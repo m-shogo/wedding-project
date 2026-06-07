@@ -1,0 +1,4 @@
+id,chapter,asset_name,purpose,duration_seconds,loopable,caption_space,local_test,production_tool,status,prompt,notes
+ai-001,1,airplane-window,出発の導入,5,yes,yes,not-started,,candidate,"A cinematic 5-second looping shot from an airplane window above soft clouds at sunrise, travel wedding film style, navy gold white color palette, gentle warm light, subtle film grain, elegant and emotional, slow smooth camera drift, clean composition, empty space for captions, no text, no logo, no watermark, no people, no animals, no signage.",
+ai-002,3,route-map,出会いから交際へのつなぎ,5,yes,yes,not-started,,candidate,"A cinematic 5-second close-up of an elegant vintage travel map with a subtle glowing route line, navy gold white color palette, soft top light, slow push-in camera movement, clean space for captions, no readable text, no logo, no watermark, no people, no animals, no signage.",
+

@@ -1,0 +1,33 @@
+# macOS
+.DS_Store
+
+# Local app files
+*.autosave
+*.tmp
+
+# Private source media: keep actual photos, videos, and audio local unless explicitly approved.
+00_inbox/**
+01_profile-movie/source/**
+02_opening-movie/source/**
+03_introduction-movie/source/**
+04_ai-video-assets/source/**
+05_photos/**
+06_videos/**
+07_music/**
+10_references/media/**
+
+# Rendered exports can be large and may include private faces/music.
+90_exports/**
+
+# Keep folder anchors.
+!.gitkeep
+!00_inbox/.gitkeep
+!01_profile-movie/.gitkeep
+!02_opening-movie/.gitkeep
+!03_introduction-movie/.gitkeep
+!04_ai-video-assets/.gitkeep
+!05_photos/.gitkeep
+!06_videos/.gitkeep
+!07_music/.gitkeep
+!90_exports/.gitkeep
+

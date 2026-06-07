@@ -1,0 +1,4 @@
+id,chapter,file_path,start_time,duration_seconds,scale_start,scale_end,position_motion,caption,caption_position,transition,bgm_cue,notes
+edit-001,1,,00:00,5,100,106,slow push-in,"Ladies and gentlemen, our journey is about to begin.",bottom center,cross fade,intro,
+edit-002,2,,00:05,4,100,108,zoom in,,bottom center,cross fade,verse,
+

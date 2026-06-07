@@ -1,0 +1,12 @@
+item,status,checked_at,notes
+venue_aspect_ratio_checked,todo,,
+venue_resolution_checked,todo,,
+file_format_checked,todo,,
+audio_volume_checked,todo,,
+caption_readability_checked,todo,,
+rights_checked,todo,,
+screening_file_exported,todo,,
+backup_file_exported,todo,,
+delivery_method_ready,todo,,
+test_playback_done,todo,,
+
