@@ -2,12 +2,12 @@
 
 ## MEMORY FLIGHT 1024
 
-**コンセプト:** 旅行をテーマに、ふたりの思い出を巡るフライト。沖縄・韓国・ハワイを“着陸しない思い出の経由地”として巡り、最後だけ横浜の挙式へ着陸する。
+**コンセプト:** 旅行をテーマに、ふたりの思い出を巡るフライト。成田空港から出発し、沖縄・韓国・ハワイを“着陸しない思い出の経由地”として巡り、最後だけ横浜の挙式へ着陸する。
 
 **ルート:**
 
 ```text
-沖縄 → 韓国 → ハワイ → 横浜の挙式
+成田空港 → 沖縄 → 韓国 → ハワイ → 横浜の挙式
 ```
 
 **便名案:**
@@ -15,6 +15,7 @@
 ```text
 MEMORY FLIGHT 1024
 Flight: SS1024
+Departure: Narita Airport
 Destination: Yokohama Wedding Ceremony
 ```
 
@@ -30,6 +31,7 @@ Destination: Yokohama Wedding Ceremony
 
 重要なルール:
 
+- 出発地は成田空港に固定する
 - 沖縄・韓国・ハワイでは着陸しない
 - 各地は機窓・フライトマップ・パスポートスタンプ・写真フラッシュバックで表現する
 - 最後だけ横浜の挙式へ着陸する
@@ -44,6 +46,7 @@ Destination: Yokohama Wedding Ceremony
 
 | 経由地 | 役割 | 温度感 |
 |---|---|---|
+| 成田空港 | 旅の始まり、搭乗、離陸前のワクワク | 上品・高揚感 |
 | 沖縄 | 旅の始まり、海、爽やかさ | 明るい・開放感 |
 | 韓国 | 食べる、歩く、笑う、日常の楽しさ | ポップ・楽しい |
 | ハワイ | プロポーズ、特別な思い出 | 感動・ロマンチック |
@@ -55,10 +58,10 @@ Destination: Yokohama Wedding Ceremony
 
 | 秒数 | 内容 | 素材 |
 |---:|---|---|
-| 0-4 | 空港ロビー | AI動画 |
-| 4-8 | 搭乗ゲート | AI動画 |
+| 0-4 | 成田空港ロビー | AI動画 |
+| 4-8 | 成田空港 搭乗ゲート | AI動画 |
 | 8-12 | 搭乗券 | AI画像 or AI動画 |
-| 12-17 | 滑走路・離陸前 | AI動画 |
+| 12-17 | 成田空港 滑走路・離陸前 | AI動画 |
 | 17-22 | 飛行機の窓と雲 | AI動画 |
 | 22-26 | フライトマップ 沖縄へ | AI動画 + CapCut線 |
 | 26-35 | 沖縄 | AI動画 + 実写真 |
@@ -83,6 +86,7 @@ SHOGO & SHIORI
 
 
 Passenger：Dear Guests
+Departure：Narita Airport
 Destination：Yokohama Wedding Ceremony
 Gate：1024
 Flight：SS1024
@@ -166,7 +170,7 @@ SHOGO & SHIORI
 
 | No | ファイル名 | 内容 | 用途 |
 |---:|---|---|---|
-| 01 | op_01_boarding_gate_ai.png | 搭乗ゲート | 冒頭・NOW BOARDING背景 |
+| 01 | op_01_narita_boarding_gate_ai.png | 成田空港の搭乗ゲート風 | 冒頭・NOW BOARDING背景 |
 | 02 | op_02_boarding_pass_bg_ai.png | 搭乗券背景 | ゲスト搭乗演出 |
 | 03 | op_03_airplane_window_clouds_ai.png | 飛行機の窓と雲 | フライト開始 |
 | 04 | op_04_flight_map_bg_ai.png | フライトマップ背景 | 経由地移動 |
@@ -181,8 +185,8 @@ SHOGO & SHIORI
 
 | No | ファイル名 | 内容 | 用途 |
 |---:|---|---|---|
-| 11 | op_11_airport_lobby_ai.png | 空港出発ロビー | 旅の始まり |
-| 12 | op_12_runway_takeoff_ai.png | 滑走路・離陸前 | 離陸前の高揚感 |
+| 11 | op_11_narita_airport_lobby_ai.png | 成田空港の出発ロビー風 | 旅の始まり |
+| 12 | op_12_narita_runway_takeoff_ai.png | 成田空港の滑走路・離陸前風 | 離陸前の高揚感 |
 | 13 | op_13_passport_stamp_bg_ai.png | パスポートページ背景 | 各地切替 |
 | 14 | op_14_okinawa_sunset_ai.png | 沖縄夕方の海 | 沖縄パート余韻 |
 | 15 | op_15_korea_cafe_food_ai.png | 韓国カフェ・グルメ | 楽しい旅行感 |
@@ -204,11 +208,13 @@ SHOGO & SHIORI
 - 人物の顔なし
 - 後から文字を載せる余白あり
 - 上品・映画的・結婚式OP向け
+- 空港ロビー・搭乗ゲート・滑走路は成田空港をイメージする
+- ただし実在の看板・航空会社ロゴ・判読できる案内表示は入れない
 
-### 01. 搭乗ゲート
+### 01. 成田空港 搭乗ゲート
 
 ```text
-結婚式オープニングムービー用の背景画像。空港の搭乗ゲート、これから特別な旅が始まる雰囲気。ゲートの入口、柔らかい照明、上品で少し映画予告風。画面中央に後からテキストを載せやすい余白を残す。人物の顔は出さない。文字やロゴは入れない。16:9。
+結婚式オープニングムービー用の背景画像。成田空港を思わせる上品な国際線の搭乗ゲート。大きな窓、整然と並ぶ待合席、滑走路や飛行機が遠くに見える雰囲気。これから特別な旅が始まるワクワク感。画面中央に後からテキストを載せやすい余白を残す。人物の顔は出さない。実在の航空会社ロゴ、空港ロゴ、判読できる文字や看板は入れない。シネマティック、清潔感、ロマンチック。16:9。
 ```
 
 ### 02. 搭乗券背景
@@ -265,16 +271,16 @@ SHOGO & SHIORI
 結婚式オープニングムービー用の背景画像。上品な結婚式場のチャペルの大きな扉。扉の向こうから柔らかい光が差し込む。まもなく新郎新婦が登場する期待感。高級感、清潔感、ロマンチック。人物なし。文字なし。16:9。
 ```
 
-### 11. 空港出発ロビー
+### 11. 成田空港 出発ロビー
 
 ```text
-結婚式オープニングムービー用の背景画像。上品で映画的な空港の出発ロビー。明るい朝の自然光、大きな窓、滑らかな床、旅行前のワクワク感。人物は小さなシルエット程度で顔は見えない。高級感、清潔感、ロマンチック、シネマティック。文字や看板の判読できる文字は入れない。16:9。
+結婚式オープニングムービー用の背景画像。成田空港を思わせる上品で映画的な国際線出発ロビー。大きな窓、自然光、滑らかな床、整然とした空港空間、旅行前のワクワク感。人物は小さなシルエット程度で顔は見えない。高級感、清潔感、ロマンチック、シネマティック。実在の空港ロゴ、航空会社ロゴ、判読できる看板や文字は入れない。16:9。
 ```
 
-### 12. 滑走路・離陸前
+### 12. 成田空港 滑走路・離陸前
 
 ```text
-結婚式オープニングムービー用の背景画像。飛行機の窓から見える滑走路、まもなく離陸する雰囲気。朝の光、期待感、旅立ち、映画的な構図。文字や航空会社ロゴは入れない。人物なし。16:9。
+結婚式オープニングムービー用の背景画像。成田空港を出発する国際線フライトの雰囲気。飛行機の窓から見える広い滑走路、まもなく離陸する高揚感。朝または夕方の柔らかい光、旅立ち、映画的な構図。実在の航空会社ロゴ、空港ロゴ、判読できる文字は入れない。人物なし。16:9。
 ```
 
 ### 13. パスポートスタンプ背景
@@ -345,10 +351,10 @@ text, subtitles, readable letters, logos, brand marks, distorted objects, warped
 
 | No | シーン | 秒数 | 用途 |
 |---:|---|---:|---|
-| 01 | 空港ロビー | 4秒 | 旅の始まり |
-| 02 | 搭乗ゲート | 4秒 | NOW BOARDING背景 |
+| 01 | 成田空港ロビー | 4秒 | 旅の始まり |
+| 02 | 成田空港 搭乗ゲート | 4秒 | NOW BOARDING背景 |
 | 03 | 搭乗券背景 | 3秒 | ゲスト搭乗演出 |
-| 04 | 滑走路・離陸前 | 5秒 | ワクワクを上げる |
+| 04 | 成田空港 滑走路・離陸前 | 5秒 | ワクワクを上げる |
 | 05 | 飛行機の窓と雲 | 5秒 | フライト開始 |
 | 06 | フライトマップ背景 | 4秒 | 沖縄へ移動 |
 | 07 | 沖縄の海 | 5秒 | Memory 01 |
@@ -366,16 +372,16 @@ text, subtitles, readable letters, logos, brand marks, distorted objects, warped
 
 ## 動画AI個別プロンプト
 
-### 01. 空港ロビー / 4秒
+### 01. 成田空港ロビー / 4秒
 
 ```text
-Use the provided image as the first frame. Create a slow cinematic push-in through an elegant airport departure lobby. Soft morning light through large windows, polished floor reflections, calm travel excitement. Keep the scene clean and romantic, suitable for a wedding opening movie. No text, no readable signs, no logos, no close-up faces. Smooth camera motion, 4 seconds, 16:9.
+Use the provided image as the first frame. Create a slow cinematic push-in through an elegant international departure lobby inspired by Narita Airport in Japan. Large windows, polished floor reflections, calm travel excitement, premium wedding opening atmosphere. Keep the scene clean and romantic. No text, no readable signs, no airport logos, no airline logos, no close-up faces. Smooth camera motion, 4 seconds, 16:9.
 ```
 
-### 02. 搭乗ゲート / 4秒
+### 02. 成田空港 搭乗ゲート / 4秒
 
 ```text
-Use the provided image as the first frame. Create a gentle forward camera movement toward an elegant airport boarding gate. The atmosphere should feel like a special journey is about to begin. Warm lighting, cinematic, clean, romantic. Leave empty space in the center for text to be added later. No text, no logos, no readable signs, no faces. 4 seconds, 16:9.
+Use the provided image as the first frame. Create a gentle forward camera movement toward an elegant international boarding gate inspired by Narita Airport in Japan. The atmosphere should feel like a special journey is about to begin. Warm lighting, cinematic, clean, romantic. Leave empty space in the center for text to be added later. No text, no airport logos, no airline logos, no readable signs, no faces. 4 seconds, 16:9.
 ```
 
 ### 03. 搭乗券背景 / 3秒
@@ -384,10 +390,10 @@ Use the provided image as the first frame. Create a gentle forward camera moveme
 Use the provided image as the first frame. Animate a minimal elegant boarding pass paper with a very subtle camera push-in and soft light movement. Keep the ticket blank with no text, no barcode, no logos, no symbols. Premium wedding travel style, clean cream paper texture, romantic and elegant. 3 seconds, 16:9.
 ```
 
-### 04. 滑走路・離陸前 / 5秒
+### 04. 成田空港 滑走路・離陸前 / 5秒
 
 ```text
-Use the provided image as the first frame. Create a cinematic airplane window view of the runway just before takeoff. The plane begins to move slowly forward, runway lights and morning atmosphere visible outside. Smooth realistic motion, anticipation, elegant travel mood. No text, no airline logos, no people, no distorted airplane parts. 5 seconds, 16:9.
+Use the provided image as the first frame. Create a cinematic airplane window view of a wide runway inspired by Narita Airport just before takeoff. The plane begins to move slowly forward, runway lights and morning or golden-hour atmosphere visible outside. Smooth realistic motion, anticipation, elegant international travel mood. No text, no airport logos, no airline logos, no people, no distorted airplane parts. 5 seconds, 16:9.
 ```
 
 ### 05. 飛行機の窓と雲 / 5秒
@@ -471,9 +477,10 @@ Use the provided image as the first frame. Create a cinematic wedding chapel doo
 - NOW BOARDING
 - MEMORY FLIGHT 1024
 - Flight SS1024
+- Departure: Narita Airport
 - Passenger / Destination / Gate
 - フライトマップの航路線
-- Okinawa / Korea / Hawaii / Yokohama の地名
+- Narita / Okinawa / Korea / Hawaii / Yokohama の地名
 - パスポートスタンプ風テロップ
 - Doors opening in...
 - 10秒カウントダウン
@@ -486,6 +493,12 @@ Use the provided image as the first frame. Create a cinematic wedding chapel doo
 ---
 
 ## 実写真で後から差し替えるもの
+
+### 成田空港
+
+- 成田空港の出発ロビー写真があれば差し替え候補
+- 成田空港の搭乗ゲート写真があれば差し替え候補
+- 実写真がなければAI生成背景のままでOK
 
 ### 沖縄
 
@@ -542,4 +555,4 @@ Use the provided image as the first frame. Create a cinematic wedding chapel doo
 
 単なる旅行Vlogにせず、ゲストを搭乗者にすることでOPとして機能する。
 
-ハワイのプロポーズを感動の山に置き、横浜の挙式への着陸で入場カウントダウンにつなげる構成が最も強い。
+成田空港から出発することで、日本から旅が始まる実感が出る。沖縄・韓国・ハワイを思い出として経由し、最後に横浜の挙式へ着陸する構成が最も強い。
