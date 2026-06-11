@@ -28,10 +28,14 @@ pnpm dev          # Remotion Studioを開く(プレビュー&props調整)
 | `StampTestPreview` | 同・紙背景付き比較用 | 2秒 | mp4 |
 | `BoardingPassIntro` | 搭乗券イントロ | 8秒 | mp4 |
 | `FlightMapNaritaToOkinawa` | 成田→沖縄フライトマップ | 8秒 | mp4 |
+| `FlightMapOkinawaToSeoul` | 沖縄→ソウル | 8秒 | mp4 |
+| `FlightMapSeoulToHawaii` | ソウル→ハワイ | 8秒 | mp4 |
+| `FlightMapHawaiiToYokohama` | ハワイ→横浜 | 8秒 | mp4 |
 | `PassportStampOkinawa` | 沖縄ハンコ | 2秒 | webm (透過) |
 | `CloudOverlay` | 雲オーバーレイ | 18秒 | webm (透過) |
 | `Countdown` | 入場前カウントダウン | 16秒 | mp4 |
 | `PhotoCardOkinawa` | 写真カード3枚 | 10秒 | mp4 |
+| `StampRushFullRoute` | 全ルート一筆+スタンプ連打(沖縄・韓国省略案の主役) | 22秒 | mp4 |
 | `OpeningFullPreview` | 通しテンポ確認用(書き出し任意) | 44秒 | - |
 
 ## 書き出し
@@ -41,6 +45,7 @@ pnpm render:stamp-test          # Phase 0: 透過VP9 WebM
 pnpm render:stamp-test:prores   # Phase 0代替: ProRes 4444 MOV
 pnpm render:stamp-test:preview  # 比較用の背景付きMP4
 pnpm render:mvp                 # MVP素材6本を一括書き出し
+pnpm render:stamprush           # 全ルート+スタンプ連打(22秒)
 pnpm render:preview             # 通し確認用MP4
 ```
 

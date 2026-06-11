@@ -19,6 +19,10 @@ import {
   photoCardSchema,
 } from './compositions/common/PhotoCardScene';
 import {OpeningFullPreview} from './compositions/opening/OpeningFullPreview';
+import {
+  StampRushFullRoute,
+  stampRushSchema,
+} from './compositions/opening/StampRushFullRoute';
 
 const base = {
   width: video.width,
@@ -112,6 +116,67 @@ export const RemotionRoot = () => {
           travelEndHoldFrames: 50,
           showHeader: true,
           headerText: 'MEMORY FLIGHT 1024',
+          fitRoute: true,
+        }}
+      />
+      <Composition
+        id="FlightMapOkinawaToSeoul"
+        component={FlightMapRoute}
+        durationInFrames={240}
+        {...base}
+        schema={flightMapSchema}
+        defaultProps={{
+          routeId: 'okinawaToSeoul' as const,
+          lineColor: '#A8666F',
+          lineWidth: 6,
+          planeColor: '#1C2A44',
+          planeSize: 30,
+          zoomTo: 1.06,
+          travelStartFrame: 30,
+          travelEndHoldFrames: 50,
+          showHeader: true,
+          headerText: 'MEMORY FLIGHT 1024',
+          fitRoute: true,
+        }}
+      />
+      <Composition
+        id="FlightMapSeoulToHawaii"
+        component={FlightMapRoute}
+        durationInFrames={240}
+        {...base}
+        schema={flightMapSchema}
+        defaultProps={{
+          routeId: 'seoulToHawaii' as const,
+          lineColor: '#A8666F',
+          lineWidth: 6,
+          planeColor: '#1C2A44',
+          planeSize: 30,
+          zoomTo: 1.06,
+          travelStartFrame: 30,
+          travelEndHoldFrames: 50,
+          showHeader: true,
+          headerText: 'MEMORY FLIGHT 1024',
+          fitRoute: true,
+        }}
+      />
+      <Composition
+        id="FlightMapHawaiiToYokohama"
+        component={FlightMapRoute}
+        durationInFrames={240}
+        {...base}
+        schema={flightMapSchema}
+        defaultProps={{
+          routeId: 'hawaiiToYokohama' as const,
+          lineColor: '#A8666F',
+          lineWidth: 6,
+          planeColor: '#1C2A44',
+          planeSize: 30,
+          zoomTo: 1.06,
+          travelStartFrame: 30,
+          travelEndHoldFrames: 50,
+          showHeader: true,
+          headerText: 'MEMORY FLIGHT 1024',
+          fitRoute: true,
         }}
       />
       <Composition
@@ -177,6 +242,32 @@ export const RemotionRoot = () => {
           shadowStrength: 1,
           staggerFrames: 14,
           zoomTo: 1.05,
+        }}
+      />
+
+      <Composition
+        id="StampRushFullRoute"
+        component={StampRushFullRoute}
+        durationInFrames={660}
+        {...base}
+        schema={stampRushSchema}
+        defaultProps={{
+          lineColor: '#A8666F',
+          lineWidth: 6,
+          planeColor: '#1C2A44',
+          planeSize: 30,
+          stampColor: '#A8666F',
+          stampSize: 240,
+          zoomTo: 1.05,
+          showHeader: true,
+          headerText: 'MEMORY FLIGHT 1024',
+          showFinalText: true,
+          finalText: 'FINAL DESTINATION — YOKOHAMA',
+          stamps: [
+            {text: 'OKINAWA', subText: 'MEMORY 01', x: 760, y: 700, rotationDeg: -9},
+            {text: 'SEOUL', subText: 'MEMORY 02', x: 560, y: 380, rotationDeg: 7},
+            {text: 'HAWAII', subText: 'PROPOSAL', x: 1620, y: 440, rotationDeg: -6},
+          ],
         }}
       />
 

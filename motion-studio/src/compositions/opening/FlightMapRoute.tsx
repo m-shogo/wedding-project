@@ -31,6 +31,8 @@ export const flightMapSchema = z.object({
   travelEndHoldFrames: z.number().min(0),
   showHeader: z.boolean(),
   headerText: z.string(),
+  // 区間のバウンディングボックスに合わせて自動でセンタリング+ズームする
+  fitRoute: z.boolean(),
 });
 
 export type FlightMapRouteProps = z.infer<typeof flightMapSchema>;
@@ -46,6 +48,7 @@ export const flightMapNaritaOkinawaDefaults: FlightMapRouteProps = {
   travelEndHoldFrames: 50,
   showHeader: true,
   headerText: 'MEMORY FLIGHT 1024',
+  fitRoute: true,
 };
 
 // 抽象的なベージュ地図の上を、紙飛行機が航路を描きながら進む。
@@ -60,11 +63,25 @@ export const FlightMapRoute = ({
   travelEndHoldFrames,
   showHeader,
   headerText,
+  fitRoute,
 }: FlightMapRouteProps) => {
   const frame = useCurrentFrame();
   const {width, height, durationInFrames} = useVideoConfig();
   const seg = routes[routeId];
   const d = routePath(seg);
+
+  // 区間にフィットする変換を計算(制御点も含めたバウンディングボックス基準)
+  const controlY = (seg.from.y + seg.to.y) / 2 - seg.arc;
+  const pad = 300;
+  const minX = Math.min(seg.from.x, seg.to.x) - pad;
+  const maxX = Math.max(seg.from.x, seg.to.x) + pad;
+  const minY = Math.min(seg.from.y, seg.to.y, controlY) - pad;
+  const maxY = Math.max(seg.from.y, seg.to.y) + pad;
+  const fitScale = fitRoute
+    ? Math.min(width / (maxX - minX), height / (maxY - minY), 1.5)
+    : 1;
+  const fitX = fitRoute ? width / 2 - (minX + maxX) / 2 : 0;
+  const fitY = fitRoute ? height / 2 - (minY + maxY) / 2 : 0;
 
   const progress = interpolate(
     frame,
@@ -97,7 +114,11 @@ export const FlightMapRoute = ({
             'radial-gradient(ellipse at center, rgba(28,42,68,0) 55%, rgba(28,42,68,0.14) 100%)',
         }}
       />
-      <AbsoluteFill style={{transform: `scale(${zoom})`}}>
+      <AbsoluteFill
+        style={{
+          transform: `scale(${zoom * fitScale}) translate(${fitX}px, ${fitY}px)`,
+        }}
+      >
         <svg width={width} height={height} style={{position: 'absolute', inset: 0}}>
           <RouteLine
             d={d}
