@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "motion-studio",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["--dir", "motion-studio", "exec", "remotion", "studio", "--port", "3789", "--no-open"],
+      "port": 3789
+    }
+  ]
+}

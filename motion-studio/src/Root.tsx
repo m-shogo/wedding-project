@@ -1,35 +1,22 @@
 import {Composition} from 'remotion';
 import {video} from './data/theme';
-import {
-  StampScene,
-  stampSchema,
-  stampTestDefaults,
-  stampOkinawaDefaults,
-} from './compositions/common/StampScene';
+import {StampScene, stampSchema} from './compositions/common/StampScene';
 import {
   BoardingPassIntro,
   boardingPassSchema,
-  boardingPassDefaults,
 } from './compositions/opening/BoardingPassIntro';
 import {
   FlightMapRoute,
   flightMapSchema,
-  flightMapNaritaOkinawaDefaults,
 } from './compositions/opening/FlightMapRoute';
 import {
   CloudOverlayScene,
   cloudOverlaySchema,
-  cloudOverlayDefaults,
 } from './compositions/common/CloudOverlayScene';
-import {
-  Countdown,
-  countdownSchema,
-  countdownDefaults,
-} from './compositions/opening/Countdown';
+import {Countdown, countdownSchema} from './compositions/opening/Countdown';
 import {
   PhotoCardScene,
   photoCardSchema,
-  photoCardOkinawaDefaults,
 } from './compositions/common/PhotoCardScene';
 import {OpeningFullPreview} from './compositions/opening/OpeningFullPreview';
 
@@ -38,6 +25,9 @@ const base = {
   height: video.height,
   fps: video.fps,
 } as const;
+
+// 注意: defaultPropsはRemotion Studioの「Save defaults」でソースに書き戻せるよう、
+// このファイル内にオブジェクトリテラルで直接書く(変数参照やspreadにしない)。
 
 export const RemotionRoot = () => {
   return (
@@ -49,7 +39,18 @@ export const RemotionRoot = () => {
         durationInFrames={60}
         {...base}
         schema={stampSchema}
-        defaultProps={stampTestDefaults}
+        defaultProps={{
+          text: 'OKINAWA',
+          subText: 'MEMORY FLIGHT',
+          centerText: 'SS1024',
+          size: 620,
+          rotationDeg: -8,
+          color: '#A8666F',
+          inkRoughness: 7,
+          pressDelayFrames: 8,
+          seed: 'stamp-test-01',
+          background: 'transparent' as const,
+        }}
       />
       <Composition
         id="StampTestPreview"
@@ -57,7 +58,18 @@ export const RemotionRoot = () => {
         durationInFrames={60}
         {...base}
         schema={stampSchema}
-        defaultProps={{...stampTestDefaults, background: 'paper' as const}}
+        defaultProps={{
+          text: 'OKINAWA',
+          subText: 'MEMORY FLIGHT',
+          centerText: 'SS1024',
+          size: 620,
+          rotationDeg: -8,
+          color: '#A8666F',
+          inkRoughness: 7,
+          pressDelayFrames: 8,
+          seed: 'stamp-test-01',
+          background: 'paper' as const,
+        }}
       />
 
       {/* Opening MVP */}
@@ -67,7 +79,21 @@ export const RemotionRoot = () => {
         durationInFrames={240}
         {...base}
         schema={boardingPassSchema}
-        defaultProps={boardingPassDefaults}
+        defaultProps={{
+          variant: 'ivory' as const,
+          title: 'MEMORY FLIGHT 1024',
+          flightNumber: 'SS1024',
+          date: 'OCT 24 2026',
+          seat: '10-24',
+          gate: '24',
+          passenger: 'DEAR GUESTS',
+          departureCode: 'NRT',
+          departureName: 'NARITA',
+          arrivalCode: 'YKH',
+          arrivalName: 'YOKOHAMA',
+          zoomTo: 1.045,
+          showCinematicBars: true,
+        }}
       />
       <Composition
         id="FlightMapNaritaToOkinawa"
@@ -75,7 +101,18 @@ export const RemotionRoot = () => {
         durationInFrames={240}
         {...base}
         schema={flightMapSchema}
-        defaultProps={flightMapNaritaOkinawaDefaults}
+        defaultProps={{
+          routeId: 'naritaToOkinawa' as const,
+          lineColor: '#A8666F',
+          lineWidth: 6,
+          planeColor: '#1C2A44',
+          planeSize: 30,
+          zoomTo: 1.06,
+          travelStartFrame: 30,
+          travelEndHoldFrames: 50,
+          showHeader: true,
+          headerText: 'MEMORY FLIGHT 1024',
+        }}
       />
       <Composition
         id="PassportStampOkinawa"
@@ -83,7 +120,18 @@ export const RemotionRoot = () => {
         durationInFrames={60}
         {...base}
         schema={stampSchema}
-        defaultProps={stampOkinawaDefaults}
+        defaultProps={{
+          text: 'OKINAWA',
+          subText: 'MEMORY 01',
+          centerText: 'SS1024',
+          size: 620,
+          rotationDeg: -8,
+          color: '#A8666F',
+          inkRoughness: 7,
+          pressDelayFrames: 8,
+          seed: 'stamp-okinawa-01',
+          background: 'transparent' as const,
+        }}
       />
       <Composition
         id="CloudOverlay"
@@ -91,7 +139,10 @@ export const RemotionRoot = () => {
         durationInFrames={540}
         {...base}
         schema={cloudOverlaySchema}
-        defaultProps={cloudOverlayDefaults}
+        defaultProps={{
+          cloudOpacity: 0.5,
+          speed: 1.6,
+        }}
       />
       <Composition
         id="Countdown"
@@ -99,7 +150,16 @@ export const RemotionRoot = () => {
         durationInFrames={480}
         {...base}
         schema={countdownSchema}
-        defaultProps={countdownDefaults}
+        defaultProps={{
+          countdownFrom: 10,
+          introText: 'Doors opening in...',
+          finalTop: 'Please welcome',
+          finalName: 'SHOGO & SHIORI',
+          numberSize: 360,
+          glowStrength: 0.5,
+          showIntro: true,
+          showCinematicBars: true,
+        }}
       />
       <Composition
         id="PhotoCardOkinawa"
@@ -107,7 +167,17 @@ export const RemotionRoot = () => {
         durationInFrames={300}
         {...base}
         schema={photoCardSchema}
-        defaultProps={photoCardOkinawaDefaults}
+        defaultProps={{
+          label: 'MEMORY 01',
+          title: 'Okinawa',
+          photos: [null, null, null],
+          background: 'beige' as const,
+          maxRotationDeg: 3,
+          cardRadius: 8,
+          shadowStrength: 1,
+          staggerFrames: 14,
+          zoomTo: 1.05,
+        }}
       />
 
       {/* 通し確認用(書き出しは任意) */}
