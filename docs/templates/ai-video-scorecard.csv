@@ -1,4 +1,8 @@
 id,asset_name,style_fit,depth,light,camera_room,loopability,caption_space,low_failure_risk,editability,credit_worth,total_score,decision,notes
 score-001,airplane-window,,,,,,,,,,,candidate,
 score-002,route-map,,,,,,,,,,,candidate,
-
+score-003,op_07_hawaii_beach_test02,8,8,7,8,8,9,8,8,8,80,adopt-candidate,2026-06-11採点。露出正常・人物動物文字なし・上下にテロップ余白。色がやや淡くnavy/goldより薄いが許容。Ch4-A用
+score-004,op_08_hawaii_rain_beach_test01,3,3,2,4,5,8,6,4,3,42,reject,2026-06-11採点。全体が灰色に白カブリして主役不在。元静止画の雨ビーチの質感が消えた。再生成するなら露出と前景の岩を明示
+score-005,op_09_yokohama_sky_test01,7,8,7,7,7,8,7,8,7,73,retry,2026-06-11採点。雲越しの街と海が綺麗だが明るくやや飽和気味。素材2-A(飛行機窓・地上の遠景)への流用候補。窓枠なしのため採否は構成側で判断
+score-006,op_10_chapel_door_test01,4,5,1,4,5,5,7,3,3,41,reject,2026-06-11採点。「光が差す扉」のはずがほぼ暗闇で光が無い。入力静止画(明るいチャペル)と真逆。再生成時はwarm light flooding through doorを強調しbalanced exposureを併記
+score-007,op_11_narita_lobby_test01,,,,,,,,,,,reject,2026-06-11判定。元静止画op_11に人物が複数写っているため即不採用(failure-patterns)。パイプライン動作確認としては成功。人物なし静止画の再生成後にやり直す

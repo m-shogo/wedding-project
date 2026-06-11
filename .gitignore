@@ -4,6 +4,7 @@
 # Local app files
 *.autosave
 *.tmp
+__pycache__/
 
 # Private source media: keep actual photos, videos, and audio local unless explicitly approved.
 00_inbox/**

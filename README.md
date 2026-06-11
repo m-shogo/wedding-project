@@ -22,6 +22,8 @@
 - [ムービー構成](docs/03_movie-structure.md)
 - [AI動画素材計画](docs/04_ai-video-assets.md)
 - [動画AI運用手順](docs/ai-video-operation.md)
+- [ローカル動画AIセットアップ手順](docs/local-video-ai-setup.md)
+- [ComfyUI・Codex・ChatGPT連携マニュアル](docs/comfy-codex-chatgpt-workflow.md)
 - [CapCut編集ルール](docs/05_capcut-editing.md)
 - [CapCut運用手順](docs/capcut-operation.md)
 - [失敗例リスト](docs/failure-patterns.md)

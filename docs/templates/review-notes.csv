@@ -1,3 +1,10 @@
 id,date,target,gate,issue,priority,status,owner,notes
 review-001,2026-06-07,profile-movie,Gate 1,,,,,
-
+review-002,2026-06-11,opening-movie v001,Gate 1,op_11空港ロビー静止画に人物が複数写っている,high,todo,,即不採用条件。人物なしの空港ロビー静止画を再生成してからI2Vに進める
+review-003,2026-06-11,opening-movie v001,Gate 1,op_01搭乗ゲート静止画に人物が写っている,high,todo,,即不採用条件。人物なしの搭乗ゲート静止画を再生成してからI2Vに進める
+review-004,2026-06-11,opening-movie v001,Gate 1,5-B章テロップが白い床に白文字でほぼ読めない,high,done,,v002でshadow=strong(濃い影+重ね描き)を追加して対応
+review-005,2026-06-11,opening-movie v001,Gate 1,2行テロップの下端が画面下端ぎりぎり(セーフエリア外),medium,done,,v002でy_base既定を0.83→0.80に変更
+review-006,2026-06-11,opening-movie v001,Gate 1,カウントダウンが黒一色で専用素材op_20が未使用,medium,done,,v002でop_20カウントダウン光背景+ゆっくりズームに変更
+review-007,2026-06-11,opening-movie v001,Gate 1,Ch4-B犬テロップの背景op_08が暗い雨ビーチで一番明るい章に合わない,medium,done,,v002でop_14沖縄夕暮れに差し替え。本番では犬の実写真に差し替え
+review-008,2026-06-11,opening-movie v001,Gate 1,Ch4-A op_07が真昼の高彩度ターコイズで前後のゴールデンアワーとトーンが跳ぶ,low,hold,,I2V版op_07_test02はgolden hour設定のため動画採用時に解消見込み
+review-009,2026-06-11,opening-movie v001,Gate 1,素材2-A(飛行機窓・地上)の静止画がない,medium,hold,,未使用のop_09横浜上空が流用候補(窓枠なし)。採否は次レビューで判断

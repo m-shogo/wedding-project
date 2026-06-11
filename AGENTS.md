@@ -29,6 +29,8 @@
 - `docs/03_movie-structure.md`: 章構成
 - `docs/04_ai-video-assets.md`: AI素材の作り方
 - `docs/ai-video-operation.md`: 動画AIの実運用
+- `docs/local-video-ai-setup.md`: ローカル動画AI環境の入れ方とClaude/Codexへの渡し方
+- `docs/comfy-codex-chatgpt-workflow.md`: ComfyUI、Codex、ChatGPT/Claudeの連携手順
 - `docs/05_capcut-editing.md`: 編集ルール
 - `docs/capcut-operation.md`: CapCutの実運用
 - `docs/failure-patterns.md`: 動画AIとCapCutの失敗例

@@ -24,6 +24,9 @@
 9. 採用候補だけ本番動画AIへ進める。
 10. 採用素材だけ `04_ai-video-assets/` に残す。
 
+ローカル環境のセットアップは `docs/local-video-ai-setup.md` を見る。
+ComfyUI、Codex、ChatGPT/Claudeの使い分けは `docs/comfy-codex-chatgpt-workflow.md` を見る。
+
 ## 採点基準
 
 100点満点。80点以上だけ本番候補。
@@ -68,4 +71,3 @@
 space for captions, elegant travel wedding film style,
 no text, no logo, no watermark, no people, no animals, no signage.
 ```
-

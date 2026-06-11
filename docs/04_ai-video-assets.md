@@ -58,6 +58,7 @@ CapCut / DaVinci で繰り返し・速度調整
 詳細手順:
 
 - `docs/ai-video-operation.md`
+- `docs/local-video-ai-setup.md`
 - `docs/failure-patterns.md`
 
 ## プロンプトの型

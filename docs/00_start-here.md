@@ -40,8 +40,10 @@
 
 1. `docs/02_style-bible.md` を見る。
 2. `docs/04_ai-video-assets.md` を見る。
-3. `docs/templates/ai-shot-list.csv` に候補を書く。
-4. 静止画、ローカル試作、本番生成の順で進める。
+3. ローカル環境を使う場合は `docs/local-video-ai-setup.md` を見る。
+4. ComfyUI、Codex、ChatGPT/Claudeの使い分けは `docs/comfy-codex-chatgpt-workflow.md` を見る。
+5. `docs/templates/ai-shot-list.csv` に候補を書く。
+6. 静止画、ローカル試作、本番生成の順で進める。
 
 ### BGMを決める
 

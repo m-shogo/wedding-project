@@ -20,6 +20,8 @@
 - 構成: @docs/03_movie-structure.md
 - AI素材: @docs/04_ai-video-assets.md
 - 動画AI運用: @docs/ai-video-operation.md
+- ローカル動画AIセットアップ: @docs/local-video-ai-setup.md
+- ComfyUI・Codex・ChatGPT連携: @docs/comfy-codex-chatgpt-workflow.md
 - 編集: @docs/05_capcut-editing.md
 - CapCut運用: @docs/capcut-operation.md
 - 失敗例: @docs/failure-patterns.md
