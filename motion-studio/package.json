@@ -1,0 +1,38 @@
+{
+  "name": "wedding-motion-studio",
+  "version": "0.1.0",
+  "private": true,
+  "description": "結婚式ムービー用モーション素材生成スタジオ (Remotion)",
+  "scripts": {
+    "dev": "remotion studio",
+    "typecheck": "tsc --noEmit",
+    "render:stamp-test": "remotion render StampTest out/common/stamp_test_vp9.webm --codec=vp9 --image-format=png --pixel-format=yuva420p",
+    "render:stamp-test:prores": "remotion render StampTest out/common/stamp_test_prores.mov --codec=prores --prores-profile=4444 --image-format=png --pixel-format=yuva444p10le",
+    "render:stamp-test:preview": "remotion render StampTestPreview out/common/stamp_test_preview.mp4",
+    "render:boarding": "remotion render BoardingPassIntro out/opening/boarding_pass_intro.mp4",
+    "render:map:okinawa": "remotion render FlightMapNaritaToOkinawa out/opening/map_narita_to_okinawa.mp4",
+    "render:stamp:okinawa": "remotion render PassportStampOkinawa out/opening/stamp_okinawa.webm --codec=vp9 --image-format=png --pixel-format=yuva420p",
+    "render:stamp:okinawa:prores": "remotion render PassportStampOkinawa out/opening/stamp_okinawa.mov --codec=prores --prores-profile=4444 --image-format=png --pixel-format=yuva444p10le",
+    "render:cloud": "remotion render CloudOverlay out/common/cloud_overlay.webm --codec=vp9 --image-format=png --pixel-format=yuva420p",
+    "render:cloud:prores": "remotion render CloudOverlay out/common/cloud_overlay.mov --codec=prores --prores-profile=4444 --image-format=png --pixel-format=yuva444p10le",
+    "render:countdown": "remotion render Countdown out/opening/countdown_10sec.mp4",
+    "render:photo:okinawa": "remotion render PhotoCardOkinawa out/opening/photo_card_okinawa.mp4",
+    "render:preview": "remotion render OpeningFullPreview out/opening/opening_full_preview.mp4",
+    "render:mvp": "pnpm render:boarding && pnpm render:map:okinawa && pnpm render:stamp:okinawa && pnpm render:cloud && pnpm render:countdown && pnpm render:photo:okinawa"
+  },
+  "dependencies": {
+    "@remotion/cli": "^4.0.0",
+    "@remotion/google-fonts": "^4.0.0",
+    "@remotion/paths": "^4.0.0",
+    "@remotion/zod-types": "^4.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "remotion": "^4.0.0",
+    "zod": "^3.22.3"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "typescript": "^5.5.0"
+  }
+}

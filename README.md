@@ -51,6 +51,7 @@
 09_design-assets/          フォント、色、ロゴ風素材、装飾
 10_references/             参考動画、参考スクショ、URLメモ
 11_printables/             印刷物、返礼品、しおり案。動画の世界観に合わせるサブ制作物
+motion-studio/             Remotion製モーション素材スタジオ（搭乗券、地図、ハンコ、カウントダウン）
 90_exports/                書き出し済み成果物
 99_archive/                不採用・古い版
 ```

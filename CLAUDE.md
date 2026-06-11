@@ -30,6 +30,7 @@
 - テーマ差し替え: @docs/theme-switching.md
 - 素材TODO: @docs/materials-todo.md
 - タスク: @docs/task-board.md
+- モーション素材スタジオ: motion-studio/README.md（Remotionで搭乗券・地図・ハンコ・カウントダウン・写真カードを生成。文字入り素材はAIでなくここで作る）
 
 ## 進め方
 

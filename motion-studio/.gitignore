@@ -1,0 +1,13 @@
+# 依存とキャッシュ
+node_modules/
+
+# 書き出した動画はGit管理しない
+out/*
+!out/.gitkeep
+
+# 実写真はGit管理しない（ローカル/iCloud/Driveで管理）
+public/photos/*
+!public/photos/.gitkeep
+
+.DS_Store
+*.log

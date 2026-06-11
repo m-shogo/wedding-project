@@ -4,6 +4,12 @@
 
 ## Now
 
+- `motion-studio/out/common/stamp_test_vp9.webm` をCapCutに読み込み、透過を確認して
+  `docs/decisions/2026-06-11-motion-studio.md` の未決事項に結果を書く。
+- motion-studioのMVP素材(搭乗券・地図・ハンコ・雲・カウントダウン・写真カード)を
+  Remotion Studio (`pnpm dev`) で見て、高級感・Style Bible適合を審査する。
+- 既存storyboard(105秒)とMEMORY FLIGHT 1024の4区間ルートの整合を決める
+  （推奨: 沖縄・韓国はスタンプ連打で省略、ハワイのみフル演出）。
 - オープニングv002ドラフトを通しで見る（5-Bテロップ可読性・カウントダウン演出）。
 - I2V生成済み動画を `docs/templates/ai-video-scorecard.csv` 基準で採点する
   （op_16 / op_02 / op_03 / op_07 test02 / op_08 / op_09 / op_10）。
