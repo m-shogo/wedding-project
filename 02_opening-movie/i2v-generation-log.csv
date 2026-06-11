@@ -1,0 +1,4 @@
+date,prefix,material,image,settings,status,elapsed_min,output,notes
+2026-06-11,op_16_cloud_sea_test01,素材3 雲海(89点),op_16_cloud_transition_ai.png,480x272/49f/14steps/cfg5.0/seed42,success,,~/ComfyUI-Shared/output/video/op_16_cloud_sea_test01_00001_.mp4,手動記録(バッチ停止のため)。採点87点adopt-candidate
+2026-06-11,op_02_abstract_light_test01,素材1-B 抽象背景(88点),op_02_boarding_pass_bg_ai.png,480x272/49f/14steps/cfg5.0/seed42,success,20.4,/Users/m-shogo/ComfyUI-Shared/output/video/op_02_abstract_light_test01_00001_.mp4,採点84点adopt-candidate
+2026-06-11,op_03_airplane_window_sky_test01,素材2-B 飛行機窓・青空(86点),op_03_airplane_window_clouds_ai.png,480x272/49f/14steps/cfg5.0/seed42,success,11.3,/Users/m-shogo/ComfyUI-Shared/output/video/op_03_airplane_window_sky_test01_00001_.mp4,採点81点adopt-candidate

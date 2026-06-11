@@ -6,3 +6,6 @@ score-004,op_08_hawaii_rain_beach_test01,3,3,2,4,5,8,6,4,3,42,reject,2026-06-11�
 score-005,op_09_yokohama_sky_test01,7,8,7,7,7,8,7,8,7,73,retry,2026-06-11採点。雲越しの街と海が綺麗だが明るくやや飽和気味。素材2-A(飛行機窓・地上の遠景)への流用候補。窓枠なしのため採否は構成側で判断
 score-006,op_10_chapel_door_test01,4,5,1,4,5,5,7,3,3,41,reject,2026-06-11採点。「光が差す扉」のはずがほぼ暗闇で光が無い。入力静止画(明るいチャペル)と真逆。再生成時はwarm light flooding through doorを強調しbalanced exposureを併記
 score-007,op_11_narita_lobby_test01,,,,,,,,,,,reject,2026-06-11判定。元静止画op_11に人物が複数写っているため即不採用(failure-patterns)。パイプライン動作確認としては成功。人物なし静止画の再生成後にやり直す
+score-008,op_16_cloud_sea_test01,9,9,9,8,8,8,9,9,9,87,adopt-candidate,2026-06-11採点。ネイビー空+ゴールド雲海で破綻なし・露出正常(白飛び対策有効)。雲の動きがかなり控えめなのでCapCutで速度1.2-1.5倍やリバースループを検討。Ch3用
+score-009,op_02_abstract_light_test01,9,7,8,8,9,9,9,9,8,84,adopt-candidate,2026-06-11採点。ネイビー地に金ボケ。ボケは左寄りだが中央〜右にテロップ余白が広く1-B(出発宣言テロップ背景)に最適。ドリフトが穏やかでループしやすい
+score-010,op_03_airplane_window_sky_test01,8,8,8,8,8,7,9,9,8,81,adopt-candidate,2026-06-11採点。窓枠が固定アンカーとして安定・雲がゆっくり流れ破綻なし。下1/3が白い雲なのでテロップを載せる場合はshadow=strong必須。2-B(上昇)用

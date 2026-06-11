@@ -30,6 +30,7 @@ REPO = Path(__file__).resolve().parent.parent
 IMG_DIR = REPO / "02_opening-movie" / "sample_image"
 VIDEO_DIR = Path.home() / "ComfyUI-Shared" / "output" / "video"
 GEN_LOG = REPO / "02_opening-movie" / "i2v-generation-log.csv"
+SCORECARD = REPO / "docs" / "templates" / "ai-video-scorecard.csv"
 BUILD_SCRIPT = REPO / "scripts" / "build_opening_movie.py"
 REPORT = REPO / "02_opening-movie" / "asset-status.md"
 
@@ -68,6 +69,14 @@ def main():
         with GEN_LOG.open() as f:
             log_rows = list(csv.DictReader(f))
 
+    # 採点済みプレフィックス: scorecardのdecision入り行 + 生成ログの採点入り行
+    scored_prefixes = set()
+    if SCORECARD.exists():
+        with SCORECARD.open() as f:
+            for r in csv.DictReader(f):
+                if r.get("decision") and r.get("notes"):
+                    scored_prefixes.add(r["asset_name"][:5])
+
     lines = [
         "# オープニング素材ステータス",
         "",
@@ -84,9 +93,10 @@ def main():
     for mid, name, score, image, vprefix in MATERIALS:
         img_ok = image in images if image else False
         vids = [v for v in videos if vprefix and v.startswith(vprefix)]
-        scored = [r for r in log_rows
-                  if vprefix and r["prefix"].startswith(vprefix)
-                  and r.get("notes") not in ("", "未採点")]
+        scored = vprefix in scored_prefixes or [
+            r for r in log_rows
+            if vprefix and r["prefix"].startswith(vprefix)
+            and r.get("notes") not in ("", "未採点")]
         if image is None:
             status = "静止画なし（I2V不可）"
             problems.append(f"素材{mid} {name}: 対応する静止画がない。"
