@@ -61,9 +61,11 @@ src/data/         単一情報源(下記)
 - chechスクリプトは `.mts` でNode 24の型ストリップ実行(`node --no-warnings scripts/x.mts`)
 - **fresh clone耐性**: `out/`と`public/photos/`はGit外。そこにある成果物のstatusは
   `ready`ではなく`generated`にする(check:assetsが「無くてもエラーにしない」扱いになる)。
+  `generated` は `regenerateCommand` で再生成できることが条件。未設定ならwarningになる。
   `ready`/`placeholder`はGit管理内など「必ず存在すべき」ファイルにだけ使う
-- **`開幕-全体確認`は順番・尺の確認専用**。propsは代表値でRoot.tsxのdefaultPropsを
-  完全反映しない。見た目の最終確認は個別テンプレのstill/renderで行う
+- **`開幕-全体確認`は順番・尺の確認専用**。完成見た目チェック用ではない。
+  propsは代表値でRoot.tsxのdefaultPropsを完全反映しない。
+  見た目の最終確認は個別テンプレのstill/renderで行う
 
 ## コマンド
 

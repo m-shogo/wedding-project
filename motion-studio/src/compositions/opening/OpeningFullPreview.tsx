@@ -9,7 +9,7 @@ import {StampRushFullRoute} from './StampRushFullRoute';
 import {CloudSea} from './CloudSea';
 import {DoorLight} from './DoorLight';
 import {Countdown, countdownDefaults} from './Countdown';
-import {PhotoCardScene, photoCardOkinawaDefaults} from '../common/PhotoCardScene';
+import {PhotoCardScene} from '../common/PhotoCardScene';
 
 // openingProject.tsのscenesをそのまま並べる通し確認用。
 // シーン構成を変えるとここも自動で変わる(尺の合計はcheck:motionが検証)。
@@ -42,11 +42,15 @@ const renderers: Record<string, () => ReactNode> = {
   ),
   '写真-Hawaii': () => (
     <PhotoCardScene
-      {...photoCardOkinawaDefaults}
       label="MEMORY 03"
       title="Hawaii"
+      photos={[null, null, null]}
+      background="beige"
       maxRotationDeg={2}
+      cardRadius={8}
+      shadowStrength={1}
       staggerFrames={18}
+      zoomTo={1.04}
     />
   ),
   '地図-Hawaii-横浜': () => (

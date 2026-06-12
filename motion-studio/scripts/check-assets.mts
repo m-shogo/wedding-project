@@ -7,6 +7,7 @@
 // status別の扱い:
 //   ready/placeholder → 存在しなければエラー
 //   generated         → あれば✅、無ければ情報表示(再生成コマンドを案内。エラーにしない)
+//                       regenerateCommand未設定はwarning
 //   missing           → 入手待ちとして情報表示のみ
 //   external          → スキップ
 // out/とpublic/photos/はGit管理外なので、fresh cloneでもこのチェックは通る。
@@ -19,6 +20,7 @@ import {openingProject} from '../src/data/openingProject.ts';
 
 const studioRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 let errors = 0;
+let warnings = 0;
 
 const resolvePath = (p: string): string | null => {
   if (p.startsWith('~') || p.startsWith('/')) {
@@ -40,11 +42,20 @@ for (const asset of Object.values(assets)) {
     continue;
   }
   if (asset.status === 'generated') {
+    if (!asset.regenerateCommand) {
+      warnings++;
+      console.warn(
+        `⚠️  [generated] ${asset.id} — regenerateCommand未設定`,
+      );
+    }
     if (abs !== null && existsSync(abs)) {
       console.log(`✅ [generated] ${asset.id} — ${asset.path}`);
     } else {
+      const regenerate = asset.regenerateCommand
+        ? `\n   → 再生成: ${asset.regenerateCommand}`
+        : '';
       console.log(
-        `ℹ️  [generated] ${asset.id} — 未生成${asset.note ? `(${asset.note})` : ''}`,
+        `ℹ️  [generated] ${asset.id} — 未生成${asset.note ? ` (${asset.note})` : ''}${regenerate}`,
       );
     }
     continue;
@@ -80,5 +91,8 @@ console.log('');
 if (errors > 0) {
   console.error(`check:assets 失敗 — エラー${errors}件`);
   process.exit(1);
+}
+if (warnings > 0) {
+  console.warn(`check:assets warning — ${warnings}件`);
 }
 console.log('check:assets 成功');

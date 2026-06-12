@@ -10,8 +10,8 @@
 // status:
 //   ready       実ファイルが存在するべき(無ければcheckがエラー)
 //   placeholder 仮素材が存在するべき(無ければcheckがエラー)
-//   generated   コマンドで再生成できる成果物(out/のrender等)。
-//               あれば✅、無くても情報表示のみ(fresh cloneでcheckを落とさない)
+//   generated   regenerateCommandで再生成できる成果物(out/のrender等)。
+//               あれば✅、無ければ再生成コマンドを表示(fresh cloneでcheckを落とさない)
 //   missing     まだ手元にない(入手待ち。checkは情報表示のみ)
 //   external    Git外・このrepo外で管理(checkはパス検証をスキップ)
 
@@ -25,6 +25,7 @@ export type Asset = {
   aspect: '16:9' | '9:16' | '3:4' | '4:3' | '1:1' | 'audio';
   usage: string;
   status: AssetStatus;
+  regenerateCommand?: string;
   note?: string;
 };
 
@@ -37,7 +38,9 @@ export const assets: Record<string, Asset> = {
     aspect: '3:4',
     usage: '写真カードの動作確認用プレースホルダー(合成グラデ画像)',
     status: 'generated',
-    note: "再生成: ffmpeg -f lavfi -i 'gradients=s=900x1200:c0=#2a4a6b:c1=#d9a05b:n=2' -frames:v 1 public/photos/opening/sample-01.jpg",
+    regenerateCommand:
+      "ffmpeg -f lavfi -i 'gradients=s=900x1200:c0=#2a4a6b:c1=#d9a05b:n=2' -frames:v 1 public/photos/opening/sample-01.jpg",
+    note: '実写真ではなく、動作確認用の合成グラデ画像なので再生成可能',
   },
   'photo-hawaii-01': {
     id: 'photo-hawaii-01',
@@ -103,7 +106,7 @@ export const assets: Record<string, Asset> = {
     aspect: '16:9',
     usage: 'CapCut Track2: 搭乗券イントロ',
     status: 'generated',
-    note: '再生成: pnpm render 搭乗券 final',
+    regenerateCommand: 'pnpm render 搭乗券 final',
   },
   'render-stamp-rush': {
     id: 'render-stamp-rush',
@@ -112,7 +115,7 @@ export const assets: Record<string, Asset> = {
     aspect: '16:9',
     usage: 'CapCut Track2: スタンプ連打ダイジェスト',
     status: 'generated',
-    note: '再生成: pnpm render 押印連打-全路線 final',
+    regenerateCommand: 'pnpm render 押印連打-全路線 final',
   },
   'render-countdown': {
     id: 'render-countdown',
@@ -121,7 +124,7 @@ export const assets: Record<string, Asset> = {
     aspect: '16:9',
     usage: 'CapCut Track2: 入場前カウントダウン',
     status: 'generated',
-    note: '再生成: pnpm render 入場前-秒読 final',
+    regenerateCommand: 'pnpm render 入場前-秒読 final',
   },
   'render-stamp-okinawa': {
     id: 'render-stamp-okinawa',
@@ -130,7 +133,7 @@ export const assets: Record<string, Asset> = {
     aspect: '16:9',
     usage: 'CapCut Track4: 透過ハンコ(乗算ブレンド推奨)',
     status: 'generated',
-    note: '再生成: pnpm render 押印-沖縄 final',
+    regenerateCommand: 'pnpm render 押印-沖縄 final',
   },
   'render-cloud-overlay': {
     id: 'render-cloud-overlay',
@@ -139,7 +142,7 @@ export const assets: Record<string, Asset> = {
     aspect: '16:9',
     usage: 'CapCut Track3: 透過雲オーバーレイ(不透明度50-70%)',
     status: 'generated',
-    note: '再生成: pnpm render 雲-透過 final',
+    regenerateCommand: 'pnpm render 雲-透過 final',
   },
 };
 

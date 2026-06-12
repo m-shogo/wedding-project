@@ -13,6 +13,23 @@ const outFile = join(studioRoot, 'src/data/photoLibrary.generated.ts');
 
 const exts = new Set(['.jpg', '.jpeg', '.png', '.webp']);
 
+const writeLibrary = (lib: Record<string, string[]>): void => {
+  const body = `// このファイルは自動生成。手で編集しない。
+// 再生成: pnpm sync:photos
+// 写真テンプレのphotos欄には、この配列の値をそのまま使える。
+
+export const photoLibrary: Record<string, string[]> = ${JSON.stringify(lib, null, 2)};
+`;
+
+  writeFileSync(outFile, body);
+};
+
+if (!existsSync(photosRoot)) {
+  writeLibrary({});
+  console.log('public/photos が無いため空のphotoLibrary.generated.tsを生成');
+  process.exit(0);
+}
+
 const scanDir = (dir: string): string[] => {
   const abs = join(photosRoot, dir);
   if (!existsSync(abs)) {
@@ -36,14 +53,7 @@ for (const c of categories) {
   lib[c] = scanDir(c);
 }
 
-const body = `// このファイルは自動生成。手で編集しない。
-// 再生成: pnpm sync:photos
-// 写真テンプレのphotos欄には、この配列の値をそのまま使える。
-
-export const photoLibrary: Record<string, string[]> = ${JSON.stringify(lib, null, 2)};
-`;
-
-writeFileSync(outFile, body);
+writeLibrary(lib);
 
 let total = 0;
 for (const [cat, files] of Object.entries(lib)) {
