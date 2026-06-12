@@ -20,23 +20,43 @@ pnpm dev          # Remotion Studioを開く(プレビュー&props調整)
 
 自作のEditor UIはない。**Remotion Studioがエディタ**。各コンポジションはZodスキーマを持っているので、右側のpropsパネルでスライダー・色・文字を調整し、「Save defaults」でソースに保存できる(そのままGit管理される)。
 
-## コンポジション一覧
+## テンプレート一覧(Remotion Studioのサイドバーに日本語で並ぶ)
 
-| ID | 内容 | 尺 | 出力 |
+IDは漢字+英数字のみ(Remotionの仕様でひらがな・カタカナは使えない)。
+出力ファイル名はCapCutで扱いやすいよう英語のまま。
+
+### 00-動作確認
+
+| テンプレート | 内容 | 尺 | 書き出し |
 |----|------|----|------|
-| `StampTest` | 透過テスト用ハンコ | 2秒 | webm (透過) |
-| `StampTestPreview` | 同・紙背景付き比較用 | 2秒 | mp4 |
-| `BoardingPassIntro` | 搭乗券イントロ | 8秒 | mp4 |
-| `FlightMapNaritaToOkinawa` | 成田→沖縄フライトマップ | 8秒 | mp4 |
-| `FlightMapOkinawaToSeoul` | 沖縄→ソウル | 8秒 | mp4 |
-| `FlightMapSeoulToHawaii` | ソウル→ハワイ | 8秒 | mp4 |
-| `FlightMapHawaiiToYokohama` | ハワイ→横浜 | 8秒 | mp4 |
-| `PassportStampOkinawa` | 沖縄ハンコ | 2秒 | webm (透過) |
-| `CloudOverlay` | 雲オーバーレイ | 18秒 | webm (透過) |
-| `Countdown` | 入場前カウントダウン | 16秒 | mp4 |
-| `PhotoCardOkinawa` | 写真カード3枚 | 10秒 | mp4 |
-| `StampRushFullRoute` | 全ルート一筆+スタンプ連打(沖縄・韓国省略案の主役) | 22秒 | mp4 |
-| `OpeningFullPreview` | 通しテンポ確認用(書き出し任意) | 44秒 | - |
+| `透過確認-押印` | 透過テスト用ハンコ | 2秒 | `pnpm render:stamp-test` (webm透過) |
+| `透過確認-紙背景` | 同・紙背景付き比較用 | 2秒 | `pnpm render:stamp-test:preview` |
+
+### 10-開幕素材
+
+| テンプレート | 内容 | 尺 | 書き出し |
+|----|------|----|------|
+| `搭乗券` | 搭乗券イントロ(ivory/navy切替) | 8秒 | `pnpm render:boarding` |
+| `地図-成田-沖縄` | フライトマップ第1区間 | 8秒 | `pnpm render:map:okinawa` |
+| `地図-沖縄-韓国` | 第2区間 | 8秒 | `pnpm render:map:seoul` |
+| `地図-韓国-Hawaii` | 第3区間 | 8秒 | `pnpm render:map:hawaii` |
+| `地図-Hawaii-横浜` | 最終区間 | 8秒 | `pnpm render:map:yokohama` |
+| `押印-沖縄` | OKINAWA / MEMORY 01 | 2秒 | `pnpm render:stamp:okinawa` (webm透過) |
+| `押印-韓国` | SEOUL / MEMORY 02 | 2秒 | `pnpm render:stamp:seoul` (webm透過) |
+| `押印-Hawaii-求婚` | HAWAII / PROPOSAL | 2秒 | `pnpm render:stamp:hawaii` (webm透過) |
+| `押印-横浜` | YOKOHAMA / FINAL DESTINATION | 2秒 | `pnpm render:stamp:yokohama` (webm透過) |
+| `押印連打-全路線` | 全ルート一筆+スタンプ連打(尺圧縮案の主役) | 22秒 | `pnpm render:stamprush` |
+| `雲-透過` | 雲オーバーレイ | 18秒 | `pnpm render:cloud` (webm透過) |
+| `入場前-秒読` | Doors opening → 10〜1 → Please welcome | 16秒 | `pnpm render:countdown` |
+| `写真-沖縄` | 写真カード3枚 MEMORY 01 | 10秒 | `pnpm render:photo:okinawa` |
+| `写真-韓国` | 写真カード3枚 MEMORY 02 | 10秒 | `pnpm render:photo:seoul` |
+| `写真-Hawaii` | 写真カード3枚 MEMORY 03(動きゆっくり) | 10秒 | `pnpm render:photo:hawaii` |
+
+### 90-全体確認
+
+| テンプレート | 内容 | 尺 | 書き出し |
+|----|------|----|------|
+| `開幕-全体確認` | 通しテンポ確認用(書き出し任意) | 44秒 | `pnpm render:preview` |
 
 ## 書き出し
 
