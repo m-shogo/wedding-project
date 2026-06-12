@@ -136,7 +136,7 @@
   <div class="header-inner">
     <h1>結婚式ムービー制作コックピット</h1>
     <div class="couple">SHOGO &amp; SHIORI — OCT 24 2026 / YOKOHAMA</div>
-    <p>生成: 2026-06-12 09:26 — このページは<strong>編集ページではなく確認入口</strong>。状態は保存されない。更新は <code>pnpm export</code></p>
+    <p>生成: 2026-06-12 13:18 — このページは<strong>編集ページではなく確認入口</strong>。状態は保存されない。更新は <code>pnpm export</code></p>
     <p>最初にやる: <code>pnpm dev</code>(Studio) / <code>pnpm export</code>(このページ更新) / <code>pnpm check</code>(整合確認)</p>
   </div>
 </header>
@@ -241,7 +241,7 @@
     <div class="preview-meta">
       <strong><code>文字部品-確認</code></strong> <span class="muted">frame 90</span><br>
       <span class="muted">TextPart 3種の見た目確認(frame90=FadeUpCaption)</span><br>
-      <span class="muted">再生成: <code>pnpm exec remotion still 文字部品-確認 exports/previews/text-parts-preview.png --frame=90</code></span>
+      <span class="muted">再生成: <code>pnpm exec remotion still "文字部品-確認" exports/previews/text-parts-preview.png --frame=90</code></span>
     </div>
   </div>
 <div class="preview-card">
@@ -249,7 +249,7 @@
     <div class="preview-meta">
       <strong><code>写真-Hawaii</code></strong> <span class="muted">frame 120</span><br>
       <span class="muted">Hawaii写真カードの確認</span><br>
-      <span class="muted">再生成: <code>pnpm exec remotion still 写真-Hawaii exports/previews/photo-hawaii.png --frame=120</code></span>
+      <span class="muted">再生成: <code>pnpm exec remotion still "写真-Hawaii" exports/previews/photo-hawaii.png --frame=120</code></span>
     </div>
   </div>
 <div class="preview-card">
@@ -257,7 +257,7 @@
     <div class="preview-meta">
       <strong><code>搭乗券</code></strong> <span class="muted">frame 120</span><br>
       <span class="muted">BOARDING PASSイントロの確認</span><br>
-      <span class="muted">再生成: <code>pnpm exec remotion still 搭乗券 exports/previews/boarding.png --frame=120</code></span>
+      <span class="muted">再生成: <code>pnpm exec remotion still "搭乗券" exports/previews/boarding.png --frame=120</code></span>
     </div>
   </div>
 <div class="preview-card">
@@ -265,7 +265,7 @@
     <div class="preview-meta">
       <strong><code>雲海</code></strong> <span class="muted">frame 150</span><br>
       <span class="muted">Remotion版雲海(AI版op_16系との比較用)</span><br>
-      <span class="muted">再生成: <code>pnpm exec remotion still 雲海 exports/previews/cloud-sea.png --frame=150</code></span>
+      <span class="muted">再生成: <code>pnpm exec remotion still "雲海" exports/previews/cloud-sea.png --frame=150</code></span>
     </div>
   </div>
 <div class="preview-card">
@@ -273,7 +273,7 @@
     <div class="preview-meta">
       <strong><code>扉-光</code></strong> <span class="muted">frame 180</span><br>
       <span class="muted">入場直前の余韻・光の強さ確認</span><br>
-      <span class="muted">再生成: <code>pnpm exec remotion still 扉-光 exports/previews/door-light.png --frame=180</code></span>
+      <span class="muted">再生成: <code>pnpm exec remotion still "扉-光" exports/previews/door-light.png --frame=180</code></span>
     </div>
   </div>
 <div class="preview-card">
@@ -281,23 +281,61 @@
     <div class="preview-meta">
       <strong><code>入場前-秒読</code></strong> <span class="muted">frame 240</span><br>
       <span class="muted">カウントダウンの数字・読みやすさ確認</span><br>
-      <span class="muted">再生成: <code>pnpm exec remotion still 入場前-秒読 exports/previews/countdown.png --frame=240</code></span>
+      <span class="muted">再生成: <code>pnpm exec remotion still "入場前-秒読" exports/previews/countdown.png --frame=240</code></span>
+    </div>
+  </div>
+  </div>
+  <h3>開幕-全体確認(通しの流れを3枚で見る)</h3>
+  <div class="preview-grid">
+<div class="preview-card">
+    <img src="./previews/opening-full-early.png" alt="開幕-全体確認" loading="lazy">
+    <div class="preview-meta">
+      <strong><code>開幕-全体確認</code></strong> <span class="muted">frame 180</span><br>
+      <span class="muted">通し序盤の雰囲気(搭乗券イントロあたり)</span><br>
+      <span class="muted">再生成: <code>pnpm exec remotion still "開幕-全体確認" exports/previews/opening-full-early.png --frame=180</code></span>
     </div>
   </div>
 <div class="preview-card">
-    <img src="./previews/opening-full-preview.png" alt="開幕-全体確認" loading="lazy">
+    <img src="./previews/opening-full-mid.png" alt="開幕-全体確認" loading="lazy">
     <div class="preview-meta">
-      <strong><code>開幕-全体確認</code></strong> <span class="muted">frame 300</span><br>
-      <span class="muted">通しの雰囲気確認(順番・尺はStudioで)</span><br>
-      <span class="muted">再生成: <code>pnpm exec remotion still 開幕-全体確認 exports/previews/opening-full-preview.png --frame=300</code></span>
+      <strong><code>開幕-全体確認</code></strong> <span class="muted">frame 900</span><br>
+      <span class="muted">通し中盤の雰囲気(スタンプ連打あたり)</span><br>
+      <span class="muted">再生成: <code>pnpm exec remotion still "開幕-全体確認" exports/previews/opening-full-mid.png --frame=900</code></span>
+    </div>
+  </div>
+<div class="preview-card">
+    <img src="./previews/opening-full-late.png" alt="開幕-全体確認" loading="lazy">
+    <div class="preview-meta">
+      <strong><code>開幕-全体確認</code></strong> <span class="muted">frame 1800</span><br>
+      <span class="muted">通し終盤の雰囲気(扉の光〜カウントダウンあたり)</span><br>
+      <span class="muted">再生成: <code>pnpm exec remotion still "開幕-全体確認" exports/previews/opening-full-late.png --frame=1800</code></span>
     </div>
   </div>
   </div>
 </section>
 
 <section>
-  <h2>今日やること(優先度つき)</h2>
+  <h2>今日やること TOP5</h2>
   <ul class="todos">
+<li class="todo-item">
+      <span class="prio" style="background:#9a3d3d">HIGH</span> 実写真を選んで public/photos/opening/hawaii-01.jpg に置く <code>photo-hawaii-01</code> <span class="muted">/ 使用シーン: <code>opening-photo-hawaii</code></span><br><span class="muted indent">実写真の選定待ち(docs/templates/photo-selection.csv)</span>
+    </li>
+<li class="todo-item">
+      <span class="prio" style="background:#9a3d3d">HIGH</span> 実写真を選んで public/photos/opening/hawaii-02.jpg に置く <code>photo-hawaii-02</code> <span class="muted">/ 使用シーン: <code>opening-photo-hawaii</code></span>
+    </li>
+<li class="todo-item">
+      <span class="prio" style="background:#9a3d3d">HIGH</span> 実写真を選んで public/photos/opening/hawaii-03.jpg に置く <code>photo-hawaii-03</code> <span class="muted">/ 使用シーン: <code>opening-photo-hawaii</code></span>
+    </li>
+<li class="todo-item">
+      <span class="prio" style="background:#9a3d3d">HIGH</span> BGM候補を決める(会場上映の利用条件確認も) <code>bgm-main</code> <span class="muted">/ 使用シーン: <code>opening-countdown</code></span><br><span class="muted indent">候補集め: docs/templates/music-candidates.csv。会場上映の利用条件確認必須</span>
+    </li>
+<li class="todo-item">
+      <span class="prio" style="background:#8a6d3b">MEDIUM</span> 生成するか、Remotion版だけで進めるか決める <code>ai-door-light-01</code> <span class="muted">/ 使用シーン: <code>opening-door-light</code></span><br><span class="muted indent">ComfyUI未生成。aiPromptRegistry.tsのai-door-light-01-idea-01を参照。生成後にgenerated_previewへ昇格(人間確認必須)</span>
+    </li>
+  </ul>
+  <details>
+    <summary>すべてのTODOを見る(19件)</summary>
+    <ul class="todos">
 <li class="todo-item">
       <span class="prio" style="background:#9a3d3d">HIGH</span> 実写真を選んで public/photos/opening/hawaii-01.jpg に置く <code>photo-hawaii-01</code> <span class="muted">/ 使用シーン: <code>opening-photo-hawaii</code></span><br><span class="muted indent">実写真の選定待ち(docs/templates/photo-selection.csv)</span>
     </li>
@@ -355,7 +393,8 @@
 <li class="todo-item">
       <span class="prio" style="background:#5b6b7a">LOW</span> Studioで見た目を確認する(draft) <code>opening-countdown</code><br><span class="muted indent">数字の頭をBGMのビートに合わせる。直後に入場曲</span>
     </li>
-  </ul>
+    </ul>
+  </details>
   <p class="note">candidate以上への昇格は人間(新郎新婦)の確認が必須。AIが勝手に上げない。</p>
 </section>
 

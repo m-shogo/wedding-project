@@ -167,6 +167,9 @@ Visual Cockpit運用:
 - 通常確認: `pnpm export`(still画像が無くてもコックピットは壊れない)
 - 見た目サムネイルも更新: `pnpm export:stills && pnpm export`
 - still画像(`exports/previews/*.png`)は生成物なのでGit管理しない
+- TODOは**TOP5をまず見る**(全件は折りたたみ内)
+- `開幕-全体確認` は early / mid / late の3枚サムネイルで通しの流れを見る。
+  最終確認はRemotion Studioで再生する
 
 出力先(CSV/MD/HTMLはGit管理してよい。動画・画像はexports/に置かない):
 

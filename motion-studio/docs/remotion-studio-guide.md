@@ -16,6 +16,8 @@ open motion-studio/exports/index.html   # Finderからダブルクリックで�
 
 コックピットには主要Compositionの**見た目プレビュー**(still画像)が出る。
 
+- TODOは**TOP5をまず見る**。全件は「すべてのTODOを見る」の折りたたみで確認
+- `開幕-全体確認` は **early / mid / late の3枚**で通しの流れを見る
 - サムネイルが古い / 無い場合: `pnpm export:stills && pnpm export` で更新
 - still画像は**目安**。動き・テンポの最終確認はRemotion Studioで再生する
 - サムネイル画像(`exports/previews/*.png`)はGit管理しない(生成物)

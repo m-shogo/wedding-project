@@ -162,7 +162,18 @@ const previewCard = (p: (typeof previewStills)[number]): string => {
   </div>`;
 };
 
-const previewSectionHtml = previewStills.map(previewCard).join('\n');
+// 開幕-全体確認の3枚(序盤/中盤/終盤)はグループとして見せる
+const FULL_PREVIEW_ID = '開幕-全体確認';
+const singleStills = previewStills.filter((p) => p.compositionId !== FULL_PREVIEW_ID);
+const fullStills = previewStills.filter((p) => p.compositionId === FULL_PREVIEW_ID);
+
+const previewSectionHtml = `<div class="preview-grid">
+${singleStills.map(previewCard).join('\n')}
+  </div>
+  <h3>開幕-全体確認(通しの流れを3枚で見る)</h3>
+  <div class="preview-grid">
+${fullStills.map(previewCard).join('\n')}
+  </div>`;
 
 // sceneId → プレビュー定義
 const previewBySceneId = new Map(
@@ -281,17 +292,17 @@ for (const a of byStatus('external')) {
 
 todos.sort((x, y) => x.order - y.order);
 
-const todoHtml = todos
-  .map(
-    (t) => `<li class="todo-item">
+const todoItemHtml = (t: TodoItem): string => `<li class="todo-item">
       ${prioBadge(t.prio)} ${esc(t.action)} <code>${esc(t.ref)}</code>${
         t.scenes.length > 0 && t.scenes[0] !== t.ref
           ? ` <span class="muted">/ 使用シーン: ${t.scenes.map((s) => `<code>${esc(s)}</code>`).join(' ')}</span>`
           : ''
       }${t.detail ? `<br><span class="muted indent">${esc(t.detail)}</span>` : ''}
-    </li>`,
-  )
-  .join('\n');
+    </li>`;
+
+// 開いた瞬間に「まず何をやるか」が分かるよう、TOP5だけ常時表示し全件は折りたたむ
+const todoTop5Html = todos.slice(0, 5).map(todoItemHtml).join('\n');
+const todoAllHtml = todos.map(todoItemHtml).join('\n');
 
 // ---------------------------------------------------------------- E. シーン別カード
 
@@ -739,16 +750,20 @@ ${summaryHtml}
   <h2>見た目プレビュー</h2>
   <p class="muted">still画像は目安。最終確認はRemotion Studio(<code>pnpm dev</code>)で再生する。
   古い/無い場合は <code>pnpm export:stills && pnpm export</code> で更新(画像はGit管理しない)。</p>
-  <div class="preview-grid">
-${previewSectionHtml}
-  </div>
+  ${previewSectionHtml}
 </section>
 
 <section>
-  <h2>今日やること(優先度つき)</h2>
+  <h2>今日やること TOP5</h2>
   <ul class="todos">
-${todoHtml}
+${todoTop5Html}
   </ul>
+  <details>
+    <summary>すべてのTODOを見る(${todos.length}件)</summary>
+    <ul class="todos">
+${todoAllHtml}
+    </ul>
+  </details>
   <p class="note">candidate以上への昇格は人間(新郎新婦)の確認が必須。AIが勝手に上げない。</p>
 </section>
 

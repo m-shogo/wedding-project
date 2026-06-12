@@ -119,6 +119,8 @@ pnpm exec remotion still <ID> /tmp/x.png --frame=N  # 静止画で見た目確�
   TODO優先度・シーン別状態・素材一覧・パーツ・AIプロンプト履歴を集約。
   生成元は `scripts/export-home.mts`(データ源: openingProject/assets/
   sceneRegistry/partRegistry/aiPromptRegistry)
+  - TODOはTOP5を常時表示、全件は折りたたみ
+  - `開幕-全体確認`のサムネイルはearly/mid/lateの3枚(preview-stills.config.mts)
 - **Remotion Studio** = 見た目確認・props微調整用。操作説明は `docs/remotion-studio-guide.md`
 - 本格的なダッシュボード・編集UI・状態保存・検索・カンバンは作らない
 - 既存テンプレへの変更はStudioの見た目だけで判断せず `git diff` も見る

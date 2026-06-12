@@ -57,13 +57,28 @@ export const previewStills: PreviewStill[] = [
     purpose: 'カウントダウンの数字・読みやすさ確認',
     sceneId: 'opening-countdown',
   },
+  // 開幕-全体確認(2460frame)は1枚だと代表性が弱いので序盤/中盤/終盤の3枚で見る
   {
     compositionId: '開幕-全体確認',
-    file: 'opening-full-preview.png',
-    frame: 300,
-    purpose: '通しの雰囲気確認(順番・尺はStudioで)',
+    file: 'opening-full-early.png',
+    frame: 180,
+    purpose: '通し序盤の雰囲気(搭乗券イントロあたり)',
+  },
+  {
+    compositionId: '開幕-全体確認',
+    file: 'opening-full-mid.png',
+    frame: 900,
+    purpose: '通し中盤の雰囲気(スタンプ連打あたり)',
+  },
+  {
+    compositionId: '開幕-全体確認',
+    file: 'opening-full-late.png',
+    frame: 1800,
+    purpose: '通し終盤の雰囲気(扉の光〜カウントダウンあたり)',
   },
 ];
 
+// 人間がコピペ実行する想定の表示用コマンド。日本語IDなのでクォートする
+// (export-preview-stills.mtsの実行はspawnSyncの引数配列なのでクォート不要)
 export const stillCommand = (p: PreviewStill): string =>
-  `pnpm exec remotion still ${p.compositionId} exports/previews/${p.file} --frame=${p.frame}`;
+  `pnpm exec remotion still "${p.compositionId}" exports/previews/${p.file} --frame=${p.frame}`;
