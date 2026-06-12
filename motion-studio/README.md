@@ -155,14 +155,16 @@ fresh clone(out/やpublic/photos/が空)でも `pnpm check` は通る設計
 ## 制作管理ファイルの出力
 
 ```sh
-pnpm export           # 下の2つをまとめて実行
+pnpm export           # 下の3つをまとめて実行
 pnpm export:capcut    # CapCut作業表CSV/MD + 本番未確定素材一覧
 pnpm export:review    # レビュー用HTML(シーン一覧+品質チェックリスト)
+pnpm export:home      # 制作ホーム(入口ページ)
 ```
 
 出力先(CSV/MD/HTMLはGit管理してよい。動画・画像はexports/に置かない):
 
 ```text
+exports/index.html                         制作ホーム(まず開く入口ページ)
 exports/capcut/opening-timeline.csv        CapCut作業表(start/end自動計算)
 exports/capcut/opening-timeline.md         同・目視用
 exports/capcut/opening-missing-assets.md   本番未確定素材の一覧(これを空にするのがゴール)
@@ -170,6 +172,14 @@ exports/review-gallery/opening/review.html レビューページ(品質ゲート
 ```
 
 単一情報源は `src/data/openingProject.ts`。出力ファイルを直接編集しない。
+
+## 迷ったらここから
+
+- **制作ホーム**: `exports/index.html`(`pnpm export` で更新。今日やること・リンク集)
+- **Remotion Studio** は見た目確認・props微調整用。操作説明は
+  [docs/remotion-studio-guide.md](docs/remotion-studio-guide.md)
+- AI(Fable/Codex)の作業後は `pnpm export` して `exports/index.html` を見る
+- 本格的なダッシュボードや編集UIは今は作らない(入口ページとStudioで足りる)
 
 ## AIプロンプト履歴
 

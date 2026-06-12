@@ -39,7 +39,8 @@
     "sync:photos": "node --no-warnings scripts/sync-photos.mts",
     "export:capcut": "node --no-warnings scripts/export-capcut-timeline.mts",
     "export:review": "node --no-warnings scripts/export-review-gallery.mts",
-    "export": "pnpm export:capcut && pnpm export:review"
+    "export:home": "node --no-warnings scripts/export-home.mts",
+    "export": "pnpm export:capcut && pnpm export:review && pnpm export:home"
   },
   "dependencies": {
     "@remotion/cli": "^4.0.0",

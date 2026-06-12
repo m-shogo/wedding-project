@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>結婚式ムービー制作ホーム</title>
+<style>
+  :root {
+    --navy: #1d2a44;
+    --navy-deep: #141d31;
+    --beige: #f4eee3;
+    --gold: #b89a5a;
+    --gold-light: #d9c18a;
+    --ink: #2c2c2c;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: "Hiragino Mincho ProN", "Yu Mincho", serif;
+    background: var(--beige);
+    color: var(--ink);
+    line-height: 1.7;
+  }
+  header {
+    background: var(--navy);
+    color: #f4eee3;
+    padding: 36px 48px 28px;
+    border-bottom: 3px solid var(--gold);
+  }
+  header h1 { margin: 0; font-size: 26px; letter-spacing: 0.18em; font-weight: 600; }
+  header p { margin: 8px 0 0; opacity: 0.75; font-size: 13px; letter-spacing: 0.08em; }
+  main { max-width: 880px; margin: 0 auto; padding: 32px 24px 64px; }
+  section {
+    background: #fff;
+    border: 1px solid #e2dac9;
+    border-radius: 10px;
+    padding: 24px 28px;
+    margin-bottom: 28px;
+    box-shadow: 0 2px 10px rgba(29,42,68,0.06);
+  }
+  h2 {
+    margin: 0 0 16px;
+    font-size: 18px;
+    letter-spacing: 0.14em;
+    color: var(--navy);
+    border-bottom: 1px solid var(--gold);
+    padding-bottom: 8px;
+  }
+  h3 { margin: 18px 0 6px; font-size: 15px; color: var(--navy); }
+  ul { margin: 6px 0; padding-left: 22px; }
+  li { margin: 4px 0; }
+  a { color: #3b5a8a; }
+  code {
+    font-family: "SF Mono", Menlo, monospace;
+    font-size: 13px;
+    background: #f0ebe0;
+    padding: 1px 6px;
+    border-radius: 4px;
+  }
+  table { border-collapse: collapse; width: 100%; }
+  td { padding: 7px 10px; border-bottom: 1px solid #ece5d6; vertical-align: top; font-size: 14px; }
+  .muted { color: #8a8273; font-size: 13px; }
+  .count { font-size: 12px; color: #8a8273; font-weight: normal; margin-left: 6px; }
+  .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 8px; }
+  .todo-group { margin-bottom: 8px; }
+  .note {
+    background: #faf6ec;
+    border-left: 3px solid var(--gold);
+    padding: 10px 16px;
+    font-size: 13px;
+    color: #6d614b;
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>結婚式ムービー制作ホーム</h1>
+  <p>motion-studio 入口ページ — 生成: 2026-06-12 09:05(pnpm export で更新)</p>
+</header>
+<main>
+
+<section>
+  <h2>まず見るもの</h2>
+  <ul>
+    <li><strong>Remotion Studio</strong> — <code>pnpm dev</code>(見た目確認・props微調整)</li>
+    <li><strong>Studio操作ガイド</strong> — <a href="../docs/remotion-studio-guide.md">docs/remotion-studio-guide.md</a></li>
+    <li><strong>レビュー一覧</strong> — <a href="./review-gallery/opening/review.html">review.html</a>(シーン×素材×品質チェック)</li>
+    <li><strong>CapCut作業表</strong> — <a href="./capcut/opening-timeline.md">opening-timeline.md</a></li>
+    <li><strong>本番未確定素材一覧</strong> — <a href="./capcut/opening-missing-assets.md">opening-missing-assets.md</a></li>
+  </ul>
+</section>
+
+<section>
+  <h2>今日やること(素材状況)</h2>
+<div class="todo-group">
+    <h3><span class="dot" style="background:#9a3d3d"></span>missing — 入手待ち <span class="count">4件</span></h3>
+    <ul><li><code>photo-hawaii-01</code> — 写真-Hawaii 1枚目(プロポーズ文脈)<br><span class="muted">実写真の選定待ち(docs/templates/photo-selection.csv)</span></li>
+<li><code>photo-hawaii-02</code> — 写真-Hawaii 2枚目</li>
+<li><code>photo-hawaii-03</code> — 写真-Hawaii 3枚目</li>
+<li><code>bgm-main</code> — オープニング本編BGM<br><span class="muted">候補集め: docs/templates/music-candidates.csv。会場上映の利用条件確認必須</span></li></ul>
+  </div>
+<div class="todo-group">
+    <h3><span class="dot" style="background:#8a6d3b"></span>idea — アイデア段階 <span class="count">1件</span></h3>
+    <ul><li><code>ai-door-light-01</code> — 扉の光のAI生成候補。Remotion版「扉-光」と比較<br><span class="muted">ComfyUI未生成。aiPromptRegistry.tsのai-door-light-01-idea-01を参照。生成後にgenerated_previewへ昇格(人間確認必須)</span></li></ul>
+  </div>
+<div class="todo-group">
+    <h3><span class="dot" style="background:#8a6d3b"></span>generated_preview — 試作済み(人間の審査待ち) <span class="count">7件</span></h3>
+    <ul><li><code>photo-sample-01</code> — 写真カードの動作確認用プレースホルダー(合成グラデ画像)<br><span class="muted">実写真ではなく、動作確認用の合成グラデ画像なので再生成可能</span></li>
+<li><code>ai-cloud-sea-01</code> — 雲海シーンのAI生成候補(op_16系)。Remotion版「雲海」と比較<br><span class="muted">採点: docs/templates/ai-video-scorecard.csv。採用確定後にpathを具体ファイル名に更新しstatusをcandidateへ(人間確認必須)</span></li>
+<li><code>render-boarding</code> — CapCut Track2: 搭乗券イントロ</li>
+<li><code>render-stamp-rush</code> — CapCut Track2: スタンプ連打ダイジェスト</li>
+<li><code>render-countdown</code> — CapCut Track2: 入場前カウントダウン</li>
+<li><code>render-stamp-okinawa</code> — CapCut Track4: 透過ハンコ(乗算ブレンド推奨)</li>
+<li><code>render-cloud-overlay</code> — CapCut Track3: 透過雲オーバーレイ(不透明度50-70%)</li></ul>
+  </div>
+<div class="todo-group">
+      <h3><span class="dot" style="background:#3b6d8a"></span>candidate — 採用候補(承認待ち) <span class="count">0件</span></h3>
+      <p class="muted">なし</p>
+    </div>
+  <p class="note">candidate以上への昇格は人間(新郎新婦)の確認が必須。AIが勝手に上げない。</p>
+</section>
+
+<section>
+  <h2>よく使うコマンド</h2>
+  <table>
+<tr><td><code>pnpm dev</code></td><td>Remotion Studioを開く(見た目確認・props微調整)</td></tr>
+<tr><td><code>pnpm check</code></td><td>コード・素材・パーツの整合チェック(コミット前に必ず)</td></tr>
+<tr><td><code>pnpm export</code></td><td>CapCut作業表・review.html・このページを再生成</td></tr>
+<tr><td><code>pnpm render:photo:hawaii</code></td><td>Hawaii写真カードを書き出す</td></tr>
+<tr><td><code>pnpm render:preview</code></td><td>開幕の通しプレビューを書き出す</td></tr>
+<tr><td><code>pnpm exec remotion still 文字部品-確認 /tmp/text-parts-preview.png --frame=90</code></td><td>文字パーツの静止画確認</td></tr>
+  </table>
+</section>
+
+</main>
+</body>
+</html>

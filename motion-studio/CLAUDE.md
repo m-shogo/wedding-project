@@ -98,7 +98,7 @@ pnpm check                        # check:motion + check:assets + check:parts(�
 pnpm render <テンプレID> <preset>  # preview / draft / final / prores
 pnpm render --all final           # 一括書き出し
 pnpm sync:photos                  # public/photos/ → photoLibrary.generated.ts
-pnpm export                       # CapCut作業表CSV/MD + 素材不足表 + review.html
+pnpm export                       # CapCut作業表CSV/MD + 素材不足表 + review.html + 制作ホーム(exports/index.html)
 pnpm exec remotion compositions src/index.ts   # 全Compositionの健全性確認
 pnpm exec remotion still <ID> /tmp/x.png --frame=N  # 静止画で見た目確認
 ```
@@ -109,6 +109,12 @@ pnpm exec remotion still <ID> /tmp/x.png --frame=N  # 静止画で見た目確�
 1. `pnpm typecheck && pnpm check`
 2. 影響したテンプレを `remotion still` でキーフレーム書き出して目視
 3. 透過素材を触ったらffprobeでalpha確認
+4. 作業を終えたら `pnpm export` を実行(制作ホーム `exports/index.html` が最新になる)
+
+人間向け導線:
+- **制作ホーム** = `exports/index.html`(入口ページ。編集UIではない)
+- **Remotion Studio** = 見た目確認・props微調整用。操作説明は `docs/remotion-studio-guide.md`
+- 本格的なダッシュボード・編集UI・状態保存は今は作らない
 
 ## 未決事項・人間待ち(2026-06-12時点)
 
