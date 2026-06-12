@@ -22,31 +22,43 @@
   - 使用シーン: opening-countdown
   - メモ: 候補集め: docs/templates/music-candidates.csv。会場上映の利用条件確認必須
 
-## generated_preview (6件)
+## idea (1件)
+
+- **ai-door-light-01** — 扉の光のAI生成候補。Remotion版「扉-光」と比較
+  - path: `~/ComfyUI-Shared/output/video/`
+  - 使用シーン: opening-door-light
+  - メモ: ComfyUI未生成。aiPromptRegistry.tsのai-door-light-01-idea-01を参照。生成後にgenerated_previewへ昇格(人間確認必須)
+
+## generated_preview (7件)
 
 - **photo-sample-01** — 写真カードの動作確認用プレースホルダー(合成グラデ画像)
   - path: `public/photos/opening/sample-01.jpg`
-  - 使用シーン: なし
+  - 使用シーン: (シーンから未参照)
   - 再生成: `ffmpeg -f lavfi -i 'gradients=s=900x1200:c0=#2a4a6b:c1=#d9a05b:n=2' -frames:v 1 public/photos/opening/sample-01.jpg`
   - メモ: 実写真ではなく、動作確認用の合成グラデ画像なので再生成可能
+- **ai-cloud-sea-01** — 雲海シーンのAI生成候補(op_16系)。Remotion版「雲海」と比較
+  - path: `~/ComfyUI-Shared/output/video/`
+  - 使用シーン: opening-cloud-sea
+  - メモ: ComfyUI Wan2.2で生成済み。~/ComfyUI-Shared/output/video/ のop_16系を採点して採用ファイルを決める
+  - メモ: 採点: docs/templates/ai-video-scorecard.csv。採用確定後にpathを具体ファイル名に更新しstatusをcandidateへ(人間確認必須)
 - **render-boarding** — CapCut Track2: 搭乗券イントロ
   - path: `out/opening/boarding_pass_intro.mp4`
-  - 使用シーン: なし
+  - 使用シーン: opening-boarding
   - 再生成: `pnpm render 搭乗券 final`
 - **render-stamp-rush** — CapCut Track2: スタンプ連打ダイジェスト
   - path: `out/opening/stamp_rush_full_route.mp4`
-  - 使用シーン: なし
+  - 使用シーン: opening-stamp-rush
   - 再生成: `pnpm render 押印連打-全路線 final`
 - **render-countdown** — CapCut Track2: 入場前カウントダウン
   - path: `out/opening/countdown_10sec.mp4`
-  - 使用シーン: なし
+  - 使用シーン: opening-countdown
   - 再生成: `pnpm render 入場前-秒読 final`
 - **render-stamp-okinawa** — CapCut Track4: 透過ハンコ(乗算ブレンド推奨)
   - path: `out/opening/stamp_okinawa.webm`
-  - 使用シーン: なし
+  - 使用シーン: (シーンから未参照)
   - 再生成: `pnpm render 押印-沖縄 final`
 - **render-cloud-overlay** — CapCut Track3: 透過雲オーバーレイ(不透明度50-70%)
   - path: `out/common/cloud_overlay.webm`
-  - 使用シーン: なし
+  - 使用シーン: (シーンから未参照)
   - 再生成: `pnpm render 雲-透過 final`
 

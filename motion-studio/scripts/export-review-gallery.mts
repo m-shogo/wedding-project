@@ -26,11 +26,13 @@ const mmss = (sec: number): string => {
 const esc = (s: string): string =>
   s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
+// external は採用段階ではなく置き場所なので本番未確定として扱う
 const NOT_PRODUCTION_READY: AssetStatus[] = [
   'missing',
   'idea',
   'prompt_ready',
   'generated_preview',
+  'external',
 ];
 
 const statusColor: Record<string, string> = {
@@ -91,10 +93,19 @@ const sceneCards = openingProject.scenes
             .join(', ')} — このシーンはまだ確定扱いにしない</p>`
         : '';
 
+    // render出力パスをsceneRegistryから導出
+    let renderInfo = '';
+    if (t && t.kind !== 'preview-only' && t.output) {
+      const ext = t.kind === 'alpha' ? '.webm' : '.mp4';
+      const renderPath = `out/${t.output}${ext}`;
+      renderInfo = `<p class="muted">CapCut素材: <code>${esc(renderPath)}</code> <span class="badge" style="background:#4a6080">${esc(t.kind)}</span> — <code>pnpm render ${esc(t.id)} final</code></p>`;
+    }
+
     return `
     <section class="scene">
       <h2>${i + 1}. ${esc(scene.title)} <span class="time">${mmss(start)}–${mmss(end)} (${scene.durationSec}s)</span></h2>
       <p>テンプレ: <strong>${esc(scene.template)}</strong>${t ? ` — ${esc(t.description)}` : ''} / scene status: ${badge(scene.status)}</p>
+      ${renderInfo}
       ${scene.caption ? `<p>テロップ: <em>${esc(scene.caption)}</em></p>` : ''}
       ${scene.bgmNote ? `<p class="muted">BGM: ${esc(scene.bgmNote)}</p>` : ''}
       ${scene.notes ? `<p class="muted">メモ: ${esc(scene.notes)}</p>` : ''}

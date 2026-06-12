@@ -87,14 +87,17 @@ export const assets: Record<string, Asset> = {
   },
 
   // ---- AI背景(ComfyUI生成。Remotionテンプレ版と比較して採用を決める) ----
+  // pathは ~/... で始まるローカル絶対パス → check-assetsは "未生成" 扱い(情報表示のみ)
   'ai-cloud-sea-01': {
     id: 'ai-cloud-sea-01',
     path: '~/ComfyUI-Shared/output/video/',
     type: 'ai-video',
     aspect: '16:9',
     usage: '雲海シーンのAI生成候補(op_16系)。Remotion版「雲海」と比較',
-    status: 'external',
-    note: '採点は docs/templates/ai-video-scorecard.csv',
+    status: 'generated_preview',
+    regenerateCommand:
+      '# ComfyUI Wan2.2で生成済み。~/ComfyUI-Shared/output/video/ のop_16系を採点して採用ファイルを決める',
+    note: '採点: docs/templates/ai-video-scorecard.csv。採用確定後にpathを具体ファイル名に更新しstatusをcandidateへ(人間確認必須)',
   },
   'ai-door-light-01': {
     id: 'ai-door-light-01',
@@ -102,7 +105,8 @@ export const assets: Record<string, Asset> = {
     type: 'ai-video',
     aspect: '16:9',
     usage: '扉の光のAI生成候補。Remotion版「扉-光」と比較',
-    status: 'external',
+    status: 'idea',
+    note: 'ComfyUI未生成。aiPromptRegistry.tsのai-door-light-01-idea-01を参照。生成後にgenerated_previewへ昇格(人間確認必須)',
   },
 
   // ---- 音源(Git外。利用条件確認が先) ----

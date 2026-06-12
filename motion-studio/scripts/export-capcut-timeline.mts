@@ -29,12 +29,14 @@ const mmss = (sec: number): string => {
 const csvEscape = (v: string): string =>
   /[",\n]/.test(v) ? `"${v.replace(/"/g, '""')}"` : v;
 
-// 本番使用してはいけない(または使えない)status
+// 本番使用してはいけない(または使えない)status。
+// external は「repo外管理」であり採用段階ではないため本番未確定扱いにする。
 const NOT_PRODUCTION_READY: AssetStatus[] = [
   'missing',
   'idea',
   'prompt_ready',
   'generated_preview',
+  'external',
 ];
 
 type Row = {
@@ -43,6 +45,9 @@ type Row = {
   end: string;
   duration_sec: string;
   template: string;
+  render_output_path: string;
+  render_kind: string;
+  render_command: string;
   visual: string;
   caption: string;
   bgm_note: string;
@@ -74,12 +79,28 @@ for (const scene of openingProject.scenes) {
       : '';
   const t = templateById(scene.template);
 
+  // render出力パスをsceneRegistryのkindとoutputから導出する
+  let renderOutputPath = '';
+  let renderKind = '';
+  let renderCommand = '';
+  if (t && t.kind !== 'preview-only' && t.output) {
+    const ext = t.kind === 'alpha' ? '.webm' : '.mp4';
+    renderOutputPath = `out/${t.output}${ext}`;
+    renderKind = t.kind;
+    renderCommand = `pnpm render ${t.id} final`;
+  } else if (t?.kind === 'preview-only') {
+    renderKind = 'preview-only';
+  }
+
   rows.push({
     scene_id: scene.id,
     start: mmss(start),
     end: mmss(end),
     duration_sec: String(scene.durationSec),
     template: scene.template,
+    render_output_path: renderOutputPath,
+    render_kind: renderKind,
+    render_command: renderCommand,
     visual: `${scene.title}${t ? ` — ${t.description}` : ''}`,
     caption: scene.caption ?? '',
     bgm_note: scene.bgmNote ?? '',
@@ -99,6 +120,9 @@ const header = [
   'end',
   'duration_sec',
   'template',
+  'render_output_path',
+  'render_kind',
+  'render_command',
   'visual',
   'caption',
   'bgm_note',
@@ -150,13 +174,46 @@ const statusOrder: AssetStatus[] = [
   'prompt_ready',
   'generated_preview',
   'candidate',
+  'external',
 ];
+
+// scene.assetsから直接参照されているasset → 使用シーンマップ
 const usedBy = new Map<string, string[]>();
 for (const scene of openingProject.scenes) {
   for (const id of scene.assets) {
     usedBy.set(id, [...(usedBy.get(id) ?? []), scene.id]);
   }
 }
+
+// render素材のregenerateCommandからテンプレートIDを抽出する
+// 例: "pnpm render 搭乗券 final" → "搭乗券"
+const templateIdFromRenderCommand = (cmd: string | undefined): string | undefined => {
+  if (!cmd) return undefined;
+  const m = cmd.match(/^pnpm render (.+?) (?:final|draft|preview|prores)/);
+  return m?.[1];
+};
+
+// テンプレートIDからシーンIDへのマップ(render素材のシーン推定用)
+const templateToSceneIds = new Map<string, string[]>();
+for (const scene of openingProject.scenes) {
+  const arr = templateToSceneIds.get(scene.template) ?? [];
+  arr.push(scene.id);
+  templateToSceneIds.set(scene.template, arr);
+}
+
+// render素材の使用シーンを推定する(scene.assetsに直接入っていないrender素材向け)
+const inferSceneIds = (assetId: string, asset: {type: string; regenerateCommand?: string}): string[] => {
+  const direct = usedBy.get(assetId);
+  if (direct && direct.length > 0) return direct;
+  if (asset.type === 'render') {
+    const templateId = templateIdFromRenderCommand(asset.regenerateCommand);
+    if (templateId) {
+      const inferred = templateToSceneIds.get(templateId);
+      if (inferred && inferred.length > 0) return inferred;
+    }
+  }
+  return [];
+};
 
 const sections = statusOrder
   .map((status) => {
@@ -166,12 +223,16 @@ const sections = statusOrder
     }
     const items = list
       .map((a) => {
-        const scenes = usedBy.get(a.id);
+        const sceneIds = inferSceneIds(a.id, a);
         return [
           `- **${a.id}** — ${a.usage}`,
           `  - path: \`${a.path}\``,
-          scenes ? `  - 使用シーン: ${scenes.join(', ')}` : '  - 使用シーン: なし',
-          a.regenerateCommand ? `  - 再生成: \`${a.regenerateCommand}\`` : null,
+          `  - 使用シーン: ${sceneIds.length > 0 ? sceneIds.join(', ') : '(シーンから未参照)'}`,
+          a.regenerateCommand && !a.regenerateCommand.startsWith('#')
+            ? `  - 再生成: \`${a.regenerateCommand}\``
+            : a.regenerateCommand
+              ? `  - メモ: ${a.regenerateCommand.replace(/^# /, '')}`
+              : null,
           a.note ? `  - メモ: ${a.note}` : null,
         ]
           .filter(Boolean)
