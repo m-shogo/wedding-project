@@ -3,6 +3,17 @@
 Remotion Studioで「どれを見ればいいか」「何を触れば何が変わるか」を迷わないためのガイド。
 Studio本体の機能説明ではなく、このプロジェクトでの使い方に絞る。
 
+## まず制作コックピットを開く
+
+Studioを開く前に `exports/index.html`(制作コックピット)を開くと、
+今日やること・各シーンの状態・見るべきCompositionの順番が分かる。
+
+```sh
+open motion-studio/exports/index.html   # Finderからダブルクリックでも可
+```
+
+古い場合は `pnpm export` で更新してから見る。
+
 ## 起動方法
 
 ```sh
@@ -12,14 +23,18 @@ pnpm dev
 
 ブラウザで Remotion Studio が開く(通常 http://localhost:3000)。
 
-## 最初に見るComposition
+## Compositionを見る順番
 
-| Composition | フォルダ | 見る目的 |
-|---|---|---|
-| `文字部品-確認` | 30-部品確認 | TextPart 3種の見た目確認 |
-| `写真-Hawaii` | 10-開幕素材 | Hawaii写真カードの確認 |
-| `搭乗券` | 10-開幕素材 | オープニング冒頭のBOARDING PASS |
-| `開幕-全体確認` | 90-全体確認 | 全体のテンポ・順番の確認 |
+迷ったらこの順に見る(制作コックピットにも同じ順番がある)。
+
+| 順 | Composition | フォルダ | 見る目的 |
+|---|---|---|---|
+| 1 | `文字部品-確認` | 30-部品確認 | TextPart 3種の見た目確認 |
+| 2 | `写真-Hawaii` | 10-開幕素材 | Hawaii写真カードの確認 |
+| 3 | `搭乗券` | 10-開幕素材 | オープニング冒頭のBOARDING PASS |
+| 4 | `雲海` | 10-開幕素材 | AI生成版(op_16系)とRemotion版の比較 |
+| 5 | `扉-光` | 10-開幕素材 | 入場直前の余韻 |
+| 6 | `開幕-全体確認` | 90-全体確認 | 全体のテンポ・順番の確認 |
 
 ## 画面の見方
 
@@ -54,6 +69,19 @@ pnpm dev
 - enum系(`variant`, `background`, `position` など) — 配色・配置パターンが切り替わる
 - 数値系(`zoomTo`, `staggerFrames` など) — 動きの強さ・タイミングが変わる。
   schemaにmin/maxがあるので極端な値は入らない
+
+**触っていい例:**
+
+- `搭乗券` の `variant` を ivory ↔ navy で切り替えて見比べる
+- `写真-Hawaii` の `zoomTo` を 1.05 → 1.10 にしてズームの強さを見る
+- `showCinematicBars` をオン/オフして黒帯の有無を比較する
+
+**危ない例:**
+
+- `photos` のパス文字列を手書きで変える — 写真は `assets.ts` のID管理。
+  Studioで一時的に見るだけなら害はないが、その値をSave defaultsで保存しない
+- `開幕-全体確認` のpropsを調整して保存する — 代表値なので本番に反映されず混乱のもと
+- min/max限界の極端な値で保存する — 上品さ(Style Bible)から外れる
 
 ## Save defaults の注意
 
@@ -163,6 +191,28 @@ propsはないので、見て気になった点を `docs/templates/review-notes.
   `pnpm check` を通す
 
 ---
+
+## 写真差し替えの基本
+
+1. 実写真を `public/photos/opening/` に置く(Git管理外。コミットされない)
+2. `pnpm sync:photos` を実行(`photoLibrary.generated.ts` が更新される)
+3. `assets.ts` の該当ID(例: `photo-hawaii-01`)の status を更新する
+   (missing → 置いたら generated_preview 等。candidate以上は人間確認)
+4. テンプレへの受け渡しは `photoPublicPath(id)` 経由。Root.tsxのphotos欄に
+   手書きパスを入れない
+5. `pnpm check` で整合確認
+
+## Fable / Codex 作業後の確認順
+
+AIに作業させた後、人間はこの順で確認する。
+
+1. `pnpm check` — 整合が崩れていないか
+2. `pnpm export` — 管理ファイルを最新化
+3. `exports/index.html` — 制作コックピットで全体把握(TODO・素材状況)
+4. `review.html` — シーン×素材×品質チェック
+5. Remotion Studio(`pnpm dev`)— 影響したCompositionを目視
+6. 必要なら still / mp4 書き出しで最終確認
+   (`pnpm exec remotion still <ID> /tmp/x.png --frame=N`)
 
 ## 困ったとき
 

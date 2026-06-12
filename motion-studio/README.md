@@ -175,11 +175,14 @@ exports/review-gallery/opening/review.html レビューページ(品質ゲート
 
 ## 迷ったらここから
 
-- **制作ホーム**: `exports/index.html`(`pnpm export` で更新。今日やること・リンク集)
+- **制作コックピット**: `exports/index.html`(`pnpm export` で更新)。
+  今日やること(優先度つき)・シーン別の状態・Compositionを見る順番・
+  素材一覧・パーツカタログ・AIプロンプト履歴が1枚で分かる
+- これは**編集UIではなく制作判断の入口**。状態保存・検索・カンバンは作らない
 - **Remotion Studio** は見た目確認・props微調整用。操作説明は
   [docs/remotion-studio-guide.md](docs/remotion-studio-guide.md)
-- AI(Fable/Codex)の作業後は `pnpm export` して `exports/index.html` を見る
-- 本格的なダッシュボードや編集UIは今は作らない(入口ページとStudioで足りる)
+- AI(Fable/Codex)の作業後は**必ず** `pnpm export` して、まず `exports/index.html` を見る
+- 既存テンプレへの変更はStudioの見た目だけで判断せず `git diff` も見る
 
 ## AIプロンプト履歴
 

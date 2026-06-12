@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>結婚式ムービー制作ホーム</title>
+<title>結婚式ムービー制作コックピット</title>
 <style>
   :root {
     --navy: #1d2a44;
@@ -24,112 +24,604 @@
   header {
     background: var(--navy);
     color: #f4eee3;
-    padding: 36px 48px 28px;
+    padding: 32px 24px 24px;
     border-bottom: 3px solid var(--gold);
   }
-  header h1 { margin: 0; font-size: 26px; letter-spacing: 0.18em; font-weight: 600; }
-  header p { margin: 8px 0 0; opacity: 0.75; font-size: 13px; letter-spacing: 0.08em; }
-  main { max-width: 880px; margin: 0 auto; padding: 32px 24px 64px; }
+  .header-inner { max-width: 960px; margin: 0 auto; }
+  header h1 { margin: 0; font-size: 24px; letter-spacing: 0.16em; font-weight: 600; }
+  header .couple { margin-top: 6px; font-size: 15px; letter-spacing: 0.3em; color: var(--gold-light); }
+  header p { margin: 6px 0 0; opacity: 0.75; font-size: 12px; letter-spacing: 0.06em; }
+  header code { background: rgba(255,255,255,0.12); color: #f4eee3; }
+  main { max-width: 960px; margin: 0 auto; padding: 28px 20px 64px; }
   section {
     background: #fff;
     border: 1px solid #e2dac9;
     border-radius: 10px;
-    padding: 24px 28px;
-    margin-bottom: 28px;
+    padding: 22px 26px;
+    margin-bottom: 26px;
     box-shadow: 0 2px 10px rgba(29,42,68,0.06);
   }
   h2 {
-    margin: 0 0 16px;
-    font-size: 18px;
+    margin: 0 0 14px;
+    font-size: 17px;
     letter-spacing: 0.14em;
     color: var(--navy);
     border-bottom: 1px solid var(--gold);
     padding-bottom: 8px;
   }
-  h3 { margin: 18px 0 6px; font-size: 15px; color: var(--navy); }
+  h3 { margin: 16px 0 6px; font-size: 14px; color: var(--navy); }
+  h4 { margin: 14px 0 4px; font-size: 13px; color: var(--navy); letter-spacing: 0.06em; }
   ul { margin: 6px 0; padding-left: 22px; }
-  li { margin: 4px 0; }
+  li { margin: 5px 0; }
   a { color: #3b5a8a; }
   code {
     font-family: "SF Mono", Menlo, monospace;
-    font-size: 13px;
+    font-size: 12.5px;
     background: #f0ebe0;
     padding: 1px 6px;
     border-radius: 4px;
+    word-break: break-all;
   }
   table { border-collapse: collapse; width: 100%; }
-  td { padding: 7px 10px; border-bottom: 1px solid #ece5d6; vertical-align: top; font-size: 14px; }
-  .muted { color: #8a8273; font-size: 13px; }
-  .count { font-size: 12px; color: #8a8273; font-weight: normal; margin-left: 6px; }
-  .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 8px; }
-  .todo-group { margin-bottom: 8px; }
+  td { padding: 7px 10px; border-bottom: 1px solid #ece5d6; vertical-align: top; font-size: 13.5px; }
+  table.mini td:first-child { white-space: normal; min-width: 120px; color: #6d614b; }
+  .muted { color: #8a8273; font-size: 12.5px; }
+  .indent { margin-left: 76px; display: inline-block; }
+  .badge {
+    display: inline-block; color: #fff; font-size: 11px; letter-spacing: 0.06em;
+    padding: 1px 9px; border-radius: 9px; font-family: Menlo, monospace; vertical-align: middle;
+  }
+  .prio {
+    display: inline-block; color: #fff; font-size: 11px; font-weight: bold;
+    padding: 1px 9px; border-radius: 4px; font-family: Menlo, monospace;
+    min-width: 58px; text-align: center; margin-right: 6px;
+  }
+  .prompt-todo { color: #9a3d3d; font-weight: bold; }
+  .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
+  .card {
+    border: 1px solid #e2dac9; border-radius: 8px; padding: 12px 16px;
+    background: #fdfbf6; font-size: 13.5px;
+  }
+  .card strong { color: var(--navy); }
+  .stats { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+  .stat {
+    border: 1px solid #e2dac9; border-radius: 8px; padding: 10px 12px;
+    background: #fdfbf6; text-align: center;
+  }
+  .stat-value { font-size: 22px; color: var(--navy); font-weight: 600; }
+  .stat-label { font-size: 12px; color: #6d614b; margin-top: 2px; }
+  .stat-hint { font-size: 10.5px; color: #a89e8a; margin-top: 2px; }
+  details { margin: 8px 0; }
+  summary {
+    cursor: pointer; padding: 8px 10px; background: #faf6ec;
+    border: 1px solid #e8e0cd; border-radius: 6px; font-size: 14px;
+  }
+  summary:hover { background: #f4edda; }
+  .scene-body { padding: 12px 14px; border: 1px solid #ece5d6; border-top: none; border-radius: 0 0 6px 6px; }
+  .scene-no {
+    display: inline-block; background: var(--gold); color: #fff;
+    width: 22px; height: 22px; line-height: 22px; text-align: center;
+    border-radius: 50%; font-size: 12px; font-family: Menlo, monospace; margin-right: 4px;
+  }
   .note {
-    background: #faf6ec;
-    border-left: 3px solid var(--gold);
-    padding: 10px 16px;
-    font-size: 13px;
-    color: #6d614b;
+    background: #faf6ec; border-left: 3px solid var(--gold);
+    padding: 10px 16px; font-size: 13px; color: #6d614b; margin-top: 12px;
+  }
+  .todo-item { list-style: none; margin: 9px 0; }
+  section > ul.todos { padding-left: 0; }
+  @media (max-width: 600px) {
+    main { padding: 16px 10px 48px; }
+    section { padding: 16px 14px; }
+    .indent { margin-left: 0; }
   }
 </style>
 </head>
 <body>
+
 <header>
-  <h1>結婚式ムービー制作ホーム</h1>
-  <p>motion-studio 入口ページ — 生成: 2026-06-12 09:05(pnpm export で更新)</p>
+  <div class="header-inner">
+    <h1>結婚式ムービー制作コックピット</h1>
+    <div class="couple">SHOGO &amp; SHIORI — OCT 24 2026 / YOKOHAMA</div>
+    <p>生成: 2026-06-12 09:18 — このページは<strong>編集ページではなく確認入口</strong>。状態は保存されない。更新は <code>pnpm export</code></p>
+    <p>最初にやる: <code>pnpm dev</code>(Studio) / <code>pnpm export</code>(このページ更新) / <code>pnpm check</code>(整合確認)</p>
+  </div>
 </header>
+
 <main>
 
 <section>
-  <h2>まず見るもの</h2>
-  <ul>
-    <li><strong>Remotion Studio</strong> — <code>pnpm dev</code>(見た目確認・props微調整)</li>
-    <li><strong>Studio操作ガイド</strong> — <a href="../docs/remotion-studio-guide.md">docs/remotion-studio-guide.md</a></li>
-    <li><strong>レビュー一覧</strong> — <a href="./review-gallery/opening/review.html">review.html</a>(シーン×素材×品質チェック)</li>
-    <li><strong>CapCut作業表</strong> — <a href="./capcut/opening-timeline.md">opening-timeline.md</a></li>
-    <li><strong>本番未確定素材一覧</strong> — <a href="./capcut/opening-missing-assets.md">opening-missing-assets.md</a></li>
-  </ul>
+  <h2>重要リンク</h2>
+  <div class="cards">
+    <div class="card"><strong>Remotion Studio</strong><br>ターミナルで <code>pnpm dev</code><br><span class="muted">見た目確認・props微調整</span></div>
+    <div class="card"><strong>Studio操作ガイド</strong><br><a href="../docs/remotion-studio-guide.md">docs/remotion-studio-guide.md</a><br><span class="muted">.mdはVS Code / Finderで開くと読みやすい</span></div>
+    <div class="card"><strong>レビューHTML</strong><br><a href="./review-gallery/opening/review.html">review.html</a><br><span class="muted">シーン×素材×品質チェック</span></div>
+    <div class="card"><strong>CapCut作業表(MD)</strong><br><a href="./capcut/opening-timeline.md">opening-timeline.md</a><br><span class="muted">VS Codeで開く前提</span></div>
+    <div class="card"><strong>CapCut作業表(CSV)</strong><br><a href="./capcut/opening-timeline.csv">opening-timeline.csv</a><br><span class="muted">Numbers / Excelで開ける</span></div>
+    <div class="card"><strong>本番未確定素材一覧</strong><br><a href="./capcut/opening-missing-assets.md">opening-missing-assets.md</a><br><span class="muted">これを空にするのがゴール</span></div>
+  </div>
 </section>
 
 <section>
-  <h2>今日やること(素材状況)</h2>
-<div class="todo-group">
-    <h3><span class="dot" style="background:#9a3d3d"></span>missing — 入手待ち <span class="count">4件</span></h3>
-    <ul><li><code>photo-hawaii-01</code> — 写真-Hawaii 1枚目(プロポーズ文脈)<br><span class="muted">実写真の選定待ち(docs/templates/photo-selection.csv)</span></li>
-<li><code>photo-hawaii-02</code> — 写真-Hawaii 2枚目</li>
-<li><code>photo-hawaii-03</code> — 写真-Hawaii 3枚目</li>
-<li><code>bgm-main</code> — オープニング本編BGM<br><span class="muted">候補集め: docs/templates/music-candidates.csv。会場上映の利用条件確認必須</span></li></ul>
-  </div>
-<div class="todo-group">
-    <h3><span class="dot" style="background:#8a6d3b"></span>idea — アイデア段階 <span class="count">1件</span></h3>
-    <ul><li><code>ai-door-light-01</code> — 扉の光のAI生成候補。Remotion版「扉-光」と比較<br><span class="muted">ComfyUI未生成。aiPromptRegistry.tsのai-door-light-01-idea-01を参照。生成後にgenerated_previewへ昇格(人間確認必須)</span></li></ul>
-  </div>
-<div class="todo-group">
-    <h3><span class="dot" style="background:#8a6d3b"></span>generated_preview — 試作済み(人間の審査待ち) <span class="count">7件</span></h3>
-    <ul><li><code>photo-sample-01</code> — 写真カードの動作確認用プレースホルダー(合成グラデ画像)<br><span class="muted">実写真ではなく、動作確認用の合成グラデ画像なので再生成可能</span></li>
-<li><code>ai-cloud-sea-01</code> — 雲海シーンのAI生成候補(op_16系)。Remotion版「雲海」と比較<br><span class="muted">採点: docs/templates/ai-video-scorecard.csv。採用確定後にpathを具体ファイル名に更新しstatusをcandidateへ(人間確認必須)</span></li>
-<li><code>render-boarding</code> — CapCut Track2: 搭乗券イントロ</li>
-<li><code>render-stamp-rush</code> — CapCut Track2: スタンプ連打ダイジェスト</li>
-<li><code>render-countdown</code> — CapCut Track2: 入場前カウントダウン</li>
-<li><code>render-stamp-okinawa</code> — CapCut Track4: 透過ハンコ(乗算ブレンド推奨)</li>
-<li><code>render-cloud-overlay</code> — CapCut Track3: 透過雲オーバーレイ(不透明度50-70%)</li></ul>
-  </div>
-<div class="todo-group">
-      <h3><span class="dot" style="background:#3b6d8a"></span>candidate — 採用候補(承認待ち) <span class="count">0件</span></h3>
-      <p class="muted">なし</p>
+  <h2>全体サマリー</h2>
+  <div class="stats">
+<div class="stat">
+      <div class="stat-value">7</div>
+      <div class="stat-label">シーン数</div>
+      <div class="stat-hint">openingProject.ts</div>
     </div>
+<div class="stat">
+      <div class="stat-value">82秒</div>
+      <div class="stat-label">Remotion素材合計</div>
+      <div class="stat-hint">目標105秒との差はCapCutの間</div>
+    </div>
+<div class="stat">
+      <div class="stat-value">105秒</div>
+      <div class="stat-label">CapCut目標尺</div>
+      <div class="stat-hint">上映尺</div>
+    </div>
+<div class="stat">
+      <div class="stat-value">4</div>
+      <div class="stat-label">missing(未入手)</div>
+      <div class="stat-hint">写真・BGMなど</div>
+    </div>
+<div class="stat">
+      <div class="stat-value">1</div>
+      <div class="stat-label">idea(アイデア)</div>
+      <div class="stat-hint">AI素材の構想段階</div>
+    </div>
+<div class="stat">
+      <div class="stat-value">0</div>
+      <div class="stat-label">prompt_ready</div>
+      <div class="stat-hint">生成準備済み</div>
+    </div>
+<div class="stat">
+      <div class="stat-value">7</div>
+      <div class="stat-label">generated_preview</div>
+      <div class="stat-hint">試作。本番使用不可</div>
+    </div>
+<div class="stat">
+      <div class="stat-value">0</div>
+      <div class="stat-label">candidate</div>
+      <div class="stat-hint">人間承認待ち</div>
+    </div>
+<div class="stat">
+      <div class="stat-value">0</div>
+      <div class="stat-label">approved / final</div>
+      <div class="stat-hint">本番確定素材</div>
+    </div>
+<div class="stat">
+      <div class="stat-value">1</div>
+      <div class="stat-label">todoシーン</div>
+      <div class="stat-hint">構成未確定</div>
+    </div>
+<div class="stat">
+      <div class="stat-value">6</div>
+      <div class="stat-label">draftシーン</div>
+      <div class="stat-hint">見た目確認待ち</div>
+    </div>
+<div class="stat">
+      <div class="stat-value">2</div>
+      <div class="stat-label">AI素材</div>
+      <div class="stat-hint">ComfyUI等</div>
+    </div>
+<div class="stat">
+      <div class="stat-value">3</div>
+      <div class="stat-label">textパーツ</div>
+      <div class="stat-hint">parts/text</div>
+    </div>
+<div class="stat">
+      <div class="stat-value">3</div>
+      <div class="stat-label">preview-onlyテンプレ</div>
+      <div class="stat-hint">書き出し対象外</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>今日やること(優先度つき)</h2>
+  <ul class="todos">
+<li class="todo-item">
+      <span class="prio" style="background:#9a3d3d">HIGH</span> 実写真を選んで public/photos/opening/hawaii-01.jpg に置く <code>photo-hawaii-01</code> <span class="muted">/ 使用シーン: <code>opening-photo-hawaii</code></span><br><span class="muted indent">実写真の選定待ち(docs/templates/photo-selection.csv)</span>
+    </li>
+<li class="todo-item">
+      <span class="prio" style="background:#9a3d3d">HIGH</span> 実写真を選んで public/photos/opening/hawaii-02.jpg に置く <code>photo-hawaii-02</code> <span class="muted">/ 使用シーン: <code>opening-photo-hawaii</code></span>
+    </li>
+<li class="todo-item">
+      <span class="prio" style="background:#9a3d3d">HIGH</span> 実写真を選んで public/photos/opening/hawaii-03.jpg に置く <code>photo-hawaii-03</code> <span class="muted">/ 使用シーン: <code>opening-photo-hawaii</code></span>
+    </li>
+<li class="todo-item">
+      <span class="prio" style="background:#9a3d3d">HIGH</span> BGM候補を決める(会場上映の利用条件確認も) <code>bgm-main</code> <span class="muted">/ 使用シーン: <code>opening-countdown</code></span><br><span class="muted indent">候補集め: docs/templates/music-candidates.csv。会場上映の利用条件確認必須</span>
+    </li>
+<li class="todo-item">
+      <span class="prio" style="background:#8a6d3b">MEDIUM</span> 生成するか、Remotion版だけで進めるか決める <code>ai-door-light-01</code> <span class="muted">/ 使用シーン: <code>opening-door-light</code></span><br><span class="muted indent">ComfyUI未生成。aiPromptRegistry.tsのai-door-light-01-idea-01を参照。生成後にgenerated_previewへ昇格(人間確認必須)</span>
+    </li>
+<li class="todo-item">
+      <span class="prio" style="background:#8a6d3b">MEDIUM</span> 試作を採点する(scorecard基準。採用ならcandidateへ=人間確認) <code>ai-cloud-sea-01</code> <span class="muted">/ 使用シーン: <code>opening-cloud-sea</code></span><br><span class="muted indent">ComfyUI Wan2.2で生成済み。~/ComfyUI-Shared/output/video/ のop_16系を採点して採用ファイルを決める</span>
+    </li>
+<li class="todo-item">
+      <span class="prio" style="background:#8a6d3b">MEDIUM</span> シーン構成を確定する(まだtodo) <code>opening-photo-hawaii</code><br><span class="muted indent">実写真3枚待ち。PROPOSAL文脈なので動きは控えめのまま</span>
+    </li>
+<li class="todo-item">
+      <span class="prio" style="background:#5b6b7a">LOW</span> 試作を確認し、本番候補(candidate)にするか決める <code>photo-sample-01</code><br><span class="muted indent">実写真ではなく、動作確認用の合成グラデ画像なので再生成可能</span>
+    </li>
+<li class="todo-item">
+      <span class="prio" style="background:#5b6b7a">LOW</span> 試作を確認し、本番候補(candidate)にするか決める <code>render-boarding</code> <span class="muted">/ 使用シーン: <code>opening-boarding</code></span>
+    </li>
+<li class="todo-item">
+      <span class="prio" style="background:#5b6b7a">LOW</span> 試作を確認し、本番候補(candidate)にするか決める <code>render-stamp-rush</code> <span class="muted">/ 使用シーン: <code>opening-stamp-rush</code></span>
+    </li>
+<li class="todo-item">
+      <span class="prio" style="background:#5b6b7a">LOW</span> 試作を確認し、本番候補(candidate)にするか決める <code>render-countdown</code> <span class="muted">/ 使用シーン: <code>opening-countdown</code></span>
+    </li>
+<li class="todo-item">
+      <span class="prio" style="background:#5b6b7a">LOW</span> 試作を確認し、本番候補(candidate)にするか決める <code>render-stamp-okinawa</code>
+    </li>
+<li class="todo-item">
+      <span class="prio" style="background:#5b6b7a">LOW</span> 試作を確認し、本番候補(candidate)にするか決める <code>render-cloud-overlay</code>
+    </li>
+<li class="todo-item">
+      <span class="prio" style="background:#5b6b7a">LOW</span> Studioで見た目を確認する(draft) <code>opening-boarding</code><br><span class="muted indent">BGMの入りに合わせて暗転から。variant=ivory採用かは審査待ち</span>
+    </li>
+<li class="todo-item">
+      <span class="prio" style="background:#5b6b7a">LOW</span> Studioで見た目を確認する(draft) <code>opening-cloud-sea</code><br><span class="muted indent">Remotion版とAI生成版(op_16系)を見比べて良い方を採用</span>
+    </li>
+<li class="todo-item">
+      <span class="prio" style="background:#5b6b7a">LOW</span> Studioで見た目を確認する(draft) <code>opening-stamp-rush</code><br><span class="muted indent">BGM第1の山に沖縄スタンプの「ポン」を合わせる</span>
+    </li>
+<li class="todo-item">
+      <span class="prio" style="background:#5b6b7a">LOW</span> Studioで見た目を確認する(draft) <code>opening-map-final</code>
+    </li>
+<li class="todo-item">
+      <span class="prio" style="background:#5b6b7a">LOW</span> Studioで見た目を確認する(draft) <code>opening-door-light</code><br><span class="muted indent">Remotion版とAI生成版を比較。テロップ「Cabin crew...」はCapCutで乗せる</span>
+    </li>
+<li class="todo-item">
+      <span class="prio" style="background:#5b6b7a">LOW</span> Studioで見た目を確認する(draft) <code>opening-countdown</code><br><span class="muted indent">数字の頭をBGMのビートに合わせる。直後に入場曲</span>
+    </li>
+  </ul>
   <p class="note">candidate以上への昇格は人間(新郎新婦)の確認が必須。AIが勝手に上げない。</p>
 </section>
 
 <section>
-  <h2>よく使うコマンド</h2>
-  <table>
+  <h2>シーン別の状態(7シーン / Remotion素材82秒)</h2>
+  <p class="muted">todoのシーンは開いた状態で表示。クリックで開閉。</p>
+<details class="scene" >
+  <summary><span class="scene-no">1</span> 00:00–00:08 <strong>搭乗券イントロ</strong> <span class="badge" style="background:#8a6d3b">draft</span> <span class="muted">opening-boarding</span></summary>
+  <div class="scene-body">
+    <table class="mini">
+      <tr><td>テンプレ / Studioで見るComposition</td><td><code>搭乗券</code></td></tr>
+      <tr><td>メモ</td><td>BGMの入りに合わせて暗転から。variant=ivory採用かは審査待ち</td></tr>
+      
+      
+      
+      <tr><td>CapCut素材(render出力)</td><td><code>out/opening/boarding_pass_intro.mp4</code>(opaque)<br>再生成: <code>pnpm render 搭乗券 final</code></td></tr>
+    </table>
+    <h4>必要素材</h4>
+    <table class="mini"><tr><td><code>render-boarding</code></td><td><span class="badge" style="background:#8a6d3b">generated_preview</span></td><td><code>out/opening/boarding_pass_intro.mp4</code></td></tr></table>
+    <h4>このシーンで見ること</h4>
+    <ul><li>採点 / 見た目確認(試作あり)</li><li>見た目確認待ち(draft)</li></ul>
+  </div>
+</details>
+<details class="scene" >
+  <summary><span class="scene-no">2</span> 00:08–00:14 <strong>離陸・雲海</strong> <span class="badge" style="background:#8a6d3b">draft</span> <span class="muted">opening-cloud-sea</span></summary>
+  <div class="scene-body">
+    <table class="mini">
+      <tr><td>テンプレ / Studioで見るComposition</td><td><code>雲海</code></td></tr>
+      <tr><td>メモ</td><td>Remotion版とAI生成版(op_16系)を見比べて良い方を採用</td></tr>
+      
+      
+      
+      <tr><td>CapCut素材(render出力)</td><td><code>out/opening/cloud_sea.mp4</code>(opaque)<br>再生成: <code>pnpm render 雲海 final</code></td></tr>
+    </table>
+    <h4>必要素材</h4>
+    <table class="mini"><tr><td><code>ai-cloud-sea-01</code></td><td><span class="badge" style="background:#8a6d3b">generated_preview</span></td><td><code>~/ComfyUI-Shared/output/video/</code><br><span class="muted">採点: docs/templates/ai-video-scorecard.csv。採用確定後にpathを具体ファイル名に更新しstatusをcandidateへ(人間確認必須)</span></td></tr></table>
+    <h4>このシーンで見ること</h4>
+    <ul><li>採点 / 見た目確認(試作あり)</li><li>見た目確認待ち(draft)</li></ul>
+  </div>
+</details>
+<details class="scene" >
+  <summary><span class="scene-no">3</span> 00:14–00:36 <strong>思い出ダイジェスト(スタンプ連打)</strong> <span class="badge" style="background:#8a6d3b">draft</span> <span class="muted">opening-stamp-rush</span></summary>
+  <div class="scene-body">
+    <table class="mini">
+      <tr><td>テンプレ / Studioで見るComposition</td><td><code>押印連打-全路線</code></td></tr>
+      <tr><td>メモ</td><td>BGM第1の山に沖縄スタンプの「ポン」を合わせる</td></tr>
+      
+      <tr><td>BGMメモ</td><td>第1の山=沖縄スタンプ着弾(素材開始+約0.3秒)に合わせる</td></tr>
+      <tr><td>SEメモ</td><td>スタンプ音を3回(沖縄/ソウル/ハワイ)。控えめに</td></tr>
+      <tr><td>CapCut素材(render出力)</td><td><code>out/opening/stamp_rush_full_route.mp4</code>(opaque)<br>再生成: <code>pnpm render 押印連打-全路線 final</code></td></tr>
+    </table>
+    <h4>必要素材</h4>
+    <table class="mini"><tr><td><code>render-stamp-rush</code></td><td><span class="badge" style="background:#8a6d3b">generated_preview</span></td><td><code>out/opening/stamp_rush_full_route.mp4</code></td></tr></table>
+    <h4>このシーンで見ること</h4>
+    <ul><li>採点 / 見た目確認(試作あり)</li><li>音との同期確認(BGMメモあり)</li><li>見た目確認待ち(draft)</li></ul>
+  </div>
+</details>
+<details class="scene" open>
+  <summary><span class="scene-no">4</span> 00:36–00:46 <strong>Hawaiiの思い出(写真解禁)</strong> <span class="badge" style="background:#9a3d3d">todo</span> <span class="muted">opening-photo-hawaii</span></summary>
+  <div class="scene-body">
+    <table class="mini">
+      <tr><td>テンプレ / Studioで見るComposition</td><td><code>写真-Hawaii</code></td></tr>
+      <tr><td>メモ</td><td>実写真3枚待ち。PROPOSAL文脈なので動きは控えめのまま</td></tr>
+      
+      
+      
+      <tr><td>CapCut素材(render出力)</td><td><code>out/opening/photo_card_hawaii.mp4</code>(opaque)<br>再生成: <code>pnpm render 写真-Hawaii final</code></td></tr>
+    </table>
+    <h4>必要素材</h4>
+    <table class="mini"><tr><td><code>photo-hawaii-01</code></td><td><span class="badge" style="background:#9a3d3d">missing</span></td><td><code>public/photos/opening/hawaii-01.jpg</code><br><span class="muted">実写真の選定待ち(docs/templates/photo-selection.csv)</span></td></tr>
+<tr><td><code>photo-hawaii-02</code></td><td><span class="badge" style="background:#9a3d3d">missing</span></td><td><code>public/photos/opening/hawaii-02.jpg</code></td></tr>
+<tr><td><code>photo-hawaii-03</code></td><td><span class="badge" style="background:#9a3d3d">missing</span></td><td><code>public/photos/opening/hawaii-03.jpg</code></td></tr></table>
+    <h4>このシーンで見ること</h4>
+    <ul><li>素材待ち(missingあり)</li><li>まだ構成未確定(todo)</li></ul>
+  </div>
+</details>
+<details class="scene" >
+  <summary><span class="scene-no">5</span> 00:46–00:54 <strong>最終区間 Hawaii→横浜</strong> <span class="badge" style="background:#8a6d3b">draft</span> <span class="muted">opening-map-final</span></summary>
+  <div class="scene-body">
+    <table class="mini">
+      <tr><td>テンプレ / Studioで見るComposition</td><td><code>地図-Hawaii-横浜</code></td></tr>
+      
+      
+      
+      
+      <tr><td>CapCut素材(render出力)</td><td><code>out/opening/map_hawaii_to_yokohama.mp4</code>(opaque)<br>再生成: <code>pnpm render 地図-Hawaii-横浜 final</code></td></tr>
+    </table>
+    <h4>必要素材</h4>
+    <p class="muted">登録素材なし(テンプレ内蔵描画のみ)</p>
+    <h4>このシーンで見ること</h4>
+    <ul><li>見た目確認待ち(draft)</li></ul>
+  </div>
+</details>
+<details class="scene" >
+  <summary><span class="scene-no">6</span> 00:54–01:06 <strong>扉の光・余韻</strong> <span class="badge" style="background:#8a6d3b">draft</span> <span class="muted">opening-door-light</span></summary>
+  <div class="scene-body">
+    <table class="mini">
+      <tr><td>テンプレ / Studioで見るComposition</td><td><code>扉-光</code></td></tr>
+      <tr><td>メモ</td><td>Remotion版とAI生成版を比較。テロップ「Cabin crew...」はCapCutで乗せる</td></tr>
+      <tr><td>caption(CapCutで乗せる)</td><td>Cabin crew, prepare for arrival.</td></tr>
+      
+      
+      <tr><td>CapCut素材(render出力)</td><td><code>out/opening/door_light.mp4</code>(opaque)<br>再生成: <code>pnpm render 扉-光 final</code></td></tr>
+    </table>
+    <h4>必要素材</h4>
+    <table class="mini"><tr><td><code>ai-door-light-01</code></td><td><span class="badge" style="background:#8a6d3b">idea</span></td><td><code>~/ComfyUI-Shared/output/video/</code><br><span class="muted">ComfyUI未生成。aiPromptRegistry.tsのai-door-light-01-idea-01を参照。生成後にgenerated_previewへ昇格(人間確認必須)</span></td></tr></table>
+    <h4>このシーンで見ること</h4>
+    <ul><li>文字の読みやすさ確認(caption予定あり)</li><li>見た目確認待ち(draft)</li></ul>
+  </div>
+</details>
+<details class="scene" >
+  <summary><span class="scene-no">7</span> 01:06–01:22 <strong>入場前カウントダウン</strong> <span class="badge" style="background:#8a6d3b">draft</span> <span class="muted">opening-countdown</span></summary>
+  <div class="scene-body">
+    <table class="mini">
+      <tr><td>テンプレ / Studioで見るComposition</td><td><code>入場前-秒読</code></td></tr>
+      <tr><td>メモ</td><td>数字の頭をBGMのビートに合わせる。直後に入場曲</td></tr>
+      
+      <tr><td>BGMメモ</td><td>数字は1秒ちょうど刻み。ビート頭に合わせ、終わりはフェードアウト→無音</td></tr>
+      
+      <tr><td>CapCut素材(render出力)</td><td><code>out/opening/countdown_10sec.mp4</code>(opaque)<br>再生成: <code>pnpm render 入場前-秒読 final</code></td></tr>
+    </table>
+    <h4>必要素材</h4>
+    <table class="mini"><tr><td><code>bgm-main</code></td><td><span class="badge" style="background:#9a3d3d">missing</span></td><td><code>../07_music/</code><br><span class="muted">候補集め: docs/templates/music-candidates.csv。会場上映の利用条件確認必須</span></td></tr>
+<tr><td><code>render-countdown</code></td><td><span class="badge" style="background:#8a6d3b">generated_preview</span></td><td><code>out/opening/countdown_10sec.mp4</code></td></tr></table>
+    <h4>このシーンで見ること</h4>
+    <ul><li>素材待ち(missingあり)</li><li>採点 / 見た目確認(試作あり)</li><li>音との同期確認(BGMメモあり)</li><li>見た目確認待ち(draft)</li></ul>
+  </div>
+</details>
+</section>
+
+<section>
+  <h2>Compositionを見る順番</h2>
+  <p class="muted">Remotion Studio(<code>pnpm dev</code>)で迷ったらこの順に見る。</p>
+<details class="compo">
+  <summary><span class="scene-no">1</span> <code>文字部品-確認</code> — TextPart 3種(FadeUpCaption / MaskRevealTitle / ElegantLowerThird)の確認</summary>
+  <div class="scene-body">
+    <table class="mini">
+      <tr><td>見るポイント</td><td>文字サイズが会場スクリーンで読めるか / 派手すぎないか / フェード速度</td></tr>
+      <tr><td>触ってよいprops</td><td>propsなし(見るだけ)</td></tr>
+      <tr><td>触らない方がよい</td><td>—</td></tr>
+      <tr><td>still確認</td><td><code>pnpm exec remotion still 文字部品-確認 /tmp/text-parts-preview.png --frame=90</code></td></tr>
+    </table>
+  </div>
+</details>
+<details class="compo">
+  <summary><span class="scene-no">2</span> <code>写真-Hawaii</code> — Hawaii写真カード(MEMORY 03)の確認</summary>
+  <div class="scene-body">
+    <table class="mini">
+      <tr><td>見るポイント</td><td>写真の切れ・傾き / ズームの上品さ / プレースホルダのままか</td></tr>
+      <tr><td>触ってよいprops</td><td>background / maxRotationDeg / cardRadius / shadowStrength / staggerFrames / zoomTo</td></tr>
+      <tr><td>触らない方がよい</td><td>photosのパス手書き(assets.ts経由にする)</td></tr>
+      <tr><td>still確認</td><td><code>pnpm exec remotion still 写真-Hawaii /tmp/photo-hawaii.png --frame=120</code></td></tr>
+    </table>
+  </div>
+</details>
+<details class="compo">
+  <summary><span class="scene-no">3</span> <code>搭乗券</code> — オープニング冒頭のBOARDING PASS確認</summary>
+  <div class="scene-body">
+    <table class="mini">
+      <tr><td>見るポイント</td><td>ivory/navyどちらにするか(人間の決定待ち) / 文言 / 黒帯の有無</td></tr>
+      <tr><td>触ってよいprops</td><td>variant / zoomTo / showCinematicBars</td></tr>
+      <tr><td>触らない方がよい</td><td>文言の確定はopeningProject.ts側で行う</td></tr>
+      <tr><td>still確認</td><td><code>pnpm exec remotion still 搭乗券 /tmp/boarding.png --frame=120</code></td></tr>
+    </table>
+  </div>
+</details>
+<details class="compo">
+  <summary><span class="scene-no">4</span> <code>雲海</code> — Remotion版雲海。AI生成版(op_16系)と比較して採用を決める</summary>
+  <div class="scene-body">
+    <table class="mini">
+      <tr><td>見るポイント</td><td>AI版と並べてどちらが上品か / テロップ余白 / ループ感</td></tr>
+      <tr><td>触ってよいprops</td><td>時間帯系props(朝/昼/夕)</td></tr>
+      <tr><td>触らない方がよい</td><td>—</td></tr>
+      <tr><td>still確認</td><td><code>pnpm exec remotion still 雲海 /tmp/cloud-sea.png --frame=150</code></td></tr>
+    </table>
+  </div>
+</details>
+<details class="compo">
+  <summary><span class="scene-no">5</span> <code>扉-光</code> — 入場直前の余韻。テロップ「Cabin crew...」はCapCutで乗せる</summary>
+  <div class="scene-body">
+    <table class="mini">
+      <tr><td>見るポイント</td><td>光の強さが文字を邪魔しないか / 余韻の長さ</td></tr>
+      <tr><td>触ってよいprops</td><td>光量・タイミング系props</td></tr>
+      <tr><td>触らない方がよい</td><td>—</td></tr>
+      <tr><td>still確認</td><td><code>pnpm exec remotion still 扉-光 /tmp/door-light.png --frame=180</code></td></tr>
+    </table>
+  </div>
+</details>
+<details class="compo">
+  <summary><span class="scene-no">6</span> <code>開幕-全体確認</code> — openingProject.ts連動の全体テンポ確認(順番・尺のみ)</summary>
+  <div class="scene-body">
+    <table class="mini">
+      <tr><td>見るポイント</td><td>シーンの順番 / テンポ / 長すぎる/短すぎるシーン</td></tr>
+      <tr><td>触ってよいprops</td><td>なし(見るだけ)</td></tr>
+      <tr><td>触らない方がよい</td><td>propsは代表値。ここで細かい編集をしない。順番・尺はopeningProject.ts</td></tr>
+      <tr><td>still確認</td><td><code>(通し確認はStudio再生で行う)</code></td></tr>
+    </table>
+  </div>
+</details>
+</section>
+
+<section>
+  <h2>Studio操作ミニガイド</h2>
+  <ul>
+    <li>左のComposition一覧から選ぶ → 中央でスペースキー再生 → 右のpropsで一時調整</li>
+    <li>propsは<strong>変えただけでは保存されない</strong>(リロードで元に戻る)</li>
+    <li><strong>Save defaultsはRoot.tsxを書き換える</strong>。保存前後に <code>git diff motion-studio/src/Root.tsx</code></li>
+    <li>迷ったら保存しない。意図しない保存は <code>git checkout -- motion-studio/src/Root.tsx</code> で戻す</li>
+    <li>シーン順・尺はStudioではなく <code>openingProject.ts</code> で変える(変更後 <code>pnpm check</code>)</li>
+  </ul>
+  <p class="muted">詳しくは <a href="../docs/remotion-studio-guide.md">docs/remotion-studio-guide.md</a></p>
+</section>
+
+<section>
+  <h2>素材ステータスの意味</h2>
+  <table class="mini">
+<tr><td><span class="badge" style="background:#9a3d3d">missing</span></td><td>未入手。写真・BGMなどの現物待ち</td></tr>
+<tr><td><span class="badge" style="background:#8a6d3b">idea</span></td><td>アイデア段階。まだ生成していない</td></tr>
+<tr><td><span class="badge" style="background:#8a6d3b">prompt_ready</span></td><td>生成準備済み(プロンプト確定)</td></tr>
+<tr><td><span class="badge" style="background:#8a6d3b">generated_preview</span></td><td>試作。本番使用不可。final扱い禁止</td></tr>
+<tr><td><span class="badge" style="background:#3b6d8a">candidate</span></td><td>採用候補。人間の確認待ち</td></tr>
+<tr><td><span class="badge" style="background:#2e7d4f">approved</span></td><td>採用決定(ファイル欠損はcheckエラー)</td></tr>
+<tr><td><span class="badge" style="background:#1b5e20">final</span></td><td>本番OK(ファイル欠損はcheckエラー)</td></tr>
+<tr><td><span class="badge" style="background:#666666">external</span></td><td>repo外管理。本番未確定扱い</td></tr>
+  </table>
+  <p class="note">candidate以上はAIが勝手に上げない / approved・finalはファイル欠損でcheckエラー / generated_previewは本番素材ではない</p>
+</section>
+
+<section>
+  <h2>素材一覧(status別)</h2>
+<details>
+  <summary><span class="badge" style="background:#9a3d3d">missing</span> <strong>4件</strong></summary>
+  <table class="mini"><tr><td><code>photo-hawaii-01</code><br><span class="muted">photo</span></td><td>写真-Hawaii 1枚目(プロポーズ文脈)<br><code>public/photos/opening/hawaii-01.jpg</code><br><span class="muted">note: 実写真の選定待ち(docs/templates/photo-selection.csv)<br>使用シーン: <code>opening-photo-hawaii</code></span></td></tr>
+<tr><td><code>photo-hawaii-02</code><br><span class="muted">photo</span></td><td>写真-Hawaii 2枚目<br><code>public/photos/opening/hawaii-02.jpg</code><br><span class="muted">使用シーン: <code>opening-photo-hawaii</code></span></td></tr>
+<tr><td><code>photo-hawaii-03</code><br><span class="muted">photo</span></td><td>写真-Hawaii 3枚目<br><code>public/photos/opening/hawaii-03.jpg</code><br><span class="muted">使用シーン: <code>opening-photo-hawaii</code></span></td></tr>
+<tr><td><code>bgm-main</code><br><span class="muted">audio</span></td><td>オープニング本編BGM<br><code>../07_music/</code><br><span class="muted">note: 候補集め: docs/templates/music-candidates.csv。会場上映の利用条件確認必須<br>使用シーン: <code>opening-countdown</code></span></td></tr></table>
+</details>
+<details>
+  <summary><span class="badge" style="background:#8a6d3b">idea</span> <strong>1件</strong></summary>
+  <table class="mini"><tr><td><code>ai-door-light-01</code><br><span class="muted">ai-video</span></td><td>扉の光のAI生成候補。Remotion版「扉-光」と比較<br><code>~/ComfyUI-Shared/output/video/</code><br><span class="muted">note: ComfyUI未生成。aiPromptRegistry.tsのai-door-light-01-idea-01を参照。生成後にgenerated_previewへ昇格(人間確認必須)<br>使用シーン: <code>opening-door-light</code></span></td></tr></table>
+</details>
+<details>
+  <summary><span class="badge" style="background:#8a6d3b">prompt_ready</span> <strong>0件</strong></summary>
+  <p class="muted">なし</p>
+</details>
+<details>
+  <summary><span class="badge" style="background:#8a6d3b">generated_preview</span> <strong>7件</strong></summary>
+  <table class="mini"><tr><td><code>photo-sample-01</code><br><span class="muted">photo</span></td><td>写真カードの動作確認用プレースホルダー(合成グラデ画像)<br><code>public/photos/opening/sample-01.jpg</code><br><span class="muted">note: 実写真ではなく、動作確認用の合成グラデ画像なので再生成可能<br>再生成: <code>ffmpeg -f lavfi -i 'gradients=s=900x1200:c0=#2a4a6b:c1=#d9a05b:n=2' -frames:v 1 public/photos/opening/sample-01.jpg</code><br>使用シーン: なし</span></td></tr>
+<tr><td><code>ai-cloud-sea-01</code><br><span class="muted">ai-video</span></td><td>雲海シーンのAI生成候補(op_16系)。Remotion版「雲海」と比較<br><code>~/ComfyUI-Shared/output/video/</code><br><span class="muted">note: 採点: docs/templates/ai-video-scorecard.csv。採用確定後にpathを具体ファイル名に更新しstatusをcandidateへ(人間確認必須)<br>確認/復旧メモ: ComfyUI Wan2.2で生成済み。~/ComfyUI-Shared/output/video/ のop_16系を採点して採用ファイルを決める<br>使用シーン: <code>opening-cloud-sea</code></span></td></tr>
+<tr><td><code>render-boarding</code><br><span class="muted">render</span></td><td>CapCut Track2: 搭乗券イントロ<br><code>out/opening/boarding_pass_intro.mp4</code><br><span class="muted">再生成: <code>pnpm render 搭乗券 final</code><br>使用シーン: <code>opening-boarding</code></span></td></tr>
+<tr><td><code>render-stamp-rush</code><br><span class="muted">render</span></td><td>CapCut Track2: スタンプ連打ダイジェスト<br><code>out/opening/stamp_rush_full_route.mp4</code><br><span class="muted">再生成: <code>pnpm render 押印連打-全路線 final</code><br>使用シーン: <code>opening-stamp-rush</code></span></td></tr>
+<tr><td><code>render-countdown</code><br><span class="muted">render</span></td><td>CapCut Track2: 入場前カウントダウン<br><code>out/opening/countdown_10sec.mp4</code><br><span class="muted">再生成: <code>pnpm render 入場前-秒読 final</code><br>使用シーン: <code>opening-countdown</code></span></td></tr>
+<tr><td><code>render-stamp-okinawa</code><br><span class="muted">render</span></td><td>CapCut Track4: 透過ハンコ(乗算ブレンド推奨)<br><code>out/opening/stamp_okinawa.webm</code><br><span class="muted">再生成: <code>pnpm render 押印-沖縄 final</code><br>使用シーン: なし</span></td></tr>
+<tr><td><code>render-cloud-overlay</code><br><span class="muted">render</span></td><td>CapCut Track3: 透過雲オーバーレイ(不透明度50-70%)<br><code>out/common/cloud_overlay.webm</code><br><span class="muted">再生成: <code>pnpm render 雲-透過 final</code><br>使用シーン: なし</span></td></tr></table>
+</details>
+<details>
+  <summary><span class="badge" style="background:#3b6d8a">candidate</span> <strong>0件</strong></summary>
+  <p class="muted">なし</p>
+</details>
+<details>
+  <summary><span class="badge" style="background:#666666">external</span> <strong>0件</strong></summary>
+  <p class="muted">なし</p>
+</details>
+<details>
+  <summary><span class="badge" style="background:#2e7d4f">approved</span> <strong>0件</strong></summary>
+  <p class="muted">なし</p>
+</details>
+<details>
+  <summary><span class="badge" style="background:#1b5e20">final</span> <strong>0件</strong></summary>
+  <p class="muted">なし</p>
+</details>
+</section>
+
+<section>
+  <h2>再利用パーツ(parts/)</h2>
+  <p class="muted">確認Composition: <code>文字部品-確認</code>(30-部品確認)</p>
+  <table class="mini">
+<tr>
+    <td><code>text-fade-up-caption</code><br><strong>FadeUpCaption</strong></td>
+    <td><span class="badge" style="background:#8a6d3b">draft</span><br><span class="muted">text</span></td>
+    <td>写真下の短文・場面説明・さりげない字幕<br><span class="muted">使える場所: opening / profile / ending / common</span></td>
+  </tr>
+<tr>
+    <td><code>text-mask-reveal-title</code><br><strong>MaskRevealTitle</strong></td>
+    <td><span class="badge" style="background:#8a6d3b">draft</span><br><span class="muted">text</span></td>
+    <td>章タイトル・場所名・MEMORY 01 などの見出し<br><span class="muted">使える場所: opening / profile / ending</span></td>
+  </tr>
+<tr>
+    <td><code>text-elegant-lower-third</code><br><strong>ElegantLowerThird</strong></td>
+    <td><span class="badge" style="background:#8a6d3b">draft</span><br><span class="muted">text</span></td>
+    <td>人物紹介・家族紹介・犬紹介・プロフィール名前札<br><span class="muted">使える場所: profile / opening / ending</span></td>
+  </tr>
+  </table>
+</section>
+
+<section>
+  <h2>AIプロンプト履歴(2件)</h2>
+  <p class="muted">AI素材の出どころ。promptが<span class="prompt-todo">TODO</span>のものは実プロンプト転記待ち。</p>
+  <table class="mini">
+<tr>
+    <td><code>ai-cloud-sea-01</code><br><span class="muted">opening-cloud-sea</span></td>
+    <td>ComfyUI / i2v<br><span class="badge" style="background:#8a6d3b">generated_preview</span></td>
+    <td><span class="prompt-todo">TODO: op_16系の実プロンプトを 02_opening-movie/i2v-generation-log.csv から転記</span><br><span class="muted">雲海のI2V試作。採点未了。Remotion版「雲海」と比較して採否を決める</span></td>
+  </tr>
+<tr>
+    <td><code>ai-door-light-01</code><br><span class="muted">opening-door-light</span></td>
+    <td>ComfyUI / i2v<br><span class="badge" style="background:#8a6d3b">idea</span></td>
+    <td><span class="prompt-todo">TODO: 扉の光の静止画→I2Vプロンプトは未確定</span><br><span class="muted">Remotion版「扉-光」が先にあるため、AI版は必要になったら作る</span></td>
+  </tr>
+  </table>
+</section>
+
+<section>
+  <h2>コマンド集</h2>
+  <table class="mini">
 <tr><td><code>pnpm dev</code></td><td>Remotion Studioを開く(見た目確認・props微調整)</td></tr>
 <tr><td><code>pnpm check</code></td><td>コード・素材・パーツの整合チェック(コミット前に必ず)</td></tr>
-<tr><td><code>pnpm export</code></td><td>CapCut作業表・review.html・このページを再生成</td></tr>
+<tr><td><code>pnpm export</code></td><td>CapCut作業表 + review.html + このページを再生成</td></tr>
+<tr><td><code>pnpm export:capcut</code></td><td>CapCut作業表CSV/MDのみ再生成</td></tr>
+<tr><td><code>pnpm export:review</code></td><td>レビューHTMLのみ再生成</td></tr>
+<tr><td><code>pnpm export:home</code></td><td>このページのみ再生成</td></tr>
 <tr><td><code>pnpm render:photo:hawaii</code></td><td>Hawaii写真カードを書き出す</td></tr>
 <tr><td><code>pnpm render:preview</code></td><td>開幕の通しプレビューを書き出す</td></tr>
 <tr><td><code>pnpm exec remotion still 文字部品-確認 /tmp/text-parts-preview.png --frame=90</code></td><td>文字パーツの静止画確認</td></tr>
+<tr><td><code>pnpm exec remotion still 写真-Hawaii /tmp/photo-hawaii.png --frame=120</code></td><td>Hawaii写真カードの静止画確認</td></tr>
+<tr><td><code>git diff</code></td><td>変更内容の確認(Save defaults後は特に)</td></tr>
+<tr><td><code>git status</code></td><td>変更ファイルの確認</td></tr>
   </table>
+</section>
+
+<section>
+  <h2>Fable / Codex 作業後の確認観点</h2>
+  <ul>
+<li>pnpm typecheck は通ったか</li>
+<li>pnpm check は通ったか</li>
+<li>pnpm export は通ったか</li>
+<li>exports/index.html は更新されたか(生成日時を見る)</li>
+<li>missing素材は増えていないか</li>
+<li>generated_preview を final 扱いしていないか</li>
+<li>approved / final に勝手に昇格していないか</li>
+<li>既存テンプレの見た目を壊していないか(stillで比較)</li>
+<li>Root.tsx の defaultProps が意図せず変わっていないか(git diff)</li>
+<li>CapCut作業表(opening-timeline.csv/md)が更新されているか</li>
+  </ul>
 </section>
 
 </main>

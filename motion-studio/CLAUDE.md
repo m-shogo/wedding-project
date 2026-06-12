@@ -112,9 +112,13 @@ pnpm exec remotion still <ID> /tmp/x.png --frame=N  # 静止画で見た目確�
 4. 作業を終えたら `pnpm export` を実行(制作ホーム `exports/index.html` が最新になる)
 
 人間向け導線:
-- **制作ホーム** = `exports/index.html`(入口ページ。編集UIではない)
+- **制作コックピット** = `exports/index.html`(確認入口。編集UIではない)。
+  TODO優先度・シーン別状態・素材一覧・パーツ・AIプロンプト履歴を集約。
+  生成元は `scripts/export-home.mts`(データ源: openingProject/assets/
+  sceneRegistry/partRegistry/aiPromptRegistry)
 - **Remotion Studio** = 見た目確認・props微調整用。操作説明は `docs/remotion-studio-guide.md`
-- 本格的なダッシュボード・編集UI・状態保存は今は作らない
+- 本格的なダッシュボード・編集UI・状態保存・検索・カンバンは作らない
+- 既存テンプレへの変更はStudioの見た目だけで判断せず `git diff` も見る
 
 ## 未決事項・人間待ち(2026-06-12時点)
 
