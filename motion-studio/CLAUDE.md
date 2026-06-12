@@ -20,11 +20,24 @@
 ## アーキテクチャ(3層+データ)
 
 ```text
-src/components/   再利用部品(PhotoCard, RouteLine, PassportStampMark, PaperTexture...)
-src/compositions/ シーン。common/opening/profileに分類
-src/Root.tsx      Composition登録(手書き。自動生成しない)
-src/data/         単一情報源(下記)
+src/components/        部品(PhotoCard, RouteLine, PassportStampMark, PaperTexture...)
+src/components/parts/  再利用パーツ基盤(text/photo/layout/effects)。下記参照
+src/compositions/      シーン。common/opening/profileに分類
+src/Root.tsx           Composition登録(手書き。自動生成しない)
+src/data/              単一情報源(下記)
 ```
+
+### 再利用パーツ(src/components/parts/)
+
+新しいテロップ演出は**新テンプレを増やす前に**パーツ化を検討する。
+text(実装済み)/photo/layout/effects に分類。`TextPart` でvariant呼び分け。
+
+- パーツ追加の手順: パーツ作成 → `parts/<cat>/index.ts` でexport →
+  `src/data/partRegistry.ts` に登録 → 確認用Composition `文字部品-確認`
+  (TextPartsPreview)を更新 → `pnpm check:parts`
+- 1パーツ1責務。`startFrame`/`durationFrames`で自己完結フェード。色・フォントはtheme/fonts必須
+- `status`は`draft`で追加。`approved`昇格は人間確認必須(AIが勝手に上げない)
+- ルール詳細: `src/components/parts/README.md`
 
 | ファイル | 役割 |
 |---|---|
@@ -35,6 +48,7 @@ src/data/         単一情報源(下記)
 | `routes.ts` `memories.ts` | 地図座標・写真カードデータ |
 | `photoLibrary.generated.ts` | `pnpm sync:photos` の自動生成。手で編集しない |
 | `aiPromptRegistry.ts` | AI生成のプロンプト履歴。assetIdに紐づけ、生成のたびに1レコード追加 |
+| `partRegistry.ts` | 再利用パーツ(parts/)のメタデータ。`pnpm check:parts`が検証 |
 
 ## テンプレート追加の手順(必ず3点セット)
 
@@ -80,7 +94,7 @@ src/data/         単一情報源(下記)
 ```sh
 pnpm dev                          # Remotion Studio
 pnpm typecheck                    # tsc
-pnpm check                        # check:motion + check:assets(コミット前に必ず)
+pnpm check                        # check:motion + check:assets + check:parts(コミット前に必ず)
 pnpm render <テンプレID> <preset>  # preview / draft / final / prores
 pnpm render --all final           # 一括書き出し
 pnpm sync:photos                  # public/photos/ → photoLibrary.generated.ts

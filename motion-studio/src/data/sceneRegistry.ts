@@ -60,6 +60,9 @@ export const templates: TemplateEntry[] = [
   {id: '写真一枚', folder: '20-Profile素材', durationInFrames: 240, kind: 'opaque', output: 'profile/single_photo', description: '写真1枚をゆっくり見せる主役テンプレ'},
   {id: '紹介札', folder: '20-Profile素材', durationInFrames: 240, kind: 'opaque', output: 'profile/intro_card', description: '家族・友人・犬の紹介カード'},
 
+  // 30-部品確認
+  {id: '文字部品-確認', folder: '30-部品確認', durationInFrames: 300, kind: 'preview-only', description: 'parts/textの3パーツ確認用(本番素材ではない)'},
+
   // 90-全体確認
   {id: '開幕-全体確認', folder: '90-全体確認', durationInFrames: 2460, kind: 'preview-only', output: 'opening/opening_full_preview', description: '通しテンポ確認用(openingProject連動)'},
 

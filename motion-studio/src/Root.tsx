@@ -35,6 +35,7 @@ import {ChapterTitle, chapterTitleSchema} from './compositions/profile/ChapterTi
 import {TimelineScene, timelineSchema} from './compositions/profile/TimelineScene';
 import {SinglePhoto, singlePhotoSchema} from './compositions/profile/SinglePhoto';
 import {IntroCard, introCardSchema} from './compositions/profile/IntroCard';
+import {TextPartsPreview} from './compositions/common/TextPartsPreview';
 
 const base = {
   width: video.width,
@@ -499,6 +500,15 @@ export const RemotionRoot = () => {
             photo: null,
             background: 'beige' as const,
           }}
+        />
+      </Folder>
+
+      <Folder name="30-部品確認">
+        <Composition
+          id="文字部品-確認"
+          component={TextPartsPreview}
+          durationInFrames={300}
+          {...base}
         />
       </Folder>
 

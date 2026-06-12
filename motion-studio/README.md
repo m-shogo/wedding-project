@@ -65,6 +65,12 @@ IDは漢字+英数字のみ(Remotionの仕様でひらがな・カタカナは�
 | `写真一枚` | 写真1枚をゆっくり見せる主役テンプレ | 8秒 | `pnpm render 写真一枚 final` |
 | `紹介札` | 家族・友人・犬の紹介カード | 8秒 | `pnpm render 紹介札 final` |
 
+### 30-部品確認
+
+| テンプレート | 内容 | 尺 | 書き出し |
+|----|------|----|------|
+| `文字部品-確認` | `parts/text` の3パーツを時間差で見る確認用(本番素材ではない) | 10秒 | preview-only |
+
 ### 90-順番・尺確認
 
 | テンプレート | 内容 | 尺 | 書き出し |
@@ -99,9 +105,10 @@ pnpm render --all final           # 全素材を一括書き出し
 ## 品質チェック
 
 ```sh
-pnpm check          # 下の2つをまとめて実行
+pnpm check          # 下の3つをまとめて実行
 pnpm check:motion   # シーン構成・registry・Root.tsxの整合チェック
 pnpm check:assets   # 素材ファイルの存在チェック
+pnpm check:parts    # 再利用パーツ(partRegistry.ts)の健全性チェック
 ```
 
 CapCutに組み込む前、コミット前に `pnpm check` を通す。
@@ -183,6 +190,53 @@ AI画像・動画の生成履歴は [src/data/aiPromptRegistry.ts](src/data/aiPr
 **Root.tsxはregistryから自動生成しない**(StudioのSave defaultsが壊れるため)。
 テンプレート追加は「Root.tsxに追加 → sceneRegistry.tsに追加 → `pnpm check:motion`」の3点セットで行う。
 
+## 再利用パーツ(parts/)
+
+完成テンプレートを増やす前に、まず**既存テンプレに差し込めるパーツ化**を検討する。
+テロップ演出を新しく作るときは、新テンプレではなく `src/components/parts/text/` に追加する。
+
+置き場所:
+
+```text
+src/components/parts/
+  text/      テロップ・章タイトル・字幕・名前表示(実装済み)
+  photo/     写真カード・写真枠・トリミング補助(今後)
+  layout/    セーフエリア・中央寄せ・下部配置・2カラム(今後)
+  effects/   光・紙質感・影・マスク(今後)
+```
+
+textパーツは `TextPart` で variant 呼び分けできる(テンプレ側はこれを差すだけ):
+
+```tsx
+import {TextPart} from '../../components/parts/text';
+
+<TextPart variant="fade-up" text="本日はご搭乗ありがとうございます"
+  subText="MEMORY FLIGHT 1024" position="bottom"
+  startFrame={20} durationFrames={120} tone="ivory" size="md" />
+
+<TextPart variant="mask-reveal" title="CHAPTER 1" subtitle="Departure"
+  startFrame={10} durationFrames={140} align="center" tone="gold" />
+
+<TextPart variant="lower-third" name="COOKIE" role="FAMILY / DOG"
+  comment="いつも一緒に旅をしてきた大切な家族"
+  position="right" startFrame={30} durationFrames={150} tone="ivory" />
+```
+
+パーツ追加時のルール(詳細は [parts/README.md](src/components/parts/README.md)):
+
+- 1パーツ1責務。propsを増やしすぎない
+- 色・フォントは `theme.ts` / `fonts.ts` から取る(直書き禁止)、`Math.random`禁止
+- 派手なグリッチ・バウンド・回転文字は禁止、GSAP/anime.js/Three.jsは原則使わない
+- 追加したら `src/data/partRegistry.ts` に登録し、確認用 `文字部品-確認`
+  (TextPartsPreview)も更新して `pnpm check:parts` を通す
+- `status` は `draft` で追加する。`approved` への昇格は人間確認が必須(AIが勝手に上げない)
+
+既存 `GenericTitle`(透過題字/大きいタイトル素材)とは役割が違う。
+parts/text は「テンプレに差し込む小〜中サイズの再利用文字部品」。被っても壊さず共存。
+
+確認: `pnpm check`(check:motion + check:assets + check:parts)。
+見た目は `pnpm exec remotion still 文字部品-確認 /tmp/x.png --frame=50` で確認できる。
+
 ## Phase 0: CapCut透過確認手順
 
 1. `pnpm render:stamp-test` を実行する
@@ -228,8 +282,9 @@ Track 8: BGM
 ```text
 src/
   compositions/{common,opening,profile}/  シーン(Composition)
-  components/{common,opening,profile}/    部品
-  data/                                   テーマ、コンセプト、ルート、写真データ
+  components/{common,opening,profile}/    部品(シーン固有寄り)
+  components/parts/{text,photo,layout,effects}/  再利用パーツ基盤
+  data/                                   テーマ、コンセプト、ルート、写真、partRegistry
 public/photos/                            実写真(Git管理外)
 out/                                      書き出し先(Git管理外)
 ```
