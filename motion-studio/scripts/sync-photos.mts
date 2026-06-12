@@ -12,6 +12,7 @@ const photosRoot = join(studioRoot, 'public/photos');
 const outFile = join(studioRoot, 'src/data/photoLibrary.generated.ts');
 
 const exts = new Set(['.jpg', '.jpeg', '.png', '.webp']);
+const emptyLibrary: Record<string, string[]> = {opening: [], profile: []};
 
 const writeLibrary = (lib: Record<string, string[]>): void => {
   const body = `// このファイルは自動生成。手で編集しない。
@@ -25,7 +26,7 @@ export const photoLibrary: Record<string, string[]> = ${JSON.stringify(lib, null
 };
 
 if (!existsSync(photosRoot)) {
-  writeLibrary({});
+  writeLibrary(emptyLibrary);
   console.log('public/photos が無いため空のphotoLibrary.generated.tsを生成');
   process.exit(0);
 }
