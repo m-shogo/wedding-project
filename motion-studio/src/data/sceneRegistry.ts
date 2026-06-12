@@ -49,12 +49,19 @@ export const templates: TemplateEntry[] = [
   {id: '飛行機窓', folder: '10-開幕素材', durationInFrames: 300, kind: 'opaque', output: 'opening/airplane_window', description: '機内視点の窓と流れる雲'},
   {id: '扉-光', folder: '10-開幕素材', durationInFrames: 360, kind: 'opaque', output: 'opening/door_light', description: '扉が開いて光が差す余韻'},
   {id: '入場前-秒読', folder: '10-開幕素材', durationInFrames: 480, kind: 'opaque', output: 'opening/countdown_10sec', description: 'Doors opening→10〜1→Please welcome'},
+  {id: '題字-汎用', folder: '10-開幕素材', durationInFrames: 240, kind: 'alpha', output: 'opening/title_generic', description: '汎用テロップ(透過。1-B/5-Bコピー用)'},
   {id: '写真-沖縄', folder: '10-開幕素材', durationInFrames: 300, kind: 'opaque', output: 'opening/photo_card_okinawa', description: '写真カード3枚 MEMORY 01'},
   {id: '写真-韓国', folder: '10-開幕素材', durationInFrames: 300, kind: 'opaque', output: 'opening/photo_card_seoul', description: '写真カード3枚 MEMORY 02'},
   {id: '写真-Hawaii', folder: '10-開幕素材', durationInFrames: 300, kind: 'opaque', output: 'opening/photo_card_hawaii', description: '写真カード3枚 MEMORY 03'},
 
+  // 20-Profile素材
+  {id: '章題', folder: '20-Profile素材', durationInFrames: 180, kind: 'opaque', output: 'profile/chapter_title', description: 'プロフィール章タイトル'},
+  {id: '年表', folder: '20-Profile素材', durationInFrames: 360, kind: 'opaque', output: 'profile/timeline', description: '歩みの年表(点線が伸びる)'},
+  {id: '写真一枚', folder: '20-Profile素材', durationInFrames: 240, kind: 'opaque', output: 'profile/single_photo', description: '写真1枚をゆっくり見せる主役テンプレ'},
+  {id: '紹介札', folder: '20-Profile素材', durationInFrames: 240, kind: 'opaque', output: 'profile/intro_card', description: '家族・友人・犬の紹介カード'},
+
   // 90-全体確認
-  {id: '開幕-全体確認', folder: '90-全体確認', durationInFrames: 1320, kind: 'preview-only', output: 'opening/opening_full_preview', description: '通しテンポ確認用'},
+  {id: '開幕-全体確認', folder: '90-全体確認', durationInFrames: 2460, kind: 'preview-only', output: 'opening/opening_full_preview', description: '通しテンポ確認用(openingProject連動)'},
 
   // 99-説明書
   {id: '取扱説明', folder: '99-説明書', durationInFrames: 150, kind: 'preview-only', description: 'Studio内マニュアル'},

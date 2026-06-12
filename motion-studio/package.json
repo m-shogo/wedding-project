@@ -34,7 +34,8 @@
     "render:window": "remotion render 飛行機窓 out/opening/airplane_window.mp4",
     "render:doorlight": "remotion render 扉-光 out/opening/door_light.mp4",
     "render:preview": "remotion render 開幕-全体確認 out/opening/opening_full_preview.mp4",
-    "render:mvp": "pnpm render:boarding && pnpm render:map:okinawa && pnpm render:stamp:okinawa && pnpm render:cloud && pnpm render:countdown && pnpm render:photo:okinawa"
+    "render:mvp": "pnpm render:boarding && pnpm render:map:okinawa && pnpm render:stamp:okinawa && pnpm render:cloud && pnpm render:countdown && pnpm render:photo:okinawa",
+    "sync:photos": "node --no-warnings scripts/sync-photos.mts"
   },
   "dependencies": {
     "@remotion/cli": "^4.0.0",

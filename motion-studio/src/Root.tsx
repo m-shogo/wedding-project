@@ -30,6 +30,11 @@ import {
 } from './compositions/opening/AirplaneWindow';
 import {DoorLight, doorLightSchema} from './compositions/opening/DoorLight';
 import {ManualScene} from './compositions/common/ManualScene';
+import {GenericTitle, genericTitleSchema} from './compositions/common/GenericTitle';
+import {ChapterTitle, chapterTitleSchema} from './compositions/profile/ChapterTitle';
+import {TimelineScene, timelineSchema} from './compositions/profile/TimelineScene';
+import {SinglePhoto, singlePhotoSchema} from './compositions/profile/SinglePhoto';
+import {IntroCard, introCardSchema} from './compositions/profile/IntroCard';
 
 const base = {
   width: video.width,
@@ -360,6 +365,23 @@ export const RemotionRoot = () => {
           }}
         />
         <Composition
+          id="題字-汎用"
+          component={GenericTitle}
+          durationInFrames={240}
+          {...base}
+          schema={genericTitleSchema}
+          defaultProps={{
+            mainText: 'Ladies and gentlemen,\nour journey is about to begin.',
+            subText: '',
+            background: 'transparent' as const,
+            mainSize: 64,
+            italic: true,
+            fadeInFrames: 24,
+            fadeOutFrames: 24,
+            showCinematicBars: false,
+          }}
+        />
+        <Composition
           id="写真-沖縄"
           component={PhotoCardScene}
           durationInFrames={300}
@@ -415,11 +437,76 @@ export const RemotionRoot = () => {
         />
       </Folder>
 
+      <Folder name="20-Profile素材">
+        <Composition
+          id="章題"
+          component={ChapterTitle}
+          durationInFrames={180}
+          {...base}
+          schema={chapterTitleSchema}
+          defaultProps={{
+            chapterLabel: 'CHAPTER 1',
+            titleEn: 'Departure',
+            titleJa: '出発',
+            background: 'beige' as const,
+          }}
+        />
+        <Composition
+          id="年表"
+          component={TimelineScene}
+          durationInFrames={360}
+          {...base}
+          schema={timelineSchema}
+          defaultProps={{
+            title: 'SHOGO',
+            events: [
+              {year: '1995', label: '誕生'},
+              {year: '2001', label: '小学校'},
+              {year: '2014', label: '大学'},
+              {year: '2018', label: '社会人'},
+              {year: '2026', label: '結婚'},
+            ],
+            background: 'beige' as const,
+            travelStartFrame: 30,
+          }}
+        />
+        <Composition
+          id="写真一枚"
+          component={SinglePhoto}
+          durationInFrames={240}
+          {...base}
+          schema={singlePhotoSchema}
+          defaultProps={{
+            photo: null,
+            caption: 'はじめての旅行',
+            subCaption: 'OKINAWA, 2021',
+            zoomDirection: 'in' as const,
+            background: 'beige' as const,
+            cardWidth: 1240,
+            cardHeight: 820,
+          }}
+        />
+        <Composition
+          id="紹介札"
+          component={IntroCard}
+          durationInFrames={240}
+          {...base}
+          schema={introCardSchema}
+          defaultProps={{
+            name: 'COOKIE',
+            relation: 'FAMILY / DOG',
+            comment: 'いつも一緒に旅をしてきた\n大切な家族',
+            photo: null,
+            background: 'beige' as const,
+          }}
+        />
+      </Folder>
+
       <Folder name="90-全体確認">
         <Composition
           id="開幕-全体確認"
           component={OpeningFullPreview}
-          durationInFrames={1320}
+          durationInFrames={2460}
           {...base}
         />
       </Folder>

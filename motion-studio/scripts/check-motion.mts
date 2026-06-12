@@ -110,6 +110,16 @@ for (const d of new Set(sceneIds.filter((id, i) => sceneIds.indexOf(id) !== i)))
   err(`openingProject: scene idが重複: ${d}`);
 }
 
+// 開幕-全体確認(openingProject連動)の尺がシーン合計と一致しているか
+const fullPreview = templates.find((t) => t.id === '開幕-全体確認');
+const expectedPreviewFrames = Math.round(totalSec * openingProject.fps);
+if (fullPreview && fullPreview.durationInFrames !== expectedPreviewFrames) {
+  err(
+    `開幕-全体確認の尺がシーン合計と不一致: registry=${fullPreview.durationInFrames}f / ` +
+      `scenes合計=${expectedPreviewFrames}f → Root.tsxとsceneRegistry.tsの両方を${expectedPreviewFrames}に更新する`,
+  );
+}
+
 const drift = Math.abs(totalSec - openingProject.targetTotalSec);
 if (drift > openingProject.targetTotalSec * 0.15) {
   warn(

@@ -54,12 +54,22 @@ IDは漢字+英数字のみ(Remotionの仕様でひらがな・カタカナは�
 | `写真-沖縄` | 写真カード3枚 MEMORY 01 | 10秒 | `pnpm render:photo:okinawa` |
 | `写真-韓国` | 写真カード3枚 MEMORY 02 | 10秒 | `pnpm render:photo:seoul` |
 | `写真-Hawaii` | 写真カード3枚 MEMORY 03(動きゆっくり) | 10秒 | `pnpm render:photo:hawaii` |
+| `題字-汎用` | 汎用テロップ(透過。「Ladies and gentlemen...」等) | 8秒 | `pnpm render 題字-汎用 final` |
+
+### 20-Profile素材(プロフィールムービー用)
+
+| テンプレート | 内容 | 尺 | 書き出し |
+|----|------|----|------|
+| `章題` | 章タイトル(CHAPTER 1 / Departure / 出発) | 6秒 | `pnpm render 章題 final` |
+| `年表` | 歩みの年表。航路と同じ点線が伸びる | 12秒 | `pnpm render 年表 final` |
+| `写真一枚` | 写真1枚をゆっくり見せる主役テンプレ | 8秒 | `pnpm render 写真一枚 final` |
+| `紹介札` | 家族・友人・犬の紹介カード | 8秒 | `pnpm render 紹介札 final` |
 
 ### 90-全体確認
 
 | テンプレート | 内容 | 尺 | 書き出し |
 |----|------|----|------|
-| `開幕-全体確認` | 通しテンポ確認用(書き出し任意) | 44秒 | `pnpm render:preview` |
+| `開幕-全体確認` | openingProjectのシーン構成をそのまま通すテンポ確認用 | 82秒 | `pnpm render:preview` |
 
 ### 99-説明書
 
