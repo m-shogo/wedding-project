@@ -23,6 +23,13 @@ import {
   StampRushFullRoute,
   stampRushSchema,
 } from './compositions/opening/StampRushFullRoute';
+import {CloudSea, cloudSeaSchema} from './compositions/opening/CloudSea';
+import {
+  AirplaneWindow,
+  airplaneWindowSchema,
+} from './compositions/opening/AirplaneWindow';
+import {DoorLight, doorLightSchema} from './compositions/opening/DoorLight';
+import {ManualScene} from './compositions/common/ManualScene';
 
 const base = {
   width: video.width,
@@ -312,6 +319,47 @@ export const RemotionRoot = () => {
           }}
         />
         <Composition
+          id="雲海"
+          component={CloudSea}
+          durationInFrames={300}
+          {...base}
+          schema={cloudSeaSchema}
+          defaultProps={{
+            timeOfDay: 'morning' as const,
+            speed: 1.4,
+            cloudOpacity: 0.85,
+            zoomTo: 1.05,
+          }}
+        />
+        <Composition
+          id="飛行機窓"
+          component={AirplaneWindow}
+          durationInFrames={300}
+          {...base}
+          schema={airplaneWindowSchema}
+          defaultProps={{
+            timeOfDay: 'morning' as const,
+            driftSpeed: 1.6,
+            cloudOpacity: 0.8,
+            zoomTo: 1.05,
+            showReflection: true,
+          }}
+        />
+        <Composition
+          id="扉-光"
+          component={DoorLight}
+          durationInFrames={360}
+          {...base}
+          schema={doorLightSchema}
+          defaultProps={{
+            lightColor: '#F2E2BC',
+            openStartFrame: 30,
+            maxOpenWidth: 300,
+            glowStrength: 0.6,
+            particleCount: 36,
+          }}
+        />
+        <Composition
           id="写真-沖縄"
           component={PhotoCardScene}
           durationInFrames={300}
@@ -372,6 +420,15 @@ export const RemotionRoot = () => {
           id="開幕-全体確認"
           component={OpeningFullPreview}
           durationInFrames={1320}
+          {...base}
+        />
+      </Folder>
+
+      <Folder name="99-説明書">
+        <Composition
+          id="取扱説明"
+          component={ManualScene}
+          durationInFrames={150}
           {...base}
         />
       </Folder>

@@ -21,6 +21,8 @@
 ## Next
 
 - 素材2-A（飛行機窓・地上）と4-A-2（ハワイ夕暮れ）の静止画を用意する。
+  ※飛行機窓・雲海・扉の光はmotion-studioのRemotionテンプレでも作れるようになった
+  （`飛行機窓` `雲海` `扉-光`）。AI生成版と見比べて良い方を採用する。
 - 採用I2V素材をCapCutの10秒試作に入れる。
 - `02_opening-movie/asset-status.md` を `python3 scripts/check_assets.py --write` で更新する。
 - 参考映像を `docs/templates/reference-log.csv` に集める。

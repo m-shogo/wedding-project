@@ -26,6 +26,9 @@
     "render:photo:seoul": "remotion render 写真-韓国 out/opening/photo_card_seoul.mp4",
     "render:photo:hawaii": "remotion render 写真-Hawaii out/opening/photo_card_hawaii.mp4",
     "render:stamprush": "remotion render 押印連打-全路線 out/opening/stamp_rush_full_route.mp4",
+    "render:cloudsea": "remotion render 雲海 out/opening/cloud_sea.mp4",
+    "render:window": "remotion render 飛行機窓 out/opening/airplane_window.mp4",
+    "render:doorlight": "remotion render 扉-光 out/opening/door_light.mp4",
     "render:preview": "remotion render 開幕-全体確認 out/opening/opening_full_preview.mp4",
     "render:mvp": "pnpm render:boarding && pnpm render:map:okinawa && pnpm render:stamp:okinawa && pnpm render:cloud && pnpm render:countdown && pnpm render:photo:okinawa"
   },

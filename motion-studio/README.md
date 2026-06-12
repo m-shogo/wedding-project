@@ -47,6 +47,9 @@ IDは漢字+英数字のみ(Remotionの仕様でひらがな・カタカナは�
 | `押印-横浜` | YOKOHAMA / FINAL DESTINATION | 2秒 | `pnpm render:stamp:yokohama` (webm透過) |
 | `押印連打-全路線` | 全ルート一筆+スタンプ連打(尺圧縮案の主役) | 22秒 | `pnpm render:stamprush` |
 | `雲-透過` | 雲オーバーレイ | 18秒 | `pnpm render:cloud` (webm透過) |
+| `雲海` | 上空の雲海(朝/昼/夕切替、上部テロップ余白) | 10秒 | `pnpm render:cloudsea` |
+| `飛行機窓` | 機内から見た窓と流れる雲(朝/昼/夕切替) | 10秒 | `pnpm render:window` |
+| `扉-光` | 扉が開いて光が差す余韻(入場直前用) | 12秒 | `pnpm render:doorlight` |
 | `入場前-秒読` | Doors opening → 10〜1 → Please welcome | 16秒 | `pnpm render:countdown` |
 | `写真-沖縄` | 写真カード3枚 MEMORY 01 | 10秒 | `pnpm render:photo:okinawa` |
 | `写真-韓国` | 写真カード3枚 MEMORY 02 | 10秒 | `pnpm render:photo:seoul` |
@@ -57,6 +60,12 @@ IDは漢字+英数字のみ(Remotionの仕様でひらがな・カタカナは�
 | テンプレート | 内容 | 尺 | 書き出し |
 |----|------|----|------|
 | `開幕-全体確認` | 通しテンポ確認用(書き出し任意) | 44秒 | `pnpm render:preview` |
+
+### 99-説明書
+
+| テンプレート | 内容 |
+|----|------|
+| `取扱説明` | Studio内で読める使い方とTipsの要約。詳細は [MANUAL.md](MANUAL.md) |
 
 ## 書き出し
 
