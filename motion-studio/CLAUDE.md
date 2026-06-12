@@ -98,7 +98,8 @@ pnpm check                        # check:motion + check:assets + check:parts(�
 pnpm render <テンプレID> <preset>  # preview / draft / final / prores
 pnpm render --all final           # 一括書き出し
 pnpm sync:photos                  # public/photos/ → photoLibrary.generated.ts
-pnpm export                       # CapCut作業表CSV/MD + 素材不足表 + review.html + 制作ホーム(exports/index.html)
+pnpm export                       # CapCut作業表CSV/MD + 素材不足表 + review.html + 制作コックピット(exports/index.html)
+pnpm export:stills                # 主要Compositionのstill(サムネイル)生成。重いのでexportに含めない
 pnpm exec remotion compositions src/index.ts   # 全Compositionの健全性確認
 pnpm exec remotion still <ID> /tmp/x.png --frame=N  # 静止画で見た目確認
 ```
@@ -109,7 +110,9 @@ pnpm exec remotion still <ID> /tmp/x.png --frame=N  # 静止画で見た目確�
 1. `pnpm typecheck && pnpm check`
 2. 影響したテンプレを `remotion still` でキーフレーム書き出して目視
 3. 透過素材を触ったらffprobeでalpha確認
-4. 作業を終えたら `pnpm export` を実行(制作ホーム `exports/index.html` が最新になる)
+4. 作業を終えたら `pnpm export` を実行(制作コックピット `exports/index.html` が最新になる)
+5. **見た目に関わる作業をしたら**、可能なら `pnpm export:stills && pnpm export:home` も
+   実行してサムネイルを更新し、報告に含める(画像はGit管理しない)
 
 人間向け導線:
 - **制作コックピット** = `exports/index.html`(確認入口。編集UIではない)。

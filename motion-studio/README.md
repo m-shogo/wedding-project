@@ -158,8 +158,15 @@ fresh clone(out/やpublic/photos/が空)でも `pnpm check` は通る設計
 pnpm export           # 下の3つをまとめて実行
 pnpm export:capcut    # CapCut作業表CSV/MD + 本番未確定素材一覧
 pnpm export:review    # レビュー用HTML(シーン一覧+品質チェックリスト)
-pnpm export:home      # 制作ホーム(入口ページ)
+pnpm export:home      # 制作コックピット(確認入口ページ)
+pnpm export:stills    # 主要Compositionのstill画像(サムネイル)生成。重いので別コマンド
 ```
+
+Visual Cockpit運用:
+
+- 通常確認: `pnpm export`(still画像が無くてもコックピットは壊れない)
+- 見た目サムネイルも更新: `pnpm export:stills && pnpm export`
+- still画像(`exports/previews/*.png`)は生成物なのでGit管理しない
 
 出力先(CSV/MD/HTMLはGit管理してよい。動画・画像はexports/に置かない):
 

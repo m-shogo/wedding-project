@@ -40,6 +40,7 @@
     "export:capcut": "node --no-warnings scripts/export-capcut-timeline.mts",
     "export:review": "node --no-warnings scripts/export-review-gallery.mts",
     "export:home": "node --no-warnings scripts/export-home.mts",
+    "export:stills": "node --no-warnings scripts/export-preview-stills.mts",
     "export": "pnpm export:capcut && pnpm export:review && pnpm export:home"
   },
   "dependencies": {

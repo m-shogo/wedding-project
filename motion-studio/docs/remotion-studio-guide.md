@@ -14,6 +14,12 @@ open motion-studio/exports/index.html   # Finderからダブルクリックで�
 
 古い場合は `pnpm export` で更新してから見る。
 
+コックピットには主要Compositionの**見た目プレビュー**(still画像)が出る。
+
+- サムネイルが古い / 無い場合: `pnpm export:stills && pnpm export` で更新
+- still画像は**目安**。動き・テンポの最終確認はRemotion Studioで再生する
+- サムネイル画像(`exports/previews/*.png`)はGit管理しない(生成物)
+
 ## 起動方法
 
 ```sh

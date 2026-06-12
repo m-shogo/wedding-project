@@ -108,6 +108,20 @@
     padding: 10px 16px; font-size: 13px; color: #6d614b; margin-top: 12px;
   }
   .todo-item { list-style: none; margin: 9px 0; }
+  .preview-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
+  .preview-card {
+    border: 1px solid #e2dac9; border-radius: 8px; overflow: hidden; background: #fdfbf6;
+  }
+  .preview-card img { display: block; width: 100%; aspect-ratio: 16/9; object-fit: cover; }
+  .preview-meta { padding: 8px 12px; font-size: 12.5px; line-height: 1.6; }
+  .no-preview {
+    display: flex; align-items: center; justify-content: center;
+    aspect-ratio: 16/9; background: #efe9da; color: #8a8273; font-size: 13px;
+  }
+  .scene-thumb {
+    display: block; width: 100%; max-width: 480px; border-radius: 6px;
+    border: 1px solid #e2dac9; margin-bottom: 10px;
+  }
   section > ul.todos { padding-left: 0; }
   @media (max-width: 600px) {
     main { padding: 16px 10px 48px; }
@@ -122,7 +136,7 @@
   <div class="header-inner">
     <h1>結婚式ムービー制作コックピット</h1>
     <div class="couple">SHOGO &amp; SHIORI — OCT 24 2026 / YOKOHAMA</div>
-    <p>生成: 2026-06-12 09:18 — このページは<strong>編集ページではなく確認入口</strong>。状態は保存されない。更新は <code>pnpm export</code></p>
+    <p>生成: 2026-06-12 09:26 — このページは<strong>編集ページではなく確認入口</strong>。状態は保存されない。更新は <code>pnpm export</code></p>
     <p>最初にやる: <code>pnpm dev</code>(Studio) / <code>pnpm export</code>(このページ更新) / <code>pnpm check</code>(整合確認)</p>
   </div>
 </header>
@@ -218,6 +232,70 @@
 </section>
 
 <section>
+  <h2>見た目プレビュー</h2>
+  <p class="muted">still画像は目安。最終確認はRemotion Studio(<code>pnpm dev</code>)で再生する。
+  古い/無い場合は <code>pnpm export:stills && pnpm export</code> で更新(画像はGit管理しない)。</p>
+  <div class="preview-grid">
+<div class="preview-card">
+    <img src="./previews/text-parts-preview.png" alt="文字部品-確認" loading="lazy">
+    <div class="preview-meta">
+      <strong><code>文字部品-確認</code></strong> <span class="muted">frame 90</span><br>
+      <span class="muted">TextPart 3種の見た目確認(frame90=FadeUpCaption)</span><br>
+      <span class="muted">再生成: <code>pnpm exec remotion still 文字部品-確認 exports/previews/text-parts-preview.png --frame=90</code></span>
+    </div>
+  </div>
+<div class="preview-card">
+    <img src="./previews/photo-hawaii.png" alt="写真-Hawaii" loading="lazy">
+    <div class="preview-meta">
+      <strong><code>写真-Hawaii</code></strong> <span class="muted">frame 120</span><br>
+      <span class="muted">Hawaii写真カードの確認</span><br>
+      <span class="muted">再生成: <code>pnpm exec remotion still 写真-Hawaii exports/previews/photo-hawaii.png --frame=120</code></span>
+    </div>
+  </div>
+<div class="preview-card">
+    <img src="./previews/boarding.png" alt="搭乗券" loading="lazy">
+    <div class="preview-meta">
+      <strong><code>搭乗券</code></strong> <span class="muted">frame 120</span><br>
+      <span class="muted">BOARDING PASSイントロの確認</span><br>
+      <span class="muted">再生成: <code>pnpm exec remotion still 搭乗券 exports/previews/boarding.png --frame=120</code></span>
+    </div>
+  </div>
+<div class="preview-card">
+    <img src="./previews/cloud-sea.png" alt="雲海" loading="lazy">
+    <div class="preview-meta">
+      <strong><code>雲海</code></strong> <span class="muted">frame 150</span><br>
+      <span class="muted">Remotion版雲海(AI版op_16系との比較用)</span><br>
+      <span class="muted">再生成: <code>pnpm exec remotion still 雲海 exports/previews/cloud-sea.png --frame=150</code></span>
+    </div>
+  </div>
+<div class="preview-card">
+    <img src="./previews/door-light.png" alt="扉-光" loading="lazy">
+    <div class="preview-meta">
+      <strong><code>扉-光</code></strong> <span class="muted">frame 180</span><br>
+      <span class="muted">入場直前の余韻・光の強さ確認</span><br>
+      <span class="muted">再生成: <code>pnpm exec remotion still 扉-光 exports/previews/door-light.png --frame=180</code></span>
+    </div>
+  </div>
+<div class="preview-card">
+    <img src="./previews/countdown.png" alt="入場前-秒読" loading="lazy">
+    <div class="preview-meta">
+      <strong><code>入場前-秒読</code></strong> <span class="muted">frame 240</span><br>
+      <span class="muted">カウントダウンの数字・読みやすさ確認</span><br>
+      <span class="muted">再生成: <code>pnpm exec remotion still 入場前-秒読 exports/previews/countdown.png --frame=240</code></span>
+    </div>
+  </div>
+<div class="preview-card">
+    <img src="./previews/opening-full-preview.png" alt="開幕-全体確認" loading="lazy">
+    <div class="preview-meta">
+      <strong><code>開幕-全体確認</code></strong> <span class="muted">frame 300</span><br>
+      <span class="muted">通しの雰囲気確認(順番・尺はStudioで)</span><br>
+      <span class="muted">再生成: <code>pnpm exec remotion still 開幕-全体確認 exports/previews/opening-full-preview.png --frame=300</code></span>
+    </div>
+  </div>
+  </div>
+</section>
+
+<section>
   <h2>今日やること(優先度つき)</h2>
   <ul class="todos">
 <li class="todo-item">
@@ -287,6 +365,7 @@
 <details class="scene" >
   <summary><span class="scene-no">1</span> 00:00–00:08 <strong>搭乗券イントロ</strong> <span class="badge" style="background:#8a6d3b">draft</span> <span class="muted">opening-boarding</span></summary>
   <div class="scene-body">
+    <a href="./previews/boarding.png"><img class="scene-thumb" src="./previews/boarding.png" alt="搭乗券イントロ" loading="lazy"></a>
     <table class="mini">
       <tr><td>テンプレ / Studioで見るComposition</td><td><code>搭乗券</code></td></tr>
       <tr><td>メモ</td><td>BGMの入りに合わせて暗転から。variant=ivory採用かは審査待ち</td></tr>
@@ -304,6 +383,7 @@
 <details class="scene" >
   <summary><span class="scene-no">2</span> 00:08–00:14 <strong>離陸・雲海</strong> <span class="badge" style="background:#8a6d3b">draft</span> <span class="muted">opening-cloud-sea</span></summary>
   <div class="scene-body">
+    <a href="./previews/cloud-sea.png"><img class="scene-thumb" src="./previews/cloud-sea.png" alt="離陸・雲海" loading="lazy"></a>
     <table class="mini">
       <tr><td>テンプレ / Studioで見るComposition</td><td><code>雲海</code></td></tr>
       <tr><td>メモ</td><td>Remotion版とAI生成版(op_16系)を見比べて良い方を採用</td></tr>
@@ -321,6 +401,7 @@
 <details class="scene" >
   <summary><span class="scene-no">3</span> 00:14–00:36 <strong>思い出ダイジェスト(スタンプ連打)</strong> <span class="badge" style="background:#8a6d3b">draft</span> <span class="muted">opening-stamp-rush</span></summary>
   <div class="scene-body">
+    
     <table class="mini">
       <tr><td>テンプレ / Studioで見るComposition</td><td><code>押印連打-全路線</code></td></tr>
       <tr><td>メモ</td><td>BGM第1の山に沖縄スタンプの「ポン」を合わせる</td></tr>
@@ -338,6 +419,7 @@
 <details class="scene" open>
   <summary><span class="scene-no">4</span> 00:36–00:46 <strong>Hawaiiの思い出(写真解禁)</strong> <span class="badge" style="background:#9a3d3d">todo</span> <span class="muted">opening-photo-hawaii</span></summary>
   <div class="scene-body">
+    <a href="./previews/photo-hawaii.png"><img class="scene-thumb" src="./previews/photo-hawaii.png" alt="Hawaiiの思い出(写真解禁)" loading="lazy"></a>
     <table class="mini">
       <tr><td>テンプレ / Studioで見るComposition</td><td><code>写真-Hawaii</code></td></tr>
       <tr><td>メモ</td><td>実写真3枚待ち。PROPOSAL文脈なので動きは控えめのまま</td></tr>
@@ -357,6 +439,7 @@
 <details class="scene" >
   <summary><span class="scene-no">5</span> 00:46–00:54 <strong>最終区間 Hawaii→横浜</strong> <span class="badge" style="background:#8a6d3b">draft</span> <span class="muted">opening-map-final</span></summary>
   <div class="scene-body">
+    
     <table class="mini">
       <tr><td>テンプレ / Studioで見るComposition</td><td><code>地図-Hawaii-横浜</code></td></tr>
       
@@ -374,6 +457,7 @@
 <details class="scene" >
   <summary><span class="scene-no">6</span> 00:54–01:06 <strong>扉の光・余韻</strong> <span class="badge" style="background:#8a6d3b">draft</span> <span class="muted">opening-door-light</span></summary>
   <div class="scene-body">
+    <a href="./previews/door-light.png"><img class="scene-thumb" src="./previews/door-light.png" alt="扉の光・余韻" loading="lazy"></a>
     <table class="mini">
       <tr><td>テンプレ / Studioで見るComposition</td><td><code>扉-光</code></td></tr>
       <tr><td>メモ</td><td>Remotion版とAI生成版を比較。テロップ「Cabin crew...」はCapCutで乗せる</td></tr>
@@ -391,6 +475,7 @@
 <details class="scene" >
   <summary><span class="scene-no">7</span> 01:06–01:22 <strong>入場前カウントダウン</strong> <span class="badge" style="background:#8a6d3b">draft</span> <span class="muted">opening-countdown</span></summary>
   <div class="scene-body">
+    <a href="./previews/countdown.png"><img class="scene-thumb" src="./previews/countdown.png" alt="入場前カウントダウン" loading="lazy"></a>
     <table class="mini">
       <tr><td>テンプレ / Studioで見るComposition</td><td><code>入場前-秒読</code></td></tr>
       <tr><td>メモ</td><td>数字の頭をBGMのビートに合わせる。直後に入場曲</td></tr>

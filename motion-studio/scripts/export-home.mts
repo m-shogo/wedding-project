@@ -5,9 +5,10 @@
 // 出力: exports/index.html
 // データ源: openingProject / assets / sceneRegistry / partRegistry / aiPromptRegistry
 
-import {mkdirSync, writeFileSync} from 'node:fs';
+import {existsSync, mkdirSync, writeFileSync} from 'node:fs';
 import {dirname, join} from 'node:path';
 import {fileURLToPath} from 'node:url';
+import {previewStills, stillCommand} from './preview-stills.config.mts';
 import {openingProject, remotionBaseSec} from '../src/data/openingProject.ts';
 import {assets} from '../src/data/assets.ts';
 import type {Asset, AssetStatus} from '../src/data/assets.ts';
@@ -141,6 +142,32 @@ const summaryHtml = summaryCards
     </div>`,
   )
   .join('\n');
+
+// ---------------------------------------------------------------- 見た目プレビュー
+
+const previewExists = (file: string): boolean =>
+  existsSync(join(outDir, 'previews', file));
+
+const previewCard = (p: (typeof previewStills)[number]): string => {
+  const img = previewExists(p.file)
+    ? `<img src="./previews/${esc(p.file)}" alt="${esc(p.compositionId)}" loading="lazy">`
+    : `<div class="no-preview">未生成。<code>pnpm export:stills</code> を実行</div>`;
+  return `<div class="preview-card">
+    ${img}
+    <div class="preview-meta">
+      <strong><code>${esc(p.compositionId)}</code></strong> <span class="muted">frame ${p.frame}</span><br>
+      <span class="muted">${esc(p.purpose)}</span><br>
+      <span class="muted">再生成: <code>${esc(stillCommand(p))}</code></span>
+    </div>
+  </div>`;
+};
+
+const previewSectionHtml = previewStills.map(previewCard).join('\n');
+
+// sceneId → プレビュー定義
+const previewBySceneId = new Map(
+  previewStills.filter((p) => p.sceneId).map((p) => [p.sceneId as string, p]),
+);
 
 // ---------------------------------------------------------------- D. 今日やること
 
@@ -304,9 +331,18 @@ const sceneCards = openingProject.scenes
     if (scene.status === 'todo') watch.push('まだ構成未確定(todo)');
     if (scene.status === 'draft') watch.push('見た目確認待ち(draft)');
 
+    // 対応するプレビュー画像(主要シーンのみ)
+    const pv = previewBySceneId.get(scene.id);
+    const pvHtml = pv
+      ? previewExists(pv.file)
+        ? `<a href="./previews/${esc(pv.file)}"><img class="scene-thumb" src="./previews/${esc(pv.file)}" alt="${esc(scene.title)}" loading="lazy"></a>`
+        : `<p class="muted">preview未生成(<code>pnpm export:stills</code>)</p>`
+      : '';
+
     return `<details class="scene" ${scene.status === 'todo' ? 'open' : ''}>
   <summary><span class="scene-no">${i + 1}</span> ${mmss(start)}–${mmss(end)} <strong>${esc(scene.title)}</strong> ${badge(scene.status)} <span class="muted">${esc(scene.id)}</span></summary>
   <div class="scene-body">
+    ${pvHtml}
     <table class="mini">
       <tr><td>テンプレ / Studioで見るComposition</td><td><code>${esc(scene.template)}</code></td></tr>
       ${scene.notes ? `<tr><td>メモ</td><td>${esc(scene.notes)}</td></tr>` : ''}
@@ -645,6 +681,20 @@ const html = `<!DOCTYPE html>
     padding: 10px 16px; font-size: 13px; color: #6d614b; margin-top: 12px;
   }
   .todo-item { list-style: none; margin: 9px 0; }
+  .preview-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
+  .preview-card {
+    border: 1px solid #e2dac9; border-radius: 8px; overflow: hidden; background: #fdfbf6;
+  }
+  .preview-card img { display: block; width: 100%; aspect-ratio: 16/9; object-fit: cover; }
+  .preview-meta { padding: 8px 12px; font-size: 12.5px; line-height: 1.6; }
+  .no-preview {
+    display: flex; align-items: center; justify-content: center;
+    aspect-ratio: 16/9; background: #efe9da; color: #8a8273; font-size: 13px;
+  }
+  .scene-thumb {
+    display: block; width: 100%; max-width: 480px; border-radius: 6px;
+    border: 1px solid #e2dac9; margin-bottom: 10px;
+  }
   section > ul.todos { padding-left: 0; }
   @media (max-width: 600px) {
     main { padding: 16px 10px 48px; }
@@ -682,6 +732,15 @@ const html = `<!DOCTYPE html>
   <h2>全体サマリー</h2>
   <div class="stats">
 ${summaryHtml}
+  </div>
+</section>
+
+<section>
+  <h2>見た目プレビュー</h2>
+  <p class="muted">still画像は目安。最終確認はRemotion Studio(<code>pnpm dev</code>)で再生する。
+  古い/無い場合は <code>pnpm export:stills && pnpm export</code> で更新(画像はGit管理しない)。</p>
+  <div class="preview-grid">
+${previewSectionHtml}
   </div>
 </section>
 
@@ -767,6 +826,7 @@ ${fableHtml}
 
 const outPath = join(outDir, 'index.html');
 writeFileSync(outPath, html);
+const previewCount = previewStills.filter((p) => previewExists(p.file)).length;
 console.log(
-  `✅ exports/index.html (シーン${sceneCount} / 素材${allAssets.length} / TODO${todos.length}件 / パーツ${parts.length} / AIプロンプト${aiPromptRecords.length})`,
+  `✅ exports/index.html (シーン${sceneCount} / 素材${allAssets.length} / TODO${todos.length}件 / パーツ${parts.length} / AIプロンプト${aiPromptRecords.length} / プレビュー画像${previewCount}/${previewStills.length})`,
 );
