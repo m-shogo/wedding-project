@@ -39,7 +39,7 @@
 - **ai-cloud-sea-01** — 雲海シーンのAI生成候補(op_16系)。Remotion版「雲海」と比較
   - path: `~/ComfyUI-Shared/output/video/`
   - 使用シーン: opening-cloud-sea
-  - メモ: ComfyUI Wan2.2で生成済み。~/ComfyUI-Shared/output/video/ のop_16系を採点して採用ファイルを決める
+  - 確認/復旧メモ: ComfyUI Wan2.2で生成済み。~/ComfyUI-Shared/output/video/ のop_16系を採点して採用ファイルを決める
   - メモ: 採点: docs/templates/ai-video-scorecard.csv。採用確定後にpathを具体ファイル名に更新しstatusをcandidateへ(人間確認必須)
 - **render-boarding** — CapCut Track2: 搭乗券イントロ
   - path: `out/opening/boarding_pass_intro.mp4`

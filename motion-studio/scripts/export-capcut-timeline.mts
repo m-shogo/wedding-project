@@ -228,11 +228,8 @@ const sections = statusOrder
           `- **${a.id}** — ${a.usage}`,
           `  - path: \`${a.path}\``,
           `  - 使用シーン: ${sceneIds.length > 0 ? sceneIds.join(', ') : '(シーンから未参照)'}`,
-          a.regenerateCommand && !a.regenerateCommand.startsWith('#')
-            ? `  - 再生成: \`${a.regenerateCommand}\``
-            : a.regenerateCommand
-              ? `  - メモ: ${a.regenerateCommand.replace(/^# /, '')}`
-              : null,
+          a.regenerateCommand ? `  - 再生成: \`${a.regenerateCommand}\`` : null,
+          a.recoveryNote ? `  - 確認/復旧メモ: ${a.recoveryNote}` : null,
           a.note ? `  - メモ: ${a.note}` : null,
         ]
           .filter(Boolean)

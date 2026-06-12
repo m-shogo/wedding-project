@@ -72,14 +72,24 @@ for (const asset of Object.values(assets)) {
       console.log(`ℹ️  ${tag} — 生成準備済み${asset.note ? `: ${asset.note}` : ''}`);
       break;
     case 'generated_preview': {
-      if (!asset.regenerateCommand) {
-        warn(`${tag} — regenerateCommand未設定(generated_previewは再生成手段を必ず書く)`);
+      // regenerateCommand(実行コマンド)か recoveryNote(人間向けメモ)のどちらかが必須。
+      // 両方無い場合は手がかりが無いためwarning。
+      if (!asset.regenerateCommand && !asset.recoveryNote) {
+        warn(
+          `${tag} — regenerateCommandもrecoveryNoteも無い(generated_previewは再生成手段または復旧メモを必ず書く)`,
+        );
       }
       if (fileExists(asset.path)) {
         console.log(`✅ ${tag} — ${asset.path}(試作。本番使用不可)`);
       } else {
-        const regen = asset.regenerateCommand ? `\n   → 再生成: ${asset.regenerateCommand}` : '';
-        console.log(`ℹ️  ${tag} — 未生成${regen}`);
+        const lines: string[] = [`ℹ️  ${tag} — 未生成`];
+        if (asset.regenerateCommand) {
+          lines.push(`   → 再生成: ${asset.regenerateCommand}`);
+        }
+        if (asset.recoveryNote) {
+          lines.push(`   → 確認/復旧メモ: ${asset.recoveryNote}`);
+        }
+        console.log(lines.join('\n'));
       }
       break;
     }

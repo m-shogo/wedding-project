@@ -80,10 +80,15 @@ const sceneCards = openingProject.scenes
       sceneAssets.length === 0
         ? '<li class="muted">素材参照なし(テンプレのみ)</li>'
         : sceneAssets
-            .map(
-              (a) =>
-                `<li><code>${esc(a.id)}</code> ${badge(a.status)} <span class="muted">${esc(a.path)}</span></li>`,
-            )
+            .map((a) => {
+              const extra = [
+                a.regenerateCommand ? `再生成: <code>${esc(a.regenerateCommand)}</code>` : '',
+                a.recoveryNote ? `確認/復旧メモ: ${esc(a.recoveryNote)}` : '',
+              ]
+                .filter(Boolean)
+                .join(' / ');
+              return `<li><code>${esc(a.id)}</code> ${badge(a.status)} <span class="muted">${esc(a.path)}</span>${extra ? `<br><span class="muted" style="font-size:12px">${extra}</span>` : ''}</li>`;
+            })
             .join('');
 
     const cautionHtml =

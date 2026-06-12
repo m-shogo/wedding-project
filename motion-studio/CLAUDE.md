@@ -63,7 +63,10 @@ src/data/         単一情報源(下記)
 - **AssetStatusは制作段階**: `missing → idea → prompt_ready → generated_preview →
   candidate → approved → final`(+`external`)。旧`generated`/`ready`/`placeholder`は廃止済み。
   - **AIが勝手にcandidate以上へ昇格させるのは禁止**。昇格は人間の確認が必須
-  - `generated_preview` = 試作。**final扱い禁止**。`regenerateCommand`必須
+  - `generated_preview` = 試作。**final扱い禁止**。`regenerateCommand`か`recoveryNote`どちらかが必須
+  - `regenerateCommand` はターミナルで**そのまま実行できるコマンドのみ**(`# コメント`を入れない)
+  - 実行コマンドでない復旧手順は `recoveryNote` に書く(AI素材はここに「どこを採点するか」)
+  - render素材は `regenerateCommand` 必須。AI素材で再生成コマンドが無い場合は `recoveryNote` 必須
   - approved/finalはファイルが無いとcheckエラー(=本番素材の消失検出)
   - final sceneに未承認素材が混ざるとcheck:assetsがエラーを出す
 - **fresh clone耐性**: `out/`と`public/photos/`はGit外。そこの成果物は

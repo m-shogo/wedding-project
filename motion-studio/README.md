@@ -113,7 +113,7 @@ CapCutに組み込む前、コミット前に `pnpm check` を通す。
 | `missing` | まだ手元にない | 情報表示 |
 | `idea` | アイデアだけある | 情報表示 |
 | `prompt_ready` | AI生成プロンプト・準備済み | 情報表示 |
-| `generated_preview` | 生成済みの**試作**。本番使用不可 | 無くても情報表示。`regenerateCommand`必須(無いと警告) |
+| `generated_preview` | 生成済みの**試作**。本番使用不可 | 無くても情報表示。`regenerateCommand`か`recoveryNote`どちらかが必須(両方無いと警告) |
 | `candidate` | 採用候補(本番確定ではない) | ファイルが無ければ警告 |
 | `approved` | 採用決定。最終書き出し前 | ファイルが無ければ**エラー** |
 | `final` | 本番使用OK | ファイルが無ければ**エラー** |
@@ -130,6 +130,20 @@ final sceneに未承認素材(missing/idea/prompt_ready/generated_preview/candid
 
 fresh clone(out/やpublic/photos/が空)でも `pnpm check` は通る設計
 (generated_previewは未生成でも再生成コマンドを表示するだけ)。
+
+### `regenerateCommand` と `recoveryNote` の使い分け
+
+| フィールド | 使う場面 | 例 |
+|---|---|---|
+| `regenerateCommand` | ターミナルで**そのまま実行できる**コマンド | `pnpm render 搭乗券 final` |
+| `recoveryNote` | 実行コマンドではない人間向け復旧・確認メモ | `ComfyUIの~/...を採点して採用ファイルを決める` |
+| `note` | 素材の補足説明 | `採点はscorecard.csv` |
+
+ルール:
+- `regenerateCommand` に `# コメント` を入れない
+- render素材は `regenerateCommand` を必ず書く
+- AI生成素材でCLI再生成コマンドが無い場合は `recoveryNote` で復旧手順を書く
+- `generated_preview` は `regenerateCommand` か `recoveryNote` の**どちらか**が必須(両方無いとcheckが警告)
 
 ## 制作管理ファイルの出力
 

@@ -43,7 +43,13 @@ export type Asset = {
   aspect: '16:9' | '9:16' | '3:4' | '4:3' | '1:1' | 'audio';
   usage: string;
   status: AssetStatus;
+  // 実行できるシェルコマンドのみ(例: "pnpm render 搭乗券 final")。
+  // 実行不能なメモを入れない。人間向け説明は recoveryNote に書く。
   regenerateCommand?: string;
+  // 実行コマンドではなく、復旧・確認に必要な人間向けメモ。
+  // AI素材は「どこのファイルを確認/採点すれば再生成できるか」をここに書く。
+  // render素材は regenerateCommand を使うため通常不要。
+  recoveryNote?: string;
   note?: string;
 };
 
@@ -95,8 +101,8 @@ export const assets: Record<string, Asset> = {
     aspect: '16:9',
     usage: '雲海シーンのAI生成候補(op_16系)。Remotion版「雲海」と比較',
     status: 'generated_preview',
-    regenerateCommand:
-      '# ComfyUI Wan2.2で生成済み。~/ComfyUI-Shared/output/video/ のop_16系を採点して採用ファイルを決める',
+    recoveryNote:
+      'ComfyUI Wan2.2で生成済み。~/ComfyUI-Shared/output/video/ のop_16系を採点して採用ファイルを決める',
     note: '採点: docs/templates/ai-video-scorecard.csv。採用確定後にpathを具体ファイル名に更新しstatusをcandidateへ(人間確認必須)',
   },
   'ai-door-light-01': {
