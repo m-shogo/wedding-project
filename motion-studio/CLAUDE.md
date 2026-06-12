@@ -28,8 +28,8 @@ src/data/         単一情報源(下記)
 
 | ファイル | 役割 |
 |---|---|
-| `openingProject.ts` | 新郎新婦・日付・トーン・シーン構成。文言はここから引く |
-| `assets.ts` | 素材ID管理。パス直書き禁止 |
+| `openingProject.ts` | 新郎新婦・日付・トーン・シーン構成。文言はここから引く。`capcutTargetSec`=上映目標尺、Remotion素材合計は`remotionBaseSec()`で導出 |
+| `assets.ts` | 素材ID管理。パス直書き禁止。写真をテンプレに渡すときは `photoPublicPath(id)` で変換(`public/photos/`プレフィックスを手で剥がさない) |
 | `sceneRegistry.ts` | 全テンプレのメタデータ(ID/尺/出力先/透過区分) |
 | `theme.ts` `fonts.ts` | デザイントークン |
 | `routes.ts` `memories.ts` | 地図座標・写真カードデータ |
@@ -59,6 +59,11 @@ src/data/         単一情報源(下記)
 - **Mac MPSでFP8不可**(ComfyUI側の話。`../docs/local-video-ai-setup.md`)
 - pnpmのbuild許可は `pnpm-workspace.yaml` の `allowBuilds`(esbuildのみ許可済み)
 - chechスクリプトは `.mts` でNode 24の型ストリップ実行(`node --no-warnings scripts/x.mts`)
+- **fresh clone耐性**: `out/`と`public/photos/`はGit外。そこにある成果物のstatusは
+  `ready`ではなく`generated`にする(check:assetsが「無くてもエラーにしない」扱いになる)。
+  `ready`/`placeholder`はGit管理内など「必ず存在すべき」ファイルにだけ使う
+- **`開幕-全体確認`は順番・尺の確認専用**。propsは代表値でRoot.tsxのdefaultPropsを
+  完全反映しない。見た目の最終確認は個別テンプレのstill/renderで行う
 
 ## コマンド
 

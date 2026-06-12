@@ -71,6 +71,11 @@ IDは漢字+英数字のみ(Remotionの仕様でひらがな・カタカナは�
 |----|------|----|------|
 | `開幕-全体確認` | openingProjectのシーン構成をそのまま通すテンポ確認用 | 82秒 | `pnpm render:preview` |
 
+注意: `開幕-全体確認` は**順番と尺の確認専用**。propsはプレビュー用の代表値で、
+Root.tsxのdefaultProps(Save defaultsの調整値)を完全には反映しない。
+見た目の最終確認は個別テンプレートのstill書き出し(`pnpm exec remotion still <ID> ...`)か
+本番render(`pnpm render <ID> final`)で行う。
+
 ### 99-説明書
 
 | テンプレート | 内容 |
@@ -100,6 +105,8 @@ pnpm check:assets   # 素材ファイルの存在チェック
 ```
 
 CapCutに組み込む前、コミット前に `pnpm check` を通す。
+fresh clone(out/やpublic/photos/が空)でも `pnpm check` は通る設計:
+render成果物はstatus `generated`(無ければ再生成コマンドを情報表示するだけ)として扱う。
 
 ## データ構造(単一情報源)
 

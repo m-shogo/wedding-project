@@ -1,5 +1,9 @@
 import type {OpeningProject} from './openingProject.schema';
 
+// Remotion素材の合計尺(秒)。scenesから導出する(手で持たない)
+export const remotionBaseSec = (p: OpeningProject): number =>
+  p.scenes.reduce((sum, s) => sum + s.durationSec, 0);
+
 // オープニングムービーの単一情報源。
 // 新郎新婦・日付・会場・トーン・解像度・シーン構成をここで一元管理する。
 // テンプレートに表示する文言は coupleDisplay / dateDisplay / venueDisplay を使う。
@@ -20,7 +24,7 @@ export const openingProject: OpeningProject = {
   fps: 30,
   width: 1920,
   height: 1080,
-  targetTotalSec: 105,
+  capcutTargetSec: 105,
   scenes: [
     {
       id: 'opening-boarding',

@@ -10,11 +10,13 @@
 // status:
 //   ready       実ファイルが存在するべき(無ければcheckがエラー)
 //   placeholder 仮素材が存在するべき(無ければcheckがエラー)
+//   generated   コマンドで再生成できる成果物(out/のrender等)。
+//               あれば✅、無くても情報表示のみ(fresh cloneでcheckを落とさない)
 //   missing     まだ手元にない(入手待ち。checkは情報表示のみ)
 //   external    Git外・このrepo外で管理(checkはパス検証をスキップ)
 
 export type AssetType = 'photo' | 'video' | 'ai-video' | 'audio' | 'render';
-export type AssetStatus = 'ready' | 'placeholder' | 'missing' | 'external';
+export type AssetStatus = 'ready' | 'placeholder' | 'generated' | 'missing' | 'external';
 
 export type Asset = {
   id: string;
@@ -33,8 +35,9 @@ export const assets: Record<string, Asset> = {
     path: 'public/photos/opening/sample-01.jpg',
     type: 'photo',
     aspect: '3:4',
-    usage: '写真カードの動作確認用プレースホルダー',
-    status: 'placeholder',
+    usage: '写真カードの動作確認用プレースホルダー(合成グラデ画像)',
+    status: 'generated',
+    note: "再生成: ffmpeg -f lavfi -i 'gradients=s=900x1200:c0=#2a4a6b:c1=#d9a05b:n=2' -frames:v 1 public/photos/opening/sample-01.jpg",
   },
   'photo-hawaii-01': {
     id: 'photo-hawaii-01',
@@ -99,7 +102,8 @@ export const assets: Record<string, Asset> = {
     type: 'render',
     aspect: '16:9',
     usage: 'CapCut Track2: 搭乗券イントロ',
-    status: 'ready',
+    status: 'generated',
+    note: '再生成: pnpm render 搭乗券 final',
   },
   'render-stamp-rush': {
     id: 'render-stamp-rush',
@@ -107,7 +111,8 @@ export const assets: Record<string, Asset> = {
     type: 'render',
     aspect: '16:9',
     usage: 'CapCut Track2: スタンプ連打ダイジェスト',
-    status: 'ready',
+    status: 'generated',
+    note: '再生成: pnpm render 押印連打-全路線 final',
   },
   'render-countdown': {
     id: 'render-countdown',
@@ -115,7 +120,8 @@ export const assets: Record<string, Asset> = {
     type: 'render',
     aspect: '16:9',
     usage: 'CapCut Track2: 入場前カウントダウン',
-    status: 'ready',
+    status: 'generated',
+    note: '再生成: pnpm render 入場前-秒読 final',
   },
   'render-stamp-okinawa': {
     id: 'render-stamp-okinawa',
@@ -123,7 +129,8 @@ export const assets: Record<string, Asset> = {
     type: 'render',
     aspect: '16:9',
     usage: 'CapCut Track4: 透過ハンコ(乗算ブレンド推奨)',
-    status: 'ready',
+    status: 'generated',
+    note: '再生成: pnpm render 押印-沖縄 final',
   },
   'render-cloud-overlay': {
     id: 'render-cloud-overlay',
@@ -131,7 +138,8 @@ export const assets: Record<string, Asset> = {
     type: 'render',
     aspect: '16:9',
     usage: 'CapCut Track3: 透過雲オーバーレイ(不透明度50-70%)',
-    status: 'ready',
+    status: 'generated',
+    note: '再生成: pnpm render 雲-透過 final',
   },
 };
 
@@ -142,4 +150,26 @@ export const assetPath = (id: string): string => {
     throw new Error(`assets.tsに存在しない素材ID: ${id}`);
   }
   return asset.path;
+};
+
+// 写真素材IDを、PhotoCard等のphotos欄に渡す形式(staticFile相対)に変換する。
+// assets.tsのpathは 'public/photos/opening/x.jpg'、テンプレ側は 'opening/x.jpg' を
+// 期待するため、この変換を必ずここで行う(手動でprefixを剥がさない)。
+export const photoPublicPath = (id: string): string => {
+  const asset = assets[id];
+  if (!asset) {
+    throw new Error(`assets.tsに存在しない素材ID: ${id}`);
+  }
+  if (asset.type !== 'photo') {
+    throw new Error(
+      `photoPublicPathはphoto素材専用: ${id} はtype=${asset.type}`,
+    );
+  }
+  const prefix = 'public/photos/';
+  if (!asset.path.startsWith(prefix)) {
+    throw new Error(
+      `写真素材のpathは${prefix}から始める: ${id} (${asset.path})`,
+    );
+  }
+  return asset.path.slice(prefix.length);
 };

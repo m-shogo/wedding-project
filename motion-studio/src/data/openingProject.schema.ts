@@ -30,8 +30,10 @@ export const openingProjectSchema = z.object({
   fps: z.number().int().positive(),
   width: z.number().int().positive(),
   height: z.number().int().positive(),
-  // 入場前上映の目標尺(秒)。シーン合計との乖離はcheckで警告
-  targetTotalSec: z.number().positive(),
+  // CapCutで仕上げる上映尺の目標(秒)。BGMと間(ま)込みの最終尺
+  // Remotion素材の合計尺(remotionBaseSec)はscenesから自動算出され、
+  // capcutTargetSecとの差はCapCutの間・トランジションで埋める前提
+  capcutTargetSec: z.number().positive(),
   scenes: z.array(sceneSchema).min(1),
 });
 

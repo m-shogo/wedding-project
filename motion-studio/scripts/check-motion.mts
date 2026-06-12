@@ -120,14 +120,18 @@ if (fullPreview && fullPreview.durationInFrames !== expectedPreviewFrames) {
   );
 }
 
-const drift = Math.abs(totalSec - openingProject.targetTotalSec);
-if (drift > openingProject.targetTotalSec * 0.15) {
+// Remotion素材の合計はCapCut目標尺以下が正常(差はCapCutの間・トランジションで埋める)。
+// 合計が目標を超えたときだけ警告する。
+if (totalSec > openingProject.capcutTargetSec) {
   warn(
-    `シーン合計${totalSec}s が目標${openingProject.targetTotalSec}s から大きく乖離。` +
-      `CapCutの間(ま)で吸収できる範囲か確認する`,
+    `Remotion素材合計${totalSec}s がCapCut目標尺${openingProject.capcutTargetSec}s を超過。` +
+      `シーンを削るか目標尺を見直す`,
   );
 } else {
-  info(`シーン合計 ${totalSec}s / 目標 ${openingProject.targetTotalSec}s(CapCutの間で調整)`);
+  info(
+    `Remotion素材合計 ${totalSec}s / CapCut目標尺 ${openingProject.capcutTargetSec}s` +
+      `(差${openingProject.capcutTargetSec - totalSec}s はCapCutの間で演出)`,
+  );
 }
 
 // ---- 結果 ----

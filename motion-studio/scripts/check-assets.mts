@@ -6,8 +6,10 @@
 //   ~ or /             → ローカル絶対(external前提。チェック対象外)
 // status別の扱い:
 //   ready/placeholder → 存在しなければエラー
+//   generated         → あれば✅、無ければ情報表示(再生成コマンドを案内。エラーにしない)
 //   missing           → 入手待ちとして情報表示のみ
 //   external          → スキップ
+// out/とpublic/photos/はGit管理外なので、fresh cloneでもこのチェックは通る。
 
 import {existsSync} from 'node:fs';
 import {dirname, join, resolve} from 'node:path';
@@ -35,6 +37,16 @@ for (const asset of Object.values(assets)) {
   }
   if (asset.status === 'missing') {
     console.log(`ℹ️  [missing ] ${asset.id} — 入手待ち${asset.note ? `: ${asset.note}` : ''}`);
+    continue;
+  }
+  if (asset.status === 'generated') {
+    if (abs !== null && existsSync(abs)) {
+      console.log(`✅ [generated] ${asset.id} — ${asset.path}`);
+    } else {
+      console.log(
+        `ℹ️  [generated] ${asset.id} — 未生成${asset.note ? `(${asset.note})` : ''}`,
+      );
+    }
     continue;
   }
   if (abs === null) {
