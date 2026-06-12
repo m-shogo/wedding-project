@@ -67,18 +67,42 @@ IDは漢字+英数字のみ(Remotionの仕様でひらがな・カタカナは�
 |----|------|
 | `取扱説明` | Studio内で読める使い方とTipsの要約。詳細は [MANUAL.md](MANUAL.md) |
 
-## 書き出し
+## 書き出し(preset方式を推奨)
 
 ```sh
-pnpm render:stamp-test          # Phase 0: 透過VP9 WebM
-pnpm render:stamp-test:prores   # Phase 0代替: ProRes 4444 MOV
-pnpm render:stamp-test:preview  # 比較用の背景付きMP4
-pnpm render:mvp                 # MVP素材6本を一括書き出し
-pnpm render:stamprush           # 全ルート+スタンプ連打(22秒)
-pnpm render:preview             # 通し確認用MP4
+pnpm render <テンプレ名> preview   # 確認用: 50%スケール低画質 → out/preview/
+pnpm render <テンプレ名> draft     # 調整用: 1080p標準画質    → out/draft/
+pnpm render <テンプレ名> final     # 納品用: 高画質。alpha素材は透過WebM → out/opening|common/
+pnpm render <テンプレ名> prores    # alpha素材のProRes 4444 MOV(WebM透過が読めない時)
+pnpm render --all final           # 全素材を一括書き出し
 ```
 
-出力先は `out/opening/`、`out/common/`。**out/配下はGit管理しない。**
+例: `pnpm render 押印-沖縄 final`。引数なしで実行するとテンプレ一覧が出る。
+従来の `pnpm render:xxx` 個別コマンドもそのまま使える。
+出力先は `out/` 配下に統一。**out/配下はGit管理しない。**
+
+## 品質チェック
+
+```sh
+pnpm check          # 下の2つをまとめて実行
+pnpm check:motion   # シーン構成・registry・Root.tsxの整合チェック
+pnpm check:assets   # 素材ファイルの存在チェック
+```
+
+CapCutに組み込む前、コミット前に `pnpm check` を通す。
+
+## データ構造(単一情報源)
+
+| ファイル | 役割 |
+|---|---|
+| [src/data/openingProject.ts](src/data/openingProject.ts) | 新郎新婦・日付・会場・トーン・fps・解像度・シーン構成 |
+| [src/data/openingProject.schema.ts](src/data/openingProject.schema.ts) | 上のzod検証スキーマ |
+| [src/data/assets.ts](src/data/assets.ts) | 写真・AI背景・音源・書き出し素材のID管理(パス直書き禁止) |
+| [src/data/sceneRegistry.ts](src/data/sceneRegistry.ts) | 全テンプレートのメタデータ(ID・尺・出力先・透過区分) |
+| [src/data/theme.ts](src/data/theme.ts) | 色・フォント・解像度のデザイントークン |
+
+**Root.tsxはregistryから自動生成しない**(StudioのSave defaultsが壊れるため)。
+テンプレート追加は「Root.tsxに追加 → sceneRegistry.tsに追加 → `pnpm check:motion`」の3点セットで行う。
 
 ## Phase 0: CapCut透過確認手順
 

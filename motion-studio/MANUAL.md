@@ -71,6 +71,24 @@ pnpm dev        # Remotion Studioがブラウザで開く
 - コンポジションIDは漢字+英数字+ハイフンのみ(Remotionの仕様でひらがな・カタカナ不可)
 - 出力ファイル名は英語(CapCutでの管理しやすさ優先)
 
+## データ構造と量産ルール(Codex/Claudeでの作業向け)
+
+- 文言・日付・シーン構成は `src/data/openingProject.ts` が単一情報源。
+  テンプレートに名前や日付をハードコードせず、ここから引く(新規テンプレの場合)
+- 素材は `src/data/assets.ts` のIDで参照する。パス直書きをしない
+- テンプレートのメタデータは `src/data/sceneRegistry.ts`。
+  **Root.tsxとregistryは手で両方更新し、`pnpm check:motion` で整合を確認する**
+  (Root自動生成にしないのはSave defaultsを守るため)
+- 書き出しは `pnpm render <テンプレ名> <preset>`(preview/draft/final/prores)
+- コミット前に `pnpm check` を通す
+
+### テンプレート追加の手順(3点セット)
+
+1. `src/compositions/` にシーンを作る(部品は `src/components/` を再利用)
+2. `Root.tsx` に `<Composition>` を追加(defaultPropsは**リテラル**で書く)
+3. `src/data/sceneRegistry.ts` にエントリを追加(ID・尺・出力先・kind)
+4. `pnpm check:motion && pnpm typecheck` が通ることを確認
+
 ## 新しいテンプレートが欲しいとき
 
 CapCut編集中に「こういう動きが欲しい」と思ったら、Claudeにそのまま伝える。

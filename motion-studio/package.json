@@ -6,6 +6,10 @@
   "scripts": {
     "dev": "remotion studio",
     "typecheck": "tsc --noEmit",
+    "render": "node --no-warnings scripts/render.mts",
+    "check": "pnpm check:motion && pnpm check:assets",
+    "check:motion": "node --no-warnings scripts/check-motion.mts",
+    "check:assets": "node --no-warnings scripts/check-assets.mts",
     "render:stamp-test": "remotion render 透過確認-押印 out/common/stamp_test_vp9.webm --codec=vp9 --image-format=png --pixel-format=yuva420p",
     "render:stamp-test:prores": "remotion render 透過確認-押印 out/common/stamp_test_prores.mov --codec=prores --prores-profile=4444 --image-format=png --pixel-format=yuva444p10le",
     "render:stamp-test:preview": "remotion render 透過確認-紙背景 out/common/stamp_test_preview.mp4",
