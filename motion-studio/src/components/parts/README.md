@@ -25,6 +25,36 @@
 - 各パーツは `startFrame` / `durationFrames` を持ち、自分でフェードイン/アウトする
   (タイムライン上に置くだけで完結する自己完結パーツにする)
 
+### durationFrames の最小値
+
+各パーツはフェード・reveal・スライドアニメに一定フレームを消費する。
+**短すぎると補間レンジが崩れる。** 各パーツのmin値を必ず守ること。
+
+| パーツ | min | 理由 |
+|---|---|---|
+| FadeUpCaption | **40** | fade=16×2=32 + rise完了分 |
+| MaskRevealTitle | **50** | fade=18×2=36 + subtitle遅延(frame 44) |
+| ElegantLowerThird | **60** | commentOpacity[30,54] + fade=16 |
+
+短尺シーンに使う場合も **durationFrames を無理に下げない**。
+代わりに `startFrame` またはシーン(Composition)側の尺で調整する。
+
+### partRegistry と export の3点セット
+
+パーツを追加したら必ず3つ揃える。`check:parts` が整合を検証する。
+
+1. `parts/<category>/` にパーツを実装(zodスキーマ + 型 + コンポーネント)
+2. `parts/<category>/index.ts` からコンポーネントを **export** する
+   → これが欠けると `check:parts` がエラーを出す
+3. `src/data/partRegistry.ts` に `name` = コンポーネント名で登録する
+
+### approved昇格ルール
+
+- `status: 'approved'` への昇格は **人間(新郎新婦)の確認が必須**
+- AIが勝手に `approved` に変更してはならない
+- 昇格時は `notes` に承認理由または「確認済み」の旨を残す
+  → なければ `check:parts` が warning を出す
+
 ## 既存テンプレとの役割分け
 
 - `compositions/common/GenericTitle` = 透過題字/大きいタイトル**素材**(単体で書き出す)

@@ -12,7 +12,8 @@ export const elegantLowerThirdSchema = z.object({
   comment: z.string().optional(),
   position: z.enum(['left', 'right', 'center']),
   startFrame: z.number().min(0),
-  durationFrames: z.number().min(1),
+  // commentOpacity[30,54]+fade=16。短すぎるとcomment表示前にフェードアウトが始まる。実用最小値60
+  durationFrames: z.number().min(60),
   tone: z.enum(['ivory', 'navy', 'gold']),
 });
 

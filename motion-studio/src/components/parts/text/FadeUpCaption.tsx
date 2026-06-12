@@ -10,7 +10,8 @@ export const fadeUpCaptionSchema = z.object({
   subText: z.string().optional(),
   position: z.enum(['center', 'bottom']),
   startFrame: z.number().min(0),
-  durationFrames: z.number().min(1),
+  // fade=16×2=32フレーム消費。実用上の最小値はrise完了分を含め40
+  durationFrames: z.number().min(40),
   tone: z.enum(['ivory', 'navy', 'gold']),
   size: z.enum(['sm', 'md', 'lg']),
 });

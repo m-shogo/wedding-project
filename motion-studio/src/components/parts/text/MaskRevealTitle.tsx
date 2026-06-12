@@ -9,7 +9,8 @@ export const maskRevealTitleSchema = z.object({
   title: z.string().min(1),
   subtitle: z.string().optional(),
   startFrame: z.number().min(0),
-  durationFrames: z.number().min(1),
+  // fade=18×2=36+subtitle遅延44フレーム分を考慮。実用最小値50
+  durationFrames: z.number().min(50),
   align: z.enum(['center', 'left']),
   tone: z.enum(['ivory', 'navy', 'gold']),
 });
