@@ -52,6 +52,8 @@ export const openingProject: OpeningProject = {
       assets: [],
       status: 'draft',
       notes: 'BGM第1の山に沖縄スタンプの「ポン」を合わせる',
+      bgmNote: '第1の山=沖縄スタンプ着弾(素材開始+約0.3秒)に合わせる',
+      seNote: 'スタンプ音を3回(沖縄/ソウル/ハワイ)。控えめに',
     },
     {
       id: 'opening-photo-hawaii',
@@ -78,6 +80,7 @@ export const openingProject: OpeningProject = {
       assets: ['ai-door-light-01'],
       status: 'draft',
       notes: 'Remotion版とAI生成版を比較。テロップ「Cabin crew...」はCapCutで乗せる',
+      caption: 'Cabin crew, prepare for arrival.',
     },
     {
       id: 'opening-countdown',
@@ -87,6 +90,7 @@ export const openingProject: OpeningProject = {
       assets: ['bgm-main'],
       status: 'draft',
       notes: '数字の頭をBGMのビートに合わせる。直後に入場曲',
+      bgmNote: '数字は1秒ちょうど刻み。ビート頭に合わせ、終わりはフェードアウト→無音',
     },
   ],
 };

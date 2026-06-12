@@ -34,6 +34,7 @@ src/data/         単一情報源(下記)
 | `theme.ts` `fonts.ts` | デザイントークン |
 | `routes.ts` `memories.ts` | 地図座標・写真カードデータ |
 | `photoLibrary.generated.ts` | `pnpm sync:photos` の自動生成。手で編集しない |
+| `aiPromptRegistry.ts` | AI生成のプロンプト履歴。assetIdに紐づけ、生成のたびに1レコード追加 |
 
 ## テンプレート追加の手順(必ず3点セット)
 
@@ -59,10 +60,14 @@ src/data/         単一情報源(下記)
 - **Mac MPSでFP8不可**(ComfyUI側の話。`../docs/local-video-ai-setup.md`)
 - pnpmのbuild許可は `pnpm-workspace.yaml` の `allowBuilds`(esbuildのみ許可済み)
 - chechスクリプトは `.mts` でNode 24の型ストリップ実行(`node --no-warnings scripts/x.mts`)
-- **fresh clone耐性**: `out/`と`public/photos/`はGit外。そこにある成果物のstatusは
-  `ready`ではなく`generated`にする(check:assetsが「無くてもエラーにしない」扱いになる)。
-  `generated` は `regenerateCommand` で再生成できることが条件。未設定ならwarningになる。
-  `ready`/`placeholder`はGit管理内など「必ず存在すべき」ファイルにだけ使う
+- **AssetStatusは制作段階**: `missing → idea → prompt_ready → generated_preview →
+  candidate → approved → final`(+`external`)。旧`generated`/`ready`/`placeholder`は廃止済み。
+  - **AIが勝手にcandidate以上へ昇格させるのは禁止**。昇格は人間の確認が必須
+  - `generated_preview` = 試作。**final扱い禁止**。`regenerateCommand`必須
+  - approved/finalはファイルが無いとcheckエラー(=本番素材の消失検出)
+  - final sceneに未承認素材が混ざるとcheck:assetsがエラーを出す
+- **fresh clone耐性**: `out/`と`public/photos/`はGit外。そこの成果物は
+  `generated_preview`(+regenerateCommand)にすればfresh cloneでもcheckが通る
 - **`開幕-全体確認`は順番・尺の確認専用**。完成見た目チェック用ではない。
   propsは代表値でRoot.tsxのdefaultPropsを完全反映しない。
   見た目の最終確認は個別テンプレのstill/renderで行う
@@ -76,6 +81,7 @@ pnpm check                        # check:motion + check:assets(コミット前�
 pnpm render <テンプレID> <preset>  # preview / draft / final / prores
 pnpm render --all final           # 一括書き出し
 pnpm sync:photos                  # public/photos/ → photoLibrary.generated.ts
+pnpm export                       # CapCut作業表CSV/MD + 素材不足表 + review.html
 pnpm exec remotion compositions src/index.ts   # 全Compositionの健全性確認
 pnpm exec remotion still <ID> /tmp/x.png --frame=N  # 静止画で見た目確認
 ```

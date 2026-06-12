@@ -105,10 +105,56 @@ pnpm check:assets   # 素材ファイルの存在チェック
 ```
 
 CapCutに組み込む前、コミット前に `pnpm check` を通す。
-fresh clone(out/やpublic/photos/が空)でも `pnpm check` は通る設計:
-render成果物など、コマンドで再生成できるGit外ファイルはstatus `generated` として扱う。
-`generated` には `regenerateCommand` を必ず書き、無ければ `pnpm check:assets` がwarningを出す。
-ファイル未生成時はこの再生成コマンドを表示するだけで、fresh cloneのチェックは落とさない。
+
+### 素材の制作段階(AssetStatus)
+
+| status | 意味 | checkの扱い |
+|---|---|---|
+| `missing` | まだ手元にない | 情報表示 |
+| `idea` | アイデアだけある | 情報表示 |
+| `prompt_ready` | AI生成プロンプト・準備済み | 情報表示 |
+| `generated_preview` | 生成済みの**試作**。本番使用不可 | 無くても情報表示。`regenerateCommand`必須(無いと警告) |
+| `candidate` | 採用候補(本番確定ではない) | ファイルが無ければ警告 |
+| `approved` | 採用決定。最終書き出し前 | ファイルが無ければ**エラー** |
+| `final` | 本番使用OK | ファイルが無ければ**エラー** |
+| `external` | repo外管理 | 存在チェック対象外 |
+
+**final扱いしてよい条件**: 人間(新郎新婦)が実物を見て採用を確定し、
+権利・プライバシー確認(BGM・写真)が済んでいること。
+**AI(Claude/Codex)が勝手にcandidate以上へ昇格させるのは禁止。**
+`generated_preview` をfinal扱いすることも禁止。
+
+さらにシーンとの混同もチェックされる:
+final sceneに未承認素材(missing/idea/prompt_ready/generated_preview/candidate)が
+混ざるとエラー、approved sceneにmissing/idea/prompt_readyが混ざるとエラー。
+
+fresh clone(out/やpublic/photos/が空)でも `pnpm check` は通る設計
+(generated_previewは未生成でも再生成コマンドを表示するだけ)。
+
+## 制作管理ファイルの出力
+
+```sh
+pnpm export           # 下の2つをまとめて実行
+pnpm export:capcut    # CapCut作業表CSV/MD + 本番未確定素材一覧
+pnpm export:review    # レビュー用HTML(シーン一覧+品質チェックリスト)
+```
+
+出力先(CSV/MD/HTMLはGit管理してよい。動画・画像はexports/に置かない):
+
+```text
+exports/capcut/opening-timeline.csv        CapCut作業表(start/end自動計算)
+exports/capcut/opening-timeline.md         同・目視用
+exports/capcut/opening-missing-assets.md   本番未確定素材の一覧(これを空にするのがゴール)
+exports/review-gallery/opening/review.html レビューページ(品質ゲートのチェックボックス付き)
+```
+
+単一情報源は `src/data/openingProject.ts`。出力ファイルを直接編集しない。
+
+## AIプロンプト履歴
+
+AI画像・動画の生成履歴は [src/data/aiPromptRegistry.ts](src/data/aiPromptRegistry.ts) に
+素材ID(assets.ts)と紐づけて記録する。生成を実行したら1レコード追加する。
+`pnpm check:assets` がassetIdの存在・status・resultPathの矛盾を検証する。
 
 ## データ構造(単一情報源)
 

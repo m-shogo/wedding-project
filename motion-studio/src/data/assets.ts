@@ -7,16 +7,34 @@
 //   ../...                → wedding-project/ リポジトリルートからの相対
 //   ~ や / で始まる        → このMacのローカル絶対パス(externalのみ。チェック対象外)
 //
-// status:
-//   ready       実ファイルが存在するべき(無ければcheckがエラー)
-//   placeholder 仮素材が存在するべき(無ければcheckがエラー)
-//   generated   regenerateCommandで再生成できる成果物(out/のrender等)。
-//               あれば✅、無ければ再生成コマンドを表示(fresh cloneでcheckを落とさない)
-//   missing     まだ手元にない(入手待ち。checkは情報表示のみ)
-//   external    Git外・このrepo外で管理(checkはパス検証をスキップ)
+// status(制作段階。下に行くほど本番に近い):
+//   missing            まだ手元にない(入手待ち。checkは情報表示のみ)
+//   idea               アイデアだけある(情報表示のみ)
+//   prompt_ready       AI生成用プロンプトや素材準備ができている(情報表示のみ)
+//   generated_preview  生成済みだが試作・プレビュー扱い。**本番使用不可**。
+//                      無くても情報表示のみ(fresh cloneでcheckを落とさない)。
+//                      regenerateCommand必須(無ければwarning)
+//   candidate          採用候補。まだ本番確定ではない(ファイルが無ければwarning)
+//   approved           採用決定。最終書き出し前(ファイルが無ければエラー)
+//   final              本番使用OK(ファイルが無ければエラー)
+//   external           repo外管理。存在チェック対象外
+//
+// 昇格ルール:
+//   - candidate以上への昇格は人間(新郎新婦)の確認が必須。
+//     AI(Claude/Codex)が勝手にapproved/finalへ変更してはならない。
+//   - generated_previewをfinal扱いすることは禁止。
+//   - 旧status `generated` は `generated_preview` に移行済み(2026-06-12)。
 
 export type AssetType = 'photo' | 'video' | 'ai-video' | 'audio' | 'render';
-export type AssetStatus = 'ready' | 'placeholder' | 'generated' | 'missing' | 'external';
+export type AssetStatus =
+  | 'missing'
+  | 'idea'
+  | 'prompt_ready'
+  | 'generated_preview'
+  | 'candidate'
+  | 'approved'
+  | 'final'
+  | 'external';
 
 export type Asset = {
   id: string;
@@ -37,7 +55,7 @@ export const assets: Record<string, Asset> = {
     type: 'photo',
     aspect: '3:4',
     usage: '写真カードの動作確認用プレースホルダー(合成グラデ画像)',
-    status: 'generated',
+    status: 'generated_preview',
     regenerateCommand:
       "ffmpeg -f lavfi -i 'gradients=s=900x1200:c0=#2a4a6b:c1=#d9a05b:n=2' -frames:v 1 public/photos/opening/sample-01.jpg",
     note: '実写真ではなく、動作確認用の合成グラデ画像なので再生成可能',
@@ -105,7 +123,7 @@ export const assets: Record<string, Asset> = {
     type: 'render',
     aspect: '16:9',
     usage: 'CapCut Track2: 搭乗券イントロ',
-    status: 'generated',
+    status: 'generated_preview',
     regenerateCommand: 'pnpm render 搭乗券 final',
   },
   'render-stamp-rush': {
@@ -114,7 +132,7 @@ export const assets: Record<string, Asset> = {
     type: 'render',
     aspect: '16:9',
     usage: 'CapCut Track2: スタンプ連打ダイジェスト',
-    status: 'generated',
+    status: 'generated_preview',
     regenerateCommand: 'pnpm render 押印連打-全路線 final',
   },
   'render-countdown': {
@@ -123,7 +141,7 @@ export const assets: Record<string, Asset> = {
     type: 'render',
     aspect: '16:9',
     usage: 'CapCut Track2: 入場前カウントダウン',
-    status: 'generated',
+    status: 'generated_preview',
     regenerateCommand: 'pnpm render 入場前-秒読 final',
   },
   'render-stamp-okinawa': {
@@ -132,7 +150,7 @@ export const assets: Record<string, Asset> = {
     type: 'render',
     aspect: '16:9',
     usage: 'CapCut Track4: 透過ハンコ(乗算ブレンド推奨)',
-    status: 'generated',
+    status: 'generated_preview',
     regenerateCommand: 'pnpm render 押印-沖縄 final',
   },
   'render-cloud-overlay': {
@@ -141,7 +159,7 @@ export const assets: Record<string, Asset> = {
     type: 'render',
     aspect: '16:9',
     usage: 'CapCut Track3: 透過雲オーバーレイ(不透明度50-70%)',
-    status: 'generated',
+    status: 'generated_preview',
     regenerateCommand: 'pnpm render 雲-透過 final',
   },
 };

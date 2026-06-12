@@ -16,6 +16,10 @@ export const sceneSchema = z.object({
   assets: z.array(z.string()),
   status: sceneStatusSchema,
   notes: z.string().optional(),
+  // CapCut作業表(export:capcut)に出す任意フィールド
+  caption: z.string().optional(),
+  bgmNote: z.string().optional(),
+  seNote: z.string().optional(),
 });
 
 export const openingProjectSchema = z.object({

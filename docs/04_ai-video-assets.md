@@ -55,6 +55,13 @@ CapCut / DaVinci で繰り返し・速度調整
 - AI破綻リスクが低い
 - Style Bibleに合っている
 
+## プロンプト履歴の記録先
+
+motion-studioのシーンに紐づくAI素材は、プロンプトと採用段階を
+`motion-studio/src/data/aiPromptRegistry.ts` にレコードとして残す
+(`pnpm check:assets` がID整合を検証する)。
+採点はこれまで通り `docs/templates/ai-video-scorecard.csv` を使う。
+
 詳細手順:
 
 - `docs/ai-video-operation.md`

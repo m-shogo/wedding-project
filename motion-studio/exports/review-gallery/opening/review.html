@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>オープニング レビュー — SHOGO &amp; SHIORI</title>
+<style>
+  body { font-family: 'Hiragino Mincho ProN', 'Yu Mincho', serif; background: #F2EBDC; color: #1C2A44; margin: 0; padding: 32px 20px; }
+  .wrap { max-width: 880px; margin: 0 auto; }
+  h1 { letter-spacing: 0.12em; font-size: 26px; border-bottom: 2px solid #B89B5E; padding-bottom: 12px; }
+  h2 { font-size: 19px; margin: 0 0 8px; }
+  .meta { color: #6b5d3f; font-size: 14px; }
+  .scene { background: #FAF6EC; border: 1px solid #DDD2BA; border-radius: 8px; padding: 18px 22px; margin: 18px 0; }
+  .time { color: #8C7A4F; font-size: 14px; font-weight: normal; margin-left: 10px; }
+  .badge { color: #fff; font-size: 12px; padding: 2px 10px; border-radius: 10px; }
+  .muted { color: #7a6f57; font-size: 13px; }
+  .caution { background: #F7E8E0; border-left: 4px solid #A8666F; padding: 8px 12px; font-size: 14px; }
+  ul { margin: 8px 0; padding-left: 20px; }
+  li { margin: 4px 0; font-size: 14px; }
+  code { background: #EDE5D4; padding: 1px 6px; border-radius: 4px; font-size: 13px; }
+  .gates { background: #1C2A44; color: #F7F2E9; border-radius: 8px; padding: 22px 26px; margin-top: 28px; }
+  .gates h2 { color: #C9B27C; }
+  .gates label { display: block; margin: 9px 0; font-size: 15px; cursor: pointer; }
+  .gates input { margin-right: 10px; transform: scale(1.2); }
+  .gates .ref { color: #9aa7c4; font-size: 13px; margin-top: 14px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>オープニングムービー レビュー</h1>
+  <p class="meta">
+    SHOGO &amp; SHIORI / 2026-10-24 / YOKOHAMA<br>
+    Remotion素材合計 82s / CapCut目標尺 105s /
+    自動生成: <code>pnpm export:review</code>(単一情報源: src/data/openingProject.ts)
+  </p>
+
+  
+    <section class="scene">
+      <h2>1. 搭乗券イントロ <span class="time">00:00–00:08 (8s)</span></h2>
+      <p>テンプレ: <strong>搭乗券</strong> — BOARDING PASSイントロ(ivory/navy) / scene status: <span class="badge" style="background:#8a6d3b">draft</span></p>
+      
+      
+      <p class="muted">メモ: BGMの入りに合わせて暗転から。variant=ivory採用かは審査待ち</p>
+      <ul><li class="muted">素材参照なし(テンプレのみ)</li></ul>
+      
+    </section>
+
+    <section class="scene">
+      <h2>2. 離陸・雲海 <span class="time">00:08–00:14 (6s)</span></h2>
+      <p>テンプレ: <strong>雲海</strong> — 上空の雲海(朝/昼/夕) / scene status: <span class="badge" style="background:#8a6d3b">draft</span></p>
+      
+      
+      <p class="muted">メモ: Remotion版とAI生成版(op_16系)を見比べて良い方を採用</p>
+      <ul><li><code>ai-cloud-sea-01</code> <span class="badge" style="background:#666">external</span> <span class="muted">~/ComfyUI-Shared/output/video/</span></li></ul>
+      
+    </section>
+
+    <section class="scene">
+      <h2>3. 思い出ダイジェスト(スタンプ連打) <span class="time">00:14–00:36 (22s)</span></h2>
+      <p>テンプレ: <strong>押印連打-全路線</strong> — 全ルート一筆+スタンプ連打 / scene status: <span class="badge" style="background:#8a6d3b">draft</span></p>
+      
+      <p class="muted">BGM: 第1の山=沖縄スタンプ着弾(素材開始+約0.3秒)に合わせる</p>
+      <p class="muted">メモ: BGM第1の山に沖縄スタンプの「ポン」を合わせる</p>
+      <ul><li class="muted">素材参照なし(テンプレのみ)</li></ul>
+      
+    </section>
+
+    <section class="scene">
+      <h2>4. Hawaiiの思い出(写真解禁) <span class="time">00:36–00:46 (10s)</span></h2>
+      <p>テンプレ: <strong>写真-Hawaii</strong> — 写真カード3枚 MEMORY 03 / scene status: <span class="badge" style="background:#9a3d3d">todo</span></p>
+      
+      
+      <p class="muted">メモ: 実写真3枚待ち。PROPOSAL文脈なので動きは控えめのまま</p>
+      <ul><li><code>photo-hawaii-01</code> <span class="badge" style="background:#9a3d3d">missing</span> <span class="muted">public/photos/opening/hawaii-01.jpg</span></li><li><code>photo-hawaii-02</code> <span class="badge" style="background:#9a3d3d">missing</span> <span class="muted">public/photos/opening/hawaii-02.jpg</span></li><li><code>photo-hawaii-03</code> <span class="badge" style="background:#9a3d3d">missing</span> <span class="muted">public/photos/opening/hawaii-03.jpg</span></li></ul>
+      <p class="caution">⚠ 本番未確定素材: photo-hawaii-01(missing), photo-hawaii-02(missing), photo-hawaii-03(missing) — このシーンはまだ確定扱いにしない</p>
+    </section>
+
+    <section class="scene">
+      <h2>5. 最終区間 Hawaii→横浜 <span class="time">00:46–00:54 (8s)</span></h2>
+      <p>テンプレ: <strong>地図-Hawaii-横浜</strong> — フライトマップ最終区間 / scene status: <span class="badge" style="background:#8a6d3b">draft</span></p>
+      
+      
+      
+      <ul><li class="muted">素材参照なし(テンプレのみ)</li></ul>
+      
+    </section>
+
+    <section class="scene">
+      <h2>6. 扉の光・余韻 <span class="time">00:54–01:06 (12s)</span></h2>
+      <p>テンプレ: <strong>扉-光</strong> — 扉が開いて光が差す余韻 / scene status: <span class="badge" style="background:#8a6d3b">draft</span></p>
+      <p>テロップ: <em>Cabin crew, prepare for arrival.</em></p>
+      
+      <p class="muted">メモ: Remotion版とAI生成版を比較。テロップ「Cabin crew...」はCapCutで乗せる</p>
+      <ul><li><code>ai-door-light-01</code> <span class="badge" style="background:#666">external</span> <span class="muted">~/ComfyUI-Shared/output/video/</span></li></ul>
+      
+    </section>
+
+    <section class="scene">
+      <h2>7. 入場前カウントダウン <span class="time">01:06–01:22 (16s)</span></h2>
+      <p>テンプレ: <strong>入場前-秒読</strong> — Doors opening→10〜1→Please welcome / scene status: <span class="badge" style="background:#8a6d3b">draft</span></p>
+      
+      <p class="muted">BGM: 数字は1秒ちょうど刻み。ビート頭に合わせ、終わりはフェードアウト→無音</p>
+      <p class="muted">メモ: 数字の頭をBGMのビートに合わせる。直後に入場曲</p>
+      <ul><li><code>bgm-main</code> <span class="badge" style="background:#9a3d3d">missing</span> <span class="muted">../07_music/</span></li></ul>
+      <p class="caution">⚠ 本番未確定素材: bgm-main(missing) — このシーンはまだ確定扱いにしない</p>
+    </section>
+
+  <div class="gates">
+    <h2>品質ゲート チェックリスト</h2>
+    <label><input type="checkbox">写真が切れていないか(被写体のフレーミング)</label>
+    <label><input type="checkbox">顔・犬・重要背景が切れていないか</label>
+    <label><input type="checkbox">文字が読めるか(会場スクリーン距離を想定)</label>
+    <label><input type="checkbox">白文字が背景に被って消えていないか</label>
+    <label><input type="checkbox">テンプレ演出が重複してくどくないか</label>
+    <label><input type="checkbox">旅行テーマが残っているか</label>
+    <label><input type="checkbox">結婚式として寒くないか(内輪すぎ・ネタ過剰)</label>
+    <label><input type="checkbox">AI臭・ネタ感が強すぎないか(AI作品に見えない)</label>
+    <label><input type="checkbox">placeholder / generated_preview が混入していないか</label>
+    <label><input type="checkbox">final扱いしてよい素材だけになっているか(昇格は人間承認済みか)</label>
+    <label><input type="checkbox">BGMの山とシーン切替が合っているか</label>
+    <label><input type="checkbox">最後が入場につながる余韻になっているか</label>
+    <p class="ref">詳細な観点: docs/10_quality-gates.md(Gate 1: 10秒試作 / Gate 2: 30秒 / Gate 3: 本編ラフ / Gate 4: 上映前)。
+    指摘は docs/templates/review-notes.csv に記録する。チェック状態はこのページを閉じると消える(記録はCSVへ)。</p>
+  </div>
+</div>
+</body>
+</html>

@@ -11,3 +11,8 @@ public/photos/*
 
 .DS_Store
 *.log
+exports/**/*.mp4
+exports/**/*.webm
+exports/**/*.mov
+exports/**/*.png
+exports/**/*.jpg

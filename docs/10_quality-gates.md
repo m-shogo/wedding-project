@@ -86,6 +86,12 @@
 - 最終ファイル名が分かる
 - バックアップを書き出している
 
+## レビュー用ページ
+
+オープニングは `motion-studio` で `pnpm export:review` を実行すると、
+シーン一覧・素材の制作段階・このドキュメントを具体化したチェックリストが
+`motion-studio/exports/review-gallery/opening/review.html` に出力される。
+
 ## レビュー記録
 
 指摘は `docs/templates/review-notes.csv` に残す。
