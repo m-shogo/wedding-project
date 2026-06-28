@@ -6,6 +6,12 @@
       "runtimeExecutable": "pnpm",
       "runtimeArgs": ["--dir", "motion-studio", "exec", "remotion", "studio", "--port", "3789", "--no-open"],
       "port": 3789
+    },
+    {
+      "name": "movie-dashboard",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["--dir", "movie-dashboard", "dev", "--port", "5173", "--host", "127.0.0.1"],
+      "port": 5173
     }
   ]
 }

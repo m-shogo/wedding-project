@@ -1,0 +1,25 @@
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Layout } from "./components/Layout";
+import { Dashboard } from "./pages/Dashboard";
+import { Storyboard } from "./pages/Storyboard";
+import { AssetLibrary } from "./pages/AssetLibrary";
+import { PromptBank } from "./pages/PromptBank";
+import { MissingList } from "./pages/MissingList";
+import { CapCutPack } from "./pages/CapCutPack";
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route element={<Layout />}>
+          <Route index element={<Dashboard />} />
+          <Route path="storyboard" element={<Storyboard />} />
+          <Route path="assets" element={<AssetLibrary />} />
+          <Route path="prompts" element={<PromptBank />} />
+          <Route path="missing" element={<MissingList />} />
+          <Route path="capcut" element={<CapCutPack />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  );
+}

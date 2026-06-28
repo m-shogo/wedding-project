@@ -1,0 +1,142 @@
+[
+  {
+    "taskId": "task-01",
+    "title": "会場仕様を確認する",
+    "category": "会場",
+    "priority": "high",
+    "relatedSceneId": "",
+    "due": "",
+    "status": "todo",
+    "notes": "推奨画角、解像度、ファイル形式、音量ルール、提出締切、持ち込み方法をvenue-specs.csvに記録する。"
+  },
+  {
+    "taskId": "task-02",
+    "title": "BGM候補を集める",
+    "category": "BGM",
+    "priority": "high",
+    "relatedSceneId": "",
+    "due": "",
+    "status": "todo",
+    "notes": "会場上映用とSNS投稿用で利用条件を分けて確認。music-candidates.csvに記録する。"
+  },
+  {
+    "taskId": "task-03",
+    "title": "空港ロビー静止画を人物なしで再生成",
+    "category": "AI素材",
+    "priority": "high",
+    "relatedSceneId": "op-01",
+    "due": "",
+    "status": "in_progress",
+    "notes": "op_01/op_11は人物入りで不採用。人物なし指定を強調して再生成。"
+  },
+  {
+    "taskId": "task-04",
+    "title": "I2V生成済み動画をscorecard基準で採点",
+    "category": "AI素材",
+    "priority": "high",
+    "relatedSceneId": "",
+    "due": "",
+    "status": "todo",
+    "notes": "対象: op_16, op_02, op_03, op_07 test02, op_08, op_09, op_10。ai-video-scorecard.csvで採点。"
+  },
+  {
+    "taskId": "task-05",
+    "title": "新郎プロフィール写真を選ぶ",
+    "category": "写真",
+    "priority": "high",
+    "relatedSceneId": "op-03",
+    "due": "",
+    "status": "todo",
+    "notes": "パスポート風フレームに合う横写真を選定。"
+  },
+  {
+    "taskId": "task-06",
+    "title": "新婦プロフィール写真を選ぶ",
+    "category": "写真",
+    "priority": "high",
+    "relatedSceneId": "op-03",
+    "due": "",
+    "status": "todo",
+    "notes": "パスポート風フレームに合う横写真を選定。"
+  },
+  {
+    "taskId": "task-07",
+    "title": "旅行写真を5-8枚選ぶ",
+    "category": "写真",
+    "priority": "medium",
+    "relatedSceneId": "op-04",
+    "due": "",
+    "status": "todo",
+    "notes": "ハワイ、旅行の思い出。表情が良く、章の役割がある写真を選ぶ。"
+  },
+  {
+    "taskId": "task-08",
+    "title": "犬の推し写真を選ぶ",
+    "category": "写真",
+    "priority": "medium",
+    "relatedSceneId": "op-04",
+    "due": "",
+    "status": "todo",
+    "notes": "Cookie & Melonの写真。1-2枚。"
+  },
+  {
+    "taskId": "task-09",
+    "title": "VP9透過をCapCutで確認",
+    "category": "素材確認",
+    "priority": "medium",
+    "relatedSceneId": "op-03",
+    "due": "",
+    "status": "todo",
+    "notes": "motion-studio/out/common/stamp_test_vp9.webm をCapCutに読み込み透過確認。"
+  },
+  {
+    "taskId": "task-10",
+    "title": "横浜夜景の静止画を作る",
+    "category": "AI素材",
+    "priority": "medium",
+    "relatedSceneId": "op-05",
+    "due": "",
+    "status": "todo",
+    "notes": "港、街灯、海沿いの光。人物なし。I2V入力用。"
+  },
+  {
+    "taskId": "task-11",
+    "title": "扉の光をAIとmotion-studioで比較",
+    "category": "AI素材",
+    "priority": "low",
+    "relatedSceneId": "op-05",
+    "due": "",
+    "status": "todo",
+    "notes": "motion-studioテンプレとAI生成版を両方作って比較する。"
+  },
+  {
+    "taskId": "task-12",
+    "title": "入場曲とのつなぎを確認",
+    "category": "BGM",
+    "priority": "low",
+    "relatedSceneId": "op-06",
+    "due": "",
+    "status": "blocked",
+    "notes": "入場曲が決まっていないため確認できない。"
+  },
+  {
+    "taskId": "task-13",
+    "title": "motion-studio MVPをStudio UIで審査",
+    "category": "素材確認",
+    "priority": "high",
+    "relatedSceneId": "",
+    "due": "",
+    "status": "todo",
+    "notes": "搭乗券・地図・ハンコ・雲・カウントダウン・写真カードの高級感とStyle Bible適合を確認。"
+  },
+  {
+    "taskId": "task-14",
+    "title": "10秒試作をCapCutで作る",
+    "category": "編集",
+    "priority": "medium",
+    "relatedSceneId": "op-01",
+    "due": "",
+    "status": "todo",
+    "notes": "まず10秒だけ作って世界観の成立を確認する。Gate 1チェック。"
+  }
+]

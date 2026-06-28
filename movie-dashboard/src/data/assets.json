@@ -1,0 +1,189 @@
+[
+  {
+    "assetId": "asset-01",
+    "type": "generated_image",
+    "title": "空港ロビー（人物なし）",
+    "path": "02_opening-movie/sample_image/narita_lobby_noperson.png",
+    "relatedSceneIds": ["op-01"],
+    "status": "generating",
+    "source": "ChatGPT / DALL-E",
+    "usage": "I2V入力用静止画",
+    "notes": "人物入りで不採用になったため再生成中。人物なし版が必要。"
+  },
+  {
+    "assetId": "asset-02",
+    "type": "motion_studio_export",
+    "title": "搭乗券モーション",
+    "path": "motion-studio/out/boarding-pass/boarding_pass.webm",
+    "relatedSceneIds": ["op-01"],
+    "status": "adopted",
+    "source": "motion-studio (Remotion)",
+    "usage": "オープニング冒頭の搭乗券アニメーション",
+    "notes": "MEMORY FLIGHT 1024デザイン。テロップ余白あり。"
+  },
+  {
+    "assetId": "asset-03",
+    "type": "ai_video",
+    "title": "滑走路 離陸シーン",
+    "path": "04_ai-video-assets/op_02_runway_takeoff.mp4",
+    "relatedSceneIds": ["op-01"],
+    "status": "needs_review",
+    "source": "ComfyUI / Wan2.2 TI2V 5B",
+    "usage": "搭乗券の後、離陸の瞬間",
+    "notes": "I2V生成済み。scorecard基準で採点が必要。"
+  },
+  {
+    "assetId": "asset-04",
+    "type": "generated_image",
+    "title": "飛行機窓からの景色",
+    "path": "02_opening-movie/sample_image/airplane_window.png",
+    "relatedSceneIds": ["op-01", "op-02"],
+    "status": "collected",
+    "source": "ChatGPT / DALL-E",
+    "usage": "I2V入力用静止画。窓の外に雲海が広がる構図。",
+    "notes": "構図は良好。I2V候補。"
+  },
+  {
+    "assetId": "asset-05",
+    "type": "ai_video",
+    "title": "雲海ドリーショット",
+    "path": "04_ai-video-assets/op_03_cloudscape.mp4",
+    "relatedSceneIds": ["op-02"],
+    "status": "needs_review",
+    "source": "ComfyUI / Wan2.2 TI2V 5B",
+    "usage": "雲の上を飛んでいる高揚感",
+    "notes": "生成済み。カメラ速度と色味を確認する。"
+  },
+  {
+    "assetId": "asset-06",
+    "type": "motion_studio_export",
+    "title": "世界地図＋航路線モーション",
+    "path": "motion-studio/out/map/world_map_route.webm",
+    "relatedSceneIds": ["op-02"],
+    "status": "adopted",
+    "source": "motion-studio (Remotion)",
+    "usage": "旅行ルートのアニメーション",
+    "notes": "4区間ルート対応。沖縄・韓国はスタンプ連打、ハワイはフル演出の方針。"
+  },
+  {
+    "assetId": "asset-07",
+    "type": "own_photo",
+    "title": "新郎プロフィール写真",
+    "path": "",
+    "relatedSceneIds": ["op-03"],
+    "status": "pending",
+    "source": "自前写真",
+    "usage": "パスポート風フレーム内に配置",
+    "notes": "写真未選定。横写真推奨。"
+  },
+  {
+    "assetId": "asset-08",
+    "type": "own_photo",
+    "title": "新婦プロフィール写真",
+    "path": "",
+    "relatedSceneIds": ["op-03"],
+    "status": "pending",
+    "source": "自前写真",
+    "usage": "パスポート風フレーム内に配置",
+    "notes": "写真未選定。横写真推奨。"
+  },
+  {
+    "assetId": "asset-09",
+    "type": "motion_studio_export",
+    "title": "パスポートスタンプモーション",
+    "path": "motion-studio/out/stamp/stamp_test_vp9.webm",
+    "relatedSceneIds": ["op-03"],
+    "status": "adopted",
+    "source": "motion-studio (Remotion)",
+    "usage": "紹介時のスタンプ演出",
+    "notes": "VP9透過。CapCutでの透過確認が必要。"
+  },
+  {
+    "assetId": "asset-10",
+    "type": "ai_video",
+    "title": "ハワイ海 夕暮れ",
+    "path": "04_ai-video-assets/op_16_hawaii_ocean.mp4",
+    "relatedSceneIds": ["op-04"],
+    "status": "needs_review",
+    "source": "ComfyUI / Wan2.2 TI2V 5B",
+    "usage": "ハワイ章の背景。3-5秒ループ。",
+    "notes": "最初の試作候補。scorecard採点待ち。"
+  },
+  {
+    "assetId": "asset-11",
+    "type": "own_photo",
+    "title": "旅行写真セット",
+    "path": "",
+    "relatedSceneIds": ["op-04"],
+    "status": "pending",
+    "source": "自前写真",
+    "usage": "ハワイ・旅行の思い出スライド",
+    "notes": "写真選定が必要。5-8枚程度。"
+  },
+  {
+    "assetId": "asset-12",
+    "type": "own_photo",
+    "title": "犬の写真（Cookie & Melon）",
+    "path": "",
+    "relatedSceneIds": ["op-04"],
+    "status": "pending",
+    "source": "自前写真",
+    "usage": "思い出の場所の中で犬を紹介",
+    "notes": "推し写真を選ぶ。"
+  },
+  {
+    "assetId": "asset-13",
+    "type": "ai_video",
+    "title": "横浜夜景",
+    "path": "",
+    "relatedSceneIds": ["op-05"],
+    "status": "pending",
+    "source": "ComfyUI / Wan2.2",
+    "usage": "到着章の背景",
+    "notes": "静止画未作成。港・街灯・海沿いの光をイメージ。"
+  },
+  {
+    "assetId": "asset-14",
+    "type": "ai_video",
+    "title": "扉の光",
+    "path": "",
+    "relatedSceneIds": ["op-05"],
+    "status": "pending",
+    "source": "ComfyUI / Wan2.2",
+    "usage": "到着→入場への橋渡し。光が差し込む扉。",
+    "notes": "motion-studioテンプレでも作れる。AI版と比較予定。"
+  },
+  {
+    "assetId": "asset-15",
+    "type": "motion_studio_export",
+    "title": "カウントダウンモーション",
+    "path": "motion-studio/out/countdown/countdown.webm",
+    "relatedSceneIds": ["op-06"],
+    "status": "adopted",
+    "source": "motion-studio (Remotion)",
+    "usage": "入場前カウントダウン 3→2→1",
+    "notes": "motion-studioで作成済み。"
+  },
+  {
+    "assetId": "asset-16",
+    "type": "ai_video",
+    "title": "抽象的な光パーティクル",
+    "path": "",
+    "relatedSceneIds": ["op-06"],
+    "status": "pending",
+    "source": "ComfyUI / Wan2.2",
+    "usage": "カウントダウン背景。白フェードへつなぐ。",
+    "notes": "カウントダウンの裏で光が集まっていくイメージ。"
+  },
+  {
+    "assetId": "asset-17",
+    "type": "audio",
+    "title": "オープニングBGM候補",
+    "path": "",
+    "relatedSceneIds": ["op-01", "op-02", "op-03", "op-04", "op-05", "op-06"],
+    "status": "pending",
+    "source": "未定",
+    "usage": "オープニングムービー通しBGM",
+    "notes": "BGM候補の収集が必要。会場上映とSNS投稿で利用条件を分けて確認。"
+  }
+]

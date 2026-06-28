@@ -1,0 +1,80 @@
+[
+  {
+    "sceneId": "op-01",
+    "title": "出発前の空港・搭乗案内",
+    "durationSec": 18,
+    "purpose": "ゲストを一気に引き込む。空港の空気感と搭乗案内で旅の始まりを演出。",
+    "visual": "空港ロビーのAI背景 → 搭乗券モーション → 滑走路のAI動画 → 飛行機窓からの離陸",
+    "caption": "Ladies and gentlemen, our journey is about to begin.",
+    "bgmCue": "BGM開始。静かなイントロから徐々に盛り上がる。",
+    "assets": ["asset-01", "asset-02", "asset-03", "asset-04"],
+    "promptIds": ["prompt-01", "prompt-02"],
+    "status": "generating",
+    "notes": "搭乗券はmotion-studioで生成済み。空港ロビーの人物なし静止画を再生成する必要あり。"
+  },
+  {
+    "sceneId": "op-02",
+    "title": "旅の始まり — 雲海と世界地図",
+    "durationSec": 15,
+    "purpose": "旅が始まった高揚感を伝える。雲海と地図で「どこへ行くんだろう」というワクワク感。",
+    "visual": "雲海のAI動画 → 世界地図のモーション → 航路線アニメーション",
+    "caption": "The adventure begins.",
+    "bgmCue": "BGMが少し盛り上がる。テンポアップの入り口。",
+    "assets": ["asset-05", "asset-06"],
+    "promptIds": ["prompt-03"],
+    "status": "collecting",
+    "notes": "地図モーションはmotion-studioで作成可能。雲海AI動画は静止画からI2V予定。"
+  },
+  {
+    "sceneId": "op-03",
+    "title": "ふたりの紹介 — パスポート風",
+    "durationSec": 20,
+    "purpose": "新郎新婦をそれぞれパスポート風のデザインで紹介。写真中心で親しみやすく。",
+    "visual": "パスポート風フレーム × 新郎写真 → スタンプ → パスポート風フレーム × 新婦写真 → スタンプ",
+    "caption": "Passenger 1: [新郎名] / Passenger 2: [新婦名]",
+    "bgmCue": "BGMは穏やかに維持。写真が主役。",
+    "assets": ["asset-07", "asset-08", "asset-09"],
+    "promptIds": [],
+    "status": "collecting",
+    "notes": "写真選定が未完了。パスポート風フレームとスタンプはmotion-studioで作成。"
+  },
+  {
+    "sceneId": "op-04",
+    "title": "思い出の場所 — ハワイ・旅行",
+    "durationSec": 25,
+    "purpose": "一番明るい章。ふたりの旅行写真とハワイの海で楽しさと幸福感を出す。",
+    "visual": "ハワイ海AI背景 → 旅行写真スライド → 犬の写真 → 夕暮れの海AI背景",
+    "caption": "Our favorite destinations.",
+    "bgmCue": "BGMのサビ。一番盛り上がるポイントに写真を合わせる。",
+    "assets": ["asset-10", "asset-11", "asset-12"],
+    "promptIds": ["prompt-04", "prompt-05"],
+    "status": "not_started",
+    "notes": "旅行写真の選定が必要。ハワイ海のAI動画は最初の試作候補。"
+  },
+  {
+    "sceneId": "op-05",
+    "title": "横浜への到着",
+    "durationSec": 15,
+    "purpose": "旅の終着点として横浜を見せる。感動と余韻の始まり。",
+    "visual": "夜景AI背景 → 横浜の写真 → 扉の光AI背景",
+    "caption": "Cabin crew, prepare for arrival. — 2026.10.24 Yokohama",
+    "bgmCue": "BGMが落ち着き始める。感動パートへの橋渡し。",
+    "assets": ["asset-13", "asset-14"],
+    "promptIds": ["prompt-06"],
+    "status": "not_started",
+    "notes": "横浜の夜景写真か会場周辺の写真が必要。"
+  },
+  {
+    "sceneId": "op-06",
+    "title": "入場前カウントダウン",
+    "durationSec": 12,
+    "purpose": "ゲストの期待感を最大にして入場につなげる。",
+    "visual": "カウントダウンモーション → 光のAI背景 → 白フェードで入場へ",
+    "caption": "3... 2... 1... Welcome aboard.",
+    "bgmCue": "BGMのラスト。カウントダウンに合わせてビートを刻む。入場曲へ自然につなぐ。",
+    "assets": ["asset-15", "asset-16"],
+    "promptIds": ["prompt-07"],
+    "status": "not_started",
+    "notes": "カウントダウンはmotion-studioで作成。入場曲とのつなぎを確認する必要あり。"
+  }
+]
