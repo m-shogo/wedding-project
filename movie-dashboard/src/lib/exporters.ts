@@ -1,6 +1,6 @@
 import type { AllData, Asset, Prompt, Scene, Task } from "../types/movie";
 
-export function downloadJson(data: AllData, filename: string): void {
+export function downloadJson(data: AllData | Record<string, unknown>, filename: string): void {
   const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");

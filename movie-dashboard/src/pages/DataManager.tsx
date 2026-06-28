@@ -34,11 +34,24 @@ export function DataManager() {
     const reader = new FileReader();
     reader.onload = (ev) => {
       try {
-        const parsed = JSON.parse(ev.target?.result as string) as AllData;
-        if (!parsed.movies || !parsed.scenes || !parsed.assets || !parsed.prompts || !parsed.tasks) {
-          setImportError("JSONの形式が正しくありません。movies, scenes, assets, prompts, tasks が必要です。");
+        const raw = JSON.parse(ev.target?.result as string) as Record<string, unknown>;
+        if (
+          !Array.isArray(raw.movies) ||
+          !Array.isArray(raw.scenes) ||
+          !Array.isArray(raw.assets) ||
+          !Array.isArray(raw.prompts) ||
+          !Array.isArray(raw.tasks)
+        ) {
+          setImportError("JSONの形式が正しくありません。movies, scenes, assets, prompts, tasks の各配列が必要です。");
           return;
         }
+        const parsed: AllData = {
+          movies: raw.movies as AllData["movies"],
+          scenes: raw.scenes as AllData["scenes"],
+          assets: raw.assets as AllData["assets"],
+          prompts: raw.prompts as AllData["prompts"],
+          tasks: raw.tasks as AllData["tasks"],
+        };
         importAllData(parsed);
         setImportError(null);
         setImportSuccess(true);

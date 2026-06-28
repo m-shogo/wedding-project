@@ -164,10 +164,27 @@ export function ProductionProvider({ children }: { children: ReactNode }) {
 
   const deleteMovie = useCallback(
     (movieId: string) => {
-      setData((prev) => ({
-        ...prev,
-        movies: prev.movies.filter((m) => m.movieId !== movieId),
-      }));
+      setData((prev) => {
+        const sceneIdsToRemove = new Set(
+          prev.scenes.filter((s) => s.movieId === movieId).map((s) => s.sceneId),
+        );
+        return {
+          ...prev,
+          movies: prev.movies.filter((m) => m.movieId !== movieId),
+          scenes: prev.scenes.filter((s) => s.movieId !== movieId),
+          assets: prev.assets.map((a) => ({
+            ...a,
+            relatedMovieIds: a.relatedMovieIds.filter((id) => id !== movieId),
+            relatedSceneIds: a.relatedSceneIds.filter((id) => !sceneIdsToRemove.has(id)),
+          })),
+          prompts: prev.prompts.map((p) => ({
+            ...p,
+            relatedMovieIds: p.relatedMovieIds.filter((id) => id !== movieId),
+            relatedSceneIds: p.relatedSceneIds.filter((id) => !sceneIdsToRemove.has(id)),
+          })),
+          tasks: prev.tasks.filter((t) => t.movieId !== movieId),
+        };
+      });
     },
     [],
   );
@@ -197,6 +214,19 @@ export function ProductionProvider({ children }: { children: ReactNode }) {
       setData((prev) => ({
         ...prev,
         scenes: prev.scenes.filter((s) => s.sceneId !== sceneId),
+        assets: prev.assets.map((a) =>
+          a.relatedSceneIds.includes(sceneId)
+            ? { ...a, relatedSceneIds: a.relatedSceneIds.filter((id) => id !== sceneId) }
+            : a,
+        ),
+        prompts: prev.prompts.map((p) =>
+          p.relatedSceneIds.includes(sceneId)
+            ? { ...p, relatedSceneIds: p.relatedSceneIds.filter((id) => id !== sceneId) }
+            : p,
+        ),
+        tasks: prev.tasks.map((t) =>
+          t.relatedSceneId === sceneId ? { ...t, relatedSceneId: "" } : t,
+        ),
       }));
     },
     [],
@@ -294,6 +324,7 @@ export function ProductionProvider({ children }: { children: ReactNode }) {
           assetId: generateId("asset"),
           title: `${original.title} (コピー)`,
           status: "idea",
+          relatedSceneIds: [],
         };
         return { ...prev, assets: [...prev.assets, newAsset] };
       });
@@ -389,6 +420,7 @@ export function ProductionProvider({ children }: { children: ReactNode }) {
           title: `${original.title} (コピー)`,
           status: "draft",
           resultAssetIds: [],
+          relatedSceneIds: [],
         };
         return { ...prev, prompts: [...prev.prompts, newPrompt] };
       });

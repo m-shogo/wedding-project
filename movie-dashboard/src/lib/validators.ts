@@ -14,6 +14,13 @@ export function validateData(data: AllData): ValidationIssue[] {
   const assetIds = new Set(data.assets.map((a) => a.assetId));
   const promptIds = new Set(data.prompts.map((p) => p.promptId));
 
+  // Duplicate ID checks
+  checkDuplicateIds(data.movies.map((m) => m.movieId), "movie", issues);
+  checkDuplicateIds(data.scenes.map((s) => s.sceneId), "scene", issues);
+  checkDuplicateIds(data.assets.map((a) => a.assetId), "asset", issues);
+  checkDuplicateIds(data.prompts.map((p) => p.promptId), "prompt", issues);
+  checkDuplicateIds(data.tasks.map((t) => t.taskId), "task", issues);
+
   for (const s of data.scenes) {
     if (s.movieId && !movieIds.has(s.movieId))
       issues.push({
@@ -58,6 +65,25 @@ export function validateData(data: AllData): ValidationIssue[] {
           entityId: a.assetId,
           message: `存在しないscene "${sid}" を参照`,
         });
+      else {
+        const scene = data.scenes.find((s) => s.sceneId === sid);
+        if (scene && !scene.assets.includes(a.assetId))
+          issues.push({
+            type: "warning",
+            entity: "asset",
+            entityId: a.assetId,
+            message: `scene "${sid}" のassets配列に自身が含まれていない（片側参照）`,
+          });
+      }
+    }
+    for (const mid of a.relatedMovieIds) {
+      if (!movieIds.has(mid))
+        issues.push({
+          type: "error",
+          entity: "asset",
+          entityId: a.assetId,
+          message: `存在しないmovie "${mid}" を参照`,
+        });
     }
   }
 
@@ -69,6 +95,25 @@ export function validateData(data: AllData): ValidationIssue[] {
           entity: "prompt",
           entityId: p.promptId,
           message: `存在しないscene "${sid}" を参照`,
+        });
+      else {
+        const scene = data.scenes.find((s) => s.sceneId === sid);
+        if (scene && !scene.promptIds.includes(p.promptId))
+          issues.push({
+            type: "warning",
+            entity: "prompt",
+            entityId: p.promptId,
+            message: `scene "${sid}" のpromptIds配列に自身が含まれていない（片側参照）`,
+          });
+      }
+    }
+    for (const mid of p.relatedMovieIds) {
+      if (!movieIds.has(mid))
+        issues.push({
+          type: "error",
+          entity: "prompt",
+          entityId: p.promptId,
+          message: `存在しないmovie "${mid}" を参照`,
         });
     }
     for (const aid of p.resultAssetIds) {
@@ -122,4 +167,19 @@ export function validateData(data: AllData): ValidationIssue[] {
   }
 
   return issues;
+}
+
+function checkDuplicateIds(ids: string[], entity: string, issues: ValidationIssue[]): void {
+  const seen = new Set<string>();
+  for (const id of ids) {
+    if (seen.has(id)) {
+      issues.push({
+        type: "error",
+        entity,
+        entityId: id,
+        message: `IDが重複しています`,
+      });
+    }
+    seen.add(id);
+  }
 }

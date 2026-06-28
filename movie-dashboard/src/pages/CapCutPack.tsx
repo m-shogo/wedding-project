@@ -50,7 +50,7 @@ export function CapCutPack() {
       tasks: movieTasks,
       exportedAt: new Date().toISOString(),
     };
-    downloadJson(pack as never, `${currentMovie?.movieId ?? "movie"}_capcut_pack.json`);
+    downloadJson(pack, `${currentMovie?.movieId ?? "movie"}_capcut_pack.json`);
   }
 
   function startEditMemo(sceneId: string, current?: string) {
