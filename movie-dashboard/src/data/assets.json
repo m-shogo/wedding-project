@@ -208,7 +208,7 @@
     "type": "audio",
     "title": "プロフィールBGM候補",
     "path": "",
-    "relatedSceneIds": [],
+    "relatedSceneIds": ["pr-01", "pr-02", "pr-03", "pr-04", "pr-05", "pr-06", "pr-07", "pr-08", "pr-09", "pr-10"],
     "relatedMovieIds": ["profile"],
     "status": "needed",
     "source": "未定",
