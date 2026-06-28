@@ -49,7 +49,7 @@ export function AssetForm({ asset, selectedMovieId, onSave, onCancel }: AssetFor
           <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} className="form-input" required />
         </div>
         <div>
-          <label className="form-label">種類</label>
+          <label className="form-label">素材タイプ</label>
           <select value={type} onChange={(e) => setType(e.target.value as AssetType)} className="form-input">
             {typeKeys.map((k) => (
               <option key={k} value={k}>{assetTypeLabel[k]}</option>
@@ -69,7 +69,7 @@ export function AssetForm({ asset, selectedMovieId, onSave, onCancel }: AssetFor
           <input type="text" value={path} onChange={(e) => setPath(e.target.value)} className="form-input" />
         </div>
         <div>
-          <label className="form-label">ソース</label>
+          <label className="form-label">出典・生成元</label>
           <input type="text" value={source} onChange={(e) => setSource(e.target.value)} className="form-input" />
         </div>
         <div>

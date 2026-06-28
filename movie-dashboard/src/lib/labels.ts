@@ -16,7 +16,7 @@ export const sceneStatusLabel: Record<SceneStatus, string> = {
   collecting: "素材収集中",
   generating: "生成中",
   editing: "編集中",
-  review: "レビュー",
+  review: "確認中",
   done: "完了",
 };
 
@@ -36,7 +36,7 @@ export const assetTypeLabel: Record<AssetType, string> = {
   ai_video: "AI動画",
   motion_studio_export: "Motion Studio",
   audio: "音源",
-  reference: "参考",
+  reference: "参考資料",
   text: "テキスト",
   design_asset: "デザイン素材",
 };
@@ -88,7 +88,7 @@ export const taskPriorityColor: Record<TaskPriority, string> = {
 };
 
 export const taskStatusLabel: Record<TaskStatus, string> = {
-  todo: "TODO",
+  todo: "未着手",
   in_progress: "進行中",
   waiting: "待機中",
   blocked: "ブロック中",
@@ -114,7 +114,7 @@ export const taskCategoryLabel: Record<TaskCategory, string> = {
   capcut: "CapCut編集",
   bgm: "BGM",
   caption: "テロップ",
-  review: "レビュー",
+  review: "確認",
 };
 
 export const taskCategoryColor: Record<TaskCategory, string> = {
@@ -164,7 +164,7 @@ export const promptTargetColor: Record<PromptTarget, string> = {
 export const movieStatusLabel: Record<MovieStatus, string> = {
   planning: "企画中",
   in_progress: "制作中",
-  review: "レビュー",
+  review: "確認中",
   done: "完了",
 };
 

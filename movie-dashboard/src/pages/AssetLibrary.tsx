@@ -52,7 +52,7 @@ export function AssetLibrary() {
 
   return (
     <div>
-      <Header title="Asset Library" description="素材一覧 — パス、用途、ステータスを管理" showMovieSelector />
+      <Header title="素材ライブラリ" description="素材一覧 — パス、用途、ステータスを管理" showMovieSelector />
 
       <div className="flex items-center justify-between mb-4">
         <div className="flex flex-wrap gap-2">
@@ -99,12 +99,12 @@ export function AssetLibrary() {
           <table className="w-full text-sm">
             <thead>
               <tr className="bg-navy-50 text-left">
-                <th className="px-4 py-3 text-xs font-semibold text-navy-500 uppercase tracking-wider">タイプ</th>
-                <th className="px-4 py-3 text-xs font-semibold text-navy-500 uppercase tracking-wider">タイトル</th>
-                <th className="px-4 py-3 text-xs font-semibold text-navy-500 uppercase tracking-wider">パス</th>
-                <th className="px-4 py-3 text-xs font-semibold text-navy-500 uppercase tracking-wider">ステータス</th>
-                <th className="px-4 py-3 text-xs font-semibold text-navy-500 uppercase tracking-wider">シーン</th>
-                <th className="px-4 py-3 text-xs font-semibold text-navy-500 uppercase tracking-wider w-28">操作</th>
+                <th className="px-4 py-3 text-xs font-semibold text-navy-500 tracking-wider">タイプ</th>
+                <th className="px-4 py-3 text-xs font-semibold text-navy-500 tracking-wider">タイトル</th>
+                <th className="px-4 py-3 text-xs font-semibold text-navy-500 tracking-wider">パス</th>
+                <th className="px-4 py-3 text-xs font-semibold text-navy-500 tracking-wider">ステータス</th>
+                <th className="px-4 py-3 text-xs font-semibold text-navy-500 tracking-wider">シーン</th>
+                <th className="px-4 py-3 text-xs font-semibold text-navy-500 tracking-wider w-28">操作</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-sand-100">

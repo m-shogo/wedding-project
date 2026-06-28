@@ -37,7 +37,7 @@ export function Dashboard() {
   return (
     <div>
       <Header
-        title="Dashboard"
+        title="ダッシュボード"
         description="ムービー制作の全体状況"
         showMovieSelector
       />

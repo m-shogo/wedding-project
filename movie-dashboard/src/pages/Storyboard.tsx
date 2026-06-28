@@ -36,7 +36,7 @@ export function Storyboard() {
 
   return (
     <div>
-      <Header title="Storyboard" description="シーンの構成・編集・並び替え" showMovieSelector />
+      <Header title="絵コンテ" description="シーンの構成・編集・並び替え" showMovieSelector />
 
       <div className="flex items-center justify-between mb-6">
         <div className="text-sm text-navy-500">
@@ -83,24 +83,24 @@ export function Storyboard() {
               <div className="p-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <div className="space-y-4">
                   <div>
-                    <p className="text-xs font-semibold text-navy-400 uppercase tracking-wider mb-1">Purpose</p>
+                    <p className="text-xs font-semibold text-navy-400 tracking-wider mb-1">目的</p>
                     <p className="text-sm text-navy-700">{scene.purpose}</p>
                   </div>
                   <div>
-                    <p className="text-xs font-semibold text-navy-400 uppercase tracking-wider mb-1">Visual</p>
+                    <p className="text-xs font-semibold text-navy-400 tracking-wider mb-1">ビジュアル</p>
                     <p className="text-sm text-navy-700">{scene.visual}</p>
                   </div>
                   <div>
-                    <p className="text-xs font-semibold text-navy-400 uppercase tracking-wider mb-1">Caption</p>
+                    <p className="text-xs font-semibold text-navy-400 tracking-wider mb-1">テロップ</p>
                     <p className="text-sm text-navy-700 font-serif italic">{scene.caption || "—"}</p>
                   </div>
                   <div>
-                    <p className="text-xs font-semibold text-navy-400 uppercase tracking-wider mb-1">BGM Cue</p>
+                    <p className="text-xs font-semibold text-navy-400 tracking-wider mb-1">BGMキュー</p>
                     <p className="text-sm text-navy-700">{scene.bgmCue || "—"}</p>
                   </div>
                   {scene.notes && (
                     <div>
-                      <p className="text-xs font-semibold text-navy-400 uppercase tracking-wider mb-1">Notes</p>
+                      <p className="text-xs font-semibold text-navy-400 tracking-wider mb-1">メモ</p>
                       <p className="text-sm text-navy-500 bg-sand-50 rounded p-2">{scene.notes}</p>
                     </div>
                   )}
@@ -109,7 +109,7 @@ export function Storyboard() {
                 <div className="space-y-4">
                   <div>
                     <div className="flex items-center justify-between mb-2">
-                      <p className="text-xs font-semibold text-navy-400 uppercase tracking-wider">素材 ({sceneAssets.length})</p>
+                      <p className="text-xs font-semibold text-navy-400 tracking-wider">素材 ({sceneAssets.length})</p>
                       <button onClick={() => setLinkAssetSceneId(scene.sceneId)} className="text-xs text-navy-500 hover:text-navy-700">+ 紐付け</button>
                     </div>
                     {sceneAssets.length > 0 ? (
@@ -129,7 +129,7 @@ export function Storyboard() {
 
                   <div>
                     <div className="flex items-center justify-between mb-2">
-                      <p className="text-xs font-semibold text-navy-400 uppercase tracking-wider">プロンプト ({scenePrompts.length})</p>
+                      <p className="text-xs font-semibold text-navy-400 tracking-wider">プロンプト ({scenePrompts.length})</p>
                       <button onClick={() => setLinkPromptSceneId(scene.sceneId)} className="text-xs text-navy-500 hover:text-navy-700">+ 紐付け</button>
                     </div>
                     {scenePrompts.length > 0 ? (

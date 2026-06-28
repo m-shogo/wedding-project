@@ -1,14 +1,14 @@
 import { NavLink } from "react-router-dom";
 
 const links = [
-  { to: "/", label: "Dashboard", icon: "✈" },
-  { to: "/storyboard", label: "Storyboard", icon: "🎬" },
-  { to: "/assets", label: "Asset Library", icon: "🗂" },
-  { to: "/prompts", label: "Prompt Bank", icon: "✨" },
-  { to: "/missing", label: "Missing List", icon: "⚠" },
-  { to: "/capcut", label: "CapCut Pack", icon: "✂" },
-  { to: "/production-map", label: "Production Map", icon: "🗺" },
-  { to: "/data", label: "Data Manager", icon: "💾" },
+  { to: "/", label: "ダッシュボード", icon: "✈" },
+  { to: "/storyboard", label: "絵コンテ", icon: "🎬" },
+  { to: "/assets", label: "素材ライブラリ", icon: "🗂" },
+  { to: "/prompts", label: "プロンプト管理", icon: "✨" },
+  { to: "/missing", label: "不足・未確定リスト", icon: "⚠" },
+  { to: "/capcut", label: "CapCut編集パック", icon: "✂" },
+  { to: "/production-map", label: "制作マップ", icon: "🗺" },
+  { to: "/data", label: "データ管理", icon: "💾" },
 ];
 
 export function Sidebar() {
@@ -18,7 +18,7 @@ export function Sidebar() {
         <h1 className="text-lg font-bold text-navy-800 font-serif tracking-wide">
           MEMORY FLIGHT
         </h1>
-        <p className="text-xs text-navy-400 mt-0.5">Wedding Movie Dashboard</p>
+        <p className="text-xs text-navy-400 mt-0.5">ウェディングムービー制作管理</p>
       </div>
       <nav className="flex-1 p-3 space-y-1">
         {links.map((link) => (

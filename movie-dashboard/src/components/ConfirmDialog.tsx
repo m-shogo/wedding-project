@@ -37,7 +37,7 @@ export function ConfirmDialog({
               : "bg-navy-700 hover:bg-navy-800"
           }`}
         >
-          確認
+          実行
         </button>
       </div>
     </Modal>

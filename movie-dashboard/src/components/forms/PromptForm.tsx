@@ -51,7 +51,7 @@ export function PromptForm({ prompt, selectedMovieId, onSave, onCancel }: Prompt
           <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} className="form-input" required />
         </div>
         <div>
-          <label className="form-label">ターゲット</label>
+          <label className="form-label">生成対象</label>
           <select value={target} onChange={(e) => setTarget(e.target.value as PromptTarget)} className="form-input">
             {targetKeys.map((k) => (
               <option key={k} value={k}>{promptTargetLabel[k]}</option>
@@ -67,7 +67,7 @@ export function PromptForm({ prompt, selectedMovieId, onSave, onCancel }: Prompt
           </select>
         </div>
         <div className="col-span-2">
-          <label className="form-label">プロンプト</label>
+          <label className="form-label">ポジティブプロンプト</label>
           <textarea value={promptText} onChange={(e) => setPromptText(e.target.value)} className="form-input" rows={4} />
         </div>
         <div className="col-span-2">

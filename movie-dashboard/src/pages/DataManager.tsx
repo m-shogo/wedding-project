@@ -83,7 +83,7 @@ export function DataManager() {
 
   return (
     <div>
-      <Header title="Data Manager" description="データのエクスポート・インポート・検証・リセット" />
+      <Header title="データ管理" description="データのエクスポート・インポート・検証・リセット" />
 
       {/* Current data summary */}
       <SectionCard title="現在のデータ" className="mb-6">
@@ -91,7 +91,7 @@ export function DataManager() {
           {Object.entries(counts).map(([key, val]) => (
             <div key={key} className="bg-sand-50 rounded-lg p-3 text-center">
               <p className="text-2xl font-bold text-navy-800">{val}</p>
-              <p className="text-xs text-navy-400 mt-1">{key}</p>
+              <p className="text-xs text-navy-400 mt-1">{{ movies: "ムービー", scenes: "シーン", assets: "素材", prompts: "プロンプト", tasks: "タスク" }[key]}</p>
             </div>
           ))}
         </div>

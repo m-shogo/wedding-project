@@ -71,19 +71,19 @@ export function CapCutPack() {
 
   return (
     <div>
-      <Header title="CapCut Pack" description="CapCut編集に渡すための素材・指示まとめ" showMovieSelector />
+      <Header title="CapCut編集パック" description="CapCut編集に渡すための素材・指示まとめ" showMovieSelector />
 
       <div className="flex items-center justify-end gap-3 mb-6">
         <button onClick={handleExportMarkdown} className="px-4 py-2 text-sm rounded-lg border border-sand-200 text-navy-600 hover:bg-sand-50">
-          Markdown書き出し
+          Markdown出力
         </button>
         <button onClick={handleExportJson} className="px-4 py-2 text-sm rounded-lg border border-sand-200 text-navy-600 hover:bg-sand-50">
-          JSON書き出し
+          JSON出力
         </button>
       </div>
 
       {/* Timeline bar */}
-      <SectionCard title="Timeline Overview" className="mb-8">
+      <SectionCard title="タイムライン全体" className="mb-8">
         <div className="flex gap-1 h-8 rounded-lg overflow-hidden">
           {movieScenes.map((scene) => {
             const pct = totalDuration > 0 ? (scene.durationSec / totalDuration) * 100 : 0;
@@ -131,7 +131,7 @@ export function CapCutPack() {
                 </div>
                 <div className="flex items-center gap-2">
                   {isCapcutReady && (
-                    <span className="text-xs bg-emerald-100 text-emerald-700 px-2 py-1 rounded-full font-medium">CapCut Ready</span>
+                    <span className="text-xs bg-emerald-100 text-emerald-700 px-2 py-1 rounded-full font-medium">CapCut準備完了</span>
                   )}
                   <Badge label={sceneStatusLabel[scene.status]} colorClass={sceneStatusColor[scene.status]} />
                 </div>
@@ -139,7 +139,7 @@ export function CapCutPack() {
 
               <div className="p-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <div>
-                  <h4 className="text-xs font-bold text-navy-400 uppercase tracking-wider mb-3">使用素材</h4>
+                  <h4 className="text-xs font-bold text-navy-400 tracking-wider mb-3">使用素材</h4>
                   {sceneAssets.length === 0 ? (
                     <p className="text-sm text-navy-300">素材なし</p>
                   ) : (
@@ -158,7 +158,7 @@ export function CapCutPack() {
                 </div>
 
                 <div>
-                  <h4 className="text-xs font-bold text-navy-400 uppercase tracking-wider mb-3">編集メモ</h4>
+                  <h4 className="text-xs font-bold text-navy-400 tracking-wider mb-3">編集メモ</h4>
                   <div className="space-y-2 text-sm">
                     <div>
                       <span className="text-xs text-navy-400">テロップ:</span>
@@ -190,7 +190,7 @@ export function CapCutPack() {
                 </div>
 
                 <div>
-                  <h4 className="text-xs font-bold text-navy-400 uppercase tracking-wider mb-3">ステータス</h4>
+                  <h4 className="text-xs font-bold text-navy-400 tracking-wider mb-3">ステータス</h4>
                   <div className="space-y-2 text-sm">
                     <div className="flex items-center gap-2">
                       <span className="w-3 h-3 rounded-full bg-emerald-400" />

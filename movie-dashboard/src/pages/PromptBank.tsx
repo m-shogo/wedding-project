@@ -43,7 +43,7 @@ export function PromptBank() {
 
   return (
     <div>
-      <Header title="Prompt Bank" description="生成プロンプトの管理・コピー" showMovieSelector />
+      <Header title="プロンプト管理" description="生成プロンプトの管理・コピー" showMovieSelector />
 
       <div className="flex items-center justify-between mb-4">
         <div className="flex flex-wrap gap-2">
@@ -99,12 +99,12 @@ export function PromptBank() {
                 <div className="p-6 space-y-4">
                   <div className="flex flex-wrap gap-4 text-xs text-navy-500">
                     <span>シーン: {p.relatedSceneIds.join(", ") || "—"}</span>
-                    {p.resultAssetIds.length > 0 && <span>生成結果: {p.resultAssetIds.join(", ")}</span>}
+                    {p.resultAssetIds.length > 0 && <span>生成結果素材:{p.resultAssetIds.join(", ")}</span>}
                   </div>
 
                   <div>
                     <div className="flex items-center justify-between mb-2">
-                      <p className="text-xs font-semibold text-navy-400 uppercase tracking-wider">Positive Prompt</p>
+                      <p className="text-xs font-semibold text-navy-400 tracking-wider">ポジティブプロンプト</p>
                       <button onClick={() => copyPrompt(p.prompt, p.promptId + "-pos")} className="text-xs text-navy-500 hover:text-navy-700">
                         {copiedId === p.promptId + "-pos" ? "✓ コピー済み" : "コピー"}
                       </button>
@@ -117,7 +117,7 @@ export function PromptBank() {
                   {p.negativePrompt && (
                     <div>
                       <div className="flex items-center justify-between mb-2">
-                        <p className="text-xs font-semibold text-navy-400 uppercase tracking-wider">Negative Prompt</p>
+                        <p className="text-xs font-semibold text-navy-400 tracking-wider">ネガティブプロンプト</p>
                         <button onClick={() => copyPrompt(p.negativePrompt, p.promptId + "-neg")} className="text-xs text-navy-500 hover:text-navy-700">
                           {copiedId === p.promptId + "-neg" ? "✓ コピー済み" : "コピー"}
                         </button>
@@ -130,7 +130,7 @@ export function PromptBank() {
 
                   {p.notes && (
                     <div>
-                      <p className="text-xs font-semibold text-navy-400 uppercase tracking-wider mb-2">Notes</p>
+                      <p className="text-xs font-semibold text-navy-400 tracking-wider mb-2">メモ</p>
                       <p className="text-sm text-navy-500">{p.notes}</p>
                     </div>
                   )}

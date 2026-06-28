@@ -16,7 +16,7 @@ export function ProductionMap() {
 
   return (
     <div>
-      <Header title="Production Map" description="制作全体の依存関係と進捗マップ" />
+      <Header title="制作マップ" description="制作全体の依存関係と進捗マップ" />
 
       {/* Movie overview */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
