@@ -1,8 +1,9 @@
 [
   {
     "taskId": "task-01",
+    "movieId": "",
     "title": "会場仕様を確認する",
-    "category": "会場",
+    "category": "undecided",
     "priority": "high",
     "relatedSceneId": "",
     "due": "",
@@ -11,8 +12,9 @@
   },
   {
     "taskId": "task-02",
+    "movieId": "",
     "title": "BGM候補を集める",
-    "category": "BGM",
+    "category": "bgm",
     "priority": "high",
     "relatedSceneId": "",
     "due": "",
@@ -21,8 +23,9 @@
   },
   {
     "taskId": "task-03",
+    "movieId": "opening",
     "title": "空港ロビー静止画を人物なしで再生成",
-    "category": "AI素材",
+    "category": "ai_generation",
     "priority": "high",
     "relatedSceneId": "op-01",
     "due": "",
@@ -31,8 +34,9 @@
   },
   {
     "taskId": "task-04",
+    "movieId": "opening",
     "title": "I2V生成済み動画をscorecard基準で採点",
-    "category": "AI素材",
+    "category": "review",
     "priority": "high",
     "relatedSceneId": "",
     "due": "",
@@ -41,8 +45,9 @@
   },
   {
     "taskId": "task-05",
+    "movieId": "opening",
     "title": "新郎プロフィール写真を選ぶ",
-    "category": "写真",
+    "category": "photo_selection",
     "priority": "high",
     "relatedSceneId": "op-03",
     "due": "",
@@ -51,8 +56,9 @@
   },
   {
     "taskId": "task-06",
+    "movieId": "opening",
     "title": "新婦プロフィール写真を選ぶ",
-    "category": "写真",
+    "category": "photo_selection",
     "priority": "high",
     "relatedSceneId": "op-03",
     "due": "",
@@ -61,8 +67,9 @@
   },
   {
     "taskId": "task-07",
+    "movieId": "opening",
     "title": "旅行写真を5-8枚選ぶ",
-    "category": "写真",
+    "category": "photo_selection",
     "priority": "medium",
     "relatedSceneId": "op-04",
     "due": "",
@@ -71,8 +78,9 @@
   },
   {
     "taskId": "task-08",
+    "movieId": "opening",
     "title": "犬の推し写真を選ぶ",
-    "category": "写真",
+    "category": "photo_selection",
     "priority": "medium",
     "relatedSceneId": "op-04",
     "due": "",
@@ -81,8 +89,9 @@
   },
   {
     "taskId": "task-09",
+    "movieId": "opening",
     "title": "VP9透過をCapCutで確認",
-    "category": "素材確認",
+    "category": "review",
     "priority": "medium",
     "relatedSceneId": "op-03",
     "due": "",
@@ -91,8 +100,9 @@
   },
   {
     "taskId": "task-10",
+    "movieId": "opening",
     "title": "横浜夜景の静止画を作る",
-    "category": "AI素材",
+    "category": "ai_generation",
     "priority": "medium",
     "relatedSceneId": "op-05",
     "due": "",
@@ -101,8 +111,9 @@
   },
   {
     "taskId": "task-11",
+    "movieId": "opening",
     "title": "扉の光をAIとmotion-studioで比較",
-    "category": "AI素材",
+    "category": "ai_generation",
     "priority": "low",
     "relatedSceneId": "op-05",
     "due": "",
@@ -111,8 +122,9 @@
   },
   {
     "taskId": "task-12",
+    "movieId": "opening",
     "title": "入場曲とのつなぎを確認",
-    "category": "BGM",
+    "category": "bgm",
     "priority": "low",
     "relatedSceneId": "op-06",
     "due": "",
@@ -121,8 +133,9 @@
   },
   {
     "taskId": "task-13",
+    "movieId": "opening",
     "title": "motion-studio MVPをStudio UIで審査",
-    "category": "素材確認",
+    "category": "review",
     "priority": "high",
     "relatedSceneId": "",
     "due": "",
@@ -131,12 +144,57 @@
   },
   {
     "taskId": "task-14",
+    "movieId": "opening",
     "title": "10秒試作をCapCutで作る",
-    "category": "編集",
+    "category": "capcut",
     "priority": "medium",
     "relatedSceneId": "op-01",
     "due": "",
     "status": "todo",
     "notes": "まず10秒だけ作って世界観の成立を確認する。Gate 1チェック。"
+  },
+  {
+    "taskId": "pr-task-01",
+    "movieId": "profile",
+    "title": "プロフィール用写真を家族に依頼",
+    "category": "photo_selection",
+    "priority": "high",
+    "relatedSceneId": "",
+    "due": "",
+    "status": "todo",
+    "notes": "新郎新婦の幼少期〜学生時代の写真を家族に依頼する。"
+  },
+  {
+    "taskId": "pr-task-02",
+    "movieId": "profile",
+    "title": "プロフィールBGM候補を集める",
+    "category": "bgm",
+    "priority": "high",
+    "relatedSceneId": "",
+    "due": "",
+    "status": "todo",
+    "notes": "6分程度の曲。穏やかな始まりからサビで盛り上がる構成が理想。利用条件を確認。"
+  },
+  {
+    "taskId": "pr-task-03",
+    "movieId": "profile",
+    "title": "プロフィールムービーの秒割りを決める",
+    "category": "undecided",
+    "priority": "medium",
+    "relatedSceneId": "",
+    "due": "",
+    "status": "todo",
+    "notes": "各章の写真枚数と表示秒数を決める。BGM候補の曲構成に合わせる。"
+  },
+  {
+    "taskId": "pr-task-04",
+    "movieId": "profile",
+    "title": "出会いの章の写真・エピソードを整理",
+    "category": "photo_selection",
+    "priority": "medium",
+    "relatedSceneId": "pr-08",
+    "due": "",
+    "status": "todo",
+    "notes": "出会いの頃の写真、初デートの写真。テロップ用のエピソードも整理する。"
   }
 ]

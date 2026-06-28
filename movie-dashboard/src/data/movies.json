@@ -1,0 +1,20 @@
+[
+  {
+    "movieId": "opening",
+    "title": "オープニングムービー",
+    "type": "opening",
+    "theme": "travel",
+    "targetDurationSec": 105,
+    "status": "in_progress",
+    "description": "披露宴入場前に流す旅行テーマのオープニングムービー"
+  },
+  {
+    "movieId": "profile",
+    "title": "プロフィールムービー",
+    "type": "profile",
+    "theme": "travel",
+    "targetDurationSec": 360,
+    "status": "planning",
+    "description": "新郎新婦の生い立ち、出会い、思い出を旅行記のように見せるプロフィールムービー"
+  }
+]

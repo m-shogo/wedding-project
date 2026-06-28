@@ -7,6 +7,8 @@ const links = [
   { to: "/prompts", label: "Prompt Bank", icon: "✨" },
   { to: "/missing", label: "Missing List", icon: "⚠" },
   { to: "/capcut", label: "CapCut Pack", icon: "✂" },
+  { to: "/production-map", label: "Production Map", icon: "🗺" },
+  { to: "/data", label: "Data Manager", icon: "💾" },
 ];
 
 export function Sidebar() {

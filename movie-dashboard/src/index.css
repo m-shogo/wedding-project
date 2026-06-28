@@ -17,4 +17,12 @@
   .sidebar-link-active {
     @apply bg-navy-100 text-navy-900 font-semibold;
   }
+  .form-label {
+    @apply block text-xs font-medium text-navy-600 mb-1;
+  }
+  .form-input {
+    @apply w-full text-sm border border-sand-200 rounded-lg px-3 py-1.5
+           text-navy-800 bg-white
+           focus:outline-none focus:ring-2 focus:ring-gold-300 focus:border-gold-400;
+  }
 }

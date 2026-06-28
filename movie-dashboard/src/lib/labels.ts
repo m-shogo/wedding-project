@@ -1,4 +1,15 @@
-import type { AssetStatus, AssetType, PromptStatus, SceneStatus, TaskPriority, TaskStatus } from "../types/movie";
+import type {
+  AssetStatus,
+  AssetType,
+  MovieStatus,
+  MovieType,
+  PromptStatus,
+  PromptTarget,
+  SceneStatus,
+  TaskCategory,
+  TaskPriority,
+  TaskStatus,
+} from "../types/movie";
 
 export const sceneStatusLabel: Record<SceneStatus, string> = {
   not_started: "未着手",
@@ -26,6 +37,8 @@ export const assetTypeLabel: Record<AssetType, string> = {
   motion_studio_export: "Motion Studio",
   audio: "音源",
   reference: "参考",
+  text: "テキスト",
+  design_asset: "デザイン素材",
 };
 
 export const assetTypeColor: Record<AssetType, string> = {
@@ -36,26 +49,30 @@ export const assetTypeColor: Record<AssetType, string> = {
   motion_studio_export: "bg-teal-100 text-teal-700",
   audio: "bg-pink-100 text-pink-700",
   reference: "bg-gray-100 text-gray-600",
+  text: "bg-lime-100 text-lime-700",
+  design_asset: "bg-fuchsia-100 text-fuchsia-700",
 };
 
 export const assetStatusLabel: Record<AssetStatus, string> = {
-  pending: "未着手",
-  collected: "収集済み",
-  generating: "生成中",
-  generated: "生成済み",
-  adopted: "採用",
+  idea: "アイデア",
+  needed: "必要",
+  collecting: "収集中",
+  ready: "準備完了",
+  selected: "選定済み",
   rejected: "不採用",
-  needs_review: "要確認",
+  needs_replace: "差し替え必要",
+  used: "使用中",
 };
 
 export const assetStatusColor: Record<AssetStatus, string> = {
-  pending: "bg-gray-100 text-gray-600",
-  collected: "bg-sky-100 text-sky-700",
-  generating: "bg-blue-100 text-blue-700",
-  generated: "bg-indigo-100 text-indigo-700",
-  adopted: "bg-emerald-100 text-emerald-700",
-  needs_review: "bg-orange-100 text-orange-700",
+  idea: "bg-slate-100 text-slate-600",
+  needed: "bg-gray-100 text-gray-600",
+  collecting: "bg-amber-100 text-amber-700",
+  ready: "bg-sky-100 text-sky-700",
+  selected: "bg-indigo-100 text-indigo-700",
   rejected: "bg-red-100 text-red-700",
+  needs_replace: "bg-orange-100 text-orange-700",
+  used: "bg-emerald-100 text-emerald-700",
 };
 
 export const taskPriorityLabel: Record<TaskPriority, string> = {
@@ -73,15 +90,43 @@ export const taskPriorityColor: Record<TaskPriority, string> = {
 export const taskStatusLabel: Record<TaskStatus, string> = {
   todo: "TODO",
   in_progress: "進行中",
-  done: "完了",
+  waiting: "待機中",
   blocked: "ブロック中",
+  done: "完了",
+  dropped: "取り下げ",
 };
 
 export const taskStatusColor: Record<TaskStatus, string> = {
   todo: "bg-gray-100 text-gray-600",
   in_progress: "bg-blue-100 text-blue-700",
-  done: "bg-emerald-100 text-emerald-700",
+  waiting: "bg-yellow-100 text-yellow-700",
   blocked: "bg-red-100 text-red-700",
+  done: "bg-emerald-100 text-emerald-700",
+  dropped: "bg-slate-100 text-slate-500",
+};
+
+export const taskCategoryLabel: Record<TaskCategory, string> = {
+  missing_asset: "素材不足",
+  undecided: "未決定",
+  photo_selection: "写真選定",
+  ai_generation: "AI生成",
+  motion_studio: "Motion Studio",
+  capcut: "CapCut編集",
+  bgm: "BGM",
+  caption: "テロップ",
+  review: "レビュー",
+};
+
+export const taskCategoryColor: Record<TaskCategory, string> = {
+  missing_asset: "bg-red-100 text-red-700",
+  undecided: "bg-yellow-100 text-yellow-700",
+  photo_selection: "bg-sky-100 text-sky-700",
+  ai_generation: "bg-indigo-100 text-indigo-700",
+  motion_studio: "bg-teal-100 text-teal-700",
+  capcut: "bg-purple-100 text-purple-700",
+  bgm: "bg-pink-100 text-pink-700",
+  caption: "bg-lime-100 text-lime-700",
+  review: "bg-orange-100 text-orange-700",
 };
 
 export const promptStatusLabel: Record<PromptStatus, string> = {
@@ -96,4 +141,50 @@ export const promptStatusColor: Record<PromptStatus, string> = {
   testing: "bg-blue-100 text-blue-700",
   adopted: "bg-emerald-100 text-emerald-700",
   rejected: "bg-red-100 text-red-700",
+};
+
+export const promptTargetLabel: Record<PromptTarget, string> = {
+  image: "画像生成",
+  video: "動画生成",
+  motion: "モーション",
+  caption: "テロップ",
+  edit_instruction: "編集指示",
+  bgm_note: "BGMメモ",
+};
+
+export const promptTargetColor: Record<PromptTarget, string> = {
+  image: "bg-violet-100 text-violet-700",
+  video: "bg-indigo-100 text-indigo-700",
+  motion: "bg-teal-100 text-teal-700",
+  caption: "bg-lime-100 text-lime-700",
+  edit_instruction: "bg-purple-100 text-purple-700",
+  bgm_note: "bg-pink-100 text-pink-700",
+};
+
+export const movieStatusLabel: Record<MovieStatus, string> = {
+  planning: "企画中",
+  in_progress: "制作中",
+  review: "レビュー",
+  done: "完了",
+};
+
+export const movieStatusColor: Record<MovieStatus, string> = {
+  planning: "bg-gray-100 text-gray-600",
+  in_progress: "bg-blue-100 text-blue-700",
+  review: "bg-orange-100 text-orange-700",
+  done: "bg-emerald-100 text-emerald-700",
+};
+
+export const movieTypeLabel: Record<MovieType, string> = {
+  opening: "オープニング",
+  profile: "プロフィール",
+  introduction: "紹介",
+  other: "その他",
+};
+
+export const movieTypeColor: Record<MovieType, string> = {
+  opening: "bg-indigo-100 text-indigo-700",
+  profile: "bg-sky-100 text-sky-700",
+  introduction: "bg-teal-100 text-teal-700",
+  other: "bg-gray-100 text-gray-600",
 };

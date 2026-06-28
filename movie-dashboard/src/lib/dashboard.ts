@@ -1,38 +1,59 @@
-import type { Asset, Scene, Task } from "../types/movie";
+import type { Asset, MovieProject, Prompt, Scene, Task } from "../types/movie";
 
-export function computeStats(scenes: Scene[], assets: Asset[], tasks: Task[]) {
+export function computeStats(
+  movie: MovieProject | undefined,
+  scenes: Scene[],
+  assets: Asset[],
+  prompts: Prompt[],
+  tasks: Task[],
+) {
   const totalScenes = scenes.length;
   const doneScenes = scenes.filter((s) => s.status === "done").length;
   const inProgressScenes = scenes.filter(
     (s) => s.status !== "not_started" && s.status !== "done",
   ).length;
+  const totalDurationSec = scenes.reduce((sum, s) => sum + s.durationSec, 0);
+  const targetDurationSec = movie?.targetDurationSec ?? 0;
 
-  const missingAssets = assets.filter(
-    (a) => a.status === "pending" || a.status === "needs_review",
-  ).length;
-  const needsReviewAssets = assets.filter(
-    (a) => a.status === "needs_review",
-  ).length;
+  const missingAssets = assets.filter((a) => a.status === "needed" || a.status === "idea").length;
+  const unlinkedAssets = assets.filter((a) => a.relatedSceneIds.length === 0).length;
+  const unlinkedPrompts = prompts.filter((p) => p.relatedSceneIds.length === 0).length;
   const aiVideoPlanned = assets.filter(
-    (a) => a.type === "ai_video" && a.status !== "adopted" && a.status !== "rejected",
+    (a) => a.type === "ai_video" && a.status !== "used" && a.status !== "rejected",
   ).length;
-  const capcutReady = assets.filter((a) => a.status === "adopted").length;
+  const capcutReady = scenes.filter((s) => {
+    const sceneAssets = assets.filter((a) => s.assets.includes(a.assetId));
+    return (
+      sceneAssets.length > 0 &&
+      sceneAssets.every(
+        (a) => a.status === "used" || a.status === "selected" || a.status === "ready",
+      )
+    );
+  }).length;
 
   const urgentTasks = tasks.filter(
-    (t) => t.priority === "high" && t.status !== "done",
+    (t) => t.priority === "high" && t.status !== "done" && t.status !== "dropped",
   );
+  const blockedScenes = scenes.filter((s) => {
+    const sceneTasks = tasks.filter((t) => t.relatedSceneId === s.sceneId);
+    return sceneTasks.some((t) => t.status === "blocked");
+  });
 
-  const totalDurationSec = scenes.reduce((sum, s) => sum + s.durationSec, 0);
+  const progressPercent = totalScenes > 0 ? Math.round((doneScenes / totalScenes) * 100) : 0;
 
   return {
     totalScenes,
     doneScenes,
     inProgressScenes,
+    totalDurationSec,
+    targetDurationSec,
     missingAssets,
-    needsReviewAssets,
+    unlinkedAssets,
+    unlinkedPrompts,
     aiVideoPlanned,
     capcutReady,
     urgentTasks,
-    totalDurationSec,
+    blockedScenes,
+    progressPercent,
   };
 }

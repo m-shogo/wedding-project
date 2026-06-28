@@ -2,11 +2,12 @@
   {
     "promptId": "prompt-01",
     "title": "空港ロビー（人物なし）",
-    "target": "generated_image",
-    "tool": "ChatGPT / DALL-E",
+    "target": "image",
+    "tool": "ChatGPT Image",
     "prompt": "A cinematic wide shot of an empty modern airport terminal lobby at golden hour, elegant travel film style, no people, no animals, warm sunlight streaming through large glass windows, clean reflective floors, departure boards showing abstract destinations, navy and gold color palette, subtle film grain, space for captions at the bottom, no text, no logo, no watermark, no signage with readable text.",
     "negativePrompt": "people, animals, crowds, readable text, logos, watermarks, signage, distorted objects, low quality",
     "relatedSceneIds": ["op-01"],
+    "relatedMovieIds": ["opening"],
     "status": "testing",
     "resultAssetIds": ["asset-01"],
     "notes": "人物なし指定を強調。前回は人物が映り込んだため不採用。"
@@ -14,11 +15,12 @@
   {
     "promptId": "prompt-02",
     "title": "滑走路 離陸",
-    "target": "ai_video",
+    "target": "video",
     "tool": "ComfyUI / Wan2.2 TI2V 5B",
     "prompt": "A cinematic 5-second shot of an airplane runway at sunrise, camera slowly moving forward along the runway, elegant wedding travel film style, warm golden light, subtle film grain, clean composition with caption space at bottom, soft focus background, no text, no logo, no watermark, no people, no animals, no signage.",
     "negativePrompt": "text, logo, watermark, people, animals, signage, distorted objects, fast camera motion, shaky camera, unreadable artifacts, low quality",
     "relatedSceneIds": ["op-01"],
+    "relatedMovieIds": ["opening"],
     "status": "testing",
     "resultAssetIds": ["asset-03"],
     "notes": "I2V生成済み。採点待ち。"
@@ -26,11 +28,12 @@
   {
     "promptId": "prompt-03",
     "title": "雲海ドリーショット",
-    "target": "ai_video",
+    "target": "video",
     "tool": "ComfyUI / Wan2.2 TI2V 5B",
     "prompt": "A cinematic 5-second looping aerial shot above a sea of clouds at golden hour, elegant wedding travel film style, soft sunlight illuminating cloud tops, slow smooth forward dolly movement, subtle film grain, clean composition with caption space, no text, no logo, no watermark, no people, no animals, no signage.",
     "negativePrompt": "text, logo, watermark, people, animals, signage, airplane, distorted objects, fast camera motion, shaky camera, low quality",
     "relatedSceneIds": ["op-02"],
+    "relatedMovieIds": ["opening"],
     "status": "testing",
     "resultAssetIds": ["asset-05"],
     "notes": "カメラ速度を「slow smooth」に抑えている。"
@@ -38,11 +41,12 @@
   {
     "promptId": "prompt-04",
     "title": "ハワイの海 夕暮れ",
-    "target": "ai_video",
+    "target": "video",
     "tool": "ComfyUI / Wan2.2 TI2V 5B",
     "prompt": "A cinematic 5-second looping shot of gentle ocean waves in Hawaii at golden hour, elegant wedding travel film style, soft sunlight reflections on water surface, calm motion, subtle film grain, slow smooth camera movement, clean composition with caption space, no text, no logo, no watermark, no people, no animals, no signage.",
     "negativePrompt": "text, logo, watermark, people, animals, signage, distorted objects, fast camera motion, shaky camera, unreadable artifacts, low quality",
     "relatedSceneIds": ["op-04"],
+    "relatedMovieIds": ["opening"],
     "status": "testing",
     "resultAssetIds": ["asset-10"],
     "notes": "最初の試作候補プロンプト。Style Bible準拠。"
@@ -50,11 +54,12 @@
   {
     "promptId": "prompt-05",
     "title": "ハワイ夕暮れ 広角",
-    "target": "generated_image",
-    "tool": "ChatGPT / DALL-E",
+    "target": "image",
+    "tool": "ChatGPT Image",
     "prompt": "A cinematic wide shot of a Hawaiian beach at sunset, golden hour light, gentle waves, palm tree silhouettes in the distance, elegant wedding travel film style, navy gold white color palette, soft film grain, clean composition with large caption space at bottom third, no people, no animals, no text, no logo, no watermark.",
     "negativePrompt": "people, animals, text, logos, watermarks, signage, distorted objects",
     "relatedSceneIds": ["op-04"],
+    "relatedMovieIds": ["opening"],
     "status": "draft",
     "resultAssetIds": [],
     "notes": "I2V入力用静止画。まだ生成していない。"
@@ -62,11 +67,12 @@
   {
     "promptId": "prompt-06",
     "title": "横浜夜景 港",
-    "target": "ai_video",
+    "target": "video",
     "tool": "ComfyUI / Wan2.2 TI2V 5B",
     "prompt": "A cinematic 5-second shot of Yokohama harbor at night, city lights reflecting on calm water, elegant wedding film style, navy and gold color palette, soft bokeh lights, slow smooth lateral camera movement, clean composition with caption space, no text, no logo, no watermark, no people, no animals, no signage.",
     "negativePrompt": "text, logo, watermark, people, animals, signage, distorted objects, fast camera motion, shaky camera, readable signs, low quality",
     "relatedSceneIds": ["op-05"],
+    "relatedMovieIds": ["opening"],
     "status": "draft",
     "resultAssetIds": [],
     "notes": "静止画を先に作ってからI2Vに進む。"
@@ -74,11 +80,12 @@
   {
     "promptId": "prompt-07",
     "title": "光パーティクル 抽象",
-    "target": "ai_video",
+    "target": "video",
     "tool": "ComfyUI / Wan2.2 TI2V 5B",
     "prompt": "A cinematic 5-second shot of abstract golden light particles slowly converging toward center, dark navy background, elegant wedding film style, soft bokeh, warm gold and white tones, slow smooth motion, clean composition, space for countdown text overlay, no text, no logo, no watermark, no people, no animals.",
     "negativePrompt": "text, logo, watermark, people, animals, fast motion, harsh light, distorted shapes, low quality",
     "relatedSceneIds": ["op-06"],
+    "relatedMovieIds": ["opening"],
     "status": "draft",
     "resultAssetIds": [],
     "notes": "カウントダウン背景用。motion-studioのカウントダウンと重ねて使う。"
