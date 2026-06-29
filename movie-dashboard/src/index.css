@@ -6,23 +6,39 @@
   body {
     @apply bg-sand-50 text-navy-900 font-sans antialiased;
   }
+  .dark body,
+  html.dark body {
+    @apply bg-navy-900 text-sand-100;
+  }
 }
 
 @layer components {
   .sidebar-link {
     @apply flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium
            text-navy-600 hover:bg-navy-50 hover:text-navy-800
+           dark:text-navy-200 dark:hover:bg-navy-700 dark:hover:text-white
            transition-colors duration-150;
   }
   .sidebar-link-active {
-    @apply bg-navy-100 text-navy-900 font-semibold;
+    @apply bg-navy-100 text-navy-900 font-semibold
+           dark:bg-navy-600 dark:text-white;
   }
   .form-label {
-    @apply block text-xs font-medium text-navy-600 mb-1;
+    @apply block text-xs font-medium text-navy-600 mb-1
+           dark:text-navy-300;
   }
   .form-input {
     @apply w-full text-sm border border-sand-200 rounded-lg px-3 py-1.5
            text-navy-800 bg-white
+           dark:bg-navy-800 dark:border-navy-600 dark:text-sand-100
            focus:outline-none focus:ring-2 focus:ring-gold-300 focus:border-gold-400;
   }
+}
+
+@keyframes slide-in {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+.animate-slide-in {
+  animation: slide-in 0.2s ease-out;
 }
