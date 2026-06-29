@@ -52,7 +52,7 @@ export function AssetLibrary() {
 
   return (
     <div>
-      <Header title="素材ライブラリ" description="素材一覧 — パス、用途、ステータスを管理" showMovieSelector />
+      <Header title="素材ライブラリ" description="写真・動画・生成素材のパス、用途、ステータスを管理します。実ファイルはGitに入れません" showMovieSelector />
 
       <div className="flex items-center justify-between mb-4">
         <div className="flex flex-wrap gap-2">

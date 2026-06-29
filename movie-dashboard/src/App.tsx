@@ -9,6 +9,7 @@ import { MissingList } from "./pages/MissingList";
 import { CapCutPack } from "./pages/CapCutPack";
 import { ProductionMap } from "./pages/ProductionMap";
 import { DataManager } from "./pages/DataManager";
+import { Guide } from "./pages/Guide";
 
 export default function App() {
   return (
@@ -24,6 +25,7 @@ export default function App() {
             <Route path="capcut" element={<CapCutPack />} />
             <Route path="production-map" element={<ProductionMap />} />
             <Route path="data" element={<DataManager />} />
+            <Route path="guide" element={<Guide />} />
           </Route>
         </Routes>
       </BrowserRouter>

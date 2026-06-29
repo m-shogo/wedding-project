@@ -43,7 +43,7 @@ export function PromptBank() {
 
   return (
     <div>
-      <Header title="プロンプト管理" description="生成プロンプトの管理・コピー" showMovieSelector />
+      <Header title="プロンプト管理" description="生成プロンプトの登録・シーン紐付け・コピーを行います" showMovieSelector />
 
       <div className="flex items-center justify-between mb-4">
         <div className="flex flex-wrap gap-2">

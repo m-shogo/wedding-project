@@ -36,7 +36,7 @@ export function Storyboard() {
 
   return (
     <div>
-      <Header title="絵コンテ" description="シーンの構成・編集・並び替え" showMovieSelector />
+      <Header title="絵コンテ" description="シーンごとの構成・尺・素材・プロンプト・タスクを管理します" showMovieSelector />
 
       <div className="flex items-center justify-between mb-6">
         <div className="text-sm text-navy-500">

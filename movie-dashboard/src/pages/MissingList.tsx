@@ -44,7 +44,7 @@ export function MissingList() {
 
   return (
     <div>
-      <Header title="不足・未確定リスト" description="不足素材・未確定事項の一覧" showMovieSelector />
+      <Header title="不足・未確定リスト" description="不足素材・未確定事項・作業タスクを優先度付きで管理します" showMovieSelector />
 
       <div className="flex items-center justify-between mb-4">
         <div className="flex flex-wrap gap-2">

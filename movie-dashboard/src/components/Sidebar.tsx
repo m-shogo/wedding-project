@@ -9,6 +9,7 @@ const links = [
   { to: "/capcut", label: "CapCut編集パック", icon: "✂" },
   { to: "/production-map", label: "制作マップ", icon: "🗺" },
   { to: "/data", label: "データ管理", icon: "💾" },
+  { to: "/guide", label: "使い方", icon: "📖" },
 ];
 
 export function Sidebar() {

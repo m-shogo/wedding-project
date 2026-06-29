@@ -83,7 +83,7 @@ export function DataManager() {
 
   return (
     <div>
-      <Header title="データ管理" description="データのエクスポート・インポート・検証・リセット" />
+      <Header title="データ管理" description="データの整合性チェック、JSONエクスポート/インポート、初期データへのリセットを行います" />
 
       {/* Current data summary */}
       <SectionCard title="現在のデータ" className="mb-6">

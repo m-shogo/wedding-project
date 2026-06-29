@@ -71,7 +71,7 @@ export function CapCutPack() {
 
   return (
     <div>
-      <Header title="CapCut編集パック" description="CapCut編集に渡すための素材・指示まとめ" showMovieSelector />
+      <Header title="CapCut編集パック" description="シーン順に素材パス・テロップ・BGM・編集メモをまとめます。Markdown書き出しも可能" showMovieSelector />
 
       <div className="flex items-center justify-end gap-3 mb-6">
         <button onClick={handleExportMarkdown} className="px-4 py-2 text-sm rounded-lg border border-sand-200 text-navy-600 hover:bg-sand-50">

@@ -16,7 +16,7 @@ export function ProductionMap() {
 
   return (
     <div>
-      <Header title="制作マップ" description="制作全体の依存関係と進捗マップ" />
+      <Header title="制作マップ" description="ムービーごとの進捗、シーン別の素材依存、ブロック中タスクを俯瞰します" />
 
       {/* Movie overview */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
