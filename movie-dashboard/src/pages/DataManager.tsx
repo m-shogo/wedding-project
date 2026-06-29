@@ -3,24 +3,37 @@ import { Header } from "../components/Header";
 import { SectionCard } from "../components/SectionCard";
 import { ConfirmDialog } from "../components/ConfirmDialog";
 import { useProduction } from "../store/productionStore";
-import { downloadJson } from "../lib/exporters";
+import { useToast } from "../store/toastStore";
+import { downloadJson, saveToLocal } from "../lib/exporters";
 import { validateData } from "../lib/validators";
 import type { ValidationIssue } from "../lib/validators";
 import type { AllData } from "../types/movie";
 
 export function DataManager() {
   const { data, resetToDefaults, importAllData, getAllData } = useProduction();
+  const { addToast } = useToast();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [showResetConfirm, setShowResetConfirm] = useState(false);
   const [issues, setIssues] = useState<ValidationIssue[] | null>(null);
-  const [importError, setImportError] = useState<string | null>(null);
-  const [importSuccess, setImportSuccess] = useState(false);
+  const [saveStatus, setSaveStatus] = useState<"idle" | "saving">("idle");
 
   function handleExport() {
     const allData = getAllData();
     const timestamp = new Date().toISOString().slice(0, 19).replace(/:/g, "-");
     downloadJson(allData, `movie-dashboard-backup-${timestamp}.json`);
+  }
+
+  async function handleSaveLocal() {
+    setSaveStatus("saving");
+    try {
+      await saveToLocal(getAllData());
+      setSaveStatus("idle");
+      addToast("src/data/ に保存しました", "success");
+    } catch (e) {
+      setSaveStatus("idle");
+      addToast(e instanceof Error ? e.message : "保存に失敗しました", "error");
+    }
   }
 
   function handleImportClick() {
@@ -42,7 +55,7 @@ export function DataManager() {
           !Array.isArray(raw.prompts) ||
           !Array.isArray(raw.tasks)
         ) {
-          setImportError("JSONの形式が正しくありません。movies, scenes, assets, prompts, tasks の各配列が必要です。");
+          addToast("JSONの形式が正しくありません", "error");
           return;
         }
         const parsed: AllData = {
@@ -53,12 +66,10 @@ export function DataManager() {
           tasks: raw.tasks as AllData["tasks"],
         };
         importAllData(parsed);
-        setImportError(null);
-        setImportSuccess(true);
         setIssues(null);
-        setTimeout(() => setImportSuccess(false), 3000);
+        addToast("インポートが完了しました", "success");
       } catch {
-        setImportError("JSONの解析に失敗しました。ファイルを確認してください。");
+        addToast("JSONの解析に失敗しました", "error");
       }
     };
     reader.readAsText(file);
@@ -97,6 +108,20 @@ export function DataManager() {
         </div>
       </SectionCard>
 
+      {/* Local save */}
+      <SectionCard title="ローカル保存" className="mb-6">
+        <p className="text-sm text-navy-500 mb-4">
+          現在のデータを <code className="text-xs bg-sand-100 px-1 py-0.5 rounded">src/data/*.json</code> に直接書き込みます。開発サーバー起動中のみ使えます。保存後に git commit すればデータをリポジトリに残せます。
+        </p>
+        <button
+          onClick={handleSaveLocal}
+          disabled={saveStatus === "saving"}
+          className="px-4 py-2 text-sm rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 disabled:opacity-50"
+        >
+          {saveStatus === "saving" ? "保存中…" : "src/data/ に保存"}
+        </button>
+      </SectionCard>
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
         {/* Export */}
         <SectionCard title="エクスポート">
@@ -117,8 +142,6 @@ export function DataManager() {
           <button onClick={handleImportClick} className="px-4 py-2 text-sm rounded-lg border border-sand-200 text-navy-600 hover:bg-sand-50">
             JSONインポート
           </button>
-          {importError && <p className="text-sm text-red-600 mt-3">{importError}</p>}
-          {importSuccess && <p className="text-sm text-emerald-600 mt-3">インポートが完了しました</p>}
         </SectionCard>
       </div>
 
@@ -169,7 +192,7 @@ export function DataManager() {
         open={showResetConfirm}
         title="データリセット"
         message="すべてのデータをデフォルトに戻します。localStorageの変更は失われます。先にエクスポートすることをおすすめします。"
-        onConfirm={() => { resetToDefaults(); setShowResetConfirm(false); setIssues(null); }}
+        onConfirm={() => { resetToDefaults(); setShowResetConfirm(false); setIssues(null); addToast("デフォルトデータに戻しました", "info"); }}
         onCancel={() => setShowResetConfirm(false)}
         danger
       />

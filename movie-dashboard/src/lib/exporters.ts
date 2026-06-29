@@ -112,6 +112,18 @@ export function exportCapcutMarkdown(
   return lines.join("\n");
 }
 
+export async function saveToLocal(data: AllData): Promise<void> {
+  const res = await fetch("/api/save-data", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: "Unknown error" })) as { error?: string };
+    throw new Error(err.error ?? `HTTP ${res.status}`);
+  }
+}
+
 function formatTimecode(totalSec: number): string {
   const min = Math.floor(totalSec / 60);
   const sec = totalSec % 60;

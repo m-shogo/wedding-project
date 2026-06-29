@@ -4,6 +4,7 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
 import type { ReactNode } from "react";
@@ -38,10 +39,13 @@ const defaults: AllData = {
   tasks: defaultTasks as Task[],
 };
 
+const MAX_HISTORY = 30;
+
 interface ProductionContextValue {
   data: AllData;
   selectedMovieId: string;
   setSelectedMovieId: (id: string) => void;
+  lastSavedAt: Date | null;
 
   // Filtered getters
   currentMovie: MovieProject | undefined;
@@ -61,6 +65,7 @@ interface ProductionContextValue {
   deleteScene: (sceneId: string) => void;
   duplicateScene: (sceneId: string) => void;
   moveScene: (sceneId: string, direction: "up" | "down") => void;
+  reorderScenes: (movieId: string, orderedIds: string[]) => void;
 
   // Asset CRUD
   addAsset: (asset: Asset) => void;
@@ -86,6 +91,12 @@ interface ProductionContextValue {
   linkTaskToScene: (taskId: string, sceneId: string) => void;
   unlinkTaskFromScene: (taskId: string) => void;
 
+  // Undo / Redo
+  undo: () => void;
+  redo: () => void;
+  canUndo: boolean;
+  canRedo: boolean;
+
   // Bulk operations
   resetToDefaults: () => void;
   importAllData: (data: AllData) => void;
@@ -95,20 +106,62 @@ interface ProductionContextValue {
 const ProductionContext = createContext<ProductionContextValue | null>(null);
 
 export function ProductionProvider({ children }: { children: ReactNode }) {
-  const [data, setData] = useState<AllData>(() => loadData(defaults));
+  const initialData = loadData(defaults);
+  const [data, setDataRaw] = useState<AllData>(initialData);
   const [selectedMovieId, setSelectedMovieIdState] = useState<string>(() =>
     loadSelectedMovie(),
   );
+  const [lastSavedAt, setLastSavedAt] = useState<Date | null>(null);
+
+  // History for undo/redo
+  const historyRef = useRef<AllData[]>([initialData]);
+  const historyIndexRef = useRef(0);
+  const isUndoRedoRef = useRef(false);
+
+  const setData = useCallback((updater: AllData | ((prev: AllData) => AllData)) => {
+    setDataRaw((prev) => {
+      const next = typeof updater === "function" ? updater(prev) : updater;
+      if (!isUndoRedoRef.current) {
+        const h = historyRef.current.slice(0, historyIndexRef.current + 1);
+        h.push(next);
+        if (h.length > MAX_HISTORY) h.shift();
+        historyRef.current = h;
+        historyIndexRef.current = h.length - 1;
+      }
+      return next;
+    });
+  }, []);
 
   // Persist data to localStorage on change
   useEffect(() => {
     saveData(data);
+    setLastSavedAt(new Date());
   }, [data]);
 
   // Persist selected movie
   const setSelectedMovieId = useCallback((id: string) => {
     setSelectedMovieIdState(id);
     saveSelectedMovie(id);
+  }, []);
+
+  // --- Undo / Redo ---
+  const canUndo = historyIndexRef.current > 0;
+  const canRedo = historyIndexRef.current < historyRef.current.length - 1;
+
+  const undo = useCallback(() => {
+    if (historyIndexRef.current <= 0) return;
+    historyIndexRef.current -= 1;
+    isUndoRedoRef.current = true;
+    setDataRaw(historyRef.current[historyIndexRef.current]);
+    isUndoRedoRef.current = false;
+  }, []);
+
+  const redo = useCallback(() => {
+    if (historyIndexRef.current >= historyRef.current.length - 1) return;
+    historyIndexRef.current += 1;
+    isUndoRedoRef.current = true;
+    setDataRaw(historyRef.current[historyIndexRef.current]);
+    isUndoRedoRef.current = false;
   }, []);
 
   // --- Filtered getters (memoized) ---
@@ -147,7 +200,7 @@ export function ProductionProvider({ children }: { children: ReactNode }) {
     (movie: MovieProject) => {
       setData((prev) => ({ ...prev, movies: [...prev.movies, movie] }));
     },
-    [],
+    [setData],
   );
 
   const updateMovie = useCallback(
@@ -159,7 +212,7 @@ export function ProductionProvider({ children }: { children: ReactNode }) {
         ),
       }));
     },
-    [],
+    [setData],
   );
 
   const deleteMovie = useCallback(
@@ -186,7 +239,7 @@ export function ProductionProvider({ children }: { children: ReactNode }) {
         };
       });
     },
-    [],
+    [setData],
   );
 
   // --- Scene CRUD ---
@@ -194,7 +247,7 @@ export function ProductionProvider({ children }: { children: ReactNode }) {
     (scene: Scene) => {
       setData((prev) => ({ ...prev, scenes: [...prev.scenes, scene] }));
     },
-    [],
+    [setData],
   );
 
   const updateScene = useCallback(
@@ -206,7 +259,7 @@ export function ProductionProvider({ children }: { children: ReactNode }) {
         ),
       }));
     },
-    [],
+    [setData],
   );
 
   const deleteScene = useCallback(
@@ -229,7 +282,7 @@ export function ProductionProvider({ children }: { children: ReactNode }) {
         ),
       }));
     },
-    [],
+    [setData],
   );
 
   const duplicateScene = useCallback(
@@ -250,7 +303,7 @@ export function ProductionProvider({ children }: { children: ReactNode }) {
         return { ...prev, scenes: newScenes };
       });
     },
-    [],
+    [setData],
   );
 
   const moveScene = useCallback(
@@ -277,7 +330,23 @@ export function ProductionProvider({ children }: { children: ReactNode }) {
         return { ...prev, scenes };
       });
     },
-    [selectedMovieId],
+    [setData, selectedMovieId],
+  );
+
+  const reorderScenes = useCallback(
+    (movieId: string, orderedIds: string[]) => {
+      setData((prev) => {
+        const otherScenes = prev.scenes.filter((s) => s.movieId !== movieId);
+        const movieScenesMap = new Map(
+          prev.scenes.filter((s) => s.movieId === movieId).map((s) => [s.sceneId, s]),
+        );
+        const reordered = orderedIds
+          .map((id) => movieScenesMap.get(id))
+          .filter((s): s is Scene => s !== undefined);
+        return { ...prev, scenes: [...otherScenes, ...reordered] };
+      });
+    },
+    [setData],
   );
 
   // --- Asset CRUD ---
@@ -285,7 +354,7 @@ export function ProductionProvider({ children }: { children: ReactNode }) {
     (asset: Asset) => {
       setData((prev) => ({ ...prev, assets: [...prev.assets, asset] }));
     },
-    [],
+    [setData],
   );
 
   const updateAsset = useCallback(
@@ -297,7 +366,7 @@ export function ProductionProvider({ children }: { children: ReactNode }) {
         ),
       }));
     },
-    [],
+    [setData],
   );
 
   const deleteAsset = useCallback(
@@ -311,7 +380,7 @@ export function ProductionProvider({ children }: { children: ReactNode }) {
         })),
       }));
     },
-    [],
+    [setData],
   );
 
   const duplicateAsset = useCallback(
@@ -329,7 +398,7 @@ export function ProductionProvider({ children }: { children: ReactNode }) {
         return { ...prev, assets: [...prev.assets, newAsset] };
       });
     },
-    [],
+    [setData],
   );
 
   const linkAssetToScene = useCallback(
@@ -348,7 +417,7 @@ export function ProductionProvider({ children }: { children: ReactNode }) {
         ),
       }));
     },
-    [],
+    [setData],
   );
 
   const unlinkAssetFromScene = useCallback(
@@ -372,7 +441,7 @@ export function ProductionProvider({ children }: { children: ReactNode }) {
         ),
       }));
     },
-    [],
+    [setData],
   );
 
   // --- Prompt CRUD ---
@@ -380,7 +449,7 @@ export function ProductionProvider({ children }: { children: ReactNode }) {
     (prompt: Prompt) => {
       setData((prev) => ({ ...prev, prompts: [...prev.prompts, prompt] }));
     },
-    [],
+    [setData],
   );
 
   const updatePrompt = useCallback(
@@ -392,7 +461,7 @@ export function ProductionProvider({ children }: { children: ReactNode }) {
         ),
       }));
     },
-    [],
+    [setData],
   );
 
   const deletePrompt = useCallback(
@@ -406,7 +475,7 @@ export function ProductionProvider({ children }: { children: ReactNode }) {
         })),
       }));
     },
-    [],
+    [setData],
   );
 
   const duplicatePrompt = useCallback(
@@ -425,7 +494,7 @@ export function ProductionProvider({ children }: { children: ReactNode }) {
         return { ...prev, prompts: [...prev.prompts, newPrompt] };
       });
     },
-    [],
+    [setData],
   );
 
   const linkPromptToScene = useCallback(
@@ -444,7 +513,7 @@ export function ProductionProvider({ children }: { children: ReactNode }) {
         ),
       }));
     },
-    [],
+    [setData],
   );
 
   const unlinkPromptFromScene = useCallback(
@@ -468,7 +537,7 @@ export function ProductionProvider({ children }: { children: ReactNode }) {
         ),
       }));
     },
-    [],
+    [setData],
   );
 
   // --- Task CRUD ---
@@ -476,7 +545,7 @@ export function ProductionProvider({ children }: { children: ReactNode }) {
     (task: Task) => {
       setData((prev) => ({ ...prev, tasks: [...prev.tasks, task] }));
     },
-    [],
+    [setData],
   );
 
   const updateTask = useCallback(
@@ -488,7 +557,7 @@ export function ProductionProvider({ children }: { children: ReactNode }) {
         ),
       }));
     },
-    [],
+    [setData],
   );
 
   const deleteTask = useCallback(
@@ -498,7 +567,7 @@ export function ProductionProvider({ children }: { children: ReactNode }) {
         tasks: prev.tasks.filter((t) => t.taskId !== taskId),
       }));
     },
-    [],
+    [setData],
   );
 
   const duplicateTask = useCallback(
@@ -515,7 +584,7 @@ export function ProductionProvider({ children }: { children: ReactNode }) {
         return { ...prev, tasks: [...prev.tasks, newTask] };
       });
     },
-    [],
+    [setData],
   );
 
   const linkTaskToScene = useCallback(
@@ -527,7 +596,7 @@ export function ProductionProvider({ children }: { children: ReactNode }) {
         ),
       }));
     },
-    [],
+    [setData],
   );
 
   const unlinkTaskFromScene = useCallback(
@@ -539,17 +608,21 @@ export function ProductionProvider({ children }: { children: ReactNode }) {
         ),
       }));
     },
-    [],
+    [setData],
   );
 
   // --- Bulk operations ---
   const resetToDefaults = useCallback(() => {
     clearData();
-    setData(defaults);
+    historyRef.current = [defaults];
+    historyIndexRef.current = 0;
+    setDataRaw(defaults);
   }, []);
 
   const importAllData = useCallback((imported: AllData) => {
-    setData(imported);
+    historyRef.current = [imported];
+    historyIndexRef.current = 0;
+    setDataRaw(imported);
   }, []);
 
   const getAllData = useCallback((): AllData => {
@@ -561,6 +634,7 @@ export function ProductionProvider({ children }: { children: ReactNode }) {
       data,
       selectedMovieId,
       setSelectedMovieId,
+      lastSavedAt,
       currentMovie,
       movieScenes,
       movieAssets,
@@ -574,6 +648,7 @@ export function ProductionProvider({ children }: { children: ReactNode }) {
       deleteScene,
       duplicateScene,
       moveScene,
+      reorderScenes,
       addAsset,
       updateAsset,
       deleteAsset,
@@ -592,6 +667,10 @@ export function ProductionProvider({ children }: { children: ReactNode }) {
       duplicateTask,
       linkTaskToScene,
       unlinkTaskFromScene,
+      undo,
+      redo,
+      canUndo,
+      canRedo,
       resetToDefaults,
       importAllData,
       getAllData,
@@ -600,6 +679,7 @@ export function ProductionProvider({ children }: { children: ReactNode }) {
       data,
       selectedMovieId,
       setSelectedMovieId,
+      lastSavedAt,
       currentMovie,
       movieScenes,
       movieAssets,
@@ -613,6 +693,7 @@ export function ProductionProvider({ children }: { children: ReactNode }) {
       deleteScene,
       duplicateScene,
       moveScene,
+      reorderScenes,
       addAsset,
       updateAsset,
       deleteAsset,
@@ -631,6 +712,10 @@ export function ProductionProvider({ children }: { children: ReactNode }) {
       duplicateTask,
       linkTaskToScene,
       unlinkTaskFromScene,
+      undo,
+      redo,
+      canUndo,
+      canRedo,
       resetToDefaults,
       importAllData,
       getAllData,
