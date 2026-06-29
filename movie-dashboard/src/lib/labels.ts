@@ -33,8 +33,8 @@ export const assetTypeLabel: Record<AssetType, string> = {
   generated_image: "生成画像",
   own_photo: "自前写真",
   own_video: "自前動画",
-  ai_video: "AI動画",
-  motion_studio_export: "Motion Studio",
+  ai_video: "生成AI動画",
+  motion_studio_export: "Motion Studio書き出し",
   audio: "音源",
   reference: "参考資料",
   text: "テキスト",
@@ -107,7 +107,7 @@ export const taskStatusColor: Record<TaskStatus, string> = {
 
 export const taskCategoryLabel: Record<TaskCategory, string> = {
   missing_asset: "素材不足",
-  undecided: "未決定",
+  undecided: "未確定事項",
   photo_selection: "写真選定",
   ai_generation: "AI生成",
   motion_studio: "Motion Studio",
