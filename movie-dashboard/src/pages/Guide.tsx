@@ -146,8 +146,84 @@ export function Guide() {
         ]} />
       </SectionCard>
 
-      {/* ───────── 5. 各ページの使い方 ───────── */}
-      <SectionCard title="各ページの使い方" className="mb-6">
+      {/* ───────── 5. ショートカットと便利機能 ───────── */}
+      <SectionCard title="ショートカットと便利機能" className="mb-6">
+
+        <SubHeading>キーボードショートカット</SubHeading>
+        <BulletList items={[
+          "⌘K（Ctrl+K） — グローバル検索を開く。シーン・素材・プロンプト・タスクを横断検索できる",
+          "⌘Z（Ctrl+Z） — 直前のデータ変更を元に戻す（Undo）",
+          "⌘⇧Z（Ctrl+Shift+Z） — 元に戻した変更をやり直す（Redo）",
+          "⌘S（Ctrl+S） — データをsrc/data/に保存する",
+          "? — ショートカット一覧を表示する（入力フォーム中は無効）",
+        ]} />
+        <Tip>
+          Undo/Redoは最大30回分の履歴を保持します。ページを閉じると履歴はリセットされます。
+        </Tip>
+
+        <SubHeading>ダークモード</SubHeading>
+        <BulletList items={[
+          "サイドバー下部の🌙/☀️ボタンで切り替える",
+          "設定はlocalStorageに保存され、リロード後も維持される",
+          "初回はOSのダークモード設定に従う",
+        ]} />
+
+        <SubHeading>ドラッグ&ドロップ（絵コンテ）</SubHeading>
+        <BulletList items={[
+          "特定ムービー選択時に⠿ハンドルをドラッグしてシーンの順番を変えられる",
+          "検索中や「すべて」表示時は▲▼ボタンでの並び替えになる",
+          "並べ替え結果は自動で保存され、CapCut編集パック・制作マップに反映される",
+        ]} />
+
+        <SubHeading>シーンテンプレート（絵コンテ）</SubHeading>
+        <BulletList items={[
+          "シーンの📌ボタンでそのシーンの設定をテンプレートとして保存する",
+          "「📌テンプレート」ボタンからテンプレートを選んでシーンを作成する",
+          "テンプレートにはIDは含まれない — 適用時に新しいIDが自動生成される",
+          "テンプレートはlocalStorageに保存される（JSONエクスポートには含まれない）",
+        ]} />
+
+        <SubHeading>プロンプト比較</SubHeading>
+        <BulletList items={[
+          "プロンプト展開時の⚖️ボタンで1つ目を選択する",
+          "続けて別のプロンプトの⚖️ボタンを押すと、2つを並べて比較できる",
+          "ポジティブ/ネガティブプロンプト、ツール、ステータスを比較できる",
+          "比較選択中はキャンセルボタンで解除できる",
+        ]} />
+
+        <SubHeading>品質ゲート</SubHeading>
+        <BulletList items={[
+          "Gate 1（10秒試作）→ Gate 2（30秒試作）→ Gate 3（本編ラフ）→ Gate 3.5（1章完成）→ Gate 4（上映前）",
+          "ムービーごとにチェック状態を管理する",
+          "チェック状態はlocalStorageに保存される",
+          "「チェックをリセット」で選択中ムービーのチェックをやり直せる",
+        ]} />
+
+        <SubHeading>一括操作</SubHeading>
+        <BulletList items={[
+          "素材ライブラリ・不足リストでチェックボックスを選択し、一括でステータス変更・削除できる",
+          "「すべて選択」で表示中の全件を一度に選択できる",
+          "フィルタを変更すると選択はリセットされる",
+        ]} />
+
+        <SubHeading>CSVエクスポート</SubHeading>
+        <BulletList items={[
+          "素材ライブラリ・絵コンテ・CapCut編集パックからCSV出力できる",
+          "CSVはBOM付きUTF-8 — Excelで開いても日本語が文字化けしにくい",
+          "フィールドはダブルクォートで囲まれ、値内のダブルクォートはエスケープされる",
+        ]} />
+
+        <SubHeading>サムネイルプレビュー</SubHeading>
+        <BulletList items={[
+          "素材ライブラリで画像パス（.jpg/.png/.webp等）を持つ素材にサムネイルが表示される",
+          "サムネイルをクリックすると拡大表示できる",
+          "画像ファイルが存在しない場合はサムネイルが表示されないだけで、画面は壊れない",
+          "サムネイルはブラウザのローカルファイルアクセスに依存する — devサーバーのpublic/から参照する場合のみ表示可能",
+        ]} />
+      </SectionCard>
+
+      {/* ───────── 6. 各ページの詳細 ───────── */}
+      <SectionCard title="各ページの詳細" className="mb-6">
 
         <SubHeading>✈ ダッシュボード</SubHeading>
         <p className="text-sm text-navy-600 mb-2">全体状況を一望するページ。</p>
@@ -229,7 +305,7 @@ export function Guide() {
         ]} />
       </SectionCard>
 
-      {/* ───────── 6. 実制作Tips ───────── */}
+      {/* ───────── 7. 実制作Tips ───────── */}
       <SectionCard title="実制作Tips" className="mb-6">
 
         <SubHeading>素材管理Tips</SubHeading>
@@ -268,7 +344,7 @@ export function Guide() {
         ]} />
       </SectionCard>
 
-      {/* ───────── 7. よくあるミス ───────── */}
+      {/* ───────── 8. よくあるミス ───────── */}
       <SectionCard title="よくあるミス" className="mb-6">
         <div className="space-y-3">
           <Warn>
@@ -303,7 +379,7 @@ export function Guide() {
         </div>
       </SectionCard>
 
-      {/* ───────── 8. localStorageとJSONの注意 ───────── */}
+      {/* ───────── 9. localStorageとJSONの注意 ───────── */}
       <SectionCard title="localStorageとJSONの注意" className="mb-6">
         <div className="space-y-4 text-sm text-navy-700">
           <div>
