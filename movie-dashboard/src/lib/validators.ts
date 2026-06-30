@@ -167,6 +167,7 @@ export function validateData(data: AllData): ValidationIssue[] {
   }
 
   // PhotoSlot validation
+  const assetTypeMap = new Map(data.assets.map((a) => [a.assetId, a.type]));
   const allSlotIds = new Set<string>();
   for (const s of data.scenes) {
     if (!s.photoSlots) continue;
@@ -178,8 +179,23 @@ export function validateData(data: AllData): ValidationIssue[] {
       for (const aid of [...slot.selectedAssetIds, ...slot.candidateAssetIds, ...slot.rejectedAssetIds]) {
         if (!assetIds.has(aid))
           issues.push({ type: "error", entity: "scene", entityId: s.sceneId, message: `photoSlot "${slot.slotId}" が存在しないasset "${aid}" を参照` });
+        else if (assetTypeMap.get(aid) !== "own_photo")
+          issues.push({ type: "warning", entity: "scene", entityId: s.sceneId, message: `photoSlot "${slot.label}" に写真以外の素材 "${aid}" が紐付いている` });
       }
+
+      if (slot.selectedAssetIds.length < slot.requiredCount)
+        issues.push({ type: "warning", entity: "scene", entityId: s.sceneId, message: `photoSlot "${slot.label}" の写真が不足 (${slot.selectedAssetIds.length}/${slot.requiredCount})` });
+
+      if (!slot.comment)
+        issues.push({ type: "warning", entity: "scene", entityId: s.sceneId, message: `photoSlot "${slot.label}" のコメントが未入力` });
     }
+  }
+
+  // Profile movie scenes without photoSlots
+  const profileMovieIds = new Set(data.movies.filter((m) => m.type === "profile").map((m) => m.movieId));
+  for (const s of data.scenes) {
+    if (profileMovieIds.has(s.movieId) && (!s.photoSlots || s.photoSlots.length === 0) && s.person)
+      issues.push({ type: "warning", entity: "scene", entityId: s.sceneId, message: "プロフィールムービーのシーンに写真スロットが未設定" });
   }
 
   return issues;

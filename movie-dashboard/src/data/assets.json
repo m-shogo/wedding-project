@@ -4,8 +4,12 @@
     "type": "generated_image",
     "title": "空港ロビー（人物なし）",
     "path": "02_opening-movie/sample_image/narita_lobby_noperson.png",
-    "relatedSceneIds": ["op-01"],
-    "relatedMovieIds": ["opening"],
+    "relatedSceneIds": [
+      "op-01"
+    ],
+    "relatedMovieIds": [
+      "opening"
+    ],
     "status": "collecting",
     "source": "ChatGPT / DALL-E",
     "usage": "I2V入力用静止画",
@@ -16,8 +20,12 @@
     "type": "motion_studio_export",
     "title": "搭乗券モーション",
     "path": "motion-studio/out/boarding-pass/boarding_pass.webm",
-    "relatedSceneIds": ["op-01"],
-    "relatedMovieIds": ["opening"],
+    "relatedSceneIds": [
+      "op-01"
+    ],
+    "relatedMovieIds": [
+      "opening"
+    ],
     "status": "used",
     "source": "motion-studio (Remotion)",
     "usage": "オープニング冒頭の搭乗券アニメーション",
@@ -28,8 +36,12 @@
     "type": "ai_video",
     "title": "滑走路 離陸シーン",
     "path": "04_ai-video-assets/op_02_runway_takeoff.mp4",
-    "relatedSceneIds": ["op-01"],
-    "relatedMovieIds": ["opening"],
+    "relatedSceneIds": [
+      "op-01"
+    ],
+    "relatedMovieIds": [
+      "opening"
+    ],
     "status": "ready",
     "source": "ComfyUI / Wan2.2 TI2V 5B",
     "usage": "搭乗券の後、離陸の瞬間",
@@ -40,8 +52,13 @@
     "type": "generated_image",
     "title": "飛行機窓からの景色",
     "path": "02_opening-movie/sample_image/airplane_window.png",
-    "relatedSceneIds": ["op-01", "op-02"],
-    "relatedMovieIds": ["opening"],
+    "relatedSceneIds": [
+      "op-01",
+      "op-02"
+    ],
+    "relatedMovieIds": [
+      "opening"
+    ],
     "status": "ready",
     "source": "ChatGPT / DALL-E",
     "usage": "I2V入力用静止画。窓の外に雲海が広がる構図。",
@@ -52,8 +69,12 @@
     "type": "ai_video",
     "title": "雲海ドリーショット",
     "path": "04_ai-video-assets/op_03_cloudscape.mp4",
-    "relatedSceneIds": ["op-02"],
-    "relatedMovieIds": ["opening"],
+    "relatedSceneIds": [
+      "op-02"
+    ],
+    "relatedMovieIds": [
+      "opening"
+    ],
     "status": "ready",
     "source": "ComfyUI / Wan2.2 TI2V 5B",
     "usage": "雲の上を飛んでいる高揚感",
@@ -64,8 +85,12 @@
     "type": "motion_studio_export",
     "title": "世界地図＋航路線モーション",
     "path": "motion-studio/out/map/world_map_route.webm",
-    "relatedSceneIds": ["op-02"],
-    "relatedMovieIds": ["opening"],
+    "relatedSceneIds": [
+      "op-02"
+    ],
+    "relatedMovieIds": [
+      "opening"
+    ],
     "status": "used",
     "source": "motion-studio (Remotion)",
     "usage": "旅行ルートのアニメーション",
@@ -76,8 +101,12 @@
     "type": "own_photo",
     "title": "新郎プロフィール写真",
     "path": "",
-    "relatedSceneIds": ["op-03"],
-    "relatedMovieIds": ["opening"],
+    "relatedSceneIds": [
+      "op-03"
+    ],
+    "relatedMovieIds": [
+      "opening"
+    ],
     "status": "needed",
     "source": "自前写真",
     "usage": "パスポート風フレーム内に配置",
@@ -88,8 +117,12 @@
     "type": "own_photo",
     "title": "新婦プロフィール写真",
     "path": "",
-    "relatedSceneIds": ["op-03"],
-    "relatedMovieIds": ["opening"],
+    "relatedSceneIds": [
+      "op-03"
+    ],
+    "relatedMovieIds": [
+      "opening"
+    ],
     "status": "needed",
     "source": "自前写真",
     "usage": "パスポート風フレーム内に配置",
@@ -100,8 +133,12 @@
     "type": "motion_studio_export",
     "title": "パスポートスタンプモーション",
     "path": "motion-studio/out/stamp/stamp_test_vp9.webm",
-    "relatedSceneIds": ["op-03"],
-    "relatedMovieIds": ["opening"],
+    "relatedSceneIds": [
+      "op-03"
+    ],
+    "relatedMovieIds": [
+      "opening"
+    ],
     "status": "used",
     "source": "motion-studio (Remotion)",
     "usage": "紹介時のスタンプ演出",
@@ -112,8 +149,12 @@
     "type": "ai_video",
     "title": "ハワイ海 夕暮れ",
     "path": "04_ai-video-assets/op_16_hawaii_ocean.mp4",
-    "relatedSceneIds": ["op-04"],
-    "relatedMovieIds": ["opening"],
+    "relatedSceneIds": [
+      "op-04"
+    ],
+    "relatedMovieIds": [
+      "opening"
+    ],
     "status": "ready",
     "source": "ComfyUI / Wan2.2 TI2V 5B",
     "usage": "ハワイ章の背景。3-5秒ループ。",
@@ -124,8 +165,12 @@
     "type": "own_photo",
     "title": "旅行写真セット",
     "path": "",
-    "relatedSceneIds": ["op-04"],
-    "relatedMovieIds": ["opening"],
+    "relatedSceneIds": [
+      "op-04"
+    ],
+    "relatedMovieIds": [
+      "opening"
+    ],
     "status": "needed",
     "source": "自前写真",
     "usage": "ハワイ・旅行の思い出スライド",
@@ -136,8 +181,12 @@
     "type": "own_photo",
     "title": "犬の写真（Cookie & Melon）",
     "path": "",
-    "relatedSceneIds": ["op-04"],
-    "relatedMovieIds": ["opening"],
+    "relatedSceneIds": [
+      "op-04"
+    ],
+    "relatedMovieIds": [
+      "opening"
+    ],
     "status": "needed",
     "source": "自前写真",
     "usage": "思い出の場所の中で犬を紹介",
@@ -148,8 +197,12 @@
     "type": "ai_video",
     "title": "横浜夜景",
     "path": "",
-    "relatedSceneIds": ["op-05"],
-    "relatedMovieIds": ["opening"],
+    "relatedSceneIds": [
+      "op-05"
+    ],
+    "relatedMovieIds": [
+      "opening"
+    ],
     "status": "needed",
     "source": "ComfyUI / Wan2.2",
     "usage": "到着章の背景",
@@ -160,8 +213,12 @@
     "type": "ai_video",
     "title": "扉の光",
     "path": "",
-    "relatedSceneIds": ["op-05"],
-    "relatedMovieIds": ["opening"],
+    "relatedSceneIds": [
+      "op-05"
+    ],
+    "relatedMovieIds": [
+      "opening"
+    ],
     "status": "needed",
     "source": "ComfyUI / Wan2.2",
     "usage": "到着→入場への橋渡し。光が差し込む扉。",
@@ -172,8 +229,12 @@
     "type": "motion_studio_export",
     "title": "カウントダウンモーション",
     "path": "motion-studio/out/countdown/countdown.webm",
-    "relatedSceneIds": ["op-06"],
-    "relatedMovieIds": ["opening"],
+    "relatedSceneIds": [
+      "op-06"
+    ],
+    "relatedMovieIds": [
+      "opening"
+    ],
     "status": "used",
     "source": "motion-studio (Remotion)",
     "usage": "入場前カウントダウン 3→2→1",
@@ -184,8 +245,12 @@
     "type": "ai_video",
     "title": "抽象的な光パーティクル",
     "path": "",
-    "relatedSceneIds": ["op-06"],
-    "relatedMovieIds": ["opening"],
+    "relatedSceneIds": [
+      "op-06"
+    ],
+    "relatedMovieIds": [
+      "opening"
+    ],
     "status": "needed",
     "source": "ComfyUI / Wan2.2",
     "usage": "カウントダウン背景。白フェードへつなぐ。",
@@ -196,8 +261,17 @@
     "type": "audio",
     "title": "オープニングBGM候補",
     "path": "",
-    "relatedSceneIds": ["op-01", "op-02", "op-03", "op-04", "op-05", "op-06"],
-    "relatedMovieIds": ["opening"],
+    "relatedSceneIds": [
+      "op-01",
+      "op-02",
+      "op-03",
+      "op-04",
+      "op-05",
+      "op-06"
+    ],
+    "relatedMovieIds": [
+      "opening"
+    ],
     "status": "needed",
     "source": "未定",
     "usage": "オープニングムービー通しBGM",
@@ -208,8 +282,21 @@
     "type": "audio",
     "title": "プロフィールBGM候補",
     "path": "",
-    "relatedSceneIds": ["pr-01", "pr-02", "pr-03", "pr-04", "pr-05", "pr-06", "pr-07", "pr-08", "pr-09", "pr-10"],
-    "relatedMovieIds": ["profile"],
+    "relatedSceneIds": [
+      "pr-01",
+      "pr-02",
+      "pr-03",
+      "pr-04",
+      "pr-05",
+      "pr-06",
+      "pr-07",
+      "pr-08",
+      "pr-09",
+      "pr-10"
+    ],
+    "relatedMovieIds": [
+      "profile"
+    ],
     "status": "needed",
     "source": "未定",
     "usage": "プロフィールムービー通しBGM",
@@ -220,8 +307,12 @@
     "type": "own_photo",
     "title": "新郎 幼少期写真セット",
     "path": "",
-    "relatedSceneIds": ["pr-02"],
-    "relatedMovieIds": ["profile"],
+    "relatedSceneIds": [
+      "pr-02"
+    ],
+    "relatedMovieIds": [
+      "profile"
+    ],
     "status": "needed",
     "source": "自前写真",
     "usage": "新郎幼少期の紹介スライド",
@@ -232,8 +323,12 @@
     "type": "own_photo",
     "title": "新婦 幼少期写真セット",
     "path": "",
-    "relatedSceneIds": ["pr-05"],
-    "relatedMovieIds": ["profile"],
+    "relatedSceneIds": [
+      "pr-05"
+    ],
+    "relatedMovieIds": [
+      "profile"
+    ],
     "status": "needed",
     "source": "自前写真",
     "usage": "新婦幼少期の紹介スライド",
@@ -244,8 +339,12 @@
     "type": "own_photo",
     "title": "ふたりの出会い〜交際写真セット",
     "path": "",
-    "relatedSceneIds": ["pr-08"],
-    "relatedMovieIds": ["profile"],
+    "relatedSceneIds": [
+      "pr-08"
+    ],
+    "relatedMovieIds": [
+      "profile"
+    ],
     "status": "needed",
     "source": "自前写真",
     "usage": "出会い章の写真スライド",
@@ -256,59 +355,886 @@
     "type": "own_photo",
     "title": "旅行・犬の写真セット",
     "path": "",
-    "relatedSceneIds": ["pr-09"],
-    "relatedMovieIds": ["profile"],
+    "relatedSceneIds": [
+      "pr-09"
+    ],
+    "relatedMovieIds": [
+      "profile"
+    ],
     "status": "needed",
     "source": "自前写真",
     "usage": "思い出の旅行章の写真スライド",
     "notes": "6枚選定が必要。ハワイ、旅行、犬。オープニングとの重複に注意。"
   },
   {
-    "assetId": "pr-photo-01",
+    "assetId": "pr-photo-03",
     "type": "own_photo",
-    "title": "新郎 幼少期 家族写真①候補",
-    "path": "",
-    "relatedSceneIds": ["pr-02"],
-    "relatedMovieIds": ["profile"],
-    "status": "collecting",
-    "source": "自前写真",
-    "usage": "プロフィール新郎幼少期スライド",
-    "notes": "赤ちゃん〜幼児期の家族写真候補。",
-    "personTags": ["groom", "family"],
-    "periodTags": ["childhood"],
+    "title": "新郎 幼少期 3",
+    "path": "photos/profile/groom/childhood/pr-photo-03.jpg",
+    "relatedSceneIds": [
+      "pr-02"
+    ],
+    "relatedMovieIds": [
+      "profile"
+    ],
+    "status": "selected",
+    "source": "家族提供",
+    "usage": "プロフィールムービー写真スロット",
+    "notes": "",
+    "personTags": [
+      "groom"
+    ],
+    "periodTags": [
+      "childhood"
+    ],
     "orientation": "landscape",
-    "photoUsage": "slide"
+    "photoUsage": "slide",
+    "commentDraft": ""
   },
   {
-    "assetId": "pr-photo-02",
+    "assetId": "pr-photo-04",
     "type": "own_photo",
-    "title": "新郎 幼少期 家族写真②候補",
-    "path": "",
-    "relatedSceneIds": ["pr-02"],
-    "relatedMovieIds": ["profile"],
-    "status": "collecting",
-    "source": "自前写真",
-    "usage": "プロフィール新郎幼少期スライド",
-    "notes": "小学校入学前後の写真候補。",
-    "personTags": ["groom", "family"],
-    "periodTags": ["childhood"],
+    "title": "新郎 幼少期 4",
+    "path": "photos/profile/groom/childhood/pr-photo-04.jpg",
+    "relatedSceneIds": [
+      "pr-02"
+    ],
+    "relatedMovieIds": [
+      "profile"
+    ],
+    "status": "selected",
+    "source": "家族提供",
+    "usage": "プロフィールムービー写真スロット",
+    "notes": "",
+    "personTags": [
+      "groom"
+    ],
+    "periodTags": [
+      "childhood"
+    ],
     "orientation": "landscape",
-    "photoUsage": "slide"
+    "photoUsage": "slide",
+    "commentDraft": ""
   },
   {
-    "assetId": "pr-photo-05",
+    "assetId": "pr-photo-06",
     "type": "own_photo",
-    "title": "新婦 幼少期 家族写真①候補",
-    "path": "",
-    "relatedSceneIds": ["pr-05"],
-    "relatedMovieIds": ["profile"],
-    "status": "collecting",
-    "source": "自前写真",
-    "usage": "プロフィール新婦幼少期スライド",
-    "notes": "赤ちゃん〜幼児期の家族写真候補。",
-    "personTags": ["bride", "family"],
-    "periodTags": ["childhood"],
+    "title": "新郎 学生時代 2",
+    "path": "photos/profile/groom/student/pr-photo-06.jpg",
+    "relatedSceneIds": [
+      "pr-03"
+    ],
+    "relatedMovieIds": [
+      "profile"
+    ],
+    "status": "selected",
+    "source": "家族提供",
+    "usage": "プロフィールムービー写真スロット",
+    "notes": "",
+    "personTags": [
+      "groom"
+    ],
+    "periodTags": [
+      "student"
+    ],
     "orientation": "landscape",
-    "photoUsage": "slide"
+    "photoUsage": "slide",
+    "commentDraft": ""
+  },
+  {
+    "assetId": "pr-photo-07",
+    "type": "own_photo",
+    "title": "新郎 学生時代 3",
+    "path": "photos/profile/groom/student/pr-photo-07.jpg",
+    "relatedSceneIds": [
+      "pr-03"
+    ],
+    "relatedMovieIds": [
+      "profile"
+    ],
+    "status": "selected",
+    "source": "家族提供",
+    "usage": "プロフィールムービー写真スロット",
+    "notes": "",
+    "personTags": [
+      "groom"
+    ],
+    "periodTags": [
+      "student"
+    ],
+    "orientation": "landscape",
+    "photoUsage": "slide",
+    "commentDraft": ""
+  },
+  {
+    "assetId": "pr-photo-08",
+    "type": "own_photo",
+    "title": "新郎 学生時代 4",
+    "path": "photos/profile/groom/student/pr-photo-08.jpg",
+    "relatedSceneIds": [
+      "pr-03"
+    ],
+    "relatedMovieIds": [
+      "profile"
+    ],
+    "status": "selected",
+    "source": "家族提供",
+    "usage": "プロフィールムービー写真スロット",
+    "notes": "",
+    "personTags": [
+      "groom"
+    ],
+    "periodTags": [
+      "student"
+    ],
+    "orientation": "landscape",
+    "photoUsage": "slide",
+    "commentDraft": ""
+  },
+  {
+    "assetId": "pr-photo-09",
+    "type": "own_photo",
+    "title": "新郎 社会人 1",
+    "path": "photos/profile/groom/adult/pr-photo-09.jpg",
+    "relatedSceneIds": [
+      "pr-04"
+    ],
+    "relatedMovieIds": [
+      "profile"
+    ],
+    "status": "selected",
+    "source": "家族提供",
+    "usage": "プロフィールムービー写真スロット",
+    "notes": "",
+    "personTags": [
+      "groom"
+    ],
+    "periodTags": [
+      "adult"
+    ],
+    "orientation": "landscape",
+    "photoUsage": "slide",
+    "commentDraft": ""
+  },
+  {
+    "assetId": "pr-photo-10",
+    "type": "own_photo",
+    "title": "新郎 社会人 2",
+    "path": "photos/profile/groom/adult/pr-photo-10.jpg",
+    "relatedSceneIds": [
+      "pr-04"
+    ],
+    "relatedMovieIds": [
+      "profile"
+    ],
+    "status": "selected",
+    "source": "家族提供",
+    "usage": "プロフィールムービー写真スロット",
+    "notes": "",
+    "personTags": [
+      "groom"
+    ],
+    "periodTags": [
+      "adult"
+    ],
+    "orientation": "landscape",
+    "photoUsage": "slide",
+    "commentDraft": ""
+  },
+  {
+    "assetId": "pr-photo-11",
+    "type": "own_photo",
+    "title": "新郎 社会人 3",
+    "path": "photos/profile/groom/adult/pr-photo-11.jpg",
+    "relatedSceneIds": [
+      "pr-04"
+    ],
+    "relatedMovieIds": [
+      "profile"
+    ],
+    "status": "selected",
+    "source": "家族提供",
+    "usage": "プロフィールムービー写真スロット",
+    "notes": "",
+    "personTags": [
+      "groom"
+    ],
+    "periodTags": [
+      "adult"
+    ],
+    "orientation": "landscape",
+    "photoUsage": "slide",
+    "commentDraft": ""
+  },
+  {
+    "assetId": "pr-photo-12",
+    "type": "own_photo",
+    "title": "新婦 幼少期 1",
+    "path": "photos/profile/bride/childhood/pr-photo-12.jpg",
+    "relatedSceneIds": [
+      "pr-05"
+    ],
+    "relatedMovieIds": [
+      "profile"
+    ],
+    "status": "selected",
+    "source": "家族提供",
+    "usage": "プロフィールムービー写真スロット",
+    "notes": "",
+    "personTags": [
+      "bride"
+    ],
+    "periodTags": [
+      "childhood"
+    ],
+    "orientation": "landscape",
+    "photoUsage": "slide",
+    "commentDraft": ""
+  },
+  {
+    "assetId": "pr-photo-13",
+    "type": "own_photo",
+    "title": "新婦 幼少期 2",
+    "path": "photos/profile/bride/childhood/pr-photo-13.jpg",
+    "relatedSceneIds": [
+      "pr-05"
+    ],
+    "relatedMovieIds": [
+      "profile"
+    ],
+    "status": "selected",
+    "source": "家族提供",
+    "usage": "プロフィールムービー写真スロット",
+    "notes": "",
+    "personTags": [
+      "bride"
+    ],
+    "periodTags": [
+      "childhood"
+    ],
+    "orientation": "landscape",
+    "photoUsage": "slide",
+    "commentDraft": ""
+  },
+  {
+    "assetId": "pr-photo-14",
+    "type": "own_photo",
+    "title": "新婦 幼少期 3",
+    "path": "photos/profile/bride/childhood/pr-photo-14.jpg",
+    "relatedSceneIds": [
+      "pr-05"
+    ],
+    "relatedMovieIds": [
+      "profile"
+    ],
+    "status": "selected",
+    "source": "家族提供",
+    "usage": "プロフィールムービー写真スロット",
+    "notes": "",
+    "personTags": [
+      "bride"
+    ],
+    "periodTags": [
+      "childhood"
+    ],
+    "orientation": "landscape",
+    "photoUsage": "slide",
+    "commentDraft": ""
+  },
+  {
+    "assetId": "pr-photo-15",
+    "type": "own_photo",
+    "title": "新婦 幼少期 4",
+    "path": "photos/profile/bride/childhood/pr-photo-15.jpg",
+    "relatedSceneIds": [
+      "pr-05"
+    ],
+    "relatedMovieIds": [
+      "profile"
+    ],
+    "status": "selected",
+    "source": "家族提供",
+    "usage": "プロフィールムービー写真スロット",
+    "notes": "",
+    "personTags": [
+      "bride"
+    ],
+    "periodTags": [
+      "childhood"
+    ],
+    "orientation": "landscape",
+    "photoUsage": "slide",
+    "commentDraft": ""
+  },
+  {
+    "assetId": "pr-photo-16",
+    "type": "own_photo",
+    "title": "新婦 学生時代 1",
+    "path": "photos/profile/bride/student/pr-photo-16.jpg",
+    "relatedSceneIds": [
+      "pr-06"
+    ],
+    "relatedMovieIds": [
+      "profile"
+    ],
+    "status": "selected",
+    "source": "家族提供",
+    "usage": "プロフィールムービー写真スロット",
+    "notes": "",
+    "personTags": [
+      "bride"
+    ],
+    "periodTags": [
+      "student"
+    ],
+    "orientation": "landscape",
+    "photoUsage": "slide",
+    "commentDraft": ""
+  },
+  {
+    "assetId": "pr-photo-17",
+    "type": "own_photo",
+    "title": "新婦 学生時代 2",
+    "path": "photos/profile/bride/student/pr-photo-17.jpg",
+    "relatedSceneIds": [
+      "pr-06"
+    ],
+    "relatedMovieIds": [
+      "profile"
+    ],
+    "status": "selected",
+    "source": "家族提供",
+    "usage": "プロフィールムービー写真スロット",
+    "notes": "",
+    "personTags": [
+      "bride"
+    ],
+    "periodTags": [
+      "student"
+    ],
+    "orientation": "landscape",
+    "photoUsage": "slide",
+    "commentDraft": ""
+  },
+  {
+    "assetId": "pr-photo-18",
+    "type": "own_photo",
+    "title": "新婦 学生時代 3",
+    "path": "photos/profile/bride/student/pr-photo-18.jpg",
+    "relatedSceneIds": [
+      "pr-06"
+    ],
+    "relatedMovieIds": [
+      "profile"
+    ],
+    "status": "selected",
+    "source": "家族提供",
+    "usage": "プロフィールムービー写真スロット",
+    "notes": "",
+    "personTags": [
+      "bride"
+    ],
+    "periodTags": [
+      "student"
+    ],
+    "orientation": "landscape",
+    "photoUsage": "slide",
+    "commentDraft": ""
+  },
+  {
+    "assetId": "pr-photo-19",
+    "type": "own_photo",
+    "title": "新婦 学生時代 4",
+    "path": "photos/profile/bride/student/pr-photo-19.jpg",
+    "relatedSceneIds": [
+      "pr-06"
+    ],
+    "relatedMovieIds": [
+      "profile"
+    ],
+    "status": "selected",
+    "source": "家族提供",
+    "usage": "プロフィールムービー写真スロット",
+    "notes": "",
+    "personTags": [
+      "bride"
+    ],
+    "periodTags": [
+      "student"
+    ],
+    "orientation": "landscape",
+    "photoUsage": "slide",
+    "commentDraft": ""
+  },
+  {
+    "assetId": "pr-photo-20",
+    "type": "own_photo",
+    "title": "新婦 社会人 1",
+    "path": "photos/profile/bride/adult/pr-photo-20.jpg",
+    "relatedSceneIds": [
+      "pr-07"
+    ],
+    "relatedMovieIds": [
+      "profile"
+    ],
+    "status": "selected",
+    "source": "家族提供",
+    "usage": "プロフィールムービー写真スロット",
+    "notes": "",
+    "personTags": [
+      "bride"
+    ],
+    "periodTags": [
+      "adult"
+    ],
+    "orientation": "landscape",
+    "photoUsage": "slide",
+    "commentDraft": ""
+  },
+  {
+    "assetId": "pr-photo-21",
+    "type": "own_photo",
+    "title": "新婦 社会人 2",
+    "path": "photos/profile/bride/adult/pr-photo-21.jpg",
+    "relatedSceneIds": [
+      "pr-07"
+    ],
+    "relatedMovieIds": [
+      "profile"
+    ],
+    "status": "selected",
+    "source": "家族提供",
+    "usage": "プロフィールムービー写真スロット",
+    "notes": "",
+    "personTags": [
+      "bride"
+    ],
+    "periodTags": [
+      "adult"
+    ],
+    "orientation": "landscape",
+    "photoUsage": "slide",
+    "commentDraft": ""
+  },
+  {
+    "assetId": "pr-photo-22",
+    "type": "own_photo",
+    "title": "新婦 社会人 3",
+    "path": "photos/profile/bride/adult/pr-photo-22.jpg",
+    "relatedSceneIds": [
+      "pr-07"
+    ],
+    "relatedMovieIds": [
+      "profile"
+    ],
+    "status": "selected",
+    "source": "家族提供",
+    "usage": "プロフィールムービー写真スロット",
+    "notes": "",
+    "personTags": [
+      "bride"
+    ],
+    "periodTags": [
+      "adult"
+    ],
+    "orientation": "landscape",
+    "photoUsage": "slide",
+    "commentDraft": ""
+  },
+  {
+    "assetId": "pr-photo-23",
+    "type": "own_photo",
+    "title": "ふたり 出会い 1",
+    "path": "photos/profile/both/meeting/pr-photo-23.jpg",
+    "relatedSceneIds": [
+      "pr-08"
+    ],
+    "relatedMovieIds": [
+      "profile"
+    ],
+    "status": "selected",
+    "source": "家族提供",
+    "usage": "プロフィールムービー写真スロット",
+    "notes": "",
+    "personTags": [
+      "both"
+    ],
+    "periodTags": [
+      "meeting"
+    ],
+    "orientation": "landscape",
+    "photoUsage": "slide",
+    "commentDraft": ""
+  },
+  {
+    "assetId": "pr-photo-24",
+    "type": "own_photo",
+    "title": "ふたり 出会い 2",
+    "path": "photos/profile/both/meeting/pr-photo-24.jpg",
+    "relatedSceneIds": [
+      "pr-08"
+    ],
+    "relatedMovieIds": [
+      "profile"
+    ],
+    "status": "selected",
+    "source": "家族提供",
+    "usage": "プロフィールムービー写真スロット",
+    "notes": "",
+    "personTags": [
+      "both"
+    ],
+    "periodTags": [
+      "meeting"
+    ],
+    "orientation": "landscape",
+    "photoUsage": "slide",
+    "commentDraft": ""
+  },
+  {
+    "assetId": "pr-photo-25",
+    "type": "own_photo",
+    "title": "ふたり 出会い 3",
+    "path": "photos/profile/both/meeting/pr-photo-25.jpg",
+    "relatedSceneIds": [
+      "pr-08"
+    ],
+    "relatedMovieIds": [
+      "profile"
+    ],
+    "status": "selected",
+    "source": "家族提供",
+    "usage": "プロフィールムービー写真スロット",
+    "notes": "",
+    "personTags": [
+      "both"
+    ],
+    "periodTags": [
+      "meeting"
+    ],
+    "orientation": "landscape",
+    "photoUsage": "slide",
+    "commentDraft": ""
+  },
+  {
+    "assetId": "pr-photo-26",
+    "type": "own_photo",
+    "title": "ふたり 現在 4",
+    "path": "photos/profile/both/present/pr-photo-26.jpg",
+    "relatedSceneIds": [
+      "pr-08"
+    ],
+    "relatedMovieIds": [
+      "profile"
+    ],
+    "status": "selected",
+    "source": "家族提供",
+    "usage": "プロフィールムービー写真スロット",
+    "notes": "",
+    "personTags": [
+      "both"
+    ],
+    "periodTags": [
+      "present"
+    ],
+    "orientation": "landscape",
+    "photoUsage": "slide",
+    "commentDraft": ""
+  },
+  {
+    "assetId": "pr-photo-27",
+    "type": "own_photo",
+    "title": "ふたり 現在 5",
+    "path": "photos/profile/both/present/pr-photo-27.jpg",
+    "relatedSceneIds": [
+      "pr-08"
+    ],
+    "relatedMovieIds": [
+      "profile"
+    ],
+    "status": "selected",
+    "source": "家族提供",
+    "usage": "プロフィールムービー写真スロット",
+    "notes": "",
+    "personTags": [
+      "both"
+    ],
+    "periodTags": [
+      "present"
+    ],
+    "orientation": "landscape",
+    "photoUsage": "slide",
+    "commentDraft": ""
+  },
+  {
+    "assetId": "pr-photo-28",
+    "type": "own_photo",
+    "title": "ふたり 現在 1",
+    "path": "photos/profile/both/present/pr-photo-28.jpg",
+    "relatedSceneIds": [
+      "pr-09"
+    ],
+    "relatedMovieIds": [
+      "profile"
+    ],
+    "status": "selected",
+    "source": "家族提供",
+    "usage": "プロフィールムービー写真スロット",
+    "notes": "",
+    "personTags": [
+      "both"
+    ],
+    "periodTags": [
+      "present"
+    ],
+    "orientation": "landscape",
+    "photoUsage": "slide",
+    "commentDraft": ""
+  },
+  {
+    "assetId": "pr-photo-29",
+    "type": "own_photo",
+    "title": "ふたり 現在 2",
+    "path": "photos/profile/both/present/pr-photo-29.jpg",
+    "relatedSceneIds": [
+      "pr-09"
+    ],
+    "relatedMovieIds": [
+      "profile"
+    ],
+    "status": "selected",
+    "source": "家族提供",
+    "usage": "プロフィールムービー写真スロット",
+    "notes": "",
+    "personTags": [
+      "both"
+    ],
+    "periodTags": [
+      "present"
+    ],
+    "orientation": "landscape",
+    "photoUsage": "slide",
+    "commentDraft": ""
+  },
+  {
+    "assetId": "pr-photo-30",
+    "type": "own_photo",
+    "title": "ふたり 現在 3",
+    "path": "photos/profile/both/present/pr-photo-30.jpg",
+    "relatedSceneIds": [
+      "pr-09"
+    ],
+    "relatedMovieIds": [
+      "profile"
+    ],
+    "status": "selected",
+    "source": "家族提供",
+    "usage": "プロフィールムービー写真スロット",
+    "notes": "",
+    "personTags": [
+      "both"
+    ],
+    "periodTags": [
+      "present"
+    ],
+    "orientation": "landscape",
+    "photoUsage": "slide",
+    "commentDraft": ""
+  },
+  {
+    "assetId": "pr-photo-31",
+    "type": "own_photo",
+    "title": "ふたり 現在 4",
+    "path": "photos/profile/both/present/pr-photo-31.jpg",
+    "relatedSceneIds": [
+      "pr-09"
+    ],
+    "relatedMovieIds": [
+      "profile"
+    ],
+    "status": "selected",
+    "source": "家族提供",
+    "usage": "プロフィールムービー写真スロット",
+    "notes": "",
+    "personTags": [
+      "both"
+    ],
+    "periodTags": [
+      "present"
+    ],
+    "orientation": "landscape",
+    "photoUsage": "slide",
+    "commentDraft": ""
+  },
+  {
+    "assetId": "pr-photo-32",
+    "type": "own_photo",
+    "title": "ふたり 現在 5",
+    "path": "photos/profile/both/present/pr-photo-32.jpg",
+    "relatedSceneIds": [
+      "pr-09"
+    ],
+    "relatedMovieIds": [
+      "profile"
+    ],
+    "status": "selected",
+    "source": "家族提供",
+    "usage": "プロフィールムービー写真スロット",
+    "notes": "",
+    "personTags": [
+      "both"
+    ],
+    "periodTags": [
+      "present"
+    ],
+    "orientation": "landscape",
+    "photoUsage": "slide",
+    "commentDraft": ""
+  },
+  {
+    "assetId": "pr-photo-33",
+    "type": "own_photo",
+    "title": "ふたり 現在 6",
+    "path": "photos/profile/both/present/pr-photo-33.jpg",
+    "relatedSceneIds": [
+      "pr-09"
+    ],
+    "relatedMovieIds": [
+      "profile"
+    ],
+    "status": "selected",
+    "source": "家族提供",
+    "usage": "プロフィールムービー写真スロット",
+    "notes": "",
+    "personTags": [
+      "both"
+    ],
+    "periodTags": [
+      "present"
+    ],
+    "orientation": "landscape",
+    "photoUsage": "slide",
+    "commentDraft": ""
+  },
+  {
+    "assetId": "pr-photo-34",
+    "type": "own_photo",
+    "title": "プロフィール写真 1",
+    "path": "photos/profile/other/present/pr-photo-34.jpg",
+    "relatedSceneIds": [
+      "pr-10"
+    ],
+    "relatedMovieIds": [
+      "profile"
+    ],
+    "status": "selected",
+    "source": "家族提供",
+    "usage": "プロフィールムービー写真スロット",
+    "notes": "",
+    "personTags": [],
+    "periodTags": [
+      "present"
+    ],
+    "orientation": "landscape",
+    "photoUsage": "slide",
+    "commentDraft": ""
+  },
+  {
+    "assetId": "pr-photo-35",
+    "type": "own_photo",
+    "title": "プロフィール写真 1",
+    "path": "photos/profile/other/present/pr-photo-35.jpg",
+    "relatedSceneIds": [
+      "pr-10"
+    ],
+    "relatedMovieIds": [
+      "profile"
+    ],
+    "status": "selected",
+    "source": "家族提供",
+    "usage": "プロフィールムービー写真スロット",
+    "notes": "",
+    "personTags": [],
+    "periodTags": [
+      "present"
+    ],
+    "orientation": "landscape",
+    "photoUsage": "slide",
+    "commentDraft": ""
+  },
+  {
+    "assetId": "pr-photo-36",
+    "type": "own_photo",
+    "title": "家族写真①",
+    "path": "photos/profile/groom/childhood/pr-photo-36.jpg",
+    "relatedSceneIds": [
+      "pr-02"
+    ],
+    "relatedMovieIds": [
+      "profile"
+    ],
+    "status": "selected",
+    "source": "家族提供",
+    "usage": "プロフィールムービー写真スロット",
+    "notes": "",
+    "personTags": [
+      "groom"
+    ],
+    "periodTags": [
+      "childhood"
+    ],
+    "orientation": "landscape",
+    "photoUsage": "slide",
+    "commentDraft": ""
+  },
+  {
+    "assetId": "pr-photo-37",
+    "type": "own_photo",
+    "title": "家族写真②",
+    "path": "photos/profile/groom/childhood/pr-photo-37.jpg",
+    "relatedSceneIds": [
+      "pr-02"
+    ],
+    "relatedMovieIds": [
+      "profile"
+    ],
+    "status": "selected",
+    "source": "家族提供",
+    "usage": "プロフィールムービー写真スロット",
+    "notes": "",
+    "personTags": [
+      "groom"
+    ],
+    "periodTags": [
+      "childhood"
+    ],
+    "orientation": "landscape",
+    "photoUsage": "slide",
+    "commentDraft": ""
+  },
+  {
+    "assetId": "pr-photo-38",
+    "type": "own_photo",
+    "title": "中学時代",
+    "path": "photos/profile/groom/student/pr-photo-38.jpg",
+    "relatedSceneIds": [
+      "pr-03"
+    ],
+    "relatedMovieIds": [
+      "profile"
+    ],
+    "status": "selected",
+    "source": "家族提供",
+    "usage": "プロフィールムービー写真スロット",
+    "notes": "",
+    "personTags": [
+      "groom"
+    ],
+    "periodTags": [
+      "student"
+    ],
+    "orientation": "landscape",
+    "photoUsage": "slide",
+    "commentDraft": ""
   }
 ]

@@ -160,8 +160,10 @@
     "assets": [
       "pr-asset-01",
       "pr-asset-02",
-      "pr-photo-01",
-      "pr-photo-02"
+      "pr-photo-03",
+      "pr-photo-04",
+      "pr-photo-36",
+      "pr-photo-37"
     ],
     "promptIds": [],
     "status": "not_started",
@@ -178,12 +180,12 @@
         "period": "childhood",
         "yearLabel": "1990-1995",
         "requiredCount": 1,
-        "selectedAssetIds": [],
-        "candidateAssetIds": [
-          "pr-photo-01"
+        "selectedAssetIds": [
+          "pr-photo-36"
         ],
+        "candidateAssetIds": [],
         "rejectedAssetIds": [],
-        "comment": "",
+        "comment": "やんちゃな笑顔の写真",
         "notes": "赤ちゃん〜幼児期の家族写真。温かみのある表情が理想。"
       },
       {
@@ -193,12 +195,12 @@
         "period": "childhood",
         "yearLabel": "1995-2000",
         "requiredCount": 1,
-        "selectedAssetIds": [],
-        "candidateAssetIds": [
-          "pr-photo-02"
+        "selectedAssetIds": [
+          "pr-photo-37"
         ],
+        "candidateAssetIds": [],
         "rejectedAssetIds": [],
-        "comment": "",
+        "comment": "家族旅行の一枚",
         "notes": "小学校入学前後。兄弟や祖父母との写真も可。"
       },
       {
@@ -208,10 +210,12 @@
         "period": "childhood",
         "yearLabel": "1993-1997",
         "requiredCount": 1,
-        "selectedAssetIds": [],
+        "selectedAssetIds": [
+          "pr-photo-03"
+        ],
         "candidateAssetIds": [],
         "rejectedAssetIds": [],
-        "comment": "",
+        "comment": "七五三の記念写真",
         "notes": "七五三、入園式、運動会など行事の写真。"
       },
       {
@@ -221,10 +225,12 @@
         "period": "childhood",
         "yearLabel": "2000-2005",
         "requiredCount": 1,
-        "selectedAssetIds": [],
+        "selectedAssetIds": [
+          "pr-photo-04"
+        ],
         "candidateAssetIds": [],
         "rejectedAssetIds": [],
-        "comment": "",
+        "comment": "お気に入りのおもちゃと",
         "notes": "小学校時代。友達や部活の写真でも可。"
       }
     ]
@@ -239,7 +245,11 @@
     "caption": "青春の日々",
     "bgmCue": "BGMが少しテンポアップ。楽しさを出す。",
     "assets": [
-      "pr-asset-01"
+      "pr-asset-01",
+      "pr-photo-06",
+      "pr-photo-07",
+      "pr-photo-08",
+      "pr-photo-38"
     ],
     "promptIds": [],
     "status": "not_started",
@@ -256,10 +266,12 @@
         "period": "student",
         "yearLabel": "2005-2008",
         "requiredCount": 1,
-        "selectedAssetIds": [],
+        "selectedAssetIds": [
+          "pr-photo-38"
+        ],
         "candidateAssetIds": [],
         "rejectedAssetIds": [],
-        "comment": "",
+        "comment": "部活の仲間と",
         "notes": "中学の部活や友達との写真。"
       },
       {
@@ -269,10 +281,12 @@
         "period": "student",
         "yearLabel": "2008-2011",
         "requiredCount": 1,
-        "selectedAssetIds": [],
+        "selectedAssetIds": [
+          "pr-photo-06"
+        ],
         "candidateAssetIds": [],
         "rejectedAssetIds": [],
-        "comment": "",
+        "comment": "修学旅行の思い出",
         "notes": "高校の友人やイベントの写真。"
       },
       {
@@ -282,10 +296,12 @@
         "period": "student",
         "yearLabel": "2011-2015",
         "requiredCount": 1,
-        "selectedAssetIds": [],
+        "selectedAssetIds": [
+          "pr-photo-07"
+        ],
         "candidateAssetIds": [],
         "rejectedAssetIds": [],
-        "comment": "",
+        "comment": "文化祭での一枚",
         "notes": "大学時代のサークルや友人との写真。"
       },
       {
@@ -295,10 +311,12 @@
         "period": "student",
         "yearLabel": "2011-2015",
         "requiredCount": 1,
-        "selectedAssetIds": [],
+        "selectedAssetIds": [
+          "pr-photo-08"
+        ],
         "candidateAssetIds": [],
         "rejectedAssetIds": [],
-        "comment": "",
+        "comment": "卒業式の日",
         "notes": "大学の卒業式やイベント写真。笑いのある写真も歓迎。"
       }
     ]
@@ -313,7 +331,10 @@
     "caption": "新しい旅路へ",
     "bgmCue": "BGMは安定。落ち着いた印象。",
     "assets": [
-      "pr-asset-01"
+      "pr-asset-01",
+      "pr-photo-09",
+      "pr-photo-10",
+      "pr-photo-11"
     ],
     "promptIds": [],
     "status": "not_started",
@@ -330,10 +351,12 @@
         "period": "adult",
         "yearLabel": "2015-",
         "requiredCount": 1,
-        "selectedAssetIds": [],
+        "selectedAssetIds": [
+          "pr-photo-09"
+        ],
         "candidateAssetIds": [],
         "rejectedAssetIds": [],
-        "comment": "",
+        "comment": "社会人になった頃",
         "notes": "仕事や日常の写真。人柄が伝わるもの。"
       },
       {
@@ -343,10 +366,12 @@
         "period": "adult",
         "yearLabel": "2015-",
         "requiredCount": 1,
-        "selectedAssetIds": [],
+        "selectedAssetIds": [
+          "pr-photo-10"
+        ],
         "candidateAssetIds": [],
         "rejectedAssetIds": [],
-        "comment": "",
+        "comment": "同期との旅行",
         "notes": "趣味や友人との写真。楽しそうな表情がベスト。"
       },
       {
@@ -356,10 +381,12 @@
         "period": "adult",
         "yearLabel": "2015-",
         "requiredCount": 1,
-        "selectedAssetIds": [],
+        "selectedAssetIds": [
+          "pr-photo-11"
+        ],
         "candidateAssetIds": [],
         "rejectedAssetIds": [],
-        "comment": "",
+        "comment": "趣味を楽しむ姿",
         "notes": "旅行、イベント、印象的なシーンの写真。"
       }
     ]
@@ -376,7 +403,10 @@
     "assets": [
       "pr-asset-01",
       "pr-asset-03",
-      "pr-photo-05"
+      "pr-photo-12",
+      "pr-photo-13",
+      "pr-photo-14",
+      "pr-photo-15"
     ],
     "promptIds": [],
     "status": "not_started",
@@ -393,12 +423,12 @@
         "period": "childhood",
         "yearLabel": "1992-1997",
         "requiredCount": 1,
-        "selectedAssetIds": [],
-        "candidateAssetIds": [
-          "pr-photo-05"
+        "selectedAssetIds": [
+          "pr-photo-12"
         ],
+        "candidateAssetIds": [],
         "rejectedAssetIds": [],
-        "comment": "",
+        "comment": "笑顔が可愛い幼少期",
         "notes": "赤ちゃん〜幼児期。家族との温かい写真。"
       },
       {
@@ -408,10 +438,12 @@
         "period": "childhood",
         "yearLabel": "1997-2002",
         "requiredCount": 1,
-        "selectedAssetIds": [],
+        "selectedAssetIds": [
+          "pr-photo-13"
+        ],
         "candidateAssetIds": [],
         "rejectedAssetIds": [],
-        "comment": "",
+        "comment": "家族みんなで",
         "notes": "小学校入学前後の写真。"
       },
       {
@@ -421,10 +453,12 @@
         "period": "childhood",
         "yearLabel": "1995-1999",
         "requiredCount": 1,
-        "selectedAssetIds": [],
+        "selectedAssetIds": [
+          "pr-photo-14"
+        ],
         "candidateAssetIds": [],
         "rejectedAssetIds": [],
-        "comment": "",
+        "comment": "ピアノの発表会",
         "notes": "七五三、ピアノ発表会、運動会など。"
       },
       {
@@ -434,10 +468,12 @@
         "period": "childhood",
         "yearLabel": "2002-2007",
         "requiredCount": 1,
-        "selectedAssetIds": [],
+        "selectedAssetIds": [
+          "pr-photo-15"
+        ],
         "candidateAssetIds": [],
         "rejectedAssetIds": [],
-        "comment": "",
+        "comment": "お花と一緒に",
         "notes": "小学校時代。友達との写真も可。"
       }
     ]
@@ -452,7 +488,11 @@
     "caption": "大切な仲間たち",
     "bgmCue": "BGMが明るくなる。楽しい雰囲気。",
     "assets": [
-      "pr-asset-01"
+      "pr-asset-01",
+      "pr-photo-16",
+      "pr-photo-17",
+      "pr-photo-18",
+      "pr-photo-19"
     ],
     "promptIds": [],
     "status": "not_started",
@@ -469,10 +509,12 @@
         "period": "student",
         "yearLabel": "2007-2010",
         "requiredCount": 1,
-        "selectedAssetIds": [],
+        "selectedAssetIds": [
+          "pr-photo-16"
+        ],
         "candidateAssetIds": [],
         "rejectedAssetIds": [],
-        "comment": "",
+        "comment": "友達とプリクラ",
         "notes": "中学の友人やイベント写真。"
       },
       {
@@ -482,10 +524,12 @@
         "period": "student",
         "yearLabel": "2010-2013",
         "requiredCount": 1,
-        "selectedAssetIds": [],
+        "selectedAssetIds": [
+          "pr-photo-17"
+        ],
         "candidateAssetIds": [],
         "rejectedAssetIds": [],
-        "comment": "",
+        "comment": "体育祭の思い出",
         "notes": "高校の友人やクラブ活動の写真。"
       },
       {
@@ -495,10 +539,12 @@
         "period": "student",
         "yearLabel": "2013-2017",
         "requiredCount": 1,
-        "selectedAssetIds": [],
+        "selectedAssetIds": [
+          "pr-photo-18"
+        ],
         "candidateAssetIds": [],
         "rejectedAssetIds": [],
-        "comment": "",
+        "comment": "放課後の教室",
         "notes": "大学時代の友人との写真。"
       },
       {
@@ -508,10 +554,12 @@
         "period": "student",
         "yearLabel": "2013-2017",
         "requiredCount": 1,
-        "selectedAssetIds": [],
+        "selectedAssetIds": [
+          "pr-photo-19"
+        ],
         "candidateAssetIds": [],
         "rejectedAssetIds": [],
-        "comment": "",
+        "comment": "制服姿の記念",
         "notes": "卒業式、旅行、サークルの写真など。"
       }
     ]
@@ -526,7 +574,10 @@
     "caption": "それぞれの道",
     "bgmCue": "BGMは穏やかに維持。次の出会い章への橋渡し。",
     "assets": [
-      "pr-asset-01"
+      "pr-asset-01",
+      "pr-photo-20",
+      "pr-photo-21",
+      "pr-photo-22"
     ],
     "promptIds": [],
     "status": "not_started",
@@ -543,10 +594,12 @@
         "period": "adult",
         "yearLabel": "2017-",
         "requiredCount": 1,
-        "selectedAssetIds": [],
+        "selectedAssetIds": [
+          "pr-photo-20"
+        ],
         "candidateAssetIds": [],
         "rejectedAssetIds": [],
-        "comment": "",
+        "comment": "初めての一人暮らし",
         "notes": "仕事や日常の写真。"
       },
       {
@@ -556,10 +609,12 @@
         "period": "adult",
         "yearLabel": "2017-",
         "requiredCount": 1,
-        "selectedAssetIds": [],
+        "selectedAssetIds": [
+          "pr-photo-21"
+        ],
         "candidateAssetIds": [],
         "rejectedAssetIds": [],
-        "comment": "",
+        "comment": "職場の仲間と",
         "notes": "趣味や友人との写真。"
       },
       {
@@ -569,10 +624,12 @@
         "period": "adult",
         "yearLabel": "2017-",
         "requiredCount": 1,
-        "selectedAssetIds": [],
+        "selectedAssetIds": [
+          "pr-photo-22"
+        ],
         "candidateAssetIds": [],
         "rejectedAssetIds": [],
-        "comment": "",
+        "comment": "休日のカフェにて",
         "notes": "旅行やイベントの写真。"
       }
     ]
@@ -588,7 +645,12 @@
     "bgmCue": "BGMが感動的に盛り上がる。出会いの特別感。",
     "assets": [
       "pr-asset-01",
-      "pr-asset-04"
+      "pr-asset-04",
+      "pr-photo-23",
+      "pr-photo-24",
+      "pr-photo-25",
+      "pr-photo-26",
+      "pr-photo-27"
     ],
     "promptIds": [],
     "status": "not_started",
@@ -605,10 +667,12 @@
         "period": "meeting",
         "yearLabel": "2018",
         "requiredCount": 1,
-        "selectedAssetIds": [],
+        "selectedAssetIds": [
+          "pr-photo-23"
+        ],
         "candidateAssetIds": [],
         "rejectedAssetIds": [],
-        "comment": "",
+        "comment": "初めてのデート",
         "notes": "出会った頃の写真。初期のツーショット。"
       },
       {
@@ -618,10 +682,12 @@
         "period": "meeting",
         "yearLabel": "2018-2019",
         "requiredCount": 1,
-        "selectedAssetIds": [],
+        "selectedAssetIds": [
+          "pr-photo-24"
+        ],
         "candidateAssetIds": [],
         "rejectedAssetIds": [],
-        "comment": "",
+        "comment": "二人で見た夕焼け",
         "notes": "初デートや初期の思い出の場所。"
       },
       {
@@ -631,10 +697,12 @@
         "period": "meeting",
         "yearLabel": "2019",
         "requiredCount": 1,
-        "selectedAssetIds": [],
+        "selectedAssetIds": [
+          "pr-photo-25"
+        ],
         "candidateAssetIds": [],
         "rejectedAssetIds": [],
-        "comment": "",
+        "comment": "記念日のディナー",
         "notes": "付き合い始めた頃の写真。"
       },
       {
@@ -644,10 +712,12 @@
         "period": "present",
         "yearLabel": "2020-",
         "requiredCount": 1,
-        "selectedAssetIds": [],
+        "selectedAssetIds": [
+          "pr-photo-26"
+        ],
         "candidateAssetIds": [],
         "rejectedAssetIds": [],
-        "comment": "",
+        "comment": "家族みんなで集合",
         "notes": "一緒に暮らし始めた頃の写真。日常の幸福感。"
       },
       {
@@ -657,10 +727,12 @@
         "period": "present",
         "yearLabel": "2020-",
         "requiredCount": 1,
-        "selectedAssetIds": [],
+        "selectedAssetIds": [
+          "pr-photo-27"
+        ],
         "candidateAssetIds": [],
         "rejectedAssetIds": [],
-        "comment": "",
+        "comment": "お気に入りの場所で",
         "notes": "記念日や誕生日などのイベント写真。"
       }
     ]
@@ -676,7 +748,13 @@
     "bgmCue": "BGMのサビ。一番盛り上がるポイント。",
     "assets": [
       "pr-asset-01",
-      "pr-asset-05"
+      "pr-asset-05",
+      "pr-photo-28",
+      "pr-photo-29",
+      "pr-photo-30",
+      "pr-photo-31",
+      "pr-photo-32",
+      "pr-photo-33"
     ],
     "promptIds": [],
     "status": "not_started",
@@ -692,10 +770,12 @@
         "period": "present",
         "yearLabel": "2020-",
         "requiredCount": 1,
-        "selectedAssetIds": [],
+        "selectedAssetIds": [
+          "pr-photo-28"
+        ],
         "candidateAssetIds": [],
         "rejectedAssetIds": [],
-        "comment": "",
+        "comment": "ハワイ旅行の海辺",
         "notes": "国内旅行の写真。風景とふたりが写っているもの。"
       },
       {
@@ -705,10 +785,12 @@
         "period": "present",
         "yearLabel": "2020-",
         "requiredCount": 1,
-        "selectedAssetIds": [],
+        "selectedAssetIds": [
+          "pr-photo-29"
+        ],
         "candidateAssetIds": [],
         "rejectedAssetIds": [],
-        "comment": "",
+        "comment": "Cookieとお散歩",
         "notes": "海外旅行の写真。ハワイなど。"
       },
       {
@@ -718,10 +800,12 @@
         "period": "present",
         "yearLabel": "2023",
         "requiredCount": 1,
-        "selectedAssetIds": [],
+        "selectedAssetIds": [
+          "pr-photo-30"
+        ],
         "candidateAssetIds": [],
         "rejectedAssetIds": [],
-        "comment": "",
+        "comment": "Melonとの日常",
         "notes": "ハワイ旅行のベストショット。"
       },
       {
@@ -731,10 +815,12 @@
         "period": "present",
         "yearLabel": "",
         "requiredCount": 1,
-        "selectedAssetIds": [],
+        "selectedAssetIds": [
+          "pr-photo-31"
+        ],
         "candidateAssetIds": [],
         "rejectedAssetIds": [],
-        "comment": "",
+        "comment": "家族みんなで集合",
         "notes": "Cookieの推し写真。"
       },
       {
@@ -744,10 +830,12 @@
         "period": "present",
         "yearLabel": "",
         "requiredCount": 1,
-        "selectedAssetIds": [],
+        "selectedAssetIds": [
+          "pr-photo-32"
+        ],
         "candidateAssetIds": [],
         "rejectedAssetIds": [],
-        "comment": "",
+        "comment": "お気に入りの場所で",
         "notes": "Melonの推し写真。"
       },
       {
@@ -757,10 +845,12 @@
         "period": "present",
         "yearLabel": "",
         "requiredCount": 1,
-        "selectedAssetIds": [],
+        "selectedAssetIds": [
+          "pr-photo-33"
+        ],
         "candidateAssetIds": [],
         "rejectedAssetIds": [],
-        "comment": "",
+        "comment": "入籍日の記念写真",
         "notes": "日常の幸せな瞬間。笑顔の写真。"
       }
     ]
@@ -775,7 +865,9 @@
     "caption": "これからもよろしくお願いします",
     "bgmCue": "BGMが静かに終わる。余韻を残す。",
     "assets": [
-      "pr-asset-01"
+      "pr-asset-01",
+      "pr-photo-34",
+      "pr-photo-35"
     ],
     "promptIds": [],
     "status": "not_started",
@@ -790,10 +882,12 @@
         "period": "present",
         "yearLabel": "2026",
         "requiredCount": 1,
-        "selectedAssetIds": [],
+        "selectedAssetIds": [
+          "pr-photo-34"
+        ],
         "candidateAssetIds": [],
         "rejectedAssetIds": [],
-        "comment": "",
+        "comment": "写真を選定する",
         "notes": "前撮り写真またはふたりのベストショット。"
       },
       {
@@ -803,12 +897,15 @@
         "period": "present",
         "yearLabel": "2026",
         "requiredCount": 1,
-        "selectedAssetIds": [],
+        "selectedAssetIds": [
+          "pr-photo-35"
+        ],
         "candidateAssetIds": [],
         "rejectedAssetIds": [],
-        "comment": "",
+        "comment": "写真を選定する",
         "notes": "メッセージテロップの背景写真。"
       }
-    ]
+    ],
+    "person": "both"
   }
 ]

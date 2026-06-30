@@ -386,6 +386,16 @@ export function ProductionProvider({ children }: { children: ReactNode }) {
         scenes: prev.scenes.map((s) => ({
           ...s,
           assets: s.assets.filter((id) => id !== assetId),
+          photoSlots: s.photoSlots?.map((slot) => ({
+            ...slot,
+            selectedAssetIds: slot.selectedAssetIds.filter((id) => id !== assetId),
+            candidateAssetIds: slot.candidateAssetIds.filter((id) => id !== assetId),
+            rejectedAssetIds: slot.rejectedAssetIds.filter((id) => id !== assetId),
+          })),
+        })),
+        prompts: prev.prompts.map((p) => ({
+          ...p,
+          resultAssetIds: p.resultAssetIds.filter((id) => id !== assetId),
         })),
       }));
     },
