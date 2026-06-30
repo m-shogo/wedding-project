@@ -1,4 +1,5 @@
 import type { AllData } from "../types/movie";
+import { validateAssetPath } from "./assetPaths";
 
 export interface ValidationIssue {
   type: "error" | "warning";
@@ -164,6 +165,15 @@ export function validateData(data: AllData): ValidationIssue[] {
         entityId: p.promptId,
         message: "未使用（どのシーンにも紐付いていない）",
       });
+  }
+
+  // Asset path validation
+  for (const a of data.assets) {
+    if (a.path) {
+      const pathWarning = validateAssetPath(a.type, a.path);
+      if (pathWarning)
+        issues.push({ type: "warning", entity: "asset", entityId: a.assetId, message: pathWarning });
+    }
   }
 
   // PhotoSlot validation

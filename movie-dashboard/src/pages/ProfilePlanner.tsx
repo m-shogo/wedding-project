@@ -1,9 +1,11 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Header } from "../components/Header";
 import { SectionCard } from "../components/SectionCard";
 import { Badge } from "../components/Badge";
 import { periodTagLabel, sceneStatusLabel, sceneStatusColor } from "../lib/labels";
 import { useProduction } from "../store/productionStore";
+import { getPhotoSlotFolder } from "../lib/assetPaths";
 import type { PersonCategory, PhotoSlot, Scene } from "../types/movie";
 
 const sections: { key: PersonCategory; label: string }[] = [
@@ -13,8 +15,10 @@ const sections: { key: PersonCategory; label: string }[] = [
 ];
 
 function SlotCard({ slot, scene, assets }: { slot: PhotoSlot; scene: Scene; assets: { assetId: string; title: string }[] }) {
+  const [showPath, setShowPath] = useState(false);
   const selected = slot.selectedAssetIds.length;
   const isFilled = selected >= slot.requiredCount;
+  const folderPath = getPhotoSlotFolder(slot.person, slot.period);
 
   return (
     <div className={`border rounded-lg p-3 ${isFilled ? "border-emerald-200 dark:border-emerald-800" : "border-amber-200 dark:border-amber-800"}`}>
@@ -46,11 +50,20 @@ function SlotCard({ slot, scene, assets }: { slot: PhotoSlot; scene: Scene; asse
       )}
       {slot.notes && <p className="text-xs text-navy-400 dark:text-navy-300 mt-1">{slot.notes}</p>}
       {slot.comment && <p className="text-xs text-navy-600 dark:text-navy-200 italic mt-1">{slot.comment}</p>}
-      <div className="mt-1">
+      <div className="mt-1.5 flex items-center gap-2">
         <Link to={`/scene/${scene.sceneId}`} className="text-xs text-navy-500 hover:text-navy-700 dark:text-navy-300 dark:hover:text-navy-100 underline">
           {scene.title}
         </Link>
+        <button onClick={() => setShowPath(!showPath)} className="text-xs text-sky-500 hover:text-sky-700 dark:text-sky-400 dark:hover:text-sky-200">
+          📁
+        </button>
       </div>
+      {showPath && (
+        <div className="mt-1.5 p-1.5 bg-sky-50 dark:bg-sky-900/20 rounded text-xs">
+          <span className="text-sky-700 dark:text-sky-300">保存先: </span>
+          <code className="font-mono text-sky-800 dark:text-sky-200">{folderPath}</code>
+        </div>
+      )}
     </div>
   );
 }

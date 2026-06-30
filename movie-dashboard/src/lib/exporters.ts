@@ -1,4 +1,5 @@
 import type { AllData, Asset, Prompt, Scene, Task } from "../types/movie";
+import { assetLocationSummary, capcutPackRule } from "./assetPaths";
 
 export function downloadJson(data: AllData | Record<string, unknown>, filename: string): void {
   const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
@@ -119,6 +120,23 @@ export function exportCapcutMarkdown(
   }
 
   lines.push(`合計尺: ${formatTimecode(timecodeOffset)} (${timecodeOffset}秒)`);
+  lines.push("");
+
+  lines.push("## 素材本体の場所");
+  lines.push("");
+  for (const loc of assetLocationSummary) {
+    lines.push(`- ${loc.label}: ${loc.path}`);
+  }
+  lines.push("");
+
+  lines.push("## CapCut Pack推奨書き出し先");
+  lines.push("");
+  lines.push(`${capcutPackRule.baseFolder}`);
+  for (const sub of capcutPackRule.subfolders) {
+    lines.push(`  └ ${sub}`);
+  }
+  lines.push("");
+  lines.push(`> ${capcutPackRule.gitNote}`);
   lines.push("");
 
   return lines.join("\n");

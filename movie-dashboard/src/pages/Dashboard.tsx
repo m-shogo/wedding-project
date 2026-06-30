@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Header } from "../components/Header";
 import { StatCard } from "../components/StatCard";
 import { SectionCard } from "../components/SectionCard";
@@ -84,6 +85,16 @@ export function Dashboard() {
           <StatCard icon="💬" label="コメント率" value={`${stats.photoCommentRate}%`} accent="text-sky-600" />
         </div>
       )}
+
+      {/* Asset placement notice */}
+      <div className="mb-4 p-3 bg-sand-50 dark:bg-navy-700 rounded-lg flex items-center justify-between">
+        <p className="text-xs text-navy-500 dark:text-navy-300">
+          💡 素材本体はGitに入れません。写真・動画・音源は推奨フォルダに保存し、Asset Libraryにはパスだけ登録します。
+        </p>
+        <Link to="/asset-placement-guide" className="text-xs text-navy-600 dark:text-navy-200 hover:underline shrink-0 ml-3">
+          素材置き場ガイドを見る →
+        </Link>
+      </div>
 
       {/* Urgent tasks */}
       {stats.urgentTasks.length > 0 && (

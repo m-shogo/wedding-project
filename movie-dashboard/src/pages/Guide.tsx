@@ -391,7 +391,78 @@ export function Guide() {
         </div>
       </SectionCard>
 
-      {/* ───────── 9. localStorageとJSONの注意 ───────── */}
+      {/* ───────── 9. 素材の保存場所 ───────── */}
+      <SectionCard title="素材の保存場所" className="mb-6">
+        <p className="text-sm text-navy-600 dark:text-navy-300 mb-4">
+          素材ファイル（写真・動画・音源）はGitに入れません。Asset Libraryにはパスだけ登録し、実ファイルは推奨フォルダに保存してください。
+        </p>
+
+        <SubHeading>素材タイプ別の保存先</SubHeading>
+        <div className="overflow-x-auto mb-4">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="bg-navy-50 dark:bg-navy-700">
+                <th className="px-3 py-2 text-left text-xs font-semibold text-navy-500 dark:text-navy-300">タイプ</th>
+                <th className="px-3 py-2 text-left text-xs font-semibold text-navy-500 dark:text-navy-300">保存先</th>
+                <th className="px-3 py-2 text-left text-xs font-semibold text-navy-500 dark:text-navy-300">Git</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-sand-100 dark:divide-navy-600 text-navy-700 dark:text-navy-200">
+              <tr><td className="px-3 py-1.5">自前写真</td><td className="px-3 py-1.5 font-mono text-xs">/05_photos/</td><td className="px-3 py-1.5 text-red-500">✕</td></tr>
+              <tr><td className="px-3 py-1.5">自前動画</td><td className="px-3 py-1.5 font-mono text-xs">/06_videos/</td><td className="px-3 py-1.5 text-red-500">✕</td></tr>
+              <tr><td className="px-3 py-1.5">生成画像</td><td className="px-3 py-1.5 font-mono text-xs">/04_ai-video-assets/generated-images/</td><td className="px-3 py-1.5 text-red-500">✕</td></tr>
+              <tr><td className="px-3 py-1.5">生成AI動画</td><td className="px-3 py-1.5 font-mono text-xs">/04_ai-video-assets/ai-videos/</td><td className="px-3 py-1.5 text-red-500">✕</td></tr>
+              <tr><td className="px-3 py-1.5">Motion Studio書き出し</td><td className="px-3 py-1.5 font-mono text-xs">/90_exports/motion-studio/</td><td className="px-3 py-1.5 text-red-500">✕</td></tr>
+              <tr><td className="px-3 py-1.5">音源・BGM</td><td className="px-3 py-1.5 font-mono text-xs">/07_music/</td><td className="px-3 py-1.5 text-red-500">✕</td></tr>
+              <tr><td className="px-3 py-1.5">参考資料</td><td className="px-3 py-1.5 font-mono text-xs">/10_references/</td><td className="px-3 py-1.5 text-emerald-600">OK（URLやメモ）</td></tr>
+              <tr><td className="px-3 py-1.5">テキスト</td><td className="px-3 py-1.5 font-mono text-xs">/08_texts/</td><td className="px-3 py-1.5 text-emerald-600">OK</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <Tip>
+          素材ライブラリで素材を追加するとき、素材タイプに応じた「おすすめ保存先」が表示されます。パス例をコピーしてそのまま使えます。
+        </Tip>
+
+        <SubHeading>プロフィール写真の保存ルール</SubHeading>
+        <BulletList items={[
+          "新郎幼少期: /05_photos/profile/groom/childhood/",
+          "新郎学生時代: /05_photos/profile/groom/school/",
+          "新郎社会人: /05_photos/profile/groom/work/",
+          "新婦幼少期: /05_photos/profile/bride/childhood/",
+          "新婦学生時代: /05_photos/profile/bride/school/",
+          "新婦社会人: /05_photos/profile/bride/work/",
+          "ふたり出会い: /05_photos/profile/couple/meeting/",
+          "ふたり旅行: /05_photos/profile/couple/travel/",
+          "ふたり現在: /05_photos/profile/couple/current/",
+        ]} />
+
+        <SubHeading>ファイル名の付け方</SubHeading>
+        <BulletList items={[
+          "写真: groom_childhood_001.jpg, bride_school_001.jpg, couple_hawaii_001.jpg",
+          "生成画像: opening_yokohama_bg_001.png, profile_map_transition_001.png",
+          "生成AI動画: opening_countdown_motion_001.mp4, opening_airport_transition_001.mp4",
+          "Motion Studio書き出し: opening_ticket_intro_001.mp4, opening_countdown_001.mp4",
+          "音源: opening_bgm_candidate_001.mp3, countdown_se_001.wav",
+        ]} />
+
+        <SubHeading>CapCut Pack書き出し先</SubHeading>
+        <BulletList items={[
+          "書き出し先: /90_exports/capcut-pack/opening/ など",
+          "MarkdownやCSVはGit管理OK",
+          "大きな素材本体はGitに入れない",
+        ]} />
+
+        <SubHeading>パス例の使い方</SubHeading>
+        <StepList items={[
+          "素材ライブラリで「+ 素材追加」をクリック",
+          "素材タイプを選ぶと「おすすめ保存先」が表示される",
+          "「パス例をコピー」でクリップボードにコピー",
+          "「このパスを素材パスに入れる」でパス欄に自動入力",
+          "実ファイルは表示されたフォルダに手動で保存する",
+        ]} />
+      </SectionCard>
+
+      {/* ───────── 10. localStorageとJSONの注意 ───────── */}
       <SectionCard title="localStorageとJSONの注意" className="mb-6">
         <div className="space-y-4 text-sm text-navy-700 dark:text-navy-200">
           <div>

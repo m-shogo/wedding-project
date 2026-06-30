@@ -2,6 +2,7 @@ import { useState } from "react";
 import type { Asset, AssetStatus, AssetType, PersonCategory, PeriodTag, PhotoOrientation, PhotoUsage } from "../../types/movie";
 import { assetTypeLabel, assetStatusLabel, personCategoryLabel, periodTagLabel, photoOrientationLabel, photoUsageLabel } from "../../lib/labels";
 import { generateId } from "../../lib/ids";
+import { getRecommendedAssetFolder, getRecommendedAssetPathExample } from "../../lib/assetPaths";
 
 interface AssetFormProps {
   asset?: Asset;
@@ -89,6 +90,7 @@ export function AssetForm({ asset, selectedMovieId, onSave, onCancel }: AssetFor
         <div className="col-span-2">
           <label className="form-label">パス</label>
           <input type="text" value={path} onChange={(e) => setPath(e.target.value)} className="form-input" />
+          <PathSuggestion type={type} title={title} movieId={selectedMovieId !== "all" ? selectedMovieId : undefined} person={personTags[0]} period={periodTags[0]} currentPath={path} onApply={setPath} />
         </div>
         <div>
           <label className="form-label">出典・生成元</label>
@@ -162,5 +164,40 @@ export function AssetForm({ asset, selectedMovieId, onSave, onCancel }: AssetFor
         </button>
       </div>
     </form>
+  );
+}
+
+function PathSuggestion({ type, title, movieId, person, period, currentPath, onApply }: {
+  type: AssetType; title: string; movieId?: string; person?: PersonCategory; period?: PeriodTag; currentPath: string; onApply: (path: string) => void;
+}) {
+  const [copied, setCopied] = useState(false);
+  const folder = getRecommendedAssetFolder(type, movieId, person, period);
+  const example = getRecommendedAssetPathExample(type, title || "asset", movieId, person, period);
+
+  function handleCopy() {
+    navigator.clipboard.writeText(example);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1500);
+  }
+
+  return (
+    <div className="mt-1.5 p-2.5 bg-sky-50 dark:bg-sky-900/20 border border-sky-200 dark:border-sky-800 rounded-lg">
+      <p className="text-xs text-sky-700 dark:text-sky-300 font-medium mb-1">おすすめ保存先:</p>
+      <code className="text-xs font-mono text-sky-800 dark:text-sky-200 block mb-1.5">{folder}</code>
+      <p className="text-xs text-sky-600 dark:text-sky-400 mb-1">パス例:</p>
+      <code className="text-xs font-mono text-sky-800 dark:text-sky-200 block mb-2">{example}</code>
+      <div className="flex gap-2">
+        <button type="button" onClick={handleCopy}
+          className="px-2 py-1 text-xs rounded bg-sky-100 dark:bg-sky-800 text-sky-700 dark:text-sky-200 hover:bg-sky-200 dark:hover:bg-sky-700">
+          {copied ? "✓ コピー済" : "📋 パス例をコピー"}
+        </button>
+        {currentPath !== example && (
+          <button type="button" onClick={() => onApply(example)}
+            className="px-2 py-1 text-xs rounded bg-sky-600 text-white hover:bg-sky-700">
+            このパスを素材パスに入れる
+          </button>
+        )}
+      </div>
+    </div>
   );
 }

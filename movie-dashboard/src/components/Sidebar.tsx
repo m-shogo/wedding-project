@@ -12,6 +12,7 @@ const links = [
   { to: "/production-map", label: "制作マップ", icon: "🗺" },
   { to: "/quality", label: "品質ゲート", icon: "🏁" },
   { to: "/profile-planner", label: "写真計画", icon: "📷" },
+  { to: "/asset-placement-guide", label: "素材置き場ガイド", icon: "📁" },
   { to: "/data", label: "データ管理", icon: "💾" },
   { to: "/guide", label: "使い方", icon: "📖" },
 ];

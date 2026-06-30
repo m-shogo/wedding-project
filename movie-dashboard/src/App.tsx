@@ -15,6 +15,7 @@ import { DataManager } from "./pages/DataManager";
 import { SceneDetail } from "./pages/SceneDetail";
 import { ProfilePlanner } from "./pages/ProfilePlanner";
 import { Guide } from "./pages/Guide";
+import { AssetPlacementGuide } from "./pages/AssetPlacementGuide";
 
 export default function App() {
   return (
@@ -35,6 +36,7 @@ export default function App() {
               <Route path="profile-planner" element={<ProfilePlanner />} />
               <Route path="data" element={<DataManager />} />
               <Route path="scene/:sceneId" element={<SceneDetail />} />
+              <Route path="asset-placement-guide" element={<AssetPlacementGuide />} />
               <Route path="guide" element={<Guide />} />
             </Route>
           </Routes>

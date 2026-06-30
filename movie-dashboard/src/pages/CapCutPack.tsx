@@ -9,6 +9,7 @@ import {
 import { useProduction } from "../store/productionStore";
 import { useToast } from "../store/toastStore";
 import { exportCapcutMarkdown, downloadText, downloadJson } from "../lib/exporters";
+import { assetLocationSummary, capcutPackRule } from "../lib/assetPaths";
 import type { Asset } from "../types/movie";
 
 function toCsvRow(fields: string[]): string {
@@ -169,6 +170,22 @@ export function CapCutPack() {
           );
         })()}
       </SectionCard>
+
+      {/* Asset location reference */}
+      <div className="mb-6 p-4 bg-sand-50 dark:bg-navy-700 rounded-lg">
+        <p className="text-xs font-medium text-navy-600 dark:text-navy-200 mb-2">素材本体の場所</p>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+          {assetLocationSummary.map((loc) => (
+            <div key={loc.label} className="text-xs">
+              <span className="text-navy-500 dark:text-navy-300">{loc.label}: </span>
+              <code className="font-mono text-navy-700 dark:text-navy-200">{loc.path}</code>
+            </div>
+          ))}
+        </div>
+        <p className="text-xs text-navy-400 dark:text-navy-400 mt-2">
+          CapCut Pack書き出し先: <code className="font-mono">{capcutPackRule.baseFolder}</code>
+        </p>
+      </div>
 
       {/* Scene cards */}
       <div className="space-y-6">

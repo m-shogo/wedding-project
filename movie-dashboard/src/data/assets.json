@@ -3,7 +3,7 @@
     "assetId": "asset-01",
     "type": "generated_image",
     "title": "空港ロビー（人物なし）",
-    "path": "02_opening-movie/sample_image/narita_lobby_noperson.png",
+    "path": "/04_ai-video-assets/generated-images/opening/narita_lobby_noperson.png",
     "relatedSceneIds": [
       "op-01"
     ],
@@ -19,7 +19,7 @@
     "assetId": "asset-02",
     "type": "motion_studio_export",
     "title": "搭乗券モーション",
-    "path": "motion-studio/out/boarding-pass/boarding_pass.webm",
+    "path": "/90_exports/motion-studio/opening/boarding_pass.webm",
     "relatedSceneIds": [
       "op-01"
     ],
@@ -35,7 +35,7 @@
     "assetId": "asset-03",
     "type": "ai_video",
     "title": "滑走路 離陸シーン",
-    "path": "04_ai-video-assets/op_02_runway_takeoff.mp4",
+    "path": "/04_ai-video-assets/ai-videos/opening/op_02_runway_takeoff.mp4",
     "relatedSceneIds": [
       "op-01"
     ],
@@ -51,7 +51,7 @@
     "assetId": "asset-04",
     "type": "generated_image",
     "title": "飛行機窓からの景色",
-    "path": "02_opening-movie/sample_image/airplane_window.png",
+    "path": "/04_ai-video-assets/generated-images/opening/airplane_window.png",
     "relatedSceneIds": [
       "op-01",
       "op-02"
@@ -68,7 +68,7 @@
     "assetId": "asset-05",
     "type": "ai_video",
     "title": "雲海ドリーショット",
-    "path": "04_ai-video-assets/op_03_cloudscape.mp4",
+    "path": "/04_ai-video-assets/ai-videos/opening/op_03_cloudscape.mp4",
     "relatedSceneIds": [
       "op-02"
     ],
@@ -84,7 +84,7 @@
     "assetId": "asset-06",
     "type": "motion_studio_export",
     "title": "世界地図＋航路線モーション",
-    "path": "motion-studio/out/map/world_map_route.webm",
+    "path": "/90_exports/motion-studio/opening/world_map_route.webm",
     "relatedSceneIds": [
       "op-02"
     ],
@@ -132,7 +132,7 @@
     "assetId": "asset-09",
     "type": "motion_studio_export",
     "title": "パスポートスタンプモーション",
-    "path": "motion-studio/out/stamp/stamp_test_vp9.webm",
+    "path": "/90_exports/motion-studio/opening/stamp_test_vp9.webm",
     "relatedSceneIds": [
       "op-03"
     ],
@@ -148,7 +148,7 @@
     "assetId": "asset-10",
     "type": "ai_video",
     "title": "ハワイ海 夕暮れ",
-    "path": "04_ai-video-assets/op_16_hawaii_ocean.mp4",
+    "path": "/04_ai-video-assets/ai-videos/opening/op_16_hawaii_ocean.mp4",
     "relatedSceneIds": [
       "op-04"
     ],
@@ -228,7 +228,7 @@
     "assetId": "asset-15",
     "type": "motion_studio_export",
     "title": "カウントダウンモーション",
-    "path": "motion-studio/out/countdown/countdown.webm",
+    "path": "/90_exports/motion-studio/opening/countdown.webm",
     "relatedSceneIds": [
       "op-06"
     ],
@@ -370,7 +370,7 @@
     "assetId": "pr-photo-03",
     "type": "own_photo",
     "title": "新郎 幼少期 3",
-    "path": "photos/profile/groom/childhood/pr-photo-03.jpg",
+    "path": "/05_photos/profile/groom/childhood/pr-photo-03.jpg",
     "relatedSceneIds": [
       "pr-02"
     ],
@@ -395,7 +395,7 @@
     "assetId": "pr-photo-04",
     "type": "own_photo",
     "title": "新郎 幼少期 4",
-    "path": "photos/profile/groom/childhood/pr-photo-04.jpg",
+    "path": "/05_photos/profile/groom/childhood/pr-photo-04.jpg",
     "relatedSceneIds": [
       "pr-02"
     ],
@@ -420,7 +420,7 @@
     "assetId": "pr-photo-06",
     "type": "own_photo",
     "title": "新郎 学生時代 2",
-    "path": "photos/profile/groom/student/pr-photo-06.jpg",
+    "path": "/05_photos/profile/groom/student/pr-photo-06.jpg",
     "relatedSceneIds": [
       "pr-03"
     ],
@@ -445,7 +445,7 @@
     "assetId": "pr-photo-07",
     "type": "own_photo",
     "title": "新郎 学生時代 3",
-    "path": "photos/profile/groom/student/pr-photo-07.jpg",
+    "path": "/05_photos/profile/groom/student/pr-photo-07.jpg",
     "relatedSceneIds": [
       "pr-03"
     ],
@@ -470,7 +470,7 @@
     "assetId": "pr-photo-08",
     "type": "own_photo",
     "title": "新郎 学生時代 4",
-    "path": "photos/profile/groom/student/pr-photo-08.jpg",
+    "path": "/05_photos/profile/groom/student/pr-photo-08.jpg",
     "relatedSceneIds": [
       "pr-03"
     ],
@@ -495,7 +495,7 @@
     "assetId": "pr-photo-09",
     "type": "own_photo",
     "title": "新郎 社会人 1",
-    "path": "photos/profile/groom/adult/pr-photo-09.jpg",
+    "path": "/05_photos/profile/groom/adult/pr-photo-09.jpg",
     "relatedSceneIds": [
       "pr-04"
     ],
@@ -520,7 +520,7 @@
     "assetId": "pr-photo-10",
     "type": "own_photo",
     "title": "新郎 社会人 2",
-    "path": "photos/profile/groom/adult/pr-photo-10.jpg",
+    "path": "/05_photos/profile/groom/adult/pr-photo-10.jpg",
     "relatedSceneIds": [
       "pr-04"
     ],
@@ -545,7 +545,7 @@
     "assetId": "pr-photo-11",
     "type": "own_photo",
     "title": "新郎 社会人 3",
-    "path": "photos/profile/groom/adult/pr-photo-11.jpg",
+    "path": "/05_photos/profile/groom/adult/pr-photo-11.jpg",
     "relatedSceneIds": [
       "pr-04"
     ],
@@ -570,7 +570,7 @@
     "assetId": "pr-photo-12",
     "type": "own_photo",
     "title": "新婦 幼少期 1",
-    "path": "photos/profile/bride/childhood/pr-photo-12.jpg",
+    "path": "/05_photos/profile/bride/childhood/pr-photo-12.jpg",
     "relatedSceneIds": [
       "pr-05"
     ],
@@ -595,7 +595,7 @@
     "assetId": "pr-photo-13",
     "type": "own_photo",
     "title": "新婦 幼少期 2",
-    "path": "photos/profile/bride/childhood/pr-photo-13.jpg",
+    "path": "/05_photos/profile/bride/childhood/pr-photo-13.jpg",
     "relatedSceneIds": [
       "pr-05"
     ],
@@ -620,7 +620,7 @@
     "assetId": "pr-photo-14",
     "type": "own_photo",
     "title": "新婦 幼少期 3",
-    "path": "photos/profile/bride/childhood/pr-photo-14.jpg",
+    "path": "/05_photos/profile/bride/childhood/pr-photo-14.jpg",
     "relatedSceneIds": [
       "pr-05"
     ],
@@ -645,7 +645,7 @@
     "assetId": "pr-photo-15",
     "type": "own_photo",
     "title": "新婦 幼少期 4",
-    "path": "photos/profile/bride/childhood/pr-photo-15.jpg",
+    "path": "/05_photos/profile/bride/childhood/pr-photo-15.jpg",
     "relatedSceneIds": [
       "pr-05"
     ],
@@ -670,7 +670,7 @@
     "assetId": "pr-photo-16",
     "type": "own_photo",
     "title": "新婦 学生時代 1",
-    "path": "photos/profile/bride/student/pr-photo-16.jpg",
+    "path": "/05_photos/profile/bride/student/pr-photo-16.jpg",
     "relatedSceneIds": [
       "pr-06"
     ],
@@ -695,7 +695,7 @@
     "assetId": "pr-photo-17",
     "type": "own_photo",
     "title": "新婦 学生時代 2",
-    "path": "photos/profile/bride/student/pr-photo-17.jpg",
+    "path": "/05_photos/profile/bride/student/pr-photo-17.jpg",
     "relatedSceneIds": [
       "pr-06"
     ],
@@ -720,7 +720,7 @@
     "assetId": "pr-photo-18",
     "type": "own_photo",
     "title": "新婦 学生時代 3",
-    "path": "photos/profile/bride/student/pr-photo-18.jpg",
+    "path": "/05_photos/profile/bride/student/pr-photo-18.jpg",
     "relatedSceneIds": [
       "pr-06"
     ],
@@ -745,7 +745,7 @@
     "assetId": "pr-photo-19",
     "type": "own_photo",
     "title": "新婦 学生時代 4",
-    "path": "photos/profile/bride/student/pr-photo-19.jpg",
+    "path": "/05_photos/profile/bride/student/pr-photo-19.jpg",
     "relatedSceneIds": [
       "pr-06"
     ],
@@ -770,7 +770,7 @@
     "assetId": "pr-photo-20",
     "type": "own_photo",
     "title": "新婦 社会人 1",
-    "path": "photos/profile/bride/adult/pr-photo-20.jpg",
+    "path": "/05_photos/profile/bride/adult/pr-photo-20.jpg",
     "relatedSceneIds": [
       "pr-07"
     ],
@@ -795,7 +795,7 @@
     "assetId": "pr-photo-21",
     "type": "own_photo",
     "title": "新婦 社会人 2",
-    "path": "photos/profile/bride/adult/pr-photo-21.jpg",
+    "path": "/05_photos/profile/bride/adult/pr-photo-21.jpg",
     "relatedSceneIds": [
       "pr-07"
     ],
@@ -820,7 +820,7 @@
     "assetId": "pr-photo-22",
     "type": "own_photo",
     "title": "新婦 社会人 3",
-    "path": "photos/profile/bride/adult/pr-photo-22.jpg",
+    "path": "/05_photos/profile/bride/adult/pr-photo-22.jpg",
     "relatedSceneIds": [
       "pr-07"
     ],
@@ -845,7 +845,7 @@
     "assetId": "pr-photo-23",
     "type": "own_photo",
     "title": "ふたり 出会い 1",
-    "path": "photos/profile/both/meeting/pr-photo-23.jpg",
+    "path": "/05_photos/profile/both/meeting/pr-photo-23.jpg",
     "relatedSceneIds": [
       "pr-08"
     ],
@@ -870,7 +870,7 @@
     "assetId": "pr-photo-24",
     "type": "own_photo",
     "title": "ふたり 出会い 2",
-    "path": "photos/profile/both/meeting/pr-photo-24.jpg",
+    "path": "/05_photos/profile/both/meeting/pr-photo-24.jpg",
     "relatedSceneIds": [
       "pr-08"
     ],
@@ -895,7 +895,7 @@
     "assetId": "pr-photo-25",
     "type": "own_photo",
     "title": "ふたり 出会い 3",
-    "path": "photos/profile/both/meeting/pr-photo-25.jpg",
+    "path": "/05_photos/profile/both/meeting/pr-photo-25.jpg",
     "relatedSceneIds": [
       "pr-08"
     ],
@@ -920,7 +920,7 @@
     "assetId": "pr-photo-26",
     "type": "own_photo",
     "title": "ふたり 現在 4",
-    "path": "photos/profile/both/present/pr-photo-26.jpg",
+    "path": "/05_photos/profile/both/present/pr-photo-26.jpg",
     "relatedSceneIds": [
       "pr-08"
     ],
@@ -945,7 +945,7 @@
     "assetId": "pr-photo-27",
     "type": "own_photo",
     "title": "ふたり 現在 5",
-    "path": "photos/profile/both/present/pr-photo-27.jpg",
+    "path": "/05_photos/profile/both/present/pr-photo-27.jpg",
     "relatedSceneIds": [
       "pr-08"
     ],
@@ -970,7 +970,7 @@
     "assetId": "pr-photo-28",
     "type": "own_photo",
     "title": "ふたり 現在 1",
-    "path": "photos/profile/both/present/pr-photo-28.jpg",
+    "path": "/05_photos/profile/both/present/pr-photo-28.jpg",
     "relatedSceneIds": [
       "pr-09"
     ],
@@ -995,7 +995,7 @@
     "assetId": "pr-photo-29",
     "type": "own_photo",
     "title": "ふたり 現在 2",
-    "path": "photos/profile/both/present/pr-photo-29.jpg",
+    "path": "/05_photos/profile/both/present/pr-photo-29.jpg",
     "relatedSceneIds": [
       "pr-09"
     ],
@@ -1020,7 +1020,7 @@
     "assetId": "pr-photo-30",
     "type": "own_photo",
     "title": "ふたり 現在 3",
-    "path": "photos/profile/both/present/pr-photo-30.jpg",
+    "path": "/05_photos/profile/both/present/pr-photo-30.jpg",
     "relatedSceneIds": [
       "pr-09"
     ],
@@ -1045,7 +1045,7 @@
     "assetId": "pr-photo-31",
     "type": "own_photo",
     "title": "ふたり 現在 4",
-    "path": "photos/profile/both/present/pr-photo-31.jpg",
+    "path": "/05_photos/profile/both/present/pr-photo-31.jpg",
     "relatedSceneIds": [
       "pr-09"
     ],
@@ -1070,7 +1070,7 @@
     "assetId": "pr-photo-32",
     "type": "own_photo",
     "title": "ふたり 現在 5",
-    "path": "photos/profile/both/present/pr-photo-32.jpg",
+    "path": "/05_photos/profile/both/present/pr-photo-32.jpg",
     "relatedSceneIds": [
       "pr-09"
     ],
@@ -1095,7 +1095,7 @@
     "assetId": "pr-photo-33",
     "type": "own_photo",
     "title": "ふたり 現在 6",
-    "path": "photos/profile/both/present/pr-photo-33.jpg",
+    "path": "/05_photos/profile/both/present/pr-photo-33.jpg",
     "relatedSceneIds": [
       "pr-09"
     ],
@@ -1120,7 +1120,7 @@
     "assetId": "pr-photo-34",
     "type": "own_photo",
     "title": "プロフィール写真 1",
-    "path": "photos/profile/other/present/pr-photo-34.jpg",
+    "path": "/05_photos/profile/other/present/pr-photo-34.jpg",
     "relatedSceneIds": [
       "pr-10"
     ],
@@ -1143,7 +1143,7 @@
     "assetId": "pr-photo-35",
     "type": "own_photo",
     "title": "プロフィール写真 1",
-    "path": "photos/profile/other/present/pr-photo-35.jpg",
+    "path": "/05_photos/profile/other/present/pr-photo-35.jpg",
     "relatedSceneIds": [
       "pr-10"
     ],
@@ -1166,7 +1166,7 @@
     "assetId": "pr-photo-36",
     "type": "own_photo",
     "title": "家族写真①",
-    "path": "photos/profile/groom/childhood/pr-photo-36.jpg",
+    "path": "/05_photos/profile/groom/childhood/pr-photo-36.jpg",
     "relatedSceneIds": [
       "pr-02"
     ],
@@ -1191,7 +1191,7 @@
     "assetId": "pr-photo-37",
     "type": "own_photo",
     "title": "家族写真②",
-    "path": "photos/profile/groom/childhood/pr-photo-37.jpg",
+    "path": "/05_photos/profile/groom/childhood/pr-photo-37.jpg",
     "relatedSceneIds": [
       "pr-02"
     ],
@@ -1216,7 +1216,7 @@
     "assetId": "pr-photo-38",
     "type": "own_photo",
     "title": "中学時代",
-    "path": "photos/profile/groom/student/pr-photo-38.jpg",
+    "path": "/05_photos/profile/groom/student/pr-photo-38.jpg",
     "relatedSceneIds": [
       "pr-03"
     ],
