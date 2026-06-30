@@ -24,19 +24,20 @@ export function Layout() {
   useEffect(() => {
     function handleKey(e: KeyboardEvent) {
       const mod = e.metaKey || e.ctrlKey;
+      const inFormField = e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement || e.target instanceof HTMLSelectElement;
       if (mod && e.key === "k") {
         e.preventDefault();
         setShowSearch((v) => !v);
-      } else if (mod && e.shiftKey && e.key === "z") {
+      } else if (mod && e.shiftKey && e.key === "z" && !inFormField) {
         e.preventDefault();
         redo();
-      } else if (mod && e.key === "z") {
+      } else if (mod && e.key === "z" && !inFormField) {
         e.preventDefault();
         undo();
       } else if (mod && e.key === "s") {
         e.preventDefault();
         void handleSaveLocal();
-      } else if (e.key === "?" && !mod && !(e.target instanceof HTMLInputElement) && !(e.target instanceof HTMLTextAreaElement) && !(e.target instanceof HTMLSelectElement)) {
+      } else if (e.key === "?" && !mod && !inFormField) {
         e.preventDefault();
         setShowShortcuts((v) => !v);
       }
@@ -63,7 +64,7 @@ export function Layout() {
             </div>
             <div className="p-6">
               <table className="w-full text-sm">
-                <tbody className="divide-y divide-sand-100">
+                <tbody className="divide-y divide-sand-100 dark:divide-navy-600">
                   {[
                     ["⌘K", "検索"],
                     ["⌘Z", "元に戻す"],
@@ -72,8 +73,8 @@ export function Layout() {
                     ["?", "ショートカット一覧"],
                   ].map(([key, desc]) => (
                     <tr key={key}>
-                      <td className="py-2 pr-4"><kbd className="px-2 py-0.5 bg-sand-100 rounded text-xs font-mono text-navy-600">{key}</kbd></td>
-                      <td className="py-2 text-navy-700">{desc}</td>
+                      <td className="py-2 pr-4"><kbd className="px-2 py-0.5 bg-sand-100 dark:bg-navy-700 rounded text-xs font-mono text-navy-600 dark:text-navy-200">{key}</kbd></td>
+                      <td className="py-2 text-navy-700 dark:text-navy-200">{desc}</td>
                     </tr>
                   ))}
                 </tbody>

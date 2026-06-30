@@ -83,8 +83,8 @@ export function Dashboard() {
                 <Badge label={taskPriorityLabel[t.priority]} colorClass={taskPriorityColor[t.priority]} />
                 <Badge label={taskStatusLabel[t.status]} colorClass={taskStatusColor[t.status]} />
                 <div className="min-w-0">
-                  <p className="text-sm font-medium text-navy-800">{t.title}</p>
-                  {t.notes && <p className="text-xs text-navy-400 mt-0.5 truncate">{t.notes}</p>}
+                  <p className="text-sm font-medium text-navy-800 dark:text-sand-100">{t.title}</p>
+                  {t.notes && <p className="text-xs text-navy-400 mt-0.5 truncate dark:text-navy-300">{t.notes}</p>}
                 </div>
               </li>
             ))}
@@ -97,11 +97,11 @@ export function Dashboard() {
         <SectionCard title="詰まっているシーン" className="mb-8">
           <div className="space-y-3">
             {stats.blockedScenes.map((s) => (
-              <div key={s.sceneId} className="flex items-center gap-3 p-3 rounded-lg bg-red-50 border border-red-100">
+              <div key={s.sceneId} className="flex items-center gap-3 p-3 rounded-lg bg-red-50 border border-red-100 dark:bg-red-900/20 dark:border-red-800">
                 <Badge label={sceneStatusLabel[s.status]} colorClass={sceneStatusColor[s.status]} />
                 <div className="min-w-0">
-                  <p className="text-sm font-medium text-navy-800">{s.title}</p>
-                  <p className="text-xs text-navy-400 font-mono">{s.sceneId} &middot; {s.durationSec}秒</p>
+                  <p className="text-sm font-medium text-navy-800 dark:text-sand-100">{s.title}</p>
+                  <p className="text-xs text-navy-400 font-mono dark:text-navy-300">{s.sceneId} &middot; {s.durationSec}秒</p>
                 </div>
               </div>
             ))}
@@ -127,18 +127,18 @@ export function Dashboard() {
               <div key={movie.movieId} className="space-y-1.5">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <span className="text-sm font-medium text-navy-800">{movie.title}</span>
-                    <span className="text-xs text-navy-400">{movieTypeLabel[movie.type]}</span>
+                    <span className="text-sm font-medium text-navy-800 dark:text-sand-100">{movie.title}</span>
+                    <span className="text-xs text-navy-400 dark:text-navy-300">{movieTypeLabel[movie.type]}</span>
                     <Badge label={movieStatusLabel[movie.status]} colorClass={movieStatusColor[movie.status]} />
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="text-xs text-navy-500">{mDone}/{mTotal} シーン完了 ({pct}%)</span>
+                    <span className="text-xs text-navy-500 dark:text-navy-300">{mDone}/{mTotal} シーン完了 ({pct}%)</span>
                     <button onClick={() => setEditMovie(movie)} className="text-xs text-navy-400 hover:text-navy-700" title="編集">✏️</button>
                     <button onClick={() => setDeleteMovieId(movie.movieId)} className="text-xs text-red-400 hover:text-red-600" title="削除">🗑</button>
                   </div>
                 </div>
-                <div className="w-full bg-sand-100 rounded-full h-2">
-                  <div className="bg-navy-600 h-2 rounded-full transition-all" style={{ width: `${pct}%` }} />
+                <div className="w-full bg-sand-100 dark:bg-navy-700 rounded-full h-2">
+                  <div className="bg-navy-600 dark:bg-navy-400 h-2 rounded-full transition-all" style={{ width: `${pct}%` }} />
                 </div>
               </div>
             );
@@ -150,14 +150,14 @@ export function Dashboard() {
       <SectionCard title="シーン進捗">
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
           {movieScenes.map((scene) => (
-            <div key={scene.sceneId} className="border border-sand-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+            <div key={scene.sceneId} className="border border-sand-200 dark:border-navy-600 rounded-lg p-4 hover:shadow-md transition-shadow dark:bg-navy-800/50">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-xs font-mono text-navy-400">{scene.sceneId}</span>
+                <span className="text-xs font-mono text-navy-400 dark:text-navy-300">{scene.sceneId}</span>
                 <Badge label={sceneStatusLabel[scene.status]} colorClass={sceneStatusColor[scene.status]} />
               </div>
-              <h3 className="font-semibold text-navy-800 mb-1">{scene.title}</h3>
-              <p className="text-xs text-navy-500 mb-2 line-clamp-2">{scene.purpose}</p>
-              <div className="flex items-center justify-between text-xs text-navy-400">
+              <h3 className="font-semibold text-navy-800 dark:text-sand-100 mb-1">{scene.title}</h3>
+              <p className="text-xs text-navy-500 dark:text-navy-300 mb-2 line-clamp-2">{scene.purpose}</p>
+              <div className="flex items-center justify-between text-xs text-navy-400 dark:text-navy-300">
                 <span>{scene.durationSec}秒</span>
                 <span>素材 {scene.assets.length}件</span>
               </div>

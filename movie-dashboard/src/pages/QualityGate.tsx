@@ -147,7 +147,7 @@ export function QualityGate() {
       <Header title="品質ゲート" description="ラフ版・完成前・上映前のチェック項目を管理します" showMovieSelector />
 
       <div className="flex justify-end mb-6">
-        <button onClick={() => setShowReset(true)} className="px-3 py-1.5 text-xs rounded-lg border border-sand-200 text-navy-500 hover:bg-sand-50">
+        <button onClick={() => setShowReset(true)} className="px-3 py-1.5 text-xs rounded-lg border border-sand-200 text-navy-500 hover:bg-sand-50 dark:border-navy-600 dark:text-navy-300 dark:hover:bg-navy-700">
           チェックをリセット
         </button>
       </div>
@@ -162,11 +162,11 @@ export function QualityGate() {
           return (
             <SectionCard key={gate.gateId} title={`${allDone ? "✅ " : ""}${gate.title}`}>
               <div className="mb-4">
-                <div className="flex items-center justify-between text-xs text-navy-500 mb-1">
+                <div className="flex items-center justify-between text-xs text-navy-500 dark:text-navy-300 mb-1">
                   <span>{checked}/{total} 確認済み</span>
                   <span>{pct}%</span>
                 </div>
-                <div className="w-full bg-sand-100 rounded-full h-2">
+                <div className="w-full bg-sand-100 dark:bg-navy-700 rounded-full h-2">
                   <div
                     className={`h-2 rounded-full transition-all ${allDone ? "bg-emerald-500" : "bg-navy-500"}`}
                     style={{ width: `${pct}%` }}
@@ -182,7 +182,7 @@ export function QualityGate() {
                       onChange={() => toggle(gate.gateId, i)}
                       className="w-4 h-4 rounded border-sand-300 text-navy-600 focus:ring-navy-300"
                     />
-                    <span className={`text-sm ${getChecked(gate.gateId, i) ? "text-navy-400 line-through" : "text-navy-700"}`}>
+                    <span className={`text-sm ${getChecked(gate.gateId, i) ? "text-navy-400 line-through" : "text-navy-700 dark:text-navy-200"}`}>
                       {item}
                     </span>
                   </label>

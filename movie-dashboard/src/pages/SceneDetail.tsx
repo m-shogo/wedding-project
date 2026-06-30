@@ -80,25 +80,25 @@ export function SceneDetail() {
             </div>
             <div className="space-y-3">
               <div>
-                <p className="text-xs font-semibold text-navy-400 tracking-wider mb-1">目的</p>
-                <p className="text-sm text-navy-700">{scene.purpose}</p>
+                <p className="text-xs font-semibold text-navy-400 dark:text-navy-300 tracking-wider mb-1">目的</p>
+                <p className="text-sm text-navy-700 dark:text-navy-200">{scene.purpose}</p>
               </div>
               <div>
-                <p className="text-xs font-semibold text-navy-400 tracking-wider mb-1">ビジュアル</p>
-                <p className="text-sm text-navy-700">{scene.visual}</p>
+                <p className="text-xs font-semibold text-navy-400 dark:text-navy-300 tracking-wider mb-1">ビジュアル</p>
+                <p className="text-sm text-navy-700 dark:text-navy-200">{scene.visual}</p>
               </div>
               <div>
-                <p className="text-xs font-semibold text-navy-400 tracking-wider mb-1">テロップ</p>
-                <p className="text-sm text-navy-700 font-serif italic">{scene.caption || "—"}</p>
+                <p className="text-xs font-semibold text-navy-400 dark:text-navy-300 tracking-wider mb-1">テロップ</p>
+                <p className="text-sm text-navy-700 dark:text-navy-200 font-serif italic">{scene.caption || "—"}</p>
               </div>
               <div>
-                <p className="text-xs font-semibold text-navy-400 tracking-wider mb-1">BGMキュー</p>
-                <p className="text-sm text-navy-700">{scene.bgmCue || "—"}</p>
+                <p className="text-xs font-semibold text-navy-400 dark:text-navy-300 tracking-wider mb-1">BGMキュー</p>
+                <p className="text-sm text-navy-700 dark:text-navy-200">{scene.bgmCue || "—"}</p>
               </div>
               {scene.notes && (
                 <div>
-                  <p className="text-xs font-semibold text-navy-400 tracking-wider mb-1">メモ</p>
-                  <p className="text-sm text-navy-500 bg-sand-50 rounded p-2">{scene.notes}</p>
+                  <p className="text-xs font-semibold text-navy-400 dark:text-navy-300 tracking-wider mb-1">メモ</p>
+                  <p className="text-sm text-navy-500 dark:text-navy-300 bg-sand-50 dark:bg-navy-700 rounded p-2">{scene.notes}</p>
                 </div>
               )}
             </div>
@@ -115,7 +115,7 @@ export function SceneDetail() {
               </div>
             ) : (
               <div className="flex items-start gap-2">
-                <p className="text-sm text-navy-600 flex-1">{scene.capcutMemo || "—"}</p>
+                <p className="text-sm text-navy-600 dark:text-navy-300 flex-1">{scene.capcutMemo || "—"}</p>
                 <button onClick={startMemoEdit} className="text-xs text-navy-400 hover:text-navy-600 shrink-0">✏️</button>
               </div>
             )}
@@ -131,7 +131,7 @@ export function SceneDetail() {
                 {sceneAssets.map((a) => (
                   <div key={a.assetId} className="flex items-center gap-2 text-sm">
                     <Badge label={assetStatusLabel[a.status]} colorClass={assetStatusColor[a.status]} />
-                    <span className="text-navy-700 truncate flex-1">{a.title}</span>
+                    <span className="text-navy-700 dark:text-navy-200 truncate flex-1">{a.title}</span>
                     <button onClick={() => unlinkAssetFromScene(a.assetId, scene.sceneId)} className="text-xs text-red-400 hover:text-red-600 shrink-0">解除</button>
                   </div>
                 ))}
@@ -165,7 +165,7 @@ export function SceneDetail() {
                   <div key={t.taskId} className="flex items-center gap-2 text-sm">
                     <Badge label={taskPriorityLabel[t.priority]} colorClass={taskPriorityColor[t.priority]} />
                     <Badge label={taskStatusLabel[t.status]} colorClass={taskStatusColor[t.status]} />
-                    <span className="text-navy-700 truncate flex-1">{t.title}</span>
+                    <span className="text-navy-700 dark:text-navy-200 truncate flex-1">{t.title}</span>
                   </div>
                 ))}
               </div>

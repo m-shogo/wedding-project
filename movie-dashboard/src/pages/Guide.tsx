@@ -3,7 +3,7 @@ import { SectionCard } from "../components/SectionCard";
 
 function Tip({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex items-start gap-2 bg-amber-50 border border-amber-200 rounded-lg p-3 text-sm text-amber-800">
+    <div className="flex items-start gap-2 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-3 text-sm text-amber-800 dark:text-amber-300">
       <span className="shrink-0">💡</span>
       <div>{children}</div>
     </div>
@@ -12,7 +12,7 @@ function Tip({ children }: { children: React.ReactNode }) {
 
 function Warn({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex items-start gap-2 bg-red-50 border border-red-200 rounded-lg p-3 text-sm text-red-800">
+    <div className="flex items-start gap-2 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-3 text-sm text-red-800 dark:text-red-300">
       <span className="shrink-0">⚠️</span>
       <div>{children}</div>
     </div>
@@ -21,7 +21,7 @@ function Warn({ children }: { children: React.ReactNode }) {
 
 function StepList({ items }: { items: string[] }) {
   return (
-    <ol className="list-decimal list-inside space-y-1.5 text-sm text-navy-700">
+    <ol className="list-decimal list-inside space-y-1.5 text-sm text-navy-700 dark:text-navy-200">
       {items.map((item, i) => (
         <li key={i}>{item}</li>
       ))}
@@ -31,7 +31,7 @@ function StepList({ items }: { items: string[] }) {
 
 function BulletList({ items }: { items: string[] }) {
   return (
-    <ul className="list-disc list-inside space-y-1 text-sm text-navy-700">
+    <ul className="list-disc list-inside space-y-1 text-sm text-navy-700 dark:text-navy-200">
       {items.map((item, i) => (
         <li key={i}>{item}</li>
       ))}
@@ -40,7 +40,7 @@ function BulletList({ items }: { items: string[] }) {
 }
 
 function SubHeading({ children }: { children: React.ReactNode }) {
-  return <h3 className="text-base font-bold text-navy-800 mt-6 mb-3 border-b border-sand-200 pb-1">{children}</h3>;
+  return <h3 className="text-base font-bold text-navy-800 dark:text-sand-100 mt-6 mb-3 border-b border-sand-200 dark:border-navy-600 pb-1">{children}</h3>;
 }
 
 export function Guide() {
@@ -50,7 +50,7 @@ export function Guide() {
 
       {/* ───────── 1. このアプリでできること ───────── */}
       <SectionCard title="このアプリでできること" className="mb-6">
-        <p className="text-sm text-navy-600 mb-4">
+        <p className="text-sm text-navy-600 dark:text-navy-300 mb-4">
           MEMORY FLIGHTは、結婚式ムービーの制作を一元管理するためのツールです。
           オープニングムービー、プロフィールムービーなど複数のムービーを同時に管理できます。
         </p>
@@ -70,7 +70,7 @@ export function Guide() {
 
       {/* ───────── 2. 基本の使い方 ───────── */}
       <SectionCard title="基本の使い方" className="mb-6">
-        <p className="text-sm text-navy-600 mb-4">
+        <p className="text-sm text-navy-600 dark:text-navy-300 mb-4">
           以下の流れで制作を進めると、抜け漏れなく進められます。
         </p>
         <StepList items={[
@@ -90,7 +90,7 @@ export function Guide() {
 
       {/* ───────── 3. オープニングムービーのおすすめ運用 ───────── */}
       <SectionCard title="オープニングムービーのおすすめ運用" className="mb-6">
-        <p className="text-sm text-navy-600 mb-4">
+        <p className="text-sm text-navy-600 dark:text-navy-300 mb-4">
           旅行テーマのオープニングムービー制作向けの流れです。
         </p>
 
@@ -119,7 +119,7 @@ export function Guide() {
 
       {/* ───────── 4. プロフィールムービーのおすすめ運用 ───────── */}
       <SectionCard title="プロフィールムービーのおすすめ運用" className="mb-6">
-        <p className="text-sm text-navy-600 mb-4">
+        <p className="text-sm text-navy-600 dark:text-navy-300 mb-4">
           写真中心のプロフィールムービー制作向けの流れです。
         </p>
 
@@ -226,7 +226,7 @@ export function Guide() {
       <SectionCard title="各ページの詳細" className="mb-6">
 
         <SubHeading>✈ ダッシュボード</SubHeading>
-        <p className="text-sm text-navy-600 mb-2">全体状況を一望するページ。</p>
+        <p className="text-sm text-navy-600 dark:text-navy-300 mb-2">全体状況を一望するページ。</p>
         <BulletList items={[
           "全シーン数、完了数、進捗率、合計尺を確認する",
           "不足素材、未紐付素材、AI動画予定、CapCut準備済の数を見る",
@@ -236,7 +236,7 @@ export function Guide() {
         ]} />
 
         <SubHeading>🎬 絵コンテ</SubHeading>
-        <p className="text-sm text-navy-600 mb-2">シーンの構成・編集・並び替えを行うページ。</p>
+        <p className="text-sm text-navy-600 dark:text-navy-300 mb-2">シーンの構成・編集・並び替えを行うページ。</p>
         <BulletList items={[
           "シーンを追加・編集・複製・削除する",
           "▲▼ボタンでシーン順を並び替える",
@@ -246,7 +246,7 @@ export function Guide() {
         ]} />
 
         <SubHeading>🗂 素材ライブラリ</SubHeading>
-        <p className="text-sm text-navy-600 mb-2">素材のパス、用途、ステータスを管理するページ。</p>
+        <p className="text-sm text-navy-600 dark:text-navy-300 mb-2">素材のパス、用途、ステータスを管理するページ。</p>
         <BulletList items={[
           "実ファイルではなく素材パスを管理する — ファイル自体はGitに入れない",
           "素材タイプ（自前写真、生成AI動画、Motion Studio書き出しなど）でフィルタする",
@@ -256,7 +256,7 @@ export function Guide() {
         ]} />
 
         <SubHeading>✨ プロンプト管理</SubHeading>
-        <p className="text-sm text-navy-600 mb-2">生成プロンプトの管理・コピーを行うページ。</p>
+        <p className="text-sm text-navy-600 dark:text-navy-300 mb-2">生成プロンプトの管理・コピーを行うページ。</p>
         <BulletList items={[
           "画像生成、動画生成、モーション、テロップ、編集指示、BGMメモの対象別に管理する",
           "ポジティブ/ネガティブプロンプトを「コピー」ボタンでそのまま使える",
@@ -267,7 +267,7 @@ export function Guide() {
         ]} />
 
         <SubHeading>⚠ 不足・未確定リスト</SubHeading>
-        <p className="text-sm text-navy-600 mb-2">不足素材、未確定事項、作業タスクを管理するページ。</p>
+        <p className="text-sm text-navy-600 dark:text-navy-300 mb-2">不足素材、未確定事項、作業タスクを管理するページ。</p>
         <BulletList items={[
           "カテゴリ（素材不足、未確定事項、写真選定、AI生成、CapCut編集、BGM、確認）で分類する",
           "優先度（高/中/低）を付けて、高から対処する",
@@ -277,7 +277,7 @@ export function Guide() {
         ]} />
 
         <SubHeading>✂ CapCut編集パック</SubHeading>
-        <p className="text-sm text-navy-600 mb-2">CapCut編集の指示をまとめるページ。</p>
+        <p className="text-sm text-navy-600 dark:text-navy-300 mb-2">CapCut編集の指示をまとめるページ。</p>
         <BulletList items={[
           "シーン順にタイムライン、使用素材、テロップ、BGM、編集メモを確認する",
           "「CapCut準備完了」バッジが付いたシーンは編集に取りかかれる",
@@ -288,7 +288,7 @@ export function Guide() {
         ]} />
 
         <SubHeading>🗺 制作マップ</SubHeading>
-        <p className="text-sm text-navy-600 mb-2">制作全体の依存関係と進捗を見るページ。</p>
+        <p className="text-sm text-navy-600 dark:text-navy-300 mb-2">制作全体の依存関係と進捗を見るページ。</p>
         <BulletList items={[
           "ムービーごとのシーン完了率、不足素材、ブロック中タスクを俯瞰する",
           "シーン別の依存状況テーブルで、素材の過不足を一覧で確認する",
@@ -296,7 +296,7 @@ export function Guide() {
         ]} />
 
         <SubHeading>💾 データ管理</SubHeading>
-        <p className="text-sm text-navy-600 mb-2">データの整合性確認、書き出し、読み込み、リセットを行うページ。</p>
+        <p className="text-sm text-navy-600 dark:text-navy-300 mb-2">データの整合性確認、書き出し、読み込み、リセットを行うページ。</p>
         <BulletList items={[
           "「検証実行」でデータの整合性をチェックする — エラー0 / 警告0を維持する",
           "「JSONエクスポート」で全データをバックアップする",
@@ -381,7 +381,7 @@ export function Guide() {
 
       {/* ───────── 9. localStorageとJSONの注意 ───────── */}
       <SectionCard title="localStorageとJSONの注意" className="mb-6">
-        <div className="space-y-4 text-sm text-navy-700">
+        <div className="space-y-4 text-sm text-navy-700 dark:text-navy-200">
           <div>
             <SubHeading>データの仕組み</SubHeading>
             <StepList items={[

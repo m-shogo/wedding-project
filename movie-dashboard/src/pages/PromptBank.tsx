@@ -91,7 +91,7 @@ export function PromptBank() {
       <div className="flex items-center justify-between mb-4">
         <div className="flex flex-wrap gap-2">
           <button onClick={() => setFilterTarget("all")}
-            className={`px-3 py-1.5 text-xs rounded-full font-medium ${filterTarget === "all" ? "bg-navy-700 text-white" : "bg-sand-100 text-navy-600 hover:bg-sand-200"}`}>
+            className={`px-3 py-1.5 text-xs rounded-full font-medium ${filterTarget === "all" ? "bg-navy-700 text-white" : "bg-sand-100 dark:bg-navy-700 text-navy-600 dark:text-navy-300 hover:bg-sand-200 dark:hover:bg-navy-600"}`}>
             すべて ({prompts.length})
           </button>
           {(Object.keys(promptTargetLabel) as PromptTarget[]).map((t) => {
@@ -99,7 +99,7 @@ export function PromptBank() {
             if (count === 0) return null;
             return (
               <button key={t} onClick={() => setFilterTarget(t)}
-                className={`px-3 py-1.5 text-xs rounded-full font-medium ${filterTarget === t ? "bg-navy-700 text-white" : "bg-sand-100 text-navy-600 hover:bg-sand-200"}`}>
+                className={`px-3 py-1.5 text-xs rounded-full font-medium ${filterTarget === t ? "bg-navy-700 text-white" : "bg-sand-100 dark:bg-navy-700 text-navy-600 dark:text-navy-300 hover:bg-sand-200 dark:hover:bg-navy-600"}`}>
                 {promptTargetLabel[t]} ({count})
               </button>
             );
@@ -107,7 +107,7 @@ export function PromptBank() {
         </div>
         <div className="flex items-center gap-2">
           {comparePickFirst && (
-            <button onClick={() => setComparePickFirst(null)} className="px-3 py-1.5 text-xs rounded-lg border border-amber-300 text-amber-700 bg-amber-50">
+            <button onClick={() => setComparePickFirst(null)} className="px-3 py-1.5 text-xs rounded-lg border border-amber-300 text-amber-700 bg-amber-50 dark:bg-amber-900/20 dark:text-amber-400 dark:border-amber-700">
               比較選択中… (キャンセル)
             </button>
           )}
@@ -122,7 +122,7 @@ export function PromptBank() {
           <span className="text-xs text-navy-400 self-center mr-1">状態:</span>
           {(Object.keys(promptStatusLabel) as PromptStatus[]).map((s) => (
             <button key={s} onClick={() => setFilterStatus(filterStatus === s ? "all" : s)}
-              className={`px-2 py-1 text-xs rounded font-medium ${filterStatus === s ? "bg-navy-600 text-white" : "bg-sand-50 text-navy-500 hover:bg-sand-100"}`}>
+              className={`px-2 py-1 text-xs rounded font-medium ${filterStatus === s ? "bg-navy-600 text-white" : "bg-sand-50 dark:bg-navy-700 text-navy-500 dark:text-navy-300 hover:bg-sand-100 dark:hover:bg-navy-600"}`}>
               {promptStatusLabel[s]}
             </button>
           ))}
@@ -141,11 +141,11 @@ export function PromptBank() {
           const isExpanded = expandedId === p.promptId;
           const resultAssets = data.assets.filter((a) => p.resultAssetIds.includes(a.assetId));
           return (
-            <div key={p.promptId} className={`bg-white rounded-xl border shadow-sm overflow-hidden ${comparePickFirst === p.promptId ? "border-amber-400 ring-2 ring-amber-200" : "border-sand-200"}`}>
-              <div className="px-6 py-4 border-b border-sand-100 flex items-center justify-between cursor-pointer" onClick={() => setExpandedId(isExpanded ? null : p.promptId)}>
+            <div key={p.promptId} className={`bg-white dark:bg-navy-800 rounded-xl border shadow-sm overflow-hidden ${comparePickFirst === p.promptId ? "border-amber-400 ring-2 ring-amber-200" : "border-sand-200 dark:border-navy-600"}`}>
+              <div className="px-6 py-4 border-b border-sand-100 dark:border-navy-600 flex items-center justify-between cursor-pointer" onClick={() => setExpandedId(isExpanded ? null : p.promptId)}>
                 <div className="flex items-center gap-3 min-w-0">
                   <span className="font-mono text-xs text-navy-400">{p.promptId}</span>
-                  <h3 className="font-bold text-navy-800 truncate">{p.title}</h3>
+                  <h3 className="font-bold text-navy-800 dark:text-sand-100 truncate">{p.title}</h3>
                   <Badge label={promptTargetLabel[p.target]} colorClass={promptTargetColor[p.target]} />
                   <Badge label={promptStatusLabel[p.status]} colorClass={promptStatusColor[p.status]} />
                 </div>
@@ -168,7 +168,7 @@ export function PromptBank() {
                         {copiedId === p.promptId + "-pos" ? "✓ コピー済み" : "コピー"}
                       </button>
                     </div>
-                    <pre className="text-sm text-navy-700 bg-sand-50 rounded-lg p-4 whitespace-pre-wrap break-words font-mono leading-relaxed select-all">
+                    <pre className="text-sm text-navy-700 dark:text-navy-200 bg-sand-50 dark:bg-navy-700 rounded-lg p-4 whitespace-pre-wrap break-words font-mono leading-relaxed select-all">
                       {p.prompt}
                     </pre>
                   </div>
@@ -181,7 +181,7 @@ export function PromptBank() {
                           {copiedId === p.promptId + "-neg" ? "✓ コピー済み" : "コピー"}
                         </button>
                       </div>
-                      <pre className="text-sm text-red-700 bg-red-50 rounded-lg p-4 whitespace-pre-wrap break-words font-mono leading-relaxed select-all">
+                      <pre className="text-sm text-red-700 dark:text-red-400 bg-red-50 dark:bg-red-900/20 rounded-lg p-4 whitespace-pre-wrap break-words font-mono leading-relaxed select-all">
                         {p.negativePrompt}
                       </pre>
                     </div>
@@ -190,7 +190,7 @@ export function PromptBank() {
                   {p.notes && (
                     <div>
                       <p className="text-xs font-semibold text-navy-400 tracking-wider mb-2">メモ</p>
-                      <p className="text-sm text-navy-500">{p.notes}</p>
+                      <p className="text-sm text-navy-500 dark:text-navy-300">{p.notes}</p>
                     </div>
                   )}
 
@@ -205,7 +205,7 @@ export function PromptBank() {
                         {resultAssets.map((a) => (
                           <div key={a.assetId} className="flex items-center gap-2 text-sm">
                             <Badge label={assetStatusLabel[a.status]} colorClass={assetStatusColor[a.status]} />
-                            <span className="text-navy-700 truncate flex-1">{a.title}</span>
+                            <span className="text-navy-700 dark:text-navy-200 truncate flex-1">{a.title}</span>
                             {a.path && <code className="text-xs text-navy-400 truncate max-w-[150px]">{a.path}</code>}
                             <button onClick={() => unlinkResultAsset(p.promptId, a.assetId)} className="text-xs text-red-400 hover:text-red-600 shrink-0">解除</button>
                           </div>
@@ -216,7 +216,7 @@ export function PromptBank() {
                     )}
                   </div>
 
-                  <div className="flex items-center gap-2 pt-2 border-t border-sand-100">
+                  <div className="flex items-center gap-2 pt-2 border-t border-sand-100 dark:border-navy-600">
                     <button onClick={() => setEditPrompt(p)} className="text-xs text-navy-500 hover:text-navy-700">✏️ 編集</button>
                     <button onClick={() => duplicatePrompt(p.promptId)} className="text-xs text-navy-500 hover:text-navy-700">📋 複製</button>
                     <button onClick={() => handleCompareClick(p.promptId)} className={`text-xs hover:text-navy-700 ${comparePickFirst === p.promptId ? "text-amber-600 font-medium" : "text-navy-500"}`}>⚖️ 比較</button>
@@ -256,9 +256,9 @@ export function PromptBank() {
             <div className="space-y-2 max-h-80 overflow-auto">
               {available.map((a) => (
                 <button key={a.assetId} onClick={() => linkResultAsset(linkAssetPromptId, a.assetId)}
-                  className="w-full text-left p-3 rounded-lg border border-sand-200 hover:bg-sand-50 flex items-center gap-3">
+                  className="w-full text-left p-3 rounded-lg border border-sand-200 dark:border-navy-600 hover:bg-sand-50 dark:hover:bg-navy-700 flex items-center gap-3">
                   <Badge label={assetStatusLabel[a.status]} colorClass={assetStatusColor[a.status]} />
-                  <span className="text-sm text-navy-700">{a.title}</span>
+                  <span className="text-sm text-navy-700 dark:text-navy-200">{a.title}</span>
                   <span className="text-xs text-navy-400 ml-auto font-mono">{a.assetId}</span>
                 </button>
               ))}
@@ -279,19 +279,19 @@ export function PromptBank() {
                   <Badge label={promptTargetLabel[cp.target]} colorClass={promptTargetColor[cp.target]} />
                   <Badge label={promptStatusLabel[cp.status]} colorClass={promptStatusColor[cp.status]} />
                 </div>
-                <h4 className="font-bold text-navy-800 text-sm">{cp.title}</h4>
+                <h4 className="font-bold text-navy-800 dark:text-sand-100 text-sm">{cp.title}</h4>
                 <p className="text-xs text-navy-400">{cp.tool} &middot; {cp.promptId}</p>
                 <div>
                   <p className="text-xs font-semibold text-navy-400 mb-1">Positive</p>
-                  <pre className="text-xs text-navy-700 bg-sand-50 rounded p-3 whitespace-pre-wrap break-words font-mono select-all">{cp.prompt}</pre>
+                  <pre className="text-xs text-navy-700 dark:text-navy-200 bg-sand-50 dark:bg-navy-700 rounded p-3 whitespace-pre-wrap break-words font-mono select-all">{cp.prompt}</pre>
                 </div>
                 {cp.negativePrompt && (
                   <div>
                     <p className="text-xs font-semibold text-navy-400 mb-1">Negative</p>
-                    <pre className="text-xs text-red-700 bg-red-50 rounded p-3 whitespace-pre-wrap break-words font-mono select-all">{cp.negativePrompt}</pre>
+                    <pre className="text-xs text-red-700 dark:text-red-400 bg-red-50 dark:bg-red-900/20 rounded p-3 whitespace-pre-wrap break-words font-mono select-all">{cp.negativePrompt}</pre>
                   </div>
                 )}
-                {cp.notes && <p className="text-xs text-navy-500">{cp.notes}</p>}
+                {cp.notes && <p className="text-xs text-navy-500 dark:text-navy-300">{cp.notes}</p>}
               </div>
             ))}
           </div>

@@ -39,20 +39,20 @@ export function ProductionMap() {
               </div>
 
               <div className="grid grid-cols-2 gap-3 text-sm mb-4">
-                <div className="bg-sand-50 rounded p-2">
-                  <p className="text-xs text-navy-400">シーン</p>
-                  <p className="font-bold text-navy-800">{doneScenes}/{scenes.length}</p>
+                <div className="bg-sand-50 dark:bg-navy-700 rounded p-2">
+                  <p className="text-xs text-navy-400 dark:text-navy-300">シーン</p>
+                  <p className="font-bold text-navy-800 dark:text-sand-100">{doneScenes}/{scenes.length}</p>
                 </div>
-                <div className="bg-sand-50 rounded p-2">
-                  <p className="text-xs text-navy-400">タスク</p>
-                  <p className="font-bold text-navy-800">{doneTasks}/{tasks.length}</p>
+                <div className="bg-sand-50 dark:bg-navy-700 rounded p-2">
+                  <p className="text-xs text-navy-400 dark:text-navy-300">タスク</p>
+                  <p className="font-bold text-navy-800 dark:text-sand-100">{doneTasks}/{tasks.length}</p>
                 </div>
-                <div className="bg-sand-50 rounded p-2">
-                  <p className="text-xs text-navy-400">不足素材</p>
+                <div className="bg-sand-50 dark:bg-navy-700 rounded p-2">
+                  <p className="text-xs text-navy-400 dark:text-navy-300">不足素材</p>
                   <p className={`font-bold ${missingAssets > 0 ? "text-red-600" : "text-emerald-600"}`}>{missingAssets}</p>
                 </div>
-                <div className="bg-sand-50 rounded p-2">
-                  <p className="text-xs text-navy-400">ブロック</p>
+                <div className="bg-sand-50 dark:bg-navy-700 rounded p-2">
+                  <p className="text-xs text-navy-400 dark:text-navy-300">ブロック</p>
                   <p className={`font-bold ${blockedTasks > 0 ? "text-red-600" : "text-emerald-600"}`}>{blockedTasks}</p>
                 </div>
               </div>
@@ -83,32 +83,32 @@ export function ProductionMap() {
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="bg-navy-50 text-left">
-                <th className="px-3 py-2 text-xs font-semibold text-navy-500">シーン</th>
-                <th className="px-3 py-2 text-xs font-semibold text-navy-500">ステータス</th>
-                <th className="px-3 py-2 text-xs font-semibold text-navy-500">尺</th>
-                <th className="px-3 py-2 text-xs font-semibold text-navy-500">素材</th>
-                <th className="px-3 py-2 text-xs font-semibold text-navy-500">不足</th>
-                <th className="px-3 py-2 text-xs font-semibold text-navy-500">タスク</th>
-                <th className="px-3 py-2 text-xs font-semibold text-navy-500">ブロック</th>
+              <tr className="bg-navy-50 dark:bg-navy-700 text-left">
+                <th className="px-3 py-2 text-xs font-semibold text-navy-500 dark:text-navy-300">シーン</th>
+                <th className="px-3 py-2 text-xs font-semibold text-navy-500 dark:text-navy-300">ステータス</th>
+                <th className="px-3 py-2 text-xs font-semibold text-navy-500 dark:text-navy-300">尺</th>
+                <th className="px-3 py-2 text-xs font-semibold text-navy-500 dark:text-navy-300">素材</th>
+                <th className="px-3 py-2 text-xs font-semibold text-navy-500 dark:text-navy-300">不足</th>
+                <th className="px-3 py-2 text-xs font-semibold text-navy-500 dark:text-navy-300">タスク</th>
+                <th className="px-3 py-2 text-xs font-semibold text-navy-500 dark:text-navy-300">ブロック</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-sand-100">
+            <tbody className="divide-y divide-sand-100 dark:divide-navy-600">
               {data.scenes.map((scene) => {
                 const sceneAssets = data.assets.filter((a) => scene.assets.includes(a.assetId));
                 const missing = sceneAssets.filter((a) => a.status === "needed" || a.status === "idea");
                 const sceneTasks = data.tasks.filter((t) => t.relatedSceneId === scene.sceneId);
                 const blocked = sceneTasks.filter((t) => t.status === "blocked");
                 return (
-                  <tr key={scene.sceneId} className="hover:bg-sand-50">
+                  <tr key={scene.sceneId} className="hover:bg-sand-50 dark:hover:bg-navy-700">
                     <td className="px-3 py-2">
-                      <span className="font-mono text-xs text-navy-400 mr-2">{scene.sceneId}</span>
-                      <span className="text-navy-700">{scene.title}</span>
+                      <span className="font-mono text-xs text-navy-400 dark:text-navy-300 mr-2">{scene.sceneId}</span>
+                      <span className="text-navy-700 dark:text-navy-200">{scene.title}</span>
                     </td>
                     <td className="px-3 py-2">
                       <Badge label={sceneStatusLabel[scene.status]} colorClass={sceneStatusColor[scene.status]} />
                     </td>
-                    <td className="px-3 py-2 text-navy-600">{scene.durationSec}秒</td>
+                    <td className="px-3 py-2 text-navy-600 dark:text-navy-300">{scene.durationSec}秒</td>
                     <td className="px-3 py-2">
                       <div className="flex flex-wrap gap-1">
                         {sceneAssets.map((a) => (
@@ -126,7 +126,7 @@ export function ProductionMap() {
                         <span className="text-xs text-emerald-600">OK</span>
                       )}
                     </td>
-                    <td className="px-3 py-2 text-navy-600 text-xs">{sceneTasks.length}</td>
+                    <td className="px-3 py-2 text-navy-600 dark:text-navy-300 text-xs">{sceneTasks.length}</td>
                     <td className="px-3 py-2">
                       {blocked.length > 0 ? (
                         <span className="text-xs text-red-600 font-semibold">{blocked.length}件</span>
@@ -150,10 +150,10 @@ export function ProductionMap() {
           <SectionCard title="要対応タスク">
             <div className="space-y-2">
               {urgent.map((t) => (
-                <div key={t.taskId} className="flex items-center gap-3 p-3 rounded-lg bg-sand-50 border border-sand-200">
+                <div key={t.taskId} className="flex items-center gap-3 p-3 rounded-lg bg-sand-50 dark:bg-navy-700 border border-sand-200 dark:border-navy-600">
                   <Badge label={taskPriorityLabel[t.priority]} colorClass={taskPriorityColor[t.priority]} />
                   <Badge label={taskStatusLabel[t.status]} colorClass={taskStatusColor[t.status]} />
-                  <span className="text-sm text-navy-700 flex-1">{t.title}</span>
+                  <span className="text-sm text-navy-700 dark:text-navy-200 flex-1">{t.title}</span>
                   {t.relatedSceneId && <span className="text-xs font-mono text-navy-400">{t.relatedSceneId}</span>}
                 </div>
               ))}

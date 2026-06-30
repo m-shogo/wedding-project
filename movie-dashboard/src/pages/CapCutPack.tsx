@@ -109,13 +109,13 @@ export function CapCutPack() {
       <Header title="CapCut編集パック" description="シーン順に素材パス・テロップ・BGM・編集メモをまとめます。Markdown書き出しも可能" showMovieSelector />
 
       <div className="flex items-center justify-end gap-3 mb-6">
-        <button onClick={handleExportCsv} className="px-4 py-2 text-sm rounded-lg border border-sand-200 text-navy-600 hover:bg-sand-50">
+        <button onClick={handleExportCsv} className="px-4 py-2 text-sm rounded-lg border border-sand-200 text-navy-600 hover:bg-sand-50 dark:border-navy-600 dark:text-navy-300 dark:hover:bg-navy-700">
           CSV出力
         </button>
-        <button onClick={handleExportMarkdown} className="px-4 py-2 text-sm rounded-lg border border-sand-200 text-navy-600 hover:bg-sand-50">
+        <button onClick={handleExportMarkdown} className="px-4 py-2 text-sm rounded-lg border border-sand-200 text-navy-600 hover:bg-sand-50 dark:border-navy-600 dark:text-navy-300 dark:hover:bg-navy-700">
           Markdown出力
         </button>
-        <button onClick={handleExportJson} className="px-4 py-2 text-sm rounded-lg border border-sand-200 text-navy-600 hover:bg-sand-50">
+        <button onClick={handleExportJson} className="px-4 py-2 text-sm rounded-lg border border-sand-200 text-navy-600 hover:bg-sand-50 dark:border-navy-600 dark:text-navy-300 dark:hover:bg-navy-700">
           JSON出力
         </button>
       </div>
@@ -161,10 +161,10 @@ export function CapCutPack() {
           if (!s) return null;
           const scAssets = getSceneAssets(s.assets);
           return (
-            <div className="mt-2 p-3 bg-navy-50 rounded-lg text-sm">
-              <p className="font-medium text-navy-800">{s.title} ({s.durationSec}秒)</p>
-              <p className="text-xs text-navy-500">{s.caption || s.purpose}</p>
-              {scAssets.length > 0 && <p className="text-xs text-navy-400 mt-1">素材: {scAssets.map((a) => a.title).join(", ")}</p>}
+            <div className="mt-2 p-3 bg-navy-50 dark:bg-navy-700 rounded-lg text-sm">
+              <p className="font-medium text-navy-800 dark:text-sand-100">{s.title} ({s.durationSec}秒)</p>
+              <p className="text-xs text-navy-500 dark:text-navy-300">{s.caption || s.purpose}</p>
+              {scAssets.length > 0 && <p className="text-xs text-navy-400 dark:text-navy-300 mt-1">素材: {scAssets.map((a) => a.title).join(", ")}</p>}
             </div>
           );
         })()}
@@ -182,15 +182,15 @@ export function CapCutPack() {
 
           return (
             <div key={scene.sceneId} ref={(el) => { sceneRefs.current[scene.sceneId] = el; }}
-              className="bg-white rounded-xl border border-sand-200 shadow-sm overflow-hidden">
-              <div className="px-6 py-4 border-b border-sand-100 bg-gradient-to-r from-navy-50 to-transparent flex items-center justify-between">
+              className="bg-white dark:bg-navy-800 rounded-xl border border-sand-200 dark:border-navy-600 shadow-sm overflow-hidden">
+              <div className="px-6 py-4 border-b border-sand-100 dark:border-navy-600 bg-gradient-to-r from-navy-50 dark:from-navy-700 to-transparent flex items-center justify-between">
                 <div className="flex items-center gap-4">
                   <div className="text-xs font-mono bg-navy-700 text-white px-2 py-1 rounded">
                     {Math.floor(startSec / 60)}:{String(startSec % 60).padStart(2, "0")} — {Math.floor(timelineSec / 60)}:{String(timelineSec % 60).padStart(2, "0")}
                   </div>
                   <div>
-                    <h3 className="font-bold text-navy-800">{scene.title}</h3>
-                    <p className="text-xs text-navy-400">{scene.durationSec}秒</p>
+                    <h3 className="font-bold text-navy-800 dark:text-sand-100">{scene.title}</h3>
+                    <p className="text-xs text-navy-400 dark:text-navy-300">{scene.durationSec}秒</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
@@ -203,16 +203,16 @@ export function CapCutPack() {
 
               <div className="p-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <div>
-                  <h4 className="text-xs font-bold text-navy-400 tracking-wider mb-3">使用素材</h4>
+                  <h4 className="text-xs font-bold text-navy-400 dark:text-navy-300 tracking-wider mb-3">使用素材</h4>
                   {sceneAssets.length === 0 ? (
-                    <p className="text-sm text-navy-300">素材なし</p>
+                    <p className="text-sm text-navy-300 dark:text-navy-400">素材なし</p>
                   ) : (
                     <ul className="space-y-2">
                       {sceneAssets.map((a) => (
                         <li key={a.assetId} className="text-sm">
                           <div className="flex items-center gap-2">
                             <Badge label={assetStatusLabel[a.status]} colorClass={assetStatusColor[a.status]} />
-                            <span className="text-navy-700 font-medium truncate">{a.title}</span>
+                            <span className="text-navy-700 dark:text-navy-200 font-medium truncate">{a.title}</span>
                           </div>
                           {a.path && <code className="text-xs text-navy-400 block mt-0.5 ml-16 truncate">{a.path}</code>}
                         </li>
@@ -222,22 +222,22 @@ export function CapCutPack() {
                 </div>
 
                 <div>
-                  <h4 className="text-xs font-bold text-navy-400 tracking-wider mb-3">編集メモ</h4>
+                  <h4 className="text-xs font-bold text-navy-400 dark:text-navy-300 tracking-wider mb-3">編集メモ</h4>
                   <div className="space-y-2 text-sm">
                     <div>
                       <span className="text-xs text-navy-400">テロップ:</span>
-                      <p className="text-navy-700 font-serif italic">{scene.caption || "—"}</p>
+                      <p className="text-navy-700 dark:text-navy-200 font-serif italic">{scene.caption || "—"}</p>
                     </div>
                     <div>
                       <span className="text-xs text-navy-400">BGM/SE:</span>
-                      <p className="text-navy-700">{scene.bgmCue || "—"}</p>
+                      <p className="text-navy-700 dark:text-navy-200">{scene.bgmCue || "—"}</p>
                     </div>
                     <div>
                       <span className="text-xs text-navy-400">CapCutメモ:</span>
                       {editingMemo === scene.sceneId ? (
                         <div className="mt-1">
                           <textarea value={memoText} onChange={(e) => setMemoText(e.target.value)}
-                            className="w-full text-sm border border-sand-200 rounded p-2 focus:outline-none focus:ring-1 focus:ring-navy-300" rows={3} />
+                            className="w-full text-sm border border-sand-200 dark:border-navy-600 dark:bg-navy-700 dark:text-sand-100 rounded p-2 focus:outline-none focus:ring-1 focus:ring-navy-300" rows={3} />
                           <div className="flex gap-2 mt-1">
                             <button onClick={() => saveMemo(scene.sceneId)} className="text-xs text-navy-600 hover:text-navy-800">保存</button>
                             <button onClick={() => setEditingMemo(null)} className="text-xs text-navy-400">キャンセル</button>
@@ -245,7 +245,7 @@ export function CapCutPack() {
                         </div>
                       ) : (
                         <div className="flex items-start gap-2">
-                          <p className="text-navy-500">{scene.capcutMemo || "—"}</p>
+                          <p className="text-navy-500 dark:text-navy-300">{scene.capcutMemo || "—"}</p>
                           <button onClick={() => startEditMemo(scene.sceneId, scene.capcutMemo)} className="text-xs text-navy-400 hover:text-navy-600 shrink-0">✏️</button>
                         </div>
                       )}
@@ -254,19 +254,19 @@ export function CapCutPack() {
                 </div>
 
                 <div>
-                  <h4 className="text-xs font-bold text-navy-400 tracking-wider mb-3">ステータス</h4>
+                  <h4 className="text-xs font-bold text-navy-400 dark:text-navy-300 tracking-wider mb-3">ステータス</h4>
                   <div className="space-y-2 text-sm">
                     <div className="flex items-center gap-2">
                       <span className="w-3 h-3 rounded-full bg-emerald-400" />
-                      <span className="text-navy-700">準備完了: {ready.length}件</span>
+                      <span className="text-navy-700 dark:text-navy-200">準備完了: {ready.length}件</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <span className="w-3 h-3 rounded-full bg-red-400" />
-                      <span className="text-navy-700">不足: {missing.length}件</span>
+                      <span className="text-navy-700 dark:text-navy-200">不足: {missing.length}件</span>
                     </div>
                   </div>
                   {missing.length > 0 && (
-                    <div className="mt-3 p-2 bg-red-50 rounded text-xs text-red-700">
+                    <div className="mt-3 p-2 bg-red-50 dark:bg-red-900/20 rounded text-xs text-red-700 dark:text-red-400">
                       <p className="font-semibold mb-1">不足素材:</p>
                       <ul className="list-disc list-inside">
                         {missing.map((a) => <li key={a.assetId}>{a.title}</li>)}

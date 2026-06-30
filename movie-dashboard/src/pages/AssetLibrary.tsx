@@ -129,7 +129,7 @@ export function AssetLibrary() {
       <div className="flex items-center justify-between mb-4">
         <div className="flex flex-wrap gap-2">
           <button onClick={() => changeFilterType("all")}
-            className={`px-3 py-1.5 text-xs rounded-full font-medium transition-colors ${filterType === "all" ? "bg-navy-700 text-white" : "bg-sand-100 text-navy-600 hover:bg-sand-200"}`}>
+            className={`px-3 py-1.5 text-xs rounded-full font-medium transition-colors ${filterType === "all" ? "bg-navy-700 text-white" : "bg-sand-100 dark:bg-navy-700 text-navy-600 dark:text-navy-300 hover:bg-sand-200 dark:hover:bg-navy-600"}`}>
             すべて ({assets.length})
           </button>
           {allTypes.map((t) => {
@@ -137,14 +137,14 @@ export function AssetLibrary() {
             if (count === 0) return null;
             return (
               <button key={t} onClick={() => changeFilterType(t)}
-                className={`px-3 py-1.5 text-xs rounded-full font-medium transition-colors ${filterType === t ? "bg-navy-700 text-white" : "bg-sand-100 text-navy-600 hover:bg-sand-200"}`}>
+                className={`px-3 py-1.5 text-xs rounded-full font-medium transition-colors ${filterType === t ? "bg-navy-700 text-white" : "bg-sand-100 dark:bg-navy-700 text-navy-600 dark:text-navy-300 hover:bg-sand-200 dark:hover:bg-navy-600"}`}>
                 {assetTypeLabel[t]} ({count})
               </button>
             );
           })}
         </div>
         <div className="flex items-center gap-2">
-          <button onClick={handleExportCsv} className="px-3 py-1.5 text-xs rounded-lg border border-sand-200 text-navy-600 hover:bg-sand-50">
+          <button onClick={handleExportCsv} className="px-3 py-1.5 text-xs rounded-lg border border-sand-200 dark:border-navy-600 text-navy-600 dark:text-navy-300 hover:bg-sand-50 dark:hover:bg-navy-700">
             CSV出力
           </button>
           <button onClick={() => setShowAdd(true)} className="px-4 py-2 text-sm rounded-lg bg-navy-700 text-white hover:bg-navy-800 shrink-0">
@@ -157,7 +157,7 @@ export function AssetLibrary() {
         <div className="flex flex-wrap gap-2">
           <span className="text-xs text-navy-400 self-center mr-1">状態:</span>
           <button onClick={() => changeFilterStatus("all")}
-            className={`px-2 py-1 text-xs rounded font-medium ${filterStatus === "all" ? "bg-navy-600 text-white" : "bg-sand-50 text-navy-500 hover:bg-sand-100"}`}>
+            className={`px-2 py-1 text-xs rounded font-medium ${filterStatus === "all" ? "bg-navy-600 text-white" : "bg-sand-50 dark:bg-navy-700 text-navy-500 dark:text-navy-300 hover:bg-sand-100 dark:hover:bg-navy-600"}`}>
             すべて
           </button>
           {allStatuses.map((s) => {
@@ -165,7 +165,7 @@ export function AssetLibrary() {
             if (count === 0) return null;
             return (
               <button key={s} onClick={() => changeFilterStatus(s)}
-                className={`px-2 py-1 text-xs rounded font-medium ${filterStatus === s ? "bg-navy-600 text-white" : "bg-sand-50 text-navy-500 hover:bg-sand-100"}`}>
+                className={`px-2 py-1 text-xs rounded font-medium ${filterStatus === s ? "bg-navy-600 text-white" : "bg-sand-50 dark:bg-navy-700 text-navy-500 dark:text-navy-300 hover:bg-sand-100 dark:hover:bg-navy-600"}`}>
                 {assetStatusLabel[s]} ({count})
               </button>
             );
@@ -182,37 +182,37 @@ export function AssetLibrary() {
 
       {/* Bulk action bar */}
       {selectedIds.size > 0 && (
-        <div className="flex items-center gap-3 mb-4 p-3 bg-navy-50 rounded-lg">
-          <span className="text-sm text-navy-700 font-medium">{selectedIds.size}件選択中</span>
+        <div className="flex items-center gap-3 mb-4 p-3 bg-navy-50 dark:bg-navy-700 rounded-lg">
+          <span className="text-sm text-navy-700 dark:text-navy-200 font-medium">{selectedIds.size}件選択中</span>
           <select value={bulkStatus} onChange={(e) => setBulkStatus(e.target.value as AssetStatus)} className="form-input w-auto text-xs">
             {allStatuses.map((s) => <option key={s} value={s}>{assetStatusLabel[s]}</option>)}
           </select>
           <button onClick={applyBulkStatus} className="px-3 py-1 text-xs rounded bg-navy-700 text-white hover:bg-navy-800">適用</button>
           <button onClick={() => setBulkDeleteConfirm(true)} className="px-3 py-1 text-xs rounded bg-red-600 text-white hover:bg-red-700">削除</button>
-          <button onClick={() => setSelectedIds(new Set())} className="px-3 py-1 text-xs rounded border border-sand-200 text-navy-600 hover:bg-sand-50">選択解除</button>
+          <button onClick={() => setSelectedIds(new Set())} className="px-3 py-1 text-xs rounded border border-sand-200 dark:border-navy-600 text-navy-600 dark:text-navy-300 hover:bg-sand-50 dark:hover:bg-navy-700">選択解除</button>
         </div>
       )}
 
-      <div className="bg-white rounded-xl border border-sand-200 shadow-sm overflow-hidden">
+      <div className="bg-white dark:bg-navy-800 rounded-xl border border-sand-200 dark:border-navy-600 shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="bg-navy-50 text-left">
+              <tr className="bg-navy-50 dark:bg-navy-700 text-left">
                 <th className="px-3 py-3 w-8">
                   <input type="checkbox" checked={filtered.length > 0 && selectedIds.size === filtered.length} onChange={toggleAll} className="w-3.5 h-3.5" />
                 </th>
-                <th className="px-3 py-3 text-xs font-semibold text-navy-500 tracking-wider w-12"></th>
-                <th className="px-4 py-3 text-xs font-semibold text-navy-500 tracking-wider">タイプ</th>
-                <th className="px-4 py-3 text-xs font-semibold text-navy-500 tracking-wider">タイトル</th>
-                <th className="px-4 py-3 text-xs font-semibold text-navy-500 tracking-wider">パス</th>
-                <th className="px-4 py-3 text-xs font-semibold text-navy-500 tracking-wider">ステータス</th>
-                <th className="px-4 py-3 text-xs font-semibold text-navy-500 tracking-wider">シーン</th>
-                <th className="px-4 py-3 text-xs font-semibold text-navy-500 tracking-wider w-28">操作</th>
+                <th className="px-3 py-3 text-xs font-semibold text-navy-500 dark:text-navy-300 tracking-wider w-12"></th>
+                <th className="px-4 py-3 text-xs font-semibold text-navy-500 dark:text-navy-300 tracking-wider">タイプ</th>
+                <th className="px-4 py-3 text-xs font-semibold text-navy-500 dark:text-navy-300 tracking-wider">タイトル</th>
+                <th className="px-4 py-3 text-xs font-semibold text-navy-500 dark:text-navy-300 tracking-wider">パス</th>
+                <th className="px-4 py-3 text-xs font-semibold text-navy-500 dark:text-navy-300 tracking-wider">ステータス</th>
+                <th className="px-4 py-3 text-xs font-semibold text-navy-500 dark:text-navy-300 tracking-wider">シーン</th>
+                <th className="px-4 py-3 text-xs font-semibold text-navy-500 dark:text-navy-300 tracking-wider w-28">操作</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-sand-100">
+            <tbody className="divide-y divide-sand-100 dark:divide-navy-600">
               {filtered.map((asset) => (
-                <tr key={asset.assetId} className="hover:bg-sand-50 transition-colors">
+                <tr key={asset.assetId} className="hover:bg-sand-50 dark:hover:bg-navy-700 transition-colors">
                   <td className="px-3 py-3">
                     <input type="checkbox" checked={selectedIds.has(asset.assetId)} onChange={() => toggleSelect(asset.assetId)} className="w-3.5 h-3.5" />
                   </td>
@@ -233,13 +233,13 @@ export function AssetLibrary() {
                     <Badge label={assetTypeLabel[asset.type]} colorClass={assetTypeColor[asset.type]} />
                   </td>
                   <td className="px-4 py-3">
-                    <p className="font-medium text-navy-800">{asset.title}</p>
+                    <p className="font-medium text-navy-800 dark:text-sand-100">{asset.title}</p>
                     {asset.notes && <p className="text-xs text-navy-400 mt-0.5 max-w-xs truncate">{asset.notes}</p>}
                   </td>
                   <td className="px-4 py-3">
                     {asset.path ? (
                       <div className="flex items-center gap-1">
-                        <code className="text-xs bg-sand-100 px-1.5 py-0.5 rounded text-navy-600 max-w-[200px] truncate block">{asset.path}</code>
+                        <code className="text-xs bg-sand-100 dark:bg-navy-600 px-1.5 py-0.5 rounded text-navy-600 dark:text-navy-300 max-w-[200px] truncate block">{asset.path}</code>
                         <button onClick={() => copyPath(asset.path, asset.assetId)} className="text-xs text-navy-400 hover:text-navy-600 shrink-0">
                           {copiedId === asset.assetId ? "✓" : "📋"}
                         </button>
@@ -254,7 +254,7 @@ export function AssetLibrary() {
                   <td className="px-4 py-3">
                     <div className="flex flex-wrap gap-1">
                       {asset.relatedSceneIds.map((s) => (
-                        <span key={s} className="text-xs bg-navy-50 text-navy-500 px-1.5 py-0.5 rounded font-mono">{s}</span>
+                        <span key={s} className="text-xs bg-navy-50 dark:bg-navy-700 text-navy-500 dark:text-navy-300 px-1.5 py-0.5 rounded font-mono">{s}</span>
                       ))}
                     </div>
                   </td>

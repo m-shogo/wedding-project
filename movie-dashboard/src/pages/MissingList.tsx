@@ -93,7 +93,7 @@ export function MissingList() {
       <div className="flex items-center justify-between mb-4">
         <div className="flex flex-wrap gap-2">
           <button onClick={() => setFilterCategory("all")}
-            className={`px-3 py-1.5 text-xs rounded-full font-medium ${filterCategory === "all" ? "bg-navy-700 text-white" : "bg-sand-100 text-navy-600 hover:bg-sand-200"}`}>
+            className={`px-3 py-1.5 text-xs rounded-full font-medium ${filterCategory === "all" ? "bg-navy-700 text-white" : "bg-sand-100 dark:bg-navy-700 text-navy-600 dark:text-navy-300 hover:bg-sand-200 dark:hover:bg-navy-600"}`}>
             すべて ({tasks.filter((t) => t.status !== "done" && t.status !== "dropped").length})
           </button>
           {(Object.keys(taskCategoryLabel) as TaskCategory[]).map((c) => {
@@ -101,7 +101,7 @@ export function MissingList() {
             if (count === 0) return null;
             return (
               <button key={c} onClick={() => setFilterCategory(c)}
-                className={`px-3 py-1.5 text-xs rounded-full font-medium ${filterCategory === c ? "bg-navy-700 text-white" : "bg-sand-100 text-navy-600 hover:bg-sand-200"}`}>
+                className={`px-3 py-1.5 text-xs rounded-full font-medium ${filterCategory === c ? "bg-navy-700 text-white" : "bg-sand-100 dark:bg-navy-700 text-navy-600 dark:text-navy-300 hover:bg-sand-200 dark:hover:bg-navy-600"}`}>
                 {taskCategoryLabel[c]} ({count})
               </button>
             );
@@ -117,7 +117,7 @@ export function MissingList() {
           <span className="text-xs text-navy-400 self-center mr-1">状態:</span>
           {activeStatuses.map((s) => (
             <button key={s} onClick={() => setFilterStatus(filterStatus === s ? "all" : s)}
-              className={`px-2 py-1 text-xs rounded font-medium ${filterStatus === s ? "bg-navy-600 text-white" : "bg-sand-50 text-navy-500 hover:bg-sand-100"}`}>
+              className={`px-2 py-1 text-xs rounded font-medium ${filterStatus === s ? "bg-navy-600 text-white" : "bg-sand-50 dark:bg-navy-700 text-navy-500 dark:text-navy-300 hover:bg-sand-100 dark:hover:bg-navy-600"}`}>
               {taskStatusLabel[s]}
             </button>
           ))}
@@ -133,8 +133,8 @@ export function MissingList() {
 
       {/* Bulk action bar */}
       {selectedIds.size > 0 && (
-        <div className="flex items-center gap-3 mb-4 p-3 bg-navy-50 rounded-lg">
-          <span className="text-sm text-navy-700 font-medium">{selectedIds.size}件選択中</span>
+        <div className="flex items-center gap-3 mb-4 p-3 bg-navy-50 dark:bg-navy-700 rounded-lg">
+          <span className="text-sm text-navy-700 dark:text-navy-200 font-medium">{selectedIds.size}件選択中</span>
           <select value={bulkStatus} onChange={(e) => setBulkStatus(e.target.value as TaskStatus)} className="form-input w-auto text-xs">
             {(["todo", "in_progress", "waiting", "blocked", "done", "dropped"] as TaskStatus[]).map((s) => (
               <option key={s} value={s}>{taskStatusLabel[s]}</option>
@@ -142,7 +142,7 @@ export function MissingList() {
           </select>
           <button onClick={applyBulkStatus} className="px-3 py-1 text-xs rounded bg-navy-700 text-white hover:bg-navy-800">適用</button>
           <button onClick={() => setBulkDeleteConfirm(true)} className="px-3 py-1 text-xs rounded bg-red-600 text-white hover:bg-red-700">削除</button>
-          <button onClick={() => setSelectedIds(new Set())} className="px-3 py-1 text-xs rounded border border-sand-200 text-navy-600 hover:bg-sand-50">選択解除</button>
+          <button onClick={() => setSelectedIds(new Set())} className="px-3 py-1 text-xs rounded border border-sand-200 dark:border-navy-600 text-navy-600 dark:text-navy-300 hover:bg-sand-50 dark:hover:bg-navy-700">選択解除</button>
         </div>
       )}
 
@@ -155,8 +155,8 @@ export function MissingList() {
         )}
         {activeTasks.map((task) => (
           <div key={task.taskId}
-            className={`bg-white rounded-lg border shadow-sm p-4 flex items-start gap-4 ${
-              task.priority === "high" ? "border-red-200" : task.priority === "medium" ? "border-amber-200" : "border-sand-200"
+            className={`bg-white dark:bg-navy-800 rounded-lg border shadow-sm p-4 flex items-start gap-4 ${
+              task.priority === "high" ? "border-red-200 dark:border-red-800" : task.priority === "medium" ? "border-amber-200 dark:border-amber-800" : "border-sand-200 dark:border-navy-600"
             }`}>
             <div className="flex items-center pt-1 shrink-0">
               <input type="checkbox" checked={selectedIds.has(task.taskId)} onChange={() => toggleSelect(task.taskId)} className="w-3.5 h-3.5" />
@@ -169,12 +169,12 @@ export function MissingList() {
               <div className="flex items-center gap-2 mb-1">
                 <span className="font-mono text-xs text-navy-400">{task.taskId}</span>
                 {task.relatedSceneId && (
-                  <span className="text-xs bg-navy-50 text-navy-500 px-1.5 py-0.5 rounded font-mono">{task.relatedSceneId}</span>
+                  <span className="text-xs bg-navy-50 dark:bg-navy-700 text-navy-500 dark:text-navy-300 px-1.5 py-0.5 rounded font-mono">{task.relatedSceneId}</span>
                 )}
                 <Badge label={taskCategoryLabel[task.category]} colorClass={taskCategoryColor[task.category]} />
               </div>
-              <h3 className="font-semibold text-navy-800">{task.title}</h3>
-              {task.notes && <p className="text-sm text-navy-500 mt-1">{task.notes}</p>}
+              <h3 className="font-semibold text-navy-800 dark:text-sand-100">{task.title}</h3>
+              {task.notes && <p className="text-sm text-navy-500 dark:text-navy-300 mt-1">{task.notes}</p>}
               {task.due && (
                 <p className={`text-xs mt-1 ${task.due < today ? "text-red-600 font-semibold" : "text-navy-400"}`}>
                   期限: {task.due} {task.due < today && "(期限超過)"}
@@ -197,16 +197,16 @@ export function MissingList() {
 
       {doneTasks.length > 0 && (
         <div>
-          <button onClick={() => setShowDone(!showDone)} className="flex items-center gap-2 text-lg font-bold text-navy-800 mb-4">
+          <button onClick={() => setShowDone(!showDone)} className="flex items-center gap-2 text-lg font-bold text-navy-800 dark:text-sand-100 mb-4">
             完了済み ({doneTasks.length})
             <span className="text-sm text-navy-400">{showDone ? "▲" : "▼"}</span>
           </button>
           {showDone && (
             <div className="space-y-2">
               {doneTasks.map((task) => (
-                <div key={task.taskId} className="bg-sand-50 rounded-lg border border-sand-200 p-3 flex items-center gap-3 opacity-60">
+                <div key={task.taskId} className="bg-sand-50 dark:bg-navy-700 rounded-lg border border-sand-200 dark:border-navy-600 p-3 flex items-center gap-3 opacity-60">
                   <Badge label={taskStatusLabel[task.status]} colorClass={taskStatusColor[task.status]} />
-                  <span className="text-sm text-navy-600 line-through flex-1">{task.title}</span>
+                  <span className="text-sm text-navy-600 dark:text-navy-300 line-through flex-1">{task.title}</span>
                   <button onClick={() => updateTask({ ...task, status: "todo" })} className="text-xs text-navy-400 hover:text-navy-600">戻す</button>
                   <button onClick={() => setDeleteId(task.taskId)} className="text-xs text-red-400 hover:text-red-600">🗑</button>
                 </div>
