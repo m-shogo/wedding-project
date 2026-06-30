@@ -94,6 +94,18 @@ export function exportCapcutMarkdown(
       }
     }
 
+    if (scene.photoSlots && scene.photoSlots.length > 0) {
+      lines.push("");
+      lines.push("### 写真スロット");
+      for (const slot of scene.photoSlots) {
+        const selected = slot.selectedAssetIds.length;
+        const mark = selected >= slot.requiredCount ? "[OK]" : "[!!]";
+        lines.push(`- ${mark} ${slot.label} (${selected}/${slot.requiredCount}枚) — ${slot.yearLabel || "時期未設定"}`);
+        if (slot.comment) lines.push(`  コメント: ${slot.comment}`);
+        if (slot.notes) lines.push(`  メモ: ${slot.notes}`);
+      }
+    }
+
     if (scene.notes) {
       lines.push("");
       lines.push(`> ${scene.notes}`);

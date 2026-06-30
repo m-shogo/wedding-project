@@ -11,6 +11,7 @@ import {
   promptStatusLabel, promptStatusColor,
   taskStatusLabel, taskStatusColor,
   taskPriorityLabel, taskPriorityColor,
+  personCategoryLabel, periodTagLabel,
 } from "../lib/labels";
 import { useProduction } from "../store/productionStore";
 
@@ -103,6 +104,54 @@ export function SceneDetail() {
               )}
             </div>
           </SectionCard>
+
+          {/* Photo slots */}
+          {scene.photoSlots && scene.photoSlots.length > 0 && (
+            <SectionCard title={`写真スロット (${scene.photoSlots.length})`}>
+              <div className="space-y-3">
+                {scene.photoSlots.map((slot) => {
+                  const selected = slot.selectedAssetIds.length;
+                  const isFilled = selected >= slot.requiredCount;
+                  return (
+                    <div key={slot.slotId} className={`border rounded-lg p-3 ${isFilled ? "border-emerald-200 dark:border-emerald-800 bg-emerald-50/50 dark:bg-emerald-900/10" : "border-amber-200 dark:border-amber-800 bg-amber-50/50 dark:bg-amber-900/10"}`}>
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center gap-2">
+                          <span className="font-medium text-sm text-navy-800 dark:text-sand-100">{slot.label}</span>
+                          <span className={`text-xs px-1.5 py-0.5 rounded ${isFilled ? "bg-emerald-100 text-emerald-700" : "bg-amber-100 text-amber-700"}`}>
+                            {selected}/{slot.requiredCount}枚
+                          </span>
+                        </div>
+                        <span className="text-xs font-mono text-navy-400">{slot.slotId}</span>
+                      </div>
+                      <div className="flex flex-wrap gap-2 text-xs text-navy-500 dark:text-navy-300">
+                        <span>{personCategoryLabel[slot.person]}</span>
+                        <span>{periodTagLabel[slot.period]}</span>
+                        {slot.yearLabel && <span>{slot.yearLabel}</span>}
+                      </div>
+                      {slot.candidateAssetIds.length > 0 && (
+                        <div className="mt-2 text-xs text-navy-400">
+                          候補: {slot.candidateAssetIds.map((aid) => {
+                            const a = data.assets.find((x) => x.assetId === aid);
+                            return a ? a.title : aid;
+                          }).join(", ")}
+                        </div>
+                      )}
+                      {slot.selectedAssetIds.length > 0 && (
+                        <div className="mt-1 text-xs text-emerald-600">
+                          選定: {slot.selectedAssetIds.map((aid) => {
+                            const a = data.assets.find((x) => x.assetId === aid);
+                            return a ? a.title : aid;
+                          }).join(", ")}
+                        </div>
+                      )}
+                      {slot.notes && <p className="mt-1 text-xs text-navy-400 dark:text-navy-300">{slot.notes}</p>}
+                      {slot.comment && <p className="mt-1 text-xs text-navy-600 dark:text-navy-200 italic">{slot.comment}</p>}
+                    </div>
+                  );
+                })}
+              </div>
+            </SectionCard>
+          )}
 
           <SectionCard title="CapCutメモ">
             {memoEditing ? (

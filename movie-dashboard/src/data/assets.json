@@ -262,5 +262,53 @@
     "source": "自前写真",
     "usage": "思い出の旅行章の写真スライド",
     "notes": "6枚選定が必要。ハワイ、旅行、犬。オープニングとの重複に注意。"
+  },
+  {
+    "assetId": "pr-photo-01",
+    "type": "own_photo",
+    "title": "新郎 幼少期 家族写真①候補",
+    "path": "",
+    "relatedSceneIds": ["pr-02"],
+    "relatedMovieIds": ["profile"],
+    "status": "collecting",
+    "source": "自前写真",
+    "usage": "プロフィール新郎幼少期スライド",
+    "notes": "赤ちゃん〜幼児期の家族写真候補。",
+    "personTags": ["groom", "family"],
+    "periodTags": ["childhood"],
+    "orientation": "landscape",
+    "photoUsage": "slide"
+  },
+  {
+    "assetId": "pr-photo-02",
+    "type": "own_photo",
+    "title": "新郎 幼少期 家族写真②候補",
+    "path": "",
+    "relatedSceneIds": ["pr-02"],
+    "relatedMovieIds": ["profile"],
+    "status": "collecting",
+    "source": "自前写真",
+    "usage": "プロフィール新郎幼少期スライド",
+    "notes": "小学校入学前後の写真候補。",
+    "personTags": ["groom", "family"],
+    "periodTags": ["childhood"],
+    "orientation": "landscape",
+    "photoUsage": "slide"
+  },
+  {
+    "assetId": "pr-photo-05",
+    "type": "own_photo",
+    "title": "新婦 幼少期 家族写真①候補",
+    "path": "",
+    "relatedSceneIds": ["pr-05"],
+    "relatedMovieIds": ["profile"],
+    "status": "collecting",
+    "source": "自前写真",
+    "usage": "プロフィール新婦幼少期スライド",
+    "notes": "赤ちゃん〜幼児期の家族写真候補。",
+    "personTags": ["bride", "family"],
+    "periodTags": ["childhood"],
+    "orientation": "landscape",
+    "photoUsage": "slide"
   }
 ]

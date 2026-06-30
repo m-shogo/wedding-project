@@ -3,6 +3,10 @@ import type {
   AssetType,
   MovieStatus,
   MovieType,
+  PersonCategory,
+  PeriodTag,
+  PhotoOrientation,
+  PhotoUsage,
   PromptStatus,
   PromptTarget,
   SceneStatus,
@@ -187,4 +191,36 @@ export const movieTypeColor: Record<MovieType, string> = {
   profile: "bg-sky-100 text-sky-700",
   introduction: "bg-teal-100 text-teal-700",
   other: "bg-gray-100 text-gray-600",
+};
+
+export const personCategoryLabel: Record<PersonCategory, string> = {
+  groom: "新郎",
+  bride: "新婦",
+  both: "ふたり",
+  family: "家族",
+  friend: "友人",
+  other: "その他",
+};
+
+export const periodTagLabel: Record<PeriodTag, string> = {
+  childhood: "幼少期",
+  student: "学生時代",
+  adult: "社会人",
+  meeting: "出会い",
+  present: "現在",
+  other: "その他",
+};
+
+export const photoOrientationLabel: Record<PhotoOrientation, string> = {
+  landscape: "横",
+  portrait: "縦",
+  square: "正方形",
+};
+
+export const photoUsageLabel: Record<PhotoUsage, string> = {
+  slide: "スライド",
+  passport_frame: "パスポート風",
+  stamp: "スタンプ",
+  bg_overlay: "背景オーバーレイ",
+  other: "その他",
 };

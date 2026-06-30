@@ -13,6 +13,7 @@ import { ProductionMap } from "./pages/ProductionMap";
 import { QualityGate } from "./pages/QualityGate";
 import { DataManager } from "./pages/DataManager";
 import { SceneDetail } from "./pages/SceneDetail";
+import { ProfilePlanner } from "./pages/ProfilePlanner";
 import { Guide } from "./pages/Guide";
 
 export default function App() {
@@ -31,6 +32,7 @@ export default function App() {
               <Route path="capcut" element={<CapCutPack />} />
               <Route path="production-map" element={<ProductionMap />} />
               <Route path="quality" element={<QualityGate />} />
+              <Route path="profile-planner" element={<ProfilePlanner />} />
               <Route path="data" element={<DataManager />} />
               <Route path="scene/:sceneId" element={<SceneDetail />} />
               <Route path="guide" element={<Guide />} />

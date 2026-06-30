@@ -8,8 +8,17 @@
     "visual": "空港ロビーのAI背景 → 搭乗券モーション → 滑走路のAI動画 → 飛行機窓からの離陸",
     "caption": "Ladies and gentlemen, our journey is about to begin.",
     "bgmCue": "BGM開始。静かなイントロから徐々に盛り上がる。",
-    "assets": ["asset-01", "asset-02", "asset-03", "asset-04", "asset-17"],
-    "promptIds": ["prompt-01", "prompt-02"],
+    "assets": [
+      "asset-01",
+      "asset-02",
+      "asset-03",
+      "asset-04",
+      "asset-17"
+    ],
+    "promptIds": [
+      "prompt-01",
+      "prompt-02"
+    ],
     "status": "generating",
     "notes": "搭乗券はmotion-studioで生成済み。空港ロビーの人物なし静止画を再生成する必要あり。",
     "capcutMemo": ""
@@ -23,8 +32,15 @@
     "visual": "雲海のAI動画 → 世界地図のモーション → 航路線アニメーション",
     "caption": "The adventure begins.",
     "bgmCue": "BGMが少し盛り上がる。テンポアップの入り口。",
-    "assets": ["asset-04", "asset-05", "asset-06", "asset-17"],
-    "promptIds": ["prompt-03"],
+    "assets": [
+      "asset-04",
+      "asset-05",
+      "asset-06",
+      "asset-17"
+    ],
+    "promptIds": [
+      "prompt-03"
+    ],
     "status": "collecting",
     "notes": "地図モーションはmotion-studioで作成可能。雲海AI動画は静止画からI2V予定。",
     "capcutMemo": ""
@@ -38,7 +54,12 @@
     "visual": "パスポート風フレーム × 新郎写真 → スタンプ → パスポート風フレーム × 新婦写真 → スタンプ",
     "caption": "Passenger 1: [新郎名] / Passenger 2: [新婦名]",
     "bgmCue": "BGMは穏やかに維持。写真が主役。",
-    "assets": ["asset-07", "asset-08", "asset-09", "asset-17"],
+    "assets": [
+      "asset-07",
+      "asset-08",
+      "asset-09",
+      "asset-17"
+    ],
     "promptIds": [],
     "status": "collecting",
     "notes": "写真選定が未完了。パスポート風フレームとスタンプはmotion-studioで作成。",
@@ -53,8 +74,16 @@
     "visual": "ハワイ海AI背景 → 旅行写真スライド → 犬の写真 → 夕暮れの海AI背景",
     "caption": "Our favorite destinations.",
     "bgmCue": "BGMのサビ。一番盛り上がるポイントに写真を合わせる。",
-    "assets": ["asset-10", "asset-11", "asset-12", "asset-17"],
-    "promptIds": ["prompt-04", "prompt-05"],
+    "assets": [
+      "asset-10",
+      "asset-11",
+      "asset-12",
+      "asset-17"
+    ],
+    "promptIds": [
+      "prompt-04",
+      "prompt-05"
+    ],
     "status": "not_started",
     "notes": "旅行写真の選定が必要。ハワイ海のAI動画は最初の試作候補。",
     "capcutMemo": ""
@@ -68,8 +97,14 @@
     "visual": "夜景AI背景 → 横浜の写真 → 扉の光AI背景",
     "caption": "Cabin crew, prepare for arrival. — 2026.10.24 Yokohama",
     "bgmCue": "BGMが落ち着き始める。感動パートへの橋渡し。",
-    "assets": ["asset-13", "asset-14", "asset-17"],
-    "promptIds": ["prompt-06"],
+    "assets": [
+      "asset-13",
+      "asset-14",
+      "asset-17"
+    ],
+    "promptIds": [
+      "prompt-06"
+    ],
     "status": "not_started",
     "notes": "横浜の夜景写真か会場周辺の写真が必要。",
     "capcutMemo": ""
@@ -83,8 +118,14 @@
     "visual": "カウントダウンモーション → 光のAI背景 → 白フェードで入場へ",
     "caption": "3... 2... 1... Welcome aboard.",
     "bgmCue": "BGMのラスト。カウントダウンに合わせてビートを刻む。入場曲へ自然につなぐ。",
-    "assets": ["asset-15", "asset-16", "asset-17"],
-    "promptIds": ["prompt-07"],
+    "assets": [
+      "asset-15",
+      "asset-16",
+      "asset-17"
+    ],
+    "promptIds": [
+      "prompt-07"
+    ],
     "status": "not_started",
     "notes": "カウントダウンはmotion-studioで作成。入場曲とのつなぎを確認する必要あり。",
     "capcutMemo": ""
@@ -98,7 +139,9 @@
     "visual": "世界地図背景 → タイトルテロップ → ページをめくるトランジション",
     "caption": "Our Story — ふたりの旅のはじまり",
     "bgmCue": "BGM開始。穏やかなイントロ。",
-    "assets": ["pr-asset-01"],
+    "assets": [
+      "pr-asset-01"
+    ],
     "promptIds": [],
     "status": "not_started",
     "notes": "オープニングの世界観を引き継ぎつつ、プロフィール用の落ち着いた導入にする。",
@@ -114,15 +157,77 @@
     "visual": "写真スライド（4枚） → 各写真にゆっくりズーム → スタンプ演出で章区切り",
     "caption": "Chapter 1: はじまりの場所",
     "bgmCue": "BGMは穏やか。写真の切り替えに合わせてやわらかく。",
-    "assets": ["pr-asset-01", "pr-asset-02"],
+    "assets": [
+      "pr-asset-01",
+      "pr-asset-02",
+      "pr-photo-01",
+      "pr-photo-02"
+    ],
     "promptIds": [],
     "status": "not_started",
     "notes": "幼少期の家族写真を4枚選定する必要あり。",
     "capcutMemo": "",
     "person": "groom",
     "yearLabel": "1990-2005",
-    "photoSlots": 4,
-    "requiredAssetCount": 4
+    "requiredAssetCount": 4,
+    "photoSlots": [
+      {
+        "slotId": "pr02-slot-01",
+        "label": "家族写真①",
+        "person": "groom",
+        "period": "childhood",
+        "yearLabel": "1990-1995",
+        "requiredCount": 1,
+        "selectedAssetIds": [],
+        "candidateAssetIds": [
+          "pr-photo-01"
+        ],
+        "rejectedAssetIds": [],
+        "comment": "",
+        "notes": "赤ちゃん〜幼児期の家族写真。温かみのある表情が理想。"
+      },
+      {
+        "slotId": "pr02-slot-02",
+        "label": "家族写真②",
+        "person": "groom",
+        "period": "childhood",
+        "yearLabel": "1995-2000",
+        "requiredCount": 1,
+        "selectedAssetIds": [],
+        "candidateAssetIds": [
+          "pr-photo-02"
+        ],
+        "rejectedAssetIds": [],
+        "comment": "",
+        "notes": "小学校入学前後。兄弟や祖父母との写真も可。"
+      },
+      {
+        "slotId": "pr02-slot-03",
+        "label": "七五三・行事",
+        "person": "groom",
+        "period": "childhood",
+        "yearLabel": "1993-1997",
+        "requiredCount": 1,
+        "selectedAssetIds": [],
+        "candidateAssetIds": [],
+        "rejectedAssetIds": [],
+        "comment": "",
+        "notes": "七五三、入園式、運動会など行事の写真。"
+      },
+      {
+        "slotId": "pr02-slot-04",
+        "label": "小学校時代",
+        "person": "groom",
+        "period": "childhood",
+        "yearLabel": "2000-2005",
+        "requiredCount": 1,
+        "selectedAssetIds": [],
+        "candidateAssetIds": [],
+        "rejectedAssetIds": [],
+        "comment": "",
+        "notes": "小学校時代。友達や部活の写真でも可。"
+      }
+    ]
   },
   {
     "sceneId": "pr-03",
@@ -133,15 +238,70 @@
     "visual": "写真スライド（4枚） → パン・ズーム演出 → 友人グループ写真で笑い",
     "caption": "青春の日々",
     "bgmCue": "BGMが少しテンポアップ。楽しさを出す。",
-    "assets": ["pr-asset-01"],
+    "assets": [
+      "pr-asset-01"
+    ],
     "promptIds": [],
     "status": "not_started",
     "notes": "学生時代の写真と友人写真を選定。",
     "capcutMemo": "",
     "person": "groom",
     "yearLabel": "2005-2012",
-    "photoSlots": 4,
-    "requiredAssetCount": 4
+    "requiredAssetCount": 4,
+    "photoSlots": [
+      {
+        "slotId": "pr03-slot-01",
+        "label": "中学時代",
+        "person": "groom",
+        "period": "student",
+        "yearLabel": "2005-2008",
+        "requiredCount": 1,
+        "selectedAssetIds": [],
+        "candidateAssetIds": [],
+        "rejectedAssetIds": [],
+        "comment": "",
+        "notes": "中学の部活や友達との写真。"
+      },
+      {
+        "slotId": "pr03-slot-02",
+        "label": "高校時代",
+        "person": "groom",
+        "period": "student",
+        "yearLabel": "2008-2011",
+        "requiredCount": 1,
+        "selectedAssetIds": [],
+        "candidateAssetIds": [],
+        "rejectedAssetIds": [],
+        "comment": "",
+        "notes": "高校の友人やイベントの写真。"
+      },
+      {
+        "slotId": "pr03-slot-03",
+        "label": "大学・友人①",
+        "person": "groom",
+        "period": "student",
+        "yearLabel": "2011-2015",
+        "requiredCount": 1,
+        "selectedAssetIds": [],
+        "candidateAssetIds": [],
+        "rejectedAssetIds": [],
+        "comment": "",
+        "notes": "大学時代のサークルや友人との写真。"
+      },
+      {
+        "slotId": "pr03-slot-04",
+        "label": "大学・友人②",
+        "person": "groom",
+        "period": "student",
+        "yearLabel": "2011-2015",
+        "requiredCount": 1,
+        "selectedAssetIds": [],
+        "candidateAssetIds": [],
+        "rejectedAssetIds": [],
+        "comment": "",
+        "notes": "大学の卒業式やイベント写真。笑いのある写真も歓迎。"
+      }
+    ]
   },
   {
     "sceneId": "pr-04",
@@ -152,15 +312,57 @@
     "visual": "写真スライド（3枚） → 趣味や仕事風景 → 章切り替えのAI背景",
     "caption": "新しい旅路へ",
     "bgmCue": "BGMは安定。落ち着いた印象。",
-    "assets": ["pr-asset-01"],
+    "assets": [
+      "pr-asset-01"
+    ],
     "promptIds": [],
     "status": "not_started",
     "notes": "社会人時代の写真を選定。趣味の写真があると人柄が伝わる。",
     "capcutMemo": "",
     "person": "groom",
     "yearLabel": "2012-",
-    "photoSlots": 3,
-    "requiredAssetCount": 3
+    "requiredAssetCount": 3,
+    "photoSlots": [
+      {
+        "slotId": "pr04-slot-01",
+        "label": "社会人・日常",
+        "person": "groom",
+        "period": "adult",
+        "yearLabel": "2015-",
+        "requiredCount": 1,
+        "selectedAssetIds": [],
+        "candidateAssetIds": [],
+        "rejectedAssetIds": [],
+        "comment": "",
+        "notes": "仕事や日常の写真。人柄が伝わるもの。"
+      },
+      {
+        "slotId": "pr04-slot-02",
+        "label": "趣味・友人",
+        "person": "groom",
+        "period": "adult",
+        "yearLabel": "2015-",
+        "requiredCount": 1,
+        "selectedAssetIds": [],
+        "candidateAssetIds": [],
+        "rejectedAssetIds": [],
+        "comment": "",
+        "notes": "趣味や友人との写真。楽しそうな表情がベスト。"
+      },
+      {
+        "slotId": "pr04-slot-03",
+        "label": "社会人・思い出",
+        "person": "groom",
+        "period": "adult",
+        "yearLabel": "2015-",
+        "requiredCount": 1,
+        "selectedAssetIds": [],
+        "candidateAssetIds": [],
+        "rejectedAssetIds": [],
+        "comment": "",
+        "notes": "旅行、イベント、印象的なシーンの写真。"
+      }
+    ]
   },
   {
     "sceneId": "pr-05",
@@ -171,15 +373,74 @@
     "visual": "写真スライド（4枚） → やわらかいズーム → スタンプ演出",
     "caption": "Chapter 2: もうひとつのはじまり",
     "bgmCue": "BGMの雰囲気を少し変える。新しい章の始まりを感じさせる。",
-    "assets": ["pr-asset-01", "pr-asset-03"],
+    "assets": [
+      "pr-asset-01",
+      "pr-asset-03",
+      "pr-photo-05"
+    ],
     "promptIds": [],
     "status": "not_started",
     "notes": "新婦の幼少期写真を4枚選定。",
     "capcutMemo": "",
     "person": "bride",
     "yearLabel": "1992-2007",
-    "photoSlots": 4,
-    "requiredAssetCount": 4
+    "requiredAssetCount": 4,
+    "photoSlots": [
+      {
+        "slotId": "pr05-slot-01",
+        "label": "家族写真①",
+        "person": "bride",
+        "period": "childhood",
+        "yearLabel": "1992-1997",
+        "requiredCount": 1,
+        "selectedAssetIds": [],
+        "candidateAssetIds": [
+          "pr-photo-05"
+        ],
+        "rejectedAssetIds": [],
+        "comment": "",
+        "notes": "赤ちゃん〜幼児期。家族との温かい写真。"
+      },
+      {
+        "slotId": "pr05-slot-02",
+        "label": "家族写真②",
+        "person": "bride",
+        "period": "childhood",
+        "yearLabel": "1997-2002",
+        "requiredCount": 1,
+        "selectedAssetIds": [],
+        "candidateAssetIds": [],
+        "rejectedAssetIds": [],
+        "comment": "",
+        "notes": "小学校入学前後の写真。"
+      },
+      {
+        "slotId": "pr05-slot-03",
+        "label": "七五三・行事",
+        "person": "bride",
+        "period": "childhood",
+        "yearLabel": "1995-1999",
+        "requiredCount": 1,
+        "selectedAssetIds": [],
+        "candidateAssetIds": [],
+        "rejectedAssetIds": [],
+        "comment": "",
+        "notes": "七五三、ピアノ発表会、運動会など。"
+      },
+      {
+        "slotId": "pr05-slot-04",
+        "label": "小学校時代",
+        "person": "bride",
+        "period": "childhood",
+        "yearLabel": "2002-2007",
+        "requiredCount": 1,
+        "selectedAssetIds": [],
+        "candidateAssetIds": [],
+        "rejectedAssetIds": [],
+        "comment": "",
+        "notes": "小学校時代。友達との写真も可。"
+      }
+    ]
   },
   {
     "sceneId": "pr-06",
@@ -190,15 +451,70 @@
     "visual": "写真スライド（4枚） → パン・ズーム → 友人との思い出",
     "caption": "大切な仲間たち",
     "bgmCue": "BGMが明るくなる。楽しい雰囲気。",
-    "assets": ["pr-asset-01"],
+    "assets": [
+      "pr-asset-01"
+    ],
     "promptIds": [],
     "status": "not_started",
     "notes": "学生時代の写真と友人写真を選定。",
     "capcutMemo": "",
     "person": "bride",
     "yearLabel": "2007-2014",
-    "photoSlots": 4,
-    "requiredAssetCount": 4
+    "requiredAssetCount": 4,
+    "photoSlots": [
+      {
+        "slotId": "pr06-slot-01",
+        "label": "中学時代",
+        "person": "bride",
+        "period": "student",
+        "yearLabel": "2007-2010",
+        "requiredCount": 1,
+        "selectedAssetIds": [],
+        "candidateAssetIds": [],
+        "rejectedAssetIds": [],
+        "comment": "",
+        "notes": "中学の友人やイベント写真。"
+      },
+      {
+        "slotId": "pr06-slot-02",
+        "label": "高校時代",
+        "person": "bride",
+        "period": "student",
+        "yearLabel": "2010-2013",
+        "requiredCount": 1,
+        "selectedAssetIds": [],
+        "candidateAssetIds": [],
+        "rejectedAssetIds": [],
+        "comment": "",
+        "notes": "高校の友人やクラブ活動の写真。"
+      },
+      {
+        "slotId": "pr06-slot-03",
+        "label": "大学・友人①",
+        "person": "bride",
+        "period": "student",
+        "yearLabel": "2013-2017",
+        "requiredCount": 1,
+        "selectedAssetIds": [],
+        "candidateAssetIds": [],
+        "rejectedAssetIds": [],
+        "comment": "",
+        "notes": "大学時代の友人との写真。"
+      },
+      {
+        "slotId": "pr06-slot-04",
+        "label": "大学・友人②",
+        "person": "bride",
+        "period": "student",
+        "yearLabel": "2013-2017",
+        "requiredCount": 1,
+        "selectedAssetIds": [],
+        "candidateAssetIds": [],
+        "rejectedAssetIds": [],
+        "comment": "",
+        "notes": "卒業式、旅行、サークルの写真など。"
+      }
+    ]
   },
   {
     "sceneId": "pr-07",
@@ -209,15 +525,57 @@
     "visual": "写真スライド（3枚） → 日常の一コマ → 章切り替えの光演出",
     "caption": "それぞれの道",
     "bgmCue": "BGMは穏やかに維持。次の出会い章への橋渡し。",
-    "assets": ["pr-asset-01"],
+    "assets": [
+      "pr-asset-01"
+    ],
     "promptIds": [],
     "status": "not_started",
     "notes": "社会人時代の写真を選定。",
     "capcutMemo": "",
     "person": "bride",
     "yearLabel": "2014-",
-    "photoSlots": 3,
-    "requiredAssetCount": 3
+    "requiredAssetCount": 3,
+    "photoSlots": [
+      {
+        "slotId": "pr07-slot-01",
+        "label": "社会人・日常",
+        "person": "bride",
+        "period": "adult",
+        "yearLabel": "2017-",
+        "requiredCount": 1,
+        "selectedAssetIds": [],
+        "candidateAssetIds": [],
+        "rejectedAssetIds": [],
+        "comment": "",
+        "notes": "仕事や日常の写真。"
+      },
+      {
+        "slotId": "pr07-slot-02",
+        "label": "趣味・友人",
+        "person": "bride",
+        "period": "adult",
+        "yearLabel": "2017-",
+        "requiredCount": 1,
+        "selectedAssetIds": [],
+        "candidateAssetIds": [],
+        "rejectedAssetIds": [],
+        "comment": "",
+        "notes": "趣味や友人との写真。"
+      },
+      {
+        "slotId": "pr07-slot-03",
+        "label": "社会人・思い出",
+        "person": "bride",
+        "period": "adult",
+        "yearLabel": "2017-",
+        "requiredCount": 1,
+        "selectedAssetIds": [],
+        "candidateAssetIds": [],
+        "rejectedAssetIds": [],
+        "comment": "",
+        "notes": "旅行やイベントの写真。"
+      }
+    ]
   },
   {
     "sceneId": "pr-08",
@@ -228,15 +586,84 @@
     "visual": "航路線が交差するモーション → ふたりの初期写真 → デートの写真",
     "caption": "Chapter 3: ふたつの航路が交わる場所",
     "bgmCue": "BGMが感動的に盛り上がる。出会いの特別感。",
-    "assets": ["pr-asset-01", "pr-asset-04"],
+    "assets": [
+      "pr-asset-01",
+      "pr-asset-04"
+    ],
     "promptIds": [],
     "status": "not_started",
     "notes": "出会いの頃の写真、初デートの写真などを選定。地図モーションの再利用を検討。",
     "capcutMemo": "",
     "person": "both",
     "yearLabel": "2018-",
-    "photoSlots": 5,
-    "requiredAssetCount": 5
+    "requiredAssetCount": 5,
+    "photoSlots": [
+      {
+        "slotId": "pr08-slot-01",
+        "label": "出会いの頃",
+        "person": "both",
+        "period": "meeting",
+        "yearLabel": "2018",
+        "requiredCount": 1,
+        "selectedAssetIds": [],
+        "candidateAssetIds": [],
+        "rejectedAssetIds": [],
+        "comment": "",
+        "notes": "出会った頃の写真。初期のツーショット。"
+      },
+      {
+        "slotId": "pr08-slot-02",
+        "label": "初デート",
+        "person": "both",
+        "period": "meeting",
+        "yearLabel": "2018-2019",
+        "requiredCount": 1,
+        "selectedAssetIds": [],
+        "candidateAssetIds": [],
+        "rejectedAssetIds": [],
+        "comment": "",
+        "notes": "初デートや初期の思い出の場所。"
+      },
+      {
+        "slotId": "pr08-slot-03",
+        "label": "交際初期",
+        "person": "both",
+        "period": "meeting",
+        "yearLabel": "2019",
+        "requiredCount": 1,
+        "selectedAssetIds": [],
+        "candidateAssetIds": [],
+        "rejectedAssetIds": [],
+        "comment": "",
+        "notes": "付き合い始めた頃の写真。"
+      },
+      {
+        "slotId": "pr08-slot-04",
+        "label": "同棲・日常",
+        "person": "both",
+        "period": "present",
+        "yearLabel": "2020-",
+        "requiredCount": 1,
+        "selectedAssetIds": [],
+        "candidateAssetIds": [],
+        "rejectedAssetIds": [],
+        "comment": "",
+        "notes": "一緒に暮らし始めた頃の写真。日常の幸福感。"
+      },
+      {
+        "slotId": "pr08-slot-05",
+        "label": "記念日・イベント",
+        "person": "both",
+        "period": "present",
+        "yearLabel": "2020-",
+        "requiredCount": 1,
+        "selectedAssetIds": [],
+        "candidateAssetIds": [],
+        "rejectedAssetIds": [],
+        "comment": "",
+        "notes": "記念日や誕生日などのイベント写真。"
+      }
+    ]
   },
   {
     "sceneId": "pr-09",
@@ -247,14 +674,96 @@
     "visual": "旅行写真スライド → 犬の写真 → ハワイの写真 → 海のAI背景",
     "caption": "ふたりの冒険はつづく",
     "bgmCue": "BGMのサビ。一番盛り上がるポイント。",
-    "assets": ["pr-asset-01", "pr-asset-05"],
+    "assets": [
+      "pr-asset-01",
+      "pr-asset-05"
+    ],
     "promptIds": [],
     "status": "not_started",
     "notes": "旅行写真、犬の写真、ハワイの写真を6枚程度選定。オープニングのハワイ素材を再利用可能。",
     "capcutMemo": "",
     "person": "both",
-    "photoSlots": 6,
-    "requiredAssetCount": 7
+    "requiredAssetCount": 7,
+    "photoSlots": [
+      {
+        "slotId": "pr09-slot-01",
+        "label": "旅行写真①",
+        "person": "both",
+        "period": "present",
+        "yearLabel": "2020-",
+        "requiredCount": 1,
+        "selectedAssetIds": [],
+        "candidateAssetIds": [],
+        "rejectedAssetIds": [],
+        "comment": "",
+        "notes": "国内旅行の写真。風景とふたりが写っているもの。"
+      },
+      {
+        "slotId": "pr09-slot-02",
+        "label": "旅行写真②",
+        "person": "both",
+        "period": "present",
+        "yearLabel": "2020-",
+        "requiredCount": 1,
+        "selectedAssetIds": [],
+        "candidateAssetIds": [],
+        "rejectedAssetIds": [],
+        "comment": "",
+        "notes": "海外旅行の写真。ハワイなど。"
+      },
+      {
+        "slotId": "pr09-slot-03",
+        "label": "ハワイ",
+        "person": "both",
+        "period": "present",
+        "yearLabel": "2023",
+        "requiredCount": 1,
+        "selectedAssetIds": [],
+        "candidateAssetIds": [],
+        "rejectedAssetIds": [],
+        "comment": "",
+        "notes": "ハワイ旅行のベストショット。"
+      },
+      {
+        "slotId": "pr09-slot-04",
+        "label": "Cookie",
+        "person": "both",
+        "period": "present",
+        "yearLabel": "",
+        "requiredCount": 1,
+        "selectedAssetIds": [],
+        "candidateAssetIds": [],
+        "rejectedAssetIds": [],
+        "comment": "",
+        "notes": "Cookieの推し写真。"
+      },
+      {
+        "slotId": "pr09-slot-05",
+        "label": "Melon",
+        "person": "both",
+        "period": "present",
+        "yearLabel": "",
+        "requiredCount": 1,
+        "selectedAssetIds": [],
+        "candidateAssetIds": [],
+        "rejectedAssetIds": [],
+        "comment": "",
+        "notes": "Melonの推し写真。"
+      },
+      {
+        "slotId": "pr09-slot-06",
+        "label": "日常・幸福感",
+        "person": "both",
+        "period": "present",
+        "yearLabel": "",
+        "requiredCount": 1,
+        "selectedAssetIds": [],
+        "candidateAssetIds": [],
+        "rejectedAssetIds": [],
+        "comment": "",
+        "notes": "日常の幸せな瞬間。笑顔の写真。"
+      }
+    ]
   },
   {
     "sceneId": "pr-10",
@@ -265,11 +774,41 @@
     "visual": "前撮り写真 or ふたりの写真 → メッセージテロップ → 白フェード",
     "caption": "これからもよろしくお願いします",
     "bgmCue": "BGMが静かに終わる。余韻を残す。",
-    "assets": ["pr-asset-01"],
+    "assets": [
+      "pr-asset-01"
+    ],
     "promptIds": [],
     "status": "not_started",
     "notes": "締めのコピーを検討。感謝の気持ちが伝わるメッセージ。",
     "capcutMemo": "",
-    "requiredAssetCount": 2
+    "requiredAssetCount": 2,
+    "photoSlots": [
+      {
+        "slotId": "pr10-slot-01",
+        "label": "前撮り・ベストショット",
+        "person": "both",
+        "period": "present",
+        "yearLabel": "2026",
+        "requiredCount": 1,
+        "selectedAssetIds": [],
+        "candidateAssetIds": [],
+        "rejectedAssetIds": [],
+        "comment": "",
+        "notes": "前撮り写真またはふたりのベストショット。"
+      },
+      {
+        "slotId": "pr10-slot-02",
+        "label": "メッセージ背景",
+        "person": "both",
+        "period": "present",
+        "yearLabel": "2026",
+        "requiredCount": 1,
+        "selectedAssetIds": [],
+        "candidateAssetIds": [],
+        "rejectedAssetIds": [],
+        "comment": "",
+        "notes": "メッセージテロップの背景写真。"
+      }
+    ]
   }
 ]

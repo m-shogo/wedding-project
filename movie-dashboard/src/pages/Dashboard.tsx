@@ -66,13 +66,24 @@ export function Dashboard() {
       </div>
 
       {/* Row 2: Asset/prompt stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
+      <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-4">
         <StatCard icon="📦" label="不足素材" value={stats.missingAssets} accent="text-orange-600" />
         <StatCard icon="🔗" label="未紐付素材" value={stats.unlinkedAssets} accent="text-amber-600" />
         <StatCard icon="📝" label="未紐付プロンプト" value={stats.unlinkedPrompts} accent="text-amber-600" />
         <StatCard icon="🤖" label="AI動画予定" value={stats.aiVideoPlanned} accent="text-indigo-600" />
         <StatCard icon="✂" label="CapCut準備済" value={stats.capcutReady} accent="text-teal-600" />
       </div>
+
+      {/* Row 3: Photo stats */}
+      {stats.photoSlotsTotal > 0 && (
+        <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
+          <StatCard icon="📷" label="写真スロット" value={stats.photoSlotsTotal} />
+          <StatCard icon="✅" label="写真選定済" value={stats.photoSelected} accent="text-emerald-600" />
+          <StatCard icon="📸" label="写真不足" value={stats.photoMissing} accent={stats.photoMissing > 0 ? "text-red-600" : "text-emerald-600"} />
+          <StatCard icon="📋" label="必要枚数" value={stats.photoRequired} />
+          <StatCard icon="💬" label="コメント率" value={`${stats.photoCommentRate}%`} accent="text-sky-600" />
+        </div>
+      )}
 
       {/* Urgent tasks */}
       {stats.urgentTasks.length > 0 && (

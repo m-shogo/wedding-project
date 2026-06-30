@@ -13,6 +13,25 @@ export interface MovieProject {
 
 export type SceneStatus = "not_started" | "collecting" | "generating" | "editing" | "review" | "done";
 
+export type PersonCategory = "groom" | "bride" | "both" | "family" | "friend" | "other";
+export type PeriodTag = "childhood" | "student" | "adult" | "meeting" | "present" | "other";
+export type PhotoOrientation = "landscape" | "portrait" | "square";
+export type PhotoUsage = "slide" | "passport_frame" | "stamp" | "bg_overlay" | "other";
+
+export interface PhotoSlot {
+  slotId: string;
+  label: string;
+  person: PersonCategory;
+  period: PeriodTag;
+  yearLabel: string;
+  requiredCount: number;
+  selectedAssetIds: string[];
+  candidateAssetIds: string[];
+  rejectedAssetIds: string[];
+  comment: string;
+  notes: string;
+}
+
 export interface Scene {
   sceneId: string;
   movieId: string;
@@ -27,7 +46,7 @@ export interface Scene {
   status: SceneStatus;
   notes: string;
   capcutMemo?: string;
-  photoSlots?: number;
+  photoSlots?: PhotoSlot[];
   comment?: string;
   yearLabel?: string;
   person?: string;
@@ -48,6 +67,11 @@ export interface Asset {
   source: string;
   usage: string;
   notes: string;
+  personTags?: PersonCategory[];
+  periodTags?: PeriodTag[];
+  orientation?: PhotoOrientation;
+  photoUsage?: PhotoUsage;
+  commentDraft?: string;
 }
 
 export type PromptTarget = "image" | "video" | "motion" | "caption" | "edit_instruction" | "bgm_note";

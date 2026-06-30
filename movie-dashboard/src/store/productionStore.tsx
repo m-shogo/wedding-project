@@ -296,6 +296,15 @@ export function ProductionProvider({ children }: { children: ReactNode }) {
           title: `${original.title} (コピー)`,
           assets: [],
           promptIds: [],
+          photoSlots: original.photoSlots
+            ? original.photoSlots.map((s) => ({
+                ...s,
+                slotId: generateId("slot"),
+                selectedAssetIds: [],
+                candidateAssetIds: [],
+                rejectedAssetIds: [],
+              }))
+            : undefined,
         };
         const idx = prev.scenes.findIndex((s) => s.sceneId === sceneId);
         const newScenes = [...prev.scenes];

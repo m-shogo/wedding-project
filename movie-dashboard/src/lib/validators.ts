@@ -166,6 +166,22 @@ export function validateData(data: AllData): ValidationIssue[] {
       });
   }
 
+  // PhotoSlot validation
+  const allSlotIds = new Set<string>();
+  for (const s of data.scenes) {
+    if (!s.photoSlots) continue;
+    for (const slot of s.photoSlots) {
+      if (allSlotIds.has(slot.slotId))
+        issues.push({ type: "error", entity: "scene", entityId: s.sceneId, message: `photoSlot ID "${slot.slotId}" が重複` });
+      allSlotIds.add(slot.slotId);
+
+      for (const aid of [...slot.selectedAssetIds, ...slot.candidateAssetIds, ...slot.rejectedAssetIds]) {
+        if (!assetIds.has(aid))
+          issues.push({ type: "error", entity: "scene", entityId: s.sceneId, message: `photoSlot "${slot.slotId}" が存在しないasset "${aid}" を参照` });
+      }
+    }
+  }
+
   return issues;
 }
 

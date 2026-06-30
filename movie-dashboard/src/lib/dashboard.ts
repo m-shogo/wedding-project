@@ -41,6 +41,23 @@ export function computeStats(
 
   const progressPercent = totalScenes > 0 ? Math.round((doneScenes / totalScenes) * 100) : 0;
 
+  // Photo slot stats
+  let photoRequired = 0;
+  let photoSelected = 0;
+  let photoSlotsTotal = 0;
+  let photoSlotsWithComment = 0;
+  for (const s of scenes) {
+    if (!s.photoSlots) continue;
+    for (const slot of s.photoSlots) {
+      photoSlotsTotal++;
+      photoRequired += slot.requiredCount;
+      photoSelected += Math.min(slot.selectedAssetIds.length, slot.requiredCount);
+      if (slot.comment) photoSlotsWithComment++;
+    }
+  }
+  const photoMissing = photoRequired - photoSelected;
+  const photoCommentRate = photoSlotsTotal > 0 ? Math.round((photoSlotsWithComment / photoSlotsTotal) * 100) : 0;
+
   return {
     totalScenes,
     doneScenes,
@@ -55,5 +72,10 @@ export function computeStats(
     urgentTasks,
     blockedScenes,
     progressPercent,
+    photoRequired,
+    photoSelected,
+    photoMissing,
+    photoSlotsTotal,
+    photoCommentRate,
   };
 }
