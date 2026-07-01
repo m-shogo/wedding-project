@@ -10,6 +10,7 @@ __pycache__/
 00_inbox/**
 01_profile-movie/source/**
 02_opening-movie/source/**
+02_opening-movie/sample_image/**
 03_introduction-movie/source/**
 04_ai-video-assets/source/**
 05_photos/**
