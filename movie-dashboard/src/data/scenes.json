@@ -13,11 +13,23 @@
       "asset-02",
       "asset-03",
       "asset-04",
-      "asset-17"
+      "asset-17",
+      "asset-18",
+      "asset-19",
+      "asset-20",
+      "asset-21",
+      "asset-22",
+      "asset-23",
+      "asset-24"
     ],
     "promptIds": [
       "prompt-01",
-      "prompt-02"
+      "prompt-02",
+      "prompt-08",
+      "prompt-09",
+      "prompt-10",
+      "prompt-11",
+      "prompt-12"
     ],
     "status": "generating",
     "notes": "搭乗券はmotion-studioで生成済み。空港ロビーの人物なし静止画を再生成する必要あり。",
@@ -36,10 +48,12 @@
       "asset-04",
       "asset-05",
       "asset-06",
-      "asset-17"
+      "asset-17",
+      "asset-20"
     ],
     "promptIds": [
-      "prompt-03"
+      "prompt-03",
+      "prompt-12"
     ],
     "status": "collecting",
     "notes": "地図モーションはmotion-studioで作成可能。雲海AI動画は静止画からI2V予定。",

@@ -1236,5 +1236,118 @@
     "orientation": "landscape",
     "photoUsage": "slide",
     "commentDraft": ""
+  },
+  {
+    "assetId": "asset-18",
+    "type": "generated_image",
+    "title": "空港ロビー候補（1-A-2・repo内既存, 夜, 82点/動画未生成）",
+    "path": "/04_ai-video-assets/generated-images/opening/c0_airport_lobby_night_001.png",
+    "relatedSceneIds": [
+      "op-01"
+    ],
+    "relatedMovieIds": [
+      "opening"
+    ],
+    "status": "collecting",
+    "source": "ChatGPT / DALL-E（現物: 02_opening-movie/sample_image/op_01_narita_boarding_gate_ai.png）",
+    "usage": "asset-01（人物なし版）が再生成中の間の代替候補。1-A-2 空港ロビーの光（夜）。",
+    "notes": "asset-status.md採点表で82点、動画未生成。人物有無を目視確認してから採否判断（op_11は人物入りで不採用の前例あり）。採用時はrenameして本パスへ移動。"
+  },
+  {
+    "assetId": "asset-19",
+    "type": "ai_video",
+    "title": "搭乗券背景 抽象光ドリフト（1-B, 84点 adopt-candidate）",
+    "path": "/04_ai-video-assets/ai-videos/opening/c0_boarding_pass_abstract_light_001.mp4",
+    "relatedSceneIds": [
+      "op-01"
+    ],
+    "relatedMovieIds": [
+      "opening"
+    ],
+    "status": "ready",
+    "source": "ComfyUI / Wan2.2 TI2V 5B（元画像: op_02_boarding_pass_bg_ai.png）",
+    "usage": "搭乗券テロップ「Ladies and gentlemen, our journey is about to begin.」の背景。暗めでテロップが主役。",
+    "notes": "2026-06-11 scorecard score-009: 84点 adopt-candidate。ネイビー地に金ボケ、中央〜右にテロップ余白が広い。生成物は現在 ~/ComfyUI-Shared/output/video/ にあり、採用時は本パスへ移動（Gitには入れない）。"
+  },
+  {
+    "assetId": "asset-20",
+    "type": "ai_video",
+    "title": "雲海トランジション（87点 adopt-candidate, C0→C1接続候補）",
+    "path": "/04_ai-video-assets/ai-videos/opening/c0_cloud_transition_001.mp4",
+    "relatedSceneIds": [
+      "op-01",
+      "op-02"
+    ],
+    "relatedMovieIds": [
+      "opening"
+    ],
+    "status": "ready",
+    "source": "ComfyUI / Wan2.2 TI2V 5B（元画像: op_16_cloud_transition_ai.png）",
+    "usage": "op-01末尾からop-02（雲海と世界地図）への場面転換、または単体の空気感補強に使用可。",
+    "notes": "score-008: 87点 adopt-candidate（現時点で最高評価）。ネイビー空+ゴールド雲海で破綻なし。雲の動きが控えめなためCapCutで速度1.2〜1.5倍を検討。"
+  },
+  {
+    "assetId": "asset-21",
+    "type": "audio",
+    "title": "空港アナウンス風SE候補",
+    "path": "/07_music/se/c0_airport_announce_001.wav",
+    "relatedSceneIds": [
+      "op-01"
+    ],
+    "relatedMovieIds": [
+      "opening"
+    ],
+    "status": "needed",
+    "source": "未定（フリーSE素材サイトで検索予定）",
+    "usage": "搭乗案内シーン冒頭、BGM開始前後に薄く重ねる案内アナウンス風の環境音。",
+    "notes": "商用・上映利用可能なライセンスを確認してから採用。声が明瞭に聞き取れすぎない音量感を想定。"
+  },
+  {
+    "assetId": "asset-22",
+    "type": "own_photo",
+    "title": "空港・出発シーンの自前写真候補",
+    "path": "",
+    "relatedSceneIds": [
+      "op-01"
+    ],
+    "relatedMovieIds": [
+      "opening"
+    ],
+    "status": "idea",
+    "source": "新郎新婦提供予定",
+    "usage": "AI背景だけでなく、二人が実際に空港で撮った写真があれば op-01末尾か op-02冒頭に一瞬差し込むと『二人らしさ』が増す。",
+    "notes": "実写真中心の方針に合わせた提案。過去の海外旅行時の空港・搭乗ゲート写真の有無を確認する。"
+  },
+  {
+    "assetId": "asset-23",
+    "type": "reference",
+    "title": "参考映像候補: 航空会社CM・空港シーンの結婚式ムービー実例",
+    "path": "/10_references/video/c0_airport_opening_reference.md",
+    "relatedSceneIds": [
+      "op-01"
+    ],
+    "relatedMovieIds": [
+      "opening"
+    ],
+    "status": "idea",
+    "source": "未収集（要検索）",
+    "usage": "空港ロビー→搭乗券→滑走路→離陸という1-Aの流れの尺配分・カメラワーク・光の使い方を研究する参考。",
+    "notes": "docs/templates/reference-log.csv にも同時記録するとよい。URLは未定、次のタスクで収集予定。"
+  },
+  {
+    "assetId": "asset-24",
+    "type": "motion_studio_export",
+    "title": "搭乗案内テロップモーション（未着手）",
+    "path": "/90_exports/motion-studio/opening/c0_boarding_announcement_caption_001.webm",
+    "relatedSceneIds": [
+      "op-01"
+    ],
+    "relatedMovieIds": [
+      "opening"
+    ],
+    "status": "needed",
+    "source": "motion-studio (Remotion) で新規作成予定",
+    "usage": "「Ladies and gentlemen, our journey is about to begin.」のテロップ表示に、フェードインと控えめな光の演出をつける。",
+    "notes": "既存の搭乗券モーション(asset-02)とは別に、テロップ単体演出として検討。motion-studio自体は今回変更せず、方針だけここに記録。"
   }
 ]

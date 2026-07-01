@@ -6,10 +6,16 @@
     "tool": "ChatGPT Image",
     "prompt": "A cinematic wide shot of an empty modern airport terminal lobby at golden hour, elegant travel film style, no people, no animals, warm sunlight streaming through large glass windows, clean reflective floors, departure boards showing abstract destinations, navy and gold color palette, subtle film grain, space for captions at the bottom, no text, no logo, no watermark, no signage with readable text.",
     "negativePrompt": "people, animals, crowds, readable text, logos, watermarks, signage, distorted objects, low quality",
-    "relatedSceneIds": ["op-01"],
-    "relatedMovieIds": ["opening"],
+    "relatedSceneIds": [
+      "op-01"
+    ],
+    "relatedMovieIds": [
+      "opening"
+    ],
     "status": "testing",
-    "resultAssetIds": ["asset-01"],
+    "resultAssetIds": [
+      "asset-01"
+    ],
     "notes": "人物なし指定を強調。前回は人物が映り込んだため不採用。"
   },
   {
@@ -19,10 +25,16 @@
     "tool": "ComfyUI / Wan2.2 TI2V 5B",
     "prompt": "A cinematic 5-second shot of an airplane runway at sunrise, camera slowly moving forward along the runway, elegant wedding travel film style, warm golden light, subtle film grain, clean composition with caption space at bottom, soft focus background, no text, no logo, no watermark, no people, no animals, no signage.",
     "negativePrompt": "text, logo, watermark, people, animals, signage, distorted objects, fast camera motion, shaky camera, unreadable artifacts, low quality",
-    "relatedSceneIds": ["op-01"],
-    "relatedMovieIds": ["opening"],
+    "relatedSceneIds": [
+      "op-01"
+    ],
+    "relatedMovieIds": [
+      "opening"
+    ],
     "status": "testing",
-    "resultAssetIds": ["asset-03"],
+    "resultAssetIds": [
+      "asset-03"
+    ],
     "notes": "I2V生成済み。採点待ち。"
   },
   {
@@ -32,10 +44,16 @@
     "tool": "ComfyUI / Wan2.2 TI2V 5B",
     "prompt": "A cinematic 5-second looping aerial shot above a sea of clouds at golden hour, elegant wedding travel film style, soft sunlight illuminating cloud tops, slow smooth forward dolly movement, subtle film grain, clean composition with caption space, no text, no logo, no watermark, no people, no animals, no signage.",
     "negativePrompt": "text, logo, watermark, people, animals, signage, airplane, distorted objects, fast camera motion, shaky camera, low quality",
-    "relatedSceneIds": ["op-02"],
-    "relatedMovieIds": ["opening"],
+    "relatedSceneIds": [
+      "op-02"
+    ],
+    "relatedMovieIds": [
+      "opening"
+    ],
     "status": "testing",
-    "resultAssetIds": ["asset-05"],
+    "resultAssetIds": [
+      "asset-05"
+    ],
     "notes": "カメラ速度を「slow smooth」に抑えている。"
   },
   {
@@ -45,10 +63,16 @@
     "tool": "ComfyUI / Wan2.2 TI2V 5B",
     "prompt": "A cinematic 5-second looping shot of gentle ocean waves in Hawaii at golden hour, elegant wedding travel film style, soft sunlight reflections on water surface, calm motion, subtle film grain, slow smooth camera movement, clean composition with caption space, no text, no logo, no watermark, no people, no animals, no signage.",
     "negativePrompt": "text, logo, watermark, people, animals, signage, distorted objects, fast camera motion, shaky camera, unreadable artifacts, low quality",
-    "relatedSceneIds": ["op-04"],
-    "relatedMovieIds": ["opening"],
+    "relatedSceneIds": [
+      "op-04"
+    ],
+    "relatedMovieIds": [
+      "opening"
+    ],
     "status": "testing",
-    "resultAssetIds": ["asset-10"],
+    "resultAssetIds": [
+      "asset-10"
+    ],
     "notes": "最初の試作候補プロンプト。Style Bible準拠。"
   },
   {
@@ -58,8 +82,12 @@
     "tool": "ChatGPT Image",
     "prompt": "A cinematic wide shot of a Hawaiian beach at sunset, golden hour light, gentle waves, palm tree silhouettes in the distance, elegant wedding travel film style, navy gold white color palette, soft film grain, clean composition with large caption space at bottom third, no people, no animals, no text, no logo, no watermark.",
     "negativePrompt": "people, animals, text, logos, watermarks, signage, distorted objects",
-    "relatedSceneIds": ["op-04"],
-    "relatedMovieIds": ["opening"],
+    "relatedSceneIds": [
+      "op-04"
+    ],
+    "relatedMovieIds": [
+      "opening"
+    ],
     "status": "draft",
     "resultAssetIds": [],
     "notes": "I2V入力用静止画。まだ生成していない。"
@@ -71,8 +99,12 @@
     "tool": "ComfyUI / Wan2.2 TI2V 5B",
     "prompt": "A cinematic 5-second shot of Yokohama harbor at night, city lights reflecting on calm water, elegant wedding film style, navy and gold color palette, soft bokeh lights, slow smooth lateral camera movement, clean composition with caption space, no text, no logo, no watermark, no people, no animals, no signage.",
     "negativePrompt": "text, logo, watermark, people, animals, signage, distorted objects, fast camera motion, shaky camera, readable signs, low quality",
-    "relatedSceneIds": ["op-05"],
-    "relatedMovieIds": ["opening"],
+    "relatedSceneIds": [
+      "op-05"
+    ],
+    "relatedMovieIds": [
+      "opening"
+    ],
     "status": "draft",
     "resultAssetIds": [],
     "notes": "静止画を先に作ってからI2Vに進む。"
@@ -84,10 +116,106 @@
     "tool": "ComfyUI / Wan2.2 TI2V 5B",
     "prompt": "A cinematic 5-second shot of abstract golden light particles slowly converging toward center, dark navy background, elegant wedding film style, soft bokeh, warm gold and white tones, slow smooth motion, clean composition, space for countdown text overlay, no text, no logo, no watermark, no people, no animals.",
     "negativePrompt": "text, logo, watermark, people, animals, fast motion, harsh light, distorted shapes, low quality",
-    "relatedSceneIds": ["op-06"],
-    "relatedMovieIds": ["opening"],
+    "relatedSceneIds": [
+      "op-06"
+    ],
+    "relatedMovieIds": [
+      "opening"
+    ],
     "status": "draft",
     "resultAssetIds": [],
     "notes": "カウントダウン背景用。motion-studioのカウントダウンと重ねて使う。"
+  },
+  {
+    "promptId": "prompt-08",
+    "title": "空港ロビー背景（人物なし・夜, 代替候補）",
+    "target": "image",
+    "tool": "ChatGPT Image",
+    "prompt": "A cinematic wide shot of an empty modern airport terminal corridor at dusk, elegant travel wedding film style, no people, warm departure gate lighting, navy and gold color palette, clean reflective floor, glass windows showing soft runway lights outside, subtle film grain, space for captions at the bottom, no text, no logo, no watermark, no signage with readable text.",
+    "negativePrompt": "people, crowds, animals, readable text, logos, watermarks, signage, distorted objects, low quality",
+    "relatedSceneIds": [
+      "op-01"
+    ],
+    "relatedMovieIds": [
+      "opening"
+    ],
+    "status": "draft",
+    "resultAssetIds": [
+      "asset-18"
+    ],
+    "notes": "asset-01（人物なし・朝バージョン）の夜バージョン代替。再生成時は人物なしを強く指定する。"
+  },
+  {
+    "promptId": "prompt-09",
+    "title": "搭乗券背景・抽象光（ネイビー×ゴールド）",
+    "target": "image",
+    "tool": "ChatGPT Image",
+    "prompt": "A cinematic abstract background of soft golden bokeh light drifting against a deep navy backdrop, elegant wedding travel film style, minimal and clean, generous negative space on the right side for captions, subtle film grain, warm gentle glow, no text, no logo, no watermark, no people, no animals, no signage, no readable objects.",
+    "negativePrompt": "text, logo, watermark, people, animals, signage, busy composition, harsh lighting, low quality",
+    "relatedSceneIds": [
+      "op-01"
+    ],
+    "relatedMovieIds": [
+      "opening"
+    ],
+    "status": "testing",
+    "resultAssetIds": [
+      "asset-19"
+    ],
+    "notes": "実際は静止画(op_02_boarding_pass_bg_ai.png)からI2Vで動画化(asset-19)。2段階パイプラインの記録用プロンプト。"
+  },
+  {
+    "promptId": "prompt-10",
+    "title": "旅の始まりを感じる光の道・抽象背景",
+    "target": "image",
+    "tool": "ChatGPT Image",
+    "prompt": "A cinematic abstract composition suggesting a path of soft light stretching into the distance, warm dawn colors transitioning from deep navy to soft gold, minimal environment resembling an airport corridor without any real structure or signage, elegant travel wedding film style, clean bottom-third space for captions, gentle atmospheric haze, no text, no logo, no watermark, no people, no animals, no signage.",
+    "negativePrompt": "text, logo, watermark, people, animals, signage, distorted objects, cluttered composition, low quality",
+    "relatedSceneIds": [
+      "op-01"
+    ],
+    "relatedMovieIds": [
+      "opening"
+    ],
+    "status": "draft",
+    "resultAssetIds": [],
+    "notes": "1-A→1-Bのつなぎ、または搭乗案内テロップの新背景候補。まだ生成未実施の純粋なアイデア。"
+  },
+  {
+    "promptId": "prompt-11",
+    "title": "空港ロビーの光ドリフト（動画生成向け）",
+    "target": "video",
+    "tool": "ComfyUI / Wan2.2 TI2V 5B",
+    "prompt": "A cinematic 5-second shot of a quiet airport terminal corridor at dusk, camera slowly drifting forward, warm departure gate lights glowing softly in the background, elegant wedding travel film style, subtle film grain, clean composition with caption space at the bottom, soft focus, no text, no logo, no watermark, no people, no animals, no signage.",
+    "negativePrompt": "text, logo, watermark, people, animals, signage, distorted objects, fast camera motion, shaky camera, unreadable artifacts, low quality",
+    "relatedSceneIds": [
+      "op-01"
+    ],
+    "relatedMovieIds": [
+      "opening"
+    ],
+    "status": "draft",
+    "resultAssetIds": [],
+    "notes": "asset-18（空港ロビー・夜）が人物なし確定した後に、この動画化プロンプトで試作する。"
+  },
+  {
+    "promptId": "prompt-12",
+    "title": "雲海トランジション（C0→C1接続, 採点済み87点）",
+    "target": "video",
+    "tool": "ComfyUI / Wan2.2 TI2V 5B",
+    "prompt": "A cinematic 5-second aerial shot of golden sunlit clouds seen from above, camera slowly drifting forward through the cloud layer, elegant wedding travel film style, navy and gold color palette, subtle film grain, clean composition with caption space, no text, no logo, no watermark, no people, no animals, no signage.",
+    "negativePrompt": "text, logo, watermark, people, animals, signage, distorted objects, fast camera motion, shaky camera, unreadable artifacts, low quality",
+    "relatedSceneIds": [
+      "op-01",
+      "op-02"
+    ],
+    "relatedMovieIds": [
+      "opening"
+    ],
+    "status": "testing",
+    "resultAssetIds": [
+      "asset-20"
+    ],
+    "notes": "score-008: 87点 adopt-candidate。元画像op_16_cloud_transition_ai.png。CapCutで速度1.2〜1.5倍調整を検討。"
   }
 ]

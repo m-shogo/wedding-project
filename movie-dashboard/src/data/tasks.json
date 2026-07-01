@@ -196,5 +196,71 @@
     "due": "",
     "status": "todo",
     "notes": "出会いの頃の写真、初デートの写真。テロップ用のエピソードも整理する。"
+  },
+  {
+    "taskId": "task-15",
+    "movieId": "opening",
+    "title": "C0 空港ロビー背景（夜）を人物なし確定で再生成",
+    "category": "ai_generation",
+    "priority": "high",
+    "relatedSceneId": "op-01",
+    "due": "",
+    "status": "todo",
+    "notes": "asset-18候補(op_01_narita_boarding_gate_ai.png)の人物有無を目視確認し、必要ならprompt-08で再生成。"
+  },
+  {
+    "taskId": "task-16",
+    "movieId": "opening",
+    "title": "C0 搭乗券・抽象光背景をI2Vで正式収録",
+    "category": "ai_generation",
+    "priority": "medium",
+    "relatedSceneId": "op-01",
+    "due": "",
+    "status": "todo",
+    "notes": "asset-19(84点)を~/ComfyUI-Shared/output/videoから/04_ai-video-assets/ai-videos/opening/へ移動し、c0_boarding_pass_abstract_light_001.mp4に統一。"
+  },
+  {
+    "taskId": "task-17",
+    "movieId": "opening",
+    "title": "C0 出発感のある短尺AI動画の追加候補を試す",
+    "category": "ai_generation",
+    "priority": "medium",
+    "relatedSceneId": "op-01",
+    "due": "",
+    "status": "todo",
+    "notes": "prompt-11で空港ロビーのI2V試作。asset-18の人物なし確定後に着手。"
+  },
+  {
+    "taskId": "task-18",
+    "movieId": "opening",
+    "title": "C0 Motion Studio用の搭乗案内テロップモーション方針を決める",
+    "category": "motion_studio",
+    "priority": "medium",
+    "relatedSceneId": "op-01",
+    "due": "",
+    "status": "todo",
+    "notes": "asset-24用。motion-studioディレクトリ自体は変更せず、演出方針（タイミング・フォント・出現エフェクト）をここに記録してから着手する。"
+  },
+  {
+    "taskId": "task-19",
+    "movieId": "opening",
+    "title": "C0 空港アナウンス風SE候補を探す",
+    "category": "bgm",
+    "priority": "low",
+    "relatedSceneId": "op-01",
+    "due": "",
+    "status": "todo",
+    "notes": "asset-21用。会場上映とSNS投稿で利用条件を分けて確認する。"
+  },
+  {
+    "taskId": "task-20",
+    "movieId": "opening",
+    "title": "C0 CapCutで重ねるテロップ文言を最終確定する",
+    "category": "caption",
+    "priority": "medium",
+    "relatedSceneId": "op-01",
+    "due": "",
+    "status": "todo",
+    "notes": "caption「Ladies and gentlemen, our journey is about to begin.」を軸に、日本語併記や新郎新婦名の表記ゆれがないか確認する。"
   }
 ]
