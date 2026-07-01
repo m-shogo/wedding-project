@@ -4,8 +4,8 @@
     "title": "空港ロビー（人物なし）",
     "target": "image",
     "tool": "ChatGPT Image",
-    "prompt": "A cinematic wide shot of an empty modern airport terminal lobby at golden hour, elegant travel film style, no people, no animals, warm sunlight streaming through large glass windows, clean reflective floors, departure boards showing abstract destinations, navy and gold color palette, subtle film grain, space for captions at the bottom, no text, no logo, no watermark, no signage with readable text.",
-    "negativePrompt": "people, animals, crowds, readable text, logos, watermarks, signage, distorted objects, low quality",
+    "prompt": "A cinematic wide shot of an empty modern airport terminal lobby at golden hour, elegant wedding opening mood, travel theme, no people, no visible staff, no passengers, no animals, warm sunlight streaming through large glass windows, clean reflective floors, departure boards showing abstract destinations, navy and gold color palette, subtle film grain, cinematic composition, space for overlay text at the bottom, clean composition, warm soft evening light, realistic but refined look, no text, no logo, no watermark, no signage with readable text.",
+    "negativePrompt": "animals, people, crowd, passengers, airport staff, readable text, logo, signage, ad poster, watermark, clutter, busy composition, low quality, distorted architecture, harsh lighting, overexposed, underexposed",
     "relatedSceneIds": [
       "op-01"
     ],
@@ -16,7 +16,7 @@
     "resultAssetIds": [
       "asset-01"
     ],
-    "notes": "人物なし指定を強調。前回は人物が映り込んだため不採用。"
+    "notes": "人物なし指定を強調。前回は人物が映り込んだため不採用。2026-07-02: 必須要素(no visible staff / no passengers / space for overlay text等)を追加して強化。比較用にprompt-13〜17(方向性A〜E)を追加。採点基準はGuide『C0 空港ロビー背景 採点基準』を参照。"
   },
   {
     "promptId": "prompt-02",
@@ -131,8 +131,8 @@
     "title": "空港ロビー背景（人物なし・夕暮れ, 代替候補）",
     "target": "image",
     "tool": "ChatGPT Image",
-    "prompt": "A cinematic wide shot of an empty modern airport terminal corridor at dusk (warm sunset light), elegant travel wedding film style, no people, warm departure gate lighting, navy and gold color palette, clean reflective floor, glass windows showing soft runway lights outside, subtle film grain, space for captions at the bottom, no text, no logo, no watermark, no signage with readable text.",
-    "negativePrompt": "people, crowds, animals, readable text, logos, watermarks, signage, distorted objects, low quality",
+    "prompt": "A cinematic wide shot of an empty modern airport terminal corridor at dusk, elegant wedding opening mood, travel theme, no people, no visible staff, no passengers, warm departure gate lighting, navy and gold color palette, clean reflective floor, glass windows showing soft runway lights outside, subtle film grain, cinematic composition, space for overlay text at the bottom, clean composition, warm soft evening light, realistic but refined look, no text, no logo, no watermark, no signage with readable text.",
+    "negativePrompt": "people, crowd, passengers, airport staff, readable text, logo, signage, ad poster, watermark, clutter, busy composition, low quality, distorted architecture, harsh lighting, overexposed, underexposed",
     "relatedSceneIds": [
       "op-01"
     ],
@@ -141,7 +141,7 @@
     ],
     "status": "draft",
     "resultAssetIds": [],
-    "notes": "夕暮れ版の空港ロビー候補として repo内 op_01_narita_boarding_gate_ai.png を検討したが、2026-07-01の目視確認で人物の写り込みが判明し不採用（asset-18参照）。このプロンプトで人物なしを徹底し新規生成する。"
+    "notes": "夕暮れ版の空港ロビー候補として repo内 op_01_narita_boarding_gate_ai.png を検討したが、2026-07-01の目視確認で人物の写り込みが判明し不採用（asset-18参照）。このプロンプトで人物なしを徹底し新規生成する。2026-07-02: 必須要素を追加して強化。方向性としてはprompt-13(方向性A)に近い搭乗ゲート寄りの通路構図として引き続き有効。"
   },
   {
     "promptId": "prompt-09",
@@ -217,5 +217,96 @@
       "asset-26"
     ],
     "notes": "score-008: 87点 adopt-candidate。元画像op_16_cloud_transition_ai.png（2026-07-01 目視確認済み: 人物・文字・ロゴなし）。静止画(asset-26)からI2Vで動画化(asset-20)。CapCutで速度1.2〜1.5倍調整を検討。"
+  },
+  {
+    "promptId": "prompt-13",
+    "title": "空港ロビー候補a（方向性A: 夕暮れの上品な空港ロビー・広い空間・静かな出発感）",
+    "target": "image",
+    "tool": "ChatGPT Image",
+    "prompt": "A cinematic wide-angle interior shot of a spacious, empty modern airport departure lobby at warm dusk, elegant wedding opening mood, travel theme, soft golden sunset light pouring through floor-to-ceiling glass windows, calm and quiet atmosphere suggesting the beginning of a journey, polished floor with soft reflections, minimalist architecture, no people, no visible staff, no passengers, no readable text, no logos, no signage, clean composition with generous space for overlay text on the right side, cinematic composition, realistic but refined look, subtle film grain, navy and gold color palette.",
+    "negativePrompt": "people, crowd, passengers, airport staff, readable text, logo, signage, ad poster, watermark, clutter, busy composition, low quality, distorted architecture, harsh lighting, overexposed, underexposed",
+    "relatedSceneIds": [
+      "op-01"
+    ],
+    "relatedMovieIds": [
+      "opening"
+    ],
+    "status": "draft",
+    "resultAssetIds": [
+      "asset-27"
+    ],
+    "notes": "狙い: 最有力の本命方向。prompt-01/asset-01の正統進化版。広さと静けさで『出発前の静寂』を出す。違い: prompt-01より『静かな出発感』『空間の広さ』を明示し、テロップ余白の位置(右側)を指定。長所: Style Bibleに最も忠実。安全度が高い。テロップ余白の指定が具体的。短所: 無難すぎて既存案(prompt-01/08)との差別化が弱い可能性。"
+  },
+  {
+    "promptId": "prompt-14",
+    "title": "空港ロビー候補c（方向性B: チェックイン前の広い空港ホール・床反射・余白重視）",
+    "target": "image",
+    "tool": "ChatGPT Image",
+    "prompt": "A cinematic wide shot of a vast, empty airport check-in hall before opening hours, elegant wedding opening mood, travel theme, soft ambient morning light, highly polished floor with clear architectural reflections, tall ceiling with clean modern lines, no people, no visible staff, no passengers, no readable text, no logos, no signage, clean composition with wide open negative space across the lower third for overlay text, cinematic composition, realistic but refined look, subtle film grain, soft navy and warm white color palette.",
+    "negativePrompt": "people, crowd, passengers, airport staff, readable text, logo, signage, ad poster, watermark, clutter, busy composition, low quality, distorted architecture, harsh lighting, overexposed, underexposed",
+    "relatedSceneIds": [
+      "op-01"
+    ],
+    "relatedMovieIds": [
+      "opening"
+    ],
+    "status": "draft",
+    "resultAssetIds": [
+      "asset-29"
+    ],
+    "notes": "狙い: 床反射を活かした開放感、下部余白を最大化しテロップとの親和性を最優先。違い: 時間帯を朝寄りにし、A案より『広さ・開放感』を強調。反射の描写を明示。長所: テロップ配置の自由度が最も高い。短所: 朝の光だとStyle Bibleの『夕暮れの薄いオレンジ』寄りの世界観からやや外れる可能性。"
+  },
+  {
+    "promptId": "prompt-15",
+    "title": "空港ロビー候補（方向性C: 搭乗ゲート近辺を抽象化・標識文字なし）",
+    "target": "image",
+    "tool": "ChatGPT Image",
+    "prompt": "A cinematic abstract interpretation of an airport boarding gate area, elegant wedding opening mood, travel theme, soft warm light, blurred bokeh of gate seating and glass kept intentionally out of focus in the background, no readable signage shapes, no people, no visible staff, no passengers, no readable text, no logos, no signage, clean minimal composition with ample negative space for overlay text, cinematic composition, realistic but refined look, gentle depth of field, navy and soft gold color palette.",
+    "negativePrompt": "people, crowd, passengers, airport staff, readable text, logo, signage, ad poster, watermark, clutter, busy composition, low quality, distorted architecture, harsh lighting, overexposed, underexposed",
+    "relatedSceneIds": [
+      "op-01"
+    ],
+    "relatedMovieIds": [
+      "opening"
+    ],
+    "status": "draft",
+    "resultAssetIds": [],
+    "notes": "狙い: 具象度を下げてリスク（人物・看板混入）を根本的に減らす方向性。違い: A/B案より抽象度・ボケを強め、読める要素が入り込む余地を構造的に排除。長所: 『文字・ロゴ・看板』混入リスクが最も低い。破綻しにくい。短所: 『空港感』が弱まる可能性があり、C0の目的（空港であることが伝わる）を満たせないリスク。他4案の生成結果が芳しくない場合の保険として扱う。"
+  },
+  {
+    "promptId": "prompt-16",
+    "title": "空港ロビー候補b（方向性D: ガラス越しの空港ロビー・光の抜け感・旅行感強め）",
+    "target": "image",
+    "tool": "ChatGPT Image",
+    "prompt": "A cinematic shot looking through the floor-to-ceiling glass wall of an airport departure lobby toward a runway bathed in warm dusk light, elegant wedding opening mood, travel theme, gentle lens flare and soft light beams passing through the glass, quiet empty interior in the foreground, no people, no visible staff, no passengers, no readable text, no logos, no signage, clean composition with space for overlay text in the upper third, cinematic composition, realistic but refined look, subtle film grain, warm golden and navy color palette.",
+    "negativePrompt": "people, crowd, passengers, airport staff, readable text, logo, signage, ad poster, watermark, clutter, busy composition, low quality, distorted architecture, harsh lighting, overexposed, underexposed",
+    "relatedSceneIds": [
+      "op-01"
+    ],
+    "relatedMovieIds": [
+      "opening"
+    ],
+    "status": "draft",
+    "resultAssetIds": [
+      "asset-28"
+    ],
+    "notes": "狙い: 『旅の始まり』を視覚的に一番強く感じさせる方向性。滑走路とのつながりを画面内に取り込む。違い: A/B案が室内完結なのに対し、D案は窓外の滑走路・光を積極的に見せ、次シーン（滑走路離陸=asset-03）への接続を意識。長所: 高揚感が最も出やすい。次シーンとの親和性が高い。短所: 光量や逆光の描写が強いと露出オーバー・破綻のリスクがやや上がる。"
+  },
+  {
+    "promptId": "prompt-17",
+    "title": "空港ロビー候補（方向性E: 空港ラウンジ風の落ち着いた高級感）",
+    "target": "image",
+    "tool": "ChatGPT Image",
+    "prompt": "A cinematic interior shot resembling an upscale airport lounge adjacent to the departure area, elegant wedding opening mood, travel theme, soft warm evening light, refined furniture silhouettes kept minimal and out of focus, muted navy and gold color palette, understated luxury atmosphere, no people, no visible staff, no passengers, no readable text, no logos, no signage, clean composition with generous space for overlay text, cinematic composition, realistic but refined look, subtle film grain.",
+    "negativePrompt": "people, crowd, passengers, airport staff, readable text, logo, signage, ad poster, watermark, clutter, busy composition, low quality, distorted architecture, harsh lighting, overexposed, underexposed",
+    "relatedSceneIds": [
+      "op-01"
+    ],
+    "relatedMovieIds": [
+      "opening"
+    ],
+    "status": "draft",
+    "resultAssetIds": [],
+    "notes": "狙い: 結婚式ムービーとしての『上質感』を最優先した方向性。空港というより『上質な旅の起点』を演出。違い: 他案より『空港らしさ』を少し弱め、『高級感・上品さ』を最優先。長所: 『安っぽく見えない』リスクが最も低い。結婚式の雰囲気に馴染みやすい。短所: 空港であることが伝わりにくくなる可能性があり、C0の『空港』要件が薄まるリスク。"
   }
 ]

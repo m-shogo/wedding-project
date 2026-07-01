@@ -22,7 +22,10 @@
       "asset-23",
       "asset-24",
       "asset-25",
-      "asset-26"
+      "asset-26",
+      "asset-27",
+      "asset-28",
+      "asset-29"
     ],
     "promptIds": [
       "prompt-01",
@@ -31,11 +34,16 @@
       "prompt-09",
       "prompt-10",
       "prompt-11",
-      "prompt-12"
+      "prompt-12",
+      "prompt-13",
+      "prompt-14",
+      "prompt-15",
+      "prompt-16",
+      "prompt-17"
     ],
     "status": "generating",
-    "notes": "搭乗券はmotion-studioで生成済み。空港ロビーの人物なし静止画を再生成する必要あり。",
-    "capcutMemo": ""
+    "notes": "搭乗券はmotion-studioで生成済み。空港ロビーの人物なし静止画を再生成する必要あり（最重要要件: 人物/犬/文字/ロゴ/看板可読文字なし、上品・旅行テーマ・高揚感・テロップ余白）。比較候補5案(prompt-13〜17, 方向性A〜E)を用意済み。採点基準はGuideページ『C0 空港ロビー背景 採点基準』を参照。",
+    "capcutMemo": "空港ロビー背景(asset-01)は再生成待ち。仮候補a/b/c(asset-27/28/29)を採点中。確定までは 搭乗券背景(asset-19) → 滑走路離陸(asset-03) → 飛行機窓(asset-04) の順で仮組みし、ロビー背景は最後に差し替える。雲海(asset-20)はop-02への接続用として末尾に配置。"
   },
   {
     "sceneId": "op-02",

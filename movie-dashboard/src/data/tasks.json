@@ -30,7 +30,7 @@
     "relatedSceneId": "op-01",
     "due": "",
     "status": "in_progress",
-    "notes": "op_01/op_11は人物入りで不採用。人物なし指定を強調して再生成。"
+    "notes": "op_01/op_11は人物入りで不採用。人物なし指定を強調して再生成。2026-07-01 目視確認完了: 両候補とも人物混入で使用不可（asset-18参照）。2026-07-02: 比較用にprompt-13〜17(方向性A〜E)・候補資産asset-27/28/29を追加。task-21〜24で生成〜確定まで管理。"
   },
   {
     "taskId": "task-04",
@@ -205,8 +205,8 @@
     "priority": "high",
     "relatedSceneId": "op-01",
     "due": "",
-    "status": "todo",
-    "notes": "2026-07-01 目視確認完了: op_01/op_11とも人物が写っており使用不可と判明（asset-18を不採用に変更）。残タスクは新規に人物なし指定を徹底したプロンプト(prompt-08 or prompt-01)で再生成すること。"
+    "status": "dropped",
+    "notes": "task-03に統合（重複タスクのため整理）。目視確認結果と対応方針はtask-03を参照。"
   },
   {
     "taskId": "task-16",
@@ -262,5 +262,49 @@
     "due": "",
     "status": "todo",
     "notes": "caption「Ladies and gentlemen, our journey is about to begin.」を軸に、日本語併記や新郎新婦名の表記ゆれがないか確認する。"
+  },
+  {
+    "taskId": "task-21",
+    "movieId": "opening",
+    "title": "C0 空港ロビー背景の比較候補5案を生成する",
+    "category": "ai_generation",
+    "priority": "high",
+    "relatedSceneId": "op-01",
+    "due": "",
+    "status": "todo",
+    "notes": "prompt-13〜17(方向性A〜E)を順に生成。まずA/D/B(prompt-13, prompt-16, prompt-14)を優先し、C/E(prompt-15, prompt-17)は保険として後回し可。"
+  },
+  {
+    "taskId": "task-22",
+    "movieId": "opening",
+    "title": "C0 空港ロビー背景の5案を採点基準で比較する",
+    "category": "review",
+    "priority": "high",
+    "relatedSceneId": "op-01",
+    "due": "",
+    "status": "todo",
+    "notes": "Guide『C0 空港ロビー背景 採点基準』の10項目（人物なし=最重要、文字/ロゴなし、空港感、上品さ、旅行テーマ適合、高揚感、テロップ余白、Motion Studio素材と重ねやすいか、次シーン接続、安っぽくないか）で比較する。"
+  },
+  {
+    "taskId": "task-23",
+    "movieId": "opening",
+    "title": "C0 空港ロビー背景を1案に絞りasset-01を確定する",
+    "category": "review",
+    "priority": "high",
+    "relatedSceneId": "op-01",
+    "due": "",
+    "status": "todo",
+    "notes": "採点1位をasset-01のpathへ反映してstatusをreadyに更新。他候補（asset-27/28/29）はrejectedまたはneeds_replaceに更新する。"
+  },
+  {
+    "taskId": "task-24",
+    "movieId": "opening",
+    "title": "C0 CapCutで搭乗券背景・雲海とのつながりを確認する",
+    "category": "capcut",
+    "priority": "medium",
+    "relatedSceneId": "op-01",
+    "due": "",
+    "status": "todo",
+    "notes": "asset-01確定後、asset-19(搭乗券背景)・asset-20(雲海)との色味/トーン接続をCapCutの仮組みで確認する。"
   }
 ]

@@ -13,7 +13,7 @@
     "status": "collecting",
     "source": "ChatGPT / DALL-E",
     "usage": "I2V入力用静止画",
-    "notes": "人物入りで不採用になったため再生成中。2026-07-01: repo内の代替候補(op_01/op_11)もいずれも人物混入で使用不可と目視確認済み。空港ロビー枠はこのアセットの新規生成が唯一のパス（prompt-01を人物なし厳守で再実行）。"
+    "notes": "人物入りで不採用になったため再生成中。2026-07-01: repo内の代替候補(op_01/op_11)もいずれも人物混入で使用不可と目視確認済み。空港ロビー枠はこのアセットの新規生成が唯一の本命パス。2026-07-02: prompt-01を強化し、比較用にprompt-13〜17(方向性A〜E)を追加。5案生成→Guide採点基準で比較→最有力案をこのasset-01のpathへ反映して確定する。"
   },
   {
     "assetId": "asset-02",
@@ -1251,7 +1251,7 @@
     "status": "rejected",
     "source": "ChatGPT / DALL-E（現物: 02_opening-movie/sample_image/op_01_narita_boarding_gate_ai.png）",
     "usage": "asset-01（人物なし版）が再生成中の間の代替候補。1-A-2 空港ロビーの光（夜）。",
-    "notes": "2026-07-01 目視確認: カウンター係員と搭乗客とみられる人物2名がはっきり写っており、「人物なし」方針（failure-patterns.md 即不採用）に該当するため不採用。asset-status.mdの82点はこの人物混入を考慮していなかったため要修正。空港ロビー枠は asset-01（新規再生成）を主軸とする。"
+    "notes": "2026-07-01 目視確認: カウンター係員と搭乗客とみられる人物2名がはっきり写っており、「人物なし」方針（failure-patterns.md 即不採用）に該当するため不採用。asset-status.mdの82点はこの人物混入を考慮していなかったため要修正。空港ロビー枠は asset-01（新規再生成）を主軸とし、比較候補a/b/c（asset-27/28/29, prompt-13/16/14）を並行生成する。"
   },
   {
     "assetId": "asset-19",
@@ -1382,5 +1382,53 @@
     "source": "ChatGPT / DALL-E（現物: 02_opening-movie/sample_image/op_16_cloud_transition_ai.png）",
     "usage": "asset-20（I2V動画）の元になった静止画。飛行機の翼越しに雲海と海が見える構図。",
     "notes": "2026-07-01 目視確認済み: 人物・文字・ロゴなし。asset-status.mdで89点（現時点最高スコア）。"
+  },
+  {
+    "assetId": "asset-27",
+    "type": "generated_image",
+    "title": "空港ロビー候補a（方向性A: 夕暮れの上品な空港ロビー, 生成待ち）",
+    "path": "/04_ai-video-assets/generated-images/opening/c0_airport_lobby_candidate_a_001.png",
+    "relatedSceneIds": [
+      "op-01"
+    ],
+    "relatedMovieIds": [
+      "opening"
+    ],
+    "status": "needed",
+    "source": "ChatGPT Image（生成待ち, prompt-13）",
+    "usage": "C0(op-01)人物なし空港ロビー背景の比較候補1。方向性A(夕暮れの上品な空港ロビー・広い空間)。",
+    "notes": "asset-01/prompt-01の正統進化版として最優先で生成する候補。生成後はGuide『C0 空港ロビー背景 採点基準』の10項目で評価し、採用ならasset-01のpathへ差し替える。"
+  },
+  {
+    "assetId": "asset-28",
+    "type": "generated_image",
+    "title": "空港ロビー候補b（方向性D: ガラス越し・光の抜け感, 生成待ち）",
+    "path": "/04_ai-video-assets/generated-images/opening/c0_airport_lobby_candidate_b_001.png",
+    "relatedSceneIds": [
+      "op-01"
+    ],
+    "relatedMovieIds": [
+      "opening"
+    ],
+    "status": "needed",
+    "source": "ChatGPT Image（生成待ち, prompt-16）",
+    "usage": "C0(op-01)人物なし空港ロビー背景の比較候補2。方向性D(ガラス越し・旅行感強め・滑走路との接続重視)。",
+    "notes": "次シーン(asset-03滑走路離陸)への接続を意識した高揚感重視案。逆光の露出オーバーに注意して評価。"
+  },
+  {
+    "assetId": "asset-29",
+    "type": "generated_image",
+    "title": "空港ロビー候補c（方向性B: 床反射・余白重視, 生成待ち）",
+    "path": "/04_ai-video-assets/generated-images/opening/c0_airport_lobby_candidate_c_001.png",
+    "relatedSceneIds": [
+      "op-01"
+    ],
+    "relatedMovieIds": [
+      "opening"
+    ],
+    "status": "needed",
+    "source": "ChatGPT Image（生成待ち, prompt-14）",
+    "usage": "C0(op-01)人物なし空港ロビー背景の比較候補3。方向性B(チェックイン前の広いホール・床反射・テロップ余白最大化)。",
+    "notes": "テロップ配置の自由度を最優先した案。時間帯が朝寄りなのでStyle Bibleの夕暮れ基調とズレないか要確認。"
   }
 ]
