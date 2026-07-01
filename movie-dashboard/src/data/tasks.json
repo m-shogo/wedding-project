@@ -206,7 +206,7 @@
     "relatedSceneId": "op-01",
     "due": "",
     "status": "todo",
-    "notes": "asset-18候補(op_01_narita_boarding_gate_ai.png)の人物有無を目視確認し、必要ならprompt-08で再生成。"
+    "notes": "2026-07-01 目視確認完了: op_01/op_11とも人物が写っており使用不可と判明（asset-18を不採用に変更）。残タスクは新規に人物なし指定を徹底したプロンプト(prompt-08 or prompt-01)で再生成すること。"
   },
   {
     "taskId": "task-16",

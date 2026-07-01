@@ -128,10 +128,10 @@
   },
   {
     "promptId": "prompt-08",
-    "title": "空港ロビー背景（人物なし・夜, 代替候補）",
+    "title": "空港ロビー背景（人物なし・夕暮れ, 代替候補）",
     "target": "image",
     "tool": "ChatGPT Image",
-    "prompt": "A cinematic wide shot of an empty modern airport terminal corridor at dusk, elegant travel wedding film style, no people, warm departure gate lighting, navy and gold color palette, clean reflective floor, glass windows showing soft runway lights outside, subtle film grain, space for captions at the bottom, no text, no logo, no watermark, no signage with readable text.",
+    "prompt": "A cinematic wide shot of an empty modern airport terminal corridor at dusk (warm sunset light), elegant travel wedding film style, no people, warm departure gate lighting, navy and gold color palette, clean reflective floor, glass windows showing soft runway lights outside, subtle film grain, space for captions at the bottom, no text, no logo, no watermark, no signage with readable text.",
     "negativePrompt": "people, crowds, animals, readable text, logos, watermarks, signage, distorted objects, low quality",
     "relatedSceneIds": [
       "op-01"
@@ -140,18 +140,16 @@
       "opening"
     ],
     "status": "draft",
-    "resultAssetIds": [
-      "asset-18"
-    ],
-    "notes": "asset-01（人物なし・朝バージョン）の夜バージョン代替。再生成時は人物なしを強く指定する。"
+    "resultAssetIds": [],
+    "notes": "夕暮れ版の空港ロビー候補として repo内 op_01_narita_boarding_gate_ai.png を検討したが、2026-07-01の目視確認で人物の写り込みが判明し不採用（asset-18参照）。このプロンプトで人物なしを徹底し新規生成する。"
   },
   {
     "promptId": "prompt-09",
-    "title": "搭乗券背景・抽象光（ネイビー×ゴールド）",
+    "title": "搭乗券背景・フラットレイ（ブランクチケット×花×リボン）",
     "target": "image",
     "tool": "ChatGPT Image",
-    "prompt": "A cinematic abstract background of soft golden bokeh light drifting against a deep navy backdrop, elegant wedding travel film style, minimal and clean, generous negative space on the right side for captions, subtle film grain, warm gentle glow, no text, no logo, no watermark, no people, no animals, no signage, no readable objects.",
-    "negativePrompt": "text, logo, watermark, people, animals, signage, busy composition, harsh lighting, low quality",
+    "prompt": "A flat lay photograph of a blank cream-colored boarding pass ticket on soft ivory satin fabric, dried baby's breath flowers and a silk ribbon at the edges, warm soft natural light, elegant wedding travel film style, minimal and clean, no readable text on the ticket, subtle film grain, gentle warm tones, no logo, no watermark, no people, no animals, no signage.",
+    "negativePrompt": "readable text, logo, watermark, people, animals, signage, harsh lighting, low quality, cluttered composition",
     "relatedSceneIds": [
       "op-01"
     ],
@@ -160,9 +158,10 @@
     ],
     "status": "testing",
     "resultAssetIds": [
-      "asset-19"
+      "asset-19",
+      "asset-25"
     ],
-    "notes": "実際は静止画(op_02_boarding_pass_bg_ai.png)からI2Vで動画化(asset-19)。2段階パイプラインの記録用プロンプト。"
+    "notes": "2026-07-01 目視確認済み: 元画像(op_02_boarding_pass_bg_ai.png)に人物・文字・ロゴなし。静止画(asset-25)からI2Vで動画化(asset-19)した2段階パイプラインの記録用プロンプト。"
   },
   {
     "promptId": "prompt-10",
@@ -203,7 +202,7 @@
     "title": "雲海トランジション（C0→C1接続, 採点済み87点）",
     "target": "video",
     "tool": "ComfyUI / Wan2.2 TI2V 5B",
-    "prompt": "A cinematic 5-second aerial shot of golden sunlit clouds seen from above, camera slowly drifting forward through the cloud layer, elegant wedding travel film style, navy and gold color palette, subtle film grain, clean composition with caption space, no text, no logo, no watermark, no people, no animals, no signage.",
+    "prompt": "A cinematic shot from an airplane window seat looking out over golden sunset clouds and a calm ocean below, a silver wing tip visible in frame, warm golden hour light with a distant mountain silhouette, elegant wedding travel film style, navy and gold color palette, subtle film grain, slow smooth camera drift, clean composition with caption space, no text, no logo, no watermark, no people, no animals, no signage.",
     "negativePrompt": "text, logo, watermark, people, animals, signage, distorted objects, fast camera motion, shaky camera, unreadable artifacts, low quality",
     "relatedSceneIds": [
       "op-01",
@@ -214,8 +213,9 @@
     ],
     "status": "testing",
     "resultAssetIds": [
-      "asset-20"
+      "asset-20",
+      "asset-26"
     ],
-    "notes": "score-008: 87点 adopt-candidate。元画像op_16_cloud_transition_ai.png。CapCutで速度1.2〜1.5倍調整を検討。"
+    "notes": "score-008: 87点 adopt-candidate。元画像op_16_cloud_transition_ai.png（2026-07-01 目視確認済み: 人物・文字・ロゴなし）。静止画(asset-26)からI2Vで動画化(asset-20)。CapCutで速度1.2〜1.5倍調整を検討。"
   }
 ]

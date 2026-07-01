@@ -20,7 +20,9 @@
       "asset-21",
       "asset-22",
       "asset-23",
-      "asset-24"
+      "asset-24",
+      "asset-25",
+      "asset-26"
     ],
     "promptIds": [
       "prompt-01",
@@ -49,7 +51,8 @@
       "asset-05",
       "asset-06",
       "asset-17",
-      "asset-20"
+      "asset-20",
+      "asset-26"
     ],
     "promptIds": [
       "prompt-03",

@@ -13,7 +13,7 @@
     "status": "collecting",
     "source": "ChatGPT / DALL-E",
     "usage": "I2V入力用静止画",
-    "notes": "人物入りで不採用になったため再生成中。人物なし版が必要。"
+    "notes": "人物入りで不採用になったため再生成中。2026-07-01: repo内の代替候補(op_01/op_11)もいずれも人物混入で使用不可と目視確認済み。空港ロビー枠はこのアセットの新規生成が唯一のパス（prompt-01を人物なし厳守で再実行）。"
   },
   {
     "assetId": "asset-02",
@@ -62,7 +62,7 @@
     "status": "ready",
     "source": "ChatGPT / DALL-E",
     "usage": "I2V入力用静止画。窓の外に雲海が広がる構図。",
-    "notes": "構図は良好。I2V候補。"
+    "notes": "構図は良好。I2V候補。現物候補: 02_opening-movie/sample_image/op_03_airplane_window_clouds_ai.png（2-B 飛行機窓・青空と雲, 82点/I2V採点81点 adopt-candidate）。採用時はrenameして本パスへ配置。"
   },
   {
     "assetId": "asset-05",
@@ -1240,7 +1240,7 @@
   {
     "assetId": "asset-18",
     "type": "generated_image",
-    "title": "空港ロビー候補（1-A-2・repo内既存, 夜, 82点/動画未生成）",
+    "title": "空港ロビー候補（1-A-2, 夕暮れ, 目視確認で人物混入のため不採用）",
     "path": "/04_ai-video-assets/generated-images/opening/c0_airport_lobby_night_001.png",
     "relatedSceneIds": [
       "op-01"
@@ -1248,10 +1248,10 @@
     "relatedMovieIds": [
       "opening"
     ],
-    "status": "collecting",
+    "status": "rejected",
     "source": "ChatGPT / DALL-E（現物: 02_opening-movie/sample_image/op_01_narita_boarding_gate_ai.png）",
     "usage": "asset-01（人物なし版）が再生成中の間の代替候補。1-A-2 空港ロビーの光（夜）。",
-    "notes": "asset-status.md採点表で82点、動画未生成。人物有無を目視確認してから採否判断（op_11は人物入りで不採用の前例あり）。採用時はrenameして本パスへ移動。"
+    "notes": "2026-07-01 目視確認: カウンター係員と搭乗客とみられる人物2名がはっきり写っており、「人物なし」方針（failure-patterns.md 即不採用）に該当するため不採用。asset-status.mdの82点はこの人物混入を考慮していなかったため要修正。空港ロビー枠は asset-01（新規再生成）を主軸とする。"
   },
   {
     "assetId": "asset-19",
@@ -1349,5 +1349,38 @@
     "source": "motion-studio (Remotion) で新規作成予定",
     "usage": "「Ladies and gentlemen, our journey is about to begin.」のテロップ表示に、フェードインと控えめな光の演出をつける。",
     "notes": "既存の搭乗券モーション(asset-02)とは別に、テロップ単体演出として検討。motion-studio自体は今回変更せず、方針だけここに記録。"
+  },
+  {
+    "assetId": "asset-25",
+    "type": "generated_image",
+    "title": "搭乗券背景 静止画・元画像（1-B, 88点, 目視確認済み）",
+    "path": "/04_ai-video-assets/generated-images/opening/c0_boarding_pass_bg_source_001.png",
+    "relatedSceneIds": [
+      "op-01"
+    ],
+    "relatedMovieIds": [
+      "opening"
+    ],
+    "status": "ready",
+    "source": "ChatGPT / DALL-E（現物: 02_opening-movie/sample_image/op_02_boarding_pass_bg_ai.png）",
+    "usage": "asset-19（I2V動画）の元になった静止画。単体でも静止テロップ背景として使用可。",
+    "notes": "2026-07-01 目視確認済み: ブランクチケット×ドライフラワー×リボンのフラットレイ。人物・文字・ロゴなし。asset-status.mdで88点。"
+  },
+  {
+    "assetId": "asset-26",
+    "type": "generated_image",
+    "title": "雲海トランジション 静止画・元画像（89点, 目視確認済み）",
+    "path": "/04_ai-video-assets/generated-images/opening/c0_cloud_transition_source_001.png",
+    "relatedSceneIds": [
+      "op-01",
+      "op-02"
+    ],
+    "relatedMovieIds": [
+      "opening"
+    ],
+    "status": "ready",
+    "source": "ChatGPT / DALL-E（現物: 02_opening-movie/sample_image/op_16_cloud_transition_ai.png）",
+    "usage": "asset-20（I2V動画）の元になった静止画。飛行機の翼越しに雲海と海が見える構図。",
+    "notes": "2026-07-01 目視確認済み: 人物・文字・ロゴなし。asset-status.mdで89点（現時点最高スコア）。"
   }
 ]
