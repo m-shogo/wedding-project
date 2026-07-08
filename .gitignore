@@ -5,6 +5,13 @@
 *.autosave
 *.tmp
 __pycache__/
+node_modules/
+.pnpm-store/
+
+# Build outputs
+movie-dashboard/dist/**
+motion-studio/out/**
+motion-studio/exports/previews/**
 
 # Private source media: keep actual photos, videos, and audio local unless explicitly approved.
 00_inbox/**
@@ -13,6 +20,8 @@ __pycache__/
 02_opening-movie/sample_image/**
 03_introduction-movie/source/**
 04_ai-video-assets/source/**
+04_ai-video-assets/generated-images/**
+04_ai-video-assets/ai-videos/**
 05_photos/**
 06_videos/**
 07_music/**
@@ -32,4 +41,3 @@ __pycache__/
 !06_videos/.gitkeep
 !07_music/.gitkeep
 !90_exports/.gitkeep
-
