@@ -12,6 +12,7 @@
 - `02_opening-movie/sample_image/**` がGit管理外になったため、GitHub上に画像が無いことを欠落と誤解しやすい。
 - `op_01_narita_boarding_gate_ai.png` と `op_11_narita_airport_lobby_ai.png` は人物入り確認済みだが、一部の表では動画未生成/採点済みのように見える余地があった。
 - root READMEの作業入口が、現在の `motion-studio` / `movie-dashboard` / 制作コックピット運用に追いついていなかった。
+- `scripts/check_assets.py --write` が `asset-status.md` を丸ごと再生成するため、人間判断メモが消える可能性があった。
 
 ## 決めたこと
 
@@ -32,7 +33,7 @@ GitHub上に画像が無いこと自体はエラーではない。レビュー�
 
 `build_opening_movie.py` はv002ドラフト用の旧スクリプト。人物入り不採用素材を参照している場合は、実行時に停止する。
 
-本番に近い確認は、人物なし素材に差し替えたCapCut試作、または `motion-studio` のRemotionテンプレで行う。
+これは失敗ではなく、安全のための意図した停止。本番に近い確認は、人物なし素材に差し替えたCapCut試作、または `motion-studio` のRemotionテンプレで行う。
 
 ### 4. READMEは作業入口にする
 
@@ -46,6 +47,20 @@ root READMEには以下への導線を追加した。
 
 固定TODOはREADMEに置かず、最新のNow/Nextは `docs/task-board.md` に寄せる。
 
+### 5. asset-statusの人間判断はcheck_assets.pyにも入れる
+
+`asset-status.md` は `python3 scripts/check_assets.py --write` で丸ごと再生成される。
+
+そのため、人物入り不採用、採用候補I2V、I2V不採用理由などの人間判断は `scripts/check_assets.py` 側の固定データにも入れる。
+
+新しい人間判断を追加した場合は、`asset-status.md` だけでなく `scripts/check_assets.py` の以下も更新する。
+
+- `REJECTED_IMAGES`
+- `REJECTED_VIDEO_ASSETS`
+- `CANDIDATE_I2V`
+
+これで、Fable/Claude/Codexが `--write` を実行しても重要判断が消えない。
+
 ## 変更したもの
 
 - `README.md`
@@ -54,10 +69,14 @@ root READMEには以下への導線を追加した。
   - Review Prepを追加し、Now/Next/Blockedを現状に合わせて更新。
 - `02_opening-movie/asset-status.md`
   - sample_imageのローカル管理、不採用素材、採用候補I2V、要対応を明確化。
+  - `check_assets.py --write` で重要判断を消さない前提を追記。
 - `scripts/check_assets.py`
   - 人物入りで不採用の素材を採用候補に戻さないようにした。
+  - 採用候補I2Vと不採用I2Vの判断を固定データ化。
+  - `--write` しても重要判断セクションを再生成できるようにした。
 - `scripts/build_opening_movie.py`
   - 不採用素材を参照している場合に停止するガードを追加。
+  - legacy旧ドラフト用であり、現在の停止は意図した安全停止であることを明記。
 - `.gitignore`
   - `node_modules/`、dashboard build、motion-studio出力、AI生成画像/動画の大容量素材を除外。
 
