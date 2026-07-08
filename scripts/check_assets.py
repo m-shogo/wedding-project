@@ -3,7 +3,7 @@
 
 突き合わせるもの:
 - 02_opening-movie/ai-prompts.md の採点済み素材(MATERIALSに反映)
-- 02_opening-movie/sample_image/ の静止画
+- 02_opening-movie/sample_image/ の静止画（Git管理外・ローカル管理）
 - scripts/build_opening_movie.py が参照する画像
 - ~/ComfyUI-Shared/output/video/ の生成済みI2V動画
 - 02_opening-movie/i2v-generation-log.csv の採点状態
@@ -14,6 +14,7 @@
 - 生成済みだが未採点の動画
 - どの素材にも紐付かない静止画・動画
 - _dup_ 重複ファイル
+- Style Bible違反で不採用になった素材
 
 usage:
   python3 scripts/check_assets.py            # 標準出力にレポート
@@ -52,6 +53,48 @@ MATERIALS = [
     ("4-A-2", "ハワイの海・夕暮れ", 81, None, None),
 ]
 
+# Style Bible違反が目視確認済みの素材。
+# これらはファイルがローカルに存在しても採用候補に戻さない。
+REJECTED_IMAGES = {
+    "op_01_narita_boarding_gate_ai.png": "人物入り（カウンター係員と搭乗客の後ろ姿）",
+    "op_11_narita_airport_lobby_ai.png": "人物入り（複数人物）",
+}
+
+# 生成結果として不採用が判明しているI2V。
+REJECTED_VIDEO_PREFIXES = {
+    "op_10": "I2V版は光が出ず暗い。Remotion版 `扉-光` と比較、AI版は再生成対象。",
+}
+
+
+def read_scored_prefixes():
+    """scorecardと生成ログから採点済みprefixを集める。"""
+    scored_prefixes = set()
+    if SCORECARD.exists():
+        with SCORECARD.open() as f:
+            for r in csv.DictReader(f):
+                if r.get("decision") and r.get("notes"):
+                    scored_prefixes.add(r["asset_name"][:5])
+    return scored_prefixes
+
+
+def read_generation_log():
+    if not GEN_LOG.exists():
+        return []
+    with GEN_LOG.open() as f:
+        return list(csv.DictReader(f))
+
+
+def is_scored(vprefix, scored_prefixes, log_rows):
+    if not vprefix:
+        return False
+    if vprefix in scored_prefixes:
+        return True
+    return bool([
+        r for r in log_rows
+        if r.get("prefix", "").startswith(vprefix)
+        and r.get("notes") not in ("", "未採点")
+    ])
+
 
 def main():
     p = argparse.ArgumentParser()
@@ -61,21 +104,11 @@ def main():
     images = sorted(f.name for f in IMG_DIR.glob("*.png"))
     videos = sorted(f.name for f in VIDEO_DIR.glob("*.mp4")) \
         if VIDEO_DIR.exists() else []
-    build_src = BUILD_SCRIPT.read_text()
+    build_src = BUILD_SCRIPT.read_text() if BUILD_SCRIPT.exists() else ""
     build_refs = set(re.findall(r"op_\d+\w*\.png", build_src))
 
-    log_rows = []
-    if GEN_LOG.exists():
-        with GEN_LOG.open() as f:
-            log_rows = list(csv.DictReader(f))
-
-    # 採点済みプレフィックス: scorecardのdecision入り行 + 生成ログの採点入り行
-    scored_prefixes = set()
-    if SCORECARD.exists():
-        with SCORECARD.open() as f:
-            for r in csv.DictReader(f):
-                if r.get("decision") and r.get("notes"):
-                    scored_prefixes.add(r["asset_name"][:5])
+    log_rows = read_generation_log()
+    scored_prefixes = read_scored_prefixes()
 
     lines = [
         "# オープニング素材ステータス",
@@ -83,27 +116,41 @@ def main():
         f"最終更新: {datetime.date.today().isoformat()}"
         "（`python3 scripts/check_assets.py --write` で再生成）",
         "",
+        "## 前提",
+        "",
+        "- `02_opening-movie/sample_image/**` はGit管理外。GitHub上に画像が無いこと自体は欠落ではない。",
+        "- この表は、ローカル素材・I2V生成ログ・scorecard・目視確認結果を合わせて読む。",
+        "- 人物、動物、文字、ロゴ、看板が入ったAI素材は、点数が高くても不採用または再生成対象。",
+        "- AIが勝手に採用確定しない。`candidate` 以上への昇格は人間確認が必須。",
+        "",
         "## 素材別ステータス",
         "",
         "| 素材ID | 名前 | 点 | 静止画 | I2V動画 | 状態 |",
         "|--------|------|----|--------|---------|------|",
     ]
     problems = []
+    rejected_rows = []
 
     for mid, name, score, image, vprefix in MATERIALS:
         img_ok = image in images if image else False
         vids = [v for v in videos if vprefix and v.startswith(vprefix)]
-        scored = vprefix in scored_prefixes or [
-            r for r in log_rows
-            if vprefix and r["prefix"].startswith(vprefix)
-            and r.get("notes") not in ("", "未採点")]
-        if image is None:
+        scored = is_scored(vprefix, scored_prefixes, log_rows)
+
+        if image in REJECTED_IMAGES:
+            status = "不採用（人物入り・再生成対象）"
+            rejected_rows.append((image, REJECTED_IMAGES[image], "人物なしで再生成"))
+            problems.append(f"素材{mid} {name}: {image} は{REJECTED_IMAGES[image]}のため再生成する。")
+        elif vprefix in REJECTED_VIDEO_PREFIXES:
+            status = "I2V版は不採用。Remotion版と比較"
+            rejected_rows.append((f"{vprefix} I2V", REJECTED_VIDEO_PREFIXES[vprefix], "Remotion版と比較。AI版は再生成"))
+            problems.append(f"素材{mid} {name}: {REJECTED_VIDEO_PREFIXES[vprefix]}")
+        elif image is None:
             status = "静止画なし（I2V不可）"
             problems.append(f"素材{mid} {name}: 対応する静止画がない。"
                             "先に静止画を生成するか流用元を決める。")
         elif not img_ok:
-            status = "静止画が見つからない"
-            problems.append(f"素材{mid} {name}: {image} が存在しない。")
+            status = "静止画が見つからない（ローカル管理確認）"
+            problems.append(f"素材{mid} {name}: {image} がローカルに存在するか確認する。")
         elif not vids:
             status = "動画未生成"
         elif not scored:
@@ -111,9 +158,16 @@ def main():
             problems.append(f"素材{mid} {name}: 動画 {len(vids)}本が未採点。"
                             "scorecardで採点して採否を決める。")
         else:
-            status = "採点済み"
+            status = "採点済み・採用候補"
         lines.append(f"| {mid} | {name} | {score} | "
                      f"{image or '—'} | {len(vids)}本 | {status} |")
+
+    if rejected_rows:
+        lines += ["", "## 不採用・再生成対象", "",
+                  "| 素材 | 理由 | 次の対応 |",
+                  "|---|---|---|"]
+        lines += [f"| {asset} | {reason} | {next_action} |"
+                  for asset, reason, next_action in rejected_rows]
 
     # どの素材にも紐付かない静止画
     mat_images = {m[3] for m in MATERIALS if m[3]}
@@ -128,7 +182,10 @@ def main():
 
     lines += ["", "## ドラフトビルドが参照する画像", "",
               f"build_opening_movie.py 参照: {len(build_refs)}枚 / "
-              f"sample_image: {len(images)}枚"]
+              f"sample_image: {len(images)}枚",
+              "",
+              "`build_opening_movie.py` はv002ドラフト用の旧ビルドスクリプト。",
+              "人物入り不採用素材を参照する場合は、本番候補扱いせず代替素材へ差し替える。"]
 
     if orphan_imgs:
         lines += ["", "## 未使用の静止画（素材表・ビルド両方で未参照）", ""]
