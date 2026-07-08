@@ -11,6 +11,16 @@
 - AI動画は背景、つなぎ、章切り替え、空気感の補助に限定する。
 - 新郎新婦、家族、友人、犬は実写真・実動画を中心に扱う。
 - 人物・犬のAI生成やAI変形は提案しない。
+- `op_01_narita_boarding_gate_ai.png` と `op_11_narita_airport_lobby_ai.png` は人物入り確認済みのため不採用。人物なしで再生成する。
+
+## レビュー前の参照順
+
+1. @README.md
+2. @docs/task-board.md
+3. @02_opening-movie/asset-status.md
+4. @motion-studio/README.md
+5. @movie-dashboard/README.md
+6. @docs/decisions/2026-07-08-review-prep-cleanup.md
 
 ## 参照
 
@@ -30,7 +40,9 @@
 - テーマ差し替え: @docs/theme-switching.md
 - 素材TODO: @docs/materials-todo.md
 - タスク: @docs/task-board.md
-- モーション素材スタジオ: motion-studio/README.md（Remotionで搭乗券・地図・ハンコ・カウントダウン・写真カードを生成。文字入り素材はAIでなくここで作る）
+- 素材状態: @02_opening-movie/asset-status.md
+- モーション素材スタジオ: @motion-studio/README.md（Remotionで搭乗券・地図・ハンコ・カウントダウン・写真カードを生成。文字入り素材はAIでなくここで作る）
+- ブラウザ制作ダッシュボード: @movie-dashboard/README.md（絵コンテ・素材・プロンプト・タスクを管理）
 
 ## 進め方
 
@@ -38,7 +50,8 @@
 - 調査が必要な動画AIの料金、無料枠、クレジット消費、最新機能は、必ず公式情報または一次情報で確認する。
 - 受け取った写真・動画・音源・個人情報は慎重に扱い、外部アップロード前に確認する。
 - 長い本編をAIで一発生成する提案は避け、3-5秒素材を作って編集で組み立てる。
-- 実写真、実動画、音源、書き出し済みムービーは原則Gitに入れず、ログと指示書だけ管理する。
+- 実写真、実動画、音源、書き出し済みムービー、大きなAI生成画像/動画は原則Gitに入れず、ログと指示書だけ管理する。
+- `02_opening-movie/sample_image/**` はローカル管理。GitHub上に無いこと自体を欠落扱いしない。
 - BGM、フォント、テンプレート、AI生成サービスの利用条件を上映用とSNS投稿用で分けて確認する。
 - CapCut向けに落とす場合は、秒数、拡大率、パン方向、テロップ、トランジション、BGM位置まで具体化する。
 - 重要な好み、判断、変更点は、該当ドキュメントまたは `docs/decisions/` に残す。
