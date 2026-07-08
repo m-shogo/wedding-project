@@ -178,9 +178,8 @@ git ls-files -z | xargs -0 du -h | sort -rh | head
 ## 最新commit hash
 
 作業前: `433c9af`
-本レビューの変更をcommitした後のhashは、コミット実行後にこのセクションを更新する。
-→ **`<COMMIT_HASH_PLACEHOLDER>`**（下記「push済みか」参照）
+本レビュー変更のコミット: `7436a19`（docs: add Fable whole-repo review report and fix stale I2V prompt doc）
 
 ## push済みか
 
-このレビュー報告のコミット後、`git push origin main` を実行する。実行結果はコミット後にこのファイルの下部へ追記する。
+`7436a19` を `git push origin main` で **push済み**。
