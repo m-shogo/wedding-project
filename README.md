@@ -2,7 +2,51 @@
 
 結婚式の動画制作を中心に管理しつつ、結婚式全体のコンセプト、内容、判断を覚えるためのプロジェクト。
 
-メインはオープニングムービー、プロフィールムービー、紹介ムービー。動画が主軸だが、コンセプト、BGM、テロップ、印刷物、返礼品、会場演出などの相談も、動画の世界観とつながるものとして扱う。テーマのサンプルは「旅行」。AI は主役ではなく、背景素材、つなぎ素材、世界観補強として使う。新郎新婦、家族、友人、犬は実写真を中心に扱う。
+メインはオープニングムービー、プロフィールムービー、紹介ムービー。動画が主軸だが、コンセプト、BGM、テロップ、印刷物、返礼品、会場演出などの相談も、動画の世界観とつながるものとして扱う。テーマは「旅行」。AI は主役ではなく、背景素材、つなぎ素材、世界観補強として使う。新郎新婦、家族、友人、犬は実写真・実動画を中心に扱う。
+
+## 現在の入口
+
+レビュー前・作業前は、この順で見る。
+
+1. `docs/task-board.md` — 今やること、詰まり、次のレビュー対象。
+2. `02_opening-movie/asset-status.md` — AI静止画/I2V素材の採否と不足。
+3. `motion-studio/README.md` — Remotion製モーション素材のテンプレ、書き出し、制作コックピット。
+4. `motion-studio/exports/index.html` — `pnpm export` で生成する制作コックピット。確認入口。
+5. `movie-dashboard/README.md` — ブラウザ管理ダッシュボード。絵コンテ、素材、プロンプト、タスクを編集する。
+6. `docs/00_start-here.md` — 初回作業者向けの全体ナビ。
+
+## 現在の制作ハブ
+
+### motion-studio
+
+Remotion + React + TypeScript で、CapCutに渡す短尺モーション素材を作る場所。
+
+```sh
+cd motion-studio
+pnpm install
+pnpm dev
+pnpm check
+pnpm export
+```
+
+- Remotion Studio が見た目調整用エディタ。
+- 完成動画はここでは作らない。素材を書き出して、最終編集はCapCutで行う。
+- `pnpm export` で `motion-studio/exports/index.html` などの制作コックピットを更新する。
+- still画像・動画・`out/` 配下は生成物なのでGit管理しない。
+
+### movie-dashboard
+
+ブラウザ上で、絵コンテ、素材、プロンプト、タスクを管理する制作ダッシュボード。
+
+```sh
+cd movie-dashboard
+pnpm install
+pnpm dev
+```
+
+- データはlocalStorageに保存される。
+- 共有・永続化したい場合はJSONエクスポートし、必要に応じて `src/data/*.json` に反映してcommitする。
+- 大きな画像、動画、音源はGitに入れず、パス・メモ・採否だけ管理する。
 
 ## 優先順位
 
@@ -51,20 +95,27 @@
 09_design-assets/          フォント、色、ロゴ風素材、装飾
 10_references/             参考動画、参考スクショ、URLメモ
 11_printables/             印刷物、返礼品、しおり案。動画の世界観に合わせるサブ制作物
-motion-studio/             Remotion製モーション素材スタジオ（搭乗券、地図、ハンコ、カウントダウン）
-90_exports/                書き出し済み成果物
+motion-studio/             Remotion製モーション素材スタジオ
+movie-dashboard/           ブラウザ制作ダッシュボード
+90_exports/                書き出し済み成果物（Git管理外）
 99_archive/                不採用・古い版
 ```
 
-## 運用
+## Git管理ルール
 
-1. 素材はまず `00_inbox/` に入れる。
-2. 何の制作物に使うか決まったら該当フォルダへ移す。
-3. 写真・動画・音源は原則Gitに入れない。ローカルで管理し、ログだけ残す。
-4. AI で作るのは原則 3-5 秒の素材。
-5. 動画の完成度は `Style Bible`、写真選別、BGM合わせ、編集テンポで作る。
-6. 人物、犬、家族、友人のAI生成・AI変形は原則しない。
-7. 重要なコンセプト、好み、判断はGitに残し、次回以降の前提にする。
+1. 写真・動画・音源・書き出し済みムービー・大きなAI生成素材は原則Gitに入れない。
+2. Gitに残すのは、ログ、判断、構成、プロンプト、編集指示、CSV/MD/HTMLの管理資料。
+3. `02_opening-movie/sample_image/**` はローカル管理。GitHub上に無いこと自体は欠落ではない。
+4. `motion-studio/out/**`、still画像、動画書き出しは生成物なのでGit管理しない。
+5. 実素材を外部サービスやAIに渡す前に、権利・プライバシーを確認する。
+
+## 素材採用ルール
+
+- AI素材は原則 3-5秒の背景・つなぎ素材。
+- 人物、犬、家族、友人のAI生成・AI変形は原則しない。
+- AI画像/動画に文字、数字、ロゴ、看板、ウォーターマークを入れない。
+- 人物・動物・文字・ロゴ・看板が入ったAI素材は、点数が高くても不採用または再生成対象。
+- `op_01_narita_boarding_gate_ai.png` と `op_11_narita_airport_lobby_ai.png` は人物入り確認済みのため不採用。人物なしで再生成する。
 
 ## ログ
 
@@ -84,8 +135,4 @@ motion-studio/             Remotion製モーション素材スタジオ（搭乗
 
 ## 次にやる
 
-1. 会場仕様を `docs/templates/venue-specs.csv` に記録する。
-2. BGM候補を `docs/templates/music-candidates.csv` に集める。
-3. 参考動画や写真を `00_inbox/` に入れる。
-4. `docs/templates/asset-log.csv` に素材の用途と採否を記録する。
-5. `02_opening-movie/roadmap.md` と `01_profile-movie/roadmap.md` を見て、動画の10秒試作を作る。
+最新のNow/Nextは `docs/task-board.md` を見る。README内の固定TODOではなく、タスクボードを単一の作業入口にする。
