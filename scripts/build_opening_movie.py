@@ -6,11 +6,16 @@
 Ken Burns (ゆっくりズーム/パン) + テロップ + クロスフェードで
 ドラフトMP4を組み立てる。
 
+注意:
+- sample_image はGit管理外・ローカル管理。
+- 人物入りが確認されたAI素材は、ファイルが存在しても使用禁止。
+- v002ドラフト用の旧スクリプトなので、レビュー前は asset-status.md と照合してから使う。
+
 - このMacのffmpegはdrawtext無しビルドのため、テロップは
   scripts/render_caption.swift で透過PNGに描き、overlayで合成する
 - 実写真章 (4-B, 5-A) はAIサンプル画像でプレースホルダ代用
 - BGMは権利確認前のため未挿入 (無音)
-- 出力: 90_exports/opening-movie_v001_draft.mp4 (Git管理外)
+- 出力: 90_exports/opening-movie_v002_draft.mp4 (Git管理外)
 
 usage: python3 scripts/build_opening_movie.py
 """
@@ -34,6 +39,12 @@ FONT_SERIF = "Times New Roman"
 FONT_SANS = "Helvetica"
 
 RENDER_BIN = None  # main()でコンパイルする
+
+# Style Bible違反が目視確認済みのため、旧ドラフトでも使用禁止。
+REJECTED_SOURCES = {
+    "op_01_narita_boarding_gate_ai.png": "人物入り（カウンター係員と搭乗客の後ろ姿）",
+    "op_11_narita_airport_lobby_ai.png": "人物入り（複数人物）",
+}
 
 
 def caption(lines, t_in, fade_in, t_out, fade_out,
@@ -159,6 +170,8 @@ CLIPS = [
     # Ch0 カウントダウン
     ("COUNTDOWN", 8, None, [], "fadeblack", 0.8),
     # Ch1-A 空港・出発の気配
+    # NOTE: op_11/op_01は人物入り確認済みのため、main()で停止する。
+    # 人物なし代替素材に差し替えてから旧ドラフトを再ビルドする。
     ("op_11_narita_airport_lobby_ai.png", 5, "zoom_in", [], "fade", 0.8),
     ("op_01_narita_boarding_gate_ai.png", 5, "zoom_in", [], "fade", 1.0),
     # Ch1-B 出発宣言テロップ
@@ -204,8 +217,23 @@ CLIPS = [
 ]
 
 
+def validate_clip_sources():
+    rejected = []
+    for src, *_ in CLIPS:
+        if src in REJECTED_SOURCES:
+            rejected.append((src, REJECTED_SOURCES[src]))
+    if rejected:
+        detail = "\n".join(f"- {src}: {reason}" for src, reason in rejected)
+        sys.exit(
+            "Style Bible違反の不採用素材を参照しています。\n"
+            "人物なし素材に差し替えてから実行してください。\n"
+            f"{detail}"
+        )
+
+
 def main():
     global RENDER_BIN
+    validate_clip_sources()
     OUT_DIR.mkdir(exist_ok=True)
     tmp = Path(tempfile.mkdtemp(prefix="opening_build_"))
 
