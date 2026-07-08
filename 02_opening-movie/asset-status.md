@@ -1,6 +1,6 @@
 # オープニング素材ステータス
 
-最終更新: 2026-07-08（レビュー前整理。ローカル環境では `python3 scripts/check_assets.py --write` で再生成）
+最終更新: 2026-07-08（`python3 scripts/check_assets.py --write` で再生成）
 
 ## 前提
 
@@ -18,7 +18,7 @@
 | 1-B | 薄い光の抽象背景 | 88 | op_02_boarding_pass_bg_ai.png | 1本 | 採点済み・採用候補 |
 | 2-A | 飛行機窓・地上の遠景 | 87 | — | 0本 | 静止画なし（I2V不可） |
 | 2-B | 飛行機窓・青空と雲 | 86 | op_03_airplane_window_clouds_ai.png | 1本 | 採点済み・採用候補 |
-| 1-A-1 | 空港ロビーの光（朝） | 85 | op_11_narita_airport_lobby_ai.png | 0本 | 不採用（人物入り・再生成対象） |
+| 1-A-1 | 空港ロビーの光（朝） | 85 | op_11_narita_airport_lobby_ai.png | 3本 | 不採用（人物入り・再生成対象） |
 | 4-A-1 | ハワイの海・ゴールドの光 | 85 | op_07_hawaii_beach_ai.png | 2本 | 採点済み・採用候補 |
 | 5-B | 光が差す扉 | 84 | op_10_chapel_door_ai.png | 1本 | I2V版は不採用。Remotion版と比較 |
 | 1-A-2 | 空港ロビーの光（夜） | 82 | op_01_narita_boarding_gate_ai.png | 0本 | 不採用（人物入り・再生成対象） |
@@ -44,19 +44,17 @@
 
 ## ドラフトビルドが参照する画像
 
-`build_opening_movie.py` はv002ドラフト用の旧ビルドスクリプト。現在は人物入り不採用素材を参照しないよう、実行時に警告/停止する方針。
+`build_opening_movie.py` はv002ドラフト用の旧ビルドスクリプト。
+現在は人物入り不採用素材を参照しないよう、実行時に警告/停止する方針。
 
 - `op_01` / `op_11` の代替ができるまでは、空港ロビー/搭乗ゲートを含む旧ドラフトを本番候補扱いしない。
 - 本番に近い確認は `motion-studio` のRemotionテンプレ、または人物なし素材に差し替えたCapCut試作で行う。
 
-build_opening_movie.py 参照: 16枚 / sample_image: 22枚
+build_opening_movie.py 参照: 16枚 / sample_image: 20枚
 
 ## 未使用の静止画（素材表・ビルド両方で未参照）
 
 ローカル `sample_image` にある場合のみ確認する。GitHub上に無いこと自体は問題ではない。
-
-- _dup_airplane_window.png
-- _dup_narita_lobby.png
 - op_04_flight_map_bg_ai.png
 - op_08_hawaii_rain_beach_ai.png
 - op_09_yokohama_sky_ai.png
@@ -64,8 +62,7 @@ build_opening_movie.py 参照: 16枚 / sample_image: 22枚
 
 ## 重複ファイル（削除候補）
 
-- _dup_airplane_window.png
-- _dup_narita_lobby.png
+- ローカル実行時に検出されなかった、またはsample_image未配置。
 
 ## 素材表に紐付かない生成動画（採否未整理）
 
@@ -75,9 +72,8 @@ build_opening_movie.py 参照: 16枚 / sample_image: 22枚
 
 ## 要対応
 
-- 素材1-A-1 空港ロビーの光（朝）: 人物なし静止画を再生成する。
-- 素材1-A-2 空港ロビーの光（夜）: 人物なし静止画を再生成する。
-- 素材2-A 飛行機窓・地上の遠景: 対応する静止画がない。先に静止画を生成するか、Remotion版 `飛行機窓` で代替する。
-- 素材4-A-2 ハワイの海・夕暮れ: 対応する静止画がない。先に静止画を生成するか、既存ハワイ素材から流用可否を判断する。
-- `op_10` 光の扉: AI版を使う場合は再生成。現時点ではRemotion版 `扉-光` を優先比較する。
-- ローカル環境で `python3 scripts/check_assets.py` を実行し、実ファイル数・生成動画数とこの表を再照合する。
+- 素材2-A 飛行機窓・地上の遠景: 対応する静止画がない。先に静止画を生成するか流用元を決める。
+- 素材1-A-1 空港ロビーの光（朝）: op_11_narita_airport_lobby_ai.png は人物入り（複数人物）のため再生成する。
+- 素材5-B 光が差す扉: 光が出ず暗闇になり、入場直前の期待感が弱い。Remotion版 `扉-光` と比較。AI版は再生成するなら warm light を強調。
+- 素材1-A-2 空港ロビーの光（夜）: op_01_narita_boarding_gate_ai.png は人物入り（カウンター係員と搭乗客の後ろ姿）のため再生成する。
+- 素材4-A-2 ハワイの海・夕暮れ: 対応する静止画がない。先に静止画を生成するか流用元を決める。

@@ -4,6 +4,14 @@
 
 対象画像: `01_profile-movie/sample_image/` にある20枚想定。
 
+## 注意: op_01 / op_11 は不採用
+
+`op_01_narita_boarding_gate_ai.png` と `op_11_narita_airport_lobby_ai.png` は
+目視確認で人物入りと判明し、Style Bibleの `no people` 違反のため不採用。
+最新の採否は `02_opening-movie/asset-status.md` を必ず確認する。
+以下の01・11節のプロンプトは、人物なし版を再生成した後の参考としてのみ扱い、
+現行の不採用画像に対してこのままI2V生成しない。
+
 ## 使い方
 
 1. Comfy Desktopで画像を1枚入れる
@@ -30,7 +38,10 @@ text, subtitles, readable letters, logos, brand marks, distorted objects, warped
 
 ---
 
-## 01. 成田空港 搭乗ゲート
+## 01. 成田空港 搭乗ゲート（不採用・要再生成）
+
+**不採用**: `op_01_narita_boarding_gate_ai.png` はカウンター係員と搭乗客の後ろ姿が写っており使用不可。
+人物なし版を再生成してから、このプロンプトを参考に流用する。
 
 - Input: `op_01_narita_boarding_gate_ai.png`
 - Output: `op_01_narita_boarding_gate_video.mp4`
@@ -130,7 +141,10 @@ Use the provided image as the first frame. Keep the original composition. Create
 Use the provided image as the first frame. Keep the original composition. Create a cinematic wedding chapel door scene. The large elegant doors slowly glow with soft light from the other side, as if they are about to open. Romantic, emotional, premium wedding atmosphere. Keep the camera slowly pushing in. Do not fully open the doors. Do not reveal any people. No text, no logos. 16:9, 6 seconds.
 ```
 
-## 11. 成田空港ロビー
+## 11. 成田空港ロビー（不採用・要再生成）
+
+**不採用**: `op_11_narita_airport_lobby_ai.png` は複数人物が写っており使用不可。
+人物なし版を再生成してから、このプロンプトを参考に流用する。
 
 - Input: `op_11_narita_airport_lobby_ai.png`
 - Output: `op_11_narita_airport_lobby_video.mp4`
