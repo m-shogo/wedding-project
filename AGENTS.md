@@ -11,6 +11,16 @@
 - 旅行テーマで統一された、映画予告編風と冒険アニメOP風の結婚式ムービーを作る。
 - 目的は「AI動画作品」ではなく、二人らしさ、思い出、家族、友人、犬、音楽、世界観が自然につながる完成度の高いムービー。
 
+## 現在の作業入口
+
+レビュー前・作業前は、この順で見る。
+
+1. `README.md`: 現在の入口とGit管理ルール。
+2. `docs/task-board.md`: Now / Next / Blocked。
+3. `02_opening-movie/asset-status.md`: AI素材の採否、不採用、再生成対象。
+4. `motion-studio/README.md`: Remotion素材スタジオ。
+5. `movie-dashboard/README.md`: ブラウザ制作ダッシュボード。
+
 ## 制作方針
 
 - AI動画は主役にしない。背景、章切り替え、空気感、トランジション素材として使う。
@@ -19,6 +29,7 @@
 - クレジット消費を抑えるため、まずローカル試作や静止画検証で構図を固め、本番だけ有料動画AIを検討する。
 - 長尺動画を生成せず、3-5秒のループしやすい素材を資産化する。
 - 印刷物や返礼品はサブ制作物として扱い、動画の世界観に合わせる。
+- `op_01_narita_boarding_gate_ai.png` と `op_11_narita_airport_lobby_ai.png` は人物入り確認済みのため不採用。人物なしで再生成する。
 
 ## 重要ドキュメント
 
@@ -42,13 +53,16 @@
 - `docs/theme-switching.md`: 旅行テーマから別テーマへ変える時の差し替え方
 - `docs/materials-todo.md`: 全動画に必要な素材と情報のTODO
 - `docs/task-board.md`: 現在の作業状態
+- `motion-studio/README.md`: Remotion素材スタジオ
+- `movie-dashboard/README.md`: ブラウザ制作ダッシュボード
 
 ## ファイル運用
 
 - 受け取った未整理素材は `00_inbox/` に置く。
 - 実写真は `05_photos/`、実動画は `06_videos/`、BGM関連は `07_music/`、テキストは `08_texts/` に分類する。
-- 生成AI素材は `04_ai-video-assets/` に置き、採用・保留・不採用が分かる名前にする。
-- 写真、動画、音源、書き出し済みムービーは原則Gitに入れない。`.gitignore` を尊重し、必要ならログやメモだけコミットする。
+- 生成AI素材は `04_ai-video-assets/` または各制作物フォルダのローカル素材置き場に置き、採用・保留・不採用が分かる名前にする。
+- `02_opening-movie/sample_image/**` はGit管理外。GitHub上に無いこと自体を欠落扱いしない。
+- 写真、動画、音源、書き出し済みムービー、大きなAI生成画像/動画は原則Gitに入れない。`.gitignore` を尊重し、必要ならログやメモだけコミットする。
 - 素材を移動・分類したら `docs/templates/asset-log.csv` または制作物フォルダのメモに用途と採否を残す。
 - 編集指示に進む場合は `docs/templates/capcut-edit-plan.csv` に秒数、動き、テロップ、BGM位置を残す。
 - 書き出し前後は `docs/templates/export-checklist.csv` を使う。
@@ -62,6 +76,7 @@
 - 生成プロンプトには原則 `no text, no logo, no watermark, no people, no animals, no signage` を入れる。
 - 3-5秒、ゆっくり動く、主役は1つ、ループ可能、テロップ余白ありを優先する。
 - 動画AI候補は `docs/templates/ai-video-scorecard.csv` で採点し、80点以上だけ本番生成候補にする。
+- ただし、人物・動物・文字・ロゴ・看板が入った素材は点数に関係なく不採用または再生成対象。
 - 最新の動画AIの料金、無料枠、クレジット消費、利用条件を扱う場合は、公式情報または一次情報を確認してから判断する。
 
 ## 制作判断
@@ -78,3 +93,5 @@
 - 文書変更後は `rg --files` で構成を確認する。
 - Markdown は見出し、リンク、フォルダ名の整合性を確認する。
 - 動画・画像素材を追加した場合は、用途と採用判断を該当メモへ残す。
+- `motion-studio` 変更時は `pnpm check` / `pnpm typecheck` / `pnpm export` を確認する。
+- `movie-dashboard` 変更時は `pnpm build` とアプリ内データ整合性チェックを確認する。
