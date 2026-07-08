@@ -1,15 +1,22 @@
 #!/usr/bin/env python3
-"""オープニングムービー ドラフト自動ビルド
+"""オープニングムービー ドラフト自動ビルド（legacy）
 
 02_opening-movie/storyboard.md (105秒構成) に沿って、
 02_opening-movie/sample_image/ のAI静止画から
 Ken Burns (ゆっくりズーム/パン) + テロップ + クロスフェードで
 ドラフトMP4を組み立てる。
 
+現在の位置づけ:
+- これはv002ドラフト用の旧スクリプト。
+- 現在は `op_01` / `op_11` が人物入り不採用素材として登録されているため、
+  そのまま実行すると安全ガードで停止する。
+- 失敗ではなく意図した停止。人物なし代替素材に差し替えてから使う。
+- 本番に近い確認は `motion-studio` のRemotionテンプレ、またはCapCut試作を優先する。
+
 注意:
 - sample_image はGit管理外・ローカル管理。
 - 人物入りが確認されたAI素材は、ファイルが存在しても使用禁止。
-- v002ドラフト用の旧スクリプトなので、レビュー前は asset-status.md と照合してから使う。
+- レビュー前は `02_opening-movie/asset-status.md` と照合してから使う。
 
 - このMacのffmpegはdrawtext無しビルドのため、テロップは
   scripts/render_caption.swift で透過PNGに描き、overlayで合成する
@@ -17,7 +24,10 @@ Ken Burns (ゆっくりズーム/パン) + テロップ + クロスフェード�
 - BGMは権利確認前のため未挿入 (無音)
 - 出力: 90_exports/opening-movie_v002_draft.mp4 (Git管理外)
 
-usage: python3 scripts/build_opening_movie.py
+usage:
+  python3 scripts/build_opening_movie.py
+
+上記コマンドは、REJECTED_SOURCES に登録された素材が CLIPS に残っている間は停止する。
 """
 
 import subprocess
@@ -226,7 +236,9 @@ def validate_clip_sources():
         detail = "\n".join(f"- {src}: {reason}" for src, reason in rejected)
         sys.exit(
             "Style Bible違反の不採用素材を参照しています。\n"
-            "人物なし素材に差し替えてから実行してください。\n"
+            "これは旧ドラフト用スクリプトの安全停止です。\n"
+            "人物なし代替素材に差し替えてから実行してください。\n"
+            "本番に近い確認は motion-studio またはCapCut試作を優先してください。\n"
             f"{detail}"
         )
 
