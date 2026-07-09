@@ -2,11 +2,17 @@
 
 ## レビュー日時
 
-2026-07-08
+- 第1弾: 2026-07-08
+- 第2弾: 2026-07-09
+- ChatGPT再レビュー整理: 2026-07-09
 
 ## 対象commit
 
-レビュー開始時点: `433c9af`（docs: add fable whole repo review prompt）
+- Fableレビュー開始時点: `433c9af`（docs: add fable whole repo review prompt）
+- 第1弾修正コミット: `7436a19`（docs: add Fable whole-repo review report and fix stale I2V prompt doc）
+- 第1弾hash記録更新: `85603b8`
+- 第2弾修正コミット: `8d45ffb`（fix: 全体レビュー第2弾の残ファイル整合と不採用素材ガード強化）
+- 第2弾hash記録更新: `ec394bc`
 
 ## 読んだ主要ファイル
 
@@ -20,49 +26,61 @@
 - `docs/task-board.md`
 - `02_opening-movie/asset-status.md`
 - `02_opening-movie/README.md`
+- `02_opening-movie/ai-prompts.md`
 - `02_opening-movie/comfy-desktop-video-prompts-concept-01.md`
+- `02_opening-movie/storyboard.md`
+- `02_opening-movie/capcut-edit-plan.md`
+- `docs/capcut-opening-timeline.md`
 - `docs/decisions/2026-07-08-review-prep-cleanup.md`
-- `docs/02_style-bible.md`（CLAUDE.md経由で参照確認済み）
+- `docs/decisions/2026-07-09-whole-repo-review-followup.md`
+- `docs/02_style-bible.md`
 - `motion-studio/README.md` / `motion-studio/CLAUDE.md` / `motion-studio/package.json`
 - `movie-dashboard/README.md` / `movie-dashboard/package.json`
-- `movie-dashboard/src/data/*.json`（assets/movies/prompts/scenes/tasks 全5件）
+- `movie-dashboard/src/data/*.json`（assets/movies/prompts/scenes/tasks）
 - `.gitignore`（root / `motion-studio/.gitignore` / `movie-dashboard/.gitignore`）
 - `scripts/check_assets.py`
 - `scripts/build_opening_movie.py`
-- 旧レガシーディレクトリ `opening-movie/`（number接頭辞なし。現行docsから参照されていないことを確認）
+- `scripts/comfy_i2v.py`
+- `scripts/comfy_i2v_batch.py`
+- `opening-movie/`（初期構想アーカイブ）
+- `.claude/agents/` / `.agents/skills/` / `.codex/agents/`
 
 ## 実行したコマンドと結果
 
 ```sh
-git checkout main && git pull origin main   # 既に最新
-git status --short / git branch --show-current / git log --oneline -8
+git checkout main && git pull origin main
+git status --short
+git branch --show-current
+git log --oneline -8
 ```
 
-横断検索（`rg`）:
+- `main` 上で作業。
+- 実素材や大容量生成物の混入なし。
 
-- `op_01|op_11|sample_image|build_opening_movie|check_assets|no people|人物|犬|AI生成|final|approved|candidate|used|ready` → ヒットは多数だが、方針と矛盾する記述は `02_opening-movie/comfy-desktop-video-prompts-concept-01.md` の1件のみ（後述、修正済み）。
-- `90_exports|motion-studio/out|movie-dashboard/dist|generated-images|ai-videos` → すべて「Git管理外」の文脈で一貫。誤ってGit管理下にある記述なし。
-- `TODO|FIXME|古い|仮|要確認|未整理` → いずれも現行方針と矛盾しない通常のTODO/仮組みメモ。
+横断検索:
+
+```sh
+rg "op_01|op_11|sample_image|build_opening_movie|check_assets|no people|人物|犬|AI生成|final|approved|candidate|used|ready" .
+rg "90_exports|motion-studio/out|movie-dashboard/dist|generated-images|ai-videos" .
+rg "TODO|FIXME|古い|仮|要確認|未整理" docs 02_opening-movie motion-studio movie-dashboard
+```
+
+- 第1弾で `02_opening-movie/comfy-desktop-video-prompts-concept-01.md` に不採用画像をそのままI2V入力に見せる導線を検出し、修正。
+- 第2弾で残り全ファイルを確認し、`ai-prompts.md` / `storyboard.md` / `capcut-edit-plan.md` / legacy `opening-movie/` などの説明を補強。
+- `op_01` / `op_11` が採用候補・本番候補として復活している箇所はなし。
 
 素材チェック:
 
 ```sh
 python3 scripts/check_assets.py
-```
-
-→ `op_01`/`op_11` は「不採用（人物入り・再生成対象）」で一貫。問題なし。
-
-```sh
 python3 scripts/check_assets.py --write
 ```
 
-→ `02_opening-movie/asset-status.md` を再生成。`--write` 前後で以下を確認:
-
-- `op_01`/`op_11` は不採用のまま（維持）
-- 採用候補I2V（op_16/op_02/op_03/op_07）は消えていない（維持）
-- I2V不採用理由（op_10 chapel door、op_08 hawaii rain beach）は消えていない（維持)
-- `sample_image` ローカル管理の説明は残っている（維持）
-- 差分は、ローカルの実ファイル数・生成動画本数の更新（`_dup_*` 重複ファイルが既にローカルで削除済みだったため一覧から消えた等）のみで、人間判断の欠落はなし
+- `op_01` / `op_11` は「不採用（人物入り・再生成対象）」で維持。
+- 採用候補I2V（op_16 / op_02 / op_03 / op_07）は維持。
+- 不採用I2V理由（op_10 / op_08）は維持。
+- `sample_image` ローカル管理の説明は維持。
+- `--write` による人間判断の消失なし。
 
 legacy build確認:
 
@@ -70,173 +88,187 @@ legacy build確認:
 python3 scripts/build_opening_movie.py
 ```
 
-→ 終了コード1で意図した安全停止。メッセージで `op_01`/`op_11` が人物入りのため停止していることを明示。**正常動作**。
+- 終了コード1で意図した安全停止。
+- `op_01` / `op_11` が人物入りのため停止していることが明示されており、正常動作。
 
-movie-dashboard JSON整合性（Python + jsonで検証）:
+I2V単発ガード確認:
 
-- `assets.json` に `asset-01`〜`asset-29` はすべて定義済み（ハンドオフメモの「asset-18〜29が未定義かもしれない」という懸念は誤りで、既に解消済みと確認）
-- `scenes.json` が参照する `assets` / `promptIds` / `movieId` に未定義参照は0件
-- `assets.json` の `relatedSceneIds` が参照する scene にも未定義参照は0件
-- `tasks.json` の関連ID参照にも不整合なし
-- `asset-01`（空港ロビー）は `status: collecting`、代替候補 `asset-27/28/29` は `status: needed` で、いずれも採用候補・確定扱いになっていないことを確認
+```sh
+python3 -c "import ast; ast.parse(open('scripts/comfy_i2v.py').read())"
+python3 scripts/comfy_i2v.py --image 02_opening-movie/sample_image/op_11_narita_airport_lobby_ai.png --prompt test --prefix test
+```
+
+- `comfy_i2v.py` 構文OK。
+- `op_11` を渡すとexit 1で安全停止。
+- 人物入り素材を強制使用できるオプションは追加していない。
+
+movie-dashboard JSON整合性:
+
+- `assets.json` に `asset-01`〜`asset-29` はすべて定義済み。
+- `scenes.json` が参照する `assets` / `promptIds` / `movieId` に未定義参照なし。
+- `assets.json` の `relatedSceneIds` が参照するsceneにも未定義参照なし。
+- `tasks.json` の関連ID参照にも不整合なし。
+- `asset-01` は `collecting`、代替候補 `asset-27/28/29` は `needed` で、採用確定扱いではない。
 
 motion-studio:
 
 ```sh
 cd motion-studio
-pnpm install   # Already up to date
-pnpm check     # check:motion / check:assets / check:parts すべて成功、警告0件
-pnpm typecheck # エラーなし
-pnpm export    # export:capcut / export:review / export:home すべて成功
+pnpm install
+pnpm check
+pnpm typecheck
+pnpm export
 cd ..
 ```
+
+- `pnpm check`: check:motion / check:assets / check:parts すべて成功、警告0件。
+- `pnpm typecheck`: エラーなし。
+- `pnpm export`: export:capcut / export:review / export:home すべて成功。
 
 movie-dashboard:
 
 ```sh
 cd movie-dashboard
-pnpm install   # Already up to date
-pnpm build     # tsc -b && vite build 成功（chunk size警告のみ、機能影響なし）
+pnpm install
+pnpm build
 cd ..
 ```
 
-Git管理・大容量素材の確認:
+- build成功。
+- chunk size警告のみ。機能影響なし。
+
+Git管理・大容量素材確認:
 
 ```sh
 git ls-files 05_photos 06_videos 07_music 04_ai-video-assets 00_inbox
-# → .gitkeep のみ。実素材の混入なし
 git ls-files -z | xargs -0 du -h | sort -rh | head
-# → 最大でも72KB(pnpm-lock.yaml)。動画・画像・音源の大容量ファイルなし
 ```
 
-`motion-studio/public/photos/**` はネストした `motion-studio/.gitignore` で既に除外設定済み（`public/photos/*` + `!public/photos/.gitkeep`）であることを確認。root `.gitignore` への追加は不要と判断（一度追加したが重複のため revert 済み）。
+- 実写真・動画・音源・AI生成動画/画像の混入なし。
+- 最大でも小さい管理ファイルのみ。
+- `motion-studio/public/photos/**` は `motion-studio/.gitignore` で除外済み。
+- `opening-movie/generated/**` をroot `.gitignore` に追加済み。
 
-## 見つかった問題
+## 見つけた問題と修正
 
-1. **`02_opening-movie/comfy-desktop-video-prompts-concept-01.md` が `op_01`/`op_11` を不採用と明記していなかった**
-   - このドキュメントはI2V生成用プロンプト集で、01節・11節がそのまま `op_01_narita_boarding_gate_ai.png` / `op_11_narita_airport_lobby_ai.png` を入力画像として指示していた。
-   - `asset-status.md` や `check_assets.py` では不採用が明確だが、この生成プロンプト集だけを見て作業すると、不採用画像にそのままI2V生成をかけてしまうリスクがあった。
-   - 分類: **P1**（人物入り素材が誤って使われる導線になり得るため）
+### P1: `comfy-desktop-video-prompts-concept-01.md` が不採用画像を入力指示していた
 
-2. **ハンドオフメモの「movie-dashboard JSON整合性」懸念は既に解消済み**（新規の問題ではなく、確認の結果「問題なし」と判明したもの）
-   - `docs/reviews/2026-07-08-pre-fable-handoff.md` は「asset-18〜29が未定義の可能性」を懸念していたが、実際には全て定義済みで、scene⇔asset⇔prompt⇔movieの参照整合も0件不一致だった。
+`op_01_narita_boarding_gate_ai.png` / `op_11_narita_airport_lobby_ai.png` をそのままI2V入力に見せる導線があった。
 
-## 修正した内容
+修正:
 
-- `02_opening-movie/comfy-desktop-video-prompts-concept-01.md`
-  - 冒頭に「op_01 / op_11 は不採用」の注意書きを追加し、`asset-status.md` を必ず確認するよう明記。
-  - 01節・11節の見出しに「（不採用・要再生成）」を追加し、各節冒頭に不採用理由と、人物なし版再生成後にのみプロンプトを参考流用する旨を追記。
-- `02_opening-movie/asset-status.md`
-  - `python3 scripts/check_assets.py --write` でローカル環境の最新状態に再生成。人間判断（不採用・採用候補I2V・不採用理由）はすべて維持されていることを確認済み。
-- `motion-studio/exports/index.html`
-  - `pnpm export` の実行に伴う制作コックピットの自動再生成（1行差分、日時等のみ）。
+- 冒頭に `op_01` / `op_11` は人物入り不採用と明記。
+- 01節・11節に「不採用・要再生成」を追記。
+- 人物なし版を再生成した後にのみプロンプトを参考流用する方針に変更。
+
+### P1: `scripts/comfy_i2v.py` に不採用画像ガードがなかった
+
+任意の `--image` を受け付けるため、不採用の `op_01` / `op_11` をそのままI2V入力にできた。
+
+修正:
+
+- `REJECTED_IMAGES` を追加。
+- `op_01` / `op_11` を渡した場合は安全停止。
+- 強制使用オプションは追加しない。
+
+### P1: `docs/capcut-opening-timeline.md` のステータス説明が古かった
+
+廃止済みの `ready` 案内があり、現行のAssetStatusフローとズレていた。
+
+修正:
+
+- 現行の `missing → idea → prompt_ready → generated_preview → candidate → approved → final` フローに合わせて修正。
+- `pnpm check` の説明に `check:parts` を追加。
+
+### P1: `opening-movie/generated/**` が未ignoreだった
+
+初期画像一括生成スクリプトの出力先がGit管理に入り得た。
+
+修正:
+
+- root `.gitignore` に `opening-movie/generated/**` を追加。
+
+### P2: `ai-prompts.md` の1-A系が採用候補に見えた
+
+`1-A-1` / `1-A-2` に85点/82点が残り、生成静止画の採用状態と混同しやすかった。
+
+修正:
+
+- 冒頭に、点数はショット案評価であり採用状態ではないと明記。
+- `1-A-1` / `1-A-2` 見出しに人物入り不採用・再生成対象を追記。
+
+### P2: storyboard / capcut-edit-plan の1-A系に再生成待ち注記が弱かった
+
+修正:
+
+- `storyboard.md` の必要AI素材表に、1-A系の再生成待ち注記を追加。
+- `capcut-edit-plan.md` のChapter 1-Aに、仮組み扱いの注記を追加。
+
+### P2: legacy `opening-movie/` が現行入口と紛らわしかった
+
+削除や `99_archive/` 移動はせず、初期構想アーカイブとして残す判断。
+
+修正:
+
+- `opening-movie/README.md` を新設。
+- `concept-01-memory-flight-1024.md` 冒頭に初期構想メモである旨と `op_01/op_11` 不採用注記を追加。
+- root `README.md` のフォルダ一覧に `opening-movie/` を追記。
 
 ## 追加した内容
 
-- `docs/reviews/2026-07-08-fable-whole-repo-review.md`（本ファイル）
+- `docs/reviews/2026-07-08-fable-whole-repo-review.md`
+- `docs/decisions/2026-07-09-whole-repo-review-followup.md`
+- `opening-movie/README.md`
 
 ## P0 / P1 / P2
 
-### P0（すぐ直すべき問題）
+- P0: 0件
+- P1: 0件（検出分はすべて修正済み）
+- P2: 0件（検出分はすべて修正済み）
 
-**0件**。実写真・動画・音源・大容量素材のGit混入なし。人物/犬のAI生成を促す記述なし。`op_01`/`op_11` の採用候補復活なし。`check_assets.py --write` での判断消失なし。README/AGENTS/CLAUDE間の矛盾なし。`sample_image` の欠落誤認記述なし。
+補足:
 
-### P1（レビュー前に直すべき問題）
+- v001/v002当時の決定ログにある `final` / `approved` 的な表現は、履歴記録として保持。
+- 現在の採否・素材状態の正は `02_opening-movie/asset-status.md`。
+- `opening-movie/` は残課題ではなく、初期構想アーカイブとして明示済み。
 
-1. **[修正済み]** `02_opening-movie/comfy-desktop-video-prompts-concept-01.md` の01/11節が不採用画像をそのまま入力指示していた。→ 不採用注記を追加済み。
+## 残っている課題（制作タスク）
 
-### P2（時間があれば直す）
+レビュー整合上のP0/P1/P2ではなく、次に制作として進めるタスク:
 
-1. **[未対応・提案のみ]** ルート直下の `opening-movie/`（number接頭辞なしの旧ディレクトリ、`opening-movie/concept-01-memory-flight-1024.md` 等）が現行の `02_opening-movie/` と別に残っている。README/AGENTS/CLAUDE/task-boardのどこからも参照されておらず、初見の人やAIが2つの「opening-movie」ディレクトリに混乱する可能性がある。中身はop_01〜op_20の初期プロンプト構想で、不採用情報は含んでいないが「採用候補」とも書いていないため実害はP0/P1ではない。次回、`99_archive/` へ移動するか、冒頭に「初期構想メモ。最新の採否は02_opening-movie/asset-status.mdを見る」という注記を足すことを推奨。今回は「修正してよいもの」リスト（README/AGENTS/CLAUDE/docs/**/*.md/asset-status.md/scripts/dashboard JSON/.gitignore）に含まれないディレクトリのため、範囲外として見送った。
-2. `docs/decisions/2026-06-10-opening-draft-v001-build.md` などv001/v002ビルド時点の決定ログは、当時の`final`/`approved`的な表現を含むが、これは履歴記録として妥当であり修正不要。
+1. 人物なしの空港ロビー/搭乗ゲート静止画を生成し、`asset-01` のpathへ反映。
+2. `asset-27〜29` の空港ロビー候補を生成・採点し、採用候補を `asset-01` に差し替える。
+3. 採用候補I2V（`op_16` / `op_02` / `op_03` / `op_07`）をCapCutの10秒試作へ組み込む。
+4. `op_10`（光の扉）はRemotion版 `扉-光` と比較して採否を決定。
+5. 静止画が無い `2-A` / `4-A-2` の素材を生成するか、Remotionテンプレ代替の可否を判断。
+6. 会場仕様・BGM利用条件・提出形式を確認する。
 
-## 残っている課題
+## Fable / Claude / Codex が次に作業するときの注意
 
-- 空港ロビー/搭乗ゲート素材（`asset-01`/候補`asset-27〜29`）は依然「生成待ち・採点待ち」。次の本命パスは `asset-01` への新規生成差し替え（`docs/task-board.md` Now節に記載済み）。
-- `2-A 飛行機窓・地上の遠景`と`4-A-2 ハワイの海・夕暮れ`は静止画そのものが無い（I2V不可）。
-- `op_10`（光の扉）I2Vは不採用のまま。Remotion版`扉-光`との比較が未完了。
-- `opening-movie/`（レガシーディレクトリ）の扱い（P2参照）。
-- motion-studio/movie-dashboardの実行環境依存ファイル（`~/ComfyUI-Shared/output/video/`、`sample_image/`）はこの実行環境（ローカルMac）に存在したため、GitHub connector環境とは異なる結果になる可能性がある点は運用上の前提として維持。
-
-## Fable/Claude/Codexが次に作業するときの注意
-
-- **絶対に** `op_01`/`op_11` を採用候補・本番候補として扱わない。人物入りが目視確認済み。
-- `02_opening-movie/comfy-desktop-video-prompts-concept-01.md` の01/11節は「不採用画像のプロンプト参考」であり、そのまま実行しない。
-- `scripts/check_assets.py --write` を実行する前後で、必ず `REJECTED_IMAGES` / `REJECTED_VIDEO_ASSETS` / `CANDIDATE_I2V` に対応する内容が `asset-status.md` に残っているか確認する。
-- `scripts/build_opening_movie.py` が停止するのは正常。エラーではない。実行して失敗したら「バグ修正」ではなく「代替素材の差し替え待ち」と判断する。
-- `movie-dashboard/src/data/*.json` を編集する場合、`assetId`/`sceneId`/`promptId`/`movieId`の参照整合を崩さないこと（今回は全整合を確認済みなので、次回差分レビュー時はこの整合性を壊していないか再確認する）。
-- `motion-studio` の `AssetStatus`（`missing→idea→prompt_ready→generated_preview→candidate→approved→final`）は、AIが勝手に`candidate`以上へ昇格させない。
+- `op_01` / `op_11` を採用候補・本番候補として扱わない。人物入りが目視確認済み。
+- `comfy-desktop-video-prompts-concept-01.md` の01/11節は「不採用画像のプロンプト参考」であり、そのまま実行しない。
+- `scripts/check_assets.py --write` 前後で、`REJECTED_IMAGES` / `REJECTED_VIDEO_ASSETS` / `CANDIDATE_I2V` に対応する内容が `asset-status.md` に残っているか確認する。
+- `scripts/build_opening_movie.py` が停止するのは正常。エラーではなく、代替素材の差し替え待ち。
+- `scripts/comfy_i2v.py` は不採用画像を安全停止する。抜け道を追加しない。
+- `movie-dashboard/src/data/*.json` を編集する場合、asset / scene / prompt / movie / task の参照整合を壊さない。
+- `motion-studio` の `AssetStatus` はAIが勝手に `candidate` 以上へ昇格させない。
+- 実写真・実動画・音源・大きなAI生成画像/動画はGitに入れない。
 
 ## 次の推奨作業順
 
-1. 人物なしの空港ロビー/搭乗ゲート静止画を実際に生成し、`asset-01`のpathへ反映（`docs/task-board.md` Now節、`movie-dashboard`のGuide「C0 空港ロビー背景 採点基準」参照）。
-2. 採用候補I2V（`op_16`/`op_02`/`op_03`/`op_07`）をCapCutの10秒試作へ組み込む。
-3. `op_10`（光の扉）はRemotion版`扉-光`と比較して採否を決定。
-4. 静止画が無い`2-A`/`4-A-2`の素材を生成するか、Remotionテンプレ代替の可否を判断。
-5. 余力があれば、レガシー`opening-movie/`ディレクトリの整理（P2参照）。
+1. C0空港ロビー背景の人物なし静止画を生成する。
+2. Guide「C0 空港ロビー背景 採点基準」で比較する。
+3. 最有力案を `asset-01` に反映する。
+4. `python3 scripts/check_assets.py` を実行する。
+5. `movie-dashboard/src/data/assets.json` / `tasks.json` / `scenes.json` を採用状態に合わせて更新する。
+6. CapCutで10秒試作を作る。
+7. `docs/task-board.md` と `asset-status.md` を更新してcommit/pushする。
 
-## 最新commit hash
+## commit / push
 
-作業前: `433c9af`
-本レビュー変更のコミット: `7436a19`（docs: add Fable whole-repo review report and fix stale I2V prompt doc）
+- 第1弾修正: `7436a19`
+- 第1弾hash記録更新: `85603b8`
+- 第2弾修正: `8d45ffb`
+- 第2弾hash記録更新: `ec394bc`
 
-## push済みか
-
-`7436a19` を `git push origin main` で **push済み**。
-
----
-
-# 第2弾（2026-07-09）: 残り全ファイルのレビューと修正
-
-第1弾で対象外・未読だった全ファイルを確認し、見つかった問題をすべて修正した。
-判断の詳細は `docs/decisions/2026-07-09-whole-repo-review-followup.md` に記録。
-
-## 追加で確認したファイル
-
-- `01_profile-movie/`（README / brief / roadmap / chapter-plan）
-- `02_opening-movie/` 残り（ai-prompts.md / storyboard.md / capcut-edit-plan.md / ai-video-services-comparison.md / i2v-generation-log.csv / roadmap.md / README.md）
-- `03_introduction-movie/README.md`
-- `prompts/`（ai-video-prompts.md / caption-prompts.md）
-- `scripts/`（comfy_i2v.py / comfy_i2v_batch.py / render_caption.swift / setup-wan22.sh）
-- `docs/capcut-opening-timeline.md`、`docs/templates/*.csv`（scorecard / review-notes 等）
-- レガシー `opening-movie/`（全ファイル）
-- `.claude/agents/` / `.agents/skills/` / `.codex/agents/`、`CODEX.md`
-- `motion-studio/`（MANUAL.md / README-deploy.md / docs / exports）
-- `movie-dashboard/FEATURE-PROMPTS.md`
-
-## 第2弾で見つけて修正した問題
-
-1. **[P1・修正済み]** `scripts/comfy_i2v.py` に不採用画像ガードがなく、op_01/op_11 をそのままI2V入力にできた。→ `REJECTED_IMAGES` による安全停止を追加（強制使用オプションは付けない）。ガード動作は実行して確認済み（exit 1・理由表示）。
-2. **[P1・修正済み]** `.gitignore` に `opening-movie/generated/**` が無く、画像一括生成スクリプトの出力（AI生成画像）がGitに入り得た。→ 追加し `git check-ignore` で確認済み。
-3. **[P1・修正済み]** `docs/capcut-opening-timeline.md` が廃止済みステータス `ready` を案内していた（現行は `missing→…→final`、candidate以上は人間確認必須）。`pnpm check` の説明も check:parts 抜け。→ 両方修正。
-4. **[P2・修正済み]** `02_opening-movie/comfy-desktop-video-prompts-concept-01.md` の対象画像パスが `01_profile-movie/sample_image/` と誤記。→ `02_opening-movie/sample_image/` に修正。
-5. **[P2・修正済み]** `02_opening-movie/ai-prompts.md` の試作優先順と1-A-1/1-A-2節が、op_11/op_01不採用に触れず85点/82点のまま採用候補に見えた。→ 冒頭注記+各節見出しに不採用明記。
-6. **[P2・修正済み]** `02_opening-movie/storyboard.md` の必要AI素材表と `capcut-edit-plan.md` のChapter 1-Aが、不採用画像由来の素材を注記なしで前提にしていた。→ 再生成待ち・仮組み扱いの注記を追加。
-7. **[P2・修正済み]** 第1弾P2で見送ったレガシー `opening-movie/` の混乱リスク。→ 削除・アーカイブはせず（採用済みコンセプトの初期企画書+再生成に流用できるツールのため）、`opening-movie/README.md` 新設・concept文書冒頭に注記・root READMEのフォルダ一覧に追記で解消。
-
-## 第2弾で確認して問題なしだったもの
-
-- profile/introduction/promptsの各文書は人物AI化禁止・Style Bibleと整合。
-- scorecard・i2v-generation-logの記録は asset-status.md と一致。
-- `comfy_i2v_batch.py` は op_01/op_11 除外済み。
-- agent定義群（.claude/.agents/.codex）に方針矛盾なし。
-- 大容量素材・実素材のGit混入なし（第1弾から変化なし）。
-
-## 第2弾の検証
-
-- `python3 -c "ast.parse(...)"` で `comfy_i2v.py` 構文OK。
-- `python3 scripts/comfy_i2v.py --image ...op_11...` → 安全停止を確認（exit 1）。
-- `python3 scripts/check_assets.py` → 出力変化なし（人間判断維持）。
-- `python3 scripts/build_opening_movie.py` → 安全停止のまま（正常）。
-- motion-studio / movie-dashboard はコード変更なしのため再ビルド不要（第1弾で全チェック通過済み）。
-
-## 第2弾後のP0/P1/P2
-
-- P0: 0件
-- P1: 0件（第2弾検出分3件すべて修正済み）
-- P2: 0件（第1弾からの持ち越し含めすべて修正済み。v001/v002決定ログ内の当時表現は履歴として保持）
-
-## 第2弾のcommit / push
-
-第2弾の修正コミット: `8d45ffb`（fix: 全体レビュー第2弾の残ファイル整合と不採用素材ガード強化）
-`git push origin main` で **push済み**。
+すべて `origin/main` へpush済み。
