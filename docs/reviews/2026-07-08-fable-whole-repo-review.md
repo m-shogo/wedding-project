@@ -238,4 +238,5 @@ git ls-files -z | xargs -0 du -h | sort -rh | head
 
 ## 第2弾のcommit / push
 
-第2弾のcommit hashとpush状態は、コミット後に末尾へ追記する。
+第2弾の修正コミット: `8d45ffb`（fix: 全体レビュー第2弾の残ファイル整合と不採用素材ガード強化）
+`git push origin main` で **push済み**。
