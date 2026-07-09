@@ -27,6 +27,9 @@ motion-studio/exports/previews/**
 07_music/**
 10_references/media/**
 
+# Generated AI images from the concept-01 batch script stay local.
+opening-movie/generated/**
+
 # Rendered exports can be large and may include private faces/music.
 90_exports/**
 

@@ -183,3 +183,59 @@ git ls-files -z | xargs -0 du -h | sort -rh | head
 ## push済みか
 
 `7436a19` を `git push origin main` で **push済み**。
+
+---
+
+# 第2弾（2026-07-09）: 残り全ファイルのレビューと修正
+
+第1弾で対象外・未読だった全ファイルを確認し、見つかった問題をすべて修正した。
+判断の詳細は `docs/decisions/2026-07-09-whole-repo-review-followup.md` に記録。
+
+## 追加で確認したファイル
+
+- `01_profile-movie/`（README / brief / roadmap / chapter-plan）
+- `02_opening-movie/` 残り（ai-prompts.md / storyboard.md / capcut-edit-plan.md / ai-video-services-comparison.md / i2v-generation-log.csv / roadmap.md / README.md）
+- `03_introduction-movie/README.md`
+- `prompts/`（ai-video-prompts.md / caption-prompts.md）
+- `scripts/`（comfy_i2v.py / comfy_i2v_batch.py / render_caption.swift / setup-wan22.sh）
+- `docs/capcut-opening-timeline.md`、`docs/templates/*.csv`（scorecard / review-notes 等）
+- レガシー `opening-movie/`（全ファイル）
+- `.claude/agents/` / `.agents/skills/` / `.codex/agents/`、`CODEX.md`
+- `motion-studio/`（MANUAL.md / README-deploy.md / docs / exports）
+- `movie-dashboard/FEATURE-PROMPTS.md`
+
+## 第2弾で見つけて修正した問題
+
+1. **[P1・修正済み]** `scripts/comfy_i2v.py` に不採用画像ガードがなく、op_01/op_11 をそのままI2V入力にできた。→ `REJECTED_IMAGES` による安全停止を追加（強制使用オプションは付けない）。ガード動作は実行して確認済み（exit 1・理由表示）。
+2. **[P1・修正済み]** `.gitignore` に `opening-movie/generated/**` が無く、画像一括生成スクリプトの出力（AI生成画像）がGitに入り得た。→ 追加し `git check-ignore` で確認済み。
+3. **[P1・修正済み]** `docs/capcut-opening-timeline.md` が廃止済みステータス `ready` を案内していた（現行は `missing→…→final`、candidate以上は人間確認必須）。`pnpm check` の説明も check:parts 抜け。→ 両方修正。
+4. **[P2・修正済み]** `02_opening-movie/comfy-desktop-video-prompts-concept-01.md` の対象画像パスが `01_profile-movie/sample_image/` と誤記。→ `02_opening-movie/sample_image/` に修正。
+5. **[P2・修正済み]** `02_opening-movie/ai-prompts.md` の試作優先順と1-A-1/1-A-2節が、op_11/op_01不採用に触れず85点/82点のまま採用候補に見えた。→ 冒頭注記+各節見出しに不採用明記。
+6. **[P2・修正済み]** `02_opening-movie/storyboard.md` の必要AI素材表と `capcut-edit-plan.md` のChapter 1-Aが、不採用画像由来の素材を注記なしで前提にしていた。→ 再生成待ち・仮組み扱いの注記を追加。
+7. **[P2・修正済み]** 第1弾P2で見送ったレガシー `opening-movie/` の混乱リスク。→ 削除・アーカイブはせず（採用済みコンセプトの初期企画書+再生成に流用できるツールのため）、`opening-movie/README.md` 新設・concept文書冒頭に注記・root READMEのフォルダ一覧に追記で解消。
+
+## 第2弾で確認して問題なしだったもの
+
+- profile/introduction/promptsの各文書は人物AI化禁止・Style Bibleと整合。
+- scorecard・i2v-generation-logの記録は asset-status.md と一致。
+- `comfy_i2v_batch.py` は op_01/op_11 除外済み。
+- agent定義群（.claude/.agents/.codex）に方針矛盾なし。
+- 大容量素材・実素材のGit混入なし（第1弾から変化なし）。
+
+## 第2弾の検証
+
+- `python3 -c "ast.parse(...)"` で `comfy_i2v.py` 構文OK。
+- `python3 scripts/comfy_i2v.py --image ...op_11...` → 安全停止を確認（exit 1）。
+- `python3 scripts/check_assets.py` → 出力変化なし（人間判断維持）。
+- `python3 scripts/build_opening_movie.py` → 安全停止のまま（正常）。
+- motion-studio / movie-dashboard はコード変更なしのため再ビルド不要（第1弾で全チェック通過済み）。
+
+## 第2弾後のP0/P1/P2
+
+- P0: 0件
+- P1: 0件（第2弾検出分3件すべて修正済み）
+- P2: 0件（第1弾からの持ち越し含めすべて修正済み。v001/v002決定ログ内の当時表現は履歴として保持）
+
+## 第2弾のcommit / push
+
+第2弾のcommit hashとpush状態は、コミット後に末尾へ追記する。

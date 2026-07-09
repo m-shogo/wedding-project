@@ -84,8 +84,10 @@ Track 1: AI背景・実写真(必要な場所のみ)
 組み込み前にmotion-studio側で:
 
 ```sh
-pnpm check          # check:motion + check:assets
+pnpm check          # check:motion + check:assets + check:parts
 ```
 
 - 素材ファイルの存在、シーン構成とテンプレの整合、尺の妥当性を機械チェックできる
-- 写真やBGMが揃ったら `assets.ts` のstatusを `ready` に更新して再実行する
+- 写真やBGMが揃ったら `assets.ts` のstatusを制作段階に合わせて更新して再実行する
+  （`missing → idea → prompt_ready → generated_preview → candidate → approved → final`。
+  `candidate` 以上への昇格は人間確認が必須。AIが勝手に上げない）

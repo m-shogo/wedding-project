@@ -97,6 +97,7 @@ pnpm dev
 11_printables/             印刷物、返礼品、しおり案。動画の世界観に合わせるサブ制作物
 motion-studio/             Remotion製モーション素材スタジオ
 movie-dashboard/           ブラウザ制作ダッシュボード
+opening-movie/             オープニング構成案1の初期構想アーカイブ（現行入口ではない）
 90_exports/                書き出し済み成果物（Git管理外）
 99_archive/                不採用・古い版
 ```

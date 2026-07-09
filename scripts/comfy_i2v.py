@@ -21,6 +21,13 @@ from pathlib import Path
 
 API = "http://127.0.0.1:8188"
 
+# Style Bible違反(人物入り)が目視確認済みの静止画。I2V入力に使わない。
+# 採否の最新状態は 02_opening-movie/asset-status.md を見る。
+REJECTED_IMAGES = {
+    "op_01_narita_boarding_gate_ai.png": "人物入り（カウンター係員と搭乗客の後ろ姿）",
+    "op_11_narita_airport_lobby_ai.png": "人物入り（複数人物）",
+}
+
 NEGATIVE = (
     "text, subtitles, readable letters, logos, brand marks, distorted "
     "objects, warped architecture, extra people, visible faces, flickering, "
@@ -105,6 +112,15 @@ def main():
     p.add_argument("--seed", type=int, default=42)
     p.add_argument("--fps", type=int, default=16)
     args = p.parse_args()
+
+    image_basename = Path(args.image).name
+    if image_basename in REJECTED_IMAGES:
+        raise SystemExit(
+            f"{image_basename} は不採用素材のためI2V入力に使えません"
+            f"（{REJECTED_IMAGES[image_basename]}）。\n"
+            "人物なしの静止画を再生成してから実行してください。"
+            "採否は 02_opening-movie/asset-status.md を確認。"
+        )
 
     image_name = upload_image(args.image)
     wf = build_workflow(image_name, args.prompt, args)

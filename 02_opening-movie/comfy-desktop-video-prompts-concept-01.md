@@ -2,7 +2,7 @@
 
 ## 構成案1: MEMORY FLIGHT 1024
 
-対象画像: `01_profile-movie/sample_image/` にある20枚想定。
+対象画像: `02_opening-movie/sample_image/` にある20枚想定（Git管理外・ローカル管理）。
 
 ## 注意: op_01 / op_11 は不採用
 
