@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="520" height="420" viewBox="0 0 520 420">
+  <g transform="rotate(-2 260 210)">
+    <path d="M54 56H466V360H54Z" fill="#FFFDF6" stroke="#2F2A26" stroke-width="6"/>
+    <path d="M82 88H438V300H82Z" fill="none" stroke="#2F2A26" stroke-width="5" stroke-dasharray="12 10"/>
+    <text x="260" y="338" text-anchor="middle" font-family="Arial,sans-serif" font-size="28" font-weight="700" fill="#E85B78">PHOTO</text>
+  </g>
+  <g opacity=".92">
+    <path d="M72 28H194L180 82H58Z" fill="#F7D765"/>
+    <path d="M338 336H462L470 390H346Z" fill="#9ED9D2"/>
+  </g>
+  <path d="M445 72c18-18 48-4 43 21-5 23-43 43-43 43s-38-20-43-43c-5-25 25-39 43-21Z" fill="#F06A86" stroke="#FFFDF6" stroke-width="5"/>
+</svg>
