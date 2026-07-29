@@ -12,7 +12,10 @@
 5. `07_prompt-library.md`
 6. `08_figma-quality-playbook.md`
 7. `09_research-notes.md`
-8. Drive参考画像・制作素材
+8. `10_workflow-hacks.md`
+9. `11_tool-stack.md`
+10. `12_social-catchup-log.md`
+11. Drive参考画像・制作素材
 
 ## 固定した進め方
 - 制作順: `るるぶWEDDING → WEDDING PASSPORT → BOARDING PASS → 青春ふたりきっぷ`
@@ -27,6 +30,19 @@
 - `02_rurubu-spec.md`
 - `03_boarding-pass-spec.md`
 - `04_ticket-spec.md`
+
+## AI / Tool運用
+- Plugin / MCP / CLI / 画像生成サービスの利用に原則制限なし。
+- ただし実際に工程を改善するものだけ採用する。
+- 新しいノウハウは `VERIFIED / OFFICIAL / CANDIDATE / AVOID` で分類する。
+- SNSは最新の失敗例・Plugin発見に使い、仕様の正本にはしない。
+- 実験で有効だったworkflowはGitへ昇格する。
+
+## Project helpers
+- Claude agent: `.claude/agents/print-art-director.md`
+- Codex agent: `.codex/agents/print-art-director.toml`
+- Codex skill: `.agents/skills/wedding-print-design/SKILL.md`
+- chroma-key transparency fallback: `scripts/remove-chroma-background.py`
 
 ## 重要
 現在の画像生成物・参考ボード・Figma検証版は完成案ではない。
