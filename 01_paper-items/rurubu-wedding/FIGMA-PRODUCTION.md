@@ -21,6 +21,7 @@ All listed SVG assets are transparent by construction: the SVG root has no backg
 - `assets/champagne-heart-v1.svg`: CANDIDATE
 - `assets/guidebook-check-v1.svg`: CANDIDATE
 - `assets/hearts-sparkle-v1.svg`: CANDIDATE
+- `assets/photo-frame-tape-v1.svg`: CANDIDATE
 - raster transparency attempts: REJECTED. Checkerboard/background pixels were baked into generated images, so raster generation is no longer the primary path.
 
 ## Freeze progress
