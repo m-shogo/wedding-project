@@ -1,0 +1,83 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <style>
+    :root { font-family: Inter, system-ui, sans-serif; }
+    body { margin: 16px; color: var(--figma-color-text); background: var(--figma-color-bg); }
+    h1 { font-size: 16px; margin: 0 0 6px; }
+    p { font-size: 12px; line-height: 1.55; margin: 0 0 12px; color: var(--figma-color-text-secondary); }
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
+    label { font-size: 11px; color: var(--figma-color-text-secondary); }
+    input { width: 100%; box-sizing: border-box; margin-top: 4px; padding: 7px 8px; border: 1px solid var(--figma-color-border); border-radius: 6px; background: var(--figma-color-bg); color: var(--figma-color-text); }
+    button { width: 100%; border: 0; border-radius: 7px; padding: 9px 10px; background: var(--figma-color-bg-brand); color: var(--figma-color-text-onbrand); font-weight: 650; cursor: pointer; }
+    #meta { font-size: 11px; margin: 12px 0 8px; color: var(--figma-color-text-secondary); }
+    #results { display: grid; gap: 7px; max-height: 350px; overflow: auto; }
+    .finding { border: 1px solid var(--figma-color-border); border-radius: 7px; padding: 8px; cursor: pointer; }
+    .finding strong { display: block; font-size: 11px; margin-bottom: 3px; }
+    .finding span { font-size: 11px; line-height: 1.45; color: var(--figma-color-text-secondary); }
+    .error { border-left: 3px solid var(--figma-color-icon-danger); }
+    .warn { border-left: 3px solid var(--figma-color-icon-warning); }
+    .info { border-left: 3px solid var(--figma-color-icon-brand); }
+  </style>
+</head>
+<body>
+  <h1>Wedding Print Toolkit</h1>
+  <p>Typography QA prototype。選択中layerがあればselection、なければcurrent pageを走査します。閾値はまだ暫定で、原寸試し刷りの代替ではありません。</p>
+
+  <div class="row">
+    <label>暫定最小 font size
+      <input id="minFontSize" type="number" value="8" min="1" step="0.5" />
+    </label>
+    <label>長文判定 文字数
+      <input id="longTextChars" type="number" value="120" min="10" step="10" />
+    </label>
+  </div>
+
+  <button id="scan">Scan typography</button>
+  <div id="meta">未走査</div>
+  <div id="results"></div>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+
+    $('scan').onclick = () => {
+      parent.postMessage({ pluginMessage: {
+        type: 'scan',
+        minFontSize: Number($('minFontSize').value),
+        longTextChars: Number($('longTextChars').value)
+      }}, '*');
+    };
+
+    window.onmessage = (event) => {
+      const message = event.data.pluginMessage;
+      if (!message || message.type !== 'scan-result') return;
+
+      $('meta').textContent = `${message.scope} / Text ${message.scannedTextNodes}件 / Finding ${message.findings.length}件`;
+      const results = $('results');
+      results.innerHTML = '';
+
+      for (const finding of message.findings) {
+        const div = document.createElement('div');
+        div.className = `finding ${finding.level}`;
+        div.innerHTML = `<strong>${escapeHtml(finding.nodeName)} · ${escapeHtml(finding.rule)}</strong><span>${escapeHtml(finding.message)}</span>`;
+        div.onclick = () => parent.postMessage({ pluginMessage: { type: 'select-node', nodeId: finding.nodeId }}, '*');
+        results.appendChild(div);
+      }
+
+      if (!message.findings.length) {
+        results.innerHTML = '<p>この暫定ルールではFindingなし。実寸・overflow・印刷QAは別途確認します。</p>';
+      }
+    };
+
+    function escapeHtml(value) {
+      return String(value)
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#039;');
+    }
+  </script>
+</body>
+</html>
