@@ -55,14 +55,19 @@ Current Authorityは `@11_printables/paper-items/00_master-brief.md`。
 - 全体トーンは `上品65% + 楽しさ35%`。
 - 本番Figmaは **1アイテム = 1ファイル = 1 URL**。4アイテムを同じ本番ファイルへ詰め込まない。
 - 既存の4種入りFigmaは capability test であり `PROTOTYPE / NOT CURRENT`。本番の完成品質として扱わない。
-- Figmaへ直行せず、Reference選別 → Foundation → Identity → Wireframe → Visual → Content Stress Test → QA → 人間の光学調整 → 試し刷りの順で進める。
-- Figma本番開始前に `@11_printables/paper-items/06_prefigma-readiness.md` を確認する。
+- Figmaへ直行せず、Reference選別 → Foundation → Identity → 固定素材Freeze → Wireframe → Visual → Content Stress Test → QA → 人間の光学調整 → 試し刷りの順で進める。
+- 本番Figma開始前に `@11_printables/paper-items/30_prefigma-exit-criteria.md` を確認する。
+- 固定素材の制作順は `@11_printables/paper-items/29_asset-production-queue.md` をCurrent queueとして扱う。
 - Figma/AI制作ルールは `@11_printables/paper-items/08_figma-quality-playbook.md` を優先する。
 - Promptは `@11_printables/paper-items/07_prompt-library.md` を参照し、1 promptで4アイテムを一括生成しない。
 - Workflow小技は `@11_printables/paper-items/10_workflow-hacks.md`、Tool/Plugin採用は `@11_printables/paper-items/11_tool-stack.md` を参照する。
 - SNS/Forumの最新知見は `@11_printables/paper-items/12_social-catchup-log.md` に日付とsourceを残す。
 - Plugin/MCP/CLI/外部ライブラリの利用に制限は設けないが、品質・再利用性・QAを明確に改善するものだけ採用する。
 - 新しい手法は `VERIFIED / OFFICIAL / CANDIDATE / AVOID` で分類し、実験で有効ならGitへ昇格する。
+- **固定要素と可変要素を切り分ける。変更しないロゴ、エンブレム、スタンプ、背景、装飾は先に完成アセット化し、変更する写真・本文・席次・ゲスト名・余白だけFigma/CSV/Pluginに残す。**
+- ロゴを含む固定素材は、生成AIで完成品質が得られるならAIで先に作る。透過・高解像度化・必要時のみベクター化して固定アセットとして扱う。
+- 自作Figma Plugin `figma-plugins/wedding-print-toolkit/` は反復作業・Variables・量産・QAを担当し、美的判断を丸投げしない。
+- ユーザーの追加アイデアや横槍で一時停止しても、完了可能な作業は止めずに継続する。迷った場合は **調査 → 判断 → 実験 → Gitへ記録** の順で進める。
 - 実写真・大きな参考画像・生成画像は原則Drive側。Gitには判断・出典・仕様・prompt・statusを残す。
 
 ## 進め方
