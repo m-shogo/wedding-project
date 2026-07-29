@@ -38,8 +38,13 @@ Codex でこの動画制作プロジェクトを進めるための入口。
 - テーマを変える時は `docs/theme-switching.md` に沿って差し替える。
 - 素材や情報を集める時は `docs/materials-todo.md` をチェックリストとして使う。
 - 重要な判断や好みが出たら、該当ドキュメントや `docs/decisions/` に残す。
-- ペーパーアイテムでは、Reference選別、Foundation、Logo/Identity、wireframe、Figma bulk edit、CSV流し込み、lint、print preflightを担当させる。
+- ペーパーアイテムでは、Reference選別、Foundation、Logo/Identity、固定素材Freeze、wireframe、Figma bulk edit、CSV流し込み、lint、print preflightを担当させる。
+- 固定素材queueは `11_printables/paper-items/29_asset-production-queue.md`、Figma開始判定は `30_prefigma-exit-criteria.md` を使う。
+- 変更しないロゴ/エンブレム/スタンプ/背景/装飾は先に完成アセット化し、変更する写真/本文/席次/ゲスト名/余白だけFigma/CSV/Pluginへ残す。
+- ロゴを含む固定素材は、生成AIで完成品質が得られる場合はAIを優先し、透過・高解像度化・必要時のみベクター化する。
 - Plugin/MCP/CLIの新しい手法を試した場合は `VERIFIED / OFFICIAL / CANDIDATE / AVOID` で分類し、`11_printables/paper-items/` へ知見を残す。
+- 自作Figma Plugin `figma-plugins/wedding-print-toolkit/` は反復作業、Variables、Stress Test、量産、QAへ使い、美的判断を丸投げしない。
+- 迷った場合は作業を止めず、**調査 → 判断 → 実験 → Git記録** の順で進める。
 
 ## Codex project skills
 
