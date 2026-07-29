@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<style>
+  body { font: 12px/1.5 Inter, system-ui, sans-serif; margin: 16px; color: var(--figma-color-text); background: var(--figma-color-bg); }
+  h1 { font-size: 16px; margin: 0 0 6px; }
+  .muted { color: var(--figma-color-text-secondary); }
+  .row { display: flex; gap: 8px; align-items: center; margin: 14px 0; }
+  input { width: 60px; padding: 6px; border: 1px solid var(--figma-color-border); border-radius: 6px; background: var(--figma-color-bg); color: inherit; }
+  button { border: 0; border-radius: 6px; padding: 8px 12px; background: var(--figma-color-bg-brand); color: var(--figma-color-text-onbrand); cursor: pointer; }
+  .secondary { background: var(--figma-color-bg-secondary); color: var(--figma-color-text); }
+  #summary { margin: 12px 0; font-weight: 600; }
+  .issue { border-top: 1px solid var(--figma-color-border); padding: 9px 0; }
+  .issue button { float: right; padding: 4px 8px; font-size: 11px; }
+  .error { color: #d92d20; }
+  .warning { color: #b54708; }
+  .info { color: var(--figma-color-text-secondary); }
+  .name { font-weight: 600; }
+</style>
+</head>
+<body>
+  <h1>Wedding Print Toolkit</h1>
+  <div class="muted">Typography QA prototype — 選択範囲があればそこだけ、なければ現在ページを検査します。</div>
+  <div class="row">
+    <label>最小文字サイズ</label>
+    <input id="min" type="number" min="1" step="0.5" value="8" />
+    <button id="run">QA実行</button>
+  </div>
+  <div id="summary"></div>
+  <div id="issues"></div>
+  <div class="row"><button class="secondary" id="close">閉じる</button></div>
+<script>
+  const run = document.getElementById('run');
+  const min = document.getElementById('min');
+  const summary = document.getElementById('summary');
+  const issues = document.getElementById('issues');
+
+  run.onclick = () => {
+    summary.textContent = '検査中…';
+    issues.innerHTML = '';
+    parent.postMessage({ pluginMessage: { type: 'run-qa', minFontSize: Number(min.value) } }, '*');
+  };
+
+  document.getElementById('close').onclick = () => parent.postMessage({ pluginMessage: { type: 'close' } }, '*');
+
+  onmessage = (event) => {
+    const msg = event.data.pluginMessage;
+    if (!msg) return;
+    if (msg.type === 'qa-result') {
+      summary.textContent = `${msg.scanned} text layers scanned / ${msg.issues.length} issues / threshold ${msg.threshold}`;
+      issues.innerHTML = '';
+      for (const item of msg.issues) {
+        const div = document.createElement('div');
+        div.className = 'issue';
+        div.innerHTML = `<button data-id="${item.nodeId}">選択</button><div class="name ${item.severity}">${item.message}</div><div>${escapeHtml(item.nodeName)}</div><div class="muted">${escapeHtml(item.detail || '')}</div>`;
+        div.querySelector('button').onclick = () => parent.postMessage({ pluginMessage: { type: 'select-node', nodeId: item.nodeId } }, '*');
+        issues.appendChild(div);
+      }
+    } else if (msg.type === 'error') {
+      summary.textContent = `Error: ${msg.message}`;
+    }
+  };
+
+  function escapeHtml(value) {
+    return String(value).replace(/[&<>'\"]/g, (c) => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', "'":'&#39;', '\"':'&quot;' }[c]));
+  }
+</script>
+</body>
+</html>
