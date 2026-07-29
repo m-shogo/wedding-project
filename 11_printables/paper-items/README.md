@@ -21,7 +21,9 @@
 14. `17_prebuild-freeze-matrix.md`
 15. `29_asset-production-queue.md`
 16. `30_prefigma-exit-criteria.md`
-17. Drive参考画像・制作素材
+17. `31_plugin-api-current-notes.md`
+18. `32_adaptive-feedback-loop.md`
+19. Drive参考画像・制作素材
 
 ## 固定した進め方
 - 制作順: `るるぶWEDDING → WEDDING PASSPORT → BOARDING PASS → 青春ふたりきっぷ`
@@ -31,6 +33,7 @@
 - 現在のFigma検証版は `PROTOTYPE / NOT CURRENT`。本番デザインの土台として無条件に流用しない。
 - 本番Figma開始前に `30_prefigma-exit-criteria.md` を通す。
 - 固定要素はFigmaへ入る前に完成アセット化し、可変要素だけFigma/CSV/Pluginへ残す。
+- 迷い・違和感・失敗が出た時は、同じ方法を繰り返さず `32_adaptive-feedback-loop.md` に沿って **FB → 原因分類 → 手段変更 → 小さく検証 → Git記録** する。
 
 ## アイテム
 - `01_passport-spec.md`
@@ -46,6 +49,7 @@
 - 実験で有効だったworkflowはGitへ昇格する。
 - 既存Pluginで足りない反復作業・QAは、自作Figma Pluginの対象にする。
 - 自作Pluginは `IDEA → PROTOTYPE → VERIFIED → CURRENT / REJECTED` で昇格管理する。
+- 「何のツールを使うか」ではなく、最終品質・再現性・修正容易性で手段を選ぶ。
 
 ## 制作の切り分け
 
@@ -79,7 +83,7 @@
 ## 自作Figma Plugin
 仮称 `Wedding Print Toolkit`。
 
-Prototype実装:
+Current prototype path:
 - `figma-plugins/wedding-print-toolkit/`
 
 現在の実装:
@@ -91,16 +95,26 @@ Prototype実装:
    - 問題レイヤーへ選択/ズーム
 2. Design Token Bootstrap
    - `Wedding Print Tokens` Variable Collectionを作成/更新
+3. Long-name Stress Test
+   - 元テンプレを破壊せずcloneを作成
+   - 短い日本語名〜長い英字名を流し込み
+   - BOARDING PASS等の実データ崩れ検出用
 
 次候補:
 1. Guest Data Populate
-2. Long-name Stress Test
-3. Print QA Overlay
-4. Photo Placeholder / Batch Swap
-5. Batch Export Helper
-6. Asset-Frozen marker
+2. Print QA Overlay
+3. Photo Placeholder / Batch Swap
+4. Batch Export Helper
+5. Asset-Frozen marker
 
 詳細: `15_custom-figma-plugin-roadmap.md` と `figma-plugins/wedding-print-toolkit/README.md`
+
+## 迷った時の判断
+- 美的に弱い → Reference / prompt / wireframe / hierarchyを変える。Pluginで美的判断を代替しない。
+- 同じ手作業が反復 → native → existing plugin → CSV/MCP/script → custom pluginを検討。
+- 見落としやすいQA → 自動検査を優先。
+- Figma外の方が速い処理 → CLI / image tool / print toolへ逃がす。
+- 同じ操作を3回以上繰り返す見込み、または4アイテムで再利用できるなら自作Plugin候補。
 
 ## Project helpers
 - Claude agent: `.claude/agents/print-art-director.md`
