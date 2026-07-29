@@ -21,6 +21,8 @@ Codex でこの動画制作プロジェクトを進めるための入口。
 5. `docs/02_style-bible.md`
 6. 作業対象の制作物フォルダ
 
+ペーパーアイテム作業の場合は、上記に加えて最初に `11_printables/paper-items/README.md` を読み、`00_master-brief.md` をCurrent Authorityとして扱う。
+
 ## Codexで頼むとよいこと
 
 - 素材のフォルダ分け案を作る。
@@ -36,6 +38,8 @@ Codex でこの動画制作プロジェクトを進めるための入口。
 - テーマを変える時は `docs/theme-switching.md` に沿って差し替える。
 - 素材や情報を集める時は `docs/materials-todo.md` をチェックリストとして使う。
 - 重要な判断や好みが出たら、該当ドキュメントや `docs/decisions/` に残す。
+- ペーパーアイテムでは、Reference選別、Foundation、Logo/Identity、wireframe、Figma bulk edit、CSV流し込み、lint、print preflightを担当させる。
+- Plugin/MCP/CLIの新しい手法を試した場合は `VERIFIED / OFFICIAL / CANDIDATE / AVOID` で分類し、`11_printables/paper-items/` へ知見を残す。
 
 ## Codex project skills
 
@@ -48,6 +52,7 @@ Codex でこの動画制作プロジェクトを進めるための入口。
 - `$wedding-asset-intake`: 受け取った素材を分類し、命名と採否ログを作る。
 - `$wedding-rights-check`: 音源、フォント、写真、AI素材の権利・プライバシー確認をする。
 - `$wedding-quality-gate`: ラフ版、完成前、上映前のチェックをする。
+- `$wedding-print-design`: ペーパーアイテムのFigma前設計、Plugin/MCP活用、印刷QAを行う。
 
 ## Codex custom agents
 
@@ -60,5 +65,6 @@ Codex でこの動画制作プロジェクトを進めるための入口。
 - `asset-librarian`
 - `rights-safety-reviewer`
 - `quality-gate-reviewer`
+- `print-art-director`
 
 明示的に複数視点で見たいときは、各観点ごとに subagent を使ってレビューする。
