@@ -15,23 +15,23 @@ Status:
 ## P0 — るるぶWEDDING
 1. `RURUBU-LOGO-01` — 誌名ロゴ `るるぶWEDDING`
    - Priority: P0
-   - Status: TODO
+   - Status: IN_PROGRESS
    - 完了条件: 30mm幅 / 写真上 / 白背景 / モノクロで読める
 2. `RURUBU-BADGE-DATE` — `2026.10.24 SAT`
    - Priority: P0
-   - Status: TODO
+   - Status: IN_PROGRESS
 3. `RURUBU-LABEL-SET` — SPECIAL / PROFILE / Q&A / OUR STORY / TRIP MAP / MEMORY SPOTS / THANK YOU
    - Priority: P0
-   - Status: TODO
+   - Status: IN_PROGRESS
 4. `RURUBU-ARROW-SET` — 矢印 / 区切り
    - Priority: P1
    - Status: TODO
 5. `RURUBU-STAMP-SET` — CHECK / PICK UP / BEST 3 / NEW
    - Priority: P1
-   - Status: TODO
+   - Status: IN_PROGRESS
 6. `RURUBU-ROUTE-SET` — map pin / dotted route / compass
    - Priority: P1
-   - Status: TODO
+   - Status: IN_PROGRESS
 7. `RURUBU-CAPTION-SET` — photo caption 2系統
    - Priority: P1
    - Status: TODO
