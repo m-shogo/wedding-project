@@ -44,6 +44,24 @@
 - モーション素材スタジオ: @motion-studio/README.md（Remotionで搭乗券・地図・ハンコ・カウントダウン・写真カードを生成。文字入り素材はAIでなくここで作る）
 - ブラウザ制作ダッシュボード: @movie-dashboard/README.md（絵コンテ・素材・プロンプト・タスクを管理）
 
+## ペーパーアイテム制作
+
+ペーパーアイテム作業を行う場合は、最初に `@11_printables/paper-items/README.md` を読む。
+Current Authorityは `@11_printables/paper-items/00_master-brief.md`。
+
+固定ルール:
+- 対象は WEDDING PASSPORT / るるぶWEDDING / BOARDING PASS / 青春ふたりきっぷ の4種。
+- 制作順は `るるぶWEDDING → WEDDING PASSPORT → BOARDING PASS → 青春ふたりきっぷ`。
+- 全体トーンは `上品65% + 楽しさ35%`。
+- 本番Figmaは **1アイテム = 1ファイル = 1 URL**。4アイテムを同じ本番ファイルへ詰め込まない。
+- 既存の4種入りFigmaは capability test であり `PROTOTYPE / NOT CURRENT`。本番の完成品質として扱わない。
+- Figmaへ直行せず、Reference選別 → Foundation → Identity → Wireframe → Visual → Content Stress Test → QA → 人間の光学調整 → 試し刷りの順で進める。
+- Figma本番開始前に `@11_printables/paper-items/06_prefigma-readiness.md` を確認する。
+- Figma/AI制作ルールは `@11_printables/paper-items/08_figma-quality-playbook.md` を優先する。
+- Promptは `@11_printables/paper-items/07_prompt-library.md` を参照し、1 promptで4アイテムを一括生成しない。
+- Plugin/MCP/外部ライブラリの利用に制限は設けないが、品質・再利用性・QAを明確に改善するものだけ採用する。
+- 実写真・大きな参考画像・生成画像は原則Drive側。Gitには判断・出典・仕様・prompt・statusを残す。
+
 ## 進め方
 
 - 素材整理、構成検討、プロンプト作成、テロップ作成、編集指示書作成を手伝う。
