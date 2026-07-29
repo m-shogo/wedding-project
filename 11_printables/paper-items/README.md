@@ -15,7 +15,9 @@
 8. `10_workflow-hacks.md`
 9. `11_tool-stack.md`
 10. `12_social-catchup-log.md`
-11. Drive参考画像・制作素材
+11. `13_rurubu-reference-selection.md`
+12. `14_logo-identity-workflow.md`
+13. Drive参考画像・制作素材
 
 ## 固定した進め方
 - 制作順: `るるぶWEDDING → WEDDING PASSPORT → BOARDING PASS → 青春ふたりきっぷ`
