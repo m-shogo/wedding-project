@@ -1,11 +1,12 @@
 # るるぶWEDDING Figma Production
 
-- status: FILE_CREATED / WRITE_BLOCKED_BY_FIGMA_STARTER_MCP_LIMIT
+- status: FILE_CREATED / FOUNDATION_SPEC_READY / WRITE_BLOCKED_BY_FIGMA_STARTER_MCP_LIMIT
 - production file: https://www.figma.com/design/bfM0d4c9dCeBv5pCkJ3TNM
 - created: 2026-07-29
 - last verified Figma MCP block: 2026-07-30
 - rule: this URL is the single production Figma file for るるぶWEDDING
 - Current authority: GitHub `main`. Drive Current Authority still contains a stale historical branch pointer; do not restore that branch as authority.
+- foundation spec: `FOUNDATION.md`
 
 ## Current build target
 A4二つ折り 420×297mm spread。Front coverは `るるぶ WEDDING` / `YOKOHAMA 2026.10.24` / couple hero photo / PICK UP badge。Back coverは OUR TRAVEL NOTES を軸に、思い出スポット・友達・歴史を旅行誌として整理する。
@@ -29,11 +30,14 @@ All listed SVG assets are transparent by construction: the SVG root has no backg
 - Fixed asset generation is proceeding as one asset per file; asset-sheet generation is prohibited.
 - Current vector route avoids the failed raster transparency loop entirely.
 - Drive production upload remains pending where the connector cannot accept the GitHub/local SVG bytes directly; GitHub `main` remains the Current source until a byte-capable Drive upload path is available.
+- Foundation geometry/content hierarchy is now documented in `FOUNDATION.md` without guessing printer-specific bleed/safe values.
 - Figma MCP read/write remains blocked by the Starter plan call limit as verified on 2026-07-30; do not repeat mutation probes until quota recovers.
 
 ## Next write when MCP quota recovers
 1. create `01_Cover_Back` A4 spread
-2. establish front/back foundation and fold guide
-3. place native title/date/hero-photo placeholder
-4. import/recreate the frozen SVG candidates one at a time
-5. continue wireframe → visual design → real-data stress test → QA
+2. implement `FOUNDATION.md`: front/back semantic containers and fold guide
+3. establish Variables/Text Styles and clearly label provisional print guides
+4. place native title/date/hero-photo placeholder
+5. import/recreate the frozen SVG candidates one at a time
+6. compare 2–3 monochrome wireframes before visual design
+7. continue visual design → real-data stress test → QA
