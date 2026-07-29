@@ -5,8 +5,9 @@
 <style>
   body { font: 12px/1.5 Inter, system-ui, sans-serif; margin: 16px; color: var(--figma-color-text); background: var(--figma-color-bg); }
   h1 { font-size: 16px; margin: 0 0 6px; }
+  h2 { font-size: 13px; margin: 18px 0 6px; }
   .muted { color: var(--figma-color-text-secondary); }
-  .row { display: flex; gap: 8px; align-items: center; margin: 14px 0; }
+  .row { display: flex; gap: 8px; align-items: center; margin: 12px 0; flex-wrap: wrap; }
   input { width: 60px; padding: 6px; border: 1px solid var(--figma-color-border); border-radius: 6px; background: var(--figma-color-bg); color: inherit; }
   button { border: 0; border-radius: 6px; padding: 8px 12px; background: var(--figma-color-bg-brand); color: var(--figma-color-text-onbrand); cursor: pointer; }
   .secondary { background: var(--figma-color-bg-secondary); color: var(--figma-color-text); }
@@ -17,21 +18,35 @@
   .warning { color: #b54708; }
   .info { color: var(--figma-color-text-secondary); }
   .name { font-weight: 600; }
+  .panel { border: 1px solid var(--figma-color-border); border-radius: 8px; padding: 10px; margin-top: 12px; }
 </style>
 </head>
 <body>
   <h1>Wedding Print Toolkit</h1>
-  <div class="muted">Typography QA prototype — 選択範囲があればそこだけ、なければ現在ページを検査します。</div>
-  <div class="row">
-    <label>最小文字サイズ</label>
-    <input id="min" type="number" min="1" step="0.5" value="8" />
-    <button id="run">QA実行</button>
+  <div class="muted">反復作業とQAを担当するローカルPlugin。美的判断は自動化しません。</div>
+
+  <div class="panel">
+    <h2>Typography QA</h2>
+    <div class="muted">選択範囲があればそこだけ、なければ現在ページを検査します。</div>
+    <div class="row">
+      <label>最小文字サイズ</label>
+      <input id="min" type="number" min="1" step="0.5" value="8" />
+      <button id="run">QA実行</button>
+    </div>
   </div>
+
+  <div class="panel">
+    <h2>Long-name Stress Test</h2>
+    <div class="muted">現在ページ直下のテンプレを1つ選択。`GUEST_NAME` layerへ短名〜長名を流した4 cloneを右側に作ります。元デザインは変更しません。</div>
+    <div class="row"><button id="stress">長い名前をテスト</button></div>
+  </div>
+
   <div id="summary"></div>
   <div id="issues"></div>
   <div class="row"><button class="secondary" id="close">閉じる</button></div>
 <script>
   const run = document.getElementById('run');
+  const stress = document.getElementById('stress');
   const min = document.getElementById('min');
   const summary = document.getElementById('summary');
   const issues = document.getElementById('issues');
@@ -40,6 +55,12 @@
     summary.textContent = '検査中…';
     issues.innerHTML = '';
     parent.postMessage({ pluginMessage: { type: 'run-qa', minFontSize: Number(min.value) } }, '*');
+  };
+
+  stress.onclick = () => {
+    summary.textContent = 'Stress clone作成中…';
+    issues.innerHTML = '';
+    parent.postMessage({ pluginMessage: { type: 'run-name-stress' } }, '*');
   };
 
   document.getElementById('close').onclick = () => parent.postMessage({ pluginMessage: { type: 'close' } }, '*');
@@ -53,10 +74,12 @@
       for (const item of msg.issues) {
         const div = document.createElement('div');
         div.className = 'issue';
-        div.innerHTML = `<button data-id="${item.nodeId}">選択</button><div class="name ${item.severity}">${item.message}</div><div>${escapeHtml(item.nodeName)}</div><div class="muted">${escapeHtml(item.detail || '')}</div>`;
+        div.innerHTML = `<button data-id="${item.nodeId}">選択</button><div class="name ${item.severity}">${escapeHtml(item.message)}</div><div>${escapeHtml(item.nodeName)}</div><div class="muted">${escapeHtml(item.detail || '')}</div>`;
         div.querySelector('button').onclick = () => parent.postMessage({ pluginMessage: { type: 'select-node', nodeId: item.nodeId } }, '*');
         issues.appendChild(div);
       }
+    } else if (msg.type === 'stress-result') {
+      summary.textContent = `${msg.created} stress clones created: ${msg.samples.join(' / ')}`;
     } else if (msg.type === 'error') {
       summary.textContent = `Error: ${msg.message}`;
     }
