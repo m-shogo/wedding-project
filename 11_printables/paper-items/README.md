@@ -18,7 +18,8 @@
 11. `13_rurubu-reference-selection.md`
 12. `14_logo-identity-workflow.md`
 13. `15_custom-figma-plugin-roadmap.md`
-14. Drive参考画像・制作素材
+14. `17_prebuild-freeze-matrix.md`
+15. Drive参考画像・制作素材
 
 ## 固定した進め方
 - 制作順: `るるぶWEDDING → WEDDING PASSPORT → BOARDING PASS → 青春ふたりきっぷ`
@@ -27,6 +28,7 @@
 - 本番Figmaは **1アイテム = 1ファイル = 1 URL**。計4ファイル。
 - 現在のFigma検証版は `PROTOTYPE / NOT CURRENT`。本番デザインの土台として無条件に流用しない。
 - 本番Figma開始前に `06_prefigma-readiness.md` を通す。
+- 固定要素はFigmaへ入る前に完成アセット化し、可変要素だけFigma/CSV/Pluginへ残す。
 
 ## アイテム
 - `01_passport-spec.md`
@@ -43,6 +45,35 @@
 - 既存Pluginで足りない反復作業・QAは、自作Figma Pluginの対象にする。
 - 自作Pluginは `IDEA → PROTOTYPE → VERIFIED → CURRENT / REJECTED` で昇格管理する。
 
+## 制作の切り分け
+
+### 先に完成アセット化
+- logo
+- emblem
+- stamps
+- fixed icon
+- decorative frame
+- route line
+- background texture
+- fixed badge
+
+### Figmaで編集可能に残す
+- layout
+- photo crop
+- margins
+- text
+- hierarchy
+- print guide
+
+### CSV / Pluginへ寄せる
+- guest names
+- table data
+- repeated labels
+- QA
+- batch export
+
+詳細: `17_prebuild-freeze-matrix.md`
+
 ## 自作Figma Plugin候補
 仮称 `Wedding Print Toolkit`。
 
@@ -55,6 +86,9 @@
 6. Batch Export Helper
 
 詳細: `15_custom-figma-plugin-roadmap.md`
+
+Prototype scaffold:
+- `tools/figma-wedding-toolkit/`
 
 ## Project helpers
 - Claude agent: `.claude/agents/print-art-director.md`
