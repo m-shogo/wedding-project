@@ -21,10 +21,24 @@
 - 「本物っぽい」より、結婚式で美しく、読めて、使いやすいことを優先する。
 - Figma本制作は、構成・原稿量・サイズ・印刷方式がほぼ決まった後に行う。
 - 最後の1〜2mmの光学調整と写真トリミングは人間が直接Figmaで行える編集構造を保つ。
+- Plugin / MCP / 外部ライブラリの利用に原則制限は設けない。ただし品質・修正性・QAを改善するものだけ採用する。
 
-## 共通デザイン言語
+## 制作順
+1. **るるぶWEDDING**
+2. **WEDDING PASSPORT**
+3. **BOARDING PASS**
+4. **青春ふたりきっぷ**
+
+4種を同時に浅く作らず、1アイテムずつ深く詰める。
+
+## 全体トーン
+- 上品 65%
+- 楽しさ 35%
 - 上質な旅行エフェメラ
 - 少しレトロ、ただし古びすぎない
+- 情報設計は現代的で読みやすくする
+
+## 共通デザイン言語
 - 余白を意識し、装飾を詰め込みすぎない
 - 共通モチーフ: スタンプ、地図線、航路/路線、番号、罫線、エンブレム
 - 共通ベース色: Navy / Ivory
@@ -73,11 +87,24 @@
 - 印刷会社/印刷方式/紙/加工/部数
 - 本番フォントと色コード
 
-## Figma proof of capability
-検証ファイル:
+## Figma Architecture
+### 本番
+**1アイテム = 1 Figma file = 1 URL** とする。計4 URL。
+
+- 01 るるぶWEDDING
+- 02 WEDDING PASSPORT
+- 03 BOARDING PASS
+- 04 青春ふたりきっぷ
+
+4アイテムを同じ本番Figmaへ詰め込まない。
+
+### 検証版
+Capability test:
 https://www.figma.com/design/DqO7m0852QP7soyXYczt6I
 
-Starterプラン制限により1ページ内4 Sectionで構築。最終版もSection方式で問題ない。
+これは `PROTOTYPE / CAPABILITY TEST / NOT CURRENT`。
+Figmaを直接生成・編集できることを検証するためのファイルであり、デザイン品質のCurrent Authorityではない。
+本番へ無条件にコピーしない。
 
 ## Drive Current Research
 - Root: https://drive.google.com/drive/folders/14reXz-xiYANpyb0Q8iG4TbU8ecNuXurL
@@ -92,13 +119,14 @@ Starterプラン制限により1ページ内4 Sectionで構築。最終版もSec
 3. 面構成を確定
 4. 実原稿・写真・ゲスト情報を収集
 5. 印刷仕様を確定
-6. Design Freeze v1
-7. Figma正式制作
-8. 実データ流し込み
-9. QA
-10. 人間の光学調整
-11. 原寸試し刷り
-12. 入稿
+6. Foundation / Identityの方向を確定
+7. Design Freeze v1
+8. Figma正式制作
+9. 実データ流し込み / Stress Test
+10. Lint / QA
+11. 人間の光学調整
+12. 原寸試し刷り
+13. 入稿
 
 ## Figma開始ゲート
 以下7項目中最低6つが揃うまで、本番FigmaをDesign Freeze扱いにしない。
@@ -116,5 +144,7 @@ Starterプラン制限により1ページ内4 Sectionで構築。最終版もSec
 3. `05_design-rules.md`
 4. `06_prefigma-readiness.md`
 5. `07_prompt-library.md`
-6. Drive参考画像/素材
-7. Figma検証版
+6. `08_figma-quality-playbook.md`
+7. `09_research-notes.md`
+8. Drive参考画像/素材
+9. Figma検証版（Currentではない）
