@@ -1,0 +1,14 @@
+{
+  "name": "wedding-print-toolkit",
+  "private": true,
+  "version": "0.0.1",
+  "scripts": {
+    "build": "esbuild src/code.ts --bundle --platform=browser --target=es2017 --outfile=dist/code.js && node -e \"require('fs').mkdirSync('dist',{recursive:true});require('fs').copyFileSync('src/ui.html','dist/ui.html')\"",
+    "watch": "esbuild src/code.ts --bundle --platform=browser --target=es2017 --outfile=dist/code.js --watch"
+  },
+  "devDependencies": {
+    "@figma/plugin-typings": "latest",
+    "esbuild": "latest",
+    "typescript": "latest"
+  }
+}
