@@ -1,4 +1,10 @@
 const MIN_FONT_DEFAULT = 8;
+const STRESS_NAMES = [
+  '山田 太郎',
+  '佐々木 アレクサンダー',
+  'Christopher Montgomery',
+  'Alexandria-Christine Watanabe',
+];
 
 function hexToRgb(hex) {
   const h = hex.replace('#', '');
@@ -38,6 +44,22 @@ function makeIssue(node, type, severity, message, detail = '') {
     message,
     detail,
   };
+}
+
+function isGuestNameTarget(node) {
+  const layerName = node.name.toUpperCase();
+  const text = node.characters.trim().toUpperCase();
+  return layerName.includes('GUEST_NAME')
+    || layerName.includes('GUEST NAME')
+    || text === 'GUEST NAME'
+    || text === '{{GUEST_NAME}}'
+    || node.characters.trim() === 'ゲスト名';
+}
+
+async function loadSingleFontTextNode(node) {
+  if (node.hasMissingFont) throw new Error(`Missing font: ${node.name}`);
+  if (node.fontName === figma.mixed) throw new Error(`Mixed font guest-name layer is unsupported: ${node.name}`);
+  await figma.loadFontAsync(node.fontName);
 }
 
 async function runTypographyQa(minFontSize) {
@@ -114,6 +136,51 @@ async function ensureTokens() {
   return { collection: collection.name, made, updated };
 }
 
+async function createGuestNameStressClones() {
+  const selection = figma.currentPage.selection;
+  if (selection.length !== 1) throw new Error('トップレベルのテンプレFrame/Component/Instanceを1つだけ選択してください。');
+
+  const base = selection[0];
+  if (!['FRAME', 'COMPONENT', 'INSTANCE'].includes(base.type)) {
+    throw new Error('Stress Test対象はFrame / Component / Instanceです。');
+  }
+  if (base.parent !== figma.currentPage) {
+    throw new Error('安全のため、現在ページ直下のトップレベルテンプレを選択してください。');
+  }
+
+  const sourceTargets = findAllTextNodes(base).filter(isGuestNameTarget);
+  if (sourceTargets.length === 0) {
+    throw new Error('GUEST_NAME / GUEST NAME / {{GUEST_NAME}} / ゲスト名 のText layerが見つかりません。');
+  }
+
+  for (const target of sourceTargets) await loadSingleFontTextNode(target);
+
+  const clones = [];
+  for (let i = 0; i < STRESS_NAMES.length; i += 1) {
+    const sample = STRESS_NAMES[i];
+    const clone = base.clone();
+    figma.currentPage.appendChild(clone);
+    clone.name = `STRESS/${i + 1}/${sample}`;
+    clone.x = base.x + (base.width + 40) * (i + 1);
+    clone.y = base.y;
+    clone.setPluginData('weddingStressTest', 'true');
+    clone.setPluginData('weddingStressName', sample);
+
+    const targets = findAllTextNodes(clone).filter(isGuestNameTarget);
+    for (const target of targets) {
+      await loadSingleFontTextNode(target);
+      target.characters = sample;
+      target.autoRename = false;
+      target.name = 'GUEST_NAME';
+    }
+    clones.push(clone);
+  }
+
+  figma.currentPage.selection = clones;
+  figma.viewport.scrollAndZoomIntoView(clones);
+  return { created: clones.length, samples: STRESS_NAMES };
+}
+
 async function selectNode(nodeId) {
   const node = await figma.getNodeByIdAsync(nodeId);
   if (!node || node.removed) return false;
@@ -127,13 +194,16 @@ if (figma.command === 'bootstrap-tokens') {
     .then((result) => figma.closePlugin(`Tokens ready: ${result.made.length} created, ${result.updated.length} updated`))
     .catch((error) => figma.closePlugin(`Token bootstrap failed: ${String(error)}`));
 } else {
-  figma.showUI(__html__, { width: 420, height: 560, themeColors: true });
+  figma.showUI(__html__, { width: 420, height: 620, themeColors: true });
   figma.ui.onmessage = async (msg) => {
     try {
       if (msg.type === 'run-qa') {
         const threshold = Number.isFinite(msg.minFontSize) ? msg.minFontSize : MIN_FONT_DEFAULT;
         const result = await runTypographyQa(threshold);
         figma.ui.postMessage({ type: 'qa-result', ...result, threshold });
+      } else if (msg.type === 'run-name-stress') {
+        const result = await createGuestNameStressClones();
+        figma.ui.postMessage({ type: 'stress-result', ...result });
       } else if (msg.type === 'select-node') {
         const ok = await selectNode(msg.nodeId);
         figma.ui.postMessage({ type: 'select-result', ok });
