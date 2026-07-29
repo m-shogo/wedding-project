@@ -3,166 +3,182 @@
 更新: 2026-07-29
 
 ## 目的
-最初のFigma検証で弱かった「ロゴをその場で適当に置く」をやめ、Logo/Identityを独立工程として詰める。
+Logo/IdentityをFigma上で毎回組み直すのではなく、**変更頻度と作業特性で最適な制作手段を切り分ける**。
+
+今回のロゴは変更頻度が低く、最終的に固定アセットとして扱えるため、生成AIを主制作手段としてよい。
 
 ---
 
-# 2026 Figmaで使えるnative craft tools
+## Current decision
 
-## Figma Draw
-Status: `OFFICIAL / CORE CANDIDATE`
+### Logo production route
+**AIで完成形を作る → 背景除去/透過 → 高解像度化 → 必要ならvectorize/trace → QA → 固定アセット化**
 
-Figma公式HelpではFigma Drawはany planで利用可能。
-使える重要機能:
-- Shape Builder
-- Brush / Pencil
-- variable-width stroke
-- multiple node editing
-- lasso selection
-- texture / noise
-- transforms
-- Text on a Path
+Figmaで文字を一から再構築することを必須にしない。
 
-今回、ロゴ・スタンプ・エンブレム制作に直接使える。
-
-## Text on a Path
-Status: `OFFICIAL`
-
-円形スタンプ、旅券エンブレム、issue text、curved labelをpluginなしで編集可能textとして作れる。
-
-用途:
-- `YOKOHAMA • 24 OCT 2026`
-- `WEDDING JOURNEY`
-- Passport emblem ring
-- circular date stamp
-
-## Vectorize
-Status: `OFFICIAL / PAID PLAN DEPENDENT`
-
-Raster lettering / sketch / stampをeditable vectorへ。
-Starterで利用不可ならPen / Shape Builderでmanual rebuildする。
+ただし以下は必ず満たす。
+- 日本語文字が正しい
+- 30mm程度の小サイズでも潰れない
+- 白背景/写真上/色背景で成立する
+- 透過PNGを保持する
+- 必要ならSVG版も作る
+- 本番印刷で荒れない解像度を確保する
+- 既存誌/企業/公共機関のロゴを直接複製しない
 
 ---
 
-# るるぶWEDDING Logo workflow
+# るるぶWEDDING Logo
 
-## Step 1 — 文字の構造だけ決める
-最初から色を付けない。
-Black on whiteで3方向。
+## 目標
+旅行雑誌の特集号として強いmastheadだが、既存誌ロゴの単純コピーではなく、結婚式用の独自identityとして成立させる。
+
+## AI生成方向
 
 ### A. Rounded Travel Masthead
-- 太いrounded Japanese
+- 太く読みやすい日本語
 - `るるぶ` が主役
-- `WEDDING` は細め/condensed label
-- 柔らかいが子どもっぽくしない
+- `WEDDING` は副題
+- 明るく楽しい
+- 子どもっぽくしない
 
 ### B. Editorial Pop
-- 太いJapanese masthead
-- WEDDINGを別baseline / small capsで対比
-- 雑誌のlogoとして最もclean
+- 強いJapanese masthead
+- WEDDINGはcondensed/small caps的
+- 写真上でも成立する
+- 雑誌らしい情報密度
 
 ### C. Travel Label
-- 文字自体は読みやすく
-- 背後のticket/tab/label shapeで旅行感
-- logo glyphを無理に変形しない
+- 読みやすい文字
+- ticket/tab/label形状で旅行感
+- 色数を増やしすぎない
 
-## Step 2 — Optical test
-必ず以下で比較。
-- 100% size
-- 約30mm幅
-- grayscale
-- photo上
-- Sky background上
-- Ivory background上
+## Color candidates
+- Sky / Blue
+- Yellow
+- Red
+- White / Ivory separator
 
-判定:
-- `るるぶ` が一瞬で読めるか
-- `WEDDING` が副題として読めるか
-- 文字が4つの別アイコンに見えないか
-- 過剰に既存誌ロゴへ近くないか
-
-## Step 3 — Custom craft
-必要な箇所だけFigma Draw。
-
-使う候補:
-- Shape Builderでtab / rounded block
-- Penでglyphの一部を微調整
-- Brushは1〜2箇所のaccentのみ
-- Text on a Pathでissue/dateを曲線配置
-
-禁止:
-- 全文字をbrushで手描きして可読性を落とす
-- 4文字全部違う形・色・shadow
-- AI生成文字をoutlineとしてそのまま採用
-
-## Step 4 — Color
-Logo構造が決まってから色。
-
-推奨role:
-- Main Sky/Blue
-- Highlight Yellow
-- Alert/Feature Red
-- White/Ivory separator
-
-全4文字を別色にする案は比較対象にはしてもCurrent defaultにはしない。
+4文字をすべて別色にする案は比較候補にはしても、過度に玩具感が出る場合は不採用。
 
 ---
 
-# WEDDING PASSPORT Identity workflow
+# WEDDING PASSPORT Identity
 
 ## Wordmark
-`WEDDING PASSPORT` を文字組みだけで成立させる。
+`WEDDING PASSPORT` を中心に、上品な架空travel document identityとして生成する。
 
-比較:
-1. Serif classic
-2. Sans + tracking
-3. Serif + small caps subline
-
-## Emblem
-wordmarkと別に3案。
-
-ルール:
-- 主モチーフ最大2種
-- circle / shield / stampのどれか1 structural form
-- text on pathを活用
-
-候補:
+## Emblem candidates
 A. globe + route
 B. plane + route
-C. monogram + coordinates/date
+C. monogram + date / coordinates-like decorative text
 
-月桂樹 + globe + plane + compass + heartを全部入れない。
-
-## Integration
-最後にwordmarkとemblemを組み合わせる。
-先にemblemを巨大に作ってwordmarkを余白へ押し込まない。
+主モチーフは最大2種。
+月桂樹 + globe + plane + compass + heart等を全部入れない。
 
 ---
 
-# AI / hand sketch hybrid
+# AI generation workflow
 
-AIや手描きで良い“骨格”が出た場合:
-1. white/chroma backgroundでisolated生成
-2. background remove
-3. contrastを上げる
-4. Vectorizeまたはmanual pen trace
-5. node数を減らす
-6. 正しい文字glyphへ置換
-7. optical spacing
-8. monochrome test
+## Phase 1 — Direction batch
+1案を一発採用しない。
+同一条件で複数案を作り、構造を比較する。
 
-Logo communityの実務的な議論でも、自動trace後のcleanupやPen toolによるcurve調整は依然重要という意見が強い。
+比較軸:
+- 可読性
+- 既存ブランドへの近さ
+- 小サイズ耐性
+- 写真上での強さ
+- 結婚式らしさ
+- 旅行感
+
+## Phase 2 — Refinement
+選んだ1〜2案を固定し、以下だけ反復する。
+- spacing
+- color
+- outline
+- shadow有無
+- badge形状
+- WEDDINGのサイズ比
+
+構造そのものを毎回変えない。
+
+## Phase 3 — Extraction
+優先順:
+1. direct transparent generation
+2. Figma/native background removal
+3. green / blue screen generation
+4. project chroma-key script + despill
+5. manual cleanup
+
+## Phase 4 — Production asset
+保存候補:
+- `logo_master_rgba.png`
+- `logo_white_rgba.png`
+- `logo_mono_black.png`
+- `logo_mono_white.png`
+- `logo_master.svg`（必要な場合）
+
+---
+
+# Vectorization policy
+
+ロゴがrasterで十分な解像度を持ち、印刷品質に問題がなければ無理にvector化しない。
+
+vector化する条件:
+- 大きく拡大する
+- strokeや色をFigmaで編集したい
+- 小サイズでraster edgeが気になる
+- 印刷会社workflowでSVG/PDF vectorが有利
+
+手段候補:
+- Figma Vectorize（planで使える場合）
+- VTracer
+- Potrace（二値向け）
+- manual Pen / Figma Draw cleanup
 
 ---
 
 # Small-size logo QA
 - 30mm幅で潰れない
 - thin gapが消えない
-- WEDDINGが読める
+- `WEDDING`が読める
 - white knockoutでも成立
 - monochromeでもidentityが残る
-- inkjet/laser試し刷りでも太細が破綻しない
+- inkjet/laser原寸試し刷りでも破綻しない
 
-## Current decision
-Logoは画像生成で完成させない。
-**AI = exploration / Figma Draw = construction / human = optical finish** を基本とする。
+---
+
+# Tool-routing principle
+
+## 生成AIへ寄せる
+- 固定ロゴ
+- decorative emblem
+- illustration concept
+- texture
+- background visual
+
+## Figmaへ寄せる
+- layout
+- size
+- spacing
+- editable text
+- guest data
+- table data
+- components
+- print guides
+
+## Plugin / scriptへ寄せる
+- repetitive replacement
+- CSV population
+- QA
+- transparency cleanup
+- naming
+- export
+
+## 人間へ残す
+- 最終的な好み
+- optical balance
+- 写真crop
+- 原寸試し刷り判断
+
+この切り分けを今後の基本原則とする。
