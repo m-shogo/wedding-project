@@ -17,7 +17,8 @@
 10. `12_social-catchup-log.md`
 11. `13_rurubu-reference-selection.md`
 12. `14_logo-identity-workflow.md`
-13. Drive参考画像・制作素材
+13. `15_custom-figma-plugin-roadmap.md`
+14. Drive参考画像・制作素材
 
 ## 固定した進め方
 - 制作順: `るるぶWEDDING → WEDDING PASSPORT → BOARDING PASS → 青春ふたりきっぷ`
@@ -39,6 +40,21 @@
 - 新しいノウハウは `VERIFIED / OFFICIAL / CANDIDATE / AVOID` で分類する。
 - SNSは最新の失敗例・Plugin発見に使い、仕様の正本にはしない。
 - 実験で有効だったworkflowはGitへ昇格する。
+- 既存Pluginで足りない反復作業・QAは、自作Figma Pluginの対象にする。
+- 自作Pluginは `IDEA → PROTOTYPE → VERIFIED → CURRENT / REJECTED` で昇格管理する。
+
+## 自作Figma Plugin候補
+仮称 `Wedding Print Toolkit`。
+
+優先候補:
+1. Typography Stress Tester
+2. Guest Data Populate
+3. Design Foundation Bootstrap
+4. Print QA Overlay
+5. Photo Placeholder / Batch Swap
+6. Batch Export Helper
+
+詳細: `15_custom-figma-plugin-roadmap.md`
 
 ## Project helpers
 - Claude agent: `.claude/agents/print-art-director.md`
