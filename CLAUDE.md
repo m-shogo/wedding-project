@@ -59,7 +59,10 @@ Current Authorityは `@11_printables/paper-items/00_master-brief.md`。
 - Figma本番開始前に `@11_printables/paper-items/06_prefigma-readiness.md` を確認する。
 - Figma/AI制作ルールは `@11_printables/paper-items/08_figma-quality-playbook.md` を優先する。
 - Promptは `@11_printables/paper-items/07_prompt-library.md` を参照し、1 promptで4アイテムを一括生成しない。
-- Plugin/MCP/外部ライブラリの利用に制限は設けないが、品質・再利用性・QAを明確に改善するものだけ採用する。
+- Workflow小技は `@11_printables/paper-items/10_workflow-hacks.md`、Tool/Plugin採用は `@11_printables/paper-items/11_tool-stack.md` を参照する。
+- SNS/Forumの最新知見は `@11_printables/paper-items/12_social-catchup-log.md` に日付とsourceを残す。
+- Plugin/MCP/CLI/外部ライブラリの利用に制限は設けないが、品質・再利用性・QAを明確に改善するものだけ採用する。
+- 新しい手法は `VERIFIED / OFFICIAL / CANDIDATE / AVOID` で分類し、実験で有効ならGitへ昇格する。
 - 実写真・大きな参考画像・生成画像は原則Drive側。Gitには判断・出典・仕様・prompt・statusを残す。
 
 ## 進め方
@@ -85,3 +88,4 @@ Current Authorityは `@11_printables/paper-items/00_master-brief.md`。
 - `asset-librarian`: 素材の分類、命名、採否ログを見る。
 - `rights-safety-reviewer`: 写真、音源、フォント、AIサービスの権利・プライバシーを見る。
 - `quality-gate-reviewer`: ラフ版、完成前、上映前の品質確認を見る。
+- `print-art-director`: ペーパーアイテムのFigma前設計、印刷品質、Plugin/MCP、QAを見る。
