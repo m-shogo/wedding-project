@@ -13,15 +13,19 @@ Figma MCP is currently unavailable for production mutation because the authentic
 Built from:
 - `FOUNDATION.md`
 - `INSIDE-BACK-WIREFRAME.md`
-- current frozen decoration assets #8–#14
+- structural/photo placeholders
+
+Important update after visual review:
+- historical SVG assets and SVG-derived PNG decorations #8–#14 are no longer Current.
+- SVG is prohibited for the Rurubu production path.
+- any color preview that contains the old #8–#14 decorations is historical QA only and must not be copied as final styling.
 
 Rules preserved:
 - inside spread = 420 × 297 mm equivalent, center fold at 210 mm
 - printer bleed / trim-safe / fold-safe remain `PROVISIONAL`
-- real photos remain placeholders
 - no AI-generated people
 - no asset sheets
-- actual frozen decoration assets are introduced only sparingly in pre-visuals
+- structure must remain understandable without decoration
 
 ## QA correction made during this pass
 
@@ -55,7 +59,7 @@ All four candidates passed current text-volume stress:
 - BACK A: PASS
 - BACK B: PASS
 
-Photo FILL tests show that every candidate can crop aggressively when a source aspect ratio is forced into the wrong slot. This is now treated as a design constraint, not evidence that every slot must support every ratio equally.
+Photo FILL tests show that every candidate can crop aggressively when a source aspect ratio is forced into the wrong slot. This is treated as a design constraint, not evidence that every slot must support every ratio equally.
 
 Practical photo rule for Figma:
 - portrait photos should prefer portrait-ish profile/card slots
@@ -100,50 +104,42 @@ Strengths:
 
 Keep as personality comparator.
 
-Strengths:
-- strong compatibility with decorative SVG assets
-- more playful and personal
+Strength:
+- more playful and personal as a composition concept
 
-Risk:
+Risks:
 - route, badges and photo count can push it toward decoration overload
+- the previous apparent compatibility with SVG decorations is no longer a positive criterion because SVG is prohibited
 
-## Color pre-visual
+## Historical color pre-visual
 
-Created a non-promoted color pre-visual for the current safe direction:
+A non-promoted color pre-visual was previously created for:
 - Inside A — Travel Editorial Grid
 - Back A — Quiet Editorial Notes
-
-Current frozen assets used sparingly:
-- travel route + airplane + heart
-- map pin
-- small travel icon set
-- heart feature stamp
-
-Photos remain abstract placeholders only.
 
 Artifacts:
 - `rurubu_inside_A_previsual_color.png`
 - `rurubu_back_A_previsual_color.png`
 - `rurubu_inside_back_A_previsual_comparison.png`
 
-These are reference previews only. They must not be treated as the production Figma or final print artwork.
+Those previews included now-rejected SVG-derived decorations. Their new status is:
+`HISTORICAL_QA_ONLY / DECORATION_SET_SUPERSEDED / NOT_PROMOTABLE`
+
+Use them only for structure/density discussion, not for decoration styling.
 
 ## Drive QA evidence
 
-Saved as new QA files in Drive folder `02_るるぶ風_A4二つ折りプロフィールブック`. These do not replace Current production assets.
-
+Existing QA files in Drive remain useful as historical evidence and are not production assets:
 - corrected inside A/B spread comparison
   - file: `QA_rurubu_inside_spread_AB_comparison_20260730.png`
   - Drive ID: `17qvisl3yybLFkqBu9Qd8AOarfdpCef1K`
-  - existence/metadata readback: VERIFIED
 - inside/back mechanical stress summary
   - file: `QA_rurubu_inside_back_mechanical_stress_20260730.png`
   - Drive ID: `1-_9tE9GJTHpZWmtuoDplfbeP89vp6ilM`
-  - existence/metadata readback: VERIFIED
-- Inside A + Back A color pre-visual comparison
+- old Inside A + Back A color pre-visual comparison
   - file: `QA_rurubu_inside_back_A_previsual_20260730.png`
   - Drive ID: `1u7x8pGxcjWP0ZR7eqlMGrgcaLTyfQ3fe`
-  - existence/metadata readback: VERIFIED
+  - status: `HISTORICAL_QA_ONLY / SUPERSEDED_DECORATION_STYLE`
 
 ## Provisional direction after local QA
 
@@ -163,6 +159,7 @@ No winner is promoted to Current visual authority until Figma same-condition scr
 6. Capture screenshots.
 7. Score rubric.
 8. Promote winner only after screenshot + stress evidence.
+9. Insert only accepted current PNG decorations; SVG and rejected #8–#14 old PNGs are prohibited.
 
 ## Current non-negotiables
 
@@ -170,4 +167,6 @@ No winner is promoted to Current visual authority until Figma same-condition scr
 - no production bleed/safe values invented
 - no AI people
 - no asset sheet
+- no SVG
+- old SVG-derived #8–#14 PNGs are non-current
 - local color previews are evidence/reference only
