@@ -95,8 +95,13 @@ Current authority: GitHub `main`
   - Drive URL: https://drive.google.com/file/d/1Svo5Degcq2sRXsxBX2H-xJIM90xOMF-9/view
   - previous PNG: `rurubu_09_masking_tape.png` / Drive ID `1an7z2OToMkvKHmNLTtr5sIKmHHYZ7NQA` / `NON_CURRENT / SVG_DERIVED_VISUAL_REJECT`
   - historical SVG: `rurubu_09_masking_tape.svg` / Drive ID `1vX9CKoiFRGlAhmh8FAKsYSFbvLmw25FG` / `NON_PRODUCTION / DO_NOT_USE`
-- [ ] 10. 旅ルート + 飛行機 + ハート装飾
-  - status: `REWORK_REQUIRED / PNG_REMAKE_PENDING`
+- [x] 10. 旅ルート + 飛行機 + ハート装飾
+  - file: `rurubu_10_travel_route_airplane_heart_pngonly_v1.png`
+  - status: `CURRENT_CANDIDATE / RASTER_NATIVE / PNG_ONLY / VISUAL_QA_PASS / ALPHA_VERIFIED / DRIVE_VERIFIED`
+  - production method: `direct raster PNG via Pillow; dotted route + paper-cut airplane + heart; no SVG`
+  - QA: `1535x431; RGBA; alpha range 0..255; one composite travel-route decoration; no text; no people`
+  - Drive ID: `18jk-uwgCeCv9vJyKjjy7q4yVQT2Fw_A0`
+  - Drive URL: https://drive.google.com/file/d/18jk-uwgCeCv9vJyKjjy7q4yVQT2Fw_A0/view
   - previous PNG: `rurubu_10_travel_route_airplane_heart.png` / Drive ID `1olSQtZpIBXLPm1gvNJ5zuwwvS-7Ie1GO` / `NON_CURRENT / SVG_DERIVED_VISUAL_REJECT`
   - historical SVG: `rurubu_10_travel_route_airplane_heart.svg` / Drive ID `1m3gdS-v02dh9w7LcvEyM22P3IqbAvcaA` / `NON_PRODUCTION / DO_NOT_USE`
 - [ ] 11. 地図ピン装飾
@@ -130,12 +135,13 @@ Current authority: GitHub `main`
 - `BEST SHOT`: 1142x943 after crop; real alpha present; suspicious visible green pixels = 0
 - Scrapbook photo frame #8: 1528x1071; direct-raster transparent PNG; center opening verified alpha=0; no SVG used
 - Masking tape #9: 1438x279; direct-raster transparent PNG; printed pattern clipped to tape bounds; no SVG used
+- Travel route #10: 1535x431; direct-raster transparent PNG; dotted route + airplane + heart; no SVG used
 
 ## Rework boundary
-- #8 and #9 are complete again using new raster-native PNGs; historical SVG-derived versions remain non-current.
-- 次の `NEXT ASSET` は **#10 旅ルート + 飛行機 + ハート装飾**。
-- 新しい#10が視覚QA + alpha QA + Drive verifyを通るまで#11へ進まない。
+- #8〜#10 are complete again using new raster-native PNGs; historical SVG-derived versions remain non-current.
+- 次の `NEXT ASSET` は **#11 地図ピン装飾**。
+- 新しい#11が視覚QA + alpha QA + Drive verifyを通るまで#12へ進まない。
 - 誤生成・旧SVG由来PNGは採用しない。
 
 ## Promotion boundary
-#1〜#9も最終選定ではなくcurrent visual candidates。最終choiceはproduction Figmaでのsame-condition placementとvisual/print-scale QA後に行う。
+#1〜#10も最終選定ではなくcurrent visual candidates。最終choiceはproduction Figmaでのsame-condition placementとvisual/print-scale QA後に行う。
