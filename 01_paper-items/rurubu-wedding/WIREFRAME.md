@@ -13,7 +13,8 @@ Visual Designへ進む前に、色・装飾・写真の質感に引っ張られ�
 - center fold = x 210mm
 - printer-specific bleed / trim-safe / fold-safe は未確定のため `PROVISIONAL` のまま
 - hero photoは比率placeholderのみ
-- SVG assetはWireframe段階では原則ボックス/ラベルで置き、装飾の良し悪しではなく構造を比較する
+- 装飾assetはWireframe段階では原則ボックス/ラベルで置き、装飾の良し悪しではなく構造を比較する
+- **SVGは禁止。装飾の採用形式は透過PNGのみ。**
 - 4–6 feature linesを最長実データ相当で入れても破綻しないこと
 - asset sheetは禁止。後工程で1素材ずつ挿入する
 
@@ -63,7 +64,7 @@ LEFT / BACK COVER
 Strengths:
 - 「るるぶ」らしさを最も出しやすい
 - hero photoの訴求力が最大
-- PICK UP / CHECK / BEST SHOT系assetと相性が良い
+- PICK UP / CHECK / BEST SHOT系PNG assetと相性が良い
 - feature copyが多少増えても下部で吸収しやすい
 
 Risks:
@@ -116,7 +117,7 @@ Strengths:
 
 Risks:
 - きれいに整えすぎると「るるぶ」特有のワクワク感が弱い
-- decorative SVGの出番が少なくなる
+- 装飾PNGを増やしすぎるとEditorial Splitの強みが消える
 
 ---
 
@@ -156,13 +157,13 @@ LEFT / BACK COVER
 
 Strengths:
 - 二人の旅行テーマと相性が強い
-- frozen SVG候補を自然に活かせる
-- 個人制作物としての特別感が出る
+- 良質な透過PNG装飾が揃えば個人制作物としての特別感が出る
 
 Risks:
 - 長文・写真増加で崩れやすい
 - fold/safeが確定前に装飾を寄せすぎると再調整コストが高い
 - 「旅行誌」より「アルバム」に寄りすぎる可能性がある
+- #8〜#14はPNG再制作中のため、装飾適合をまだ加点根拠にしない
 
 ---
 
@@ -177,7 +178,7 @@ Risks:
 | 長文stress耐性 | 15 | pending | pending | pending |
 | 写真比率stress耐性 | 10 | pending | pending | pending |
 | fold/trim調整耐性 | 10 | pending | pending | pending |
-| SVG asset適合 | 5 | pending | pending | pending |
+| accepted PNG decoration適合 | 5 | pending | pending | pending |
 
 ## Current recommendation before canvas comparison
 `A — Classic Rurubu Cover` を第一候補、`B — Editorial Split` を安全側比較対象、`C — Scrapbook Journey` を個性側比較対象とする。
@@ -192,6 +193,7 @@ Risks:
 5. Comparison rubricをFigma上またはQA記録で採点
 6. winnerのみ複製してVisual Designへ進む
 7. loserは比較証跡として残し、Current visualには昇格しない
+8. Visual Designでは accepted current transparent PNGのみを1素材ずつ配置する
 
 ## Exit criteria
 - 3案が同一条件で比較可能
@@ -200,3 +202,4 @@ Risks:
 - fold line付近に重要文字がない
 - winnerがrubricで説明可能
 - 色・装飾だけを理由にwinnerを決めない
+- SVGをCurrent productionへ入れない
