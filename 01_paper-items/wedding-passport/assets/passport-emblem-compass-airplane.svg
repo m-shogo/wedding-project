@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Wedding Passport fictional compass and airplane emblem</title>
+  <desc id="desc">Original decorative wedding passport emblem with compass ring, airplane silhouette, stars, event date and wedding passport wording. Transparent background.</desc>
+  <g fill="none" stroke="#B79A58" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="256" cy="256" r="192" stroke-width="10"/>
+    <circle cx="256" cy="256" r="166" stroke-width="3"/>
+    <path d="M256 84v32M256 396v32M84 256h32M396 256h32" stroke-width="6"/>
+    <path d="M256 121l13 31-13 13-13-13 13-31zm0 270l13-31-13-13-13 13 13 31zM121 256l31-13 13 13-13 13-31-13zm270 0l-31-13-13 13 13 13 31-13z" stroke-width="4"/>
+    <path d="M172 205c44-14 89-17 131-9l57-51c8-7 18-8 24-3 6 6 4 16-3 24l-47 55c18 8 34 19 48 32l-14 18-65-24-40 48 24 55-19 12-42-48-39 46-16-11 27-62-50-34 13-18 61 16 39-47-53-47 14-14 70 30z" fill="#B79A58" stroke-width="2"/>
+    <path d="M174 331c48 32 116 36 166 3" stroke-width="3" stroke-dasharray="5 10"/>
+  </g>
+  <g fill="#B79A58" font-family="Georgia, 'Times New Roman', serif" text-anchor="middle">
+    <text x="256" y="54" font-size="22" letter-spacing="5">WEDDING PASSPORT</text>
+    <text x="256" y="470" font-size="18" letter-spacing="4">2026 · 10 · 24</text>
+    <text x="256" y="309" font-size="14" letter-spacing="4">JOURNEY TOGETHER</text>
+  </g>
+  <g fill="#B79A58">
+    <path d="M151 132l5 11 12 1-9 8 3 12-11-6-11 6 3-12-9-8 12-1 5-11z"/>
+    <path d="M361 132l5 11 12 1-9 8 3 12-11-6-11 6 3-12-9-8 12-1 5-11z"/>
+  </g>
+</svg>
