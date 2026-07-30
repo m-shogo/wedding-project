@@ -50,7 +50,12 @@ Current authority: GitHub `main`
   - Drive ID: `1NAt9SaallBR2E54AxBfISk2gPnosjsZ-`
   - Drive URL: https://drive.google.com/file/d/1NAt9SaallBR2E54AxBfISk2gPnosjsZ-
   - superseded candidate: `rurubu_06_check_badge_transparent.png` / Drive ID `1x8EaXJrahOeax6IErqffKwcsCLWyALLE` / `REJECTED: suspicious visible green pixels = 1`
-- [ ] 7. `BEST SHOT` バッジ
+- [x] 7. `BEST SHOT` バッジ
+  - file: `rurubu_07_best_shot_badge_transparent.png`
+  - status: `CURRENT_CANDIDATE / ALPHA_VERIFIED / DRIVE_VERIFIED`
+  - QA: `1142x943 after crop; real alpha present; suspicious visible green pixels = 0`
+  - Drive ID: `1XK03fy0A5UnzaBgoOV59MiOlO-grsVpo`
+  - Drive URL: https://drive.google.com/file/d/1XK03fy0A5UnzaBgoOV59MiOlO-grsVpo
 - [ ] 8. 写真フレーム（スクラップ風）
 - [ ] 9. マスキングテープ風装飾
 - [ ] 10. 旅ルート + 飛行機 + ハート装飾
@@ -68,6 +73,7 @@ Current authority: GitHub `main`
 - Date badge `2026.10.24 SAT`: 1336x843 after crop; real alpha present; suspicious visible green pixels = 0
 - `PICK UP!`: 1212x998 after crop; real alpha present; suspicious visible green pixels = 0
 - `CHECK!`: 1073x948 after crop; real alpha present; suspicious visible green pixels = 0
+- `BEST SHOT`: 1142x943 after crop; real alpha present; suspicious visible green pixels = 0
 
 The three logos are independent files. No production asset sheet is used.
 
