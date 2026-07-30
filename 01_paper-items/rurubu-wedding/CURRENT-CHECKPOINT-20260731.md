@@ -1,6 +1,6 @@
 # るるぶWEDDING — Current Checkpoint 2026-07-31
 
-Status: `DECORATION_COMPLETE / DRIVE_DEDUPED / PRINT_WORKING_TARGET_DEFINED / REAL_CONTENT_COLLECTION_PENDING / FIGMA_VISUAL_PENDING`
+Status: `DECORATION_COMPLETE / DRIVE_DEDUPED / PRINT_WORKING_TARGET_DEFINED / GROUNDED_CONTENT_PREFILLED / REAL_CONTENT_COLLECTION_PENDING / FIGMA_VISUAL_PENDING`
 Current authority: GitHub `main`
 Production Figma: https://www.figma.com/design/bfM0d4c9dCeBv5pCkJ3TNM
 
@@ -91,8 +91,20 @@ Result:
 - existing Hawaii set is enough for History / Memory visual QA
 - groom portrait is now the single obvious profile-photo blocker
 
+A second local Inside A QA now uses grounded route/content candidates:
+- names: `SHOGO & SHIORI`
+- Memory Spots: `沖縄 / 韓国 / ハワイ / 横浜`
+- Hawaii: `雨の日のプロポーズ`
+- fixed timeline entries: `2026.02.11 入籍` / `2026.10.24 WEDDING`
+- groom portrait, person-specific profile fields, Q&A and early relationship dates remain explicitly missing
+
+Local artifact:
+- `rurubu_inside_A_grounded_content_printaware_20260731.png`
+- local QA only; not yet a Drive production asset or Figma authority
+
 Authority:
 - `PRINT-AWARE-QA-20260731.md`
+- `CONTENT-PREFILL-20260731.md`
 
 ## 5. Current provisional layout direction
 
@@ -104,7 +116,27 @@ Not Final. Figma comparison is still required.
 - B directions remain structural comparison/fallbacks
 - C remains personality control and is structurally weaker under long-copy stress
 
-## 6. Real-content gaps
+## 6. Grounded content now available
+
+Recovered from adopted wedding creative / repo evidence:
+- `SHOGO & SHIORI`
+- wedding date: `2026.10.24`
+- wedding location label: `YOKOHAMA`
+- theme: `TRAVEL`
+- marriage registration date: `2026.02.11`
+- adopted memory route: `沖縄 → 韓国 → ハワイ → 横浜`
+- Okinawa meaning: blue sea / slow time / comfort together
+- Korea meaning: ate a lot / walked a lot / laughed a lot
+- Hawaii meaning: proposal / special memory / rain-day proposal
+- Yokohama: today's/final wedding destination in the adopted flight concept
+
+Working profile-book copy for these items is stored in `CONTENT-PREFILL-20260731.md` and remains `GROUNDED_CANDIDATE` until final editorial review.
+
+Context candidates that must not be silently assigned to one person:
+- `ワンピース好き`
+- `コーギー2匹`
+
+## 7. Real-content gaps
 
 ### Photos
 
@@ -119,27 +151,29 @@ Already sufficient for first visual pass:
 
 Drive-wide filename/folder search did not find a valid groom-only or Friends source set. Generic `IMG_...` candidate checked on 2026-07-31 was a Pokemon card image and was rejected as unrelated.
 
-### Text
+A File Library cross-chat search was attempted for older uploads but the retrieval service returned an error; no File Library photo was adopted from that failed search.
 
-Still required and must not be invented:
-- [ ] profile basics for both people
+### Text still genuinely missing
+
+Do not invent:
+- [ ] person-specific profile basics (favorite food / hobby / individual favorite place / small detail)
 - [ ] paired Q&A ×3
-- [ ] travel note ×1
-- [ ] relationship/history milestones ×4 before registration/wedding
-- [ ] Memory Spots ×4 with factual places/reasons
-- [ ] Friends / Family captions ×3
+- [ ] relationship/history dates for meeting / dating / Hawaii proposal / cohabitation
+- [ ] Friends / Family group identities + captions ×3
 
-Already fixed:
-- wedding date: `2026.10.24`
-- wedding location label: `YOKOHAMA`
-- theme: `TRAVEL`
-- marriage registration date: `2026.02.11`
+No longer blank at candidate level:
+- [x] couple masthead names: SHOGO & SHIORI
+- [x] travel-note working draft
+- [x] Memory Spots first-pass candidate set
+- [x] Hawaii proposal event description
+- [x] registration/wedding timeline entries
 
 Authority:
 - `CONTENT-COLLECTION-MINIMUM.md`
-- `CURRENT-CONTENT-GAPS-20260730.md` remains historical gap snapshot; this checkpoint supersedes its print-status section.
+- `CONTENT-PREFILL-20260731.md`
+- `CONTENT-RESPONSE-TEMPLATE.md`
 
-## 7. Figma blocker
+## 8. Figma blocker
 
 Authenticated Figma account remains Starter / Full seat with the monthly MCP limit exhausted during this work period.
 
@@ -152,11 +186,12 @@ When access becomes available:
 4. compare A vs B first
 5. apply current PNG-only decorations only after structural winner selection
 6. use `007.jpg` / `024.jpg` / current history-memory candidates
-7. leave missing groom/Friends/text slots explicitly unresolved rather than inventing content
-8. screenshot + stress QA
-9. promote exactly one direction
+7. use grounded SHOGO/SHIORI + Okinawa/Korea/Hawaii/Yokohama content candidates
+8. leave missing groom/Friends/person-specific Q&A and dates explicitly unresolved rather than inventing content
+9. screenshot + stress QA
+10. promote exactly one direction
 
-## 8. What NOT to do next
+## 9. What NOT to do next
 
 - do not generate more decoration assets
 - do not restore SVG
@@ -165,13 +200,14 @@ When access becomes available:
 - do not fill Friends slots with unrelated couple photos
 - do not call any local preview Final
 
-## 9. Next productive work while Figma is blocked
+## 10. Next productive input while Figma is blocked
 
-The design system is no longer the bottleneck.
+The design system, decoration set, first-pass print geometry and Memory content are no longer the bottleneck.
 
-Highest-value remaining input is real couple content:
+Highest-value remaining inputs are now narrowly scoped:
 1. groom portrait
 2. three Friends / Family photos
-3. profile fields + Q&A + history + Memory Spot facts
+3. person-specific profile facts and Q&A
+4. four missing relationship dates/periods
 
-Until those arrive, structural/print prep is sufficiently advanced; additional speculative visual variants would create noise rather than progress.
+`CONTENT-RESPONSE-TEMPLATE.md` contains only those remaining questions. Rough bullet answers are enough; editorial copy can be normalized afterward.
