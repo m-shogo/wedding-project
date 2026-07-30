@@ -34,7 +34,7 @@ Current authority: GitHub `main`
 - [x] 4. 日付バッジ `2026.10.24 SAT`
   - file: `rurubu_04_date_badge_2026-10-24_sat.png`
   - status: `CURRENT_CANDIDATE / ALPHA_VERIFIED / DRIVE_VERIFIED`
-  - QA: `1349x845 after crop; real alpha present; suspicious visible green pixels = 0`
+  - QA: `1336x843 after crop; real alpha present; suspicious visible green pixels = 0`
   - Drive ID: `1S7HP3LAQriL42PgkN2WwaX-p7DvU04iG`
   - Drive URL: https://drive.google.com/file/d/1S7HP3LAQriL42PgkN2WwaX-p7DvU04iG
 - [ ] 5. `PICK UP!` バッジ
@@ -54,7 +54,7 @@ Current authority: GitHub `main`
 - C: 1303x1024 after crop; real alpha present; suspicious visible green pixels = 0
 
 ## Alpha QA — fixed decoration batch
-- Date badge `2026.10.24 SAT`: 1349x845 after crop; real alpha present; suspicious visible green pixels = 0
+- Date badge `2026.10.24 SAT`: 1336x843 after crop; real alpha present; suspicious visible green pixels = 0
 
 The three logos are independent files. No production asset sheet is used.
 
