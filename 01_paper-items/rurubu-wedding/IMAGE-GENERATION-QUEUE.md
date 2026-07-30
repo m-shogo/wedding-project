@@ -104,8 +104,13 @@ Current authority: GitHub `main`
   - Drive URL: https://drive.google.com/file/d/18jk-uwgCeCv9vJyKjjy7q4yVQT2Fw_A0/view
   - previous PNG: `rurubu_10_travel_route_airplane_heart.png` / Drive ID `1olSQtZpIBXLPm1gvNJ5zuwwvS-7Ie1GO` / `NON_CURRENT / SVG_DERIVED_VISUAL_REJECT`
   - historical SVG: `rurubu_10_travel_route_airplane_heart.svg` / Drive ID `1m3gdS-v02dh9w7LcvEyM22P3IqbAvcaA` / `NON_PRODUCTION / DO_NOT_USE`
-- [ ] 11. 地図ピン装飾
-  - status: `REWORK_REQUIRED / PNG_REMAKE_PENDING`
+- [x] 11. 地図ピン装飾
+  - file: `rurubu_11_map_pin_pngonly_v2.png`
+  - status: `CURRENT_CANDIDATE / RASTER_NATIVE / PNG_ONLY / VISUAL_QA_PASS / ALPHA_VERIFIED / DRIVE_VERIFIED`
+  - production method: `direct raster PNG via Pillow; layered paper pin with heart marker; no SVG`
+  - QA: `567x976; RGBA; alpha range 0..255; one isolated map pin; no text; no people; v1 rejected for crossed/invalid white outline geometry`
+  - Drive ID: `1DrTPSDeb7mfmIF6_WTL14NJY8DbLTNnc`
+  - Drive URL: https://drive.google.com/file/d/1DrTPSDeb7mfmIF6_WTL14NJY8DbLTNnc/view
   - previous PNG: `rurubu_11_map_pin.png` / Drive ID `1kJT3s_4ty4LZjji0aIv4XzbzrLUdrfz7` / `NON_CURRENT / SVG_DERIVED_VISUAL_REJECT`
   - historical SVG: `rurubu_11_map_pin.svg` / Drive ID `1qpljWdOq5-SehAvLtjPSw5BDRnW1J7rf` / `NON_PRODUCTION / DO_NOT_USE`
 - [ ] 12. 小さな旅アイコンセット
@@ -136,12 +141,13 @@ Current authority: GitHub `main`
 - Scrapbook photo frame #8: 1528x1071; direct-raster transparent PNG; center opening verified alpha=0; no SVG used
 - Masking tape #9: 1438x279; direct-raster transparent PNG; printed pattern clipped to tape bounds; no SVG used
 - Travel route #10: 1535x431; direct-raster transparent PNG; dotted route + airplane + heart; no SVG used
+- Map pin #11: 567x976; direct-raster transparent PNG; clean paper-cut silhouette + heart center; no SVG used
 
 ## Rework boundary
-- #8〜#10 are complete again using new raster-native PNGs; historical SVG-derived versions remain non-current.
-- 次の `NEXT ASSET` は **#11 地図ピン装飾**。
-- 新しい#11が視覚QA + alpha QA + Drive verifyを通るまで#12へ進まない。
+- #8〜#11 are complete again using new raster-native PNGs; historical SVG-derived versions remain non-current.
+- 次の `NEXT ASSET` は **#12 小さな旅アイコンセット**。
+- 新しい#12が視覚QA + alpha QA + Drive verifyを通るまで#13へ進まない。
 - 誤生成・旧SVG由来PNGは採用しない。
 
 ## Promotion boundary
-#1〜#10も最終選定ではなくcurrent visual candidates。最終choiceはproduction Figmaでのsame-condition placementとvisual/print-scale QA後に行う。
+#1〜#11も最終選定ではなくcurrent visual candidates。最終choiceはproduction Figmaでのsame-condition placementとvisual/print-scale QA後に行う。
