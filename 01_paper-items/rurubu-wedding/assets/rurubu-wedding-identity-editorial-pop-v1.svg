@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="360" viewBox="0 0 1200 360" role="img" aria-labelledby="title desc">
+  <title id="title">るるぶ WEDDING editorial pop monochrome identity</title>
+  <desc id="desc">Original monochrome editorial-pop masthead. Transparent exterior; no background layer.</desc>
+  <g fill="#111111">
+    <text x="86" y="214" font-family="Arial Black, Arial, sans-serif" font-size="156" font-weight="900" letter-spacing="-11">るるぶ</text>
+    <text x="604" y="146" font-family="Arial, sans-serif" font-size="36" font-weight="800" letter-spacing="10">YOKOHAMA</text>
+    <text x="600" y="230" font-family="Arial Black, Arial, sans-serif" font-size="96" font-weight="900" letter-spacing="1">WEDDING</text>
+    <circle cx="1084" cy="116" r="27"/>
+    <path d="M1084 154 C1064 130 1024 142 1027 177 C1032 214 1084 244 1084 244 C1084 244 1136 214 1141 177 C1144 142 1104 130 1084 154Z"/>
+  </g>
+  <g fill="none" stroke="#111111" stroke-linecap="round">
+    <path d="M88 262 H1128" stroke-width="10"/>
+    <path d="M88 286 H730" stroke-width="4"/>
+  </g>
+  <text x="748" y="296" font-family="Arial, sans-serif" font-size="30" font-weight="700" letter-spacing="6" fill="#111111">2026.10.24</text>
+</svg>
