@@ -15,6 +15,16 @@ Current authority: GitHub `main`
 
 装飾のないタイトル・本文・見出し・ラベルは画像化せずFigma native textで作る。
 
+## Hard generation gate
+- 画像生成直前に必ずこの `main` のキューを再取得し、最初の `[ ]` だけを `NEXT ASSET` とする。
+- `[x]` の素材は、ユーザーが「別案」「作り直し」を明示しない限り再生成禁止。
+- 生成結果が `NEXT ASSET` と一致しない場合は即 `REJECTED`。Drive保存・Git更新・`[x]`化をしない。
+- 文字指定がある素材は、指定文字以外の主要文字が出たら `REJECTED`。
+- 文字なし素材は、意味のある文字・単語・日付・既存バッジ文言が1つでも出たら `REJECTED`。
+- 異なる素材へ進むときは、直前素材を編集・変形・流用する発想を禁止し、完全な新規単体素材として生成する。
+- `進めて` は「前素材の後処理を完了し、次の未完了素材へ進む」の意味。既完了素材の再生成ではない。
+- 同じ誤素材が2回連続で出た場合、その素材の生成を止め、次回生成前にこのHard generation gateとNEXT ASSET固有仕様を再固定する。
+
 ## Current queue
 - [x] 1. るるぶWEDDING ロゴA
   - file: `rurubu_wedding_logo_A_v1.png`
