@@ -128,6 +128,23 @@ Artifacts:
 
 These are reference previews only. They must not be treated as the production Figma or final print artwork.
 
+## Drive QA evidence
+
+Saved as new QA files in Drive folder `02_るるぶ風_A4二つ折りプロフィールブック`. These do not replace Current production assets.
+
+- corrected inside A/B spread comparison
+  - file: `QA_rurubu_inside_spread_AB_comparison_20260730.png`
+  - Drive ID: `17qvisl3yybLFkqBu9Qd8AOarfdpCef1K`
+  - existence/metadata readback: VERIFIED
+- inside/back mechanical stress summary
+  - file: `QA_rurubu_inside_back_mechanical_stress_20260730.png`
+  - Drive ID: `1-_9tE9GJTHpZWmtuoDplfbeP89vp6ilM`
+  - existence/metadata readback: VERIFIED
+- Inside A + Back A color pre-visual comparison
+  - file: `QA_rurubu_inside_back_A_previsual_20260730.png`
+  - Drive ID: `1u7x8pGxcjWP0ZR7eqlMGrgcaLTyfQ3fe`
+  - existence/metadata readback: VERIFIED
+
 ## Provisional direction after local QA
 
 - Cover: A remains visual-direction favorite, B remains structural comparator.
