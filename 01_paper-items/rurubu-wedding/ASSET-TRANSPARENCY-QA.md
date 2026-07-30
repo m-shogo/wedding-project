@@ -1,44 +1,69 @@
 # るるぶWEDDING — Asset Transparency QA
 
-Status: PASS_STRUCTURE / FIGMA_PLACEMENT_PENDING
+Status: PNG_ONLY_AUTHORITY / ASSETS_8_TO_14_REWORK_PENDING
 Current authority: GitHub `main`
 Verified: 2026-07-30
 
-## Scope
-Mechanically inspect every currently registered frozen-candidate SVG in `assets/` before any Drive production promotion or Figma placement. This QA is structural SVG transparency verification; PNG alpha-channel verification is not applicable because these accepted candidates are SVG, not raster PNG.
+## Current rule
 
-## Acceptance rule
+**SVG transparency QA is obsolete for production. SVG is prohibited.**
+
+Historical SVG files may remain in Git/Drive for provenance, but their old structural transparency PASS does not make them Current candidates.
+
+Production acceptance is based on transparent PNG only.
+
+## PNG acceptance rule
+
 PASS only when:
-- the SVG root/viewBox does not paint a canvas-sized background rectangle/image;
-- no embedded raster image is used as a fake transparent background;
-- only intended artwork is painted;
-- area outside the intended artwork remains transparent by SVG construction.
+- file format is PNG
+- image has a real alpha channel
+- transparent exterior is actual alpha, not checkerboard/matte/background pixels
+- no suspicious chroma-green spill remains visible after keying where green screen was used
+- the asset visually matches the intended Rurubu/Wedding direction
+- visual QA passes **before** alpha/Drive QA is used to mark the queue complete
 
-A deliberately painted badge/icon body (including circular icon discs) is artwork, not a canvas background. A checkerboard, white canvas, generated matte, or full-viewBox background would be REJECTED.
+A technically valid alpha channel is necessary but not sufficient.
 
-## Results
+## Current accepted alpha-verified candidates
 
-| Asset | Structural transparency | Embedded raster | Canvas background | Result |
-|---|---|---|---|---|
-| `assets/pickup-badge-v1.svg` | yes | none | none | PASS |
-| `assets/date-badge-v1.svg` | yes | none | none | PASS |
-| `assets/route-heart-plane-v1.svg` | yes | none | none | PASS |
-| `assets/check-burst-v1.svg` | yes | none | none | PASS |
-| `assets/cloche-heart-v1.svg` | yes; circular disc is intended artwork | none | none | PASS |
-| `assets/champagne-heart-v1.svg` | yes; circular disc is intended artwork | none | none | PASS |
-| `assets/guidebook-check-v1.svg` | yes; circular disc is intended artwork | none | none | PASS |
-| `assets/hearts-sparkle-v1.svg` | yes; circular disc is intended artwork | none | none | PASS |
-| `assets/photo-frame-tape-v1.svg` | yes; photo frame fill is intended artwork | none | none | PASS |
-| `assets/best-shot-tag-v1.svg` | yes; tag fill is intended artwork | none | none | PASS |
-| `assets/rurubu-wedding-identity-mono-v1.svg` | yes; paths/text only, no full-viewBox paint | none | none | PASS |
-| `assets/rurubu-wedding-identity-editorial-pop-v1.svg` | yes; paths/text/circle only, no full-viewBox paint | none | none | PASS |
-| `assets/rurubu-wedding-identity-stamped-issue-v1.svg` | yes; outlined stamp is intended artwork, exterior remains transparent | none | none | PASS |
+| Queue | Asset | QA | Current state |
+|---|---|---|---|
+| #1 | logo A | 1448×465 after crop; real alpha; suspicious visible green = 0 | CURRENT_CANDIDATE |
+| #2 | logo B | 1493×974 after crop; real alpha; suspicious visible green = 0 | CURRENT_CANDIDATE |
+| #3 | logo C | 1303×1024 after crop; real alpha; suspicious visible green = 0 | CURRENT_CANDIDATE |
+| #4 | date badge | 1336×843 after crop; real alpha; suspicious visible green = 0 | CURRENT_CANDIDATE |
+| #5 | PICK UP! | 1212×998 after crop; real alpha; suspicious visible green = 0 | CURRENT_CANDIDATE |
+| #6 | CHECK! | 1073×948 after crop; real alpha; suspicious visible green = 0 | CURRENT_CANDIDATE |
+| #7 | BEST SHOT | 1142×943 after crop; real alpha; suspicious visible green = 0 | CURRENT_CANDIDATE |
 
-## Promotion boundary
-- These thirteen files are accepted as structurally transparent SVG candidates.
-- Do not call them final production assets until the selected wireframe/visual design actually uses them and visual QA passes.
-- Do not regenerate any of these solely to obtain transparency; the transparency requirement is already satisfied structurally.
-- If a future raster derivative is created, verify real alpha values mechanically before Drive production promotion. A baked checkerboard/matte is REJECTED.
+## Reopened assets
+
+#8–#14 had technically valid RGBA PNG exports, but those PNGs were derived from the rejected SVG visual direction.
+
+Therefore:
+- old #8–#14 PNGs are `NON_CURRENT / SVG_DERIVED_VISUAL_REJECT`
+- historical SVG files are `NON_PRODUCTION / DO_NOT_USE`
+- #8–#14 must be remade as new PNG-only assets
+- their previous alpha PASS must not be copied forward as a completion gate
+
+## Next QA target
+
+`#8 写真フレーム（スクラップ風）`
+
+Required order:
+1. visual match QA
+2. PNG/alpha QA
+3. green-spill QA if chroma key was used
+4. Drive upload
+5. Drive metadata/existence verification
+6. queue `[x]`
+
+Do not proceed to #9 until #8 passes all gates.
 
 ## Figma placement rule
-Import/recreate one SVG at a time only after the wireframe winner is selected. Do not create an asset sheet. After each import, verify bounds, transparent exterior, text/font behavior, and print-scale legibility before placing the next asset.
+
+- only Current accepted transparent PNG assets may enter the production Figma
+- SVG import/recreation is prohibited
+- rejected old #8–#14 PNGs are prohibited
+- insert one accepted PNG at a time after wireframe winner selection
+- after each placement, verify bounds, subject overlap, print-scale legibility and visual fit before placing the next asset
