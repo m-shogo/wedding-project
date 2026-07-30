@@ -5,9 +5,10 @@ Production Figma: https://www.figma.com/design/bfM0d4c9dCeBv5pCkJ3TNM
 
 ## Current status
 
-- ASSET_QUEUE_COMPLETE_1_TO_14
-- DRIVE_VERIFIED_1_TO_14
-- SVG_PREFERRED_FOR_SIMPLE_DECORATIONS
+- ASSET_QUEUE_ACCEPTED_1_TO_7
+- ASSET_QUEUE_8_TO_14_REOPENED_FOR_PNG_REMAKE
+- SVG_PROHIBITED
+- SVG_DERIVED_8_TO_14_NON_CURRENT
 - LOCAL_WIREFRAME_A_B_C_COMPLETE
 - LOCAL_MECHANICAL_STRESS_COMPLETE
 - FIGMA_EXECUTION_RUNBOOK_READY
@@ -16,14 +17,16 @@ Production Figma: https://www.figma.com/design/bfM0d4c9dCeBv5pCkJ3TNM
 
 ## Asset authority
 
-`IMAGE-GENERATION-QUEUE.md` is complete through #14.
+`IMAGE-GENERATION-QUEUE.md` is the source of truth.
 
 Important boundaries:
-- #1–#7 are accepted current image candidates with Drive verification.
-- #8–#14 use SVG-native sources plus transparent PNG exports where appropriate.
-- Do not regenerate `[x]` assets unless the user explicitly requests another version.
-- Do not overwrite current Drive authority files with later candidates.
-- Do not place frozen decorative SVGs into production layout before wireframe winner promotion.
+- #1–#7 remain accepted current PNG image candidates with alpha QA and Drive verification.
+- #8–#14 were previously completed from SVG-native constructions and exported PNGs, but the visual direction was not good enough.
+- #8–#14 are therefore reopened as `[ ]` and require new PNG-only visual remakes.
+- all historical SVG files are `NON_PRODUCTION / DO_NOT_USE`.
+- all old SVG-derived PNGs #8–#14 are `NON_CURRENT / SVG_DERIVED_VISUAL_REJECT` even though their alpha channels were technically valid.
+- do not place rejected #8–#14 decorations into the production layout.
+- current NEXT ASSET is `#8 写真フレーム（スクラップ風）`.
 
 ## Wireframe state
 
@@ -65,11 +68,10 @@ Therefore B's previous high photo-ratio resilience hypothesis must be proved in 
 
 ## Figma blocker
 
-A fresh metadata read on 2026-07-30 still returns:
+A fresh metadata read on 2026-07-30 returned:
 `You've reached the Figma MCP tool call limit on the Starter plan.`
 
 The failure occurs before metadata access and before any mutation. No production Figma node was changed in this checkpoint.
-
 Do not repeatedly retry the same MCP read in the same blocked window.
 
 ## Figma recovery authority
@@ -91,19 +93,27 @@ Execution sequence:
 12. allow one structural hero resize/rebalance for B and validate its claimed adaptability
 13. score the real editable canvas
 14. promote exactly one winner to `02_Cover_Back_Visual`
-15. only then place #1–#14 frozen decoration assets one at a time
+15. only then place **accepted PNG-only assets** one at a time; never place SVGs or rejected SVG-derived #8–#14 PNGs
 
-## Relevant commits
+## Relevant history
 
-- `805088c905bca2d4665cb40d63f9d6c2892e947b` — complete scrapbook photo frame #8
-- `671ff43beb89481608372f18c0bb7748951382df` — complete vector decoration queue #9–#14
-- `b2f2a32139b8c6dab7a7e276366f21dad2804f87` — record local A/B/C wireframe preview
-- `c8e22cd6a766e3988312141298bb7c7e3d6afaff` — add mechanical wireframe stress measurements
-- `8f920848d68457397fcfbca5ff51483a3f5c1c00` — add Figma wireframe execution runbook
+Historical commits that created #8–#14 are retained as provenance only and no longer imply production approval:
+- `805088c905bca2d4665cb40d63f9d6c2892e947b` — historical #8 SVG-derived frame
+- `671ff43beb89481608372f18c0bb7748951382df` — historical #9–#14 vector batch
+- `b2f2a32139b8c6dab7a7e276366f21dad2804f87` — local A/B/C wireframe preview
+- `c8e22cd6a766e3988312141298bb7c7e3d6afaff` — mechanical wireframe stress measurements
+- `8f920848d68457397fcfbca5ff51483a3f5c1c00` — Figma wireframe execution runbook
+- `6f19c337cef588bfcaf44a17f643d67c8887ec0d` — reopen #8–#14 for PNG-only remake after SVG rejection
 
 ## Next executable action
 
-Do not create more decorative assets now.
+Do not proceed as if decorative assets are complete.
 
-The next production action is:
-`Figma MCP recovers -> execute Stage 0 of FIGMA-WIREFRAME-EXECUTION-RUNBOOK.md -> continue incrementally through real A/B/C comparison.`
+Current order:
+1. remake #8 as a new PNG-only scrapbook photo frame
+2. visual QA + alpha QA
+3. Drive save + metadata verification
+4. mark #8 complete only after those gates
+5. then continue #9 → #14 sequentially
+
+Figma comparison remains pending and should resume when MCP quota becomes available.
