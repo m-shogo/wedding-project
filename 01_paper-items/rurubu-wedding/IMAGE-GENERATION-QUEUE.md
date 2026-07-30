@@ -44,11 +44,12 @@ Current authority: GitHub `main`
   - Drive ID: `1i4FhqEIRWiZ9UHY998XIKN2QYcYUH84w`
   - Drive URL: https://drive.google.com/file/d/1i4FhqEIRWiZ9UHY998XIKN2QYcYUH84w
 - [x] 6. `CHECK!` バッジ
-  - file: `rurubu_06_check_badge_transparent.png`
+  - file: `rurubu_06_check_badge_transparent_v2.png`
   - status: `CURRENT_CANDIDATE / ALPHA_VERIFIED / DRIVE_VERIFIED`
-  - QA: `1089x964 after crop; real alpha present; suspicious visible green pixels = 0`
-  - Drive ID: `1x8EaXJrahOeax6IErqffKwcsCLWyALLE`
-  - Drive URL: https://drive.google.com/file/d/1x8EaXJrahOeax6IErqffKwcsCLWyALLE
+  - QA: `1073x948 after crop; real alpha present; suspicious visible green pixels = 0`
+  - Drive ID: `1NAt9SaallBR2E54AxBfISk2gPnosjsZ-`
+  - Drive URL: https://drive.google.com/file/d/1NAt9SaallBR2E54AxBfISk2gPnosjsZ-
+  - superseded candidate: `rurubu_06_check_badge_transparent.png` / Drive ID `1x8EaXJrahOeax6IErqffKwcsCLWyALLE` / `REJECTED: suspicious visible green pixels = 1`
 - [ ] 7. `BEST SHOT` バッジ
 - [ ] 8. 写真フレーム（スクラップ風）
 - [ ] 9. マスキングテープ風装飾
@@ -66,7 +67,7 @@ Current authority: GitHub `main`
 ## Alpha QA — fixed decoration batch
 - Date badge `2026.10.24 SAT`: 1336x843 after crop; real alpha present; suspicious visible green pixels = 0
 - `PICK UP!`: 1212x998 after crop; real alpha present; suspicious visible green pixels = 0
-- `CHECK!`: 1089x964 after crop; real alpha present; suspicious visible green pixels = 0
+- `CHECK!`: 1073x948 after crop; real alpha present; suspicious visible green pixels = 0
 
 The three logos are independent files. No production asset sheet is used.
 
