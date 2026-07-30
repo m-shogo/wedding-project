@@ -1,6 +1,6 @@
 # 青春ふたりきっぷ — Asset Register
 
-Status: `REBUILD_IN_PROGRESS / 8_STRUCTURAL_QA_PASS / DRIVE_UPLOAD_BLOCKED / NOT_PLACEMENT_READY`
+Status: `REBUILD_IN_PROGRESS / 8_STRUCTURAL_QA_PASS / PNG_FALLBACK_QA_PASS / DRIVE_UPLOAD_BLOCKED / NOT_PLACEMENT_READY`
 
 ## Scope
 
@@ -42,6 +42,33 @@ The legacy vector ZIP was mounted and inspected as a reference source. Eight sim
 
 These are `GIT_CURRENT_CANDIDATE / STRUCTURAL_QA_PASS`, not `COMPLETED`. Completion still requires independent Drive upload and post-upload existence verification.
 
+## PNG fallback derivative QA — 2026-07-30
+
+Because direct upload of generated SVG children again failed at the connector file-reference boundary, the method was changed instead of repeating the same failure. 1024x1024 transparent PNG derivatives were generated from the eight Git-current SVGs for a Drive/Figma fallback path.
+
+All eight derivatives passed mechanical alpha QA:
+
+- real RGBA alpha channel present;
+- transparent exterior present;
+- outermost border max alpha = `0` for all eight files;
+- no white/checkerboard/matte canvas introduced;
+- antialiasing is represented as partial alpha where applicable.
+
+The generated PNG derivatives are **not** promoted because the same Drive connector rejected the new local PNG paths with `UNREGISTERED_FILE_REFERENCE`. They remain ephemeral QA evidence only; Git SVG remains the persistent current source for these simple geometries.
+
+## Legacy decorative stamp audit — 2026-07-30
+
+`03_青春ふたりきっぷ風_装飾スタンプ10点.zip` was mounted and inspected directly. It contains `stamp_01.svg` through `stamp_10.svg`.
+
+The ten legacy stamps are deliberately **not** bulk-promoted. They are flat circle/rectangle SVG constructions with live `Arial,sans-serif` text such as `青春ふたりきっぷ`, `未来行き 2026.10.24`, `新郎駅`, `新婦駅`, `改札済 WEDDING`, `記念発行 YOKOHAMA`, `旅立ち TOGETHER`, `幸福行 EXPRESS`, and `THANK YOU GIFT`.
+
+Decision under the current visual-quality rule:
+
+- simple geometry can remain vector/native;
+- these stamp treatments are main decorative artwork whose value depends on texture, type treatment, and print character;
+- the legacy flat/font-dependent SVG stamps are `REFERENCE / REBUILD_PNG_PREFERRED`, not Current production candidates;
+- rebuild as independent textured PNG assets when image generation is available, then perform alpha/edge QA and Drive verification one file at a time.
+
 ## Current gate
 
 `PLACEMENT_READY = false`
@@ -52,16 +79,18 @@ Reasons:
 - no individual asset may be promoted merely because it exists inside a ZIP or comparison sheet;
 - generated transparent PNGs must pass alpha-channel, transparent-edge, and green-fringe QA before promotion;
 - simple lines, route geometry, rail marks, barcode-like marks, base patterns, simple frames, and similarly elementary icons may remain SVG/native vectors when that is visually superior;
-- the eight audited vectors cannot be marked `COMPLETED` until their independent Drive files exist and are verified.
+- the eight audited vectors cannot be marked `COMPLETED` until their independent Drive files exist and are verified;
+- the ten legacy stamp SVGs require quality-led rebuilding rather than bulk promotion.
 
 ## Next queue
 
-1. Retry independent Drive upload for the eight structurally approved SVG candidates and verify each file ID/existence.
+1. Retry independent Drive upload for the eight structurally approved vector candidates using a genuinely connector-registered file reference; verify each resulting Drive file ID/existence.
 2. Mark each candidate `COMPLETED` only after Drive verification.
-3. Continue selecting/rebuilding only remaining important fixed assets; image-generated PNG remains preferred for texture-heavy/main decorative artwork when image-generation is available.
-4. Do not bulk-promote the remaining contents of the legacy bundles.
-5. Only after the fixed asset set is complete mark this item `PLACEMENT_READY` and advance to BOARDING PASS.
+3. Rebuild the selected main decorative stamps as independent textured PNGs when image generation is available; do not reuse the flat legacy SVG typography as Current production art.
+4. Continue selecting/rebuilding only remaining important fixed assets; image-generated PNG remains preferred for texture-heavy/main decorative artwork.
+5. Do not bulk-promote the remaining contents of the legacy bundles.
+6. Only after the fixed asset set is complete mark this item `PLACEMENT_READY` and advance to BOARDING PASS.
 
 ## Runtime constraint observed
 
-The Google Drive connector exposes `upload_file`, and raw Drive files can now be mounted into the runtime for inspection. However, the upload action still requires a connector-registered file reference for each independent output. The mounted legacy ZIP is registered, but extracted/generated SVG children are not automatically registered as uploadable connector files. Repeating the previous local-path upload would reproduce the same `UNREGISTERED_FILE_REFERENCE` failure, so this run did not falsely promote or re-upload the ZIP. The eight candidates remain `DRIVE_UPLOAD_BLOCKED` until an independent connector-uploadable file reference is available for each SVG.
+The Google Drive connector exposes `upload_file`, and raw Drive ZIP files can be mounted into the runtime for direct inspection. However, `upload_file` still requires a connector-registered file reference for each independent output. Both direct SVG local paths and newly generated transparent PNG local paths were rejected with `UNREGISTERED_FILE_REFERENCE`; converting format alone does not solve the connector boundary. The legacy ZIP itself is registered, but extracted/generated children are not automatically registered as uploadable connector files. Do not falsely promote or re-upload the ZIP. The eight vector candidates remain `DRIVE_UPLOAD_BLOCKED` until an independent connector-uploadable file reference is available for each production file.
