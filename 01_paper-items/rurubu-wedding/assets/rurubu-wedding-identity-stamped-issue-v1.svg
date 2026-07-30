@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="360" viewBox="0 0 1200 360" role="img" aria-labelledby="title desc">
+  <title id="title">るるぶ WEDDING stamped travel issue monochrome identity</title>
+  <desc id="desc">Original monochrome stamped-travel-issue masthead. Transparent exterior; no background layer.</desc>
+  <g fill="none" stroke="#111111" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="84" y="72" width="1032" height="220" rx="34" stroke-width="12" stroke-dasharray="34 16"/>
+    <path d="M140 248 C244 188 324 240 410 180 C488 126 566 132 644 106" stroke-width="8"/>
+    <path d="M638 106 L692 82 L670 132 Z" fill="#111111" stroke-width="3"/>
+  </g>
+  <g fill="#111111">
+    <text x="128" y="184" font-family="Arial Rounded MT Bold, Arial, sans-serif" font-size="118" font-weight="900" letter-spacing="-6">るるぶ</text>
+    <text x="520" y="180" font-family="Arial Black, Arial, sans-serif" font-size="76" font-weight="900" letter-spacing="5">WEDDING</text>
+    <text x="716" y="238" font-family="Arial, sans-serif" font-size="31" font-weight="800" letter-spacing="6">TRAVEL ISSUE 01</text>
+    <text x="716" y="274" font-family="Arial, sans-serif" font-size="25" font-weight="700" letter-spacing="4">YOKOHAMA · 2026.10.24</text>
+  </g>
+</svg>
