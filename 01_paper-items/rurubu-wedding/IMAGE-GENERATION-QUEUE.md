@@ -77,8 +77,13 @@ Current authority: GitHub `main`
   - Drive ID: `1XK03fy0A5UnzaBgoOV59MiOlO-grsVpo`
   - Drive URL: https://drive.google.com/file/d/1XK03fy0A5UnzaBgoOV59MiOlO-grsVpo
 - [ ] 8. 写真フレーム（スクラップ風）
-  - status: `REWORK_REQUIRED / PNG_REMAKE_PENDING`
-  - acceptance: blank scrapbook photo frame / large transparent photo opening / no text / no people / no badge composition / travel-magazine handmade feel
+  - status: `REWORK_REQUIRED / PNG_REMAKE_PENDING / HARD_STOP_AFTER_REPEATED_GENERATION_MISS`
+  - acceptance: blank scrapbook photo frame / large transparent photo opening / no text / no people / no badge composition / no camera motif / one isolated object / travel-magazine handmade feel
+  - dedicated brief: `NEXT-ASSET-08-PNG-BRIEF.md`
+  - rejected raster attempt `745d17a5-9171-4e97-80f1-f2fcb70e374a`: correct blank-frame class but contains a camera motif; `REJECTED`, not saved to Drive
+  - rejected raster attempt `2107c552-b3ec-40b8-b444-75ba72f3542a`: generated 3 labeled frames plus sample collage, readable text, real/AI people/photos and camera; violates single-asset/content boundary; `REJECTED`, not saved to Drive
+  - rejected raster attempt `363f8330-fec1-4120-9a4c-58d55e4077a0`: generated 3 frames and readable text/camera-like motifs; violates one-object/textless boundary; `REJECTED`, not saved to Drive
+  - hard-stop rule is active: do not continue blind generation in the same contaminated generation run; queue stays open until a compliant new PNG passes visual + alpha QA
   - previous PNG: `rurubu_08_scrapbook_photo_frame.png` / Drive ID `1JNN1AeGpKX9A_-gB24b-kx0EG4F--YbG` / `NON_CURRENT / SVG_DERIVED_VISUAL_REJECT`
   - historical SVG: `rurubu_08_scrapbook_photo_frame.svg` / Drive ID `12S8yfO2hjAIRswIERoMEIWeeI1lufEId` / `NON_PRODUCTION / DO_NOT_USE`
 - [ ] 9. マスキングテープ風装飾
