@@ -10,7 +10,8 @@ Drive design-freeze source: `05_るるぶWEDDING｜参考選別・Design Freeze�
 Drive Current Authorityの「中面wireframe 2案 / 裏表紙wireframe 2案」を、Figma Starter MCP quota回復後すぐ比較実装できる状態に固定する。完成装飾ではなく、情報階層・写真比率・長文耐性・旅行誌らしさを比較する。
 
 共通ルール:
-- asset sheetは禁止。SVGは後工程で1素材ずつ配置する。
+- asset sheetは禁止。装飾assetは後工程でaccepted current transparent PNGを1素材ずつ配置する。
+- **SVGは禁止。** historical SVGやSVG-derived旧PNG #8〜#14はCurrent productionに使わない。
 - 実写真が来るまでは `PHOTO` placeholder。
 - printer-specific bleed / trim-safe / fold-safe は未確定のため `PROVISIONAL`。
 - AI生成人物やAI文字ロゴを本番素材として使わない。
@@ -97,13 +98,14 @@ Risks:
 
 Strengths:
 - 結婚式テーマ「旅行」が最も強く伝わる。
-- 写真とroute系単体SVGを活かしやすい。
+- 写真とroute系の良質な透過PNGが揃えば旅行誌感を強化しやすい。
 - 読む人にも眺める人にも成立しやすい。
 
 Risks:
 - 写真不足時に弱い。
 - route装飾を増やしすぎるとスクラップブック化する。
 - 長いプロフィール文章にはAより弱い。
+- #8〜#14はPNG再制作中のため、装飾適合をまだ評価根拠にしない。
 
 ---
 
@@ -154,12 +156,13 @@ Risks:
 ```
 
 Strengths:
-- 現在のFreeze候補SVGと親和性が高い。
 - 個人制作物としての楽しさが強い。
+- 良質なPNG装飾が完成した場合は個性側の比較案として活かせる。
 
 Risks:
 - 表紙Cと組み合わせると装飾過多になりやすい。
 - 長文耐性はAより低い。
+- historical SVGとの親和性は評価対象外。
 
 ---
 
@@ -186,7 +189,7 @@ Figma比較時は以下を両案へ同量投入する。
 | 長文stress耐性 | 15 | pending | pending | pending | pending |
 | 写真比率stress耐性 | 10 | pending | pending | pending | pending |
 | 表紙とのブランド一貫性 | 15 | pending | pending | pending | pending |
-| SVG asset適合 | 5 | pending | pending | pending | pending |
+| accepted PNG decoration適合 | 5 | pending | pending | pending | pending |
 
 ## Provisional recommendation before canvas comparison
 
@@ -205,6 +208,7 @@ Figma比較時は以下を両案へ同量投入する。
 6. 同じplaceholder copy / photo ratios / provisional guidesで揃える。
 7. screenshotを取得しrubric採点。
 8. winnerだけVisual Designへ複製。loserは比較証跡として残す。
+9. winnerへ入れる装飾はaccepted current transparent PNGのみ。SVGは使わない。
 
 ## Exit criteria
 
@@ -213,3 +217,4 @@ Figma比較時は以下を両案へ同量投入する。
 - portrait / landscape / square写真差替え時の破綻箇所が把握できる。
 - 表紙より一段静かな密度を保てる。
 - winnerを色や装飾の好みだけでなく構造的に説明できる。
+- SVGをCurrent productionへ入れない。
