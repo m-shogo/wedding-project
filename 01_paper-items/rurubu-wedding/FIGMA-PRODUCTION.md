@@ -26,6 +26,7 @@ All listed SVG assets are transparent by construction: the SVG root has no backg
 - `assets/hearts-sparkle-v1.svg`: CANDIDATE
 - `assets/photo-frame-tape-v1.svg`: CANDIDATE
 - `assets/best-shot-tag-v1.svg`: CANDIDATE
+- `assets/rurubu-wedding-identity-mono-v1.svg`: CANDIDATE — original monochrome identity study; transparent exterior; route/heart/plane motif; must be judged in the same-condition cover comparison before Freeze.
 - raster transparency attempts: REJECTED. Checkerboard/background pixels were baked into generated images, so raster generation is no longer the primary path.
 
 ## Freeze progress
@@ -36,6 +37,7 @@ All listed SVG assets are transparent by construction: the SVG root has no backg
 - Three monochrome outer-spread wireframes are specified in `WIREFRAME.md`: A Classic Rurubu, B Editorial Split, C Scrapbook Journey. A is the provisional first candidate only; final selection waits for same-condition Figma comparison and weighted rubric scoring.
 - `FIGMA-WIREFRAME-BUILD.md` now fixes the physical-size-equivalent Figma geometry, shared stress-copy payload, semantic node structure, incremental mutation order and QA checklist so quota recovery can go directly to canvas execution without rediscovery.
 - Figma MCP read/write remains blocked by the Starter plan call limit as verified on 2026-07-30; do not repeat mutation probes until quota recovers.
+- Identity is now an explicit single-asset monochrome candidate instead of being folded into decorative asset generation. It remains CANDIDATE until Figma wireframe comparison validates hierarchy and legibility.
 
 ## Next write when MCP quota recovers
 1. execute `FIGMA-WIREFRAME-BUILD.md` against the existing production file
