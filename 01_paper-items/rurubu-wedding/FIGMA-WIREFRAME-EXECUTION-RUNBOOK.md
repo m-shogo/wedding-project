@@ -2,9 +2,9 @@
 
 Current authority: GitHub `main`
 Production Figma: https://www.figma.com/design/bfM0d4c9dCeBv5pCkJ3TNM
-Status: `READY_TO_EXECUTE_AFTER_FIGMA_MCP_RECOVERY`
+Status: `READY_TO_EXECUTE_AFTER_FIGMA_MCP_RECOVERY / PNG_ONLY_OVERRIDE_ACTIVE`
 
-This runbook turns the existing `FIGMA-WIREFRAME-BUILD.md` into small, fail-closed `use_figma` stages. Do not skip stages. Do not place frozen decorative SVGs before the wireframe winner is promoted.
+This runbook turns the existing `FIGMA-WIREFRAME-BUILD.md` into small, fail-closed `use_figma` stages. Do not skip stages. **SVG is prohibited for るるぶWEDDING. Do not place accepted decorative PNG assets before the wireframe winner is promoted.**
 
 ## Execution invariants
 
@@ -23,6 +23,9 @@ This runbook turns the existing `FIGMA-WIREFRAME-BUILD.md` into small, fail-clos
 - one current-page switch maximum per `use_figma` call
 - every text edit: load font first, then mutate
 - failed script = atomic/no-change; inspect error before retry
+- **SVG import/recreation is forbidden. Historical SVGs and SVG-derived rejected PNGs are non-current.**
+- after winner promotion, only Drive/Git-accepted transparent PNG assets from `IMAGE-GENERATION-QUEUE.md` may be placed
+- decoration density must follow `PNG-ASSET-INTEGRATION-QA-20260730.md`
 
 ## Stage 0 — read-only capability / file inspection
 
@@ -280,7 +283,10 @@ Current local pre-score is **A 4.45 / B 4.45 / C 3.89**, but it is not final.
 Promotion rule:
 - promote exactly one winner to `02_Cover_Back_Visual`
 - keep losing wireframes as comparison evidence
-- only after promotion place frozen SVG decoration one asset at a time
+- only after promotion place **accepted transparent PNG-only decorations** one asset at a time
+- use `IMAGE-GENERATION-QUEUE.md` as asset authority and `PNG-ASSET-INTEGRATION-QA-20260730.md` as density/placement authority
+- first Cover A visual pass should use a reduced subset: one #9 tape accent, `BEST SHOT`, and at most one #14 stamp; keep #12 off the first cover pass unless real-photo placement leaves clear unused space
+- never import/recreate SVGs and never use historical SVG-derived #8–#14 PNGs
 
 ## Current known blocker
 
