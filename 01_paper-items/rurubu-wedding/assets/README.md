@@ -1,13 +1,24 @@
 # るるぶWEDDING production assets
 
-## pickup-badge-v1.svg
-- status: CANDIDATE / production-usable
-- format: SVG (background elementなし = true transparency)
-- tool chain: programmatic SVG; image generation transparency loop abandoned after repeated raster background failures
-- purpose: cover / feature callout `PICK UP!`
-- palette: gold #FFD84D→#F4B51E, pink #EE3E64, white outline
-- QA: single asset only; no asset sheet; scalable; editable in Figma; no raster alpha ambiguity
-- promotion rule: Figma placement + visual QA後に FINAL へ昇格
+## Current format authority
 
-## rejected raster attempts
-2026-07-29 の画像生成による `PICK UP!` 候補は checkerboard/背景が画像自体に描画されたため production asset として不採用。同方式の再試行は禁止し、SVG/Figma-native経路へ切替済み。
+**SVG is prohibited for the current るるぶWEDDING production path.**
+
+- production/current fixed decoration format: transparent PNG only
+- SVG files in this directory are historical artifacts only
+- status for every `.svg` here: `HISTORICAL / NON_PRODUCTION / DO_NOT_USE`
+- do not place these SVGs into Figma
+- do not promote them to Current/Final
+- do not use the existence of an SVG source as evidence that an exported PNG is visually acceptable
+
+## Historical note
+
+Earlier work switched to programmatic SVG after repeated raster transparency failures. That solved alpha/editability problems but produced a visual direction the user did not like. The decision has been reversed.
+
+Current rule:
+1. remake needed decorative assets as new transparent PNGs
+2. judge each PNG on visual quality first, then alpha QA
+3. Drive-verify only accepted PNG candidates
+4. keep historical SVGs only for provenance
+
+See `../IMAGE-GENERATION-QUEUE.md` for the current #8–#14 remake state.
