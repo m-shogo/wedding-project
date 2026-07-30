@@ -86,8 +86,13 @@ Current authority: GitHub `main`
   - historical rejected raster attempts: `745d17a5-9171-4e97-80f1-f2fcb70e374a`, `2107c552-b3ec-40b8-b444-75ba72f3542a`, `363f8330-fec1-4120-9a4c-58d55e4077a0` / all `REJECTED / NOT_SAVED_TO_DRIVE`
   - previous PNG: `rurubu_08_scrapbook_photo_frame.png` / Drive ID `1JNN1AeGpKX9A_-gB24b-kx0EG4F--YbG` / `NON_CURRENT / SVG_DERIVED_VISUAL_REJECT`
   - historical SVG: `rurubu_08_scrapbook_photo_frame.svg` / Drive ID `12S8yfO2hjAIRswIERoMEIWeeI1lufEId` / `NON_PRODUCTION / DO_NOT_USE`
-- [ ] 9. マスキングテープ風装飾
-  - status: `REWORK_REQUIRED / PNG_REMAKE_PENDING`
+- [x] 9. マスキングテープ風装飾
+  - file: `rurubu_09_masking_tape_pngonly_v2.png`
+  - status: `CURRENT_CANDIDATE / RASTER_NATIVE / PNG_ONLY / VISUAL_QA_PASS / ALPHA_VERIFIED / DRIVE_VERIFIED`
+  - production method: `direct raster PNG via Pillow; clipped printed pattern; no SVG`
+  - QA: `1438x279; RGBA; real alpha; one torn-edge tape strip; no text; no people; v1 rejected because cream stripes escaped tape bounds`
+  - Drive ID: `1Svo5Degcq2sRXsxBX2H-xJIM90xOMF-9`
+  - Drive URL: https://drive.google.com/file/d/1Svo5Degcq2sRXsxBX2H-xJIM90xOMF-9/view
   - previous PNG: `rurubu_09_masking_tape.png` / Drive ID `1an7z2OToMkvKHmNLTtr5sIKmHHYZ7NQA` / `NON_CURRENT / SVG_DERIVED_VISUAL_REJECT`
   - historical SVG: `rurubu_09_masking_tape.svg` / Drive ID `1vX9CKoiFRGlAhmh8FAKsYSFbvLmw25FG` / `NON_PRODUCTION / DO_NOT_USE`
 - [ ] 10. 旅ルート + 飛行機 + ハート装飾
@@ -124,12 +129,13 @@ Current authority: GitHub `main`
 - `CHECK!`: 1073x948 after crop; real alpha present; suspicious visible green pixels = 0
 - `BEST SHOT`: 1142x943 after crop; real alpha present; suspicious visible green pixels = 0
 - Scrapbook photo frame #8: 1528x1071; direct-raster transparent PNG; center opening verified alpha=0; no SVG used
+- Masking tape #9: 1438x279; direct-raster transparent PNG; printed pattern clipped to tape bounds; no SVG used
 
 ## Rework boundary
-- #8 is complete again using a new raster-native PNG; historical SVG-derived #8 remains non-current.
-- 次の `NEXT ASSET` は **#9 マスキングテープ風装飾**。
-- 新しい#9が視覚QA + alpha QA + Drive verifyを通るまで#10へ進まない。
+- #8 and #9 are complete again using new raster-native PNGs; historical SVG-derived versions remain non-current.
+- 次の `NEXT ASSET` は **#10 旅ルート + 飛行機 + ハート装飾**。
+- 新しい#10が視覚QA + alpha QA + Drive verifyを通るまで#11へ進まない。
 - 誤生成・旧SVG由来PNGは採用しない。
 
 ## Promotion boundary
-#1〜#8も最終選定ではなくcurrent visual candidates。最終choiceはproduction Figmaでのsame-condition placementとvisual/print-scale QA後に行う。
+#1〜#9も最終選定ではなくcurrent visual candidates。最終choiceはproduction Figmaでのsame-condition placementとvisual/print-scale QA後に行う。
