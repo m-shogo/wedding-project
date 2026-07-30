@@ -20,7 +20,8 @@ Current authority: GitHub `main`
 - 固定装飾の正本形式は **透過PNG**。
 - PNGは実alpha channelを必須とし、checkerboardや背景色が焼き付いたものは `REJECTED`。
 - 過去に制作済みのSVGは履歴としてDriveに残っていてもよいが、すべて `HISTORICAL / NON_PRODUCTION / DO_NOT_USE` と扱う。
-- 過去SVGから書き出したPNGも、**PNG単体の見た目・alpha QAで採用可否を判断**する。SVGが存在すること自体は品質根拠にしない。
+- **過去SVGから書き出したPNG #8〜#14もCurrentから降格。見た目が良くなかったため再制作必須。** alpha QAに通っていても採用根拠にはしない。
+- 新規PNGは「るるぶ風旅行誌の楽しさ・手作り感・印刷時の見栄え」を視覚QAし、単に幾何学的に整っているだけの素材は採用しない。
 
 ## Hard generation gate
 - 画像生成直前に必ずこの `main` のキューを再取得し、最初の `[ ]` だけを `NEXT ASSET` とする。
@@ -32,6 +33,7 @@ Current authority: GitHub `main`
 - `進めて` は「前素材の後処理を完了し、次の未完了素材へ進む」の意味。既完了素材の再生成ではない。
 - 同じ誤素材が2回連続で出た場合、その素材の生成を止め、次回生成前にこのHard generation gateとNEXT ASSET固有仕様を再固定する。
 - SVG/Figma vectorへの逃げ道は使わない。固定装飾は最終的に透過PNGとして品質判断する。
+- **SVG-derived旧PNGを次素材の見本として直接変形・流用しない。新規PNGとして作り直す。**
 
 ## Current queue
 - [x] 1. るるぶWEDDING ロゴA
@@ -74,70 +76,54 @@ Current authority: GitHub `main`
   - QA: `1142x943 after crop; real alpha present; suspicious visible green pixels = 0`
   - Drive ID: `1XK03fy0A5UnzaBgoOV59MiOlO-grsVpo`
   - Drive URL: https://drive.google.com/file/d/1XK03fy0A5UnzaBgoOV59MiOlO-grsVpo
-- [x] 8. 写真フレーム（スクラップ風）
-  - file: `rurubu_08_scrapbook_photo_frame.png`
-  - status: `CURRENT_CANDIDATE / PNG_ONLY / ALPHA_VERIFIED / DRIVE_VERIFIED`
-  - QA: `1600x1200; RGBA; real alpha present; central photo opening alpha = 0; frame alpha = 255; no text; no people`
-  - PNG Drive ID: `1JNN1AeGpKX9A_-gB24b-kx0EG4F--YbG`
-  - PNG Drive URL: https://drive.google.com/file/d/1JNN1AeGpKX9A_-gB24b-kx0EG4F--YbG
+- [ ] 8. 写真フレーム（スクラップ風）
+  - status: `REWORK_REQUIRED / PNG_REMAKE_PENDING`
+  - acceptance: blank scrapbook photo frame / large transparent photo opening / no text / no people / no badge composition / travel-magazine handmade feel
+  - previous PNG: `rurubu_08_scrapbook_photo_frame.png` / Drive ID `1JNN1AeGpKX9A_-gB24b-kx0EG4F--YbG` / `NON_CURRENT / SVG_DERIVED_VISUAL_REJECT`
   - historical SVG: `rurubu_08_scrapbook_photo_frame.svg` / Drive ID `12S8yfO2hjAIRswIERoMEIWeeI1lufEId` / `NON_PRODUCTION / DO_NOT_USE`
-- [x] 9. マスキングテープ風装飾
-  - file: `rurubu_09_masking_tape.png`
-  - status: `CURRENT_CANDIDATE / PNG_ONLY / ALPHA_VERIFIED / DRIVE_VERIFIED`
-  - QA: `1400x500; RGBA; real alpha present; no text; no people`
-  - PNG Drive ID: `1an7z2OToMkvKHmNLTtr5sIKmHHYZ7NQA`
+- [ ] 9. マスキングテープ風装飾
+  - status: `REWORK_REQUIRED / PNG_REMAKE_PENDING`
+  - previous PNG: `rurubu_09_masking_tape.png` / Drive ID `1an7z2OToMkvKHmNLTtr5sIKmHHYZ7NQA` / `NON_CURRENT / SVG_DERIVED_VISUAL_REJECT`
   - historical SVG: `rurubu_09_masking_tape.svg` / Drive ID `1vX9CKoiFRGlAhmh8FAKsYSFbvLmw25FG` / `NON_PRODUCTION / DO_NOT_USE`
-- [x] 10. 旅ルート + 飛行機 + ハート装飾
-  - file: `rurubu_10_travel_route_airplane_heart.png`
-  - status: `CURRENT_CANDIDATE / PNG_ONLY / ALPHA_VERIFIED / DRIVE_VERIFIED`
-  - QA: `1500x800; RGBA; real alpha present; no text; no people`
-  - PNG Drive ID: `1olSQtZpIBXLPm1gvNJ5zuwwvS-7Ie1GO`
+- [ ] 10. 旅ルート + 飛行機 + ハート装飾
+  - status: `REWORK_REQUIRED / PNG_REMAKE_PENDING`
+  - previous PNG: `rurubu_10_travel_route_airplane_heart.png` / Drive ID `1olSQtZpIBXLPm1gvNJ5zuwwvS-7Ie1GO` / `NON_CURRENT / SVG_DERIVED_VISUAL_REJECT`
   - historical SVG: `rurubu_10_travel_route_airplane_heart.svg` / Drive ID `1m3gdS-v02dh9w7LcvEyM22P3IqbAvcaA` / `NON_PRODUCTION / DO_NOT_USE`
-- [x] 11. 地図ピン装飾
-  - file: `rurubu_11_map_pin.png`
-  - status: `CURRENT_CANDIDATE / PNG_ONLY / ALPHA_VERIFIED / DRIVE_VERIFIED`
-  - QA: `900x1100; RGBA; real alpha present; no text; no people`
-  - PNG Drive ID: `1kJT3s_4ty4LZjji0aIv4XzbzrLUdrfz7`
+- [ ] 11. 地図ピン装飾
+  - status: `REWORK_REQUIRED / PNG_REMAKE_PENDING`
+  - previous PNG: `rurubu_11_map_pin.png` / Drive ID `1kJT3s_4ty4LZjji0aIv4XzbzrLUdrfz7` / `NON_CURRENT / SVG_DERIVED_VISUAL_REJECT`
   - historical SVG: `rurubu_11_map_pin.svg` / Drive ID `1qpljWdOq5-SehAvLtjPSw5BDRnW1J7rf` / `NON_PRODUCTION / DO_NOT_USE`
-- [x] 12. 小さな旅アイコンセット
-  - file: `rurubu_12_small_travel_icons.png`
-  - status: `CURRENT_CANDIDATE / PNG_ONLY / ALPHA_VERIFIED / DRIVE_VERIFIED`
-  - QA: `1800x520; RGBA; real alpha present; intentional icon-row set; no text; no people`
-  - PNG Drive ID: `1EqKmGXnv684cwFuB4SIbMZScxtVLnI2U`
+- [ ] 12. 小さな旅アイコンセット
+  - status: `REWORK_REQUIRED / PNG_REMAKE_PENDING`
+  - previous PNG: `rurubu_12_small_travel_icons.png` / Drive ID `1EqKmGXnv684cwFuB4SIbMZScxtVLnI2U` / `NON_CURRENT / SVG_DERIVED_VISUAL_REJECT`
   - historical SVG: `rurubu_12_small_travel_icons.svg` / Drive ID `1mj_fAKcHgjxx2d0d6yce9DA_JQ_WnecL` / `NON_PRODUCTION / DO_NOT_USE`
-- [x] 13. 写真キャプション飾り
-  - file: `rurubu_13_photo_caption_ornament.png`
-  - status: `CURRENT_CANDIDATE / PNG_ONLY / ALPHA_VERIFIED / DRIVE_VERIFIED`
-  - QA: `1600x600; RGBA; real alpha present; blank caption area; no embedded text; no people`
-  - PNG Drive ID: `1b6qFyaaNinIqtn_btVJwUdL71hFctF2I`
+- [ ] 13. 写真キャプション飾り
+  - status: `REWORK_REQUIRED / PNG_REMAKE_PENDING`
+  - previous PNG: `rurubu_13_photo_caption_ornament.png` / Drive ID `1b6qFyaaNinIqtn_btVJwUdL71hFctF2I` / `NON_CURRENT / SVG_DERIVED_VISUAL_REJECT`
   - historical SVG: `rurubu_13_photo_caption_ornament.svg` / Drive ID `1KiSsaq-1PA6CHGdnDBJdMLIQ_Wfjmd4i` / `NON_PRODUCTION / DO_NOT_USE`
-- [x] 14. 小さな特集スタンプ各種
-  - status: `CURRENT_CANDIDATE / PNG_ONLY / ALPHA_VERIFIED / DRIVE_VERIFIED`
-  - QA: `3 independent 800x800 stamps; RGBA; real alpha present; no text; no people`
-  - star PNG: `rurubu_14a_feature_stamp_star.png` / Drive ID `1wmbAlnSmRG9nOIYBtQOODSsHMnTUHygn`
-  - airplane PNG: `rurubu_14b_feature_stamp_airplane.png` / Drive ID `1YTnlqy5C-I6BM99OR76LstI3jjYDKLIa`
-  - heart PNG: `rurubu_14c_feature_stamp_heart.png` / Drive ID `1sT9wzLtzdF-3J_K1-zfGMl51y8cCy-Nj`
+- [ ] 14. 小さな特集スタンプ各種
+  - status: `REWORK_REQUIRED / PNG_REMAKE_PENDING`
+  - previous PNGs:
+    - star `rurubu_14a_feature_stamp_star.png` / Drive ID `1wmbAlnSmRG9nOIYBtQOODSsHMnTUHygn`
+    - airplane `rurubu_14b_feature_stamp_airplane.png` / Drive ID `1YTnlqy5C-I6BM99OR76LstI3jjYDKLIa`
+    - heart `rurubu_14c_feature_stamp_heart.png` / Drive ID `1sT9wzLtzdF-3J_K1-zfGMl51y8cCy-Nj`
+    - all `NON_CURRENT / SVG_DERIVED_VISUAL_REJECT`
   - historical SVGs: star `1eAYyPm0KLh6MlYp9J_3pqkXe9nsDvppb`, airplane `1JpcCIsfeQO4e221jHfkajectG7_10s-o`, heart `1zmXb0t8UOxY6bNySt36-SoogQonKgHhw` / all `NON_PRODUCTION / DO_NOT_USE`
 
-## Alpha QA — logo batch
+## Alpha QA — accepted current assets
 - A: 1448x465 after crop; real alpha present; suspicious visible green pixels = 0
 - B: 1493x974 after crop; real alpha present; suspicious visible green pixels = 0
 - C: 1303x1024 after crop; real alpha present; suspicious visible green pixels = 0
-
-## Alpha QA — fixed decoration batch
 - Date badge `2026.10.24 SAT`: 1336x843 after crop; real alpha present; suspicious visible green pixels = 0
 - `PICK UP!`: 1212x998 after crop; real alpha present; suspicious visible green pixels = 0
 - `CHECK!`: 1073x948 after crop; real alpha present; suspicious visible green pixels = 0
 - `BEST SHOT`: 1142x943 after crop; real alpha present; suspicious visible green pixels = 0
-- Scrapbook photo frame: 1600x1200 transparent PNG; transparent center verified
-- Masking tape: 1400x500 transparent PNG
-- Travel route/airplane/heart: 1500x800 transparent PNG
-- Map pin: 900x1100 transparent PNG
-- Small travel icons: 1800x520 transparent PNG
-- Photo caption ornament: 1600x600 transparent PNG
-- Feature stamps: 3 independent 800x800 transparent PNG files
 
-The three logos are independent files. No production asset sheet is used. `#12` is an intentional icon-row set because the queue item itself is a set; `#14` remains three independent stamp files.
+## Rework boundary
+- #8〜#14の旧PNGはalpha技術QAには通っているが、ユーザーの視覚評価によりCurrentから降格した。
+- 次の `NEXT ASSET` は **#8 写真フレーム（スクラップ風）**。
+- 新しい#8が視覚QA + alpha QA + Drive verifyを通るまで#9へ進まない。
+- 誤生成・旧SVG由来PNGは採用しない。
 
 ## Promotion boundary
-These are current visual candidates, not the final selected masthead. Final choice happens after same-condition placement in the production Figma layout and visual/print-scale QA.
+#1〜#7も最終選定ではなくcurrent visual candidates。最終choiceはproduction Figmaでのsame-condition placementとvisual/print-scale QA後に行う。
