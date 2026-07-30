@@ -44,12 +44,12 @@ Each frame:
 Create local variables only if no equivalent Current variables exist in the production file.
 
 Suggested wireframe-only primitives:
-- `wf/bg` = #FFFFFF — FRAME_FILL / SHAPE_FILL
-- `wf/ink` = #111111 — TEXT_FILL / SHAPE_FILL / STROKE_COLOR
-- `wf/muted` = #6B6B6B — TEXT_FILL / STROKE_COLOR
-- `wf/line` = #B8B8B8 — STROKE_COLOR
-- `wf/photo` = #E5E5E5 — SHAPE_FILL
-- `wf/panel` = #F4F4F4 — SHAPE_FILL
+- `wf/bg` = #FFFFFF
+- `wf/ink` = #111111
+- `wf/muted` = #6B6B6B
+- `wf/line` = #B8B8B8
+- `wf/photo` = #E5E5E5
+- `wf/panel` = #F4F4F4
 
 Do not introduce wedding palette colors until a wireframe winner exists.
 
@@ -123,7 +123,7 @@ Goal: personal scrapbook energy without evaluating decoration yet.
 FRONT_COVER:
 - title/date top band
 - hero placeholder centered and slightly smaller than A
-- route placeholder = a simple stroked line, NOT imported frozen SVG yet
+- route placeholder = a simple stroked line only; no production asset imported yet
 - PICK UP and BEST SHOT = labeled gray chips, not actual assets yet
 - feature modules = uneven card sizes while retaining a clear reading order
 
@@ -148,7 +148,13 @@ Follow this exact incremental sequence when quota returns:
 10. Run long-copy / photo-ratio stress observations.
 11. Score `WIREFRAME.md` rubric.
 12. Promote only the winner to `02_Cover_Back_Visual`.
-13. Only after winner promotion, insert frozen SVG assets one at a time.
+13. Only after winner promotion, insert **accepted Current transparent PNG assets** one at a time.
+
+## Asset-format safety
+- SVG is prohibited for the Rurubu production path.
+- do not import, recreate, trace or promote historical SVG assets.
+- old SVG-derived PNGs #8–#14 are non-current and must not be used.
+- current #8–#14 must be remade and pass visual QA + alpha QA + Drive verification before placement.
 
 ## Mutation safety
 - one failed `use_figma` script is treated as atomic/no-change
@@ -156,7 +162,7 @@ Follow this exact incremental sequence when quota returns:
 - all created/mutated node IDs must be returned
 - switch current page at most once per invocation
 - load all fonts before text mutation
-- do not create asset sheets or combined SVGs
+- do not create asset sheets
 - do not insert actual decorative candidates before wireframe winner selection
 
 ## Wireframe QA checklist
@@ -168,5 +174,6 @@ Follow this exact incremental sequence when quota returns:
 - [ ] feature lines support 2-line wrapping
 - [ ] front hierarchy understandable in grayscale
 - [ ] back hierarchy understandable in grayscale
-- [ ] no frozen SVG promoted solely from isolated appearance
+- [ ] no SVG present in Current production path
+- [ ] no rejected #8–#14 old PNGs used
 - [ ] comparison screenshots captured before scoring
