@@ -28,14 +28,17 @@ Until those values are confirmed, Figma foundation may show clearly named provis
 3. add separate Front Cover / Back Cover containers
 4. establish color variables and text styles before visual decoration
 5. create native title/date/hero-photo placeholder first
-6. introduce frozen SVG assets one at a time
+6. introduce approved transparent PNG assets one at a time
 7. compare 2–3 monochrome wireframes before committing to color
 
 ## Asset discipline
 - one fixed asset per source file
 - no asset sheets
 - raster files with baked checkerboard/background pixels remain REJECTED
-- SVG candidates are preferred because they are transparent by construction and editable in Figma
+- **SVG is prohibited for るるぶWEDDING production assets. Do not create, promote, import, or rely on SVG as a production source.**
+- transparent PNG is the production asset format for fixed decorative graphics
+- transparency must be verified by alpha-channel QA; checkerboard/background pixels are not acceptable
+- existing historical SVG files may remain in Drive/Git records only as deprecated evidence, but they are `NON_PRODUCTION / DO_NOT_USE`
 - candidate assets stay CANDIDATE until seen in the real spread and passed through visual QA
 
 ## Stress-test requirements before QA
