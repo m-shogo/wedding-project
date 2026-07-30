@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="360" viewBox="0 0 1200 360" role="img" aria-labelledby="title desc">
+  <title id="title">るるぶ WEDDING monochrome identity</title>
+  <desc id="desc">Original monochrome wedding travel-magazine identity with route line, heart, and plane motif. Transparent exterior; no background layer.</desc>
+  <g fill="none" stroke="#111111" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M92 246 C184 174 258 272 354 202 C436 142 514 176 586 130" stroke-width="12"/>
+    <path d="M584 130 L638 96 L616 150 L584 130 Z" fill="#111111" stroke-width="4"/>
+    <path d="M232 213 C217 192 182 199 182 226 C182 259 232 284 232 284 C232 284 282 259 282 226 C282 199 247 192 232 213 Z" fill="#111111" stroke="none"/>
+    <path d="M650 106 H1090" stroke-width="5"/>
+    <path d="M650 286 H1090" stroke-width="5"/>
+  </g>
+  <text x="650" y="218" font-family="Arial Rounded MT Bold, Arial, sans-serif" font-size="116" font-weight="900" letter-spacing="-5" fill="#111111">るるぶ</text>
+  <text x="922" y="218" font-family="Arial, sans-serif" font-size="70" font-weight="800" letter-spacing="5" fill="#111111">WEDDING</text>
+  <text x="654" y="274" font-family="Arial, sans-serif" font-size="28" font-weight="700" letter-spacing="8" fill="#111111">YOKOHAMA · 2026.10.24</text>
+</svg>
