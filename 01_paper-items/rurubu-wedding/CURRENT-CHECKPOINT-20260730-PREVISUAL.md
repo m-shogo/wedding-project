@@ -8,74 +8,82 @@ Production Figma: https://www.figma.com/design/bfM0d4c9dCeBv5pCkJ3TNM
 - Authenticated account: `m-shogo`
 - Plan: Starter
 - Seat: Full
-- Figma MCP rate-limit reference inspected locally from the returned support artifact.
-- Starter plan is limited to up to 6 MCP read tool calls per month, even with a Full seat.
-- Therefore the current Figma block is not being treated as a transient per-minute issue. Do not burn repeated metadata/read calls this month.
-- `whoami` is exempt from that limit and was used only to diagnose the account tier.
+- Starter plan MCP allowance is exhausted for the current month.
+- Do not burn repeated metadata/read calls while blocked.
 
 ## Current production state
 
-- Image generation/decorative asset queue #1–#14 remains complete and Drive-verified.
+- #1–#7 remain accepted current PNG candidates and Drive-verified.
+- #8–#14 are **NOT complete anymore**. They were reopened after the SVG-derived visual direction was rejected.
+- SVG is prohibited for new/current Rurubu production assets.
 - Local monochrome A/B/C wireframes remain comparison evidence only.
-- Mechanical stress result remains:
-  - A: long-copy PASS; moderate photo-crop pressure.
-  - B: long-copy PASS; strongest structural resilience, but landscape 3:2 photo in current portrait hero frame has high FILL crop pressure.
+- Mechanical stress remains:
+  - A: long-copy PASS; balanced fixed hero crop.
+  - B: long-copy PASS; strongest structural resilience, but current portrait hero frame has high 3:2 landscape crop pressure.
   - C: weakest; 2/6 feature cards overflow under stress copy.
 - No wireframe has been promoted to Visual Design in Figma.
 
-## Previsual created while Figma reads are unavailable
+## Historical previsual created while Figma reads were unavailable
 
-Two local color previsuals were created using Current authority visual assets:
-
+The following local color previsuals were created before the SVG rejection:
 - `rurubu_previsual_A_actual_assets.png`
 - `rurubu_previsual_B_actual_assets.png`
 - `rurubu_previsual_AB_actual_assets_comparison.png`
 
-The previsuals use:
-- Current logo A / logo B from Drive
-- Current date badge
-- Current BEST SHOT badge
-- Vector/transparent decoration candidates #8–#14
-- Photo placeholders only; no AI-generated people
+They used:
+- logo A / logo B
+- date badge
+- BEST SHOT badge
+- now-rejected SVG-derived decoration PNGs #8–#14
+- photo placeholders only; no AI-generated people
 
-These are **PREVISUAL_ONLY_NOT_PROMOTED**. They are not Figma Current visual authority and must not be mistaken for final print design.
+Therefore these previews are now:
+`HISTORICAL_QA_ONLY / DECORATION_SET_SUPERSEDED / NOT_PROMOTABLE`
 
-## Current design read
+They can still inform structure, hierarchy and photo-placement discussion, but **their #8–#14 decoration styling must not be copied into production**.
+
+## Current design read unaffected by SVG rejection
 
 ### A — Classic Rurubu
 - strongest immediate `るるぶWEDDING` identity
-- better fit for playful badge/stamp assets
 - strongest hero-first emotional read
-- still needs final real-photo and long-copy checks in Figma
+- remains the visual-direction favorite structurally
 
 ### B — Editorial Split
 - strongest information architecture and long-copy resilience
 - cleaner and more mature
-- visually less distinctive / slightly too orderly for the intended Rurubu energy
-- current portrait hero box causes excessive crop for 3:2 landscape photos; must be adjusted if B survives Figma comparison
+- current portrait hero box causes excessive crop for 3:2 landscape photos and needs adjustment if B survives Figma comparison
 
 ## Working recommendation
 
-Keep both A and B alive until real Figma comparison, but treat **A as the visual-direction favorite** and **B as the structural fallback/comparator**.
+Keep both A and B alive until real Figma comparison:
+- A = visual-direction favorite
+- B = structural fallback/comparator
 
 Do not promote A yet. Promotion still requires:
 1. Figma A/B/C same-condition implementation
 2. screenshots
-3. real-photo fit test or production-equivalent photo ratios
+3. real-photo fit test
 4. fold/trim-safe review once printer values are known
 5. rubric rescore
+6. **new accepted PNG-only #8–#14 decorations**, if they are needed in the winning visual
+
+## Current decoration recovery order
+
+1. #8 scrapbook photo frame — remake from scratch as PNG-only
+2. visual QA + alpha QA + Drive verify
+3. #9 → #14 sequential PNG-only remakes
+4. never reuse historical SVGs or the rejected SVG-derived visual style as Current authority
 
 ## Next action when Figma MCP quota becomes available
 
-Do not start by re-reading every historical page. Use the existing runbook and minimize reads:
-
 1. one metadata read for page/current structure
-2. inspect available fonts/local styles in one `use_figma` read if possible
+2. inspect available fonts/local styles in one read if possible
 3. build A/B/C shells incrementally
 4. populate identical copy
 5. screenshot each
 6. compare A vs B first; C remains personality control
 7. promote exactly one winner
-8. insert frozen SVG assets one at a time only after winner promotion
+8. insert only accepted current PNG decorations after winner promotion
 
-Until then, do not regenerate decorative assets and do not create additional speculative variants unless a concrete layout problem requires one.
+Until then, structural/profile/photo work may continue, but rejected SVG-derived decorations must stay out of Current visual decisions.
