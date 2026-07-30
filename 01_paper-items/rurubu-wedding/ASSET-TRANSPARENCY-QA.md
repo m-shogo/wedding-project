@@ -31,9 +31,11 @@ A deliberately painted badge/icon body (including circular icon discs) is artwor
 | `assets/photo-frame-tape-v1.svg` | yes; photo frame fill is intended artwork | none | none | PASS |
 | `assets/best-shot-tag-v1.svg` | yes; tag fill is intended artwork | none | none | PASS |
 | `assets/rurubu-wedding-identity-mono-v1.svg` | yes; paths/text only, no full-viewBox paint | none | none | PASS |
+| `assets/rurubu-wedding-identity-editorial-pop-v1.svg` | yes; paths/text/circle only, no full-viewBox paint | none | none | PASS |
+| `assets/rurubu-wedding-identity-stamped-issue-v1.svg` | yes; outlined stamp is intended artwork, exterior remains transparent | none | none | PASS |
 
 ## Promotion boundary
-- These eleven files are accepted as structurally transparent SVG candidates.
+- These thirteen files are accepted as structurally transparent SVG candidates.
 - Do not call them final production assets until the selected wireframe/visual design actually uses them and visual QA passes.
 - Do not regenerate any of these solely to obtain transparency; the transparency requirement is already satisfied structurally.
 - If a future raster derivative is created, verify real alpha values mechanically before Drive production promotion. A baked checkerboard/matte is REJECTED.
