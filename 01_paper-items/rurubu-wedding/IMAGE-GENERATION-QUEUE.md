@@ -4,9 +4,9 @@ Updated: 2026-07-30
 Current authority: GitHub `main`
 
 ## Workflow
-1. 1素材 = 1画像で生成
+1. 1素材 = 1画像で生成/制作
 2. 明らかに採用可能かQA
-3. 透過が必要な素材は green screen -> Python chroma key -> alpha QA
+3. AI生成で透過が必要な素材は green screen -> Python chroma key -> alpha QA。ベクター向き素材は SVG native -> transparent PNG export -> alpha QA を優先
 4. Google Driveへ実ファイル保存
 5. Drive上で存在確認
 6. このリストを更新
@@ -24,6 +24,7 @@ Current authority: GitHub `main`
 - 異なる素材へ進むときは、直前素材を編集・変形・流用する発想を禁止し、完全な新規単体素材として生成する。
 - `進めて` は「前素材の後処理を完了し、次の未完了素材へ進む」の意味。既完了素材の再生成ではない。
 - 同じ誤素材が2回連続で出た場合、その素材の生成を止め、次回生成前にこのHard generation gateとNEXT ASSET固有仕様を再固定する。
+- 単純なフレーム、テープ、線、ピン、アイコン等は画像生成AIより SVG/Figma native vector を優先し、会話内の画像文脈汚染を回避する。
 
 ## Current queue
 - [x] 1. るるぶWEDDING ロゴA
@@ -66,7 +67,15 @@ Current authority: GitHub `main`
   - QA: `1142x943 after crop; real alpha present; suspicious visible green pixels = 0`
   - Drive ID: `1XK03fy0A5UnzaBgoOV59MiOlO-grsVpo`
   - Drive URL: https://drive.google.com/file/d/1XK03fy0A5UnzaBgoOV59MiOlO-grsVpo
-- [ ] 8. 写真フレーム（スクラップ風）
+- [x] 8. 写真フレーム（スクラップ風）
+  - source: `rurubu_08_scrapbook_photo_frame.svg`
+  - export: `rurubu_08_scrapbook_photo_frame.png`
+  - status: `CURRENT_CANDIDATE / VECTOR_SOURCE / ALPHA_VERIFIED / DRIVE_VERIFIED`
+  - QA: `1600x1200; RGBA; real alpha present; central photo opening alpha = 0; frame alpha = 255; no text; no people`
+  - SVG Drive ID: `12S8yfO2hjAIRswIERoMEIWeeI1lufEId`
+  - SVG Drive URL: https://drive.google.com/file/d/12S8yfO2hjAIRswIERoMEIWeeI1lufEId
+  - PNG Drive ID: `1JNN1AeGpKX9A_-gB24b-kx0EG4F--YbG`
+  - PNG Drive URL: https://drive.google.com/file/d/1JNN1AeGpKX9A_-gB24b-kx0EG4F--YbG
 - [ ] 9. マスキングテープ風装飾
 - [ ] 10. 旅ルート + 飛行機 + ハート装飾
 - [ ] 11. 地図ピン装飾
@@ -84,6 +93,7 @@ Current authority: GitHub `main`
 - `PICK UP!`: 1212x998 after crop; real alpha present; suspicious visible green pixels = 0
 - `CHECK!`: 1073x948 after crop; real alpha present; suspicious visible green pixels = 0
 - `BEST SHOT`: 1142x943 after crop; real alpha present; suspicious visible green pixels = 0
+- Scrapbook photo frame: 1600x1200; SVG source + RGBA PNG export; transparent center verified
 
 The three logos are independent files. No production asset sheet is used.
 
