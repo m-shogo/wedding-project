@@ -131,13 +131,14 @@ Current authority: GitHub `main`
   - Drive URL: https://drive.google.com/file/d/1h99j9EiZ-3yRnBoMMYCYuxBRvjzWX3fx/view
   - previous PNG: `rurubu_13_photo_caption_ornament.png` / Drive ID `1b6qFyaaNinIqtn_btVJwUdL71hFctF2I` / `NON_CURRENT / SVG_DERIVED_VISUAL_REJECT`
   - historical SVG: `rurubu_13_photo_caption_ornament.svg` / Drive ID `1KiSsaq-1PA6CHGdnDBJdMLIQ_Wfjmd4i` / `NON_PRODUCTION / DO_NOT_USE`
-- [ ] 14. 小さな特集スタンプ各種
-  - status: `REWORK_REQUIRED / PNG_REMAKE_PENDING`
-  - previous PNGs:
-    - star `rurubu_14a_feature_stamp_star.png` / Drive ID `1wmbAlnSmRG9nOIYBtQOODSsHMnTUHygn`
-    - airplane `rurubu_14b_feature_stamp_airplane.png` / Drive ID `1YTnlqy5C-I6BM99OR76LstI3jjYDKLIa`
-    - heart `rurubu_14c_feature_stamp_heart.png` / Drive ID `1sT9wzLtzdF-3J_K1-zfGMl51y8cCy-Nj`
-    - all `NON_CURRENT / SVG_DERIVED_VISUAL_REJECT`
+- [x] 14. 小さな特集スタンプ各種
+  - status: `CURRENT_CANDIDATE / RASTER_NATIVE / PNG_ONLY / VISUAL_QA_PASS / ALPHA_VERIFIED / DRIVE_VERIFIED`
+  - production method: `3 independent direct-raster PNG files via Pillow; torn-paper stamp texture; no SVG`
+  - QA: `star 716x712; airplane 717x715; heart 717x714; all RGBA; alpha range 0..255; no text; no people`
+  - star PNG: `rurubu_14a_feature_stamp_star_pngonly_v1.png` / Drive ID `1TiR8B1hX1PW1AlMkSDVMkF9T4aMOkNno`
+  - airplane PNG: `rurubu_14b_feature_stamp_airplane_pngonly_v1.png` / Drive ID `1AOQmOqSEPmzpyUARzetEvic6H6Q6Spu1`
+  - heart PNG: `rurubu_14c_feature_stamp_heart_pngonly_v1.png` / Drive ID `1GoMtMrf-EGseg6YcKBK_CGK0-sQFUadJ`
+  - previous SVG-derived PNGs: star `1wmbAlnSmRG9nOIYBtQOODSsHMnTUHygn`, airplane `1YTnlqy5C-I6BM99OR76LstI3jjYDKLIa`, heart `1sT9wzLtzdF-3J_K1-zfGMl51y8cCy-Nj` / all `NON_CURRENT / SVG_DERIVED_VISUAL_REJECT`
   - historical SVGs: star `1eAYyPm0KLh6MlYp9J_3pqkXe9nsDvppb`, airplane `1JpcCIsfeQO4e221jHfkajectG7_10s-o`, heart `1zmXb0t8UOxY6bNySt36-SoogQonKgHhw` / all `NON_PRODUCTION / DO_NOT_USE`
 
 ## Alpha QA — accepted current assets
@@ -154,12 +155,12 @@ Current authority: GitHub `main`
 - Map pin #11: 567x976; direct-raster transparent PNG; clean paper-cut silhouette + heart center; no SVG used
 - Small travel icons #12: 1952x281; direct-raster transparent PNG; 6 handmade paper-cut icons; no SVG used
 - Photo caption ornament #13: 1488x411; direct-raster transparent PNG; blank label center; no SVG used
+- Feature stamps #14: 3 independent direct-raster transparent PNGs; torn-paper stamp texture; no SVG used
 
 ## Rework boundary
-- #8〜#13 are complete again using new raster-native PNGs; historical SVG-derived versions remain non-current.
-- 次の `NEXT ASSET` は **#14 小さな特集スタンプ各種**。
-- 新しい#14が視覚QA + alpha QA + Drive verifyを通るまでキュー完了にしない。
-- 誤生成・旧SVG由来PNGは採用しない。
+- **#8〜#14 PNG-only rework COMPLETE.** Historical SVG-derived versions remain non-current and must not be restored.
+- Current queue #1〜#14 is complete again.
+- Do not create more fixed decorative assets unless a concrete Figma layout problem requires one.
 
 ## Promotion boundary
-#1〜#13も最終選定ではなくcurrent visual candidates。最終choiceはproduction Figmaでのsame-condition placementとvisual/print-scale QA後に行う。
+#1〜#14 are current visual candidates, not final production selections. Final choice happens after production Figma same-condition placement, real-photo fit, visual QA and print-scale QA.
