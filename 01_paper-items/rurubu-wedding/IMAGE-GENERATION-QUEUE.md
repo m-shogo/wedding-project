@@ -76,12 +76,53 @@ Current authority: GitHub `main`
   - SVG Drive URL: https://drive.google.com/file/d/12S8yfO2hjAIRswIERoMEIWeeI1lufEId
   - PNG Drive ID: `1JNN1AeGpKX9A_-gB24b-kx0EG4F--YbG`
   - PNG Drive URL: https://drive.google.com/file/d/1JNN1AeGpKX9A_-gB24b-kx0EG4F--YbG
-- [ ] 9. マスキングテープ風装飾
-- [ ] 10. 旅ルート + 飛行機 + ハート装飾
-- [ ] 11. 地図ピン装飾
-- [ ] 12. 小さな旅アイコンセット
-- [ ] 13. 写真キャプション飾り
-- [ ] 14. 小さな特集スタンプ各種
+- [x] 9. マスキングテープ風装飾
+  - source: `rurubu_09_masking_tape.svg`
+  - export: `rurubu_09_masking_tape.png`
+  - status: `CURRENT_CANDIDATE / VECTOR_SOURCE / ALPHA_VERIFIED / DRIVE_VERIFIED`
+  - QA: `1400x500; RGBA; real alpha present; no text; no people`
+  - SVG Drive ID: `1vX9CKoiFRGlAhmh8FAKsYSFbvLmw25FG`
+  - PNG Drive ID: `1an7z2OToMkvKHmNLTtr5sIKmHHYZ7NQA`
+- [x] 10. 旅ルート + 飛行機 + ハート装飾
+  - source: `rurubu_10_travel_route_airplane_heart.svg`
+  - export: `rurubu_10_travel_route_airplane_heart.png`
+  - status: `CURRENT_CANDIDATE / VECTOR_SOURCE / ALPHA_VERIFIED / DRIVE_VERIFIED`
+  - QA: `1500x800; RGBA; real alpha present; no text; no people`
+  - SVG Drive ID: `1m3gdS-v02dh9w7LcvEyM22P3IqbAvcaA`
+  - PNG Drive ID: `1olSQtZpIBXLPm1gvNJ5zuwwvS-7Ie1GO`
+- [x] 11. 地図ピン装飾
+  - source: `rurubu_11_map_pin.svg`
+  - export: `rurubu_11_map_pin.png`
+  - status: `CURRENT_CANDIDATE / VECTOR_SOURCE / ALPHA_VERIFIED / DRIVE_VERIFIED`
+  - QA: `900x1100; RGBA; real alpha present; no text; no people`
+  - SVG Drive ID: `1qpljWdOq5-SehAvLtjPSw5BDRnW1J7rf`
+  - PNG Drive ID: `1kJT3s_4ty4LZjji0aIv4XzbzrLUdrfz7`
+- [x] 12. 小さな旅アイコンセット
+  - source: `rurubu_12_small_travel_icons.svg`
+  - export: `rurubu_12_small_travel_icons.png`
+  - status: `CURRENT_CANDIDATE / VECTOR_SOURCE / ALPHA_VERIFIED / DRIVE_VERIFIED`
+  - QA: `1800x520; RGBA; real alpha present; intentional icon-row set; no text; no people`
+  - SVG Drive ID: `1mj_fAKcHgjxx2d0d6yce9DA_JQ_WnecL`
+  - PNG Drive ID: `1EqKmGXnv684cwFuB4SIbMZScxtVLnI2U`
+- [x] 13. 写真キャプション飾り
+  - source: `rurubu_13_photo_caption_ornament.svg`
+  - export: `rurubu_13_photo_caption_ornament.png`
+  - status: `CURRENT_CANDIDATE / VECTOR_SOURCE / ALPHA_VERIFIED / DRIVE_VERIFIED`
+  - QA: `1600x600; RGBA; real alpha present; blank caption area; no embedded text; no people`
+  - SVG Drive ID: `1KiSsaq-1PA6CHGdnDBJdMLIQ_Wfjmd4i`
+  - PNG Drive ID: `1b6qFyaaNinIqtn_btVJwUdL71hFctF2I`
+- [x] 14. 小さな特集スタンプ各種
+  - status: `CURRENT_CANDIDATE / VECTOR_SOURCE / ALPHA_VERIFIED / DRIVE_VERIFIED`
+  - QA: `3 independent 800x800 stamps; RGBA; real alpha present; no text; no people`
+  - star source/export: `rurubu_14a_feature_stamp_star.svg` / `rurubu_14a_feature_stamp_star.png`
+    - SVG Drive ID: `1eAYyPm0KLh6MlYp9J_3pqkXe9nsDvppb`
+    - PNG Drive ID: `1wmbAlnSmRG9nOIYBtQOODSsHMnTUHygn`
+  - airplane source/export: `rurubu_14b_feature_stamp_airplane.svg` / `rurubu_14b_feature_stamp_airplane.png`
+    - SVG Drive ID: `1JpcCIsfeQO4e221jHfkajectG7_10s-o`
+    - PNG Drive ID: `1YTnlqy5C-I6BM99OR76LstI3jjYDKLIa`
+  - heart source/export: `rurubu_14c_feature_stamp_heart.svg` / `rurubu_14c_feature_stamp_heart.png`
+    - SVG Drive ID: `1zmXb0t8UOxY6bNySt36-SoogQonKgHhw`
+    - PNG Drive ID: `1sT9wzLtzdF-3J_K1-zfGMl51y8cCy-Nj`
 
 ## Alpha QA — logo batch
 - A: 1448x465 after crop; real alpha present; suspicious visible green pixels = 0
@@ -94,8 +135,14 @@ Current authority: GitHub `main`
 - `CHECK!`: 1073x948 after crop; real alpha present; suspicious visible green pixels = 0
 - `BEST SHOT`: 1142x943 after crop; real alpha present; suspicious visible green pixels = 0
 - Scrapbook photo frame: 1600x1200; SVG source + RGBA PNG export; transparent center verified
+- Masking tape: 1400x500; SVG source + RGBA PNG export
+- Travel route/airplane/heart: 1500x800; SVG source + RGBA PNG export
+- Map pin: 900x1100; SVG source + RGBA PNG export
+- Small travel icons: 1800x520; SVG source + RGBA PNG export
+- Photo caption ornament: 1600x600; SVG source + RGBA PNG export
+- Feature stamps: 3 independent 800x800 SVG/PNG pairs
 
-The three logos are independent files. No production asset sheet is used.
+The three logos are independent files. No production asset sheet is used. `#12` is an intentional icon-row set because the queue item itself is a set; `#14` remains three independent stamp files.
 
 ## Promotion boundary
 These are current visual candidates, not the final selected masthead. Final choice happens after same-condition placement in the production Figma layout and visual/print-scale QA.
