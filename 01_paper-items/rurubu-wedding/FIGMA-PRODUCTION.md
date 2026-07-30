@@ -1,6 +1,6 @@
 # るるぶWEDDING Figma Production
 
-- status: FILE_CREATED / FOUNDATION_SPEC_READY / WIREFRAME_SPEC_READY / FIGMA_BUILD_SPEC_READY / WRITE_BLOCKED_BY_FIGMA_STARTER_MCP_LIMIT
+- status: FILE_CREATED / FOUNDATION_SPEC_READY / WIREFRAME_SPEC_READY / FIGMA_BUILD_SPEC_READY / IDENTITY_3_DIRECTION_READY / WRITE_BLOCKED_BY_FIGMA_STARTER_MCP_LIMIT
 - production file: https://www.figma.com/design/bfM0d4c9dCeBv5pCkJ3TNM
 - created: 2026-07-29
 - last verified Figma MCP block: 2026-07-30
@@ -26,7 +26,9 @@ All listed SVG assets are transparent by construction: the SVG root has no backg
 - `assets/hearts-sparkle-v1.svg`: CANDIDATE
 - `assets/photo-frame-tape-v1.svg`: CANDIDATE
 - `assets/best-shot-tag-v1.svg`: CANDIDATE
-- `assets/rurubu-wedding-identity-mono-v1.svg`: CANDIDATE — original monochrome identity study; transparent exterior; route/heart/plane motif; must be judged in the same-condition cover comparison before Freeze.
+- `assets/rurubu-wedding-identity-mono-v1.svg`: CANDIDATE — Rounded Travel Masthead direction; route/heart/plane motif.
+- `assets/rurubu-wedding-identity-editorial-pop-v1.svg`: CANDIDATE — Editorial Pop direction; bold editorial hierarchy.
+- `assets/rurubu-wedding-identity-stamped-issue-v1.svg`: CANDIDATE — Stamped Travel Issue direction; issue-stamp/travel-ticket character.
 - raster transparency attempts: REJECTED. Checkerboard/background pixels were baked into generated images, so raster generation is no longer the primary path.
 
 ## Freeze progress
@@ -37,7 +39,7 @@ All listed SVG assets are transparent by construction: the SVG root has no backg
 - Three monochrome outer-spread wireframes are specified in `WIREFRAME.md`: A Classic Rurubu, B Editorial Split, C Scrapbook Journey. A is the provisional first candidate only; final selection waits for same-condition Figma comparison and weighted rubric scoring.
 - `FIGMA-WIREFRAME-BUILD.md` now fixes the physical-size-equivalent Figma geometry, shared stress-copy payload, semantic node structure, incremental mutation order and QA checklist so quota recovery can go directly to canvas execution without rediscovery.
 - Figma MCP read/write remains blocked by the Starter plan call limit as verified on 2026-07-30; do not repeat mutation probes until quota recovers.
-- Identity is now an explicit single-asset monochrome candidate instead of being folded into decorative asset generation. It remains CANDIDATE until Figma wireframe comparison validates hierarchy and legibility.
+- Drive Design Freeze requires three independent monochrome logo directions before production; all three are now present as separate SVG candidate files. None is frozen until same-condition cover comparison validates hierarchy, originality and print-scale legibility.
 
 ## Next write when MCP quota recovers
 1. execute `FIGMA-WIREFRAME-BUILD.md` against the existing production file
@@ -45,7 +47,8 @@ All listed SVG assets are transparent by construction: the SVG root has no backg
 3. create the three spread wrappers and validate geometry
 4. add Front/Back containers, provisional fold guide, variables and text styles
 5. populate A/B/C with identical shared copy
-6. screenshot and score the weighted rubric; promote only the winner
-7. place native title/date/hero-photo structure on the winner
-8. import/recreate frozen SVG candidates one at a time
-9. continue Visual Design → real-data Stress Test → QA
+6. place the three monochrome identity directions one at a time for same-condition comparison
+7. screenshot and score the weighted rubric; promote only the winner
+8. place native date/hero-photo structure on the winner
+9. import/recreate remaining frozen SVG candidates one at a time
+10. continue Visual Design → real-data Stress Test → QA
