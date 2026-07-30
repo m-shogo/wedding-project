@@ -6,7 +6,7 @@ Current authority: GitHub `main`
 ## Workflow
 1. 1素材 = 1画像で生成/制作
 2. 明らかに採用可能かQA
-3. AI生成で透過が必要な素材は green screen -> Python chroma key -> alpha QA。ベクター向き素材は SVG native -> transparent PNG export -> alpha QA を優先
+3. 透過が必要な固定装飾は transparent PNG を正本とする。AI生成素材は必要に応じて green screen -> Python chroma key -> alpha QA
 4. Google Driveへ実ファイル保存
 5. Drive上で存在確認
 6. このリストを更新
@@ -14,6 +14,13 @@ Current authority: GitHub `main`
 8. 次の素材へ
 
 装飾のないタイトル・本文・見出し・ラベルは画像化せずFigma native textで作る。
+
+## Format policy — SVG PROHIBITED
+- **SVGは禁止。るるぶWEDDINGでは今後SVGを新規制作・採用・Figma配置・Current昇格しない。**
+- 固定装飾の正本形式は **透過PNG**。
+- PNGは実alpha channelを必須とし、checkerboardや背景色が焼き付いたものは `REJECTED`。
+- 過去に制作済みのSVGは履歴としてDriveに残っていてもよいが、すべて `HISTORICAL / NON_PRODUCTION / DO_NOT_USE` と扱う。
+- 過去SVGから書き出したPNGも、**PNG単体の見た目・alpha QAで採用可否を判断**する。SVGが存在すること自体は品質根拠にしない。
 
 ## Hard generation gate
 - 画像生成直前に必ずこの `main` のキューを再取得し、最初の `[ ]` だけを `NEXT ASSET` とする。
@@ -24,7 +31,7 @@ Current authority: GitHub `main`
 - 異なる素材へ進むときは、直前素材を編集・変形・流用する発想を禁止し、完全な新規単体素材として生成する。
 - `進めて` は「前素材の後処理を完了し、次の未完了素材へ進む」の意味。既完了素材の再生成ではない。
 - 同じ誤素材が2回連続で出た場合、その素材の生成を止め、次回生成前にこのHard generation gateとNEXT ASSET固有仕様を再固定する。
-- 単純なフレーム、テープ、線、ピン、アイコン等は画像生成AIより SVG/Figma native vector を優先し、会話内の画像文脈汚染を回避する。
+- SVG/Figma vectorへの逃げ道は使わない。固定装飾は最終的に透過PNGとして品質判断する。
 
 ## Current queue
 - [x] 1. るるぶWEDDING ロゴA
@@ -68,61 +75,49 @@ Current authority: GitHub `main`
   - Drive ID: `1XK03fy0A5UnzaBgoOV59MiOlO-grsVpo`
   - Drive URL: https://drive.google.com/file/d/1XK03fy0A5UnzaBgoOV59MiOlO-grsVpo
 - [x] 8. 写真フレーム（スクラップ風）
-  - source: `rurubu_08_scrapbook_photo_frame.svg`
-  - export: `rurubu_08_scrapbook_photo_frame.png`
-  - status: `CURRENT_CANDIDATE / VECTOR_SOURCE / ALPHA_VERIFIED / DRIVE_VERIFIED`
+  - file: `rurubu_08_scrapbook_photo_frame.png`
+  - status: `CURRENT_CANDIDATE / PNG_ONLY / ALPHA_VERIFIED / DRIVE_VERIFIED`
   - QA: `1600x1200; RGBA; real alpha present; central photo opening alpha = 0; frame alpha = 255; no text; no people`
-  - SVG Drive ID: `12S8yfO2hjAIRswIERoMEIWeeI1lufEId`
-  - SVG Drive URL: https://drive.google.com/file/d/12S8yfO2hjAIRswIERoMEIWeeI1lufEId
   - PNG Drive ID: `1JNN1AeGpKX9A_-gB24b-kx0EG4F--YbG`
   - PNG Drive URL: https://drive.google.com/file/d/1JNN1AeGpKX9A_-gB24b-kx0EG4F--YbG
+  - historical SVG: `rurubu_08_scrapbook_photo_frame.svg` / Drive ID `12S8yfO2hjAIRswIERoMEIWeeI1lufEId` / `NON_PRODUCTION / DO_NOT_USE`
 - [x] 9. マスキングテープ風装飾
-  - source: `rurubu_09_masking_tape.svg`
-  - export: `rurubu_09_masking_tape.png`
-  - status: `CURRENT_CANDIDATE / VECTOR_SOURCE / ALPHA_VERIFIED / DRIVE_VERIFIED`
+  - file: `rurubu_09_masking_tape.png`
+  - status: `CURRENT_CANDIDATE / PNG_ONLY / ALPHA_VERIFIED / DRIVE_VERIFIED`
   - QA: `1400x500; RGBA; real alpha present; no text; no people`
-  - SVG Drive ID: `1vX9CKoiFRGlAhmh8FAKsYSFbvLmw25FG`
   - PNG Drive ID: `1an7z2OToMkvKHmNLTtr5sIKmHHYZ7NQA`
+  - historical SVG: `rurubu_09_masking_tape.svg` / Drive ID `1vX9CKoiFRGlAhmh8FAKsYSFbvLmw25FG` / `NON_PRODUCTION / DO_NOT_USE`
 - [x] 10. 旅ルート + 飛行機 + ハート装飾
-  - source: `rurubu_10_travel_route_airplane_heart.svg`
-  - export: `rurubu_10_travel_route_airplane_heart.png`
-  - status: `CURRENT_CANDIDATE / VECTOR_SOURCE / ALPHA_VERIFIED / DRIVE_VERIFIED`
+  - file: `rurubu_10_travel_route_airplane_heart.png`
+  - status: `CURRENT_CANDIDATE / PNG_ONLY / ALPHA_VERIFIED / DRIVE_VERIFIED`
   - QA: `1500x800; RGBA; real alpha present; no text; no people`
-  - SVG Drive ID: `1m3gdS-v02dh9w7LcvEyM22P3IqbAvcaA`
   - PNG Drive ID: `1olSQtZpIBXLPm1gvNJ5zuwwvS-7Ie1GO`
+  - historical SVG: `rurubu_10_travel_route_airplane_heart.svg` / Drive ID `1m3gdS-v02dh9w7LcvEyM22P3IqbAvcaA` / `NON_PRODUCTION / DO_NOT_USE`
 - [x] 11. 地図ピン装飾
-  - source: `rurubu_11_map_pin.svg`
-  - export: `rurubu_11_map_pin.png`
-  - status: `CURRENT_CANDIDATE / VECTOR_SOURCE / ALPHA_VERIFIED / DRIVE_VERIFIED`
+  - file: `rurubu_11_map_pin.png`
+  - status: `CURRENT_CANDIDATE / PNG_ONLY / ALPHA_VERIFIED / DRIVE_VERIFIED`
   - QA: `900x1100; RGBA; real alpha present; no text; no people`
-  - SVG Drive ID: `1qpljWdOq5-SehAvLtjPSw5BDRnW1J7rf`
   - PNG Drive ID: `1kJT3s_4ty4LZjji0aIv4XzbzrLUdrfz7`
+  - historical SVG: `rurubu_11_map_pin.svg` / Drive ID `1qpljWdOq5-SehAvLtjPSw5BDRnW1J7rf` / `NON_PRODUCTION / DO_NOT_USE`
 - [x] 12. 小さな旅アイコンセット
-  - source: `rurubu_12_small_travel_icons.svg`
-  - export: `rurubu_12_small_travel_icons.png`
-  - status: `CURRENT_CANDIDATE / VECTOR_SOURCE / ALPHA_VERIFIED / DRIVE_VERIFIED`
+  - file: `rurubu_12_small_travel_icons.png`
+  - status: `CURRENT_CANDIDATE / PNG_ONLY / ALPHA_VERIFIED / DRIVE_VERIFIED`
   - QA: `1800x520; RGBA; real alpha present; intentional icon-row set; no text; no people`
-  - SVG Drive ID: `1mj_fAKcHgjxx2d0d6yce9DA_JQ_WnecL`
   - PNG Drive ID: `1EqKmGXnv684cwFuB4SIbMZScxtVLnI2U`
+  - historical SVG: `rurubu_12_small_travel_icons.svg` / Drive ID `1mj_fAKcHgjxx2d0d6yce9DA_JQ_WnecL` / `NON_PRODUCTION / DO_NOT_USE`
 - [x] 13. 写真キャプション飾り
-  - source: `rurubu_13_photo_caption_ornament.svg`
-  - export: `rurubu_13_photo_caption_ornament.png`
-  - status: `CURRENT_CANDIDATE / VECTOR_SOURCE / ALPHA_VERIFIED / DRIVE_VERIFIED`
+  - file: `rurubu_13_photo_caption_ornament.png`
+  - status: `CURRENT_CANDIDATE / PNG_ONLY / ALPHA_VERIFIED / DRIVE_VERIFIED`
   - QA: `1600x600; RGBA; real alpha present; blank caption area; no embedded text; no people`
-  - SVG Drive ID: `1KiSsaq-1PA6CHGdnDBJdMLIQ_Wfjmd4i`
   - PNG Drive ID: `1b6qFyaaNinIqtn_btVJwUdL71hFctF2I`
+  - historical SVG: `rurubu_13_photo_caption_ornament.svg` / Drive ID `1KiSsaq-1PA6CHGdnDBJdMLIQ_Wfjmd4i` / `NON_PRODUCTION / DO_NOT_USE`
 - [x] 14. 小さな特集スタンプ各種
-  - status: `CURRENT_CANDIDATE / VECTOR_SOURCE / ALPHA_VERIFIED / DRIVE_VERIFIED`
+  - status: `CURRENT_CANDIDATE / PNG_ONLY / ALPHA_VERIFIED / DRIVE_VERIFIED`
   - QA: `3 independent 800x800 stamps; RGBA; real alpha present; no text; no people`
-  - star source/export: `rurubu_14a_feature_stamp_star.svg` / `rurubu_14a_feature_stamp_star.png`
-    - SVG Drive ID: `1eAYyPm0KLh6MlYp9J_3pqkXe9nsDvppb`
-    - PNG Drive ID: `1wmbAlnSmRG9nOIYBtQOODSsHMnTUHygn`
-  - airplane source/export: `rurubu_14b_feature_stamp_airplane.svg` / `rurubu_14b_feature_stamp_airplane.png`
-    - SVG Drive ID: `1JpcCIsfeQO4e221jHfkajectG7_10s-o`
-    - PNG Drive ID: `1YTnlqy5C-I6BM99OR76LstI3jjYDKLIa`
-  - heart source/export: `rurubu_14c_feature_stamp_heart.svg` / `rurubu_14c_feature_stamp_heart.png`
-    - SVG Drive ID: `1zmXb0t8UOxY6bNySt36-SoogQonKgHhw`
-    - PNG Drive ID: `1sT9wzLtzdF-3J_K1-zfGMl51y8cCy-Nj`
+  - star PNG: `rurubu_14a_feature_stamp_star.png` / Drive ID `1wmbAlnSmRG9nOIYBtQOODSsHMnTUHygn`
+  - airplane PNG: `rurubu_14b_feature_stamp_airplane.png` / Drive ID `1YTnlqy5C-I6BM99OR76LstI3jjYDKLIa`
+  - heart PNG: `rurubu_14c_feature_stamp_heart.png` / Drive ID `1sT9wzLtzdF-3J_K1-zfGMl51y8cCy-Nj`
+  - historical SVGs: star `1eAYyPm0KLh6MlYp9J_3pqkXe9nsDvppb`, airplane `1JpcCIsfeQO4e221jHfkajectG7_10s-o`, heart `1zmXb0t8UOxY6bNySt36-SoogQonKgHhw` / all `NON_PRODUCTION / DO_NOT_USE`
 
 ## Alpha QA — logo batch
 - A: 1448x465 after crop; real alpha present; suspicious visible green pixels = 0
@@ -134,13 +129,13 @@ Current authority: GitHub `main`
 - `PICK UP!`: 1212x998 after crop; real alpha present; suspicious visible green pixels = 0
 - `CHECK!`: 1073x948 after crop; real alpha present; suspicious visible green pixels = 0
 - `BEST SHOT`: 1142x943 after crop; real alpha present; suspicious visible green pixels = 0
-- Scrapbook photo frame: 1600x1200; SVG source + RGBA PNG export; transparent center verified
-- Masking tape: 1400x500; SVG source + RGBA PNG export
-- Travel route/airplane/heart: 1500x800; SVG source + RGBA PNG export
-- Map pin: 900x1100; SVG source + RGBA PNG export
-- Small travel icons: 1800x520; SVG source + RGBA PNG export
-- Photo caption ornament: 1600x600; SVG source + RGBA PNG export
-- Feature stamps: 3 independent 800x800 SVG/PNG pairs
+- Scrapbook photo frame: 1600x1200 transparent PNG; transparent center verified
+- Masking tape: 1400x500 transparent PNG
+- Travel route/airplane/heart: 1500x800 transparent PNG
+- Map pin: 900x1100 transparent PNG
+- Small travel icons: 1800x520 transparent PNG
+- Photo caption ornament: 1600x600 transparent PNG
+- Feature stamps: 3 independent 800x800 transparent PNG files
 
 The three logos are independent files. No production asset sheet is used. `#12` is an intentional icon-row set because the queue item itself is a set; `#14` remains three independent stamp files.
 
