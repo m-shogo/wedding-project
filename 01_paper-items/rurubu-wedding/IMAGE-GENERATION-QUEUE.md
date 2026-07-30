@@ -76,14 +76,14 @@ Current authority: GitHub `main`
   - QA: `1142x943 after crop; real alpha present; suspicious visible green pixels = 0`
   - Drive ID: `1XK03fy0A5UnzaBgoOV59MiOlO-grsVpo`
   - Drive URL: https://drive.google.com/file/d/1XK03fy0A5UnzaBgoOV59MiOlO-grsVpo
-- [ ] 8. 写真フレーム（スクラップ風）
-  - status: `REWORK_REQUIRED / PNG_REMAKE_PENDING / HARD_STOP_AFTER_REPEATED_GENERATION_MISS`
-  - acceptance: blank scrapbook photo frame / large transparent photo opening / no text / no people / no badge composition / no camera motif / one isolated object / travel-magazine handmade feel
-  - dedicated brief: `NEXT-ASSET-08-PNG-BRIEF.md`
-  - rejected raster attempt `745d17a5-9171-4e97-80f1-f2fcb70e374a`: correct blank-frame class but contains a camera motif; `REJECTED`, not saved to Drive
-  - rejected raster attempt `2107c552-b3ec-40b8-b444-75ba72f3542a`: generated 3 labeled frames plus sample collage, readable text, real/AI people/photos and camera; violates single-asset/content boundary; `REJECTED`, not saved to Drive
-  - rejected raster attempt `363f8330-fec1-4120-9a4c-58d55e4077a0`: generated 3 frames and readable text/camera-like motifs; violates one-object/textless boundary; `REJECTED`, not saved to Drive
-  - hard-stop rule is active: do not continue blind generation in the same contaminated generation run; queue stays open until a compliant new PNG passes visual + alpha QA
+- [x] 8. 写真フレーム（スクラップ風）
+  - file: `rurubu_08_scrapbook_photo_frame_pngonly_v1.png`
+  - status: `CURRENT_CANDIDATE / RASTER_NATIVE / PNG_ONLY / VISUAL_QA_PASS / ALPHA_VERIFIED / DRIVE_VERIFIED`
+  - production method: `direct raster PNG via Pillow; no SVG; no image-generation retry loop`
+  - QA: `1528x1071; RGBA; alpha range 0..255; center/left/right photo-opening samples alpha=0; frame sample alpha=255; one isolated frame; no text; no people; no camera motif`
+  - Drive ID: `1InvEJp5UID7_x2gU3cvEbGzeF6G18WC4`
+  - Drive URL: https://drive.google.com/file/d/1InvEJp5UID7_x2gU3cvEbGzeF6G18WC4/view
+  - historical rejected raster attempts: `745d17a5-9171-4e97-80f1-f2fcb70e374a`, `2107c552-b3ec-40b8-b444-75ba72f3542a`, `363f8330-fec1-4120-9a4c-58d55e4077a0` / all `REJECTED / NOT_SAVED_TO_DRIVE`
   - previous PNG: `rurubu_08_scrapbook_photo_frame.png` / Drive ID `1JNN1AeGpKX9A_-gB24b-kx0EG4F--YbG` / `NON_CURRENT / SVG_DERIVED_VISUAL_REJECT`
   - historical SVG: `rurubu_08_scrapbook_photo_frame.svg` / Drive ID `12S8yfO2hjAIRswIERoMEIWeeI1lufEId` / `NON_PRODUCTION / DO_NOT_USE`
 - [ ] 9. マスキングテープ風装飾
@@ -123,12 +123,13 @@ Current authority: GitHub `main`
 - `PICK UP!`: 1212x998 after crop; real alpha present; suspicious visible green pixels = 0
 - `CHECK!`: 1073x948 after crop; real alpha present; suspicious visible green pixels = 0
 - `BEST SHOT`: 1142x943 after crop; real alpha present; suspicious visible green pixels = 0
+- Scrapbook photo frame #8: 1528x1071; direct-raster transparent PNG; center opening verified alpha=0; no SVG used
 
 ## Rework boundary
-- #8〜#14の旧PNGはalpha技術QAには通っているが、ユーザーの視覚評価によりCurrentから降格した。
-- 次の `NEXT ASSET` は **#8 写真フレーム（スクラップ風）**。
-- 新しい#8が視覚QA + alpha QA + Drive verifyを通るまで#9へ進まない。
+- #8 is complete again using a new raster-native PNG; historical SVG-derived #8 remains non-current.
+- 次の `NEXT ASSET` は **#9 マスキングテープ風装飾**。
+- 新しい#9が視覚QA + alpha QA + Drive verifyを通るまで#10へ進まない。
 - 誤生成・旧SVG由来PNGは採用しない。
 
 ## Promotion boundary
-#1〜#7も最終選定ではなくcurrent visual candidates。最終choiceはproduction Figmaでのsame-condition placementとvisual/print-scale QA後に行う。
+#1〜#8も最終選定ではなくcurrent visual candidates。最終choiceはproduction Figmaでのsame-condition placementとvisual/print-scale QA後に行う。
