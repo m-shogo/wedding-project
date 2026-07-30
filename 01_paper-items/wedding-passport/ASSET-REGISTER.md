@@ -20,7 +20,7 @@ Note: the Drive Current Authority document still contains an older branch pointe
 ## Production asset 001
 ### passport-emblem-compass-airplane.svg
 Path: `assets/passport-emblem-compass-airplane.svg`
-Status: `CANDIDATE_READY / TRANSPARENCY_VERIFIED / FIGMA_EDITABLE`
+Status: `CANDIDATE_READY / TRANSPARENCY_VERIFIED / FIGMA_EDITABLE / DRIVE_UPLOAD_BLOCKED`
 
 Purpose:
 - WEDDING PASSPORT front-cover central identity candidate
@@ -50,6 +50,15 @@ Tool chain:
 - source constraints: Google Drive reference analysis
 - generation: programmatic SVG (chosen instead of raster generation because this identity is geometric/typographic and benefits from full Figma editability)
 - verification: GitHub readback / structural transparency inspection
+
+Drive sync status:
+- target item folder: `01_パスポート風_メニュー・ドリンク・座席表`
+- target production subfolder: `20_制作素材/01_ベクター・アイコン`
+- target folder ID: `1zs8Y7jVKW7xqng_U9Hr2aKZxyySbbym2`
+- Drive inspection on 2026-07-30 confirmed the target folder currently contains no files; this asset is not present there yet.
+- immediate upload attempts from the current runtime were rejected because Google Drive requires a registered connector file reference and would not accept the local sandbox file path.
+- do not mark this asset `COMPLETED` or `PLACEMENT_READY` until Drive upload succeeds and existence is re-verified.
+- next scheduled run must prioritize retrying Drive upload before advancing this asset's completion state.
 
 ## Next assets, one at a time
 1. fictional entry/arrival stamp mark
