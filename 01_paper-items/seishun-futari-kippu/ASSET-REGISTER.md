@@ -1,6 +1,6 @@
 # 青春ふたりきっぷ — Asset Register
 
-Status: `8_VECTOR_ASSETS_COMPLETED / DRIVE_VERIFIED / DECORATIVE_REBUILDS_PENDING / BOARDING_PASS_ADVANCE_ALLOWED / NOT_FIGMA_PLACEMENT_READY`
+Status: `10_ASSETS_COMPLETED / DRIVE_VERIFIED / PLACEMENT_READY / BOARDING_PASS_ADVANCE_ALLOWED`
 
 ## Scope
 
@@ -12,8 +12,11 @@ Item folder ID: `1XpuRqck_yDmWI6NhwZFWkvxpS6mqH29J`
 Production folder: `20_制作素材`
 Production folder ID: `1KsF80iBOynFy5RdTjPM7grQXClzXW4Tv`
 Vector/icon subfolder ID: `1bhhltc5APlthGbisvFvYzeJMdDyM52au`
+Decorative/stamp subfolder ID: `1Mh7acGiT3cw4NQE29Ew2eJiNDtlNTIqF`
 
-The local-file -> Drive upload bridge is working in the current runtime. The eight approved vector-native production assets have been uploaded independently and their existence was verified in the vector/icon subfolder.
+The local-file -> Drive upload bridge is working in the current runtime. All selected production assets have been uploaded independently and verified in Drive.
+
+## Completed vector-native assets
 
 | Asset | Git path | Drive ID | Drive state |
 |---|---|---|---|
@@ -28,32 +31,35 @@ The local-file -> Drive upload bridge is working in the current runtime. The eig
 
 All eight remain structurally QA-passed: SVG-native geometry, viewBox present, no embedded raster, transparent exterior where applicable, and one asset per file.
 
+## Completed decorative PNG assets
+
+The legacy flat stamp SVGs remain reference-only and are not promoted. Two independent production PNG rebuilds were created and mechanically QA'd.
+
+| Asset | Production filename | Mechanical QA | Drive ID | Drive state |
+|---|---|---|---|---|
+| red celebratory `祝` stamp | `seishun_stamp_shuku_red_v1.png` | 2048x2048 RGBA; transparent exterior; border max alpha 0; visible green 0 | `18IfyAhcrnW16shx-rYrSMPWnYfStZfqz` | `COMPLETED` |
+| blue fictional ticket-gate/date stamp | `seishun_stamp_gate_blue_v1.png` | 2048x2048 RGBA; transparent exterior; border max alpha 0; visible green 0 | `1TkdqzYldyQc8kB6nxl4os8NGF28i_GM9` | `COMPLETED` |
+
+The blue stamp is fictional decorative artwork and does not reproduce a real railway operator mark. Both PNGs use distressed ink treatment suitable for the intended retro-ticket composition.
+
 ## PNG fallback derivative QA
 
-1024x1024 transparent PNG derivatives of the eight vectors previously passed mechanical alpha QA. They remain fallback-only because SVG is the preferred production representation for these simple geometries.
+1024x1024 transparent PNG derivatives of the eight vectors previously passed mechanical alpha QA. They remain fallback-only because SVG is the preferred production representation for those simple geometries.
 
-## Decorative artwork still pending
+## Current gate
 
-Legacy stamp SVGs remain `REFERENCE / REBUILD_PNG_PREFERRED`. Do not promote the flat Arial/sans-serif versions.
+`PLACEMENT_READY = true`
 
-Required future decorative work for final Figma composition:
-1. red celebratory `祝` stamp as an independent transparent PNG;
-2. blue fictional ticket-gate/date stamp as an independent transparent PNG;
-3. optional subtle paper/ink texture accent only if Figma-native treatment is insufficient.
-
-These pending decorations mean item 4 is **not yet final Figma placement-ready**. Exact physical label dimensions also remain subject to re-measurement before print lock.
+All required fixed assets for item 4 now satisfy the one-asset-one-file production rule and the Drive-save/existence gate. Physical label dimensions still require normal print-lock remeasurement, but that is downstream layout/print QA rather than a missing fixed-asset blocker.
 
 ## Progression decision
 
-Per explicit user direction on 2026-07-31, the completed Drive gate for the eight already-generated fixed assets is sufficient to stop blocking the next fixed-asset lane.
-
 `BOARDING_PASS_ASSET_GENERATION_ALLOWED = true`
 
-This does **not** mean the remaining decorative rebuilds are waived or that item 4 is print/Figma-final. They stay as item-4 follow-up work, while item 3 asset generation may proceed in parallel without touching the rurubu lane.
+Item 4 fixed-asset generation is closed. The fixed-asset lane may advance to `3. BOARDING PASS` without returning to item 4 unless later Figma/print QA identifies a concrete defect.
 
 ## Next queue
 
 1. Advance fixed-asset generation to `3. BOARDING PASS`.
-2. Keep item 4 decorative stamp rebuilds as a non-blocking follow-up queue.
-3. Before item 4 Figma placement, complete/replace required red and blue stamp treatments and verify their Drive files.
-4. Do not modify `01_paper-items/rurubu-wedding/` from this lane.
+2. Keep item 4 assets unchanged unless placement/print QA reveals a specific issue.
+3. Do not modify `01_paper-items/rurubu-wedding/` from this lane.
