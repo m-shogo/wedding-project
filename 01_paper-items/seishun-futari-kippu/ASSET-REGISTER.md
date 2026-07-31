@@ -37,8 +37,10 @@ The legacy flat stamp SVGs remain reference-only and are not promoted. Two indep
 
 | Asset | Production filename | Mechanical QA | Drive ID | Drive state |
 |---|---|---|---|---|
-| red celebratory `祝` stamp | `seishun_stamp_shuku_red_v1.png` | 2048x2048 RGBA; transparent exterior; border max alpha 0; visible green 0 | `18IfyAhcrnW16shx-rYrSMPWnYfStZfqz` | `COMPLETED` |
+| red celebratory `祝` stamp | `seishun_stamp_shuku_red_v2_centered.png` | 1254x1254 RGBA; centered glyph; chroma-keyed from green; transparent exterior; border max alpha 0; visible green 0 | `18IfyAhcrnW16shx-rYrSMPWnYfStZfqz` | `COMPLETED` |
 | blue fictional ticket-gate/date stamp | `seishun_stamp_gate_blue_v1.png` | 2048x2048 RGBA; transparent exterior; border max alpha 0; visible green 0 | `1TkdqzYldyQc8kB6nxl4os8NGF28i_GM9` | `COMPLETED` |
+
+The red `祝` asset was replaced in-place on Drive after visual review found the earlier glyph placement off-center. The accepted replacement uses the centered green-background source, chroma-key transparency, and zero visible green pixels under the production QA rule.
 
 The blue stamp is fictional decorative artwork and does not reproduce a real railway operator mark. Both PNGs use distressed ink treatment suitable for the intended retro-ticket composition.
 
