@@ -1,10 +1,13 @@
 # 青春ふたりきっぷ — Placement Plan
 
-Status: `PREPARED / WAITING_FOR_DRIVE_CHILD_ASSET_GATE`
+Status: `FIXED_ASSET_SET_READY_FOR_PLACEMENT / FIGMA_PLACEMENT_ALLOWED`
+Current authority: GitHub `main`
 
 ## Scope
 
-This is the placement contract for paper item 4 only. It does not authorize any edit under `01_paper-items/rurubu-wedding/` and does not bypass the Drive one-asset-one-file completion gate in `ASSET-REGISTER.md`.
+This is the placement contract for paper item 4 only. It does not authorize any edit under `01_paper-items/rurubu-wedding/`.
+
+The Drive one-asset-one-file completion gate is already satisfied. See `ASSET-REGISTER.md` for Current production IDs and `FIGMA-PLACEMENT-PREP.md` for the exact Figma restart/build procedure.
 
 ## Current design authority
 
@@ -31,7 +34,7 @@ Keep these as Figma native text so copy, tracking and print-size legibility rema
 - `No.1024`
 - `旅のはじまりは、あなたと。`
 
-Use fixed assets only for geometry/illustration/texture:
+Completed vector-native production assets:
 - ticket frame: `assets/seishun_ticket_frame_v1.svg`
 - route geometry: `assets/seishun_route_v1.svg`
 - retro train line icon: `assets/seishun_train_icon_v1.svg`
@@ -41,22 +44,28 @@ Use fixed assets only for geometry/illustration/texture:
 - station mark: `assets/seishun_station_v1.svg`
 - calendar mark: `assets/seishun_calendar_v1.svg`
 
-The eight vectors remain candidates until each exists independently in Drive and passes post-upload verification.
+All eight exist independently in Drive and are `COMPLETED`.
 
-## Required decorative rebuilds
+## Completed decorative PNG assets
 
-Legacy stamp SVGs are reference only. Do not place them as production artwork because their flat construction and live Arial/sans-serif text are below the intended print character.
+Legacy stamp SVGs remain reference-only. Current production uses:
 
-Rebuild as independent transparent PNGs when image generation is available:
-1. red celebratory `祝` stamp — slightly uneven ink, clean enough for wedding stationery
-2. blue fictional ticket-gate/date stamp — clearly fictional, no real railway company mark
-3. optional subtle paper/ink texture accent if the Figma-native background cannot achieve the intended tactile print feel
+1. `seishun_stamp_shuku_red_v2_centered.png`
+   - centered red `祝`
+   - green-background source -> chroma-key transparency
+   - RGBA / transparent exterior / visible green 0
+   - Drive ID: `18IfyAhcrnW16shx-rYrSMPWnYfStZfqz`
+2. `seishun_stamp_gate_blue_v1.png`
+   - fictional blue ticket-gate/date stamp
+   - no real railway company mark
+   - RGBA / transparent exterior / visible green 0
+   - Drive ID: `1TkdqzYldyQc8kB6nxl4os8NGF28i_GM9`
 
-Each rebuilt decoration must be one asset per file and must pass alpha-edge QA plus Drive existence verification before promotion.
+No further decorative rebuild is required before the first Figma placement pass.
 
 ## Figma composition contract
 
-Recommended hierarchy for the provisional 72×25mm face:
+Recommended hierarchy for the provisional `72×25mm` face:
 1. primary title occupies the strongest visual band; do not rasterize it
 2. route line sits immediately below or adjacent as the second information layer
 3. date and `No.1024` form compact factual anchors
@@ -77,10 +86,12 @@ Recommended hierarchy for the provisional 72×25mm face:
 
 ## Placement gate
 
-`FIGMA_PLACEMENT_ALLOWED = false` until all of the following are true:
-- selected production fixed assets are independent Drive files, not merely children inside ZIPs or preview sheets
-- each selected asset has Drive ID/existence evidence in the asset register
-- required red/blue stamp artwork is rebuilt or explicitly replaced by Figma-native treatment
-- exact physical label area has been re-measured before print lock
+`FIGMA_PLACEMENT_ALLOWED = true`
 
-Once the Drive child-asset gate clears, this plan is the authority for assembling the item without revisiting the visual information architecture.
+The fixed-asset gate is complete. Remaining gates are downstream only:
+
+- build the semantic Figma layout according to `FIGMA-PLACEMENT-PREP.md`
+- physically re-measure the exact label application area before print lock
+- run actual-size readability and test-application QA
+
+No asset-generation blocker remains.
