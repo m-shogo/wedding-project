@@ -1,6 +1,6 @@
 # るるぶWEDDING — Print Vendor Working Target 2026-07-31
 
-Status: `WORKING_TARGET / NOT_PURCHASED / FINAL_VENDOR_CONFIRMATION_PENDING`
+Status: `WORKING_TARGET / OFFICIAL_REVERIFIED_20260731 / NOT_PURCHASED / FINAL_VENDOR_CONFIRMATION_PENDING`
 Current authority: GitHub `main`
 
 ## Decision
@@ -52,12 +52,19 @@ State: `VENDOR_EXPLICIT_VALUE_NOT_FOUND`
 
 Do not invent a vendor-required fold-safe margin.
 
+Official speed-check guidance explicitly warns that the fold position may shift slightly because of cutting/finishing deviation. Therefore the fold line must be treated as a real production-risk zone even though no numeric fold-safe distance was found.
+
 Working design rule until a template/operator answer is obtained:
 - do not place critical small text exactly across the center fold
 - do not use the fold line as the edge of a narrow text box
+- keep faces, tiny labels and key icons away from the fold when practical
 - decorative background / route line may cross the fold if visual QA permits
+- inspect the confirmation PDF / finishing preview before final approval
 
 This is a design precaution, not a claimed printer specification.
+
+Official reference:
+- https://raksul.com/guide/submit-data/preflight/folding-products/
 
 ## Data arrangement
 
@@ -71,6 +78,20 @@ Current Figma spread workflow therefore remains correct:
 Reference:
 - https://raksul.com/guide/submit-data/preflight/folding-products/
 
+## Minimum print-detail constraints — official re-verification
+
+ラクスル公式折りパンフレット作成ガイドを2026-07-31に再確認。
+
+Working minimums:
+- text: **6pt以上**
+- line width: **0.3pt / 0.1mm以上**
+- image resolution: **原寸100%で350〜400dpi**
+
+These are now part of the working print QA checklist and should be enforced before PRINT_READY.
+
+Reference:
+- https://raksul.com/guide/create-data/item/pamphlet/guide/
+
 ## Paper working candidate
 
 First working candidate: **マット紙 135kg**
@@ -79,7 +100,7 @@ Reasoning:
 - るるぶ風の写真・色を使いつつ、文字も多い
 - 光沢紙より反射が少なく読みやすい
 - 135kgはパンフレット用途向けのしっかりした厚み
-- ラクスルの折りパンフレットでマット紙135kgが案内されている
+- ラクスルの折りパンフレット厚さガイドで135kgが「しっかりした厚み」と案内され、商品パンフレット用途例が示されている
 
 Official notes:
 - マット紙: 光の反射が少なく、文字情報が多い印刷物向き
@@ -101,9 +122,12 @@ When Figma MCP access returns, use this working target instead of the former ful
 3. keep critical outer-edge text at least 3mm inside trim
 4. keep center fold at trim x=210mm
 5. keep fold-safe as design precaution only until vendor-specific confirmation
-6. compare A/B/C using identical print guides
-7. do not move final export to PRINT_READY until final vendor/order specification is rechecked
+6. enforce text >=6pt and line width >=0.3pt / 0.1mm
+7. verify placed raster images are suitable for 350–400dpi at intended print size
+8. compare A/B/C using identical print guides
+9. inspect Raksul confirmation PDF / finishing preview before final approval if Raksul remains the order target
+10. do not move final export to PRINT_READY until final vendor/order specification is rechecked
 
 ## Boundary
 
-This document resolves the **working print geometry** enough to continue design. It does not certify final print readiness and does not authorize purchase.
+This document resolves the **working print geometry and minimum-detail rules** enough to continue design. It does not certify final print readiness and does not authorize purchase.
