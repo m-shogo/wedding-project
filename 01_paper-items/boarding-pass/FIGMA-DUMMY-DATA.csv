@@ -1,0 +1,3 @@
+record_type,guest_name,table,from,to,date,gate,boarding_time,venue,thank_you
+DUMMY,山田 はるか 様,07,YOKOHAMA,HAPPINESS,2026.10.24,W24,14:10,VENUE TBD,今日は私たちの旅の1日にご搭乗いただきありがとうございます。
+STRESS,髙橋 アレクサンダー 様,11,YOKOHAMA,HAPPINESS,2026.10.24,W24,14:10,VENUE TBD,今日は私たちの旅の1日にご搭乗いただきありがとうございます。どうぞ最後までゆっくりお楽しみください。
