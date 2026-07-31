@@ -1,49 +1,64 @@
 # るるぶWEDDING — Minimum Real Content Collection
 
-Status: `READY_FOR_USER_FACTS / DECORATION_COMPLETE / FIGMA_VISUAL_PENDING`
+Status: `PREFILL_SYNCED / READY_FOR_USER_FACTS / DECORATION_COMPLETE / FIGMA_VISUAL_PENDING`
 Current authority: GitHub `main`
+Grounding source: `CONTENT-PREFILL-20260731.md`
 
 ## Purpose
 
-Current Cover / Inside / Back structure can already be tested. This sheet contains only the remaining real-world facts/copy that cannot be safely invented.
+Current Cover / Inside / Back structure can already be tested. This sheet contains the remaining real-world facts/copy that cannot be safely invented, plus grounded candidates already recovered from Current project evidence.
+
+Status vocabulary:
+- `FIXED` = Current fact; safe to use as production fact.
+- `GROUNDED_CANDIDATE` = supported by prior project/person evidence, but wording/content still requires couple review before final print.
+- `TODO` = genuinely missing and must not be invented.
+- `MISSING` = required source file/photo not found.
 
 Known production facts already fixed:
-- Wedding date: `2026.10.24`
-- Wedding location: `YOKOHAMA`
-- Theme: `TRAVEL`
-- Marriage registration date: `2026.02.11`
-- Cover working direction: `Cover A — Classic Rurubu` (candidate, not Final)
-- Inside working direction: `Inside A — Travel Editorial Grid` (candidate, not Final)
-- Back working direction: `Back A — Quiet Editorial Notes` (candidate, not Final)
+- Wedding date: `2026.10.24` — `FIXED`
+- Wedding location label: `YOKOHAMA` — `FIXED`
+- Theme: `TRAVEL` — `FIXED`
+- Marriage registration date: `2026.02.11` — `FIXED`
+- Cover working direction: `Cover A — Classic Rurubu` — candidate, not Final
+- Inside working direction: `Inside A — Travel Editorial Grid` — candidate, not Final
+- Back working direction: `Back A — Quiet Editorial Notes` — candidate, not Final
 - Decorative assets: PNG-only queue #1–#14 complete; SVG prohibited
 
-Do not invent any blank item below.
+Do not invent any remaining `TODO/MISSING` item below.
 
 ---
 
 ## A. Couple profile — minimum publishable fields
 
-Only fill fields worth printing. Optional fields may remain blank.
+Only print fields worth publishing. Optional fields may remain blank.
 
 ### Person A
-- display name: `TODO`
-- birthday / month-day: `OPTIONAL`
-- hometown: `OPTIONAL`
-- job / role: `OPTIONAL`
+- display name: `SHOGO` — `FIXED_FOR_WEDDING_CREATIVE`
+- Japanese-name glyph: `松﨑翔伍` vs existing draft `松崎 翔伍` — `TODO_CONFIRM_GLYPH_BEFORE_PRINT`
+- birthday / month-day: `OPTIONAL / TODO if publishing`
+- hometown: `OPTIONAL / TODO if publishing`
+- job / role: `OPTIONAL / TODO if publishing`
 - favorite food: `TODO`
 - favorite trip / place: `TODO`
 - hobby: `TODO`
 - one small personality/detail item: `TODO`
 
 ### Person B
-- display name: `TODO`
-- birthday / month-day: `OPTIONAL`
-- hometown: `OPTIONAL`
-- job / role: `OPTIONAL`
+- display name: `SHIORI` — `FIXED_FOR_WEDDING_CREATIVE`
+- Japanese full name: `岩堀汐梨` — `GROUNDED_CANDIDATE / CONFIRM_BEFORE_PRINT`
+- nickname candidate: `しおり / しーちゃん` — `GROUNDED_CANDIDATE`
+- birthday / month-day: `OPTIONAL / TODO if publishing`
+- hometown: `OPTIONAL / TODO if publishing`
+- job / role: `OPTIONAL / TODO if publishing`
 - favorite food: `TODO`
 - favorite trip / place: `TODO`
 - hobby: `TODO`
 - one small personality/detail item: `TODO`
+
+Grounded couple-life chip candidate:
+- `WITH くっきー & めろん 🐾` — `GROUNDED_CANDIDATE`
+
+Do not add dog ages / sexes / personalities unless separately confirmed.
 
 ---
 
@@ -51,83 +66,115 @@ Only fill fields worth printing. Optional fields may remain blank.
 
 Target: 20–35 Japanese characters per person answer.
 
+No reliable person-specific answers were found in Current evidence. All six answers remain genuine TODO.
+
 1. お互いの第一印象は？
-   - A: `TODO`
-   - B: `TODO`
+   - SHOGO: `TODO`
+   - SHIORI: `TODO`
 
 2. 相手の好きなところは？
-   - A: `TODO`
-   - B: `TODO`
+   - SHOGO: `TODO`
+   - SHIORI: `TODO`
 
 3. これから一緒に行きたい場所は？
-   - A: `TODO`
-   - B: `TODO`
+   - SHOGO: `TODO`
+   - SHIORI: `TODO`
 
 ---
 
 ## C. Travel note
 
-35–60 Japanese characters, magazine side-note tone.
+Target: 35–60 Japanese characters, magazine side-note tone.
 
-- `TODO`
+Grounded working candidate — `GROUNDED_CANDIDATE / NOT_FINAL`:
+> 沖縄、韓国、ハワイ。ふたりの思い出を巡りながら、今日の横浜へ。これからも旅は続きます。
+
+User review still required before print.
 
 ---
 
 ## D. Our History × 6
 
-Two dates are already fixed. Keep timeline titles short.
+Two dates are fixed. Other slots are partially grounded but dates remain missing.
 
 1. 出会い
    - date/year: `TODO`
+   - place / trigger: `TODO`
    - short title/detail: `TODO`
 
-2. 仲良くなった時期
+2. 仲良くなった時期 / 交際前後
    - date/year: `TODO`
-   - short title/detail: `TODO`
+   - grounded activity sequence: `ボウリング / ボードゲームカフェ / 焼肉 / チームラボ`
+   - working title: `何度も会ううちに` — `GROUNDED_CANDIDATE`
+   - working detail: `ボウリング、ボードゲームカフェ、焼肉、チームラボ。何度か会ううちに距離が近づき、交際へ。` — `GROUNDED_CANDIDATE`
 
-3. 印象的な旅行
+3. 印象的な旅行 / プロポーズ
+   - place: `ハワイ` — `GROUNDED_CANDIDATE`
+   - event: `雨の日のプロポーズ` — `GROUNDED_CANDIDATE`
+   - place detail: `タンタラスの丘 / ビーチ / ウルフギャング` — `GROUNDED_CANDIDATE`
    - date/year: `TODO`
-   - place/title: `TODO`
 
 4. 同棲 / 大きな生活イベント
+   - category: `同棲` — `GROUNDED_CANDIDATE`
    - date/year: `TODO`
-   - short title/detail: `TODO`
+   - short detail: `TODO`
 
 5. 入籍
-   - date: `2026.02.11`
+   - date: `2026.02.11` — `FIXED`
    - working title: `入籍`
 
 6. WEDDING DAY
-   - date: `2026.10.24`
+   - date: `2026.10.24` — `FIXED`
+   - place label: `YOKOHAMA` — `FIXED`
    - working title: `WEDDING DAY`
+
+Do not infer any missing date from photo metadata.
 
 ---
 
 ## E. Memory Spots × 4
 
-Each description target: 35–60 Japanese characters.
+First-pass set recovered from the adopted travel route. These are content candidates, not Final publication choices.
 
-1. title: `TODO`
-   - city/place: `TODO`
-   - why it matters: `TODO`
+### 1. 沖縄 — `GROUNDED_CANDIDATE`
+Working copy:
+> 青い海とゆっくり流れる時間。ふたりで過ごす心地よさを、何度も感じた思い出の場所。
 
-2. title: `TODO`
-   - city/place: `TODO`
-   - why it matters: `TODO`
+Still needed only if more precision is desired:
+- city / island / exact place: `TODO_OPTIONAL`
+- year/date: `TODO_OPTIONAL`
 
-3. title: `TODO`
-   - city/place: `TODO`
-   - why it matters: `TODO`
+### 2. 韓国 — `GROUNDED_CANDIDATE`
+Working copy:
+> よく食べて、よく歩いて、たくさん笑った旅。ふたりらしい楽しさが詰まった思い出の場所。
 
-4. title: `TODO`
-   - city/place: `TODO`
-   - why it matters: `TODO`
+Still needed only if more precision is desired:
+- city / exact place: `TODO_OPTIONAL`
+- year/date: `TODO_OPTIONAL`
 
-Existing Hawaii photographs are sufficient for first layout comparison; the four spots do not each need a unique photograph.
+### 3. ハワイ — `GROUNDED_CANDIDATE / HIGH_CONFIDENCE_IMPORTANCE`
+Working copy:
+> タンタラスの丘もビーチも雨。それでも最後はウルフギャングでプロポーズ。ふたりにとって忘れられない一日。
+
+Still needed:
+- proposal year/date: `TODO_OPTIONAL_FOR_SPOT / REQUIRED_IF_HISTORY_DATE_IS_PRINTED`
+
+### 4. 横浜 — `GROUNDED_CANDIDATE / TODAY_DESTINATION`
+Working copy:
+> 思い出を巡る旅の今日の目的地。2026年10月24日、みんなと迎える新しい旅のスタート地点。
+
+Decision still needed:
+- keep `横浜` as the present-day/future-facing fourth spot, or replace with another real past-memory location — `TODO_DECISION`
+
+Photo note:
+- existing Hawaii photographs are sufficient for first layout comparison;
+- four spots do not each need a unique photograph.
 
 ---
 
 ## F. Friends & Family × 3
+
+This remains the largest unresolved content block.
 
 Need meaningful real source photographs. Do not substitute unrelated travel/couple photos.
 
@@ -148,20 +195,27 @@ Need meaningful real source photographs. Do not substitute unrelated travel/coup
 
 ---
 
-## G. Remaining photo blocker
+## G. Photo state
 
+Already sufficient for layout test:
+- cover hero first candidate: `007.jpg`
+- bride-side profile first candidate: `024.jpg`
+- history / memory / back-cover candidates: existing Hawaii set
+
+Still missing:
 - groom-side clean profile portrait: `MISSING`
-- bride-side first candidate: existing `024.jpg`
-- cover hero first candidate: existing `007.jpg`
-- history / memory candidates: existing Hawaii set
+- three meaningful Friends / Family source photographs: `MISSING`
 
-Drive-wide audit did not find an acceptable groom-only portrait or three meaningful Friends / Family source photographs. Do not crop a couple image into a fake-equivalent single portrait without explicit visual review.
+Drive-wide audit did not find an acceptable groom-only portrait or three meaningful Friends / Family source photographs.
+
+Do not crop a couple image into a fake-equivalent single portrait without explicit visual review.
 
 ---
 
 ## H. Print-production blocker
 
 Still unknown; do not guess:
+- actual printer / print vendor
 - bleed
 - trim-safe margin
 - fold-safe margin
@@ -169,18 +223,29 @@ Still unknown; do not guess:
 - PDF/export profile
 - printer-specific color/export requirements
 
-These values must come from the actual printer / venue workflow before final print readiness.
+Current Drive/repo/email audit did not identify a confirmed profile-book printer specification. These values remain `PROVISIONAL` until the actual print workflow is chosen or confirmed.
 
 ---
 
-## Minimum response needed from the couple
+## Minimum response still needed from the couple
 
-The remaining editorial blocker can be resolved with:
-1. profile basics for both people
-2. 3 paired Q&A answers
-3. 4 relationship/history dates or periods before the already-known registration/wedding dates
-4. 4 Memory Spot names + one-line reasons
-5. which 3 friend/family groups should appear + short captions
-6. one groom-only portrait + three friend/family photos
+The remaining editorial blocker is now reduced to:
 
-Once these exist, production Figma can move directly from structural comparison into meaningful real-content visual QA when MCP access is available.
+1. SHOGO Japanese-name glyph for final print: `崎` or `﨑`
+2. minimum profile facts worth publishing for both people:
+   - favorite food
+   - favorite trip/place
+   - hobby
+   - one small personality/detail item
+3. six Q&A answers: 3 questions × 2 people
+4. relationship timing:
+   - meeting date/year
+   - dating/start period
+   - Hawaii proposal date/year if printed in History
+   - cohabitation date/year
+5. decide whether Memory Spot 04 stays `横浜` or becomes another past-memory destination
+6. choose three Friends / Family groups + write short captions
+7. provide one groom-only portrait + three Friends / Family photos
+8. choose/confirm the printer before final print-ready QA
+
+Everything else above can already be used as grounded first-pass content for production-Figma stress testing.
