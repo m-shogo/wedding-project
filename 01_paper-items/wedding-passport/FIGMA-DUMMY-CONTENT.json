@@ -1,0 +1,54 @@
+{
+  "status": "DUMMY_REPLACE_LATER",
+  "cover": {
+    "title": "WEDDING PASSPORT",
+    "date": "2026.10.24",
+    "location": "YOKOHAMA",
+    "subtitle": "OUR WEDDING JOURNEY"
+  },
+  "menu": {
+    "title": "MENU",
+    "items": [
+      "Amuse｜季節のひとくち前菜",
+      "Appetizer｜彩り野菜と魚介の前菜",
+      "Soup｜季節野菜のポタージュ",
+      "Fish｜白身魚のロースト ソース添え",
+      "Meat｜国産牛のロースト 季節の付け合わせ",
+      "Dessert｜パティシエ特製デザートとコーヒー"
+    ]
+  },
+  "drink": {
+    "title": "DRINK",
+    "items": [
+      "BEER｜ビール / ノンアルコールビール",
+      "WINE｜赤ワイン / 白ワイン",
+      "WHISKY｜ハイボール",
+      "COCKTAIL｜カクテル各種",
+      "SOFT DRINK｜ウーロン茶 / オレンジ / アップル",
+      "OTHER｜当日のドリンクメニューをご覧ください"
+    ]
+  },
+  "seating": {
+    "title": "SEATING CHART",
+    "head_table": "BRIDE & GROOM",
+    "tables": [
+      {"label": "TABLE 01", "guests": ["ゲスト 01-A", "ゲスト 01-B", "ゲスト 01-C", "ゲスト 01-D", "ゲスト 01-E"]},
+      {"label": "TABLE 02", "guests": ["ゲスト 02-A", "ゲスト 02-B", "ゲスト 02-C", "ゲスト 02-D", "ゲスト 02-E"]},
+      {"label": "TABLE 03", "guests": ["ゲスト 03-A", "ゲスト 03-B", "ゲスト 03-C", "ゲスト 03-D", "ゲスト 03-E"]},
+      {"label": "TABLE 04", "guests": ["ゲスト 04-A", "ゲスト 04-B", "ゲスト 04-C", "ゲスト 04-D", "ゲスト 04-E"]},
+      {"label": "TABLE 05", "guests": ["ゲスト 05-A", "ゲスト 05-B", "ゲスト 05-C", "ゲスト 05-D", "ゲスト 05-E"]},
+      {"label": "TABLE 06", "guests": ["ゲスト 06-A", "ゲスト 06-B", "ゲスト 06-C", "ゲスト 06-D", "ゲスト 06-E"]},
+      {"label": "TABLE 07", "guests": ["ゲスト 07-A", "ゲスト 07-B", "ゲスト 07-C", "ゲスト 07-D", "ゲスト 07-E"]},
+      {"label": "TABLE 08", "guests": ["ゲスト 08-A", "ゲスト 08-B", "ゲスト 08-C", "ゲスト 08-D", "ゲスト 08-E"]},
+      {"label": "TABLE 09", "guests": ["ゲスト 09-A", "ゲスト 09-B", "ゲスト 09-C", "ゲスト 09-D", "ゲスト 09-E"]},
+      {"label": "TABLE 10", "guests": ["ゲスト 10-A", "ゲスト 10-B", "ゲスト 10-C", "ゲスト 10-D", "ゲスト 10-E"]},
+      {"label": "TABLE 11", "guests": ["髙橋 アレクサンダー 様", "長いお名前テスト ゲストB", "ゲスト 11-C", "ゲスト 11-D", "ゲスト 11-E"]}
+    ]
+  },
+  "back": {
+    "title": "WEDDING JOURNEY",
+    "itinerary": "2026.10.24 / YOKOHAMA / CEREMONY → RECEPTION → NEXT JOURNEY",
+    "thank_you": "本日は私たちの新しい旅のはじまりを一緒に過ごしていただき、ありがとうございます。"
+  },
+  "replacement_rule": "Every value in this file is layout-only dummy content except explicitly fixed event copy. Replace menu, drink, seating names and final back-cover copy before FINAL export."
+}
