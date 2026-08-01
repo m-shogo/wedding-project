@@ -18,7 +18,7 @@ Authority: `m-shogo/wedding-project` `main`
 | ADD-01 | ウェルカムボード | `PLACEMENT_READY` |
 | ADD-02 | 11卓の国別テーブルサイン | `PREPARED_FOR_FIGMA` |
 | ADD-03 | 当日タイムテーブルボード | `PREPARED_FOR_FIGMA` |
-| ADD-04 | 受付サイン | `PENDING` |
+| ADD-04 | 受付サイン | `PREPARED_FOR_FIGMA` |
 | ADD-05 | サンキュータグ / プチギフトタグ | `PENDING` |
 | ADD-06 | フォトブースサイン | `PENDING` |
 | ADD-07 | エスコートカード案内ボード | `PENDING` |
@@ -35,7 +35,7 @@ Authority: `m-shogo/wedding-project` `main`
 
 ## Current pointer
 
-`ACTIVE_NEXT = ADD-04_RECEPTION_SIGNS_SPEC_AND_QUEUE`
+`ACTIVE_NEXT = ADD-05_THANK_YOU_GIFT_TAG_SPEC_AND_QUEUE`
 
 ## ADD-01 checkpoint
 
@@ -63,6 +63,18 @@ Authority: `m-shogo/wedding-project` `main`
 - schedule facts remain native Figma text
 - route and nodes remain native vectors
 - Drive folder: `1uVcXv2Xs0H7juheHk977pt7YxLMJez_j`
+- production raster: 0 by design
+- completion: `PREPARED_FOR_FIGMA`
+
+## ADD-04 checkpoint
+
+- 5/5 documents prepared
+- core set: groom-side A5, bride-side A5, optional shared A6 header
+- ADD-09 Guest Book scope explicitly kept separate
+- primary Japanese labels remain native Figma text
+- pair shares typography/paper system but avoids mirrored recolor duplication
+- gender-cliche motifs and app-like equal cards rejected
+- Drive folder: `1vjSYrbjzfZs_vyCIpQAbml9_en5RcH_r`
 - production raster: 0 by design
 - completion: `PREPARED_FOR_FIGMA`
 
