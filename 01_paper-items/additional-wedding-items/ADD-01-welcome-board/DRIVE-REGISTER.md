@@ -8,8 +8,10 @@ Date: 2026-08-01
 | Role | Name | Drive ID | URL | Verification |
 |---|---|---|---|---|
 | Project root | 2026-10-24_結婚式_ペーパーアイテム制作 | `14reXz-xiYANpyb0Q8iG4TbU8ecNuXurL` | https://drive.google.com/drive/folders/14reXz-xiYANpyb0Q8iG4TbU8ecNuXurL | `READBACK_OK` |
-| Additional items root | 05_追加ウェディングアイテム | `1iJGIzmNSlzwqrcv7P6UsNbstwBki1523` | https://drive.google.com/drive/folders/1iJGIzmNSlzwqrcv7P6UsNbstwBki1523 | `CREATED / READBACK_PENDING` |
-| ADD-01 folder | ADD-01_ウェルカムボード | `1UT-s_z2KOnzNeq9cluqJ_Uxh-xDzO6Kg` | https://drive.google.com/drive/folders/1UT-s_z2KOnzNeq9cluqJ_Uxh-xDzO6Kg | `CREATED / READBACK_PENDING` |
+| Additional items root | 05_追加ウェディングアイテム | `1iJGIzmNSlzwqrcv7P6UsNbstwBki1523` | https://drive.google.com/drive/folders/1iJGIzmNSlzwqrcv7P6UsNbstwBki1523 | `READBACK_OK` |
+| ADD-01 folder | ADD-01_ウェルカムボード | `1UT-s_z2KOnzNeq9cluqJ_Uxh-xDzO6Kg` | https://drive.google.com/drive/folders/1UT-s_z2KOnzNeq9cluqJ_Uxh-xDzO6Kg | `READBACK_OK` |
+
+Drive list readback confirmed that the ADD-01 folder exists directly under the additional-items root.
 
 ## Production assets
 
