@@ -20,7 +20,7 @@ Authority: `m-shogo/wedding-project` `main`
 | ADD-03 | 当日タイムテーブルボード | `PREPARED_FOR_FIGMA` |
 | ADD-04 | 受付サイン | `PREPARED_FOR_FIGMA` |
 | ADD-05 | サンキュータグ / プチギフトタグ | `PREPARED_FOR_FIGMA` |
-| ADD-06 | フォトブースサイン | `PENDING` |
+| ADD-06 | フォトブースサイン | `PREPARED_FOR_FIGMA` |
 | ADD-07 | エスコートカード案内ボード | `PENDING` |
 | ADD-08 | メニュー補助サイン | `PENDING` |
 | ADD-09 | ゲストブックサイン | `PENDING` |
@@ -35,69 +35,22 @@ Authority: `m-shogo/wedding-project` `main`
 
 ## Current pointer
 
-`ACTIVE_NEXT = ADD-06_PHOTO_BOOTH_SIGN_SPEC_AND_QUEUE`
+`ACTIVE_NEXT = ADD-07_ESCORT_CARD_GUIDE_BOARD_SPEC_AND_QUEUE`
 
-## ADD-01 checkpoint
+## Completed checkpoints
 
-- 5/5 documents prepared
-- four accepted production assets
-- Drive folder: `1UT-s_z2KOnzNeq9cluqJ_Uxh-xDzO6Kg`
-- completion: `PLACEMENT_READY`
-
-## ADD-02 checkpoint
-
-- 5/5 documents prepared
-- 11 destinations and country-specific art directions recorded
-- Drive folder: `1KmbIncy5Wl6aEqqjBQmssCsw_KZjM62r`
-- production raster: 0 by design
-- completion: `PREPARED_FOR_FIGMA`
-
-## ADD-03 checkpoint
-
-- 5/5 documents prepared
-- confirmed facts: `2026.10.24 SAT`, `YOKOHAMA`, Ceremony `14:10–14:40`, Reception `15:00–17:30`
-- unconfirmed information remains `TBD`
-- primary format: A2 portrait; A3 is a separately adapted comparison
-- art direction: warm-ivory concierge itinerary with one asymmetric route spine
-- equal rounded event-card dashboard rejected
-- schedule facts remain native Figma text
-- route and nodes remain native vectors
-- Drive folder: `1uVcXv2Xs0H7juheHk977pt7YxLMJez_j`
-- production raster: 0 by design
-- completion: `PREPARED_FOR_FIGMA`
-
-## ADD-04 checkpoint
-
-- 5/5 documents prepared
-- core set: groom-side A5, bride-side A5, optional shared A6 header
-- ADD-09 Guest Book scope explicitly kept separate
-- primary Japanese labels remain native Figma text
-- pair shares typography/paper system but avoids mirrored recolor duplication
-- gender-cliche motifs and app-like equal cards rejected
-- Drive folder: `1vjSYrbjzfZs_vyCIpQAbml9_en5RcH_r`
-- production raster: 0 by design
-- completion: `PREPARED_FOR_FIGMA`
-
-## ADD-05 checkpoint
-
-- 5/5 documents prepared
-- primary single master: `50 × 80 mm` portrait
-- editorial comparison: `45 × 70 mm`, reflow required rather than proportional scaling
-- approved copy: `Thank you for traveling with us.`, `Have a safe trip home.`, `2026.10.24`
-- single master and imposed sheet authority explicitly separated
-- provisional 5 mm punch and punch-clearance rules recorded
-- art direction: quiet luggage note / last-stop object, not a miniature boarding pass
-- all text remains native Figma text; route and endpoint remain native vectors
-- Drive folder: `1_V20y77VU1aGrJtqpl7U5XUpC-bQuTxV`
-- production raster: 0 by design
-- physical package, attachment method, printer and 100% proof remain pending
-- completion: `PREPARED_FOR_FIGMA`
+- ADD-01: 5/5 docs, four accepted assets, Drive `1UT-s_z2KOnzNeq9cluqJ_Uxh-xDzO6Kg`, `PLACEMENT_READY`
+- ADD-02: 5/5 docs, 11 destinations specified, Drive `1KmbIncy5Wl6aEqqjBQmssCsw_KZjM62r`, `PREPARED_FOR_FIGMA`
+- ADD-03: 5/5 docs, confirmed times recorded, Drive `1uVcXv2Xs0H7juheHk977pt7YxLMJez_j`, `PREPARED_FOR_FIGMA`
+- ADD-04: 5/5 docs, groom/bride reception signs specified, Drive `1vjSYrbjzfZs_vyCIpQAbml9_en5RcH_r`, `PREPARED_FOR_FIGMA`
+- ADD-05: 5/5 docs, 50 × 80 mm master specified, Drive `1_V20y77VU1aGrJtqpl7U5XUpC-bQuTxV`, `PREPARED_FOR_FIGMA`
+- ADD-06: 5/5 docs, A3 portrait/A4 reflow, editable title/date/location, native vector decoration, Drive `1Ehk_oQ8vhAGo3DYBbgyOGfA03u0pu5wb`, no new raster by design, `PREPARED_FOR_FIGMA`
 
 ## Execution rules
 
 - Current pointerを優先する
 - 完成済み4種へwriteしない
-- FigmaはCurrentが許可するまで使用しない
+- Figmaを使用しない
 - 未確定情報を事実として作らない
 - 素材不要ならラスターを無理に生成しない
 - 各アイテムは `SPEC.md`、`ASSET-QUEUE.md`、`DRIVE-REGISTER.md`、`QA.md`、`FIGMA-PLACEMENT-BRIEF.md` を揃える
