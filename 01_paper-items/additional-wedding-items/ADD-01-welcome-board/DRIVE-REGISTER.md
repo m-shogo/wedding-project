@@ -1,7 +1,7 @@
 # ADD-01 ウェルカムボード — DRIVE REGISTER
 
-Status: `FOLDER_READY / WB-01_STORED_AND_VERIFIED`
-Date: 2026-08-01
+Status: `FOLDER_READY / WB-01_WB-02_STORED_AND_VERIFIED`
+Date: 2026-08-02
 
 ## Parent structure
 
@@ -16,7 +16,7 @@ Date: 2026-08-01
 | Asset ID | Filename | MIME type | Drive ID | URL | Parent | Status |
 |---|---|---|---|---|---|---|
 | WB-01 | `ADD-01_WB-01_A2_PORTRAIT_BASE_BACKGROUND_v1.png` | `image/png` | `1XgE7c8cffxmMViEqeqJJ8Phnd5YxaE4l` | https://drive.google.com/file/d/1XgE7c8cffxmMViEqeqJJ8Phnd5YxaE4l/view | `1UT-s_z2KOnzNeq9cluqJ_Uxh-xDzO6Kg` | `READBACK_OK / ACCEPTED` |
-| WB-02 | TBD | TBD | — | — | — | `PENDING` |
+| WB-02 | `ADD-01_WB-02_TRAVEL_ROUTE_LINE_TRANSPARENT_v1.png` | `image/png` | `1cSpz2tcZZ0eKPBhD8vdacjc3GtWqPwf9` | https://drive.google.com/file/d/1cSpz2tcZZ0eKPBhD8vdacjc3GtWqPwf9/view | `1UT-s_z2KOnzNeq9cluqJ_Uxh-xDzO6Kg` | `READBACK_OK / ACCEPTED` |
 | WB-03 | TBD | TBD | — | — | — | `PENDING` |
 | WB-04 | TBD | TBD | — | — | — | `PENDING` |
 | WB-05 | TBD | TBD | — | — | — | `PENDING_REVIEW` |
@@ -30,6 +30,17 @@ Date: 2026-08-01
 - SHA-256: `2a2a0244862355e777926839ae39d9ce9e6c6c9e602ab6c0e53d3d276a0692f7`
 - Upload response: success
 - Drive search readback: exact filename and `image/png` confirmed
+
+## WB-02 integrity
+
+- Dimensions: 3083 × 1233 px
+- Mode: RGBA
+- Alpha extrema: `0–235`
+- File size: 26,708 bytes
+- SHA-256: `4beb9590d729130cb27863c626277f677ffd47840edcde6b7f444181886ecc84`
+- Upload response: success
+- Drive search readback: exact filename and `image/png` confirmed
+- Parent folder: `1UT-s_z2KOnzNeq9cluqJ_Uxh-xDzO6Kg`
 
 ## Rules
 
