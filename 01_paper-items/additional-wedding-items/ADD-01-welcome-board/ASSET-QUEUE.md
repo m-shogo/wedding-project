@@ -1,6 +1,6 @@
 # ADD-01 ウェルカムボード — ASSET QUEUE
 
-Status: `ASSET_IN_PROGRESS / WB-01_WB-02_ACCEPTED`
+Status: `ASSET_IN_PROGRESS / WB-01_WB-02_WB-03_ACCEPTED`
 Date: 2026-08-02
 
 ## Existing asset search
@@ -8,6 +8,7 @@ Date: 2026-08-02
 - GitHub search before WB-01 production: no existing WB-01 production asset
 - Google Drive ADD-01 folder readback before production: empty
 - GitHub and Drive exact-name search before WB-02 production: no existing WB-02 production asset
+- GitHub and Drive exact-name search before WB-03 production: no existing WB-03 production asset
 - 完成済み4種は参照のみ。改変・再生成禁止
 
 ## Production queue
@@ -16,7 +17,7 @@ Date: 2026-08-02
 |---|---|---|---|---|
 | WB-01 | A2縦ベース背景 | raster/background | `ACCEPTED` | `ADD-01_WB-01_A2_PORTRAIT_BASE_BACKGROUND_v1.png`; 4961×7016 px; 300 dpi; RGB PNG; mint-to-blue paper/travel atmosphere; no text |
 | WB-02 | 旅行ルート線装飾 | transparent PNG | `ACCEPTED` | `ADD-01_WB-02_TRAVEL_ROUTE_LINE_TRANSPARENT_v1.png`; 3083×1233 px; RGBA; curved dashed route, five route nodes, minimal paper-plane silhouette; no text |
-| WB-03 | 旅行バッジ装飾 | transparent PNG | `PENDING` | 結婚式用途、固有名詞なし |
+| WB-03 | 旅行バッジ装飾 | transparent PNG | `ACCEPTED` | `ADD-01_WB-03_TRAVEL_BADGE_TRANSPARENT_v1.png`; 1826×1748 px; RGBA; irregular luggage-sticker silhouette, globe, route, plane, blank ribbon/tab; no text |
 | WB-04 | 方位/コンパス装飾 | transparent PNG | `PENDING` | 控えめ、写真を邪魔しない |
 | WB-05 | 横浜アクセント装飾 | transparent PNG | `PENDING_REVIEW` | 会場や写真と競合しない抽象表現 |
 | WB-06 | 写真フレームマスク仕様 | editable shape | `SPEC_READY` | 画像生成せずFigma shapeで作成 |
@@ -47,6 +48,19 @@ Date: 2026-08-02
 - Drive readback: exact filename, MIME type `image/png`, and ADD-01 parent folder confirmed
 - Visual intent: warm metallic-silver route with restrained navy/mint/gold accents; sparse nodes and paper plane; no text or fixed wedding copy
 
+## WB-03 evidence
+
+- Mechanical QA: PASS
+- Visual QA: PASS
+- Dimensions: 1826 × 1748 px
+- Mode: RGBA
+- Alpha extrema: `0–245`; transparent exterior exists
+- File size: 64,784 bytes
+- SHA-256: `407ec787643771040de0125957dd49c7491604f820440c52c27ee5c4399799c3`
+- Drive ID: `1TOok5ps43XKrf3FN2OUV46Sr8cAgWgxR`
+- Drive readback: exact filename, MIME type `image/png`, and ADD-01 parent folder confirmed
+- Visual intent: irregular luggage-sticker badge with ivory/navy base, restrained metallic rim, globe, travel route, plane and blank ribbon/tab; no text or fixed wedding copy
+
 ## Generation constraints
 
 - 人物・犬を生成またはAI変換しない
@@ -71,4 +85,4 @@ Date: 2026-08-02
 
 ## ACTIVE_NEXT
 
-`WB-03_TRAVEL_BADGE_TRANSPARENT_PNG`
+`WB-04_COMPASS_DECOR_TRANSPARENT_PNG`
