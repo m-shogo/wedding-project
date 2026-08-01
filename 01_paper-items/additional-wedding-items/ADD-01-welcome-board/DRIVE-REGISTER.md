@@ -1,6 +1,6 @@
 # ADD-01 ウェルカムボード — DRIVE REGISTER
 
-Status: `FOLDER_READY / NO_PRODUCTION_ASSETS`
+Status: `FOLDER_READY / WB-01_STORED_AND_VERIFIED`
 Date: 2026-08-01
 
 ## Parent structure
@@ -11,19 +11,25 @@ Date: 2026-08-01
 | Additional items root | 05_追加ウェディングアイテム | `1iJGIzmNSlzwqrcv7P6UsNbstwBki1523` | https://drive.google.com/drive/folders/1iJGIzmNSlzwqrcv7P6UsNbstwBki1523 | `READBACK_OK` |
 | ADD-01 folder | ADD-01_ウェルカムボード | `1UT-s_z2KOnzNeq9cluqJ_Uxh-xDzO6Kg` | https://drive.google.com/drive/folders/1UT-s_z2KOnzNeq9cluqJ_Uxh-xDzO6Kg | `READBACK_OK` |
 
-Drive list readback confirmed that the ADD-01 folder exists directly under the additional-items root.
-
 ## Production assets
 
-No production assets have been uploaded yet.
+| Asset ID | Filename | MIME type | Drive ID | URL | Parent | Status |
+|---|---|---|---|---|---|---|
+| WB-01 | `ADD-01_WB-01_A2_PORTRAIT_BASE_BACKGROUND_v1.png` | `image/png` | `1XgE7c8cffxmMViEqeqJJ8Phnd5YxaE4l` | https://drive.google.com/file/d/1XgE7c8cffxmMViEqeqJJ8Phnd5YxaE4l/view | `1UT-s_z2KOnzNeq9cluqJ_Uxh-xDzO6Kg` | `READBACK_OK / ACCEPTED` |
+| WB-02 | TBD | TBD | — | — | — | `PENDING` |
+| WB-03 | TBD | TBD | — | — | — | `PENDING` |
+| WB-04 | TBD | TBD | — | — | — | `PENDING` |
+| WB-05 | TBD | TBD | — | — | — | `PENDING_REVIEW` |
 
-| Asset ID | Filename | MIME type | Drive ID | Status |
-|---|---|---|---|---|
-| WB-01 | TBD | TBD | — | `PENDING` |
-| WB-02 | TBD | TBD | — | `PENDING` |
-| WB-03 | TBD | TBD | — | `PENDING` |
-| WB-04 | TBD | TBD | — | `PENDING` |
-| WB-05 | TBD | TBD | — | `PENDING_REVIEW` |
+## WB-01 integrity
+
+- Dimensions: 4961 × 7016 px
+- Resolution metadata: 299.9994 dpi
+- Mode: RGB
+- File size: 36,169,290 bytes
+- SHA-256: `2a2a0244862355e777926839ae39d9ce9e6c6c9e602ab6c0e53d3d276a0692f7`
+- Upload response: success
+- Drive search readback: exact filename and `image/png` confirmed
 
 ## Rules
 
