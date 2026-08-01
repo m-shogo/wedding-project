@@ -1,6 +1,6 @@
 # ADD-01 ウェルカムボード — QA
 
-Status: `QA_PLAN_READY / NO_ASSET_TESTED`
+Status: `QA_PLAN_READY / DRIVE_FOLDER_VERIFIED / NO_ASSET_TESTED`
 Date: 2026-08-01
 
 ## Layout QA
@@ -43,15 +43,17 @@ WB-02〜WB-05に適用。
 
 - [x] Driveの追加アイテム親フォルダを作成
 - [x] DriveのADD-01フォルダを作成
-- [ ] Drive folder readback
+- [x] Drive folder readback
 - [ ] 正本素材をDriveへ保存
 - [ ] ファイル名・MIME type・親フォルダをreadback
-- [ ] Drive IDを`DRIVE-REGISTER.md`へ記録
-- [ ] Git write後readback
+- [x] Drive folder IDを`DRIVE-REGISTER.md`へ記録
+- [ ] production asset IDを`DRIVE-REGISTER.md`へ記録
+- [ ] production assetのGit write後readback
 
 ## Current result
 
-- QA PASS: 0 production assets
+- QA PASS: Drive folder structure 1 set
+- Production asset QA PASS: 0
 - QA REJECT: 0
 - Blocking: production asset generation not started
 - Item status: `SPEC_READY`
