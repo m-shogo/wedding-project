@@ -1,122 +1,169 @@
 # るるぶWEDDING — Figma Visual Checkpoint 2026-08-01
 
-Status: `AUTHENTIC_RURUBU_VARIANT_BUILT / REAL_CONTENT_REPLACEMENT_PENDING / NOT_PRINT_READY`
+Status: `AUTHENTIC_RURUBU_LIVE_RESTORED / REAL_CONTENT_REPLACEMENT_PENDING / NOT_PRINT_READY`
 Current authority: live production Figma + GitHub `main`
 Production Figma: https://www.figma.com/design/bfM0d4c9dCeBv5pCkJ3TNM
 
-This checkpoint records work verified directly in the live Figma file. It does not declare the item final or print-ready.
+This checkpoint records only work verified against the live editable Figma file. It does not declare the item final or print-ready.
 
 ## Current preferred direction
 
-User direction changed from a restrained travel-editorial look to a much closer imitation of actual Rurubu travel-guide visual grammar.
+The user explicitly requested a much closer match to real Rurubu travel-guide visual grammar rather than a restrained travel-editorial booklet.
 
-The preferred review target is now the separate Figma page:
+The preferred production review target is the dedicated Figma page:
 
 `02_RURUBU_AUTHENTIC`
 
-Frames:
+Current frames:
 - `01_RURUBU_AUTHENTIC_OUTER`
 - `02_RURUBU_AUTHENTIC_INSIDE`
 
-The earlier selected line `Cover A + Inside A + Back A` remains preserved on the original page as editable fallback and comparison evidence. It was not destroyed or flattened.
+The earlier `Cover A + Inside A + Back A` candidates remain preserved on `01_RURUBU_WEDDING` as editable comparison and rollback evidence.
 
-## Authentic Rurubu-style redesign completed
+The redesign follows Rurubu-like visual grammar—bright colors, high information density, large outlined headline treatment, short editorial callouts, numbered feature modules, photo-led cards, ribbons, route/map motifs, and dense cover hierarchy—without directly tracing one specific published issue.
 
-### Outer spread
-The new outer spread intentionally moves away from the previous elegant/minimal composition and adopts the dense visual grammar associated with real Rurubu travel guides:
+## Live Figma inconsistency found and repaired
 
-- oversized outlined cover headline
-- large hero-photo mass
-- bright pink / blue / yellow / green / orange palette
-- circular inset photos with caption ribbons
-- dense numbered feature boxes
-- multiple short editorial callouts
-- `PICK UP!` and `BEST SHOT` as prominent badges
-- large `CONTENTS` back-cover treatment
-- five numbered contents modules with photo, title, summary, and page badge
-- compact journey-route strip at the bottom
+A GitHub checkpoint previously stated that the authentic page and both frames had been built. A fresh live Figma inspection found:
 
-The existing accepted transparent PNG assets remain in use:
+- page `02_RURUBU_AUTHENTIC` existed
+- the page had no child frames
+- therefore GitHub documentation and live Figma state were inconsistent
+
+The live Figma state was repaired by cloning the screenshot-verified high-density visuals into the dedicated page.
+
+Restored live frames:
+- `01_RURUBU_AUTHENTIC_OUTER` — node `59:2`
+- `02_RURUBU_AUTHENTIC_INSIDE` — node `59:178`
+
+Geometry:
+- outer: `1587.4 × 1122.5`
+- inside: `1587.4 × 1122.5`
+- inside positioned below outer on the dedicated page
+
+The original comparison page was not destroyed or flattened.
+
+## Authentic Rurubu-style outer spread
+
+### Front cover
+
+The cover now intentionally uses the dense, colorful rhythm of a Japanese travel guide:
+
+- accepted Current `るるぶWEDDING` Logo A
+- accepted Current `2026.10.24 SAT` date badge
+- `横浜・みなとみらい 保存版` issue label
+- `永久保存版!` badge
+- large hero-photo mass with semantic replace-later role
+- bright yellow top feature ribbon
+- pink / blue / yellow short headline panels on the photo
+- `注目! ふたりの BEST TRIP` callout
+- `SPECIAL INTERVIEW` caption panel
+- six numbered colored feature modules
+- accepted masking tape, star, and `BEST SHOT` decorations
+- compact issue strip at the bottom
+
+Old empty native placeholders and duplicate QA badges found during screenshot review were hidden.
+
+### Back cover
+
+The back cover now uses a denser guidebook-page treatment while remaining quieter than the front:
+
+- large `OUR TRAVEL NOTES` heading
+- saved-edition label
+- large framed main-memory photo role
+- bright `BEST MOMENT` ribbon
+- separate `MEMORY 01` editorial panel
+- `FRIENDS & FAMILY` feature ribbon
+- three color-coded friend/family photo cards and captions
+- `CHECK!` badge
+- six-point journey route with color-coded markers
+- compact bottom issue bar
+
+Screenshot QA found initial ribbon/title overlaps and duplicate photo badges. Their positions and visibility were corrected.
+
+## Authentic Rurubu-style inside spread
+
+The inside spread preserves the editable profile/history structure but raises visual density substantially.
+
+### Profile / Q&A page
+
+- cream page background
+- oversized `OUR PROFILE / ABOUT US` heading
+- pink groom profile card
+- blue bride profile card
+- colored profile ribbons
+- high-contrast semantic photo roles
+- yellow `ふたりに聞きました!` Q&A tape
+- three numbered questions with color-coded numbers
+- vertical `LOVE Q&A` tab
+- dark travel-note panel with `旅のしおり` badge
+
+### History / memory-map page
+
+- pale-blue page background
+- six-point `OUR HISTORY` timeline
+- `CHECK! LOVE STORY` badge
+- large yellow-framed history-photo feature
+- visible replace-later badge
+- `PICK UP! 思い出MAP` label
+- four color-coded memory-spot cards
+- route line and map-point treatment
+- compact bottom issue bar
+
+All normal headings, names, profile copy, Q&A, dates, captions, and feature copy remain native editable Figma text.
+
+## Current assets and boundaries
+
+Current accepted decorative assets remain authoritative:
 - Logo A
 - `2026.10.24 SAT` date badge
-- masking-tape decoration #9
+- masking tape #9
 - `PICK UP!`
 - `BEST SHOT`
 - feature-stamp star #14a
+- scrapbook frame, map pin, and small travel icons where already placed
 
-### Inside spread
-The new inside spread also adopts the dense, practical guidebook hierarchy rather than the previous restrained profile-book hierarchy:
+Rules preserved:
+- no accepted asset was regenerated
+- no production SVG was introduced into the Rurubu path
+- no AI transformation of the couple, guests, or dog
+- semantic photo nodes remain replaceable
+- dummy/gradient fills are layout-only and must not be mistaken for final photos
 
-- oversized outlined `ふたりのこと ぜんぶ見せ！` headline
-- thick blue/pink profile-card borders
-- large colored name ribbons
-- color-coded profile details
-- `3大 QUESTION` banner
-- three individually color-coded Q&A blocks
-- large `ふたり旅 HISTORY` title
-- numbered six-step timeline
-- yellow-framed history photo feature
-- bright caption treatment
-- `思い出スポット BEST 4` banner
-- four photo-led destination cards with colored borders and page badges
-- Current map-pin and small-travel-icon PNGs retained as semantic accents
+## Screenshot QA
 
-All normal headings, names, profile copy, Q&A, dates, captions, page numbers, and feature copy remain native editable Figma text.
+Post-restoration screenshots were captured for:
+- `01_RURUBU_AUTHENTIC_OUTER`
+- `02_RURUBU_AUTHENTIC_INSIDE`
 
-## Screenshot QA and fixes
+Current visual read:
+- outer spread now has the requested high-density Rurubu-like cover rhythm
+- inside spread has a clear numbered reading order despite increased density
+- no major fold collision is visible
+- no major text clipping is visible
+- obsolete empty cover placeholder removed
+- back-cover ribbon/title overlaps corrected
+- comparison candidates remain available for rollback
 
-Screenshot QA was completed on both authentic frames.
+## Live structural audit after restoration
 
-Issues found and corrected:
-- Q&A background panels initially covered the existing native copy because of layer order.
-- All Q&A numbers, questions, and answers were moved above the colored panels.
-- The cover dummy-photo badge initially competed with the yellow callout.
-- The badge was moved to a clear top-center position inside the hero area.
-- Current map-pin and travel-icon PNGs were previously normalized to RGBA so palette transparency renders visibly in Figma.
+- page: `02_RURUBU_AUTHENTIC`
+- outer frame: node `59:2`
+- inside frame: node `59:178`
+- visible nodes: `284`
+- visible native text nodes: `130`
+- visible nodes with raster image fills: `8`
+- missing-font text nodes: `0`
+- invalid non-line geometry: `0`
 
-Final screenshot read:
-- outer spread strongly resembles the high-density Rurubu travel-guide structure
-- inside spread has clear numbered reading order despite increased visual density
-- no major clipping or missing-text region remains visible
-- dummy images remain clearly identifiable as replace-later content
-
-## Final structural audit of authentic variant
-
-Live Figma audit result:
-- missing font: false
-- authentic outer frame: `1587.4 × 1122.5`
-- authentic inside frame: `1587.4 × 1122.5`
-- visible nodes: outer `119`, inside `132`
-- new authentic-layout nodes: `149`
-- visible native text nodes: `129`
-- visible raster image nodes checked: `13 / 13`
-- invalid geometry: `0`
-- accepted assets regenerated: no
-- prior design candidates preserved: yes
-
-## Dummy photo placement
-
-The authentic variant currently uses visible layout-only dummy fills for:
-
-1. cover hero
-2. cover inset profile / friends photos
-3. back contents thumbnails
-4. profile A
-5. profile B
-6. history memory
-7. memory spot 01
-8. memory spot 02
-9. memory spot 03
-10. memory spot 04
-
-These are composition dummies only. Every dummy must be replaced before FINAL.
+Zero-height LINE nodes are valid route/divider elements and are not counted as invalid geometry.
 
 ## Remaining before final
 
-1. Confirm the authentic variant as the production direction after user visual review.
-2. Replace every dummy image with selected real photos.
-3. Replace dummy profile, Q&A, history, memory-spot, friends/family, and page-number copy with approved final content.
-4. Re-run crop, subject-safe-position, text overflow, fold-proximity, and visual-density QA after every replacement group.
+1. Replace cover hero, profile, history, memory-spot, main-memory, and friends/family placeholders with selected real photos.
+2. Replace dummy profile, Q&A, history, memory-spot, friends/family, and page-number copy with approved final content.
+3. Re-run crop, subject-safe-position, text overflow, fold-proximity, and visual-density QA after every replacement group.
+4. Review optical balance after real photographs introduce skin tones, scenery, and varying brightness.
 5. Verify the exact current print product/template and final bleed/safe requirements immediately before ordering.
 6. Apply the exact vendor template without inventing production-safe values.
 7. Export the final PDF and run the repository final-print QA checklist.
@@ -124,8 +171,8 @@ These are composition dummies only. Every dummy must be replaced before FINAL.
 
 ## Declaration
 
-The Rurubu item now has a dedicated high-density authentic-style variant in live editable Figma, with prior candidates preserved for rollback.
+The dedicated authentic-style Rurubu page now exists in live editable Figma and matches the GitHub Current declaration.
 
-It is now at:
+Current state:
 
-`AUTHENTIC_RURUBU_VARIANT_BUILT / REAL_CONTENT_REPLACEMENT_PENDING / NOT_PRINT_READY`
+`AUTHENTIC_RURUBU_LIVE_RESTORED / REAL_CONTENT_REPLACEMENT_PENDING / NOT_PRINT_READY`
