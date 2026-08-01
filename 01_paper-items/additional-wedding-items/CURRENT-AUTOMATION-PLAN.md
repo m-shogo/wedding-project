@@ -38,31 +38,69 @@ Repository authority: `m-shogo/wedding-project` `main`
 
 成果物は、画像生成・ローカル/プログラム処理・Google Drive・Git管理までとする。
 
+Figma課金後に配置・編集できるよう、各成果物では以下を準備する。
+
+- 印刷サイズ
+- 塗り足し・安全域
+- 可変テキスト一覧
+- 画像と編集テキストの分離
+- semantic node name案
+- Drive正本ID
+- 配置メモ
+
 ## 3. 追加制作の固定順
 
 先頭の未完了1件から進める。順番を飛ばさない。
 
-1. ウェルカムボード
-2. 11卓の国別テーブルサイン
-3. 当日タイムテーブルボード
-4. 受付サイン
-5. サンキュータグ
-6. フォトブースサイン
-7. エスコートカード案内ボード
-8. メニュー補助サイン
+### Phase A — 最優先
+
+1. `ADD-01` ウェルカムボード
+2. `ADD-02` 11卓の国別テーブルサイン
+3. `ADD-03` 当日タイムテーブルボード
+4. `ADD-04` 受付サイン
+5. `ADD-05` サンキュータグ / プチギフトタグ
+
+### Phase B — 優先高
+
+6. `ADD-06` フォトブースサイン
+7. `ADD-07` エスコートカード案内ボード
+8. `ADD-08` メニュー補助サイン
+9. `ADD-09` ゲストブックサイン
+10. `ADD-10` クローク / お手洗い / 会場案内サイン
+
+### Phase C — 拡張候補
+
+11. `ADD-11` 写真共有 / ハッシュタグ / QR案内サイン
+12. `ADD-12` 新郎新婦クイズカード
+13. `ADD-13` メッセージカード / 寄せ書きカード
+14. `ADD-14` 二次会案内カード / サイン
+15. `ADD-15` 料理紹介カード / 各国テーマ説明カード
+16. `ADD-16` 両親贈呈品メッセージカード
+17. `ADD-17` 子ども向けミニカード / ぬりえ
+
+詳細は `MASTER-LIST.md` を正本とする。
 
 ### 初期状態
 
-| # | アイテム | 状態 |
-|---:|---|---|
-| 1 | ウェルカムボード | `PENDING` |
-| 2 | 11卓の国別テーブルサイン | `PENDING` |
-| 3 | 当日タイムテーブルボード | `PENDING` |
-| 4 | 受付サイン | `PENDING` |
-| 5 | サンキュータグ | `PENDING` |
-| 6 | フォトブースサイン | `PENDING` |
-| 7 | エスコートカード案内ボード | `PENDING` |
-| 8 | メニュー補助サイン | `PENDING` |
+| ID | アイテム | 優先度 | 状態 |
+|---|---|---|---|
+| ADD-01 | ウェルカムボード | 最優先 | `PENDING` |
+| ADD-02 | 11卓の国別テーブルサイン | 最優先 | `PENDING` |
+| ADD-03 | 当日タイムテーブルボード | 最優先 | `PENDING` |
+| ADD-04 | 受付サイン | 最優先 | `PENDING` |
+| ADD-05 | サンキュータグ / プチギフトタグ | 最優先 | `PENDING` |
+| ADD-06 | フォトブースサイン | 高 | `PENDING` |
+| ADD-07 | エスコートカード案内ボード | 高 | `PENDING` |
+| ADD-08 | メニュー補助サイン | 高 | `PENDING` |
+| ADD-09 | ゲストブックサイン | 高 | `PENDING` |
+| ADD-10 | クローク / お手洗い / 会場案内サイン | 高 | `PENDING` |
+| ADD-11 | 写真共有 / ハッシュタグ / QR案内サイン | 中 | `PENDING` |
+| ADD-12 | 新郎新婦クイズカード | 中 | `PENDING` |
+| ADD-13 | メッセージカード / 寄せ書きカード | 中 | `PENDING` |
+| ADD-14 | 二次会案内カード / サイン | 条件付き | `PENDING_REQUIREMENT_CHECK` |
+| ADD-15 | 料理紹介カード / 各国テーマ説明カード | 中 | `PENDING` |
+| ADD-16 | 両親贈呈品メッセージカード | 中 | `PENDING` |
+| ADD-17 | 子ども向けミニカード / ぬりえ | 条件付き | `PENDING_REQUIREMENT_CHECK` |
 
 各実行開始時にGitとDriveを再確認し、既に成果物と完了証跡がある場合は状態を更新して再作成を防止する。
 
@@ -71,18 +109,21 @@ Repository authority: `m-shogo/wedding-project` `main`
 - 開始: 2026-08-01 13:00 JST
 - 頻度: 1時間ごと
 - 回数: 24回
-- 目的: 2026-08-02中までに可能な限り追加8種を完了する
+- 目的: 2026-08-02中までに可能な限りPhase A/Bを完了し、Phase CのFigma前準備を進める
 
-1回の実行で1素材だけ作って止まらず、時間・品質・ツール制約の許す範囲で、同一アイテムの未完了キューを連続処理する。
+品質ゲートを下げて見かけ上の完了数を増やしてはならない。
 
 ## 5. 毎回の必須開始手順
 
 1. GitHub `main` の最新状態を取得する。
 2. この `CURRENT-AUTOMATION-PLAN.md` を読む。
-3. 対象アイテムのitem-specificキュー・QA・Drive registerを読む。
-4. Google Driveの対象フォルダを確認する。
-5. `COMPLETED` / `PLACEMENT_READY` / 採用済み成果物をスキップする。
-6. 固定順の先頭にある本当の未完了1件を決める。
+3. `POSTMORTEM-AND-REPEAT-PREVENTION.md` を読む。
+4. `MASTER-LIST.md` と `CURRENT-STATUS.md` を読む。
+5. 対象アイテムのitem-specificキュー・QA・Drive registerを読む。
+6. Google Driveの対象フォルダを確認する。
+7. `COMPLETED` / `PLACEMENT_READY` / `ACCEPTED`をスキップする。
+8. `GENERATED_ONLY` / `DRIVE_UPLOAD_BLOCKED` / `IN_PROGRESS`を先に回収する。
+9. 固定順の先頭にある本当の未完了1件を決める。
 
 前回の会話・記憶・古いcommitだけを根拠に現在地を決めない。
 
@@ -90,25 +131,26 @@ Repository authority: `m-shogo/wedding-project` `main`
 
 1. 仕様整理
 2. 必要素材一覧をitem-specificキューへ記録
-3. 画像生成またはプログラム生成
-4. 必要なら透過処理
-5. 機械QA
-6. 視覚QA
-7. Google Driveへ新規保存
-8. Drive上で存在・ファイル名・形式を再確認
-9. Drive file ID / URLをGitへ記録
-10. item-specific状態を更新
-11. write直前に最新mainを再確認
-12. commit
-13. commit後にmainとDriveを再確認
-14. 次の未完了素材または次アイテムへ進む
+3. 既存Git・Driveの重複検索
+4. 画像生成またはプログラム生成
+5. 必要なら透過処理
+6. 機械QA
+7. 視覚QA
+8. Google Driveへ新規保存
+9. Drive上で存在・ファイル名・MIME type・親フォルダをreadback
+10. Drive file ID / URLをGitへ記録
+11. item-specific状態と`CURRENT-STATUS.md`を更新
+12. write直前に最新mainを再確認
+13. commit
+14. commit後にmainとDriveを再確認
+15. 次の未完了素材または次アイテムへ進む
 
 ## 7. 重複・やり直し防止
 
 - 1素材 = 1ファイル
-- asset sheetを本番成果物にしない
-- 採用済み、`COMPLETED`、`PLACEMENT_READY` は必ずスキップ
-- 同じ名前・同じ役割・同じ構図の再生成前にGitとDriveを検索
+- asset sheetは`QA_CONTACT_SHEET / NON_PRODUCTION`
+- 採用済み、`COMPLETED`、`PLACEMENT_READY`、`ACCEPTED`は必ずスキップ
+- 同じ名前・役割・構図の再生成前にGitとDriveを検索
 - Driveへ上書きせず新規保存
 - 候補と正本を区別
 - 同じ失敗方法を2回繰り返さない
@@ -135,6 +177,7 @@ Repository authority: `m-shogo/wedding-project` `main`
 - ゲスト名
 - 卓番号
 - 可変日付
+- QRコード
 - 長文
 - 普通の見出し
 - 通常本文
@@ -208,7 +251,12 @@ Drive uploadが失敗した場合は`DRIVE_UPLOAD_BLOCKED`として未完了の�
 - 塗り足し・安全域を明記
 - 可変テキストを別管理
 - 画像生成部分と編集テキスト部分を分離
+- Figma semantic node name案を記録
 - Drive/Git完了ゲートPASS
+
+### 条件付きアイテム
+
+`ADD-14`、`ADD-17`など実施条件が不明なものは、勝手に本番文言や人数を確定しない。ダミー仕様・テンプレ・必要情報一覧までを`PREPARED_FOR_FIGMA`として準備し、実施有無は別途確定する。
 
 ## 13. 報告フォーマット
 
@@ -225,21 +273,21 @@ Drive uploadが失敗した場合は`DRIVE_UPLOAD_BLOCKED`として未完了の�
 - BLOCK
 - 次回の先頭未完了
 
-実作業がない場合は、理由を明示し、成果を捏造しない。
+実作業がない場合は`NO_CHANGE`と理由を明示し、成果を捏造しない。
 
-## 14. 全8件完了後
+## 14. 全17件完了後
 
-全8件が完了済みなら:
+全17件が完了、または条件付きアイテムが`PREPARED_FOR_FIGMA`なら:
 
 - 新規生成しない
 - 再作成しない
 - GitとDriveの整合性だけ確認
-- 欠損・重複・未記録IDがなければ`ALL_ADDITIONAL_ITEMS_COMPLETED`
+- 欠損・重複・未記録IDがなければ`ALL_ADDITIONAL_ITEMS_PREPARED`
 - 完了報告後、同じ成果物を増殖させない
 
 ## 15. Current宣言
 
-この自動制作の対象は追加8種だけである。
+この自動制作の対象は追加17種だけである。
 完成済み4種とFigmaは対象外である。
 
-`ACTIVE_NEXT = WELCOME_BOARD`
+`ACTIVE_NEXT = ADD-01_WELCOME_BOARD`
