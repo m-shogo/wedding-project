@@ -1,6 +1,6 @@
 # ADD-01 ウェルカムボード — QA
 
-Status: `WB-01_WB-02_QA_PASS / ASSET_IN_PROGRESS`
+Status: `WB-01_WB-02_WB-03_QA_PASS / ASSET_IN_PROGRESS`
 Date: 2026-08-02
 
 ## Layout QA
@@ -11,6 +11,8 @@ Date: 2026-08-02
 - [x] 既存4種の単純複製ではない
 - [x] WB-02は横長の単一路線装飾で、A2縦の上部・下部・対角配置へ非破壊で使用可能
 - [x] WB-02の線幅・ノード・飛行機は縮小配置しても視認でき、主役写真より強くならない
+- [x] WB-03は単体バッジとして四隅・写真近傍・タイトル補助位置へ配置可能
+- [x] WB-03は完全な円形UIではなく、荷物ステッカー風の軽い輪郭揺らぎを持つ
 - [ ] 最終レイアウトで四辺3 mmの塗り足しを設定
 - [ ] 最終レイアウトで重要文字を仕上がり端から20 mm以上内側へ配置
 - [ ] 最終レイアウトで3 m視認性を確認
@@ -19,6 +21,8 @@ Date: 2026-08-02
 
 - [x] WB-01へ名前・日付・会場・サブコピーを焼き込んでいない
 - [x] WB-02に文字・日付・固有名詞を焼き込んでいない
+- [x] WB-03に文字・日付・固有名詞を焼き込んでいない
+- [x] WB-03の中央タブは空白で、必要時に編集可能テキストを別配置できる
 - [x] 未確定会場名を捏造していない
 - [x] 長文を画像へ焼き込んでいない
 - [ ] Figma配置時に可変テキストを編集可能レイヤーで追加
@@ -52,9 +56,28 @@ Date: 2026-08-02
 - [x] ファイルサイズ26,708 bytes、0 byteではない
 - [x] SHA-256: `4beb9590d729130cb27863c626277f677ffd47840edcde6b7f444181886ecc84`
 
+## WB-03 transparent PNG QA
+
+- [x] PNG / RGBA
+- [x] 1826 × 1748 px
+- [x] alpha channel実在
+- [x] alpha extrema `0–245`
+- [x] 外周透明
+- [x] visible greenなし
+- [x] 緑フリンジなし
+- [x] checkerboard焼込みなし
+- [x] 白背景焼込みなし
+- [x] 1素材1ファイル
+- [x] 文字・ロゴ・透かしなし
+- [x] 視覚QA: 不規則な荷物ステッカー輪郭、地球儀、経路線、紙飛行機、空白タブの階層が成立
+- [x] 完全なアプリ用円形バッジではなく、印刷装飾として使える軽い物質感と輪郭差を確認
+- [x] ネイビー・アイボリー・ミント・シルバー・温かいゴールドがWB-01/WB-02と調和
+- [x] ファイルサイズ64,784 bytes、0 byteではない
+- [x] SHA-256: `407ec787643771040de0125957dd49c7491604f820440c52c27ee5c4399799c3`
+
 ## Transparent PNG QA
 
-WB-03〜WB-05に継続適用。
+WB-04〜WB-05に継続適用。
 
 - [ ] alpha channel実在
 - [ ] 外周透明
@@ -79,13 +102,18 @@ WB-03〜WB-05に継続適用。
 - [x] WB-02 parent folder IDをupload responseで確認
 - [x] WB-02 Drive IDを`DRIVE-REGISTER.md`へ記録
 - [x] WB-02を`ASSET-QUEUE.md`で`ACCEPTED`へ更新
+- [x] WB-03正本素材をDriveへ新規保存
+- [x] WB-03ファイル名・MIME typeをDrive searchでreadback
+- [x] WB-03 parent folder IDをupload responseで確認
+- [x] WB-03 Drive IDを`DRIVE-REGISTER.md`へ記録
+- [x] WB-03を`ASSET-QUEUE.md`で`ACCEPTED`へ更新
 - [ ] ADD-01全素材完了後のitem completion QA
 
 ## Current result
 
-- Production asset QA PASS: 2
+- Production asset QA PASS: 3
 - QA REJECT: 0
-- Drive production saves: 2
-- Accepted: WB-01, WB-02
+- Drive production saves: 3
+- Accepted: WB-01, WB-02, WB-03
 - Item status: `ASSET_IN_PROGRESS`
-- Next: `WB-03_TRAVEL_BADGE_TRANSPARENT_PNG`
+- Next: `WB-04_COMPASS_DECOR_TRANSPARENT_PNG`
