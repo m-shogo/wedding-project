@@ -22,7 +22,7 @@ Authority: `m-shogo/wedding-project` `main`
 | ID | アイテム | 状態 |
 |---|---|---|
 | ADD-01 | ウェルカムボード | `PLACEMENT_READY` |
-| ADD-02 | 11卓の国別テーブルサイン | `PENDING` |
+| ADD-02 | 11卓の国別テーブルサイン | `PREPARED_FOR_FIGMA` |
 | ADD-03 | 当日タイムテーブルボード | `PENDING` |
 | ADD-04 | 受付サイン | `PENDING` |
 | ADD-05 | サンキュータグ / プチギフトタグ | `PENDING` |
@@ -41,7 +41,7 @@ Authority: `m-shogo/wedding-project` `main`
 
 ## Current pointer
 
-`ACTIVE_NEXT = ADD-02_TABLE_SIGNS_SPEC_AND_QUEUE`
+`ACTIVE_NEXT = ADD-03_TIMETABLE_BOARD_SPEC_AND_QUEUE`
 
 ## ADD-01 checkpoint
 
@@ -52,14 +52,22 @@ Authority: `m-shogo/wedding-project` `main`
 - WB-06: editable Figma photo-frame shape specification ready
 - WB-07: editable title/name/date/location text specification ready
 - Drive ADD-01 folder: `1UT-s_z2KOnzNeq9cluqJ_Uxh-xDzO6Kg`
-- WB-01 Drive ID: `1XgE7c8cffxmMViEqeqJJ8Phnd5YxaE4l`
-- WB-02 Drive ID: `1cSpz2tcZZ0eKPBhD8vdacjc3GtWqPwf9`
-- WB-03 Drive ID: `1TOok5ps43XKrf3FN2OUV46Sr8cAgWgxR`
-- WB-04 Drive ID: `1jt54tvLnk1CCVaBt3XhvEgqnw593_O1t`
 - Production QA: 4 PASS / 0 REJECT
-- Drive readback: PASS for all four production assets
-- Figma placement brief: Drive mappings, print size, bleed, safe area, editable text and semantic nodes recorded
 - item completion: `PLACEMENT_READY`
+
+## ADD-02 checkpoint
+
+- item-specific documents: 5/5 prepared
+- destinations fixed: Hawaii, Italy, France, Spain, Taiwan, Japan, Hong Kong, Singapore, Bali, Korea, Maldives
+- production model: one Figma item file with 11 semantic destination frames; one destination per export
+- common hierarchy and country-specific art direction recorded
+- editable text and non-destructive photo contract recorded
+- provisional primary size: 100 × 148 mm portrait, subject to holder/vendor confirmation
+- Drive ADD-02 folder: `1KmbIncy5Wl6aEqqjBQmssCsw_KZjM62r`
+- production raster assets: 0 by design
+- generation decision: fake country imagery and generic flag-card generation rejected; selected real photos and native Figma motifs take priority
+- first prototype set for future Figma: Hawaii / Taiwan / Maldives
+- item completion: `PREPARED_FOR_FIGMA`
 
 ## Current execution rules
 
@@ -70,6 +78,7 @@ Authority: `m-shogo/wedding-project` `main`
 - Drive IDとcommit SHAがなければ`COMPLETED`にしない
 - 既存成果物をGitとDriveで検索してから新規生成する
 - 条件付きアイテムは実施有無を勝手に確定せず、テンプレ準備まで許容する
+- 素材が不要なアイテムは、無理にラスターを生成せず`PREPARED_FOR_FIGMA`を許容する
 
 ## Figma課金後の開始条件
 
@@ -80,7 +89,7 @@ Authority: `m-shogo/wedding-project` `main`
 - `DRIVE-REGISTER.md`
 - `QA.md`
 - `FIGMA-PLACEMENT-BRIEF.md`
-- 正本素材のDrive ID
+- 正本素材のDrive ID、または素材不要の明示的判断
 - 可変テキスト一覧
 - semantic node name案
 - 印刷サイズ・塗り足し・安全域
