@@ -40,6 +40,7 @@ Completed in Figma:
 - native cover/back/menu/drink text inserted
 - 11 native seating table groups inserted with dummy guest data
 - screenshots captured for cover, menu/drink, and seating density review
+- Current Drive cover emblem fetched and verified for the next exact placement pass
 
 Not yet complete:
 - Current Drive emblem/icons/textures/stamp placement
@@ -57,10 +58,13 @@ Completed in Figma:
 - semantic front/back frames created
 - guest name, table number, route, date, gate, boarding time, stub, thank-you copy remain native text
 - non-scannable decorative barcode geometry and ticket hierarchy created
-- front screenshot captured; current layout hierarchy is readable
+- temporary emoji plane removed
+- exact Current Drive `boarding_plane_v1.svg` placed as editable vector under `ICON_PLANE`
+- post-placement front screenshot captured; hierarchy remains readable
+- Current primary and thank-you PNG stamps fetched and verified for the next exact placement pass
 
 Not yet complete:
-- Current Drive SVG/PNG asset placement
+- remaining Current Drive SVG/PNG asset placement
 - long-name stress screenshot and final correction pass
 - final venue/copy replacement
 - actual-size print QA
@@ -75,17 +79,23 @@ Completed in Figma:
 - `FRAME_LABEL` and Current semantic/native text structure created
 - pale sage / warm off-white / black direction applied, with red and blue stamp accents
 - screenshot QA found phrase/support-mark interference and a low-quality train placeholder
-- unnecessary support mark removed, phrase repositioned, train placeholder replaced with Figma-native geometry
+- unnecessary support mark removed and phrase repositioned
+- exact Current Drive `seishun_ticket_frame_v1.svg`, `seishun_route_v1.svg`, and `seishun_train_icon_v1.svg` placed as editable vectors
+- first exact-asset screenshot exposed overlap caused by scale/layer order
+- evidence-driven correction reduced asset scale, moved vectors behind native text, and added a restrained native outer border
+- post-fix screenshot captured
+- Current red `祝` and blue gate PNG stamps fetched and verified for the next exact placement pass
 
 Not yet complete:
-- Current Drive frame/route/train/stamp asset placement
-- post-fix screenshot confirmation
+- exact Current PNG stamp placement
+- final small-format optical correction after stamp placement
 - physical MINTIA application-area measurement
 - 100% print and adhesion test
 
 ## Shared declaration
 
-- one item = one Figma file = one URL is now satisfied for all four items
-- no image asset was regenerated during this execution
-- Current Drive assets remain authoritative and must be placed before visual completion
+- one item = one Figma file = one URL is satisfied for all four items
+- no visual asset was regenerated; Figma placement copies may be resized/re-encoded only for composition transport
+- Current Drive assets remain authoritative
+- exact SVG placement has started and screenshot-driven correction is active
 - none of the four items is `PRINT_READY`
