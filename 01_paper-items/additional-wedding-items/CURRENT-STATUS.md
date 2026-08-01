@@ -19,7 +19,7 @@ Authority: `m-shogo/wedding-project` `main`
 | ADD-02 | 11卓の国別テーブルサイン | `PREPARED_FOR_FIGMA` |
 | ADD-03 | 当日タイムテーブルボード | `PREPARED_FOR_FIGMA` |
 | ADD-04 | 受付サイン | `PREPARED_FOR_FIGMA` |
-| ADD-05 | サンキュータグ / プチギフトタグ | `PENDING` |
+| ADD-05 | サンキュータグ / プチギフトタグ | `PREPARED_FOR_FIGMA` |
 | ADD-06 | フォトブースサイン | `PENDING` |
 | ADD-07 | エスコートカード案内ボード | `PENDING` |
 | ADD-08 | メニュー補助サイン | `PENDING` |
@@ -35,7 +35,7 @@ Authority: `m-shogo/wedding-project` `main`
 
 ## Current pointer
 
-`ACTIVE_NEXT = ADD-05_THANK_YOU_GIFT_TAG_SPEC_AND_QUEUE`
+`ACTIVE_NEXT = ADD-06_PHOTO_BOOTH_SIGN_SPEC_AND_QUEUE`
 
 ## ADD-01 checkpoint
 
@@ -76,6 +76,21 @@ Authority: `m-shogo/wedding-project` `main`
 - gender-cliche motifs and app-like equal cards rejected
 - Drive folder: `1vjSYrbjzfZs_vyCIpQAbml9_en5RcH_r`
 - production raster: 0 by design
+- completion: `PREPARED_FOR_FIGMA`
+
+## ADD-05 checkpoint
+
+- 5/5 documents prepared
+- primary single master: `50 × 80 mm` portrait
+- editorial comparison: `45 × 70 mm`, reflow required rather than proportional scaling
+- approved copy: `Thank you for traveling with us.`, `Have a safe trip home.`, `2026.10.24`
+- single master and imposed sheet authority explicitly separated
+- provisional 5 mm punch and punch-clearance rules recorded
+- art direction: quiet luggage note / last-stop object, not a miniature boarding pass
+- all text remains native Figma text; route and endpoint remain native vectors
+- Drive folder: `1_V20y77VU1aGrJtqpl7U5XUpC-bQuTxV`
+- production raster: 0 by design
+- physical package, attachment method, printer and 100% proof remain pending
 - completion: `PREPARED_FOR_FIGMA`
 
 ## Execution rules
