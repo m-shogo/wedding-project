@@ -21,7 +21,7 @@ Authority: `m-shogo/wedding-project` `main`
 
 | ID | アイテム | 状態 |
 |---|---|---|
-| ADD-01 | ウェルカムボード | `SPEC_READY` |
+| ADD-01 | ウェルカムボード | `ASSET_IN_PROGRESS` |
 | ADD-02 | 11卓の国別テーブルサイン | `PENDING` |
 | ADD-03 | 当日タイムテーブルボード | `PENDING` |
 | ADD-04 | 受付サイン | `PENDING` |
@@ -41,16 +41,20 @@ Authority: `m-shogo/wedding-project` `main`
 
 ## Current pointer
 
-`ACTIVE_NEXT = ADD-01_WB-01_A2_PORTRAIT_BASE_BACKGROUND`
+`ACTIVE_NEXT = ADD-01_WB-02_TRAVEL_ROUTE_LINE_TRANSPARENT_PNG`
 
 ## ADD-01 checkpoint
 
 - item-specific documents: 5/5 created
 - Drive additional-items root: created and readback verified
 - Drive ADD-01 folder: created and readback verified
-- production assets: 0
+- production assets: 1
+- accepted assets: WB-01
+- WB-01 Drive ID: `1XgE7c8cffxmMViEqeqJJ8Phnd5YxaE4l`
+- WB-01 SHA-256: `2a2a0244862355e777926839ae39d9ce9e6c6c9e602ab6c0e53d3d276a0692f7`
+- WB-01 QA: mechanical PASS / visual PASS / Drive readback PASS
 - item completion: not complete
-- next required work: WB-01 A2 portrait base background
+- next required work: WB-02 travel route line transparent PNG
 
 ## Current execution rules
 
