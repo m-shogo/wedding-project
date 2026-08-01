@@ -1,35 +1,39 @@
 # ADD-01 ウェルカムボード — QA
 
-Status: `QA_PLAN_READY / DRIVE_FOLDER_VERIFIED / NO_ASSET_TESTED`
+Status: `WB-01_QA_PASS / ASSET_IN_PROGRESS`
 Date: 2026-08-01
 
 ## Layout QA
 
-- [ ] A2縦の仕上がり寸法が420 × 594 mm
-- [ ] 四辺3 mmの塗り足し
-- [ ] 重要文字が仕上がり端から20 mm以内に入っていない
-- [ ] タイトル、名前、日付の視認順が明確
-- [ ] 3 m程度離れた想定でも主要情報が読める
-- [ ] 写真差し替え枠が主役で、装飾が競合しない
-- [ ] 既存4種の単純複製になっていない
+- [x] WB-01はA2縦300 dpi相当の4961 × 7016 px
+- [x] 中央の可変テキスト・写真配置領域を妨げない余白
+- [x] 装飾は四隅寄りで主役と競合しない
+- [x] 既存4種の単純複製ではない
+- [ ] 最終レイアウトで四辺3 mmの塗り足しを設定
+- [ ] 最終レイアウトで重要文字を仕上がり端から20 mm以上内側へ配置
+- [ ] 最終レイアウトで3 m視認性を確認
 
 ## Text QA
 
-- [ ] 名前・日付・会場・サブコピーが編集可能テキスト
-- [ ] 未確定会場名を捏造していない
-- [ ] 長文を画像へ焼き込んでいない
-- [ ] 2026.10.24の表記統一
+- [x] WB-01へ名前・日付・会場・サブコピーを焼き込んでいない
+- [x] 未確定会場名を捏造していない
+- [x] 長文を画像へ焼き込んでいない
+- [ ] Figma配置時に可変テキストを編集可能レイヤーで追加
 
-## Image QA
+## WB-01 image QA
 
-- [ ] 人物・犬をAI生成/AI変換していない
-- [ ] 仮写真と本番写真を区別
-- [ ] 画像解像度がA2印刷に耐える
-- [ ] 背景に不要な文字・ロゴ・透かしがない
+- [x] 人物・犬をAI生成/AI変換していない
+- [x] 不要な文字・ロゴ・透かしなし
+- [x] PNG / RGB
+- [x] 4961 × 7016 px
+- [x] 299.9994 dpi metadata
+- [x] ファイルサイズ36,169,290 bytes、0 byteではない
+- [x] 視覚QA: mint-to-blueの淡い紙質、中央の可読領域、控えめな旅行ルート風曲線を確認
+- [x] SHA-256: `2a2a0244862355e777926839ae39d9ce9e6c6c9e602ab6c0e53d3d276a0692f7`
 
 ## Transparent PNG QA
 
-WB-02〜WB-05に適用。
+WB-02〜WB-05に適用。WB-01は背景画像のため透過対象外。
 
 - [ ] alpha channel実在
 - [ ] 外周透明
@@ -44,16 +48,18 @@ WB-02〜WB-05に適用。
 - [x] Driveの追加アイテム親フォルダを作成
 - [x] DriveのADD-01フォルダを作成
 - [x] Drive folder readback
-- [ ] 正本素材をDriveへ保存
-- [ ] ファイル名・MIME type・親フォルダをreadback
-- [x] Drive folder IDを`DRIVE-REGISTER.md`へ記録
-- [ ] production asset IDを`DRIVE-REGISTER.md`へ記録
-- [ ] production assetのGit write後readback
+- [x] WB-01正本素材をDriveへ新規保存
+- [x] WB-01ファイル名・MIME typeをreadback
+- [x] WB-01 parent folder IDをupload responseで確認
+- [x] WB-01 Drive IDを`DRIVE-REGISTER.md`へ記録
+- [x] WB-01を`ASSET-QUEUE.md`で`ACCEPTED`へ更新
+- [ ] ADD-01全素材完了後のitem completion QA
 
 ## Current result
 
-- QA PASS: Drive folder structure 1 set
-- Production asset QA PASS: 0
+- Production asset QA PASS: 1
 - QA REJECT: 0
-- Blocking: production asset generation not started
-- Item status: `SPEC_READY`
+- Drive production saves: 1
+- Accepted: WB-01
+- Item status: `ASSET_IN_PROGRESS`
+- Next: `WB-02_TRAVEL_ROUTE_LINE_TRANSPARENT_PNG`
