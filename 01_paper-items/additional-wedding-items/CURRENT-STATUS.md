@@ -1,7 +1,7 @@
 # 追加ウェディングアイテム — CURRENT STATUS
 
 Status: `ACTIVE / PREPARATION_AND_ASSET_PRODUCTION`
-Date: 2026-08-01
+Date: 2026-08-02
 Authority: `m-shogo/wedding-project` `main`
 
 このファイルは追加ウェディングアイテム制作の現在地を示す。詳細仕様は`MASTER-LIST.md`、実行ルールは`CURRENT-AUTOMATION-PLAN.md`、再発防止は`POSTMORTEM-AND-REPEAT-PREVENTION.md`を参照する。
@@ -41,20 +41,23 @@ Authority: `m-shogo/wedding-project` `main`
 
 ## Current pointer
 
-`ACTIVE_NEXT = ADD-01_WB-02_TRAVEL_ROUTE_LINE_TRANSPARENT_PNG`
+`ACTIVE_NEXT = ADD-01_WB-03_TRAVEL_BADGE_TRANSPARENT_PNG`
 
 ## ADD-01 checkpoint
 
 - item-specific documents: 5/5 created
 - Drive additional-items root: created and readback verified
 - Drive ADD-01 folder: created and readback verified
-- production assets: 1
-- accepted assets: WB-01
+- production assets: 2
+- accepted assets: WB-01, WB-02
 - WB-01 Drive ID: `1XgE7c8cffxmMViEqeqJJ8Phnd5YxaE4l`
 - WB-01 SHA-256: `2a2a0244862355e777926839ae39d9ce9e6c6c9e602ab6c0e53d3d276a0692f7`
-- WB-01 QA: mechanical PASS / visual PASS / Drive readback PASS
+- WB-02 Drive ID: `1cSpz2tcZZ0eKPBhD8vdacjc3GtWqPwf9`
+- WB-02 SHA-256: `4beb9590d729130cb27863c626277f677ffd47840edcde6b7f444181886ecc84`
+- WB-02 dimensions/mode: `3083 × 1233 / RGBA`
+- WB-02 QA: mechanical PASS / visual PASS / transparent PNG PASS / Drive readback PASS
 - item completion: not complete
-- next required work: WB-02 travel route line transparent PNG
+- next required work: WB-03 travel badge transparent PNG
 
 ## Current execution rules
 
