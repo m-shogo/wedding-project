@@ -1,8 +1,28 @@
 # Figma Execution Checkpoint — 2026-08-01
 
-Authority inspected before work: GitHub `main` at `f49fa2b9040fefb435d772f4c46b631b1077917d`.
+Current authority: live Figma + GitHub `main`.
 
 This checkpoint records only work verified against the live Figma files. It does not mark any item `PRINT_READY`.
+
+## Mandatory project-wide Figma quality rule
+
+Before continuing any item, read:
+
+- `01_paper-items/README.md`
+- `01_paper-items/FIGMA-GLOBAL-QUALITY-STANDARD.md`
+- the target item's Current status, asset register, placement plan, and copy data
+
+The global standard applies to all current and future Figma-generated wedding items.
+
+Required interpretation:
+- transfer researched Figma workflow, semantic structure, reusable styles/components, non-destructive photo replacement, screenshot QA, and Git continuity
+- do not transfer the るるぶ palette, density, motifs, or editorial voice into unrelated items
+- reject generic AI-looking equal-card layouts, arbitrary gradients, decorative filler, excessive rounded rectangles, and whole-page raster output with baked-in normal text
+- item-specific art direction and human editorial judgment remain mandatory
+
+The global standard was promoted to Current through:
+- `6216b648a1b7b53c2b2b59cd8428f8c2565f1e47` — project-wide anti-AI Figma quality standard
+- `39c54e8fb54067ee47cb3820309d2d1228522b60` — mandatory paper-items entry point
 
 ## 1. るるぶWEDDING
 
@@ -23,9 +43,11 @@ Completed in Figma:
 - A promoted to `02_Cover_Back_Visual`
 - `02_INSIDE_WF_A`, `02_INSIDE_WF_B`, `03_BACK_WF_A`, `03_BACK_WF_B` shells created
 
+Later live Current work is recorded in:
+- `01_paper-items/rurubu-wedding/FIGMA-VISUAL-CHECKPOINT-2026-08-01.md`
+- `01_paper-items/rurubu-wedding/FIGMA-EDITORIAL-QUALITY-PLAYBOOK-2026-08-01.md`
+
 Not yet complete:
-- approved Current transparent PNG placement
-- inside/back content composition
 - final-photo/content replacement
 - print-template and physical proof QA
 
@@ -43,7 +65,7 @@ Completed in Figma:
 - Current Drive cover emblem fetched and verified for the next exact placement pass
 
 Not yet complete:
-- Current Drive emblem/icons/textures/stamp placement
+- remaining Current Drive icon/texture placement where still required
 - final venue menu/drink copy
 - final seating names and physical room layout
 - print-size QA
@@ -61,10 +83,10 @@ Completed in Figma:
 - temporary emoji plane removed
 - exact Current Drive `boarding_plane_v1.svg` placed as editable vector under `ICON_PLANE`
 - post-placement front screenshot captured; hierarchy remains readable
-- Current primary and thank-you PNG stamps fetched and verified for the next exact placement pass
+- Current primary and thank-you PNG stamps fetched and verified
 
 Not yet complete:
-- remaining Current Drive SVG/PNG asset placement
+- remaining Current Drive asset placement where still required
 - long-name stress screenshot and final correction pass
 - final venue/copy replacement
 - actual-size print QA
@@ -84,18 +106,20 @@ Completed in Figma:
 - first exact-asset screenshot exposed overlap caused by scale/layer order
 - evidence-driven correction reduced asset scale, moved vectors behind native text, and added a restrained native outer border
 - post-fix screenshot captured
-- Current red `祝` and blue gate PNG stamps fetched and verified for the next exact placement pass
+- Current red `祝` and blue gate PNG stamps fetched and verified
 
 Not yet complete:
-- exact Current PNG stamp placement
-- final small-format optical correction after stamp placement
+- final small-format optical correction where still required
 - physical MINTIA application-area measurement
 - 100% print and adhesion test
 
 ## Shared declaration
 
-- one item = one Figma file = one URL is satisfied for all four items
-- no visual asset was regenerated; Figma placement copies may be resized/re-encoded only for composition transport
+- one item = one Figma file = one URL remains the production rule
 - Current Drive assets remain authoritative
-- exact SVG placement has started and screenshot-driven correction is active
+- normal changeable information remains native editable Figma text
+- fixed and replaceable roles must remain separate and semantically named
+- accepted assets must not be regenerated without a concrete, screenshot-supported defect
+- every meaningful placement group requires screenshot QA
+- visual tone is item-specific; shared quality method is project-wide
 - none of the four items is `PRINT_READY`
