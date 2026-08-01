@@ -21,7 +21,7 @@ Authority: `m-shogo/wedding-project` `main`
 
 | ID | アイテム | 状態 |
 |---|---|---|
-| ADD-01 | ウェルカムボード | `PENDING` |
+| ADD-01 | ウェルカムボード | `SPEC_READY` |
 | ADD-02 | 11卓の国別テーブルサイン | `PENDING` |
 | ADD-03 | 当日タイムテーブルボード | `PENDING` |
 | ADD-04 | 受付サイン | `PENDING` |
@@ -41,12 +41,20 @@ Authority: `m-shogo/wedding-project` `main`
 
 ## Current pointer
 
-`ACTIVE_NEXT = ADD-01_WELCOME_BOARD`
+`ACTIVE_NEXT = ADD-01_WB-01_A2_PORTRAIT_BASE_BACKGROUND`
+
+## ADD-01 checkpoint
+
+- item-specific documents: 5/5 created
+- Drive additional-items root: created and readback verified
+- Drive ADD-01 folder: created and readback verified
+- production assets: 0
+- item completion: not complete
+- next required work: WB-01 A2 portrait base background
 
 ## Current execution rules
 
 - Figma禁止
-- 1時間ごとのScheduled Taskで進行
 - 生成だけで完了扱いしない
 - `生成 → 後処理 → QA → Drive → Drive readback → Git → NEXT更新`を1単位とする
 - 1素材1ファイル
