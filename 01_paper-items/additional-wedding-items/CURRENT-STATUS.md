@@ -21,7 +21,7 @@ Authority: `m-shogo/wedding-project` `main`
 
 | ID | アイテム | 状態 |
 |---|---|---|
-| ADD-01 | ウェルカムボード | `ASSET_IN_PROGRESS` |
+| ADD-01 | ウェルカムボード | `PLACEMENT_READY` |
 | ADD-02 | 11卓の国別テーブルサイン | `PENDING` |
 | ADD-03 | 当日タイムテーブルボード | `PENDING` |
 | ADD-04 | 受付サイン | `PENDING` |
@@ -41,27 +41,25 @@ Authority: `m-shogo/wedding-project` `main`
 
 ## Current pointer
 
-`ACTIVE_NEXT = ADD-01_WB-05_YOKOHAMA_ACCENT_TRANSPARENT_PNG_REVIEW`
+`ACTIVE_NEXT = ADD-02_TABLE_SIGNS_SPEC_AND_QUEUE`
 
 ## ADD-01 checkpoint
 
-- item-specific documents: 5/5 created
-- Drive additional-items root: created and readback verified
-- Drive ADD-01 folder: created and readback verified
+- item-specific documents: 5/5 prepared
 - production assets: 4
 - accepted assets: WB-01, WB-02, WB-03, WB-04
+- WB-05: `NOT_REQUIRED_AFTER_REVIEW` because an additional Yokohama graphic would compete with hero photo, title and editable location text
+- WB-06: editable Figma photo-frame shape specification ready
+- WB-07: editable title/name/date/location text specification ready
+- Drive ADD-01 folder: `1UT-s_z2KOnzNeq9cluqJ_Uxh-xDzO6Kg`
 - WB-01 Drive ID: `1XgE7c8cffxmMViEqeqJJ8Phnd5YxaE4l`
-- WB-01 SHA-256: `2a2a0244862355e777926839ae39d9ce9e6c6c9e602ab6c0e53d3d276a0692f7`
 - WB-02 Drive ID: `1cSpz2tcZZ0eKPBhD8vdacjc3GtWqPwf9`
-- WB-02 SHA-256: `4beb9590d729130cb27863c626277f677ffd47840edcde6b7f444181886ecc84`
 - WB-03 Drive ID: `1TOok5ps43XKrf3FN2OUV46Sr8cAgWgxR`
-- WB-03 SHA-256: `407ec787643771040de0125957dd49c7491604f820440c52c27ee5c4399799c3`
 - WB-04 Drive ID: `1jt54tvLnk1CCVaBt3XhvEgqnw593_O1t`
-- WB-04 SHA-256: `c1a05cbc3b3e36c8a255d6dd0a6ae09c414f4396154cc7c4fb5d6fb62866ac56`
-- WB-04 dimensions/mode: `1821 × 1821 / RGBA`
-- WB-04 QA: mechanical PASS / visual PASS / transparent PNG PASS / Drive readback PASS
-- item completion: not complete
-- next required work: WB-05 Yokohama accent review; create only if it adds value without competing with venue/photo/title
+- Production QA: 4 PASS / 0 REJECT
+- Drive readback: PASS for all four production assets
+- Figma placement brief: Drive mappings, print size, bleed, safe area, editable text and semantic nodes recorded
+- item completion: `PLACEMENT_READY`
 
 ## Current execution rules
 
