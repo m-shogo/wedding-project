@@ -23,7 +23,7 @@ Authority: `m-shogo/wedding-project` `main`
 | ADD-06 | フォトブースサイン | `PREPARED_FOR_FIGMA` |
 | ADD-07 | エスコートカード案内ボード | `PREPARED_FOR_FIGMA` |
 | ADD-08 | メニュー補助サイン | `PREPARED_FOR_FIGMA` |
-| ADD-09 | ゲストブックサイン | `PENDING` |
+| ADD-09 | ゲストブックサイン | `PREPARED_FOR_FIGMA` |
 | ADD-10 | 会場案内サイン | `PENDING` |
 | ADD-11 | 写真共有 / QR案内サイン | `PENDING` |
 | ADD-12 | 新郎新婦クイズカード | `PENDING` |
@@ -35,7 +35,7 @@ Authority: `m-shogo/wedding-project` `main`
 
 ## Current pointer
 
-`ACTIVE_NEXT = ADD-09_GUEST_BOOK_SIGN_SPEC_AND_QUEUE`
+`ACTIVE_NEXT = ADD-10_VENUE_GUIDE_SIGNS_SPEC_AND_QUEUE`
 
 ## Completed checkpoints
 
@@ -47,10 +47,11 @@ Authority: `m-shogo/wedding-project` `main`
 - ADD-06: 5/5 docs, A3 portrait/A4 reflow, editable title/date/location, native vector decoration, Drive `1Ehk_oQ8vhAGo3DYBbgyOGfA03u0pu5wb`, no new raster by design, `PREPARED_FOR_FIGMA`
 - ADD-07: 5/5 docs, A2 portrait/A3 reflow, three-action route, BOARDING PASS no-copy contract, Drive `1nPb_yvp1rIlF_L3X0mAnBFSzSuEIllDi`, no new raster by design, `PREPARED_FOR_FIGMA`
 - ADD-08: 5/5 docs, A4 portrait/A5 reflow, editable text/native vector design, no raster required, Drive `12D7UPRTDwUx7vLOm1mtaew-sFGHt9FPG`, metadata readback PASS, `PREPARED_FOR_FIGMA`
+- ADD-09: 5/5 docs, A5 portrait/A4 reflow, editable text/native vector guest-book guidance, Drive `1D259ugx13El0JYxvn8yyskIjc2c2liF4`, no new raster by design, `PREPARED_FOR_FIGMA`
 
 ## Incomplete checkpoint
 
-- ADD-09 is the first pending item.
+- ADD-10 is the first pending item.
 
 ## Execution rules
 
