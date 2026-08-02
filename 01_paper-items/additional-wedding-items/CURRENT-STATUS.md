@@ -28,14 +28,14 @@ Authority: `m-shogo/wedding-project` `main`
 | ADD-11 | 写真共有 / QR案内サイン | `PREPARED_FOR_FIGMA` |
 | ADD-12 | 新郎新婦クイズカード | `PREPARED_FOR_FIGMA` |
 | ADD-13 | メッセージカード | `PREPARED_FOR_FIGMA` |
-| ADD-14 | 二次会案内 | `PENDING_REQUIREMENT_CHECK` |
+| ADD-14 | 二次会案内 | `PREPARED_FOR_FIGMA` |
 | ADD-15 | 料理紹介 / 国テーマ説明カード | `PENDING` |
 | ADD-16 | 両親贈呈品メッセージカード | `PENDING` |
 | ADD-17 | 子ども向けミニカード / ぬりえ | `PENDING_REQUIREMENT_CHECK` |
 
 ## Current pointer
 
-`ACTIVE_NEXT = ADD-14_AFTER_PARTY_TEMPLATE_SPEC_AND_QUEUE`
+`ACTIVE_NEXT = ADD-15_CUISINE_DESTINATION_STORY_CARD_SPEC_AND_QUEUE`
 
 ## Completed checkpoints
 
@@ -52,10 +52,11 @@ Authority: `m-shogo/wedding-project` `main`
 - ADD-11: 5/5 docs, A5 portrait/A4 reflow, replaceable QR frame, editable access/privacy/expiry text, Drive `1wuxHEqby_0JWS0bYV0RWCTUotM88Mnxb`, no QR or raster generated before official URL confirmation, `PREPARED_FOR_FIGMA`
 - ADD-12: 5/5 docs, A6 double-sided quiz card, semantic placeholders for unconfirmed questions/answers, fairness and writing-space QA, Drive `1LUanrHk9_lhZcSqf95ybgWH29_bmcfvZ`, no raster generated before question/photo confirmation, `PREPARED_FOR_FIGMA`
 - ADD-13: 5/5 docs, A6 landscape double-sided message card, editable prompts and handwriting area, Drive `1Md8oCMsw4F9tZjQueNmQQ2dYR1I7JwZl`, no raster required, `PREPARED_FOR_FIGMA`
+- ADD-14: 5/5 docs, conditional A6/A5 after-party guide template, required-information gate, Drive `1Oq2Pz2mYo4oaDnO7LMezMrCUizcxaEjs`, no fabricated venue/time/fee/QR and no raster required, `PREPARED_FOR_FIGMA`
 
 ## Incomplete checkpoint
 
-- ADD-14 is the first pending conditional item. Do not invent after-party venue, time, attendance method, or implementation decision; prepare template and required-information list only.
+- ADD-15 is the first pending item. Prepare the cuisine/destination story-card specification without inventing the final menu, ingredients, allergens, country assignments, or table deployment decision.
 
 ## Execution rules
 
