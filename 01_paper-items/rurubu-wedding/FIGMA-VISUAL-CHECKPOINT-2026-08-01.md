@@ -1,261 +1,111 @@
-# るるぶWEDDING — Figma Visual Checkpoint 2026-08-01
+# るるぶWEDDING — Figma Visual Checkpoint
 
-Status: `AUTHENTIC_RURUBU_EDITORIAL_SYSTEM_V4_QA_PASS / REAL_CONTENT_REPLACEMENT_PENDING / NOT_PRINT_READY`
-Current authority: live production Figma + GitHub `main`
+Updated: 2026-08-02
 Production Figma: https://www.figma.com/design/bfM0d4c9dCeBv5pCkJ3TNM
 
-This checkpoint records only work verified against the live editable Figma file. It does not declare the item final or print-ready.
+## Current status
 
-Detailed research and reusable rules:
+`RURUBU_V5_CURRENT_CANDIDATE / REALISTIC_DUMMY_PACK_READY_IN_DRIVE / FIGMA_HIGH_RES_PHOTO_IMPORT_BLOCKED / REAL_CONTENT_PENDING / PRINT_TEMPLATE_PENDING / NOT_PRINT_READY`
 
-`FIGMA-EDITORIAL-QUALITY-PLAYBOOK-2026-08-01.md`
+This checkpoint records only evidence verified against the live editable Figma file. It does not declare the item final or print-ready.
 
-## Current production review target
+## Live targets
 
-Dedicated Figma page:
+Page: `01_RURUBU_WEDDING`
 
-`02_RURUBU_AUTHENTIC`
+Current candidate frames:
+- outer: `01_RURUBU_AUTHENTIC_OUTER_V5_CURRENT_CANDIDATE` — node `77:18`
+- inside: `02_RURUBU_AUTHENTIC_INSIDE_V5_CURRENT_CANDIDATE` — node `77:290`
 
-Current frames:
-- `01_RURUBU_AUTHENTIC_OUTER` — node `59:2`
-- `02_RURUBU_AUTHENTIC_INSIDE` — node `59:178`
+Rollback frames:
+- outer V4 — node `59:2`
+- inside V4 — node `59:178`
 
-Geometry:
-- outer: `1587.4 × 1122.5`
-- inside: `1587.4 × 1122.5`
+## Structural audit
 
-The earlier `Cover A + Inside A + Back A` candidates remain preserved on `01_RURUBU_WEDDING` as editable comparison and rollback evidence.
+- outer geometry: `1587.4 × 1122.5`
+- inside geometry: `1587.4 × 1122.5`
+- semantic photo roles: `13 / 13`
+- IMAGE fills: `13 / 13`
+- gradient-only photo roles: `0`
+- native text maintained
+- comparison and rollback evidence preserved
 
-## Current visual direction
+The earlier assumption that all photo roles were gradients was incorrect. A direct fill audit confirmed that every role currently uses an IMAGE fill.
 
-The user requested:
-- a closer match to actual Rurubu travel-guide visual grammar
-- more detailed editorial design
-- less repetitive placement
-- more creative photo and module rhythm
-- online research into Figma operation and layout quality
-- preservation of the resulting knowledge in Git
+## Screenshot QA result
 
-The Current preferred variant therefore combines:
-- bright Japanese travel-guide color
-- dense but ordered information hierarchy
-- large / medium / small module rhythm
-- unequal cards rather than repeated grids
-- staggered, angled, circular, and overlapping photo roles
-- ribbons, page references, route motifs, micro labels, stickers, and editorial notes
-- reusable Figma styles and Auto Layout components
-- hidden alignment guides beneath the intentional visual irregularity
+Whole-spread screenshots were reviewed after the live audit and reassignment pass.
 
-It does not directly trace one specific published issue.
+Confirmed strengths:
+- strong travel-wedding identity
+- clear Rurubu-inspired logo and category hierarchy
+- readable macro structure
+- varied Friends & Family composition
+- profile and Q&A structure remains editable
+- `1 large + 3 small` memory hierarchy remains intact
 
-## Creative layout V3 retained
+Confirmed defects:
+- cover hero is visibly pixelated at final display size
+- history image is visibly pixelated at final display size
+- back main memory image is visibly pixelated at final display size
+- one small memory role initially appeared empty or too pale
+- cover retains a high badge/card density
+- real-content text reflow has not been tested
 
-### Front cover
+## Live changes on 2026-08-02
 
-- six equal feature boxes replaced by deliberately unequal large, tall, compact, and angled modules
-- circular `旅のひとコマ` secondary photo role
-- vertical `YOKOHAMA 2026` strip
-- angled `編集部おすすめ!` sticker
-- handwritten-style photo note
-- route and page-reference detail inside the tall feature
-- Logo A, date badge, masking tape, star, and `BEST SHOT` retained
+- V5 frames renamed from `V5_WORKING` to `V5_CURRENT_CANDIDATE`.
+- existing sharp in-file IMAGE fills were reassigned to weak roles for comparison.
+- semantic node IDs were preserved.
+- small memory slot `77:446` received an existing photographic fill.
+- large-image reassignment was screenshot-tested and did not fully remove pixelation.
 
-### Back cover
+Mutated nodes:
+- `77:148` cover hero
+- `77:24` back main memory
+- `77:422` history image
+- `77:446` memory spot 03
 
-- main-memory photo and text panel overlap at different angles
-- three Friends & Family photos use different sizes, heights, and rotations
-- translucent tape accents sit across photo edges
-- caption cards rotate independently
-- straight journey line replaced by a zigzag dashed route
-- `BEST MOMENT` note and route microcopy added
+## Realistic generated dummy pack
 
-### Inside left
+Verified Drive folder:
+- `RURUBU_V5_DUMMY_PHOTOS_2026-08-02`
+- ID: `1tAvBO9TodEKVHVZnABD73rEPUGG8iu0N`
+- verified file count: `13`
 
-- groom becomes the larger lead profile
-- bride becomes the smaller circular-photo profile
-- Q1 becomes the large main question
-- Q2 and Q3 become side-by-side supporting articles
-- vertical `LOVE Q&A` tab and shared-interests mini feature added
+The pack contains distinct, role-specific images for the cover, profiles, history, four memory spots, back main image, and three Friends & Family images.
 
-### Inside right
+Detailed IDs and role mapping:
+- `FIGMA-DESIGN-RESEARCH-AND-V5-BRUSHUP-2026-08-02.md`
 
-- four equal memory cards replaced by `1 large + 3 small`
-- one large `BEST SPOT No.1` feature
-- three compact supporting destinations with varied rotation
-- branch-route treatment connects the lead destination to supporting spots
+## Current blocker
 
-All 12 semantic photo replacement roles remain intact.
+The generated high-resolution pack is not yet applied to the Figma roles.
 
-## Online-research-driven Editorial System V4
+Attempts and results:
+- Figma `upload_assets`: upload URLs issued successfully.
+- binary POST: blocked because the local container could not resolve `mcp.figma.com`.
+- `figma.createImageAsync`: unsupported in the current runtime.
+- runtime `fetch`: undefined.
+- inline base64: unreliable because large payloads were truncated.
 
-Current official Figma and Adobe editorial documentation was reviewed before this pass. The resulting system was implemented in the live file rather than kept as prose only.
+This is a transfer-path blocker. It is not evidence that the assets or Figma structure are missing.
 
-New Figma page:
+## Remaining work
 
-`03_RURUBU_EDITORIAL_SYSTEM` — node `68:2`
+1. Recover a functioning binary upload path.
+2. Apply all 13 Drive assets to the matching semantic nodes.
+3. Verify every image hash and FILL crop.
+4. Run whole-spread, page, and detail screenshot QA.
+5. Fix the weakest three areas.
+6. Remove at least one redundant badge/card element.
+7. Re-run structural audit.
+8. Replace dummy images and copy with approved real content.
+9. Apply the exact print-vendor template and run PDF/physical proof QA.
 
-System frame:
+## Honest quality assessment
 
-`99_EDITORIAL_SYSTEM_V1` — node `68:23`
+Current visual quality: approximately `6.5 / 10`.
 
-### Reusable local styles
-
-Paint styles:
-- 11 `RURUBU/Color/*` styles
-
-Text styles:
-- `RURUBU/Type/Display`
-- `RURUBU/Type/Section`
-- `RURUBU/Type/CardTitle`
-- `RURUBU/Type/Body`
-- `RURUBU/Type/Micro`
-- `RURUBU/Type/Label`
-
-Effect styles:
-- `RURUBU/Effect/Card Lift`
-- `RURUBU/Effect/Sticker Lift`
-
-Layout-guide style:
-- `RURUBU/Grid/8px + 12 Columns`
-
-The hidden guide combines:
-- 8 px uniform grid
-- 12 stretch columns
-- 16 px gutters
-- 32 px outer offsets
-
-It is applied to both Current production frames.
-
-### Auto Layout components
-
-Six reusable live main components were created:
-- `RURUBU/Chip/Pink`
-- `RURUBU/Chip/Blue`
-- `RURUBU/Chip/Yellow`
-- `RURUBU/Chip/Mint`
-- `RURUBU/Folio`
-- `RURUBU/MicroNote`
-
-These use padding and hug-content behavior so short copy changes are less likely to break small editorial labels.
-
-### Reusable micro vectors
-
-Editable vector details:
-- camera
-- plane
-- heart
-- map pin
-
-They are used only when they indicate photo, travel, relationship, or location meaning.
-
-## V4 production refinements applied
-
-### Outer spread
-
-Added or standardized:
-- page folios
-- Auto Layout category chips
-- camera and plane micro-icons
-- low-opacity halftone texture
-- dashed guide accents
-- photo-point note
-- photo/archive microcopy
-- consistent card-lift and sticker-lift effect styles
-
-### Inside spread
-
-Added or standardized:
-- profile/history page folios
-- semantic profile chip
-- camera, heart, plane, and pin micro-icons
-- low-opacity halftone texture outside body-copy areas
-- reusable history-photo note
-- consistent effects across key profile, Q&A, and memory surfaces
-
-## Screenshot-driven correction after V4
-
-Whole-spread screenshots were reviewed after applying the system.
-
-Removed after review:
-- `EDITOR CHECK` note overlapping Q&A content
-- redundant `MAP ROUTE` chip competing with the existing memory-map heading
-- yellow dashed rule crossing the Q&A article area
-
-These removals are part of the quality result. Detail count is not the goal; hierarchy, meaning, and editability are the goal.
-
-Current visual read:
-- fine details are visible without replacing the main hierarchy
-- page references and icons improve navigation
-- shadows are more consistent
-- halftone texture remains subtle
-- no major fold collision is visible
-- no major text clipping is visible
-- the layout remains intentionally irregular without losing its underlying grid
-
-## Final live structural audit after V4
-
-Production page:
-
-`02_RURUBU_AUTHENTIC`
-
-Audit result:
-- visible nodes: `497`
-- visible native text nodes: `162`
-- live component instances: `9`
-- editorial-detail nodes in production frames: `20`
-- system main components: `6`
-- local RURUBU paint styles: `11`
-- local RURUBU text styles: `6`
-- local RURUBU effect styles: `2`
-- local RURUBU grid styles: `1`
-- missing-font text nodes: `0`
-- invalid non-line geometry: `0`
-- semantic photo roles preserved: `12 / 12`
-
-Zero-height LINE nodes are valid route/divider elements and are excluded from invalid-geometry checks.
-
-## Current assets and boundaries
-
-Current accepted decorative assets remain authoritative:
-- Logo A
-- `2026.10.24 SAT` date badge
-- masking tape #9
-- `PICK UP!`
-- `BEST SHOT`
-- feature-stamp star #14a
-- scrapbook frame
-- map pin
-- small travel icons
-
-Rules preserved:
-- no accepted Current asset was regenerated
-- no production SVG was introduced into the Rurubu path
-- no AI transformation of the couple, guests, or dog
-- normal headings, names, profile copy, Q&A, dates, captions, labels, and page references remain native editable Figma text
-- photo roles remain replaceable and non-flattened
-- dummy/gradient fills remain visibly provisional
-- earlier comparison candidates remain available for rollback
-
-## Remaining before final
-
-1. Replace cover hero, profile, history, memory-spot, main-memory, and friends/family placeholders with selected real photos.
-2. Replace dummy profile, Q&A, history, memory-spot, friends/family, shared-interests, and page-number copy with approved final content.
-3. Re-run non-destructive crop and subject-safe-position QA after every photo replacement group.
-4. Re-run text overflow, fold-proximity, and visual-density QA after every copy replacement group.
-5. Review optical balance after real photographs introduce skin tones, scenery, and varying brightness.
-6. Verify the exact current print product/template and final bleed/safe requirements immediately before ordering.
-7. Apply the exact vendor template without inventing production-safe values.
-8. Export the final PDF and run the repository final-print QA checklist.
-9. Complete actual-size print and physical proof review.
-
-## Declaration
-
-The dedicated authentic-style Rurubu page now contains:
-- the requested more creative, non-repetitive editorial composition
-- a research-driven reusable Figma editorial system
-- screenshot-driven removal of redundant detail
-- a passing live structural audit
-
-Current state:
-
-`AUTHENTIC_RURUBU_EDITORIAL_SYSTEM_V4_QA_PASS / REAL_CONTENT_REPLACEMENT_PENDING / NOT_PRINT_READY`
+The layout foundation is stronger than an average generic template, but the large-image pixelation prevents a claim that it is equal to a high-quality commercial profile book. The next meaningful quality jump depends on successful placement of the 13 high-resolution Drive images.
