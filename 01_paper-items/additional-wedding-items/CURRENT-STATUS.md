@@ -31,11 +31,11 @@ Authority: `m-shogo/wedding-project` `main`
 | ADD-14 | 二次会案内 | `PREPARED_FOR_FIGMA` |
 | ADD-15 | 料理紹介 / 国テーマ説明カード | `PREPARED_FOR_FIGMA` |
 | ADD-16 | 両親贈呈品メッセージカード | `PREPARED_FOR_FIGMA` |
-| ADD-17 | 子ども向けミニカード / ぬりえ | `PENDING_REQUIREMENT_CHECK` |
+| ADD-17 | 子ども向けミニカード / ぬりえ | `BLOCKED_REQUIRED_INPUT` |
 
 ## Current pointer
 
-`ACTIVE_NEXT = ADD-17_CHILDREN_MINI_CARD_REQUIREMENT_CHECK`
+`ACTIVE_NEXT = ADD-17_CHILDREN_MINI_CARD_REQUIREMENT_CONFIRMATION`
 
 ## Completed checkpoints
 
@@ -56,9 +56,13 @@ Authority: `m-shogo/wedding-project` `main`
 - ADD-15: 5/5 docs, Model A course-story / Model B destination-story decision gate, truth and allergen safety contract, Drive `186f2tA2czrrdIQ_7djhPBun6dStztmS8`, no fabricated menu, ingredient, allergen, country relation, or food raster, `PREPARED_FOR_FIGMA`
 - ADD-16: 5/5 docs, home-port editorial direction, family-fact and message truth gate, postcard/small-tag/folded conditional formats, Drive `1BOyETtL1_loGXNjGV9S30sJKEhZNjd6O`, no fabricated family story or raster, `PREPARED_FOR_FIGMA`
 
-## Incomplete checkpoint
+## Requirement-gated checkpoint
 
-- ADD-17 is the first pending item. Confirm whether children will attend and whether a mini card, activity sheet, or coloring item is actually required before preparing production specifications. Do not invent names, ages, counts, interests, or venue-provided children services.
+- ADD-17 live requirement check completed on 2026-08-02.
+- Google Drive searches found no authoritative guest-list or child-attendance evidence.
+- `ADD-17-children-mini-card/REQUIREMENT-CHECK.md` records the evidence, allowed resolutions, and required inputs.
+- No Figma nodes, Drive assets, or raster assets were created because age, count, attendance, and need remain unconfirmed.
+- Resolve as `NOT_REQUIRED` or `READY_FOR_SPEC` only after authoritative confirmation.
 
 ## Execution rules
 
