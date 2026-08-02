@@ -25,7 +25,7 @@ Authority: `m-shogo/wedding-project` `main`
 | ADD-08 | メニュー補助サイン | `PREPARED_FOR_FIGMA` |
 | ADD-09 | ゲストブックサイン | `PREPARED_FOR_FIGMA` |
 | ADD-10 | 会場案内サイン | `PREPARED_FOR_FIGMA` |
-| ADD-11 | 写真共有 / QR案内サイン | `PENDING` |
+| ADD-11 | 写真共有 / QR案内サイン | `PREPARED_FOR_FIGMA` |
 | ADD-12 | 新郎新婦クイズカード | `PENDING` |
 | ADD-13 | メッセージカード | `PENDING` |
 | ADD-14 | 二次会案内 | `PENDING_REQUIREMENT_CHECK` |
@@ -35,7 +35,7 @@ Authority: `m-shogo/wedding-project` `main`
 
 ## Current pointer
 
-`ACTIVE_NEXT = ADD-11_PHOTO_SHARE_QR_SIGN_SPEC_AND_QUEUE`
+`ACTIVE_NEXT = ADD-12_COUPLE_QUIZ_CARD_SPEC_AND_QUEUE`
 
 ## Completed checkpoints
 
@@ -49,10 +49,11 @@ Authority: `m-shogo/wedding-project` `main`
 - ADD-08: 5/5 docs, A4 portrait/A5 reflow, editable text/native vector design, no raster required, Drive `12D7UPRTDwUx7vLOm1mtaew-sFGHt9FPG`, metadata readback PASS, `PREPARED_FOR_FIGMA`
 - ADD-09: 5/5 docs, A5 portrait/A4 reflow, editable text/native vector guest-book guidance, Drive `1D259ugx13El0JYxvn8yyskIjc2c2liF4`, no new raster by design, `PREPARED_FOR_FIGMA`
 - ADD-10: 5/5 docs, modular A4/A5 venue wayfinding system, official venue terminology/direction verification gate, Drive `1ASWOTXO4fosLb9reWxQrHL2_UUC_Y8-3`, no new raster by design, `PREPARED_FOR_FIGMA`
+- ADD-11: 5/5 docs, A5 portrait/A4 reflow, replaceable QR frame, editable access/privacy/expiry text, Drive `1wuxHEqby_0JWS0bYV0RWCTUotM88Mnxb`, no QR or raster generated before official URL confirmation, `PREPARED_FOR_FIGMA`
 
 ## Incomplete checkpoint
 
-- ADD-11 is the first pending item.
+- ADD-12 is the first pending item.
 
 ## Execution rules
 
