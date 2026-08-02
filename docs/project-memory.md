@@ -49,6 +49,8 @@
 - テキスト案: `08_texts/`
 - 全ウェディングFigma制作正本: `docs/wedding-figma-production-system.md`
 - 全ウェディング生成素材メモリ: `docs/wedding-asset-generation-memory.md`
+- Figma/AI継続学習正本: `docs/wedding-figma-ai-continuous-learning-system.md`
+- デザイン学習・FBログ: `docs/wedding-design-learning-feedback-log.md`
 - 生成素材証拠台帳テンプレート: `docs/templates/wedding-generated-asset-register.csv`
 
 ## 運用ルール
@@ -83,6 +85,19 @@
 - 架空の生成人物を本人として見せない。ダミー人物は後ろ姿、遠景、手元など本人と誤認されにくい構図にする。
 - 文字、数字、ロゴ、看板、ウォーターマークは画像に焼き込まず、原則Figmaのnative text/vectorで作る。
 - 新しいclean-room版は、知識と工程は継承しても、前版の生成写真、image hash、hero構図、crop、card geometryを自動流用しない。
+
+## 継続学習の恒久方針
+
+- 学びに完了状態を置かない。Figma、Figma AI、画像生成AI、雑誌編集、日本語組版、印刷工程の更新を継続的に確認する。
+- 作業前に `docs/wedding-figma-ai-continuous-learning-system.md` を読み、発見をそのままルールにせず、`DISCOVERED → PROTOTYPED → VERIFIED → PROJECT_RULE` の順で昇格する。
+- 公式Figma、Adobe、W3C/JLREQ、印刷会社、利用モデルの一次資料を優先する。
+- AI出力は候補であり、編集判断・事実・権利・印刷品質の正本にはしない。
+- AIは構想展開、画像編集、背景除去、拡張、解像度改善、現実的な長さのダミー文章、レイヤー整理、類似資産検索に使う。
+- AIを最終の主従判断、日本語文字組み、本番人物写真、権利判断、印刷プリフライトの代わりにしない。
+- Auto Layoutは反復要素や長文耐性に限定して検証し、Web UI風カードを増やす理由にしない。
+- 新機能やノウハウはCurrentを壊さない複製フレームまたは限定ノードで実験する。
+- 検証結果、失敗、採否、次回への影響を `docs/wedding-design-learning-feedback-log.md` に記録する。
+- 定期フィードバックでは、学んだ内容、実験、改善、失敗、Git更新、次の変更を具体的に報告する。
 
 ## 学習と改善
 
