@@ -30,12 +30,12 @@ Authority: `m-shogo/wedding-project` `main`
 | ADD-13 | メッセージカード | `PREPARED_FOR_FIGMA` |
 | ADD-14 | 二次会案内 | `PREPARED_FOR_FIGMA` |
 | ADD-15 | 料理紹介 / 国テーマ説明カード | `PREPARED_FOR_FIGMA` |
-| ADD-16 | 両親贈呈品メッセージカード | `PENDING` |
+| ADD-16 | 両親贈呈品メッセージカード | `PREPARED_FOR_FIGMA` |
 | ADD-17 | 子ども向けミニカード / ぬりえ | `PENDING_REQUIREMENT_CHECK` |
 
 ## Current pointer
 
-`ACTIVE_NEXT = ADD-16_PARENT_GIFT_MESSAGE_CARD_SPEC_AND_QUEUE`
+`ACTIVE_NEXT = ADD-17_CHILDREN_MINI_CARD_REQUIREMENT_CHECK`
 
 ## Completed checkpoints
 
@@ -54,10 +54,11 @@ Authority: `m-shogo/wedding-project` `main`
 - ADD-13: 5/5 docs, A6 landscape double-sided message card, editable prompts and handwriting area, Drive `1Md8oCMsw4F9tZjQueNmQQ2dYR1I7JwZl`, no raster required, `PREPARED_FOR_FIGMA`
 - ADD-14: 5/5 docs, conditional A6/A5 after-party guide template, required-information gate, Drive `1Oq2Pz2mYo4oaDnO7LMezMrCUizcxaEjs`, no fabricated venue/time/fee/QR and no raster required, `PREPARED_FOR_FIGMA`
 - ADD-15: 5/5 docs, Model A course-story / Model B destination-story decision gate, truth and allergen safety contract, Drive `186f2tA2czrrdIQ_7djhPBun6dStztmS8`, no fabricated menu, ingredient, allergen, country relation, or food raster, `PREPARED_FOR_FIGMA`
+- ADD-16: 5/5 docs, home-port editorial direction, family-fact and message truth gate, postcard/small-tag/folded conditional formats, Drive `1BOyETtL1_loGXNjGV9S30sJKEhZNjd6O`, no fabricated family story or raster, `PREPARED_FOR_FIGMA`
 
 ## Incomplete checkpoint
 
-- ADD-16 is the first pending item. Prepare the parent-gift message-card specification without inventing final messages, names, gift format, presentation order, or family-specific facts.
+- ADD-17 is the first pending item. Confirm whether children will attend and whether a mini card, activity sheet, or coloring item is actually required before preparing production specifications. Do not invent names, ages, counts, interests, or venue-provided children services.
 
 ## Execution rules
 
