@@ -22,7 +22,7 @@ Authority: `m-shogo/wedding-project` `main`
 | ADD-05 | サンキュータグ / プチギフトタグ | `PREPARED_FOR_FIGMA` |
 | ADD-06 | フォトブースサイン | `PREPARED_FOR_FIGMA` |
 | ADD-07 | エスコートカード案内ボード | `PREPARED_FOR_FIGMA` |
-| ADD-08 | メニュー補助サイン | `PENDING` |
+| ADD-08 | メニュー補助サイン | `DRIVE_UPLOAD_BLOCKED` |
 | ADD-09 | ゲストブックサイン | `PENDING` |
 | ADD-10 | 会場案内サイン | `PENDING` |
 | ADD-11 | 写真共有 / QR案内サイン | `PENDING` |
@@ -35,7 +35,7 @@ Authority: `m-shogo/wedding-project` `main`
 
 ## Current pointer
 
-`ACTIVE_NEXT = ADD-08_MENU_SUPPORT_SIGNS_SPEC_AND_QUEUE`
+`ACTIVE_NEXT = ADD-08_RETRY_DRIVE_FOLDER_CREATE_AND_READBACK`
 
 ## Completed checkpoints
 
@@ -46,6 +46,10 @@ Authority: `m-shogo/wedding-project` `main`
 - ADD-05: 5/5 docs, 50 × 80 mm master specified, Drive `1_V20y77VU1aGrJtqpl7U5XUpC-bQuTxV`, `PREPARED_FOR_FIGMA`
 - ADD-06: 5/5 docs, A3 portrait/A4 reflow, editable title/date/location, native vector decoration, Drive `1Ehk_oQ8vhAGo3DYBbgyOGfA03u0pu5wb`, no new raster by design, `PREPARED_FOR_FIGMA`
 - ADD-07: 5/5 docs, A2 portrait/A3 reflow, three-action route, BOARDING PASS no-copy contract, Drive `1nPb_yvp1rIlF_L3X0mAnBFSzSuEIllDi`, no new raster by design, `PREPARED_FOR_FIGMA`
+
+## Incomplete checkpoint
+
+- ADD-08: 5/5 docs created, A4 portrait/A5 reflow, editable text/native vector design, no raster required. Drive folder creation was blocked before an ID was returned; status remains `DRIVE_UPLOAD_BLOCKED`.
 
 ## Execution rules
 
