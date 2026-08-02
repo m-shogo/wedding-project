@@ -4,6 +4,10 @@ Date: 2026-08-02
 Current authority: live Figma + GitHub `main`
 Production Figma: https://www.figma.com/design/bfM0d4c9dCeBv5pCkJ3TNM
 
+Process authority:
+- `POSTMORTEM-CONTINUOUS-IMPROVEMENT-AND-V6-GUARDRAILS-2026-08-02.md`
+- `RURUBU-V5-NONSTOP-EXECUTION-ROADMAP-2026-08-02.md`
+
 ## Current declaration
 
 `RURUBU_V5_CURRENT_CANDIDATE / REALISTIC_DUMMY_PACK_READY_IN_DRIVE / INLINE_FIGMA_IMAGE_IMPORT_PATH_PROVEN / 1_OF_13_HIGH_RES_DUMMIES_APPLIED / REAL_CONTENT_PENDING / PRINT_TEMPLATE_PENDING / NOT_PRINT_READY`
@@ -28,6 +32,10 @@ Rollback evidence remains preserved:
 - ordinary copy remains native Figma text
 - semantic role names remain intact
 - V4 rollback remains available
+
+Important distinction:
+- `IMAGE fill present` does not prove that the intended high-resolution Drive asset is applied
+- only a verified Drive file ID → semantic node ID → Figma image hash mapping plus screenshot QA can complete a photo role
 
 ## Verified new progress
 
@@ -69,6 +77,21 @@ The folder contains 13 individually named, realistic generated dummy photos for:
 Full file IDs and execution evidence are recorded in:
 - `FIGMA-DESIGN-RESEARCH-AND-V5-BRUSHUP-2026-08-02.md`
 
+## Mandatory Drive-first workflow
+
+For every remaining V5 asset and every future V6 asset:
+
+1. generate
+2. visual-QA and accept/reject
+3. save accepted asset to the version-specific Drive folder
+4. list/read back Drive and record the exact file ID
+5. apply to the semantic Figma node
+6. screenshot-QA crop, contrast, density, and fold safety
+7. structurally audit native text and semantic roles
+8. record verified evidence on GitHub main
+
+No generated local file may be treated as Current before Drive readback.
+
 ## Current transfer strategy
 
 Use the proven inline path incrementally:
@@ -81,23 +104,45 @@ Use the proven inline path incrementally:
 
 The direct upload URL route is still unavailable because the container cannot resolve `mcp.figma.com`; do not rely on it.
 
-## Next required work
+## Next required V5 work
 
 1. Apply the remaining `12 / 13` Drive images through the proven inline path.
 2. Prioritize back main memory and history before small roles.
-3. Re-run crop, contrast, text-overlay, and fold QA after each large-role group.
-4. Fix the weakest three visual areas identified by screenshots.
-5. Reduce remaining Web UI card/badge density where it improves editorial rhythm.
-6. Re-run whole/page/detail screenshots and structural audit.
-7. Replace dummy photos and copy with approved real content.
-8. Apply the exact print-vendor template.
-9. Export PDF, print at actual size, and complete physical proof QA.
+3. Record every Drive ID → semantic node → image hash mapping.
+4. Re-run crop, contrast, text-overlay, and fold QA after each large-role group.
+5. Fix the weakest three visual areas identified by screenshots.
+6. Remove at least one unnecessary visual element after the final review.
+7. Reduce remaining Web UI card/badge density where it improves editorial rhythm.
+8. Re-run whole/page/detail screenshots and structural audit.
+9. Replace dummy photos and copy with approved real content.
+10. Apply the exact print-vendor template.
+11. Export PDF, print at actual size, and complete physical proof QA.
+
+## V6 sequencing and clean-room boundary
+
+V6 is a separate Hawaii / tropical-resort editorial version.
+
+Do not promote or build V6 as the Current candidate until V5 reaches the verified dummy-photo design QA gate. Research and planning may proceed, but V6 production must remain separate.
+
+V6 rules:
+- do not reuse V5-generated photographs
+- create a new version-specific Drive folder before Figma placement
+- create a new asset register and semantic mapping
+- use separate Figma frames/page; never overwrite V5
+- research multiple Hawaii, tropical-resort, travel-magazine, and editorial-layout references
+- extract layout principles rather than trace one commercial issue
+- generate all V6 photo roles newly
+- independently run screenshot and structural QA
+
+Detailed guardrails:
+- `POSTMORTEM-CONTINUOUS-IMPROVEMENT-AND-V6-GUARDRAILS-2026-08-02.md`
 
 ## Stop conditions
 
 Do not claim `DESIGN_FINAL`, `PHOTO_QA_PASS`, or `PRINT_READY` while:
 - the remaining generated photos are not applied and audited,
 - large images remain pixelated,
+- Drive-to-node-to-hash evidence is missing,
 - dummy content remains,
 - the exact print template is not applied,
 - final PDF and physical proof QA are incomplete.
