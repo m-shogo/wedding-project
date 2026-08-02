@@ -2,7 +2,13 @@
 
 Date: 2026-08-02
 Repository: `m-shogo/wedding-project`
-Authority: live Figma + Drive readback + GitHub `main`
+Authority: live Figma + Drive readback + asset evidence ledger + GitHub `main`
+
+Operational companion:
+- `RURUBU-PRODUCTION-OPERATING-SYSTEM-V2-2026-08-02.md`
+
+Progress authority:
+- `RURUBU-V5-ASSET-EVIDENCE-LEDGER.json`
 
 ## Purpose
 
@@ -36,6 +42,7 @@ Corrective action:
 - distinguish these states explicitly:
   - `IMAGE_FILL_PRESENT`
   - `SOURCE_VERIFIED`
+  - `DERIVATIVE_QA_PASS`
   - `CROP_QA_PASS`
   - `PHOTO_ROLE_PASS`
 
@@ -61,39 +68,82 @@ Corrective action:
 
 ### 5. The transfer path was not proven with one small end-to-end sample first
 
-Several upload paths were attempted before a minimal working path was established. The proven route is now compressed inline binary import through `figma.base64Decode()` and `figma.createImage()`.
+Several upload paths were attempted before a minimal working path was established. The proven route is compressed inline binary import through `figma.base64Decode()` and `figma.createImage()`.
 
 Corrective action:
 - prove one role end-to-end first:
   1. generate
-  2. save to Drive
+  2. save master to Drive
   3. read back Drive ID
-  4. resize/compress
-  5. apply to one semantic Figma node
-  6. screenshot
-  7. inspect fill/hash
-  8. record in Git
+  4. create a role-sized derivative
+  5. inspect derivative dimensions and quality
+  6. apply to one semantic Figma node
+  7. screenshot
+  8. inspect fill/hash
+  9. record in Git
 - only after that proof may the method be scaled to the remaining roles
 
 ### 6. A roadmap contained checked items that no longer matched Current truth
 
-The earlier nonstop roadmap marked all 13 photo roles and final QA as complete, while the later Current status correctly stated only `1 / 13` generated high-resolution assets had been applied through the verified path.
+The earlier nonstop roadmap marked all 13 photo roles and final QA as complete, while later Current evidence showed otherwise.
 
 Corrective action:
-- Current status outranks historical roadmaps
+- Current status and the asset ledger outrank historical roadmaps
 - checkboxes must be changed when later evidence disproves them
 - a document timestamp does not make its claims authoritative
+- progress counts are derived from the ledger, not copied manually between prose documents
 
-## Mandatory asset lifecycle
+### 7. Transport success was mistaken for visual-quality success
 
-Every generated visual asset must move through this exact state machine:
+The first proven inline import used a `5,927-byte` derivative for the cover hero. It created a valid Figma image hash and proved that the transfer mechanism worked, but it did not meet the visual quality bar for a dominant magazine image.
+
+Root cause:
+- payload minimization was prioritized over image quality
+- no derivative dimension / byte / visible-quality floor existed
+- `FIGMA_APPLIED` was too close to `PHOTO_ROLE_PASS`
+
+Corrective action:
+- preserve the Drive master separately
+- create and record a role-sized Figma derivative
+- large dummy-design roles must normally be at least approximately `2×` their Figma box dimensions
+- profile, circle, and small roles should normally be `4×` for crop flexibility
+- a derivative that transmits but pixelates is rejected
+- `FIGMA_APPLIED` is never a visual-quality completion state
+
+### 8. Clearly recognizable generated people can imply false identity
+
+A realistic generated profile person may look polished while still being unsuitable as a stand-in for the real bride or groom.
+
+Corrective action:
+- profile dummies should prefer back view, side view, hands, travel objects, silhouette, or face-obscured composition
+- no generated person is described or visually presented as the real couple, guest, or family member
+- recognizable generated faces require replacement or safe cropping before photo-role pass
+
+### 9. Figma design QA was not sufficiently separated from print preflight
+
+A visually strong editable spread can still fail commercial output because of low effective resolution, overset text, bleed, color, PDF, fold, or trim issues.
+
+Corrective action:
+- maintain independent gates:
+  - `DESIGN_QA_PASS`
+  - `REAL_CONTENT_EDITORIAL_QA_PASS`
+  - `PRINT_TEMPLATE_PREFLIGHT_PASS`
+  - `PHYSICAL_PROOF_PASS`
+- never jump from dummy design QA to `PRINT_READY`
+
+## Mandatory asset lifecycle V2
+
+Every generated visual asset must move through this state machine:
 
 `PLANNED`
-→ `GENERATED`
-→ `VISUAL_QA_ACCEPTED`
-→ `DRIVE_SAVED`
-→ `DRIVE_READBACK_VERIFIED`
+→ `MASTER_GENERATED`
+→ `MASTER_VISUAL_QA_ACCEPTED`
+→ `MASTER_DRIVE_SAVED`
+→ `MASTER_DRIVE_READBACK_VERIFIED`
+→ `FIGMA_DERIVATIVE_CREATED`
+→ `DERIVATIVE_QA_PASS`
 → `FIGMA_APPLIED`
+→ `SOURCE_NODE_HASH_VERIFIED`
 → `SCREENSHOT_QA_PASS`
 → `STRUCTURE_QA_PASS`
 → `GIT_RECORDED`
@@ -109,50 +159,60 @@ An asset is not complete when it is merely in Drive.
 
 An asset is not complete when an arbitrary IMAGE fill exists in its Figma node.
 
+An asset is not complete when a low-quality derivative successfully creates a Figma hash.
+
 `ROLE_COMPLETE` requires:
-- exact intended asset identified
+- exact intended master identified
 - Drive ID recorded
+- derivative dimensions and byte size recorded
+- derivative quality accepted
 - exact semantic target node identified
 - image hash or equivalent live-placement evidence recorded
 - screenshot crop/contrast review passed
+- structure/editability review passed
 - GitHub main records the verified state
 
 ## Drive-first rule
 
 For V5, V6, and later versions:
 
-1. generate the visual asset
+1. generate the visual master
 2. reject or accept it visually
-3. save accepted files to a version-specific Drive folder
-4. list/read back the folder and record file IDs
-5. only then import into Figma
-6. do not treat temporary local paths as Current authority
+3. save accepted master to a version-specific Drive folder
+4. list/read back the folder and record file ID
+5. create a role-sized derivative without overwriting the master
+6. only then import into Figma
+7. do not treat temporary local paths as Current authority
 
-File naming must express version and semantic role.
+Recommended version folder structure:
+- `00_MANIFEST_AND_LICENSE`
+- `10_MASTER_ACCEPTED`
+- `20_FIGMA_DERIVATIVES`
+- `30_REJECTED_CANDIDATES`
+- `40_QA_SCREENSHOTS`
+- `90_ARCHIVE`
+
+File naming must express version, semantic role, and artifact type.
 
 Examples:
-- `V6_01_COVER_HERO_HAWAII_DUMMY.png`
-- `V6_05_HISTORY_RESORT_DUMMY.png`
-- `V6_11_FRIENDS_FAMILY_SUNSET_DINNER_DUMMY.png`
+- `V6_01_COVER_HERO_HAWAII_MASTER.png`
+- `V6_01_COVER_HERO_HAWAII_FIGMA_Q85.jpg`
+- `V6_05_HISTORY_RESORT_MASTER.png`
 
 ## Live-evidence reporting contract
 
 Every progress report must separate:
 
 ### Verified completed
-
-Operations proven by live Drive, Figma, or GitHub evidence.
+Operations proven by live Drive, Figma, ledger, or GitHub evidence.
 
 ### In progress
-
 Operations started but not yet through their completion gate.
 
 ### Blocked
-
-The precise failed operation and the safe retry path.
+The precise failed operation, blocker fingerprint, and safe retry path.
 
 ### Not started
-
 Work that has not begun, even if a plan or prompt exists.
 
 Forbidden wording without evidence:
@@ -162,23 +222,28 @@ Forbidden wording without evidence:
 - `QA pass`
 - `print ready`
 
-## V5 recovery rule
+## V5 recovery rule V2
 
 V5 must finish before V6 becomes the Current candidate.
 
 V5 remaining verified sequence:
-1. apply the remaining `12 / 13` Drive photos through the proven inline path
-2. verify Drive ID → semantic node → Figma image hash mapping
-3. run whole-spread screenshots
-4. run page and detail screenshots
-5. identify and repair the weakest three areas
-6. remove at least one unnecessary visual element
-7. re-run screenshot and structural QA
-8. update GitHub main with actual node IDs, hashes, counts, and remaining work
+1. re-derive and re-import the cover hero because the current derivative is rejected
+2. apply back-main and history masters with quality-passing derivatives
+3. screenshot both spreads and confirm the dominant-image gate
+4. apply the remaining profile, cover-snap, lead-memory, Friends & Family, and small-memory roles in bounded batches
+5. update the asset ledger after each role/batch
+6. verify Drive ID → semantic node → Figma image hash mapping
+7. run whole-spread, page, and detail screenshots
+8. identify and repair the weakest three areas
+9. remove at least one unnecessary visual element
+10. re-run screenshot and structural QA
+11. update GitHub main with actual node IDs, hashes, counts, and remaining work
+
+Current truthful counts are defined only by `RURUBU-V5-ASSET-EVIDENCE-LEDGER.json`.
 
 ## V6 clean-room rule
 
-V6 is a new Hawaii / tropical resort editorial direction, not a recolor or reskin of V5.
+V6 is a new Hawaii / tropical-resort editorial direction, not a recolor or reskin of V5.
 
 ### V6 must not reuse
 
@@ -194,8 +259,8 @@ Accepted Current decorative assets may be reused only when they remain appropria
 
 - version-specific research report
 - Hawaii/resort reference taxonomy
-- new image-generation queue
-- new Drive folder and asset register
+- new image-generation queue with target aspect ratios and text-safe zones
+- new Drive folder and evidence ledger
 - new semantic placement map
 - separate Figma working frames/page
 - screenshot comparison against V5
@@ -207,7 +272,7 @@ Research must compare multiple sources and extract principles rather than trace 
 
 Required study areas:
 - Hawaii and tropical-resort travel guide covers and spreads
-- Japanese travel magazine hierarchy and density
+- Japanese travel-magazine hierarchy and density
 - resort hotel and destination editorial layouts
 - modern Japanese and international magazine typography
 - photographic cropping, captions, maps, itineraries, sidebars, and cover-line rhythm
@@ -246,33 +311,48 @@ Required qualities:
 - no unauthorized real-person substitution
 - no baked-in editorial text
 
-### Gate 2 — Drive
-- file saved
+### Gate 2 — Drive master
+- master saved
 - folder listed
 - ID and filename match semantic role
+- master not overwritten by derivative
 
-### Gate 3 — Figma structure
+### Gate 3 — derivative
+- target dimensions recorded
+- byte size recorded
+- no visible quality failure
+- correct color/orientation
+
+### Gate 4 — Figma structure
+- intended source-node-hash mapping verified
 - native text preserved
 - semantic role preserved
 - no flattening of important layers
 - rollback candidate preserved
 
-### Gate 4 — visual QA
+### Gate 5 — visual QA
 - whole spread
 - page level
 - detail level
-- crop, contrast, density, fold, and repetition reviewed
+- crop, contrast, density, fold, repetition, and AI artifacts reviewed
 
-### Gate 5 — truthfulness
-- Current status matches live state
-- checklist matches Current status
+### Gate 6 — truthfulness
+- ledger matches live state
+- Current status summarizes ledger
 - commit SHA recorded
 - incomplete work remains explicitly incomplete
+
+### Gate 7 — print
+- exact template and product verified
+- effective image resolution checked
+- bleed, fold, trim, color, PDF, and small text checked
+- actual-size proof passed
 
 ## Continuous-improvement expectation
 
 Every failure should produce one of the following durable improvements:
 - a corrected Current document
+- an updated asset ledger
 - a new validator or audit step
 - a tighter state transition
 - a reusable script or proven import route
