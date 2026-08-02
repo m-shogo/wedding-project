@@ -116,3 +116,61 @@ The design defect is not lack of a good source master. The immediate blocker is 
 ### Status
 
 `PROTOTYPED / TRANSFER_METHOD_REJECTED / LIVE_DESIGN_UNCHANGED / LESSON_RECORDED`
+
+---
+
+## 2026-08-03 — V5 hero-caption card-to-editorial-strip refinement
+
+### Visible problem
+
+The cover hero photograph still carried a floating white rounded caption panel in its lower-right area. The module was legible, but its white card shape and corner radius repeated a Web/UI containment pattern and covered more of the already-limited dominant photograph than necessary.
+
+### Source and hypothesis
+
+- Source: live V5 whole-spread screenshot and the project rule to attempt subtraction or structural simplification before adding decoration.
+- Hypothesis: converting the module into a compact, flush, square-corner editorial strip would preserve contrast and native text while reducing UI-card feel and returning more visual authority to the photograph.
+
+### Experiment
+
+Bounded live nodes only:
+
+- panel `77:205`
+- kicker `77:206`
+- main caption `77:207`
+
+Changes:
+
+- replaced the near-opaque white rounded panel with an 88%-opaque navy strip
+- removed corner radius, strokes, and effects
+- reduced the panel height from 66 to 58
+- reduced kicker size from 12 to 10 and kept it as a pink editorial eyebrow
+- changed the main caption to white and reduced it from 17 to 16
+- preserved the text as native `Noto Sans JP` and retained all semantic node IDs
+
+### Result
+
+**VERIFIED / ADOPTED FOR CURRENT V5.**
+
+The post-change whole-spread screenshot shows:
+
+- clearer integration with the lower edge of the photograph
+- less resemblance to a floating interface card
+- preserved readability over the image
+- slightly more visible photograph area
+- no text loss, overlap, structural flattening, or rollback damage
+
+### Failure or regression check
+
+The strip remains a contained caption device, so this does not prove that every image caption should use a dark strip. The treatment is adopted only for this high-contrast cover-photo context. It must not become an automatic global component without further evidence.
+
+### Reusable lesson
+
+When a caption requires guaranteed contrast over a variable photograph, a compact flush editorial strip can outperform a floating rounded card. The improvement comes from edge alignment, lower height, square geometry, and typographic hierarchy—not from merely changing the color.
+
+### Next application
+
+Audit remaining V5 photo overlays and labels individually. Prefer direct type or a minimal rule where contrast permits; use a strip only where the image genuinely requires containment.
+
+### Status
+
+`PROTOTYPED → VERIFIED / V5_CURRENT_ADOPTED / GLOBAL_RULE_NOT_YET_PROMOTED`
