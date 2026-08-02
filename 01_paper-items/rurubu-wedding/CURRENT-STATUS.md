@@ -1,16 +1,22 @@
 # るるぶWEDDING — CURRENT STATUS
 
 Date: 2026-08-02
-Current authority: live Figma + GitHub `main`
+Current authority: live Figma + Drive readback + asset evidence ledger + GitHub `main`
 Production Figma: https://www.figma.com/design/bfM0d4c9dCeBv5pCkJ3TNM
 
 Process authority:
+- `RURUBU-PRODUCTION-OPERATING-SYSTEM-V2-2026-08-02.md`
 - `POSTMORTEM-CONTINUOUS-IMPROVEMENT-AND-V6-GUARDRAILS-2026-08-02.md`
+
+Progress authority:
+- `RURUBU-V5-ASSET-EVIDENCE-LEDGER.json`
+
+Sequence reference only:
 - `RURUBU-V5-NONSTOP-EXECUTION-ROADMAP-2026-08-02.md`
 
 ## Current declaration
 
-`RURUBU_V5_CURRENT_CANDIDATE / REALISTIC_DUMMY_PACK_READY_IN_DRIVE / INLINE_FIGMA_IMAGE_IMPORT_PATH_PROVEN / 1_OF_13_HIGH_RES_DUMMIES_APPLIED / REAL_CONTENT_PENDING / PRINT_TEMPLATE_PENDING / NOT_PRINT_READY`
+`RURUBU_V5_CURRENT_CANDIDATE / REALISTIC_DUMMY_MASTERS_13_OF_13_DRIVE_VERIFIED / INLINE_FIGMA_IMPORT_PATH_PROVEN / INTENDED_SOURCE_APPLIED_1_OF_13 / PHOTO_ROLE_PASS_0_OF_13 / HERO_REIMPORT_REQUIRED / REAL_CONTENT_PENDING / PRINT_TEMPLATE_PENDING / NOT_PRINT_READY`
 
 ## Current live Figma
 
@@ -27,122 +33,170 @@ Rollback evidence remains preserved:
 ## Verified structure
 
 - semantic photo roles: `13 / 13`
-- IMAGE fills: `13 / 13`
+- nodes with an IMAGE fill of some kind: `13 / 13`
 - gradient-only photo roles: `0`
 - ordinary copy remains native Figma text
 - semantic role names remain intact
 - V4 rollback remains available
 
-Important distinction:
-- `IMAGE fill present` does not prove that the intended high-resolution Drive asset is applied
-- only a verified Drive file ID → semantic node ID → Figma image hash mapping plus screenshot QA can complete a photo role
+Important distinctions:
+- `IMAGE fill present` does not prove that the intended Drive asset is applied
+- `intended source applied` does not prove that the derivative is visually acceptable
+- only a verified Drive ID → semantic node ID → Figma image hash mapping plus screenshot and structure QA can complete a photo role
 
-## Verified new progress
+## Inline transfer path: proven, but first derivative rejected for quality
 
 A safe inline binary-import path into live Figma was proven on 2026-08-02:
-- source image was resized and JPEG-compressed locally
-- bytes were base64-encoded
-- `figma.base64Decode()` + `figma.createImage()` created a new Figma image hash
-- the existing semantic cover hero node `77:148` was updated without flattening text or changing the frame hierarchy
-- shared metadata records the Drive source role
+- source image resized and JPEG-compressed locally
+- bytes base64-encoded
+- `figma.base64Decode()` + `figma.createImage()` produced a Figma image hash
+- existing semantic cover node `77:148` updated without flattening text or changing frame hierarchy
 
-Verified live result:
-- cover hero `IMG_HERO` — generated Yokohama dummy applied
+Verified transport result:
+- role: cover hero `IMG_HERO`
+- target node: `77:148`
 - imported byte length: `5,927`
 - Figma image hash: `a776d183a5ea8715f6fe9186c4c0749973df06b4`
-- screenshot QA completed after placement
 
-This resolves the earlier assumption that all binary import paths were blocked. The direct `upload_assets` URL remains inaccessible from the local container, but inline compressed image insertion works.
+Quality result:
+- `REJECT_LOW_QUALITY_DERIVATIVE`
+- this proves the transport path only
+- it does not count as `PHOTO_ROLE_PASS`
+- cover hero must be re-derived at role-appropriate dimensions and compression, re-imported, and re-QA'd
 
-## Important visual truth
-
-The cover hero now uses the generated Yokohama dummy rather than the previous in-file reassignment. However, only `1 / 13` generated high-resolution dummy roles has been applied through the proven path so far.
-
-The remaining large-role images—especially back main memory and history—still require replacement and screenshot QA. Do not claim the full realistic generated 13-image pack is applied or that photo QA has passed.
-
-## Realistic dummy photo pack
+## Realistic dummy master pack
 
 Drive folder:
 - `RURUBU_V5_DUMMY_PHOTOS_2026-08-02`
 - ID: `1tAvBO9TodEKVHVZnABD73rEPUGG8iu0N`
 
-The folder contains 13 individually named, realistic generated dummy photos for:
-- cover hero and cover snap
-- groom and bride profiles
-- history
-- four memory spots
-- back main image
-- three Friends & Family images
+Verified:
+- accepted master files in Drive: `13 / 13`
+- Drive list/readback: complete
+- exact IDs, filenames, sizes, Figma target nodes, and current role states: `RURUBU-V5-ASSET-EVIDENCE-LEDGER.json`
 
-Full file IDs and execution evidence are recorded in:
-- `FIGMA-DESIGN-RESEARCH-AND-V5-BRUSHUP-2026-08-02.md`
-
-## Mandatory Drive-first workflow
+## Mandatory Drive-first workflow V2
 
 For every remaining V5 asset and every future V6 asset:
 
-1. generate
+1. generate or select a role-specific master
 2. visual-QA and accept/reject
-3. save accepted asset to the version-specific Drive folder
-4. list/read back Drive and record the exact file ID
-5. apply to the semantic Figma node
-6. screenshot-QA crop, contrast, density, and fold safety
-7. structurally audit native text and semantic roles
-8. record verified evidence on GitHub main
+3. save accepted master to the version-specific Drive folder
+4. list/read back Drive and record file ID, filename, dimensions/bytes where available
+5. create a separate role-sized Figma derivative
+6. apply derivative to the exact semantic Figma node
+7. record Figma image hash
+8. screenshot-QA crop, contrast, density, and fold safety
+9. structurally audit native text, semantic role, and rollback state
+10. update the asset ledger
+11. update Current status only if the ledger changed
 
-No generated local file may be treated as Current before Drive readback.
+No temporary local file, attempted write, or arbitrary IMAGE fill may be treated as Current.
 
-## Current transfer strategy
+## Image-quality policy
 
-Use the proven inline path incrementally:
-1. resize each source to a role-appropriate pixel size
-2. JPEG-compress to keep the base64 payload safely below the `use_figma` code limit
-3. insert one or a small group of images per call
-4. preserve each semantic photo node and native text
-5. run screenshots after large-role groups
-6. record only verified image hashes and node IDs
+- Drive master and Figma derivative are different artifacts
+- the Drive master is never overwritten by a transfer-compressed derivative
+- large dummy-design derivatives must be at least approximately `2×` the target Figma box dimensions
+- small/circular/profile derivatives should preferably be `4×` for crop flexibility
+- payload size is not minimized below visible quality
+- a derivative that transmits but pixelates is rejected
+- final print image requirements are recalculated from exact physical placement and printer specifications
 
-The direct upload URL route is still unavailable because the container cannot resolve `mcp.figma.com`; do not rely on it.
+Figma currently scales images over `4096 × 4096` down proportionally, so oversized imports are avoided without sacrificing the role quality floor.
 
 ## Next required V5 work
 
-1. Apply the remaining `12 / 13` Drive images through the proven inline path.
-2. Prioritize back main memory and history before small roles.
-3. Record every Drive ID → semantic node → image hash mapping.
-4. Re-run crop, contrast, text-overlay, and fold QA after each large-role group.
-5. Fix the weakest three visual areas identified by screenshots.
-6. Remove at least one unnecessary visual element after the final review.
-7. Reduce remaining Web UI card/badge density where it improves editorial rhythm.
-8. Re-run whole/page/detail screenshots and structural audit.
-9. Replace dummy photos and copy with approved real content.
-10. Apply the exact print-vendor template.
-11. Export PDF, print at actual size, and complete physical proof QA.
+### Batch A — dominant images
+
+1. re-import cover hero `77:148` with a quality-passing derivative
+2. import back main `77:24`
+3. import history `77:422`
+4. screenshot outer and inside spreads
+5. record Drive ID → node ID → image hash mappings in the ledger
+
+No decorative polish should outrank these dominant-image corrections.
+
+### Batch B — identity and lead images
+
+- groom `77:296`
+- bride `77:302`
+- cover snap `77:236`
+- lead memory `77:430`
+
+Profile dummies must not be presented as recognizable substitutes for the real couple. Crop or replace any overly identifiable generated face.
+
+### Batch C — Friends & Family
+
+- `77:35`
+- `77:39`
+- `77:43`
+
+### Batch D — small memory roles
+
+- `77:438`
+- `77:446`
+- `77:454`
+
+### Final V5 design pass
+
+1. whole-spread, page, and detail screenshots
+2. identify and deeply repair the weakest three areas
+3. remove at least one unnecessary element
+4. reduce remaining Web UI card/badge feel where helpful
+5. re-run screenshot and structural audit
+6. update ledger and GitHub main
+
+Valid dummy-design pass requires:
+- intended high-quality derivatives applied: `13 / 13`
+- photo role pass: `13 / 13`
+- dominant role pass: `3 / 3`
+- screenshot QA complete
+- structure QA complete
+- no false generated-person identity
 
 ## V6 sequencing and clean-room boundary
 
 V6 is a separate Hawaii / tropical-resort editorial version.
 
-Do not promote or build V6 as the Current candidate until V5 reaches the verified dummy-photo design QA gate. Research and planning may proceed, but V6 production must remain separate.
+V6 production may begin only after V5 reaches the verified dummy-photo design gate. Research planning may proceed earlier but must remain separate.
 
 V6 rules:
-- do not reuse V5-generated photographs
-- create a new version-specific Drive folder before Figma placement
-- create a new asset register and semantic mapping
-- use separate Figma frames/page; never overwrite V5
-- research multiple Hawaii, tropical-resort, travel-magazine, and editorial-layout references
-- extract layout principles rather than trace one commercial issue
-- generate all V6 photo roles newly
-- independently run screenshot and structural QA
+- no V5-generated photo reuse
+- new version-specific Drive folder and evidence ledger before Figma placement
+- separate Figma page/frames; never overwrite V5
+- role-specific aspect-ratio generation
+- at least two structurally different outer concepts before polish
+- compare multiple Hawaii, resort, travel-magazine, and editorial references
+- extract principles rather than trace one issue
+- no generic tropical sticker/hibiscus/palm overload
+- independent screenshot, structure, and truthfulness QA
 
-Detailed guardrails:
-- `POSTMORTEM-CONTINUOUS-IMPROVEMENT-AND-V6-GUARDRAILS-2026-08-02.md`
+## Print transition
+
+Do not treat Figma design QA as print preflight.
+
+Required future gates:
+1. `REAL_CONTENT_EDITORIAL_QA_PASS`
+2. `PRINT_TEMPLATE_PREFLIGHT_PASS`
+3. `PHYSICAL_PROOF_PASS`
+4. `PRINT_READY`
+
+Before print readiness:
+- exact printer/product/template verified
+- bleed, trim, fold tolerance, page order, color, and PDF requirements verified
+- final image resolution calculated from physical placed size
+- PDF preflight completed
+- actual-size folded proof reviewed
+- names, dates, captions, and small text proofread by at least two people
 
 ## Stop conditions
 
 Do not claim `DESIGN_FINAL`, `PHOTO_QA_PASS`, or `PRINT_READY` while:
-- the remaining generated photos are not applied and audited,
-- large images remain pixelated,
-- Drive-to-node-to-hash evidence is missing,
-- dummy content remains,
-- the exact print template is not applied,
-- final PDF and physical proof QA are incomplete.
+- the ledger has incomplete photo roles
+- dominant images remain pixelated or use rejected derivatives
+- Drive-to-node-to-hash evidence is missing
+- generated dummy people can be mistaken for the real couple
+- dummy content remains
+- exact print template is not applied
+- final PDF and physical proof QA are incomplete
