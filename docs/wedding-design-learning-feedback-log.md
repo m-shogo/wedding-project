@@ -174,3 +174,49 @@ Audit remaining V5 photo overlays and labels individually. Prefer direct type or
 ### Status
 
 `PROTOTYPED → VERIFIED / V5_CURRENT_ADOPTED / GLOBAL_RULE_NOT_YET_PROMOTED`
+
+---
+
+## 2026-08-06 — V5 Friends photo-tab tape subtraction
+
+### Visible problem
+
+The two Friends & Family images already had colored native-text tabs, but each tab was backed by a second translucent tape strip. The extra strip added a double-layer sticker silhouette without new information, contrast, navigation, or provenance value.
+
+### Source and hypothesis
+
+- Source: live V5 outer screenshot and nodes `77:92–77:95`, `77:104`, and `77:105`.
+- Hypothesis: hiding only the redundant tape strips would make the module quieter while preserving the labels, photo relationship, captions, editability, and rollback state.
+
+### Experiment
+
+- `77:104 / AUTH_FRIEND_TAPE_2`: `visible true → false`
+- `77:105 / AUTH_FRIEND_TAPE_3`: `visible true → false`
+- no deletion, text edit, crop edit, image replacement, or geometry change
+
+### Result
+
+**VERIFIED / ADOPTED FOR CURRENT V5.**
+
+Whole-item, reading-scale, and actual-size/structure checks confirmed:
+
+- the Friends tabs remain legible and attached to the correct photos
+- the photo module no longer has a redundant translucent layer
+- no empty gap, collision, clipping, text reflow, or hierarchy loss
+- photo hashes, fold guide, native text, semantic roles, and V4 rollback nodes remain unchanged
+
+### Failure or regression check
+
+This does not justify removing all tape effects. Tape can remain where it is the only attachment cue or where it resolves an otherwise ambiguous overlap. It was rejected here because the colored tab already carried the complete semantic and visual role.
+
+### Reusable lesson
+
+When a photo tab already provides label, contrast, and attachment geometry, test removing any secondary tape layer before redesigning or adding decoration.
+
+### Next application
+
+Audit the remaining V5 stickers, shadows, badges, and tape combinations only for real semantic duplication. Keep unique content and necessary contrast devices.
+
+### Status
+
+`PROTOTYPED → VERIFIED / V5_CURRENT_ADOPTED / GLOBAL_RULE_NOT_YET_PROMOTED`
