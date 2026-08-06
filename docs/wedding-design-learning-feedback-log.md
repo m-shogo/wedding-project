@@ -220,3 +220,51 @@ Audit the remaining V5 stickers, shadows, badges, and tape combinations only for
 ### Status
 
 `PROTOTYPED → VERIFIED / V5_CURRENT_ADOPTED / GLOBAL_RULE_NOT_YET_PROMOTED`
+
+---
+
+## 2026-08-06 — V5 history photo-kicker subtraction
+
+### Visible problem
+
+The inside-right history page already contained `OUR HISTORY`, a six-point chronological timeline, dates, event labels, and a dominant history photograph. A yellow bar partly covering that photograph repeated the same section meaning with `6つの出来事でたどる ふたり年表`, adding another wide color field without unique navigation or factual value.
+
+### Source and hypothesis
+
+- Source: live V5 inside frame `77:290`, kicker nodes `77:466` and `77:467`, and history image `77:422`.
+- Hypothesis: hiding only the redundant kicker pair would improve continuity from timeline to dominant image while preserving chronology, captioning, native text, semantic structure, crop, image hashes, fold safety, and rollback.
+
+### Experiment
+
+- `77:466 / HISTORY_PHOTO_KICKER`: `visible true → false`
+- `77:467 / HISTORY_PHOTO_KICKER_TXT`: `visible true → false`
+- no deletion, text rewrite, geometry change, image replacement, or crop edit
+
+### Result
+
+**VERIFIED / ADOPTED FOR CURRENT V5.**
+
+Whole-item, reading-scale, and actual-size/structure review confirmed:
+
+- the page now reads directly from `OUR HISTORY` and the timeline into the dominant photograph
+- chronology remains explicit through the timeline, dates, and labels
+- no empty hole, collision, clipping, text reflow, mask exposure, or hierarchy loss
+- native text nodes: `92`; visible text nodes: `62`; IMAGE-fill nodes: `9`
+- history image hash `1bfd7f1fa601206bfed1594a140b40554e85d77a` unchanged
+- fold guide `77:288` and rollback frames `59:2`, `59:178` preserved
+
+### Failure or regression check
+
+This does not justify removing every photo kicker. A kicker can remain when it contributes unique context, necessary contrast, or navigation not already provided by the page heading, chronology, caption, or module structure.
+
+### Reusable lesson
+
+When a page heading and a complete timeline already establish chronology, test removing any photo-overlapping kicker that merely restates that function. The dominant photograph should not lose authority to redundant labeling.
+
+### Next application
+
+Return priority to unresolved dominant-photo provenance and quality evidence. Continue subtraction only for demonstrable semantic duplication.
+
+### Status
+
+`PROTOTYPED → VERIFIED / V5_CURRENT_ADOPTED / GLOBAL_RULE_NOT_YET_PROMOTED`
