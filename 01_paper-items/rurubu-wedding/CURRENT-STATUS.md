@@ -33,6 +33,7 @@ Rollback evidence remains preserved:
 Preserved comparison evidence:
 - inside-left rhythm comparison — `334:2`
 - rejected Friends three-up comparison — `336:2 / V5_BACK_FRIENDS_3UP_TEST_2026_08_07`
+- front-cover FEATURE 01 full-field subtraction comparison — `345:2 / V5_OUTER_FEATURE01_FIELD_SUBTRACTION_TEST_2026_08_07`
 
 ## Verified structure and active-scope truth
 
@@ -76,7 +77,29 @@ Accepted back-main test derivative:
 - `944 × 608`
 - `95,542 bytes`
 
+A changed binary transport attempt was executed on 2026-08-07 using Drive streamed raw bytes plus a fresh Figma `upload_assets` endpoint targeted directly at `77:24`. The POST again failed at DNS resolution for `mcp.figma.com`, before any Figma mutation. This fingerprint is now a loop-break condition: do not retry the same runtime/network path with another single-use URL. The current node/hash and all asset-ledger counts remain unchanged.
+
 Do not advance `INTENDED_SOURCE_APPLIED`, `PHOTO_ROLE_PASS`, or the V5 completion gate from Drive presence or transport preparation.
+
+### Verified editorial refinement — FEATURE 01 full-field subtraction
+
+A rollback-safe comparison tested whether the front-cover `FEATURE_BOX_1` saturated pink field was necessary for the first cover-line entry.
+
+Comparison:
+- `345:2 / V5_OUTER_FEATURE01_FIELD_SUBTRACTION_TEST_2026_08_07`
+
+Verified Current adoption:
+- `77:209 / FEATURE_BOX_1`: visible → false
+- `77:212 / FEATURE_TXT_1`: native text preserved; direct dark-navy type on the pale-blue cover background
+- `77:210 / FEATURE_NO_1`: pink number circle retained
+- `77:211 / FEATURE_NO_TXT_1`: white native number retained
+
+Three-scale screenshot review found that the previous `430 × 74` saturated field read like a CTA/button and competed with the hero photograph. The subtraction keeps feature 01 identifiable while making the six-entry cover index more coherent and returning visual authority to the masthead and hero image. The comparison frame, V4 rollback frames, native text, fold guide, crop, and dominant-image hashes remain preserved.
+
+Detailed evidence:
+- `learning-runs/2026-08-07-v5-feature01-field-subtraction-and-binary-upload-loop-break.md`
+
+This is a verified V5-specific improvement, not a project-wide rule.
 
 ## Realistic dummy master pack
 
