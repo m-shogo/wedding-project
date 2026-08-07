@@ -87,6 +87,21 @@ requireText(
   'route.destination === "edit" ? selected : []',
   "blocked adopted media must be omitted from Palmier handoff result assets",
 );
+requireText(
+  executionRouter,
+  "QA-reviewed sample fingerprint",
+  "Palmier handoff must expose the fingerprint captured at QA PASS",
+);
+requireText(
+  executionRouter,
+  "current sample fingerprint",
+  "Palmier handoff must expose the current adopted media fingerprint evidence",
+);
+requireText(
+  executionRouter,
+  "sample fingerprint is a bounded audit hint",
+  "Palmier handoff must not present sampled fingerprint as a full-file checksum or visual QA",
+);
 
 const continuity = await source("src/lib/videoContinuitySignoff.ts");
 requireText(continuity, "version: 2", "continuity fingerprint payload must stay on v2 authority");
