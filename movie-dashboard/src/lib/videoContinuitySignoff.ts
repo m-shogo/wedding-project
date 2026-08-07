@@ -2,6 +2,7 @@ import type { Asset, Prompt, Scene } from "../types/movie";
 import type { VideoContinuityIssue } from "./videoContinuity";
 import { presetId, selectedResultAssetId } from "./videoExecutionRouter";
 import { parseVideoResultReproMetadata } from "./videoResultMetadata";
+import { parseVideoResultProbeEvidence } from "./videoResultProbeEvidence";
 
 export interface VideoContinuitySignoff {
   fingerprint: string;
@@ -25,6 +26,7 @@ function resultSignature(prompt: Prompt, assets: Asset[]) {
   const selectedId = selectedResultAssetId(prompt) || (resultAssets.length === 1 ? resultAssets[0]?.assetId ?? "" : "");
   const selected = resultAssets.find((asset) => asset.assetId === selectedId);
   const media = selected ? parseVideoResultReproMetadata(selected.notes) : undefined;
+  const probe = selected ? parseVideoResultProbeEvidence(selected.notes) : undefined;
   return {
     promptId: prompt.promptId,
     tool: prompt.tool,
@@ -32,6 +34,7 @@ function resultSignature(prompt: Prompt, assets: Asset[]) {
     sceneIds: [...prompt.relatedSceneIds].sort(),
     selectedAssetId: selectedId,
     selectedPath: selected?.path ?? "",
+    sampleFingerprint: probe?.sampleFingerprint ?? "",
     actualDurationSec: media?.actualDurationSec ?? null,
     resolution: media?.resolution ?? "",
     fps: media?.fps ?? null,
@@ -46,7 +49,7 @@ export function buildVideoContinuityFingerprint(
 ) {
   const movieIds = new Set(scenes.map((scene) => scene.movieId));
   const payload = {
-    version: 1,
+    version: 2,
     scenes: scenes.map((scene) => ({
       sceneId: scene.sceneId,
       movieId: scene.movieId,
@@ -66,7 +69,7 @@ export function buildVideoContinuityFingerprint(
       .map((issue) => ({ id: issue.id, severity: issue.severity, detail: issue.detail, action: issue.action }))
       .sort((a, b) => a.id.localeCompare(b.id)),
   };
-  return `v1-${stableHash(JSON.stringify(payload))}`;
+  return `v2-${stableHash(JSON.stringify(payload))}`;
 }
 
 export function buildVideoContinuitySignoffLine(params: {
