@@ -9,6 +9,7 @@ import { AssetLibrary } from "./pages/AssetLibrary";
 import { PromptBank } from "./pages/PromptBank";
 import { VideoPromptBuilder } from "./pages/VideoPromptBuilder";
 import { VideoGenerationQueue } from "./pages/VideoGenerationQueue";
+import { VideoPreflight } from "./pages/VideoPreflight";
 import { VideoResultReview } from "./pages/VideoResultReview";
 import { VideoFailureLab } from "./pages/VideoFailureLab";
 import { PalmierHandoff } from "./pages/PalmierHandoff";
@@ -36,6 +37,7 @@ export default function App() {
               <Route path="prompts" element={<PromptBank />} />
               <Route path="video-prompt-builder" element={<VideoPromptBuilder />} />
               <Route path="video-generation-queue" element={<VideoGenerationQueue />} />
+              <Route path="video-preflight" element={<VideoPreflight />} />
               <Route path="video-result-review" element={<VideoResultReview />} />
               <Route path="video-failure-lab" element={<VideoFailureLab />} />
               <Route path="palmier-handoff" element={<PalmierHandoff />} />
