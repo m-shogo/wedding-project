@@ -11,6 +11,7 @@ import { VideoPromptBuilder } from "./pages/VideoPromptBuilder";
 import { VideoGenerationQueue } from "./pages/VideoGenerationQueue";
 import { VideoResultReview } from "./pages/VideoResultReview";
 import { VideoFailureLab } from "./pages/VideoFailureLab";
+import { VideoPreflight } from "./pages/VideoPreflight";
 import { PalmierHandoff } from "./pages/PalmierHandoff";
 import { MissingList } from "./pages/MissingList";
 import { CapCutPack } from "./pages/CapCutPack";
@@ -36,6 +37,7 @@ export default function App() {
               <Route path="prompts" element={<PromptBank />} />
               <Route path="video-prompt-builder" element={<VideoPromptBuilder />} />
               <Route path="video-generation-queue" element={<VideoGenerationQueue />} />
+              <Route path="video-preflight" element={<VideoPreflight />} />
               <Route path="video-result-review" element={<VideoResultReview />} />
               <Route path="video-failure-lab" element={<VideoFailureLab />} />
               <Route path="palmier-handoff" element={<PalmierHandoff />} />
