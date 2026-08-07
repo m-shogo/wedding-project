@@ -89,6 +89,21 @@ requireText(
 );
 requireText(
   executionRouter,
+  'const blockedAdopted = prompt.status === "adopted" && route.destination === "blocked";',
+  "Palmier handoff must explicitly identify blocked adopted prompts before exposing alternatives",
+);
+requireText(
+  executionRouter,
+  "withheldResultAssetIds: blockedAdopted ? allResultAssets.map((asset) => asset.assetId) : []",
+  "blocked adopted media may expose only diagnostic Asset IDs instead of file paths or repro metadata",
+);
+requireText(
+  executionRouter,
+  "Blocked adopted media must not expose file paths or repro metadata in the structured handoff",
+  "Palmier handoff safety boundary must forbid blocked media path and repro leakage",
+);
+requireText(
+  executionRouter,
   "QA-reviewed sample fingerprint",
   "Palmier handoff must expose the fingerprint captured at QA PASS",
 );
