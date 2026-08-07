@@ -26,6 +26,16 @@ function noteValue(notes: string, key: string) {
   return match?.[1] ?? "";
 }
 
+function lastNoteValue(notes: string, key: string) {
+  const lines = notes.split("\n");
+  const pattern = new RegExp(`${key}=([^\\s/]+)`);
+  for (let index = lines.length - 1; index >= 0; index -= 1) {
+    const match = lines[index].match(pattern);
+    if (match?.[1]) return match[1];
+  }
+  return "";
+}
+
 function guidanceAgeDays(notes: string, now: Date) {
   const value = noteValue(notes, "guidance-checked");
   if (!value) return undefined;
@@ -123,7 +133,7 @@ export function runVideoPreflight(data: AllData, prompts: Prompt[], now = new Da
       issues.push({ id: `${prompt.promptId}:asset-missing`, severity: "block", promptId: prompt.promptId, title: `${label}: 存在しない結果Asset`, detail: missingAssetIds.join(", "), action: "Prompt.resultAssetIdsを修復するか、生成キューから結果を登録し直す。", href: "/video-generation-queue" });
     }
 
-    const selectedResultId = noteValue(prompt.notes, "selected-result-asset");
+    const selectedResultId = lastNoteValue(prompt.notes, "selected-result-asset");
     const effectiveAdoptedResultId = prompt.status === "adopted"
       ? selectedResultId || (prompt.resultAssetIds.length === 1 ? prompt.resultAssetIds[0] : "")
       : "";
@@ -170,7 +180,21 @@ export function runVideoPreflight(data: AllData, prompts: Prompt[], now = new Da
         });
       }
       const adoptedResultAsset = effectiveAdoptedResultId ? assetById.get(effectiveAdoptedResultId) : undefined;
-      if (adoptedResultAsset && !parseVideoResultProbeEvidence(adoptedResultAsset.notes)?.sampleFingerprint) {
+      const adoptedProbe = adoptedResultAsset ? parseVideoResultProbeEvidence(adoptedResultAsset.notes) : undefined;
+      const reviewedFingerprint = lastNoteValue(prompt.notes, "reviewed-sample-fingerprint");
+      const currentFingerprint = adoptedProbe?.sampleFingerprint ?? "";
+      if (adoptedResultAsset && reviewedFingerprint && currentFingerprint && reviewedFingerprint !== currentFingerprint) {
+        issues.push({
+          id: `${prompt.promptId}:adopted-review-fingerprint-mismatch`,
+          severity: "block",
+          promptId: prompt.promptId,
+          title: `${label}: QA時と現在の採用正本fingerprintが不一致`,
+          detail: `${adoptedResultAsset.title} はQA時 …${reviewedFingerprint.slice(-12)}、現在 …${currentFingerprint.slice(-12)} です。sample fingerprintはfull-file hashではありませんが、差分が出た以上は同じ目視QAを引き継げません。`,
+          action: "元の実動画を復元するか、現在の動画をAI動画 結果レビューで再QAして採用正本を更新する。",
+          href: "/video-result-review",
+        });
+      }
+      if (adoptedResultAsset && !currentFingerprint) {
         issues.push({
           id: `${prompt.promptId}:adopted-result-no-sample-fingerprint`,
           severity: "warning",
