@@ -476,3 +476,86 @@ Detailed run record:
 ### Status
 
 `PROTOTYPED → VERIFIED / V5_CURRENT_ADOPTED / GLOBAL_RULE_NOT_PROMOTED`
+
+---
+
+## 2026-08-07 — V5 Friends two-up active-scope comparison
+
+### Visible problem
+
+The live Current back cover uses only two visible Friends & Family photo/caption groups, but the asset evidence ledger still required the hidden legacy `V5-11 / BACK_VISUAL_FRIEND_1_PHOTO / 77:35` group. This stale denominator risked forcing a rejected legacy module back into Current for checklist completion.
+
+### Source and hypothesis
+
+- Source: live outer screenshot, exact visibility inspection of `77:35`–`77:46`, Drive readback, and the quality-over-legacy rule.
+- Current hidden group: `77:35`–`77:38`.
+- Current visible Friends groups: `77:39`/`77:41`/`77:42` and `77:43`/`77:45`/`77:46`.
+- Preserved V5-11 Drive master: `11_FRIENDS_FAMILY_01_TOAST_DUMMY.png`, ID `1zZfvktztbPx59Yb0Gxor8IsbGG1w6Fq8`.
+- Hypothesis: restoring the third group would increase density without adding a necessary narrative role; the current two-up treatment would preserve clearer hierarchy and a better transition to the route.
+
+Expected improvement if two-up wins:
+- cleaner Friends & Family hierarchy;
+- stronger quiet-space transition into `OUR JOURNEY ROUTE`;
+- asset ledger aligned with the actual Current rather than with hidden legacy structure.
+
+Possible regression:
+- two photos could feel too sparse;
+- the section could lose some travel-magazine abundance.
+
+Evidence required:
+- safe duplicate, not Current mutation;
+- whole-page comparison;
+- reading-scale comparison;
+- semantic-node and Drive-source preservation.
+
+### Experiment
+
+Created comparison frame:
+- `336:2 / V5_BACK_FRIENDS_3UP_TEST_2026_08_07`
+
+Only in that duplicate, restored the old Friend 1 group:
+- `336:18` photo
+- `336:19` label
+- `336:20` caption background
+- `336:21` caption
+
+Current `77:19` remained unchanged.
+
+### Result
+
+**VERIFIED / CURRENT TWO-UP ADOPTED / THREE-UP REJECTED.**
+
+Whole-page and reading-scale comparison showed:
+- restored three-up immediately collides/overlaps with the established two-photo composition;
+- its caption competes with the current caption region;
+- the Friends→route transition loses useful breathing room;
+- Current two-up remains clear and balanced.
+
+Current `77:35`–`77:38` remains hidden but present. The rejected comparison frame is preserved. The Drive master is preserved. Nothing was deleted.
+
+### Governance result
+
+The ledger now distinguishes:
+- `total_registered_roles: 13`
+- `active_current_roles: 12`
+- `retired_preserved_roles: 1`
+
+V5-11 is `RETIRED_FROM_CURRENT_VISUAL_SCOPE`. Retirement is **not** `PHOTO_ROLE_PASS` or `ROLE_COMPLETE`; quality pass counts remain unchanged. Reactivation requires a new comparison and the full asset lifecycle.
+
+### Failure or regression check
+
+This is not a global rule that two Friends images are always correct. It is a verified V5 scope decision under this exact page composition. The principle remains TESTED rather than PROJECT_RULE.
+
+The dominant-photo blocker remains unresolved. V5 dummy-design QA and V6 production gates remain closed.
+
+### Evidence
+
+Detailed run record:
+- `01_paper-items/rurubu-wedding/learning-runs/2026-08-07-v5-friends-two-up-scope-comparison.md`
+
+Comparison frame:
+- `336:2`
+
+### Status
+
+`PROTOTYPED → VERIFIED / V5_CURRENT_SCOPE_ALIGNED / V5-11_RETIRED / GLOBAL_RULE_NOT_PROMOTED`
