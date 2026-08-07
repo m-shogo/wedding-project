@@ -4,6 +4,7 @@ import { useProduction } from "../store/productionStore";
 import { useToast } from "../store/toastStore";
 import { buildPalmierAgentHandoff, routeVideoPrompt, selectedResultAssetId } from "../lib/videoExecutionRouter";
 import { buildVideoDecisionRecords } from "../lib/videoDecisionRecord";
+import { buildVideoContinuityReport, CONTINUITY_REVIEW_CHECKLIST } from "../lib/videoContinuity";
 
 function downloadText(filename: string, content: string, type: string) {
   const blob = new Blob([content], { type });
@@ -18,12 +19,14 @@ function downloadText(filename: string, content: string, type: string) {
 }
 
 export function PalmierHandoff() {
-  const { selectedMovieId, currentMovie, data, moviePrompts } = useProduction();
+  const { selectedMovieId, currentMovie, data, moviePrompts, movieScenes } = useProduction();
   const { addToast } = useToast();
   const [copied, setCopied] = useState(false);
   const [copiedDecision, setCopiedDecision] = useState(false);
+  const [copiedContinuity, setCopiedContinuity] = useState(false);
 
   const sourcePrompts = selectedMovieId === "all" ? data.prompts : moviePrompts;
+  const sourceScenes = selectedMovieId === "all" ? data.scenes : movieScenes;
   const videoPrompts = sourcePrompts.filter((prompt) => prompt.target === "video");
   const movieTitle = currentMovie?.title ?? (selectedMovieId === "all" ? "All Movies" : selectedMovieId);
 
@@ -51,6 +54,16 @@ export function PalmierHandoff() {
     sceneName,
   }), [videoPrompts, data.prompts, data.assets]);
 
+  const continuity = useMemo(
+    () => buildVideoContinuityReport(sourceScenes, videoPrompts, data.assets),
+    [sourceScenes, videoPrompts, data.assets],
+  );
+
+  const combinedHandoffMarkdown = useMemo(
+    () => `${handoff.markdown}\n\n${continuity.markdown}`,
+    [handoff.markdown, continuity.markdown],
+  );
+
   const routeCounts = useMemo(() => {
     const counts = { palmier: 0, review: 0, edit: 0, external: 0, blocked: 0 };
     for (const prompt of videoPrompts) {
@@ -68,10 +81,10 @@ export function PalmierHandoff() {
   const decisionWarnings = decisions.records.reduce((sum, record) => sum + record.warnings.length, 0);
 
   async function copyHandoff() {
-    await navigator.clipboard.writeText(handoff.markdown);
+    await navigator.clipboard.writeText(combinedHandoffMarkdown);
     setCopied(true);
     window.setTimeout(() => setCopied(false), 1600);
-    addToast("Palmier Agent Handoffをコピーしました", "success");
+    addToast("Palmier Agent Handoff + Continuity Gateをコピーしました", "success");
   }
 
   async function copyDecisionRecords() {
@@ -81,13 +94,30 @@ export function PalmierHandoff() {
     addToast("採用Decision Recordをコピーしました", "success");
   }
 
+  async function copyContinuity() {
+    await navigator.clipboard.writeText(continuity.markdown);
+    setCopiedContinuity(true);
+    window.setTimeout(() => setCopiedContinuity(false), 1600);
+    addToast("Continuity Gateをコピーしました", "success");
+  }
+
   function exportMarkdown() {
-    downloadText("palmier-agent-handoff.md", handoff.markdown, "text/markdown;charset=utf-8");
-    addToast("Palmier Handoff Markdownを書き出しました", "success");
+    downloadText("palmier-agent-handoff.md", combinedHandoffMarkdown, "text/markdown;charset=utf-8");
+    addToast("Palmier Handoff + Continuity Markdownを書き出しました", "success");
   }
 
   function exportJson() {
-    downloadText("palmier-agent-handoff.json", JSON.stringify({ movieTitle, prompts: handoff.rows }, null, 2), "application/json;charset=utf-8");
+    downloadText("palmier-agent-handoff.json", JSON.stringify({
+      movieTitle,
+      prompts: handoff.rows,
+      continuity: {
+        transitionCount: continuity.transitionCount,
+        warningCount: continuity.warningCount,
+        infoCount: continuity.infoCount,
+        issues: continuity.issues,
+        checklist: CONTINUITY_REVIEW_CHECKLIST,
+      },
+    }, null, 2), "application/json;charset=utf-8");
     addToast("Palmier Handoff JSONを書き出しました", "success");
   }
 
@@ -105,7 +135,7 @@ export function PalmierHandoff() {
     <div>
       <Header
         title="Palmier 実行Handoff"
-        description="動画Prompt・採用正本・判断根拠を、Palmier/Claude Codeへそのまま渡せる非破壊の実行パックにします"
+        description="採用正本・判断根拠・前後ショットの連続性まで、Palmier/Claude Codeへ非破壊で引き渡します"
         showMovieSelector
       />
 
@@ -139,7 +169,7 @@ export function PalmierHandoff() {
 
       <div className="flex flex-wrap gap-2 mb-6">
         <button onClick={() => void copyHandoff()} disabled={videoPrompts.length === 0} className="px-4 py-2.5 text-sm rounded-lg bg-navy-700 text-white hover:bg-navy-800 disabled:opacity-40">
-          {copied ? "✓ コピー済み" : "Claude Code / Palmier用Handoffをコピー"}
+          {copied ? "✓ コピー済み" : "Palmier用Handoff + Continuityをコピー"}
         </button>
         <button onClick={exportMarkdown} disabled={videoPrompts.length === 0} className="px-4 py-2.5 text-sm rounded-lg border border-sand-200 dark:border-navy-600 text-navy-600 dark:text-navy-200 disabled:opacity-40">Markdown</button>
         <button onClick={exportJson} disabled={videoPrompts.length === 0} className="px-4 py-2.5 text-sm rounded-lg border border-sand-200 dark:border-navy-600 text-navy-600 dark:text-navy-200 disabled:opacity-40">JSON</button>
@@ -149,7 +179,7 @@ export function PalmierHandoff() {
         <div className="flex flex-wrap items-center gap-3">
           <div className="min-w-0 flex-1">
             <h2 className={`font-bold ${decisionWarnings > 0 ? "text-amber-900 dark:text-amber-200" : "text-emerald-900 dark:text-emerald-200"}`}>採用Decision Record — {decisions.records.length}件</h2>
-            <p className={`text-xs mt-1 ${decisionWarnings > 0 ? "text-amber-800 dark:text-amber-300" : "text-emerald-800 dark:text-emerald-300"}`}>採用正本 / model / preset / routing / QA日時 / project実績 / 代替variantを保存。warning {decisionWarnings}件。</p>
+            <p className={`text-xs mt-1 ${decisionWarnings > 0 ? "text-amber-800 dark:text-amber-300" : "text-emerald-800 dark:text-emerald-300"}`}>採用正本 / model / preset / routing / QA日時 / project実績 / 実メディア仕様 / 代替variantを保存。warning {decisionWarnings}件。</p>
           </div>
           <div className="flex flex-wrap gap-2">
             <button onClick={() => void copyDecisionRecords()} disabled={decisions.records.length === 0} className="px-3 py-2 text-xs rounded-lg bg-white/70 dark:bg-navy-800/60 border border-current/20 disabled:opacity-40">{copiedDecision ? "✓ コピー済み" : "Decision Recordをコピー"}</button>
@@ -157,6 +187,41 @@ export function PalmierHandoff() {
             <button onClick={exportDecisionJson} disabled={decisions.records.length === 0} className="px-3 py-2 text-xs rounded-lg bg-white/70 dark:bg-navy-800/60 border border-current/20 disabled:opacity-40">JSON</button>
           </div>
         </div>
+      </div>
+
+      <div className={`rounded-xl border p-4 mb-6 ${continuity.warningCount > 0 ? "border-amber-200 bg-amber-50 dark:border-amber-800 dark:bg-amber-900/20" : "border-sky-200 bg-sky-50 dark:border-sky-800 dark:bg-sky-900/20"}`}>
+        <div className="flex flex-wrap items-center gap-3">
+          <div className="min-w-0 flex-1">
+            <h2 className={`font-bold ${continuity.warningCount > 0 ? "text-amber-900 dark:text-amber-200" : "text-sky-900 dark:text-sky-200"}`}>AI動画 Continuity Gate</h2>
+            <p className={`text-xs mt-1 ${continuity.warningCount > 0 ? "text-amber-800 dark:text-amber-300" : "text-sky-800 dark:text-sky-300"}`}>AI関連の前後境界 {continuity.transitionCount}件 / warning {continuity.warningCount} / info {continuity.infoCount}。これはメタデータ・構造による事前検知で、最終的な連続再生QAの代わりではありません。</p>
+          </div>
+          <button onClick={() => void copyContinuity()} disabled={continuity.transitionCount === 0 && continuity.issues.length === 0} className="px-3 py-2 text-xs rounded-lg bg-white/70 dark:bg-navy-800/60 border border-current/20 disabled:opacity-40">{copiedContinuity ? "✓ コピー済み" : "Continuityだけコピー"}</button>
+        </div>
+
+        {continuity.issues.length > 0 ? (
+          <div className="mt-4 space-y-2">
+            {continuity.issues.map((issue) => (
+              <div key={issue.id} className={`rounded-lg border p-3 ${issue.severity === "warning" ? "border-amber-200 bg-white/60 dark:border-amber-800 dark:bg-navy-800/40" : "border-sky-200 bg-white/60 dark:border-sky-800 dark:bg-navy-800/40"}`}>
+                <div className="flex flex-wrap items-center gap-2">
+                  <span>{issue.severity === "warning" ? "⚠️" : "ℹ️"}</span>
+                  <p className="text-sm font-bold text-navy-800 dark:text-sand-100">{issue.title}</p>
+                  <span className="text-[11px] text-navy-400">{issue.sceneIds.join(" → ")}</span>
+                </div>
+                <p className="mt-1 text-xs text-navy-600 dark:text-navy-200">{issue.detail}</p>
+                <p className="mt-2 text-xs text-navy-700 dark:text-navy-100"><strong>編集時:</strong> {issue.action}</p>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className="mt-3 text-sm text-navy-600 dark:text-navy-200">自動検出できる連続性問題はありません。AI採用カットがある場合は下の人間チェックを残して、前後を連続再生してください。</p>
+        )}
+
+        <details className="mt-4 rounded-lg border border-current/15 bg-white/50 dark:bg-navy-800/30 p-3">
+          <summary className="cursor-pointer text-sm font-medium text-navy-700 dark:text-navy-200">人間が最後に見るContinuity Checklist</summary>
+          <ul className="mt-3 space-y-2 text-xs text-navy-600 dark:text-navy-200">
+            {CONTINUITY_REVIEW_CHECKLIST.map((item) => <li key={item}>☐ {item}</li>)}
+          </ul>
+        </details>
       </div>
 
       {videoPrompts.length === 0 ? (
