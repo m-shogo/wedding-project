@@ -6,8 +6,6 @@ on:
       - "movie-dashboard/**"
       - ".github/workflows/movie-dashboard-ci.yml"
   push:
-    branches:
-      - main
     paths:
       - "movie-dashboard/**"
       - ".github/workflows/movie-dashboard-ci.yml"
