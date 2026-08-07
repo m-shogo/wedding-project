@@ -1,12 +1,23 @@
 # Figma: Wedding Movie Control Center Demo
 
 Created: 2026-08-07
+Updated: 2026-08-07
 
 ## Figma file
 
 - Figma URL: https://www.figma.com/design/vwC1tArvxpNFSdBmXd9RBD
 - File name: `Wedding Movie Control Center Demo`
 - Purpose: 結婚式オープニングムービー制作を、素材・絵コンテ・プロンプト・不足素材・Palmier/CapCut導線まで一目で管理するためのFigmaデモ。
+
+## 現在の位置づけ
+
+`movie-dashboard/` は既に存在する。したがって、このFigmaは「新規実装の指示書」ではなく、以下のために使う。
+
+- 既存 `movie-dashboard` の画面改善方向
+- Palmier Free + Claude Code MCP運用の可視化
+- 90秒絵コンテの全体確認
+- AI画像/動画プロンプトパックの優先順位確認
+- CapCut Packへ渡す前の制作導線確認
 
 ## 作成済みフレーム
 
@@ -22,12 +33,23 @@ Created: 2026-08-07
    - Palmier Free + Claude Code MCPからCapCut仕上げまでの作業導線。
 6. `05 Implementation Spec for movie-dashboard`
    - `movie-dashboard` 実装へ落とすためのJSON設計と優先順位。
+7. `06 Palmier Execution Board`
+   - Palmier 10秒 → 30秒 → 90秒 → CapCut Pack の実行順。
+8. `07 AI Prompt Pack Board`
+   - 画像生成12枚、動画化優先6本、固定negative、採用QA。
 
-## 使い方
+## 関連Git正本
 
-このFigmaデモは最終デザインではなく、`movie-dashboard` を実装する前の情報設計・UIデモとして使う。
+| ドキュメント | 役割 |
+|---|---|
+| `docs/palmier-operation.md` | Palmier Free + Claude Code MCPの運用手順 |
+| `docs/opening-90s-storyboard.md` | 90秒オープニング完全絵コンテ |
+| `docs/ai-generation-prompt-pack.md` | 画像生成12枚 + 動画化プロンプト |
+| `docs/palmier-dashboard-sync.md` | Palmier結果をmovie-dashboard/CSVへ戻すルール |
+| `docs/task-board.md` | 現在のNow/Next/Blocked |
+| `movie-dashboard/README.md` | 既存ダッシュボードの起動・運用方法 |
 
-### Palmierでの役割
+## Palmierでの役割
 
 Palmierは最終編集ではなく、以下に限定する。
 
@@ -37,7 +59,7 @@ Palmierは最終編集ではなく、以下に限定する。
 - 不足素材の洗い出し
 - CapCutへ渡す前の構成確認
 
-### CapCutでの役割
+## CapCutでの役割
 
 CapCutは仕上げに限定する。
 
@@ -48,36 +70,13 @@ CapCutは仕上げに限定する。
 - トランジション
 - 最終書き出し
 
-## 実装優先順位
-
-### P0: 静的JSONで可視化
-
-- `movie-dashboard/src/data/scenes.json`
-- `movie-dashboard/src/data/assets.json`
-- `movie-dashboard/src/data/prompts.json`
-- `movie-dashboard/src/data/tasks.json`
-
-まずはFigmaの構成をそのままReact/Viteで表示する。
-
-### P1: Asset Library + Prompt Bank
-
-生成結果とプロンプトを紐づける。良かった生成を再現できるようにする。
-
-### P2: Missing List自動算出
-
-`scenes.requiredAssets` と `assets.status` から、不足素材を自動表示する。
-
-### P3: CapCut Pack
-
-採用素材だけをシーン順に並べ、CapCut投入用の順番表・CSVを書き出せるようにする。
-
 ## 必須ルール
 
 - 大きな写真・動画・音源はGitに入れない。
 - AIは背景・つなぎ・世界観補強に限定する。
 - 人物、犬、家族、友人のAI生成・AI変形は禁止。
 - AI動画は3〜5秒素材を基本にする。
-- 文字入りAI動画は禁止。文字はMotion StudioかCapCutで重ねる。
+- 文字入りAI動画は禁止。文字はmotion-studioかCapCutで重ねる。
 - Palmierはラフ編集まで。最終仕上げはCapCut。
 
 ## 次にやること
@@ -85,54 +84,38 @@ CapCutは仕上げに限定する。
 1. Palmier MCP読み取り確認を行う。
 2. `02_opening-movie/source/palmier-test-001/` にテスト素材を10個だけ置く。
 3. Palmierで10秒試作を作る。
-4. 結果を `docs/templates/review-notes.csv` と `docs/templates/ai-video-scorecard.csv` に記録する。
+4. 結果を `docs/palmier-dashboard-sync.md` に従って `movie-dashboard` とCSVへ反映する。
 5. 問題なければ30秒試作へ進む。
-6. その後、Figmaデモを基準に `movie-dashboard/` を実装する。
+6. 30秒試作後に90秒ラフへ進むか判断する。
 
-## Claude Codeへ渡す実装プロンプト
+## Claude Codeへ渡すローカル実行プロンプト
 
 ```text
 /Users/m-shogo/Developer/personal/wedding-project で作業してください。
 
-Figmaデモ https://www.figma.com/design/vwC1tArvxpNFSdBmXd9RBD を参考に、
-新規ディレクトリ movie-dashboard/ を作成してください。
+まず以下を読んでください。
+- docs/task-board.md
+- docs/palmier-operation.md
+- docs/opening-90s-storyboard.md
+- docs/ai-generation-prompt-pack.md
+- docs/palmier-dashboard-sync.md
+- movie-dashboard/README.md
 
-目的：
-結婚式オープニングムービー制作の管理サイトを作る。
-生成画像、自前写真、自前動画、生成AI動画、Motion Studio書き出し、プロンプト、絵コンテ、進捗、不足素材、CapCut Packを一目で見られるローカルWebアプリにする。
+目的:
+Palmier Free + Claude Code MCPで、結婚式オープニングムービーの10秒試作を安全に実行する準備をする。
 
-重要：
-- 既存 motion-studio/ は触らない
-- 大きな画像・動画・音源はGit管理しない
-- まずDBは使わない
-- JSONで管理する
-- Palmierはラフ編集、CapCutは最終仕上げという分担を守る
-- 人物、犬、家族、友人のAI生成・AI変形は禁止
+やること:
+1. Palmier MCP読み取り確認を行う
+2. 10秒試作用の素材フォルダ `02_opening-movie/source/palmier-test-001/` の構成を確認する
+3. 使える素材だけで10秒試作を行う
+4. 使用素材、不足素材、ボツ理由、CapCutで仕上げる作業を整理する
+5. `docs/palmier-dashboard-sync.md` に沿ってmovie-dashboardとCSVへ反映する
+6. 大きな画像・動画・音源はGitに入れない
+7. commitして報告する
 
-技術：
-- Vite
-- React
-- TypeScript
-- Tailwind CSS
-
-作る画面：
-1. Dashboard
-2. Storyboard
-3. Asset Library
-4. Prompt Bank
-5. Missing List
-6. CapCut Pack
-
-データ：
-- movie-dashboard/src/data/scenes.json
-- movie-dashboard/src/data/assets.json
-- movie-dashboard/src/data/prompts.json
-- movie-dashboard/src/data/tasks.json
-
-完了条件：
-- pnpm install
-- pnpm dev
-- pnpm build
-が通る。
-READMEに起動方法と運用方法を書く。
+禁止:
+- 既存motion-studioを壊す
+- 人物、犬、家族、友人をAI生成/AI変形する
+- AI動画に文字、数字、ロゴ、看板を入れる
+- Palmierで最終編集までやろうとする
 ```
