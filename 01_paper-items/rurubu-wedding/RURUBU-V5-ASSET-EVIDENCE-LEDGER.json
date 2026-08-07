@@ -13,9 +13,9 @@
     "active_current_roles": 12,
     "retired_preserved_roles": 1,
     "drive_readback_verified": 13,
-    "intended_source_applied": 1,
-    "photo_role_pass": 0,
-    "role_complete": 0
+    "intended_source_applied": 2,
+    "photo_role_pass": 1,
+    "role_complete": 1
   },
   "roles": [
     {
@@ -195,12 +195,20 @@
       "target_node_id": "77:24",
       "target_box_px": {"width": 472, "height": 304},
       "dummy_derivative_min_px": {"width": 944, "height": 608},
-      "asset_state": "DRIVE_READBACK_VERIFIED",
-      "quality_state": "PENDING_FIGMA_IMPORT",
-      "figma_image_hash": null,
-      "screenshot_qa": "NOT_RUN_FOR_INTENDED_SOURCE",
-      "structure_qa": "TARGET_NODE_VERIFIED",
-      "role_complete": false
+      "derivative_drive_file_id": "17YaX5CK-c0cTr4zsL2Dly4J1XSZyFxHG",
+      "derivative_filename": "RURUBU_V5_10_BACK_MAIN_TRAVEL_FLATLAY__FIGMA_944x608_Q18_SINGLECALL.jpg",
+      "derivative_dimensions_px": {"width": 944, "height": 608},
+      "derivative_size_bytes": 33577,
+      "asset_state": "FIGMA_APPLIED_VERIFIED",
+      "quality_state": "PASS_DUMMY_DESIGN_DERIVATIVE",
+      "figma_image_hash": "e3738476f760932bb5b09c9d60f174dd6c84049d",
+      "comparison_frame_id": "360:2",
+      "comparison_target_node_id": "360:8",
+      "screenshot_qa": "PASS_WHOLE_PAGE_READING_AND_ACTUAL_SIZE_DETAIL",
+      "structure_qa": "PASS_NODE_NATIVE_TEXT_FOLD_ROLLBACK_AND_COMPARISON_PRESERVED",
+      "role_complete": true,
+      "note": "Q18 is accepted only for V5 dummy-design QA. It exactly meets the 2x derivative dimension target and visibly outperforms the old 176x220 source. Final print readiness remains gated by final real content, printer template, PDF preflight and physical proof.",
+      "evidence": "learning-runs/2026-08-07-v5-back-main-q18-binary-safe-promotion.md"
     },
     {
       "role_id": "V5-11",
