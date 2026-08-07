@@ -41,7 +41,9 @@ All new copy is native Figma text. No final names/credentials were baked into ge
 ## Screenshot QA and correction
 First screenshot exposed two defects: `RURUBU WEDDING` was clipped behind the white title cloud, and white left-side feature copy lost contrast against the yellow sunset. These were corrected in the same comparison candidate: masthead moved above the cloud and left feature copy changed to dark navy while the yellow kicker remained.
 
-A subsequent structure inspection found that the duplicated legacy `FRONT_COVER` frame still existed visibly underneath the clean-room overlay. Although the overlay hid it visually, retaining two active front-cover systems would weaken semantic clarity and make later adoption/error diagnosis harder. The clean-room candidate therefore changed the inherited `413:129 / FRONT_COVER` to `visible=false` while preserving it as rollback evidence. The back cover, provisional fold guide, and all 29 `CR_*` native clean-room nodes remain visible/editable. A post-change screenshot is visually identical, proving the cleanup removed hidden structural duplication rather than changing the approved appearance.
+A subsequent structure inspection found that the duplicated legacy `FRONT_COVER` frame still existed visibly underneath the clean-room overlay. Although the overlay hid it visually, retaining two active front-cover systems would weaken semantic clarity and make later adoption/error diagnosis harder. The clean-room candidate therefore changed the inherited `413:129 / FRONT_COVER` to `visible=false` while preserving it as rollback evidence. The back cover and provisional fold guide remain visible.
+
+The 29 clean-room nodes were then grouped non-destructively into `415:2 / CLEANROOM_FRONT_COVER`. The group preserves all child semantic names and editability while giving the candidate one explicit front-cover structural root. A post-group screenshot is visually identical, so the change is structure-only and rollback-safe.
 
 ### Whole-item
 PASS as a materially different clean-room direction. It is immediately denser and more travel-guide-like than Current and does not inherit Current card geometry.
@@ -53,7 +55,7 @@ PROVISIONAL PASS. Reading order is top bonus → edge logo/masthead → destinat
 PROVISIONAL. Native text remains editable and major text does not clip after correction. Final print-size typography and fold/safe-area evidence still need dedicated checks before adoption.
 
 ### Structure / rollback
-PASS for comparison-candidate structure. Legacy front cover is hidden rather than deleted; back cover and provisional fold guide remain visible; clean-room content is represented by 29 semantically named native nodes; Current `77:18` is untouched.
+PASS for comparison-candidate structure. Legacy front cover is hidden rather than deleted; back cover and provisional fold guide remain visible; all 29 clean-room nodes are grouped under `415:2 / CLEANROOM_FRONT_COVER`; Current `77:18` is untouched.
 
 ## Result
 `DISCOVERED → PROTOTYPED → VERIFIED_DIRECTION_AND_STRUCTURE / NOT_CURRENT / NOT_PROJECT_RULE`
@@ -64,7 +66,7 @@ This candidate is intentionally not promoted to Current yet. It proves that the 
 The authoritative V5 ledger still identifies the real hero master as `01_COVER_HERO_YOKOHAMA_DUMMY.png`, Drive ID `1rS1QpAL-H4Dvg3tzI3NvmPUw-oAiicpv`, `2,089,658 bytes`, target `665×610`, minimum dummy derivative `1330×1220`, with the currently imported `5,927-byte` derivative rejected for visible quality. A separate Drive JPEG named `RURUBU_V5_DUMMY__01_COVER_HERO__IMG_HERO.jpg` (ID `1DeJm3cqf-YDZGvi8n7sP5hwnr27CpGpi`) was also observed, but it is not the role-level source of truth and therefore is not used to alter ledger status. This clean-room design does not convert the hero into PHOTO_ROLE_PASS.
 
 ## Reusable learning candidate
-A clean-room alternative must be structurally clean as well as visually different. When a duplicate is used as a starting shell, inherited competing layout systems should be hidden/preserved as rollback rather than left simultaneously active beneath the new candidate. This remains a tested lesson, not yet a project-wide rule.
+A clean-room alternative must be structurally clean as well as visually different. When a duplicate is used as a starting shell, inherited competing layout systems should be hidden/preserved as rollback rather than left simultaneously active beneath the new candidate. Grouping the new semantic system under one named root improves auditability without flattening it. This remains a tested lesson, not yet a project-wide rule.
 
 ## Next application
 1. Resolve V5-01 cover hero through the authoritative master lifecycle; do not substitute a similarly named derivative or convenience file for the ledger source.
