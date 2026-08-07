@@ -40,6 +40,10 @@ function evidenceRoot(prompt: Prompt) {
   return noteValue(prompt.notes, "retry-root") || prompt.promptId;
 }
 
+function retryAttempt(prompt: Prompt) {
+  return Number(noteValue(prompt.notes, "retry-attempt") || 0);
+}
+
 function wilsonInterval(successes: number, total: number) {
   if (total <= 0) return { low: 0, high: 1 };
   const p = successes / total;
@@ -54,18 +58,35 @@ function wilsonInterval(successes: number, total: number) {
 }
 
 export function buildVideoModelEvidence(prompts: Prompt[]): VideoModelEvidence[] {
-  const groups = new Map<string, { tool: string; preset: string; adopted: number; rejected: number; roots: Set<string> }>();
+  const latestByLineage = new Map<string, { prompt: Prompt; outcome: "adopted" | "rejected"; attempt: number; order: number }>();
 
-  for (const prompt of prompts) {
-    if (prompt.target !== "video") continue;
+  prompts.forEach((prompt, order) => {
+    if (prompt.target !== "video") return;
     const outcome = reviewedOutcome(prompt);
-    if (!outcome) continue;
+    if (!outcome) return;
+
     const tool = prompt.tool || "unknown-model";
     const preset = noteValue(prompt.notes, "preset") || "no-preset";
+    const root = evidenceRoot(prompt);
+    const lineageKey = `${tool}::${preset}::${root}`;
+    const attempt = retryAttempt(prompt);
+    const current = latestByLineage.get(lineageKey);
+
+    if (!current || attempt > current.attempt || (attempt === current.attempt && order > current.order)) {
+      latestByLineage.set(lineageKey, { prompt, outcome, attempt, order });
+    }
+  });
+
+  const groups = new Map<string, { tool: string; preset: string; adopted: number; rejected: number; roots: Set<string> }>();
+
+  for (const { prompt, outcome } of latestByLineage.values()) {
+    const tool = prompt.tool || "unknown-model";
+    const preset = noteValue(prompt.notes, "preset") || "no-preset";
+    const root = evidenceRoot(prompt);
     const key = `${tool}::${preset}`;
     const current = groups.get(key) ?? { tool, preset, adopted: 0, rejected: 0, roots: new Set<string>() };
     current[outcome] += 1;
-    current.roots.add(evidenceRoot(prompt));
+    current.roots.add(root);
     groups.set(key, current);
   }
 
@@ -86,14 +107,14 @@ export function buildVideoModelEvidence(prompts: Prompt[]): VideoModelEvidence[]
     const pct = Math.round(passRate * 100);
     const lowPct = Math.round(confidence.low * 100);
     const highPct = Math.round(confidence.high * 100);
-    const base = `実績 ${reviewed}本・独立系統${independentRoots}・採用率${pct}%・95%区間${lowPct}–${highPct}%`;
+    const base = `実績 ${reviewed}系統・独立系統${independentRoots}・採用率${pct}%・95%区間${lowPct}–${highPct}%`;
     const summary = signal === "promote"
       ? `${base} — このpresetでは優先候補。`
       : signal === "caution"
         ? `${base} — 同条件の追加課金前にモデル/入力条件を見直す。`
         : signal === "neutral"
           ? `${base} — まだ明確な優位差なし。`
-          : `${base} — QA本数または独立lineageが不足しているためモデル優劣を断定しない。`;
+          : `${base} — QA済みlineage数または独立lineageが不足しているためモデル優劣を断定しない。`;
 
     return {
       key,
