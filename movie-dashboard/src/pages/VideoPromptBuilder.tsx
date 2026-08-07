@@ -73,7 +73,7 @@ export function VideoPromptBuilder() {
   const [intent, setIntent] = useState<VideoPromptIntent>(starterIntent);
   const [selectedSceneId, setSelectedSceneId] = useState("");
   const [selectedPresetId, setSelectedPresetId] = useState("");
-  const [copied, setCopied] = useState<"prompt" | "negative" | "all" | null>(null);
+  const [copied, setCopied] = useState<"prompt" | "negative" | "model" | "qa" | null>(null);
 
   const availableScenes = useMemo(
     () => selectedMovieId === "all" ? data.scenes : movieScenes,
@@ -114,7 +114,7 @@ export function VideoPromptBuilder() {
     }
   }
 
-  async function copy(text: string, kind: "prompt" | "negative" | "all") {
+  async function copy(text: string, kind: "prompt" | "negative" | "model" | "qa") {
     await navigator.clipboard.writeText(text);
     setCopied(kind);
     window.setTimeout(() => setCopied(null), 1500);
@@ -166,16 +166,27 @@ export function VideoPromptBuilder() {
     }
   }
 
-  const fullCopy = [
+  const modelInputCopy = [
     `[MODEL] ${model.label}`,
     `[MODE] ${intent.mode} / ${intent.durationSec}s / ${intent.aspectRatio}`,
     selectedScene ? `[SCENE] ${selectedScene.title} (${selectedScene.sceneId})` : "[SCENE] unlinked",
     activePreset ? `[PRESET] ${activePreset.label}` : "",
     "",
+    "[MODEL INPUT]",
     compiled.prompt,
+    model.negativePromptPolicy === "optional-separate-field" && compiled.negativePrompt ? "" : "",
+    model.negativePromptPolicy === "optional-separate-field" && compiled.negativePrompt ? "[OPTIONAL SEPARATE NEGATIVE FIELD]" : "",
+    model.negativePromptPolicy === "optional-separate-field" && compiled.negativePrompt ? compiled.negativePrompt : "",
+  ].filter(Boolean).join("\n");
+
+  const qaCopy = [
+    modelInputCopy,
     "",
-    `[AVOID] ${compiled.negativePrompt}`,
-  ].filter((line, index, lines) => line || lines[index - 1] !== "").join("\n");
+    "[HUMAN QA / DO NOT PASTE BLINDLY INTO MODEL]",
+    model.negativePromptPolicy === "qa-only"
+      ? `QA ONLY — DO NOT SEND AS MODEL INPUT\n${compiled.negativePrompt}`
+      : `QA / optional separate negative field\n${compiled.negativePrompt}`,
+  ].filter(Boolean).join("\n");
 
   return (
     <div>
@@ -383,21 +394,27 @@ export function VideoPromptBuilder() {
                 <p className="text-xs text-navy-400">MODEL-SPECIFIC PROMPT</p>
                 <h2 className="font-bold text-navy-800 dark:text-sand-100">{model.label}</h2>
               </div>
-              <div className="flex gap-2">
+              <div className="flex flex-wrap gap-2">
                 <button onClick={() => void copy(compiled.prompt, "prompt")} className="px-3 py-1.5 text-xs rounded-lg border border-sand-200 dark:border-navy-600 text-navy-600 dark:text-navy-200 hover:bg-sand-50 dark:hover:bg-navy-700">
-                  {copied === "prompt" ? "✓ コピー済み" : "プロンプトをコピー"}
+                  {copied === "prompt" ? "✓ コピー済み" : "本文だけコピー"}
                 </button>
-                <button onClick={() => void copy(fullCopy, "all")} className="px-3 py-1.5 text-xs rounded-lg bg-navy-700 text-white hover:bg-navy-800">
-                  {copied === "all" ? "✓ コピー済み" : "全部コピー"}
+                <button onClick={() => void copy(modelInputCopy, "model")} className="px-3 py-1.5 text-xs rounded-lg bg-navy-700 text-white hover:bg-navy-800">
+                  {copied === "model" ? "✓ コピー済み" : "モデル入力をコピー"}
+                </button>
+                <button onClick={() => void copy(qaCopy, "qa")} className="px-3 py-1.5 text-xs rounded-lg border border-sky-200 dark:border-sky-700 text-sky-700 dark:text-sky-300">
+                  {copied === "qa" ? "✓ コピー済み" : "QA込みをコピー"}
                 </button>
               </div>
             </div>
             <pre className="text-sm text-navy-700 dark:text-navy-200 bg-sand-50 dark:bg-navy-700 rounded-lg p-4 whitespace-pre-wrap break-words font-mono leading-relaxed select-all">{compiled.prompt}</pre>
 
             <div className="mt-4 flex items-center justify-between mb-2">
-              <p className="text-xs font-semibold text-navy-400">AVOID / NEGATIVE</p>
+              <div>
+                <p className="text-xs font-semibold text-navy-400">{model.negativePromptPolicy === "qa-only" ? "QA ONLY — MODEL INPUTへ送らない" : "OPTIONAL NEGATIVE FIELD / QA"}</p>
+                <p className="mt-0.5 text-[11px] text-navy-400">{model.negativePromptPolicy === "qa-only" ? `${model.label}では下の文を生成入力に貼りません。人間QAの確認項目としてだけ使います。` : "モデルUIに独立negative欄がある場合だけ使用します。本文へ混ぜません。"}</p>
+              </div>
               <button onClick={() => void copy(compiled.negativePrompt, "negative")} className="text-xs text-navy-500 hover:text-navy-700 dark:text-navy-300">
-                {copied === "negative" ? "✓ コピー済み" : "コピー"}
+                {copied === "negative" ? "✓ コピー済み" : model.negativePromptPolicy === "qa-only" ? "QA用コピー" : "negative欄をコピー"}
               </button>
             </div>
             <pre className="text-xs text-red-700 dark:text-red-300 bg-red-50 dark:bg-red-900/20 rounded-lg p-3 whitespace-pre-wrap break-words font-mono">{compiled.negativePrompt}</pre>
