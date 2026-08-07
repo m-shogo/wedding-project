@@ -8,6 +8,7 @@ const links = [
   { to: "/assets", label: "素材ライブラリ", icon: "🗂" },
   { to: "/video-prompt-builder", label: "動画プロンプト", icon: "🎥" },
   { to: "/video-generation-queue", label: "動画生成キュー", icon: "🚀" },
+  { to: "/video-preflight", label: "AI動画 プリフライト", icon: "🛡️" },
   { to: "/video-result-review", label: "AI動画 結果レビュー", icon: "🔎" },
   { to: "/video-failure-lab", label: "AI動画 失敗学習", icon: "🧠" },
   { to: "/palmier-handoff", label: "Palmier 実行Handoff", icon: "🌴" },
