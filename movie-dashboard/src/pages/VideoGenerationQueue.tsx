@@ -6,6 +6,7 @@ import { useProduction } from "../store/productionStore";
 import { useToast } from "../store/toastStore";
 import { generateId } from "../lib/ids";
 import { runVideoPreflight, type VideoPreflightIssue } from "../lib/videoPreflight";
+import { suggestVideoResultNaming } from "../lib/videoResultNaming";
 import type { Prompt, PromptStatus } from "../types/movie";
 
 const statusLabels: Record<PromptStatus, string> = { draft: "下書き", testing: "テスト中", adopted: "採用", rejected: "不採用" };
@@ -96,6 +97,7 @@ export function VideoGenerationQueue() {
   const withResultCount = videoPrompts.filter((prompt) => prompt.resultAssetIds.length > 0).length;
   const executionHoldCount = videoPrompts.filter((prompt) => prompt.status === "draft" && executionHoldIssues(prompt).length > 0).length;
   const resultPrompt = data.prompts.find((prompt) => prompt.promptId === resultPromptId);
+  const resultNaming = resultPrompt ? suggestVideoResultNaming(resultPrompt, data.assets) : undefined;
 
   function sceneText(prompt: Prompt) {
     const names = prompt.relatedSceneIds.map((sceneId) => {
@@ -151,8 +153,9 @@ export function VideoGenerationQueue() {
   }
 
   function openResultIntake(prompt: Prompt) {
+    const naming = suggestVideoResultNaming(prompt, data.assets);
     setResultPromptId(prompt.promptId);
-    setResultTitle(`${prompt.title} / generated result`);
+    setResultTitle(naming.title);
     setResultPath("");
     setResultNote("");
   }
@@ -169,8 +172,9 @@ export function VideoGenerationQueue() {
     const path = resultPath.trim();
     const title = resultTitle.trim();
     if (!prompt) { addToast("元Promptが見つかりません", "error"); return; }
-    if (!title || !path) { addToast("結果タイトルと保存パスを入力してください", "error"); return; }
+    if (!title || !path) { addToast("結果タイトルと実際の保存パスを入力してください", "error"); return; }
 
+    const naming = suggestVideoResultNaming(prompt, data.assets);
     const assetId = generateId("asset");
     addAsset({
       assetId,
@@ -185,6 +189,8 @@ export function VideoGenerationQueue() {
       notes: [
         `promptId=${prompt.promptId}`,
         `registeredAt=${new Date().toISOString()}`,
+        `variant=${naming.variant}`,
+        `result-intake=movie-dashboard`,
         resultNote.trim(),
       ].filter(Boolean).join("\n"),
     });
@@ -251,8 +257,9 @@ export function VideoGenerationQueue() {
       {resultPrompt && <div className="space-y-4">
         <div className="rounded-lg bg-sand-50 dark:bg-navy-700 p-3 text-sm"><p className="font-medium text-navy-800 dark:text-sand-100">{resultPrompt.title}</p><p className="text-xs text-navy-400 mt-1">{resultPrompt.tool} · {sceneText(resultPrompt)}</p></div>
         <div><label className="form-label">結果タイトル</label><input value={resultTitle} onChange={(e) => setResultTitle(e.target.value)} className="form-input" placeholder="例: 雲海 Seedance Mini v01" /></div>
-        <div><label className="form-label">保存パス</label><input value={resultPath} onChange={(e) => setResultPath(e.target.value)} className="form-input font-mono" placeholder="例: /04_ai-video-assets/ai-videos/cloud-sea-v01.mp4" /><p className="text-xs text-navy-400 mt-1">動画本体はGitへ入れず、ローカル/Drive等の保存パスだけ登録します。</p></div>
-        <div><label className="form-label">生成メモ（任意）</label><textarea value={resultNote} onChange={(e) => setResultNote(e.target.value)} className="form-input" rows={3} placeholder="seed / variant / provider側設定 / 気づいた点など" /></div>
+        {resultNaming && <div className="rounded-lg border border-sky-200 dark:border-sky-800 bg-sky-50 dark:bg-sky-900/20 p-3"><div className="flex flex-wrap items-center gap-2"><div className="min-w-0 flex-1"><p className="text-xs font-bold text-sky-800 dark:text-sky-300">保存名候補 {resultNaming.variant}</p><code className="block mt-1 text-xs text-sky-700 dark:text-sky-200 break-all">{resultNaming.suggestedPath}</code></div><button type="button" onClick={() => setResultPath(resultNaming.suggestedPath)} className="px-3 py-1.5 text-xs rounded-lg bg-white/70 dark:bg-navy-800/60 border border-sky-200 dark:border-sky-700 text-sky-800 dark:text-sky-200">候補を入力欄へ</button></div><p className="mt-2 text-[11px] text-sky-700 dark:text-sky-300">scene / preset / model / 既存variant数から作った命名候補です。実ファイルの存在は確認していないため、自動保存はしません。</p></div>}
+        <div><label className="form-label">実際の保存パス</label><input value={resultPath} onChange={(e) => setResultPath(e.target.value)} className="form-input font-mono" placeholder="実際に保存した動画ファイルのパスを入力" /><p className="text-xs text-navy-400 mt-1">動画本体はGitへ入れず、ローカル/Drive等の実際の保存パスだけ登録します。上の候補を使う場合もファイル配置と一致しているか確認してください。</p></div>
+        <div><label className="form-label">生成メモ（任意）</label><textarea value={resultNote} onChange={(e) => setResultNote(e.target.value)} className="form-input" rows={3} placeholder="seed / provider側設定 / motion strength / 気づいた点など" /></div>
         <div className="rounded-lg border border-emerald-200 dark:border-emerald-800 bg-emerald-50 dark:bg-emerald-900/20 p-3 text-xs text-emerald-800 dark:text-emerald-300">保存すると `ai_video / ready` Assetを作り、元Promptと全sceneへ接続します。draftならtestingへ進め、結果レビュー待ちに載せられる状態にします。</div>
         <div className="flex justify-end gap-3"><button type="button" onClick={closeResultIntake} className="px-4 py-2 text-sm rounded-lg border border-sand-200 dark:border-navy-600 text-navy-600 dark:text-navy-200">キャンセル</button><button type="button" onClick={saveResultAsset} className="px-4 py-2 text-sm rounded-lg bg-emerald-700 text-white hover:bg-emerald-800">Asset作成 + Prompt/シーンへ紐付け</button></div>
       </div>}
