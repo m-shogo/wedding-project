@@ -3,6 +3,7 @@ import { failureCategoryForPrompt, failureLearningKey, latestRejectedCategory, l
 import { promptMode } from "./videoExecutionRouter";
 import { buildVideoModelEvidence } from "./videoModelEvidence";
 import { resolveProjectVideoModelRoute } from "./videoProjectModelRouter";
+import { findVideoResultFingerprintDuplicates } from "./videoResultFingerprintDuplicates";
 
 export type PreflightSeverity = "block" | "warning" | "info";
 
@@ -42,6 +43,22 @@ export function runVideoPreflight(data: AllData, prompts: Prompt[], now = new Da
   const assetById = new Map(data.assets.map((asset) => [asset.assetId, asset]));
   const promptById = new Map(prompts.map((prompt) => [prompt.promptId, prompt]));
   const modelEvidence = buildVideoModelEvidence(data.prompts);
+
+  for (const duplicate of findVideoResultFingerprintDuplicates(prompts, data.assets)) {
+    const prompt = promptById.get(duplicate.promptId);
+    if (!prompt) continue;
+    const titles = duplicate.assets.map((asset) => asset.title).join(" / ");
+    const fingerprintTail = duplicate.sampleFingerprint.slice(-12);
+    issues.push({
+      id: `${duplicate.promptId}:duplicate-sample-fingerprint:${fingerprintTail}`,
+      severity: "warning",
+      promptId: duplicate.promptId,
+      title: `${promptLabel(prompt)}: 同じ実動画らしいvariantが複数`,
+      detail: `${titles} が同じsample fingerprint（…${fingerprintTail}）です。sample fingerprintはfull-file hashではないため、完全一致の証明ではありません。`,
+      action: "結果レビューで各Assetを確認し、重複登録なら不要variantを整理する。fingerprintだけで自動削除しない。",
+      href: "/video-result-review",
+    });
+  }
 
   // Result intake records promptId on generated assets. If Undo or manual editing
   // leaves the Asset but removes Prompt.resultAssetIds, surface it before more work.
