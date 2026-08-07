@@ -15,6 +15,12 @@ function noteValue(notes: string, key: string) {
   return match?.[1] ?? "";
 }
 
+function lastNoteValue(notes: string, key: string) {
+  const matches = Array.from(notes.matchAll(new RegExp(`${key}=([^\\s/]+)`, "g")));
+  const latest = matches.length > 0 ? matches[matches.length - 1] : undefined;
+  return latest?.[1] ?? "";
+}
+
 export function promptMode(prompt: Prompt) {
   return noteValue(prompt.notes, "mode") || "unknown";
 }
@@ -40,6 +46,19 @@ export function presetId(prompt: Prompt) {
   return noteValue(prompt.notes, "preset") || "";
 }
 
+export function selectedResultAssetId(prompt: Prompt) {
+  return lastNoteValue(prompt.notes, "selected-result-asset") || "";
+}
+
+export function selectedResultAssets(prompt: Prompt, resultAssets: Asset[]) {
+  const selectedId = selectedResultAssetId(prompt);
+  if (selectedId) {
+    const selected = resultAssets.find((asset) => asset.assetId === selectedId);
+    return selected ? [selected] : [];
+  }
+  return resultAssets.length === 1 ? resultAssets : [];
+}
+
 export function routeVideoPrompt(prompt: Prompt, resultAssets: Asset[]): VideoExecutionRoute {
   const mode = promptMode(prompt);
 
@@ -54,10 +73,29 @@ export function routeVideoPrompt(prompt: Prompt, resultAssets: Asset[]): VideoEx
   }
 
   if (prompt.status === "adopted") {
+    const selected = selectedResultAssets(prompt, resultAssets);
+    if (resultAssets.length === 0) {
+      return {
+        destination: "blocked",
+        label: "採用結果Assetなし",
+        reason: "Promptは採用済みですが、編集へ渡せる結果Assetがありません。",
+        action: "結果AssetをPromptへ紐付けてからPalmier / CapCutへ進む。",
+        paidGenerationAllowed: false,
+      };
+    }
+    if (resultAssets.length > 1 && selected.length !== 1) {
+      return {
+        destination: "blocked",
+        label: "採用結果を1本選ぶ",
+        reason: "複数variantが紐付いていますが、編集へ渡す正本Assetが未選択です。",
+        action: "AI動画 結果レビューで使用する結果Assetを1本選んでQA PASSを保存する。",
+        paidGenerationAllowed: false,
+      };
+    }
     return {
       destination: "edit",
       label: "Palmier / CapCut実尺",
-      reason: "QA採用済み。生成工程ではなく編集・接続確認の段階。",
+      reason: "QA採用済み。使用する結果Assetも確定しており、生成工程ではなく編集・接続確認の段階。",
       action: "採用AssetをPalmierまたはCapCutへ置き、前後ショット・テロップ・BGMと実尺確認する。",
       paidGenerationAllowed: false,
     };
@@ -110,8 +148,10 @@ export function buildPalmierAgentHandoff(params: {
 }) {
   const { movieTitle, prompts, assets, sceneName } = params;
   const rows = prompts.map((prompt) => {
-    const resultAssets = assets.filter((asset) => prompt.resultAssetIds.includes(asset.assetId));
-    const route = routeVideoPrompt(prompt, resultAssets);
+    const allResultAssets = assets.filter((asset) => prompt.resultAssetIds.includes(asset.assetId));
+    const route = routeVideoPrompt(prompt, allResultAssets);
+    const selected = selectedResultAssets(prompt, allResultAssets);
+    const handoffAssets = prompt.status === "adopted" ? selected : allResultAssets;
     return {
       promptId: prompt.promptId,
       title: prompt.title,
@@ -124,10 +164,12 @@ export function buildPalmierAgentHandoff(params: {
       preset: presetId(prompt),
       finishCandidate: finishCandidate(prompt),
       negativePolicy: negativePolicy(prompt),
+      selectedResultAssetId: selectedResultAssetId(prompt) || (allResultAssets.length === 1 ? allResultAssets[0]?.assetId ?? "" : ""),
       route,
       prompt: prompt.prompt,
       qaAvoid: prompt.negativePrompt,
-      resultAssets: resultAssets.map((asset) => ({ title: asset.title, path: asset.path, status: asset.status })),
+      resultAssets: handoffAssets.map((asset) => ({ assetId: asset.assetId, title: asset.title, path: asset.path, status: asset.status })),
+      alternativeResultAssets: allResultAssets.filter((asset) => !handoffAssets.some((selectedAsset) => selectedAsset.assetId === asset.assetId)).map((asset) => ({ assetId: asset.assetId, title: asset.title, path: asset.path, status: asset.status })),
     };
   });
 
@@ -142,7 +184,7 @@ export function buildPalmierAgentHandoff(params: {
     "- Important text, captions and logos belong in the editor/compositor, not baked into generated footage.",
     "",
     "## Execution order",
-    "1. Place adopted result assets on the matching scene timeline positions where paths are available.",
+    "1. Place only the latest selected adopted result asset on the matching scene timeline position. If multiple variants exist but no selected result is recorded, stop and return it to movie-dashboard.",
     "2. For testing prompts with result assets, create/keep review placeholders rather than generating more.",
     "3. For first-last prompts, prepare first-frame / last-frame / reference slots in Palmier and keep generation paused.",
     "4. For draft prompts, create a named placeholder containing the prompt metadata; do not generate until explicitly requested.",
@@ -163,7 +205,9 @@ export function buildPalmierAgentHandoff(params: {
       `- finish candidate: ${row.finishCandidate || "—"}`,
       `- route: ${row.route.label}`,
       `- next action: ${row.route.action}`,
-      row.resultAssets.length > 0 ? `- result assets: ${row.resultAssets.map((asset) => `${asset.title} (${asset.path || "path missing"})`).join(" / ")}` : "- result assets: none",
+      row.selectedResultAssetId ? `- selected result asset: ${row.selectedResultAssetId}` : "- selected result asset: —",
+      row.resultAssets.length > 0 ? `- handoff result: ${row.resultAssets.map((asset) => `${asset.title} (${asset.path || "path missing"})`).join(" / ")}` : "- handoff result: none",
+      row.alternativeResultAssets.length > 0 ? `- unselected alternatives: ${row.alternativeResultAssets.map((asset) => asset.title).join(" / ")}` : "",
       "",
       "Prompt:",
       "```text",
@@ -174,10 +218,10 @@ export function buildPalmierAgentHandoff(params: {
       "```text",
       row.qaAvoid,
       "```",
-    ]),
+    ].filter(Boolean)),
     "",
     "## Return to dashboard",
-    "After editing, report per promptId: placed / missing / timing-changed / reference-needed / generated-result-path / review-needed. Do not silently change Prompt adoption status.",
+    "After editing, report per promptId: placed / missing / timing-changed / reference-needed / generated-result-path / review-needed. Do not silently change Prompt adoption status or swap to an unselected alternative result.",
   ].join("\n");
 
   return { rows, markdown };

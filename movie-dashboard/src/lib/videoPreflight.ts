@@ -1,5 +1,5 @@
 import type { AllData, Prompt } from "../types/movie";
-import { classifyVideoFailure, failureLearningKey, latestRejectedReason, retryAttempt } from "./videoFailureTaxonomy";
+import { failureCategoryForPrompt, failureLearningKey, latestRejectedCategory, latestRejectedReason, retryAttempt } from "./videoFailureTaxonomy";
 import { promptMode } from "./videoExecutionRouter";
 import { buildVideoModelEvidence } from "./videoModelEvidence";
 import { resolveProjectVideoModelRoute } from "./videoProjectModelRouter";
@@ -81,8 +81,7 @@ export function runVideoPreflight(data: AllData, prompts: Prompt[], now = new Da
   const failureCounts = new Map<string, number>();
   for (const prompt of prompts) {
     if (prompt.status !== "rejected") continue;
-    const reason = latestRejectedReason(prompt.notes);
-    const category = classifyVideoFailure(reason);
+    const category = failureCategoryForPrompt(prompt);
     const key = failureLearningKey(prompt, category.id);
     failureCounts.set(key, (failureCounts.get(key) ?? 0) + 1);
   }
@@ -106,9 +105,17 @@ export function runVideoPreflight(data: AllData, prompts: Prompt[], now = new Da
       issues.push({ id: `${prompt.promptId}:asset-missing`, severity: "block", promptId: prompt.promptId, title: `${label}: 存在しない結果Asset`, detail: missingAssetIds.join(", "), action: "Prompt.resultAssetIdsを修復するか、生成キューから結果を登録し直す。", href: "/video-generation-queue" });
     }
 
-    const pathless = resultAssets.filter((asset) => asset && !asset.path.trim());
-    if (pathless.length > 0 && (prompt.status === "testing" || prompt.status === "adopted")) {
-      issues.push({ id: `${prompt.promptId}:asset-path`, severity: "block", promptId: prompt.promptId, title: `${label}: 結果Assetの保存パスなし`, detail: pathless.map((asset) => asset?.title).filter(Boolean).join(" / "), action: "素材ライブラリで実ファイルの保存パスを登録する。", href: "/assets" });
+    const selectedResultId = noteValue(prompt.notes, "selected-result-asset");
+    const effectiveAdoptedResultId = prompt.status === "adopted"
+      ? selectedResultId || (prompt.resultAssetIds.length === 1 ? prompt.resultAssetIds[0] : "")
+      : "";
+    const pathless = resultAssets.filter((asset) => {
+      if (!asset || asset.path.trim()) return false;
+      if (prompt.status === "adopted") return effectiveAdoptedResultId ? asset.assetId === effectiveAdoptedResultId : false;
+      return prompt.status === "testing";
+    });
+    if (pathless.length > 0) {
+      issues.push({ id: `${prompt.promptId}:asset-path`, severity: "block", promptId: prompt.promptId, title: `${label}: 使用対象の結果Assetに保存パスなし`, detail: pathless.map((asset) => asset?.title).filter(Boolean).join(" / "), action: "素材ライブラリで実ファイルの保存パスを登録する。", href: "/assets" });
     }
 
     if (prompt.status === "testing" && prompt.resultAssetIds.length > 0) {
@@ -122,23 +129,44 @@ export function runVideoPreflight(data: AllData, prompts: Prompt[], now = new Da
       if (!prompt.notes.includes("video-review=passed")) {
         issues.push({ id: `${prompt.promptId}:adopted-no-review`, severity: "block", promptId: prompt.promptId, title: `${label}: QA記録なしで採用`, detail: "目視QAを通過した証跡がPrompt.notesにありません。", action: "結果レビューを通し、video-review=passedを残す。", href: "/video-result-review" });
       }
+      if (prompt.resultAssetIds.length > 1 && !selectedResultId) {
+        issues.push({
+          id: `${prompt.promptId}:adopted-result-ambiguous`,
+          severity: "block",
+          promptId: prompt.promptId,
+          title: `${label}: 複数variantの採用正本が未選択`,
+          detail: `${prompt.resultAssetIds.length}本の結果Assetが紐付いていますが、Palmier / CapCutへ渡す1本が確定していません。`,
+          action: "AI動画 結果レビューで使用する結果Assetを1本選び、QA PASSを保存し直す。",
+          href: "/video-result-review",
+        });
+      }
+      if (selectedResultId && !prompt.resultAssetIds.includes(selectedResultId)) {
+        issues.push({
+          id: `${prompt.promptId}:selected-result-broken`,
+          severity: "block",
+          promptId: prompt.promptId,
+          title: `${label}: 採用正本Asset参照が壊れている`,
+          detail: `selected-result-asset=${selectedResultId} がPrompt.resultAssetIdsにありません。`,
+          action: "結果レビューで存在する結果Assetを採用正本として選び直す。",
+          href: "/video-result-review",
+        });
+      }
     }
 
     if (prompt.status === "rejected") {
       const reason = latestRejectedReason(prompt.notes);
-      if (!reason) {
-        issues.push({ id: `${prompt.promptId}:rejected-no-reason`, severity: "warning", promptId: prompt.promptId, title: `${label}: 不採用理由なし`, detail: "次回生成へ学習を引き継げません。", action: "結果レビューで具体的な失敗理由を記録する。", href: "/video-result-review" });
+      const explicitCategory = latestRejectedCategory(prompt.notes);
+      if (!reason && !explicitCategory) {
+        issues.push({ id: `${prompt.promptId}:rejected-no-reason`, severity: "warning", promptId: prompt.promptId, title: `${label}: 不採用理由・カテゴリなし`, detail: "次回生成へ学習を引き継げません。", action: "結果レビューで失敗カテゴリを記録する。", href: "/video-result-review" });
       }
       const attempt = retryAttempt(prompt);
       if (attempt >= 3) {
         issues.push({ id: `${prompt.promptId}:retry-stop`, severity: "warning", promptId: prompt.promptId, title: `${label}: retry ${attempt}/3 — この系統は停止`, detail: "このlineageは追加Promptではなく入力条件を変える段階です。他のショットまで全体停止にはしません。", action: "失敗学習で静止画・参照・カメラ・モデルの変更を決める。", href: "/video-failure-lab" });
       }
-      if (reason) {
-        const category = classifyVideoFailure(reason);
-        const recurrence = failureCounts.get(failureLearningKey(prompt, category.id)) ?? 0;
-        if (recurrence >= 2) {
-          issues.push({ id: `${prompt.promptId}:failure-repeat`, severity: "warning", promptId: prompt.promptId, title: `${label}: 同条件の「${category.label}」が${recurrence}回`, detail: "同じmodel + preset + failure categoryで再発しています。", action: category.nextAction, href: "/video-failure-lab" });
-        }
+      const category = failureCategoryForPrompt(prompt);
+      const recurrence = failureCounts.get(failureLearningKey(prompt, category.id)) ?? 0;
+      if (recurrence >= 2) {
+        issues.push({ id: `${prompt.promptId}:failure-repeat`, severity: "warning", promptId: prompt.promptId, title: `${label}: 同条件の「${category.label}」が${recurrence}回`, detail: "同じmodel + preset + failure categoryで再発しています。明示カテゴリがあるログではそれを正本にしています。", action: category.nextAction, href: "/video-failure-lab" });
       }
     }
 
