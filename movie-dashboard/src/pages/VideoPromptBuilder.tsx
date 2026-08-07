@@ -65,8 +65,7 @@ export function VideoPromptBuilder() {
     selectedMovieId,
     data,
     movieScenes,
-    addPrompt,
-    linkPromptToScene,
+    addPromptLinkedToScenes,
   } = useProduction();
   const { addToast } = useToast();
   const [modelId, setModelId] = useState<VideoModelId>("seedance-2.0-mini");
@@ -134,7 +133,7 @@ export function VideoPromptBuilder() {
         : `model-routing=manual-override / project-suggested-model=${activeRoute.model.id}`
       : "model-routing=manual";
 
-    addPrompt({
+    addPromptLinkedToScenes({
       promptId,
       title,
       target: "video",
@@ -154,13 +153,10 @@ export function VideoPromptBuilder() {
         ...compiled.modelNotes,
         ...(compiled.warnings.length ? [`Warnings: ${compiled.warnings.join(" / ")}`] : []),
       ].filter(Boolean).join("\n"),
-    });
+    }, selectedScene ? [selectedScene.sceneId] : []);
 
     if (selectedScene) {
-      // The second history entry adds both Prompt.relatedSceneIds and Scene.promptIds.
-      // One undo returns to a valid unlinked Prompt instead of a one-way relationship.
-      linkPromptToScene(promptId, selectedScene.sceneId);
-      addToast(`保存して「${selectedScene.title}」へ紐付けました`, "success");
+      addToast(`保存して「${selectedScene.title}」へ紐付けました。Undo 1回で両方戻せます`, "success");
     } else {
       addToast("プロンプト管理へ保存しました", "success");
     }
