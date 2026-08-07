@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "check:video-contracts": "node scripts/verify-video-safety-contracts.mjs",
     "preview": "vite preview"
   },
   "dependencies": {

@@ -40,5 +40,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: AI video safety contracts
+        run: pnpm check:video-contracts
+
       - name: TypeScript and Vite build
         run: pnpm build
