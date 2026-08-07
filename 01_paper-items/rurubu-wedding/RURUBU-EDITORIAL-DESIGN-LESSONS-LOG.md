@@ -308,6 +308,32 @@ Do not turn every isolated preference into a rigid global rule. The goal is accu
 
 ---
 
+## LESSON-011 — Closing editorial notes can use rule + direct type instead of a full footer card
+
+**Date:** 2026-08-07
+
+**Context:** V5 inside-left `TRAVEL NOTE` (`77:330`–`77:332`)
+
+**Observed failure or opportunity:** The useful closing note was contained in a `702 × 102` dark rounded card whose visual weight exceeded the importance of the content and reintroduced a Web-UI/footer-card silhouette.
+
+**Root cause:** Contrast and grouping were solved with a full container even though the warm paper background already supported direct native type.
+
+**General editorial principle:** When a closing note does not need image-backed contrast, test a lightweight separator plus direct type before retaining a full card. Preserve the content and hierarchy; remove only the unnecessary containment.
+
+**Process change:** For low-priority editorial notes, compare `direct type → rule → minimal field → full card` in that order. Adopt the least container-heavy option that still passes reading and actual-size QA.
+
+**Design change:** `77:330` became a `702 × 4` square pink rule; `77:331` changed to pink native text; `77:332` changed to navy native text. No copy, semantic node, image role, or rollback state changed.
+
+**Verification evidence:** Whole-spread and left-page screenshots passed; inside structure audit remained at `92` native text nodes and `9` IMAGE-fill nodes; fold guide `77:540` and rollback frames `59:2` / `59:178` remained preserved. Detailed evidence: `learning-runs/2026-08-07-v5-travel-note-card-to-rule.md`.
+
+**Applies to:** V5; candidate for later editorial versions when the same contrast conditions hold
+
+**Status:** TESTED
+
+**Promoted knowledge-base section:** Not yet promoted; requires repeated evidence before becoming a broader rule.
+
+---
+
 ## Open candidate lessons
 
 Use this area for observations that require further evidence before promotion.
