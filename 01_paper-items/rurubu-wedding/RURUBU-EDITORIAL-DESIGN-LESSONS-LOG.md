@@ -360,6 +360,32 @@ Do not turn every isolated preference into a rigid global rule. The goal is accu
 
 ---
 
+## LESSON-013 — Subtraction can create dead zones that require spacing re-balance
+
+**Date:** 2026-08-07
+
+**Context:** V5 inside-left page after profile-card/ribbon reductions.
+
+**Observed failure or opportunity:** Earlier subtraction improved the profile hierarchy but left an excessive vertical pause between the profile content and `3 QUESTIONS`, while the lower modules still finished relatively close to the bottom edge.
+
+**Root cause:** Removing containers and decorative layers changed the perceived density, but the old Y positions were retained as if the previous visual mass still existed.
+
+**General editorial principle:** White space is valuable only when it clarifies hierarchy. After subtraction, re-evaluate rhythm rather than preserving legacy spacing automatically; a dead zone and intentional quiet space are not the same thing.
+
+**Process change:** After any meaningful subtraction pass, compare the resulting page rhythm at whole-page scale and test bounded spacing re-balance before adding new decoration.
+
+**Design change:** Created comparison frame `334:2 / V5_INSIDE_LEFT_RHYTHM_TEST_2026_08_07`, then moved the bounded Q&A/common/travel-note lower-half families upward by `52 px` in Current after the duplicate won the comparison. No copy, image, crop, size, or semantic role changed.
+
+**Verification evidence:** Whole-page and whole-spread screenshots show improved continuity from profiles → questions → common points → travel note. Post-change structure audit retained `92` native text nodes, `57` visible text nodes, all `7 / 7` inside semantic image-role IMAGE fills, history hash `1bfd7f1fa601206bfed1594a140b40554e85d77a`, fold guide `77:540`, and rollback frames `59:2` / `59:178`. Detailed evidence: `learning-runs/2026-08-07-v5-inside-left-rhythm-compression.md`.
+
+**Applies to:** V5; candidate for broader editorial use after repeated evidence
+
+**Status:** TESTED
+
+**Promoted knowledge-base section:** Not yet promoted; one verified V5 case is insufficient for PROJECT_RULE.
+
+---
+
 ## Open candidate lessons
 
 Use this area for observations that require further evidence before promotion.
