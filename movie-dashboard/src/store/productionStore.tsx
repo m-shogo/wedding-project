@@ -123,6 +123,7 @@ export function ProductionProvider({ children }: { children: ReactNode }) {
   const setData = useCallback((updater: AllData | ((prev: AllData) => AllData)) => {
     setDataRaw((prev) => {
       const next = typeof updater === "function" ? updater(prev) : updater;
+      if (Object.is(next, prev)) return prev;
       if (!isUndoRedoRef.current) {
         const h = historyRef.current.slice(0, historyIndexRef.current + 1);
         h.push(next);
