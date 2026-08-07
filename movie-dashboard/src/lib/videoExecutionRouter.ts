@@ -15,6 +15,12 @@ function noteValue(notes: string, key: string) {
   return match?.[1] ?? "";
 }
 
+function lastNoteValue(notes: string, key: string) {
+  const matches = Array.from(notes.matchAll(new RegExp(`${key}=([^\\s/]+)`, "g")));
+  const latest = matches.length > 0 ? matches[matches.length - 1] : undefined;
+  return latest?.[1] ?? "";
+}
+
 export function promptMode(prompt: Prompt) {
   return noteValue(prompt.notes, "mode") || "unknown";
 }
@@ -41,7 +47,7 @@ export function presetId(prompt: Prompt) {
 }
 
 export function selectedResultAssetId(prompt: Prompt) {
-  return noteValue(prompt.notes, "selected-result-asset") || "";
+  return lastNoteValue(prompt.notes, "selected-result-asset") || "";
 }
 
 export function selectedResultAssets(prompt: Prompt, resultAssets: Asset[]) {
@@ -178,7 +184,7 @@ export function buildPalmierAgentHandoff(params: {
     "- Important text, captions and logos belong in the editor/compositor, not baked into generated footage.",
     "",
     "## Execution order",
-    "1. Place only the selected adopted result asset on the matching scene timeline position. If multiple variants exist but no selected result is recorded, stop and return it to movie-dashboard.",
+    "1. Place only the latest selected adopted result asset on the matching scene timeline position. If multiple variants exist but no selected result is recorded, stop and return it to movie-dashboard.",
     "2. For testing prompts with result assets, create/keep review placeholders rather than generating more.",
     "3. For first-last prompts, prepare first-frame / last-frame / reference slots in Palmier and keep generation paused.",
     "4. For draft prompts, create a named placeholder containing the prompt metadata; do not generate until explicitly requested.",
