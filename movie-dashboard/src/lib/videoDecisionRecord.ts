@@ -10,6 +10,7 @@ import {
   promptRatio,
   selectedResultAssetId,
 } from "./videoExecutionRouter";
+import { parseVideoResultReproMetadata } from "./videoResultMetadata";
 
 function lastNoteValue(notes: string, key: string) {
   const matches = Array.from(notes.matchAll(new RegExp(`${key}=([^\\s/]+)`, "g")));
@@ -42,6 +43,11 @@ export interface VideoDecisionRecord {
     title: string;
     path: string;
     status: string;
+    generationId: string;
+    seed: string;
+    actualDurationSec?: number;
+    resolution: string;
+    fps?: number;
   };
   alternatives: Array<{
     assetId: string;
@@ -80,6 +86,7 @@ export function buildVideoDecisionRecords(params: {
       const explicitSelectedId = selectedResultAssetId(prompt);
       const selectedId = explicitSelectedId || (resultAssets.length === 1 ? resultAssets[0]?.assetId ?? "" : "");
       const selected = resultAssets.find((asset) => asset.assetId === selectedId);
+      const selectedMedia = selected ? parseVideoResultReproMetadata(selected.notes) : undefined;
       const preset = presetId(prompt);
       const modelEvidence = preset ? observedEvidenceForToolPreset(evidence, prompt.tool, preset) : undefined;
       const reviewedAt = reviewTimestamp(prompt.notes);
@@ -89,6 +96,13 @@ export function buildVideoDecisionRecords(params: {
       else if (!selected.path.trim()) warnings.push("採用正本Assetの保存パスがありません。");
       if (!reviewedAt) warnings.push("QA PASSのreviewedAt記録がありません。");
 
+      const mediaSummary = selectedMedia && (selectedMedia.actualDurationSec || selectedMedia.resolution || selectedMedia.fps)
+        ? `actual media: ${selectedMedia.actualDurationSec ?? "?"}s / ${selectedMedia.resolution || "?"} / ${selectedMedia.fps ?? "?"}fps.`
+        : "actual media specsは未記録。";
+      const reproSummary = selectedMedia && (selectedMedia.generationId || selectedMedia.seed)
+        ? `repro metadata: generationId=${selectedMedia.generationId || "—"}, seed=${selectedMedia.seed || "—"}.`
+        : "provider generation ID / seedは未記録。";
+
       const rationale = [
         selected ? `QA PASSで「${selected.title}」を採用正本として確定。` : "採用正本は未確定。",
         preset ? `shot preset: ${preset}.` : "preset記録なし。",
@@ -96,6 +110,8 @@ export function buildVideoDecisionRecords(params: {
         modelEvidence
           ? `project QA: ${modelEvidence.reviewed}本、独立系統${modelEvidence.independentRoots}、採用率${Math.round(modelEvidence.passRate * 100)}%、95%区間${Math.round(modelEvidence.confidenceLow * 100)}–${Math.round(modelEvidence.confidenceHigh * 100)}%、signal=${modelEvidence.signal}.`
           : "このmodel + presetのproject QA evidenceはまだありません。",
+        mediaSummary,
+        reproSummary,
         resultAssets.length > 1 ? `代替variant ${Math.max(0, resultAssets.length - 1)}本は比較候補として保持し、編集へ自動差し替えしない。` : "代替variantなし。",
       ];
 
@@ -114,6 +130,11 @@ export function buildVideoDecisionRecords(params: {
           title: selected.title,
           path: selected.path,
           status: selected.status,
+          generationId: selectedMedia?.generationId ?? "",
+          seed: selectedMedia?.seed ?? "",
+          actualDurationSec: selectedMedia?.actualDurationSec,
+          resolution: selectedMedia?.resolution ?? "",
+          fps: selectedMedia?.fps,
         } : undefined,
         alternatives: resultAssets
           .filter((asset) => asset.assetId !== selected?.assetId)
@@ -154,13 +175,16 @@ export function buildVideoDecisionRecords(params: {
       `- model: ${record.model}`,
       `- preset: ${record.preset || "—"}`,
       `- mode: ${record.mode}`,
-      `- duration: ${record.durationSec ?? "unknown"}s`,
-      `- ratio: ${record.ratio}`,
+      `- intended duration: ${record.durationSec ?? "unknown"}s`,
+      `- intended ratio: ${record.ratio}`,
       `- model routing: ${record.modelRouting}`,
       `- reviewed at: ${record.reviewedAt || "unknown"}`,
       record.selectedResult
         ? `- selected result: ${record.selectedResult.title} / ${record.selectedResult.assetId} / ${record.selectedResult.path || "path missing"}`
         : "- selected result: MISSING",
+      record.selectedResult ? `- actual media: ${record.selectedResult.actualDurationSec ?? "unknown"}s / ${record.selectedResult.resolution || "unknown"} / ${record.selectedResult.fps ?? "unknown"}fps` : "",
+      record.selectedResult ? `- provider generation ID: ${record.selectedResult.generationId || "—"}` : "",
+      record.selectedResult ? `- seed: ${record.selectedResult.seed || "—"}` : "",
       record.alternatives.length > 0
         ? `- alternatives retained: ${record.alternatives.map((asset) => `${asset.title} (${asset.assetId})`).join(" / ")}`
         : "- alternatives retained: none",
@@ -168,7 +192,7 @@ export function buildVideoDecisionRecords(params: {
       "### Decision basis",
       ...record.rationale.map((item) => `- ${item}`),
       ...(record.warnings.length > 0 ? ["", "### Warnings", ...record.warnings.map((item) => `- ${item}`)] : []),
-    ]),
+    ].filter(Boolean)),
     "",
   ].join("\n");
 
