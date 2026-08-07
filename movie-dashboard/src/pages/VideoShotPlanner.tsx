@@ -16,8 +16,7 @@ export function VideoShotPlanner() {
     data,
     movieScenes,
     moviePrompts,
-    addPrompt,
-    linkPromptToScene,
+    addPromptLinkedToScenes,
   } = useProduction();
   const { addToast } = useToast();
   const [overrides, setOverrides] = useState<Record<string, string>>({});
@@ -51,7 +50,7 @@ export function VideoShotPlanner() {
     const compiled = compileVideoPrompt(route.model.id, intent);
     const promptId = generateId("prompt");
 
-    addPrompt({
+    addPromptLinkedToScenes({
       promptId,
       title: intent.title,
       target: "video",
@@ -71,8 +70,7 @@ export function VideoShotPlanner() {
         ...compiled.modelNotes,
         ...(compiled.warnings.length ? [`Warnings: ${compiled.warnings.join(" / ")}`] : []),
       ].filter(Boolean).join("\n"),
-    });
-    linkPromptToScene(promptId, scene.sceneId);
+    }, [scene.sceneId]);
     return true;
   }
 
