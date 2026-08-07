@@ -117,12 +117,14 @@ export async function captureLocalVideoPreviewFrames(file: File): Promise<LocalV
 
     const frames: LocalVideoPreviewFrame[] = [];
     for (const point of points) {
-      video.currentTime = Math.min(Math.max(point.timeSec, 0), Math.max(0, duration - 0.001));
-      await waitForMediaEvent(video, "seeked");
+      const targetTime = Math.min(Math.max(point.timeSec, 0), Math.max(0, duration - 0.001));
+      const seeked = waitForMediaEvent(video, "seeked");
+      video.currentTime = targetTime;
+      await seeked;
       context.drawImage(video, 0, 0, canvas.width, canvas.height);
       frames.push({
         label: point.label,
-        timeSec: roundedDuration(point.timeSec),
+        timeSec: roundedDuration(targetTime),
         dataUrl: canvas.toDataURL("image/jpeg", 0.78),
       });
     }
