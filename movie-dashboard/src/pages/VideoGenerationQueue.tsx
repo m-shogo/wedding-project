@@ -6,6 +6,7 @@ import { Modal } from "../components/Modal";
 import { useProduction } from "../store/productionStore";
 import { useToast } from "../store/toastStore";
 import { generateId } from "../lib/ids";
+import { buildVideoModelInput, buildVideoQaPacket } from "../lib/videoGenerationPacket";
 import { runVideoPreflight, type VideoPreflightIssue } from "../lib/videoPreflight";
 import { suggestVideoResultNaming } from "../lib/videoResultNaming";
 import { formatVideoResultReproMetadata } from "../lib/videoResultMetadata";
@@ -99,6 +100,10 @@ export function VideoGenerationQueue() {
     return (issuesByPrompt.get(prompt.promptId) ?? []).filter(isExecutionHold);
   }
 
+  function runnableDraft(prompt: Prompt) {
+    return prompt.status === "draft" && executionHoldIssues(prompt).length === 0;
+  }
+
   const pendingCount = videoPrompts.filter((prompt) => prompt.status === "draft" || prompt.status === "testing").length;
   const unlinkedCount = videoPrompts.filter((prompt) => prompt.relatedSceneIds.length === 0).length;
   const withResultCount = videoPrompts.filter((prompt) => prompt.resultAssetIds.length > 0).length;
@@ -117,19 +122,12 @@ export function VideoGenerationQueue() {
     return names.join(" / ") || "未紐付け";
   }
 
-  function packet(prompt: Prompt) {
-    const preset = parseNoteValue(prompt.notes, "preset");
-    const finishCandidate = parseNoteValue(prompt.notes, "finish-candidate");
-    return [
-      `[MODEL] ${prompt.tool || "未指定"}`,
-      `[SHOT] ${prompt.title}`,
-      `[SCENE] ${sceneText(prompt)}`,
-      preset ? `[PRESET] ${preset}` : "",
-      finishCandidate ? `[FINISH CANDIDATE] ${finishCandidate}` : "",
-      "", "[PROMPT]", prompt.prompt, "",
-      prompt.negativePrompt ? `[AVOID]\n${prompt.negativePrompt}` : "",
-      "", prompt.notes ? `[NOTES]\n${prompt.notes}` : "",
-    ].filter(Boolean).join("\n");
+  function qaPacket(prompt: Prompt) {
+    return buildVideoQaPacket(prompt, { scene: sceneText(prompt) });
+  }
+
+  function modelInput(prompt: Prompt) {
+    return buildVideoModelInput(prompt, { scene: sceneText(prompt) });
   }
 
   async function copyPrompt(prompt: Prompt, moveToTesting: boolean) {
@@ -138,26 +136,26 @@ export function VideoGenerationQueue() {
       addToast(`実行保留 ${holds.length}件があります。プリフライトを直してからテスト中へ進めてください`, "error");
       return;
     }
-    await navigator.clipboard.writeText(packet(prompt));
+    await navigator.clipboard.writeText(moveToTesting ? modelInput(prompt) : qaPacket(prompt));
     setCopiedId(prompt.promptId);
     window.setTimeout(() => setCopiedId(""), 1500);
     if (moveToTesting && prompt.status === "draft") {
       updatePrompt({ ...prompt, status: "testing" });
-      addToast("生成パックをコピーしてテスト中へ移動しました", "success");
-    } else addToast("生成パックをコピーしました", "success");
+      addToast("provider-safeなモデル入力をコピーしてテスト中へ移動しました", "success");
+    } else addToast("人間確認用QA packetをコピーしました", "success");
   }
 
   async function copyGroup(tool: string, prompts: Prompt[]) {
-    const runnable = prompts.filter((prompt) => executionHoldIssues(prompt).length === 0);
+    const runnable = prompts.filter(runnableDraft);
     const skipped = prompts.length - runnable.length;
     if (runnable.length === 0) {
-      addToast(`${tool} は全件実行保留です。プリフライトを先に修正してください`, "error");
+      addToast(`${tool} は新規実行できるdraftがありません。testingは結果待ちとして再コピーしません`, "error");
       return;
     }
-    await navigator.clipboard.writeText(runnable.map(packet).join("\n\n---\n\n"));
+    await navigator.clipboard.writeText(runnable.map(modelInput).join("\n\n---\n\n"));
     setCopiedId(`group:${tool}`);
     window.setTimeout(() => setCopiedId(""), 1500);
-    addToast(skipped > 0 ? `${tool}: 実行可能${runnable.length}件をコピー、保留${skipped}件は除外しました` : `${tool} の生成パックをまとめてコピーしました`, "success");
+    addToast(skipped > 0 ? `${tool}: provider-safeなdraft ${runnable.length}件をコピー、testing/保留 ${skipped}件は除外しました` : `${tool} のprovider-safeモデル入力をまとめてコピーしました`, "success");
   }
 
   function resetResultMetadata() {
@@ -232,19 +230,19 @@ export function VideoGenerationQueue() {
   }
 
   function exportMarkdown() {
-    const body = groups.map(([tool, prompts]) => [`## ${tool}`, "", ...prompts.map((prompt) => `### ${prompt.title}\n\n\`\`\`text\n${packet(prompt)}\n\`\`\``)].join("\n\n")).join("\n\n");
+    const body = groups.map(([tool, prompts]) => [`## ${tool}`, "", ...prompts.map((prompt) => `### ${prompt.title}\n\n\`\`\`text\n${qaPacket(prompt)}\n\`\`\``)].join("\n\n")).join("\n\n");
     downloadText("video-generation-queue.md", `# Video Generation Queue\n\nExported: ${new Date().toISOString()}\nMovie: ${selectedMovieId}\nCount: ${filteredPrompts.length}\n\n${body}\n`, "text/markdown;charset=utf-8");
-    addToast("Markdownを書き出しました", "success");
+    addToast("QA packet Markdownを書き出しました", "success");
   }
 
   function exportJson() {
-    const payload = { exportedAt: new Date().toISOString(), selectedMovieId, count: filteredPrompts.length, prompts: filteredPrompts.map((prompt) => ({ promptId: prompt.promptId, title: prompt.title, tool: prompt.tool, status: prompt.status, sceneIds: prompt.relatedSceneIds, scene: sceneText(prompt), prompt: prompt.prompt, negativePrompt: prompt.negativePrompt, notes: prompt.notes, resultAssetIds: prompt.resultAssetIds })) };
+    const payload = { exportedAt: new Date().toISOString(), selectedMovieId, count: filteredPrompts.length, prompts: filteredPrompts.map((prompt) => ({ promptId: prompt.promptId, title: prompt.title, tool: prompt.tool, status: prompt.status, sceneIds: prompt.relatedSceneIds, scene: sceneText(prompt), modelInput: modelInput(prompt), qaPacket: qaPacket(prompt), prompt: prompt.prompt, negativePrompt: prompt.negativePrompt, notes: prompt.notes, resultAssetIds: prompt.resultAssetIds })) };
     downloadText("video-generation-queue.json", JSON.stringify(payload, null, 2), "application/json;charset=utf-8");
-    addToast("JSONを書き出しました", "success");
+    addToast("provider-safe input + QA JSONを書き出しました", "success");
   }
 
   return <div>
-    <Header title="動画生成キュー" description="生成待ちプロンプトをモデル別にまとめ、プリフライトを通ったものだけ実行へ進めます" showMovieSelector />
+    <Header title="動画生成キュー" description="生成待ちプロンプトをモデル別にまとめ、provider-safeな入力だけを実行へ進めます" showMovieSelector />
 
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
       <div className="rounded-xl border border-sand-200 dark:border-navy-600 bg-white dark:bg-navy-800 p-4"><p className="text-xs text-navy-400">生成待ち / テスト中</p><p className="text-2xl font-bold text-navy-800 dark:text-sand-100">{pendingCount}</p></div>
@@ -257,20 +255,20 @@ export function VideoGenerationQueue() {
       <select value={filter} onChange={(e) => setFilter(e.target.value as QueueFilter)} className="form-input w-auto min-w-[160px]"><option value="pending">生成待ち + テスト中</option><option value="draft">下書き</option><option value="testing">テスト中</option><option value="adopted">採用</option><option value="rejected">不採用</option><option value="all">すべて</option></select>
       <span className="text-xs text-navy-400">表示 {filteredPrompts.length}件 / 動画Prompt {videoPrompts.length}件</span>
       <Link to="/video-preflight" className={`px-3 py-2 text-xs rounded-lg border ${executionHoldCount > 0 ? "border-red-200 text-red-700 dark:border-red-800 dark:text-red-300" : "border-sand-200 dark:border-navy-600 text-navy-600 dark:text-navy-200"}`}>プリフライト {executionHoldCount > 0 ? `(${executionHoldCount}保留)` : "✓"}</Link>
-      <div className="ml-auto flex flex-wrap gap-2"><button onClick={exportMarkdown} disabled={filteredPrompts.length === 0} className="px-3 py-2 text-xs rounded-lg border border-sand-200 dark:border-navy-600 text-navy-600 dark:text-navy-200 disabled:opacity-40">Markdown</button><button onClick={exportJson} disabled={filteredPrompts.length === 0} className="px-3 py-2 text-xs rounded-lg border border-sand-200 dark:border-navy-600 text-navy-600 dark:text-navy-200 disabled:opacity-40">JSON</button><Link to="/video-prompt-builder" className="px-3 py-2 text-xs rounded-lg bg-navy-700 text-white hover:bg-navy-800">+ 動画プロンプト作成</Link></div>
+      <div className="ml-auto flex flex-wrap gap-2"><button onClick={exportMarkdown} disabled={filteredPrompts.length === 0} className="px-3 py-2 text-xs rounded-lg border border-sand-200 dark:border-navy-600 text-navy-600 dark:text-navy-200 disabled:opacity-40">QA Markdown</button><button onClick={exportJson} disabled={filteredPrompts.length === 0} className="px-3 py-2 text-xs rounded-lg border border-sand-200 dark:border-navy-600 text-navy-600 dark:text-navy-200 disabled:opacity-40">Input + QA JSON</button><Link to="/video-prompt-builder" className="px-3 py-2 text-xs rounded-lg bg-navy-700 text-white hover:bg-navy-800">+ 動画プロンプト作成</Link></div>
     </div>
 
     {groups.length === 0 ? <div className="rounded-xl border border-dashed border-sand-300 dark:border-navy-600 p-10 text-center text-sm text-navy-400">この条件の動画プロンプトはありません。</div> : <div className="space-y-7">{groups.map(([tool, prompts]) => {
-      const runnableCount = prompts.filter((prompt) => executionHoldIssues(prompt).length === 0).length;
+      const runnableCount = prompts.filter(runnableDraft).length;
       return <section key={tool} className="rounded-xl border border-sand-200 dark:border-navy-600 bg-white dark:bg-navy-800 shadow-sm overflow-hidden">
-        <div className="px-5 py-4 border-b border-sand-100 dark:border-navy-600 flex flex-wrap items-center gap-3"><div><p className="text-xs text-navy-400">MODEL / TOOL</p><h2 className="font-bold text-navy-800 dark:text-sand-100">{tool}</h2></div><span className="text-xs text-navy-400">{prompts.length} shots · 実行可能 {runnableCount}</span><button onClick={() => void copyGroup(tool, prompts)} disabled={runnableCount === 0} className="ml-auto px-3 py-1.5 text-xs rounded-lg border border-sand-200 dark:border-navy-600 text-navy-600 dark:text-navy-200 hover:bg-sand-50 dark:hover:bg-navy-700 disabled:opacity-40">{copiedId === `group:${tool}` ? "✓ コピー済み" : runnableCount === prompts.length ? "このモデル分をまとめてコピー" : `実行可能${runnableCount}件をコピー`}</button></div>
+        <div className="px-5 py-4 border-b border-sand-100 dark:border-navy-600 flex flex-wrap items-center gap-3"><div><p className="text-xs text-navy-400">MODEL / TOOL</p><h2 className="font-bold text-navy-800 dark:text-sand-100">{tool}</h2></div><span className="text-xs text-navy-400">{prompts.length} shots · 新規実行draft {runnableCount}</span><button onClick={() => void copyGroup(tool, prompts)} disabled={runnableCount === 0} className="ml-auto px-3 py-1.5 text-xs rounded-lg border border-sand-200 dark:border-navy-600 text-navy-600 dark:text-navy-200 hover:bg-sand-50 dark:hover:bg-navy-700 disabled:opacity-40">{copiedId === `group:${tool}` ? "✓ コピー済み" : runnableCount === prompts.length ? "provider-safe入力をまとめてコピー" : `draft ${runnableCount}件の入力をコピー`}</button></div>
         <div className="divide-y divide-sand-100 dark:divide-navy-600">{prompts.map((prompt) => {
           const resultAssets = data.assets.filter((asset) => prompt.resultAssetIds.includes(asset.assetId));
           const preset = parseNoteValue(prompt.notes, "preset"); const finishCandidate = parseNoteValue(prompt.notes, "finish-candidate");
           const promptIssues = issuesByPrompt.get(prompt.promptId) ?? [];
           const holds = promptIssues.filter(isExecutionHold);
           const blocking = holds.filter((issue) => issue.severity === "block");
-          return <article key={prompt.promptId} className="p-5"><div className="flex flex-wrap items-start gap-3"><div className="min-w-0 flex-1"><div className="flex flex-wrap items-center gap-2 mb-1"><h3 className="font-bold text-navy-800 dark:text-sand-100">{prompt.title}</h3><span className={`px-2 py-0.5 rounded-full text-[11px] font-medium ${statusClasses[prompt.status]}`}>{statusLabels[prompt.status]}</span>{preset && <span className="px-2 py-0.5 rounded-full text-[11px] bg-sand-100 dark:bg-navy-700 text-navy-500 dark:text-navy-300">{preset}</span>}{holds.length > 0 && <span className={`px-2 py-0.5 rounded-full text-[11px] ${blocking.length > 0 ? "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300" : "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300"}`}>実行保留 {holds.length}</span>}</div><p className="text-xs text-navy-400">シーン: {sceneText(prompt)}</p>{finishCandidate && <p className="text-xs text-navy-400 mt-0.5">仕上げ候補: {finishCandidate}</p>}</div><div className="flex flex-wrap gap-2"><button onClick={() => void copyPrompt(prompt, false)} className="px-3 py-1.5 text-xs rounded-lg border border-sand-200 dark:border-navy-600 text-navy-600 dark:text-navy-200 hover:bg-sand-50 dark:hover:bg-navy-700">{copiedId === prompt.promptId ? "✓ コピー済み" : "確認用コピー"}</button>{prompt.status === "draft" && <button onClick={() => void copyPrompt(prompt, true)} disabled={holds.length > 0} className="px-3 py-1.5 text-xs rounded-lg bg-navy-700 text-white hover:bg-navy-800 disabled:opacity-40 disabled:cursor-not-allowed">コピー + テスト中</button>}<button onClick={() => openResultIntake(prompt)} className="px-3 py-1.5 text-xs rounded-lg bg-emerald-700 text-white hover:bg-emerald-800">+ 結果を登録</button></div></div>
+          return <article key={prompt.promptId} className="p-5"><div className="flex flex-wrap items-start gap-3"><div className="min-w-0 flex-1"><div className="flex flex-wrap items-center gap-2 mb-1"><h3 className="font-bold text-navy-800 dark:text-sand-100">{prompt.title}</h3><span className={`px-2 py-0.5 rounded-full text-[11px] font-medium ${statusClasses[prompt.status]}`}>{statusLabels[prompt.status]}</span>{preset && <span className="px-2 py-0.5 rounded-full text-[11px] bg-sand-100 dark:bg-navy-700 text-navy-500 dark:text-navy-300">{preset}</span>}{holds.length > 0 && <span className={`px-2 py-0.5 rounded-full text-[11px] ${blocking.length > 0 ? "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300" : "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300"}`}>実行保留 {holds.length}</span>}</div><p className="text-xs text-navy-400">シーン: {sceneText(prompt)}</p>{finishCandidate && <p className="text-xs text-navy-400 mt-0.5">仕上げ候補: {finishCandidate}</p>}</div><div className="flex flex-wrap gap-2"><button onClick={() => void copyPrompt(prompt, false)} className="px-3 py-1.5 text-xs rounded-lg border border-sand-200 dark:border-navy-600 text-navy-600 dark:text-navy-200 hover:bg-sand-50 dark:hover:bg-navy-700">{copiedId === prompt.promptId ? "✓ コピー済み" : "QA確認用コピー"}</button>{prompt.status === "draft" && <button onClick={() => void copyPrompt(prompt, true)} disabled={holds.length > 0} className="px-3 py-1.5 text-xs rounded-lg bg-navy-700 text-white hover:bg-navy-800 disabled:opacity-40 disabled:cursor-not-allowed">モデル入力コピー + テスト中</button>}<button onClick={() => openResultIntake(prompt)} className="px-3 py-1.5 text-xs rounded-lg bg-emerald-700 text-white hover:bg-emerald-800">+ 結果を登録</button></div></div>
           {holds.length > 0 && <div className={`mt-4 rounded-lg border p-3 ${blocking.length > 0 ? "border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-900/20" : "border-amber-200 bg-amber-50 dark:border-amber-800 dark:bg-amber-900/20"}`}><div className="flex flex-wrap items-start gap-3"><div className="min-w-0 flex-1"><p className={`text-xs font-bold ${blocking.length > 0 ? "text-red-800 dark:text-red-300" : "text-amber-800 dark:text-amber-300"}`}>実行前に確認</p><ul className={`mt-1 space-y-1 text-xs ${blocking.length > 0 ? "text-red-700 dark:text-red-300" : "text-amber-700 dark:text-amber-300"}`}>{holds.slice(0, 3).map((issue) => <li key={issue.id}>• {issue.title} — {issue.action}</li>)}</ul></div><Link to="/video-preflight" className="text-xs font-medium underline">プリフライトへ →</Link></div></div>}
           <details className="mt-4"><summary className="cursor-pointer text-xs font-medium text-navy-500 dark:text-navy-300">プロンプトを確認</summary><div className="mt-3 space-y-3"><pre className="text-xs text-navy-700 dark:text-navy-200 bg-sand-50 dark:bg-navy-700 rounded-lg p-3 whitespace-pre-wrap break-words font-mono">{prompt.prompt}</pre>{prompt.negativePrompt && <pre className="text-xs text-red-700 dark:text-red-300 bg-red-50 dark:bg-red-900/20 rounded-lg p-3 whitespace-pre-wrap break-words font-mono">{prompt.negativePrompt}</pre>}</div></details>
           <div className="mt-4 flex flex-wrap items-center gap-2 text-xs"><span className="text-navy-400">結果素材:</span>{resultAssets.length === 0 ? <span className="text-amber-600 dark:text-amber-300">未登録</span> : resultAssets.map((asset) => <span key={asset.assetId} className="px-2 py-1 rounded bg-sand-50 dark:bg-navy-700 text-navy-600 dark:text-navy-200">{asset.title} · {asset.status}</span>)}{resultAssets.length > 0 && <Link to="/video-result-review" className="ml-auto font-medium text-emerald-700 dark:text-emerald-300 hover:underline">結果レビューへ →</Link>}</div>
