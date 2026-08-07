@@ -127,7 +127,7 @@ export function routeVideoPrompt(prompt: Prompt, resultAssets: Asset[]): VideoEx
       destination: "external-generation",
       label: "生成結果待ち",
       reason: "PromptはtestingだがresultAssetが未登録。",
-      action: "外部生成結果があるなら動画生成キューから結果を登録。未生成なら現在のmodel/toolで1本だけ実行する。",
+      action: "外部生成結果があるなら動画生成キューから結果を登録。未生成ならPrompt packetだけ準備し、generationは明示指示まで実行しない。",
       paidGenerationAllowed: false,
     };
   }
@@ -136,7 +136,7 @@ export function routeVideoPrompt(prompt: Prompt, resultAssets: Asset[]): VideoEx
     destination: "external-generation",
     label: "低コスト試作",
     reason: "draftのため、まず1本だけ生成してshot intentの成立を確認する段階。",
-    action: "動画生成キューからPrompt packetをコピーし、低コスト試作を1本だけ実行する。",
+    action: "動画生成キューからPrompt packetをコピーし、低コスト試作候補として準備する。generationは明示指示まで実行しない。",
     paidGenerationAllowed: false,
   };
 }
