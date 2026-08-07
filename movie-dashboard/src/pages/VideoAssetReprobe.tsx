@@ -38,7 +38,6 @@ export function VideoAssetReprobe() {
   const sourceAssets = selectedMovieId === "all" ? data.assets : movieAssets;
   const videoAssets = sourceAssets.filter((asset) => asset.type === "ai_video");
   const selectedAsset = videoAssets.find((asset) => asset.assetId === selectedAssetId);
-  const selectedExistingEvidence = selectedAsset ? parseVideoResultProbeEvidence(selectedAsset.notes) : undefined;
   const selectedStoredMedia = selectedAsset ? parseVideoResultReproMetadata(selectedAsset.notes) : undefined;
   const selectedTargetDuration = selectedAsset?.relatedSceneIds.reduce((sum, sceneId) => sum + (data.scenes.find((scene) => scene.sceneId === sceneId)?.durationSec ?? 0), 0);
 
