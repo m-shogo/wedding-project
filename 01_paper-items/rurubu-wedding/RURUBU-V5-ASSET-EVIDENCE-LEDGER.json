@@ -1,15 +1,17 @@
 {
-  "schema_version": "2.0",
-  "updated_at": "2026-08-02",
+  "schema_version": "2.1",
+  "updated_at": "2026-08-07",
   "repository": "m-shogo/wedding-project",
   "figma_file_key": "bfM0d4c9dCeBv5pCkJ3TNM",
   "drive_folder": {
     "name": "RURUBU_V5_DUMMY_PHOTOS_2026-08-02",
     "id": "1tAvBO9TodEKVHVZnABD73rEPUGG8iu0N"
   },
-  "authority_note": "This ledger is the role-level progress authority. IMAGE_FILL_PRESENT is not source verification. ROLE_COMPLETE requires source identity, quality-passing derivative, Figma node/hash evidence, screenshot QA, structure QA, and Git recording.",
+  "authority_note": "This ledger is the role-level progress authority. IMAGE_FILL_PRESENT is not source verification. ROLE_COMPLETE requires source identity, quality-passing derivative, Figma node/hash evidence, screenshot QA, structure QA, and Git recording. A RETIRED_FROM_CURRENT_VISUAL_SCOPE role remains registered and provenance-preserved but is excluded from the active Current completion denominator; retirement is not PHOTO_ROLE_PASS or ROLE_COMPLETE.",
   "counts": {
-    "total_roles": 13,
+    "total_registered_roles": 13,
+    "active_current_roles": 12,
+    "retired_preserved_roles": 1,
     "drive_readback_verified": 13,
     "intended_source_applied": 1,
     "photo_role_pass": 0,
@@ -203,7 +205,7 @@
     {
       "role_id": "V5-11",
       "semantic_role": "BACK_VISUAL_FRIEND_1_PHOTO",
-      "purpose": "Friends & Family 01",
+      "purpose": "Friends & Family legacy third role",
       "drive_file_id": "1zZfvktztbPx59Yb0Gxor8IsbGG1w6Fq8",
       "drive_filename": "11_FRIENDS_FAMILY_01_TOAST_DUMMY.png",
       "drive_size_bytes": 2074937,
@@ -211,12 +213,17 @@
       "target_node_id": "77:35",
       "target_box_px": {"width": 214, "height": 150},
       "dummy_derivative_min_px": {"width": 642, "height": 450},
-      "asset_state": "DRIVE_READBACK_VERIFIED",
-      "quality_state": "PENDING_FIGMA_IMPORT",
-      "figma_image_hash": null,
-      "screenshot_qa": "NOT_RUN_FOR_INTENDED_SOURCE",
-      "structure_qa": "TARGET_NODE_VERIFIED",
-      "role_complete": false
+      "participation_state": "RETIRED_FROM_CURRENT_VISUAL_SCOPE",
+      "asset_state": "DRIVE_READBACK_VERIFIED_PRESERVED_UNUSED",
+      "quality_state": "NOT_REQUIRED_FOR_CURRENT_TWO_UP_COMPOSITION",
+      "figma_image_hash": "2cfd19cf1701db58039a4fc645e4279832ec465a",
+      "screenshot_qa": "CURRENT_TWO_UP_WINS_AGAINST_RESTORED_THREE_UP_COMPARISON",
+      "structure_qa": "PASS_HIDDEN_SEMANTIC_GROUP_PRESERVED",
+      "role_complete": false,
+      "retired": true,
+      "comparison_frame_id": "336:2",
+      "note": "Current nodes 77:35-77:38 remain hidden and rollback-safe. Drive master is preserved. Retirement is not PHOTO_ROLE_PASS or ROLE_COMPLETE.",
+      "next_action": "No import while retired. Reactivate only if a later comparison proves a three-photo Friends composition is stronger; then run the full asset lifecycle."
     },
     {
       "role_id": "V5-12",
