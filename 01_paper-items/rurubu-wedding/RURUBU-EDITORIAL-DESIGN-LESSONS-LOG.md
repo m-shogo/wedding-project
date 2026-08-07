@@ -412,6 +412,32 @@ Do not turn every isolated preference into a rigid global rule. The goal is accu
 
 ---
 
+## LESSON-015 — Guard binary integrity before treating a dominant-photo replacement as evidence
+
+**Date:** 2026-08-08
+
+**Context:** V5 history dominant role `V5-05 / 77:422`.
+
+**Observed failure or opportunity:** The correct `1356 × 560` Drive derivative already existed, but the direct external upload route repeated its DNS blocker and a one-shot manually copied base64 payload failed validation. Repeating either route would create activity without increasing evidence.
+
+**Root cause:** Long binary payloads are fragile when treated as one model-visible text string, while external upload availability depends on the execution network rather than on Figma node correctness.
+
+**General editorial principle:** For dominant-image evidence, binary transport must be independently integrity-checked before screenshot quality is judged. Transport fallback is acceptable only when exact bytes, semantic target, visual result, and rollback are all verified separately.
+
+**Process change:** After the repeated external-upload blocker, switched methods. The exact Drive-readback base64 was split into six deterministic chunks, staged temporarily, reassembled inside Figma, and guarded by joined encoded length, decoded byte length, and JPEG SOI/EOI markers. The image was applied to a duplicate first; Current promotion happened only after three-scale screenshot QA. Temporary staged chunks were cleared afterward.
+
+**Design change:** Current `77:422 / IA_HISTORY_MEMORY_PHOTO` was promoted from old hash `1bfd7f1fa601206bfed1594a140b40554e85d77a` to verified hash `539c259be8036b481d06b4f76db9a39b407d90e8`. Geometry and native editorial structure were unchanged.
+
+**Verification evidence:** Drive derivative `1ndvJShFDKPO6OmUD3JeIRvPwpS8V1v8x`, `1356 × 560`, `29,582 bytes`, SHA-256 `f6642e7fd43e5058221bf6937d3e8428d8e2b89c35196ec43570aed4f8dd24da`; comparison `383:2` / `383:140`; Current `77:422`; actual-size, reading and whole-spread screenshot PASS; fold guide and rollback frames preserved. Detailed evidence: `learning-runs/2026-08-08-v5-history-q18-binary-safe-promotion.md`.
+
+**Applies to:** V5; candidate fallback for later bounded binary roles after repeated evidence
+
+**Status:** TESTED
+
+**Promoted knowledge-base section:** Not yet promoted. One successful chunked-transfer case is insufficient for PROJECT_RULE.
+
+---
+
 ## Open candidate lessons
 
 Use this area for observations that require further evidence before promotion.
