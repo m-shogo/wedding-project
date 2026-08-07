@@ -7,6 +7,7 @@ import { useToast } from "../store/toastStore";
 import { generateId } from "../lib/ids";
 import { runVideoPreflight, type VideoPreflightIssue } from "../lib/videoPreflight";
 import { suggestVideoResultNaming } from "../lib/videoResultNaming";
+import { formatVideoResultReproMetadata } from "../lib/videoResultMetadata";
 import type { Prompt, PromptStatus } from "../types/movie";
 
 const statusLabels: Record<PromptStatus, string> = { draft: "下書き", testing: "テスト中", adopted: "採用", rejected: "不採用" };
@@ -56,6 +57,11 @@ export function VideoGenerationQueue() {
   const [resultTitle, setResultTitle] = useState("");
   const [resultPath, setResultPath] = useState("");
   const [resultNote, setResultNote] = useState("");
+  const [resultGenerationId, setResultGenerationId] = useState("");
+  const [resultSeed, setResultSeed] = useState("");
+  const [resultActualDuration, setResultActualDuration] = useState("");
+  const [resultResolution, setResultResolution] = useState("");
+  const [resultFps, setResultFps] = useState("");
 
   const sourcePrompts = selectedMovieId === "all" ? data.prompts : moviePrompts;
   const videoPrompts = sourcePrompts.filter((prompt) => prompt.target === "video");
@@ -152,12 +158,21 @@ export function VideoGenerationQueue() {
     addToast(skipped > 0 ? `${tool}: 実行可能${runnable.length}件をコピー、保留${skipped}件は除外しました` : `${tool} の生成パックをまとめてコピーしました`, "success");
   }
 
+  function resetResultMetadata() {
+    setResultGenerationId("");
+    setResultSeed("");
+    setResultActualDuration("");
+    setResultResolution("");
+    setResultFps("");
+  }
+
   function openResultIntake(prompt: Prompt) {
     const naming = suggestVideoResultNaming(prompt, data.assets);
     setResultPromptId(prompt.promptId);
     setResultTitle(naming.title);
     setResultPath("");
     setResultNote("");
+    resetResultMetadata();
   }
 
   function closeResultIntake() {
@@ -165,6 +180,7 @@ export function VideoGenerationQueue() {
     setResultTitle("");
     setResultPath("");
     setResultNote("");
+    resetResultMetadata();
   }
 
   function saveResultAsset() {
@@ -175,6 +191,13 @@ export function VideoGenerationQueue() {
     if (!title || !path) { addToast("結果タイトルと実際の保存パスを入力してください", "error"); return; }
 
     const naming = suggestVideoResultNaming(prompt, data.assets);
+    const reproLines = formatVideoResultReproMetadata({
+      generationId: resultGenerationId,
+      seed: resultSeed,
+      actualDurationSec: resultActualDuration ? Number(resultActualDuration) || undefined : undefined,
+      resolution: resultResolution,
+      fps: resultFps ? Number(resultFps) || undefined : undefined,
+    });
     const assetId = generateId("asset");
     addAsset({
       assetId,
@@ -191,6 +214,7 @@ export function VideoGenerationQueue() {
         `registeredAt=${new Date().toISOString()}`,
         `variant=${naming.variant}`,
         `result-intake=movie-dashboard`,
+        ...reproLines,
         resultNote.trim(),
       ].filter(Boolean).join("\n"),
     });
@@ -259,7 +283,8 @@ export function VideoGenerationQueue() {
         <div><label className="form-label">結果タイトル</label><input value={resultTitle} onChange={(e) => setResultTitle(e.target.value)} className="form-input" placeholder="例: 雲海 Seedance Mini v01" /></div>
         {resultNaming && <div className="rounded-lg border border-sky-200 dark:border-sky-800 bg-sky-50 dark:bg-sky-900/20 p-3"><div className="flex flex-wrap items-center gap-2"><div className="min-w-0 flex-1"><p className="text-xs font-bold text-sky-800 dark:text-sky-300">保存名候補 {resultNaming.variant}</p><code className="block mt-1 text-xs text-sky-700 dark:text-sky-200 break-all">{resultNaming.suggestedPath}</code></div><button type="button" onClick={() => setResultPath(resultNaming.suggestedPath)} className="px-3 py-1.5 text-xs rounded-lg bg-white/70 dark:bg-navy-800/60 border border-sky-200 dark:border-sky-700 text-sky-800 dark:text-sky-200">候補を入力欄へ</button></div><p className="mt-2 text-[11px] text-sky-700 dark:text-sky-300">scene / preset / model / 既存variant数から作った命名候補です。実ファイルの存在は確認していないため、自動保存はしません。</p></div>}
         <div><label className="form-label">実際の保存パス</label><input value={resultPath} onChange={(e) => setResultPath(e.target.value)} className="form-input font-mono" placeholder="実際に保存した動画ファイルのパスを入力" /><p className="text-xs text-navy-400 mt-1">動画本体はGitへ入れず、ローカル/Drive等の実際の保存パスだけ登録します。上の候補を使う場合もファイル配置と一致しているか確認してください。</p></div>
-        <div><label className="form-label">生成メモ（任意）</label><textarea value={resultNote} onChange={(e) => setResultNote(e.target.value)} className="form-input" rows={3} placeholder="seed / provider側設定 / motion strength / 気づいた点など" /></div>
+        <details className="rounded-lg border border-sand-200 dark:border-navy-600 p-3"><summary className="cursor-pointer text-sm font-medium text-navy-700 dark:text-navy-200">再現用メタデータ（任意）</summary><div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3"><div><label className="form-label">Provider generation ID</label><input value={resultGenerationId} onChange={(e) => setResultGenerationId(e.target.value)} className="form-input font-mono" placeholder="生成サービスのjob / generation ID" /></div><div><label className="form-label">Seed</label><input value={resultSeed} onChange={(e) => setResultSeed(e.target.value)} className="form-input font-mono" placeholder="取得できる場合のみ" /></div><div><label className="form-label">実際の尺（秒）</label><input type="number" min="0" step="0.1" value={resultActualDuration} onChange={(e) => setResultActualDuration(e.target.value)} className="form-input" placeholder="例: 5.0" /></div><div><label className="form-label">解像度</label><input value={resultResolution} onChange={(e) => setResultResolution(e.target.value)} className="form-input font-mono" placeholder="例: 1920x1080" /></div><div><label className="form-label">FPS</label><input type="number" min="0" step="1" value={resultFps} onChange={(e) => setResultFps(e.target.value)} className="form-input" placeholder="例: 24" /></div></div><p className="mt-3 text-xs text-navy-400">分かる項目だけでOKです。生成サービスから取得できない値を推測して埋めません。</p></details>
+        <div><label className="form-label">生成メモ（任意）</label><textarea value={resultNote} onChange={(e) => setResultNote(e.target.value)} className="form-input" rows={3} placeholder="motion strength / referenceの使い方 / 気づいた点など" /></div>
         <div className="rounded-lg border border-emerald-200 dark:border-emerald-800 bg-emerald-50 dark:bg-emerald-900/20 p-3 text-xs text-emerald-800 dark:text-emerald-300">保存すると `ai_video / ready` Assetを作り、元Promptと全sceneへ接続します。draftならtestingへ進め、結果レビュー待ちに載せられる状態にします。</div>
         <div className="flex justify-end gap-3"><button type="button" onClick={closeResultIntake} className="px-4 py-2 text-sm rounded-lg border border-sand-200 dark:border-navy-600 text-navy-600 dark:text-navy-200">キャンセル</button><button type="button" onClick={saveResultAsset} className="px-4 py-2 text-sm rounded-lg bg-emerald-700 text-white hover:bg-emerald-800">Asset作成 + Prompt/シーンへ紐付け</button></div>
       </div>}
