@@ -84,6 +84,9 @@ export const PROMPT_TOOLS = [
   "Veo 3.1",
   "Runway Gen-4.5",
   "Kling",
+  // Legacy values are kept so existing saved prompts remain editable.
+  "Seedance",
+  "Runway",
   "Hailuo",
   "PixVerse",
   "Luma",
