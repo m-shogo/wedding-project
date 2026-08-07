@@ -308,25 +308,18 @@ Structural verification after the change:
 - visible text nodes: `59`
 - IMAGE-fill nodes: `9`
 - semantic nodes `77:330`–`77:332` preserved
-- provisional fold guide `77:540` preserved
+- provisional fold guide preserved
 - rollback frames `59:2` and `59:178` preserved
-- history image `77:422` hash remains `1bfd7f1fa601206bfed1594a140b40554e85d77a`
 - no asset-role state or photo-role count changed
 
 ### Failure or regression check
 
 This does not establish that full dark editorial cards are always wrong. They may still be appropriate where an image or dense background requires containment and contrast. Here the paper background already provided sufficient contrast, so the container had no necessary semantic job.
 
-The change also does not resolve the dominant-photo provenance/quality blockers. V5 cannot reach the dummy-photo design gate until all intended Drive assets are proven through Drive ID → node ID → image hash plus screenshot and structure QA.
-
 ### Evidence
 
 Detailed run record:
 - `01_paper-items/rurubu-wedding/learning-runs/2026-08-07-v5-travel-note-card-to-rule.md`
-
-### Next application
-
-Return priority to dominant-photo evidence closure. If the known binary-transport method remains blocked, continue only bounded high-impact editorial work rather than repeating the same failed mechanism.
 
 ### Status
 
@@ -345,20 +338,6 @@ The inside-left profile area already established the two people through `OUR PRO
 - Source: live Figma inside-spread and left-page review, nodes `77:335`–`77:338`.
 - Hypothesis: hiding the redundant ribbons would strengthen the direct path from section heading to names/photos and reduce template-like decoration without weakening identity distinction.
 
-Expected improvement:
-- quieter top profile zone;
-- less Canva/Web-UI/sticker feel;
-- clearer emphasis on the people rather than their labels.
-
-Possible regression:
-- bride/groom distinction could become ambiguous;
-- the profile area could appear unfinished.
-
-Evidence required:
-- whole-spread and page screenshot comparison;
-- detail/structure audit;
-- no loss of names, profile text, native editability, fold guide, rollback, or image structure.
-
 ### Experiment
 
 Hidden only; no deletion:
@@ -368,43 +347,20 @@ Hidden only; no deletion:
 - `77:337 / PROFILE_RIBBON_B`: `visible true → false`
 - `77:338 / PROFILE_RIBBON_B_TXT`: `visible true → false`
 
-No copy, image, crop, geometry, profile name, or asset-role change.
-
 ### Result
 
 **VERIFIED / ADOPTED FOR CURRENT V5.**
 
-Three-scale review confirmed:
-
-- whole spread: profile opening is calmer and the eye moves directly from the section heading to SHOGO / SHI-CHAN;
-- reading/page: identity remains clear through names, photographs, metadata, position, and colored rules; the reading order remains unchanged;
-- detail/structure: no collision, clipping, reflow, image loss, or semantic-node deletion was observed.
-
-Structural verification:
-
-- native text nodes: `92`
-- visible text nodes: `57`
-- IMAGE-fill nodes: `9`
-- fold guide `77:540` preserved and visible
-- rollback frames `59:2` and `59:178` preserved
-- history image `77:422` remains visible with hash `1bfd7f1fa601206bfed1594a140b40554e85d77a`
-- all four ribbon nodes remain present and immediately rollback-safe
-- no asset-role count or photo-role status changed
+Three-scale review confirmed that identity remains clear through names, photographs, metadata, position, and colored rules; no collision, clipping, reflow, image loss, or semantic-node deletion occurred.
 
 ### Failure or regression check
 
-The subtraction is context-specific. Role labels can remain useful when names, layout, or surrounding content do not make identity obvious. This result does not justify removing all profile labels globally.
-
-The dominant-photo provenance/quality blocker also remains unresolved. V5 therefore remains below the dummy-photo design gate and V6 production remains gated.
+The subtraction is context-specific. Role labels can remain useful when names, layout, or surrounding content do not make identity obvious.
 
 ### Evidence
 
 Detailed run record:
 - `01_paper-items/rurubu-wedding/learning-runs/2026-08-07-v5-profile-ribbon-subtraction.md`
-
-### Next application
-
-Return priority to dominant-photo Drive ID → semantic node → image-hash evidence closure. Do not retry already rejected binary-transfer mechanisms without a changed transport method.
 
 ### Status
 
@@ -422,51 +378,19 @@ After profile-card/ribbon subtraction, the inside-left page kept legacy Y positi
 
 - Source: live Figma inside-left page and whole-spread screenshots.
 - Hypothesis: rebalancing spacing by moving the bounded lower editorial sequence upward would convert accidental dead space into deliberate rhythm without adding any new container or decoration.
-- Expected improvement: stronger continuity from profiles → Q&A → common points → travel note and more comfortable bottom breathing room.
-- Possible regression: crowding against the profile block, collisions, text reflow, or loss of editorial separation.
-- Evidence needed: clean comparison frame, whole-page and whole-spread comparison, then structure/hash/fold/rollback audit.
 
 ### Experiment
 
 Created rollback-safe comparison frame:
 - `334:2 / V5_INSIDE_LEFT_RHYTHM_TEST_2026_08_07`
 
-Moved only the bounded lower-half families upward `52 px` in the duplicate:
-- `IA_QA_*`
-- `AUTH_QA_*`
-- `V5_QA_*`
-- `AUTH_COMMON_*`
-- `IA_TRAVEL_NOTE*`
-
-The duplicate won the page-scale comparison, so the same `-52 px` shift was applied to Current `77:291`. The comparison frame was preserved.
+Moved only the bounded lower-half families upward `52 px` in the duplicate, then applied the same shift to Current after comparison passed.
 
 ### Result
 
 **VERIFIED / ADOPTED FOR CURRENT V5.**
 
-Whole-item/read/detail review confirmed:
-- the profile-to-Q&A pause is now intentional rather than excessive;
-- `OUR PROFILE / ABOUT US → SHOGO / SHI-CHAN → 3 QUESTIONS → ふたりの共通点 → TRAVEL NOTE` remains the reading order;
-- no new card, badge, shadow, gradient, or color field was added;
-- no copy, crop, image, semantic name, or visibility state changed;
-- no collision, clipping, or text reflow observed.
-
-Post-change structure evidence:
-- native text `92`
-- visible text `57`
-- inside semantic IMAGE-fill roles `7 / 7`
-- history `77:422` hash unchanged: `1bfd7f1fa601206bfed1594a140b40554e85d77a`
-- groom `77:296` hash unchanged: `bef2164a2fc70e882f31f735bf66773299b1a62e`
-- bride `77:302` hash unchanged: `1c6a3d54817e2ca8e25a3d9b700e7ab9cb4ff4fd`
-- fold guide `77:540` preserved
-- rollback frames `59:2` and `59:178` preserved
-- comparison frame `334:2` preserved
-
-### Failure or regression check
-
-This does not mean tighter spacing is always better. The lesson is narrower: subtraction changes perceived mass, so old coordinates must be re-judged. White space is only useful when it serves hierarchy rather than becoming an accidental void.
-
-Dominant-photo provenance/quality remains unresolved; no `PHOTO_ROLE_PASS`, V5 completion gate, or V6 start gate was advanced.
+No new card, badge, shadow, gradient, or color field was added; no copy, crop, image, semantic name, or visibility state changed; no collision, clipping, or text reflow observed.
 
 ### Evidence
 
@@ -488,74 +412,99 @@ The live Current back cover uses only two visible Friends & Family photo/caption
 ### Source and hypothesis
 
 - Source: live outer screenshot, exact visibility inspection of `77:35`–`77:46`, Drive readback, and the quality-over-legacy rule.
-- Current hidden group: `77:35`–`77:38`.
-- Current visible Friends groups: `77:39`/`77:41`/`77:42` and `77:43`/`77:45`/`77:46`.
-- Preserved V5-11 Drive master: `11_FRIENDS_FAMILY_01_TOAST_DUMMY.png`, ID `1zZfvktztbPx59Yb0Gxor8IsbGG1w6Fq8`.
 - Hypothesis: restoring the third group would increase density without adding a necessary narrative role; the current two-up treatment would preserve clearer hierarchy and a better transition to the route.
-
-Expected improvement if two-up wins:
-- cleaner Friends & Family hierarchy;
-- stronger quiet-space transition into `OUR JOURNEY ROUTE`;
-- asset ledger aligned with the actual Current rather than with hidden legacy structure.
-
-Possible regression:
-- two photos could feel too sparse;
-- the section could lose some travel-magazine abundance.
-
-Evidence required:
-- safe duplicate, not Current mutation;
-- whole-page comparison;
-- reading-scale comparison;
-- semantic-node and Drive-source preservation.
 
 ### Experiment
 
 Created comparison frame:
 - `336:2 / V5_BACK_FRIENDS_3UP_TEST_2026_08_07`
 
-Only in that duplicate, restored the old Friend 1 group:
-- `336:18` photo
-- `336:19` label
-- `336:20` caption background
-- `336:21` caption
-
-Current `77:19` remained unchanged.
+Only in that duplicate, restored the old Friend 1 group. Current remained unchanged.
 
 ### Result
 
 **VERIFIED / CURRENT TWO-UP ADOPTED / THREE-UP REJECTED.**
 
-Whole-page and reading-scale comparison showed:
-- restored three-up immediately collides/overlaps with the established two-photo composition;
-- its caption competes with the current caption region;
-- the Friends→route transition loses useful breathing room;
-- Current two-up remains clear and balanced.
-
-Current `77:35`–`77:38` remains hidden but present. The rejected comparison frame is preserved. The Drive master is preserved. Nothing was deleted.
+Restored three-up immediately collided/overlapped with the established two-photo composition, competed with the caption region, and weakened Friends→route breathing room. Current two-up remained clear and balanced.
 
 ### Governance result
 
-The ledger now distinguishes:
+The ledger distinguishes:
 - `total_registered_roles: 13`
 - `active_current_roles: 12`
 - `retired_preserved_roles: 1`
 
-V5-11 is `RETIRED_FROM_CURRENT_VISUAL_SCOPE`. Retirement is **not** `PHOTO_ROLE_PASS` or `ROLE_COMPLETE`; quality pass counts remain unchanged. Reactivation requires a new comparison and the full asset lifecycle.
-
-### Failure or regression check
-
-This is not a global rule that two Friends images are always correct. It is a verified V5 scope decision under this exact page composition. The principle remains TESTED rather than PROJECT_RULE.
-
-The dominant-photo blocker remains unresolved. V5 dummy-design QA and V6 production gates remain closed.
+V5-11 is `RETIRED_FROM_CURRENT_VISUAL_SCOPE`; retirement is not `PHOTO_ROLE_PASS` or `ROLE_COMPLETE`.
 
 ### Evidence
 
 Detailed run record:
 - `01_paper-items/rurubu-wedding/learning-runs/2026-08-07-v5-friends-two-up-scope-comparison.md`
 
-Comparison frame:
-- `336:2`
-
 ### Status
 
 `PROTOTYPED → VERIFIED / V5_CURRENT_SCOPE_ALIGNED / V5-11_RETIRED / GLOBAL_RULE_NOT_PROMOTED`
+
+---
+
+## 2026-08-08 — V5 history Q18 guarded binary promotion
+
+### Visible problem
+
+`77:422 / IA_HISTORY_MEMORY_PHOTO` was still a visibly pixelated dominant placeholder even though a role-sized `1356 × 560` Q18 derivative already existed in Drive.
+
+### Source and hypothesis
+
+- Source master: `05_HISTORY_WATERFRONT_DUMMY.png`, Drive ID `1LO9rwdFuWMD2TZvSa6efn-gjbdyRBYt3`.
+- Source derivative: `RURUBU_V5_05_HISTORY__FIGMA_1356x560_Q18_SINGLECALL.jpg`, Drive ID `1ndvJShFDKPO6OmUD3JeIRvPwpS8V1v8x`, `29,582 bytes`.
+- Hypothesis: if exact Drive-readback bytes could be transported without truncation, the intended waterfront image would materially improve the dominant history role without requiring regeneration or layout change.
+- Expected improvement: sharper history lead, correct source identity, and preserved timeline→photo→memory-spots hierarchy.
+- Possible regression: compression artifacts, excessive photo dominance, corrupted binary, or crop mismatch.
+- Adoption evidence required: binary length/marker guards, duplicate-frame placement, three-scale screenshot QA, node/hash verification, rollback preservation, and ledger/Git recording.
+
+### Experiment and failure handling
+
+1. Direct external Figma upload repeated the known `mcp.figma.com` DNS blocker. The method was abandoned rather than retried again.
+2. A one-shot manually copied long base64 payload failed `Invalid base64 string`. The Figma call was atomic and did not change the canvas.
+3. Changed method: split the exact Drive-readback base64 into six deterministic chunks (`7000,7000,7000,7000,7000,4444`), stage them temporarily, reconstruct inside Figma, and verify joined encoded length `39,444`, decoded byte length `29,582`, and JPEG SOI/EOI markers before image creation.
+4. Applied first to rollback-safe comparison `383:140` in `383:2`.
+
+### Result
+
+**VERIFIED / ADOPTED FOR CURRENT V5.**
+
+Comparison and Current screenshots passed:
+- actual-size `678 × 280`: waterfront path, lights, mountains, horizon, tree/building edges remain distinct;
+- reading/page: `OUR HISTORY → timeline → hero → caption → MEMORY SPOTS` remains intact;
+- whole spread: intended waterfront image materially outperforms the old blocky placeholder without destabilizing the left profile page.
+
+Current promotion:
+- node `77:422`
+- old hash `1bfd7f1fa601206bfed1594a140b40554e85d77a`
+- new hash `539c259be8036b481d06b4f76db9a39b407d90e8`
+
+Post-promotion structure QA:
+- native text nodes `92`
+- IMAGE-fill nodes `9`
+- history geometry `678 × 280` preserved
+- fold guide `77:288` visible
+- rollback `59:2`, `59:178` preserved
+- comparison `383:2` preserved
+- temporary chunk storage cleared after successful creation
+
+Ledger advances:
+- intended source applied `2 → 3`
+- PHOTO_ROLE_PASS `1 → 2`
+- ROLE_COMPLETE `1 → 2`
+- dominant pass `1/3 → 2/3`
+
+### Learning status
+
+`PROTOTYPED → VERIFIED / V5_CURRENT_ADOPTED / PROJECT_RULE_NOT_PROMOTED`
+
+The chunked transfer is a verified fallback for this bounded case, not yet a permanent project rule. The next application is the final dominant blocker `77:148 / IMG_HERO`, using an existing role-sized Drive derivative if one can pass visible QA before considering regeneration.
+
+### Evidence
+
+- `01_paper-items/rurubu-wedding/learning-runs/2026-08-08-v5-history-q18-binary-safe-promotion.md`
+- updated asset ledger and `CURRENT-STATUS.md`
