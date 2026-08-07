@@ -508,3 +508,51 @@ The chunked transfer is a verified fallback for this bounded case, not yet a per
 
 - `01_paper-items/rurubu-wedding/learning-runs/2026-08-08-v5-history-q18-binary-safe-promotion.md`
 - updated asset ledger and `CURRENT-STATUS.md`
+
+---
+
+## 2026-08-08 — V5 small-memory roles 03–04: guarded role-specific promotion
+
+### Source
+
+- V5-08 night-view master: Drive ID `1168rkBzpx84Wvr7IxPCW31WOr30kdqhb`
+- V5-08 derivative: Drive ID `1rJJDOX_lwkCbA_DiCDptZfAQrMieG5LL`, `352 × 368`, `7,762 bytes`
+- V5-09 resort master: Drive ID `1wGhESjFYaX84Vwk7YEw86VZzg6i5Je6z`, visually inspected before derivation
+- V5-09 derivative: Drive ID `1QHWfftLU6m6FZYNJy8IxbOAgp1knzzoP`, `352 × 368`, `9,950 bytes`
+- Figma Current nodes: `77:446 / IA_MEMORY_3_PHOTO`, `77:454 / IA_MEMORY_4_PHOTO`
+- comparison frames: `427:2`, `429:2`
+
+### Hypothesis
+
+For tiny `88 × 92` supporting-memory roles, an exact 4× role derivative can be sufficient for V5 dummy-design QA when the intended source remains visually distinct at page scale, the natural-size thumbnail preserves the role cue, and binary/source/structure evidence is complete. A master that already fits the editorial concept should be cropped before regeneration is considered.
+
+### Result
+
+**VERIFIED / ADOPTED FOR CURRENT V5.**
+
+- V5-08 Current hash: `58d7d6f144a4aff9e3cc31caefad88089981ec6a`
+- V5-09 Current hash: `c09aa82e7b2ac75708707345c6f845452bf67663`
+- memory-spots sequence now has distinct old-town, night-view, and resort/sunset supporting images
+- native text nodes remain `92`; visible text `57`; IMAGE-fill nodes `9`
+- fold guide and V4 rollback frames remain preserved
+- ledger advanced to intended source `6/12`, PHOTO_ROLE_PASS `5/12`, ROLE_COMPLETE `5/12`
+
+### Failure / correction
+
+The earlier V5-08 long inline attempt failed its encoded-length guard and made no canvas change. It was not retried blindly. Exact Drive-readback bytes were used with encoded-length, decoded-byte and JPEG-boundary guards. V5-09 then used the same bounded guard pattern only because its payload remained small enough; this is not evidence that one-call base64 is appropriate for dominant photography.
+
+### Adopted/rejected status
+
+`DISCOVERED → PROTOTYPED → VERIFIED / V5_CURRENT_ADOPTED / PROJECT_RULE_NOT_PROMOTED`
+
+Adopted: role-specific crop/derivative + guarded binary import + duplicate-first screenshot/structure QA for these small supporting roles.
+Rejected as a global rule: Q30 compression, one-call base64, or 4× dimensions as universal requirements.
+
+### Next application
+
+Return priority to the final dominant blocker `77:148 / IMG_HERO`, then close remaining lead/identity/Friends roles. For each role, inspect the existing verified master first; regenerate only when crop, text-safe space, resolution, identity, or concept quality genuinely requires it.
+
+### Evidence
+
+- `01_paper-items/rurubu-wedding/learning-runs/2026-08-08-v5-memory-03-q30-binary-safe-promotion.md`
+- `01_paper-items/rurubu-wedding/learning-runs/2026-08-08-v5-memory-04-resort-q30-binary-safe-promotion.md`
