@@ -24,6 +24,13 @@ export function formatVideoResultProbeEvidence(evidence: VideoResultProbeEvidenc
   ].filter(Boolean).join(" / ");
 }
 
+export function upsertVideoResultProbeEvidence(notes: string, evidence: VideoResultProbeEvidence) {
+  const line = formatVideoResultProbeEvidence(evidence);
+  if (!line) return notes;
+  const retained = notes.split("\n").filter((item) => !item.startsWith("local-media-probe=completed"));
+  return [...retained, line].filter((item) => item.trim()).join("\n");
+}
+
 export function parseVideoResultProbeEvidence(notes: string): VideoResultProbeEvidence | undefined {
   const lines = notes.split("\n").filter((line) => line.startsWith("local-media-probe=completed"));
   const line = lines[lines.length - 1];
