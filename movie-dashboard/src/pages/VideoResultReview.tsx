@@ -94,7 +94,7 @@ function formatProbeTime(value: string) {
 }
 
 export function VideoResultReview() {
-  const { selectedMovieId, data, moviePrompts, addPrompt, updatePrompt, linkPromptToScene } = useProduction();
+  const { selectedMovieId, data, moviePrompts, addPromptLinkedToScenes, updatePrompt } = useProduction();
   const { addToast } = useToast();
   const [filter, setFilter] = useState<ReviewFilter>("ready");
   const [reviewDrafts, setReviewDrafts] = useState(loadVideoReviewDrafts);
@@ -219,7 +219,7 @@ export function VideoResultReview() {
     const retryRoot = parseLastNoteValue(prompt.notes, "retry-root") || prompt.promptId;
     const correction = `Retry correction ${nextAttempt}/3: ${category.correction} Preserve the intended composition, timing, single primary action and camera behavior otherwise unchanged.`;
     const retryNote = `retry-of=${prompt.promptId} / retry-root=${retryRoot} / retry-attempt=${nextAttempt} / source-failure-category=${category.id} / source-review=${reason}`;
-    addPrompt({
+    addPromptLinkedToScenes({
       ...prompt,
       promptId: retryId,
       title: `${prompt.title} / retry ${nextAttempt}`,
@@ -228,9 +228,8 @@ export function VideoResultReview() {
       status: "draft",
       resultAssetIds: [],
       notes: appendReviewNote(prompt.notes, retryNote),
-    });
-    for (const sceneId of prompt.relatedSceneIds) linkPromptToScene(retryId, sceneId);
-    addToast(`再生成ドラフト retry ${nextAttempt}/3 を作成しました`, "success");
+    }, prompt.relatedSceneIds);
+    addToast(`再生成ドラフト retry ${nextAttempt}/3 を作成しました。sceneリンクもUndo 1回で戻せます`, "success");
   }
 
   return <div>
