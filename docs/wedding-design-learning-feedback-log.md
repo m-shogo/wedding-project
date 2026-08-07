@@ -409,3 +409,70 @@ Return priority to dominant-photo Drive ID → semantic node → image-hash evid
 ### Status
 
 `PROTOTYPED → VERIFIED / V5_CURRENT_ADOPTED / GLOBAL_RULE_NOT_PROMOTED`
+
+---
+
+## 2026-08-07 — V5 inside-left rhythm compression after subtraction
+
+### Visible problem
+
+After profile-card/ribbon subtraction, the inside-left page kept legacy Y positions. This left a large dead zone between the profile block and `3 QUESTIONS`, while the lower modules still finished comparatively close to the bottom edge.
+
+### Source and hypothesis
+
+- Source: live Figma inside-left page and whole-spread screenshots.
+- Hypothesis: rebalancing spacing by moving the bounded lower editorial sequence upward would convert accidental dead space into deliberate rhythm without adding any new container or decoration.
+- Expected improvement: stronger continuity from profiles → Q&A → common points → travel note and more comfortable bottom breathing room.
+- Possible regression: crowding against the profile block, collisions, text reflow, or loss of editorial separation.
+- Evidence needed: clean comparison frame, whole-page and whole-spread comparison, then structure/hash/fold/rollback audit.
+
+### Experiment
+
+Created rollback-safe comparison frame:
+- `334:2 / V5_INSIDE_LEFT_RHYTHM_TEST_2026_08_07`
+
+Moved only the bounded lower-half families upward `52 px` in the duplicate:
+- `IA_QA_*`
+- `AUTH_QA_*`
+- `V5_QA_*`
+- `AUTH_COMMON_*`
+- `IA_TRAVEL_NOTE*`
+
+The duplicate won the page-scale comparison, so the same `-52 px` shift was applied to Current `77:291`. The comparison frame was preserved.
+
+### Result
+
+**VERIFIED / ADOPTED FOR CURRENT V5.**
+
+Whole-item/read/detail review confirmed:
+- the profile-to-Q&A pause is now intentional rather than excessive;
+- `OUR PROFILE / ABOUT US → SHOGO / SHI-CHAN → 3 QUESTIONS → ふたりの共通点 → TRAVEL NOTE` remains the reading order;
+- no new card, badge, shadow, gradient, or color field was added;
+- no copy, crop, image, semantic name, or visibility state changed;
+- no collision, clipping, or text reflow observed.
+
+Post-change structure evidence:
+- native text `92`
+- visible text `57`
+- inside semantic IMAGE-fill roles `7 / 7`
+- history `77:422` hash unchanged: `1bfd7f1fa601206bfed1594a140b40554e85d77a`
+- groom `77:296` hash unchanged: `bef2164a2fc70e882f31f735bf66773299b1a62e`
+- bride `77:302` hash unchanged: `1c6a3d54817e2ca8e25a3d9b700e7ab9cb4ff4fd`
+- fold guide `77:540` preserved
+- rollback frames `59:2` and `59:178` preserved
+- comparison frame `334:2` preserved
+
+### Failure or regression check
+
+This does not mean tighter spacing is always better. The lesson is narrower: subtraction changes perceived mass, so old coordinates must be re-judged. White space is only useful when it serves hierarchy rather than becoming an accidental void.
+
+Dominant-photo provenance/quality remains unresolved; no `PHOTO_ROLE_PASS`, V5 completion gate, or V6 start gate was advanced.
+
+### Evidence
+
+Detailed run record:
+- `01_paper-items/rurubu-wedding/learning-runs/2026-08-07-v5-inside-left-rhythm-compression.md`
+
+### Status
+
+`PROTOTYPED → VERIFIED / V5_CURRENT_ADOPTED / GLOBAL_RULE_NOT_PROMOTED`
