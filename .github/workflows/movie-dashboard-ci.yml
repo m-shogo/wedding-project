@@ -43,5 +43,8 @@ jobs:
       - name: AI video safety contracts
         run: pnpm check:video-contracts
 
+      - name: AI video failure-learning contracts
+        run: pnpm check:video-failure-learning
+
       - name: TypeScript and Vite build
         run: pnpm build
