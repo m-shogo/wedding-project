@@ -4,6 +4,7 @@ import { promptMode } from "./videoExecutionRouter";
 import { buildVideoModelEvidence } from "./videoModelEvidence";
 import { resolveProjectVideoModelRoute } from "./videoProjectModelRouter";
 import { findVideoResultFingerprintDuplicates } from "./videoResultFingerprintDuplicates";
+import { parseVideoResultProbeEvidence } from "./videoResultProbeEvidence";
 
 export type PreflightSeverity = "block" | "warning" | "info";
 
@@ -166,6 +167,18 @@ export function runVideoPreflight(data: AllData, prompts: Prompt[], now = new Da
           detail: `selected-result-asset=${selectedResultId} がPrompt.resultAssetIdsにありません。`,
           action: "結果レビューで存在する結果Assetを採用正本として選び直す。",
           href: "/video-result-review",
+        });
+      }
+      const adoptedResultAsset = effectiveAdoptedResultId ? assetById.get(effectiveAdoptedResultId) : undefined;
+      if (adoptedResultAsset && !parseVideoResultProbeEvidence(adoptedResultAsset.notes)?.sampleFingerprint) {
+        issues.push({
+          id: `${prompt.promptId}:adopted-result-no-sample-fingerprint`,
+          severity: "warning",
+          promptId: prompt.promptId,
+          title: `${label}: 採用正本の実体fingerprintなし`,
+          detail: `${adoptedResultAsset.title} は採用正本ですがsample fingerprintがありません。Continuity v2はAsset ID/path/media metadataで評価を続けますが、同じpathへの実体差し替え検知が弱くなります。`,
+          action: "AI動画 実体再probeで同じ既存Assetへprobe証跡だけ追加する。動画本体は上書きしない。",
+          href: "/video-asset-reprobe",
         });
       }
     }
