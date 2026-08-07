@@ -386,6 +386,32 @@ Do not turn every isolated preference into a rigid global rule. The goal is accu
 
 ---
 
+## LESSON-014 — Retire stale legacy roles instead of forcing them back into Current
+
+**Date:** 2026-08-07
+
+**Context:** V5 back-cover `FRIENDS & FAMILY`, registered role `V5-11 / 77:35`.
+
+**Observed failure or opportunity:** The Current back cover had already evolved to a clean two-photo Friends & Family composition, while the asset ledger still required a third hidden legacy photo role. Following the old denominator would have forced a visually rejected module back into Current merely to complete the checklist.
+
+**Root cause:** The ledger preserved an earlier semantic inventory after the editorial Current had materially changed. Registered provenance and active visual scope were treated as the same concept.
+
+**General editorial principle:** A production ledger should preserve history without allowing stale legacy structure to dictate the current design. A role may be retired from active visual scope when a rollback-safe comparison proves it no longer improves the page. Retirement is not completion and must not erase provenance.
+
+**Process change:** Distinguish `total registered roles`, `active Current roles`, and `retired preserved roles`. Before retiring a legacy role, create a safe comparator, review whole-item and reading-scale consequences, preserve the original semantic nodes and source master, and record a reversible retirement state.
+
+**Design change:** Current `77:35`–`77:38` remains hidden. Comparison frame `336:2 / V5_BACK_FRIENDS_3UP_TEST_2026_08_07` restored the third group only in the duplicate. The three-up version produced collision/overlap and weaker Friends→route rhythm, so Current two-up remained unchanged. V5-11 was retired from the active completion denominator while its Drive master and semantic nodes were preserved.
+
+**Verification evidence:** Live Current screenshot, rejected comparison screenshot, live node visibility/hash inspection, Drive readback for `11_FRIENDS_FAMILY_01_TOAST_DUMMY.png` (`1zZfvktztbPx59Yb0Gxor8IsbGG1w6Fq8`), and `learning-runs/2026-08-07-v5-friends-two-up-scope-comparison.md`.
+
+**Applies to:** V5; candidate for broader project governance after repeated evidence
+
+**Status:** TESTED
+
+**Promoted knowledge-base section:** Not yet promoted. One role-retirement case is insufficient for PROJECT_RULE.
+
+---
+
 ## Open candidate lessons
 
 Use this area for observations that require further evidence before promotion.
