@@ -12,6 +12,7 @@ import { VideoPromptBuilder } from "./pages/VideoPromptBuilder";
 import { VideoGenerationQueue } from "./pages/VideoGenerationQueue";
 import { VideoPreflight } from "./pages/VideoPreflight";
 import { VideoResultReview } from "./pages/VideoResultReview";
+import { VideoAssetReprobe } from "./pages/VideoAssetReprobe";
 import { VideoFailureLab } from "./pages/VideoFailureLab";
 import { VideoModelEvidence } from "./pages/VideoModelEvidence";
 import { PalmierHandoff } from "./pages/PalmierHandoff";
@@ -42,6 +43,7 @@ export default function App() {
               <Route path="video-generation-queue" element={<VideoGenerationQueue />} />
               <Route path="video-preflight" element={<VideoPreflight />} />
               <Route path="video-result-review" element={<VideoResultReview />} />
+              <Route path="video-asset-reprobe" element={<VideoAssetReprobe />} />
               <Route path="video-failure-lab" element={<VideoFailureLab />} />
               <Route path="video-model-evidence" element={<VideoModelEvidence />} />
               <Route path="palmier-handoff" element={<PalmierHandoff />} />
