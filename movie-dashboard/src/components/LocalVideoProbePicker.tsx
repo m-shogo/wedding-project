@@ -100,10 +100,10 @@ export function LocalVideoProbePicker({ expectedDurationSec, savedPath = "", onM
                 <p className="text-xs font-bold text-sky-800 dark:text-sky-300">時間方向の早期QA</p>
                 <span className="text-[11px] text-sky-700 dark:text-sky-300">3枚を横に見比べる</span>
               </div>
-              <div className="grid grid-cols-3 gap-2">
+              <div className="grid grid-cols-3 gap-2 items-start">
                 {previewFrames.map((frame) => (
                   <figure key={`${frame.label}-${frame.timeSec}`} className="rounded-lg overflow-hidden border border-sky-200 dark:border-sky-700 bg-white dark:bg-navy-800">
-                    <img src={frame.dataUrl} alt={`${frame.label} ${frame.timeSec}s`} className="block w-full aspect-video object-cover" />
+                    <img src={frame.dataUrl} alt={`${frame.label} ${frame.timeSec}s`} className="block w-full h-auto object-contain bg-black" />
                     <figcaption className="px-2 py-1.5 text-[11px] text-navy-600 dark:text-navy-200"><strong>{frame.label}</strong> · {frame.timeSec}s</figcaption>
                   </figure>
                 ))}
