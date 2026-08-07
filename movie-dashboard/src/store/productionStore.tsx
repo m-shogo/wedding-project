@@ -78,6 +78,7 @@ interface ProductionContextValue {
 
   // Prompt CRUD
   addPrompt: (prompt: Prompt) => void;
+  addPromptLinkedToScenes: (prompt: Prompt, sceneIds: string[]) => void;
   updatePrompt: (prompt: Prompt) => void;
   deletePrompt: (promptId: string) => void;
   duplicatePrompt: (promptId: string) => void;
@@ -514,6 +515,35 @@ export function ProductionProvider({ children }: { children: ReactNode }) {
     [setData],
   );
 
+  const addPromptLinkedToScenes = useCallback(
+    (prompt: Prompt, sceneIds: string[]) => {
+      setData((prev) => {
+        if (prev.prompts.some((item) => item.promptId === prompt.promptId)) return prev;
+        const requestedSceneIds = new Set([...prompt.relatedSceneIds, ...sceneIds]);
+        const linkedScenes = prev.scenes.filter((scene) => requestedSceneIds.has(scene.sceneId));
+        const relatedSceneIds = Array.from(new Set(linkedScenes.map((scene) => scene.sceneId)));
+        const normalizedPrompt: Prompt = {
+          ...prompt,
+          relatedSceneIds,
+          relatedMovieIds: Array.from(new Set([
+            ...prompt.relatedMovieIds,
+            ...linkedScenes.map((scene) => scene.movieId),
+          ])),
+        };
+        return {
+          ...prev,
+          prompts: [...prev.prompts, normalizedPrompt],
+          scenes: prev.scenes.map((scene) =>
+            relatedSceneIds.includes(scene.sceneId) && !scene.promptIds.includes(prompt.promptId)
+              ? { ...scene, promptIds: [...scene.promptIds, prompt.promptId] }
+              : scene,
+          ),
+        };
+      });
+    },
+    [setData],
+  );
+
   const updatePrompt = useCallback(
     (prompt: Prompt) => {
       setData((prev) => ({
@@ -719,6 +749,7 @@ export function ProductionProvider({ children }: { children: ReactNode }) {
       unlinkAssetFromScene,
       registerPromptResultAsset,
       addPrompt,
+      addPromptLinkedToScenes,
       updatePrompt,
       deletePrompt,
       duplicatePrompt,
@@ -765,6 +796,7 @@ export function ProductionProvider({ children }: { children: ReactNode }) {
       unlinkAssetFromScene,
       registerPromptResultAsset,
       addPrompt,
+      addPromptLinkedToScenes,
       updatePrompt,
       deletePrompt,
       duplicatePrompt,
