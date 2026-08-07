@@ -2,7 +2,8 @@ import { useMemo, useState } from "react";
 import { Header } from "../components/Header";
 import { useProduction } from "../store/productionStore";
 import { useToast } from "../store/toastStore";
-import { buildPalmierAgentHandoff, routeVideoPrompt } from "../lib/videoExecutionRouter";
+import { buildPalmierAgentHandoff, routeVideoPrompt, selectedResultAssetId } from "../lib/videoExecutionRouter";
+import { buildVideoDecisionRecords } from "../lib/videoDecisionRecord";
 
 function downloadText(filename: string, content: string, type: string) {
   const blob = new Blob([content], { type });
@@ -20,6 +21,7 @@ export function PalmierHandoff() {
   const { selectedMovieId, currentMovie, data, moviePrompts } = useProduction();
   const { addToast } = useToast();
   const [copied, setCopied] = useState(false);
+  const [copiedDecision, setCopiedDecision] = useState(false);
 
   const sourcePrompts = selectedMovieId === "all" ? data.prompts : moviePrompts;
   const videoPrompts = sourcePrompts.filter((prompt) => prompt.target === "video");
@@ -42,6 +44,13 @@ export function PalmierHandoff() {
     sceneName,
   }), [movieTitle, videoPrompts, data.assets]);
 
+  const decisions = useMemo(() => buildVideoDecisionRecords({
+    prompts: videoPrompts,
+    allPrompts: data.prompts,
+    assets: data.assets,
+    sceneName,
+  }), [videoPrompts, data.prompts, data.assets]);
+
   const routeCounts = useMemo(() => {
     const counts = { palmier: 0, review: 0, edit: 0, external: 0, blocked: 0 };
     for (const prompt of videoPrompts) {
@@ -56,11 +65,20 @@ export function PalmierHandoff() {
     return counts;
   }, [videoPrompts, data.assets]);
 
+  const decisionWarnings = decisions.records.reduce((sum, record) => sum + record.warnings.length, 0);
+
   async function copyHandoff() {
     await navigator.clipboard.writeText(handoff.markdown);
     setCopied(true);
     window.setTimeout(() => setCopied(false), 1600);
     addToast("Palmier Agent Handoffをコピーしました", "success");
+  }
+
+  async function copyDecisionRecords() {
+    await navigator.clipboard.writeText(decisions.markdown);
+    setCopiedDecision(true);
+    window.setTimeout(() => setCopiedDecision(false), 1600);
+    addToast("採用Decision Recordをコピーしました", "success");
   }
 
   function exportMarkdown() {
@@ -73,11 +91,21 @@ export function PalmierHandoff() {
     addToast("Palmier Handoff JSONを書き出しました", "success");
   }
 
+  function exportDecisionMarkdown() {
+    downloadText("ai-video-decision-records.md", decisions.markdown, "text/markdown;charset=utf-8");
+    addToast("Decision Record Markdownを書き出しました", "success");
+  }
+
+  function exportDecisionJson() {
+    downloadText("ai-video-decision-records.json", JSON.stringify({ movieTitle, records: decisions.records }, null, 2), "application/json;charset=utf-8");
+    addToast("Decision Record JSONを書き出しました", "success");
+  }
+
   return (
     <div>
       <Header
         title="Palmier 実行Handoff"
-        description="動画Promptと採用結果を、Palmier/Claude Codeへそのまま渡せる非破壊の実行パックにします"
+        description="動画Prompt・採用正本・判断根拠を、Palmier/Claude Codeへそのまま渡せる非破壊の実行パックにします"
         showMovieSelector
       />
 
@@ -117,6 +145,20 @@ export function PalmierHandoff() {
         <button onClick={exportJson} disabled={videoPrompts.length === 0} className="px-4 py-2.5 text-sm rounded-lg border border-sand-200 dark:border-navy-600 text-navy-600 dark:text-navy-200 disabled:opacity-40">JSON</button>
       </div>
 
+      <div className={`rounded-xl border p-4 mb-6 ${decisionWarnings > 0 ? "border-amber-200 bg-amber-50 dark:border-amber-800 dark:bg-amber-900/20" : "border-emerald-200 bg-emerald-50 dark:border-emerald-800 dark:bg-emerald-900/20"}`}>
+        <div className="flex flex-wrap items-center gap-3">
+          <div className="min-w-0 flex-1">
+            <h2 className={`font-bold ${decisionWarnings > 0 ? "text-amber-900 dark:text-amber-200" : "text-emerald-900 dark:text-emerald-200"}`}>採用Decision Record — {decisions.records.length}件</h2>
+            <p className={`text-xs mt-1 ${decisionWarnings > 0 ? "text-amber-800 dark:text-amber-300" : "text-emerald-800 dark:text-emerald-300"}`}>採用正本 / model / preset / routing / QA日時 / project実績 / 代替variantを保存。warning {decisionWarnings}件。</p>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <button onClick={() => void copyDecisionRecords()} disabled={decisions.records.length === 0} className="px-3 py-2 text-xs rounded-lg bg-white/70 dark:bg-navy-800/60 border border-current/20 disabled:opacity-40">{copiedDecision ? "✓ コピー済み" : "Decision Recordをコピー"}</button>
+            <button onClick={exportDecisionMarkdown} disabled={decisions.records.length === 0} className="px-3 py-2 text-xs rounded-lg bg-white/70 dark:bg-navy-800/60 border border-current/20 disabled:opacity-40">MD</button>
+            <button onClick={exportDecisionJson} disabled={decisions.records.length === 0} className="px-3 py-2 text-xs rounded-lg bg-white/70 dark:bg-navy-800/60 border border-current/20 disabled:opacity-40">JSON</button>
+          </div>
+        </div>
+      </div>
+
       {videoPrompts.length === 0 ? (
         <div className="rounded-xl border border-dashed border-sand-300 dark:border-navy-600 p-10 text-center text-sm text-navy-400">動画Promptがありません。動画プロンプト画面から作成してください。</div>
       ) : (
@@ -124,6 +166,7 @@ export function PalmierHandoff() {
           {videoPrompts.map((prompt) => {
             const resultAssets = data.assets.filter((asset) => prompt.resultAssetIds.includes(asset.assetId));
             const route = routeVideoPrompt(prompt, resultAssets);
+            const selectedId = selectedResultAssetId(prompt) || (resultAssets.length === 1 ? resultAssets[0]?.assetId ?? "" : "");
             return (
               <article key={prompt.promptId} className="rounded-xl border border-sand-200 dark:border-navy-600 bg-white dark:bg-navy-800 p-5">
                 <div className="flex flex-wrap items-start gap-3">
@@ -139,7 +182,10 @@ export function PalmierHandoff() {
                 </div>
                 {resultAssets.length > 0 && (
                   <div className="mt-3 flex flex-wrap gap-2">
-                    {resultAssets.map((asset) => <span key={asset.assetId} className="px-2 py-1 rounded bg-emerald-50 dark:bg-emerald-900/20 text-xs text-emerald-700 dark:text-emerald-300">{asset.title}{asset.path ? ` · ${asset.path}` : " · path missing"}</span>)}
+                    {resultAssets.map((asset) => {
+                      const selected = asset.assetId === selectedId && prompt.status === "adopted";
+                      return <span key={asset.assetId} className={`px-2 py-1 rounded text-xs ${selected ? "bg-emerald-100 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-200 ring-1 ring-emerald-300" : "bg-sand-50 dark:bg-navy-700 text-navy-500 dark:text-navy-300"}`}>{selected ? "✓ 採用正本 · " : "候補 · "}{asset.title}{asset.path ? ` · ${asset.path}` : " · path missing"}</span>;
+                    })}
                   </div>
                 )}
               </article>
