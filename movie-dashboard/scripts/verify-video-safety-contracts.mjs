@@ -71,6 +71,35 @@ requireText(
   "continuity authority must bind adopted media sample fingerprint when available",
 );
 
+const resultReview = await source("src/pages/VideoResultReview.tsx");
+requireText(
+  resultReview,
+  "reviewed-sample-fingerprint=",
+  "QA PASS must bind the selected adopted Asset to its sampled media fingerprint when available",
+);
+requireText(
+  resultReview,
+  "QA時fingerprintと不一致",
+  "result review must visibly surface reviewed/current fingerprint mismatch",
+);
+
+const preflight = await source("src/lib/videoPreflight.ts");
+requireText(
+  preflight,
+  "lastNoteValue(prompt.notes, \"selected-result-asset\")",
+  "preflight must resolve the latest append-only selected-result authority",
+);
+requireText(
+  preflight,
+  "adopted-review-fingerprint-mismatch",
+  "preflight must block when current adopted media differs from the fingerprint reviewed at QA PASS",
+);
+requireText(
+  preflight,
+  "同じ目視QAを引き継げません",
+  "fingerprint mismatch must invalidate previous visual QA authority",
+);
+
 const store = await source("src/store/productionStore.tsx");
 requireText(store, "registerPromptResultAsset", "atomic generated-result registration must remain available");
 requireText(store, "addPromptLinkedToScenes", "atomic Prompt + scene linking must remain available");
