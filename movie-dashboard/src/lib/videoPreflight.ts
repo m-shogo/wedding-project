@@ -1,0 +1,264 @@
+import type { AllData, Prompt } from "../types/movie";
+import { classifyVideoFailure, failureLearningKey, latestRejectedReason, retryAttempt } from "./videoFailureTaxonomy";
+import { promptMode } from "./videoExecutionRouter";
+
+export type PreflightSeverity = "block" | "warning" | "info";
+
+export interface VideoPreflightIssue {
+  id: string;
+  severity: PreflightSeverity;
+  promptId?: string;
+  title: string;
+  detail: string;
+  action: string;
+  href: string;
+}
+
+const NEGATIVE_PATTERN = /\b(no|not|without|avoid|never|don't|do not|doesn't)\b/i;
+const GUIDANCE_MAX_AGE_DAYS = 45;
+
+function noteValue(notes: string, key: string) {
+  const match = notes.match(new RegExp(`${key}=([^\\s/]+)`));
+  return match?.[1] ?? "";
+}
+
+function guidanceAgeDays(notes: string, now: Date) {
+  const value = noteValue(notes, "guidance-checked");
+  if (!value) return undefined;
+  const date = new Date(`${value}T00:00:00Z`);
+  if (Number.isNaN(date.getTime())) return undefined;
+  return Math.floor((now.getTime() - date.getTime()) / 86_400_000);
+}
+
+function promptLabel(prompt: Prompt) {
+  return prompt.title || prompt.promptId;
+}
+
+export function runVideoPreflight(data: AllData, prompts: Prompt[], now = new Date()): VideoPreflightIssue[] {
+  const issues: VideoPreflightIssue[] = [];
+  const sceneIds = new Set(data.scenes.map((scene) => scene.sceneId));
+  const assetById = new Map(data.assets.map((asset) => [asset.assetId, asset]));
+
+  const failureCounts = new Map<string, number>();
+  for (const prompt of prompts) {
+    if (prompt.status !== "rejected") continue;
+    const reason = latestRejectedReason(prompt.notes);
+    const category = classifyVideoFailure(reason);
+    const key = failureLearningKey(prompt, category.id);
+    failureCounts.set(key, (failureCounts.get(key) ?? 0) + 1);
+  }
+
+  for (const prompt of prompts) {
+    const label = promptLabel(prompt);
+    const active = prompt.status === "draft" || prompt.status === "testing";
+
+    if (prompt.relatedSceneIds.length === 0 && active) {
+      issues.push({
+        id: `${prompt.promptId}:scene-unlinked`,
+        severity: "block",
+        promptId: prompt.promptId,
+        title: `${label}: シーン未紐付け`,
+        detail: "生成しても絵コンテ上の用途・尺・前後関係へ戻せません。",
+        action: "動画プロンプトまたはPrompt Bankでsceneへ紐付ける。",
+        href: "/prompts",
+      });
+    }
+
+    const missingScenes = prompt.relatedSceneIds.filter((sceneId) => !sceneIds.has(sceneId));
+    if (missingScenes.length > 0) {
+      issues.push({
+        id: `${prompt.promptId}:scene-missing`,
+        severity: "block",
+        promptId: prompt.promptId,
+        title: `${label}: 存在しないsceneId`,
+        detail: missingScenes.join(", "),
+        action: "壊れたscene参照をPromptから外し、正しいsceneへ再リンクする。",
+        href: "/prompts",
+      });
+    }
+
+    const resultAssets = prompt.resultAssetIds.map((assetId) => assetById.get(assetId));
+    const missingAssetIds = prompt.resultAssetIds.filter((_, index) => !resultAssets[index]);
+    if (missingAssetIds.length > 0) {
+      issues.push({
+        id: `${prompt.promptId}:asset-missing`,
+        severity: "block",
+        promptId: prompt.promptId,
+        title: `${label}: 存在しない結果Asset`,
+        detail: missingAssetIds.join(", "),
+        action: "Prompt.resultAssetIdsを修復するか、生成キューから結果を登録し直す。",
+        href: "/video-generation-queue",
+      });
+    }
+
+    const pathless = resultAssets.filter((asset) => asset && !asset.path.trim());
+    if (pathless.length > 0 && (prompt.status === "testing" || prompt.status === "adopted")) {
+      issues.push({
+        id: `${prompt.promptId}:asset-path`,
+        severity: "block",
+        promptId: prompt.promptId,
+        title: `${label}: 結果Assetの保存パスなし`,
+        detail: pathless.map((asset) => asset?.title).filter(Boolean).join(" / "),
+        action: "素材ライブラリで実ファイルの保存パスを登録する。",
+        href: "/assets",
+      });
+    }
+
+    if (prompt.status === "testing" && prompt.resultAssetIds.length > 0) {
+      issues.push({
+        id: `${prompt.promptId}:review-ready`,
+        severity: "info",
+        promptId: prompt.promptId,
+        title: `${label}: 追加生成よりレビュー優先`,
+        detail: "testingで結果Assetが登録済みです。",
+        action: "AI動画 結果レビューへ進む。",
+        href: "/video-result-review",
+      });
+    }
+
+    if (prompt.status === "adopted") {
+      if (prompt.resultAssetIds.length === 0) {
+        issues.push({
+          id: `${prompt.promptId}:adopted-no-result`,
+          severity: "block",
+          promptId: prompt.promptId,
+          title: `${label}: 採用済みなのに結果Assetなし`,
+          detail: "採用状態と実素材が一致していません。",
+          action: "結果Assetを紐付けるか、Prompt statusを見直す。",
+          href: "/prompts",
+        });
+      }
+      if (!prompt.notes.includes("video-review=passed")) {
+        issues.push({
+          id: `${prompt.promptId}:adopted-no-review`,
+          severity: "block",
+          promptId: prompt.promptId,
+          title: `${label}: QA記録なしで採用`,
+          detail: "目視QAを通過した証跡がPrompt.notesにありません。",
+          action: "結果レビューを通し、video-review=passedを残す。",
+          href: "/video-result-review",
+        });
+      }
+    }
+
+    if (prompt.status === "rejected") {
+      const reason = latestRejectedReason(prompt.notes);
+      if (!reason) {
+        issues.push({
+          id: `${prompt.promptId}:rejected-no-reason`,
+          severity: "warning",
+          promptId: prompt.promptId,
+          title: `${label}: 不採用理由なし`,
+          detail: "次回生成へ学習を引き継げません。",
+          action: "結果レビューで具体的な失敗理由を記録する。",
+          href: "/video-result-review",
+        });
+      }
+      const attempt = retryAttempt(prompt);
+      if (attempt >= 3) {
+        issues.push({
+          id: `${prompt.promptId}:retry-stop`,
+          severity: "block",
+          promptId: prompt.promptId,
+          title: `${label}: retry ${attempt}/3 — 同系統停止`,
+          detail: "追加Promptではなく入力条件を変える段階です。",
+          action: "失敗学習で静止画・参照・カメラ・モデルの変更を決める。",
+          href: "/video-failure-lab",
+        });
+      }
+      if (reason) {
+        const category = classifyVideoFailure(reason);
+        const recurrence = failureCounts.get(failureLearningKey(prompt, category.id)) ?? 0;
+        if (recurrence >= 2) {
+          issues.push({
+            id: `${prompt.promptId}:failure-repeat`,
+            severity: "warning",
+            promptId: prompt.promptId,
+            title: `${label}: 同条件の「${category.label}」が${recurrence}回`,
+            detail: "同じmodel + preset + failure categoryで再発しています。",
+            action: category.nextAction,
+            href: "/video-failure-lab",
+          });
+        }
+      }
+    }
+
+    if (prompt.tool === "Runway Gen-4.5") {
+      if (NEGATIVE_PATTERN.test(prompt.prompt)) {
+        issues.push({
+          id: `${prompt.promptId}:runway-negative`,
+          severity: "warning",
+          promptId: prompt.promptId,
+          title: `${label}: Runway本文に否定表現`,
+          detail: "現行Runway guidanceでは、起きてほしい状態を肯定文で直接書く方針です。",
+          action: "no / avoid / without等を、維持したい状態の肯定文へ書き換える。",
+          href: "/video-prompt-builder",
+        });
+      }
+      const policy = noteValue(prompt.notes, "negative-policy");
+      if (policy !== "qa-only") {
+        issues.push({
+          id: `${prompt.promptId}:runway-negative-policy`,
+          severity: "warning",
+          promptId: prompt.promptId,
+          title: `${label}: Runway negative policyが旧形式`,
+          detail: "このPromptはprovider-aware compiler導入前の可能性があります。",
+          action: "必要なら最新Video Prompt Builderで作り直し、AVOIDをQA専用にする。",
+          href: "/video-prompt-builder",
+        });
+      }
+    }
+
+    const age = guidanceAgeDays(prompt.notes, now);
+    if (age === undefined && active) {
+      issues.push({
+        id: `${prompt.promptId}:guidance-missing`,
+        severity: "warning",
+        promptId: prompt.promptId,
+        title: `${label}: guidance確認日の記録なし`,
+        detail: "古いPromptまたは旧compilerの可能性があります。",
+        action: "モデル仕様が変わっていないか確認し、必要なら最新builderで再コンパイルする。",
+        href: "/video-prompt-builder",
+      });
+    } else if (age !== undefined && age > GUIDANCE_MAX_AGE_DAYS && active) {
+      issues.push({
+        id: `${prompt.promptId}:guidance-stale`,
+        severity: "warning",
+        promptId: prompt.promptId,
+        title: `${label}: provider guidanceが${age}日前`,
+        detail: `確認から${GUIDANCE_MAX_AGE_DAYS}日を超えています。モデル更新が速い領域です。`,
+        action: "公式provider docs / 現行UIを再確認してから有料生成する。",
+        href: "/video-prompt-builder",
+      });
+    }
+
+    if (promptMode(prompt) === "first-last" && active) {
+      issues.push({
+        id: `${prompt.promptId}:first-last-route`,
+        severity: "info",
+        promptId: prompt.promptId,
+        title: `${label}: first / lastはPalmier準備候補`,
+        detail: "first/last frame・referenceをtimeline contextで管理できます。",
+        action: "Palmier 実行Handoffでfirst/last slotsを準備する。",
+        href: "/palmier-handoff",
+      });
+    }
+
+    if (prompt.status === "draft" && prompt.resultAssetIds.length > 0) {
+      issues.push({
+        id: `${prompt.promptId}:draft-with-result`,
+        severity: "warning",
+        promptId: prompt.promptId,
+        title: `${label}: draftなのに結果Assetあり`,
+        detail: "生成済みならtestingへ進めた方がパイプライン状態が正確です。",
+        action: "Prompt statusをtestingへ変更し、結果レビューへ進む。",
+        href: "/prompts",
+      });
+    }
+  }
+
+  return issues.sort((a, b) => {
+    const rank: Record<PreflightSeverity, number> = { block: 0, warning: 1, info: 2 };
+    return rank[a.severity] - rank[b.severity] || a.title.localeCompare(b.title, "ja");
+  });
+}
