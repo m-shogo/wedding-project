@@ -268,3 +268,66 @@ Return priority to unresolved dominant-photo provenance and quality evidence. Co
 ### Status
 
 `PROTOTYPED → VERIFIED / V5_CURRENT_ADOPTED / GLOBAL_RULE_NOT_YET_PROMOTED`
+
+---
+
+## 2026-08-07 — V5 Travel Note full-card to editorial-rule subtraction
+
+### Visible problem
+
+The inside-left page ended with a useful `TRAVEL NOTE`, but it was contained in a `702 × 102` dark rounded card. The large container visually outweighed the importance of the closing note and reintroduced a dashboard/footer-card silhouette after other V5 card-density reductions.
+
+### Source and hypothesis
+
+- Source: live Figma inside-spread and left-page screenshots, plus the project-wide reduction order `direct type → alignment/white space → rule → minimal field → full card`.
+- Hypothesis: preserving the text but replacing the full dark card with a thin editorial rule and direct native type would keep grouping and legibility while improving print-magazine rhythm.
+
+### Experiment
+
+Bounded semantic nodes only:
+
+- `77:330 / IA_TRAVEL_NOTE_BG`: `702 × 102` navy rounded field → `702 × 4` square pink rule
+- `77:331 / IA_TRAVEL_NOTE_LABEL`: native text preserved; yellow → pink
+- `77:332 / IA_TRAVEL_NOTE`: native text preserved; white → navy
+
+No copy rewrite, node deletion, image replacement, crop edit, hierarchy flattening, or unrelated geometry change.
+
+### Result
+
+**VERIFIED / ADOPTED FOR CURRENT V5.**
+
+Three-scale review confirmed:
+
+- whole spread: the left page no longer ends in a heavy dark UI-like card; the closing note remains clearly subordinate
+- reading/page: reading order remains `OUR PROFILE / ABOUT US → profiles → 3 QUESTIONS → shared interests → TRAVEL NOTE`
+- actual-size/detail: pink label and navy body copy remain legible on the warm paper background; no clipping or text reflow was observed
+
+Structural verification after the change:
+
+- native text nodes: `92`
+- visible text nodes: `59`
+- IMAGE-fill nodes: `9`
+- semantic nodes `77:330`–`77:332` preserved
+- provisional fold guide `77:540` preserved
+- rollback frames `59:2` and `59:178` preserved
+- history image `77:422` hash remains `1bfd7f1fa601206bfed1594a140b40554e85d77a`
+- no asset-role state or photo-role count changed
+
+### Failure or regression check
+
+This does not establish that full dark editorial cards are always wrong. They may still be appropriate where an image or dense background requires containment and contrast. Here the paper background already provided sufficient contrast, so the container had no necessary semantic job.
+
+The change also does not resolve the dominant-photo provenance/quality blockers. V5 cannot reach the dummy-photo design gate until all intended Drive assets are proven through Drive ID → node ID → image hash plus screenshot and structure QA.
+
+### Evidence
+
+Detailed run record:
+- `01_paper-items/rurubu-wedding/learning-runs/2026-08-07-v5-travel-note-card-to-rule.md`
+
+### Next application
+
+Return priority to dominant-photo evidence closure. If the known binary-transport method remains blocked, continue only bounded high-impact editorial work rather than repeating the same failed mechanism.
+
+### Status
+
+`PROTOTYPED → VERIFIED / V5_CURRENT_ADOPTED / GLOBAL_RULE_NOT_PROMOTED`
