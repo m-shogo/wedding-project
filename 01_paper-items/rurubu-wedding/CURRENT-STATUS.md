@@ -10,7 +10,7 @@ Process authority:
 
 ## Current declaration
 
-`RURUBU_V5_CURRENT_CANDIDATE / REALISTIC_DUMMY_MASTERS_13_OF_13_DRIVE_VERIFIED / ACTIVE_CURRENT_PHOTO_ROLES_12 / RETIRED_PRESERVED_ROLE_1 / INTENDED_SOURCE_APPLIED_5 / PHOTO_ROLE_PASS_4 / ROLE_COMPLETE_4 / DOMINANT_PHOTO_PASS_2_OF_3 / COVER_HERO_REPAIR_REQUIRED / REAL_CONTENT_PENDING / PRINT_TEMPLATE_PENDING / NOT_PRINT_READY`
+`RURUBU_V5_CURRENT_CANDIDATE / REALISTIC_DUMMY_MASTERS_13_OF_13_DRIVE_VERIFIED / ACTIVE_CURRENT_PHOTO_ROLES_12 / RETIRED_PRESERVED_ROLE_1 / INTENDED_SOURCE_APPLIED_6 / PHOTO_ROLE_PASS_5 / ROLE_COMPLETE_5 / DOMINANT_PHOTO_PASS_2_OF_3 / COVER_HERO_REPAIR_REQUIRED / REAL_CONTENT_PENDING / PRINT_TEMPLATE_PENDING / NOT_PRINT_READY`
 
 ## Current live Figma
 
@@ -31,6 +31,7 @@ Key preserved comparisons:
 - history Q18 `383:2 / V5_HISTORY_Q18_DRIVE_DERIVATIVE_TEST_2026_08_08`
 - V5-07 old-town derivative `421:2 / V5_07_OLD_TOWN_DERIVATIVE_TEST_2026_08_08`
 - V5-08 night-view derivative `427:2 / V5_08_NIGHT_VIEW_DERIVATIVE_TEST_2026_08_08`
+- V5-09 resort derivative `429:2 / V5_09_RESORT_DERIVATIVE_TEST_2026_08_08`
 
 ## Active-scope truth
 
@@ -40,9 +41,9 @@ Retired/preserved role: `1` (`V5-11 / 77:35`); its Drive master remains preserve
 
 Verified counts from the ledger:
 - Drive readback: `13 / 13`
-- intended source applied: `5 / 12`
-- photo-role pass: `4 / 12`
-- role complete: `4 / 12`
+- intended source applied: `6 / 12`
+- photo-role pass: `5 / 12`
+- role complete: `5 / 12`
 - dominant role pass: `2 / 3`
 
 ## Dominant-photo gate
@@ -98,75 +99,41 @@ V5-10 remains PASS and unchanged:
 - comparison `360:2`
 - evidence `learning-runs/2026-08-07-v5-back-main-q18-binary-safe-promotion.md`
 
-## Verified supporting-role gain — V5-07 old-town memory
+## Verified supporting-role gains — V5-07 / V5-08 / V5-09
 
-Drive master:
-- `07_MEMORY_SPOT_02_OLD_TOWN_DUMMY.png`
-- ID `1z7pV8BzSaqrvChCbmotTRoEptTaQZMLw`
-- `2,591,213 bytes`
-
-Accepted V5 dummy-design derivative:
-- `RURUBU_V5_07_MEMORY_OLD_TOWN__FIGMA_352x368_Q30_SINGLECALL.jpg`
-- Drive ID `1ZsLOgZbZWyfYgDfvKvYPqOsbMJrSf1J5`
-- `352 × 368`
-- `12,186 bytes`
-- SHA-256 `a957431f3b6177661d03e8ddec93a784a1a7fa86bfa4ecba0cf959ec557939be`
-
-Verified Figma mapping:
+### V5-07 old-town memory
 - Current node `77:438 / IA_MEMORY_2_PHOTO`
+- derivative Drive ID `1ZsLOgZbZWyfYgDfvKvYPqOsbMJrSf1J5`
+- derivative `352 × 368 / 12,186 bytes`
 - current hash `439a719d73f28e8dd2889f2026cccb15f345ec63`
-- comparison frame `421:2`
-- comparison target `421:156`
+- comparison `421:2`
+- three-scale QA: PASS for V5 dummy-design QA
+- evidence `learning-runs/2026-08-08-v5-memory-02-q30-binary-safe-promotion.md`
 
-Three-scale QA: PASS for V5 dummy-design QA.
-
-Detailed evidence:
-- `learning-runs/2026-08-08-v5-memory-02-q30-binary-safe-promotion.md`
-
-## Verified supporting-role gain — V5-08 night-view memory
-
-Drive master:
-- `08_MEMORY_SPOT_03_NIGHT_VIEW_DUMMY.png`
-- ID `1168rkBzpx84Wvr7IxPCW31WOr30kdqhb`
-- `2,160,660 bytes`
-
-Accepted V5 dummy-design derivative:
-- `RURUBU_V5_08_MEMORY_NIGHT_VIEW__FIGMA_352x368_Q30_SINGLECALL.jpg`
-- Drive ID `1rJJDOX_lwkCbA_DiCDptZfAQrMieG5LL`
-- `352 × 368`
-- `7,762 bytes`
-- SHA-256 `a87c39773e7374356641266aa709c585c60ff3435169fbeaed33a83d8fc35aae`
-- exactly `4×` the `88 × 92` semantic target
-
-Verified Figma mapping:
+### V5-08 night-view memory
 - Current node `77:446 / IA_MEMORY_3_PHOTO`
-- previous hash `27ad4cfab8fd579b8452540ce954f8b36edc77fb`
+- derivative Drive ID `1rJJDOX_lwkCbA_DiCDptZfAQrMieG5LL`
+- derivative `352 × 368 / 7,762 bytes`
+- SHA-256 `a87c39773e7374356641266aa709c585c60ff3435169fbeaed33a83d8fc35aae`
 - current hash `58d7d6f144a4aff9e3cc31caefad88089981ec6a`
-- comparison frame `427:2`
-- comparison target `427:164`
+- comparison `427:2`
+- three-scale QA: PASS for the role-specific V5 dummy-design bar
+- evidence `learning-runs/2026-08-08-v5-memory-03-q30-binary-safe-promotion.md`
 
-Three-scale QA:
-- whole spread: PASS; the small supporting memory reads as distinct from the neighboring old-town role without stealing hierarchy from the lead images
-- reading scale: PASS; the memory-spots sequence remains lead image → supporting memories
-- actual-size/detail: PASS for the role-specific V5 dummy-design bar at natural `88 × 92`; this Q30 acceptance is not generalized to larger roles
+### V5-09 resort memory
+- Current node `77:454 / IA_MEMORY_4_PHOTO`
+- master Drive ID `1wGhESjFYaX84Vwk7YEw86VZzg6i5Je6z`
+- derivative Drive ID `1QHWfftLU6m6FZYNJy8IxbOAgp1knzzoP`
+- derivative `352 × 368 / 9,950 bytes`
+- SHA-256 `dbd5d0d15506bee04446ed02c62ad23df043c05b96ce43495d722c5d88ef5970`
+- previous hash `f8357056c1f50bc928066273ce9391f5feba02d2`
+- current hash `c09aa82e7b2ac75708707345c6f845452bf67663`
+- comparison `429:2 / 429:172`
+- three-scale QA: PASS for the role-specific V5 dummy-design bar
+- structure: native text `92`, visible text `57`, IMAGE-fill nodes `9`, fold guide and rollback preserved
+- evidence `learning-runs/2026-08-08-v5-memory-04-resort-q30-binary-safe-promotion.md`
 
-Structure QA after promotion:
-- inside native text nodes: `92`
-- visible native text nodes: `57`
-- inside IMAGE-fill nodes: `9`
-- semantic node name and `88 × 92` geometry preserved
-- fold guide `77:288` preserved and visible
-- rollback frames `59:2` / `59:178` preserved
-- comparison `427:2` preserved
-
-Transport learning:
-- an earlier inline attempt failed encoded-length validation atomically and did not mutate Current
-- this run used the exact mounted Drive-readback derivative bytes
-- guarded encoded length `10,352`, decoded length `7,762`, and JPEG SOI/EOI markers before `figma.createImage`
-- duplicate-first QA preceded Current promotion
-
-Detailed evidence:
-- `learning-runs/2026-08-08-v5-memory-03-q30-binary-safe-promotion.md`
+The V5-09 master was visually inspected before derivation. Regeneration was rejected as unnecessary because the existing resort/sunset master was conceptually suitable and had sufficient crop room; a role-specific crop was used instead.
 
 ## Next required V5 work
 
@@ -188,12 +155,10 @@ Friends & Family active:
 - `77:39`
 - `77:43`
 
-Small memory remaining:
-- `77:454 / V5-09`
-
-Completed supporting roles:
+Completed small-memory sequence:
 - `77:438 / V5-07` — PASS
 - `77:446 / V5-08` — PASS
+- `77:454 / V5-09` — PASS
 
 Generated recognizable people must not be represented as the real bride, groom, family, or friends; profile dummies require safe identity treatment before pass.
 
