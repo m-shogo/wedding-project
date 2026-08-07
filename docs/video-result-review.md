@@ -14,10 +14,10 @@
 6. 結果素材を確認し、共通QAとプリセット固有QAをチェックする。
 7. 全QAを通過したものだけ `QA PASS → 採用` にする。
 8. 不採用は理由を必ず記録する。
+9. 再生成する場合は不採用Promptからretry draftを作り、生成キューへ戻す。
+10. 同じ系統のretryは最大3回。3回失敗したらショット設計へ戻る。
 
 ## レビュー待ちの条件
-
-次の両方を満たす動画Promptのみ「レビュー待ち」に出す。
 
 - `Prompt.status === testing`
 - `Prompt.resultAssetIds.length > 0`
@@ -40,35 +40,81 @@
 
 ## 採用
 
-採用ボタンは全QAチェック済みの場合だけ有効になる。
-
-採用時:
-
-- Prompt.statusを `adopted` にする。
-- Prompt.notesへ次を追記する。
+全QAチェック済みの場合だけ採用できる。
 
 ```text
 video-review=passed / reviewedAt=<ISO時刻> / checks=<通過数>/<全QA数>
 ```
 
-結果Assetのstatusは自動変更しない。1つのPromptに複数候補がある場合や、別シーンへ再利用する場合を壊さないため、素材の選定状態は素材ライブラリ側で管理する。
+結果Assetのstatusは自動変更しない。複数候補や別シーン再利用を壊さないため、素材の選定状態は素材ライブラリ側で管理する。
 
-## 不採用・再生成
+## 不採用
 
-不採用では理由を必須にする。
+理由は必須。
 
 ```text
 video-review=rejected / reviewedAt=<ISO時刻> / reason=<理由>
 ```
 
-例:
+不採用時はPrompt.statusを `rejected` にする。
+
+## retry draft
+
+不採用Promptから **再生成ドラフト** を押すと、新しいPromptを作る。
+
+- 元Promptは `rejected` のまま保存。
+- 新Promptは `draft`。
+- 元のsceneId / movieId / model / presetを継承。
+- 過去の結果Assetは継承しない。
+- 不採用理由をretry correctionとして次のpromptへ引き継ぐ。
+- sceneとの相互リンクを新しいpromptIdで作り直す。
 
 ```text
-video-review=rejected / reviewedAt=2026-08-07T04:15:00.000Z / reason=3秒付近で窓枠が歪む。カメラをlockedにして再生成。
+retry-of=<直前promptId> / retry-root=<最初のpromptId> / retry-attempt=<1..3> / source-review=<不採用理由>
 ```
 
-不採用時はPrompt.statusを `rejected` にする。
-再生成する場合は、失敗理由を元にショット意図・静止画・参照素材・モデルのどれかを修正し、新しいPromptとして比較可能な形で残す。
+### Promptを長文化させない
+
+retry 2/3、3/3を作る時に、過去の`Retry correction`を積み上げない。
+常に元Promptへ戻して、**最新の不採用理由1つだけ**を補正文として付ける。
+
+```text
+元Prompt + retry1補正 + retry2補正 + retry3補正
+```
+
+にはしない。
+
+```text
+元Prompt + 最新retry補正
+```
+
+を維持する。
+
+## retry上限
+
+同じ系統のretryは最大3回。
+
+```text
+original
+  ↓
+retry 1/3
+  ↓
+retry 2/3
+  ↓
+retry 3/3
+  ↓
+STOP
+```
+
+3回失敗したら同じPromptへ文章を継ぎ足さない。次のどれかを変更する。
+
+1. 元の静止画。
+2. 参照画像・参照動画。
+3. ショット構成、主動作、カメラ。
+4. 生成モデル。
+5. AIを使わずMotion Studio / 実素材へ切り替える。
+
+「もう1回だけ」を繰り返してクレジットを消費しないための強制停止ルールとする。
 
 ## なぜ自動採用しないか
 
@@ -83,8 +129,6 @@ AI動画の品質は単純なファイル存在や自動スコアだけでは判
 などがあるため、最終採用は目視とCapCut実尺確認を必須にする。
 
 ## 完了条件
-
-1つのAI動画ショットは次を満たして初めて制作上の採用とする。
 
 - Promptがシーンへ紐付いている。
 - Promptが `testing` を経由している。
