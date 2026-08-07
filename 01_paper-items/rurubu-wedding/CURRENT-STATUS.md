@@ -10,7 +10,7 @@ Process authority:
 
 ## Current declaration
 
-`RURUBU_V5_CURRENT_CANDIDATE / REALISTIC_DUMMY_MASTERS_13_OF_13_DRIVE_VERIFIED / ACTIVE_CURRENT_PHOTO_ROLES_12 / RETIRED_PRESERVED_ROLE_1 / INTENDED_SOURCE_APPLIED_4 / PHOTO_ROLE_PASS_3 / ROLE_COMPLETE_3 / DOMINANT_PHOTO_PASS_2_OF_3 / COVER_HERO_REPAIR_REQUIRED / REAL_CONTENT_PENDING / PRINT_TEMPLATE_PENDING / NOT_PRINT_READY`
+`RURUBU_V5_CURRENT_CANDIDATE / REALISTIC_DUMMY_MASTERS_13_OF_13_DRIVE_VERIFIED / ACTIVE_CURRENT_PHOTO_ROLES_12 / RETIRED_PRESERVED_ROLE_1 / INTENDED_SOURCE_APPLIED_5 / PHOTO_ROLE_PASS_4 / ROLE_COMPLETE_4 / DOMINANT_PHOTO_PASS_2_OF_3 / COVER_HERO_REPAIR_REQUIRED / REAL_CONTENT_PENDING / PRINT_TEMPLATE_PENDING / NOT_PRINT_READY`
 
 ## Current live Figma
 
@@ -30,6 +30,7 @@ Key preserved comparisons:
 - back-main Q18 `360:2`
 - history Q18 `383:2 / V5_HISTORY_Q18_DRIVE_DERIVATIVE_TEST_2026_08_08`
 - V5-07 old-town derivative `421:2 / V5_07_OLD_TOWN_DERIVATIVE_TEST_2026_08_08`
+- V5-08 night-view derivative `427:2 / V5_08_NIGHT_VIEW_DERIVATIVE_TEST_2026_08_08`
 
 ## Active-scope truth
 
@@ -39,9 +40,9 @@ Retired/preserved role: `1` (`V5-11 / 77:35`); its Drive master remains preserve
 
 Verified counts from the ledger:
 - Drive readback: `13 / 13`
-- intended source applied: `4 / 12`
-- photo-role pass: `3 / 12`
-- role complete: `3 / 12`
+- intended source applied: `5 / 12`
+- photo-role pass: `4 / 12`
+- role complete: `4 / 12`
 - dominant role pass: `2 / 3`
 
 ## Dominant-photo gate
@@ -85,12 +86,6 @@ Structure QA after promotion:
 - rollback frames `59:2` / `59:178` preserved
 - comparison `383:2` preserved
 
-Transport learning:
-- direct external `mcp.figma.com` upload repeated the known DNS blocker and was abandoned
-- a one-shot manually pasted base64 payload failed validation and made no canvas changes because the Figma write was atomic
-- changed method: the exact Drive-readback base64 was split into six guarded document-shared chunks (`7000,7000,7000,7000,7000,4444` chars), reconstructed in Figma, validated at encoded length `39,444`, decoded length `29,582`, and JPEG SOI/EOI markers, then applied to the duplicate first
-- Current was promoted only after screenshot QA on `383:140` and `383:2`
-
 Detailed evidence:
 - `learning-runs/2026-08-08-v5-history-q18-binary-safe-promotion.md`
 
@@ -116,19 +111,44 @@ Accepted V5 dummy-design derivative:
 - `352 × 368`
 - `12,186 bytes`
 - SHA-256 `a957431f3b6177661d03e8ddec93a784a1a7fa86bfa4ecba0cf959ec557939be`
-- exactly `4×` the `88 × 92` semantic target
 
 Verified Figma mapping:
 - Current node `77:438 / IA_MEMORY_2_PHOTO`
-- previous hash `27ad4cfab8fd579b8452540ce954f8b36edc77fb`
 - current hash `439a719d73f28e8dd2889f2026cccb15f345ec63`
 - comparison frame `421:2`
 - comparison target `421:156`
 
+Three-scale QA: PASS for V5 dummy-design QA.
+
+Detailed evidence:
+- `learning-runs/2026-08-08-v5-memory-02-q30-binary-safe-promotion.md`
+
+## Verified supporting-role gain — V5-08 night-view memory
+
+Drive master:
+- `08_MEMORY_SPOT_03_NIGHT_VIEW_DUMMY.png`
+- ID `1168rkBzpx84Wvr7IxPCW31WOr30kdqhb`
+- `2,160,660 bytes`
+
+Accepted V5 dummy-design derivative:
+- `RURUBU_V5_08_MEMORY_NIGHT_VIEW__FIGMA_352x368_Q30_SINGLECALL.jpg`
+- Drive ID `1rJJDOX_lwkCbA_DiCDptZfAQrMieG5LL`
+- `352 × 368`
+- `7,762 bytes`
+- SHA-256 `a87c39773e7374356641266aa709c585c60ff3435169fbeaed33a83d8fc35aae`
+- exactly `4×` the `88 × 92` semantic target
+
+Verified Figma mapping:
+- Current node `77:446 / IA_MEMORY_3_PHOTO`
+- previous hash `27ad4cfab8fd579b8452540ce954f8b36edc77fb`
+- current hash `58d7d6f144a4aff9e3cc31caefad88089981ec6a`
+- comparison frame `427:2`
+- comparison target `427:164`
+
 Three-scale QA:
-- whole spread: PASS; it reads as a distinct old-town supporting destination without disturbing the history/lead-memory hierarchy
-- reading scale: PASS; warm architecture clearly differentiates memory 02 from the bright lead coast and memory 03
-- actual-size/detail: PASS for dummy-design QA at natural `88 × 92`; the central street, lit façades and perspective remain recognizable
+- whole spread: PASS; the small supporting memory reads as distinct from the neighboring old-town role without stealing hierarchy from the lead images
+- reading scale: PASS; the memory-spots sequence remains lead image → supporting memories
+- actual-size/detail: PASS for the role-specific V5 dummy-design bar at natural `88 × 92`; this Q30 acceptance is not generalized to larger roles
 
 Structure QA after promotion:
 - inside native text nodes: `92`
@@ -137,16 +157,16 @@ Structure QA after promotion:
 - semantic node name and `88 × 92` geometry preserved
 - fold guide `77:288` preserved and visible
 - rollback frames `59:2` / `59:178` preserved
-- comparison `421:2` preserved
+- comparison `427:2` preserved
 
 Transport learning:
-- external `upload_assets` returned a valid endpoint but repeated the known `mcp.figma.com` DNS blocker; the method was not retried
-- changed method: a small role-sized Q30 derivative was decoded in one guarded Figma call with exact encoded/decoded-length and JPEG-marker checks
-- the duplicate was screenshot/structure-QA'd before its verified hash was promoted to Current
-- this Q30 acceptance is role-specific and does not establish a general compression rule for larger images
+- an earlier inline attempt failed encoded-length validation atomically and did not mutate Current
+- this run used the exact mounted Drive-readback derivative bytes
+- guarded encoded length `10,352`, decoded length `7,762`, and JPEG SOI/EOI markers before `figma.createImage`
+- duplicate-first QA preceded Current promotion
 
 Detailed evidence:
-- `learning-runs/2026-08-08-v5-memory-02-q30-binary-safe-promotion.md`
+- `learning-runs/2026-08-08-v5-memory-03-q30-binary-safe-promotion.md`
 
 ## Next required V5 work
 
@@ -168,12 +188,12 @@ Friends & Family active:
 - `77:39`
 - `77:43`
 
-Small memories:
-- `77:446`
-- `77:454`
+Small memory remaining:
+- `77:454 / V5-09`
 
-Completed supporting role:
+Completed supporting roles:
 - `77:438 / V5-07` — PASS
+- `77:446 / V5-08` — PASS
 
 Generated recognizable people must not be represented as the real bride, groom, family, or friends; profile dummies require safe identity treatment before pass.
 
