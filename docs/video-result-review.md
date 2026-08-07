@@ -14,6 +14,8 @@
 6. 結果素材を確認し、共通QAとプリセット固有QAをチェックする。
 7. 全QAを通過したものだけ `QA PASS → 採用` にする。
 8. 不採用は理由を必ず記録する。
+9. 再生成する場合は不採用Promptからretry draftを作り、生成キューへ戻す。
+10. 同じ系統のretryは最大3回。3回失敗したらショット設計へ戻る。
 
 ## レビュー待ちの条件
 
@@ -68,7 +70,51 @@ video-review=rejected / reviewedAt=2026-08-07T04:15:00.000Z / reason=3秒付近�
 ```
 
 不採用時はPrompt.statusを `rejected` にする。
-再生成する場合は、失敗理由を元にショット意図・静止画・参照素材・モデルのどれかを修正し、新しいPromptとして比較可能な形で残す。
+
+### retry draft
+
+不採用Promptから **再生成ドラフト** を押すと、新しいPromptを作る。
+
+- 元Promptは `rejected` のまま保存する。
+- 新しいPromptは `draft`。
+- 元のsceneId / movieId / model / preset / promptを継承する。
+- 過去の結果Assetは継承しない。
+- 不採用理由をretry correctionとして次のpromptへ引き継ぐ。
+- sceneとの相互リンクを新しいpromptIdで作り直す。
+
+notesには系譜を残す。
+
+```text
+retry-of=<直前promptId> / retry-root=<最初のpromptId> / retry-attempt=<1..3> / source-review=<不採用理由>
+```
+
+これにより、採用版だけを残して失敗版を消すのではなく「何を直して改善したか」を追跡できる。
+
+### retry上限
+
+同じ系統のretryは最大3回。
+
+```text
+original
+  ↓
+retry 1/3
+  ↓
+retry 2/3
+  ↓
+retry 3/3
+  ↓
+STOP
+```
+
+3回失敗したら同じPromptへ文章を継ぎ足さない。次のどれかを変更する。
+
+1. 元の静止画。
+2. 参照画像・参照動画。
+3. ショット構成、主動作、カメラ。
+4. 生成モデル。
+5. AIを使わずMotion Studio / 実素材へ切り替える。
+
+「もう1回だけ」を繰り返してクレジットを消費しないための強制停止ルールとする。
 
 ## なぜ自動採用しないか
 
