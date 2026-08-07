@@ -100,6 +100,10 @@ export function VideoGenerationQueue() {
     return (issuesByPrompt.get(prompt.promptId) ?? []).filter(isExecutionHold);
   }
 
+  function runnableDraft(prompt: Prompt) {
+    return prompt.status === "draft" && executionHoldIssues(prompt).length === 0;
+  }
+
   const pendingCount = videoPrompts.filter((prompt) => prompt.status === "draft" || prompt.status === "testing").length;
   const unlinkedCount = videoPrompts.filter((prompt) => prompt.relatedSceneIds.length === 0).length;
   const withResultCount = videoPrompts.filter((prompt) => prompt.resultAssetIds.length > 0).length;
@@ -142,16 +146,16 @@ export function VideoGenerationQueue() {
   }
 
   async function copyGroup(tool: string, prompts: Prompt[]) {
-    const runnable = prompts.filter((prompt) => executionHoldIssues(prompt).length === 0);
+    const runnable = prompts.filter(runnableDraft);
     const skipped = prompts.length - runnable.length;
     if (runnable.length === 0) {
-      addToast(`${tool} は全件実行保留です。プリフライトを先に修正してください`, "error");
+      addToast(`${tool} は新規実行できるdraftがありません。testingは結果待ちとして再コピーしません`, "error");
       return;
     }
     await navigator.clipboard.writeText(runnable.map(modelInput).join("\n\n---\n\n"));
     setCopiedId(`group:${tool}`);
     window.setTimeout(() => setCopiedId(""), 1500);
-    addToast(skipped > 0 ? `${tool}: provider-safe入力${runnable.length}件をコピー、保留${skipped}件は除外しました` : `${tool} のprovider-safeモデル入力をまとめてコピーしました`, "success");
+    addToast(skipped > 0 ? `${tool}: provider-safeなdraft ${runnable.length}件をコピー、testing/保留 ${skipped}件は除外しました` : `${tool} のprovider-safeモデル入力をまとめてコピーしました`, "success");
   }
 
   function resetResultMetadata() {
@@ -255,9 +259,9 @@ export function VideoGenerationQueue() {
     </div>
 
     {groups.length === 0 ? <div className="rounded-xl border border-dashed border-sand-300 dark:border-navy-600 p-10 text-center text-sm text-navy-400">この条件の動画プロンプトはありません。</div> : <div className="space-y-7">{groups.map(([tool, prompts]) => {
-      const runnableCount = prompts.filter((prompt) => executionHoldIssues(prompt).length === 0).length;
+      const runnableCount = prompts.filter(runnableDraft).length;
       return <section key={tool} className="rounded-xl border border-sand-200 dark:border-navy-600 bg-white dark:bg-navy-800 shadow-sm overflow-hidden">
-        <div className="px-5 py-4 border-b border-sand-100 dark:border-navy-600 flex flex-wrap items-center gap-3"><div><p className="text-xs text-navy-400">MODEL / TOOL</p><h2 className="font-bold text-navy-800 dark:text-sand-100">{tool}</h2></div><span className="text-xs text-navy-400">{prompts.length} shots · 実行可能 {runnableCount}</span><button onClick={() => void copyGroup(tool, prompts)} disabled={runnableCount === 0} className="ml-auto px-3 py-1.5 text-xs rounded-lg border border-sand-200 dark:border-navy-600 text-navy-600 dark:text-navy-200 hover:bg-sand-50 dark:hover:bg-navy-700 disabled:opacity-40">{copiedId === `group:${tool}` ? "✓ コピー済み" : runnableCount === prompts.length ? "provider-safe入力をまとめてコピー" : `実行可能${runnableCount}件の入力をコピー`}</button></div>
+        <div className="px-5 py-4 border-b border-sand-100 dark:border-navy-600 flex flex-wrap items-center gap-3"><div><p className="text-xs text-navy-400">MODEL / TOOL</p><h2 className="font-bold text-navy-800 dark:text-sand-100">{tool}</h2></div><span className="text-xs text-navy-400">{prompts.length} shots · 新規実行draft {runnableCount}</span><button onClick={() => void copyGroup(tool, prompts)} disabled={runnableCount === 0} className="ml-auto px-3 py-1.5 text-xs rounded-lg border border-sand-200 dark:border-navy-600 text-navy-600 dark:text-navy-200 hover:bg-sand-50 dark:hover:bg-navy-700 disabled:opacity-40">{copiedId === `group:${tool}` ? "✓ コピー済み" : runnableCount === prompts.length ? "provider-safe入力をまとめてコピー" : `draft ${runnableCount}件の入力をコピー`}</button></div>
         <div className="divide-y divide-sand-100 dark:divide-navy-600">{prompts.map((prompt) => {
           const resultAssets = data.assets.filter((asset) => prompt.resultAssetIds.includes(asset.assetId));
           const preset = parseNoteValue(prompt.notes, "preset"); const finishCandidate = parseNoteValue(prompt.notes, "finish-candidate");
