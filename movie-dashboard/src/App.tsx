@@ -13,6 +13,7 @@ import { VideoGenerationQueue } from "./pages/VideoGenerationQueue";
 import { VideoPreflight } from "./pages/VideoPreflight";
 import { VideoResultReview } from "./pages/VideoResultReview";
 import { VideoFailureLab } from "./pages/VideoFailureLab";
+import { VideoModelEvidence } from "./pages/VideoModelEvidence";
 import { PalmierHandoff } from "./pages/PalmierHandoff";
 import { MissingList } from "./pages/MissingList";
 import { CapCutPack } from "./pages/CapCutPack";
@@ -42,6 +43,7 @@ export default function App() {
               <Route path="video-preflight" element={<VideoPreflight />} />
               <Route path="video-result-review" element={<VideoResultReview />} />
               <Route path="video-failure-lab" element={<VideoFailureLab />} />
+              <Route path="video-model-evidence" element={<VideoModelEvidence />} />
               <Route path="palmier-handoff" element={<PalmierHandoff />} />
               <Route path="missing" element={<MissingList />} />
               <Route path="capcut" element={<CapCutPack />} />
