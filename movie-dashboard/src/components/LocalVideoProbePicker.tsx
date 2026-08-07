@@ -6,6 +6,7 @@ import {
   type LocalVideoPreviewFrame,
   type LocalVideoProbeResult,
 } from "../lib/localVideoProbe";
+import { fingerprintLocalVideoSample } from "../lib/localVideoSampleFingerprint";
 import type { VideoResultProbeEvidence } from "../lib/videoResultProbeEvidence";
 
 interface LocalVideoProbePickerProps {
@@ -31,9 +32,11 @@ function pathBaseName(path: string) {
 export function LocalVideoProbePicker({ expectedDurationSec, savedPath = "", onMetadata, onProbeEvidence }: LocalVideoProbePickerProps) {
   const [probe, setProbe] = useState<LocalVideoProbeResult>();
   const [previewFrames, setPreviewFrames] = useState<LocalVideoPreviewFrame[]>([]);
+  const [sampleFingerprint, setSampleFingerprint] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [previewError, setPreviewError] = useState("");
+  const [fingerprintError, setFingerprintError] = useState("");
   const fit = durationFit(probe?.durationSec, expectedDurationSec);
   const savedFileName = pathBaseName(savedPath);
   const fileNameMismatch = Boolean(probe?.fileName && savedFileName && probe.fileName.toLowerCase() !== savedFileName.toLowerCase());
@@ -41,14 +44,18 @@ export function LocalVideoProbePicker({ expectedDurationSec, savedPath = "", onM
   async function handleFile(file?: File) {
     setError("");
     setPreviewError("");
+    setFingerprintError("");
     setProbe(undefined);
     setPreviewFrames([]);
+    setSampleFingerprint("");
     if (!file) return;
     setBusy(true);
     try {
       const result = await probeLocalVideoFile(file);
       const probedAt = new Date().toISOString();
       let previewFrameCount = 0;
+      let fingerprint = "";
+      let sampledBytes: number | undefined;
       setProbe(result);
       onMetadata({ durationSec: result.durationSec, resolution: result.resolution });
       try {
@@ -58,7 +65,15 @@ export function LocalVideoProbePicker({ expectedDurationSec, savedPath = "", onM
       } catch (caught) {
         setPreviewError(caught instanceof Error ? caught.message : "QAフレームを抽出できませんでした");
       }
-      onProbeEvidence?.({ probedAt, previewFrameCount });
+      try {
+        const sampled = await fingerprintLocalVideoSample(file);
+        fingerprint = `${sampled.version}:${sampled.digest}`;
+        sampledBytes = sampled.sampledBytes;
+        setSampleFingerprint(fingerprint);
+      } catch (caught) {
+        setFingerprintError(caught instanceof Error ? caught.message : "sample fingerprintを作成できませんでした");
+      }
+      onProbeEvidence?.({ probedAt, previewFrameCount, sampleFingerprint: fingerprint || undefined, sampledBytes });
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "動画メタデータを読み取れませんでした");
     } finally {
@@ -71,7 +86,7 @@ export function LocalVideoProbePicker({ expectedDurationSec, savedPath = "", onM
       <div className="flex flex-wrap items-start gap-3">
         <div className="min-w-0 flex-1">
           <p className="text-xs font-bold text-sky-800 dark:text-sky-300">ローカル動画から実メディア情報 + QAフレームを読む</p>
-          <p className="mt-1 text-[11px] text-sky-700 dark:text-sky-300">動画ファイルはアップロードしません。ブラウザ内でduration / width / heightと、冒頭・中間・終端の縮小プレビューだけを作ります。FPS・seed・generation IDは推測しません。</p>
+          <p className="mt-1 text-[11px] text-sky-700 dark:text-sky-300">動画ファイルはアップロードしません。ブラウザ内でduration / width / height、冒頭・中間・終端プレビュー、先頭/中央/末尾の最大64KBずつを使う軽量sample fingerprintだけを作ります。FPS・seed・generation IDは推測しません。</p>
         </div>
         <label className="px-3 py-1.5 text-xs rounded-lg bg-white/70 dark:bg-navy-800/60 border border-sky-200 dark:border-sky-700 text-sky-800 dark:text-sky-200 cursor-pointer">
           {busy ? "読取中…" : "動画ファイルを選択"}
@@ -96,6 +111,7 @@ export function LocalVideoProbePicker({ expectedDurationSec, savedPath = "", onM
             {probe.mimeType && <span>{probe.mimeType}</span>}
           </div>
 
+          {sampleFingerprint && <div className="mt-3 rounded-lg border border-violet-200 dark:border-violet-700 bg-violet-50 dark:bg-violet-900/20 p-2.5 text-violet-800 dark:text-violet-300"><strong>sample fingerprint:</strong> <code>{sampleFingerprint.slice(0, 28)}…</code><p className="mt-1 text-[10px]">動画全体hashではありません。同名/リネームvariantの取り違え検知用で、完全なファイル同一性証明には使いません。</p></div>}
           {fileNameMismatch && <div className="mt-3 rounded-lg border border-amber-200 dark:border-amber-700 bg-amber-50 dark:bg-amber-900/20 p-2.5 text-amber-800 dark:text-amber-300"><strong>ファイル名を再確認:</strong> 今プレビューした動画は <code>{probe.fileName}</code>、登録path末尾は <code>{savedFileName}</code> です。意図的にリネーム/コピー済みならそのままでOKですが、別variantを誤って登録していないか確認してください。</div>}
           {fit === "short" && <div className="mt-3 rounded-lg border border-amber-200 dark:border-amber-700 bg-amber-50 dark:bg-amber-900/20 p-2.5 text-amber-800 dark:text-amber-300"><strong>尺不足:</strong> sceneより短い動画です。ループや強いslow-downで埋めるとAIっぽさが出やすいため、scene尺を短くする・別素材で補う・必要尺だけ再生成する方を優先します。</div>}
           {fit === "long" && <div className="mt-3 rounded-lg border border-sky-200 dark:border-sky-700 bg-sky-50 dark:bg-sky-900/20 p-2.5 text-sky-800 dark:text-sky-300"><strong>余尺あり:</strong> sceneより1秒以上長いです。速度変更せず、自然な区間をtrimできる候補です。</div>}
@@ -122,7 +138,8 @@ export function LocalVideoProbePicker({ expectedDurationSec, savedPath = "", onM
           )}
 
           {previewError && <p className="mt-3 text-[11px] text-amber-700 dark:text-amber-300">QAフレームだけ取得できませんでした: {previewError}。実尺・解像度はそのまま利用できます。</p>}
-          <p className="mt-2 text-[11px] opacity-80">ファイル名・bytes・3枚のプレビューは表示確認用だけです。production data / Git / Driveへ自動保存しません。保存パスは実際の配置先を別欄で確認してください。</p>
+          {fingerprintError && <p className="mt-2 text-[11px] text-amber-700 dark:text-amber-300">sample fingerprintだけ作成できませんでした: {fingerprintError}。metadata / QAフレームはそのまま利用できます。</p>}
+          <p className="mt-2 text-[11px] opacity-80">ファイル名・bytes・3枚のプレビューは表示確認用だけです。production dataへ残すのはprobe時刻・preview成功数・sample fingerprintだけで、動画本体やローカルpathは保存しません。</p>
         </div>
       )}
 
