@@ -68,6 +68,23 @@ export function selectedResultAssets(prompt: Prompt, resultAssets: Asset[]) {
   return resultAssets.length === 1 ? resultAssets : [];
 }
 
+function adoptedReviewAuthorityIssue(prompt: Prompt, selectedAsset?: Asset) {
+  if (!selectedAsset) return "";
+  const reviewedFingerprint = lastNoteValue(prompt.notes, "reviewed-sample-fingerprint");
+  const reviewedPreviewFrames = Number(lastNoteValue(prompt.notes, "reviewed-preview-frames") || "0");
+  const currentProbe = parseVideoResultProbeEvidence(selectedAsset.notes);
+  const currentFingerprint = currentProbe?.sampleFingerprint ?? "";
+  const currentPreviewFrames = currentProbe?.previewFrameCount ?? 0;
+
+  if (!reviewedFingerprint || reviewedPreviewFrames < 3) {
+    return "QA PASS時の実体fingerprintまたは3フレームpreview authorityが不足しています。旧レビュー記録だけで編集工程へ進めません。";
+  }
+  if (!currentFingerprint || currentPreviewFrames < 3) {
+    return "現在の採用正本Assetに実体fingerprint + 3フレームpreview証跡が揃っていません。現在の実体を確認できるまで編集工程へ進めません。";
+  }
+  return "";
+}
+
 function adoptedFingerprintMismatch(prompt: Prompt, selectedAsset?: Asset) {
   if (!selectedAsset) return false;
   const reviewedFingerprint = lastNoteValue(prompt.notes, "reviewed-sample-fingerprint");
@@ -105,6 +122,16 @@ export function routeVideoPrompt(prompt: Prompt, resultAssets: Asset[]): VideoEx
         label: "採用結果を1本選ぶ",
         reason: "複数variantが紐付いていますが、編集へ渡す正本Assetが未選択です。",
         action: "AI動画 結果レビューで使用する結果Assetを1本選んでQA PASSを保存する。",
+        paidGenerationAllowed: false,
+      };
+    }
+    const authorityIssue = adoptedReviewAuthorityIssue(prompt, selected[0]);
+    if (authorityIssue) {
+      return {
+        destination: "blocked",
+        label: "採用正本のQA authorityを補完",
+        reason: authorityIssue,
+        action: "AI動画 実体再probeで現在Assetのfingerprint + 3フレームpreviewを揃え、必要なら結果レビューで再QAしてからPalmier / CapCutへ進む。",
         paidGenerationAllowed: false,
       };
     }
@@ -214,6 +241,7 @@ export function buildPalmierAgentHandoff(params: {
       selectedResultAssetId: selectedResultAssetId(prompt) || (allResultAssets.length === 1 ? allResultAssets[0]?.assetId ?? "" : ""),
       reviewedSampleFingerprint: lastNoteValue(prompt.notes, "reviewed-sample-fingerprint"),
       reviewedProbeAt: lastNoteValue(prompt.notes, "reviewed-probe-at"),
+      reviewedPreviewFrames: Number(lastNoteValue(prompt.notes, "reviewed-preview-frames") || "0"),
       route,
       prompt: prompt.prompt,
       qaAvoid: prompt.negativePrompt,
@@ -235,6 +263,7 @@ export function buildPalmierAgentHandoff(params: {
     "- Never place an adopted Asset when its route is blocked; return it to movie-dashboard for review instead.",
     "- Blocked adopted media must not expose file paths or repro metadata in the structured handoff; only withheld Asset IDs may be reported for diagnosis.",
     "- sample fingerprint is a bounded audit hint, not a full-file cryptographic checksum; never infer visual QA from fingerprint equality alone.",
+    "- Adopted edit handoff requires both QA-time and current fingerprint + at least 3 preview frames; missing evidence must return to movie-dashboard instead of being inferred.",
     "",
     "## Execution order",
     "1. Place only the latest selected adopted result asset on the matching scene timeline position when route=edit. If the route is blocked, do not place that media and return it to movie-dashboard.",
@@ -259,7 +288,7 @@ export function buildPalmierAgentHandoff(params: {
       `- route: ${row.route.label}`,
       `- next action: ${row.route.action}`,
       row.selectedResultAssetId ? `- selected result asset: ${row.selectedResultAssetId}` : "- selected result asset: —",
-      row.reviewedSampleFingerprint ? `- QA-reviewed sample fingerprint: ${shortFingerprint(row.reviewedSampleFingerprint)} / reviewed probe: ${row.reviewedProbeAt || "—"}` : "- QA-reviewed sample fingerprint: —",
+      row.reviewedSampleFingerprint ? `- QA-reviewed sample fingerprint: ${shortFingerprint(row.reviewedSampleFingerprint)} / preview=${row.reviewedPreviewFrames || "?"} / reviewed probe: ${row.reviewedProbeAt || "—"}` : "- QA-reviewed sample fingerprint: —",
       row.resultAssets.length > 0 ? `- handoff result: ${row.resultAssets.map((asset) => `${asset.title} (${asset.path || "path missing"})`).join(" / ")}` : "- handoff result: none",
       row.resultAssets.length > 0 ? `- actual media: ${row.resultAssets.map((asset) => `${asset.media.actualDurationSec ?? "?"}s / ${asset.media.resolution || "?"} / ${asset.media.fps ?? "?"}fps`).join(" / ")}` : "",
       row.resultAssets.length > 0 ? `- current sample fingerprint: ${row.resultAssets.map((asset) => `${asset.assetId}=${shortFingerprint(asset.probe?.sampleFingerprint)} / preview=${asset.probe?.previewFrameCount ?? "?"} / probed=${asset.probe?.probedAt || "—"}`).join(" / ")}` : "",

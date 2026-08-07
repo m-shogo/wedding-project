@@ -74,6 +74,31 @@ requireText(
 );
 requireText(
   executionRouter,
+  "adoptedReviewAuthorityIssue",
+  "Palmier routing must validate complete adopted review authority before edit handoff",
+);
+requireText(
+  executionRouter,
+  "reviewed-preview-frames",
+  "Palmier routing must bind the preview-frame count recorded at QA PASS",
+);
+requireText(
+  executionRouter,
+  "currentPreviewFrames < 3",
+  "Palmier routing must reject current adopted media with fewer than three preview frames",
+);
+requireText(
+  executionRouter,
+  "QA PASS時の実体fingerprintまたは3フレームpreview authorityが不足しています",
+  "legacy or incomplete QA authority must block adopted edit handoff",
+);
+requireText(
+  executionRouter,
+  "現在の採用正本Assetに実体fingerprint + 3フレームpreview証跡が揃っていません",
+  "current incomplete probe evidence must block adopted edit handoff",
+);
+requireText(
+  executionRouter,
   "adoptedFingerprintMismatch",
   "execution routing must compare reviewed and current adopted media fingerprints",
 );
@@ -116,6 +141,11 @@ requireText(
   executionRouter,
   "sample fingerprint is a bounded audit hint",
   "Palmier handoff must not present sampled fingerprint as a full-file checksum or visual QA",
+);
+requireText(
+  executionRouter,
+  "Adopted edit handoff requires both QA-time and current fingerprint + at least 3 preview frames",
+  "Palmier safety boundary must document the complete review-authority requirement",
 );
 
 const continuity = await source("src/lib/videoContinuitySignoff.ts");
