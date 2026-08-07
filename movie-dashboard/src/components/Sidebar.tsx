@@ -12,6 +12,7 @@ const links = [
   { to: "/video-preflight", label: "AI動画 プリフライト", icon: "🛡️" },
   { to: "/video-result-review", label: "AI動画 結果レビュー", icon: "🔎" },
   { to: "/video-failure-lab", label: "AI動画 失敗学習", icon: "🧠" },
+  { to: "/video-model-evidence", label: "AI動画 モデル実績", icon: "📊" },
   { to: "/palmier-handoff", label: "Palmier 実行Handoff", icon: "🌴" },
   { to: "/prompts", label: "プロンプト管理", icon: "✨" },
   { to: "/missing", label: "不足・未確定リスト", icon: "⚠" },
