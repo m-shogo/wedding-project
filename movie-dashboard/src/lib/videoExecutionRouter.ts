@@ -23,6 +23,13 @@ function lastNoteValue(notes: string, key: string) {
   return latest?.[1] ?? "";
 }
 
+function shortFingerprint(value?: string) {
+  if (!value) return "—";
+  const parts = value.split(":");
+  const digest = parts[parts.length - 1] ?? value;
+  return `…${digest.slice(-12)}`;
+}
+
 export function promptMode(prompt: Prompt) {
   return noteValue(prompt.notes, "mode") || "unknown";
 }
@@ -159,12 +166,18 @@ export function routeVideoPrompt(prompt: Prompt, resultAssets: Asset[]): VideoEx
 }
 
 function handoffAsset(asset: Asset) {
+  const probe = parseVideoResultProbeEvidence(asset.notes);
   return {
     assetId: asset.assetId,
     title: asset.title,
     path: asset.path,
     status: asset.status,
     media: parseVideoResultReproMetadata(asset.notes),
+    probe: probe ? {
+      probedAt: probe.probedAt,
+      previewFrameCount: probe.previewFrameCount,
+      sampleFingerprint: probe.sampleFingerprint ?? "",
+    } : undefined,
   };
 }
 
@@ -195,6 +208,8 @@ export function buildPalmierAgentHandoff(params: {
       finishCandidate: finishCandidate(prompt),
       negativePolicy: negativePolicy(prompt),
       selectedResultAssetId: selectedResultAssetId(prompt) || (allResultAssets.length === 1 ? allResultAssets[0]?.assetId ?? "" : ""),
+      reviewedSampleFingerprint: lastNoteValue(prompt.notes, "reviewed-sample-fingerprint"),
+      reviewedProbeAt: lastNoteValue(prompt.notes, "reviewed-probe-at"),
       route,
       prompt: prompt.prompt,
       qaAvoid: prompt.negativePrompt,
@@ -213,6 +228,7 @@ export function buildPalmierAgentHandoff(params: {
     "- People, family, friends and dogs must remain real photo/video material; do not replace them with AI generations.",
     "- Important text, captions and logos belong in the editor/compositor, not baked into generated footage.",
     "- Never place an adopted Asset when its route is blocked; return it to movie-dashboard for review instead.",
+    "- sample fingerprint is a bounded audit hint, not a full-file cryptographic checksum; never infer visual QA from fingerprint equality alone.",
     "",
     "## Execution order",
     "1. Place only the latest selected adopted result asset on the matching scene timeline position when route=edit. If the route is blocked, do not place that media and return it to movie-dashboard.",
@@ -237,8 +253,10 @@ export function buildPalmierAgentHandoff(params: {
       `- route: ${row.route.label}`,
       `- next action: ${row.route.action}`,
       row.selectedResultAssetId ? `- selected result asset: ${row.selectedResultAssetId}` : "- selected result asset: —",
+      row.reviewedSampleFingerprint ? `- QA-reviewed sample fingerprint: ${shortFingerprint(row.reviewedSampleFingerprint)} / reviewed probe: ${row.reviewedProbeAt || "—"}` : "- QA-reviewed sample fingerprint: —",
       row.resultAssets.length > 0 ? `- handoff result: ${row.resultAssets.map((asset) => `${asset.title} (${asset.path || "path missing"})`).join(" / ")}` : "- handoff result: none",
       row.resultAssets.length > 0 ? `- actual media: ${row.resultAssets.map((asset) => `${asset.media.actualDurationSec ?? "?"}s / ${asset.media.resolution || "?"} / ${asset.media.fps ?? "?"}fps`).join(" / ")}` : "",
+      row.resultAssets.length > 0 ? `- current sample fingerprint: ${row.resultAssets.map((asset) => `${asset.assetId}=${shortFingerprint(asset.probe?.sampleFingerprint)} / preview=${asset.probe?.previewFrameCount ?? "?"} / probed=${asset.probe?.probedAt || "—"}`).join(" / ")}` : "",
       row.resultAssets.some((asset) => asset.media.generationId || asset.media.seed) ? `- repro: ${row.resultAssets.map((asset) => `generationId=${asset.media.generationId || "—"}, seed=${asset.media.seed || "—"}`).join(" / ")}` : "",
       row.alternativeResultAssets.length > 0 ? `- unselected / blocked alternatives: ${row.alternativeResultAssets.map((asset) => asset.title).join(" / ")}` : "",
       "",
