@@ -438,6 +438,32 @@ Do not turn every isolated preference into a rigid global rule. The goal is accu
 
 ---
 
+## LESSON-016 — Inspect and crop a verified master before regenerating a small supporting role
+
+**Date:** 2026-08-08
+
+**Context:** V5 supporting memory roles `V5-08 / 77:446` and `V5-09 / 77:454`.
+
+**Observed failure or opportunity:** Small supporting roles still used generic/duplicated placeholders even though their intended Drive masters were already valid. The temptation was either to regenerate assets unnecessarily or to reuse a compression/transport method without role-specific evidence.
+
+**Root cause:** Source selection, crop, compression, and transport can be conflated. A correct master may need only a role-specific crop and bounded derivative, while a failed transfer attempt can falsely make the asset itself look defective.
+
+**General editorial principle:** For small supporting photography, inspect the verified master first. If concept, provenance, identity safety, and crop potential are already correct, derive for the semantic box before regenerating. Compression and transport acceptance must remain role-specific.
+
+**Process change:** V5-08 used exact Drive-readback bytes after an earlier encoded-length guard failed atomically. V5-09 was visually inspected at master scale, then cropped to retain sunset, ocean horizon, pavilion and lounge chairs while removing excess sky. Both derivatives were exactly `4×` their `88 × 92` targets. Before image creation, encoded length, decoded byte count, and JPEG boundary markers were checked; duplicate-first screenshot and structure QA preceded Current promotion.
+
+**Design change:** V5-08 Current hash became `58d7d6f144a4aff9e3cc31caefad88089981ec6a`; V5-09 Current hash became `c09aa82e7b2ac75708707345c6f845452bf67663`. The memory-spots sequence now differentiates old-town, night-view and resort/sunset supporting roles without adding cards or decoration.
+
+**Verification evidence:** V5-08 derivative Drive ID `1rJJDOX_lwkCbA_DiCDptZfAQrMieG5LL`, `352 × 368`, `7,762 bytes`; comparison `427:2`. V5-09 derivative Drive ID `1QHWfftLU6m6FZYNJy8IxbOAgp1knzzoP`, `352 × 368`, `9,950 bytes`, SHA-256 `dbd5d0d15506bee04446ed02c62ad23df043c05b96ce43495d722c5d88ef5970`; comparison `429:2`. Current inside retained `92` native text nodes, `57` visible text nodes, `9` IMAGE-fill nodes, fold guide, rollback frames, and semantic geometry.
+
+**Applies to:** V5 small supporting roles; candidate for later asset work when the same conditions hold
+
+**Status:** TESTED
+
+**Promoted knowledge-base section:** Not yet promoted. Do not generalize Q30, `4×`, or one-call base64 to larger/dominant roles.
+
+---
+
 ## Open candidate lessons
 
 Use this area for observations that require further evidence before promotion.
