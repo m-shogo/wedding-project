@@ -9,6 +9,7 @@ import {
 
 interface LocalVideoProbePickerProps {
   expectedDurationSec?: number;
+  savedPath?: string;
   onMetadata: (metadata: { durationSec?: number; resolution: string }) => void;
 }
 
@@ -21,13 +22,19 @@ function durationFit(actual: number | undefined, expected: number | undefined): 
   return "fit";
 }
 
-export function LocalVideoProbePicker({ expectedDurationSec, onMetadata }: LocalVideoProbePickerProps) {
+function pathBaseName(path: string) {
+  return path.trim().replace(/\\/g, "/").split("/").filter(Boolean).pop() ?? "";
+}
+
+export function LocalVideoProbePicker({ expectedDurationSec, savedPath = "", onMetadata }: LocalVideoProbePickerProps) {
   const [probe, setProbe] = useState<LocalVideoProbeResult>();
   const [previewFrames, setPreviewFrames] = useState<LocalVideoPreviewFrame[]>([]);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [previewError, setPreviewError] = useState("");
   const fit = durationFit(probe?.durationSec, expectedDurationSec);
+  const savedFileName = pathBaseName(savedPath);
+  const fileNameMismatch = Boolean(probe?.fileName && savedFileName && probe.fileName.toLowerCase() !== savedFileName.toLowerCase());
 
   async function handleFile(file?: File) {
     setError("");
@@ -82,6 +89,7 @@ export function LocalVideoProbePicker({ expectedDurationSec, onMetadata }: Local
             {probe.mimeType && <span>{probe.mimeType}</span>}
           </div>
 
+          {fileNameMismatch && <div className="mt-3 rounded-lg border border-amber-200 dark:border-amber-700 bg-amber-50 dark:bg-amber-900/20 p-2.5 text-amber-800 dark:text-amber-300"><strong>ファイル名を再確認:</strong> 今プレビューした動画は <code>{probe.fileName}</code>、登録path末尾は <code>{savedFileName}</code> です。意図的にリネーム/コピー済みならそのままでOKですが、別variantを誤って登録していないか確認してください。</div>}
           {fit === "short" && <div className="mt-3 rounded-lg border border-amber-200 dark:border-amber-700 bg-amber-50 dark:bg-amber-900/20 p-2.5 text-amber-800 dark:text-amber-300"><strong>尺不足:</strong> sceneより短い動画です。ループや強いslow-downで埋めるとAIっぽさが出やすいため、scene尺を短くする・別素材で補う・必要尺だけ再生成する方を優先します。</div>}
           {fit === "long" && <div className="mt-3 rounded-lg border border-sky-200 dark:border-sky-700 bg-sky-50 dark:bg-sky-900/20 p-2.5 text-sky-800 dark:text-sky-300"><strong>余尺あり:</strong> sceneより1秒以上長いです。速度変更せず、自然な区間をtrimできる候補です。</div>}
           {fit === "fit" && <div className="mt-3 rounded-lg border border-emerald-200 dark:border-emerald-700 bg-emerald-50 dark:bg-emerald-900/20 p-2.5 text-emerald-800 dark:text-emerald-300">✓ scene尺に対して無理なループ/速度変更なしで扱いやすい実尺です。</div>}
