@@ -5,6 +5,8 @@ export interface VideoResultProbeEvidence {
   sampledBytes?: number;
 }
 
+export const MIN_REVIEW_PREVIEW_FRAMES = 3;
+
 function safeSingleLine(value: string) {
   return value.replace(/[\r\n]+/g, " ").trim();
 }
@@ -40,10 +42,12 @@ export function parseVideoResultProbeEvidence(notes: string): VideoResultProbeEv
   const sampleFingerprint = line.match(/sample-fingerprint=([^\s/]+)/)?.[1] ?? "";
   const sampledBytes = Number(line.match(/sampled-bytes=(\d+)/)?.[1] ?? 0);
   if (!probedAt) return undefined;
+  const normalizedPreviewFrameCount = Number.isFinite(previewFrameCount) ? previewFrameCount : 0;
+  const reviewReadyFingerprint = normalizedPreviewFrameCount >= MIN_REVIEW_PREVIEW_FRAMES ? sampleFingerprint : "";
   return {
     probedAt,
-    previewFrameCount: Number.isFinite(previewFrameCount) ? previewFrameCount : 0,
-    sampleFingerprint: sampleFingerprint || undefined,
+    previewFrameCount: normalizedPreviewFrameCount,
+    sampleFingerprint: reviewReadyFingerprint || undefined,
     sampledBytes: sampledBytes > 0 && Number.isFinite(sampledBytes) ? sampledBytes : undefined,
   };
 }
