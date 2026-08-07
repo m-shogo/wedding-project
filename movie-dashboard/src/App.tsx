@@ -7,6 +7,7 @@ import { Dashboard } from "./pages/Dashboard";
 import { Storyboard } from "./pages/Storyboard";
 import { AssetLibrary } from "./pages/AssetLibrary";
 import { PromptBank } from "./pages/PromptBank";
+import { VideoPromptBuilder } from "./pages/VideoPromptBuilder";
 import { MissingList } from "./pages/MissingList";
 import { CapCutPack } from "./pages/CapCutPack";
 import { ProductionMap } from "./pages/ProductionMap";
@@ -29,6 +30,7 @@ export default function App() {
               <Route path="storyboard" element={<Storyboard />} />
               <Route path="assets" element={<AssetLibrary />} />
               <Route path="prompts" element={<PromptBank />} />
+              <Route path="video-prompt-builder" element={<VideoPromptBuilder />} />
               <Route path="missing" element={<MissingList />} />
               <Route path="capcut" element={<CapCutPack />} />
               <Route path="production-map" element={<ProductionMap />} />
