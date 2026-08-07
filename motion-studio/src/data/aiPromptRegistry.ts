@@ -8,6 +8,7 @@
 //   - candidate以上への昇格は人間の確認が必須。AIが勝手にapproved/finalにしない
 //   - 実プロンプトの正は docs/templates/ai-shot-list.csv や i2v-generation-log.csv
 //     にもあるため、移行する場合はそこからコピーする
+//   - 新規ショットのプロンプト設計は movie-dashboard の「動画プロンプト」を入口にする
 
 export type AiPromptStatus =
   | 'idea'
@@ -18,13 +19,26 @@ export type AiPromptStatus =
   | 'rejected'
   | 'final';
 
+export type AiPromptTool =
+  | 'ComfyUI'
+  | 'Seedance 2.0 Mini'
+  | 'Seedance 2.0'
+  | 'Seedance 2.5 (preview)'
+  | 'Veo 3.1'
+  | 'Runway Gen-4.5'
+  | 'Kling'
+  | 'Hailuo'
+  | 'PixVerse'
+  | 'Luma'
+  | 'Other';
+
 export type AiPromptRecord = {
   id: string;
   // assets.tsに存在するIDであること(check:assetsが検証)
   assetId: string;
   // openingProject.scenesのid(任意)
   sceneId?: string;
-  tool: 'ComfyUI' | 'Hailuo' | 'PixVerse' | 'Kling' | 'Luma' | 'Other';
+  tool: AiPromptTool;
   mode: 't2i' | 'i2v' | 't2v' | 'upscale' | 'other';
   sourceImage?: string;
   prompt: string;
