@@ -331,3 +331,81 @@ Return priority to dominant-photo evidence closure. If the known binary-transpor
 ### Status
 
 `PROTOTYPED → VERIFIED / V5_CURRENT_ADOPTED / GLOBAL_RULE_NOT_PROMOTED`
+
+---
+
+## 2026-08-07 — V5 profile role-ribbon subtraction
+
+### Visible problem
+
+The inside-left profile area already established the two people through `OUR PROFILE / ABOUT US`, large native names, separate photographs, metadata, and pink/blue vertical rules. Rotated `新郎 PROFILE` and `新婦 PROFILE` ribbons repeated the same identity role while adding another sticker/tape layer.
+
+### Source and hypothesis
+
+- Source: live Figma inside-spread and left-page review, nodes `77:335`–`77:338`.
+- Hypothesis: hiding the redundant ribbons would strengthen the direct path from section heading to names/photos and reduce template-like decoration without weakening identity distinction.
+
+Expected improvement:
+- quieter top profile zone;
+- less Canva/Web-UI/sticker feel;
+- clearer emphasis on the people rather than their labels.
+
+Possible regression:
+- bride/groom distinction could become ambiguous;
+- the profile area could appear unfinished.
+
+Evidence required:
+- whole-spread and page screenshot comparison;
+- detail/structure audit;
+- no loss of names, profile text, native editability, fold guide, rollback, or image structure.
+
+### Experiment
+
+Hidden only; no deletion:
+
+- `77:335 / PROFILE_RIBBON_A`: `visible true → false`
+- `77:336 / PROFILE_RIBBON_A_TXT`: `visible true → false`
+- `77:337 / PROFILE_RIBBON_B`: `visible true → false`
+- `77:338 / PROFILE_RIBBON_B_TXT`: `visible true → false`
+
+No copy, image, crop, geometry, profile name, or asset-role change.
+
+### Result
+
+**VERIFIED / ADOPTED FOR CURRENT V5.**
+
+Three-scale review confirmed:
+
+- whole spread: profile opening is calmer and the eye moves directly from the section heading to SHOGO / SHI-CHAN;
+- reading/page: identity remains clear through names, photographs, metadata, position, and colored rules; the reading order remains unchanged;
+- detail/structure: no collision, clipping, reflow, image loss, or semantic-node deletion was observed.
+
+Structural verification:
+
+- native text nodes: `92`
+- visible text nodes: `57`
+- IMAGE-fill nodes: `9`
+- fold guide `77:540` preserved and visible
+- rollback frames `59:2` and `59:178` preserved
+- history image `77:422` remains visible with hash `1bfd7f1fa601206bfed1594a140b40554e85d77a`
+- all four ribbon nodes remain present and immediately rollback-safe
+- no asset-role count or photo-role status changed
+
+### Failure or regression check
+
+The subtraction is context-specific. Role labels can remain useful when names, layout, or surrounding content do not make identity obvious. This result does not justify removing all profile labels globally.
+
+The dominant-photo provenance/quality blocker also remains unresolved. V5 therefore remains below the dummy-photo design gate and V6 production remains gated.
+
+### Evidence
+
+Detailed run record:
+- `01_paper-items/rurubu-wedding/learning-runs/2026-08-07-v5-profile-ribbon-subtraction.md`
+
+### Next application
+
+Return priority to dominant-photo Drive ID → semantic node → image-hash evidence closure. Do not retry already rejected binary-transfer mechanisms without a changed transport method.
+
+### Status
+
+`PROTOTYPED → VERIFIED / V5_CURRENT_ADOPTED / GLOBAL_RULE_NOT_PROMOTED`
