@@ -33,8 +33,8 @@ export function VideoModelEvidence() {
       </div>
 
       <div className="rounded-xl border border-sky-200 dark:border-sky-800 bg-sky-50 dark:bg-sky-900/20 p-4 mb-6 text-sm text-sky-900 dark:text-sky-200">
-        <p className="font-bold mb-1">判定ルール</p>
-        <p>同じ <strong>モデル + preset</strong> でQA済み3本以上になってから判定します。採用率67%以上を優先候補、33%以下を要見直しとし、3本未満では優劣を断定しません。これはprovider公式性能ではなく、このプロジェクト内の観測実績です。</p>
+        <p className="font-bold mb-1">判定ルール — 少数サンプルで自動学習しすぎない</p>
+        <p>同じ <strong>モデル + preset</strong> でQA済み3本以上かつ独立したretry lineageが2系統以上ある時だけ判定対象にします。採用率に加えて95% Wilson信頼区間を使い、優先候補は採用率67%以上かつ信頼区間下限40%以上、要見直しは採用率33%以下かつ上限60%以下に限定します。たとえば同じshotをretry 3回しただけでは自動昇格しません。これはprovider公式性能ではなく、このプロジェクト内の観測実績です。</p>
       </div>
 
       {evidence.length === 0 ? (
@@ -50,7 +50,7 @@ export function VideoModelEvidence() {
                     <div className="flex flex-wrap items-center gap-2"><h2 className="font-bold">{item.tool}</h2><span className="text-xs opacity-70">preset: {item.preset}</span><span className="text-[11px] px-2 py-0.5 rounded-full bg-white/50 dark:bg-navy-800/40">{meta.icon} {meta.label}</span></div>
                     <p className="text-sm mt-1">{item.summary}</p>
                   </div>
-                  <div className="text-right text-sm shrink-0"><p className="font-bold text-lg">{Math.round(item.passRate * 100)}%</p><p className="text-xs opacity-70">採用 {item.adopted} / 不採用 {item.rejected}</p></div>
+                  <div className="text-right text-sm shrink-0"><p className="font-bold text-lg">{Math.round(item.passRate * 100)}%</p><p className="text-xs opacity-70">採用 {item.adopted} / 不採用 {item.rejected}</p><p className="text-xs opacity-70">独立系統 {item.independentRoots} · 95% {Math.round(item.confidenceLow * 100)}–{Math.round(item.confidenceHigh * 100)}%</p></div>
                 </div>
               </article>
             );
