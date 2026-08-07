@@ -10,6 +10,7 @@ import { useProduction } from "../store/productionStore";
 import { useToast } from "../store/toastStore";
 import { exportCapcutMarkdown, downloadText, downloadJson } from "../lib/exporters";
 import { assetLocationSummary, capcutPackRule } from "../lib/assetPaths";
+import { runVideoPreflight } from "../lib/videoPreflight";
 import type { Asset } from "../types/movie";
 
 function toCsvRow(fields: string[]): string {
@@ -33,13 +34,29 @@ export function CapCutPack() {
   const [hoveredSceneId, setHoveredSceneId] = useState<string | null>(null);
   const sceneRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
+  const videoPreflightBlocks = runVideoPreflight(data, moviePrompts).filter((issue) => issue.severity === "block");
+  const blockedPromptIds = new Set(videoPreflightBlocks.map((issue) => issue.promptId).filter((id): id is string => Boolean(id)));
+  const blockedSceneIds = new Set(
+    moviePrompts
+      .filter((prompt) => blockedPromptIds.has(prompt.promptId))
+      .flatMap((prompt) => prompt.relatedSceneIds),
+  );
+  const capcutExportBlocked = videoPreflightBlocks.length > 0;
+
   function getSceneAssets(sceneAssetIds: string[]): Asset[] {
     return sceneAssetIds
       .map((id) => data.assets.find((a) => a.assetId === id))
       .filter((a): a is Asset => a !== undefined);
   }
 
+  function guardCapcutExport() {
+    if (!capcutExportBlocked) return false;
+    addToast(`動画PreflightにBLOCKが${videoPreflightBlocks.length}件あります。修復してからCapCutへ書き出してください`, "error");
+    return true;
+  }
+
   function handleExportMarkdown() {
+    if (guardCapcutExport()) return;
     const md = exportCapcutMarkdown(
       currentMovie?.title ?? "ムービー",
       movieScenes,
@@ -51,6 +68,7 @@ export function CapCutPack() {
   }
 
   function handleExportJson() {
+    if (guardCapcutExport()) return;
     const pack = {
       movie: currentMovie,
       scenes: movieScenes,
@@ -63,6 +81,7 @@ export function CapCutPack() {
   }
 
   function handleExportCsv() {
+    if (guardCapcutExport()) return;
     const bom = "﻿";
     const header = toCsvRow(["開始", "終了", "シーンID", "タイトル", "秒数", "テロップ", "BGM", "CapCutメモ", "素材", "ステータス"]);
     let t = 0;
@@ -109,14 +128,25 @@ export function CapCutPack() {
     <div>
       <Header title="CapCut編集パック" description="シーン順に素材パス・テロップ・BGM・編集メモをまとめます。Markdown書き出しも可能" showMovieSelector />
 
+      {capcutExportBlocked && (
+        <div className="mb-4 rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-800 dark:border-red-800 dark:bg-red-900/20 dark:text-red-300">
+          <p className="font-semibold">動画Preflight BLOCK中 — CapCut書き出しを停止しています</p>
+          <p className="mt-1 text-xs">採用動画のQA authority・実体fingerprint・結果リンクなどを先に修復してください。BLOCK中の素材pathを編集工程へ流しません。</p>
+          <ul className="mt-2 list-disc list-inside text-xs">
+            {videoPreflightBlocks.slice(0, 5).map((issue) => <li key={issue.id}>{issue.title}</li>)}
+          </ul>
+          {videoPreflightBlocks.length > 5 && <p className="mt-1 text-xs">ほか {videoPreflightBlocks.length - 5}件</p>}
+        </div>
+      )}
+
       <div className="flex items-center justify-end gap-3 mb-6">
-        <button onClick={handleExportCsv} className="px-4 py-2 text-sm rounded-lg border border-sand-200 text-navy-600 hover:bg-sand-50 dark:border-navy-600 dark:text-navy-300 dark:hover:bg-navy-700">
+        <button disabled={capcutExportBlocked} onClick={handleExportCsv} className="px-4 py-2 text-sm rounded-lg border border-sand-200 text-navy-600 hover:bg-sand-50 disabled:opacity-40 disabled:cursor-not-allowed dark:border-navy-600 dark:text-navy-300 dark:hover:bg-navy-700">
           CSV出力
         </button>
-        <button onClick={handleExportMarkdown} className="px-4 py-2 text-sm rounded-lg border border-sand-200 text-navy-600 hover:bg-sand-50 dark:border-navy-600 dark:text-navy-300 dark:hover:bg-navy-700">
+        <button disabled={capcutExportBlocked} onClick={handleExportMarkdown} className="px-4 py-2 text-sm rounded-lg border border-sand-200 text-navy-600 hover:bg-sand-50 disabled:opacity-40 disabled:cursor-not-allowed dark:border-navy-600 dark:text-navy-300 dark:hover:bg-navy-700">
           Markdown出力
         </button>
-        <button onClick={handleExportJson} className="px-4 py-2 text-sm rounded-lg border border-sand-200 text-navy-600 hover:bg-sand-50 dark:border-navy-600 dark:text-navy-300 dark:hover:bg-navy-700">
+        <button disabled={capcutExportBlocked} onClick={handleExportJson} className="px-4 py-2 text-sm rounded-lg border border-sand-200 text-navy-600 hover:bg-sand-50 disabled:opacity-40 disabled:cursor-not-allowed dark:border-navy-600 dark:text-navy-300 dark:hover:bg-navy-700">
           JSON出力
         </button>
       </div>
@@ -195,7 +225,8 @@ export function CapCutPack() {
           const sceneAssets = getSceneAssets(scene.assets);
           const missing = sceneAssets.filter((a) => a.status === "needed" || a.status === "idea" || !a.path);
           const ready = sceneAssets.filter((a) => (a.status === "used" || a.status === "selected" || a.status === "ready") && a.path);
-          const isCapcutReady = sceneAssets.length > 0 && missing.length === 0;
+          const blockedByVideoPreflight = blockedSceneIds.has(scene.sceneId);
+          const isCapcutReady = sceneAssets.length > 0 && missing.length === 0 && !blockedByVideoPreflight;
 
           return (
             <div key={scene.sceneId} ref={(el) => { sceneRefs.current[scene.sceneId] = el; }}
@@ -211,6 +242,9 @@ export function CapCutPack() {
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
+                  {blockedByVideoPreflight && (
+                    <span className="text-xs bg-red-100 text-red-700 px-2 py-1 rounded-full font-medium dark:bg-red-900/30 dark:text-red-300">動画Preflight BLOCK</span>
+                  )}
                   {isCapcutReady && (
                     <span className="text-xs bg-emerald-100 text-emerald-700 px-2 py-1 rounded-full font-medium">CapCut準備完了</span>
                   )}
@@ -282,6 +316,11 @@ export function CapCutPack() {
                       <span className="text-navy-700 dark:text-navy-200">不足: {missing.length}件</span>
                     </div>
                   </div>
+                  {blockedByVideoPreflight && (
+                    <div className="mt-3 p-2 bg-red-50 dark:bg-red-900/20 rounded text-xs text-red-700 dark:text-red-400">
+                      動画PreflightのBLOCKを解消するまで、このシーンをCapCut準備完了として扱いません。
+                    </div>
+                  )}
                   {missing.length > 0 && (
                     <div className="mt-3 p-2 bg-red-50 dark:bg-red-900/20 rounded text-xs text-red-700 dark:text-red-400">
                       <p className="font-semibold mb-1">不足素材:</p>
