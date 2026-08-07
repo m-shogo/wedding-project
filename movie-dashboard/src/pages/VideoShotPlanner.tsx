@@ -29,7 +29,7 @@ export function VideoShotPlanner() {
   const sourcePrompts = selectedMovieId === "all" ? data.prompts : moviePrompts;
   const videoPrompts = sourcePrompts.filter((prompt) => prompt.target === "video");
   const suggestions = useMemo(() => scenes.map((scene) => ({ scene, suggestion: suggestVideoPreset(scene) })), [scenes]);
-  const modelEvidence = useMemo(() => buildVideoModelEvidence(sourcePrompts), [sourcePrompts]);
+  const modelEvidence = useMemo(() => buildVideoModelEvidence(data.prompts), [data.prompts]);
 
   const existingSceneIds = useMemo(() => new Set(videoPrompts.flatMap((prompt) => prompt.relatedSceneIds)), [videoPrompts]);
   const highReady = suggestions.filter(({ scene, suggestion }) => scene.status !== "done" && suggestion.kind === "preset" && suggestion.confidence === "high" && !existingSceneIds.has(scene.sceneId));
@@ -120,7 +120,7 @@ export function VideoShotPlanner() {
     <div>
       <Header
         title="AI動画 ショットプランナー"
-        description="絵コンテを読み、AI向けB-rollだけを8プリセットへ分類し、QA実績が十分ならモデル選択にも反映します"
+        description="絵コンテを読み、AI向けB-rollだけを8プリセットへ分類し、プロジェクト全体のQA実績が十分ならモデル選択にも反映します"
         showMovieSelector
       />
 
@@ -139,7 +139,7 @@ export function VideoShotPlanner() {
 
       <div className="rounded-xl border border-emerald-200 dark:border-emerald-800 bg-emerald-50 dark:bg-emerald-900/20 p-4 mb-6">
         <p className="font-bold text-emerald-900 dark:text-emerald-200">モデル選択もプロジェクト実績から学習</p>
-        <p className="mt-1 text-sm text-emerald-800 dark:text-emerald-300">同じモデル + presetでQA済み3本以上、採用率67%以上になった組み合わせだけを自動昇格します。3本未満や差が曖昧な場合はpreset既定モデルを維持し、外部ランキングだけでは差し替えません。</p>
+        <p className="mt-1 text-sm text-emerald-800 dark:text-emerald-300">結婚式プロジェクト全体で、同じモデル + presetがQA済み3本以上・採用率67%以上になった組み合わせだけを自動昇格します。3本未満や差が曖昧な場合はpreset既定モデルを維持し、外部ランキングだけでは差し替えません。</p>
       </div>
 
       <div className="flex flex-wrap items-center gap-3 mb-6">
