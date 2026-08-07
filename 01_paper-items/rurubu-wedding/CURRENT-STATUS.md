@@ -1,281 +1,156 @@
 # るるぶWEDDING — CURRENT STATUS
 
-Date: 2026-08-07
-Current authority: live Figma + Drive readback + asset evidence ledger + GitHub `main`
+Date: 2026-08-08
+Current authority: live Figma + Drive readback + `RURUBU-V5-ASSET-EVIDENCE-LEDGER.json` + GitHub `main`
 Production Figma: https://www.figma.com/design/bfM0d4c9dCeBv5pCkJ3TNM
 
 Process authority:
 - `RURUBU-PRODUCTION-OPERATING-SYSTEM-V2-2026-08-02.md`
 - `POSTMORTEM-CONTINUOUS-IMPROVEMENT-AND-V6-GUARDRAILS-2026-08-02.md`
 
-Progress authority:
-- `RURUBU-V5-ASSET-EVIDENCE-LEDGER.json`
-
-Sequence reference only:
-- `RURUBU-V5-NONSTOP-EXECUTION-ROADMAP-2026-08-02.md`
-
 ## Current declaration
 
-`RURUBU_V5_CURRENT_CANDIDATE / REALISTIC_DUMMY_MASTERS_13_OF_13_DRIVE_VERIFIED / ACTIVE_CURRENT_PHOTO_ROLES_12 / RETIRED_PRESERVED_ROLE_1 / INTENDED_SOURCE_APPLIED_2 / PHOTO_ROLE_PASS_1 / ROLE_COMPLETE_1 / DOMINANT_PHOTO_PASS_1_OF_3 / DOMINANT_PHOTO_REPAIR_REQUIRED / REAL_CONTENT_PENDING / PRINT_TEMPLATE_PENDING / NOT_PRINT_READY`
+`RURUBU_V5_CURRENT_CANDIDATE / REALISTIC_DUMMY_MASTERS_13_OF_13_DRIVE_VERIFIED / ACTIVE_CURRENT_PHOTO_ROLES_12 / RETIRED_PRESERVED_ROLE_1 / INTENDED_SOURCE_APPLIED_3 / PHOTO_ROLE_PASS_2 / ROLE_COMPLETE_2 / DOMINANT_PHOTO_PASS_2_OF_3 / COVER_HERO_REPAIR_REQUIRED / REAL_CONTENT_PENDING / PRINT_TEMPLATE_PENDING / NOT_PRINT_READY`
 
 ## Current live Figma
 
 Page: `01_RURUBU_WEDDING`
 
 Current candidates:
-- `01_RURUBU_AUTHENTIC_OUTER_V5_CURRENT_CANDIDATE` — node `77:18`
-- `02_RURUBU_AUTHENTIC_INSIDE_V5_CURRENT_CANDIDATE` — node `77:290`
+- outer `77:18 / 01_RURUBU_AUTHENTIC_OUTER_V5_CURRENT_CANDIDATE`
+- inside `77:290 / 02_RURUBU_AUTHENTIC_INSIDE_V5_CURRENT_CANDIDATE`
 
-Rollback evidence remains preserved:
-- outer V4 — node `59:2`
-- inside V4 — node `59:178`
+Rollback evidence preserved:
+- outer V4 `59:2`
+- inside V4 `59:178`
 
-Preserved comparison evidence includes:
-- inside-left rhythm comparison — `334:2`
-- rejected Friends three-up comparison — `336:2 / V5_BACK_FRIENDS_3UP_TEST_2026_08_07`
-- front-cover FEATURE 01 full-field subtraction comparison — `345:2 / V5_OUTER_FEATURE01_FIELD_SUBTRACTION_TEST_2026_08_07`
-- back-main Q18 binary-safe comparison — `360:2 / V5_BACK_MAIN_Q18_BINARY_SAFE_TEST_2026_08_07`
+Key preserved comparisons:
+- Friends two-up/three-up `336:2`
+- FEATURE 01 subtraction `345:2`
+- back-main Q18 `360:2`
+- history Q18 `383:2 / V5_HISTORY_Q18_DRIVE_DERIVATIVE_TEST_2026_08_08`
 
-## Verified structure and active-scope truth
+## Active-scope truth
 
-Registered semantic photo roles remain `13`, and all source masters remain preserved in Drive. The Current editorial design has `12` active photo roles and `1` retired preserved role.
+Registered photo roles: `13`.
+Active Current roles: `12`.
+Retired/preserved role: `1` (`V5-11 / 77:35`); its Drive master remains preserved and it is not counted as PHOTO_ROLE_PASS or ROLE_COMPLETE.
 
-Retired from active Current scope:
-- `V5-11 / BACK_VISUAL_FRIEND_1_PHOTO / 77:35`
-- related Current group `77:35`–`77:38` remains present but hidden
-- Drive master `11_FRIENDS_FAMILY_01_TOAST_DUMMY.png` / `1zZfvktztbPx59Yb0Gxor8IsbGG1w6Fq8` remains preserved
-- this is **not** `PHOTO_ROLE_PASS` or `ROLE_COMPLETE`
+Verified counts from the ledger:
+- Drive readback: `13 / 13`
+- intended source applied: `3 / 12`
+- photo-role pass: `2 / 12`
+- role complete: `2 / 12`
+- dominant role pass: `2 / 3`
 
-Why retired:
-- Current back cover already uses a deliberate two-photo Friends & Family composition
-- a rollback-safe duplicate restored the third legacy group
-- the three-up restoration produced immediate collision/overlap and weakened the transition to `OUR JOURNEY ROUTE`
-- Current two-up won whole-page and reading-scale comparison
+## Dominant-photo gate
+
+- cover hero `77:148` — **OPEN / current derivative rejected for visible quality**
+- back main `77:24` — **PASS for V5 dummy-design QA**
+- history `77:422` — **PASS for V5 dummy-design QA**
+
+### Verified dominant-role gain — V5-05 history
+
+Drive master:
+- `05_HISTORY_WATERFRONT_DUMMY.png`
+- ID `1LO9rwdFuWMD2TZvSa6efn-gjbdyRBYt3`
+- `2,201,647 bytes`
+
+Accepted V5 dummy-design derivative:
+- `RURUBU_V5_05_HISTORY__FIGMA_1356x560_Q18_SINGLECALL.jpg`
+- Drive ID `1ndvJShFDKPO6OmUD3JeIRvPwpS8V1v8x`
+- `1356 × 560`
+- `29,582 bytes`
+- SHA-256 `f6642e7fd43e5058221bf6937d3e8428d8e2b89c35196ec43570aed4f8dd24da`
+- exactly `2×` the `678 × 280` semantic target
+
+Verified Figma mapping:
+- Current node `77:422 / IA_HISTORY_MEMORY_PHOTO`
+- previous hash `1bfd7f1fa601206bfed1594a140b40554e85d77a`
+- current hash `539c259be8036b481d06b4f76db9a39b407d90e8`
+- comparison frame `383:2`
+- comparison node `383:140`
+
+Three-scale QA:
+- whole/page: PASS; the waterfront photograph reads as an intentional history lead and is materially sharper than the old blocky placeholder
+- reading scale: PASS; the timeline → hero → caption → memory-spots reading order remains intact
+- actual-size/detail: PASS for dummy-design QA; waterfront path, skyline/tree edge, lights, mountains and horizon remain distinct at natural `678 × 280` render size
+
+Structure QA after promotion:
+- inside native text nodes: `92`
+- inside IMAGE-fill nodes: `9`
+- semantic node name and `678 × 280` geometry preserved
+- fold guide `77:288` preserved and visible
+- rollback frames `59:2` / `59:178` preserved
+- comparison `383:2` preserved
+
+Transport learning:
+- direct external `mcp.figma.com` upload repeated the known DNS blocker and was abandoned
+- a one-shot manually pasted base64 payload failed validation and made no canvas changes because the Figma write was atomic
+- changed method: the exact Drive-readback base64 was split into six guarded document-shared chunks (`7000,7000,7000,7000,7000,4444` chars), reconstructed in Figma, validated at encoded length `39,444`, decoded length `29,582`, and JPEG SOI/EOI markers, then applied to the duplicate first
+- Current was promoted only after screenshot QA on `383:140` and `383:2`
 
 Detailed evidence:
-- `learning-runs/2026-08-07-v5-friends-two-up-scope-comparison.md`
-
-Important distinctions:
-- `IMAGE fill present` does not prove intended Drive source identity
-- `intended source applied` does not prove derivative quality
-- a retired preserved role is excluded from the active Current completion denominator but remains recoverable
-- only Drive ID → semantic node ID → Figma image hash plus screenshot and structure QA can complete an active photo role
-
-## Live quality truth
-
-Dominant photo quality/provenance remains the main unresolved V5 gate, but the first dominant role is now verified.
-
-Current dominant targets:
-- cover hero `77:148` — **OPEN**
-- back main `77:24` — **PASS for V5 dummy-design QA**
-- history `77:422` — **OPEN**
+- `learning-runs/2026-08-08-v5-history-q18-binary-safe-promotion.md`
 
 ### Verified dominant-role gain — V5-10 back main
 
-Current `77:24 / BACK_VISUAL_MAIN_MEMORY_PHOTO` now uses the intended travel-flatlay source through a separately verified role-sized derivative.
-
-Drive master:
-- `10_BACK_MAIN_TRAVEL_FLATLAY_DUMMY.png`
-- ID `1bBiAcFfHJ3-Ns1gAKn6Bct-q-w2p-AvD`
-- `2,952,524 bytes`
-
-Accepted V5 dummy-design derivative:
-- `RURUBU_V5_10_BACK_MAIN_TRAVEL_FLATLAY__FIGMA_944x608_Q18_SINGLECALL.jpg`
-- Drive ID `17YaX5CK-c0cTr4zsL2Dly4J1XSZyFxHG`
-- `944 × 608`
-- `33,577 bytes`
-- exact `2×` target dimensions for the `472 × 304` semantic box
-
-Verified Figma mapping:
-- semantic node `77:24`
-- old hash `2cfd19cf1701db58039a4fc645e4279832ec465a`
+V5-10 remains PASS and unchanged:
+- Current node `77:24`
+- derivative Drive ID `17YaX5CK-c0cTr4zsL2Dly4J1XSZyFxHG`
 - current hash `e3738476f760932bb5b09c9d60f174dd6c84049d`
-- comparison frame `360:2`
-- comparison target `360:8`
-
-Three-scale screenshot QA:
-- whole-item: PASS; the intended travel flat-lay is materially clearer and better aligned with the `OUR TRAVEL NOTES` story than the old blurred dinner placeholder
-- reading/page: PASS; reading order and visual balance remain intact
-- actual-size/detail: PASS for dummy-design QA; camera, map, rings, flowers and notebook remain distinct at natural node render size
-
-Post-promotion structure QA:
-- native text `85`
-- visible text `41`
-- IMAGE-fill nodes `14`
-- fold guide `77:288` preserved and visible
-- rollback frames `59:2` and `59:178` preserved
-- comparison `360:2` preserved
-
-Transport method:
-- prior container → `mcp.figma.com` upload POST remains a loop-break blocker and was **not retried**
-- Drive-readback derivative was decoded inside the Figma Plugin API runtime with encoded/decoded length guards on a duplicate first
-- only the verified duplicate IMAGE fill was then promoted to Current
-
-Detailed evidence:
-- `learning-runs/2026-08-07-v5-back-main-q18-binary-safe-promotion.md`
-
-This advances V5-10 only. It does not automatically validate cover hero, history, any supporting role, real-content readiness, or print readiness.
-
-### Verified editorial refinement — FEATURE 01 full-field subtraction
-
-A rollback-safe comparison tested whether the front-cover `FEATURE_BOX_1` saturated pink field was necessary for the first cover-line entry.
-
-Comparison:
-- `345:2 / V5_OUTER_FEATURE01_FIELD_SUBTRACTION_TEST_2026_08_07`
-
-Verified Current adoption:
-- `77:209 / FEATURE_BOX_1`: visible → false
-- `77:212 / FEATURE_TXT_1`: native text preserved; direct dark-navy type on the pale-blue cover background
-- `77:210 / FEATURE_NO_1`: pink number circle retained
-- `77:211 / FEATURE_NO_TXT_1`: white native number retained
-
-Three-scale screenshot review found that the previous `430 × 74` saturated field read like a CTA/button and competed with the hero photograph. The subtraction keeps feature 01 identifiable while making the six-entry cover index more coherent and returning visual authority to the masthead and hero image. The comparison frame, V4 rollback frames, native text, fold guide, crop, and dominant-image hashes remain preserved.
-
-Detailed evidence:
-- `learning-runs/2026-08-07-v5-feature01-field-subtraction-and-binary-upload-loop-break.md`
-
-This is a verified V5-specific improvement, not a project-wide rule.
-
-## Realistic dummy master pack
-
-Drive folder:
-- `RURUBU_V5_DUMMY_PHOTOS_2026-08-02`
-- ID: `1tAvBO9TodEKVHVZnABD73rEPUGG8iu0N`
-
-Verified:
-- registered master files in Drive: `13 / 13`
-- active Current roles: `12`
-- retired preserved roles: `1`
-- intended source applied: `2 / 12`
-- photo-role pass: `1 / 12`
-- role complete: `1 / 12`
-- dominant role pass: `1 / 3`
-- exact IDs, filenames, target nodes, active/retired state, and quality state: `RURUBU-V5-ASSET-EVIDENCE-LEDGER.json`
-
-## Mandatory Drive-first workflow V2
-
-For every active remaining V5 asset and every future V6 asset:
-
-1. generate or select a role-specific master
-2. visual-QA and accept/reject
-3. save accepted master to the version-specific Drive folder
-4. list/read back Drive and record file ID, filename, dimensions/bytes where available
-5. create a separate role-sized Figma derivative
-6. apply derivative to the exact semantic Figma node
-7. record Figma image hash
-8. screenshot-QA crop, contrast, density, and fold safety
-9. structurally audit native text, semantic role, and rollback state
-10. update the asset ledger
-11. update Current status only if the ledger changed
-
-No temporary local file, attempted write, arbitrary IMAGE fill, or retired legacy role may be treated as Current completion.
-
-## Image-quality policy
-
-- Drive master and Figma derivative are different artifacts
-- Drive masters are never overwritten by transfer-compressed derivatives
-- large dummy-design derivatives must be approximately `2×` the target Figma box dimensions or better
-- small/circular/profile derivatives should preferably be `4×` for crop flexibility
-- payload size is not minimized below visible quality
-- a derivative that transmits but pixelates is rejected
-- final print image requirements are recalculated from exact physical placement and printer specifications
+- comparison `360:2`
+- evidence `learning-runs/2026-08-07-v5-back-main-q18-binary-safe-promotion.md`
 
 ## Next required V5 work
 
-### Batch A — dominant images
+### Priority A — final open dominant role
 
-1. close cover hero `77:148` source/derivative/hash evidence with a quality-passing derivative
-2. **back main `77:24` — VERIFIED PASS / no further replacement activity unless new evidence shows a defect**
-3. import and verify accepted history derivative to `77:422`
-4. screenshot outer and inside spreads at whole/page/detail scales after each dominant promotion
-5. record every Drive ID → node ID → image hash mapping in the ledger
+1. close cover hero `77:148` with a quality-passing role-sized derivative, Drive ID → node ID → Figma hash evidence, and three-scale QA
+2. do not regenerate unless the existing master/derivative cannot satisfy crop, resolution, text-safe-space, identity, or editorial-fit requirements
+3. preserve rollback and test on a duplicate first
 
-No decorative polish should outrank these dominant-image corrections. Previously repeated binary-transfer blocker fingerprints must not be retried without a changed method. The V5-10 in-runtime decode route may be tested on another role only when its Drive derivative fits the Figma execution payload and is first applied to a rollback-safe duplicate.
+### Priority B — remaining active photo roles
 
-### Batch B — identity and lead images
-
+Identity/lead:
+- cover snap `77:236`
 - groom `77:296`
 - bride `77:302`
-- cover snap `77:236`
 - lead memory `77:430`
 
-Profile dummies must not be presented as recognizable substitutes for the real couple. Crop or replace overly identifiable generated faces before role pass.
-
-### Batch C — active Friends & Family
-
+Friends & Family active:
 - `77:39`
 - `77:43`
 
-Retired/preserved comparator only:
-- `77:35` — excluded from active completion denominator unless explicitly reactivated after a new comparison
-
-### Batch D — small memory roles
-
+Small memories:
 - `77:438`
 - `77:446`
 - `77:454`
 
-### Final V5 design pass
+Generated recognizable people must not be represented as the real bride, groom, family, or friends; profile dummies require safe identity treatment before pass.
 
-1. whole-spread, page, and actual-size/detail screenshots
-2. identify and deeply repair the weakest three areas
-3. perform at least one subtraction attempt
-4. reduce remaining Web UI card/badge feel only where evidence supports it
-5. re-run screenshot and structural audit
-6. update ledger and GitHub main
+### Final V5 design gate
 
-Valid dummy-design pass requires:
-- intended high-quality derivatives applied to active roles: `12 / 12`
-- active photo role pass: `12 / 12`
-- retired preserved roles truthfully recorded: `1 / 1`
-- dominant role pass: `3 / 3`
-- screenshot QA complete
-- structure QA complete
-- no false generated-person identity
-- Drive/Figma/GitHub evidence and rollback state intact
+Do not declare `RURUBU_V5_DUMMY_PHOTO_DESIGN_QA_PASS` until:
+- intended high-quality derivatives: `12 / 12`
+- active PHOTO_ROLE_PASS: `12 / 12`
+- retired preserved roles: `1 / 1` truthfully recorded
+- dominant PHOTO_ROLE_PASS: `3 / 3`
+- whole-item / reading / actual-size QA complete
+- fold/safe-area/print plausibility complete
+- native text, semantic nodes, crop integrity, Drive IDs, Figma hashes and rollback state verified
+- weakest-three repair and at least one evidence-based subtraction review completed
 
-## V6 sequencing and clean-room boundary
+## V6 boundary
 
-V6 is a separate Hawaii / tropical-resort editorial version.
+V6 remains research/preparation only until the V5 dummy-design gate passes. Production must remain separate from V5, use clean-room Figma concepts and V6-specific assets/Drive evidence, and must not overwrite V5 or inherit its image hashes/crops/composition by default.
 
-V6 production may begin only after V5 reaches the verified dummy-photo design gate. Research planning may proceed earlier but must remain separate.
+## Print boundary
 
-V6 rules:
-- no V5-generated photo reuse
-- new version-specific Drive folder and evidence ledger before Figma placement
-- separate Figma page/frames; never overwrite V5
-- role-specific aspect-ratio generation
-- at least two structurally different outer concepts before polish
-- compare multiple Hawaii, resort, travel-magazine, and editorial references
-- extract principles rather than trace one issue
-- no generic tropical sticker/hibiscus/palm overload
-- independent screenshot, structure, and truthfulness QA
-
-## Print transition
-
-Do not treat Figma design QA as print preflight.
-
-Required future gates:
+Figma dummy-design QA is not print readiness. Later independent gates remain:
 1. `REAL_CONTENT_EDITORIAL_QA_PASS`
 2. `PRINT_TEMPLATE_PREFLIGHT_PASS`
 3. `PHYSICAL_PROOF_PASS`
 4. `PRINT_READY`
 
-Before print readiness:
-- exact printer/product/template verified
-- bleed, trim, fold tolerance, page order, color, and PDF requirements verified
-- final image resolution calculated from physical placed size
-- PDF preflight completed
-- actual-size folded proof reviewed
-- names, dates, captions, and small text proofread by at least two people
-
-## Stop conditions
-
-Do not claim `DESIGN_FINAL`, full `PHOTO_QA_PASS`, or `PRINT_READY` while:
-- the ledger has incomplete active photo roles
-- remaining dominant images are pixelated or use rejected/unverified derivatives
-- Drive-to-node-to-hash evidence is missing for active roles
-- generated dummy people can be mistaken for the real couple
-- dummy content remains
-- exact print template is not applied
-- final PDF and physical proof QA are incomplete
+Do not claim final/print-ready while dummy content remains, printer template is unverified, PDF preflight is incomplete, or physical proof has not passed.
