@@ -9,10 +9,21 @@ export interface VideoModelEvidence {
   reviewed: number;
   adopted: number;
   rejected: number;
+  independentRoots: number;
   passRate: number;
+  confidenceLow: number;
+  confidenceHigh: number;
   signal: ModelEvidenceSignal;
   summary: string;
 }
+
+const MIN_REVIEWED = 3;
+const MIN_INDEPENDENT_ROOTS = 2;
+const PROMOTE_RATE = 2 / 3;
+const CAUTION_RATE = 1 / 3;
+const PROMOTE_CONFIDENCE_LOW = 0.4;
+const CAUTION_CONFIDENCE_HIGH = 0.6;
+const WILSON_Z = 1.96;
 
 function noteValue(notes: string, key: string) {
   const match = notes.match(new RegExp(`${key}=([^\\s/]+)`));
@@ -25,8 +36,25 @@ function reviewedOutcome(prompt: Prompt) {
   return undefined;
 }
 
+function evidenceRoot(prompt: Prompt) {
+  return noteValue(prompt.notes, "retry-root") || prompt.promptId;
+}
+
+function wilsonInterval(successes: number, total: number) {
+  if (total <= 0) return { low: 0, high: 1 };
+  const p = successes / total;
+  const z2 = WILSON_Z * WILSON_Z;
+  const denominator = 1 + z2 / total;
+  const center = (p + z2 / (2 * total)) / denominator;
+  const margin = (WILSON_Z * Math.sqrt((p * (1 - p) + z2 / (4 * total)) / total)) / denominator;
+  return {
+    low: Math.max(0, center - margin),
+    high: Math.min(1, center + margin),
+  };
+}
+
 export function buildVideoModelEvidence(prompts: Prompt[]): VideoModelEvidence[] {
-  const groups = new Map<string, { tool: string; preset: string; adopted: number; rejected: number }>();
+  const groups = new Map<string, { tool: string; preset: string; adopted: number; rejected: number; roots: Set<string> }>();
 
   for (const prompt of prompts) {
     if (prompt.target !== "video") continue;
@@ -35,27 +63,37 @@ export function buildVideoModelEvidence(prompts: Prompt[]): VideoModelEvidence[]
     const tool = prompt.tool || "unknown-model";
     const preset = noteValue(prompt.notes, "preset") || "no-preset";
     const key = `${tool}::${preset}`;
-    const current = groups.get(key) ?? { tool, preset, adopted: 0, rejected: 0 };
+    const current = groups.get(key) ?? { tool, preset, adopted: 0, rejected: 0, roots: new Set<string>() };
     current[outcome] += 1;
+    current.roots.add(evidenceRoot(prompt));
     groups.set(key, current);
   }
 
   return Array.from(groups.entries()).map(([key, group]) => {
     const reviewed = group.adopted + group.rejected;
     const passRate = reviewed > 0 ? group.adopted / reviewed : 0;
+    const independentRoots = group.roots.size;
+    const confidence = wilsonInterval(group.adopted, reviewed);
+    const enoughDiversity = independentRoots >= MIN_INDEPENDENT_ROOTS;
     let signal: ModelEvidenceSignal = "insufficient";
-    if (reviewed >= 3 && passRate >= 2 / 3) signal = "promote";
-    else if (reviewed >= 3 && passRate <= 1 / 3) signal = "caution";
-    else if (reviewed >= 3) signal = "neutral";
+
+    if (reviewed >= MIN_REVIEWED && enoughDiversity) {
+      if (passRate >= PROMOTE_RATE && confidence.low >= PROMOTE_CONFIDENCE_LOW) signal = "promote";
+      else if (passRate <= CAUTION_RATE && confidence.high <= CAUTION_CONFIDENCE_HIGH) signal = "caution";
+      else signal = "neutral";
+    }
 
     const pct = Math.round(passRate * 100);
+    const lowPct = Math.round(confidence.low * 100);
+    const highPct = Math.round(confidence.high * 100);
+    const base = `実績 ${reviewed}本・独立系統${independentRoots}・採用率${pct}%・95%区間${lowPct}–${highPct}%`;
     const summary = signal === "promote"
-      ? `実績 ${reviewed}本・採用率${pct}% — このpresetでは優先候補。`
+      ? `${base} — このpresetでは優先候補。`
       : signal === "caution"
-        ? `実績 ${reviewed}本・採用率${pct}% — 同条件の追加課金前にモデル/入力条件を見直す。`
+        ? `${base} — 同条件の追加課金前にモデル/入力条件を見直す。`
         : signal === "neutral"
-          ? `実績 ${reviewed}本・採用率${pct}% — 明確な優位差なし。`
-          : `実績 ${reviewed}本 — 3本未満なのでモデル優劣を断定しない。`;
+          ? `${base} — まだ明確な優位差なし。`
+          : `${base} — QA本数または独立lineageが不足しているためモデル優劣を断定しない。`;
 
     return {
       key,
@@ -64,7 +102,10 @@ export function buildVideoModelEvidence(prompts: Prompt[]): VideoModelEvidence[]
       reviewed,
       adopted: group.adopted,
       rejected: group.rejected,
+      independentRoots,
       passRate,
+      confidenceLow: confidence.low,
+      confidenceHigh: confidence.high,
       signal,
       summary,
     };
@@ -75,13 +116,13 @@ export function buildVideoModelEvidence(prompts: Prompt[]): VideoModelEvidence[]
 }
 
 export function bestObservedModelForPreset(evidence: VideoModelEvidence[], preset: string) {
-  const candidates = evidence.filter((item) => item.preset === preset && item.reviewed >= 3);
+  const candidates = evidence.filter((item) => item.preset === preset && item.reviewed >= MIN_REVIEWED && item.independentRoots >= MIN_INDEPENDENT_ROOTS);
   return candidates.sort((a, b) => b.passRate - a.passRate || b.reviewed - a.reviewed)[0];
 }
 
 export function promotedObservedModelForPreset(evidence: VideoModelEvidence[], preset: string) {
   const candidates = evidence.filter((item) => item.preset === preset && item.signal === "promote");
-  return candidates.sort((a, b) => b.passRate - a.passRate || b.reviewed - a.reviewed)[0];
+  return candidates.sort((a, b) => b.confidenceLow - a.confidenceLow || b.passRate - a.passRate || b.reviewed - a.reviewed)[0];
 }
 
 export function observedEvidenceForToolPreset(evidence: VideoModelEvidence[], tool: string, preset: string) {
