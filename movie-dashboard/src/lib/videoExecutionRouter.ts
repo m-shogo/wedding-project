@@ -1,4 +1,5 @@
 import type { Asset, Prompt } from "../types/movie";
+import { parseVideoResultReproMetadata } from "./videoResultMetadata";
 
 export type ExecutionDestination = "external-generation" | "palmier" | "review" | "edit" | "blocked";
 
@@ -140,6 +141,16 @@ export function routeVideoPrompt(prompt: Prompt, resultAssets: Asset[]): VideoEx
   };
 }
 
+function handoffAsset(asset: Asset) {
+  return {
+    assetId: asset.assetId,
+    title: asset.title,
+    path: asset.path,
+    status: asset.status,
+    media: parseVideoResultReproMetadata(asset.notes),
+  };
+}
+
 export function buildPalmierAgentHandoff(params: {
   movieTitle: string;
   prompts: Prompt[];
@@ -168,8 +179,8 @@ export function buildPalmierAgentHandoff(params: {
       route,
       prompt: prompt.prompt,
       qaAvoid: prompt.negativePrompt,
-      resultAssets: handoffAssets.map((asset) => ({ assetId: asset.assetId, title: asset.title, path: asset.path, status: asset.status })),
-      alternativeResultAssets: allResultAssets.filter((asset) => !handoffAssets.some((selectedAsset) => selectedAsset.assetId === asset.assetId)).map((asset) => ({ assetId: asset.assetId, title: asset.title, path: asset.path, status: asset.status })),
+      resultAssets: handoffAssets.map(handoffAsset),
+      alternativeResultAssets: allResultAssets.filter((asset) => !handoffAssets.some((selectedAsset) => selectedAsset.assetId === asset.assetId)).map(handoffAsset),
     };
   });
 
@@ -199,14 +210,16 @@ export function buildPalmierAgentHandoff(params: {
       `- status: ${row.status}`,
       `- current model: ${row.model}`,
       `- mode: ${row.mode}`,
-      `- duration: ${row.durationSec ?? "unknown"}s`,
-      `- ratio: ${row.ratio}`,
+      `- intended duration: ${row.durationSec ?? "unknown"}s`,
+      `- intended ratio: ${row.ratio}`,
       `- preset: ${row.preset || "—"}`,
       `- finish candidate: ${row.finishCandidate || "—"}`,
       `- route: ${row.route.label}`,
       `- next action: ${row.route.action}`,
       row.selectedResultAssetId ? `- selected result asset: ${row.selectedResultAssetId}` : "- selected result asset: —",
       row.resultAssets.length > 0 ? `- handoff result: ${row.resultAssets.map((asset) => `${asset.title} (${asset.path || "path missing"})`).join(" / ")}` : "- handoff result: none",
+      row.resultAssets.length > 0 ? `- actual media: ${row.resultAssets.map((asset) => `${asset.media.actualDurationSec ?? "?"}s / ${asset.media.resolution || "?"} / ${asset.media.fps ?? "?"}fps`).join(" / ")}` : "",
+      row.resultAssets.some((asset) => asset.media.generationId || asset.media.seed) ? `- repro: ${row.resultAssets.map((asset) => `generationId=${asset.media.generationId || "—"}, seed=${asset.media.seed || "—"}`).join(" / ")}` : "",
       row.alternativeResultAssets.length > 0 ? `- unselected alternatives: ${row.alternativeResultAssets.map((asset) => asset.title).join(" / ")}` : "",
       "",
       "Prompt:",
