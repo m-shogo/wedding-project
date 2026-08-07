@@ -1,0 +1,257 @@
+export type VideoModelId =
+  | "seedance-2.0-mini"
+  | "seedance-2.0"
+  | "seedance-2.5-preview"
+  | "runway-gen-4.5"
+  | "veo-3.1"
+  | "kling";
+
+export type VideoGenerationMode = "i2v" | "t2v" | "first-last";
+export type RealismProfile = "natural-film" | "documentary" | "polished";
+export type MotionPace = "locked" | "subtle" | "slow" | "medium";
+
+export interface VideoModelProfile {
+  id: VideoModelId;
+  label: string;
+  toolLabel: string;
+  availability: "recommended" | "available" | "preview";
+  bestFor: string;
+  promptStrategy: string;
+  durationHint: string;
+}
+
+export interface VideoPromptIntent {
+  title: string;
+  mode: VideoGenerationMode;
+  subject: string;
+  environment: string;
+  action: string;
+  camera: string;
+  pace: MotionPace;
+  lighting: string;
+  mood: string;
+  durationSec: number;
+  aspectRatio: string;
+  realism: RealismProfile;
+  captionSpace: boolean;
+  loop: boolean;
+  referenceNotes: string;
+}
+
+export interface CompiledVideoPrompt {
+  prompt: string;
+  negativePrompt: string;
+  modelNotes: string[];
+  qaChecklist: string[];
+  warnings: string[];
+}
+
+export const VIDEO_MODELS: VideoModelProfile[] = [
+  {
+    id: "seedance-2.0-mini",
+    label: "Seedance 2.0 Mini",
+    toolLabel: "Seedance 2.0 Mini",
+    availability: "recommended",
+    bestFor: "低コストの反復、短尺B-roll、I2Vの量産試作",
+    promptStrategy: "構図は参照画像に任せ、動き・カメラ・時間変化を短く明確に指定する。",
+    durationHint: "まず4〜6秒で比較し、採用候補だけ高品質モデルへ。",
+  },
+  {
+    id: "seedance-2.0",
+    label: "Seedance 2.0",
+    toolLabel: "Seedance 2.0",
+    availability: "recommended",
+    bestFor: "参照画像・参照動画を使う高品質I2V、複数要素の制御",
+    promptStrategy: "参照素材の役割を分け、1ショット1主動作で時間順に書く。",
+    durationHint: "4〜15秒。結婚式素材では5〜8秒を基本にする。",
+  },
+  {
+    id: "seedance-2.5-preview",
+    label: "Seedance 2.5 (preview tracking)",
+    toolLabel: "Seedance 2.5 (preview)",
+    availability: "preview",
+    bestFor: "長尺・多参照・局所修正。提供状況を確認できた時だけ使う。",
+    promptStrategy: "スクリプト、画像、動画、音声などの参照を役割別に整理し、タイムライン意図を明示する。",
+    durationHint: "最新仕様は変動中。Dreamina上の提供状況を生成前に確認する。",
+  },
+  {
+    id: "runway-gen-4.5",
+    label: "Runway Gen-4.5",
+    toolLabel: "Runway Gen-4.5",
+    availability: "recommended",
+    bestFor: "自然なI2V、精密なカメラ演出、最終候補の磨き込み",
+    promptStrategy: "I2Vでは画像内容を再説明せず、何がどう動くか・カメラがどう動くかだけを書く。",
+    durationHint: "2〜10秒。複数動作を詰め込まず、5秒前後を基本にする。",
+  },
+  {
+    id: "veo-3.1",
+    label: "Veo 3.1",
+    toolLabel: "Veo 3.1",
+    availability: "recommended",
+    bestFor: "実写寄りの物理表現、first/last frame、参照画像を使った仕上げ",
+    promptStrategy: "主動作、カメラ、物理的な時間変化を明示し、first/last frameがある場合は遷移を優先する。",
+    durationHint: "first/last frameや参照画像を活かす。音は必要な時だけ使う。",
+  },
+  {
+    id: "kling",
+    label: "Kling",
+    toolLabel: "Kling",
+    availability: "available",
+    bestFor: "短尺I2Vの比較候補。モデル更新が速いためUI上の最新モデル名を確認する。",
+    promptStrategy: "単一主動作・単一カメラ意図で比較生成し、破綻率を実測して採否を決める。",
+    durationHint: "同一ショットをSeedance / Runwayと比較する時に使う。",
+  },
+];
+
+const forbidden = [
+  "readable text",
+  "logos",
+  "watermarks",
+  "signage",
+  "people",
+  "animals",
+  "morphing",
+  "warped geometry",
+  "duplicate objects",
+  "random subtitles",
+  "unmotivated camera movement",
+];
+
+function realismSentence(profile: RealismProfile) {
+  switch (profile) {
+    case "documentary":
+      return "Natural observational footage, restrained framing, slight real-camera imperfection, realistic exposure response, no glossy AI-showreel look.";
+    case "polished":
+      return "Clean commercial-film finish with realistic optics, physically plausible motion and restrained grading; polished but not synthetic.";
+    default:
+      return "Natural film footage with realistic inertia, subtle optical breathing, restrained contrast and small real-world imperfections; avoid over-perfect CGI-like motion.";
+  }
+}
+
+function paceSentence(pace: MotionPace) {
+  switch (pace) {
+    case "locked":
+      return "Camera remains locked off; only motivated environmental motion is visible.";
+    case "subtle":
+      return "Camera movement is barely perceptible and physically smooth.";
+    case "medium":
+      return "Camera moves at a controlled moderate pace with natural acceleration and deceleration.";
+    default:
+      return "Camera moves slowly with gentle acceleration and a soft stop.";
+  }
+}
+
+function commonMotion(intent: VideoPromptIntent) {
+  const lines = [
+    intent.action.trim(),
+    intent.camera.trim(),
+    paceSentence(intent.pace),
+    realismSentence(intent.realism),
+  ].filter(Boolean);
+
+  if (intent.lighting.trim()) lines.push(`Lighting remains ${intent.lighting.trim()} with natural exposure changes.`);
+  if (intent.mood.trim()) lines.push(`Mood: ${intent.mood.trim()}.`);
+  if (intent.captionSpace) lines.push("Preserve uncluttered negative space for captions; do not generate text inside the image.");
+  if (intent.loop) lines.push("End in a visually compatible state for a soft editorial loop without an obvious reset.");
+  return lines;
+}
+
+function t2vScene(intent: VideoPromptIntent) {
+  const scene = [intent.subject.trim(), intent.environment.trim()].filter(Boolean).join(" in ");
+  return scene ? `${scene}.` : "";
+}
+
+export function compileVideoPrompt(modelId: VideoModelId, intent: VideoPromptIntent): CompiledVideoPrompt {
+  const profile = VIDEO_MODELS.find((model) => model.id === modelId) ?? VIDEO_MODELS[0];
+  const motion = commonMotion(intent);
+  const referenceNote = intent.referenceNotes.trim();
+  let lines: string[] = [];
+
+  if (intent.mode === "t2v") lines.push(t2vScene(intent));
+
+  switch (modelId) {
+    case "runway-gen-4.5":
+      lines = [
+        ...lines,
+        ...motion,
+        referenceNote ? `Reference intent: ${referenceNote}` : "",
+        "Keep one primary visual event; no cuts and no extra invented actions.",
+      ];
+      break;
+    case "veo-3.1":
+      lines = [
+        ...lines,
+        intent.mode === "first-last" ? "Transition naturally from the supplied first frame to the supplied last frame while preserving scene identity." : "",
+        ...motion,
+        referenceNote ? `Use the supplied reference only for: ${referenceNote}.` : "",
+        "Maintain real-world physics, stable geometry and consistent lighting throughout the shot.",
+      ];
+      break;
+    case "seedance-2.0":
+    case "seedance-2.0-mini":
+      lines = [
+        ...lines,
+        ...motion,
+        referenceNote ? `Reference role: ${referenceNote}.` : "",
+        `Timeline: 0-${Math.max(1, Math.round(intent.durationSec * 0.2))}s establish; middle section performs the single main motion; final moment settles naturally.`,
+        "Do not invent additional subjects, cuts, camera moves or transitions.",
+      ];
+      break;
+    case "seedance-2.5-preview":
+      lines = [
+        ...lines,
+        ...motion,
+        referenceNote ? `Multimodal reference roles: ${referenceNote}.` : "",
+        "Keep the timeline structurally simple: establish, one motivated motion beat, settle.",
+        "Use local editing for isolated defects instead of regenerating the full shot when that feature is available.",
+      ];
+      break;
+    default:
+      lines = [
+        ...lines,
+        ...motion,
+        referenceNote ? `Reference intent: ${referenceNote}.` : "",
+        "One shot, one primary action, one camera idea. Preserve geometry and avoid unnecessary transformations.",
+      ];
+  }
+
+  const prompt = lines.filter(Boolean).join(" ").replace(/\s+/g, " ").trim();
+  const negativePrompt = `Avoid: ${forbidden.join(", ")}.`;
+  const warnings = getPromptWarnings(modelId, intent);
+
+  return {
+    prompt,
+    negativePrompt,
+    modelNotes: [profile.bestFor, profile.promptStrategy, profile.durationHint],
+    warnings,
+    qaChecklist: [
+      "人物・動物・読める文字・ロゴ・看板が0か",
+      "主動作が1つで、勝手なカットや追加アクションがないか",
+      "背景の直線・窓枠・翼・建物などの形状が途中で変形していないか",
+      "カメラの加速・減速と被写体の慣性が自然か",
+      "光源・影・反射・露出が時間方向に連続しているか",
+      "字幕用の余白が最後まで維持されているか",
+      "AIショーリール風の過剰な光・粒子・完璧すぎる動きになっていないか",
+      "3回以上の比較生成で同じ破綻が再発する場合、モデルではなく静止画/ショット設計を直したか",
+      "採用前に実尺でCapCutへ置き、前後ショットとつないでも違和感がないか",
+    ],
+  };
+}
+
+export function getPromptWarnings(modelId: VideoModelId, intent: VideoPromptIntent): string[] {
+  const warnings: string[] = [];
+  if (!intent.action.trim()) warnings.push("主動作が未入力です。I2Vでは特に『何がどう動くか』を必ず指定してください。");
+  if (intent.mode === "t2v" && (!intent.subject.trim() || !intent.environment.trim())) {
+    warnings.push("T2Vは被写体と環境の両方がある方が構図ドリフトを抑えやすいです。");
+  }
+  if (intent.mode !== "t2v" && intent.subject.trim().length > 120) {
+    warnings.push("I2Vでは画像内容の長い再説明を避け、動き・カメラ中心にしてください。");
+  }
+  if (modelId === "runway-gen-4.5" && intent.durationSec > 10) warnings.push("Runway Gen-4.5は2〜10秒。10秒以下にしてください。");
+  if ((modelId === "seedance-2.0" || modelId === "seedance-2.0-mini") && intent.durationSec > 15) warnings.push("Seedance 2.0系は短尺運用を基本にし、15秒以内へ分割してください。");
+  if (modelId === "seedance-2.5-preview") warnings.push("Seedance 2.5は提供状況・仕様が変動中です。Dreaminaの現行UIで利用可否を確認してから生成してください。");
+  if (intent.camera.split(/[,.、]/).filter(Boolean).length >= 3) warnings.push("カメラ指示が多すぎます。1ショット1カメラ意図へ削ると安定しやすいです。");
+  if (intent.action.split(/[,.、]/).filter(Boolean).length >= 4) warnings.push("動作を詰め込みすぎています。ショットを分割してください。");
+  if (intent.realism === "polished") warnings.push("polishedはAIっぽい過剰演出に寄りやすいため、実写素材の前後で必ず比較してください。");
+  return warnings;
+}

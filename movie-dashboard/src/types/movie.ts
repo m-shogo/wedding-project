@@ -77,8 +77,22 @@ export interface Asset {
 export type PromptTarget = "image" | "video" | "motion" | "caption" | "edit_instruction" | "bgm_note";
 
 export const PROMPT_TOOLS = [
-  "ChatGPT Image", "Seedance", "Kling", "Hailuo", "PixVerse",
-  "Luma", "Runway", "Midjourney", "Motion Studio", "CapCut",
+  "ChatGPT Image",
+  "Seedance 2.0 Mini",
+  "Seedance 2.0",
+  "Seedance 2.5 (preview)",
+  "Veo 3.1",
+  "Runway Gen-4.5",
+  "Kling",
+  // Legacy values are kept so existing saved prompts remain editable.
+  "Seedance",
+  "Runway",
+  "Hailuo",
+  "PixVerse",
+  "Luma",
+  "Midjourney",
+  "Motion Studio",
+  "CapCut",
 ] as const;
 
 export type PromptStatus = "draft" | "testing" | "adopted" | "rejected";
