@@ -38,6 +38,42 @@ export function runVideoPreflight(data: AllData, prompts: Prompt[], now = new Da
   const issues: VideoPreflightIssue[] = [];
   const sceneIds = new Set(data.scenes.map((scene) => scene.sceneId));
   const assetById = new Map(data.assets.map((asset) => [asset.assetId, asset]));
+  const promptById = new Map(prompts.map((prompt) => [prompt.promptId, prompt]));
+
+  // Result intake records promptId on generated assets. If Undo or manual editing
+  // leaves the Asset but removes Prompt.resultAssetIds, surface it before more work.
+  for (const asset of data.assets) {
+    if (asset.type !== "ai_video") continue;
+    const sourcePromptId = noteValue(asset.notes, "promptId");
+    if (!sourcePromptId) continue;
+    const sourcePrompt = promptById.get(sourcePromptId);
+    if (!sourcePrompt) continue; // Outside the currently selected movie scope.
+
+    if (!sourcePrompt.resultAssetIds.includes(asset.assetId)) {
+      issues.push({
+        id: `${asset.assetId}:orphan-result-link`,
+        severity: "block",
+        promptId: sourcePromptId,
+        title: `${asset.title}: 生成結果リンクが途中状態`,
+        detail: `Asset.notesはpromptId=${sourcePromptId}を示しますが、Prompt.resultAssetIdsに${asset.assetId}がありません。Undo途中または手動編集の可能性があります。`,
+        action: "Prompt Bankで既存Assetを結果へ再リンクするか、不要な生成結果ならAssetを整理してから続行する。",
+        href: "/prompts",
+      });
+    }
+
+    const missingSceneLinks = sourcePrompt.relatedSceneIds.filter((sceneId) => !asset.relatedSceneIds.includes(sceneId));
+    if (missingSceneLinks.length > 0) {
+      issues.push({
+        id: `${asset.assetId}:result-scene-gap`,
+        severity: "warning",
+        promptId: sourcePromptId,
+        title: `${asset.title}: Promptと結果Assetのscene範囲が不一致`,
+        detail: `Prompt側scene ${missingSceneLinks.join(", ")} が結果Asset.relatedSceneIdsにありません。`,
+        action: "素材ライブラリまたは絵コンテで、生成結果を元Promptと同じsceneへ紐付ける。",
+        href: "/assets",
+      });
+    }
+  }
 
   const failureCounts = new Map<string, number>();
   for (const prompt of prompts) {
