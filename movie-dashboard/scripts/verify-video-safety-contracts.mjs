@@ -137,6 +137,16 @@ requireText(
   "QA時fingerprintと不一致",
   "result review must visibly surface reviewed/current fingerprint mismatch",
 );
+requireText(
+  resultReview,
+  "採用前に実体fingerprintを記録してください",
+  "result review must stop QA adoption until the selected Asset has sampled media fingerprint evidence",
+);
+requireText(
+  resultReview,
+  "selectedHasFingerprint",
+  "QA adoption button must remain gated by the selected Asset fingerprint authority",
+);
 
 const preflight = await source("src/lib/videoPreflight.ts");
 requireText(
