@@ -1,6 +1,8 @@
 import type { AllData, Prompt } from "../types/movie";
 import { classifyVideoFailure, failureLearningKey, latestRejectedReason, retryAttempt } from "./videoFailureTaxonomy";
 import { promptMode } from "./videoExecutionRouter";
+import { buildVideoModelEvidence } from "./videoModelEvidence";
+import { resolveProjectVideoModelRoute } from "./videoProjectModelRouter";
 
 export type PreflightSeverity = "block" | "warning" | "info";
 
@@ -39,6 +41,7 @@ export function runVideoPreflight(data: AllData, prompts: Prompt[], now = new Da
   const sceneIds = new Set(data.scenes.map((scene) => scene.sceneId));
   const assetById = new Map(data.assets.map((asset) => [asset.assetId, asset]));
   const promptById = new Map(prompts.map((prompt) => [prompt.promptId, prompt]));
+  const modelEvidence = buildVideoModelEvidence(data.prompts);
 
   // Result intake records promptId on generated assets. If Undo or manual editing
   // leaves the Asset but removes Prompt.resultAssetIds, surface it before more work.
@@ -135,6 +138,28 @@ export function runVideoPreflight(data: AllData, prompts: Prompt[], now = new Da
         const recurrence = failureCounts.get(failureLearningKey(prompt, category.id)) ?? 0;
         if (recurrence >= 2) {
           issues.push({ id: `${prompt.promptId}:failure-repeat`, severity: "warning", promptId: prompt.promptId, title: `${label}: 同条件の「${category.label}」が${recurrence}回`, detail: "同じmodel + preset + failure categoryで再発しています。", action: category.nextAction, href: "/video-failure-lab" });
+        }
+      }
+    }
+
+    // Project-observed model evidence can improve after a draft was created.
+    // Never rewrite the draft silently: warn before paid generation unless the user explicitly overrode the model.
+    if (prompt.status === "draft") {
+      const presetId = noteValue(prompt.notes, "preset");
+      const routingMode = noteValue(prompt.notes, "model-routing");
+      if (presetId && routingMode !== "manual-override") {
+        const currentRoute = resolveProjectVideoModelRoute(presetId, modelEvidence);
+        if (currentRoute?.learned && currentRoute.model.toolLabel !== prompt.tool) {
+          const rate = currentRoute.evidence ? Math.round(currentRoute.evidence.passRate * 100) : 0;
+          issues.push({
+            id: `${prompt.promptId}:routing-stale`,
+            severity: "warning",
+            promptId: prompt.promptId,
+            title: `${label}: モデル選択が現在のproject実績より古い`,
+            detail: `このdraftは${prompt.tool}ですが、現在の「${currentRoute.preset.label}」実績では${currentRoute.model.label}がQA済み${currentRoute.evidence?.reviewed ?? 0}本・採用率${rate}%で優先候補になっています。`,
+            action: "有料生成前にVideo Prompt Builderで同じpresetを再適用して比較する。手動で現モデルを使う判断ならmanual overrideとして保存する。",
+            href: "/video-prompt-builder",
+          });
         }
       }
     }
