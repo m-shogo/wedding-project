@@ -8,6 +8,7 @@ import { Modal } from "../components/Modal";
 import { ConfirmDialog } from "../components/ConfirmDialog";
 import { MovieForm } from "../components/forms/MovieForm";
 import { computeStats } from "../lib/dashboard";
+import { runVideoPreflight } from "../lib/videoPreflight";
 import {
   sceneStatusLabel,
   sceneStatusColor,
@@ -55,18 +56,25 @@ export function Dashboard() {
   const aiReviewReady = aiVideoPrompts.filter((prompt) => prompt.status === "testing" && prompt.resultAssetIds.length > 0).length;
   const aiAdopted = aiVideoPrompts.filter((prompt) => prompt.status === "adopted").length;
   const aiRejected = aiVideoPrompts.filter((prompt) => prompt.status === "rejected").length;
+  const aiPreflightIssues = runVideoPreflight(data, aiVideoPrompts);
+  const aiPreflightBlocks = aiPreflightIssues.filter((issue) => issue.severity === "block").length;
+  const aiPreflightWarnings = aiPreflightIssues.filter((issue) => issue.severity === "warning").length;
 
-  const aiNextAction = aiReviewReady > 0
-    ? { label: `レビュー待ち ${aiReviewReady}件をQAする`, to: "/video-result-review", cta: "結果レビューを開く" }
-    : aiDraft > 0
-      ? { label: `下書き ${aiDraft}件をモデル別に生成する`, to: "/video-generation-queue", cta: "生成キューを開く" }
-      : aiWaitingResult > 0
-        ? { label: `結果待ち ${aiWaitingResult}件。生成結果をAssetへ登録する`, to: "/video-generation-queue", cta: "生成キューを確認" }
-        : aiRejected > 0
-          ? { label: `不採用 ${aiRejected}件。理由からretryまたはショット見直し`, to: "/video-result-review", cta: "不採用を確認" }
-          : aiVideoPrompts.length === 0
-            ? { label: "AI動画Promptがまだありません。シーンとプリセットから作成する", to: "/video-prompt-builder", cta: "動画Promptを作る" }
-            : { label: `採用済み ${aiAdopted}件。CapCut実尺へ進める`, to: "/capcut", cta: "CapCut Packを開く" };
+  const aiNextAction = aiPreflightBlocks > 0
+    ? { label: `プリフライト要修正 ${aiPreflightBlocks}件。生成を増やす前に赤を0にする`, to: "/video-preflight", cta: "プリフライトを修正" }
+    : aiReviewReady > 0
+      ? { label: `レビュー待ち ${aiReviewReady}件をQAする`, to: "/video-result-review", cta: "結果レビューを開く" }
+      : aiDraft > 0 && aiPreflightWarnings > 0
+        ? { label: `生成可能。注意 ${aiPreflightWarnings}件を確認してから下書き ${aiDraft}件へ進む`, to: "/video-preflight", cta: "注意を確認" }
+        : aiDraft > 0
+          ? { label: `下書き ${aiDraft}件をモデル別に低コスト試作する`, to: "/video-generation-queue", cta: "生成キューを開く" }
+          : aiWaitingResult > 0
+            ? { label: `結果待ち ${aiWaitingResult}件。生成結果をAssetへ登録する`, to: "/video-generation-queue", cta: "生成キューを確認" }
+            : aiRejected > 0
+              ? { label: `不採用 ${aiRejected}件。失敗カテゴリからretryまたは入力条件を見直す`, to: "/video-failure-lab", cta: "失敗学習を開く" }
+              : aiVideoPrompts.length === 0
+                ? { label: "AI動画Promptがまだありません。シーンとプリセットから作成する", to: "/video-prompt-builder", cta: "動画Promptを作る" }
+                : { label: `採用済み ${aiAdopted}件。Palmier / CapCutの実尺へ進める`, to: "/palmier-handoff", cta: "Palmier Handoffを開く" };
 
   return (
     <div>
@@ -104,28 +112,36 @@ export function Dashboard() {
       </div>
 
       <SectionCard title="AI動画パイプライン" className="mb-8">
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-4">
+        <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3 mb-4">
           {[
+            ["0", "プリフライト赤", aiPreflightBlocks, "/video-preflight"],
             ["1", "Prompt下書き", aiDraft, "/video-prompt-builder"],
             ["2", "生成・結果待ち", aiWaitingResult, "/video-generation-queue"],
             ["3", "レビュー待ち", aiReviewReady, "/video-result-review"],
-            ["4", "採用", aiAdopted, "/video-result-review"],
-            ["×", "不採用", aiRejected, "/video-result-review"],
+            ["4", "採用", aiAdopted, "/palmier-handoff"],
+            ["×", "不採用", aiRejected, "/video-failure-lab"],
           ].map(([step, label, value, to]) => (
             <Link key={String(label)} to={String(to)} className="rounded-lg border border-sand-200 dark:border-navy-600 p-3 hover:bg-sand-50 dark:hover:bg-navy-700 transition">
-              <div className="flex items-center justify-between"><span className="text-[11px] font-mono text-navy-400">STEP {step}</span><span className="text-lg font-bold text-navy-800 dark:text-sand-100">{value}</span></div>
+              <div className="flex items-center justify-between"><span className="text-[11px] font-mono text-navy-400">STEP {step}</span><span className={`text-lg font-bold ${step === "0" && Number(value) > 0 ? "text-red-700 dark:text-red-300" : "text-navy-800 dark:text-sand-100"}`}>{value}</span></div>
               <p className="mt-1 text-xs text-navy-600 dark:text-navy-200">{label}</p>
             </Link>
           ))}
         </div>
-        <div className="rounded-lg bg-navy-50 dark:bg-navy-700 p-4 flex flex-wrap items-center gap-3">
-          <div className="min-w-0 flex-1"><p className="text-[11px] font-semibold tracking-wider text-navy-400">NEXT ACTION</p><p className="mt-1 text-sm font-medium text-navy-800 dark:text-sand-100">{aiNextAction.label}</p></div>
+        <div className={`${aiPreflightBlocks > 0 ? "bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800" : "bg-navy-50 dark:bg-navy-700"} rounded-lg p-4 flex flex-wrap items-center gap-3`}>
+          <div className="min-w-0 flex-1">
+            <p className={`text-[11px] font-semibold tracking-wider ${aiPreflightBlocks > 0 ? "text-red-500" : "text-navy-400"}`}>NEXT ACTION</p>
+            <p className={`mt-1 text-sm font-medium ${aiPreflightBlocks > 0 ? "text-red-900 dark:text-red-200" : "text-navy-800 dark:text-sand-100"}`}>{aiNextAction.label}</p>
+            {aiPreflightBlocks === 0 && aiPreflightWarnings > 0 && <p className="text-xs text-amber-600 dark:text-amber-300 mt-1">⚠ プリフライト注意 {aiPreflightWarnings}件</p>}
+          </div>
           <Link to={aiNextAction.to} className="px-3 py-2 text-xs rounded-lg bg-navy-700 dark:bg-navy-500 text-white hover:bg-navy-800">{aiNextAction.cta} →</Link>
         </div>
         <div className="mt-3 flex flex-wrap gap-2 text-xs">
           <Link to="/video-prompt-builder" className="px-2.5 py-1.5 rounded border border-sand-200 dark:border-navy-600 text-navy-500 dark:text-navy-300">① Prompt・プリセット</Link>
+          <Link to="/video-preflight" className="px-2.5 py-1.5 rounded border border-sand-200 dark:border-navy-600 text-navy-500 dark:text-navy-300">🛡 プリフライト</Link>
           <Link to="/video-generation-queue" className="px-2.5 py-1.5 rounded border border-sand-200 dark:border-navy-600 text-navy-500 dark:text-navy-300">② モデル別生成キュー</Link>
           <Link to="/video-result-review" className="px-2.5 py-1.5 rounded border border-sand-200 dark:border-navy-600 text-navy-500 dark:text-navy-300">③ QA・retry</Link>
+          <Link to="/video-failure-lab" className="px-2.5 py-1.5 rounded border border-sand-200 dark:border-navy-600 text-navy-500 dark:text-navy-300">🧠 失敗学習</Link>
+          <Link to="/palmier-handoff" className="px-2.5 py-1.5 rounded border border-sand-200 dark:border-navy-600 text-navy-500 dark:text-navy-300">🌴 Palmier Handoff</Link>
           <Link to="/capcut" className="px-2.5 py-1.5 rounded border border-sand-200 dark:border-navy-600 text-navy-500 dark:text-navy-300">④ CapCut実尺</Link>
         </div>
       </SectionCard>
