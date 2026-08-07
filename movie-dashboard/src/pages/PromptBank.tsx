@@ -13,6 +13,12 @@ import { useProduction } from "../store/productionStore";
 import { useToast } from "../store/toastStore";
 import type { Prompt, PromptStatus, PromptTarget } from "../types/movie";
 
+function latestNoteValue(notes: string, key: string) {
+  const matches = Array.from(notes.matchAll(new RegExp(`${key}=([^\\s/]+)`, "g")));
+  const latest = matches.length > 0 ? matches[matches.length - 1] : undefined;
+  return latest?.[1] ?? "";
+}
+
 export function PromptBank() {
   const {
     selectedMovieId,
@@ -140,6 +146,10 @@ export function PromptBank() {
         {filtered.map((p) => {
           const isExpanded = expandedId === p.promptId;
           const resultAssets = data.assets.filter((a) => p.resultAssetIds.includes(a.assetId));
+          const negativePolicy = p.target === "video" ? latestNoteValue(p.notes, "negative-policy") : "";
+          const qaOnlyNegative = p.target === "video" && negativePolicy === "qa-only";
+          const optionalNegative = p.target === "video" && negativePolicy === "optional-separate-field";
+          const unknownVideoNegative = p.target === "video" && !negativePolicy;
           return (
             <div key={p.promptId} className={`bg-white dark:bg-navy-800 rounded-xl border shadow-sm overflow-hidden ${comparePickFirst === p.promptId ? "border-amber-400 ring-2 ring-amber-200" : "border-sand-200 dark:border-navy-600"}`}>
               <div className="px-6 py-4 border-b border-sand-100 dark:border-navy-600 flex items-center justify-between cursor-pointer" onClick={() => setExpandedId(isExpanded ? null : p.promptId)}>
@@ -175,10 +185,17 @@ export function PromptBank() {
 
                   {p.negativePrompt && (
                     <div>
-                      <div className="flex items-center justify-between mb-2">
-                        <p className="text-xs font-semibold text-navy-400 tracking-wider">ネガティブプロンプト</p>
-                        <button onClick={() => copyPrompt(p.negativePrompt, p.promptId + "-neg")} className="text-xs text-navy-500 hover:text-navy-700">
-                          {copiedId === p.promptId + "-neg" ? "✓ コピー済み" : "コピー"}
+                      <div className="flex items-start justify-between gap-3 mb-2">
+                        <div>
+                          <p className={`text-xs font-semibold tracking-wider ${qaOnlyNegative || unknownVideoNegative ? "text-amber-700 dark:text-amber-300" : "text-navy-400"}`}>
+                            {qaOnlyNegative ? "QA ONLY — MODEL INPUTへ送らない" : optionalNegative ? "OPTIONAL NEGATIVE FIELD / QA" : "ネガティブプロンプト"}
+                          </p>
+                          {qaOnlyNegative && <p className="mt-1 text-[11px] text-amber-700 dark:text-amber-300">negative-policy=qa-only。生成モデル本文へ貼らず、人間QAだけに使います。</p>}
+                          {optionalNegative && <p className="mt-1 text-[11px] text-navy-400">provider UIに独立negative欄がある場合だけ使います。positive本文へ混ぜません。</p>}
+                          {unknownVideoNegative && <p className="mt-1 text-[11px] text-amber-700 dark:text-amber-300">旧動画Prompt / policy不明。生成前にVideo Prompt Builderまたはプリフライトでnegative policyを再確認してください。</p>}
+                        </div>
+                        <button onClick={() => copyPrompt(p.negativePrompt, p.promptId + "-neg")} className="text-xs text-navy-500 hover:text-navy-700 shrink-0">
+                          {copiedId === p.promptId + "-neg" ? "✓ コピー済み" : qaOnlyNegative ? "QA用コピー" : optionalNegative ? "negative欄をコピー" : "コピー"}
                         </button>
                       </div>
                       <pre className="text-sm text-red-700 dark:text-red-400 bg-red-50 dark:bg-red-900/20 rounded-lg p-4 whitespace-pre-wrap break-words font-mono leading-relaxed select-all">
@@ -194,7 +211,6 @@ export function PromptBank() {
                     </div>
                   )}
 
-                  {/* Result assets */}
                   <div>
                     <div className="flex items-center justify-between mb-2">
                       <p className="text-xs font-semibold text-navy-400 tracking-wider">生成結果素材 ({resultAssets.length})</p>
@@ -247,7 +263,6 @@ export function PromptBank() {
         danger
       />
 
-      {/* Link result asset modal */}
       <Modal open={!!linkAssetPromptId} onClose={() => setLinkAssetPromptId(null)} title="生成結果素材を紐付け">
         {linkAssetPromptId && (() => {
           const prompt = data.prompts.find((p) => p.promptId === linkAssetPromptId);
@@ -269,31 +284,36 @@ export function PromptBank() {
         })()}
       </Modal>
 
-      {/* Comparison modal */}
       <Modal open={!!compareIds} onClose={() => setCompareIds(null)} title="プロンプト比較" wide>
         {comparePrompts && comparePrompts[0] && comparePrompts[1] && (
           <div className="grid grid-cols-2 gap-6">
-            {comparePrompts.map((cp) => cp && (
-              <div key={cp.promptId} className="space-y-3">
-                <div className="flex items-center gap-2">
-                  <Badge label={promptTargetLabel[cp.target]} colorClass={promptTargetColor[cp.target]} />
-                  <Badge label={promptStatusLabel[cp.status]} colorClass={promptStatusColor[cp.status]} />
-                </div>
-                <h4 className="font-bold text-navy-800 dark:text-sand-100 text-sm">{cp.title}</h4>
-                <p className="text-xs text-navy-400">{cp.tool} &middot; {cp.promptId}</p>
-                <div>
-                  <p className="text-xs font-semibold text-navy-400 mb-1">Positive</p>
-                  <pre className="text-xs text-navy-700 dark:text-navy-200 bg-sand-50 dark:bg-navy-700 rounded p-3 whitespace-pre-wrap break-words font-mono select-all">{cp.prompt}</pre>
-                </div>
-                {cp.negativePrompt && (
-                  <div>
-                    <p className="text-xs font-semibold text-navy-400 mb-1">Negative</p>
-                    <pre className="text-xs text-red-700 dark:text-red-400 bg-red-50 dark:bg-red-900/20 rounded p-3 whitespace-pre-wrap break-words font-mono select-all">{cp.negativePrompt}</pre>
+            {comparePrompts.map((cp) => {
+              if (!cp) return null;
+              const comparisonPolicy = cp.target === "video" ? latestNoteValue(cp.notes, "negative-policy") : "";
+              const comparisonQaOnly = cp.target === "video" && comparisonPolicy === "qa-only";
+              const comparisonOptional = cp.target === "video" && comparisonPolicy === "optional-separate-field";
+              return (
+                <div key={cp.promptId} className="space-y-3">
+                  <div className="flex items-center gap-2">
+                    <Badge label={promptTargetLabel[cp.target]} colorClass={promptTargetColor[cp.target]} />
+                    <Badge label={promptStatusLabel[cp.status]} colorClass={promptStatusColor[cp.status]} />
                   </div>
-                )}
-                {cp.notes && <p className="text-xs text-navy-500 dark:text-navy-300">{cp.notes}</p>}
-              </div>
-            ))}
+                  <h4 className="font-bold text-navy-800 dark:text-sand-100 text-sm">{cp.title}</h4>
+                  <p className="text-xs text-navy-400">{cp.tool} &middot; {cp.promptId}</p>
+                  <div>
+                    <p className="text-xs font-semibold text-navy-400 mb-1">Positive</p>
+                    <pre className="text-xs text-navy-700 dark:text-navy-200 bg-sand-50 dark:bg-navy-700 rounded p-3 whitespace-pre-wrap break-words font-mono select-all">{cp.prompt}</pre>
+                  </div>
+                  {cp.negativePrompt && (
+                    <div>
+                      <p className={`text-xs font-semibold mb-1 ${comparisonQaOnly ? "text-amber-700 dark:text-amber-300" : "text-navy-400"}`}>{comparisonQaOnly ? "QA Only — model inputへ送らない" : comparisonOptional ? "Optional Negative Field / QA" : "Negative / QA"}</p>
+                      <pre className="text-xs text-red-700 dark:text-red-400 bg-red-50 dark:bg-red-900/20 rounded p-3 whitespace-pre-wrap break-words font-mono select-all">{cp.negativePrompt}</pre>
+                    </div>
+                  )}
+                  {cp.notes && <p className="text-xs text-navy-500 dark:text-navy-300">{cp.notes}</p>}
+                </div>
+              );
+            })}
           </div>
         )}
       </Modal>
