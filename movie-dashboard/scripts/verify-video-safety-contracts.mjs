@@ -21,6 +21,12 @@ function requireText(text, expected, label) {
   }
 }
 
+function forbidText(text, forbidden, label) {
+  if (text.includes(forbidden)) {
+    throw new Error(`AI video safety contract failed: ${label}`);
+  }
+}
+
 const promptBuilder = await source("src/lib/videoPromptBuilder.ts");
 requireMatch(
   promptBuilder,
@@ -38,6 +44,23 @@ requireText(
   generationPacket,
   "QA ONLY — DO NOT SEND AS MODEL INPUT",
   "qa-only negative content must remain explicitly separated from model input",
+);
+
+const executionRouter = await source("src/lib/videoExecutionRouter.ts");
+requireText(
+  executionRouter,
+  "generationは明示指示まで実行しない",
+  "external-generation routes must keep generation execution behind explicit user instruction",
+);
+forbidText(
+  executionRouter,
+  "未生成なら現在のmodel/toolで1本だけ実行する。",
+  "testing-without-result route must not implicitly authorize generation",
+);
+forbidText(
+  executionRouter,
+  "低コスト試作を1本だけ実行する。",
+  "draft route must not implicitly authorize generation",
 );
 
 const continuity = await source("src/lib/videoContinuitySignoff.ts");
