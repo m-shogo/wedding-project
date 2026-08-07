@@ -10,6 +10,7 @@ const links = [
   { to: "/video-generation-queue", label: "動画生成キュー", icon: "🚀" },
   { to: "/video-result-review", label: "AI動画 結果レビュー", icon: "🔎" },
   { to: "/video-failure-lab", label: "AI動画 失敗学習", icon: "🧠" },
+  { to: "/palmier-handoff", label: "Palmier 実行Handoff", icon: "🌴" },
   { to: "/prompts", label: "プロンプト管理", icon: "✨" },
   { to: "/missing", label: "不足・未確定リスト", icon: "⚠" },
   { to: "/capcut", label: "CapCut編集パック", icon: "✂" },
