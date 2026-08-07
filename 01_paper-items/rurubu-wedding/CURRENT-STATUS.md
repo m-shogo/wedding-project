@@ -10,7 +10,7 @@ Process authority:
 
 ## Current declaration
 
-`RURUBU_V5_CURRENT_CANDIDATE / REALISTIC_DUMMY_MASTERS_13_OF_13_DRIVE_VERIFIED / ACTIVE_CURRENT_PHOTO_ROLES_12 / RETIRED_PRESERVED_ROLE_1 / INTENDED_SOURCE_APPLIED_3 / PHOTO_ROLE_PASS_2 / ROLE_COMPLETE_2 / DOMINANT_PHOTO_PASS_2_OF_3 / COVER_HERO_REPAIR_REQUIRED / REAL_CONTENT_PENDING / PRINT_TEMPLATE_PENDING / NOT_PRINT_READY`
+`RURUBU_V5_CURRENT_CANDIDATE / REALISTIC_DUMMY_MASTERS_13_OF_13_DRIVE_VERIFIED / ACTIVE_CURRENT_PHOTO_ROLES_12 / RETIRED_PRESERVED_ROLE_1 / INTENDED_SOURCE_APPLIED_4 / PHOTO_ROLE_PASS_3 / ROLE_COMPLETE_3 / DOMINANT_PHOTO_PASS_2_OF_3 / COVER_HERO_REPAIR_REQUIRED / REAL_CONTENT_PENDING / PRINT_TEMPLATE_PENDING / NOT_PRINT_READY`
 
 ## Current live Figma
 
@@ -29,6 +29,7 @@ Key preserved comparisons:
 - FEATURE 01 subtraction `345:2`
 - back-main Q18 `360:2`
 - history Q18 `383:2 / V5_HISTORY_Q18_DRIVE_DERIVATIVE_TEST_2026_08_08`
+- V5-07 old-town derivative `421:2 / V5_07_OLD_TOWN_DERIVATIVE_TEST_2026_08_08`
 
 ## Active-scope truth
 
@@ -38,9 +39,9 @@ Retired/preserved role: `1` (`V5-11 / 77:35`); its Drive master remains preserve
 
 Verified counts from the ledger:
 - Drive readback: `13 / 13`
-- intended source applied: `3 / 12`
-- photo-role pass: `2 / 12`
-- role complete: `2 / 12`
+- intended source applied: `4 / 12`
+- photo-role pass: `3 / 12`
+- role complete: `3 / 12`
 - dominant role pass: `2 / 3`
 
 ## Dominant-photo gate
@@ -102,6 +103,51 @@ V5-10 remains PASS and unchanged:
 - comparison `360:2`
 - evidence `learning-runs/2026-08-07-v5-back-main-q18-binary-safe-promotion.md`
 
+## Verified supporting-role gain — V5-07 old-town memory
+
+Drive master:
+- `07_MEMORY_SPOT_02_OLD_TOWN_DUMMY.png`
+- ID `1z7pV8BzSaqrvChCbmotTRoEptTaQZMLw`
+- `2,591,213 bytes`
+
+Accepted V5 dummy-design derivative:
+- `RURUBU_V5_07_MEMORY_OLD_TOWN__FIGMA_352x368_Q30_SINGLECALL.jpg`
+- Drive ID `1ZsLOgZbZWyfYgDfvKvYPqOsbMJrSf1J5`
+- `352 × 368`
+- `12,186 bytes`
+- SHA-256 `a957431f3b6177661d03e8ddec93a784a1a7fa86bfa4ecba0cf959ec557939be`
+- exactly `4×` the `88 × 92` semantic target
+
+Verified Figma mapping:
+- Current node `77:438 / IA_MEMORY_2_PHOTO`
+- previous hash `27ad4cfab8fd579b8452540ce954f8b36edc77fb`
+- current hash `439a719d73f28e8dd2889f2026cccb15f345ec63`
+- comparison frame `421:2`
+- comparison target `421:156`
+
+Three-scale QA:
+- whole spread: PASS; it reads as a distinct old-town supporting destination without disturbing the history/lead-memory hierarchy
+- reading scale: PASS; warm architecture clearly differentiates memory 02 from the bright lead coast and memory 03
+- actual-size/detail: PASS for dummy-design QA at natural `88 × 92`; the central street, lit façades and perspective remain recognizable
+
+Structure QA after promotion:
+- inside native text nodes: `92`
+- visible native text nodes: `57`
+- inside IMAGE-fill nodes: `9`
+- semantic node name and `88 × 92` geometry preserved
+- fold guide `77:288` preserved and visible
+- rollback frames `59:2` / `59:178` preserved
+- comparison `421:2` preserved
+
+Transport learning:
+- external `upload_assets` returned a valid endpoint but repeated the known `mcp.figma.com` DNS blocker; the method was not retried
+- changed method: a small role-sized Q30 derivative was decoded in one guarded Figma call with exact encoded/decoded-length and JPEG-marker checks
+- the duplicate was screenshot/structure-QA'd before its verified hash was promoted to Current
+- this Q30 acceptance is role-specific and does not establish a general compression rule for larger images
+
+Detailed evidence:
+- `learning-runs/2026-08-08-v5-memory-02-q30-binary-safe-promotion.md`
+
 ## Next required V5 work
 
 ### Priority A — final open dominant role
@@ -123,9 +169,11 @@ Friends & Family active:
 - `77:43`
 
 Small memories:
-- `77:438`
 - `77:446`
 - `77:454`
+
+Completed supporting role:
+- `77:438 / V5-07` — PASS
 
 Generated recognizable people must not be represented as the real bride, groom, family, or friends; profile dummies require safe identity treatment before pass.
 
