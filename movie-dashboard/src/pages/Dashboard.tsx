@@ -73,7 +73,7 @@ export function Dashboard() {
             : aiRejected > 0
               ? { label: `不採用 ${aiRejected}件。失敗カテゴリからretryまたは入力条件を見直す`, to: "/video-failure-lab", cta: "失敗学習を開く" }
               : aiVideoPrompts.length === 0
-                ? { label: "AI動画Promptがまだありません。シーンとプリセットから作成する", to: "/video-prompt-builder", cta: "動画Promptを作る" }
+                ? { label: "AI動画Promptがまだありません。絵コンテからAI向けB-roll候補を先に自動分類する", to: "/video-shot-planner", cta: "ショット計画を開く" }
                 : { label: `採用済み ${aiAdopted}件。Palmier / CapCutの実尺へ進める`, to: "/palmier-handoff", cta: "Palmier Handoffを開く" };
 
   return (
@@ -115,7 +115,7 @@ export function Dashboard() {
         <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3 mb-4">
           {[
             ["0", "プリフライト赤", aiPreflightBlocks, "/video-preflight"],
-            ["1", "Prompt下書き", aiDraft, "/video-prompt-builder"],
+            ["1", "Shot計画 / Prompt", aiDraft, "/video-shot-planner"],
             ["2", "生成・結果待ち", aiWaitingResult, "/video-generation-queue"],
             ["3", "レビュー待ち", aiReviewReady, "/video-result-review"],
             ["4", "採用", aiAdopted, "/palmier-handoff"],
@@ -136,7 +136,8 @@ export function Dashboard() {
           <Link to={aiNextAction.to} className="px-3 py-2 text-xs rounded-lg bg-navy-700 dark:bg-navy-500 text-white hover:bg-navy-800">{aiNextAction.cta} →</Link>
         </div>
         <div className="mt-3 flex flex-wrap gap-2 text-xs">
-          <Link to="/video-prompt-builder" className="px-2.5 py-1.5 rounded border border-sand-200 dark:border-navy-600 text-navy-500 dark:text-navy-300">① Prompt・プリセット</Link>
+          <Link to="/video-shot-planner" className="px-2.5 py-1.5 rounded border border-sand-200 dark:border-navy-600 text-navy-500 dark:text-navy-300">🧭 ① ショット計画</Link>
+          <Link to="/video-prompt-builder" className="px-2.5 py-1.5 rounded border border-sand-200 dark:border-navy-600 text-navy-500 dark:text-navy-300">✍ Prompt微調整</Link>
           <Link to="/video-preflight" className="px-2.5 py-1.5 rounded border border-sand-200 dark:border-navy-600 text-navy-500 dark:text-navy-300">🛡 プリフライト</Link>
           <Link to="/video-generation-queue" className="px-2.5 py-1.5 rounded border border-sand-200 dark:border-navy-600 text-navy-500 dark:text-navy-300">② モデル別生成キュー</Link>
           <Link to="/video-result-review" className="px-2.5 py-1.5 rounded border border-sand-200 dark:border-navy-600 text-navy-500 dark:text-navy-300">③ QA・retry</Link>
