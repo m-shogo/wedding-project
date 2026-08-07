@@ -113,7 +113,7 @@ export function classifyVideoFailure(reason: string): VideoFailureCategory {
 
 export function latestRejectedReason(notes: string) {
   const lines = notes.split("\n").filter((line) => line.startsWith("video-review=rejected"));
-  const latest = lines.at(-1) ?? "";
+  const latest = lines.length > 0 ? lines[lines.length - 1] : "";
   const marker = "reason=";
   const index = latest.indexOf(marker);
   return index >= 0 ? latest.slice(index + marker.length).trim() : "";
@@ -121,7 +121,8 @@ export function latestRejectedReason(notes: string) {
 
 export function retryAttempt(prompt: Prompt) {
   const matches = Array.from(prompt.notes.matchAll(/retry-attempt=(\d+)/g));
-  return Number(matches.at(-1)?.[1] ?? 0);
+  const latest = matches.length > 0 ? matches[matches.length - 1] : undefined;
+  return Number(latest?.[1] ?? 0);
 }
 
 export function failureLearningKey(prompt: Prompt, categoryId: VideoFailureCategoryId) {
