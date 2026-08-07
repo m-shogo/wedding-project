@@ -27,13 +27,13 @@ pnpm dev
    ↓
 ③ 結果レビュー
    ↓
-④ 採用 → CapCut実尺
+④ 採用 → Palmier / CapCut実尺
 
 不採用
    ↓
-retry 1/3 → retry 2/3 → retry 3/3
+失敗学習 → retry 1/3 → retry 2/3 → retry 3/3
    ↓
-STOP / ショット設計見直し
+STOP / 静止画・参照・ショット設計・モデル見直し
 ```
 
 レビュー待ちがあれば新規生成よりレビューを優先するなど、`NEXT ACTION` に次に開く画面を表示する。
@@ -44,12 +44,12 @@ STOP / ショット設計見直し
 2. **動画プロンプト** でシーンを選び、結婚式・旅行プリセットを適用する。
 3. shot intentを必要な部分だけ修正する。
 4. **動画生成キュー** で同じモデルのPromptをまとめて処理する。
-5. 生成結果を素材ライブラリへ登録する。
-6. Prompt Bankで結果AssetをPromptへ紐付ける。
+5. 外部AIで生成したら、生成キューの **結果を登録** からタイトルと保存パスを入力する。
+6. Asset作成・Scene紐付け・Prompt.resultAssetIds接続・testing移行を一括で行う。
 7. **AI動画 結果レビュー** で共通QA＋プリセット固有QAを確認する。
-8. PASSだけ採用し、CapCut実尺へ進める。
-9. 不採用は理由を記録し、必要ならretry draftを作る。
-10. 同系統のretryは最大3回。3回失敗したら静止画・参照・ショット・モデルを見直す。
+8. PASSだけ採用し、Palmier / CapCut実尺へ進める。
+9. 不採用は理由を記録し、**AI動画 失敗学習** で原因カテゴリと次の変更点を確認する。
+10. 必要ならretry draftを作る。同系統retryは最大3回。
 
 ## 動画プロンプトの考え方
 
@@ -60,12 +60,18 @@ shot intent
   ↓
 主動作 / カメラ / 速度 / 光 / 参照素材の役割 / テロップ余白
   ↓
-Seedance / Runway / Veo 向けプロンプト
+provider-aware prompt
   ↓
-生成前warning + AIっぽさQA
+生成前warning + QA用avoid + AIっぽさQA
 ```
 
-標準は **低コストで比較 → QA → 採用候補だけ高品質モデル → CapCut実尺確認**。
+### provider-aware rule
+
+- **Runway Gen-4.5**: I2Vは画像内容を再説明せずmotion / camera / temporal progression中心。否定文をモデル本文へ送らず、`AVOID`はQA専用として扱う。
+- **Seedance系**: wedding-projectでは短く構造化したshot intentを試作基準にする。モデル名・尺・料金・reference仕様は変化が速いため、生成直前に現行UIを確認する。
+- **first / last frame**: Palmierのタイムライン生成を優先候補にする。
+
+標準は **低コストで比較 → QA → 採用候補だけ高品質モデル → Palmier / CapCut実尺確認**。
 
 結婚式・旅行プリセット:
 
@@ -82,6 +88,7 @@ Seedance / Runway / Veo 向けプロンプト
 
 - `../docs/ai-video-operation.md`
 - `../docs/ai-video-model-routing-2026-08.md`
+- `../docs/ai-video-guidance-sources-2026-08-07.md`
 - `../docs/video-prompt-presets.md`
 - `../docs/video-generation-queue.md`
 - `../docs/video-result-review.md`
@@ -90,10 +97,13 @@ Seedance / Runway / Veo 向けプロンプト
 
 - **AI動画パイプライン表示** — 下書き / 結果待ち / レビュー待ち / 採用 / 不採用をTOPで集計し、次の操作へ誘導
 - **動画プロンプトビルダー** — Seedance 2.0 Mini / 2.0 / 2.5 preview / Veo 3.1 / Runway Gen-4.5 / Kling向けにshot intentを変換
+- **provider-aware Prompt** — モデルごとのprompt方針、negative扱い、guidance確認日をPrompt notesへ残す
 - **結婚式・旅行プリセット** — 頻出8ショットの動き・カメラ・モデル候補・固有QAを初期入力
 - **シーン自動紐付け** — Prompt保存時に絵コンテのsceneIdへ相互リンク
 - **動画生成キュー** — モデル別グルーピング、一括コピー、draft→testing、Markdown/JSON出力
+- **生成結果ワンステップ登録** — AI動画Asset作成、Scene相互リンク、Prompt.resultAssetIds接続を1回の入力で実行
 - **AI動画 結果レビュー** — 結果Assetありのtesting PromptをQAし、採用/不採用理由を記録
+- **AI動画 失敗学習** — 不採用理由を原因分類し、再発数・次アクション・肯定文補正を表示
 - **bounded retry** — 不採用理由を引き継いだretry draftを最大3回。過去の補正文を積み上げない
 - **ダークモード** — サイドバーの🌙/☀️ボタンで切り替え
 - **グローバル検索** — `⌘K` でシーン・素材・プロンプト・タスクを横断検索
@@ -116,8 +126,9 @@ Seedance / Runway / Veo 向けプロンプト
 | 絵コンテ | シーンの追加・編集・削除・複製・並び替え。素材とPromptを紐付ける |
 | 素材ライブラリ | 素材CRUD、フィルタ、パス、一括操作、CSV、サムネイル |
 | 動画プロンプト | シーン＋プリセット＋shot intentからモデル別Promptを作成 |
-| 動画生成キュー | 生成待ちPromptをモデル別にまとめ、コピー・testing移行・Export |
+| 動画生成キュー | 生成待ちPromptをモデル別にまとめ、コピー・testing移行・結果登録・Export |
 | AI動画 結果レビュー | 結果Asset、共通/固有QA、採否、失敗理由、retry lineage |
+| AI動画 失敗学習 | 不採用理由の分類、再発検知、次アクション、肯定文補正 |
 | プロンプト管理 | Prompt CRUD、結果素材紐付け、比較 |
 | 不足・未確定リスト | タスクCRUD、カテゴリ・状態・期限 |
 | CapCut編集パック | タイムライン、編集指示、Markdown・JSON・CSV |
@@ -133,10 +144,11 @@ Seedance / Runway / Veo 向けプロンプト
 - AIは本編の主役ではなく、背景・B-roll・つなぎ素材。
 - 新郎新婦、家族、友人、犬はAIで置換しない。
 - 人物・動物・読める文字・ロゴ・看板が出た生成素材は不採用。
-- 重要文字やテロップは生成映像へ焼き込まず、CapCut / Motion Studio側で載せる。
+- 重要文字やテロップは生成映像へ焼き込まず、Palmier / CapCut / Motion Studio側で載せる。
 - 1ショット1主動作、1カメラ意図。
 - 綺麗さより、実写真・実動画の前後に置いた時に浮かないことを優先する。
-- 同じ失敗を3回続けない。retry 3/3で止める。
+- 同じ失敗を2回観測したら失敗学習を確認し、3回目はPrompt以外の条件変更を優先する。
+- 同系統retry 3/3で止める。
 
 ## データ管理
 
@@ -176,10 +188,11 @@ Seedance / Runway / Veo 向けプロンプト
 ## 実制作Tips
 
 - 作業開始時はダッシュボードの `NEXT ACTION` を見る。
-- AI動画は動画Prompt → 生成キュー → 結果レビューの順で進める。
-- 結果AssetをPromptへ紐付けるまで「生成完了」扱いにしない。
+- AI動画は動画Prompt → 生成キュー → 結果レビュー → 失敗学習/採用の順で進める。
+- 結果登録は生成キューから行い、手動で複数画面を往復しない。
 - retryを作る前に必ず不採用理由を記録する。
-- 素材を登録したらシーンに紐付ける。
+- RunwayではQA用AVOIDをモデル本文へ貼らない。
+- first/last frameが必要ならPalmierを優先候補にする。
 - CapCutで使った素材は「使用中」にする。
 - 不足は口頭管理せず不足・未確定リストへ入れる。
 - 大きな変更前はデータ管理からJSONをバックアップする。
@@ -192,7 +205,8 @@ Seedance / Runway / Veo 向けプロンプト
 4. 素材がシーンに出ない → 絵コンテで紐付け確認。
 5. 生成結果がレビュー待ちに出ない → Prompt.status=`testing` かつresultAssetIdsありを確認。
 6. retryが作れない → 不採用理由があるか、retry 3/3に到達していないか確認。
-7. CapCut準備完了にならない → 必要素材のパス・状態を確認。
+7. 同じ破綻が続く → AI動画 失敗学習で再発カテゴリとNEXT CHANGEを確認。
+8. CapCut準備完了にならない → 必要素材のパス・状態を確認。
 
 ## ビルド
 
