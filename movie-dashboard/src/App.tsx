@@ -7,6 +7,7 @@ import { Dashboard } from "./pages/Dashboard";
 import { Storyboard } from "./pages/Storyboard";
 import { AssetLibrary } from "./pages/AssetLibrary";
 import { PromptBank } from "./pages/PromptBank";
+import { VideoShotPlanner } from "./pages/VideoShotPlanner";
 import { VideoPromptBuilder } from "./pages/VideoPromptBuilder";
 import { VideoGenerationQueue } from "./pages/VideoGenerationQueue";
 import { VideoPreflight } from "./pages/VideoPreflight";
@@ -35,6 +36,7 @@ export default function App() {
               <Route path="storyboard" element={<Storyboard />} />
               <Route path="assets" element={<AssetLibrary />} />
               <Route path="prompts" element={<PromptBank />} />
+              <Route path="video-shot-planner" element={<VideoShotPlanner />} />
               <Route path="video-prompt-builder" element={<VideoPromptBuilder />} />
               <Route path="video-generation-queue" element={<VideoGenerationQueue />} />
               <Route path="video-preflight" element={<VideoPreflight />} />
