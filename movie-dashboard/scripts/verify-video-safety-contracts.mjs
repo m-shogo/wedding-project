@@ -62,6 +62,21 @@ forbidText(
   "低コスト試作を1本だけ実行する。",
   "draft route must not implicitly authorize generation",
 );
+requireText(
+  executionRouter,
+  "adoptedFingerprintMismatch",
+  "execution routing must compare reviewed and current adopted media fingerprints",
+);
+requireText(
+  executionRouter,
+  "以前の目視QAを編集工程へ引き継げません",
+  "fingerprint mismatch must block adopted media from edit handoff",
+);
+requireText(
+  executionRouter,
+  'route.destination === "edit" ? selected : []',
+  "blocked adopted media must be omitted from Palmier handoff result assets",
+);
 
 const continuity = await source("src/lib/videoContinuitySignoff.ts");
 requireText(continuity, "version: 2", "continuity fingerprint payload must stay on v2 authority");
