@@ -62,6 +62,16 @@ forbidText(
   "低コスト試作を1本だけ実行する。",
   "draft route must not implicitly authorize generation",
 );
+forbidText(
+  executionRouter,
+  "まず1本だけ生成して",
+  "draft route reason must not imply permission to execute generation",
+);
+requireText(
+  executionRouter,
+  "生成実行の許可とは分離する",
+  "draft route must explicitly separate preparation from generation authorization",
+);
 requireText(
   executionRouter,
   "adoptedFingerprintMismatch",
