@@ -195,6 +195,10 @@ export function buildPalmierAgentHandoff(params: {
     const handoffAssets = prompt.status === "adopted"
       ? route.destination === "edit" ? selected : []
       : allResultAssets;
+    const blockedAdopted = prompt.status === "adopted" && route.destination === "blocked";
+    const alternativeResultAssets = blockedAdopted
+      ? []
+      : allResultAssets.filter((asset) => !handoffAssets.some((selectedAsset) => selectedAsset.assetId === asset.assetId)).map(handoffAsset);
     return {
       promptId: prompt.promptId,
       title: prompt.title,
@@ -214,7 +218,8 @@ export function buildPalmierAgentHandoff(params: {
       prompt: prompt.prompt,
       qaAvoid: prompt.negativePrompt,
       resultAssets: handoffAssets.map(handoffAsset),
-      alternativeResultAssets: allResultAssets.filter((asset) => !handoffAssets.some((selectedAsset) => selectedAsset.assetId === asset.assetId)).map(handoffAsset),
+      alternativeResultAssets,
+      withheldResultAssetIds: blockedAdopted ? allResultAssets.map((asset) => asset.assetId) : [],
     };
   });
 
@@ -228,6 +233,7 @@ export function buildPalmierAgentHandoff(params: {
     "- People, family, friends and dogs must remain real photo/video material; do not replace them with AI generations.",
     "- Important text, captions and logos belong in the editor/compositor, not baked into generated footage.",
     "- Never place an adopted Asset when its route is blocked; return it to movie-dashboard for review instead.",
+    "- Blocked adopted media must not expose file paths or repro metadata in the structured handoff; only withheld Asset IDs may be reported for diagnosis.",
     "- sample fingerprint is a bounded audit hint, not a full-file cryptographic checksum; never infer visual QA from fingerprint equality alone.",
     "",
     "## Execution order",
@@ -258,7 +264,8 @@ export function buildPalmierAgentHandoff(params: {
       row.resultAssets.length > 0 ? `- actual media: ${row.resultAssets.map((asset) => `${asset.media.actualDurationSec ?? "?"}s / ${asset.media.resolution || "?"} / ${asset.media.fps ?? "?"}fps`).join(" / ")}` : "",
       row.resultAssets.length > 0 ? `- current sample fingerprint: ${row.resultAssets.map((asset) => `${asset.assetId}=${shortFingerprint(asset.probe?.sampleFingerprint)} / preview=${asset.probe?.previewFrameCount ?? "?"} / probed=${asset.probe?.probedAt || "—"}`).join(" / ")}` : "",
       row.resultAssets.some((asset) => asset.media.generationId || asset.media.seed) ? `- repro: ${row.resultAssets.map((asset) => `generationId=${asset.media.generationId || "—"}, seed=${asset.media.seed || "—"}`).join(" / ")}` : "",
-      row.alternativeResultAssets.length > 0 ? `- unselected / blocked alternatives: ${row.alternativeResultAssets.map((asset) => asset.title).join(" / ")}` : "",
+      row.alternativeResultAssets.length > 0 ? `- unselected alternatives: ${row.alternativeResultAssets.map((asset) => asset.title).join(" / ")}` : "",
+      row.withheldResultAssetIds.length > 0 ? `- blocked result asset IDs withheld from handoff: ${row.withheldResultAssetIds.join(" / ")}` : "",
       "",
       "Prompt:",
       "```text",
