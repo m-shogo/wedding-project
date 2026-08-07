@@ -6,11 +6,13 @@ import {
   type LocalVideoPreviewFrame,
   type LocalVideoProbeResult,
 } from "../lib/localVideoProbe";
+import type { VideoResultProbeEvidence } from "../lib/videoResultProbeEvidence";
 
 interface LocalVideoProbePickerProps {
   expectedDurationSec?: number;
   savedPath?: string;
   onMetadata: (metadata: { durationSec?: number; resolution: string }) => void;
+  onProbeEvidence?: (evidence: VideoResultProbeEvidence) => void;
 }
 
 type DurationFit = "short" | "long" | "fit" | "unknown";
@@ -26,7 +28,7 @@ function pathBaseName(path: string) {
   return path.trim().replace(/\\/g, "/").split("/").filter(Boolean).pop() ?? "";
 }
 
-export function LocalVideoProbePicker({ expectedDurationSec, savedPath = "", onMetadata }: LocalVideoProbePickerProps) {
+export function LocalVideoProbePicker({ expectedDurationSec, savedPath = "", onMetadata, onProbeEvidence }: LocalVideoProbePickerProps) {
   const [probe, setProbe] = useState<LocalVideoProbeResult>();
   const [previewFrames, setPreviewFrames] = useState<LocalVideoPreviewFrame[]>([]);
   const [busy, setBusy] = useState(false);
@@ -45,13 +47,18 @@ export function LocalVideoProbePicker({ expectedDurationSec, savedPath = "", onM
     setBusy(true);
     try {
       const result = await probeLocalVideoFile(file);
+      const probedAt = new Date().toISOString();
+      let previewFrameCount = 0;
       setProbe(result);
       onMetadata({ durationSec: result.durationSec, resolution: result.resolution });
       try {
-        setPreviewFrames(await captureLocalVideoPreviewFrames(file));
+        const frames = await captureLocalVideoPreviewFrames(file);
+        previewFrameCount = frames.length;
+        setPreviewFrames(frames);
       } catch (caught) {
         setPreviewError(caught instanceof Error ? caught.message : "QAフレームを抽出できませんでした");
       }
+      onProbeEvidence?.({ probedAt, previewFrameCount });
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "動画メタデータを読み取れませんでした");
     } finally {
