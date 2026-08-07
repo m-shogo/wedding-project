@@ -71,11 +71,21 @@ Key changes relative to `388:2`:
 
 No commercial cover image was placed into production art. The reference was used only to correct structure and hierarchy.
 
+## Refinement after screenshot QA
+
+A second bounded refinement was applied only to the study frame after whole-cover screenshot review:
+
+- `392:5`, `392:7`, `392:9` logo blocks received a dark outline, tighter radius, and small hard shadow to better approximate the stacked printed-label silhouette rather than flat app tiles.
+- new native text node `393:2 / REF_RIGHT_EDGE_MICROCOPY` was added as narrow white right-edge editorial microcopy.
+- Current V5, rollback frames, V5 photo-role states, image hashes, and production ledgers were not modified.
+
+This refinement improved the reference-study silhouette, but it does **not** prove the commercial logo itself has been reproduced. The project still avoids copying proprietary final artwork into production.
+
 ## Three-scale QA
 
 ### Whole-item
 
-PASS as a stronger fidelity study than V4. The image now owns the lower two-thirds of the cover and the silhouette is visibly closer to the current Hawaii-cover family.
+PASS as a stronger fidelity study than V4. The image now owns the lower two-thirds of the cover and the silhouette is visibly closer to the current Hawaii-cover family. The outlined left logo stack and right-edge microcopy also make the overall edge treatment closer to the observed cover family.
 
 ### Reading/page
 
@@ -97,7 +107,7 @@ Earlier studies over-interpreted Rurubu as "many photo modules everywhere" and i
 
 ## Next application
 
-1. Continue refining logo silhouette, title-cloud geometry, right-edge micro-copy, and photo-to-copy overlap against the reference.
+1. Continue refining title-cloud geometry, right-edge microcopy, photo-to-copy overlap, and the left logo silhouette against the reference.
 2. Keep the study editable and replacement-safe.
 3. Translate only verified structural lessons into the WEDDING clean-room candidate.
 4. Do not promote this study to Current V5 merely because it resembles the reference better.
