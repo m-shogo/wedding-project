@@ -4,7 +4,7 @@ import { Header } from "../components/Header";
 import { useProduction } from "../store/productionStore";
 import { useToast } from "../store/toastStore";
 import {
-  classifyVideoFailure,
+  failureCategoryForPrompt,
   failureLearningKey,
   latestRejectedReason,
   retryAttempt,
@@ -21,7 +21,7 @@ export function VideoFailureLab() {
     .filter((prompt) => prompt.target === "video" && prompt.status === "rejected")
     .map((prompt) => {
       const reason = latestRejectedReason(prompt.notes);
-      const category = classifyVideoFailure(reason);
+      const category = failureCategoryForPrompt(prompt);
       return {
         prompt,
         reason,
@@ -60,7 +60,7 @@ export function VideoFailureLab() {
     <div>
       <Header
         title="AI動画 失敗学習"
-        description="不採用理由を分類し、同じ失敗を繰り返さない次アクションへ変換します"
+        description="レビューで記録した失敗カテゴリを優先し、古い自由記述ログだけキーワード推定して次アクションへ変換します"
         showMovieSelector
       />
 
@@ -106,7 +106,7 @@ export function VideoFailureLab() {
 
       {rejected.length === 0 ? (
         <div className="rounded-xl border border-dashed border-sand-300 dark:border-navy-600 p-10 text-center text-sm text-navy-400">
-          まだ不採用ログがありません。結果レビューで理由を記録すると、ここへ自動で蓄積されます。
+          まだ不採用ログがありません。結果レビューでカテゴリを選ぶと、ここへ自動で蓄積されます。
         </div>
       ) : (
         <div className="space-y-4">
@@ -138,7 +138,7 @@ export function VideoFailureLab() {
                 <div className="mt-4 grid grid-cols-1 lg:grid-cols-2 gap-3">
                   <div className="rounded-lg bg-red-50 dark:bg-red-900/20 p-3">
                     <p className="text-[11px] font-bold text-red-600 dark:text-red-300 mb-1">VERIFIED FAILURE</p>
-                    <p className="text-sm text-red-800 dark:text-red-200">{reason || "理由テキストなし"}</p>
+                    <p className="text-sm text-red-800 dark:text-red-200">{reason || category.label}</p>
                   </div>
                   <div className="rounded-lg bg-emerald-50 dark:bg-emerald-900/20 p-3">
                     <p className="text-[11px] font-bold text-emerald-700 dark:text-emerald-300 mb-1">NEXT CHANGE</p>

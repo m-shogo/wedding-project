@@ -105,18 +105,36 @@ const keywordRules: Array<{ id: VideoFailureCategoryId; keywords: string[] }> = 
   { id: "caption", keywords: ["テロップ", "余白", "字幕領域", "caption", "negative space"] },
 ];
 
+export function videoFailureCategoryById(id: string | undefined) {
+  return VIDEO_FAILURE_CATEGORIES.find((category) => category.id === id);
+}
+
 export function classifyVideoFailure(reason: string): VideoFailureCategory {
   const normalized = reason.toLowerCase();
   const match = keywordRules.find((rule) => rule.keywords.some((keyword) => normalized.includes(keyword.toLowerCase())));
-  return VIDEO_FAILURE_CATEGORIES.find((category) => category.id === (match?.id ?? "unknown")) ?? VIDEO_FAILURE_CATEGORIES[VIDEO_FAILURE_CATEGORIES.length - 1];
+  return videoFailureCategoryById(match?.id ?? "unknown") ?? VIDEO_FAILURE_CATEGORIES[VIDEO_FAILURE_CATEGORIES.length - 1];
+}
+
+function latestRejectedReviewLine(notes: string) {
+  const lines = notes.split("\n").filter((line) => line.startsWith("video-review=rejected"));
+  return lines.length > 0 ? lines[lines.length - 1] : "";
 }
 
 export function latestRejectedReason(notes: string) {
-  const lines = notes.split("\n").filter((line) => line.startsWith("video-review=rejected"));
-  const latest = lines.length > 0 ? lines[lines.length - 1] : "";
+  const latest = latestRejectedReviewLine(notes);
   const marker = "reason=";
   const index = latest.indexOf(marker);
   return index >= 0 ? latest.slice(index + marker.length).trim() : "";
+}
+
+export function latestRejectedCategory(notes: string) {
+  const latest = latestRejectedReviewLine(notes);
+  const match = latest.match(/failure-category=([^\s/]+)/);
+  return videoFailureCategoryById(match?.[1]);
+}
+
+export function failureCategoryForPrompt(prompt: Prompt) {
+  return latestRejectedCategory(prompt.notes) ?? classifyVideoFailure(latestRejectedReason(prompt.notes));
 }
 
 export function retryAttempt(prompt: Prompt) {
