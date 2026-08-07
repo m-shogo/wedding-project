@@ -16,7 +16,7 @@ Sequence reference only:
 
 ## Current declaration
 
-`RURUBU_V5_CURRENT_CANDIDATE / REALISTIC_DUMMY_MASTERS_13_OF_13_DRIVE_VERIFIED / ACTIVE_CURRENT_PHOTO_ROLES_12 / RETIRED_PRESERVED_ROLE_1 / INTENDED_SOURCE_APPLIED_1 / PHOTO_ROLE_PASS_0 / DOMINANT_PHOTO_REPAIR_REQUIRED / REAL_CONTENT_PENDING / PRINT_TEMPLATE_PENDING / NOT_PRINT_READY`
+`RURUBU_V5_CURRENT_CANDIDATE / REALISTIC_DUMMY_MASTERS_13_OF_13_DRIVE_VERIFIED / ACTIVE_CURRENT_PHOTO_ROLES_12 / RETIRED_PRESERVED_ROLE_1 / INTENDED_SOURCE_APPLIED_2 / PHOTO_ROLE_PASS_1 / ROLE_COMPLETE_1 / DOMINANT_PHOTO_PASS_1_OF_3 / DOMINANT_PHOTO_REPAIR_REQUIRED / REAL_CONTENT_PENDING / PRINT_TEMPLATE_PENDING / NOT_PRINT_READY`
 
 ## Current live Figma
 
@@ -30,14 +30,15 @@ Rollback evidence remains preserved:
 - outer V4 — node `59:2`
 - inside V4 — node `59:178`
 
-Preserved comparison evidence:
+Preserved comparison evidence includes:
 - inside-left rhythm comparison — `334:2`
 - rejected Friends three-up comparison — `336:2 / V5_BACK_FRIENDS_3UP_TEST_2026_08_07`
 - front-cover FEATURE 01 full-field subtraction comparison — `345:2 / V5_OUTER_FEATURE01_FIELD_SUBTRACTION_TEST_2026_08_07`
+- back-main Q18 binary-safe comparison — `360:2 / V5_BACK_MAIN_Q18_BINARY_SAFE_TEST_2026_08_07`
 
 ## Verified structure and active-scope truth
 
-Registered semantic photo roles remain `13`, and all source masters remain preserved in Drive. The Current editorial design now has `12` active photo roles and `1` retired preserved role.
+Registered semantic photo roles remain `13`, and all source masters remain preserved in Drive. The Current editorial design has `12` active photo roles and `1` retired preserved role.
 
 Retired from active Current scope:
 - `V5-11 / BACK_VISUAL_FRIEND_1_PHOTO / 77:35`
@@ -62,24 +63,58 @@ Important distinctions:
 
 ## Live quality truth
 
-Dominant photo quality/provenance remains the main unresolved V5 gate.
+Dominant photo quality/provenance remains the main unresolved V5 gate, but the first dominant role is now verified.
 
 Current dominant targets:
-- cover hero `77:148`
-- back main `77:24`
-- history `77:422`
+- cover hero `77:148` — **OPEN**
+- back main `77:24` — **PASS for V5 dummy-design QA**
+- history `77:422` — **OPEN**
 
-The back-main Current node `77:24` still uses old image hash `2cfd19cf1701db58039a4fc645e4279832ec465a`; the accepted Q70 transport derivative is Drive-verified but not yet applied.
+### Verified dominant-role gain — V5-10 back main
 
-Accepted back-main test derivative:
-- `RURUBU_V5_10_BACK_MAIN_TRAVEL_FLATLAY__FIGMA_944x608_Q70_TRANSPORT.jpg`
-- Drive ID `1L-SQiPuNHrCMuTbb_yaf9FNPg5iuf8uN`
+Current `77:24 / BACK_VISUAL_MAIN_MEMORY_PHOTO` now uses the intended travel-flatlay source through a separately verified role-sized derivative.
+
+Drive master:
+- `10_BACK_MAIN_TRAVEL_FLATLAY_DUMMY.png`
+- ID `1bBiAcFfHJ3-Ns1gAKn6Bct-q-w2p-AvD`
+- `2,952,524 bytes`
+
+Accepted V5 dummy-design derivative:
+- `RURUBU_V5_10_BACK_MAIN_TRAVEL_FLATLAY__FIGMA_944x608_Q18_SINGLECALL.jpg`
+- Drive ID `17YaX5CK-c0cTr4zsL2Dly4J1XSZyFxHG`
 - `944 × 608`
-- `95,542 bytes`
+- `33,577 bytes`
+- exact `2×` target dimensions for the `472 × 304` semantic box
 
-A changed binary transport attempt was executed on 2026-08-07 using Drive streamed raw bytes plus a fresh Figma `upload_assets` endpoint targeted directly at `77:24`. The POST again failed at DNS resolution for `mcp.figma.com`, before any Figma mutation. This fingerprint is now a loop-break condition: do not retry the same runtime/network path with another single-use URL. The current node/hash and all asset-ledger counts remain unchanged.
+Verified Figma mapping:
+- semantic node `77:24`
+- old hash `2cfd19cf1701db58039a4fc645e4279832ec465a`
+- current hash `e3738476f760932bb5b09c9d60f174dd6c84049d`
+- comparison frame `360:2`
+- comparison target `360:8`
 
-Do not advance `INTENDED_SOURCE_APPLIED`, `PHOTO_ROLE_PASS`, or the V5 completion gate from Drive presence or transport preparation.
+Three-scale screenshot QA:
+- whole-item: PASS; the intended travel flat-lay is materially clearer and better aligned with the `OUR TRAVEL NOTES` story than the old blurred dinner placeholder
+- reading/page: PASS; reading order and visual balance remain intact
+- actual-size/detail: PASS for dummy-design QA; camera, map, rings, flowers and notebook remain distinct at natural node render size
+
+Post-promotion structure QA:
+- native text `85`
+- visible text `41`
+- IMAGE-fill nodes `14`
+- fold guide `77:288` preserved and visible
+- rollback frames `59:2` and `59:178` preserved
+- comparison `360:2` preserved
+
+Transport method:
+- prior container → `mcp.figma.com` upload POST remains a loop-break blocker and was **not retried**
+- Drive-readback derivative was decoded inside the Figma Plugin API runtime with encoded/decoded length guards on a duplicate first
+- only the verified duplicate IMAGE fill was then promoted to Current
+
+Detailed evidence:
+- `learning-runs/2026-08-07-v5-back-main-q18-binary-safe-promotion.md`
+
+This advances V5-10 only. It does not automatically validate cover hero, history, any supporting role, real-content readiness, or print readiness.
 
 ### Verified editorial refinement — FEATURE 01 full-field subtraction
 
@@ -111,6 +146,10 @@ Verified:
 - registered master files in Drive: `13 / 13`
 - active Current roles: `12`
 - retired preserved roles: `1`
+- intended source applied: `2 / 12`
+- photo-role pass: `1 / 12`
+- role complete: `1 / 12`
+- dominant role pass: `1 / 3`
 - exact IDs, filenames, target nodes, active/retired state, and quality state: `RURUBU-V5-ASSET-EVIDENCE-LEDGER.json`
 
 ## Mandatory Drive-first workflow V2
@@ -146,12 +185,12 @@ No temporary local file, attempted write, arbitrary IMAGE fill, or retired legac
 ### Batch A — dominant images
 
 1. close cover hero `77:148` source/derivative/hash evidence with a quality-passing derivative
-2. import accepted back main to `77:24`
-3. import accepted history derivative to `77:422`
-4. screenshot outer and inside spreads at whole/page/detail scales
-5. record Drive ID → node ID → image hash mappings in the ledger
+2. **back main `77:24` — VERIFIED PASS / no further replacement activity unless new evidence shows a defect**
+3. import and verify accepted history derivative to `77:422`
+4. screenshot outer and inside spreads at whole/page/detail scales after each dominant promotion
+5. record every Drive ID → node ID → image hash mapping in the ledger
 
-No decorative polish should outrank these dominant-image corrections. Previously repeated binary-transfer blocker fingerprints must not be retried without a changed method.
+No decorative polish should outrank these dominant-image corrections. Previously repeated binary-transfer blocker fingerprints must not be retried without a changed method. The V5-10 in-runtime decode route may be tested on another role only when its Drive derivative fits the Figma execution payload and is first applied to a rollback-safe duplicate.
 
 ### Batch B — identity and lead images
 
@@ -232,10 +271,10 @@ Before print readiness:
 
 ## Stop conditions
 
-Do not claim `DESIGN_FINAL`, `PHOTO_QA_PASS`, or `PRINT_READY` while:
+Do not claim `DESIGN_FINAL`, full `PHOTO_QA_PASS`, or `PRINT_READY` while:
 - the ledger has incomplete active photo roles
-- dominant images remain pixelated or use rejected/unverified derivatives
-- Drive-to-node-to-hash evidence is missing
+- remaining dominant images are pixelated or use rejected/unverified derivatives
+- Drive-to-node-to-hash evidence is missing for active roles
 - generated dummy people can be mistaken for the real couple
 - dummy content remains
 - exact print template is not applied
