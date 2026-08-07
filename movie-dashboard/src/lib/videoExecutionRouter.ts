@@ -1,5 +1,6 @@
 import type { Asset, Prompt } from "../types/movie";
 import { parseVideoResultReproMetadata } from "./videoResultMetadata";
+import { parseVideoResultProbeEvidence } from "./videoResultProbeEvidence";
 
 export type ExecutionDestination = "external-generation" | "palmier" | "review" | "edit" | "blocked";
 
@@ -60,6 +61,13 @@ export function selectedResultAssets(prompt: Prompt, resultAssets: Asset[]) {
   return resultAssets.length === 1 ? resultAssets : [];
 }
 
+function adoptedFingerprintMismatch(prompt: Prompt, selectedAsset?: Asset) {
+  if (!selectedAsset) return false;
+  const reviewedFingerprint = lastNoteValue(prompt.notes, "reviewed-sample-fingerprint");
+  const currentFingerprint = parseVideoResultProbeEvidence(selectedAsset.notes)?.sampleFingerprint ?? "";
+  return Boolean(reviewedFingerprint && currentFingerprint && reviewedFingerprint !== currentFingerprint);
+}
+
 export function routeVideoPrompt(prompt: Prompt, resultAssets: Asset[]): VideoExecutionRoute {
   const mode = promptMode(prompt);
 
@@ -90,6 +98,15 @@ export function routeVideoPrompt(prompt: Prompt, resultAssets: Asset[]): VideoEx
         label: "採用結果を1本選ぶ",
         reason: "複数variantが紐付いていますが、編集へ渡す正本Assetが未選択です。",
         action: "AI動画 結果レビューで使用する結果Assetを1本選んでQA PASSを保存する。",
+        paidGenerationAllowed: false,
+      };
+    }
+    if (adoptedFingerprintMismatch(prompt, selected[0])) {
+      return {
+        destination: "blocked",
+        label: "採用正本を再QA",
+        reason: "QA PASS時に記録したsample fingerprintと、現在の採用正本Assetのsample fingerprintが一致しません。以前の目視QAを編集工程へ引き継げません。",
+        action: "AI動画 結果レビューへ戻り、現在の実動画を再QAするか、QA時の元動画を復元してからPalmier / CapCutへ進む。",
         paidGenerationAllowed: false,
       };
     }
@@ -162,7 +179,9 @@ export function buildPalmierAgentHandoff(params: {
     const allResultAssets = assets.filter((asset) => prompt.resultAssetIds.includes(asset.assetId));
     const route = routeVideoPrompt(prompt, allResultAssets);
     const selected = selectedResultAssets(prompt, allResultAssets);
-    const handoffAssets = prompt.status === "adopted" ? selected : allResultAssets;
+    const handoffAssets = prompt.status === "adopted"
+      ? route.destination === "edit" ? selected : []
+      : allResultAssets;
     return {
       promptId: prompt.promptId,
       title: prompt.title,
@@ -193,9 +212,10 @@ export function buildPalmierAgentHandoff(params: {
     "- Preserve existing user edits; prefer non-destructive placeholders and clip swaps.",
     "- People, family, friends and dogs must remain real photo/video material; do not replace them with AI generations.",
     "- Important text, captions and logos belong in the editor/compositor, not baked into generated footage.",
+    "- Never place an adopted Asset when its route is blocked; return it to movie-dashboard for review instead.",
     "",
     "## Execution order",
-    "1. Place only the latest selected adopted result asset on the matching scene timeline position. If multiple variants exist but no selected result is recorded, stop and return it to movie-dashboard.",
+    "1. Place only the latest selected adopted result asset on the matching scene timeline position when route=edit. If the route is blocked, do not place that media and return it to movie-dashboard.",
     "2. For testing prompts with result assets, create/keep review placeholders rather than generating more.",
     "3. For first-last prompts, prepare first-frame / last-frame / reference slots in Palmier and keep generation paused.",
     "4. For draft prompts, create a named placeholder containing the prompt metadata; do not generate until explicitly requested.",
@@ -220,7 +240,7 @@ export function buildPalmierAgentHandoff(params: {
       row.resultAssets.length > 0 ? `- handoff result: ${row.resultAssets.map((asset) => `${asset.title} (${asset.path || "path missing"})`).join(" / ")}` : "- handoff result: none",
       row.resultAssets.length > 0 ? `- actual media: ${row.resultAssets.map((asset) => `${asset.media.actualDurationSec ?? "?"}s / ${asset.media.resolution || "?"} / ${asset.media.fps ?? "?"}fps`).join(" / ")}` : "",
       row.resultAssets.some((asset) => asset.media.generationId || asset.media.seed) ? `- repro: ${row.resultAssets.map((asset) => `generationId=${asset.media.generationId || "—"}, seed=${asset.media.seed || "—"}`).join(" / ")}` : "",
-      row.alternativeResultAssets.length > 0 ? `- unselected alternatives: ${row.alternativeResultAssets.map((asset) => asset.title).join(" / ")}` : "",
+      row.alternativeResultAssets.length > 0 ? `- unselected / blocked alternatives: ${row.alternativeResultAssets.map((asset) => asset.title).join(" / ")}` : "",
       "",
       "Prompt:",
       "```text",
@@ -234,7 +254,7 @@ export function buildPalmierAgentHandoff(params: {
     ].filter(Boolean)),
     "",
     "## Return to dashboard",
-    "After editing, report per promptId: placed / missing / timing-changed / reference-needed / generated-result-path / review-needed. Do not silently change Prompt adoption status or swap to an unselected alternative result.",
+    "After editing, report per promptId: placed / missing / timing-changed / reference-needed / generated-result-path / review-needed. Do not silently change Prompt adoption status or swap to an unselected or blocked result.",
   ].join("\n");
 
   return { rows, markdown };
