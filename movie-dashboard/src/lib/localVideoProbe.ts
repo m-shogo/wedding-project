@@ -12,12 +12,18 @@ export interface LocalVideoPreviewFrame {
   dataUrl: string;
 }
 
+const MEDIA_EVENT_TIMEOUT_MS = 12_000;
+
 function roundedDuration(value: number) {
   return Math.round(value * 100) / 100;
 }
 
 function waitForMediaEvent(video: HTMLVideoElement, eventName: "loadedmetadata" | "seeked") {
   return new Promise<void>((resolve, reject) => {
+    const timeoutId = window.setTimeout(() => {
+      cleanup();
+      reject(new Error(eventName === "seeked" ? "動画フレームの読み取りがタイムアウトしました" : "動画メタデータの読み取りがタイムアウトしました"));
+    }, MEDIA_EVENT_TIMEOUT_MS);
     const onSuccess = () => {
       cleanup();
       resolve();
@@ -27,6 +33,7 @@ function waitForMediaEvent(video: HTMLVideoElement, eventName: "loadedmetadata" 
       reject(new Error("動画フレームを読み取れませんでした"));
     };
     const cleanup = () => {
+      window.clearTimeout(timeoutId);
       video.removeEventListener(eventName, onSuccess);
       video.removeEventListener("error", onError);
     };
@@ -49,8 +56,10 @@ export function probeLocalVideoFile(file: File): Promise<LocalVideoProbeResult> 
     const url = URL.createObjectURL(file);
     const video = document.createElement("video");
     let settled = false;
+    const timeoutId = window.setTimeout(() => fail("動画メタデータの読み取りがタイムアウトしました"), MEDIA_EVENT_TIMEOUT_MS);
 
     function cleanup() {
+      window.clearTimeout(timeoutId);
       URL.revokeObjectURL(url);
       video.removeAttribute("src");
       video.load();
