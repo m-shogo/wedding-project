@@ -7,6 +7,7 @@ const links = [
   { to: "/storyboard", label: "絵コンテ", icon: "🎬" },
   { to: "/assets", label: "素材ライブラリ", icon: "🗂" },
   { to: "/video-prompt-builder", label: "動画プロンプト", icon: "🎥" },
+  { to: "/video-generation-queue", label: "動画生成キュー", icon: "🚀" },
   { to: "/prompts", label: "プロンプト管理", icon: "✨" },
   { to: "/missing", label: "不足・未確定リスト", icon: "⚠" },
   { to: "/capcut", label: "CapCut編集パック", icon: "✂" },
