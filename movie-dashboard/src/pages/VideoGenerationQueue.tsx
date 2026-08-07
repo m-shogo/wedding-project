@@ -49,8 +49,7 @@ export function VideoGenerationQueue() {
     selectedMovieId,
     data,
     moviePrompts,
-    addAsset,
-    linkAssetToScene,
+    registerPromptResultAsset,
     updatePrompt,
   } = useProduction();
   const { addToast } = useToast();
@@ -203,7 +202,7 @@ export function VideoGenerationQueue() {
     });
     const probeEvidenceLine = resultProbeEvidence ? formatVideoResultProbeEvidence(resultProbeEvidence) : "";
     const assetId = generateId("asset");
-    addAsset({
+    registerPromptResultAsset(prompt.promptId, {
       assetId,
       type: "ai_video",
       title,
@@ -223,15 +222,8 @@ export function VideoGenerationQueue() {
         resultNote.trim(),
       ].filter(Boolean).join("\n"),
     });
-
-    for (const sceneId of prompt.relatedSceneIds) linkAssetToScene(assetId, sceneId);
-    updatePrompt({
-      ...prompt,
-      status: prompt.status === "draft" ? "testing" : prompt.status,
-      resultAssetIds: prompt.resultAssetIds.includes(assetId) ? prompt.resultAssetIds : [...prompt.resultAssetIds, assetId],
-    });
     closeResultIntake();
-    addToast("結果Assetを作成し、Promptとシーンへ紐付けました", "success");
+    addToast("結果Asset・Prompt・シーンを1回の履歴で登録しました。Undo 1回で登録前へ戻せます", "success");
   }
 
   function exportMarkdown() {
@@ -292,7 +284,7 @@ export function VideoGenerationQueue() {
         {resultProbeEvidence ? <div className="rounded-lg border border-emerald-200 dark:border-emerald-700 bg-emerald-50 dark:bg-emerald-900/20 p-2.5 text-xs text-emerald-800 dark:text-emerald-300">✓ 実メディアprobe証跡を結果Assetへ保存します。metadata読取済み / QA preview {resultProbeEvidence.previewFrameCount}枚。これは人間QA PASSではありません。</div> : <div className="rounded-lg border border-sand-200 dark:border-navy-600 bg-sand-50 dark:bg-navy-700 p-2.5 text-xs text-navy-500 dark:text-navy-300">ローカル動画の読取は任意です。未実施でも登録できますが、実尺・解像度・3フレームの早期確認ができるため正式QA前の利用を推奨します。</div>}
         <details className="rounded-lg border border-sand-200 dark:border-navy-600 p-3"><summary className="cursor-pointer text-sm font-medium text-navy-700 dark:text-navy-200">再現用メタデータ（任意）</summary><div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3"><div><label className="form-label">Provider generation ID</label><input value={resultGenerationId} onChange={(e) => setResultGenerationId(e.target.value)} className="form-input font-mono" placeholder="生成サービスのjob / generation ID" /></div><div><label className="form-label">Seed</label><input value={resultSeed} onChange={(e) => setResultSeed(e.target.value)} className="form-input font-mono" placeholder="取得できる場合のみ" /></div><div><label className="form-label">実際の尺（秒）</label><input type="number" min="0" step="0.1" value={resultActualDuration} onChange={(e) => setResultActualDuration(e.target.value)} className="form-input" placeholder="例: 5.0" /></div><div><label className="form-label">解像度</label><input value={resultResolution} onChange={(e) => setResultResolution(e.target.value)} className="form-input font-mono" placeholder="例: 1920x1080" /></div><div><label className="form-label">FPS</label><input type="number" min="0" step="1" value={resultFps} onChange={(e) => setResultFps(e.target.value)} className="form-input" placeholder="例: 24" /></div></div><p className="mt-3 text-xs text-navy-400">分かる項目だけでOKです。生成サービスから取得できない値を推測して埋めません。</p></details>
         <div><label className="form-label">生成メモ（任意）</label><textarea value={resultNote} onChange={(e) => setResultNote(e.target.value)} className="form-input" rows={3} placeholder="motion strength / referenceの使い方 / 気づいた点など" /></div>
-        <div className="rounded-lg border border-emerald-200 dark:border-emerald-800 bg-emerald-50 dark:bg-emerald-900/20 p-3 text-xs text-emerald-800 dark:text-emerald-300">保存すると `ai_video / ready` Assetを作り、元Promptと全sceneへ接続します。draftならtestingへ進め、結果レビュー待ちに載せられる状態にします。</div>
+        <div className="rounded-lg border border-emerald-200 dark:border-emerald-800 bg-emerald-50 dark:bg-emerald-900/20 p-3 text-xs text-emerald-800 dark:text-emerald-300">保存すると `ai_video / ready` Asset・全scene紐付け・Prompt結果参照・draft→testingを1回の履歴で更新します。Undo 1回で登録前の状態へ戻ります。</div>
         <div className="flex justify-end gap-3"><button type="button" onClick={closeResultIntake} className="px-4 py-2 text-sm rounded-lg border border-sand-200 dark:border-navy-600 text-navy-600 dark:text-navy-200">キャンセル</button><button type="button" onClick={saveResultAsset} className="px-4 py-2 text-sm rounded-lg bg-emerald-700 text-white hover:bg-emerald-800">Asset作成 + Prompt/シーンへ紐付け</button></div>
       </div>}
     </Modal>

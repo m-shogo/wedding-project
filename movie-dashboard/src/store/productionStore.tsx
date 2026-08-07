@@ -74,6 +74,7 @@ interface ProductionContextValue {
   duplicateAsset: (assetId: string) => void;
   linkAssetToScene: (assetId: string, sceneId: string) => void;
   unlinkAssetFromScene: (assetId: string, sceneId: string) => void;
+  registerPromptResultAsset: (promptId: string, asset: Asset) => void;
 
   // Prompt CRUD
   addPrompt: (prompt: Prompt) => void;
@@ -463,6 +464,48 @@ export function ProductionProvider({ children }: { children: ReactNode }) {
     [setData],
   );
 
+  const registerPromptResultAsset = useCallback(
+    (promptId: string, asset: Asset) => {
+      setData((prev) => {
+        const prompt = prev.prompts.find((item) => item.promptId === promptId);
+        if (!prompt || prev.assets.some((item) => item.assetId === asset.assetId)) return prev;
+
+        const existingSceneIds = new Set(prev.scenes.map((scene) => scene.sceneId));
+        const relatedSceneIds = Array.from(new Set([
+          ...asset.relatedSceneIds,
+          ...prompt.relatedSceneIds.filter((sceneId) => existingSceneIds.has(sceneId)),
+        ]));
+        const registeredAsset: Asset = {
+          ...asset,
+          relatedSceneIds,
+          relatedMovieIds: Array.from(new Set([...asset.relatedMovieIds, ...prompt.relatedMovieIds])),
+        };
+
+        return {
+          ...prev,
+          assets: [...prev.assets, registeredAsset],
+          scenes: prev.scenes.map((scene) =>
+            relatedSceneIds.includes(scene.sceneId) && !scene.assets.includes(asset.assetId)
+              ? { ...scene, assets: [...scene.assets, asset.assetId] }
+              : scene,
+          ),
+          prompts: prev.prompts.map((item) =>
+            item.promptId === promptId
+              ? {
+                  ...item,
+                  status: item.status === "draft" ? "testing" : item.status,
+                  resultAssetIds: item.resultAssetIds.includes(asset.assetId)
+                    ? item.resultAssetIds
+                    : [...item.resultAssetIds, asset.assetId],
+                }
+              : item,
+          ),
+        };
+      });
+    },
+    [setData],
+  );
+
   // --- Prompt CRUD ---
   const addPrompt = useCallback(
     (prompt: Prompt) => {
@@ -674,6 +717,7 @@ export function ProductionProvider({ children }: { children: ReactNode }) {
       duplicateAsset,
       linkAssetToScene,
       unlinkAssetFromScene,
+      registerPromptResultAsset,
       addPrompt,
       updatePrompt,
       deletePrompt,
@@ -719,6 +763,7 @@ export function ProductionProvider({ children }: { children: ReactNode }) {
       duplicateAsset,
       linkAssetToScene,
       unlinkAssetFromScene,
+      registerPromptResultAsset,
       addPrompt,
       updatePrompt,
       deletePrompt,
