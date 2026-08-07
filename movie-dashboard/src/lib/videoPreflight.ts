@@ -197,10 +197,10 @@ export function runVideoPreflight(data: AllData, prompts: Prompt[], now = new Da
       if (adoptedResultAsset && !currentFingerprint) {
         issues.push({
           id: `${prompt.promptId}:adopted-result-no-sample-fingerprint`,
-          severity: "warning",
+          severity: "block",
           promptId: prompt.promptId,
           title: `${label}: 採用正本の実体fingerprintなし`,
-          detail: `${adoptedResultAsset.title} は採用正本ですがsample fingerprintがありません。Continuity v2はAsset ID/path/media metadataで評価を続けますが、同じpathへの実体差し替え検知が弱くなります。`,
+          detail: `${adoptedResultAsset.title} は採用正本ですがsample fingerprintがありません。実体差し替えを検知できないため、Palmier / CapCutへ渡す前にprobe証跡が必要です。`,
           action: "AI動画 実体再probeで同じ既存Assetへprobe証跡だけ追加する。動画本体は上書きしない。",
           href: "/video-asset-reprobe",
         });
