@@ -77,7 +77,7 @@ export function VideoPromptBuilder() {
     () => selectedMovieId === "all" ? data.scenes : movieScenes,
     [data.scenes, movieScenes, selectedMovieId],
   );
-  const selectedScene = data.scenes.find((scene) => scene.sceneId === selectedSceneId);
+  const selectedScene = availableScenes.find((scene) => scene.sceneId === selectedSceneId);
   const activePreset = selectedPresetId ? getVideoPromptPreset(selectedPresetId) : undefined;
   const model = VIDEO_MODELS.find((item) => item.id === modelId) ?? VIDEO_MODELS[0];
   const compiled = useMemo(() => compileVideoPrompt(modelId, intent), [modelId, intent]);
@@ -126,7 +126,7 @@ export function VideoPromptBuilder() {
       tool: model.toolLabel,
       prompt: compiled.prompt,
       negativePrompt: compiled.negativePrompt,
-      relatedSceneIds: selectedScene ? [selectedScene.sceneId] : [],
+      relatedSceneIds: [],
       relatedMovieIds,
       status: "draft",
       resultAssetIds: [],
@@ -141,6 +141,8 @@ export function VideoPromptBuilder() {
     });
 
     if (selectedScene) {
+      // The second history entry adds both Prompt.relatedSceneIds and Scene.promptIds.
+      // One undo returns to a valid unlinked Prompt instead of a one-way relationship.
       linkPromptToScene(promptId, selectedScene.sceneId);
       addToast(`保存して「${selectedScene.title}」へ紐付けました`, "success");
     } else {
