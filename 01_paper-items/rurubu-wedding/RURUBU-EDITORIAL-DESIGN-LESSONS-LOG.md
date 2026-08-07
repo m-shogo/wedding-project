@@ -334,6 +334,32 @@ Do not turn every isolated preference into a rigid global rule. The goal is accu
 
 ---
 
+## LESSON-012 — Redundant profile ribbons can weaken direct identity hierarchy
+
+**Date:** 2026-08-07
+
+**Context:** V5 inside-left profile area, nodes `77:335`–`77:338`.
+
+**Observed failure or opportunity:** The spread already identified the two people through the section heading, large native names, distinct profile photographs, metadata, and colored vertical rules. Rotated `新郎 PROFILE` / `新婦 PROFILE` ribbons repeated the same role and added sticker/tape geometry without additional navigation or information.
+
+**Root cause:** Identity distinction had been solved twice: first by the profile composition itself, then again by decorative labels.
+
+**General editorial principle:** When names, photographs, position, and editorial rules already establish identity, test removing secondary role ribbons before refining them. Keep a role label only when removing it creates genuine ambiguity.
+
+**Process change:** During profile QA, classify every role label as essential identification, navigation, or decoration. Subtract labels that duplicate information already carried by stronger hierarchy.
+
+**Design change:** Hid `77:335 / PROFILE_RIBBON_A`, `77:336 / PROFILE_RIBBON_A_TXT`, `77:337 / PROFILE_RIBBON_B`, and `77:338 / PROFILE_RIBBON_B_TXT`. Nodes were not deleted; rollback remains immediate.
+
+**Verification evidence:** Whole-spread and page screenshots retained clear SHOGO/SHI-CHAN identity and reading order. Structure audit: `92` native text nodes, `57` visible text nodes, `9` IMAGE-fill nodes; fold guide `77:540` and rollback frames `59:2` / `59:178` preserved; history image hash remained `1bfd7f1fa601206bfed1594a140b40554e85d77a`. Detailed evidence: `learning-runs/2026-08-07-v5-profile-ribbon-subtraction.md`.
+
+**Applies to:** V5; candidate for later profile/editorial pages under the same conditions
+
+**Status:** TESTED
+
+**Promoted knowledge-base section:** Not yet promoted; requires repeated evidence before broader adoption.
+
+---
+
 ## Open candidate lessons
 
 Use this area for observations that require further evidence before promotion.
