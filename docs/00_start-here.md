@@ -4,6 +4,14 @@
 
 ## 何をしたいかで選ぶ
 
+### 迷ったら最初に見る
+
+1. `docs/task-board.md` — 今やること、Blocked、次に確認するもの。
+2. `README.md` — repo全体の入口、制作ハブ、Git管理ルール。
+3. `movie-dashboard/README.md` — ブラウザ管理ダッシュボードの使い方。
+4. `docs/figma-wedding-movie-dashboard-demo.md` — Figmaデモと情報設計。
+5. `docs/palmier-operation.md` — Palmier Free + Claude Code MCPの運用手順。
+
 ### 最初に始める
 
 1. `docs/materials-todo.md` を見る。
@@ -11,6 +19,44 @@
 3. BGM候補を `docs/templates/music-candidates.csv` に集める。
 4. 参考映像を `docs/templates/reference-log.csv` に集める。
 5. `docs/02_style-bible.md` を好みに合わせて更新する。
+
+### オープニングムービーを進める
+
+1. `02_opening-movie/roadmap.md` を見る。
+2. `docs/opening-90s-storyboard.md` で90秒構成を確認する。
+3. `docs/ai-generation-prompt-pack.md` から必要な静止画・AI動画プロンプトを選ぶ。
+4. `docs/palmier-operation.md` に従ってPalmier 10秒試作を行う。
+5. 10秒試作が安定したら30秒試作へ進む。
+6. 結果を `movie-dashboard`、`docs/templates/review-notes.csv`、`docs/templates/ai-video-scorecard.csv`、`docs/templates/capcut-edit-plan.csv` に反映する。
+
+### Palmier Free + Claude Code MCPを使う
+
+1. Palmierを起動する。
+2. `docs/palmier-operation.md` のMCP接続確認プロンプトをClaude Codeに投げる。
+3. `02_opening-movie/source/palmier-test-001/` にテスト素材だけ置く。
+4. 10秒試作を作る。
+5. `docs/palmier-dashboard-sync.md` に従ってmovie-dashboardへ反映する。
+6. 問題なければ30秒試作へ進む。
+
+### 画像生成・AI動画生成を進める
+
+1. `docs/02_style-bible.md` を見る。
+2. `docs/04_ai-video-assets.md` を見る。
+3. `docs/ai-generation-prompt-pack.md` から静止画プロンプトを使う。
+4. 静止画を目視QAする。
+5. 採用候補だけSeedance/Kling等で3〜5秒動画化する。
+6. `docs/templates/ai-video-scorecard.csv` に採点を残す。
+
+### movie-dashboardを使う
+
+1. `cd movie-dashboard && pnpm dev` で起動する。
+2. ダッシュボードで全体状況を見る。
+3. 絵コンテでシーンを確認する。
+4. 素材ライブラリに素材パスと採否を登録する。
+5. 動画プロンプト/Prompt Bankでプロンプトと結果素材を紐付ける。
+6. 不足・未確定リストに足りない素材を入れる。
+7. CapCut編集パックで仕上げ作業を確認する。
+8. データ管理でJSONエクスポートし、必要に応じて `src/data/*.json` へ反映する。
 
 ### 素材を送る
 
@@ -27,23 +73,6 @@
 4. `docs/templates/photo-selection.csv` で写真候補を選ぶ。
 5. `docs/templates/storyboard.csv` に秒割りを作る。
 6. `docs/templates/capcut-edit-plan.csv` に編集指示を作る。
-
-### オープニングムービーを進める
-
-1. `02_opening-movie/roadmap.md` を見る。
-2. 会場の入場前演出の流れを確認する。
-3. BGM候補を選ぶ。
-4. 旅行サンプルで10秒試作を作る。
-5. テーマ変更が必要なら、Style Bibleと参考映像を差し替える。
-
-### AI動画素材を作る
-
-1. `docs/02_style-bible.md` を見る。
-2. `docs/04_ai-video-assets.md` を見る。
-3. ローカル環境を使う場合は `docs/local-video-ai-setup.md` を見る。
-4. ComfyUI、Codex、ChatGPT/Claudeの使い分けは `docs/comfy-codex-chatgpt-workflow.md` を見る。
-5. `docs/templates/ai-shot-list.csv` に候補を書く。
-6. 静止画、ローカル試作、本番生成の順で進める。
 
 ### BGMを決める
 
@@ -82,4 +111,9 @@
 ```text
 この章に使うAI背景素材を3-5秒で提案して。
 Style Bibleに合わせて、人物と犬は出さない。
+```
+
+```text
+Palmierで作ったラフ結果をmovie-dashboardへ反映して。
+使用素材、不足素材、ボツ理由、CapCutで仕上げる作業を整理して。
 ```
