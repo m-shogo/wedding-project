@@ -78,3 +78,12 @@ export function bestObservedModelForPreset(evidence: VideoModelEvidence[], prese
   const candidates = evidence.filter((item) => item.preset === preset && item.reviewed >= 3);
   return candidates.sort((a, b) => b.passRate - a.passRate || b.reviewed - a.reviewed)[0];
 }
+
+export function promotedObservedModelForPreset(evidence: VideoModelEvidence[], preset: string) {
+  const candidates = evidence.filter((item) => item.preset === preset && item.signal === "promote");
+  return candidates.sort((a, b) => b.passRate - a.passRate || b.reviewed - a.reviewed)[0];
+}
+
+export function observedEvidenceForToolPreset(evidence: VideoModelEvidence[], tool: string, preset: string) {
+  return evidence.find((item) => item.tool === tool && item.preset === preset);
+}
