@@ -1,7 +1,9 @@
 import { useState } from "react";
 import {
+  captureLocalVideoPreviewFrames,
   formatFileSize,
   probeLocalVideoFile,
+  type LocalVideoPreviewFrame,
   type LocalVideoProbeResult,
 } from "../lib/localVideoProbe";
 
@@ -21,19 +23,28 @@ function durationFit(actual: number | undefined, expected: number | undefined): 
 
 export function LocalVideoProbePicker({ expectedDurationSec, onMetadata }: LocalVideoProbePickerProps) {
   const [probe, setProbe] = useState<LocalVideoProbeResult>();
+  const [previewFrames, setPreviewFrames] = useState<LocalVideoPreviewFrame[]>([]);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  const [previewError, setPreviewError] = useState("");
   const fit = durationFit(probe?.durationSec, expectedDurationSec);
 
   async function handleFile(file?: File) {
     setError("");
+    setPreviewError("");
     setProbe(undefined);
+    setPreviewFrames([]);
     if (!file) return;
     setBusy(true);
     try {
       const result = await probeLocalVideoFile(file);
       setProbe(result);
       onMetadata({ durationSec: result.durationSec, resolution: result.resolution });
+      try {
+        setPreviewFrames(await captureLocalVideoPreviewFrames(file));
+      } catch (caught) {
+        setPreviewError(caught instanceof Error ? caught.message : "QAフレームを抽出できませんでした");
+      }
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "動画メタデータを読み取れませんでした");
     } finally {
@@ -45,8 +56,8 @@ export function LocalVideoProbePicker({ expectedDurationSec, onMetadata }: Local
     <div className="rounded-lg border border-sky-200 dark:border-sky-800 bg-sky-50 dark:bg-sky-900/20 p-3">
       <div className="flex flex-wrap items-start gap-3">
         <div className="min-w-0 flex-1">
-          <p className="text-xs font-bold text-sky-800 dark:text-sky-300">ローカル動画から実メディア情報を読む</p>
-          <p className="mt-1 text-[11px] text-sky-700 dark:text-sky-300">動画ファイルはアップロードしません。ブラウザ内でdurationとwidth/heightだけを読み、下の再現メタデータ入力へ反映します。FPS・seed・generation IDは推測しません。</p>
+          <p className="text-xs font-bold text-sky-800 dark:text-sky-300">ローカル動画から実メディア情報 + QAフレームを読む</p>
+          <p className="mt-1 text-[11px] text-sky-700 dark:text-sky-300">動画ファイルはアップロードしません。ブラウザ内でduration / width / heightと、冒頭・中間・終端の縮小プレビューだけを作ります。FPS・seed・generation IDは推測しません。</p>
         </div>
         <label className="px-3 py-1.5 text-xs rounded-lg bg-white/70 dark:bg-navy-800/60 border border-sky-200 dark:border-sky-700 text-sky-800 dark:text-sky-200 cursor-pointer">
           {busy ? "読取中…" : "動画ファイルを選択"}
@@ -75,7 +86,28 @@ export function LocalVideoProbePicker({ expectedDurationSec, onMetadata }: Local
           {fit === "long" && <div className="mt-3 rounded-lg border border-sky-200 dark:border-sky-700 bg-sky-50 dark:bg-sky-900/20 p-2.5 text-sky-800 dark:text-sky-300"><strong>余尺あり:</strong> sceneより1秒以上長いです。速度変更せず、自然な区間をtrimできる候補です。</div>}
           {fit === "fit" && <div className="mt-3 rounded-lg border border-emerald-200 dark:border-emerald-700 bg-emerald-50 dark:bg-emerald-900/20 p-2.5 text-emerald-800 dark:text-emerald-300">✓ scene尺に対して無理なループ/速度変更なしで扱いやすい実尺です。</div>}
 
-          <p className="mt-2 text-[11px] opacity-80">ファイル名やbytesは表示確認用だけで、production dataには自動保存しません。保存パスは実際の配置先を別欄で確認してください。</p>
+          {previewFrames.length > 0 && (
+            <div className="mt-4">
+              <div className="flex flex-wrap items-baseline gap-2 mb-2">
+                <p className="text-xs font-bold text-sky-800 dark:text-sky-300">時間方向の早期QA</p>
+                <span className="text-[11px] text-sky-700 dark:text-sky-300">3枚を横に見比べる</span>
+              </div>
+              <div className="grid grid-cols-3 gap-2">
+                {previewFrames.map((frame) => (
+                  <figure key={`${frame.label}-${frame.timeSec}`} className="rounded-lg overflow-hidden border border-sky-200 dark:border-sky-700 bg-white dark:bg-navy-800">
+                    <img src={frame.dataUrl} alt={`${frame.label} ${frame.timeSec}s`} className="block w-full aspect-video object-cover" />
+                    <figcaption className="px-2 py-1.5 text-[11px] text-navy-600 dark:text-navy-200"><strong>{frame.label}</strong> · {frame.timeSec}s</figcaption>
+                  </figure>
+                ))}
+              </div>
+              <div className="mt-3 rounded-lg border border-sky-200 dark:border-sky-700 bg-sky-50/70 dark:bg-sky-900/20 p-2.5 text-[11px] text-sky-900 dark:text-sky-200">
+                <strong>見る場所:</strong> 窓枠・翼・建物・水平線などの形が変わっていないか / 人物・文字・ロゴが途中で増えていないか / 終端だけ溶ける・構図が崩れる・過剰発光していないか / テロップ余白が最後まで残っているか。
+              </div>
+            </div>
+          )}
+
+          {previewError && <p className="mt-3 text-[11px] text-amber-700 dark:text-amber-300">QAフレームだけ取得できませんでした: {previewError}。実尺・解像度はそのまま利用できます。</p>}
+          <p className="mt-2 text-[11px] opacity-80">ファイル名・bytes・3枚のプレビューは表示確認用だけです。production data / Git / Driveへ自動保存しません。保存パスは実際の配置先を別欄で確認してください。</p>
         </div>
       )}
 
