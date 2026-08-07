@@ -38,6 +38,28 @@ requireText(
   "generated text/logo failures must stay routed to editing handoff",
 );
 
+const modelEvidence = await source("src/lib/videoModelEvidence.ts");
+requireText(
+  modelEvidence,
+  "const latestByLineage = new Map",
+  "model evidence must deduplicate reviewed retries by lineage before aggregation",
+);
+requireText(
+  modelEvidence,
+  'const lineageKey = `${tool}::${preset}::${root}`;',
+  "model evidence lineage must stay scoped to model + preset + retry root",
+);
+requireMatch(
+  modelEvidence,
+  /attempt\s*>\s*current\.attempt[\s\S]{0,220}?attempt\s*===\s*current\.attempt[\s\S]{0,220}?order\s*>\s*current\.order/,
+  "latest reviewed retry must win within a lineage",
+);
+requireText(
+  modelEvidence,
+  "for (const { prompt, outcome } of latestByLineage.values())",
+  "only lineage-deduplicated outcomes may feed model evidence groups",
+);
+
 const failureLab = await source("src/pages/VideoFailureLab.tsx");
 requireText(
   failureLab,
