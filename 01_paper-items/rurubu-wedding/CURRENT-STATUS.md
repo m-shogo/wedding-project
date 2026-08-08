@@ -12,7 +12,7 @@ Process authority:
 
 ## Current declaration
 
-`RURUBU_V5_CURRENT_CANDIDATE / REALISTIC_DUMMY_MASTERS_13_OF_13_DRIVE_VERIFIED / ACTIVE_CURRENT_PHOTO_ROLES_11 / RETIRED_PRESERVED_ROLES_2 / INTENDED_SOURCE_APPLIED_7 / PHOTO_ROLE_PASS_6 / ROLE_COMPLETE_6 / DOMINANT_PHOTO_PASS_2_OF_3 / COVER_HERO_REPAIR_REQUIRED / REAL_CONTENT_PENDING / PRINT_TEMPLATE_PENDING / NOT_PRINT_READY`
+`RURUBU_V5_CURRENT_CANDIDATE / REALISTIC_DUMMY_MASTERS_13_OF_13_DRIVE_VERIFIED / ACTIVE_CURRENT_PHOTO_ROLES_11 / RETIRED_PRESERVED_ROLES_2 / INTENDED_SOURCE_APPLIED_8 / PHOTO_ROLE_PASS_7 / ROLE_COMPLETE_7 / DOMINANT_PHOTO_PASS_2_OF_3 / COVER_HERO_REPAIR_REQUIRED / REAL_CONTENT_PENDING / PRINT_TEMPLATE_PENDING / NOT_PRINT_READY`
 
 ## Current live Figma
 
@@ -38,6 +38,7 @@ Important comparison frames preserved:
 - memory 04 `429:2`
 - cover-snap scope/transport comparison `432:2`
 - lead-memory coast derivative `436:2`
+- Friends cafe derivative `442:2`
 
 ## Active-scope truth
 
@@ -51,9 +52,9 @@ Retired roles:
 
 Verified ledger counts:
 - Drive readback: `13 / 13`
-- intended source applied: `7 / 11 active`
-- photo-role pass: `6 / 11 active`
-- role complete: `6 / 11 active`
+- intended source applied: `8 / 11 active`
+- photo-role pass: `7 / 11 active`
+- role complete: `7 / 11 active`
 - dominant role pass: `2 / 3`
 
 ## Dominant-photo gate
@@ -115,6 +116,21 @@ The accepted role derivative is exactly 2× its `398 × 214` semantic target. Th
 - image hash: `e3738476f760932bb5b09c9d60f174dd6c84049d`
 - QA: whole/page, reading, actual-size detail, structure PASS for dummy-design QA
 
+### V5-12 — Friends & Family cafe
+- Current node: `77:39 / BACK_VISUAL_FRIEND_2_PHOTO`
+- live semantic geometry: `270 × 184` (this corrects the stale prior ledger geometry `236 × 176`)
+- master Drive ID: `1D0U-rBuidfk7YttssNyonTW2YAPrpUjv`
+- accepted derivative Drive ID: `1CN3gXWgHccx6WwcsmJcXDfXWgARMLFrO`
+- derivative: `810 × 552`, `25,901 bytes`, exactly `3×` live target geometry
+- SHA-256: `bf441c0fba4d52c9694c311665f25958bf930efb33aad5f3c4fe287e4907e76f`
+- previous image hash: `2005b91ce26ead7d8128f547c293fe4a510f5d24`
+- Current image hash: `c1ada11205bc3978bf426b304d683f1c1566cac2`
+- comparison: `442:2`, target `442:23`
+- QA: whole/page, reading and natural-size `270 × 184` detail PASS; cup, cake, flowers and camera remain distinct
+- structure: outer native text `85`, IMAGE-fill nodes `14`, fold guide and V4 rollback preserved
+
+The verified `1254 × 1254` cafe master was already identity-safe and editorially suitable, so no new asset was generated. A role-specific crop was used instead. The stale ledger geometry was corrected from live Figma before derivative acceptance; live Figma remains the highest production authority.
+
 ## V5-02 scope reconciliation / preserved evidence
 
 Master:
@@ -142,8 +158,7 @@ This does **not** become PHOTO_ROLE_PASS because the Current semantic node is hi
 1. `V5-01 / 77:148` — cover hero; highest priority and final dominant blocker
 2. `V5-03 / 77:296` — groom atmosphere profile; identity-safe treatment required
 3. `V5-04 / 77:302` — bride atmosphere profile; recognizable-face risk must be removed
-4. `V5-12 / 77:39` — Friends & Family 02 / cafe
-5. `V5-13 / 77:43` — Friends & Family 03 / dining
+4. `V5-13 / 77:43` — Friends & Family 03 / dining; live geometry must be re-read before derivative acceptance because the ledger’s old geometry may also be stale
 
 No active role may be counted complete until Drive ID, derivative dimensions/bytes, exact Figma node/hash, screenshot QA, structure QA, and Git readback agree.
 
@@ -158,7 +173,7 @@ V6 remains separate and production-blocked. Research, Drive structure, asset que
 ## Next safe work
 
 - close `V5-01` with a quality-passing role-specific cover derivative and duplicate-first three-scale QA
-- advance `V5-12` and `V5-13` while preserving source identity and crop quality
+- re-read live geometry and advance `V5-13` with source identity/crop quality preserved
 - treat V5-03/V5-04 with identity-safe crops/replacements before any pass
 - continue comparing Current against the clean-room cover/inside candidates
 - keep print readiness separate from dummy-design completion
