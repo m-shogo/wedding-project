@@ -364,3 +364,26 @@ GUI手動作成でも落ちる場合は、PalmierPro側のMetal/GPU初期化不�
   （60秒 / 30fps / Git管理外）。バックグラウンドrenderのためPalmierの通知で完了確認。
 - 実写真が来たら、地域色ダミーclip（上表の各frame）を photo clip に差し替え、
   対応するV3ラベルを外す。
+
+### 追記2: 動きを付与（Ken Burns + ラベルアニメ）2026-08-09
+
+「もっと動き・ワクワク」の要望で、無地ダミーを**人物なしAI旅行風景ダミー**へ差し替え、
+Ken Burns（ゆっくりズーム/パン）を全写真枠に付与した。実写真ではない・人物や犬のAI生成もなし。
+
+- 使用ダミー画像（`02_opening-movie/sample_image/`、いずれも人物・看板なしを目視確認）:
+  - Okinawa: op_05_okinawa_sea（4240A770）
+  - Seoul枠: op_17_hawaii_night_view（148645A1、夜景の街として流用）
+  - Hawaii: op_07_hawaii_beach（DD712239）
+  - Hero A: op_09_yokohama_sky（CDAF53F5、俯瞰夕景）
+  - Hero B: op_03_airplane_window_clouds（1B1DEDFF、機窓）
+  - ※ op_06_korea_street は**人物が写っている**ため不使用。
+- 動き: 各写真枠に `set_keyframes`(scale/position) で Ken Burns。
+  ズームイン / ズームアウト / 横パンを交互に配置し、Hero枠はゆっくり大きく寄せる。
+  scaleは常に>1.0で端の黒欠けなし。派手なグリッチ/回転/フレアは不使用（Style Bible順守）。
+- ラベル: V3の11枚を下三分の一（centerY 0.84）へ移動、`slideUp` アニメ + ネイビー縁取りで可読性確保。
+- 再書き出し: `~/Downloads/Opening V1 2.mp4`（H.264 / 1080p / 60.0s / 約65MB、Git管理外）。
+- V2差し替え後の新clipId（実写真差し替え先）:
+  Okinawa FAB3A839 / 6FBE8DCA / 4E2A02FE、Seoul FF3E6258 / 626A5F70 / 9250E8BA、
+  Hawaii 127BF326 / 22159CEF / 6B790636、
+  Hero A E8BA7505(+21F6DA70)、Hero B 04651760(+57F28818)。
+- これらAI風景はあくまで**動き確認用ダミー**。本番は実写真11枚へ差し替える方針は不変。
