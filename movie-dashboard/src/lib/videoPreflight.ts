@@ -5,6 +5,7 @@ import { buildVideoModelEvidence } from "./videoModelEvidence";
 import { resolveProjectVideoModelRoute } from "./videoProjectModelRouter";
 import { findVideoResultFingerprintDuplicates } from "./videoResultFingerprintDuplicates";
 import { parseVideoResultProbeEvidence } from "./videoResultProbeEvidence";
+import { parseVideoResultReproMetadata } from "./videoResultMetadata";
 
 export type PreflightSeverity = "block" | "warning" | "info";
 
@@ -20,6 +21,7 @@ export interface VideoPreflightIssue {
 
 const NEGATIVE_PATTERN = /\b(no|not|without|avoid|never|don't|do not|doesn't)\b/i;
 const GUIDANCE_MAX_AGE_DAYS = 45;
+const MEASURED_DURATION_WARNING_GAP_SEC = 0.25;
 
 function noteValue(notes: string, key: string) {
   const match = notes.match(new RegExp(`${key}=([^\\s/]+)`));
@@ -46,6 +48,20 @@ function guidanceAgeDays(notes: string, now: Date) {
 
 function promptLabel(prompt: Prompt) {
   return prompt.title || prompt.promptId;
+}
+
+function mediaMetadataMismatchDetail(notes: string) {
+  const probe = parseVideoResultProbeEvidence(notes);
+  const saved = parseVideoResultReproMetadata(notes);
+  const differences: string[] = [];
+
+  if (probe?.measuredDurationSec && saved.actualDurationSec && Math.abs(probe.measuredDurationSec - saved.actualDurationSec) > MEASURED_DURATION_WARNING_GAP_SEC) {
+    differences.push(`尺: 登録 ${saved.actualDurationSec}s / ブラウザ実測 ${probe.measuredDurationSec}s`);
+  }
+  if (probe?.measuredResolution && saved.resolution && probe.measuredResolution.toLowerCase() !== saved.resolution.toLowerCase()) {
+    differences.push(`解像度: 登録 ${saved.resolution} / ブラウザ実測 ${probe.measuredResolution}`);
+  }
+  return differences;
 }
 
 export function runVideoPreflight(data: AllData, prompts: Prompt[], now = new Date()): VideoPreflightIssue[] {
@@ -79,6 +95,19 @@ export function runVideoPreflight(data: AllData, prompts: Prompt[], now = new Da
     if (!sourcePromptId) continue;
     const sourcePrompt = promptById.get(sourcePromptId);
     if (!sourcePrompt) continue; // Outside the currently selected movie scope.
+
+    const metadataDifferences = mediaMetadataMismatchDetail(asset.notes);
+    if (metadataDifferences.length > 0) {
+      issues.push({
+        id: `${asset.assetId}:result-metadata-measured-mismatch`,
+        severity: "warning",
+        promptId: sourcePromptId,
+        title: `${asset.title}: 登録metadataとブラウザ実測値が不一致`,
+        detail: `${metadataDifferences.join(" / ")}。実測metadataはlocal media evidenceであり、このwarningだけで目視QAの合否は決めません。`,
+        action: "AI動画 実体再probeで現在ファイルを再確認し、実測が正しければ登録metadata側を修正する。動画本体は自動変更しない。",
+        href: "/video-asset-reprobe",
+      });
+    }
 
     if (!sourcePrompt.resultAssetIds.includes(asset.assetId)) {
       issues.push({
