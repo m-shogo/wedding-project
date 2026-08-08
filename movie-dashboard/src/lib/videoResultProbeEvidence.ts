@@ -1,3 +1,5 @@
+import { normalizeVideoResolution } from "./videoResultMetadata";
+
 export interface VideoResultProbeEvidence {
   probedAt: string;
   previewFrameCount: number;
@@ -44,7 +46,7 @@ export function formatVideoResultProbeEvidence(evidence: VideoResultProbeEvidenc
   const previewFrameCount = Math.max(0, Math.floor(evidence.previewFrameCount));
   const previewFrameTimesSec = normalizedPreviewTimes(evidence.previewFrameTimesSec);
   const measuredDurationSec = normalizedMeasuredDuration(evidence.measuredDurationSec);
-  const measuredResolution = safeSingleLine(evidence.measuredResolution ?? "");
+  const measuredResolution = normalizeVideoResolution(evidence.measuredResolution ?? "");
   const sampleFingerprint = safeSingleLine(evidence.sampleFingerprint ?? "");
   const sampledBytes = evidence.sampledBytes && evidence.sampledBytes > 0 ? Math.floor(evidence.sampledBytes) : undefined;
   if (!probedAt) return "";
@@ -73,7 +75,7 @@ export function parseVideoResultProbeEvidence(notes: string): VideoResultProbeEv
   if (!line) return undefined;
   const probedAt = line.match(/probedAt=([^\s/]+)/)?.[1] ?? "";
   const measuredDurationSec = Number(line.match(/measured-duration-sec=([\d.]+)/)?.[1] ?? 0);
-  const measuredResolution = line.match(/measured-resolution=([^\s/]+)/)?.[1] ?? "";
+  const measuredResolution = normalizeVideoResolution(line.match(/measured-resolution=([^\s/]+)/)?.[1] ?? "");
   const previewFrameCount = Number(line.match(/preview-frames=(\d+)/)?.[1] ?? 0);
   const previewTimesRaw = line.match(/preview-times=([^\s/]+)/)?.[1] ?? "";
   const previewFrameTimesSec = previewTimesRaw
