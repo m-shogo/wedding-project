@@ -12,7 +12,7 @@ Process authority:
 
 ## Current declaration
 
-`RURUBU_V5_CURRENT_CANDIDATE / REALISTIC_DUMMY_MASTERS_13_OF_13_DRIVE_VERIFIED / ACTIVE_CURRENT_PHOTO_ROLES_11 / RETIRED_PRESERVED_ROLES_2 / INTENDED_SOURCE_APPLIED_6 / PHOTO_ROLE_PASS_5 / ROLE_COMPLETE_5 / DOMINANT_PHOTO_PASS_2_OF_3 / COVER_HERO_REPAIR_REQUIRED / REAL_CONTENT_PENDING / PRINT_TEMPLATE_PENDING / NOT_PRINT_READY`
+`RURUBU_V5_CURRENT_CANDIDATE / REALISTIC_DUMMY_MASTERS_13_OF_13_DRIVE_VERIFIED / ACTIVE_CURRENT_PHOTO_ROLES_11 / RETIRED_PRESERVED_ROLES_2 / INTENDED_SOURCE_APPLIED_7 / PHOTO_ROLE_PASS_6 / ROLE_COMPLETE_6 / DOMINANT_PHOTO_PASS_2_OF_3 / COVER_HERO_REPAIR_REQUIRED / REAL_CONTENT_PENDING / PRINT_TEMPLATE_PENDING / NOT_PRINT_READY`
 
 ## Current live Figma
 
@@ -37,6 +37,7 @@ Important comparison frames preserved:
 - memory 03 `427:2`
 - memory 04 `429:2`
 - cover-snap scope/transport comparison `432:2`
+- lead-memory coast derivative `436:2`
 
 ## Active-scope truth
 
@@ -50,9 +51,9 @@ Retired roles:
 
 Verified ledger counts:
 - Drive readback: `13 / 13`
-- intended source applied: `6 / 11 active`
-- photo-role pass: `5 / 11 active`
-- role complete: `5 / 11 active`
+- intended source applied: `7 / 11 active`
+- photo-role pass: `6 / 11 active`
+- role complete: `6 / 11 active`
 - dominant role pass: `2 / 3`
 
 ## Dominant-photo gate
@@ -71,6 +72,20 @@ The cover hero remains the last dominant-photo blocker. V6 production remains cl
 - derivative: `1356 × 560`, `29,582 bytes`
 - image hash: `539c259be8036b481d06b4f76db9a39b407d90e8`
 - QA: whole/page, reading, actual-size detail, structure PASS for dummy-design QA
+
+### V5-06 — lead memory / coast
+- Current node: `77:430 / IA_MEMORY_1_PHOTO`
+- master Drive ID: `1DgbIjrpAhRunU6fmDVF4y_jcXOB4t3wx`
+- accepted derivative Drive ID: `1epb80L7WSZDmU86zl6PVQkZ8frP1JEeN`
+- derivative: `796 × 428`, `23,276 bytes`
+- SHA-256: `0c0ac76ed45aa8f0261df92b5e1ead40991a3d5c767b5ab2a01ab8c921ce8746`
+- previous image hash: `8344d95d228f3ca6661d2dbd06220353d265a540`
+- Current image hash: `adbb8e529451a81dd25e4eb29bf068655569ce25`
+- comparison: `436:2`, target `436:148`
+- QA: whole/page, reading, natural-size `398 × 214` detail, structure PASS for V5 dummy-design QA
+- structure: native text `92`, IMAGE-fill nodes `9`, fold guide and V4 rollback preserved
+
+The accepted role derivative is exactly 2× its `398 × 214` semantic target. The coast, cliff town, horizon, boats and mountain edge remain distinct at natural render size. The source master was already editorially suitable, so a role-specific wide crop was chosen instead of unnecessary regeneration.
 
 ### V5-07 — memory spot 02 / old town
 - Current node: `77:438 / IA_MEMORY_2_PHOTO`
@@ -127,9 +142,8 @@ This does **not** become PHOTO_ROLE_PASS because the Current semantic node is hi
 1. `V5-01 / 77:148` — cover hero; highest priority and final dominant blocker
 2. `V5-03 / 77:296` — groom atmosphere profile; identity-safe treatment required
 3. `V5-04 / 77:302` — bride atmosphere profile; recognizable-face risk must be removed
-4. `V5-06 / 77:430` — lead memory coast image
-5. `V5-12 / 77:39` — Friends & Family 02 / cafe
-6. `V5-13 / 77:43` — Friends & Family 03 / dining
+4. `V5-12 / 77:39` — Friends & Family 02 / cafe
+5. `V5-13 / 77:43` — Friends & Family 03 / dining
 
 No active role may be counted complete until Drive ID, derivative dimensions/bytes, exact Figma node/hash, screenshot QA, structure QA, and Git readback agree.
 
@@ -144,7 +158,7 @@ V6 remains separate and production-blocked. Research, Drive structure, asset que
 ## Next safe work
 
 - close `V5-01` with a quality-passing role-specific cover derivative and duplicate-first three-scale QA
-- advance `V5-06`, `V5-12`, and `V5-13` while preserving source identity and crop quality
+- advance `V5-12` and `V5-13` while preserving source identity and crop quality
 - treat V5-03/V5-04 with identity-safe crops/replacements before any pass
 - continue comparing Current against the clean-room cover/inside candidates
 - keep print readiness separate from dummy-design completion
