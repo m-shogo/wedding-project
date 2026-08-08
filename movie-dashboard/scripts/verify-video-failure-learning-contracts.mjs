@@ -59,6 +59,36 @@ requireText(
   "for (const { prompt, outcome } of latestByLineage.values())",
   "only lineage-deduplicated outcomes may feed model evidence groups",
 );
+requireText(
+  modelEvidence,
+  "function latestReviewOutcome",
+  "model routing evidence must resolve the latest append-only visual review event",
+);
+requireText(
+  modelEvidence,
+  'prompt.status === "adopted" && latestOutcome === "adopted"',
+  "adopted model evidence must require status and latest review outcome to agree",
+);
+requireText(
+  modelEvidence,
+  'prompt.status === "rejected" && latestOutcome === "rejected"',
+  "rejected model evidence must require status and latest review outcome to agree",
+);
+requireText(
+  modelEvidence,
+  'lastNoteValue(prompt.notes, "retry-attempt")',
+  "retry lineage ordering must use the latest append-only retry attempt marker",
+);
+requireText(
+  modelEvidence,
+  'lastNoteValue(prompt.notes, "retry-root")',
+  "retry lineage identity must use the latest append-only retry root marker",
+);
+requireText(
+  modelEvidence,
+  'lastNoteValue(prompt.notes, "preset")',
+  "model evidence grouping must use the latest append-only preset marker",
+);
 
 const failureLab = await source("src/pages/VideoFailureLab.tsx");
 requireText(

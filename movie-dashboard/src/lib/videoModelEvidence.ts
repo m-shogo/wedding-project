@@ -25,23 +25,33 @@ const PROMOTE_CONFIDENCE_LOW = 0.4;
 const CAUTION_CONFIDENCE_HIGH = 0.6;
 const WILSON_Z = 1.96;
 
-function noteValue(notes: string, key: string) {
-  const match = notes.match(new RegExp(`${key}=([^\\s/]+)`));
-  return match?.[1] ?? "";
+function lastNoteValue(notes: string, key: string) {
+  const matches = Array.from(notes.matchAll(new RegExp(`${key}=([^\\s/]+)`, "g")));
+  const latest = matches.length > 0 ? matches[matches.length - 1] : undefined;
+  return latest?.[1] ?? "";
+}
+
+function latestReviewOutcome(notes: string) {
+  const reviewLines = notes.split("\n").filter((line) => line.startsWith("video-review="));
+  const latest = reviewLines[reviewLines.length - 1] ?? "";
+  if (latest.startsWith("video-review=passed")) return "adopted" as const;
+  if (latest.startsWith("video-review=rejected")) return "rejected" as const;
+  return undefined;
 }
 
 function reviewedOutcome(prompt: Prompt) {
-  if (prompt.status === "adopted" && prompt.notes.includes("video-review=passed")) return "adopted" as const;
-  if (prompt.status === "rejected" && prompt.notes.includes("video-review=rejected")) return "rejected" as const;
+  const latestOutcome = latestReviewOutcome(prompt.notes);
+  if (prompt.status === "adopted" && latestOutcome === "adopted") return "adopted" as const;
+  if (prompt.status === "rejected" && latestOutcome === "rejected") return "rejected" as const;
   return undefined;
 }
 
 function evidenceRoot(prompt: Prompt) {
-  return noteValue(prompt.notes, "retry-root") || prompt.promptId;
+  return lastNoteValue(prompt.notes, "retry-root") || prompt.promptId;
 }
 
 function retryAttempt(prompt: Prompt) {
-  return Number(noteValue(prompt.notes, "retry-attempt") || 0);
+  return Number(lastNoteValue(prompt.notes, "retry-attempt") || 0);
 }
 
 function wilsonInterval(successes: number, total: number) {
@@ -66,7 +76,7 @@ export function buildVideoModelEvidence(prompts: Prompt[]): VideoModelEvidence[]
     if (!outcome) return;
 
     const tool = prompt.tool || "unknown-model";
-    const preset = noteValue(prompt.notes, "preset") || "no-preset";
+    const preset = lastNoteValue(prompt.notes, "preset") || "no-preset";
     const root = evidenceRoot(prompt);
     const lineageKey = `${tool}::${preset}::${root}`;
     const attempt = retryAttempt(prompt);
@@ -81,7 +91,7 @@ export function buildVideoModelEvidence(prompts: Prompt[]): VideoModelEvidence[]
 
   for (const { prompt, outcome } of latestByLineage.values()) {
     const tool = prompt.tool || "unknown-model";
-    const preset = noteValue(prompt.notes, "preset") || "no-preset";
+    const preset = lastNoteValue(prompt.notes, "preset") || "no-preset";
     const root = evidenceRoot(prompt);
     const key = `${tool}::${preset}`;
     const current = groups.get(key) ?? { tool, preset, adopted: 0, rejected: 0, roots: new Set<string>() };
