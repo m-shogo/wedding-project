@@ -46,6 +46,29 @@ requireText(
   "qa-only negative content must remain explicitly separated from model input",
 );
 
+const probeEvidence = await source("src/lib/videoResultProbeEvidence.ts");
+requireText(
+  probeEvidence,
+  "measured-duration-sec=",
+  "local media probe evidence must retain browser-measured duration separately from manual result metadata",
+);
+requireText(
+  probeEvidence,
+  "measured-resolution=",
+  "local media probe evidence must retain browser-measured resolution separately from manual result metadata",
+);
+const localProbePicker = await source("src/components/LocalVideoProbePicker.tsx");
+requireText(
+  localProbePicker,
+  "measuredDurationSec: result.durationSec",
+  "local video picker must bind measured duration into persisted probe evidence",
+);
+requireText(
+  localProbePicker,
+  "measuredResolution: result.resolution || undefined",
+  "local video picker must bind measured resolution into persisted probe evidence",
+);
+
 const executionRouter = await source("src/lib/videoExecutionRouter.ts");
 requireText(
   executionRouter,
