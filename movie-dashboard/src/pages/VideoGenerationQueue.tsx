@@ -56,6 +56,7 @@ export function VideoGenerationQueue() {
     moviePrompts,
     registerPromptResultAsset,
     updatePrompt,
+    updatePromptsAtomically,
   } = useProduction();
   const { addToast } = useToast();
   const [filter, setFilter] = useState<QueueFilter>("pending");
@@ -191,12 +192,14 @@ export function VideoGenerationQueue() {
     }
     await navigator.clipboard.writeText(batchHandoffPacket(tool, runnable));
     const copiedAt = new Date().toISOString();
+    const preparedPrompts: Prompt[] = [];
     for (const prompt of runnable) {
-      updatePrompt({ ...prompt, status: "testing", notes: appendGenerationPacketCopyEvidence(prompt.notes, copiedAt, "batch") });
+      preparedPrompts.push({ ...prompt, status: "testing", notes: appendGenerationPacketCopyEvidence(prompt.notes, copiedAt, "batch") });
     }
+    updatePromptsAtomically(preparedPrompts);
     setCopiedId(`group:${tool}`);
     window.setTimeout(() => setCopiedId(""), 1500);
-    addToast(skipped > 0 ? `${tool}: 別生成用batch handoff ${runnable.length}件をコピーしてテスト中へ移動、testing/保留 ${skipped}件は除外しました。各SHOTを1本ずつ実行してください。実生成の完了証明ではありません` : `${tool}: 別生成用batch handoff ${runnable.length}件をコピーしてテスト中へ移動しました。各SHOTを1本ずつ実行してください。実生成の完了証明ではありません`, "success");
+    addToast(skipped > 0 ? `${tool}: 別生成用batch handoff ${runnable.length}件をコピーしてテスト中へ移動、testing/保留 ${skipped}件は除外しました。各SHOTを1本ずつ実行してください。状態変更はUndo 1回で戻せます。実生成の完了証明ではありません` : `${tool}: 別生成用batch handoff ${runnable.length}件をコピーしてテスト中へ移動しました。各SHOTを1本ずつ実行してください。状態変更はUndo 1回で戻せます。実生成の完了証明ではありません`, "success");
   }
 
   function resetResultMetadata() {
