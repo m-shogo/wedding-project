@@ -159,6 +159,17 @@ function realismSentence(profile: RealismProfile) {
   }
 }
 
+function sentenceInstruction(value: string) {
+  const trimmed = value.trim();
+  if (!trimmed) return "";
+  return /[.!?]$/.test(trimmed) ? trimmed : `${trimmed}.`;
+}
+
+function prefixedInstruction(prefix: string, value: string) {
+  const sentence = sentenceInstruction(value);
+  return sentence ? `${prefix}: ${sentence}` : "";
+}
+
 function cameraInstruction(camera: string) {
   const value = camera.trim();
   if (!value) return "";
@@ -199,7 +210,7 @@ function continuityLines(intent: VideoPromptIntent) {
 
 function commonMotion(intent: VideoPromptIntent) {
   const lines = [
-    intent.action.trim(),
+    sentenceInstruction(intent.action),
     cameraInstruction(intent.camera),
     paceSentence(intent.pace),
     realismSentence(intent.realism),
@@ -213,7 +224,7 @@ function commonMotion(intent: VideoPromptIntent) {
 
 function runwayI2VMotion(intent: VideoPromptIntent) {
   return [
-    intent.action.trim(),
+    sentenceInstruction(intent.action),
     cameraInstruction(intent.camera),
     paceSentence(intent.pace),
     ...continuityLines(intent),
@@ -222,7 +233,7 @@ function runwayI2VMotion(intent: VideoPromptIntent) {
 
 function t2vScene(intent: VideoPromptIntent) {
   const scene = [intent.subject.trim(), intent.environment.trim()].filter(Boolean).join(" in ");
-  return scene ? `${scene}.` : "";
+  return scene ? sentenceInstruction(scene) : "";
 }
 
 function qaAvoidText(profile: VideoModelProfile) {
@@ -252,7 +263,7 @@ export function compileVideoPrompt(modelId: VideoModelId, intent: VideoPromptInt
       lines = [
         ...lines,
         ...motion,
-        referenceNote ? `Continuity: ${referenceNote}.` : "",
+        prefixedInstruction("Continuity", referenceNote),
         "Maintain one continuous shot with one primary visual event and the specified camera path.",
         "Preserve stable scene geometry and the supplied framing throughout the shot.",
       ];
@@ -262,7 +273,7 @@ export function compileVideoPrompt(modelId: VideoModelId, intent: VideoPromptInt
         ...lines,
         intent.mode === "first-last" ? "Transition naturally from the supplied first frame to the supplied last frame while preserving scene identity." : "",
         ...motion,
-        referenceNote ? `Use the supplied reference for this role: ${referenceNote}.` : "",
+        prefixedInstruction("Use the supplied reference for this role", referenceNote),
         "Maintain real-world physics, stable geometry and consistent lighting throughout the shot.",
       ];
       break;
@@ -271,7 +282,7 @@ export function compileVideoPrompt(modelId: VideoModelId, intent: VideoPromptInt
       lines = [
         ...lines,
         ...motion,
-        referenceNote ? `Reference role: ${referenceNote}.` : "",
+        prefixedInstruction("Reference role", referenceNote),
         `Timeline: 0-${Math.max(1, Math.round(intent.durationSec * 0.2))}s establish; middle section performs the single main motion; final moment settles naturally.`,
         "Keep a continuous single shot containing only the specified subject, main action, camera move and transition.",
       ];
@@ -280,7 +291,7 @@ export function compileVideoPrompt(modelId: VideoModelId, intent: VideoPromptInt
       lines = [
         ...lines,
         ...motion,
-        referenceNote ? `Multimodal reference roles: ${referenceNote}.` : "",
+        prefixedInstruction("Multimodal reference roles", referenceNote),
         "Keep the timeline structurally simple: establish, one motivated motion beat, settle.",
         "Prefer isolated local correction for a localized defect when that control is available.",
       ];
@@ -289,7 +300,7 @@ export function compileVideoPrompt(modelId: VideoModelId, intent: VideoPromptInt
       lines = [
         ...lines,
         ...motion,
-        referenceNote ? `Reference intent: ${referenceNote}.` : "",
+        prefixedInstruction("Reference intent", referenceNote),
         "Use one continuous shot, one primary action and one camera idea with stable scene geometry.",
       ];
   }
