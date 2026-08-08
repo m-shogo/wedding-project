@@ -252,3 +252,96 @@ GUI手動作成でも落ちる場合は、PalmierPro側のMetal/GPU初期化不�
 - Palmier project本体・大容量media・MP4はGitに入れない（未commit）。
 - 本セクション（timeline名 `Opening V1` / 60秒 / track構成 / clip mapping /
   placeholder一覧 / missing素材0/11 / BGM状態 / AI判定 / 次作業 / QA）のみGitへ記録。
+
+---
+
+## 更新: Palmier timeline構築 完了（2026-08-08 追記）
+
+ブロッカーは解消。原因切り分けは上記のまま（`new_project` はraw HTTP経由でMetalクラッシュ）だが、
+**ハング時にproject本体はディスク生成されていた**ため、`open_project` で開いて編集できた。
+
+### 復帰の経緯
+
+- 既存project発見: `/Users/m-shogo/Documents/Palmier Pro/Opening V1.palmier`
+  （先の `new_project` ハング時に生成済み）。
+- `open_project`（path指定）は**クラッシュせず成功**。`get_timeline` / 編集系すべて正常動作。
+  → 落ちる/固まるのは `new_project` のMetal初期化パスだけ。open + 編集は問題なし。
+
+### 構築したtimeline（Palmier project `Opening V1`）
+
+- project: `Opening V1`（`~/Documents/Palmier Pro/Opening V1.palmier`）
+- 1920×1080 / 30fps / totalFrames 1800（= 60.000秒）/ settingsConfigured true
+- canGenerate: **false**（Palmier未サインインのためAI生成不可。今回は生成不要なので影響なし）
+- track構成（index 0 = 最上層）:
+
+| track | 種別 | 内容 |
+|---|---|---|
+| V3 | video | placeholderラベル 11枚（各写真枠のテキスト） |
+| V2 | video | placeholder navy matte 13クリップ（写真区間を被覆） |
+| V1 | video | reference = Remotion Opening V1 MP4（frame 0–1800 通し） |
+| A1 | audio | referenceのリンク音声（実質無音） |
+
+- media: reference `0B8C9AB8`（imported、960×540 source を1080pへ自動リフィット）、
+  placeholder matte `7738F1EF`（#16233F navy、1920×1080）。
+- 0–270（0–9s）と 1560–1800（52–60s）は V2/V3 が空 → reference の travel UI
+  （WELCOME ABOARD / SHOGO & SHIORI、FINAL DESTINATION / HAWAII—YOKOHAMA）が見える。
+- 9–52s は placeholder が reference の上に合成される（実写真の差し替え先）。
+
+### placeholder clip → 差し替え対象（V2 = matte, V3 = label）
+
+| 枠 | frame | matte clipId | label clipId |
+|---|---|---|---|
+| Okinawa 1/3 | 270–360 | 7391F062 | E1ECFB71 |
+| Okinawa 2/3 | 360–450 | 4012143C | D79EE9D8 |
+| Okinawa 3/3 | 450–540 | 515F8ABD | 47BE5823 |
+| Seoul 1/3 | 540–630 | 506994B1 | 48EAF971 |
+| Seoul 2/3 | 630–720 | 66EE3478 | 133731FB |
+| Seoul 3/3 | 720–810 | F831533F | 9E3E63EF |
+| Hawaii 1/3 | 810–900 | 88FE14A8 | 25C8F2EB |
+| Hawaii 2/3 | 900–990 | 3DFA83F3 | 0E95B123 |
+| Hawaii 3/3 | 990–1080 | E3C0B971 | 8A6AF762 |
+| Couple Hero A | 1080–1320 | 599CFF30 + E55D5547 | 7E05EA57 |
+| Couple Hero B | 1320–1560 | CB50085B + A9FE9C46 | A905835B |
+
+※ matte画像のソース長が150frame上限のため、Hero枠（240f）だけmatteを150+90の2クリップで被覆。
+実写真差し替え時はHero枠を1枚のphoto clipに置換し、対応labelを外す（or キャプション化）。
+
+### 実際に直した箇所
+
+- 初回clip配置で解像度が reference の 960×540 に落ちたため、`set_project_settings` で
+  1920×1080 / 30fps に戻した（referenceは自動アップスケール、reference用途なので許容）。
+- Hero枠のmatte 240f超過エラーを、150+90の2クリップ被覆に変更して回避。
+- それ以外の scene境界・尺・写真配分は正本どおり維持（実写真/BGM未確定のため構成は崩さない）。
+
+### QA（inspect_timeline 合成確認）
+
+| frame | 期待 | 実際 | 判定 |
+|---|---|---|---|
+| 15 | intro / reference | WELCOME ABOARD · SHOGO & SHIORI · 24 OCT 2026 YOKOHAMA | ✓ |
+| 315 | Okinawa placeholder | navy + "OKINAWA — PHOTO 1/3 · swap real photo" | ✓ |
+| 1150 | Hero A placeholder | navy + gold "COUPLE HERO A" | ✓ |
+| 1620 | ending / reference | FINAL DESTINATION · HAWAII — YOKOHAMA | ✓ |
+
+- 60秒 通し再生可能。黒frame・破綻なし。過剰演出なし（Style Bible準拠）。
+
+### 完了条件の達成状況
+
+1. Palmier に Opening V1 timeline 存在 … ✓
+2. 60秒を最初から最後まで再生可能 … ✓（inspect_timeline確認）
+3. reference 配置済み … ✓（V1、全60秒）
+4. 実写真の安全な差し替え/候補配置 … 実写真0/11のため差し替えなし（正当）
+5. 無い写真は明示 placeholder … ✓（11枠、V2 matte + V3 label）
+6. BGM有無明示 … ✓（BGMなし・A1は無音）
+7. AI動画なしで成立 … ✓
+8. AI必要判定 … 現時点で必須なし（`v1-cloud-transition` もRemotion版維持）
+9. Git記録 … ✓（本doc）
+
+### 残タスク / 人間待ち（変更なし）
+
+- 実写真11枚の選定 → 各 matte clipId を photo clip に差し替え。
+- BGM候補と利用条件（会場上映 / SNS）。
+- 会場の納品形式・解像度・fps・音声仕様。
+- 実写真投入後の crop / safe area / テロップ可読性 / Hero見せ時間 / ending余韻の最終確認
+  （実写真が入るまで意図的に未調整）。
+- 見た目の最終proof が欲しい場合は Palmier で `export_project`（video / 1080p）を実行して
+  60秒MP4を書き出す（~/Downloads、Git管理外）。
