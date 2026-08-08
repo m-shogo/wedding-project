@@ -197,7 +197,7 @@ function qaAvoidText(profile: VideoModelProfile) {
   if (profile.negativePromptPolicy === "qa-only") {
     return `QA ONLY — DO NOT SEND THIS AS ${profile.label} MODEL INPUT. ${base}`;
   }
-  return `OPTIONAL SEPARATE NEGATIVE FIELD / QA. ${base}`;
+  return forbidden.join(", ");
 }
 
 function containsNegativePhrasing(value: string) {

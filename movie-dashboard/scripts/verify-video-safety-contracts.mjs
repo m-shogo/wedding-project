@@ -33,6 +33,11 @@ requireMatch(
   /id:\s*"runway-gen-4\.5"[\s\S]{0,2200}?negativePromptPolicy:\s*"qa-only"/,
   "Runway Gen-4.5 must keep negativePromptPolicy=qa-only",
 );
+requireMatch(
+  promptBuilder,
+  /if \(profile\.negativePromptPolicy === "qa-only"\)[\s\S]{0,300}?return forbidden\.join\(", "\);/,
+  "new optional-separate-field prompts must store clean provider negative text without QA wrapper labels",
+);
 
 const generationPacket = await source("src/lib/videoGenerationPacket.ts");
 requireText(
