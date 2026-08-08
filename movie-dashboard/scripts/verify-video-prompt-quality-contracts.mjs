@@ -195,4 +195,34 @@ requireText(
   "fingerprint equality must never be presented as automatic visual QA",
 );
 
+const queue = await source("src/pages/VideoGenerationQueue.tsx");
+requireText(queue, "function batchHandoffPacket", "multi-shot clipboard preparation must use a dedicated handoff format");
+requireText(
+  queue,
+  "IMPORTANT: DO NOT PASTE THIS WHOLE PACKET INTO ONE PROVIDER PROMPT.",
+  "batch handoff must explicitly forbid pasting multiple shots into one provider prompt",
+);
+requireText(queue, "Run each SHOT separately", "batch handoff must require one provider generation per shot");
+requireText(
+  queue,
+  "[MAIN PROMPT — RUN THIS SHOT SEPARATELY]",
+  "each batch shot must mark the exact main prompt boundary",
+);
+requireText(
+  queue,
+  "[OPTIONAL SEPARATE NEGATIVE FIELD — USE ONLY IN THE PROVIDER NEGATIVE FIELD]",
+  "batch handoff must preserve optional negative-field separation",
+);
+requireText(queue, "buildVideoProviderFields(prompt)", "batch and JSON handoff must use structured provider fields");
+forbidText(
+  queue,
+  'runnable.map(modelInput).join("\\n\\n---\\n\\n")',
+  "raw main prompts must never be concatenated into one ambiguous batch provider payload",
+);
+requireText(
+  queue,
+  "batchは各SHOTを別生成。丸ごとproviderへ貼らない",
+  "queue UI must keep the separate-shot batch warning visible before copy",
+);
+
 console.log("AI video prompt quality contracts: PASS");
