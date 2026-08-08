@@ -96,14 +96,27 @@ export const VIDEO_FAILURE_CATEGORIES: VideoFailureCategory[] = [
 const keywordRules: Array<{ id: VideoFailureCategoryId; keywords: string[] }> = [
   { id: "geometry", keywords: ["歪", "ゆが", "曲が", "直線", "窓枠", "翼", "建物", "形状", "geometry", "warp", "morph", "line"] },
   { id: "spawn", keywords: ["人物", "人影", "人が", "顔", "増え", "出現", "勝手に", "duplicate", "person", "people", "spawn", "extra object"] },
+  { id: "caption", keywords: ["テロップ", "余白", "字幕領域", "caption", "negative space"] },
   { id: "text-logo", keywords: ["文字", "ロゴ", "看板", "字幕", "数字", "読め", "text", "logo", "sign", "watermark"] },
   { id: "camera", keywords: ["カメラ", "ズーム", "パン", "回転", "揺れ", "視点", "camera", "zoom", "pan", "orbit", "shake"] },
   { id: "motion-physics", keywords: ["動き", "速度", "慣性", "物理", "急", "飛ぶ", "波", "motion", "physics", "inertia", "speed"] },
   { id: "lighting", keywords: ["光", "影", "露出", "反射", "明る", "暗", "フリッカー", "lighting", "exposure", "reflection", "flicker"] },
   { id: "ai-look", keywords: ["aiっぽ", "AIっぽ", "不自然", "ツルツル", "フレア", "粒子", "cg", "cgi", "plastic", "glossy", "flare", "particle"] },
   { id: "composition", keywords: ["構図", "位置", "水平線", "参照", "別物", "変わる", "composition", "framing", "identity", "reference", "drift"] },
-  { id: "caption", keywords: ["テロップ", "余白", "字幕領域", "caption", "negative space"] },
 ];
+
+function escapeRegExp(value: string) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function keywordMatches(normalizedReason: string, keyword: string) {
+  const normalizedKeyword = keyword.toLowerCase().trim();
+  if (!normalizedKeyword) return false;
+  const asciiOnly = /^[\x00-\x7F]+$/.test(normalizedKeyword);
+  if (!asciiOnly) return normalizedReason.includes(normalizedKeyword);
+  const tokenPattern = escapeRegExp(normalizedKeyword).replace(/\s+/g, "\\s+");
+  return new RegExp(`(^|[^a-z0-9])${tokenPattern}(?=$|[^a-z0-9])`, "i").test(normalizedReason);
+}
 
 export function videoFailureCategoryById(id: string | undefined) {
   return VIDEO_FAILURE_CATEGORIES.find((category) => category.id === id);
@@ -111,7 +124,7 @@ export function videoFailureCategoryById(id: string | undefined) {
 
 export function classifyVideoFailure(reason: string): VideoFailureCategory {
   const normalized = reason.toLowerCase();
-  const match = keywordRules.find((rule) => rule.keywords.some((keyword) => normalized.includes(keyword.toLowerCase())));
+  const match = keywordRules.find((rule) => rule.keywords.some((keyword) => keywordMatches(normalized, keyword)));
   return videoFailureCategoryById(match?.id ?? "unknown") ?? VIDEO_FAILURE_CATEGORIES[VIDEO_FAILURE_CATEGORIES.length - 1];
 }
 
