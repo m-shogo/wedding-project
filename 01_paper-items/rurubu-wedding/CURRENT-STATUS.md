@@ -7,10 +7,12 @@ Production Figma: https://www.figma.com/design/bfM0d4c9dCeBv5pCkJ3TNM
 Process authority:
 - `RURUBU-PRODUCTION-OPERATING-SYSTEM-V2-2026-08-02.md`
 - `POSTMORTEM-CONTINUOUS-IMPROVEMENT-AND-V6-GUARDRAILS-2026-08-02.md`
+- `docs/wedding-figma-production-system.md`
+- `docs/decisions/2026-08-02-quality-over-legacy-design.md`
 
 ## Current declaration
 
-`RURUBU_V5_CURRENT_CANDIDATE / REALISTIC_DUMMY_MASTERS_13_OF_13_DRIVE_VERIFIED / ACTIVE_CURRENT_PHOTO_ROLES_12 / RETIRED_PRESERVED_ROLE_1 / INTENDED_SOURCE_APPLIED_6 / PHOTO_ROLE_PASS_5 / ROLE_COMPLETE_5 / DOMINANT_PHOTO_PASS_2_OF_3 / COVER_HERO_REPAIR_REQUIRED / REAL_CONTENT_PENDING / PRINT_TEMPLATE_PENDING / NOT_PRINT_READY`
+`RURUBU_V5_CURRENT_CANDIDATE / REALISTIC_DUMMY_MASTERS_13_OF_13_DRIVE_VERIFIED / ACTIVE_CURRENT_PHOTO_ROLES_11 / RETIRED_PRESERVED_ROLES_2 / INTENDED_SOURCE_APPLIED_6 / PHOTO_ROLE_PASS_5 / ROLE_COMPLETE_5 / DOMINANT_PHOTO_PASS_2_OF_3 / COVER_HERO_REPAIR_REQUIRED / REAL_CONTENT_PENDING / PRINT_TEMPLATE_PENDING / NOT_PRINT_READY`
 
 ## Current live Figma
 
@@ -20,30 +22,37 @@ Current candidates:
 - outer `77:18 / 01_RURUBU_AUTHENTIC_OUTER_V5_CURRENT_CANDIDATE`
 - inside `77:290 / 02_RURUBU_AUTHENTIC_INSIDE_V5_CURRENT_CANDIDATE`
 
-Rollback evidence preserved:
+Rollback evidence:
 - outer V4 `59:2`
 - inside V4 `59:178`
 
-Key preserved comparisons:
+Important comparison frames preserved:
 - Friends two-up/three-up `336:2`
 - FEATURE 01 subtraction `345:2`
-- back-main Q18 `360:2`
-- history Q18 `383:2 / V5_HISTORY_Q18_DRIVE_DERIVATIVE_TEST_2026_08_08`
-- V5-07 old-town derivative `421:2 / V5_07_OLD_TOWN_DERIVATIVE_TEST_2026_08_08`
-- V5-08 night-view derivative `427:2 / V5_08_NIGHT_VIEW_DERIVATIVE_TEST_2026_08_08`
-- V5-09 resort derivative `429:2 / V5_09_RESORT_DERIVATIVE_TEST_2026_08_08`
+- back-main derivative `360:2`
+- history derivative `383:2`
+- dense Rurubu clean-room cover `413:2`
+- inside editorial clean-room `419:2`
+- memory 02 `421:2`
+- memory 03 `427:2`
+- memory 04 `429:2`
+- cover-snap scope/transport comparison `432:2`
 
 ## Active-scope truth
 
 Registered photo roles: `13`.
-Active Current roles: `12`.
-Retired/preserved role: `1` (`V5-11 / 77:35`); its Drive master remains preserved and it is not counted as PHOTO_ROLE_PASS or ROLE_COMPLETE.
+Active Current roles: `11`.
+Retired/preserved roles: `2`.
 
-Verified counts from the ledger:
+Retired roles:
+- `V5-11 / 77:35 / BACK_VISUAL_FRIEND_1_PHOTO` — hidden legacy third Friends role; Current two-up composition won the comparison.
+- `V5-02 / 77:236 / AUTH_COVER_SNAP_01` — live-Figma audit on 2026-08-08 verified the image node and its label `77:237` are both hidden, and no alternate cover-snap node is effectively visible in Current. Its Drive master and tested derivative remain preserved, but it is excluded from the active completion denominator rather than falsely counted as a pass.
+
+Verified ledger counts:
 - Drive readback: `13 / 13`
-- intended source applied: `6 / 12`
-- photo-role pass: `5 / 12`
-- role complete: `5 / 12`
+- intended source applied: `6 / 11 active`
+- photo-role pass: `5 / 11 active`
+- role complete: `5 / 11 active`
 - dominant role pass: `2 / 3`
 
 ## Dominant-photo gate
@@ -52,138 +61,90 @@ Verified counts from the ledger:
 - back main `77:24` — **PASS for V5 dummy-design QA**
 - history `77:422` — **PASS for V5 dummy-design QA**
 
-### Verified dominant-role gain — V5-05 history
+The cover hero remains the last dominant-photo blocker. V6 production remains closed until the full V5 dummy-photo/design gate is genuinely verified.
 
-Drive master:
-- `05_HISTORY_WATERFRONT_DUMMY.png`
-- ID `1LO9rwdFuWMD2TZvSa6efn-gjbdyRBYt3`
-- `2,201,647 bytes`
+## Verified completed active photo roles
 
-Accepted V5 dummy-design derivative:
-- `RURUBU_V5_05_HISTORY__FIGMA_1356x560_Q18_SINGLECALL.jpg`
-- Drive ID `1ndvJShFDKPO6OmUD3JeIRvPwpS8V1v8x`
-- `1356 × 560`
-- `29,582 bytes`
-- SHA-256 `f6642e7fd43e5058221bf6937d3e8428d8e2b89c35196ec43570aed4f8dd24da`
-- exactly `2×` the `678 × 280` semantic target
+### V5-05 — history lead
+- Current node: `77:422 / IA_HISTORY_MEMORY_PHOTO`
+- derivative Drive ID: `1ndvJShFDKPO6OmUD3JeIRvPwpS8V1v8x`
+- derivative: `1356 × 560`, `29,582 bytes`
+- image hash: `539c259be8036b481d06b4f76db9a39b407d90e8`
+- QA: whole/page, reading, actual-size detail, structure PASS for dummy-design QA
 
-Verified Figma mapping:
-- Current node `77:422 / IA_HISTORY_MEMORY_PHOTO`
-- previous hash `1bfd7f1fa601206bfed1594a140b40554e85d77a`
-- current hash `539c259be8036b481d06b4f76db9a39b407d90e8`
-- comparison frame `383:2`
-- comparison node `383:140`
+### V5-07 — memory spot 02 / old town
+- Current node: `77:438 / IA_MEMORY_2_PHOTO`
+- derivative Drive ID: `1ZsLOgZbZWyfYgDfvKvYPqOsbMJrSf1J5`
+- derivative: `352 × 368`, `12,186 bytes`
+- image hash: `439a719d73f28e8dd2889f2026cccb15f345ec63`
+- QA: whole/page, reading, actual-size detail, structure PASS
 
-Three-scale QA:
-- whole/page: PASS; the waterfront photograph reads as an intentional history lead and is materially sharper than the old blocky placeholder
-- reading scale: PASS; the timeline → hero → caption → memory-spots reading order remains intact
-- actual-size/detail: PASS for dummy-design QA; waterfront path, skyline/tree edge, lights, mountains and horizon remain distinct at natural `678 × 280` render size
+### V5-08 — memory spot 03 / night view
+- Current node: `77:446 / IA_MEMORY_3_PHOTO`
+- derivative Drive ID: `1rJJDOX_lwkCbA_DiCDptZfAQrMieG5LL`
+- derivative: `352 × 368`, `7,762 bytes`
+- image hash: `58d7d6f144a4aff9e3cc31caefad88089981ec6a`
+- QA: whole/page, reading, actual-size detail, structure PASS
 
-Structure QA after promotion:
-- inside native text nodes: `92`
-- inside IMAGE-fill nodes: `9`
-- semantic node name and `678 × 280` geometry preserved
-- fold guide `77:288` preserved and visible
-- rollback frames `59:2` / `59:178` preserved
-- comparison `383:2` preserved
+### V5-09 — memory spot 04 / resort sunset
+- Current node: `77:454 / IA_MEMORY_4_PHOTO`
+- derivative Drive ID: `1QHWfftLU6m6FZYNJy8IxbOAgp1knzzoP`
+- derivative: `352 × 368`, `9,950 bytes`
+- image hash: `c09aa82e7b2ac75708707345c6f845452bf67663`
+- QA: whole/page, reading, actual-size detail, structure PASS
 
-Detailed evidence:
-- `learning-runs/2026-08-08-v5-history-q18-binary-safe-promotion.md`
+### V5-10 — back-cover main
+- Current node: `77:24 / BACK_VISUAL_MAIN_MEMORY_PHOTO`
+- derivative Drive ID: `17YaX5CK-c0cTr4zsL2Dly4J1XSZyFxHG`
+- derivative: `944 × 608`, `33,577 bytes`
+- image hash: `e3738476f760932bb5b09c9d60f174dd6c84049d`
+- QA: whole/page, reading, actual-size detail, structure PASS for dummy-design QA
 
-### Verified dominant-role gain — V5-10 back main
+## V5-02 scope reconciliation / preserved evidence
 
-V5-10 remains PASS and unchanged:
-- Current node `77:24`
-- derivative Drive ID `17YaX5CK-c0cTr4zsL2Dly4J1XSZyFxHG`
-- current hash `e3738476f760932bb5b09c9d60f174dd6c84049d`
-- comparison `360:2`
-- evidence `learning-runs/2026-08-07-v5-back-main-q18-binary-safe-promotion.md`
+Master:
+- `02_COVER_SNAP_AIRPLANE_DUMMY.png`
+- Drive ID `1fkzkpkhi2nEq-gxYjroqJipsvAoDStwI`
+- `1,625,765 bytes`
 
-## Verified supporting-role gains — V5-07 / V5-08 / V5-09
+Role-specific derivative preserved:
+- `RURUBU_V5_02_COVER_SNAP__FIGMA_528x528_Q08_BINARYSAFE.jpg`
+- Drive ID `19KuYUYkyePCErVjXbzX0KQpNoBOdFh34`
+- `528 × 528`
+- `4,492 bytes`
+- SHA-256 `6366d4700992fcc1407929d815c96b6c8a7b8f1c6e88c1c32cbce0e2f01ee11e`
 
-### V5-07 old-town memory
-- Current node `77:438 / IA_MEMORY_2_PHOTO`
-- derivative Drive ID `1ZsLOgZbZWyfYgDfvKvYPqOsbMJrSf1J5`
-- derivative `352 × 368 / 12,186 bytes`
-- current hash `439a719d73f28e8dd2889f2026cccb15f345ec63`
-- comparison `421:2`
-- three-scale QA: PASS for V5 dummy-design QA
-- evidence `learning-runs/2026-08-08-v5-memory-02-q30-binary-safe-promotion.md`
+Binary-safe comparison proof:
+- comparison frame `432:2`
+- comparison node `432:220`
+- verified image hash `6508fe94eb77b14d73b06ed2b8e705d33e5ab880`
+- guarded chunks reconstructed to encoded length `5,992`, decoded length `4,492`, valid JPEG SOI/EOI
 
-### V5-08 night-view memory
-- Current node `77:446 / IA_MEMORY_3_PHOTO`
-- derivative Drive ID `1rJJDOX_lwkCbA_DiCDptZfAQrMieG5LL`
-- derivative `352 × 368 / 7,762 bytes`
-- SHA-256 `a87c39773e7374356641266aa709c585c60ff3435169fbeaed33a83d8fc35aae`
-- current hash `58d7d6f144a4aff9e3cc31caefad88089981ec6a`
-- comparison `427:2`
-- three-scale QA: PASS for the role-specific V5 dummy-design bar
-- evidence `learning-runs/2026-08-08-v5-memory-03-q30-binary-safe-promotion.md`
+This does **not** become PHOTO_ROLE_PASS because the Current semantic node is hidden. The correct quality-over-legacy action is retirement from visible scope, not importing activity for its own sake.
 
-### V5-09 resort memory
-- Current node `77:454 / IA_MEMORY_4_PHOTO`
-- master Drive ID `1wGhESjFYaX84Vwk7YEw86VZzg6i5Je6z`
-- derivative Drive ID `1QHWfftLU6m6FZYNJy8IxbOAgp1knzzoP`
-- derivative `352 × 368 / 9,950 bytes`
-- SHA-256 `dbd5d0d15506bee04446ed02c62ad23df043c05b96ce43495d722c5d88ef5970`
-- previous hash `f8357056c1f50bc928066273ce9391f5feba02d2`
-- current hash `c09aa82e7b2ac75708707345c6f845452bf67663`
-- comparison `429:2 / 429:172`
-- three-scale QA: PASS for the role-specific V5 dummy-design bar
-- structure: native text `92`, visible text `57`, IMAGE-fill nodes `9`, fold guide and rollback preserved
-- evidence `learning-runs/2026-08-08-v5-memory-04-resort-q30-binary-safe-promotion.md`
+## Remaining active V5 photo roles
 
-The V5-09 master was visually inspected before derivation. Regeneration was rejected as unnecessary because the existing resort/sunset master was conceptually suitable and had sufficient crop room; a role-specific crop was used instead.
+1. `V5-01 / 77:148` — cover hero; highest priority and final dominant blocker
+2. `V5-03 / 77:296` — groom atmosphere profile; identity-safe treatment required
+3. `V5-04 / 77:302` — bride atmosphere profile; recognizable-face risk must be removed
+4. `V5-06 / 77:430` — lead memory coast image
+5. `V5-12 / 77:39` — Friends & Family 02 / cafe
+6. `V5-13 / 77:43` — Friends & Family 03 / dining
 
-## Next required V5 work
+No active role may be counted complete until Drive ID, derivative dimensions/bytes, exact Figma node/hash, screenshot QA, structure QA, and Git readback agree.
 
-### Priority A — final open dominant role
+## Design direction
 
-1. close cover hero `77:148` with a quality-passing role-sized derivative, Drive ID → node ID → Figma hash evidence, and three-scale QA
-2. do not regenerate unless the existing master/derivative cannot satisfy crop, resolution, text-safe-space, identity, or editorial-fit requirements
-3. preserve rollback and test on a duplicate first
+Current remains a candidate, not a sacred composition. Clean-room comparisons `413:2` and `419:2` remain valid evidence that a denser, more authentic travel-magazine hierarchy can outperform legacy card geometry. Whole-item, reading/page, and actual-size comparisons decide promotion; legacy implementation effort does not.
 
-### Priority B — remaining active photo roles
+## V6 gate
 
-Identity/lead:
-- cover snap `77:236`
-- groom `77:296`
-- bride `77:302`
-- lead memory `77:430`
+V6 remains separate and production-blocked. Research, Drive structure, asset queue, and two clean-room concept directions are prepared, but no V6 production frame or generated production master may be claimed until V5 reaches the verified dummy-photo/design QA gate.
 
-Friends & Family active:
-- `77:39`
-- `77:43`
+## Next safe work
 
-Completed small-memory sequence:
-- `77:438 / V5-07` — PASS
-- `77:446 / V5-08` — PASS
-- `77:454 / V5-09` — PASS
-
-Generated recognizable people must not be represented as the real bride, groom, family, or friends; profile dummies require safe identity treatment before pass.
-
-### Final V5 design gate
-
-Do not declare `RURUBU_V5_DUMMY_PHOTO_DESIGN_QA_PASS` until:
-- intended high-quality derivatives: `12 / 12`
-- active PHOTO_ROLE_PASS: `12 / 12`
-- retired preserved roles: `1 / 1` truthfully recorded
-- dominant PHOTO_ROLE_PASS: `3 / 3`
-- whole-item / reading / actual-size QA complete
-- fold/safe-area/print plausibility complete
-- native text, semantic nodes, crop integrity, Drive IDs, Figma hashes and rollback state verified
-- weakest-three repair and at least one evidence-based subtraction review completed
-
-## V6 boundary
-
-V6 remains research/preparation only until the V5 dummy-design gate passes. Production must remain separate from V5, use clean-room Figma concepts and V6-specific assets/Drive evidence, and must not overwrite V5 or inherit its image hashes/crops/composition by default.
-
-## Print boundary
-
-Figma dummy-design QA is not print readiness. Later independent gates remain:
-1. `REAL_CONTENT_EDITORIAL_QA_PASS`
-2. `PRINT_TEMPLATE_PREFLIGHT_PASS`
-3. `PHYSICAL_PROOF_PASS`
-4. `PRINT_READY`
-
-Do not claim final/print-ready while dummy content remains, printer template is unverified, PDF preflight is incomplete, or physical proof has not passed.
+- close `V5-01` with a quality-passing role-specific cover derivative and duplicate-first three-scale QA
+- advance `V5-06`, `V5-12`, and `V5-13` while preserving source identity and crop quality
+- treat V5-03/V5-04 with identity-safe crops/replacements before any pass
+- continue comparing Current against the clean-room cover/inside candidates
+- keep print readiness separate from dummy-design completion
