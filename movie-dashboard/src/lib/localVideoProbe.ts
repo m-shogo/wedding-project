@@ -13,6 +13,7 @@ export interface LocalVideoPreviewFrame {
 }
 
 const MEDIA_EVENT_TIMEOUT_MS = 12_000;
+const MIN_DISTINCT_FRAME_GAP_SEC = 0.01;
 
 function roundedDuration(value: number) {
   return Math.round(value * 100) / 100;
@@ -115,6 +116,16 @@ export async function captureLocalVideoPreviewFrames(file: File): Promise<LocalV
       { label: "中間", timeSec: duration / 2 },
       { label: "終端", timeSec: Math.max(0, duration - edgeMargin) },
     ];
+    const maxSeekTime = Math.max(0, duration - 0.001);
+    const targetPoints = points.map((point) => ({
+      ...point,
+      timeSec: Math.min(Math.max(point.timeSec, 0), maxSeekTime),
+    }));
+    const sortedTargetTimes = targetPoints.map((point) => point.timeSec).sort((a, b) => a - b);
+    const hasDistinctTargetTimes = sortedTargetTimes.every((timeSec, index) => index === 0 || timeSec - sortedTargetTimes[index - 1] >= MIN_DISTINCT_FRAME_GAP_SEC);
+    if (!hasDistinctTargetTimes) {
+      throw new Error("冒頭・中間・終端を別時刻として取得できないほど動画が短いため、3フレームQAを作成できませんでした");
+    }
 
     const maxWidth = 320;
     const scale = Math.min(1, maxWidth / video.videoWidth);
@@ -125,15 +136,18 @@ export async function captureLocalVideoPreviewFrames(file: File): Promise<LocalV
     if (!context) throw new Error("フレーム描画用Canvasを作成できませんでした");
 
     const frames: LocalVideoPreviewFrame[] = [];
-    for (const point of points) {
-      const targetTime = Math.min(Math.max(point.timeSec, 0), Math.max(0, duration - 0.001));
+    for (const point of targetPoints) {
       const seeked = waitForMediaEvent(video, "seeked");
-      video.currentTime = targetTime;
+      video.currentTime = point.timeSec;
       await seeked;
+      const actualTimeSec = video.currentTime;
+      if (frames.some((frame) => Math.abs(frame.timeSec - actualTimeSec) < MIN_DISTINCT_FRAME_GAP_SEC)) {
+        throw new Error("ブラウザが同じ再生時刻へ丸めたため、冒頭・中間・終端の3フレームQAを作成できませんでした");
+      }
       context.drawImage(video, 0, 0, canvas.width, canvas.height);
       frames.push({
         label: point.label,
-        timeSec: roundedDuration(targetTime),
+        timeSec: roundedDuration(actualTimeSec),
         dataUrl: canvas.toDataURL("image/jpeg", 0.78),
       });
     }
