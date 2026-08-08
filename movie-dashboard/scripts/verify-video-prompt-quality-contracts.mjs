@@ -67,6 +67,26 @@ forbidText(
   "intent.camera.trim(),",
   "raw camera shorthand must not be inserted directly into compiled model prompts",
 );
+requireText(
+  promptBuilder,
+  "function sentenceInstruction",
+  "free-form motion instructions must retain explicit sentence boundaries",
+);
+requireText(
+  promptBuilder,
+  "sentenceInstruction(intent.action)",
+  "action text must be normalized before it is joined with camera or pacing instructions",
+);
+requireText(
+  promptBuilder,
+  "function prefixedInstruction",
+  "reference guidance must avoid missing or duplicated sentence terminators",
+);
+forbidText(
+  promptBuilder,
+  "intent.action.trim(),",
+  "raw action shorthand must not be inserted directly into compiled model prompts",
+);
 
 const presets = await source("src/lib/videoPromptPresets.ts");
 for (const legacyNegative of [
