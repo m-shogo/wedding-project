@@ -44,6 +44,17 @@ export function buildVideoModelInput(prompt: Prompt, context: VideoGenerationPac
   ].filter(Boolean).join("\n");
 }
 
+function qaAvoidLabel(negativePolicy: string, qaAvoid: string) {
+  if (!qaAvoid) return "QA avoid list: none";
+  if (negativePolicy === "qa-only") {
+    return `QA ONLY — DO NOT SEND AS MODEL INPUT\n${qaAvoid}`;
+  }
+  if (negativePolicy === "optional-separate-field") {
+    return `QA / optional separate negative field\n${qaAvoid}`;
+  }
+  return `QA ONLY UNTIL PROVIDER POLICY IS VERIFIED — DO NOT SEND AS MODEL INPUT\n${qaAvoid}`;
+}
+
 export function buildVideoQaPacket(prompt: Prompt, context: VideoGenerationPacketContext) {
   const negativePolicy = promptNegativePolicy(prompt);
   const qaAvoid = prompt.negativePrompt.trim();
@@ -51,11 +62,10 @@ export function buildVideoQaPacket(prompt: Prompt, context: VideoGenerationPacke
     buildVideoModelInput(prompt, context),
     "",
     "[HUMAN QA / DO NOT PASTE BLINDLY INTO MODEL]",
-    qaAvoid
-      ? negativePolicy === "qa-only"
-        ? `QA ONLY — DO NOT SEND AS MODEL INPUT\n${qaAvoid}`
-        : `QA / optional separate negative field\n${qaAvoid}`
-      : "QA avoid list: none",
+    qaAvoidLabel(negativePolicy, qaAvoid),
+    negativePolicy === "unknown"
+      ? "[POLICY CHECK REQUIRED] negative-policy is missing; verify the current provider UI/docs before using any negative field."
+      : "",
     prompt.notes ? `\n[NOTES]\n${prompt.notes}` : "",
   ].filter(Boolean).join("\n");
 }
