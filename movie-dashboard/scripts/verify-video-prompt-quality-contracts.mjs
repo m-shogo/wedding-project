@@ -87,6 +87,31 @@ forbidText(
   "intent.action.trim(),",
   "raw action shorthand must not be inserted directly into compiled model prompts",
 );
+requireText(
+  promptBuilder,
+  "function inlineFragment",
+  "embedded lighting fragments must remove trailing sentence punctuation before wrapping",
+);
+requireText(
+  promptBuilder,
+  'prefixedInstruction("Mood", intent.mood)',
+  "mood text must use the shared sentence boundary helper",
+);
+requireText(
+  promptBuilder,
+  "function instructionClauseCount",
+  "prompt complexity warnings must share one clause counter",
+);
+requireText(
+  promptBuilder,
+  "split(/[,;、；。]/)",
+  "prompt complexity warnings must count comma and semicolon separated clauses",
+);
+requireText(
+  promptBuilder,
+  "runwayI2VIgnoresAppearanceControls",
+  "warnings must recognize that Runway I2V omits appearance controls from its main prompt",
+);
 
 const presets = await source("src/lib/videoPromptPresets.ts");
 for (const legacyNegative of [
