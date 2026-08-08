@@ -4,6 +4,12 @@ export interface VideoGenerationPacketContext {
   scene: string;
 }
 
+export interface VideoProviderFields {
+  mainPrompt: string;
+  separateNegativeField: string;
+  negativePolicy: string;
+}
+
 function noteValue(notes: string, key: string) {
   const matches = Array.from(notes.matchAll(new RegExp(`${key}=([^\\s/]+)`, "g")));
   const latest = matches.length > 0 ? matches[matches.length - 1] : undefined;
@@ -25,22 +31,39 @@ export function providerNegativeField(prompt: Prompt) {
     .trim();
 }
 
-export function buildVideoModelInput(prompt: Prompt, context: VideoGenerationPacketContext) {
+export function buildVideoProviderFields(prompt: Prompt): VideoProviderFields {
+  return {
+    mainPrompt: prompt.prompt.trim(),
+    separateNegativeField: providerNegativeField(prompt),
+    negativePolicy: promptNegativePolicy(prompt),
+  };
+}
+
+// This function is used by the queue's provider-safe copy action. Keep it as
+// the exact text intended for the provider's MAIN prompt field: no dashboard
+// labels, scene IDs, QA notes or negative-field text are mixed into it.
+export function buildVideoModelInput(prompt: Prompt, _context: VideoGenerationPacketContext) {
+  return buildVideoProviderFields(prompt).mainPrompt;
+}
+
+function buildVideoOperatorPacket(prompt: Prompt, context: VideoGenerationPacketContext) {
   const preset = noteValue(prompt.notes, "preset");
   const finishCandidate = noteValue(prompt.notes, "finish-candidate");
-  const separateNegative = providerNegativeField(prompt);
+  const fields = buildVideoProviderFields(prompt);
 
   return [
+    `[PROMPT ID] ${prompt.promptId}`,
     `[MODEL] ${prompt.tool || "未指定"}`,
     `[SHOT] ${prompt.title}`,
     `[SCENE] ${context.scene}`,
     preset ? `[PRESET] ${preset}` : "",
     finishCandidate ? `[FINISH CANDIDATE] ${finishCandidate}` : "",
+    `[NEGATIVE POLICY] ${fields.negativePolicy}`,
     "",
-    "[MODEL INPUT]",
-    prompt.prompt,
-    separateNegative ? "[OPTIONAL SEPARATE NEGATIVE FIELD]" : "",
-    separateNegative,
+    "[PROVIDER MAIN PROMPT — COPY ONLY THIS BLOCK TO THE MAIN PROMPT FIELD]",
+    fields.mainPrompt,
+    fields.separateNegativeField ? "[OPTIONAL SEPARATE NEGATIVE FIELD — USE ONLY IN A SEPARATE PROVIDER FIELD]" : "",
+    fields.separateNegativeField,
   ].filter(Boolean).join("\n");
 }
 
@@ -59,7 +82,7 @@ export function buildVideoQaPacket(prompt: Prompt, context: VideoGenerationPacke
   const negativePolicy = promptNegativePolicy(prompt);
   const qaAvoid = prompt.negativePrompt.trim();
   return [
-    buildVideoModelInput(prompt, context),
+    buildVideoOperatorPacket(prompt, context),
     "",
     "[HUMAN QA / DO NOT PASTE BLINDLY INTO MODEL]",
     qaAvoidLabel(negativePolicy, qaAvoid),
