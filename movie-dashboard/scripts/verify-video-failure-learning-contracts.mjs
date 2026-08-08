@@ -90,6 +90,15 @@ requireText(
   "model evidence grouping must use the latest append-only preset marker",
 );
 
+const modelRouter = await source("src/lib/videoProjectModelRouter.ts");
+requireText(modelRouter, "function evidenceSnapshot", "saved model routing notes must be built from an explicit evidence snapshot");
+requireText(modelRouter, "selected-model=", "routing notes must retain the exact selected model id");
+requireText(modelRouter, "evidence-signal=", "routing notes must retain promote/neutral/caution/insufficient state");
+requireText(modelRouter, "independent-roots=", "routing notes must retain independent lineage count");
+requireText(modelRouter, "confidence-low=", "routing notes must retain the Wilson confidence lower bound");
+requireText(modelRouter, "confidence-high=", "routing notes must retain the Wilson confidence upper bound");
+requireText(modelRouter, "preset-default-model=", "routing notes must retain the preset default for later comparison");
+
 const failureLab = await source("src/pages/VideoFailureLab.tsx");
 requireText(
   failureLab,
