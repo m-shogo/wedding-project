@@ -44,6 +44,11 @@ function isExecutionHold(issue: VideoPreflightIssue) {
   return issue.severity === "block" || issue.id.endsWith(":routing-stale");
 }
 
+function appendGenerationPacketCopyEvidence(notes: string, copiedAt: string, copyMode: "single" | "batch") {
+  const evidence = `generation-packet-copy=prepared / copiedAt=${copiedAt} / copy-mode=${copyMode} / generation-not-proven=true`;
+  return [notes.trim(), evidence].filter(Boolean).join("\n");
+}
+
 export function VideoGenerationQueue() {
   const {
     selectedMovieId,
@@ -141,8 +146,9 @@ export function VideoGenerationQueue() {
     setCopiedId(prompt.promptId);
     window.setTimeout(() => setCopiedId(""), 1500);
     if (moveToTesting && prompt.status === "draft") {
-      updatePrompt({ ...prompt, status: "testing" });
-      addToast("provider-safeなモデル入力をコピーしてテスト中へ移動しました", "success");
+      const copiedAt = new Date().toISOString();
+      updatePrompt({ ...prompt, status: "testing", notes: appendGenerationPacketCopyEvidence(prompt.notes, copiedAt, "single") });
+      addToast("provider-safeなモデル入力をコピーしてテスト中へ移動しました。コピーは実生成の完了証明ではありません", "success");
     } else addToast("人間確認用QA packetをコピーしました", "success");
   }
 
@@ -154,9 +160,13 @@ export function VideoGenerationQueue() {
       return;
     }
     await navigator.clipboard.writeText(runnable.map(modelInput).join("\n\n---\n\n"));
+    const copiedAt = new Date().toISOString();
+    for (const prompt of runnable) {
+      updatePrompt({ ...prompt, status: "testing", notes: appendGenerationPacketCopyEvidence(prompt.notes, copiedAt, "batch") });
+    }
     setCopiedId(`group:${tool}`);
     window.setTimeout(() => setCopiedId(""), 1500);
-    addToast(skipped > 0 ? `${tool}: provider-safeなdraft ${runnable.length}件をコピー、testing/保留 ${skipped}件は除外しました` : `${tool} のprovider-safeモデル入力をまとめてコピーしました`, "success");
+    addToast(skipped > 0 ? `${tool}: provider-safeなdraft ${runnable.length}件をコピーしてテスト中へ移動、testing/保留 ${skipped}件は除外しました。実生成の完了証明ではありません` : `${tool}: provider-safe入力 ${runnable.length}件をコピーしてテスト中へ移動しました。実生成の完了証明ではありません`, "success");
   }
 
   function resetResultMetadata() {

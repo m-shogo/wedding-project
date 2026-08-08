@@ -230,6 +230,21 @@ requireMatch(
   /const\s*\{[\s\S]{0,500}?registerPromptResultAsset[\s\S]{0,500}?\}\s*=\s*useProduction\(\)/,
   "generation queue must obtain atomic registration from ProductionProvider",
 );
+requireText(
+  queue,
+  "generation-not-proven=true",
+  "clipboard preparation evidence must explicitly avoid claiming that provider generation happened",
+);
+requireMatch(
+  queue,
+  /for \(const prompt of runnable\)[\s\S]{0,500}?status: "testing"/,
+  "batch provider-safe copy must move copied drafts out of the runnable draft set",
+);
+requireText(
+  queue,
+  "実生成の完了証明ではありません",
+  "generation queue must tell the operator that copying a packet is not proof of generation",
+);
 
 for (const relativePath of [
   "src/pages/VideoPromptBuilder.tsx",
