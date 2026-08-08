@@ -14,11 +14,19 @@ export function promptNegativePolicy(prompt: Prompt) {
   return noteValue(prompt.notes, "negative-policy") || "unknown";
 }
 
+export function providerNegativeField(prompt: Prompt) {
+  if (promptNegativePolicy(prompt) !== "optional-separate-field") return "";
+  return prompt.negativePrompt
+    .trim()
+    .replace(/^OPTIONAL SEPARATE NEGATIVE FIELD\s*\/\s*QA\.\s*/i, "")
+    .replace(/^Avoid:\s*/i, "")
+    .trim();
+}
+
 export function buildVideoModelInput(prompt: Prompt, context: VideoGenerationPacketContext) {
   const preset = noteValue(prompt.notes, "preset");
   const finishCandidate = noteValue(prompt.notes, "finish-candidate");
-  const negativePolicy = promptNegativePolicy(prompt);
-  const includeSeparateNegative = Boolean(prompt.negativePrompt.trim()) && negativePolicy === "optional-separate-field";
+  const separateNegative = providerNegativeField(prompt);
 
   return [
     `[MODEL] ${prompt.tool || "未指定"}`,
@@ -29,9 +37,8 @@ export function buildVideoModelInput(prompt: Prompt, context: VideoGenerationPac
     "",
     "[MODEL INPUT]",
     prompt.prompt,
-    includeSeparateNegative ? "" : "",
-    includeSeparateNegative ? "[OPTIONAL SEPARATE NEGATIVE FIELD]" : "",
-    includeSeparateNegative ? prompt.negativePrompt : "",
+    separateNegative ? "[OPTIONAL SEPARATE NEGATIVE FIELD]" : "",
+    separateNegative,
   ].filter(Boolean).join("\n");
 }
 
