@@ -242,6 +242,21 @@ requireText(
   "同じ目視QAを引き継げません",
   "fingerprint mismatch must invalidate previous visual QA authority",
 );
+requireText(
+  preflight,
+  "result-metadata-measured-mismatch",
+  "preflight must surface saved-versus-measured video metadata mismatches",
+);
+requireText(
+  preflight,
+  "MEASURED_DURATION_WARNING_GAP_SEC = 0.25",
+  "duration provenance warning must tolerate minor container and rounding differences",
+);
+requireText(
+  preflight,
+  "このwarningだけで目視QAの合否は決めません",
+  "metadata provenance differences must remain warnings rather than automatic visual-QA failures",
+);
 
 const store = await source("src/store/productionStore.tsx");
 requireText(store, "registerPromptResultAsset", "atomic generated-result registration must remain available");
