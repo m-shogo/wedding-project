@@ -172,6 +172,13 @@ function paceSentence(pace: MotionPace) {
   }
 }
 
+function continuityLines(intent: VideoPromptIntent) {
+  return [
+    intent.captionSpace ? "Maintain clean, uncluttered caption-safe negative space throughout the shot." : "",
+    intent.loop ? "End in a visually compatible state for a soft editorial loop with a continuous-feeling transition back to the opening frame." : "",
+  ].filter(Boolean);
+}
+
 function commonMotion(intent: VideoPromptIntent) {
   const lines = [
     intent.action.trim(),
@@ -182,9 +189,17 @@ function commonMotion(intent: VideoPromptIntent) {
 
   if (intent.lighting.trim()) lines.push(`Lighting remains ${intent.lighting.trim()} with natural exposure changes.`);
   if (intent.mood.trim()) lines.push(`Mood: ${intent.mood.trim()}.`);
-  if (intent.captionSpace) lines.push("Maintain clean, uncluttered caption-safe negative space throughout the shot.");
-  if (intent.loop) lines.push("End in a visually compatible state for a soft editorial loop with a continuous-feeling transition back to the opening frame.");
+  lines.push(...continuityLines(intent));
   return lines;
+}
+
+function runwayI2VMotion(intent: VideoPromptIntent) {
+  return [
+    intent.action.trim(),
+    intent.camera.trim(),
+    paceSentence(intent.pace),
+    ...continuityLines(intent),
+  ].filter(Boolean);
 }
 
 function t2vScene(intent: VideoPromptIntent) {
@@ -206,7 +221,9 @@ function containsNegativePhrasing(value: string) {
 
 export function compileVideoPrompt(modelId: VideoModelId, intent: VideoPromptIntent): CompiledVideoPrompt {
   const profile = VIDEO_MODELS.find((model) => model.id === modelId) ?? VIDEO_MODELS[0];
-  const motion = commonMotion(intent);
+  const motion = modelId === "runway-gen-4.5" && intent.mode === "i2v"
+    ? runwayI2VMotion(intent)
+    : commonMotion(intent);
   const referenceNote = intent.referenceNotes.trim();
   let lines: string[] = [];
 
@@ -217,9 +234,9 @@ export function compileVideoPrompt(modelId: VideoModelId, intent: VideoPromptInt
       lines = [
         ...lines,
         ...motion,
-        referenceNote ? `Reference intent: ${referenceNote}` : "",
-        "Maintain a continuous single shot with one primary visual event and only the specified camera path.",
-        "Preserve the supplied composition, subject identity and stable scene geometry throughout the shot.",
+        referenceNote ? `Continuity: ${referenceNote}.` : "",
+        "Maintain one continuous shot with one primary visual event and the specified camera path.",
+        "Preserve stable scene geometry and the supplied framing throughout the shot.",
       ];
       break;
     case "veo-3.1":
@@ -272,8 +289,9 @@ export function compileVideoPrompt(modelId: VideoModelId, intent: VideoPromptInt
       profile.durationHint,
       `prompt-budget=${profile.promptBudgetHint}`,
       `negative-policy=${profile.negativePromptPolicy}`,
+      modelId === "runway-gen-4.5" && intent.mode === "i2v" ? "runway-i2v-input=motion-first" : "",
       `guidance-checked=${profile.guidanceCheckedAt} / basis=${profile.guidanceBasis}`,
-    ],
+    ].filter(Boolean),
     warnings,
     qaChecklist: [
       "人物・動物・読める文字・ロゴ・看板が0か",
