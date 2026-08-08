@@ -92,4 +92,21 @@ const resultMetadata = await source("src/lib/videoResultMetadata.ts");
 requireText(resultMetadata, "normalizeVideoResolution", "video resolution evidence must retain canonical normalization");
 requireText(resultMetadata, "[xX×]", "resolution normalization must handle x/X/multiplication-sign variants");
 
+const preflight = await source("src/lib/videoPreflight.ts");
+requireText(
+  preflight,
+  "runway-i2v-motion-first-missing",
+  "legacy Runway I2V drafts without the motion-first marker must stay visible before generation",
+);
+requireText(
+  preflight,
+  'lastNoteValue(prompt.notes, "runway-i2v-input")',
+  "Runway migration preflight must read the latest compiler marker",
+);
+requireText(
+  preflight,
+  "既に生成を開始しているなら追加生成せず",
+  "testing-state migration guidance must avoid duplicate provider generation",
+);
+
 console.log("AI video prompt quality contracts: PASS");

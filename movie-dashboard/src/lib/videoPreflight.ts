@@ -283,6 +283,20 @@ export function runVideoPreflight(data: AllData, prompts: Prompt[], now = new Da
       if (policy !== "qa-only") {
         issues.push({ id: `${prompt.promptId}:runway-negative-policy`, severity: "warning", promptId: prompt.promptId, title: `${label}: Runway negative policyが旧形式`, detail: "このPromptはprovider-aware compiler導入前の可能性があります。", action: "必要なら最新Video Prompt Builderで作り直し、AVOIDをQA専用にする。", href: "/video-prompt-builder" });
       }
+      const motionFirstCompiler = lastNoteValue(prompt.notes, "runway-i2v-input");
+      if (promptMode(prompt) === "i2v" && active && prompt.resultAssetIds.length === 0 && motionFirstCompiler !== "motion-first") {
+        issues.push({
+          id: `${prompt.promptId}:runway-i2v-motion-first-missing`,
+          severity: "warning",
+          promptId: prompt.promptId,
+          title: `${label}: Runway I2Vが旧compiler形式`,
+          detail: "motion-first markerがありません。旧compilerでは入力画像が既に持つlighting / mood / film textureまで本文へ再記述しており、画像とtext指示が競合する余地があります。",
+          action: prompt.status === "testing"
+            ? "providerで既に生成を開始しているなら追加生成せず、その結果を先に登録する。まだ生成していないなら最新Video Prompt Builderで同じshotをmotion-firstへ再コンパイルする。"
+            : "有料生成前に最新Video Prompt Builderで同じshot/presetを再コンパイルし、motion-first marker付きdraftを使う。",
+          href: "/video-prompt-builder",
+        });
+      }
     }
 
     const age = guidanceAgeDays(prompt.notes, now);
