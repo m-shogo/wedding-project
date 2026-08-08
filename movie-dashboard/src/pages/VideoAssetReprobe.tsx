@@ -28,6 +28,16 @@ function formatProbeDate(value: string) {
   return date.toLocaleString("ja-JP", { month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" });
 }
 
+function lastNoteValue(notes: string, key: string) {
+  const lines = notes.split("\n");
+  const pattern = new RegExp(`${key}=([^\\s/]+)`);
+  for (let index = lines.length - 1; index >= 0; index -= 1) {
+    const match = lines[index].match(pattern);
+    if (match?.[1]) return match[1];
+  }
+  return "";
+}
+
 export function VideoAssetReprobe() {
   const { selectedMovieId, data, movieAssets, updateAsset } = useProduction();
   const { addToast } = useToast();
@@ -39,7 +49,35 @@ export function VideoAssetReprobe() {
   const videoAssets = sourceAssets.filter((asset) => asset.type === "ai_video");
   const selectedAsset = videoAssets.find((asset) => asset.assetId === selectedAssetId);
   const selectedStoredMedia = selectedAsset ? parseVideoResultReproMetadata(selectedAsset.notes) : undefined;
+  const selectedStoredProbe = selectedAsset ? parseVideoResultProbeEvidence(selectedAsset.notes) : undefined;
   const selectedTargetDuration = selectedAsset?.relatedSceneIds.reduce((sum, sceneId) => sum + (data.scenes.find((scene) => scene.sceneId === sceneId)?.durationSec ?? 0), 0);
+  const selectedAdoptedPrompts = selectedAsset
+    ? data.prompts.filter((prompt) => {
+      if (prompt.status !== "adopted" || !prompt.resultAssetIds.includes(selectedAsset.assetId)) return false;
+      const savedSelectedResultId = lastNoteValue(prompt.notes, "selected-result-asset");
+      const effectiveSelectedResultId = savedSelectedResultId || (prompt.resultAssetIds.length === 1 ? prompt.resultAssetIds[0] : "");
+      return effectiveSelectedResultId === selectedAsset.assetId;
+    })
+    : [];
+  const adoptedSelectedAuthority = selectedAdoptedPrompts.length > 0;
+  const pendingFingerprint = pendingEvidence?.sampleFingerprint ?? "";
+  const wouldRemoveAdoptedFingerprint = Boolean(adoptedSelectedAuthority && pendingEvidence && !pendingFingerprint);
+  const reviewedFingerprintMismatch = Boolean(
+    adoptedSelectedAuthority
+      && pendingFingerprint
+      && selectedAdoptedPrompts.some((prompt) => {
+        const reviewedFingerprint = lastNoteValue(prompt.notes, "reviewed-sample-fingerprint");
+        return Boolean(reviewedFingerprint && reviewedFingerprint !== pendingFingerprint);
+      }),
+  );
+  const reviewedFingerprintMatch = Boolean(
+    adoptedSelectedAuthority
+      && pendingFingerprint
+      && selectedAdoptedPrompts.every((prompt) => {
+        const reviewedFingerprint = lastNoteValue(prompt.notes, "reviewed-sample-fingerprint");
+        return !reviewedFingerprint || reviewedFingerprint === pendingFingerprint;
+      }),
+  );
 
   const counts = useMemo(() => {
     let probed = 0;
@@ -80,11 +118,19 @@ export function VideoAssetReprobe() {
       addToast("先にローカル動画を選んでprobeしてください", "error");
       return;
     }
+    if (adoptedSelectedAuthority && !pendingEvidence.sampleFingerprint) {
+      addToast("採用正本はfingerprintなしのprobe証跡で上書きできません。fingerprintを取得できる実動画を選び直してください", "error");
+      return;
+    }
     updateAsset({
       ...selectedAsset,
       notes: upsertVideoResultProbeEvidence(selectedAsset.notes, pendingEvidence),
     });
-    addToast("動画本体を変更せず、probe証跡だけ更新しました", "success");
+    if (reviewedFingerprintMismatch) {
+      addToast("probe証跡を更新しました。QA時fingerprintと変わったため結果レビューで再QAが必要です", "info");
+    } else {
+      addToast("動画本体を変更せず、probe証跡だけ更新しました", "success");
+    }
     closeProbe();
   }
 
@@ -127,6 +173,13 @@ export function VideoAssetReprobe() {
 
                 {active && selectedAsset && (
                   <div className="border-t border-sand-100 dark:border-navy-600 p-4 space-y-4">
+                    {adoptedSelectedAuthority && (
+                      <div className="rounded-lg border border-violet-200 dark:border-violet-700 bg-violet-50 dark:bg-violet-900/20 p-3 text-xs text-violet-800 dark:text-violet-300">
+                        <strong>採用正本のQA authorityを保護します。</strong>
+                        <p className="mt-1">このAssetは {selectedAdoptedPrompts.length}件の採用Promptで編集正本です。保存にはsample fingerprintが必要です。現在の証跡: {selectedStoredProbe?.sampleFingerprint ? shortFingerprint(selectedStoredProbe.sampleFingerprint) : "fingerprintなし"}。</p>
+                      </div>
+                    )}
+
                     <LocalVideoProbePicker
                       savedPath={selectedAsset.path}
                       expectedDurationSec={selectedTargetDuration || undefined}
@@ -143,6 +196,26 @@ export function VideoAssetReprobe() {
                       </div>
                     )}
 
+                    {wouldRemoveAdoptedFingerprint && (
+                      <div className="rounded-lg border border-red-300 dark:border-red-700 bg-red-50 dark:bg-red-900/20 p-3 text-xs text-red-800 dark:text-red-300">
+                        <strong>保存不可: 採用正本のfingerprint authorityが失われます。</strong>
+                        <p className="mt-1">今回のprobeではsample fingerprintを取得できませんでした。旧fingerprintを消すprobe証跡では上書きせず、fingerprintを取得できる実動画を選び直してください。</p>
+                      </div>
+                    )}
+
+                    {reviewedFingerprintMismatch && (
+                      <div className="rounded-lg border border-amber-300 dark:border-amber-700 bg-amber-50 dark:bg-amber-900/20 p-3 text-xs text-amber-900 dark:text-amber-300">
+                        <strong>QA時の実動画とfingerprintが変わっています。</strong>
+                        <p className="mt-1">保存はできますが、以前の目視QAを現在の実動画へ引き継げません。保存後はPreflight / Palmier Handoffが止まり、AI動画 結果レビューで再QAが必要です。</p>
+                      </div>
+                    )}
+
+                    {reviewedFingerprintMatch && (
+                      <div className="rounded-lg border border-emerald-200 dark:border-emerald-700 bg-emerald-50 dark:bg-emerald-900/20 p-3 text-xs text-emerald-800 dark:text-emerald-300">
+                        ✓ 今回のsample fingerprintは保存済みQA authorityと一致しています。fingerprint一致だけで目視QA PASSを推測せず、既存レビュー証跡の実体参照を維持します。
+                      </div>
+                    )}
+
                     {pendingEvidence && (
                       <div className="rounded-lg border border-emerald-200 dark:border-emerald-700 bg-emerald-50 dark:bg-emerald-900/20 p-3 text-xs text-emerald-800 dark:text-emerald-300">
                         <p>保存候補: preview {pendingEvidence.previewFrameCount}枚{pendingEvidence.sampleFingerprint ? ` / fingerprint ${shortFingerprint(pendingEvidence.sampleFingerprint)}` : " / fingerprintなし"}</p>
@@ -152,7 +225,7 @@ export function VideoAssetReprobe() {
 
                     <div className="flex justify-end gap-2">
                       <button type="button" onClick={closeProbe} className="px-4 py-2 text-sm rounded-lg border border-sand-200 dark:border-navy-600 text-navy-600 dark:text-navy-200">キャンセル</button>
-                      <button type="button" onClick={saveEvidence} disabled={!pendingEvidence} className="px-4 py-2 text-sm rounded-lg bg-emerald-700 text-white hover:bg-emerald-800 disabled:opacity-40 disabled:cursor-not-allowed">probe証跡だけ保存</button>
+                      <button type="button" onClick={saveEvidence} disabled={!pendingEvidence || wouldRemoveAdoptedFingerprint} className="px-4 py-2 text-sm rounded-lg bg-emerald-700 text-white hover:bg-emerald-800 disabled:opacity-40 disabled:cursor-not-allowed">probe証跡だけ保存</button>
                     </div>
                   </div>
                 )}

@@ -170,4 +170,29 @@ requireText(
   "testing-state migration guidance must avoid duplicate provider generation",
 );
 
+const assetReprobe = await source("src/pages/VideoAssetReprobe.tsx");
+requireText(assetReprobe, "adoptedSelectedAuthority", "reprobe must identify assets that are active adopted edit authorities");
+requireText(assetReprobe, "wouldRemoveAdoptedFingerprint", "reprobe must detect when a save would erase adopted fingerprint authority");
+requireText(assetReprobe, "reviewedFingerprintMismatch", "reprobe must compare new media fingerprint with QA-reviewed authority");
+requireText(
+  assetReprobe,
+  "採用正本はfingerprintなしのprobe証跡で上書きできません",
+  "adopted result evidence must not be overwritten by an incomplete fingerprint probe",
+);
+requireText(
+  assetReprobe,
+  "QA時fingerprintと変わったため結果レビューで再QAが必要です",
+  "changed adopted media fingerprint must explicitly require visual re-review",
+);
+requireText(
+  assetReprobe,
+  "disabled={!pendingEvidence || wouldRemoveAdoptedFingerprint}",
+  "reprobe save control must block adopted-authority fingerprint removal",
+);
+requireText(
+  assetReprobe,
+  "fingerprint一致だけで目視QA PASSを推測せず",
+  "fingerprint equality must never be presented as automatic visual QA",
+);
+
 console.log("AI video prompt quality contracts: PASS");
