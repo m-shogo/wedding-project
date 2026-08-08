@@ -1,0 +1,95 @@
+import { readFile } from "node:fs/promises";
+import { fileURLToPath } from "node:url";
+import { dirname, resolve } from "node:path";
+
+const here = dirname(fileURLToPath(import.meta.url));
+const root = resolve(here, "..");
+
+async function source(relativePath) {
+  return readFile(resolve(root, relativePath), "utf8");
+}
+
+function requireText(text, expected, label) {
+  if (!text.includes(expected)) throw new Error(`AI video prompt quality contract failed: ${label}`);
+}
+
+function forbidText(text, forbidden, label) {
+  if (text.includes(forbidden)) throw new Error(`AI video prompt quality contract failed: ${label}`);
+}
+
+const generationPacket = await source("src/lib/videoGenerationPacket.ts");
+requireText(
+  generationPacket,
+  "return buildVideoProviderFields(prompt).mainPrompt;",
+  "provider model input must stay limited to the clean main prompt",
+);
+requireText(
+  generationPacket,
+  "buildVideoOperatorPacket",
+  "operator metadata must remain separate from the provider main prompt",
+);
+requireText(
+  generationPacket,
+  "QA ONLY UNTIL PROVIDER POLICY IS VERIFIED",
+  "unknown negative policy must fail safe into human QA only",
+);
+requireText(
+  generationPacket,
+  "[OPTIONAL SEPARATE NEGATIVE FIELD — USE ONLY IN A SEPARATE PROVIDER FIELD]",
+  "optional negative text must stay visibly separated from the main prompt",
+);
+
+const promptBuilder = await source("src/lib/videoPromptBuilder.ts");
+requireText(promptBuilder, "function runwayI2VMotion", "Runway I2V must retain a motion-first compiler path");
+requireText(
+  promptBuilder,
+  'modelId === "runway-gen-4.5" && intent.mode === "i2v"',
+  "motion-first compilation must be scoped to Runway I2V rather than all modes",
+);
+requireText(
+  promptBuilder,
+  "runway-i2v-input=motion-first",
+  "Runway I2V prompts must retain an auditable compiler marker",
+);
+
+const presets = await source("src/lib/videoPromptPresets.ts");
+for (const legacyNegative of [
+  "no new cloud forms suddenly appear",
+  "do not invent people",
+  "; no people, text, logos or signs",
+  "realistic not glossy",
+  "avoid additional vehicles or aircraft",
+  "no dramatic wave growth",
+  "do not add text, signs, neon graphics, particles or lens effects",
+  "without particles or magical effects",
+]) {
+  forbidText(presets, legacyNegative, `model-facing preset language must not regress to negative phrase: ${legacyNegative}`);
+}
+
+const reviewDrafts = await source("src/lib/videoReviewDraftStorage.ts");
+requireText(
+  reviewDrafts,
+  "resetReviewDraftEvidenceOnVariantChange",
+  "switching result variants must invalidate in-progress visual QA evidence",
+);
+requireText(
+  reviewDrafts,
+  "previousDraft.selectedResultAssetId === draft.selectedResultAssetId",
+  "QA evidence may persist only while the selected result Asset stays the same",
+);
+requireText(reviewDrafts, "checks: {}", "variant changes must clear prior QA checks");
+requireText(reviewDrafts, "failureCategoryId: undefined", "variant changes must clear prior failure classification");
+
+const failureTaxonomy = await source("src/lib/videoFailureTaxonomy.ts");
+requireText(failureTaxonomy, "function keywordMatches", "failure inference must use explicit keyword matching rules");
+requireText(
+  failureTaxonomy,
+  "(^|[^a-z0-9])",
+  "ASCII failure keywords must retain token boundaries to avoid substring false positives",
+);
+
+const resultMetadata = await source("src/lib/videoResultMetadata.ts");
+requireText(resultMetadata, "normalizeVideoResolution", "video resolution evidence must retain canonical normalization");
+requireText(resultMetadata, "[xX×]", "resolution normalization must handle x/X/multiplication-sign variants");
+
+console.log("AI video prompt quality contracts: PASS");
