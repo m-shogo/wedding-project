@@ -5,6 +5,7 @@ export interface VideoReviewDraftEntry {
   reason: string;
   failureCategoryId?: VideoFailureCategoryId;
   selectedResultAssetId: string;
+  selectedResultAuthorityKey?: string;
   updatedAt: string;
 }
 
@@ -23,12 +24,15 @@ function cloneVideoReviewDraftState(state: VideoReviewDraftState): VideoReviewDr
   ]));
 }
 
-export function resetReviewDraftEvidenceOnVariantChange(previous: VideoReviewDraftState, next: VideoReviewDraftState) {
+export function resetReviewDraftEvidenceOnAuthorityChange(previous: VideoReviewDraftState, next: VideoReviewDraftState) {
   return Object.fromEntries(Object.entries(next).map(([promptId, draft]) => {
     const previousDraft = previous[promptId];
-    if (!previousDraft || previousDraft.selectedResultAssetId === draft.selectedResultAssetId) {
-      return [promptId, draft];
-    }
+    if (!previousDraft) return [promptId, draft];
+
+    const variantChanged = previousDraft.selectedResultAssetId !== draft.selectedResultAssetId;
+    const authorityChanged = (previousDraft.selectedResultAuthorityKey ?? "") !== (draft.selectedResultAuthorityKey ?? "");
+    if (!variantChanged && !authorityChanged) return [promptId, draft];
+
     return [promptId, {
       ...draft,
       checks: {},
@@ -65,10 +69,10 @@ export function loadVideoReviewDrafts(): VideoReviewDraftState {
 }
 
 export function saveVideoReviewDrafts(state: VideoReviewDraftState) {
-  const normalized = resetReviewDraftEvidenceOnVariantChange(lastKnownState, state);
+  const normalized = resetReviewDraftEvidenceOnAuthorityChange(lastKnownState, state);
   // VideoResultReview returns the same `state` object after calling this function.
-  // Replace it in-place so a variant switch clears stale checks immediately in the
-  // current React session as well as in localStorage.
+  // Replace it in-place so a variant/media authority switch clears stale checks
+  // immediately in the current React session as well as in localStorage.
   replaceStateInPlace(state, normalized);
   lastKnownState = cloneVideoReviewDraftState(normalized);
 
@@ -84,7 +88,7 @@ export function saveVideoReviewDrafts(state: VideoReviewDraftState) {
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(Object.fromEntries(entries)));
   } catch {
     // Review persistence is a convenience layer. Production data must keep working
-    // even when storage is blocked, full or unavailable. The in-memory variant
+    // even when storage is blocked, full or unavailable. The in-memory authority
     // transition guard above still protects the current review session.
   }
 }
