@@ -12,7 +12,7 @@ Process authority:
 
 ## Current declaration
 
-`RURUBU_V5_CURRENT_CANDIDATE / REALISTIC_DUMMY_MASTERS_13_OF_13_DRIVE_VERIFIED / ACTIVE_CURRENT_PHOTO_ROLES_11 / RETIRED_PRESERVED_ROLES_2 / INTENDED_SOURCE_APPLIED_8 / PHOTO_ROLE_PASS_7 / ROLE_COMPLETE_7 / DOMINANT_PHOTO_PASS_2_OF_3 / COVER_HERO_REPAIR_REQUIRED / REAL_CONTENT_PENDING / PRINT_TEMPLATE_PENDING / NOT_PRINT_READY`
+`RURUBU_V5_CURRENT_CANDIDATE / REALISTIC_DUMMY_MASTERS_13_OF_13_DRIVE_VERIFIED / ACTIVE_CURRENT_PHOTO_ROLES_11 / RETIRED_PRESERVED_ROLES_2 / INTENDED_SOURCE_APPLIED_9 / PHOTO_ROLE_PASS_8 / ROLE_COMPLETE_8 / DOMINANT_PHOTO_PASS_2_OF_3 / COVER_HERO_REPAIR_REQUIRED / REAL_CONTENT_PENDING / PRINT_TEMPLATE_PENDING / NOT_PRINT_READY`
 
 ## Current live Figma
 
@@ -39,6 +39,7 @@ Important comparison frames preserved:
 - cover-snap scope/transport comparison `432:2`
 - lead-memory coast derivative `436:2`
 - Friends cafe derivative `442:2`
+- groom identity-safe derivative `460:2`
 
 ## Active-scope truth
 
@@ -52,9 +53,9 @@ Retired roles:
 
 Verified ledger counts:
 - Drive readback: `13 / 13`
-- intended source applied: `8 / 11 active`
-- photo-role pass: `7 / 11 active`
-- role complete: `7 / 11 active`
+- intended source applied: `9 / 11 active`
+- photo-role pass: `8 / 11 active`
+- role complete: `8 / 11 active`
 - dominant role pass: `2 / 3`
 
 ## Dominant-photo gate
@@ -66,6 +67,22 @@ Verified ledger counts:
 The cover hero remains the last dominant-photo blocker. V6 production remains closed until the full V5 dummy-photo/design gate is genuinely verified.
 
 ## Verified completed active photo roles
+
+### V5-03 — groom profile / identity-safe dummy
+- Current node: `77:296 / IA_PROFILE_A_PHOTO`
+- master Drive ID: `1x4zsKXkk4AHnXoUBHuSX0HnCqPGIy_Wd`
+- accepted derivative Drive ID: `1gi7hPnUi2B_fWbwROrq5Mw5Skora3VQy`
+- derivative: `616 × 720`, `12,865 bytes`, exactly `4×` the `154 × 180` semantic role
+- derivative SHA-256: `1d4152adddb99ddf256f7f9e31d284cc8ca93e6b51624b0f6231f02e8a7d162c`
+- retained higher-quality fallback: `RURUBU_V5_03_GROOM__FIGMA_616x720_Q35.jpg`, Drive ID `1nT1tAU5Ua8xU3h20jvQ1DRKV5hzDrHAO`, `24,795 bytes`
+- previous image hash: `bef2164a2fc70e882f31f735bf66773299b1a62e`
+- Current image hash: `a39dd297eb9de572317a5ce57f0af12e8597b156`
+- comparison: `460:2`, target `460:8`
+- QA: whole spread, reading/page and natural-size profile detail PASS for V5 dummy-design QA
+- identity: back/side-view adult man with camera; face remains unreadable and is not presented as the real groom
+- structure after promotion: native text `92`, IMAGE-fill nodes `9`, fold guide `77:540` visible, V4 rollback preserved
+
+The source master was already conceptually suitable and identity-neutral, so regeneration was rejected. The Q16 transport derivative is accepted only for this small `154 × 180` dummy role after actual-size review; it is not a general compression rule. The Q35 derivative remains preserved as a higher-quality fallback.
 
 ### V5-05 — history lead
 - Current node: `77:422 / IA_HISTORY_MEMORY_PHOTO`
@@ -156,9 +173,8 @@ This does **not** become PHOTO_ROLE_PASS because the Current semantic node is hi
 ## Remaining active V5 photo roles
 
 1. `V5-01 / 77:148` — cover hero; highest priority and final dominant blocker
-2. `V5-03 / 77:296` — groom atmosphere profile; identity-safe treatment required
-3. `V5-04 / 77:302` — bride atmosphere profile; recognizable-face risk must be removed
-4. `V5-13 / 77:43` — Friends & Family 03 / dining; live geometry must be re-read before derivative acceptance because the ledger’s old geometry may also be stale
+2. `V5-04 / 77:302` — bride atmosphere profile; recognizable-face risk must be removed
+3. `V5-13 / 77:43` — Friends & Family 03 / dining; live geometry must be re-read before derivative acceptance because the ledger’s old geometry may also be stale
 
 No active role may be counted complete until Drive ID, derivative dimensions/bytes, exact Figma node/hash, screenshot QA, structure QA, and Git readback agree.
 
@@ -174,6 +190,6 @@ V6 remains separate and production-blocked. Research, Drive structure, asset que
 
 - close `V5-01` with a quality-passing role-specific cover derivative and duplicate-first three-scale QA
 - re-read live geometry and advance `V5-13` with source identity/crop quality preserved
-- treat V5-03/V5-04 with identity-safe crops/replacements before any pass
+- treat `V5-04` with an identity-safe crop/replacement before any pass
 - continue comparing Current against the clean-room cover/inside candidates
 - keep print readiness separate from dummy-design completion
