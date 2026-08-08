@@ -8,6 +8,7 @@
     "build": "tsc -b && vite build",
     "check:video-contracts": "node scripts/verify-video-safety-contracts.mjs",
     "check:video-failure-learning": "node scripts/verify-video-failure-learning-contracts.mjs",
+    "check:video-prompt-quality": "node scripts/verify-video-prompt-quality-contracts.mjs",
     "preview": "vite preview"
   },
   "dependencies": {
