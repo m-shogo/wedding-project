@@ -159,10 +159,28 @@ function realismSentence(profile: RealismProfile) {
   }
 }
 
+function cameraInstruction(camera: string) {
+  const value = camera.trim();
+  if (!value) return "";
+  const known: Record<string, string> = {
+    "locked camera": "Camera remains locked off.",
+    "slow push-in": "Camera performs one slow, steady push-in.",
+    "slow lateral truck": "Camera performs one slow, steady lateral truck.",
+    "gentle pan": "Camera performs one gentle pan.",
+    "subtle handheld observation": "Camera uses restrained observational handheld movement.",
+    "slow pull-back": "Camera performs one slow, steady pull-back.",
+  };
+  const mapped = known[value.toLowerCase()];
+  if (mapped) return mapped;
+  if (/[.!?]$/.test(value)) return value;
+  if (/^(?:the\s+)?camera\b/i.test(value)) return `${value}.`;
+  return `Camera movement: ${value}.`;
+}
+
 function paceSentence(pace: MotionPace) {
   switch (pace) {
     case "locked":
-      return "Camera remains locked off; motivated environmental motion carries the shot.";
+      return "Framing remains fixed while motivated environmental motion carries the shot.";
     case "subtle":
       return "Camera movement is barely perceptible and physically smooth.";
     case "medium":
@@ -182,7 +200,7 @@ function continuityLines(intent: VideoPromptIntent) {
 function commonMotion(intent: VideoPromptIntent) {
   const lines = [
     intent.action.trim(),
-    intent.camera.trim(),
+    cameraInstruction(intent.camera),
     paceSentence(intent.pace),
     realismSentence(intent.realism),
   ].filter(Boolean);
@@ -196,7 +214,7 @@ function commonMotion(intent: VideoPromptIntent) {
 function runwayI2VMotion(intent: VideoPromptIntent) {
   return [
     intent.action.trim(),
-    intent.camera.trim(),
+    cameraInstruction(intent.camera),
     paceSentence(intent.pace),
     ...continuityLines(intent),
   ].filter(Boolean);
