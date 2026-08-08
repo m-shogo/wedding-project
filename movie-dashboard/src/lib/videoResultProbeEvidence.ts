@@ -7,6 +7,7 @@ export interface VideoResultProbeEvidence {
 }
 
 export const MIN_REVIEW_PREVIEW_FRAMES = 3;
+const MIN_DISTINCT_PREVIEW_TIME_GAP_SEC = 0.01;
 
 function safeSingleLine(value: string) {
   return value.replace(/[\r\n]+/g, " ").trim();
@@ -17,6 +18,12 @@ function normalizedPreviewTimes(values: number[] | undefined) {
   return values
     .filter((value) => Number.isFinite(value) && value >= 0)
     .map((value) => Math.round(value * 100) / 100);
+}
+
+function hasDistinctReviewPreviewTimes(values: number[]) {
+  if (values.length < MIN_REVIEW_PREVIEW_FRAMES) return false;
+  const sorted = [...values].sort((a, b) => a - b);
+  return sorted.every((value, index) => index === 0 || value - sorted[index - 1] >= MIN_DISTINCT_PREVIEW_TIME_GAP_SEC);
 }
 
 export function formatVideoResultProbeEvidence(evidence: VideoResultProbeEvidence) {
@@ -57,7 +64,9 @@ export function parseVideoResultProbeEvidence(notes: string): VideoResultProbeEv
   const sampledBytes = Number(line.match(/sampled-bytes=(\d+)/)?.[1] ?? 0);
   if (!probedAt) return undefined;
   const normalizedPreviewFrameCount = Number.isFinite(previewFrameCount) ? previewFrameCount : 0;
-  const reviewReadyFingerprint = normalizedPreviewFrameCount >= MIN_REVIEW_PREVIEW_FRAMES ? sampleFingerprint : "";
+  const hasRecordedPreviewTimes = Boolean(previewTimesRaw);
+  const previewTimeAuthorityReady = !hasRecordedPreviewTimes || hasDistinctReviewPreviewTimes(previewFrameTimesSec);
+  const reviewReadyFingerprint = normalizedPreviewFrameCount >= MIN_REVIEW_PREVIEW_FRAMES && previewTimeAuthorityReady ? sampleFingerprint : "";
   return {
     probedAt,
     previewFrameCount: normalizedPreviewFrameCount,
