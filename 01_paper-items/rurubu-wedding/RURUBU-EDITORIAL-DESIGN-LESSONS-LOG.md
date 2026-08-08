@@ -464,6 +464,32 @@ Do not turn every isolated preference into a rigid global rule. The goal is accu
 
 ---
 
+## LESSON-017 — A strong master can support a medium lead role through exact-role cropping without regeneration
+
+**Date:** 2026-08-08
+
+**Context:** V5 `V5-06 / 77:430 / IA_MEMORY_1_PHOTO`, `398 × 214` lead-memory role.
+
+**Observed failure or opportunity:** The role remained incomplete even though its Drive master already had strong coastal specificity, adequate source resolution, good crop flexibility, and no false-person identity risk. Regenerating would have created activity without addressing a real defect.
+
+**Root cause:** The project can over-associate incomplete roles with generation work. In this case the missing evidence was a role-specific crop, reliable binary transport, and three-scale QA—not a new master.
+
+**General editorial principle:** Before regenerating an already suitable master, test whether a role-specific crop at an evidence-appropriate derivative size solves the actual editorial problem. Judge the result at its natural render size and in page hierarchy; dimensions and successful transport alone do not establish quality.
+
+**Process change:** Derived an exact `2×` `796 × 428` crop, saved/read it back from Drive, then applied exact bytes to a rollback-safe duplicate. When normal upload, `createImageAsync`, sandbox `fetch`, and private plugin data routes were unavailable, switched to shared plugin data with encoded-length, decoded-byte and JPEG-boundary guards. One truncated chunk was rejected by the guard before decode/current mutation. Current promotion followed screenshot and structure QA only.
+
+**Design change:** Current `77:430 / IA_MEMORY_1_PHOTO` moved from hash `8344d95d228f3ca6661d2dbd06220353d265a540` to `adbb8e529451a81dd25e4eb29bf068655569ce25`. No geometry, native text, fold, rollback, or other image role changed.
+
+**Verification evidence:** Accepted derivative Drive ID `1epb80L7WSZDmU86zl6PVQkZ8frP1JEeN`, `796 × 428`, `23,276 bytes`, SHA-256 `0c0ac76ed45aa8f0261df92b5e1ead40991a3d5c767b5ab2a01ab8c921ce8746`; comparison `436:2 / 436:148`; Current `77:430`; whole-spread, reading, and actual-size screenshot PASS; native text `92`, IMAGE fills `9`, fold guide and V4 rollback preserved. Detailed evidence: `learning-runs/2026-08-08-v5-memory-01-coast-binary-safe-promotion.md`.
+
+**Applies to:** V5 medium/supporting photo roles when the source is already verified and editorially suitable
+
+**Status:** TESTED
+
+**Promoted knowledge-base section:** Not yet promoted. This supports the master-first principle but does not make Q30, exact `2×`, or shared-data transport a universal PROJECT_RULE.
+
+---
+
 ## Open candidate lessons
 
 Use this area for observations that require further evidence before promotion.
