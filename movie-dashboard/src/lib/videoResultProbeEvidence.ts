@@ -86,7 +86,8 @@ export function parseVideoResultProbeEvidence(notes: string): VideoResultProbeEv
   const normalizedDurationSec = normalizedMeasuredDuration(measuredDurationSec);
   const hasRecordedPreviewTimes = Boolean(previewTimesRaw);
   const previewTimeAuthorityReady = !hasRecordedPreviewTimes || (
-    hasDistinctReviewPreviewTimes(previewFrameTimesSec)
+    previewFrameTimesSec.length === normalizedPreviewFrameCount
+    && hasDistinctReviewPreviewTimes(previewFrameTimesSec)
     && hasPreviewTimesWithinMeasuredDuration(previewFrameTimesSec, normalizedDurationSec)
   );
   const reviewReadyFingerprint = normalizedPreviewFrameCount >= MIN_REVIEW_PREVIEW_FRAMES && previewTimeAuthorityReady ? sampleFingerprint : "";
