@@ -120,3 +120,135 @@ Palmier MCPのtimeline正担当はClaude Codeだけ。
 - BGM候補、会場上映/SNS利用条件、終端同期
 - 会場の推奨納品形式、解像度、fps、音声仕様
 - 実写真差し替え後のcrop・safe area・テロップ可読性の最終確認
+
+---
+
+## Palmier Claude Code セッション（2026-08-08 22:52 JST）
+
+担当: Claude Code（Palmier timeline正担当）。Codexはこのtimelineへ書き込まない。
+
+### 接続構成（判明した事実）
+
+- Palmier MCPは `.mcpb`（Claude Desktop向け）としてアプリ内に同梱。
+  実体: `/Applications/PalmierPro.app/Contents/Resources/palmier-pro.mcpb`。
+- このClaude Codeセッションには **Palmier MCPは未登録**（接続MCPは `openaiDeveloperDocs` のみ）。
+- PalmierProは起動中で、ローカルMCPサーバを `http://127.0.0.1:19789/mcp`
+  （streamable HTTP / JSON-RPC）で公開している。
+- Claude Codeからは、この稼働中ローカルサーバへHTTPで直接JSON-RPCを送って操作した
+  （`initialize` / `tools/list` / `tools/call` 成功）。ヘルパーはscratchpadの `palmier.py`。
+- 公開ツール: get_timeline, get_media, add_clips, insert_clips, move_clips, split_clips,
+  set_clip_properties, apply_layout, add_texts, create_matte, import_media, export_project,
+  generate_* , new_project, open_project, get_projects 等（フルセット確認済み）。
+
+### ブロッカー（最重要・環境起因）
+
+**`new_project`（プロジェクト作成）を呼ぶとPalmierPro本体がクラッシュまたはハングする。**
+
+- 1回目: `new_project` 呼び出し中に接続断→アプリ終了。
+- crash log: `~/Library/Logs/DiagnosticReports/PalmierPro-2026-08-08-224501.ips`
+  - `EXC_CRASH (SIGABRT)` / `abort() called`
+  - faulting stack: `RenderBox RB::precondition_failure` ← `RB::(anon)::load_library(NSBundle*, MTLDevice)`
+    ← `RB::Device::preload_resources` ← `RB::Device::Device(...)`
+  - 原因: **Metal / GPUレンダーデバイス初期化の失敗（RenderBox）**。JSON-RPC引数の問題ではない。
+- 2回目: 再起動後に再度 `new_project` を呼ぶと今度は無応答（ハング）。
+  ハングしたリクエストがMCPサーバスレッドをブロックし、以後 `get_projects` まで応答しなくなった。
+- 読み取り系（`get_projects` 等）は、fresh relaunch直後なら即応答する。
+  → **MCPサーバ自体は健全。落ちる/固まるのは project 生成時のMetal初期化だけ。**
+
+現状 `get_projects` = `{"projects":[],"openCount":0}`。プロジェクトは1件も生成できていない。
+
+### やったこと / できたこと
+
+- Palmier MCPへのHTTP直結と全ツール列挙、read系動作確認。
+- 実写真の探索（下記）。
+- reference MP4（Remotion V1）の実在・仕様確認。
+- 60秒timelineの実行可能なclip mapping（frame単位）を確定（下記「実行待ちtimeline」）。
+- crash切り分けとhandoff記録。
+
+### できなかったこと（環境ブロック）
+
+- Palmier上でのproject/timeline生成（`new_project` がMetalで落ちる/固まる）。
+- 従って import / clip配置 / split / trim / reorder / BGM配置 は**未実行**。
+- 完了ゲート「Palmier上で60秒を最後まで再生」は**未達（環境ブロック）**。
+
+### 実写真の探索結果: 0 / 11
+
+- `05_photos/`, `06_videos/`, `00_inbox/` はいずれも空（実写真・実動画なし）。
+- `02_opening-movie/sample_image/` にあるのは **AI背景画像**（op_01〜op_17）で、
+  実在の新郎新婦・家族・友人・犬の写真ではない。11枠の実写真には使えない。
+  （op_05 沖縄海 / op_07 ハワイ海 等はAI背景として章のつなぎ候補になり得るが、
+  「実写真枠」の代替にはしない。op_01/op_11は人物入りで不採用のまま。）
+- 結論: 実写真は **0/11**。11枠すべて明示placeholder。実写真選定は人間待ち。
+
+### 実行待ちtimeline（Palmierが復帰したら即実行するclip map・30fps / 1920x1080）
+
+前提: reference MP4を track0 の base（全60秒 / frame 0–1800）に置き、
+写真区間（00:09–00:52）だけ track1 に個別placeholder clipを重ねる。
+0–9s / 52–60s は track1を空にしてRemotion trave UI（reference）を通す。
+
+| # | シーン | 時間 | frame範囲 | track | 素材 |
+|---|---|---|---|---|---|
+| base | reference全体 | 00:00–01:00 | 0–1800 | 0 | Remotion V1 MP4（reference / backbone） |
+| 1 | Okinawa 写真1 | 00:09–00:12 | 270–360 | 1 | placeholder（実写真待ち） |
+| 2 | Okinawa 写真2 | 00:12–00:15 | 360–450 | 1 | placeholder |
+| 3 | Okinawa 写真3 | 00:15–00:18 | 450–540 | 1 | placeholder |
+| 4 | Seoul 写真1 | 00:18–00:21 | 540–630 | 1 | placeholder |
+| 5 | Seoul 写真2 | 00:21–00:24 | 630–720 | 1 | placeholder |
+| 6 | Seoul 写真3 | 00:24–00:27 | 720–810 | 1 | placeholder |
+| 7 | Hawaii 写真1 | 00:27–00:30 | 810–900 | 1 | placeholder |
+| 8 | Hawaii 写真2 | 00:30–00:33 | 900–990 | 1 | placeholder |
+| 9 | Hawaii 写真3 | 00:33–00:36 | 990–1080 | 1 | placeholder |
+| 10 | Couple Hero A | 00:36–00:44 | 1080–1320 | 1 | placeholder（主役サイズ・8秒） |
+| 11 | Couple Hero B | 00:44–00:52 | 1320–1560 | 1 | placeholder（主役サイズ・8秒） |
+
+placeholder実体: `create_matte hex=#16233F`（Style Bibleのネイビー）を全枠で再利用し、
+`add_texts` で枠ごとにラベル（例 `OKINAWA · PHOTO 1/3 · PLACEHOLDER — swap real photo`、
+ゴールド#C8A86B / アイボリー#F4EFE4）を重ねる。実写真が来たら各clipの mediaRef を差し替える。
+
+写真区間 43秒 / 60秒 = 71.7%（写真主役方針を維持。frame配分はreferenceと一致）。
+
+### BGM状態
+
+- **BGMなし**。正式BGM・仮BGMともに未投入。無音前提でtimelineを組む方針は維持。
+- 候補が出た場合の利用条件（会場上映可否 / SNS利用差）は未確認。推測しない。人間待ち。
+
+### AI B-roll 必要判定
+
+- 現時点でAI化必須のshotは **なし**。`v1-cloud-transition`(00:05–00:09) も、
+  Palmierで通し確認できるまではRemotion版維持で十分と判断（従来判定を踏襲）。
+- 有料AI動画生成は実行していない。実行しない。
+
+### Codexへ戻す作業
+
+- なし（Palmier timelineはClaude Code専任。Codex側の追加renderは現時点で不要）。
+- もしPalmier復帰後に通し確認で `v1-cloud-transition` の素材感が弱いと判断されたら、
+  上表「AI B-roll候補」の仕様でCodexへshot単位handoffを起こす。それまで生成しない。
+
+### 次にPalmierを復帰させる手順（要・人間判断）
+
+`new_project` のMetalクラッシュを回避する最有力ルートは
+**アプリのGUIから手動でプロジェクトを新規作成/オープンする**こと
+（通常UI経由ならMetalコンテキストが正しく初期化され、以後のMCP編集が通る可能性が高い）。
+
+1. PalmierProのウィンドウで新規プロジェクト「Opening V1」を作成し、開いた状態にする
+   （16:9 / 1080p / 30fps）。
+2. その状態でClaude Codeに知らせる。
+3. Claude Codeが `open_project`（or 既にactive）→ `import_media`（reference MP4）→
+   `add_clips`（上表）→ `create_matte`/`add_texts`（placeholder）で60秒timelineを構築。
+4. `export_project` or Palmier再生で60秒通し確認。
+5. 実写真が揃い次第、clip mediaRefを差し替え。
+
+GUI手動作成でも落ちる場合は、PalmierPro側のMetal/GPU初期化不具合（アプリ更新 or
+再インストール、macOS GPU周りの確認）が必要。その場合は開発元（palmier.io）案件。
+
+### 人間が選ぶ必要のあるもの
+
+- 実写真11枚（沖縄3 / Seoul 3 / Hawaii 3 / Hero 2）の選定。
+- BGM候補と利用条件（会場上映 / SNS）。
+- 上記「PalmierをGUIで手動作成」を実施するか、別手段でMCP編集を通すか。
+
+### Git記録方針の順守
+
+- Palmier project本体・大容量media・MP4はGitに入れない（未commit）。
+- 本セクション（timeline名 `Opening V1` / 60秒 / track構成 / clip mapping /
+  placeholder一覧 / missing素材0/11 / BGM状態 / AI判定 / 次作業 / QA）のみGitへ記録。
