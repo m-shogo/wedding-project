@@ -165,6 +165,10 @@ function sentenceInstruction(value: string) {
   return /[.!?]$/.test(trimmed) ? trimmed : `${trimmed}.`;
 }
 
+function inlineFragment(value: string) {
+  return value.trim().replace(/[.!?]+$/, "").trim();
+}
+
 function prefixedInstruction(prefix: string, value: string) {
   const sentence = sentenceInstruction(value);
   return sentence ? `${prefix}: ${sentence}` : "";
@@ -216,8 +220,9 @@ function commonMotion(intent: VideoPromptIntent) {
     realismSentence(intent.realism),
   ].filter(Boolean);
 
-  if (intent.lighting.trim()) lines.push(`Lighting remains ${intent.lighting.trim()} with natural exposure changes.`);
-  if (intent.mood.trim()) lines.push(`Mood: ${intent.mood.trim()}.`);
+  const lighting = inlineFragment(intent.lighting);
+  if (lighting) lines.push(`Lighting remains ${lighting} with natural exposure changes.`);
+  if (intent.mood.trim()) lines.push(prefixedInstruction("Mood", intent.mood));
   lines.push(...continuityLines(intent));
   return lines;
 }
@@ -246,6 +251,10 @@ function qaAvoidText(profile: VideoModelProfile) {
 
 function containsNegativePhrasing(value: string) {
   return /\b(no|not|without|avoid|never|don't|do not|doesn't|doens't)\b/i.test(value);
+}
+
+function instructionClauseCount(value: string) {
+  return value.split(/[,;、；。]/).map((part) => part.trim()).filter(Boolean).length;
 }
 
 export function compileVideoPrompt(modelId: VideoModelId, intent: VideoPromptIntent): CompiledVideoPrompt {
@@ -352,8 +361,9 @@ export function getPromptWarnings(modelId: VideoModelId, intent: VideoPromptInte
   }
   if ((modelId === "seedance-2.0" || modelId === "seedance-2.0-mini") && intent.durationSec > 15) warnings.push("このプロジェクトではSeedance 2.0系を短尺運用し、15秒超はショット分割してください。");
   if (modelId === "seedance-2.5-preview") warnings.push("Seedance 2.5は提供状況・仕様が変動中です。Dreamina / CapCutの現行UIで利用可否を確認してから生成してください。");
-  if (intent.camera.split(/[,.、]/).filter(Boolean).length >= 3) warnings.push("カメラ指示が多すぎます。1ショット1カメラ意図へ削ると安定しやすいです。");
-  if (intent.action.split(/[,.、]/).filter(Boolean).length >= 4) warnings.push("動作を詰め込みすぎています。ショットを分割してください。");
-  if (intent.realism === "polished") warnings.push("polishedはAIっぽい過剰演出に寄りやすいため、実写素材の前後で必ず比較してください。");
+  if (instructionClauseCount(intent.camera) >= 3) warnings.push("カメラ指示が多すぎます。1ショット1カメラ意図へ削ると安定しやすいです。");
+  if (instructionClauseCount(intent.action) >= 4) warnings.push("動作を詰め込みすぎています。ショットを分割してください。");
+  const runwayI2VIgnoresAppearanceControls = modelId === "runway-gen-4.5" && intent.mode === "i2v";
+  if (intent.realism === "polished" && !runwayI2VIgnoresAppearanceControls) warnings.push("polishedはAIっぽい過剰演出に寄りやすいため、実写素材の前後で必ず比較してください。");
   return warnings;
 }
