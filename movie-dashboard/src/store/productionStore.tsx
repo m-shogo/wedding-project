@@ -80,6 +80,7 @@ interface ProductionContextValue {
   addPrompt: (prompt: Prompt) => void;
   addPromptLinkedToScenes: (prompt: Prompt, sceneIds: string[]) => void;
   updatePrompt: (prompt: Prompt) => void;
+  updatePromptsAtomically: (prompts: Prompt[]) => void;
   deletePrompt: (promptId: string) => void;
   duplicatePrompt: (promptId: string) => void;
   linkPromptToScene: (promptId: string, sceneId: string) => void;
@@ -557,6 +558,24 @@ export function ProductionProvider({ children }: { children: ReactNode }) {
     [setData],
   );
 
+  const updatePromptsAtomically = useCallback(
+    (prompts: Prompt[]) => {
+      if (prompts.length === 0) return;
+      const replacements = new Map(prompts.map((prompt) => [prompt.promptId, prompt]));
+      setData((prev) => {
+        let changed = false;
+        const nextPrompts = prev.prompts.map((prompt) => {
+          const replacement = replacements.get(prompt.promptId);
+          if (!replacement || Object.is(replacement, prompt)) return prompt;
+          changed = true;
+          return replacement;
+        });
+        return changed ? { ...prev, prompts: nextPrompts } : prev;
+      });
+    },
+    [setData],
+  );
+
   const deletePrompt = useCallback(
     (promptId: string) => {
       setData((prev) => ({
@@ -752,6 +771,7 @@ export function ProductionProvider({ children }: { children: ReactNode }) {
       addPrompt,
       addPromptLinkedToScenes,
       updatePrompt,
+      updatePromptsAtomically,
       deletePrompt,
       duplicatePrompt,
       linkPromptToScene,
@@ -799,6 +819,7 @@ export function ProductionProvider({ children }: { children: ReactNode }) {
       addPrompt,
       addPromptLinkedToScenes,
       updatePrompt,
+      updatePromptsAtomically,
       deletePrompt,
       duplicatePrompt,
       linkPromptToScene,
