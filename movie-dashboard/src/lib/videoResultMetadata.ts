@@ -10,10 +10,20 @@ function safeSingleLine(value: string) {
   return value.replace(/[\r\n]+/g, " ").trim();
 }
 
+export function normalizeVideoResolution(value: string) {
+  const singleLine = safeSingleLine(value);
+  const dimensions = singleLine.match(/^(\d{1,5})\s*[xX×]\s*(\d{1,5})$/);
+  if (!dimensions) return singleLine;
+  const width = Number(dimensions[1]);
+  const height = Number(dimensions[2]);
+  if (!Number.isFinite(width) || !Number.isFinite(height) || width <= 0 || height <= 0) return singleLine;
+  return `${width}x${height}`;
+}
+
 export function formatVideoResultReproMetadata(metadata: VideoResultReproMetadata) {
   const generationId = safeSingleLine(metadata.generationId);
   const seed = safeSingleLine(metadata.seed);
-  const resolution = safeSingleLine(metadata.resolution);
+  const resolution = normalizeVideoResolution(metadata.resolution);
   return [
     generationId ? `provider-generation-id=${generationId}` : "",
     seed ? `seed=${seed}` : "",
@@ -35,7 +45,7 @@ export function parseVideoResultReproMetadata(notes: string): VideoResultReproMe
     generationId: noteValue(notes, "provider-generation-id"),
     seed: noteValue(notes, "seed"),
     actualDurationSec: duration ? Number(duration) || undefined : undefined,
-    resolution: noteValue(notes, "resolution"),
+    resolution: normalizeVideoResolution(noteValue(notes, "resolution")),
     fps: fps ? Number(fps) || undefined : undefined,
   };
 }
