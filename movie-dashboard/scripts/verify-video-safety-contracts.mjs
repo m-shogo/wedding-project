@@ -167,6 +167,26 @@ requireText(
 );
 requireText(
   executionRouter,
+  "browser-measured media",
+  "Palmier handoff must expose browser-measured duration and resolution separately from saved result metadata",
+);
+requireText(
+  executionRouter,
+  "measuredDurationSec: probe.measuredDurationSec",
+  "structured Palmier handoff must carry browser-measured duration evidence",
+);
+requireText(
+  executionRouter,
+  "measuredResolution: probe.measuredResolution",
+  "structured Palmier handoff must carry browser-measured resolution evidence",
+);
+requireText(
+  executionRouter,
+  "Browser-measured duration/resolution are local media evidence, not visual QA",
+  "Palmier safety boundary must not treat measured metadata as visual QA",
+);
+requireText(
+  executionRouter,
   "sample fingerprint is a bounded audit hint",
   "Palmier handoff must not present sampled fingerprint as a full-file checksum or visual QA",
 );
