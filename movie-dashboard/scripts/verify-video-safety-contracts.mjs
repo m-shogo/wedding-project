@@ -262,6 +262,12 @@ const store = await source("src/store/productionStore.tsx");
 requireText(store, "registerPromptResultAsset", "atomic generated-result registration must remain available");
 requireText(store, "addPromptLinkedToScenes", "atomic Prompt + scene linking must remain available");
 requireText(store, "if (Object.is(next, prev)) return prev;", "no-op state updates must not pollute Undo history");
+requireText(store, "updatePromptsAtomically", "multi-prompt transitions must have a single-store transaction path");
+requireMatch(
+  store,
+  /const updatePromptsAtomically[\s\S]{0,900}?setData\(\(prev\)[\s\S]{0,900}?prompts: nextPrompts/,
+  "atomic multi-prompt updates must use one setData transaction so Undo records one history step",
+);
 
 const queue = await source("src/pages/VideoGenerationQueue.tsx");
 requireText(queue, "registerPromptResultAsset", "generation queue must use atomic result registration");
@@ -278,7 +284,13 @@ requireText(
 requireMatch(
   queue,
   /for \(const prompt of runnable\)[\s\S]{0,500}?status: "testing"/,
-  "batch provider-safe copy must move copied drafts out of the runnable draft set",
+  "batch handoff preparation must move copied drafts out of the runnable draft set",
+);
+requireText(queue, "updatePromptsAtomically(preparedPrompts)", "batch state transition must be committed as one Undo history step");
+requireText(
+  queue,
+  "状態変更はUndo 1回で戻せます",
+  "batch UI must tell the operator that the grouped state transition is one undoable action",
 );
 requireText(
   queue,
