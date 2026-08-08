@@ -25,9 +25,19 @@ export function resolveProjectVideoModelRoute(presetId: string, evidence: VideoM
   };
 }
 
+function evidenceSnapshot(evidence: VideoModelEvidence | undefined) {
+  if (!evidence) {
+    return "evidence-signal=none / reviewed=0 / independent-roots=0";
+  }
+  const passRate = Math.round(evidence.passRate * 100);
+  const confidenceLow = Math.round(evidence.confidenceLow * 100);
+  const confidenceHigh = Math.round(evidence.confidenceHigh * 100);
+  return `evidence-signal=${evidence.signal} / reviewed=${evidence.reviewed} / independent-roots=${evidence.independentRoots} / pass-rate=${passRate}% / confidence-low=${confidenceLow}% / confidence-high=${confidenceHigh}%`;
+}
+
 export function videoModelRouteNote(route: NonNullable<ReturnType<typeof resolveProjectVideoModelRoute>>) {
-  const evidenceRate = route.evidence ? Math.round(route.evidence.passRate * 100) : undefined;
+  const snapshot = evidenceSnapshot(route.evidence);
   return route.learned
-    ? `model-routing=project-observed / preset-default-model=${route.preset.draftModelId} / reviewed=${route.evidence?.reviewed ?? 0} / pass-rate=${evidenceRate ?? 0}%`
-    : `model-routing=preset-default / reviewed=${route.evidence?.reviewed ?? 0}${evidenceRate === undefined ? "" : ` / pass-rate=${evidenceRate}%`}`;
+    ? `model-routing=project-observed / selected-model=${route.model.id} / preset-default-model=${route.preset.draftModelId} / ${snapshot}`
+    : `model-routing=preset-default / selected-model=${route.model.id} / preset-default-model=${route.preset.draftModelId} / ${snapshot}`;
 }
