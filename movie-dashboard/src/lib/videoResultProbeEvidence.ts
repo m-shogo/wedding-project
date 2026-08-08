@@ -10,6 +10,7 @@ export interface VideoResultProbeEvidence {
 
 export const MIN_REVIEW_PREVIEW_FRAMES = 3;
 const MIN_DISTINCT_PREVIEW_TIME_GAP_SEC = 0.01;
+const PREVIEW_DURATION_TOLERANCE_SEC = 0.05;
 
 function safeSingleLine(value: string) {
   return value.replace(/[\r\n]+/g, " ").trim();
@@ -31,6 +32,11 @@ function hasDistinctReviewPreviewTimes(values: number[]) {
   if (values.length < MIN_REVIEW_PREVIEW_FRAMES) return false;
   const sorted = [...values].sort((a, b) => a - b);
   return sorted.every((value, index) => index === 0 || value - sorted[index - 1] >= MIN_DISTINCT_PREVIEW_TIME_GAP_SEC);
+}
+
+function hasPreviewTimesWithinMeasuredDuration(values: number[], measuredDurationSec: number | undefined) {
+  if (!measuredDurationSec) return true;
+  return values.every((value) => value <= measuredDurationSec + PREVIEW_DURATION_TOLERANCE_SEC);
 }
 
 export function formatVideoResultProbeEvidence(evidence: VideoResultProbeEvidence) {
@@ -77,14 +83,18 @@ export function parseVideoResultProbeEvidence(notes: string): VideoResultProbeEv
   const sampledBytes = Number(line.match(/sampled-bytes=(\d+)/)?.[1] ?? 0);
   if (!probedAt) return undefined;
   const normalizedPreviewFrameCount = Number.isFinite(previewFrameCount) ? previewFrameCount : 0;
+  const normalizedDurationSec = normalizedMeasuredDuration(measuredDurationSec);
   const hasRecordedPreviewTimes = Boolean(previewTimesRaw);
-  const previewTimeAuthorityReady = !hasRecordedPreviewTimes || hasDistinctReviewPreviewTimes(previewFrameTimesSec);
+  const previewTimeAuthorityReady = !hasRecordedPreviewTimes || (
+    hasDistinctReviewPreviewTimes(previewFrameTimesSec)
+    && hasPreviewTimesWithinMeasuredDuration(previewFrameTimesSec, normalizedDurationSec)
+  );
   const reviewReadyFingerprint = normalizedPreviewFrameCount >= MIN_REVIEW_PREVIEW_FRAMES && previewTimeAuthorityReady ? sampleFingerprint : "";
   return {
     probedAt,
     previewFrameCount: normalizedPreviewFrameCount,
     previewFrameTimesSec: previewFrameTimesSec.length > 0 ? previewFrameTimesSec : undefined,
-    measuredDurationSec: normalizedMeasuredDuration(measuredDurationSec),
+    measuredDurationSec: normalizedDurationSec,
     measuredResolution: measuredResolution || undefined,
     sampleFingerprint: reviewReadyFingerprint || undefined,
     sampledBytes: sampledBytes > 0 && Number.isFinite(sampledBytes) ? sampledBytes : undefined,
