@@ -75,7 +75,8 @@ export function parseVideoResultProbeEvidence(notes: string): VideoResultProbeEv
   if (!line) return undefined;
   const probedAt = line.match(/probedAt=([^\s/]+)/)?.[1] ?? "";
   const measuredDurationSec = Number(line.match(/measured-duration-sec=([\d.]+)/)?.[1] ?? 0);
-  const measuredResolution = normalizeVideoResolution(line.match(/measured-resolution=([^\s/]+)/)?.[1] ?? "");
+  const measuredResolutionRaw = line.match(/measured-resolution=(.*?)(?:\s*\/\s*preview-frames=|$)/)?.[1] ?? "";
+  const measuredResolution = normalizeVideoResolution(measuredResolutionRaw);
   const previewFrameCount = Number(line.match(/preview-frames=(\d+)/)?.[1] ?? 0);
   const previewTimesRaw = line.match(/preview-times=([^\s/]+)/)?.[1] ?? "";
   const previewFrameTimesSec = previewTimesRaw
