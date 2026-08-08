@@ -345,3 +345,22 @@ GUI手動作成でも落ちる場合は、PalmierPro側のMetal/GPU初期化不�
   （実写真が入るまで意図的に未調整）。
 - 見た目の最終proof が欲しい場合は Palmier で `export_project`（video / 1080p）を実行して
   60秒MP4を書き出す（~/Downloads、Git管理外）。
+
+### 追記: ダミー画像差し替え + 書き出し（2026-08-08）
+
+レビューを映像らしくするため、V2の無地navy placeholderを**地域色ダミーmatte**へ差し替えた
+（V3ラベルは維持。実写真差し替え先であることは不変）。
+
+| 地域 | 色 | mediaRef |
+|---|---|---|
+| Okinawa | teal #2E7D8A | D5A3E9B1 |
+| Seoul | mauve #7A4E63 | 55F1B39F |
+| Hawaii | gold #C08A3E | D05D531B |
+| Couple Hero A/B | blue #223A63 | EE169CD9 |
+
+- これは**ダミー（レビュー用）**。実写真ではない。人物・犬等のAI生成は一切していない。
+- 元の navy matte `7738F1EF` はライブラリに残るが未使用。
+- 書き出し: `export_project(video/H.264/1080p)` 実行 → `~/Downloads/Opening V1.mp4`
+  （60秒 / 30fps / Git管理外）。バックグラウンドrenderのためPalmierの通知で完了確認。
+- 実写真が来たら、地域色ダミーclip（上表の各frame）を photo clip に差し替え、
+  対応するV3ラベルを外す。
