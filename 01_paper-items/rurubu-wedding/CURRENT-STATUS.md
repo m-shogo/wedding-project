@@ -12,7 +12,7 @@ Process authority:
 
 ## Current declaration
 
-`RURUBU_V5_CURRENT_CANDIDATE / REALISTIC_DUMMY_MASTERS_13_OF_13_DRIVE_VERIFIED / ACTIVE_CURRENT_PHOTO_ROLES_11 / RETIRED_PRESERVED_ROLES_2 / INTENDED_SOURCE_APPLIED_9 / PHOTO_ROLE_PASS_8 / ROLE_COMPLETE_8 / DOMINANT_PHOTO_PASS_2_OF_3 / COVER_HERO_REPAIR_REQUIRED / REAL_CONTENT_PENDING / PRINT_TEMPLATE_PENDING / NOT_PRINT_READY`
+`RURUBU_V5_CURRENT_CANDIDATE / REALISTIC_DUMMY_MASTERS_13_OF_13_DRIVE_VERIFIED / ACTIVE_CURRENT_PHOTO_ROLES_11 / RETIRED_PRESERVED_ROLES_2 / INTENDED_SOURCE_APPLIED_10 / PHOTO_ROLE_PASS_9 / ROLE_COMPLETE_9 / DOMINANT_PHOTO_PASS_2_OF_3 / COVER_HERO_REPAIR_REQUIRED / REAL_CONTENT_PENDING / PRINT_TEMPLATE_PENDING / NOT_PRINT_READY`
 
 ## Current live Figma
 
@@ -40,6 +40,8 @@ Important comparison frames preserved:
 - lead-memory coast derivative `436:2`
 - Friends cafe derivative `442:2`
 - groom identity-safe derivative `460:2`
+- cover-hero Q60 staging comparison `469:2`
+- bride identity-safe derivative `484:2`
 
 ## Active-scope truth
 
@@ -53,14 +55,14 @@ Retired roles:
 
 Verified ledger counts:
 - Drive readback: `13 / 13`
-- intended source applied: `9 / 11 active`
-- photo-role pass: `8 / 11 active`
-- role complete: `8 / 11 active`
+- intended source applied: `10 / 11 active`
+- photo-role pass: `9 / 11 active`
+- role complete: `9 / 11 active`
 - dominant role pass: `2 / 3`
 
 ## Dominant-photo gate
 
-- cover hero `77:148` — **OPEN / current derivative rejected for visible quality**
+- cover hero `77:148` — **OPEN / current source below quality target; Q60 derivative prepared but not yet promoted**
 - back main `77:24` — **PASS for V5 dummy-design QA**
 - history `77:422` — **PASS for V5 dummy-design QA**
 
@@ -83,6 +85,21 @@ The cover hero remains the last dominant-photo blocker. V6 production remains cl
 - structure after promotion: native text `92`, IMAGE-fill nodes `9`, fold guide `77:540` visible, V4 rollback preserved
 
 The source master was already conceptually suitable and identity-neutral, so regeneration was rejected. The Q16 transport derivative is accepted only for this small `154 × 180` dummy role after actual-size review; it is not a general compression rule. The Q35 derivative remains preserved as a higher-quality fallback.
+
+### V5-04 — bride profile / identity-safe dummy
+- Current node: `77:302 / IA_PROFILE_B_PHOTO`
+- master Drive ID: `1xOhG8tOmhUclfUchGzFOlrWP2vb9yPfO`
+- accepted derivative Drive ID: `1OJLOs_17GCNrED-oUAWtCHknmx0v2cub`
+- derivative: `488 × 488`, `11,932 bytes`, exactly `4×` the `122 × 122` semantic role
+- derivative SHA-256: `cb099eb490d840e07413d246a4b4b9e8f95bdeba2a22199713da108787d287c9`
+- previous image hash: `1c6a3d54817e2ca8e25a3d9b700e7ab9cb4ff4fd`
+- Current image hash: `2359f635b4926a83e22ca1f9214e75c709291152`
+- comparison: `484:2`, target `484:14`
+- QA: whole spread, left-page reading scale and actual-size circular profile detail PASS for V5 dummy-design QA
+- identity: face-excluding crop preserves hair/earring, bridal lace/back silhouette and warm architectural atmosphere; no recognizable generated face is presented as the real bride
+- structure after promotion: native text `92`, IMAGE-fill nodes `9`, fold guide `77:540` visible, V4 rollback `59:2` / `59:178` and comparison `484:2` preserved
+
+The original high-resolution master was not regenerated merely to create activity. A safe crop solved the concrete false-person risk while preserving the editorial cue. Large one-call payloads failed encoded-length guards atomically; four bounded shared-plugin-data chunks (`4000 / 4000 / 4000 / 3912`) reconstructed the exact `15,912` base64 characters / `11,932` JPEG bytes before duplicate-first visual QA and Current promotion. This result is evidence for this role, not a universal compression or payload threshold rule.
 
 ### V5-05 — history lead
 - Current node: `77:422 / IA_HISTORY_MEMORY_PHOTO`
@@ -135,7 +152,7 @@ The accepted role derivative is exactly 2× its `398 × 214` semantic target. Th
 
 ### V5-12 — Friends & Family cafe
 - Current node: `77:39 / BACK_VISUAL_FRIEND_2_PHOTO`
-- live semantic geometry: `270 × 184` (this corrects the stale prior ledger geometry `236 × 176`)
+- live semantic geometry: `270 × 184`
 - master Drive ID: `1D0U-rBuidfk7YttssNyonTW2YAPrpUjv`
 - accepted derivative Drive ID: `1CN3gXWgHccx6WwcsmJcXDfXWgARMLFrO`
 - derivative: `810 × 552`, `25,901 bytes`, exactly `3×` live target geometry
@@ -145,8 +162,6 @@ The accepted role derivative is exactly 2× its `398 × 214` semantic target. Th
 - comparison: `442:2`, target `442:23`
 - QA: whole/page, reading and natural-size `270 × 184` detail PASS; cup, cake, flowers and camera remain distinct
 - structure: outer native text `85`, IMAGE-fill nodes `14`, fold guide and V4 rollback preserved
-
-The verified `1254 × 1254` cafe master was already identity-safe and editorially suitable, so no new asset was generated. A role-specific crop was used instead. The stale ledger geometry was corrected from live Figma before derivative acceptance; live Figma remains the highest production authority.
 
 ## V5-02 scope reconciliation / preserved evidence
 
@@ -162,19 +177,12 @@ Role-specific derivative preserved:
 - `4,492 bytes`
 - SHA-256 `6366d4700992fcc1407929d815c96b6c8a7b8f1c6e88c1c32cbce0e2f01ee11e`
 
-Binary-safe comparison proof:
-- comparison frame `432:2`
-- comparison node `432:220`
-- verified image hash `6508fe94eb77b14d73b06ed2b8e705d33e5ab880`
-- guarded chunks reconstructed to encoded length `5,992`, decoded length `4,492`, valid JPEG SOI/EOI
-
 This does **not** become PHOTO_ROLE_PASS because the Current semantic node is hidden. The correct quality-over-legacy action is retirement from visible scope, not importing activity for its own sake.
 
 ## Remaining active V5 photo roles
 
-1. `V5-01 / 77:148` — cover hero; highest priority and final dominant blocker
-2. `V5-04 / 77:302` — bride atmosphere profile; recognizable-face risk must be removed
-3. `V5-13 / 77:43` — Friends & Family 03 / dining; live geometry must be re-read before derivative acceptance because the ledger’s old geometry may also be stale
+1. `V5-01 / 77:148` — cover hero; highest priority and final dominant blocker. Live geometry is `665 × 610`, Current hash `e58ddfa30e3b4bb68e44f1789d984b75cf8a7912`; Q60 `1330 × 1220` derivative is Drive-readback ready but not yet visually promoted.
+2. `V5-13 / 77:43` — Friends & Family 03 / dining. Live geometry is now reconciled to `244 × 166`, Current hash `3abe9ce228d2252b847860ac895f2c178b6b3ddd`; Q15 `732 × 498` derivative (Drive ID `1R0JW7jny0XSOaysUzLMLo8n8nDxVGqdy`) is prepared but remains uncounted until binary-safe placement and three-scale QA.
 
 No active role may be counted complete until Drive ID, derivative dimensions/bytes, exact Figma node/hash, screenshot QA, structure QA, and Git readback agree.
 
@@ -188,8 +196,7 @@ V6 remains separate and production-blocked. Research, Drive structure, asset que
 
 ## Next safe work
 
-- close `V5-01` with a quality-passing role-specific cover derivative and duplicate-first three-scale QA
-- re-read live geometry and advance `V5-13` with source identity/crop quality preserved
-- treat `V5-04` with an identity-safe crop/replacement before any pass
-- continue comparing Current against the clean-room cover/inside candidates
+- close `V5-13` through bounded binary-safe placement plus whole/page/detail and structure QA
+- close `V5-01` with the higher-quality Q60 role derivative; do not fall back to visibly weaker compression merely to increase the completion count
+- continue comparing Current against the clean-room cover/inside candidates at whole-item, reading/page and actual-size scales
 - keep print readiness separate from dummy-design completion
