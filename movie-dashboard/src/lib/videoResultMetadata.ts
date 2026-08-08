@@ -38,6 +38,16 @@ function noteValue(notes: string, key: string) {
   return match?.[1] ?? "";
 }
 
+function lineValue(notes: string, key: string) {
+  const prefix = `${key}=`;
+  const lines = notes.split("\n");
+  for (let index = lines.length - 1; index >= 0; index -= 1) {
+    const line = lines[index].trim();
+    if (line.startsWith(prefix)) return line.slice(prefix.length).trim();
+  }
+  return "";
+}
+
 export function parseVideoResultReproMetadata(notes: string): VideoResultReproMetadata {
   const duration = noteValue(notes, "actual-duration").replace(/s$/, "");
   const fps = noteValue(notes, "fps");
@@ -45,7 +55,7 @@ export function parseVideoResultReproMetadata(notes: string): VideoResultReproMe
     generationId: noteValue(notes, "provider-generation-id"),
     seed: noteValue(notes, "seed"),
     actualDurationSec: duration ? Number(duration) || undefined : undefined,
-    resolution: normalizeVideoResolution(noteValue(notes, "resolution")),
+    resolution: normalizeVideoResolution(lineValue(notes, "resolution") || noteValue(notes, "resolution")),
     fps: fps ? Number(fps) || undefined : undefined,
   };
 }
