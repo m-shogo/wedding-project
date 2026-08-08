@@ -556,3 +556,47 @@ Return priority to the final dominant blocker `77:148 / IMG_HERO`, then close re
 
 - `01_paper-items/rurubu-wedding/learning-runs/2026-08-08-v5-memory-03-q30-binary-safe-promotion.md`
 - `01_paper-items/rurubu-wedding/learning-runs/2026-08-08-v5-memory-04-resort-q30-binary-safe-promotion.md`
+
+---
+
+## 2026-08-08 — V5-06 exact-role coast crop + guarded shared-data transport
+
+### Source and hypothesis
+
+- Source master: `06_MEMORY_SPOT_01_COAST_DUMMY.png`, Drive ID `1DgbIjrpAhRunU6fmDVF4y_jcXOB4t3wx`, `2,453,405 bytes`.
+- Current target: `77:430 / IA_MEMORY_1_PHOTO`, `398 × 214`.
+- Hypothesis: because the verified master already had the right coastal concept, provenance, crop potential, and no identity risk, a role-specific wide crop should be tested before regeneration. An exact `2×` derivative should be judged at natural size rather than accepted from dimensions or transport alone.
+- Expected improvement: a sharper, destination-specific first-memory image that remains subordinate to the history lead.
+- Possible regression: excessive blue dominance, lost cliff-town context, compression artifacts, or binary corruption.
+
+### Result
+
+**VERIFIED / ADOPTED FOR CURRENT V5.**
+
+Accepted derivative:
+- Drive ID `1epb80L7WSZDmU86zl6PVQkZ8frP1JEeN`
+- `796 × 428`, `23,276 bytes`
+- SHA-256 `0c0ac76ed45aa8f0261df92b5e1ead40991a3d5c767b5ab2a01ab8c921ce8746`
+- comparison `436:2 / 436:148`
+- Current hash `adbb8e529451a81dd25e4eb29bf068655569ce25`
+
+Whole-spread, reading/page and natural `398 × 214` screenshots passed. Coastline, cliff-town buildings, boats, horizon and mountain edge remain distinct. Native text `92`, IMAGE fills `9`, fold guide and V4 rollback remain preserved.
+
+### Failure / correction
+
+Normal external upload again hit the known DNS blocker; `createImageAsync` was unsupported; sandbox `fetch` was unavailable; private `setPluginData` was unavailable. A first shared-data chunk write was also truncated. The encoded-length guard detected the mismatch before decode or Current mutation. The method switched to five exact shared-data chunks (`6500,6500,6500,6500,5036`), reconstructing `31,036` encoded characters to exactly `23,276` JPEG bytes with SOI/EOI guards.
+
+### Adopted / rejected status
+
+`DISCOVERED → PROTOTYPED → VERIFIED_FOR_ROLE / V5_CURRENT_ADOPTED / PROJECT_RULE_NOT_PROMOTED`
+
+Adopted: inspect a good master before regeneration; derive specifically for the semantic role; guard binary integrity; duplicate-first visual QA.
+Rejected: regeneration merely to create activity; treating upload/byte success as visual completion; generalizing Q30 or this byte size to dominant photography.
+
+### Next application
+
+Test the same master-first/crop-first decision process on V5-12 and V5-13. Keep V5-01 on a stricter dominant-photo quality bar and handle V5-03/V5-04 with identity-safe crops/replacements.
+
+### Evidence
+
+- `01_paper-items/rurubu-wedding/learning-runs/2026-08-08-v5-memory-01-coast-binary-safe-promotion.md`
