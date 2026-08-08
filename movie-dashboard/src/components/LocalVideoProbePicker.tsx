@@ -75,7 +75,15 @@ export function LocalVideoProbePicker({ expectedDurationSec, savedPath = "", onM
       } catch (caught) {
         setFingerprintError(caught instanceof Error ? caught.message : "sample fingerprintを作成できませんでした");
       }
-      onProbeEvidence?.({ probedAt, previewFrameCount, previewFrameTimesSec, sampleFingerprint: fingerprint || undefined, sampledBytes });
+      onProbeEvidence?.({
+        probedAt,
+        previewFrameCount,
+        previewFrameTimesSec,
+        measuredDurationSec: result.durationSec,
+        measuredResolution: result.resolution || undefined,
+        sampleFingerprint: fingerprint || undefined,
+        sampledBytes,
+      });
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "動画メタデータを読み取れませんでした");
     } finally {
@@ -141,7 +149,7 @@ export function LocalVideoProbePicker({ expectedDurationSec, savedPath = "", onM
 
           {previewError && <p className="mt-3 text-[11px] text-amber-700 dark:text-amber-300">QAフレームだけ取得できませんでした: {previewError}。実尺・解像度はそのまま利用できます。</p>}
           {fingerprintError && <p className="mt-2 text-[11px] text-amber-700 dark:text-amber-300">sample fingerprintだけ作成できませんでした: {fingerprintError}。metadata / QAフレームはそのまま利用できます。</p>}
-          <p className="mt-2 text-[11px] opacity-80">ファイル名・bytes・3枚のプレビュー画像は表示確認用だけです。production dataへ残すのはprobe時刻・preview成功数・確認した再生時刻・sample fingerprintだけで、動画本体やローカルpathは保存しません。</p>
+          <p className="mt-2 text-[11px] opacity-80">ファイル名・bytes・3枚のプレビュー画像は表示確認用だけです。production dataへ残すのはprobe時刻・ブラウザ実測の尺/解像度・preview成功数・確認した再生時刻・sample fingerprintだけで、動画本体やローカルpathは保存しません。</p>
         </div>
       )}
 

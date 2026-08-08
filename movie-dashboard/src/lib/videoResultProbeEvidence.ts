@@ -2,6 +2,8 @@ export interface VideoResultProbeEvidence {
   probedAt: string;
   previewFrameCount: number;
   previewFrameTimesSec?: number[];
+  measuredDurationSec?: number;
+  measuredResolution?: string;
   sampleFingerprint?: string;
   sampledBytes?: number;
 }
@@ -20,6 +22,11 @@ function normalizedPreviewTimes(values: number[] | undefined) {
     .map((value) => Math.round(value * 100) / 100);
 }
 
+function normalizedMeasuredDuration(value: number | undefined) {
+  if (!Number.isFinite(value) || !value || value <= 0) return undefined;
+  return Math.round(value * 100) / 100;
+}
+
 function hasDistinctReviewPreviewTimes(values: number[]) {
   if (values.length < MIN_REVIEW_PREVIEW_FRAMES) return false;
   const sorted = [...values].sort((a, b) => a - b);
@@ -30,12 +37,16 @@ export function formatVideoResultProbeEvidence(evidence: VideoResultProbeEvidenc
   const probedAt = safeSingleLine(evidence.probedAt);
   const previewFrameCount = Math.max(0, Math.floor(evidence.previewFrameCount));
   const previewFrameTimesSec = normalizedPreviewTimes(evidence.previewFrameTimesSec);
+  const measuredDurationSec = normalizedMeasuredDuration(evidence.measuredDurationSec);
+  const measuredResolution = safeSingleLine(evidence.measuredResolution ?? "");
   const sampleFingerprint = safeSingleLine(evidence.sampleFingerprint ?? "");
   const sampledBytes = evidence.sampledBytes && evidence.sampledBytes > 0 ? Math.floor(evidence.sampledBytes) : undefined;
   if (!probedAt) return "";
   return [
     "local-media-probe=completed",
     `probedAt=${probedAt}`,
+    measuredDurationSec ? `measured-duration-sec=${measuredDurationSec}` : "",
+    measuredResolution ? `measured-resolution=${measuredResolution}` : "",
     `preview-frames=${previewFrameCount}`,
     previewFrameTimesSec.length > 0 ? `preview-times=${previewFrameTimesSec.join(",")}` : "",
     sampleFingerprint ? `sample-fingerprint=${sampleFingerprint}` : "",
@@ -55,6 +66,8 @@ export function parseVideoResultProbeEvidence(notes: string): VideoResultProbeEv
   const line = lines[lines.length - 1];
   if (!line) return undefined;
   const probedAt = line.match(/probedAt=([^\s/]+)/)?.[1] ?? "";
+  const measuredDurationSec = Number(line.match(/measured-duration-sec=([\d.]+)/)?.[1] ?? 0);
+  const measuredResolution = line.match(/measured-resolution=([^\s/]+)/)?.[1] ?? "";
   const previewFrameCount = Number(line.match(/preview-frames=(\d+)/)?.[1] ?? 0);
   const previewTimesRaw = line.match(/preview-times=([^\s/]+)/)?.[1] ?? "";
   const previewFrameTimesSec = previewTimesRaw
@@ -71,6 +84,8 @@ export function parseVideoResultProbeEvidence(notes: string): VideoResultProbeEv
     probedAt,
     previewFrameCount: normalizedPreviewFrameCount,
     previewFrameTimesSec: previewFrameTimesSec.length > 0 ? previewFrameTimesSec : undefined,
+    measuredDurationSec: normalizedMeasuredDuration(measuredDurationSec),
+    measuredResolution: measuredResolution || undefined,
     sampleFingerprint: reviewReadyFingerprint || undefined,
     sampledBytes: sampledBytes > 0 && Number.isFinite(sampledBytes) ? sampledBytes : undefined,
   };
