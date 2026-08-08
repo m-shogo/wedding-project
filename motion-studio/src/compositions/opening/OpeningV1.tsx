@@ -7,24 +7,20 @@ import {
   useCurrentFrame,
   useVideoConfig,
 } from 'remotion';
-import {colors} from '../../data/theme';
+import {colors, fonts} from '../../data/theme';
 import {serifFamily} from '../../data/fonts';
 import {openingV1Scenes} from '../../data/openingV1';
 
-const sansFamily = "'Helvetica Neue', Helvetica, Arial, sans-serif";
+const sansFamily = fonts.sans;
 
 const fadeForScene = (frame: number, durationFrames: number) => {
-  const fadeIn = interpolate(frame, [0, 12], [0, 1], {
-    extrapolateLeft: 'clamp',
-    extrapolateRight: 'clamp',
-  });
   const fadeOut = interpolate(
     frame,
     [Math.max(0, durationFrames - 12), durationFrames],
     [1, 0],
     {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'},
   );
-  return Math.min(fadeIn, fadeOut);
+  return fadeOut;
 };
 
 const EditorialBase = ({children, dark = false}: {children: ReactNode; dark?: boolean}) => (
@@ -157,19 +153,6 @@ const CloudTransition = ({durationFrames}: {durationFrames: number}) => {
           >
             The journey begins.
           </div>
-        </div>
-        <div
-          style={{
-            position: 'absolute',
-            right: 150,
-            top: 125,
-            fontFamily: sansFamily,
-            fontSize: 18,
-            letterSpacing: '0.22em',
-            color: colors.gold,
-          }}
-        >
-          AI B-ROLL OPTIONAL · V1 PLACEHOLDER
         </div>
       </AbsoluteFill>
     </EditorialBase>
@@ -552,7 +535,7 @@ export const OpeningV1 = () => {
       case 'v1-ending-title':
         return <EndingTitle durationFrames={durationFrames} />;
       default:
-        return <EditorialBase dark />;
+        return <EditorialBase dark>{null}</EditorialBase>;
     }
   };
 
