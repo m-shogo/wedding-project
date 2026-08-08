@@ -15,7 +15,9 @@ export function promptNegativePolicy(prompt: Prompt) {
 }
 
 export function providerNegativeField(prompt: Prompt) {
-  if (promptNegativePolicy(prompt) !== "optional-separate-field") return "";
+  const negativePolicy = promptNegativePolicy(prompt);
+  const includeSeparateNegative = negativePolicy === "optional-separate-field";
+  if (!includeSeparateNegative) return "";
   return prompt.negativePrompt
     .trim()
     .replace(/^OPTIONAL SEPARATE NEGATIVE FIELD\s*\/\s*QA\.\s*/i, "")
