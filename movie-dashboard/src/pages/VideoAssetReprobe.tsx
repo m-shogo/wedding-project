@@ -55,7 +55,7 @@ export function VideoAssetReprobe() {
   const durationChanged = Boolean(
     pendingMedia?.durationSec !== undefined
       && selectedStoredMedia?.actualDurationSec !== undefined
-      && Math.abs(pendingMedia.durationSec - selectedStoredMedia.actualDurationSec) > 0.1,
+      && Math.abs(pendingMedia.durationSec - selectedStoredMedia.actualDurationSec) > 0.25,
   );
   const resolutionChanged = Boolean(
     pendingMedia?.resolution
