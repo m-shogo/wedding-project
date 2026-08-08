@@ -51,6 +51,22 @@ requireText(
   "runway-i2v-input=motion-first",
   "Runway I2V prompts must retain an auditable compiler marker",
 );
+requireText(promptBuilder, "function cameraInstruction", "camera controls must compile through a sentence-normalization layer");
+requireText(
+  promptBuilder,
+  '"slow push-in": "Camera performs one slow, steady push-in."',
+  "common camera preset shorthand must compile into a complete natural-language sentence",
+);
+requireText(
+  promptBuilder,
+  "cameraInstruction(intent.camera)",
+  "compiled motion must use normalized camera sentences",
+);
+forbidText(
+  promptBuilder,
+  "intent.camera.trim(),",
+  "raw camera shorthand must not be inserted directly into compiled model prompts",
+);
 
 const presets = await source("src/lib/videoPromptPresets.ts");
 for (const legacyNegative of [
