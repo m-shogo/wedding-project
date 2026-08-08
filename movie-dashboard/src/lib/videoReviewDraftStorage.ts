@@ -1,10 +1,14 @@
+import type { Asset, Prompt } from "../types/movie";
+import { loadStoredDataSnapshot } from "./storage";
 import type { VideoFailureCategoryId } from "./videoFailureTaxonomy";
+import { parseVideoResultProbeEvidence } from "./videoResultProbeEvidence";
 
 export interface VideoReviewDraftEntry {
   checks: Record<string, boolean>;
   reason: string;
   failureCategoryId?: VideoFailureCategoryId;
   selectedResultAssetId: string;
+  selectedResultAuthorityKey?: string;
   updatedAt: string;
 }
 
@@ -23,17 +27,63 @@ function cloneVideoReviewDraftState(state: VideoReviewDraftState): VideoReviewDr
   ]));
 }
 
-export function resetReviewDraftEvidenceOnVariantChange(previous: VideoReviewDraftState, next: VideoReviewDraftState) {
+function hasHumanReviewEvidence(draft: VideoReviewDraftEntry) {
+  return Object.values(draft.checks ?? {}).some(Boolean) || Boolean(draft.reason?.trim()) || Boolean(draft.failureCategoryId);
+}
+
+function mediaAuthorityKey(asset: Asset | undefined) {
+  if (!asset) return "";
+  const probe = parseVideoResultProbeEvidence(asset.notes);
+  if (!probe) return `${asset.assetId}::unprobed`;
+
+  const previewTimes = probe.previewFrameTimesSec?.join(",") ?? "";
+  const evidenceShape = [
+    `preview=${probe.previewFrameCount}`,
+    `times=${previewTimes}`,
+    `duration=${probe.measuredDurationSec ?? ""}`,
+    `resolution=${probe.measuredResolution ?? ""}`,
+  ].join("|");
+
+  return probe.sampleFingerprint
+    ? `${asset.assetId}::fingerprint=${probe.sampleFingerprint}|${evidenceShape}`
+    : `${asset.assetId}::unverified-probe=${probe.probedAt}|${evidenceShape}`;
+}
+
+function bindCurrentReviewAuthorities(state: VideoReviewDraftState): VideoReviewDraftState {
+  const snapshot = loadStoredDataSnapshot();
+  const prompts = Array.isArray(snapshot?.prompts) ? snapshot.prompts as Prompt[] : [];
+  const assets = Array.isArray(snapshot?.assets) ? snapshot.assets as Asset[] : [];
+  const promptById = new Map(prompts.map((prompt) => [prompt.promptId, prompt]));
+  const assetById = new Map(assets.map((asset) => [asset.assetId, asset]));
+
+  return Object.fromEntries(Object.entries(state).map(([promptId, draft]) => {
+    const prompt = promptById.get(promptId);
+    const implicitSingleResultId = prompt?.resultAssetIds.length === 1 ? prompt.resultAssetIds[0] : "";
+    const effectiveAssetId = draft.selectedResultAssetId || implicitSingleResultId || "";
+    const authorityKey = effectiveAssetId ? mediaAuthorityKey(assetById.get(effectiveAssetId)) : "";
+    return [promptId, {
+      ...draft,
+      selectedResultAuthorityKey: authorityKey,
+    }];
+  })) as VideoReviewDraftState;
+}
+
+export function resetReviewDraftEvidenceOnAuthorityChange(previous: VideoReviewDraftState, next: VideoReviewDraftState) {
   return Object.fromEntries(Object.entries(next).map(([promptId, draft]) => {
     const previousDraft = previous[promptId];
-    if (!previousDraft || previousDraft.selectedResultAssetId === draft.selectedResultAssetId) {
-      return [promptId, draft];
-    }
+    if (!previousDraft) return [promptId, draft];
+
+    const variantChanged = previousDraft.selectedResultAssetId !== draft.selectedResultAssetId;
+    const authorityChanged = (previousDraft.selectedResultAuthorityKey ?? "") !== (draft.selectedResultAuthorityKey ?? "");
+    const legacyEvidenceWithoutAuthority = !previousDraft.selectedResultAuthorityKey && Boolean(draft.selectedResultAuthorityKey) && hasHumanReviewEvidence(previousDraft);
+    if (!variantChanged && !authorityChanged && !legacyEvidenceWithoutAuthority) return [promptId, draft];
+
     return [promptId, {
       ...draft,
       checks: {},
       reason: "",
       failureCategoryId: undefined,
+      updatedAt: "",
     }];
   })) as VideoReviewDraftState;
 }
@@ -41,6 +91,11 @@ export function resetReviewDraftEvidenceOnVariantChange(previous: VideoReviewDra
 function replaceStateInPlace(target: VideoReviewDraftState, source: VideoReviewDraftState) {
   for (const promptId of Object.keys(target)) delete target[promptId];
   Object.assign(target, source);
+}
+
+function normalizeAgainstCurrentMedia(state: VideoReviewDraftState, previous: VideoReviewDraftState) {
+  const withAuthority = bindCurrentReviewAuthorities(state);
+  return resetReviewDraftEvidenceOnAuthorityChange(previous, withAuthority);
 }
 
 export function loadVideoReviewDrafts(): VideoReviewDraftState {
@@ -56,8 +111,10 @@ export function loadVideoReviewDrafts(): VideoReviewDraftState {
       return {};
     }
     const loaded = parsed as VideoReviewDraftState;
-    lastKnownState = cloneVideoReviewDraftState(loaded);
-    return cloneVideoReviewDraftState(loaded);
+    const normalized = normalizeAgainstCurrentMedia(loaded, loaded);
+    lastKnownState = cloneVideoReviewDraftState(normalized);
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(normalized));
+    return cloneVideoReviewDraftState(normalized);
   } catch {
     lastKnownState = {};
     return {};
@@ -65,10 +122,10 @@ export function loadVideoReviewDrafts(): VideoReviewDraftState {
 }
 
 export function saveVideoReviewDrafts(state: VideoReviewDraftState) {
-  const normalized = resetReviewDraftEvidenceOnVariantChange(lastKnownState, state);
+  const normalized = normalizeAgainstCurrentMedia(state, lastKnownState);
   // VideoResultReview returns the same `state` object after calling this function.
-  // Replace it in-place so a variant switch clears stale checks immediately in the
-  // current React session as well as in localStorage.
+  // Replace it in-place so a variant/media authority switch clears stale checks
+  // immediately in the current React session as well as in localStorage.
   replaceStateInPlace(state, normalized);
   lastKnownState = cloneVideoReviewDraftState(normalized);
 
@@ -84,7 +141,7 @@ export function saveVideoReviewDrafts(state: VideoReviewDraftState) {
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(Object.fromEntries(entries)));
   } catch {
     // Review persistence is a convenience layer. Production data must keep working
-    // even when storage is blocked, full or unavailable. The in-memory variant
+    // even when storage is blocked, full or unavailable. The in-memory authority
     // transition guard above still protects the current review session.
   }
 }

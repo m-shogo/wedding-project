@@ -128,18 +128,21 @@ for (const legacyNegative of [
 }
 
 const reviewDrafts = await source("src/lib/videoReviewDraftStorage.ts");
-requireText(
-  reviewDrafts,
-  "resetReviewDraftEvidenceOnVariantChange",
-  "switching result variants must invalidate in-progress visual QA evidence",
-);
-requireText(
-  reviewDrafts,
-  "previousDraft.selectedResultAssetId === draft.selectedResultAssetId",
-  "QA evidence may persist only while the selected result Asset stays the same",
-);
-requireText(reviewDrafts, "checks: {}", "variant changes must clear prior QA checks");
-requireText(reviewDrafts, "failureCategoryId: undefined", "variant changes must clear prior failure classification");
+requireText(reviewDrafts, "selectedResultAuthorityKey", "in-progress review drafts must retain the selected media authority key");
+requireText(reviewDrafts, "function mediaAuthorityKey", "review draft authority must derive from current result media evidence");
+requireText(reviewDrafts, "parseVideoResultProbeEvidence(asset.notes)", "review authority must bind persisted probe evidence rather than only the Asset id");
+requireText(reviewDrafts, "fingerprint=${probe.sampleFingerprint}", "fingerprinted media must bind the QA draft to the current sampled-media identity");
+requireText(reviewDrafts, "preview=${probe.previewFrameCount}", "review authority must also bind the current preview evidence shape");
+requireText(reviewDrafts, "resetReviewDraftEvidenceOnAuthorityChange", "switching result variants or media evidence must invalidate in-progress visual QA");
+requireText(reviewDrafts, "variantChanged", "variant changes must still invalidate in-progress QA evidence");
+requireText(reviewDrafts, "authorityChanged", "same-Asset media authority changes must invalidate in-progress QA evidence");
+requireText(reviewDrafts, "checks: {}", "authority changes must clear prior QA checks");
+requireText(reviewDrafts, "failureCategoryId: undefined", "authority changes must clear prior failure classification");
+requireText(reviewDrafts, 'updatedAt: ""', "invalidated evidence must not remain labeled as a saved human QA draft");
+requireText(reviewDrafts, "loadStoredDataSnapshot", "review drafts must reconcile against the current production-data snapshot");
+
+const storage = await source("src/lib/storage.ts");
+requireText(storage, "loadStoredDataSnapshot", "production storage must expose a safe snapshot reader for review authority reconciliation");
 
 const failureTaxonomy = await source("src/lib/videoFailureTaxonomy.ts");
 requireText(failureTaxonomy, "function keywordMatches", "failure inference must use explicit keyword matching rules");
