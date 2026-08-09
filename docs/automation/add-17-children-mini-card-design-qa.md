@@ -2,80 +2,89 @@
 
 Date: 2026-08-09
 Authority: `docs/automation/non-rurubu-figma-quality-current.md`
-Start main SHA: `d9f303e6af9f2ff7af05a69e1b529d3e0e45dc56`
+Latest refinement start main SHA: `2b2dbe3fab38df64a1d532810d1c18267be53a79`
 
 ## Status
 
 `DESIGN_QA_PASS_WITH_PLACEHOLDERS / BLOCKED_REQUIRED_INPUT / NOT_PRINT_READY`
 
-The latest non-Rurubu Current authority explicitly permits an age-independent neutral editable ADD-17 template while keeping final adoption blocked until authoritative child-attendance/count/age information exists. This supersedes the older ADD-17 requirement-check statement that prohibited Figma work, but does not resolve the attendance requirement gate.
+The latest non-Rurubu Current authority explicitly permits an age-independent neutral editable ADD-17 template while keeping final adoption blocked until authoritative child-attendance/count/age information exists.
 
 ## Live Figma authority
 
 - file key: `PAvkRggJiRuXVypi3RgZCN`
-- page: `01_PRODUCTION`
+- production page: `01_PRODUCTION`
 - front: `2:2` — `ADD17/A6_FRONT/BLEED_111x154mm__PRINT_SCALE_10PX_PER_MM`
 - back: `2:5` — `ADD17/A6_BACK/BLEED_111x154mm__PRINT_SCALE_10PX_PER_MM`
 - format model: A6 trim 105 × 148 mm, 3 mm bleed model, hidden 8 mm safe-area guides
 - no child names, ages, count, interests, venue services, QR, or other guest facts were invented
 
-## Visible refinement
+## 2026-08-09 editorial refinement
 
-Initial production used decorative English microcopy and visible internal workflow footers. Reading-scale screenshot QA identified those as template/AI-like print defects. They were replaced with functional Japanese labels and the internal workflow text was hidden from the printable surface.
+A fresh whole-item and actual-size screenshot audit found that the prior PASS still carried two visible template/AI signals:
 
-The back-side fifth writing line also collided with the optional-name row; it was removed and the optional-name row was widened/repositioned. Header spacing and field geometry were adjusted to tolerate two-line variable prompts.
+1. the front used a generic suitcase illustration plus route dot/line/arrow that primarily filled whitespace rather than supporting the activity;
+2. the back used deliberately uneven writing-line lengths that read as arbitrary pseudo-editorial decoration rather than a functional writing field.
 
-Final art direction is restrained editorial print rather than web UI: warm paper field, Japanese-first typography, thin rules, asymmetric drawing space, and a small native-vector travel activity motif. No gradients, shadows, badge stack, fake transport data, generated people/animals, or raster decoration are used.
+Before editing, the then-current production was duplicated to `99_QA` as rollback evidence:
+
+- `8:2` — `QA_ADD17_ROLLBACK_PRE_EDITORIAL_REFINEMENT_FRONT_2026_08_09`
+- `8:22` — `QA_ADD17_ROLLBACK_PRE_EDITORIAL_REFINEMENT_BACK_2026_08_09`
+
+Production was then refined natively:
+
+- removed the visible decorative kicker and field labels;
+- hid the suitcase, tag, route dot/line/arrow motif instead of raster-replacing it;
+- reduced the hero-like title scale and tightened the Japanese-first hierarchy;
+- enlarged the front drawing area into a clean, intentionally empty activity field;
+- normalized the back writing guides into four functional equal-length baselines;
+- kept the optional-name field separate and moved its underline lower after long-copy QA exposed a two-line collision risk;
+- retained the warm paper field, restrained teal rule, native text/vector structure, and hidden trim/safe guides.
+
+No gradients, shadows, badges, fake transport data, generated people/animals, or raster decoration were introduced.
 
 ## Screenshot QA
 
-PASS after refinement at:
+Post-refinement screenshots were inspected at thumbnail/whole scale and natural-size/detail scale for both production sides.
 
-- whole-item / thumbnail scale
-- reading scale
-- natural-size / detail scale
+Result: PASS. The composition now reads as a restrained Japanese editorial activity card rather than a generic travel worksheet. No visible text collision or print-only internal workflow text is present.
 
-Production front/back show no visible text collision or unintended print-only internal status text.
+Post-refinement long-copy stress proofs:
 
-Long-copy stress proofs:
+- `9:2` — `QA_ADD17_EDITORIAL_LONG_COPY_STRESS_FRONT_2026_08_09_V3`
+- `9:22` — `QA_ADD17_EDITORIAL_LONG_COPY_STRESS_BACK_2026_08_09_V3`
 
-- `5:2` — `QA_ADD17_LONG_COPY_STRESS_FRONT_2026_08_09_V2`
-- `5:22` — `QA_ADD17_LONG_COPY_STRESS_BACK_2026_08_09_V2`
-
-The V2 stress proofs test genuinely variable prompt/hint/name copy only. Fixed semantic titles are not treated as arbitrary variable strings. Both V2 proofs visually pass without collision.
+The V3 proofs use explicit semantic placeholders only. They test a two-line front prompt, longer front hint, two-line back prompt, and a two-line optional-name label. Initial V3 screenshot QA exposed the optional-name underline touching the wrapped label; the underline was moved down in both production and stress proof, and the second screenshot passed.
 
 ## Structural readback
 
-Production:
+Production front/back:
 
-- front native text: 6
-- back native text: 6
+- native text: 6 / 6 total
+- visible native text after editorial simplification: 3 / 3
 - image fills: 0 / 0
 - frame-bound visible overflow: 0 / 0
 - trim guides present and hidden
 - 8 mm safe-area guides present and hidden
 - variable copy remains native editable text
-- travel line art remains native vector/shape nodes
-- no raster/flatten replacement introduced
+- removed travel filler remains hidden native vector/shape history rather than flatten/raster replacement
 
-Stress V2:
+V3 stress front/back:
 
 - native text: 6 / 6
+- visible native text: 3 / 3
 - image fills: 0 / 0
 - frame-bound visible overflow: 0 / 0
-
-Rollback evidence retained on `99_QA`:
-
-- `QA_ADD17_BLANK_BASELINE_2026_08_09__PRINT_SCALE_10PX_PER_MM`
-- `QA_ADD17_ROLLBACK_PRODUCTION_FRONT_2026_08_09`
-- `QA_ADD17_ROLLBACK_PRODUCTION_BACK_2026_08_09`
+- trim and safe-area guides remain present and hidden
 
 ## Google Drive
 
-Exact non-Rurubu ADD-17 searches for `ADD-17` and `children mini card` returned no dedicated Drive folder. No Drive asset was required by the screenshot-supported design defects, so Drive write count remains 0 and no duplicate folder/assets were created.
+Exact non-Rurubu ADD-17 folder search still returns no dedicated Drive folder. No Drive asset was required by the screenshot-supported defect, so Drive write count remains 0 and no duplicate folder/assets were created.
 
 ## Deferred / blocked finalization
 
-Final adoption remains `BLOCKED_REQUIRED_INPUT` until authoritative information confirms whether children attend and, if so, approximate count/age range and whether this activity is wanted or venue-provided. Final paper/printer template, production PDF/export profile, physical 100% proof, pen/crayon usability, edge/bleed verification, and real-use handling also remain `DEFERRED_FINALIZATION`.
+Final adoption remains `BLOCKED_REQUIRED_INPUT` until authoritative information confirms whether children attend and, if so, approximate count/age range and whether this activity is wanted or venue-provided.
 
-Do not repeatedly redesign this neutral template while those inputs are missing. If the item is later confirmed unnecessary, resolve it as `NOT_REQUIRED`; otherwise replace only the semantic copy/operation fields required by the confirmed use case and perform final print proof.
+Final paper/printer template, production PDF/export profile, physical 100% proof, pen/crayon usability, edge/bleed verification, and real-use handling remain `DEFERRED_FINALIZATION`.
+
+Do not repeatedly redesign this neutral template while those inputs are missing. If later confirmed unnecessary, resolve it as `NOT_REQUIRED`; otherwise replace only confirmed semantic copy/operation fields and perform final physical print proof.
