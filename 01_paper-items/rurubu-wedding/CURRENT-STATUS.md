@@ -1,7 +1,7 @@
 # るるぶWEDDING — CURRENT STATUS
 
-Date: 2026-08-08
-Current authority: live Figma + Drive readback + `RURUBU-V5-ASSET-EVIDENCE-LEDGER.json` + GitHub `main`
+Date: 2026-08-09
+Current authority: live Figma + Drive readback + `RURUBU-V5-ASSET-EVIDENCE-LEDGER.json` + `RURUBU-V5-LIVE-SCOPE-RECONCILIATION-2026-08-09.json` + GitHub `main`
 Production Figma: https://www.figma.com/design/bfM0d4c9dCeBv5pCkJ3TNM
 
 Process authority:
@@ -12,7 +12,7 @@ Process authority:
 
 ## Current declaration
 
-`RURUBU_V5_CURRENT_CANDIDATE / REALISTIC_DUMMY_MASTERS_13_OF_13_DRIVE_VERIFIED / ACTIVE_CURRENT_PHOTO_ROLES_11 / RETIRED_PRESERVED_ROLES_2 / INTENDED_SOURCE_APPLIED_11 / PHOTO_ROLE_PASS_10 / ROLE_COMPLETE_10 / DOMINANT_PHOTO_PASS_2_OF_3 / COVER_HERO_REPAIR_REQUIRED / REAL_CONTENT_PENDING / PRINT_TEMPLATE_PENDING / NOT_PRINT_READY`
+`RURUBU_V5_CURRENT_CANDIDATE / REALISTIC_DUMMY_MASTERS_13_OF_13_DRIVE_VERIFIED / ACTIVE_CURRENT_PHOTO_ROLES_10 / RETIRED_PRESERVED_ROLES_3 / INTENDED_SOURCE_APPLIED_10 / PHOTO_ROLE_PASS_9 / ROLE_COMPLETE_9 / DOMINANT_PHOTO_PASS_2_OF_3 / COVER_HERO_REPAIR_REQUIRED / REAL_CONTENT_PENDING / PRINT_TEMPLATE_PENDING / NOT_PRINT_READY`
 
 ## Current live Figma
 
@@ -40,26 +40,34 @@ Important comparison frames preserved:
 - lead-memory coast derivative `436:2`
 - Friends cafe derivative `442:2`
 - groom identity-safe derivative `460:2`
-- cover-hero Q60 staging comparison `469:2`
+- legacy cover-hero Q60 staging comparison `469:2`
 - bride identity-safe derivative `484:2`
 - Friends dining derivative `487:2`
+- Current-parity Q60 staging `538:2`
 
 ## Active-scope truth
 
 Registered photo roles: `13`.
-Active Current roles: `11`.
-Retired/preserved roles: `2`.
+Active Current roles: `10`.
+Retired/preserved roles: `3`.
 
 Retired roles:
 - `V5-11 / 77:35 / BACK_VISUAL_FRIEND_1_PHOTO` — hidden legacy third Friends role; Current two-up composition won the comparison.
-- `V5-02 / 77:236 / AUTH_COVER_SNAP_01` — live-Figma audit verified the image node and its label `77:237` are both hidden, and no alternate cover-snap node is effectively visible in Current. Its Drive master and tested derivative remain preserved, but it is excluded from the active completion denominator rather than falsely counted as a pass.
+- `V5-02 / 77:236 / AUTH_COVER_SNAP_01` — live-Figma audit verified the image node and its label `77:237` are hidden, and no alternate cover-snap node is effectively visible in Current. Its Drive master and tested derivative remain preserved, but it is excluded from the active completion denominator rather than falsely counted as a pass.
+- `V5-08 / 77:446 / IA_MEMORY_3_PHOTO` — fresh live-Figma audit on 2026-08-09 verified the complete former MEMORY 03 module (`77:446–77:452`) is hidden, while `V5-09 / 77:454` occupies the same effective geometry and is displayed as visible memory number `03` via `77:457`. The V5-08 Drive master, derivative, comparison, historical QA, semantic nodes, and image hash remain preserved as rollback evidence; the role is excluded from the active Current denominator instead of being restored merely to satisfy a stale count.
 
-Verified ledger counts:
-- Drive readback: `13 / 13`
-- intended source applied: `11 / 11 active`
-- photo-role pass: `10 / 11 active`
-- role complete: `10 / 11 active`
+Live-scope reconciliation evidence:
+- `RURUBU-V5-LIVE-SCOPE-RECONCILIATION-2026-08-09.json`
+- `learning-runs/2026-08-09-v5-memory-03-live-scope-reconciliation.md`
+
+Current verified counts derived from live effective visibility:
+- Drive readback: `13 / 13 registered`
+- intended source applied: `10 / 10 active`
+- photo-role pass: `9 / 10 active`
+- role complete: `9 / 10 active`
 - dominant role pass: `2 / 3`
+
+The monolithic `RURUBU-V5-ASSET-EVIDENCE-LEDGER.json` still contains the earlier V5-08 active-role record. Until that large file can be safely replaced without truncating preserved role evidence, the live-Figma audit plus the reconciliation overlay above supersede only its active-scope/count fields. All per-asset provenance, Drive IDs, derivative details, hashes, historical QA, and rollback evidence remain preserved.
 
 ## Dominant-photo gate
 
@@ -67,7 +75,7 @@ Verified ledger counts:
 - back main `77:24` — **PASS for V5 dummy-design QA**
 - history `77:422` — **PASS for V5 dummy-design QA**
 
-The cover hero is now the only remaining active photo-role blocker and the last dominant-photo blocker. V6 production remains closed until the full V5 dummy-photo/design gate is genuinely verified.
+The cover hero is the only remaining visible photo-role blocker and the last dominant-photo blocker. V6 production remains closed until the full V5 dummy-photo/design gate is genuinely verified.
 
 ## Verified completed active photo roles
 
@@ -116,18 +124,12 @@ The cover hero is now the only remaining active photo-role blocker and the last 
 - image hash: `439a719d73f28e8dd2889f2026cccb15f345ec63`
 - QA: whole/page, reading, actual-size detail, structure PASS
 
-### V5-08 — memory spot 03 / night view
-- Current node: `77:446 / IA_MEMORY_3_PHOTO`
-- derivative Drive ID: `1rJJDOX_lwkCbA_DiCDptZfAQrMieG5LL`
-- derivative: `352 × 368`, `7,762 bytes`
-- image hash: `58d7d6f144a4aff9e3cc31caefad88089981ec6a`
-- QA: whole/page, reading, actual-size detail, structure PASS
-
-### V5-09 — memory spot 04 / resort sunset
+### V5-09 — visible memory spot 03 / next destination
 - Current node: `77:454 / IA_MEMORY_4_PHOTO`
 - derivative Drive ID: `1QHWfftLU6m6FZYNJy8IxbOAgp1knzzoP`
 - derivative: `352 × 368`, `9,950 bytes`
 - image hash: `c09aa82e7b2ac75708707345c6f845452bf67663`
+- visible number node: `77:457` renders `03`
 - QA: whole/page, reading, actual-size detail, structure PASS
 
 ### V5-10 — back-cover main
@@ -167,6 +169,9 @@ The first Current fill-assignment attempt for V5-13 appeared to succeed from the
 ### V5-02 — cover snap
 The role-specific derivative remains preserved in Drive and its hidden comparison was binary-transport proven, but the Current image node and label are hidden. It is intentionally retired from the visible denominator and is not PHOTO_ROLE_PASS.
 
+### V5-08 — former memory spot 03 / night view
+The verified master, derivative, image hash `58d7d6f1444aff9e3cc31caefad88089981ec6a`, comparison `427:2`, and historical three-scale QA are preserved. Fresh live inspection verified every visible-content node in the former module is hidden: `77:446` photo, `77:447` photo label, `77:448` number background, `77:449` number, `77:450` title, `77:451` dummy city label, and `77:452` body. Current instead displays `V5-09 / 77:454` at the same photo geometry with visible number `03`. V5-08 is therefore retired from Current visual scope; it is not restored merely to satisfy the old 11-role denominator.
+
 ### V5-11 — legacy third Friends photo
 The master remains preserved, but the two-photo Current composition won the clean comparison. The hidden legacy module is not forced back into Current merely to satisfy an obsolete checklist denominator.
 
@@ -180,7 +185,9 @@ The master remains preserved, but the two-photo Current composition won the clea
 - Q60 derivative: `1330 × 1220`, `155,439 bytes`
 - Q60 Drive ID: `1YL0WAOzYU3O1FGa23ieRuw_Btu4jbmzr`
 - Q60 SHA-256: `090880c0ebe101f1321ebac05f22a91b2b61f3a8ac31c8d112dc418412f13ab2`
-- rollback-safe staging comparison: `469:2`, target `469:132`
+- current-parity rollback-safe staging comparison: `538:2`, target `538:132`
+
+Fresh Drive readback on 2026-08-09 again verified the Q60 file ID, JPEG MIME type, and exact `155,439` byte size. The already-rejected external `mcp.figma.com` POST and model-visible large chunk transcription routes are not retried under the same runtime capability.
 
 No role may be counted complete until Drive ID, derivative dimensions/bytes, exact Figma node/hash, screenshot QA, structure QA, and Git readback agree.
 
@@ -188,13 +195,16 @@ No role may be counted complete until Drive ID, derivative dimensions/bytes, exa
 
 Current remains a candidate, not a sacred composition. Clean-room comparisons `413:2` and `419:2` remain evidence that materially different hierarchy can outperform legacy card geometry. Whole-item, reading/page, and actual-size comparisons decide promotion; legacy implementation effort does not.
 
+The 2026-08-09 inside-spread screenshot confirms the effective visible Memory Spots composition is intentionally `1 lead + 2 support`: lead `77:430`, support `77:438`, support `77:454`. No empty hole or missing module is created by keeping V5-08 hidden.
+
 ## V6 gate
 
 V6 remains separate and production-blocked. Research, Drive structure, asset queue, and two clean-room concept directions are prepared, but no V6 production frame or generated production master may be claimed until V5 reaches the verified dummy-photo/design QA gate.
 
 ## Next safe work
 
-- close `V5-01` using a quality-preserving cover-hero derivative; do not fall back to the rejected low-quality transport proof merely to reach 11/11
+- close `V5-01` using a genuinely binary-safe quality-preserving cover-hero bridge; do not fall back to the rejected low-quality transport proof or repeat the already-rejected external upload/manual-large-chunk routes merely to reach a count
 - compare Current cover against clean-room cover `413:2` at whole-item, reading/page and actual-size scales after the hero is repaired
 - run final V5 weakest-three, typography, density, fold/safe-area and structure checks only after the dominant-photo gate reaches `3/3`
+- reconcile the monolithic asset ledger from the verified live-scope overlay only through a write path that can preserve all existing role-level evidence atomically
 - keep print readiness separate from dummy-design completion
