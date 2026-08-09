@@ -1,7 +1,7 @@
 # WEDDING PASSPORT — Seating Clean-Room V2 Editorial QA
 
 Date: 2026-08-09
-State: `VISUAL_REOPENED / CLEANROOM_V2_CREATED / STRUCTURE_QA_PASS / PRODUCTION_NOT_YET_PROMOTED`
+State: `VISUAL_REOPENED / CLEANROOM_V2_CREATED / STRUCTURE_QA_PASS / LONG_NAME_STRESS_PASS / PRODUCTION_NOT_YET_PROMOTED`
 
 ## Live authorities
 
@@ -11,6 +11,7 @@ State: `VISUAL_REOPENED / CLEANROOM_V2_CREATED / STRUCTURE_QA_PASS / PRODUCTION_
 - Figma file key: `UbK8KmuWJcDeGScsN49Uor`
 - Existing production seating frame: `02_INSIDE / 18:131 / FRAME_SEATING`
 - Clean-room comparison: `02_INSIDE / 78:2 / QA_SEATING_CLEANROOM_V2_EDITORIAL_2026_08_09`
+- Long-name stress proof: `02_INSIDE / 81:2 / QA_SEATING_CLEANROOM_V2_LONG_NAME_STRESS_2026_08_09`
 - Drive authority folder: `01_パスポート風_メニュー・ドリンク・座席表`
 - Drive folder ID: `1LnGb9tq_Vswe-GKO6UxfvKMAZuShEaaw`
 - RURUBU / るるぶ scope: not read or modified by this run.
@@ -68,15 +69,63 @@ Post-fix guest nodes:
 
 Thus the seven-line placeholders now have real native editable geometry rather than only visual overflow.
 
+## Long-name stress QA
+
+A dedicated duplicate proof `81:2` was created without touching existing production.
+
+### Deliberately overlong diagnostic — expected FAIL
+
+The first stress string used `[長い氏名レイアウトダミーNN]`, which intentionally exceeds a realistic single-name measure. With the initial V2 guest width of 238 px, every guest row wrapped and the text block measured 406 px high inside a 286 px table parent. Machine readback returned `allWithinParent=false`.
+
+This failed proof was kept rather than hidden. It established that the initial clean-room geometry had insufficient horizontal tolerance if very long semantic dummy labels were inserted literally.
+
+### Realistic long-name layout dummy — PASS
+
+The proof was then refined without shrinking the 20 px type:
+
+- guest text x: 70 px
+- guest width: 280 px
+- font: Noto Sans JP Regular, 20 px
+- line-height: 29 px
+- stress rows: `長文氏名レイアウトNN`
+- 7 rows per table
+- 11 tables
+- total rows: 77
+
+Post-refinement machine readback:
+
+- all seven rows retained: true
+- text height: 203 px
+- text bottom: 211 px
+- table parent height: 286 px
+- remaining vertical clearance: 75 px
+- all guest blocks within parent: true
+
+The post-refinement screenshot showed all 77 long-name dummies as single lines with no table-to-table collision and no loss of the large editorial table-number hierarchy.
+
+### V2 candidate promotion of proven geometry
+
+After the stress proof passed, the same proven geometry was applied to clean-room candidate `78:2`:
+
+- all 11 guest nodes moved from x=112 to x=70
+- all 11 guest widths expanded from 238 to 280 px
+- font size retained at 20 px
+- `textAutoResize=HEIGHT` retained
+- each measured height remains 203 px
+- each remains within its 286 px parent
+
+This is a structural refinement of the comparison candidate only. Existing production `18:131` remains untouched and available as the live legacy comparison.
+
 ## Screenshot QA
 
-Whole-item screenshot after the structural fix shows:
+Whole-item screenshot after the structural and long-name refinements shows:
 
 - clear Japanese-first hierarchy;
 - substantially less UI/card-grid impression than the existing production;
 - no table-box repetition;
 - table numbers remain easy to scan;
 - 77 placeholders remain visible;
+- the wider guest column improves long-name tolerance without reducing the established 20 px type size;
 - composition remains restrained without confusing empty space for decoration;
 - no image asset was forced into this page because the diagnosed defect was typography/composition rather than missing imagery.
 
@@ -96,6 +145,7 @@ Clean-room V2:
 - native text nodes: 41
 - IMAGE-fill nodes: 0
 - raster/flatten replacement: 0
+- guest text x/width after stress-derived refinement: 70 / 280 px
 
 ## Drive
 
@@ -105,20 +155,19 @@ Drive authority folder was live-read before writes.
 - generated assets adopted: 0
 - reason: seating-chart defect was composition/card-grid quality, so adding a generated image would have been decoration without a concrete role.
 
-The new Current now explicitly allows generated background/texture/editorial assets on later items when screenshot evidence shows they will materially improve the design.
+The new Current explicitly allows generated background/texture/editorial assets on later items when screenshot evidence shows they will materially improve the design.
 
 ## Decision
 
-`CLEANROOM_V2_CREATED / STRUCTURE_QA_PASS / VISUAL_COMPARISON_ADVANCE / PRODUCTION_NOT_YET_PROMOTED`
+`CLEANROOM_V2_CREATED / STRUCTURE_QA_PASS / LONG_NAME_STRESS_PASS / VISUAL_COMPARISON_ADVANCE / PRODUCTION_NOT_YET_PROMOTED`
 
 Do not restore the old assumption that the previous structural PASS means the existing seating layout is visually complete.
 
 Before production promotion, continue with:
 
 1. reading-scale and actual-size comparison against `18:131`;
-2. long Japanese name stress on the V2 width model;
-3. optical spacing refinement if the clean-room candidate still feels too sparse;
-4. production promotion only if the candidate clearly wins and semantic/rollback references can be migrated safely.
+2. optical spacing refinement if the clean-room candidate still feels too sparse;
+3. production promotion only if the candidate clearly wins and semantic/rollback references can be migrated safely.
 
 ## Next quality direction
 
