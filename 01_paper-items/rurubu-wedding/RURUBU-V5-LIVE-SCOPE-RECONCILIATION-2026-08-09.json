@@ -1,0 +1,106 @@
+{
+  "schema_version": "1.0",
+  "date": "2026-08-09",
+  "scope": "Rurubu WEDDING V5 active Current photo-role reconciliation",
+  "authority_order": [
+    "live Figma",
+    "Drive readback",
+    "RURUBU-V5-ASSET-EVIDENCE-LEDGER.json",
+    "CURRENT-STATUS.md"
+  ],
+  "reason": "Fresh live-Figma inspection proves V5-08 is no longer effectively visible in Current even though the monolithic ledger still counts it as active/complete. This overlay supersedes only active-scope and count fields until the large ledger can be atomically rewritten without dropping preserved role evidence.",
+  "before_stale_counts": {
+    "total_registered_roles": 13,
+    "active_current_roles": 11,
+    "retired_preserved_roles": 2,
+    "intended_source_applied": 11,
+    "photo_role_pass": 10,
+    "role_complete": 10,
+    "dominant_photo_pass": "2/3"
+  },
+  "verified_live_counts": {
+    "total_registered_roles": 13,
+    "active_current_roles": 10,
+    "retired_preserved_roles": 3,
+    "drive_readback_verified": 13,
+    "intended_source_applied": 10,
+    "photo_role_pass": 9,
+    "role_complete": 9,
+    "dominant_photo_pass": "2/3"
+  },
+  "retired_preserved_roles": [
+    {
+      "role_id": "V5-02",
+      "node_id": "77:236",
+      "semantic_role": "AUTH_COVER_SNAP_01",
+      "reason": "Current image node and label are hidden; preserved as rollback/provenance evidence."
+    },
+    {
+      "role_id": "V5-08",
+      "node_id": "77:446",
+      "semantic_role": "IA_MEMORY_3_PHOTO",
+      "reason": "The complete former MEMORY 03 module is hidden in live Current; V5-09 is visible at the same effective photo geometry and renders visible memory number 03. Restoring V5-08 only to satisfy the old denominator would violate quality-over-legacy.",
+      "preserved_asset_evidence": {
+        "drive_master_id": "1168rkBzpx84Wvr7IxPCW31WOr30kdqhb",
+        "derivative_drive_id": "1rJJDOX_lwkCbA_DiCDptZfAQrMieG5LL",
+        "derivative_dimensions_px": {"width": 352, "height": 368},
+        "derivative_size_bytes": 7762,
+        "derivative_sha256": "a87c39773e7374356641266aa709c585c60ff3435169fbeaed33a83d8fc35aae",
+        "figma_image_hash": "58d7d6f144a4aff9e3cc31caefad88089981ec6a",
+        "comparison_frame_id": "427:2",
+        "historical_qa": "preserved; not counted as active Current completion while hidden"
+      },
+      "live_hidden_nodes": [
+        "77:446 IA_MEMORY_3_PHOTO",
+        "77:447 IA_MEMORY_3_PHOTO_LABEL",
+        "77:448 IA_MEMORY_3_NO_BG",
+        "77:449 IA_MEMORY_3_NO",
+        "77:450 IA_MEMORY_3_TITLE",
+        "77:451 DUMMY_LABEL__IA_MEMORY_3_CITY",
+        "77:452 IA_MEMORY_3_BODY"
+      ],
+      "visible_replacement_module": {
+        "role_id": "V5-09",
+        "photo_node_id": "77:454",
+        "photo_geometry_px": {"width": 88, "height": 92, "x": 518, "y": 783},
+        "image_hash": "c09aa82e7b2ac75708707345c6f845452bf67663",
+        "visible_number_node_id": "77:457",
+        "visible_number_text": "03"
+      }
+    },
+    {
+      "role_id": "V5-11",
+      "node_id": "77:35",
+      "semantic_role": "BACK_VISUAL_FRIEND_1_PHOTO",
+      "reason": "Hidden legacy third Friends role; Current two-up composition won the preserved comparison."
+    }
+  ],
+  "remaining_visible_blocker": {
+    "role_id": "V5-01",
+    "node_id": "77:148",
+    "semantic_role": "IMG_HERO",
+    "current_image_hash": "e58ddfa30e3b4bb68e44f1789d984b75cf8a7912",
+    "quality_state": "REJECT_LOW_QUALITY_DERIVATIVE",
+    "prepared_q60_drive_id": "1YL0WAOzYU3O1FGa23ieRuw_Btu4jbmzr",
+    "prepared_q60_dimensions_px": {"width": 1330, "height": 1220},
+    "prepared_q60_size_bytes": 155439,
+    "prepared_q60_sha256": "090880c0ebe101f1321ebac05f22a91b2b61f3a8ac31c8d112dc418412f13ab2",
+    "current_parity_staging_frame_id": "538:2",
+    "current_parity_staging_target_id": "538:132"
+  },
+  "structure_snapshot": {
+    "inside_native_text": 92,
+    "inside_visible_text": 57,
+    "inside_image_fill_nodes": 9,
+    "inside_visible_image_fill_nodes": 6,
+    "outer_native_text": 85,
+    "outer_visible_text": 44,
+    "outer_image_fill_nodes": 14,
+    "outer_visible_image_fill_nodes": 6,
+    "inside_fold_guide": "77:540 visible",
+    "outer_fold_guide": "77:288 visible",
+    "rollback_frames": ["59:2", "59:178"]
+  },
+  "decision": "V5-08 RETIRED_FROM_CURRENT_VISUAL_SCOPE; preserve provenance, semantic nodes, image hash, comparison and historical QA; do not restore it merely to recover the stale 11-role denominator.",
+  "v6_gate": "CLOSED until V5 cover hero and final dummy-design QA are verified"
+}
