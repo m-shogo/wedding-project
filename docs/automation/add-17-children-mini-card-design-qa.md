@@ -1,14 +1,14 @@
 # ADD-17 子ども向けミニカード / ぬりえ — Design QA
 
-Date: 2026-08-09
+Date: 2026-08-10
 Authority: `docs/automation/non-rurubu-figma-quality-current.md`
-Latest refinement start main SHA: `2b2dbe3fab38df64a1d532810d1c18267be53a79`
+Reopened visual-pass start main SHA: `f2d66130863f2b15705243d3b261217b8d2d9b9c`
 
 ## Status
 
-`DESIGN_QA_PASS_WITH_PLACEHOLDERS / BLOCKED_REQUIRED_INPUT / NOT_PRINT_READY`
+`SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / BLOCKED_REQUIRED_INPUT / NOT_PRINT_READY`
 
-The latest non-Rurubu Current authority explicitly permits an age-independent neutral editable ADD-17 template while keeping final adoption blocked until authoritative child-attendance/count/age information exists.
+This status applies to the age-independent neutral editable template only. Final adoption remains blocked until authoritative child-attendance/count/age information exists.
 
 ## Live Figma authority
 
@@ -16,70 +16,67 @@ The latest non-Rurubu Current authority explicitly permits an age-independent ne
 - production page: `01_PRODUCTION`
 - front: `2:2` — `ADD17/A6_FRONT/BLEED_111x154mm__PRINT_SCALE_10PX_PER_MM`
 - back: `2:5` — `ADD17/A6_BACK/BLEED_111x154mm__PRINT_SCALE_10PX_PER_MM`
-- format model: A6 trim 105 × 148 mm, 3 mm bleed model, hidden 8 mm safe-area guides
+- format: A6 trim 105 × 148 mm, 3 mm bleed model
 - no child names, ages, count, interests, venue services, QR, or other guest facts were invented
 
-## 2026-08-09 editorial refinement
+## Reopened visual audit — 2026-08-10
 
-A fresh whole-item and actual-size screenshot audit found that the prior PASS still carried two visible template/AI signals:
+The previous production was structurally valid but still too sparse and worksheet-like to count as sellable visual evidence. At thumbnail scale it relied on a centered title, one large generic box, and otherwise empty paper; the back similarly read as a functional form rather than a designed wedding stationery item.
 
-1. the front used a generic suitcase illustration plus route dot/line/arrow that primarily filled whitespace rather than supporting the activity;
-2. the back used deliberately uneven writing-line lengths that read as arbitrary pseudo-editorial decoration rather than a functional writing field.
+A materially different native clean-room comparison was therefore created on `99_QA`:
 
-Before editing, the then-current production was duplicated to `99_QA` as rollback evidence:
+- section `10:2` — `QA_ADD17_CLEANROOM_VISUAL_V4_2026_08_10`
+- front `10:3` — `QA_ADD17_CLEANROOM_V4_FRONT`
+- back `10:15` — `QA_ADD17_CLEANROOM_V4_BACK`
 
-- `8:2` — `QA_ADD17_ROLLBACK_PRE_EDITORIAL_REFINEMENT_FRONT_2026_08_09`
-- `8:22` — `QA_ADD17_ROLLBACK_PRE_EDITORIAL_REFINEMENT_BACK_2026_08_09`
+V4 direction:
 
-Production was then refined natively:
+- Japanese-first editorial activity-card hierarchy;
+- narrow teal binding rule and restrained rust registration accents;
+- deliberately asymmetric drawing/writing composition rather than centered worksheet UI;
+- front drawing field remains genuinely usable and large;
+- back uses five quiet writing baselines plus a small optional sketch corner;
+- all variable instructions remain native semantic text;
+- no generated people/children/animals, stock travel motifs, badges, gradients, shadows, fake UI, or raster decoration.
 
-- removed the visible decorative kicker and field labels;
-- hid the suitcase, tag, route dot/line/arrow motif instead of raster-replacing it;
-- reduced the hero-like title scale and tightened the Japanese-first hierarchy;
-- enlarged the front drawing area into a clean, intentionally empty activity field;
-- normalized the back writing guides into four functional equal-length baselines;
-- kept the optional-name field separate and moved its underline lower after long-copy QA exposed a two-line collision risk;
-- retained the warm paper field, restrained teal rule, native text/vector structure, and hidden trim/safe guides.
+Image generation was not required for this item: the screenshot-supported bottleneck was composition/typography, and a generated decorative asset would reduce editability without solving the core problem.
 
-No gradients, shadows, badges, fake transport data, generated people/animals, or raster decoration were introduced.
+## Long-copy stress
 
-## Screenshot QA
+V4 stress proofs:
 
-Post-refinement screenshots were inspected at thumbnail/whole scale and natural-size/detail scale for both production sides.
+- section `10:33` — `QA_ADD17_CLEANROOM_V4_LONG_COPY_STRESS_2026_08_10`
+- front `10:34` — `QA_ADD17_V4_STRESS_FRONT`
+- back `10:46` — `QA_ADD17_V4_STRESS_BACK`
 
-Result: PASS. The composition now reads as a restrained Japanese editorial activity card rather than a generic travel worksheet. No visible text collision or print-only internal workflow text is present.
+Stress content used explicit `LAYOUT DUMMY` semantics and tested a multi-line activity prompt, longer margin/footer guidance, a multi-line back prompt, and a longer optional-name label. Screenshot QA passed without collisions or clipped text.
 
-Post-refinement long-copy stress proofs:
+## Rollback and production promotion
 
-- `9:2` — `QA_ADD17_EDITORIAL_LONG_COPY_STRESS_FRONT_2026_08_09_V3`
-- `9:22` — `QA_ADD17_EDITORIAL_LONG_COPY_STRESS_BACK_2026_08_09_V3`
+Immediately before promotion, the previous production was preserved on `99_QA`:
 
-The V3 proofs use explicit semantic placeholders only. They test a two-line front prompt, longer front hint, two-line back prompt, and a two-line optional-name label. Initial V3 screenshot QA exposed the optional-name underline touching the wrapped label; the underline was moved down in both production and stress proof, and the second screenshot passed.
+- section `10:64` — `QA_ADD17_ROLLBACK_PRE_V4_PROMOTION_2026_08_10`
+- front `10:65` — `ROLLBACK_ADD17_FRONT_PRE_V4`
+- back `10:85` — `ROLLBACK_ADD17_BACK_PRE_V4`
+
+The validated V4 visual system was then promoted while preserving the production root IDs `2:2` and `2:5`.
+
+Post-promotion screenshot QA at whole/reading scale: PASS. The front now has a strong Japanese title, clear activity prompt, large usable drawing field and optical asymmetry. The back has a stronger writing hierarchy and no admin-form/card-grid feel.
 
 ## Structural readback
 
-Production front/back:
+Production front/back after V4 promotion:
 
-- native text: 6 / 6 total
-- visible native text after editorial simplification: 3 / 3
+- native text: 5 / 7
 - image fills: 0 / 0
-- frame-bound visible overflow: 0 / 0
-- trim guides present and hidden
-- 8 mm safe-area guides present and hidden
-- variable copy remains native editable text
-- removed travel filler remains hidden native vector/shape history rather than flatten/raster replacement
+- variable copy: native editable text
+- drawing/writing fields: native vector
+- hidden safe guide retained
+- no flatten/raster replacement introduced
 
-V3 stress front/back:
+## Google Drive / generated assets
 
-- native text: 6 / 6
-- visible native text: 3 / 3
-- image fills: 0 / 0
-- frame-bound visible overflow: 0 / 0
-- trim and safe-area guides remain present and hidden
-
-## Google Drive
-
-Exact non-Rurubu ADD-17 folder search still returns no dedicated Drive folder. No Drive asset was required by the screenshot-supported defect, so Drive write count remains 0 and no duplicate folder/assets were created.
+No image asset was required or adopted. Drive write count remains 0; no duplicate folder or raster was created.
 
 ## Deferred / blocked finalization
 
