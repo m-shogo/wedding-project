@@ -35,6 +35,7 @@ Increase photo dominance and asymmetric scale without adding cards, pills, gradi
 ### Implementation
 Rollback-safe duplicate created:
 - `739:171 / V5_OUTER_RURUBU_CLEANROOM_AV_PHOTO_LED_FEATURE_COLLAGE_2026_08_11`
+- front page `739:298`
 
 Changes relative to AU:
 - coast teaser enlarged to `282 × 188`, rotation `-3.8°`
@@ -49,6 +50,11 @@ Changes relative to AU:
 First AV screenshot exposed a real regression: `01` wrapped vertically because its text box was too narrow after the font-size increase. The state was not adopted. `CE_FEATURE_1_NO / 739:314` was corrected to `112 × 82`, 78 px, and a fresh screenshot verified normal `01` rendering.
 
 Fresh structure QA then found an `8 px` intersection between `CE_FEATURE_1_NO / 739:314` and `CE_FEATURE_1 / 739:315`. The title was shifted right. Re-run intersection QA: `0`.
+
+### Three-scale visual QA
+- whole-item: PASS as comparator; photo seam is visibly more energetic than AU and feature 01 remains dominant
+- reading/page: PASS on `739:298`; logo/title/photo/teasers/feature index remain legible as one cover rather than separate UI regions
+- actual-size/detail: PASS for native feature text and teaser-caption legibility; the temporary hero is still visibly below the quality target and therefore remains a blocker rather than being hidden by layout polish
 
 ### Evidence
 - visible native text: `41`
@@ -90,6 +96,8 @@ Subtract the long UI-like rail and use controlled vertical staggering. Preserve 
 ### Implementation
 Rollback-safe duplicate created:
 - `740:2 / V5_INSIDE_RURUBU_CLEANROOM_AW_STAGGERED_EDITORIAL_TIMELINE_2026_08_11`
+- left page `740:3`
+- right page `740:126`
 
 Changes relative to AT:
 - `CRC_HISTORY_YELLOW_RULE` hidden
@@ -103,6 +111,12 @@ Changes relative to AT:
 
 ### Screenshot/structure correction
 Fresh structure QA detected a `4 px` intersection between `IA_QA_1_B / 740:27` and `IA_QA_3_Q / 740:39`. Q3 and its answers were shifted down by a controlled amount. Re-run intersection QA: `0`.
+
+### Three-scale visual QA
+- whole-item: PASS as comparator; left interview blocks and right timeline no longer share the same rigid horizontal rhythm
+- reading/page left `740:3`: PASS; profile collage remains dominant, Q1 is primary, Q2/Q3 are staggered and readable, common-point pull quote still closes the page
+- reading/page right `740:126`: PASS; history events read as a loose editorial chronology above the dominant history image, and Memory Spots remains a large-photo + two-support-photo collage
+- actual-size/detail: PASS after the 4 px Q1/Q3 collision correction; native text remains editable and all verified image hashes persist
 
 ### Evidence
 - visible native text: `53`
@@ -135,13 +149,14 @@ Created `740:275 / V5_OUTER_RURUBU_CLEANROOM_AX_EDITORIAL_BACK_TIMELINE_2026_08_
 
 Whole-spread screenshot was cleaner but the six points became too disconnected; the route/travel metaphor weakened more than the UI signal improved. Preserve as experiment evidence only. AV remains the stronger outer comparator.
 
-## Asset-generation state
+## Asset-generation / Drive state
 No new image was generated, adopted, or placed in this run. Existing verified fills were preserved. The cover-specific Q60 remains the only active V5 photo blocker and was not falsely counted as placed.
 
-Q60 truth remains:
+Fresh Drive search/readback during this run confirmed the file still exists at the same identity:
+- filename `RURUBU_V5_01_COVER_HERO__FIGMA_1330x1220_Q60.jpg`
 - Drive ID `1YL0WAOzYU3O1FGa23ieRuw_Btu4jbmzr`
-- `1330 × 1220`
-- `155,439 bytes`
+- expected registered geometry `1330 × 1220`
+- expected registered size `155,439 bytes`
 - Figma placement: NOT VERIFIED / NOT COMPLETE
 
 ## Current / gates
