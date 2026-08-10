@@ -8,29 +8,49 @@ Authority at write: GitHub latest `main`; `docs/automation/non-rurubu-figma-qual
 - production groom: `1:3 / FRAME_GROOM_RECEPTION_A5`
 - production bride: `1:14 / FRAME_BRIDE_RECEPTION_A5`
 - Drive folder: `ADD-04_受付サイン` / `1vjSYrbjzfZs_vyCIpQAbml9_en5RcH_r`
+- rollback section: `5:25 / ROLLBACK_ADD_04_RECEPTION_PRE_V2_EDITORIAL_2026_08_10`
+- rollback groom: `5:26 / ROLLBACK_GROOM_RECEPTION_PRE_V2`
+- rollback bride: `5:37 / ROLLBACK_BRIDE_RECEPTION_PRE_V2`
 - RURUBU/るるぶ area was not read or written.
 
 ## Reopened visual diagnosis
 
-The legacy pair is structurally sound but still too close to a generic signage template: large Japanese label, English duplicate, a long horizontal route rule ending in a dot, then a large mostly-empty lower field. The groom/bride pair differs mainly through accent color and route length. That is not enough evidence for `SELLABLE_VISUAL_QA_PASS` under the reopened visual gate.
+The legacy pair was structurally sound but too close to a generic signage template: large Japanese label, English duplicate, a long horizontal route rule ending in a dot, then a large mostly-empty lower field. The groom/bride pair differed mainly through accent color and route length.
 
-## Rollback-safe clean-room comparison
+## Clean-room comparison evaluated
 
-Created a bounded QA section without modifying production:
+The bounded comparison remains available:
 
 - section `3:2 / QA_ADD_04_REOPENED_EDITORIAL_PAIR_2026_08_10`
 - groom `3:3 / QA_GROOM_RECEPTION_V2_EDITORIAL`
 - bride `3:20 / QA_BRIDE_RECEPTION_V2_EDITORIAL`
 
-The comparison changes the composition materially rather than polishing the legacy template: top rule instead of full-height side stripe; Japanese `受付` kicker; larger side label; compact asymmetric route block; editorial metadata line; dedicated guidance field; restrained rust vertical mark; large low-opacity pair number; shared family grammar without making the two signs recolor duplicates.
+The clean-room direction materially changes the composition: top rule instead of full-height side stripe; Japanese `受付` kicker; stronger side label; compact asymmetric route block; editorial metadata line; dedicated guidance field; restrained rust vertical mark; large low-opacity pair number; and shared family grammar without making the two signs recolor duplicates.
 
-## Screenshot-led refinement
+## Three-scale visual decision
 
-Whole-item screenshots were captured for production and both clean-room candidates. After the first clean-room pass, the large pair number was judged too assertive and was reduced to 13% opacity; the lower editorial mark was narrowed. No decorative airplane/passport/stamp imagery was added.
+The legacy and clean-room designs were compared again at thumbnail/whole-pair scale, reading scale, and actual A5 detail scale.
 
-## Structure readback
+The clean-room pair clearly wins: hierarchy reads faster, the pair is differentiated without gimmicks, the large empty field is converted into deliberate editorial rhythm, and the composition no longer depends on generic signage-template cues. The low-opacity `01 / 02` stays subordinate and does not compete with the Japanese labels.
 
-Both clean-room frames:
+Result: **promoted to production** while preserving the existing production frame IDs.
+
+## Rollback-safe promotion
+
+Before promotion, the legacy production pair was duplicated into the rollback section above. Production IDs `1:3` and `1:14` were retained and their contents were replaced with the approved V2 editorial structures.
+
+## Post-promotion screenshot QA
+
+Actual-size production screenshots were re-read after promotion.
+
+- groom: top navy rule, `受付 / 新郎側`, route block, guidance field, editorial footer and `01` render cleanly; no clipping or accidental overlap observed.
+- bride: teal family variant, shorter route block, guidance field, editorial footer and `02` render cleanly; no clipping or accidental overlap observed.
+- variable copy remains visibly secondary to the primary wayfinding label.
+- no decorative airplane/passport/stamp imagery was added.
+
+## Post-promotion structure readback
+
+Both production frames:
 
 - size: `740 × 1050`
 - native editable text nodes: `11`
@@ -38,19 +58,26 @@ Both clean-room frames:
 - text outside frame: `0`
 - variable fields remain native semantic placeholders: `[受付案内 · LAYOUT DUMMY]`, `[受付名 · LAYOUT DUMMY]`
 
+Rollback readback:
+
+- rollback groom/bride each retain the legacy `740 × 1050` structure
+- legacy text nodes: `6` each
+- IMAGE fills: `0`
+- text outside frame: `0`
+
 No rasterization or generated imagery was introduced.
 
 ## Image-generation decision
 
-`IMAGE_GENERATION_NOT_REQUIRED_FOR_THIS_COMPARISON`.
+`IMAGE_GENERATION_NOT_REQUIRED_FOR_THIS_ITEM`.
 
-The visible defect is typography/composition and pair differentiation, not a missing hero image. Adding generated imagery would make the reception desk signs less direct and risks decoration for decoration's sake. Drive writes: `0`.
+The quality bottleneck was typography/composition and pair differentiation, not a missing hero image. Adding generated imagery would reduce direct wayfinding utility and risk decoration for decoration's sake. Drive writes: `0`; exact Drive folder metadata was re-read before the Figma write.
 
 ## Status
 
-- existing structural state retained: `DESIGN_QA_PASS_WITH_PLACEHOLDERS / NOT_PRINT_READY`
-- reopened visual state: `CLEANROOM_COMPARISON_CREATED / SELLABLE_VISUAL_QA_PENDING`
-- production was intentionally not promoted in this run; final choice should compare the pair side-by-side at thumbnail, reading and actual A5 scale before promotion.
+- structural: `DESIGN_QA_PASS_WITH_PLACEHOLDERS / NOT_PRINT_READY`
+- reopened visual: `SELLABLE_VISUAL_QA_PASS`
+- combined design state: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / NOT_PRINT_READY`
 
 ## Deferred finalization
 
@@ -60,6 +87,8 @@ The visible defect is typography/composition and pair differentiation, not a mis
 - stand overlap / glare
 - printer template, bleed and 100% physical proof
 
+These remain `DEFERRED_FINALIZATION` and do not block progression.
+
 ## Next
 
-Complete paired visual comparison of production vs V2, promote only if the clean-room pair clearly wins, then proceed to ADD-05.
+Proceed to ADD-05 サンキュータグ / プチギフトタグ for the reopened visual-art-direction audit.
