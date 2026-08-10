@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "scope": "RURUBU_WEDDING_V5_ONLY",
+  "date": "2026-08-11",
+  "authority": "live Figma + Drive readback + GitHub main",
+  "current": {
+    "outer": {"nodeId": "77:18", "changed": false},
+    "inside": {"nodeId": "77:290", "changed": false}
+  },
+  "comparators": {
+    "outerBest": {
+      "label": "BF",
+      "nodeId": "761:2",
+      "frontNodeId": "761:131",
+      "status": "ADOPT_AS_STRONGEST_COMPARATOR_NOT_CURRENT",
+      "nativeTextVisible": 39,
+      "imageFillVisible": 8,
+      "sameParentTextIntersections": 0,
+      "foldGuide": {"nodeId": "761:176", "width": 2, "height": 1122.5}
+    },
+    "insideBest": {
+      "label": "BG",
+      "nodeId": "763:2",
+      "leftNodeId": "763:3",
+      "rightNodeId": "763:126",
+      "status": "ADOPT_AS_STRONGEST_COMPARATOR_NOT_CURRENT",
+      "nativeTextVisible": 53,
+      "imageFillVisible": 6,
+      "sameParentTextIntersections": 0,
+      "foldGuide": {"nodeId": "763:276", "width": 2, "height": 1122.5}
+    }
+  },
+  "coverHeroQ60": {
+    "driveId": "1YL0WAOzYU3O1FGa23ieRuw_Btu4jbmzr",
+    "fileName": "RURUBU_V5_01_COVER_HERO__FIGMA_1330x1220_Q60.jpg",
+    "mime": "image/jpeg",
+    "bytes": 155439,
+    "driveVerified": true,
+    "runtimeMaterialized": true,
+    "freshUploadTargetNodeId": "761:132",
+    "figmaPlaced": false,
+    "figmaVisuallyVerified": false,
+    "blocker": "mcp.figma.com DNS resolution from execution container"
+  },
+  "gate": {
+    "photoRolePass": "9/10",
+    "dominantPhotoPass": "2/3",
+    "v5Complete": false,
+    "v6ProductionStarted": false
+  },
+  "evidence": "learning-runs/2026-08-11-v5-bf-bg-cleanroom-editorial-qa.md"
+}
