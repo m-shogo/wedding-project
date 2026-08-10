@@ -600,3 +600,87 @@ Test the same master-first/crop-first decision process on V5-12 and V5-13. Keep 
 ### Evidence
 
 - `01_paper-items/rurubu-wedding/learning-runs/2026-08-08-v5-memory-01-coast-binary-safe-promotion.md`
+
+---
+
+## 2026-08-10 — Rurubu V5 clean-room P/Q lower-cover compression and print-folio subtraction
+
+### Visible problem
+
+The clean-room outer direction had already become much more travel-magazine-like than the legacy Current, but O still left a low-information cream field below the dominant cover image. After P compressed that field, its heavy navy footer bar still looked like a web/app status strip rather than a printed magazine folio.
+
+### Principle / hypothesis
+
+- A dead zone created by legacy spacing should be recomposed before new decoration is added.
+- Existing navigation can be compressed into one asymmetric editorial rail instead of three floating modules.
+- A low-priority footer containing repeated identity/date information should first be tested as a thin print rule plus direct native microtype rather than a full dark field.
+
+Expected improvement: stronger cover thumbnail density, more continuous photo → feature-navigation rhythm, and a quieter print-native bottom edge.
+
+Regression risk: compressed Japanese title groups may collide; microtype may become too small; removing a footer field may weaken the bottom anchor.
+
+### Experiment
+
+P:
+- created `659:2 / V5_OUTER_RURUBU_CLEANROOM_P_DENSE_LOWER_RAIL_2026_08_10` from O
+- temporary comparator hero enlarged to `766 × 904`
+- hero bottom and magenta/cyan/yellow seam aligned at `y=920`
+- 01/02/03 groups compressed into one lower rail
+- added three subordinate native descriptors only: `写真と記憶をめぐる`, `ふたりの歩みをたどる`, `当日の楽しみ方`
+- no new cards, pills, gradients, shadows, or generated images
+
+Programmatic QA caught two real text collisions that the screenshot alone could have missed. The candidate was not accepted until title measures and group-03 position were corrected; final P same-parent overlaps became `0`.
+
+Q:
+- created `663:162 / V5_OUTER_RURUBU_CLEANROOM_Q_PRINT_FOLIO_SUBTRACTION_2026_08_10` from P
+- changed `738 × 24` navy footer field into a `738 × 3` navy rule
+- retained the footer copy as `8 px` native Noto Sans JP microtype below the rule
+- first attempt failed before creating a candidate because the font was not loaded; readback confirmed no Q node existed and P was untouched
+- corrected method explicitly loaded the existing font before mutation, then Q was created successfully
+
+### Result
+
+**VERIFIED FOR COMPARATOR / Q ADOPTED AS STRONGEST OUTER COMPARATOR / CURRENT NOT PROMOTED.**
+
+Three-scale review:
+- whole-item: Current remains markedly more orderly/template-like; Q preserves the much stronger photo/title/collage silhouette and a denser lower rail
+- page: `横浜 / ふたり旅。` remains dominant; 01/02/03 form one secondary navigation system
+- actual-size: Q's thin rule + native folio remains readable and less UI-like than P's dark footer bar
+
+Final Q structure evidence:
+- visible native text `42`
+- visible IMAGE fills `9`
+- same-parent text overlaps `0`
+- fold guide `663:321` visible at `2 × 1122.5`
+- Current outer/inside remain `77:18` / `77:290`
+- verified back/Friends/logo/date image hashes unchanged
+
+The cover image in Q remains the history image hash `539c259be8036b481d06b4f76db9a39b407d90e8` used only as a composition comparator. It is not the final V5-01 source and is not counted as role completion.
+
+### Asset-state distinction
+
+- generated this experiment: none
+- verified Q60 Drive derivative: existing and healthy; no regeneration
+- Q60 placed/adopted in Figma: no
+- P/Q duplicate layouts placed: yes
+- P/Q screenshot/structure QA: yes
+- production Current promotion: no
+- V5 gate: unchanged at `9/10`, dominant `2/3`
+- V6: remains closed
+
+### Reusable feedback
+
+1. After photo-led/subtraction changes, audit dead zones created by retained legacy spacing; do not fill them with new cards by reflex.
+2. Asymmetric compression should be followed by text-box intersection QA because visual inspection can miss real Japanese title collisions.
+3. For low-priority print folios, a thin rule plus direct native microtype can outperform a full dark field when contrast does not require containment.
+4. Failed writes are not progress; verify atomicity/leftovers, correct the method, and only count the successfully re-read result.
+
+### Evidence
+
+- `01_paper-items/rurubu-wedding/learning-runs/2026-08-10-v5-outer-cleanroom-p-dense-lower-rail.md`
+- `01_paper-items/rurubu-wedding/learning-runs/2026-08-10-v5-outer-cleanroom-q-print-folio-subtraction.md`
+- `01_paper-items/rurubu-wedding/RURUBU-EDITORIAL-DESIGN-LESSONS-LOG.md` LESSON-018
+
+### Status
+
+`PROTOTYPED → VERIFIED_FOR_COMPARATOR / Q_STRONGEST_OUTER_COMPARATOR / CURRENT_NOT_PROMOTED / GLOBAL_RULE_NOT_PROMOTED`
