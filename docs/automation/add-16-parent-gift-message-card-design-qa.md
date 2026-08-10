@@ -1,61 +1,70 @@
 # ADD-16 両親贈呈品メッセージカード — Figma Design QA
 
-Date: 2026-08-09
-Status: `DESIGN_QA_PASS_WITH_PLACEHOLDERS / ROLLBACK_SAFE / NOT_PRINT_READY`
+Date: 2026-08-10
+Status: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / ROLLBACK_SAFE / NOT_PRINT_READY`
 
 ## Live authority
 - Current: `docs/automation/non-rurubu-figma-quality-current.md`
-- Run start Git main: `ee72d4a23d37b0e6f53cc11fa90d8689a30eff53`
-- Git main immediately before write: `ee72d4a23d37b0e6f53cc11fa90d8689a30eff53`
+- Git main immediately before write: `0e99b5162f1defaa930022a948410b08fa0d3d85`
 - Item spec: `01_paper-items/additional-wedding-items/ADD-16-parent-gift-message-card/SPEC.md`
 - Figma production file key: `ylmVBbwNcnjueYrymNpa3c`
 - Production nodes: front `1:2`, back `1:13`
-- QA section: `1:22`
-- Post-flow long-copy stress: front `2:24`, back `2:36`
+- Reopened clean-room comparison: front `3:2`, back `3:13`
+- Reopened long-copy stress: front `3:22`, back `3:33`
+- Pre-V2 rollback copies: front `4:2`, back `4:24`
 - Drive folder: `ADD-16_両親贈呈品メッセージカード` / `1BOyETtL1_loGXNjGV9S30sJKEhZNjd6O`
 - Drive child items at audit/write time: none
 
-## Verified Figma improvement
-The previous native-edit blocker cleared. The existing exact ADD-16 file was reused; no duplicate Figma file was created.
+## Reopened visual audit
+The earlier structural production remained editable and overflow-safe, but the actual screenshots still read as a generic sparse stationery template: `HOME PORT` and `THE JOURNEY BEGAN HERE` functioned mainly as decorative English, while the large unstructured blank field made the front feel more like a neutral template than a purpose-built parent-gift enclosure card. The old `DESIGN_QA_PASS_WITH_PLACEHOLDERS` was therefore retained only as structural evidence.
 
-Created a native editable 100×148 mm portrait-equivalent front/back production pair with 3 mm bleed guides, hidden trim/safe guides, semantic text roles, and restrained `HOME PORT` editorial art direction. The composition intentionally avoids rounded-card UI, gradients, shadows, fake transport data, decorative badge clutter, AI-generated family imagery, and fabricated family facts.
+A materially different native clean-room pair was built and compared. The reopened direction treats the item as a small gift-enclosure correspondence piece rather than a travel-template derivative:
+- Japanese-first front headline `ありがとうを、手渡す日。`;
+- narrow navy binding strip rather than a generic top hairline;
+- rust occasion kicker and restrained mint/date accents;
+- clearer recipient / message-lead / gift-context rhythm;
+- back side structured as a real letter surface with body, signature rule, signature/date and understated closing copy;
+- all unknown family-specific information remains explicit native `LAYOUT DUMMY` text.
 
-All unknown recipient, message, signature and family-specific copy remains explicit native `LAYOUT DUMMY` content. No parent names, family relationships, anecdotes, gift details or presentation order were invented.
-
-After the first stress proof showed the recipient/message area could become visually tight under long copy, the production was hardened with native vertical auto-layout flows:
-- front `ADD16/FRONT/CONTENT_FLOW` (`2:22`): title → recipient → hairline → message lead;
-- back `ADD16/BACK/MESSAGE_FLOW` (`2:23`): Japanese kicker → hairline → message body.
-
-Pre-flow stress proofs were retained as QA history. Post-flow long-copy proofs were then generated from the updated production.
+Image generation was not required: the screenshot-supported defect was typography, authorship and paper composition rather than missing imagery. No family image, decorative raster, or fabricated documentary content was generated.
 
 ## Screenshot QA
-- whole/reading/detail inspection completed for production front/back;
-- post-flow front stress shows long recipient + multi-line message lead without collision;
-- post-flow back stress shows multi-paragraph body + long signature without collision;
-- visual hierarchy remains Japanese-first with restrained teal hairlines and meaningful negative space.
+- Legacy production front/back: reopened because of sparse/generic-template appearance.
+- Clean-room V2 front/back: PASS at whole-item and reading scale; Japanese hierarchy is materially stronger and the gift-enclosure role is clearer.
+- Long-copy stress front `3:22`: long recipient plus multi-line message lead remains readable without collision.
+- Long-copy stress back `3:33`: multi-paragraph body plus long signature remains inside the frame without collision.
+- Post-promotion production front/back screenshots: PASS.
+
+## Production promotion
+The previous production was duplicated as rollback proof before promotion. The reopened V2 children were then promoted into the existing stable production root IDs (`1:2`, `1:13`) so external references remain valid.
 
 ## Structure QA
-Production front:
-- native text: 6
-- image fills: 0
-- frame-bound overflow: 0
-- native vertical auto-layout present
+Final production front `1:2`:
+- 400.63×582.05 px canvas equivalent;
+- native text: 7;
+- image fills: 0;
+- text outside frame: 0.
 
-Production back:
-- native text: 4
-- image fills: 0
-- frame-bound overflow: 0
-- native vertical auto-layout present
+Final production back `1:13`:
+- 400.63×582.05 px canvas equivalent;
+- native text: 5;
+- image fills: 0;
+- text outside frame: 0.
 
-Post-flow long-copy stress:
-- front overflow: 0; auto-layout height 254 px
-- back overflow: 0; auto-layout height 223 px
-- image fills: 0
+Reopened long-copy stress:
+- front `3:22`: native text 7, image fills 0, text outside frame 0;
+- back `3:33`: native text 5, image fills 0, text outside frame 0.
 
-Rollback-safe production baseline duplicates remain under `99_QA / ROLLBACK + STRESS`.
+No flatten/raster replacement was introduced. Recipient, message, signature, date and gift-format placeholders remain native editable text.
 
 ## Drive
-Exact Drive folder metadata was re-read immediately before Git write. Folder remains empty and unchanged because no screenshot-supported asset defect or required production raster asset exists.
+Exact Drive folder metadata was re-read immediately before production promotion. Folder remains empty and unchanged:
+- ID: `1BOyETtL1_loGXNjGV9S30sJKEhZNjd6O`
+- title: `ADD-16_両親贈呈品メッセージカード`
+- MIME: `application/vnd.google-apps.folder`
+- files: 0
+
+No raster was added because no screenshot-supported production asset need exists.
 
 ## Deferred / blocked required input
 - one card per family vs shared card;
@@ -64,6 +73,6 @@ Exact Drive folder metadata was re-read immediately before Git write. Folder rem
 - full vs short message, vertical vs horizontal writing, and overlap with any read-aloud letter;
 - printer template/profile, exact vendor bleed/safe requirements and 100% physical proof.
 
-These are `DEFERRED_FINALIZATION` / `BLOCKED_REQUIRED_INPUT` and no longer block design progression. Maintain `NOT_PRINT_READY` until physical/vendor checks are complete.
+These remain `DEFERRED_FINALIZATION` / `BLOCKED_REQUIRED_INPUT`; maintain `NOT_PRINT_READY` until physical/vendor checks are complete.
 
-Next target: `ADD-17 子ども向けミニカード / ぬりえ`.
+ADD-16 now satisfies the reopened sellable-visual gate. ADD-15 remains blocked before Figma production because the authoritative Model A / Model B / NOT_REQUIRED decision and an exact live Figma file key/page/node are not present. Next safe target is ADD-17 read-only requirement/neutral-template review without inventing child attendance facts.
