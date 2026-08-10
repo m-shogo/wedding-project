@@ -452,7 +452,7 @@ Do not turn every isolated preference into a rigid global rule. The goal is accu
 
 **Process change:** V5-08 used exact Drive-readback bytes after an earlier encoded-length guard failed atomically. V5-09 was visually inspected at master scale, then cropped to retain sunset, ocean horizon, pavilion and lounge chairs while removing excess sky. Both derivatives were exactly `4×` their `88 × 92` targets. Before image creation, encoded length, decoded byte count, and JPEG boundary markers were checked; duplicate-first screenshot and structure QA preceded Current promotion.
 
-**Design change:** V5-08 Current hash became `58d7d6f144a4aff9e3cc31caefad88089981ec6a`; V5-09 Current hash became `c09aa82e7b2ac75708707345c6f845452bf67663`. The memory-spots sequence now differentiates old-town, night-view and resort/sunset supporting roles without adding cards or decoration.
+**Design change:** V5-08 Current hash became `58d7d6f1444aff9e3cc31caefad88089981ec6a`; V5-09 Current hash became `c09aa82e7b2ac75708707345c6f845452bf67663`. The memory-spots sequence now differentiates old-town, night-view and resort/sunset supporting roles without adding cards or decoration.
 
 **Verification evidence:** V5-08 derivative Drive ID `1rJJDOX_lwkCbA_DiCDptZfAQrMieG5LL`, `352 × 368`, `7,762 bytes`; comparison `427:2`. V5-09 derivative Drive ID `1QHWfftLU6m6FZYNJy8IxbOAgp1knzzoP`, `352 × 368`, `9,950 bytes`, SHA-256 `dbd5d0d15506bee04446ed02c62ad23df043c05b96ce43495d722c5d88ef5970`; comparison `429:2`. Current inside retained `92` native text nodes, `57` visible text nodes, `9` IMAGE-fill nodes, fold guide, rollback frames, and semantic geometry.
 
@@ -487,6 +487,32 @@ Do not turn every isolated preference into a rigid global rule. The goal is accu
 **Status:** TESTED
 
 **Promoted knowledge-base section:** Not yet promoted. This supports the master-first principle but does not make Q30, exact `2×`, or shared-data transport a universal PROJECT_RULE.
+
+---
+
+## LESSON-018 — Compress dead lower-cover fields before adding containers
+
+**Date:** 2026-08-10
+
+**Context:** V5 clean-room outer progression `657:2 / O` → `659:2 / P` → `663:162 / Q`.
+
+**Observed failure or opportunity:** O had already achieved a much stronger photo-led travel-magazine silhouette, but its lower front-cover field still contained too much low-information cream space and three feature groups that read as detached islands. P fixed the dead zone by extending photography and compressing the existing navigation; Q then revealed that the remaining heavy footer bar still reintroduced a UI/status-strip silhouette.
+
+**Root cause:** Dominant-photo and collage improvement had advanced faster than the secondary navigation and closing folio rhythm. Legacy spacing/field geometry remained after the upper cover had become materially denser.
+
+**General editorial principle:** After a major photo-led redesign or subtraction pass, inspect the remaining low-information fields as part of the composition rather than preserving them automatically. Before adding a new card or badge, first test whether expanding the dominant image, compressing existing navigation into one rail, and reducing a heavy footer to direct print-native type solves the problem.
+
+**Process change:** Work on rollback-safe duplicates. Compare whole-item, page, and actual-size screenshots. After asymmetric compression, run programmatic text-box intersection QA because visually plausible rails can still contain real collisions. For low-priority folios, test `heavy field → thin rule + direct native microtype` and retain the heavier field only if it has a necessary contrast/navigation role.
+
+**Design change:** P `659:2` extended the temporary hero comparator to `766 × 904`, aligned the three-color seam at `y=920`, compressed 01/02/03 into one lower rail, and added only three subordinate native descriptors. Structure QA caught and corrected two feature-group collisions before adoption. Q `663:162` then changed the `738 × 24` navy footer field into a `738 × 3` rule with `8 px` native folio text. Current `77:18` remained unchanged.
+
+**Verification evidence:** Current/O/P/Q whole-item comparison; P and Q front actual-size screenshots; P final same-parent text overlaps `0`; Q final visible native text `42`, visible IMAGE fills `9`, overlaps `0`, fold `663:321` visible at `2 × 1122.5`; verified image hashes unchanged. Detailed evidence: `learning-runs/2026-08-10-v5-outer-cleanroom-p-dense-lower-rail.md` and `learning-runs/2026-08-10-v5-outer-cleanroom-q-print-folio-subtraction.md`.
+
+**Applies to:** V5; candidate for V6 and later print-editorial pages after repeated evidence and physical-print review
+
+**Status:** TESTED
+
+**Promoted knowledge-base section:** Not yet promoted. The P/Q result is strong but remains a clean-room comparator until the intended cover hero is placed and final print evidence exists.
 
 ---
 
