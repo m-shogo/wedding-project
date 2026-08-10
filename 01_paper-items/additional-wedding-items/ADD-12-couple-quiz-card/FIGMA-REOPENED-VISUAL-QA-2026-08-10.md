@@ -1,10 +1,10 @@
 # ADD-12 新郎新婦クイズカード — Reopened Visual QA 2026-08-10
 
-Status: `CLEANROOM_COMPARISON_CREATED / SELLABLE_VISUAL_QA_PENDING / DESIGN_QA_PASS_WITH_PLACEHOLDERS`
+Status: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / NOT_PRINT_READY`
 
 ## Live authority
 
-- Start latest main: `dbd8b1ff3629fd7d3d84254c60826308ab49832f`
+- Start latest main for this promotion run: `1429cb604b0d3f030ef66af578d30efdb7ad0458`
 - Current: `docs/automation/non-rurubu-figma-quality-current.md` = `ACTIVE / HOURLY / FIGMA_EDIT_ALLOWED / VISUAL_REOPENED`
 - Figma file key: `oZ24SbwGkeAfFJcXlbxCoD`
 - Production: front `1:2`, back `1:26`
@@ -12,50 +12,58 @@ Status: `CLEANROOM_COMPARISON_CREATED / SELLABLE_VISUAL_QA_PENDING / DESIGN_QA_P
 
 ## Reopened visual diagnosis
 
-The existing production is structurally strong but the second-pass screenshots show a restrained field-note template with a generic English kicker, large unused lower field, and a thin mint edge. It remains functional, but the reopened sellable gate requires a materially different comparison before re-adoption.
+The previous production was structurally strong but visually read as a restrained field-note template with a generic English kicker, large unused lower field, and thin mint edge. It remained functional, but did not satisfy the reopened sellable visual gate by itself.
 
 ## Clean-room comparison
 
-Created rollback-safe section `2:2` — `QA_ADD12_REOPENED_EDITORIAL_BALLOT_V2_2026_08_10` without changing production.
+Created rollback-safe section `2:2` — `QA_ADD12_REOPENED_EDITORIAL_BALLOT_V2_2026_08_10`.
 
 - front `2:3` — `QA_ADD12_FRONT_V2_BALLOT_EDITORIAL`
 - back `2:28` — `QA_ADD12_BACK_V2_BALLOT_EDITORIAL`
 
-Direction: Japanese-first editorial ballot / travel notebook rather than quiz-show UI. Warm ivory remains, but the visual grammar changes to a narrow deep-navy book-edge rail, rust editorial kicker/rule, stronger Japanese headline, and compact ballot rhythm. No planes, passport stamps, quiz-show icons, gradients, shadows, rounded web cards, or generated people.
+Direction: Japanese-first editorial ballot / travel notebook rather than quiz-show UI. Warm ivory remains, but the grammar changes to a narrow deep-navy book-edge rail, rust editorial hierarchy, stronger Japanese headline, and compact ballot rhythm. No planes, passport stamps, quiz-show icons, gradients, shadows, rounded web cards, or generated people.
 
-The first V2 screenshot exposed a real defect: the initial 96 px navy rail clipped the title/question area and alternating mark colors weakened answer-choice fairness. Both were corrected in the same run: rail reduced to 18 px and all four marks returned to identical teal treatment.
+The first V2 screenshot exposed a real defect: the initial 96 px navy rail clipped the title/question area and alternating mark colors weakened answer-choice fairness. Both were corrected before promotion: rail reduced to 18 px and all four marks returned to identical teal treatment.
 
-## Screenshot QA
+## Long-copy stress
 
-Final front screenshot confirms:
+Created isolated stress section `3:2` — `QA_ADD12_REOPENED_V2_LONG_COPY_STRESS_2026_08_10`, front `3:3`, back `3:28`.
 
-- Japanese headline `ふたりのこと、どれだけ知ってる？` leads at thumbnail/reading scale;
-- question hierarchy remains `Q 01 → question → short rust rule → A–D → answer method`;
-- all four answer marks are equal 28 × 28 and visually identical;
-- no button/card UI or fake quiz-show treatment;
-- the lower negative space reads as a physical A6 ballot/card field rather than a centered web hero.
+Stress used materially longer Japanese question copy, four two-line answer choices, a longer answer-method line, a two-to-three-line back method, and extended optional-note copy. Whole-card screenshots confirmed:
 
-Final back screenshot confirms:
+- the front question expands to multiple lines without colliding with the answer choices;
+- all four long answer choices reflow to two lines without mark/row collisions;
+- answer-method copy remains within the card and does not collide with the footer date;
+- back method expands to multiple lines without touching the rule, name field, or message field;
+- extended optional-note copy remains above the footer date with no collision.
 
-- `回答と、ひとこと` establishes a clearer paired role;
-- answer instructions, name line, and message writing area remain distinct;
-- rust is used as print hierarchy rather than badge decoration;
-- no unconfirmed operational facts were introduced.
+## Promotion / rollback
+
+Before production replacement, preserved the previous production pair under rollback section `4:2` — `ROLLBACK_ADD12_PRE_REOPENED_PROMOTION_2026_08_10`, with rollback front `4:3` and back `4:28`.
+
+Then promoted the clean-room V2 into the existing production frame IDs:
+
+- production front remains `1:2`
+- production back remains `1:26`
+
+Post-promotion screenshots confirm the Japanese-first editorial hierarchy at actual 620 × 875 scale. The old generic English-led field-note composition is no longer production.
 
 ## Structure readback
 
-- candidate front: 620 × 875, native text 10, IMAGE fills 0, clipsContent true
-- candidate back: 620 × 875, native text 7, IMAGE fills 0, clipsContent true
-- answer marks A–D: all 28 × 28 after correction
-- production `1:2 / 1:26` unchanged; existing long-copy structural evidence remains authoritative
+- production front `1:2`: 620 × 875, native text 10, IMAGE fill nodes 0, trim/bleed guides 2, clipsContent true
+- production back `1:26`: 620 × 875, native text 7, IMAGE fill nodes 0, trim/bleed guides 2, clipsContent true
+- answer marks remain equal and non-directive
 - no flatten/raster replacement introduced
+- variable quiz/answer/instruction text remains native editable text
 
 ## Image generation / Drive
 
-`IMAGE_GENERATION_NOT_REQUIRED_FOR_THIS_COMPARISON`. The screenshot-supported bottleneck is typography/composition, not missing hero imagery. Drive changes: 0.
+`IMAGE_GENERATION_NOT_REQUIRED_FOR_THIS_ITEM`. The screenshot-supported bottleneck was typography/composition rather than missing hero imagery. Drive changes: 0. No generated people or raster-variable copy were introduced.
 
 ## Decision
 
-Do not promote V2 yet. The candidate is materially different and visually stronger in Japanese hierarchy, but production should only be replaced after a direct whole-pair comparison plus candidate long-copy stress confirms that the stronger headline and reduced vertical spacing do not compromise the existing structural resilience.
+The reopened second-pass comparison, long-copy stress, rollback-safe promotion, final screenshot QA, and structural readback all passed. ADD-12 is now `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS`.
 
-Next: run V2 long-copy stress and pair comparison; if it remains structurally safe and clearly wins, preserve a production rollback duplicate, promote to `1:2 / 1:26`, then set `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS` and continue to ADD-13.
+`DEFERRED_FINALIZATION / NOT_PRINT_READY`: final question/choices, answer/recovery rules, prize/lottery policy if any, final date/copy, paper stock, printer template/profile, and physical proof remain pending.
+
+Next target: ADD-13 メッセージカード.
