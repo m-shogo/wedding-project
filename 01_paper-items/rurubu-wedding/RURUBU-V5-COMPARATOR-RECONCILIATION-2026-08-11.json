@@ -11,8 +11,8 @@
     "start": {"pageId": "845:2", "name": "00_RURUBU_START_HERE"},
     "current": {"pageId": "0:1", "name": "01_RURUBU_WEDDING", "topLevelCount": 11},
     "review": {"pageId": "833:2", "name": "04_RURUBU_REVIEW", "topLevelCount": 8},
-    "working": {"pageId": "834:2", "name": "05_RURUBU_WORKING", "activeFrames": ["834:3", "848:2", "818:2"]},
-    "studies": {"pageId": "853:19", "name": "06_RURUBU_0811_STUDIES", "frameCount": 46},
+    "working": {"pageId": "834:2", "name": "05_RURUBU_WORKING", "activeFrames": ["834:3", "848:2", "854:187"]},
+    "studies": {"pageId": "853:19", "name": "06_RURUBU_0811_STUDIES", "frameCount": 48},
     "archive": {"pageId": "853:18", "name": "90_RURUBU_ARCHIVE_0807_0810", "frameCount": 138}
   },
   "comparators": {
@@ -32,12 +32,15 @@
       "qa": {"thumbnail": true, "wholeReading": true, "actualSize": true, "structure": true, "assetQualityPass": false}
     },
     "insideBest": {
-      "label": "CM",
-      "nodeId": "818:2",
+      "label": "CX",
+      "nodeId": "854:187",
+      "leftNodeId": "854:188",
+      "rightNodeId": "854:317",
       "status": "ADOPT_AS_STRONGEST_COMPARATOR_NOT_CURRENT",
       "nativeTextVisible": 54,
-      "imageFillVisible": 6,
+      "imageFillVisible": 9,
       "sameParentTextIntersections": 0,
+      "foldGuide": {"nodeId": "854:468", "x": 792.7000122070312, "y": 0, "width": 2, "height": 1122.5},
       "qa": {"thumbnail": true, "wholeReading": true, "actualSize": true, "structure": true}
     }
   },
@@ -60,9 +63,17 @@
       ],
       "complete": false
     },
+    "officialUploadAttempt": {
+      "studyCandidateNodeId": "854:2",
+      "studyHeroNodeId": "854:133",
+      "uploadTargetCreated": true,
+      "postCompleted": false,
+      "failure": "runtime DNS resolution failed for mcp.figma.com before byte upload",
+      "candidateMovedToStudies": true
+    },
     "figmaPlaced": false,
     "figmaVisuallyVerified": false,
-    "loopBreaker": "do not count raw download, upload-target creation, or partial chunk staging as placement"
+    "loopBreaker": "do not count raw download, upload-target creation, partial chunk staging, or failed upload POST as placement"
   },
   "gate": {
     "photoRolePass": "9/10",
@@ -71,5 +82,5 @@
     "v5Complete": false,
     "v6ProductionStarted": false
   },
-  "evidence": "learning-runs/2026-08-11-v5-cv-review-navigation-qa.md"
+  "evidence": "learning-runs/2026-08-11-v5-cx-q60-upload-and-qa-subtraction.md"
 }
