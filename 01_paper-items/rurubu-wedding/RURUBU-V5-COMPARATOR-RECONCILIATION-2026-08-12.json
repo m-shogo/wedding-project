@@ -8,11 +8,18 @@
     "inside": {"nodeId": "77:290", "changed": false, "liveReadbackAfterWrites": true}
   },
   "figmaNavigation": {
-    "start": {"pageId": "845:2", "name": "00_RURUBU_START_HERE", "status": "DB outer / CY inside"},
-    "review": {"pageId": "833:2", "name": "04_RURUBU_REVIEW", "bestOuterSnapshot": "886:2", "bestInsideSnapshot": "861:2", "previousOuterRollback": {"nodeId": "878:2", "visible": false}},
-    "working": {"pageId": "834:2", "name": "05_RURUBU_WORKING", "activeFrames": ["834:3", "848:2", "859:2", "881:2"]},
-    "studies": {"pageId": "853:19", "name": "06_RURUBU_0811_STUDIES", "movedThisRun": ["875:2"]},
-    "archive": {"pageId": "853:18", "name": "90_RURUBU_ARCHIVE_0807_0810"}
+    "start": {"pageId": "845:2", "name": "00_RURUBU_START_HERE", "status": "DB outer / DE inside"},
+    "review": {
+      "pageId": "833:2",
+      "name": "04_RURUBU_REVIEW",
+      "bestOuterSnapshot": "886:2",
+      "bestInsideSnapshot": "897:2",
+      "previousOuterRollback": {"nodeId": "878:2", "visible": false},
+      "previousInsideRollback": {"nodeId": "861:2", "visible": false}
+    },
+    "working": {"pageId": "834:2", "name": "05_RURUBU_WORKING", "activeFrames": ["834:3", "848:2", "881:2", "894:2"]},
+    "studies": {"pageId": "853:19", "name": "06_RURUBU_0811_STUDIES", "count": 55, "movedThisRun": ["859:2", "891:2"]},
+    "archive": {"pageId": "853:18", "name": "90_RURUBU_ARCHIVE_0807_0810", "count": 138}
   },
   "comparators": {
     "outerBest": {
@@ -29,20 +36,21 @@
       "sameParentTextIntersections": 0,
       "foldGuide": {"nodeId": "881:189", "x": 792.7000122070312, "y": 0, "width": 2, "height": 1122.5},
       "qa": {"thumbnail": true, "wholeReading": true, "actualSize": true, "structure": true, "assetQualityPass": false},
-      "visualRationale": "DA split-field composition retained; yellow-field microcopy repaired to navy/magenta; bright-skyline subheads anchored on one compact rectangular navy editorial field; first incorrect z-order pass rejected and corrected before adoption"
+      "visualRationale": "DB retains the strongest outer composition/readability balance. A later DC experiment increased photo overlap but amplified proxy-raster softness at actual size and was rejected rather than promoted."
     },
     "insideBest": {
-      "label": "CY",
-      "nodeId": "859:2",
-      "leftNodeId": "859:3",
-      "rightNodeId": "859:132",
-      "reviewSnapshotNodeId": "861:2",
+      "label": "DE",
+      "nodeId": "894:2",
+      "leftNodeId": "894:3",
+      "rightNodeId": "894:132",
+      "reviewSnapshotNodeId": "897:2",
       "status": "ADOPT_AS_STRONGEST_COMPARATOR_NOT_CURRENT",
       "nativeTextVisible": 54,
       "productionImageFillVisible": 6,
       "sameParentTextIntersections": 0,
-      "foldGuide": {"nodeId": "859:283", "x": 792.7000122070312, "y": 0, "width": 2, "height": 1122.5},
-      "qa": {"thumbnail": true, "wholeReading": true, "actualSize": true, "structure": true}
+      "foldGuide": {"nodeId": "894:283", "x": 792.7000122070312, "y": 0, "width": 2, "height": 1122.5},
+      "qa": {"thumbnail": true, "wholeReading": true, "actualSize": true, "structure": true},
+      "visualRationale": "CY photo-led structure retained while the lower Q&A was rebuilt with one magenta section anchor, materially stronger Q1 scale, and compact cyan/yellow Q2/Q3 notes. No new card system was introduced and existing image hashes were preserved."
     }
   },
   "coverHeroQ60": {
@@ -54,10 +62,22 @@
     "sha256": "090880c0ebe101f1321ebac05f22a91b2b61f3a8ac31c8d112dc418412f13ab2",
     "driveVerified": true,
     "runtimeMaterialized": true,
-    "officialUploadAttempt": {"postCompleted": false, "failure": "runtime DNS resolution failed for mcp.figma.com before byte upload", "retryThisRun": false},
-    "pluginDirectDriveFetchAttempt": {"completed": false, "failure": "TypeError: Network request failed", "retryThisRun": false},
+    "officialUploadAttemptThisRun": {
+      "targetNodeId": "891:133",
+      "uploadTargetIssued": true,
+      "postCompleted": false,
+      "failure": "runtime DNS resolution failed for mcp.figma.com before exact-byte POST",
+      "retryAfterRepeatFailure": false
+    },
     "figmaPlaced": false,
     "figmaVisuallyVerified": false
+  },
+  "experiments": {
+    "dcOuter": {
+      "nodeId": "891:2",
+      "status": "REJECTED_AND_MOVED_TO_STUDIES",
+      "reason": "larger tilted proxy increased visible raster softness at actual size and worsened destination-microcopy wrapping"
+    }
   },
   "progressClassification": {
     "generatedThisRun": 0,
@@ -74,5 +94,5 @@
     "v5Complete": false,
     "v6ProductionStarted": false
   },
-  "evidence": "learning-runs/2026-08-12-v5-db-contrast-repair.md"
+  "evidence": "learning-runs/2026-08-12-v5-de-dense-editorial-qa.md"
 }
