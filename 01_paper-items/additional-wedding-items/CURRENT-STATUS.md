@@ -1,19 +1,31 @@
 # 追加ウェディングアイテム — CURRENT STATUS
 
-Status: `ACTIVE / PREPARATION_AND_ASSET_PRODUCTION`
-Date: 2026-08-02
-Authority: `m-shogo/wedding-project` `main`
+> **VISUAL AUTHORITY NOTICE — 2026-08-12**
+>
+> This file is a **legacy preparation snapshot** from 2026-08-02. It is **not** the Current authority for the reopened non-Rurubu Figma visual-quality pass.
+>
+> For every non-Rurubu visual/Figma decision, use `docs/automation/non-rurubu-figma-quality-current.md` on latest `main` first. That Current explicitly supersedes the legacy rules below that say `完成済み4種へwriteしない` or `Figmaを使用しない` within the non-Rurubu visual-quality scope.
+>
+> Do **not** use the old `ACTIVE_NEXT`, `PREPARED_FOR_FIGMA`, or `PLACEMENT_READY` values below as evidence of current sellable visual completion. Item-specific reopened visual QA/evidence on latest `main` is authoritative for `SELLABLE_VISUAL_QA_PASS` state.
+>
+> Known current exception: ADD-15 remains gated by its item-specific three-way deployment decision (`Model A / Model B / NOT_REQUIRED`) and must not be guessed. Rurubu remains completely outside this task.
 
-## 完成済み・編集禁止
+Status: `LEGACY_PREPARATION_SNAPSHOT / SUPERSEDED_FOR_VISUAL_QA`
+Snapshot date: 2026-08-02
+Authority for visual QA: `docs/automation/non-rurubu-figma-quality-current.md` on latest `main`
+
+## Historical snapshot below — do not use as visual-completion authority
+
+## 完成済み・編集禁止（historical wording; superseded within current non-Rurubu visual scope）
 
 - るるぶWEDDING
 - 青春ふたりきっぷ
 - BOARDING PASS
 - WEDDING PASSPORT
 
-## 追加17種の現在地
+## 追加17種の2026-08-02時点
 
-| ID | アイテム | 状態 |
+| ID | アイテム | 当時の状態 |
 |---|---|---|
 | ADD-01 | ウェルカムボード | `PLACEMENT_READY` |
 | ADD-02 | 11卓の国別テーブルサイン | `PREPARED_FOR_FIGMA` |
@@ -33,46 +45,31 @@ Authority: `m-shogo/wedding-project` `main`
 | ADD-16 | 両親贈呈品メッセージカード | `PREPARED_FOR_FIGMA` |
 | ADD-17 | 子ども向けミニカード / ぬりえ | `BLOCKED_REQUIRED_INPUT` |
 
-## Current pointer
+Historical `ACTIVE_NEXT = ADD-17_CHILDREN_MINI_CARD_REQUIREMENT_CONFIRMATION` is superseded and must not drive current visual work.
 
-`ACTIVE_NEXT = ADD-17_CHILDREN_MINI_CARD_REQUIREMENT_CONFIRMATION`
+## Historical Drive/checkpoint references
 
-## Completed checkpoints
+These IDs remain useful as discovery hints only; live-read before any write.
 
-- ADD-01: 5/5 docs, four accepted assets, Drive `1UT-s_z2KOnzNeq9cluqJ_Uxh-xDzO6Kg`, `PLACEMENT_READY`
-- ADD-02: 5/5 docs, 11 destinations specified, Drive `1KmbIncy5Wl6aEqqjBQmssCsw_KZjM62r`, `PREPARED_FOR_FIGMA`
-- ADD-03: 5/5 docs, confirmed times recorded, Drive `1uVcXv2Xs0H7juheHk977pt7YxLMJez_j`, `PREPARED_FOR_FIGMA`
-- ADD-04: 5/5 docs, groom/bride reception signs specified, Drive `1vjSYrbjzfZs_vyCIpQAbml9_en5RcH_r`, `PREPARED_FOR_FIGMA`
-- ADD-05: 5/5 docs, 50 × 80 mm master specified, Drive `1_V20y77VU1aGrJtqpl7U5XUpC-bQuTxV`, `PREPARED_FOR_FIGMA`
-- ADD-06: 5/5 docs, A3 portrait/A4 reflow, editable title/date/location, native vector decoration, Drive `1Ehk_oQ8vhAGo3DYBbgyOGfA03u0pu5wb`, no new raster by design, `PREPARED_FOR_FIGMA`
-- ADD-07: 5/5 docs, A2 portrait/A3 reflow, three-action route, BOARDING PASS no-copy contract, Drive `1nPb_yvp1rIlF_L3X0mAnBFSzSuEIllDi`, no new raster by design, `PREPARED_FOR_FIGMA`
-- ADD-08: 5/5 docs, A4 portrait/A5 reflow, editable text/native vector design, no raster required, Drive `12D7UPRTDwUx7vLOm1mtaew-sFGHt9FPG`, metadata readback PASS, `PREPARED_FOR_FIGMA`
-- ADD-09: 5/5 docs, A5 portrait/A4 reflow, editable text/native vector guest-book guidance, Drive `1D259ugx13El0JYxvn8yyskIjc2c2liF4`, no new raster by design, `PREPARED_FOR_FIGMA`
-- ADD-10: 5/5 docs, modular A4/A5 venue wayfinding system, official venue terminology/direction verification gate, Drive `1ASWOTXO4fosLb9reWxQrHL2_UUC_Y8-3`, no new raster by design, `PREPARED_FOR_FIGMA`
-- ADD-11: 5/5 docs, A5 portrait/A4 reflow, replaceable QR frame, editable access/privacy/expiry text, Drive `1wuxHEqby_0JWS0bYV0RWCTUotM88Mnxb`, no QR or raster generated before official URL confirmation, `PREPARED_FOR_FIGMA`
-- ADD-12: 5/5 docs, A6 double-sided quiz card, semantic placeholders for unconfirmed questions/answers, fairness and writing-space QA, Drive `1LUanrHk9_lhZcSqf95ybgWH29_bmcfvZ`, no raster generated before question/photo confirmation, `PREPARED_FOR_FIGMA`
-- ADD-13: 5/5 docs, A6 landscape double-sided message card, editable prompts and handwriting area, Drive `1Md8oCMsw4F9tZjQueNmQQ2dYR1I7JwZl`, no raster required, `PREPARED_FOR_FIGMA`
-- ADD-14: 5/5 docs, conditional A6/A5 after-party guide template, required-information gate, Drive `1Oq2Pz2mYo4oaDnO7LMezMrCUizcxaEjs`, no fabricated venue/time/fee/QR and no raster required, `PREPARED_FOR_FIGMA`
-- ADD-15: 5/5 docs, Model A course-story / Model B destination-story decision gate, truth and allergen safety contract, Drive `186f2tA2czrrdIQ_7djhPBun6dStztmS8`, no fabricated menu, ingredient, allergen, country relation, or food raster, `PREPARED_FOR_FIGMA`
-- ADD-16: 5/5 docs, home-port editorial direction, family-fact and message truth gate, postcard/small-tag/folded conditional formats, Drive `1BOyETtL1_loGXNjGV9S30sJKEhZNjd6O`, no fabricated family story or raster, `PREPARED_FOR_FIGMA`
+- ADD-01 Drive `1UT-s_z2KOnzNeq9cluqJ_Uxh-xDzO6Kg`
+- ADD-02 Drive `1KmbIncy5Wl6aEqqjBQmssCsw_KZjM62r`
+- ADD-03 Drive `1uVcXv2Xs0H7juheHk977pt7YxLMJez_j`
+- ADD-04 Drive `1vjSYrbjzfZs_vyCIpQAbml9_en5RcH_r`
+- ADD-05 Drive `1_V20y77VU1aGrJtqpl7U5XUpC-bQuTxV`
+- ADD-06 Drive `1Ehk_oQ8vhAGo3DYBbgyOGfA03u0pu5wb`
+- ADD-07 Drive `1nPb_yvp1rIlF_L3X0mAnBFSzSuEIllDi`
+- ADD-08 Drive `12D7UPRTDwUx7vLOm1mtaew-sFGHt9FPG`
+- ADD-09 Drive `1D259ugx13El0JYxvn8yyskIjc2c2liF4`
+- ADD-10 Drive `1ASWOTXO4fosLb9reWxQrHL2_UUC_Y8-3`
+- ADD-11 Drive `1wuxHEqby_0JWS0bYV0RWCTUotM88Mnxb`
+- ADD-12 Drive `1LUanrHk9_lhZcSqf95ybgWH29_bmcfvZ`
+- ADD-13 Drive `1Md8oCMsw4F9tZjQueNmQQ2dYR1I7JwZl`
+- ADD-14 Drive `1Oq2Pz2mYo4oaDnO7LMezMrCUizcxaEjs`
+- ADD-15 Drive `186f2tA2czrrdIQ_7djhPBun6dStztmS8`
+- ADD-16 Drive `1BOyETtL1_loGXNjGV9S30sJKEhZNjd6O`
 
-## Requirement-gated checkpoint
+## Historical execution rules — superseded for current non-Rurubu visual QA
 
-- ADD-17 live requirement check completed on 2026-08-02.
-- Google Drive searches found no authoritative guest-list or child-attendance evidence.
-- `ADD-17-children-mini-card/REQUIREMENT-CHECK.md` records the evidence, allowed resolutions, and required inputs.
-- No Figma nodes, Drive assets, or raster assets were created because age, count, attendance, and need remain unconfirmed.
-- Resolve as `NOT_REQUIRED` or `READY_FOR_SPEC` only after authoritative confirmation.
+The former rules `完成済み4種へwriteしない` and `Figmaを使用しない` must not be followed for the reopened non-Rurubu visual-quality task. The latest Current and item-specific live authority govern instead.
 
-## Execution rules
-
-- Current pointerを優先する
-- 完成済み4種へwriteしない
-- Figmaを使用しない
-- 未確定情報を事実として作らない
-- 素材不要ならラスターを無理に生成しない
-- 各アイテムは `SPEC.md`、`ASSET-QUEUE.md`、`DRIVE-REGISTER.md`、`QA.md`、`FIGMA-PLACEMENT-BRIEF.md` を揃える
-
-## Completion declaration
-
-追加17種すべてが`COMPLETED`、`PLACEMENT_READY`、`PREPARED_FOR_FIGMA`、または`NOT_REQUIRED`になった時点で `ALL_ADDITIONAL_ITEMS_PREPARED` とする。
+Truth/safety rules remain valid: do not fabricate unknown facts, do not force raster imagery where it is not needed, and live-read exact authority before writes.
