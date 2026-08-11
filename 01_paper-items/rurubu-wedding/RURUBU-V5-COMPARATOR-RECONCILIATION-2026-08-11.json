@@ -10,17 +10,18 @@
   "figmaNavigation": {
     "start": {"pageId": "845:2", "name": "00_RURUBU_START_HERE"},
     "current": {"pageId": "0:1", "name": "01_RURUBU_WEDDING", "topLevelCount": 11},
-    "review": {"pageId": "833:2", "name": "04_RURUBU_REVIEW", "topLevelCount": 8},
-    "working": {"pageId": "834:2", "name": "05_RURUBU_WORKING", "activeFrames": ["834:3", "848:2", "859:2"]},
-    "studies": {"pageId": "853:19", "name": "06_RURUBU_0811_STUDIES", "frameCount": 50},
+    "review": {"pageId": "833:2", "name": "04_RURUBU_REVIEW", "topLevelCount": 8, "bestOuterSnapshot": "878:2", "bestInsideSnapshot": "861:2"},
+    "working": {"pageId": "834:2", "name": "05_RURUBU_WORKING", "activeFrames": ["834:3", "848:2", "859:2", "875:2"]},
+    "studies": {"pageId": "853:19", "name": "06_RURUBU_0811_STUDIES", "frameCount": 52, "movedThisRun": ["867:2", "851:2"]},
     "archive": {"pageId": "853:18", "name": "90_RURUBU_ARCHIVE_0807_0810", "frameCount": 138}
   },
   "comparators": {
     "outerBest": {
-      "label": "CV",
-      "nodeId": "848:2",
-      "frontNodeId": "848:131",
-      "heroNodeId": "848:133",
+      "label": "DA",
+      "nodeId": "875:2",
+      "frontNodeId": "875:131",
+      "reviewSnapshotNodeId": "878:2",
+      "heroNodeId": "875:133",
       "heroImageHash": "e58ddfa30e3b4bb68e44f1789d984b75cf8a7912",
       "heroNaturalSize": {"width": 640, "height": 587},
       "heroStatus": "LOW_QUALITY_SEMANTIC_PROXY_Q60_REQUIRED",
@@ -28,14 +29,16 @@
       "nativeTextVisible": 37,
       "imageFillVisible": 7,
       "sameParentTextIntersections": 0,
-      "foldGuide": {"nodeId": "848:186", "x": 792.7000122070312, "y": 0, "width": 2, "height": 1122.5},
-      "qa": {"thumbnail": true, "wholeReading": true, "actualSize": true, "structure": true, "assetQualityPass": false}
+      "foldGuide": {"nodeId": "875:186", "x": 792.7000122070312, "y": 0, "width": 2, "height": 1122.5},
+      "qa": {"thumbnail": true, "wholeReading": true, "actualSize": true, "structure": true, "assetQualityPass": false},
+      "visualRationale": "split yellow destination field + right-side hero + native headline crossing field boundary + unequal 01/02/03 photo hierarchy; stronger travel-magazine silhouette than CV/CZ while reducing proxy visual monopoly"
     },
     "insideBest": {
       "label": "CY",
       "nodeId": "859:2",
       "leftNodeId": "859:3",
       "rightNodeId": "859:132",
+      "reviewSnapshotNodeId": "861:2",
       "status": "ADOPT_AS_STRONGEST_COMPARATOR_NOT_CURRENT",
       "nativeTextVisible": 54,
       "productionImageFillVisible": 6,
@@ -72,16 +75,17 @@
       "complete": false
     },
     "officialUploadAttempt": {
-      "studyCandidateNodeId": "854:2",
-      "studyHeroNodeId": "854:133",
-      "uploadTargetCreated": true,
       "postCompleted": false,
       "failure": "runtime DNS resolution failed for mcp.figma.com before byte upload",
-      "candidateMovedToStudies": true
+      "loopBreaker": "external upload path already failed repeatedly; current run switched to composition work and in-file search instead of repeating it"
+    },
+    "inFileSearch": {
+      "q60ExactAlreadyEmbedded": false,
+      "largeSourceFound": {"hash": "539c259be8036b481d06b4f76db9a39b407d90e8", "width": 1356, "height": 560},
+      "note": "no existing 1330x1220 Q60-equivalent embedded image was found on Studies"
     },
     "figmaPlaced": false,
-    "figmaVisuallyVerified": false,
-    "loopBreaker": "do not count raw download, upload-target creation, partial chunk staging, or failed upload POST as placement"
+    "figmaVisuallyVerified": false
   },
   "gate": {
     "photoRolePass": "9/10",
@@ -90,5 +94,5 @@
     "v5Complete": false,
     "v6ProductionStarted": false
   },
-  "evidence": "learning-runs/2026-08-11-v5-cy-photo-led-profile-cleanroom.md"
+  "evidence": "learning-runs/2026-08-11-v5-da-split-field-editorial-cover.md"
 }
