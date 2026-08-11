@@ -8,40 +8,40 @@
     "inside": {"nodeId": "77:290", "changed": false, "liveReadbackAfterWrites": true}
   },
   "figmaNavigation": {
-    "start": {"pageId": "845:2", "name": "00_RURUBU_START_HERE", "status": "DJ outer / DF inside", "statusTextNodeId": "845:27", "reviewBodyNodeId": "845:16", "reviewBodyStatus": "Best DJ / DF"},
+    "start": {"pageId": "845:2", "name": "00_RURUBU_START_HERE", "status": "DK outer / DF inside", "statusTextNodeId": "845:27", "reviewBodyNodeId": "845:16", "reviewBodyStatus": "Best DK / DF", "workingCount": 4},
     "review": {
       "pageId": "833:2",
       "name": "04_RURUBU_REVIEW",
-      "bestOuterSnapshot": "936:2",
+      "bestOuterSnapshot": "946:2",
       "bestInsideSnapshot": "904:2",
-      "previousOuterRollback": {"nodeId": "930:2", "label": "DI", "visible": false},
+      "previousOuterRollback": {"nodeId": "936:2", "label": "DJ", "visible": false},
       "previousInsideRollback": {"nodeId": "897:2", "visible": false}
     },
-    "working": {"pageId": "834:2", "name": "05_RURUBU_WORKING", "activeFrames": ["834:3", "848:2", "881:2", "899:2", "913:190", "920:2", "925:2", "933:2"]},
-    "studies": {"pageId": "853:19", "name": "06_RURUBU_0811_STUDIES", "count": 56},
+    "working": {"pageId": "834:2", "name": "05_RURUBU_WORKING", "activeFrames": ["834:3", "848:2", "899:2", "945:2"], "layout": "single compact row"},
+    "studies": {"pageId": "853:19", "name": "06_RURUBU_0811_STUDIES", "count": 63, "movedThisRun": ["881:2", "913:190", "920:2", "925:2", "933:2", "939:2", "942:2"]},
     "archive": {"pageId": "853:18", "name": "90_RURUBU_ARCHIVE_0807_0810", "count": 138}
   },
   "comparators": {
     "outerBest": {
-      "label": "DJ",
-      "nodeId": "933:2",
-      "frontNodeId": "933:131",
-      "reviewSnapshotNodeId": "936:2",
-      "dominantPhotoNodeId": "933:132",
+      "label": "DK",
+      "nodeId": "945:2",
+      "frontNodeId": "945:131",
+      "reviewSnapshotNodeId": "946:2",
+      "dominantPhotoNodeId": "945:132",
       "dominantPhotoImageHash": "adbb8e529451a81dd25e4eb29bf068655569ce25",
       "dominantPhotoSemantic": "verified travel-memory coast image; explicitly not represented as Yokohama",
-      "destinationAnchorNodeId": "933:134",
+      "destinationAnchorNodeId": "945:134",
       "destinationAnchorImageHash": "e58ddfa30e3b4bb68e44f1789d984b75cf8a7912",
       "destinationAnchorStatus": "LOW_QUALITY_SEMANTIC_PROXY_Q60_REQUIRED",
-      "supportPhotoNodeId": "933:155",
+      "supportPhotoNodeId": "945:155",
       "supportPhotoImageHash": "d76eb07d83d042f15044c8bc6bf68d73a73cd77d",
       "status": "ADOPT_AS_STRONGEST_CLEANROOM_COMPOSITION_COMPARATOR_NOT_CURRENT",
       "nativeTextVisible": 39,
       "imageFillVisible": 7,
       "sameParentTextIntersections": 0,
-      "foldGuide": {"nodeId": "933:190", "x": 792.7000122070312, "y": 0, "width": 2, "height": 1122.5},
-      "qa": {"thumbnail500": true, "wholeReading1600": true, "actualSizeFront1800": true, "structure": true, "dominantPhotoQualityPass": true, "destinationAnchorQualityPass": false},
-      "visualRationale": "DJ is materially stronger than DI from-scratch because verified travel-memory photography becomes the full front-page substrate instead of ending above a broad poster-like information zone. Native Japanese masthead and feature type sit directly on photography; feature 01 is constrained to one irregular 252px cream paper patch; the unresolved Yokohama proxy remains a small tilted factual anchor; and an unequal support photo overlaps the lower composition. The non-Yokohama dominant image is explicitly labeled TRAVEL MEMORY / 旅の記憶. An initial 322px paper patch was rejected at actual size, and one hidden text-box intersection was repaired before promotion. Thumbnail, whole-spread, actual-size, and structure QA all passed."
+      "foldGuide": {"nodeId": "945:190", "x": 792.7000122070312, "y": 0, "width": 2, "height": 1122.5},
+      "qa": {"thumbnail500": true, "wholeReading1024": true, "actualSizeFront794x1123": true, "structure": true, "dominantPhotoQualityPass": true, "destinationAnchorQualityPass": false},
+      "visualRationale": "DK is selected from scratch over DJ and concurrent live 939/942 because it keeps the verified travel-memory photograph as the full page substrate while giving much more work to large native Japanese headline typography. The former broad magenta headline block is reduced to a thin slanted accent rule; feature 01 remains one irregular paper fragment; feature 02 is direct-on-photo; the unresolved Yokohama proxy remains a small tilted factual anchor; and feature 03 uses an unequal support photo separated from native type by a thin editorial rule. An actual-size feature-03/photo collision was detected and repaired before promotion. Thumbnail, whole-spread, actual-size, and structure QA passed."
     },
     "insideBest": {
       "label": "DF",
@@ -75,29 +75,30 @@
     "sha256": "090880c0ebe101f1321ebac05f22a91b2b61f3a8ac31c8d112dc418412f13ab2",
     "driveVerified": true,
     "runtimeMaterialized": true,
-    "officialUploadAttemptThisRun": {"attempted": false, "reason": "same transport route already failed repeatedly; switched method to safe visual redesign"},
-    "fallbackCreateImageAttempt": {"attempted": false, "reason": "previous encoded method failed atomically; not repeated"},
+    "officialUploadAttemptThisRun": {"attempted": true, "targetNodeId": "933:134", "result": "FAILED_BEFORE_UPLOAD", "reason": "mcp.figma.com DNS resolution failure during raw-byte POST"},
+    "methodSwitchedAfterFailure": true,
     "figmaPlaced": false,
     "figmaVisuallyVerified": false
   },
   "experiments": {
-    "djOuter": {
-      "nodeId": "933:2",
-      "sourceNodeId": "925:2",
-      "reviewSnapshotNodeId": "936:2",
+    "dkOuter": {
+      "nodeId": "945:2",
+      "sourceNodeId": "933:2",
+      "reviewSnapshotNodeId": "946:2",
       "status": "ADOPTED_AS_BEST_OUTER_COMPARATOR",
       "changes": [
-        "extended verified travel-memory coast photography to full front-page substrate",
-        "kept atmosphere semantics explicit rather than presenting the coast as Yokohama",
-        "constrained feature 01 to a single irregular cream paper patch",
-        "kept the unresolved Yokohama proxy as a small tilted factual anchor",
-        "used unequal support-photo scale and direct native typography instead of cards",
-        "rejected 322px paper patch and reduced it to 252px after actual-size QA",
-        "caught and repaired one TRAVEL MEMORY versus feature-02 text-box intersection before promotion"
+        "replaced broad headline card with much larger native Japanese type plus a thin slanted magenta editorial rule",
+        "kept verified travel-memory photography as full-page substrate",
+        "increased intentional scale contrast between destination anchor, feature-01 paper fragment, and feature-03 support photo",
+        "kept unresolved Yokohama proxy factual and small",
+        "detected and repaired feature-03 typography/support-photo collision at actual size",
+        "compared concurrent live 939:2 and 942:2 before promotion and preserved both as studies"
       ],
-      "verification": {"thumbnail500": true, "wholeReading1600": true, "actualSizeFront1800": true, "structure": true, "sameParentTextIntersections": 0}
+      "verification": {"thumbnail500": true, "wholeReading1024": true, "actualSizeFront794x1123": true, "structure": true, "sameParentTextIntersections": 0}
     },
-    "diOuter": {"nodeId": "925:2", "status": "SUPERSEDED_AS_BEST_OUTER_BUT_PRESERVED_IN_WORKING_AND_HIDDEN_REVIEW_ROLLBACK", "reviewSnapshotNodeId": "930:2", "preserved": true},
+    "djOuter": {"nodeId": "933:2", "status": "SUPERSEDED_AS_BEST_OUTER_PRESERVED_IN_STUDIES_AND_HIDDEN_REVIEW_ROLLBACK", "reviewSnapshotNodeId": "936:2", "preserved": true},
+    "concurrent939": {"nodeId": "939:2", "status": "REJECTED_AS_BEST_AFTER_THUMBNAIL_COMPARISON_PRESERVED_IN_STUDIES"},
+    "concurrent942": {"nodeId": "942:2", "status": "REJECTED_AS_BEST_AFTER_THUMBNAIL_COMPARISON_PRESERVED_IN_STUDIES"},
     "dfInside": {"nodeId": "899:2", "status": "ADOPTED_AS_BEST_INSIDE_COMPARATOR", "reviewSnapshotNodeId": "904:2"}
   },
   "progressClassification": {
@@ -116,5 +117,5 @@
     "v5Complete": false,
     "v6ProductionStarted": false
   },
-  "evidence": "learning-runs/2026-08-12-v5-dj-fullbleed-editorial-cleanroom.md"
+  "evidence": "learning-runs/2026-08-12-v5-dk-japanese-travel-mag-cleanroom.md"
 }
