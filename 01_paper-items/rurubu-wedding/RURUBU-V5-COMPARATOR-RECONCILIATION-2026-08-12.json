@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "scope": "RURUBU_WEDDING_V5_ONLY",
+  "date": "2026-08-12",
+  "authority": "live Figma + Drive readback + active-scope overlay + asset evidence ledger + GitHub main",
+  "current": {
+    "outer": {"nodeId": "77:18", "changed": false, "liveReadbackAfterWrites": true},
+    "inside": {"nodeId": "77:290", "changed": false, "liveReadbackAfterWrites": true}
+  },
+  "figmaNavigation": {
+    "start": {"pageId": "845:2", "name": "00_RURUBU_START_HERE", "status": "DB outer / CY inside"},
+    "review": {"pageId": "833:2", "name": "04_RURUBU_REVIEW", "bestOuterSnapshot": "886:2", "bestInsideSnapshot": "861:2", "previousOuterRollback": {"nodeId": "878:2", "visible": false}},
+    "working": {"pageId": "834:2", "name": "05_RURUBU_WORKING", "activeFrames": ["834:3", "848:2", "859:2", "881:2"]},
+    "studies": {"pageId": "853:19", "name": "06_RURUBU_0811_STUDIES", "movedThisRun": ["875:2"]},
+    "archive": {"pageId": "853:18", "name": "90_RURUBU_ARCHIVE_0807_0810"}
+  },
+  "comparators": {
+    "outerBest": {
+      "label": "DB",
+      "nodeId": "881:2",
+      "frontNodeId": "881:131",
+      "reviewSnapshotNodeId": "886:2",
+      "heroNodeId": "881:133",
+      "heroImageHash": "e58ddfa30e3b4bb68e44f1789d984b75cf8a7912",
+      "heroStatus": "LOW_QUALITY_SEMANTIC_PROXY_Q60_REQUIRED",
+      "status": "ADOPT_AS_STRONGEST_COMPOSITION_READABILITY_COMPARATOR_NOT_CURRENT",
+      "nativeTextVisible": 37,
+      "imageFillVisible": 7,
+      "sameParentTextIntersections": 0,
+      "foldGuide": {"nodeId": "881:189", "x": 792.7000122070312, "y": 0, "width": 2, "height": 1122.5},
+      "qa": {"thumbnail": true, "wholeReading": true, "actualSize": true, "structure": true, "assetQualityPass": false},
+      "visualRationale": "DA split-field composition retained; yellow-field microcopy repaired to navy/magenta; bright-skyline subheads anchored on one compact rectangular navy editorial field; first incorrect z-order pass rejected and corrected before adoption"
+    },
+    "insideBest": {
+      "label": "CY",
+      "nodeId": "859:2",
+      "leftNodeId": "859:3",
+      "rightNodeId": "859:132",
+      "reviewSnapshotNodeId": "861:2",
+      "status": "ADOPT_AS_STRONGEST_COMPARATOR_NOT_CURRENT",
+      "nativeTextVisible": 54,
+      "productionImageFillVisible": 6,
+      "sameParentTextIntersections": 0,
+      "foldGuide": {"nodeId": "859:283", "x": 792.7000122070312, "y": 0, "width": 2, "height": 1122.5},
+      "qa": {"thumbnail": true, "wholeReading": true, "actualSize": true, "structure": true}
+    }
+  },
+  "coverHeroQ60": {
+    "driveId": "1YL0WAOzYU3O1FGa23ieRuw_Btu4jbmzr",
+    "fileName": "RURUBU_V5_01_COVER_HERO__FIGMA_1330x1220_Q60.jpg",
+    "mime": "image/jpeg",
+    "dimensions": {"width": 1330, "height": 1220},
+    "bytes": 155439,
+    "sha256": "090880c0ebe101f1321ebac05f22a91b2b61f3a8ac31c8d112dc418412f13ab2",
+    "driveVerified": true,
+    "runtimeMaterialized": true,
+    "officialUploadAttempt": {"postCompleted": false, "failure": "runtime DNS resolution failed for mcp.figma.com before byte upload", "retryThisRun": false},
+    "pluginDirectDriveFetchAttempt": {"completed": false, "failure": "TypeError: Network request failed", "retryThisRun": false},
+    "figmaPlaced": false,
+    "figmaVisuallyVerified": false
+  },
+  "progressClassification": {
+    "generatedThisRun": 0,
+    "newGeneratedAssetAdopted": 0,
+    "newExternalBinaryPlaced": 0,
+    "visualLayoutEditsPlaced": true,
+    "visualLayoutEditsVerified": true,
+    "structureVerified": true
+  },
+  "gate": {
+    "photoRolePass": "9/10",
+    "roleComplete": "9/10",
+    "dominantPhotoPass": "2/3",
+    "v5Complete": false,
+    "v6ProductionStarted": false
+  },
+  "evidence": "learning-runs/2026-08-12-v5-db-contrast-repair.md"
+}
