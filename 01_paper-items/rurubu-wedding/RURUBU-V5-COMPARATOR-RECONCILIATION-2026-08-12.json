@@ -8,37 +8,37 @@
     "inside": {"nodeId": "77:290", "changed": false, "liveReadbackAfterWrites": true}
   },
   "figmaNavigation": {
-    "start": {"pageId": "845:2", "name": "00_RURUBU_START_HERE", "status": "DG outer / DF inside"},
+    "start": {"pageId": "845:2", "name": "00_RURUBU_START_HERE", "status": "DH outer / DF inside", "statusTextNodeId": "845:27"},
     "review": {
       "pageId": "833:2",
       "name": "04_RURUBU_REVIEW",
-      "bestOuterSnapshot": "915:2",
+      "bestOuterSnapshot": "922:2",
       "bestInsideSnapshot": "904:2",
-      "previousOuterRollback": {"nodeId": "886:2", "visible": false},
+      "previousOuterRollback": {"nodeId": "915:2", "visible": false},
       "previousInsideRollback": {"nodeId": "897:2", "visible": false}
     },
-    "working": {"pageId": "834:2", "name": "05_RURUBU_WORKING", "activeFrames": ["834:3", "848:2", "881:2", "899:2", "913:190"]},
+    "working": {"pageId": "834:2", "name": "05_RURUBU_WORKING", "activeFrames": ["834:3", "848:2", "881:2", "899:2", "913:190", "920:2"]},
     "studies": {"pageId": "853:19", "name": "06_RURUBU_0811_STUDIES", "count": 56},
     "archive": {"pageId": "853:18", "name": "90_RURUBU_ARCHIVE_0807_0810", "count": 138}
   },
   "comparators": {
     "outerBest": {
-      "label": "DG",
-      "nodeId": "913:190",
-      "frontNodeId": "913:319",
-      "reviewSnapshotNodeId": "915:2",
-      "dominantPhotoNodeId": "913:378",
+      "label": "DH",
+      "nodeId": "920:2",
+      "frontNodeId": "920:131",
+      "reviewSnapshotNodeId": "922:2",
+      "dominantPhotoNodeId": "920:132",
       "dominantPhotoImageHash": "e3738476f760932bb5b09c9d60f174dd6c84049d",
-      "destinationAnchorNodeId": "913:321",
+      "destinationAnchorNodeId": "920:134",
       "destinationAnchorImageHash": "e58ddfa30e3b4bb68e44f1789d984b75cf8a7912",
       "destinationAnchorStatus": "LOW_QUALITY_SEMANTIC_PROXY_Q60_REQUIRED",
       "status": "ADOPT_AS_STRONGEST_CLEANROOM_COMPOSITION_COMPARATOR_NOT_CURRENT",
       "nativeTextVisible": 35,
       "imageFillVisible": 8,
       "sameParentTextIntersections": 0,
-      "foldGuide": {"nodeId": "913:377", "x": 792.7000122070312, "y": 0, "width": 2, "height": 1122.5},
+      "foldGuide": {"nodeId": "920:190", "x": 792.7000122070312, "y": 0, "width": 2, "height": 1122.5},
       "qa": {"thumbnail": true, "wholeReading": true, "actualSize": true, "structure": true, "dominantPhotoQualityPass": true, "destinationAnchorQualityPass": false},
-      "visualRationale": "DG is materially different from DB: verified travel flat-lay photography owns the front page, native Japanese type sits directly on the photographic surface, the unresolved Yokohama proxy is demoted to a small factual destination anchor, and the lower feature cluster uses asymmetric photo scale instead of a large legacy color field. Screenshot QA caught dark-on-photo readability, repeated front/back imagery, inherited feature-03 collision, and text-box intersections; all were repaired before promotion."
+      "visualRationale": "DH improves DG by extending verified photography deeper into the page, replacing the UI-like feature-02 ink card with direct editorial type plus a narrow rule, inserting a single irregular cream print-paper feature field across the photo/cream transition, shrinking and framing the unresolved Yokohama proxy as a subordinate destination anchor, and increasing unequal photo scale/overlap. 500px thumbnail, spread-reading, 794x1123 actual-size front, and structure QA all passed before promotion."
     },
     "insideBest": {
       "label": "DF",
@@ -73,7 +73,7 @@
     "driveVerified": true,
     "runtimeMaterialized": true,
     "officialUploadAttemptThisRun": {
-      "targetNodeId": "881:133",
+      "targetNodeId": "913:321",
       "uploadTargetIssued": true,
       "postCompleted": false,
       "failure": "runtime DNS resolution failed for mcp.figma.com before exact-byte POST",
@@ -83,29 +83,37 @@
       "investigated": true,
       "createImageAvailable": true,
       "firstEncodedAttemptCompleted": false,
-      "failure": "atob rejected the first encoded payload; Figma write was atomic and no image placement occurred"
+      "failure": "previous encoded payload attempt failed atomically; this run did not repeat the same large one-shot method"
     },
     "figmaPlaced": false,
     "figmaVisuallyVerified": false
   },
   "experiments": {
+    "dhOuter": {
+      "nodeId": "920:2",
+      "status": "ADOPTED_AS_BEST_OUTER_COMPARATOR",
+      "sourceNodeId": "913:190",
+      "reviewSnapshotNodeId": "922:2",
+      "dominantPhotoNodeId": "920:132",
+      "destinationAnchorNodeId": "920:134",
+      "changes": [
+        "verified dominant flat-lay extended to y=676 so photography owns more of the cover",
+        "feature 02 large dark card reduced to a 5px editorial rule with native type directly on photography",
+        "single irregular cream paper field overlaps the photo/cream boundary for feature 01",
+        "low-quality Yokohama destination proxy reduced, framed and rotated as a subordinate factual anchor",
+        "support photography retains unequal scale and stronger asymmetry"
+      ],
+      "verification": {"thumbnail500": true, "wholeReading": true, "actualSizeFront794x1123": true, "structure": true, "sameParentTextIntersections": 0}
+    },
     "dgOuter": {
       "nodeId": "913:190",
-      "status": "ADOPTED_AS_BEST_OUTER_COMPARATOR",
-      "sourceNodeId": "881:2",
+      "status": "SUPERSEDED_AS_BEST_OUTER_BUT_PRESERVED_IN_WORKING_AND_HIDDEN_REVIEW_ROLLBACK",
       "reviewSnapshotNodeId": "915:2",
-      "dominantPhotoNodeId": "913:378",
-      "destinationAnchorNodeId": "913:321",
-      "caughtRegressions": [
-        "first clean-room state repeated the same dominant flat-lay on front and back; back dominant was switched to a distinct existing production image",
-        "dark inherited cover text lost contrast on photography; native text was changed to white and a compact translucent ink field was reused",
-        "inherited feature-03 number/title collided with the new lower editorial field; redundant labels were subtracted",
-        "structure QA detected four text-box intersections and then one remaining kicker/headline intersection; spacing was repaired to zero"
-      ]
+      "preserved": true
     },
     "dbOuter": {
       "nodeId": "881:2",
-      "status": "SUPERSEDED_AS_BEST_OUTER_BUT_PRESERVED_IN_WORKING_AND_HIDDEN_REVIEW_ROLLBACK",
+      "status": "PRESERVED_IN_WORKING_AS_EARLIER_OUTER_COMPARATOR",
       "reviewSnapshotNodeId": "886:2",
       "preserved": true
     },
@@ -131,5 +139,5 @@
     "v5Complete": false,
     "v6ProductionStarted": false
   },
-  "evidence": "learning-runs/2026-08-12-v5-dg-flatlay-editorial-cleanroom.md"
+  "evidence": "learning-runs/2026-08-12-v5-dh-overlap-paper-editorial-cleanroom.md"
 }
