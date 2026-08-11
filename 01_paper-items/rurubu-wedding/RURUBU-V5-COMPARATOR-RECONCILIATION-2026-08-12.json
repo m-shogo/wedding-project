@@ -8,17 +8,17 @@
     "inside": {"nodeId": "77:290", "changed": false, "liveReadbackAfterWrites": true}
   },
   "figmaNavigation": {
-    "start": {"pageId": "845:2", "name": "00_RURUBU_START_HERE", "status": "DB outer / DE inside"},
+    "start": {"pageId": "845:2", "name": "00_RURUBU_START_HERE", "status": "DB outer / DF inside"},
     "review": {
       "pageId": "833:2",
       "name": "04_RURUBU_REVIEW",
       "bestOuterSnapshot": "886:2",
-      "bestInsideSnapshot": "897:2",
+      "bestInsideSnapshot": "904:2",
       "previousOuterRollback": {"nodeId": "878:2", "visible": false},
-      "previousInsideRollback": {"nodeId": "861:2", "visible": false}
+      "previousInsideRollback": {"nodeId": "897:2", "visible": false}
     },
-    "working": {"pageId": "834:2", "name": "05_RURUBU_WORKING", "activeFrames": ["834:3", "848:2", "881:2", "894:2"]},
-    "studies": {"pageId": "853:19", "name": "06_RURUBU_0811_STUDIES", "count": 55, "movedThisRun": ["859:2", "891:2"]},
+    "working": {"pageId": "834:2", "name": "05_RURUBU_WORKING", "activeFrames": ["834:3", "848:2", "881:2", "899:2"]},
+    "studies": {"pageId": "853:19", "name": "06_RURUBU_0811_STUDIES", "count": 56, "movedThisRun": ["894:2"]},
     "archive": {"pageId": "853:18", "name": "90_RURUBU_ARCHIVE_0807_0810", "count": 138}
   },
   "comparators": {
@@ -36,21 +36,29 @@
       "sameParentTextIntersections": 0,
       "foldGuide": {"nodeId": "881:189", "x": 792.7000122070312, "y": 0, "width": 2, "height": 1122.5},
       "qa": {"thumbnail": true, "wholeReading": true, "actualSize": true, "structure": true, "assetQualityPass": false},
-      "visualRationale": "DB retains the strongest outer composition/readability balance. A later DC experiment increased photo overlap but amplified proxy-raster softness at actual size and was rejected rather than promoted."
+      "visualRationale": "DB remains the strongest outer comparator, but its dominant hero is still the rejected low-quality semantic proxy. No outer promotion can close V5 until a quality-passing hero is exactly placed and visually verified."
     },
     "insideBest": {
-      "label": "DE",
-      "nodeId": "894:2",
-      "leftNodeId": "894:3",
-      "rightNodeId": "894:132",
-      "reviewSnapshotNodeId": "897:2",
+      "label": "DF",
+      "nodeId": "899:2",
+      "leftNodeId": "899:3",
+      "rightNodeId": "899:132",
+      "reviewSnapshotNodeId": "904:2",
       "status": "ADOPT_AS_STRONGEST_COMPARATOR_NOT_CURRENT",
-      "nativeTextVisible": 54,
+      "nativeTextVisible": 53,
       "productionImageFillVisible": 6,
       "sameParentTextIntersections": 0,
-      "foldGuide": {"nodeId": "894:283", "x": 792.7000122070312, "y": 0, "width": 2, "height": 1122.5},
+      "foldGuide": {"nodeId": "899:283", "x": 792.7000122070312, "y": 0, "width": 2, "height": 1122.5},
       "qa": {"thumbnail": true, "wholeReading": true, "actualSize": true, "structure": true},
-      "visualRationale": "CY photo-led structure retained while the lower Q&A was rebuilt with one magenta section anchor, materially stronger Q1 scale, and compact cyan/yellow Q2/Q3 notes. No new card system was introduced and existing image hashes were preserved."
+      "productionImageHashes": {
+        "profileA": {"nodeId": "899:7", "hash": "a39dd297eb9de572317a5ce57f0af12e8597b156"},
+        "profileB": {"nodeId": "899:12", "hash": "2359f635b4926a83e22ca1f9214e75c709291152"},
+        "history": {"nodeId": "899:133", "hash": "539c259be8036b481d06b4f76db9a39b407d90e8"},
+        "memory1": {"nodeId": "899:267", "hash": "adbb8e529451a81dd25e4eb29bf068655569ce25"},
+        "memory2": {"nodeId": "899:268", "hash": "439a719d73f28e8dd2889f2026cccb15f345ec63"},
+        "memory4": {"nodeId": "899:269", "hash": "c09aa82e7b2ac75708707345c6f845452bf67663"}
+      },
+      "visualRationale": "DF replaces the remaining profile-form feel with photo-as-architecture: a dominant edge crop, an overlapping secondary crop, native Japanese headline in an adjacent cream text-safe field, dominant Q1 pull quote, and compact Q2/Q3 side notes. The first headline-occlusion state and one Q1 micro-label collision were caught and repaired before adoption."
     }
   },
   "coverHeroQ60": {
@@ -73,10 +81,20 @@
     "figmaVisuallyVerified": false
   },
   "experiments": {
-    "dcOuter": {
-      "nodeId": "891:2",
-      "status": "REJECTED_AND_MOVED_TO_STUDIES",
-      "reason": "larger tilted proxy increased visible raster softness at actual size and worsened destination-microcopy wrapping"
+    "dfInside": {
+      "nodeId": "899:2",
+      "status": "ADOPTED_AS_BEST_INSIDE_COMPARATOR",
+      "sourceNodeId": "894:2",
+      "reviewSnapshotNodeId": "904:2",
+      "caughtRegressions": [
+        "groom-photo enlargement occluded the first characters of the Japanese profile headline; crop width, headline position and z-order were repaired",
+        "enlarged Q1 numeral collided with inherited BU_Q1_B_MICROLABEL; redundant micro-label was hidden"
+      ]
+    },
+    "deInside": {
+      "nodeId": "894:2",
+      "status": "SUPERSEDED_AND_MOVED_TO_STUDIES",
+      "preserved": true
     }
   },
   "progressClassification": {
@@ -94,5 +112,5 @@
     "v5Complete": false,
     "v6ProductionStarted": false
   },
-  "evidence": "learning-runs/2026-08-12-v5-de-dense-editorial-qa.md"
+  "evidence": "learning-runs/2026-08-12-v5-df-asymmetric-profile-feature.md"
 }
