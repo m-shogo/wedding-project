@@ -7,21 +7,28 @@
     "outer": {"nodeId": "77:18", "changed": false},
     "inside": {"nodeId": "77:290", "changed": false}
   },
+  "figmaNavigation": {
+    "start": {"pageId": "845:2", "name": "00_RURUBU_START_HERE"},
+    "current": {"pageId": "0:1", "name": "01_RURUBU_WEDDING", "topLevelCount": 11},
+    "review": {"pageId": "833:2", "name": "04_RURUBU_REVIEW", "topLevelCount": 8},
+    "working": {"pageId": "834:2", "name": "05_RURUBU_WORKING", "activeFrames": ["834:3", "848:2", "818:2"]},
+    "studies": {"pageId": "853:19", "name": "06_RURUBU_0811_STUDIES", "frameCount": 46},
+    "archive": {"pageId": "853:18", "name": "90_RURUBU_ARCHIVE_0807_0810", "frameCount": 138}
+  },
   "comparators": {
     "outerBest": {
-      "label": "CT",
-      "nodeId": "827:2",
-      "frontNodeId": "827:131",
-      "heroNodeId": "827:133",
+      "label": "CV",
+      "nodeId": "848:2",
+      "frontNodeId": "848:131",
+      "heroNodeId": "848:133",
       "heroImageHash": "e58ddfa30e3b4bb68e44f1789d984b75cf8a7912",
+      "heroNaturalSize": {"width": 640, "height": 587},
       "heroStatus": "LOW_QUALITY_SEMANTIC_PROXY_Q60_REQUIRED",
-      "status": "ADOPT_AS_STRONGEST_COMPOSITION_COMPARATOR_NOT_CURRENT",
+      "status": "ADOPT_AS_STRONGEST_COMPOSITION_TYPOGRAPHY_COMPARATOR_NOT_CURRENT",
       "nativeTextVisible": 37,
       "imageFillVisible": 7,
       "sameParentTextIntersections": 0,
-      "headlineBarNodeId": "827:143",
-      "feature02InkStripNodeId": "827:186",
-      "foldGuide": {"nodeId": "827:185", "x": 792.7, "y": 0, "width": 2, "height": 1122.5},
+      "foldGuide": {"nodeId": "848:186", "x": 792.7000122070312, "y": 0, "width": 2, "height": 1122.5},
       "qa": {"thumbnail": true, "wholeReading": true, "actualSize": true, "structure": true, "assetQualityPass": false}
     },
     "insideBest": {
@@ -43,6 +50,7 @@
     "sha256": "090880c0ebe101f1321ebac05f22a91b2b61f3a8ac31c8d112dc418412f13ab2",
     "driveVerified": true,
     "runtimeMaterialized": true,
+    "localRuntimePathObserved": "/mnt/data/RURUBU_V5_01_COVER_HERO__FIGMA_1330x1220_Q60.jpg",
     "partialPluginDataStaging": {
       "nodeId": "80:18",
       "namespace": "rurubu_q60_20260811",
@@ -52,11 +60,9 @@
       ],
       "complete": false
     },
-    "exactPlacementTarget": {"frameNodeId": "825:2", "heroNodeId": "825:133", "stillProxyFilled": true},
     "figmaPlaced": false,
     "figmaVisuallyVerified": false,
-    "blocker": "official upload target resolves under mcp.figma.com; execution environment again failed DNS resolution before binary POST",
-    "loopBreaker": "do not retry the same external upload path again without a changed transport method"
+    "loopBreaker": "do not count raw download, upload-target creation, or partial chunk staging as placement"
   },
   "gate": {
     "photoRolePass": "9/10",
@@ -65,5 +71,5 @@
     "v5Complete": false,
     "v6ProductionStarted": false
   },
-  "evidence": "learning-runs/2026-08-11-v5-ct-print-headline-and-caption-contrast.md"
+  "evidence": "learning-runs/2026-08-11-v5-cv-review-navigation-qa.md"
 }
