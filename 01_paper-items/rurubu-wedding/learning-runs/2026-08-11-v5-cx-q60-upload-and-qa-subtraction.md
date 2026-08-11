@@ -75,6 +75,14 @@ Programmatic structure QA found one sub-pixel intersection (`AUTH_COMMON_TAPE_TX
 
 Key photo hashes remained unchanged, including profile A `a39dd297eb9de572317a5ce57f0af12e8597b156`, profile B `2359f635b4926a83e22ca1f9214e75c709291152`, history `539c259be8036b481d06b4f76db9a39b407d90e8`, memory lead `adbb8e529451a81dd25e4eb29bf068655569ce25`, and the two supporting memory hashes.
 
+## Review / navigation reconciliation
+- Review best-inside snapshot replaced with `BEST INSIDE — CX — source 854:187`, new review snapshot `855:2`.
+- Review label updated to `BEST CLEANROOM — INSIDE / CX`.
+- Start page now reads `Best comparator: CV outer / CX inside` and shows Studies `48` / Archive `138`.
+- Working page returned to exactly three active frames: CU Q60 receiver, CV outer comparator, CX inside comparator.
+- Start-page screenshot QA: PASS; no wrapping/collision regression.
+- Review four-quadrant Best-vs-Current screenshot QA: PASS; Current snapshots remained unchanged.
+
 ## Adoption decision
 - CX: ADOPT as strongest inside comparator over CM.
 - CV outer: RETAIN as strongest outer comparator; asset-quality gate still fails on the 640×587 semantic proxy.
