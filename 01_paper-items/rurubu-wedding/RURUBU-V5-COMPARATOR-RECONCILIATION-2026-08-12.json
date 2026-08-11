@@ -8,35 +8,37 @@
     "inside": {"nodeId": "77:290", "changed": false, "liveReadbackAfterWrites": true}
   },
   "figmaNavigation": {
-    "start": {"pageId": "845:2", "name": "00_RURUBU_START_HERE", "status": "DB outer / DF inside"},
+    "start": {"pageId": "845:2", "name": "00_RURUBU_START_HERE", "status": "DG outer / DF inside"},
     "review": {
       "pageId": "833:2",
       "name": "04_RURUBU_REVIEW",
-      "bestOuterSnapshot": "886:2",
+      "bestOuterSnapshot": "915:2",
       "bestInsideSnapshot": "904:2",
-      "previousOuterRollback": {"nodeId": "878:2", "visible": false},
+      "previousOuterRollback": {"nodeId": "886:2", "visible": false},
       "previousInsideRollback": {"nodeId": "897:2", "visible": false}
     },
-    "working": {"pageId": "834:2", "name": "05_RURUBU_WORKING", "activeFrames": ["834:3", "848:2", "881:2", "899:2"]},
-    "studies": {"pageId": "853:19", "name": "06_RURUBU_0811_STUDIES", "count": 56, "movedThisRun": ["894:2"]},
+    "working": {"pageId": "834:2", "name": "05_RURUBU_WORKING", "activeFrames": ["834:3", "848:2", "881:2", "899:2", "913:190"]},
+    "studies": {"pageId": "853:19", "name": "06_RURUBU_0811_STUDIES", "count": 56},
     "archive": {"pageId": "853:18", "name": "90_RURUBU_ARCHIVE_0807_0810", "count": 138}
   },
   "comparators": {
     "outerBest": {
-      "label": "DB",
-      "nodeId": "881:2",
-      "frontNodeId": "881:131",
-      "reviewSnapshotNodeId": "886:2",
-      "heroNodeId": "881:133",
-      "heroImageHash": "e58ddfa30e3b4bb68e44f1789d984b75cf8a7912",
-      "heroStatus": "LOW_QUALITY_SEMANTIC_PROXY_Q60_REQUIRED",
-      "status": "ADOPT_AS_STRONGEST_COMPOSITION_READABILITY_COMPARATOR_NOT_CURRENT",
-      "nativeTextVisible": 37,
-      "imageFillVisible": 7,
+      "label": "DG",
+      "nodeId": "913:190",
+      "frontNodeId": "913:319",
+      "reviewSnapshotNodeId": "915:2",
+      "dominantPhotoNodeId": "913:378",
+      "dominantPhotoImageHash": "e3738476f760932bb5b09c9d60f174dd6c84049d",
+      "destinationAnchorNodeId": "913:321",
+      "destinationAnchorImageHash": "e58ddfa30e3b4bb68e44f1789d984b75cf8a7912",
+      "destinationAnchorStatus": "LOW_QUALITY_SEMANTIC_PROXY_Q60_REQUIRED",
+      "status": "ADOPT_AS_STRONGEST_CLEANROOM_COMPOSITION_COMPARATOR_NOT_CURRENT",
+      "nativeTextVisible": 35,
+      "imageFillVisible": 8,
       "sameParentTextIntersections": 0,
-      "foldGuide": {"nodeId": "881:189", "x": 792.7000122070312, "y": 0, "width": 2, "height": 1122.5},
-      "qa": {"thumbnail": true, "wholeReading": true, "actualSize": true, "structure": true, "assetQualityPass": false},
-      "visualRationale": "DB remains the strongest outer comparator, but its dominant hero is still the rejected low-quality semantic proxy. No outer promotion can close V5 until a quality-passing hero is exactly placed and visually verified."
+      "foldGuide": {"nodeId": "913:377", "x": 792.7000122070312, "y": 0, "width": 2, "height": 1122.5},
+      "qa": {"thumbnail": true, "wholeReading": true, "actualSize": true, "structure": true, "dominantPhotoQualityPass": true, "destinationAnchorQualityPass": false},
+      "visualRationale": "DG is materially different from DB: verified travel flat-lay photography owns the front page, native Japanese type sits directly on the photographic surface, the unresolved Yokohama proxy is demoted to a small factual destination anchor, and the lower feature cluster uses asymmetric photo scale instead of a large legacy color field. Screenshot QA caught dark-on-photo readability, repeated front/back imagery, inherited feature-03 collision, and text-box intersections; all were repaired before promotion."
     },
     "insideBest": {
       "label": "DF",
@@ -58,7 +60,7 @@
         "memory2": {"nodeId": "899:268", "hash": "439a719d73f28e8dd2889f2026cccb15f345ec63"},
         "memory4": {"nodeId": "899:269", "hash": "c09aa82e7b2ac75708707345c6f845452bf67663"}
       },
-      "visualRationale": "DF replaces the remaining profile-form feel with photo-as-architecture: a dominant edge crop, an overlapping secondary crop, native Japanese headline in an adjacent cream text-safe field, dominant Q1 pull quote, and compact Q2/Q3 side notes. The first headline-occlusion state and one Q1 micro-label collision were caught and repaired before adoption."
+      "visualRationale": "DF remains the strongest inside comparator: dominant edge crop, overlapping secondary crop, native Japanese headline in an adjacent cream text-safe field, dominant Q1 pull quote, and compact Q2/Q3 side notes."
     }
   },
   "coverHeroQ60": {
@@ -71,36 +73,53 @@
     "driveVerified": true,
     "runtimeMaterialized": true,
     "officialUploadAttemptThisRun": {
-      "targetNodeId": "891:133",
+      "targetNodeId": "881:133",
       "uploadTargetIssued": true,
       "postCompleted": false,
       "failure": "runtime DNS resolution failed for mcp.figma.com before exact-byte POST",
       "retryAfterRepeatFailure": false
     },
+    "fallbackCreateImageAttempt": {
+      "investigated": true,
+      "createImageAvailable": true,
+      "firstEncodedAttemptCompleted": false,
+      "failure": "atob rejected the first encoded payload; Figma write was atomic and no image placement occurred"
+    },
     "figmaPlaced": false,
     "figmaVisuallyVerified": false
   },
   "experiments": {
+    "dgOuter": {
+      "nodeId": "913:190",
+      "status": "ADOPTED_AS_BEST_OUTER_COMPARATOR",
+      "sourceNodeId": "881:2",
+      "reviewSnapshotNodeId": "915:2",
+      "dominantPhotoNodeId": "913:378",
+      "destinationAnchorNodeId": "913:321",
+      "caughtRegressions": [
+        "first clean-room state repeated the same dominant flat-lay on front and back; back dominant was switched to a distinct existing production image",
+        "dark inherited cover text lost contrast on photography; native text was changed to white and a compact translucent ink field was reused",
+        "inherited feature-03 number/title collided with the new lower editorial field; redundant labels were subtracted",
+        "structure QA detected four text-box intersections and then one remaining kicker/headline intersection; spacing was repaired to zero"
+      ]
+    },
+    "dbOuter": {
+      "nodeId": "881:2",
+      "status": "SUPERSEDED_AS_BEST_OUTER_BUT_PRESERVED_IN_WORKING_AND_HIDDEN_REVIEW_ROLLBACK",
+      "reviewSnapshotNodeId": "886:2",
+      "preserved": true
+    },
     "dfInside": {
       "nodeId": "899:2",
       "status": "ADOPTED_AS_BEST_INSIDE_COMPARATOR",
-      "sourceNodeId": "894:2",
-      "reviewSnapshotNodeId": "904:2",
-      "caughtRegressions": [
-        "groom-photo enlargement occluded the first characters of the Japanese profile headline; crop width, headline position and z-order were repaired",
-        "enlarged Q1 numeral collided with inherited BU_Q1_B_MICROLABEL; redundant micro-label was hidden"
-      ]
-    },
-    "deInside": {
-      "nodeId": "894:2",
-      "status": "SUPERSEDED_AND_MOVED_TO_STUDIES",
-      "preserved": true
+      "reviewSnapshotNodeId": "904:2"
     }
   },
   "progressClassification": {
     "generatedThisRun": 0,
     "newGeneratedAssetAdopted": 0,
     "newExternalBinaryPlaced": 0,
+    "existingVerifiedImageReusedAsDominant": true,
     "visualLayoutEditsPlaced": true,
     "visualLayoutEditsVerified": true,
     "structureVerified": true
@@ -108,9 +127,9 @@
   "gate": {
     "photoRolePass": "9/10",
     "roleComplete": "9/10",
-    "dominantPhotoPass": "2/3",
+    "dominantPhotoPass": "3/3 compositionally, destination asset lifecycle still blocked",
     "v5Complete": false,
     "v6ProductionStarted": false
   },
-  "evidence": "learning-runs/2026-08-12-v5-df-asymmetric-profile-feature.md"
+  "evidence": "learning-runs/2026-08-12-v5-dg-flatlay-editorial-cleanroom.md"
 }
