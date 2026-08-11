@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "scope": "RURUBU_WEDDING_V5_ONLY",
+  "date": "2026-08-11",
+  "authority": "live Figma + Drive readback + GitHub main",
+  "current": {
+    "outer": {"nodeId": "77:18", "changed": false},
+    "inside": {"nodeId": "77:290", "changed": false}
+  },
+  "comparators": {
+    "outerBest": {
+      "label": "CE",
+      "nodeId": "801:284",
+      "frontNodeId": "801:413",
+      "status": "ADOPT_AS_STRONGEST_COMPARATOR_NOT_CURRENT",
+      "nativeTextVisible": 37,
+      "imageFillVisible": 7,
+      "sameParentTextIntersections": 0,
+      "heroNodeId": "801:415",
+      "heroKnownTemporaryHash": "539c259be8036b481d06b4f76db9a39b407d90e8",
+      "heroHeight": 700,
+      "foldGuide": {"nodeId": "801:466", "x": 792.7000122070312, "width": 2, "height": 1122.5}
+    },
+    "insideBest": {
+      "label": "CC",
+      "nodeId": "801:2",
+      "status": "ADOPT_AS_STRONGEST_COMPARATOR_NOT_CURRENT",
+      "nativeTextVisible": 54,
+      "imageFillVisible": 6,
+      "sameParentTextIntersections": 0,
+      "foldGuide": {"nodeId": "801:283", "x": 792.7000122070312, "width": 2, "height": 1122.5}
+    }
+  },
+  "coverHeroQ60": {
+    "driveId": "1YL0WAOzYU3O1FGa23ieRuw_Btu4jbmzr",
+    "fileName": "RURUBU_V5_01_COVER_HERO__FIGMA_1330x1220_Q60.jpg",
+    "mime": "image/jpeg",
+    "bytes": 155439,
+    "sha256": "090880c0ebe101f1321ebac05f22a91b2b61f3a8ac31c8d112dc418412f13ab2",
+    "driveVerified": true,
+    "runtimeMaterialized": true,
+    "freshUploadTargetNodeId": "794:133",
+    "figmaPlaced": false,
+    "figmaVisuallyVerified": false,
+    "blocker": "execution environment cannot reach mcp.figma.com upload POST endpoint"
+  },
+  "gate": {
+    "photoRolePass": "9/10",
+    "dominantPhotoPass": "2/3",
+    "v5Complete": false,
+    "v6ProductionStarted": false
+  },
+  "generatedNewImages": 0,
+  "newlyAdoptedGeneratedImages": 0,
+  "evidence": "learning-runs/2026-08-11-v5-cc-ce-cleanroom.md"
+}
