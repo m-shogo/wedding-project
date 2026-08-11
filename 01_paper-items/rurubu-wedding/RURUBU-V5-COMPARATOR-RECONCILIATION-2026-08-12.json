@@ -8,40 +8,42 @@
     "inside": {"nodeId": "77:290", "changed": false, "liveReadbackAfterWrites": true}
   },
   "figmaNavigation": {
-    "start": {"pageId": "845:2", "name": "00_RURUBU_START_HERE", "status": "DK outer / DF inside", "statusTextNodeId": "845:27", "reviewBodyNodeId": "845:16", "reviewBodyStatus": "Best DK / DF", "workingCount": 4},
+    "start": {"pageId": "845:2", "name": "00_RURUBU_START_HERE", "status": "DM outer / DF inside", "statusTextNodeId": "845:27", "reviewBodyNodeId": "845:16", "reviewBodyStatus": "Best DM / DF", "workingCount": 4},
     "review": {
       "pageId": "833:2",
       "name": "04_RURUBU_REVIEW",
-      "bestOuterSnapshot": "946:2",
+      "bestOuterSnapshot": "956:2",
       "bestInsideSnapshot": "904:2",
-      "previousOuterRollback": {"nodeId": "936:2", "label": "DJ", "visible": false},
+      "previousOuterRollback": {"nodeId": "946:2", "label": "DK", "visible": false},
       "previousInsideRollback": {"nodeId": "897:2", "visible": false}
     },
-    "working": {"pageId": "834:2", "name": "05_RURUBU_WORKING", "activeFrames": ["834:3", "848:2", "899:2", "945:2"], "layout": "single compact row"},
-    "studies": {"pageId": "853:19", "name": "06_RURUBU_0811_STUDIES", "count": 63, "movedThisRun": ["881:2", "913:190", "920:2", "925:2", "933:2", "939:2", "942:2"]},
+    "working": {"pageId": "834:2", "name": "05_RURUBU_WORKING", "activeFrames": ["834:3", "848:2", "899:2", "955:2"], "layout": "single compact row"},
+    "studies": {"pageId": "853:19", "name": "06_RURUBU_0811_STUDIES", "count": 64, "movedThisRun": ["945:2"]},
     "archive": {"pageId": "853:18", "name": "90_RURUBU_ARCHIVE_0807_0810", "count": 138}
   },
   "comparators": {
     "outerBest": {
-      "label": "DK",
-      "nodeId": "945:2",
-      "frontNodeId": "945:131",
-      "reviewSnapshotNodeId": "946:2",
-      "dominantPhotoNodeId": "945:132",
+      "label": "DM",
+      "nodeId": "955:2",
+      "frontNodeId": "955:131",
+      "reviewSnapshotNodeId": "956:2",
+      "dominantPhotoNodeId": "955:132",
       "dominantPhotoImageHash": "adbb8e529451a81dd25e4eb29bf068655569ce25",
       "dominantPhotoSemantic": "verified travel-memory coast image; explicitly not represented as Yokohama",
-      "destinationAnchorNodeId": "945:134",
+      "destinationAnchorNodeId": "955:134",
       "destinationAnchorImageHash": "e58ddfa30e3b4bb68e44f1789d984b75cf8a7912",
       "destinationAnchorStatus": "LOW_QUALITY_SEMANTIC_PROXY_Q60_REQUIRED",
-      "supportPhotoNodeId": "945:155",
-      "supportPhotoImageHash": "d76eb07d83d042f15044c8bc6bf68d73a73cd77d",
+      "supportPhotos": [
+        {"nodeId": "955:153", "imageHash": "e3738476f760932bb5b09c9d60f174dd6c84049d", "role": "tilted travel-object support"},
+        {"nodeId": "955:155", "imageHash": "d76eb07d83d042f15044c8bc6bf68d73a73cd77d", "role": "guest-trip support"}
+      ],
       "status": "ADOPT_AS_STRONGEST_CLEANROOM_COMPOSITION_COMPARATOR_NOT_CURRENT",
       "nativeTextVisible": 39,
-      "imageFillVisible": 7,
+      "imageFillVisible": 8,
       "sameParentTextIntersections": 0,
-      "foldGuide": {"nodeId": "945:190", "x": 792.7000122070312, "y": 0, "width": 2, "height": 1122.5},
-      "qa": {"thumbnail500": true, "wholeReading1024": true, "actualSizeFront794x1123": true, "structure": true, "dominantPhotoQualityPass": true, "destinationAnchorQualityPass": false},
-      "visualRationale": "DK is selected from scratch over DJ and concurrent live 939/942 because it keeps the verified travel-memory photograph as the full page substrate while giving much more work to large native Japanese headline typography. The former broad magenta headline block is reduced to a thin slanted accent rule; feature 01 remains one irregular paper fragment; feature 02 is direct-on-photo; the unresolved Yokohama proxy remains a small tilted factual anchor; and feature 03 uses an unequal support photo separated from native type by a thin editorial rule. An actual-size feature-03/photo collision was detected and repaired before promotion. Thumbnail, whole-spread, actual-size, and structure QA passed."
+      "foldGuide": {"nodeId": "955:190", "x": 792.7000122070312, "y": 0, "width": 2, "height": 1122.5},
+      "qa": {"thumbnail500": true, "wholeReading800": true, "actualSizeFront794x1123": true, "structure": true, "dominantPhotoQualityPass": true, "destinationAnchorQualityPass": false},
+      "visualRationale": "DM is selected from scratch over DK because it reduces the feature-01 paper mass and increases irregular photo-led rhythm with a three-photo lower/right cluster. The verified travel-memory photograph remains the full-page substrate, the large native Japanese headline remains dominant, feature 02 stays direct-on-photo, the unresolved Yokohama proxy remains small and factual, and support photographs use unequal scale/rotation instead of cards. First structure QA detected one 01 numeral/headline text-box intersection; the headline was shifted and final structure returned to zero intersections. Thumbnail, whole-spread, actual-size, and structure QA passed."
     },
     "insideBest": {
       "label": "DF",
@@ -75,47 +77,53 @@
     "sha256": "090880c0ebe101f1321ebac05f22a91b2b61f3a8ac31c8d112dc418412f13ab2",
     "driveVerified": true,
     "runtimeMaterialized": true,
-    "officialUploadAttemptThisRun": {"attempted": true, "targetNodeId": "933:134", "result": "FAILED_BEFORE_UPLOAD", "reason": "mcp.figma.com DNS resolution failure during raw-byte POST"},
-    "methodSwitchedAfterFailure": true,
+    "roleDerivativesThisRun": [
+      {"dimensions": {"width": 560, "height": 514}, "driveId": "1YwRdAauE1-CtXV3VD08CEvn7b-lFYlGX", "visuallyQa": true, "driveReadback": true, "figmaAdopted": false, "figmaPlaced": false},
+      {"dimensions": {"width": 240, "height": 220}, "driveId": "1aVp34U5qUTqd9FR3AILmJggdWwY1lAJb", "visuallyQa": true, "driveReadback": true, "figmaAdopted": false, "figmaPlaced": false}
+    ],
+    "transportAttemptsThisRun": [
+      {"method": "official Figma upload_assets raw-byte POST", "result": "FAILED_BEFORE_UPLOAD", "reason": "mcp.figma.com DNS resolution failure"},
+      {"method": "inline figma.createImage bounded payload", "result": "FAILED_ATOMICALLY_BEFORE_MUTATION", "reason": "invalid encoded input on first attempt; unsupported image on second bounded attempt"}
+    ],
+    "methodSwitchedAfterRepeatedFailure": true,
     "figmaPlaced": false,
     "figmaVisuallyVerified": false
   },
   "experiments": {
-    "dkOuter": {
-      "nodeId": "945:2",
-      "sourceNodeId": "933:2",
-      "reviewSnapshotNodeId": "946:2",
+    "dmOuter": {
+      "nodeId": "955:2",
+      "sourceNodeId": "945:2",
+      "reviewSnapshotNodeId": "956:2",
       "status": "ADOPTED_AS_BEST_OUTER_COMPARATOR",
       "changes": [
-        "replaced broad headline card with much larger native Japanese type plus a thin slanted magenta editorial rule",
-        "kept verified travel-memory photography as full-page substrate",
-        "increased intentional scale contrast between destination anchor, feature-01 paper fragment, and feature-03 support photo",
-        "kept unresolved Yokohama proxy factual and small",
-        "detected and repaired feature-03 typography/support-photo collision at actual size",
-        "compared concurrent live 939:2 and 942:2 before promotion and preserved both as studies"
+        "compressed feature-01 paper mass instead of adding another card",
+        "revealed existing verified travel-object photograph as a tilted support image",
+        "resized and staggered the guest-trip support photograph",
+        "kept the Yokohama semantic proxy factual and small",
+        "preserved large native Japanese headline typography and direct-on-photo feature 02",
+        "detected and repaired one feature-01 text-box collision before promotion"
       ],
-      "verification": {"thumbnail500": true, "wholeReading1024": true, "actualSizeFront794x1123": true, "structure": true, "sameParentTextIntersections": 0}
+      "verification": {"thumbnail500": true, "wholeReading800": true, "actualSizeFront794x1123": true, "structure": true, "sameParentTextIntersections": 0}
     },
-    "djOuter": {"nodeId": "933:2", "status": "SUPERSEDED_AS_BEST_OUTER_PRESERVED_IN_STUDIES_AND_HIDDEN_REVIEW_ROLLBACK", "reviewSnapshotNodeId": "936:2", "preserved": true},
-    "concurrent939": {"nodeId": "939:2", "status": "REJECTED_AS_BEST_AFTER_THUMBNAIL_COMPARISON_PRESERVED_IN_STUDIES"},
-    "concurrent942": {"nodeId": "942:2", "status": "REJECTED_AS_BEST_AFTER_THUMBNAIL_COMPARISON_PRESERVED_IN_STUDIES"},
+    "dkOuter": {"nodeId": "945:2", "status": "SUPERSEDED_AS_BEST_OUTER_PRESERVED_IN_STUDIES_AND_HIDDEN_REVIEW_ROLLBACK", "reviewSnapshotNodeId": "946:2", "preserved": true},
     "dfInside": {"nodeId": "899:2", "status": "ADOPTED_AS_BEST_INSIDE_COMPARATOR", "reviewSnapshotNodeId": "904:2"}
   },
   "progressClassification": {
     "generatedThisRun": 0,
     "newGeneratedAssetAdopted": 0,
     "newExternalBinaryPlaced": 0,
-    "existingVerifiedImageReusedAsDominant": true,
+    "roleDerivativesDriveSavedAndReadbackButNotPlaced": 2,
+    "existingVerifiedImageReusedAsSupport": true,
     "visualLayoutEditsPlaced": true,
     "visualLayoutEditsVerified": true,
     "structureVerified": true
   },
   "gate": {
-    "photoRolePass": "9/10",
-    "roleComplete": "9/10",
+    "photoRolePass": "9/10 comparator gate; canonical asset ledger Current authority remains unchanged until exact placement",
+    "roleComplete": "9/10 comparator gate; no Q60 role promotion",
     "dominantPhotoPass": "3/3 compositionally, destination asset lifecycle still blocked",
     "v5Complete": false,
     "v6ProductionStarted": false
   },
-  "evidence": "learning-runs/2026-08-12-v5-dk-japanese-travel-mag-cleanroom.md"
+  "evidence": "learning-runs/2026-08-12-v5-dm-photo-cluster-cleanroom.md"
 }
