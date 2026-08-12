@@ -1,7 +1,7 @@
 # ADD-03 当日タイムテーブルボード — QA
 
 Status: `CURRENT / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / PRODUCTION_PROMOTED / ROLLBACK_SAFE / NOT_PRINT_READY`
-Date: 2026-08-12
+Date: 2026-08-13
 
 ## Authority
 
@@ -49,6 +49,38 @@ Post-edit structure readback:
 
 Decision: `SELLABLE_VISUAL_QA_PASS` remains valid and the semantic placeholder presentation is cleaner. No Drive asset write was required.
 
+## Fresh visual polish — 2026-08-13
+
+A new whole-item / reading-scale / actual-size review found one remaining generic-template signal: `WEDDING JOURNEY` in the left date rail was decorative English filler without an informational role. The date, city, event hierarchy, rail geometry and Japanese title already carry the concept, so keeping that phrase made the board feel more like a pre-made travel template than an intentional wedding itinerary.
+
+Rollback-safe change:
+
+- rollback: `8:2 / ROLLBACK_ADD03_PRE_RAIL_FILLER_REMOVAL_2026_08_13` (hidden)
+- production root preserved: `1:5 / FRAME_TIMETABLE_BOARD`
+- changed node: `6:35`, renamed to `TXT_V2_RAIL_LABEL_HIDDEN_REDUNDANT_EN_FILLER`
+- previous visible copy: `WEDDING JOURNEY`
+- production action: hidden only; the native text node remains editable and recoverable
+
+Post-change screenshot QA:
+
+- thumbnail at 500px: PASS — the board reads more cleanly and the left rail no longer competes with the date hierarchy
+- reading scale at 1000px: PASS — `本日の旅程`, ceremony/reception times and the sand TBD interval remain the clear reading order
+- actual size at `1400 × 1980`: PASS — no collision, clipping or hierarchy loss introduced
+
+Post-change structure readback:
+
+- native editable text nodes: `19`
+- visible native text nodes: `18`
+- IMAGE fill nodes: `0`
+- visible text outside production root: `0`
+- root remains `1400 × 1980`, `clipsContent=true`
+- rollback `8:2` is present and hidden
+- no rasterization or flattening introduced
+
+Drive authority was read back immediately before the change and remains `1uVcXv2Xs0H7juheHk977pt7YxLMJez_j / ADD-03_当日タイムテーブルボード`. No Drive asset write was required because imagery was not the visual bottleneck.
+
+Decision: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS` remains valid. The improvement specifically removes non-functional English filler rather than adding decoration.
+
 ## Fact QA
 
 - [x] date is exactly `2026.10.24 SAT`
@@ -69,9 +101,10 @@ Current promoted production evidence:
 - [x] no missing or duplicated semantic event node observed in production
 - [x] production remains `1400 × 1980`; vendor/A2-A3 output mapping remains deferred rather than guessed
 
-Post-promotion structure readback recorded in the reopened evidence and refreshed after the semantic-placeholder correction:
+Post-promotion structure readback recorded in the reopened evidence and refreshed after the semantic-placeholder correction and 2026-08-13 filler removal:
 
 - native editable text nodes: `19`
+- visible native text nodes: `18`
 - IMAGE fill nodes: `0`
 - hidden bleed / trim / safe guides retained
 - text outside production root: `0`
@@ -90,7 +123,7 @@ Pass conditions currently satisfied digitally:
 - Ceremony and Reception times are readable before decorative detail
 - title does not compete with times
 - transfer/TBD row cannot be mistaken for a confirmed event
-- Japanese and English labels remain legible
+- Japanese and English event labels remain legible
 - no essential text visibly collides with the current composition
 - no critical rule disappears in the live screenshot
 
@@ -102,11 +135,11 @@ Reject when:
 - every event has an identical rounded card
 - airport iconography is repeated mechanically
 - dark navy overwhelms the board and reduces wedding warmth
-- empty space is filled with meaningless stamps
+- empty space is filled with meaningless stamps or decorative English filler
 - route line crosses time or label text
 - visual metaphor implies false gate, terminal, flight or operational information
 
-Fresh 2026-08-12 visual review did not trigger these rejection conditions after the placeholder correction.
+Fresh 2026-08-13 visual review did not trigger these rejection conditions after the redundant rail-label removal.
 
 ## Screenshot-driven correction protocol
 
