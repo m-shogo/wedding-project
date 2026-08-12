@@ -1,0 +1,57 @@
+{
+  "schema_version": "1.0",
+  "date": "2026-08-13",
+  "scope": "Rurubu WEDDING V5 comparator asset evidence overlay; does not modify Current role counts",
+  "authority_order": ["live Figma", "Drive readback", "RURUBU-V5-ASSET-EVIDENCE-LEDGER.json", "RURUBU-V5-LIVE-SCOPE-RECONCILIATION-2026-08-09.json"],
+  "current_untouched": {"outer":"77:18","inside":"77:290"},
+  "v5_01_master": {
+    "drive_id":"1YL0WAOzYU3O1FGa23ieRuw_Btu4jbmzr",
+    "file_name":"RURUBU_V5_01_COVER_HERO__FIGMA_1330x1220_Q60.jpg",
+    "mime_type":"image/jpeg",
+    "dimensions_px":{"width":1330,"height":1220},
+    "size_bytes":155439,
+    "sha256":"090880c0ebe101f1321ebac05f22a91b2b61f3a8ac31c8d112dc418412f13ab2",
+    "fresh_drive_readback":true,
+    "dominant_exact_figma_placement":false
+  },
+  "verified_secondary_q60": {
+    "drive_id":"1aVp34U5qUTqd9FR3AILmJggdWwY1lAJb",
+    "working_node_id":"1149:189",
+    "image_hash":"644f449c3bf2001a94d4b822d2b55e2614c11042",
+    "working_geometry_px":{"width":345,"height":316},
+    "visual_qa":"PASS at 500px whole, 1000px whole and 794x1123 actual-size front as destination postcard",
+    "provenance_state":"VERIFIED_SECONDARY_ONLY"
+  },
+  "ex_dominant_proxy": {
+    "production_node_id":"1147:134",
+    "working_image_hash":"539c259be8036b481d06b4f76db9a39b407d90e8",
+    "geometry_px":{"width":793.7,"height":330},
+    "semantic_use":"bounded ratio-correct wide atmosphere field",
+    "explicitly_not_q60_master":true,
+    "visual_qa":"PASS for EX comparator only; does not close V5-01 role"
+  },
+  "transport_attempt": {
+    "target":"safe EW hero 1145:134",
+    "method":"official Figma upload_assets target + exact Drive-master JPEG bytes",
+    "result":"FAILED_BEFORE_MUTATION",
+    "fingerprint":"mcp.figma.com DNS resolution failure",
+    "repeated":false
+  },
+  "ex_comparator": {
+    "production":"1147:2",
+    "working":"1149:2",
+    "review":"1149:192",
+    "start_here":"1149:382",
+    "native_text_visible":35,
+    "image_fills_visible":7,
+    "absolute_text_intersections":0,
+    "bounded_18px_safe_area_risks":0,
+    "fold":"x=792.7 width=2"
+  },
+  "gate": {
+    "v5_01_role_complete":false,
+    "v5_complete":false,
+    "v6_production_started":false,
+    "reason":"Exact secondary destination provenance is verified and EX mitigates proxy scaling visually, but the dominant Q60 master has not been placed/read back as the dominant Figma asset."
+  }
+}
