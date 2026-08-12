@@ -11,25 +11,26 @@
     "start": {
       "pageId": "845:2",
       "name": "00_RURUBU_START_HERE",
-      "status": "DV outer / DF inside",
+      "status": "DV outer / DY inside",
       "statusTextNodeId": "845:27",
       "reviewBodyNodeId": "845:16",
-      "reviewBodyStatus": "Best DV outer / DF inside",
+      "reviewBodyStatus": "Best DV outer / DY inside",
       "screenshotReadback": true
     },
     "review": {
       "pageId": "833:2",
       "name": "04_RURUBU_REVIEW",
       "bestOuterSnapshot": "997:2",
-      "bestInsideSnapshot": "904:2",
-      "previousOuterRollback": {"nodeId": "993:2", "label": "DU", "visible": false, "preserved": true}
+      "bestInsideSnapshot": "1016:2",
+      "previousOuterRollback": {"nodeId": "993:2", "label": "DU", "visible": false, "preserved": true},
+      "previousInsideRollback": {"nodeId": "904:2", "label": "DF", "visible": false, "preserved": true}
     },
     "working": {
       "pageId": "834:2",
       "name": "05_RURUBU_WORKING",
-      "preservedComparators": ["977:2", "982:2", "992:2", "996:2"],
+      "preservedComparators": ["899:2", "977:2", "982:2", "992:2", "996:2", "1012:2"],
       "bestOuterWorking": "996:2",
-      "bestInsideWorking": "899:2"
+      "bestInsideWorking": "1012:2"
     }
   },
   "comparators": {
@@ -39,65 +40,50 @@
       "backNodeId": "996:3",
       "frontNodeId": "996:131",
       "reviewSnapshotNodeId": "997:2",
-      "sourceComparator": {"label": "DU", "nodeId": "992:2", "preserved": true},
       "status": "ADOPT_AS_STRONGEST_CLEANROOM_COMPOSITION_COMPARATOR_NOT_CURRENT",
-      "scratchSelection": "DV_SELECTED_OVER_DU_FOR_PRINT_NATIVE_HEADLINE",
       "nativeTextVisible": 37,
       "imageFillVisible": 7,
       "sameParentTextIntersections": 0,
       "safeAreaTextRisksUnder18px": 0,
-      "foldGuide": {"nodeId": "996:184", "x": 792.7000122070312, "y": 0, "width": 2, "height": 1122.5},
+      "foldGuide": {"nodeId": "996:184", "x": 792.7000122070312, "width": 2, "height": 1122.5},
       "hero": {
         "nodeId": "996:133",
         "imageHash": "539c259be8036b481d06b4f76db9a39b407d90e8",
         "geometry": {"width": 793.7, "height": 650},
-        "semantic": "visually verified existing Figma Yokohama waterfront reuse; this hash is also the registered V5-05 history derivative hash and is not proof of exact Q60 Drive binary placement"
+        "semantic": "visually verified existing Figma waterfront reuse; this hash is also the registered V5-05 history derivative hash and is not proof of exact Q60 Drive binary placement"
       },
-      "headline": {
-        "nodeId": "996:143",
-        "text": "横浜\nふたり旅。",
-        "treatment": "solid deep navy native text; no stroke; no effects",
-        "mastheadNodeId": "996:183",
-        "mastheadTreatment": "generic drop shadow removed"
-      },
-      "backCover": {
-        "mainPhotoNodeId": "996:6",
-        "mainPhotoGeometry": {"width": 793.7, "height": 620},
-        "friendPhotoA": {"nodeId": "996:18", "imageHash": "c1ada11205bc3978bf426b304d683f1c1566cac2", "geometry": {"width": 520, "height": 300}, "rotation": -1.6},
-        "friendPhotoB": {"nodeId": "996:22", "imageHash": "d76eb07d83d042f15044c8bc6bf68d73a73cd77d", "geometry": {"width": 320, "height": 224}, "rotation": 2.2},
-        "captionStripNodes": ["996:20", "996:24"]
-      },
-      "qa": {
-        "thumbnail500": true,
-        "wholeReading1400": true,
-        "actualSizeFront": true,
-        "actualSizeBackInheritedFromVerifiedDU": true,
-        "structure": true,
-        "safeArea": true,
-        "reviewSnapshot": true
-      },
-      "visualRationale": "DU solved whole-item back-cover weakness. DV preserves that photo-led outer and removes the remaining effect-dependent headline treatment: the main Japanese title becomes solid deep navy with no outline, and the masthead drop shadow is removed. Thumbnail and actual-size comparison selected DV as more print-native and less synthetic."
+      "headline": {"nodeId": "996:143", "text": "横浜\nふたり旅。", "treatment": "solid deep navy native text; no stroke; no effects"},
+      "qa": {"thumbnail500": true, "wholeReading1400": true, "actualSizeFront": true, "actualSizeBack": true, "structure": true, "safeArea": true, "reviewSnapshot": true}
     },
     "insideBest": {
-      "label": "DF",
-      "nodeId": "899:2",
-      "leftNodeId": "899:3",
-      "rightNodeId": "899:132",
-      "reviewSnapshotNodeId": "904:2",
-      "status": "ADOPT_AS_STRONGEST_COMPARATOR_NOT_CURRENT",
+      "label": "DY",
+      "nodeId": "1012:2",
+      "leftNodeId": "1012:3",
+      "rightNodeId": "1012:132",
+      "reviewSnapshotNodeId": "1016:2",
+      "sourceComparator": {"label": "DF", "nodeId": "899:2", "preserved": true, "reviewRollbackNodeId": "904:2"},
+      "status": "ADOPT_AS_STRONGEST_CLEANROOM_COMPARATOR_NOT_CURRENT",
+      "scratchSelection": "DY_SELECTED_OVER_DF_FOR_SOURCE_AWARE_SUPPORT_CROPS_AND_EDITORIAL_RHYTHM",
       "nativeTextVisible": 53,
       "productionImageFillVisible": 6,
       "sameParentTextIntersections": 0,
-      "foldGuide": {"nodeId": "899:283", "x": 792.7000122070312, "y": 0, "width": 2, "height": 1122.5},
-      "qa": {"thumbnail": true, "wholeReading": true, "actualSize": true, "structure": true},
+      "safeAreaTextRisksUnder18px": 0,
+      "foldGuide": {"nodeId": "1012:283", "x": 792.7000122070312, "width": 2, "height": 1122.5},
+      "memoryGeometry": {
+        "lead": {"nodeId": "1012:267", "width": 550, "height": 330, "rotation": 0.6},
+        "support02": {"nodeId": "1012:268", "width": 220, "height": 230, "rotation": -3.2},
+        "support03": {"nodeId": "1012:269", "width": 230, "height": 170, "rotation": 2.4}
+      },
+      "qa": {"thumbnail500": true, "wholeReading1400": true, "actualSizeRight794x1123": true, "structure": true, "safeArea": true, "reviewSnapshot": true},
       "productionImageHashes": {
-        "profileA": {"nodeId": "899:7", "hash": "a39dd297eb9de572317a5ce57f0af12e8597b156"},
-        "profileB": {"nodeId": "899:12", "hash": "2359f635b4926a83e22ca1f9214e75c709291152"},
-        "history": {"nodeId": "899:133", "hash": "539c259be8036b481d06b4f76db9a39b407d90e8"},
-        "memory1": {"nodeId": "899:267", "hash": "adbb8e529451a81dd25e4eb29bf068655569ce25"},
-        "memory2": {"nodeId": "899:268", "hash": "439a719d73f28e8dd2889f2026cccb15f345ec63"},
-        "memory4": {"nodeId": "899:269", "hash": "c09aa82e7b2ac75708707345c6f845452bf67663"}
-      }
+        "profileA": {"nodeId": "1012:7", "hash": "a39dd297eb9de572317a5ce57f0af12e8597b156"},
+        "profileB": {"nodeId": "1012:12", "hash": "2359f635b4926a83e22ca1f9214e75c709291152"},
+        "history": {"nodeId": "1012:133", "hash": "539c259be8036b481d06b4f76db9a39b407d90e8"},
+        "memory1": {"nodeId": "1012:267", "hash": "adbb8e529451a81dd25e4eb29bf068655569ce25"},
+        "memory2": {"nodeId": "1012:268", "hash": "439a719d73f28e8dd2889f2026cccb15f345ec63"},
+        "memory4": {"nodeId": "1012:269", "hash": "c09aa82e7b2ac75708707345c6f845452bf67663"}
+      },
+      "visualRationale": "DF's right page retained horizontal/card-like support crops and actual-size copy intrusion around the dominant memory image. DY preserves all accepted hashes but rebuilds the section as one dominant landscape photo plus portrait/compact satellites with independent native caption bands and a stronger 01/title anchor. Three-scale comparison selected DY."
     }
   },
   "coverHeroQ60": {
@@ -108,22 +94,17 @@
     "bytes": 155439,
     "sha256": "090880c0ebe101f1321ebac05f22a91b2b61f3a8ac31c8d112dc418412f13ab2",
     "driveFreshReadback": true,
-    "roleDerivative240": {
-      "driveId": "1aVp34U5qUTqd9FR3AILmJggdWwY1lAJb",
-      "dimensions": {"width": 240, "height": 220},
-      "bytes": 10284,
-      "driveFreshReadback": true
-    },
-    "latestTransportAttempt": "official Figma upload_assets issued a fresh single-use target for node 982:133; raw JPEG POST failed before upload because mcp.figma.com DNS resolution was unavailable",
+    "roleDerivative240": {"driveId": "1aVp34U5qUTqd9FR3AILmJggdWwY1lAJb", "dimensions": {"width": 240, "height": 220}, "bytes": 10284, "driveFreshReadback": true},
+    "latestTransportDecision": "Existing evidence explicitly rejects manual/model-visible base64 chunk transport because bounded chunks can lose characters. That path was re-audited and intentionally not resumed. No Q60 node mutation was adopted this run.",
     "exactDriveBinaryPlacedInFigma": false,
     "exactDriveBinaryVisuallyVerifiedInFigma": false,
-    "note": "Do not infer exact Q60 completion from DV/DU/DT hero visual reuse. Live hero hash 539c259... is separately registered as the V5-05 history derivative hash; the Drive ID to exact Figma node/image-hash chain remains open."
+    "note": "Do not infer exact Q60 completion from DV hero hash 539c259..., which is separately registered as the V5-05 history derivative hash."
   },
   "progressClassification": {
     "generatedThisRun": 0,
     "newGeneratedAssetAdopted": 0,
     "newExternalBinaryPlaced": 0,
-    "newCleanRoomComparatorsCreated": 2,
+    "newCleanRoomComparatorsCreated": 1,
     "visualLayoutEditsPlaced": true,
     "visualLayoutEditsVerified": true,
     "structureVerified": true,
@@ -138,5 +119,5 @@
     "v5Complete": false,
     "v6ProductionStarted": false
   },
-  "evidence": "learning-runs/2026-08-12-v5-dv-solid-japanese-type-cleanroom.md"
+  "evidence": "learning-runs/2026-08-12-v5-dy-portrait-memory-cluster-cleanroom.md"
 }
