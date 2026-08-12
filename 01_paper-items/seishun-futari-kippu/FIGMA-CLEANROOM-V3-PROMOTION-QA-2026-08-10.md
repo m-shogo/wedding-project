@@ -95,3 +95,39 @@ No generated image was claimed, stored, or placed. The screenshot-supported bott
 `SELLABLE_VISUAL_QA_PASS / DESIGN_QA_PASS_WITH_PLACEHOLDERS_EVIDENCE_RETAINED / PRODUCTION_PROMOTED / ROLLBACK_SAFE / NOT_PRINT_READY`
 
 Remaining deferred finalization is physical/vendor/final-copy work only. The reopened visual pass may now progress to `ADD-01 ウェルカムボード`.
+
+## 2026-08-12 fresh production spot-check — semantic placeholder normalization
+
+Observed latest `main` immediately before production edit: `e20e642d04c3b4e34a055c13d7074207cb3a4bec`.
+
+Fresh actual-size `720×250` production screenshot confirmed the V3 rail-ephemera composition remains sellable, but three visible unknown-value roles still used generic `DUMMY` copy rather than Current's explicit semantic `LAYOUT DUMMY` convention:
+
+- `[出発地 · DUMMY]`;
+- `[行き先 · DUMMY]`;
+- `[管理番号 · DUMMY]`.
+
+Rollback-safe proof:
+- hidden production rollback: `46:2 / ROLLBACK_SEISHUN_FUTARI_PRE_SEMANTIC_PLACEHOLDER_FIX_2026_08_12`;
+- production root remained `11:2 / FRAME_LABEL`.
+
+Production changes, all native editable text:
+- `44:212 / TXT_FROM` → `[出発地 · LAYOUT DUMMY]`;
+- `44:214 / TXT_DEST` → `[行き先 · LAYOUT DUMMY]`;
+- `44:268 / DECOR_SERIAL` → `[管理番号 · LAYOUT DUMMY]`.
+
+No final departure, destination or management number was invented. Date, title, route narrative, 2名さま marker, red accent, guilloche/route structure and the hidden legacy decoration nodes were unchanged.
+
+Post-write screenshot QA:
+- actual-size `720×250`: PASS;
+- the three placeholders remain legible within their existing regions with no collision;
+- title and route narrative remain the first visual read rather than the semantic dummies.
+
+Live post-write structure:
+- production `11:2`: `720×250`, `clipsContent=true`;
+- native text nodes: `19`, visible text nodes: `17`;
+- text outside root: `0`;
+- current later-adopted IMAGE role: `45:2 / IMG_LABEL_STOCK_TEXTURE_REPLACEABLE`, opacity `0.12`, blend `MULTIPLY`.
+
+The IMAGE role supersedes the older historical `IMAGE fills: 0` production snapshot above; it was not added in this spot-check and contains no variable copy. Drive authority remained `1XpuRqck_yDmWI6NhwZFWkvxpS6mqH29J / 04_青春18きっぷ風_ミンティア用シール`; Drive write this spot-check: `0`.
+
+Current result remains `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / PRODUCTION_PROMOTED / ROLLBACK_SAFE / NOT_PRINT_READY`.
