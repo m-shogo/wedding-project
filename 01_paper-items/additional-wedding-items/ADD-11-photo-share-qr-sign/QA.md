@@ -12,7 +12,7 @@ Date: 2026-08-13
 - Drive folder: `ADD-11_写真共有_QR案内サイン`
 - Drive folder ID: `1wuxHEqby_0JWS0bYV0RWCTUotM88Mnxb`
 - reopened visual authority: `FIGMA-REOPENED-VISUAL-QA-2026-08-10.md`
-- latest typography repairs: `FIGMA-A5-JA-LINEBREAK-REPAIR-2026-08-12.md` if present in history and `FIGMA-A4-JA-LINEBREAK-REPAIR-2026-08-12.md`; the reopened visual evidence also contains the verified A5 repair record.
+- latest typography repair authority: the verified A5 repair is recorded inside `FIGMA-REOPENED-VISUAL-QA-2026-08-10.md`; the A4 repair is `FIGMA-A4-JA-LINEBREAK-REPAIR-2026-08-12.md`.
 
 ## Production frames
 
