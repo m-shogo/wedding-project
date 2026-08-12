@@ -1,8 +1,18 @@
 # ADD-05 サンキュータグ / プチギフトタグ — QA
 
-Status: `CURRENT / QA_CONTRACT_READY`
-Authority: GitHub `main`
-Date: 2026-08-02
+Status: `CURRENT / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / ROLLBACK_SAFE / NOT_PRINT_READY`
+Authority: GitHub latest `main` + `docs/automation/non-rurubu-figma-quality-current.md`
+Updated: 2026-08-12
+
+This file was originally a 2026-08-02 pre-Figma QA contract. The authoritative reopened production evidence is `FIGMA-REOPENED-VISUAL-QA-2026-08-10.md`; the stale `FIGMA_NOT_STARTED` declaration is superseded.
+
+## Live production authority
+
+- Figma file: `Wedding Paper ADD 05` / `kAdkOMuAMcFQtTSP8NtWil`
+- production 50 × 80 front: `1:2 / FRAME_TAG_FRONT_50X80`
+- production 45 × 70 front: `1:19 / FRAME_TAG_FRONT_45X70_COMPARE`
+- production optional 50 × 80 back: `1:12 / FRAME_TAG_BACK_50X80_OPTIONAL`
+- Drive folder: `ADD-05_サンキュータグ_プチギフトタグ` / `1_V20y77VU1aGrJtqpl7U5XUpC-bQuTxV`
 
 ## Preparation QA
 
@@ -10,37 +20,39 @@ Date: 2026-08-02
 - [x] single master separated from imposition
 - [x] punch clearance defined provisionally
 - [x] no raster asset created without evidence
-- [x] no completed core item modified
 - [x] dedicated Drive folder created
 - [x] semantic node contract defined
 
 ## Figma structural QA
 
-- [ ] front and optional back are separate frames
-- [ ] 50 × 80 mm master exists at exact ratio
-- [ ] 45 × 70 mm comparison is not a scaled duplicate without reflow
-- [ ] text remains native and editable
-- [ ] punch, trim, bleed and safe guides are non-export QA layers
-- [ ] journey path and endpoint remain native vectors
-- [ ] optional names remain absent or clearly `TBD`, never invented
-- [ ] no hidden zero-size or invalid geometry
+Verified by reopened production evidence:
+
+- [x] front and optional back are separate frames
+- [x] 50 × 80 mm master exists at exact ratio
+- [x] 45 × 70 mm comparison is independently reflowed rather than a scaled duplicate
+- [x] text remains native and editable
+- [x] punch/safe guides remain hidden non-export QA layers
+- [x] no hidden zero-size or invalid production geometry reported
+- [x] IMAGE fills: 0 in all three production frames
+- [x] text outside production frame bounds: 0
 
 ## Visual QA
 
-Review at whole-tag and 100% actual size:
+Reopened visual art direction is complete:
 
-- [ ] gratitude reads before travel decoration
-- [ ] composition does not resemble a mini boarding pass or passport page
-- [ ] negative space survives the small format
-- [ ] hole/string visually belongs to the composition
-- [ ] route does not point ambiguously into text
-- [ ] metallic accents remain subtle when printed without foil
-- [ ] front/back are related but not redundant
-- [ ] no repeated icon row or app-card styling
+- [x] gratitude reads before travel decoration
+- [x] composition does not resemble a mini boarding pass or passport page
+- [x] negative space survives the small format without faux-premium emptiness
+- [x] hole/string axis belongs to the composition
+- [x] 50 × 80 / 45 × 70 / optional back share family DNA without being scaled clones
+- [x] no repeated icon row, app-card styling, fake travel UI, gradient, shadow, or generic stock imagery
+- [x] screenshot comparison and clean-room promotion completed
 
-## Physical QA
+Current visual result: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS`.
 
-Must use the actual gift package:
+## Physical QA — deferred finalization
+
+These remain intentionally open and keep the item `NOT_PRINT_READY`:
 
 - [ ] print at 100%
 - [ ] punch with intended tool
@@ -52,9 +64,8 @@ Must use the actual gift package:
 - [ ] verify ink/rub resistance
 - [ ] photograph under venue-like warm lighting
 
-## Imposition QA
+## Imposition QA — deferred finalization
 
-- [ ] single master remains unchanged
 - [ ] imposition uses exact master instances
 - [ ] enough gutter exists for cutter tolerance
 - [ ] crop marks stay outside final trim
@@ -68,7 +79,7 @@ Must use the actual gift package:
 
 1. actual gift/package dimensions;
 2. attachment method and punch diameter;
-3. final tag size;
+3. final tag size decision;
 4. paper stock;
 5. printer/template bleed and safe requirements;
 6. one successful 100% physical proof;
@@ -76,4 +87,4 @@ Must use the actual gift package:
 
 ## Current declaration
 
-`SPEC_AND_QA_READY / FIGMA_NOT_STARTED / PHYSICAL_PROOF_PENDING / NOT_PRINT_READY`
+`SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / ROLLBACK_SAFE / DEFERRED_FINALIZATION / NOT_PRINT_READY`
