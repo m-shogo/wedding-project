@@ -1,0 +1,58 @@
+{
+  "date": "2026-08-13",
+  "scope": "Rurubu WEDDING only",
+  "current": {"outer":"77:18","inside":"77:290","touched":false},
+  "best": {
+    "outer": {"productionStudyNodeId":"1147:2","workingNodeId":"1149:2","reviewNodeId":"1149:192","startHereNodeId":"1149:382","label":"EX","visuallyVerified":true,"structureVerified":true},
+    "inside": {"workingNodeId":"1107:285","reviewNodeId":"1111:188","label":"EO","visuallyVerified":true,"structureVerified":true}
+  },
+  "q60": {
+    "masterDriveId":"1YL0WAOzYU3O1FGa23ieRuw_Btu4jbmzr",
+    "masterMimeType":"image/jpeg",
+    "masterBytes":155439,
+    "derivativeDriveId":"1aVp34U5qUTqd9FR3AILmJggdWwY1lAJb",
+    "exactDerivativeWorkingFigmaNodeId":"1149:189",
+    "exactDerivativeImageHash":"644f449c3bf2001a94d4b822d2b55e2614c11042",
+    "exactDerivativeGeometry":"345x316 bounded destination postcard in EX production/Working copy",
+    "exactDerivativeAnchorVerified":true,
+    "dominantProxyProductionNodeId":"1147:134",
+    "dominantProxyWorkingImageHash":"539c259be8036b481d06b4f76db9a39b407d90e8",
+    "dominantProxyGeometry":"793.7x330 ratio-correct wide field",
+    "dominantMasterExact":false,
+    "freshMasterReadback":true,
+    "freshUploadAttempt":"official target issued for safe EW hero; exact JPEG POST stopped before mutation because mcp.figma.com DNS could not resolve; same method not retried"
+  },
+  "experiments": {
+    "EW": {"nodeId":"1145:2","status":"REJECTED_FOR_PROMOTION","reason":"actual-size full-page proxy showed visible pixelation/blocking"},
+    "EX": {"nodeId":"1147:2","status":"ADOPTED","principle":"source fidelity before scale; ratio-correct photo roles plus asymmetric editorial overlap"}
+  },
+  "exQa": {
+    "thumbnail500":"PASS",
+    "wholeReading1000":"PASS",
+    "actualSizeFront794x1123":"PASS",
+    "visibleNativeText":35,
+    "visibleImageFills":7,
+    "absoluteTextIntersections":0,
+    "bounded18pxSafeAreaRisks":0,
+    "fold":"x=792.7 width=2",
+    "actualSizeRepairs":["white second line on cream converted to sharp magenta print strap","support-photo z-order repaired above lower street field"]
+  },
+  "navigation": {
+    "reviewBestOuter":"EX",
+    "reviewBestInside":"EO",
+    "startHereStatus":"EX outer / EO inside",
+    "workingHasEX":true,
+    "previousReviewOuter":"EU",
+    "previousReviewOuterHiddenRollback":true,
+    "previousStartHereOuter":"EV",
+    "previousStartHereOuterHiddenRollback":true,
+    "authorityDriftReconciled":true
+  },
+  "status": {
+    "generated":0,
+    "newExternalBinaryPlaced":0,
+    "v5Complete":false,
+    "v6ProductionStarted":false,
+    "reason":"EX is the strongest verified clean-room comparator and resolves the proxy-scaling visual defect, but the dominant Q60 master is still not exact in Figma and final V5 print/fold/asset-ledger reconciliation remains open."
+  }
+}
