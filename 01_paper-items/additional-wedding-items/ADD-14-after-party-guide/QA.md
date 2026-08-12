@@ -1,32 +1,49 @@
 # ADD-14 二次会案内 — QA
 
-Status: `PREPARED_FOR_FIGMA`
-Date: 2026-08-02
+Status: `CURRENT / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / ROLLBACK_SAFE / BLOCKED_REQUIRED_INPUT / NOT_PRINT_READY`
+Authority: GitHub latest `main` + `docs/automation/non-rurubu-figma-quality-current.md`
+Updated: 2026-08-13
 
-## Information QA
-- [ ] 二次会の実施が正式確定している
-- [ ] 会場名・住所・階数が公式情報と一致する
-- [ ] 受付・開始・終了時刻が幹事確認済み
-- [ ] 会費・支払方法・出欠期限が一致する
-- [ ] 移動方法と所要時間が現実的である
-- [ ] 連絡先の掲載許可がある
-- [ ] QRの遷移先・公開範囲・期限を実機確認した
-- [ ] TBD、仮URL、仮会場、仮時刻が最終PDFにない
+This file began as the 2026-08-02 pre-Figma QA checklist. The live production and reopened visual evidence now supersede the stale `PREPARED_FOR_FIGMA` state.
 
-## Visual QA
-- [ ] 時刻・会場・アクセスが装飾より先に読める
-- [ ] 深い背景でも小さな文字が潰れない
-- [ ] 夜景・ネオン・酒の記号を過剰に使っていない
-- [ ] 既存4種の縮小コピーに見えない
-- [ ] 均等な角丸カードUIになっていない
-- [ ] 余白と情報密度が実際の印刷物として自然
+## Live production authority
 
-## Production QA
-- [ ] Figma semantic node名がSPECと一致する
-- [ ] 可変情報がeditable textである
-- [ ] screenshot QAを表裏または全体フレームで実施する
-- [ ] QRを100%実寸・複数端末で読み取れる
-- [ ] A6/A5を100%実寸で試し刷りする
-- [ ] 塗り足し・安全域・裁断方向を確認する
+- Figma file: `IygEr140Yqk12LsGL3TFrT`
+- production A6: `1:2 / FRAME_AFTER_PARTY_GUIDE_FRONT`
+- production A5: `1:18 / FRAME_AFTER_PARTY_GUIDE_A5`
+- Drive folder: `ADD-14_二次会案内` / `1Oq2Pz2mYo4oaDnO7LMezMrCUizcxaEjs`
+- detailed reopened evidence: `docs/automation/add-14-after-party-guide-design-qa.md`
 
-二次会を実施しない場合は制作を中止し、状態を`NOT_REQUIRED`へ変更する。
+## Current visual / structure QA
+
+Fresh production screenshot and live structural readback reconfirmed the V2 editorial itinerary direction:
+
+- Japanese-first headline and venue hierarchy remain readable before decorative elements;
+- reception / start / end use deliberate two-level semantic time placeholders rather than broken form-like wrapping;
+- fee / access / RSVP remain compact native editable placeholders;
+- QR remains a native replaceable non-scannable placeholder; no fake final QR was introduced;
+- A6 `1:2`: 592×420, 18 native text nodes, 0 IMAGE fill nodes, 0 text outside root, `clipsContent=true`;
+- A5 `1:18`: 840×592, 18 native text nodes, 0 IMAGE fill nodes, 0 text outside root, `clipsContent=true`;
+- no flatten/raster replacement introduced;
+- no new screenshot-supported need for generated imagery was found.
+
+Current result: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS`.
+
+## Rollback / edit history
+
+Rollback-safe proofs and the two 2026-08-12 production polish passes are recorded in `docs/automation/add-14-after-party-guide-design-qa.md`. Production root IDs remain stable.
+
+## Required input / deferred finalization
+
+These are still authoritative blockers for real-world adoption or print readiness, not blockers for visual progression:
+
+- [ ] whether the after-party will actually be held; otherwise set `NOT_REQUIRED`
+- [ ] official venue name / address / floor
+- [ ] reception / start / end times
+- [ ] fee / payment method
+- [ ] access and realistic travel time
+- [ ] RSVP method / deadline and contact permission
+- [ ] final QR destination plus device scan test
+- [ ] printer template/profile, exact bleed/safe area and 100% A6/A5 physical proof
+
+Do not replace placeholders with invented facts. Keep `BLOCKED_REQUIRED_INPUT / NOT_PRINT_READY` until the required authority and physical checks exist.
