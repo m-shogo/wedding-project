@@ -11,58 +11,62 @@
     "start": {
       "pageId": "845:2",
       "name": "00_RURUBU_START_HERE",
-      "status": "DT outer / DF inside",
+      "status": "DU outer / DF inside",
       "statusTextNodeId": "845:27",
       "reviewBodyNodeId": "845:16",
-      "reviewBodyStatus": "Best DT outer / DF inside",
+      "reviewBodyStatus": "Best DU outer / DF inside",
       "screenshotReadback": true
     },
     "review": {
       "pageId": "833:2",
       "name": "04_RURUBU_REVIEW",
-      "bestOuterSnapshot": "987:2",
+      "bestOuterSnapshot": "993:2",
       "bestInsideSnapshot": "904:2",
-      "previousOuterRollback": {"nodeId": "979:2", "label": "DS", "visible": false, "preserved": true}
+      "previousOuterRollback": {"nodeId": "987:2", "label": "DT", "visible": false, "preserved": true}
     },
     "working": {
       "pageId": "834:2",
       "name": "05_RURUBU_WORKING",
-      "preservedComparators": ["977:2", "982:2"],
-      "bestOuterWorking": "982:2",
+      "preservedComparators": ["977:2", "982:2", "992:2"],
+      "bestOuterWorking": "992:2",
       "bestInsideWorking": "899:2"
     }
   },
   "comparators": {
     "outerBest": {
-      "label": "DT",
-      "nodeId": "982:2",
-      "frontNodeId": "982:131",
-      "reviewSnapshotNodeId": "987:2",
-      "sourceComparator": {"label": "DS", "nodeId": "977:2", "preserved": true},
+      "label": "DU",
+      "nodeId": "992:2",
+      "backNodeId": "992:3",
+      "frontNodeId": "992:131",
+      "reviewSnapshotNodeId": "993:2",
+      "sourceComparator": {"label": "DT", "nodeId": "982:2", "preserved": true},
       "status": "ADOPT_AS_STRONGEST_CLEANROOM_COMPOSITION_COMPARATOR_NOT_CURRENT",
-      "scratchSelection": "DT_SELECTED_OVER_DS",
+      "scratchSelection": "DU_SELECTED_OVER_DT_FOR_WHOLE_ITEM_BALANCE",
       "nativeTextVisible": 37,
       "imageFillVisible": 7,
       "sameParentTextIntersections": 0,
-      "foldGuide": {"nodeId": "982:184", "x": 792.7000122070312, "y": 0, "width": 2, "height": 1122.5},
+      "foldGuide": {"nodeId": "992:184", "x": 792.7000122070312, "y": 0, "width": 2, "height": 1122.5},
       "hero": {
-        "nodeId": "982:133",
-        "imageHash": "5d1739f42059246431108b7944fd7b16d9c92c42",
+        "nodeId": "992:133",
+        "imageHash": "539c259be8036b481d06b4f76db9a39b407d90e8",
         "geometry": {"width": 793.7, "height": 650},
-        "semantic": "visually verified Yokohama waterfront image already present in Figma; not proof of exact Q60 Drive binary placement"
+        "semantic": "visually verified existing Figma Yokohama waterfront reuse; this hash is also the registered V5-05 history derivative hash and is not proof of exact Q60 Drive binary placement"
       },
-      "supportPhotos": [
-        {"nodeId": "982:153", "imageHash": "2f9f122f14028031931ec6925586a09f1fd0cb01", "role": "boundary-crossing restaurant support"},
-        {"nodeId": "982:167", "imageHash": "9cdc28331cd0c54e4de0f84ad70afb865c23a6dd", "role": "large asymmetric street feature"}
-      ],
+      "backCover": {
+        "mainPhotoNodeId": "992:6",
+        "mainPhotoGeometry": {"width": 793.7, "height": 620},
+        "friendPhotoA": {"nodeId": "992:18", "imageHash": "c1ada11205bc3978bf426b304d683f1c1566cac2", "geometry": {"width": 520, "height": 300}, "rotation": -1.6},
+        "friendPhotoB": {"nodeId": "992:22", "imageHash": "d76eb07d83d042f15044c8bc6bf68d73a73cd77d", "geometry": {"width": 320, "height": 224}, "rotation": 2.2},
+        "captionStripNodes": ["992:20", "992:24"],
+        "visualRationale": "DT front was preserved. DU rebuilds the weaker back face with a full-width photo substrate, unequal overlapping friend photography, slim attached caption strips, larger native Japanese hierarchy, and a staggered travel-log timeline. The first floating-caption state was rejected at actual size and repaired before promotion."
+      },
       "qa": {
         "thumbnail500": true,
         "wholeReading": true,
-        "actualSizeFront": true,
+        "actualSizeChangedBack": true,
         "structure": true,
         "reviewSnapshot": true
-      },
-      "visualRationale": "DS was not scratch-selectable because the cover still read as hero plus stacked modules. DT extends the destination photograph into the page substrate, strengthens the native Japanese headline, crosses a support photograph over the hero boundary, rebuilds feature 01 as direct oversized type, compresses feature 02, and uses a large asymmetric street photograph for feature 03. Intermediate lower-half spacing and feature-02 crowding were rejected and repaired before promotion."
+      }
     },
     "insideBest": {
       "label": "DF",
@@ -100,9 +104,10 @@
       "bytes": 10284,
       "driveFreshReadback": true
     },
+    "latestTransportAttempt": "official Figma upload_assets issued a fresh single-use target for node 982:133; raw JPEG POST failed before upload because mcp.figma.com DNS resolution was unavailable",
     "exactDriveBinaryPlacedInFigma": false,
     "exactDriveBinaryVisuallyVerifiedInFigma": false,
-    "note": "Do not infer exact Q60 completion from DT hero visual reuse; the Drive ID to exact Figma node/image-hash chain remains open."
+    "note": "Do not infer exact Q60 completion from DU/DT hero visual reuse. Live hero hash 539c259... is separately registered as the V5-05 history derivative hash; the Drive ID to exact Figma node/image-hash chain remains open."
   },
   "progressClassification": {
     "generatedThisRun": 0,
@@ -116,11 +121,11 @@
     "navigationReadbackVerified": true
   },
   "gate": {
-    "photoRolePass": "9/10 canonical Current gate; no exact Q60 role promotion",
-    "roleComplete": "9/10 canonical Current gate; no Q60 role promotion",
-    "dominantPhotoCompositionComparator": "DT visually passes as a composition comparator, but exact destination asset lifecycle remains open",
+    "photoRolePass": "canonical Current cover-hero role remains incomplete; no exact Q60 role promotion",
+    "roleComplete": "V5-01 remains false in asset evidence ledger; no Q60 role promotion",
+    "dominantPhotoCompositionComparator": "DU visually passes as the strongest whole-item composition comparator, but exact destination asset lifecycle remains open",
     "v5Complete": false,
     "v6ProductionStarted": false
   },
-  "evidence": "learning-runs/2026-08-12-v5-dt-photo-substrate-cleanroom.md"
+  "evidence": "learning-runs/2026-08-12-v5-du-back-cover-photo-led-cleanroom.md"
 }
