@@ -1,0 +1,96 @@
+{
+  "schemaVersion": 1,
+  "scope": "RURUBU_WEDDING_V5_ONLY",
+  "date": "2026-08-12",
+  "authorityType": "live-promotion-overlay",
+  "supersedesComparatorSelectionOnly": "RURUBU-V5-COMPARATOR-EF-EE-PROMOTION-2026-08-12.json",
+  "authority": "live Figma + Drive authority/readback state + asset evidence ledger + GitHub main",
+  "current": {
+    "outer": {"nodeId": "77:18", "changed": false, "reviewSnapshotNodeId": "833:470"},
+    "inside": {"nodeId": "77:290", "changed": false, "reviewSnapshotNodeId": "833:744"}
+  },
+  "selectedComparators": {
+    "outer": {
+      "label": "EH",
+      "workingNodeId": "1061:2",
+      "frontNodeId": "1061:131",
+      "backNodeId": "1061:3",
+      "reviewSnapshotNodeId": "1064:2",
+      "previousBest": {"label": "EF", "workingNodeId": "1053:2", "reviewRollbackNodeId": "1054:2", "visible": false, "preserved": true},
+      "selectionReason": "EH keeps EF's accepted photo-first hierarchy but replaces the square 保存版 module with a slim vertical page-edge issue strap, pushes the tilted Feature 02 photo further across the hero/lower-photo boundary, and removes back-cover display shadows in favor of solid native ink. The first solid-navy back headline was rejected for weak contrast and repaired to solid magenta before promotion.",
+      "qa": {
+        "thumbnail500": true,
+        "wholeReading1000": true,
+        "actualSizeFront794x1123": true,
+        "actualSizeBack794x1123": true,
+        "structure": true,
+        "sameParentTextIntersections": 0,
+        "boundedSafeAreaTextRisks": 0,
+        "nativeVisibleText": 37,
+        "visibleImageFills": 6,
+        "foldNodeId": "1061:184"
+      },
+      "rejectedIntermediates": [
+        "Solid navy back-cover headline weakened over the floral photograph; rejected by actual-size screenshot and changed to solid magenta without restoring a shadow.",
+        "Structural QA found a Feature 03 number/title same-parent text-box intersection; the native title was moved to x=126 and final intersection count is zero."
+      ],
+      "imageHashesPreserved": {
+        "hero": "539c259be8036b481d06b4f76db9a39b407d90e8",
+        "lowerStreet": "439a719d73f28e8dd2889f2026cccb15f345ec63",
+        "backMain": "e3738476f760932bb5b09c9d60f174dd6c84049d",
+        "backFriendCafe": "c1ada11205bc3978bf426b304d683f1c1566cac2",
+        "backFriendDiningAndFeature02": "d76eb07d83d042f15044c8bc6bf68d73a73cd77d"
+      }
+    },
+    "inside": {
+      "label": "EG",
+      "workingNodeId": "1057:2",
+      "reviewSnapshotNodeId": "1058:2",
+      "selectionReason": "Verified EG preserves EE's photo hierarchy while replacing history text strokes/drop shadows with solid native ink selected from the local image luminance.",
+      "qaInheritedFrom": "learning-runs/2026-08-12-v5-eg-solid-history-type-promotion.md"
+    }
+  },
+  "figmaNavigation": {
+    "reviewPageId": "833:2",
+    "visibleBestOuter": "1064:2",
+    "visibleBestInside": "1058:2",
+    "bestOuterLabelNodeId": "846:2",
+    "bestOuterLabel": "BEST CLEANROOM — OUTER / EH",
+    "bestInsideLabelNodeId": "846:4",
+    "bestInsideLabel": "BEST CLEANROOM — INSIDE / EG",
+    "startPageId": "845:2",
+    "statusTextNodeId": "845:27",
+    "status": "EH outer / EG inside",
+    "reviewBodyNodeId": "845:16",
+    "finalLiveReadback": true
+  },
+  "coverHeroQ60": {
+    "driveId": "1YL0WAOzYU3O1FGa23ieRuw_Btu4jbmzr",
+    "fileName": "RURUBU_V5_01_COVER_HERO__FIGMA_1330x1220_Q60.jpg",
+    "dimensionsPx": {"width": 1330, "height": 1220},
+    "sizeBytes": 155439,
+    "sha256": "090880c0ebe101f1321ebac05f22a91b2b61f3a8ac31c8d112dc418412f13ab2",
+    "exactDriveBinaryPlacedInFigma": false,
+    "exactDriveBinaryVisuallyVerifiedInFigma": false,
+    "note": "Fresh Drive search found the Q60 master and prepared role derivatives. EH still reuses Figma hero hash 539c259..., which the asset evidence ledger identifies as the V5-05 history derivative. This is not evidence of exact Q60 placement. Known failed DNS/base64 transport methods were not repeated."
+  },
+  "progressClassification": {
+    "generatedThisRun": 0,
+    "newGeneratedAssetAdopted": 0,
+    "newExternalBinaryPlaced": 0,
+    "cleanRoomComparatorsCreated": 1,
+    "cleanRoomComparatorsPromoted": 1,
+    "visualThreeScaleVerified": true,
+    "actualSizeBackVerified": true,
+    "structureVerified": true,
+    "reviewPromotionVerified": true,
+    "navigationReadbackVerified": true,
+    "currentChanged": false
+  },
+  "gate": {
+    "v5Complete": false,
+    "v6ProductionStarted": false,
+    "remainingDominantBlocker": "V5-01 exact Q60 Drive-to-Figma provenance lifecycle and remaining final V5 gate reconciliation"
+  },
+  "evidence": "learning-runs/2026-08-12-v5-eh-vertical-issue-strap-promotion.md"
+}
