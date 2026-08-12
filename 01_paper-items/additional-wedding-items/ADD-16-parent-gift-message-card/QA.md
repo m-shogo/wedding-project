@@ -1,7 +1,22 @@
 # ADD-16 両親贈呈品メッセージカード — QA
 
-Status: `PREPARED_FOR_FIGMA`
-Date: 2026-08-02
+Status: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / ROLLBACK_SAFE / NOT_PRINT_READY`
+Updated: 2026-08-12
+Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
+Design evidence: `docs/automation/add-16-parent-gift-message-card-design-qa.md`
+
+## Current visual / Figma state
+
+The former `PREPARED_FOR_FIGMA` header dated 2026-08-02 is superseded for visual/Figma status. Live production has already passed the reopened second visual-art-direction audit and was promoted rollback-safely.
+
+- Figma file key: `ylmVBbwNcnjueYrymNpa3c`
+- production front: `1:2`
+- production back: `1:13`
+- Drive authority folder: `ADD-16_両親贈呈品メッセージカード` / `1BOyETtL1_loGXNjGV9S30sJKEhZNjd6O`
+- current image-fill requirement: none; production remains native text/vector
+- final family-specific copy, gift attachment method, vendor requirements and physical proof remain unresolved
+
+Do not interpret the unchecked finalization checklist below as a reason to reopen the already-passed sellable visual composition. Reopen visual production only when a fresh screenshot exposes a concrete defect or authoritative input materially changes the layout requirements.
 
 ## Truth and family-safety gate
 - [ ] 宛名、呼称、氏名が本人確認済み
@@ -19,12 +34,16 @@ Date: 2026-08-02
 - [ ] 余白が不足せず、感謝文を急かす密度になっていない
 - [ ] 筆記体や装飾書体で日本語本文の可読性を落としていない
 
+These editorial items must be rechecked against the final family-specific copy before print export; the current layout-level visual evidence is recorded in the linked design QA.
+
 ## Typography gate
 - [ ] 100%実寸で本文を無理なく読める
 - [ ] 和文の禁則、句読点、改行位置が自然
 - [ ] 宛名と署名が本文に埋もれない
 - [ ] 長文時に字間・行間を詰めて解決していない
 - [ ] 縦書き採用時に英数字・日付・署名の向きを確認
+
+The reopened Figma QA already contains long-copy placeholder stress evidence; this checklist remains open for the final approved wording.
 
 ## Physical-production gate
 - [ ] 贈呈品、箱、リボン、封筒とのサイズ比が適切
@@ -35,13 +54,15 @@ Date: 2026-08-02
 - [ ] 実際の照明下で紙色と文字コントラストを確認
 - [ ] 100%実寸試し刷りを贈呈品へ仮設置して確認
 
-## Figma screenshot QA
-- [ ] 表面単体
-- [ ] 裏面単体
-- [ ] 両家版の並置比較
-- [ ] 100%相当の本文クロップ
-- [ ] 贈呈品モックへの仮設置
-- [ ] 修正前後のevidenceを保存
+## Final screenshot / handoff QA
+- [x] reopened production front screenshot
+- [x] reopened production back screenshot
+- [x] long-copy placeholder stress evidence
+- [x] rollback proof before visual promotion
+- [ ] final family-specific front/back readback
+- [ ] 贈呈品モックへの最終仮設置
+- [ ] 100%実寸の最終本文クロップ
 
 ## Completion gate
-Figma実制作、スクリーンショットQA、本文正本照合、実寸試し刷りの完了前に`COMPLETED`としない。
+
+Current design status may remain `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS`, but do not mark the item `COMPLETED` or print-ready until final family copy, gift/attachment conditions, vendor/export requirements and 100% physical proof are confirmed.
