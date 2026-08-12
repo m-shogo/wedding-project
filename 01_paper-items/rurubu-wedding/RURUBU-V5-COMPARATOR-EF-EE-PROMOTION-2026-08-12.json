@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 1,
+  "scope": "RURUBU_WEDDING_V5_ONLY",
+  "date": "2026-08-12",
+  "authorityType": "live-promotion-overlay",
+  "supersedesComparatorSelectionOnly": "RURUBU-V5-COMPARATOR-ED-EE-PROMOTION-2026-08-12.json",
+  "authority": "live Figma + Drive authority/readback state + asset evidence ledger + GitHub main",
+  "current": {
+    "outer": {"nodeId": "77:18", "changed": false, "reviewSnapshotNodeId": "833:470"},
+    "inside": {"nodeId": "77:290", "changed": false, "reviewSnapshotNodeId": "833:744"}
+  },
+  "selectedComparators": {
+    "outer": {
+      "label": "EF",
+      "workingNodeId": "1053:2",
+      "frontNodeId": "1053:131",
+      "backNodeId": "1053:3",
+      "reviewSnapshotNodeId": "1054:2",
+      "previousBest": {"label": "ED", "workingNodeId": "1046:2", "reviewRollbackNodeId": "1048:2", "visible": false, "preserved": true},
+      "selectionReason": "EF strengthens ED at thumbnail scale without increasing card count: a thin magenta issue rule, white native masthead, compact yellow 保存版 label, oversized native Japanese Yokohama headline, Feature 01 directly on the hero, one tilted support photo with a flat yellow caption band, and Feature 03 directly on the full-bleed lower street photo. Actual-size comparison selected EF after repairing Feature 01 contrast with white native text rather than adding a panel.",
+      "qa": {
+        "thumbnail500": true,
+        "wholeReading1000": true,
+        "actualSizeFront794x1123": true,
+        "actualSizeBackInheritedFromED": true,
+        "structure": true,
+        "sameParentTextIntersections": 0,
+        "boundedFrontSafeAreaTextRisks": 0,
+        "nativeVisibleText": 37,
+        "visibleImageFills": 6,
+        "foldNodeId": "1053:184"
+      },
+      "rejectedIntermediate": "Initial EF used dark navy Feature 01 title text over the darker pier/water crop. Actual-size screenshot QA rejected that contrast; the existing native title was changed to white with no new background container.",
+      "imageHashesPreserved": {
+        "hero": "539c259be8036b481d06b4f76db9a39b407d90e8",
+        "lowerStreet": "439a719d73f28e8dd2889f2026cccb15f345ec63",
+        "backMain": "e3738476f760932bb5b09c9d60f174dd6c84049d",
+        "backFriendCafe": "c1ada11205bc3978bf426b304d683f1c1566cac2",
+        "backFriendDiningAndFeature02": "d76eb07d83d042f15044c8bc6bf68d73a73cd77d"
+      }
+    },
+    "inside": {
+      "label": "EE",
+      "workingNodeId": "1048:185",
+      "reviewSnapshotNodeId": "1050:2",
+      "selectionReason": "Unchanged from the prior verified authority: asymmetric dominant/support/accent photo hierarchy with native editable text and actual-size readable captions.",
+      "qaInheritedFrom": "RURUBU-V5-COMPARATOR-ED-EE-PROMOTION-2026-08-12.json"
+    }
+  },
+  "figmaNavigation": {
+    "reviewPageId": "833:2",
+    "visibleBestOuter": "1054:2",
+    "visibleBestInside": "1050:2",
+    "startPageId": "845:2",
+    "statusTextNodeId": "845:27",
+    "status": "EF outer / EE inside",
+    "reviewBodyNodeId": "845:16",
+    "finalLiveReadback": true
+  },
+  "coverHeroQ60": {
+    "driveId": "1YL0WAOzYU3O1FGa23ieRuw_Btu4jbmzr",
+    "fileName": "RURUBU_V5_01_COVER_HERO__FIGMA_1330x1220_Q60.jpg",
+    "exactDriveBinaryPlacedInFigma": false,
+    "exactDriveBinaryVisuallyVerifiedInFigma": false,
+    "note": "EF reuses the existing Figma hero image for layout comparison. This is not evidence that the exact Q60 Drive binary was placed. Drive connector search in this run confirmed the RURUBU V5 asset authority folder but did not return the Q60 child file by keyword, so no new claim of exact binary readback is made."
+  },
+  "progressClassification": {
+    "generatedThisRun": 0,
+    "newGeneratedAssetAdopted": 0,
+    "newExternalBinaryPlaced": 0,
+    "cleanRoomComparatorsCreated": 1,
+    "cleanRoomComparatorsPromoted": 1,
+    "visualThreeScaleVerified": true,
+    "structureVerified": true,
+    "reviewPromotionVerified": true,
+    "navigationReadbackVerified": true,
+    "currentChanged": false
+  },
+  "gate": {
+    "v5Complete": false,
+    "v6ProductionStarted": false,
+    "remainingDominantBlocker": "V5-01 exact Q60 Drive-to-Figma provenance lifecycle and remaining final V5 gate reconciliation"
+  },
+  "evidence": "learning-runs/2026-08-12-v5-ef-cover-label-rhythm-promotion.md"
+}
