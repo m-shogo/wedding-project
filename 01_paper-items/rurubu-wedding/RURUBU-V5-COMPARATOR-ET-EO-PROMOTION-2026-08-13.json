@@ -1,0 +1,60 @@
+{
+  "date": "2026-08-13",
+  "scope": "Rurubu WEDDING only",
+  "current": {
+    "outer": "77:18",
+    "inside": "77:290",
+    "touched": false
+  },
+  "best": {
+    "outer": {
+      "workingNodeId": "1132:2",
+      "reviewNodeId": "1133:2",
+      "label": "ET",
+      "visuallyVerified": true,
+      "structureVerified": true
+    },
+    "inside": {
+      "workingNodeId": "1107:285",
+      "reviewNodeId": "1111:188",
+      "label": "EO",
+      "visuallyVerified": true
+    }
+  },
+  "q60": {
+    "masterDriveId": "1YL0WAOzYU3O1FGa23ieRuw_Btu4jbmzr",
+    "derivativeDriveId": "1aVp34U5qUTqd9FR3AILmJggdWwY1lAJb",
+    "exactDerivativeFigmaNodeId": "1132:189",
+    "exactDerivativeImageHash": "644f449c3bf2001a94d4b822d2b55e2614c11042",
+    "exactDerivativeAnchorVerified": true,
+    "dominantHeroNodeName": "EP_HERO_Q60_EXACT_PENDING",
+    "dominantHeroImageHash": "539c259be8036b481d06b4f76db9a39b407d90e8",
+    "dominantHeroExact": false,
+    "masterUploadRetryResult": "DNS failure before byte POST; no Figma mutation"
+  },
+  "etQa": {
+    "thumbnail500": "PASS",
+    "wholeReading": "PASS",
+    "actualFront794x1123": "PASS",
+    "actualBackApprox798x1123": "PASS",
+    "visibleNativeText": 36,
+    "visibleImageFills": 7,
+    "absoluteTextIntersections": 0,
+    "bounded18pxSafeAreaRisks": 0,
+    "foldX": 792.7000122070312,
+    "foldWidth": 2
+  },
+  "rollback": {
+    "previousBestOuterReviewNodeId": "1125:2",
+    "previousBestOuter": "ES",
+    "preservedHidden": true,
+    "rejectedPreConcurrencyAlternativeNodeId": "1130:18",
+    "rejectedPreConcurrencyAlternativeHidden": true
+  },
+  "startHere": "ET outer / EO inside",
+  "status": {
+    "v5Complete": false,
+    "v6ProductionStarted": false,
+    "reason": "Exact Drive derivative anchor is closed, but dominant Q60 hero provenance and full V5 gate are still open."
+  }
+}
