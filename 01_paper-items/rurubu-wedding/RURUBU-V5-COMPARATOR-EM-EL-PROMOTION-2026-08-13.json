@@ -1,0 +1,105 @@
+{
+  "schemaVersion": 1,
+  "scope": "RURUBU_WEDDING_V5_ONLY",
+  "date": "2026-08-13",
+  "authorityType": "live-promotion-overlay",
+  "supersedesComparatorSelectionOnly": "RURUBU-V5-COMPARATOR-EK-EG-PROMOTION-2026-08-12.json",
+  "authority": "live Figma + Drive readback + existing asset evidence + GitHub main",
+  "current": {
+    "outer": {"nodeId": "77:18", "changed": false, "reviewSnapshotNodeId": "833:470"},
+    "inside": {"nodeId": "77:290", "changed": false, "reviewSnapshotNodeId": "833:744"}
+  },
+  "selectedComparators": {
+    "outer": {
+      "label": "EM",
+      "workingNodeId": "1094:2",
+      "frontNodeId": "1094:132",
+      "reviewSnapshotNodeId": "1096:2",
+      "previousBest": {"label": "EK", "reviewRollbackNodeId": "1081:2", "visible": false, "preserved": true},
+      "selectionReason": "EK's front cover was retained because its destination-led Japanese headline hierarchy remained strong, but its back-cover dominant flat-lay camera/map image still read as generic wedding stock imagery rather than travel editorial. EM is a safe clean-room duplicate that subtracts that object-led dominance and reuses the already accepted same-V5 coast travel image as the full dominant back-cover field, then overlaps two verified support photographs at unequal scale. At thumbnail, whole-reading, and actual-size back-cover scales the full item reads more consistently as a Japanese travel-information magazine while preserving native text, semantic roles, crop editability, rollback state, and the EK front cover.",
+      "qa": {
+        "thumbnail500Equivalent": true,
+        "wholeReading1200": true,
+        "actualSizeFront794x1123": true,
+        "actualSizeBackApprox798x1123": true,
+        "structure": true,
+        "sameParentTextIntersections": 0,
+        "boundedSafeAreaTextRisks": 0,
+        "nativeVisibleText": 36,
+        "visibleImageFills": 6,
+        "foldNodeId": "1094:187",
+        "foldX": 792.7,
+        "foldWidth": 2,
+        "foldHeight": 1122.5
+      },
+      "imageHashes": {
+        "backMainAcceptedCoastReuse": "adbb8e529451a81dd25e4eb29bf068655569ce25",
+        "backSupport1": "c1ada11205bc3978bf426b304d683f1c1566cac2",
+        "backSupport2": "d76eb07d83d042f15044c8bc6bf68d73a73cd77d",
+        "frontHeroExistingProxy": "539c259be8036b481d06b4f76db9a39b407d90e8",
+        "frontSupport": "d76eb07d83d042f15044c8bc6bf68d73a73cd77d",
+        "frontStreet": "439a719d73f28e8dd2889f2026cccb15f345ec63"
+      }
+    },
+    "inside": {
+      "label": "EL",
+      "workingNodeId": "1086:2",
+      "reviewSnapshotNodeId": "1089:2",
+      "selectionReason": "Live Figma had already promoted EL before this run's Git reconciliation. Fresh visual and structural readback confirms the profile-collage clean-room direction: dominant groom photograph, smaller overlapping bride portrait, direct-on-photo native Japanese display type, and preserved photo-led history/memory page. It outperforms the previous equal-profile-panel treatment without changing accepted image identities.",
+      "qa": {
+        "thumbnail500Equivalent": true,
+        "wholeReading": true,
+        "actualSizeLeft794x1123": true,
+        "actualSizeRight794x1123": true,
+        "structure": true,
+        "sameParentTextIntersections": 0,
+        "boundedSafeAreaTextRisks": 0,
+        "nativeVisibleText": 53,
+        "visibleImageFills": 6,
+        "foldNodeId": "1086:283",
+        "foldX": 792.7,
+        "foldWidth": 2,
+        "foldHeight": 1122.5
+      }
+    }
+  },
+  "figmaNavigation": {
+    "reviewPageId": "833:2",
+    "visibleBestOuter": "1096:2",
+    "visibleBestInside": "1089:2",
+    "bestOuterLabelNodeId": "846:2",
+    "bestOuterLabel": "BEST CLEANROOM — OUTER / EM",
+    "bestInsideLabelNodeId": "846:4",
+    "bestInsideLabel": "BEST CLEANROOM — INSIDE / EL",
+    "startPageId": "845:2",
+    "statusTextNodeId": "845:27",
+    "status": "EM outer / EL inside"
+  },
+  "coverHeroQ60": {
+    "masterDriveId": "1YL0WAOzYU3O1FGa23ieRuw_Btu4jbmzr",
+    "masterFileName": "RURUBU_V5_01_COVER_HERO__FIGMA_1330x1220_Q60.jpg",
+    "masterMimeType": "image/jpeg",
+    "exactDriveBinaryPlacedInFigma": false,
+    "exactDriveBinaryVisuallyVerifiedInFigma": false,
+    "targetSafeDuplicateNodeId": "1094:134",
+    "currentSafeDuplicateImageHash": "539c259be8036b481d06b4f76db9a39b407d90e8",
+    "transportNote": "Drive search freshly confirmed the Q60 master ID and filename. Previously rejected repeated DNS/manual binary transport routes were not retried in this experiment; EM's front hero remains the existing Figma proxy and is not counted as Q60 completion."
+  },
+  "progressClassification": {
+    "generatedThisRun": 0,
+    "newGeneratedAssetAdopted": 0,
+    "newExternalBinaryPlaced": 0,
+    "acceptedSameV5ImageReused": 1,
+    "cleanRoomComparatorsCreated": 1,
+    "cleanRoomComparatorsPromoted": 1,
+    "visualThreeScaleVerified": true,
+    "structureVerified": true,
+    "reviewPromotionVerified": true,
+    "currentChanged": false
+  },
+  "gate": {
+    "v5Complete": false,
+    "v6ProductionStarted": false,
+    "remainingDominantBlocker": "V5-01 exact Q60 Drive-to-Figma provenance lifecycle and final V5 gate reconciliation"
+  }
+}
