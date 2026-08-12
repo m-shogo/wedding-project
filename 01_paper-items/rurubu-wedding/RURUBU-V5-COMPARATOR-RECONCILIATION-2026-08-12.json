@@ -40,20 +40,44 @@
       "backNodeId": "996:3",
       "frontNodeId": "996:131",
       "reviewSnapshotNodeId": "997:2",
+      "sourceComparator": {"label": "DU", "nodeId": "992:2", "preserved": true},
       "status": "ADOPT_AS_STRONGEST_CLEANROOM_COMPOSITION_COMPARATOR_NOT_CURRENT",
+      "scratchSelection": "DV_SELECTED_OVER_DU_FOR_PRINT_NATIVE_HEADLINE",
       "nativeTextVisible": 37,
       "imageFillVisible": 7,
       "sameParentTextIntersections": 0,
       "safeAreaTextRisksUnder18px": 0,
-      "foldGuide": {"nodeId": "996:184", "x": 792.7000122070312, "width": 2, "height": 1122.5},
+      "foldGuide": {"nodeId": "996:184", "x": 792.7000122070312, "y": 0, "width": 2, "height": 1122.5},
       "hero": {
         "nodeId": "996:133",
         "imageHash": "539c259be8036b481d06b4f76db9a39b407d90e8",
         "geometry": {"width": 793.7, "height": 650},
-        "semantic": "visually verified existing Figma waterfront reuse; this hash is also the registered V5-05 history derivative hash and is not proof of exact Q60 Drive binary placement"
+        "semantic": "visually verified existing Figma Yokohama waterfront reuse; this hash is also the registered V5-05 history derivative hash and is not proof of exact Q60 Drive binary placement"
       },
-      "headline": {"nodeId": "996:143", "text": "横浜\nふたり旅。", "treatment": "solid deep navy native text; no stroke; no effects"},
-      "qa": {"thumbnail500": true, "wholeReading1400": true, "actualSizeFront": true, "actualSizeBack": true, "structure": true, "safeArea": true, "reviewSnapshot": true}
+      "headline": {
+        "nodeId": "996:143",
+        "text": "横浜\nふたり旅。",
+        "treatment": "solid deep navy native text; no stroke; no effects",
+        "mastheadNodeId": "996:183",
+        "mastheadTreatment": "generic drop shadow removed"
+      },
+      "backCover": {
+        "mainPhotoNodeId": "996:6",
+        "mainPhotoGeometry": {"width": 793.7, "height": 620},
+        "friendPhotoA": {"nodeId": "996:18", "imageHash": "c1ada11205bc3978bf426b304d683f1c1566cac2", "geometry": {"width": 520, "height": 300}, "rotation": -1.6},
+        "friendPhotoB": {"nodeId": "996:22", "imageHash": "d76eb07d83d042f15044c8bc6bf68d73a73cd77d", "geometry": {"width": 320, "height": 224}, "rotation": 2.2},
+        "captionStripNodes": ["996:20", "996:24"]
+      },
+      "qa": {
+        "thumbnail500": true,
+        "wholeReading1400": true,
+        "actualSizeFront": true,
+        "actualSizeBackInheritedFromVerifiedDU": true,
+        "structure": true,
+        "safeArea": true,
+        "reviewSnapshot": true
+      },
+      "visualRationale": "DU solved whole-item back-cover weakness. DV preserves that photo-led outer and removes the remaining effect-dependent headline treatment: the main Japanese title becomes solid deep navy with no outline, and the masthead drop shadow is removed. Thumbnail and actual-size comparison selected DV as more print-native and less synthetic."
     },
     "insideBest": {
       "label": "DY",
@@ -68,7 +92,7 @@
       "productionImageFillVisible": 6,
       "sameParentTextIntersections": 0,
       "safeAreaTextRisksUnder18px": 0,
-      "foldGuide": {"nodeId": "1012:283", "x": 792.7000122070312, "width": 2, "height": 1122.5},
+      "foldGuide": {"nodeId": "1012:283", "x": 792.7000122070312, "y": 0, "width": 2, "height": 1122.5},
       "memoryGeometry": {
         "lead": {"nodeId": "1012:267", "width": 550, "height": 330, "rotation": 0.6},
         "support02": {"nodeId": "1012:268", "width": 220, "height": 230, "rotation": -3.2},
@@ -94,11 +118,17 @@
     "bytes": 155439,
     "sha256": "090880c0ebe101f1321ebac05f22a91b2b61f3a8ac31c8d112dc418412f13ab2",
     "driveFreshReadback": true,
-    "roleDerivative240": {"driveId": "1aVp34U5qUTqd9FR3AILmJggdWwY1lAJb", "dimensions": {"width": 240, "height": 220}, "bytes": 10284, "driveFreshReadback": true},
+    "roleDerivative240": {
+      "driveId": "1aVp34U5qUTqd9FR3AILmJggdWwY1lAJb",
+      "dimensions": {"width": 240, "height": 220},
+      "bytes": 10284,
+      "driveFreshReadback": true
+    },
+    "latestTransportAttempt": "official Figma upload_assets previously issued a fresh single-use target but raw JPEG POST failed before upload because mcp.figma.com DNS resolution was unavailable",
     "latestTransportDecision": "Existing evidence explicitly rejects manual/model-visible base64 chunk transport because bounded chunks can lose characters. That path was re-audited and intentionally not resumed. No Q60 node mutation was adopted this run.",
     "exactDriveBinaryPlacedInFigma": false,
     "exactDriveBinaryVisuallyVerifiedInFigma": false,
-    "note": "Do not infer exact Q60 completion from DV hero hash 539c259..., which is separately registered as the V5-05 history derivative hash."
+    "note": "Do not infer exact Q60 completion from DV/DU/DT hero visual reuse. Live hero hash 539c259... is separately registered as the V5-05 history derivative hash; the Drive ID to exact Figma node/image-hash chain remains open."
   },
   "progressClassification": {
     "generatedThisRun": 0,
