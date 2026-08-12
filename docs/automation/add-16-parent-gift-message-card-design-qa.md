@@ -76,3 +76,25 @@ No raster was added because no screenshot-supported production asset need exists
 These remain `DEFERRED_FINALIZATION` / `BLOCKED_REQUIRED_INPUT`; maintain `NOT_PRINT_READY` until physical/vendor checks are complete.
 
 ADD-16 now satisfies the reopened sellable-visual gate. ADD-15 remains blocked before Figma production because the authoritative Model A / Model B / NOT_REQUIRED decision and an exact live Figma file key/page/node are not present. Next safe target is ADD-17 read-only requirement/neutral-template review without inventing child attendance facts.
+
+## 2026-08-12 fresh production spot-check — semantic placeholder polish
+
+Observed latest `main` immediately before the Figma write: `1fc11f364b19a241d8f5861c14083c43447dd63c`.
+
+Fresh front/back actual-size screenshots confirmed the V2 correspondence direction remains sellable. One visible production-note defect remained on the back: the body included `[家族固有の事実・思い出は正式入力後に配置]`, which reads as an implementation instruction rather than a semantic placeholder presented inside the finished stationery.
+
+Rollback-safe production change:
+- hidden rollback back: `6:2 / ROLLBACK_ADD16_BACK_PRE_SEMANTIC_PLACEHOLDER_FIX_2026_08_12`
+- production back root remained `1:13`
+- native text `4:37 / TXT_BODY` changed from `[本文 · LAYOUT DUMMY]\n\n[家族固有の事実・思い出は正式入力後に配置]` to `[本文 · LAYOUT DUMMY]\n\n[家族の思い出 · LAYOUT DUMMY]`
+- no factual family memory was invented
+
+Post-write actual-size screenshot QA: PASS. The back now reads like a designed letter surface with explicit replaceable semantic copy rather than a visible internal production instruction.
+
+Post-write structure readback:
+- front `1:2`: 7 native text, 0 IMAGE fill nodes, 0 text outside root, `clipsContent=true`
+- back `1:13`: 5 native text, 0 IMAGE fill nodes, 0 text outside root, `clipsContent=true`
+- rollback `6:2` is hidden
+- no flatten/raster replacement introduced
+
+Drive live readback before the Figma write confirmed `1BOyETtL1_loGXNjGV9S30sJKEhZNjd6O / ADD-16_両親贈呈品メッセージカード`. Drive write: 0. Image generation was not required because the defect was semantic copy, not missing visual media.
