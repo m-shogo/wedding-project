@@ -1,0 +1,86 @@
+{
+  "date": "2026-08-13",
+  "scope": "Rurubu WEDDING only",
+  "status": "V5_INCOMPLETE_Q60_EXACT_PROVENANCE_OPEN",
+  "current_untouched": {
+    "outer": "77:18",
+    "inside": "77:290"
+  },
+  "best_comparator": {
+    "outer": {
+      "label": "ER",
+      "working_node_id": "1118:2",
+      "review_node_id": "1119:2",
+      "source": "EQ 1116:2",
+      "source_lineage": "EP 1108:2",
+      "visually_verified": true,
+      "structure_verified": true,
+      "native_text_visible": 36,
+      "visible_image_fills": 7,
+      "absolute_text_intersections": 0,
+      "bounded_18px_safe_area_risks": 0,
+      "fold_x": 792.7000122070312,
+      "hero_node_id": "1118:134",
+      "hero_image_hash": "539c259be8036b481d06b4f76db9a39b407d90e8",
+      "hero_provenance_note": "existing proxy/history derivative only; not Q60 exact-placement evidence",
+      "destination_anchor": {
+        "node_id": "1118:190",
+        "name": "ER_YOKOHAMA_PROXY_ANCHOR_NOT_Q60_EXACT",
+        "width": 166,
+        "height": 118,
+        "image_hash": "e58ddfa30e3b4bb68e44f1789d984b75cf8a7912",
+        "role": "small secondary Yokohama specificity cue only",
+        "q60_completion_evidence": false
+      }
+    },
+    "inside": {
+      "label": "EO",
+      "working_node_id": "1107:285",
+      "review_node_id": "1111:188",
+      "visually_verified": true,
+      "structure_verified": true
+    }
+  },
+  "rollback": {
+    "ep_review_node_id": "1111:2",
+    "ep_hidden": true,
+    "eq_review_node_id": "1117:2",
+    "eq_hidden": true
+  },
+  "start_here": {
+    "status_text": "ER outer / EO inside",
+    "body_node_id": "845:16",
+    "status_node_id": "845:27"
+  },
+  "q60": {
+    "master_drive_id": "1YL0WAOzYU3O1FGa23ieRuw_Btu4jbmzr",
+    "master_mime": "image/jpeg",
+    "master_dimensions": "1330x1220",
+    "master_bytes": 155439,
+    "master_sha256": "090880c0ebe101f1321ebac05f22a91b2b61f3a8ac31c8d112dc418412f13ab2",
+    "small_derivative_drive_id": "1aVp34U5qUTqd9FR3AILmJggdWwY1lAJb",
+    "small_derivative_dimensions": "240x220",
+    "small_derivative_bytes": 10284,
+    "same_failed_transport_retried_this_run": false,
+    "exact_figma_placed": false,
+    "exact_figma_visually_verified": false
+  },
+  "qa": {
+    "thumbnail_500px": "PASS",
+    "whole_item_reading": "PASS",
+    "actual_size_front_794x1123": "PASS",
+    "structure": "PASS",
+    "print_safe_geometry": "PASS"
+  },
+  "progress_classification": {
+    "generated_images": 0,
+    "new_generated_assets_adopted": 0,
+    "new_external_binary_assets_placed": 0,
+    "clean_room_outer_candidates_created": 2,
+    "intermediate_eq_promoted_then_superseded": true,
+    "er_promoted": true,
+    "existing_yokohama_proxy_reused_as_small_secondary_anchor": 1
+  },
+  "v5_complete": false,
+  "v6_production_started": false
+}
