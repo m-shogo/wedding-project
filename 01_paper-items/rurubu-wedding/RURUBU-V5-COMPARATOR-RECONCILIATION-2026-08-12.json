@@ -11,74 +11,65 @@
     "start": {
       "pageId": "845:2",
       "name": "00_RURUBU_START_HERE",
-      "status": "DV outer / DZ inside",
+      "status": "EA outer / DZ inside",
       "statusTextNodeId": "845:27",
       "reviewBodyNodeId": "845:16",
-      "reviewBodyStatus": "Best DV outer / DZ inside",
+      "reviewBodyStatus": "Best EA outer / DZ inside",
       "screenshotReadback": true
     },
     "review": {
       "pageId": "833:2",
       "name": "04_RURUBU_REVIEW",
-      "bestOuterSnapshot": "997:2",
+      "bestOuterSnapshot": "1027:2",
       "bestInsideSnapshot": "1021:2",
-      "previousOuterRollback": {"nodeId": "993:2", "label": "DU", "visible": false, "preserved": true},
+      "previousOuterRollback": {"nodeId": "997:2", "label": "DV", "visible": false, "preserved": true},
       "previousInsideRollback": {"nodeId": "1016:2", "label": "DY", "visible": false, "preserved": true},
       "rejectedInsideEvidence": {"nodeId": "1020:2", "label": "DZ_Q1_OVERFLOW_PRE_FIX", "visible": false, "preserved": true}
     },
     "working": {
       "pageId": "834:2",
       "name": "05_RURUBU_WORKING",
-      "preservedComparators": ["899:2", "977:2", "982:2", "992:2", "996:2", "1012:2", "1019:2"],
-      "bestOuterWorking": "996:2",
+      "preservedComparators": ["899:2", "977:2", "982:2", "992:2", "996:2", "1012:2", "1019:2", "1024:2"],
+      "bestOuterWorking": "1024:2",
       "bestInsideWorking": "1019:2"
     }
   },
   "comparators": {
     "outerBest": {
-      "label": "DV",
-      "nodeId": "996:2",
-      "backNodeId": "996:3",
-      "frontNodeId": "996:131",
-      "reviewSnapshotNodeId": "997:2",
-      "sourceComparator": {"label": "DU", "nodeId": "992:2", "preserved": true},
+      "label": "EA",
+      "nodeId": "1024:2",
+      "backNodeId": "1024:3",
+      "frontNodeId": "1024:131",
+      "reviewSnapshotNodeId": "1027:2",
+      "sourceComparator": {"label": "DV", "nodeId": "996:2", "preserved": true, "reviewRollbackNodeId": "997:2"},
       "status": "ADOPT_AS_STRONGEST_CLEANROOM_COMPOSITION_COMPARATOR_NOT_CURRENT",
-      "scratchSelection": "DV_SELECTED_OVER_DU_FOR_PRINT_NATIVE_HEADLINE",
-      "nativeTextVisible": 37,
+      "scratchSelection": "EA_SELECTED_OVER_DV_FOR_FULLBLEED_LOWER_PHOTO_EDITORIAL_CONTINUITY",
+      "nativeTextVisible": 36,
       "imageFillVisible": 7,
       "sameParentTextIntersections": 0,
-      "safeAreaTextRisksUnder18px": 0,
-      "foldGuide": {"nodeId": "996:184", "x": 792.7000122070312, "y": 0, "width": 2, "height": 1122.5},
+      "foldGuide": {"nodeId": "1024:184", "x": 792.7000122070312, "y": 0, "width": 2, "height": 1122.5},
       "hero": {
-        "nodeId": "996:133",
+        "nodeId": "1024:133",
         "imageHash": "539c259be8036b481d06b4f76db9a39b407d90e8",
-        "geometry": {"width": 793.7, "height": 650},
-        "semantic": "visually verified existing Figma Yokohama waterfront reuse; this hash is also the registered V5-05 history derivative hash and is not proof of exact Q60 Drive binary placement"
+        "semantic": "visually verified existing Figma Yokohama waterfront reuse; not proof of exact Q60 Drive binary placement"
       },
-      "headline": {
-        "nodeId": "996:143",
-        "text": "横浜\nふたり旅。",
-        "treatment": "solid deep navy native text; no stroke; no effects",
-        "mastheadNodeId": "996:183",
-        "mastheadTreatment": "generic drop shadow removed"
-      },
-      "backCover": {
-        "mainPhotoNodeId": "996:6",
-        "mainPhotoGeometry": {"width": 793.7, "height": 620},
-        "friendPhotoA": {"nodeId": "996:18", "imageHash": "c1ada11205bc3978bf426b304d683f1c1566cac2", "geometry": {"width": 520, "height": 300}, "rotation": -1.6},
-        "friendPhotoB": {"nodeId": "996:22", "imageHash": "d76eb07d83d042f15044c8bc6bf68d73a73cd77d", "geometry": {"width": 320, "height": 224}, "rotation": 2.2},
-        "captionStripNodes": ["996:20", "996:24"]
+      "frontLowerEditorial": {
+        "fullBleedStreetPhotoNodeId": "1024:167",
+        "feature01PaperNodeId": "1024:174",
+        "feature02PhotoNodeId": "1024:153",
+        "feature02CaptionBandNodeId": "1024:162",
+        "feature03RuleNodeId": "1024:164",
+        "subtractedNodes": ["1024:134", "1024:135", "1024:171", "1024:173", "1024:178"]
       },
       "qa": {
         "thumbnail500": true,
-        "wholeReading1400": true,
-        "actualSizeFront": true,
-        "actualSizeBackInheritedFromVerifiedDU": true,
+        "wholeReading1000": true,
+        "actualSizeFront794x1123": true,
+        "actualSizeBackInheritedFromVerifiedDV": true,
         "structure": true,
-        "safeArea": true,
         "reviewSnapshot": true
       },
-      "visualRationale": "DU solved whole-item back-cover weakness. DV preserves that photo-led outer and removes the remaining effect-dependent headline treatment: the main Japanese title becomes solid deep navy with no outline, and the masthead drop shadow is removed. Thumbnail and actual-size comparison selected DV as more print-native and less synthetic."
+      "visualRationale": "DV's upper hero remains strong, but its lower half still separated into a light information field plus framed photo. EA removes redundant lower UI-like fields, expands the verified street image to full bleed, keeps one dominant cream feature paper, attaches feature 02 to its tilted photo with a compact caption band, and places feature 03 directly on photography using native white type plus a thin yellow rule. Three-scale comparison selected EA as denser, more photo-led, and less brochure-like."
     },
     "insideBest": {
       "label": "DZ",
@@ -94,18 +85,6 @@
       "sameParentTextIntersections": 0,
       "safeAreaTextRisksUnder18px": 0,
       "foldGuide": {"nodeId": "1019:283", "x": 792.7000122070312, "y": 0, "width": 2, "height": 1122.5},
-      "interviewGeometry": {
-        "q1Number": {"nodeId": "1019:22", "x": 24, "y": 724, "width": 120, "height": 96, "fontSize": 80},
-        "q1Question": {"nodeId": "1019:23", "x": 152, "y": 738, "width": 316, "height": 34},
-        "q1PullQuote": {"nodeId": "1019:25", "x": 42, "y": 830, "width": 430, "height": 96, "fontSize": 31},
-        "q2RuleNodeId": "1019:125",
-        "q3RuleNodeId": "1019:126"
-      },
-      "memoryGeometry": {
-        "lead": {"nodeId": "1019:267", "width": 550, "height": 330, "rotation": 0.6},
-        "support02": {"nodeId": "1019:268", "width": 220, "height": 230, "rotation": -3.2},
-        "support03": {"nodeId": "1019:269", "width": 230, "height": 170, "rotation": 2.4}
-      },
       "qa": {
         "thumbnail500": true,
         "wholeReading1200": true,
@@ -116,19 +95,14 @@
         "reviewSnapshot": true,
         "renderedGlyphFit": true
       },
-      "rejectedEvidence": {
-        "reviewSnapshotNodeId": "1020:2",
-        "reason": "structure collision count was zero after narrowing Q1, but the fixed 01 text box was too narrow and visually wrapped the second digit into the pull-quote zone; screenshot QA rejected it"
-      },
       "productionImageHashes": {
-        "profileA": {"nodeId": "1019:7", "hash": "a39dd297eb9de572317a5ce57f0af12e8597b156"},
-        "profileB": {"nodeId": "1019:12", "hash": "2359f635b4926a83e22ca1f9214e75c709291152"},
-        "history": {"nodeId": "1019:133", "hash": "539c259be8036b481d06b4f76db9a39b407d90e8"},
-        "memory1": {"nodeId": "1019:267", "hash": "adbb8e529451a81dd25e4eb29bf068655569ce25"},
-        "memory2": {"nodeId": "1019:268", "hash": "439a719d73f28e8dd2889f2026cccb15f345ec63"},
-        "memory4": {"nodeId": "1019:269", "hash": "c09aa82e7b2ac75708707345c6f845452bf67663"}
-      },
-      "visualRationale": "DY already fixed Memory Spots crop hierarchy. DZ keeps that verified right-page structure and all accepted image hashes, then rebuilds the lower-left Q&A as an asymmetric interview feature: oversized 01 and pull quote dominate, while 02/03 compress into a narrow secondary column. Screenshot QA exposed and repaired a glyph-wrap failure that collision QA alone missed. Three-scale comparison selected corrected DZ."
+        "profileA": "a39dd297eb9de572317a5ce57f0af12e8597b156",
+        "profileB": "2359f635b4926a83e22ca1f9214e75c709291152",
+        "history": "539c259be8036b481d06b4f76db9a39b407d90e8",
+        "memory1": "adbb8e529451a81dd25e4eb29bf068655569ce25",
+        "memory2": "439a719d73f28e8dd2889f2026cccb15f345ec63",
+        "memory4": "c09aa82e7b2ac75708707345c6f845452bf67663"
+      }
     }
   },
   "coverHeroQ60": {
@@ -141,15 +115,18 @@
     "driveFreshReadback": true,
     "roleDerivative240": {
       "driveId": "1aVp34U5qUTqd9FR3AILmJggdWwY1lAJb",
+      "fileName": "RURUBU_V5_01_COVER_HERO__ROLE_240x220_Q78.jpg",
       "dimensions": {"width": 240, "height": 220},
       "bytes": 10284,
       "driveFreshReadback": true
     },
-    "latestTransportAttempt": "official Figma upload_assets previously issued a fresh single-use target but raw JPEG POST failed before upload because mcp.figma.com DNS resolution was unavailable",
-    "latestTransportDecision": "Repeated DNS upload path and rejected manual/model-visible base64 chunk transport were intentionally not repeated. Fresh Drive readback reconfirmed the exact Q60 source; no Q60 node mutation was adopted this run.",
+    "latestTransportAttempts": [
+      "Official Figma upload_assets issued a fresh target for safe EA hero node 1024:133; raw POST of the locally materialized verified Drive master failed before upload because mcp.figma.com DNS resolution was unavailable.",
+      "Switched method: exact bytes of the verified 240x220 Drive derivative were locally materialized and encoded in-call; figma.createImage rejected JPEG as Image type is unsupported. The failed Figma script was atomic and no node mutation occurred."
+    ],
     "exactDriveBinaryPlacedInFigma": false,
     "exactDriveBinaryVisuallyVerifiedInFigma": false,
-    "note": "Do not infer exact Q60 completion from DV/DU/DT hero visual reuse. Live hero hash 539c259... is separately registered as the V5-05 history derivative hash; the Drive ID to exact Figma node/image-hash chain remains open."
+    "note": "Do not infer exact Q60 completion from EA/DV hero visual reuse. The live hero hash 539c259... is separately registered elsewhere and the Drive ID to exact Figma image-hash chain remains open."
   },
   "progressClassification": {
     "generatedThisRun": 0,
@@ -159,17 +136,15 @@
     "visualLayoutEditsPlaced": true,
     "visualLayoutEditsVerified": true,
     "structureVerified": true,
-    "safeAreaVerified": true,
     "reviewPromotionVerified": true,
-    "navigationReadbackVerified": true,
-    "rejectedVisualRegressionPreserved": true
+    "navigationReadbackVerified": true
   },
   "gate": {
     "photoRolePass": "canonical Current cover-hero role remains incomplete; no exact Q60 role promotion",
     "roleComplete": "V5-01 remains false in asset evidence ledger; no Q60 role promotion",
-    "dominantPhotoCompositionComparator": "DV visually passes as strongest outer comparator, but exact destination asset lifecycle remains open",
+    "dominantPhotoCompositionComparator": "EA visually passes as strongest outer comparator, but exact destination asset lifecycle remains open",
     "v5Complete": false,
     "v6ProductionStarted": false
   },
-  "evidence": "learning-runs/2026-08-12-v5-dz-editorial-interview-cleanroom.md"
+  "evidence": "learning-runs/2026-08-12-v5-ea-fullbleed-lower-editorial-cleanroom.md"
 }
