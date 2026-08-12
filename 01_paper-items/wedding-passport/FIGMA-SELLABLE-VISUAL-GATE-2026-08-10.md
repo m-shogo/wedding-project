@@ -99,3 +99,38 @@ These are `DEFERRED_FINALIZATION` and do not reopen the sellable placeholder vis
 `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / ROLLBACK_SAFE / NOT_PRINT_READY`
 
 WEDDING PASSPORT can now leave the reopened visual queue. Next target: BOARDING PASS, starting from its live production front/back and treating its older `DESIGN_QA_PASS_WITH_PLACEHOLDERS` as structural evidence only.
+
+## 2026-08-12 fresh front-cover spot-check — semantic issue-note cleanup
+
+Observed latest `main` immediately before production edit: `a06fe1339be8b0135c0e6190e461947dbe827ad3`.
+
+Fresh 1480×2100 production screenshot of front cover `18:2` confirmed the graphic-editorial cover remains visually strong, but found one visible internal production instruction in the lower-right folio area:
+
+`[正式文言・印刷仕様は最終確定時に差替え · LAYOUT DUMMY]`
+
+This was structurally valid but read as an authoring note rather than a sellable semantic placeholder.
+
+Rollback-safe proof:
+- hidden front-cover rollback on `99_QA`: `122:2 / ROLLBACK_PASSPORT_FRONT_PRE_ISSUE_NOTE_SEMANTIC_FIX_2026_08_12`
+- production root remained `18:2`.
+
+Production change:
+- native text `103:134 / V2_EDIT_NOTE` changed to `[発行情報 · LAYOUT DUMMY]`.
+- no factual issue/print information was invented.
+- layout, font size, folio alignment, contour artwork and other copy were unchanged.
+
+Post-write screenshot QA:
+- full front cover at 1480×2100: PASS;
+- the lower-right note now reads as a concise replaceable role rather than an internal instruction;
+- title `旅のはじまり`, navy date rail, index hierarchy and contour composition remain unchanged.
+
+Live post-write structural readback supersedes the older front-cover image-count snapshot above for the current production state:
+- `18:2`: 1480×2100, `clipsContent=true`;
+- native text: `18`;
+- current IMAGE-fill role: `1` — `121:2 / IMG_PAPER_TEXTURE_REPLACEABLE`, opacity `0.16`, blend `MULTIPLY`;
+- text outside root: `0`;
+- edited note: `103:134`, native editable text, `360×24`.
+
+The IMAGE role is the later adopted replaceable paper-texture layer; it is not newly added by this spot-check. Drive authority remained `1LnGb9tq_Vswe-GKO6UxfvKMAZuShEaaw`; Drive write this spot-check: `0`.
+
+Current result remains `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / ROLLBACK_SAFE / NOT_PRINT_READY`.
