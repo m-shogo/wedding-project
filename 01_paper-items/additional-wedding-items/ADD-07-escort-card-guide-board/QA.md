@@ -1,55 +1,72 @@
 # ADD-07 エスコートカード案内ボード — QA
 
-Status: `PREPARED_FOR_FIGMA / SCREENSHOT_QA_PENDING`
-Date: 2026-08-02
+Status: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / A2_A3_REFLOW_PASS / ROLLBACK_SAFE / NOT_PRINT_READY`
+Date: 2026-08-12
 
-## Preflight
+## Current authority
 
-- [x] 完成済みBOARDING PASSを改変しない
-- [x] 未確定の並び順・受付運用を事実として記載しない
-- [x] production rasterを不要に生成しない
-- [x] A2/A3を別レイアウトとして扱う
-- [ ] Figma実制作
-- [ ] スクリーンショットQA
-- [ ] 100%実寸試し刷り
-- [ ] 設置環境QA
+- Current: `docs/automation/non-rurubu-figma-quality-current.md` → `ACTIVE / FIGMA_EDIT_ALLOWED / VISUAL_REOPENED`
+- Figma file: `rplj1IWXP4XVKjWDQRg3dU`
+- page: `0:1 / ADD-07_ESCORT_CARD_GUIDE`
+- A2 production: `1:2 / FRAME_ADD07_A2_PORTRAIT`
+- A3 production: `1:17 / FRAME_ADD07_A3_REFLOW_COMPARE`
+- exact Drive authority: `1nPb_yvp1rIlF_L3X0mAnBFSzSuEIllDi / ADD-07_エスコートカード案内ボード`
+- latest detailed visual evidence: `docs/add-items/ADD-07-REOPENED-VISUAL-QA-2026-08-10.md`
+- latest placeholder polish evidence: `docs/add-items/ADD-07-PLACEHOLDER-POLISH-2026-08-12.md`
 
-## Screenshot QA checklist
+This file supersedes its old 2026-08-02 `PREPARED_FOR_FIGMA / SCREENSHOT_QA_PENDING` snapshot. It is now an item-level pointer to the verified live production state; physical/installation checks remain deferred.
 
-### Information hierarchy
+## Verified live production
 
-- 2–4mから「エスコートカードをお取りください」が最初に読める
-- 英語見出しが日本語案内を圧倒しない
-- `探す → 取る → 卓へ進む`が説明なしでも追える
-- 3工程が均等カードUIに見えない
+### A2
 
-### Authenticity
+- canvas: `1400 × 1980`, `clipsContent=true`
+- native editable text: `11`
+- raster IMAGE fills: `0`
+- text outside production root: `0`
+- semantic location placeholder: `[カード設置場所 · LAYOUT DUMMY]`
 
-- 搭乗口らしさが記号の羅列ではなく、文字階層と導線から生まれている
-- BOARDING PASSの拡大コピーに見えない
-- バーコード、スタンプ、飛行機が装飾目的で増えていない
-- 旅行テーマを保ちながら、会場案内として落ち着いている
+### A3
 
-### Print and installation
+- canvas: `990 × 1400`, `clipsContent=true`
+- native editable text: `11`
+- raster IMAGE fills: `0`
+- text outside production root: `0`
+- semantic location placeholder: `[カード設置場所 · LAYOUT DUMMY]`
 
-- 3mm bleedと15mm safe areaを保持
-- 細線が印刷で消えない
-- イーゼルの受けで下部文言が隠れない
-- 暖色照明、白壁、暗い木部のいずれでも主見出しが埋もれない
-- カード陳列やゲストの動線と競合しない
+## Fresh visual spot-check — 2026-08-12
 
-### Content safety
+Fresh live screenshots of both A2 and A3 were re-read after the latest placeholder polish.
 
-- ゲスト名・卓番号一覧を焼き込んでいない
-- 五十音順、アルファベット順など未確定運用を記載していない
-- QRコードや実在しないゲート番号を追加していない
+- the large Japanese instruction remains the first visual read;
+- `01 → 02 → 03` forms a clear staggered action sequence without equal cards or dashboard UI;
+- English kicker remains subordinate;
+- generous negative space reads as large-format signage rather than an empty web hero because the title, left-edge rail and stepped sequence provide a strong vertical/diagonal rhythm;
+- the footer placeholder remains a single controlled line and does not look like accidental implementation copy;
+- no generic airplane, stamp, barcode, fake gate data, raster decoration, shadow, gradient or badge was introduced;
+- no image-generation asset is required by the current visual defect model.
 
-## Evidence-driven correction order
+Decision: keep current production. A materially different redesign is not justified by this fresh screenshot because the composition still meets the reopened sellable gate and new decoration would reduce rather than improve print authenticity.
 
-1. 日本語主案内の可読性
-2. 行動導線の理解速度
-3. カード陳列との視覚競合
-4. 印刷線幅とコントラスト
-5. 装飾量
+## Content safety
 
-具体的欠陥がない限り、既存Drive素材の再制作・差し替えは行わない。
+- guest names and table-number lists are not baked into the sign;
+- alphabetical / kana ordering is not asserted before the real operation is fixed;
+- no QR code or fabricated gate/transport data is present;
+- all unknown placement information remains native semantic placeholder text.
+
+## Deferred finalization
+
+Still `NOT_PRINT_READY` until the following are actually verified:
+
+- 100% physical print proof;
+- printer stock/profile and final trim/bleed confirmation;
+- installation height / easel lip / viewing-distance check;
+- venue lighting and wall/background contrast;
+- final card placement operation and wording.
+
+These are `DEFERRED_FINALIZATION`; they do not invalidate the current visual/structural pass.
+
+## Final decision
+
+`SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / A2_A3_REFLOW_PASS / ROLLBACK_SAFE / NOT_PRINT_READY`
