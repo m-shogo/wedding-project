@@ -69,3 +69,26 @@ Final production:
 - Printer template/profile, exact physical bleed/safe-area verification, 100% A6/A5 proof.
 
 These inputs block finalization, not design progression. ADD-14 now satisfies the reopened visual target and may progress to ADD-15.
+
+## 2026-08-12 fresh production spot-check — QR placeholder polish
+
+Observed latest `main` immediately before the Figma write: `1fc11f364b19a241d8f5861c14083c43447dd63c`.
+
+Fresh A6/A5 screenshots found one remaining production-facing implementation note inside the QR role: `QR / FINAL URL / REQUIRED`. Although structurally harmless, it read like an internal admin label rather than sellable stationery and conflicted with the Current rule that unknown QR destinations remain explicit semantic layout dummies.
+
+Rollback-safe production change:
+- hidden rollback A6: `7:2 / ROLLBACK_ADD14_A6_PRE_QR_PLACEHOLDER_JA_FIX_2026_08_12`
+- hidden rollback A5: `7:27 / ROLLBACK_ADD14_A5_PRE_QR_PLACEHOLDER_JA_FIX_2026_08_12`
+- A6 native text `5:55 / TXT_QR_PLACEHOLDER`: changed to `QR\n[QRリンク先 ·\nLAYOUT DUMMY]`
+- A5 native text `5:79 / TXT_QR_PLACEHOLDER`: changed to the same semantic placeholder
+- production root IDs remained A6 `1:2`, A5 `1:18`
+
+Post-write screenshot QA: PASS at A6 592×420 and A5 840×592. The QR box remains clearly replaceable but no longer displays internal-looking English production instructions.
+
+Post-write structure readback:
+- A6: 18 native text, 0 IMAGE fill nodes, 0 text outside root, `clipsContent=true`
+- A5: 18 native text, 0 IMAGE fill nodes, 0 text outside root, `clipsContent=true`
+- both rollback copies are hidden
+- no flatten/raster replacement introduced
+
+Drive live readback before the Figma write confirmed `1Oq2Pz2mYo4oaDnO7LMezMrCUizcxaEjs / ADD-14_二次会案内`. Drive write: 0. Image generation was not required because the defect was semantic placeholder typography, not missing imagery.
