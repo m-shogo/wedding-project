@@ -151,3 +151,37 @@ These do not block the reopened sellable placeholder visual pass.
 `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / ROLLBACK_SAFE / NOT_PRINT_READY`
 
 BOARDING PASS may leave the reopened visual queue. Next target is `青春ふたりきっぷ`, which must be reopened visually even if its older structural QA passed.
+
+## 2026-08-12 fresh front spot-check — semantic placeholder normalization
+
+Observed latest `main` immediately before production edit: `9d604c29e20bfdc782ba011f3276e4d0ff62d3e4`.
+
+Fresh 1200×550 front/back screenshots confirmed the V2 editorial direction remains strong. The front still exposed several legacy generic `DUMMY` values and an ambiguous detachable-stub table value `--`, even though Current requires unknown variable values to remain explicit semantic layout placeholders.
+
+Rollback-safe proof:
+- hidden front rollback: `24:2 / ROLLBACK_BOARDING_FRONT_PRE_SEMANTIC_PLACEHOLDER_FIX_2026_08_12`;
+- production root remained `8:5`.
+
+Production changes, all native editable text:
+- `21:108 / TXT_GUEST_NAME`: `[氏名 · DUMMY]` → `[氏名 · LAYOUT DUMMY]`;
+- `21:123 / TXT_VENUE_VALUE`: `[VENUE · DUMMY]` → `[会場名 · LAYOUT DUMMY]`;
+- `21:127 / TXT_STUB_NAME`: `[ROMAN NAME · DUMMY]` → `[ローマ字氏名 · LAYOUT DUMMY]`;
+- `21:129 / TXT_STUB_GATE`: `[最終案内 · DUMMY]` → `[最終案内 · LAYOUT DUMMY]`;
+- `21:126 / TXT_TABLE_VALUE`: ambiguous `--` → two-level `[卓番号]` + small `LAYOUT DUMMY`; the role was resized to `185×52` and positioned at `y=106` inside the physical tear-off stub.
+
+The old `GATE` and `YOKOHAMA / HAPPINESS` legacy text nodes remain hidden and were not revived.
+
+Post-write screenshot QA:
+- front 1200×550: PASS; guest name remains the dominant editorial anchor;
+- reception/table/date/ceremony-time hierarchy is unchanged;
+- stub now communicates that the table value is replaceable rather than displaying an unexplained dash;
+- back 1200×550 was freshly checked and required no edit.
+
+Live post-write structure:
+- front `8:5`: 1200×550, `clipsContent=true`, 24 native text nodes, 0 text outside root;
+- current later-adopted IMAGE role: `23:2 / IMG_TICKET_STOCK_TEXTURE_REPLACEABLE`, opacity `0.14`, blend `MULTIPLY`;
+- no raster flattening or variable copy was baked into the texture.
+
+The IMAGE role supersedes the older historical `IMAGE-fill nodes: 0` production snapshot above; it was not added in this spot-check. Drive authority remained `1pccCqb47W7z4F9g_224X4U3bS45HA_Ql / 03_航空チケット風_エスコートカード`; Drive write this spot-check: `0`.
+
+Current result remains `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / ROLLBACK_SAFE / NOT_PRINT_READY`.
