@@ -1,0 +1,98 @@
+{
+  "schemaVersion": 1,
+  "scope": "RURUBU_WEDDING_V5_ONLY",
+  "date": "2026-08-12",
+  "authorityType": "live-promotion-overlay",
+  "supersedesComparatorSelectionOnly": "RURUBU-V5-COMPARATOR-EH-EG-PROMOTION-2026-08-12.json",
+  "authority": "live Figma + Drive authority/readback state + asset evidence ledger + GitHub main",
+  "current": {
+    "outer": {"nodeId": "77:18", "changed": false, "reviewSnapshotNodeId": "833:470"},
+    "inside": {"nodeId": "77:290", "changed": false, "reviewSnapshotNodeId": "833:744"}
+  },
+  "selectedComparators": {
+    "outer": {
+      "label": "EI",
+      "workingNodeId": "1067:2",
+      "frontNodeId": "1067:131",
+      "backNodeId": "1067:3",
+      "reviewSnapshotNodeId": "1069:2",
+      "previousBest": {"label": "EH", "workingNodeId": "1061:2", "reviewRollbackNodeId": "1064:2", "visible": false, "preserved": true},
+      "selectionReason": "EI preserves EH's accepted photo-first composition but makes the Japanese destination word itself the dominant editorial image: 横浜 is 112px while ふたり旅。 is materially smaller at 58px, Feature 01 has a stronger number/title scale relationship, and Feature 02 is enlarged and pushed further across the hero/lower-photo boundary. This improves thumbnail recognition and Japanese travel-magazine silhouette without adding rounded cards, shadows, gradients, or generic UI furniture.",
+      "qa": {
+        "thumbnail500": true,
+        "wholeReading1000": true,
+        "actualSizeFront794x1123": true,
+        "actualSizeBack794x1123": true,
+        "structure": true,
+        "sameParentTextIntersections": 0,
+        "boundedSafeAreaTextRisks": 0,
+        "nativeVisibleText": 37,
+        "visibleImageFills": 6,
+        "foldNodeId": "1067:184"
+      },
+      "rejectedIntermediates": [
+        "Initial EI placed the 80px Feature 01 number at x=16, inside the bounded 18px safe-area heuristic. It was moved to x=20 and the candidate was re-verified before promotion."
+      ],
+      "imageHashesPreserved": {
+        "heroExistingProxy": "539c259be8036b481d06b4f76db9a39b407d90e8",
+        "lowerStreet": "439a719d73f28e8dd2889f2026cccb15f345ec63",
+        "backMain": "e3738476f760932bb5b09c9d60f174dd6c84049d",
+        "backFriendCafe": "c1ada11205bc3978bf426b304d683f1c1566cac2",
+        "backFriendDiningAndFeature02": "d76eb07d83d042f15044c8bc6bf68d73a73cd77d"
+      }
+    },
+    "inside": {
+      "label": "EG",
+      "workingNodeId": "1057:2",
+      "reviewSnapshotNodeId": "1058:2",
+      "selectionReason": "EG remains the verified Best Inside; this EI run did not mutate it.",
+      "qaInheritedFrom": "learning-runs/2026-08-12-v5-eg-solid-history-type-promotion.md"
+    }
+  },
+  "figmaNavigation": {
+    "reviewPageId": "833:2",
+    "visibleBestOuter": "1069:2",
+    "visibleBestInside": "1058:2",
+    "bestOuterLabelNodeId": "846:2",
+    "bestOuterLabel": "BEST CLEANROOM — OUTER / EI",
+    "bestInsideLabelNodeId": "846:4",
+    "bestInsideLabel": "BEST CLEANROOM — INSIDE / EG",
+    "startPageId": "845:2",
+    "statusTextNodeId": "845:27",
+    "status": "EI outer / EG inside",
+    "reviewBodyNodeId": "845:16",
+    "finalLiveReadback": true
+  },
+  "coverHeroQ60": {
+    "driveId": "1YL0WAOzYU3O1FGa23ieRuw_Btu4jbmzr",
+    "fileName": "RURUBU_V5_01_COVER_HERO__FIGMA_1330x1220_Q60.jpg",
+    "dimensionsPx": {"width": 1330, "height": 1220},
+    "sizeBytes": 155439,
+    "sha256": "090880c0ebe101f1321ebac05f22a91b2b61f3a8ac31c8d112dc418412f13ab2",
+    "runtimeMaterializedFromDrive": true,
+    "exactDriveBinaryPlacedInFigma": false,
+    "exactDriveBinaryVisuallyVerifiedInFigma": false,
+    "targetSafeDuplicateNodeId": "1067:133",
+    "currentSafeDuplicateImageHash": "539c259be8036b481d06b4f76db9a39b407d90e8",
+    "note": "Fresh authenticated Drive fetch materialized the exact 155,439-byte JPEG into the runtime. A new official Figma upload_assets target was issued specifically for EI node 1067:133, but the exact-byte POST stopped before upload because mcp.figma.com DNS resolution failed. The node was not mutated by the failed transport and is explicitly named EI_HERO_EXISTING_FIGMA_PROXY_Q60_OPEN. Hash 539c259... is existing V5-05 history-derived imagery and is not Q60 provenance."
+  },
+  "progressClassification": {
+    "generatedThisRun": 0,
+    "newGeneratedAssetAdopted": 0,
+    "newExternalBinaryPlaced": 0,
+    "cleanRoomComparatorsCreated": 1,
+    "cleanRoomComparatorsPromoted": 1,
+    "visualThreeScaleVerified": true,
+    "actualSizeBackVerified": true,
+    "structureVerified": true,
+    "reviewPromotionVerified": true,
+    "navigationReadbackVerified": true,
+    "currentChanged": false
+  },
+  "gate": {
+    "v5Complete": false,
+    "v6ProductionStarted": false,
+    "remainingDominantBlocker": "V5-01 exact Q60 Drive-to-Figma provenance lifecycle and remaining final V5 gate reconciliation"
+  },
+  "evidence": "learning-runs/2026-08-12-v5-ei-destination-type-dominance.md"
+}
