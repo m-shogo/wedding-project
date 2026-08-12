@@ -1,0 +1,67 @@
+{
+  "date": "2026-08-13",
+  "scope": "Rurubu WEDDING only",
+  "current": {
+    "outer": "77:18",
+    "inside": "77:290",
+    "touched": false
+  },
+  "best": {
+    "outer": {
+      "workingNodeId": "1135:2",
+      "reviewNodeId": "1137:2",
+      "label": "EU",
+      "visuallyVerified": true,
+      "structureVerified": true
+    },
+    "inside": {
+      "workingNodeId": "1107:285",
+      "reviewNodeId": "1111:188",
+      "label": "EO",
+      "visuallyVerified": true,
+      "structureVerified": true
+    }
+  },
+  "q60": {
+    "masterDriveId": "1YL0WAOzYU3O1FGa23ieRuw_Btu4jbmzr",
+    "masterMimeType": "image/jpeg",
+    "masterBytes": 155439,
+    "derivativeDriveId": "1aVp34U5qUTqd9FR3AILmJggdWwY1lAJb",
+    "exactDerivativeFigmaNodeId": "1135:189",
+    "exactDerivativeImageHash": "644f449c3bf2001a94d4b822d2b55e2614c11042",
+    "exactDerivativeGeometry": "226x206 secondary destination postcard",
+    "exactDerivativeAnchorVerified": true,
+    "dominantHeroFigmaNodeId": "1135:134",
+    "dominantHeroNodeName": "EU_HERO_Q60_EXACT_PENDING",
+    "dominantHeroImageHash": "539c259be8036b481d06b4f76db9a39b407d90e8",
+    "dominantHeroExact": false,
+    "masterUploadRetryResult": "Fresh official upload target issued for safe duplicate hero; exact JPEG byte POST failed on mcp.figma.com DNS resolution before mutation."
+  },
+  "euQa": {
+    "thumbnail": "PASS",
+    "wholeReading": "PASS",
+    "naturalWholeSpreadApprox1588x1123": "PASS",
+    "visibleNativeText": 36,
+    "visibleImageFills": 7,
+    "sameParentTextIntersections": 0,
+    "bounded18pxSafeAreaRisks": 0,
+    "rejectedFirstRender": "Large 01 wrapped into two lines",
+    "rejectedStructureState": "Two text intersections: kicker x Yokohama and 01 x Feature 01 title",
+    "postFixReviewComparison": "PASS"
+  },
+  "rollback": {
+    "previousBestOuter": "ET",
+    "previousBestOuterWorkingNodeId": "1132:2",
+    "previousBestOuterReviewNodeId": "1133:2",
+    "previousBestOuterReviewHidden": true
+  },
+  "reviewLabels": {
+    "outer": "BEST CLEANROOM — OUTER / EU",
+    "inside": "BEST CLEANROOM — INSIDE / EO"
+  },
+  "status": {
+    "v5Complete": false,
+    "v6ProductionStarted": false,
+    "reason": "EU improves the verified visual comparator and preserves exact secondary Yokohama evidence, but the dominant Q60 hero provenance and full V5 final gate remain open."
+  }
+}
