@@ -11,62 +11,72 @@
     "start": {
       "pageId": "845:2",
       "name": "00_RURUBU_START_HERE",
-      "status": "DU outer / DF inside",
+      "status": "DV outer / DF inside",
       "statusTextNodeId": "845:27",
       "reviewBodyNodeId": "845:16",
-      "reviewBodyStatus": "Best DU outer / DF inside",
+      "reviewBodyStatus": "Best DV outer / DF inside",
       "screenshotReadback": true
     },
     "review": {
       "pageId": "833:2",
       "name": "04_RURUBU_REVIEW",
-      "bestOuterSnapshot": "993:2",
+      "bestOuterSnapshot": "997:2",
       "bestInsideSnapshot": "904:2",
-      "previousOuterRollback": {"nodeId": "987:2", "label": "DT", "visible": false, "preserved": true}
+      "previousOuterRollback": {"nodeId": "993:2", "label": "DU", "visible": false, "preserved": true}
     },
     "working": {
       "pageId": "834:2",
       "name": "05_RURUBU_WORKING",
-      "preservedComparators": ["977:2", "982:2", "992:2"],
-      "bestOuterWorking": "992:2",
+      "preservedComparators": ["977:2", "982:2", "992:2", "996:2"],
+      "bestOuterWorking": "996:2",
       "bestInsideWorking": "899:2"
     }
   },
   "comparators": {
     "outerBest": {
-      "label": "DU",
-      "nodeId": "992:2",
-      "backNodeId": "992:3",
-      "frontNodeId": "992:131",
-      "reviewSnapshotNodeId": "993:2",
-      "sourceComparator": {"label": "DT", "nodeId": "982:2", "preserved": true},
+      "label": "DV",
+      "nodeId": "996:2",
+      "backNodeId": "996:3",
+      "frontNodeId": "996:131",
+      "reviewSnapshotNodeId": "997:2",
+      "sourceComparator": {"label": "DU", "nodeId": "992:2", "preserved": true},
       "status": "ADOPT_AS_STRONGEST_CLEANROOM_COMPOSITION_COMPARATOR_NOT_CURRENT",
-      "scratchSelection": "DU_SELECTED_OVER_DT_FOR_WHOLE_ITEM_BALANCE",
+      "scratchSelection": "DV_SELECTED_OVER_DU_FOR_PRINT_NATIVE_HEADLINE",
       "nativeTextVisible": 37,
       "imageFillVisible": 7,
       "sameParentTextIntersections": 0,
-      "foldGuide": {"nodeId": "992:184", "x": 792.7000122070312, "y": 0, "width": 2, "height": 1122.5},
+      "safeAreaTextRisksUnder18px": 0,
+      "foldGuide": {"nodeId": "996:184", "x": 792.7000122070312, "y": 0, "width": 2, "height": 1122.5},
       "hero": {
-        "nodeId": "992:133",
+        "nodeId": "996:133",
         "imageHash": "539c259be8036b481d06b4f76db9a39b407d90e8",
         "geometry": {"width": 793.7, "height": 650},
         "semantic": "visually verified existing Figma Yokohama waterfront reuse; this hash is also the registered V5-05 history derivative hash and is not proof of exact Q60 Drive binary placement"
       },
+      "headline": {
+        "nodeId": "996:143",
+        "text": "横浜\nふたり旅。",
+        "treatment": "solid deep navy native text; no stroke; no effects",
+        "mastheadNodeId": "996:183",
+        "mastheadTreatment": "generic drop shadow removed"
+      },
       "backCover": {
-        "mainPhotoNodeId": "992:6",
+        "mainPhotoNodeId": "996:6",
         "mainPhotoGeometry": {"width": 793.7, "height": 620},
-        "friendPhotoA": {"nodeId": "992:18", "imageHash": "c1ada11205bc3978bf426b304d683f1c1566cac2", "geometry": {"width": 520, "height": 300}, "rotation": -1.6},
-        "friendPhotoB": {"nodeId": "992:22", "imageHash": "d76eb07d83d042f15044c8bc6bf68d73a73cd77d", "geometry": {"width": 320, "height": 224}, "rotation": 2.2},
-        "captionStripNodes": ["992:20", "992:24"],
-        "visualRationale": "DT front was preserved. DU rebuilds the weaker back face with a full-width photo substrate, unequal overlapping friend photography, slim attached caption strips, larger native Japanese hierarchy, and a staggered travel-log timeline. The first floating-caption state was rejected at actual size and repaired before promotion."
+        "friendPhotoA": {"nodeId": "996:18", "imageHash": "c1ada11205bc3978bf426b304d683f1c1566cac2", "geometry": {"width": 520, "height": 300}, "rotation": -1.6},
+        "friendPhotoB": {"nodeId": "996:22", "imageHash": "d76eb07d83d042f15044c8bc6bf68d73a73cd77d", "geometry": {"width": 320, "height": 224}, "rotation": 2.2},
+        "captionStripNodes": ["996:20", "996:24"]
       },
       "qa": {
         "thumbnail500": true,
-        "wholeReading": true,
-        "actualSizeChangedBack": true,
+        "wholeReading1400": true,
+        "actualSizeFront": true,
+        "actualSizeBackInheritedFromVerifiedDU": true,
         "structure": true,
+        "safeArea": true,
         "reviewSnapshot": true
-      }
+      },
+      "visualRationale": "DU solved whole-item back-cover weakness. DV preserves that photo-led outer and removes the remaining effect-dependent headline treatment: the main Japanese title becomes solid deep navy with no outline, and the masthead drop shadow is removed. Thumbnail and actual-size comparison selected DV as more print-native and less synthetic."
     },
     "insideBest": {
       "label": "DF",
@@ -107,25 +117,26 @@
     "latestTransportAttempt": "official Figma upload_assets issued a fresh single-use target for node 982:133; raw JPEG POST failed before upload because mcp.figma.com DNS resolution was unavailable",
     "exactDriveBinaryPlacedInFigma": false,
     "exactDriveBinaryVisuallyVerifiedInFigma": false,
-    "note": "Do not infer exact Q60 completion from DU/DT hero visual reuse. Live hero hash 539c259... is separately registered as the V5-05 history derivative hash; the Drive ID to exact Figma node/image-hash chain remains open."
+    "note": "Do not infer exact Q60 completion from DV/DU/DT hero visual reuse. Live hero hash 539c259... is separately registered as the V5-05 history derivative hash; the Drive ID to exact Figma node/image-hash chain remains open."
   },
   "progressClassification": {
     "generatedThisRun": 0,
     "newGeneratedAssetAdopted": 0,
     "newExternalBinaryPlaced": 0,
-    "newCleanRoomComparatorCreated": 1,
+    "newCleanRoomComparatorsCreated": 2,
     "visualLayoutEditsPlaced": true,
     "visualLayoutEditsVerified": true,
     "structureVerified": true,
+    "safeAreaVerified": true,
     "reviewPromotionVerified": true,
     "navigationReadbackVerified": true
   },
   "gate": {
     "photoRolePass": "canonical Current cover-hero role remains incomplete; no exact Q60 role promotion",
     "roleComplete": "V5-01 remains false in asset evidence ledger; no Q60 role promotion",
-    "dominantPhotoCompositionComparator": "DU visually passes as the strongest whole-item composition comparator, but exact destination asset lifecycle remains open",
+    "dominantPhotoCompositionComparator": "DV visually passes as strongest outer comparator, but exact destination asset lifecycle remains open",
     "v5Complete": false,
     "v6ProductionStarted": false
   },
-  "evidence": "learning-runs/2026-08-12-v5-du-back-cover-photo-led-cleanroom.md"
+  "evidence": "learning-runs/2026-08-12-v5-dv-solid-japanese-type-cleanroom.md"
 }
