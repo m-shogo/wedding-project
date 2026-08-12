@@ -1,0 +1,72 @@
+{
+  "date": "2026-08-13",
+  "scope": "Rurubu WEDDING only",
+  "status": "V5_INCOMPLETE_Q60_EXACT_PROVENANCE_OPEN",
+  "current_untouched": {
+    "outer": "77:18",
+    "inside": "77:290"
+  },
+  "best_comparator": {
+    "outer": {
+      "label": "EP",
+      "working_node_id": "1108:2",
+      "review_node_id": "1111:2",
+      "source": "EM 1094:2",
+      "visually_verified": true,
+      "structure_verified": true,
+      "native_text_visible": 36,
+      "visible_image_fills": 6,
+      "absolute_text_intersections": 0,
+      "bounded_18px_safe_area_risks": 0,
+      "fold_x": 792.7000122070312,
+      "hero_node_id": "1108:134",
+      "hero_image_hash": "539c259be8036b481d06b4f76db9a39b407d90e8",
+      "hero_provenance_note": "existing proxy only; not Q60 exact-placement evidence"
+    },
+    "inside": {
+      "label": "EO",
+      "working_node_id": "1107:285",
+      "review_node_id": "1111:188",
+      "visually_verified": true,
+      "structure_verified": true,
+      "authority_reconciled_from_prior_review_en_drift": true
+    }
+  },
+  "rollback": {
+    "em_review_node_id": "1096:2",
+    "em_hidden": true,
+    "en_review_node_id": "1106:2",
+    "en_hidden": true
+  },
+  "start_here": {
+    "status_text": "EP outer / EO inside",
+    "body_node_id": "845:16",
+    "status_node_id": "845:27"
+  },
+  "q60": {
+    "master_drive_id": "1YL0WAOzYU3O1FGa23ieRuw_Btu4jbmzr",
+    "master_mime": "image/jpeg",
+    "master_dimensions": "1330x1220",
+    "master_bytes": 155439,
+    "master_sha256": "090880c0ebe101f1321ebac05f22a91b2b61f3a8ac31c8d112dc418412f13ab2",
+    "small_derivative_drive_id": "1aVp34U5qUTqd9FR3AILmJggdWwY1lAJb",
+    "small_derivative_dimensions": "240x220",
+    "small_derivative_bytes": 10284,
+    "official_upload_target_issued": true,
+    "official_upload_byte_post_completed": false,
+    "official_upload_failure": "mcp.figma.com DNS resolution",
+    "alternate_plugin_api_attempted": true,
+    "alternate_plugin_api_result": "atomic reject: Image type is unsupported",
+    "exact_figma_placed": false,
+    "exact_figma_visually_verified": false
+  },
+  "progress_classification": {
+    "generated_images": 0,
+    "new_generated_assets_adopted": 0,
+    "new_external_binary_assets_placed": 0,
+    "new_clean_room_outer_created": 1,
+    "outer_promoted": true,
+    "inside_review_authority_reconciled": true
+  },
+  "v6_production_started": false
+}
