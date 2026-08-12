@@ -126,6 +126,47 @@ Still intentionally unresolved:
 
 No real QR will be generated before those authoritative inputs exist.
 
+## Fresh typography repair — 2026-08-12
+
+A new actual-size production screenshot exposed a second Japanese line-break defect that the earlier QA had not caught. In A5 `1:31`, `INTRO_JA / 6:29` auto-wrapped `共有できます。` as `共有できま / す。`, which is unacceptable Japanese typesetting even though the frame remained structurally collision-free.
+
+Live authority before the Figma write:
+
+- GitHub `main`: `f0945d1cf09df88cc1dc66385d8a0b3f1da6f67a`
+- Current: `VISUAL_REOPENED / FIGMA_EDIT_ALLOWED`
+- Figma: `PWQ5ygJJt0IlOqj5ri5jng`, A5 production `1:31`, text `6:29`
+- Drive: `ADD-11_写真共有_QR案内サイン` / `1wuxHEqby_0JWS0bYV0RWCTUotM88Mnxb`
+
+Rollback proof was created before editing:
+
+- `8:2 / ROLLBACK_ADD11_A5_PRE_JA_LINEBREAK_FIX_2026_08_12`
+- hidden, full `875 × 1240` production clone
+
+The native editable A5 intro was changed from automatic wrapping to deliberate semantic line breaks:
+
+- `撮影した写真を、`
+- `こちらから共有できます。`
+- `たくさんの思い出を`
+- `残していただけたら嬉しいです。`
+
+No copy meaning, QR role, format, image asset, font size or layout width was changed. The `INTRO_JA` box remains `400 × 168`, `textAutoResize=HEIGHT`.
+
+Post-write screenshot QA:
+
+- thumbnail scale: PASS; left editorial field and navy QR field remain balanced;
+- actual size (`875 × 1240`): PASS; the unnatural `できま / す。` break is gone and all four lines end at sensible phrase boundaries;
+- QR hierarchy and final-link placeholders remain unchanged.
+
+Post-write structure readback:
+
+- production root `1:31`: native text `10`, IMAGE fills `0`, text outside root `0`, `clipsContent=true`;
+- `INTRO_JA / 6:29`: native editable text, `400 × 168`, no overflow introduced;
+- rollback `8:2` remains hidden and intact.
+
+This is a Japanese typography repair inside an already-approved art direction, not a new visual-system redesign. ADD-11 remains:
+
+`SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / ROLLBACK_SAFE / NOT_PRINT_READY`
+
 ## Next
 
-Proceed to ADD-12 新郎新婦クイズカード for reopened visual-art-direction audit.
+Continue fresh spot-checks only where actual screenshots expose concrete sellable-quality defects. Do not re-open ADD-11 again merely for decorative polish; final QR / privacy / format / physical-proof inputs remain deferred.
