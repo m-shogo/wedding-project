@@ -2,48 +2,67 @@
   "schemaVersion": 1,
   "scope": "RURUBU_WEDDING_V5_ONLY",
   "date": "2026-08-12",
-  "authority": "live Figma + Drive readback + active-scope overlay + asset evidence ledger + GitHub main",
+  "authority": "live Figma + fresh Drive readback + active-scope overlay + asset evidence ledger + GitHub main",
   "current": {
     "outer": {"nodeId": "77:18", "changed": false, "liveReadbackAfterWrites": true},
     "inside": {"nodeId": "77:290", "changed": false, "liveReadbackAfterWrites": true}
   },
   "figmaNavigation": {
-    "start": {"pageId": "845:2", "name": "00_RURUBU_START_HERE", "status": "DM outer / DF inside", "statusTextNodeId": "845:27", "reviewBodyNodeId": "845:16", "reviewBodyStatus": "Best DM / DF", "workingCount": 4},
+    "start": {
+      "pageId": "845:2",
+      "name": "00_RURUBU_START_HERE",
+      "status": "DT outer / DF inside",
+      "statusTextNodeId": "845:27",
+      "reviewBodyNodeId": "845:16",
+      "reviewBodyStatus": "Best DT outer / DF inside",
+      "screenshotReadback": true
+    },
     "review": {
       "pageId": "833:2",
       "name": "04_RURUBU_REVIEW",
-      "bestOuterSnapshot": "956:2",
+      "bestOuterSnapshot": "987:2",
       "bestInsideSnapshot": "904:2",
-      "previousOuterRollback": {"nodeId": "946:2", "label": "DK", "visible": false},
-      "previousInsideRollback": {"nodeId": "897:2", "visible": false}
+      "previousOuterRollback": {"nodeId": "979:2", "label": "DS", "visible": false, "preserved": true}
     },
-    "working": {"pageId": "834:2", "name": "05_RURUBU_WORKING", "activeFrames": ["834:3", "848:2", "899:2", "955:2"], "layout": "single compact row"},
-    "studies": {"pageId": "853:19", "name": "06_RURUBU_0811_STUDIES", "count": 64, "movedThisRun": ["945:2"]},
-    "archive": {"pageId": "853:18", "name": "90_RURUBU_ARCHIVE_0807_0810", "count": 138}
+    "working": {
+      "pageId": "834:2",
+      "name": "05_RURUBU_WORKING",
+      "preservedComparators": ["977:2", "982:2"],
+      "bestOuterWorking": "982:2",
+      "bestInsideWorking": "899:2"
+    }
   },
   "comparators": {
     "outerBest": {
-      "label": "DM",
-      "nodeId": "955:2",
-      "frontNodeId": "955:131",
-      "reviewSnapshotNodeId": "956:2",
-      "dominantPhotoNodeId": "955:132",
-      "dominantPhotoImageHash": "adbb8e529451a81dd25e4eb29bf068655569ce25",
-      "dominantPhotoSemantic": "verified travel-memory coast image; explicitly not represented as Yokohama",
-      "destinationAnchorNodeId": "955:134",
-      "destinationAnchorImageHash": "e58ddfa30e3b4bb68e44f1789d984b75cf8a7912",
-      "destinationAnchorStatus": "LOW_QUALITY_SEMANTIC_PROXY_Q60_REQUIRED",
-      "supportPhotos": [
-        {"nodeId": "955:153", "imageHash": "e3738476f760932bb5b09c9d60f174dd6c84049d", "role": "tilted travel-object support"},
-        {"nodeId": "955:155", "imageHash": "d76eb07d83d042f15044c8bc6bf68d73a73cd77d", "role": "guest-trip support"}
-      ],
+      "label": "DT",
+      "nodeId": "982:2",
+      "frontNodeId": "982:131",
+      "reviewSnapshotNodeId": "987:2",
+      "sourceComparator": {"label": "DS", "nodeId": "977:2", "preserved": true},
       "status": "ADOPT_AS_STRONGEST_CLEANROOM_COMPOSITION_COMPARATOR_NOT_CURRENT",
-      "nativeTextVisible": 39,
-      "imageFillVisible": 8,
+      "scratchSelection": "DT_SELECTED_OVER_DS",
+      "nativeTextVisible": 37,
+      "imageFillVisible": 7,
       "sameParentTextIntersections": 0,
-      "foldGuide": {"nodeId": "955:190", "x": 792.7000122070312, "y": 0, "width": 2, "height": 1122.5},
-      "qa": {"thumbnail500": true, "wholeReading800": true, "actualSizeFront794x1123": true, "structure": true, "dominantPhotoQualityPass": true, "destinationAnchorQualityPass": false},
-      "visualRationale": "DM is selected from scratch over DK because it reduces the feature-01 paper mass and increases irregular photo-led rhythm with a three-photo lower/right cluster. The verified travel-memory photograph remains the full-page substrate, the large native Japanese headline remains dominant, feature 02 stays direct-on-photo, the unresolved Yokohama proxy remains small and factual, and support photographs use unequal scale/rotation instead of cards. First structure QA detected one 01 numeral/headline text-box intersection; the headline was shifted and final structure returned to zero intersections. Thumbnail, whole-spread, actual-size, and structure QA passed."
+      "foldGuide": {"nodeId": "982:184", "x": 792.7000122070312, "y": 0, "width": 2, "height": 1122.5},
+      "hero": {
+        "nodeId": "982:133",
+        "imageHash": "5d1739f42059246431108b7944fd7b16d9c92c42",
+        "geometry": {"width": 793.7, "height": 650},
+        "semantic": "visually verified Yokohama waterfront image already present in Figma; not proof of exact Q60 Drive binary placement"
+      },
+      "supportPhotos": [
+        {"nodeId": "982:153", "imageHash": "2f9f122f14028031931ec6925586a09f1fd0cb01", "role": "boundary-crossing restaurant support"},
+        {"nodeId": "982:167", "imageHash": "9cdc28331cd0c54e4de0f84ad70afb865c23a6dd", "role": "large asymmetric street feature"}
+      ],
+      "qa": {
+        "thumbnail500": true,
+        "wholeReading": true,
+        "actualSizeFront": true,
+        "structure": true,
+        "reviewSnapshot": true
+      },
+      "visualRationale": "DS was not scratch-selectable because the cover still read as hero plus stacked modules. DT extends the destination photograph into the page substrate, strengthens the native Japanese headline, crosses a support photograph over the hero boundary, rebuilds feature 01 as direct oversized type, compresses feature 02, and uses a large asymmetric street photograph for feature 03. Intermediate lower-half spacing and feature-02 crowding were rejected and repaired before promotion."
     },
     "insideBest": {
       "label": "DF",
@@ -64,8 +83,7 @@
         "memory1": {"nodeId": "899:267", "hash": "adbb8e529451a81dd25e4eb29bf068655569ce25"},
         "memory2": {"nodeId": "899:268", "hash": "439a719d73f28e8dd2889f2026cccb15f345ec63"},
         "memory4": {"nodeId": "899:269", "hash": "c09aa82e7b2ac75708707345c6f845452bf67663"}
-      },
-      "visualRationale": "DF remains the strongest inside comparator: dominant edge crop, overlapping secondary crop, native Japanese headline in an adjacent cream text-safe field, dominant Q1 pull quote, and compact Q2/Q3 side notes."
+      }
     }
   },
   "coverHeroQ60": {
@@ -75,55 +93,34 @@
     "dimensions": {"width": 1330, "height": 1220},
     "bytes": 155439,
     "sha256": "090880c0ebe101f1321ebac05f22a91b2b61f3a8ac31c8d112dc418412f13ab2",
-    "driveVerified": true,
-    "runtimeMaterialized": true,
-    "roleDerivativesThisRun": [
-      {"dimensions": {"width": 560, "height": 514}, "driveId": "1YwRdAauE1-CtXV3VD08CEvn7b-lFYlGX", "visuallyQa": true, "driveReadback": true, "figmaAdopted": false, "figmaPlaced": false},
-      {"dimensions": {"width": 240, "height": 220}, "driveId": "1aVp34U5qUTqd9FR3AILmJggdWwY1lAJb", "visuallyQa": true, "driveReadback": true, "figmaAdopted": false, "figmaPlaced": false}
-    ],
-    "transportAttemptsThisRun": [
-      {"method": "official Figma upload_assets raw-byte POST", "result": "FAILED_BEFORE_UPLOAD", "reason": "mcp.figma.com DNS resolution failure"},
-      {"method": "inline figma.createImage bounded payload", "result": "FAILED_ATOMICALLY_BEFORE_MUTATION", "reason": "invalid encoded input on first attempt; unsupported image on second bounded attempt"}
-    ],
-    "methodSwitchedAfterRepeatedFailure": true,
-    "figmaPlaced": false,
-    "figmaVisuallyVerified": false
-  },
-  "experiments": {
-    "dmOuter": {
-      "nodeId": "955:2",
-      "sourceNodeId": "945:2",
-      "reviewSnapshotNodeId": "956:2",
-      "status": "ADOPTED_AS_BEST_OUTER_COMPARATOR",
-      "changes": [
-        "compressed feature-01 paper mass instead of adding another card",
-        "revealed existing verified travel-object photograph as a tilted support image",
-        "resized and staggered the guest-trip support photograph",
-        "kept the Yokohama semantic proxy factual and small",
-        "preserved large native Japanese headline typography and direct-on-photo feature 02",
-        "detected and repaired one feature-01 text-box collision before promotion"
-      ],
-      "verification": {"thumbnail500": true, "wholeReading800": true, "actualSizeFront794x1123": true, "structure": true, "sameParentTextIntersections": 0}
+    "driveFreshReadback": true,
+    "roleDerivative240": {
+      "driveId": "1aVp34U5qUTqd9FR3AILmJggdWwY1lAJb",
+      "dimensions": {"width": 240, "height": 220},
+      "bytes": 10284,
+      "driveFreshReadback": true
     },
-    "dkOuter": {"nodeId": "945:2", "status": "SUPERSEDED_AS_BEST_OUTER_PRESERVED_IN_STUDIES_AND_HIDDEN_REVIEW_ROLLBACK", "reviewSnapshotNodeId": "946:2", "preserved": true},
-    "dfInside": {"nodeId": "899:2", "status": "ADOPTED_AS_BEST_INSIDE_COMPARATOR", "reviewSnapshotNodeId": "904:2"}
+    "exactDriveBinaryPlacedInFigma": false,
+    "exactDriveBinaryVisuallyVerifiedInFigma": false,
+    "note": "Do not infer exact Q60 completion from DT hero visual reuse; the Drive ID to exact Figma node/image-hash chain remains open."
   },
   "progressClassification": {
     "generatedThisRun": 0,
     "newGeneratedAssetAdopted": 0,
     "newExternalBinaryPlaced": 0,
-    "roleDerivativesDriveSavedAndReadbackButNotPlaced": 2,
-    "existingVerifiedImageReusedAsSupport": true,
+    "newCleanRoomComparatorCreated": 1,
     "visualLayoutEditsPlaced": true,
     "visualLayoutEditsVerified": true,
-    "structureVerified": true
+    "structureVerified": true,
+    "reviewPromotionVerified": true,
+    "navigationReadbackVerified": true
   },
   "gate": {
-    "photoRolePass": "9/10 comparator gate; canonical asset ledger Current authority remains unchanged until exact placement",
-    "roleComplete": "9/10 comparator gate; no Q60 role promotion",
-    "dominantPhotoPass": "3/3 compositionally, destination asset lifecycle still blocked",
+    "photoRolePass": "9/10 canonical Current gate; no exact Q60 role promotion",
+    "roleComplete": "9/10 canonical Current gate; no Q60 role promotion",
+    "dominantPhotoCompositionComparator": "DT visually passes as a composition comparator, but exact destination asset lifecycle remains open",
     "v5Complete": false,
     "v6ProductionStarted": false
   },
-  "evidence": "learning-runs/2026-08-12-v5-dm-photo-cluster-cleanroom.md"
+  "evidence": "learning-runs/2026-08-12-v5-dt-photo-substrate-cleanroom.md"
 }
