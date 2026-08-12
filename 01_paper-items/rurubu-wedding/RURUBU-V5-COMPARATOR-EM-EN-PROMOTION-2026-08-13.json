@@ -1,0 +1,35 @@
+{
+  "date": "2026-08-13",
+  "scope": "RURUBU_WEDDING_ONLY",
+  "figma_file_key": "bfM0d4c9dCeBv5pCkJ3TNM",
+  "best": {
+    "outer": {"candidate": "EM", "node_id": "1094:2", "review_node_id": "1096:2"},
+    "inside": {"candidate": "EN", "node_id": "1098:2", "review_node_id": "1106:2"}
+  },
+  "rollback": {
+    "inside_previous_review": {"candidate": "EL", "node_id": "1089:2", "visible": false},
+    "inside_pre_folio_fix": {"node_id": "1102:2", "visible": false}
+  },
+  "current_production_untouched": {"outer": "77:18", "inside": "77:290"},
+  "en_final_qa": {
+    "thumbnail": "PASS_500PX",
+    "reading": "PASS_1000PX",
+    "actual_size_right_page": "PASS_794X1123",
+    "visible_native_text": 53,
+    "visible_image_fills": 6,
+    "absolute_text_intersections": 0,
+    "bounded_safe_area_risks": 0,
+    "fold": {"node_id": "1098:283", "x": 792.7, "width": 2, "height": 1122.5},
+    "image_hashes": ["a39dd297eb9de572317a5ce57f0af12e8597b156","2359f635b4926a83e22ca1f9214e75c709291152","539c259be8036b481d06b4f76db9a39b407d90e8","adbb8e529451a81dd25e4eb29bf068655569ce25","439a719d73f28e8dd2889f2026cccb15f345ec63","c09aa82e7b2ac75708707345c6f845452bf67663"]
+  },
+  "q60": {
+    "drive_id": "1YL0WAOzYU3O1FGa23ieRuw_Btu4jbmzr",
+    "exact_figma_placement": false,
+    "figma_visual_verification": false,
+    "status": "OPEN"
+  },
+  "generated_new_assets": 0,
+  "new_external_binaries_placed": 0,
+  "v5_complete": false,
+  "v6_production_started": false
+}
