@@ -11,26 +11,27 @@
     "start": {
       "pageId": "845:2",
       "name": "00_RURUBU_START_HERE",
-      "status": "DV outer / DY inside",
+      "status": "DV outer / DZ inside",
       "statusTextNodeId": "845:27",
       "reviewBodyNodeId": "845:16",
-      "reviewBodyStatus": "Best DV outer / DY inside",
+      "reviewBodyStatus": "Best DV outer / DZ inside",
       "screenshotReadback": true
     },
     "review": {
       "pageId": "833:2",
       "name": "04_RURUBU_REVIEW",
       "bestOuterSnapshot": "997:2",
-      "bestInsideSnapshot": "1016:2",
+      "bestInsideSnapshot": "1021:2",
       "previousOuterRollback": {"nodeId": "993:2", "label": "DU", "visible": false, "preserved": true},
-      "previousInsideRollback": {"nodeId": "904:2", "label": "DF", "visible": false, "preserved": true}
+      "previousInsideRollback": {"nodeId": "1016:2", "label": "DY", "visible": false, "preserved": true},
+      "rejectedInsideEvidence": {"nodeId": "1020:2", "label": "DZ_Q1_OVERFLOW_PRE_FIX", "visible": false, "preserved": true}
     },
     "working": {
       "pageId": "834:2",
       "name": "05_RURUBU_WORKING",
-      "preservedComparators": ["899:2", "977:2", "982:2", "992:2", "996:2", "1012:2"],
+      "preservedComparators": ["899:2", "977:2", "982:2", "992:2", "996:2", "1012:2", "1019:2"],
       "bestOuterWorking": "996:2",
-      "bestInsideWorking": "1012:2"
+      "bestInsideWorking": "1019:2"
     }
   },
   "comparators": {
@@ -80,34 +81,54 @@
       "visualRationale": "DU solved whole-item back-cover weakness. DV preserves that photo-led outer and removes the remaining effect-dependent headline treatment: the main Japanese title becomes solid deep navy with no outline, and the masthead drop shadow is removed. Thumbnail and actual-size comparison selected DV as more print-native and less synthetic."
     },
     "insideBest": {
-      "label": "DY",
-      "nodeId": "1012:2",
-      "leftNodeId": "1012:3",
-      "rightNodeId": "1012:132",
-      "reviewSnapshotNodeId": "1016:2",
-      "sourceComparator": {"label": "DF", "nodeId": "899:2", "preserved": true, "reviewRollbackNodeId": "904:2"},
+      "label": "DZ",
+      "nodeId": "1019:2",
+      "leftNodeId": "1019:3",
+      "rightNodeId": "1019:132",
+      "reviewSnapshotNodeId": "1021:2",
+      "sourceComparator": {"label": "DY", "nodeId": "1012:2", "preserved": true, "reviewRollbackNodeId": "1016:2"},
       "status": "ADOPT_AS_STRONGEST_CLEANROOM_COMPARATOR_NOT_CURRENT",
-      "scratchSelection": "DY_SELECTED_OVER_DF_FOR_SOURCE_AWARE_SUPPORT_CROPS_AND_EDITORIAL_RHYTHM",
+      "scratchSelection": "DZ_SELECTED_OVER_DY_FOR_EDITORIAL_INTERVIEW_HIERARCHY_AND_RENDERED_GLYPH_FIT",
       "nativeTextVisible": 53,
       "productionImageFillVisible": 6,
       "sameParentTextIntersections": 0,
       "safeAreaTextRisksUnder18px": 0,
-      "foldGuide": {"nodeId": "1012:283", "x": 792.7000122070312, "y": 0, "width": 2, "height": 1122.5},
+      "foldGuide": {"nodeId": "1019:283", "x": 792.7000122070312, "y": 0, "width": 2, "height": 1122.5},
+      "interviewGeometry": {
+        "q1Number": {"nodeId": "1019:22", "x": 24, "y": 724, "width": 120, "height": 96, "fontSize": 80},
+        "q1Question": {"nodeId": "1019:23", "x": 152, "y": 738, "width": 316, "height": 34},
+        "q1PullQuote": {"nodeId": "1019:25", "x": 42, "y": 830, "width": 430, "height": 96, "fontSize": 31},
+        "q2RuleNodeId": "1019:125",
+        "q3RuleNodeId": "1019:126"
+      },
       "memoryGeometry": {
-        "lead": {"nodeId": "1012:267", "width": 550, "height": 330, "rotation": 0.6},
-        "support02": {"nodeId": "1012:268", "width": 220, "height": 230, "rotation": -3.2},
-        "support03": {"nodeId": "1012:269", "width": 230, "height": 170, "rotation": 2.4}
+        "lead": {"nodeId": "1019:267", "width": 550, "height": 330, "rotation": 0.6},
+        "support02": {"nodeId": "1019:268", "width": 220, "height": 230, "rotation": -3.2},
+        "support03": {"nodeId": "1019:269", "width": 230, "height": 170, "rotation": 2.4}
       },
-      "qa": {"thumbnail500": true, "wholeReading1400": true, "actualSizeRight794x1123": true, "structure": true, "safeArea": true, "reviewSnapshot": true},
+      "qa": {
+        "thumbnail500": true,
+        "wholeReading1200": true,
+        "actualSizeLeft804x1123": true,
+        "rightPageInheritedFromVerifiedDY": true,
+        "structure": true,
+        "safeArea": true,
+        "reviewSnapshot": true,
+        "renderedGlyphFit": true
+      },
+      "rejectedEvidence": {
+        "reviewSnapshotNodeId": "1020:2",
+        "reason": "structure collision count was zero after narrowing Q1, but the fixed 01 text box was too narrow and visually wrapped the second digit into the pull-quote zone; screenshot QA rejected it"
+      },
       "productionImageHashes": {
-        "profileA": {"nodeId": "1012:7", "hash": "a39dd297eb9de572317a5ce57f0af12e8597b156"},
-        "profileB": {"nodeId": "1012:12", "hash": "2359f635b4926a83e22ca1f9214e75c709291152"},
-        "history": {"nodeId": "1012:133", "hash": "539c259be8036b481d06b4f76db9a39b407d90e8"},
-        "memory1": {"nodeId": "1012:267", "hash": "adbb8e529451a81dd25e4eb29bf068655569ce25"},
-        "memory2": {"nodeId": "1012:268", "hash": "439a719d73f28e8dd2889f2026cccb15f345ec63"},
-        "memory4": {"nodeId": "1012:269", "hash": "c09aa82e7b2ac75708707345c6f845452bf67663"}
+        "profileA": {"nodeId": "1019:7", "hash": "a39dd297eb9de572317a5ce57f0af12e8597b156"},
+        "profileB": {"nodeId": "1019:12", "hash": "2359f635b4926a83e22ca1f9214e75c709291152"},
+        "history": {"nodeId": "1019:133", "hash": "539c259be8036b481d06b4f76db9a39b407d90e8"},
+        "memory1": {"nodeId": "1019:267", "hash": "adbb8e529451a81dd25e4eb29bf068655569ce25"},
+        "memory2": {"nodeId": "1019:268", "hash": "439a719d73f28e8dd2889f2026cccb15f345ec63"},
+        "memory4": {"nodeId": "1019:269", "hash": "c09aa82e7b2ac75708707345c6f845452bf67663"}
       },
-      "visualRationale": "DF's right page retained horizontal/card-like support crops and actual-size copy intrusion around the dominant memory image. DY preserves all accepted hashes but rebuilds the section as one dominant landscape photo plus portrait/compact satellites with independent native caption bands and a stronger 01/title anchor. Three-scale comparison selected DY."
+      "visualRationale": "DY already fixed Memory Spots crop hierarchy. DZ keeps that verified right-page structure and all accepted image hashes, then rebuilds the lower-left Q&A as an asymmetric interview feature: oversized 01 and pull quote dominate, while 02/03 compress into a narrow secondary column. Screenshot QA exposed and repaired a glyph-wrap failure that collision QA alone missed. Three-scale comparison selected corrected DZ."
     }
   },
   "coverHeroQ60": {
@@ -125,7 +146,7 @@
       "driveFreshReadback": true
     },
     "latestTransportAttempt": "official Figma upload_assets previously issued a fresh single-use target but raw JPEG POST failed before upload because mcp.figma.com DNS resolution was unavailable",
-    "latestTransportDecision": "Existing evidence explicitly rejects manual/model-visible base64 chunk transport because bounded chunks can lose characters. That path was re-audited and intentionally not resumed. No Q60 node mutation was adopted this run.",
+    "latestTransportDecision": "Repeated DNS upload path and rejected manual/model-visible base64 chunk transport were intentionally not repeated. Fresh Drive readback reconfirmed the exact Q60 source; no Q60 node mutation was adopted this run.",
     "exactDriveBinaryPlacedInFigma": false,
     "exactDriveBinaryVisuallyVerifiedInFigma": false,
     "note": "Do not infer exact Q60 completion from DV/DU/DT hero visual reuse. Live hero hash 539c259... is separately registered as the V5-05 history derivative hash; the Drive ID to exact Figma node/image-hash chain remains open."
@@ -140,7 +161,8 @@
     "structureVerified": true,
     "safeAreaVerified": true,
     "reviewPromotionVerified": true,
-    "navigationReadbackVerified": true
+    "navigationReadbackVerified": true,
+    "rejectedVisualRegressionPreserved": true
   },
   "gate": {
     "photoRolePass": "canonical Current cover-hero role remains incomplete; no exact Q60 role promotion",
@@ -149,5 +171,5 @@
     "v5Complete": false,
     "v6ProductionStarted": false
   },
-  "evidence": "learning-runs/2026-08-12-v5-dy-portrait-memory-cluster-cleanroom.md"
+  "evidence": "learning-runs/2026-08-12-v5-dz-editorial-interview-cleanroom.md"
 }
