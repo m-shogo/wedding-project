@@ -92,3 +92,33 @@ Post-write structure readback:
 - no flatten/raster replacement introduced
 
 Drive live readback before the Figma write confirmed `1Oq2Pz2mYo4oaDnO7LMezMrCUizcxaEjs / ADD-14_二次会案内`. Drive write: 0. Image generation was not required because the defect was semantic placeholder typography, not missing imagery.
+
+## 2026-08-12 fresh production spot-check — placeholder rhythm polish
+
+Observed latest `main` immediately before the production edit: `2091ec72be001ecd6f503482114491a716020865`.
+
+Fresh actual-size screenshots found that the three reception/start/end placeholders were visibly breaking as `[時刻 · DUMMY]` across awkward line boundaries, while the fee/access/RSVP placeholders also exposed uneven `LAYOUT / DUMMY` wrapping. This made the information band look more like an internal form than finished stationery with explicit placeholders.
+
+Rollback-safe proof created on `99_QA` before editing:
+- A6 `10:2 / ROLLBACK_ADD14_A6_PRE_PLACEHOLDER_RHYTHM_FIX_2026_08_12`
+- A5 `10:27 / ROLLBACK_ADD14_A5_PRE_PLACEHOLDER_RHYTHM_FIX_2026_08_12`
+
+Production polish:
+- A6/A5 `TXT_STATUS`: `開催情報未確定 / LAYOUT DUMMY` → `[開催情報 · LAYOUT DUMMY]`.
+- reception/start/end: explicit two-level placeholder `［時刻］` + smaller `LAYOUT DUMMY` marker; A6 time boxes widened to the exact 112 px column interval, A5 to 159.04 px.
+- fee/access/RSVP were compacted without inventing facts: `[金額/支払 · LAYOUT DUMMY]`, `[方法/時間 · LAYOUT DUMMY]`, `[方法/期限 · LAYOUT DUMMY]`.
+- the second-line dummy markers are intentionally smaller than the semantic labels so the three-column itinerary reads as print hierarchy rather than broken template copy.
+
+Screenshot QA:
+- first attempted correction produced three-line `LAYOUT / DUMMY` wrapping and was explicitly rejected rather than accepted as progress;
+- corrected A6 592×420 and A5 840×592 screenshots show deliberate two-level time placeholders and single-line fee/access/RSVP dummy lines;
+- headline, venue authority block, itinerary rule, QR role and bottom note remain visually unchanged.
+
+Post-write structure readback:
+- A6 `1:2`: 18 native text, 0 IMAGE fill nodes, 0 text outside root, `clipsContent=true`;
+- A5 `1:18`: 18 native text, 0 IMAGE fill nodes, 0 text outside root, `clipsContent=true`;
+- no flatten/raster replacement introduced; all variable information remains native editable text.
+
+Drive authority remained `1Oq2Pz2mYo4oaDnO7LMezMrCUizcxaEjs / ADD-14_二次会案内`; Drive write: 0. Image generation was not required because the bottleneck was semantic typography, not imagery.
+
+Current result remains `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / ROLLBACK_SAFE / NOT_PRINT_READY`.
