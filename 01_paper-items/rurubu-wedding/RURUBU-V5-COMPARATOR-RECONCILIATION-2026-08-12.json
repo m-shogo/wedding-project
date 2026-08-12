@@ -11,65 +11,68 @@
     "start": {
       "pageId": "845:2",
       "name": "00_RURUBU_START_HERE",
-      "status": "EA outer / DZ inside",
+      "status": "EB outer / DZ inside",
       "statusTextNodeId": "845:27",
       "reviewBodyNodeId": "845:16",
-      "reviewBodyStatus": "Best EA outer / DZ inside",
-      "screenshotReadback": true
+      "reviewBodyStatus": "Best EB outer / DZ inside",
+      "liveReadbackAfterWrites": true
     },
     "review": {
       "pageId": "833:2",
       "name": "04_RURUBU_REVIEW",
-      "bestOuterSnapshot": "1027:2",
+      "bestOuterSnapshot": "1036:2",
       "bestInsideSnapshot": "1021:2",
-      "previousOuterRollback": {"nodeId": "997:2", "label": "DV", "visible": false, "preserved": true},
+      "previousOuterRollback": {"nodeId": "1027:2", "label": "EA", "visible": false, "preserved": true},
       "previousInsideRollback": {"nodeId": "1016:2", "label": "DY", "visible": false, "preserved": true},
-      "rejectedInsideEvidence": {"nodeId": "1020:2", "label": "DZ_Q1_OVERFLOW_PRE_FIX", "visible": false, "preserved": true}
+      "rejectedInsideEvidence": {"nodeId": "1020:2", "label": "DZ_Q1_OVERFLOW_PRE_FIX", "visible": false, "preserved": true},
+      "visibleReadback": ["833:470", "833:744", "1021:2", "1036:2"]
     },
     "working": {
       "pageId": "834:2",
       "name": "05_RURUBU_WORKING",
-      "preservedComparators": ["899:2", "977:2", "982:2", "992:2", "996:2", "1012:2", "1019:2", "1024:2"],
-      "bestOuterWorking": "1024:2",
+      "preservedComparators": ["899:2", "977:2", "982:2", "992:2", "996:2", "1012:2", "1019:2", "1024:2", "1029:2"],
+      "bestOuterWorking": "1029:2",
       "bestInsideWorking": "1019:2"
     }
   },
   "comparators": {
     "outerBest": {
-      "label": "EA",
-      "nodeId": "1024:2",
-      "backNodeId": "1024:3",
-      "frontNodeId": "1024:131",
-      "reviewSnapshotNodeId": "1027:2",
-      "sourceComparator": {"label": "DV", "nodeId": "996:2", "preserved": true, "reviewRollbackNodeId": "997:2"},
+      "label": "EB",
+      "nodeId": "1029:2",
+      "backNodeId": "1029:3",
+      "frontNodeId": "1029:131",
+      "reviewSnapshotNodeId": "1036:2",
+      "sourceComparator": {"label": "EA", "nodeId": "1024:2", "preserved": true, "reviewRollbackNodeId": "1027:2"},
       "status": "ADOPT_AS_STRONGEST_CLEANROOM_COMPOSITION_COMPARATOR_NOT_CURRENT",
-      "scratchSelection": "EA_SELECTED_OVER_DV_FOR_FULLBLEED_LOWER_PHOTO_EDITORIAL_CONTINUITY",
+      "scratchSelection": "EB_SELECTED_OVER_EA_FOR_CONTINUOUS_PHOTO_SPINE_AND_DIRECT_PHOTO_FEATURE_HIERARCHY",
       "nativeTextVisible": 36,
       "imageFillVisible": 7,
       "sameParentTextIntersections": 0,
-      "foldGuide": {"nodeId": "1024:184", "x": 792.7000122070312, "y": 0, "width": 2, "height": 1122.5},
+      "safeAreaRisks": 0,
+      "foldGuide": {"reviewNodeId": "1036:184", "x": 792.7000122070312, "y": 0, "width": 2, "height": 1122.5},
       "hero": {
-        "nodeId": "1024:133",
+        "nodeId": "1029:133",
+        "width": 793.7000122070312,
+        "height": 740,
         "imageHash": "539c259be8036b481d06b4f76db9a39b407d90e8",
         "semantic": "visually verified existing Figma Yokohama waterfront reuse; not proof of exact Q60 Drive binary placement"
       },
-      "frontLowerEditorial": {
-        "fullBleedStreetPhotoNodeId": "1024:167",
-        "feature01PaperNodeId": "1024:174",
-        "feature02PhotoNodeId": "1024:153",
-        "feature02CaptionBandNodeId": "1024:162",
-        "feature03RuleNodeId": "1024:164",
-        "subtractedNodes": ["1024:134", "1024:135", "1024:171", "1024:173", "1024:178"]
+      "photoSpine": {
+        "feature02PhotoNodeId": "1029:153",
+        "feature02ImageHash": "d76eb07d83d042f15044c8bc6bf68d73a73cd77d",
+        "lowerStreetPhotoNodeId": "1029:163",
+        "lowerStreetImageHash": "439a719d73f28e8dd2889f2026cccb15f345ec63",
+        "seamY": 740
       },
       "qa": {
-        "thumbnail500": true,
-        "wholeReading1000": true,
+        "wholeItem900": true,
         "actualSizeFront794x1123": true,
-        "actualSizeBackInheritedFromVerifiedDV": true,
+        "actualSizeBack794x1123": true,
         "structure": true,
+        "safeArea": true,
         "reviewSnapshot": true
       },
-      "visualRationale": "DV's upper hero remains strong, but its lower half still separated into a light information field plus framed photo. EA removes redundant lower UI-like fields, expands the verified street image to full bleed, keeps one dominant cream feature paper, attaches feature 02 to its tilted photo with a compact caption band, and places feature 03 directly on photography using native white type plus a thin yellow rule. Three-scale comparison selected EA as denser, more photo-led, and less brochure-like."
+      "visualRationale": "EA still changed visual register between hero and lower feature. EB extends the hero to y=740, places feature 01 directly on photography, uses one tilted photo-note for feature 02, and begins the full-bleed street photograph at the same seam for feature 03. This makes photography itself the page spine, reads more immediately as a Japanese travel-information magazine at thumbnail scale, and avoids adding rounded cards, generic shadows, or broad neutral bridge fields."
     },
     "insideBest": {
       "label": "DZ",
@@ -118,23 +121,25 @@
       "fileName": "RURUBU_V5_01_COVER_HERO__ROLE_240x220_Q78.jpg",
       "dimensions": {"width": 240, "height": 220},
       "bytes": 10284,
-      "driveFreshReadback": true
+      "driveFreshReadback": true,
+      "materializedExactBytesThisRun": true
     },
     "latestTransportAttempts": [
-      "Official Figma upload_assets issued a fresh target for safe EA hero node 1024:133; raw POST of the locally materialized verified Drive master failed before upload because mcp.figma.com DNS resolution was unavailable.",
-      "Switched method: exact bytes of the verified 240x220 Drive derivative were locally materialized and encoded in-call; figma.createImage rejected JPEG as Image type is unsupported. The failed Figma script was atomic and no node mutation occurred."
+      "Verified 240x220 Drive derivative was freshly materialized as exact JPEG bytes and a fresh official Figma upload_assets target was issued for safe EA hero node 1024:133; multipart POST failed before upload because mcp.figma.com DNS resolution was unavailable. No Figma mutation occurred.",
+      "Previous exact-binary transport attempts remain non-completion evidence; do not infer Q60 completion from EB/EA live hero hash 539c259... ."
     ],
     "exactDriveBinaryPlacedInFigma": false,
     "exactDriveBinaryVisuallyVerifiedInFigma": false,
-    "note": "Do not infer exact Q60 completion from EA/DV hero visual reuse. The live hero hash 539c259... is separately registered elsewhere and the Drive ID to exact Figma image-hash chain remains open."
+    "note": "EB improves composition but does not close the Drive ID to exact Figma image-hash chain."
   },
   "progressClassification": {
     "generatedThisRun": 0,
     "newGeneratedAssetAdopted": 0,
     "newExternalBinaryPlaced": 0,
-    "newCleanRoomComparatorsCreated": 1,
-    "visualLayoutEditsPlaced": true,
-    "visualLayoutEditsVerified": true,
+    "newCleanRoomComparatorsCreatedThisRun": 0,
+    "existingLiveCleanRoomComparatorAdopted": 1,
+    "visualComparatorPromoted": true,
+    "visualComparatorVerified": true,
     "structureVerified": true,
     "reviewPromotionVerified": true,
     "navigationReadbackVerified": true
@@ -142,9 +147,9 @@
   "gate": {
     "photoRolePass": "canonical Current cover-hero role remains incomplete; no exact Q60 role promotion",
     "roleComplete": "V5-01 remains false in asset evidence ledger; no Q60 role promotion",
-    "dominantPhotoCompositionComparator": "EA visually passes as strongest outer comparator, but exact destination asset lifecycle remains open",
+    "dominantPhotoCompositionComparator": "EB visually passes as strongest outer comparator, but exact destination asset lifecycle remains open",
     "v5Complete": false,
     "v6ProductionStarted": false
   },
-  "evidence": "learning-runs/2026-08-12-v5-ea-fullbleed-lower-editorial-cleanroom.md"
+  "evidence": "learning-runs/2026-08-12-v5-eb-photo-spine-cleanroom.md"
 }
