@@ -1,29 +1,44 @@
 # ADD-13 メッセージカード — QA
 
-Status: `PASS_FOR_FIGMA_PREPARATION`
-Date: 2026-08-02
+Status: `CURRENT / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / ROLLBACK_SAFE / NOT_PRINT_READY`
+Authority: GitHub latest `main` + `docs/automation/non-rurubu-figma-quality-current.md`
+Updated: 2026-08-13
 
-## Mechanical QA
-- [x] A6横の仕上がり寸法を明記
-- [x] 四辺3 mmの塗り足しを明記
-- [x] 安全域8 mm以上を明記
-- [x] 記入領域55%以上を確保する仕様
-- [x] 可変テキストを画像から分離
-- [x] semantic node nameを定義
-- [x] 表面・裏面の個別出力方針を定義
-- [x] Drive folder metadata readback PASS
+This file began as the 2026-08-02 pre-Figma QA checklist. The live production and reopened visual evidence supersede the stale `PASS_FOR_FIGMA_PREPARATION` state.
 
-## Visual QA criteria
-- 手書き領域を装飾が侵食しない
-- 背景を薄く保ち、一般的な筆記具で読みやすい
-- 罫線は印刷後も見えるが主張しすぎない
-- 旅行モチーフは四隅または端部に限定
-- 氏名欄と本文欄の視線順が明確
+## Live production authority
 
-## Raster / transparency QA
-新規ラスター素材なし。透過QAは対象外。
+- Figma file: `8ad7bEPAc8I88gs1JxsWhe`
+- production front: `1:3 / ADD13/A6/FRONT`
+- production back: `1:13 / ADD13/A6/BACK`
+- Drive folder: `ADD-13_Message_Card` / `1Md8oCMsw4F9tZjQueNmQQ2dYR1I7JwZl`
+- detailed reopened evidence: `docs/automation/add-13-message-card-design-qa.md`
 
-## Result
-- QA PASS: 1 item specification set
-- QA REJECT: 0
-- Block: none
+## Current visual / structure QA
+
+Fresh production screenshots and live structure readback reconfirm the Japanese-first letterpress/correspondence V2 direction:
+
+- front uses `ことばを、残す。` as the hierarchy anchor with restrained recipient / intro / body / signer rhythm;
+- back remains an open reply surface with three restrained writing rules rather than a boxed form;
+- all unknown recipient/message/signer/policy values remain explicit native editable `LAYOUT DUMMY` text;
+- front `1:3`: 700×990, 8 native text nodes, 0 IMAGE fill nodes, 0 text outside root, `clipsContent=true`;
+- back `1:13`: 700×990, 4 native text nodes, 0 IMAGE fill nodes, 0 text outside root, `clipsContent=true`;
+- no flatten/raster replacement introduced;
+- no screenshot-supported need for generated imagery was found.
+
+Current result: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS`.
+
+## Rollback / stress evidence
+
+The materially different clean-room comparison, long-copy stress and rollback-safe promotion are recorded in `docs/automation/add-13-message-card-design-qa.md`. Production root IDs remain stable.
+
+## Deferred finalization
+
+- [ ] final recipient/use-case policy
+- [ ] final message copy and signer naming convention
+- [ ] final date/copy
+- [ ] paper stock
+- [ ] printer template/profile, exact mm/bleed/export settings
+- [ ] 100% physical proof and handwriting/readability check
+
+Do not replace placeholders with invented facts. Keep `NOT_PRINT_READY` until final copy, vendor requirements and physical proof exist.
