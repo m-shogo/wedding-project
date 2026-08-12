@@ -1,0 +1,47 @@
+{
+  "date": "2026-08-13",
+  "scope": "Rurubu WEDDING only",
+  "current": {"outer":"77:18","inside":"77:290","touched":false},
+  "best": {
+    "outer": {"workingNodeId":"1139:2","reviewNodeId":"1140:2","label":"EV","visuallyVerified":true,"structureVerified":true},
+    "inside": {"workingNodeId":"1107:285","label":"EO","visuallyVerified":true,"structureVerified":true}
+  },
+  "q60": {
+    "masterDriveId":"1YL0WAOzYU3O1FGa23ieRuw_Btu4jbmzr",
+    "masterMimeType":"image/jpeg",
+    "masterBytes":155439,
+    "derivativeDriveId":"1aVp34U5qUTqd9FR3AILmJggdWwY1lAJb",
+    "exactDerivativeFigmaNodeId":"1139:189",
+    "exactDerivativeImageHash":"644f449c3bf2001a94d4b822d2b55e2614c11042",
+    "exactDerivativeGeometry":"286x262 bounded destination postcard",
+    "exactDerivativeAnchorVerified":true,
+    "dominantHeroFigmaNodeId":"1139:134",
+    "dominantHeroNodeName":"EV_HERO_HISTORY_DERIVATIVE_NOT_Q60",
+    "dominantHeroImageHash":"539c259be8036b481d06b4f76db9a39b407d90e8",
+    "dominantHeroExact":false,
+    "masterUploadRetryResult":"Fresh official target issued; exact JPEG POST failed on mcp.figma.com DNS before mutation."
+  },
+  "evQa": {
+    "thumbnail500":"PASS",
+    "wholeReading":"PASS",
+    "actualSizeFront794x1123":"PASS",
+    "visibleNativeText":37,
+    "visibleImageFills":7,
+    "absoluteTextIntersections":0,
+    "bounded18pxSafeAreaRisks":0,
+    "fold":"x=792.7 width=2",
+    "rejectedStructureState":"3 text intersections + giant Yokohama at 16px left safe area",
+    "postFix":"PASS"
+  },
+  "navigation": {
+    "startHereStatus":"EV outer / EO inside",
+    "staleReferencesReconciled":true,
+    "previousOuterReview":"ES 1122:2",
+    "previousOuterReviewHidden":true
+  },
+  "status": {
+    "v5Complete":false,
+    "v6ProductionStarted":false,
+    "reason":"EV is the stronger verified comparator and exact secondary Q60 evidence is preserved, but dominant Q60 hero provenance and full final V5 print/fold/ledger reconciliation remain open."
+  }
+}
