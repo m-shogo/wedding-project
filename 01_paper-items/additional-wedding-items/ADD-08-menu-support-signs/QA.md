@@ -1,7 +1,7 @@
 # ADD-08 メニュー補助サイン — QA
 
 Status: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / LONG_COPY_STRESS_PASS / ROLLBACK_SAFE / NOT_PRINT_READY`
-Date: 2026-08-12
+Date: 2026-08-14
 
 ## Current authority
 
@@ -12,7 +12,7 @@ Date: 2026-08-12
 - exact Drive authority: `12D7UPRTDwUx7vLOm1mtaew-sFGHt9FPG / ADD-08_メニュー補助サイン`
 - reopened visual evidence: `docs/add-items/ADD-08-REOPENED-VISUAL-QA-2026-08-10.md`
 
-This file supersedes its old 2026-08-02 `SPEC_QA_PASS / DRIVE_UPLOAD_BLOCKED` snapshot. The Drive folder now exists and was re-read live; Figma production is already implemented and visually promoted.
+This file supersedes its old 2026-08-02 `SPEC_QA_PASS / DRIVE_UPLOAD_BLOCKED` snapshot. The Drive folder now exists and was re-read live; Figma production is implemented and visually promoted.
 
 ## Fresh visual QA — 2026-08-12
 
@@ -26,7 +26,7 @@ Fresh live screenshot review at `990 × 1400` render size confirmed the culinary
 
 A remaining typography defect was found in the navy right rail: the semantic placeholder strings were wrapping so `LAYOUT DUMMY` appeared as an accidental second line.
 
-## Rollback-safe production polish
+## Rollback-safe production polish — 2026-08-12
 
 Before editing, production `1:3` was cloned to hidden rollback:
 
@@ -38,42 +38,54 @@ Native editable text changes:
 
 - `4:58 / TXT_ALLERGY_BODY`
   - before: `[アレルギー案内 · LAYOUT DUMMY]`, 20 px, wrapped to 2 lines
-  - after: `[アレルギー · LAYOUT DUMMY]`, 16 px / 24 px line-height, single line
+  - after: `[アレルギー · LAYOUT DUMMY]`, single line
 - `4:62 / TXT_DIETARY_BODY`
   - before: `[食事制限案内 · LAYOUT DUMMY]`, 20 px, wrapped to 2 lines
-  - after: `[食事制限 · LAYOUT DUMMY]`, 16 px / 24 px line-height, single line
+  - after: `[食事制限 · LAYOUT DUMMY]`, single line
 
 The surrounding headings `アレルギーについて` / `食事制限について` already carry the full semantic role, so shortening the dummy body removes redundant wording without losing meaning.
 
-## Post-write screenshot QA
+## Fresh visual polish — 2026-08-14
 
-Fresh post-write screenshot confirmed:
+Observed latest `main` immediately before the Figma write: `9234e867afda17ab50f2274c7ee30da2daa9bb76`.
 
-- both right-rail semantic placeholders stay on one line;
-- placeholder copy is visually subordinate to `01 / 02` and the Japanese headings;
-- navy-field spacing is calmer and less like exposed implementation copy;
-- the main ivory field, rust accent rule and staff CTA were not altered;
-- no clipping, overlap, image insertion or new decorative UI element was introduced.
+Fresh 1400×1980 production review found two remaining English headings functioning primarily as template filler rather than guest-facing information:
 
-## Structure readback
+- `4:47 / TXT_KICKER / TODAY’S TABLE`
+- `4:55 / TXT_RIGHT_INDEX / TABLE\nNOTES`
 
-Production `1:3` after polish:
+The Japanese hero `本日の食卓を、ゆっくりお楽しみください。` already establishes the page role. In the navy rail, `01 / アレルギーについて` and `02 / 食事制限について` already establish the marginalia structure. Retaining generic English headings repeated the same information and made the sheet feel more like a branded template than a resolved Japanese wedding print piece.
+
+Rollback-safe proof created before mutation:
+
+- `13:2 / ROLLBACK_ADD08_PRE_ENGLISH_FILLER_REMOVAL_2026_08_14` (`visible=false`)
+
+Production root remained `1:3`. Only the two redundant English nodes were hidden; no Japanese guest-facing copy, semantic placeholder, allergy/dietary role, CTA, footer, rule, safe area or layout geometry was changed.
+
+Post-write screenshot QA at the live 1400×1980 composition: PASS.
+
+- the Japanese hero now enters immediately without a decorative English pre-label;
+- the right rail now starts directly with the functional `01 / 02` allergy/dietary hierarchy;
+- the navy rail still reads as intentional marginalia rather than a blank column;
+- no dashboard/card feel, fake UI, image insertion or excessive empty-premium treatment was introduced.
+
+Post-write structure readback:
 
 - canvas: `1400 × 1980`
 - `clipsContent=true`
-- native editable text: `15`
+- native editable text: `15` / visible `13`
 - raster IMAGE fills: `0`
-- text outside production root: `0`
-- safe-area text risks against `4:66 / GUIDE_SAFE_10MM`: `0`
-- `4:58`: `[アレルギー · LAYOUT DUMMY]`, `245 × 24`, `16 px`
-- `4:62`: `[食事制限 · LAYOUT DUMMY]`, `245 × 24`, `16 px`
-- rollback `6:2` exists and is hidden
+- visible text outside production root: `0`
+- `4:47` reads back hidden
+- `4:55` reads back hidden
+- rollback `13:2` reads back hidden
+- no flattening or raster replacement.
 
 ## Image / Drive decision
 
-`IMAGE_GENERATION_NOT_REQUIRED_FOR_THIS_FIX`.
+`IMAGE_GENERATION_NOT_REQUIRED`.
 
-The observed bottleneck was typography inside an already-distinctive editorial composition. Drive writes: `0`. Exact Drive folder metadata was re-read before the Figma write.
+The observed bottleneck was redundant English filler inside an already-distinctive editorial composition. Drive writes: `0`. Exact Drive folder metadata was re-read before the Figma write and remains `12D7UPRTDwUx7vLOm1mtaew-sFGHt9FPG / ADD-08_メニュー補助サイン`.
 
 ## Deferred finalization
 
