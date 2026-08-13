@@ -78,11 +78,43 @@ Production `1:3`:
 
 Rollback `4:28` remains intact with the prior 11 native text nodes, zero IMAGE fills, zero text outside frame, and its safe guide.
 
+## 2026-08-13 placeholder hierarchy polish
+
+Fresh live inspection at `main` `7fd5b95de3ff51ea57656aa4b6ebd3a070e586c8` confirmed that the V2 composition remained sellable, but all four semantic placeholders still rendered the proof-only `LAYOUT DUMMY` suffix at the same size and color as the guest-facing field label. At actual size this reintroduced a visible proof-sheet / CMS-label impression.
+
+Exact authority was re-read before the write:
+
+- Figma: `xvJH23nWjWAApd3yOwr4y3 / 01_PRODUCTION / 1:3`
+- Drive: `12D7UPRTDwUx7vLOm1mtaew-sFGHt9FPG / ADD-08_メニュー補助サイン`
+
+A fresh hidden rollback copy was created on `99_QA`:
+
+- `11:2 / ROLLBACK_ADD08_PRE_PLACEHOLDER_HIERARCHY_2026_08_13`
+
+Production root `1:3` was preserved. Only native text-range styling changed:
+
+- `4:49 / TXT_MENU_SUPPORT_BODY`: semantic field stays `34 px`; ` · LAYOUT DUMMY]` becomes `11 px`, muted warm-gray, `0.78` opacity.
+- `4:53 / TXT_STAFF_BODY`: semantic field stays `27 px`; suffix becomes `10 px`, muted warm-gray, `0.78` opacity.
+- `4:58 / TXT_ALLERGY_BODY`: semantic field stays `16 px`; suffix becomes `8 px`, pale warm-gray, `0.78` opacity on the navy rail.
+- `4:62 / TXT_DIETARY_BODY`: semantic field stays `16 px`; suffix becomes `8 px`, pale warm-gray, `0.78` opacity on the navy rail.
+
+Post-write screenshot QA at the full-item 1400×1980 design scale shows the semantic fields remain immediately legible while proof metadata recedes to a subordinate production cue. The Japanese editorial hierarchy, asymmetric navy marginalia, 01/02 index rhythm, and staff-callout hierarchy are unchanged.
+
+Post-write structural readback:
+
+- production root: `1400 × 1980`, `clipsContent=true`
+- native text: `15`
+- IMAGE fills: `0`
+- no rasterization/flattening introduced
+- all four changed fields remain native editable text; the semantic placeholder strings themselves were not deleted or factually resolved.
+
+Image generation was not required: this defect was typography/proof-metadata hierarchy, not missing imagery. Drive writes: `0`.
+
 ## Status
 
 - structural: `DESIGN_QA_PASS_WITH_PLACEHOLDERS / LONG_COPY_STRESS_PASS / NATIVE_EDITABLE_PASS / ROLLBACK_SAFE / ACTUAL_SIZE_QA_PASS`
 - reopened visual: `SELLABLE_VISUAL_QA_PASS`
-- combined: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / NOT_PRINT_READY`
+- combined: `ADD_08_PLACEHOLDER_HIERARCHY_PASS / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / NOT_PRINT_READY`
 
 ## Deferred finalization
 
