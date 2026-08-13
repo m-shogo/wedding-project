@@ -1,0 +1,69 @@
+{
+  "schema_version": "1.0",
+  "date": "2026-08-13",
+  "scope": "Rurubu WEDDING V5 comparator promotion; FA outer / EO inside; Current remains untouched",
+  "authority_order": ["live Figma", "fresh Google Drive readback", "RURUBU-V5-ASSET-EVIDENCE-LEDGER.json and overlays", "GitHub main"],
+  "current_untouched": {"outer": "77:18", "inside": "77:290"},
+  "best": {
+    "outer": {"label": "FA", "working": "1161:2", "review": "1167:2", "start_here": "1168:2"},
+    "inside": {"label": "EO", "source": "1107:285", "review": "1111:188"}
+  },
+  "fa_visual_change": {
+    "problem": "EZ still read as stacked horizontal web-like bands and Feature 02 retained a card-like caption treatment.",
+    "principle": "source fidelity plus asymmetric materially different photo scales before decoration",
+    "adopted": true,
+    "generated_assets": 0,
+    "new_external_binary_placed": 0
+  },
+  "fa_qa": {
+    "thumbnail_500": "PASS",
+    "whole_item_1000": "PASS",
+    "actual_size_front": "794x1123 PASS",
+    "review_thumbnail": "PASS",
+    "start_here_thumbnail": "PASS",
+    "visible_native_text_whole_outer": 35,
+    "back_absolute_text_intersections": 0,
+    "front_absolute_text_intersections": 0,
+    "bounded_18px_safe_area_risks": 0,
+    "visible_image_nodes": 8,
+    "fold": {"node": "1161:193", "x": 792.7, "width": 2, "height": 1122.5}
+  },
+  "q60_secondary": {
+    "drive_id": "1aVp34U5qUTqd9FR3AILmJggdWwY1lAJb",
+    "working_figma_node": "1161:189",
+    "review_figma_node": "1167:189",
+    "start_here_figma_node": "1168:189",
+    "image_hash": "644f449c3bf2001a94d4b822d2b55e2614c11042",
+    "working_geometry_px": {"width": 252, "height": 231},
+    "state": "VERIFIED_SECONDARY_ONLY"
+  },
+  "q60_master": {
+    "drive_id": "1YL0WAOzYU3O1FGa23ieRuw_Btu4jbmzr",
+    "file_name": "RURUBU_V5_01_COVER_HERO__FIGMA_1330x1220_Q60.jpg",
+    "mime_type": "image/jpeg",
+    "size_bytes": 155439,
+    "fresh_drive_readback": true,
+    "dominant_exact_figma_placement": false
+  },
+  "fa_dominant_proxy": {
+    "working_node": "1161:134",
+    "image_hash": "539c259be8036b481d06b4f76db9a39b407d90e8",
+    "geometry_px": {"width": 793.7, "height": 330},
+    "explicitly_not_q60_master": true
+  },
+  "rollback": {
+    "ez_review": "1158:2",
+    "ez_start_here": "1158:194",
+    "hidden": true,
+    "deleted": false
+  },
+  "runtime_learning": {
+    "large_one_shot_recompose": "ATOMIC_REJECT_NO_MUTATION",
+    "switched_method": "small reversible geometry writes with live readback between writes"
+  },
+  "gate": {
+    "v5_complete": false,
+    "v6_production_started": false,
+    "reason": "FA is the verified best outer comparator, but dominant Q60 master exact Figma provenance and final V5 asset/print/fold reconciliation remain open."
+  }
+}
