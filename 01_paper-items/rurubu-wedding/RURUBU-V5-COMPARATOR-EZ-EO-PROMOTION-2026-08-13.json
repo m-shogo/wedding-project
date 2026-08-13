@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0",
+  "date": "2026-08-13",
+  "scope": "Rurubu WEDDING V5 comparator promotion; Current remains untouched",
+  "authority_order": ["live Figma", "fresh Google Drive readback", "RURUBU-V5-ASSET-EVIDENCE-LEDGER.json", "GitHub main"],
+  "current_untouched": {"outer":"77:18","inside":"77:290"},
+  "best": {
+    "outer": {"label":"EZ","working":"1157:2","review":"1158:2","start_here":"1158:194"},
+    "inside": {"label":"EO","source":"1107:285","review":"1111:188"}
+  },
+  "ez_qa": {
+    "thumbnail_500":"PASS",
+    "whole_item":"PASS",
+    "actual_size_front":"794x1123 PASS",
+    "native_text_visible":35,
+    "absolute_text_intersections":0,
+    "bounded_18px_safe_area_risks":0,
+    "fold":"x=792.7 width=2"
+  },
+  "q60_secondary": {
+    "drive_id":"1aVp34U5qUTqd9FR3AILmJggdWwY1lAJb",
+    "figma_node":"1157:189",
+    "image_hash":"644f449c3bf2001a94d4b822d2b55e2614c11042",
+    "geometry_px":{"width":266,"height":244},
+    "state":"VERIFIED_SECONDARY_ONLY"
+  },
+  "q60_master": {
+    "drive_id":"1YL0WAOzYU3O1FGa23ieRuw_Btu4jbmzr",
+    "file_name":"RURUBU_V5_01_COVER_HERO__FIGMA_1330x1220_Q60.jpg",
+    "mime_type":"image/jpeg",
+    "size_bytes":155439,
+    "fresh_drive_readback":true,
+    "dominant_exact_figma_placement":false
+  },
+  "ez_dominant_proxy": {
+    "node":"1157:134",
+    "image_hash":"539c259be8036b481d06b4f76db9a39b407d90e8",
+    "geometry_px":{"width":793.7,"height":470},
+    "explicitly_not_q60_master":true
+  },
+  "rollback": {
+    "ey_review":"1155:192",
+    "ey_start_here":"1155:382",
+    "hidden":true,
+    "deleted":false
+  },
+  "gate": {"v5_complete":false,"v6_production_started":false,"reason":"EZ improves visual hierarchy and preserves exact secondary Q60 provenance, but dominant Q60 master exact Figma provenance remains open."}
+}
