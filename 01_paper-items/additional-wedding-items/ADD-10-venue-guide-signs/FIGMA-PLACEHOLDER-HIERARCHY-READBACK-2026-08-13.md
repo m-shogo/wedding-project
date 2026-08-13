@@ -1,46 +1,45 @@
 # ADD-10 会場案内サイン — Placeholder Hierarchy Readback — 2026-08-13
 
-Status: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / PLACEHOLDER_HIERARCHY_FOLLOWUP_REQUIRED / ROLLBACK_SAFE / NOT_PRINT_READY`
+Status: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / PLACEHOLDER_HIERARCHY_PASS / ROLLBACK_SAFE / NOT_PRINT_READY`
 
 ## Live authority
 
-- GitHub `main` immediately before this evidence write: `a44c1e6f401c2e2fc53f1694079244bc86edca83`
+- GitHub `main` immediately before this evidence write: `8f13c2bd97d50eb1130ffa9edb175224a25f8685`
 - Current: `docs/automation/non-rurubu-figma-quality-current.md` = `ACTIVE / HOURLY / FIGMA_EDIT_ALLOWED / VISUAL_REOPENED`
 - Figma file key: `mMfoBkoZ7eVbuerSRHePLV`
 - production roots: A4 `2:2 / 2:13 / 2:24`, A5 `2:35 / 2:46 / 2:57`
 - Drive folder: `ADD-10_会場案内サイン` / `1ASWOTXO4fosLb9reWxQrHL2_UUC_Y8-3`
 - Drive metadata readback confirmed the exact folder ID and parent `0ADXt8irGMFGnUk9PVA`.
 
-## Fresh six-template readback
+## Fresh live verification
 
-A fresh live text-range inspection checked the visible `LAYOUT DUMMY` token on all four semantic fields in all six production templates.
+The previous evidence incorrectly left A5-forward `2:57` as a color/opacity follow-up. Fresh text-range readback now verifies that the production token treatment is already normalized.
 
-Five templates (`2:2 / 2:13 / 2:24 / 2:35 / 2:46`) have the intended proof-metadata hierarchy:
+A5-forward `2:57` currently has:
 
-- destination JP token: `10 px`, muted warm-gray, opacity about `0.76`
-- destination EN token: `7 px`, muted warm-gray, opacity about `0.76`
-- floor/room token: `8 px`, muted warm-gray, opacity about `0.76`
-- direction token: `7 px`, muted warm-gray, opacity about `0.76`
+- destination JP semantic field `52 px`; `LAYOUT DUMMY` suffix `10 px`, muted warm-gray, opacity about `0.76`;
+- destination EN semantic field `17 px`; suffix `7 px`, muted warm-gray, opacity about `0.76`;
+- floor/room semantic field `22 px`; suffix `8 px`, muted warm-gray, opacity about `0.76`;
+- direction semantic field `16 px` rust; suffix `7 px`, muted warm-gray, opacity about `0.76`.
 
-A5-forward `2:57` has the intended reduced token sizes but its token fills did **not** receive the muted proof-only treatment. Live readback shows opacity `1.0` and the field's original semantic colors remain on the `LAYOUT DUMMY` ranges. Actual-size screenshot confirms this is most noticeable on the rust-red direction note, where the small proof suffix remains colored instead of receding like the other five templates.
+This matches the proof-metadata hierarchy already established on the other five production templates. The previously recorded A5-forward family-consistency defect is therefore closed in live Figma.
 
-This is a bounded family-consistency defect, not a composition failure. Arrow geometry, Japanese-first hierarchy, destination fields, safe clipping, native editability and overall sellable wayfinding direction remain intact.
+## Screenshot QA
 
-## Figma write status
+A fresh actual-size screenshot of A5-forward at `1400 × 990` confirms:
 
-No production mutation is claimed in this evidence write. The current automation run encountered an OpenAI write-safety gate on bounded Figma text-range mutations in other non-Rurubu files, so the A5-forward fill normalization is intentionally left for the next write-safe run rather than retried aggressively.
+- arrow remains the primary directional cue;
+- Japanese destination is the first readable information after the arrow;
+- English, floor/room and direction note remain subordinate;
+- `LAYOUT DUMMY` suffixes visibly recede instead of inheriting the semantic navy/rust colors;
+- no collision, clipping, dashboard-like paneling or image artifact is present.
 
-Expected bounded follow-up when writes are available:
+## Structure / image decision
 
-- production root stays `2:57`
-- keep the existing reduced token font sizes
-- change only the four `LAYOUT DUMMY` token fills to the same muted warm-gray / ~0.76 opacity treatment already verified on the other five production templates
-- capture actual-size screenshot and structural readback afterward
+The production root remains `2:57`; no new Figma mutation was required in this verification run. Existing native text/vector structure and arrow geometry remain intact.
 
-## Asset decision
-
-`IMAGE_GENERATION_NOT_REQUIRED`. The defect is proof-metadata typography consistency, not missing imagery. Drive writes: `0`.
+`IMAGE_GENERATION_NOT_REQUIRED`. The issue was proof-metadata hierarchy consistency, not missing imagery. Drive writes: `0`.
 
 ## Result
 
-ADD-10 remains `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / ROLLBACK_SAFE / NOT_PRINT_READY`, with one bounded A5-forward placeholder-color consistency follow-up now explicitly recorded instead of being silently treated as complete.
+ADD-10 remains `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / ROLLBACK_SAFE / NOT_PRINT_READY`, and the stale A5-forward follow-up is now verified closed as `PLACEHOLDER_HIERARCHY_PASS`.
