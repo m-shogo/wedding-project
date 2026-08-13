@@ -2,7 +2,7 @@
 
 Status: `CURRENT / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / ROLLBACK_SAFE / NOT_PRINT_READY`
 Authority: GitHub latest `main` + `docs/automation/non-rurubu-figma-quality-current.md`
-Updated: 2026-08-13
+Updated: 2026-08-14
 
 This file began as the 2026-08-02 pre-Figma QA contract. The live reopened production supersedes the stale `live Figma visual QA: NOT_RUN / PREPARED_FOR_FIGMA` state.
 
@@ -22,8 +22,8 @@ Fresh production screenshot plus live readback reconfirm the promoted editorial 
 - the pair shares paper/typographic family DNA without relying on a simple color-only duplicate;
 - route geometry, editorial metadata and low-opacity `01 / 02` retain intentional asymmetry;
 - guidance and reception-name fields remain explicit native editable semantic placeholders;
-- groom `1:3`: 740×1050, 11 native text nodes / 10 visible, 0 IMAGE fill nodes, 0 visible text outside root, `clipsContent=true`;
-- bride `1:14`: 740×1050, 11 native text nodes / 10 visible, 0 IMAGE fill nodes, 0 visible text outside root, `clipsContent=true`;
+- groom `1:3`: 740×1050, 11 native text nodes / 9 visible, 0 IMAGE fill nodes, 0 visible text outside root, `clipsContent=true`;
+- bride `1:14`: 740×1050, 11 native text nodes / 9 visible, 0 IMAGE fill nodes, 0 visible text outside root, `clipsContent=true`;
 - no rasterization or generated imagery was introduced;
 - no current screenshot-supported need for image generation exists.
 
@@ -58,6 +58,39 @@ Post-change structure readback:
 - variable copy remains native editable text; no flattening or rasterization was introduced.
 
 Drive authority was re-read as `1vjSYrbjzfZs_vyCIpQAbml9_en5RcH_r / ADD-04_受付サイン`. No Drive asset write was required because imagery was not the bottleneck.
+
+### Fresh visual polish — 2026-08-14
+
+Observed latest `main` immediately before the production write: `28658582a9e10078981bb258fce54496d286ca99`.
+
+Fresh 740×1050 actual-size review found another duplicated template-like metadata line on both signs: `RECEPTION / 2026.10.24`. The reception role is already established by `受付 / 新郎側・新婦側`, and the date remains present in the footer. Keeping the repeated line added proof-sheet/template density without adding guest-facing information.
+
+Rollback-safe proofs created before mutation:
+
+- groom `13:2 / ROLLBACK_ADD04_GROOM_PRE_META_DUPLICATION_REMOVAL_2026_08_14`
+- bride `13:19 / ROLLBACK_ADD04_BRIDE_PRE_META_DUPLICATION_REMOVAL_2026_08_14`
+
+Production roots remained `1:3 / 1:14`. Only the duplicated metadata nodes were hidden:
+
+- groom `5:54 / META_LINE` → `visible=false`
+- bride `5:70 / META_LINE` → `visible=false`
+
+`GROOM / BRIDE` were retained because they still serve as concise bilingual side identifiers rather than decorative filler. No receptionist name, operational copy or venue fact was invented.
+
+Post-write actual-size screenshots: PASS on both groom and bride. The top half now reads more cleanly as `受付 → 新郎側/新婦側 → bilingual side label → rule`, with less repeated metadata before the guidance area.
+
+Post-write structure readback:
+
+- groom: 11 native text / 9 visible / IMAGE 0 / outside 0
+- bride: 11 native text / 9 visible / IMAGE 0 / outside 0
+- both roots remain 740×1050, `clipsContent=true`
+- `5:54` and `5:70` read back hidden
+- all semantic placeholders remain native editable text
+- no flattening or raster replacement.
+
+Drive authority was live-read immediately before this evidence write and remains `1vjSYrbjzfZs_vyCIpQAbml9_en5RcH_r / ADD-04_受付サイン`; Drive write 0.
+
+Image decision: `IMAGE_GENERATION_NOT_REQUIRED`. The defect was duplicated metadata, not missing imagery.
 
 Current result: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS`.
 
