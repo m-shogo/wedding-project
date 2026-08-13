@@ -131,3 +131,44 @@ Live post-write structure:
 The IMAGE role supersedes the older historical `IMAGE fills: 0` production snapshot above; it was not added in this spot-check and contains no variable copy. Drive authority remained `1XpuRqck_yDmWI6NhwZFWkvxpS6mqH29J / 04_青春18きっぷ風_ミンティア用シール`; Drive write this spot-check: `0`.
 
 Current result remains `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / PRODUCTION_PROMOTED / ROLLBACK_SAFE / NOT_PRINT_READY`.
+
+## 2026-08-14 fresh actual-size polish — placeholder hierarchy
+
+Observed latest `main` immediately before this evidence write: `761f91bef29da393647930aec9142f8295732a40`.
+
+Fresh `720×250` production screenshot showed that the V3 art direction still sells, but the three normalized semantic placeholders kept `LAYOUT DUMMY` at the same typographic weight as the unresolved field. At this small physical size that metadata still read as part of the ticket content rather than as proof-state annotation.
+
+Rollback-safe proof created before mutation:
+
+- `48:2 / ROLLBACK_SEISHUN_FUTARI_PRE_PLACEHOLDER_HIERARCHY_2026_08_14`.
+
+Production root remained `11:2 / FRAME_LABEL`.
+
+Suffix-only native text changes:
+
+- `44:212 / TXT_FROM`: semantic `[出発地]` stays `10.5px`; suffix reduced to `6px`;
+- `44:214 / TXT_DEST`: semantic `[行き先]` stays `10.5px`; suffix reduced to `6px`;
+- `44:268 / DECOR_SERIAL`: semantic `[管理番号]` stays `8.5px`; suffix reduced to `5.5px`;
+- all three suffix ranges use muted warm-gray at approximately `0.72` opacity.
+
+No departure, destination, management number, date, or route fact was invented. Geometry and the current replaceable stock-texture role were unchanged.
+
+Post-write actual-size screenshot: PASS.
+
+- the Japanese ticket title, route narrative and unresolved field labels remain readable first;
+- proof metadata is still visible but clearly subordinate;
+- no new collision or clipping is visible.
+
+Structural readback:
+
+- native text nodes: `19` total / `17` visible;
+- IMAGE fill nodes: `1` (existing replaceable stock texture, not added in this polish);
+- text outside root: `0`;
+- `clipsContent=true`;
+- all three edited suffix ranges read back at the intended size/fill/opacity.
+
+Drive authority was live-read before the change and remains `1XpuRqck_yDmWI6NhwZFWkvxpS6mqH29J`; Drive write `0`.
+
+Image decision: `IMAGE_GENERATION_NOT_REQUIRED`.
+
+Current result remains `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / PRODUCTION_PROMOTED / PLACEHOLDER_HIERARCHY_PASS / ROLLBACK_SAFE / NOT_PRINT_READY`.
