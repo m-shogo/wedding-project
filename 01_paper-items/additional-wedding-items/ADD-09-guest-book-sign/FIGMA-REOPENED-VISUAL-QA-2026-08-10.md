@@ -81,11 +81,41 @@ Rollback `5:21` remains intact with the prior five native text nodes, zero IMAGE
 
 Stress `5:50` retains eight native text nodes, zero IMAGE fills, zero text outside frame, and hidden safe guide `5:66`.
 
+## 2026-08-13 placeholder hierarchy polish
+
+Fresh actual-size review at current main `c31743ce370e316b6973e8350d2b03dda1e73ceb` confirmed that the V2 bookplate/editorial composition still passes the sellable visual gate, but the two semantic placeholders rendered proof-only `LAYOUT DUMMY` metadata at the same scale and color as their guest-facing field labels. The result looked more like a proof/CMS sheet than a finished physical sign.
+
+Exact authority was re-read before mutation:
+
+- Figma: `PjFWBpDwaQM5LfvgdqSFvU / 01_PRODUCTION / 1:3`
+- Drive: `1D259ugx13El0JYxvn8yyskIjc2c2liF4 / ADD-09_Guest_Bookサイン`
+
+A fresh hidden rollback was created on `99_QA`:
+
+- `7:2 / ROLLBACK_ADD09_PRE_PLACEHOLDER_HIERARCHY_2026_08_13`
+
+Production root `1:3` was preserved. Only native text-range hierarchy changed:
+
+- `5:38 / TXT_GUIDE`: semantic field remains `29 px`; ` · LAYOUT DUMMY]` becomes `10 px`, muted warm-gray, opacity `0.78`.
+- `5:42 / TXT_NOTE`: semantic field remains `24 px`; suffix becomes `9 px`, muted warm-gray, opacity `0.78`.
+
+Post-write screenshot QA at the full-item `990 × 1400` rendering shows the semantic instructions remain immediately readable while proof metadata recedes. The deep-navy book spine, Japanese-first title, bookplate rule, writing-line rhythm and footer composition are unchanged.
+
+Post-write structural readback:
+
+- production root: `990 × 1400`, `clipsContent=true`
+- native text count: `8`
+- IMAGE fills: `0`
+- no rasterization or flattening introduced
+- both edited fields remain native editable text; unresolved values were not factually resolved or deleted.
+
+Image generation was not required for this correction because the live bottleneck was proof-metadata typography, not missing imagery. Drive writes: `0`.
+
 ## Status
 
 - structural: `DESIGN_QA_PASS_WITH_PLACEHOLDERS / LONG_COPY_STRESS_PASS / NATIVE_EDITABLE_PASS / SEMANTIC_PLACEHOLDERS_PASS / ROLLBACK_SAFE / ACTUAL_SIZE_QA_PASS`
 - reopened visual: `SELLABLE_VISUAL_QA_PASS`
-- combined: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / NOT_PRINT_READY`
+- combined: `ADD_09_PLACEHOLDER_HIERARCHY_PASS / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / NOT_PRINT_READY`
 
 ## Deferred finalization
 
