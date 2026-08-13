@@ -1,0 +1,90 @@
+{
+  "date": "2026-08-13",
+  "scope": "Rurubu WEDDING only",
+  "current": {
+    "outer": "77:18",
+    "inside": "77:290",
+    "touched": false
+  },
+  "best": {
+    "outer": {
+      "productionStudyNodeId": "1153:2",
+      "workingNodeId": "1155:2",
+      "reviewNodeId": "1155:192",
+      "startHereNodeId": "1155:382",
+      "label": "EY",
+      "visuallyVerified": true,
+      "structureVerified": true
+    },
+    "inside": {
+      "workingNodeId": "1107:285",
+      "reviewNodeId": "1111:188",
+      "label": "EO",
+      "visuallyVerified": true,
+      "structureVerified": true
+    }
+  },
+  "q60": {
+    "masterDriveId": "1YL0WAOzYU3O1FGa23ieRuw_Btu4jbmzr",
+    "masterFileName": "RURUBU_V5_01_COVER_HERO__FIGMA_1330x1220_Q60.jpg",
+    "masterMimeType": "image/jpeg",
+    "masterBytes": 155439,
+    "freshMasterReadback": true,
+    "derivativeDriveId": "1aVp34U5qUTqd9FR3AILmJggdWwY1lAJb",
+    "derivativeFileName": "RURUBU_V5_01_COVER_HERO__ROLE_240x220_Q78.jpg",
+    "freshDerivativeReadback": true,
+    "exactDerivativeWorkingFigmaNodeId": "1155:189",
+    "exactDerivativeImageHash": "644f449c3bf2001a94d4b822d2b55e2614c11042",
+    "exactDerivativeGeometry": "292x267 bounded destination postcard in EY Working",
+    "exactDerivativeAnchorVerified": true,
+    "dominantMasterExact": false
+  },
+  "experiments": {
+    "EX": {
+      "status": "SUPERSEDED_HIDDEN_ROLLBACK",
+      "reason": "actual-size source fidelity remained weaker because low-resolution/proxy fields still carried too much printed area"
+    },
+    "EY": {
+      "nodeId": "1153:2",
+      "status": "ADOPTED",
+      "principle": "source fidelity before scale; recover editorial energy through image-size contrast, overlap, and native Japanese typography rather than stretching weak assets"
+    }
+  },
+  "eyQa": {
+    "thumbnail500": "PASS",
+    "wholeReading": "PASS",
+    "actualSizeFront794x1123": "PASS",
+    "actualSizeBack794x1123": "PASS",
+    "visibleNativeText": 35,
+    "visibleImageFills": 7,
+    "absoluteTextIntersections": 0,
+    "bounded18pxSafeAreaRisks": 0,
+    "fold": "x=792.7 width=2",
+    "actualSizeRepairs": [
+      "realigned stale friend-caption background strips with their captions",
+      "separated back title and subtitle",
+      "moved front masthead inside the 18px safe area",
+      "removed masthead/main and subcopy/feature text-box intersections",
+      "moved subtitle/taxonomy from print-strap mixing onto hero sky as direct deep-navy type"
+    ]
+  },
+  "navigation": {
+    "reviewBestOuter": "EY",
+    "reviewBestInside": "EO",
+    "startHereStatus": "EY outer / EO inside",
+    "workingHasEY": true,
+    "oldEXWorkingHiddenRollback": true,
+    "oldEXReviewHiddenRollback": true,
+    "oldEXStartHereHiddenRollback": true,
+    "authorityDriftReconciled": true
+  },
+  "status": {
+    "generated": 0,
+    "newlyAdoptedGeneratedAsset": 0,
+    "newExternalBinaryPlaced": 0,
+    "existingExactQ60DerivativeReused": true,
+    "v5Complete": false,
+    "v6ProductionStarted": false,
+    "reason": "EY improves actual-size source fidelity and secondary Q60 provenance is exact, but dominant Q60 master exact placement and final V5 asset/print reconciliation remain open."
+  }
+}

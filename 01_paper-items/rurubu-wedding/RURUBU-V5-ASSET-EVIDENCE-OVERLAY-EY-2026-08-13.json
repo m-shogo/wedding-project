@@ -1,0 +1,67 @@
+{
+  "schema_version": "1.0",
+  "date": "2026-08-13",
+  "scope": "Rurubu WEDDING V5 comparator asset evidence overlay; does not modify Current role counts",
+  "authority_order": [
+    "live Figma",
+    "fresh Google Drive readback",
+    "RURUBU-V5-ASSET-EVIDENCE-LEDGER.json",
+    "RURUBU-V5-LIVE-SCOPE-RECONCILIATION-2026-08-09.json"
+  ],
+  "current_untouched": {
+    "outer": "77:18",
+    "inside": "77:290"
+  },
+  "v5_01_master": {
+    "drive_id": "1YL0WAOzYU3O1FGa23ieRuw_Btu4jbmzr",
+    "file_name": "RURUBU_V5_01_COVER_HERO__FIGMA_1330x1220_Q60.jpg",
+    "mime_type": "image/jpeg",
+    "dimensions_px": {"width":1330,"height":1220},
+    "size_bytes": 155439,
+    "sha256": "090880c0ebe101f1321ebac05f22a91b2b61f3a8ac31c8d112dc418412f13ab2",
+    "fresh_drive_readback": true,
+    "dominant_exact_figma_placement": false
+  },
+  "verified_secondary_q60": {
+    "drive_id": "1aVp34U5qUTqd9FR3AILmJggdWwY1lAJb",
+    "file_name": "RURUBU_V5_01_COVER_HERO__ROLE_240x220_Q78.jpg",
+    "working_node_id": "1155:189",
+    "review_node_id": "1155:379",
+    "start_here_node_id": "1155:569",
+    "image_hash": "644f449c3bf2001a94d4b822d2b55e2614c11042",
+    "working_geometry_px": {"width":292,"height":267},
+    "visual_qa": "PASS at thumbnail, whole-item and ~794x1123 actual-size front as a bounded destination postcard",
+    "provenance_state": "VERIFIED_SECONDARY_ONLY"
+  },
+  "ey_dominant_proxy": {
+    "production_node_name": "EV_HERO_HISTORY_DERIVATIVE_NOT_Q60",
+    "geometry_px": {"width":793.7,"height":390},
+    "semantic_use": "bounded ratio-appropriate wide atmosphere field",
+    "explicitly_not_q60_master": true,
+    "visual_qa": "PASS for EY comparator only; does not close V5-01 dominant role"
+  },
+  "ey_comparator": {
+    "production": "1153:2",
+    "working": "1155:2",
+    "review": "1155:192",
+    "start_here": "1155:382",
+    "native_text_visible": 35,
+    "image_fills_visible": 7,
+    "absolute_text_intersections": 0,
+    "bounded_18px_safe_area_risks": 0,
+    "fold": "x=792.7 width=2"
+  },
+  "rollback": {
+    "ex_working": "1149:2",
+    "ex_review": "1149:192",
+    "ex_start_here": "1149:382",
+    "all_hidden": true,
+    "deleted": false
+  },
+  "gate": {
+    "v5_01_role_complete": false,
+    "v5_complete": false,
+    "v6_production_started": false,
+    "reason": "EY keeps the exact accepted secondary Q60 derivative and improves source-fidelity at actual size, but the dominant Q60 master has not been placed/read back as the dominant Figma asset."
+  }
+}
