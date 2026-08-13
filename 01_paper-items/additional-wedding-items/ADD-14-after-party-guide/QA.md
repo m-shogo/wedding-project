@@ -27,11 +27,23 @@ Fresh production screenshot and live structural readback reconfirmed the V2 edit
 - no flatten/raster replacement introduced;
 - no new screenshot-supported need for generated imagery was found.
 
+### 2026-08-13 placeholder hierarchy polish
+
+Fresh actual-size screenshots showed that the composition itself still passed, but the repeated `LAYOUT DUMMY` suffix was nearly as optically strong as guest-facing copy across venue, time, fee, access, RSVP, contact, QR and notice fields. That made the sellable itinerary read more like a form/proof sheet than intended.
+
+- rollback copies were created first on `99_QA`: A6 `17:2`, A5 `17:27`;
+- production roots `1:2` and `1:18` remained stable;
+- the semantic placeholder strings were **not removed or fact-filled**;
+- only the `LAYOUT DUMMY` substring was recolored to a restrained warm-gray secondary hierarchy across 24 occurrences;
+- native text/editability remained intact;
+- post-write screenshot QA passed at A6 592×420 and A5 840×592: the unknown/final distinction remains visible, while the Japanese headline, venue, times and functional labels regain hierarchy;
+- structural readback remained A6 `18 native text / 0 IMAGE / 0 outside`, A5 `18 / 0 / 0`, both `clipsContent=true`.
+
 Current result: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS`.
 
 ## Rollback / edit history
 
-Rollback-safe proofs and the two 2026-08-12 production polish passes are recorded in `docs/automation/add-14-after-party-guide-design-qa.md`. Production root IDs remain stable.
+Rollback-safe proofs and the two 2026-08-12 production polish passes are recorded in `docs/automation/add-14-after-party-guide-design-qa.md`. The 2026-08-13 placeholder hierarchy rollback copies are `17:2` and `17:27`. Production root IDs remain stable.
 
 ## Required input / deferred finalization
 
