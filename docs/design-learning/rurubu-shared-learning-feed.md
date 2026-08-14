@@ -102,3 +102,27 @@ Status: `VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`.
 What must remain Rurubu-specific: specific photo choices, overlap angles, the giant `横浜` title, magenta/cyan/yellow palette, and Japanese travel-magazine visual grammar.
 
 Cross-item applicability: when a print item feels like stacked horizontal sections, another item may independently test whether changing a dominant image from a wide band to a continuous spine/field improves editorial continuity before generating new imagery.
+
+### RSL-008 — Subtraction needs a binding-function check; small timeline modules still carry visual mass
+
+State: `VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`
+
+Source problem: FE's back-cover six-event travel timeline was technically readable but visually too quiet at whole-item scale. In parallel, FG tested removing Feature 02's white photo border and cyan rule to reduce card/UI feeling.
+
+Root-cause hypothesis: two different issues were being conflated. The timeline needed more hierarchy, while the Feature 02 border/rule had a real physical/editorial binding function between photo and caption. Blind subtraction weakened that relationship instead of improving it.
+
+Bounded test: FG removed/reduced the Feature 02 framing treatment and tried both wide and portrait-like photo clipping; both variants were rejected at whole-item scale. FH left the accepted front photo treatment intact, enlarged native timeline title/date/label hierarchy, tightened the 3×2 event rhythm, and used six short purposeful color rails without adding cards or assets.
+
+Expected improvement: stronger back-cover closure and better information hierarchy without increasing decoration or asset count.
+
+Regression risk: enlarged dates can consume footer/safe-area reserve; colorful rails can become decorative noise; preserving a border/rule can slide back into card UI if it has no actual binding function.
+
+Three-scale evidence: 500px whole-item PASS; 1000px spread PASS; actual-size back `1190:195` ≈ 798×1123 PASS; actual-size front `1190:324` = 794×1123 PASS. Final FH has 35 visible native text nodes, 7 visible IMAGE fills, 0 same-parent absolute text intersections and 0 18px text safe-area risks.
+
+Figma evidence: FH `1190:194` adopted; FE `1186:2` hidden rollback; FG `1190:2` hidden rejected study; exact secondary Q60 node `1190:381` hash `644f449c3bf2001a94d4b822d2b55e2614c11042`.
+
+Status: `VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`.
+
+What must remain Rurubu-specific: the exact 3×2 layout, rail colors, title scale, photo framing, palette and travel-magazine treatment.
+
+Cross-item applicability: when another print item has a date/timeline/metadata module, test its contribution to whole-item visual mass—not only minimum legibility. Before removing a border/rule during UI-subtraction, verify whether it performs a real image-caption/physical-artifact binding function at thumbnail scale.
