@@ -2,7 +2,7 @@
 
 Status: `CURRENT / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / ROLLBACK_SAFE / BLOCKED_REQUIRED_INPUT / NOT_PRINT_READY`
 Authority: GitHub latest `main` + `docs/automation/non-rurubu-figma-quality-current.md`
-Updated: 2026-08-13
+Updated: 2026-08-14
 
 This file began as the 2026-08-02 pre-Figma QA checklist. The live production and reopened visual evidence now supersede the stale `PREPARED_FOR_FIGMA` state.
 
@@ -12,6 +12,7 @@ This file began as the 2026-08-02 pre-Figma QA checklist. The live production an
 - production A6: `1:2 / FRAME_AFTER_PARTY_GUIDE_FRONT`
 - production A5: `1:18 / FRAME_AFTER_PARTY_GUIDE_A5`
 - Drive folder: `ADD-14_二次会案内` / `1Oq2Pz2mYo4oaDnO7LMezMrCUizcxaEjs`
+- Drive parent folder: `0ADXt8irGMFGnUk9PVA`
 - detailed reopened evidence: `docs/automation/add-14-after-party-guide-design-qa.md`
 
 ## Current visual / structure QA
@@ -34,16 +35,25 @@ Fresh actual-size screenshots showed that the composition itself still passed, b
 - rollback copies were created first on `99_QA`: A6 `17:2`, A5 `17:27`;
 - production roots `1:2` and `1:18` remained stable;
 - the semantic placeholder strings were **not removed or fact-filled**;
-- only the `LAYOUT DUMMY` substring was recolored to a restrained warm-gray secondary hierarchy across 24 occurrences;
-- native text/editability remained intact;
-- post-write screenshot QA passed at A6 592×420 and A5 840×592: the unknown/final distinction remains visible, while the Japanese headline, venue, times and functional labels regain hierarchy;
-- structural readback remained A6 `18 native text / 0 IMAGE / 0 outside`, A5 `18 / 0 / 0`, both `clipsContent=true`.
+- the `LAYOUT DUMMY` substring was recolored to a restrained warm-gray secondary hierarchy across 24 occurrences;
+- native text/editability remained intact.
 
-Current result: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS`.
+### 2026-08-14 suffix-size closure / live readback
+
+The warm-gray recolor alone still left proof metadata optically too large at actual size, so the suffix-only size follow-up was applied without changing semantic fields, facts, QR geometry or composition. Fresh live readback now confirms the closure in production:
+
+- A6 `1:2`: 12 `LAYOUT DUMMY` suffixes at `5.5–7px`, warm-gray; 18 native text nodes; 0 IMAGE fills; `clipsContent=true`;
+- A5 `1:18`: 12 suffixes at `7–10px`, warm-gray; 18 native text nodes; 0 IMAGE fills; `clipsContent=true`;
+- examples: A6 venue suffix `7px`, time suffixes `7px`, fee/access/RSVP `5.5px`, QR `5.5px`; A5 venue `10px`, times `9px`, fee/access/RSVP `7.5px`, QR `7px`;
+- production root IDs remain stable and the existing rollback copies `17:2` / `17:27` remain available;
+- fresh A6 actual-size screenshot continues to show the Japanese headline, venue and time hierarchy reading before proof metadata;
+- no generated image or Drive asset is required for this item.
+
+Current result: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / PLACEHOLDER_SUFFIX_SIZE_PASS`.
 
 ## Rollback / edit history
 
-Rollback-safe proofs and the two 2026-08-12 production polish passes are recorded in `docs/automation/add-14-after-party-guide-design-qa.md`. The 2026-08-13 placeholder hierarchy rollback copies are `17:2` and `17:27`. Production root IDs remain stable.
+Rollback-safe proofs and the earlier production polish passes are recorded in `docs/automation/add-14-after-party-guide-design-qa.md`. The placeholder-hierarchy rollback copies are `17:2` and `17:27`. Production root IDs remain stable.
 
 ## Required input / deferred finalization
 
