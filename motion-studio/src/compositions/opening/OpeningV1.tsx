@@ -10,6 +10,7 @@ import {
 import {colors, fonts} from '../../data/theme';
 import {serifFamily} from '../../data/fonts';
 import {openingV1Scenes} from '../../data/openingV1';
+import {CloudSea} from './CloudSea';
 
 const sansFamily = fonts.sans;
 
@@ -109,53 +110,41 @@ const DepartureTitle = ({durationFrames}: {durationFrames: number}) => {
   );
 };
 
+// 雲は角丸のplaceholderではなく、本番と同じ CloudSea を背景に使う。
+// 対応表(docs/opening-v1-motion-map.md)のセクション2 = drift / rec-03。
+// timeOfDay=morning はStyle Bibleの「朝日・やわらかい空色」に合わせている。
 const CloudTransition = ({durationFrames}: {durationFrames: number}) => {
   const frame = useCurrentFrame();
   const opacity = fadeForScene(frame, durationFrames);
-  const drift = interpolate(frame, [0, durationFrames], [-28, 34]);
 
   return (
-    <EditorialBase>
-      <AbsoluteFill style={{opacity}}>
+    <AbsoluteFill style={{opacity, overflow: 'hidden'}}>
+      <CloudSea timeOfDay="morning" speed={0.9} cloudOpacity={0.85} zoomTo={1.06} />
+      {/* 他セクションと同じ内枠。EditorialBaseは不透明な下地を敷くのでここでは枠だけ描く */}
+      <div
+        style={{
+          position: 'absolute',
+          inset: 34,
+          border: '1px solid rgba(255,255,255,0.34)',
+          pointerEvents: 'none',
+        }}
+      />
+      <div style={{position: 'absolute', left: 150, bottom: 120, color: colors.navy}}>
+        <SmallLabel>Altitude</SmallLabel>
         <div
           style={{
-            position: 'absolute',
-            left: 130 + drift,
-            top: 260,
-            width: 650,
-            height: 220,
-            borderRadius: 999,
-            backgroundColor: colors.cloud,
-            boxShadow: '0 32px 80px rgba(28,42,68,0.08)',
+            fontFamily: serifFamily,
+            fontSize: 62,
+            letterSpacing: '0.06em',
+            marginTop: 10,
+            // 雲の白に負けないよう、薄く影を敷いて可読性を確保する
+            textShadow: '0 2px 18px rgba(255,255,255,0.55)',
           }}
-        />
-        <div
-          style={{
-            position: 'absolute',
-            right: 110 - drift * 0.55,
-            top: 430,
-            width: 820,
-            height: 260,
-            borderRadius: 999,
-            backgroundColor: colors.white,
-            boxShadow: '0 36px 90px rgba(28,42,68,0.09)',
-          }}
-        />
-        <div style={{position: 'absolute', left: 150, bottom: 120}}>
-          <SmallLabel>Altitude</SmallLabel>
-          <div
-            style={{
-              fontFamily: serifFamily,
-              fontSize: 62,
-              letterSpacing: '0.06em',
-              marginTop: 10,
-            }}
-          >
-            The journey begins.
-          </div>
+        >
+          The journey begins.
         </div>
-      </AbsoluteFill>
-    </EditorialBase>
+      </div>
+    </AbsoluteFill>
   );
 };
 
