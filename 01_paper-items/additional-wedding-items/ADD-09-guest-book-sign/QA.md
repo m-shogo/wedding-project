@@ -1,7 +1,7 @@
 # ADD-09 ゲストブックサイン — QA
 
 Status: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / LONG_COPY_STRESS_PASS / ROLLBACK_SAFE / NOT_PRINT_READY`
-Date: 2026-08-14
+Date: 2026-08-15
 
 ## Current authority
 
@@ -37,20 +37,47 @@ Post-write actual-size screenshot QA: PASS.
 - the small top `GUEST BOOK` role label remains available without redundant English repetition;
 - no dashboard/card feel, image insertion, gradient, shadow or replacement decoration was introduced.
 
-## Verified structure
+## Fresh semantic-placeholder polish — 2026-08-15
 
-Production `1:3` remains a `1000 × 1419`, `clipsContent=true` native composition. Prior verified structure contained `8` native editable text nodes and `0` raster IMAGE fills; the 2026-08-14 polish hides one existing text node rather than flattening or raster-replacing content. Primary semantic placeholders remain:
+Observed latest `main` immediately before the bounded production write: `7bff1c10baf81591d64e80a80bb356bdfa569313`.
 
-- `5:38 / TXT_INSTRUCTION` = `[記入案内 · LAYOUT DUMMY]`
-- `5:42 / TXT_NOTE` = `[記入方法・設置場所 · LAYOUT DUMMY]`
+Fresh `1000 × 1419` actual-size review found one remaining authoring-style operational placeholder in the lower instruction block: `5:42 / TXT_NOTE / [記入方法・設置場所 · LAYOUT DUMMY]`. The visible heading directly above already says `ご記入について`; retaining `設置場所` in the placeholder read like a production-field name rather than guest-facing copy.
 
-A fresh screenshot confirms the intended post-write visual state. Programmatic structure readback was attempted again on 2026-08-14 but the Figma runtime safety gate blocked that read-only plugin call before execution; therefore no unverified new node-count claim is added here. Existing structural/long-copy evidence remains valid because the bounded mutation only changed visibility of `TXT_SPINE_MARK`.
+Drive authority was live re-read before mutation and remains `1D259ugx13El0JYxvn8yyskIjc2c2liF4 / ADD-09_ゲストブックサイン`.
+
+Rollback-safe proof created before mutation:
+
+- `12:2 / ROLLBACK_ADD09_PRE_NOTE_PLACEHOLDER_JA_POLISH_2026_08_15` (`visible=false`)
+
+Production root remained `1:3`. Only the native editable `5:42 / TXT_NOTE` copy changed:
+
+- before: `[記入方法・設置場所 · LAYOUT DUMMY]`
+- after: `[ご記入のご案内 · LAYOUT DUMMY]`
+
+The established mixed-style proof metadata hierarchy was preserved explicitly after the copy edit: semantic field `[ご記入のご案内` remains 24 px in the existing navy, while ` · LAYOUT DUMMY]` remains 9 px warm-gray at opacity 0.78.
+
+Post-write actual-size screenshot QA: PASS.
+
+- the lower instruction block now reads as guest-facing copy rather than a CMS/production field;
+- the small `LAYOUT DUMMY` suffix remains subordinate;
+- Japanese hero, book-spine field, top `GUEST BOOK` role label, three writing rules, date and location remain unchanged;
+- no new decoration, image or fake operational fact was added.
+
+Fresh programmatic structure readback now succeeds and supersedes the previous read-block note for the current state:
+
+- production root: `1000 × 1419`, `clipsContent=true`
+- native editable text: `8` / visible `7`
+- raster IMAGE fills: `0`
+- visible text outside production root: `0`
+- `5:42` reads `[ご記入のご案内 · LAYOUT DUMMY]` with 24 px semantic field + 9 px muted suffix
+- rollback `12:2` reads back hidden
+- no flattening or raster replacement.
 
 ## Image / Drive decision
 
 `IMAGE_GENERATION_NOT_REQUIRED`.
 
-The screenshot-supported bottleneck was redundant English filler inside an already-specific physical bookplate composition, not missing media. Drive writes: `0`. Exact Drive folder metadata was re-read live on 2026-08-14 and remains `1D259ugx13El0JYxvn8yyskIjc2c2liF4 / ADD-09_ゲストブックサイン`.
+The screenshot-supported bottlenecks were redundant English filler and internal authoring language inside an already-specific physical bookplate composition, not missing media. Drive writes: `0`. Exact Drive folder metadata remains `1D259ugx13El0JYxvn8yyskIjc2c2liF4 / ADD-09_ゲストブックサイン`.
 
 ## Deferred finalization
 
