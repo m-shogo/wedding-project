@@ -1,10 +1,10 @@
-clip_id,source_file,in_tc,out_tc,chapter,role,motion,tags,caption_space,rating,pick,out_name,notes
-clip-001,10_references/media/pool/pexels_4092172_sky_is_not_the_limit.mp4,8.0,13.0,1,背景,parallax,飛行機窓;雲海,yes,86,candidate,window_clouds_a,Pexels/表記不要/rec-08 窓枠が安定している区間
-clip-002,10_references/media/pool/pexels_4092172_sky_is_not_the_limit.mp4,20.0,25.0,1,背景,parallax,飛行機窓;雲海,yes,82,candidate,window_clouds_b,Pexels/表記不要/rec-08 別テイク比較用
-clip-003,10_references/media/pool/pexels_4543121_evening_sky.mp4,1.0,6.0,5,背景,drift,夕暮れ;空,yes,88,candidate,evening_sky_a,Pexels/表記不要/rec-12 到着の余韻向き。オレンジ〜ネイビーがStyle Bibleに合う
-clip-004,10_references/media/pool/pexels_6156696_video_footage_of_a_blue_sky_from_the_air.mp4,10.0,15.0,3,背景,drift,雲海;青空,yes,78,candidate,cloudsea_blue_a,Pexels/表記不要/rec-03 右上に機体の赤い部品が映る。上部トリミング必須
-clip-005,10_references/media/pool/pexels_30808497_aerial_view_of_clouds_in_overcast_sky.mp4,1.0,5.0,3,背景,drift,雲海;曇天,yes,62,pool,cloudsea_grey_a,Pexels/表記不要/rec-03 灰色が強くStyle Bibleの色から外れ気味。色調整前提
-clip-006,10_references/media/pool/pexels_10961750_airplane_landing_on_airport.mp4,0.0,4.0,1,背景,locked,滑走路;夜,yes,65,pool,runway_night_a,Pexels/表記不要/rec-10 冒頭は車両が写らない。中盤はバス・車が入るため使用不可
-clip-007,10_references/media/pool/pexels_11058632_time_lapse_of_sunset_above_city.mp4,2.0,6.0,3,背景,drift,夜景;街,yes,58,pool,city_sunset_a,Pexels/表記不要/rec-10 街並みが雑然として上品さに欠ける。保留
-clip-008,10_references/media/pool/pexels_6472910_airplane_wing_while_flying_in_the_sky.mp4,0,1.0,1,背景,parallax,翼,no,0,rejected,,不採用: 翼にAVIANCAのロゴが全編で写る。Style Bibleのno logo違反
-clip-009,10_references/media/pool/pexels_13973018_an_airline_plane_taxiing_on_the_runway_a.mp4,0,1.0,1,背景,locked,滑走路,no,0,rejected,,不採用: American Airlinesの機体ロゴが写る。Style Bibleのno logo違反
+clip_id,source_file,in_tc,out_tc,chapter,role,motion,tags,caption_space,crop,rating,pick,out_name,notes
+clip-001,10_references/media/pool/pexels_4092172_sky_is_not_the_limit.mp4,8.0,13.0,1,背景,parallax,飛行機窓;雲海,yes,,86,candidate,window_clouds_a,Pexels/表記不要/rec-08 窓枠が安定している区間
+clip-002,10_references/media/pool/pexels_4092172_sky_is_not_the_limit.mp4,20.0,25.0,1,背景,parallax,飛行機窓;雲海,yes,,82,candidate,window_clouds_b,Pexels/表記不要/rec-08 別テイク比較用
+clip-003,10_references/media/pool/pexels_4543121_evening_sky.mp4,1.0,6.0,5,背景,drift,夕暮れ;空,yes,,88,candidate,evening_sky_a,Pexels/表記不要/rec-12 到着の余韻向き。オレンジ〜ネイビーがStyle Bibleに合う
+clip-004,10_references/media/pool/pexels_6156696_video_footage_of_a_blue_sky_from_the_air.mp4,10.0,15.0,3,背景,drift,雲海;青空,yes,1760:990:80:90,84,candidate,cloudsea_blue_a,Pexels/表記不要/rec-03 右上の翼をcropで除外(16:9維持のまま1920x1080へ戻す)
+clip-005,10_references/media/pool/pexels_30808497_aerial_view_of_clouds_in_overcast_sky.mp4,1.0,5.0,3,背景,drift,雲海;曇天,yes,,62,pool,cloudsea_grey_a,Pexels/表記不要/rec-03 灰色が強くStyle Bibleの色から外れ気味。色調整前提
+clip-006,10_references/media/pool/pexels_10961750_airplane_landing_on_airport.mp4,0.0,4.0,1,背景,locked,滑走路;夜,yes,,65,pool,runway_night_a,Pexels/表記不要/rec-10 冒頭は車両が写らない。中盤はバス・車が入るため使用不可
+clip-007,10_references/media/pool/pexels_11058632_time_lapse_of_sunset_above_city.mp4,2.0,6.0,3,背景,drift,夜景;街,yes,,58,pool,city_sunset_a,Pexels/表記不要/rec-10 街並みが雑然として上品さに欠ける。保留
+clip-008,10_references/media/pool/pexels_6472910_airplane_wing_while_flying_in_the_sky.mp4,0,1.0,1,背景,parallax,翼,no,,0,rejected,,不採用: 翼にAVIANCAのロゴが全編で写る。Style Bibleのno logo違反
+clip-009,10_references/media/pool/pexels_13973018_an_airline_plane_taxiing_on_the_runway_a.mp4,0,1.0,1,背景,locked,滑走路,no,,0,rejected,,不採用: American Airlinesの機体ロゴが写る。Style Bibleのno logo違反

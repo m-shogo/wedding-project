@@ -336,6 +336,7 @@
         "雲海"
       ],
       "captionSpace": "yes",
+      "crop": "",
       "rating": 86,
       "pick": "candidate",
       "outName": "window_clouds_a",
@@ -358,6 +359,7 @@
         "雲海"
       ],
       "captionSpace": "yes",
+      "crop": "",
       "rating": 82,
       "pick": "candidate",
       "outName": "window_clouds_b",
@@ -380,6 +382,7 @@
         "空"
       ],
       "captionSpace": "yes",
+      "crop": "",
       "rating": 88,
       "pick": "candidate",
       "outName": "evening_sky_a",
@@ -402,10 +405,11 @@
         "青空"
       ],
       "captionSpace": "yes",
-      "rating": 78,
+      "crop": "1760:990:80:90",
+      "rating": 84,
       "pick": "candidate",
       "outName": "cloudsea_blue_a",
-      "notes": "Pexels/表記不要/rec-03 右上に機体の赤い部品が映る。上部トリミング必須",
+      "notes": "Pexels/表記不要/rec-03 右上の翼をcropで除外(16:9維持のまま1920x1080へ戻す)",
       "recipeIds": [
         "rec-03"
       ]
@@ -424,6 +428,7 @@
         "曇天"
       ],
       "captionSpace": "yes",
+      "crop": "",
       "rating": 62,
       "pick": "pool",
       "outName": "cloudsea_grey_a",
@@ -446,6 +451,7 @@
         "夜"
       ],
       "captionSpace": "yes",
+      "crop": "",
       "rating": 65,
       "pick": "pool",
       "outName": "runway_night_a",
@@ -468,6 +474,7 @@
         "街"
       ],
       "captionSpace": "yes",
+      "crop": "",
       "rating": 58,
       "pick": "pool",
       "outName": "city_sunset_a",
@@ -489,6 +496,7 @@
         "翼"
       ],
       "captionSpace": "no",
+      "crop": "",
       "rating": 0,
       "pick": "rejected",
       "outName": "clip-008",
@@ -508,6 +516,7 @@
         "滑走路"
       ],
       "captionSpace": "no",
+      "crop": "",
       "rating": 0,
       "pick": "rejected",
       "outName": "clip-009",

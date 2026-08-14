@@ -225,6 +225,7 @@ def slice_clips(write: bool, statuses: set[str], copy: bool) -> None:
             {
                 "clip_id": clip_id, "src": src, "src_rel": src_rel,
                 "start": start, "end": end, "out": out_path, "exists": exists,
+                "crop": (row.get("crop") or "").strip(),
             }
         )
 
@@ -242,6 +243,8 @@ def slice_clips(write: bool, statuses: set[str], copy: bool) -> None:
             f"[{fmt(p['start'])}s → {fmt(p['end'])}s, {fmt(p['end'] - p['start'])}s] "
             f"→ {rel(p['out'])}{mark}"
         )
+        if p["crop"]:
+            print(f"      crop={p['crop']} → 1920x1080へ戻す")
 
     missing = [p for p in plan if not p["exists"]]
     if not write:
@@ -262,15 +265,23 @@ def slice_clips(write: bool, statuses: set[str], copy: bool) -> None:
     print()
     for p in runnable:
         dur = p["end"] - p["start"]
-        if copy:
+        if copy and p["crop"]:
+            # cropは再エンコードが要る。--copyでもcrop指定があれば再エンコードする
+            print(f"  ({p['clip_id']}: cropがあるため--copyでも再エンコードします)")
+        if copy and not p["crop"]:
             cmd = [
                 "ffmpeg", "-y", "-ss", fmt(p["start"]), "-i", str(p["src"]),
                 "-t", fmt(dur), "-c", "copy", str(p["out"]),
             ]
         else:
+            vf = []
+            if p["crop"]:
+                vf.append(f"crop={p['crop']}")
+                vf.append("scale=1920:1080")
             cmd = [
                 "ffmpeg", "-y", "-i", str(p["src"]),
                 "-ss", fmt(p["start"]), "-t", fmt(dur),
+                *(["-vf", ",".join(vf)] if vf else []),
                 "-c:v", "libx264", "-preset", "medium", "-crf", "18",
                 "-c:a", "aac", str(p["out"]),
             ]
@@ -285,8 +296,12 @@ def slice_clips(write: bool, statuses: set[str], copy: bool) -> None:
 
 EXPECTED_HEADER = [
     "clip_id", "source_file", "in_tc", "out_tc", "chapter", "role",
-    "motion", "tags", "caption_space", "rating", "pick", "out_name", "notes",
+    "motion", "tags", "caption_space", "crop", "rating", "pick", "out_name", "notes",
 ]
+
+# crop は ffmpeg と同じ W:H:X:Y。実写素材の隅に写る機体・車両・ロゴを
+# 部分的に外すために使う。切り出し後に1920x1080へ戻す。
+CROP_RE = re.compile(r"^\d+:\d+:\d+:\d+$")
 VALID_PICK = {"pool", "candidate", "picked", "rejected"}
 RECIPES_PATH = REPO_ROOT / "docs" / "data" / "recipes.json"
 
@@ -366,6 +381,19 @@ def validate_csv() -> None:
             errors.append(
                 f"{loc} ({cid}): pick 不正 '{pick}' (許可: {', '.join(sorted(VALID_PICK))})"
             )
+
+        crop = (row.get("crop") or "").strip()
+        if crop and not CROP_RE.fullmatch(crop):
+            errors.append(f"{loc} ({cid}): crop は W:H:X:Y 形式 (実際: {crop!r})")
+        elif crop:
+            cw, ch, cx, cy = (int(v) for v in crop.split(":"))
+            if cw <= 0 or ch <= 0:
+                errors.append(f"{loc} ({cid}): crop の幅・高さは正の値")
+            if cx + cw > 1920 or cy + ch > 1080:
+                errors.append(
+                    f"{loc} ({cid}): crop が1920x1080をはみ出す "
+                    f"(x+w={cx + cw}, y+h={cy + ch})"
+                )
 
         rating = (row.get("rating") or "").strip()
         if rating:
@@ -508,6 +536,7 @@ def sync_dashboard(write: bool, check: bool = False) -> None:
                 "motion": (row.get("motion") or "").strip(),
                 "tags": [t.strip() for t in tags],
                 "captionSpace": (row.get("caption_space") or "").strip(),
+                "crop": (row.get("crop") or "").strip(),
                 "rating": int(rating_raw) if rating_raw.isdigit() else 0,
                 "pick": (row.get("pick") or "").strip().lower(),
                 "outName": (row.get("out_name") or "").strip() or cid,

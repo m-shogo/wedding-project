@@ -165,6 +165,8 @@ export interface Clip {
   motion: string;
   tags: string[];
   captionSpace: string;
+  /** ffmpegと同じ W:H:X:Y。隅の機体・車両を外すのに使う。空なら無加工 */
+  crop: string;
   rating: number;
   pick: ClipPick | string;
   outName: string;
