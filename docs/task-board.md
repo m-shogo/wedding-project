@@ -13,6 +13,12 @@
 
 ## Now
 
+- Opening V1へ実写真11枚を入れる（**最優先**。ここが60秒完成の唯一のボトルネック）
+  - 動き・素材の割り当ては `docs/opening-v1-motion-map.md` で確定済み。
+  - 置き場: `motion-studio/public/photos/opening/`（Git管理外）
+  - 反映: `cd motion-studio && pnpm sync:photos`
+  - 必要枚数: 沖縄3 / 韓国3 / ハワイ3 / 2人ヒーロー2。
+
 - Palmier Free + Claude Code MCPの読み取り確認を行う。
   - 手順: `docs/palmier-operation.md`
   - まだ本編集しない。まずプロジェクト、タイムライン、素材ライブラリを読めるか確認する。
