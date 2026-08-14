@@ -23,7 +23,7 @@ When consuming Rurubu lessons, never copy Rurubu-like art direction into passpor
 
 Source scope/item: non-Rurubu / ADD-08 メニュー補助サイン
 
-State: `VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`
+State: `VERIFIED_CROSS_ITEM`
 
 ### Visible problem
 
@@ -79,6 +79,87 @@ Do not transfer ADD-08's exact y-values, CTA scale, navy marginalia, palette, or
 
 When another print item improves hierarchy by moving a variable-height text block closer to a trim/footer edge, rerun a realistic long-copy stress after the spatial change instead of reusing older long-copy PASS evidence.
 
+### Cross-item verification — ADD-10 / 2026-08-15
+
+ADD-10 A4-left/right independently reproduced the method under a different physical role and composition. Its `INFO_BLOCK_AUTO` was moved from `y=555 → 760` to reduce lower-field emptiness. A new stress copy at the adopted position expanded the auto-layout block from `270 → 470 px`; the stress bottom was `1230` against footer `y=1815`, with outside visible text count `0` and a native 1400×1980 screenshot PASS.
+
+This receiving-item verification did **not** reuse ADD-08 coordinates, CTA geometry, palette, or culinary layout. Only the QA method transferred: material spatial movement of dynamic copy requires fresh stress at the new position.
+
+Receiving-item evidence:
+- Figma: `mMfoBkoZ7eVbuerSRHePLV`
+- production: `2:2 / 2:13`
+- hidden stress: `25:2`
+- Drive authority: `1ASWOTXO4fosLb9reWxQrHL2_UUC_Y8-3`
+- item QA: `01_paper-items/additional-wedding-items/ADD-10-venue-guide-signs/QA.md`
+- item Git commit: `9e8b9d9c066c0649d8dcce7a91ec6ef39e46b175`
+
 ### Next receiving-item experiment
 
-On the next non-Rurubu item where a text block is repositioned materially, independently test the final position with long copy before calling the visual polish complete. If reproduced without unacceptable regression, advance this lesson toward `VERIFIED_CROSS_ITEM`.
+Continue applying this check when a third materially different print artifact moves an auto-height or auto-layout text role closer to trim, footer, fold, perforation or another fixed physical boundary. Do not promote coordinate heuristics; only the revalidation requirement is transferable.
+
+## NRSL-002 — A retained line/field should prove a binding function at whole-item scale
+
+Source scope/item: non-Rurubu / ADD-10 会場案内サイン
+
+State: `VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`
+
+Consumed neutral hypothesis: RSL-008 from the Rurubu shared feed. No Rurubu production node, asset, item-specific path, palette or layout was inspected or copied.
+
+### Visible problem
+
+ADD-10 A4-left/right needed the destination information block moved deeper to use the physical page more intentionally. Moving the text alone left the existing rust `ACCENT_EDGE` visually ending above the information block, making it read more like a disconnected decorative stripe.
+
+### Root-cause hypothesis
+
+Subtraction is not automatically better. A line or narrow field may deserve retention when it visibly binds two information regions into one artifact-level reading path. The correct test is whether the element still performs that role at whole-item scale after a layout change.
+
+### Bounded test
+
+Two rollback-safe A4-left candidates were compared:
+
+1. `24:2 / QA_ADD10_A4_LEFT_DEEPER_INFO_ONLY_2026_08_15`
+   - `INFO_BLOCK_AUTO y 555 → 760`
+   - seam unchanged at height `520`.
+2. `24:15 / QA_ADD10_A4_LEFT_DEEPER_INFO_PLUS_BINDING_SEAM_2026_08_15`
+   - same information-block movement;
+   - `ACCENT_EDGE height 520 → 640`, ending at the deeper information start.
+
+Candidate 2 was stronger because the rust seam visibly linked the upper `会場案内` kicker to the deeper destination block instead of floating independently. The element was retained for function, not because it existed already.
+
+### Expected improvement
+
+Use the page more fully while keeping a coherent top-to-middle reading path without adding cards, badges, illustration or new imagery.
+
+### Regression risk
+
+Extending a line without a real binding role can become meaningless decoration, over-segment the page, or turn into a template signature repeated across unrelated items.
+
+### Three-scale evidence
+
+- whole-item / 500 px: candidate 2 PASS and clearer than candidate 1;
+- reading / 1000 px: PASS;
+- actual-size / native 1400×1980: PASS on adopted left/right production;
+- A4-right independent mirrored-role read at actual size: PASS without assuming blind geometric mirroring.
+
+### Figma / Drive / GitHub evidence
+
+- Figma file: `mMfoBkoZ7eVbuerSRHePLV`
+- adopted production roots: `2:2 / 2:13`
+- candidate A: `24:2` hidden
+- candidate B: `24:15` hidden
+- rollback: `25:15 / 25:28` hidden
+- Drive authority: `1ASWOTXO4fosLb9reWxQrHL2_UUC_Y8-3`
+- item QA: `01_paper-items/additional-wedding-items/ADD-10-venue-guide-signs/QA.md`
+- Git commit: `9e8b9d9c066c0649d8dcce7a91ec6ef39e46b175`
+
+### What must remain item-specific
+
+Do not transfer ADD-10's deep-navy split field, rust seam, arrow geometry, exact seam length, information y-position, A4/A5 reflows, or wayfinding visual language.
+
+### Cross-item applicability hypothesis
+
+Before removing or extending a border/rule/rail during UI-subtraction or spacing polish, another print item can independently compare whether the element performs a real binding function between image/caption, title/body, date/events, or physical artifact regions at thumbnail scale.
+
+### Next receiving-item experiment
+
+Only when a future non-Rurubu item has a visible border/rule/rail whose purpose is ambiguous, test one bounded subtraction/retention comparison. If another materially different item reproduces the benefit without adding template sameness, advance this lesson to `VERIFIED_CROSS_ITEM`.
