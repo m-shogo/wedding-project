@@ -119,7 +119,7 @@ const CloudTransition = ({durationFrames}: {durationFrames: number}) => {
 
   return (
     <AbsoluteFill style={{opacity, overflow: 'hidden'}}>
-      <CloudSea timeOfDay="morning" speed={0.9} cloudOpacity={0.85} zoomTo={1.06} />
+      <CloudSea timeOfDay="morning" speed={0.9} cloudOpacity={0.85} zoomTo={1.06} softness={18} />
       {/* 他セクションと同じ内枠。EditorialBaseは不透明な下地を敷くのでここでは枠だけ描く */}
       <div
         style={{
