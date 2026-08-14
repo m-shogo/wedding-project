@@ -1,6 +1,6 @@
 # ADD-14 二次会案内 — QA
 
-Status: `CURRENT / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / ROLLBACK_SAFE / BLOCKED_REQUIRED_INPUT / NOT_PRINT_READY`
+Status: `CURRENT / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / STATUS_LABEL_REMOVAL_PASS / ROLLBACK_SAFE / BLOCKED_REQUIRED_INPUT / NOT_PRINT_READY`
 Authority: GitHub latest `main` + `docs/automation/non-rurubu-figma-quality-current.md`
 Updated: 2026-08-14
 
@@ -49,11 +49,44 @@ The warm-gray recolor alone still left proof metadata optically too large at act
 - fresh A6 actual-size screenshot continues to show the Japanese headline, venue and time hierarchy reading before proof metadata;
 - no generated image or Drive asset is required for this item.
 
-Current result: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / PLACEHOLDER_SUFFIX_SIZE_PASS`.
+### 2026-08-14 redundant status-label removal
+
+Fresh A6/A5 actual-size screenshots found one remaining proof-sheet signal at the upper left of the ivory information field: `[開催情報 · LAYOUT DUMMY]`.
+
+This label did not carry a unique guest-facing value. Venue, address/floor, reception/start/end, fee, access, RSVP, contact, QR and notice each already have explicit native semantic fields, while the title and left rail already identify the item as a second-party guide. The extra status label therefore read as production metadata rather than useful information.
+
+Live authority was re-read immediately before the edit: GitHub `main` `d8c48017f1cdfe07217a1c4ce57d2fbdcbf1e1ce`; Drive folder `1Oq2Pz2mYo4oaDnO7LMezMrCUizcxaEjs` under parent `0ADXt8irGMFGnUk9PVA`; Figma production roots `1:2` / `1:18`.
+
+Rollback-safe proof created before mutation:
+
+- `26:2 / ROLLBACK_ADD14_PRE_STATUS_LABEL_REMOVAL_2026_08_14` (`visible=false`)
+- A6 rollback `26:3`
+- A5 rollback `26:28`
+
+Only two existing native text nodes were hidden:
+
+- A6 `5:36 / TXT_STATUS / [開催情報 · LAYOUT DUMMY]` → `visible=false`
+- A5 `5:60 / TXT_STATUS / [開催情報 · LAYOUT DUMMY]` → `visible=false`
+
+No venue/time/fee/access/RSVP/contact/QR/notice semantic field, geometry, factual value, color system or layout was changed.
+
+Post-write A6 `592×420` and A5 `840×592` screenshots: `PASS`. The headline now starts the ivory-field hierarchy immediately, reducing the remaining proof-sheet feel without making the composition emptier or removing any real information.
+
+Post-write structural readback:
+
+- A6: 18 native text / 17 visible / IMAGE 0 / outside visible text 0 / `clipsContent=true`
+- A5: 18 native text / 17 visible / IMAGE 0 / outside visible text 0 / `clipsContent=true`
+- `5:36` and `5:60` read back hidden
+- rollback `26:2` reads back hidden with two children
+- no flattening, raster replacement or invented factual copy.
+
+Image decision: `IMAGE_GENERATION_NOT_REQUIRED`. The screenshot-supported defect was redundant proof metadata, not missing imagery. Drive writes: `0`.
+
+Current result: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / PLACEHOLDER_SUFFIX_SIZE_PASS / STATUS_LABEL_REMOVAL_PASS`.
 
 ## Rollback / edit history
 
-Rollback-safe proofs and the earlier production polish passes are recorded in `docs/automation/add-14-after-party-guide-design-qa.md`. The placeholder-hierarchy rollback copies are `17:2` and `17:27`. Production root IDs remain stable.
+Rollback-safe proofs and the earlier production polish passes are recorded in `docs/automation/add-14-after-party-guide-design-qa.md`. The placeholder-hierarchy rollback copies are `17:2` and `17:27`; the current status-label rollback is `26:2`. Production root IDs remain stable.
 
 ## Required input / deferred finalization
 
