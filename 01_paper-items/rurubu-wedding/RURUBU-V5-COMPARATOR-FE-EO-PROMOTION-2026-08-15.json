@@ -1,0 +1,102 @@
+{
+  "schemaVersion": "rurubu-v5-comparator-promotion-v1",
+  "date": "2026-08-15",
+  "scope": "Rurubu WEDDING only",
+  "authorityOrder": [
+    "live Figma",
+    "fresh Google Drive readback",
+    "asset evidence ledger/overlays",
+    "GitHub main"
+  ],
+  "currentUntouched": {
+    "outer": "77:18",
+    "inside": "77:290"
+  },
+  "best": {
+    "outer": {
+      "label": "FE",
+      "reviewNodeId": "1186:2",
+      "frontNodeId": "1186:132",
+      "name": "BEST_CLEANROOM_OUTER_FE_REVIEW_2026_08_15",
+      "status": "VERIFIED_LOCAL_ADOPTED"
+    },
+    "inside": {
+      "label": "EO",
+      "sourceNodeId": "1107:285",
+      "status": "UNCHANGED_FROM_PREVIOUS_VERIFIED_AUTHORITY"
+    }
+  },
+  "outerChange": {
+    "sourceBest": "FC 1180:2",
+    "intermediateStudy": "FD 1185:2",
+    "promotedBest": "FE 1186:2",
+    "problem": "FC retained a wide horizontal history-derived photo band, leaving a masthead/hero/lower-collage stacked-section reading.",
+    "principle": "Change photo orientation and editorial role before adding assets; use one continuous photo spine to unify a print page when overlapping secondary photography already supplies lateral rhythm.",
+    "generated": 0,
+    "newGeneratedAssetAdopted": 0,
+    "newExternalBinaryPlaced": 0
+  },
+  "qa": {
+    "thumbnail500": "PASS",
+    "wholeReading1000": "PASS",
+    "actualFront794x1123": "PASS",
+    "frontNativeTextVisible": 15,
+    "frontVisibleImageFills": 4,
+    "absoluteTextIntersections": 0,
+    "textSafeAreaRisk18px": 0,
+    "fold": {
+      "nodeId": "1186:193",
+      "x": 792.7000122070312,
+      "width": 2,
+      "height": 1122.5
+    }
+  },
+  "imageEvidence": [
+    {
+      "nodeId": "1186:133",
+      "role": "lower secondary destination",
+      "imageHash": "c09aa82e7b2ac75708707345c6f845452bf67663"
+    },
+    {
+      "nodeId": "1186:164",
+      "role": "dominant vertical street photo spine",
+      "imageHash": "439a719d73f28e8dd2889f2026cccb15f345ec63"
+    },
+    {
+      "nodeId": "1186:177",
+      "role": "angled Feature 02 secondary photo",
+      "imageHash": "d76eb07d83d042f15044c8bc6bf68d73a73cd77d"
+    },
+    {
+      "nodeId": "1186:189",
+      "role": "exact secondary Q60 Yokohama postcard",
+      "driveId": "1aVp34U5qUTqd9FR3AILmJggdWwY1lAJb",
+      "imageHash": "644f449c3bf2001a94d4b822d2b55e2614c11042",
+      "status": "VERIFIED_SECONDARY_ONLY"
+    }
+  ],
+  "rollback": {
+    "fc": {
+      "nodeId": "1180:2",
+      "name": "ROLLBACK_HIDDEN_OUTER_FC_2026_08_15",
+      "visible": false
+    },
+    "fd": {
+      "nodeId": "1185:2",
+      "name": "STUDY_HIDDEN_OUTER_FD_2026_08_15",
+      "visible": false
+    }
+  },
+  "q60Master": {
+    "driveId": "1YL0WAOzYU3O1FGa23ieRuw_Btu4jbmzr",
+    "dominantExactFigmaPlacement": false,
+    "status": "OPEN"
+  },
+  "learning": {
+    "sharedFeedEntry": "RSL-007",
+    "status": "VERIFIED_LOCAL_TO_CROSS_ITEM_CANDIDATE"
+  },
+  "v5Complete": false,
+  "v6ProductionStarted": false,
+  "remainingGate": "Dominant Q60 master exact Figma provenance followed by final asset/print/fold reconciliation."
+}
