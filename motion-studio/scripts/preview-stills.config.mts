@@ -57,6 +57,38 @@ export const previewStills: PreviewStill[] = [
     purpose: 'カウントダウンの数字・読みやすさ確認',
     sceneId: 'opening-countdown',
   },
+  // --- ここから下は「一覧から選ぶ」ためのカタログ用 ---
+  // 本番テンプレを目で選べるようにする。frameは動きが決まった後の代表位置。
+  // 動作確認(透過確認-*)と説明書(取扱説明)は制作用ではないので入れない。
+
+  // 地図(各240frame)。航路が伸び切った後を見せる
+  {compositionId: '地図-成田-沖縄', file: 'map-okinawa.png', frame: 170, purpose: 'フライトマップ第1区間の航路と地名'},
+  {compositionId: '地図-沖縄-韓国', file: 'map-seoul.png', frame: 170, purpose: 'フライトマップ第2区間'},
+  {compositionId: '地図-韓国-Hawaii', file: 'map-hawaii.png', frame: 170, purpose: 'フライトマップ第3区間'},
+  {compositionId: '地図-Hawaii-横浜', file: 'map-yokohama.png', frame: 170, purpose: 'フライトマップ最終区間(到着)'},
+
+  // 押印(各60frame・透過)。ハンコが着地した後
+  {compositionId: '押印-沖縄', file: 'stamp-okinawa.png', frame: 45, purpose: 'OKINAWA / MEMORY 01(透過)'},
+  {compositionId: '押印-韓国', file: 'stamp-seoul.png', frame: 45, purpose: 'SEOUL / MEMORY 02(透過)'},
+  {compositionId: '押印-Hawaii-求婚', file: 'stamp-hawaii.png', frame: 45, purpose: 'HAWAII / PROPOSAL(透過)'},
+  {compositionId: '押印-横浜', file: 'stamp-yokohama.png', frame: 45, purpose: 'YOKOHAMA / FINAL DESTINATION(透過)'},
+  {compositionId: '押印連打-全路線', file: 'stamp-rush.png', frame: 420, purpose: '全ルート一筆+スタンプ連打(尺圧縮案の主役)'},
+
+  // 背景・つなぎ
+  {compositionId: '雲-透過', file: 'cloud-overlay.png', frame: 270, purpose: '雲オーバーレイ(透過。重ねて使う)'},
+  {compositionId: '飛行機窓', file: 'airplane-window.png', frame: 150, purpose: '機内視点の窓と流れる雲'},
+  {compositionId: '題字-汎用', file: 'title-generic.png', frame: 120, purpose: '汎用テロップ(透過。文字を差し替えて使う)'},
+
+  // 写真カード(各300frame)。Hawaii版は上に既出
+  {compositionId: '写真-沖縄', file: 'photo-okinawa.png', frame: 120, purpose: '写真カード3枚 MEMORY 01'},
+  {compositionId: '写真-韓国', file: 'photo-seoul.png', frame: 120, purpose: '写真カード3枚 MEMORY 02'},
+
+  // Profile素材。「名前をつけたセクションテンプレ」として選ぶ対象
+  {compositionId: '章題', file: 'chapter-title.png', frame: 90, purpose: '章タイトル(CHAPTER 1 / Departure / 出発)'},
+  {compositionId: '年表', file: 'timeline.png', frame: 240, purpose: '歩みの年表(航路と同じ点線が伸びる)'},
+  {compositionId: '写真一枚', file: 'single-photo.png', frame: 120, purpose: '写真1枚をゆっくり見せる主役テンプレ'},
+  {compositionId: '紹介札', file: 'intro-card.png', frame: 120, purpose: '家族・友人・犬の紹介カード(名前/関係/ひとこと/写真を差し替え)'},
+
   // 開幕-全体確認(2460frame)は1枚だと代表性が弱いので序盤/中盤/終盤の3枚で見る
   {
     compositionId: '開幕-全体確認',
