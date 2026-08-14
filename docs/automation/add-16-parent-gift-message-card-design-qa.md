@@ -103,3 +103,61 @@ No Drive asset was added or changed.
 - printer template/profile, exact vendor bleed/safe requirements and 100% physical proof.
 
 These remain `DEFERRED_FINALIZATION` / `BLOCKED_REQUIRED_INPUT`; maintain `NOT_PRINT_READY` until physical/vendor checks are complete.
+
+---
+
+## Presentation-format footer removal — 2026-08-14
+
+Fresh native-size front review found one remaining production-only footer: `4:23 / TXT_NOTE / [贈呈形式 · LAYOUT DUMMY]`. The actual card already carries the recipient, gratitude lead, gift-enclosure context and date; `贈呈形式` describes production/handoff setup rather than content the parents need to read. Keeping it on the printed face made the card look slightly more like a proof sheet than a finished gift enclosure.
+
+### Live authority before write
+
+- observed `main`: `30afbe44a03f2639c51f39bf802f52839115f9b1`
+- Current: `ACTIVE / HOURLY / FIGMA_EDIT_ALLOWED / VISUAL_REOPENED`
+- Figma: `ylmVBbwNcnjueYrymNpa3c`
+- front: `1:2`
+- back: `1:13`
+- Drive: `1BOyETtL1_loGXNjGV9S30sJKEhZNjd6O / ADD-16_両親贈呈品メッセージカード`
+
+### Rollback-safe production change
+
+Created hidden full-front rollback before the edit:
+
+- `14:2 / ROLLBACK_ADD16_FRONT_PRE_PRESENTATION_FORMAT_FOOTER_REMOVAL_2026_08_14`
+- native size: approximately `400.63×582.05`
+
+Production root `1:2` was preserved. Only `4:23 / TXT_NOTE` was changed to `visible=false`.
+
+Recipient placeholder, gratitude-message placeholder, fixed date, headline, binding strip, gift-context sentence, accents, back content and all factual/semantic roles were left unchanged.
+
+### Screenshot QA
+
+Fresh native-size front screenshot PASS.
+
+- the bottom area now ends with the fixed date rather than a production/handoff instruction;
+- headline → recipient → gratitude lead → gift-context → date hierarchy is cleaner;
+- the card reads more like a finished enclosure and less like a proof sheet;
+- no new empty premium-style void, clipping, collision or decorative replacement was introduced.
+
+### Structural readback
+
+Front `1:2` after the edit:
+
+- root: approximately `400.63×582.05`, `clipsContent=true`;
+- native text nodes: `7` total / `6` visible;
+- IMAGE fills: `0`;
+- visible text outside root: `0`;
+- `4:23 / TXT_NOTE`: hidden;
+- rollback `14:2`: exists, hidden, same native size.
+
+### Image / Drive
+
+`IMAGE_GENERATION_NOT_REQUIRED`.
+
+This defect was production-only editorial metadata, not missing imagery. Drive write: `0`.
+
+### Decision
+
+ADD-16 remains:
+
+`SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / PRESENTATION_FORMAT_FOOTER_REMOVAL_PASS / V2_PRODUCTION_POLISHED / ROLLBACK_SAFE / NOT_PRINT_READY`
