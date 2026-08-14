@@ -78,6 +78,9 @@ pnpm dev
 - [品質ゲート](docs/10_quality-gates.md)
 - [テーマ差し替えガイド](docs/theme-switching.md)
 - [全動画 素材・情報TODO](docs/materials-todo.md)
+- [クリップ素材集の使い方](docs/clip-library-guide.md)
+- [参考レシピ一覧（おいしいとこどり素材集）](docs/reference-recipes.md)
+- [無料素材の入手先](docs/free-sample-sources.md)
 - [タスクボード](docs/task-board.md)
 
 ## フォルダ

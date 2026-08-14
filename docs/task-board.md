@@ -41,6 +41,18 @@
   - `exports/index.html` を開いて制作コックピットを確認する。
 - 会場仕様を確認して `docs/templates/venue-specs.csv` に記録する。
 - BGM候補を `docs/templates/music-candidates.csv` に集める。
+- おいしいとこどり素材集を回す（集める→まとめる→切る→選ぶ）。
+  - 手順書: `docs/clip-library-guide.md`（人間・AI共通の入口）
+  - 型を選ぶ: `python3 scripts/slice_clips.py recipes --chapter 4`
+  - 無料素材の入手先は `docs/free-sample-sources.md`（ライセンスは都度確認）。
+  - 素材取得は公式APIのみ（スクレイピング禁止）。無料APIキーが要る。
+    - `export PEXELS_API_KEY='...'`
+    - `python3 scripts/fetch_stock.py --provider pexels --query "clouds aerial" --count 3`
+    - 取得後に必ず目視確認（人物・動物・文字・ロゴ・看板）。
+  - `python3 scripts/slice_clips.py reel --write` で1本にまとめる。
+  - 使いたい区間の in/out と motion を `docs/templates/sample-clips.csv` に記録。
+  - `python3 scripts/slice_clips.py slice --write` で切り出し、pick/ratingを更新。
+  - 検証: `python3 scripts/slice_clips.py validate`（CIでも自動実行）。
 
 ## Next
 
