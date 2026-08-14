@@ -1,7 +1,7 @@
 # ADD-16 両親贈呈品メッセージカード — QA
 
-Status: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / ROLLBACK_SAFE / NOT_PRINT_READY`
-Updated: 2026-08-12
+Status: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / PRODUCT_DESCRIPTOR_REMOVAL_PASS / ROLLBACK_SAFE / NOT_PRINT_READY`
+Updated: 2026-08-15
 Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
 Design evidence: `docs/automation/add-16-parent-gift-message-card-design-qa.md`
 
@@ -17,6 +17,47 @@ The former `PREPARED_FOR_FIGMA` header dated 2026-08-02 is superseded for visual
 - final family-specific copy, gift attachment method, vendor requirements and physical proof remain unresolved
 
 Do not interpret the unchecked finalization checklist below as a reason to reopen the already-passed sellable visual composition. Reopen visual production only when a fresh screenshot exposes a concrete defect or authoritative input materially changes the layout requirements.
+
+## Fresh product-descriptor removal — 2026-08-15
+
+Observed latest `main` immediately before the bounded production change: `d5c68bd8be1ade7439e2ad0b103c8e26378b85bd`.
+
+Fresh actual-size review of production front `1:2` found `4:20 / TXT_CONTEXT / 贈呈品に添える、小さな手紙。` functioning as a product-description caption rather than family-facing content. The item purpose and hierarchy are already communicated by `両親へ`, `ありがとうを、手渡す日。`, the recipient/message semantic fields and the date, so the extra line weakened the front into a stationery-template/product sheet.
+
+The current SPEC does not require this sentence as fixed copy. It defines recipient, gratitude message, date, signature and only an optional short travel metaphor as content hierarchy, while keeping family-specific facts unresolved.
+
+Before production mutation, a materially different native clean-room comparison was created:
+
+- `15:2 / QA_ADD16_FRONT_WITHOUT_PRODUCT_DESCRIPTOR_2026_08_15`
+- only cloned `TXT_CONTEXT` was hidden
+- actual-size screenshot comparison preferred the quieter version with stronger title → recipient → message → date rhythm
+- the comparison proof is retained hidden after promotion
+
+Rollback-safe proof created immediately before promotion:
+
+- `15:13 / ROLLBACK_ADD16_FRONT_PRE_PRODUCT_DESCRIPTOR_REMOVAL_2026_08_15` (`visible=false`)
+
+Production root remained `1:2`. Only native editable `4:20 / TXT_CONTEXT` was set `visible=false`; no copy, placeholder, geometry, date or semantic role was fabricated or rasterized.
+
+Post-write screenshot QA: PASS.
+
+- front reads more like an intimate gift enclosure and less like a product/template description;
+- title, recipient placeholder, gratitude-message placeholder, date, rule and accent remain unchanged;
+- back `1:13` remains unchanged;
+- no added decoration, image, travel cliché or family-specific invented fact.
+
+Fresh structure readback:
+
+- front: `400.63 × 582.05`, `clipsContent=true`, native text `7`, visible text `5`, raster IMAGE fills `0`
+- back: `400.63 × 582.05`, `clipsContent=true`, native text `5`, visible text `5`, raster IMAGE fills `0`
+- `4:20 / TXT_CONTEXT` reads back hidden
+- rollback `15:13` reads back hidden
+- clean-room comparison `15:2` reads back hidden
+- page-level visible loose text outside the production roots: `0`
+
+Drive authority was live re-read before the mutation and remains `1BOyETtL1_loGXNjGV9S30sJKEhZNjd6O / ADD-16_両親贈呈品メッセージカード`, parent `0ADXt8irGMFGnUk9PVA`. Drive writes: `0`.
+
+`IMAGE_GENERATION_NOT_REQUIRED`: the screenshot-supported defect was redundant product-descriptor copy in an already-specific native print composition, not missing media.
 
 ## Truth and family-safety gate
 - [ ] 宛名、呼称、氏名が本人確認済み
