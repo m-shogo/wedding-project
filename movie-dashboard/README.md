@@ -125,6 +125,7 @@ provider-aware prompt
 | ダッシュボード | 全体状況、AI動画パイプライン、NEXT ACTION、優先タスク、ムービー別進捗 |
 | 絵コンテ | シーンの追加・編集・削除・複製・並び替え。素材とPromptを紐付ける |
 | 素材ライブラリ | 素材CRUD、フィルタ、パス、一括操作、CSV、サムネイル |
+| クリップ素材集 | 切り出し済みクリップと演出レシピを章・動き(motion)・採否で絞り込む（読み取り専用） |
 | 動画プロンプト | シーン＋プリセット＋shot intentからモデル別Promptを作成 |
 | 動画生成キュー | 生成待ちPromptをモデル別にまとめ、コピー・testing移行・結果登録・Export |
 | AI動画 結果レビュー | 結果Asset、共通/固有QA、採否、失敗理由、retry lineage |
@@ -161,6 +162,17 @@ provider-aware prompt
 | `assets.json` | 素材 |
 | `prompts.json` | 生成Prompt |
 | `tasks.json` | タスク |
+| `clips.json` | クリップ素材集（**自動生成**。直接編集しない） |
+
+`clips.json` だけは例外で、localStorageではなく
+`docs/templates/sample-clips.csv` を単一情報源とする。
+CSVを編集したら次を実行して反映する。
+
+```bash
+python3 ../scripts/slice_clips.py sync-dashboard --write
+```
+
+詳細は [../docs/clip-library-guide.md](../docs/clip-library-guide.md)。
 
 ### localStorageとJSON
 

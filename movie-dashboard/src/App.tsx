@@ -6,6 +6,7 @@ import { Layout } from "./components/Layout";
 import { Dashboard } from "./pages/Dashboard";
 import { Storyboard } from "./pages/Storyboard";
 import { AssetLibrary } from "./pages/AssetLibrary";
+import { ClipLibrary } from "./pages/ClipLibrary";
 import { PromptBank } from "./pages/PromptBank";
 import { VideoShotPlanner } from "./pages/VideoShotPlanner";
 import { VideoPromptBuilder } from "./pages/VideoPromptBuilder";
@@ -37,6 +38,7 @@ export default function App() {
               <Route index element={<Dashboard />} />
               <Route path="storyboard" element={<Storyboard />} />
               <Route path="assets" element={<AssetLibrary />} />
+              <Route path="clips" element={<ClipLibrary />} />
               <Route path="prompts" element={<PromptBank />} />
               <Route path="video-shot-planner" element={<VideoShotPlanner />} />
               <Route path="video-prompt-builder" element={<VideoPromptBuilder />} />
