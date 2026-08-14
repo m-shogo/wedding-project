@@ -102,13 +102,44 @@ pnpm render --all final           # 全素材を一括書き出し
 従来の `pnpm render:xxx` 個別コマンドもそのまま使える。
 出力先は `out/` 配下に統一。**out/配下はGit管理しない。**
 
+## プリセット(テンプレ×propsの名前付き組み合わせ)
+
+同じテンプレを使い回すとき、毎回propsを指示しなくて済むようにする仕組み。
+**テンプレートを増やすのではなく、既存テンプレの使い方に名前を付ける。**
+
+```sh
+pnpm preset                          # 一覧
+pnpm preset intro-dog-cookie         # 内容と実行コマンドを表示(実行しない)
+pnpm preset intro-dog-cookie --still # 静止画で見た目確認
+pnpm preset intro-dog-cookie --render # 書き出し(out/preset/)
+```
+
+登録済み(14件 / 4テンプレート):
+
+| テンプレート | プリセット |
+|---|---|
+| `紹介札` | 犬-Cookie / 犬-Melon / 家族 / 友人 |
+| `章題` | 1-出発 / 2-それぞれの旅 / 3-交差 / 4-冒険 / 5-到着 |
+| `題字-汎用` | 出発アナウンス / 到着アナウンス / 日付会場 |
+| `写真一枚` | ヒーローA-寄る / ヒーローB-引く |
+
+単一情報源は [src/data/presetRegistry.ts](src/data/presetRegistry.ts)。
+`pnpm check:presets` が、各Compositionのzodスキーマと突き合わせて
+propsの過不足・enum値・数値範囲・型を検証する(スキーマを二重管理しない)。
+
+`写真一枚` のA/Bは `docs/opening-v1-motion-map.md` の判断(A=寄る / B=引く)を
+propsに埋め込んでいる。全部同じ動きにすると単調になるため。
+
+`status` は `draft` で追加する。`approved` への昇格は人間確認が必須(AIが勝手に上げない)。
+
 ## 品質チェック
 
 ```sh
-pnpm check          # 下の3つをまとめて実行
+pnpm check          # 下の4つをまとめて実行
 pnpm check:motion   # シーン構成・registry・Root.tsxの整合チェック
 pnpm check:assets   # 素材ファイルの存在チェック
 pnpm check:parts    # 再利用パーツ(partRegistry.ts)の健全性チェック
+pnpm check:presets  # プリセット(presetRegistry.ts)とzodスキーマの整合チェック
 ```
 
 CapCutに組み込む前、コミット前に `pnpm check` を通す。
@@ -209,6 +240,7 @@ AI画像・動画の生成履歴は [src/data/aiPromptRegistry.ts](src/data/aiPr
 | [src/data/assets.ts](src/data/assets.ts) | 写真・AI背景・音源・書き出し素材のID管理(パス直書き禁止) |
 | [src/data/sceneRegistry.ts](src/data/sceneRegistry.ts) | 全テンプレートのメタデータ(ID・尺・出力先・透過区分) |
 | [src/data/theme.ts](src/data/theme.ts) | 色・フォント・解像度のデザイントークン |
+| [src/data/presetRegistry.ts](src/data/presetRegistry.ts) | テンプレ×propsの名前付き組み合わせ(プリセット) |
 
 **Root.tsxはregistryから自動生成しない**(StudioのSave defaultsが壊れるため)。
 テンプレート追加は「Root.tsxに追加 → sceneRegistry.tsに追加 → `pnpm check:motion`」の3点セットで行う。
