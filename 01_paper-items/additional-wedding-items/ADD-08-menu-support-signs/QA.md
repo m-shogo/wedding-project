@@ -1,7 +1,7 @@
 # ADD-08 メニュー補助サイン — QA
 
 Status: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / LONG_COPY_STRESS_PASS / ROLLBACK_SAFE / NOT_PRINT_READY`
-Date: 2026-08-14
+Date: 2026-08-15
 
 ## Current authority
 
@@ -81,11 +81,51 @@ Post-write structure readback:
 - rollback `13:2` reads back hidden
 - no flattening or raster replacement.
 
+## Fresh semantic-placeholder polish — 2026-08-15
+
+Observed latest `main` immediately before the bounded production write: `07314ce10d416f6e181285ddb1eb86420422df98`.
+
+Fresh 1400×1980 actual-size review found one remaining internal-production phrase in the main content: `4:53 / TXT_STAFF_BODY / [正式案内文 · LAYOUT DUMMY]`. The surrounding heading `気になることがございましたら` and CTA `どうぞスタッフへお声がけください。` already establish the guest-facing function, so `正式案内文` read like an authoring instruction rather than a semantic placeholder.
+
+Drive authority was live re-read before mutation and remains `12D7UPRTDwUx7vLOm1mtaew-sFGHt9FPG / ADD-08_メニュー補助サイン`.
+
+Rollback-safe proof created before mutation:
+
+- `14:2 / ROLLBACK_ADD08_PRE_STAFF_PLACEHOLDER_JA_POLISH_2026_08_15` (`visible=false`)
+
+Production root remained `1:3`. The staff placeholder copy was changed only from:
+
+- `[正式案内文 · LAYOUT DUMMY]`
+
+to:
+
+- `[ご案内 · LAYOUT DUMMY]`
+
+The first text mutation reset the mixed range styling on that node, which was caught immediately in the post-write screenshot/readback. The established proof-metadata hierarchy was then restored explicitly: semantic field `[ご案内` remains 27 px in the existing navy, while ` · LAYOUT DUMMY]` is 10 px warm-gray at opacity 0.78. This correction is part of the same bounded edit; no other node was changed.
+
+Post-write actual-size screenshot QA: PASS.
+
+- the internal-sounding `正式案内文` wording is gone;
+- `ご案内` reads as the native semantic field beneath the existing staff-help heading;
+- `LAYOUT DUMMY` remains visibly subordinate rather than competing with guest-facing copy;
+- culinary-editorial hierarchy, right marginalia, CTA and footer remain unchanged.
+
+Post-write structure readback:
+
+- canvas: `1400 × 1980`
+- `clipsContent=true`
+- native editable text: `15` / visible `13`
+- raster IMAGE fills: `0`
+- visible text outside production root: `0`
+- `4:53` reads `[ご案内 · LAYOUT DUMMY]` with 27 px semantic field + 10 px muted suffix
+- rollback `14:2` reads back hidden
+- no flattening or raster replacement.
+
 ## Image / Drive decision
 
 `IMAGE_GENERATION_NOT_REQUIRED`.
 
-The observed bottleneck was redundant English filler inside an already-distinctive editorial composition. Drive writes: `0`. Exact Drive folder metadata was re-read before the Figma write and remains `12D7UPRTDwUx7vLOm1mtaew-sFGHt9FPG / ADD-08_メニュー補助サイン`.
+The observed bottlenecks were redundant/internal authoring language inside an already-distinctive editorial composition, not missing imagery. Drive writes: `0`. Exact Drive folder metadata remains `12D7UPRTDwUx7vLOm1mtaew-sFGHt9FPG / ADD-08_メニュー補助サイン`.
 
 ## Deferred finalization
 
