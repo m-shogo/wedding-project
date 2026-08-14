@@ -78,3 +78,61 @@ BOARDING PASS remains:
 `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / ROLLBACK_SAFE / NOT_PRINT_READY`
 
 Deferred finalization remains final guest/table/venue wording, final approved back copy, vendor geometry/export profile, and physical 100% proof.
+
+---
+
+## Back filler removal — 2026-08-14
+
+Fresh back-side audit at native `1200×550` found one remaining non-functional English filler label: `21:157 / TXT_BACK_FOLIO / WEDDING\nNOTE`. The Japanese thank-you title/body already establish the page role, while the visible date/location footer is meaningful event metadata. Keeping `WEDDING NOTE` added template-like decorative microcopy without helping the guest.
+
+### Live authority before write
+
+- observed `main`: `b7f7dead17282b7018a046ed3b87a9184244dada`
+- Current: `ACTIVE / HOURLY / FIGMA_EDIT_ALLOWED / VISUAL_REOPENED`
+- Figma: `P2PtpMyhyZqHYe1ZBBCD13`
+- production back: `8:73 / FRAME_BACK`
+- Drive: `1pccCqb47W7z4F9g_224X4U3bS45HA_Ql / 03_航空チケット風_エスコートカード`
+
+### Rollback-safe change
+
+Before touching production, created hidden full-back rollback:
+
+- `28:2 / ROLLBACK_BOARDING_BACK_PRE_WEDDING_NOTE_FILLER_REMOVAL_2026_08_14`
+- `1200×550`
+
+Production root `8:73` was preserved. Only `21:157 / TXT_BACK_FOLIO` was changed to `visible=false`.
+
+No thank-you copy, date, location, large `余韻` atmosphere glyph, ticket-stock texture, geometry, or factual information was changed.
+
+### Screenshot QA
+
+Post-write screenshots at reading scale (`700×321`) and native size (`1200×550`) both PASS.
+
+- the eye now starts directly at `きょうを、ありがとう。` rather than decorative English metadata;
+- the three-line Japanese message and red rule retain the editorial rhythm;
+- `24 OCT 2026 · YOKOHAMA` remains as meaningful date/location metadata;
+- the pale `余韻` atmosphere remains subtle and does not read as UI;
+- no clipping, collision, faux airline credential, decorative stamp, or new stock-template treatment was introduced.
+
+### Structural readback
+
+Back `8:73` after the change:
+
+- `1200×550`, `clipsContent=true`;
+- native text nodes: `8` total / `4` visible;
+- image-fill roles: `23:3 / IMG_TICKET_STOCK_TEXTURE_REPLACEABLE` remains visible;
+- visible text outside root: `0`;
+- `21:157 / TXT_BACK_FOLIO`: hidden;
+- rollback `28:2`: exists, hidden, `1200×550`.
+
+### Image / Drive
+
+`IMAGE_GENERATION_NOT_REQUIRED`.
+
+The screenshot-supported defect was redundant English filler, not missing art. Drive write: `0`.
+
+### Decision
+
+BOARDING PASS remains:
+
+`SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / BACK_FILLER_REMOVAL_PASS / ROLLBACK_SAFE / NOT_PRINT_READY`
