@@ -73,6 +73,48 @@ def rel(path: Path) -> str:
         return str(path)
 
 
+# Style Bible が禁じる被写体を示唆する語。説明文に出たら警告する。
+# 自動判定ではなく「目視確認せよ」の合図。判断は人間が行う。
+RISK_WORDS = {
+    "人物": ["people", "person", "man", "woman", "men", "women", "girl", "boy",
+             "couple", "crowd", "child", "kid", "family", "hand", "face",
+             "tourist", "passenger", "walking", "running", "sitting", "portrait"],
+    "動物": ["dog", "cat", "bird", "animal", "horse", "pet"],
+    "文字・ロゴ": ["sign", "signage", "text", "logo", "banner", "billboard",
+                  "poster", "label", "brand"],
+    # 機体外観は塗装(livery)に航空会社のロゴが入る。実測: "airplane wing" は
+    # AVIANCA、"airline plane taxiing" は American のロゴが写っていた。
+    # 機内からの窓越し("airplane window" 等)は該当しないので語を分けている。
+    "機体ロゴ": ["airline", "airways", "aircraft", "wing", "taxiing", "livery",
+                "fuselage", "tail"],
+}
+
+
+def desc_from_pexels_url(url: str) -> str:
+    """Pexelsのページ URL から説明文を復元する。
+
+    動画APIは alt も tags も返さないが、URLのスラッグが説明になっている。
+    例: https://www.pexels.com/video/aerial-view-of-clouds-30808497/
+        → "aerial view of clouds"
+    """
+    if not url:
+        return ""
+    slug = urllib.parse.urlparse(url).path.rstrip("/").split("/")[-1]
+    slug = re.sub(r"-\d+$", "", slug)  # 末尾のID
+    return slug.replace("-", " ").strip()
+
+
+def risk_flags(desc: str) -> list[str]:
+    """説明文から、Style Bible違反の可能性がある要素を拾う。"""
+    low = (desc or "").lower()
+    hits = []
+    for category, words in RISK_WORDS.items():
+        found = [w for w in words if re.search(rf"\b{w}", low)]
+        if found:
+            hits.append(f"{category}({', '.join(found[:3])})")
+    return hits
+
+
 def slugify(text: str) -> str:
     s = re.sub(r"[^a-zA-Z0-9]+", "_", text.strip().lower())
     return s.strip("_")[:40] or "clip"
@@ -167,6 +209,9 @@ def search_pexels(query: str, count: int, key: str) -> list[dict]:
                 "link": best["link"],
                 "page": v.get("url", ""),
                 "author": v.get("user", {}).get("name", ""),
+                # 動画APIは alt / tags を返さないので、ページURLのスラッグから説明を取る。
+                # 例: .../video/two-people-running-on-beach-9871924/ → "two people running on beach"
+                "desc": desc_from_pexels_url(v.get("url", "")),
             }
         )
     return out
@@ -206,6 +251,7 @@ def search_pixabay(query: str, count: int, key: str) -> list[dict]:
                 "page": v.get("pageURL", ""),
                 "author": v.get("user", ""),
                 "size": best.get("size"),
+                "desc": v.get("tags", ""),
             }
         )
     return out
@@ -261,25 +307,47 @@ def main() -> None:
     if not results:
         die("該当する動画が見つかりませんでした。検索語を変えてください。")
 
-    slug = slugify(args.query)
+    query_slug = slugify(args.query)
     plan = []
-    for r in results[:count]:
-        name = f"{args.provider}_{r['id']}_{slug}.mp4"
+    for r in results:
+        if len(plan) >= count:
+            break
+        # 説明文からファイル名を作る。同じ動画は別クエリでも同名になり、二重取得を防ぐ。
+        name_slug = slugify(r.get("desc") or "") or query_slug
+        name = f"{args.provider}_{r['id']}_{name_slug}.mp4"
+        if (POOL_DIR / name).exists():
+            print(f"(取得済みのためスキップ: {name})")
+            continue
         size = r.get("size") or head_size(r["link"])
-        plan.append({**r, "file_name": name, "bytes": size})
+        plan.append({**r, "file_name": name, "bytes": size, "risks": risk_flags(r.get("desc", ""))})
+
+    if not plan:
+        print("\n新しく取得するものはありません(すべて取得済み)。")
+        return
 
     total = sum(p["bytes"] or 0 for p in plan)
     print(f"\n取得候補 {len(plan)} 本 (合計 約{human_size(total)}):\n")
+    flagged = 0
     for p in plan:
         dur = f"{p['duration']}秒" if p.get("duration") else "尺不明"
         fps = f" / {p['fps']:.0f}fps" if p.get("fps") else ""
         print(f"  {p['file_name']}")
         print(f"      {p['width']}x{p['height']}{fps} / {dur} / {human_size(p['bytes'])}")
+        if p.get("desc"):
+            print(f"      説明: {p['desc']}")
         print(f"      出所: {p.get('page') or p['link'][:70]}")
         if p.get("author"):
             print(f"      作者: {p['author']}")
+        if p["risks"]:
+            flagged += 1
+            print(f"      ⚠ 要確認: {' / '.join(p['risks'])}")
     meta = PROVIDERS[args.provider]
     print(f"\nライセンス: {meta['license']} / クレジット表記: {meta['attribution']}")
+    if flagged:
+        print(
+            f"⚠ {flagged}本に Style Bible 違反の可能性あり。説明文からの推定なので、"
+            "取得するなら必ず目視確認する。"
+        )
 
     if not args.write:
         print("\n[dry-run] 実際に取得するには --write を付けてください。")

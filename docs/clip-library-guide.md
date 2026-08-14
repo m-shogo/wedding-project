@@ -35,6 +35,10 @@ python3 scripts/slice_clips.py recipes --chapter 4
 python3 scripts/slice_clips.py recipes --motion drift
 python3 scripts/slice_clips.py recipes --json          # AI・他ツール向け
 
+# 目視確認シートを作る（各動画から3枚。ロゴ・人物の混入を弾く）
+python3 scripts/slice_clips.py preview --write
+python3 scripts/slice_clips.py preview --write --targets clips
+
 # 集めた素材を1本の確認用リールにまとめる
 python3 scripts/slice_clips.py reel                    # dry-run
 python3 scripts/slice_clips.py reel --write
@@ -61,7 +65,8 @@ python3 scripts/slice_clips.py sync-dashboard --check  # CSVとのズレ検出�
 
 ```text
 ① 集める   fetch_stock.py（公式API）またはブラウザで pool/ に保存
-           → 取得後に必ず目視確認（人物・動物・文字・ロゴ・看板が無いか）
+① .5 確認  preview --write で確認シートを作り、目視で弾く
+           実在の航空機・店舗・車両は社名やロゴが写りやすい（failure-patterns.md）
 ② 型を選ぶ recipes コマンドで「この動き(motion)を使う」と決める
 ③ まとめる reel --write で1本にして通しで見る
 ④ 記録する 使いたい区間の in/out と motion を sample-clips.csv に書く

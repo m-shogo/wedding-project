@@ -324,42 +324,194 @@
   "clips": [
     {
       "clipId": "clip-001",
-      "sourceFile": "10_references/media/reel/review_reel.mp4",
-      "inTc": "00:00:03.0",
-      "outTc": "00:00:07.5",
-      "durationSec": 4.5,
+      "sourceFile": "10_references/media/pool/pexels_4092172_sky_is_not_the_limit.mp4",
+      "inTc": "8.0",
+      "outTc": "13.0",
+      "durationSec": 5.0,
       "chapter": "1",
-      "role": "導入",
-      "motion": "slow-push-in",
+      "role": "背景",
+      "motion": "parallax",
       "tags": [
-        "空港",
-        "光"
+        "飛行機窓",
+        "雲海"
       ],
       "captionSpace": "yes",
-      "rating": 0,
-      "pick": "pool",
-      "outName": "clip-001",
-      "notes": "レビューリールの通し位置で記録する例",
-      "recipeIds": []
+      "rating": 86,
+      "pick": "candidate",
+      "outName": "window_clouds_a",
+      "notes": "Pexels/表記不要/rec-08 窓枠が安定している区間",
+      "recipeIds": [
+        "rec-08"
+      ]
     },
     {
       "clipId": "clip-002",
-      "sourceFile": "10_references/media/pool/sample_ocean_01.mp4",
-      "inTc": "12.0",
-      "outTc": "16.5",
-      "durationSec": 4.5,
-      "chapter": "4",
+      "sourceFile": "10_references/media/pool/pexels_4092172_sky_is_not_the_limit.mp4",
+      "inTc": "20.0",
+      "outTc": "25.0",
+      "durationSec": 5.0,
+      "chapter": "1",
       "role": "背景",
-      "motion": "slow-pan-right",
+      "motion": "parallax",
       "tags": [
-        "海",
-        "夕暮れ"
+        "飛行機窓",
+        "雲海"
       ],
       "captionSpace": "yes",
-      "rating": 0,
+      "rating": 82,
+      "pick": "candidate",
+      "outName": "window_clouds_b",
+      "notes": "Pexels/表記不要/rec-08 別テイク比較用",
+      "recipeIds": [
+        "rec-08"
+      ]
+    },
+    {
+      "clipId": "clip-003",
+      "sourceFile": "10_references/media/pool/pexels_4543121_evening_sky.mp4",
+      "inTc": "1.0",
+      "outTc": "6.0",
+      "durationSec": 5.0,
+      "chapter": "5",
+      "role": "背景",
+      "motion": "drift",
+      "tags": [
+        "夕暮れ",
+        "空"
+      ],
+      "captionSpace": "yes",
+      "rating": 88,
+      "pick": "candidate",
+      "outName": "evening_sky_a",
+      "notes": "Pexels/表記不要/rec-12 到着の余韻向き。オレンジ〜ネイビーがStyle Bibleに合う",
+      "recipeIds": [
+        "rec-12"
+      ]
+    },
+    {
+      "clipId": "clip-004",
+      "sourceFile": "10_references/media/pool/pexels_6156696_video_footage_of_a_blue_sky_from_the_air.mp4",
+      "inTc": "10.0",
+      "outTc": "15.0",
+      "durationSec": 5.0,
+      "chapter": "3",
+      "role": "背景",
+      "motion": "drift",
+      "tags": [
+        "雲海",
+        "青空"
+      ],
+      "captionSpace": "yes",
+      "rating": 78,
+      "pick": "candidate",
+      "outName": "cloudsea_blue_a",
+      "notes": "Pexels/表記不要/rec-03 右上に機体の赤い部品が映る。上部トリミング必須",
+      "recipeIds": [
+        "rec-03"
+      ]
+    },
+    {
+      "clipId": "clip-005",
+      "sourceFile": "10_references/media/pool/pexels_30808497_aerial_view_of_clouds_in_overcast_sky.mp4",
+      "inTc": "1.0",
+      "outTc": "5.0",
+      "durationSec": 4.0,
+      "chapter": "3",
+      "role": "背景",
+      "motion": "drift",
+      "tags": [
+        "雲海",
+        "曇天"
+      ],
+      "captionSpace": "yes",
+      "rating": 62,
       "pick": "pool",
-      "outName": "hawaii_ocean_a",
-      "notes": "個別ソースから直接切り出す例",
+      "outName": "cloudsea_grey_a",
+      "notes": "Pexels/表記不要/rec-03 灰色が強くStyle Bibleの色から外れ気味。色調整前提",
+      "recipeIds": [
+        "rec-03"
+      ]
+    },
+    {
+      "clipId": "clip-006",
+      "sourceFile": "10_references/media/pool/pexels_10961750_airplane_landing_on_airport.mp4",
+      "inTc": "0.0",
+      "outTc": "4.0",
+      "durationSec": 4.0,
+      "chapter": "1",
+      "role": "背景",
+      "motion": "locked",
+      "tags": [
+        "滑走路",
+        "夜"
+      ],
+      "captionSpace": "yes",
+      "rating": 65,
+      "pick": "pool",
+      "outName": "runway_night_a",
+      "notes": "Pexels/表記不要/rec-10 冒頭は車両が写らない。中盤はバス・車が入るため使用不可",
+      "recipeIds": [
+        "rec-10"
+      ]
+    },
+    {
+      "clipId": "clip-007",
+      "sourceFile": "10_references/media/pool/pexels_11058632_time_lapse_of_sunset_above_city.mp4",
+      "inTc": "2.0",
+      "outTc": "6.0",
+      "durationSec": 4.0,
+      "chapter": "3",
+      "role": "背景",
+      "motion": "drift",
+      "tags": [
+        "夜景",
+        "街"
+      ],
+      "captionSpace": "yes",
+      "rating": 58,
+      "pick": "pool",
+      "outName": "city_sunset_a",
+      "notes": "Pexels/表記不要/rec-10 街並みが雑然として上品さに欠ける。保留",
+      "recipeIds": [
+        "rec-10"
+      ]
+    },
+    {
+      "clipId": "clip-008",
+      "sourceFile": "10_references/media/pool/pexels_6472910_airplane_wing_while_flying_in_the_sky.mp4",
+      "inTc": "0",
+      "outTc": "1.0",
+      "durationSec": 1.0,
+      "chapter": "1",
+      "role": "背景",
+      "motion": "parallax",
+      "tags": [
+        "翼"
+      ],
+      "captionSpace": "no",
+      "rating": 0,
+      "pick": "rejected",
+      "outName": "clip-008",
+      "notes": "不採用: 翼にAVIANCAのロゴが全編で写る。Style Bibleのno logo違反",
+      "recipeIds": []
+    },
+    {
+      "clipId": "clip-009",
+      "sourceFile": "10_references/media/pool/pexels_13973018_an_airline_plane_taxiing_on_the_runway_a.mp4",
+      "inTc": "0",
+      "outTc": "1.0",
+      "durationSec": 1.0,
+      "chapter": "1",
+      "role": "背景",
+      "motion": "locked",
+      "tags": [
+        "滑走路"
+      ],
+      "captionSpace": "no",
+      "rating": 0,
+      "pick": "rejected",
+      "outName": "clip-009",
+      "notes": "不採用: American Airlinesの機体ロゴが写る。Style Bibleのno logo違反",
       "recipeIds": []
     }
   ]

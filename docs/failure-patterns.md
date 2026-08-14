@@ -136,6 +136,37 @@ color mood = image C
 
 を分離する。
 
+## ストック素材の失敗
+
+### 説明文だけで採否を決める
+
+2026-08-14の実測。Pexelsから8本取得して目視確認したところ、
+**説明文からは読み取れないロゴが2本に写っていた**。
+
+| 素材の説明 | 実際に写っていたもの | 判定 |
+|---|---|---|
+| airplane wing while flying in the sky | 翼にAVIANCAのロゴ | 不採用 |
+| an airline plane taxiing on the runway at night | American Airlinesの機体 | 不採用 |
+| video footage of a blue sky from the airplane window | 右上に機体の赤い部品 | 要トリミング |
+
+実在の航空機・店舗・車両を外から写した素材は、塗装や社名が入るため
+`no logo` に抵触しやすい。**機内から窓越しに撮った素材のほうが安全**。
+
+修正:
+
+- 取得したら必ず `python3 scripts/slice_clips.py preview --write` で
+  確認シート(10%/50%/90%地点)を作り、目視する
+- `fetch_stock.py` は説明文から人物・動物・文字・機体ロゴの可能性を警告するが、
+  **これは事前フィルタであって判定ではない**。最終判断は目視
+- 中盤だけ車両が入る等、部分的にNGな素材は、使える区間だけ切り出す
+  (例: 滑走路の夜景は冒頭4秒だけ車両が写らない)
+
+### 色がStyle Bibleから外れる
+
+綺麗でも、灰色に寄った曇天や雑然とした街並みは、
+ネイビー・ゴールド・空色の世界観から浮く。
+点数を付けて `pool` 止まりにし、色調整前提かどうかを notes に書く。
+
 ## CapCutの失敗
 
 ### よくある失敗

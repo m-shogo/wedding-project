@@ -404,6 +404,72 @@ def validate_csv() -> None:
     print(f"検証OK: {len(rows)} 件のクリップ定義に問題なし ({rel(CSV_PATH)})")
 
 
+PREVIEW_DIR = MEDIA_DIR / "preview"
+
+
+def build_preview(write: bool, targets: str) -> None:
+    """各動画から3枚(10%/50%/90%)を抜いて横並びの確認シートを作る。
+
+    説明文だけでは分からない要素(ロゴ・人物・看板)を目視で弾くための工程。
+    実測: "airplane wing" にAVIANCA、"airline plane taxiing" にAmericanの
+    ロゴが写っていた。どちらも説明文からは読み取れなかった。
+    """
+    src_dir = POOL_DIR if targets == "pool" else CLIPS_DIR
+    if not src_dir.exists():
+        die(f"対象がありません: {rel(src_dir)}")
+    videos = [p for p in sorted(src_dir.iterdir()) if p.suffix.lower() in VIDEO_EXTS]
+    if not videos:
+        die(f"動画がありません: {rel(src_dir)}")
+
+    print(f"確認シートを作成: {rel(src_dir)} → {rel(PREVIEW_DIR)}")
+    print(f"対象 {len(videos)} 本 (各3枚: 10% / 50% / 90%地点)")
+    for v in videos:
+        print(f"  - {v.name}")
+
+    if not write:
+        print("\n[dry-run] 実行するには --write を付けてください。")
+        return
+
+    check_ffmpeg()
+    PREVIEW_DIR.mkdir(parents=True, exist_ok=True)
+    print()
+    for v in videos:
+        probe = subprocess.run(
+            ["ffprobe", "-v", "error", "-show_entries", "format=duration",
+             "-of", "csv=p=0", str(v)],
+            capture_output=True, text=True,
+        )
+        try:
+            dur = float(probe.stdout.strip())
+        except ValueError:
+            print(f"  尺を取得できずスキップ: {v.name}")
+            continue
+
+        shots = []
+        for i, ratio in enumerate((0.10, 0.50, 0.90)):
+            shot = PREVIEW_DIR / f".{v.stem}_{i}.jpg"
+            subprocess.run(
+                ["ffmpeg", "-v", "error", "-y", "-ss", fmt(dur * ratio), "-i", str(v),
+                 "-frames:v", "1", "-vf", "scale=420:-1", str(shot)],
+                check=True,
+            )
+            shots.append(shot)
+
+        sheet = PREVIEW_DIR / f"{v.stem}.jpg"
+        cmd = ["ffmpeg", "-v", "error", "-y"]
+        for s in shots:
+            cmd += ["-i", str(s)]
+        cmd += ["-filter_complex", "hstack=inputs=3", str(sheet)]
+        subprocess.run(cmd, check=True)
+        for s in shots:
+            s.unlink(missing_ok=True)
+        print(f"確認シート: {rel(sheet)}")
+
+    print(f"\n完了: {len(videos)} 本分を {rel(PREVIEW_DIR)} に出力しました。")
+    print("画像を開いて、人物・動物・文字・ロゴ・看板が無いか確認してください。")
+    print("特に実在の航空機・店舗・車両は、ロゴや社名が写り込みやすい。")
+
+
 DASHBOARD_JSON = REPO_ROOT / "movie-dashboard" / "src" / "data" / "clips.json"
 
 
@@ -555,6 +621,11 @@ def main() -> None:
     p_rec.add_argument("--motion", help="motionで絞る (例: drift)")
     p_rec.add_argument("--json", action="store_true", dest="as_json", help="JSONで出力(AI/他ツール向け)")
 
+    p_prev = sub.add_parser("preview", help="各動画から3枚抜いて目視確認用シートを作る")
+    p_prev.add_argument("--write", action="store_true", help="実際に生成する")
+    p_prev.add_argument("--targets", choices=["pool", "clips"], default="pool",
+                        help="対象 (既定: pool)")
+
     p_sync = sub.add_parser("sync-dashboard", help="movie-dashboard用の clips.json を生成する")
     p_sync.add_argument("--write", action="store_true", help="実際に書き出す")
     p_sync.add_argument("--check", action="store_true", help="CSVとのズレを検出する(CI用。ズレていたら異常終了)")
@@ -569,6 +640,8 @@ def main() -> None:
         validate_csv()
     elif args.command == "recipes":
         show_recipes(args.chapter, args.motion, args.as_json)
+    elif args.command == "preview":
+        build_preview(args.write, args.targets)
     elif args.command == "sync-dashboard":
         sync_dashboard(args.write, args.check)
     else:
