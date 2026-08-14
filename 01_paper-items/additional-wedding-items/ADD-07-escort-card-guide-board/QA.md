@@ -1,7 +1,7 @@
 # ADD-07 エスコートカード案内ボード — QA
 
-Status: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / A2_A3_REFLOW_PASS / ROLLBACK_SAFE / NOT_PRINT_READY`
-Date: 2026-08-12
+Status: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / A2_A3_DEEPER_STEP_RHYTHM_PASS / ROLLBACK_SAFE / NOT_PRINT_READY`
+Date: 2026-08-15
 
 ## Current authority
 
@@ -11,42 +11,86 @@ Date: 2026-08-12
 - A2 production: `1:2 / FRAME_ADD07_A2_PORTRAIT`
 - A3 production: `1:17 / FRAME_ADD07_A3_REFLOW_COMPARE`
 - exact Drive authority: `1nPb_yvp1rIlF_L3X0mAnBFSzSuEIllDi / ADD-07_エスコートカード案内ボード`
-- latest detailed visual evidence: `docs/add-items/ADD-07-REOPENED-VISUAL-QA-2026-08-10.md`
-- latest placeholder polish evidence: `docs/add-items/ADD-07-PLACEHOLDER-POLISH-2026-08-12.md`
+- historical visual evidence: `docs/add-items/ADD-07-REOPENED-VISUAL-QA-2026-08-10.md`
+- placeholder polish evidence: `docs/add-items/ADD-07-PLACEHOLDER-POLISH-2026-08-12.md`
 
-This file supersedes its old 2026-08-02 `PREPARED_FOR_FIGMA / SCREENSHOT_QA_PENDING` snapshot. It is now an item-level pointer to the verified live production state; physical/installation checks remain deferred.
+This file supersedes the earlier A2/A3 spot-check that accepted the previous step spacing. The current production keeps the same art direction and semantics but uses a deeper diagonal step rhythm after a fresh actual-size visual comparison.
 
-## Verified live production
+## 2026-08-15 reopened visual finding
 
-### A2
+Fresh whole-item / reading / actual-size review found that the former `01 → 02 → 03` sequence ended too early vertically:
+
+- A2 former step-number y positions: `760 / 935 / 1110`
+- A3 former step-number y positions: approximately `537 / 661 / 785`
+- the lower half therefore carried more unused space than the action sequence needed, which risked reading as blank-template premium minimalism rather than intentional large-format signage.
+
+The title, Japanese-first copy, left rail and diagonal action concept remained strong, so a full redesign or image asset was not justified. The highest-value correction was to make the three-step diagonal occupy the physical board more decisively.
+
+## Rollback-safe comparison and promotion
+
+Materially different native comparison candidates were created first:
+
+- A2 comparison: `12:2 / QA_ADD07_A2_DEEPER_STEP_RHYTHM_2026_08_15`
+- A3 comparison: `12:22 / QA_ADD07_A3_DEEPER_STEP_RHYTHM_2026_08_15`
+
+The candidates were visually stronger at actual-size because the sequence reaches farther through the board while preserving the clear `01 → 02 → 03` diagonal and footer breathing room.
+
+Full hidden rollbacks were then preserved:
+
+- A2 rollback: `12:42 / ROLLBACK_ADD07_A2_PRE_DEEPER_STEP_RHYTHM_2026_08_15`
+- A3 rollback: `12:62 / ROLLBACK_ADD07_A3_PRE_DEEPER_STEP_RHYTHM_2026_08_15`
+
+The comparison candidates are hidden after promotion.
+
+## Current production geometry
+
+### A2 `1:2`
 
 - canvas: `1400 × 1980`, `clipsContent=true`
 - native editable text: `11`
-- raster IMAGE fills: `0`
-- text outside production root: `0`
-- semantic location placeholder: `[カード設置場所 · LAYOUT DUMMY]`
+- visible text: `11`
+- text outside root: `0`
+- IMAGE fills: `0`
+- step-number positions:
+  - `01`: `x=110 / y=800`
+  - `02`: `x=475 / y=1055`
+  - `03`: `x=840 / y=1310`
+- matching rules and step labels were moved with each number as one visual unit.
 
-### A3
+### A3 `1:17`
 
 - canvas: `990 × 1400`, `clipsContent=true`
 - native editable text: `11`
-- raster IMAGE fills: `0`
-- text outside production root: `0`
-- semantic location placeholder: `[カード設置場所 · LAYOUT DUMMY]`
+- visible text: `11`
+- text outside root: `0`
+- IMAGE fills: `0`
+- step-number positions:
+  - `01`: `x≈77.77 / y=566`
+  - `02`: `x=336 / y=746`
+  - `03`: `x=594 / y=926`
+- A3 is a proportional reflow of the same approved deeper rhythm rather than a separate composition.
 
-## Fresh visual spot-check — 2026-08-12
+## Screenshot QA
 
-Fresh live screenshots of both A2 and A3 were re-read after the latest placeholder polish.
+Fresh post-promotion screenshots were checked at whole-item and actual-size scale for both A2 and A3.
 
-- the large Japanese instruction remains the first visual read;
-- `01 → 02 → 03` forms a clear staggered action sequence without equal cards or dashboard UI;
-- English kicker remains subordinate;
-- generous negative space reads as large-format signage rather than an empty web hero because the title, left-edge rail and stepped sequence provide a strong vertical/diagonal rhythm;
-- the footer placeholder remains a single controlled line and does not look like accidental implementation copy;
-- no generic airplane, stamp, barcode, fake gate data, raster decoration, shadow, gradient or badge was introduced;
-- no image-generation asset is required by the current visual defect model.
+PASS:
 
-Decision: keep current production. A materially different redesign is not justified by this fresh screenshot because the composition still meets the reopened sellable gate and new decoration would reduce rather than improve print authenticity.
+- the large Japanese instruction remains the first read;
+- `01 → 02 → 03` now occupies more of the middle/lower board and feels intentionally composed rather than top-heavy;
+- the diagonal remains clear without equal cards, boxes or dashboard UI;
+- footer date/location information keeps sufficient separation from step 03;
+- no clipping, overlap, accidental crop or outside-root text was introduced;
+- the semantic location placeholder remains native editable text;
+- no raster decoration, fake travel data, generic airplane/stamp imagery, shadow or gradient was added.
+
+## Image-generation decision
+
+`IMAGE_GENERATION_NOT_REQUIRED`.
+
+The screenshot-supported bottleneck was spatial rhythm, not missing photography/illustration. Adding generated imagery would have weakened the sign's typographic wayfinding role.
+
+Drive asset additions: `0`.
 
 ## Content safety
 
@@ -69,4 +113,4 @@ These are `DEFERRED_FINALIZATION`; they do not invalidate the current visual/str
 
 ## Final decision
 
-`SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / A2_A3_REFLOW_PASS / ROLLBACK_SAFE / NOT_PRINT_READY`
+`SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / A2_A3_DEEPER_STEP_RHYTHM_PASS / ROLLBACK_SAFE / NOT_PRINT_READY`
