@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.0",
+  "date": "2026-08-15",
+  "scope": "Rurubu WEDDING V5 FC actual-size microtype contrast repair",
+  "outer": "1180:2",
+  "nodes": {
+    "issue": {"id": "1180:186", "text": "YOKOHAMA / SPECIAL ISSUE", "fill": "#F0054D"},
+    "season": {"id": "1180:187", "text": "2026 AUTUMN", "fill": "#051229"}
+  },
+  "qa": {
+    "actual_size_front_794x1123": "PASS",
+    "absolute_text_intersections": 0,
+    "bounded_18px_text_safe_area_risks": 0
+  },
+  "generated_assets": 0,
+  "new_external_binary_placed": 0,
+  "best_outer_remains": "FC",
+  "best_inside_remains": "EO"
+}
