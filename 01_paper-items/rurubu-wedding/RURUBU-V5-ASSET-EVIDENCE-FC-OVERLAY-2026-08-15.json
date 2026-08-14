@@ -1,0 +1,31 @@
+{
+  "schema_version": "1.0",
+  "date": "2026-08-15",
+  "scope": "Rurubu WEDDING V5 FC outer asset evidence overlay",
+  "fc_outer": "1180:2",
+  "q60_secondary": {
+    "drive_id": "1aVp34U5qUTqd9FR3AILmJggdWwY1lAJb",
+    "figma_node": "1180:189",
+    "image_hash": "644f449c3bf2001a94d4b822d2b55e2614c11042",
+    "state": "VERIFIED_SECONDARY_ONLY"
+  },
+  "secondary_destination_reuse": {
+    "source_figma_node": "1107:552",
+    "target_figma_node": "1180:133",
+    "image_hash": "c09aa82e7b2ac75708707345c6f845452bf67663",
+    "state": "EXISTING_VERIFIED_RURUBU_ASSET_REUSED",
+    "new_external_binary": false
+  },
+  "dominant_proxy": {
+    "figma_node": "1180:134",
+    "image_hash": "539c259be8036b481d06b4f76db9a39b407d90e8",
+    "explicitly_not_q60_master": true
+  },
+  "q60_master": {
+    "drive_id": "1YL0WAOzYU3O1FGa23ieRuw_Btu4jbmzr",
+    "file_name": "RURUBU_V5_01_COVER_HERO__FIGMA_1330x1220_Q60.jpg",
+    "dominant_exact_figma_placement": false
+  },
+  "generated_this_run": 0,
+  "new_external_binary_placed_this_run": 0
+}

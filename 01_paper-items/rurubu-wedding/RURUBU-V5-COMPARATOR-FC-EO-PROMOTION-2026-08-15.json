@@ -1,0 +1,49 @@
+{
+  "schema_version": "1.0",
+  "date": "2026-08-15",
+  "scope": "Rurubu WEDDING V5 comparator promotion; FC outer / EO inside; Current remains untouched",
+  "authority_order": ["live Figma", "fresh Google Drive readback", "RURUBU asset evidence ledger/overlays", "GitHub main"],
+  "current_untouched": {"outer": "77:18", "inside": "77:290"},
+  "best": {
+    "outer": {"label": "FC", "review": "1180:2", "front": "1180:132"},
+    "inside": {"label": "EO", "source": "1107:285", "review": "1111:188"}
+  },
+  "fc_visual_change": {
+    "problem": "FA lower front retained a card-like cyan caption field and repeated the back-cover coast image as a large front support role.",
+    "principle": "photo-role hierarchy and source diversity before containment/decorative density",
+    "adopted": true,
+    "generated_assets": 0,
+    "new_external_binary_placed": 0
+  },
+  "fc_qa": {
+    "thumbnail_500": "PASS",
+    "whole_item_1000": "PASS",
+    "actual_size_front_794x1123": "PASS",
+    "front_visible_native_text": 15,
+    "front_visible_image_nodes": 5,
+    "front_absolute_text_intersections": 0,
+    "bounded_18px_safe_area_risks": 0,
+    "fold": {"node": "1180:193", "x": 792.7, "width": 2, "height": 1122.5}
+  },
+  "q60_secondary": {
+    "drive_id": "1aVp34U5qUTqd9FR3AILmJggdWwY1lAJb",
+    "figma_node": "1180:189",
+    "image_hash": "644f449c3bf2001a94d4b822d2b55e2614c11042",
+    "state": "VERIFIED_SECONDARY_ONLY"
+  },
+  "verified_secondary_reuse": {
+    "source_node": "1107:552",
+    "target_node": "1180:133",
+    "image_hash": "c09aa82e7b2ac75708707345c6f845452bf67663"
+  },
+  "q60_master": {
+    "drive_id": "1YL0WAOzYU3O1FGa23ieRuw_Btu4jbmzr",
+    "dominant_exact_figma_placement": false
+  },
+  "rollback": {"fa": "1168:2", "hidden": true, "deleted": false},
+  "gate": {
+    "v5_complete": false,
+    "v6_production_started": false,
+    "reason": "FC is the verified best outer comparator, but dominant Q60 master exact Figma provenance and final V5 asset/print/fold reconciliation remain open."
+  }
+}

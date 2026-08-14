@@ -54,3 +54,27 @@ State: `PROMOTED_PROJECT_RULE`
 When the same tool/environment/input-contract fingerprint fails twice without a material capability change, stop cosmetic retries. Change transport/method or continue another safe target.
 
 Transfer value: Figma binary transfer, Drive upload, image generation/placement, and other repeatable production capabilities.
+
+### RSL-006 — Photo-role redistribution can outperform adding assets
+
+State: `CROSS_ITEM_CANDIDATE`
+
+Source problem: Rurubu FC outer had a large UI-like caption field and repeated one coast source across two major outer-cover roles.
+
+Root-cause hypothesis: density was being carried by containment and repeated image mass instead of distinct dominant/support roles.
+
+Bounded test: on rollback-safe FC, widen the vertical street anchor, reduce the caption field to a thin rule, and replace the repeated secondary source with an already verified alternate Rurubu image.
+
+Expected improvement: clearer asymmetric hierarchy and less template/grid reading without new decoration or new asset generation.
+
+Regression risk: dead space or reduced caption contrast.
+
+Three-scale evidence: 500px thumbnail PASS; 1000px spread PASS; 794×1123 front PASS. Absolute text intersections 0; 18px text safe-area risk 0.
+
+Figma evidence: FC `1180:2`; alternate source `1107:552` → target `1180:133`, hash `c09aa82e7b2ac75708707345c6f845452bf67663`.
+
+Status: `VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`.
+
+What must remain Rurubu-specific: photo ratios, overlap angles, magenta/cyan/yellow palette, Japanese travel-magazine grammar, exact image choices.
+
+Cross-item applicability: other print items may independently test (a) full-field-to-rule subtraction and (b) duplicate-source audits before generating additional imagery.
