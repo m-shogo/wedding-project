@@ -1,0 +1,53 @@
+{
+  "schemaVersion": "rurubu-v5-comparator-promotion-v1",
+  "date": "2026-08-15",
+  "scope": "Rurubu WEDDING only",
+  "authorityOrder": ["live Figma", "fresh Google Drive readback", "asset evidence ledger/overlays", "GitHub main"],
+  "currentUntouched": {"outer": "77:18", "inside": "77:290"},
+  "best": {
+    "outer": {"label": "FH", "reviewNodeId": "1190:194", "backNodeId": "1190:195", "frontNodeId": "1190:324", "name": "BEST_CLEANROOM_OUTER_FH_REVIEW_2026_08_15", "status": "VERIFIED_LOCAL_ADOPTED"},
+    "inside": {"label": "EO", "sourceNodeId": "1107:285", "status": "UNCHANGED_FROM_PREVIOUS_VERIFIED_AUTHORITY"}
+  },
+  "outerChange": {
+    "sourceBest": "FE 1186:2",
+    "rejectedStudy": "FG 1190:2",
+    "promotedBest": "FH 1190:194",
+    "problem": "FE back-cover six-event travel timeline was technically readable but too quiet at whole-item scale; FG showed that blanket removal of Feature 02's binding border/rule worsened collage coherence.",
+    "principle": "Treat timeline/date modules as visual mass in print, and remove containment only when image-caption binding remains clear after subtraction.",
+    "generated": 0,
+    "newGeneratedAssetAdopted": 0,
+    "newExternalBinaryPlaced": 0
+  },
+  "qa": {
+    "thumbnail500": "PASS",
+    "wholeReading1000": "PASS",
+    "actualBack798x1123": "PASS",
+    "actualFront794x1123": "PASS",
+    "visibleNativeText": 35,
+    "visibleImageFills": 7,
+    "absoluteSameParentTextIntersections": 0,
+    "textSafeAreaRisk18px": 0
+  },
+  "q60Secondary": {
+    "driveId": "1aVp34U5qUTqd9FR3AILmJggdWwY1lAJb",
+    "mimeType": "image/jpeg",
+    "sizeBytes": 10284,
+    "figmaNodeId": "1190:381",
+    "imageHash": "644f449c3bf2001a94d4b822d2b55e2614c11042",
+    "status": "VERIFIED_SECONDARY_ONLY"
+  },
+  "q60Master": {
+    "driveId": "1YL0WAOzYU3O1FGa23ieRuw_Btu4jbmzr",
+    "mimeType": "image/jpeg",
+    "sizeBytes": 155439,
+    "dominantExactFigmaPlacement": false,
+    "status": "OPEN"
+  },
+  "rollback": {
+    "fe": {"nodeId": "1186:2", "name": "ROLLBACK_HIDDEN_OUTER_FE_2026_08_15", "visible": false},
+    "fg": {"nodeId": "1190:2", "name": "REJECTED_HIDDEN_OUTER_FG_FEATURE02_CARD_SUBTRACTION_2026_08_15", "visible": false}
+  },
+  "v5Complete": false,
+  "v6ProductionStarted": false,
+  "remainingGate": "Dominant Q60 master exact Figma provenance followed by final asset/print/fold/ledger reconciliation."
+}
