@@ -78,3 +78,27 @@ Status: `VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`.
 What must remain Rurubu-specific: photo ratios, overlap angles, magenta/cyan/yellow palette, Japanese travel-magazine grammar, exact image choices.
 
 Cross-item applicability: other print items may independently test (a) full-field-to-rule subtraction and (b) duplicate-source audits before generating additional imagery.
+
+### RSL-007 — Photo orientation can be a hierarchy decision, not just a crop decision
+
+State: `VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`
+
+Source problem: FC retained a wide horizontal hero band between the cream masthead and the stronger overlapping lower collage, so the cover still read partly as stacked web-like sections.
+
+Root-cause hypothesis: the problem was not missing imagery but the **orientation and editorial role** assigned to existing photography. A continuous vertical photo spine can unify a print page when secondary images already provide enough lateral rhythm.
+
+Bounded test: on rollback-safe duplicate FD/FE, hide the non-Q60 wide-band hero, promote a verified street image to a tall photo spine, keep one large angled secondary photo and one smaller destination photo, and preserve the bounded exact Q60 postcard role. Strengthen Feature 02 typography without introducing a new card.
+
+Expected improvement: continuous page rhythm, clearer asymmetric photo hierarchy, less section-band reading, and reduced dependence on a weak dominant proxy.
+
+Regression risk: source-detail exposure from enlarging a vertical role, excessive occlusion from the angled overlap, or text collisions on the rotated secondary photo.
+
+Three-scale evidence: 500px whole-item PASS; 1000px spread PASS; 794×1123 actual-size front PASS. Final FE front has 15 visible native text nodes, 4 visible IMAGE fills, absolute text intersections 0, 18px text safe-area risk 0, and fold guide x=792.7 / width=2.
+
+Figma evidence: FE `1186:2`, front `1186:132`; vertical spine hash `439a719d73f28e8dd2889f2026cccb15f345ec63`; angled secondary hash `d76eb07d83d042f15044c8bc6bf68d73a73cd77d`; lower destination hash `c09aa82e7b2ac75708707345c6f845452bf67663`; exact Q60 secondary node `1186:189` hash `644f449c3bf2001a94d4b822d2b55e2614c11042`.
+
+Status: `VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`.
+
+What must remain Rurubu-specific: specific photo choices, overlap angles, the giant `横浜` title, magenta/cyan/yellow palette, and Japanese travel-magazine visual grammar.
+
+Cross-item applicability: when a print item feels like stacked horizontal sections, another item may independently test whether changing a dominant image from a wide band to a continuous spine/field improves editorial continuity before generating new imagery.
