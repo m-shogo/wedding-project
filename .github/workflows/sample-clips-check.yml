@@ -1,0 +1,42 @@
+name: Sample Clips Check
+
+on:
+  pull_request:
+    paths:
+      - "docs/templates/sample-clips.csv"
+      - "docs/data/recipes.json"
+      - "movie-dashboard/src/data/clips.json"
+      - "scripts/slice_clips.py"
+      - ".github/workflows/sample-clips-check.yml"
+  push:
+    paths:
+      - "docs/templates/sample-clips.csv"
+      - "docs/data/recipes.json"
+      - "movie-dashboard/src/data/clips.json"
+      - "scripts/slice_clips.py"
+      - ".github/workflows/sample-clips-check.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Validate sample-clips.csv and recipe dictionary
+        run: python3 scripts/slice_clips.py validate
+
+      - name: Recipe dictionary is listable
+        run: python3 scripts/slice_clips.py recipes --json > /dev/null
+
+      - name: Dashboard clips.json is in sync with CSV
+        run: python3 scripts/slice_clips.py sync-dashboard --check
