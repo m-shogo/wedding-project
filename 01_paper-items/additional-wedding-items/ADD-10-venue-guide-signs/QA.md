@@ -1,7 +1,7 @@
 # ADD-10 会場案内サイン — QA
 
-Status: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / ROLLBACK_SAFE / NOT_PRINT_READY`
-Date: 2026-08-13
+Status: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / A4_DEEPER_INFO_RHYTHM_PASS / ROLLBACK_SAFE / NOT_PRINT_READY`
+Date: 2026-08-15
 
 ## Current production authority
 - Current: `docs/automation/non-rurubu-figma-quality-current.md` = `ACTIVE / HOURLY / FIGMA_EDIT_ALLOWED / VISUAL_REOPENED`
@@ -10,6 +10,7 @@ Date: 2026-08-13
 - Figma URL: `https://www.figma.com/design/mMfoBkoZ7eVbuerSRHePLV`
 - Drive folder: `ADD-10_会場案内サイン`
 - Drive folder ID: `1ASWOTXO4fosLb9reWxQrHL2_UUC_Y8-3`
+- Drive parent readback: `0ADXt8irGMFGnUk9PVA`
 - latest reopened visual evidence: `FIGMA-REOPENED-VISUAL-QA-2026-08-10.md`
 - latest production polish evidence: `FIGMA-DIRECTION-PLACEHOLDER-POLISH-2026-08-12.md`
 
@@ -32,13 +33,38 @@ Fresh reopened visual QA replaced the earlier sparse wireframe-like composition 
 Current art direction:
 - deep-navy direction fields make the functional arrow the primary physical cue;
 - warm-ivory information fields keep Japanese destination primary and English secondary;
-- a restrained rust seam connects direction and information fields;
+- a restrained rust seam connects direction and information fields when it has a real binding role;
 - A4 and A5 remain distinct reflows, and left/right/forward are not forced into one centered template;
 - no cards, pills, gradients, shadows, fake transport metadata, decorative planes, or raster imagery are used.
 
-Fresh 2026-08-13 screenshots rechecked A4-left at thumbnail/reading scale, A4-forward at reading scale, and A5-left at near-natural scale. The family still reads as deliberate print wayfinding rather than web UI, and no new composition defect warrants another redesign.
-
 The 2026-08-12 direction-placeholder polish removed visible implementation language from all six templates. `DIRECTION_NOTE` is now the native semantic placeholder `［方向案内 · LAYOUT DUMMY］` while the functional arrow remains the only direction-specific visual assertion.
+
+## 2026-08-15 A4 deeper-information rhythm
+Fresh 1400×1980 review found that A4-left and A4-right still placed `INFO_BLOCK_AUTO` at `y=555`, causing the right/left information field to end too early and leaving a large lower paper field that read closer to premium-by-emptiness than deliberate wayfinding rhythm.
+
+Production was not edited first. Two rollback-safe A4-left comparisons were created:
+
+- `24:2 / QA_ADD10_A4_LEFT_DEEPER_INFO_ONLY_2026_08_15`
+  - moved `INFO_BLOCK_AUTO` to `y=760` only;
+- `24:15 / QA_ADD10_A4_LEFT_DEEPER_INFO_PLUS_BINDING_SEAM_2026_08_15`
+  - moved `INFO_BLOCK_AUTO` to `y=760`;
+  - extended `ACCENT_EDGE` height from `520 → 640` so the rust seam continues to the information start instead of becoming a disconnected decorative stripe.
+
+The second candidate won at thumbnail, reading and actual-size scales. The seam was retained because it performs a visible binding function between the upper kicker and the destination block; this was an independent receiving-item test of shared lesson RSL-008, not a copied Rurubu layout treatment.
+
+Before promotion, full hidden rollbacks were saved:
+
+- `25:15 / ROLLBACK_ADD10_A4_LEFT_PRE_DEEPER_INFO_RHYTHM_2026_08_15`
+- `25:28 / ROLLBACK_ADD10_A4_RIGHT_PRE_DEEPER_INFO_RHYTHM_2026_08_15`
+
+Production changes:
+
+- A4-left `2:2`: `INFO_BLOCK_AUTO y 555 → 760`, `ACCENT_EDGE height 520 → 640`;
+- A4-right `2:13`: `INFO_BLOCK_AUTO y 555 → 760`, `ACCENT_EDGE height 520 → 640`;
+- A4-forward `2:24`: unchanged because its vertical-arrow composition already uses a different `INFO_BLOCK_AUTO y=660` relationship;
+- all A5 templates: unchanged because they are independent near-field landscape reflows.
+
+Comparison/stress nodes were hidden after promotion.
 
 ## Visual QA
 - [x] Japanese destination is visually primary; English is support only.
@@ -47,10 +73,19 @@ The 2026-08-12 direction-placeholder polish removed visible implementation langu
 - [x] A4 and A5 are separate reflows rather than proportional scaling.
 - [x] No equal-card UI, badge stack, decorative flight data, gradients, shadows, or fake transport metadata are used.
 - [x] Reopened clean-room comparison was evaluated and promoted.
-- [x] Whole-item / thumbnail QA completed.
-- [x] Reading-scale QA completed.
-- [x] Actual-size/detail QA completed on A4/A5 production.
-- [x] 2026-08-13 fresh spot-check still supports `SELLABLE_VISUAL_QA_PASS`.
+- [x] Whole-item / thumbnail QA completed after 2026-08-15 A4 polish.
+- [x] Reading-scale QA completed after 2026-08-15 A4 polish.
+- [x] Actual-size/detail QA completed on A4-left and A4-right production.
+- [x] The extended rust seam was checked for binding function before retention instead of being kept as automatic decoration.
+
+Post-promotion screenshot result:
+
+- A4-left at 500px whole-item: PASS;
+- A4-left at 1000px reading scale: PASS;
+- A4-left at 1400px max dimension / native 1400×1980: PASS;
+- A4-right at 1400px max dimension / native 1400×1980: PASS.
+
+The deeper information position now aligns more convincingly with the functional horizontal arrow, uses more of the physical page, and still leaves controlled negative space to the footer.
 
 ## Long-text stress QA
 Initial QA-only copies exposed a real structural defect: a very long Japanese destination expanded into the fixed-position English/floor block and visually collided.
@@ -65,18 +100,39 @@ Post-fix V2 long-text evidence:
 - `8:3` — `QA_ADD10_A4_V2_LONG_DESTINATION_STRESS`
 - `8:16` — `QA_ADD10_A5_V2_LONG_DESTINATION_STRESS`
 
-Stress text used explicit layout dummy copy only. Structural/screenshot readback passed without collision.
+Because the 2026-08-15 visual polish materially changed the A4 information-block y-position, the older long-copy PASS was **not** reused as completion evidence. A new hidden stress copy was created from the adopted deeper-position candidate:
+
+- `25:2 / QA_ADD10_A4_LEFT_DEEPER_INFO_LONG_COPY_STRESS_2026_08_15`
+- stress `INFO_BLOCK_AUTO y=760`;
+- production-width native auto-layout retained;
+- stress information block expanded from `270 → 470 px`;
+- stress bottom = `1230`;
+- footer y = `1815`;
+- outside visible text count = `0`;
+- screenshot at native 1400×1980: PASS for collision/clip and bottom-edge reserve.
+
+This independently reproduces non-Rurubu shared lesson NRSL-001 on a materially different item: spatial polish of variable-height copy must be revalidated at the new position.
 
 ## Structure QA
-- all six production frames: 6 native editable text nodes each, 0 image fills, `clipsContent=true`;
-- one functional editable arrow role per frame;
-- destination information blocks remain native vertical auto-layout with `primaryAxisSizingMode=AUTO`;
-- destination copy uses `textAutoResize=HEIGHT` so long text pushes later roles instead of overlapping them;
+2026-08-15 post-promotion live readback:
+
+- A4-left `2:2`: `1400×1980`, 6 native text, 6 visible, IMAGE fills 0, outside visible text 0, `clipsContent=true`;
+- A4-right `2:13`: `1400×1980`, 6 native text, 6 visible, IMAGE fills 0, outside visible text 0, `clipsContent=true`;
+- both `INFO_BLOCK_AUTO`: `layoutMode=VERTICAL`, `primaryAxisSizingMode=AUTO`, `y=760`, production height `270`, bottom `1030`;
+- hidden stress `25:2`: same auto-layout role at `y=760`, stress height `470`, bottom `1230`, outside visible text 0;
+- one functional editable arrow role per frame remains intact;
 - no flatten/raster replacement was introduced;
-- reopened rollback section `9:2` and direction-polish rollbacks `11:2 / 11:15 / 11:28 / 11:41 / 11:54 / 11:67` remain the rollback authority.
+- historical reopened/direction-polish rollbacks remain intact;
+- new A4 rhythm rollbacks: `25:15 / 25:28`.
 
 ## Image / Drive decision
-`IMAGE_GENERATION_NOT_REQUIRED` for the current production direction. Wayfinding clarity depends on functional arrow recognition, typography and physical field hierarchy; decorative generated imagery would compete with the sign's job. Drive writes for this QA sync: `0`.
+`IMAGE_GENERATION_NOT_REQUIRED` for the current production direction. Wayfinding clarity depends on functional arrow recognition, typography and physical field hierarchy; decorative generated imagery would compete with the sign's job.
+
+Drive authority was re-read immediately before the Figma write:
+- folder: `ADD-10_会場案内サイン`
+- ID: `1ASWOTXO4fosLb9reWxQrHL2_UUC_Y8-3`
+- parent: `0ADXt8irGMFGnUk9PVA`
+- Drive writes: `0`.
 
 ## Information accuracy gate — BLOCKED_REQUIRED_INPUT
 - [ ] Final destination names match the venue's official terminology.
@@ -102,8 +158,10 @@ These inputs do **not** block visual progression because the production template
 - Drive folder creation/readback: `PASS`
 - Figma production creation: `PASS`
 - Reopened sellable visual QA: `PASS`
+- A4 deeper-information rhythm: `PASS`
+- Binding-function seam check: `PASS`
 - Whole / reading / detail visual QA: `PASS_WITH_PLACEHOLDERS`
-- Long-text structural QA: `PASS`
+- Long-text structural QA at the new A4 spatial position: `PASS`
 - Native editability: `PASS`
 - Rollback / QA evidence: `PASS`
 - Physical proof: `NOT_RUN`
