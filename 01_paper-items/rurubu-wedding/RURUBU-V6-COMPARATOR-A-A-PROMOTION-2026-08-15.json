@@ -1,0 +1,92 @@
+{
+  "schemaVersion": "rurubu-v6-comparator-promotion-v1",
+  "date": "2026-08-15",
+  "scope": "Rurubu WEDDING only",
+  "v5EntryGate": {
+    "authority": "01_paper-items/rurubu-wedding/RURUBU-V5-SELECTED-CLEANROOM-FINAL-DUMMY-DESIGN-GATE-2026-08-15.json",
+    "commit": "826033f90085b0fcb6bb32505ff89a3ae43a7a97",
+    "dummyDesignQaVerified": true,
+    "overallPrintReady": false
+  },
+  "legacyAndV5Preserved": {
+    "currentOuter": "77:18",
+    "currentInside": "77:290",
+    "v5BestOuter": "1209:2",
+    "v5BestInside": "1214:2",
+    "mutatedByV6Promotion": false
+  },
+  "v6Best": {
+    "outer": {
+      "label": "A",
+      "rootNodeId": "1221:2",
+      "frontNodeId": "1221:4",
+      "backNodeId": "1221:3",
+      "name": "V6_BEST_OUTER_A_DESTINATION_LED_2026_08_15"
+    },
+    "inside": {
+      "label": "A",
+      "rootNodeId": "1223:2",
+      "leftNodeId": "1223:3",
+      "rightNodeId": "1223:4",
+      "name": "V6_BEST_INSIDE_A_PROFILE_MEMORY_EDITORIAL_2026_08_15"
+    }
+  },
+  "preservedStudies": [
+    {"scope": "outer", "label": "B", "rootNodeId": "1221:55", "status": "STUDY_HIDDEN", "reason": "The vertical navy type spine was materially different and structurally clean, but whole-item comparison became too quiet/formal and left too much low-information cream area for the target dense Japanese travel-magazine rhythm."},
+    {"scope": "inside", "label": "B", "rootNodeId": "1223:58", "status": "STUDY_HIDDEN", "reason": "The vertical story spine produced a strong silhouette, but after repair it still read more like a restrained editorial brochure than the denser photo-led travel-magazine target."},
+    {"scope": "v5OuterStudy", "label": "FY", "rootNodeId": "1217:2", "status": "REJECTED_HIDDEN", "reason": "A Yokohama hero improved destination semantics but the mixed old-town/travel-object support set did not beat FU consistently across scales."}
+  ],
+  "startHere": {"statusNodeId": "845:27", "text": "V5 FU/FX · V6 A/A"},
+  "visualQA": {
+    "outer": {
+      "thumbnail500": "PASS",
+      "reading1000": "PASS",
+      "actualFront794x1123": "PASS",
+      "actualBack794x1123": "PASS",
+      "visualRationale": "Destination-first hierarchy, large bounded Yokohama photography, strong native Japanese masthead, deliberate photo overlap, compact timeline and asymmetric back-cover photo field outperform the more formal B silhouette for the requested Rurubu-like energy."
+    },
+    "inside": {
+      "thumbnail500": "PASS",
+      "reading1000": "PASS",
+      "actualLeft794x1123": "PASS",
+      "actualRight794x1123": "PASS",
+      "visualRationale": "Large profile atmosphere, native identity copy, unequal question scales, waterfront timeline, and overlapping three-role memory collage preserve dense-readable rhythm without reintroducing V5 card geometry."
+    }
+  },
+  "structureQA": {
+    "outer": {"visibleNativeText": 28, "visibleImageFills": 7, "absoluteTextIntersections": 0, "textSafeAreaRisk18px": 0, "allVisibleRasterRolesAtOrBelowIntrinsic": true, "fold": {"nodeId": "1221:54", "x": 792.7000122070312, "width": 2, "height": 1122.5}},
+    "inside": {"visibleNativeText": 41, "visibleImageFills": 6, "absoluteTextIntersections": 0, "textSafeAreaRisk18px": 0, "allVisibleRasterRolesAtOrBelowIntrinsic": true, "fold": {"nodeId": "1223:57", "x": 792.7000122070312, "width": 2, "height": 1122.5}}
+  },
+  "assetEvidence": {
+    "newlyGenerated": 0,
+    "newExternalBinaryPlaced": 0,
+    "strategy": "Reuse only previously Drive/Figma-verified Rurubu raster roles because the current bottleneck was macro-composition and editorial hierarchy, not missing photography. No blocked binary transport route was retried.",
+    "uniqueHashes": [
+      {"hash": "539c259be8036b481d06b4f76db9a39b407d90e8", "driveId": "1ndvJShFDKPO6OmUD3JeIRvPwpS8V1v8x"},
+      {"hash": "c1ada11205bc3978bf426b304d683f1c1566cac2", "driveId": "1CN3gXWgHccx6WwcsmJcXDfXWgARMLFrO"},
+      {"hash": "d76eb07d83d042f15044c8bc6bf68d73a73cd77d", "driveId": "1R0JW7jny0XSOaysUzLMLo8n8nDxVGqdy"},
+      {"hash": "e3738476f760932bb5b09c9d60f174dd6c84049d", "driveId": "17YaX5CK-c0cTr4zsL2Dly4J1XSZyFxHG"},
+      {"hash": "439a719d73f28e8dd2889f2026cccb15f345ec63", "driveId": "1ZsLOgZbZWyfYgDfvKvYPqOsbMJrSf1J5"},
+      {"hash": "644f449c3bf2001a94d4b822d2b55e2614c11042", "driveId": "1aVp34U5qUTqd9FR3AILmJggdWwY1lAJb"},
+      {"hash": "adbb8e529451a81dd25e4eb29bf068655569ce25", "driveId": "1epb80L7WSZDmU86zl6PVQkZ8frP1JEeN"}
+    ]
+  },
+  "identitySafety": {
+    "generatedRecognizablePeopleRepresentedAsRealCoupleFamilyFriendsDog": false,
+    "identityFactsRemainNativeEditableText": true,
+    "profileRasterRoles": "non-person atmosphere"
+  },
+  "rollback": {
+    "v5FUFXPreservedVisible": true,
+    "v6BStudiesPreservedHidden": true,
+    "legacyCurrentPreserved": true
+  },
+  "status": {
+    "v6ProductionStarted": true,
+    "v6BestComparatorVerified": true,
+    "v6FinalVendorTemplateVerified": false,
+    "v6RealContentFinalized": false,
+    "v6OverallPrintReady": false,
+    "next": "Continue visual improvement from V6 A/A using screenshot evidence; new image generation is warranted only when a concrete role remains bottlenecked after composition/crop/typography work. Final vendor-template/real-content production readiness remains a separate gate."
+  }
+}
