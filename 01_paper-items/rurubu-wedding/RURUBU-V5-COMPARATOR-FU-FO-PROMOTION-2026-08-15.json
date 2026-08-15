@@ -1,0 +1,107 @@
+{
+  "schemaVersion": "rurubu-v5-comparator-promotion-v1",
+  "date": "2026-08-15",
+  "scope": "Rurubu WEDDING only",
+  "authorityOrder": ["live Figma", "fresh Google Drive readback", "asset evidence ledger/overlays", "GitHub main"],
+  "startingMainSha": "0cc3fc81e9bf1760196a72f063beb8d47eb36cc6",
+  "learningRunCommit": "56765c3cb05a167831a1d1f2093e08bf8fcc8dea",
+  "sharedLearningCommit": "fb8bc80b8901d1ed8ce8347d4913d4fc87bb2723",
+  "currentUntouched": {"outer": "77:18", "inside": "77:290"},
+  "best": {
+    "outer": {
+      "label": "FU",
+      "reviewNodeId": "1209:2",
+      "backNodeId": "1209:3",
+      "frontNodeId": "1209:132",
+      "name": "BEST_CLEANROOM_OUTER_FU_TRAVEL_OBJECT_DOMINANT_2026_08_15",
+      "status": "VERIFIED_LOCAL_ADOPTED"
+    },
+    "inside": {
+      "label": "FO",
+      "sourceNodeId": "1200:2",
+      "name": "BEST_CLEANROOM_INSIDE_FO_MEMORY_ROLE_COHERENCE_2026_08_15",
+      "status": "VERIFIED_LOCAL_ADOPTED_UNCHANGED_THIS_RUN"
+    }
+  },
+  "outerChange": {
+    "sourceBest": "FL 1195:2",
+    "promotedBest": "FU 1209:2",
+    "rejectedStudy": "FT 1208:2",
+    "problem": "FL depended on street source hash 439a719... intrinsic 352x368 displayed at 515x822.5 as a dominant vertical spine, embedding source-fidelity weakness into the macro-composition.",
+    "principle": "Role-sized source fidelity is an upstream macro-composition constraint. If a raster cannot credibly sustain the intended printed area, reassign the role or rebuild the composition before crop/decorative polish.",
+    "generated": 0,
+    "newGeneratedAssetAdopted": 0,
+    "newExternalBinaryPlaced": 0,
+    "dominant": {
+      "nodeId": "1209:153",
+      "name": "FU_DOMINANT_TRAVEL_OBJECT_MAP_CAMERA_RINGS",
+      "imageHash": "e3738476f760932bb5b09c9d60f174dd6c84049d",
+      "intrinsic": [944,608],
+      "display": [793.7,512]
+    },
+    "streetSupport": {
+      "nodeId": "1209:164",
+      "imageHash": "439a719d73f28e8dd2889f2026cccb15f345ec63",
+      "intrinsic": [352,368],
+      "display": [226,304]
+    },
+    "diningSupport": {
+      "nodeId": "1209:177",
+      "imageHash": "d76eb07d83d042f15044c8bc6bf68d73a73cd77d",
+      "intrinsic": [732,498],
+      "display": [444,286]
+    },
+    "exactSecondaryQ60": {
+      "nodeId": "1209:189",
+      "imageHash": "644f449c3bf2001a94d4b822d2b55e2614c11042",
+      "intrinsic": [240,220],
+      "display": [230,211]
+    }
+  },
+  "rejectedStudy": {
+    "label": "FT",
+    "nodeId": "1208:2",
+    "name": "REJECTED_HIDDEN_OUTER_FT_REPEAT_WATERFRONT_DEAD_LOWER_2026_08_15",
+    "reason": "Replacing the weak street dominant with the higher-resolution waterfront fixed fidelity but repeated the same waterfront across front/back and weakened lower-front closure.",
+    "visible": false
+  },
+  "qa": {
+    "outerWholeThumbnail500": "PASS_STRONGER_THAN_FL_UNDER_SOURCE_FIDELITY_REVIEW",
+    "outerReading1000": "PASS",
+    "outerActualFront794x1123": "PASS_AFTER_NATIVE_TYPE_REPAIRS",
+    "outerActualBackApprox798x1123": "PASS",
+    "visibleNativeText": 35,
+    "visibleImageFills": 7,
+    "absoluteTextIntersections": 0,
+    "textSafeAreaRisk18px": 0,
+    "fold": {"nodeId": "1209:193", "x": 792.7000122070312, "width": 2, "height": 1122.5}
+  },
+  "q60Secondary": {
+    "driveId": "1aVp34U5qUTqd9FR3AILmJggdWwY1lAJb",
+    "figmaNodeId": "1209:189",
+    "imageHash": "644f449c3bf2001a94d4b822d2b55e2614c11042",
+    "status": "VERIFIED_SECONDARY_ONLY"
+  },
+  "q60Master": {
+    "driveId": "1YL0WAOzYU3O1FGa23ieRuw_Btu4jbmzr",
+    "mimeType": "image/jpeg",
+    "sizeBytes": 155439,
+    "dominantExactFigmaPlacement": false,
+    "knownFailureFingerprint": "FIGMA_UPLOAD_DNS_MCP_FIGMA_COM",
+    "sameMethodRetriedThisRun": false,
+    "status": "OPEN"
+  },
+  "rollback": {
+    "fl": {"nodeId": "1195:2", "name": "ROLLBACK_HIDDEN_OUTER_FL_2026_08_15", "visible": false},
+    "ft": {"nodeId": "1208:2", "name": "REJECTED_HIDDEN_OUTER_FT_REPEAT_WATERFRONT_DEAD_LOWER_2026_08_15", "visible": false}
+  },
+  "startHere": {
+    "statusNodeId": "845:27",
+    "status": "FU outer / FO inside",
+    "currentOuter": "77:18",
+    "currentInside": "77:290"
+  },
+  "v5Complete": false,
+  "v6ProductionStarted": false,
+  "remainingGate": "Dominant Q60 master exact Figma provenance followed by final asset/print/fold/ledger reconciliation."
+}
