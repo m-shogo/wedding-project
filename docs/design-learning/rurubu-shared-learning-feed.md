@@ -105,7 +105,7 @@ Cross-item applicability: when a print item feels like stacked horizontal sectio
 
 ### RSL-008 — Subtraction needs a binding-function check; small timeline modules still carry visual mass
 
-State: `VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`
+State: `VERIFIED_CROSS_ITEM`
 
 Source problem: FE's back-cover six-event travel timeline was technically readable but visually too quiet at whole-item scale. In parallel, FG tested removing Feature 02's white photo border and cyan rule to reduce card/UI feeling.
 
@@ -119,10 +119,38 @@ Regression risk: enlarged dates can consume footer/safe-area reserve; colorful r
 
 Three-scale evidence: 500px whole-item PASS; 1000px spread PASS; actual-size back `1190:195` ≈ 798×1123 PASS; actual-size front `1190:324` = 794×1123 PASS. Final FH has 35 visible native text nodes, 7 visible IMAGE fills, 0 same-parent absolute text intersections and 0 18px text safe-area risks.
 
-Figma evidence: FH `1190:194` adopted; FE `1186:2` hidden rollback; FG `1190:2` hidden rejected study; exact secondary Q60 node `1190:381` hash `644f449c3bf2001a94d4b822d2b55e2614c11042`.
+Figma evidence: FH `1190:194` adopted before FJ; FE `1186:2` hidden rollback; FG `1190:2` hidden rejected study; exact secondary Q60 node `1190:381` hash `644f449c3bf2001a94d4b822d2b55e2614c11042`.
 
-Status: `VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`.
+Cross-item verification: neutral non-Rurubu lesson `NRSL-002` independently reproduced the binding-function check on ADD-10 with a materially different physical artifact. It compared a deeper information block with and without an extended accent seam and retained the seam only because whole-item QA showed that it bound upper and middle information regions. No Rurubu layout, asset, palette, geometry, or production state was inspected or copied.
+
+Status: `VERIFIED_CROSS_ITEM`.
 
 What must remain Rurubu-specific: the exact 3×2 layout, rail colors, title scale, photo framing, palette and travel-magazine treatment.
 
-Cross-item applicability: when another print item has a date/timeline/metadata module, test its contribution to whole-item visual mass—not only minimum legibility. Before removing a border/rule during UI-subtraction, verify whether it performs a real image-caption/physical-artifact binding function at thumbnail scale.
+Cross-item applicability: before removing or extending a border/rule/rail during UI-subtraction or spacing polish, verify whether it performs a real image-caption/title-body/physical-region binding function at thumbnail scale.
+
+### RSL-009 — A full-bleed image field can remove a print page's false header section without adding decoration
+
+State: `VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`
+
+Source problem: FH back cover still read as `cream header → large photo → lower collage/timeline`, which preserved a stacked web-section rhythm even though the individual modules were already print-oriented.
+
+Evidence before change: FH `1190:194` passed structure and actual-size QA, but 500px whole-item comparison showed the top cream band functioning as an isolated header rather than part of the photographic page.
+
+Root-cause hypothesis: the page break was being created by background segmentation, not by missing information or missing assets. Letting the existing dominant photo continue behind the native headline could unify the page while preserving editability and hierarchy.
+
+Bounded test: create FJ `1193:2` from FH, change only the back-cover dominant photo from `y=150 / h=530` to `y=0 / h=650`, keep the native navy headline/subhead above it in z-order, preserve all lower collage/timeline content, and add no new card, shadow, gradient, asset, or text. A separate FI study `1192:2` removed the lower-right photo and enlarged the center image; it created dead cream space and was rejected/hidden.
+
+Expected improvement: a single continuous back-cover editorial field, stronger photo-led first read, less section-band/UI rhythm, and better thumbnail cohesion without increasing decorative density.
+
+Regression risk: headline contrast can fail on a bright photo; a weak raster can become visibly soft when enlarged; removing a lower photo can create dead space even if the page becomes simpler.
+
+Three-scale evidence: FJ 500px whole-item PASS and stronger than FH; 1000px/read-equivalent composition preserved; actual-size back `1193:3` 798×1123 PASS; actual-size front `1193:132` 794×1123 PASS. Structure readback: 35 visible native text nodes, 7 visible IMAGE fills, absolute text intersections 0, 18px text safe-area risks 0.
+
+Figma evidence: FJ `1193:2` promoted; FH `1190:194` hidden rollback; FI `1192:2` hidden rejected study. Back dominant image hash remains `adbb8e529451a81dd25e4eb29bf068655569ce25`; no asset provenance changed.
+
+Asset/transport evidence: Q60 master Drive `1YL0WAOzYU3O1FGa23ieRuw_Btu4jbmzr` was materialized and visually inspected, but official upload target POST again hit the already-known `mcp.figma.com` DNS failure fingerprint before mutation. Per RSL-005, that method was not retried. Exact secondary Q60 remains Drive `1aVp34U5qUTqd9FR3AILmJggdWwY1lAJb` → FJ node `1193:189` → hash `644f449c3bf2001a94d4b822d2b55e2614c11042`.
+
+What must remain Rurubu-specific: exact headline placement, destination photography, collage density, timeline geometry, and Rurubu-like editorial grammar.
+
+Cross-item applicability: when another print artifact visually breaks into a false header band plus body even though the content is coherent, independently test whether extending an existing legitimate image/texture field behind native type improves continuity before adding another container or decorative device.
