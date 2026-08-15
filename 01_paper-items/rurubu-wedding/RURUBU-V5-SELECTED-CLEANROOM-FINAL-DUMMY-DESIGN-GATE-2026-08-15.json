@@ -1,0 +1,69 @@
+{
+  "schemaVersion": "rurubu-v5-selected-cleanroom-final-dummy-design-gate-v1",
+  "date": "2026-08-15",
+  "scope": "Rurubu WEDDING only",
+  "authorityOrder": ["live Figma", "fresh Google Drive readback", "selected cleanroom asset ledger", "GitHub main"],
+  "selectedComparatorAuthority": "01_paper-items/rurubu-wedding/RURUBU-V5-COMPARATOR-FU-FX-PROMOTION-2026-08-15.json",
+  "selectedAssetLedger": "01_paper-items/rurubu-wedding/RURUBU-V5-SELECTED-CLEANROOM-ACTIVE-ASSET-LEDGER-2026-08-15.json",
+  "legacyCurrentPreservedUntouched": {"outer": "77:18", "inside": "77:290"},
+  "selected": {
+    "outer": {"label": "FU", "rootNodeId": "1209:2", "frontNodeId": "1209:132", "backNodeId": "1209:3"},
+    "inside": {"label": "FX", "rootNodeId": "1214:2", "leftNodeId": "1214:3", "rightNodeId": "1214:132"}
+  },
+  "freshThreeScaleQA": {
+    "outer": {
+      "wholeItem": "PASS",
+      "reading": "PASS",
+      "actualFront794x1123": "PASS",
+      "actualBackApprox798x1123": "PASS"
+    },
+    "inside": {
+      "wholeItem": "PASS",
+      "reading": "PASS",
+      "actualLeft794x1123": "PASS",
+      "actualRight794x1123": "PASS"
+    }
+  },
+  "freshStructureQA": {
+    "outer": {"visibleNativeText": 35, "visibleImageFills": 7, "absoluteTextIntersections": 0, "textSafeAreaRisk18px": 0, "allVisibleRasterRolesAtOrBelowIntrinsic": true, "fold": {"nodeId": "1209:193", "x": 792.7000122070312, "width": 2, "height": 1122.5}},
+    "inside": {"visibleNativeText": 52, "visibleImageFills": 6, "absoluteTextIntersections": 0, "textSafeAreaRisk18px": 0, "allVisibleRasterRolesAtOrBelowIntrinsic": true, "fold": {"nodeId": "1214:284", "x": 792.7000122070312, "width": 2, "height": 1122.5}}
+  },
+  "freshDriveReadback": [
+    {"driveId": "1ndvJShFDKPO6OmUD3JeIRvPwpS8V1v8x", "fileName": "RURUBU_V5_05_HISTORY__FIGMA_1356x560_Q18_SINGLECALL.jpg", "mimeType": "image/jpeg", "size": 29582, "figmaHash": "539c259be8036b481d06b4f76db9a39b407d90e8"},
+    {"driveId": "1CN3gXWgHccx6WwcsmJcXDfXWgARMLFrO", "fileName": "RURUBU_V5_12_FRIENDS_CAFE__FIGMA_810x552_Q22.jpg", "mimeType": "image/jpeg", "size": 25901, "figmaHash": "c1ada11205bc3978bf426b304d683f1c1566cac2"},
+    {"driveId": "1R0JW7jny0XSOaysUzLMLo8n8nDxVGqdy", "fileName": "RURUBU_V5_13_FRIENDS_DINING__FIGMA_732x498_Q15.jpg", "mimeType": "image/jpeg", "size": 13867, "figmaHash": "d76eb07d83d042f15044c8bc6bf68d73a73cd77d"},
+    {"driveId": "17YaX5CK-c0cTr4zsL2Dly4J1XSZyFxHG", "fileName": "RURUBU_V5_10_BACK_MAIN_TRAVEL_FLATLAY__FIGMA_944x608_Q18_SINGLECALL.jpg", "mimeType": "image/jpeg", "size": 33577, "figmaHash": "e3738476f760932bb5b09c9d60f174dd6c84049d"},
+    {"driveId": "1ZsLOgZbZWyfYgDfvKvYPqOsbMJrSf1J5", "fileName": "RURUBU_V5_07_MEMORY_OLD_TOWN__FIGMA_352x368_Q30_SINGLECALL.jpg", "mimeType": "image/jpeg", "size": 12186, "figmaHash": "439a719d73f28e8dd2889f2026cccb15f345ec63"},
+    {"driveId": "1aVp34U5qUTqd9FR3AILmJggdWwY1lAJb", "fileName": "RURUBU_V5_01_COVER_HERO__ROLE_240x220_Q78.jpg", "mimeType": "image/jpeg", "size": 10284, "figmaHash": "644f449c3bf2001a94d4b822d2b55e2614c11042"},
+    {"driveId": "1epb80L7WSZDmU86zl6PVQkZ8frP1JEeN", "fileName": "RURUBU_V5_06_MEMORY_COAST__FIGMA_796x428_Q30.jpg", "mimeType": "image/jpeg", "size": 23276, "figmaHash": "adbb8e529451a81dd25e4eb29bf068655569ce25"}
+  ],
+  "legacyQ60Reconciliation": {
+    "driveId": "1YL0WAOzYU3O1FGa23ieRuw_Btu4jbmzr",
+    "legacyCurrentNodeId": "77:148",
+    "exactDominantPlacementInLegacyCurrent": false,
+    "selectedCleanroomStatus": "INACTIVE_NOT_VISIBLE_NOT_COUNTED",
+    "selectedReplacementRole": "FU front dominant uses verified travel flatlay; exact Q60 remains as bounded secondary skyline role",
+    "knownTransportFingerprint": "FIGMA_UPLOAD_DNS_MCP_FIGMA_COM",
+    "sameMethodRetried": false,
+    "rollbackAndProvenancePreserved": true
+  },
+  "identitySafety": {
+    "generatedRecognizablePeopleRepresentedAsRealCoupleFamilyFriendsDog": false,
+    "identityFactsRemainNativeEditableText": true,
+    "profileRasterRoles": "non-person atmosphere"
+  },
+  "rejectedStudyThisRun": {
+    "label": "FY",
+    "nodeId": "1217:2",
+    "status": "REJECTED_HIDDEN",
+    "reason": "Yokohama hero semantics improved, but the remaining old-town plus generic travel-object support set produced mixed destination semantics and did not beat FU consistently at all scales."
+  },
+  "gate": {
+    "v5SelectedCleanroomDummyDesignQaVerified": true,
+    "v5OverallPrintReady": false,
+    "v5FinalVendorTemplateVerified": false,
+    "v5RealContentFinalized": false,
+    "v6CleanroomConceptWorkMayStart": true,
+    "reason": "The selected clean-room FU/FX dummy-design state now has fresh three-scale visual QA, native/semantic structure QA, fold/safe-area plausibility, crop/source-fidelity checks, Drive IDs, Figma image hashes, identity safety, and rollback evidence. Final vendor template and real-content finalization remain separate later production gates and are not claimed."
+  }
+}
