@@ -41,6 +41,43 @@ Do not bake critical or variable text into generated raster decoration merely to
 
 Generated assets may contain non-semantic visual marks or texture-like pseudo-letterform fragments only when they are clearly decorative and cannot be mistaken for authoritative copy. Fake AI text/signage should normally be rejected.
 
+### Generated text-support backgrounds are allowed
+
+The **text itself stays native**, but its fixed visual support may be part of a generated/composed asset.
+
+Examples:
+
+- headline ribbon/background;
+- speech/callout shape;
+- caption paper strip;
+- scrapbook note card;
+- painted label field;
+- decorative title plate;
+- magazine-style text panel;
+- ornamental frame intended to hold 2–3 lines of native copy.
+
+It is valid to decide in advance that a role is, for example, `2 lines preferred / 3 lines maximum`, generate the decorative background for that expected text mass, and then place editable Figma text above it.
+
+For these roles define a **text-fit contract**:
+
+- expected line count;
+- maximum line count;
+- intended text width;
+- safe inset/padding inside the generated decoration;
+- target font-size/line-height range;
+- alignment/anchor;
+- minimum contrast zone;
+- overflow behavior.
+
+If real copy exceeds the contract materially, do not distort the decorative asset blindly. Prefer one of:
+
+1. use an approved alternate 1-line / 2-line / 3-line decoration size;
+2. regenerate/recompose the support asset for the new text mass;
+3. adjust native typography only within the verified range;
+4. promote a more flexible native structure when the role proves genuinely unpredictable.
+
+The generated support image must contain **no authoritative final wording**. It provides shape, texture, border, color and visual rhythm; Figma provides the editable text.
+
 ## 2. Generated/composed fixed-decoration boundary
 
 When AI manipulation of many tiny Figma ornaments is slower, less stable, or visually weaker, it is acceptable and often preferable to create a composed fixed-decoration asset outside the editable text layer system.
@@ -56,7 +93,22 @@ Good candidates include:
 - decorative stamps that are not authoritative logos/marks;
 - tropical/travel atmosphere clusters;
 - fixed magazine-style non-text embellishment;
+- text-support backgrounds whose native copy follows a bounded line-count contract;
 - visual texture whose internal pieces have no expected future edit role.
+
+### Default Figma decoration rule
+
+For AI-authored wedding design, do **not** default to recreating decoration inside Figma with many rectangles, circles, lines, vector scribbles, shadows and tiny groups.
+
+Unless there is a concrete future-editing or functional reason, keep Figma-native construction mainly for:
+
+- native text;
+- layout/positioning containers;
+- photo/image masks and crop roles;
+- SVG/vector assets with meaningful edit value;
+- simple functional geometry where native construction is clearly easier and more robust than generation.
+
+Everything else may be intentionally composed into generated/design assets when doing so improves the visual result and keeps the file understandable.
 
 Do not use this rule as permission to rasterize an entire page by default. Keep semantic hierarchy, replaceable content, variable text and high-value reusable marks independently editable.
 
@@ -123,6 +175,7 @@ Prefer semantic top-level roles such as:
 - `MASK / ...`
 - `VECTOR / ...`
 - `DECOR / COMPOSED ...`
+- `TEXT SUPPORT / COMPOSED ...`
 - `REFERENCE / ...`
 - `ROLLBACK / ...`
 
@@ -134,6 +187,7 @@ A person opening the file should be able to identify quickly:
 - what image can be replaced;
 - what is an editable vector asset;
 - what decoration is intentionally composed/flattened;
+- what decorative support belongs to a native text role;
 - what is reference or rollback evidence.
 
 ## 6. Design-quality precedence
@@ -163,6 +217,15 @@ For any generated/composed fixed-decoration asset used in production:
 
 `role brief → generate/select → visual QA → provenance/master save → role-sized derivative when needed → exact Figma placement → screenshot QA → structure/readability QA → ledger/evidence`
 
+For generated text-support decoration, the role brief should additionally specify:
+
+- text-safe zone;
+- intended line count and maximum line count;
+- expected alignment;
+- no baked final wording;
+- contrast behind the native text;
+- crop/scale behavior if the decorative asset is resized.
+
 Reject:
 
 - fake text/signage/UI;
@@ -185,6 +248,7 @@ For meaningful design changes, inspect as applicable:
 Also verify:
 
 - native text rendering and line breaks;
+- generated text-support fit at expected and maximum line counts;
 - mask/crop integrity;
 - image replacement resilience for template roles;
 - SVG/vector editability where applicable;
@@ -200,6 +264,7 @@ Transfer:
 
 - authoring split;
 - editability decision logic;
+- bounded native-text/generated-support pattern;
 - mask/replacement contract;
 - vector-vs-raster decision;
 - QA methods;
@@ -223,6 +288,7 @@ Normalize recurring failures:
 
 - `NATIVE_DECOR_MICROGEOMETRY_OVERLOAD` — too many fragile Figma ornament layers reduce speed/clarity without meaningful future edit value;
 - `RASTERIZED_VARIABLE_COPY` — editable factual text was baked into a raster/composed asset;
+- `TEXT_SUPPORT_CONTRACT_OVERFLOW` — native copy exceeds the generated support's verified line-count/safe-zone contract;
 - `UNREPLACEABLE_IMAGE_GEOMETRY` — swapping a photo forces surrounding layout reconstruction;
 - `MASK_CROP_FOCAL_FAILURE` — replacement survives structurally but loses the intended subject/focal point;
 - `DECOR_TEXT_CONFLICT` — generated decoration contains fake/baked text that competes with authoritative native copy;
@@ -237,11 +303,12 @@ If the same method triggers the same fingerprint twice without material capabili
 Before constructing a visual element in Figma, ask:
 
 1. Will a human need to change the wording/value? → native text.
-2. Will a human need to replace the image? → stable mask/role container.
-3. Is the graphic a reusable/recolorable silhouette? → SVG/vector candidate.
-4. Is it fixed visual decoration whose internal pieces have little future edit value? → composed/generated asset candidate.
-5. Does flattening it destroy meaningful future control? → keep semantic/native structure instead.
-6. Does native reconstruction materially weaken the design or create fragile complexity? → prefer composed asset, with rollback and QA.
+2. Does that text need a decorative background? → generated/composed text-support asset is allowed; define a bounded line-count/text-fit contract.
+3. Will a human need to replace the image? → stable mask/role container.
+4. Is the graphic a reusable/recolorable silhouette? → SVG/vector candidate.
+5. Is it fixed visual decoration whose internal pieces have little future edit value? → composed/generated asset candidate.
+6. Does flattening it destroy meaningful future control? → keep semantic/native structure instead.
+7. Does native reconstruction materially weaken the design or create fragile complexity? → prefer composed asset, with rollback and QA.
 
 This decision is role-based, not format ideology.
 
