@@ -26,6 +26,17 @@ To avoid concurrent writes to one shared file, each hourly owner has one append-
 
 Each owner writes only its own feed and may read the neutral shared system plus the other feed. Existing `docs/wedding-design-learning-feedback-log.md` remains the long-lived project learning history, but hourly workers should not fight over that same file merely to record every experiment.
 
+### Append extensions are part of the feed
+
+When replacing a long feed file atomically would create concurrency/truncation risk, the owning scope may append a lesson as a separate immutable file under:
+
+- `docs/design-learning/rurubu-shared-learning-feed.append/`
+- `docs/design-learning/non-rurubu-shared-learning-feed.append/`
+
+These sibling directories are **canonical extensions of the corresponding feed**, not secondary notes. At run start, read the base feed plus all newer relevant entries in its `.append/` directory. A receiving scope may read the opposite scope's base feed and opposite `.append/` entries only as neutral learning input under the same scope firewall. Do not require a risky whole-file replacement merely to make a valid lesson discoverable.
+
+If an append entry is later consolidated into the base feed, keep one canonical state and mark the older duplicate as consolidated/superseded rather than allowing conflicting lesson states.
+
 ## Learning state machine
 
 Use these states instead of treating every observation as a rule:
@@ -118,12 +129,12 @@ Do not make all wedding items converge into one style. Shared learning should im
 At the beginning of each hourly visual run:
 
 1. Re-read its own current authority and live GitHub/Figma/Drive state first.
-2. Read this shared system and the opposite scope's shared-learning feed only as a neutral learning input.
+2. Read this shared system and the opposite scope's base shared-learning feed plus relevant newer `.append/` entries only as neutral learning input.
 3. Select at most the lessons relevant to the current visible defect.
 4. Treat transferred lessons as hypotheses unless already `PROMOTED_PROJECT_RULE`.
 5. Test on a rollback-safe duplicate or bounded semantic role.
 6. Review at whole-item, reading/page, and actual-size/detail scales.
-7. Record success or failure in the receiving scope's own feed.
+7. Record success or failure in the receiving scope's own base feed or canonical `.append/` extension.
 
 This makes cross-item learning bidirectional: Rurubu can teach typography, hierarchy, crop, editorial-density and print lessons; non-Rurubu items can teach physical-artifact realism, restrained motif usage, information hierarchy, editability, or asset-production lessons back to Rurubu—only after local verification.
 
