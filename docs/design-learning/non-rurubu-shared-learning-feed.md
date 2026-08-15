@@ -163,3 +163,75 @@ Before removing or extending a border/rule/rail during UI-subtraction or spacing
 ### Next receiving-item experiment
 
 Only when a future non-Rurubu item has a visible border/rule/rail whose purpose is ambiguous, test one bounded subtraction/retention comparison. If another materially different item reproduces the benefit without adding template sameness, advance this lesson to `VERIFIED_CROSS_ITEM`.
+
+## NRSL-003 — Preserve functional quiet zones without drawing UI-like boxes around them
+
+Source scope/item: non-Rurubu / ADD-14 二次会案内
+
+State: `VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`
+
+Consumed neutral hypothesis: RSL-003 (`UI-like containment often hides weak hierarchy`). No Rurubu item-specific Figma, Drive, asset, ledger, composition or palette was inspected or copied.
+
+### Visible problem
+
+ADD-14 A6/A5 used a 1px dark rectangular stroke around the unresolved QR placeholder. The QR role legitimately needs reserved geometry and future quiet-zone space, but the visible border itself had no printing, scanning or semantic job. At whole-item scale it read as a small web/form widget inside an otherwise typographic itinerary.
+
+### Evidence before change
+
+- A6 production `1:2`: QR role `5:54`, 84×84, one dark stroke.
+- A5 production `1:18`: QR role `5:78`, ≈119.28×119.28, one dark stroke.
+- Both designs were structurally sound and already had non-scannable native semantic placeholders; the defect was containment appearance, not missing QR authority.
+
+### Root-cause hypothesis
+
+A functional reserved area does not always need a visible container. When the physical requirement is empty space/quiet zone rather than a printed border, drawing the boundary can create unnecessary UI/card semantics.
+
+### Bounded test
+
+Rollback-safe comparisons removed only the QR frame stroke:
+
+- A6 `27:2 / QA_ADD14_A6_QR_QUIET_ZONE_WITHOUT_BORDER_2026_08_15`
+- A5 `27:27 / QA_ADD14_A5_QR_QUIET_ZONE_WITHOUT_BORDER_2026_08_15`
+
+No frame size, QR semantic text, position, time/venue fields, rail, color system or facts changed.
+
+### Expected improvement
+
+Reduce the form/widget impression while preserving the future replaceable QR role and exact reserved geometry.
+
+### Regression risk
+
+Blind box removal can weaken grouping or make an unresolved role disappear. This treatment is valid only when spacing/placement already makes the role legible and the border is not required for trim, scan, binding, caption, ticket, or physical artifact semantics.
+
+### Three-scale evidence
+
+- whole-item A6: PASS; the itinerary reads more continuously and less like a form.
+- reading/native A6 592×420: PASS.
+- reading/native A5 840×592: PASS.
+- structure after promotion: A6 QR 84×84 stroke count 0; A5 QR ≈119.28×119.28 stroke count 0; both roots outside visible text 0 and IMAGE fills 0.
+
+### Figma / Drive / GitHub evidence
+
+- Figma file: `IygEr140Yqk12LsGL3TFrT`
+- production A6/A5: `1:2 / 1:18`
+- hidden comparisons: `27:2 / 27:27`
+- hidden rollbacks: `27:52 / 27:77`
+- Drive authority: `1Oq2Pz2mYo4oaDnO7LMezMrCUizcxaEjs`
+- item evidence: `01_paper-items/additional-wedding-items/ADD-14-after-party-guide/FIGMA-QR-CONTAINMENT-SUBTRACTION-2026-08-15.md`
+- item Git commit: `8a0747c657f436e0f573db12b14eabf445789613`
+
+### Adopted / rejected / blocked status
+
+`VERIFIED_LOCAL`: adopted in A6 and A5 production. No generated asset or Drive write was needed.
+
+### What must remain item-specific
+
+Do not transfer ADD-14's after-party itinerary layout, navy/rust rail, QR dimensions, exact placement, time grid, palette or semantic copy.
+
+### Cross-item applicability hypothesis
+
+When another print artifact contains a visible rectangle around a role whose true physical requirement is only reserved space (QR quiet zone, replaceable image crop, handwriting field, stamp area), independently test whether removing the visible border preserves comprehension while reducing card/UI reading.
+
+### Next receiving-item experiment
+
+Use the method only on a materially different non-Rurubu artifact with a screenshot-visible container whose binding/physical function is ambiguous. Compare border retained vs removed at whole-item scale first; if grouping weakens, reject the subtraction rather than forcing consistency.
