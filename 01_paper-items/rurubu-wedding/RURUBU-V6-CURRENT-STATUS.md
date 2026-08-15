@@ -8,7 +8,7 @@ Production state: separate clean-room V6; V7 is HOLD
 
 ## Current declaration
 
-`V6_LIVE_FIGMA_IN_PROGRESS / OUTER_O_CURRENT / INSIDE_AL_AI_PREFERRED_STUDIES / THREE_SCALE_DUMMY_QA_VERIFIED_LOCALLY / VARIABLE_COPY_STRESS_VERIFIED / PNG_MASTHEAD_DRIVE_AND_FIGMA_HASH_VERIFIED / GENERATED_SECTION_MASTERS_DRIVE_VERIFIED_NOT_ADOPTED / V7_HOLD / NOT_PRINT_READY`
+`V6_LIVE_FIGMA_IN_PROGRESS / OUTER_O_CURRENT / INSIDE_AL_AI_PREFERRED_STUDIES / THREE_SCALE_DUMMY_QA_VERIFIED_LOCALLY / VARIABLE_COPY_STRESS_VERIFIED / REGISTERED_PHOTO_ROLES_INTRINSIC_RECONCILED / PNG_MASTHEAD_DRIVE_AND_FIGMA_HASH_VERIFIED / GENERATED_SECTION_MASTERS_DRIVE_VERIFIED_NOT_ADOPTED / V7_HOLD / NOT_PRINT_READY`
 
 Live Figma and later evidence supersede the original historical declaration that V6 Figma had not started.
 
@@ -82,7 +82,7 @@ Evidence:
 - `RURUBU-V6-O-AK-AI-QA-2026-08-16.md`
 - `RURUBU-V6-O-AL-AI-QA-2026-08-16.md`
 
-## AL — intrinsic-safe Profile + AK-derived Q&A
+## AL — intrinsic-safe Profile + feature/support Q&A
 
 Figma: `1373:2`
 
@@ -147,7 +147,7 @@ Final value fields:
 
 ### Q&A in AL
 
-AL inherits AK's verified Q&A geometry unchanged:
+AL preserves AK's verified **native Q&A typography hierarchy**:
 
 - `01 / 04` = feature anchors
 - `02 / 03 / 05` = support beats
@@ -155,21 +155,34 @@ AL inherits AK's verified Q&A geometry unchanged:
 - no repeated card containers
 - native questions and answers preserved
 
-The Q&A long-copy proof `1368:2 / 1368:30` remains applicable because this geometry did not change:
+The native question/answer geometry did not change, so the Q&A long-copy proof `1368:2 / 1368:30` remains applicable:
 
 - six realistic two-line Japanese answers
 - text/text collisions: `0`
 - safe-area risks: `0`
 
+The Memories photography was later reconciled independently for raster quality:
+
+- hero `1373:55`: verified dining hash `d76eb07d83d042f15044c8bc6bf68d73a73cd77d`, registered source `732×498`, display `705×480`, `FILL`
+- support `1373:56`: skyline hash `644f449c3bf2001a94d4b822d2b55e2614c11042`, registered source `240×220`, display `175×205`, `FILL`
+
+Fresh post-reconciliation QA:
+
+- 1400 px AL spread: PASS
+- actual Q&A `1373:30`, `794×1123`: PASS
+- text/text collisions: `0`
+- 18 px text safe-area risks: `0`
+
 Evidence:
 
 - `RURUBU-V6-O-AL-AI-QA-2026-08-16.md`
+- `RURUBU-V6-O-AL-AI-INTRINSIC-RECONCILIATION-2026-08-16.md`
 
 ## AI — Story / chronology
 
 Figma: `1363:125`
 
-AI remains the preferred Story/chronology study and was not cosmetically changed in the latest AL pass.
+AI remains the preferred Story/chronology study. Its visual hierarchy was not cosmetically reworked during the AL pass, but a fresh registered-source audit corrected small raster over-enlargements.
 
 Chronology page `1363:137` currently uses:
 
@@ -180,20 +193,36 @@ Chronology page `1363:137` currently uses:
 - one dominant WEDDING endpoint caption strip + large final photo;
 - hidden old route rail/milestone dots.
 
-Verified structure from its latest QA:
+Intrinsic reconciliation included:
+
+- Story support `1363:131`: `260×235 → 235×210` for registered `240×220` source
+- Event 03 `1363:150`: `255×165 → 235×160` for the same source
+
+Fresh 1400 px AI spread review passed after these reductions with no material hierarchy regression.
+
+Verified structure remains:
 
 - native text: `27`
-- replaceable IMAGE roles: `9`
+- replaceable chronology IMAGE roles: `9`
 - text/text collisions: `0`
 - 18 px text safe-area risks: `0`
 - visible outside-page nodes: `0`
-
-Three-scale visual QA passed at 500 px spread, 1400 px spread and actual `794×1123` chronology page size.
 
 Evidence:
 
 - `RURUBU-V6-AI-AJ-INSIDE-QA-2026-08-16.md`
 - `RURUBU-V6-O-AL-AI-QA-2026-08-16.md`
+- `RURUBU-V6-O-AL-AI-INTRINSIC-RECONCILIATION-2026-08-16.md`
+
+## Active asset reconciliation authority
+
+Current preferred asset/node/hash/display reconciliation:
+
+- `RURUBU-V6-O-AL-AI-ACTIVE-ASSET-RECONCILIATION-2026-08-16.json`
+
+This overlay supersedes the old M/I ledger **only for the currently selected O + AL/AI frame/node/use mappings**. Historical M/I provenance remains preserved.
+
+Current registered dummy photo roles in O + AL/AI are reconciled to displays at or below their registered intrinsic dimensions in both axes. This does not equal final print effective-DPI approval.
 
 ## Drive authority
 
@@ -231,7 +260,7 @@ Known normalized fingerprints include:
 
 Do not retry the same fingerprint without a material transport/capability change.
 
-The successful Outer O logo reuse does **not** mean the blocker is solved: O used an already resident, already verified PNG node and avoided new binary transport entirely.
+The successful Outer O logo reuse and AL Q&A image reassignment do **not** mean the blocker is solved: both reused already resident, already verified image sources and avoided new binary transport entirely.
 
 ## Asset lifecycle truth of latest preferred system
 
@@ -241,10 +270,11 @@ Latest improvement cycle:
 - new Drive saves: `0`
 - new external binary uploads: `0`
 - existing authoritative PNG masthead reused: `YES`
-- existing verified photo roles recomposed: `YES`
+- existing verified photo roles recomposed/reassigned: `YES`
 - generated section decoration adopted: `NO`
 - three-scale visual verification: `YES`
 - variable-copy rendered stress verification: `YES`
+- registered dummy raster dimensions reconciled: `YES`
 - rollback comparisons preserved: `YES`
 
 ## Clean-room boundary
@@ -277,12 +307,12 @@ Do **not** call V6 complete or print-ready until all of these are true:
 
 Current state:
 
-`V6 O + AL/AI = VERIFIED_LOCAL_DUMMY_DESIGN_STUDIES / ROLLBACK_SAFE / V7_HOLD / NOT_PRINT_READY`.
+`V6 O + AL/AI = VERIFIED_LOCAL_DUMMY_DESIGN_STUDIES / REGISTERED_DUMMY_RASTERS_INTRINSIC_RECONCILED / ROLLBACK_SAFE / V7_HOLD / NOT_PRINT_READY`.
 
 ## Next highest-value work
 
 1. Review O + AL/AI as one coherent magazine system; fix only defects visible at thumbnail, reading or actual size.
-2. Continue asset-resolution/intrinsic audits before enlarging any dummy photo role.
+2. Preserve the active reconciliation ledger when changing any photo source, role size or Figma node.
 3. Preserve AL's variable fact-field widths and Q&A long-copy tolerance when real copy arrives.
 4. If binary transport materially changes, test at most one generated section support on a rollback-safe duplicate and compare before adoption.
 5. Keep V7 HOLD until V6 coherence/evidence is genuinely closed.
