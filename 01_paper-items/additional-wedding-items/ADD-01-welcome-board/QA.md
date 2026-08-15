@@ -1,65 +1,96 @@
 # ADD-01 ウェルカムボード — QA
 
-Status: `PLACEMENT_READY / PRODUCTION_QA_PASS`
-Date: 2026-08-02
+Status: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / PRODUCTION_POLISHED / ROLLBACK_SAFE / FINAL_REAL_HERO_PHOTO_DEFERRED / NOT_PRINT_READY`
+Updated: 2026-08-15
+Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
 
-## Layout QA
+The former 2026-08-02 `PLACEMENT_READY / PRODUCTION_QA_PASS` state is historical mechanical/asset evidence only. Live Figma production has since been rebuilt through the reopened visual-art-direction pass and is the current visual authority.
 
-- [x] WB-01はA2縦300 dpi相当の4961 × 7016 px
-- [x] 中央の可変テキスト・写真配置領域を妨げない余白
-- [x] 装飾は四隅寄りで主役と競合しない
-- [x] 既存4種の単純複製ではない
-- [x] WB-02は横長の単一路線装飾で、A2縦の上部・下部・対角配置へ非破壊で使用可能
-- [x] WB-03は単体バッジとして四隅・写真近傍・タイトル補助位置へ配置可能
-- [x] WB-04は細線主体で、写真・名前・日付より前へ出ない補助装飾として使用可能
-- [x] WB-05は追加不要。既存4素材に重ねると装飾過多になるため生成しない
-- [ ] 最終レイアウトで四辺3 mmの塗り足しを設定
-- [ ] 最終レイアウトで重要文字を仕上がり端から20 mm以上内側へ配置
-- [ ] 最終レイアウトで3 m視認性を確認
+## Current production authority
 
-## Text QA
+- Figma file key: `XyyTGuz6BMf8XRhPZZfdoT`
+- production root: `1:3 / FRAME_ADD_01_WELCOME_A2_PORTRAIT`
+- production size: `852 × 1200`, `clipsContent=true`
+- exact Drive folder: `1UT-s_z2KOnzNeq9cluqJ_Uxh-xDzO6Kg / ADD-01_ウェルカムボード`
+- current visual promotion evidence: `FIGMA-CLEANROOM-V2-PROMOTION-QA-2026-08-10.md`
+- semantic hero-label polish: `FIGMA-HERO-ROLE-SEMANTIC-POLISH-2026-08-13.md`
+- semantic/placeholder hierarchy and English-folio polish: `FIGMA-PLACEHOLDER-HIERARCHY-POLISH-2026-08-13.md`
 
-- [x] WB-01〜WB-04へ名前・日付・会場名・長文を焼き込んでいない
-- [x] 未確定会場名を捏造していない
-- [x] Yokohama/locationは編集テキストとして配置文書へ残した
-- [ ] Figma配置時に可変テキストを編集可能レイヤーで追加
+## Fresh 2026-08-15 visual / structure readback
 
-## Production asset QA
+Fresh native `852 × 1200` production screenshot still supports the sellable judgment:
 
-| Asset | Mechanical | Visual | Transparency | Drive readback |
-|---|---|---|---|---|
-| WB-01 | PASS | PASS | N/A | PASS |
-| WB-02 | PASS | PASS | PASS | PASS |
-| WB-03 | PASS | PASS | PASS | PASS |
-| WB-04 | PASS | PASS | PASS | PASS |
-| WB-05 | N/A | `NOT_REQUIRED_AFTER_REVIEW` | N/A | N/A |
+- Japanese-led `ようこそ、旅の一日へ` remains the visual hierarchy anchor;
+- left editorial copy and tall right replaceable-photo field remain intentionally asymmetric;
+- the hero role is an empty/replaceable real-photo area, not an AI-generated couple depiction;
+- visible hero placeholder copy is semantic `[写真 · LAYOUT DUMMY]`, separated from the couple-name identity block below the image;
+- real-person identity text is not attached as a direct label over invented/non-person imagery;
+- the former generic `WELCOME BOARD 01` folio remains hidden;
+- no rounded cards, generic travel badge, fake airplane/stamp motif, shadow, gradient or web-UI container was reintroduced.
 
-## Integrity
+Fresh live structure readback:
 
-- WB-01 SHA-256: `2a2a0244862355e777926839ae39d9ce9e6c6c9e602ab6c0e53d3d276a0692f7`
-- WB-02 SHA-256: `4beb9590d729130cb27863c626277f677ffd47840edcde6b7f444181886ecc84`
-- WB-03 SHA-256: `407ec787643771040de0125957dd49c7491604f820440c52c27ee5c4399799c3`
-- WB-04 SHA-256: `c1a05cbc3b3e36c8a255d6dd0a6ae09c414f4396154cc7c4fb5d6fb62866ac56`
+- root: `1:3`, 852 × 1200, `clipsContent=true`;
+- native text nodes: `10` total / `9` visible;
+- visible IMAGE-fill nodes: `1` — `8:2 / IMG_PAPER_TEXTURE_REPLACEABLE`, opacity ≈ `0.16`;
+- replaceable real-photo role: `7:30 / IMG_WELCOME_HERO_REPLACEABLE`, `474 × 744`;
+- `7:39 / TXT_FOLIO / WELCOME BOARD 01` reads back hidden;
+- no flattened/rasterized text replacement was introduced.
 
-## Drive/Git QA
+This fresh review also independently supports the neutral image-role safety principle that an unverified/non-person visual must not inherit a real-person identity label. No production change was required because the current ADD-01 composition already keeps the image role, placeholder label and couple-name identity block separate.
 
-- [x] Driveの追加アイテム親フォルダとADD-01フォルダをreadback
-- [x] WB-01〜WB-04をDriveへ新規保存
-- [x] WB-01〜WB-04のファイル名・MIME type・親フォルダをreadback
-- [x] WB-01〜WB-04のDrive IDを`DRIVE-REGISTER.md`へ記録
-- [x] WB-01〜WB-04を`ASSET-QUEUE.md`で`ACCEPTED`へ更新
-- [x] WB-05の重複検索と不要判定を記録
-- [x] `FIGMA-PLACEMENT-BRIEF.md`へDrive ID、semantic node、印刷仕様を反映
-- [x] ADD-01 production completion QA
+## Existing reopened evidence retained
 
-## Current result
+### Clean-room V2 / visual promotion
 
-- Production asset QA PASS: 4
-- QA REJECT: 0
-- Drive production saves: 4
-- Accepted: WB-01, WB-02, WB-03, WB-04
-- Not required: WB-05
-- Item status: `PLACEMENT_READY`
-- Next: `ADD-02_TABLE_SIGNS_SPEC_AND_QUEUE`
+`FIGMA-CLEANROOM-V2-PROMOTION-QA-2026-08-10.md` remains the visual-composition authority for:
 
-Figma未実行のため、塗り足し・最終文字配置・3 m視認性は配置時の最終QAとして残す。これらは素材準備の未完了を意味しない。
+- replacement of the former centered generic wedding-template layout with the asymmetric editorial poster;
+- tall `474 × 744` replaceable real-photo role;
+- removal of the circular travel badge / generic centered `WELCOME` hierarchy;
+- Japanese-first title and bottom editorial identity block;
+- clean-room long-copy stress and production rollback.
+
+### Semantic / hierarchy polish
+
+Later bounded edits remain current:
+
+- implementation label `[HERO PHOTO · REPLACEABLE]` → `[写真 · LAYOUT DUMMY]` without altering the replaceable image role;
+- unresolved couple name, venue and photo-caption proof metadata remains native editable semantic text with reduced auxiliary `LAYOUT DUMMY` hierarchy;
+- `WELCOME BOARD 01` was removed as non-semantic English series filler;
+- paper texture remains replaceable and subordinate rather than baked into text.
+
+## Image / Drive decision
+
+`IMAGE_GENERATION_NOT_REQUIRED` for this fresh run.
+
+The remaining large hero role is intentionally reserved for a **real couple photograph**. Generating bride/groom likeness as if it were the actual couple is prohibited and would reduce factual integrity. The current screenshot did not expose a missing non-person texture/background/collage problem that justifies another generated asset.
+
+Drive authority was re-read live and remains:
+
+- `1UT-s_z2KOnzNeq9cluqJ_Uxh-xDzO6Kg / ADD-01_ウェルカムボード`
+- parent: `1iJGIzmNSlzwqrcv7P6UsNbstwBki1523`
+- Drive writes in this authority reconciliation: `0`.
+
+Historical WB-01〜WB-04 production-asset hashes, mechanical checks and Drive registration remain valid historical evidence; they are not used as proof of the current sellable composition.
+
+## DEFERRED_FINALIZATION / NOT_PRINT_READY
+
+The sellable visual template is not final print data. Remaining finalization includes:
+
+- select the actual couple photograph and verify crop at whole / reading / actual size;
+- confirm final couple-name and venue copy;
+- confirm physical A2/A3 choice, bleed/safe-area against the selected printer template and 100% print proof;
+- check stand/frame/installation interaction and final export.
+
+## Result
+
+- Reopened sellable visual QA: `PASS`
+- Current native structure / editability: `PASS`
+- Existing long-copy structural evidence: `PASS`
+- Real-person / image-role separation: `PASS`
+- Drive authority readback: `PASS`
+- Image generation: `NOT_REQUIRED`
+- Physical print proof: `NOT_RUN`
+- Print-ready: `NO`
+- Completion state: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS`
