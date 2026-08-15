@@ -1,144 +1,195 @@
 # るるぶWEDDING V6 — CURRENT STATUS
 
-Date: 2026-08-02
-Direction: Hawaii / tropical resort / premium travel editorial
-Authority: GitHub main + V6 Drive readback
-Production state: separate from V5
+Date: 2026-08-16
+Direction: Japanese travel-information magazine / Hawaii-tropical wedding editorial
+Authority order: live Figma → verified Drive → Rurubu evidence → this status
+Figma file: `bfM0d4c9dCeBv5pCkJ3TNM`
+Production state: separate clean-room V6; V7 is HOLD
 
 ## Current declaration
 
-`V6_RESEARCH_PASS_1_COMPLETE / EDITORIAL_DIRECTION_DEFINED / ASSET_QUEUE_PREPARED / DRIVE_STRUCTURE_READY / PRODUCTION_GENERATION_BLOCKED_BY_V5_GATE / FIGMA_NOT_STARTED / NOT_PRINT_READY`
+`V6_LIVE_FIGMA_IN_PROGRESS / OUTER_M_CURRENT / INSIDE_AJ_AI_PREFERRED_STUDIES / THREE_SCALE_DUMMY_QA_VERIFIED_LOCALLY / GENERATED_SECTION_MASTERS_DRIVE_VERIFIED / QUALITY_PRESERVING_BINARY_TRANSPORT_STILL_BLOCKED / V7_HOLD / NOT_PRINT_READY`
 
-## Clean-room boundary
+This supersedes the original 2026-08-02 declaration that V6 Figma had not started. Live Figma and later evidence are now materially ahead of that historical gate state.
 
-V6 is a new editorial version, not a recolor or reskin of V5.
+## Live Figma current state
 
-Do not reuse:
-- V5-generated photographs
-- V5 image hashes
-- V5 hero composition
-- V5 card geometry
-- V5 photo crops
-- V5 node mappings
-- V5 completion claims
+Start Here `845:27`:
 
-V6 may inherit:
-- editorial hierarchy knowledge
-- Japanese typography QA
-- asset evidence lifecycle
-- Drive-first workflow
-- screenshot and structural QA
-- print plausibility checks
-- lessons from V5 failures
+`V5 FU/FX · V6 M + AJ/AI INSIDE STUDIES · V7 HOLD`
 
-## Research completed
+Current V6 studies:
 
-Reference categories reviewed:
-- current Rurubu Hawaii cover
-- Rurubu Hawaii destination spread
-- Japanese Hawaii orientation/map spreads
-- calm resort-planning editorial
-- illustrated Waikiki area map
-- W3C Japanese layout guidance
-- Adobe Japanese layout-grid guidance
-- anti-reference: generic tropical template / card-dashboard layout
+- Outer M: `1241:2`
+- Profile / Q&A AJ: `1364:2 / PREFERRED / V6_INSIDE_AJ_EDITORIAL_PROFILE_QA_2026_08_16`
+- Story / chronology AI: `1363:125 / PREFERRED / V6_INSIDE_AI_MAGAZINE_CHRONOLOGY_2026_08_16`
 
-Research authority:
-- `RURUBU-V6-HAWAII-REFERENCE-ANALYSIS-2026-08-02.md`
-- `RURUBU-V6-HAWAII-EDITORIAL-RESEARCH-MATRIX-TEMPLATE.md`
+Rollback/comparison remains preserved, including:
 
-## Editorial direction defined
+- AF `1355:2` — hidden comparison
+- AG `1356:2` — hidden comparison
+- earlier U/V/AC/AD and rejected generated-transport studies — retained where useful as evidence
 
-Required V6 behavior:
-- destination recognized before body text is read
-- dominant photography owns the cover and each major spread
-- unequal information hierarchy
-- useful map/route/number/caption devices
-- warm-white/sand base with ocean blue/aqua and controlled coral accent
-- maximum one micro yellow issue/date accent
-- Japanese five-level type system
-- fewer full cards, pills, shadows, and decorative stickers
-- one subtraction attempt per QA pass
-- Hawaii signal primarily through photography, light, material, and hospitality detail
+V7 is not the active improvement target and must not be advanced while V6 still has meaningful visual work.
 
-## Prepared outer concepts
+## Current visual direction
 
-### V6-A — Resort Panorama
+V6 is being judged as an original wedding travel magazine, not as a generic Figma template.
 
-- one dominant destination panorama
-- stable title field
-- minimal support modules
-- strongest thumbnail recognition
+Required behavior:
 
-### V6-B — Editorial Resort Collage
+- dominant photography before card/container decoration;
+- materially unequal photo scale and overlap;
+- large Japanese headline hierarchy;
+- dense but readable editorial rhythm;
+- compact facts/captions/numbers;
+- asymmetric page composition;
+- a small number of purposeful color rules/rails/caption strips;
+- native editable factual text;
+- replaceable photo IMAGE roles with non-destructive crop behavior;
+- no dashboard/card-grid aesthetic;
+- no copying a protected Rurubu logo, exact page, proprietary illustration, map, or text.
 
-- dominant hotel/ocean image
-- two supporting images with unequal ratios
-- one vertical destination/issue axis
-- stronger magazine density and wedding storytelling
+Current preferred inside studies intentionally use very little native decoration. Fixed complex decoration may use generated/composed assets when a quality-preserving transport path is available and the result beats the native layout at three scales.
 
-The two concepts must be structurally different. B cannot be a palette variation of A.
+## AJ — Profile / Q&A
 
-## Original asset queue
+Figma: `1364:2`
 
-Prepared:
-- `RURUBU-V6-HAWAII-ASSET-QUEUE-2026-08-02.md`
+Current verified structure:
 
-Photo roles prepared:
-- 2 alternative cover heroes
-- cover arrival snap
-- groom atmosphere profile
-- bride atmosphere profile
-- history lead
-- 4 memory destinations
-- back-cover emotional close
-- 3 Friends & Family roles
+### Profile `1364:3`
 
-All V6 photographs will be newly generated or replaced with approved final photographs. No published reference image becomes a production asset.
+- native text: `18`
+- replaceable IMAGE roles: `4`
+- text/text collisions: `0`
+- 18 px text safe-area risks: `0`
 
-## Drive structure
+### Q&A `1364:27`
 
-Root:
+- native text: `22`
+- replaceable IMAGE roles: `2`
+- text/text collisions: `0`
+- 18 px text safe-area risks: `0`
+
+Three-scale visual QA passed at whole-spread thumbnail, 1400 px spread review, and actual `794×1123` page size.
+
+Evidence:
+
+- `RURUBU-V6-AI-AJ-INSIDE-QA-2026-08-16.md`
+
+## AI — Story / chronology
+
+Figma: `1363:125`
+
+Story remains photo-led. The chronology page `1363:137` currently uses:
+
+- dominant feature photo + two support crops;
+- unequal six-event photo hierarchy;
+- native `01–06`, dates, titles and copy;
+- short flat editorial accent rules instead of cards/route diagrams;
+- one dominant WEDDING endpoint caption strip + large final photo;
+- hidden old route rail/milestone dots.
+
+Verified structure:
+
+- native text: `27`
+- replaceable IMAGE roles: `9`
+- text/text collisions: `0`
+- 18 px text safe-area risks: `0`
+- visible outside-page nodes: `0`
+
+Three-scale visual QA passed at 500 px spread, 1400 px spread and actual `794×1123` chronology page size.
+
+Evidence:
+
+- `RURUBU-V6-AI-AJ-INSIDE-QA-2026-08-16.md`
+
+## Drive authority
+
+V6 root:
+
 - `RURUBU_V6_HAWAII_2026-08-02`
 - ID: `1wHxC2E09JpLIQRNDDTY4i29KMwMY2_XK`
 
-Subfolders:
+Prepared folders remain:
+
 - `00_RESEARCH_AND_REFERENCE_LINKS` — `1IrenZjT3Iv6pgMyABj6C7ThqVcfKH5y4`
 - `10_GENERATED_MASTERS` — `1pkkf4BX3ugKdR1rTkgXdp8xTaNGrQD1p`
 - `20_FIGMA_DERIVATIVES` — `1MSpa1pFo2Xiau81aoEzfYviFY_YGF6S9`
 - `90_REJECTED_AND_ARCHIVE` — `1Ggl4e1WEElSFHuMhuzeEJ14uwQoq_6TJ`
 
-Drive rule:
-- published reference imagery is not copied into production folders
-- accepted generated masters are saved before Figma placement
-- transfer-compressed derivatives never overwrite masters
+Current high-resolution generated section masters were re-read on 2026-08-16:
 
-## Current gate
+- Profile v2 — `RURUBU_V6_PROFILE_SECTION_ROLE_v2.png` — `1IL1L8MWzaqkwVQv9CkLen4EkTccq-5cm`
+- Q&A v2 — `RURUBU_V6_QA_SECTION_ROLE_v2.png` — `1_JmXHiTmJnRjR9Oam4gERv456yN4qjQn`
+- Timeline v2 — `RURUBU_V6_TIMELINE_SECTION_ROLE_v2.png` — `1uRP3ri4MKw1g8_vtNDxBoazuAm4Hq3B8`
+- Memories v2 — `RURUBU_V6_MEMORIES_SECTION_ROLE_v2.png` — `1Xi8C0KV8JfZrbx1fKttGae0Go6tsFzqG`
 
-V6 production generation and Figma work begin after V5 reaches:
+These are `DRIVE_READBACK_VERIFIED`. They are not automatically `FIGMA_PLACED`, `VISUALLY_ADOPTED`, or `PRINT_READY`.
 
-`RURUBU_V5_DUMMY_PHOTO_DESIGN_QA_PASS`
+## Known transport blocker
 
-Research, design logic, Drive preparation, and prompt planning may continue without touching V5 production.
+Quality-preserving generated-decoration transport remains unresolved in the current runtime.
 
-## Next V6 actions after gate
+Repeated/normalized failure evidence already exists for:
 
-1. Generate V6-01, V6-02, and V6-03 only.
-2. Visual-QA and save accepted masters to Drive.
-3. Drive readback and register exact file IDs.
-4. Create separate V6 Figma page/frames.
-5. Build rough V6-A and V6-B outer concepts.
-6. Run whole-spread screenshots.
-7. Score both with the editorial rubric.
-8. Choose or revise the stronger structural direction.
-9. Generate the remaining identity/history/memory/back-cover roles.
+- official Figma asset submit path failing at `mcp.figma.com` DNS resolution;
+- Plugin runtime lacking global `fetch` for a direct Drive fetch attempt;
+- compressed inline derivative transport succeeding technically but becoming visibly soft/blocky at actual size;
+- an old timeline image hash rendering as effectively empty/invalid decoration.
 
-## Stop conditions
+Do not retry the same fingerprint cosmetically. A retry requires a material capability or transport change.
 
-Do not claim V6 production progress while:
-- V5 gate is not verified
-- no V6 generated master has passed Drive readback
-- no separate V6 Figma frame exists
-- a concept is only a recolored V5 layout
-- reference imagery is used as production art
-- screenshot and structure evidence are missing
+Until then, continue high-value editorial work with native text, replaceable photo roles, typography, crop, subtraction and minimal semantic geometry. Generated assets remain available for later bounded replacement tests.
+
+## Clean-room boundary
+
+V6 is a separate editorial version, not a recolor/reskin of V5.
+
+Do not inherit V5 literally:
+
+- hero composition;
+- card geometry;
+- crop decisions;
+- generated-photo identity;
+- image hashes merely because they existed in V5;
+- completion claims.
+
+May inherit verified knowledge:
+
+- editorial hierarchy lessons;
+- Japanese typography QA;
+- screenshot/structure QA;
+- Drive-first lifecycle;
+- provenance and rollback rules;
+- failure fingerprints;
+- print plausibility checks.
+
+Current dummy images inside the V6 studies are replaceable layout roles, not final-personal-memory claims.
+
+## Completion gate
+
+Do **not** call V6 complete or print-ready until all of these are true:
+
+- final chosen outer and inside system visually cohere;
+- whole-item, page/reading and actual-size QA pass on the selected final candidate;
+- real copy passes line-break/long-copy QA;
+- final real photography is substituted and crop/contrast QA rerun;
+- all adopted generated/composed decoration has Drive provenance and quality-preserving Figma placement evidence;
+- exact printer/product template is applied;
+- bleed, trim, fold, safe area and page order are verified;
+- PDF preflight passes;
+- actual-size/physical proof passes.
+
+Current state remains:
+
+`VERIFIED_LOCAL_DUMMY_DESIGN_STUDIES / NOT_PRINT_READY`.
+
+## Next highest-value work
+
+1. Continue V6-only visual comparison of M + AJ/AI as one magazine system.
+2. Improve only defects that remain visible at thumbnail/reading/actual-size scales; avoid filler decoration.
+3. If binary transport capability materially changes, test one generated section support in a rollback-safe duplicate and compare against AJ/AI before adoption.
+4. Preserve native text and replaceable-image contracts while replacing dummy content later.
+5. Keep V7 on HOLD until V6 is genuinely coherent and its evidence is reconciled.
