@@ -2,7 +2,7 @@
   "schemaVersion": "rurubu-v6-n-photo-led-chronology-qa-v1",
   "date": "2026-08-15",
   "scope": "Rurubu WEDDING only",
-  "githubMainBeforeWrite": "33c65afa7935d8caba0acf78e316bd6aceb71c47",
+  "githubMainBeforeWrite": "d8a8b800e3c8a41f68bda8694bddccd4dabbe9a0",
   "figmaFileKey": "bfM0d4c9dCeBv5pCkJ3TNM",
   "source": {"nodeId":"1283:2","name":"V6_INSIDE_K_STORY_TIMELINE_2026_08_15"},
   "candidate": {"label":"N","nodeId":"1315:2","name":"V6_INSIDE_N_PHOTO_LED_CHRONOLOGY_2026_08_15"},
@@ -13,8 +13,9 @@
   "decision": "VERIFIED_LOCAL / keep as V6 comparison study; not yet promoted as final V6 inside because generated section-asset placement transport remains blocked",
   "threeScaleEvidence": {
     "wholeItem":"1400x990 spread screenshot PASS after repair; right page is materially more photo-led and less 2x3-grid-like than K",
+    "thumbnail":"500x354 whole-spread screenshot PASS; the irregular six-photo rhythm remains legible instead of collapsing into equal cards",
     "reading":"headline, six event labels and captions remain readable with clear staggered photo hierarchy",
-    "actualSize":"structure readback shows 18px safe-area risk count 0; fold guide x=792.7 width=2"
+    "actualSize":"right page 794x1123 screenshot PASS; six photo/copy groups remain readable with intentional scale contrast and no visible clipping. Structure readback shows 18px safe-area risk count 0; fold guide x=792.7 width=2"
   },
   "structure": {
     "nativeTextCount":28,
