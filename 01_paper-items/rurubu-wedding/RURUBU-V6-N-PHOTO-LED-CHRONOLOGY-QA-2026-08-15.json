@@ -1,0 +1,38 @@
+{
+  "schemaVersion": "rurubu-v6-n-photo-led-chronology-qa-v1",
+  "date": "2026-08-15",
+  "scope": "Rurubu WEDDING only",
+  "githubMainBeforeWrite": "33c65afa7935d8caba0acf78e316bd6aceb71c47",
+  "figmaFileKey": "bfM0d4c9dCeBv5pCkJ3TNM",
+  "source": {"nodeId":"1283:2","name":"V6_INSIDE_K_STORY_TIMELINE_2026_08_15"},
+  "candidate": {"label":"N","nodeId":"1315:2","name":"V6_INSIDE_N_PHOTO_LED_CHRONOLOGY_2026_08_15"},
+  "visibleProblem": "The existing V6 chronology read as an evenly spaced 2x3 event grid and the separate generated chronology module study read as a sparse strip, both too close to template/UI organization for the requested Japanese travel-magazine editorial energy.",
+  "rootCauseHypothesis": "The timeline needs materially different photo scale and irregular vertical rhythm before decorative treatment. A photo-led staggered chronology using only replaceable photo roles and native text should produce stronger editorial scanning while remaining ready for later composed section decoration.",
+  "boundedTest": "Clone K rollback-safely, enlarge the left story hero, keep two overlapping supports, then redistribute the six right-page event photos into staggered unequal sizes. Keep event dates/titles/copy as native text and keep every image as a replaceable IMAGE-fill role. Add no new native decoration.",
+  "firstAttempt": "REJECTED_LOCAL_COORDINATE_ERROR: event images were positioned using spread coordinates while parented to the right-page frame and fell outside the page. The source K remained unchanged. The same N duplicate was repaired after parent-coordinate readback.",
+  "decision": "VERIFIED_LOCAL / keep as V6 comparison study; not yet promoted as final V6 inside because generated section-asset placement transport remains blocked",
+  "threeScaleEvidence": {
+    "wholeItem":"1400x990 spread screenshot PASS after repair; right page is materially more photo-led and less 2x3-grid-like than K",
+    "reading":"headline, six event labels and captions remain readable with clear staggered photo hierarchy",
+    "actualSize":"structure readback shows 18px safe-area risk count 0; fold guide x=792.7 width=2"
+  },
+  "structure": {
+    "nativeTextCount":28,
+    "imageFillCount":9,
+    "replaceablePhotoRoles":9,
+    "safeArea18pxRiskCount":0,
+    "nonDestructiveImageFillRoles":true
+  },
+  "generatedSectionAssets": [
+    {"role":"profile","driveId":"1MfLObNcvsWhQ8nQqgZHeFiDBdjPzj1w8","file":"RURUBU_V6_SECTION_PROFILE_GENERATED_V1_2026-08-15.png","state":"GENERATED + DRIVE_SAVED; NOT_PLACED"},
+    {"role":"qa","driveId":"1M4X4ELmau3_GrCDb6n72xv13R_CszDKR","file":"RURUBU_V6_SECTION_QA_GENERATED_V1_2026-08-15.png","state":"GENERATED + DRIVE_SAVED; NOT_PLACED"},
+    {"role":"timeline","driveId":"1KzAiPYc3HrvUL75Kkv9cPcAN2blQt8MV","file":"RURUBU_V6_SECTION_TIMELINE_GENERATED_V1_2026-08-15.png","state":"GENERATED + DRIVE_SAVED; NOT_PLACED"},
+    {"role":"memories","driveId":"1WhO8iIIx1G9oAxU5-lWSnBEHx_AQpZe0","file":"RURUBU_V6_SECTION_MEMORIES_GENERATED_V1_2026-08-15.png","state":"GENERATED + DRIVE_SAVED; NOT_PLACED"}
+  ],
+  "transportFailure": {
+    "fingerprint":"FIGMA_MCP_UPLOAD_DNS_UNRESOLVED",
+    "symptom":"POST to official upload_assets submit URLs failed with Could not resolve host: mcp.figma.com",
+    "handling":"Known repeated fingerprint; no cosmetic retry. Generated masters were saved to Drive and visual work continued with existing Figma assets and semantic roles."
+  },
+  "notes":"V7 was not modified. WEDDING PASSPORT, BOARDING PASS, 青春ふたりきっぷ and ADD items were not inspected or changed."
+}
