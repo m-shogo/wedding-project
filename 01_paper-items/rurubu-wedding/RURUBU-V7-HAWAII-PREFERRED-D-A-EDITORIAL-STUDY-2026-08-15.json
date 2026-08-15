@@ -1,0 +1,89 @@
+{
+  "schemaVersion": "rurubu-v7-hawaii-preferred-da-study-v1",
+  "date": "2026-08-15",
+  "scope": "Rurubu WEDDING only",
+  "observedGithubMainBeforeWrite": "46216078d837fdf58a14a71ceef3602b15dcc1f7",
+  "figmaFileKey": "bfM0d4c9dCeBv5pCkJ3TNM",
+  "selectionBoundary": {
+    "v6Selected": {"outer":"1241:2 / M","inside":"1233:2 / I"},
+    "v7PreferredStudy": {"outer":"1252:2 / D","inside":"1247:2 / A"},
+    "startHere": {"nodeId":"845:27","text":"V5 FU/FX · V6 M/I · V7 D/A STUDY"},
+    "notFinalReason":"Hawaii-specific hero photography remains an unverified mood placeholder; D/A is the strongest visual study, not final Hawaii asset fidelity."
+  },
+  "outerD": {
+    "nodeId":"1252:2",
+    "name":"V7_HAWAII_CLEANROOM_OUTER_D_PREFERRED_STUDY_2026_08_15",
+    "source":"Outer C 1250:2",
+    "nativeTextCount":20,
+    "replaceableMaskCount":6,
+    "imageNodeCount":6,
+    "safeArea18pxRiskCount":0,
+    "wholeSpreadScreenshot":"PASS / 1200px",
+    "thumbnailScreenshot":"PASS / 500px",
+    "actualSizeFront":"PASS / 794x1123",
+    "changeFromC":"front page paper field only: saturated pink -> warm ivory; FRONT_KICK pink, FRONT_HAWAII navy, FRONT_MOOD pink; geometry, masks, photos and native copy preserved",
+    "visualDecision":"preferred over C because tropical identity is carried by Japanese typography + photography rather than a dominant saturated page field; reads closer to a printed Japanese travel magazine and less like a poster/landing page"
+  },
+  "insideA": {
+    "nodeId":"1247:2",
+    "name":"V7_HAWAII_CLEANROOM_INSIDE_A_PREFERRED_STUDY_2026_08_15",
+    "nativeTextCount":32,
+    "replaceableMaskCount":6,
+    "imageNodeCount":6,
+    "safeArea18pxRiskCount":0,
+    "decision":"retained over Inside B 1250:37 because B strengthened the right photo cluster but did not materially solve the left lower-page density defect; insufficient visual gain"
+  },
+  "comparisonHistory": {
+    "outerB":"1245:2 / hidden / superseded by C",
+    "outerC":"1250:2 / hidden / superseded by D",
+    "outerD":"1252:2 / preferred study",
+    "insideA":"1247:2 / preferred study",
+    "insideB":"1250:37 / hidden / rejected insufficient gain"
+  },
+  "imageHashes": {
+    "outerD": {
+      "yokohamaWaterfront":"539c259be8036b481d06b4f76db9a39b407d90e8",
+      "dining":"d76eb07d83d042f15044c8bc6bf68d73a73cd77d",
+      "cafe":"c1ada11205bc3978bf426b304d683f1c1566cac2",
+      "coastMoodPlaceholder":"adbb8e529451a81dd25e4eb29bf068655569ce25",
+      "travelFlatlay":"e3738476f760932bb5b09c9d60f174dd6c84049d"
+    },
+    "insideA": {
+      "profileCafe":"c1ada11205bc3978bf426b304d683f1c1566cac2",
+      "profileDining":"d76eb07d83d042f15044c8bc6bf68d73a73cd77d",
+      "historyYokohama":"539c259be8036b481d06b4f76db9a39b407d90e8",
+      "coastMoodPlaceholder":"adbb8e529451a81dd25e4eb29bf068655569ce25",
+      "travelFlatlay":"e3738476f760932bb5b09c9d60f174dd6c84049d",
+      "yokohamaSkyline":"644f449c3bf2001a94d4b822d2b55e2614c11042"
+    }
+  },
+  "driveReadback": {
+    "v6HawaiiRoot":"1wHxC2E09JpLIQRNDDTY4i29KMwMY2_XK",
+    "generatedMastersFolder":"1pkkf4BX3ugKdR1rTkgXdp8xTaNGrQD1p",
+    "generatedMastersFolderState":"EMPTY",
+    "figmaDerivativesFolder":"1MSpa1pFo2Xiau81aoEzfYviFY_YGF6S9",
+    "acceptableHawaiiPhotoMasterFound":false,
+    "rejectedExistingImageSearchCandidates":[
+      {"driveId":"1IRdULGftWzGeEU6ndKAU4CtZrnSGSY2F","reason":"line-art with baked Aloha/ABC STORES text; not acceptable as final photo/decoration authority"},
+      {"driveId":"1ow9_Z6uOwpED0_c3_eMrjqipN39PVWib","reason":"line-art with baked ABC STORES/WAIKIKI BEACH text; not acceptable as final photo/decoration authority"}
+    ]
+  },
+  "assetLifecycleThisRun": {
+    "newImageGeneration":0,
+    "newDriveSaves":0,
+    "newFigmaBinaryPlacements":0,
+    "existingVerifiedAssetsRecomposed":true,
+    "outerDAdoptedAsPreferredStudy":true,
+    "insideAAdoptedAsPreferredStudy":true,
+    "visuallyVerified":true,
+    "structureVerified":true,
+    "finalHawaiiAssetVerified":false
+  },
+  "openBlocker": {
+    "state":"BLOCKED",
+    "fingerprint":"HAWAII_SPECIFIC_HERO_MASTER_UNAVAILABLE_IN_REACHABLE_ASSETS",
+    "role":"Hawaii/Oahu-specific dominant hero photography",
+    "reason":"reachable Drive has no acceptable Hawaii photo master and this runtime has no image generation capability; existing coast hash is mood-only and must not be represented as literal Hawaii",
+    "nextMethod":"when generation or an owned/licensed Hawaii source is available: role brief -> master visual QA -> Drive master save/readback -> role derivative -> exact mask placement -> image hash/node verification -> three-scale QA"
+  }
+}
