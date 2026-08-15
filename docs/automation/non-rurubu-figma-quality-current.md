@@ -20,6 +20,42 @@ For this quality pass:
 - prefer a few large, high-value composition changes over repeated one-pixel or decoration-only polish;
 - the completion target is now `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS`, not structural PASS alone.
 
+## Clean-room rebuild mandate — 2026-08-15
+
+The user explicitly changed the production strategy for the non-Rurubu suite: **new V2/V3 work must be rebuilt from zero and must not reuse design items from the previous production. The previous production must remain intact as reference / rollback history.**
+
+This is now a hard authoring rule for the reopened visual pass:
+
+- do **not** duplicate an old frame and merely restyle it as the new V2/V3;
+- do **not** copy old layout groups, ornamental vectors, cards, rails, badges, icons, decorative text blocks, image crops, background compositions, or generated assets into the new clean-room version;
+- do **not** use the old production as a component library;
+- preserve old production, old V2/V3, prior QA boards, rollback copies, and historical evidence in place unless a later explicit cleanup instruction says otherwise;
+- use the previous production only as a comparison/reference artifact for facts, content roles, dimensions, constraints, and failure analysis;
+- verified factual content and verified structural constraints may be re-entered manually in the new version, but the **visual construction itself must start from a blank clean-room frame**;
+- item facts, exact dimensions, printer constraints, semantic roles, maximum 7 guests/table, final-known schedule values, and other verified non-visual requirements are not considered forbidden “design reuse”; they are requirements to be re-authored into the new design;
+- each V2 clean-room direction must establish its own composition, typography system, fixed-art treatment, image/SVG strategy, spacing rhythm, and physical-paper logic from scratch;
+- if V2 is not clearly better at whole-item / reading / actual-size scales, keep the old production untouched and iterate as V3 rather than mutating the old version;
+- promote a clean-room version to production only after it clearly beats the retained previous production and passes the current visual + structural gates.
+
+### Hybrid authoring for clean-room rebuilds
+
+Apply the latest AI + Figma hybrid authoring policy while rebuilding from zero:
+
+- variable copy and facts: native editable Figma text;
+- replaceable photography: stable mask / replaceable image role;
+- reusable flat graphic roles where editability is valuable: clean editable SVG;
+- fixed decorative art, paper fields, collage, background treatments, illustration fragments, and non-variable visual support: generated/composed assets are allowed and encouraged when they improve the result;
+- do not rebuild fixed artwork out of dozens of low-value Figma primitives merely to maximize editability;
+- do not bake variable names, menu items, times, venue facts, directions, QR destinations, table assignments, or guest information into SVG/raster assets.
+
+Where SVG is appropriate, distinguish:
+
+1. **High Fidelity SVG** — visual-truth reference;
+2. **Clean Editable SVG** — working master optimized for sane Figma editing;
+3. **Final Candidate** — preserves editability while closing the visual gap to the high-fidelity reference.
+
+Use overlay/diff, small-size review, and Figma editability QA before calling an SVG final.
+
 ## Exclusive boundary
 
 Rurubu WEDDING is owned by a separate scheduled task. The non-Rurubu task must not read, edit, regenerate, relink, QA, or write any Figma file/page/node, Drive item, GitHub item-specific document, asset, or path whose name/file key/page name/path contains `RURUBU` or `るるぶ`.
@@ -160,14 +196,14 @@ For each target:
 3. inspect actual-size/detail scale;
 4. judge whether the design would still be chosen if it did not already exist;
 5. identify the highest-value visible or structural defect;
-6. when current art direction is weak, create a rollback-safe clean-room comparison instead of polishing the legacy composition forever;
-7. decide whether image generation has a concrete role; if yes, follow the generated-asset workflow above;
-8. preserve a rollback-safe duplicate/proof before material edits;
-9. edit the Figma production design or bounded comparison with native semantic layers;
-10. capture screenshot QA after the edit;
-11. perform structural readback for native text, semantic roles, overflow, crop/editability, safe area, and unintended flatten/rasterization;
-12. test long text and long names where applicable;
-13. for seating content, use **maximum 7 guests per table** and never expand the QA model to 8;
+6. for the reopened rebuild program, create a **blank-frame clean-room V2 from zero** rather than duplicating or restyling old production;
+7. decide per role whether the rebuild should use native text, editable SVG, replaceable image, or generated/composed fixed artwork;
+8. preserve old production unchanged as retained comparison/reference;
+9. capture screenshot QA for both old retained production and new V2 at whole / reading / actual-size scales;
+10. perform structural readback for native text, semantic roles, overflow, crop/editability, safe area, and unintended flatten/rasterization;
+11. test long text and long names where applicable;
+12. for seating content, use **maximum 7 guests per table** and never expand the QA model to 8;
+13. if V2 does not clearly win, keep both and iterate as V3 from a fresh clean-room direction rather than degrading the old production;
 14. record only verified results in item-specific GitHub QA/status evidence.
 
 Unknown guest names, menu copy, times, room names, directions, QR destinations, venue instructions, children information, etc. must use explicit semantic placeholders such as `[... · LAYOUT DUMMY]` as native editable text. Do not invent realistic names or facts.
