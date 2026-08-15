@@ -51,7 +51,7 @@ Transfer value: visual-reopened items and any design stuck in local optimization
 
 State: `PROMOTED_PROJECT_RULE`
 
-When the same tool/environment/input-contract fingerprint fails twice without a material capability change, stop cosmetic retries. Change transport/method or continue another safe target.
+When the same tool/environment/input-contract fingerprint fails twice without a material capability change, stop cosmetic retries. Change transport/method or continue another safe visual target.
 
 Transfer value: Figma binary transfer, Drive upload, image generation/placement, and other repeatable production capabilities.
 
@@ -198,3 +198,29 @@ Figma evidence: FM `1196:285`; non-person profile nodes `1196:290` hash `c1ada11
 What must remain Rurubu-specific: cafe/dining image choices, profile composition, question geometry, colors and travel-magazine treatment.
 
 Cross-item applicability: any wedding artifact that labels a real person must independently verify image identity authority. If verified real photography is absent, use non-person atmosphere or an explicit replaceable placeholder rather than a generated recognizable stranger.
+
+### RSL-012 — Image-role semantics should be reviewed as a set, not one photo at a time
+
+State: `VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`
+
+Source problem: FN's `思い出スポット` cluster combined individually valid imagery whose destination/story semantics conflicted with the surrounding native editorial context. The large coast/resort lead made the page read as a synthetic multi-destination collage even though each raster itself had already passed technical/provenance checks.
+
+Evidence before change: FN `1199:2` had passed profile identity-label separation, structure and actual-size QA, but the lower right page still mixed foreign-looking coast/resort imagery with the Yokohama-oriented issue and captions.
+
+Root-cause hypothesis: individual source quality, crop and provenance are necessary but not sufficient. Adjacent photo roles form a narrative set; semantic contradictions between those roles can undermine plausibility. Asset repetition is a separate concern and should not be solved by subtraction when subtraction destroys visual binding.
+
+Bounded test: FO `1200:2` retained the full native structure and reassigned only the three lower image roles to already-verified Rurubu sources: street hash `439a719d73f28e8dd2889f2026cccb15f345ec63`, exact Q60 Yokohama secondary hash `644f449c3bf2001a94d4b822d2b55e2614c11042`, and waterfront hash `539c259be8036b481d06b4f76db9a39b407d90e8`. FP `1202:2` then tested deduplicating the repeated waterfront by replacing the third image with a text-led callout; it weakened lower-right binding and photo-led closure and was rejected/hidden.
+
+Expected improvement: stronger story/place coherence without unnecessary new generation, while retaining dense editorial rhythm.
+
+Regression risk: semantically coherent sets can over-repeat one source; conversely, aggressive deduplication can remove a role that is doing necessary compositional work. Evaluate coherence, repetition and binding as distinct axes.
+
+Three-scale evidence: FO 1000px spread PASS; actual-size right page ≈795×1123 PASS; visible native text 52; visible IMAGE fills 6; absolute text intersections 0; 18px text safe-area risks 0; fold x=792.700012 / width=2 / height=1122.5.
+
+Figma evidence: FO `1200:2` promoted; lead `1200:267`; exact secondary `1200:268`; support `1200:269`; FN `1199:2` hidden rollback; FP `1202:2` rejected/hidden. Current `77:18 / 77:290` untouched.
+
+Drive/provenance evidence: exact secondary remains bound to Drive `1aVp34U5qUTqd9FR3AILmJggdWwY1lAJb`. Dominant Q60 master `1YL0WAOzYU3O1FGa23ieRuw_Btu4jbmzr`, JPEG 155,439 bytes, was freshly materialized, but a new first-class `Figma.upload_assets` target plus exact mounted-file multipart POST again hit `FIGMA_UPLOAD_DNS_MCP_FIGMA_COM` before mutation. Per RSL-005 it was not retried and does not count as placement.
+
+What must remain Rurubu-specific: Yokohama subject, exact photographs, crop/overlap geometry, Japanese headline treatment, palette and travel-magazine grammar.
+
+Cross-item applicability: another print artifact with multiple photos can independently audit whether the images form one believable editorial story before generating more assets. If a repeated source is detected, compare whether deduplication improves the artifact or merely removes a necessary visual/binding role.
