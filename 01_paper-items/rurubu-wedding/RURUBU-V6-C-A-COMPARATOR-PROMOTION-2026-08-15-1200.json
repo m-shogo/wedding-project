@@ -1,0 +1,60 @@
+{
+  "schemaVersion": "rurubu-v6-comparator-promotion-v1",
+  "date": "2026-08-15",
+  "scope": "Rurubu WEDDING only",
+  "previousAuthority": "01_paper-items/rurubu-wedding/RURUBU-V6-COMPARATOR-A-A-PROMOTION-2026-08-15.json",
+  "previousBest": {"outer": "1221:2", "inside": "1223:2"},
+  "selectedBest": {
+    "outer": {"label": "C", "rootNodeId": "1227:2", "frontNodeId": "1227:34", "backNodeId": "1227:3", "name": "V6_BEST_OUTER_C_YOKOHAMA_FIELD_2026_08_15"},
+    "inside": {"label": "A", "rootNodeId": "1223:2", "name": "V6_BEST_INSIDE_A_PROFILE_MEMORY_EDITORIAL_2026_08_15"}
+  },
+  "startHere": {"statusNodeId": "845:27", "text": "V5 FU/FX · V6 C/A"},
+  "visibleProblem": "Outer A still diluted destination plausibility with a foreign-looking alley used twice and a relatively shallow Yokohama hero. The front read as header + medium hero + support-card row rather than one dominant travel-magazine photo field.",
+  "rootCauseHypothesis": "The issue was not missing raster quantity. Destination semantic coherence and role scale were weak: a non-Yokohama support image was carrying too much visual mass, while the verified Yokohama waterfront image was under-scaled.",
+  "boundedTest": [
+    "Clone only V6 Outer A into rollback-safe C; V5 and Inside A remain untouched.",
+    "Increase the verified Yokohama waterfront hero from 793.7x328 to 793.7x470.",
+    "Keep the exact Q60 skyline postcard bounded and slightly rotated.",
+    "Recompose lower front into one travel-object field plus one smaller cafe-memory overlap rather than the repeated foreign alley.",
+    "Replace the back-cover foreign alley role with the already verified exact Yokohama skyline source.",
+    "Add no new card, shadow, gradient, generated image, or external binary."
+  ],
+  "visualQA": {
+    "wholeItem1000": "PASS_AND_STRONGER_THAN_A",
+    "actualFront794x1123": "PASS",
+    "actualBack794x1123": "PASS",
+    "rationale": "C creates a visibly stronger Yokohama-first cover, removes the foreign alley repetition, and retains dense asymmetric photo rhythm without introducing more UI-like containment."
+  },
+  "structureQA": {
+    "visibleNativeText": 28,
+    "visibleImageFills": 7,
+    "absoluteTextIntersections": 0,
+    "textSafeAreaRisk18px": 0
+  },
+  "assetLifecycle": {
+    "generated": 0,
+    "newDriveSaves": 0,
+    "newExternalBinaryPlaced": 0,
+    "reusedVerifiedSources": [
+      {"imageHash": "539c259be8036b481d06b4f76db9a39b407d90e8", "driveId": "1ndvJShFDKPO6OmUD3JeIRvPwpS8V1v8x", "role": "front Yokohama waterfront hero"},
+      {"imageHash": "644f449c3bf2001a94d4b822d2b55e2614c11042", "driveId": "1aVp34U5qUTqd9FR3AILmJggdWwY1lAJb", "role": "bounded Yokohama skyline postcard and back support"},
+      {"imageHash": "c1ada11205bc3978bf426b304d683f1c1566cac2", "driveId": "1CN3gXWgHccx6WwcsmJcXDfXWgARMLFrO", "role": "front cafe-memory overlap and back cafe memory"},
+      {"imageHash": "e3738476f760932bb5b09c9d60f174dd6c84049d", "driveId": "17YaX5CK-c0cTr4zsL2Dly4J1XSZyFxHG", "role": "front travel-object support"},
+      {"imageHash": "d76eb07d83d042f15044c8bc6bf68d73a73cd77d", "driveId": "1R0JW7jny0XSOaysUzLMLo8n8nDxVGqdy", "role": "back dining dominant"}
+    ],
+    "driveSearchReadback": "The connected Drive search did not return filename-index matches for the two tested exact names in this run; existing verified Drive IDs from the active asset ledger therefore remain provenance authority and no new Drive state was claimed."
+  },
+  "rollback": {
+    "previousOuterA": {"rootNodeId": "1221:2", "name": "V6_PREVIOUS_OUTER_A_DESTINATION_LED_2026_08_15", "preserved": true},
+    "insideAUnchanged": true,
+    "v5Unchanged": true,
+    "legacyCurrentUnchanged": true
+  },
+  "status": {
+    "v6BestComparatorVerified": true,
+    "v6OverallPrintReady": false,
+    "vendorTemplateVerified": false,
+    "realContentFinalized": false,
+    "next": "Continue from C/A. The most visible remaining issue is raster character/print fidelity in the back dining dominant and other atmosphere imagery; image generation should be used only when an exact role brief can be completed through generation -> Drive master/readback -> Figma placement/hash -> three-scale QA."
+  }
+}
