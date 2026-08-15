@@ -1,0 +1,99 @@
+{
+  "schemaVersion": "rurubu-v7-hawaii-preferred-ba-study-v1",
+  "date": "2026-08-15",
+  "scope": "Rurubu WEDDING only",
+  "observedGithubMainBeforeWrite": "c64fe2c75fe805b0adc7b9d578fb39e25b24a794",
+  "figmaFileKey": "bfM0d4c9dCeBv5pCkJ3TNM",
+  "currentSelectionBoundary": {
+    "v6Selected": {"outer":"1241:2 / M","inside":"1233:2 / I"},
+    "v7PreferredStudy": {"outer":"1245:2 / B","inside":"1247:2 / A"},
+    "startHere": {"nodeId":"845:27","text":"V5 FU/FX · V6 M/I · V7 B/A STUDY"},
+    "note":"V7 is not promoted as final because its Hawaii hero is still a semantic placeholder."
+  },
+  "outerB": {
+    "nodeId":"1245:2",
+    "name":"V7_HAWAII_CLEANROOM_OUTER_B_PREFERRED_STUDY_2026_08_15",
+    "nativeTextCount":20,
+    "replaceableMaskCount":6,
+    "safeArea18pxRiskCount":0,
+    "allKnownImageRolesIntrinsicSafe":true,
+    "wholeSpreadScreenshot":"PASS",
+    "actualSizeFront":"PASS",
+    "actualSizeBack":"PASS"
+  },
+  "insideA": {
+    "nodeId":"1247:2",
+    "name":"V7_HAWAII_CLEANROOM_INSIDE_A_PREFERRED_STUDY_2026_08_15",
+    "leftNodeId":"1247:3",
+    "rightNodeId":"1247:4",
+    "nativeTextCount":32,
+    "replaceableMaskCount":6,
+    "safeArea18pxRiskCount":0,
+    "allKnownImageRolesIntrinsicSafe":true,
+    "wholeSpreadScreenshot":"PASS",
+    "actualSizeLeft":"PASS after profile title fit correction",
+    "actualSizeRight":"PASS"
+  },
+  "outerComparison": {
+    "A":"1244:2 / SUPERSEDED and hidden",
+    "B":"1245:2 / preferred study",
+    "reason":"A established tropical color and photo-led direction but was too evenly arranged and poster/landing-page-like. B strengthened Japanese headline dominance, asymmetry, rotation and non-uniform photo scale without introducing decorative micro-geometry."
+  },
+  "hybridAuthoringEvidence": {
+    "nativeVariableText":true,
+    "fixedDecorativeMicroGeometryIntroduced":false,
+    "photoRolesUseClippedMaskFrames":true,
+    "svgIntroducedThisRun":false,
+    "textBakedIntoGeneratedImages":false,
+    "notes":"Background page fills are semantic page fields. All copy remains native. All photography is behind stable named MASK / roles."
+  },
+  "replacementResilienceProof": {
+    "nodeId":"1246:2",
+    "status":"PASS / hidden",
+    "test":"front hero source changed from 796x428 coast family to 1356x560 Yokohama waterfront family while mask geometry stayed 793.7x420",
+    "result":"visual crop changed; surrounding title/support-photo/footer layout did not reconstruct"
+  },
+  "outerImageRoles": [
+    {"mask":"1245:4","role":"Yokohama reality waterfront","display":[793.7,328],"intrinsic":[1356,560],"intrinsicSafe":true},
+    {"mask":"1245:6","role":"dining memory","display":[460,314],"intrinsic":[732,498],"intrinsicSafe":true},
+    {"mask":"1245:8","role":"cafe memory","display":[300,226],"intrinsic":[810,552],"intrinsicSafe":true},
+    {"mask":"1245:21","role":"Hawaii-mood coast hero placeholder","display":[793.7,420],"intrinsic":[796,428],"intrinsicSafe":true},
+    {"mask":"1245:23","role":"travel flatlay support","display":[510,330],"intrinsic":[944,608],"intrinsicSafe":true},
+    {"mask":"1245:25","role":"cafe support","display":[292,224],"intrinsic":[810,552],"intrinsicSafe":true}
+  ],
+  "insideImageRoles": [
+    {"mask":"1247:5","role":"profile cafe dominant","display":[483,300],"intrinsic":[810,552],"intrinsicSafe":true},
+    {"mask":"1247:7","role":"profile dining support","display":[250,210],"intrinsic":[732,498],"intrinsicSafe":true},
+    {"mask":"1247:9","role":"history Yokohama reality","display":[793.7,300],"intrinsic":[1356,560],"intrinsicSafe":true},
+    {"mask":"1247:11","role":"next-trip coast placeholder","display":[530,285],"intrinsic":[796,428],"intrinsicSafe":true},
+    {"mask":"1247:13","role":"travel flatlay support","display":[320,210],"intrinsic":[944,608],"intrinsicSafe":true},
+    {"mask":"1247:15","role":"Yokohama skyline support","display":[220,202],"intrinsic":[240,220],"intrinsicSafe":true}
+  ],
+  "referenceResearch": {
+    "officialPublicSourcesReviewed":[
+      "JTB Publishing るるぶハワイ'26",
+      "JTB Publishing るるぶホノルル'27"
+    ],
+    "adoptedGrammarOnly":["bright pink/aqua tropical energy","dominant ocean imagery","large Japanese/destination headline","food/travel support imagery","dense asymmetric travel-guide rhythm"],
+    "protectedOrLiteralMaterialCopied":false
+  },
+  "knownOpenQualityBlocker": {
+    "status":"BLOCKED_FOR_FINAL_V7_ASSET_FIDELITY",
+    "role":"Hawaii-specific hero photography",
+    "reason":"current coast imagery is structurally useful but is not verified Hawaii photography; final V7 must use a believable Hawaii/Oahu master or clearly remain mood-only",
+    "approvedNextMethod":"role-specific generation or licensed/owned Hawaii destination master followed by Drive save/readback, derivative QA, exact mask placement, hash/node verification and three-scale screenshot QA",
+    "doNot":"do not label the current coast placeholder as literal Hawaii"
+  },
+  "assetLifecycleThisRun": {
+    "generated":0,
+    "newDriveSaves":0,
+    "newExternalBinaryPlacements":0,
+    "existingVerifiedAssetsRecomposed":true,
+    "candidateAAdopted":false,
+    "candidateBOuterPreferred":true,
+    "insideAPreferred":true,
+    "visuallyVerified":true,
+    "structureVerified":true,
+    "replacementStressVerified":true
+  }
+}
