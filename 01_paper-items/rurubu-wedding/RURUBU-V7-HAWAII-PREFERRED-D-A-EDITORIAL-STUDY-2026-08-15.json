@@ -2,7 +2,7 @@
   "schemaVersion": "rurubu-v7-hawaii-preferred-da-study-v1",
   "date": "2026-08-15",
   "scope": "Rurubu WEDDING only",
-  "observedGithubMainBeforeWrite": "46216078d837fdf58a14a71ceef3602b15dcc1f7",
+  "observedGithubMainBeforeInitialWrite": "46216078d837fdf58a14a71ceef3602b15dcc1f7",
   "figmaFileKey": "bfM0d4c9dCeBv5pCkJ3TNM",
   "selectionBoundary": {
     "v6Selected": {"outer":"1241:2 / M","inside":"1233:2 / I"},
@@ -37,8 +37,18 @@
     "outerB":"1245:2 / hidden / superseded by C",
     "outerC":"1250:2 / hidden / superseded by D",
     "outerD":"1252:2 / preferred study",
+    "outerE":"1256:2 / hidden / rejected: both-side ivory made back page over-quiet and weakened photo-boundary title contrast",
     "insideA":"1247:2 / preferred study",
     "insideB":"1250:37 / hidden / rejected insufficient gain"
+  },
+  "outerECounterTest": {
+    "nodeId":"1256:2",
+    "name":"V7_HAWAII_CLEANROOM_OUTER_E_REJECTED_OVERQUIET_BACK_CONTRAST_2026_08_15",
+    "test":"change D back-page turquoise field to warm ivory and recolor only native labels/date; preserve images, masks, geometry and wording",
+    "expected":"stronger two-page paper-system cohesion",
+    "observed":"spread became too quiet and the back-page turquoise field proved to have useful binding/contrast function; white back title weakened near photo/paper boundary",
+    "status":"REJECTED / hidden",
+    "lesson":"do not generalize D into all-ivory; evaluate field function per page"
   },
   "imageHashes": {
     "outerD": {
@@ -75,6 +85,7 @@
     "existingVerifiedAssetsRecomposed":true,
     "outerDAdoptedAsPreferredStudy":true,
     "insideAAdoptedAsPreferredStudy":true,
+    "outerECounterTestRejected":true,
     "visuallyVerified":true,
     "structureVerified":true,
     "finalHawaiiAssetVerified":false
