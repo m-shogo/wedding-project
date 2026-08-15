@@ -36,8 +36,12 @@
       "nodeId": "1209:153",
       "name": "FU_DOMINANT_TRAVEL_OBJECT_MAP_CAMERA_RINGS",
       "imageHash": "e3738476f760932bb5b09c9d60f174dd6c84049d",
+      "driveDerivativeId": "17YaX5CK-c0cTr4zsL2Dly4J1XSZyFxHG",
+      "driveFileName": "RURUBU_V5_10_BACK_MAIN_TRAVEL_FLATLAY__FIGMA_944x608_Q18_SINGLECALL.jpg",
+      "driveMimeType": "image/jpeg",
       "intrinsic": [944,608],
-      "display": [793.7,512]
+      "display": [793.7,512],
+      "driveReadback": "VERIFIED_THIS_RUN"
     },
     "streetSupport": {
       "nodeId": "1209:164",
