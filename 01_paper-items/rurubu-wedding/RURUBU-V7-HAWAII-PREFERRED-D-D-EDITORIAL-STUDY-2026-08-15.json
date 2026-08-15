@@ -1,0 +1,81 @@
+{
+  "schemaVersion": "rurubu-v7-hawaii-preferred-dd-study-v1",
+  "date": "2026-08-15",
+  "scope": "Rurubu WEDDING only",
+  "observedGithubMainBeforeWrite": "f2ecf3616d9bcc4317926727c16ca0ad49aa8a11",
+  "figmaFileKey": "bfM0d4c9dCeBv5pCkJ3TNM",
+  "selectionBoundary": {
+    "v6Selected": {"outer":"1241:2 / M","inside":"1233:2 / I"},
+    "v7PreferredStudy": {"outer":"1252:2 / D","inside":"1259:2 / D"},
+    "startHere": {"nodeId":"845:27","text":"V5 FU/FX · V6 M/I · V7 D/D STUDY"},
+    "notFinalReason":"Hawaii-specific hero photography remains an unverified mood placeholder. D/D is the strongest current editorial study, not final Hawaii asset fidelity or print readiness."
+  },
+  "insideD": {
+    "nodeId":"1259:2",
+    "name":"V7_HAWAII_CLEANROOM_INSIDE_D_PREFERRED_STUDY_2026_08_15",
+    "source":"Inside A 1247:2 through bounded C and D comparisons",
+    "visibleProblem":"Inside A left page concentrated photography/profile density in the upper half while the lower common-point payoff was isolated near the footer, leaving the Q&A and lower page feeling disconnected and under-edited.",
+    "rootCauseHypothesis":"The lower-page weakness came from editorial hierarchy and vertical rhythm, not from missing decoration. A stronger native-type payoff could create a second focal anchor without adding weak or repeated imagery.",
+    "boundedChanges":[
+      "moved 3 QUESTIONS and Q1/Q2/Q3 native text upward into a tighter editorial field",
+      "moved OUR COMMON POINT into the active reading path",
+      "increased only the native COMMON payoff typography from 23px to 34px and widened it to 650px",
+      "narrowed Q1 answer text box from 500px to 450px after absolute-bound collision QA, with characters/font-size/line count preserved",
+      "preserved all photography, masks, image hashes, right page geometry, factual wording and semantic native text"
+    ],
+    "nativeTextCount":32,
+    "replaceableMaskCount":6,
+    "imageNodeCount":6,
+    "wholeSpreadScreenshot":"PASS / 1200px",
+    "thumbnailScreenshot":"PASS / 500px",
+    "actualSizeLeft":"PASS / 794x1123",
+    "leftDirectTextCollisionCount":0,
+    "nonBleedSafeArea18pxRiskCount":0,
+    "intentionalBleedRoles":["MASK / PROFILE_CAFE_DOMINANT","MASK / HISTORY_YOKOHAMA_REALITY"],
+    "visualDecision":"preferred over Inside A and intermediate C because the left page now has a deliberate second typographic focal point and a more continuous profile -> Q&A -> shared-travel reading path, without adding card/UI geometry or repeated imagery"
+  },
+  "comparisonHistory": {
+    "insideA":"1247:2 / hidden / previous preferred rollback",
+    "insideB":"1250:37 / hidden / rejected insufficient gain",
+    "insideC":"1258:2 / hidden / locally improved spacing but lower editorial payoff still too weak",
+    "insideD":"1259:2 / preferred study",
+    "outerD":"1252:2 / preferred study",
+    "outerE":"1256:2 / hidden / rejected over-quiet back contrast"
+  },
+  "imageHashes": {
+    "insideD": {
+      "profileCafe":"c1ada11205bc3978bf426b304d683f1c1566cac2",
+      "profileDining":"d76eb07d83d042f15044c8bc6bf68d73a73cd77d",
+      "historyYokohama":"539c259be8036b481d06b4f76db9a39b407d90e8",
+      "coastMoodPlaceholder":"adbb8e529451a81dd25e4eb29bf068655569ce25",
+      "travelFlatlay":"e3738476f760932bb5b09c9d60f174dd6c84049d",
+      "yokohamaSkyline":"644f449c3bf2001a94d4b822d2b55e2614c11042"
+    }
+  },
+  "driveReadback": {
+    "v6HawaiiRoot":"1wHxC2E09JpLIQRNDDTY4i29KMwMY2_XK",
+    "generatedMastersFolder":"1pkkf4BX3ugKdR1rTkgXdp8xTaNGrQD1p",
+    "generatedMastersFolderState":"EMPTY",
+    "newDriveWrites":0,
+    "acceptableHawaiiPhotoMasterFound":false
+  },
+  "assetLifecycleThisRun": {
+    "newImageGeneration":0,
+    "newDriveSaves":0,
+    "newFigmaBinaryPlacements":0,
+    "existingVerifiedAssetsRecomposed":true,
+    "insideDAdoptedAsPreferredStudy":true,
+    "visuallyVerified":true,
+    "structureVerified":true,
+    "nodeHashesVerified":true,
+    "finalHawaiiAssetVerified":false
+  },
+  "learningState":"VERIFIED_LOCAL -> CROSS_ITEM_CANDIDATE",
+  "openBlocker": {
+    "state":"BLOCKED",
+    "fingerprint":"HAWAII_SPECIFIC_HERO_MASTER_UNAVAILABLE_IN_REACHABLE_ASSETS",
+    "role":"Hawaii/Oahu-specific dominant hero photography",
+    "reason":"Rurubu Hawaii generated-master Drive folder remains empty and no acceptable owned/licensed Hawaii hero is reachable. Current coast image remains mood-only and must not be represented as literal Hawaii.",
+    "nextMethod":"when a generation capability or owned/licensed Hawaii source is available: role brief -> master visual QA -> Drive master save/readback -> derivative QA -> exact mask placement -> node/hash verification -> three-scale screenshot and structure QA"
+  }
+}
