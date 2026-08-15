@@ -1,0 +1,51 @@
+{
+  "schemaVersion": "rurubu-v6-o-am-ap-active-asset-reconciliation-v1",
+  "date": "2026-08-16",
+  "scope": "Rurubu WEDDING V6 current preferred O + AM/AP studies only",
+  "observedGithubMainBeforeWrite": "f2753b317f098957357016bdead2a0302c7af862",
+  "figmaFileKey": "bfM0d4c9dCeBv5pCkJ3TNM",
+  "selectedFrames": {
+    "outer": {"label": "O", "nodeId": "1370:2"},
+    "profileQa": {"label": "AM", "nodeId": "1380:18"},
+    "storyChronology": {"label": "AP", "nodeId": "1384:2"}
+  },
+  "startHereStatus": {
+    "nodeId": "845:27",
+    "text": "V5 FU/FX · V6 O + AM/AP INSIDE STUDIES · V7 HOLD"
+  },
+  "apStoryImageRoles": [
+    {"nodeId":"1384:7","role":"AP story hero","imageHash":"539c259be8036b481d06b4f76db9a39b407d90e8","registeredIntrinsic":[1356,560],"display":[650,455],"scaleMode":"FILL"},
+    {"nodeId":"1384:8","role":"AP story support 1","imageHash":"644f449c3bf2001a94d4b822d2b55e2614c11042","registeredIntrinsic":[240,220],"display":[205,188],"scaleMode":"FILL"},
+    {"nodeId":"1384:9","role":"AP story support 2","imageHash":"c1ada11205bc3978bf426b304d683f1c1566cac2","registeredIntrinsic":[810,552],"display":[300,255],"scaleMode":"FILL"}
+  ],
+  "apChronologyImageRoles": [
+    {"nodeId":"1384:19","role":"AP chronology event 01","imageHash":"539c259be8036b481d06b4f76db9a39b407d90e8","registeredIntrinsic":[1356,560],"display":[325,155],"scaleMode":"FILL"},
+    {"nodeId":"1384:27","role":"AP chronology event 03","imageHash":"644f449c3bf2001a94d4b822d2b55e2614c11042","registeredIntrinsic":[240,220],"display":[300,145],"scaleMode":"FILL","intrinsicNote":"display width exceeds registered width; visual role is temporary dummy study and not print-ready"},
+    {"nodeId":"1384:35","role":"AP chronology event 05","imageHash":"d76eb07d83d042f15044c8bc6bf68d73a73cd77d","registeredIntrinsic":[732,498],"display":[335,150],"scaleMode":"FILL"},
+    {"nodeId":"1384:44","role":"AP chronology feature hero","imageHash":"e3738476f760932bb5b09c9d60f174dd6c84049d","registeredIntrinsic":[944,608],"display":[505,305],"scaleMode":"FILL"},
+    {"nodeId":"1384:45","role":"AP chronology feature support 1","imageHash":"539c259be8036b481d06b4f76db9a39b407d90e8","registeredIntrinsic":[1356,560],"display":[250,150],"scaleMode":"FILL"},
+    {"nodeId":"1384:46","role":"AP chronology feature support 2","imageHash":"439a719d73f28e8dd2889f2026cccb15f345ec63","registeredIntrinsic":[352,368],"display":[225,150],"scaleMode":"FILL"}
+  ],
+  "qa": {
+    "apStory": {"whole500":"PASS","whole1400":"PASS","actual794x1123":"PASS","visibleNativeText":7,"replaceableImageRoles":3,"textIntersections":0,"safeArea18pxRisks":0},
+    "apChronology": {"whole500":"PASS","whole1400":"PASS","actual794x1123":"PASS","visibleNativeText":27,"replaceableImageRoles":6,"textIntersections":0,"safeArea18pxRisks":0,"outsideVisibleNodes":0},
+    "rollbackPreserved": true
+  },
+  "transportState": {
+    "timelineDriveMasterId":"1uRP3ri4MKw1g8_vtNDxBoazuAm4Hq3B8",
+    "timelineDriveRawDownload":"PASS",
+    "timelineDriveBytes":1242829,
+    "figmaUploadSubmit":"BLOCKED_DNS_MCP_FIGMA_COM",
+    "generatedDecorationPlaced":false,
+    "generatedDecorationAdopted":false
+  },
+  "assetLifecycleThisRun": {
+    "generated":0,
+    "newDriveSaves":0,
+    "newExternalBinaryUploads":0,
+    "existingVerifiedPhotoSourcesRecomposed":true,
+    "nativeEditableCopyPreserved":true,
+    "v7Touched":false
+  },
+  "status": "VERIFIED_LOCAL_DUMMY_ASSET_RECONCILIATION / AP_PROMOTED / ONE_TEMPORARY_EVENT_ROLE_EXCEEDS_REGISTERED_WIDTH / V7_HOLD / NOT_PRINT_READY"
+}
