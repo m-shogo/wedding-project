@@ -1,0 +1,67 @@
+{
+  "schemaVersion": "rurubu-v6-comparator-promotion-v1",
+  "date": "2026-08-15",
+  "scope": "Rurubu WEDDING only",
+  "previousAuthority": "01_paper-items/rurubu-wedding/RURUBU-V6-D-A-COMPARATOR-PROMOTION-2026-08-15-1300.json",
+  "previousBest": {"outer": "1229:2", "inside": "1223:2"},
+  "selectedBest": {
+    "outer": {"label": "H", "rootNodeId": "1232:55", "backNodeId": "1232:56", "name": "V6_BEST_OUTER_H_TWO_LINE_BACK_HEADLINE_2026_08_15"},
+    "inside": {"label": "A", "rootNodeId": "1223:2", "name": "V6_BEST_INSIDE_A_PROFILE_MEMORY_EDITORIAL_2026_08_15"}
+  },
+  "startHere": {"statusNodeId": "845:27", "text": "V5 FU/FX · V6 H/A"},
+  "visibleProblem": "V6 D back-cover Japanese headline had an unintended third rendered line: the explicit copy contained two lines, but the 220px text box forced the final character 色 onto a third line at actual size. This weakened the navy-panel hierarchy even though structure checks and copy itself were otherwise valid.",
+  "rootCauseHypothesis": "Japanese editorial headline QA must validate the rendered text box width and actual wrap, not only the source string/newline positions. A fixed-width native text box can introduce an extra orphan character without changing characters.",
+  "boundedTest": [
+    "Preserve V6 D imagery, palette, all other typography, fold guide, inside A, V5 and legacy Current.",
+    "Clone D to H and change only the back title text-box geometry: x 548 → 541, width 220 → 234, height 128 → 96; characters remain exactly 旅の途中で\\n見つけた景色 and font size remains 39.",
+    "Verify actual-size back and whole-spread render, then run post-readback collision and 18px safe-area checks.",
+    "Keep D as hidden rollback."
+  ],
+  "visualQA": {
+    "wholeItem1400": "PASS_AND_STRONGER",
+    "actualBack794x1123": "PASS",
+    "rationale": "The headline now renders as the intended two strong lines with no single-character orphan. The navy block reads cleaner and more like deliberate Japanese magazine typography without adding decoration or changing content."
+  },
+  "structureQA": {
+    "visibleNativeText": 28,
+    "visibleImageFills": 7,
+    "sameParentTextIntersections": 0,
+    "textSafeAreaRisk18px": 0,
+    "titleNodeId": "1232:60",
+    "titleGeometry": {"x": 541, "y": 74, "width": 234, "height": 96}
+  },
+  "assetLifecycle": {
+    "generated": 0,
+    "newDriveSaves": 0,
+    "newExternalBinaryPlaced": 0,
+    "driveToFigmaQ90Attempt": {
+      "driveId": "1gZyIF4STQp3LN_V3haxFXFBTNebLPgcd",
+      "driveFile": "RURUBU_V5_01_COVER_HERO_YOKOHAMA__FIGMA_1330x1220_Q90.jpg",
+      "mimeType": "image/jpeg",
+      "sizeBytes": 315267,
+      "localMaterialization": "PASS",
+      "figmaUploadTargetNode": "1232:4",
+      "result": "BLOCKED_BEFORE_MUTATION",
+      "failureFingerprint": "mcp.figma.com DNS resolution failure on upload_assets submit POST",
+      "retryDecision": "STOP_SAME_METHOD_PER_RSL_005"
+    },
+    "roleExperiments": [
+      {"candidate": "E", "rootNodeId": "1231:2", "status": "REJECTED_HIDDEN", "reason": "Using the same Yokohama waterfront as both front and back dominant made whole-spread repetition too obvious."},
+      {"candidate": "F", "rootNodeId": "1231:55", "status": "REJECTED_HIDDEN", "reason": "Tight imageTransform crop reduced the full-bleed visual field and created unintended cream margin; weaker than D."},
+      {"candidate": "G", "rootNodeId": "1232:2", "status": "BLOCKED_HIDDEN", "reason": "High-resolution Drive Q90 placement could not reach Figma because the known DNS transport fingerprint recurred before mutation."}
+    ]
+  },
+  "rollback": {
+    "previousOuterD": {"rootNodeId": "1229:2", "name": "V6_PREVIOUS_OUTER_D_INTRINSIC_SAFE_SUPPORT_2026_08_15", "preserved": true, "visible": false},
+    "insideAUnchanged": true,
+    "v5Unchanged": true,
+    "legacyCurrentUnchanged": true
+  },
+  "status": {
+    "v6BestComparatorVerified": true,
+    "v6OverallPrintReady": false,
+    "vendorTemplateVerified": false,
+    "realContentFinalized": false,
+    "next": "Continue from H/A. The back dining dominant remains semantically weaker than the Yokohama front. Do not retry the same upload transport until a material capability/environment change. Continue safe native editorial improvements or use a genuinely available non-paid image-generation/transport path when present."
+  }
+}
