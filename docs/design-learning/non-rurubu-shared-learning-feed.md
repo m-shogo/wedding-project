@@ -101,7 +101,7 @@ Continue applying this check when a third materially different print artifact mo
 
 Source scope/item: non-Rurubu / ADD-10 会場案内サイン
 
-State: `VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`
+State: `VERIFIED_CROSS_ITEM`
 
 Consumed neutral hypothesis: RSL-008 from the Rurubu shared feed. No Rurubu production node, asset, item-specific path, palette or layout was inspected or copied.
 
@@ -132,7 +132,7 @@ Use the page more fully while keeping a coherent top-to-middle reading path with
 
 ### Regression risk
 
-Extending a line without a real binding role can become meaningless decoration, over-segment the page, or turn into a template signature repeated across unrelated items.
+Extending a line without a real binding role can become meaningless decoration, over-segment the page, or turn into a template signature repeated across unrelated items. Conversely, removing a line merely because it looks decorative can break a real binding relationship. The decision must be made per artifact, not by a global keep/remove rule.
 
 ### Three-scale evidence
 
@@ -158,11 +158,45 @@ Do not transfer ADD-10's deep-navy split field, rust seam, arrow geometry, exact
 
 ### Cross-item applicability hypothesis
 
-Before removing or extending a border/rule/rail during UI-subtraction or spacing polish, another print item can independently compare whether the element performs a real binding function between image/caption, title/body, date/events, or physical artifact regions at thumbnail scale.
+Before removing or extending a border/rule/rail during UI-subtraction or spacing polish, another print item should independently compare whether the element performs a real binding function between image/caption, title/body, date/events, or physical artifact regions at thumbnail scale.
+
+### Cross-item verification — ADD-11 / 2026-08-15
+
+ADD-11 写真共有 / QR案内 independently reproduced the **method**, with the opposite visual outcome from ADD-10. Its cream editorial field and deep-navy QR authority field were already grouped by a full-height/full-width field boundary. The rust `ACCENT_EDGE` repeated that split instead of binding otherwise-disconnected information.
+
+Rollback-safe seam-off candidates were created for all materially different size/reflow variants:
+
+- A5 `15:2 / QA_ADD11_A5_NO_SPLIT_SEAM_2026_08_15`
+- A6 `16:2 / QA_ADD11_A6_NO_ACCENT_SEAM_2026_08_15`
+- A4 `16:18 / QA_ADD11_A4_NO_ACCENT_SEAM_2026_08_15`
+
+The test changed only the cloned seam visibility. QR geometry, semantic placeholders, typography, privacy copy, date and sizes did not change.
+
+Three-scale / variant evidence:
+
+- A5 whole-item 500px: PASS without seam; cream/navy grouping remains immediate.
+- A5 reading 1000px: PASS; title → body/steps → QR field hierarchy is clearer and less template-segmented.
+- A5 actual-size 875×1240: PASS.
+- A6 actual-size 620×875: PASS; horizontal field boundary alone is sufficient.
+- A4 990×1400 render from native 1240×1754: PASS; vertical field boundary alone is sufficient.
+
+Production adopted seam subtraction only after full rollback copies were created:
+
+- production: `1:31 / 1:45 / 3:2`
+- seam nodes hidden: `6:19 / 6:49 / 6:79`
+- hidden rollbacks: `16:34 / 16:50 / 16:66`
+- post-readback: each production retains native text `10`, IMAGE fills `0`, `clipsContent=true`, and seam hidden.
+- Drive authority: `1wuxHEqby_0JWS0bYV0RWCTUotM88Mnxb`
+- item QA: `01_paper-items/additional-wedding-items/ADD-11-photo-share-qr-sign/QA.md`
+- item Git commit: `ae2f6e07853816f86076915f7db078a30663a345`
+
+This verifies that the transferable principle is **not** “keep seams” or “remove seams.” It is: prove the binding function at whole-item scale, then retain, extend, reduce, or remove the element according to that evidence. ADD-10 retained/extended a real binder; ADD-11 removed a redundant separator.
+
+No image generation or Drive write was involved in either receiving-item decision.
 
 ### Next receiving-item experiment
 
-Only when a future non-Rurubu item has a visible border/rule/rail whose purpose is ambiguous, test one bounded subtraction/retention comparison. If another materially different item reproduces the benefit without adding template sameness, advance this lesson to `VERIFIED_CROSS_ITEM`.
+Treat `VERIFIED_CROSS_ITEM` as a QA-method default, not a visual-style default. On a future materially different artifact, use one bounded comparison when a border/rule/rail has ambiguous purpose. If the element is required for trim, scan, binding, ticket/perforation semantics, image-caption attachment, or another physical role, preserve that role rather than forcing subtraction.
 
 ## NRSL-003 — Preserve functional quiet zones without drawing UI-like boxes around them
 
