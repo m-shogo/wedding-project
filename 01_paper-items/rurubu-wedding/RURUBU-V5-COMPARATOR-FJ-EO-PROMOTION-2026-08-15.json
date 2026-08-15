@@ -1,0 +1,62 @@
+{
+  "schemaVersion": "rurubu-v5-comparator-promotion-v1",
+  "date": "2026-08-15",
+  "scope": "Rurubu WEDDING only",
+  "authorityOrder": ["live Figma", "fresh Google Drive readback", "asset evidence ledger/overlays", "GitHub main"],
+  "startingMainSha": "ff4c3142cb919e5c963a53f896d358571b073717",
+  "learningCommitBeforeAuthority": "d3ce8cde6cd6ea766607fcbcf36f1f171fd654c9",
+  "currentUntouched": {"outer": "77:18", "inside": "77:290"},
+  "best": {
+    "outer": {"label": "FJ", "reviewNodeId": "1193:2", "backNodeId": "1193:3", "frontNodeId": "1193:132", "name": "BEST_CLEANROOM_OUTER_FJ_REVIEW_2026_08_15", "status": "VERIFIED_LOCAL_ADOPTED"},
+    "inside": {"label": "EO", "sourceNodeId": "1107:285", "status": "UNCHANGED_FROM_PREVIOUS_VERIFIED_AUTHORITY"}
+  },
+  "outerChange": {
+    "sourceBest": "FH 1190:194",
+    "rejectedStudy": "FI 1192:2",
+    "promotedBest": "FJ 1193:2",
+    "problem": "FH back cover still read as cream header + photo + lower collage/timeline. FI also showed that removing the lower-right photo created dead cream space.",
+    "principle": "When content is coherent but the page reads as stacked digital sections, test extending an existing legitimate image field behind native type before adding decoration or removing supporting imagery.",
+    "boundedChange": "Only the back dominant photo changed from y=150/h=530 to y=0/h=650; headline/subhead remained native and above the photo; all lower collage/timeline content and the front cover were preserved.",
+    "generated": 0,
+    "newGeneratedAssetAdopted": 0,
+    "newExternalBinaryPlaced": 0
+  },
+  "qa": {
+    "thumbnail500": "PASS_STRONGER_THAN_FH",
+    "wholeReading1000Equivalent": "PASS",
+    "actualBack798x1123": "PASS",
+    "actualFront794x1123": "PASS",
+    "visibleNativeText": 35,
+    "visibleImageFills": 7,
+    "absoluteTextIntersections": 0,
+    "textSafeAreaRisk18px": 0
+  },
+  "q60Secondary": {
+    "driveId": "1aVp34U5qUTqd9FR3AILmJggdWwY1lAJb",
+    "mimeType": "image/jpeg",
+    "sizeBytes": 10284,
+    "figmaNodeId": "1193:189",
+    "imageHash": "644f449c3bf2001a94d4b822d2b55e2614c11042",
+    "status": "VERIFIED_SECONDARY_ONLY"
+  },
+  "q60Master": {
+    "driveId": "1YL0WAOzYU3O1FGa23ieRuw_Btu4jbmzr",
+    "mimeType": "image/jpeg",
+    "sizeBytes": 155439,
+    "visuallyInspectedFromDrive": true,
+    "dominantExactFigmaPlacement": false,
+    "transportFailureFingerprint": "FIGMA_UPLOAD_DNS_MCP_FIGMA_COM",
+    "status": "OPEN"
+  },
+  "rollback": {
+    "fh": {"nodeId": "1190:194", "name": "ROLLBACK_HIDDEN_OUTER_FH_2026_08_15", "visible": false},
+    "fi": {"nodeId": "1192:2", "name": "REJECTED_HIDDEN_OUTER_FI_RIGHT_MASS_DEADSPACE_2026_08_15", "visible": false}
+  },
+  "learning": {
+    "rsl008": "advanced to VERIFIED_CROSS_ITEM using neutral NRSL-002 cross-item evidence",
+    "rsl009": "VERIFIED_LOCAL_TO_CROSS_ITEM_CANDIDATE"
+  },
+  "v5Complete": false,
+  "v6ProductionStarted": false,
+  "remainingGate": "Dominant Q60 master exact Figma provenance followed by final asset/print/fold/ledger reconciliation."
+}
