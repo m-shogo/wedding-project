@@ -1,0 +1,61 @@
+{
+  "schemaVersion": "rurubu-v6-comparator-promotion-v1",
+  "date": "2026-08-15",
+  "scope": "Rurubu WEDDING only",
+  "previousAuthority": "01_paper-items/rurubu-wedding/RURUBU-V6-C-A-COMPARATOR-PROMOTION-2026-08-15-1200.json",
+  "previousBest": {"outer": "1227:2", "inside": "1223:2"},
+  "selectedBest": {
+    "outer": {"label": "D", "rootNodeId": "1229:2", "backNodeId": "1229:3", "name": "V6_BEST_OUTER_D_INTRINSIC_SAFE_SUPPORT_2026_08_15"},
+    "inside": {"label": "A", "rootNodeId": "1223:2", "name": "V6_BEST_INSIDE_A_PROFILE_MEMORY_EDITORIAL_2026_08_15"}
+  },
+  "startHere": {"statusNodeId": "845:27", "text": "V5 FU/FX · V6 D/A"},
+  "visibleProblem": "V6 C visually passed, but its back Yokohama skyline support displayed a 240x220 source at 306x270. That meant the selected comparator contained one raster role enlarged beyond intrinsic pixel dimensions even though the same source could carry the editorial role at a smaller scale.",
+  "rootCauseHypothesis": "A small support raster should not be promoted by visual balance alone when the role can remain legible at or below intrinsic dimensions. Print-fidelity QA must check intrinsic/display ratio per image role, not only whole-page screenshots.",
+  "boundedTest": [
+    "Clone only V6 Outer C into rollback-safe D; keep V5 and Inside A untouched.",
+    "Resize only back support skyline node from 306x270 to 240x220 and reposition it to preserve the asymmetric cafe/skyline pair.",
+    "Do not change image hash, Drive provenance, front composition, typography, cards, shadows, gradients, or any other raster role.",
+    "Compare actual-size back and whole outer spread before promotion."
+  ],
+  "visualQA": {
+    "wholeItem1400": "PASS_AND_COHERENT",
+    "actualBack794x1123": "PASS",
+    "rationale": "The smaller skyline remains clearly legible as a supporting postcard, increases scale contrast against the cafe image, and removes the only below-1x intrinsic/display ratio in the selected Outer comparator."
+  },
+  "structureQA": {
+    "visibleNativeText": 28,
+    "visibleImageFills": 7,
+    "sameParentTextIntersections": 0,
+    "textSafeAreaRisk18px": 0,
+    "allOuterImageDisplayRatiosAtLeast1x": true
+  },
+  "assetLifecycle": {
+    "generated": 0,
+    "newDriveSaves": 0,
+    "newExternalBinaryPlaced": 0,
+    "changedRole": {
+      "nodeId": "1229:10",
+      "imageHash": "644f449c3bf2001a94d4b822d2b55e2614c11042",
+      "driveId": "1aVp34U5qUTqd9FR3AILmJggdWwY1lAJb",
+      "driveFile": "RURUBU_V5_01_COVER_HERO__ROLE_240x220_Q78.jpg",
+      "intrinsic": {"width": 240, "height": 220},
+      "displayBefore": {"width": 306, "height": 270},
+      "displayAfter": {"width": 240, "height": 220},
+      "postRatio": {"x": 1.0, "y": 1.0},
+      "driveReadback": "PASS image/jpeg"
+    }
+  },
+  "rollback": {
+    "previousOuterC": {"rootNodeId": "1227:2", "name": "V6_PREVIOUS_OUTER_C_YOKOHAMA_FIELD_2026_08_15", "preserved": true, "visible": false},
+    "insideAUnchanged": true,
+    "v5Unchanged": true,
+    "legacyCurrentUnchanged": true
+  },
+  "status": {
+    "v6BestComparatorVerified": true,
+    "v6OverallPrintReady": false,
+    "vendorTemplateVerified": false,
+    "realContentFinalized": false,
+    "next": "Continue from D/A. Remaining image-quality work should prioritize actual-size visual character and source fidelity. Generate new imagery only when a specific weak role cannot be solved by role sizing, crop, or verified existing assets and when the full generation -> Drive -> Figma lifecycle is available."
+  }
+}
