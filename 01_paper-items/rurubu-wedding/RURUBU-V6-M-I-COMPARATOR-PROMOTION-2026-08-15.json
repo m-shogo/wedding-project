@@ -1,0 +1,45 @@
+{
+  "schemaVersion": "rurubu-v6-mi-comparator-promotion-v1",
+  "date": "2026-08-15",
+  "scope": "Rurubu WEDDING only",
+  "githubMainBeforeWrite": "9887b9e08cc1e9b1c34d41e5966492204b6f5044",
+  "figmaFileKey": "bfM0d4c9dCeBv5pCkJ3TNM",
+  "promotion": {
+    "outer": {"label":"M","nodeId":"1241:2","name":"V6_BEST_OUTER_M_INTRINSIC_SAFE_ROLE_REDISTRIBUTION_2026_08_15"},
+    "inside": {"label":"I","nodeId":"1233:2","name":"V6_BEST_INSIDE_I_DENSE_MEMORY_COLLAGE_2026_08_15"},
+    "startHere": {"nodeId":"845:27","text":"V5 FU/FX · V6 M/I"}
+  },
+  "supersededVisibleSelection": {"outer":"H / 1232:55","inside":"I / 1233:2"},
+  "preservedHiddenStudies": [
+    {"label":"H","nodeId":"1232:55","role":"rollback"},
+    {"label":"J","nodeId":"1239:55","role":"role-redistribution study"},
+    {"label":"K","nodeId":"1240:2","role":"denser collage study; rejected due skyline upscale"},
+    {"label":"L","nodeId":"1240:55","role":"title-corrected dense study; rejected due skyline upscale"}
+  ],
+  "visibleProblem": "H used the dining image as the largest back-cover raster even though its strongest semantic role was social/lifestyle memory rather than issue-level travel identity. The verified travel flatlay was relegated to a smaller front support role. The back also lacked enough photo-scale contrast below the dominant field.",
+  "rootCauseHypothesis": "The defect was primarily role assignment, not missing imagery. Reassigning a verified travel-object flatlay to dominant back-cover duty and reducing the dining image to support duty should strengthen editorial semantics; denser support overlap can improve magazine rhythm only if source-fidelity gates remain intact.",
+  "boundedTests": [
+    "J: swap flatlay into back dominant and dining into front support",
+    "K: enlarge back cafe + skyline supports for stronger collage density",
+    "L: move memory/timeline headings to remove accidental photo collision",
+    "M: retain dense cafe role but return skyline support to 240x220 intrinsic-safe size"
+  ],
+  "decision": "PROMOTED M/I",
+  "threeScaleEvidence": {
+    "wholeItem":"M 1588x1123 screenshot PASS; clearer travel-first back semantics than H",
+    "reading":"full-spread reading composition PASS; front remains unchanged except dining/flatlay role redistribution",
+    "actualSize":"M back 794x1123 PASS; title/collage/timeline remain legible and deliberate"
+  },
+  "structureEvidence": {
+    "outerNativeText":28,
+    "insideNativeText":41,
+    "outerVisibleImageFills":7,
+    "insideVisibleImageFills":6,
+    "safeArea18pxRiskCount":0,
+    "selectedOuterImagesAtOrBelowIntrinsic":true,
+    "imageFillsNonDestructive":true
+  },
+  "assetLedger":"01_paper-items/rurubu-wedding/RURUBU-V6-M-I-ACTIVE-ASSET-LEDGER-2026-08-15.json",
+  "generation": {"generated":0,"adoptedNewGenerated":0,"placedNewGenerated":0},
+  "notes": "This promotion improves the V6 comparator but does not claim final print-ready V6 completion. No other Wedding item was inspected or edited."
+}
