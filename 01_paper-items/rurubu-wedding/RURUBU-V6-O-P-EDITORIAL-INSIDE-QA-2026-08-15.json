@@ -1,0 +1,74 @@
+{
+  "schemaVersion": "rurubu-v6-o-p-editorial-inside-qa-v1",
+  "date": "2026-08-15",
+  "scope": "Rurubu WEDDING only",
+  "githubMainBeforeWrite": "7a85aca9613d61f8794ee95fef21dc4bcfa20e73",
+  "figmaFileKey": "bfM0d4c9dCeBv5pCkJ3TNM",
+  "observedProblems": [
+    "V6 N chronology still clustered content in the upper/middle page and left an editorially dead lower quarter.",
+    "V6 L profile/Q&A spread remained too sparse and wireframe-like, especially the Q&A page and memories area.",
+    "Generated profile section master existed in Drive but official upload_assets transport remained blocked by the known FIGMA_MCP_UPLOAD_DNS_UNRESOLVED fingerprint."
+  ],
+  "candidates": {
+    "O": {
+      "nodeId": "1318:2",
+      "name": "V6_INSIDE_O_FULL_HEIGHT_EDITORIAL_CHRONOLOGY_2026_08_15",
+      "source": "1315:2 / V6 N",
+      "boundedChange": "Keep native copy and replaceable IMAGE roles; redistribute event photos across the full page and promote the final WEDDING milestone into a wide closing photo instead of adding decoration.",
+      "decision": "VERIFIED_LOCAL / preferred chronology study over N",
+      "threeScaleEvidence": {
+        "wholeItem": "500x354 whole-spread screenshot PASS; the right page reads from headline through the final WEDDING image without the former dead lower quarter.",
+        "reading": "1400x990 spread/read scale PASS; unequal photo sizes and the wide final milestone create a stronger magazine scan path.",
+        "actualSize": "794x1123 right-page screenshot PASS; all six event groups remain readable and visually separated."
+      },
+      "structure": {
+        "nativeTextCount": 28,
+        "imageFillCount": 9,
+        "replaceableImageRolesPreserved": true,
+        "safeArea18pxRiskCount": 0,
+        "textCollisionPairsAfterRepair": 0
+      }
+    },
+    "P": {
+      "nodeId": "1318:43",
+      "name": "V6_INSIDE_P_DENSE_PROFILE_QA_MEMORIES_2026_08_15",
+      "source": "1283:42 / V6 L",
+      "boundedChange": "Enlarge profile photography, tighten profile fact rhythm, compress six native-text Q&A rows, and enlarge the memories photo field; add no new native decorative cards or rasterized copy.",
+      "decision": "VERIFIED_LOCAL / preferred profile-Q&A study over L",
+      "threeScaleEvidence": {
+        "wholeItem": "1400x990 whole-spread screenshot PASS; profile and memories photography carry substantially more visual weight than L.",
+        "reading": "Q&A remains six editable native-text groups with more compact vertical rhythm and stronger lower-page closure.",
+        "actualSize": "794x1123 Q&A page screenshot PASS; questions and answers remain readable and the two memories images become a real editorial section rather than small footer thumbnails."
+      },
+      "structure": {
+        "nativeTextCount": 40,
+        "imageFillCount": 4,
+        "replaceableImageRolesPreserved": true,
+        "safeArea18pxRiskCount": 0,
+        "textCollisionPairsAfterRepair": 0
+      }
+    },
+    "Q": {
+      "nodeId": "1320:2",
+      "name": "REJECTED_VISUAL_V6_INSIDE_Q_GENERATED_PROFILE_DECOR_TRANSPORT_STUDY_2026_08_15",
+      "source": "1318:43 / V6 P",
+      "driveMasterId": "1MfLObNcvsWhQ8nQqgZHeFiDBdjPzj1w8",
+      "transport": "Drive master was materialized, a bounded JPEG study derivative was passed directly to figma.createImage(Uint8Array), and imageHash 7c93168e6262004013942224016fce7a71f72a16 was placed successfully without upload_assets.",
+      "decision": "TRANSPORT_VERIFIED_LOCAL + VISUAL_REJECTED",
+      "reason": "Direct Plugin API image transport is viable for supported raster formats, but the low-resolution study derivative became visibly soft when enlarged and its generated blank-frame geometry did not align tightly enough with existing native photo/text roles. Q was hidden after evidence capture and was not promoted."
+    }
+  },
+  "transportLearning": {
+    "knownFailureFingerprint": "FIGMA_MCP_UPLOAD_DNS_UNRESOLVED",
+    "newObservedFingerprint": "FIGMA_CREATEIMAGE_WEBP_UNSUPPORTED",
+    "replacementMethod": "Drive/source bytes -> supported JPEG/PNG derivative -> figma.createImage(Uint8Array) -> IMAGE fill. This bypasses the failing mcp.figma.com submit path and is now locally proven for JPEG.",
+    "qualityGate": "Transport success does not equal adoption. Use role-appropriate high-resolution derivatives and align generated decoration with native replaceable photo/text roles before production promotion."
+  },
+  "driveReadback": {
+    "profileMaster": "1MfLObNcvsWhQ8nQqgZHeFiDBdjPzj1w8",
+    "qaMaster": "1M4X4ELmau3_GrCDb6n72xv13R_CszDKR",
+    "timelineMaster": "1KzAiPYc3HrvUL75Kkv9cPcAN2blQt8MV",
+    "memoriesMaster": "1WhO8iIIx1G9oAxU5-lWSnBEHx_AQpZe0"
+  },
+  "scopeNotes": "V7 was not modified. WEDDING PASSPORT, BOARDING PASS, 青春ふたりきっぷ, ADD items and non-Rurubu item-specific production state were not inspected or changed."
+}
