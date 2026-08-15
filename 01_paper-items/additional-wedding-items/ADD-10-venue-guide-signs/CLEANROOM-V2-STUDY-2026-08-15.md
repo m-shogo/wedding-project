@@ -1,11 +1,11 @@
-# ADD-10 会場案内サイン — Clean-room V2 Study — 2026-08-15
+# ADD-10 会場案内サイン — Clean-room V2/V3 Study — 2026-08-15
 
-Status: `VISUAL_REOPENED / CLEANROOM_V2_A4_CREATED / STRUCTURE_PASS / VISUAL_NOT_PROMOTED / LEGACY_PRESERVED / NOT_PRINT_READY`
+Status: `VISUAL_REOPENED / CLEANROOM_V2_STRUCTURAL_PASS / CLEANROOM_V3_STRUCTURAL_PASS / V3_REJECTED_POST_COMPARISON_CONVERGENCE / LEGACY_PRESERVED / NOT_PROMOTED / NOT_PRINT_READY`
 Authority: GitHub latest `main` + `docs/automation/non-rurubu-figma-quality-current.md`
 
 ## Authority readback
 
-- latest main immediately before evidence write: `eae804351507e12261fd513b36369a0ea586ac12`
+- latest main immediately before V3 evidence write: `306c1178cb0db1c1b76dd2f79821c6f1d3b90cb6`
 - Figma file key: `mMfoBkoZ7eVbuerSRHePLV`
 - authoring page: `99_QA`
 - exact Drive authority: `1ASWOTXO4fosLb9reWxQrHL2_UUC_Y8-3 / ADD-10_会場案内サイン`
@@ -27,9 +27,9 @@ Only current SPEC facts and constraints were used before authoring:
 - no photography, flags, barcode, stamps, ticket/passport/Rurubu grammar, or equal-card Web UI;
 - variable destination / floor / room / direction must remain native editable text/vector.
 
-No existing production frame or previous ADD-10 clean-room family was visually inspected before this V2 family was created.
+No existing production frame was visually inspected before V2 or before V3 authoring. V3 was also authored as a new blank-frame concept rather than cloning V2.
 
-## New clean-room V2 A4 family
+## Clean-room V2 A4 family
 
 Section:
 
@@ -53,16 +53,9 @@ Direction:
 - YOKOHAMA + date are the only small confirmed context line;
 - no raster imagery or generated decoration was introduced.
 
-## Hybrid responsibility split
+### V2 structure readback
 
-- destination / English label / floor-room / TBD note / date-location: native Figma text;
-- arrow / destination node / structural rules: new editable vector geometry;
-- raster/composed decoration: not required under the current SPEC;
-- replaceable image role: not applicable.
-
-## Structure readback
-
-Each A4 candidate currently reports:
+Each A4 candidate reports:
 
 - native editable text nodes: `5`;
 - raster IMAGE-fill nodes: `0`;
@@ -71,30 +64,101 @@ Each A4 candidate currently reports:
 
 The destination stack is native auto-layout and remains editable.
 
-## Whole-family screenshot QA
+### V2 visual QA
 
-The first family screenshot confirms:
-
-- direction and destination remain immediately readable;
-- no card/dashboard UI pattern is present;
-- all three variants remain sparse and physically plausible as wayfinding signs;
-- no fake floor/room/direction fact was introduced.
-
-However the screenshot also exposes a quality issue: the lower half of the A4 field is still too inactive, so the family currently reads as a strong functional wayfinding prototype rather than an unequivocally sellable wedding-signage system.
+The first family screenshot confirmed immediate arrow/destination readability and no UI-card pattern, but the lower field remained too inactive. V2 therefore read as a functional wayfinding prototype rather than an unequivocally sellable wedding-signage system.
 
 Decision: `VISUAL_NOT_PROMOTED`.
 
-The retained production was therefore not opened for visual comparison in this iteration; a weak V2 does not earn a legacy comparison merely because it is structurally valid.
+Legacy production was not opened at this point.
+
+## Clean-room V3 A4 family
+
+V3 was then authored from blank authority facts in a materially different `hotel-sign slab` direction, without duplicating V2.
+
+Section:
+
+- `31:2 / CLEANROOM_ADD10_V3_A4_HOTEL_SIGN_2026_08_15`
+
+Candidates:
+
+- `31:3 / CLEANROOM_ADD10_V3_A4_LEFT`
+- `31:15 / CLEANROOM_ADD10_V3_A4_RIGHT`
+- `31:27 / CLEANROOM_ADD10_V3_A4_FORWARD`
+
+V3 direction:
+
+- direction and information are separated into large physical sign planes rather than floating as small objects in one open field;
+- left/right use independent deep-navy directional slabs with large ivory arrows;
+- forward uses a top directional slab and a separate lower information field;
+- destination Japanese text was increased to venue-distance scale;
+- mint route-axis rule and destination node provide a restrained structural cue;
+- all copy remains native; arrows/rules remain editable vectors;
+- no raster or generated decoration.
+
+## V3 long-copy / structure QA
+
+QA section:
+
+- `31:39 / QA_CLEANROOM_ADD10_V3_LONG_COPY_2026_08_15`
+
+Stress candidates:
+
+- `31:40`
+- `31:52`
+- `31:64`
+
+Stress content used the longer required candidate `披露宴会場 / RECEPTION HALL` and a materially longer floor-room placeholder.
+
+Programmatic readback for all three stress frames:
+
+- native editable text nodes: `5` each;
+- raster IMAGE-fill nodes: `0` each;
+- text outside root: `0` each.
+
+Screenshot QA showed the forward variant remained clean; left/right wrapped `披露宴会場` to two lines but stayed readable and non-destructive. This is a structural PASS, not final-copy proof.
+
+## Post-completion legacy comparison
+
+Only after V3 and V3 long-copy/structure QA were complete was retained production opened for comparison.
+
+Retained production evidence inspected:
+
+- `2:2 / A4_LEFT_LAYOUT_TEMPLATE`
+- `2:13 / A4_RIGHT_LAYOUT_TEMPLATE`
+
+Result: `V3 REJECTED FOR PROMOTION / POST_COMPARISON_VISUAL_CONVERGENCE`.
+
+The retained A4 family already uses a large deep-navy directional side field with a large ivory arrow and an ivory information field. Although V3 was independently authored from blank frames and improved scale, typography, route-axis treatment, and placeholder discipline, the final silhouette converges too closely to retained production to serve as a convincing clean-room replacement direction.
+
+This is not node reuse and does not invalidate the structural QA, but it fails the stricter clean-room visual-independence goal.
+
+Failure fingerprint:
+
+- `POST_COMPARISON_VISUAL_CONVERGENCE` — an independently authored candidate can still converge toward the retained silhouette; discovery after completion requires rejecting it as promotion evidence rather than rationalizing similarity.
+
+V3 remains preserved as valid structural/process evidence but is not promoted.
+
+## Hybrid responsibility split
+
+Across V2/V3:
+
+- destination / English label / floor-room / TBD note / date-location: native Figma text;
+- arrow / destination node / structural rules: new editable vector geometry;
+- raster/composed decoration: not required under the current SPEC;
+- replaceable image role: not applicable.
 
 ## Next method change
 
-Create a fresh V3 direction from blank authority facts, without using this V2 as a visual source. The next direction should increase physical-sign presence through scale, optical information placement, and route-axis treatment rather than adding decorative icons, cards, or raster imagery. Only after V3 completes long-copy / structure QA should retained production and V2 be opened for final comparison.
+The next ADD-10 attempt must be a new clean-room V4 from authority facts only and must avoid both the open-field V2 and side-slab V3 grammars. Do not use retained production, V2, or V3 as a component/source. A materially different route should be explored, for example a typographic/axis-led hanging-sign or transit-index composition where the arrow and Japanese destination create one directional gesture without a full-height side slab.
+
+Complete V4 structure + long-copy QA first, then compare only after completion.
 
 ## Generation decision
 
 `IMAGE_GENERATION_NOT_REQUIRED_THIS_ITERATION`.
 
-The SPEC explicitly favors native direction vectors and typography and forbids photography. The current weakness is composition / field activation, not a shortage of raster art.
+The SPEC explicitly favors native direction vectors and typography and forbids photography. The current weakness is art-direction independence, not a shortage of raster art.
 
 ## Deferred finalization
 
@@ -106,4 +170,4 @@ The SPEC explicitly favors native direction vectors and typography and forbids p
 - optional 90×210 narrow-format adoption;
 - printer bleed/profile and 100% physical proof.
 
-These remain `DEFERRED_FINALIZATION` / `BLOCKED_REQUIRED_INPUT`. The V2 study remains rollback-safe comparison evidence only.
+These remain `DEFERRED_FINALIZATION` / `BLOCKED_REQUIRED_INPUT`. V2/V3 and retained production remain preserved.
