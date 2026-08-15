@@ -1,0 +1,107 @@
+{
+  "schemaVersion": "rurubu-v5-comparator-promotion-v1",
+  "date": "2026-08-15",
+  "scope": "Rurubu WEDDING only",
+  "authorityOrder": ["live Figma", "fresh Google Drive readback", "asset evidence ledger/overlays", "GitHub main"],
+  "startingMainSha": "90bc76625a8c41dd6c4b4521c420405d21467718",
+  "learningCommits": [
+    "e3569402961b9e5532ec93afc7fe4dda09589043",
+    "e071f5eed60b9d581b1da9a11c1a54021acf101c",
+    "3353632e6e2f19c5d12a49bff394b89975169739",
+    "9479fe66471b6a112d14b02285a6a90f738d0d44"
+  ],
+  "currentUntouched": {"outer": "77:18", "inside": "77:290"},
+  "best": {
+    "outer": {
+      "label": "FL",
+      "reviewNodeId": "1195:2",
+      "backNodeId": "1195:3",
+      "frontNodeId": "1195:132",
+      "name": "BEST_CLEANROOM_OUTER_FL_REVIEW_2026_08_15",
+      "status": "VERIFIED_LOCAL_ADOPTED"
+    },
+    "inside": {
+      "label": "FM",
+      "sourceNodeId": "1196:285",
+      "leftNodeId": "1196:286",
+      "rightNodeId": "1196:415",
+      "name": "BEST_CLEANROOM_INSIDE_FM_NONPERSON_PROFILE_2026_08_15",
+      "status": "VERIFIED_LOCAL_ADOPTED"
+    }
+  },
+  "outerChange": {
+    "sourceBest": "FJ 1193:2",
+    "blockedStudy": "FK 1194:2",
+    "promotedBest": "FL 1195:2",
+    "problem": "FJ back dominant image was visually attractive but read as a foreign cliff/coast destination and weakened the Yokohama issue identity.",
+    "principle": "Destination/story semantics are a first-class image-fidelity dimension; a dominant photo can be technically good and still be editorially wrong.",
+    "boundedChange": "Replace only the back dominant fill with existing verified Rurubu waterfront source hash 539c259be8036b481d06b4f76db9a39b407d90e8, rebalance existing lower modules, preserve native text, front content, fold and exact secondary Q60.",
+    "generated": 0,
+    "newGeneratedAssetAdopted": 0,
+    "newExternalBinaryPlaced": 0
+  },
+  "insideChange": {
+    "sourceBest": "EO 1107:285",
+    "promotedBest": "FM 1196:285",
+    "problem": "EO paired recognizable generic/generated people with real-person native labels SHOGO and SHI-CHAN, risking false representation of strangers as the real couple.",
+    "principle": "When verified real-person photography is absent, keep identity in native editable text and use non-person atmosphere/objects or an explicit replaceable role rather than an invented face.",
+    "boundedChange": "Replace only two profile raster roles with existing verified non-person Rurubu atmosphere images; retain all native names/facts/questions and rebalance typography without adding cards/shadows/gradients.",
+    "generated": 0,
+    "newGeneratedAssetAdopted": 0,
+    "newExternalBinaryPlaced": 0,
+    "profileA": {"nodeId": "1196:290", "imageHash": "c1ada11205bc3978bf426b304d683f1c1566cac2", "intrinsic": "810x552", "semanticState": "NONPERSON_ATMOSPHERE"},
+    "profileB": {"nodeId": "1196:295", "imageHash": "d76eb07d83d042f15044c8bc6bf68d73a73cd77d", "intrinsic": "732x498", "semanticState": "NONPERSON_ATMOSPHERE"}
+  },
+  "qa": {
+    "outerThumbnail500": "PASS_STRONGER_DESTINATION_COHERENCE_THAN_FJ",
+    "outerWholeReading1000": "PASS",
+    "outerActualBack798x1123": "PASS",
+    "outerVisibleNativeText": 35,
+    "outerVisibleImageFills": 7,
+    "outerAbsoluteTextIntersections": 0,
+    "outerTextSafeAreaRisk18px": 0,
+    "insideWholeReading1000": "PASS",
+    "insideActualLeft794x1123": "PASS",
+    "insideVisibleNativeText": 52,
+    "insideVisibleImageFills": 6,
+    "insideAbsoluteTextIntersections": 0,
+    "insideTextSafeAreaRisk18px": 0
+  },
+  "q60Secondary": {
+    "driveId": "1aVp34U5qUTqd9FR3AILmJggdWwY1lAJb",
+    "mimeType": "image/jpeg",
+    "sizeBytes": 10284,
+    "figmaNodeId": "1195:189",
+    "imageHash": "644f449c3bf2001a94d4b822d2b55e2614c11042",
+    "status": "VERIFIED_SECONDARY_ONLY"
+  },
+  "q60Master": {
+    "driveId": "1YL0WAOzYU3O1FGa23ieRuw_Btu4jbmzr",
+    "mimeType": "image/jpeg",
+    "sizeBytes": 155439,
+    "materializedAndVisuallyInspected": true,
+    "dominantExactFigmaPlacement": false,
+    "transportFailureFingerprint": "FIGMA_UPLOAD_DNS_MCP_FIGMA_COM",
+    "blockedStudyNodeId": "1194:2",
+    "status": "OPEN"
+  },
+  "rollback": {
+    "fj": {"nodeId": "1193:2", "name": "ROLLBACK_HIDDEN_OUTER_FJ_2026_08_15", "visible": false},
+    "fk": {"nodeId": "1194:2", "name": "BLOCKED_HIDDEN_OUTER_FK_Q60_UPLOAD_DNS_2026_08_15", "visible": false},
+    "eo": {"nodeId": "1107:285", "name": "ROLLBACK_HIDDEN_INSIDE_EO_2026_08_15", "visible": false}
+  },
+  "startHere": {
+    "statusNodeId": "845:27",
+    "status": "FL outer / FM inside",
+    "currentOuter": "77:18",
+    "currentInside": "77:290"
+  },
+  "learning": {
+    "rsl010": "VERIFIED_LOCAL_TO_CROSS_ITEM_CANDIDATE",
+    "rsl011": "VERIFIED_LOCAL_TO_CROSS_ITEM_CANDIDATE",
+    "knownFailureFingerprintRetriedCosmetically": false
+  },
+  "v5Complete": false,
+  "v6ProductionStarted": false,
+  "remainingGate": "Dominant Q60 master exact Figma provenance followed by final asset/print/fold/ledger reconciliation."
+}
