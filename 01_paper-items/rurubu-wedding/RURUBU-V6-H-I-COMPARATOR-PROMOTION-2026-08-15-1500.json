@@ -1,0 +1,80 @@
+{
+  "schemaVersion": "rurubu-v6-comparator-promotion-v1",
+  "date": "2026-08-15",
+  "scope": "Rurubu WEDDING only",
+  "previousAuthority": "01_paper-items/rurubu-wedding/RURUBU-V6-H-A-COMPARATOR-PROMOTION-2026-08-15-1400.json",
+  "previousBest": {"outer": "1232:55", "inside": "1223:2"},
+  "selectedBest": {
+    "outer": {"label": "H", "rootNodeId": "1232:55", "name": "V6_BEST_OUTER_H_TWO_LINE_BACK_HEADLINE_2026_08_15"},
+    "inside": {"label": "I", "rootNodeId": "1233:2", "rightNodeId": "1233:28", "name": "V6_BEST_INSIDE_I_DENSE_MEMORY_COLLAGE_2026_08_15"}
+  },
+  "startHere": {"statusNodeId": "845:27", "text": "V5 FU/FX · V6 H/I"},
+  "visibleProblem": "V6 Inside A's lower-right memory section was structurally sound but visually too timid: three photos behaved like separated rectangles with a large cream field and weak overlap, so the page read closer to a brochure/gallery than an energetic Japanese travel-information spread.",
+  "rootCauseHypothesis": "The bottleneck was not missing photography but role composition. Keeping the same verified sources while moving captions onto photographs, varying angle and overlap, and allowing one intrinsically strong raster to carry more width could increase editorial density without adding cards, effects, or new assets.",
+  "boundedTest": [
+    "Clone Inside A to rollback-safe candidate I; do not modify V5, Outer H, legacy Current, or non-Rurubu items.",
+    "Keep all facts, native text, image hashes, provenance and history hero unchanged.",
+    "Recompose only the memory-photo cluster using asymmetric overlap and direct native captions on the photos.",
+    "Initial I enlarged memory 01 and 02 beyond intrinsic dimensions; intrinsic QA rejected that geometry before promotion.",
+    "Correct memory 01 to 350x365 against intrinsic 352x368 and memory 02 to 220x202 against intrinsic 240x220; enlarge only memory 03 to 430x230 against intrinsic 796x428.",
+    "Resolve the final memory 01 number/title text-box overlap and keep both labels fully inside the photo.",
+    "Preserve previous Inside A as hidden rollback and update Start Here only after screenshot and structure QA passed."
+  ],
+  "expectedImprovement": "Denser but readable print rhythm, stronger photo hierarchy, less card/gallery reading, and clearer image-caption binding while preserving editability and source fidelity.",
+  "regressionRisk": [
+    "Overlapping photos can become scrapbook noise instead of editorial hierarchy.",
+    "Increasing small rasters can silently create print softness even when screenshots look stronger.",
+    "White captions can lose contrast if moved onto bright parts of a photo.",
+    "Rotated image roles can create accidental text collisions or safe-area regressions."
+  ],
+  "visualQA": {
+    "wholeItemThumbnail500": "PASS_AND_STRONGER_THAN_INSIDE_A",
+    "readingSpread1000": "PASS_AND_STRONGER_THAN_INSIDE_A",
+    "actualRight794x1123": "PASS",
+    "rationale": "The memory cluster now reads as one asymmetric editorial story rather than three detached image cards. The page remains dense but legible and no additional decorative container was introduced."
+  },
+  "structureQA": {
+    "visibleNativeText": 41,
+    "visibleImageFills": 6,
+    "sameParentTextIntersections": 0,
+    "textSafeAreaRisk18px": 0,
+    "allVisibleRasterRolesAtOrBelowIntrinsicInBothAxes": true,
+    "semanticRenameOuterH": [
+      {"nodeId": "1232:63", "name": "V6_H_BACK_YOKOHAMA_SKYLINE_SUPPORT"},
+      {"nodeId": "1232:100", "name": "V6_H_FRONT_CAFE_MEMORY_SUPPORT"}
+    ]
+  },
+  "insideIImageRoles": [
+    {"nodeId":"1233:4","hash":"c1ada11205bc3978bf426b304d683f1c1566cac2","display":[560,382],"intrinsic":[810,552]},
+    {"nodeId":"1233:5","hash":"d76eb07d83d042f15044c8bc6bf68d73a73cd77d","display":[286,330],"intrinsic":[732,498]},
+    {"nodeId":"1233:29","hash":"539c259be8036b481d06b4f76db9a39b407d90e8","display":[793.7000122070312,328],"intrinsic":[1356,560]},
+    {"nodeId":"1233:46","hash":"439a719d73f28e8dd2889f2026cccb15f345ec63","display":[350,365],"intrinsic":[352,368]},
+    {"nodeId":"1233:49","hash":"644f449c3bf2001a94d4b822d2b55e2614c11042","display":[220,202],"intrinsic":[240,220]},
+    {"nodeId":"1233:52","hash":"adbb8e529451a81dd25e4eb29bf068655569ce25","display":[430,230],"intrinsic":[796,428]}
+  ],
+  "assetLifecycle": {
+    "generated": 0,
+    "newDriveSaves": 0,
+    "newExternalBinaryPlaced": 0,
+    "existingVerifiedAssetsReassigned": true,
+    "driveReadback": {
+      "exactBoundedQ78": {"driveId":"1aVp34U5qUTqd9FR3AILmJggdWwY1lAJb","file":"RURUBU_V5_01_COVER_HERO__ROLE_240x220_Q78.jpg","sizeBytes":10284},
+      "q60Master": {"driveId":"1YL0WAOzYU3O1FGa23ieRuw_Btu4jbmzr","file":"RURUBU_V5_01_COVER_HERO__FIGMA_1330x1220_Q60.jpg","sizeBytes":155439}
+    },
+    "reasonNoGeneration": "The verified existing raster pool was sufficient; the diagnosed defect was editorial role composition rather than asset scarcity."
+  },
+  "rollback": {
+    "previousInsideA": {"rootNodeId":"1223:2","name":"V6_PREVIOUS_INSIDE_A_PROFILE_MEMORY_EDITORIAL_2026_08_15","preserved":true,"visible":false},
+    "outerHUnchangedVisually": true,
+    "v5Unchanged": true,
+    "legacyCurrentUnchanged": true,
+    "nonRurubuUntouched": true
+  },
+  "status": {
+    "v6BestComparatorVerified": true,
+    "v6OverallPrintReady": false,
+    "vendorTemplateVerified": false,
+    "realContentFinalized": false,
+    "next": "Continue from H/I. Highest-value unresolved visual issue remains the Outer H back dominant dining image's Yokohama semantic fidelity and stock-like photographic feel; do not retry the known DNS-blocked binary transport without a material capability/environment change."
+  }
+}
