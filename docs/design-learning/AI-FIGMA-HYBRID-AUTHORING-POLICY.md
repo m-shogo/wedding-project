@@ -54,27 +54,26 @@ Examples:
 - painted label field;
 - decorative title plate;
 - magazine-style text panel;
-- ornamental frame intended to hold 2–3 lines of native copy.
+- ornamental frame intended to hold native copy.
 
-It is valid to decide in advance that a role is, for example, `2 lines preferred / 3 lines maximum`, generate the decorative background for that expected text mass, and then place editable Figma text above it.
+The support asset should be designed for the **expected text mass of that role**, not for one universal line count. A role may be one line, two-to-three lines, four or more lines, or a wider/shorter arrangement if that is what the actual content and design need.
 
-For these roles define a **text-fit contract**:
+For these roles define a **text-fit contract** that is practical rather than dogmatic:
 
-- expected line count;
-- maximum line count;
+- expected text mass or preferred line range when useful;
 - intended text width;
 - safe inset/padding inside the generated decoration;
 - target font-size/line-height range;
 - alignment/anchor;
 - minimum contrast zone;
-- overflow behavior.
+- sensible overflow or replacement behavior.
 
-If real copy exceeds the contract materially, do not distort the decorative asset blindly. Prefer one of:
+If real copy no longer fits the support gracefully, do not distort the decorative asset blindly. Prefer one of:
 
-1. use an approved alternate 1-line / 2-line / 3-line decoration size;
-2. regenerate/recompose the support asset for the new text mass;
-3. adjust native typography only within the verified range;
-4. promote a more flexible native structure when the role proves genuinely unpredictable.
+1. use another approved support size/shape;
+2. regenerate/recompose the support asset for the actual text mass;
+3. adjust native typography only within a visually verified range;
+4. use a more flexible native structure when the role proves genuinely unpredictable.
 
 The generated support image must contain **no authoritative final wording**. It provides shape, texture, border, color and visual rhythm; Figma provides the editable text.
 
@@ -93,7 +92,7 @@ Good candidates include:
 - decorative stamps that are not authoritative logos/marks;
 - tropical/travel atmosphere clusters;
 - fixed magazine-style non-text embellishment;
-- text-support backgrounds whose native copy follows a bounded line-count contract;
+- text-support backgrounds sized for the intended native-copy role;
 - visual texture whose internal pieces have no expected future edit role.
 
 ### Default Figma decoration rule
@@ -220,7 +219,7 @@ For any generated/composed fixed-decoration asset used in production:
 For generated text-support decoration, the role brief should additionally specify:
 
 - text-safe zone;
-- intended line count and maximum line count;
+- expected text mass or preferred line range when it helps the design;
 - expected alignment;
 - no baked final wording;
 - contrast behind the native text;
@@ -248,7 +247,7 @@ For meaningful design changes, inspect as applicable:
 Also verify:
 
 - native text rendering and line breaks;
-- generated text-support fit at expected and maximum line counts;
+- generated text-support fit against the actual intended copy and reasonable copy variation;
 - mask/crop integrity;
 - image replacement resilience for template roles;
 - SVG/vector editability where applicable;
@@ -264,7 +263,7 @@ Transfer:
 
 - authoring split;
 - editability decision logic;
-- bounded native-text/generated-support pattern;
+- native-text/generated-support pattern;
 - mask/replacement contract;
 - vector-vs-raster decision;
 - QA methods;
@@ -288,7 +287,7 @@ Normalize recurring failures:
 
 - `NATIVE_DECOR_MICROGEOMETRY_OVERLOAD` — too many fragile Figma ornament layers reduce speed/clarity without meaningful future edit value;
 - `RASTERIZED_VARIABLE_COPY` — editable factual text was baked into a raster/composed asset;
-- `TEXT_SUPPORT_CONTRACT_OVERFLOW` — native copy exceeds the generated support's verified line-count/safe-zone contract;
+- `TEXT_SUPPORT_FIT_FAILURE` — native copy no longer fits the generated support gracefully at its intended text mass/safe zone;
 - `UNREPLACEABLE_IMAGE_GEOMETRY` — swapping a photo forces surrounding layout reconstruction;
 - `MASK_CROP_FOCAL_FAILURE` — replacement survives structurally but loses the intended subject/focal point;
 - `DECOR_TEXT_CONFLICT` — generated decoration contains fake/baked text that competes with authoritative native copy;
@@ -303,7 +302,7 @@ If the same method triggers the same fingerprint twice without material capabili
 Before constructing a visual element in Figma, ask:
 
 1. Will a human need to change the wording/value? → native text.
-2. Does that text need a decorative background? → generated/composed text-support asset is allowed; define a bounded line-count/text-fit contract.
+2. Does that text need a decorative background? → generated/composed text-support asset is allowed; size it to the expected text mass and verify fit rather than enforcing a universal line count.
 3. Will a human need to replace the image? → stable mask/role container.
 4. Is the graphic a reusable/recolorable silhouette? → SVG/vector candidate.
 5. Is it fixed visual decoration whose internal pieces have little future edit value? → composed/generated asset candidate.
