@@ -1,0 +1,148 @@
+{
+  "schemaVersion": "rurubu-v6-o-al-ai-active-asset-reconciliation-v1",
+  "date": "2026-08-16",
+  "scope": "Rurubu WEDDING V6 current preferred O + AL/AI studies only",
+  "observedGithubMainBeforeWrite": "272c02e819dde47b44e7ec05311200d1e7b75f1a",
+  "figmaFileKey": "bfM0d4c9dCeBv5pCkJ3TNM",
+  "selectedFrames": {
+    "outer": {"label": "O", "nodeId": "1370:2"},
+    "profileQa": {"label": "AL", "nodeId": "1373:2"},
+    "storyChronology": {"label": "AI", "nodeId": "1363:125"}
+  },
+  "startHereStatus": {
+    "nodeId": "845:27",
+    "text": "V5 FU/FX · V6 O + AL/AI INSIDE STUDIES · V7 HOLD"
+  },
+  "activeVisibleUniqueRasterHashes": 7,
+  "registeredPhotoRolesAtOrBelowIntrinsicInBothAxes": true,
+  "allCurrentImageRolesUseNonDestructiveImageFills": true,
+  "fixedIdentity": {
+    "role": "V6 outer O masthead",
+    "nodeId": "1370:55",
+    "imageHash": "0bdbf47904ea5865c71b1555dc73689b2c7b2126",
+    "driveId": "1opK9BSoL8rCeoYxuPWUyKZZsu0-Q165b",
+    "driveFileName": "rurubu_wedding_logo_A_v1.png",
+    "driveMimeType": "image/png",
+    "driveBytes": 629061,
+    "display": [330, 106.7],
+    "scaleMode": "FIT",
+    "provenanceState": "CURRENT_CANDIDATE / ALPHA_VERIFIED / DRIVE_VERIFIED / EXISTING_FIGMA_HASH_VERIFIED",
+    "newBinaryTransportThisRun": false
+  },
+  "registeredPhotoSources": [
+    {
+      "imageHash": "e3738476f760932bb5b09c9d60f174dd6c84049d",
+      "driveId": "17YaX5CK-c0cTr4zsL2Dly4J1XSZyFxHG",
+      "driveFileName": "RURUBU_V5_10_BACK_MAIN_TRAVEL_FLATLAY__FIGMA_944x608_Q18_SINGLECALL.jpg",
+      "intrinsic": [944, 608],
+      "uses": [
+        {"nodeId": "1370:4", "role": "outer O back travel flatlay dominant", "display": [620, 422], "scaleMode": "FILL"},
+        {"nodeId": "1363:162", "role": "AI event 06", "display": [450, 208], "scaleMode": "FILL"},
+        {"nodeId": "1363:166", "role": "AI chronology feature hero", "display": [650, 370], "scaleMode": "FILL"}
+      ]
+    },
+    {
+      "imageHash": "c1ada11205bc3978bf426b304d683f1c1566cac2",
+      "driveId": "1CN3gXWgHccx6WwcsmJcXDfXWgARMLFrO",
+      "driveFileName": "RURUBU_V5_12_FRIENDS_CAFE__FIGMA_810x552_Q22.jpg",
+      "intrinsic": [810, 552],
+      "uses": [
+        {"nodeId": "1370:9", "role": "outer O back cafe memory", "display": [400, 272], "scaleMode": "FILL"},
+        {"nodeId": "1370:47", "role": "outer O front cafe support", "display": [300, 250], "scaleMode": "FILL"},
+        {"nodeId": "1373:12", "role": "AL profile snapshot 1", "display": [220, 172], "scaleMode": "FILL"},
+        {"nodeId": "1363:132", "role": "AI story support 2", "display": [245, 210], "scaleMode": "FILL"},
+        {"nodeId": "1363:154", "role": "AI event 04", "display": [150, 105], "scaleMode": "FILL"}
+      ]
+    },
+    {
+      "imageHash": "d76eb07d83d042f15044c8bc6bf68d73a73cd77d",
+      "driveId": "1R0JW7jny0XSOaysUzLMLo8n8nDxVGqdy",
+      "driveFileName": "RURUBU_V5_13_FRIENDS_DINING__FIGMA_732x498_Q15.jpg",
+      "intrinsic": [732, 498],
+      "uses": [
+        {"nodeId": "1370:46", "role": "outer O front dining support", "display": [507.7, 300], "scaleMode": "FILL"},
+        {"nodeId": "1373:55", "role": "AL Q&A Memories hero", "display": [705, 480], "scaleMode": "FILL"},
+        {"nodeId": "1363:158", "role": "AI event 05", "display": [250, 165], "scaleMode": "FILL"}
+      ]
+    },
+    {
+      "imageHash": "539c259be8036b481d06b4f76db9a39b407d90e8",
+      "driveId": "1ndvJShFDKPO6OmUD3JeIRvPwpS8V1v8x",
+      "driveFileName": "RURUBU_V5_05_HISTORY__FIGMA_1356x560_Q18_SINGLECALL.jpg",
+      "intrinsic": [1356, 560],
+      "uses": [
+        {"nodeId": "1370:35", "role": "outer O front waterfront hero", "display": [793.7, 470], "scaleMode": "FILL"},
+        {"nodeId": "1373:11", "role": "AL profile wide hero", "display": [650, 268], "scaleMode": "FILL"},
+        {"nodeId": "1363:130", "role": "AI story hero", "display": [600, 465], "scaleMode": "FILL"},
+        {"nodeId": "1363:142", "role": "AI event 01", "display": [230, 150], "scaleMode": "FILL"},
+        {"nodeId": "1363:167", "role": "AI chronology feature support 1", "display": [190, 125], "scaleMode": "FILL"}
+      ]
+    },
+    {
+      "imageHash": "644f449c3bf2001a94d4b822d2b55e2614c11042",
+      "driveId": "1aVp34U5qUTqd9FR3AILmJggdWwY1lAJb",
+      "driveFileName": "RURUBU_V5_01_COVER_HERO__ROLE_240x220_Q78.jpg",
+      "intrinsic": [240, 220],
+      "uses": [
+        {"nodeId": "1370:10", "role": "outer O back skyline support", "display": [240, 220], "scaleMode": "FILL"},
+        {"nodeId": "1370:44", "role": "outer O front skyline postcard", "display": [214, 196], "scaleMode": "FILL"},
+        {"nodeId": "1373:29", "role": "AL profile snapshot 3", "display": [170, 130], "scaleMode": "FILL"},
+        {"nodeId": "1373:56", "role": "AL Q&A Memories support", "display": [175, 205], "scaleMode": "FILL"},
+        {"nodeId": "1363:131", "role": "AI story support 1", "display": [235, 210], "scaleMode": "FILL"},
+        {"nodeId": "1363:150", "role": "AI event 03", "display": [235, 160], "scaleMode": "FILL"}
+      ]
+    },
+    {
+      "imageHash": "439a719d73f28e8dd2889f2026cccb15f345ec63",
+      "driveId": "1ZsLOgZbZWyfYgDfvKvYPqOsbMJrSf1J5",
+      "driveFileName": "RURUBU_V5_07_MEMORY_OLD_TOWN__FIGMA_352x368_Q30_SINGLECALL.jpg",
+      "intrinsic": [352, 368],
+      "uses": [
+        {"nodeId": "1373:28", "role": "AL profile snapshot 2", "display": [178, 140], "scaleMode": "FILL"},
+        {"nodeId": "1363:146", "role": "AI event 02", "display": [165, 115], "scaleMode": "FILL"},
+        {"nodeId": "1363:168", "role": "AI chronology feature support 2", "display": [205, 150], "scaleMode": "FILL"}
+      ]
+    }
+  ],
+  "reconciledRejectedOrRepairedStates": [
+    {
+      "role": "AK profile main",
+      "previous": {"nodeId": "1367:11", "hash": "539c259be8036b481d06b4f76db9a39b407d90e8", "display": [520, 735]},
+      "reason": "registered 1356x560 source was enlarged vertically and rendered visibly soft at actual size",
+      "replacement": "AL wide hero 1373:11 at 650x268"
+    },
+    {
+      "role": "AL Q&A Memories hero",
+      "previous": {"nodeId": "1373:55", "hash": "439a719d73f28e8dd2889f2026cccb15f345ec63", "display": [705, 545]},
+      "reason": "registered 352x368 source was substantially enlarged",
+      "replacement": "verified dining hash d76eb07d83d042f15044c8bc6bf68d73a73cd77d at 705x480"
+    },
+    {
+      "role": "small skyline/postcard repeated uses",
+      "sourceIntrinsic": [240, 220],
+      "repairs": [
+        {"nodeId": "1373:56", "before": [190, 255], "after": [175, 205]},
+        {"nodeId": "1363:131", "before": [260, 235], "after": [235, 210]},
+        {"nodeId": "1363:150", "before": [255, 165], "after": [235, 160]}
+      ]
+    }
+  ],
+  "qa": {
+    "outerO": {"whole1400": "PASS", "thumbnail500": "PASS", "actualFront794x1123": "PASS"},
+    "insideAL": {"whole1400": "PASS", "thumbnail500": "PASS", "actualProfile794x1123": "PASS", "actualQa794x1123": "PASS"},
+    "insideAI": {"whole1400AfterIntrinsicRepair": "PASS", "latestChronologyStructure": "PASS"},
+    "profileValueStress": {"nodeId": "1374:2", "renderedActualSize": "PASS", "textIntersections": 0, "safeArea18pxRisks": 0},
+    "qaAnswerStress": {"nodeId": "1368:2", "textIntersections": 0, "safeArea18pxRisks": 0},
+    "rollbackPreserved": true
+  },
+  "assetLifecycleThisRun": {
+    "generated": 0,
+    "newDriveSaves": 0,
+    "newExternalBinaryUploads": 0,
+    "existingVerifiedPngMastheadReused": true,
+    "existingVerifiedPhotoSourcesRecomposed": true,
+    "generatedSectionDecorationAdopted": false,
+    "v7Touched": false
+  },
+  "status": "VERIFIED_LOCAL_DUMMY_ASSET_RECONCILIATION / REGISTERED_PHOTO_ROLES_INTRINSIC_SAFE / V7_HOLD / NOT_PRINT_READY"
+}
