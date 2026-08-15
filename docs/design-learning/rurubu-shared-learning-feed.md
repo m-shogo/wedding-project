@@ -154,3 +154,47 @@ Asset/transport evidence: Q60 master Drive `1YL0WAOzYU3O1FGa23ieRuw_Btu4jbmzr` w
 What must remain Rurubu-specific: exact headline placement, destination photography, collage density, timeline geometry, and Rurubu-like editorial grammar.
 
 Cross-item applicability: when another print artifact visually breaks into a false header band plus body even though the content is coherent, independently test whether extending an existing legitimate image/texture field behind native type improves continuity before adding another container or decorative device.
+
+### RSL-010 — Destination-semantic coherence is a dominant-photo QA dimension
+
+State: `VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`
+
+Source problem: FJ's back dominant photo was visually strong but read as a foreign cliff/coast destination, weakening the Yokohama issue identity.
+
+Root-cause hypothesis: image quality is not only resolution, crop and beauty. A dominant photograph can be technically excellent and still be wrong when its place/story semantics conflict with native editorial context.
+
+Bounded test: FL `1195:2` replaced only the back dominant image with an existing verified waterfront source, preserved native headline, lower collage, timeline and all front content, and rebalanced existing vertical positions without adding assets or containers.
+
+Expected improvement: stronger front/back destination coherence and less synthetic travel-collage feeling.
+
+Regression risk: semantically safer city imagery can still feel generic; role and crop must remain editorially intentional.
+
+Three-scale evidence: 500px whole-item PASS; 1000px spread PASS; actual-size back ≈798×1123 PASS; 35 visible native texts; 7 IMAGE fills; absolute text intersections 0; 18px safe-area risks 0.
+
+Figma evidence: FL `1195:2`, back `1195:3`, dominant source node `1195:6`, hash `539c259be8036b481d06b4f76db9a39b407d90e8`.
+
+What must remain Rurubu-specific: Yokohama subject, exact image, crop, headline, timeline geometry and magazine grammar.
+
+Cross-item applicability: other print items can independently test whether a dominant image contradicts the artifact's place/story semantics before solving the problem with more decoration or generation.
+
+### RSL-011 — An invented face must never inherit a real-person identity label
+
+State: `VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`
+
+Source problem: EO's profile page paired recognizable generic/generated people with native `SHOGO` / `SHI-CHAN` labels, which could falsely represent strangers as the real couple.
+
+Root-cause hypothesis: when verified real-person photography is unavailable, identity should remain in native editable text while raster imagery carries non-person atmosphere, objects, destination or explicitly replaceable placeholders.
+
+Bounded test: FM `1196:285` replaced only the two profile raster roles with already-verified non-person travel/lifestyle atmosphere sources, preserved native names and factual copy, and rebalanced question hierarchy without new cards/shadows/gradients.
+
+Expected improvement: remove false-identity risk while retaining a strong editorial profile page and editable identity facts.
+
+Regression risk: non-person lifestyle imagery can become generic stock or be mistaken for final real-photo authority; keep it semantically named and replaceable.
+
+Three-scale evidence: 1000px spread PASS; actual-size left 794×1123 PASS; final structure 52 visible native texts; 6 IMAGE fills; absolute text intersections 0; 18px safe-area risks 0.
+
+Figma evidence: FM `1196:285`; non-person profile nodes `1196:290` hash `c1ada11205bc3978bf426b304d683f1c1566cac2` and `1196:295` hash `d76eb07d83d042f15044c8bc6bf68d73a73cd77d`; EO retained as hidden rollback.
+
+What must remain Rurubu-specific: cafe/dining image choices, profile composition, question geometry, colors and travel-magazine treatment.
+
+Cross-item applicability: any wedding artifact that labels a real person must independently verify image identity authority. If verified real photography is absent, use non-person atmosphere or an explicit replaceable placeholder rather than a generated recognizable stranger.
