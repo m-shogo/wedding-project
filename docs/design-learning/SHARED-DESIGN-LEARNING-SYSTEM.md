@@ -110,6 +110,8 @@ These can become `CROSS_ITEM_CANDIDATE` quickly when backed by real evidence:
 - rollback and semantic-node practices
 - failure stop conditions
 - conditional raster-to-vector capability and its QA methods, without transferring literal artwork
+- hybrid Figma authoring split: native variable text + generated/composed fixed decoration + SVG where valuable + replaceable mask/image roles
+- generated text-support backgrounds while the final copy remains native and editable
 
 ### Must usually remain item-specific until reproduced
 
@@ -124,6 +126,27 @@ These can become `CROSS_ITEM_CANDIDATE` quickly when backed by real evidence:
 - passport/ticket-specific authenticity devices
 
 Do not make all wedding items converge into one style. Shared learning should improve judgment while preserving distinct art direction.
+
+## Project-wide authoring default — AI-assisted Figma Hybrid Authoring
+
+State: `PROMOTED_PROJECT_RULE` by explicit project-wide user direction on 2026-08-15.
+
+Canonical policy:
+
+- `docs/design-learning/AI-FIGMA-HYBRID-AUTHORING-POLICY.md`
+
+Default responsibility split:
+
+- variable/semantic/factual copy stays native Figma text;
+- fixed decoration and visual treatment may be generated/composed rather than recreated as fragile native micro-geometry;
+- the decorative background behind editable text may itself be generated/composed for the expected text mass; one line, two-to-three lines, or longer copy are all valid depending on the role, as long as final wording remains native text and the support has a verified text-fit/safe-zone contract;
+- logos, wordmarks, icons and suitable reusable silhouettes use SVG/vector where meaningful editability justifies it;
+- replaceable photography/images use stable non-destructive mask/crop roles so different source dimensions do not require rebuilding surrounding layout;
+- Figma is primarily the assembly, readable hierarchy, text-editing, image-replacement, positioning and final-QA surface, not a requirement to hand-build every visual flourish.
+
+This rule does **not** mean flattening whole pages or baking future-editable information into images. Preserve the controls people are actually likely to change later.
+
+The hybrid split is project-wide; the look is not. Exact generated decoration, layout, motif, palette, visual density and item-specific art direction never transfer automatically between Wedding items.
 
 ## Project-wide conditional capability — Raster / Image → Editable SVG → Figma
 
@@ -163,11 +186,12 @@ At the beginning of each hourly visual run:
 
 1. Re-read its own current authority and live GitHub/Figma/Drive state first.
 2. Read this shared system and the opposite scope's base shared-learning feed plus relevant newer `.append/` entries only as neutral learning input.
-3. Select at most the lessons relevant to the current visible defect.
-4. Treat transferred lessons as hypotheses unless already `PROMOTED_PROJECT_RULE`.
-5. Test on a rollback-safe duplicate or bounded semantic role.
-6. Review at whole-item, reading/page, and actual-size/detail scales.
-7. Record success or failure in the receiving scope's own base feed or canonical `.append/` extension.
+3. Read `docs/design-learning/AI-FIGMA-HYBRID-AUTHORING-POLICY.md` for Figma-based design work; read the editable-SVG workflow only when vectorization is relevant.
+4. Select only the lessons relevant to the current visible defect.
+5. Treat transferred lessons as hypotheses unless already `PROMOTED_PROJECT_RULE`.
+6. Test on a rollback-safe duplicate or bounded semantic role.
+7. Review at whole-item, reading/page, and actual-size/detail scales.
+8. Record success or failure in the receiving scope's own base feed or canonical `.append/` extension.
 
 This makes cross-item learning bidirectional: Rurubu can teach typography, hierarchy, crop, editorial-density and print lessons; non-Rurubu items can teach physical-artifact realism, restrained motif usage, information hierarchy, editability, or asset-production lessons back to Rurubu—only after local verification.
 
