@@ -95,3 +95,23 @@
 - 動画・画像素材を追加した場合は、用途と採用判断を該当メモへ残す。
 - `motion-studio` 変更時は `pnpm check` / `pnpm typecheck` / `pnpm export` を確認する。
 - `movie-dashboard` 変更時は `pnpm build` とアプリ内データ整合性チェックを確認する。
+
+## Wedding Figma / 印刷物の共通学習
+
+Wedding内でFigmaを使うデザイン研究・改善を行う場合は、item固有authorityに加えて次を必ず共通入口として読む。
+
+- `docs/design-learning/SHARED-DESIGN-LEARNING-SYSTEM.md`
+- `docs/design-learning/AI-FIGMA-HYBRID-AUTHORING-POLICY.md`
+- Vector化が関係する場合のみ `docs/design-learning/RASTER-TO-EDITABLE-SVG-FIGMA-WORKFLOW.md`
+
+AI-assisted Figmaのproject-wide defaultは役割分担を明確にする。
+
+- 可変・意味を持つ文字はnative Figma text。
+- 文字以外の固定装飾・あしらい・視覚処理は、将来個別編集する理由がなければ生成/composed assetを優先してよい。
+- native textの背景枠・帯・紙片・吹き出し等も生成側に含めてよい。1行、2〜3行、4行以上などを固定ルールにせず、実際の文字量に合うsupport assetとsafe zoneを設計する。
+- ロゴ、wordmark、icon、再利用価値の高いflat graphicは、必要性がある場合SVG/vectorを使う。
+- 差し替え対象画像はstable mask/crop roleに置き、異なる画像サイズ・比率へ差し替えても周辺layoutを作り直さない構造にする。
+- Figmaは主にassembly、native text編集、画像差し替え、配置、読みやすさ、最終QAのsurfaceとして使い、装飾を無理に大量のnative geometryで再現しない。
+- ただしページ全体の一枚画像化や、後で変更する文字・事実の画像焼き込みはdefaultにしない。
+
+この共通方針は制作方法だけを共有し、Rurubu、Passport、Ticket、ADD等の固有レイアウト・配色・装飾・世界観を同一化しない。
