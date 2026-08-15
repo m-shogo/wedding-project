@@ -1,0 +1,39 @@
+{
+  "date": "2026-08-16",
+  "scope": "Rurubu WEDDING V6 only",
+  "state": "ACTIVE_ROLE_RECONCILIATION / AQ_PREFERRED / INTRINSIC_SAFE_BY_REGISTERED_BOUNDS / NOT_PRINT_READY",
+  "authority": "live Figma -> verified prior image registry/Drive evidence -> this reconciliation",
+  "preferred": {
+    "outer": {"nodeId": "1370:2", "label": "O", "status": "UNCHANGED_FROM_PRIOR_VERIFIED_RECONCILIATION"},
+    "profileQa": {"nodeId": "1380:18", "label": "AM", "status": "UNCHANGED_FROM_PRIOR_VERIFIED_RECONCILIATION"},
+    "storyChronology": {"nodeId": "1387:2", "label": "AQ", "status": "PREFERRED"}
+  },
+  "aqRoles": [
+    {"nodeId":"1387:7","role":"PHOTO / STORY_HERO_REPLACEABLE","display":{"w":650,"h":455},"registered":{"w":1356,"h":560},"imageHash":"539c259be8036b481d06b4f76db9a39b407d90e8","withinRegisteredBounds":true},
+    {"nodeId":"1387:8","role":"PHOTO / STORY_SUPPORT_1_REPLACEABLE","display":{"w":220,"h":202},"registered":{"w":240,"h":220},"imageHash":"644f449c3bf2001a94d4b822d2b55e2614c11042","withinRegisteredBounds":true},
+    {"nodeId":"1387:9","role":"PHOTO / STORY_SUPPORT_2_REPLACEABLE","display":{"w":338,"h":278},"registered":{"w":810,"h":552},"imageHash":"c1ada11205bc3978bf426b304d683f1c1566cac2","withinRegisteredBounds":true},
+    {"nodeId":"1387:19","role":"PHOTO / EVENT_1_REPLACEABLE_EDITORIAL","display":{"w":325,"h":155},"imageHash":"539c259be8036b481d06b4f76db9a39b407d90e8","withinRegisteredBounds":true},
+    {"nodeId":"1387:27","role":"PHOTO / EVENT_3_REPLACEABLE_EDITORIAL","display":{"w":235,"h":145},"registered":{"w":240,"h":220},"imageHash":"644f449c3bf2001a94d4b822d2b55e2614c11042","withinRegisteredBounds":true},
+    {"nodeId":"1387:35","role":"PHOTO / EVENT_5_REPLACEABLE_EDITORIAL","display":{"w":335,"h":150},"registered":{"w":732,"h":498},"imageHash":"d76eb07d83d042f15044c8bc6bf68d73a73cd77d","withinRegisteredBounds":true},
+    {"nodeId":"1387:44","role":"PHOTO / TIMELINE_FEATURE_HERO_REPLACEABLE","display":{"w":505,"h":305},"registered":{"w":944,"h":608},"imageHash":"e3738476f760932bb5b09c9d60f174dd6c84049d","withinRegisteredBounds":true},
+    {"nodeId":"1387:45","role":"PHOTO / TIMELINE_FEATURE_SUPPORT_1_REPLACEABLE","display":{"w":250,"h":150},"registered":{"w":1356,"h":560},"imageHash":"539c259be8036b481d06b4f76db9a39b407d90e8","withinRegisteredBounds":true},
+    {"nodeId":"1387:46","role":"PHOTO / TIMELINE_FEATURE_SUPPORT_2_REPLACEABLE","display":{"w":225,"h":150},"registered":{"w":352,"h":368},"imageHash":"439a719d73f28e8dd2889f2026cccb15f345ec63","withinRegisteredBounds":true}
+  ],
+  "structure": {
+    "story": {"nativeTextVisible":12,"imageRolesVisible":3,"textCollisions":0,"safeArea18pxRisks":0,"outsideVisibleNodes":0},
+    "chronology": {"nativeTextVisible":32,"imageRolesVisible":6,"textCollisions":0,"safeArea18pxRisks":0,"outsideVisibleNodes":0}
+  },
+  "rollback": {"nodeId":"1384:2","label":"AP","visible":false,"preserved":true},
+  "assetLifecycle": {
+    "newGeneration":0,
+    "newDriveSaves":0,
+    "newExternalBinaryPlacement":0,
+    "existingVerifiedImageRecomposition":true,
+    "generatedSectionDecorationAdopted":false
+  },
+  "notes": [
+    "This is a registered-dimension safety reconciliation, not effective-DPI final print approval.",
+    "O and AM are unchanged; their prior verified asset evidence remains authoritative for those roots.",
+    "Generated Timeline v2 remains in Drive but was not adopted in AQ."
+  ]
+}
