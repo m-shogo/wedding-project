@@ -1,0 +1,88 @@
+{
+  "schemaVersion": "rurubu-v5-comparator-promotion-v1",
+  "date": "2026-08-15",
+  "scope": "Rurubu WEDDING only",
+  "authorityOrder": ["live Figma", "fresh Google Drive readback", "asset evidence ledger/overlays", "GitHub main"],
+  "startingMainSha": "cf6873df7da1a9297964ed9cdd1c3c92d542c812",
+  "runEvidenceCommit": "21ff046c10c2f0a41afbe3eccb977b368d0001e3",
+  "currentUntouched": {"outer": "77:18", "inside": "77:290"},
+  "best": {
+    "outer": {
+      "label": "FL",
+      "reviewNodeId": "1195:2",
+      "backNodeId": "1195:3",
+      "frontNodeId": "1195:132",
+      "name": "BEST_CLEANROOM_OUTER_FL_REVIEW_2026_08_15",
+      "status": "VERIFIED_LOCAL_ADOPTED"
+    },
+    "inside": {
+      "label": "FO",
+      "sourceNodeId": "1200:2",
+      "leftNodeId": "1200:3",
+      "rightNodeId": "1200:132",
+      "name": "BEST_CLEANROOM_INSIDE_FO_MEMORY_ROLE_COHERENCE_2026_08_15",
+      "status": "VERIFIED_LOCAL_ADOPTED"
+    }
+  },
+  "insideChange": {
+    "sourceBest": "FN 1199:2",
+    "promotedBest": "FO 1200:2",
+    "rejectedStudy": "FP 1202:2",
+    "problem": "The lower Memory Spots image set mixed foreign-looking coast/resort imagery with Yokohama/native editorial context, so individually valid assets formed a semantically synthetic destination collage.",
+    "principle": "Image roles must be QA'd as an editorial narrative set; individual fidelity/provenance PASS is insufficient when adjacent images contradict the native story. Asset deduplication is a separate objective and must not be forced when it harms binding or photo-led density.",
+    "boundedChange": "Reuse only existing verified Rurubu sources for the three lower Memory Spots roles: street hash 439a719..., exact Q60 Yokohama secondary hash 644f449..., waterfront hash 539c259.... Preserve native text, profile safety treatment, fold, and Current.",
+    "generated": 0,
+    "newGeneratedAssetAdopted": 0,
+    "newExternalBinaryPlaced": 0,
+    "memoryLead": {"nodeId": "1200:267", "imageHash": "439a719d73f28e8dd2889f2026cccb15f345ec63"},
+    "memorySupport02": {"nodeId": "1200:268", "imageHash": "644f449c3bf2001a94d4b822d2b55e2614c11042"},
+    "memorySupport03": {"nodeId": "1200:269", "imageHash": "539c259be8036b481d06b4f76db9a39b407d90e8"}
+  },
+  "rejectedStudy": {
+    "label": "FP",
+    "nodeId": "1202:2",
+    "name": "REJECTED_HIDDEN_INSIDE_FP_DUPLICATE_REMOVAL_WEAK_BINDING_2026_08_15",
+    "reason": "Removing the repeated waterfront image and converting role 03 to a text-led callout weakened lower-right binding and photo-led closure at whole-item scale.",
+    "visible": false
+  },
+  "qa": {
+    "insideWholeReading1000": "PASS_STRONGER_SEMANTIC_COHERENCE_THAN_FN",
+    "insideActualRight795x1123": "PASS",
+    "insideVisibleNativeText": 52,
+    "insideVisibleImageFills": 6,
+    "insideAbsoluteTextIntersections": 0,
+    "insideTextSafeAreaRisk18px": 0,
+    "fold": {"nodeId": "1200:284", "x": 792.7000122070312, "width": 2, "height": 1122.5}
+  },
+  "q60Secondary": {
+    "driveId": "1aVp34U5qUTqd9FR3AILmJggdWwY1lAJb",
+    "figmaNodeId": "1200:268",
+    "imageHash": "644f449c3bf2001a94d4b822d2b55e2614c11042",
+    "status": "VERIFIED_SECONDARY_ONLY"
+  },
+  "q60Master": {
+    "driveId": "1YL0WAOzYU3O1FGa23ieRuw_Btu4jbmzr",
+    "mimeType": "image/jpeg",
+    "sizeBytes": 155439,
+    "materializedInRuntime": true,
+    "dominantExactFigmaPlacement": false,
+    "transportAttempt": "Figma.upload_assets official target + exact mounted Drive JPEG multipart POST",
+    "transportFailureFingerprint": "FIGMA_UPLOAD_DNS_MCP_FIGMA_COM",
+    "mutationOccurred": false,
+    "sameMethodRetriedAfterFailure": false,
+    "status": "OPEN"
+  },
+  "rollback": {
+    "fn": {"nodeId": "1199:2", "name": "ROLLBACK_HIDDEN_INSIDE_FN_2026_08_15", "visible": false},
+    "fp": {"nodeId": "1202:2", "name": "REJECTED_HIDDEN_INSIDE_FP_DUPLICATE_REMOVAL_WEAK_BINDING_2026_08_15", "visible": false}
+  },
+  "startHere": {
+    "statusNodeId": "845:27",
+    "status": "FL outer / FO inside",
+    "currentOuter": "77:18",
+    "currentInside": "77:290"
+  },
+  "v5Complete": false,
+  "v6ProductionStarted": false,
+  "remainingGate": "Dominant Q60 master exact Figma provenance followed by final asset/print/fold/ledger reconciliation."
+}
