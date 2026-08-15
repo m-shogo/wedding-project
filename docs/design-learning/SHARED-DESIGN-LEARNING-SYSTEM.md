@@ -109,6 +109,7 @@ These can become `CROSS_ITEM_CANDIDATE` quickly when backed by real evidence:
 - clean-room comparison methods
 - rollback and semantic-node practices
 - failure stop conditions
+- conditional raster-to-vector capability and its QA methods, without transferring literal artwork
 
 ### Must usually remain item-specific until reproduced
 
@@ -123,6 +124,38 @@ These can become `CROSS_ITEM_CANDIDATE` quickly when backed by real evidence:
 - passport/ticket-specific authenticity devices
 
 Do not make all wedding items converge into one style. Shared learning should improve judgment while preserving distinct art direction.
+
+## Project-wide conditional capability — Raster / Image → Editable SVG → Figma
+
+State: `PROMOTED_PROJECT_RULE` by explicit project-wide user direction on 2026-08-15.
+
+Canonical workflow:
+
+- `docs/design-learning/RASTER-TO-EDITABLE-SVG-FIGMA-WORKFLOW.md`
+
+This is **not** a rule to vectorize all imagery. It is a reusable capability to apply where editability, scale independence, recoloring, shape reuse, or print reuse justify it—especially logos, lettering, icons, pictograms, flat illustrations, map-like linework, stamps/seals, or other graphic silhouettes.
+
+Photography, natural textures, food, skin/hair, painterly imagery, and diffusion-rich continuous-tone images should normally remain strong raster masters unless there is a specific vector reason.
+
+When vectorization is appropriate:
+
+1. preserve `Original Raster`;
+2. create `High Fidelity SVG` as visual truth;
+3. create a separate `Clean Editable SVG` as working master;
+4. compare with Overlay Diff;
+5. verify large + ~320px + ~180px and smaller real-use scales when needed;
+6. verify Light/Dark polarity when relevant;
+7. perform actual anchor/Bezier/recolor editability QA in Figma;
+8. refine a Final Candidate from the clean working copy toward the high-fidelity reference;
+9. verify SVG export/re-import behavior when downstream reuse matters.
+
+Do not optimize for minimum node count. Protect negative spaces, sharp terminals, asymmetry, characteristic curvature, thin/thick transitions, spacing and center of gravity.
+
+Use destructive Figma vector operations only on a rollback-safe Working copy. In particular, Simplify, Flatten, Outline Stroke, Shape Builder edits, and text-to-vector conversion can destroy editability/history. Preserve native text whenever text semantics still matter.
+
+Imported SVG should be treated as complete only when it is actually an editable vector node tree—not because a PNG or rendered preview was transported successfully. Connected Figma `upload_assets` with `image/svg+xml` is a preferred route when available; `figma.createNodeFromSvg(svgString)` is an appropriate Plugin API fallback where that environment is available.
+
+Cross-item transfer includes the method, QA gates, rollback discipline and failure fingerprints only. Exact silhouettes, lettering, brand motifs, colors and item production state remain item-specific.
 
 ## Receiving-item protocol
 
