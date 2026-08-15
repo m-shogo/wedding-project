@@ -2,7 +2,7 @@
   "schemaVersion": "rurubu-v6-o-am-ai-active-asset-reconciliation-v1",
   "date": "2026-08-16",
   "scope": "Rurubu WEDDING V6 current preferred O + AM/AI studies only",
-  "observedGithubMainBeforeWrite": "3585b8bf5468222ffcc0c49386a4c0c7e1b07586",
+  "observedGithubMainBeforeWrite": "c8a08f100c0426e3422b8cfc8bdf5c9b79a668e0",
   "figmaFileKey": "bfM0d4c9dCeBv5pCkJ3TNM",
   "selectedFrames": {
     "outer": {"label": "O", "nodeId": "1370:2"},
@@ -41,6 +41,16 @@
       "textIntersections": 0,
       "safeArea18pxRisks": 0
     },
+    "amLongAnswerStress": {
+      "rootNodeId": "1381:18",
+      "qaPageNodeId": "1381:46",
+      "actualQa794x1123": "PASS",
+      "realisticLongJapaneseAnswers": 6,
+      "textIntersections": 0,
+      "safeArea18pxRisks": 0,
+      "hiddenAfterVerification": true,
+      "evidence": "RURUBU-V6-AM-LONG-ANSWER-STRESS-2026-08-16.md"
+    },
     "rollbackPreserved": true
   },
   "assetLifecycleThisRun": {
@@ -49,7 +59,8 @@
     "newExternalBinaryUploads": 0,
     "existingVerifiedPhotoSourcesRecomposed": true,
     "generatedSectionDecorationAdopted": false,
+    "amSpecificLongAnswerStressVerified": true,
     "v7Touched": false
   },
-  "status": "VERIFIED_LOCAL_DUMMY_ASSET_RECONCILIATION / AM_PROMOTED / REGISTERED_PHOTO_ROLES_INTRINSIC_SAFE / V7_HOLD / NOT_PRINT_READY"
+  "status": "VERIFIED_LOCAL_DUMMY_ASSET_RECONCILIATION / AM_PROMOTED / AM_LONG_ANSWER_STRESS_PASS / REGISTERED_PHOTO_ROLES_INTRINSIC_SAFE / V7_HOLD / NOT_PRINT_READY"
 }
