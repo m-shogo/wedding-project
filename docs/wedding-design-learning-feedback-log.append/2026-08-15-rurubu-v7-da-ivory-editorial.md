@@ -40,7 +40,7 @@ Source: Inside A `1247:2`.
 
 Created `1250:37`, increasing profile/travel photo mass and tightening question/travel clusters. The right page improved, but the left lower-page rhythm remained materially similar to A. Because the gain was insufficient, Inside B was rejected and hidden; A remains preferred.
 
-### Outer D — paper-like base test
+### Outer D — paper-like front base test
 
 Source: corrected Outer C `1250:2`.
 
@@ -56,6 +56,18 @@ Created `1252:2` and changed only the front-page paper field and native headline
 Expected improvement: reduce poster/landing-page reading while retaining Hawaii energy through Japanese typography and photography.
 
 Regression risk: tropical energy could become too quiet or generic; the ivory could read as empty luxury space if photo hierarchy did not remain strong.
+
+### Outer E — both-side paper-base counter-test
+
+Source: preferred Outer D `1252:2`.
+
+Created rollback-safe `1256:2` and changed only the back-page turquoise field to the same warm ivory family, recoloring existing native labels/date to pink/turquoise/navy while preserving all image roles and geometry.
+
+Expected improvement: make the outer spread feel like one consistent printed paper system rather than an ivory front paired with a saturated back.
+
+Observed regression: the back page became too quiet, lost useful tropical/editorial tension, and the white `旅の途中で、ハワイ気分。` treatment became weaker near the photo/paper boundary. The turquoise field was therefore proven to have a useful page-level binding/contrast function in this composition even though the large front pink field did not.
+
+Status: `REJECTED`. E was renamed `V7_HAWAII_CLEANROOM_OUTER_E_REJECTED_OVERQUIET_BACK_CONTRAST_2026_08_15` and hidden. D remains preferred.
 
 ## Visual evidence
 
@@ -73,22 +85,27 @@ Outer C:
 - front actual size / 794×1123: PASS;
 - back actual size / 794×1123: PASS.
 
+Outer E:
+
+- whole spread / 1200 px: REJECTED; stronger uniformity but weaker editorial tension/back-page contrast.
+
 Inside B:
 
 - whole spread / 1200 px: technically PASS but insufficient gain over A; REJECTED.
 
 ## Structure evidence
 
-Preferred V7 state after promotion:
+Preferred V7 state after promotion and counter-test:
 
 - Start Here `845:27`: `V5 FU/FX · V6 M/I · V7 D/A STUDY`;
 - Outer D `1252:2`: 20 visible native text nodes, 6 IMAGE roles, 6 named MASK roles, 18px safe-area text risk = 0;
 - Inside A `1247:2`: 32 visible native text nodes, 6 IMAGE roles, 6 named MASK roles, 18px safe-area text risk = 0;
 - Outer C `1250:2`: hidden rollback/superseded comparison;
 - Outer B `1245:2`: hidden older comparison;
+- Outer E `1256:2`: hidden rejected counter-test;
 - Inside B `1250:37`: hidden rejected comparison.
 
-No image hashes changed between C and D. Existing verified image roles remain replaceable and semantic.
+No image hashes changed between C, D and E. Existing verified image roles remain replaceable and semantic.
 
 ## Drive / asset evidence
 
@@ -105,11 +122,14 @@ This run therefore produced:
 - new Figma binary placements: `0`;
 - existing verified asset recomposition: `YES`;
 - preferred study visual promotion: `YES`;
+- rejected visual counter-tests recorded: `YES`;
 - final Hawaii asset fidelity: `NO`.
 
 ## Decision
 
-`V7 D/A STUDY` is the preferred Hawaii clean-room direction.
+`V7 D/A STUDY` remains the preferred Hawaii clean-room direction after the E counter-test.
+
+The result is deliberately asymmetric in page-field treatment: a quieter front paper base lets the large Japanese cover typography and hero photography carry the genre, while the turquoise back field still performs useful visual binding/contrast around the memory cluster. This is evidence-based, not a rule to make both pages the same color.
 
 It is **not final V7**. The coast image remains mood-only and must not be represented as literal Hawaii. The final dominant Hawaii role still requires an acceptable Hawaii/Oahu-specific master and the full asset lifecycle.
 
