@@ -8,7 +8,7 @@ Production state: separate clean-room V6; V7 is HOLD
 
 ## Current declaration
 
-`V6_LIVE_FIGMA_IN_PROGRESS / OUTER_O_CURRENT / INSIDE_AM_AI_PREFERRED_STUDIES / THREE_SCALE_DUMMY_QA_VERIFIED_LOCALLY / VARIABLE_COPY_STRESS_PARTIALLY_INHERITED_AND_AM_STRUCTURE_REVERIFIED / REGISTERED_PHOTO_ROLES_INTRINSIC_RECONCILED / PNG_MASTHEAD_DRIVE_AND_FIGMA_HASH_VERIFIED / GENERATED_SECTION_MASTERS_DRIVE_VERIFIED_NOT_ADOPTED / V7_HOLD / NOT_PRINT_READY`
+`V6_LIVE_FIGMA_IN_PROGRESS / OUTER_O_CURRENT / INSIDE_AM_AI_PREFERRED_STUDIES / THREE_SCALE_DUMMY_QA_VERIFIED_LOCALLY / PROFILE_VALUE_STRESS_VERIFIED / AM_LONG_ANSWER_STRESS_VERIFIED / REGISTERED_PHOTO_ROLES_INTRINSIC_RECONCILED / PNG_MASTHEAD_DRIVE_AND_FIGMA_HASH_VERIFIED / GENERATED_SECTION_MASTERS_DRIVE_VERIFIED_NOT_ADOPTED / V7_HOLD / NOT_PRINT_READY`
 
 Live Figma and later evidence supersede older declarations.
 
@@ -27,6 +27,7 @@ Current V6 preferred studies:
 Rollback/comparison remains preserved:
 
 - AL `1373:2` — hidden rollback after AM promotion
+- AM long-answer proof `1381:18` — hidden QA evidence
 - AJ `1364:2` — hidden comparison
 - AK `1367:2` — hidden comparison
 - Outer M `1241:2` — hidden comparison
@@ -94,7 +95,7 @@ Current image roles:
 - snapshot 2 `1380:44` — display `178×140`
 - snapshot 3 `1380:45` — display `170×130`
 
-AL's prior profile value stress remains relevant because the profile geometry was cloned unchanged:
+Profile value stress remains verified because the profile geometry was cloned unchanged from AL:
 
 - hidden proof `1374:2`
 - realistic values including `神奈川県川崎市`, `1991年8月16日`, `散歩してカフェ巡り`
@@ -142,9 +143,25 @@ Final Q&A structure readback:
 
 The first AM render exposed vertically wrapped number boxes and text-bounding overlap. That intermediate state was rejected and corrected before promotion.
 
+### AM-specific long-answer stress
+
+Because AM materially changed Q&A geometry, AL/AK's old geometry-specific answer stress was not reused as authority.
+
+Dedicated hidden proof:
+
+- stress root `1381:18 / QA_HIDDEN / V6_AM_LONG_ANSWER_STRESS_2026_08_16`
+- stress Q&A page `1381:46`
+- six realistic longer Japanese answers rendered at native `794×1123`
+- text/text collisions: `0`
+- 18 px text safe-area risks: `0`
+- no answer overlaps the next question, photo anchor or page bottom
+- rendered actual-size screenshot: PASS
+- proof hidden after verification
+
 Evidence:
 
 - `RURUBU-V6-O-AM-AI-QA-2026-08-16.md`
+- `RURUBU-V6-AM-LONG-ANSWER-STRESS-2026-08-16.md`
 
 ## AI — current Story / chronology
 
@@ -227,6 +244,7 @@ The capability/environment did not materially change in the AM run, so these met
 - generated section decoration adopted: `NO`
 - native editable Q&A preserved: `YES`
 - three-scale visual verification: `YES`
+- AM-specific long-answer stress verification: `YES`
 - structure/safe-area verification: `YES`
 - registered dummy raster dimensions reconciled: `YES`
 - rollback comparison preserved: `YES`
@@ -257,12 +275,12 @@ Do **not** call V6 complete or print-ready until:
 
 Current state:
 
-`V6 O + AM/AI = VERIFIED_LOCAL_DUMMY_DESIGN_STUDIES / REGISTERED_DUMMY_RASTERS_INTRINSIC_RECONCILED / ROLLBACK_SAFE / V7_HOLD / NOT_PRINT_READY`.
+`V6 O + AM/AI = VERIFIED_LOCAL_DUMMY_DESIGN_STUDIES / PROFILE_VALUE_STRESS_VERIFIED / AM_LONG_ANSWER_STRESS_VERIFIED / REGISTERED_DUMMY_RASTERS_INTRINSIC_RECONCILED / ROLLBACK_SAFE / V7_HOLD / NOT_PRINT_READY`.
 
 ## Next highest-value work
 
 1. Review O + AM/AI together as one coherent magazine system and fix only defects visible at thumbnail, reading or actual size.
 2. Preserve the AM/AI active reconciliation overlay when changing any image source, role size or Figma node.
-3. Run AM-specific long-answer stress if Q&A geometry changes again or final real copy arrives; do not blindly reuse AL geometry-specific stress for the changed Q&A layout.
+3. Re-run AM long-answer stress only if Q&A geometry changes again or final real copy arrives.
 4. If binary transport materially changes, test at most one generated section support on a rollback-safe duplicate before adoption.
 5. Keep V7 HOLD until V6 coherence/evidence is genuinely closed.
