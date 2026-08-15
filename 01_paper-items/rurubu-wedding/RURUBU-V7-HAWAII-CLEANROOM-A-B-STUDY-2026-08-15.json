@@ -1,0 +1,96 @@
+{
+  "schemaVersion": "rurubu-v7-hawaii-cleanroom-study-v1",
+  "date": "2026-08-15",
+  "scope": "Rurubu WEDDING only",
+  "observedGithubMainBeforeWrite": "3206bcde2b13ebb89bd2aa681ad0a3ac1479b8b5",
+  "figmaFileKey": "bfM0d4c9dCeBv5pCkJ3TNM",
+  "referenceMethod": {
+    "sources": [
+      "JTB Publishing official るるぶハワイ'26 publication page",
+      "JTB Publishing official るるぶホノルル'27 publication page and public cover"
+    ],
+    "transferredOnly": [
+      "bright tropical pink/aqua energy",
+      "large destination/aspiration headline hierarchy",
+      "dominant ocean/travel photography",
+      "dense food/travel support imagery",
+      "Japanese travel-guide cover rhythm"
+    ],
+    "notCopied": [
+      "るるぶ logo",
+      "exact cover layout",
+      "exact typography treatment",
+      "proprietary illustrations",
+      "source wording",
+      "literal current cover composition"
+    ]
+  },
+  "projectWideAuthoringRuleApplied": "native variable text + clipped replaceable image roles; no Figma decorative micro-geometry",
+  "candidateA": {
+    "outerNodeId": "1244:2",
+    "name": "V7_HAWAII_CLEANROOM_OUTER_A_STRUCTURE_2026_08_15",
+    "status": "TESTED_LOCAL / SUPERSEDED_BY_B",
+    "visibleProblem": "Hawaii color direction and photo-led structure were established, but the page was too evenly arranged and read closer to a poster/landing-page system than a Japanese travel-information magazine."
+  },
+  "candidateB": {
+    "outerNodeId": "1245:2",
+    "frontNodeId": "1245:20",
+    "backNodeId": "1245:3",
+    "name": "V7_HAWAII_CLEANROOM_OUTER_B_EDITORIAL_2026_08_15",
+    "status": "VERIFIED_LOCAL_CLEANROOM_CANDIDATE / NOT_FINAL_V7",
+    "improvementsOverA": [
+      "Japanese headline becomes the dominant front-cover read",
+      "non-uniform photo scale and overlap replace tidy grid rhythm",
+      "support photos are intentionally angled while remaining replaceable masks",
+      "front and back have different but related reading rhythms",
+      "no rounded cards, shadows, UI containers or ornamental micro-geometry were added"
+    ],
+    "nativeTextCount": 20,
+    "replaceableMaskCount": 6,
+    "safeArea18pxRiskCount": 0,
+    "allKnownImageRolesAtOrBelowIntrinsic": true,
+    "wholeSpreadScreenshot": "PASS",
+    "actualSizeFrontScreenshot": "PASS",
+    "actualSizeBackScreenshot": "PASS"
+  },
+  "maskReplacementProof": {
+    "nodeId": "1246:2",
+    "name": "QA / V7_B_FRONT_HERO_REPLACEMENT_STRESS_WIDE_SOURCE",
+    "status": "PASS / hidden after QA",
+    "heroMaskNodeId": "1246:3",
+    "heroMaskGeometry": [0,270,793.7000122070312,420],
+    "test": "swapped the hero from the 796x428 coast source family to the materially wider 1356x560 Yokohama waterfront source without changing mask geometry or surrounding layout",
+    "result": "crop changes inside the role; page layout remains intact"
+  },
+  "activeV7BImageRoles": [
+    {"mask":"1245:4","role":"Yokohama reality waterfront","display":[793.7000122070312,328],"hash":"539c259be8036b481d06b4f76db9a39b407d90e8","intrinsic":[1356,560]},
+    {"mask":"1245:6","role":"dining memory","display":[460,314],"hash":"d76eb07d83d042f15044c8bc6bf68d73a73cd77d","intrinsic":[732,498]},
+    {"mask":"1245:8","role":"cafe memory","display":[300,226],"hash":"c1ada11205bc3978bf426b304d683f1c1566cac2","intrinsic":[810,552]},
+    {"mask":"1245:21","role":"Hawaii-mood hero placeholder","display":[793.7000122070312,420],"hash":"adbb8e529451a81dd25e4eb29bf068655569ce25","intrinsic":[796,428]},
+    {"mask":"1245:23","role":"travel flatlay support","display":[510,330],"hash":"e3738476f760932bb5b09c9d60f174dd6c84049d","intrinsic":[944,608]},
+    {"mask":"1245:25","role":"cafe support","display":[292,224],"hash":"c1ada11205bc3978bf426b304d683f1c1566cac2","intrinsic":[810,552]}
+  ],
+  "knownBlockingQualityIssue": {
+    "role": "V7 B front Hawaii-mood hero",
+    "nodeId": "1245:21",
+    "status": "STRUCTURALLY_VERIFIED_PLACEHOLDER / NOT_HAWAII_SEMANTIC_MASTER",
+    "reason": "the current coast source provides ocean energy but is not verified Hawaii photography; it must not be represented as literal Hawaii",
+    "nextAssetBrief": {
+      "targetAspect": "approximately 1.89:1 within 793.7x420 mask",
+      "subject": "believable Hawaii/Oahu coastal or beach atmosphere, preferably no recognizable person",
+      "focalPoint": "open ocean/beach plus unmistakable tropical-island cues without fake signage",
+      "textSafeZone": "lower-left or lower-middle reserve for native Japanese headline/caption",
+      "lighting": "bright natural tropical daylight or credible golden-hour travel editorial",
+      "photographicCharacter": "real destination-magazine photography, crisp print detail, moderate wide lens",
+      "negatives": ["fake text","fake signs","fantasy saturation","plastic AI surfaces","warped architecture","impossible coast geography","excessive bokeh","generic luxury-resort stock look"]
+    }
+  },
+  "assetLifecycleThisRun": {
+    "generated": 0,
+    "newDriveSaves": 0,
+    "newExternalBinaryPlacements": 0,
+    "existingVerifiedAssetsUsedAsPlaceholders": true,
+    "reasonNoGeneration": "No zero-cost approved generation path was available in this run. The clean-room composition and replacement contract were verified first; the exact Hawaii hero role is now narrowly specified for a future approved generation/asset path."
+  },
+  "selectionBoundary": "V6 M/I remains the selected verified comparator. V7 B is a separate clean-room study and is not yet promoted as final V7."
+}
