@@ -1,0 +1,126 @@
+{
+  "schemaVersion": "rurubu-v5-comparator-promotion-v1",
+  "date": "2026-08-15",
+  "scope": "Rurubu WEDDING only",
+  "authorityOrder": ["live Figma", "fresh Google Drive readback", "asset evidence ledger/overlays", "GitHub main"],
+  "currentUntouched": {"outer": "77:18", "inside": "77:290"},
+  "best": {
+    "outer": {
+      "label": "FU",
+      "rootNodeId": "1209:2",
+      "backNodeId": "1209:3",
+      "frontNodeId": "1209:132",
+      "name": "BEST_CLEANROOM_OUTER_FU_TRAVEL_OBJECT_DOMINANT_2026_08_15",
+      "status": "VERIFIED_LOCAL_ADOPTED"
+    },
+    "inside": {
+      "label": "FX",
+      "rootNodeId": "1214:2",
+      "rightNodeId": "1214:132",
+      "name": "BEST_CLEANROOM_INSIDE_FX_SOURCE_FIDELITY_MEMORY_CLUSTER_2026_08_15",
+      "status": "VERIFIED_LOCAL_ADOPTED"
+    }
+  },
+  "outerQA": {
+    "wholeThumbnail500": "PASS",
+    "reading1000": "PASS",
+    "actualFront794x1123": "PASS",
+    "actualBackApprox798x1123": "PASS",
+    "visibleNativeText": 35,
+    "visibleImageFills": 7,
+    "absoluteTextIntersections": 0,
+    "textSafeAreaRisk18px": 0,
+    "fold": {"nodeId": "1209:193", "x": 792.7000122070312, "width": 2, "height": 1122.5}
+  },
+  "insideQA": {
+    "readingSpread1000": "PASS",
+    "actualRight794x1123": "PASS",
+    "actualLeft": "PASS_INHERITED_FROM_FO_WITH_IDENTICAL_LEFT_PAGE_CONTENT",
+    "visibleNativeText": 52,
+    "visibleImageFills": 6,
+    "absoluteTextIntersections": 0,
+    "textSafeAreaRisk18px": 0,
+    "fold": {"nodeId": "1214:284", "x": 792.7000122070312, "width": 2, "height": 1122.5}
+  },
+  "sourceFidelity": {
+    "outerAllVisibleRasterRolesAtOrBelowIntrinsicInBothAxes": true,
+    "insideAllVisibleRasterRolesAtOrBelowIntrinsicInBothAxes": true,
+    "insideMemory": [
+      {
+        "role": "Memory 01 street",
+        "nodeId": "1214:267",
+        "imageHash": "439a719d73f28e8dd2889f2026cccb15f345ec63",
+        "driveId": "1ZsLOgZbZWyfYgDfvKvYPqOsbMJrSf1J5",
+        "intrinsic": [352,368],
+        "display": [350,365]
+      },
+      {
+        "role": "Memory 02 exact Yokohama skyline",
+        "nodeId": "1214:268",
+        "imageHash": "644f449c3bf2001a94d4b822d2b55e2614c11042",
+        "driveId": "1aVp34U5qUTqd9FR3AILmJggdWwY1lAJb",
+        "intrinsic": [240,220],
+        "display": [200,220]
+      },
+      {
+        "role": "Memory 03 next destination coast",
+        "nodeId": "1214:269",
+        "imageHash": "adbb8e529451a81dd25e4eb29bf068655569ce25",
+        "driveId": "1epb80L7WSZDmU86zl6PVQkZ8frP1JEeN",
+        "intrinsic": [796,428],
+        "display": [330,177]
+      }
+    ]
+  },
+  "freshDriveReadback": {
+    "outerDominantTravelFlatlay": {
+      "driveId": "17YaX5CK-c0cTr4zsL2Dly4J1XSZyFxHG",
+      "fileName": "RURUBU_V5_10_BACK_MAIN_TRAVEL_FLATLAY__FIGMA_944x608_Q18_SINGLECALL.jpg",
+      "mimeType": "image/jpeg",
+      "figmaHash": "e3738476f760932bb5b09c9d60f174dd6c84049d"
+    },
+    "history": {
+      "driveId": "1ndvJShFDKPO6OmUD3JeIRvPwpS8V1v8x",
+      "fileName": "RURUBU_V5_05_HISTORY__FIGMA_1356x560_Q18_SINGLECALL.jpg",
+      "mimeType": "image/jpeg",
+      "figmaHash": "539c259be8036b481d06b4f76db9a39b407d90e8"
+    },
+    "street": {
+      "driveId": "1ZsLOgZbZWyfYgDfvKvYPqOsbMJrSf1J5",
+      "fileName": "RURUBU_V5_07_MEMORY_OLD_TOWN__FIGMA_352x368_Q30_SINGLECALL.jpg",
+      "mimeType": "image/jpeg"
+    },
+    "exactSecondaryQ60": {
+      "driveId": "1aVp34U5qUTqd9FR3AILmJggdWwY1lAJb",
+      "fileName": "RURUBU_V5_01_COVER_HERO__ROLE_240x220_Q78.jpg",
+      "mimeType": "image/jpeg",
+      "figmaHash": "644f449c3bf2001a94d4b822d2b55e2614c11042"
+    },
+    "coast": {
+      "driveId": "1epb80L7WSZDmU86zl6PVQkZ8frP1JEeN",
+      "fileName": "RURUBU_V5_06_MEMORY_COAST__FIGMA_796x428_Q30.jpg",
+      "mimeType": "image/jpeg"
+    }
+  },
+  "studiesAndRollback": {
+    "outerFL": {"nodeId": "1195:2", "status": "ROLLBACK_HIDDEN"},
+    "outerFT": {"nodeId": "1208:2", "status": "REJECTED_HIDDEN"},
+    "outerFV": {"nodeId": "1212:2", "status": "REJECTED_HIDDEN"},
+    "insideFO": {"nodeId": "1200:2", "status": "ROLLBACK_HIDDEN"},
+    "insideFW": {"nodeId": "1213:2", "status": "STUDY_HIDDEN"}
+  },
+  "startHere": {"statusNodeId": "845:27", "status": "FU outer / FX inside"},
+  "generatedThisRun": 0,
+  "newGeneratedAssetAdoptedThisRun": 0,
+  "newExternalBinaryPlacedThisRun": 0,
+  "dominantQ60Master": {
+    "driveId": "1YL0WAOzYU3O1FGa23ieRuw_Btu4jbmzr",
+    "legacyCurrentExactPlacement": false,
+    "knownFailureFingerprint": "FIGMA_UPLOAD_DNS_MCP_FIGMA_COM",
+    "sameMethodRetriedThisRun": false,
+    "note": "FU selected clean-room outer no longer depends on the legacy Current dominant Q60 role for its visible dominant image. This does not by itself retire legacy V5-01 or declare V5 complete; active-scope reconciliation is still required before changing the V5/V6 gate."
+  },
+  "v5Complete": false,
+  "v6ProductionStarted": false,
+  "nextSafeGateWork": "Reconcile whether selected clean-room FU/FX legitimately supersedes the legacy Current V5-01 dominant-photo role, then run final selected-comparator print/fold/provenance/ledger gate without inventing print-vendor values."
+}
