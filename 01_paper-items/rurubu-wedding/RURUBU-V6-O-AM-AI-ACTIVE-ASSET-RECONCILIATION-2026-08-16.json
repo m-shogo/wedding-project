@@ -1,0 +1,55 @@
+{
+  "schemaVersion": "rurubu-v6-o-am-ai-active-asset-reconciliation-v1",
+  "date": "2026-08-16",
+  "scope": "Rurubu WEDDING V6 current preferred O + AM/AI studies only",
+  "observedGithubMainBeforeWrite": "3585b8bf5468222ffcc0c49386a4c0c7e1b07586",
+  "figmaFileKey": "bfM0d4c9dCeBv5pCkJ3TNM",
+  "selectedFrames": {
+    "outer": {"label": "O", "nodeId": "1370:2"},
+    "profileQa": {"label": "AM", "nodeId": "1380:18"},
+    "storyChronology": {"label": "AI", "nodeId": "1363:125"}
+  },
+  "startHereStatus": {
+    "nodeId": "845:27",
+    "text": "V5 FU/FX · V6 O + AM/AI INSIDE STUDIES · V7 HOLD"
+  },
+  "baseReconciliationAuthority": "RURUBU-V6-O-AL-AI-ACTIVE-ASSET-RECONCILIATION-2026-08-16.json",
+  "unchangedAuthorities": {
+    "outerO": true,
+    "storyChronologyAI": true,
+    "profileGeometryAndSourcesInheritedFromAL": true
+  },
+  "amProfileImageRoles": [
+    {"nodeId":"1380:27","role":"AM profile wide hero","imageHash":"539c259be8036b481d06b4f76db9a39b407d90e8","registeredIntrinsic":[1356,560],"display":[650,268],"scaleMode":"FILL"},
+    {"nodeId":"1380:28","role":"AM profile snapshot 1","imageHash":"c1ada11205bc3978bf426b304d683f1c1566cac2","registeredIntrinsic":[810,552],"display":[220,172],"scaleMode":"FILL"},
+    {"nodeId":"1380:44","role":"AM profile snapshot 2","imageHash":"439a719d73f28e8dd2889f2026cccb15f345ec63","registeredIntrinsic":[352,368],"display":[178,140],"scaleMode":"FILL"},
+    {"nodeId":"1380:45","role":"AM profile snapshot 3","imageHash":"644f449c3bf2001a94d4b822d2b55e2614c11042","registeredIntrinsic":[240,220],"display":[170,130],"scaleMode":"FILL"}
+  ],
+  "amQaImageRoles": [
+    {"nodeId":"1380:71","role":"AM Q&A Memories hero","imageHash":"d76eb07d83d042f15044c8bc6bf68d73a73cd77d","registeredIntrinsic":[732,498],"display":[340,460],"scaleMode":"FILL"},
+    {"nodeId":"1380:72","role":"AM Q&A Memories support","imageHash":"644f449c3bf2001a94d4b822d2b55e2614c11042","registeredIntrinsic":[240,220],"display":[185,215],"scaleMode":"FILL"}
+  ],
+  "registeredPhotoRolesAtOrBelowIntrinsicInBothAxes": true,
+  "allCurrentImageRolesUseNonDestructiveImageFills": true,
+  "qa": {
+    "insideAM": {
+      "whole500": "PASS",
+      "whole1400": "PASS",
+      "actualQa794x1123": "PASS",
+      "visibleNativeText": 24,
+      "replaceableImageRoles": 2,
+      "textIntersections": 0,
+      "safeArea18pxRisks": 0
+    },
+    "rollbackPreserved": true
+  },
+  "assetLifecycleThisRun": {
+    "generated": 0,
+    "newDriveSaves": 0,
+    "newExternalBinaryUploads": 0,
+    "existingVerifiedPhotoSourcesRecomposed": true,
+    "generatedSectionDecorationAdopted": false,
+    "v7Touched": false
+  },
+  "status": "VERIFIED_LOCAL_DUMMY_ASSET_RECONCILIATION / AM_PROMOTED / REGISTERED_PHOTO_ROLES_INTRINSIC_SAFE / V7_HOLD / NOT_PRINT_READY"
+}
