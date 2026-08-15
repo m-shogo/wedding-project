@@ -1,8 +1,8 @@
 # ADD-13 メッセージカード — QA
 
-Status: `CURRENT / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / POLICY_FOOTER_REMOVAL_PASS / ROLLBACK_SAFE / NOT_PRINT_READY`
+Status: `CURRENT / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / RECIPIENT_LABEL_REMOVAL_PASS / POLICY_FOOTER_REMOVAL_PASS / ROLLBACK_SAFE / NOT_PRINT_READY`
 Authority: GitHub latest `main` + `docs/automation/non-rurubu-figma-quality-current.md`
-Updated: 2026-08-14
+Updated: 2026-08-15
 
 This file began as the 2026-08-02 pre-Figma QA checklist. The live production and reopened visual evidence supersede the stale `PASS_FOR_FIGMA_PREPARATION` state.
 
@@ -21,10 +21,53 @@ Fresh production screenshots and live structure readback reconfirm the Japanese-
 - front uses `ことばを、残す。` as the hierarchy anchor with restrained recipient / intro / body / signer rhythm;
 - back remains an open reply surface with three restrained writing rules rather than a boxed form;
 - unknown guest-facing recipient/message/signer values remain explicit native editable `LAYOUT DUMMY` text;
-- front `1:3`: 700×990, 8 native text nodes, 0 IMAGE fill nodes, 0 text outside root, `clipsContent=true`;
+- front `1:3`: 700×990, 8 native text nodes / 7 visible, 0 IMAGE fill nodes, 0 visible text outside root, `clipsContent=true`;
 - back `1:13`: 700×990, 4 native text nodes / 3 visible, 0 IMAGE fill nodes, 0 visible text outside root, `clipsContent=true`;
 - no flatten/raster replacement introduced;
 - no screenshot-supported need for generated imagery was found.
+
+### 2026-08-15 redundant front recipient-label removal
+
+Fresh thumbnail and native 700×990 review found the small English `TO` label (`4:26 / ADD13V2/RecipientLabel`) redundant beside the explicit native recipient field `［宛名 · LAYOUT DUMMY］`. At whole-item scale it read as generic stationery filler rather than guest-facing information and added a template-like English cue without improving recipient comprehension.
+
+Live authority was re-read immediately before the edit: GitHub latest `main` `0dcf2a38ff4542b8f69aeaa43b513b06b6772dee`; Current remained `ACTIVE / HOURLY / FIGMA_EDIT_ALLOWED / VISUAL_REOPENED`; Drive folder `1Md8oCMsw4F9tZjQueNmQQ2dYR1I7JwZl`; Figma front production root `1:3`.
+
+Rollback-safe clean-room comparison:
+
+- `13:2 / QA_ADD13_FRONT_NO_TO_LABEL_2026_08_15`
+- changed only the copied `ADD13V2/RecipientLabel` visibility
+- thumbnail 354×500: PASS
+- native 700×990: PASS
+
+The comparison was stronger because the recipient field remained self-explanatory while the right-upper corner became quieter and less template-like.
+
+Full rollback was saved before production mutation:
+
+- `13:16 / ROLLBACK_ADD13_FRONT_PRE_TO_LABEL_REMOVAL_2026_08_15` (`visible=false`)
+
+Production change:
+
+- `4:26 / ADD13V2/RecipientLabel / TO` → `visible=false`
+
+No recipient placeholder, headline, intro/body/signature field, date, rule geometry, type scale, color or factual value changed. The comparison `13:2` was returned to `visible=false` after promotion.
+
+Post-write actual-size screenshot: `PASS`.
+
+Post-write structural readback:
+
+- front root: `700×990`, `clipsContent=true`
+- native text: `8`
+- visible native text: `7`
+- IMAGE fills: `0`
+- outside visible text: `0`
+- `4:26` reads back hidden
+- rollback `13:16` reads back hidden with 13 children
+- comparison `13:2` reads back hidden
+- no flattening, raster replacement or invented factual copy.
+
+Image decision: `IMAGE_GENERATION_NOT_REQUIRED`. The screenshot-supported defect was redundant English filler, not missing imagery. Drive writes: `0`.
+
+Current result: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / RECIPIENT_LABEL_REMOVAL_PASS`.
 
 ### 2026-08-14 redundant back policy-footer removal
 
@@ -62,7 +105,7 @@ Current result: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / PO
 
 ## Rollback / stress evidence
 
-The materially different clean-room comparison, long-copy stress and rollback-safe promotion are recorded in `docs/automation/add-13-message-card-design-qa.md`. Production root IDs remain stable. The current back-footer rollback authority is `12:13`.
+The materially different clean-room comparison, long-copy stress and rollback-safe promotion are recorded in `docs/automation/add-13-message-card-design-qa.md`. Production root IDs remain stable. The current front recipient-label rollback authority is `13:16`; the current back-footer rollback authority is `12:13`.
 
 ## Deferred finalization
 
