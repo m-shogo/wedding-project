@@ -1,0 +1,59 @@
+{
+  "date": "2026-08-17",
+  "scope": "Rurubu WEDDING only",
+  "figmaFile": "bfM0d4c9dCeBv5pCkJ3TNM",
+  "startHere": "V5 FU/FX · V6 W + BZ/CA INSIDE STUDIES · V7 HOLD",
+  "preferred": {
+    "outer": {"label": "W", "nodeId": "1491:2"},
+    "profileQa": {"label": "BZ", "nodeId": "1514:2"},
+    "storyChronology": {"label": "CA", "nodeId": "1517:2"}
+  },
+  "rollback": {
+    "storyChronology": {"label": "BY", "nodeId": "1510:2", "visible": false}
+  },
+  "ca": {
+    "story": {
+      "nativeTextCount": 11,
+      "visibleImageCount": 4,
+      "textCollisionCount": 0,
+      "safeArea18pxRiskCount": 0,
+      "images": [
+        {"role": "DECOR / STORY_TRAVEL_TEXTURE_COMPOSED_RASTER", "hash": "691a6ceed471a5d8efa144052a10564eed177b4f", "display": [375,500], "intrinsic": [720,860], "replaceablePhoto": false},
+        {"role": "PHOTO / STORY_HERO_REPLACEABLE", "hash": "539c259be8036b481d06b4f76db9a39b407d90e8", "display": [820,520], "intrinsic": [1356,560], "replaceablePhoto": true},
+        {"role": "PHOTO / STORY_SUPPORT_1_REPLACEABLE", "hash": "644f449c3bf2001a94d4b822d2b55e2614c11042", "display": [238,216], "intrinsic": [240,220], "replaceablePhoto": true},
+        {"role": "PHOTO / STORY_SUPPORT_2_REPLACEABLE", "hash": "c1ada11205bc3978bf426b304d683f1c1566cac2", "display": [515,350], "intrinsic": [810,552], "replaceablePhoto": true}
+      ]
+    },
+    "chronology": {
+      "nativeTextCount": 30,
+      "visibleImageCount": 5,
+      "textCollisionCount": 0,
+      "safeArea18pxRiskCount": 0,
+      "images": [
+        {"role": "DECOR / TIMELINE_TRAVEL_TEXTURE_COMPOSED_RASTER", "hash": "691a6ceed471a5d8efa144052a10564eed177b4f", "display": [430,505], "intrinsic": [720,860], "replaceablePhoto": false},
+        {"role": "PHOTO / TIMELINE_FEATURE_HERO_REPLACEABLE", "hash": "e3738476f760932bb5b09c9d60f174dd6c84049d", "display": [801,430], "intrinsic": [944,608], "replaceablePhoto": true},
+        {"role": "PHOTO / EVENT_1_REPLACEABLE_EDITORIAL", "hash": "539c259be8036b481d06b4f76db9a39b407d90e8", "display": [350,190], "intrinsic": [1356,560], "replaceablePhoto": true},
+        {"role": "PHOTO / EVENT_3_FEATURE_REPLACEABLE_EDITORIAL", "hash": "439a719d73f28e8dd2889f2026cccb15f345ec63", "display": [300,220], "intrinsic": [352,368], "replaceablePhoto": true},
+        {"role": "PHOTO / EVENT_5_REPLACEABLE_EDITORIAL", "hash": "d76eb07d83d042f15044c8bc6bf68d73a73cd77d", "display": [410,155], "intrinsic": [732,498], "replaceablePhoto": true}
+      ]
+    }
+  },
+  "drive": {
+    "v6RootId": "1wHxC2E09JpLIQRNDDTY4i29KMwMY2_XK",
+    "generatedMastersFolderId": "1pkkf4BX3ugKdR1rTkgXdp8xTaNGrQD1p",
+    "figmaDerivativesFolderId": "1MSpa1pFo2Xiau81aoEzfYviFY_YGF6S9",
+    "newFilesThisPass": 0
+  },
+  "assetLifecycle": {
+    "newImageGeneration": 0,
+    "newDriveSaves": 0,
+    "newExternalBinaryPlacements": 0,
+    "newDistinctRasterBytes": 0,
+    "existingVerifiedComposedTextureReused": true,
+    "nativeEditableTextPreserved": true,
+    "replaceablePhotoRolesPreserved": true,
+    "rollbackPreserved": true,
+    "v7Touched": false
+  },
+  "status": "VERIFIED_LOCAL_DUMMY_DESIGN_STUDIES_NOT_PRINT_READY"
+}
