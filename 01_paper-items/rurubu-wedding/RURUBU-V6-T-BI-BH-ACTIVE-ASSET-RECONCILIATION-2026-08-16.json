@@ -1,0 +1,44 @@
+{
+  "date":"2026-08-16",
+  "scope":"Rurubu WEDDING V6 only",
+  "state":"T_BI_BH_ACTIVE_ASSET_RECONCILIATION_PASS",
+  "figmaFileKey":"bfM0d4c9dCeBv5pCkJ3TNM",
+  "startHere":"V5 FU/FX · V6 T + BI/BH INSIDE STUDIES · V7 HOLD",
+  "preferred":{
+    "outer":{"nodeId":"1447:2","name":"PREFERRED / V6_OUTER_T_PHOTO_LED_BACK_COVER_2026_08_16"},
+    "profileQa":{"nodeId":"1458:2","name":"PREFERRED / V6_INSIDE_BI_DENSE_NATIVE_PROFILE_DATA_2026_08_16"},
+    "storyChronology":{"nodeId":"1451:2","name":"PREFERRED / V6_INSIDE_BH_PHOTO_EVENT_INTEGRATED_CHRONOLOGY_2026_08_16"}
+  },
+  "outer":"unchanged from T verified reconciliation",
+  "profileQa":{
+    "profile":{"nodeId":"1458:3","visibleNativeText":17,"visibleImageRoles":4,"textTextCollision":0,"safeAreaRisk18px":0,"actualSize794x1123Pass":true,"wholeItem500Pass":true,"dataLayout":"2 columns x 3 rows native labels/values","longValueProof":"1459:2 hidden PASS"},
+    "qa":{"nodeId":"1458:33","visibleNativeText":25,"visibleImageRoles":2,"textTextCollision":0,"safeAreaRisk18px":0,"geometryChangedFromBG":false,"existingLongAnswerProofRemainsApplicable":true}
+  },
+  "storyChronology":{
+    "preferredNodeId":"1451:2",
+    "chronologyNodeId":"1451:21",
+    "visibleNativeText":31,
+    "visibleImageRoles":6,
+    "textTextCollision":0,
+    "safeAreaRisk18px":0,
+    "actualSize794x1123Pass":true,
+    "event3IntrinsicGate":{"imageHash":"644f449c3bf2001a94d4b822d2b55e2614c11042","display":[238,148],"registeredIntrinsic":[240,220],"withinIntrinsic":true}
+  },
+  "driveGeneratedMasters":{
+    "root":"1wHxC2E09JpLIQRNDDTY4i29KMwMY2_XK",
+    "profile":"1MfLObNcvsWhQ8nQqgZHeFiDBdjPzj1w8",
+    "qa":"1M4X4ELmau3_GrCDb6n72xv13R_CszDKR",
+    "timeline":"1KzAiPYc3HrvUL75Kkv9cPcAN2blQt8MV",
+    "memories":"1WhO8iIIx1G9oAxU5-lWSnBEHx_AQpZe0",
+    "adoptedThisPass":false,
+    "transportFingerprint":"DRIVE_RAW_MASTER_REACHABLE / FIGMA_SUBMIT_DNS_BLOCKED"
+  },
+  "rollback":{
+    "profileQaBG":"1439:58 hidden",
+    "chronologyBE":"1433:2 hidden",
+    "outerU":"1455:2 hidden marginal comparison",
+    "profileLongValueProof":"1459:2 hidden",
+    "bgLongAnswerProof":"1441:2 hidden"
+  },
+  "truth":{"newGeneration":0,"newDriveWrite":0,"newBinaryPlacement":0,"existingVerifiedHashReuse":true,"nativeTextPreserved":true,"replaceablePhotoRolesPreserved":true,"rollbackSafe":true,"v7Touched":false,"printReady":false}
+}
