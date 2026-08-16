@@ -1,56 +1,107 @@
-# ADD-02 V14 — destination-photo hero asset preparation
+# ADD-02 V14 — destination-photo hero clean-room continuation
 
-Status: `TESTED_LOCAL / DRIVE_ASSET_PREPARED / FIGMA_PLACEMENT_PENDING`
+Status: `TESTED_LOCAL / FIGMA_STRUCTURE_PASS / LONG_COPY_STRESS_PASS / PHOTO_PLACEMENT_BLOCKED / DRIVE_UPLOAD_NOT_OBSERVED / NO_PROMOTION`
 
 Scope: non-Rurubu `ADD-02` country table sign only.
 
 ## Clean-room boundary
 
-This experiment does not use the existing ADD-02 production design, prior V2/V3/V5–V13 layouts, prior vectors, prior crops, or prior generated/composed artwork as an authoring reference. It carries forward only the ADD-02 semantic/physical requirements and the already-promoted hybrid-authoring rule.
+This experiment does not use the existing ADD-02 production design, prior V2/V3/V5–V13 layouts, prior vectors, prior crops, or prior generated/composed artwork as an authoring reference. It carries forward only the ADD-02 semantic/physical requirements and the promoted hybrid-authoring rule.
 
-The legacy production remains untouched and must not be opened for visual comparison until a fresh Figma candidate using one of these assets is complete and has passed structure/long-copy QA.
+The retained production remains untouched and must not be opened for visual comparison until a fresh photo-led candidate is actually complete with its real hero image, has passed structure/long-copy QA, and has been visually reviewed at three scales.
 
 ## Why this method switch exists
 
-The recent ADD-02 clean-room sequence already established that repeated vector landscapes, abstract raster, literal procedural destination illustrations, and generic material/botanical treatments do not clearly beat the retained production. The next materially different test is a real high-resolution destination-specific photographic hero with native typography kept separate.
+The recent ADD-02 clean-room sequence already established that repeated vector landscapes, abstract raster, literal procedural destination illustrations, and generic material/botanical treatments do not clearly beat the retained production. The next materially different test remains a real high-resolution destination-specific photographic hero with native typography kept separate.
 
-This run therefore stops iterating the same SVG/raster grammar and prepares real photographic hero candidates instead.
+## Live authority correction — 2026-08-16
 
-## Prepared Hawaii candidates
+A live readback of the exact Drive authority folder `1KmbIncy5Wl6aEqqjBQmssCsw_KZjM62r` did **not** show the three V14 files that the earlier note described as uploaded.
 
-Two materially different Hawaii landscape candidates were retrieved from Wikimedia Commons through its API under an explicit reusable-license allowlist (`CC0`, public-domain, or Creative Commons attribution/share-alike variants). Selection also required source imagery large enough for the target crop.
+Observed direct children at this run:
 
-For each candidate:
+- `1_upRvZXq4PE54UsvmeWz-Hqhb1fXVP8U / V6_COMPARE_FRANCE_folded-publication-depth_2026-08-16.png`
+- `1x4N7LUsJiPI93hU__BA8WYnasDw9QNT7 / ADD-02_ARCHIVAL_PRINT_GRAIN_MASTER_v1.png`
 
-- source metadata and licensing/provenance are preserved in the manifest;
-- a `2000×1840` 2× hero derivative was created for a `1000×920` Figma image role;
-- no variable wedding copy is baked into the derivative;
-- intended role is fixed destination visual only;
-- `01`, `HAWAII`, Japanese country name, country-theme placeholder, and date remain native Figma text in the eventual candidate.
+Therefore the earlier `DRIVE_ASSET_PREPARED` claim is withdrawn. The truthful state is `DRIVE_UPLOAD_NOT_OBSERVED` until the intended V14 photo files are actually uploaded and read back from the exact folder.
 
-Drive authority folder:
+Do not invent Drive IDs or treat local/web retrieval as Drive completion.
 
-`1KmbIncy5Wl6aEqqjBQmssCsw_KZjM62r`
+## Fresh V14 Figma structure created
 
-Uploaded filenames:
+Without opening legacy production or prior ADD-02 visual candidates, a new clean-room page was created in Figma file `LAZAZ0u3RGqtN4bYFPZ3pU`:
 
-- `ADD-02-Hawaii-cleanroom-V14-coast-hero-2x.jpg`
-- `ADD-02-Hawaii-cleanroom-V14-oahu-hero-2x.jpg`
-- `ADD-02-Hawaii-cleanroom-V14-hero-manifest.json`
+- page: `78:6 / CLEANROOM / ADD-02 / V14 PHOTO HERO / 2026-08-16`
+- section: `78:7 / CLEANROOM_ADD02_V14_HAWAII_PHOTO_LED`
+- candidate root: `78:8 / FRAME_TABLE_SIGN_HAWAII_V14`
+- replaceable hero role: `78:9 / IMG_COUNTRY_HERO / REPLACEABLE / V14`
+- native info stack: `78:15 / TEXT / INFO STACK`
+- hidden long-copy stress clone: `78:20 / STRESS_ADD02_V14_HAWAII_LONG_COPY`
 
-The manifest is the provenance authority for exact Commons source URLs, creator/credit metadata, source dimensions, derivative crop boxes, and per-file licenses.
+The fresh candidate uses the current `1000×1480` primary format and a `1000×900` replaceable hero role. The current hierarchy is authored from the semantic requirements only:
+
+1. large native `HAWAII` over the hero zone;
+2. large native table identifier `01`;
+3. native Japanese support label `ハワイ`;
+4. native country-theme semantic placeholder;
+5. native `DESTINATION 01` support line;
+6. native `2026.10.24` date.
+
+No final or variable copy is baked into an image or SVG.
+
+## Structural / long-copy QA
+
+The first clean-room draft exposed a real Figma structure defect: the `TEXT / INFO STACK` retained a 10px fixed frame height, which made its children disappear from the screenshot even though the text nodes existed. The fix was structural rather than cosmetic:
+
+- `TEXT / INFO STACK` changed to visible auto-height behavior;
+- `clipsContent=false`;
+- long-copy children remain native editable text;
+- hero/type hierarchy was separated so `HAWAII` and `01` no longer collide.
+
+After repair, the live whole-item screenshot visibly shows the full information stack.
+
+Long-copy stress on hidden clone `78:20` used an intentionally extended Japanese country note. Readback result:
+
+- root: `1000×1480`;
+- info stack y: `1035`;
+- info stack height under stress: `255`;
+- long note height: `144`;
+- stress text outside root: `0`.
+
+Result: `FIGMA_STRUCTURE_PASS / LONG_COPY_STRESS_PASS` for the clean-room structure only.
+
+## Photo source investigation
+
+A suitable high-resolution Hawaii source was verified on Wikimedia Commons:
+
+- `Diamond Head from Fort DeRussy Beach.jpg`
+- source dimensions: `4032×3024`
+- creator: Farragutful
+- license: `CC BY-SA 4.0`
+- depicts Diamond Head from Fort DeRussy Beach, Waikīkī, Honolulu.
+
+The source is large enough for the intended hero crop and has explicit reusable licensing, but this run could not reliably transport the binary from the web source into the Figma upload endpoint. The runtime also could not produce a truthful Drive file reference for Google Drive upload.
+
+A Figma upload slot was reserved for node `78:9`, but because the source bytes could not be delivered, the real photo was **not** placed. The hero remains a placeholder color field. Do not count the upload reservation as image placement.
 
 ## Current gate
 
 This is **not** a sellable visual pass and **not** a production promotion.
 
-Next valid step:
+Current verified state:
 
-1. create a brand-new ADD-02 Hawaii blank frame without viewing legacy production or prior visual candidates;
-2. place one of the prepared photographs only as a replaceable/non-destructive image role;
-3. build the full information hierarchy with native text;
-4. perform whole / reading / actual-size screenshot QA plus long-copy stress and structure readback;
-5. only after the new candidate is complete, open the retained production for comparison;
-6. promote only if the fresh candidate is clearly stronger overall.
+`CLEANROOM_V14_FIGMA_STRUCTURE_PASS / LONG_COPY_STRESS_PASS / PHOTO_PLACEMENT_BLOCKED / DRIVE_UPLOAD_NOT_OBSERVED / LEGACY_NOT_OPENED_FOR_COMPARISON / NO_PROMOTION`
 
-If image placement is unavailable in the Figma runtime, do not fall back to another lookalike vector landscape merely to create activity. Keep the asset candidates as `DRIVE_ASSET_PREPARED` evidence and continue with another safe unresolved target.
+The legacy production remains unchanged and was intentionally not opened for visual comparison because the candidate is not complete without its real photo.
+
+## Next valid step
+
+1. obtain a reliable binary/file-reference route for a high-resolution non-person Hawaii image;
+2. upload/read back the adopted master in exact ADD-02 Drive authority;
+3. place it only in Figma node `78:9` as a replaceable image role;
+4. perform whole / reading / actual-size screenshot QA on `78:8`;
+5. repeat long-copy/contrast/crop structural readback after real image placement;
+6. only then open retained production for the first visual comparison;
+7. promote only if the photo-led clean-room candidate is clearly stronger overall.
+
+Do not fall back to another vector landscape or generic material treatment merely to create activity.
