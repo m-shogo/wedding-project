@@ -60,6 +60,12 @@
   - `python3 scripts/slice_clips.py slice --write` で切り出し、pick/ratingを更新。
   - 検証: `python3 scripts/slice_clips.py validate`（CIでも自動実行）。
 
+- Opening V1 セクション2（雲つなぎ）の採否を判断する。
+  - Palmierに実写の雲海を配置済み（V2 / frame 150-270 / fadeIn12・fadeOut12 / 音声ミュート）。
+  - 判断ログ: `docs/decisions/2026-08-14-opening-v1-cloud-transition.md`
+  - 採用なら `docs/templates/sample-clips.csv` の clip-004 を `pick=picked` へ。
+  - テロップはフェード中にRemotion層が透けて見える。はっきり見せたいなら要調整。
+
 ## Next
 
 - Palmier 10秒試作を実施する。
