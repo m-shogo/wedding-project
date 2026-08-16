@@ -1,0 +1,24 @@
+{
+  "date": "2026-08-16",
+  "scope": "Rurubu WEDDING V6 only",
+  "state": "Q_BF_BE_ACTIVE_ASSET_RECONCILIATION_PASS",
+  "figmaFileKey": "bfM0d4c9dCeBv5pCkJ3TNM",
+  "startHere": "V5 FU/FX · V6 Q + BF/BE INSIDE STUDIES · V7 HOLD",
+  "preferred": {
+    "outer": {"nodeId":"1426:2","name":"PREFERRED / V6_OUTER_Q_BACK_CHRONOLOGY_TYPE_HIERARCHY_2026_08_16"},
+    "profileQa": {"nodeId":"1436:56","name":"PREFERRED / V6_INSIDE_BF_QA_ANSWER_READABILITY_2026_08_16"},
+    "storyChronology": {"nodeId":"1433:2","name":"PREFERRED / V6_INSIDE_BE_CHRONOLOGY_EDITORIAL_CLUSTER_2026_08_16"}
+  },
+  "profileQa": {
+    "profileSource":"unchanged from BD",
+    "qnaRoles":[
+      {"role":"PHOTO / QA_MEMORY_HERO_REPLACEABLE","display":[465,480],"position":[323,145],"rotation":-0.9,"imageHash":"e3738476f760932bb5b09c9d60f174dd6c84049d","intrinsic":[944,608],"withinIntrinsic":true},
+      {"role":"PHOTO / QA_MEMORY_SUPPORT_REPLACEABLE","display":[238,210],"imageHash":"644f449c3bf2001a94d4b822d2b55e2614c11042","intrinsic":[240,220],"withinIntrinsic":true}
+    ],
+    "qnaQa":{"nativeText":24,"replaceableImages":2,"allAnswerFontSize":11,"textTextCollision":0,"answerImageCollision":0,"safeAreaRisk18px":0,"longAnswerStressProof":"1436:180 PASS"}
+  },
+  "outer":"unchanged from Q reconciliation",
+  "storyChronology":"unchanged from BE reconciliation",
+  "driveGeneratedMasters":{"root":"1wHxC2E09JpLIQRNDDTY4i29KMwMY2_XK","profile":"1MfLObNcvsWhQ8nQqgZHeFiDBdjPzj1w8","qa":"1M4X4ELmau3_GrCDb6n72xv13R_CszDKR","timeline":"1KzAiPYc3HrvUL75Kkv9cPcAN2blQt8MV","memories":"1WhO8iIIx1G9oAxU5-lWSnBEHx_AQpZe0","adoptedThisPass":false,"transportFingerprint":"DRIVE_RAW_MASTER_REACHABLE / FIGMA_SUBMIT_DNS_BLOCKED"},
+  "truth":{"newGeneration":0,"newDriveWrite":0,"newBinaryPlacement":0,"existingVerifiedHashReuse":true,"nativeTextPreserved":true,"replaceablePhotoRolesPreserved":true,"rollbackSafe":true,"v7Touched":false,"printReady":false}
+}
