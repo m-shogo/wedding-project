@@ -8,7 +8,7 @@ Production state: separate clean-room V6; V7 is HOLD
 
 ## Current declaration
 
-`V6_LIVE_FIGMA_IN_PROGRESS / OUTER_W_CURRENT / INSIDE_CF_CE_PREFERRED_STUDIES / EDITORIAL_FOLIO_COHESION_VERIFIED / JAPANESE_TYPOGRAPHY_COHESION_VERIFIED / TIMELINE_BOUNDED_TEXTURE_PLUS_RHYTHM_PRESERVED / NATIVE_TEXT_AND_REPLACEABLE_IMAGE_ROLES_PRESERVED / GENERATED_SECTION_MASTERS_DRIVE_VERIFIED_NOT_ADOPTED / V7_HOLD / NOT_PRINT_READY`
+`V6_LIVE_FIGMA_IN_PROGRESS / OUTER_Y_CURRENT / INSIDE_CF_CE_PREFERRED_STUDIES / PHOTO_BOUND_BACK_CLOSURE_VERIFIED / EDITORIAL_FOLIO_COHESION_VERIFIED / JAPANESE_TYPOGRAPHY_COHESION_VERIFIED / TIMELINE_BOUNDED_TEXTURE_PLUS_RHYTHM_PRESERVED / NATIVE_TEXT_AND_REPLACEABLE_IMAGE_ROLES_PRESERVED / GENERATED_SECTION_MASTERS_DRIVE_VERIFIED_NOT_ADOPTED / V7_HOLD / NOT_PRINT_READY`
 
 Live Figma and later evidence supersede older declarations.
 
@@ -16,16 +16,17 @@ Live Figma and later evidence supersede older declarations.
 
 Start Here:
 
-`V5 FU/FX · V6 W + CF/CE INSIDE STUDIES · V7 HOLD`
+`V5 FU/FX · V6 Y + CF/CE INSIDE STUDIES · V7 HOLD`
 
 Preferred:
 
-- Outer W `1491:2` — unchanged in this pass.
+- Outer Y `1542:2` — `PREFERRED / V6_OUTER_Y_PHOTO_BOUND_BACK_CLOSURE_2026_08_17`.
 - Profile / Q&A CF `1538:2` — `PREFERRED / V6_INSIDE_CF_JAPANESE_TYPOGRAPHY_COHESION_2026_08_17`.
 - Story / chronology CE `1535:78` — `PREFERRED / V6_INSIDE_CE_EDITORIAL_FOLIO_COHESION_2026_08_17`.
 
 Immediate rollback:
 
+- Outer W `1491:2` — hidden as `ROLLBACK_HIDDEN / V6_OUTER_W_PRE_Y_PHOTO_BOUND_CLOSURE_2026_08_17`.
 - CD `1535:2` — hidden as `ROLLBACK_HIDDEN / V6_INSIDE_CD_PRE_CF_JAPANESE_TYPE_2026_08_17`.
 - CB `1527:2` — older hidden rollback before CD.
 - CA `1517:2` — hidden rollback before CE.
@@ -33,59 +34,65 @@ Immediate rollback:
 
 Older comparison/proof frames remain preserved. V7 remains HOLD and was not edited.
 
-## CF Japanese typography cohesion
+## Outer Y — photo-bound back-cover closure
 
 ### Visible defect
 
-After CD/CE folio promotion, a full preferred-spread font-family audit found exactly two visible Japanese nodes assigned to a Latin-family font:
+At whole-item scale Outer W had a strong front cover and technically sound back cover, but the back still read as `top photo field → separate lower timeline information area`. The cafe/memory photo stopped before the chronology and the lower cream field therefore behaved like a secondary UI/info panel rather than the continuation of a magazine page.
 
-- Q&A closing pullquote `答えのつづきは、\nこれからの旅で。` — Inter Bold 38;
-- Q&A closing note `ふたりの言葉を、写真と一緒に残すページ。` — Inter Regular 11.
+### Root-cause hypothesis
 
-Every other visible Japanese native-text node across Outer W + CD/CE used Noto Sans JP.
+The remaining weakness was not missing information or missing decoration. The existing verified secondary photography was under-weighted. Promoting the cafe image into a larger page-binding photo field and attaching `みんなとの思い出` directly to that field could reduce the section break while keeping the chronology native, editable and readable.
 
 ### Bounded treatment
 
-CF duplicates CD and changes only those two font-family assignments:
+Outer Y duplicates W and changes only back-cover composition:
 
-- pullquote → Noto Sans JP Bold;
-- note → Noto Sans JP Regular.
+- existing cafe photo `c1ada11205bc3978bf426b304d683f1c1566cac2` becomes a larger `552×320` secondary feature starting at the left bleed;
+- existing skyline postcard `644f449c3bf2001a94d4b822d2b55e2614c11042` remains near intrinsic size at `232×210`, with a small editorial rotation;
+- the existing dark `みんなとの思い出` strip is bound directly to the photo field;
+- chronology title/rules move immediately beneath the photo field;
+- the five pre-wedding events remain native text in an asymmetric compact rhythm;
+- the WEDDING terminal remains a strong navy closure with its yellow edge;
+- front cover, masthead, hero, front image hashes and all CF/CE interior pages remain unchanged.
 
-Characters, sizes, boxes, x/y positions, images, image hashes, crops, decoration, folios, fold guide and page geometry are unchanged.
+No new image, card, gradient, shadow, generated decoration or raster source was added.
 
 ### Verification
 
-- CF whole spread 1000px: PASS;
-- Q&A actual-size `1538:39` = 794×1123: PASS;
-- intended pullquote remains two lines;
-- text collision `0`;
-- 18px text safe-area risk `0`.
+- Y whole item 500px: PASS and stronger than W; back reads as photo → memory → chronology → WEDDING instead of two detached sections.
+- Y back actual-size `1542:3` = 794×1123: PASS after one correction.
+- Initial Y study exposed the chronology title over the enlarged photo at actual size; the candidate was not accepted in that state. Cafe height was corrected from `344 → 320`, and the memory/title/rule start was moved onto the cream field before promotion.
+- final visible back native text: `18`;
+- absolute text collision: `0`;
+- 18px text safe-area risk: `0`;
+- all three visible back images are within registered intrinsic dimensions:
+  - flatlay `793.7×490` ≤ `944×608`;
+  - cafe `552×320` ≤ `810×552`;
+  - skyline `232×210` ≤ `240×220`.
 
-Post-promotion typography audit:
-- Outer W Japanese non-Noto visible nodes: `0`;
-- Profile/Q&A CF Japanese non-Noto visible nodes: `0`;
-- Story/chronology CE Japanese non-Noto visible nodes: `0`.
+## CF Japanese typography cohesion retained
 
-## CD / CE editorial folio cohesion retained
+CF remains unchanged from the previously verified pass. The two Japanese closing-copy nodes remain Noto Sans JP rather than accidental Inter fallback. Whole-spread and actual-size QA remain valid because Outer Y did not mutate CF.
 
-The previously verified folio system is preserved in CF/CE:
+Post-promotion preferred-book audit intent remains:
+- Japanese native copy uses the intentional Japanese family established by CF/CE;
+- no new Japanese node was created in Y.
+
+## Editorial folio cohesion retained
+
+CF/CE retain the recurring native folios:
 
 - `02 PROFILE / FAVORITES`;
 - `03 Q&A / MEMORIES`;
 - `04 OUR STORY / JOURNEY`;
 - `05 TRAVEL TIMELINE`.
 
-The page-05 folio remains light cream on the dark WEDDING ending band after its earlier polarity correction.
-
-Underlying layout, photography and crop geometry remain unchanged from the verified CD/CE pass.
-
-### Prior rejected experiment
-
-CC `1534:2` added three small native captions directly to the profile snapshot cluster. It remained technically readable but did not materially strengthen the page and looked applied after the fact, so it remains hidden/rejected.
+The page-05 folio remains light cream on the dark WEDDING ending band. Outer Y does not modify any interior folio.
 
 ## Structure / visual state
 
-CF retains CD structure counts except for font metadata:
+CF remains:
 - Profile: native text `18`, IMAGE roles `4`, text collision `0`, 18px text safe-area risk `0`;
 - Q&A: native text `26`, IMAGE roles `3`, text collision `0`, 18px text safe-area risk `0`.
 
@@ -95,53 +102,33 @@ CE remains:
 
 Representative Profile/Q&A values remain layout-evaluation dummy content, not final personal facts.
 
-## Story / chronology content retained from CA
+## Photo-diversity / provenance state
 
-CE preserves the verified CA chronology content plus the editorial folio:
-- bounded composed chronology texture remains subordinate to native copy and replaceable photography;
-- major/minor event rhythm remains unchanged;
-- image intrinsic checks remain unchanged;
-- no new image source or crop was introduced in the CD/CE or CF pass.
+The preferred dummy studies still reuse some photo hashes across the book. Same-scope alternatives previously inspected do not justify lowering identity, provenance or resolution quality merely to increase variety. Recognizable generic/generated people must not be represented as the real couple. The replaceable-photo contract remains the correct path for final legitimate photography later.
 
-## Photo-diversity audit
-
-The preferred dummy studies still reuse some photo hashes across the book. Same-scope Rurubu alternatives were previously inspected before substitution:
-
-- larger low-reuse candidates with recognizable people were rejected because they could imply the real bride/groom;
-- low-resolution non-person alternatives remain unsuitable for hero roles;
-- older composed/generated timeline/profile assets remain visually weak, soft, empty, or previously rejected at actual size.
-
-Do not reduce identity/provenance/resolution quality merely to remove repetition. The replaceable-photo contract is preserved so final legitimate photography can solve this later.
+Outer Y uses only existing verified Rurubu image hashes; no provenance state changed.
 
 ## Drive / generated section masters
 
-V6 Drive root remains verified:
+V6 Drive root was re-read on 2026-08-17:
 - `1wHxC2E09JpLIQRNDDTY4i29KMwMY2_XK / RURUBU_V6_HAWAII_2026-08-02`.
 
-Drive re-audit on 2026-08-17 confirmed the generated section masters still exist, including:
-- Profile V1 `1MfLObNcvsWhQ8nQqgZHeFiDBdjPzj1w8`;
-- Q&A V1 `1M4X4ELmau3_GrCDb6n72xv13R_CszDKR`;
+Timeline generated masters remain present, including:
 - Timeline V1 `1KzAiPYc3HrvUL75Kkv9cPcAN2blQt8MV`;
-- Memories V1 `1WhO8iIIx1G9oAxU5-lWSnBEHx_AQpZe0`;
-- Timeline v2 `1uRP3ri4MKw1g8_vtNDxBoazuAm4Hq3B8`;
-- Memories v2 `1Xi8C0KV8JfZrbx1fKttGae0Go6tsFzqG`.
+- Timeline v2 `1uRP3ri4MKw1g8_vtNDxBoazuAm4Hq3B8`.
 
-Registered generated masters remain authoritative-but-unadopted. Existing Figma-imported generated Profile derivatives were re-audited; the low-resolution/soft variants remain rejected, and the 800×1000 inline-JPEG derivative has no new evidence that would reverse its prior visual rejection. No material change to known external binary-submit constraints was observed, so unchanged failed transport methods were not repeated.
+Previously registered Profile/Q&A/Memories generated masters remain authoritative-but-unadopted. No material change to the known quality-preserving external binary-placement constraint was observed, so unchanged failed transport methods were not repeated.
 
 ## Evidence
 
-Latest evidence:
+Latest:
+- `01_paper-items/rurubu-wedding/evidence/RURUBU-V6-Y-CF-CE-PHOTO-BOUND-BACK-CLOSURE-QA-2026-08-17.md`;
+- `docs/design-learning/rurubu-shared-learning-feed.append/2026-08-17-rsl-059-photo-bound-back-closure.md`;
+- `docs/wedding-design-learning-feedback-log.append/2026-08-17-rurubu-v6-y-cf-ce.md`.
+
+Still relevant:
 - `01_paper-items/rurubu-wedding/evidence/RURUBU-V6-W-CF-CE-JAPANESE-TYPOGRAPHY-QA-2026-08-17.md`;
 - `01_paper-items/rurubu-wedding/evidence/RURUBU-V6-W-CD-CE-EDITORIAL-FOLIO-QA-2026-08-17.md`.
-
-Latest learning:
-- `docs/design-learning/rurubu-shared-learning-feed.append/2026-08-17-rsl-058-japanese-font-family-audit.md`;
-- `docs/design-learning/rurubu-shared-learning-feed.append/2026-08-17-rsl-057-editorial-folio-cohesion.md`;
-- `docs/wedding-design-learning-feedback-log.append/2026-08-17-rurubu-v6-w-cf-ce.md`;
-- `docs/wedding-design-learning-feedback-log.append/2026-08-17-rurubu-v6-w-cd-ce.md`.
-
-Previous chronology evidence remains relevant to unchanged CA-derived content:
-- `01_paper-items/rurubu-wedding/evidence/RURUBU-V6-W-BZ-CA-TIMELINE-TEXTURE-RHYTHM-QA-2026-08-17.md`.
 
 ## Asset lifecycle truth of latest pass
 
@@ -149,46 +136,43 @@ Previous chronology evidence remains relevant to unchanged CA-derived content:
 - new Drive saves: `0`;
 - new external binary placements: `0`;
 - new distinct raster bytes: `0`;
-- existing image hashes changed: `0`;
-- native editable folios retained: `YES`;
-- native Japanese font-family normalization: `2 nodes`;
+- image hashes changed: `0`;
+- existing verified back-cover photography recomposed: `YES`;
+- native text preserved: `YES`;
 - replaceable image semantics preserved: `YES`;
-- whole/read/actual-size visual verification: `YES`;
-- structure/safe-area verification: `PASS`;
+- whole-item visual verification: `PASS`;
+- actual-size back verification: `PASS`;
+- structure / safe-area verification: `PASS`;
 - rollback preserved: `YES`;
 - V7 touched: `NO`.
 
 ## Learning
 
-### RSL-057
-A recurring native folio/page slug can create publication-level continuity across materially different interior layouts without reintroducing card/UI geometry. The semantic folio role may stay consistent, but color/polarity must adapt to the local page field.
+### RSL-059
+When a print page is still split into a dominant photo region and a detached information region, first test whether a legitimate existing secondary image can become a page-binding field before adding another container or ornament. The image should bind the adjacent headline/section and reduce the false section boundary; chronology/facts can remain native and editable below it.
 
-### RSL-058
-Audit font-family assignments, not only rasterized screenshots. Japanese text can appear acceptable through fallback while remaining typographically inconsistent. Font-family changes require fresh actual-size and collision QA because glyph metrics can alter line breaks.
+State: `VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`.
 
-Both are currently:
-`VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`.
-
-They are not cross-item verified. Exact page numbers, slugs, font choice, type sizes, placement, colors, photography and Rurubu editorial grammar remain Rurubu-specific.
+Do not transfer Outer Y's exact crop, dimensions, palette, Yokohama photography, event geometry or Rurubu editorial grammar.
 
 ## Completion gate
 
 Do not call V6 complete or print-ready until:
-- W + CF/CE cohere with final real content as one magazine system;
+- Y + CF/CE cohere with final real content as one magazine system;
 - final personal copy replaces dummy content and final-copy stress is rerun;
-- final photography replaces repeated/stand-in roles where applicable and crop/contrast are rerun;
+- final legitimate photography replaces stand-in/repeated roles where applicable and crop/contrast are rerun;
 - exact printer/product template is applied;
 - bleed, trim, fold, safe area and page order are verified;
 - PDF preflight and physical proof pass.
 
 Current state:
 
-`V6 W + CF/CE = VERIFIED_LOCAL_DUMMY_DESIGN_STUDIES / ROLLBACK_SAFE / V7_HOLD / NOT_PRINT_READY`.
+`V6 Y + CF/CE = VERIFIED_LOCAL_DUMMY_DESIGN_STUDIES / ROLLBACK_SAFE / V7_HOLD / NOT_PRINT_READY`.
 
 ## Next highest-value work
 
 1. Continue V6, not V7.
-2. Treat final legitimate photography as the next largest visual-quality lever; do not substitute low-resolution or identity-unsafe imagery simply to increase variety.
+2. Treat final legitimate photography as the largest remaining visual-quality lever; do not substitute low-resolution or identity-unsafe imagery simply to increase variety.
 3. Replace final Profile/Q&A dummy copy later and rerun realistic long-copy/safe-area proof.
 4. Keep generated section masters in Drive as unadopted until a quality-preserving placement path and actual-size visual pass exist.
 5. Keep printer-template/PDF/physical-proof gates separate from dummy-design QA.
