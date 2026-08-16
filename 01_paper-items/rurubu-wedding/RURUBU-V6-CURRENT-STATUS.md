@@ -8,7 +8,7 @@ Production state: separate clean-room V6; V7 is HOLD
 
 ## Current declaration
 
-`V6_LIVE_FIGMA_IN_PROGRESS / OUTER_T_CURRENT / INSIDE_BK_BQ_PREFERRED_STUDIES / T_PHOTO_LED_BACK_COVER_VERIFIED / BK_PHOTO_BOUND_QA_AND_LONG_ANSWER_STRESS_VERIFIED / BQ_SELECTIVE_PHOTO_BOUND_CHRONOLOGY_VERIFIED / NATIVE_TEXT_AND_REPLACEABLE_IMAGE_ROLES_PRESERVED / GENERATED_SECTION_MASTERS_DRIVE_VERIFIED_NOT_ADOPTED / V7_HOLD / NOT_PRINT_READY`
+`V6_LIVE_FIGMA_IN_PROGRESS / OUTER_V_CURRENT / INSIDE_BR_BQ_PREFERRED_STUDIES / V_MEMORY_TO_CHRONOLOGY_FLOW_VERIFIED / BR_REALISTIC_NATIVE_QA_DUMMY_COPY_VERIFIED / BQ_SELECTIVE_PHOTO_BOUND_CHRONOLOGY_VERIFIED / NATIVE_TEXT_AND_REPLACEABLE_IMAGE_ROLES_PRESERVED / GENERATED_SECTION_MASTERS_DRIVE_VERIFIED_NOT_ADOPTED / V7_HOLD / NOT_PRINT_READY`
 
 Live Figma and later evidence supersede older declarations.
 
@@ -16,32 +16,42 @@ Live Figma and later evidence supersede older declarations.
 
 Start Here `845:27`:
 
-`V5 FU/FX · V6 T + BK/BQ INSIDE STUDIES · V7 HOLD`
+`V5 FU/FX · V6 V + BR/BQ INSIDE STUDIES · V7 HOLD`
 
 Preferred:
 
-- Outer T `1447:2 / PREFERRED / V6_OUTER_T_PHOTO_LED_BACK_COVER_2026_08_16`
-- Profile / Q&A BK `1462:191 / PREFERRED / V6_INSIDE_BK_FEATURE_Q4_PHOTO_LED_QA_2026_08_16`
+- Outer V `1477:2 / PREFERRED / V6_OUTER_V_MEMORY_TO_CHRONOLOGY_FLOW_2026_08_16`
+- Profile / Q&A BR `1482:2 / PREFERRED / V6_INSIDE_BR_REALISTIC_NATIVE_QA_DUMMY_COPY_2026_08_16`
 - Story / chronology BQ `1468:2 / PREFERRED / V6_INSIDE_BQ_PHOTO_BOUND_MILESTONE_CHRONOLOGY_2026_08_16`
 
 Preserved rollback/evidence:
 
-- Outer S `1439:2` — hidden rollback before T.
+- Outer T `1447:2` — hidden rollback before V.
+- Outer S `1439:2` — older hidden rollback.
 - Outer U `1455:2` — hidden marginal comparison; did not materially outperform T.
-- Profile/Q&A BG `1439:58` — older hidden rollback.
-- Profile/Q&A BI `1458:2` — hidden rollback before BK.
-- BJ `1462:128` — hidden intermediate photo-led comparison.
-- BI long-value proof `1459:2` — hidden after PASS; remains applicable because BK Profile geometry is unchanged from BI.
-- BK long-answer proof `1463:2` — hidden after PASS.
+- Profile/Q&A BK `1462:191` — hidden rollback before BR.
+- Profile/Q&A BI `1458:2` — older hidden rollback.
+- BJ `1462:128` — hidden intermediate comparison.
+- BI long-value proof `1459:2` — hidden after PASS; profile geometry remains applicable to BR because BR changed only Q&A answer characters.
+- BK long-answer proof `1463:2` — hidden stress evidence for the same Q&A geometry/type sizing retained by BR.
 - Story/chronology BH `1451:2` — hidden rollback before BQ.
 - Story/chronology BE `1433:2` — older hidden rollback.
 - V7 remains HOLD.
 
-## Outer T
+## Outer V
 
-Outer T remains preferred and unchanged in the BQ run.
+Outer V replaces T because T back cover still read as a strong photography block followed by a detached beige `みんなとの思い出 / ふたりの旅年表` block.
 
-Back verification remains:
+### V back-cover composition
+
+- the existing memory underline was repurposed as `DECOR / MEMORY_CAPTION_STRIP` instead of adding a new decorative family;
+- native `みんなとの思い出` is now bound directly to the café photograph on that navy caption field;
+- native chronology is pulled upward so photography and sequence read continuously;
+- the existing WEDDING terminal field is strengthened to `718×110`;
+- the front cover remains visually unchanged from T;
+- no new photo, generated asset, flattening, or rasterized copy was introduced.
+
+Final V back verification:
 
 - dominant flatlay hash `e3738476f760932bb5b09c9d60f174dd6c84049d` at `793.7×490`, registered intrinsic `944×608`;
 - café image hash `c1ada11205bc3978bf426b304d683f1c1566cac2` at `430×270`;
@@ -50,97 +60,118 @@ Back verification remains:
 - replaceable IMAGE roles `3`;
 - text/text collision `0`;
 - 18px text safe-area risk `0`;
-- whole/read/actual-size QA PASS.
+- 500px whole-item screenshot PASS;
+- 1000px reading screenshot PASS;
+- actual-size back page `1477:3 / 794×1123` PASS.
 
-## Profile / Q&A BK
+## Profile / Q&A BR
 
-BK remains preferred and unchanged in the BQ run.
+BR replaces BK because BK's visible answer text still used the repeated placeholder `回答をここに。文量に合わせて調整。`, which made an otherwise editorial layout read like a form/wireframe.
 
 ### Profile
+
+Profile geometry is unchanged from BK/BI:
 
 - six representative editable dummy values remain native;
 - `2 columns × 3 rows` information structure;
 - visible native text `17`;
 - replaceable IMAGE roles `4`;
-- previous dedicated BI long-value proof `1459:2` remains applicable because Profile geometry is unchanged;
-- final personal copy must replace dummy values later.
+- BI long-value proof `1459:2` remains applicable because profile geometry/type sizing did not change;
+- final personal facts must replace all representative dummy values later.
 
 ### Q&A
 
-- Q1–03 remain a compact left interview rail;
-- existing memories hero is the dominant photo field;
-- existing native pullquote is bound directly to that field;
-- Q4 is the second major typographic beat;
-- Q5/Q6 remain compact support beats;
-- lower-right support photo closes the page;
-- native text `25`;
+BR preserves BK's entire photo/type geometry and changes only six native answer strings to distinct realistic-length Japanese dummy sentences.
+
+Examples:
+
+- `話しやすくて、笑顔が印象的でした。`
+- `何でも一緒に楽しんでくれるところ。`
+- `旅行の計画を立てている時間。`
+- `まだ行ったことのない場所を、ふたりで巡りたい。`
+- `いつも隣で笑ってくれて、ありがとう。`
+- `よく笑って、旅の話が尽きない家庭。`
+
+These are **layout-evaluation dummy sentences, not final personal facts**.
+
+Q&A hierarchy remains:
+
+- Q1–03 compact left interview rail;
+- existing memories hero as dominant photo field;
+- native pullquote bound to that photo;
+- Q4 as second major typographic beat;
+- Q5/Q6 compact support beats;
+- lower-right support photo closes the page.
+
+Final BR Q&A verification:
+
+- visible native text `25`;
 - replaceable IMAGE roles `2`;
 - text/text collision `0`;
-- accidental text/image collision `0`;
-- 18px safe-area risk `0`;
-- dedicated BK long-answer proof `1463:2 / 1463:33` PASS and hidden after verification.
+- 18px text safe-area risk `0`;
+- whole spread `1200px` PASS;
+- actual-size Q&A page `1482:33 / 794×1123` PASS;
+- Q&A hero hash `e3738476f760932bb5b09c9d60f174dd6c84049d` unchanged;
+- Q&A support hash `d76eb07d83d042f15044c8bc6bf68d73a73cd77d` unchanged;
+- BK long-answer proof remains separate overflow evidence because BR geometry/type sizing are unchanged.
 
 ## Story / chronology BQ
 
-Story page is unchanged from BH and remains verified:
+BQ remains preferred and unchanged in this run.
+
+Story remains verified:
 
 - native text `11`;
 - replaceable IMAGE roles `3`;
 - collision `0`;
 - 18px safe-area risk `0`.
 
-BQ replaces BH on the chronology page because BH still separated major milestone copy from its photography. BQ uses selective photo/text binding instead of forcing every event into one treatment.
+BQ chronology uses selective photo/text binding:
 
-### BQ chronology composition
-
-- event `01` is a major photo-bound beat: its number remains a strong native marker and its editable date/title/copy are placed directly on the sunset photo;
-- event `05` is also photo-bound on the dining photo;
-- event `03` remains a separate large native typographic beat beside its smaller skyline photo because binding all of its copy onto the small photo reduced readability in the rollback-safe comparison;
+- event `01` is a major photo-bound beat;
+- event `05` is photo-bound on the dining photograph;
+- event `03` remains a separate native typographic beat beside the smaller skyline because binding all copy onto the small photograph reduced readability;
 - events `02 / 04` remain compact support beats;
 - `06 / WEDDING` remains the full-width terminal field;
-- the duplicated upper sunset support image was removed from visible scope so the same source is not repeated twice on one page;
-- the remaining upper old-town support image is `210×155`, hash `439a719d73f28e8dd2889f2026cccb15f345ec63`;
-- the reused generated timeline decoration hash `702fe2639cb39189a04d5db1f57bda8d2f054305` is hidden because live screenshot comparison showed it did not contribute a meaningful visible role;
+- repeated/non-contributing imagery and generated timeline decor remain hidden;
 - all chronology facts remain native/editable;
 - all visible photographs remain replaceable IMAGE roles.
 
-Active BQ chronology IMAGE roles:
-
-- feature hero `1468:22` `793.7×430`, hash `e3738476f760932bb5b09c9d60f174dd6c84049d`;
-- top support `1468:24` `210×155`, hash `439a719d73f28e8dd2889f2026cccb15f345ec63`;
-- event 01 `1468:29` `350×190`, hash `539c259be8036b481d06b4f76db9a39b407d90e8`;
-- event 03 `1468:37` `238×148`, hash `644f449c3bf2001a94d4b822d2b55e2614c11042`, registered intrinsic `240×220`;
-- event 05 `1468:45` `410×155`, hash `d76eb07d83d042f15044c8bc6bf68d73a73cd77d`.
-
-Final BQ chronology verification:
+Final BQ chronology verification remains:
 
 - visible native text `30`;
 - visible replaceable IMAGE roles `5`;
 - absolute text/text collisions `0`;
 - 18px text safe-area risks `0`;
 - visible text outside page `0`;
-- 500px whole-spread screenshot PASS;
-- 1000px reading-spread screenshot PASS;
+- 500px whole-spread PASS;
+- 1000px reading-spread PASS;
 - actual-size chronology `1468:21 / 794×1123` PASS.
 
-Evidence:
+## Evidence
+
+Latest combined evidence:
+
+- `01_paper-items/rurubu-wedding/evidence/RURUBU-V6-V-BR-BQ-INTEGRATED-FLOW-QA-2026-08-16.md`.
+
+Previous BQ evidence remains valid:
 
 - `01_paper-items/rurubu-wedding/evidence/RURUBU-V6-T-BK-BQ-PHOTO-BOUND-CHRONOLOGY-QA-2026-08-16.md`.
 
 ## Drive / generated section masters
 
-Fresh Drive readback in the BQ run confirms V6 root:
+Fresh Drive readback in this run confirms V6 root:
 
 - `1wHxC2E09JpLIQRNDDTY4i29KMwMY2_XK / RURUBU_V6_HAWAII_2026-08-02`.
 
-Registered generated masters remain present:
+Registered generated masters remain authoritative-but-unadopted:
 
 - Profile `1MfLObNcvsWhQ8nQqgZHeFiDBdjPzj1w8` — `2,308,995` bytes;
 - Q&A `1M4X4ELmau3_GrCDb6n72xv13R_CszDKR` — `1,990,587` bytes;
 - Timeline `1KzAiPYc3HrvUL75Kkv9cPcAN2blQt8MV` — `1,242,829` bytes;
 - Memories `1WhO8iIIx1G9oAxU5-lWSnBEHx_AQpZe0` — `1,960,906` bytes.
 
-No generated section master was adopted in this pass. Known unchanged boundary remains:
+Known unchanged boundary remains:
 
 `DRIVE_RAW_MASTER_REACHABLE / FIGMA_SUBMIT_DNS_BLOCKED / NO_NEW_GENERATED_SECTION_DECORATION_ADOPTION`.
 
@@ -152,33 +183,33 @@ Do not retry the unchanged failing submit method without a material capability/e
 - new Drive saves: `0`
 - new external binary placement: `0`
 - existing verified Figma image hashes reused: `YES`
-- duplicate visible source removed from BQ chronology: `YES`
-- non-contributing generated timeline decor hidden: `YES`
 - replaceable photo roles preserved: `YES`
 - native editable copy preserved: `YES`
+- realistic visible Q&A dummy-copy mass added as native text: `YES`
 - generated/fixed section decoration newly adopted: `NO`
 - whole/read/actual-size visual verification: `YES`
 - structure/safe-area verification: `PASS`
-- rollback comparison preserved: `YES`
+- rollback comparisons preserved: `YES`
 - V7 touched: `NO`.
 
 ## Learning
 
-Latest local finding: `RSL-048`.
+Latest local findings:
 
-When a chronology has already escaped equal cards but major text and photography still read as parallel systems, selectively bind copy to the photographs that can support it at actual size. Do not force the same treatment on smaller photos. A mixed system — major photo-bound beats plus separate support beats — can improve editorial integration without losing native editability. Also remove repeated photo sources and generated layers that do not prove a visible role.
+- `RSL-049` — when a page feels vertically split into photo and information modules, test binding the native section heading directly to the legitimate photograph it describes and compress the following sequence before adding decoration.
+- `RSL-050` — realistic visible native dummy text mass is part of editorial visual QA; dedicated overflow stress and preferred-state copy realism are separate gates.
 
-State:
+Both are:
 
 `OBSERVED → ROOT_CAUSE_HYPOTHESIS → TESTED_LOCAL → VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`.
 
-Literal Rurubu event grouping, typography, photographs, positions, palette and travel art direction remain Rurubu-specific.
+Literal Rurubu palette, image selection, chronology, question wording, dummy answer wording, dimensions and placement remain Rurubu-specific.
 
 ## Completion gate
 
 Do not call V6 complete or print-ready until:
 
-- T + BK/BQ cohere with final real content as one magazine system;
+- V + BR/BQ cohere with final real content as one magazine system;
 - real photography and final copy replace dummy content and crop/contrast/text stress are rerun;
 - exact printer/product template is applied;
 - bleed, trim, fold, safe area and page order are verified;
@@ -186,14 +217,13 @@ Do not call V6 complete or print-ready until:
 
 Current state:
 
-`V6 T + BK/BQ = VERIFIED_LOCAL_DUMMY_DESIGN_STUDIES / ROLLBACK_SAFE / V7_HOLD / NOT_PRINT_READY`.
+`V6 V + BR/BQ = VERIFIED_LOCAL_DUMMY_DESIGN_STUDIES / ROLLBACK_SAFE / V7_HOLD / NOT_PRINT_READY`.
 
 ## Next highest-value work
 
 1. Continue V6, not V7.
-2. Review T + BK/BQ together at thumbnail scale; prioritize remaining magazine-system incoherence over decoration count.
-3. Replace Profile dummy values with final facts later, then rerun value stress against the real text.
-4. Re-run BK Q&A answer stress whenever Q&A geometry or type size changes.
-5. Re-run chronology copy/crop QA whenever real event copy or replacement photos change.
-6. Replace dummy photography only when actual-size visual quality and story semantics are clearly stronger.
-7. Keep final print/template/PDF/physical-proof gates separate from dummy-design QA.
+2. Review V + BR/BQ together at whole-item and actual-size scales; prioritize visible magazine-system incoherence over decoration count.
+3. Replace Profile and Q&A dummy text with final facts later, then rerun real-copy stress.
+4. Re-run chronology copy/crop QA whenever real event copy or replacement photos change.
+5. Replace dummy photography only when actual-size visual quality and story semantics are clearly stronger.
+6. Keep final printer-template/PDF/physical-proof gates separate from dummy-design QA.
