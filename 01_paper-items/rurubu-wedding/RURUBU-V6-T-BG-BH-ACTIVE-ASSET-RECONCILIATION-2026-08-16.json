@@ -1,0 +1,60 @@
+{
+  "date": "2026-08-16",
+  "scope": "Rurubu WEDDING V6 only",
+  "state": "T_BG_BH_ACTIVE_ASSET_RECONCILIATION_PASS",
+  "figmaFileKey": "bfM0d4c9dCeBv5pCkJ3TNM",
+  "startHere": "V5 FU/FX · V6 T + BG/BH INSIDE STUDIES · V7 HOLD",
+  "preferred": {
+    "outer": {"nodeId":"1447:2","name":"PREFERRED / V6_OUTER_T_PHOTO_LED_BACK_COVER_2026_08_16"},
+    "profileQa": {"nodeId":"1439:58","name":"PREFERRED / V6_INSIDE_BG_QA_EDITORIAL_BEATS_2026_08_16"},
+    "storyChronology": {"nodeId":"1451:2","name":"PREFERRED / V6_INSIDE_BH_PHOTO_EVENT_INTEGRATED_CHRONOLOGY_2026_08_16"}
+  },
+  "outer": "unchanged from T verified reconciliation",
+  "profileQa": "unchanged from BG verified reconciliation including long-answer proof 1441:2 PASS",
+  "story": "unchanged from BE verified Story page",
+  "chronology": {
+    "nodeId":"1451:21",
+    "visibleNativeText":31,
+    "visibleImageRoles":6,
+    "textTextCollision":0,
+    "safeAreaRisk18px":0,
+    "wholeItem500Pass":true,
+    "reading1200Pass":true,
+    "actualSize794x1123Pass":true,
+    "images":[
+      {"nodeId":"1451:22","role":"featureHero","imageHash":"e3738476f760932bb5b09c9d60f174dd6c84049d","display":[793.7,430],"position":[0,0],"rotation":-1.0,"replaceable":true},
+      {"nodeId":"1451:23","role":"featureSupport1","imageHash":"539c259be8036b481d06b4f76db9a39b407d90e8","display":[255,170],"position":[530,290],"rotation":2.0,"replaceable":true},
+      {"nodeId":"1451:24","role":"featureSupport2","imageHash":"439a719d73f28e8dd2889f2026cccb15f345ec63","display":[220,135],"position":[545,405],"rotation":-2.0,"replaceable":true},
+      {"nodeId":"1451:29","role":"event1","imageHash":"539c259be8036b481d06b4f76db9a39b407d90e8","display":[350,190],"position":[400,485],"rotation":-1.4,"replaceable":true},
+      {"nodeId":"1451:37","role":"event3","imageHash":"644f449c3bf2001a94d4b822d2b55e2614c11042","display":[238,148],"position":[342,658],"rotation":1.2,"registeredIntrinsic":[240,220],"withinIntrinsic":true,"replaceable":true},
+      {"nodeId":"1451:45","role":"event5","imageHash":"d76eb07d83d042f15044c8bc6bf68d73a73cd77d","display":[410,155],"position":[345,825],"rotation":-0.7,"replaceable":true}
+    ]
+  },
+  "driveGeneratedMasters": {
+    "root":"1wHxC2E09JpLIQRNDDTY4i29KMwMY2_XK",
+    "profile":"1MfLObNcvsWhQ8nQqgZHeFiDBdjPzj1w8",
+    "qa":"1M4X4ELmau3_GrCDb6n72xv13R_CszDKR",
+    "timeline":"1KzAiPYc3HrvUL75Kkv9cPcAN2blQt8MV",
+    "memories":"1WhO8iIIx1G9oAxU5-lWSnBEHx_AQpZe0",
+    "adoptedThisPass":false,
+    "transportFingerprint":"DRIVE_RAW_MASTER_REACHABLE / FIGMA_SUBMIT_DNS_BLOCKED"
+  },
+  "rollback": {
+    "chronologyBE":"1433:2 hidden",
+    "outerU":"1455:2 hidden marginal comparison",
+    "outerS":"1439:2 hidden",
+    "profileQaBF":"1436:56 hidden",
+    "bgLongAnswerProof":"1441:2 hidden"
+  },
+  "truth": {
+    "newGeneration":0,
+    "newDriveWrite":0,
+    "newBinaryPlacement":0,
+    "existingVerifiedHashReuse":true,
+    "nativeTextPreserved":true,
+    "replaceablePhotoRolesPreserved":true,
+    "rollbackSafe":true,
+    "v7Touched":false,
+    "printReady":false
+  }
+}
