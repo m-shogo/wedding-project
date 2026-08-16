@@ -178,12 +178,11 @@ Neutral non-Rurubu learning was consumed only through the neutral shared feed. N
 
 ## Active asset reconciliation
 
-Current ledger:
+Current authoritative active ledger:
 
-- `RURUBU-V6-P-BA-AZ-ACTIVE-ASSET-RECONCILIATION-2026-08-16.json` records the pre-BB geometry/image lineage.
-- BB keeps all BA geometry but replaces Q&A hero hash with `e3738476f760932bb5b09c9d60f174dd6c84049d`, intrinsic `944×608`, display `465×480`, PASS.
+- `RURUBU-V6-P-BB-AZ-ACTIVE-ASSET-RECONCILIATION-2026-08-16.json`
 
-A later consolidated ledger may supersede the BA-labelled filename; live Figma + this status + BB evidence are authoritative for the current Q&A hero.
+It records current P masthead, all active BB/AZ photo hashes, display sizes, intrinsic sizes, Drive generated-master IDs, and asset-lifecycle truth. The older BA/AZ reconciliation remains lineage/rollback evidence only.
 
 ## Asset lifecycle truth of latest pass
 
