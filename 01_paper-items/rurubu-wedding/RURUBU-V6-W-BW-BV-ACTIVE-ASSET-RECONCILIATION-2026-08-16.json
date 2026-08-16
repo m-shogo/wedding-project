@@ -1,0 +1,87 @@
+{
+  "date": "2026-08-16",
+  "scope": "Rurubu WEDDING V6 only",
+  "figmaFileKey": "bfM0d4c9dCeBv5pCkJ3TNM",
+  "driveRoot": {
+    "id": "1wHxC2E09JpLIQRNDDTY4i29KMwMY2_XK",
+    "name": "RURUBU_V6_HAWAII_2026-08-02",
+    "verifiedThisPass": true
+  },
+  "preferred": {
+    "outer": {
+      "nodeId": "1491:2",
+      "label": "W",
+      "changedThisPass": false
+    },
+    "profileQa": {
+      "nodeId": "1502:2",
+      "qaPageNodeId": "1502:38",
+      "label": "BW",
+      "changedThisPass": true,
+      "nativeTextCountQa": 25,
+      "replaceablePhotoCountQa": 2,
+      "composedDecoration": {
+        "nodeId": "1502:75",
+        "name": "DECOR / QA_ROUTE_TEXTURE_COMPOSED_RASTER",
+        "sourceHash": "691a6ceed471a5d8efa144052a10564eed177b4f",
+        "sourceIntrinsic": [720, 860],
+        "displayApprox": [438, 660],
+        "intrinsicSafe": true,
+        "role": "fixed non-semantic bounded Q&A continuity texture",
+        "containsFinalCopy": false
+      },
+      "photos": [
+        {
+          "nodeId": "1502:66",
+          "name": "PHOTO / QA_MEMORY_HERO_REPLACEABLE",
+          "imageHash": "e3738476f760932bb5b09c9d60f174dd6c84049d",
+          "displayApprox": [458, 438],
+          "replaceable": true
+        },
+        {
+          "nodeId": "1502:67",
+          "name": "PHOTO / QA_MEMORY_SUPPORT_REPLACEABLE",
+          "imageHash": "d76eb07d83d042f15044c8bc6bf68d73a73cd77d",
+          "displayApprox": [348, 290],
+          "replaceable": true
+        }
+      ],
+      "qa": {
+        "whole500": "PASS",
+        "spread1200": "PASS",
+        "actual794x1123": "PASS",
+        "textTextCollision": 0,
+        "unintendedTextPhotoCollision": 0,
+        "textSafeArea18Risk": 0
+      }
+    },
+    "storyChronology": {
+      "nodeId": "1498:159",
+      "label": "BV",
+      "changedThisPass": false,
+      "composedStoryTextureHash": "691a6ceed471a5d8efa144052a10564eed177b4f"
+    }
+  },
+  "rollbackAndRejected": {
+    "profileQaBt": {
+      "nodeId": "1488:2",
+      "state": "hidden rollback"
+    },
+    "outerX": {
+      "nodeId": "1506:2",
+      "state": "rejected hidden comparison",
+      "failureFingerprint": "OVER_SUBTRACTION_REMOVES_EDITORIAL_ENERGY"
+    }
+  },
+  "assetLifecycle": {
+    "newImageGeneration": 0,
+    "newDriveSaves": 0,
+    "newExternalBinaryPlacements": 0,
+    "newDistinctRasterBytes": 0,
+    "verifiedExistingComposedRasterReusedInNewBoundedRole": true,
+    "nativeEditableCopyPreserved": true,
+    "replaceablePhotosPreserved": true,
+    "v7Touched": false
+  },
+  "completionState": "VERIFIED_LOCAL_DUMMY_DESIGN_STUDY / NOT_PRINT_READY"
+}
