@@ -8,7 +8,7 @@ Production state: separate clean-room V6; V7 is HOLD
 
 ## Current declaration
 
-`V6_LIVE_FIGMA_IN_PROGRESS / OUTER_P_CURRENT / INSIDE_BA_AZ_PREFERRED_STUDIES / BA_ASYMMETRIC_INTERVIEW_QA_VERIFIED / BA_LONG_ANSWER_STRESS_PASS / AZ_STORY_EDITORIAL_FIELD_VERIFIED / AZ_INHERITS_AS_CHRONOLOGY_QA / P_BACK_CHRONOLOGY_ENDPOINT_QA_VERIFIED / NATIVE_TEXT_AND_REPLACEABLE_IMAGE_ROLES_PRESERVED / GENERATED_SECTION_MASTERS_DRIVE_VERIFIED_NOT_ADOPTED / V7_HOLD / NOT_PRINT_READY`
+`V6_LIVE_FIGMA_IN_PROGRESS / OUTER_P_CURRENT / INSIDE_BB_AZ_PREFERRED_STUDIES / BB_INHERITS_BA_INTERVIEW_GEOMETRY_AND_STRESS / BB_SHARPER_TRAVEL_HERO_QA_VERIFIED / AZ_STORY_EDITORIAL_FIELD_VERIFIED / AZ_INHERITS_AS_CHRONOLOGY_QA / P_BACK_CHRONOLOGY_ENDPOINT_QA_VERIFIED / NATIVE_TEXT_AND_REPLACEABLE_IMAGE_ROLES_PRESERVED / GENERATED_SECTION_MASTERS_DRIVE_VERIFIED_NOT_ADOPTED / V7_HOLD / NOT_PRINT_READY`
 
 Live Figma and later evidence supersede older declarations.
 
@@ -16,202 +16,189 @@ Live Figma and later evidence supersede older declarations.
 
 Start Here `845:27`:
 
-`V5 FU/FX · V6 P + BA/AZ INSIDE STUDIES · V7 HOLD`
+`V5 FU/FX · V6 P + BB/AZ INSIDE STUDIES · V7 HOLD`
 
 Preferred:
 
 - Outer P `1397:64 / PREFERRED / V6_OUTER_P_ASYMMETRIC_BACK_CHRONOLOGY_2026_08_16`
-- Profile / Q&A BA `1411:2 / PREFERRED / V6_INSIDE_BA_ASYMMETRIC_INTERVIEW_FLOW_2026_08_16`
+- Profile / Q&A BB `1415:2 / PREFERRED / V6_INSIDE_BB_QA_TRAVEL_FLATLAY_HERO_2026_08_16`
 - Story / chronology AZ `1409:2 / PREFERRED / V6_INSIDE_AZ_STORY_EDITORIAL_FIELD_2026_08_16`
 
 Latest preserved comparison / rollback:
 
+- BA `1411:2` — hidden rollback after BB photo-type promotion
 - AX `1406:2` — hidden rollback after BA promotion
 - AS `1392:2` — hidden rollback after AZ promotion
-- AY `1408:2` — hidden `REJECTED_VISUAL`; vertical `INTERVIEW` anchor added decoration/noise without enough editorial benefit
-- BA long-answer proof `1412:2` — hidden after PASS
+- AY `1408:2` — hidden `REJECTED_VISUAL`; vertical `INTERVIEW` anchor added noise without enough hierarchy benefit
+- BA long-answer proof `1412:2` — hidden after PASS; still applies to BB because BB changed image fill only
 - earlier V6 rollbacks/rejected frames remain preserved and are not production authority.
 
 V7 remains HOLD while V6 still has meaningful work and final-content/print gates remain open.
 
 ## Outer P
 
-P remains preferred and unchanged in the latest pass.
+P remains preferred and unchanged.
 
-Verified retained state:
+Retained verified state:
 
 - 500 px whole-outer thumbnail PASS
-- reading-scale outer PASS
+- reading-scale PASS
 - actual back cover `793.7×1122.5` PASS
 - back native text `18`
 - text collision `0`
 - 18 px text safe-area risk `0`
 - active images remain within verified intrinsic bounds
-- PNG masthead authority:
+- PNG masthead:
   - Drive master `1opK9BSoL8rCeoYxuPWUyKZZsu0-Q165b`
-  - image hash `0bdbf47904ea5865c71b1555dc73689b2c7b2126`.
+  - image hash `0bdbf47904ea5865c71b1555dc73689b2c7b2126`
+  - display `330×106.7` / intrinsic `500×161`: PASS.
 
-## Profile / Q&A BA
+## Profile / Q&A BB
 
-BA supersedes AX on the Q&A page. Profile geometry is inherited from AX.
+BB keeps BA's successful interview geometry and changes only the Q&A hero image fill.
 
-### BA design decision
+### BA reading-structure result retained
 
-AX problem:
+BA replaced AX because the prior Q&A still read as six independently positioned questionnaire prompts.
 
-- right page remained structurally safe but still read as six independently placed questions around a photograph;
-- repeated prompts retained clean-template/questionnaire behavior relative to P and the chronology spread.
+Current geometry retained in BB:
 
-BA response:
+- Q01–Q03 = compact left interview flow
+- Q04 = feature question
+- Q05/Q06 = vertical continuation instead of a repeated row
+- closing native pullquote bridges interview text and photography
+- support photo uses the lower page field
+- no new card, shadow, gradient or fixed decorative raster.
 
-- no new asset and no new decorative raster;
-- existing replaceable memory hero enlarged to `465×480`;
-- Q01–Q03 compacted into one left interview flow;
-- Q04 promoted to the feature question;
-- Q05/Q06 continued vertically instead of forming another grid row;
-- existing native closing pullquote moved to bridge interview text and photography;
-- small support photo moved upward to use the lower physical page field;
-- no card, shadow, gradient or new fixed graphic decoration.
+### BB photo-type improvement
 
-### BA verification
+Actual-size BA review showed the dining hero was technically intrinsic-safe but perceptually soft.
+
+BB bounded test:
+
+- same hero role geometry `465×480`
+- same mask/replaceable role
+- only image fill changed
+- new hero hash `e3738476f760932bb5b09c9d60f174dd6c84049d`
+- intrinsic `944×608`
+- within intrinsic: PASS
+- visual role: camera/map/travel flatlay
+- sharper object edges and stronger travel-magazine semantic fit than BA dining dummy.
+
+BB verification:
 
 - 500 px whole spread: PASS
-- reading scale: PASS
 - actual Q&A `794×1123`: PASS
 - Q&A visible native text `24`
 - replaceable IMAGE roles `2`
 - text/text collision `0`
-- accidental text/image collision `0` except intended photo caption
 - 18 px text safe-area risk `0`
-- outside visible nodes `0`.
+- hero intrinsic gate PASS.
 
-Intrinsic gate:
-
-- Q&A hero `465×480` / source `732×498`: PASS
-- Q&A support `238×210` / source `240×220`: PASS.
-
-### Fresh BA long-answer stress
-
-Proof:
+Dynamic-copy proof:
 
 - `1412:2 / QA_EVIDENCE / V6_BA_LONG_ANSWER_STRESS_2026_08_16`
-
-Six realistic Japanese answers with auto-height proof text:
-
-- text/text collision `0`
+- six realistic Japanese answers
+- collision `0`
 - accidental text/image collision `0`
-- 18 px safe-area risk `0`
-- outside/page overflow `0`
+- safe-area risk `0`
+- page overflow `0`
 - actual-size screenshot PASS.
 
-This proof must be rerun if BA Q&A geometry materially changes.
+This proof remains valid because BB changed only hero image fill; rerun if Q&A geometry changes.
 
-Profile inherited from AX remains:
+Profile geometry remains inherited from AX/BA:
 
 - native text `17`
 - replaceable IMAGE roles `4`
-- text collision `0`
-- 18 px safe-area risk `0`
-- all images inside intrinsic bounds.
-
-## Story / chronology AZ
-
-AZ supersedes AS on Story geometry. Chronology geometry is inherited unchanged from verified AS.
-
-### AZ design decision
-
-AS Story problem:
-
-- dominant hero was strong, but the lower half still became quiet and explanatory;
-- support photos and story copy did not occupy the physical page as one continuous editorial field.
-
-AZ response:
-
-- Story hero enlarged to `700×470` with controlled clipped bleed;
-- skyline support retained at `220×202`;
-- cafe support enlarged to `430×330`;
-- native two-line story anchor increased and bridges photography/copy;
-- utility-like `PHOTO MEMO` text hidden;
-- a weak decorative `01` experiment was removed after screenshot comparison instead of retained as filler;
-- no new cards, generated decoration, shadow or gradient.
-
-### AZ verification
-
-- 500 px whole spread: PASS
-- reading scale comparison vs AS: PASS; AZ selected
-- actual Story `794×1123`: PASS
-- visible native text `11`
-- replaceable IMAGE roles `3`
-- text/text collision `0`
-- 18 px text safe-area risk `0`
-- outside-page text `0`.
-
-Intrinsic gate:
-
-- Story hero `700×470` / source `1356×560`: PASS
-- Story support 1 `220×202` / source `240×220`: PASS
-- Story support 2 `430×330` / source `810×552`: PASS.
-
-Chronology inherits AS verified state for this pass:
-
-- all event facts remain native
-- asymmetric event field, not UI rail/grid
-- six replaceable IMAGE roles retained
-- dominant WEDDING endpoint retained
-- native text `32`
 - collision `0`
-- 18 px safe risk `0`
-- all current image roles read back within intrinsic source dimensions.
+- 18 px safe-area risk `0`
+- all images within intrinsic bounds.
 
 Evidence:
 
 - `RURUBU-V6-P-BA-AZ-QA-2026-08-16.md`
+- `RURUBU-V6-P-BB-AZ-PHOTO-TYPE-QA-2026-08-16.md`
+
+## Story / chronology AZ
+
+AZ remains preferred.
+
+Story:
+
+- hero `700×470`
+- skyline support `220×202`
+- cafe support `430×330`
+- native two-line Story anchor bridges photo/copy
+- visible native text `11`
+- replaceable IMAGE roles `3`
+- text collision `0`
+- 18 px safe-area risk `0`
+- all Story image roles within intrinsic dimensions.
+
+Chronology inherits unchanged verified AS geometry:
+
+- all event facts native
+- asymmetric event field rather than UI rail/grid
+- six replaceable IMAGE roles
+- dominant WEDDING endpoint
+- native text `32`
+- collision `0`
+- 18 px safe-area risk `0`
+- active image roles remain inside intrinsic source dimensions.
 
 ## Drive / generated section masters
 
-Fresh Drive root readback confirmed V6 authority:
+Fresh Drive root readback confirms:
 
-- root `1wHxC2E09JpLIQRNDDTY4i29KMwMY2_XK / RURUBU_V6_HAWAII_2026-08-02`.
+- V6 root `1wHxC2E09JpLIQRNDDTY4i29KMwMY2_XK / RURUBU_V6_HAWAII_2026-08-02`
+- Profile generated master `1MfLObNcvsWhQ8nQqgZHeFiDBdjPzj1w8`
+- Q&A generated master `1M4X4ELmau3_GrCDb6n72xv13R_CszDKR`
+- Timeline generated master `1KzAiPYc3HrvUL75Kkv9cPcAN2blQt8MV`
+- Memories generated master `1WhO8iIIx1G9oAxU5-lWSnBEHx_AQpZe0`.
 
-Existing generated masters remain present:
+No generated master was newly placed or adopted.
 
-- Profile `1MfLObNcvsWhQ8nQqgZHeFiDBdjPzj1w8`
-- Q&A `1M4X4ELmau3_GrCDb6n72xv13R_CszDKR`
-- Timeline `1KzAiPYc3HrvUL75Kkv9cPcAN2blQt8MV`
-- Memories `1WhO8iIIx1G9oAxU5-lWSnBEHx_AQpZe0`.
-
-No generated master was newly placed or adopted in the latest pass.
-
-Known transport boundary remains unchanged:
+Known boundary remains:
 
 `DRIVE_RAW_MASTER_REACHABLE / FIGMA_SUBMIT_DNS_BLOCKED / NO_NEW_GENERATED_SECTION_DECORATION_ADOPTION`.
 
-Do not retry the same external submit path without a material environment/capability change.
+Do not retry that external submit path without a material capability/environment change.
 
 ## Shared-learning result
 
-Shared hybrid-authoring remains the default: variable/factual copy stays native, photos remain replaceable semantic roles, and fixed decoration must beat a strong photo/type baseline at real use size before adoption.
+Current local verified principles:
 
-Neutral non-Rurubu learning was consumed only at the principle level. No non-Rurubu item-specific Figma, Drive, asset, ledger, layout, palette or production conclusion was inspected or copied.
+- repeated editable Q&A can read more editorially when organized as one semantic reading flow paired with an independent dominant photo anchor and one closing pullquote beat;
+- decorative display text that does not improve hierarchy should be rejected rather than kept as magazine-looking filler;
+- intrinsic-size compliance is necessary but not sufficient: actual-size perceptual sharpness still gates photo adoption;
+- a role-preserving photo-type swap can improve quality without disturbing native text geometry or replacement behavior.
 
-Latest local result:
+Neutral non-Rurubu learning was consumed only through the neutral shared feed. No non-Rurubu item-specific Figma, Drive, asset, ledger, layout or production state was inspected.
 
-- repeated Q&A became stronger when treated as one interview reading flow paired with an independent dominant photo anchor and a closing native pullquote;
-- Story density improved by enlarging legitimate photo fields and letting native typography bridge them, without filler decoration;
-- decorative editorial text that did not improve hierarchy was explicitly rejected.
+## Active asset reconciliation
+
+Current ledger:
+
+- `RURUBU-V6-P-BA-AZ-ACTIVE-ASSET-RECONCILIATION-2026-08-16.json` records the pre-BB geometry/image lineage.
+- BB keeps all BA geometry but replaces Q&A hero hash with `e3738476f760932bb5b09c9d60f174dd6c84049d`, intrinsic `944×608`, display `465×480`, PASS.
+
+A later consolidated ledger may supersede the BA-labelled filename; live Figma + this status + BB evidence are authoritative for the current Q&A hero.
 
 ## Asset lifecycle truth of latest pass
 
 - newly generated images: `0`
 - new Drive saves: `0`
-- new external binary placement in Figma: `0`
-- existing verified replaceable photo roles recomposed: `YES`
+- new external binary placement: `0`
+- existing verified Figma photo hash reused: `YES`
+- existing replaceable photo roles recomposed: `YES`
 - generated/fixed decoration adopted: `NO`
 - native editable copy preserved: `YES`
 - whole/read/actual-size visual verification: `YES`
-- fresh BA long-answer stress: `PASS`
+- Q&A long-answer stress: `PASS` via unchanged BA/BB geometry
 - structure/safe-area verification: `PASS`
 - intrinsic/display-size gate: `PASS`
+- perceptual actual-size photo-quality comparison: `PASS / BB selected`
 - rollback comparison preserved: `YES`
 - V7 touched: `NO`.
 
@@ -219,7 +206,7 @@ Latest local result:
 
 Do not call V6 complete or print-ready until:
 
-- P + BA/AZ cohere with final real content as one magazine system;
+- P + BB/AZ cohere with final real content as one magazine system;
 - real photography and final copy replace dummy content and crop/contrast/text-stress QA is rerun;
 - any adopted generated/fixed decoration has quality-preserving placement and provenance evidence;
 - exact printer/product template is applied;
@@ -228,13 +215,13 @@ Do not call V6 complete or print-ready until:
 
 Current state:
 
-`V6 P + BA/AZ = VERIFIED_LOCAL_DUMMY_DESIGN_STUDIES / ROLLBACK_SAFE / V7_HOLD / NOT_PRINT_READY`.
+`V6 P + BB/AZ = VERIFIED_LOCAL_DUMMY_DESIGN_STUDIES / ROLLBACK_SAFE / V7_HOLD / NOT_PRINT_READY`.
 
 ## Next highest-value work
 
-1. Review P + BA/AZ together and fix only concrete remaining system-level incoherence; do not reopen V7.
-2. Continue increasing authentic editorial rhythm through legitimate photography + native Japanese type before weak decorative raster.
-3. Keep every enlarged image role inside verified intrinsic-quality limits.
-4. Re-run profile-value stress if profile field geometry changes; re-run BA Q&A stress if Q&A geometry changes.
-5. Do not retry the unchanged external generated-section submit path.
+1. Review P + BB/AZ as one magazine system and fix only concrete remaining incoherence; do not reopen V7.
+2. Replace dummy photography only when the new role is visibly stronger at actual size, not merely intrinsic-safe.
+3. Continue using native Japanese typography + replaceable photo hierarchy before weak decorative raster.
+4. Re-run profile-value stress if profile geometry changes; rerun Q&A stress if BB text geometry changes.
+5. Do not retry unchanged generated-section submit transport.
 6. Keep V7 HOLD until V6 coherence and final-content gates are genuinely closed.
