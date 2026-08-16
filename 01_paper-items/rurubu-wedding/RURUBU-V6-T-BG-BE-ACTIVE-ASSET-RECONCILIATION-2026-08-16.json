@@ -1,0 +1,34 @@
+{
+  "date": "2026-08-16",
+  "scope": "Rurubu WEDDING V6 only",
+  "state": "T_BG_BE_ACTIVE_ASSET_RECONCILIATION_PASS",
+  "figmaFileKey": "bfM0d4c9dCeBv5pCkJ3TNM",
+  "startHere": "V5 FU/FX · V6 T + BG/BE INSIDE STUDIES · V7 HOLD",
+  "preferred": {
+    "outer": {"nodeId":"1447:2","name":"PREFERRED / V6_OUTER_T_PHOTO_LED_BACK_COVER_2026_08_16"},
+    "profileQa": {"nodeId":"1439:58","name":"PREFERRED / V6_INSIDE_BG_QA_EDITORIAL_BEATS_2026_08_16"},
+    "storyChronology": {"nodeId":"1433:2","name":"PREFERRED / V6_INSIDE_BE_CHRONOLOGY_EDITORIAL_CLUSTER_2026_08_16"}
+  },
+  "outer": {
+    "front": "unchanged from S verified front state",
+    "back": {
+      "dominantFlatlay": {"imageHash":"e3738476f760932bb5b09c9d60f174dd6c84049d","display":[793.7,490],"intrinsic":[944,608],"withinIntrinsic":true,"replaceable":true},
+      "cafe": {"imageHash":"c1ada11205bc3978bf426b304d683f1c1566cac2","display":[430,270],"position":[24,430],"rotation":-2.2,"replaceable":true},
+      "skyline": {"imageHash":"644f449c3bf2001a94d4b822d2b55e2614c11042","display":[232,210],"position":[535,412],"rotation":2.4,"replaceable":true},
+      "qa": {"visibleNativeText":18,"visibleImageRoles":3,"textTextCollision":0,"safeAreaRisk18px":0,"actualSizeBackPass":true,"wholeItem500Pass":true,"reading900Pass":true}
+    }
+  },
+  "profileQa": "unchanged from BG verified reconciliation including long-answer proof 1441:2 PASS",
+  "storyChronology": "unchanged from BE verified reconciliation",
+  "driveGeneratedMasters": {
+    "root":"1wHxC2E09JpLIQRNDDTY4i29KMwMY2_XK",
+    "profile":"1MfLObNcvsWhQ8nQqgZHeFiDBdjPzj1w8",
+    "qa":"1M4X4ELmau3_GrCDb6n72xv13R_CszDKR",
+    "timeline":"1KzAiPYc3HrvUL75Kkv9cPcAN2blQt8MV",
+    "memories":"1WhO8iIIx1G9oAxU5-lWSnBEHx_AQpZe0",
+    "adoptedThisPass":false,
+    "transportFingerprint":"DRIVE_RAW_MASTER_REACHABLE / FIGMA_SUBMIT_DNS_BLOCKED"
+  },
+  "rollback": {"outerS":"1439:2 hidden","profileQaBF":"1436:56 hidden","bgLongAnswerProof":"1441:2 hidden"},
+  "truth": {"newGeneration":0,"newDriveWrite":0,"newBinaryPlacement":0,"existingVerifiedHashReuse":true,"nativeTextPreserved":true,"replaceablePhotoRolesPreserved":true,"rollbackSafe":true,"v7Touched":false,"printReady":false}
+}
