@@ -8,7 +8,7 @@ Production state: separate clean-room V6; V7 is HOLD
 
 ## Current declaration
 
-`V6_LIVE_FIGMA_IN_PROGRESS / OUTER_T_CURRENT / INSIDE_BG_BH_PREFERRED_STUDIES / T_PHOTO_LED_BACK_COVER_VERIFIED / BG_QA_EDITORIAL_BEATS_AND_LONG_COPY_STRESS_VERIFIED / BH_CHRONOLOGY_PHOTO_EVENT_INTEGRATION_VERIFIED / NATIVE_TEXT_AND_REPLACEABLE_IMAGE_ROLES_PRESERVED / GENERATED_SECTION_MASTERS_DRIVE_VERIFIED_NOT_ADOPTED / V7_HOLD / NOT_PRINT_READY`
+`V6_LIVE_FIGMA_IN_PROGRESS / OUTER_T_CURRENT / INSIDE_BI_BH_PREFERRED_STUDIES / T_PHOTO_LED_BACK_COVER_VERIFIED / BI_DENSE_NATIVE_PROFILE_AND_LONG_VALUE_STRESS_VERIFIED / BH_CHRONOLOGY_PHOTO_EVENT_INTEGRATION_VERIFIED / NATIVE_TEXT_AND_REPLACEABLE_IMAGE_ROLES_PRESERVED / GENERATED_SECTION_MASTERS_DRIVE_VERIFIED_NOT_ADOPTED / V7_HOLD / NOT_PRINT_READY`
 
 Live Figma and later evidence supersede older declarations.
 
@@ -16,21 +16,21 @@ Live Figma and later evidence supersede older declarations.
 
 Start Here `845:27`:
 
-`V5 FU/FX · V6 T + BG/BH INSIDE STUDIES · V7 HOLD`
+`V5 FU/FX · V6 T + BI/BH INSIDE STUDIES · V7 HOLD`
 
 Preferred:
 
 - Outer T `1447:2 / PREFERRED / V6_OUTER_T_PHOTO_LED_BACK_COVER_2026_08_16`
-- Profile / Q&A BG `1439:58 / PREFERRED / V6_INSIDE_BG_QA_EDITORIAL_BEATS_2026_08_16`
+- Profile / Q&A BI `1458:2 / PREFERRED / V6_INSIDE_BI_DENSE_NATIVE_PROFILE_DATA_2026_08_16`
 - Story / chronology BH `1451:2 / PREFERRED / V6_INSIDE_BH_PHOTO_EVENT_INTEGRATED_CHRONOLOGY_2026_08_16`
 
 Preserved rollback/evidence:
 
 - Outer S `1439:2` — hidden rollback before T.
 - Outer U `1455:2` — hidden marginal comparison; did not materially outperform T.
-- Profile/Q&A BF `1436:56` — hidden rollback before BG.
-- BG long-answer proof `1441:2` — hidden after PASS.
-- profile long-value proof `1431:2` remains valid because BH did not change Profile geometry.
+- Profile/Q&A BG `1439:58` — hidden rollback before BI.
+- BI long-value proof `1459:2` — hidden after PASS.
+- BG long-answer proof `1441:2` — hidden after PASS; remains applicable because BI Q&A geometry/type is unchanged from BG.
 - Story/chronology BE `1433:2` — hidden rollback before BH.
 - V7 remains HOLD.
 
@@ -51,33 +51,47 @@ Back verification remains:
 
 Outer U tested stronger year-size hierarchy only. It was visually valid but the difference from T was too marginal at 500px/1200px to justify a new preferred state, so U was hidden.
 
-Evidence for T remains:
+## Profile / Q&A BI
 
-- `RURUBU-V6-T-BG-BE-PHOTO-LED-BACK-QA-2026-08-16.md`
-- latest reconciliation is now `RURUBU-V6-T-BG-BH-ACTIVE-ASSET-RECONCILIATION-2026-08-16.json`.
+BI replaces BG as preferred because the BG Profile values were still `—` placeholders and the wide 3-column × 2-row block read like an unfinished form.
 
-## Profile / Q&A BG
+BI Profile keeps the same verified photography and changes only native information structure:
 
-Unchanged from the verified BG pass.
+- six label/value pairs rearranged to `2 columns × 3 rows`;
+- representative editable dummy values inserted so realistic information mass is visible during design QA;
+- no new card, border, gradient, shadow, generated decoration, image asset, or binary transport;
+- values remain native and are not factual authority; final personal copy must replace them later.
 
-Profile:
+Profile verification:
 
-- native text `17`;
+- page `1458:3 / 794×1123` actual-size PASS;
+- visible native text `17`;
 - replaceable IMAGE roles `4`;
 - text/text collision `0`;
-- unintended text/image collision `0`;
-- 18px safe-area risk `0`;
-- realistic profile long-value proof `1431:2` remains valid.
+- 18px text safe-area risk `0`;
+- 500px BG/BI comparison: BI preferred.
 
-Q&A:
+Dedicated BI long-value stress `1459:2`:
+
+- longer multi-line values across all six fields;
+- new label/value collisions `0`;
+- new profile-data vs lower-photo collisions `0`;
+- safe-area risks `0`;
+- the only text/image intersections are the existing intentional Profile name/pullquote overlays on the hero photo;
+- proof hidden after PASS.
+
+BI Q&A is unchanged from BG:
 
 - native text `25`;
 - replaceable IMAGE roles `2`;
 - text/text collision `0`;
-- unintended question/image collision `0`;
-- 18px safe-area risk `0`;
-- whole/read/actual-size visual QA PASS;
-- dedicated long-answer proof `1441:2`: PASS and remains valid because BH did not change BG geometry/type.
+- 18px text safe-area risk `0`;
+- existing BG long-answer proof remains applicable.
+
+Evidence:
+
+- `RURUBU-V6-T-BI-BH-DENSE-PROFILE-QA-2026-08-16.md`
+- `RURUBU-V6-T-BI-BH-ACTIVE-ASSET-RECONCILIATION-2026-08-16.json`.
 
 ## Story / chronology BH
 
@@ -88,9 +102,7 @@ Story page is unchanged from BE and remains verified:
 - collision `0`;
 - 18px safe-area risk `0`.
 
-BH changes only the chronology page.
-
-Visible defect repaired: BE still separated events 01–05 from the event-photo strip, which preserved an infographic/timeline feel.
+BH changes only the chronology page. It repairs the BE defect where events 01–05 and event photos still read as separate systems.
 
 BH composition:
 
@@ -116,7 +128,7 @@ Final BH chronology verification:
 Evidence:
 
 - `RURUBU-V6-T-BG-BH-PHOTO-EVENT-INTEGRATION-QA-2026-08-16.md`
-- `RURUBU-V6-T-BG-BH-ACTIVE-ASSET-RECONCILIATION-2026-08-16.json`.
+- latest active reconciliation is `RURUBU-V6-T-BI-BH-ACTIVE-ASSET-RECONCILIATION-2026-08-16.json`.
 
 ## Drive / generated section masters
 
@@ -141,6 +153,7 @@ Do not retry the unchanged failing submit method without a material capability/e
 - native editable copy preserved: `YES`
 - generated/fixed section decoration adopted: `NO`
 - whole/read/actual-size visual verification: `YES`
+- Profile long-value stress: `PASS`
 - structure/safe-area verification: `PASS`
 - rollback comparison preserved: `YES`
 - V7 touched: `NO`.
@@ -149,7 +162,7 @@ Do not retry the unchanged failing submit method without a material capability/e
 
 Do not call V6 complete or print-ready until:
 
-- T + BG/BH cohere with final real content as one magazine system;
+- T + BI/BH cohere with final real content as one magazine system;
 - real photography and final copy replace dummy content and crop/contrast/text stress are rerun;
 - exact printer/product template is applied;
 - bleed, trim, fold, safe area and page order are verified;
@@ -157,13 +170,13 @@ Do not call V6 complete or print-ready until:
 
 Current state:
 
-`V6 T + BG/BH = VERIFIED_LOCAL_DUMMY_DESIGN_STUDIES / ROLLBACK_SAFE / V7_HOLD / NOT_PRINT_READY`.
+`V6 T + BI/BH = VERIFIED_LOCAL_DUMMY_DESIGN_STUDIES / ROLLBACK_SAFE / V7_HOLD / NOT_PRINT_READY`.
 
 ## Next highest-value work
 
 1. Continue V6, not V7.
-2. Review T + BG/BH together at thumbnail scale; prioritize remaining magazine-system incoherence over decoration count.
-3. Re-run profile value stress only if Profile geometry changes.
+2. Review T + BI/BH together at thumbnail scale; prioritize remaining magazine-system incoherence over decoration count.
+3. Replace BI dummy profile values with final facts later, then rerun value stress against the real text.
 4. Re-run Q&A answer stress whenever Q&A geometry or type size changes.
 5. Replace dummy photography only when actual-size visual quality and story semantics are clearly stronger.
 6. Keep final print/template/PDF/physical-proof gates separate from dummy-design QA.
