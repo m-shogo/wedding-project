@@ -1,0 +1,46 @@
+{
+  "date": "2026-08-16",
+  "scope": "Rurubu WEDDING V6 only",
+  "figmaFile": "bfM0d4c9dCeBv5pCkJ3TNM",
+  "preferred": {
+    "outer": "1491:2",
+    "profileQA": "1488:2",
+    "storyChronology": "1498:159"
+  },
+  "driveRoot": {
+    "id": "1wHxC2E09JpLIQRNDDTY4i29KMwMY2_XK",
+    "name": "RURUBU_V6_HAWAII_2026-08-02"
+  },
+  "lifecycle": {
+    "newlyImageGenerated": 0,
+    "newDriveSaves": 0,
+    "newExternalBinaryPlacements": 0,
+    "newInFigmaComposedRasterRoles": 1,
+    "composedRasterSourceGeometryRetained": false,
+    "existingVerifiedFigmaHashesReused": true,
+    "nativeEditableCopyPreserved": true,
+    "replaceableImageRolesPreserved": true,
+    "v7Touched": false
+  },
+  "bvActiveImages": [
+    {"node":"1498:161","role":"DECOR / STORY_TRAVEL_TEXTURE_COMPOSED_RASTER","size":[465,450],"hash":"691a6ceed471a5d8efa144052a10564eed177b4f","intrinsic":[720,860],"scaleMode":"FILL","replaceablePhoto":false},
+    {"node":"1498:166","role":"PHOTO / STORY_HERO_REPLACEABLE","size":[820,520],"hash":"539c259be8036b481d06b4f76db9a39b407d90e8","intrinsic":[1356,560],"scaleMode":"FILL","replaceablePhoto":true},
+    {"node":"1498:167","role":"PHOTO / STORY_SUPPORT_1_REPLACEABLE","size":[220,202],"hash":"644f449c3bf2001a94d4b822d2b55e2614c11042","intrinsic":[240,220],"scaleMode":"FILL","replaceablePhoto":true},
+    {"node":"1498:168","role":"PHOTO / STORY_SUPPORT_2_REPLACEABLE","size":[475,325],"hash":"c1ada11205bc3978bf426b304d683f1c1566cac2","intrinsic":[810,552],"scaleMode":"FILL","replaceablePhoto":true},
+    {"node":"1498:184","role":"PHOTO / TIMELINE_FEATURE_HERO_REPLACEABLE","size":[801,430],"hash":"e3738476f760932bb5b09c9d60f174dd6c84049d","intrinsic":[944,608],"scaleMode":"FILL","replaceablePhoto":true},
+    {"node":"1498:186","role":"PHOTO / TIMELINE_FEATURE_SUPPORT_2_REPLACEABLE","size":[210,155],"hash":"439a719d73f28e8dd2889f2026cccb15f345ec63","intrinsic":[352,368],"scaleMode":"FILL","replaceablePhoto":true},
+    {"node":"1498:193","role":"PHOTO / EVENT_1_REPLACEABLE_EDITORIAL","size":[350,190],"hash":"539c259be8036b481d06b4f76db9a39b407d90e8","intrinsic":[1356,560],"scaleMode":"FILL","replaceablePhoto":true},
+    {"node":"1498:201","role":"PHOTO / EVENT_3_REPLACEABLE_EDITORIAL","size":[238,148],"hash":"644f449c3bf2001a94d4b822d2b55e2614c11042","intrinsic":[240,220],"scaleMode":"FILL","replaceablePhoto":true},
+    {"node":"1498:209","role":"PHOTO / EVENT_5_REPLACEABLE_EDITORIAL","size":[410,155],"hash":"d76eb07d83d042f15044c8bc6bf68d73a73cd77d","intrinsic":[732,498],"scaleMode":"FILL","replaceablePhoto":true}
+  ],
+  "verification": {
+    "wholeThumbnail": "PASS",
+    "readingScale": "PASS",
+    "actualSizeStory": "PASS",
+    "textCollisions": 0,
+    "text18pxSafeAreaRisks": 0,
+    "photoIntrinsicViolations": 0,
+    "rollbackPreserved": true
+  },
+  "note": "Outer W and Profile/Q&A BT active assets are unchanged from the preceding W/BT/BS reconciliation. This reconciliation records the new preferred BV Story/Chronology role/hash state only and does not claim final photography or print readiness."
+}
