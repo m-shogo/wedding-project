@@ -8,77 +8,92 @@ Production state: separate clean-room V6; V7 is HOLD
 
 ## Current declaration
 
-`V6_LIVE_FIGMA_IN_PROGRESS / OUTER_Y_CURRENT / INSIDE_CL_CJ_PREFERRED_STUDIES / CHRONOLOGY_MAJOR_MINOR_MAGAZINE_BEATS_VERIFIED / GUEST_FACING_QA_COPY_VERIFIED / PROFILE_TRAVELER_DATA_RAIL_VERIFIED / PROFILE_LONG_COPY_STRESS_VERIFIED / NATIVE_TEXT_AND_REPLACEABLE_IMAGE_ROLES_PRESERVED / GENERATED_SECTION_MASTERS_DRIVE_VERIFIED_NOT_ADOPTED / V7_HOLD / NOT_PRINT_READY`
+`V6_LIVE_FIGMA_IN_PROGRESS / OUTER_Y_CURRENT / INSIDE_CN_CM_PREFERRED_STUDIES / PROFILE_SNAPSHOT_EDITORIAL_CAPTIONS_VERIFIED / CHRONOLOGY_MINOR_BEAT_NUMERIC_ANCHORS_VERIFIED / GUEST_FACING_QA_COPY_VERIFIED / PROFILE_TRAVELER_DATA_RAIL_VERIFIED / PROFILE_LONG_COPY_STRESS_VERIFIED / NATIVE_TEXT_AND_REPLACEABLE_IMAGE_ROLES_PRESERVED / GENERATED_SECTION_MASTERS_DRIVE_VERIFIED_NOT_ADOPTED / V7_HOLD / NOT_PRINT_READY`
 
 ## Live Figma current state
 
 Current preferred set:
 
 - Outer Y `1542:2` — `PREFERRED / V6_OUTER_Y_PHOTO_BOUND_BACK_CLOSURE_2026_08_17`;
-- Profile / Q&A CL `1556:2` — `PREFERRED / V6_INSIDE_CL_GUEST_FACING_QA_COPY_2026_08_17`;
-- Story / chronology CJ `1554:97` — `PREFERRED / V6_INSIDE_CJ_CHRONOLOGY_MAGAZINE_BEATS_2026_08_17`.
+- Profile / Q&A CN `1562:2` — `PREFERRED / V6_INSIDE_CN_PROFILE_SNAPSHOT_CAPTIONS_2026_08_17`;
+- Story / chronology CM `1559:2` — `PREFERRED / V6_INSIDE_CM_CHRONOLOGY_MINOR_BEAT_NUMERIC_ANCHORS_2026_08_17`.
 
 Immediate rollback / proof:
 
-- CK `1553:79` — `ROLLBACK_HIDDEN / V6_INSIDE_CK_PRE_CL_GUEST_FACING_QA_COPY_2026_08_17`;
-- CI `1551:2` — `ROLLBACK_HIDDEN / V6_INSIDE_CI_PRE_CJ_CHRONOLOGY_2026_08_17`;
-- Profile long-copy proof `1553:156` remains hidden and valid for unchanged Profile geometry;
-- older CG / CH / CE / CF / W and rejected comparisons remain preserved.
+- CL `1556:2` — `ROLLBACK_HIDDEN / V6_INSIDE_CL_PRE_CN_PROFILE_CAPTIONS_2026_08_17`;
+- CJ `1554:97` — `ROLLBACK_HIDDEN / V6_INSIDE_CJ_PRE_CM_CHRONOLOGY_2026_08_17`;
+- CK `1553:79`, CI `1551:2`, Profile long-copy proof `1553:156`, and older comparisons remain preserved.
 
 Start Here live readback:
 
-`V5 FU/FX · V6 Y + CL/CJ INSIDE STUDIES · V7 HOLD`
+`V5 FU/FX · V6 Y + CN/CM INSIDE STUDIES · V7 HOLD`
 
 V7 was not edited.
 
 ## Outer Y retained
 
-Outer Y remains unchanged and retains its previous verified photo-bound front/back system, native text, replaceable image roles, collision-free layout and 18px safe-area compliance.
+Outer Y remains unchanged and retains its previously verified photo-led front/back system, native text, replaceable image roles, collision-free layout and safe-area compliance.
 
-## CL — guest-facing Profile / Q&A copy
+## CN — Profile snapshot editorial captions
 
-CL is a rollback-safe duplicate of CK. Profile layout, traveler-data rail, Profile long-copy behavior, Q&A questions/answers, photos, composed texture, image hashes and editability are unchanged.
+CN keeps CL Profile/Q&A geometry, photos, image hashes, traveler-data rail and Q&A content while improving the lower Profile photo cluster.
 
-Only the visible Q&A deck changed:
+Observed defect:
 
-- old implementation-facing text: `質問も答えもnative text。あとから自由に変更できます。`;
-- new native guest-facing editorial copy: `旅の途中で聞いた、ふたりの6つのこと。`.
+- the three overlapping snapshots still read partly as placed-photo collage elements rather than editorial scenes.
 
-The neutral non-Rurubu lesson `2026-08-17-nrsl-internal-status-label-leakage.md` was consumed only as a hypothesis. No non-Rurubu production node, asset, layout or current state was inspected or copied.
+Bounded test:
+
+1. Existing hidden native snapshot captions were first placed over the photos. This was rejected because 9px metadata lost contrast on heterogeneous image backgrounds.
+2. The same native captions were moved immediately outside the photo borders onto the cream page and rechecked.
+
+Adopted native dummy metadata:
+
+- `CAFE MEMORY / FAVORITE SCENE`;
+- `NIGHT WALK / PHOTO NOTE`;
+- `YOKOHAMA / NEXT VIEW`.
+
+These are editable design-study captions, not final factual copy.
 
 Verification:
 
-- actual-size Q&A `1556:40` = `794×1123`: PASS;
-- native text `26`;
-- visible IMAGE fills `3` (`2` replaceable photos + `1` bounded composed texture);
+- Profile actual-size `1562:3` = `794×1123`: PASS;
+- whole Profile/Q&A spread ~1200px: PASS;
+- visible Profile native text `22`;
 - text collision `0`;
 - 18px text safe-area risk `0`;
-- visible text outside page `0`.
+- visible overflow `0`;
+- all four Profile photo roles remain intrinsic-safe;
+- image hashes changed `0`;
+- Q&A geometry/content remains unchanged from verified CL.
 
-## CJ — chronology major/minor magazine beats
+## CM — chronology minor-beat numeric anchors
 
-CJ keeps Story, native event facts/placeholders, image sources/hashes, replaceable-photo semantics and WEDDING terminal while changing chronology emphasis:
+CM keeps Story, native event facts/placeholders, image sources/hashes, replaceable-photo semantics and the WEDDING terminal while refining minor chronology beats.
 
-- Event 2 / 4 numeric markers hidden; date/title/copy remain native;
-- Event 1 / 3 / 5 / 6 markers reduced to small colored editorial metadata;
-- Event 1 / 3 / 5 retain stronger photo/title beats;
-- Event 2 / 4 remain quieter bridge events;
-- existing composed travel texture stays bounded at reduced opacity;
-- no new cards, shadows, gradients, generated assets or binary placements.
+Observed defect:
 
-The initial CJ candidate failed four text-collision checks and was corrected before promotion.
+- CJ correctly made Event 1 / 3 / 5 strong and Event 2 / 4 quiet, but the center-left field could read as unfinished because Event 2 / 4 were too visually silent.
+
+Bounded test:
+
+- Event 2 / 4 existing native number nodes re-enabled at small `14px` scale;
+- their redundant small rule bars hidden;
+- Event 2 / 4 title scale raised `17px → 22px` while date/copy remain restrained;
+- Event 3 replaceable photo increased `285×210 → 310×230`, still below source intrinsic `352×368`;
+- Event 1 / 3 / 5 remain the major photographic beats; Event 2 / 4 remain minor;
+- no new cards, shadows, gradients, generated assets, binary placements or image hashes.
 
 Verification:
 
-- whole spread / 500px: PASS;
-- reading / 1200px: PASS;
-- actual-size chronology `1554:122` = `794×1123`: PASS;
-- native text `28`;
-- visible IMAGE fills `5` (`4` replaceable photos + `1` bounded composed texture);
+- whole spread ~1200px: PASS;
+- chronology actual-size `1559:27` = `794×1123`: PASS;
+- native text `30`;
 - text collision `0`;
-- 18px safe-area risk `0`;
-- text outside page `0`;
-- image hashes changed `0`.
+- 18px text safe-area risk `0`;
+- image intrinsic violations `0`;
+- image hashes changed `0`;
+- only page-bound overflow is the already-intentional top-hero bleed.
 
 ## Drive / generated section masters
 
@@ -97,16 +112,17 @@ No material capability change occurred for the known quality-preserving external
 
 ## Latest evidence / learning
 
-- `01_paper-items/rurubu-wedding/evidence/RURUBU-V6-Y-CL-CJ-GUEST-FACING-COPY-CHRONOLOGY-QA-2026-08-17.md`;
-- `01_paper-items/rurubu-wedding/evidence/RURUBU-V6-Y-CK-CJ-CHRONOLOGY-MAGAZINE-BEATS-QA-2026-08-17.md`;
-- `docs/design-learning/rurubu-shared-learning-feed.append/2026-08-17-rsl-064-chronology-major-minor-beats.md`;
-- `docs/design-learning/rurubu-shared-learning-feed.append/2026-08-17-rsl-065-internal-copy-leakage.md`;
-- `docs/wedding-design-learning-feedback-log.append/2026-08-17-rurubu-v6-y-cl-cj.md`.
+- `01_paper-items/rurubu-wedding/evidence/RURUBU-V6-Y-CN-CM-PROFILE-CAPTIONS-CHRONOLOGY-QA-2026-08-17.md`;
+- `docs/design-learning/rurubu-shared-learning-feed.append/2026-08-17-rsl-066-minor-chronology-anchors.md`;
+- `docs/design-learning/rurubu-shared-learning-feed.append/2026-08-17-rsl-067-photo-caption-binding.md`;
+- `docs/wedding-design-learning-feedback-log.append/2026-08-17-rurubu-v6-y-cn-cm.md`.
 
 Learning states:
 
-- RSL-064 — unequal major/minor visual beats can preserve native chronology order: `VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`;
-- RSL-065 — implementation language belongs in production evidence, not guest-facing editorial copy: locally verified in Rurubu and supportive of the already cross-item-verified neutral method; not promoted as a visual-style rule.
+- RSL-066 — small native ordinal anchors can clarify minor chronology beats without restoring equal-card hierarchy: `VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`;
+- RSL-067 — existing photo clusters can gain editorial meaning from small native captions outside image bounds without adding containers: `VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`.
+
+Neither is a promoted project-wide visual-style rule.
 
 ## Asset lifecycle truth
 
@@ -117,8 +133,8 @@ Learning states:
 - image hashes changed `0`;
 - native variable text preserved `YES`;
 - replaceable image semantics preserved `YES`;
-- screenshot/actual-size QA `PASS` for changed pages;
-- structure/safe-area QA `PASS`;
+- screenshot / actual-size QA `PASS` for changed pages;
+- structure / safe-area QA `PASS`;
 - rollback preserved `YES`;
 - V7 touched `NO`.
 
@@ -126,7 +142,7 @@ Learning states:
 
 Do not call V6 complete or print-ready until:
 
-- Y + CL/CJ cohere with final legitimate photography and final personal copy as one magazine system;
+- Y + CN/CM cohere with final legitimate photography and final personal copy as one magazine system;
 - fresh realistic-copy stress passes after final copy insertion;
 - exact printer/product template is applied;
 - bleed, trim, fold, safe area and page order are verified;
@@ -135,12 +151,12 @@ Do not call V6 complete or print-ready until:
 
 Current state:
 
-`V6 Y + CL/CJ = VERIFIED_LOCAL_DUMMY_DESIGN_STUDIES / ROLLBACK_SAFE / V7_HOLD / NOT_PRINT_READY`.
+`V6 Y + CN/CM = VERIFIED_LOCAL_DUMMY_DESIGN_STUDIES / ROLLBACK_SAFE / V7_HOLD / NOT_PRINT_READY`.
 
 ## Next highest-value work
 
 1. Continue V6, not V7.
-2. Compare Y + CL/CJ together and target the next area that still reads like a template rather than a finished travel-information magazine.
+2. Compare Y + CN/CM together and target the next area that still reads like a template rather than a finished travel-information magazine.
 3. Replace dummy/repeated photos with final legitimate photography when available and rerun crop/contrast/actual-size QA.
 4. Replace dummy native copy with final copy and rerun dedicated stresses.
 5. Keep generated section masters unadopted until quality-preserving placement + actual-size QA is possible.
