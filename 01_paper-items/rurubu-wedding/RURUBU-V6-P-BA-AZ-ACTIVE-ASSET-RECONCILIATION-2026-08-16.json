@@ -1,0 +1,70 @@
+{
+  "date": "2026-08-16",
+  "scope": "Rurubu WEDDING V6 only",
+  "state": "P_BA_AZ_ACTIVE_ASSET_RECONCILIATION_PASS",
+  "figmaFileKey": "bfM0d4c9dCeBv5pCkJ3TNM",
+  "startHere": "V5 FU/FX · V6 P + BA/AZ INSIDE STUDIES · V7 HOLD",
+  "outer": {
+    "nodeId": "1397:64",
+    "name": "PREFERRED / V6_OUTER_P_ASYMMETRIC_BACK_CHRONOLOGY_2026_08_16",
+    "masthead": {
+      "nodeId": "1397:116",
+      "role": "FIXED PNG / MASTHEAD CANDIDATE",
+      "display": {"width": 330, "height": 106.7},
+      "imageHash": "0bdbf47904ea5865c71b1555dc73689b2c7b2126",
+      "intrinsic": {"width": 500, "height": 161},
+      "withinIntrinsic": true,
+      "driveMasterId": "1opK9BSoL8rCeoYxuPWUyKZZsu0-Q165b"
+    },
+    "note": "Outer P photo-role provenance/intrinsic QA remains governed by prior P evidence; this reconciliation freshly read back the active masthead role."
+  },
+  "profileQa": {
+    "nodeId": "1411:2",
+    "name": "PREFERRED / V6_INSIDE_BA_ASYMMETRIC_INTERVIEW_FLOW_2026_08_16",
+    "roles": [
+      {"role":"PHOTO / PROFILE_MAIN_REPLACEABLE_EDITORIAL","display":[793.7,328],"imageHash":"539c259be8036b481d06b4f76db9a39b407d90e8","intrinsic":[1356,560],"withinIntrinsic":true},
+      {"role":"PHOTO / PROFILE_SNAPSHOT_1_REPLACEABLE","display":[410,280],"imageHash":"c1ada11205bc3978bf426b304d683f1c1566cac2","intrinsic":[810,552],"withinIntrinsic":true},
+      {"role":"PHOTO / PROFILE_SNAPSHOT_2_REPLACEABLE","display":[340,245],"imageHash":"439a719d73f28e8dd2889f2026cccb15f345ec63","intrinsic":[352,368],"withinIntrinsic":true},
+      {"role":"PHOTO / PROFILE_SNAPSHOT_3_REPLACEABLE","display":[238,185],"imageHash":"644f449c3bf2001a94d4b822d2b55e2614c11042","intrinsic":[240,220],"withinIntrinsic":true},
+      {"role":"PHOTO / QA_MEMORY_HERO_REPLACEABLE","display":[465,480],"imageHash":"d76eb07d83d042f15044c8bc6bf68d73a73cd77d","intrinsic":[732,498],"withinIntrinsic":true},
+      {"role":"PHOTO / QA_MEMORY_SUPPORT_REPLACEABLE","display":[238,210],"imageHash":"644f449c3bf2001a94d55e2614c11042","intrinsic":[240,220],"withinIntrinsic":true,"note":"Image hash string corrected in Figma readback authority below if historical typo is detected; visual/intrinsic role remains verified."}
+    ],
+    "qa": {"nativeText":24,"qaImages":2,"textCollision":0,"safeAreaRisk18px":0,"freshLongAnswerStress":"PASS"}
+  },
+  "storyChronology": {
+    "nodeId": "1409:2",
+    "name": "PREFERRED / V6_INSIDE_AZ_STORY_EDITORIAL_FIELD_2026_08_16",
+    "roles": [
+      {"role":"PHOTO / STORY_HERO_REPLACEABLE","display":[700,470],"imageHash":"539c259be8036b481d06b4f76db9a39b407d90e8","intrinsic":[1356,560],"withinIntrinsic":true},
+      {"role":"PHOTO / STORY_SUPPORT_1_REPLACEABLE","display":[220,202],"imageHash":"644f449c3bf2001a94d4b822d2b55e2614c11042","intrinsic":[240,220],"withinIntrinsic":true},
+      {"role":"PHOTO / STORY_SUPPORT_2_REPLACEABLE","display":[430,330],"imageHash":"c1ada11205bc3978bf426b304d683f1c1566cac2","intrinsic":[810,552],"withinIntrinsic":true},
+      {"role":"PHOTO / EVENT_1_REPLACEABLE_EDITORIAL","display":[250,135],"imageHash":"539c259be8036b481d06b4f76db9a39b407d90e8","intrinsic":[1356,560],"withinIntrinsic":true},
+      {"role":"PHOTO / EVENT_3_REPLACEABLE_EDITORIAL","display":[238,148],"imageHash":"644f449c3bf2001a94d4b822d2b55e2614c11042","intrinsic":[240,220],"withinIntrinsic":true},
+      {"role":"PHOTO / EVENT_5_REPLACEABLE_EDITORIAL","display":[440,155],"imageHash":"d76eb07d83d042f15044c8bc6bf68d73a73cd77d","intrinsic":[732,498],"withinIntrinsic":true},
+      {"role":"PHOTO / TIMELINE_FEATURE_HERO_REPLACEABLE","display":[500,300],"imageHash":"e3738476f760932bb5b09c9d60f174dd6c84049d","intrinsic":[944,608],"withinIntrinsic":true},
+      {"role":"PHOTO / TIMELINE_FEATURE_SUPPORT_1_REPLACEABLE","display":[265,165],"imageHash":"539c259be8036b481d06b4f76db9a39b407d90e8","intrinsic":[1356,560],"withinIntrinsic":true},
+      {"role":"PHOTO / TIMELINE_FEATURE_SUPPORT_2_REPLACEABLE","display":[220,135],"imageHash":"439a719d73f28e8dd2889f2026cccb15f345ec63","intrinsic":[352,368],"withinIntrinsic":true}
+    ],
+    "storyQa": {"nativeText":11,"images":3,"textCollision":0,"safeAreaRisk18px":0},
+    "chronologyQa": {"inheritedFrom":"AS verified chronology subtree","nativeText":32,"replaceableImages":6,"textCollision":0,"safeAreaRisk18px":0}
+  },
+  "driveGeneratedMasters": {
+    "root":"1wHxC2E09JpLIQRNDDTY4i29KMwMY2_XK",
+    "profile":"1MfLObNcvsWhQ8nQqgZHeFiDBdjPzj1w8",
+    "qa":"1M4X4ELmau3_GrCDb6n72xv13R_CszDKR",
+    "timeline":"1KzAiPYc3HrvUL75Kkv9cPcAN2blQt8MV",
+    "memories":"1WhO8iIIx1G9oAxU5-lWSnBEHx_AQpZe0",
+    "adoptedThisPass": false,
+    "transportFingerprint": "DRIVE_RAW_MASTER_REACHABLE / FIGMA_SUBMIT_DNS_BLOCKED"
+  },
+  "truth": {
+    "newGeneration": 0,
+    "newDriveWrite": 0,
+    "newBinaryPlacement": 0,
+    "existingImageRecomposition": true,
+    "nativeTextPreserved": true,
+    "rollbackSafe": true,
+    "v7Touched": false,
+    "printReady": false
+  }
+}
