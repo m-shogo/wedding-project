@@ -27,7 +27,7 @@
       {"role":"PHOTO / PROFILE_SNAPSHOT_2_REPLACEABLE","display":[340,245],"imageHash":"439a719d73f28e8dd2889f2026cccb15f345ec63","intrinsic":[352,368],"withinIntrinsic":true},
       {"role":"PHOTO / PROFILE_SNAPSHOT_3_REPLACEABLE","display":[238,185],"imageHash":"644f449c3bf2001a94d4b822d2b55e2614c11042","intrinsic":[240,220],"withinIntrinsic":true},
       {"role":"PHOTO / QA_MEMORY_HERO_REPLACEABLE","display":[465,480],"imageHash":"d76eb07d83d042f15044c8bc6bf68d73a73cd77d","intrinsic":[732,498],"withinIntrinsic":true},
-      {"role":"PHOTO / QA_MEMORY_SUPPORT_REPLACEABLE","display":[238,210],"imageHash":"644f449c3bf2001a94d55e2614c11042","intrinsic":[240,220],"withinIntrinsic":true,"note":"Image hash string corrected in Figma readback authority below if historical typo is detected; visual/intrinsic role remains verified."}
+      {"role":"PHOTO / QA_MEMORY_SUPPORT_REPLACEABLE","display":[238,210],"imageHash":"644f449c3bf2001a94d4b822d2b55e2614c11042","intrinsic":[240,220],"withinIntrinsic":true}
     ],
     "qa": {"nativeText":24,"qaImages":2,"textCollision":0,"safeAreaRisk18px":0,"freshLongAnswerStress":"PASS"}
   },
