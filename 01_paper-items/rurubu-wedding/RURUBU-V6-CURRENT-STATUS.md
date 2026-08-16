@@ -8,7 +8,7 @@ Production state: separate clean-room V6; V7 is HOLD
 
 ## Current declaration
 
-`V6_LIVE_FIGMA_IN_PROGRESS / OUTER_Y_CURRENT / INSIDE_CG_CH_PREFERRED_STUDIES / PHOTO_BOUND_BACK_CLOSURE_VERIFIED / EDGE_LED_QA_PHOTO_FIELDS_VERIFIED / STORY_SUPPORT_FRAME_SUBTRACTION_VERIFIED / BORDER_BINDING_CONTEXT_TEST_VERIFIED / NATIVE_TEXT_AND_REPLACEABLE_IMAGE_ROLES_PRESERVED / GENERATED_SECTION_MASTERS_DRIVE_VERIFIED_NOT_ADOPTED / V7_HOLD / NOT_PRINT_READY`
+`V6_LIVE_FIGMA_IN_PROGRESS / OUTER_Y_CURRENT / INSIDE_CK_CI_PREFERRED_STUDIES / TIMELINE_UI_BLOCK_SUBTRACTION_VERIFIED / PROFILE_TRAVELER_DATA_RAIL_VERIFIED / PROFILE_LONG_COPY_STRESS_VERIFIED / NATIVE_TEXT_AND_REPLACEABLE_IMAGE_ROLES_PRESERVED / GENERATED_SECTION_MASTERS_DRIVE_VERIFIED_NOT_ADOPTED / V7_HOLD / NOT_PRINT_READY`
 
 Live Figma and later evidence supersede older declarations.
 
@@ -16,105 +16,84 @@ Live Figma and later evidence supersede older declarations.
 
 Current preferred set:
 
-- Outer Y `1542:2` — `PREFERRED / V6_OUTER_Y_PHOTO_BOUND_BACK_CLOSURE_2026_08_17`.
-- Profile / Q&A CG `1545:2` — `PREFERRED / V6_INSIDE_CG_EDGE_LED_QA_2026_08_17`.
-- Story / chronology CH `1548:2` — `PREFERRED / V6_INSIDE_CH_STORY_FRAME_SUBTRACTION_2026_08_17`.
+- Outer Y `1542:2` — unchanged preferred outer spread;
+- Profile / Q&A CK `1553:79` — `PREFERRED / V6_INSIDE_CK_PROFILE_TRAVELER_DATA_RAIL_2026_08_17`;
+- Story / chronology CI `1551:2` — `PREFERRED / V6_INSIDE_CI_TIMELINE_PHOTO_LED_CLEANROOM_2026_08_17`.
 
-Immediate rollback / rejected comparison:
+Immediate rollback / proof:
 
-- Story / chronology CE `1535:78` — hidden as `ROLLBACK_HIDDEN / V6_INSIDE_CE_PRE_CH_STORY_FRAME_SUBTRACTION_2026_08_17`.
-- Profile frame-subtraction study CJ `1549:2` — hidden as `REJECTED_HIDDEN / V6_INSIDE_CJ_PROFILE_FRAME_SUBTRACTION_WEAK_BINDING_2026_08_17`.
-- Profile / Q&A CF `1538:2` — older hidden rollback before CG.
-- Outer W `1491:2` — older hidden rollback before Y.
+- Profile / Q&A CG `1545:2` — `ROLLBACK_HIDDEN / V6_INSIDE_CG_PRE_CK_PROFILE_FORM_RHYTHM_2026_08_17`;
+- Profile long-copy proof `1553:156` — hidden;
+- Story / chronology CH `1548:2` — `ROLLBACK_HIDDEN / V6_INSIDE_CH_PRE_CI_TIMELINE_UI_BLOCKS_2026_08_17`;
+- older CE / CF / W and rejected CJ comparisons remain preserved.
 
-Start Here is synchronized to:
+Start Here live readback:
 
-`V5 FU/FX · V6 Y + CG/CH INSIDE STUDIES · V7 HOLD`
+`V5 FU/FX · V6 Y + CK/CI INSIDE STUDIES · V7 HOLD`
 
-Older comparison/proof frames remain preserved. V7 remains HOLD and was not edited in this pass.
+V7 was not edited.
 
 ## Outer Y retained
 
-Outer Y remains the preferred outer spread and was not mutated in this pass.
+Outer Y remains unchanged and retains the previous verified state: photo-bound back-cover closure, native text collision `0`, 18px text safe risk `0`, and registered photo roles within the established dummy-design bounds.
 
-Retained verified state:
-
-- back cover is bound by legitimate existing photography rather than a detached lower information panel;
-- native text collision `0`;
-- 18px text safe-area risk `0`;
-- registered photo roles remain within intrinsic dimensions;
-- front cover, masthead and image hashes unchanged.
-
-Detailed evidence remains:
-- `01_paper-items/rurubu-wedding/evidence/RURUBU-V6-Y-CF-CE-PHOTO-BOUND-BACK-CLOSURE-QA-2026-08-17.md`.
-
-## CG Profile / Q&A retained
-
-CG remains the preferred Profile / Q&A spread and was not mutated in this pass.
-
-Retained state:
-
-- Profile: native text `18`, IMAGE roles `4`, text collision `0`, 18px text safe-area risk `0`;
-- Q&A: native text `26`, visible IMAGE fills `3` (`2` replaceable photo roles + `1` bounded composed texture), text collision `0`, 18px text safe-area risk `0`.
-
-The two Q&A photographs remain edge-led without non-functional white frames. Variable questions/answers remain native text and the composed route texture remains a bounded fixed decoration.
-
-## CH — Story support-frame subtraction
+## CK — compact Profile traveler-data rail
 
 ### Visible defect
 
-CE Story was already photo-led and structurally safe, but its two support photos still carried 6px white postcard/polaroid borders. At whole-spread scale those borders added scrapbook/template containment that was weaker than the edge-led photo language already verified in Outer Y and Q&A CG.
+CG's photo hero was strong, but six profile facts below it were spaced like a form and separated the hero from the snapshot cluster.
 
-### Root-cause hypothesis
+### Treatment
 
-The two Story support-photo borders had no trim, crop, caption, or overlap-separation job. Removing only those redundant frames could let the photography read more continuously without changing native text, image sources, provenance, or replaceable-image semantics.
+CK keeps the hero, four replaceable image roles, profile quote and Q&A page. On Profile only:
 
-A second bounded test asked whether the same subtraction should apply to the Profile snapshot cluster. It was rejected because those borders did perform a real separation/binding role between overlapping images.
-
-### Bounded treatment
-
-CH duplicates CE and changes only the Story support-photo framing:
-
-- Story support 1 keeps `238×216`, loses the 6px white stroke, and moves slightly to `x=548 / y=424`;
-- Story support 2 keeps `515×350`, loses the 6px white stroke, and moves slightly to `x=-18 / y=680`;
-- Story hero, native copy, captions, folio, composed travel texture, chronology page, image fills/hashes and replaceable-image roles remain unchanged.
-
-CJ duplicated CG and removed the three Profile snapshot borders as a comparison. That variant was rejected because the photos visually merged and the intended overlap order weakened.
+- three form-like colored data-row bars were hidden;
+- `TRAVELER DATA / 6 NOTES` was added as native editable text;
+- six labels/values were compressed into three rows while staying separate native text roles;
+- three existing replaceable snapshots were moved upward without increasing their dimensions or changing sources/hashes;
+- overlapping snapshot borders were retained because earlier CJ evidence showed a real separation function.
 
 ### Verification
 
-CH:
+- whole spread comparison: PASS and denser/more editorial than CG;
+- actual-size Profile `1553:80` = `794×1123`: PASS;
+- Profile native text `19`, replaceable photo roles `4`;
+- text collision `0`, 18px safe-area risk `0`;
+- Q&A `1553:116` unchanged from CG: native text `26`, replaceable photos `2`, collision `0`, safe risk `0`.
 
-- whole spread / 500px: PASS and cleaner/more photo-led than CE;
-- reading / `1400×990`: PASS;
-- actual-size Story `1548:3` = `794×1123`: PASS;
-- Story native text: `12`;
-- Story IMAGE fills: `4` (`3` replaceable photos + `1` bounded composed texture);
-- absolute text collision: `0`;
-- 18px text safe-area risk: `0`.
+Dedicated hidden long-copy proof `1553:156` used realistic longer Japanese values. Auto-height values reached up to `38px`; collision `0`, safe risk `0`.
 
-Chronology is unchanged from CE and retains its prior verified state:
+## CI — chronology photo-led clean-room comparison
 
-- native text `31`;
-- visible IMAGE fills `5`;
-- text collision `0`;
-- 18px text safe-area risk `0`.
+### Visible defect
 
-The recurring native folios remain:
-- `02 PROFILE / FAVORITES`;
-- `03 Q&A / MEMORIES`;
-- `04 OUR STORY / JOURNEY`;
-- `05 TRAVEL TIMELINE`.
+CH chronology still looked like a timeline UI because 01/03/05 were contained in large colored rectangular blocks. The sequence was already encoded in native text, so the boxes were visually heavier than their semantic value.
 
-## Photo-diversity / provenance state
+### Treatment
 
-The preferred dummy studies still reuse some verified photo hashes. Do not lower identity, provenance or resolution quality simply to increase variety.
+CI keeps the Story page unchanged and rebuilds the chronology hierarchy without changing image sources/hashes:
 
-Recognizable generic/generated people must not be represented as the real couple. Final legitimate photography remains the largest open visual-quality lever. Every final photo replacement must preserve the replaceable-image contract and receive fresh crop, contrast and actual-size QA.
+- hides the large colored number blocks for 01/03/05;
+- keeps 01/03/05 as free native number typography tied directly to unequal photo beats;
+- Event 1, 3 and 5 remain the strong photographic milestones; Event 2 and 4 remain text-only bridge beats;
+- unknown dummy dates 01—04 use editable `20XX.XX`; no factual date was invented;
+- existing travel texture reduced to 9% opacity;
+- WEDDING terminal and known `2026.10.24` retained;
+- one nonessential `SCENE 03` caption was hidden after collision audit.
+
+### Verification
+
+- whole spread / 500px: PASS and less card/UI-like than CH;
+- reading / 1200px: PASS;
+- actual-size chronology `1551:27` = `794×1123`: PASS;
+- chronology native text `30`, visible replaceable photos `4`;
+- text collision `0`, 18px safe-area risk `0`;
+- Story `1551:3` unchanged from CH: native text `12`, replaceable photos `3`, collision `0`, safe risk `0`.
 
 ## Drive / generated section masters
 
 V6 Drive root re-read on 2026-08-17:
+
 - `1wHxC2E09JpLIQRNDDTY4i29KMwMY2_XK / RURUBU_V6_HAWAII_2026-08-02`.
 
 Registered generated section masters remain authoritative-but-unadopted:
@@ -124,63 +103,55 @@ Registered generated section masters remain authoritative-but-unadopted:
 - Timeline `1KzAiPYc3HrvUL75Kkv9cPcAN2blQt8MV`;
 - Memories `1WhO8iIIx1G9oAxU5-lWSnBEHx_AQpZe0`.
 
-No material capability change to the known quality-preserving external binary-placement constraint was observed, so failed transport methods were not repeated.
+No material capability change occurred for the known quality-preserving external binary-placement blocker, so the failed path was not retried.
 
-## Latest evidence
+## Latest evidence / learning
 
-- `01_paper-items/rurubu-wedding/evidence/RURUBU-V6-Y-CG-CH-STORY-FRAME-SUBTRACTION-QA-2026-08-17.md`;
-- `docs/design-learning/rurubu-shared-learning-feed.append/2026-08-17-rsl-061-border-binding-context-test.md`;
-- `docs/wedding-design-learning-feedback-log.append/2026-08-17-rurubu-v6-y-cg-ch.md`.
+- `01_paper-items/rurubu-wedding/evidence/RURUBU-V6-Y-CK-CI-PHOTO-LED-TIMELINE-PROFILE-DATA-QA-2026-08-17.md`;
+- `docs/design-learning/rurubu-shared-learning-feed.append/2026-08-17-rsl-062-063-timeline-profile-editorial-density.md`;
+- `docs/wedding-design-learning-feedback-log.append/2026-08-17-rurubu-v6-y-ck-ci.md`.
 
-Still relevant:
-- `01_paper-items/rurubu-wedding/evidence/RURUBU-V6-Y-CG-CE-EDGE-LED-QA-2026-08-17.md`;
-- `01_paper-items/rurubu-wedding/evidence/RURUBU-V6-Y-CF-CE-PHOTO-BOUND-BACK-CLOSURE-QA-2026-08-17.md`.
+New local learning:
+
+- RSL-062 — native order can survive subtraction of redundant number containers; `VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`;
+- RSL-063 — repeated semantic facts can be compressed into a text-first editorial rail when a dedicated long-copy stress still passes; `VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`.
+
+Neither is cross-item verified or project-wide promoted.
 
 ## Asset lifecycle truth of latest pass
 
-- newly image-generated assets: `0`;
-- new Drive saves: `0`;
-- new external binary placements: `0`;
-- new distinct raster bytes: `0`;
-- image hashes changed: `0`;
-- existing verified Story photography recomposed: `YES`;
-- native variable text preserved: `YES`;
-- replaceable image semantics preserved: `YES`;
-- whole-spread visual verification: `PASS`;
-- actual-size Story verification: `PASS`;
-- structure / safe-area verification: `PASS`;
-- rollback preserved: `YES`;
-- Profile border-subtraction comparison rejected: `YES`;
-- V7 touched: `NO`.
-
-## Learning
-
-### RSL-061 — border binding-context test
-
-A border/frame treatment must be evaluated per overlap context rather than globally kept or removed. In Story, the two support-image borders were redundant and weakened photo-led continuity, so subtraction improved the page. In the overlapping Profile snapshot cluster, the same borders separated the photographs and preserved reading order, so subtraction was rejected.
-
-State: `VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`.
-
-Do not transfer the exact white-stroke width, photo positions, rotations, destination imagery, palette, headline geometry, or Rurubu editorial grammar.
+- newly image-generated assets `0`;
+- new Drive saves `0`;
+- new external binary placements `0`;
+- new raster bytes `0`;
+- image hashes changed `0`;
+- existing verified photography repositioned `YES`;
+- native variable text preserved `YES`;
+- replaceable image semantics preserved `YES`;
+- three-scale visual review `PASS` for the changed pages;
+- structure / safe-area review `PASS`;
+- rollback preserved `YES`;
+- V7 touched `NO`.
 
 ## Completion gate
 
 Do not call V6 complete or print-ready until:
-- Y + CG/CH cohere with final real content as one magazine system;
-- final personal copy replaces dummy content and fresh copy-stress passes;
-- final legitimate photography replaces stand-in/repeated roles where applicable and crop/contrast/actual-size checks are rerun;
+
+- Y + CK/CI cohere with final legitimate photography and final personal copy as one magazine system;
+- fresh realistic-copy stress passes after final copy insertion;
 - exact printer/product template is applied;
 - bleed, trim, fold, safe area and page order are verified;
-- PDF preflight and physical proof pass.
+- exported PDF preflight passes;
+- physical proof passes.
 
 Current state:
 
-`V6 Y + CG/CH = VERIFIED_LOCAL_DUMMY_DESIGN_STUDIES / ROLLBACK_SAFE / V7_HOLD / NOT_PRINT_READY`.
+`V6 Y + CK/CI = VERIFIED_LOCAL_DUMMY_DESIGN_STUDIES / ROLLBACK_SAFE / V7_HOLD / NOT_PRINT_READY`.
 
 ## Next highest-value work
 
 1. Continue V6, not V7.
-2. Treat final legitimate photography as the largest remaining visual-quality lever.
-3. When real Q&A/Profile copy arrives, rerun dedicated realistic-copy stress; do not reuse dummy-copy safety as final evidence.
-4. Keep generated section masters in Drive as unadopted until a quality-preserving placement path and actual-size visual pass exist.
+2. Replace repeated/dummy photographs with final legitimate photography when available and rerun crop/contrast/actual-size QA.
+3. Replace dummy profile/Q&A/chronology copy with final native copy and rerun dedicated stresses.
+4. Keep generated section masters unadopted until quality-preserving placement + actual-size visual QA is possible.
 5. Keep printer-template/PDF/physical-proof gates separate from dummy-design QA.
