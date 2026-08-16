@@ -84,19 +84,36 @@ The source is large enough for the intended hero crop and has explicit reusable 
 
 A Figma upload slot was reserved for node `78:9`, but because the source bytes could not be delivered, the real photo was **not** placed. The hero remains a placeholder color field. Do not count the upload reservation as image placement.
 
+## Upload transport root-cause probe — 2026-08-16 later run
+
+A fresh live probe narrowed the placement blocker further without changing production or the V14 candidate:
+
+- Figma MCP `upload_assets` successfully issued a single-use upload endpoint for file `LAZAZ0u3RGqtN4bYFPZ3pU`;
+- a fresh local `64×64` PNG transport probe was created solely to test byte delivery, not as a design asset;
+- the upload endpoint was `mcp.figma.com/.../submit`, confirming that the Figma-side upload reservation capability now exists;
+- the runtime's outbound shell could not resolve `mcp.figma.com` (`curl: Could not resolve host`), so no POST reached Figma and no scratch image was placed;
+- the same runtime also could not resolve `upload.wikimedia.org` for direct source download, even though the Commons file and original-image URL were successfully verified through web retrieval;
+- therefore no forbidden prior asset, fake photo, or procedural fallback was inserted into `78:9`.
+
+This changes the blocker diagnosis from a vague “no Figma upload route” to:
+
+`UPLOAD_ENDPOINT_AVAILABLE / RUNTIME_BINARY_EGRESS_DNS_BLOCKED / PHOTO_BYTES_NOT_DELIVERED`.
+
+Do not repeat the same shell/DNS upload probe in subsequent runs unless the execution environment or connector capability materially changes. The valid next method is a connector-native binary/file-reference transfer route, or a run where image generation / binary upload can deliver bytes directly without shell network egress.
+
 ## Current gate
 
 This is **not** a sellable visual pass and **not** a production promotion.
 
 Current verified state:
 
-`CLEANROOM_V14_FIGMA_STRUCTURE_PASS / LONG_COPY_STRESS_PASS / PHOTO_PLACEMENT_BLOCKED / DRIVE_UPLOAD_NOT_OBSERVED / LEGACY_NOT_OPENED_FOR_COMPARISON / NO_PROMOTION`
+`CLEANROOM_V14_FIGMA_STRUCTURE_PASS / LONG_COPY_STRESS_PASS / PHOTO_PLACEMENT_BLOCKED / UPLOAD_ENDPOINT_AVAILABLE / RUNTIME_BINARY_EGRESS_DNS_BLOCKED / DRIVE_UPLOAD_NOT_OBSERVED / LEGACY_NOT_OPENED_FOR_COMPARISON / NO_PROMOTION`
 
 The legacy production remains unchanged and was intentionally not opened for visual comparison because the candidate is not complete without its real photo.
 
 ## Next valid step
 
-1. obtain a reliable binary/file-reference route for a high-resolution non-person Hawaii image;
+1. obtain a connector-native or otherwise reachable binary/file-reference route for a high-resolution non-person Hawaii image;
 2. upload/read back the adopted master in exact ADD-02 Drive authority;
 3. place it only in Figma node `78:9` as a replaceable image role;
 4. perform whole / reading / actual-size screenshot QA on `78:8`;
