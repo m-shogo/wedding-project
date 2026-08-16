@@ -8,7 +8,7 @@ Production state: separate clean-room V6; V7 is HOLD
 
 ## Current declaration
 
-`V6_LIVE_FIGMA_IN_PROGRESS / OUTER_O_CURRENT / INSIDE_AR_AQ_PREFERRED_STUDIES / AR_PROFILE_PHOTO_FIELD_QA_VERIFIED / AQ_STORY_AND_CHRONOLOGY_QA_VERIFIED / NATIVE_TEXT_AND_REPLACEABLE_IMAGE_ROLES_PRESERVED / GENERATED_SECTION_MASTERS_DRIVE_VERIFIED_NOT_ADOPTED / V7_HOLD / NOT_PRINT_READY`
+`V6_LIVE_FIGMA_IN_PROGRESS / OUTER_O_CURRENT / INSIDE_AT_AS_PREFERRED_STUDIES / AT_PROFILE_OVERLAP_EDITORIAL_QA_VERIFIED / AS_SCATTERED_CHRONOLOGY_QA_VERIFIED / NATIVE_TEXT_AND_REPLACEABLE_IMAGE_ROLES_PRESERVED / GENERATED_SECTION_MASTERS_DRIVE_VERIFIED_NOT_ADOPTED / V7_HOLD / NOT_PRINT_READY`
 
 Live Figma and later evidence supersede older declarations.
 
@@ -16,21 +16,22 @@ Live Figma and later evidence supersede older declarations.
 
 Start Here `845:27`:
 
-`V5 FU/FX · V6 O + AR/AQ INSIDE STUDIES · V7 HOLD`
+`V5 FU/FX · V6 O + AT/AS INSIDE STUDIES · V7 HOLD`
 
 Preferred:
 
 - Outer O `1370:2 / PREFERRED / V6_OUTER_O_VERIFIED_PNG_MASTHEAD_2026_08_16`
-- Profile / Q&A AR `1389:2 / PREFERRED / V6_INSIDE_AR_PROFILE_FULLBLEED_EDITORIAL_2026_08_16`
-- Story / chronology AQ `1387:2 / PREFERRED / V6_INSIDE_AQ_TYPOGRAPHIC_EDITORIAL_DENSITY_2026_08_16`
+- Profile / Q&A AT `1392:95 / PREFERRED / V6_INSIDE_AT_PROFILE_OVERLAP_EDITORIAL_2026_08_16`
+- Story / chronology AS `1392:2 / PREFERRED / V6_INSIDE_AS_SCATTERED_CHRONOLOGY_2026_08_16`
 
 Rollback/comparison preserved:
 
-- AM `1380:18` — hidden rollback after AR promotion
-- AP `1384:2` — hidden rollback after AQ promotion
-- AO `1383:2`, AI `1363:125` — hidden earlier rollbacks
+- AR `1389:2` — hidden rollback after AT promotion
+- AQ `1387:2` — hidden rollback after AS promotion
+- AM `1380:18` — hidden earlier profile/Q&A rollback
+- AP `1384:2`, AO `1383:2`, AI `1363:125` — hidden earlier Story/chronology rollbacks
 - AN `1382:132` — hidden rejected overbusy chronology study
-- AM long-answer proof `1381:18` — hidden QA evidence; Q&A geometry remains unchanged in AR.
+- AM long-answer proof `1381:18` — hidden QA evidence; Q&A geometry remains unchanged in AT.
 
 V7 remains HOLD while V6 still has meaningful work.
 
@@ -44,31 +45,35 @@ Unchanged in this pass.
 - Figma image hash `0bdbf47904ea5865c71b1555dc73689b2c7b2126`
 - prior three-scale QA remains applicable because geometry did not change.
 
-## Profile / Q&A AR
+## Profile / Q&A AT
 
-AR supersedes AM for the profile page while intentionally retaining AM's Q&A geometry.
+AT supersedes AR for the profile page while intentionally retaining AR/AM Q&A geometry.
 
 ### Profile change
 
-Visible defect in AM: the profile page still read as `headline → modest photo → information block`, weaker than Outer O and AQ.
+Visible defect in AR: the page had a strong full-width hero but the lower three replaceable photos still read as a tidy thumbnail row, and the pullquote was disconnected from the dominant image field.
 
-AR bounded change:
+AT bounded change:
 
-- main replaceable photo widened to `793.7×328` at page width;
-- six native profile fields compacted below it in two columns;
-- existing three replaceable snapshots enlarged/repositioned with unequal scale and small opposing rotations;
-- native pullquote brought above the snapshot cluster;
-- no new photo source, generated decoration, card, badge, gradient, shadow, or rasterized copy.
+- main replaceable hero remains `793.7×328`;
+- move the native pullquote onto the hero as white text with one existing accent rule;
+- convert the same three verified replaceable snapshots into one denser overlapping cluster with unequal sizes and small opposing rotations;
+- add three small native `SCENE` metadata captions;
+- add no new raster asset, generated decoration, card, badge, gradient, shadow, or rasterized factual copy.
 
 Verification:
 
-- whole spread 1200 px: PASS and visually stronger than AM;
-- reading scale: PASS;
-- actual profile `794×1123`: PASS;
-- native text `18`;
+- whole spread / ~794 px: PASS and visually stronger than AR;
+- actual profile `793.7×1122.5`: PASS;
+- native text `21`;
 - IMAGE roles `4`;
 - same-parent text collisions `0`;
 - 18 px text safe-area risks `0`.
+
+Intrinsic correction before promotion:
+
+- snapshot 3 source `240×220` was initially displayed `250×190`;
+- corrected to `238×185` before promotion.
 
 ### Q&A retained
 
@@ -76,50 +81,67 @@ Verification:
 - replaceable IMAGE roles `2`;
 - same-parent text collisions `0`;
 - 18 px text safe-area risks `0`;
-- AM long-answer stress remains relevant because Q&A geometry did not change.
+- existing AM long-answer stress remains relevant because Q&A geometry did not change.
 
 Evidence:
 
-- `RURUBU-V6-O-AR-AQ-QA-2026-08-16.md`
+- `RURUBU-V6-O-AT-AS-QA-2026-08-16.md`
 
-## Story / chronology AQ
+## Story / chronology AS
 
-AQ remains preferred and unchanged in this pass.
+AS supersedes AQ for the chronology page while retaining AQ's Story page structure.
 
 Story:
 
 - photo-led hierarchy with native caption metadata;
 - native text `12`, IMAGE roles `3`;
 - collision `0`, 18 px safe risk `0`;
-- whole/read/actual-size QA previously PASS.
+- whole/read/actual-size QA remains applicable because Story geometry did not materially change.
 
-Chronology:
+Chronology change:
 
-- events 01–05 remain one native timeline reading rail;
-- three event-specific photo anchors plus top feature cluster;
-- WEDDING full-width endpoint remains dominant;
-- native text `32`, IMAGE roles `6`;
-- collision `0`, 18 px safe risk `0`;
-- whole/read/actual-size QA previously PASS.
+- preserve all native event facts and six replaceable IMAGE roles;
+- replace AQ's single vertical 01–05 event rail with three asymmetric event columns;
+- keep a few stronger scene-photo anchors between the event groups;
+- preserve the dominant full-width WEDDING endpoint;
+- add no new raster, card, shadow, gradient, sticker, or generated decoration.
+
+Verification:
+
+- whole spread / ~794 px: PASS and less list/diagram-like than AQ;
+- actual chronology `793.7×1122.5`: PASS;
+- native text `32`;
+- IMAGE roles `6`;
+- same-parent text collisions `0`;
+- 18 px text safe-area risks `0`.
+
+Intrinsic correction before promotion:
+
+- event-3 source `240×220` was initially displayed `245×150`;
+- corrected to `238×148` before promotion.
+
+Evidence:
+
+- `RURUBU-V6-O-AT-AS-QA-2026-08-16.md`
 
 ## Drive / generated section masters
 
 Fresh Drive readback confirmed:
 
-- V6 root `1wHxC2E09JpLIQRNDDTY4i29KMwMY2_XK / RURUBU_V6_HAWAII_2026-08-02`.
+- V6 root `1wHxC2E09JpLIQRNDDTY4i29KMwMY2_XK / RURUBU_V6_HAWAII_2026-08-02`;
+- Profile v2 `1IL1L8MWzaqkwVQv9CkLen4EkTccq-5cm`;
+- Timeline v2 `1uRP3ri4MKw1g8_vtNDxBoazuAm4Hq3B8`.
 
-Generated section masters remain Drive-readback verified but not adopted:
+Other generated section masters remain verified from prior evidence and not adopted:
 
-- Profile v2 `1IL1L8MWzaqkwVQv9CkLen4EkTccq-5cm`
 - Q&A v2 `1_JmXHiTmJnRjR9Oam4gERv456yN4qjQn`
-- Timeline v2 `1uRP3ri4MKw1g8_vtNDxBoazuAm4Hq3B8`
 - Memories v2 `1Xi8C0KV8JfZrbx1fKttGae0Go6tsFzqG`
 
-Known transport state remains:
+Known external transport state remains:
 
 `DRIVE_RAW_MASTER_REACHABLE / FIGMA_SUBMIT_DNS_BLOCKED / NO_GENERATED_DECORATION_ADOPTION`.
 
-The same failed upload path was not retried without a material capability/environment change.
+Neutral non-Rurubu lesson `in-file raster export` was read as a capability hypothesis. It was not exercised because the current screenshot-visible defects were solved more cleanly with existing legitimate photo roles + native text; no filler raster was created merely to reproduce the capability.
 
 ## Asset lifecycle truth of latest pass
 
@@ -131,6 +153,7 @@ The same failed upload path was not retried without a material capability/enviro
 - native editable copy preserved: `YES`
 - whole/read/actual-size visual verification: `YES`
 - structure/safe-area verification: `YES`
+- intrinsic/display-size verification: `YES`
 - rollback comparison preserved: `YES`
 - V7 touched: `NO`
 
@@ -138,15 +161,15 @@ The same failed upload path was not retried without a material capability/enviro
 
 Latest meaningful lesson:
 
-- `RSL-034 — Increase legitimate photo-field authority before adding decoration`
+- `RSL-035 — Distribute repeated chronology facts spatially before adding timeline decoration`
 - state `VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`
-- canonical append: `docs/design-learning/rurubu-shared-learning-feed.append/2026-08-16-rsl-034-full-width-photo-field-before-decoration.md`
+- canonical append: `docs/design-learning/rurubu-shared-learning-feed.append/2026-08-16-rsl-035-spatial-chronology-distribution.md`
 
 ## Completion gate
 
 Do not call V6 complete or print-ready until:
 
-- Outer O + AR/AQ cohere with final real content as one magazine system;
+- Outer O + AT/AS cohere with final real content as one magazine system;
 - real photography and final copy replace dummy content and crop/contrast/text-stress QA is rerun;
 - any adopted generated/fixed decoration has quality-preserving Figma placement and provenance evidence;
 - exact printer/product template is applied;
@@ -155,12 +178,13 @@ Do not call V6 complete or print-ready until:
 
 Current state:
 
-`V6 O + AR/AQ = VERIFIED_LOCAL_DUMMY_DESIGN_STUDIES / ROLLBACK_SAFE / V7_HOLD / NOT_PRINT_READY`.
+`V6 O + AT/AS = VERIFIED_LOCAL_DUMMY_DESIGN_STUDIES / ROLLBACK_SAFE / V7_HOLD / NOT_PRINT_READY`.
 
 ## Next highest-value work
 
-1. Review O + AR/AQ together at thumbnail scale and fix only remaining system-level incoherence.
-2. Keep all enlarged AR/AQ image roles inside verified intrinsic-quality limits.
-3. Re-run profile-value stress only if AR's profile field geometry or real copy changes materially; re-run Q&A long-copy stress only if Q&A geometry changes.
-4. Do not retry the same generated-section binary submit path without a material environment change.
-5. Keep V7 HOLD until V6 coherence and final-content gates are genuinely closed.
+1. Review O + AT/AS together again at thumbnail scale and fix only remaining system-level incoherence; do not reopen V7 yet.
+2. Keep all enlarged AT/AS image roles inside verified intrinsic-quality limits.
+3. Re-run profile-value stress only if AT profile-field geometry or real copy changes materially; re-run Q&A long-copy stress only if Q&A geometry changes.
+4. Do not retry the same external generated-section submit path without a material environment change.
+5. Consider the neutral in-file raster fallback only when a concrete screenshot-visible fixed-decoration defect cannot be solved with legitimate photos/native text; do not create abstract raster filler.
+6. Keep V7 HOLD until V6 coherence and final-content gates are genuinely closed.
