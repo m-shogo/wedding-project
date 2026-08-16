@@ -1,0 +1,57 @@
+{
+  "date": "2026-08-16",
+  "scope": "Rurubu WEDDING V6 only",
+  "figmaFile": "bfM0d4c9dCeBv5pCkJ3TNM",
+  "preferred": {
+    "outer": "1491:2",
+    "profileQA": "1488:2",
+    "storyChronology": "1486:81"
+  },
+  "driveRoot": {
+    "id": "1wHxC2E09JpLIQRNDDTY4i29KMwMY2_XK",
+    "name": "RURUBU_V6_HAWAII_2026-08-02"
+  },
+  "lifecycle": {
+    "newlyGenerated": 0,
+    "newDriveSaves": 0,
+    "newExternalBinaryPlacements": 0,
+    "existingVerifiedFigmaHashesReused": true,
+    "nativeEditableCopyPreserved": true,
+    "replaceableImageRolesPreserved": true,
+    "generatedSectionDecorationNewlyAdopted": false,
+    "v7Touched": false
+  },
+  "activeImages": [
+    {"node":"1491:4","role":"V6_J_BACK_TRAVEL_FLATLAY_DOMINANT","size":[793.7,490],"hash":"e3738476f760932bb5b09c9d60f174dd6c84049d","scaleMode":"FILL"},
+    {"node":"1491:9","role":"V6_A_BACK_CAFE","size":[430,270],"hash":"c1ada11205bc3978bf426b304d683f1c1566cac2","scaleMode":"FILL"},
+    {"node":"1491:10","role":"V6_H_BACK_YOKOHAMA_SKYLINE_SUPPORT","size":[232,210],"hash":"644f449c3bf2001a94d4b822d2b55e2614c11042","scaleMode":"FILL"},
+    {"node":"1491:35","role":"V6_A_HERO_YOKOHAMA_WATERFRONT","size":[793.7,470],"hash":"539c259be8036b481d06b4f76db9a39b407d90e8","scaleMode":"FILL"},
+    {"node":"1491:44","role":"V6_A_SKYLINE_POSTCARD","size":[214,196],"hash":"644f449c3bf2001a94d4b822d2b55e2614c11042","scaleMode":"FILL"},
+    {"node":"1491:46","role":"V6_J_FRONT_DINING_SUPPORT","size":[507.7,300],"hash":"d76eb07d83d042f15044c8bc6bf68d73a73cd77d","scaleMode":"FILL"},
+    {"node":"1491:47","role":"V6_H_FRONT_CAFE_MEMORY_SUPPORT","size":[300,250],"hash":"c1ada11205bc3978bf426b304d683f1c1566cac2","scaleMode":"FILL"},
+    {"node":"1491:54","role":"FIXED PNG / MASTHEAD CANDIDATE","size":[360,115.92],"hash":"0bdbf47904ea5865c71b1555dc73689b2c7b2126","scaleMode":"FIT"},
+    {"node":"1488:10","role":"PHOTO / PROFILE_MAIN_REPLACEABLE_EDITORIAL","size":[793.7,328],"hash":"539c259be8036b481d06b4f76db9a39b407d90e8","scaleMode":"FILL"},
+    {"node":"1488:11","role":"PHOTO / PROFILE_SNAPSHOT_1_REPLACEABLE","size":[410,280],"hash":"c1ada11205bc3978bf426b304d683f1c1566cac2","scaleMode":"FILL"},
+    {"node":"1488:25","role":"PHOTO / PROFILE_SNAPSHOT_2_REPLACEABLE","size":[340,245],"hash":"439a719d73f28e8dd2889f2026cccb15f345ec63","scaleMode":"FILL"},
+    {"node":"1488:26","role":"PHOTO / PROFILE_SNAPSHOT_3_REPLACEABLE","size":[238,185],"hash":"644f449c3bf2001a94d4b822d2b55e2614c11042","scaleMode":"FILL"},
+    {"node":"1488:58","role":"PHOTO / QA_MEMORY_HERO_REPLACEABLE","size":[458,438],"hash":"e3738476f760932bb5b09c9d60f174dd6c84049d","scaleMode":"FILL"},
+    {"node":"1488:59","role":"PHOTO / QA_MEMORY_SUPPORT_REPLACEABLE","size":[348,290],"hash":"d76eb07d83d042f15044c8bc6bf68d73a73cd77d","scaleMode":"FILL"},
+    {"node":"1486:86","role":"PHOTO / STORY_HERO_REPLACEABLE","size":[725,489],"hash":"539c259be8036b481d06b4f76db9a39b407d90e8","scaleMode":"FILL"},
+    {"node":"1486:87","role":"PHOTO / STORY_SUPPORT_1_REPLACEABLE","size":[220,202],"hash":"644f449c3bf2001a94d4b822d2b55e2614c11042","scaleMode":"FILL"},
+    {"node":"1486:88","role":"PHOTO / STORY_SUPPORT_2_REPLACEABLE","size":[438,337],"hash":"c1ada11205bc3978bf426b304d683f1c1566cac2","scaleMode":"FILL"},
+    {"node":"1486:101","role":"PHOTO / TIMELINE_FEATURE_HERO_REPLACEABLE","size":[801,430],"hash":"e3738476f760932bb5b09c9d60f174dd6c84049d","scaleMode":"FILL"},
+    {"node":"1486:103","role":"PHOTO / TIMELINE_FEATURE_SUPPORT_2_REPLACEABLE","size":[210,155],"hash":"439a719d73f28e8dd2889f2026cccb15f345ec63","scaleMode":"FILL"},
+    {"node":"1486:108","role":"PHOTO / EVENT_1_REPLACEABLE_EDITORIAL","size":[350,190],"hash":"539c259be8036b481d06b4f76db9a39b407d90e8","scaleMode":"FILL"},
+    {"node":"1486:116","role":"PHOTO / EVENT_3_REPLACEABLE_EDITORIAL","size":[238,148],"hash":"644f449c3bf2001a94d4b822d2b55e2614c11042","scaleMode":"FILL"},
+    {"node":"1486:124","role":"PHOTO / EVENT_5_REPLACEABLE_EDITORIAL","size":[410,155],"hash":"d76eb07d83d042f15044c8bc6bf68d73a73cd77d","scaleMode":"FILL"}
+  ],
+  "verification": {
+    "wholeThumbnail": "PASS",
+    "readingScale": "PASS",
+    "actualSize": "PASS",
+    "textCollisions": 0,
+    "text18pxSafeAreaRisks": 0,
+    "rollbackPreserved": true
+  },
+  "note": "This file records live Figma role/hash state. It does not promote generated Drive masters or claim final photography/print readiness."
+}
