@@ -8,7 +8,7 @@ Production state: separate clean-room V6; V7 is HOLD
 
 ## Current declaration
 
-`V6_LIVE_FIGMA_IN_PROGRESS / OUTER_T_CURRENT / INSIDE_BG_BE_PREFERRED_STUDIES / T_PHOTO_LED_BACK_COVER_VERIFIED / BG_QA_EDITORIAL_BEATS_AND_LONG_COPY_STRESS_VERIFIED / BE_CHRONOLOGY_MAJOR_MINOR_EDITORIAL_CLUSTER_VERIFIED / NATIVE_TEXT_AND_REPLACEABLE_IMAGE_ROLES_PRESERVED / GENERATED_SECTION_MASTERS_DRIVE_VERIFIED_NOT_ADOPTED / V7_HOLD / NOT_PRINT_READY`
+`V6_LIVE_FIGMA_IN_PROGRESS / OUTER_T_CURRENT / INSIDE_BG_BH_PREFERRED_STUDIES / T_PHOTO_LED_BACK_COVER_VERIFIED / BG_QA_EDITORIAL_BEATS_AND_LONG_COPY_STRESS_VERIFIED / BH_CHRONOLOGY_PHOTO_EVENT_INTEGRATION_VERIFIED / NATIVE_TEXT_AND_REPLACEABLE_IMAGE_ROLES_PRESERVED / GENERATED_SECTION_MASTERS_DRIVE_VERIFIED_NOT_ADOPTED / V7_HOLD / NOT_PRINT_READY`
 
 Live Figma and later evidence supersede older declarations.
 
@@ -16,58 +16,49 @@ Live Figma and later evidence supersede older declarations.
 
 Start Here `845:27`:
 
-`V5 FU/FX · V6 T + BG/BE INSIDE STUDIES · V7 HOLD`
+`V5 FU/FX · V6 T + BG/BH INSIDE STUDIES · V7 HOLD`
 
 Preferred:
 
 - Outer T `1447:2 / PREFERRED / V6_OUTER_T_PHOTO_LED_BACK_COVER_2026_08_16`
 - Profile / Q&A BG `1439:58 / PREFERRED / V6_INSIDE_BG_QA_EDITORIAL_BEATS_2026_08_16`
-- Story / chronology BE `1433:2 / PREFERRED / V6_INSIDE_BE_CHRONOLOGY_EDITORIAL_CLUSTER_2026_08_16`
+- Story / chronology BH `1451:2 / PREFERRED / V6_INSIDE_BH_PHOTO_EVENT_INTEGRATED_CHRONOLOGY_2026_08_16`
 
 Preserved rollback/evidence:
 
 - Outer S `1439:2` — hidden rollback before T.
+- Outer U `1455:2` — hidden marginal comparison; did not materially outperform T.
 - Profile/Q&A BF `1436:56` — hidden rollback before BG.
 - BG long-answer proof `1441:2` — hidden after PASS.
-- profile long-value proof `1431:2` remains valid because T did not change Profile geometry.
+- profile long-value proof `1431:2` remains valid because BH did not change Profile geometry.
+- Story/chronology BE `1433:2` — hidden rollback before BH.
 - V7 remains HOLD.
 
 ## Outer T
 
-T changes only the back-cover macro-composition. Front remains the previously verified S front.
+T remains preferred and unchanged in the latest pass. Front remains the previously verified S front.
 
-### Back-cover change
+Back verification remains:
 
-Visible problem in S: the back read as `photo block → beige timeline section`, weaker than the photo-led front.
-
-T bounded test:
-
-- verified flatlay hash `e3738476f760932bb5b09c9d60f174dd6c84049d` expanded to full back width `793.7×490`; registered intrinsic `944×608`, therefore intrinsic-safe;
-- existing navy field moved from right-side column to compact top-left photo overlay `305×265`, opacity `0.93`;
-- native title/kicker/subline retained; first-pass subline/title collision was corrected before promotion;
-- café image hash `c1ada11205bc3978bf426b304d683f1c1566cac2` → `430×270`, rotation `-2.2°`;
-- skyline hash `644f449c3bf2001a94d4b822d2b55e2614c11042` → `232×210`, rotation `2.4°`;
-- native `みんなとの思い出`, chronology facts and final `2026.10.24 / WEDDING` field retained;
-- no new card, sticker, gradient, shadow, generated decoration, image asset, or binary transport.
-
-Final back verification:
-
+- dominant flatlay hash `e3738476f760932bb5b09c9d60f174dd6c84049d` at `793.7×490`, registered intrinsic `944×608`;
+- café image hash `c1ada11205bc3978bf426b304d683f1c1566cac2` at `430×270`;
+- skyline hash `644f449c3bf2001a94d4b822d2b55e2614c11042` at `232×210`;
 - visible native text `18`;
 - replaceable IMAGE roles `3`;
 - text/text collision `0`;
 - 18px text safe-area risk `0`;
-- 500px whole-item PASS and preferred over S;
-- 900px reading-spread PASS;
-- actual-size back `1447:3 / 794×1123` PASS.
+- whole/read/actual-size QA PASS.
 
-Evidence:
+Outer U tested stronger year-size hierarchy only. It was visually valid but the difference from T was too marginal at 500px/1200px to justify a new preferred state, so U was hidden.
+
+Evidence for T remains:
 
 - `RURUBU-V6-T-BG-BE-PHOTO-LED-BACK-QA-2026-08-16.md`
-- `RURUBU-V6-T-BG-BE-ACTIVE-ASSET-RECONCILIATION-2026-08-16.json`.
+- latest reconciliation is now `RURUBU-V6-T-BG-BH-ACTIVE-ASSET-RECONCILIATION-2026-08-16.json`.
 
 ## Profile / Q&A BG
 
-Unchanged from the verified S + BG/BE pass.
+Unchanged from the verified BG pass.
 
 Profile:
 
@@ -86,16 +77,46 @@ Q&A:
 - unintended question/image collision `0`;
 - 18px safe-area risk `0`;
 - whole/read/actual-size visual QA PASS;
-- dedicated long-answer proof `1441:2`: PASS and remains valid because T did not change BG geometry/type.
+- dedicated long-answer proof `1441:2`: PASS and remains valid because BH did not change BG geometry/type.
 
-## Story / chronology BE
+## Story / chronology BH
 
-BE remains preferred and unchanged:
+Story page is unchanged from BE and remains verified:
 
-- Story native text `11`, replaceable IMAGE roles `3`, collision `0`, safe-area risks `0`;
-- chronology native text `32`, replaceable IMAGE roles `6`, collision `0`, safe-area risks `0`;
-- `01 / 03 / 05` major milestones, `02 / 04` support beats, WEDDING terminal field;
-- chronology facts remain native/editable.
+- Story native text `11`;
+- replaceable IMAGE roles `3`;
+- collision `0`;
+- 18px safe-area risk `0`.
+
+BH changes only the chronology page.
+
+Visible defect repaired: BE still separated events 01–05 from the event-photo strip, which preserved an infographic/timeline feel.
+
+BH composition:
+
+- `01 / 03 / 05` remain major milestones and are spatially paired with event photographs;
+- `02 / 04` remain compact text-only support beats;
+- event 01 photo `1451:29` → `350×190`, hash `539c259be8036b481d06b4f76db9a39b407d90e8`;
+- event 03 photo `1451:37` → `238×148`, hash `644f449c3bf2001a94d4b822d2b55e2614c11042`; registered intrinsic `240×220`, PASS;
+- event 05 photo `1451:45` → `410×155`, hash `d76eb07d83d042f15044c8bc6bf68d73a73cd77d`;
+- WEDDING remains the full-width terminal field;
+- all chronology facts remain native/editable;
+- no new card, shadow, gradient, generated decoration, asset, or binary transport.
+
+Final BH chronology verification:
+
+- visible native text `31`;
+- visible replaceable IMAGE roles `6`;
+- absolute text/text collisions `0`;
+- 18px text safe-area risks `0`;
+- 500px BE/BH comparison: BH preferred;
+- 1200px reading-spread PASS;
+- actual-size chronology `1451:21 / 794×1123`: PASS.
+
+Evidence:
+
+- `RURUBU-V6-T-BG-BH-PHOTO-EVENT-INTEGRATION-QA-2026-08-16.md`
+- `RURUBU-V6-T-BG-BH-ACTIVE-ASSET-RECONCILIATION-2026-08-16.json`.
 
 ## Drive / generated section masters
 
@@ -128,7 +149,7 @@ Do not retry the unchanged failing submit method without a material capability/e
 
 Do not call V6 complete or print-ready until:
 
-- T + BG/BE cohere with final real content as one magazine system;
+- T + BG/BH cohere with final real content as one magazine system;
 - real photography and final copy replace dummy content and crop/contrast/text stress are rerun;
 - exact printer/product template is applied;
 - bleed, trim, fold, safe area and page order are verified;
@@ -136,12 +157,12 @@ Do not call V6 complete or print-ready until:
 
 Current state:
 
-`V6 T + BG/BE = VERIFIED_LOCAL_DUMMY_DESIGN_STUDIES / ROLLBACK_SAFE / V7_HOLD / NOT_PRINT_READY`.
+`V6 T + BG/BH = VERIFIED_LOCAL_DUMMY_DESIGN_STUDIES / ROLLBACK_SAFE / V7_HOLD / NOT_PRINT_READY`.
 
 ## Next highest-value work
 
 1. Continue V6, not V7.
-2. Review T + BG/BE together at thumbnail scale; prioritize remaining magazine-system incoherence over decoration count.
+2. Review T + BG/BH together at thumbnail scale; prioritize remaining magazine-system incoherence over decoration count.
 3. Re-run profile value stress only if Profile geometry changes.
 4. Re-run Q&A answer stress whenever Q&A geometry or type size changes.
 5. Replace dummy photography only when actual-size visual quality and story semantics are clearly stronger.
