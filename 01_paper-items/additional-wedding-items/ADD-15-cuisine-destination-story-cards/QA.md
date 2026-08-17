@@ -1,7 +1,36 @@
 # ADD-15 — QA CONTRACT
 
-Status: `CURRENT / READY`
-Authority: GitHub `main`
+Status: `CURRENT / BLOCKED_REQUIRED_INPUT / FIGMA_NOT_STARTED / NOT_PRINT_READY`
+Authority: GitHub latest `main` + `docs/automation/non-rurubu-figma-quality-current.md`
+Updated: 2026-08-18
+Observed `main` before write: `ea23605eb31a0559e0351f822624a4fbee0c24b2`
+Drive authority: `186f2tA2czrrdIQ_7djhPBun6dStztmS8 / ADD-15_料理紹介_国テーマ説明カード`
+
+## Current blocker
+
+The QA contract is prepared, but Figma production is **not authorized yet**. The SPEC makes deployment selection a hard gate before Figma implementation:
+
+- `Model A — Course story cards`, or
+- `Model B — Destination story cards`, or
+- `NOT_REQUIRED`.
+
+No current authority selects one of these outcomes. The task must not guess because A and B have materially different information hierarchy, truth/safety obligations, number of cards, placement, and photography rules.
+
+This is therefore not `READY` in the operational sense. The truthful state is `BLOCKED_REQUIRED_INPUT / FIGMA_NOT_STARTED`.
+
+### Stop condition for repeated hourly runs
+
+Do **not** repeat the same ADD-15 Figma-start probe or fabricate a neutral hybrid of A/B in later runs unless a material authority change provides at least the deployment decision. Continue other safe non-Rurubu targets instead.
+
+Resume ADD-15 when latest authority provides:
+
+1. `Model A / Model B / NOT_REQUIRED`;
+2. required quantity and placement;
+3. official dish names or destination names for the chosen model;
+4. factual source for story copy;
+5. allergen responsibility boundary when Model A uses food/safety information;
+6. photo source/rights/resolution if photography is used;
+7. final physical size/stand condition when available.
 
 ## 1. Truth QA
 
@@ -57,9 +86,7 @@ Authority: GitHub `main`
 - [ ] trim size、frame ID、export dateをevidenceへ記録
 - [ ] screenshot QAの指摘と修正結果を記録
 
-## Required screenshots
-
-Figma実制作が許可された後に取得する。
+## Required screenshots after the gate opens
 
 1. card full frame at high resolution
 2. 100% type/detail crop
@@ -72,6 +99,7 @@ Figma実制作が許可された後に取得する。
 
 次のすべてが揃うまで`COMPLETED`としない。
 
+- deployment decision
 - official copy lock
 - screenshot QA
 - evidence-driven correction pass
@@ -79,4 +107,4 @@ Figma実制作が許可された後に取得する。
 - Drive export/readback
 - GitHub evidence record
 
-Current result: `QA_CONTRACT_READY / EXECUTION_NOT_STARTED`
+Current result: `BLOCKED_REQUIRED_INPUT / DEPLOYMENT_DECISION_MISSING / FIGMA_NOT_STARTED / DRIVE_AUTHORITY_VERIFIED / NOT_PRINT_READY`.
