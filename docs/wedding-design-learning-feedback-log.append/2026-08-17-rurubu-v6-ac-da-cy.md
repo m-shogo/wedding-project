@@ -1,4 +1,4 @@
-# Rurubu V6 feedback — AC + DA/CY
+# Rurubu V6 feedback — AC + DA/DB
 
 Date: 2026-08-17
 Scope: Rurubu WEDDING only
@@ -8,7 +8,8 @@ Scope: Rurubu WEDDING only
 After AB + CZ/CY, the next visible weakness was not image selection or page geometry. It was photo-caption finish:
 
 - Profile's lower three-photo cluster still used tiny 9px implementation-like metadata;
-- the front-cover postcard caption was too dark/small over photography at actual size.
+- the front-cover postcard caption was too dark/small over photography at actual size;
+- Story's small destination-support caption remained only 8.5px and disappeared beside the dominant hero and large Japanese story typography.
 
 ## Hypothesis
 
@@ -36,24 +37,36 @@ Regression risk: future photo replacement may require contrast reposition/review
 
 Result: adopted.
 
+### DB Story
+
+Applied the same principle to a materially different Rurubu photo role rather than copying the exact treatment. Changed only `NEXT DESTINATION / YOKOHAMA` from 8.5px to 10.5px white native text with a restrained shadow and slightly better in-photo position.
+
+Expected improvement: small destination photo remains subordinate but readable at actual size, preserving the page's hero/support hierarchy.
+
+Regression risk: future replacement photo can change local contrast and require revalidation.
+
+Result: adopted after Story actual-size and structural QA.
+
 ## Evidence
 
 Figma:
 
 - AC `1614:2`, front `1614:47`;
 - DA `1612:2`, Profile `1612:3`;
-- CY `1601:81` unchanged;
-- prior AB `1607:2` / CZ `1609:2` hidden rollback;
-- Start Here readback: `V5 FU/FX · V6 AC + DA/CY INSIDE STUDIES · V7 HOLD`.
+- DB `1615:2`, Story `1615:3`;
+- prior AB `1607:2`, CZ `1609:2`, CY `1601:81` hidden rollback;
+- Start Here readback: `V5 FU/FX · V6 AC + DA/DB INSIDE STUDIES · V7 HOLD`.
 
-Three-scale QA:
+Three-scale / actual-size QA:
 
 - AC whole 500×354 PASS;
 - AC reading 1000×708 PASS;
 - AC front actual-size 794×1123 PASS;
 - DA whole 500×354 PASS;
 - DA reading 1000×708 PASS;
-- DA Profile actual-size 794×1123 PASS after collision correction.
+- DA Profile actual-size 794×1123 PASS after collision correction;
+- DB reading spread 1000×708 PASS;
+- DB Story actual-size 794×1123 PASS.
 
 Structure:
 
@@ -61,7 +74,10 @@ Structure:
 - AC front 18px safe-area risks 0;
 - DA Profile text collisions 0;
 - DA Profile 18px safe-area risks 0;
-- DA Q&A unchanged and retained verified structure.
+- DA Q&A unchanged and retained verified structure;
+- DB Story text collisions 0;
+- DB Story 18px safe-area risks 0;
+- DB chronology geometry/content unchanged from CY.
 
 Asset lifecycle:
 
@@ -71,10 +87,10 @@ Asset lifecycle:
 - raster bytes 0;
 - image hashes changed 0;
 - photo geometry changed 0;
-- native text edits only.
+- native text styling/content edits only.
 
 ## Learning status
 
-RSL-079: `VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`.
+RSL-079: `VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`, now reproduced across Profile cluster, Outer support postcard, and Story support-photo roles within Rurubu.
 
-Transfer only the principle: support photos that still feel templated may need stronger native caption hierarchy/contrast before any new container or decoration is added. Do not transfer Rurubu layout, coordinates, palette, copy, or imagery.
+Transfer only the principle: support photos that still feel templated or unreadable may need stronger native caption hierarchy/contrast before any new container or decoration is added. Do not transfer Rurubu layout, coordinates, palette, copy, imagery, or exact shadow treatment.
