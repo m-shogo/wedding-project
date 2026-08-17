@@ -8,105 +8,136 @@ Production state: separate clean-room V6; V7 is HOLD
 
 ## Current declaration
 
-`V6_LIVE_FIGMA_IN_PROGRESS / OUTER_Z_CURRENT / INSIDE_CV_CQ_PREFERRED_STUDIES / Q04_PHOTO_PAIRED_SECONDARY_FEATURE_VERIFIED / CHRONOLOGY_EVENT03_PHOTO_COPY_BINDING_VERIFIED / CHRONOLOGY_SIDE_TRIP_NOTES_RAIL_VERIFIED / NATIVE_TEXT_AND_REPLACEABLE_IMAGE_ROLES_PRESERVED / GENERATED_SECTION_MASTERS_DRIVE_VERIFIED_NOT_ADOPTED / V7_HOLD / NOT_PRINT_READY`
-
-## Authority drift repaired on 2026-08-17
-
-Fresh live Figma inspection found this file stale before the current run:
-
-- Outer Y `1542:2` was already named `ROLLBACK` and hidden;
-- Profile/Q&A CP `1567:18` was already named `ROLLBACK` and hidden;
-- Start Here already declared `V5 FU/FX · V6 Z + CU/CQ INSIDE STUDIES · V7 HOLD`;
-- live visible winners were Outer Z `1576:160`, Profile/Q&A CU `1580:2`, and Story/Chronology CQ `1569:2`.
-
-No edit was made to stale Y/CP. The current run continued from live Figma authority and then promoted CU → CV after fresh QA.
+`V6_LIVE_FIGMA_IN_PROGRESS / OUTER_AA_CURRENT / INSIDE_CW_CQ_PREFERRED_STUDIES / FRONT_PHOTO_CLUSTER_VERIFIED / PROFILE_QA_SEMANTIC_PHOTO_ROLE_REASSIGNMENT_VERIFIED / CHRONOLOGY_CQ_RETAINED / NATIVE_TEXT_AND_REPLACEABLE_IMAGE_ROLES_PRESERVED / ALL_25_ACTIVE_RASTER_ROLES_INTRINSIC_SAFE / GENERATED_SECTION_MASTERS_DRIVE_VERIFIED_NOT_ADOPTED / V7_HOLD / NOT_PRINT_READY`
 
 ## Live Figma current state
 
-Current preferred set:
+Current preferred set after fresh promotion/readback:
 
-- Outer Z `1576:160` — `PREFERRED / V6_OUTER_Z_EDITORIAL_BACK_MILESTONES_2026_08_17`;
-- Profile / Q&A CV `1585:2` — `PREFERRED / V6_INSIDE_CV_Q04_PHOTO_PAIR_2026_08_17`;
+- Outer AA `1592:2` — `PREFERRED / V6_OUTER_AA_FRONT_PHOTO_CLUSTER_2026_08_17`;
+- Profile / Q&A CW `1593:2` — `PREFERRED / V6_INSIDE_CW_PHOTO_ROLE_DIVERSITY_2026_08_17`;
 - Story / chronology CQ `1569:2` — `PREFERRED / V6_INSIDE_CQ_EVENT03_PHOTO_BINDING_SIDE_NOTES_2026_08_17`.
 
 Immediate rollback / proof:
 
-- CU `1580:2` — `ROLLBACK / V6_INSIDE_CU_Q04_SECOND_FEATURE_BEAT_2026_08_17`, hidden;
-- CV realistic-copy proof `1586:2` — `QA_STRESS_HIDDEN / V6_INSIDE_CV_Q04_Q06_LONG_COPY_2026_08_17`;
-- CO `1566:2` — chronology rollback before CQ;
-- older rollback-safe comparisons remain preserved.
+- Outer Z `1576:160` — hidden rollback;
+- Profile/Q&A CV `1585:2` — hidden rollback;
+- CV realistic-copy proof `1586:2` remains preserved hidden;
+- CQ's earlier rollback/proof states remain preserved;
+- temporary Rurubu-only historical-raster audit board `1591:2` is hidden QA evidence, not adopted production.
 
-Start Here live readback after promotion:
+Start Here live readback:
 
-`V5 FU/FX · V6 Z + CV/CQ INSIDE STUDIES · V7 HOLD`
+`V5 FU/FX · V6 AA + CW/CQ INSIDE STUDIES · V7 HOLD`
 
 V7 was not edited.
 
-## Outer Z retained
+## AA — front cover photo cluster verified
 
-Outer Z was re-read live and retained unchanged. It is the current visible preferred outer, not Y.
+Outer Z had a strong waterfront hero but the lower support-photo pair still read partly as separate placed modules. AA was created rollback-safely and changed only the front-cover photo rhythm:
 
-Notable verified structure visible in live metadata:
+- waterfront hero moved upward while remaining `793.7×470` and keeping the same image hash;
+- dining support enlarged/repositioned to about `533.7×320`, rotation `+1.2°`;
+- cafe support enlarged/repositioned to about `330×268`, rotation `-3.2°`;
+- support photos were pulled upward into a tighter asymmetric cluster;
+- skyline postcard remains a separate small support beat;
+- back cover is unchanged;
+- no new card, shadow, gradient, generated asset, raster byte, external binary or image hash was introduced.
 
-- Back: dominant travel flatlay + large cafe memory + skyline support + native staggered milestones + WEDDING terminal;
-- Front: full-width Yokohama waterfront hero + independent PNG masthead candidate + large native destination typography + two replaceable support photos;
-- card-like year blocks for 01/03/05 remain hidden; native milestone numbers carry the visible hierarchy.
-
-No Outer mutation occurred in the current run.
-
-## CV — Q04 paired with the existing support photograph
-
-CU's top half was already strong, but Q04 began around `y=610` while the support photograph started at `y=725`, leaving a large cream gap that still read partly as a form/template.
-
-CV was created as a rollback-safe clone and changed only the Q&A page:
-
-- support photo kept hash `d76eb07d83d042f15044c8bc6bf68d73a73cd77d`;
-- support photo changed from about `430×300 @ y725` to `455×370 @ y610`;
-- source readback `732×498`, therefore still intrinsic-safe;
-- Q04 was aligned beside the photo as one secondary editorial feature beat;
-- Q05/Q06 were reflowed beneath it;
-- support caption/rule were rebound to the photo;
-- Q01–03, top hero, route texture, Profile page and all image hashes were preserved;
-- no new card, shadow, gradient, generated asset, external binary or raster byte was introduced.
+The first AA state created a real `横浜` / strap-deck collision. It was not adopted. After moving the destination headline upward, fresh structural QA returned collision `0` and 18px text safe-area risk `0`.
 
 Verification:
 
-- whole-item `500×354`: PASS;
+- whole spread `500×354`: PASS;
 - reading spread `1200×849`: PASS;
-- Q&A actual-size `794×1123`: PASS;
-- visible native text `26`;
-- absolute text collisions `0`;
-- 18px text safe-area risks `0`;
-- route texture `470×470` ≤ source `720×860`;
-- top hero `478×330` ≤ source `944×608`;
-- support photo `455×370` ≤ source `732×498`;
-- photo image hashes changed `0`.
-
-Realistic-copy proof `1586:2 / 1586:42`:
-
-- Q04–Q06 were replaced with materially longer Japanese native copy;
-- Q04 answer height `42px`, Q05 `26px`, Q06 `39px`;
+- front actual-size `794×1123`: PASS;
+- visible front native text `12`;
 - text collisions `0`;
-- 18px safe-area risks `0`;
-- actual-size screenshot `794×1123`: PASS;
-- proof returned to hidden state.
+- 18px text safe-area risks `0`;
+- waterfront hero `793.7×470` ≤ source `1356×560`;
+- skyline `214×196` ≤ source `240×220`;
+- dining `533.7×320` ≤ source `732×498`;
+- cafe `330×268` ≤ source `810×552`;
+- masthead `360×115.92` ≤ source `500×161`.
 
-## CQ retained — Event 03 photo binding + side-trip notes rail
+Result: `AA VERIFIED_LOCAL / PREFERRED`.
 
-CQ was visually re-read at `1200×849` and retained unchanged.
+## CW — semantic photo-role redistribution verified
 
-Verified prior behavior remains:
+CV was structurally strong, but the book repeated several dominant images and the Profile hero still used a place photograph under a `GROOM / BRIDE` overlay label.
+
+CW was created rollback-safely using only already-verified replaceable V6 image hashes:
+
+- Profile main: waterfront → travel flatlay;
+- Profile snapshot 1: cafe → waterfront;
+- Q&A memory hero: flatlay → cafe still-life;
+- Q&A support remains dining;
+- old-town / skyline Profile snapshots remain unchanged;
+- Profile overlay copy changed as native text from `GROOM / BRIDE` to `TRAVEL PROFILE`;
+- no Q04–06 geometry or copy flow changed.
+
+This reduces dominant-photo repetition and improves semantic photo/copy fit without another generation or binary-transport attempt.
+
+Verification:
+
+- whole spread `500×354`: PASS;
+- reading spread `1200×849`: PASS;
+- Profile actual-size `794×1123`: PASS;
+- Q&A actual-size `794×1123`: PASS.
+
+Profile:
+
+- visible native text `23`;
+- text collisions `0`;
+- 18px text safe-area risks `0`;
+- main flatlay `793.7×328` ≤ source `944×608`;
+- waterfront snapshot `410×280` ≤ source `1356×560`;
+- old-town `340×245` ≤ source `352×368`;
+- skyline `238×185` ≤ source `240×220`.
+
+Q&A:
+
+- visible native text `26`;
+- text collisions `0`;
+- 18px text safe-area risks `0`;
+- cafe memory hero `478×330` ≤ source `810×552`;
+- dining support `455×370` ≤ source `732×498`;
+- composed route texture remains intrinsic-safe.
+
+Because Q04–06 geometry/copy positions did not change from CV, the existing CV realistic-copy stress remains structurally applicable to the Q&A flow.
+
+Result: `CW VERIFIED_LOCAL / PREFERRED`.
+
+## CQ retained — chronology
+
+CQ was not edited in this promotion and remains the current preferred Story/chronology study.
+
+Verified behavior remains:
 
 - Event 01/03/05 operate as photographic milestones;
-- Event 02/04 live in the explicitly labeled native `寄り道メモ / 02・04` rail;
+- Event 02/04 live in the native `寄り道メモ / 02・04` secondary rail;
 - Event 06 remains the WEDDING terminal;
-- chronology actual-size previously passed with native text, replaceable image roles, zero collision, zero safe-area risk and intrinsic-safe imagery.
+- chronology native text and replaceable-image structure remain intact.
 
-No chronology mutation occurred in the current run.
+## Active raster reconciliation
+
+Fresh post-promotion readback across AA + CW/CQ found:
+
+- visible active raster/image roles: `25`;
+- intrinsic-safe: `25/25`;
+- intrinsic violations: `0`;
+- new image hashes this run: `0`;
+- existing verified image-role reassignments: `3`;
+- generated section assets adopted: `0`;
+- new Drive saves: `0`.
+
+Canonical reconciliation:
+
+- `01_paper-items/rurubu-wedding/RURUBU-V6-AA-CW-CQ-ACTIVE-ASSET-RECONCILIATION-2026-08-17.json`.
 
 ## Drive / generated section masters
 
-V6 Drive root re-read live on 2026-08-17:
+V6 Drive root remains:
 
 - `1wHxC2E09JpLIQRNDDTY4i29KMwMY2_XK / RURUBU_V6_HAWAII_2026-08-02`.
 
@@ -117,19 +148,24 @@ Registered generated section masters remain authoritative-but-unadopted:
 - Timeline `1KzAiPYc3HrvUL75Kkv9cPcAN2blQt8MV`;
 - Memories `1WhO8iIIx1G9oAxU5-lWSnBEHx_AQpZe0`.
 
-No material capability change occurred for the known quality-preserving external binary-placement blocker, so that failed path was not retried.
+No material capability change occurred for the known quality-preserving external binary-placement blocker, so the same failed route was not retried.
+
+A Rurubu-only audit also confirmed historical verified image fills existed, but version/folder isolation and semantic fitness were respected; no V5-only historical image was promoted into V6 merely because it was technically available.
 
 ## Latest evidence / learning
 
-- `01_paper-items/rurubu-wedding/evidence/RURUBU-V6-Z-CV-CQ-Q04-PHOTO-PAIR-QA-2026-08-17.md`;
-- `docs/design-learning/rurubu-shared-learning-feed.append/2026-08-17-rsl-073-photo-paired-secondary-feature-beat.md`;
-- `docs/wedding-design-learning-feedback-log.append/2026-08-17-rurubu-v6-z-cv-cq.md`.
+Primary evidence:
 
-Learning state:
+- `01_paper-items/rurubu-wedding/evidence/RURUBU-V6-AA-CW-CQ-PHOTO-LED-COVER-AND-ROLE-DIVERSITY-QA-2026-08-17.md`;
+- `01_paper-items/rurubu-wedding/RURUBU-V6-AA-CW-CQ-ACTIVE-ASSET-RECONCILIATION-2026-08-17.json`;
+- `docs/wedding-design-learning-feedback-log.append/2026-08-17-rurubu-v6-aa-cw-cq.md`.
 
-- RSL-073 — before adding a new container to repair a detached repeated-information module, test whether an already-legitimate image and meaningful native-text beat can be paired into one stronger editorial unit: `VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`.
+Learning:
 
-This is not `VERIFIED_CROSS_ITEM` and not a promoted visual-style rule. Exact Rurubu photography, copy, scale, color and layout remain item-specific.
+- RSL-074 — redistribute already-verified replaceable photographs by semantic fit before generating another asset when the problem is repeated-photo fatigue: `VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`;
+- RSL-075 — before adding decoration to a modular-looking cover, test whether existing legitimate photography can form a stronger dominant/support cluster: `VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`.
+
+Neither is `VERIFIED_CROSS_ITEM` or a promoted project-wide visual-style rule. Exact Rurubu photography, copy, scale, color, composition, masthead and rotations remain Rurubu-specific.
 
 ## Asset lifecycle truth for this run
 
@@ -138,12 +174,13 @@ This is not `VERIFIED_CROSS_ITEM` and not a promoted visual-style rule. Exact Ru
 - new Drive saves `0`;
 - new external binary placements `0`;
 - new raster bytes `0`;
-- existing replaceable photo roles recomposed `YES`;
-- photo image hashes changed `0`;
+- existing verified photo-role reassignments `YES`;
+- existing cover photo roles recomposed `YES`;
 - native variable/factual text preserved `YES`;
-- screenshot / actual-size QA `PASS`;
+- photo replaceability preserved `YES`;
+- screenshot / reading / actual-size QA `PASS`;
 - structure / safe-area QA `PASS`;
-- realistic-copy stress `PASS`;
+- active raster intrinsic QA `25/25 PASS`;
 - rollback preserved `YES`;
 - V7 touched `NO`.
 
@@ -151,8 +188,8 @@ This is not `VERIFIED_CROSS_ITEM` and not a promoted visual-style rule. Exact Ru
 
 Do not call V6 complete or print-ready until:
 
-- Z + CV/CQ cohere with final legitimate photography and final personal copy as one magazine system;
-- fresh realistic-copy stress passes after final copy insertion;
+- AA + CW/CQ cohere with final legitimate photography and final personal copy as one magazine system;
+- fresh realistic-copy stress passes after final copy insertion where geometry/copy changes;
 - exact printer/product template is applied;
 - bleed, trim, fold, safe area and page order are verified;
 - exported PDF preflight passes;
@@ -160,13 +197,13 @@ Do not call V6 complete or print-ready until:
 
 Current state:
 
-`V6 Z + CV/CQ = VERIFIED_LOCAL_DUMMY_DESIGN_STUDIES / ROLLBACK_SAFE / V7_HOLD / NOT_PRINT_READY`.
+`V6 AA + CW/CQ = VERIFIED_LOCAL_DUMMY_DESIGN_STUDIES / ROLLBACK_SAFE / V7_HOLD / NOT_PRINT_READY`.
 
 ## Next highest-value work
 
 1. Continue V6, not V7.
-2. Compare Z + CV/CQ as one magazine and target the next region that still reads like a template rather than a finished Japanese travel-information magazine.
+2. Compare AA + CW/CQ as one magazine and target the next region that still reads as a template rather than a finished Japanese travel-information magazine.
 3. Prefer final legitimate photography when available; rerun crop, semantic, contrast and actual-size QA after replacement.
-4. Replace dummy native copy with final personal copy and rerun dedicated realistic/long-copy stresses.
+4. Replace dummy native copy with final personal copy and rerun dedicated realistic/long-copy stresses where needed.
 5. Keep generated section masters unadopted until quality-preserving placement + actual-size QA is possible.
 6. Keep printer-template/PDF/physical-proof gates separate from dummy-design QA.
