@@ -1,104 +1,100 @@
 # ADD-14 二次会案内 — QA
 
-Status: `CURRENT / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / STATUS_LABEL_REMOVAL_PASS / ROLLBACK_SAFE / BLOCKED_REQUIRED_INPUT / NOT_PRINT_READY`
-Authority: GitHub latest `main` + `docs/automation/non-rurubu-figma-quality-current.md`
-Updated: 2026-08-14
+Status: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / CLEANROOM_V3_SELECTED / A6_A5_LONG_COPY_STRESS_PASS / AUTO_HEIGHT_HARDENED / LEGACY_PRESERVED / BLOCKED_REQUIRED_INPUT / ROLLBACK_SAFE / NOT_PRINT_READY`
+Updated: 2026-08-18
+Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
 
-This file began as the 2026-08-02 pre-Figma QA checklist. The live production and reopened visual evidence now supersede the stale `PREPARED_FOR_FIGMA` state.
+## Current selected authority
 
-## Live production authority
+The legacy A6/A5 production previously described here is retained comparison / rollback history only for the reopened clean-room program. The current selected design is clean-room V3 Night Field.
+
+Canonical evidence:
+
+- `FIGMA-CLEANROOM-V3-NIGHT-FIELD-QA-2026-08-17.md`
+- later guest-copy / proof-language and auto-height hardening evidence retained in the ADD-14 item history.
+
+Live authority:
 
 - Figma file: `IygEr140Yqk12LsGL3TFrT`
-- production A6: `1:2 / FRAME_AFTER_PARTY_GUIDE_FRONT`
-- production A5: `1:18 / FRAME_AFTER_PARTY_GUIDE_A5`
-- Drive folder: `ADD-14_二次会案内` / `1Oq2Pz2mYo4oaDnO7LMezMrCUizcxaEjs`
-- Drive parent folder: `0ADXt8irGMFGnUk9PVA`
-- detailed reopened evidence: `docs/automation/add-14-after-party-guide-design-qa.md`
+- clean-room page: `32:2 / CLEANROOM / ADD-14 / V3 NIGHT FIELD / 2026-08-17`
+- selected A6: `32:3`
+- selected A5: `32:29`
+- hidden long-copy A6: `33:2`
+- hidden long-copy A5: `33:28`
+- auto-height rollback: `41:2`
+- retained legacy production: A6 `1:2`, A5 `1:18` — comparison/history only
+- Drive folder: `ADD-14_二次会案内 / 1Oq2Pz2mYo4oaDnO7LMezMrCUizcxaEjs`
 
-## Current visual / structure QA
+## Current visual direction
 
-Fresh production screenshot and live structural readback reconfirmed the V2 editorial itinerary direction:
+V3 is a night-specific, materially independent clean-room direction:
 
-- Japanese-first headline and venue hierarchy remain readable before decorative elements;
-- reception / start / end use deliberate two-level semantic time placeholders rather than broken form-like wrapping;
-- fee / access / RSVP remain compact native editable placeholders;
-- QR remains a native replaceable non-scannable placeholder; no fake final QR was introduced;
-- A6 `1:2`: 592×420, 18 native text nodes, 0 IMAGE fill nodes, 0 text outside root, `clipsContent=true`;
-- A5 `1:18`: 840×592, 18 native text nodes, 0 IMAGE fill nodes, 0 text outside root, `clipsContent=true`;
-- no flatten/raster replacement introduced;
-- no new screenshot-supported need for generated imagery was found.
+- continuous deep-navy paper field;
+- warm ivory Japanese headline `夜のつづきへ。`;
+- one mint route axis carrying reception / start / end;
+- venue/address as a direct native hierarchy block;
+- lower access / fee / RSVP/contact information as direct typography rather than equal UI cards;
+- no gradients, fake neon, alcohol motifs, travel icons, decorative English filler or generated/raster decoration.
 
-### 2026-08-13 placeholder hierarchy polish
+Fresh 2026-08-18 A6 whole-item screenshot reconfirmed the intended read: `二次会のご案内 → 夜のつづきへ。 → 会場 → 時刻 → lower practical information`.
 
-Fresh actual-size screenshots showed that the composition itself still passed, but the repeated `LAYOUT DUMMY` suffix was nearly as optically strong as guest-facing copy across venue, time, fee, access, RSVP, contact, QR and notice fields. That made the sellable itinerary read more like a form/proof sheet than intended.
+## Structure / long-copy QA
 
-- rollback copies were created first on `99_QA`: A6 `17:2`, A5 `17:27`;
-- production roots `1:2` and `1:18` remained stable;
-- the semantic placeholder strings were **not removed or fact-filled**;
-- the `LAYOUT DUMMY` substring was recolored to a restrained warm-gray secondary hierarchy across 24 occurrences;
-- native text/editability remained intact.
+Selected A6/A5 and hidden stress roots preserve native editable text and no image fills. Earlier clean-room repairs addressed:
 
-### 2026-08-14 suffix-size closure / live readback
+- clipped lower information;
+- end-time trim overflow;
+- venue/address collision;
+- equal-column failure under realistic copy;
+- hidden fixed-height native-text boxes.
 
-The warm-gray recolor alone still left proof metadata optically too large at actual size, so the suffix-only size follow-up was applied without changing semantic fields, facts, QR geometry or composition. Fresh live readback now confirms the closure in production:
+Current post-hardening readback evidence for `32:3 / 32:29 / 33:2 / 33:28`:
 
-- A6 `1:2`: 12 `LAYOUT DUMMY` suffixes at `5.5–7px`, warm-gray; 18 native text nodes; 0 IMAGE fills; `clipsContent=true`;
-- A5 `1:18`: 12 suffixes at `7–10px`, warm-gray; 18 native text nodes; 0 IMAGE fills; `clipsContent=true`;
-- examples: A6 venue suffix `7px`, time suffixes `7px`, fee/access/RSVP `5.5px`, QR `5.5px`; A5 venue `10px`, times `9px`, fee/access/RSVP `7.5px`, QR `7px`;
-- production root IDs remain stable and the existing rollback copies `17:2` / `17:27` remain available;
-- fresh A6 actual-size screenshot continues to show the Japanese headline, venue and time hierarchy reading before proof metadata;
-- no generated image or Drive asset is required for this item.
+- remaining visible `textAutoResize=NONE` nodes with nominal <=12px height: `0`;
+- visible proof-language: `0`;
+- visible text outside root: `0`;
+- IMAGE fills: `0`;
+- realistic long-copy stress: `PASS`.
 
-### 2026-08-14 redundant status-label removal
+The lower information architecture intentionally uses unequal semantic widths because access, fee and RSVP/contact have different expected text mass.
 
-Fresh A6/A5 actual-size screenshots found one remaining proof-sheet signal at the upper left of the ivory information field: `[開催情報 · LAYOUT DUMMY]`.
+## Legacy preservation
 
-This label did not carry a unique guest-facing value. Venue, address/floor, reception/start/end, fee, access, RSVP, contact, QR and notice each already have explicit native semantic fields, while the title and left rail already identify the item as a second-party guide. The extra status label therefore read as production metadata rather than useful information.
+Legacy A6 `1:2` and A5 `1:18` remain untouched. They were compared only after V3 and realistic stress had passed. Do not use them as the current selected editing target.
 
-Live authority was re-read immediately before the edit: GitHub `main` `d8c48017f1cdfe07217a1c4ce57d2fbdcbf1e1ce`; Drive folder `1Oq2Pz2mYo4oaDnO7LMezMrCUizcxaEjs` under parent `0ADXt8irGMFGnUk9PVA`; Figma production roots `1:2` / `1:18`.
+## Image / Drive decision
 
-Rollback-safe proof created before mutation:
+`IMAGE_GENERATION_NOT_REQUIRED_FOR_THIS_ITEM`.
 
-- `26:2 / ROLLBACK_ADD14_PRE_STATUS_LABEL_REMOVAL_2026_08_14` (`visible=false`)
-- A6 rollback `26:3`
-- A5 rollback `26:28`
+The item-specific strength comes from typography, night field and route hierarchy; current blockers are factual/finalization inputs, not missing imagery. Drive metadata was live-read on 2026-08-18 and matched `1Oq2Pz2mYo4oaDnO7LMezMrCUizcxaEjs`. Drive writes: `0`.
 
-Only two existing native text nodes were hidden:
+## BLOCKED_REQUIRED_INPUT
 
-- A6 `5:36 / TXT_STATUS / [開催情報 · LAYOUT DUMMY]` → `visible=false`
-- A5 `5:60 / TXT_STATUS / [開催情報 · LAYOUT DUMMY]` → `visible=false`
+Final adoption still requires authoritative facts:
 
-No venue/time/fee/access/RSVP/contact/QR/notice semantic field, geometry, factual value, color system or layout was changed.
+- whether a second party will actually be held; otherwise `NOT_REQUIRED`;
+- official venue / address / floor;
+- reception / start / end times;
+- fee / payment method;
+- access / travel time;
+- RSVP method / deadline;
+- contact / notice policy;
+- final QR destination if used.
 
-Post-write A6 `592×420` and A5 `840×592` screenshots: `PASS`. The headline now starts the ivory-field hierarchy immediately, reducing the remaining proof-sheet feel without making the composition emptier or removing any real information.
+Do not invent any of these.
 
-Post-write structural readback:
+## DEFERRED_FINALIZATION
 
-- A6: 18 native text / 17 visible / IMAGE 0 / outside visible text 0 / `clipsContent=true`
-- A5: 18 native text / 17 visible / IMAGE 0 / outside visible text 0 / `clipsContent=true`
-- `5:36` and `5:60` read back hidden
-- rollback `26:2` reads back hidden with two children
-- no flattening, raster replacement or invented factual copy.
+Printer template/profile, exact bleed/safe area, QR device scan proof if used, and 100% A6/A5 physical print proof remain deferred.
 
-Image decision: `IMAGE_GENERATION_NOT_REQUIRED`. The screenshot-supported defect was redundant proof metadata, not missing imagery. Drive writes: `0`.
+## Result
 
-Current result: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / PLACEHOLDER_SUFFIX_SIZE_PASS / STATUS_LABEL_REMOVAL_PASS`.
-
-## Rollback / edit history
-
-Rollback-safe proofs and the earlier production polish passes are recorded in `docs/automation/add-14-after-party-guide-design-qa.md`. The placeholder-hierarchy rollback copies are `17:2` and `17:27`; the current status-label rollback is `26:2`. Production root IDs remain stable.
-
-## Required input / deferred finalization
-
-These are still authoritative blockers for real-world adoption or print readiness, not blockers for visual progression:
-
-- [ ] whether the after-party will actually be held; otherwise set `NOT_REQUIRED`
-- [ ] official venue name / address / floor
-- [ ] reception / start / end times
-- [ ] fee / payment method
-- [ ] access and realistic travel time
-- [ ] RSVP method / deadline and contact permission
-- [ ] final QR destination plus device scan test
-- [ ] printer template/profile, exact bleed/safe area and 100% A6/A5 physical proof
-
-Do not replace placeholders with invented facts. Keep `BLOCKED_REQUIRED_INPUT / NOT_PRINT_READY` until the required authority and physical checks exist.
+- clean-room independence: `PASS`
+- sellable visual: `PASS`
+- A6/A5 long-copy resilience: `PASS`
+- native semantic editability: `PASS`
+- auto-height hardening: `PASS`
+- legacy preservation: `PASS`
+- Drive authority: `PASS`
+- event facts: `BLOCKED_REQUIRED_INPUT`
+- print readiness: `NO`
