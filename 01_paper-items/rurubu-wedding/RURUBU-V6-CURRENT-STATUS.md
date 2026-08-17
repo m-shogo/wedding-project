@@ -8,84 +8,101 @@ Production state: separate clean-room V6; V7 is HOLD
 
 ## Current declaration
 
-`V6_LIVE_FIGMA_IN_PROGRESS / OUTER_Y_CURRENT / INSIDE_CP_CQ_PREFERRED_STUDIES / PROFILE_BOUNDED_TEXTURE_BINDING_VERIFIED / CHRONOLOGY_EVENT03_PHOTO_COPY_BINDING_VERIFIED / CHRONOLOGY_SIDE_TRIP_NOTES_RAIL_VERIFIED / NATIVE_TEXT_AND_REPLACEABLE_IMAGE_ROLES_PRESERVED / GENERATED_SECTION_MASTERS_DRIVE_VERIFIED_NOT_ADOPTED / V7_HOLD / NOT_PRINT_READY`
+`V6_LIVE_FIGMA_IN_PROGRESS / OUTER_Z_CURRENT / INSIDE_CV_CQ_PREFERRED_STUDIES / Q04_PHOTO_PAIRED_SECONDARY_FEATURE_VERIFIED / CHRONOLOGY_EVENT03_PHOTO_COPY_BINDING_VERIFIED / CHRONOLOGY_SIDE_TRIP_NOTES_RAIL_VERIFIED / NATIVE_TEXT_AND_REPLACEABLE_IMAGE_ROLES_PRESERVED / GENERATED_SECTION_MASTERS_DRIVE_VERIFIED_NOT_ADOPTED / V7_HOLD / NOT_PRINT_READY`
+
+## Authority drift repaired on 2026-08-17
+
+Fresh live Figma inspection found this file stale before the current run:
+
+- Outer Y `1542:2` was already named `ROLLBACK` and hidden;
+- Profile/Q&A CP `1567:18` was already named `ROLLBACK` and hidden;
+- Start Here already declared `V5 FU/FX · V6 Z + CU/CQ INSIDE STUDIES · V7 HOLD`;
+- live visible winners were Outer Z `1576:160`, Profile/Q&A CU `1580:2`, and Story/Chronology CQ `1569:2`.
+
+No edit was made to stale Y/CP. The current run continued from live Figma authority and then promoted CU → CV after fresh QA.
 
 ## Live Figma current state
 
 Current preferred set:
 
-- Outer Y `1542:2` — `PREFERRED / V6_OUTER_Y_PHOTO_BOUND_BACK_CLOSURE_2026_08_17`;
-- Profile / Q&A CP `1567:18` — `PREFERRED / V6_INSIDE_CP_PROFILE_BOUNDED_ROUTE_TEXTURE_2026_08_17`;
+- Outer Z `1576:160` — `PREFERRED / V6_OUTER_Z_EDITORIAL_BACK_MILESTONES_2026_08_17`;
+- Profile / Q&A CV `1585:2` — `PREFERRED / V6_INSIDE_CV_Q04_PHOTO_PAIR_2026_08_17`;
 - Story / chronology CQ `1569:2` — `PREFERRED / V6_INSIDE_CQ_EVENT03_PHOTO_BINDING_SIDE_NOTES_2026_08_17`.
 
 Immediate rollback / proof:
 
-- CO `1566:2` — `ROLLBACK_HIDDEN / V6_INSIDE_CO_PRE_CQ_CHRONOLOGY_2026_08_17`;
-- CN `1562:2` — hidden rollback before CP;
-- CM `1559:2` — hidden rollback before CO;
-- older rollback-safe comparisons and long-copy proofs remain preserved.
+- CU `1580:2` — `ROLLBACK / V6_INSIDE_CU_Q04_SECOND_FEATURE_BEAT_2026_08_17`, hidden;
+- CV realistic-copy proof `1586:2` — `QA_STRESS_HIDDEN / V6_INSIDE_CV_Q04_Q06_LONG_COPY_2026_08_17`;
+- CO `1566:2` — chronology rollback before CQ;
+- older rollback-safe comparisons remain preserved.
 
-Start Here live readback:
+Start Here live readback after promotion:
 
-`V5 FU/FX · V6 Y + CP/CQ INSIDE STUDIES · V7 HOLD`
+`V5 FU/FX · V6 Z + CV/CQ INSIDE STUDIES · V7 HOLD`
 
 V7 was not edited.
 
-## Outer Y retained
+## Outer Z retained
 
-Outer Y remains unchanged and retains its previously verified photo-led front/back system, native text, replaceable image roles, collision-free layout and safe-area compliance.
+Outer Z was re-read live and retained unchanged. It is the current visible preferred outer, not Y.
 
-## CP retained — bounded Profile route texture
+Notable verified structure visible in live metadata:
 
-CP remains unchanged from its verified state:
+- Back: dominant travel flatlay + large cafe memory + skyline support + native staggered milestones + WEDDING terminal;
+- Front: full-width Yokohama waterfront hero + independent PNG masthead candidate + large native destination typography + two replaceable support photos;
+- card-like year blocks for 01/03/05 remain hidden; native milestone numbers carry the visible hierarchy.
 
-- lower three-photo cluster bound by one existing low-opacity composed travel texture;
-- native snapshot captions preserved;
-- traveler-data rail remains native/editable;
-- Q&A structure unchanged;
-- all replaceable Profile photo roles remain intrinsic-safe;
-- screenshot / actual-size / safe-area QA already passed.
+No Outer mutation occurred in the current run.
 
-## CQ — Event 03 photo binding + side-trip notes rail
+## CV — Q04 paired with the existing support photograph
 
-CQ was created as a rollback-safe clone of CO because CO still had one visible inconsistency:
+CU's top half was already strong, but Q04 began around `y=610` while the support photograph started at `y=725`, leaving a large cream gap that still read partly as a form/template.
 
-- Events 01/05 bound native copy directly to their photos, while Event 03 photo and copy were detached;
-- Event 02/04 sat in the left texture rail without an explicit editorial role, making the rail read partly as leftover pale space.
+CV was created as a rollback-safe clone and changed only the Q&A page:
 
-Bounded changes:
+- support photo kept hash `d76eb07d83d042f15044c8bc6bf68d73a73cd77d`;
+- support photo changed from about `430×300 @ y725` to `455×370 @ y610`;
+- source readback `732×498`, therefore still intrinsic-safe;
+- Q04 was aligned beside the photo as one secondary editorial feature beat;
+- Q05/Q06 were reflowed beneath it;
+- support caption/rule were rebound to the photo;
+- Q01–03, top hero, route texture, Profile page and all image hashes were preserved;
+- no new card, shadow, gradient, generated asset, external binary or raster byte was introduced.
 
-- Event 03 kept the same verified replaceable photo and image hash;
-- Event 03 native number/date/title/copy were moved onto the existing photograph so the photo and copy read as one editorial milestone;
-- Event 02/04 stayed native text on the existing bounded texture rail;
-- native `寄り道メモ / 02・04` was added as the guest-facing rail label;
-- no new external asset, generated image, Drive save, card, shadow, gradient or photo hash was introduced;
-- Story, Event 01, Event 05 and the WEDDING terminal were preserved.
+Verification:
 
-Rejected/corrected states before promotion:
-
-1. Event 03 title/copy initially fell behind Event 05 due to overlap/z-order. That state was rejected; copy was moved fully inside Event 03's photo region.
-2. Structure QA then found a 6px Event 03 number/date text collision. The date was moved right and QA rerun.
-
-Verification after correction:
-
-- whole spread 500px: PASS and stronger than CO;
-- reading scale ~1000px: PASS;
-- chronology actual-size `1569:27` = `794×1123`: PASS;
-- visible native text `31`;
-- absolute text collision `0`;
-- 18px text safe-area risk `0`;
-- visible text overflow `0`;
-- visible image intrinsic violations `0`;
+- whole-item `500×354`: PASS;
+- reading spread `1200×849`: PASS;
+- Q&A actual-size `794×1123`: PASS;
+- visible native text `26`;
+- absolute text collisions `0`;
+- 18px text safe-area risks `0`;
+- route texture `470×470` ≤ source `720×860`;
+- top hero `478×330` ≤ source `944×608`;
+- support photo `455×370` ≤ source `732×498`;
 - photo image hashes changed `0`.
 
-Relevant visible intrinsic checks:
+Realistic-copy proof `1586:2 / 1586:42`:
 
-- timeline composed texture `226×506` ≤ source `720×860`;
-- top hero `801×430` ≤ source `944×608`;
-- Event 03 `345×230` ≤ source `352×368`;
-- Event 01 `455×218` ≤ source `1356×560`;
-- Event 05 `455×154` ≤ source `732×498`.
+- Q04–Q06 were replaced with materially longer Japanese native copy;
+- Q04 answer height `42px`, Q05 `26px`, Q06 `39px`;
+- text collisions `0`;
+- 18px safe-area risks `0`;
+- actual-size screenshot `794×1123`: PASS;
+- proof returned to hidden state.
+
+## CQ retained — Event 03 photo binding + side-trip notes rail
+
+CQ was visually re-read at `1200×849` and retained unchanged.
+
+Verified prior behavior remains:
+
+- Event 01/03/05 operate as photographic milestones;
+- Event 02/04 live in the explicitly labeled native `寄り道メモ / 02・04` rail;
+- Event 06 remains the WEDDING terminal;
+- chronology actual-size previously passed with native text, replaceable image roles, zero collision, zero safe-area risk and intrinsic-safe imagery.
+
+No chronology mutation occurred in the current run.
 
 ## Drive / generated section masters
 
@@ -104,17 +121,17 @@ No material capability change occurred for the known quality-preserving external
 
 ## Latest evidence / learning
 
-- `01_paper-items/rurubu-wedding/evidence/RURUBU-V6-Y-CP-CQ-EVENT03-BINDING-QA-2026-08-17.md`;
-- `docs/design-learning/rurubu-shared-learning-feed.append/2026-08-17-rsl-070-photo-copy-beat-and-secondary-rail-binding.md`;
-- `docs/wedding-design-learning-feedback-log.append/2026-08-17-rurubu-v6-y-cp-cq.md`.
+- `01_paper-items/rurubu-wedding/evidence/RURUBU-V6-Z-CV-CQ-Q04-PHOTO-PAIR-QA-2026-08-17.md`;
+- `docs/design-learning/rurubu-shared-learning-feed.append/2026-08-17-rsl-073-photo-paired-secondary-feature-beat.md`;
+- `docs/wedding-design-learning-feedback-log.append/2026-08-17-rurubu-v6-z-cv-cq.md`.
 
 Learning state:
 
-- RSL-070 — major photographic milestones can be tested as one photo+native-copy editorial beat, while minor events can share an explicitly named secondary rail: `VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`.
+- RSL-073 — before adding a new container to repair a detached repeated-information module, test whether an already-legitimate image and meaningful native-text beat can be paired into one stronger editorial unit: `VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`.
 
-This is not a promoted project-wide visual-style rule. Exact Rurubu layout, wording, colors, photography and travel-magazine grammar remain item-specific.
+This is not `VERIFIED_CROSS_ITEM` and not a promoted visual-style rule. Exact Rurubu photography, copy, scale, color and layout remain item-specific.
 
-## Asset lifecycle truth
+## Asset lifecycle truth for this run
 
 - newly image-generated assets `0`;
 - newly adopted generated assets `0`;
@@ -126,6 +143,7 @@ This is not a promoted project-wide visual-style rule. Exact Rurubu layout, word
 - native variable/factual text preserved `YES`;
 - screenshot / actual-size QA `PASS`;
 - structure / safe-area QA `PASS`;
+- realistic-copy stress `PASS`;
 - rollback preserved `YES`;
 - V7 touched `NO`.
 
@@ -133,7 +151,7 @@ This is not a promoted project-wide visual-style rule. Exact Rurubu layout, word
 
 Do not call V6 complete or print-ready until:
 
-- Y + CP/CQ cohere with final legitimate photography and final personal copy as one magazine system;
+- Z + CV/CQ cohere with final legitimate photography and final personal copy as one magazine system;
 - fresh realistic-copy stress passes after final copy insertion;
 - exact printer/product template is applied;
 - bleed, trim, fold, safe area and page order are verified;
@@ -142,13 +160,13 @@ Do not call V6 complete or print-ready until:
 
 Current state:
 
-`V6 Y + CP/CQ = VERIFIED_LOCAL_DUMMY_DESIGN_STUDIES / ROLLBACK_SAFE / V7_HOLD / NOT_PRINT_READY`.
+`V6 Z + CV/CQ = VERIFIED_LOCAL_DUMMY_DESIGN_STUDIES / ROLLBACK_SAFE / V7_HOLD / NOT_PRINT_READY`.
 
 ## Next highest-value work
 
 1. Continue V6, not V7.
-2. Compare Y + CP/CQ as one magazine and target the next region that still reads like a template rather than a finished Japanese travel-information magazine.
+2. Compare Z + CV/CQ as one magazine and target the next region that still reads like a template rather than a finished Japanese travel-information magazine.
 3. Prefer final legitimate photography when available; rerun crop, semantic, contrast and actual-size QA after replacement.
-4. Replace dummy native copy with final personal copy and rerun dedicated long-copy stresses.
+4. Replace dummy native copy with final personal copy and rerun dedicated realistic/long-copy stresses.
 5. Keep generated section masters unadopted until quality-preserving placement + actual-size QA is possible.
 6. Keep printer-template/PDF/physical-proof gates separate from dummy-design QA.
