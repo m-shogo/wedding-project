@@ -8,25 +8,25 @@ Production state: separate clean-room V6; V7 is HOLD
 
 ## Current declaration
 
-`V6_LIVE_FIGMA_IN_PROGRESS / OUTER_Y_CURRENT / INSIDE_CN_CM_PREFERRED_STUDIES / PROFILE_SNAPSHOT_EDITORIAL_CAPTIONS_VERIFIED / CHRONOLOGY_MINOR_BEAT_NUMERIC_ANCHORS_VERIFIED / GUEST_FACING_QA_COPY_VERIFIED / PROFILE_TRAVELER_DATA_RAIL_VERIFIED / PROFILE_LONG_COPY_STRESS_VERIFIED / NATIVE_TEXT_AND_REPLACEABLE_IMAGE_ROLES_PRESERVED / GENERATED_SECTION_MASTERS_DRIVE_VERIFIED_NOT_ADOPTED / V7_HOLD / NOT_PRINT_READY`
+`V6_LIVE_FIGMA_IN_PROGRESS / OUTER_Y_CURRENT / INSIDE_CP_CO_PREFERRED_STUDIES / PROFILE_BOUNDED_TEXTURE_BINDING_VERIFIED / CHRONOLOGY_MAJOR_PHOTO_MINOR_NOTES_RAIL_VERIFIED / PROFILE_SNAPSHOT_EDITORIAL_CAPTIONS_VERIFIED / GUEST_FACING_QA_COPY_VERIFIED / PROFILE_TRAVELER_DATA_RAIL_VERIFIED / PROFILE_LONG_COPY_STRESS_VERIFIED / NATIVE_TEXT_AND_REPLACEABLE_IMAGE_ROLES_PRESERVED / GENERATED_SECTION_MASTERS_DRIVE_VERIFIED_NOT_ADOPTED / V7_HOLD / NOT_PRINT_READY`
 
 ## Live Figma current state
 
 Current preferred set:
 
 - Outer Y `1542:2` — `PREFERRED / V6_OUTER_Y_PHOTO_BOUND_BACK_CLOSURE_2026_08_17`;
-- Profile / Q&A CN `1562:2` — `PREFERRED / V6_INSIDE_CN_PROFILE_SNAPSHOT_CAPTIONS_2026_08_17`;
-- Story / chronology CM `1559:2` — `PREFERRED / V6_INSIDE_CM_CHRONOLOGY_MINOR_BEAT_NUMERIC_ANCHORS_2026_08_17`.
+- Profile / Q&A CP `1567:18` — `PREFERRED / V6_INSIDE_CP_PROFILE_BOUNDED_ROUTE_TEXTURE_2026_08_17`;
+- Story / chronology CO `1566:2` — `PREFERRED / V6_INSIDE_CO_CHRONOLOGY_MAJOR_PHOTO_MINOR_NOTES_RAIL_2026_08_17`.
 
 Immediate rollback / proof:
 
-- CL `1556:2` — `ROLLBACK_HIDDEN / V6_INSIDE_CL_PRE_CN_PROFILE_CAPTIONS_2026_08_17`;
-- CJ `1554:97` — `ROLLBACK_HIDDEN / V6_INSIDE_CJ_PRE_CM_CHRONOLOGY_2026_08_17`;
-- CK `1553:79`, CI `1551:2`, Profile long-copy proof `1553:156`, and older comparisons remain preserved.
+- CN `1562:2` — `ROLLBACK_HIDDEN / V6_INSIDE_CN_PRE_CP_PROFILE_TEXTURE_2026_08_17`;
+- CM `1559:2` — `ROLLBACK_HIDDEN / V6_INSIDE_CM_PRE_CO_CHRONOLOGY_2026_08_17`;
+- CL `1556:2`, CJ `1554:97`, CK `1553:79`, CI `1551:2`, Profile long-copy proof `1553:156`, and older comparisons remain preserved.
 
 Start Here live readback:
 
-`V5 FU/FX · V6 Y + CN/CM INSIDE STUDIES · V7 HOLD`
+`V5 FU/FX · V6 Y + CP/CO INSIDE STUDIES · V7 HOLD`
 
 V7 was not edited.
 
@@ -34,66 +34,71 @@ V7 was not edited.
 
 Outer Y remains unchanged and retains its previously verified photo-led front/back system, native text, replaceable image roles, collision-free layout and safe-area compliance.
 
-## CN — Profile snapshot editorial captions
+## CP — bounded Profile route texture
 
-CN keeps CL Profile/Q&A geometry, photos, image hashes, traveler-data rail and Q&A content while improving the lower Profile photo cluster.
+CP keeps CN's Profile/Q&A geometry, native captions, traveler-data rail, Q&A content, photos, photo borders, image hashes, and replaceable semantics.
 
 Observed defect:
 
-- the three overlapping snapshots still read partly as placed-photo collage elements rather than editorial scenes.
+- the lower three-photo cluster still floated on a large cream field even after native captions had improved editorial meaning.
 
 Bounded test:
 
-1. Existing hidden native snapshot captions were first placed over the photos. This was rejected because 9px metadata lost contrast on heterogeneous image backgrounds.
-2. The same native captions were moved immediately outside the photo borders onto the cream page and rechecked.
-
-Adopted native dummy metadata:
-
-- `CAFE MEMORY / FAVORITE SCENE`;
-- `NIGHT WALK / PHOTO NOTE`;
-- `YOKOHAMA / NEXT VIEW`.
-
-These are editable design-study captions, not final factual copy.
+- one existing Rurubu-internal composed travel texture was inserted behind only the lower snapshot cluster;
+- role `1567:95 / DECOR / PROFILE_ROUTE_TEXTURE_COMPOSED_RASTER`;
+- image hash `691a6ceed471a5d8efa144052a10564eed177b4f`;
+- opacity `0.16`;
+- initial `770×430` width was rejected after intrinsic QA and corrected to `720×430` against source `720×860`;
+- no photo hash, native copy, photo border, or replacement role changed.
 
 Verification:
 
-- Profile actual-size `1562:3` = `794×1123`: PASS;
-- whole Profile/Q&A spread ~1200px: PASS;
+- whole Profile/Q&A thumbnail 500px: PASS;
+- Profile actual-size `1567:19` = `794×1123`: PASS;
 - visible Profile native text `22`;
 - text collision `0`;
 - 18px text safe-area risk `0`;
-- visible overflow `0`;
-- all four Profile photo roles remain intrinsic-safe;
-- image hashes changed `0`;
-- Q&A geometry/content remains unchanged from verified CL.
+- all four replaceable Profile photo roles intrinsic-safe;
+- composed texture intrinsic-safe after correction;
+- image hashes changed `0`.
 
-## CM — chronology minor-beat numeric anchors
+Q&A geometry/content remains unchanged from the prior verified state.
 
-CM keeps Story, native event facts/placeholders, image sources/hashes, replaceable-photo semantics and the WEDDING terminal while refining minor chronology beats.
+## CO — chronology major-photo / minor-notes rail
+
+CO keeps Story, native chronology facts/placeholders, replaceable photo semantics, top feature hero, and WEDDING terminal while materially changing the chronology reading path.
 
 Observed defect:
 
-- CJ correctly made Event 1 / 3 / 5 strong and Event 2 / 4 quiet, but the center-left field could read as unfinished because Event 2 / 4 were too visually silent.
+- CM had strong major/minor scale hierarchy, but Event 1/3/5 photography and Event 2/4 text still occupied the same central field, creating crossing reading paths and visual congestion.
 
 Bounded test:
 
-- Event 2 / 4 existing native number nodes re-enabled at small `14px` scale;
-- their redundant small rule bars hidden;
-- Event 2 / 4 title scale raised `17px → 22px` while date/copy remain restrained;
-- Event 3 replaceable photo increased `285×210 → 310×230`, still below source intrinsic `352×368`;
-- Event 1 / 3 / 5 remain the major photographic beats; Event 2 / 4 remain minor;
-- no new cards, shadows, gradients, generated assets, binary placements or image hashes.
+- Event 2 / 4 moved into a narrow quiet left travel-notes rail;
+- lower composed travel texture narrowed to `226×506`, opacity `0.22`, as a subordinate rail support;
+- Event 1 / 3 / 5 remain large replaceable photo beats in the main field;
+- redundant crossing magenta/cyan rules hidden;
+- native title copy remains `ふたりの旅、6つの景色。` but its text box was widened so it reads as one intentional line;
+- Event 03 typography was corrected after QA to return inside the 18px right safe area;
+- no new card, shadow, gradient, generated asset, external binary placement, or image hash was introduced.
 
 Verification:
 
-- whole spread ~1200px: PASS;
-- chronology actual-size `1559:27` = `794×1123`: PASS;
+- whole spread ~1200px: PASS and clearer than CM;
+- chronology actual-size `1566:27` = `794×1123`: PASS;
 - native text `30`;
 - text collision `0`;
 - 18px text safe-area risk `0`;
-- image intrinsic violations `0`;
-- image hashes changed `0`;
-- only page-bound overflow is the already-intentional top-hero bleed.
+- outside visible nodes `0`;
+- visible image intrinsic violations `0`.
+
+Relevant intrinsic checks:
+
+- top hero `801×430` ≤ `944×608`;
+- Event 1 `455×218` ≤ `1356×560`;
+- Event 3 `345×230` ≤ `352×368`;
+- Event 5 `455×154` ≤ `732×498`;
+- rail texture `226×506` ≤ `720×860`.
 
 ## Drive / generated section masters
 
@@ -112,17 +117,17 @@ No material capability change occurred for the known quality-preserving external
 
 ## Latest evidence / learning
 
-- `01_paper-items/rurubu-wedding/evidence/RURUBU-V6-Y-CN-CM-PROFILE-CAPTIONS-CHRONOLOGY-QA-2026-08-17.md`;
-- `docs/design-learning/rurubu-shared-learning-feed.append/2026-08-17-rsl-066-minor-chronology-anchors.md`;
-- `docs/design-learning/rurubu-shared-learning-feed.append/2026-08-17-rsl-067-photo-caption-binding.md`;
-- `docs/wedding-design-learning-feedback-log.append/2026-08-17-rurubu-v6-y-cn-cm.md`.
+- `01_paper-items/rurubu-wedding/evidence/RURUBU-V6-Y-CP-CO-EDITORIAL-FLOW-QA-2026-08-17.md`;
+- `docs/design-learning/rurubu-shared-learning-feed.append/2026-08-17-rsl-068-major-photo-minor-notes-rail.md`;
+- `docs/design-learning/rurubu-shared-learning-feed.append/2026-08-17-rsl-069-bounded-texture-photo-cluster-binding.md`;
+- `docs/wedding-design-learning-feedback-log.append/2026-08-17-rurubu-v6-y-cp-co.md`.
 
 Learning states:
 
-- RSL-066 — small native ordinal anchors can clarify minor chronology beats without restoring equal-card hierarchy: `VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`;
-- RSL-067 — existing photo clusters can gain editorial meaning from small native captions outside image bounds without adding containers: `VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`.
+- RSL-068 — spatial separation of major photographic events and minor chronology notes: `VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`;
+- RSL-069 — one bounded low-opacity composed support can bind a legitimate multi-photo cluster without adding cards: `VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`.
 
-Neither is a promoted project-wide visual-style rule.
+Neither is a promoted project-wide visual-style rule. Exact Rurubu layout, texture, photography, palette and travel-magazine grammar remain item-specific.
 
 ## Asset lifecycle truth
 
@@ -130,7 +135,8 @@ Neither is a promoted project-wide visual-style rule.
 - new Drive saves `0`;
 - new external binary placements `0`;
 - new raster bytes `0`;
-- image hashes changed `0`;
+- existing composed raster reused in a new bounded Profile role `YES`;
+- photo image hashes changed `0`;
 - native variable text preserved `YES`;
 - replaceable image semantics preserved `YES`;
 - screenshot / actual-size QA `PASS` for changed pages;
@@ -142,7 +148,7 @@ Neither is a promoted project-wide visual-style rule.
 
 Do not call V6 complete or print-ready until:
 
-- Y + CN/CM cohere with final legitimate photography and final personal copy as one magazine system;
+- Y + CP/CO cohere with final legitimate photography and final personal copy as one magazine system;
 - fresh realistic-copy stress passes after final copy insertion;
 - exact printer/product template is applied;
 - bleed, trim, fold, safe area and page order are verified;
@@ -151,13 +157,13 @@ Do not call V6 complete or print-ready until:
 
 Current state:
 
-`V6 Y + CN/CM = VERIFIED_LOCAL_DUMMY_DESIGN_STUDIES / ROLLBACK_SAFE / V7_HOLD / NOT_PRINT_READY`.
+`V6 Y + CP/CO = VERIFIED_LOCAL_DUMMY_DESIGN_STUDIES / ROLLBACK_SAFE / V7_HOLD / NOT_PRINT_READY`.
 
 ## Next highest-value work
 
 1. Continue V6, not V7.
-2. Compare Y + CN/CM together and target the next area that still reads like a template rather than a finished travel-information magazine.
-3. Replace dummy/repeated photos with final legitimate photography when available and rerun crop/contrast/actual-size QA.
-4. Replace dummy native copy with final copy and rerun dedicated stresses.
+2. Compare Y + CP/CO together and target the next region that still reads like a template rather than a finished Japanese travel-information magazine.
+3. Prefer final legitimate photography when available; rerun crop, semantic, contrast and actual-size QA after replacement.
+4. Replace dummy native copy with final personal copy and rerun dedicated long-copy stresses.
 5. Keep generated section masters unadopted until quality-preserving placement + actual-size QA is possible.
 6. Keep printer-template/PDF/physical-proof gates separate from dummy-design QA.
