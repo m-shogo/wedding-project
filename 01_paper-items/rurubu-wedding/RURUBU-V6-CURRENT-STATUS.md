@@ -8,28 +8,29 @@ Production state: separate clean-room V6; V7 is HOLD
 
 ## Current declaration
 
-`V6_LIVE_FIGMA_IN_PROGRESS / OUTER_AB_CURRENT / INSIDE_CX_CY_PREFERRED_STUDIES / FRONT_PHOTO_CLUSTER_VERIFIED / BACK_TIMELINE_EDITORIAL_DENSITY_VERIFIED / NATIVE_VARIABLE_TEXT_RESILIENCE_VERIFIED / DEPENDENT_QA_AND_CHRONOLOGY_COPY_STACKS_VERIFIED / ALL_25_ACTIVE_RASTER_ROLES_INTRINSIC_SAFE / GENERATED_SECTION_MASTERS_DRIVE_VERIFIED_NOT_ADOPTED / V7_HOLD / NOT_PRINT_READY`
+`V6_LIVE_FIGMA_IN_PROGRESS / OUTER_AB_CURRENT / INSIDE_CZ_CY_PREFERRED_STUDIES / FRONT_PHOTO_CLUSTER_VERIFIED / BACK_TIMELINE_EDITORIAL_DENSITY_VERIFIED / PROFILE_DATA_EDITORIAL_HIERARCHY_VERIFIED / PROFILE_REALISTIC_COPY_STRESS_VERIFIED / NATIVE_VARIABLE_TEXT_RESILIENCE_VERIFIED / DEPENDENT_QA_AND_CHRONOLOGY_COPY_STACKS_VERIFIED / ALL_25_ACTIVE_RASTER_ROLES_INTRINSIC_SAFE / GENERATED_SECTION_MASTERS_DRIVE_VERIFIED_NOT_ADOPTED / V7_HOLD / NOT_PRINT_READY`
 
 ## Live Figma current state
 
 Current preferred set after fresh promotion/readback:
 
 - Outer AB `1607:2` — `PREFERRED / V6_OUTER_AB_BACK_TIMELINE_EDITORIAL_DENSITY_2026_08_17`;
-- Profile / Q&A CX `1601:2` — `PREFERRED / V6_INSIDE_CX_NATIVE_TEXT_RESILIENCE_2026_08_17`;
+- Profile / Q&A CZ `1609:2` — `PREFERRED / V6_INSIDE_CZ_PROFILE_DATA_EDITORIAL_HIERARCHY_2026_08_17`;
 - Story / chronology CY `1601:81` — `PREFERRED / V6_INSIDE_CY_NATIVE_TEXT_RESILIENCE_2026_08_17`.
 
 Immediate rollback / proof:
 
 - Outer AA `1592:2` — hidden rollback;
-- Outer Z `1576:160` — older hidden rollback;
-- Profile/Q&A CW `1593:2` — hidden rollback;
+- Profile/Q&A CX `1601:2` — hidden rollback;
 - Story/chronology CQ `1569:2` — hidden rollback;
+- failed CZ realistic-copy proof `1610:2` — hidden rejected structural evidence;
+- corrected CZ realistic-copy proof `1610:82 / 1610:83` — hidden after PASS;
 - second-pass CX/CY realistic-copy proofs `1603:9 / 1603:89` remain hidden after PASS;
 - older rollback-safe comparisons remain preserved.
 
 Start Here live readback:
 
-`V5 FU/FX · V6 AB + CX/CY INSIDE STUDIES · V7 HOLD`
+`V5 FU/FX · V6 AB + CZ/CY INSIDE STUDIES · V7 HOLD`
 
 V7 was not edited.
 
@@ -64,15 +65,52 @@ Canonical evidence:
 
 - `01_paper-items/rurubu-wedding/evidence/RURUBU-V6-AB-CX-CY-BACK-TIMELINE-EDITORIAL-DENSITY-QA-2026-08-17.md`.
 
-## CX — Profile / Q&A native-text resilience retained
+## CZ — Profile data editorial hierarchy
 
-CX remains visually unchanged and retains its verified editability behavior:
+CX's Profile page had strong photo hierarchy and safe native text, but the six facts still read as a 2×3 form because labels/values shared nearly equal row rhythm.
 
-- Profile value 1–6 use native height-following text;
-- Q04 question is native auto-height;
-- Q04 question + answer use `STACK / QA_Q04_NATIVE_AUTOHEIGHT`;
-- decorative Profile pullquote remains intentionally bounded after the rejected unlimited-auto-height stress;
-- Profile/Q&A realistic-copy stress previously passed with collisions 0 and 18px safe-area risks 0.
+Rollback-safe CZ changed only the Profile data hierarchy:
+
+- compact metadata row for 出身地 / 誕生日;
+- larger native favorite/personality beats for 趣味 / 休日の過ごし方;
+- quieter support row for 好きな食べ物 / チャームポイント;
+- photos and Q&A unchanged;
+- all profile values remain native editable auto-height text;
+- no new cards, containers, decoration, assets or image hashes.
+
+### Realistic-copy stress
+
+First proof `1610:2` failed and was rejected because:
+
+- the longer 出身地 value touched its label;
+- the longer 休日 value collided with the support row.
+
+Corrected geometry then passed with longer realistic Japanese values in proof `1610:82 / 1610:83`:
+
+- Profile collisions: 0;
+- 18px safe-area risks: 0;
+- actual-size 794×1123: PASS.
+
+Visual evidence:
+
+- CZ spread 1400×990: PASS and stronger than CX;
+- Profile actual-size 794×1123: PASS;
+- post-promotion CZ spread 1400×990: PASS.
+
+Result: `CZ VERIFIED_LOCAL / PREFERRED`.
+
+Canonical evidence:
+
+- `01_paper-items/rurubu-wedding/evidence/RURUBU-V6-AB-CZ-CY-PROFILE-DATA-HIERARCHY-QA-2026-08-17.md`.
+
+## Q&A retained inside CZ
+
+The Q&A page was not changed from CX. Its verified behavior remains:
+
+- native editable question/answer structure;
+- Q04 question + answer native auto-layout stack;
+- existing photo-led asymmetric interview composition;
+- prior realistic-copy stress evidence remains applicable to unchanged Q&A geometry.
 
 ## CY — Story / chronology native-text resilience retained
 
@@ -92,12 +130,12 @@ AB:
 - back actual-size 794×1123: PASS;
 - post-promotion outer 1400×990: PASS.
 
-CX retained:
+CZ:
 
-- whole spread 500×354: PASS;
-- reading spread 1200×849: PASS;
+- whole spread 1400×990: PASS;
 - Profile actual-size 794×1123: PASS;
-- Q&A actual-size 794×1123: PASS.
+- realistic-copy Profile actual-size 794×1123: PASS;
+- Q&A unchanged from previously verified CX geometry.
 
 CY retained:
 
@@ -117,7 +155,7 @@ The current book keeps the same verified raster/image set as AA + CX/CY:
 - generated section assets adopted: 0;
 - new Drive saves: 0.
 
-The prior canonical reconciliation remains applicable because AB changed only native typography and one simple solid rule, not image geometry or hashes:
+AB and CZ changed native typography/geometry only; image geometry/hashes remained unchanged. The prior reconciliation remains applicable:
 
 - `01_paper-items/rurubu-wedding/RURUBU-V6-AA-CX-CY-ACTIVE-ASSET-RECONCILIATION-2026-08-17.json`.
 
@@ -141,16 +179,19 @@ No material capability change occurred for the known quality-preserving external
 Primary evidence:
 
 - `01_paper-items/rurubu-wedding/evidence/RURUBU-V6-AB-CX-CY-BACK-TIMELINE-EDITORIAL-DENSITY-QA-2026-08-17.md`;
+- `01_paper-items/rurubu-wedding/evidence/RURUBU-V6-AB-CZ-CY-PROFILE-DATA-HIERARCHY-QA-2026-08-17.md`;
 - `docs/wedding-design-learning-feedback-log.append/2026-08-17-rurubu-v6-ab-cx-cy.md`;
+- `docs/wedding-design-learning-feedback-log.append/2026-08-17-rurubu-v6-ab-cz-cy.md`;
 - `docs/design-learning/rurubu-shared-learning-feed.append/2026-08-17-rsl-077-sequence-transition-density.md`;
-- prior native-text resilience evidence remains valid for unchanged CX/CY.
+- `docs/design-learning/rurubu-shared-learning-feed.append/2026-08-17-rsl-078-profile-data-editorial-priority.md`.
 
 Learning:
 
 - RSL-076 — native variable-text resilience audit: `VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`;
-- RSL-077 — bind a repeated native sequence to the preceding content transition and use major/minor typographic contrast before adding cards or imagery: `VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`.
+- RSL-077 — bind repeated sequences to the preceding content transition and use major/minor typography before adding cards: `VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`;
+- RSL-078 — repeated editable facts can use semantic-priority typography instead of equal grid rhythm, but hierarchy changes require fresh realistic-copy stress: `VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`.
 
-Neither lesson transfers Rurubu-specific layout, palette, photo roles, milestone positions, or visual grammar.
+None transfers Rurubu-specific layout, palette, photo roles, milestone positions or visual grammar.
 
 ## Asset lifecycle truth for this run
 
@@ -160,10 +201,12 @@ Neither lesson transfers Rurubu-specific layout, palette, photo roles, milestone
 - new external binary placements: 0;
 - new raster bytes: 0;
 - image hashes changed: 0;
-- one new simple native editorial rule: YES;
+- new simple native editorial rule in AB: YES;
 - native factual copy preserved: YES;
+- native profile values remain editable: YES;
 - photo replaceability preserved: YES;
 - screenshot / actual-size QA: PASS;
+- CZ realistic-copy stress: PASS after one rejected first geometry;
 - rollback preserved: YES;
 - V7 touched: NO.
 
@@ -171,7 +214,7 @@ Neither lesson transfers Rurubu-specific layout, palette, photo roles, milestone
 
 Do not call V6 complete or print-ready until:
 
-- AB + CX/CY cohere with final legitimate photography and final personal copy as one magazine system;
+- AB + CZ/CY cohere with final legitimate photography and final personal copy as one magazine system;
 - final personal copy receives fresh realistic-copy / actual-size stress after replacement;
 - exact printer/product template is applied;
 - bleed, trim, fold, safe area and page order are verified;
@@ -180,13 +223,13 @@ Do not call V6 complete or print-ready until:
 
 Current state:
 
-`V6 AB + CX/CY = VERIFIED_LOCAL_DUMMY_DESIGN_STUDIES / NATIVE_TEXT_RESILIENCE_VERIFIED / ROLLBACK_SAFE / V7_HOLD / NOT_PRINT_READY`.
+`V6 AB + CZ/CY = VERIFIED_LOCAL_DUMMY_DESIGN_STUDIES / NATIVE_TEXT_RESILIENCE_VERIFIED / PROFILE_REALISTIC_COPY_STRESS_VERIFIED / ROLLBACK_SAFE / V7_HOLD / NOT_PRINT_READY`.
 
 ## Next highest-value work
 
 1. Continue V6, not V7.
-2. Compare AB + CX/CY as one magazine and target the next region that still reads as a template rather than a finished Japanese travel-information magazine.
-3. Preserve CX/CY native-text resilience when making later visual changes.
+2. Compare AB + CZ/CY as one magazine and target the next region that still reads as a template rather than a finished Japanese travel-information magazine.
+3. Preserve CZ/CY native-text resilience when making later visual changes.
 4. Prefer final legitimate photography when available; rerun crop, semantic, contrast and actual-size QA after replacement.
 5. Replace dummy native copy with final personal copy and rerun dedicated realistic/long-copy stresses.
 6. Keep generated section masters unadopted until quality-preserving placement + actual-size QA is possible.
