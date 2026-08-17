@@ -1,119 +1,99 @@
 # ADD-13 メッセージカード — QA
 
-Status: `CURRENT / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / RECIPIENT_LABEL_REMOVAL_PASS / POLICY_FOOTER_REMOVAL_PASS / ROLLBACK_SAFE / NOT_PRINT_READY`
-Authority: GitHub latest `main` + `docs/automation/non-rurubu-figma-quality-current.md`
-Updated: 2026-08-15
+Status: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / CLEANROOM_V6_SELECTED / LONG_COPY_STRESS_PASS / HANDWRITING_AREA_55_PERCENT_PASS / LEGACY_PRESERVED / ROLLBACK_SAFE / NOT_PRINT_READY`
+Updated: 2026-08-18
+Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
 
-This file began as the 2026-08-02 pre-Figma QA checklist. The live production and reopened visual evidence supersede the stale `PASS_FOR_FIGMA_PREPARATION` state.
+## Current selected authority
 
-## Live production authority
+The older portrait production authority previously described in this file is now retained legacy / rollback history only for the reopened clean-room program. The selected current design is clean-room V6 Postal Field.
+
+Canonical current evidence:
+
+- `FIGMA-CLEANROOM-V6-POSTAL-FIELD-QA-2026-08-17.md`
+- `FIGMA-CLEANROOM-V6-PLACEHOLDER-STATUS-CLEANUP-2026-08-17.md`
+- `FIGMA-CLEANROOM-V6-GUEST-MICROCOPY-CLEANUP-2026-08-17.md`
+- `FIGMA-CLEANROOM-V6-INLINE-PROOF-COPY-CLEANUP-2026-08-17.md`
+
+Live authority:
 
 - Figma file: `8ad7bEPAc8I88gs1JxsWhe`
-- production front: `1:3 / ADD13/A6/FRONT`
-- production back: `1:13 / ADD13/A6/BACK`
-- Drive folder: `ADD-13_Message_Card` / `1Md8oCMsw4F9tZjQueNmQQ2dYR1I7JwZl`
-- detailed reopened evidence: `docs/automation/add-13-message-card-design-qa.md`
+- selected clean-room page: `27:2 / CLEANROOM / ADD-13 / V6 POSTAL FIELD / 2026-08-17`
+- selected front: `27:3`
+- selected back: `27:4`
+- hidden long-copy front: `27:35`
+- hidden long-copy back: `27:51`
+- retained legacy production: `1:3 / 1:13` — comparison/history only
+- Drive folder: `ADD-13_Message_Card / 1Md8oCMsw4F9tZjQueNmQQ2dYR1I7JwZl`
 
-## Current visual / structure QA
+## Current visual direction
 
-Fresh production screenshots and live structure readback reconfirm the Japanese-first letterpress/correspondence V2 direction:
+V6 uses the SPEC primary A6-landscape direction instead of the old portrait correspondence silhouette.
 
-- front uses `ことばを、残す。` as the hierarchy anchor with restrained recipient / intro / body / signer rhythm;
-- back remains an open reply surface with three restrained writing rules rather than a boxed form;
-- unknown guest-facing recipient/message/signer values remain explicit native editable `LAYOUT DUMMY` text;
-- front `1:3`: 700×990, 8 native text nodes / 7 visible, 0 IMAGE fill nodes, 0 visible text outside root, `clipsContent=true`;
-- back `1:13`: 700×990, 4 native text nodes / 3 visible, 0 IMAGE fill nodes, 0 visible text outside root, `clipsContent=true`;
-- no flatten/raster replacement introduced;
-- no screenshot-supported need for generated imagery was found.
+- front: narrow Japanese editorial copy column + dominant open writing field;
+- back: compact theme/prompt header + broad open writing field;
+- no rounded UI cards, shadows, gradients, travel icons, fake stamps, product-label English filler or rasterized variable copy;
+- unresolved values remain short guest-facing native semantic placeholders;
+- fixed decoration is limited to restrained rules/edge accent;
+- no image fill is required.
 
-### 2026-08-15 redundant front recipient-label removal
+Fresh 2026-08-18 screenshots reconfirmed the selected front/back at whole-item scale. The writing action remains the dominant read and the page does not depend on decorative density to feel complete.
 
-Fresh thumbnail and native 700×990 review found the small English `TO` label (`4:26 / ADD13V2/RecipientLabel`) redundant beside the explicit native recipient field `［宛名 · LAYOUT DUMMY］`. At whole-item scale it read as generic stationery filler rather than guest-facing information and added a template-like English cue without improving recipient comprehension.
+## Structure / handwriting-area QA
 
-Live authority was re-read immediately before the edit: GitHub latest `main` `0dcf2a38ff4542b8f69aeaa43b513b06b6772dee`; Current remained `ACTIVE / HOURLY / FIGMA_EDIT_ALLOWED / VISUAL_REOPENED`; Drive folder `1Md8oCMsw4F9tZjQueNmQQ2dYR1I7JwZl`; Figma front production root `1:3`.
+### Front `27:3`
 
-Rollback-safe clean-room comparison:
-
-- `13:2 / QA_ADD13_FRONT_NO_TO_LABEL_2026_08_15`
-- changed only the copied `ADD13V2/RecipientLabel` visibility
-- thumbnail 354×500: PASS
-- native 700×990: PASS
-
-The comparison was stronger because the recipient field remained self-explanatory while the right-upper corner became quieter and less template-like.
-
-Full rollback was saved before production mutation:
-
-- `13:16 / ROLLBACK_ADD13_FRONT_PRE_TO_LABEL_REMOVAL_2026_08_15` (`visible=false`)
-
-Production change:
-
-- `4:26 / ADD13V2/RecipientLabel / TO` → `visible=false`
-
-No recipient placeholder, headline, intro/body/signature field, date, rule geometry, type scale, color or factual value changed. The comparison `13:2` was returned to `visible=false` after promotion.
-
-Post-write actual-size screenshot: `PASS`.
-
-Post-write structural readback:
-
-- front root: `700×990`, `clipsContent=true`
-- native text: `8`
-- visible native text: `7`
+- working size: `1400×993`
 - IMAGE fills: `0`
-- outside visible text: `0`
-- `4:26` reads back hidden
-- rollback `13:16` reads back hidden with 13 children
-- comparison `13:2` reads back hidden
-- no flattening, raster replacement or invented factual copy.
+- visible text outside root: `0`
+- semantic writing area: `900×870`
+- writing-area ratio: `56.32%`
 
-Image decision: `IMAGE_GENERATION_NOT_REQUIRED`. The screenshot-supported defect was redundant English filler, not missing imagery. Drive writes: `0`.
+### Back `27:4`
 
-Current result: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / RECIPIENT_LABEL_REMOVAL_PASS`.
-
-### 2026-08-14 redundant back policy-footer removal
-
-Fresh 700×990 actual-size review found one remaining proof-sheet signal at the lower left of the back face: `［用途・記名方針等 · LAYOUT DUMMY］` (`4:42 / ADD13V2/Footer`). It described unresolved production/use policy rather than guest-facing content and visually made the otherwise open correspondence surface look like a proof sheet.
-
-Live authority was re-read immediately before the edit: GitHub `main` `efac9261cafec7b17ec5f5f58a8244c68d534eff`; Drive folder `1Md8oCMsw4F9tZjQueNmQQ2dYR1I7JwZl`; Figma back production root `1:13`.
-
-Rollback-safe proof created before mutation:
-
-- `12:13 / ROLLBACK_ADD13_PRE_POLICY_FOOTER_REMOVAL_2026_08_14` (`visible=false`)
-- rollback child `12:2 / ROLLBACK_ADD13_BACK_PRE_POLICY_FOOTER_REMOVAL_2026_08_14`
-
-Only the existing native policy-footer text node was hidden:
-
-- `4:42 / ADD13V2/Footer / ［用途・記名方針等 · LAYOUT DUMMY］` → `visible=false`
-
-No headline, free-writing guide, writing rules, recipient/message/signature semantics, geometry, color, factual value or paper direction was changed.
-
-Post-write actual-size screenshot: `PASS`. The back now reads as a cleaner open reply surface, while the remaining `［自由記入の案内 · LAYOUT DUMMY］` still preserves the unresolved guest-facing instruction role.
-
-Post-write structural readback:
-
-- back root: `700×990`, `clipsContent=true`
-- native text: `4`
-- visible native text: `3`
+- working size: `1400×993`
 - IMAGE fills: `0`
-- outside visible text: `0`
-- `4:42` reads back hidden
-- rollback `12:13` reads back hidden with one child
-- no flattening, raster replacement or invented factual copy.
+- visible text outside root: `0`
+- semantic writing area: `1240×650`
+- writing-area ratio: `57.98%`
 
-Image decision: `IMAGE_GENERATION_NOT_REQUIRED`. The screenshot-supported defect was redundant proof metadata, not missing imagery. Drive writes: `0`.
+Both faces remain above the SPEC minimum handwriting-area requirement of 55%.
 
-Current result: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / POLICY_FOOTER_REMOVAL_PASS`.
+## Long-copy / editability
 
-## Rollback / stress evidence
+Hidden stress roots `27:35 / 27:51` remain current long-copy authority. V6 already repaired the failure where root-outside count was zero but long title/prompt text collided internally. Dynamic header roles now use native auto-layout / auto-height behavior and the stress copies pass without clipping or title/prompt collision.
 
-The materially different clean-room comparison, long-copy stress and rollback-safe promotion are recorded in `docs/automation/add-13-message-card-design-qa.md`. Production root IDs remain stable. The current front recipient-label rollback authority is `13:16`; the current back-footer rollback authority is `12:13`.
+All variable/factual copy remains native editable text. No flattening or raster replacement was introduced.
 
-## Deferred finalization
+## Legacy preservation
 
-- [ ] final recipient/use-case policy
-- [ ] final message copy and signer naming convention
-- [ ] final date/copy
-- [ ] paper stock
-- [ ] printer template/profile, exact mm/bleed/export settings
-- [ ] 100% physical proof and handwriting/readability check
+Legacy production `1:3 / 1:13` remains untouched. It was used only after V6 had been independently built and stress-tested, for retained comparison. Do not use legacy production as the selected-current editing target.
 
-Do not replace placeholders with invented facts. Keep `NOT_PRINT_READY` until final copy, vendor requirements and physical proof exist.
+## Image / Drive decision
+
+`IMAGE_GENERATION_NOT_REQUIRED_FOR_THIS_ITEM`.
+
+The item role is handwriting-first and current bottlenecks are copy/finalization/physical proof rather than missing imagery. Exact Drive folder metadata was live-read on 2026-08-18 and matched `1Md8oCMsw4F9tZjQueNmQQ2dYR1I7JwZl`. Drive writes: `0`.
+
+## BLOCKED_REQUIRED_INPUT / DEFERRED_FINALIZATION
+
+- final title/theme/prompt copy;
+- final signer/name/date policy;
+- actual handwriting test with intended pen;
+- paper stock;
+- printer template/profile and exact bleed/export settings;
+- 100% physical proof.
+
+Do not invent final personal copy or signer details.
+
+## Result
+
+- clean-room independence: `PASS`
+- sellable visual: `PASS`
+- handwriting-area >=55%: `PASS`
+- native semantic editability: `PASS`
+- long-copy / internal-collision stress: `PASS`
+- legacy preservation: `PASS`
+- Drive authority: `PASS`
+- final content/physical proof: `BLOCKED_REQUIRED_INPUT / DEFERRED_FINALIZATION`
+- print readiness: `NO`
