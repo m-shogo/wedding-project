@@ -1,96 +1,77 @@
 # ADD-01 ウェルカムボード — QA
 
-Status: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / PRODUCTION_POLISHED / ROLLBACK_SAFE / FINAL_REAL_HERO_PHOTO_DEFERRED / NOT_PRINT_READY`
-Updated: 2026-08-15
+Status: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / LEGACY_PRODUCTION_RETAINED / CLEANROOM_V3_CANDIDATE_REFINED / REAL_PHOTO_COMPARISON_REQUIRED / NOT_PRINT_READY`
+Updated: 2026-08-18
 Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
+Start `main`: `3e9023c52f1633a77ee9700914b6614cb7c8abf9`
 
-The former 2026-08-02 `PLACEMENT_READY / PRODUCTION_QA_PASS` state is historical mechanical/asset evidence only. Live Figma production has since been rebuilt through the reopened visual-art-direction pass and is the current visual authority.
+## Live authority reconciliation
 
-## Current production authority
+The prior QA text treated retained production `1:3` as the only current visual authority. Live Figma readback now shows both the retained production and the newer clean-room V3 comparison candidate in the same non-Rurubu file. The clean-room candidate must not be lost or confused with the retained production.
 
-- Figma file key: `XyyTGuz6BMf8XRhPZZfdoT`
-- production root: `1:3 / FRAME_ADD_01_WELCOME_A2_PORTRAIT`
-- production size: `852 × 1200`, `clipsContent=true`
+- Figma file: `XyyTGuz6BMf8XRhPZZfdoT`
+- retained production: `1:3 / FRAME_ADD_01_WELCOME_A2_PORTRAIT`
+- clean-room V3 candidate: `19:3 / V3 / ADD-01 / PHOTO WINDOW POSTER / 852x1200`
+- clean-room V3 long-copy stress: `19:21`
+- V3 photo replacement-resilience QA: `22:8`
 - exact Drive folder: `1UT-s_z2KOnzNeq9cluqJ_Uxh-xDzO6Kg / ADD-01_ウェルカムボード`
-- current visual promotion evidence: `FIGMA-CLEANROOM-V2-PROMOTION-QA-2026-08-10.md`
-- semantic hero-label polish: `FIGMA-HERO-ROLE-SEMANTIC-POLISH-2026-08-13.md`
-- semantic/placeholder hierarchy and English-folio polish: `FIGMA-PLACEHOLDER-HIERARCHY-POLISH-2026-08-13.md`
 
-## Fresh 2026-08-15 visual / structure readback
+The retained production remains untouched as rollback/reference history. V3 is not promoted over it until a real couple photograph is placed and the final photo-led comparison is completed.
 
-Fresh native `852 × 1200` production screenshot still supports the sellable judgment:
+## Fresh V3 visual refinement — 2026-08-18
 
-- Japanese-led `ようこそ、旅の一日へ` remains the visual hierarchy anchor;
-- left editorial copy and tall right replaceable-photo field remain intentionally asymmetric;
-- the hero role is an empty/replaceable real-photo area, not an AI-generated couple depiction;
-- visible hero placeholder copy is semantic `[写真 · LAYOUT DUMMY]`, separated from the couple-name identity block below the image;
-- real-person identity text is not attached as a direct label over invented/non-person imagery;
-- the former generic `WELCOME BOARD 01` folio remains hidden;
-- no rounded cards, generic travel badge, fake airplane/stamp motif, shadow, gradient or web-UI container was reintroduced.
+Fresh whole-item and native `852×1200` screenshots showed two non-semantic English filler elements in the clean-room V3 candidate:
 
-Fresh live structure readback:
+- `19:10 / WELCOME TO OUR DAY`
+- `19:19 / YOKOHAMA / 2026`
 
-- root: `1:3`, 852 × 1200, `clipsContent=true`;
-- native text nodes: `10` total / `9` visible;
-- visible IMAGE-fill nodes: `1` — `8:2 / IMG_PAPER_TEXTURE_REPLACEABLE`, opacity ≈ `0.16`;
-- replaceable real-photo role: `7:30 / IMG_WELCOME_HERO_REPLACEABLE`, `474 × 744`;
-- `7:39 / TXT_FOLIO / WELCOME BOARD 01` reads back hidden;
-- no flattened/rasterized text replacement was introduced.
+They duplicated information already carried by the Japanese title/date/location hierarchy and weakened the Japanese-first editorial poster into a more generic wedding-template read. Current explicitly rejects excessive decorative English filler without a genuine reader-facing job.
 
-This fresh review also independently supports the neutral image-role safety principle that an unverified/non-person visual must not inherit a real-person identity label. No production change was required because the current ADD-01 composition already keeps the image role, placeholder label and couple-name identity block separate.
+Rollback copies were created before mutation:
 
-## Existing reopened evidence retained
+- `23:2 / ROLLBACK / ADD-01 V3 / PRE_ENGLISH_FILLER_SUBTRACTION / 2026-08-18`
+- `23:21 / ROLLBACK / ADD-01 V3 STRESS / PRE_ENGLISH_FILLER_SUBTRACTION / 2026-08-18`
 
-### Clean-room V2 / visual promotion
+The two filler nodes were hidden in the selected V3 candidate, and their counterparts were hidden in the long-copy stress. No layout group, photo role, arc vector, date, location, venue, couple-name placeholder, or subcopy role was removed.
 
-`FIGMA-CLEANROOM-V2-PROMOTION-QA-2026-08-10.md` remains the visual-composition authority for:
+Result at thumbnail and actual size:
 
-- replacement of the former centered generic wedding-template layout with the asymmetric editorial poster;
-- tall `474 × 744` replaceable real-photo role;
-- removal of the circular travel badge / generic centered `WELCOME` hierarchy;
-- Japanese-first title and bottom editorial identity block;
-- clean-room long-copy stress and production rollback.
+- Japanese `ようこそ。 / 旅の一日へ` becomes the unambiguous first read;
+- date/location/couple identity remain the right-side information anchor;
+- the large photo window still dominates the physical poster as intended;
+- no new icon, card, badge, shadow, gradient, or filler copy was introduced.
 
-### Semantic / hierarchy polish
+## Long-copy / structure readback
 
-Later bounded edits remain current:
+The hidden stress contained old internal suffixes in venue/name/subcopy test strings. Those were replaced with realistic long semantic test strings without `LAYOUT DUMMY`, preserving stress intent while removing proof-language leakage.
 
-- implementation label `[HERO PHOTO · REPLACEABLE]` → `[写真 · LAYOUT DUMMY]` without altering the replaceable image role;
-- unresolved couple name, venue and photo-caption proof metadata remains native editable semantic text with reduced auxiliary `LAYOUT DUMMY` hierarchy;
-- `WELCOME BOARD 01` was removed as non-semantic English series filler;
-- paper texture remains replaceable and subordinate rather than baked into text.
+Fresh readback:
 
-## Image / Drive decision
+- V3 candidate `19:3`: `852×1200`, visible native text `7`, outside text `0`, proof-language `0`, fixed-height <=12px text `0`;
+- V3 stress `19:21`: `852×1200`, visible native text `8`, outside text `0`, proof-language `0`, fixed-height <=12px text `0`;
+- the title/subtitle text bounding boxes overlap by ~2px because of font metrics, but fresh screenshots show no visible glyph collision; no geometry change was justified from numeric bounds alone;
+- replaceable real-photo role remains `19:4`, `514×720`;
+- variable names/venue/subcopy remain native editable text;
+- image-role replacement-resilience evidence in `22:8` remains valid.
 
-`IMAGE_GENERATION_NOT_REQUIRED` for this fresh run.
+## Drive / image decision
 
-The remaining large hero role is intentionally reserved for a **real couple photograph**. Generating bride/groom likeness as if it were the actual couple is prohibited and would reduce factual integrity. The current screenshot did not expose a missing non-person texture/background/collage problem that justifies another generated asset.
+Drive authority was read back live and remains `1UT-s_z2KOnzNeq9cluqJ_Uxh-xDzO6Kg`.
 
-Drive authority was re-read live and remains:
+Drive writes in this run: `0`.
 
-- `1UT-s_z2KOnzNeq9cluqJ_Uxh-xDzO6Kg / ADD-01_ウェルカムボード`
-- parent: `1iJGIzmNSlzwqrcv7P6UsNbstwBki1523`
-- Drive writes in this authority reconciliation: `0`.
+Image generation is still not appropriate for the main hero because it is reserved for the real couple photograph. Do not AI-generate bride/groom likeness as a substitute. The fixed paper/arc treatment did not show a screenshot-supported need for another generated asset.
 
-Historical WB-01〜WB-04 production-asset hashes, mechanical checks and Drive registration remain valid historical evidence; they are not used as proof of the current sellable composition.
+## Completion / deferred finalization
 
-## DEFERRED_FINALIZATION / NOT_PRINT_READY
+The retained production keeps its previous `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS` evidence. The clean-room V3 candidate is now structurally and visually cleaner, but final promotion still requires authoritative real-photo input.
 
-The sellable visual template is not final print data. Remaining finalization includes:
+Remaining:
 
-- select the actual couple photograph and verify crop at whole / reading / actual size;
-- confirm final couple-name and venue copy;
-- confirm physical A2/A3 choice, bleed/safe-area against the selected printer template and 100% print proof;
-- check stand/frame/installation interaction and final export.
+- select the actual couple photograph;
+- place it non-destructively in `19:4` and verify crop/focal point;
+- whole / reading / actual-size comparison against retained production `1:3` after real-photo placement;
+- confirm final couple names, venue copy, physical A2/A3 choice, printer bleed/safe area and installation proof;
+- promote V3 only if it clearly wins with the real photo.
 
-## Result
-
-- Reopened sellable visual QA: `PASS`
-- Current native structure / editability: `PASS`
-- Existing long-copy structural evidence: `PASS`
-- Real-person / image-role separation: `PASS`
-- Drive authority readback: `PASS`
-- Image generation: `NOT_REQUIRED`
-- Physical print proof: `NOT_RUN`
-- Print-ready: `NO`
-- Completion state: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS`
+Current result: `V3_FILLER_SUBTRACTION_PASS / V3_STRUCTURE_PASS / V3_LONG_COPY_PASS / PHOTO_ROLE_REPLACEMENT_RESILIENCE_PASS / REAL_PHOTO_COMPARISON_REQUIRED / LEGACY_PRESERVED / NOT_PRINT_READY`.
