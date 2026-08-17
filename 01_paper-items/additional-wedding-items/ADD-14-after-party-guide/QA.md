@@ -1,6 +1,6 @@
 # ADD-14 二次会案内 — QA
 
-Status: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / CLEANROOM_V3_SELECTED / A6_A5_LONG_COPY_STRESS_PASS / AUTO_HEIGHT_HARDENED / LEGACY_PRESERVED / BLOCKED_REQUIRED_INPUT / ROLLBACK_SAFE / NOT_PRINT_READY`
+Status: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / CLEANROOM_V3_SELECTED / A6_A5_LONG_COPY_STRESS_PASS / A6_ACTUAL_SIZE_READABILITY_HARDENED / AUTO_HEIGHT_HARDENED / LEGACY_PRESERVED / BLOCKED_REQUIRED_INPUT / ROLLBACK_SAFE / NOT_PRINT_READY`
 Updated: 2026-08-18
 Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
 
@@ -11,6 +11,7 @@ The legacy A6/A5 production previously described here is retained comparison / r
 Canonical evidence:
 
 - `FIGMA-CLEANROOM-V3-NIGHT-FIELD-QA-2026-08-17.md`
+- `A6-ACTUAL-SIZE-READABILITY-HARDENING-2026-08-18.md`
 - later guest-copy / proof-language and auto-height hardening evidence retained in the ADD-14 item history.
 
 Live authority:
@@ -22,6 +23,8 @@ Live authority:
 - hidden long-copy A6: `33:2`
 - hidden long-copy A5: `33:28`
 - auto-height rollback: `41:2`
+- A6 pre-readability rollback: `44:2`
+- A6 stress pre-readability rollback: `44:29`
 - retained legacy production: A6 `1:2`, A5 `1:18` — comparison/history only
 - Drive folder: `ADD-14_二次会案内 / 1Oq2Pz2mYo4oaDnO7LMezMrCUizcxaEjs`
 
@@ -55,6 +58,21 @@ Current post-hardening readback evidence for `32:3 / 32:29 / 33:2 / 33:28`:
 - visible text outside root: `0`;
 - IMAGE fills: `0`;
 - realistic long-copy stress: `PASS`.
+
+### A6 actual-size readability hardening — 2026-08-18
+
+Fresh native A6 review found that `TXT_ACCESS / TXT_FEE / TXT_RSVP_DEADLINE` were only `9 px / 14`, which read as microcopy relative to the physical A6 working size.
+
+A rollback-safe 11 px test first exposed long-copy overflow, so the solution was not to shrink the type again. The A6 lower information area was rebalanced by expected text mass:
+
+- practical body copy: `9 px / 14` → `11 px / 16`;
+- lower grid y: `338` → `330`;
+- access width: `260` → `220`;
+- fee width: `110` → `120`;
+- RSVP/contact width: `110` → `140`;
+- existing 20 px gaps preserved.
+
+Selected A6 now ends the lower grid at `385 / 420`. Realistic stress `33:2` ends at `417 / 420`, with visible text outside root `0`. Native `592×420` screenshot review confirms improved practical-copy readability without weakening the headline/time hierarchy.
 
 The lower information architecture intentionally uses unequal semantic widths because access, fee and RSVP/contact have different expected text mass.
 
@@ -92,6 +110,7 @@ Printer template/profile, exact bleed/safe area, QR device scan proof if used, a
 - clean-room independence: `PASS`
 - sellable visual: `PASS`
 - A6/A5 long-copy resilience: `PASS`
+- A6 actual-size practical-copy readability: `PASS`
 - native semantic editability: `PASS`
 - auto-height hardening: `PASS`
 - legacy preservation: `PASS`
