@@ -6,10 +6,11 @@ State: `VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`
 
 ## Visible problem
 
-Two different Rurubu photo roles were structurally correct and already passed image/provenance checks, but their captions still reduced perceived finish:
+Several Rurubu photo roles were structurally correct and already passed image/provenance checks, but their captions still reduced perceived finish:
 
 1. Profile's three-photo memory cluster used 9px English metadata, so the photos read partly like placed assets rather than a deliberate editorial sequence.
 2. Outer cover's small rotated postcard used a 9px dark caption over photography, making the caption barely readable at actual size.
+3. Story's small `NEXT DESTINATION / YOKOHAMA` support-photo caption was only 8.5px and became too weak beside the dominant hero and large Japanese story typography.
 
 ## Root-cause hypothesis
 
@@ -26,6 +27,17 @@ The first 03-caption placement failed structural QA by colliding with profile da
 ### Outer / AC
 
 Rollback-safe AC changed only the small postcard caption: 9px dark → 10.5px white with restrained shadow and a better in-photo position. No photo geometry, image hash, masthead, cover hierarchy, or back cover changed.
+
+### Story / DB — receiving role verification inside the same Rurubu item
+
+After AC/DA, the same hypothesis was tested on a materially different photo role rather than copied blindly. DB changed only Story's small support-photo caption:
+
+- 8.5px → 10.5px;
+- native text remained editable;
+- white text + restrained shadow improved contrast over photography;
+- photo geometry, image hash, Story hero, lower feature photo, chronology page, and all factual copy remained unchanged.
+
+This independently reproduced the benefit on a different page/role while preserving the existing Story composition.
 
 ## Expected improvement
 
@@ -60,14 +72,22 @@ Outer AC:
 - front text collisions 0;
 - 18px text safe-area risks 0.
 
+Story DB:
+
+- reading spread 1000×708 PASS;
+- actual-size Story 794×1123 PASS;
+- Story text collisions 0;
+- 18px text safe-area risks 0;
+- chronology geometry/content unchanged from CY.
+
 ## Figma / Drive / GitHub evidence
 
 Figma file: `bfM0d4c9dCeBv5pCkJ3TNM`
 
 - AC `1614:2`, front `1614:47`, postcard caption `1614:58`;
 - DA `1612:2`, Profile `1612:3`, captions `1612:32 / 1612:33 / 1612:34`;
-- prior Outer AB `1607:2` and Profile/Q&A CZ `1609:2` preserved as hidden rollback;
-- Story/Chronology CY `1601:81` unchanged.
+- DB `1615:2`, Story `1615:3`, support caption `1615:19`;
+- prior Outer AB `1607:2`, Profile/Q&A CZ `1609:2`, and Story/Chronology CY `1601:81` preserved as hidden rollback.
 
 Drive authority re-read:
 
@@ -75,19 +95,21 @@ Drive authority re-read:
 
 GitHub evidence:
 
-- `01_paper-items/rurubu-wedding/evidence/RURUBU-V6-AC-DA-CY-PHOTO-CAPTION-HIERARCHY-QA-2026-08-17.md`.
+- `01_paper-items/rurubu-wedding/evidence/RURUBU-V6-AC-DA-CY-PHOTO-CAPTION-HIERARCHY-QA-2026-08-17.md`;
+- DB-specific Story support-caption evidence is recorded in the same run feedback/current-status chain.
 
 ## Adopted / rejected / blocked
 
 - DA: adopted after one rejected caption placement and correction.
 - AC: adopted.
+- DB: adopted after actual-size + structural QA.
 - new image generation: 0.
 - new Drive write: 0.
 - generated decoration adoption: 0.
 
 ## What must remain Rurubu-specific
 
-Do not transfer the exact `01/02/03` wording, magenta/cyan/navy palette, postcard placement, Japanese travel-magazine grammar, photo choices, or specific caption coordinates.
+Do not transfer the exact `01/02/03` wording, magenta/cyan/navy palette, postcard placement, Story caption placement, Japanese travel-magazine grammar, photo choices, or specific caption coordinates.
 
 ## Cross-item applicability hypothesis
 
