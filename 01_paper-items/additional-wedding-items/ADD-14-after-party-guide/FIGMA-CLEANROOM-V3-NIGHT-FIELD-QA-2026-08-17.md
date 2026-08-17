@@ -1,8 +1,7 @@
 # ADD-14 二次会案内 — Clean-room V3 Night Field QA
 
-Status: `CLEANROOM_V3_SELECTED_CANDIDATE / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / A6_A5_LONG_COPY_STRESS_PASS / LEGACY_PRESERVED / BLOCKED_REQUIRED_INPUT / NOT_PRINT_READY`
+Status: `CLEANROOM_V3_SELECTED_CANDIDATE / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / A6_A5_LONG_COPY_STRESS_PASS / AUTO_HEIGHT_HARDENED / LEGACY_PRESERVED / BLOCKED_REQUIRED_INPUT / NOT_PRINT_READY`
 Date: 2026-08-17
-Start authority SHA: `e92809ac9f7f43b92bab4397ff218f6c2b1e9def`
 
 ## Authority
 
@@ -15,6 +14,7 @@ Start authority SHA: `e92809ac9f7f43b92bab4397ff218f6c2b1e9def`
 - V3 A5: `32:29`
 - hidden stress A6: `33:2`
 - hidden stress A5: `33:28`
+- auto-height rollback section: `41:2`
 
 ## Clean-room contract
 
@@ -24,7 +24,7 @@ No legacy production screenshot was opened until both V3 sizes and realistic lon
 
 ## V3 art direction
 
-The new direction uses a continuous deep-night field rather than a cream page with a bounded side slab:
+The selected direction uses a continuous deep-night field:
 
 - full deep-navy paper field;
 - warm ivory Japanese serif headline;
@@ -33,74 +33,46 @@ The new direction uses a continuous deep-night field rather than a cream page wi
 - venue/address as one native hierarchy block;
 - lower access/fee/RSVP information is direct typography, not equal rounded cards;
 - no shadows, gradients, fake neon, alcohol motifs, generic travel icons, or decorative English filler;
-- no raster/image fills; all variable/factual copy remains native editable text;
-- unresolved title and facts remain explicit `LAYOUT DUMMY` semantics.
+- no raster/image fills; all variable/factual copy remains native editable text.
 
-## Visual QA and repairs before legacy comparison
+## Structural repairs and long-copy QA
 
-Initial whole-item screenshots exposed real failures rather than receiving cosmetic polish:
+Earlier clean-room QA repaired clipped lower information, end-time trim overflow, venue/address collision, and equal-column failure under realistic copy. Final lower structure uses unequal semantic columns sized by content mass.
 
-1. lower access/fee/RSVP content was clipped below A6/A5 trim;
-2. rightmost end-time text extended outside the root;
-3. realistic long venue copy collided with the address;
-4. long access and RSVP/contact copy did not fit the first equal three-column lower row.
+### 2026-08-17 auto-height hardening
 
-The repair was structural:
+A later live structure audit found a hidden robustness defect: multiple visible native text roles still used `textAutoResize=NONE` with a nominal `10px` box height even though screenshots rendered acceptably. This left the selected candidate vulnerable to clipping when copy/font metrics change and made the Figma structure inconsistent with the project's native-editability contract.
 
-- venue name + address moved into native vertical auto-layout `GROUP / VENUE STACK V3`;
-- end-time label/value were moved inward from trim;
-- lower information was rebuilt instead of micro-shifted;
-- the first nested access + fee/RSVP experiment still failed under stress and was rejected;
-- final lower structure uses three **unequal** horizontal semantic columns sized by content mass: wide access/notice, compact fee, compact RSVP/contact;
-- A5 lower variable-copy typography was optically reduced only enough to keep the realistic stress inside trim.
+Before editing, A6/A5 and both stress roots were copied into hidden rollback section `41:2`. The affected text roles were changed from fixed-height to native `HEIGHT` auto-resize without changing copy, coordinates, typography, route geometry, or legacy production.
 
-This avoids equal admin-card logic while protecting actual variable-copy mass.
+Examples:
 
-## Long-copy stress
+- A6 headline `32:5`: `10px fixed → 54px auto-height`;
+- A6 reception time `32:12`: `10px fixed → 26px auto-height`;
+- A5 headline `32:31`: `10px fixed → 77px auto-height`;
+- A5 reception time `32:38`: `10px fixed → 37px auto-height`;
+- route labels and the corresponding stress-clone labels were hardened the same way.
 
-Stress inputs included a long Yokohama venue name, full address, real-form time strings, multi-line walking/access instructions, fee/payment text, RSVP deadline, and an emergency contact placeholder.
+Post-readback across `32:3 / 32:29 / 33:2 / 33:28`:
 
-Final structure readback:
+- remaining visible `textAutoResize=NONE` nodes with height <=12px: `0`;
+- visible proof-language (`LAYOUT DUMMY / PROOF / TEMP / QA / EDITORIAL NOTE`): `0`;
+- visible text outside root: `0`;
+- IMAGE fills remain `0`;
+- long-copy stress remains inside trim.
 
-### A6 `32:3`
-- size: `592×420`
-- visible native text: `17`
-- IMAGE fills: `0`
-- visible text outside root: `0`
-
-### A5 `32:29`
-- size: `840×592`
-- visible native text: `17`
-- IMAGE fills: `0`
-- visible text outside root: `0`
-
-### stress clones
-- A6 `33:2`: visible text outside root `0`
-- A5 `33:28`: visible text outside root `0`
-- final screenshot review: no venue/address collision, no time/lower-grid collision, no clipped access/RSVP/contact text.
-- both stress clones are retained hidden after verification.
+Fresh A6 and A5 screenshots after the repair preserve the selected hierarchy and route composition at native size.
 
 ## Three-scale visual QA
 
-- whole / thumbnail: PASS; first read is `二次会のご案内 → 夜のつづきへ。 → venue → time axis`;
-- reading scale: PASS; time nodes and the three lower semantic roles stay distinct without UI-card segmentation;
-- actual-size A6/A5: PASS; dark-field typography remains readable and the mint route stays subordinate;
-- realistic long-copy stress: PASS after structural repairs.
+- whole / thumbnail: PASS; first read remains `二次会のご案内 → 夜のつづきへ。 → venue → time axis`;
+- reading scale: PASS; time nodes and lower semantic roles stay distinct without UI-card segmentation;
+- actual-size A6/A5: PASS after auto-height hardening;
+- realistic long-copy stress: PASS.
 
-## Legacy comparison — only after V3 completion
+## Legacy comparison
 
-Legacy A6 `1:2` and A5 `1:18` were opened only after the V3/stress gate passed.
-
-Legacy remains refined and editorial, especially its cream negative space and Japanese headline. V3 is materially different rather than a restyle: it uses the current SPEC's late-night concept as the paper field itself, creates a clearer first-glance time route, and removes the older bounded-side-slab silhouette.
-
-V3 is selected as the clean-room candidate because:
-
-- the night-specific art direction is stronger and more item-specific;
-- the route/time hierarchy reads faster at thumbnail scale;
-- venue/access/fee/RSVP/contact semantics survive realistic long copy without turning into form cards;
-- the composition does not depend on an optional/fake QR placeholder for balance.
-
-Legacy production is preserved unchanged and remains rollback/reference evidence.
+Legacy A6 `1:2` and A5 `1:18` were originally opened only after the V3/stress gate passed. V3 remains the selected clean-room candidate: its night-specific art direction and time-route hierarchy are materially different and stronger for the item role. Legacy production remains preserved unchanged.
 
 ## Hybrid authoring / asset decision
 
@@ -111,20 +83,10 @@ Legacy production is preserved unchanged and remains rollback/reference evidence
 - image fills: `0`;
 - Drive writes: `0`.
 
-The screenshot-supported defect was hierarchy and long-copy structure, not missing imagery.
+The current defect was native-text robustness, not missing imagery.
 
 ## Deferred / blocked input
 
-Final adoption still requires authoritative event facts:
-
-- whether a second party will actually be held;
-- final venue/address/floor;
-- reception/start/end times;
-- access and travel time;
-- fee/payment method;
-- RSVP method/deadline;
-- contact/notice policy;
-- final QR destination if QR is used;
-- vendor proof / physical print check.
+Final adoption still requires authoritative event facts: whether a second party will actually be held, final venue/address/floor, reception/start/end times, access/travel time, fee/payment method, RSVP method/deadline, contact/notice policy, final QR destination if used, and vendor/physical print proof.
 
 Until those exist, keep `BLOCKED_REQUIRED_INPUT / NOT_PRINT_READY` and do not invent final values.
