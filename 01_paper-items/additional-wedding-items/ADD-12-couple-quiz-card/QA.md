@@ -1,178 +1,84 @@
 # ADD-12 新郎新婦クイズカード — QA
 
-Status: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / V4_1_ADAPTIVE_BALLOT / LONG_COPY_STRESS_PASS / ROLLBACK_SAFE / NOT_PRINT_READY`
-Date: 2026-08-14
+Status: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / CLEANROOM_V3_SELECTED / OPEN_QUADRANTS_POLISH_PASS / LONG_COPY_STRESS_PASS / LEGACY_PRESERVED / ROLLBACK_SAFE / NOT_PRINT_READY`
+Updated: 2026-08-18
+Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
 
-## Current production authority
+## Current selected authority
 
-- Current authority: `docs/automation/non-rurubu-figma-quality-current.md` = `ACTIVE / HOURLY / FIGMA_EDIT_ALLOWED / VISUAL_REOPENED`
-- Figma file: `ADD-12 新郎新婦クイズカード`
+The older V4.1 legacy-production authority in this file is superseded for the reopened clean-room visual pass. The selected current design is the independently built clean-room V3 documented in:
+
+- `CLEANROOM-V3-EDITORIAL-QUADRANTS-QA-2026-08-16.md`
+- `CLEANROOM-V3-GUEST-COPY-CLEANUP-2026-08-17.md`
+- `FIGMA-STRESS-PROOF-LANGUAGE-CLEANUP-2026-08-17.md`
+- `CLEANROOM-V3-OPEN-QUADRANTS-POLISH-2026-08-18.md`
+
+Live authority:
+
 - Figma file key: `oZ24SbwGkeAfFJcXlbxCoD`
-- Figma URL: `https://www.figma.com/design/oZ24SbwGkeAfFJcXlbxCoD`
+- selected page: `26:2 / SELECTED / CLEANROOM / ADD-12 / V3 EDITORIAL QUADRANTS / 2026-08-16`
+- selected front: `26:3 / ADD12/QuizCard/Front/CleanroomV3`
+- selected back: `26:4 / ADD12/QuizCard/Back/CleanroomV3`
+- hidden long-copy front: `27:51`
+- hidden long-copy back: `27:83`
+- retained legacy production: `1:2 / 1:26` — comparison / rollback history only
 - Drive folder: `ADD-12_新郎新婦クイズカード`
-- Drive folder ID: `1LUanrHk9_lhZcSqf95ybgWH29_bmcfvZ`
-- Drive parent ID: `0ADXt8irGMFGnUk9PVA`
-- reopened visual authority: `FIGMA-REOPENED-VISUAL-QA-2026-08-10.md`
-- V3 authority: `FIGMA-V3-OPEN-BALLOT-REFINEMENT-2026-08-12.md`
-- current V4/V4.1 authority: `FIGMA-V4-BALLOT-RHYTHM-2026-08-14.md`
-
-## Production frames
-
-- `1:2` — `ADD12/QuizCard/Front` — 620 × 875
-- `1:26` — `ADD12/QuizCard/Back` — 620 × 875
-
-The production remains a design/proportion authority. Exact A6 output, bleed, printer profile, duplex direction and physical stock proof remain finalization work.
+- Drive ID: `1LUanrHk9_lhZcSqf95ybgWH29_bmcfvZ`
 
 ## Current visual direction
 
-The current design keeps the selected V3 stationery direction:
+Front uses Japanese-first hierarchy, `Q.01` + native semantic `[設問]`, and four equal A–D response roles in a 2×2 editorial field. It does not use a radio-button list, rounded cards, shadows, pills, quiz-show icons, ticket/passport grammar or AI-person imagery. Each answer keeps native editable text and a short handwriting-selection rule.
 
-- warm ivory paper, deep navy typography and restrained rust/mint accents;
-- Japanese title/question hierarchy first;
-- equal circular hand-mark targets rather than buttons/cards;
-- back uses five native writing rules of intentionally decreasing length instead of a large form-like box;
-- no photos, AI-generated people, quiz-show icons, speech bubbles, gradients, shadows, badges, rounded cards or travel clichés.
+On 2026-08-18 the four complete quadrant border strokes were removed because spacing + A–D labels + writing rules already carried the functional grouping; the boxes added unnecessary UI-card feel at thumbnail scale.
 
-The V4 goal was to use the lower field more deliberately. A fixed `42px` choice gap looked better with short placeholder copy but failed long-copy revalidation. V4.1 therefore keeps the improved paper rhythm with an adaptive native auto-layout field rather than a fixed large gap.
+Back keeps the mint opening field, native `[回答方法]`, `[記名欄]`, `[メッセージ]` roles and one large open handwriting area. It has no raster/image dependency.
 
-## V4.1 adaptive ballot authority — 2026-08-14
+## Fresh visual QA — 2026-08-18
 
-Fresh rollback created before the adaptive production edit:
+Front `26:3` was reviewed at 500px whole-item scale and native `620×875` reading/detail scale. The open-quadrant version retains equal answer weighting while reading less like a dashboard/form. Back `26:4` was live-read and remains coherent with the selected V3 family.
 
-- `20:2 / ROLLBACK_ADD12_FRONT_PRE_ADAPTIVE_BALLOT_V41_2026_08_14` (`visible=false`)
+## Structure / editability
 
-Earlier rollback remains:
-
-- `18:2 / ROLLBACK_ADD12_FRONT_PRE_BALLOT_RHYTHM_V4_2026_08_14`
-
-Production root `1:2` remains stable.
-
-Current `11:52 / ADD12/Choices/Flow`:
-
-- native vertical auto-layout;
-- fixed height `270px`;
-- `primaryAxisSizingMode=FIXED`;
-- `primaryAxisAlignItems=SPACE_BETWEEN`.
-
-This allows short 30px choice rows to breathe while longer 60px wrapped rows automatically use tighter spacing.
-
-No wording, facts, answer, choice count, font size, hand-mark geometry, semantic role, color, image, or back-side content changed.
-
-## Fresh screenshot QA
-
-Production front `1:2` was rendered at native `620 × 875` after the V4.1 change.
-
-Result:
-
-- the four short placeholder choices still occupy the paper with deliberate ballot rhythm;
-- the lower field no longer reads as unused template space;
-- choice weighting remains equal;
-- answer-method text remains subordinate;
-- Japanese title/question hierarchy and date/footer remain clear;
-- no web-UI/card treatment or decorative filler was introduced.
-
-## Long-copy stress
-
-### Historical V3 evidence
-
-V3 stress remains valid historical evidence that `ADD12/Question/ContentFlow=580px` is required for longer Japanese content.
-
-### V4 failure found
-
-Stress `18:27 / QA_ADD12_V4_BALLOT_RHYTHM_LONG_COPY_2026_08_14` proved that the fixed `42px` V4 gap was not robust. With four 60px wrapped rows the choices flow became `366px`; the final answer method extended to bottom `620px` inside the `580px` clipping content flow.
-
-This was treated as a real regression and fixed rather than ignored.
-
-### V4.1 stress PASS
-
-The same stress proof was updated to the adaptive `270px / SPACE_BETWEEN` choice field, temporarily exposed only for screenshot QA, then returned to `visible=false`.
-
-Fresh native-size screenshot showed the long question, all four long choices and the answer-method copy fully visible.
-
-Structural readback:
-
-- stress content flow: `580px`, `clipsContent=true`
-- choices flow: `270px`, `FIXED`, `SPACE_BETWEEN`
-- four stress rows: `60px` each
-- row y positions: `0 / 70 / 140 / 210`
-- effective long-copy gaps: `10px`
-- final choice bottom: `270px`
-- answer method: `y=476`, `height=48`, bottom=`524`
-- content-flow fit: `PASS` (`524 <= 580`)
-
-## Semantic placeholder policy
-
-No actual question, correct answer, final choice count, collection method, prize rule, anonymity rule, aggregation timing or QR method was invented.
-
-Production continues to use native editable semantic placeholders. Four choices remain candidate roles because the SPEC defines A–D; unused choices must be removed only after authoritative final content exists.
-
-## Structure QA
-
-### Front `1:2`
-
-- 620 × 875, `clipsContent=true`
-- native text: `10`
+- front root: `620×875`
+- back root: `620×875`
 - IMAGE fills: `0`
-- text outside root: `0`
-- `ADD12/Question/ContentFlow`: `580px`, native vertical auto-layout
-- `ADD12/Choices/Flow`: `270px`, native vertical auto-layout, `FIXED / SPACE_BETWEEN`
-- all four choices remain native editable text with equal hand-mark semantics
+- question / choices / answer method / name / message remain native editable semantic text
+- answer roles: 4 equal semantic roles
+- retained legacy production overwritten/deleted: `NO`
 
-### Back `1:26`
+Long-copy roots `27:51 / 27:83` remain current stress authority. The 2026-08-18 change altered only quadrant frame strokes and was mirrored to the front stress proof, so prior long-copy fit evidence remains valid.
 
-Unchanged from verified V3 authority:
+## Rollback / QA evidence
 
-- 620 × 875, `clipsContent=true`
-- native text: `7`
-- IMAGE fills: `0`
-- text outside root: `0`
-- open ruled message field remains native vector structure.
+- comparison: `33:2 / QA / ADD12 / OPEN QUADRANTS / 2026-08-18` (`visible=false` after promotion)
+- rollback selected front: `34:2 / ROLLBACK / ADD12 / FRONT / PRE_OPEN_QUADRANTS / 2026-08-18`
+- rollback stress front: `34:34 / ROLLBACK / ADD12 / STRESS FRONT / PRE_OPEN_QUADRANTS / 2026-08-18`
 
-No flatten/raster replacement was introduced.
+Older rejected clean-room V2 and retained legacy production remain intact.
 
 ## Image / Drive decision
 
 `IMAGE_GENERATION_NOT_REQUIRED_FOR_THIS_ITEM`.
 
-The screenshot-supported weakness was ballot rhythm/adaptability, not missing imagery. Drive writes for this run: `0`. Exact Drive folder metadata was re-read live before Figma write and matched the registered non-Rurubu authority.
+The defect was unnecessary containment, not missing imagery. Exact Drive authority was live-read and matched `1LUanrHk9_lhZcSqf95ybgWH29_bmcfvZ`. Drive writes for this polish: `0`.
 
 ## BLOCKED_REQUIRED_INPUT
 
-These final content decisions remain required but do not block visual progression:
-
-- authoritative question text and correct answer;
-- authoritative final number of choices;
-- response collection method and deadline;
-- named vs anonymous participation;
-- prize / lottery existence and rules;
-- aggregation/result-announcement timing;
-- whether any QR response mechanism is actually used;
-- final back-side wording and whether name/message fields are retained.
+Final content still requires authoritative question/correct answer, final choice count, response collection/deadline, named vs anonymous participation, prize rules if any, result timing, whether QR is used, and final back-side wording. Do not fabricate these values.
 
 ## DEFERRED_FINALIZATION
 
-- exact 105 × 148 mm A6 production sizing and 3 mm bleed in the printer/vendor template;
-- final trim/safe-area confirmation;
-- duplex orientation proof;
-- minimum line-weight proof on selected stock/printer;
-- handwriting test;
-- 100% physical print proof;
-- show-through/post-trim crowding check;
-- final PDF / print PNG / optional imposition export and Drive storage.
+Printer/vendor A6 template and bleed, trim/safe-area, duplex orientation, line-weight/handwriting proof, physical print proof, final PDF/export and Drive storage remain deferred.
 
 ## Result
 
-- V4 fixed-gap regression detection: `PASS`
-- V4.1 adaptive ballot production edit: `PASS`
-- Reopened sellable visual screenshot QA: `PASS`
-- Whole / reading / actual-size visual QA: `PASS_WITH_PLACEHOLDERS`
-- V4.1 long-copy screenshot QA: `PASS`
-- V4.1 long-copy structure QA: `PASS`
-- Choice fairness visual QA: `PASS`
-- Native semantic editability: `PASS`
-- Rollback evidence: `PASS`
-- Drive authority readback: `PASS`
-- Final content verification: `BLOCKED_REQUIRED_INPUT`
-- Physical/mechanical proof: `NOT_RUN`
-- Print-ready: `NO`
-- Completion state: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS`
+- clean-room independence: `PASS`
+- sellable visual: `PASS`
+- open-quadrant UI-subtraction polish: `PASS`
+- native semantic editability: `PASS`
+- long-copy evidence: `PASS`
+- rollback safety: `PASS`
+- Drive authority: `PASS`
+- legacy preservation: `PASS`
+- final factual/content verification: `BLOCKED_REQUIRED_INPUT`
+- print readiness: `NO`
