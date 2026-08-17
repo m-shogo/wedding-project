@@ -1,6 +1,6 @@
 # ADD-16 両親贈呈品メッセージカード — QA
 
-Status: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / CLEANROOM_V3_SELECTED / LONG_COPY_STRESS_PASS / AUTO_HEIGHT_HARDENED / LEGACY_PRESERVED / ROLLBACK_SAFE / NOT_PRINT_READY`
+Status: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / CLEANROOM_V3_SELECTED / OPEN_HANDWRITTEN_AREA_POLISHED / LONG_COPY_STRESS_PASS / AUTO_HEIGHT_HARDENED / LEGACY_PRESERVED / ROLLBACK_SAFE / NOT_PRINT_READY`
 Updated: 2026-08-18
 Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
 
@@ -11,6 +11,7 @@ The older production `1:2 / 1:13` previously described in this file is retained 
 Canonical evidence:
 
 - `FIGMA-CLEANROOM-V3-HOME-HORIZON-QA-2026-08-17.md`
+- `OPEN-HANDWRITTEN-SIGNATURE-AREA-QA-2026-08-18.md`
 - subsequent guest-copy / placeholder-status cleanup and native-text auto-height hardening records in the ADD-16 item history.
 
 Live authority:
@@ -21,6 +22,8 @@ Live authority:
 - selected back: `18:14`
 - hidden long-copy front: `18:26`
 - hidden long-copy back: `18:37`
+- open-signature rollback: `28:14`
+- open-signature stress rollback: `28:26`
 - retained legacy production: front `1:2`, back `1:13` — comparison/history only
 - Drive folder: `ADD-16_両親贈呈品メッセージカード / 1BOyETtL1_loGXNjGV9S30sJKEhZNjd6O`
 
@@ -36,7 +39,7 @@ Live authority:
 - no certificate symmetry, side slab, hearts, houses, airplanes, family photos, rounded cards, shadows or script-font decoration;
 - all family-specific/final copy stays native semantic text.
 
-Fresh 2026-08-18 whole-item screenshot reconfirmed the selected front hierarchy without a new screenshot-supported visual defect.
+The optional handwritten-signature role on the back now uses an open paper field instead of a complete visible rectangle. The semantic `260×120` writing-area geometry and native `自筆署名欄（任意）` label remain in Figma, so editability is preserved without printing a form-like box.
 
 ## Structure / long-copy QA
 
@@ -51,9 +54,11 @@ Fresh 2026-08-18 whole-item screenshot reconfirmed the selected front hierarchy 
 - working size: `700×1036`
 - IMAGE fills: `0`
 - visible text outside root: `0`
-- message body remains native auto-layout so approved Japanese copy can grow without a fixed-height raster/text block.
+- message body remains native auto-layout so approved Japanese copy can grow without a fixed-height raster/text block;
+- `AREA_HANDWRITTEN_SIGNATURE`: `260×120`, visible stroke `0`, semantic geometry retained;
+- native label `自筆署名欄（任意）` retained.
 
-Hidden stress `18:26 / 18:37` uses long recipient, multi-paragraph gratitude body, longer optional metaphor and long couple-signature strings. Existing stress evidence passes without recipient/title collision, body overflow, route/footer collision or signature escape.
+Hidden stress `18:26 / 18:37` uses long recipient, multi-paragraph gratitude body, longer optional metaphor and long couple-signature strings. Actual-size `700×1036` review after the open-area change still passes with visible text outside root `0` and no signature-area collision.
 
 Later structural hardening removed nominal fixed-height native-text boxes while preserving the selected composition and stress result.
 
@@ -87,6 +92,7 @@ Still unresolved:
 - clean-room independence: `PASS`
 - sellable visual: `PASS`
 - native semantic editability: `PASS`
+- open handwritten-signature area: `PASS`
 - long-copy stress: `PASS`
 - auto-height hardening: `PASS`
 - family-safety / no fabricated facts: `PASS`
