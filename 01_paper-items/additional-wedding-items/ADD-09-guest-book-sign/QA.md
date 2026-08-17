@@ -1,88 +1,99 @@
 # ADD-09 ゲストブックサイン — QA
 
-Status: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / LONG_COPY_STRESS_PASS / ROLLBACK_SAFE / NOT_PRINT_READY`
-Date: 2026-08-15
+Status: `CURRENT / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / CLEANROOM_V4_SELECTED / LONG_COPY_STRESS_PASS / LEGACY_PRESERVED / NOT_PRINT_READY`
+Updated: 2026-08-18
+Authority: GitHub latest `main` + `docs/automation/non-rurubu-figma-quality-current.md`
 
 ## Current authority
 
-- Current: `docs/automation/non-rurubu-figma-quality-current.md` → `ACTIVE / FIGMA_EDIT_ALLOWED / VISUAL_REOPENED`
 - Figma file: `PjFWBpDwaQM5LfvgdqSFvU`
-- page: `01_PRODUCTION`
-- production: `1:3 / FRAME_ADD09_GUEST_BOOK_SIGN`
-- exact Drive authority: `1D259ugx13El0JYxvn8yyskIjc2c2liF4 / ADD-09_ゲストブックサイン`
-- reopened visual evidence: `01_paper-items/additional-wedding-items/ADD-09-guest-book-sign/FIGMA-REOPENED-VISUAL-QA-2026-08-10.md`
+- selected clean-room V4: `16:3 / CLEANROOM_ADD09_V4_JOURNEY_LINE`
+- long-copy stress: `17:4 / QA_CLEANROOM_ADD09_V4_LONG_COPY_STRESS`
+- retained legacy production: `1:3 / FRAME_ADD09_GUEST_BOOK_SIGN`
+- Drive authority: `1D259ugx13El0JYxvn8yyskIjc2c2liF4 / ADD-09_ゲストブックサイン`
 
-This file supersedes the old 2026-08-02 `PASS / PREPARED_FOR_FIGMA` planning snapshot.
+Retained production `1:3` is historical rollback/comparison evidence only. The clean-room V4 is the current selected sellable candidate and must be used for future non-Rurubu QA/finalization work.
 
-## Fresh visual spot-check — 2026-08-12
+## Clean-room V4 direction
 
-Fresh live screenshot review of production `1:3` confirmed the promoted bookplate/editorial direction meets the reopened sellable gate: Japanese headline `旅の記録に、一言を。` is the primary visual event; the deep-navy left spine gives the sign a physical guest-book identity; `GUEST BOOK` remains subordinate metadata; instruction and operational placeholders remain native editable text; and three restrained writing rules support the guest-book role without becoming form/UI boxes.
+V4 was created from a blank frame under the current zero-reuse mandate. It does not use the retained production as a component/layout source.
 
-## Rollback-safe English filler removal — 2026-08-14
+Current V4 characteristics:
 
-Observed latest `main` immediately before evidence write: `2df777806cd62e8f9942e45a44bc6d8d9ac798d4`.
+- working canvas `1000×1419`;
+- Japanese headline `旅の記録に、一言を。` is the first visual read;
+- native date `2026.10.24` remains editable;
+- large fixed-art journey line provides a distinct guest-book identity without card/dashboard UI;
+- lower operational roles remain native semantic placeholders;
+- raster IMAGE fill count `0`;
+- legacy remains untouched.
 
-Fresh actual-size production review at `1000 × 1419` found one remaining template-like repetition in the navy spine: `GUEST / BOOK / ARCHIVE`. The small top `GUEST BOOK` label already communicates the English role, while the Japanese hero carries the guest-facing hierarchy. The spine mark therefore repeated the same concept as decorative English filler rather than useful information.
+Earlier V2/V3 studies and retained production remain comparison/history only.
 
-Rollback-safe proof was created before mutation:
+## 2026-08-18 guest-facing placeholder cleanup
 
-- `11:2 / ROLLBACK_ADD09_PRE_SPINE_FILLER_REMOVAL_2026_08_14` (`visible=false`)
+Detailed evidence:
 
-Production root remained `1:3`. Only `5:35 / TXT_SPINE_MARK` was hidden. No Japanese guest-facing copy, semantic placeholder, writing rule, footer, safe-area geometry, or installation wording was changed.
+- `FIGMA-CLEANROOM-V4-PROOF-LANGUAGE-CLEANUP-2026-08-18.md`
 
-Post-write actual-size screenshot QA: PASS.
+Fresh actual-size screenshot showed three internal authoring strings still visible inside the selected V4:
 
-- the navy spine now reads as a quieter physical book-spine field rather than a template branding rail;
-- the Japanese headline, instruction hierarchy and three writing rules remain visually dominant;
-- the small top `GUEST BOOK` role label remains available without redundant English repetition;
-- no dashboard/card feel, image insertion, gradient, shadow or replacement decoration was introduced.
+- `[記帳案内 · LAYOUT DUMMY]`
+- `[記帳方法・ペン位置・設置案内 · LAYOUT DUMMY]`
+- `[設置場所・補足情報 · LAYOUT DUMMY]`
 
-## Fresh semantic-placeholder polish — 2026-08-15
+Rollback-safe selected copy was preserved at:
 
-Observed latest `main` immediately before the bounded production write: `7bff1c10baf81591d64e80a80bb356bdfa569313`.
+- `21:2 / ROLLBACK_ADD09_V4_PRE_PROOF_LANGUAGE_CLEANUP_2026_08_18`
 
-Fresh `1000 × 1419` actual-size review found one remaining authoring-style operational placeholder in the lower instruction block: `5:42 / TXT_NOTE / [記入方法・設置場所 · LAYOUT DUMMY]`. The visible heading directly above already says `ご記入について`; retaining `設置場所` in the placeholder read like a production-field name rather than guest-facing copy.
+The selected V4 now uses native guest-facing semantic placeholders:
 
-Drive authority was live re-read before mutation and remains `1D259ugx13El0JYxvn8yyskIjc2c2liF4 / ADD-09_ゲストブックサイン`.
+- `[ご記帳のご案内]`
+- `[記入方法・ペンのご案内]`
+- `[設置場所・補足情報]`
 
-Rollback-safe proof created before mutation:
+No fixed-art geometry, headline, date, safe area, image role or legacy node changed.
 
-- `12:2 / ROLLBACK_ADD09_PRE_NOTE_PLACEHOLDER_JA_POLISH_2026_08_15` (`visible=false`)
+Post-write readback / screenshot:
 
-Production root remained `1:3`. Only the native editable `5:42 / TXT_NOTE` copy changed:
+- actual-size `1000×1419`: PASS;
+- selected visible text outside root: `0`;
+- IMAGE fills: `0`;
+- implementation/proof suffixes are absent from the selected print surface;
+- unresolved operations remain explicit native editable text.
 
-- before: `[記入方法・設置場所 · LAYOUT DUMMY]`
-- after: `[ご記入のご案内 · LAYOUT DUMMY]`
+The long-copy frame `17:4` remains separate QA evidence and is hidden after validation.
 
-The established mixed-style proof metadata hierarchy was preserved explicitly after the copy edit: semantic field `[ご記入のご案内` remains 24 px in the existing navy, while ` · LAYOUT DUMMY]` remains 9 px warm-gray at opacity 0.78.
+## Hybrid authoring / asset decision
 
-Post-write actual-size screenshot QA: PASS.
+- variable / unresolved operations: native Figma text;
+- fixed journey-line decoration: editable vector/fixed art;
+- replaceable raster role: not required;
+- image generation: `NOT_REQUIRED`.
 
-- the lower instruction block now reads as guest-facing copy rather than a CMS/production field;
-- the small `LAYOUT DUMMY` suffix remains subordinate;
-- Japanese hero, book-spine field, top `GUEST BOOK` role label, three writing rules, date and location remain unchanged;
-- no new decoration, image or fake operational fact was added.
+Drive write in the 2026-08-18 cleanup: `0`.
 
-Fresh programmatic structure readback now succeeds and supersedes the previous read-block note for the current state:
+## Historical evidence
 
-- production root: `1000 × 1419`, `clipsContent=true`
-- native editable text: `8` / visible `7`
-- raster IMAGE fills: `0`
-- visible text outside production root: `0`
-- `5:42` reads `[ご記入のご案内 · LAYOUT DUMMY]` with 24 px semantic field + 9 px muted suffix
-- rollback `12:2` reads back hidden
-- no flattening or raster replacement.
+Older production-focused QA remains available through Git history and item files, including:
 
-## Image / Drive decision
+- `FIGMA-REOPENED-VISUAL-QA-2026-08-10.md`
+- `CLEANROOM-V2-V3-STUDY-2026-08-15.md`
+- `FIGMA-PROOF-SUFFIX-REMOVAL-2026-08-17.md`
 
-`IMAGE_GENERATION_NOT_REQUIRED`.
-
-The screenshot-supported bottlenecks were redundant English filler and internal authoring language inside an already-specific physical bookplate composition, not missing media. Drive writes: `0`. Exact Drive folder metadata remains `1D259ugx13El0JYxvn8yyskIjc2c2liF4 / ADD-09_ゲストブックサイン`.
+These are historical evidence and do not supersede the current clean-room V4 authority.
 
 ## Deferred finalization
 
-Still `NOT_PRINT_READY` pending final writing method / pen placement / installation wording, final location/footer wording, printer bleed/template/profile, and 100% physical proof / venue-distance readability. These remain `DEFERRED_FINALIZATION`.
+Still `NOT_PRINT_READY` pending authoritative:
 
-## Final decision
+- final writing method / pen placement;
+- final installation wording / placement;
+- printer bleed/template/profile;
+- 100% physical proof and venue-distance readability.
 
-`SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / LONG_COPY_STRESS_PASS / ROLLBACK_SAFE / NOT_PRINT_READY`
+These remain `DEFERRED_FINALIZATION` and do not reopen the current sellable visual decision.
+
+## Current decision
+
+`SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / CLEANROOM_V4_SELECTED / LONG_COPY_STRESS_PASS / LEGACY_PRESERVED / NOT_PRINT_READY`
