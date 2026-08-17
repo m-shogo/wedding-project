@@ -1,0 +1,50 @@
+{
+  "date": "2026-08-17",
+  "scope": "Rurubu WEDDING V6 only",
+  "authority": "live Figma post-promotion readback",
+  "figmaFile": "bfM0d4c9dCeBv5pCkJ3TNM",
+  "preferred": {
+    "outer": "1592:2",
+    "profileQA": "1601:2",
+    "storyChronology": "1601:81"
+  },
+  "summary": {
+    "visibleRasterRoles": 25,
+    "intrinsicSafe": 25,
+    "intrinsicViolations": 0,
+    "newImageHashesThisRun": 0,
+    "existingImageRoleReassignmentsThisRun": 0,
+    "nativeVariableFixedHeightRepairsThisRun": 27,
+    "nativeAutoLayoutStacksAddedThisRun": 7,
+    "generatedAssetsAdoptedThisRun": 0,
+    "newDriveSavesThisRun": 0,
+    "v7Touched": false
+  },
+  "roles": [
+    {"root":"1592:2","node":"1592:4","name":"V6_J_BACK_TRAVEL_FLATLAY_DOMINANT","display":[793.7,490],"hash":"e3738476f760932bb5b09c9d60f174dd6c84049d","source":[944,608],"intrinsicSafe":true},
+    {"root":"1592:2","node":"1592:10","name":"V6_A_BACK_CAFE","display":[552,320],"hash":"c1ada11205bc3978bf426b304d683f1c1566cac2","source":[810,552],"intrinsicSafe":true},
+    {"root":"1592:2","node":"1592:11","name":"V6_H_BACK_YOKOHAMA_SKYLINE_SUPPORT","display":[232,210],"hash":"644f449c3bf2001a94d4b822d2b55e2614c11042","source":[240,220],"intrinsicSafe":true},
+    {"root":"1592:2","node":"1592:47","name":"V6_A_HERO_YOKOHAMA_WATERFRONT","display":[793.7,470],"hash":"539c259be8036b481d06b4f76db9a39b407d90e8","source":[1356,560],"intrinsicSafe":true},
+    {"root":"1592:2","node":"1592:56","name":"V6_A_SKYLINE_POSTCARD","display":[214,196],"hash":"644f449c3bf2001a94d4b822d2b55e2614c11042","source":[240,220],"intrinsicSafe":true},
+    {"root":"1592:2","node":"1592:58","name":"V6_J_FRONT_DINING_SUPPORT","display":[533.7,320],"hash":"d76eb07d83d042f15044c8bc6bf68d73a73cd77d","source":[732,498],"intrinsicSafe":true},
+    {"root":"1592:2","node":"1592:59","name":"V6_H_FRONT_CAFE_MEMORY_SUPPORT","display":[330,268],"hash":"c1ada11205bc3978bf426b304d683f1c1566cac2","source":[810,552],"intrinsicSafe":true},
+    {"root":"1592:2","node":"1592:66","name":"FIXED PNG / MASTHEAD CANDIDATE","display":[360,115.92],"hash":"0bdbf47904ea5865c71b1555dc73689b2c7b2126","source":[500,161],"intrinsicSafe":true},
+    {"root":"1601:2","node":"1601:11","name":"PHOTO / PROFILE_MAIN_REPLACEABLE_EDITORIAL","display":[793.7,328],"hash":"e3738476f760932bb5b09c9d60f174dd6c84049d","source":[944,608],"intrinsicSafe":true},
+    {"root":"1601:2","node":"1601:12","name":"DECOR / PROFILE_ROUTE_TEXTURE_COMPOSED_RASTER","display":[720,430],"hash":"691a6ceed471a5d8efa144052a10564eed177b4f","source":[720,860],"intrinsicSafe":true},
+    {"root":"1601:2","node":"1601:13","name":"PHOTO / PROFILE_SNAPSHOT_1_REPLACEABLE","display":[410,280],"hash":"539c259be8036b481d06b4f76db9a39b407d90e8","source":[1356,560],"intrinsicSafe":true},
+    {"root":"1601:2","node":"1601:27","name":"PHOTO / PROFILE_SNAPSHOT_2_REPLACEABLE","display":[340,245],"hash":"439a719d73f28e8dd2889f2026cccb15f345ec63","source":[352,368],"intrinsicSafe":true},
+    {"root":"1601:2","node":"1601:28","name":"PHOTO / PROFILE_SNAPSHOT_3_REPLACEABLE","display":[238,185],"hash":"644f449c3bf2001a94d4b822d2b55e2614c11042","source":[240,220],"intrinsicSafe":true},
+    {"root":"1601:2","node":"1601:43","name":"DECOR / QA_ROUTE_TEXTURE_COMPOSED_RASTER","display":[470,470],"hash":"691a6ceed471a5d8efa144052a10564eed177b4f","source":[720,860],"intrinsicSafe":true},
+    {"root":"1601:2","node":"1601:71","name":"PHOTO / QA_MEMORY_HERO_REPLACEABLE","display":[478,330],"hash":"c1ada11205bc3978bf426b304d683f1c1566cac2","source":[810,552],"intrinsicSafe":true},
+    {"root":"1601:2","node":"1601:72","name":"PHOTO / QA_MEMORY_SUPPORT_REPLACEABLE","display":[455,370],"hash":"d76eb07d83d042f15044c8bc6bf68d73a73cd77d","source":[732,498],"intrinsicSafe":true},
+    {"root":"1601:81","node":"1601:83","name":"DECOR / STORY_TRAVEL_TEXTURE_COMPOSED_RASTER","display":[375,500],"hash":"691a6ceed471a5d8efa144052a10564eed177b4f","source":[720,860],"intrinsicSafe":true},
+    {"root":"1601:81","node":"1601:88","name":"PHOTO / STORY_HERO_REPLACEABLE","display":[820,520],"hash":"539c259be8036b481d06b4f76db9a39b407d90e8","source":[1356,560],"intrinsicSafe":true},
+    {"root":"1601:81","node":"1601:89","name":"PHOTO / STORY_SUPPORT_1_REPLACEABLE","display":[238,216],"hash":"644f449c3bf2001a94d4b822d2b55e2614c11042","source":[240,220],"intrinsicSafe":true},
+    {"root":"1601:81","node":"1601:90","name":"PHOTO / STORY_SUPPORT_2_REPLACEABLE","display":[515,350],"hash":"c1ada11205bc3978bf426b304d683f1c1566cac2","source":[810,552],"intrinsicSafe":true},
+    {"root":"1601:81","node":"1601:107","name":"DECOR / TIMELINE_TRAVEL_TEXTURE_COMPOSED_RASTER","display":[226,506],"hash":"691a6ceed471a5d8efa144052a10564eed177b4f","source":[720,860],"intrinsicSafe":true},
+    {"root":"1601:81","node":"1601:108","name":"PHOTO / TIMELINE_FEATURE_HERO_REPLACEABLE","display":[801,430],"hash":"e3738476f760932bb5b09c9d60f174dd6c84049d","source":[944,608],"intrinsicSafe":true},
+    {"root":"1601:81","node":"1601:110","name":"PHOTO / EVENT_3_FEATURE_REPLACEABLE_EDITORIAL","display":[345,230],"hash":"439a719d73f28e8dd2889f2026cccb15f345ec63","source":[352,368],"intrinsicSafe":true},
+    {"root":"1601:81","node":"1601:117","name":"PHOTO / EVENT_1_REPLACEABLE_EDITORIAL","display":[455,218],"hash":"539c259be8036b481d06b4f76db9a39b407d90e8","source":[1356,560],"intrinsicSafe":true},
+    {"root":"1601:81","node":"1601:133","name":"PHOTO / EVENT_5_REPLACEABLE_EDITORIAL","display":[455,154],"hash":"d76eb07d83d042f15044c8bc6bf68d73a73cd77d","source":[732,498],"intrinsicSafe":true}
+  ]
+}
