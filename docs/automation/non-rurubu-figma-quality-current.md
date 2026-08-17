@@ -206,7 +206,7 @@ For each target:
 13. if V2 does not clearly win, keep both and iterate as V3 from a fresh clean-room direction rather than degrading the old production;
 14. record only verified results in item-specific GitHub QA/status evidence.
 
-Unknown guest names, menu copy, times, room names, directions, QR destinations, venue instructions, children information, etc. must use explicit semantic placeholders such as `[... · LAYOUT DUMMY]` as native editable text. Do not invent realistic names or facts.
+Unknown guest names, menu copy, times, room names, directions, QR destinations, venue instructions, children information, etc. must remain explicit native/editable semantic placeholders such as `[会場名]`, `[方向]`, `[料理名]`, `[国テーマ説明]`, or another item-specific field label. Do not invent realistic names or facts. Keep implementation state in node names, hidden QA/rollback layers, and GitHub evidence; do **not** print internal authoring suffixes such as `LAYOUT DUMMY`, `DUMMY`, `QA`, `PROOF`, `TEMP`, `editable`, or `native text` into guest-facing copy unless the term itself has a genuine reader-facing meaning.
 
 ## Progression rule
 
