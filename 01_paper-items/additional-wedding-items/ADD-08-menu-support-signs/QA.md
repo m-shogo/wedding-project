@@ -1,7 +1,7 @@
 # ADD-08 メニュー補助サイン — QA
 
-Status: `CURRENT / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / LONG_COPY_STRESS_PASS / CLEANROOM_SELECTED_FAMILY / LEGACY_PRESERVED / NOT_PRINT_READY`
-Updated: 2026-08-18
+Status: `CURRENT / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / LONG_COPY_STRESS_PASS / CLEANROOM_SELECTED_FAMILY / DRINK_TICK_UI_SUBTRACTION_PASS / LEGACY_PRESERVED / NOT_PRINT_READY`
+Updated: 2026-08-19
 Authority: GitHub latest `main` + `docs/automation/non-rurubu-figma-quality-current.md`
 
 ## Current Figma authority
@@ -32,7 +32,7 @@ The selected family was authored under the 2026-08-15 zero-reuse clean-room rule
 
 The family remains visually distinct by role rather than one template repeated three times:
 
-- Drink uses a navy title field, cream beverage ledger and teal fixed-art measurement field;
+- Drink uses a navy title field, cream beverage ledger and teal fixed-art curve field;
 - Allergy / Dietary uses Japanese-first safety hierarchy and a functional bilingual category header;
 - World Trip uses a rust title field, three editorial culinary chapters and fixed orbit/route art.
 
@@ -60,7 +60,7 @@ Adopted result:
 - section labels are `アルコール / ソフトドリンク / ご案内`;
 - decorative kicker/footer note hidden;
 - fake measure labels hidden;
-- teal curve/tick artwork preserved as fixed art;
+- teal curve artwork preserved as fixed art;
 - selected outside visible text `0`;
 - long-copy outside visible text `0`;
 - IMAGE fills `0`.
@@ -100,6 +100,37 @@ A bounded comparison hid `ALLERGY / DIETARY INFORMATION`, but the removal left a
 
 This is intentional: the rule is not “remove all English.” The category line remains because the screenshot comparison proved a real binding/function role in this specific artifact.
 
+## 2026-08-19 Drink V3 measure-tick subtraction
+
+Fresh whole-item / reading / native `1400×1980` review found twelve short horizontal tick marks still repeated down the teal fixed-art field. Because the fake `01–06` measure labels had already been removed, these ticks no longer represented any guest-facing data and made the field read like a chart or measurement UI.
+
+Rollback-safe comparison:
+
+- `31:2 / QA_ADD08_DRINK_V3_NO_MEASURE_TICKS_2026_08_19`
+
+The comparison hid only the 12-vector tick group while preserving the full-width teal field and both cream beverage curves. It was materially cleaner at reading scale without creating the excessive cream emptiness seen in the previously rejected narrow-field test.
+
+Adopted state:
+
+- selected `21:3`: `21:10` tick group hidden;
+- long-copy `23:34`: `23:41` tick group hidden;
+- beverage curves retained;
+- teal field retained;
+- comparison hidden after adoption;
+- pre-change rollback selected `31:43` hidden;
+- pre-change rollback long-copy `31:84` hidden.
+
+Post-adoption QA:
+
+- whole / thumbnail: PASS;
+- reading scale: PASS;
+- actual size `1400×1980`: PASS;
+- long-copy native-size screenshot: PASS and returned to hidden state;
+- selected visible native text `9`, IMAGE fills `0`, outside text `0`, same-parent text collisions `0`;
+- long-copy visible native text `9`, IMAGE fills `0`, outside text `0`, same-parent text collisions `0`.
+
+Detailed evidence: `FIGMA-DRINK-V3-MEASURE-TICK-SUBTRACTION-QA-2026-08-19.md`.
+
 ## Structure / editability QA
 
 Current family requirements remain:
@@ -121,11 +152,13 @@ Historical structural/visual evidence remains available in:
 
 ## Drive / image decision
 
-Drive folder is verified. Drive write in the 2026-08-18 cleanup: `0`.
+Drive folder live-read on 2026-08-19 and remains `12D7UPRTDwUx7vLOm1mtaew-sFGHt9FPG`.
+
+Drive write: `0`.
 
 `IMAGE_GENERATION_NOT_REQUIRED`.
 
-The observed bottleneck was redundant/internal/fake-data labeling, not missing photography or illustration.
+The observed bottleneck was UI-like repeated fixed vector micro-geometry, not missing photography or illustration.
 
 ## Deferred finalization
 
@@ -142,4 +175,4 @@ These are `DEFERRED_FINALIZATION` and do not reopen the current sellable visual 
 
 ## Current decision
 
-`SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / LONG_COPY_STRESS_PASS / CLEANROOM_SELECTED_FAMILY / LEGACY_PRESERVED / NOT_PRINT_READY`
+`SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / LONG_COPY_STRESS_PASS / CLEANROOM_SELECTED_FAMILY / DRINK_TICK_UI_SUBTRACTION_PASS / LEGACY_PRESERVED / NOT_PRINT_READY`
