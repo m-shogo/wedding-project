@@ -522,6 +522,144 @@
       "outName": "clip-009",
       "notes": "不採用: American Airlinesの機体ロゴが写る。Style Bibleのno logo違反",
       "recipeIds": []
+    },
+    {
+      "clipId": "clip-010",
+      "sourceFile": "10_references/media/pool/pexels_4057958_drone_flying_towards_the_sunset_over_the.mp4",
+      "inTc": "6.0",
+      "outTc": "11.0",
+      "durationSec": 5.0,
+      "chapter": "4",
+      "role": "背景",
+      "motion": "drift",
+      "tags": [
+        "海",
+        "夕暮れ",
+        "ゴールド"
+      ],
+      "captionSpace": "yes",
+      "crop": "",
+      "rating": 90,
+      "pick": "candidate",
+      "outName": "ocean_golden_a",
+      "notes": "Pexels/表記不要/rec-09 golden hourで最有力。右手前にアウトリガー舟のシルエットが全編写るが、人物は乗っておらず文字・ロゴも無いためStyle Bible適合。旅情がむしろ出る",
+      "recipeIds": [
+        "rec-09"
+      ]
+    },
+    {
+      "clipId": "clip-011",
+      "sourceFile": "10_references/media/pool/pexels_8303109_drone_footage_of_a_sunset_at_the_ocean.mp4",
+      "inTc": "0.5",
+      "outTc": "5.0",
+      "durationSec": 4.5,
+      "chapter": "4",
+      "role": "背景",
+      "motion": "drift",
+      "tags": [
+        "海",
+        "夕暮れ"
+      ],
+      "captionSpace": "yes",
+      "crop": "",
+      "rating": 80,
+      "pick": "candidate",
+      "outName": "ocean_golden_b",
+      "notes": "Pexels/表記不要/rec-09 水平線と太陽のみで完全にクリーン。clip-010より静かなので、テロップを載せるならこちら",
+      "recipeIds": [
+        "rec-09"
+      ]
+    },
+    {
+      "clipId": "clip-012",
+      "sourceFile": "10_references/media/pool/pexels_31288104_tranquil_sunrise_over_serene_coastal_lan.mp4",
+      "inTc": "1.0",
+      "outTc": "5.0",
+      "durationSec": 4.0,
+      "chapter": "4",
+      "role": "背景",
+      "motion": "drift",
+      "tags": [
+        "海",
+        "朝日",
+        "海岸"
+      ],
+      "captionSpace": "yes",
+      "crop": "",
+      "rating": 68,
+      "pick": "pool",
+      "outName": "ocean_sunrise_a",
+      "notes": "Pexels/表記不要/rec-09 陸地が入り海単体より風景寄り。ハワイ章には弱い",
+      "recipeIds": [
+        "rec-09"
+      ]
+    },
+    {
+      "clipId": "clip-013",
+      "sourceFile": "10_references/media/pool/pexels_14300105_philadelphia_at_night.mp4",
+      "inTc": "2.0",
+      "outTc": "6.0",
+      "durationSec": 4.0,
+      "chapter": "3",
+      "role": "背景",
+      "motion": "locked",
+      "tags": [
+        "夜景",
+        "都市"
+      ],
+      "captionSpace": "yes",
+      "crop": "",
+      "rating": 64,
+      "pick": "pool",
+      "outName": "city_night_a",
+      "notes": "Pexels/表記不要/rec-10 ビル頂部を拡大し読める文字・ロゴが無いことを確認済み。ただしシャープでボケ感が無く、マゼンタの照明がStyle Bibleと合わない",
+      "recipeIds": [
+        "rec-10"
+      ]
+    },
+    {
+      "clipId": "clip-014",
+      "sourceFile": "10_references/media/pool/pexels_8951964_aerial_shot_of_a_town_during_night_time.mp4",
+      "inTc": "0",
+      "outTc": "1.0",
+      "durationSec": 1.0,
+      "chapter": "3",
+      "role": "背景",
+      "motion": "locked",
+      "tags": [
+        "夜景",
+        "郊外"
+      ],
+      "captionSpace": "no",
+      "crop": "",
+      "rating": 0,
+      "pick": "rejected",
+      "outName": "clip-014",
+      "notes": "不採用: 暗すぎて主役不在。郊外の高速道路で上品さに欠ける。rec-10の狙いと合わない",
+      "recipeIds": [
+        "rec-10"
+      ]
+    },
+    {
+      "clipId": "clip-015",
+      "sourceFile": "10_references/media/pool/pexels_34398886_breathtaking_cityscape_at_night_in_black.mp4",
+      "inTc": "0",
+      "outTc": "1.0",
+      "durationSec": 1.0,
+      "chapter": "3",
+      "role": "背景",
+      "motion": "locked",
+      "tags": [
+        "夜景",
+        "白黒"
+      ],
+      "captionSpace": "no",
+      "crop": "",
+      "rating": 0,
+      "pick": "rejected",
+      "outName": "clip-015",
+      "notes": "不採用: 白黒でStyle Bibleのネイビー・ゴールド・空色から外れる。手前が暗く沈む",
+      "recipeIds": []
     }
   ]
 }
