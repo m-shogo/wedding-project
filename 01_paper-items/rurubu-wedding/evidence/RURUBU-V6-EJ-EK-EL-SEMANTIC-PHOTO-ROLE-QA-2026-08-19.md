@@ -71,7 +71,7 @@ Final EK Profile page `1762:3`:
 - visible native text: `25`
 - text collisions: `0`
 - 18px text safe-area risks: `0`
-- visible image roles: `4` total (`3` raster/texture roles plus `2` replaceable support photos and Profile hero as counted by actual fills)
+- visible image roles: `4` total (`Profile hero + composed travel texture + 2 replaceable support photos`)
 - all visible image roles intrinsic-safe
 - repeated skyline use across preferred set: `6 → 5`
 
