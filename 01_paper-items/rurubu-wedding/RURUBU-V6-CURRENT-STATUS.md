@@ -8,7 +8,7 @@ Production state: separate clean-room V6; V7 is HOLD
 
 ## Current declaration
 
-`V6_LIVE_FIGMA_IN_PROGRESS / OUTER_EO_PREFERRED / PROFILE_QA_EK_PREFERRED / STORY_CHRONOLOGY_EN_PREFERRED / MEMORY_SPOTS_EM_PREFERRED / GOURMET_CAFE_EF_PREFERRED / ONE_DAY_PLAN_EJ_PREFERRED / NATIVE_VARIABLE_TEXT_PRESERVED / REPLACEABLE_PHOTOS_PRESERVED / PREFERRED_NODE_LIVENESS_VERIFIED / INTRINSIC_VIOLATIONS_0 / READER_PRODUCTION_TERMS_0 / V7_HOLD / NOT_PRINT_READY`
+`V6_LIVE_FIGMA_IN_PROGRESS / OUTER_EO_PREFERRED / PROFILE_QA_EK_PREFERRED / STORY_CHRONOLOGY_EN_PREFERRED / MEMORY_SPOTS_EM_PREFERRED / GOURMET_CAFE_EL_PREFERRED / ONE_DAY_PLAN_EJ_PREFERRED / NATIVE_VARIABLE_TEXT_PRESERVED / REPLACEABLE_PHOTOS_PRESERVED / PREFERRED_NODE_LIVENESS_VERIFIED / INTRINSIC_VIOLATIONS_0 / READER_PRODUCTION_TERMS_0 / V7_HOLD / NOT_PRINT_READY`
 
 ## Live Figma preferred set
 
@@ -16,49 +16,37 @@ Production state: separate clean-room V6; V7 is HOLD
 - Profile / Q&A EK `1762:2` — preferred profile/interview spread; Profile page `1762:3`.
 - Story / chronology EN `1773:2` — preferred story/timeline spread; chronology page `1773:28`.
 - Memory Spots EM `1767:2` — preferred destination-information spread; guide page `1767:24`.
-- Gourmet / Cafe EF `1734:2` — preferred cafe/table spread.
+- Gourmet / Cafe EL `1789:2` — preferred cafe/table spread; Cafe page `1789:3`.
 - Yokohama 1DAY Plan EJ `1784:2` — preferred model-course spread; right page `1784:29`.
 
 Start Here `845:27`:
 
-`V5 FU/FX · V6 EO + EK/EN + EM MEMORY SPOTS + EF CAFE & TABLE + EJ 1DAY PLAN · V7 HOLD`
+`V5 FU/FX · V6 EO + EK/EN + EM MEMORY SPOTS + EL CAFE & TABLE + EJ 1DAY PLAN · V7 HOLD`
 
 Rollback/rejected comparisons remain preserved. V7 was not edited.
 
-## Latest visual progress — EJ 1DAY Plan
+## Latest visual progress — EL Cafe/Table
 
-Six-spread thumbnail review identified the EI 1DAY right page as the clearest remaining repeated-media-module rhythm. EI had already removed the route rail/markers, but its four photos were still close enough in scale and column behavior to read as a placed image stack rather than a travel-magazine photo diary.
+Six-spread same-scale review identified Cafe/Table EF as the quietest current spread. Its Cafe left page was structurally safe, but the lower source-safe view photo and nearby native copy still read as a small placed module rather than a deliberate second editorial beat.
 
-EJ `1784:2` was created from EI as a rollback-safe duplicate and changed only the existing right-page photo geometry plus nearby native-copy positions:
+Two rollback-safe tests were made from EF:
 
-- STOP 01 remains a small/supporting Yokohama skyline role;
-- STOP 02 cafe becomes the largest middle-page visual beat;
-- STOP 03 street becomes a narrower bridge image;
-- STOP 04 dining becomes the closing wide feature;
-- all `01–04`, times, titles, copy and metadata remain native Figma text;
-- all four photos remain independent replaceable IMAGE roles;
-- no image source/hash, fact, Drive asset or generated decoration changed.
+1. `1788:2` moved the view photo to the right and floated the copy below the composed texture field. Whole/actual review showed more dead paper and weaker binding. It was rejected and hidden.
+2. `1789:2` retained the existing `238×218` replaceable view photo on the left, added a large native cyan `02`, and regrouped the existing view title/copy/check information as one second feature. The first structure audit found an 18px overlap between the ordinal and title; the native text group was shifted right before promotion.
 
-The first EJ geometry enlarged the small skyline beyond its known source width. That state was rejected before promotion. STOP 01 was corrected to `238×210` within the verified ~`240×220` source.
+Final EL QA:
 
-Final EJ QA:
+- whole-item / 500px: PASS and stronger than EF;
+- reading / 1200px: PASS;
+- actual-size Cafe page `1789:3`, 794×1123: PASS;
+- Cafe native visible text: `17`;
+- Cafe absolute text collision: `0`;
+- Cafe 18px text safe-area risk: `0`;
+- composed travel texture remains `720×430`;
+- replaceable view photo remains source-safe at `238×218`, rotation ≈ `+1.5°`;
+- right Table page is unchanged from EF and remains collision/safe-risk `0`.
 
-- whole spread comparison: PASS and stronger than EI;
-- reading scale: PASS;
-- actual-size right page `794×1123`: PASS;
-- native visible right-page text `25`;
-- replaceable photos `4`;
-- absolute text collision `0`;
-- 18px text safe-area risk `0`.
-
-Final right-page photo geometry:
-
-- STOP 01 skyline `238×210`, ≈ `+1.2°`;
-- STOP 02 cafe `388×270`, ≈ `-2.1°`;
-- STOP 03 street `277×220`, ≈ `+1.1°`;
-- STOP 04 dining `420×242`, ≈ `-1.0°`.
-
-EI `1752:2` is hidden rollback. EJ `1784:2` is live preferred.
+EF `1734:2` is hidden rollback. Rejected `1788:2` remains hidden evidence.
 
 ## Previous preferred improvements retained
 
@@ -78,25 +66,21 @@ EN uses source-safe existing photographs as stronger Event 03 / 05 editorial bea
 
 EM promotes the legitimate Spot 04 dining source into an edge-led feature at `732×430` within source `732×498`, with native text over the photo. Whole + actual-size QA PASS, collision `0`, safe-area risk `0`, rollback preserved.
 
+### 1DAY Plan EJ
+
+EJ gives the four existing right-page images materially different dominant/support responsibility through scale, placement and light rotation while preserving native stop copy and independent replaceable image roles. Whole/read/actual QA PASS; collision `0`, safe-area risk `0`.
+
 ## Preferred-set raster / terminology audit
 
-EJ changes only geometry of existing photo roles and adjacent native-copy positions. It introduces no new image role or hash. Preferred-set inventory remains:
+EL introduces one native text node (`TEXT / VIEW_NUM`) and changes only native-copy geometry around an existing source-safe image role. It introduces no new raster or image hash.
 
-- visible image roles: `34`;
+Preferred-set truth remains:
+
 - intrinsic-size violations: `0`;
 - reader-visible production/proof terminology: `0`;
-- dining photo uses: `6`;
-- Yokohama skyline uses: `5`;
-- waterfront uses: `5`;
-- cafe photo uses: `5`;
-- flatlay uses: `4`;
-- street uses: `3`.
-
-Unused legacy rasters are not adopted merely to improve diversity counts. Semantic truth and provenance remain stronger gates than raw repetition metrics.
-
-## Preferred-set truth
-
-The preferred set remains photo-led, native-text editable and rollback-safe. Existing Drive-generated Profile/Q&A/Timeline/Memories masters remain unadopted until quality-preserving placement plus actual-size QA is possible.
+- native variable text preserved;
+- replaceable photo roles preserved;
+- generated section masters remain unadopted pending quality-preserving placement and actual-size QA.
 
 Drive root remains verified:
 
@@ -104,18 +88,15 @@ Drive root remains verified:
 
 ## Latest evidence / learning
 
-- `01_paper-items/rurubu-wedding/evidence/RURUBU-V6-EJ-1DAY-PHOTO-SCALE-RHYTHM-QA-2026-08-19.md`;
-- `docs/wedding-design-learning-feedback-log.append/2026-08-19-rurubu-v6-ej-1day-photo-scale-rhythm.md`;
-- `docs/design-learning/rurubu-shared-learning-feed.append/2026-08-19-rsl-107-photo-scale-rhythm-without-module-containment.md`.
+- `01_paper-items/rurubu-wedding/evidence/RURUBU-V6-EL-CAFE-NUMBERED-SECOND-FEATURE-QA-2026-08-19.md`;
+- `docs/wedding-design-learning-feedback-log.append/2026-08-19-rurubu-v6-el-cafe-second-feature.md`;
+- `docs/design-learning/rurubu-shared-learning-feed.append/2026-08-19-rsl-108-numbered-second-feature-without-new-imagery.md`.
 
-RSL-107: when a print page is structurally correct but media still reads as repeated modules, existing legitimate image roles may be given materially different dominant/support responsibility through scale, placement and light rotation before adding new containment or imagery. Intrinsic-source and copy-collision gates remain mandatory. State: `VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`.
+RSL-108: when a source-safe support image is legitimate but a page still feels like loosely placed modules, native numbering/typographic hierarchy may bind the existing image into a stronger second editorial beat before adding another image or container. State: `VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`.
 
+RSL-107 remains active: existing legitimate image roles can gain materially different dominant/support responsibility before adding containment or imagery.
 RSL-106 remains active: photo-bound heading subtraction requires a contrast/binding gate.
-
-RSL-105 remains active: existing legitimate source-safe photos may assume more chronology responsibility before new imagery/cards/decor are added.
-
-RSL-103 remains active: under a constrained legitimate photo pool, prioritize identical same-spread duplicates and repeated non-evidence support roles before cosmetic cross-spread repetition reduction.
-
+RSL-103 remains active: semantic truth and provenance outrank cosmetic repetition-count reduction.
 RSL-100 remains active: resolve live preferred node existence before every write.
 
 ## Asset lifecycle truth for latest run
@@ -126,13 +107,15 @@ RSL-100 remains active: resolve live preferred node existence before every write
 - new external binary placements: `0`;
 - new image hashes: `0`;
 - image source changes: `0`;
-- photo geometry changes: `YES`, right-page 1DAY roles only;
+- photo geometry changes: existing Cafe view photo position only; source-safe size unchanged;
+- new native text nodes: `1` (`02` ordinal);
 - native text preserved: `YES`;
 - remaining photo roles replaceable: `YES`;
-- EJ whole + actual visual QA: `PASS`;
-- EJ collision / safe-area QA: `PASS`;
-- source-size overreach found and corrected before promotion: `YES`;
-- EI rollback preserved: `YES`;
+- EL 500px / 1200px / actual-size visual QA: `PASS`;
+- EL collision / safe-area QA: `PASS`;
+- first EL collision found and corrected before promotion: `YES`;
+- rejected alternate preserved: `YES`;
+- EF rollback preserved: `YES`;
 - V7 touched: `NO`.
 
 ## Completion gate
@@ -141,14 +124,14 @@ Do not call V6 complete or print-ready until final legitimate photography/copy, 
 
 Current state:
 
-`V6 EO + EK/EN + EM + EF + EJ = VERIFIED_LOCAL_DUMMY_DESIGN_STUDIES / PHOTO_LED_TRAVEL_GUIDE_GRAMMAR / NATIVE_TEXT_EDITABILITY_PRESERVED / REPLACEABLE_PHOTOS_PRESERVED / INTRINSIC_VIOLATIONS_0 / ROLLBACK_SAFE / V7_HOLD / NOT_PRINT_READY`.
+`V6 EO + EK/EN + EM + EL + EJ = VERIFIED_LOCAL_DUMMY_DESIGN_STUDIES / PHOTO_LED_TRAVEL_GUIDE_GRAMMAR / NATIVE_TEXT_EDITABILITY_PRESERVED / REPLACEABLE_PHOTOS_PRESERVED / INTRINSIC_VIOLATIONS_0 / ROLLBACK_SAFE / V7_HOLD / NOT_PRINT_READY`.
 
 ## Next highest-value work
 
 1. Continue V6, not V7.
 2. Reconcile live preferred IDs before every write.
-3. Keep attacking screenshot-visible repetition, dead paper or semantic-photo defects; same-spread duplicates and obvious weak regions have priority.
-4. Treat any card/band/rail subtraction as a function/contrast test, not a blanket style rule.
+3. Continue same-scale six-spread review and attack screenshot-visible weak regions, same-spread duplicates or semantic-photo defects before cosmetic additions.
+4. Treat card/band/rail subtraction as a function/contrast test, not a blanket style rule.
 5. Prioritize final legitimate distinct Yokohama/destination photography over cosmetic repetition-count optimization.
 6. Do not use unrelated coastal/resort images or unknown-provenance people as fake diversity.
 7. Keep generated section masters unadopted until quality-preserving transport materially improves.
