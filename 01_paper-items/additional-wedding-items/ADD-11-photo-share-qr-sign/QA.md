@@ -1,118 +1,120 @@
 # ADD-11 写真共有 / QR案内サイン — QA
 
-Status: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / SEAM_SUBTRACTION_PASS / ROLLBACK_SAFE / NOT_PRINT_READY`
-Date: 2026-08-15
+Status: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / CLEANROOM_V2_SELECTED / A5_JAPANESE_FIRST_HEADLINE_PASS / LONG_COPY_STRESS_PASS / LEGACY_PRESERVED / NOT_PRINT_READY`
+Updated: 2026-08-18
 Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
 
-## Current production authority
+## Current selected authority
+
+The reopened clean-room program supersedes the older legacy-node listing for **which family is current**. Legacy production remains preserved as comparison / rollback history only.
 
 - Figma file: `ADD-11 写真共有・QR案内サイン`
 - Figma file key: `PWQ5ygJJt0IlOqj5ri5jng`
-- production A5: `1:31 / ADD11_A5_TABLETOP` — 875 × 1240
-- production A6: `1:45 / ADD11_A6_MINI` — 620 × 875
-- production A4: `3:2 / ADD11_A4_POSTER` — 1240 × 1754 independent poster reflow
+- clean-room page: `18:18 / CLEANROOM / ADD-11 / V2 MEMORY ORBIT / 2026-08-16`
+- selected A5: `18:19 / FRAME_ADD11_A5_CLEANROOM_V2` — `875×1240`
+- selected A4: `19:34 / FRAME_ADD11_A4_CLEANROOM_V2` — `1240×1754`
+- hidden A5 long-copy stress: `19:4`
+- hidden A4 long-copy stress: `19:56`
+- retained legacy: `1:31 / 1:45 / 3:2` — unchanged history/comparison only
 - Drive folder: `ADD-11_写真共有_QR案内サイン`
 - Drive folder ID: `1wuxHEqby_0JWS0bYV0RWCTUotM88Mnxb`
-- reopened visual authority: `FIGMA-REOPENED-VISUAL-QA-2026-08-10.md`
-- A4 Japanese line-break repair: `FIGMA-A4-JA-LINEBREAK-REPAIR-2026-08-12.md`
-
-A5 remains the primary tabletop direction. A4 is an independent larger reflow rather than a proportional scale-up. A6 is a smaller near-field derivative whose final installation use remains unresolved.
+- Drive parent: `1iJGIzmNSlzwqrcv7P6UsNbstwBki1523`
+- detailed clean-room evidence: `CLEANROOM-V2-MEMORY-ORBIT-QA-2026-08-16.md`
+- authority reconciliation: `FIGMA-CLEANROOM-V2-AUTHORITY-RECONCILIATION-2026-08-18.md`
+- guest-copy cleanup: `FIGMA-CLEANROOM-V2-GUEST-COPY-CLEANUP-2026-08-17.md`
 
 ## Current art direction
 
-- Japanese-first category label `写真共有` and serif headline drive the hierarchy.
-- The unresolved QR remains deliberately non-scannable and reserved inside a deep-navy authority field; no valid QR modules or fake finder patterns are present.
-- A5/A4 use a right-side navy QR field; A6 independently reflows the QR role into a lower navy field.
-- The former rust `ACCENT_EDGE` seam has been removed from all three production variants after rollback-safe comparison proved that the navy field boundary already carried the physical grouping and the seam added decorative segmentation without a binding function.
-- No rounded card, pill, badge, shadow, gradient, generated person, fake operational control or transport-roleplay is used.
+The selected clean-room family is a quiet editorial photo-sharing sign, not a dashboard or enlarged QR widget.
 
-## 2026-08-15 — seam subtraction / binding-function audit
+- Japanese category / headline hierarchy leads the page;
+- the unresolved QR remains a non-scannable semantic role until an authoritative URL exists;
+- A5 uses a compact tabletop composition; A4 is an independent larger poster reflow rather than proportional scaling;
+- privacy/access/hashtag/expiry roles remain native editable semantic placeholders;
+- decorative rust seam from the legacy family is not part of the selected clean-room V2;
+- no generated person imagery, rounded cards, pills, shadows, gradients, fake operational controls or fake QR destination is used.
 
-Visible problem: at whole-item scale, the rust seam repeated the cream/navy split that was already fully legible through the field boundary. A5/A4 used a vertical rust bar and A6 used a horizontal rust strip. It read as decorative segmentation rather than a necessary image-caption/title-body/physical-region binding device.
+## A5 Japanese-first headline refinement — 2026-08-18
 
-This was tested as a bounded receiving-item experiment for the neutral `NRSL-002 / RSL-008` binding-function method. No Rurubu layout, asset, palette, node or item-specific production evidence was inspected or copied.
+Fresh whole-item review of selected A5 `18:19` found that the oversized English headline `SHARE YOUR JOURNEY` read more like generic travel-template copy than an item-specific Japanese wedding-stationery title. The A4 selected reflow already demonstrated a stronger Japanese editorial voice with `旅の記憶を、ひとつに。`.
 
-Rollback-safe clean-room comparisons:
+A rollback-safe comparison `26:2 / QA_ADD11_A5_JAPANESE_FIRST_HEADLINE_2026_08_18` changed only two fixed guest-facing roles:
 
-- A5 `15:2 / QA_ADD11_A5_NO_SPLIT_SEAM_2026_08_15`
-- A6 `16:2 / QA_ADD11_A6_NO_ACCENT_SEAM_2026_08_15`
-- A4 `16:18 / QA_ADD11_A4_NO_ACCENT_SEAM_2026_08_15`
+- `TXT_SHARE_TITLE`: `SHARE YOUR JOURNEY` → `旅の記憶を、\nひとつに。`;
+- decorative footer `MEMORY DESK / 2026.10.24` → hidden.
 
-Only cloned `ACCENT_EDGE` visibility changed. QR field geometry, QR placeholder, semantic copy, Japanese typography, privacy placeholder, date and paper sizes were untouched.
+The QR role, three-step instructions, privacy/access/hashtag/expiry placeholders, camera vector, cream/mint fields, geometry and all variable copy were unchanged.
 
-Three-scale evidence:
+The comparison was stronger at 500px and native `875×1240`: Japanese category → Japanese headline → guidance → steps/QR now reads directly without decorative English filler.
 
-- A5 whole-item / 500px: PASS; the two-field composition remains immediately legible without the rust seam.
-- A5 reading / 1000px: PASS; title → body/steps → QR authority field reading order is unchanged and the split feels less template-like.
-- A5 actual-size / 875×1240: PASS; no missing grouping or weakened QR role.
-- A6 actual-size / 620×875: PASS; cream upper field and navy lower field remain self-evident without the rust strip.
-- A4 actual-size / rendered 990×1400 from native 1240×1754: PASS; the vertical field boundary is sufficient and the right QR field remains authoritative.
+Before selected-family mutation, hidden rollback copies were saved:
 
-Promotion rollback copies created immediately before production mutation:
+- `26:32 / ROLLBACK_ADD11_A5_PRE_JAPANESE_FIRST_HEADLINE_2026_08_18`;
+- `26:62 / ROLLBACK_ADD11_A5_STRESS_PRE_JAPANESE_FIRST_HEADLINE_2026_08_18`.
 
-- A5 `16:34 / ROLLBACK_ADD11_A5_PRE_SEAM_REMOVAL_2026_08_15`
-- A6 `16:50 / ROLLBACK_ADD11_A6_PRE_SEAM_REMOVAL_2026_08_15`
-- A4 `16:66 / ROLLBACK_ADD11_A4_PRE_SEAM_REMOVAL_2026_08_15`
+The same fixed-title/footer change was applied to hidden long-copy stress `19:4` so the QA proof matches selected production.
 
-All three are hidden. Comparison candidates are also hidden after promotion.
+Post-write A5 stress verification:
 
-Production mutation was limited to native seam visibility:
+- outside visible text: `0`;
+- text-to-text collision: `0`;
+- QR role unchanged;
+- stress returned to hidden QA state after actual-size screenshot review.
 
-- A5 `6:19 / ACCENT_EDGE` → hidden
-- A6 `6:49 / ACCENT_EDGE` → hidden
-- A4 `6:79 / ACCENT_EDGE` → hidden
+## Structural QA
 
-Post-write structure readback:
+Fresh selected-family readback remains healthy:
 
-- A5 `1:31`: `clipsContent=true`, native text `10`, visible text `10`, IMAGE fills `0`, seam hidden.
-- A6 `1:45`: `clipsContent=true`, native text `10`, visible text `10`, IMAGE fills `0`, seam hidden.
-- A4 `3:2`: `clipsContent=true`, native text `10`, visible text `10`, IMAGE fills `0`, seam hidden.
-- no raster/flatten replacement was introduced; variable text remains native and editable.
+### A5 `18:19`
+- `875×1240`;
+- native editable text preserved;
+- guest-facing proof-language `0`;
+- fixed 10/12px variable text roles `0`;
+- outside visible text `0`;
+- QR role remains replaceable semantic geometry;
+- IMAGE fills `0`.
 
-Result: `SEAM_SUBTRACTION_PASS`. The sign is quieter and less template-segmented while the QR authority field retains its actual functional grouping role.
+### A4 `19:34`
+- `1240×1754`;
+- native editable text preserved;
+- guest-facing proof-language `0`;
+- fixed 10/12px variable text roles `0`;
+- outside visible text `0`;
+- IMAGE fills `0`.
 
-## Existing typography / long-copy evidence retained
-
-A5 `INTRO_JA / 6:29` uses deliberate phrase-boundary line breaks:
-
-- `撮影した写真を、`
-- `こちらから共有できます。`
-- `たくさんの思い出を`
-- `残していただけたら嬉しいです。`
-
-A4 `INTRO_JA / 6:89` was likewise repaired so `嬉しいです。` is not split unnaturally.
-
-Existing V2 long-copy stress family remains valid because this run changed no text geometry, auto-layout sizing, copy width, safe area or QR position:
-
-- `5:52 / QA_ADD11_A5_V2_LONG_COPY_STRESS`
-- `5:68 / QA_ADD11_A6_V2_LONG_COPY_STRESS`
-- `5:84 / QA_ADD11_A4_V2_LONG_COPY_STRESS`
+Hidden long-copy stress `19:4 / 19:56` remains the structural evidence for variable guidance/privacy/hashtag/expiry copy.
 
 ## Image / Drive decision
 
-`IMAGE_GENERATION_NOT_REQUIRED` for this change. The screenshot-supported defect was a redundant native seam, not missing imagery. Generated imagery would compete with the eventual real QR and add no functional value.
+`IMAGE_GENERATION_NOT_REQUIRED`. The current bottleneck was generic decorative English hierarchy, not missing imagery. Generated art would compete with the future real QR and add no functional value.
 
-Drive authority was re-read immediately before the Figma write and remains `1wuxHEqby_0JWS0bYV0RWCTUotM88Mnxb / ADD-11_写真共有_QR案内サイン`, parent `1iJGIzmNSlzwqrcv7P6UsNbstwBki1523`. Drive writes: `0`.
+Live Drive readback on 2026-08-18 confirmed:
+
+- folder ID: `1wuxHEqby_0JWS0bYV0RWCTUotM88Mnxb`;
+- parent: `1iJGIzmNSlzwqrcv7P6UsNbstwBki1523`;
+- Drive writes in this run: `0`.
 
 ## BLOCKED_REQUIRED_INPUT / DEFERRED_FINALIZATION
 
-These remain finalization boundaries only and do not invalidate the sellable visual pass:
+These are finalization boundaries only and do not invalidate the visual pass:
 
-- authoritative photo-sharing destination URL and service/account ownership;
-- final public/private access scope, permission model, retention/expiration and privacy/consent wording;
-- final A5/A4 installation selection and whether A6 is needed;
-- generate the real QR from the exact approved destination, verify the encoded URL, scan on iPhone/Android, and run 100% physical-size/low-light/oblique-angle proof;
-- confirm printer bleed/template/profile, safe area, stand/frame interference, final export and Drive delivery.
+- authoritative photo-sharing service / URL and account ownership;
+- final public/private access scope, permission model, retention/expiration and consent/privacy wording;
+- final hashtag decision;
+- final A5/A4 installation selection and whether an A6 derivative is required;
+- real QR generation from the approved URL and iPhone/Android scan proof;
+- physical-size / low-light / oblique-angle scan proof;
+- printer template/profile, bleed, safe-area, frame/stand interference, final export and Drive delivery.
 
-## Result
+## Current result
 
+- Clean-room selected visual: `V2`
+- A5 Japanese-first headline refinement: `PASS`
 - Reopened sellable visual QA: `PASS`
-- Seam binding-function audit: `PASS / SEAM_SUBTRACTION_PASS`
 - Whole / reading / actual-size visual QA: `PASS_WITH_PLACEHOLDERS`
-- Long-copy structural QA: `PASS` (existing stress retained; no dynamic text geometry changed)
+- Long-copy structural QA: `PASS`
 - Native editability: `PASS`
-- Rollback evidence: `PASS`
-- Drive authority readback: `PASS`
-- Physical / device scan proof: `NOT_RUN`
+- Legacy preservation: `PASS`
+- Physical/device scan proof: `NOT_RUN`
 - Print-ready: `NO`
 - Completion state: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS`
