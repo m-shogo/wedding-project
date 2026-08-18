@@ -1,111 +1,94 @@
 # ADD-06 フォトブースサイン — QA
 
-Status: `CURRENT / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / CLEANROOM_V3_SELECTED_CANDIDATE / LEGACY_PRESERVED / NOT_PRINT_READY`
-Authority: GitHub latest `main` + `docs/automation/non-rurubu-figma-quality-current.md`
-Updated: 2026-08-15
+Status: `CURRENT / CLEANROOM_V3_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / LONG_COPY_STRESS_PASS / LEGACY_PRESERVED / NOT_PRINT_READY`
+Updated: 2026-08-18
+Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
 
-This file began as the 2026-08-02 pre-Figma QA checklist. The retained production is preserved as rollback/comparison history. The 2026-08-15 clean-room rebuild mandate requires new V2/V3 work to start from blank frames without visual reuse from retained production.
-
-## Live production authority
+## Current Figma authority
 
 - Figma file: `SVMALDUyhc2chxHa4fvdjx`
 - page: `0:1 / ADD-06_PHOTO_BOOTH_SIGN`
-- retained production: `1:2 / FRAME_ADD06_A3_PORTRAIT`
-- selected clean-room candidate: `25:3 / CLEANROOM_ADD06_V3_SELECTED_A3_BEST_SHOT_LENS_POSTER`
-- retained clean-room V2 comparison: `23:3 / CLEANROOM_ADD06_V2_A3_PHOTO_SPOT_FIELD_GUIDE`
-- Drive folder: `ADD-06_フォトブースサイン` / `1Ehk_oQ8vhAGo3DYBbgyOGfA03u0pu5wb`
-- previous promoted-production evidence: `FIGMA-NATIVE-EDITORIAL-PROMOTION-2026-08-12.md`
+- selected clean-room V3: `25:3 / CLEANROOM_ADD06_V3_SELECTED_A3_BEST_SHOT_LENS_POSTER`
+- long-copy proof: `25:41 / QA_ADD06_V3_LONG_COPY_STRESS_2026_08_15` — hidden after QA
+- retained clean-room V2 comparison: `23:3`
+- retained legacy production: `1:2 / FRAME_ADD06_A3_PORTRAIT`
+- Drive authority: `1Ehk_oQ8vhAGo3DYBbgyOGfA03u0pu5wb / ADD-06_フォトブースサイン`
 
-## 2026-08-15 zero-reuse clean-room rebuild
+The legacy production and V2 comparison remain untouched as rollback/history. V3 was originally built from a blank A3 frame under the clean-room mandate and remains the selected family.
 
-Observed latest `main` before the run: `ddd3253da041d43ef86147201ab4f9a6eab42ec4`.
+## Current visual direction
 
-The previous production was not duplicated, copied, or used as a component library. Only the current SPEC facts/constraints were used during authoring:
+The selected poster now reads primarily as:
 
-- A3 portrait / 990×1400 working canvas for 297×420 mm;
-- 3 mm bleed requirement and 12 mm safe-area requirement;
-- viewing distance about 1.5–3 m;
-- permitted title roles `PHOTO SPOT`, `BEST SHOT`, `TRAVEL MEMORY`;
-- support copy `Capture a memory from our special journey.`;
-- wedding date `2026.10.24`;
-- unresolved placement kept as native semantic placeholder;
-- no real-person generation and no variable copy baked into raster/SVG.
+`BEST SHOT → 写真撮影はこちら → editable lens target → 2026.10.24 / [会場内設置場所]`.
 
-### V2 — field-guide / viewfinder direction
+The large `BEST SHOT` typography and lens target provide the photo-booth semantic cue. The design deliberately avoids cards, badges, fake photography, gradients, shadows and repeated travel icons.
 
-Blank-frame V2:
+### 2026-08-18 subtraction polish
 
-- section `23:2 / CLEANROOM_ADD06_V2_2026_08_15`;
-- root `23:3 / CLEANROOM_ADD06_V2_A3_PHOTO_SPOT_FIELD_GUIDE`;
-- new editable vector `23:8 / VECTOR_VIEWFINDER_MARK_V2_EDITABLE`;
-- variable/factual copy remained native Figma text;
-- raster IMAGE fill count 0;
-- hidden `GUIDE_SAFE_12MM` preserves the print-safe reference.
+Fresh actual-size review found three fixed elements no longer carrying enough reader-facing value:
 
-Three-scale screenshot review:
+- `PHOTO SPOT` English kicker;
+- its small mint rule;
+- lower decorative route sweep / endpoint dots.
 
-- whole-item / 500 px: PASS for immediate `PHOTO SPOT` recognition and clean central photo-space cue;
-- reading / 1000 px: PASS;
-- actual-size / 990×1400: PASS.
+A rollback-safe comparison `32:2` showed that removing those roles produced a stronger, less template/UI-like first read without creating false premium emptiness. The subtraction was adopted in selected V3 and its long-copy proof.
 
-After V2 was complete, the retained production was viewed for comparison for the first time in this run. V2 improved immediate wayfinding but did not clearly beat the retained production's visual richness, so V2 was preserved as comparison rather than promoted.
+Hidden in selected `25:3`:
 
-### V3 — BEST SHOT / lens-poster direction
+- `25:14 / TXT_PHOTO_SPOT_KICKER`;
+- `25:20 / DECOR_KICKER_RULE`;
+- `25:10 / VECTOR_ROUTE_SWEEP_V3_EDITABLE`.
 
-A second materially different direction was then authored from another blank A3 frame. No V2 or retained-production nodes/assets were copied.
+Hidden in long-copy proof `25:41`:
 
-- section `25:2 / CLEANROOM_ADD06_V3_SELECTED_CANDIDATE_2026_08_15`;
-- root `25:3 / CLEANROOM_ADD06_V3_SELECTED_A3_BEST_SHOT_LENS_POSTER`;
-- new editable SVG/vector roles:
-  - `25:5 / VECTOR_LENS_TARGET_V3_EDITABLE`;
-  - `25:10 / VECTOR_ROUTE_SWEEP_V3_EDITABLE`;
-- native copy roles: `PHOTO SPOT`, `BEST SHOT`, support sentence, `写真撮影はこちら`, date, and semantic placement placeholder;
-- 6 visible native text nodes;
-- raster IMAGE fill count 0;
-- visible text outside root 0;
-- safe guide retained hidden.
+- `25:52 / TXT_PHOTO_SPOT_KICKER`;
+- `25:58 / DECOR_KICKER_RULE`;
+- `25:48 / VECTOR_ROUTE_SWEEP_V3_EDITABLE`.
 
-V3 screenshot QA:
+Rollback evidence:
 
-- whole-item / 500 px: PASS; strongest first-read hierarchy of the tested clean-room directions;
-- reading scale: PASS; `PHOTO SPOT → BEST SHOT → support → 写真撮影はこちら` remains legible without card/UI containment;
-- actual-size / 990×1400: PASS; vector lens/route detail remains crisp and the lower information field reads as a physical poster footer rather than an app panel.
+- `32:22 / ROLLBACK_ADD06_V3_PRE_KICKER_ROUTE_SUBTRACTION_2026_08_18` — hidden;
+- `32:42 / ROLLBACK_ADD06_V3_STRESS_PRE_KICKER_ROUTE_SUBTRACTION_2026_08_18` — hidden;
+- comparison `32:2` — hidden after adoption.
 
-Long-copy QA:
+Detailed evidence: `FIGMA-V3-KICKER-ROUTE-SUBTRACTION-QA-2026-08-18.md`.
 
-- production text roles were corrected to fixed-width `textAutoResize=HEIGHT` behavior before final QA;
-- hidden stress root: `25:41 / QA_ADD06_V3_LONG_COPY_STRESS_2026_08_15`;
-- stress subtitle, Japanese note, and placement placeholder all remained inside the 990×1400 root;
-- stress screenshot at reading scale: PASS;
-- stress root hidden after verification.
+## Structure / long-copy QA
 
-Comparison decision: V3 is the selected clean-room candidate because it adds stronger 1.5–3 m wayfinding, a distinct photo/lens semantic cue, and clearer thumbnail hierarchy without raster generation, fake photography, cards, badges, gradients, shadows, or old-layout reuse. The retained production remains untouched for rollback/history.
+The prior long-copy flow repair remains intact: variable subtitle/note flow uses native height-following structure rather than absolute text overlap.
 
-Image decision: `IMAGE_GENERATION_NOT_REQUIRED`. The current clean-room solution is stronger through typography + editable vector semantics; no missing raster role was identified. Drive write 0.
+Fresh post-subtraction readback:
 
-Current result: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / CLEANROOM_V3_SELECTED_CANDIDATE / LEGACY_PRESERVED`.
+- selected root: `990×1400`;
+- selected visible native text: `4`;
+- selected IMAGE fills: `0`;
+- selected visible text outside root: `0`;
+- selected text-to-text collisions: `0`;
+- long-copy visible native text: `4`;
+- long-copy IMAGE fills: `0`;
+- long-copy visible text outside root: `0`;
+- long-copy text-to-text collisions: `0`;
+- comparison and both rollback roots hidden after QA.
 
-## Previous visual / structure QA history
+Variable date/location copy remains native editable text. No final or variable copy is baked into SVG/raster.
 
-The retained production before the clean-room mandate had already passed a reopened editorial QA:
+## Asset / Drive decision
 
-- Japanese headline `旅の記憶を、ここで一枚。` was the dominant hierarchy;
-- production had 11 native text nodes / 10 visible, 0 raster IMAGE fill nodes and 0 visible text outside frame bounds;
-- no flatten/raster replacement was introduced and variable text remained native editable;
-- a redundant English rail mark was hidden on 2026-08-14 under rollback `19:2`.
+Exact Drive folder was live-read before the 2026-08-18 Figma write and remains `1Ehk_oQ8vhAGo3DYBbgyOGfA03u0pu5wb`.
 
-This evidence remains valid as historical structural/rollback evidence only; it is not used as the construction source for the clean-room candidate.
+Drive write: `0`.
 
-## Drive / image asset state
-
-Drive authority is live at `1Ehk_oQ8vhAGo3DYBbgyOGfA03u0pu5wb / ADD-06_フォトブースサイン`. No new Drive asset was required in the 2026-08-15 clean-room rebuild.
+`IMAGE_GENERATION_NOT_REQUIRED`: the current concrete defects were redundant fixed copy/decorative routing, not missing photography or texture.
 
 ## Deferred finalization
 
-- [ ] final photo-booth wording / placement location
-- [ ] actual installation sightline and distance check
-- [ ] intended stand / board / mounting method
-- [ ] printer template/profile, exact bleed/safe-area proof
-- [ ] 100% physical print and venue-lighting check
+Keep `NOT_PRINT_READY` until authoritative final inputs exist:
 
-Keep `NOT_PRINT_READY` until physical/vendor checks and final copy are authoritative.
+- final booth wording and exact placement location;
+- intended stand/board/mounting method;
+- actual installation sightline and 1.5–3m viewing check;
+- printer template/profile, final bleed/safe area;
+- physical print and venue-lighting proof.
+
+Do not reopen the selected visual family for cosmetic churn unless a fresh screenshot, physical proof or authoritative input exposes a concrete defect.
