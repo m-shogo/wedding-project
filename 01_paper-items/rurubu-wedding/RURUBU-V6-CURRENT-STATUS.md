@@ -8,7 +8,7 @@ Production state: separate clean-room V6; V7 is HOLD
 
 ## Current declaration
 
-`V6_LIVE_FIGMA_IN_PROGRESS / OUTER_EE_PREFERRED / PROFILE_QA_DN_PREFERRED / STORY_CHRONOLOGY_DO_PREFERRED / MEMORY_SPOTS_EB_PREFERRED / GOURMET_CAFE_EF_PREFERRED / ONE_DAY_PLAN_EC_PREFERRED / NATIVE_VARIABLE_TEXT_PRESERVED / REPLACEABLE_PHOTOS_PRESERVED / PREFERRED_VISIBLE_IMAGE_ROLES_36 / PHOTO_REPETITION_ROLE_AUDITED / V7_HOLD / NOT_PRINT_READY`
+`V6_LIVE_FIGMA_IN_PROGRESS / OUTER_EE_PREFERRED / PROFILE_QA_DN_PREFERRED / STORY_CHRONOLOGY_DO_PREFERRED / MEMORY_SPOTS_EB_PREFERRED / GOURMET_CAFE_EF_PREFERRED / ONE_DAY_PLAN_EG_PREFERRED / NATIVE_VARIABLE_TEXT_PRESERVED / REPLACEABLE_PHOTOS_PRESERVED / PREFERRED_VISIBLE_IMAGE_ROLES_36 / PHOTO_REPETITION_ROLE_AUDITED / PREFERRED_NODE_LIVENESS_RECONCILED / V7_HOLD / NOT_PRINT_READY`
 
 ## Live Figma preferred set
 
@@ -17,13 +17,64 @@ Production state: separate clean-room V6; V7 is HOLD
 - Story / chronology DO `1679:2` — preferred story/timeline spread.
 - Memory Spots EB `1721:2` — preferred destination-information spread; lead image remains source-bounded.
 - Gourmet / Cafe EF `1734:2` — preferred cafe/table spread; EA image roles preserved while the Cafe page gains a compact native reader-facing guide note in the previous dead gap.
-- Yokohama 1DAY Plan EC `1723:63` — preferred model-course spread; practical metadata remains native/editable.
+- Yokohama 1DAY Plan EG `1739:2` — live preferred model-course spread; reconstructed from verified DX rollback after durable EC IDs were found missing live. Right page `1739:29`; practical metadata remains native/editable.
 
 Start Here `845:27`:
 
-`V5 FU/FX · V6 EE + DN/DO + EB MEMORY SPOTS + EF CAFE & TABLE + EC 1DAY PLAN · V7 HOLD`
+`V5 FU/FX · V6 EE + DN/DO + EB MEMORY SPOTS + EF CAFE & TABLE + EG 1DAY PLAN · V7 HOLD`
 
 Rollback/rejected comparisons remain preserved. V7 was not edited.
+
+## EG — 1DAY preferred liveness reconciliation
+
+Fresh pre-write reconciliation found that durable status still pointed to EC `1723:63`, but live Figma no longer contained `1723:2`, `1723:63`, or right page `1723:90`. Verified rollback DX `1714:2` remained intact and hidden.
+
+Per authority order, live Figma was treated as truth. No attempt was made to continue writing against the missing EC IDs.
+
+Rollback-safe EG `1739:2` was reconstructed from DX using only the already-verified RSL-098 delta:
+
+- STOP 01 `MOVE / WALK　　MOOD / MORNING`;
+- STOP 02 `BREAK / CAFE　　PACE / SLOW`;
+- STOP 03 `MOVE / WALK　　STYLE / DETOUR`;
+- STOP 04 `TABLE / DINNER　　MOOD / RELAX`.
+
+Metadata node parent readback:
+
+- `1739:63` → `1739:29 / PAGE / V6_1DAY_RIGHT`;
+- `1739:64` → `1739:29`;
+- `1739:65` → `1739:29`;
+- `1739:66` → `1739:29`.
+
+Actual-size left-page review also found visible internal copy `TRIP DATA / EDITABLE`. It was replaced in native text with reader-facing `TRIP DATA / YOKOHAMA`. A subsequent scan across all live preferred V6 visible text found no remaining production/proof terms in the tested vocabulary.
+
+EG QA:
+
+- 1200px whole spread: PASS;
+- left actual `1739:3`, `794×1123`: PASS;
+- right actual `1739:29`, `794×1123`: PASS;
+- left native text: `19`; collisions `0`; 18px safe risks `0`;
+- right native text: `25`; collisions `0`; 18px safe risks `0`;
+- right replaceable photo roles: `4`;
+- whole spread preserves the verified five-photo 1DAY structure;
+- image hashes/crops/routes/times/titles were inherited unchanged from verified DX.
+
+Promotion: EG preferred; DX `1714:2` remains hidden rollback.
+
+Failure fingerprint: `PREFERRED_STATUS_POINTS_TO_MISSING_LIVE_NODE`.
+
+Before future writes, durable preferred IDs must be resolved against live node existence/visibility/semantic role. If a preferred node is missing, reconcile from verified rollback/evidence rather than silently inventing a replacement.
+
+## Preferred canvas organization
+
+Fresh live readback found EB `1721:2` and EF `1734:2` almost exactly overlapping at the same page-level canvas position. Internal designs were valid, but the overlap made the preferred set unnecessarily difficult for a human to inspect and edit.
+
+Only top-level spread positions were changed; no internal page geometry changed:
+
+- EB remains x `249387.75` / y `6440`;
+- EF is now x `251155.15625` / y `6440`;
+- EG is now x `252922.5625` / y `6440`.
+
+EB / EF / EG now read side-by-side on the working canvas.
 
 ## EE — Outer repeated-cafe subtraction
 
@@ -76,24 +127,24 @@ Promotion: EF preferred; EA `1720:2` hidden rollback.
 
 ## Preferred-set live image-role / repetition audit
 
-Preferred roots audited: EE / DN / DO / EB / EF / EC.
+Preferred roots: EE / DN / DO / EB / EF / EG.
 
-Visible IMAGE roles: `36` total.
+Visible IMAGE roles remain `36` total after restoring the intended live 1DAY preferred spread. EG restores the verified DX/EC image roles rather than introducing a new asset set.
 
-Hash repetition:
+Hash repetition from the latest full preferred-set audit remains the working reference:
 
 - Yokohama skyline `644f449c...`: `6` roles;
 - waterfront `539c259b...`: `6` roles;
 - dining `d76eb07d...`: `6` roles;
 - travel texture `691a6cee...`: `5` roles;
-- cafe `c1ada112...`: `5` roles (reduced from `6` by EE);
+- cafe `c1ada112...`: `5` roles;
 - travel-object/flatlay `e3738476...`: `4` roles;
 - travel street `439a719d...`: `3` roles;
 - masthead PNG `0bdbf479...`: `1` role.
 
 Do not optimize repetition count blindly. Evidentiary/place roles and dominant editorial-energy roles must not be removed merely to lower a number. ED proves that even a non-evidentiary repeated photo can still be necessary for magazine energy; EE proves that a redundant role can be removed when another legitimate field already performs its job.
 
-The prior preferred-set intrinsic audit was `37/37 PASS`. EE removes one image role and changes only flatlay height to its known source height; EF changes no image geometry. Current live preferred image geometry has no newly introduced upscale violation. This remains a dummy-layout geometry gate, not final print effective-DPI proof.
+The prior preferred-set intrinsic audit passed all live roles. EG uses the verified DX image geometry/hashes and introduces no new upscale condition. This remains a dummy-layout geometry gate, not final print effective-DPI proof.
 
 ## Drive / generated section masters
 
@@ -105,13 +156,16 @@ Previously generated Profile/Q&A/Timeline/Memories masters remain stored and una
 
 ## Latest evidence / learning
 
-- `01_paper-items/rurubu-wedding/evidence/RURUBU-V6-EE-EF-PHOTO-REPETITION-AND-CAFE-DENSITY-QA-2026-08-18.md`;
-- `docs/wedding-design-learning-feedback-log.append/2026-08-18-rurubu-v6-ee-ef-photo-repetition-cafe-density.md`;
-- `docs/design-learning/rurubu-shared-learning-feed.append/2026-08-18-rsl-099-photo-repetition-role-subtraction.md`.
+- `01_paper-items/rurubu-wedding/evidence/RURUBU-V6-EG-1DAY-PREFERRED-LIVENESS-RECONCILIATION-2026-08-18.md`;
+- `docs/wedding-design-learning-feedback-log.append/2026-08-18-rurubu-v6-eg-live-preferred-reconciliation.md`;
+- `docs/design-learning/rurubu-shared-learning-feed.append/2026-08-18-rsl-100-preferred-node-liveness-reconciliation.md`;
+- previous latest visual evidence: `01_paper-items/rurubu-wedding/evidence/RURUBU-V6-EE-EF-PHOTO-REPETITION-AND-CAFE-DENSITY-QA-2026-08-18.md`.
 
-RSL-099: reduce photo repetition by semantic/editorial role, not by count. A rollback-safe substitution that loses editorial energy must be rejected even if it improves diversity metrics. A redundant photo role can be removed when an existing legitimate field preserves or improves the page at whole/read/actual-size scales. State: `VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`.
+RSL-100: durable preferred status is not sufficient evidence that the preferred node still exists live. Resolve live node existence/visibility/semantic role before writes; if missing, reconcile only from verified rollback/evidence. State: `VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`.
 
-RSL-098 remains active: when a travel-guide sequence is too sparse to feel useful, add small semantic native practical metadata before cards or extra photography. EF independently follows the same general direction on a different page role without copying the 1DAY label grammar.
+RSL-099 remains active: reduce photo repetition by semantic/editorial role, not by count.
+
+RSL-098 remains active: when a travel-guide sequence is too sparse to feel useful, add small semantic native practical metadata before cards or extra photography. EG restores that already-verified behavior in live Figma.
 
 ## Asset lifecycle truth for latest run
 
@@ -120,12 +174,14 @@ RSL-098 remains active: when a travel-guide sequence is too sparse to feel usefu
 - new Drive saves: `0`;
 - new external binary placements: `0`;
 - new image hashes: `0`;
+- reconstructed Figma preferred root from verified rollback: `YES`;
 - visible preferred IMAGE roles: `36`;
-- cafe repetition: `6 → 5`;
 - native text preserved: `YES`;
 - remaining photography preserved as independently replaceable roles: `YES`;
-- whole / actual-size visual QA: `PASS` for EE and EF;
-- collision / safe-area QA: `PASS`;
+- EG whole / left actual / right actual visual QA: `PASS`;
+- EG collision / safe-area QA: `PASS`;
+- preferred-visible production-term scan after correction: `0 hits`;
+- preferred middle-spread canvas overlap corrected: `YES`;
 - rollback/rejected evidence preserved: `YES`;
 - V7 touched: `NO`.
 
@@ -135,14 +191,15 @@ Do not call V6 complete or print-ready until final legitimate photography/copy, 
 
 Current state:
 
-`V6 EE + DN/DO + EB + EF + EC = VERIFIED_LOCAL_DUMMY_DESIGN_STUDIES / PHOTO_LED_TRAVEL_GUIDE_GRAMMAR / PHOTO_REPETITION_REDUCED_BY_ROLE / PRACTICAL_GUIDE_DENSITY_IMPROVED / NATIVE_TEXT_EDITABILITY_PRESERVED / REPLACEABLE_PHOTOS_PRESERVED / ROLLBACK_SAFE / V7_HOLD / NOT_PRINT_READY`.
+`V6 EE + DN/DO + EB + EF + EG = VERIFIED_LOCAL_DUMMY_DESIGN_STUDIES / PHOTO_LED_TRAVEL_GUIDE_GRAMMAR / PHOTO_REPETITION_REDUCED_BY_ROLE / PRACTICAL_GUIDE_DENSITY_RESTORED_LIVE / PREFERRED_NODE_LIVENESS_RECONCILED / NATIVE_TEXT_EDITABILITY_PRESERVED / REPLACEABLE_PHOTOS_PRESERVED / ROLLBACK_SAFE / V7_HOLD / NOT_PRINT_READY`.
 
 ## Next highest-value work
 
 1. Continue V6, not V7.
-2. Continue publication-level photo-repetition audit by semantic role, not by count alone.
-3. Prioritize final legitimate distinct Yokohama/destination photography over extra surface decoration.
-4. Do not repeat the rejected Profile texture substitution without a material new asset/capability.
-5. Keep practical metadata native/editable and varied by page role; do not turn all spreads into the same label system.
-6. Keep EB / EF / EC as preferred middle-feature studies until page count/imposition is known.
-7. Keep printer-template/PDF/physical-proof gates separate from dummy-design QA.
+2. Before each write, reconcile durable preferred IDs with live Figma node liveness.
+3. Continue publication-level photo-repetition audit by semantic role, not by count alone.
+4. Prioritize final legitimate distinct Yokohama/destination photography over extra surface decoration.
+5. Do not repeat the rejected Profile texture substitution without a material new asset/capability.
+6. Keep practical metadata native/editable and varied by page role; do not turn all spreads into the same label system.
+7. Keep EB / EF / EG as preferred middle-feature studies until page count/imposition is known.
+8. Keep printer-template/PDF/physical-proof gates separate from dummy-design QA.
