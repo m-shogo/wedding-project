@@ -8,26 +8,54 @@ Production state: separate clean-room V6; V7 is HOLD
 
 ## Current declaration
 
-`V6_LIVE_FIGMA_IN_PROGRESS / OUTER_AH_PREFERRED / PROFILE_QA_DN_PREFERRED / STORY_CHRONOLOGY_DO_PREFERRED / MEMORY_SPOTS_DS_PREFERRED / GOURMET_CAFE_EA_PREFERRED / ONE_DAY_PLAN_DX_PREFERRED / NATIVE_VARIABLE_TEXT_PRESERVED / REPLACEABLE_PHOTOS_PRESERVED / V7_HOLD / NOT_PRINT_READY`
+`V6_LIVE_FIGMA_IN_PROGRESS / OUTER_AH_PREFERRED / PROFILE_QA_DN_PREFERRED / STORY_CHRONOLOGY_DO_PREFERRED / MEMORY_SPOTS_EB_PREFERRED / GOURMET_CAFE_EA_PREFERRED / ONE_DAY_PLAN_DX_PREFERRED / NATIVE_VARIABLE_TEXT_PRESERVED / REPLACEABLE_PHOTOS_PRESERVED / PREFERRED_VISIBLE_RASTERS_INTRINSIC_SAFE_37_OF_37 / V7_HOLD / NOT_PRINT_READY`
 
 ## Live Figma preferred set
 
 - Outer AH `1717:55` — preferred outer spread; front duplicate skyline role converted to editable issue panel.
 - Profile / Q&A DN `1675:2` — preferred profile/interview spread.
 - Story / chronology DO `1679:2` — preferred story/timeline spread.
-- Memory Spots DS `1709:2` — preferred destination-information spread; SPOT 03 uses truthful Yokohama skyline source.
-- Gourmet / Cafe EA `1720:2` — preferred gourmet/cafe spread; DZ hierarchy retained while all visible Cafe/Table raster roles are now displayed within intrinsic source dimensions.
+- Memory Spots EB `1721:2` — preferred destination-information spread; DS visual grammar retained while the lead photo is now source-bounded and the lower-left editorial rhythm is rebalanced.
+- Gourmet / Cafe EA `1720:2` — preferred gourmet/cafe spread; DZ hierarchy retained while all visible Cafe/Table raster roles are displayed within intrinsic source dimensions.
 - Yokohama 1DAY Plan DX `1714:2` — preferred model-course spread; exact hero/STOP01 photo duplication removed.
 
 Start Here `845:27`:
 
-`V5 FU/FX · V6 AH + DN/DO + DS MEMORY SPOTS + EA CAFE & TABLE + DX 1DAY PLAN · V7 HOLD`
+`V5 FU/FX · V6 AH + DN/DO + EB MEMORY SPOTS + EA CAFE & TABLE + DX 1DAY PLAN · V7 HOLD`
 
 Rollback and rejected comparisons remain preserved. V7 was not edited.
 
-## DS — Memory Spots semantic truth repair
+## EB — Memory Spots intrinsic-safe correction
 
-DS replaced DR's destination-wrong SPOT 03 with the existing verified Yokohama skyline hash `644f449c3bf2001a94d4b822d2b55e2614c11042`, kept at `238×218` rather than enlarging the small source. Whole/reading/actual-size QA passed with collisions `0` and 18px safe risks `0`.
+A full preferred-set image-size audit after EA promotion found one remaining intrinsic-size violation in DS:
+
+- Memory Spots lead display `840×610`, intrinsic source `1356×560`.
+
+Width was safe but displayed height exceeded source height by about 8.9%.
+
+EB `1721:2` corrected the lead photo to `840×560` while preserving the existing waterfront hash `539c259be8036b481d06b4f76db9a39b407d90e8`. To avoid creating dead space beneath the shorter photo, the existing editable content was rebalanced as one bounded left-page composition:
+
+- lead caption moved with the photographic edge;
+- SPOT 01 native number/title/copy moved upward;
+- SPOT 02 existing replaceable cafe image moved upward without resize;
+- SPOT 02 native number/title/copy/label/pullquote moved upward;
+- right guide page, all hashes and all semantic roles remained unchanged.
+
+QA:
+
+- left page native text `13`, collision `0`, 18px safe risks `0`;
+- lead `840×560` vs intrinsic `1356×560`: PASS;
+- SPOT 02 `405×335` vs intrinsic `810×552`: PASS;
+- right page native text `14`, collision `0`, 18px safe risks `0`;
+- SPOT 03 `238×218` vs intrinsic `240×220`: PASS;
+- SPOT 04 `455×318` vs intrinsic `732×498`: PASS;
+- whole/read screenshot PASS and actual-size structural review PASS.
+
+Promotion: EB preferred; DS `1709:2` hidden rollback.
+
+## DS — Memory Spots semantic truth repair history
+
+DS replaced DR's destination-wrong SPOT 03 with the existing verified Yokohama skyline hash `644f449c3bf2001a94d4b822d2b55e2614c11042`, kept at `238×218` rather than enlarging the small source. EB keeps that semantic-truth repair while correcting the later-discovered lead-image upscale.
 
 ## DX — 1DAY Plan photo-diversity refinement
 
@@ -85,9 +113,20 @@ AH `1717:55` changed only the front postcard role:
 
 Promotion: AH preferred; AG hidden rollback.
 
+## Preferred-set intrinsic-image audit
+
+After EA and EB promotion, a live audit of every visible IMAGE role in all six preferred spreads returned:
+
+- preferred roots audited: AH / DN / DO / EB / EA / DX;
+- visible IMAGE roles: `37`;
+- intrinsic-size violations: `0`;
+- result: `37 / 37 PASS`.
+
+This is a stronger current truth than the previous prose assumption. It verifies current dummy-design display geometry only; it does not prove final print effective DPI or final-source suitability.
+
 ## Preferred-set photo repetition audit
 
-EA changes only Cafe/Table display geometry; it does not change preferred-set image-hash counts from the AH + DZ audit:
+EA/EB change display geometry and page rhythm only; they do not materially change preferred-set image-hash repetition:
 
 - cafe `c1ada...`: `6` roles;
 - Yokohama skyline `644f...`: `6` roles;
@@ -111,10 +150,12 @@ Previously generated Profile/Q&A/Timeline/Memories masters remain stored and una
 ## Latest evidence / learning
 
 - `01_paper-items/rurubu-wedding/evidence/RURUBU-V6-EA-CAFE-INTRINSIC-SAFE-QA-2026-08-18.md`;
+- `01_paper-items/rurubu-wedding/evidence/RURUBU-V6-EB-MEMORY-SPOTS-INTRINSIC-SAFE-QA-2026-08-18.md`;
 - `docs/wedding-design-learning-feedback-log.append/2026-08-18-rurubu-v6-ea-cafe-intrinsic-safe.md`;
+- `docs/wedding-design-learning-feedback-log.append/2026-08-18-rurubu-v6-eb-memory-spots-intrinsic-safe.md`;
 - `docs/design-learning/rurubu-shared-learning-feed.append/2026-08-18-rsl-097-intrinsic-audit-can-overrule-visual-pass.md`.
 
-RSL-097: a prior screenshot PASS does not replace a live intrinsic-dimension audit. If a raster role exceeds source dimensions, test a source-bounded rollback-safe candidate and adopt it only when whole/read/actual-size visual hierarchy still passes.
+RSL-097: a prior screenshot PASS does not replace a live intrinsic-dimension audit. If a raster role exceeds source dimensions, test a source-bounded rollback-safe candidate and adopt it only when whole/read/actual-size visual hierarchy still passes. EA and EB reproduced this method on two materially different Rurubu spreads in the same run; state remains `VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`, not cross-item verified.
 
 RSL-096 remains active: after a repeated/nonessential photo is truthfully removed, if the resulting print role is too quiet and does not require photographic evidence, independently test stronger native typography inside the existing bounded composed support before restoring imagery or adding cards.
 
@@ -125,7 +166,7 @@ RSL-096 remains active: after a repeated/nonessential photo is truthfully remove
 - new Drive saves: `0`;
 - new external binary placements: `0`;
 - new image hashes: `0`;
-- image geometry corrected to intrinsic-safe display: `YES`;
+- preferred visible IMAGE roles intrinsic-safe: `37 / 37`;
 - existing verified composed texture reused: `YES`;
 - existing verified image fills reused: `YES`;
 - native text preserved: `YES`;
@@ -141,14 +182,14 @@ Do not call V6 complete or print-ready until final legitimate photography/copy, 
 
 Current state:
 
-`V6 AH + DN/DO + DS + EA + DX = VERIFIED_LOCAL_DUMMY_DESIGN_STUDIES / PHOTO_LED_TRAVEL_GUIDE_GRAMMAR / NATIVE_TEXT_EDITABILITY_PRESERVED / REPLACEABLE_PHOTOS_PRESERVED / CAFE_TABLE_VISIBLE_RASTERS_INTRINSIC_SAFE / PHOTO_REPETITION_REDUCED_WITHOUT_FALSE_DESTINATION_ASSETS / ROLLBACK_SAFE / V7_HOLD / NOT_PRINT_READY`.
+`V6 AH + DN/DO + EB + EA + DX = VERIFIED_LOCAL_DUMMY_DESIGN_STUDIES / PHOTO_LED_TRAVEL_GUIDE_GRAMMAR / NATIVE_TEXT_EDITABILITY_PRESERVED / REPLACEABLE_PHOTOS_PRESERVED / PREFERRED_VISIBLE_RASTERS_INTRINSIC_SAFE_37_OF_37 / PHOTO_REPETITION_REDUCED_WITHOUT_FALSE_DESTINATION_ASSETS / ROLLBACK_SAFE / V7_HOLD / NOT_PRINT_READY`.
 
 ## Next highest-value work
 
 1. Continue V6, not V7.
 2. Continue publication-level photo-repetition audit by semantic role, not by count alone.
-3. Run intrinsic-dimension readback on other currently preferred large photo roles before assuming earlier visual PASS also proves source-safe display.
+3. Treat `37 / 37 intrinsic-safe` as a dummy-layout gate only; final legitimate photography still needs effective print-resolution calculation.
 4. Prioritize final legitimate distinct Yokohama/destination photography over extra surface decoration.
-5. Keep DS / EA / DX as preferred middle-feature studies until page count/imposition is known.
+5. Keep EB / EA / DX as preferred middle-feature studies until page count/imposition is known.
 6. Do not convert place-evidence photos into decoration merely to improve repetition metrics.
 7. Keep printer-template/PDF/physical-proof gates separate from dummy-design QA.
