@@ -1,7 +1,7 @@
 # ADD-16 両親贈呈品メッセージカード — QA
 
-Status: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / CLEANROOM_V3_SELECTED / HOME_PORT_MICROCOPY_SUBTRACTION_PASS / OPEN_HANDWRITTEN_AREA_POLISHED / LONG_COPY_STRESS_PASS / AUTO_HEIGHT_HARDENED / LEGACY_PRESERVED / ROLLBACK_SAFE / NOT_PRINT_READY`
-Updated: 2026-08-18
+Status: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / CLEANROOM_V3_SELECTED / HOME_PORT_MICROCOPY_SUBTRACTION_PASS / OPEN_HANDWRITTEN_AREA_POLISHED / HANDWRITTEN_HELPER_LABEL_HIDDEN / LONG_COPY_STRESS_PASS / AUTO_HEIGHT_HARDENED / LEGACY_PRESERVED / ROLLBACK_SAFE / NOT_PRINT_READY`
+Updated: 2026-08-19
 Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
 
 ## Current selected authority
@@ -12,6 +12,7 @@ Canonical evidence:
 
 - `FIGMA-CLEANROOM-V3-HOME-HORIZON-QA-2026-08-17.md`
 - `OPEN-HANDWRITTEN-SIGNATURE-AREA-QA-2026-08-18.md`
+- `HANDWRITTEN-LABEL-VISIBILITY-RECONCILIATION-2026-08-19.md`
 - subsequent guest-copy / placeholder-status cleanup and native-text auto-height hardening records in the ADD-16 item history.
 
 Live authority:
@@ -37,7 +38,7 @@ Live authority:
 - no certificate symmetry, side slab, hearts, houses, airplanes, family photos, rounded cards, shadows or script-font decoration;
 - all family-specific/final copy stays native semantic text.
 
-The optional handwritten-signature role on the back uses an open paper field instead of a complete visible rectangle. The semantic `260×120` writing-area geometry and native `自筆署名欄（任意）` label remain in Figma, so editability is preserved without printing a form-like box.
+The optional handwritten-signature role on the back uses an open paper field instead of a complete visible rectangle. The semantic `260×120` writing-area geometry remains in Figma with visible stroke `0`; the internal helper label `自筆署名欄（任意）` is hidden from the guest-facing paper. Editability is preserved without printing a form-like box or production note.
 
 ## Decorative English microcopy subtraction — 2026-08-18
 
@@ -60,6 +61,18 @@ The same fixed microcopy visibility change was applied to hidden front stress `1
 
 Result: `HOME_PORT_MICROCOPY_SUBTRACTION_PASS`.
 
+## Handwritten helper-label reconciliation — 2026-08-19
+
+Fresh live readback found the durable QA text lagging behind the selected Figma state:
+
+- `18:24 / AREA_HANDWRITTEN_SIGNATURE`: visible semantic `260×120` geometry, stroke count `0`;
+- `18:25 / META / HANDWRITTEN / 自筆署名欄（任意）`: `visible=false`;
+- `18:23 / TXT_COUPLE_SIGNATURE`: visible native `[ふたりの署名]`.
+
+No Figma mutation was required. The guest-facing paper was already correct; this QA file was reconciled so it no longer claims that the internal helper label is visible/retained on the printed surface.
+
+Result: `HANDWRITTEN_HELPER_LABEL_HIDDEN / AUTHORITY_RECONCILED`.
+
 ## Structure / long-copy QA
 
 ### Selected front `18:3`
@@ -76,7 +89,8 @@ Result: `HOME_PORT_MICROCOPY_SUBTRACTION_PASS`.
 - visible text outside root: `0`
 - message body remains native auto-layout so approved Japanese copy can grow without a fixed-height raster/text block;
 - `AREA_HANDWRITTEN_SIGNATURE`: `260×120`, visible stroke `0`, semantic geometry retained;
-- native label `自筆署名欄（任意）` retained.
+- internal helper label `META / HANDWRITTEN / 自筆署名欄（任意）`: hidden;
+- guest-facing native signature role `[ふたりの署名]`: visible/editable.
 
 Hidden stress `18:26 / 18:37` uses long recipient, multi-paragraph gratitude body, longer optional metaphor and long couple-signature strings. Existing actual-size evidence remains valid because the 2026-08-18 front change only hides fixed decorative microcopy and does not reduce any variable-copy geometry.
 
@@ -92,7 +106,7 @@ Do not invent family composition, names, forms of address, episodes, dates/memor
 
 `IMAGE_GENERATION_NOT_REQUIRED_FOR_THIS_ITEM`.
 
-The item is text/emotion-led. Adding generated family/photo imagery would add identity/provenance risk without solving a current visual defect. Live Drive metadata on 2026-08-18 matched `1BOyETtL1_loGXNjGV9S30sJKEhZNjd6O`, parent `0ADXt8irGMFGnUk9PVA`. Drive writes: `0`.
+The item is text/emotion-led. Adding generated family/photo imagery would add identity/provenance risk without solving a current visual defect. Live Drive metadata on 2026-08-19 matched `1BOyETtL1_loGXNjGV9S30sJKEhZNjd6O`, parent `0ADXt8irGMFGnUk9PVA`. Drive writes: `0`.
 
 ## BLOCKED_REQUIRED_INPUT / DEFERRED_FINALIZATION
 
@@ -114,6 +128,7 @@ Still unresolved:
 - decorative English microcopy subtraction: `PASS`
 - native semantic editability: `PASS`
 - open handwritten-signature area: `PASS`
+- guest-facing handwritten helper label hidden: `PASS`
 - long-copy stress: `PASS`
 - auto-height hardening: `PASS`
 - family-safety / no fabricated facts: `PASS`
