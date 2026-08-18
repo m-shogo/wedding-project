@@ -1,7 +1,7 @@
 # ADD-06 フォトブースサイン — QA
 
-Status: `CURRENT / CLEANROOM_V3_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / LONG_COPY_STRESS_PASS / LEGACY_PRESERVED / NOT_PRINT_READY`
-Updated: 2026-08-18
+Status: `CURRENT / CLEANROOM_V3_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / LONG_COPY_STRESS_PASS / LENS_RETICLE_UI_SUBTRACTION_PASS / LEGACY_PRESERVED / NOT_PRINT_READY`
+Updated: 2026-08-19
 Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
 
 ## Current Figma authority
@@ -20,9 +20,9 @@ The legacy production and V2 comparison remain untouched as rollback/history. V3
 
 The selected poster now reads primarily as:
 
-`BEST SHOT → 写真撮影はこちら → editable lens target → 2026.10.24 / [会場内設置場所]`.
+`BEST SHOT → 写真撮影はこちら → simplified editable lens mark → 2026.10.24 / [会場内設置場所]`.
 
-The large `BEST SHOT` typography and lens target provide the photo-booth semantic cue. The design deliberately avoids cards, badges, fake photography, gradients, shadows and repeated travel icons.
+The large `BEST SHOT` typography and two-ring lens mark provide the photo-booth semantic cue. The design deliberately avoids cards, badges, fake photography, gradients, shadows, repeated travel icons and target/radar-style reticle decoration.
 
 ### 2026-08-18 subtraction polish
 
@@ -54,32 +54,67 @@ Rollback evidence:
 
 Detailed evidence: `FIGMA-V3-KICKER-ROUTE-SUBTRACTION-QA-2026-08-18.md`.
 
+### 2026-08-19 lens-reticle simplification
+
+Fresh 500px / reading / native `990×1400` review found the editable lens target still carried four simultaneous cues: blue outer ring, grey dashed intermediate reticle, mint crosshair and dark inner aperture. With `BEST SHOT` and `写真撮影はこちら` already carrying the photo-booth meaning, the dashed reticle + crosshair pushed the mark toward radar/target-widget semantics.
+
+Two bounded rollback-safe comparisons were created from the selected clean-room V3 only:
+
+- `33:2 / QA_ADD06_V3_LENS_SIMPLIFY_A_NO_DASHED_RETICLE_2026_08_19` — dashed reticle removed only;
+- `33:22 / QA_ADD06_V3_LENS_SIMPLIFY_B_NO_RETICLE_NO_CROSSHAIR_2026_08_19` — dashed reticle + mint crosshair removed.
+
+Comparison B was stronger at reading scale while retaining an immediate lens/aperture reading. It was adopted in selected and long-copy proof:
+
+Selected `25:3`:
+
+- `25:7` dashed reticle: hidden;
+- `25:8` mint crosshair: hidden;
+- `25:6` blue outer ring: retained;
+- `25:9` dark inner aperture: retained.
+
+Long-copy proof `25:41`:
+
+- `25:45` dashed reticle: hidden;
+- `25:46` mint crosshair: hidden;
+- `25:44` blue outer ring: retained;
+- `25:47` dark inner aperture: retained.
+
+Pre-change rollback:
+
+- `34:2 / ROLLBACK_ADD06_V3_PRE_LENS_RETICLE_SUBTRACTION_2026_08_19` — hidden;
+- `34:22 / ROLLBACK_ADD06_V3_STRESS_PRE_LENS_RETICLE_SUBTRACTION_2026_08_19` — hidden.
+
+Both comparison roots are hidden after adoption. Detailed evidence: `FIGMA-V3-LENS-RETICLE-SUBTRACTION-QA-2026-08-19.md`.
+
 ## Structure / long-copy QA
 
 The prior long-copy flow repair remains intact: variable subtitle/note flow uses native height-following structure rather than absolute text overlap.
 
-Fresh post-subtraction readback:
+Fresh post-reticle-subtraction readback:
 
 - selected root: `990×1400`;
 - selected visible native text: `4`;
 - selected IMAGE fills: `0`;
 - selected visible text outside root: `0`;
 - selected text-to-text collisions: `0`;
+- selected lens visible children: blue outer ring + dark inner aperture only;
 - long-copy visible native text: `4`;
 - long-copy IMAGE fills: `0`;
 - long-copy visible text outside root: `0`;
 - long-copy text-to-text collisions: `0`;
-- comparison and both rollback roots hidden after QA.
+- long-copy lens visible children: blue outer ring + dark inner aperture only;
+- long-copy proof returned to hidden state after native-size screenshot QA;
+- comparison and rollback roots hidden after QA.
 
 Variable date/location copy remains native editable text. No final or variable copy is baked into SVG/raster.
 
 ## Asset / Drive decision
 
-Exact Drive folder was live-read before the 2026-08-18 Figma write and remains `1Ehk_oQ8vhAGo3DYBbgyOGfA03u0pu5wb`.
+Exact Drive folder live-read before the 2026-08-19 Figma write and remains `1Ehk_oQ8vhAGo3DYBbgyOGfA03u0pu5wb`.
 
 Drive write: `0`.
 
-`IMAGE_GENERATION_NOT_REQUIRED`: the current concrete defects were redundant fixed copy/decorative routing, not missing photography or texture.
+`IMAGE_GENERATION_NOT_REQUIRED`: the concrete defect was excess UI-like fixed vector treatment, not missing photography or texture.
 
 ## Deferred finalization
 
