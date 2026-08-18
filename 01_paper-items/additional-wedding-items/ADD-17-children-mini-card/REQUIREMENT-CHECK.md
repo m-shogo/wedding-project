@@ -1,6 +1,6 @@
 # ADD-17 子ども向けミニカード / ぬりえ — REQUIREMENT CHECK
 
-Status: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / V5_PRODUCTION_POLISHED / OPEN_DRAWING_FIELD_RULE_SUBTRACTION_PASS / ROLLBACK_SAFE / BLOCKED_REQUIRED_INPUT / NOT_PRINT_READY`
+Status: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / V5_PRODUCTION_POLISHED / FRONT_BACK_OPEN_FIELD_RULE_SUBTRACTION_PASS / ROLLBACK_SAFE / BLOCKED_REQUIRED_INPUT / NOT_PRINT_READY`
 Date updated: 2026-08-19
 Authority: latest `m-shogo/wedding-project` `main` + `docs/automation/non-rurubu-figma-quality-current.md`
 
@@ -16,7 +16,8 @@ Current production authority:
 - exact Drive folder: `ADD-17_子ども向けミニカード_ぬりえ` / `1xqxYqJ6_-0nPYSKrWkISHYljiNGIP5mB`
 - V5 promotion evidence: `FIGMA-V5-PROMOTION-2026-08-11.md`
 - prior production polish evidence: `FIGMA-V5-MICROCOPY-POLISH-2026-08-12.md`
-- current front open-field polish evidence: `FRONT-OPEN-FIELD-RULE-SUBTRACTION-QA-2026-08-19.md`
+- front open-field polish evidence: `FRONT-OPEN-FIELD-RULE-SUBTRACTION-QA-2026-08-19.md`
+- back open-writing polish evidence: `BACK-OPEN-WRITING-RULE-SUBTRACTION-QA-2026-08-19.md`
 
 ## Current design state
 
@@ -31,17 +32,34 @@ Verified production characteristics:
 - long-copy / structure evidence is retained from the reopened V5 work;
 - no generated child/person imagery and no fabricated child facts are present.
 
-Fresh 2026-08-19 front review removed one non-semantic short rust rule from inside the large mint drawing field. The field itself, left binding rule, top tick, Japanese hierarchy and child-facing guidance were preserved. The subtraction made the central area read more clearly as an open drawing/activity field rather than a decorated UI-like module.
+Fresh 2026-08-19 front/back review removed one non-semantic short rust rule from each open activity field:
 
-Current front post-write evidence:
+- front: removed the floating short rule inside the large mint drawing field;
+- back: removed the floating short divider between the four writing lines and optional-name area.
+
+The semantic areas, left teal binding rule, top rust tick, Japanese hierarchy, four back writing lines, optional name rule and child-facing guidance remain intact. The result is more open paper behavior and less segmented/template-like UI reading.
+
+Current post-write evidence:
+
+### Front `2:2`
 
 - visible native text: `5`;
 - IMAGE fills: `0`;
 - visible text outside root: `0`;
 - text collision: `0`;
-- short internal zero-height accent rule in the drawing field: `0`;
+- short internal zero-height accent rule in drawing field: `0`;
 - hidden pre-change rollback: `37:19`;
 - comparison `37:2` hidden after adoption.
+
+### Back `2:5`
+
+- visible native text: `6`;
+- IMAGE fills: `0`;
+- visible text outside root: `0`;
+- text collision: `0`;
+- short 200–300px floating accent rule in body: `0`;
+- hidden pre-change rollback: `38:23`;
+- comparison `38:2` hidden after adoption.
 
 ## Requirement gate that still remains
 
@@ -68,7 +86,7 @@ Do not fabricate these facts or personalize production until they are confirmed.
 
 - Figma production: existing V5 front `2:2` / back `2:5`
 - current visual status: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS`
-- current front polish: `OPEN_DRAWING_FIELD_RULE_SUBTRACTION_PASS`
+- current polish: `FRONT_BACK_OPEN_FIELD_RULE_SUBTRACTION_PASS`
 - Drive authority: `1xqxYqJ6_-0nPYSKrWkISHYljiNGIP5mB`
 - new Drive asset in this sync: `0`
 - raster assets required by current design: `0`
