@@ -8,7 +8,7 @@ Production state: separate clean-room V6; V7 is HOLD
 
 ## Current declaration
 
-`V6_LIVE_FIGMA_IN_PROGRESS / OUTER_EO_PREFERRED / PROFILE_QA_EK_PREFERRED / STORY_CHRONOLOGY_EN_PREFERRED / MEMORY_SPOTS_EM_PREFERRED / GOURMET_CAFE_EF_PREFERRED / ONE_DAY_PLAN_EI_PREFERRED / NATIVE_VARIABLE_TEXT_PRESERVED / REPLACEABLE_PHOTOS_PRESERVED / PREFERRED_NODE_LIVENESS_VERIFIED / INTRINSIC_VIOLATIONS_0 / READER_PRODUCTION_TERMS_0 / V7_HOLD / NOT_PRINT_READY`
+`V6_LIVE_FIGMA_IN_PROGRESS / OUTER_EO_PREFERRED / PROFILE_QA_EK_PREFERRED / STORY_CHRONOLOGY_EN_PREFERRED / MEMORY_SPOTS_EM_PREFERRED / GOURMET_CAFE_EF_PREFERRED / ONE_DAY_PLAN_EJ_PREFERRED / NATIVE_VARIABLE_TEXT_PRESERVED / REPLACEABLE_PHOTOS_PRESERVED / PREFERRED_NODE_LIVENESS_VERIFIED / INTRINSIC_VIOLATIONS_0 / READER_PRODUCTION_TERMS_0 / V7_HOLD / NOT_PRINT_READY`
 
 ## Live Figma preferred set
 
@@ -17,43 +17,54 @@ Production state: separate clean-room V6; V7 is HOLD
 - Story / chronology EN `1773:2` — preferred story/timeline spread; chronology page `1773:28`.
 - Memory Spots EM `1767:2` — preferred destination-information spread; guide page `1767:24`.
 - Gourmet / Cafe EF `1734:2` — preferred cafe/table spread.
-- Yokohama 1DAY Plan EI `1752:2` — preferred model-course spread; right page `1752:29`.
+- Yokohama 1DAY Plan EJ `1784:2` — preferred model-course spread; right page `1784:29`.
 
 Start Here `845:27`:
 
-`V5 FU/FX · V6 EO + EK/EN + EM MEMORY SPOTS + EF CAFE & TABLE + EI 1DAY PLAN · V7 HOLD`
+`V5 FU/FX · V6 EO + EK/EN + EM MEMORY SPOTS + EF CAFE & TABLE + EJ 1DAY PLAN · V7 HOLD`
 
 Rollback/rejected comparisons remain preserved. V7 was not edited.
 
-## Latest visual progress — EO Outer
+## Latest visual progress — EJ 1DAY Plan
 
-Live six-spread review identified the full-width navy `みんなとの思い出` band on Outer EE `1730:2` as the clearest remaining back-cover UI-like separator. The dominant photo already had a dark, quiet lower field capable of supporting native type.
+Six-spread thumbnail review identified the EI 1DAY right page as the clearest remaining repeated-media-module rhythm. EI had already removed the route rail/markers, but its four photos were still close enough in scale and column behavior to read as a placed image stack rather than a travel-magazine photo diary.
 
-Two Q&A subtraction experiments were tested first and rejected rather than generalized:
+EJ `1784:2` was created from EI as a rollback-safe duplicate and changed only the existing right-page photo geometry plus nearby native-copy positions:
 
-- `1778:2`: direct Q02/Q03 text on the busy dining image failed contrast;
-- `1779:2`: two compact navy supports restored readability but increased card/module reading.
+- STOP 01 remains a small/supporting Yokohama skyline role;
+- STOP 02 cafe becomes the largest middle-page visual beat;
+- STOP 03 street becomes a narrower bridge image;
+- STOP 04 dining becomes the closing wide feature;
+- all `01–04`, times, titles, copy and metadata remain native Figma text;
+- all four photos remain independent replaceable IMAGE roles;
+- no image source/hash, fact, Drive asset or generated decoration changed.
 
-EO `1780:2` was then tested on the materially different back-cover photo condition:
+The first EJ geometry enlarged the small skyline beyond its known source width. That state was rejected before promotion. STOP 01 was corrected to `238×210` within the verified ~`240×220` source.
 
-- hide only `DECOR / MEMORY_CAPTION_STRIP`;
-- bind native `みんなとの思い出` directly to the dark lower photo field;
-- keep the heading editable, 30px white with restrained shadow;
-- move the chronology heading/rule upward to restore direct photo → chronology continuity;
-- preserve all photo hashes, crops, facts, native chronology text and replaceable photo roles;
-- add no generated asset, raster, Drive save or image hash.
+Final EJ QA:
 
-Final EO QA:
-
-- whole spread 1400px: PASS and stronger than EE;
-- back actual `794×1123`: PASS;
-- visible native back-cover text `23`;
+- whole spread comparison: PASS and stronger than EI;
+- reading scale: PASS;
+- actual-size right page `794×1123`: PASS;
+- native visible right-page text `25`;
+- replaceable photos `4`;
 - absolute text collision `0`;
 - 18px text safe-area risk `0`.
 
-EE `1730:2` is hidden rollback. EO `1780:2` is live preferred.
+Final right-page photo geometry:
+
+- STOP 01 skyline `238×210`, ≈ `+1.2°`;
+- STOP 02 cafe `388×270`, ≈ `-2.1°`;
+- STOP 03 street `277×220`, ≈ `+1.1°`;
+- STOP 04 dining `420×242`, ≈ `-1.0°`.
+
+EI `1752:2` is hidden rollback. EJ `1784:2` is live preferred.
 
 ## Previous preferred improvements retained
+
+### Outer EO
+
+EO removes a non-functional full-width memory-title band only where the legitimate dominant photo supplies a dark/quiet field, preserving native heading readability and direct photo → chronology continuity. Whole + actual-size QA PASS, collision `0`, safe-area risk `0`.
 
 ### Profile / Q&A EK
 
@@ -69,7 +80,7 @@ EM promotes the legitimate Spot 04 dining source into an edge-led feature at `73
 
 ## Preferred-set raster / terminology audit
 
-EO changes only native heading treatment and chronology-title position. It introduces no new image role or hash. Preferred-set inventory therefore remains:
+EJ changes only geometry of existing photo roles and adjacent native-copy positions. It introduces no new image role or hash. Preferred-set inventory remains:
 
 - visible image roles: `34`;
 - intrinsic-size violations: `0`;
@@ -93,11 +104,13 @@ Drive root remains verified:
 
 ## Latest evidence / learning
 
-- `01_paper-items/rurubu-wedding/evidence/RURUBU-V6-EO-OUTER-MEMORY-TITLE-PHOTO-BINDING-QA-2026-08-19.md`;
-- `docs/wedding-design-learning-feedback-log.append/2026-08-19-rurubu-v6-eo-outer-photo-bound-memory-title.md`;
-- `docs/design-learning/rurubu-shared-learning-feed.append/2026-08-19-rsl-106-photo-bound-heading-contrast-gate.md`.
+- `01_paper-items/rurubu-wedding/evidence/RURUBU-V6-EJ-1DAY-PHOTO-SCALE-RHYTHM-QA-2026-08-19.md`;
+- `docs/wedding-design-learning-feedback-log.append/2026-08-19-rurubu-v6-ej-1day-photo-scale-rhythm.md`;
+- `docs/design-learning/rurubu-shared-learning-feed.append/2026-08-19-rsl-107-photo-scale-rhythm-without-module-containment.md`.
 
-RSL-106: photo-bound heading subtraction requires a contrast/binding gate. It succeeded on Outer EO because the legitimate photo provided a dark/quiet field, but failed on the busy Q&A dining image. State: `VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`.
+RSL-107: when a print page is structurally correct but media still reads as repeated modules, existing legitimate image roles may be given materially different dominant/support responsibility through scale, placement and light rotation before adding new containment or imagery. Intrinsic-source and copy-collision gates remain mandatory. State: `VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`.
+
+RSL-106 remains active: photo-bound heading subtraction requires a contrast/binding gate.
 
 RSL-105 remains active: existing legitimate source-safe photos may assume more chronology responsibility before new imagery/cards/decor are added.
 
@@ -112,13 +125,14 @@ RSL-100 remains active: resolve live preferred node existence before every write
 - new Drive saves: `0`;
 - new external binary placements: `0`;
 - new image hashes: `0`;
-- photo geometry/hash changes: `0`;
+- image source changes: `0`;
+- photo geometry changes: `YES`, right-page 1DAY roles only;
 - native text preserved: `YES`;
 - remaining photo roles replaceable: `YES`;
-- EO whole + actual visual QA: `PASS`;
-- EO collision / safe-area QA: `PASS`;
-- EE rollback preserved: `YES`;
-- two weaker Q&A studies rejected/hidden: `YES`;
+- EJ whole + actual visual QA: `PASS`;
+- EJ collision / safe-area QA: `PASS`;
+- source-size overreach found and corrected before promotion: `YES`;
+- EI rollback preserved: `YES`;
 - V7 touched: `NO`.
 
 ## Completion gate
@@ -127,7 +141,7 @@ Do not call V6 complete or print-ready until final legitimate photography/copy, 
 
 Current state:
 
-`V6 EO + EK/EN + EM + EF + EI = VERIFIED_LOCAL_DUMMY_DESIGN_STUDIES / PHOTO_LED_TRAVEL_GUIDE_GRAMMAR / NATIVE_TEXT_EDITABILITY_PRESERVED / REPLACEABLE_PHOTOS_PRESERVED / INTRINSIC_VIOLATIONS_0 / ROLLBACK_SAFE / V7_HOLD / NOT_PRINT_READY`.
+`V6 EO + EK/EN + EM + EF + EJ = VERIFIED_LOCAL_DUMMY_DESIGN_STUDIES / PHOTO_LED_TRAVEL_GUIDE_GRAMMAR / NATIVE_TEXT_EDITABILITY_PRESERVED / REPLACEABLE_PHOTOS_PRESERVED / INTRINSIC_VIOLATIONS_0 / ROLLBACK_SAFE / V7_HOLD / NOT_PRINT_READY`.
 
 ## Next highest-value work
 
