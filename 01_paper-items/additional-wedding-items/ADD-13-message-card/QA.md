@@ -1,6 +1,6 @@
 # ADD-13 メッセージカード — QA
 
-Status: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / CLEANROOM_V6_SELECTED / LONG_COPY_STRESS_PASS / HANDWRITING_AREA_55_PERCENT_PASS / LEGACY_PRESERVED / ROLLBACK_SAFE / NOT_PRINT_READY`
+Status: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / CLEANROOM_V6_SELECTED / BACK_PROMPT_COUNTERPOINT_PASS / LONG_COPY_STRESS_PASS / HANDWRITING_AREA_55_PERCENT_PASS / LEGACY_PRESERVED / ROLLBACK_SAFE / NOT_PRINT_READY`
 Updated: 2026-08-18
 Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
 
@@ -14,6 +14,7 @@ Canonical current evidence:
 - `FIGMA-CLEANROOM-V6-PLACEHOLDER-STATUS-CLEANUP-2026-08-17.md`
 - `FIGMA-CLEANROOM-V6-GUEST-MICROCOPY-CLEANUP-2026-08-17.md`
 - `FIGMA-CLEANROOM-V6-INLINE-PROOF-COPY-CLEANUP-2026-08-17.md`
+- `CLEANROOM-V6-BACK-PROMPT-COUNTERPOINT-2026-08-18.md`
 
 Live authority:
 
@@ -31,13 +32,44 @@ Live authority:
 V6 uses the SPEC primary A6-landscape direction instead of the old portrait correspondence silhouette.
 
 - front: narrow Japanese editorial copy column + dominant open writing field;
-- back: compact theme/prompt header + broad open writing field;
+- back: large left Japanese theme title + small upper-right native prompt counterpoint + broad open writing field;
 - no rounded UI cards, shadows, gradients, travel icons, fake stamps, product-label English filler or rasterized variable copy;
 - unresolved values remain short guest-facing native semantic placeholders;
 - fixed decoration is limited to restrained rules/edge accent;
 - no image fill is required.
 
-Fresh 2026-08-18 screenshots reconfirmed the selected front/back at whole-item scale. The writing action remains the dominant read and the page does not depend on decorative density to feel complete.
+Fresh 2026-08-18 screenshots reconfirmed the selected front/back at whole-item and native actual size. The writing action remains the dominant read and the page does not depend on decorative density to feel complete.
+
+## Back prompt counterpoint refinement — 2026-08-18
+
+Fresh actual-size review found `[テーマ]` floating near the upper-center of the selected back. It was structurally valid but visually detached from the large left title and the handwriting field.
+
+Rollback-safe bounded comparisons:
+
+- `40:18 / QA_ADD13_BACK_PROMPT_RIGHT_COUNTERPOINT_V2_2026_08_18` — small upper-right prompt counterpoint;
+- `40:34 / QA_ADD13_BACK_PROMPT_UNDER_TITLE_V2_2026_08_18` — prompt beneath left title.
+
+The under-title direction was rejected because the existing realistic long-title stress occupies the same vertical region and would reduce copy resilience. The upper-right counterpoint preserved the full writing field and improved intentional asymmetry.
+
+Before selected mutation, realistic stress candidate `40:50` verified the same upper-right treatment with long prompt copy:
+
+- prompt width `490`;
+- prompt typography `18 px / 30 px`, right aligned;
+- long prompt height `60`, bottom `190`;
+- name row y `320`;
+- outside visible text `0`;
+- text collision `0`;
+- proof-language `0`;
+- IMAGE fills `0`.
+
+Pre-change hidden rollbacks:
+
+- selected back `41:2`;
+- stress back `41:18`.
+
+The treatment was adopted in selected `27:4` and hidden stress `27:51`. Post-write selected/stress remain outside `0` / collision `0` / proof-language `0` / IMAGE `0`.
+
+Result: `BACK_PROMPT_COUNTERPOINT_PASS`.
 
 ## Structure / handwriting-area QA
 
@@ -54,14 +86,16 @@ Fresh 2026-08-18 screenshots reconfirmed the selected front/back at whole-item s
 - working size: `1400×993`
 - IMAGE fills: `0`
 - visible text outside root: `0`
+- text-to-text collision: `0`
 - semantic writing area: `1240×650`
 - writing-area ratio: `57.98%`
+- native prompt remains editable and is not baked into decoration.
 
 Both faces remain above the SPEC minimum handwriting-area requirement of 55%.
 
 ## Long-copy / editability
 
-Hidden stress roots `27:35 / 27:51` remain current long-copy authority. V6 already repaired the failure where root-outside count was zero but long title/prompt text collided internally. Dynamic header roles now use native auto-layout / auto-height behavior and the stress copies pass without clipping or title/prompt collision.
+Hidden stress roots `27:35 / 27:51` remain current long-copy authority. V6 repaired the earlier failure where root-outside count was zero but long title/prompt text collided internally. Dynamic header roles use native auto-layout / auto-height behavior; the upper-right prompt treatment independently passed realistic long title + long prompt stress before adoption.
 
 All variable/factual copy remains native editable text. No flattening or raster replacement was introduced.
 
@@ -73,7 +107,7 @@ Legacy production `1:3 / 1:13` remains untouched. It was used only after V6 had 
 
 `IMAGE_GENERATION_NOT_REQUIRED_FOR_THIS_ITEM`.
 
-The item role is handwriting-first and current bottlenecks are copy/finalization/physical proof rather than missing imagery. Exact Drive folder metadata was live-read on 2026-08-18 and matched `1Md8oCMsw4F9tZjQueNmQQ2dYR1I7JwZl`. Drive writes: `0`.
+The item role is handwriting-first and current bottlenecks are typography/copy/finalization/physical proof rather than missing imagery. Exact Drive folder metadata was live-read on 2026-08-18 and matched `1Md8oCMsw4F9tZjQueNmQQ2dYR1I7JwZl`. Drive writes: `0`.
 
 ## BLOCKED_REQUIRED_INPUT / DEFERRED_FINALIZATION
 
@@ -90,6 +124,7 @@ Do not invent final personal copy or signer details.
 
 - clean-room independence: `PASS`
 - sellable visual: `PASS`
+- back prompt counterpoint: `PASS`
 - handwriting-area >=55%: `PASS`
 - native semantic editability: `PASS`
 - long-copy / internal-collision stress: `PASS`
