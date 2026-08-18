@@ -1,103 +1,113 @@
 # ADD-02 — QA
 
-Status: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / PRODUCTION_POLISHED / TOP_TABLE_LABEL_FILLER_REMOVAL_PASS / ROLLBACK_SAFE / NOT_PRINT_READY`
+Status: `CURRENT / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / PRODUCTION_POLISHED / TAIWAN_GRID_SUBTRACTION_PASS / HONG_KONG_HARBOR_RULER_SUBTRACTION_PASS / KOREA_FOLD_RULER_SUBTRACTION_PASS / ROLLBACK_SAFE / NOT_PRINT_READY`
+Updated: 2026-08-19
+Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
+Latest `main` observed before this reconciliation: `e96fed54dfb6327be45761ce3323f110cab1c25a`
 
 ## Current live authority
 
-- Current: `docs/automation/non-rurubu-figma-quality-current.md`
-- latest `main` observed immediately before this write: `29b06536929d520342915b4f279a56ba959728ca`
 - Figma file: `LAZAZ0u3RGqtN4bYFPZ3pU`
 - production roots: `2:2`, `2:11`, `2:20`, `2:29`, `2:38`, `2:47`, `2:56`, `2:65`, `2:74`, `2:83`, `2:92`
-- Drive folder: `ADD-02_11卓の国別テーブルサイン`
-- Drive ID: `1KmbIncy5Wl6aEqqjBQmssCsw_KZjM62r`
+- exact Drive folder: `1KmbIncy5Wl6aEqqjBQmssCsw_KZjM62r / ADD-02_11卓の国別テーブルサイン`
 - current Drive master: `1x4N7LUsJiPI93hU__BA8WYnasDw9QNT7 / ADD-02_ARCHIVAL_PRINT_GRAIN_MASTER_v1.png`
 
-Historical structural/long-copy evidence remains reusable, but the status above is based on reopened live visual review rather than the old pre-Figma checklist.
+All eleven retained production roots remain intact as the current selected family. Historical clean-room V5–V14 studies remain comparison/history only unless explicitly promoted by later evidence. The separate photo-led V14 experiment remains blocked and must not be treated as placed/adopted production.
 
-## Reopened visual QA — 2026-08-14
+## Current family visual state
 
-Fresh review was performed at family/thumbnail scale and actual 1000×1480 scale.
+The eleven signs remain materially different rather than one layout with flag/color swaps. Country title, Japanese country label, semantic country-description placeholder and large table number remain native editable text. Each current sign retains one replaceable tiled print-grain IMAGE role; variable/factual copy is not baked into raster/SVG.
 
-The eleven signs remain materially different rather than flag/color swaps. Hawaii, Italy, France, Spain, Taiwan, Japan, Hong Kong, Singapore, Bali, Korea and Maldives retain distinct country-specific geometry, typography and editorial rhythm.
+Previously verified family-level polish remains active:
 
-A remaining family-level template signal was found: every sign still repeated a small top `TABLE 01`–`TABLE 11` label even though each sign already carries a large, highly visible table number in the lower composition. At family scale the repeated English label read as redundant template filler rather than necessary guest-facing information.
+- redundant top `TABLE 01`–`TABLE 11` labels removed;
+- guest-facing `LAYOUT DUMMY / QA / PROOF` suffixes removed while semantic placeholders remain;
+- unsupported art-direction descriptors removed from guest-facing output where they had no reader-facing job;
+- Hawaii / Japan badge-like contour containment and Italy orphan lower rule were removed only after bounded comparison;
+- print grain remains a tiled `256×256` role rather than a stretched low-resolution hero.
 
-### Rollback-safe production change
+## 2026-08-19 bounded fixed-art subtraction
 
-Before editing, all eleven production frames were duplicated into a hidden rollback section:
+Fresh whole-item review found three country signs where repeated thin construction lines read as chart/form scaffolding rather than destination print art.
 
-- `31:2 / ROLLBACK_ADD02_PRE_TOP_TABLE_LABEL_REMOVAL_2026_08_14`
-- child count: 11
+### Taiwan `2:38`
 
-Production root IDs were preserved. Only these native text nodes were hidden:
+Nine `TW_GRID_H_* / TW_GRID_V_*` lines combined with fixed amber/cinnabar blocks to read like a bar-chart/dashboard grid.
 
-- Hawaii `21:214 / TABLE 01`
-- Italy `21:257 / TABLE 02`
-- France `21:273 / TABLE 03`
-- Spain `21:294 / TABLE 04`
-- Taiwan `21:320 / TABLE 05`
-- Japan `21:336 / TABLE 06`
-- Hong Kong `21:363 / TABLE 07`
-- Singapore `21:381 / TABLE 08`
-- Bali `21:404 / TABLE 09`
-- Korea `21:423 / TABLE 10`
-- Maldives `21:444 / TABLE 11`
+Bounded QA:
 
-No large table number, country name, Japanese label, semantic country-description placeholder, safe guide, country-specific artwork, print-grain image role or frame geometry was changed.
+- comparison: `95:2 / QA / ADD-02 TAIWAN / NO CHART GRID / 2026-08-19`;
+- fresh rollback: `96:2 / ROLLBACK / ADD-02 TAIWAN / PRE_GRID_SUBTRACTION / 2026-08-19`;
+- adopted: hide only the nine grid lines;
+- retained: country title, Japanese label, semantic note placeholder, large `05`, fixed blocks, route cut and print grain.
 
-## Screenshot QA
+Fresh QA: `1000×1480`, visible native text `4`, IMAGE fills `1`, outside text `0`; whole 500px and actual-size PASS.
 
-Current-production family proof:
+Evidence: `FIGMA-TAIWAN-GRID-SUBTRACTION-QA-2026-08-19.md`.
 
-- `31:274 / QA_ADD02_FAMILY_AFTER_TOP_TABLE_LABEL_REMOVAL_2026_08_14`
-- 11 current-production clones
+### Hong Kong `2:56`
 
-Result: `PASS`.
+Five cyan `HK_HARBOR_H_*` rules directly under the two tower/window blocks read like chart grid lines.
 
-The set reads more cleanly and less like eleven instances of one travel template. The large lower table numbers remain immediately scannable, while destination-specific compositions carry more authority. Hawaii was also checked at native `1000×1480` scale after the edit and remained balanced without the redundant top label.
+Two comparisons were tested:
 
-## Structural readback
+- `97:2`: hide only harbor horizontal ruler;
+- `97:30`: hide harbor ruler plus tower vertical scaffold.
 
-All eleven production roots remain:
+The more aggressive scaffold removal added no visible benefit, so only the five harbor lines were adopted.
 
-- `1000×1480`
-- `clipsContent=true`
-- one visible `IMG_PRINT_GRAIN_REPLACEABLE` IMAGE-fill role each
-- zero text nodes outside the production root
-- native editable text preserved; no flattening or raster replacement
-- top `TABLE 01`–`TABLE 11` labels hidden
-- rollback `31:2` hidden and intact
+- fresh rollback: `98:2 / ROLLBACK / ADD-02 HONG KONG / PRE_HARBOR_RULER_SUBTRACTION / 2026-08-19`;
+- tower structure, fixed blocks, country/Japanese labels, semantic note, large `07`, lower rule and print grain remain.
 
-Visible text counts after the edit:
+Fresh QA: `1000×1480`, visible native text `4`, IMAGE fills `1`, outside text `0`; whole 500px and actual-size PASS.
 
-- Hawaii: 5 / total 7
-- Italy: 4 / total 8
-- France: 5 / total 7
-- Spain: 5 / total 7
-- Taiwan: 5 / total 7
-- Japan: 5 / total 7
-- Hong Kong: 5 / total 7
-- Singapore: 5 / total 7
-- Bali: 5 / total 7
-- Korea: 5 / total 7
-- Maldives: 5 / total 7
+Evidence: `FIGMA-HONG-KONG-HARBOR-RULER-SUBTRACTION-QA-2026-08-19.md`.
 
-## Image / Drive decision
+### Korea `2:83`
 
-`IMAGE_GENERATION_NOT_REQUIRED`.
+Five equally spaced `KR_FOLD_*` rules above/into the Korean-name area read as ruled form fields rather than a meaningful fold or physical print boundary.
 
-The screenshot-supported defect was repeated English filler, not missing imagery. Existing archival print grain remains the only current Drive master and no new Drive asset was added or changed in this pass.
+- comparison: `99:2 / QA / ADD-02 KOREA / NO REPEATED FOLD RULER / 2026-08-19`;
+- fresh rollback: `99:24 / ROLLBACK / ADD-02 KOREA / PRE_FOLD_RULER_SUBTRACTION / 2026-08-19`;
+- adopted: hide only `KR_FOLD_1`–`KR_FOLD_5`;
+- retained: blue/red/ink block construction, diagonal cut, country/Japanese labels, semantic note, large `10`, bottom blue/red rule and print grain.
+
+Fresh QA: `1000×1480`, visible native text `4`, IMAGE fills `1`, outside text `0`, visible text intersections `0`; whole 500px and actual-size PASS.
+
+Evidence: `FIGMA-KOREA-FOLD-RULER-SUBTRACTION-QA-2026-08-19.md`.
+
+## Structural / visual gate
+
+Current verified invariants:
+
+- all 11 roots remain `1000×1480` and editable;
+- one visible print-grain IMAGE role per sign;
+- large table numbers remain intact and immediately scannable;
+- semantic country-description placeholders remain native text;
+- text outside each audited root: `0`;
+- no full-page flattening/raster replacement;
+- all fresh comparisons/rollbacks are hidden after QA;
+- other country art was not mechanically changed merely to make the family uniform.
+
+Numeric text-box intersections may exist on some signs where the large table-number box overlaps the note box region, but actual screenshots must show visible glyph collision before geometry is changed. Do not damage good optical spacing based on bounds alone.
+
+## Asset / Drive decision
+
+Image generation in the 2026-08-19 polish: `0`.
+Drive write: `0`.
+
+The observed defects were excessive native chart/form scaffolds, not missing imagery. Existing print grain remains unchanged.
+
+The separate Hawaii V14 photo-led method remains a truthful blocker: do not repeat the previously failed shell/DNS or unsupported `createImageAsync` ingestion paths unless the environment/capability materially changes.
 
 ## Deferred finalization
 
-Still required before print readiness:
+Keep `NOT_PRINT_READY` until authoritative final inputs/proofs exist:
 
-- exact holder / stand dimensions and obstruction check
-- vendor bleed / safe-area template
-- actual-size physical proof
-- final country-description copy where placeholders remain
-- print behavior for thin rules, dark navy and pale aqua/mint under the chosen stock and venue lighting
+- final country-description copy;
+- exact stand/holder dimensions and obstruction proof;
+- vendor bleed/safe-area template;
+- stock/profile and physical actual-size print proof;
+- thin-rule/dark-navy/pale-aqua behavior under venue lighting.
 
-## Current result
-
-`SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / PRODUCTION_POLISHED / TOP_TABLE_LABEL_FILLER_REMOVAL_PASS / ROLLBACK_SAFE / NOT_PRINT_READY`
+Do not reopen healthy country signs for cosmetic uniformity. Continue only when a fresh screenshot exposes a concrete item-specific defect.
