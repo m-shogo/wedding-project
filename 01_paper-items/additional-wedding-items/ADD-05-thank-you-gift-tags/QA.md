@@ -1,90 +1,100 @@
 # ADD-05 サンキュータグ / プチギフトタグ — QA
 
-Status: `CURRENT / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / ROLLBACK_SAFE / NOT_PRINT_READY`
-Authority: GitHub latest `main` + `docs/automation/non-rurubu-figma-quality-current.md`
-Updated: 2026-08-12
+Status: `CURRENT / CLEANROOM_V2_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / PHYSICAL_CLEARANCE_PASS / LEGACY_PRESERVED / NOT_PRINT_READY`
+Updated: 2026-08-18
+Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
 
-This file was originally a 2026-08-02 pre-Figma QA contract. The authoritative reopened production evidence is `FIGMA-REOPENED-VISUAL-QA-2026-08-10.md`; the stale `FIGMA_NOT_STARTED` declaration is superseded.
+## Current Figma authority
 
-## Live production authority
+The former production family `1:2 / 1:12 / 1:19` is retained as legacy comparison/rollback history. It is **not** the current selected visual family after the 2026-08-15 clean-room rebuild.
 
-- Figma file: `Wedding Paper ADD 05` / `kAdkOMuAMcFQtTSP8NtWil`
-- production 50 × 80 front: `1:2 / FRAME_TAG_FRONT_50X80`
-- production 45 × 70 front: `1:19 / FRAME_TAG_FRONT_45X70_COMPARE`
-- production optional 50 × 80 back: `1:12 / FRAME_TAG_BACK_50X80_OPTIONAL`
-- Drive folder: `ADD-05_サンキュータグ_プチギフトタグ` / `1_V20y77VU1aGrJtqpl7U5XUpC-bQuTxV`
+Current selected clean-room V2:
 
-## Preparation QA
+- Figma file: `kAdkOMuAMcFQtTSP8NtWil`
+- 50×80 front: `9:2 / CLEANROOM_V2_ADD05_FRONT_50X80_PUNCHED_NOTE` — `500×800`
+- 50×80 optional back: `9:13 / CLEANROOM_V2_ADD05_BACK_50X80_QUIET_NOTE` — `500×800`
+- 45×70 front reflow: `9:20 / CLEANROOM_V2_ADD05_FRONT_45X70_REFLOW` — `450×700`
+- retained legacy: `1:2 / 1:12 / 1:19`
+- Drive authority: `1_V20y77VU1aGrJtqpl7U5XUpC-bQuTxV / ADD-05_サンキュータグ_プチギフトタグ`
 
-- [x] fixed copy separated from provisional data
-- [x] single master separated from imposition
-- [x] punch clearance defined provisionally
-- [x] no raster asset created without evidence
-- [x] dedicated Drive folder created
-- [x] semantic node contract defined
+Clean-room source evidence: `CLEANROOM-V2-PUNCHED-NOTE-QA-2026-08-15.md`.
 
-## Figma structural QA
+## Current visual direction
 
-Verified by reopened production evidence:
+Direction: `PUNCHED NOTE / QUIET ENDPOINT`.
 
-- [x] front and optional back are separate frames
-- [x] 50 × 80 mm master exists at exact ratio
-- [x] 45 × 70 mm comparison is independently reflowed rather than a scaled duplicate
-- [x] text remains native and editable
-- [x] punch/safe guides remain hidden non-export QA layers
-- [x] no hidden zero-size or invalid production geometry reported
-- [x] IMAGE fills: 0 in all three production frames
-- [x] text outside production frame bounds: 0
+The physical punch/string relationship is the first composition anchor. The front reads:
 
-## Visual QA
+`punch → Thank you → for traveling with us. → quiet registration line → 2026.10.24`.
 
-Reopened visual art direction is complete:
+The optional back is intentionally quieter and carries only the approved safe-trip message and date. The 45×70 version is an independent reflow, not a scaled duplicate.
 
-- [x] gratitude reads before travel decoration
-- [x] composition does not resemble a mini boarding pass or passport page
-- [x] negative space survives the small format without faux-premium emptiness
-- [x] hole/string axis belongs to the composition
-- [x] 50 × 80 / 45 × 70 / optional back share family DNA without being scaled clones
-- [x] no repeated icon row, app-card styling, fake travel UI, gradient, shadow, or generic stock imagery
-- [x] screenshot comparison and clean-room promotion completed
+The selected family deliberately avoids mini-boarding-pass/passport imitation, repeated icons, rounded UI cards, fake travel credentials, shadows, gradients or generic stock imagery.
 
-Current visual result: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS`.
+## Physical / structural QA
 
-## Physical QA — deferred finalization
+Current verified clean-room geometry:
 
-These remain intentionally open and keep the item `NOT_PRINT_READY`:
+### 50×80 front `9:2`
 
-- [ ] print at 100%
-- [ ] punch with intended tool
-- [ ] attach using intended string/ribbon/tie
-- [ ] verify text is not hidden by knot or gift edge
-- [ ] verify tag rotation does not expose an unusable blank side
-- [ ] verify corners do not curl or catch
-- [ ] verify stock thickness survives handling
-- [ ] verify ink/rub resistance
-- [ ] photograph under venue-like warm lighting
+- native text `3`;
+- IMAGE fill `0`;
+- outside visible text `0`;
+- punch geometry `50×50`, top-left `225,55`, center `250,80`;
+- first visible text y `226`;
+- punch edge → first visible text gap `121px`.
 
-## Imposition QA — deferred finalization
+### 50×80 optional back `9:13`
 
-- [ ] imposition uses exact master instances
-- [ ] enough gutter exists for cutter tolerance
-- [ ] crop marks stay outside final trim
-- [ ] duplex front/back registration is tested when used
-- [ ] sheet size and printer margins are documented
-- [ ] no automatic “fit to page” scaling
+- native text `2`;
+- IMAGE fill `0`;
+- outside visible text `0`;
+- punch edge → first visible text gap `165px`.
 
-## Print-ready gate
+### 45×70 front `9:20`
 
-`PRINT_READY` is prohibited until all are known:
+- native text `3`;
+- IMAGE fill `0`;
+- outside visible text `0`;
+- punch edge → first visible text gap `100px`;
+- independently reflowed for the smaller physical format.
 
-1. actual gift/package dimensions;
-2. attachment method and punch diameter;
-3. final tag size decision;
-4. paper stock;
-5. printer/template bleed and safe requirements;
-6. one successful 100% physical proof;
-7. approved final copy and optional names.
+Hidden punch/safe guides remain non-export QA structure. Variable guest/product/venue/QR/SNS facts are not invented or baked into graphics.
 
-## Current declaration
+## Recent visual polish retained in current selection
 
-`SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / ROLLBACK_SAFE / DEFERRED_FINALIZATION / NOT_PRINT_READY`
+Fresh actual-size review found that the former filled circular endpoint made the thin green registration line read like a web slider/progress control. A rollback-safe comparison removed only that dot; the quieter line was stronger and was adopted on both selected front sizes.
+
+Current state:
+
+- `9:10 / NODE_LAST_STOP`: hidden on 50×80 front;
+- `9:28 / NODE_LAST_STOP`: hidden on 45×70 front;
+- optional back was already dot-free;
+- gratitude copy, date, punch hole, rules, safe guides and spacing remain unchanged;
+- rollback copies remain hidden and recoverable.
+
+Evidence: `FIGMA-ENDPOINT-DOT-SUBTRACTION-QA-2026-08-18.md`.
+
+## Drive / generated assets
+
+- exact Drive folder live-read on 2026-08-18: `1_V20y77VU1aGrJtqpl7U5XUpC-bQuTxV`;
+- generated/raster production assets required by current design: `0`;
+- Drive write for this reconciliation: `0`.
+
+`IMAGE_GENERATION_NOT_REQUIRED`: the sellable quality is carried by physical punch logic, typography, trim clearance and a restrained fixed line; imagery is not the bottleneck.
+
+## Deferred finalization / print gate
+
+Keep `NOT_PRINT_READY` until these are authoritative and physically tested:
+
+- actual gift/package dimensions;
+- final tag size decision;
+- attachment method, string/ribbon/tie width and final punch/tool diameter;
+- final stock thickness and finish;
+- final printer/template bleed and safe requirements;
+- 100% physical punch/attachment/rotation proof;
+- ink/rub and warm venue-lighting check;
+- imposition/gutter/crop marks and duplex registration when the back is used;
+- approved final copy and optional names if any.
+
+Do not reopen the selected visual family for cosmetic churn unless a fresh screenshot, physical proof or authoritative production input exposes a concrete defect.
