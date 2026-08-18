@@ -1,12 +1,12 @@
 # ADD-16 両親贈呈品メッセージカード — QA
 
-Status: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / CLEANROOM_V3_SELECTED / OPEN_HANDWRITTEN_AREA_POLISHED / LONG_COPY_STRESS_PASS / AUTO_HEIGHT_HARDENED / LEGACY_PRESERVED / ROLLBACK_SAFE / NOT_PRINT_READY`
+Status: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / CLEANROOM_V3_SELECTED / HOME_PORT_MICROCOPY_SUBTRACTION_PASS / OPEN_HANDWRITTEN_AREA_POLISHED / LONG_COPY_STRESS_PASS / AUTO_HEIGHT_HARDENED / LEGACY_PRESERVED / ROLLBACK_SAFE / NOT_PRINT_READY`
 Updated: 2026-08-18
 Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
 
 ## Current selected authority
 
-The older production `1:2 / 1:13` previously described in this file is retained legacy / rollback history for the reopened clean-room program. The selected current design is clean-room V3 `HOME HORIZON`.
+The older production `1:2 / 1:13` is retained legacy / rollback history for the reopened clean-room program. The selected current design is clean-room V3 `HOME HORIZON`.
 
 Canonical evidence:
 
@@ -22,8 +22,6 @@ Live authority:
 - selected back: `18:14`
 - hidden long-copy front: `18:26`
 - hidden long-copy back: `18:37`
-- open-signature rollback: `28:14`
-- open-signature stress rollback: `28:26`
 - retained legacy production: front `1:2`, back `1:13` — comparison/history only
 - Drive folder: `ADD-16_両親贈呈品メッセージカード / 1BOyETtL1_loGXNjGV9S30sJKEhZNjd6O`
 
@@ -39,7 +37,28 @@ Live authority:
 - no certificate symmetry, side slab, hearts, houses, airplanes, family photos, rounded cards, shadows or script-font decoration;
 - all family-specific/final copy stays native semantic text.
 
-The optional handwritten-signature role on the back now uses an open paper field instead of a complete visible rectangle. The semantic `260×120` writing-area geometry and native `自筆署名欄（任意）` label remain in Figma, so editability is preserved without printing a form-like box.
+The optional handwritten-signature role on the back uses an open paper field instead of a complete visible rectangle. The semantic `260×120` writing-area geometry and native `自筆署名欄（任意）` label remain in Figma, so editability is preserved without printing a form-like box.
+
+## Decorative English microcopy subtraction — 2026-08-18
+
+Fresh whole-item review of selected front `18:3` found `META / ORIGIN / HOME PORT` printed directly beneath the mint horizon line. The line + rust origin mark already communicates the fixed origin/home metaphor, while the tiny English label added generic travel-template flavor without reader-facing information.
+
+Rollback-safe comparison:
+
+- `30:2 / QA_ADD16_FRONT_NO_HOME_PORT_MICROCOPY_2026_08_18`;
+- only visible `HOME PORT` microcopy was hidden;
+- horizon line, rust origin mark, recipient, gratitude headline, optional metaphor, date and signature roles were unchanged.
+
+The subtraction was stronger at whole-item scale: the metaphor remains readable through the Japanese copy and fixed graphic, while the page loses an unnecessary decorative English label.
+
+Before selected-family mutation, hidden rollback copies were saved:
+
+- `30:13 / ROLLBACK_ADD16_FRONT_PRE_HOME_PORT_SUBTRACTION_2026_08_18`;
+- `30:24 / ROLLBACK_ADD16_FRONT_STRESS_PRE_HOME_PORT_SUBTRACTION_2026_08_18`.
+
+The same fixed microcopy visibility change was applied to hidden front stress `18:26` so QA evidence matches selected production.
+
+Result: `HOME_PORT_MICROCOPY_SUBTRACTION_PASS`.
 
 ## Structure / long-copy QA
 
@@ -48,6 +67,7 @@ The optional handwritten-signature role on the back now uses an open paper field
 - working size: `700×1036`
 - IMAGE fills: `0`
 - visible text outside root: `0`
+- native recipient / gratitude / optional metaphor / date / signature roles retained.
 
 ### Selected back `18:14`
 
@@ -58,7 +78,7 @@ The optional handwritten-signature role on the back now uses an open paper field
 - `AREA_HANDWRITTEN_SIGNATURE`: `260×120`, visible stroke `0`, semantic geometry retained;
 - native label `自筆署名欄（任意）` retained.
 
-Hidden stress `18:26 / 18:37` uses long recipient, multi-paragraph gratitude body, longer optional metaphor and long couple-signature strings. Actual-size `700×1036` review after the open-area change still passes with visible text outside root `0` and no signature-area collision.
+Hidden stress `18:26 / 18:37` uses long recipient, multi-paragraph gratitude body, longer optional metaphor and long couple-signature strings. Existing actual-size evidence remains valid because the 2026-08-18 front change only hides fixed decorative microcopy and does not reduce any variable-copy geometry.
 
 Later structural hardening removed nominal fixed-height native-text boxes while preserving the selected composition and stress result.
 
@@ -72,7 +92,7 @@ Do not invent family composition, names, forms of address, episodes, dates/memor
 
 `IMAGE_GENERATION_NOT_REQUIRED_FOR_THIS_ITEM`.
 
-The item is text/emotion-led. Adding generated family/photo imagery would add identity/provenance risk without solving a current visual defect. Drive metadata was live-read on 2026-08-18 and matched `1BOyETtL1_loGXNjGV9S30sJKEhZNjd6O`. Drive writes: `0`.
+The item is text/emotion-led. Adding generated family/photo imagery would add identity/provenance risk without solving a current visual defect. Live Drive metadata on 2026-08-18 matched `1BOyETtL1_loGXNjGV9S30sJKEhZNjd6O`, parent `0ADXt8irGMFGnUk9PVA`. Drive writes: `0`.
 
 ## BLOCKED_REQUIRED_INPUT / DEFERRED_FINALIZATION
 
@@ -91,6 +111,7 @@ Still unresolved:
 
 - clean-room independence: `PASS`
 - sellable visual: `PASS`
+- decorative English microcopy subtraction: `PASS`
 - native semantic editability: `PASS`
 - open handwritten-signature area: `PASS`
 - long-copy stress: `PASS`
