@@ -65,7 +65,7 @@ Latest run:
 
 Evidence: `01_paper-items/rurubu-wedding/evidence/RURUBU-V6-ES-ET-EDITORIAL-HIERARCHY-QA-2026-08-19.md`.
 Feedback append: `docs/wedding-design-learning-feedback-log.append/2026-08-19-rurubu-v6-es-et.md`.
-Learning: `RSL-112` recorded in `docs/design-learning/rurubu-shared-learning-feed.append/2026-08-19-rsl-112-major-minor-chronology-hierarchy.md`.
+Learning: `RSL-112` in `docs/design-learning/rurubu-shared-learning-feed.append/2026-08-19-rsl-112-major-minor-chronology-hierarchy.md`; `RSL-113` in `docs/design-learning/rurubu-shared-learning-feed.append/2026-08-19-rsl-113-native-text-closing-role.md`.
 
 ## Completion gate
 
