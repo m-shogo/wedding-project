@@ -1,163 +1,106 @@
 # ADD-03 当日タイムテーブルボード — QA
 
-Status: `CURRENT / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / PRODUCTION_PROMOTED / ROLLBACK_SAFE / NOT_PRINT_READY`
-Date: 2026-08-13
+Status: `CURRENT / CLEANROOM_V2_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / LONG_COPY_STRESS_PASS / LEGACY_PRESERVED / NOT_PRINT_READY`
+Updated: 2026-08-18
+Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
 
-## Authority
+## Current Figma authority
 
-- Current visual authority: `docs/automation/non-rurubu-figma-quality-current.md`
-- Figma file key: `woFUHUqZcvNkih8o42xeH4`
-- production frame: `1:5 / FRAME_TIMETABLE_BOARD`
-- Drive authority folder: `1uVcXv2Xs0H7juheHk977pt7YxLMJez_j / ADD-03_当日タイムテーブルボード`
-- reopened promotion evidence: `FIGMA-REOPENED-VISUAL-PROMOTION-2026-08-10.md`
+The older promoted production `1:5 / FRAME_TIMETABLE_BOARD` is retained as legacy comparison/rollback history. It is **not** the current selected visual family after the 2026-08-15 clean-room rebuild.
 
-The original 2026-08-02 checklist below remains the fact/structure/readability contract. It is no longer a `PRE-FIGMA` state marker: the production frame has since been promoted through the reopened visual gate.
+Current selected clean-room family:
 
-## Fresh visual spot-check — 2026-08-12
+- Figma file: `woFUHUqZcvNkih8o42xeH4`
+- A2 selected: `14:2 / CLEANROOM_V2_ADD03_DAY_INDEX` — `1400×1980`
+- A3 selected: `15:40 / CLEANROOM_V2_ADD03_A3_DAY_INDEX_REFLOW` — `990×1400`
+- A2 long-copy proof: `15:2 / QA_ADD03_CLEANROOM_V2_LONG_COPY_STRESS` — hidden after QA
+- A3 long-copy proof: `15:72 / QA_ADD03_A3_CLEANROOM_V2_LONG_COPY_STRESS` — hidden after QA
+- retained legacy: `1:5 / FRAME_TIMETABLE_BOARD`
+- Drive authority: `1uVcXv2Xs0H7juheHk977pt7YxLMJez_j / ADD-03_当日タイムテーブルボード`
 
-Fresh live screenshots of production `1:5` were reviewed again at thumbnail, reading and actual/detail scale.
+Clean-room source evidence: `CLEANROOM-V2-DAY-INDEX-QA-2026-08-15.md`.
 
-- Japanese `本日の旅程` remains the primary hierarchy.
-- `14:10–14:40` and `15:00–17:30` read before decorative detail.
-- the sand `14:40–15:00 / TBD · LAYOUT DUMMY` interval remains visibly secondary and cannot reasonably be mistaken for a confirmed event.
-- the deep-navy date rail and rust rules still structure the negative space without turning the board back into a dashboard or airport UI.
-- fresh actual-size review found that `[CEREMONY NOTE · LAYOUT DUMMY]` and `[RECEPTION NOTE · LAYOUT DUMMY]` still read like internal implementation labels in an otherwise Japanese-first print layout.
-- fresh Drive metadata readback confirmed the exact authority folder ID above.
+## Current visual direction
 
-### Rollback-safe semantic placeholder correction
+`DAY INDEX / CHRONOGRAPHIC SHEET` treats the board as a large-format printed time score instead of event cards or simulated transport UI.
 
-Before editing production, frame `1:5` was cloned to `99_QA` as hidden rollback proof:
+Current first-glance hierarchy:
 
-- rollback: `7:2 / ROLLBACK_ADD03_PRE_JA_SEMANTIC_PLACEHOLDER_FIX_2026_08_12`
+1. `本日の旅程` + `2026.10.24 SAT / YOKOHAMA`;
+2. Ceremony `14:10–14:40`;
+3. quiet unresolved transfer interval `14:40–15:00 / TBD`;
+4. Reception `15:00–17:30`;
+5. authoritative date/location footer.
 
-Production root `1:5` was preserved. Only two native text nodes were changed:
+No rounded-card dashboard structure, fake gate/flight data, repeated icons, shadows, gradients, generated imagery, or rasterized timetable is required.
 
-- `6:43 / TXT_V2_CEREMONY_NOTE`: `[CEREMONY NOTE · LAYOUT DUMMY]` → `[挙式案内 · LAYOUT DUMMY]`
-- `6:52 / TXT_V2_RECEPTION_NOTE`: `[RECEPTION NOTE · LAYOUT DUMMY]` → `[披露宴案内 · LAYOUT DUMMY]`
+Fresh 2026-08-18 live screenshot review of selected A2 `14:2` at reading scale confirms the hierarchy remains strong and intentionally asymmetric. The pale `24`, event index points, rules and time-axis geometry read as paper composition rather than UI controls.
 
-The unconfirmed middle interval remains `TBD · LAYOUT DUMMY` and was not promoted into a factual event.
+## Recent hardening retained in current selection
 
-Post-edit actual-size `1400 × 1980` screenshot QA confirmed that both placeholders read naturally beneath the bilingual event headings, without clipping, collision, or hierarchy change.
+### Native variable-text resilience
 
-Post-edit structure readback:
+The genuinely variable guidance roles are native auto-height text in selected A2/A3 and their stress proofs:
 
-- native editable text nodes: `19`
-- IMAGE fill nodes: `0`
-- text outside production root: `0`
-- root remains `1400 × 1980`, `clipsContent=true`
-- all variable/final note copy remains native editable text; no rasterization or flattened timetable was introduced.
+- `TXT_EVENT_01_NOTE`
+- `TXT_TRANSFER_LABEL`
+- `TXT_EVENT_02_NOTE`
 
-Decision: `SELLABLE_VISUAL_QA_PASS` remains valid and the semantic placeholder presentation is cleaner. No Drive asset write was required.
+The A2 Reception divider/duration were moved down only as much as required to preserve `24px` long-copy clearance after natural-height reflow. Final selected/stress roots keep visible text outside root at `0`.
 
-## Fresh visual polish — 2026-08-13
+Evidence: `FIGMA-CLEANROOM-V2-NATIVE-TEXT-RESILIENCE-JA-TITLE-2026-08-17.md`.
 
-A new whole-item / reading-scale / actual-size review found one remaining generic-template signal: `WEDDING JOURNEY` in the left date rail was decorative English filler without an informational role. The date, city, event hierarchy, rail geometry and Japanese title already carry the concept, so keeping that phrase made the board feel more like a pre-made travel template than an intentional wedding itinerary.
+### Japanese-first title
 
-Rollback-safe change:
+The generic English top label was replaced with native `本日の旅程`. This keeps the travel concept in the artifact/chronology grammar rather than decorative English filler.
 
-- rollback: `8:2 / ROLLBACK_ADD03_PRE_RAIL_FILLER_REMOVAL_2026_08_13` (hidden)
-- production root preserved: `1:5 / FRAME_TIMETABLE_BOARD`
-- changed node: `6:35`, renamed to `TXT_V2_RAIL_LABEL_HIDDEN_REDUNDANT_EN_FILLER`
-- previous visible copy: `WEDDING JOURNEY`
-- production action: hidden only; the native text node remains editable and recoverable
+### Generic closing removal
 
-Post-change screenshot QA:
+`Thank you for traveling with us.` was removed from A2/A3 selected and long-copy proofs because it added stock wedding-travel copy without schedule information. The footer date/location remains the closing anchor.
 
-- thumbnail at 500px: PASS — the board reads more cleanly and the left rail no longer competes with the date hierarchy
-- reading scale at 1000px: PASS — `本日の旅程`, ceremony/reception times and the sand TBD interval remain the clear reading order
-- actual size at `1400 × 1980`: PASS — no collision, clipping or hierarchy loss introduced
+Evidence: `FIGMA-GENERIC-ENGLISH-CLOSING-REMOVAL-2026-08-18.md`.
 
-Post-change structure readback:
+## Structure / stress QA
 
-- native editable text nodes: `19`
-- visible native text nodes: `18`
-- IMAGE fill nodes: `0`
-- visible text outside production root: `0`
-- root remains `1400 × 1980`, `clipsContent=true`
-- rollback `8:2` is present and hidden
-- no rasterization or flattening introduced
+Current verified state:
 
-Drive authority was read back immediately before the change and remains `1uVcXv2Xs0H7juheHk977pt7YxLMJez_j / ADD-03_当日タイムテーブルボード`. No Drive asset write was required because imagery was not the visual bottleneck.
+- A2 selected: native editable text, IMAGE fill `0`, outside visible text `0`;
+- A3 selected: native editable text, IMAGE fill `0`, outside visible text `0`;
+- variable guidance roles: `textAutoResize=HEIGHT`;
+- A2 long-copy Reception note → divider clearance: `24px`;
+- A3 long-copy Reception note → divider clearance: `24px`;
+- no variable copy baked into raster/SVG;
+- stress proofs return to hidden state after inspection;
+- retained legacy remains unchanged.
 
-Decision: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS` remains valid. The improvement specifically removes non-functional English filler rather than adding decoration.
+## Fact / placeholder contract
 
-## Fact QA
+Confirmed facts only:
 
-- [x] date is exactly `2026.10.24 SAT`
-- [x] location is exactly `YOKOHAMA`
-- [x] ceremony is exactly `14:10–14:40`
-- [x] reception is exactly `15:00–17:30`
-- [x] unconfirmed interval remains explicit `TBD · LAYOUT DUMMY` in working production
-- [x] no invented reception/opening/departure/after-party time is exported as confirmed copy
+- date: `2026.10.24 SAT`;
+- location: `YOKOHAMA`;
+- Ceremony: `14:10–14:40`;
+- transfer interval: `14:40–15:00`, activity still unresolved and visibly secondary;
+- Reception: `15:00–17:30`.
 
-## Structural QA
+Do not invent opening time, venue floor, gate, flight number, QR, transport credentials or other operational facts. Unknown guidance stays native semantic placeholder copy.
 
-Current promoted production evidence:
+## Drive / generated assets
 
-- [x] one semantic production frame
-- [x] all required text remains native and editable
-- [x] decorative/route geometry remains native vector/shape construction
-- [x] no flattened timetable raster
-- [x] no missing or duplicated semantic event node observed in production
-- [x] production remains `1400 × 1980`; vendor/A2-A3 output mapping remains deferred rather than guessed
+- exact Drive folder live-read on 2026-08-18: `1uVcXv2Xs0H7juheHk977pt7YxLMJez_j`;
+- generated/raster production assets required by current design: `0`;
+- Drive write for this reconciliation: `0`.
 
-Post-promotion structure readback recorded in the reopened evidence and refreshed after the semantic-placeholder correction and 2026-08-13 filler removal:
+`IMAGE_GENERATION_NOT_REQUIRED`: hierarchy, typography and paper chronology carry the design; missing imagery is not the current bottleneck.
 
-- native editable text nodes: `19`
-- visible native text nodes: `18`
-- IMAGE fill nodes: `0`
-- hidden bleed / trim / safe guides retained
-- text outside production root: `0`
+## Deferred finalization
 
-## Readability QA
+Keep `NOT_PRINT_READY` until authoritative final inputs exist:
 
-Review at:
+- final transfer/activity wording;
+- exact printer template / bleed / safe-area values;
+- font availability and PDF embedding/output proof;
+- physical A2/A3 proof;
+- venue placement and approximately 1.5–2m viewing-distance check.
 
-1. whole-board thumbnail
-2. reading scale
-3. actual/detail-scale production screenshot
-4. final physical 1.5–2 m viewing-distance proof before print
-
-Pass conditions currently satisfied digitally:
-
-- Ceremony and Reception times are readable before decorative detail
-- title does not compete with times
-- transfer/TBD row cannot be mistaken for a confirmed event
-- Japanese and English event labels remain legible
-- no essential text visibly collides with the current composition
-- no critical rule disappears in the live screenshot
-
-## Editorial QA
-
-Reject when:
-
-- layout reads as a web dashboard
-- every event has an identical rounded card
-- airport iconography is repeated mechanically
-- dark navy overwhelms the board and reduces wedding warmth
-- empty space is filled with meaningless stamps or decorative English filler
-- route line crosses time or label text
-- visual metaphor implies false gate, terminal, flight or operational information
-
-Fresh 2026-08-13 visual review did not trigger these rejection conditions after the redundant rail-label removal.
-
-## Screenshot-driven correction protocol
-
-1. capture full frame
-2. identify at most three load-bearing defects
-3. fix those defects only
-4. capture post-fix frame
-5. remove additions that create overlap or hierarchy noise
-
-## Print gate
-
-`SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS` is not `PRINT_READY`.
-
-Before print:
-
-- exact vendor dimensions and bleed
-- final confirmed transfer/activity information
-- final font availability
-- PDF font embedding/output review
-- actual-size physical proof
-- venue placement and approximately 1.5–2 m viewing-distance check
+Do not reopen the selected visual family for cosmetic churn unless a fresh screenshot or authoritative input exposes a concrete defect.
