@@ -8,65 +8,67 @@ Production state: separate clean-room V6; V7 is HOLD
 
 ## Current declaration
 
-`V6_LIVE_FIGMA_IN_PROGRESS / OUTER_EE_PREFERRED / PROFILE_QA_EK_PREFERRED / STORY_CHRONOLOGY_EL_PREFERRED / MEMORY_SPOTS_EM_PREFERRED / GOURMET_CAFE_EF_PREFERRED / ONE_DAY_PLAN_EI_PREFERRED / NATIVE_VARIABLE_TEXT_PRESERVED / REPLACEABLE_PHOTOS_PRESERVED / PREFERRED_NODE_LIVENESS_VERIFIED / INTRINSIC_VIOLATIONS_0 / READER_PRODUCTION_TERMS_0 / V7_HOLD / NOT_PRINT_READY`
+`V6_LIVE_FIGMA_IN_PROGRESS / OUTER_EE_PREFERRED / PROFILE_QA_EK_PREFERRED / STORY_CHRONOLOGY_EN_PREFERRED / MEMORY_SPOTS_EM_PREFERRED / GOURMET_CAFE_EF_PREFERRED / ONE_DAY_PLAN_EI_PREFERRED / NATIVE_VARIABLE_TEXT_PRESERVED / REPLACEABLE_PHOTOS_PRESERVED / PREFERRED_NODE_LIVENESS_VERIFIED / INTRINSIC_VIOLATIONS_0 / READER_PRODUCTION_TERMS_0 / V7_HOLD / NOT_PRINT_READY`
 
 ## Live Figma preferred set
 
 - Outer EE `1730:2` — preferred outer spread.
 - Profile / Q&A EK `1762:2` — preferred profile/interview spread; Profile page `1762:3`.
-- Story / chronology EL `1763:2` — preferred story/timeline spread; chronology page `1763:28`.
+- Story / chronology EN `1773:2` — preferred story/timeline spread; chronology page `1773:28`.
 - Memory Spots EM `1767:2` — preferred destination-information spread; guide page `1767:24`.
 - Gourmet / Cafe EF `1734:2` — preferred cafe/table spread.
 - Yokohama 1DAY Plan EI `1752:2` — preferred model-course spread; right page `1752:29`.
 
 Start Here `845:27`:
 
-`V5 FU/FX · V6 EE + EK/EL + EM MEMORY SPOTS + EF CAFE & TABLE + EI 1DAY PLAN · V7 HOLD`
+`V5 FU/FX · V6 EE + EK/EN + EM MEMORY SPOTS + EF CAFE & TABLE + EI 1DAY PLAN · V7 HOLD`
 
 Rollback/rejected comparisons remain preserved. V7 was not edited.
 
-## Latest visual progress — EM Memory Spots
+## Latest visual progress — EN Story / chronology
 
-EJ `1759:2` was already semantically correct and intrinsic-safe, but the right guide page still had a large cream band before Spot 04. The legitimate Spot 04 dining source (`732×498`) was only used at `493×344`, leaving the page partly in a medium-photo-card rhythm.
+Live six-spread review identified EL chronology `1763:2` as the weakest current preferred region. The hero/title area was strong, but the lower chronology left a large cream dead field around Event 01 while Event 03 / Event 05 photos were compressed toward the bottom. The page partially returned to a timeline-template reading.
 
-EM `1767:2` promotes that existing evidence-bearing photo instead of adding another asset:
+EN `1773:2` fixes the visible defect without adding assets:
 
-- Spot 04 photo → `732×430`, still within verified source `732×498`;
-- existing native `食卓も、旅の景色。` and supporting copy moved onto the photo in white with small contrast shadows;
-- existing magenta `04 / TABLE & TALK` label moved inside the feature;
-- Spot 03, left page, bottom CHECK metadata, all image hashes and all final-copy editability preserved;
-- no new card, generated decoration, photo, Drive asset or raster added.
+- hero/title area preserved;
+- Event 01 becomes a strong native opening milestone below the hero;
+- Event 03 existing old-town photo becomes a source-safe center/right feature beat at `350×260` against known source `352×368`;
+- Event 05 existing dining photo becomes an overlapping second feature at `402×254` against source `732×498`;
+- Event 02 / 04 remain quiet native side-trip notes;
+- WEDDING terminal remains the bottom destination;
+- the existing composed travel texture is reduced to a bounded `220×292` support role behind the quiet note rail;
+- all facts/copy stay native and all photography stays replaceable;
+- no new generated decoration, photo, Drive asset, raster or image hash was added.
 
-Two pre-adoption defects were caught and corrected:
+The initial EN visual candidate was stronger but structural AABB QA found five text contacts. It was not promoted in that state. Event 01 date/title and Event 03 photo/text geometry were corrected, then fresh QA returned collision `0`.
 
-1. the first Spot 04 label position crossed the bottom navy guide rule → moved upward;
-2. the first feature width was `733px` against a `732px` source → corrected to exactly `732px` before promotion.
+Final EN QA:
 
-Final EM QA:
-
-- whole spread 1200px: PASS and stronger than EJ;
-- guide page actual `794×1123`: PASS;
-- native text `14`;
+- whole spread 1200px: PASS and stronger than EL;
+- reading scale: PASS;
+- chronology actual `794×1123`: PASS;
+- native visible text `31`;
 - text collision `0`;
 - 18px safe-area risk `0`;
-- Spot 03 `238×218 / 240×220`, PASS;
-- Spot 04 `732×430 / 732×498`, PASS.
+- Event 03 intrinsic gate PASS;
+- Event 05 intrinsic gate PASS.
 
-EJ `1759:2` is now hidden rollback.
+EL `1763:2` is hidden rollback. EN `1773:2` is live preferred.
 
-## Previous current preferred improvements retained
+## Previous preferred improvements retained
 
 ### Profile / Q&A EK
 
-EK removed one repeated low-resolution skyline support role from the Profile page and converted that non-evidence slot to editable native typography over the already-adopted composed travel texture. Profile remains whole/actual-size PASS, native text editable, replaceable photos preserved, text collision `0`, 18px safe-area risk `0`, and all visible image roles intrinsic-safe.
+EK removed one repeated low-resolution skyline support role and converted that non-evidence slot to editable native typography over the already-adopted composed travel texture. Profile remains whole/actual-size PASS, native text editable, replaceable photos preserved, collision `0`, safe-area risk `0`, and visible image roles intrinsic-safe.
 
-### Story / chronology EL
+### Memory Spots EM
 
-EL removed the identical waterfront image from Event 01 while preserving the large Story hero, then rebuilt Event 01 as a native milestone on cream. Chronology remains actual-size PASS with native text `31`, text collision `0`, 18px safe-area risk `0`, and visible image intrinsic violations `0`.
+EM promoted the legitimate Spot 04 dining source into an edge-led feature at `732×430` within source `732×498`, with native text over the photo. Whole + actual-size QA PASS, collision `0`, safe-area risk `0`, rollback preserved.
 
-## Final preferred-set raster / terminology audit
+## Preferred-set raster / terminology audit
 
-EM changes only Spot 04 geometry and native overlay treatment; no image hash was added or removed. Therefore the preferred-set inventory remains:
+EN reuses the same image hashes as EL and changes only geometry/role responsibility. Therefore the preferred-set inventory remains:
 
 - visible image roles: `34`;
 - intrinsic-size violations: `0`;
@@ -90,11 +92,13 @@ Drive root remains verified:
 
 ## Latest evidence / learning
 
-- `01_paper-items/rurubu-wedding/evidence/RURUBU-V6-EM-MEMORY-SPOTS-EDGE-LED-FEATURE-QA-2026-08-19.md`;
-- `docs/wedding-design-learning-feedback-log.append/2026-08-19-rurubu-v6-em-memory-spots-edge-led-feature.md`;
-- `docs/design-learning/rurubu-shared-learning-feed.append/2026-08-19-rsl-104-memory-spots-edge-led-feature.md`.
+- `01_paper-items/rurubu-wedding/evidence/RURUBU-V6-EN-CHRONOLOGY-PHOTO-STAIRCASE-QA-2026-08-19.md`;
+- `docs/wedding-design-learning-feedback-log.append/2026-08-19-rurubu-v6-en-chronology-photo-staircase.md`;
+- `docs/design-learning/rurubu-shared-learning-feed.append/2026-08-19-rsl-105-chronology-photo-staircase.md`.
 
-RSL-104: when a weak print region already contains a legitimate evidence-bearing photo with sufficient source resolution, test whether that existing photo can assume a larger editorial role before generating or adding another asset. Promotion must still pass actual-size readability, intrinsic-size, safe-area and binding checks. State: `VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`.
+RSL-105: when a chronology is semantically correct but visibly leaves dead paper, test whether existing legitimate source-safe photographs can assume more editorial responsibility before adding imagery/cards/decor. Promotion still requires actual-size, collision, safe-area and intrinsic checks. State: `VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`.
+
+RSL-104 remains active: existing legitimate evidence-bearing photos may be promoted to a larger editorial role before adding assets.
 
 RSL-103 remains active: under a constrained legitimate photo pool, prioritize identical same-spread duplicates and repeated non-evidence support roles before cosmetic cross-spread repetition reduction.
 
@@ -107,11 +111,11 @@ RSL-100 remains active: resolve live preferred node existence before every write
 - new Drive saves: `0`;
 - new external binary placements: `0`;
 - new image hashes: `0`;
-- existing photo promoted to larger editorial role: `YES`;
+- existing photos promoted/recomposed: `YES`;
 - native text preserved: `YES`;
 - remaining photo roles replaceable: `YES`;
-- EM whole + actual visual QA: `PASS`;
-- EM collision / safe-area QA: `PASS`;
+- EN whole + reading + actual visual QA: `PASS`;
+- EN collision / safe-area QA: `PASS`;
 - rollback preserved: `YES`;
 - V7 touched: `NO`.
 
@@ -121,7 +125,7 @@ Do not call V6 complete or print-ready until final legitimate photography/copy, 
 
 Current state:
 
-`V6 EE + EK/EL + EM + EF + EI = VERIFIED_LOCAL_DUMMY_DESIGN_STUDIES / PHOTO_LED_TRAVEL_GUIDE_GRAMMAR / NATIVE_TEXT_EDITABILITY_PRESERVED / REPLACEABLE_PHOTOS_PRESERVED / INTRINSIC_VIOLATIONS_0 / ROLLBACK_SAFE / V7_HOLD / NOT_PRINT_READY`.
+`V6 EE + EK/EN + EM + EF + EI = VERIFIED_LOCAL_DUMMY_DESIGN_STUDIES / PHOTO_LED_TRAVEL_GUIDE_GRAMMAR / NATIVE_TEXT_EDITABILITY_PRESERVED / REPLACEABLE_PHOTOS_PRESERVED / INTRINSIC_VIOLATIONS_0 / ROLLBACK_SAFE / V7_HOLD / NOT_PRINT_READY`.
 
 ## Next highest-value work
 
