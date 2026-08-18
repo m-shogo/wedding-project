@@ -1,6 +1,6 @@
 # ADD-05 サンキュータグ / プチギフトタグ — QA
 
-Status: `CURRENT / CLEANROOM_V2_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / PHYSICAL_CLEARANCE_PASS / LEGACY_PRESERVED / NOT_PRINT_READY`
+Status: `CURRENT / CLEANROOM_V2_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / PHYSICAL_CLEARANCE_PASS / PUNCH_AXIS_RULE_SUBTRACTION_PASS / LEGACY_PRESERVED / NOT_PRINT_READY`
 Updated: 2026-08-18
 Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
 
@@ -63,25 +63,45 @@ Hidden punch/safe guides remain non-export QA structure. Variable guest/product/
 
 ## Recent visual polish retained in current selection
 
+### Endpoint-dot subtraction
+
 Fresh actual-size review found that the former filled circular endpoint made the thin green registration line read like a web slider/progress control. A rollback-safe comparison removed only that dot; the quieter line was stronger and was adopted on both selected front sizes.
 
 Current state:
 
 - `9:10 / NODE_LAST_STOP`: hidden on 50×80 front;
 - `9:28 / NODE_LAST_STOP`: hidden on 45×70 front;
-- optional back was already dot-free;
-- gratitude copy, date, punch hole, rules, safe guides and spacing remain unchanged;
-- rollback copies remain hidden and recoverable.
+- optional back was already dot-free.
 
 Evidence: `FIGMA-ENDPOINT-DOT-SUBTRACTION-QA-2026-08-18.md`.
+
+### Punch-axis rule subtraction
+
+A second fresh actual-size review found that the printed neutral rule immediately below the punch hole had no trim, clearance, fold, copy-grouping or other reader-facing function. Because the selected fronts already retain the meaningful lower green journey/registration line, the upper rule created two competing horizontal separators and made the attachment zone feel diagrammatic.
+
+Rollback-safe comparisons independently verified removal on both front sizes. Adopted state:
+
+- `9:6 / RULE_HOLE_AXIS`: hidden on 50×80 front;
+- `9:24 / RULE_HOLE_AXIS`: hidden on 45×70 front;
+- punch holes and hidden clearance guides unchanged;
+- lower `PATH_JOURNEY` line preserved;
+- optional back unchanged;
+- pre-change rollback: `17:12 / 17:22`.
+
+Post-change structure:
+
+- 50×80: `500×800`, native text `3`, IMAGE `0`, outside text `0`, punch `50×50` preserved;
+- 45×70: `450×700`, native text `3`, IMAGE `0`, outside text `0`, punch `50×50` preserved.
+
+Evidence: `FIGMA-PUNCH-AXIS-RULE-SUBTRACTION-QA-2026-08-18.md`.
 
 ## Drive / generated assets
 
 - exact Drive folder live-read on 2026-08-18: `1_V20y77VU1aGrJtqpl7U5XUpC-bQuTxV`;
 - generated/raster production assets required by current design: `0`;
-- Drive write for this reconciliation: `0`.
+- Drive write for this polish: `0`.
 
-`IMAGE_GENERATION_NOT_REQUIRED`: the sellable quality is carried by physical punch logic, typography, trim clearance and a restrained fixed line; imagery is not the bottleneck.
+`IMAGE_GENERATION_NOT_REQUIRED`: the sellable quality is carried by physical punch logic, typography, trim clearance and the restrained lower line; imagery is not the bottleneck.
 
 ## Deferred finalization / print gate
 
