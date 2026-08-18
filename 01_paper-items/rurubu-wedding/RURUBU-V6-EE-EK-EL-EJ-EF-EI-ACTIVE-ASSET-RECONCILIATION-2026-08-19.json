@@ -1,0 +1,90 @@
+{
+  "date": "2026-08-19",
+  "scope": "Rurubu WEDDING V6 preferred only",
+  "figma_file": "bfM0d4c9dCeBv5pCkJ3TNM",
+  "drive_root": {
+    "id": "1wHxC2E09JpLIQRNDDTY4i29KMwMY2_XK",
+    "name": "RURUBU_V6_HAWAII_2026-08-02"
+  },
+  "preferred": {
+    "outer": "1730:2 / EE",
+    "profile_qa": "1762:2 / EK",
+    "story_chronology": "1763:2 / EL",
+    "memory_spots": "1759:2 / EJ",
+    "cafe_table": "1734:2 / EF",
+    "one_day_plan": "1752:2 / EI"
+  },
+  "start_here": "V5 FU/FX · V6 EE + EK/EL + EJ MEMORY SPOTS + EF CAFE & TABLE + EI 1DAY PLAN · V7 HOLD",
+  "audit": {
+    "visible_image_roles": 34,
+    "intrinsic_size_violations": 0,
+    "reader_visible_production_terms": 0,
+    "new_image_hashes_this_run": 0,
+    "new_generated_assets_this_run": 0,
+    "new_drive_saves_this_run": 0,
+    "new_external_binary_placements_this_run": 0
+  },
+  "hash_inventory": [
+    {
+      "hash": "d76eb07d83d042f15044c8bc6bf68d73a73cd77d",
+      "role": "dining / table",
+      "intrinsic": [732, 498],
+      "visible_uses": 6
+    },
+    {
+      "hash": "644f449c3bf2001a94d4b822d2b55e2614c11042",
+      "role": "Yokohama skyline",
+      "intrinsic": [240, 220],
+      "visible_uses": 5
+    },
+    {
+      "hash": "539c259be8036b481d06b4f76db9a39b407d90e8",
+      "role": "Yokohama waterfront",
+      "intrinsic": [1356, 560],
+      "visible_uses": 5
+    },
+    {
+      "hash": "691a6ceed471a5d8efa144052a10564eed177b4f",
+      "role": "composed travel texture",
+      "intrinsic": [720, 860],
+      "visible_uses": 5
+    },
+    {
+      "hash": "c1ada11205bc3978bf426b304d683f1c1566cac2",
+      "role": "cafe / memory",
+      "intrinsic": [810, 552],
+      "visible_uses": 5
+    },
+    {
+      "hash": "e3738476f760932bb5b09c9d60f174dd6c84049d",
+      "role": "travel flatlay / object",
+      "intrinsic": [944, 608],
+      "visible_uses": 4
+    },
+    {
+      "hash": "439a719d73f28e8dd2889f2026cccb15f345ec63",
+      "role": "street / night walk",
+      "intrinsic": [352, 368],
+      "visible_uses": 3
+    },
+    {
+      "hash": "0bdbf47904ea5865c71b1555dc73689b2c7b2126",
+      "role": "fixed masthead PNG",
+      "intrinsic": [500, 161],
+      "visible_uses": 1
+    }
+  ],
+  "run_changes": {
+    "memory_spots": "EJ promoted Spot 04 using the existing 732x498 dining source; Spot 03 remained source-safe at 238x218.",
+    "profile": "EK removed the non-evidence repeated skyline snapshot and replaced that slot with native destination typography over existing composed texture.",
+    "chronology": "EL removed the same-spread duplicate waterfront from Event 01 and replaced it with native milestone typography.",
+    "skyline_use_change": "6 -> 5",
+    "waterfront_use_change": "6 -> 5",
+    "total_visible_image_roles_change": "36 -> 34"
+  },
+  "rejected_reuse": {
+    "reason": "Unused Rurubu legacy raster audit found unrelated coastal/resort scenes and people images without sufficiently established production provenance for the tested roles. They were not adopted merely to lower repetition counts."
+  },
+  "evidence": "01_paper-items/rurubu-wedding/evidence/RURUBU-V6-EJ-EK-EL-SEMANTIC-PHOTO-ROLE-QA-2026-08-19.md",
+  "state": "VERIFIED_LOCAL_DUMMY_DESIGN / ROLLBACK_SAFE / V7_HOLD / NOT_PRINT_READY"
+}
