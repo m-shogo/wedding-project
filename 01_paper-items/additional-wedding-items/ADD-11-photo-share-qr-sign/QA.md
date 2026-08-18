@@ -1,6 +1,6 @@
 # ADD-11 写真共有 / QR案内サイン — QA
 
-Status: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / CLEANROOM_V2_SELECTED / A5_JAPANESE_FIRST_HEADLINE_PASS / LONG_COPY_STRESS_PASS / LEGACY_PRESERVED / NOT_PRINT_READY`
+Status: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / CLEANROOM_V2_SELECTED / A5_JAPANESE_FIRST_HEADLINE_PASS / QR_FIELD_SIMPLIFICATION_PASS / LONG_COPY_STRESS_PASS / LEGACY_PRESERVED / NOT_PRINT_READY`
 Updated: 2026-08-18
 Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
 
@@ -22,6 +22,7 @@ The reopened clean-room program supersedes the older legacy-node listing for **w
 - detailed clean-room evidence: `CLEANROOM-V2-MEMORY-ORBIT-QA-2026-08-16.md`
 - authority reconciliation: `FIGMA-CLEANROOM-V2-AUTHORITY-RECONCILIATION-2026-08-18.md`
 - guest-copy cleanup: `FIGMA-CLEANROOM-V2-GUEST-COPY-CLEANUP-2026-08-17.md`
+- QR field simplification: `CLEANROOM-V2-QR-FIELD-SIMPLIFICATION-2026-08-18.md`
 
 ## Current art direction
 
@@ -32,6 +33,7 @@ The selected clean-room family is a quiet editorial photo-sharing sign, not a da
 - A5 uses a compact tabletop composition; A4 is an independent larger poster reflow rather than proportional scaling;
 - privacy/access/hashtag/expiry roles remain native editable semantic placeholders;
 - decorative rust seam from the legacy family is not part of the selected clean-room V2;
+- the QR role keeps its exact reserved geometry / quiet-zone semantics without a hard widget-like outer border;
 - no generated person imagery, rounded cards, pills, shadows, gradients, fake operational controls or fake QR destination is used.
 
 ## A5 Japanese-first headline refinement — 2026-08-18
@@ -61,32 +63,65 @@ Post-write A5 stress verification:
 - QR role unchanged;
 - stress returned to hidden QA state after actual-size screenshot review.
 
+## QR field simplification — 2026-08-18
+
+Fresh actual-size review showed that the selected V2 still surrounded the unresolved QR role with a hard square border plus quiet-zone reserve and orbit decoration. The QR geometry was correct, but the hard frame made the role read like a web/widget control.
+
+Rollback-safe comparison candidates:
+
+- A5 `27:54 / QA_ADD11_A5_SIMPLIFIED_QR_FIELD_V2_2026_08_18`;
+- A4 `27:84 / QA_ADD11_A4_SIMPLIFIED_QR_FIELD_V2_2026_08_18`.
+
+The bounded comparison changed only:
+
+- hide the redundant `DECOR_TRAVEL_ROUTE` layer;
+- remove the visible stroke from `QR_PHOTO_SHARE` while keeping exact QR role dimensions;
+- preserve `QR_QUIET_ZONE_RESERVE` and the remaining spatial/orbit cue;
+- `[#HASHTAG]` → `[ハッシュタグ]`;
+- A4 `写真共有 / TRAVEL MEMORY` → `写真共有`.
+
+The A5 `875×1240` and A4 `1240×1754` candidates were stronger: QR discoverability remained immediate, while the page lost a redundant interface-like box and decorative English/category filler.
+
+Before selected mutation, hidden rollback copies were saved:
+
+- A5 selected `28:2`;
+- A4 selected `28:32`;
+- A5 stress `28:54`;
+- A4 stress `28:84`.
+
+The same bounded treatment was applied to hidden stress `19:4 / 19:56` so QA evidence remains aligned. No URL, QR destination, hashtag value, privacy rule or expiry fact was invented.
+
 ## Structural QA
 
-Fresh selected-family readback remains healthy:
+Fresh selected/stress readback after QR-field simplification:
 
 ### A5 `18:19`
 - `875×1240`;
+- visible native text: `13`;
 - native editable text preserved;
 - guest-facing proof-language `0`;
-- fixed 10/12px variable text roles `0`;
 - outside visible text `0`;
-- QR role remains replaceable semantic geometry;
+- text-to-text collision `0`;
+- QR role `290×290`, outer frame stroke count `0`;
+- quiet-zone role `230×230` preserved;
 - IMAGE fills `0`.
 
 ### A4 `19:34`
 - `1240×1754`;
+- visible native text: `13`;
 - native editable text preserved;
 - guest-facing proof-language `0`;
-- fixed 10/12px variable text roles `0`;
 - outside visible text `0`;
+- text-to-text collision `0`;
+- QR role `420×420`, outer frame stroke count `0`;
+- quiet-zone role `332×332` preserved;
 - IMAGE fills `0`.
 
-Hidden long-copy stress `19:4 / 19:56` remains the structural evidence for variable guidance/privacy/hashtag/expiry copy.
+Hidden long-copy stress `19:4 / 19:56` matches the selected treatment and remains outside `0` / collision `0` / proof-language `0` / IMAGE `0`.
 
 ## Image / Drive decision
 
-`IMAGE_GENERATION_NOT_REQUIRED`. The current bottleneck was generic decorative English hierarchy, not missing imagery. Generated art would compete with the future real QR and add no functional value.
+`IMAGE_GENERATION_NOT_REQUIRED`. The bottleneck was redundant containment and generic/template copy, not missing imagery. Generated art would compete with the future real QR and add no functional value.
 
 Live Drive readback on 2026-08-18 confirmed:
 
@@ -110,6 +145,7 @@ These are finalization boundaries only and do not invalidate the visual pass:
 
 - Clean-room selected visual: `V2`
 - A5 Japanese-first headline refinement: `PASS`
+- QR-field simplification: `PASS`
 - Reopened sellable visual QA: `PASS`
 - Whole / reading / actual-size visual QA: `PASS_WITH_PLACEHOLDERS`
 - Long-copy structural QA: `PASS`
