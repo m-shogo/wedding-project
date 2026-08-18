@@ -1,99 +1,96 @@
 # ADD-09 ゲストブックサイン — QA
 
-Status: `CURRENT / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / CLEANROOM_V4_SELECTED / LONG_COPY_STRESS_PASS / LEGACY_PRESERVED / NOT_PRINT_READY`
-Updated: 2026-08-18
-Authority: GitHub latest `main` + `docs/automation/non-rurubu-figma-quality-current.md`
+Status: `CURRENT / CLEANROOM_V4_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / PROOF_LANGUAGE_CLEANUP_PASS / INDEX_MARK_SUBTRACTION_PASS / SECONDARY_ROUTE_SUBTRACTION_PASS / LONG_COPY_STRESS_PASS / LEGACY_PRESERVED / NOT_PRINT_READY`
+Updated: 2026-08-19
+Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
+Latest `main` observed before this reconciliation: `daee3f54bac73f0dae4757b0a7a652c82a2cf9ac`
 
 ## Current authority
 
 - Figma file: `PjFWBpDwaQM5LfvgdqSFvU`
 - selected clean-room V4: `16:3 / CLEANROOM_ADD09_V4_JOURNEY_LINE`
-- long-copy stress: `17:4 / QA_CLEANROOM_ADD09_V4_LONG_COPY_STRESS`
+- long-copy stress: `17:4 / QA_CLEANROOM_ADD09_V4_LONG_COPY_STRESS` — hidden after QA
 - retained legacy production: `1:3 / FRAME_ADD09_GUEST_BOOK_SIGN`
-- Drive authority: `1D259ugx13El0JYxvn8yyskIjc2c2liF4 / ADD-09_ゲストブックサイン`
+- exact Drive authority: `1D259ugx13El0JYxvn8yyskIjc2c2liF4 / ADD-09_ゲストブックサイン`
 
-Retained production `1:3` is historical rollback/comparison evidence only. The clean-room V4 is the current selected sellable candidate and must be used for future non-Rurubu QA/finalization work.
+Retained production is history/rollback only. V4 is the current selected clean-room candidate.
 
-## Clean-room V4 direction
+## Current visual direction
 
-V4 was created from a blank frame under the current zero-reuse mandate. It does not use the retained production as a component/layout source.
+V4 was authored from a blank frame under the zero-reuse mandate. It uses:
 
-Current V4 characteristics:
+- Japanese headline `旅の記録に、一言を。` as the first read;
+- native date `2026.10.24`;
+- one large editable `VECTOR / CONTINUOUS JOURNEY LINE` as the dominant fixed-art gesture;
+- lower operational roles as native guest-facing semantic placeholders;
+- raster IMAGE roles `0`.
 
-- working canvas `1000×1419`;
-- Japanese headline `旅の記録に、一言を。` is the first visual read;
-- native date `2026.10.24` remains editable;
-- large fixed-art journey line provides a distinct guest-book identity without card/dashboard UI;
-- lower operational roles remain native semantic placeholders;
-- raster IMAGE fill count `0`;
-- legacy remains untouched.
+The current selected design intentionally has **one** dominant journey-line system rather than multiple competing route/index devices.
 
-Earlier V2/V3 studies and retained production remain comparison/history only.
+## Current refinements retained
 
-## 2026-08-18 guest-facing placeholder cleanup
+### Guest-facing semantic placeholder cleanup
 
-Detailed evidence:
-
-- `FIGMA-CLEANROOM-V4-PROOF-LANGUAGE-CLEANUP-2026-08-18.md`
-
-Fresh actual-size screenshot showed three internal authoring strings still visible inside the selected V4:
-
-- `[記帳案内 · LAYOUT DUMMY]`
-- `[記帳方法・ペン位置・設置案内 · LAYOUT DUMMY]`
-- `[設置場所・補足情報 · LAYOUT DUMMY]`
-
-Rollback-safe selected copy was preserved at:
-
-- `21:2 / ROLLBACK_ADD09_V4_PRE_PROOF_LANGUAGE_CLEANUP_2026_08_18`
-
-The selected V4 now uses native guest-facing semantic placeholders:
+Internal authoring strings such as `[記帳案内 · LAYOUT DUMMY]` were replaced with native guest-facing semantic roles:
 
 - `[ご記帳のご案内]`
 - `[記入方法・ペンのご案内]`
 - `[設置場所・補足情報]`
 
-No fixed-art geometry, headline, date, safe area, image role or legacy node changed.
+Evidence: `FIGMA-CLEANROOM-V4-PROOF-LANGUAGE-CLEANUP-2026-08-18.md`.
 
-Post-write readback / screenshot:
+### Index-mark subtraction
 
-- actual-size `1000×1419`: PASS;
-- selected visible text outside root: `0`;
-- IMAGE fills: `0`;
-- implementation/proof suffixes are absent from the selected print surface;
-- unresolved operations remain explicit native editable text.
+The isolated top-right `VECTOR / INDEX MARK` behaved like a tab/UI artifact after the main headline, date and journey line already established the hierarchy. Bounded comparison removed it from selected V4 and long-copy proof.
 
-The long-copy frame `17:4` remains separate QA evidence and is hidden after validation.
+Live 2026-08-19 readback confirms:
 
-## Hybrid authoring / asset decision
+- selected `16:5 / VECTOR / INDEX MARK`: hidden;
+- stress `17:6 / VECTOR / INDEX MARK`: hidden.
 
-- variable / unresolved operations: native Figma text;
-- fixed journey-line decoration: editable vector/fixed art;
-- replaceable raster role: not required;
-- image generation: `NOT_REQUIRED`.
+Evidence: `FIGMA-CLEANROOM-V4-INDEX-MARK-SUBTRACTION-2026-08-18.md`.
 
-Drive write in the 2026-08-18 cleanup: `0`.
+### Secondary-route subtraction
 
-## Historical evidence
+The lower secondary dotted route/endpoints competed with the main continuous journey line and made the page read more like an infographic/map system. Bounded comparison removed that secondary route while retaining the primary continuous line and its meaningful open nodes.
 
-Older production-focused QA remains available through Git history and item files, including:
+Evidence: `FIGMA-CLEANROOM-V4-SECONDARY-ROUTE-SUBTRACTION-2026-08-18.md`.
 
-- `FIGMA-REOPENED-VISUAL-QA-2026-08-10.md`
-- `CLEANROOM-V2-V3-STUDY-2026-08-15.md`
-- `FIGMA-PROOF-SUFFIX-REMOVAL-2026-08-17.md`
+## Fresh live QA — 2026-08-19
 
-These are historical evidence and do not supersede the current clean-room V4 authority.
+Fresh whole-item screenshot of selected `16:3` at 500px remains PASS:
+
+- Japanese headline is immediate;
+- date is secondary but readable;
+- the single continuous line reads as one editorial gesture rather than multiple UI routes;
+- lower semantic instructions remain quiet and functional;
+- no card/dashboard containment, shadow, gradient, raster filler or proof-language is visible.
+
+Live structure readback:
+
+- selected `16:3`: `1000×1419`, visible native text `5`, text outside root `0`, IMAGE fills `0`;
+- stress `17:4`: `1000×1419`, hidden after QA, visible native text `5` when inspected, text outside root `0`, IMAGE fills `0`;
+- selected/stress `VECTOR / CONTINUOUS JOURNEY LINE`: visible;
+- selected/stress `VECTOR / INDEX MARK`: hidden;
+- variable/unresolved operations remain native editable text.
+
+No new screenshot-supported need for image generation was found.
+
+## Hybrid / asset state
+
+- variable/unresolved operations: native text;
+- fixed journey-line art: editable vector;
+- raster/image role: none required;
+- image generation: `0`;
+- Drive write in this reconciliation: `0`.
 
 ## Deferred finalization
 
-Still `NOT_PRINT_READY` pending authoritative:
+Keep `NOT_PRINT_READY` until authoritative final inputs/proofs exist:
 
-- final writing method / pen placement;
-- final installation wording / placement;
+- final writing method and pen placement;
+- final installation wording/location;
 - printer bleed/template/profile;
 - 100% physical proof and venue-distance readability.
 
-These remain `DEFERRED_FINALIZATION` and do not reopen the current sellable visual decision.
-
-## Current decision
-
-`SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / CLEANROOM_V4_SELECTED / LONG_COPY_STRESS_PASS / LEGACY_PRESERVED / NOT_PRINT_READY`
+Do not cosmetically reopen the healthy V4 unless a fresh screenshot or authoritative input exposes a concrete defect.
