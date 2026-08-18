@@ -1,7 +1,7 @@
 # ADD-14 二次会案内 — QA
 
-Status: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / CLEANROOM_V3_SELECTED / A6_A5_LONG_COPY_STRESS_PASS / A6_ACTUAL_SIZE_READABILITY_HARDENED / AUTO_HEIGHT_HARDENED / LEGACY_PRESERVED / BLOCKED_REQUIRED_INPUT / ROLLBACK_SAFE / NOT_PRINT_READY`
-Updated: 2026-08-18
+Status: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / CLEANROOM_V3_SELECTED / ROUTE_NODE_UI_SUBTRACTION_PASS / A6_A5_LONG_COPY_STRESS_PASS / A6_ACTUAL_SIZE_READABILITY_HARDENED / AUTO_HEIGHT_HARDENED / LEGACY_PRESERVED / BLOCKED_REQUIRED_INPUT / ROLLBACK_SAFE / NOT_PRINT_READY`
+Updated: 2026-08-19
 Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
 
 ## Current selected authority
@@ -12,6 +12,7 @@ Canonical evidence:
 
 - `FIGMA-CLEANROOM-V3-NIGHT-FIELD-QA-2026-08-17.md`
 - `A6-ACTUAL-SIZE-READABILITY-HARDENING-2026-08-18.md`
+- `ROUTE-NODE-SUBTRACTION-QA-2026-08-19.md`
 - later guest-copy / proof-language and auto-height hardening evidence retained in the ADD-14 item history.
 
 Live authority:
@@ -22,6 +23,8 @@ Live authority:
 - selected A5: `32:29`
 - hidden long-copy A6: `33:2`
 - hidden long-copy A5: `33:28`
+- route-dot subtraction comparison: `46:2 / 46:29` — hidden after adoption
+- route-dot pre-change rollbacks: `46:56 / 46:83 / 46:110 / 46:137`
 - auto-height rollback: `41:2`
 - A6 pre-readability rollback: `44:2`
 - A6 stress pre-readability rollback: `44:29`
@@ -34,12 +37,38 @@ V3 is a night-specific, materially independent clean-room direction:
 
 - continuous deep-navy paper field;
 - warm ivory Japanese headline `夜のつづきへ。`;
-- one mint route axis carrying reception / start / end;
+- one mint route axis carrying reception / start / end without repeated progress-step dots;
 - venue/address as a direct native hierarchy block;
 - lower access / fee / RSVP/contact information as direct typography rather than equal UI cards;
 - no gradients, fake neon, alcohol motifs, travel icons, decorative English filler or generated/raster decoration.
 
-Fresh 2026-08-18 A6 whole-item screenshot reconfirmed the intended read: `二次会のご案内 → 夜のつづきへ。 → 会場 → 時刻 → lower practical information`.
+Fresh 2026-08-19 A6/A5 whole-item review reconfirmed the intended read: `二次会のご案内 → 夜のつづきへ。 → 会場 → 時刻 → lower practical information`.
+
+## Route node UI-subtraction — 2026-08-19
+
+Fresh selected A6/A5 review found the three evenly spaced mint circles on the route axis reading like progress/stepper controls. Reception/start/end were already explicit native Japanese labels aligned beneath the route, so the circles did not carry necessary information.
+
+Rollback-safe candidates `46:2 / 46:29` hid only the three `DECOR_DESTINATION_NODE` circles while preserving the route line, all native labels/times, venue hierarchy and lower practical copy. The no-dot version was stronger at both sizes: the route reads as an editorial time axis rather than an interactive UI control.
+
+Before adoption, selected and long-copy pre-change roots were preserved as hidden rollbacks `46:56 / 46:83 / 46:110 / 46:137`.
+
+Adopted visibility change:
+
+- selected A6 route nodes `32:10 / 32:13 / 32:16`: hidden;
+- selected A5 route nodes `32:36 / 32:39 / 32:42`: hidden;
+- stress A6 route nodes `33:9 / 33:12 / 33:15`: hidden;
+- stress A5 route nodes `33:35 / 33:38 / 33:41`: hidden.
+
+Post-adoption QA:
+
+- A6 whole/thumbnail 500 px: PASS;
+- A5 native `840×592`: PASS;
+- realistic A6 long-copy native `592×420`: PASS after temporary reveal and re-hide;
+- visible route-dot count on selected/stress: `0`;
+- visible text outside root: `0`;
+- IMAGE fills: `0`.
+
+Result: `ROUTE_NODE_UI_SUBTRACTION_PASS`.
 
 ## Structure / long-copy QA
 
@@ -57,6 +86,7 @@ Current post-hardening readback evidence for `32:3 / 32:29 / 33:2 / 33:28`:
 - visible proof-language: `0`;
 - visible text outside root: `0`;
 - IMAGE fills: `0`;
+- visible route-dot count: `0`;
 - realistic long-copy stress: `PASS`.
 
 ### A6 actual-size readability hardening — 2026-08-18
@@ -84,7 +114,7 @@ Legacy A6 `1:2` and A5 `1:18` remain untouched. They were compared only after V3
 
 `IMAGE_GENERATION_NOT_REQUIRED_FOR_THIS_ITEM`.
 
-The item-specific strength comes from typography, night field and route hierarchy; current blockers are factual/finalization inputs, not missing imagery. Drive metadata was live-read on 2026-08-18 and matched `1Oq2Pz2mYo4oaDnO7LMezMrCUizcxaEjs`. Drive writes: `0`.
+The item-specific strength comes from typography, night field and route hierarchy; current blockers are factual/finalization inputs, not missing imagery. Drive metadata was live-read on 2026-08-19 and matched `1Oq2Pz2mYo4oaDnO7LMezMrCUizcxaEjs`. Drive writes: `0`.
 
 ## BLOCKED_REQUIRED_INPUT
 
@@ -109,6 +139,7 @@ Printer template/profile, exact bleed/safe area, QR device scan proof if used, a
 
 - clean-room independence: `PASS`
 - sellable visual: `PASS`
+- route node UI-subtraction: `PASS`
 - A6/A5 long-copy resilience: `PASS`
 - A6 actual-size practical-copy readability: `PASS`
 - native semantic editability: `PASS`
