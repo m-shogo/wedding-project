@@ -1,6 +1,6 @@
 # ADD-16 両親贈呈品メッセージカード — QA
 
-Status: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / CLEANROOM_V3_SELECTED / HOME_PORT_MICROCOPY_SUBTRACTION_PASS / OPEN_HANDWRITTEN_AREA_POLISHED / HANDWRITTEN_HELPER_LABEL_HIDDEN / LONG_COPY_STRESS_PASS / AUTO_HEIGHT_HARDENED / LEGACY_PRESERVED / ROLLBACK_SAFE / NOT_PRINT_READY`
+Status: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / CLEANROOM_V3_SELECTED / HOME_PORT_MICROCOPY_SUBTRACTION_PASS / ORIGIN_DOT_UI_SUBTRACTION_PASS / OPEN_HANDWRITTEN_AREA_POLISHED / HANDWRITTEN_HELPER_LABEL_HIDDEN / LONG_COPY_STRESS_PASS / AUTO_HEIGHT_HARDENED / LEGACY_PRESERVED / ROLLBACK_SAFE / NOT_PRINT_READY`
 Updated: 2026-08-19
 Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
 
@@ -13,6 +13,7 @@ Canonical evidence:
 - `FIGMA-CLEANROOM-V3-HOME-HORIZON-QA-2026-08-17.md`
 - `OPEN-HANDWRITTEN-SIGNATURE-AREA-QA-2026-08-18.md`
 - `HANDWRITTEN-LABEL-VISIBILITY-RECONCILIATION-2026-08-19.md`
+- `ORIGIN-DOT-SUBTRACTION-QA-2026-08-19.md`
 - subsequent guest-copy / placeholder-status cleanup and native-text auto-height hardening records in the ADD-16 item history.
 
 Live authority:
@@ -32,7 +33,7 @@ Live authority:
 
 - warm cream paper field;
 - Japanese serif typography with controlled asymmetry;
-- one restrained mint horizon line and one rust origin mark;
+- one restrained mint horizon line without a decorative endpoint/control marker;
 - recipient → gratitude headline → optional short metaphor → horizon → date/signature on the front;
 - native auto-layout message stack on the back;
 - no certificate symmetry, side slab, hearts, houses, airplanes, family photos, rounded cards, shadows or script-font decoration;
@@ -42,7 +43,7 @@ The optional handwritten-signature role on the back uses an open paper field ins
 
 ## Decorative English microcopy subtraction — 2026-08-18
 
-Fresh whole-item review of selected front `18:3` found `META / ORIGIN / HOME PORT` printed directly beneath the mint horizon line. The line + rust origin mark already communicates the fixed origin/home metaphor, while the tiny English label added generic travel-template flavor without reader-facing information.
+Fresh whole-item review of selected front `18:3` found `META / ORIGIN / HOME PORT` printed directly beneath the mint horizon line. The line + rust origin mark already communicated the fixed origin/home metaphor, while the tiny English label added generic travel-template flavor without reader-facing information.
 
 Rollback-safe comparison:
 
@@ -50,16 +51,41 @@ Rollback-safe comparison:
 - only visible `HOME PORT` microcopy was hidden;
 - horizon line, rust origin mark, recipient, gratitude headline, optional metaphor, date and signature roles were unchanged.
 
-The subtraction was stronger at whole-item scale: the metaphor remains readable through the Japanese copy and fixed graphic, while the page loses an unnecessary decorative English label.
+The subtraction was stronger at whole-item scale: the metaphor remained readable through the Japanese copy and fixed graphic, while the page lost an unnecessary decorative English label.
 
 Before selected-family mutation, hidden rollback copies were saved:
 
 - `30:13 / ROLLBACK_ADD16_FRONT_PRE_HOME_PORT_SUBTRACTION_2026_08_18`;
 - `30:24 / ROLLBACK_ADD16_FRONT_STRESS_PRE_HOME_PORT_SUBTRACTION_2026_08_18`.
 
-The same fixed microcopy visibility change was applied to hidden front stress `18:26` so QA evidence matches selected production.
+The same fixed microcopy visibility change was applied to hidden front stress `18:26` so QA evidence matched selected production.
 
 Result: `HOME_PORT_MICROCOPY_SUBTRACTION_PASS`.
+
+## Origin-dot UI subtraction — 2026-08-19
+
+Fresh actual-size review found that the remaining rust origin circle at the left end of the mint horizon line no longer carried a clear reader-facing job after the `HOME PORT` microcopy had been removed. The horizon line itself still carried the quiet home/origin metaphor, while the isolated endpoint increasingly read like a slider/progress control.
+
+Rollback-safe bounded comparison:
+
+- `35:2 / QA_ADD16_FRONT_NO_ORIGIN_DOT_2026_08_19`;
+- only `DECOR_ORIGIN_MARK` visibility changed;
+- native recipient, gratitude headline, optional metaphor, horizon line, date and signature were unchanged.
+
+The no-dot version was stronger at whole and actual-size scales. Before selected mutation, hidden rollbacks were saved:
+
+- `36:2 / ROLLBACK_ADD16_FRONT_PRE_ORIGIN_DOT_SUBTRACTION_2026_08_19`;
+- `36:13 / ROLLBACK_ADD16_FRONT_STRESS_PRE_ORIGIN_DOT_SUBTRACTION_2026_08_19`.
+
+Adopted state:
+
+- selected `18:10 / DECOR_ORIGIN_MARK`: hidden;
+- stress `18:33 / DECOR_ORIGIN_MARK`: hidden;
+- comparison `35:2`: hidden after adoption.
+
+Post-write selected/stress readback: visible text outside root `0`, text collision `0`, proof-language `0`, IMAGE fills `0`.
+
+Result: `ORIGIN_DOT_UI_SUBTRACTION_PASS`.
 
 ## Handwritten helper-label reconciliation — 2026-08-19
 
@@ -80,7 +106,9 @@ Result: `HANDWRITTEN_HELPER_LABEL_HIDDEN / AUTHORITY_RECONCILED`.
 - working size: `700×1036`
 - IMAGE fills: `0`
 - visible text outside root: `0`
-- native recipient / gratitude / optional metaphor / date / signature roles retained.
+- text collision: `0`
+- native recipient / gratitude / optional metaphor / date / signature roles retained;
+- decorative origin dot hidden; mint horizon line retained.
 
 ### Selected back `18:14`
 
@@ -92,7 +120,7 @@ Result: `HANDWRITTEN_HELPER_LABEL_HIDDEN / AUTHORITY_RECONCILED`.
 - internal helper label `META / HANDWRITTEN / 自筆署名欄（任意）`: hidden;
 - guest-facing native signature role `[ふたりの署名]`: visible/editable.
 
-Hidden stress `18:26 / 18:37` uses long recipient, multi-paragraph gratitude body, longer optional metaphor and long couple-signature strings. Existing actual-size evidence remains valid because the 2026-08-18 front change only hides fixed decorative microcopy and does not reduce any variable-copy geometry.
+Hidden stress `18:26 / 18:37` uses long recipient, multi-paragraph gratitude body, longer optional metaphor and long couple-signature strings. Front stress was re-read after the origin-dot subtraction: visible text outside root `0`, text collision `0`, proof-language `0`, IMAGE fills `0`.
 
 Later structural hardening removed nominal fixed-height native-text boxes while preserving the selected composition and stress result.
 
@@ -126,6 +154,7 @@ Still unresolved:
 - clean-room independence: `PASS`
 - sellable visual: `PASS`
 - decorative English microcopy subtraction: `PASS`
+- origin-dot UI subtraction: `PASS`
 - native semantic editability: `PASS`
 - open handwritten-signature area: `PASS`
 - guest-facing handwritten helper label hidden: `PASS`
