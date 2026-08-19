@@ -1,6 +1,6 @@
 # ADD-08 メニュー補助サイン — QA
 
-Status: `CURRENT / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / LONG_COPY_STRESS_PASS / CLEANROOM_SELECTED_FAMILY / DRINK_TICK_UI_SUBTRACTION_PASS / ALLERGY_CENTER_SEPARATOR_SUBTRACTION_PASS / LEGACY_PRESERVED / NOT_PRINT_READY`
+Status: `CURRENT / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / LONG_COPY_STRESS_PASS / CLEANROOM_SELECTED_FAMILY / DRINK_TICK_UI_SUBTRACTION_PASS / DRINK_INTERNAL_RULE_SUBTRACTION_PASS / ALLERGY_CENTER_SEPARATOR_SUBTRACTION_PASS / LEGACY_PRESERVED / NOT_PRINT_READY`
 Updated: 2026-08-19
 Authority: GitHub latest `main` + `docs/automation/non-rurubu-figma-quality-current.md`
 
@@ -88,6 +88,37 @@ Post-adoption QA remains whole/read/actual-size PASS, selected/stress outside te
 
 Detailed evidence: `FIGMA-DRINK-V3-MEASURE-TICK-SUBTRACTION-QA-2026-08-19.md`.
 
+## 2026-08-19 Drink V3 internal-section-rule subtraction
+
+Fresh whole-item / reading / native `1400×1980` review found two full-width dark rules between `アルコール → ソフトドリンク → ご案内`. The sections were already grouped by large vertical rhythm, colored Japanese headings and native text blocks, so the two internal rules had stopped performing a meaningful binding role and instead made the cream field read like a form/table ledger.
+
+Rollback-safe comparison:
+
+- `38:2 / QA_ADD08_DRINK_V3_NO_INTERNAL_SECTION_RULES_2026_08_19`
+
+Only `DECOR / RULE 02` and `DECOR / RULE 03` were hidden. The top rust intro rule remains because it still binds the opening guidance to the beverage content field.
+
+Adopted state:
+
+- selected `21:3`: `23:7 / DECOR / RULE 02` hidden; `23:10 / DECOR / RULE 03` hidden;
+- long-copy `23:34`: `23:69 / DECOR / RULE 02` hidden; `23:72 / DECOR / RULE 03` hidden;
+- pre-change rollback selected `39:2`, long-copy `39:43`, both hidden;
+- comparison `38:2` hidden after adoption.
+
+Post-adoption three-scale QA:
+
+- whole-item ~500px: PASS;
+- reading ~1000px: PASS;
+- selected actual-size `1400×1980`: PASS;
+- long-copy actual-size `1400×1980`: PASS after temporary show, then returned hidden.
+
+Post-adoption structure readback:
+
+- selected visible native text `9`, outside text `0`, text collisions `0`, IMAGE additions `0`;
+- long-copy visible native text `9`, outside text `0`, text collisions `0`, IMAGE additions `0`.
+
+Detailed evidence: `FIGMA-DRINK-V3-INTERNAL-RULE-SUBTRACTION-QA-2026-08-19.md`.
+
 ## 2026-08-19 Allergy/Dietary V2 center-separator subtraction
 
 Fresh whole-item review found the two-column information field still used a grey dashed center separator. The field is already grouped by a shared mint top rule, shared mint bottom rule, aligned Japanese headings and two clear columns, so the dashed center rule had little binding value and read as a form/table UI divider.
@@ -158,4 +189,4 @@ These are `DEFERRED_FINALIZATION` and do not reopen the current sellable visual 
 
 ## Current decision
 
-`SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / LONG_COPY_STRESS_PASS / CLEANROOM_SELECTED_FAMILY / DRINK_TICK_UI_SUBTRACTION_PASS / ALLERGY_CENTER_SEPARATOR_SUBTRACTION_PASS / LEGACY_PRESERVED / NOT_PRINT_READY`
+`SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / LONG_COPY_STRESS_PASS / CLEANROOM_SELECTED_FAMILY / DRINK_TICK_UI_SUBTRACTION_PASS / DRINK_INTERNAL_RULE_SUBTRACTION_PASS / ALLERGY_CENTER_SEPARATOR_SUBTRACTION_PASS / LEGACY_PRESERVED / NOT_PRINT_READY`
