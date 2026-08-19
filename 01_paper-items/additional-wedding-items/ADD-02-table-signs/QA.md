@@ -1,9 +1,9 @@
 # ADD-02 — QA
 
-Status: `CURRENT / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / PRODUCTION_POLISHED / TAIWAN_GRID_SUBTRACTION_PASS / HONG_KONG_HARBOR_RULER_SUBTRACTION_PASS / KOREA_FOLD_RULER_SUBTRACTION_PASS / ROLLBACK_SAFE / NOT_PRINT_READY`
+Status: `CURRENT / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / PRODUCTION_POLISHED / TAIWAN_GRID_SUBTRACTION_PASS / HONG_KONG_HARBOR_RULER_SUBTRACTION_PASS / SINGAPORE_CHART_BAR_SUBTRACTION_PASS / KOREA_FOLD_RULER_SUBTRACTION_PASS / MALDIVES_WATER_RULER_SUBTRACTION_PASS / ROLLBACK_SAFE / NOT_PRINT_READY`
 Updated: 2026-08-19
 Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
-Latest `main` observed before this reconciliation: `e96fed54dfb6327be45761ce3323f110cab1c25a`
+Latest `main` observed before this reconciliation: `02245030e399b27cd3dc6055fad79043468c29d5`
 
 ## Current live authority
 
@@ -28,16 +28,14 @@ Previously verified family-level polish remains active:
 
 ## 2026-08-19 bounded fixed-art subtraction
 
-Fresh whole-item review found three country signs where repeated thin construction lines read as chart/form scaffolding rather than destination print art.
+Fresh whole-item review found several country signs where repeated construction marks read as chart/form scaffolding rather than destination print art. Each was tested independently; other countries were not mechanically changed for uniformity.
 
 ### Taiwan `2:38`
 
 Nine `TW_GRID_H_* / TW_GRID_V_*` lines combined with fixed amber/cinnabar blocks to read like a bar-chart/dashboard grid.
 
-Bounded QA:
-
 - comparison: `95:2 / QA / ADD-02 TAIWAN / NO CHART GRID / 2026-08-19`;
-- fresh rollback: `96:2 / ROLLBACK / ADD-02 TAIWAN / PRE_GRID_SUBTRACTION / 2026-08-19`;
+- rollback: `96:2 / ROLLBACK / ADD-02 TAIWAN / PRE_GRID_SUBTRACTION / 2026-08-19`;
 - adopted: hide only the nine grid lines;
 - retained: country title, Japanese label, semantic note placeholder, large `05`, fixed blocks, route cut and print grain.
 
@@ -56,25 +54,57 @@ Two comparisons were tested:
 
 The more aggressive scaffold removal added no visible benefit, so only the five harbor lines were adopted.
 
-- fresh rollback: `98:2 / ROLLBACK / ADD-02 HONG KONG / PRE_HARBOR_RULER_SUBTRACTION / 2026-08-19`;
+- rollback: `98:2 / ROLLBACK / ADD-02 HONG KONG / PRE_HARBOR_RULER_SUBTRACTION / 2026-08-19`;
 - tower structure, fixed blocks, country/Japanese labels, semantic note, large `07`, lower rule and print grain remain.
 
 Fresh QA: `1000×1480`, visible native text `4`, IMAGE fills `1`, outside text `0`; whole 500px and actual-size PASS.
 
 Evidence: `FIGMA-HONG-KONG-HARBOR-RULER-SUBTRACTION-QA-2026-08-19.md`.
 
+### Singapore `2:65`
+
+Four equally spaced `SG_ARCH_BLOCK_*` bars in the jade upper field read like a bar chart/dashboard more than destination print art. The field split, country title and botanical ellipse/stem already carried the composition.
+
+- comparison: `101:2 / QA / ADD-02 SINGAPORE / NO CHART BARS / 2026-08-19`;
+- rollback: `102:2 / ROLLBACK / ADD-02 SINGAPORE / PRE_CHART_BAR_SUBTRACTION / 2026-08-19`;
+- adopted: hide `SG_ARCH_BLOCK_1`–`SG_ARCH_BLOCK_4` only;
+- retained: dark/jade/sand fields, botanical arc/stem, country/Japanese labels, semantic note, large `08` and print grain.
+
+Fresh QA: whole 500px PASS; actual-size `1000×1480` PASS; visible native text `4`; IMAGE fills `1`; outside text `0`; text collisions `0`.
+
+Evidence: `FIGMA-SINGAPORE-CHART-BAR-SUBTRACTION-QA-2026-08-19.md`.
+
 ### Korea `2:83`
 
 Five equally spaced `KR_FOLD_*` rules above/into the Korean-name area read as ruled form fields rather than a meaningful fold or physical print boundary.
 
 - comparison: `99:2 / QA / ADD-02 KOREA / NO REPEATED FOLD RULER / 2026-08-19`;
-- fresh rollback: `99:24 / ROLLBACK / ADD-02 KOREA / PRE_FOLD_RULER_SUBTRACTION / 2026-08-19`;
+- rollback: `99:24 / ROLLBACK / ADD-02 KOREA / PRE_FOLD_RULER_SUBTRACTION / 2026-08-19`;
 - adopted: hide only `KR_FOLD_1`–`KR_FOLD_5`;
 - retained: blue/red/ink block construction, diagonal cut, country/Japanese labels, semantic note, large `10`, bottom blue/red rule and print grain.
 
 Fresh QA: `1000×1480`, visible native text `4`, IMAGE fills `1`, outside text `0`, visible text intersections `0`; whole 500px and actual-size PASS.
 
 Evidence: `FIGMA-KOREA-FOLD-RULER-SUBTRACTION-QA-2026-08-19.md`.
+
+### Maldives `2:92`
+
+Six evenly spaced `MV_WATER_1`–`MV_WATER_6` rules filled the deep-water band like a ruled ledger/form rather than water.
+
+Two comparisons were tested:
+
+- `103:2`: keep three alternating water rules plus the existing current line;
+- `103:24`: remove all six equal water rules and retain only the existing `MV_DIAGONAL_CURRENT` line.
+
+The partial reduction still read as a ruler; the single-current version was stronger and was adopted.
+
+- rollback: `104:2 / ROLLBACK / ADD-02 MALDIVES / PRE_WATER_RULER_SUBTRACTION / 2026-08-19`;
+- adopted: hide `MV_WATER_1`–`MV_WATER_6`;
+- retained: current line, sky/deep-water/sand fields, coral disc, country/Japanese labels, semantic note, large `11`, register and print grain.
+
+Fresh QA: actual-size `1000×1480` PASS; visible native text `4`; IMAGE fills `1`; outside text `0`. A numeric note/number text-box overlap remains in geometry, but the fresh screenshot shows no visible glyph collision, so the optical layout was not damaged merely to satisfy bounding-box math.
+
+Evidence: `FIGMA-MALDIVES-WATER-RULER-SUBTRACTION-QA-2026-08-19.md`.
 
 ## Structural / visual gate
 
