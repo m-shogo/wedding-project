@@ -8,7 +8,7 @@ Production state: separate clean-room V6; V7 is HOLD
 
 ## Current declaration
 
-`V6_LIVE_FIGMA_IN_PROGRESS / OUTER_GB_PREFERRED / PROFILE_QA_GA_PREFERRED / STORY_CHRONOLOGY_FR_PREFERRED / MEMORY_SPOTS_FT_PREFERRED / GOURMET_CAFE_GC_PREFERRED / ONE_DAY_PLAN_FM_PREFERRED / NATIVE_VARIABLE_TEXT_PRESERVED / REPLACEABLE_PHOTOS_PRESERVED / CURRENT_REVIEW_BOARD_3X2_LIVE_VERIFIED / V7_HOLD / NOT_PRINT_READY`
+`V6_LIVE_FIGMA_IN_PROGRESS / OUTER_GB_PREFERRED / PROFILE_QA_GA_PREFERRED / STORY_CHRONOLOGY_FR_PREFERRED / MEMORY_SPOTS_FT_PREFERRED / GOURMET_CAFE_GC_PREFERRED / ONE_DAY_PLAN_GD_PREFERRED / NATIVE_VARIABLE_TEXT_PRESERVED / REPLACEABLE_PHOTOS_PRESERVED / CURRENT_REVIEW_BOARD_3X2_LIVE_VERIFIED / V7_HOLD / NOT_PRINT_READY`
 
 ## Live Figma preferred set
 
@@ -19,54 +19,47 @@ All six current preferred spreads live on `845:2 / 00_RURUBU_START_HERE` as one 
 - Story / chronology FR `1904:18` — chronology right `1904:44`; x `275600`, y `0`.
 - Memory Spots FT `1912:2` — guide right `1912:24`; x `272000`, y `1300`.
 - Gourmet / Cafe GC `1933:2` — Cafe page `1933:3`; x `273800`, y `1300`.
-- Yokohama 1DAY Plan FM `1879:71` — x `275600`, y `1300`.
+- Yokohama 1DAY Plan GD `1938:2` — right `1938:33`; x `275600`, y `1300`.
 
 Start Here `845:27`:
 
-`V5 FU/FX · V6 GB + GA/FR + FT MEMORY SPOTS + GC CAFE & TABLE + FM 1DAY PLAN · V7 HOLD`
+`V5 FU/FX · V6 GB + GA/FR + FT MEMORY SPOTS + GC CAFE & TABLE + GD 1DAY PLAN · V7 HOLD`
 
-Rollbacks remain preserved hidden, including FO `1891:18`, FP `1895:18`, EW `1826:18`, FQ `1898:125`, FN `1866:2`, and rejected Cafe/Table study FS `1909:2`.
+FM `1879:71` is preserved hidden rollback. Other prior rollbacks/comparisons remain preserved hidden.
 
-## Latest verified progress — GC Cafe source-safe overlapped view beat
+## Latest verified progress — GD 1DAY native closing caption
 
 ### Visible problem
 
-FN Cafe/Table was structurally safe, but the Cafe left page still read as `large travel-note texture → separate small Yokohama-view module → separate closing copy`. The small view photo began only after the composed field ended, so the page retained a false section break and modular/card-like reading.
-
-### Root cause
-
-The problem was not missing photography. The Yokohama view source was already near its safe display ceiling, so enlarging it would trade editorial hierarchy for image softness. The better test was whether the same legitimate replaceable photo could carry more editorial responsibility through controlled overlap rather than scale.
+FM's final dining stop still used a yellow `END` tag plus tiny `END / TABLE & TALK` copy. At whole-item scale the element read as a UI/status tag rather than a magazine closing caption.
 
 ### Bounded visual test
 
-Rollback-safe GC duplicated FN and changed only the Cafe left page:
+Rollback-safe GD duplicated FM and changed only the final closing role:
 
-- existing replaceable Yokohama view photo remained `238×218`, source/hash unchanged;
-- photo moved `y=686 → 600` and rotation `-2.5° → -4°`, overlapping the lower edge of the travel-note field;
-- native `02`, view title/copy/meta/check note moved upward into the same editorial beat;
-- nonfunctional cyan `DECOR / CAFE_LABEL` was hidden;
-- closing quote moved upward slightly to maintain page cadence;
-- no new photo, generated asset, raster, Drive save, binary placement or image hash.
+- hid `LABEL / END`;
+- replaced the English status copy with native `一日の終わりは、食卓で。`;
+- placed the native caption directly on the existing dining photo;
+- preserved stop order, route copy, photography, crop and image hashes.
 
-The first GC geometry improved the visual flow but created a 32px native-text overlap between `02` and the view title. It was not promoted in that state. The right text column was moved to x=382 and structure QA was rerun.
+Structure QA also exposed inherited 3px contacts between `02` / `12:30` and `04` / `19:00`. The two time nodes were moved from x=105 to x=116 before promotion.
 
 ### Three-scale / structure evidence
 
-- FN 1400px spread was reviewed before write;
-- GC 1400px spread: PASS and stronger continuity than FN;
-- GC Cafe actual-size `1933:3` = `794×1123`: PASS;
-- visible Cafe native text: `21`;
-- absolute text collisions after correction: `0`;
+- 1200px whole spread: PASS and cleaner than FM;
+- reading/page scale: PASS;
+- right-page actual-size context: PASS;
+- visible right-page native text: `25`;
+- absolute text collisions: `0` after inherited-contact correction;
 - 18px text safe-area risks: `0`;
 - page-level stray nodes: `0`;
-- view photo remains `238×218`, rotation `-4°`, existing hash/source role unchanged;
-- FN preserved hidden rollback.
+- new images / generated assets / Drive saves / binary placements / image hashes: `0`.
 
-Learning: RSL-134 `VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`.
+Learning: RSL-135 `VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`.
 
-Evidence: `01_paper-items/rurubu-wedding/evidence/RURUBU-V6-GC-CAFE-OVERLAPPED-VIEW-BEAT-QA-2026-08-20.md`.
-Feedback: `docs/wedding-design-learning-feedback-log.append/2026-08-20-rurubu-v6-gc-cafe-overlapped-view-beat.md`.
-Learning append: `docs/design-learning/rurubu-shared-learning-feed.append/2026-08-20-rsl-134-controlled-overlap-for-source-limited-photo.md`.
+Evidence: `01_paper-items/rurubu-wedding/evidence/RURUBU-V6-GD-1DAY-NATIVE-CLOSING-CAPTION-QA-2026-08-20.md`.
+Feedback: `docs/wedding-design-learning-feedback-log.append/2026-08-20-rurubu-v6-gd-1day-native-closing-caption.md`.
+Learning append: `docs/design-learning/rurubu-shared-learning-feed.append/2026-08-20-rsl-135-photo-bound-native-closing-caption.md`.
 
 ## Existing preferred verification retained
 
@@ -74,9 +67,10 @@ Learning append: `docs/design-learning/rurubu-shared-learning-feed.append/2026-0
 - GA retains its verified readable Profile closing column and Q&A page.
 - FR retains the boxless native chronology terminal and actual-size verification.
 - FT retains the compact Spot 03 → dominant dining flow and actual-size verification.
-- FM retains semantic 1DAY stop hierarchy and replaceable photos.
+- GC retains the source-safe overlapped Cafe view beat and actual-size verification.
+- GD retains semantic 1DAY stop hierarchy, replaceable photos, and a native photo-bound closing caption.
 
-No internal design changes were made to GB / GA / FR / FT / FM in this run.
+No internal design changes were made to GB / GA / FR / FT / GC in this run.
 
 ## Shared-learning / scope behavior
 
@@ -85,7 +79,7 @@ No internal design changes were made to GB / GA / FR / FT / FM in this run.
 - read the neutral non-Rurubu feed only as permitted principle/QA input;
 - did not inspect or edit non-Rurubu item-specific Figma, Drive, ledgers, assets or GitHub paths;
 - project-wide hybrid Figma authoring remains `PROMOTED_PROJECT_RULE`;
-- RSL-134 is a local cross-item candidate, not a promoted visual rule.
+- RSL-135 is a local cross-item candidate, not a promoted visual rule.
 
 ## Drive / asset truth
 
@@ -120,7 +114,7 @@ Do not call V6 complete or print-ready until all of the following are verified:
 
 Current state:
 
-`V6 GB + GA/FR + FT + GC + FM = VERIFIED_LOCAL_DUMMY_DESIGN_STUDIES / PHOTO_LED_TRAVEL_GUIDE_GRAMMAR / NATIVE_TEXT_EDITABILITY_PRESERVED / REPLACEABLE_PHOTOS_PRESERVED / CURRENT_REVIEW_BOARD_LIVE_VERIFIED / ROLLBACK_SAFE / V7_HOLD / NOT_PRINT_READY`.
+`V6 GB + GA/FR + FT + GC + GD = VERIFIED_LOCAL_DUMMY_DESIGN_STUDIES / PHOTO_LED_TRAVEL_GUIDE_GRAMMAR / NATIVE_TEXT_EDITABILITY_PRESERVED / REPLACEABLE_PHOTOS_PRESERVED / CURRENT_REVIEW_BOARD_LIVE_VERIFIED / ROLLBACK_SAFE / V7_HOLD / NOT_PRINT_READY`.
 
 ## Next highest-value work
 
@@ -128,9 +122,8 @@ Current state:
 2. Re-read exact live preferred IDs and parent page before every write.
 3. Judge all six spreads at the same scale before choosing the next defect.
 4. Cafe photography remains an asset bottleneck: do not enlarge the current Yokohama view beyond source tolerance or substitute semantically unrelated imagery merely to add density.
-5. Use controlled overlap only when it improves continuity without text/photo collision or source upscaling.
+5. Treat UI/status-like labels as candidates for subtraction only after verifying whether they still provide binding/contrast/physical function.
 6. Keep major/minor repeated information unequal, but verify subordinate beats remain readable at actual size.
-7. Continue subtraction only when contrast/binding/physical function can be replaced by hierarchy.
-8. Re-run actual-size collision, safe-area, contrast, parent-containment and source-fidelity QA after material typography or geometry changes.
-9. Keep generated section masters unadopted until quality-preserving transport materially improves.
-10. Keep printer-template/PDF/physical-proof gates separate from dummy-design QA.
+7. Re-run actual-size collision, safe-area, contrast, parent-containment and source-fidelity QA after material typography or geometry changes.
+8. Keep generated section masters unadopted until quality-preserving transport materially improves.
+9. Keep printer-template/PDF/physical-proof gates separate from dummy-design QA.
