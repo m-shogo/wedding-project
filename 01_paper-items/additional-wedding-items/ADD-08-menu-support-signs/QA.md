@@ -1,6 +1,6 @@
 # ADD-08 メニュー補助サイン — QA
 
-Status: `CURRENT / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / LONG_COPY_STRESS_PASS / CLEANROOM_SELECTED_FAMILY / DRINK_TICK_UI_SUBTRACTION_PASS / DRINK_INTERNAL_RULE_SUBTRACTION_PASS / ALLERGY_CENTER_SEPARATOR_SUBTRACTION_PASS / LEGACY_PRESERVED / NOT_PRINT_READY`
+Status: `CURRENT / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / LONG_COPY_STRESS_PASS / CLEANROOM_SELECTED_FAMILY / DRINK_TICK_UI_SUBTRACTION_PASS / DRINK_INTERNAL_RULE_SUBTRACTION_PASS / ALLERGY_CENTER_SEPARATOR_SUBTRACTION_PASS / WORLD_TRIP_ORBIT_CHECKPOINT_SUBTRACTION_PASS / LEGACY_PRESERVED / NOT_PRINT_READY`
 Updated: 2026-08-19
 Authority: GitHub latest `main` + `docs/automation/non-rurubu-figma-quality-current.md`
 
@@ -34,7 +34,7 @@ The family remains visually distinct by role rather than one template repeated t
 
 - Drink uses a navy title field, cream beverage ledger and teal fixed-art curve field;
 - Allergy / Dietary uses Japanese-first safety hierarchy and a functional bilingual category header;
-- World Trip uses a rust title field, three editorial culinary chapters and fixed orbit/route art.
+- World Trip uses a rust title field, three editorial culinary chapters and a single long fixed route curve after target/checkpoint simplification.
 
 No raster IMAGE role is required by the diagnosed visual problems. Variable food, drink, allergy, dietary and operational wording remains native editable text.
 
@@ -150,6 +150,26 @@ Post-adoption QA:
 
 Detailed evidence: `FIGMA-ALLERGY-V2-CENTER-SEPARATOR-SUBTRACTION-QA-2026-08-19.md`.
 
+## 2026-08-19 World Trip V3 orbit / checkpoint subtraction
+
+Fresh reading-scale review found the World Trip fixed-art column still using two concentric orbit circles plus three small checkpoint dots along the long route curve. The chapters, Japanese title, numbering and route curve already carry the culinary-journey concept, so the circles read as a target/scanner widget and the dots as progress/checkpoint controls without semantic meaning.
+
+Rollback-safe comparisons tested outer-orbit-only removal, both-orbit removal, and checkpoint-dot removal. Removing both orbit circles while retaining the long route curve was strongest. The selected and stress roots were then synchronized to remove both circles and the three non-semantic dots while keeping the route itself.
+
+Adopted state:
+
+- selected orbit `21:48 / 21:49`: hidden;
+- selected checkpoint dots `21:52 / 21:53 / 21:54`: hidden;
+- selected route curve `21:50`: retained;
+- stress orbit `23:80 / 23:81`: hidden;
+- stress checkpoint dots `23:84 / 23:85 / 23:86`: hidden;
+- stress route curve `23:82`: retained;
+- pre-change rollback selected/stress `42:2 / 42:40`, hidden.
+
+Post-adoption selected/stress roots retain visible native text `14`, outside text `0`, IMAGE additions `0`, and one intentional long route vector each. The fixed-art field remains asymmetric without scanner/progress UI semantics.
+
+Detailed evidence: `FIGMA-WORLD-TRIP-V3-ORBIT-CHECKPOINT-SUBTRACTION-QA-2026-08-19.md`.
+
 ## Structure / editability QA
 
 Current family requirements remain:
@@ -189,4 +209,4 @@ These are `DEFERRED_FINALIZATION` and do not reopen the current sellable visual 
 
 ## Current decision
 
-`SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / LONG_COPY_STRESS_PASS / CLEANROOM_SELECTED_FAMILY / DRINK_TICK_UI_SUBTRACTION_PASS / DRINK_INTERNAL_RULE_SUBTRACTION_PASS / ALLERGY_CENTER_SEPARATOR_SUBTRACTION_PASS / LEGACY_PRESERVED / NOT_PRINT_READY`
+`SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / LONG_COPY_STRESS_PASS / CLEANROOM_SELECTED_FAMILY / DRINK_TICK_UI_SUBTRACTION_PASS / DRINK_INTERNAL_RULE_SUBTRACTION_PASS / ALLERGY_CENTER_SEPARATOR_SUBTRACTION_PASS / WORLD_TRIP_ORBIT_CHECKPOINT_SUBTRACTION_PASS / LEGACY_PRESERVED / NOT_PRINT_READY`
