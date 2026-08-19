@@ -1,9 +1,8 @@
 # ADD-07 エスコートカード案内ボード — QA
 
-Status: `CURRENT / CLEANROOM_V2_SELECTED_A2_A3 / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / JAPANESE_ACTION_LABELS_PASS / STEP_MARKER_SUBTRACTION_PASS / REDUNDANT_NOTE_SUBTRACTION_PASS / LONG_COPY_STRESS_PASS / LEGACY_PRESERVED / NOT_PRINT_READY`
+Status: `CURRENT / CLEANROOM_V2_SELECTED_A2_A3 / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / JAPANESE_ACTION_LABELS_PASS / STEP_MARKER_SUBTRACTION_PASS / REDUNDANT_NOTE_SUBTRACTION_PASS / GENERIC_KICKER_SUBTRACTION_PASS / LONG_COPY_STRESS_PASS / LEGACY_PRESERVED / NOT_PRINT_READY`
 Updated: 2026-08-19
 Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
-Latest `main` observed before this reconciliation: `7ed2306ed7549e0c3ac500c297695fabf9809a62`
 
 ## Live authority
 
@@ -19,19 +18,18 @@ The retained production remains rollback/history only. The selected V2 family wa
 
 ## Current selected visual state
 
-Fresh live screenshot/readback on 2026-08-19 confirms the selected family is no longer in the older bilingual-step state described by the original 2026-08-15 QA prose.
+Current visible A2/A3 copy is Japanese-first:
 
-Current visible A2/A3 copy:
-
-- artifact kicker: `BOARDING GATE`;
-- Japanese title: `エスコートカードをお取りください`;
+- title: `エスコートカードをお取りください`;
 - lead: `お名前のカードを見つけて、記載されたテーブルへお進みください。`;
 - step 01: `お名前を探す`;
 - step 02: `カードを取る`;
 - step 03: `行き先の卓へ`;
 - date/location: `2026.10.24 / YOKOHAMA`.
 
-The former English action duplicates (`FIND YOUR NAME / PICK UP YOUR TICKET / FIND YOUR DESTINATION`) were removed in the Japanese-first polish. The former circular step markers were also removed; the native `01 / 02 / 03` numerals now sit directly on the mint action route. The redundant lower note repeating the Step 03 destination instruction was removed. These changes reduce airport-interface / stepper-UI reading without weakening wayfinding.
+The former English action duplicates (`FIND YOUR NAME / PICK UP YOUR TICKET / FIND YOUR DESTINATION`) were removed in the Japanese-first polish. The former circular step markers were removed; the native `01 / 02 / 03` numerals sit directly on the mint action route. The redundant lower note repeating Step 03 was removed.
+
+Fresh 2026-08-19 review also removed the remaining `BOARDING GATE` kicker. The board is not an actual boarding gate, and the Japanese title/lead/route already communicate both function and travel-theme motion. Removing the generic transport-roleplay label strengthened the editorial first read without creating false emptiness; the right navy terminal field still supplies a strong physical-sign identity.
 
 Evidence:
 
@@ -39,19 +37,39 @@ Evidence:
 - `FIGMA-V2-STEP-MARKER-SUBTRACTION-2026-08-18.md`
 - `FIGMA-V2-REDUNDANT-DESTINATION-NOTE-SUBTRACTION-2026-08-18.md`
 - `FIGMA-V2-STEP3-MARKER-SEPARATION-QA-2026-08-17.md`
+- `FIGMA-V2-GENERIC-BOARDING-GATE-KICKER-SUBTRACTION-QA-2026-08-19.md`
 
-## Live structure / long-copy readback
+## Generic-kicker subtraction QA
 
-2026-08-19 readback:
+Rollback-safe A2/A3 comparison candidates were created at `27:2 / 27:25` with only `BOARDING GATE` hidden. Both were stronger at whole-item scale, so the change was adopted in selected and long-copy proofs.
 
-- A2 `14:3`: visible native text `11`; IMAGE fills `0`; text outside root `0`;
-- A3 `14:25`: visible native text `11`; IMAGE fills `0`; text outside root `0`;
-- A2 stress `15:4`: hidden; long Japanese title/lead and long Japanese step actions retained; text outside root `0`;
-- A3 stress `15:27`: hidden; long Japanese title/lead and long Japanese step actions retained; text outside root `0`.
+Pre-change rollback copies:
 
-The header remains native vertical auto-layout so title/lead grow together. The action route and terminal edge remain editable vector roles. No variable/factual copy is baked into raster or SVG.
+- `27:48` A2 selected;
+- `27:71` A3 selected;
+- `27:94` A2 stress;
+- `27:117` A3 stress.
 
-Fresh whole-item A2 screenshot at 500px remains PASS: Japanese instruction hierarchy is immediate, `01 → 02 → 03` reads as one continuous action path, and the right navy terminal field gives large-format sign identity without card/dashboard UI.
+All comparison and rollback roots are hidden after QA.
+
+Post-adoption readback:
+
+- A2 selected: visible native text `10`, `BOARDING GATE` visible count `0`, outside text `0`;
+- A3 selected: visible native text `10`, `BOARDING GATE` visible count `0`, outside text `0`;
+- A2/A3 stress: visible native text `10` each, kicker `0`, outside text `0`, hidden after QA;
+- IMAGE fills `0`.
+
+A2 long-copy proof was temporarily shown at large scale after adoption and still passes with the long Japanese title/lead/action copy; it returned to hidden state afterward.
+
+## Live structure / long-copy state
+
+- header remains native vertical auto-layout so title/lead grow together;
+- action route and terminal edge remain editable vector roles;
+- long Japanese title/lead and long Japanese step actions remain in hidden stress proofs;
+- no variable/factual copy is baked into raster or SVG;
+- no generated/raster imagery is required.
+
+Fresh whole-item A2 and A3 screenshots remain PASS: `01 → 02 → 03` reads as one continuous action path and the right navy terminal field gives large-format sign identity without card/dashboard UI.
 
 ## Hybrid authoring / asset state
 
@@ -59,7 +77,7 @@ Fresh whole-item A2 screenshot at 500px remains PASS: Japanese instruction hiera
 - route / terminal fixed graphics: editable vector;
 - raster/image roles: `0`;
 - image generation required: `0`;
-- Drive write in this reconciliation: `0`.
+- Drive write in this run: `0`.
 
 The current bottleneck is not imagery.
 
