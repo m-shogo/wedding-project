@@ -1,6 +1,6 @@
 # ADD-08 メニュー補助サイン — QA
 
-Status: `CURRENT / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / LONG_COPY_STRESS_PASS / CLEANROOM_SELECTED_FAMILY / DRINK_TICK_UI_SUBTRACTION_PASS / LEGACY_PRESERVED / NOT_PRINT_READY`
+Status: `CURRENT / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / LONG_COPY_STRESS_PASS / CLEANROOM_SELECTED_FAMILY / DRINK_TICK_UI_SUBTRACTION_PASS / ALLERGY_CENTER_SEPARATOR_SUBTRACTION_PASS / LEGACY_PRESERVED / NOT_PRINT_READY`
 Updated: 2026-08-19
 Authority: GitHub latest `main` + `docs/automation/non-rurubu-figma-quality-current.md`
 
@@ -36,7 +36,7 @@ The family remains visually distinct by role rather than one template repeated t
 - Allergy / Dietary uses Japanese-first safety hierarchy and a functional bilingual category header;
 - World Trip uses a rust title field, three editorial culinary chapters and fixed orbit/route art.
 
-No raster IMAGE role is required by the diagnosed visual problem. Variable food, drink, allergy, dietary and operational wording remains native editable text.
+No raster IMAGE role is required by the diagnosed visual problems. Variable food, drink, allergy, dietary and operational wording remains native editable text.
 
 ## 2026-08-18 selected-family cleanup
 
@@ -65,71 +65,59 @@ Adopted result:
 - long-copy outside visible text `0`;
 - IMAGE fills `0`.
 
-Rollback:
-
-- selected `27:84`;
-- long-copy `27:125`.
-
 ### World Trip V3
 
-Fresh review found implementation/template language still visible to guests:
-
-- `WORLD TRIP SPECIAL MENU` and `WEDDING JOURNEY` repeated the Japanese hierarchy;
-- intro contained `内容は確定後に編集可能なテキストで更新します。`;
-- `MENU NOTE` was internal/template labeling;
-- the note body described future updating rather than the semantic role.
-
-Adopted result:
-
-- decorative English kicker/footer hidden;
-- intro is guest-facing `旅するように味わう、この日のための料理紹介。`;
-- note label is `ご案内`;
-- note body is native semantic placeholder `[アレルギー・提供に関するご案内]`;
-- selected outside visible text `0`;
-- long-copy outside visible text `0`;
-- IMAGE fills `0`.
-
-Rollback:
-
-- selected `27:204`;
-- long-copy `27:242`.
+Fresh review found implementation/template language still visible to guests. Decorative English kicker/footer were hidden, intro and note copy were converted to guest-facing Japanese/semantic placeholders, and long-copy remains native.
 
 ### Allergy / Dietary V2
 
-A bounded comparison hid `ALLERGY / DIETARY INFORMATION`, but the removal left an empty navy header field and weakened the whole-item binding. The test was rejected and hidden (`27:280`).
-
-This is intentional: the rule is not “remove all English.” The category line remains because the screenshot comparison proved a real binding/function role in this specific artifact.
+A prior bounded comparison hid `ALLERGY / DIETARY INFORMATION`, but the removal left an empty navy header field and weakened whole-item binding. That test was rejected. The bilingual category line remains because it has a proven binding role.
 
 ## 2026-08-19 Drink V3 measure-tick subtraction
 
-Fresh whole-item / reading / native `1400×1980` review found twelve short horizontal tick marks still repeated down the teal fixed-art field. Because the fake `01–06` measure labels had already been removed, these ticks no longer represented any guest-facing data and made the field read like a chart or measurement UI.
-
-Rollback-safe comparison:
-
-- `31:2 / QA_ADD08_DRINK_V3_NO_MEASURE_TICKS_2026_08_19`
-
-The comparison hid only the 12-vector tick group while preserving the full-width teal field and both cream beverage curves. It was materially cleaner at reading scale without creating the excessive cream emptiness seen in the previously rejected narrow-field test.
+Fresh whole-item / reading / native `1400×1980` review found twelve short horizontal tick marks repeated down the teal fixed-art field. Because fake `01–06` measure labels had already been removed, these ticks no longer represented guest-facing data and made the field read like a chart or measurement UI.
 
 Adopted state:
 
 - selected `21:3`: `21:10` tick group hidden;
 - long-copy `23:34`: `23:41` tick group hidden;
-- beverage curves retained;
-- teal field retained;
-- comparison hidden after adoption;
-- pre-change rollback selected `31:43` hidden;
-- pre-change rollback long-copy `31:84` hidden.
+- beverage curves and teal field retained;
+- pre-change rollback selected `31:43`, long-copy `31:84`, both hidden.
+
+Post-adoption QA remains whole/read/actual-size PASS, selected/stress outside text `0`, collision `0`, IMAGE `0`.
+
+Detailed evidence: `FIGMA-DRINK-V3-MEASURE-TICK-SUBTRACTION-QA-2026-08-19.md`.
+
+## 2026-08-19 Allergy/Dietary V2 center-separator subtraction
+
+Fresh whole-item review found the two-column information field still used a grey dashed center separator. The field is already grouped by a shared mint top rule, shared mint bottom rule, aligned Japanese headings and two clear columns, so the dashed center rule had little binding value and read as a form/table UI divider.
+
+Rollback-safe comparison:
+
+- `37:2 / QA_ADD08_ALLERGY_V2_NO_CENTER_DASHED_SEPARATOR_2026-08-19`
+
+Only the center grey separator was hidden. The comparison was stronger at whole-item scale and preserved column comprehension.
+
+Adopted state:
+
+- selected `18:19`: `18:23 / Vector` hidden;
+- long-copy `18:64`: `18:68 / Vector` hidden;
+- top/bottom mint rules retained;
+- selected pre-change rollback `37:16` hidden;
+- stress pre-change rollback `37:30` hidden;
+- comparison hidden after adoption.
+
+During long-copy QA, internal `LAYOUT DUMMY` suffixes were also found in the hidden stress proof. A separate pre-cleanup rollback `37:44` was preserved, then the two stress bodies were changed to equally demanding native Japanese semantic stress copy without reducing the text-fit test. Both remain `textAutoResize=HEIGHT`.
 
 Post-adoption QA:
 
-- whole / thumbnail: PASS;
-- reading scale: PASS;
-- actual size `1400×1980`: PASS;
-- long-copy native-size screenshot: PASS and returned to hidden state;
-- selected visible native text `9`, IMAGE fills `0`, outside text `0`, same-parent text collisions `0`;
-- long-copy visible native text `9`, IMAGE fills `0`, outside text `0`, same-parent text collisions `0`.
+- selected actual size `1400×1980`: PASS;
+- selected visible native text `8`, outside text `0`, visible proof-language `0`, IMAGE `0`;
+- long-copy native-size-equivalent screenshot: PASS;
+- long-copy visible native text `8`, outside text `0`, visible proof-language `0`, IMAGE `0`;
+- long-copy proof returned to hidden state.
 
-Detailed evidence: `FIGMA-DRINK-V3-MEASURE-TICK-SUBTRACTION-QA-2026-08-19.md`.
+Detailed evidence: `FIGMA-ALLERGY-V2-CENTER-SEPARATOR-SUBTRACTION-QA-2026-08-19.md`.
 
 ## Structure / editability QA
 
@@ -143,12 +131,7 @@ Current family requirements remain:
 - rollback candidates remain preserved;
 - legacy is preserved and not overwritten.
 
-Historical structural/visual evidence remains available in:
-
-- `CLEANROOM-V2-COMPARISON-2026-08-15.md`
-- `CLEANROOM-V3-DRINK-WORLD-2026-08-15.md`
-- `FIGMA-SELECTED-FAMILY-INLINE-PROOF-SUFFIX-REMOVAL-2026-08-17.md`
-- earlier reopened production QA files and Git history.
+Historical structural/visual evidence remains available in Git history and item-specific QA evidence files.
 
 ## Drive / image decision
 
@@ -158,7 +141,7 @@ Drive write: `0`.
 
 `IMAGE_GENERATION_NOT_REQUIRED`.
 
-The observed bottleneck was UI-like repeated fixed vector micro-geometry, not missing photography or illustration.
+The observed bottlenecks were UI-like fixed vector micro-geometry and evidence-copy drift, not missing photography or illustration.
 
 ## Deferred finalization
 
@@ -175,4 +158,4 @@ These are `DEFERRED_FINALIZATION` and do not reopen the current sellable visual 
 
 ## Current decision
 
-`SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / LONG_COPY_STRESS_PASS / CLEANROOM_SELECTED_FAMILY / DRINK_TICK_UI_SUBTRACTION_PASS / LEGACY_PRESERVED / NOT_PRINT_READY`
+`SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / LONG_COPY_STRESS_PASS / CLEANROOM_SELECTED_FAMILY / DRINK_TICK_UI_SUBTRACTION_PASS / ALLERGY_CENTER_SEPARATOR_SUBTRACTION_PASS / LEGACY_PRESERVED / NOT_PRINT_READY`
