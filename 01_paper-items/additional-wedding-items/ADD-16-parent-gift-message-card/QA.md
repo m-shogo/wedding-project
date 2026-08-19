@@ -1,6 +1,6 @@
 # ADD-16 両親贈呈品メッセージカード — QA
 
-Status: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / CLEANROOM_V3_SELECTED / HOME_PORT_MICROCOPY_SUBTRACTION_PASS / ORIGIN_DOT_UI_SUBTRACTION_PASS / OPEN_HANDWRITTEN_AREA_POLISHED / HANDWRITTEN_HELPER_LABEL_HIDDEN / LONG_COPY_STRESS_PASS / AUTO_HEIGHT_HARDENED / LEGACY_PRESERVED / ROLLBACK_SAFE / NOT_PRINT_READY`
+Status: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / CLEANROOM_V3_SELECTED / HOME_PORT_MICROCOPY_SUBTRACTION_PASS / ORIGIN_DOT_UI_SUBTRACTION_PASS / BACK_ENDPOINT_DOT_UI_SUBTRACTION_PASS / OPEN_HANDWRITTEN_AREA_POLISHED / HANDWRITTEN_HELPER_LABEL_HIDDEN / LONG_COPY_STRESS_PASS / AUTO_HEIGHT_HARDENED / LEGACY_PRESERVED / ROLLBACK_SAFE / NOT_PRINT_READY`
 Updated: 2026-08-19
 Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
 
@@ -14,6 +14,7 @@ Canonical evidence:
 - `OPEN-HANDWRITTEN-SIGNATURE-AREA-QA-2026-08-18.md`
 - `HANDWRITTEN-LABEL-VISIBILITY-RECONCILIATION-2026-08-19.md`
 - `ORIGIN-DOT-SUBTRACTION-QA-2026-08-19.md`
+- `BACK-ENDPOINT-DOT-SUBTRACTION-QA-2026-08-19.md`
 - subsequent guest-copy / placeholder-status cleanup and native-text auto-height hardening records in the ADD-16 item history.
 
 Live authority:
@@ -33,7 +34,7 @@ Live authority:
 
 - warm cream paper field;
 - Japanese serif typography with controlled asymmetry;
-- one restrained mint horizon line without a decorative endpoint/control marker;
+- one restrained mint horizon line on each face without a decorative endpoint/control marker;
 - recipient → gratitude headline → optional short metaphor → horizon → date/signature on the front;
 - native auto-layout message stack on the back;
 - no certificate symmetry, side slab, hearts, houses, airplanes, family photos, rounded cards, shadows or script-font decoration;
@@ -87,6 +88,33 @@ Post-write selected/stress readback: visible text outside root `0`, text collisi
 
 Result: `ORIGIN_DOT_UI_SUBTRACTION_PASS`.
 
+## Back endpoint-dot UI subtraction — 2026-08-19
+
+Fresh native `700×1036` back review found that the back face still retained a rust endpoint dot at the right end of the same mint horizon device, even though the front had already removed its endpoint marker.
+
+The back dot had no destination, trim, attachment or handwriting role. The horizon line alone already bound the long message body to the date/signature closure, so the isolated circle increasingly read as a slider/progress terminal.
+
+Rollback-safe comparison:
+
+- `37:2 / QA / ADD16 / BACK / NO_ENDPOINT_DOT / 2026-08-19`.
+
+Only the back `DECOR_ORIGIN_MARK` visibility changed. The horizon line, message stack, optional metaphor, date, signature and semantic handwritten area were unchanged.
+
+Pre-change hidden rollbacks:
+
+- selected back: `37:14`;
+- long-copy back: `37:26`.
+
+Adopted:
+
+- selected `18:21 / DECOR_ORIGIN_MARK`: hidden;
+- stress `18:44 / DECOR_ORIGIN_MARK`: hidden;
+- comparison `37:2`: hidden after adoption.
+
+Selected and long-copy back both passed actual-size review after the subtraction. Readback remained outside visible text `0`, text collision `0`, IMAGE fills `0`.
+
+Result: `BACK_ENDPOINT_DOT_UI_SUBTRACTION_PASS`.
+
 ## Handwritten helper-label reconciliation — 2026-08-19
 
 Fresh live readback found the durable QA text lagging behind the selected Figma state:
@@ -115,12 +143,14 @@ Result: `HANDWRITTEN_HELPER_LABEL_HIDDEN / AUTHORITY_RECONCILED`.
 - working size: `700×1036`
 - IMAGE fills: `0`
 - visible text outside root: `0`
+- text collision: `0`
 - message body remains native auto-layout so approved Japanese copy can grow without a fixed-height raster/text block;
+- back decorative endpoint dot hidden; mint horizon line retained;
 - `AREA_HANDWRITTEN_SIGNATURE`: `260×120`, visible stroke `0`, semantic geometry retained;
 - internal helper label `META / HANDWRITTEN / 自筆署名欄（任意）`: hidden;
 - guest-facing native signature role `[ふたりの署名]`: visible/editable.
 
-Hidden stress `18:26 / 18:37` uses long recipient, multi-paragraph gratitude body, longer optional metaphor and long couple-signature strings. Front stress was re-read after the origin-dot subtraction: visible text outside root `0`, text collision `0`, proof-language `0`, IMAGE fills `0`.
+Hidden stress `18:26 / 18:37` uses long recipient, multi-paragraph gratitude body, longer optional metaphor and long couple-signature strings. Back stress was temporarily revealed after endpoint-dot subtraction and passed native `700×1036`: visible text outside root `0`, text collision `0`, IMAGE fills `0`; it was returned to hidden QA state after review.
 
 Later structural hardening removed nominal fixed-height native-text boxes while preserving the selected composition and stress result.
 
@@ -154,7 +184,8 @@ Still unresolved:
 - clean-room independence: `PASS`
 - sellable visual: `PASS`
 - decorative English microcopy subtraction: `PASS`
-- origin-dot UI subtraction: `PASS`
+- front origin-dot UI subtraction: `PASS`
+- back endpoint-dot UI subtraction: `PASS`
 - native semantic editability: `PASS`
 - open handwritten-signature area: `PASS`
 - guest-facing handwritten helper label hidden: `PASS`
