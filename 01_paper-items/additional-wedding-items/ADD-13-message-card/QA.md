@@ -1,7 +1,7 @@
 # ADD-13 メッセージカード — QA
 
-Status: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / CLEANROOM_V6_SELECTED / BACK_PROMPT_COUNTERPOINT_PASS / LONG_COPY_STRESS_PASS / HANDWRITING_AREA_55_PERCENT_PASS / LEGACY_PRESERVED / ROLLBACK_SAFE / NOT_PRINT_READY`
-Updated: 2026-08-18
+Status: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / CLEANROOM_V6_SELECTED / BACK_PROMPT_COUNTERPOINT_PASS / ACTUAL_SIZE_SECONDARY_READABILITY_HARDENED / LONG_COPY_STRESS_PASS / HANDWRITING_AREA_55_PERCENT_PASS / LEGACY_PRESERVED / ROLLBACK_SAFE / NOT_PRINT_READY`
+Updated: 2026-08-20
 Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
 
 ## Current selected authority
@@ -15,6 +15,7 @@ Canonical current evidence:
 - `FIGMA-CLEANROOM-V6-GUEST-MICROCOPY-CLEANUP-2026-08-17.md`
 - `FIGMA-CLEANROOM-V6-INLINE-PROOF-COPY-CLEANUP-2026-08-17.md`
 - `CLEANROOM-V6-BACK-PROMPT-COUNTERPOINT-2026-08-18.md`
+- `FIGMA-V6-SECONDARY-COPY-READABILITY-QA-2026-08-20.md`
 
 Live authority:
 
@@ -38,7 +39,7 @@ V6 uses the SPEC primary A6-landscape direction instead of the old portrait corr
 - fixed decoration is limited to restrained rules/edge accent;
 - no image fill is required.
 
-Fresh 2026-08-18 screenshots reconfirmed the selected front/back at whole-item and native actual size. The writing action remains the dominant read and the page does not depend on decorative density to feel complete.
+Fresh 2026-08-20 screenshots reconfirmed the selected front/back at whole-item and native actual size after secondary-copy readability hardening. The writing action remains the dominant read and the page does not depend on decorative density to feel complete.
 
 ## Back prompt counterpoint refinement — 2026-08-18
 
@@ -51,39 +52,65 @@ Rollback-safe bounded comparisons:
 
 The under-title direction was rejected because the existing realistic long-title stress occupies the same vertical region and would reduce copy resilience. The upper-right counterpoint preserved the full writing field and improved intentional asymmetry.
 
-Before selected mutation, realistic stress candidate `40:50` verified the same upper-right treatment with long prompt copy:
+Before selected mutation, realistic stress candidate `40:50` verified the same upper-right treatment with long prompt copy. The treatment was adopted in selected `27:4` and hidden stress `27:51`. Existing rollback `41:2 / 41:18` remains preserved.
 
-- prompt width `490`;
-- prompt typography `18 px / 30 px`, right aligned;
-- long prompt height `60`, bottom `190`;
-- name row y `320`;
-- outside visible text `0`;
-- text collision `0`;
-- proof-language `0`;
-- IMAGE fills `0`.
+Result: `BACK_PROMPT_COUNTERPOINT_PASS`.
+
+## Actual-size secondary-copy readability — 2026-08-20
+
+Fresh native `1400×993` review applied the already `VERIFIED_CROSS_ITEM` non-Rurubu method that explicitly audits the smallest meaningful reader-facing copy. V6 was visually strong at whole/read scale, but the instruction/name/date roles remained fragile at physical A6 scale.
+
+Rollback-safe selected comparisons:
+
+- `45:2 / QA_ADD13_V6_FRONT_SECONDARY_READABILITY_2026-08-20`;
+- `45:20 / QA_ADD13_V6_BACK_SECONDARY_READABILITY_2026-08-20`.
+
+Dedicated long-copy comparisons:
+
+- `46:2 / QA_ADD13_V6_FRONT_STRESS_SECONDARY_READABILITY_2026-08-20`;
+- `46:19 / QA_ADD13_V6_BACK_STRESS_SECONDARY_READABILITY_2026-08-20`.
+
+Adopted selected sizes:
+
+### Front `27:3`
+- `お名前`: `20→24px`;
+- `2026.10.24`: `18→22px`;
+- `自由にメッセージをご記入ください`: `18→22px`.
+
+### Back `27:4`
+- upper-right `[テーマ]`: `18→22px`;
+- `お名前`: `19→23px`;
+- `日付`: `17→22px`.
+
+The same semantic-role sizes were applied to hidden long-copy roots. Stale QA-only helper text inherited by stress evidence (`MESSAGE CARD`, `POSTCARD FOR TWO`, and the internal final-copy note) was hidden; stress title/prompt/name length was not reduced.
 
 Pre-change hidden rollbacks:
 
-- selected back `41:2`;
-- stress back `41:18`.
+- `46:34 / ROLLBACK_ADD13_V6_FRONT_BEFORE_SECONDARY_READABILITY_2026-08-20`;
+- `46:52 / ROLLBACK_ADD13_V6_BACK_BEFORE_SECONDARY_READABILITY_2026-08-20`;
+- `46:68 / ROLLBACK_ADD13_V6_FRONT_STRESS_BEFORE_SECONDARY_READABILITY_2026-08-20`;
+- `46:85 / ROLLBACK_ADD13_V6_BACK_STRESS_BEFORE_SECONDARY_READABILITY_2026-08-20`.
 
-The treatment was adopted in selected `27:4` and hidden stress `27:51`. Post-write selected/stress remain outside `0` / collision `0` / proof-language `0` / IMAGE `0`.
+Comparison roots are hidden after adoption. Final selected/stress readback remains outside text `0`, collisions `0`, proof-language `0`, IMAGE fills `0`.
 
-Result: `BACK_PROMPT_COUNTERPOINT_PASS`.
+Result: `ACTUAL_SIZE_SECONDARY_READABILITY_HARDENED`.
 
 ## Structure / handwriting-area QA
 
 ### Front `27:3`
 
 - working size: `1400×993`
+- visible native text: `5`
 - IMAGE fills: `0`
 - visible text outside root: `0`
+- text-to-text collisions: `0`
 - semantic writing area: `900×870`
 - writing-area ratio: `56.32%`
 
 ### Back `27:4`
 
 - working size: `1400×993`
+- visible native text: `4`
 - IMAGE fills: `0`
 - visible text outside root: `0`
 - text-to-text collision: `0`
@@ -95,7 +122,13 @@ Both faces remain above the SPEC minimum handwriting-area requirement of 55%.
 
 ## Long-copy / editability
 
-Hidden stress roots `27:35 / 27:51` remain current long-copy authority. V6 repaired the earlier failure where root-outside count was zero but long title/prompt text collided internally. Dynamic header roles use native auto-layout / auto-height behavior; the upper-right prompt treatment independently passed realistic long title + long prompt stress before adoption.
+Hidden stress roots `27:35 / 27:51` remain current long-copy authority. Dynamic header roles use native auto-layout / auto-height behavior.
+
+Post-readability-hardening stress state:
+
+- front outside `0`, collisions `0`, proof-language `0`, IMAGE `0`, writing ratio `56.32%`;
+- back outside `0`, collisions `0`, proof-language `0`, IMAGE `0`, writing ratio `57.98%`;
+- enlarged long back prompt grows to its natural height without colliding with the name/date row.
 
 All variable/factual copy remains native editable text. No flattening or raster replacement was introduced.
 
@@ -107,7 +140,7 @@ Legacy production `1:3 / 1:13` remains untouched. It was used only after V6 had 
 
 `IMAGE_GENERATION_NOT_REQUIRED_FOR_THIS_ITEM`.
 
-The item role is handwriting-first and current bottlenecks are typography/copy/finalization/physical proof rather than missing imagery. Exact Drive folder metadata was live-read on 2026-08-18 and matched `1Md8oCMsw4F9tZjQueNmQQ2dYR1I7JwZl`. Drive writes: `0`.
+The item role is handwriting-first and the concrete 2026-08-20 bottleneck was actual-size typography rather than missing imagery. Exact Drive folder metadata was live-read on 2026-08-20 and matched `1Md8oCMsw4F9tZjQueNmQQ2dYR1I7JwZl`. Drive writes: `0`.
 
 ## BLOCKED_REQUIRED_INPUT / DEFERRED_FINALIZATION
 
@@ -125,10 +158,12 @@ Do not invent final personal copy or signer details.
 - clean-room independence: `PASS`
 - sellable visual: `PASS`
 - back prompt counterpoint: `PASS`
+- actual-size secondary readability: `PASS`
 - handwriting-area >=55%: `PASS`
 - native semantic editability: `PASS`
 - long-copy / internal-collision stress: `PASS`
 - legacy preservation: `PASS`
 - Drive authority: `PASS`
+- generated/image assets required: `0`
 - final content/physical proof: `BLOCKED_REQUIRED_INPUT / DEFERRED_FINALIZATION`
 - print readiness: `NO`
