@@ -1,9 +1,9 @@
 # ADD-02 — QA
 
-Status: `CURRENT / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / PRODUCTION_POLISHED / TAIWAN_GRID_SUBTRACTION_PASS / HONG_KONG_HARBOR_RULER_SUBTRACTION_PASS / SINGAPORE_CHART_BAR_SUBTRACTION_PASS / KOREA_FOLD_RULER_SUBTRACTION_PASS / MALDIVES_WATER_RULER_SUBTRACTION_PASS / ROLLBACK_SAFE / NOT_PRINT_READY`
+Status: `CURRENT / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / PRODUCTION_POLISHED / FRANCE_ARCH_SIMPLIFICATION_PASS / BALI_GATE_SIMPLIFICATION_PASS / TAIWAN_GRID_SUBTRACTION_PASS / HONG_KONG_HARBOR_RULER_SUBTRACTION_PASS / SINGAPORE_CHART_BAR_SUBTRACTION_PASS / KOREA_FOLD_RULER_SUBTRACTION_PASS / MALDIVES_WATER_RULER_SUBTRACTION_PASS / ROLLBACK_SAFE / NOT_PRINT_READY`
 Updated: 2026-08-19
 Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
-Latest `main` observed before this reconciliation: `02245030e399b27cd3dc6055fad79043468c29d5`
+Latest `main` observed before this reconciliation: `85847ced7af372a3d003141ea78b60a5455c5f90`
 
 ## Current live authority
 
@@ -24,11 +24,43 @@ Previously verified family-level polish remains active:
 - guest-facing `LAYOUT DUMMY / QA / PROOF` suffixes removed while semantic placeholders remain;
 - unsupported art-direction descriptors removed from guest-facing output where they had no reader-facing job;
 - Hawaii / Japan badge-like contour containment and Italy orphan lower rule were removed only after bounded comparison;
+- France now retains two architectural arch outlines rather than four repeated echoes;
+- Bali now retains two outer split-gate pairs rather than four stepped pairs;
 - print grain remains a tiled `256×256` role rather than a stretched low-resolution hero.
 
 ## 2026-08-19 bounded fixed-art subtraction
 
-Fresh whole-item review found several country signs where repeated construction marks read as chart/form scaffolding rather than destination print art. Each was tested independently; other countries were not mechanically changed for uniformity.
+Fresh whole-item review found several country signs where repeated construction marks read as chart/form/UI scaffolding rather than destination print art. Each was tested independently; other countries were not mechanically changed for uniformity.
+
+### France `2:20`
+
+Four offset `FR_ARCH_RULE_*` outlines in the upper navy field carried the architectural idea too far: the first two established the window/arch cue, while the third and fourth read as repeated UI/scaffold echoes.
+
+- comparison: `107:26 / QA / ADD-02 FRANCE / TWO ARCHES / 2026-08-19`;
+- rollback: `108:2 / ROLLBACK / ADD-02 FRANCE / PRE_ARCH_SIMPLIFICATION / 2026-08-19`;
+- adopted: hide `FR_ARCH_RULE_3 / FR_ARCH_RULE_4` only;
+- retained: `FR_ARCH_RULE_1 / FR_ARCH_RULE_2`, navy/ivory fields, red register, horizon rule, all native text and print grain.
+
+Fresh QA: whole ~500px PASS; reading ~1000px PASS; actual canvas `1000×1480`; visible native text `4`; IMAGE fills `1`; outside text `0`; visible text collisions `0`.
+
+Evidence: `FIGMA-FRANCE-ARCH-SIMPLIFICATION-QA-2026-08-19.md`.
+
+### Bali `2:74`
+
+Eight stepped `BA_GATE_L/R_0`–`BA_GATE_L/R_3` bars around the central gap read partly as an audio equalizer / dashboard glyph instead of split-gate architecture.
+
+Two comparisons were tested:
+
+- `106:2`: keep only the outermost gate pair — rejected because the field became too empty and lost useful architectural depth;
+- `106:26`: keep the two outer gate pairs and remove the two innermost pairs — adopted.
+
+- rollback: `107:2 / ROLLBACK / ADD-02 BALI / PRE_GATE_SIMPLIFICATION / 2026-08-19`;
+- adopted: hide `BA_GATE_L/R_2` and `BA_GATE_L/R_3` only;
+- retained: `BA_GATE_L/R_0`, `BA_GATE_L/R_1`, clay/black fields, ochre sun, country/Japanese labels, semantic note, large `09`, lower register and print grain.
+
+Fresh QA: whole ~500px PASS; reading ~1000px PASS; actual canvas `1000×1480`; visible native text `4`; IMAGE fills `1`; outside text `0`. A numeric note/number text-box overlap remains in bounds, but fresh screenshots show no visible glyph collision, so optical spacing was not damaged merely to satisfy bounding-box math.
+
+Evidence: `FIGMA-BALI-GATE-SIMPLIFICATION-QA-2026-08-19.md`.
 
 ### Taiwan `2:38`
 
@@ -126,7 +158,7 @@ Numeric text-box intersections may exist on some signs where the large table-num
 Image generation in the 2026-08-19 polish: `0`.
 Drive write: `0`.
 
-The observed defects were excessive native chart/form scaffolds, not missing imagery. Existing print grain remains unchanged.
+The observed defects were excessive native chart/form/equalizer/scaffold repetition, not missing imagery. Existing print grain remains unchanged.
 
 The separate Hawaii V14 photo-led method remains a truthful blocker: do not repeat the previously failed shell/DNS or unsupported `createImageAsync` ingestion paths unless the environment/capability materially changes.
 
