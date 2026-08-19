@@ -8,7 +8,7 @@ Production state: separate clean-room V6; V7 is HOLD
 
 ## Current declaration
 
-`V6_LIVE_FIGMA_IN_PROGRESS / OUTER_EV_PREFERRED / PROFILE_QA_ET_PREFERRED / STORY_CHRONOLOGY_EN_PREFERRED / MEMORY_SPOTS_EW_PREFERRED / GOURMET_CAFE_ER_PREFERRED / ONE_DAY_PLAN_EU_PREFERRED / NATIVE_VARIABLE_TEXT_PRESERVED / REPLACEABLE_PHOTOS_PRESERVED / PREFERRED_NODE_LIVENESS_VERIFIED / V7_HOLD / NOT_PRINT_READY`
+`V6_LIVE_FIGMA_IN_PROGRESS / OUTER_EV_PREFERRED / PROFILE_QA_ET_PREFERRED / STORY_CHRONOLOGY_EN_PREFERRED / MEMORY_SPOTS_EW_PREFERRED / GOURMET_CAFE_EX_PREFERRED / ONE_DAY_PLAN_EU_PREFERRED / NATIVE_VARIABLE_TEXT_PRESERVED / REPLACEABLE_PHOTOS_PRESERVED / PREFERRED_NODE_LIVENESS_VERIFIED / V7_HOLD / NOT_PRINT_READY`
 
 ## Live Figma preferred set
 
@@ -16,54 +16,56 @@ Production state: separate clean-room V6; V7 is HOLD
 - Profile / Q&A ET `1817:2` — Profile `1817:3`.
 - Story / chronology EN `1773:2` — chronology `1773:28`.
 - Memory Spots EW `1826:18` — lead `1826:19`; guide `1826:40`.
-- Gourmet / Cafe ER `1805:134` — Cafe `1805:135`.
-- Yokohama 1DAY Plan EU `1818:2` — left `1818:3`; right inherited from EQ and visually unchanged.
+- Gourmet / Cafe EX `1831:2` — Cafe `1831:3`.
+- Yokohama 1DAY Plan EU `1818:2` — left `1818:3`; right visually unchanged.
 
 Start Here `845:27`:
 
-`V5 FU/FX · V6 EV + ET/EN + EW MEMORY SPOTS + ER CAFE & TABLE + EU 1DAY PLAN · V7 HOLD`
+`V5 FU/FX · V6 EV + ET/EN + EW MEMORY SPOTS + EX CAFE & TABLE + EU 1DAY PLAN · V7 HOLD`
 
-Rollback/rejected comparisons remain preserved. EM `1767:2`, ES `1815:2` and EQ `1803:2` are hidden rollback states. V7 was not edited.
+Rollback/rejected comparisons remain preserved. ER `1805:134` is the latest Cafe rollback. V7 was not edited.
 
 ## Latest verified progress
 
+### EX — Cafe denser editorial field
+
+Same-scale comparison showed ER Cafe remaining quieter than the photo-led Table page. The middle composed travel texture existed, but the right half carried little reader-facing information, so the page still read partly as underused template space.
+
+EX preserves all photography, image hashes, the full Table page, native text editability and image replaceability. It changes only the Cafe editorial field:
+
+- existing composed travel texture expanded from `720×430` to `793.7×448` and opacity `0.20 → 0.30`;
+- existing native `01` strengthened `92px → 104px`;
+- existing native Cafe metadata redistributed to the right half as a readable two-line editorial block;
+- no new card, photo, raster, generated asset, Drive save, external binary placement or image hash.
+
+The first metadata variant was rejected because it became micro/production-note-like. A later placement produced a real title/metadata collision; that was corrected before promotion.
+
+Final EX: 1200px whole spread PASS; Cafe `1831:3` actual-size `794×1123` PASS; text collision 0; 18px safe-area risk 0; right Table page unchanged.
+
+Evidence: `01_paper-items/rurubu-wedding/evidence/RURUBU-V6-EX-CAFE-DENSER-EDITORIAL-FIELD-QA-2026-08-19.md`.
+Learning: `RSL-117` in `docs/design-learning/rurubu-shared-learning-feed.append/2026-08-19-rsl-117-composed-texture-plus-native-metadata-density.md`.
+Feedback: `docs/wedding-design-learning-feedback-log.append/2026-08-19-rurubu-v6-ex-cafe-density.md`.
+
 ### EW — Memory Spots redundant-copy subtraction + stronger SPOT02 photo beat
 
-Same-scale review and actual-size inspection showed that EM's SPOT02 repeated nearly the same meaning twice: a small body sentence and a larger pullquote both explained that looking back at the photo brings the conversation/memory back. The duplication made the lower-left area read more like a template containing required text slots than a confidently edited travel-magazine beat.
-
-EW preserves SPOT01, all right-page content, all image hashes and all replaceable photo roles. It hides only the weaker SPOT02 body copy, moves the existing native pullquote/rule upward, and enlarges the existing SPOT02 photo from `405×335` to `430×355` using the same `810×552` source/hash.
-
-Final EW: 500px whole PASS; 1200px whole PASS; lead `1826:19` actual-size 794×1123 PASS; lead native text 12; guide native text 14; collision 0 and 18px safe-area risk 0 on both pages; image intrinsic violations 0/4.
+EW removes redundant SPOT02 helper copy, strengthens the existing pullquote, and enlarges the same verified SPOT02 photo to `430×355`. Final 500px/1200px/actual-size QA PASS; collision 0; 18px safe risk 0; image intrinsic violations 0/4.
 
 Evidence: `01_paper-items/rurubu-wedding/evidence/RURUBU-V6-EW-MEMORY-SPOT02-COPY-SUBTRACTION-QA-2026-08-19.md`.
-Learning: `RSL-116` in `docs/design-learning/rurubu-shared-learning-feed.append/2026-08-19-rsl-116-redundant-editorial-copy-subtraction.md`.
-Feedback: `docs/wedding-design-learning-feedback-log.append/2026-08-19-rurubu-v6-ew-memory-spots.md`.
+Learning: `RSL-116`.
 
 ### EV — Outer repeated-photo reduction via native editorial copy
 
-Preferred-wide image audit showed the same Yokohama skyline source in five visible roles. On the Outer back, the small skyline postcard acted mainly as editorial punctuation rather than essential place evidence because the dominant flatlay already carried the page.
-
-EV preserves the dominant photo, chronology, front cover, masthead and all other image roles. It hides only the repeated small skyline support and repurposes existing native metadata as `YOKOHAMA / MEMORY ROUTE / 6 SCENES`, placed over the maroon notebook surface already present inside the dominant photo.
-
-The result reduces duplicate-photo feeling without substituting an unrelated or semantically false image. No new raster or visible container was added.
-
-Final EV: whole spread 1000px PASS; back `1821:3` actual-size 794×1123 PASS; back visible native text 24; back visible IMAGE roles 1; front visible native text 13; front visible IMAGE roles 5; collision 0 and 18px safe-area risk 0 on both pages.
+EV removes one redundant support skyline role and uses native editorial copy on an existing legitimate photo surface instead. Whole/actual-size QA PASS; collision 0; 18px safe risk 0.
 
 Evidence: `01_paper-items/rurubu-wedding/evidence/RURUBU-V6-EV-OUTER-TEXT-ONLY-MEMORY-ROUTE-QA-2026-08-19.md`.
-Learning: `RSL-115` in `docs/design-learning/rurubu-shared-learning-feed.append/2026-08-19-rsl-115-natural-photo-surface-for-native-editorial-copy.md`.
+Learning: `RSL-115`.
 
 ### EU — 1DAY Plan lower editorial feature
 
-Same-scale six-spread review showed the 1DAY Plan left page as the clearest remaining template-like region: the hero was strong, but the lower `POINT + TRIP DATA` information sat in underused cream space.
-
-EU preserves all photography, route content, image hashes and replaceable photo roles. It changes only the lower left-page editorial hierarchy: a large native `01`, stronger native point headline, larger/reorganized TRIP DATA values and a native closing thought.
-
-The initial candidate was not promoted: structure QA found two real text contacts. Those were corrected and QA repeated.
-
-Final EU: whole spread 1000px PASS; left page `1818:3` actual-size 794×1123 PASS; left native text 23; right native text 25; collision 0 on both pages; 18px safe-area risk 0 on both pages.
+EU strengthens the lower left-page utility area using native editorial hierarchy rather than another photo/card. Whole/actual-size QA PASS after correcting two real text contacts.
 
 Evidence: `01_paper-items/rurubu-wedding/evidence/RURUBU-V6-EU-1DAY-LOWER-EDITORIAL-FEATURE-QA-2026-08-19.md`.
-Learning: `RSL-114` in `docs/design-learning/rurubu-shared-learning-feed.append/2026-08-19-rsl-114-utility-copy-as-editorial-anchor.md`.
+Learning: `RSL-114`.
 
 ## Drive / asset truth
 
@@ -76,7 +78,7 @@ Latest run:
 - new external binary placements: 0
 - new image hashes: 0
 - image-source changes: 0
-- Memory Spots geometry change: existing SPOT02 photo `405×335 → 430×355`, same source/hash
+- Cafe texture geometry/opacity changed only; source hash unchanged
 - native variable text preserved: YES
 - replaceable photo roles preserved: YES
 - rollback states preserved: YES
@@ -88,7 +90,7 @@ Do not call V6 complete or print-ready until final legitimate photography/copy, 
 
 Current state:
 
-`V6 EV + ET/EN + EW + ER + EU = VERIFIED_LOCAL_DUMMY_DESIGN_STUDIES / PHOTO_LED_TRAVEL_GUIDE_GRAMMAR / NATIVE_TEXT_EDITABILITY_PRESERVED / REPLACEABLE_PHOTOS_PRESERVED / ROLLBACK_SAFE / V7_HOLD / NOT_PRINT_READY`.
+`V6 EV + ET/EN + EW + EX + EU = VERIFIED_LOCAL_DUMMY_DESIGN_STUDIES / PHOTO_LED_TRAVEL_GUIDE_GRAMMAR / NATIVE_TEXT_EDITABILITY_PRESERVED / REPLACEABLE_PHOTOS_PRESERVED / ROLLBACK_SAFE / V7_HOLD / NOT_PRINT_READY`.
 
 ## Next highest-value work
 
@@ -97,7 +99,6 @@ Current state:
 3. Continue same-scale six-spread review and attack screenshot-visible weak regions before cosmetic additions.
 4. Revalidate dynamic native copy after any material spatial or typography change.
 5. Continue semantic photo-repetition reduction only where the photo role is not essential evidence; never substitute unrelated imagery merely to reduce counts.
-6. Test redundant helper/body copy subtraction only where actual-size review proves the meanings are genuinely duplicated; preserve facts/instructions/accessibility/physical-use guidance.
-7. Treat text-on-photo as a verified crop/text-safe-zone relationship; revalidate if the underlying photo is replaced.
-8. Keep generated section masters unadopted until quality-preserving transport and actual-size QA materially improve.
-9. Keep printer-template/PDF/physical-proof gates separate from dummy-design QA.
+6. Treat composed texture as useful only when reader-facing hierarchy/information actually uses the field; reject microtext that looks like production annotation.
+7. Keep generated section masters unadopted until quality-preserving transport and actual-size QA materially improve.
+8. Keep printer-template/PDF/physical-proof gates separate from dummy-design QA.
