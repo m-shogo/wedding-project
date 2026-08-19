@@ -1,7 +1,7 @@
 # ADD-05 サンキュータグ / プチギフトタグ — QA
 
-Status: `CURRENT / CLEANROOM_V2_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / PHYSICAL_CLEARANCE_PASS / PUNCH_AXIS_RULE_SUBTRACTION_PASS / LEGACY_PRESERVED / NOT_PRINT_READY`
-Updated: 2026-08-18
+Status: `CURRENT / CLEANROOM_V2_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / PHYSICAL_CLEARANCE_PASS / PUNCH_AXIS_RULE_SUBTRACTION_PASS / ACTUAL_SIZE_READABILITY_HARDENED / LEGACY_PRESERVED / NOT_PRINT_READY`
+Updated: 2026-08-20
 Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
 
 ## Current Figma authority
@@ -40,23 +40,31 @@ Current verified clean-room geometry:
 - native text `3`;
 - IMAGE fill `0`;
 - outside visible text `0`;
+- text-to-text collisions `0`;
 - punch geometry `50×50`, top-left `225,55`, center `250,80`;
 - first visible text y `226`;
-- punch edge → first visible text gap `121px`.
+- punch edge → first visible text gap `121px`;
+- support line `25px`;
+- date `22px`.
 
 ### 50×80 optional back `9:13`
 
 - native text `2`;
 - IMAGE fill `0`;
 - outside visible text `0`;
-- punch edge → first visible text gap `165px`.
+- text-to-text collisions `0`;
+- punch edge → first visible text gap `165px`;
+- date `22px`.
 
 ### 45×70 front `9:20`
 
 - native text `3`;
 - IMAGE fill `0`;
 - outside visible text `0`;
+- text-to-text collisions `0`;
 - punch edge → first visible text gap `100px`;
+- support line `23px`;
+- date `20px`;
 - independently reflowed for the smaller physical format.
 
 Hidden punch/safe guides remain non-export QA structure. Variable guest/product/venue/QR/SNS facts are not invented or baked into graphics.
@@ -88,20 +96,45 @@ Rollback-safe comparisons independently verified removal on both front sizes. Ad
 - optional back unchanged;
 - pre-change rollback: `17:12 / 17:22`.
 
-Post-change structure:
-
-- 50×80: `500×800`, native text `3`, IMAGE `0`, outside text `0`, punch `50×50` preserved;
-- 45×70: `450×700`, native text `3`, IMAGE `0`, outside text `0`, punch `50×50` preserved.
-
 Evidence: `FIGMA-PUNCH-AXIS-RULE-SUBTRACTION-QA-2026-08-18.md`.
+
+### Actual-size secondary/date readability hardening — 2026-08-20
+
+Fresh native-size review applied the verified cross-item QA method that explicitly audits the smallest meaningful reader-facing copy. The selected composition was already sellable, but its date/support text was visually fragile at physical tag size.
+
+Rollback-safe comparisons:
+
+- `19:2 / QA_ADD05_50X80_SECONDARY_READABILITY_2026-08-20`
+- `19:12 / QA_ADD05_BACK_50X80_DATE_READABILITY_2026-08-20`
+- `19:19 / QA_ADD05_45X70_SECONDARY_READABILITY_2026-08-20`
+
+Adopted changes:
+
+- 50×80 front support `23→25px`;
+- 50×80 front date `18→22px`;
+- 50×80 back date `17→22px`;
+- 45×70 front support `20→23px`;
+- 45×70 front date `16→20px`.
+
+The headline, punch geometry, lower journey line, copy wording and physical clearances are unchanged. Whole / reading / native-size screenshots passed and the support/date roles remain subordinate to the headline.
+
+Pre-change hidden rollbacks:
+
+- `20:2 / ROLLBACK_ADD05_50X80_BEFORE_SECONDARY_READABILITY_2026-08-20`
+- `20:12 / ROLLBACK_ADD05_BACK_50X80_BEFORE_DATE_READABILITY_2026-08-20`
+- `20:19 / ROLLBACK_ADD05_45X70_BEFORE_SECONDARY_READABILITY_2026-08-20`
+
+Comparison clones are hidden after adoption. Post-change selected roots have outside text `0`, collisions `0`, proof-language `0`, and IMAGE fills `0`.
+
+Evidence: `FIGMA-V2-SECONDARY-COPY-READABILITY-QA-2026-08-20.md`.
 
 ## Drive / generated assets
 
-- exact Drive folder live-read on 2026-08-18: `1_V20y77VU1aGrJtqpl7U5XUpC-bQuTxV`;
+- exact Drive folder live-read on 2026-08-20: `1_V20y77VU1aGrJtqpl7U5XUpC-bQuTxV`;
 - generated/raster production assets required by current design: `0`;
 - Drive write for this polish: `0`.
 
-`IMAGE_GENERATION_NOT_REQUIRED`: the sellable quality is carried by physical punch logic, typography, trim clearance and the restrained lower line; imagery is not the bottleneck.
+`IMAGE_GENERATION_NOT_REQUIRED`: the concrete bottleneck was actual-size typography, not missing imagery.
 
 ## Deferred finalization / print gate
 
