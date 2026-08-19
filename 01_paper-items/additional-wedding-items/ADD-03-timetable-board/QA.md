@@ -1,6 +1,6 @@
 # ADD-03 当日タイムテーブルボード — QA
 
-Status: `CURRENT / CLEANROOM_V2_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / LONG_COPY_STRESS_PASS / LEGACY_PRESERVED / NOT_PRINT_READY`
+Status: `CURRENT / CLEANROOM_V2_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / LONG_COPY_STRESS_PASS / REDUNDANT_TRANSFER_STATUS_REMOVAL_PASS / LEGACY_PRESERVED / NOT_PRINT_READY`
 Updated: 2026-08-19
 Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
 
@@ -28,7 +28,7 @@ Current first-glance hierarchy:
 
 1. `本日の旅程` + `2026.10.24 SAT / YOKOHAMA`;
 2. `14:10–14:40 / 挙式`;
-3. quiet unresolved transfer interval `14:40–15:00 / TBD`;
+3. quiet unresolved transfer interval `14:40–15:00` + native semantic placeholder guidance;
 4. `15:00–17:30 / 披露宴`;
 5. authoritative date/location footer.
 
@@ -70,20 +70,39 @@ Post-change selected/stress roots all have visible `UNTIL/MIN` microcopy `0` and
 
 Evidence: `FIGMA-REDUNDANT-DURATION-CONNECTOR-SUBTRACTION-QA-2026-08-19.md`.
 
+### Redundant transfer-status subtraction
+
+Fresh whole-item review found an isolated red `TBD` at the right edge of the `14:40–15:00` transfer interval even though the same unresolved state was already communicated by native semantic guidance directly under the time.
+
+A2 comparison `31:2` hid only `TXT_TRANSFER_STATUS`; it read more like a guest-facing schedule and less like an internal status board while preserving the unresolved interval itself. The same bounded change was then applied to A2/A3 selected and both long-copy proofs.
+
+Hidden rollback roots:
+
+- `31:40` A2 selected;
+- `31:78` A3 selected;
+- `31:110` A2 stress;
+- `31:148` A3 stress.
+
+Current hidden status nodes: `14:27 / 15:60 / 15:27 / 15:92`. No schedule fact, transfer time, event node, rule or semantic placeholder was removed.
+
+Evidence: `FIGMA-REDUNDANT-TBD-STATUS-REMOVAL-QA-2026-08-19.md`.
+
 ## Structure / stress QA
 
 Current verified state:
 
 - A2 selected: native editable text, IMAGE fill `0`, outside visible text `0`;
 - A3 selected: native editable text, IMAGE fill `0`, outside visible text `0`;
-- A2/A3 selected: visible native text `19` each;
+- A2/A3 selected: visible native text `18` each after status subtraction;
 - variable guidance roles: `textAutoResize=HEIGHT`;
 - A2 long-copy Reception note → divider clearance remains protected;
 - A3 long-copy Reception note → divider clearance remains protected;
-- no residual visible `UNTIL/MIN` duration microcopy in selected/stress;
+- no residual visible `UNTIL/MIN/TBD` template/status microcopy in selected/stress;
 - no variable copy baked into raster/SVG;
 - stress proofs return to hidden state after inspection;
 - retained legacy remains unchanged.
+
+Numeric bounding-box probes still flag some intentional/optical intersections involving the pale atmosphere numeral and oversized time typography. Fresh 500px, 1000px and native `1400×1980` screenshots show no new visible glyph collision from the current change, so good optical composition is not altered solely to satisfy box math.
 
 ## Fact / placeholder contract
 
@@ -92,7 +111,7 @@ Confirmed facts only:
 - date: `2026.10.24 SAT`;
 - location: `YOKOHAMA`;
 - Ceremony: `14:10–14:40`;
-- transfer interval: `14:40–15:00`, activity still unresolved and visibly secondary;
+- transfer interval: `14:40–15:00`, activity still unresolved and visibly secondary through native semantic placeholder guidance;
 - Reception: `15:00–17:30`.
 
 Do not invent opening time, venue floor, gate, flight number, QR, transport credentials or other operational facts. Unknown guidance stays native semantic placeholder copy.
