@@ -1,9 +1,8 @@
 # ADD-09 ゲストブックサイン — QA
 
-Status: `CURRENT / CLEANROOM_V4_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / PROOF_LANGUAGE_CLEANUP_PASS / INDEX_MARK_SUBTRACTION_PASS / SECONDARY_ROUTE_SUBTRACTION_PASS / LONG_COPY_STRESS_PASS / LEGACY_PRESERVED / NOT_PRINT_READY`
+Status: `CURRENT / CLEANROOM_V4_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / PROOF_LANGUAGE_CLEANUP_PASS / INDEX_MARK_SUBTRACTION_PASS / SECONDARY_ROUTE_SUBTRACTION_PASS / INSTRUCTION_FOOT_RULE_SUBTRACTION_PASS / LONG_COPY_STRESS_PASS / LEGACY_PRESERVED / NOT_PRINT_READY`
 Updated: 2026-08-19
 Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
-Latest `main` observed before this reconciliation: `daee3f54bac73f0dae4757b0a7a652c82a2cf9ac`
 
 ## Current authority
 
@@ -43,7 +42,7 @@ Evidence: `FIGMA-CLEANROOM-V4-PROOF-LANGUAGE-CLEANUP-2026-08-18.md`.
 
 The isolated top-right `VECTOR / INDEX MARK` behaved like a tab/UI artifact after the main headline, date and journey line already established the hierarchy. Bounded comparison removed it from selected V4 and long-copy proof.
 
-Live 2026-08-19 readback confirms:
+Live readback:
 
 - selected `16:5 / VECTOR / INDEX MARK`: hidden;
 - stress `17:6 / VECTOR / INDEX MARK`: hidden.
@@ -56,25 +55,55 @@ The lower secondary dotted route/endpoints competed with the main continuous jou
 
 Evidence: `FIGMA-CLEANROOM-V4-SECONDARY-ROUTE-SUBTRACTION-2026-08-18.md`.
 
+### Instruction foot-rule subtraction — 2026-08-19
+
+Fresh whole-item / reading / actual-size review found a full-width thin dark rule between the lower operational note and footer placeholder. The lower block was already grouped by the rust vertical instruction index, three native Japanese text roles and shared alignment, so the horizontal line had little binding value and read like a form/input separator.
+
+Rollback-safe comparison:
+
+- `26:2 / QA_ADD09_V4_NO_INSTRUCTION_FOOT_RULE_2026_08_19`
+
+The comparison changed only `VECTOR / FOOT RULE` visibility and was stronger at whole-item scale.
+
+Adopted state:
+
+- selected `16:3`: `16:20 / VECTOR / FOOT RULE` hidden;
+- stress `17:4`: `17:21 / VECTOR / FOOT RULE` hidden;
+- selected pre-change rollback `27:2` hidden;
+- stress pre-change rollback `27:22` hidden;
+- comparison `26:2` hidden after adoption.
+
+During long-copy review, stale internal `LAYOUT DUMMY` text was also found in the hidden stress proof. A dedicated rollback `29:2` was preserved and stress nodes `17:19 / 17:20 / 17:22` were replaced with equally demanding native Japanese semantic long-copy while preserving their text-box heights (`76 / 58 / 17 px`). Visible proof-language is now `0`.
+
+Detailed evidence: `FIGMA-V4-INSTRUCTION-FOOT-RULE-SUBTRACTION-QA-2026-08-19.md`.
+
 ## Fresh live QA — 2026-08-19
 
-Fresh whole-item screenshot of selected `16:3` at 500px remains PASS:
+Post-adoption visual QA:
+
+- whole-item ~500px: PASS;
+- reading ~1000px: PASS;
+- selected actual-size `1000×1419`: PASS;
+- long-copy actual-size `1000×1419`: PASS; stress returned hidden afterward.
+
+Current visual read:
 
 - Japanese headline is immediate;
-- date is secondary but readable;
+- date remains secondary but readable;
 - the single continuous line reads as one editorial gesture rather than multiple UI routes;
-- lower semantic instructions remain quiet and functional;
+- lower semantic instructions remain grouped by the rust vertical index and typography without a form-like horizontal divider;
 - no card/dashboard containment, shadow, gradient, raster filler or proof-language is visible.
 
 Live structure readback:
 
-- selected `16:3`: `1000×1419`, visible native text `5`, text outside root `0`, IMAGE fills `0`;
-- stress `17:4`: `1000×1419`, hidden after QA, visible native text `5` when inspected, text outside root `0`, IMAGE fills `0`;
+- selected `16:3`: visible native text `5`, text outside root `0`, proof-language `0`, IMAGE fills `0`;
+- stress `17:4`: visible native text `5` when inspected, text outside root `0`, proof-language `0`, IMAGE fills `0`, hidden after QA;
 - selected/stress `VECTOR / CONTINUOUS JOURNEY LINE`: visible;
 - selected/stress `VECTOR / INDEX MARK`: hidden;
+- selected/stress `VECTOR / FOOT RULE`: hidden;
 - variable/unresolved operations remain native editable text.
 
-No new screenshot-supported need for image generation was found.
+A generic absolute-bounding-box detector reports the headline/date text boxes as intersecting because the headline box extends underneath the date box, but fresh actual-size screenshots show no glyph collision. This pre-existing geometry was not changed by the bounded foot-rule test.
 
 ## Hybrid / asset state
 
@@ -82,7 +111,9 @@ No new screenshot-supported need for image generation was found.
 - fixed journey-line art: editable vector;
 - raster/image role: none required;
 - image generation: `0`;
-- Drive write in this reconciliation: `0`.
+- Drive write: `0`.
+
+The current bottleneck was redundant separator geometry and stale hidden QA copy, not missing imagery.
 
 ## Deferred finalization
 
