@@ -1,7 +1,7 @@
 # ADD-04 受付サイン — QA
 
 Status: `CURRENT / CLEANROOM_V3_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / LONG_COPY_STRESS_PASS / LEGACY_PRESERVED / NOT_PRINT_READY`
-Updated: 2026-08-18
+Updated: 2026-08-19
 Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
 
 ## Current Figma authority
@@ -30,9 +30,10 @@ V3 is a Japanese typographic reception-band pair rather than a recolored duplica
 - groom/bride use opposite band anchoring within one paper/typographic family;
 - optional name and direction remain native semantic fields below the band;
 - a restrained functional route line supports the lower field without becoming transport UI;
+- the former L-shaped decorative destination endpoint/cap is hidden because it did not encode an authoritative destination or physical instruction;
 - no generated person/image, fake desk brand, ticket credential, decorative icon row, shadow or dashboard card treatment is used.
 
-Fresh 2026-08-18 live screenshot review of selected groom `16:2` confirms the black band, Japanese label and open lower field remain clear at reading/actual scale. The sign still reads as a physical reception marker rather than a web form.
+Fresh 2026-08-19 whole-item and native `740×1050` review confirms that removing only the route endpoint makes the lower field read more like a purposeful print rule and less like a slider/progress/control glyph. The black band, Japanese reception hierarchy and open lower field remain intact.
 
 ## Resilience / recent polish retained in current selection
 
@@ -42,9 +43,19 @@ The optional-name field uses native `GROUP_NAME_FIELD_AUTO` vertical auto-layout
 
 ### Direction-field auto-height
 
-`TXT_DIRECTION_TBD` is native auto-height in groom/bride selected and both long-copy proofs. Verified direction bottom is `712px`; route line y is `750px`; long-copy direction-to-route clearance remains `38px`; visible text outside root is `0`.
+`TXT_DIRECTION_TBD` is native auto-height in groom/bride selected and both long-copy proofs. Long-copy direction still reflows without clipping; visible text outside root remains `0`.
 
 Evidence: `FIGMA-CLEANROOM-V3-DIRECTION-AUTOHEIGHT-QA-2026-08-17.md`.
+
+### Route endpoint subtraction
+
+Fresh screenshot review found that the lower direction line ended in a vertical tick plus short cap that had no confirmed destination, turn, trim, stand or other semantic/physical role. This extra endpoint made the line read closer to a UI control.
+
+The functional horizontal route remains. Only `NODE_DESTINATION` / `NODE_DESTINATION_CAP` are hidden in groom/bride selected and both long-copy proofs. Pre-change rollback copies are hidden at `25:2 / 25:17 / 25:32 / 25:47`.
+
+Three-scale groom review and native long-copy proof pass; outside text remains `0`, IMAGE fills remain `0`.
+
+Evidence: `FIGMA-V3-ROUTE-ENDPOINT-SUBTRACTION-QA-2026-08-19.md`.
 
 ### Guest-facing placeholder language
 
@@ -64,7 +75,8 @@ Current verified state:
 - bride selected: native editable text/vector, IMAGE fill `0`, outside visible text `0`;
 - adaptive optional-name auto-layout present on both sides;
 - direction semantic field auto-height in selected + stress;
-- long-name / long-direction proofs pass without clipping/collision;
+- long-name / long-direction proofs pass without clipping;
+- route endpoint/cap nodes hidden in selected + stress while the horizontal route remains;
 - no variable copy baked into graphics;
 - stress proofs return to hidden state after inspection;
 - retained legacy pair remains unchanged.
@@ -82,9 +94,9 @@ Do not invent receptionist names, surname use, payment/gift handling, desk opera
 
 ## Drive / generated assets
 
-- exact Drive folder live-read on 2026-08-18: `1vjSYrbjzfZs_vyCIpQAbml9_en5RcH_r`;
+- exact Drive folder live-read on 2026-08-19: `1vjSYrbjzfZs_vyCIpQAbml9_en5RcH_r`;
 - generated/raster production assets required by current design: `0`;
-- Drive write for this reconciliation: `0`.
+- Drive write in this run: `0`.
 
 `IMAGE_GENERATION_NOT_REQUIRED`: the reception pair is carried by typography, physical sign hierarchy and editable field structure; imagery is not the current bottleneck.
 
