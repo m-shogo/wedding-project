@@ -1,6 +1,6 @@
 # ADD-12 新郎新婦クイズカード — QA
 
-Status: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / CLEANROOM_V3_SELECTED / OPEN_QUADRANTS_POLISH_PASS / SELECT_HELPER_SUBTRACTION_PASS / OPEN_MESSAGE_FIELD_POLISH_PASS / BACK_FOLIO_SUBTRACTION_PASS / MINT_TAB_SUBTRACTION_PASS / BACK_HEADER_FIELD_SUBTRACTION_PASS / LONG_COPY_STRESS_PASS / LEGACY_PRESERVED / ROLLBACK_SAFE / NOT_PRINT_READY`
+Status: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / CLEANROOM_V3_SELECTED / OPEN_QUADRANTS_POLISH_PASS / SELECT_HELPER_SUBTRACTION_PASS / OPEN_MESSAGE_FIELD_POLISH_PASS / BACK_FOLIO_SUBTRACTION_PASS / MINT_TAB_SUBTRACTION_PASS / BACK_HEADER_FIELD_SUBTRACTION_PASS / FRONT_HEADER_FIELD_SUBTRACTION_PASS / LONG_COPY_STRESS_PASS / LEGACY_PRESERVED / ROLLBACK_SAFE / NOT_PRINT_READY`
 Updated: 2026-08-19
 Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
 
@@ -28,12 +28,14 @@ Current evidence:
 - `CLEANROOM-V3-BACK-FOLIO-SUBTRACTION-2026-08-19.md`
 - `CLEANROOM-V3-MINT-TAB-SUBTRACTION-2026-08-19.md`
 - `CLEANROOM-V3-BACK-HEADER-FIELD-SUBTRACTION-2026-08-19.md`
+- `FIGMA-CLEANROOM-V3-FRONT-BOXLESS-HEADER-QA-2026-08-19.md`
 
 ## Current visual direction
 
 ### Front
 
 - Japanese-first `新郎新婦クイズ` hierarchy;
+- the former full-width `620×92` navy header field is hidden; category title remains native navy text and date remains native mint text directly on the cream paper field;
 - `Q.01` + native semantic `[設問]`;
 - four equal A–D response roles in a 2×2 editorial field;
 - no radio-button list, rounded card stack, quiz-show iconography, ticket/passport grammar, or AI-person imagery;
@@ -108,6 +110,47 @@ Three-scale result:
 
 Result: `BACK_HEADER_FIELD_SUBTRACTION_PASS`.
 
+## Front header-field subtraction — 2026-08-19
+
+Fresh front review found the remaining `620×92` navy top field increasingly inconsistent with the mature open quadrants and already-boxless back. It enclosed only the small category title and date, so at whole-item scale it read as a residual web/app header rather than a necessary print container.
+
+Neutral RSL-130 was consumed only as a hypothesis. No Rurubu item-specific design, asset, node, Drive item, or layout was inspected or copied.
+
+Rollback-safe comparison:
+
+- `45:2 / QA_ADD12_FRONT_BOXLESS_HEADER_2026_08_19`
+
+Only the header treatment changed:
+
+- `DECOR / TOP FIELD`: hidden;
+- `ADD12/Title`: retained as native text and changed from off-white to the existing ADD-12 navy;
+- `ADD12/Date`: retained as native mint text;
+- question, choice, answer-writing and answer-method geometry unchanged.
+
+Pre-change hidden rollbacks:
+
+- selected front: `45:34`;
+- long-copy front: `45:66`.
+
+Adopted on selected `26:3` and stress `27:51`. Comparison `45:2` is hidden after promotion.
+
+Post-adoption QA:
+
+- whole / thumbnail 500px: PASS;
+- reading scale: PASS;
+- native `620×875`: PASS;
+- realistic long-copy native `620×875`: PASS;
+- selected visible native text: `14`;
+- stress visible native text: `14` when inspected;
+- selected/stress IMAGE fills: `0`;
+- selected/stress outside visible text: `0`;
+- selected/stress top field visible: `false`;
+- stress returned hidden after QA.
+
+Detailed evidence: `FIGMA-CLEANROOM-V3-FRONT-BOXLESS-HEADER-QA-2026-08-19.md`.
+
+Result: `FRONT_HEADER_FIELD_SUBTRACTION_PASS`.
+
 ## Structure / long-copy QA
 
 ### Selected front `26:3`
@@ -115,7 +158,9 @@ Result: `BACK_HEADER_FIELD_SUBTRACTION_PASS`.
 - root: `620×875`;
 - native editable question/choice/answer-method roles retained;
 - four equal semantic answer roles retained;
+- visible top header field: `0`;
 - visible `選ぶ` helper count: `0`;
+- visible native text: `14`;
 - IMAGE fills: `0`;
 - outside visible text: `0`.
 
@@ -132,7 +177,7 @@ Result: `BACK_HEADER_FIELD_SUBTRACTION_PASS`.
 - outside visible text: `0`;
 - text-to-text collisions: `0`.
 
-Hidden long-copy roots `27:51 / 27:83` remain the current stress authority. Back stress was temporarily revealed after the header-field subtraction and passed at native `620×875` with long answer-method, name, and message placeholders; outside visible text remained `0`, text-to-text collisions remained `0`, and IMAGE fills remained `0`. It was returned to hidden QA state after review.
+Hidden long-copy roots `27:51 / 27:83` remain the current stress authority. Front stress was temporarily revealed after the boxless-header adoption and passed at native `620×875` with a long Japanese question, multi-line choices and long answer-method copy; outside visible text remained `0` and IMAGE fills remained `0`. Back stress retains the previously verified boxless treatment and remains hidden QA evidence.
 
 No flattening or raster replacement was introduced. Variable/factual content remains native editable text.
 
@@ -158,6 +203,9 @@ No flattening or raster replacement was introduced. Variable/factual content rem
 - typographic-opening comparison: `43:36` — hidden after adoption
 - pre-header-subtraction back rollback: `43:53`
 - pre-header-subtraction back-stress rollback: `43:70`
+- front boxless-header comparison: `45:2` — hidden after adoption
+- pre-front-header selected rollback: `45:34`
+- pre-front-header stress rollback: `45:66`
 
 Legacy production and the earlier rejected clean-room V2 remain preserved.
 
@@ -165,7 +213,7 @@ Legacy production and the earlier rejected clean-room V2 remain preserved.
 
 `IMAGE_GENERATION_NOT_REQUIRED_FOR_THIS_ITEM`.
 
-The latest defect was oversized section containment, not missing imagery. Exact Drive authority was live-read immediately before the Figma write and matched `1LUanrHk9_lhZcSqf95ybgWH29_bmcfvZ`. Drive writes for the latest polish: `0`.
+The latest defect was stale container mass after native hierarchy matured, not missing imagery. Exact Drive authority was live-read before the Figma write and matched `1LUanrHk9_lhZcSqf95ybgWH29_bmcfvZ`. Drive writes for the latest polish: `0`.
 
 ## BLOCKED_REQUIRED_INPUT
 
@@ -196,6 +244,7 @@ Printer/vendor A6 template and bleed, trim/safe-area, duplex orientation, handwr
 - back folio subtraction: `PASS`
 - mint-tab subtraction: `PASS`
 - back header-field subtraction: `PASS`
+- front header-field subtraction: `PASS`
 - native semantic editability: `PASS`
 - long-copy evidence: `PASS`
 - rollback safety: `PASS`
