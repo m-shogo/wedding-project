@@ -1,6 +1,6 @@
 # ADD-12 新郎新婦クイズカード — QA
 
-Status: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / CLEANROOM_V3_SELECTED / OPEN_QUADRANTS_POLISH_PASS / SELECT_HELPER_SUBTRACTION_PASS / OPEN_MESSAGE_FIELD_POLISH_PASS / BACK_FOLIO_SUBTRACTION_PASS / MINT_TAB_SUBTRACTION_PASS / LONG_COPY_STRESS_PASS / LEGACY_PRESERVED / ROLLBACK_SAFE / NOT_PRINT_READY`
+Status: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / CLEANROOM_V3_SELECTED / OPEN_QUADRANTS_POLISH_PASS / SELECT_HELPER_SUBTRACTION_PASS / OPEN_MESSAGE_FIELD_POLISH_PASS / BACK_FOLIO_SUBTRACTION_PASS / MINT_TAB_SUBTRACTION_PASS / BACK_HEADER_FIELD_SUBTRACTION_PASS / LONG_COPY_STRESS_PASS / LEGACY_PRESERVED / ROLLBACK_SAFE / NOT_PRINT_READY`
 Updated: 2026-08-19
 Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
 
@@ -27,6 +27,7 @@ Current evidence:
 - `CLEANROOM-V3-SELECT-HELPER-SUBTRACTION-2026-08-18.md`
 - `CLEANROOM-V3-BACK-FOLIO-SUBTRACTION-2026-08-19.md`
 - `CLEANROOM-V3-MINT-TAB-SUBTRACTION-2026-08-19.md`
+- `CLEANROOM-V3-BACK-HEADER-FIELD-SUBTRACTION-2026-08-19.md`
 
 ## Current visual direction
 
@@ -42,7 +43,8 @@ Current evidence:
 
 ### Back
 
-- mint opening field with `旅の余白に、ひとこと。`;
+- typographic mint opening `旅の余白に、ひとこと。` on one continuous cream paper field;
+- the former full-width `620×108` mint header field is hidden because it read as a separate web-like section and had no trim/fold/writing role;
 - native `[回答方法]`, `[記名欄]`, and `[メッセージ]` roles;
 - one large `536×216` semantic handwriting field;
 - the full message-area border is removed, while the semantic writing geometry remains;
@@ -50,7 +52,7 @@ Current evidence:
 - the residual `DECOR / MINT TAB` is hidden because the open message role remains clear without a widget-like corner/tab marker;
 - no raster/image dependency.
 
-## Latest bounded visual polish — 2026-08-19
+## Mint-tab polish — 2026-08-19
 
 Fresh native `620×875` review of selected back found a short mint tab at the top-right edge of the already borderless open message field. The semantic writing area, `ひとこと`, `[メッセージ]`, and faint handwriting hint already communicate the role, so the tab had no binding, trim, navigation, or writing function.
 
@@ -58,7 +60,7 @@ Rollback-safe comparison:
 
 - `39:2 / QA / ADD12 / BACK / NO_MINT_TAB / 2026-08-19`
 
-Only `DECOR / MINT TAB` was hidden. The `536×216` writing area, text, spacing, mint opening field, answer method and name roles were unchanged.
+Only `DECOR / MINT TAB` was hidden. The `536×216` writing area, text, spacing, opening field, answer method and name roles were unchanged.
 
 Pre-change rollbacks:
 
@@ -70,7 +72,41 @@ Adopted visibility changes:
 - selected `26:48 / DECOR / MINT TAB`: hidden;
 - stress `27:97 / DECOR / MINT TAB`: hidden.
 
-The no-tab version is quieter and more stationery-like without reducing comprehension.
+Result: `MINT_TAB_SUBTRACTION_PASS`.
+
+## Back header-field subtraction — 2026-08-19
+
+Fresh whole / reading / actual-size review then found the remaining full-width mint opening field increasingly inconsistent with the already-open stationery body. The color was useful, but the `620×108` containment block itself had no physical or semantic job.
+
+Three rollback-safe comparisons were created before mutating selected production:
+
+1. `43:2` — thin mint top rule;
+2. `43:19` — narrow vertical mint rail;
+3. `43:36` — no field, native mint opening text only.
+
+The thin top rule remained an orphan separator and the vertical rail introduced a new binding motif without a physical requirement. The typographic-only version was strongest because it preserved the mint semantic accent without adding another box, rail, or section.
+
+Pre-change rollbacks:
+
+- selected back: `43:53`;
+- long-copy back: `43:70`.
+
+Adopted on selected `26:4` and stress `27:83`:
+
+- `DECOR / CORNER FIELD`: hidden;
+- `旅の余白に、ひとこと。`: kept as native editable text, colored mint;
+- opening y optically adjusted to `36`.
+
+No answer-method, name, message, handwriting geometry, trim/bleed guide, or variable copy changed.
+
+Three-scale result:
+
+- whole / thumbnail: PASS;
+- reading scale: PASS;
+- native `620×875`: PASS;
+- long-copy native `620×875`: PASS.
+
+Result: `BACK_HEADER_FIELD_SUBTRACTION_PASS`.
 
 ## Structure / long-copy QA
 
@@ -88,13 +124,15 @@ The no-tab version is quieter and more stationery-like without reducing comprehe
 - root: `620×875`;
 - visible native text: `8`;
 - semantic handwriting area: `536×216`;
+- visible full-width mint header field: `0`;
 - visible message-area border: `0`;
 - visible decorative folio: `0`;
 - visible mint-tab count: `0`;
 - IMAGE fills: `0`;
-- outside visible text: `0`.
+- outside visible text: `0`;
+- text-to-text collisions: `0`.
 
-Hidden long-copy roots `27:51 / 27:83` remain the current stress authority. Back stress was temporarily revealed after the mint-tab subtraction and passed at native `620×875` with long answer-method, name, and message placeholders; outside visible text remained `0`. It was returned to hidden QA state after review.
+Hidden long-copy roots `27:51 / 27:83` remain the current stress authority. Back stress was temporarily revealed after the header-field subtraction and passed at native `620×875` with long answer-method, name, and message placeholders; outside visible text remained `0`, text-to-text collisions remained `0`, and IMAGE fills remained `0`. It was returned to hidden QA state after review.
 
 No flattening or raster replacement was introduced. Variable/factual content remains native editable text.
 
@@ -115,6 +153,11 @@ No flattening or raster replacement was introduced. Variable/factual content rem
 - no-mint-tab comparison: `39:2` — hidden after adoption
 - no-mint-tab back rollback: `39:19`
 - no-mint-tab back-stress rollback: `39:36`
+- thin-header comparison: `43:2` — hidden after rejection
+- vertical-binding comparison: `43:19` — hidden after rejection
+- typographic-opening comparison: `43:36` — hidden after adoption
+- pre-header-subtraction back rollback: `43:53`
+- pre-header-subtraction back-stress rollback: `43:70`
 
 Legacy production and the earlier rejected clean-room V2 remain preserved.
 
@@ -122,7 +165,7 @@ Legacy production and the earlier rejected clean-room V2 remain preserved.
 
 `IMAGE_GENERATION_NOT_REQUIRED_FOR_THIS_ITEM`.
 
-The current defects were unnecessary containment, repeated form-control helpers, non-semantic metadata, and a residual tab—not missing imagery. Exact Drive authority was live-read on 2026-08-19 and matched `1LUanrHk9_lhZcSqf95ybgWH29_bmcfvZ`. Drive writes for the latest polish: `0`.
+The latest defect was oversized section containment, not missing imagery. Exact Drive authority was live-read immediately before the Figma write and matched `1LUanrHk9_lhZcSqf95ybgWH29_bmcfvZ`. Drive writes for the latest polish: `0`.
 
 ## BLOCKED_REQUIRED_INPUT
 
@@ -152,6 +195,7 @@ Printer/vendor A6 template and bleed, trim/safe-area, duplex orientation, handwr
 - open message-field stationery polish: `PASS`
 - back folio subtraction: `PASS`
 - mint-tab subtraction: `PASS`
+- back header-field subtraction: `PASS`
 - native semantic editability: `PASS`
 - long-copy evidence: `PASS`
 - rollback safety: `PASS`
