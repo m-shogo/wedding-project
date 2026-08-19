@@ -8,12 +8,12 @@ Production state: separate clean-room V6; V7 is HOLD
 
 ## Current declaration
 
-`V6_LIVE_FIGMA_IN_PROGRESS / OUTER_EZ_PREFERRED / PROFILE_QA_ET_PREFERRED / STORY_CHRONOLOGY_EN_PREFERRED / MEMORY_SPOTS_EW_PREFERRED / GOURMET_CAFE_FB_PREFERRED / ONE_DAY_PLAN_FA_PREFERRED / NATIVE_VARIABLE_TEXT_PRESERVED / REPLACEABLE_PHOTOS_PRESERVED / PREFERRED_NODE_LIVENESS_VERIFIED / V7_HOLD / NOT_PRINT_READY`
+`V6_LIVE_FIGMA_IN_PROGRESS / OUTER_EZ_PREFERRED / PROFILE_QA_FC_PREFERRED / STORY_CHRONOLOGY_EN_PREFERRED / MEMORY_SPOTS_EW_PREFERRED / GOURMET_CAFE_FB_PREFERRED / ONE_DAY_PLAN_FA_PREFERRED / NATIVE_VARIABLE_TEXT_PRESERVED / REPLACEABLE_PHOTOS_PRESERVED / PREFERRED_NODE_LIVENESS_VERIFIED / V7_HOLD / NOT_PRINT_READY`
 
 ## Live Figma preferred set
 
 - Outer EZ `1836:2` — front `1836:51`.
-- Profile / Q&A ET `1817:2` — Profile `1817:3`.
+- Profile / Q&A FC `1846:18` — Profile `1846:19`; Q&A `1846:63`.
 - Story / chronology EN `1773:2` — chronology `1773:28`.
 - Memory Spots EW `1826:18` — lead `1826:19`; guide `1826:40`.
 - Gourmet / Cafe FB `1843:2` — Cafe `1843:3`.
@@ -21,17 +21,34 @@ Production state: separate clean-room V6; V7 is HOLD
 
 Start Here `845:27`:
 
-`V5 FU/FX · V6 EZ + ET/EN + EW MEMORY SPOTS + FB CAFE & TABLE + FA 1DAY PLAN · V7 HOLD`
+`V5 FU/FX · V6 EZ + FC/EN + EW MEMORY SPOTS + FB CAFE & TABLE + FA 1DAY PLAN · V7 HOLD`
 
-EU `1818:2` and EY `1835:2` are preserved as hidden rollbacks. EV `1821:2` and EX `1831:2` remain hidden rollbacks. V7 was not edited.
+ET `1817:2` is preserved as hidden rollback before FC. EU `1818:2` and EY `1835:2` are preserved as hidden rollbacks. EV `1821:2` and EX `1831:2` remain hidden rollbacks. V7 was not edited.
 
 ## Latest verified progress
 
+### FC — Q&A reader-facing Japanese editorial microcopy
+
+Same-scale review found the Profile/Q&A spread structurally healthy but still carrying several small generic English helper labels that read like template/AI scaffolding at actual size.
+
+Rollback-safe FC changes native helper microcopy only:
+
+- `MEMORIES FROM OUR JOURNEY` → `ふたりの旅の記憶`
+- `DINNER NOTE / FAVORITE SCENE` → `旅の途中の、好きな一皿。`
+- `TO BE CONTINUED / OUR JOURNEY` → `これからも、ふたりの旅はつづく。`
+- `OUR NEXT CHAPTER` → `ふたりの次の章へ`
+- `NEXT TRIP / FEATURE` → `つぎの旅で、やりたいこと。`
+
+The support-photo caption was moved from the image edge to the cream field directly below the photo for actual-size legibility. Q&A answers, photos, crops, image hashes, Profile geometry and replaceable-image roles remain unchanged.
+
+Final FC: whole spread 1000px PASS; actual-size Q&A `1846:63` 794×1123 PASS; Profile native text 25 / IMAGE 4 / collisions 0 / 18px safe-area risks 0; Q&A native text 30 / IMAGE 2 / collisions 0 / 18px safe-area risks 0.
+
+Evidence: `01_paper-items/rurubu-wedding/evidence/RURUBU-V6-FC-QA-JAPANESE-EDITORIAL-CAPTIONS-QA-2026-08-19.md`.
+Learning: `RSL-121` in `docs/design-learning/rurubu-shared-learning-feed.append/2026-08-19-rsl-121-reader-facing-microcopy-over-template-labels.md`.
+
 ### FA — 1DAY photo-led stop hierarchy
 
-Same-scale six-spread review showed the 1DAY right page as the weakest remaining page. Its native schedule and editability were correct, but repeated narrow text-left / similarly weighted photo-right units still read as an itinerary template.
-
-FA preserves all stop copy, chronology, image hashes and replaceable-photo semantics while assigning unequal photo responsibility:
+Same-scale six-spread review showed the 1DAY right page as a weak remaining page. FA preserves all stop copy, chronology, image hashes and replaceable-photo semantics while assigning unequal photo responsibility:
 
 - STOP01 compact `238×210`, source `240×220`;
 - STOP02 dominant `480×290`, source `810×552`;
@@ -45,39 +62,21 @@ Learning: `RSL-120` in `docs/design-learning/rurubu-shared-learning-feed.append/
 
 ### FB — Cafe composed-raster intrinsic-safe correction
 
-Post-FA cross-audit found one remaining source-fidelity violation: EY's composed Cafe travel texture was displayed at `793.7×448` from a `720×860` source.
-
-FB changes only that fixed-decoration geometry:
-
-- composed texture: `720×448`, centered at x `36.84375`;
-- source remains `720×860`;
-- native copy, opacity, Yokohama view photo, Table page and all image hashes remain unchanged.
+FB keeps the composed Cafe travel texture source-safe at `720×448` from a `720×860` source while preserving native copy, opacity, Yokohama view photo, Table page and image hashes.
 
 Final FB: 1200px whole PASS; Cafe `1843:3` actual-size `794×1123` PASS; native text `17`; collision `0`; 18px safe-area risk `0`; Cafe intrinsic violations `0/2`.
 
 Evidence: `01_paper-items/rurubu-wedding/evidence/RURUBU-V6-FB-CAFE-INTRINSIC-SAFE-TEXTURE-QA-2026-08-19.md`.
 
-No new shared-learning entry was created for FB because the correction is a direct application of the already-established intrinsic/source-fidelity gate rather than a new transferable finding.
+### EZ / EN / EW
 
-### EZ — Outer selective photo-frame subtraction
-
-The smaller rotated Cafe photo retains a functional white separation frame while the larger Dining support works edge-led. Final whole/read/front actual-size PASS; collision 0; safe risk 0.
-
-### ET / EN / EW
-
-Profile/Q&A ET, Story/chronology EN and Memory Spots EW remain live preferred and unchanged this run. Same-scale screenshots were re-read before writes.
+Outer EZ, Story/chronology EN and Memory Spots EW remain live preferred and unchanged in the FC experiment. Their existing verified evidence remains authoritative.
 
 ## Shared-learning input used this run
 
 - project-wide hybrid Figma authoring remains `PROMOTED_PROJECT_RULE`;
-- neutral non-Rurubu `2026-08-17-nrsl-unequal-content-mass-columns.md` was consumed only as a hypothesis about assigning unequal visual mass according to semantic/content responsibility;
-- no non-Rurubu item-specific Figma, Drive, asset, ledger, palette, coordinates or current production state was inspected or copied.
-
-## Cross-spread audit after promotion
-
-All six preferred roots exist and are visible. Preferred-set internal/proof/status-copy leakage scan found `0` visible matches.
-
-A source-fidelity audit found the single Cafe composed-texture width violation described above; FB repaired it. No unrelated image was substituted merely to change repetition counts.
+- the neutral non-Rurubu feed was consumed only for general QA/process hypotheses; no literal layout, palette, asset or current-state conclusion was transferred;
+- no non-Rurubu item-specific Figma, Drive, asset, ledger, GitHub production path or production state was inspected or copied.
 
 ## Drive / asset truth
 
@@ -101,16 +100,17 @@ Do not call V6 complete or print-ready until final legitimate photography/copy, 
 
 Current state:
 
-`V6 EZ + ET/EN + EW + FB + FA = VERIFIED_LOCAL_DUMMY_DESIGN_STUDIES / PHOTO_LED_TRAVEL_GUIDE_GRAMMAR / NATIVE_TEXT_EDITABILITY_PRESERVED / REPLACEABLE_PHOTOS_PRESERVED / ROLLBACK_SAFE / V7_HOLD / NOT_PRINT_READY`.
+`V6 EZ + FC/EN + EW + FB + FA = VERIFIED_LOCAL_DUMMY_DESIGN_STUDIES / PHOTO_LED_TRAVEL_GUIDE_GRAMMAR / NATIVE_TEXT_EDITABILITY_PRESERVED / REPLACEABLE_PHOTOS_PRESERVED / ROLLBACK_SAFE / V7_HOLD / NOT_PRINT_READY`.
 
 ## Next highest-value work
 
 1. Continue V6, not V7.
 2. Reconcile live preferred IDs before every write.
 3. Continue same-scale six-spread review and attack screenshot-visible weak regions before cosmetic additions.
-4. Revalidate dynamic native copy after material spatial/typography changes.
-5. Continue semantic photo-repetition reduction only where a photo role is not essential evidence; never substitute unrelated imagery merely to reduce counts.
-6. Keep photo frames/rules/support geometry only where they prove a binding or separation function.
-7. Prefer unequal editorial responsibility among repeated content/photo roles when equal mass creates module rhythm; rerun actual-size and source-fidelity QA after geometry changes.
-8. Keep generated section masters unadopted until quality-preserving transport and actual-size QA materially improve.
-9. Keep printer-template/PDF/physical-proof gates separate from dummy-design QA.
+4. Audit generic scaffold/template microcopy at actual size, but preserve intentional English branding/navigation where it has a real editorial role.
+5. Revalidate dynamic native copy after material spatial/typography changes.
+6. Continue semantic photo-repetition reduction only where a photo role is not essential evidence; never substitute unrelated imagery merely to reduce counts.
+7. Keep photo frames/rules/support geometry only where they prove a binding or separation function.
+8. Prefer unequal editorial responsibility among repeated content/photo roles when equal mass creates module rhythm; rerun actual-size and source-fidelity QA after geometry changes.
+9. Keep generated section masters unadopted until quality-preserving transport and actual-size QA materially improve.
+10. Keep printer-template/PDF/physical-proof gates separate from dummy-design QA.
