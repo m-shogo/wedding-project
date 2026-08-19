@@ -1,7 +1,7 @@
 # ADD-16 両親贈呈品メッセージカード — QA
 
-Status: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / CLEANROOM_V3_SELECTED / HOME_PORT_MICROCOPY_SUBTRACTION_PASS / ORIGIN_DOT_UI_SUBTRACTION_PASS / BACK_ENDPOINT_DOT_UI_SUBTRACTION_PASS / OPEN_HANDWRITTEN_AREA_POLISHED / HANDWRITTEN_HELPER_LABEL_HIDDEN / LONG_COPY_STRESS_PASS / AUTO_HEIGHT_HARDENED / LEGACY_PRESERVED / ROLLBACK_SAFE / NOT_PRINT_READY`
-Updated: 2026-08-19
+Status: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / CLEANROOM_V3_SELECTED / SECONDARY_COPY_READABILITY_HARDENED / HOME_PORT_MICROCOPY_SUBTRACTION_PASS / ORIGIN_DOT_UI_SUBTRACTION_PASS / BACK_ENDPOINT_DOT_UI_SUBTRACTION_PASS / OPEN_HANDWRITTEN_AREA_POLISHED / HANDWRITTEN_HELPER_LABEL_HIDDEN / LONG_COPY_STRESS_PASS / AUTO_HEIGHT_HARDENED / LEGACY_PRESERVED / ROLLBACK_SAFE / NOT_PRINT_READY`
+Updated: 2026-08-20
 Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
 
 ## Current selected authority
@@ -15,6 +15,7 @@ Canonical evidence:
 - `HANDWRITTEN-LABEL-VISIBILITY-RECONCILIATION-2026-08-19.md`
 - `ORIGIN-DOT-SUBTRACTION-QA-2026-08-19.md`
 - `BACK-ENDPOINT-DOT-SUBTRACTION-QA-2026-08-19.md`
+- `SECONDARY-COPY-READABILITY-QA-2026-08-20.md`
 - subsequent guest-copy / placeholder-status cleanup and native-text auto-height hardening records in the ADD-16 item history.
 
 Live authority:
@@ -76,7 +77,7 @@ Rollback-safe bounded comparison:
 The no-dot version was stronger at whole and actual-size scales. Before selected mutation, hidden rollbacks were saved:
 
 - `36:2 / ROLLBACK_ADD16_FRONT_PRE_ORIGIN_DOT_SUBTRACTION_2026_08_19`;
-- `36:13 / ROLLBACK_ADD16_FRONT_STRESS_PRE_ORIGIN_DOT_SUBTRACTION_2026_08_19`.
+- `36:13 / ROLLBACK_ADD16_FRONT_STRESS_PRE_ORIGIN_DOT_SUBTRACTION_2026-08-19`.
 
 Adopted state:
 
@@ -127,6 +128,47 @@ No Figma mutation was required. The guest-facing paper was already correct; this
 
 Result: `HANDWRITTEN_HELPER_LABEL_HIDDEN / AUTHORITY_RECONCILED`.
 
+## Secondary-copy actual-size readability — 2026-08-20
+
+Fresh native `700×1036` review found that the overall HOME HORIZON hierarchy remained strong while several meaningful reader-facing roles were still close to microcopy strength: the front optional journey line was `19px`, front date/signature `17px`, back kicker `18px`, and back optional line/date/signature `17–18px`.
+
+The already `VERIFIED_CROSS_ITEM` non-Rurubu method `Actual-size QA must audit the smallest reader-facing copy` was applied as a QA method only. Exact sizes and the HOME HORIZON art direction remain item-specific.
+
+Rollback-safe comparisons:
+
+- front `41:48`;
+- back `41:59`;
+- front stress `41:71`;
+- back stress `41:82`.
+
+Adopted native-text changes:
+
+Front:
+
+- optional journey line `19 → 21px`;
+- date `17 → 20px`;
+- signature `17 → 20px`.
+
+Back:
+
+- kicker `18 → 20px`;
+- optional journey line `17 → 20px`;
+- date `17 → 20px`;
+- signature `17 → 20px`.
+
+Before production mutation, hidden rollback copies were saved:
+
+- front `42:2`;
+- back `42:13`;
+- front stress `42:25`;
+- back stress `42:36`.
+
+The hidden back stress also still contained the internal `META / HANDWRITTEN / 自筆署名欄（任意）` as a visible child. It never leaked into selected artwork because the stress root was hidden, but it would have appeared when the proof was revealed. The helper is now hidden there as well so selected and stress evidence match.
+
+Post-adoption selected front/back and realistic long-copy front/back all passed native `700×1036` review. Selected/stress readback: outside visible text `0`, text collision `0`, IMAGE fills `0`; selected/stress back visible internal handwritten helper `0`.
+
+Result: `SECONDARY_COPY_READABILITY_HARDENED / QA_HELPER_VISIBILITY_SYNCED`.
+
 ## Structure / long-copy QA
 
 ### Selected front `18:3`
@@ -135,6 +177,7 @@ Result: `HANDWRITTEN_HELPER_LABEL_HIDDEN / AUTHORITY_RECONCILED`.
 - IMAGE fills: `0`
 - visible text outside root: `0`
 - text collision: `0`
+- smallest reader-facing sizes after hardening: date/signature `20px`, optional journey line `21px`;
 - native recipient / gratitude / optional metaphor / date / signature roles retained;
 - decorative origin dot hidden; mint horizon line retained.
 
@@ -144,13 +187,14 @@ Result: `HANDWRITTEN_HELPER_LABEL_HIDDEN / AUTHORITY_RECONCILED`.
 - IMAGE fills: `0`
 - visible text outside root: `0`
 - text collision: `0`
+- smallest reader-facing size after hardening: `20px`;
 - message body remains native auto-layout so approved Japanese copy can grow without a fixed-height raster/text block;
 - back decorative endpoint dot hidden; mint horizon line retained;
 - `AREA_HANDWRITTEN_SIGNATURE`: `260×120`, visible stroke `0`, semantic geometry retained;
 - internal helper label `META / HANDWRITTEN / 自筆署名欄（任意）`: hidden;
 - guest-facing native signature role `[ふたりの署名]`: visible/editable.
 
-Hidden stress `18:26 / 18:37` uses long recipient, multi-paragraph gratitude body, longer optional metaphor and long couple-signature strings. Back stress was temporarily revealed after endpoint-dot subtraction and passed native `700×1036`: visible text outside root `0`, text collision `0`, IMAGE fills `0`; it was returned to hidden QA state after review.
+Hidden stress `18:26 / 18:37` uses long recipient, multi-paragraph gratitude body, longer optional metaphor and long couple-signature strings. Both were revalidated at native `700×1036` after secondary-copy hardening: visible text outside root `0`, text collision `0`, IMAGE fills `0`; back helper label remains hidden. Stress roots were returned to hidden QA state after review.
 
 Later structural hardening removed nominal fixed-height native-text boxes while preserving the selected composition and stress result.
 
@@ -164,7 +208,7 @@ Do not invent family composition, names, forms of address, episodes, dates/memor
 
 `IMAGE_GENERATION_NOT_REQUIRED_FOR_THIS_ITEM`.
 
-The item is text/emotion-led. Adding generated family/photo imagery would add identity/provenance risk without solving a current visual defect. Live Drive metadata on 2026-08-19 matched `1BOyETtL1_loGXNjGV9S30sJKEhZNjd6O`, parent `0ADXt8irGMFGnUk9PVA`. Drive writes: `0`.
+The item is text/emotion-led. Adding generated family/photo imagery would add identity/provenance risk without solving a current visual defect. Live Drive metadata on 2026-08-20 matched `1BOyETtL1_loGXNjGV9S30sJKEhZNjd6O`, parent `0ADXt8irGMFGnUk9PVA`. Drive writes: `0`.
 
 ## BLOCKED_REQUIRED_INPUT / DEFERRED_FINALIZATION
 
@@ -183,12 +227,14 @@ Still unresolved:
 
 - clean-room independence: `PASS`
 - sellable visual: `PASS`
+- secondary reader-facing copy actual-size readability: `PASS`
 - decorative English microcopy subtraction: `PASS`
 - front origin-dot UI subtraction: `PASS`
 - back endpoint-dot UI subtraction: `PASS`
 - native semantic editability: `PASS`
 - open handwritten-signature area: `PASS`
 - guest-facing handwritten helper label hidden: `PASS`
+- hidden stress helper visibility synced: `PASS`
 - long-copy stress: `PASS`
 - auto-height hardening: `PASS`
 - family-safety / no fabricated facts: `PASS`
