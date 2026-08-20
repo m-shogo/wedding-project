@@ -1,130 +1,168 @@
 # ADD-09 ゲストブックサイン — QA
 
-Status: `CURRENT / CLEANROOM_V4_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / TOP_RULE_SUBTRACTION_PASS / PROOF_LANGUAGE_CLEANUP_PASS / INDEX_MARK_SUBTRACTION_PASS / SECONDARY_ROUTE_SUBTRACTION_PASS / INSTRUCTION_FOOT_RULE_SUBTRACTION_PASS / LONG_COPY_STRESS_PASS / LEGACY_PRESERVED / NOT_PRINT_READY`
-Updated: 2026-08-20
+Status: `CURRENT / PROFESSIONAL_VNEXT_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / LONG_COPY_STRESS_PASS / LEGACY_AND_V4_PRESERVED / NOT_PRINT_READY`
+Updated: 2026-08-21
 Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
 
-## Current authority
+## Live authority
 
+- start/latest `main` before the final Figma/Git write: `5353acadf41622e065218be49835e484622e4a57`
 - Figma file: `PjFWBpDwaQM5LfvgdqSFvU`
-- selected clean-room V4: `16:3 / CLEANROOM_ADD09_V4_JOURNEY_LINE`
-- long-copy stress: `17:4 / QA_CLEANROOM_ADD09_V4_LONG_COPY_STRESS` — hidden after QA
-- retained legacy production: `1:3 / FRAME_ADD09_GUEST_BOOK_SIGN`
-- exact Drive authority: `1D259ugx13El0JYxvn8yyskIjc2c2liF4 / ADD-09_ゲストブックサイン`
+- selected Professional vNext: `35:2 / CLEANROOM_ADD09_VNEXT_WORDS_AS_SOUVENIR / SELECTED 2026-08-21`
+- vNext long-copy stress: `35:19` — hidden after QA
+- prior selected clean-room V4 preserved unchanged: `16:3 / CLEANROOM_ADD09_V4_JOURNEY_LINE` — hidden after vNext promotion
+- retained legacy production preserved unchanged: `1:3 / FRAME_ADD09_GUEST_BOOK_SIGN`
+- exact Drive authority verified live: `1D259ugx13El0JYxvn8yyskIjc2c2liF4 / ADD-09_ゲストブックサイン`
+- Drive write: `0`
 
-Drive metadata was live-read before this reconciliation. Drive write: `0`.
+## Professional vNext reset
 
-Retained production is history/rollback only. V4 remains the selected clean-room family.
+The earlier V4 remained structurally and visually credible, but the 2026-08-20 Professional vNext brief raised the aspiration ceiling toward stronger travel / destination warmth / pop / joy / participation. The new pass therefore started from blank frames and did not use V4 or legacy composition as an authoring source.
 
-## Current visual direction
+Only verified non-visual requirements were carried forward:
 
-V4 was authored from a blank frame under the zero-reuse mandate. Its current first read is:
-
-- Japanese headline `旅の記録に、一言を。`;
+- physical canvas `1000×1419`;
+- guest-book sign role;
 - native date `2026.10.24`;
-- one large editable `VECTOR / CONTINUOUS JOURNEY LINE` as the dominant fixed-art gesture;
-- lower operational roles as native guest-facing semantic placeholders;
-- narrow rust instruction index as a functional grouping anchor;
-- raster IMAGE roles `0`.
+- semantic roles `[ご記帳のご案内]`, `[記入方法・ペンのご案内]`, `[設置場所・補足情報]`;
+- final writing method / pen placement / installation wording remain unresolved finalization inputs.
 
-The selected design intentionally keeps **one** dominant journey-line system rather than multiple competing route/index/separator devices.
+## Three blank-frame art-direction thumbnails
 
-## Current refinements retained
+New section:
 
-### Guest-facing semantic placeholder cleanup
+- `34:2 / VNEXT_PRO / ADD-09 GUEST BOOK / SUNSHINE NOTES / 2026-08-21`
 
-Internal authoring strings were replaced with native guest-facing semantic roles:
+Materially different blank-frame concepts:
 
-- `[ご記帳のご案内]`
-- `[記入方法・ペンのご案内]`
-- `[設置場所・補足情報]`
+1. `34:3 / SUNRISE NOTE`
+2. `34:13 / NIGHT LOGBOOK`
+3. `34:22 / POSTCARD BREEZE`
 
-Evidence: `FIGMA-CLEANROOM-V4-PROOF-LANGUAGE-CLEANUP-2026-08-18.md`.
+Professional critique:
 
-### Index-mark subtraction
+- A was clear and friendly but read closer to a generic bright sign;
+- B had strong keepsake mood but became too dark for the current arrival/participation brief;
+- C had the strongest emotional phrase, immediate participation energy, and a simple coral/lagoon/sunlight system without fake travel UI.
 
-The isolated top-right index mark behaved like a tab/UI artifact after the headline, date and journey line already established hierarchy.
+C was selected as the conceptual direction; the full-size frame was rebuilt separately rather than duplicating the thumbnail.
 
-- selected `16:5 / VECTOR / INDEX MARK`: hidden;
-- stress `17:6 / VECTOR / INDEX MARK`: hidden.
+## Selected full-size direction — WORDS AS SOUVENIR
 
-Evidence: `FIGMA-CLEANROOM-V4-INDEX-MARK-SUBTRACTION-2026-08-18.md`.
+Selected frame:
 
-### Secondary-route subtraction
+- `35:2 / CLEANROOM_ADD09_VNEXT_WORDS_AS_SOUVENIR / SELECTED 2026-08-21`
+- size `1000×1419`
 
-The lower dotted route/endpoints competed with the primary continuous line and pushed the page toward infographic/map UI semantics. The secondary route was removed while the main continuous line and meaningful open nodes remained.
+Emotional brief:
 
-Evidence: `FIGMA-CLEANROOM-V4-SECONDARY-ROUTE-SUBTRACTION-2026-08-18.md`.
+`旅の思い出は写真だけではなく、ゲストのことばも持ち帰るおみやげになる。`
 
-### Instruction foot-rule subtraction — 2026-08-19
+First-read headline:
 
-The lower operational block was already grouped by the rust instruction index, three native Japanese text roles and shared alignment. Its full-width foot rule therefore read like a form/input separator and was removed after bounded comparison.
+`ことばも、旅のおみやげ。`
 
-- selected `16:20 / VECTOR / FOOT RULE`: hidden;
-- stress `17:21 / VECTOR / FOOT RULE`: hidden;
-- rollback selected/stress `27:2 / 27:22`: hidden;
-- comparison `26:2`: hidden after adoption.
+Visual system:
 
-Long-copy QA also replaced stale hidden `LAYOUT DUMMY` wording with equally demanding semantic Japanese stress copy. Visible proof-language is `0`.
+- bold coral upper field for the participation invitation;
+- warm cream operational field;
+- one lagoon breeze sweep and one yellow sunlight disc as the fixed travel/destination gesture;
+- deep-ocean footer for date closure;
+- Japanese-first hierarchy;
+- direct semantic information rather than cards, route nodes, stamps, badges, or form-like separators.
 
-Evidence: `FIGMA-V4-INSTRUCTION-FOOT-RULE-SUBTRACTION-QA-2026-08-19.md`.
+## Hybrid authoring roles
 
-### Top-rule subtraction — adopted 2026-08-20
-
-Fresh selected review found the `760×6` rust `VECTOR / TOP RULE` floating above the headline/date pair. After the earlier index, secondary-route and lower foot-rule removals, the headline/date pair and main continuous journey line already formed a complete top-to-middle hierarchy. The remaining top rule no longer bound disconnected information and had become a template separator.
-
-Rollback-safe comparison:
-
-- `32:2 / QA / ADD-09 V4 / NO TOP RULE / 2026-08-20`
-- only top-rule visibility changed.
-
-Adopted:
-
-- selected `16:4 / VECTOR / TOP RULE`: hidden;
-- stress `17:5 / VECTOR / TOP RULE`: hidden;
-- selected/stress pre-change rollback `33:2 / 33:22`: hidden;
-- comparison hidden after promotion.
-
-The continuous journey line remains the single intentional fixed-art gesture.
-
-Evidence: `FIGMA-V4-TOP-RULE-SUBTRACTION-QA-2026-08-20.md`.
-
-## Fresh live visual QA — 2026-08-20
-
-Fresh selected screenshot in this run at ~500px: PASS.
-
-Current visual read:
-
-- Japanese headline is immediate;
-- date remains secondary but readable;
-- the single continuous line has enough visual authorship without becoming route UI;
-- lower semantic instructions remain grouped by the rust vertical index and typography;
-- no top separator, foot separator, secondary route, index tab, card/dashboard containment, shadow, gradient, raster filler or proof-language is visible.
-
-Existing 2026-08-20 adopted QA also passes:
-
-- whole / ~500px-equivalent: PASS;
-- reading / 705×1000: PASS;
-- actual `1000×1419`: PASS;
-- selected/stress native text `5 / 5`;
-- selected/stress IMAGE fills `0 / 0`;
-- text outside root `0 / 0`;
-- visible proof-language `0 / 0`;
-- stress remains hidden after QA.
-
-A generic bounding-box detector can report headline/date boxes as intersecting because the headline box extends under the date box, but actual-size screenshots show no visible glyph collision. No change is justified from box geometry alone.
-
-## Hybrid / asset state
-
-- variable/unresolved operations: native editable text;
-- fixed journey-line art: editable vector;
-- fixed instruction index: native vector/geometry;
+- variable/final copy: native editable Figma text;
+- semantic placeholders: native editable Figma text;
+- dynamic information stack: native Figma Auto Layout;
+- fixed art: a small number of simple native geometric fields;
+- editable SVG: `0` — no reusable silhouette justified a separate SVG asset;
 - generated/composed raster: `0`;
-- replaceable image role: not required;
-- image generation: `0`;
-- Drive write: `0`.
+- replaceable image role: `0`;
+- rasterized variable copy: `0`.
 
-`IMAGE_GENERATION_NOT_REQUIRED`: the observed defect was redundant separator geometry, not missing imagery or texture.
+Image generation was not started because the live candidate did not expose an image/illustration deficit. Adding destination photography or generic tropical illustration would have increased stock/AI-template risk without improving the participation role.
+
+## Long-copy stress and structure correction
+
+Stress frame:
+
+- `35:19 / QA / VNEXT ADD-09 / WORDS AS SOUVENIR / LONG COPY STRESS`
+
+Realistic longer Japanese copy was tested independently for all three operational roles.
+
+The initial fixed-position stress technically had no text/text intersection, but vertical gaps collapsed to `6–15 px`, producing a visually cramped instruction block. This was treated as a real readability defect rather than accepting the bounding-box PASS.
+
+Bounded correction:
+
+- converted the three label/placeholder pairs into `LAYOUT / INFO STACK`;
+- each pair uses native vertical Auto Layout with internal spacing;
+- the outer stack uses controlled spacing and pushes the closing message naturally;
+- title, fixed art, footer and overall art direction were not changed.
+
+Final stress structure:
+
+- candidate stack height: `385 px`;
+- stress stack height: `631 px`;
+- candidate native text: `11`;
+- stress native text: `11`;
+- `textAutoResize=HEIGHT`: `11/11` in both;
+- IMAGE fills: `0/0`;
+- text outside root: `0/0`;
+- text/text intersections: `0` after correction.
+
+Final long-copy screenshot shows comfortable pair separation and a stable closing message above the footer.
+
+## Three-scale screenshot QA
+
+Selected vNext was reviewed from live Figma renders at:
+
+- whole-item / ~500 px: PASS — headline and participation purpose read immediately; no dashboard/form impression;
+- reading / 705×1000: PASS — semantic instruction sequence and accent-color roles remain clear;
+- actual-size / `1000×1419`: PASS — Japanese type, header field, breeze/sun gesture and footer date remain credible;
+- realistic long-copy / 705×1000: PASS after Auto Layout correction.
+
+## Mature comparison against prior selected V4
+
+Only after vNext completed three-scale + stress + structure QA was prior selected V4 `16:3` opened for comparison.
+
+V4 remains a strong quiet editorial design with a continuous journey line. It is preserved unchanged because it remains valuable history/rollback. Under the current Professional vNext brief, however, it reads more reflective/minimal and less immediately joyful/participatory.
+
+The new vNext provides:
+
+- stronger first-glance participation energy;
+- clearer `ことば = 旅のおみやげ` concept;
+- brighter destination warmth without literal tropical cliché;
+- more resilient operational-copy structure;
+- no route/infographic semantics competing with the guest-book purpose.
+
+Decision: **Professional vNext clearly wins the current art-direction brief and becomes selected.**
+
+## Professional Design Council score
+
+Selected vNext: **90/100**.
+
+- Concept clarity / ownability: `14/15`
+- Emotional excitement / pick-up appeal: `14/15`
+- Japanese editorial typography: `13/15`
+- Composition / hierarchy / rhythm: `13/15`
+- Travel / destination warmth without cliché: `9/10`
+- Item-specific functionality: `10/10`
+- Physical print credibility: `9/10`
+- Editability / content resilience: `4/5`
+- Family fit without template sameness: `4/5`
+
+No Executive Creative Director, Japanese Editorial, or Print Production veto remained after the dynamic-stack correction.
+
+## Preservation / promotion
+
+Promotion did **not** overwrite prior visual history:
+
+- new selected vNext `35:2` remains the live selected clean-room frame;
+- previous selected V4 `16:3` remains intact and is hidden;
+- legacy production `1:3` remains intact;
+- three vNext thumbnails and stress proof remain retained hidden evidence.
 
 ## Deferred finalization
 
@@ -135,6 +173,8 @@ Keep `NOT_PRINT_READY` until authoritative final inputs/proofs exist:
 - printer bleed/template/profile;
 - 100% physical proof and venue-distance readability.
 
-Do not cosmetically reopen the healthy V4 unless a fresh screenshot or authoritative input exposes a concrete defect.
+These do not block progression of the visual pass.
 
-Next progression target: `ADD-10 クローク / お手洗い / 会場案内サイン`.
+## Next
+
+Proceed to **ADD-10 クローク / お手洗い / 会場案内サイン** under the same Professional vNext clean-room workflow.
