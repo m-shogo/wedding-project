@@ -1,0 +1,55 @@
+{
+  "date": "2026-08-20",
+  "scope": "Rurubu WEDDING only",
+  "figmaFile": "bfM0d4c9dCeBv5pCkJ3TNM",
+  "driveRoot": {
+    "id": "1wHxC2E09JpLIQRNDDTY4i29KMwMY2_XK",
+    "name": "RURUBU_V6_HAWAII_2026-08-02"
+  },
+  "preferred": [
+    {"role":"outer","id":"1975:2","version":"GU"},
+    {"role":"profileQa","id":"2004:2","version":"GZ"},
+    {"role":"storyChronology","id":"1987:2","version":"GW"},
+    {"role":"memorySpots","id":"2003:2","version":"GY"},
+    {"role":"cafeTable","id":"2000:2","version":"GL"},
+    {"role":"oneDayPlan","id":"1968:71","version":"GQ"}
+  ],
+  "visibleImageRoles": 29,
+  "uniqueImageHashes": 8,
+  "hashCounts": {
+    "e3738476f760932bb5b09c9d60f174dd6c84049d": 3,
+    "539c259be8036b481d06b4f76db9a39b407d90e8": 5,
+    "d76eb07d83d042f15044c8bc6bf68d73a73cd77d": 5,
+    "c1ada11205bc3978bf426b304d683f1c1566cac2": 5,
+    "0bdbf47904ea5865c71b1555dc73689b2c7b2126": 1,
+    "691a6ceed471a5d8efa144052a10564eed177b4f": 4,
+    "439a719d73f28e8dd2889f2026cccb15f345ec63": 3,
+    "644f449c3bf2001a94d4b822d2b55e2614c11042": 3
+  },
+  "changesThisRun": {
+    "generatedAssets": 0,
+    "adoptedGeneratedAssets": 0,
+    "newDriveSaves": 0,
+    "newExternalBinaryPlacements": 0,
+    "newImageHashes": 0,
+    "imageGeometryChangesInGY": 0,
+    "imageGeometryChangesInGZ": 0,
+    "nativeTextPreserved": true,
+    "replaceablePhotosPreserved": true
+  },
+  "qa": {
+    "physicalPages": 12,
+    "visibleTextCollisions": 0,
+    "textSafeArea18pxRisks": 0,
+    "visibleImplementationProofPlaceholderLeakage": 0,
+    "gzLongCopyProof": "PASS after bottom-closing y 995 -> 1010 repair"
+  },
+  "rollback": {
+    "GV_1976_2": "hidden",
+    "HA_1996_99": "hidden",
+    "GZ_longCopy_2004_101": "hidden",
+    "GX_2002_2": "hidden rejected"
+  },
+  "v7Touched": false,
+  "printReady": false
+}
