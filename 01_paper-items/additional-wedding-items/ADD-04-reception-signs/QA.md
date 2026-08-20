@@ -1,113 +1,123 @@
 # ADD-04 受付サイン — QA
 
-Status: `CURRENT / CLEANROOM_V3_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / LONG_COPY_STRESS_PASS / LEGACY_PRESERVED / NOT_PRINT_READY`
-Updated: 2026-08-19
+Status: `CURRENT / CLEANROOM_V4_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / LONG_COPY_STRESS_PASS / V3_AND_LEGACY_PRESERVED / NOT_PRINT_READY`
+Updated: 2026-08-20
 Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
 
 ## Current Figma authority
 
-The former promoted production pair `1:3 / 1:14` is retained as legacy comparison/rollback history. It is **not** the current selected visual family after the 2026-08-15 clean-room rebuild.
-
-Current selected clean-room V3:
+Current selected clean-room V4:
 
 - Figma file: `qWlF9THLR1G76hLcx1zYOx`
-- groom selected: `16:2 / CLEANROOM_V3_ADD04_GROOM_TYPO_BAND`
-- bride selected: `16:17 / CLEANROOM_V3_ADD04_BRIDE_TYPO_BAND`
-- groom long-copy proof: `16:32` — hidden after QA
-- bride long-copy proof: `16:47` — hidden after QA
+- selected section: `29:9 / SELECTED CLEANROOM V4 / ADD-04 / JAPANESE RECEPTION PLACARDS / 2026-08-20`
+- groom selected: `29:10 / SELECTED V4 / GROOM / JAPANESE RECEPTION PLACARD`
+- bride selected: `29:26 / SELECTED V4 / BRIDE / JAPANESE RECEPTION PLACARD`
+- groom long-copy proof: `30:34` — hidden after QA
+- bride long-copy proof: `30:50` — hidden after QA
+- pre-footer-subtraction rollback: `30:2 / 30:18` — hidden
 - each selected frame: `740×1050`
-- retained legacy: groom `1:3`, bride `1:14`
-- Drive authority: `1vjSYrbjzfZs_vyCIpQAbml9_en5RcH_r / ADD-04_受付サイン`
+- prior selected V3 preserved: `16:2 / 16:17`
+- retained legacy preserved: `1:3 / 1:14`
+- exact Drive authority: `1vjSYrbjzfZs_vyCIpQAbml9_en5RcH_r / ADD-04_受付サイン`
 
-Clean-room source evidence: `CLEANROOM-V2-V3-QA-2026-08-15.md`.
+Current V4 evidence: `FIGMA-CLEANROOM-V4-JAPANESE-PLACARD-QA-2026-08-20.md`.
 
-## Current visual direction
+## Why V4 supersedes V3 visually
 
-V3 is a Japanese typographic reception-band pair rather than a recolored duplicate:
+Fresh same-scale review of V3 showed a real whole-item weakness despite its previous structural and visual PASS: the large black title band was clear, but the remaining A5 field read as two unresolved fields floating in a long empty paper area. At thumbnail scale it approached Current's `false premium by emptiness` failure mode.
 
-- `新郎側受付 / GROOM RECEPTION` and `新婦側受付 / BRIDE RECEPTION` are the primary tabletop read;
-- compact date/location context remains secondary;
-- groom/bride use opposite band anchoring within one paper/typographic family;
-- optional name and direction remain native semantic fields below the band;
-- a restrained functional route line supports the lower field without becoming transport UI;
-- the former L-shaped decorative destination endpoint/cap is hidden because it did not encode an authoritative destination or physical instruction;
-- no generated person/image, fake desk brand, ticket credential, decorative icon row, shadow or dashboard card treatment is used.
+V4 was built on new blank `740×1050` frames without duplicating any V3/legacy frame, layout group, black band, rail, icon, SVG, bitmap, generated asset or crop. It uses only the verified item facts and semantic requirements.
 
-Fresh 2026-08-19 whole-item and native `740×1050` review confirms that removing only the route endpoint makes the lower field read more like a purposeful print rule and less like a slider/progress/control glyph. The black band, Japanese reception hierarchy and open lower field remain intact.
+The selected V4 direction is a Japanese editorial reception placard:
 
-## Resilience / recent polish retained in current selection
+- warm paper field;
+- narrow groom/bride edge spine instead of a large hero band;
+- Shippori Mincho `受付` as the dominant tabletop read;
+- stacked native `新郎側 / 新婦側` identity;
+- compact date/location register;
+- restrained bilingual reception role;
+- native reader-facing reception cue;
+- open lower name/direction ledger rather than cards or form boxes;
+- no shadows, gradients, badges, fake transport data, icons or image filler.
 
-### Optional-name reflow
+At ~500px V4 has stronger Japanese-first physical-sign identity, uses the full paper field more intentionally, and remains immediately recognizable as reception signage. V3 remains intact as rollback/history but is no longer the selected visual family.
 
-The optional-name field uses native `GROUP_NAME_FIELD_AUTO` vertical auto-layout so a longer authoritative name cannot collide with its divider. This was repaired before V3 selection.
+## V4 bounded polish
 
-### Direction-field auto-height
+The first V4 draft included tiny `RECEPTION DESK` footer text. It duplicated the already-established reception role and behaved as decorative English filler. Hidden rollback copies `30:2 / 30:18` were created, then only that footer was removed from selected V4. No factual or semantic field changed.
 
-`TXT_DIRECTION_TBD` is native auto-height in groom/bride selected and both long-copy proofs. Long-copy direction still reflows without clipping; visible text outside root remains `0`.
+## Three-scale visual QA
 
-Evidence: `FIGMA-CLEANROOM-V3-DIRECTION-AUTOHEIGHT-QA-2026-08-17.md`.
+Groom `29:10`:
 
-### Route endpoint subtraction
+- whole-item / ~500 px: PASS;
+- reading / ~800 px: PASS;
+- actual canvas / `740×1050`: PASS.
 
-Fresh screenshot review found that the lower direction line ended in a vertical tick plus short cap that had no confirmed destination, turn, trim, stand or other semantic/physical role. This extra endpoint made the line read closer to a UI control.
+Bride `29:26`:
 
-The functional horizontal route remains. Only `NODE_DESTINATION` / `NODE_DESTINATION_CAP` are hidden in groom/bride selected and both long-copy proofs. Pre-change rollback copies are hidden at `25:2 / 25:17 / 25:32 / 25:47`.
+- whole-item / ~500 px: PASS;
+- actual canvas / `740×1050`: PASS;
+- optical pair review: PASS; bride/groom share a family but are not a blind mirrored duplicate.
 
-Three-scale groom review and native long-copy proof pass; outside text remains `0`, IMAGE fills remain `0`.
+Completion-only comparison against preserved V3 at ~500px: V4 preferred.
 
-Evidence: `FIGMA-V3-ROUTE-ENDPOINT-SUBTRACTION-QA-2026-08-19.md`.
+## Structure / long-copy stress
 
-### Guest-facing placeholder language
+Selected V4 readback, each root:
 
-Current selected/stress copy uses semantic placeholders such as `[お名前]` and `[方向]` rather than internal `LAYOUT DUMMY / QA / PROOF / TEMP` suffixes. Implementation state belongs in node names/hidden QA/GitHub evidence, not on the printed sign.
+- `740×1050`;
+- `clipsContent=true`;
+- visible native text `10`;
+- IMAGE fills `0`;
+- visible text outside root `0`;
+- visible text collisions `0`;
+- variable name/direction fields remain native editable text;
+- variable content baked into raster/SVG `0`.
 
-### Redundant English footer removal
+Long-copy stress `30:34 / 30:50` uses a long native name and multi-line direction message. Actual-size screenshot and structural readback both PASS:
 
-The tiny `RECEPTION / YOKOHAMA` footer was removed from selected groom/bride and their stress proofs because the black band already establishes Reception and the top context already contains Yokohama. The useful bilingual side label directly below the Japanese title remains.
+- visible text outside root `0`;
+- visible text collisions `0`;
+- long name expands `46px → 92px`;
+- long direction expands `34px → 68px`;
+- both remain clear of subsequent roles and the lower rule in the tested range.
 
-Evidence: `FIGMA-REDUNDANT-ENGLISH-FOOTER-REMOVAL-2026-08-18.md`.
+Stress proofs are hidden after QA.
 
-## Structure / stress QA
+## Hybrid authoring / asset decision
 
-Current verified state:
+- variable/factual copy: native editable Figma text;
+- semantic placeholders: native editable `[お名前] / [方向]`;
+- fixed art: simple native paper/line geometry only;
+- editable SVG: not required for this direction;
+- generated/composed raster: not required;
+- replaceable image role: not required.
 
-- groom selected: native editable text/vector, IMAGE fill `0`, outside visible text `0`;
-- bride selected: native editable text/vector, IMAGE fill `0`, outside visible text `0`;
-- adaptive optional-name auto-layout present on both sides;
-- direction semantic field auto-height in selected + stress;
-- long-name / long-direction proofs pass without clipping;
-- route endpoint/cap nodes hidden in selected + stress while the horizontal route remains;
-- no variable copy baked into graphics;
-- stress proofs return to hidden state after inspection;
-- retained legacy pair remains unchanged.
+`IMAGE_GENERATION_NOT_REQUIRED`: the screenshot-supported bottleneck was composition and typography, not missing hero imagery, texture, illustration or collage.
+
+Drive authority was live-read immediately before the V4 evidence write and confirmed as `1vjSYrbjzfZs_vyCIpQAbml9_en5RcH_r / ADD-04_受付サイン`. Drive write `0`.
 
 ## Fact / placeholder contract
 
-Confirmed copy:
+Confirmed facts/roles:
 
-- `新郎側受付 / GROOM RECEPTION`;
-- `新婦側受付 / BRIDE RECEPTION`;
+- groom/bride reception distinction;
 - date `2026.10.24 SAT`;
-- location `YOKOHAMA`.
+- location `YOKOHAMA`;
+- optional native name field;
+- optional native direction/guidance field.
 
-Do not invent receptionist names, surname use, payment/gift handling, desk operation, direction wording, QR, gate/flight/seat information or other operational facts. Unknown name/direction roles remain native semantic placeholders.
-
-## Drive / generated assets
-
-- exact Drive folder live-read on 2026-08-19: `1vjSYrbjzfZs_vyCIpQAbml9_en5RcH_r`;
-- generated/raster production assets required by current design: `0`;
-- Drive write in this run: `0`.
-
-`IMAGE_GENERATION_NOT_REQUIRED`: the reception pair is carried by typography, physical sign hierarchy and editable field structure; imagery is not the current bottleneck.
+Do not invent receptionist names, surname use, payment/gift handling, QR, gate/flight/seat information or other operational facts. Unknown name/direction values remain semantic placeholders until authoritative copy exists.
 
 ## Deferred finalization
 
-Keep `NOT_PRINT_READY` until authoritative final inputs exist:
+Keep `NOT_PRINT_READY` until authoritative final inputs/proofs exist:
 
-- whether receptionist/name text is actually used and its final wording;
+- whether the optional name role is used and its final wording;
 - actual direction wording;
-- real stand overlap/glare/lower-edge occlusion and venue lighting;
-- final printer template, bleed and safe area;
-- physical pair proof and approximately 2m viewing-distance check.
+- stand/holder overlap and lower-edge occlusion;
+- venue lighting/glare and approximately 2m viewing-distance proof;
+- final printer template, bleed, safe area, stock/profile and physical print proof.
 
-Do not reopen the selected visual family for cosmetic churn unless a fresh screenshot or authoritative input exposes a concrete defect.
+Do not reopen V4 for cosmetic churn unless a fresh screenshot or authoritative input exposes a concrete defect. Next progression target: `ADD-05 サンキュータグ / プチギフトタグ`.
