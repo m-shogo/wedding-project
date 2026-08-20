@@ -1,151 +1,104 @@
 # ADD-12 新郎新婦クイズカード — QA
 
-Status: `CURRENT / CLEANROOM_V3_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / FRONT_HEADER_FIELD_SUBTRACTION_PASS / BACK_HEADER_FIELD_SUBTRACTION_PASS / OPEN_QUADRANTS_POLISH_PASS / SELECT_HELPER_SUBTRACTION_PASS / OPEN_MESSAGE_FIELD_POLISH_PASS / BACK_WRITE_HINT_READABILITY_PASS / LONG_COPY_STRESS_PASS / LEGACY_PRESERVED / ROLLBACK_SAFE / NOT_PRINT_READY`
-Updated: 2026-08-20
+Status: `CURRENT / PROFESSIONAL_VNEXT_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / LONG_COPY_STRESS_PASS / LEGACY_PRESERVED / ROLLBACK_SAFE / NOT_PRINT_READY`
+Updated: 2026-08-21
 Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
+Professional quality authority: `docs/design-learning/PROFESSIONAL-DESIGN-COUNCIL-VNEXT-2026-08-20.md`
 
 ## Current selected authority
 
 - Figma file key: `oZ24SbwGkeAfFJcXlbxCoD`
-- selected page: `26:2 / SELECTED / CLEANROOM / ADD-12 / V3 EDITORIAL QUADRANTS / 2026-08-16`
-- selected front: `26:3 / ADD12/QuizCard/Front/CleanroomV3`
-- selected back: `26:4 / ADD12/QuizCard/Back/CleanroomV3`
-- hidden long-copy front/back: `27:51 / 27:83`
+- selected page: `55:2 / SELECTED / VNEXT PRO / ADD-12 / SUNSET TRIVIA / 2026-08-21`
+- selected front: `55:3 / VNEXT_SELECTED_CANDIDATE / ADD12 / FRONT / SUNSET TRIVIA`
+- selected back: `55:25 / VNEXT_SELECTED_CANDIDATE / ADD12 / BACK / AFTERGLOW NOTE`
+- hidden long-copy front/back: `55:41 / 55:63`
+- vNext three-direction concept page: `54:2`
+- retained previous clean-room V3: `26:2 / 26:3 / 26:4` — comparison/rollback/history only
 - retained legacy production: `1:2 / 1:26` — rollback/history only
 - exact Drive authority: `1LUanrHk9_lhZcSqf95ybgWH29_bmcfvZ / ADD-12_新郎新婦クイズカード`
 
-Drive metadata was live-read during this progression run. Drive write: `0`.
+Drive metadata was live-read before vNext authoring. Drive write: `0`.
 
-The current family is independently authored clean-room V3. The retained V4.1-era production is not the current authoring base.
+Canonical vNext evidence:
+
+- `PROFESSIONAL-VNEXT-SUNSET-TRIVIA-QA-2026-08-21.md`
+
+## vNext clean-room result
+
+The new professional pass was authored from blank frames without using the old production/V2/V3 visual construction as a source. Only A6/duplex dimensions, semantic roles, confirmed date, print/readability constraints and unresolved-input boundaries were carried forward.
+
+Three materially different new directions were made first:
+
+- `54:3 / ISLAND QUESTION`;
+- `54:25 / SUNSET TRIVIA`;
+- `54:42 / PLAYFUL BOARDING GAME`.
+
+`SUNSET TRIVIA` was selected because it gives the quiz stronger participation/game energy and travel warmth while avoiding equal rounded-card UI. `PLAYFUL BOARDING GAME` was rejected specifically because its answer panels reintroduced app/card containment.
 
 ## Current visual direction
 
-### Front
+### Front `55:3`
 
-- Japanese-first `新郎新婦クイズ` category hierarchy;
+- deep-ocean field with one large Japanese emotional headline;
+- oversized yellow `01` as the game-energy scale shift;
+- A–D remain equal semantic answer roles with open rules rather than equal cards;
+- lagoon/coral/yellow crop-through fields create movement without fake airline credentials;
+- decoration is kept outside answer roles so no choice is visually privileged;
 - native date `2026.10.24`;
-- large mint `Q.01` + native semantic `[設問]`;
-- four equal A–D semantic response roles in an open 2×2 editorial field;
-- complete quadrant boxes removed; spacing, A–D labels and handwriting rules carry grouping;
-- repeated `選ぶ` helper labels removed because the instruction already explains the action;
-- former full-width navy header field hidden; title/date remain native on one cream paper surface;
-- no radio-button list, rounded card grid, quiz-show iconography, ticket/passport grammar or AI-person imagery.
+- no person imagery, fake barcode, gate/class data, quiz-show iconography or web controls.
 
-### Back
+### Back `55:25`
 
-- typographic mint opening `旅の余白に、ひとこと。` on one continuous cream paper field;
-- native `[回答方法]`, `[記名欄]`, `[メッセージ]` roles;
-- semantic open handwriting area `536×216`;
-- former full-width mint header field, message border, non-semantic folio and corner mint tab hidden;
-- legitimate guest-facing writing helper retained and now strengthened for actual-size readability;
-- no raster/image dependency.
+- warm cream paper field;
+- Japanese-first `答えの旅は、まだつづく。`;
+- native `[回答方法]`, `[記名欄]`, `[メッセージ]`;
+- open handwriting rules rather than a bordered message card;
+- coral/yellow/mint movement remains outside critical writing lanes.
 
-## Current adopted simplification
+## Screenshot / stress findings
 
-The selected V3 has already passed a sequence of bounded, rollback-safe reductions:
+The first selected-front screenshot caught an authoring-expression bug that placed answer rules at the top of the page. This was corrected before promotion.
 
-- open quadrant treatment instead of four full choice boxes;
-- repeated `選ぶ` control-like helper subtraction;
-- open message-field treatment;
-- non-semantic back folio subtraction;
-- mint-tab subtraction;
-- back full-width header-field subtraction;
-- front full-width header-field subtraction.
+Long-copy stress then caught two additional real risks:
 
-These changes preserve semantic writing/answer roles while removing web/app containment and decorative UI residue. Evidence remains in the item-specific 2026-08-18/19 QA files.
+1. the coral crop could enter choice C’s area and create unintended answer emphasis;
+2. a long name on the back reached the original underline/message spacing.
 
-## Back writing-hint readability — adopted 2026-08-20
+Both were corrected before selection. Final stress frames are hidden evidence.
 
-Fresh native `620×875` review found the legitimate reader-facing helper `自由に書いてください` at only `11px` in a very light grey. The open handwriting area remained clear compositionally, but the helper was close to disappearing at actual size.
+Three-scale result:
 
-This copy is not implementation/proof language; it is real guest guidance, so removal would have been the wrong response.
+- front whole-item ~500px: PASS;
+- back whole-item ~500px: PASS;
+- front/back native 620×875 reading/detail: PASS;
+- long-copy stress front/back: PASS.
 
-Rollback-safe comparison:
+## Structure QA
 
-- `49:2 / QA_ADD12_BACK_WRITE_HINT_READABILITY_2026_08_20`;
-- changed only `TEXT / WRITE HINT`:
-  - `11 → 14px`;
-  - width `170 → 220px`;
-  - very light grey → darker neutral grey `rgb≈(0.36, 0.39, 0.41)`.
+Final readback:
 
-The comparison was stronger at native size while remaining subordinate to the title/message roles.
+- selected front: visible native text `14`, IMAGE fills `0`, outside visible text `0`, same-parent text collisions `0`;
+- selected back: visible native text `8`, IMAGE fills `0`, outside visible text `0`, collisions `0`;
+- stress front: native text `14`, IMAGE fills `0`, outside `0`, collisions `0`;
+- stress back: native text `8`, IMAGE fills `0`, outside `0`, collisions `0`.
 
-Adopted after hidden rollback preservation:
+All variable/factual roles remain native editable text. Fixed decoration is simple native shape geometry; generated/composed raster `0`; replaceable image roles `0`.
 
-- selected rollback `49:19`;
-- stress rollback `49:36`;
-- selected `26:47 / TEXT / WRITE HINT`: `14px`, width `220px`, darker neutral grey;
-- stress `27:96 / TEXT / WRITE HINT`: same treatment;
-- comparison hidden after adoption.
+## Mature comparison / score
 
-Evidence: `FIGMA-BACK-WRITE-HINT-READABILITY-QA-2026-08-20.md`.
+The retained V3 was opened only after the vNext candidate had matured and passed stress/structure QA.
 
-## Fresh live visual audit — 2026-08-20
+The retained V3 remains a strong quiet questionnaire, but the vNext is clearly better for the current `SUNSHINE DEPARTURE` brief: more playful participation, stronger thumbnail hierarchy, warmer travel/destination energy and a more memorable physical keepsake character without losing answer fairness or editability.
 
-Fresh screenshots in this progression run:
+Professional Design Council: `92/100`.
 
-- selected front ~500px: PASS;
-- selected back ~500px: PASS.
-
-Front remains a restrained paper ballot rather than form UI: question first, then four open answer roles. Back remains intentionally quieter because it is a physical writing surface; the large open area has a functional handwriting purpose and is not treated as false-premium emptiness.
-
-The strengthened `自由に書いてください` helper is now visible at review scale without competing with `ひとこと` or the message placeholder.
-
-No fresh screenshot exposed a defect requiring another clean-room version or image generation in this run.
-
-## Structure / long-copy QA
-
-### Selected front `26:3`
-
-- root `620×875`;
-- visible native text `14`;
-- four semantic answer roles retained;
-- visible top field `0`;
-- visible `選ぶ` helper count `0`;
-- IMAGE fills `0`;
-- outside visible text `0`.
-
-### Selected back `26:4`
-
-- root `620×875`;
-- visible native text `8`;
-- semantic handwriting area `536×216`;
-- full-width mint header field visible `0`;
-- message-area border visible `0`;
-- decorative folio visible `0`;
-- mint-tab visible `0`;
-- IMAGE fills `0`;
-- outside visible text `0`;
-- text collisions `0`.
-
-2026-08-20 readability evidence confirms selected/stress:
-
-- visible native text `8 / 8`;
-- outside visible text `0 / 0`;
-- same-parent text collisions `0 / 0`;
-- proof-language `0 / 0`;
-- IMAGE fills `0 / 0`;
-- writing helper synchronized at `14px / 220px`;
-- long-copy stress returned hidden after native-size QA.
-
-All variable/factual content remains native editable. No flattening or raster replacement was introduced.
-
-## Hybrid / image decision
-
-- question, choices, answer method, name/message roles: native editable text;
-- handwriting geometry / rules: native vector/shape;
-- generated/composed raster: `0`;
-- replaceable image role: not required;
-- person imagery: `0`;
-- Drive writes: `0`.
-
-`IMAGE_GENERATION_NOT_REQUIRED_FOR_THIS_ITEM`: the latest bottleneck was small secondary typography, not missing illustration or visual material.
+`IMAGE_GENERATION_NOT_REQUIRED_FOR_THIS_ITEM`: no hero/photo/illustration deficit was diagnosed; adding generic aircraft/tropical/quiz imagery would raise stock/AI-template risk rather than solve the actual hierarchy/game-energy problem.
 
 ## BLOCKED_REQUIRED_INPUT / DEFERRED_FINALIZATION
 
 Do not fabricate:
 
-- question and correct answer;
+- actual question and correct answer;
 - final choice count/content;
 - response collection/deadline;
 - named vs anonymous participation;
@@ -163,6 +116,6 @@ Also deferred:
 
 ## Current result
 
-`CLEANROOM_V3_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / BACK_WRITE_HINT_READABILITY_PASS / LONG_COPY_STRESS_PASS / LEGACY_PRESERVED / NOT_PRINT_READY`
+`PROFESSIONAL_VNEXT_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / LONG_COPY_STRESS_PASS / LEGACY_PRESERVED / NOT_PRINT_READY`
 
-Next progression target: `ADD-13 キッズ向けミッションカード`.
+Next progression target: `ADD-13`, after resolving its exact item authority/name from latest main before any Figma write.
