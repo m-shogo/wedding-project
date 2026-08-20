@@ -8,7 +8,7 @@ Production state: separate clean-room V6; V7 is HOLD
 
 ## Current declaration
 
-`V6_LIVE_FIGMA_IN_PROGRESS / OUTER_HB_PREFERRED / PROFILE_QA_GZ_PREFERRED / STORY_CHRONOLOGY_GW_PREFERRED / MEMORY_SPOTS_GY_PREFERRED / GOURMET_CAFE_GL_PREFERRED / ONE_DAY_PLAN_GR_PREFERRED / NATIVE_VARIABLE_TEXT_PRESERVED / REPLACEABLE_PHOTOS_PRESERVED / CURRENT_REVIEW_BOARD_3X2_LIVE_VERIFIED / CURRENT_CHANGED_PAGES_COLLISION_AND_SAFE_AREA_CLEAN / V7_HOLD / NOT_PRINT_READY`
+`V6_LIVE_FIGMA_IN_PROGRESS / OUTER_HB_PREFERRED / PROFILE_QA_GZ_PREFERRED / STORY_CHRONOLOGY_GW_PREFERRED / MEMORY_SPOTS_GY_PREFERRED / GOURMET_CAFE_HC_PREFERRED / ONE_DAY_PLAN_GR_PREFERRED / NATIVE_VARIABLE_TEXT_PRESERVED / REPLACEABLE_PHOTOS_PRESERVED / CURRENT_REVIEW_BOARD_3X2_LIVE_VERIFIED / CURRENT_CHANGED_PAGES_COLLISION_AND_SAFE_AREA_CLEAN / V7_HOLD / NOT_PRINT_READY`
 
 ## Live Figma preferred set
 
@@ -18,16 +18,17 @@ Fresh live readback on `845:2 / 00_RURUBU_START_HERE`:
 - Profile / Q&A GZ `2004:2`; Q&A right `2004:49`; x `273800`, y `0`.
 - Story / chronology GW `1987:2`; chronology right `1987:28`; x `275600`, y `0`.
 - Memory Spots GY `2003:2`; guide right `2003:24`; x `272000`, y `1300`.
-- Gourmet / Cafe GL `2000:2`; Cafe left `2000:3`; Table right `2000:33`; x `273800`, y `1300`.
+- Gourmet / Cafe HC `2012:2`; Cafe left `2012:3`; Table right `2012:33`; x `273800`, y `1300`.
 - Yokohama 1DAY Plan GR `2007:2`; left `2007:3`; x `275600`, y `1300`.
 
 Start Here `845:27`:
 
-`V5 FU/FX · V6 HB + GZ/GW + GY MEMORY SPOTS + GL CAFE & TABLE + GR 1DAY PLAN · V7 HOLD`
+`V5 FU/FX · V6 HB + GZ/GW + GY MEMORY SPOTS + HC CAFE & TABLE + GR 1DAY PLAN · V7 HOLD`
 
 Rollback state:
 
 - GV `2006:2` hidden rollback for HB.
+- GL `2000:2` hidden rollback for HC.
 - GU `1975:2` remains older Outer rollback.
 - GQ `1968:71` hidden rollback for GR.
 - HA `1996:99` hidden rollback for GZ.
@@ -77,6 +78,40 @@ The ordinal boxes were widened and both minor beats were repositioned before re-
 
 Decision: `ADOPTED / VERIFIED_LOCAL`.
 
+## Same-run verified progress — HC Cafe/Table reader-facing Japanese microcopy
+
+### Visible problem
+
+GL's composition and photography were already acceptable, but multiple small labels still read like internal or stock template role names at actual size: `YOKOHAMA / CAFE GUIDE`, `CAFE NOTE`, `VIEW & WALK`, `TABLE & TALK`, `TABLE NOTE`, `CHECK! / 2 FAVORITES`, and English-heavy utility copy. The layout therefore looked slightly more like an AI editorial template than a finished Japanese travel-information spread.
+
+### Bounded test
+
+Rollback-safe duplicate from GL kept all photography, image hashes, geometry, color fields and native content hierarchy unchanged. Only small native labels were rewritten for the reader:
+
+- `YOKOHAMA / CAFE GUIDE` → `横浜 / カフェ案内`;
+- `CAFE NOTE / 01` → `休日カフェ / 01`;
+- `VIEW & WALK` → `景色とさんぽ`;
+- `CAFE CHECK / 3 PICKS` → `3つのカフェメモ`;
+- `TABLE & TALK / FAVORITE` → `食卓 / ふたりの定番`;
+- `03 / TABLE & TALK` → `03 / 食卓の時間`;
+- `TABLE NOTE / 04` → `旅の余韻 / 04`;
+- `CHECK! / 2 FAVORITES` → `ふたりの定番 / 2つ`;
+- the utility summary was rewritten as Japanese `カフェ / 食卓 / おすすめ / 気分` reader information;
+- folios and closing metadata were changed from generic English role labels to Japanese editorial wording.
+
+### Verification
+
+- whole spread `1200×849`: PASS and more finished than GL;
+- Cafe actual-size `2012:3 / 794×1123`: PASS;
+- Table actual-size `2012:33 / 794×1123`: PASS;
+- Cafe visible native text: `20`;
+- Table visible native text: `22`;
+- same-parent text collisions: `0` on both pages;
+- 18px text safe-area risks: `0` on both pages;
+- image geometry/hash changes: `0`.
+
+Decision: `ADOPTED / VERIFIED_LOCAL`.
+
 ## Shared-learning / scope behavior
 
 - read `docs/design-learning/SHARED-DESIGN-LEARNING-SYSTEM.md` before writes;
@@ -84,7 +119,8 @@ Decision: `ADOPTED / VERIFIED_LOCAL`.
 - consumed only neutral methods, never non-Rurubu item-specific production nodes/assets/state;
 - project-wide hybrid Figma authoring remains `PROMOTED_PROJECT_RULE`;
 - HB gives additional local evidence for existing RSL-133 (minor information must remain legible at actual size) and RSL-153 (reader-facing Japanese utility/microcopy), without creating a duplicate rule;
-- failure fingerprint observed: `TYPE_SCALE_WITH_STALE_TEXTBOX_WRAP_OR_CONTACT`; changing type scale requires box/flow and collision revalidation.
+- HC gives another materially different Rurubu spread verification for the same reader-facing microcopy principle: role/schema labels that have no brand or factual job should be rewritten for the reader before adding visual decoration;
+- failure fingerprint observed in HB: `TYPE_SCALE_WITH_STALE_TEXTBOX_WRAP_OR_CONTACT`; changing type scale requires box/flow and collision revalidation.
 
 ## Drive / asset truth
 
@@ -100,6 +136,7 @@ Latest run:
 - new external binary placements: `0`;
 - new image hashes: `0`;
 - HB adopted + visually verified: YES;
+- HC adopted + visually verified: YES;
 - native variable text preserved: YES;
 - replaceable photos preserved: YES;
 - rollback states preserved: YES;
@@ -120,7 +157,7 @@ Do not call V6 complete or print-ready until all are verified:
 
 Current state:
 
-`V6 HB + GZ/GW + GY + GL + GR = VERIFIED_LOCAL_DUMMY_DESIGN_STUDIES / PHOTO_LED_TRAVEL_GUIDE_GRAMMAR / NATIVE_TEXT_EDITABILITY_PRESERVED / REPLACEABLE_PHOTOS_PRESERVED / CURRENT_REVIEW_BOARD_LIVE_VERIFIED / ROLLBACK_SAFE / V7_HOLD / NOT_PRINT_READY`.
+`V6 HB + GZ/GW + GY + HC + GR = VERIFIED_LOCAL_DUMMY_DESIGN_STUDIES / PHOTO_LED_TRAVEL_GUIDE_GRAMMAR / NATIVE_TEXT_EDITABILITY_PRESERVED / REPLACEABLE_PHOTOS_PRESERVED / CURRENT_REVIEW_BOARD_LIVE_VERIFIED / ROLLBACK_SAFE / V7_HOLD / NOT_PRINT_READY`.
 
 ## Next highest-value work
 
@@ -128,7 +165,7 @@ Current state:
 2. Re-read live preferred IDs and parent page before every write.
 3. Compare all six preferred spreads at the same scale before choosing the next defect.
 4. Prioritize remaining dead-space/hierarchy problems before adding containers.
-5. Keep reader-facing Japanese microcopy where generic template labels remain.
+5. Keep reader-facing Japanese microcopy where generic template labels remain, while preserving deliberate brand/genre English where it has a real role.
 6. Keep minor editorial beats subordinate but still legible at actual size.
 7. Keep variable Q&A/profile copy in native Auto Layout with fresh realistic Japanese long-copy stress after material type/layout changes.
 8. Keep unresolved facts at authoritative precision; never invent dates/details for visual completeness.
