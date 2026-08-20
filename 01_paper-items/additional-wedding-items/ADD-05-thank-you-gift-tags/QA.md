@@ -1,137 +1,148 @@
 # ADD-05 サンキュータグ / プチギフトタグ — QA
 
-Status: `CURRENT / CLEANROOM_V3_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / PHYSICAL_CLEARANCE_PASS / V2_AND_LEGACY_PRESERVED / NOT_PRINT_READY`
-Updated: 2026-08-20
+Status: `CURRENT / PROFESSIONAL_VNEXT_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / CONFIRMED_COPY_ONLY / PHYSICAL_CLEARANCE_PASS / 45X70_INDEPENDENT_REFLOW_PASS / PREVIOUS_V3_V2_LEGACY_PRESERVED / NOT_PRINT_READY`
+Updated: 2026-08-21
 Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
 
 ## Current Figma authority
 
-Current selected clean-room V3:
+Professional vNext selected family:
 
 - Figma file: `kAdkOMuAMcFQtTSP8NtWil`
-- selected section: `22:2 / SELECTED CLEANROOM V3 / ADD-05 / OFFSET TYPOGRAPHIC GIFT TAG / 2026-08-20`
-- 50×80 front: `22:3 / SELECTED V3 / FRONT 50X80 / OFFSET THANK-YOU TAG` — `500×800`
-- 50×80 optional back: `22:11 / SELECTED V3 / BACK 50X80 / SAFE-TRIP TAG` — `500×800`
-- 45×70 front reflow: `22:17 / SELECTED V3 / FRONT 45X70 / OFFSET REFLOW` — `450×700`
+- vNext page: `24:2 / VNEXT_PRO / ADD-05 THANK YOU TAG / TINY TRAVEL SOUVENIR / 2026-08-21`
+- 50×80 front: `25:2 / SELECTED PROFESSIONAL VNEXT / ADD-05 / FRONT 50X80 / WAVE SOUVENIR`
+- 45×70 front: `25:10 / SELECTED PROFESSIONAL VNEXT / ADD-05 / FRONT 45X70 / WAVE SOUVENIR REFLOW`
+- optional 50×80 back: `25:18 / SELECTED PROFESSIONAL VNEXT / ADD-05 / BACK 50X80 OPTIONAL / AFTERGLOW NOTE`
+- previous selected V3 preserved: `22:3 / 22:11 / 22:17`
 - prior selected V2 preserved: `9:2 / 9:13 / 9:20`
 - retained legacy preserved: `1:2 / 1:12 / 1:19`
 - exact Drive authority: `1_V20y77VU1aGrJtqpl7U5XUpC-bQuTxV / ADD-05_サンキュータグ_プチギフトタグ`
 
-Current V3 evidence: `FIGMA-CLEANROOM-V3-OFFSET-TYPOGRAPHIC-QA-2026-08-20.md`.
+Current evidence:
 
-## Why V3 supersedes V2 visually
+- `PROFESSIONAL-VNEXT-WAVE-SOUVENIR-QA-2026-08-21.md`
 
-Fresh native-size and thumbnail review found that V2 remained structurally sound, but its centered `Thank you` + support line + one horizontal rule + date read too close to generic minimalist wedding-tag styling at whole-item scale.
+## vNext clean-room direction
 
-V3 was built on blank frames without duplicating V2/legacy layout groups, centered headline composition, route line, endpoint, SVG, bitmap, generated asset or crop. It re-authors only the confirmed copy, physical sizes and punch constraints.
+The previous V3 remains valid rollback/structural evidence but does not waive the professional vNext reset.
 
-V3 uses an offset typographic gift-label direction:
+The new work started from blank frames and carried forward only verified facts/physical constraints. Three materially different directions were built:
 
-- warm ivory front field;
-- rust signal bar kept outside the punch-safe area;
-- large split `Thank / you` serif hierarchy;
-- confirmed support copy stays native and subordinate;
-- deep navy lower print field carries the native date;
-- optional back uses a distinct dark field with an ivory punch tab and large safe-trip message;
-- 45×70 is independently reflowed rather than mechanically scaled;
-- no fake ticket/passport data, icons, stamps, badges, route endpoint, shadow or gradient.
+1. `24:3 / SUNSET TOKEN`
+2. `24:10 / LUGGAGE RIBBON`
+3. `24:18 / WAVE NOTE`
 
-At the same ~250×400 whole-item scale V3 has a more authored print silhouette and avoids V2's generic centered-minimal treatment while remaining simple enough for a physical gift tag.
+`WAVE NOTE` was selected and rebuilt as `WAVE SOUVENIR`.
 
-## Clean-room physical correction
+The central art direction is one oversized deep-ocean wave plus coral/lagoon movement fields. It creates a brighter travel-souvenir character without plane icons, fake baggage labels, barcodes, route codes, badges, shadows, gradients or generic tropical imagery.
 
-The initial 45×70 V3 build placed the provisional punch center at `70px`. Physical readback caught this before selection and corrected the punch only to the verified provisional `80px` center (`8 mm` from top trim at the current 10px/mm canvas scale).
+The `LUGGAGE RIBBON` study was rejected because making the punch/string axis visually dominant created a device stronger than the thank-you message. Physical relevance alone is not enough to justify a motif.
 
-No styling or copy changed during that correction.
+## Confirmed-copy / physical-authority correction
 
-## Three-scale visual QA
+A final item-authority read before Current promotion exposed two mismatches in the first selected draft:
 
-50×80 front `22:3`:
+- exploratory Japanese concept copy was not authoritative production copy;
+- prototype punch geometry did not match the latest verified provisional item geometry.
 
-- whole-item / ~250×400: PASS;
-- reading / native `500×800`: PASS;
-- actual-size composition review: PASS.
+Selected vNext was corrected before promotion.
 
-50×80 optional back `22:11`:
+Final visible selected copy is authoritative only:
 
-- whole-item / ~250×400: PASS;
-- native `500×800`: PASS;
-- punch/tab relationship: PASS.
+- front: `Thank you.` + `for traveling with us.`;
+- optional back: `Have a safe trip home.`;
+- date: `2026.10.24`.
 
-45×70 front `22:17`:
+Final provisional punch geometry:
 
-- whole-item / ~225×350: PASS;
+- 50×80: `50×50`, center `(250,80)`;
+- 45×70: `50×50`, center `(225,80)`.
+
+No unconfirmed Japanese wording, guest/product/venue/QR/SNS data, or fake transport credential remains visible in selected vNext.
+
+## Three-scale / format QA
+
+50×80 front `25:2`:
+
+- whole-item / thumbnail: PASS;
+- reading scale: PASS;
+- native `500×800`: PASS.
+
+45×70 front `25:10`:
+
+- whole-item: PASS;
+- reading scale: PASS;
 - native `450×700`: PASS;
-- independent reflow after punch correction: PASS.
+- independent reflow: PASS.
 
-Completion-only comparison against preserved V2 `9:2` at the same thumbnail scale: V3 preferred.
+Optional back `25:18`:
+
+- whole-item: PASS;
+- reading/native `500×800`: PASS;
+- front/back family relationship: PASS without mirrored-template sameness.
+
+Completion-only comparison with retained production was performed only after vNext maturity. The retained English-serif tag remains competent but quieter/formal; vNext is preferred for `SUNSHINE DEPARTURE` because crop/scale/color create stronger pick-up appeal and souvenir energy while keeping the same authoritative wording and physical punch clarity.
+
+Professional Design Council score: `90/100`; no Executive Creative Director, Japanese Editorial Designer or Print Production Director veto.
 
 ## Structure / physical QA
 
-### 50×80 front `22:3`
+### 50×80 front `25:2`
 
-- visible native text `4`;
+- `500×800`, `clipsContent=true`;
+- visible native text `3`;
+- all visible text `textAutoResize=HEIGHT`;
 - IMAGE fills `0`;
-- outside visible text `0`;
-- visible text collisions `0`;
-- punch `50×50`, center `(250,80)`;
-- first text begins `y=210`, leaving `105px` from punch bottom to first text;
-- text left safe inset >= `102px`;
-- date bottom `710`, leaving `90px` bottom clearance.
-
-### 50×80 optional back `22:11`
-
-- visible native text `2`;
-- IMAGE fills `0`;
-- outside visible text `0`;
-- visible text collisions `0`;
+- outside text `0`;
+- text collisions `0`;
 - punch `50×50`, center `(250,80)`.
 
-### 45×70 front `22:17`
+### 45×70 front `25:10`
 
-- visible native text `4`;
+- `450×700`, `clipsContent=true`;
+- visible native text `3`;
+- all visible text `textAutoResize=HEIGHT`;
 - IMAGE fills `0`;
-- outside visible text `0`;
-- visible text collisions `0`;
-- punch `50×50`, center `(225,80)`;
-- date bottom `626`, leaving `74px` bottom clearance.
+- outside text `0`;
+- text collisions `0`;
+- punch `50×50`, center `(225,80)`.
 
-All reader-facing copy/date remains native editable Figma text. Variable guest/product/venue/QR/SNS facts are absent rather than fake-filled. No full-page flattening or baked variable information was introduced.
+### Optional 50×80 back `25:18`
+
+- `500×800`, `clipsContent=true`;
+- visible native text `2`;
+- all visible text `textAutoResize=HEIGHT`;
+- IMAGE fills `0`;
+- outside text `0`;
+- text collisions `0`;
+- punch `50×50`, center `(250,80)`.
 
 ## Hybrid authoring / asset decision
 
 - confirmed text/date: native editable Figma text;
-- fixed art: simple native paper/color fields and signal bars;
+- fixed art: a few large native color/shape fields;
 - punch: native physical ellipse role;
 - editable SVG: not required;
 - generated/composed raster: not required;
-- replaceable image role: not required.
+- replaceable image role: not required;
+- Drive write: `0`.
 
-`IMAGE_GENERATION_NOT_REQUIRED`: the visual bottleneck was generic composition, and typography/physical print fields solved it without decorative imagery.
-
-Drive authority was live-read immediately before this QA write and confirmed as `1_V20y77VU1aGrJtqpl7U5XUpC-bQuTxV / ADD-05_サンキュータグ_プチギフトタグ`. Drive write `0`.
-
-## Confirmed copy / exclusions
-
-Confirmed only:
-
-- `Thank you for traveling with us.`;
-- `Have a safe trip home.`;
-- `2026.10.24`.
-
-Do not invent names, venue, gift/product name, SNS, QR, flight/gate/seat/barcode data or other credentials.
+`IMAGE_GENERATION_NOT_REQUIRED`: at this small physical scale, imagery would reduce legibility and increase stock/AI-template risk. The quality problem is object-level hierarchy, punch interaction and souvenir character.
 
 ## Deferred finalization / print gate
 
-Keep `NOT_PRINT_READY` until authoritative physical production inputs exist:
+Keep `NOT_PRINT_READY` until authoritative production inputs exist:
 
 - final choice between 50×80 and 45×70;
 - actual gift/package dimensions;
-- attachment/string/ribbon width;
-- final punch/tool diameter and stock thickness;
+- attachment/string/ribbon width and method;
+- final punch/tool diameter and stock thickness beyond current provisional geometry;
 - printer bleed/safe template;
 - duplex registration if optional back is used;
 - 100% physical attachment/rotation proof;
-- warm venue-light and rub/ink proof.
+- warm venue-light and rub/ink proof;
+- optional back adoption under the real attachment method.
 
-V2 and legacy remain intact for rollback/history. Do not reopen V3 for cosmetic churn unless a fresh screenshot or authoritative physical input exposes a concrete defect. Next progression target: `ADD-06 フォトブースサイン`.
+Previous V3/V2/legacy remain intact as rollback/history.
+
+Next progression target: `ADD-06 フォトブースサイン`.
