@@ -1,150 +1,110 @@
 # ADD-14 二次会案内 — QA
 
-Status: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / CLEANROOM_V3_SELECTED / ROUTE_NODE_UI_SUBTRACTION_PASS / A6_A5_LONG_COPY_STRESS_PASS / A6_ACTUAL_SIZE_READABILITY_HARDENED / AUTO_HEIGHT_HARDENED / LEGACY_PRESERVED / BLOCKED_REQUIRED_INPUT / ROLLBACK_SAFE / NOT_PRINT_READY`
-Updated: 2026-08-19
+Status: `CURRENT / PROFESSIONAL_VNEXT_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / A6_A5_LONG_COPY_STRESS_PASS / AUTO_HEIGHT_PASS / LEGACY_PRESERVED / BLOCKED_REQUIRED_INPUT / ROLLBACK_SAFE / NOT_PRINT_READY`
+Updated: 2026-08-21
 Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
+Professional quality authority: `docs/design-learning/PROFESSIONAL-DESIGN-COUNCIL-VNEXT-2026-08-20.md`
 
 ## Current selected authority
 
-The legacy A6/A5 production previously described here is retained comparison / rollback history only for the reopened clean-room program. The current selected design is clean-room V3 Night Field.
+- Figma file: `IygEr140Yqk12LsGL3TFrT`
+- selected page: `52:2 / SELECTED / VNEXT PRO / ADD-14 / MOONLIT RENDEZVOUS / 2026-08-21`
+- selected A6: `52:3 / VNEXT_SELECTED_CANDIDATE / ADD14 / A6 / MOONLIT RENDEZVOUS`
+- selected A5: `52:20 / VNEXT_SELECTED_CANDIDATE / ADD14 / A5 / MOONLIT RENDEZVOUS`
+- hidden long-copy A6/A5: `52:38 / 52:55`
+- three-direction concept page: `51:2`
+- retained prior clean-room V3: `32:2 / 32:3 / 32:29` — comparison/rollback/history only
+- retained legacy: `1:2 / 1:18` — comparison/rollback/history only
+- Drive folder: `1Oq2Pz2mYo4oaDnO7LMezMrCUizcxaEjs / ADD-14_二次会案内`
 
 Canonical evidence:
+- `PROFESSIONAL-VNEXT-MOONLIT-RENDEZVOUS-QA-2026-08-21.md`
 
-- `FIGMA-CLEANROOM-V3-NIGHT-FIELD-QA-2026-08-17.md`
-- `A6-ACTUAL-SIZE-READABILITY-HARDENING-2026-08-18.md`
-- `ROUTE-NODE-SUBTRACTION-QA-2026-08-19.md`
-- later guest-copy / proof-language and auto-height hardening evidence retained in the ADD-14 item history.
+Drive metadata was re-read live. Drive write: `0`.
 
-Live authority:
+## Clean-room vNext
 
-- Figma file: `IygEr140Yqk12LsGL3TFrT`
-- clean-room page: `32:2 / CLEANROOM / ADD-14 / V3 NIGHT FIELD / 2026-08-17`
-- selected A6: `32:3`
-- selected A5: `32:29`
-- hidden long-copy A6: `33:2`
-- hidden long-copy A5: `33:28`
-- route-dot subtraction comparison: `46:2 / 46:29` — hidden after adoption
-- route-dot pre-change rollbacks: `46:56 / 46:83 / 46:110 / 46:137`
-- auto-height rollback: `41:2`
-- A6 pre-readability rollback: `44:2`
-- A6 stress pre-readability rollback: `44:29`
-- retained legacy production: A6 `1:2`, A5 `1:18` — comparison/history only
-- Drive folder: `ADD-14_二次会案内 / 1Oq2Pz2mYo4oaDnO7LMezMrCUizcxaEjs`
+The professional vNext was authored from blank frames without using retained V3/legacy visual construction, route axis, old decoration, crops or assets as a visual source. Only verified A6/A5 dimensions, semantic fields, unresolved-fact boundary, print/readability constraints and optional independent QR role were carried forward.
+
+Three new directions:
+- `51:3 / MOONLIT RENDEZVOUS` — selected;
+- `51:16 / LATE DEPARTURE` — energetic but too close to generic dark event-poster territory;
+- `51:30 / CITY GLOW POSTCARD` — bright and clear but less intimate/after-hours.
 
 ## Current visual direction
 
-V3 is a night-specific, materially independent clean-room direction:
+### A6 `52:3`
+- warm cream invitation field + deep-ocean practical field;
+- Japanese-first `夜のつづきへ、もうひと旅。`;
+- coral moon and low mint night-wind gesture;
+- venue/address/access/notice separated from reception/start/end/fee/RSVP;
+- no route-stepper dots, fake neon, alcohol motifs, barcode/airline credentials or equal UI cards.
 
-- continuous deep-navy paper field;
-- warm ivory Japanese headline `夜のつづきへ。`;
-- one mint route axis carrying reception / start / end without repeated progress-step dots;
-- venue/address as a direct native hierarchy block;
-- lower access / fee / RSVP/contact information as direct typography rather than equal UI cards;
-- no gradients, fake neon, alcohol motifs, travel icons, decorative English filler or generated/raster decoration.
+### A5 `52:20`
+- independent reflow rather than scaled A6;
+- warm upper editorial field + deep-ocean lower practical band;
+- venue/access in the upper field; time/fee/RSVP/contact in the lower field;
+- same afterglow family without reproducing the A6 split-column geometry.
 
-Fresh 2026-08-19 A6/A5 whole-item review reconfirmed the intended read: `二次会のご案内 → 夜のつづきへ。 → 会場 → 時刻 → lower practical information`.
+All event facts remain explicit native placeholders and are not fabricated.
 
-## Route node UI-subtraction — 2026-08-19
+## Screenshot / stress refinements
 
-Fresh selected A6/A5 review found the three evenly spaced mint circles on the route axis reading like progress/stepper controls. Reception/start/end were already explicit native Japanese labels aligned beneath the route, so the circles did not carry necessary information.
+Live QA found and corrected:
 
-Rollback-safe candidates `46:2 / 46:29` hid only the three `DECOR_DESTINATION_NODE` circles while preserving the route line, all native labels/times, venue hierarchy and lower practical copy. The no-dot version was stronger at both sizes: the route reads as an editorial time axis rather than an interactive UI control.
+1. A5 selected title wrapped into the status line; title was resized/reflowed before selection.
+2. Initial structural readback found all `50` new native text nodes as fixed-height because sizing occurred after the auto-height mode was set. Auto-height was re-applied after sizing across selected/stress roots.
+3. With true auto-height geometry active, A5 long-copy stress exposed a venue-name/address collision that had not been reliable before geometry hardening. Address spacing was corrected and re-screened.
 
-Before adoption, selected and long-copy pre-change roots were preserved as hidden rollbacks `46:56 / 46:83 / 46:110 / 46:137`.
-
-Adopted visibility change:
-
-- selected A6 route nodes `32:10 / 32:13 / 32:16`: hidden;
-- selected A5 route nodes `32:36 / 32:39 / 32:42`: hidden;
-- stress A6 route nodes `33:9 / 33:12 / 33:15`: hidden;
-- stress A5 route nodes `33:35 / 33:38 / 33:41`: hidden.
-
-Post-adoption QA:
-
-- A6 whole/thumbnail 500 px: PASS;
+Final visual result:
+- A6 native `592×420`: PASS;
 - A5 native `840×592`: PASS;
-- realistic A6 long-copy native `592×420`: PASS after temporary reveal and re-hide;
-- visible route-dot count on selected/stress: `0`;
-- visible text outside root: `0`;
-- IMAGE fills: `0`.
+- A6 long-copy native stress: PASS;
+- A5 long-copy stress after repair: PASS.
 
-Result: `ROUTE_NODE_UI_SUBTRACTION_PASS`.
+## Structure QA
 
-## Structure / long-copy QA
+Final readback:
+- selected A6: visible text `12`, IMAGE fills `0`, outside text `0`, collisions `0`, fixed-height text `0`;
+- selected A5: visible text `13`, IMAGE `0`, outside `0`, collisions `0`, fixed-height `0`;
+- stress A6: visible text `12`, IMAGE `0`, outside `0`, collisions `0`, fixed-height `0`;
+- stress A5: visible text `13`, IMAGE `0`, outside `0`, collisions `0`, fixed-height `0`.
 
-Selected A6/A5 and hidden stress roots preserve native editable text and no image fills. Earlier clean-room repairs addressed:
+Optional QR remains only as an invisible independent `AREA_AFTER_PARTY_QR_REPLACEABLE` role and does not imply QR use is confirmed.
 
-- clipped lower information;
-- end-time trim overflow;
-- venue/address collision;
-- equal-column failure under realistic copy;
-- hidden fixed-height native-text boxes.
+Generated/composed raster `0`; replaceable image fill `0`; person imagery `0`.
 
-Current post-hardening readback evidence for `32:3 / 32:29 / 33:2 / 33:28`:
+## Mature comparison / professional gate
 
-- remaining visible `textAutoResize=NONE` nodes with nominal <=12px height: `0`;
-- visible proof-language: `0`;
-- visible text outside root: `0`;
-- IMAGE fills: `0`;
-- visible route-dot count: `0`;
-- realistic long-copy stress: `PASS`.
+Retained V3 was opened only after the vNext candidate passed visual, stress and structural QA. V3 remains strong functionally but reads as a dark information sheet centered around a time axis. The vNext is more inviting and more aligned with the current joyful night-flight/afterglow brief while preserving practical hierarchy.
 
-### A6 actual-size readability hardening — 2026-08-18
+Professional Design Council: `91/100`.
 
-Fresh native A6 review found that `TXT_ACCESS / TXT_FEE / TXT_RSVP_DEADLINE` were only `9 px / 14`, which read as microcopy relative to the physical A6 working size.
-
-A rollback-safe 11 px test first exposed long-copy overflow, so the solution was not to shrink the type again. The A6 lower information area was rebalanced by expected text mass:
-
-- practical body copy: `9 px / 14` → `11 px / 16`;
-- lower grid y: `338` → `330`;
-- access width: `260` → `220`;
-- fee width: `110` → `120`;
-- RSVP/contact width: `110` → `140`;
-- existing 20 px gaps preserved.
-
-Selected A6 now ends the lower grid at `385 / 420`. Realistic stress `33:2` ends at `417 / 420`, with visible text outside root `0`. Native `592×420` screenshot review confirms improved practical-copy readability without weakening the headline/time hierarchy.
-
-The lower information architecture intentionally uses unequal semantic widths because access, fee and RSVP/contact have different expected text mass.
-
-## Legacy preservation
-
-Legacy A6 `1:2` and A5 `1:18` remain untouched. They were compared only after V3 and realistic stress had passed. Do not use them as the current selected editing target.
-
-## Image / Drive decision
-
-`IMAGE_GENERATION_NOT_REQUIRED_FOR_THIS_ITEM`.
-
-The item-specific strength comes from typography, night field and route hierarchy; current blockers are factual/finalization inputs, not missing imagery. Drive metadata was live-read on 2026-08-19 and matched `1Oq2Pz2mYo4oaDnO7LMezMrCUizcxaEjs`. Drive writes: `0`.
+`IMAGE_GENERATION_NOT_REQUIRED_FOR_THIS_ITEM`: the quality gap was night-event emotional amplitude and hierarchy, not missing photography. Since venue/event facts are not confirmed, generated venue imagery/maps/QR-like content would be misleading.
 
 ## BLOCKED_REQUIRED_INPUT
 
-Final adoption still requires authoritative facts:
-
-- whether a second party will actually be held; otherwise `NOT_REQUIRED`;
-- official venue / address / floor;
-- reception / start / end times;
-- fee / payment method;
-- access / travel time;
-- RSVP method / deadline;
-- contact / notice policy;
+Final production still requires:
+- whether the after-party is actually held; otherwise `NOT_REQUIRED`;
+- official venue/address/floor;
+- reception/start/end times;
+- fee/payment method;
+- access/travel time;
+- RSVP method/deadline;
+- contact/notice policy;
 - final QR destination if used.
 
-Do not invent any of these.
+Do not invent these facts.
 
 ## DEFERRED_FINALIZATION
 
-Printer template/profile, exact bleed/safe area, QR device scan proof if used, and 100% A6/A5 physical print proof remain deferred.
+- printer template/profile;
+- exact bleed/safe-area/export settings;
+- QR scan proof if used;
+- 100% A6/A5 physical print proof.
 
 ## Result
 
-- clean-room independence: `PASS`
-- sellable visual: `PASS`
-- route node UI-subtraction: `PASS`
-- A6/A5 long-copy resilience: `PASS`
-- A6 actual-size practical-copy readability: `PASS`
-- native semantic editability: `PASS`
-- auto-height hardening: `PASS`
-- legacy preservation: `PASS`
-- Drive authority: `PASS`
-- event facts: `BLOCKED_REQUIRED_INPUT`
-- print readiness: `NO`
+`PROFESSIONAL_VNEXT_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / A6_A5_LONG_COPY_STRESS_PASS / AUTO_HEIGHT_PASS / LEGACY_PRESERVED / BLOCKED_REQUIRED_INPUT / NOT_PRINT_READY`
+
+Next progression target: `ADD-15`, subject to latest authority and product-model status.
