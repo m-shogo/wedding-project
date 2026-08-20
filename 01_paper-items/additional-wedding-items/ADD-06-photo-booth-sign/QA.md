@@ -1,129 +1,102 @@
 # ADD-06 フォトブースサイン — QA
 
-Status: `CURRENT / CLEANROOM_V3_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / LONG_COPY_STRESS_PASS / LENS_RETICLE_UI_SUBTRACTION_PASS / LEGACY_PRESERVED / NOT_PRINT_READY`
-Updated: 2026-08-19
+Status: `CURRENT / CLEANROOM_V6_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / LONG_COPY_STRESS_PASS / V3_AND_LEGACY_PRESERVED / NOT_PRINT_READY`
+Updated: 2026-08-20
 Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
 
 ## Current Figma authority
 
 - Figma file: `SVMALDUyhc2chxHa4fvdjx`
 - page: `0:1 / ADD-06_PHOTO_BOOTH_SIGN`
-- selected clean-room V3: `25:3 / CLEANROOM_ADD06_V3_SELECTED_A3_BEST_SHOT_LENS_POSTER`
-- long-copy proof: `25:41 / QA_ADD06_V3_LONG_COPY_STRESS_2026_08_15` — hidden after QA
+- selected clean-room V6: `42:2 / CLEANROOM_ADD06_V6_SELECTED_DARK_WAYFINDING_POSTER_2026_08_20`
+- V6 long-copy proof: `43:2 / QA_ADD06_V6_LONG_COPY_STRESS_2026_08_20` — hidden after QA
+- V6 pre-flow-hardening rollback: `43:12` — hidden
+- rejected clean-room V4/V5 studies remain hidden/preserved
+- former selected V3 preserved: `25:3`
 - retained clean-room V2 comparison: `23:3`
 - retained legacy production: `1:2 / FRAME_ADD06_A3_PORTRAIT`
-- Drive authority: `1Ehk_oQ8vhAGo3DYBbgyOGfA03u0pu5wb / ADD-06_フォトブースサイン`
+- exact Drive authority: `1Ehk_oQ8vhAGo3DYBbgyOGfA03u0pu5wb / ADD-06_フォトブースサイン`
 
-The legacy production and V2 comparison remain untouched as rollback/history. V3 was originally built from a blank A3 frame under the clean-room mandate and remains the selected family.
+Current selection evidence: `FIGMA-CLEANROOM-V6-DARK-WAYFINDING-PROMOTION-QA-2026-08-20.md`.
+
+The previous `QA.md` selection line still named V3 even though V6 had already been promoted by item-specific evidence. This file is now reconciled to the live selected V6; no Figma design was changed during this reconciliation.
 
 ## Current visual direction
 
-The selected poster now reads primarily as:
+V6 is a dark Japanese-first physical wayfinding poster rather than a sparse cream poster with a lens/target motif.
 
-`BEST SHOT → 写真撮影はこちら → simplified editable lens mark → 2026.10.24 / [会場内設置場所]`.
+Current reading hierarchy:
 
-The large `BEST SHOT` typography and two-ring lens mark provide the photo-booth semantic cue. The design deliberately avoids cards, badges, fake photography, gradients, shadows, repeated travel icons and target/radar-style reticle decoration.
+1. `写真撮影はこちら`;
+2. `フォトブース` role label;
+3. native guidance `撮影スペースへお進みください`;
+4. date `2026.10.24`;
+5. unresolved native location placeholder `[会場内設置場所]`.
 
-### 2026-08-18 subtraction polish
+Fixed visual support is limited to a large mint flash/color field, low-opacity fixed `写真` semantic typography and one compact information rule. There is no lens/reticle, card grid, badge, shadow, gradient, fake credential, stock photo or generated-image filler.
 
-Fresh actual-size review found three fixed elements no longer carrying enough reader-facing value:
+## Clean-room history
 
-- `PHOTO SPOT` English kicker;
-- its small mint rule;
-- lower decorative route sweep / endpoint dots.
+V4, V5 and V6 were built from blank `990×1400` frames using only verified non-visual facts/semantic requirements.
 
-A rollback-safe comparison `32:2` showed that removing those roles produced a stronger, less template/UI-like first read without creating false premium emptiness. The subtraction was adopted in selected V3 and its long-copy proof.
+- V4 rejected: lens/arc treatment still risked target/widget semantics; no-lens comparison became too weak.
+- V5 rejected: Japanese-first typography improved, but the cream middle field still relied too heavily on empty space.
+- V6 selected: one high-contrast dark/mint field materially improved whole-item silhouette and wayfinding hierarchy.
 
-Hidden in selected `25:3`:
+Former V3 and legacy remain intact as rollback/history and were not construction ingredients for V6.
 
-- `25:14 / TXT_PHOTO_SPOT_KICKER`;
-- `25:20 / DECOR_KICKER_RULE`;
-- `25:10 / VECTOR_ROUTE_SWEEP_V3_EDITABLE`.
+## Fresh live visual revalidation — 2026-08-20
 
-Hidden in long-copy proof `25:41`:
+The selected V6 was re-read live after the ADD-04/ADD-05 progression and the stale QA mismatch was discovered.
 
-- `25:52 / TXT_PHOTO_SPOT_KICKER`;
-- `25:58 / DECOR_KICKER_RULE`;
-- `25:48 / VECTOR_ROUTE_SWEEP_V3_EDITABLE`.
+Fresh screenshots:
 
-Rollback evidence:
+- whole-item / ~500 px: PASS;
+- reading / ~1000 px: PASS;
+- existing native `990×1400` and long-copy evidence remains valid.
 
-- `32:22 / ROLLBACK_ADD06_V3_PRE_KICKER_ROUTE_SUBTRACTION_2026_08_18` — hidden;
-- `32:42 / ROLLBACK_ADD06_V3_STRESS_PRE_KICKER_ROUTE_SUBTRACTION_2026_08_18` — hidden;
-- comparison `32:2` — hidden after adoption.
+The live 500px screenshot still has a strong first read: large Japanese photo guidance, one dominant mint field, compact date/location anchor and no dashboard/card semantics. The 1000px screenshot confirms the instruction and placeholder remain legible over the fixed low-opacity semantic field.
 
-Detailed evidence: `FIGMA-V3-KICKER-ROUTE-SUBTRACTION-QA-2026-08-18.md`.
-
-### 2026-08-19 lens-reticle simplification
-
-Fresh 500px / reading / native `990×1400` review found the editable lens target still carried four simultaneous cues: blue outer ring, grey dashed intermediate reticle, mint crosshair and dark inner aperture. With `BEST SHOT` and `写真撮影はこちら` already carrying the photo-booth meaning, the dashed reticle + crosshair pushed the mark toward radar/target-widget semantics.
-
-Two bounded rollback-safe comparisons were created from the selected clean-room V3 only:
-
-- `33:2 / QA_ADD06_V3_LENS_SIMPLIFY_A_NO_DASHED_RETICLE_2026_08_19` — dashed reticle removed only;
-- `33:22 / QA_ADD06_V3_LENS_SIMPLIFY_B_NO_RETICLE_NO_CROSSHAIR_2026_08_19` — dashed reticle + mint crosshair removed.
-
-Comparison B was stronger at reading scale while retaining an immediate lens/aperture reading. It was adopted in selected and long-copy proof:
-
-Selected `25:3`:
-
-- `25:7` dashed reticle: hidden;
-- `25:8` mint crosshair: hidden;
-- `25:6` blue outer ring: retained;
-- `25:9` dark inner aperture: retained.
-
-Long-copy proof `25:41`:
-
-- `25:45` dashed reticle: hidden;
-- `25:46` mint crosshair: hidden;
-- `25:44` blue outer ring: retained;
-- `25:47` dark inner aperture: retained.
-
-Pre-change rollback:
-
-- `34:2 / ROLLBACK_ADD06_V3_PRE_LENS_RETICLE_SUBTRACTION_2026_08_19` — hidden;
-- `34:22 / ROLLBACK_ADD06_V3_STRESS_PRE_LENS_RETICLE_SUBTRACTION_2026_08_19` — hidden.
-
-Both comparison roots are hidden after adoption. Detailed evidence: `FIGMA-V3-LENS-RETICLE-SUBTRACTION-QA-2026-08-19.md`.
+No fresh screenshot exposed a visual defect requiring V7 or image generation.
 
 ## Structure / long-copy QA
 
-The prior long-copy flow repair remains intact: variable subtitle/note flow uses native height-following structure rather than absolute text overlap.
+Existing V6 evidence remains the current structural authority:
 
-Fresh post-reticle-subtraction readback:
+- selected visible native text `6`;
+- IMAGE fills `0`;
+- proof/dummy language `0`;
+- location safe width `450px`;
+- selected location height `44px`;
+- selected instruction height `40px`;
+- long-copy instruction height `120px`;
+- long-copy location height `88px`;
+- stress proof remains contained and hidden after QA.
 
-- selected root: `990×1400`;
-- selected visible native text: `4`;
-- selected IMAGE fills: `0`;
-- selected visible text outside root: `0`;
-- selected text-to-text collisions: `0`;
-- selected lens visible children: blue outer ring + dark inner aperture only;
-- long-copy visible native text: `4`;
-- long-copy IMAGE fills: `0`;
-- long-copy visible text outside root: `0`;
-- long-copy text-to-text collisions: `0`;
-- long-copy lens visible children: blue outer ring + dark inner aperture only;
-- long-copy proof returned to hidden state after native-size screenshot QA;
-- comparison and rollback roots hidden after QA.
+The oversized low-opacity fixed `写真` role may geometrically cross the instruction region, but it is a deliberately backgrounded fixed semantic field. Fresh screenshots show no visible glyph collision or reader-facing legibility loss.
 
-Variable date/location copy remains native editable text. No final or variable copy is baked into SVG/raster.
+Variable date/location/guidance remains native editable text. No variable copy is baked into raster/SVG.
 
-## Asset / Drive decision
+## Hybrid authoring / asset decision
 
-Exact Drive folder live-read before the 2026-08-19 Figma write and remains `1Ehk_oQ8vhAGo3DYBbgyOGfA03u0pu5wb`.
+- variable/factual text: native editable Figma text;
+- fixed semantic typography: native text;
+- fixed flat graphics: editable native vector/rectangle roles;
+- generated/composed raster: `0`;
+- IMAGE fills: `0`;
+- replaceable photo role: not required.
 
-Drive write: `0`.
+`IMAGE_GENERATION_NOT_REQUIRED`: the selected direction already solves the composition/hierarchy problem without decorative photography or texture.
 
-`IMAGE_GENERATION_NOT_REQUIRED`: the concrete defect was excess UI-like fixed vector treatment, not missing photography or texture.
+Drive authority was live-read during this reconciliation and confirmed as `1Ehk_oQ8vhAGo3DYBbgyOGfA03u0pu5wb / ADD-06_フォトブースサイン`. Drive write `0`.
 
 ## Deferred finalization
 
 Keep `NOT_PRINT_READY` until authoritative final inputs exist:
 
-- final booth wording and exact placement location;
-- intended stand/board/mounting method;
-- actual installation sightline and 1.5–3m viewing check;
-- printer template/profile, final bleed/safe area;
-- physical print and venue-lighting proof.
+- final booth wording and exact installation location;
+- actual stand/board/mounting method and venue sightline;
+- printer template/profile and final bleed/safe area;
+- physical print, contrast and venue-lighting proof.
 
-Do not reopen the selected visual family for cosmetic churn unless a fresh screenshot, physical proof or authoritative input exposes a concrete defect.
+Do not reopen V6 for cosmetic churn unless a fresh screenshot, physical proof or authoritative input exposes a concrete defect. Next progression target: `ADD-07`.
