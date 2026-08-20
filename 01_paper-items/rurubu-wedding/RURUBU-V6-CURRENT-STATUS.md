@@ -8,14 +8,14 @@ Production state: separate clean-room V6; V7 is HOLD
 
 ## Current declaration
 
-`V6_LIVE_FIGMA_IN_PROGRESS / OUTER_HN_PREFERRED / PROFILE_QA_HK_PREFERRED / STORY_CHRONOLOGY_HT_PREFERRED / MEMORY_SPOTS_GY_PREFERRED / GOURMET_CAFE_HC_PREFERRED / ONE_DAY_PLAN_HS_PREFERRED / NATIVE_VARIABLE_TEXT_PRESERVED / REPLACEABLE_PHOTOS_PRESERVED / CURRENT_REVIEW_BOARD_LIVE_VERIFIED / HT_WHOLE_AND_ACTUAL_SIZE_QA_PASS / V7_HOLD / NOT_PRINT_READY`
+`V6_LIVE_FIGMA_IN_PROGRESS / OUTER_HN_PREFERRED / PROFILE_QA_HU_PREFERRED / STORY_CHRONOLOGY_HT_PREFERRED / MEMORY_SPOTS_GY_PREFERRED / GOURMET_CAFE_HC_PREFERRED / ONE_DAY_PLAN_HS_PREFERRED / NATIVE_VARIABLE_TEXT_PRESERVED / REPLACEABLE_PHOTOS_PRESERVED / HU_HT_WHOLE_AND_ACTUAL_SIZE_QA_PASS / V7_HOLD / NOT_PRINT_READY`
 
 ## Live Figma preferred set
 
-Fresh live readback on `845:2 / 00_RURUBU_START_HERE` after HT promotion:
+Fresh live state on `845:2 / 00_RURUBU_START_HERE`:
 
 - Outer HN `2029:2`; x `272000`, y `0`.
-- Profile / Q&A HK `2027:2`; x `273800`, y `0`.
+- Profile / Q&A HU `2044:2`; Q&A right `2044:49`; x `273800`, y `0`.
 - Story / chronology HT `2040:2`; timeline right `2040:28`; x `275600`, y `0`.
 - Memory Spots GY `2003:2`; x `272000`, y `1300`.
 - Gourmet / Cafe HC `2012:2`; x `273800`, y `1300`.
@@ -23,68 +23,43 @@ Fresh live readback on `845:2 / 00_RURUBU_START_HERE` after HT promotion:
 
 Start Here `845:27`:
 
-`V5 FU/FX · V6 HN + HK/HT + GY MEMORY SPOTS + HC CAFE & TABLE + HS 1DAY PLAN · V7 HOLD`
+`V5 FU/FX · V6 HN + HU/HT + GY MEMORY SPOTS + HC CAFE & TABLE + HS 1DAY PLAN · V7 HOLD`
 
-Rollback / comparison evidence:
+Rollback:
 
+- HK `2027:2` hidden rollback for HU.
 - HR `2033:111` hidden rollback for HT.
-- HJ `2024:2` remains earlier hidden rollback.
-- HD `2014:2` hidden rollback for HN.
-- GZ `2004:2` hidden rollback for HK.
-- earlier preferred/rejected studies remain hidden and preserved.
+- earlier comparisons remain hidden and preserved.
 
-## Latest verified progress — HT native-hierarchy subtraction
+## Latest verified progress
 
-### Visible problem
+### HT chronology
 
-HR had already become photo-led, but the chronology right page still retained a yellow kicker field, Event 05 underline and WEDDING terminal rule from earlier timeline iterations. At whole, reading and actual size these no longer added unique binding/contrast and kept a residual diagram/UI character.
+Removed three now-redundant decorative bars/fields after photo + native-type hierarchy had matured. The first HT geometry exposed Event 05 collisions/safe-area violations; it was corrected before promotion.
 
-### Root-cause hypothesis
+Final HT timeline `2040:28 / 794×1123`:
 
-The existing dominant hero, Event 03 photo, and native 01→03→05→06 hierarchy had matured enough to carry sequence and closure without those decorative rectangles. Subtraction should make the page feel more like an edited travel-magazine chronology and less like a timeline component.
+- native text `27`;
+- visible image roles `2`;
+- collision `0`;
+- 18px safe-area risk `0`;
+- stray text `0`;
+- image hashes unchanged.
 
-### Bounded test
+### HU Q&A
 
-Rollback-safe HT `2040:2` from HR `2033:111`:
+HK Q&A retained four thin separator/binding rules that no longer carried unique structure. HU removed only those four rules while preserving the yellow section kicker and cyan photo-caption field because those still provide meaningful category/contrast function.
 
-- Story left page unchanged.
-- hero image unchanged.
-- Event 03 replaceable image unchanged at `350×260`.
-- hid the timeline yellow kicker field.
-- hid Event 05 editorial underline.
-- hid WEDDING terminal rule.
-- hid the tiny kicker text after its background disappeared and it no longer had a useful readable role.
-- strengthened/repositioned native Event 05 and Event 06 typography without adding any new container.
-- kept 02/04 as quieter bridge events.
-- no new image, generated asset, Drive save, binary placement or image hash.
+Final HU Q&A `2044:49 / 794×1123`:
 
-### Rejected / corrected state
+- native text `29`;
+- replaceable photos `2`;
+- collision `0`;
+- 18px safe-area risk `0`;
+- stray text `0`;
+- image geometry/hash unchanged.
 
-The first HT geometry looked cleaner visually but actual-size structure QA found:
-
-- Event 05 date/number overlap `9×18px`;
-- Event 05 number/title overlap `9×38px`;
-- Event 05 number/body overlap `9×12px`;
-- Event 05 title/body right-safe-area violations.
-
-HT was not promoted in that state. Event 05 number was moved left and the date/title/body stack moved inward. The second audit returned zero collisions and zero 18px safe-area risks.
-
-### Verification
-
-HT `2040:2`, timeline right `2040:28`:
-
-- whole spread: PASS and visually preferred over HR;
-- reading/page scale: PASS;
-- actual-size timeline `794×1123`: PASS;
-- visible native text: `27`;
-- visible image roles: `2`;
-- text collisions: `0`;
-- 18px text safe-area risks: `0`;
-- page-level stray text: `0`;
-- hero and Event 03 image hashes unchanged;
-- HR `2033:111` preserved hidden as rollback.
-
-Decision: `HT ADOPTED / VERIFIED_LOCAL`.
+Decision: `HU + HT ADOPTED / VERIFIED_LOCAL`.
 
 ## Drive / asset truth
 
@@ -92,7 +67,7 @@ Drive root reverified:
 
 `1wHxC2E09JpLIQRNDDTY4i29KMwMY2_XK / RURUBU_V6_HAWAII_2026-08-02`
 
-Existing generated section masters remain saved in Drive and unadopted in the current preferred spreads. Transport-only state is not counted as visual progress.
+Existing generated section masters remain saved in Drive and unadopted in current preferred spreads.
 
 This run:
 
@@ -101,9 +76,8 @@ This run:
 - new Drive saves: `0`;
 - new external binary placements: `0`;
 - new image hashes: `0`;
-- HT placed as preferred: YES;
-- HT whole/page/actual-size visually verified: YES;
-- HR preserved hidden as rollback: YES;
+- HU/HT placed and visually verified: YES;
+- HK/HR preserved hidden as rollback: YES;
 - native variable text preserved: YES;
 - replaceable photos preserved: YES;
 - V7 touched: NO.
@@ -111,35 +85,28 @@ This run:
 ## Shared learning
 
 - Shared system, Rurubu feed and neutral non-Rurubu feed were read before writes.
-- Only neutral principles/capabilities/failure fingerprints were consumed from non-Rurubu work; no non-Rurubu item-specific Figma, Drive, asset, ledger or production path was inspected or edited.
-- `RSL-159` records the HT lesson: decorative bars/fields that once provided grouping should be re-tested after photo + native-type hierarchy matures; keep them only if they still provide unique contrast/binding/closure.
-- Failure fingerprint: `DECOR_SUBTRACTION_EXPOSES_SPACING_COLLISION`.
-- State: `VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`.
-- Exact chronology, Yokohama/travel imagery, geometry, palette and Rurubu travel-magazine grammar remain item-specific.
+- No non-Rurubu item-specific Figma/Drive/ledger/asset/GitHub path was inspected or edited.
+- `RSL-159` now has two independent Rurubu-local replications: chronology HT and Q&A HU.
+- Principle: mature photo + native-type hierarchy can retire decorative bars only when order, contrast, grouping, closure and actual-size readability survive their removal.
+- State remains `VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`; this is not cross-item verification.
+- Failure fingerprint retained: `DECOR_SUBTRACTION_EXPOSES_SPACING_COLLISION`.
 
 ## Completion gate
 
-Do not call V6 complete or print-ready until all are verified:
-
-- final legitimate photography and final copy;
-- final page count and imposition;
-- exact printer/product template;
-- bleed / trim / fold / safe-area requirements;
-- exported PDF preflight;
-- physical proof.
+Do not call V6 complete or print-ready until final legitimate photography/copy, final page count/imposition, exact printer template, bleed/trim/fold/safe-area requirements, exported PDF preflight and physical proof are verified.
 
 Current state:
 
-`V6 HN + HK/HT + GY + HC + HS = VERIFIED_LOCAL_DUMMY_DESIGN_STUDIES / PHOTO_LED_TRAVEL_GUIDE_GRAMMAR / NATIVE_TEXT_EDITABILITY_PRESERVED / REPLACEABLE_PHOTOS_PRESERVED / ROLLBACK_SAFE / V7_HOLD / NOT_PRINT_READY`.
+`V6 HN + HU/HT + GY + HC + HS = VERIFIED_LOCAL_DUMMY_DESIGN_STUDIES / PHOTO_LED_TRAVEL_GUIDE_GRAMMAR / NATIVE_TEXT_EDITABILITY_PRESERVED / REPLACEABLE_PHOTOS_PRESERVED / ROLLBACK_SAFE / V7_HOLD / NOT_PRINT_READY`.
 
 ## Next highest-value work
 
 1. Continue V6, not V7.
-2. Re-read live preferred IDs and current GitHub main before every write.
+2. Re-read live Figma and latest GitHub main before every write.
 3. Compare all six preferred spreads at the same scale before choosing the next defect.
-4. Continue testing whether legacy bars/cards still perform a real role before adding or retaining them.
+4. Retain a decorative field only when its contrast/binding/category function is visible and necessary.
 5. Keep photo-semantic truth and source fidelity above repetition-count targets.
-6. Keep variable Q&A/profile copy native and rerun realistic long-copy stress after material layout/type changes.
+6. Keep Q&A/profile copy native and rerun realistic long-copy stress after material layout/type changes.
 7. Never invent unresolved dates/details for visual completeness.
 8. Keep generated section masters unadopted until quality-preserving transport materially improves.
-9. Keep printer-template/PDF/physical-proof gates separate from dummy-design QA.
+9. Keep printer/PDF/physical-proof gates separate from dummy-design QA.
