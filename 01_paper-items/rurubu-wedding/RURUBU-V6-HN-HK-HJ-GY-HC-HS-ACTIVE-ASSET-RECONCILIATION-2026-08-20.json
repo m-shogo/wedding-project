@@ -1,0 +1,82 @@
+{
+  "date": "2026-08-20",
+  "scope": "Rurubu WEDDING V6 only",
+  "figma_file": "bfM0d4c9dCeBv5pCkJ3TNM",
+  "review_board": "845:2",
+  "drive_root": {
+    "id": "1wHxC2E09JpLIQRNDDTY4i29KMwMY2_XK",
+    "name": "RURUBU_V6_HAWAII_2026-08-02",
+    "reverified": true
+  },
+  "preferred_spreads": [
+    {"role": "outer", "node_id": "2029:2", "version": "HN"},
+    {"role": "profile_qa", "node_id": "2027:2", "version": "HK"},
+    {"role": "story_chronology", "node_id": "2024:2", "version": "HJ"},
+    {"role": "memory_spots", "node_id": "2003:2", "version": "GY"},
+    {"role": "cafe_table", "node_id": "2012:2", "version": "HC"},
+    {"role": "one_day_plan", "node_id": "2019:2", "version": "HS"}
+  ],
+  "preferred_image_inventory": {
+    "visible_image_roles": 28,
+    "unique_hashes": 8,
+    "repeated_hash_counts": {
+      "539c259be8036b481d06b4f76db9a39b407d90e8": 5,
+      "d76eb07d83d042f15044c8bc6bf68d73a73cd77d": 5,
+      "c1ada11205bc3978bf426b304d683f1c1566cac2": 4,
+      "691a6ceed471a5d8efa144052a10564eed177b4f": 4,
+      "644f449c3bf2001a94d4b822d2b55e2614c11042": 3,
+      "439a719d73f28e8dd2889f2026cccb15f345ec63": 3,
+      "e3738476f760932bb5b09c9d60f174dd6c84049d": 3
+    }
+  },
+  "run_delta": {
+    "visible_image_roles_before_hn": 29,
+    "visible_image_roles_after_hn": 28,
+    "cafe_hash_roles_before_hn": 5,
+    "cafe_hash_roles_after_hn": 4,
+    "new_image_hashes": 0,
+    "new_generated_assets": 0,
+    "new_drive_saves": 0,
+    "new_external_binary_placements": 0
+  },
+  "changed_roles": [
+    {
+      "spread": "HK",
+      "node_id": "2027:11",
+      "name": "PHOTO / PROFILE_MAIN_REPLACEABLE_EDITORIAL",
+      "hash": "e3738476f760932bb5b09c9d60f174dd6c84049d",
+      "display": {"width": 793.7, "height": 480},
+      "intrinsic": {"width": 944, "height": 608},
+      "status": "source_safe_recomposed_existing_hash"
+    },
+    {
+      "spread": "HN",
+      "former_role": "V6_H_FRONT_CAFE_MEMORY_SUPPORT",
+      "hash": "c1ada11205bc3978bf426b304d683f1c1566cac2",
+      "status": "hidden_semantically_nonessential_repeated_support",
+      "replacement": "native Feature 03 typography; no substitute image"
+    }
+  ],
+  "quality_gates": {
+    "hk_profile_text_collisions": 0,
+    "hk_profile_safe_area_risks": 0,
+    "hk_qa_text_collisions": 0,
+    "hk_qa_safe_area_risks": 0,
+    "hn_front_text_collisions": 0,
+    "hn_front_safe_area_risks": 0,
+    "hn_back_text_collisions": 0,
+    "hn_back_safe_area_risks": 0,
+    "changed_page_image_intrinsic_violations": 0
+  },
+  "rollback": {
+    "outer_hd": {"node_id": "2014:2", "preserved_hidden": true},
+    "profile_gz": {"node_id": "2004:2", "preserved_hidden": true}
+  },
+  "v7_touched": false,
+  "print_ready": false,
+  "notes": [
+    "Photo repetition is an audit signal, not a target metric.",
+    "Do not replace repeated roles with semantically false destination imagery merely to reduce counts.",
+    "Generated section masters remain saved in Drive but are not counted as adopted or placed."
+  ]
+}
