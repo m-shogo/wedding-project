@@ -1,0 +1,71 @@
+{
+  "date": "2026-08-20",
+  "scope": "Rurubu WEDDING V6 only",
+  "authority_order": ["live Figma", "verified Drive", "Rurubu evidence", "current status"],
+  "figma_file_key": "bfM0d4c9dCeBv5pCkJ3TNM",
+  "review_page": {"id": "845:2", "name": "00_RURUBU_START_HERE"},
+  "preferred": [
+    {"role": "outer", "label": "GU", "id": "1975:2", "x": 272000, "y": 0, "visible_images": 5},
+    {"role": "profile_qa", "label": "HA", "id": "1996:99", "x": 273800, "y": 0, "visible_images": 6},
+    {"role": "story_chronology", "label": "GW", "id": "1987:2", "x": 275600, "y": 0, "visible_images": 7},
+    {"role": "memory_spots", "label": "GV", "id": "1976:2", "x": 272000, "y": 1300, "visible_images": 4},
+    {"role": "cafe_table", "label": "GK", "id": "1991:2", "x": 273800, "y": 1300, "visible_images": 3},
+    {"role": "one_day_plan", "label": "GQ", "id": "1968:71", "x": 275600, "y": 1300, "visible_images": 4}
+  ],
+  "current_start_here": "V5 FU/FX · V6 GU + HA/GW + GV MEMORY SPOTS + GK CAFE & TABLE + GQ 1DAY PLAN · V7 HOLD",
+  "visible_image_role_count": 29,
+  "unique_image_hash_count": 8,
+  "hash_counts": {
+    "539c259be8036b481d06b4f76db9a39b407d90e8": 5,
+    "c1ada11205bc3978bf426b304d683f1c1566cac2": 5,
+    "439a719d73f28e8dd2889f2026cccb15f345ec63": 3,
+    "d76eb07d83d042f15044c8bc6bf68d73a73cd77d": 5,
+    "e3738476f760932bb5b09c9d60f174dd6c84049d": 3,
+    "0bdbf47904ea5865c71b1555dc73689b2c7b2126": 1,
+    "644f449c3bf2001a94d4b822d2b55e2614c11042": 3,
+    "691a6ceed471a5d8efa144052a10564eed177b4f": 4
+  },
+  "ha_changed_image_role": {
+    "node_id": "1996:160",
+    "name": "PHOTO / QA_MEMORY_SUPPORT_REPLACEABLE",
+    "image_hash": "d76eb07d83d042f15044c8bc6bf68d73a73cd77d",
+    "geometry": {"width": 545, "height": 255, "y": 610},
+    "change_from_gt": "same verified image/hash; role height reduced from 372 to 255 and moved down to reserve native Q02/Q03 growth space",
+    "new_enlargement_risk": false
+  },
+  "ha_native_variable_stacks": [
+    {"id": "1997:2", "name": "STACK / QA_Q02_CREAM_NATIVE_AUTOHEIGHT"},
+    {"id": "1997:3", "name": "STACK / QA_Q03_CREAM_NATIVE_AUTOHEIGHT"}
+  ],
+  "ha_long_copy_proof": {
+    "root_id": "1998:2",
+    "right_page_id": "1998:49",
+    "visible": false,
+    "q02_stack_height": 100,
+    "q03_stack_height": 100,
+    "minimum_stack_to_photo_clearance": 13,
+    "text_collisions": 0,
+    "safe_area_risks_18px": 0
+  },
+  "preferred_leak_audit": {
+    "pattern": "EDITABLE|PLACEHOLDER|DUMMY|PROOF|TODO|20XX|1991.XX|XX.XX",
+    "visible_hits": 0
+  },
+  "drive_authority": {
+    "id": "1wHxC2E09JpLIQRNDDTY4i29KMwMY2_XK",
+    "title": "RURUBU_V6_HAWAII_2026-08-02",
+    "reverified": true
+  },
+  "asset_lifecycle": {
+    "newly_generated": 0,
+    "adopted_generated": 0,
+    "new_drive_saves": 0,
+    "new_external_binary_placements": 0,
+    "new_image_hashes": 0,
+    "replaceable_photo_structure_preserved": true,
+    "native_variable_text_preserved": true,
+    "rollback_state_preserved": true,
+    "v7_touched": false
+  },
+  "completion_state": "VERIFIED_LOCAL_DUMMY_DESIGN_STUDIES / NOT_PRINT_READY"
+}
