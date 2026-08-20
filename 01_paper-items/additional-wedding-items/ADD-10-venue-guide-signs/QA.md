@@ -1,176 +1,145 @@
 # ADD-10 会場案内サイン — QA
 
-Status: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / CLEANROOM_V4_SELECTED / SEMANTIC_COPY_HARDENING_PASS / DEEPER_HORIZONTAL_DIRECTION_AXIS_RHYTHM_PASS / LONG_COPY_STRESS_PASS / LEGACY_PRESERVED / NOT_PRINT_READY`
-Updated: 2026-08-19
+Status: `CURRENT / CLEANROOM_V4_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / REDUNDANT_ENGLISH_DESTINATION_SUBTRACTION_PASS / SEMANTIC_COPY_HARDENING_PASS / DEEPER_HORIZONTAL_DIRECTION_AXIS_RHYTHM_PASS / LONG_COPY_STRESS_PASS / LEGACY_PRESERVED / NOT_PRINT_READY`
+Updated: 2026-08-20
 Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
 
 ## Current selected authority
 
-The reopened visual program supersedes the older legacy-node listing below for **which family is current**. The retained `2:*` production family remains preserved as rollback/comparison history and must not be treated as the selected clean-room design.
-
 - Figma file: `ADD-10_会場案内サイン`
 - Figma file key: `mMfoBkoZ7eVbuerSRHePLV`
 - selected clean-room V4 left/right/forward: `32:3 / 32:15 / 32:27`
-- selected-family long-copy stress: `33:3 / 33:15 / 33:27`
+- selected-family long-copy stress: `33:3 / 33:15 / 33:27` — hidden after QA
 - retained legacy family: `2:2 / 2:13 / 2:24 / 2:35 / 2:46 / 2:57`
-- Drive folder: `ADD-10_会場案内サイン`
-- Drive folder ID: `1ASWOTXO4fosLb9reWxQrHL2_UUC_Y8-3`
-- Drive parent: `0ADXt8irGMFGnUk9PVA`
-- clean-room V4 design evidence: `CLEANROOM-V4-STUDY-2026-08-15.md`
-- semantic-copy / structure evidence: `FIGMA-CLEANROOM-V4-SEMANTIC-COPY-HARDENING-2026-08-18.md`
-- latest page-rhythm evidence: `FIGMA-CLEANROOM-V4-DEEPER-DIRECTION-AXIS-RHYTHM-QA-2026-08-19.md`
+- exact Drive authority: `1ASWOTXO4fosLb9reWxQrHL2_UUC_Y8-3 / ADD-10_会場案内サイン`
 
-## Clean-room V4 result
+Drive metadata was live-read in this progression run. Drive write: `0`.
 
-V4 was built from blank frames under the current clean-room mandate and does not use the retained legacy split-field composition as an authoring base.
+The retained `2:*` production family remains rollback/history only. V4 was authored from blank frames under the clean-room mandate and is the selected visual family.
 
-Current art direction:
+## Current visual direction
 
-- oversized Japanese destination is the primary first-glance cue;
-- English destination is support only;
-- one editable direction axis performs the functional wayfinding job;
-- warm paper field and restrained mint/rust accents avoid dashboard/card UI;
-- left/right/forward are optically balanced rather than blindly mirrored;
-- horizontal-direction signs intentionally place the arrow lower in the page so the physical direction gesture carries meaningful page mass rather than leaving the lower half as undifferentiated empty field;
-- variable destination / floor / room / direction content stays native editable text;
-- no raster imagery, fake transport metadata, gradients, shadows, decorative planes or equal card stacks are required.
+V4 is functional Japanese-first wayfinding rather than a decorative travel-theme poster:
 
-Fresh 2026-08-19 screenshot review of selected left/right passed at whole/thumbnail and actual-size scales. The visible hierarchy remains `会場案内 → 受付 → RECEPTION → [階数・部屋名] → direction axis`. No internal export instructions or `LAYOUT DUMMY` suffixes remain on the selected family.
+- oversized Japanese destination is the first-glance cue;
+- native venue/date context is secondary;
+- `[階数・部屋名]` remains a native semantic placeholder;
+- one editable direction axis carries the actual left/right/forward job;
+- warm paper and restrained mint/rust accents avoid dashboard/card UI;
+- horizontal left/right signs place the direction axis deliberately deeper than the destination stack;
+- forward uses its naturally tall vertical direction gesture;
+- variable destination/floor/room/direction content remains native editable text;
+- raster IMAGE fills and generated assets are `0`.
 
-## Semantic-copy hardening — 2026-08-18
+## Semantic-copy hardening retained
 
-Live readback found three defects in the selected V4 family:
+The selected/stress family no longer exposes implementation language or fragile fixed-height copy:
 
-- guest-facing `[階数・部屋名 · LAYOUT DUMMY]`;
-- a visible internal authority/export note;
-- category/context native text in fragile ~10px fixed-height boxes.
+- selected floor/room copy is `[階数・部屋名]`;
+- stress uses semantic Japanese long-copy without `LAYOUT DUMMY` suffixes;
+- internal authority/export note is hidden;
+- category/context roles use native auto-height text;
+- selected/stress outside text `0`;
+- text collisions `0`;
+- IMAGE additions `0`.
 
-Before mutation, six hidden rollback clones were saved: `38:2 / 38:15 / 38:28 / 38:40 / 38:53 / 38:66`.
+Evidence: `FIGMA-CLEANROOM-V4-SEMANTIC-COPY-HARDENING-2026-08-18.md`.
 
-The selected family and its stress evidence were repaired without changing the direction-axis vector, destination hierarchy, palette or retained legacy:
+## Deeper horizontal direction-axis rhythm retained — 2026-08-19
 
-- floor/room selected copy → `[階数・部屋名]`;
-- stress floor/room copy remains semantic stress text without implementation suffixes;
-- internal authority/export note hidden;
-- category/context converted to native auto-height text.
+Earlier whole-item review found left/right direction arrows too close to the destination stack, leaving the lower half visually inactive. Bounded tests increased the destination-to-axis gap; `400px` was strongest and adopted for left/right selected and stress only.
 
-Post-write selected `32:3 / 32:15 / 32:27`:
+- selected left/right flow spacing: `400`;
+- stress left/right flow spacing: `400`;
+- forward unchanged because its vertical arrow already carries lower-page mass;
+- realistic long-copy left/right retain `108px` direction-axis bottom clearance;
+- selected/stress outside text `0`, collisions `0`.
 
-- guest-facing proof language: `0`;
-- fixed ~10px text roles: `0`;
-- outside visible text: `0`;
-- text-to-text collision: `0`;
+Evidence: `FIGMA-CLEANROOM-V4-DEEPER-DIRECTION-AXIS-RHYTHM-QA-2026-08-19.md`.
+
+## Redundant English destination subtraction — adopted 2026-08-20
+
+Fresh actual-size review found `RECEPTION` directly beneath the already-dominant Japanese destination `受付`. It repeated the same ordinary meaning rather than carrying a brand, code, artifact type or additional wayfinding fact. The same redundant role existed in right/forward and as `RECEPTION HALL` in long-copy proofs.
+
+Bounded comparison:
+
+- `46:2 / QA / ADD10 / LEFT / NO_REDUNDANT_ENGLISH_RECEPTION / 2026-08-20`;
+- only the redundant English destination role was hidden.
+
+Adopted after the comparison was stronger:
+
+- selected `RECEPTION`: `32:8 / 32:20 / 32:32` hidden;
+- stress `RECEPTION HALL`: `33:8 / 33:20 / 33:32` hidden;
+- selected rollback roots: `46:15 / 46:28 / 46:41` hidden;
+- stress rollback roots: `46:53 / 46:66 / 46:79` hidden;
+- comparison hidden after adoption.
+
+Japanese destination, venue/date support, floor/room placeholder, direction axis, spacing and colors remain otherwise unchanged/editable.
+
+Evidence: `REDUNDANT-ENGLISH-DESTINATION-SUBTRACTION-QA-2026-08-20.md`.
+
+## Fresh live visual audit — 2026-08-20
+
+Fresh selected-left screenshot in this progression run at ~500px: PASS.
+
+Current first read is clean and functional:
+
+`会場案内 → 受付 → [階数・部屋名] → large left direction axis`.
+
+The intentionally large open field is not treated as false-premium emptiness here because the destination and physical direction gesture are the sign's complete functional content, and the arrow occupies a substantial lower-page role. Adding image/texture/icon filler would reduce recognition speed rather than improve art direction.
+
+Existing 2026-08-20 evidence also confirms:
+
+- selected-left whole-item 500px: PASS;
+- forward actual-size-equivalent 1400px: PASS;
+- left realistic long-copy `1400×1980`: PASS and returned hidden;
+- residual selected/stress `RECEPTION / RECEPTION HALL`: `0`;
 - IMAGE fills added: `0`.
 
-Post-write stress `33:3 / 33:15 / 33:27`:
-
-- proof language: `0`;
-- fixed ~10px text roles: `0`;
-- outside visible text: `0`;
-- text-to-text collision: `0`.
-
-Stress frames remain hidden QA evidence after review.
-
-## Deeper horizontal direction-axis rhythm — 2026-08-19
-
-Fresh whole-item review found a directional family imbalance. Forward `32:27` uses a tall vertical arrow that occupies the middle/lower page naturally, but left/right `32:3 / 32:15` ended their horizontal arrow shortly below the destination stack, leaving most of the lower half visually inactive.
-
-Two left-only rollback-safe comparisons tested the gap between the native destination stack and the functional direction axis:
-
-- `45:2`: item spacing `90 → 240`;
-- `45:15`: item spacing `90 → 400`.
-
-The `400px` version was stronger. It creates a clearer two-beat physical sign—destination first, then direction gesture—without adding decoration or changing arrow geometry.
-
-Before promotion, a long-copy candidate `45:28` applied the same `400px` gap to the realistic stress payload. It remained inside the `1400×1980` root with:
-
-- direction-axis bottom clearance: `108px`;
-- outside visible text: `0`;
-- text collision: `0`.
-
-Hidden pre-change rollbacks:
-
-- selected left/right: `45:41 / 45:54`;
-- stress left/right: `45:67 / 45:80`.
-
-Adopted:
-
-- selected left flow `33:39`: item spacing `400`;
-- selected right flow `33:40`: item spacing `400`;
-- stress left flow `33:41`: item spacing `400`;
-- stress right flow `33:42`: item spacing `400`.
-
-Forward selected/stress were deliberately not changed. Their vertical arrow already carries lower-page mass and does not share the horizontal-axis whitespace defect.
-
-Post-write selected left/right:
-
-- direction-axis bottom: `1570`;
-- bottom clearance: `510px`;
-- outside visible text: `0`;
-- text collision: `0`.
-
-Post-write long-copy left/right:
-
-- direction-axis bottom clearance: `108px`;
-- outside visible text: `0`;
-- text collision: `0`;
-- stress roots returned to hidden QA state after actual-size review.
-
-Result: `DEEPER_HORIZONTAL_DIRECTION_AXIS_RHYTHM_PASS`.
+No fresh defect justifies a V5 rebuild in this run.
 
 ## Long-copy / editability gate
 
-Long destination / room-name stress remains required because the destination stack and the functional direction vector share physical page space. The selected V4 stress family passes after the direction graphic was structured to follow variable copy instead of relying on a brittle absolute-position relationship.
-
 Current structural gate:
 
-- selected left/right/forward: outside visible text `0`;
-- long-copy left/right/forward: outside visible text `0`;
+- selected left/right/forward outside visible text `0`;
+- long-copy left/right/forward outside visible text `0`;
 - native variable copy remains editable;
-- direction axis remains an editable vector role;
-- horizontal left/right realistic stress retains `108px` bottom clearance after the deeper-axis polish;
-- no unintended flatten/raster replacement introduced;
-- retained legacy and rollback evidence remain intact.
+- direction axis remains editable vector geometry;
+- realistic horizontal stress preserves `108px` bottom clearance;
+- retained legacy and rollback evidence remain intact;
+- no full-page raster/flatten replacement introduced.
 
-## Image / Drive decision
+## Hybrid / image decision
 
-`IMAGE_GENERATION_NOT_REQUIRED` for the current V4 direction. Wayfinding quality depends on destination hierarchy, direction recognition and physical sign readability; generated imagery would compete with the sign's functional job.
+- variable destination/floor/room/direction roles: native Figma text;
+- functional direction axis: editable vector/geometry;
+- fixed accent geometry: native vector/shape;
+- generated/composed raster: `0`;
+- replaceable image role: not required;
+- Drive writes: `0`.
 
-Live Drive readback on 2026-08-19:
+`IMAGE_GENERATION_NOT_REQUIRED`: wayfinding quality is determined by recognition, hierarchy and route correctness; decorative imagery would compete with the functional sign.
 
-- folder ID: `1ASWOTXO4fosLb9reWxQrHL2_UUC_Y8-3`;
-- parent: `0ADXt8irGMFGnUk9PVA`;
-- Drive writes in the latest polish: `0`.
+## BLOCKED_REQUIRED_INPUT / DEFERRED_FINALIZATION
 
-## Information accuracy gate — BLOCKED_REQUIRED_INPUT
+Do not fabricate:
 
-The design is visually complete with placeholders, but the following may not be fabricated:
-
-- official destination names and venue terminology;
-- exact left/right/forward direction at each installation point;
-- floor / room labels;
+- official destination names / venue terminology;
+- exact left/right/forward direction per installation point;
+- final floor/room labels;
 - sign count and installation locations.
 
-## DEFERRED_FINALIZATION
+Finalization also waits for:
 
-- final venue route facts / installation points;
-- final room/floor wording;
 - stand/frame/wall-mount interference check;
-- matte/low-glare check under venue lighting;
+- matte/low-glare venue-light check;
 - route walk-through by a first-time visitor;
-- printer template/profile, bleed/trim confirmation;
-- 100% physical print proof;
-- final PDF export and Drive storage.
+- printer template/profile and bleed/trim confirmation;
+- 100% physical print proof and final PDF/Drive export.
 
 ## Current result
 
-- Clean-room selected visual: `V4`
-- Reopened sellable visual QA: `PASS`
-- Semantic guest-copy hardening: `PASS`
-- Deeper horizontal direction-axis rhythm: `PASS`
-- Long-copy structural QA: `PASS`
-- Native editability: `PASS`
-- Legacy preservation: `PASS`
-- Physical proof: `NOT_RUN`
-- Print-ready: `NO`
-- Completion state: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS`
+`CLEANROOM_V4_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / REDUNDANT_ENGLISH_DESTINATION_SUBTRACTION_PASS / LONG_COPY_STRESS_PASS / LEGACY_PRESERVED / NOT_PRINT_READY`
+
+Next progression target: `ADD-11 写真共有 / ハッシュタグ / QR案内サイン`.
