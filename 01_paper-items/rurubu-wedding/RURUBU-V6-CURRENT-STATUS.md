@@ -8,14 +8,14 @@ Production state: separate clean-room V6; V7 is HOLD
 
 ## Current declaration
 
-`V6_LIVE_FIGMA_IN_PROGRESS / OUTER_GB_PREFERRED / PROFILE_QA_GN_PREFERRED / STORY_CHRONOLOGY_GP_PREFERRED / MEMORY_SPOTS_GE_PREFERRED / GOURMET_CAFE_GJ_PREFERRED / ONE_DAY_PLAN_GQ_PREFERRED / NATIVE_VARIABLE_TEXT_PRESERVED / REPLACEABLE_PHOTOS_PRESERVED / CURRENT_REVIEW_BOARD_3X2_LIVE_VERIFIED / V7_HOLD / NOT_PRINT_READY`
+`V6_LIVE_FIGMA_IN_PROGRESS / OUTER_GB_PREFERRED / PROFILE_QA_GR_PREFERRED / STORY_CHRONOLOGY_GP_PREFERRED / MEMORY_SPOTS_GE_PREFERRED / GOURMET_CAFE_GJ_PREFERRED / ONE_DAY_PLAN_GQ_PREFERRED / NATIVE_VARIABLE_TEXT_PRESERVED / REPLACEABLE_PHOTOS_PRESERVED / CURRENT_REVIEW_BOARD_3X2_LIVE_VERIFIED / V7_HOLD / NOT_PRINT_READY`
 
 ## Live Figma preferred set
 
 Fresh live readback confirmed the six preferred V6 spreads on `845:2 / 00_RURUBU_START_HERE`:
 
 - Outer GB `1929:2`; x `272000`, y `0`.
-- Profile / Q&A GN `1957:2`; x `273800`, y `0`.
+- Profile / Q&A GR `1971:2`; Profile page `1971:3`; x `273800`, y `0`.
 - Story / chronology GP `1961:2`; chronology right `1961:28`; x `275600`, y `0`.
 - Memory Spots GE `1941:2`; x `272000`, y `1300`.
 - Gourmet / Cafe GJ `1954:2`; x `273800`, y `1300`.
@@ -23,96 +23,69 @@ Fresh live readback confirmed the six preferred V6 spreads on `845:2 / 00_RURUBU
 
 Start Here `845:27`:
 
-`V5 FU/FX · V6 GB + GN/GP + GE MEMORY SPOTS + GJ CAFE & TABLE + GQ 1DAY PLAN · V7 HOLD`
+`V5 FU/FX · V6 GB + GR/GP + GE MEMORY SPOTS + GJ CAFE & TABLE + GQ 1DAY PLAN · V7 HOLD`
 
-GO `1958:2` is hidden rollback for GP. GP long-copy proof `1962:2 / 1962:28` is hidden evidence. GD `1938:2` is hidden rollback for GQ. Other prior comparisons/rollbacks remain preserved hidden.
+GN `1957:2` is hidden rollback for GR. GO `1958:2` remains hidden rollback for GP. GP long-copy proof `1962:2 / 1962:28` remains hidden evidence. GD `1938:2` remains hidden rollback for GQ. Other prior comparisons/rollbacks remain preserved hidden.
 
-## Latest verified progress — GP Wedding terminal editorial typography
-
-At equal-scale review, GO chronology had a strong 01→03→05 sequence but the final `06 / WEDDING` was visually under-resolved. GP promoted only the final native number/date/title/body and existing yellow rule into a horizontal final-destination beat. No photo, hash, asset, earlier event or Story geometry changed.
-
-Verification:
-
-- 500px whole PASS;
-- 1200px reading PASS;
-- chronology actual-size `794×1123` PASS;
-- visible native text `32`;
-- text collision `0`;
-- 18px safe risk `0`;
-- overflow `0`.
-
-The event-6 stack is native auto-height. Hidden realistic long-copy proof `1962:2 / 1962:28` also passes collision `0`, safe risk `0`, overflow `0` at actual size.
-
-Evidence:
-`01_paper-items/rurubu-wedding/evidence/RURUBU-V6-GP-WEDDING-TERMINAL-TYPO-QA-2026-08-20.md`
-
-Learning:
-`docs/design-learning/rurubu-shared-learning-feed.append/2026-08-20-rsl-140-editorial-page-ending-terminal-typography.md`
-
-## Latest verified progress — GQ 1DAY stop metadata readability
+## Latest verified progress — GR Profile closing typography
 
 ### Visible problem
 
-The 1DAY Plan right page had a strong photo hierarchy and clear STOP sequence, but all four reader-facing metadata rows (`MOVE / WALK`, `MOOD / MORNING`, etc.) remained 10px. At actual size they were technically present but visually weaker than intended and close to micro-annotation territory.
+GN had already intentionally removed the third Profile snapshot photo, but the residual `03 / 次の旅へ。` role still used a large vertically separated number, long editorial rule and widely separated native copy. At whole-item and actual-size review it could still imply a missing third-photo slot rather than an intentional typographic closing feature.
 
 ### Bounded rollback-safe test
 
-GQ changed only four native metadata text roles:
+GR `1971:2` was duplicated from GN and changed only the Profile 03 closing role:
 
-- `TEXT / STOP_01_META`;
-- `TEXT / STOP_02_META`;
-- `TEXT / STOP_03_META`;
-- `TEXT / STOP_04_META`.
+- compacted native `03`, metadata, title and body into one lower-right editorial group;
+- removed the long vertical decorative rule;
+- retained one short horizontal accent rule;
+- changed no photo, image hash, Profile data, Q&A, page geometry or composed route texture;
+- added no generated asset, card, shadow, gradient or new image role.
 
-Each changed from `10px → 11.5px`.
-
-Unchanged:
-
-- all photos/crops/image hashes;
-- STOP numbers, times, titles and body copy;
-- left page;
-- route geometry;
-- closing photo caption;
-- overall composition.
+The first candidate geometry clipped `次の旅へ。` and was not promoted. After widening/repositioning the native copy, structure QA still found one number/title contact. The number was shifted left and QA rerun before adoption.
 
 ### Verification
 
-- 500px whole spread: PASS; metadata stays subordinate and does not flatten the stop hierarchy;
-- right page actual-size `794×1123`: PASS and more comfortably readable;
-- right-page visible native text: `25`;
+- 500px whole spread: PASS;
+- 1200px reading: PASS;
+- Profile actual-size `794×1123`: PASS;
+- visible native text: `26`;
 - absolute text collisions: `0`;
 - 18px safe-area risks: `0`;
-- overflow: `0`.
-
-No fresh long-copy proof was required because this bounded test changed fixed short reader-facing metadata size only; no variable copy was moved or narrowed.
+- visible page-level stray text: `0`.
 
 Evidence:
-`01_paper-items/rurubu-wedding/evidence/RURUBU-V6-GQ-1DAY-METADATA-READABILITY-QA-2026-08-20.md`
+`01_paper-items/rurubu-wedding/evidence/RURUBU-V6-GR-PROFILE-CLOSING-TYPO-QA-2026-08-20.md`
 
 Feedback:
-`docs/wedding-design-learning-feedback-log.append/2026-08-20-rurubu-v6-gq-1day-metadata-readability.md`
+`docs/wedding-design-learning-feedback-log.append/2026-08-20-rurubu-v6-gr-profile-closing.md`
 
-Shared-learning corroboration:
-`docs/design-learning/rurubu-shared-learning-feed.append/2026-08-20-rsl-133-corroboration-1day-metadata-readability.md`
+Learning:
+`docs/design-learning/rurubu-shared-learning-feed.append/2026-08-20-rsl-141-typography-closes-optional-image-role.md`
 
-This corroborates existing RSL-133; it does not create a new promoted rule.
+State: `VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE` for the method only; exact Rurubu composition remains item-specific.
+
+## Prior verified progress retained
+
+- GP keeps the final `06 / WEDDING` as a native terminal editorial beat with 500px / 1200px / actual-size PASS and dynamic-copy stress PASS.
+- GQ keeps its four short reader-facing stop metadata roles at `11.5px`, preserving the major/minor hierarchy while remaining readable at actual size.
+- Existing generated Profile / Q&A / Timeline / Memories masters remain stored and unadopted until a quality-preserving placement path and actual-size QA are verified.
 
 ## Shared-learning / scope behavior
 
 - read `docs/design-learning/SHARED-DESIGN-LEARNING-SYSTEM.md` before writes;
 - read the Rurubu shared feed as source-scope learning;
 - read the neutral non-Rurubu feed only as permitted principle/QA input;
-- did not use cross-scope learning as permission to mutate non-Rurubu production;
+- did not inspect or mutate non-Rurubu item-specific Figma, Drive, ledgers, assets or GitHub paths;
 - project-wide hybrid Figma authoring remains `PROMOTED_PROJECT_RULE`;
-- RSL-140 and RSL-133 remain local cross-item candidates, not promoted visual rules.
+- RSL-141 is locally verified only, not a promoted visual rule.
 
 ## Drive / asset truth
 
 Drive root reverified:
 
 `1wHxC2E09JpLIQRNDDTY4i29KMwMY2_XK / RURUBU_V6_HAWAII_2026-08-02`
-
-Existing generated Profile / Q&A / Timeline / Memories masters remain stored and unadopted until a quality-preserving placement path and actual-size QA are verified.
 
 Latest run:
 
@@ -121,9 +94,7 @@ Latest run:
 - new Drive saves: `0`;
 - new external binary placements: `0`;
 - new image hashes: `0`;
-- GP adopted + visually verified: YES;
-- GP dynamic-copy stress: PASS;
-- GQ adopted + visually verified: YES;
+- GR adopted + visually verified: YES;
 - native variable text preserved: YES;
 - replaceable photos preserved: YES;
 - rollback states preserved: YES;
@@ -142,14 +113,14 @@ Do not call V6 complete or print-ready until all of the following are verified:
 
 Current state:
 
-`V6 GB + GN/GP + GE + GJ + GQ = VERIFIED_LOCAL_DUMMY_DESIGN_STUDIES / PHOTO_LED_TRAVEL_GUIDE_GRAMMAR / NATIVE_TEXT_EDITABILITY_PRESERVED / REPLACEABLE_PHOTOS_PRESERVED / CURRENT_REVIEW_BOARD_LIVE_VERIFIED / ROLLBACK_SAFE / V7_HOLD / NOT_PRINT_READY`.
+`V6 GB + GR/GP + GE + GJ + GQ = VERIFIED_LOCAL_DUMMY_DESIGN_STUDIES / PHOTO_LED_TRAVEL_GUIDE_GRAMMAR / NATIVE_TEXT_EDITABILITY_PRESERVED / REPLACEABLE_PHOTOS_PRESERVED / CURRENT_REVIEW_BOARD_LIVE_VERIFIED / ROLLBACK_SAFE / V7_HOLD / NOT_PRINT_READY`.
 
 ## Next highest-value work
 
 1. Continue V6, not V7.
 2. Re-read exact live preferred IDs and parent page before every write.
 3. Judge all six spreads at the same scale before choosing the next defect.
-4. Audit the smallest meaningful reader-facing copy at actual size, but preserve real major/minor hierarchy instead of enlarging everything uniformly.
+4. Audit any remaining role that visually implies an unfilled placeholder or internal template convention even when the structure is technically complete.
 5. Prefer stronger native editorial hierarchy or existing legitimate photo roles before creating another image role.
 6. Treat photo frames, labels, rails and containers as subtraction candidates only after verifying binding/contrast/physical function.
 7. Re-run actual-size collision, safe-area, parent-containment and realistic long-copy QA after material dynamic-copy movement near trim/footer/fold.
