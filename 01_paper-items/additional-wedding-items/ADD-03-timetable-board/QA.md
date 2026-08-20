@@ -1,108 +1,91 @@
 # ADD-03 当日タイムテーブルボード — QA
 
-Status: `CURRENT / CLEANROOM_V2_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / LONG_COPY_STRESS_PASS / REDUNDANT_TRANSFER_STATUS_REMOVAL_PASS / LEGACY_PRESERVED / NOT_PRINT_READY`
-Updated: 2026-08-19
+Status: `CURRENT / VNEXT_PRO_TIDE_DAY_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / LONG_COPY_STRESS_PASS / ROLLBACK_SAFE / LEGACY_PRESERVED / NOT_PRINT_READY`
+Updated: 2026-08-21
 Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
 
 ## Current Figma authority
 
-The older promoted production `1:5 / FRAME_TIMETABLE_BOARD` is retained as legacy comparison/rollback history. It is **not** the current selected visual family after the 2026-08-15 clean-room rebuild.
+Figma file: `woFUHUqZcvNkih8o42xeH4`.
 
-Current selected clean-room family:
+Current selected Professional vNext family:
 
-- Figma file: `woFUHUqZcvNkih8o42xeH4`
-- A2 selected: `14:2 / CLEANROOM_V2_ADD03_DAY_INDEX` — `1400×1980`
-- A3 selected: `15:40 / CLEANROOM_V2_ADD03_A3_DAY_INDEX_REFLOW` — `990×1400`
-- A2 long-copy proof: `15:2 / QA_ADD03_CLEANROOM_V2_LONG_COPY_STRESS` — hidden after QA
-- A3 long-copy proof: `15:72 / QA_ADD03_A3_CLEANROOM_V2_LONG_COPY_STRESS` — hidden after QA
-- retained legacy: `1:5 / FRAME_TIMETABLE_BOARD`
-- Drive authority: `1uVcXv2Xs0H7juheHk977pt7YxLMJez_j / ADD-03_当日タイムテーブルボード`
+- A2 selected: `14:2 / VNEXT_PRO_ADD03_TIDE_DAY_A2_SELECTED` — `1400×1980`;
+- A3 selected: `15:40 / VNEXT_PRO_ADD03_TIDE_DAY_A3_SELECTED` — `990×1400`;
+- vNext source page: `36:2 / VNEXT_PRO / ADD-03 / DAY OF JOURNEY / 2026-08-21`;
+- selected A2 clean-room master: `36:20 / VNEXT_SELECTED_CANDIDATE / ADD-03 A2 / TIDE DAY`;
+- selected A3 clean-room master: `37:2 / VNEXT_SELECTED_CANDIDATE / ADD-03 A3 / TIDE DAY REFLOW`;
+- vNext A2 long-copy proof: `37:22 / QA / ADD-03 VNEXT A2 / LONG COPY STRESS` — hidden after QA;
+- vNext A3 long-copy proof: `37:42 / QA / ADD-03 VNEXT A3 / LONG COPY STRESS` — hidden after QA;
+- exact pre-vNext selected rollback: `40:111 / ROLLBACK / ADD-03 / PRE-VNEXT-PROMOTION / 2026-08-21`;
+- older legacy production remains untouched: `1:5 / FRAME_TIMETABLE_BOARD`.
 
-Clean-room source evidence: `CLEANROOM-V2-DAY-INDEX-QA-2026-08-15.md`.
+Drive authority: `1uVcXv2Xs0H7juheHk977pt7YxLMJez_j / ADD-03_当日タイムテーブルボード`.
+
+Primary vNext evidence: `FIGMA-VNEXT-PRO-TIDE-DAY-PROMOTION-2026-08-21.md`.
 
 ## Current visual direction
 
-`DAY INDEX / CHRONOGRAPHIC SHEET` treats the board as a large-format printed time score instead of event cards or simulated transport UI.
+`TIDE DAY / ONE CONTINUOUS DAY` treats the timetable as one continuous wedding-day movement rather than cards, a data chart, or simulated transport UI.
 
 Current first-glance hierarchy:
 
-1. `本日の旅程` + `2026.10.24 SAT / YOKOHAMA`;
-2. `14:10–14:40 / 挙式`;
-3. quiet unresolved transfer interval `14:40–15:00` + native semantic placeholder guidance;
-4. `15:00–17:30 / 披露宴`;
-5. authoritative date/location footer.
+1. `今日を、めぐる。` + `2026.10.24 SAT / YOKOHAMA`;
+2. large `14:10` + `挙式`;
+3. `14:40` + unresolved `14:40–15:00` native guidance;
+4. large `15:00` + `披露宴`;
+5. warm closing copy.
 
-No rounded-card dashboard structure, fake gate/flight data, repeated icons, shadows, gradients, generated imagery, or rasterized timetable is required.
+The deep-ocean field provides distance contrast while cyan/yellow/coral tide gestures create wedding-trip movement. The large fixed fields are deliberately bounded away from expanded variable-copy lanes after long-copy QA. No event cards, fake flight/gate/class data, barcode, route nodes, repeated badges, shadows, gradients or generated imagery are required.
 
-Fresh 2026-08-19 whole/read/actual review confirms the hierarchy remains strong and intentionally asymmetric. The pale `24`, event index points, rules and time-axis geometry read as paper composition rather than UI controls.
+## Clean-room vNext provenance
 
-## Recent hardening retained in current selection
+The 2026-08-21 Professional vNext pass started from blank frames and reused only factual/non-visual requirements:
 
-### Native variable-text resilience
+- A2 `1400×1980` and A3 `990×1400` working formats;
+- confirmed date/location;
+- confirmed Ceremony and Reception intervals;
+- unresolved `14:40–15:00` semantic guidance role;
+- print/readability constraints.
 
-The genuinely variable guidance roles are native auto-height text in selected A2/A3 and their stress proofs:
+Three independent blank-frame A2 directions were made before selection:
 
-- `TXT_EVENT_01_NOTE`
-- `TXT_TRANSFER_LABEL`
-- `TXT_EVENT_02_NOTE`
+- `36:3 / SUN PATH / DAYLIGHT SCORE`;
+- `36:20 / TIDE / ONE CONTINUOUS DAY`;
+- `36:40 / WIND CLOCK / BIG TYPE`.
 
-The A2 Reception divider was moved down only as much as required to preserve `24px` long-copy clearance after natural-height reflow. Final selected/stress roots keep visible text outside root at `0`.
+`TIDE` was selected because it provided the best balance of emotional excitement, chronology, long-distance readability and travel/Hawaii warmth without using fake airline vocabulary. The retained prior selected design was opened only after the new candidate passed its own screenshot/structure/stress QA.
 
-Evidence: `FIGMA-CLEANROOM-V2-NATIVE-TEXT-RESILIENCE-JA-TITLE-2026-08-17.md`.
+## Professional visual judgment
 
-### Japanese-first title and event labels
+Professional Design Council score: `92 / 100`.
 
-The generic English top label was replaced with native `本日の旅程`, and ordinary event labels use `挙式 / 披露宴`. This keeps the travel concept in the artifact/chronology grammar rather than decorative English filler.
+The prior `DAY INDEX / CHRONOGRAPHIC SHEET` remains competent editorial history, but the new TIDE DAY family clearly wins the explicit current brief for stronger pop, travel energy, celebration and memorable large-format presence while keeping time information immediate.
 
-### Generic closing removal
+Current state therefore holds:
 
-`Thank you for traveling with us.` was removed from A2/A3 selected and long-copy proofs because it added stock wedding-travel copy without schedule information. The footer date/location remains the closing anchor.
-
-Evidence: `FIGMA-GENERIC-ENGLISH-CLOSING-REMOVAL-2026-08-18.md`.
-
-### Redundant duration / connector subtraction
-
-Fresh A2/A3 review found tiny English `30 MIN`, `UNTIL`, and `2 H 30 MIN` microcopy surviving even though every authoritative start/end time is already printed directly. The A2-only duration labels also made the larger format feel more like a data chart than the cleaner A3 reflow.
-
-Rollback-safe selected/stress copies were created at `29:2 / 29:40 / 29:72 / 29:110`, then only the redundant duration/connector text was hidden. No schedule fact, timeline geometry, node marker, Japanese event label or semantic guidance field changed.
-
-Post-change selected/stress roots all have visible `UNTIL/MIN` microcopy `0` and outside visible text `0`; stress proofs returned to hidden state after QA.
-
-Evidence: `FIGMA-REDUNDANT-DURATION-CONNECTOR-SUBTRACTION-QA-2026-08-19.md`.
-
-### Redundant transfer-status subtraction
-
-Fresh whole-item review found an isolated red `TBD` at the right edge of the `14:40–15:00` transfer interval even though the same unresolved state was already communicated by native semantic guidance directly under the time.
-
-A2 comparison `31:2` hid only `TXT_TRANSFER_STATUS`; it read more like a guest-facing schedule and less like an internal status board while preserving the unresolved interval itself. The same bounded change was then applied to A2/A3 selected and both long-copy proofs.
-
-Hidden rollback roots:
-
-- `31:40` A2 selected;
-- `31:78` A3 selected;
-- `31:110` A2 stress;
-- `31:148` A3 stress.
-
-Current hidden status nodes: `14:27 / 15:60 / 15:27 / 15:92`. No schedule fact, transfer time, event node, rule or semantic placeholder was removed.
-
-Evidence: `FIGMA-REDUNDANT-TBD-STATUS-REMOVAL-QA-2026-08-19.md`.
+`SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS`.
 
 ## Structure / stress QA
 
-Current verified state:
+Post-promotion current selected readback:
 
-- A2 selected: native editable text, IMAGE fill `0`, outside visible text `0`;
-- A3 selected: native editable text, IMAGE fill `0`, outside visible text `0`;
-- A2/A3 selected: visible native text `18` each after status subtraction;
-- variable guidance roles: `textAutoResize=HEIGHT`;
-- A2 long-copy Reception note → divider clearance remains protected;
-- A3 long-copy Reception note → divider clearance remains protected;
-- no residual visible `UNTIL/MIN/TBD` template/status microcopy in selected/stress;
-- no variable copy baked into raster/SVG;
-- stress proofs return to hidden state after inspection;
-- retained legacy remains unchanged.
+- A2 `14:2`: `1400×1980`, `clipsContent=true`, visible native text `15`, auto-height `15/15`, IMAGE fills `0`, outside visible text `0`;
+- A3 `15:40`: `990×1400`, `clipsContent=true`, visible native text `15`, auto-height `15/15`, IMAGE fills `0`, outside visible text `0`;
+- all factual/variable roles remain native editable text;
+- no variable copy is baked into SVG/raster.
 
-Numeric bounding-box probes still flag some intentional/optical intersections involving the pale atmosphere numeral and oversized time typography. Fresh 500px, 1000px and native `1400×1980` screenshots show no new visible glyph collision from the current change, so good optical composition is not altered solely to satisfy box math.
+Realistic long-copy stress on `37:22 / 37:42` initially revealed fixed cyan/coral tide fields entering expanded Ceremony/Reception copy lanes. Only those fixed field widths were reduced. Facts, typography, time positions and semantic roles were unchanged.
+
+After the bounded repair:
+
+- A2/A3 stress screenshots PASS;
+- Ceremony/Reception expanded guidance keeps a stable dark-navy copy lane;
+- transfer expanded guidance remains clear of the yellow time field;
+- stress roots keep auto-height native text and outside visible text `0`;
+- stress proofs are hidden after verification.
+
+This consumes the existing cross-item QA rule that dynamic copy must be revalidated against fixed decoration; it does not introduce a new shared-learning claim.
 
 ## Fact / placeholder contract
 
@@ -111,27 +94,42 @@ Confirmed facts only:
 - date: `2026.10.24 SAT`;
 - location: `YOKOHAMA`;
 - Ceremony: `14:10–14:40`;
-- transfer interval: `14:40–15:00`, activity still unresolved and visibly secondary through native semantic placeholder guidance;
+- transfer interval: `14:40–15:00`, activity remains unresolved and represented only through native semantic guidance;
 - Reception: `15:00–17:30`.
 
-Do not invent opening time, venue floor, gate, flight number, QR, transport credentials or other operational facts. Unknown guidance stays native semantic placeholder copy.
+Do not invent opening time, venue floor, gate, flight number, QR, transport credential or other operational fact. Unknown guidance stays native editable placeholder copy.
 
-## Drive / generated assets
+## Hybrid authoring / Drive
 
-- exact Drive folder live-read on 2026-08-19: `1uVcXv2Xs0H7juheHk977pt7YxLMJez_j`;
-- generated/raster production assets required by current design: `0`;
-- Drive write in this run: `0`.
+- native text: factual/variable copy;
+- editable Figma geometry: fixed tide movement fields;
+- reusable SVG: `0` needed;
+- generated raster: `0`;
+- replaceable IMAGE fills: `0`;
+- Drive writes: `0`.
 
-`IMAGE_GENERATION_NOT_REQUIRED`: hierarchy, typography and paper chronology carry the design; missing imagery is not the current bottleneck.
+`IMAGE_GENERATION_NOT_REQUIRED`: screenshot diagnosis showed that chronology, scale, movement and viewing-distance readability were the actual design bottlenecks. Photography/illustration would compete with the timetable rather than solve that problem.
+
+## Historical QA retained
+
+Previous clean-room V2 evidence remains valid as historical structure/process evidence only and is preserved in Git history, including:
+
+- `CLEANROOM-V2-DAY-INDEX-QA-2026-08-15.md`;
+- `FIGMA-CLEANROOM-V2-NATIVE-TEXT-RESILIENCE-JA-TITLE-2026-08-17.md`;
+- `FIGMA-GENERIC-ENGLISH-CLOSING-REMOVAL-2026-08-18.md`;
+- `FIGMA-REDUNDANT-DURATION-CONNECTOR-SUBTRACTION-QA-2026-08-19.md`;
+- `FIGMA-REDUNDANT-TBD-STATUS-REMOVAL-QA-2026-08-19.md`.
+
+Those older PASS states do not substitute for the current vNext visual evidence above.
 
 ## Deferred finalization
 
 Keep `NOT_PRINT_READY` until authoritative final inputs exist:
 
-- final transfer/activity wording;
+- final `14:40–15:00` wording;
 - exact printer template / bleed / safe-area values;
 - font availability and PDF embedding/output proof;
 - physical A2/A3 proof;
 - venue placement and approximately 1.5–2m viewing-distance check.
 
-Do not reopen the selected visual family for cosmetic churn unless a fresh screenshot or authoritative input exposes a concrete defect.
+These deferred items do not block progression to ADD-04. Reopen the current selected family only if a fresh screenshot or authoritative input exposes a concrete defect.
