@@ -1,0 +1,44 @@
+{
+  "date": "2026-08-20",
+  "scope": "Rurubu WEDDING V6 only",
+  "figma_file": "bfM0d4c9dCeBv5pCkJ3TNM",
+  "drive_root": {
+    "id": "1wHxC2E09JpLIQRNDDTY4i29KMwMY2_XK",
+    "name": "RURUBU_V6_HAWAII_2026-08-02",
+    "verified": true
+  },
+  "preferred": {
+    "outer": "2014:2 / HD",
+    "profile_qa": "2004:2 / GZ",
+    "story_chronology": "2024:2 / HJ",
+    "memory_spots": "2003:2 / GY",
+    "cafe_table": "2012:2 / HC",
+    "one_day_plan": "2019:2 / HS"
+  },
+  "story_hj": {
+    "story_page": "2024:3",
+    "native_text_visible": 12,
+    "text_collisions": 0,
+    "safe_area_18px_risks": 0,
+    "image_roles": [
+      {"role":"PHOTO / STORY_HERO_REPLACEABLE","size":"820x520","hash":"539c259be8036b481d06b4f76db9a39b407d90e8","changed_hash":false},
+      {"role":"PHOTO / STORY_SUPPORT_1_REPLACEABLE","size":"238x216","hash":"644f449c3bf2001a94d4b822d2b55e2614c11042","changed_hash":false},
+      {"role":"PHOTO / STORY_SUPPORT_2_REPLACEABLE","size":"545x370","hash":"c1ada11205bc3978bf426b304d683f1c1566cac2","changed_hash":false},
+      {"role":"DECOR / STORY_TRAVEL_TEXTURE_COMPOSED_RASTER","size":"375x500","hash":"691a6ceed471a5d8efa144052a10564eed177b4f","changed_hash":false}
+    ]
+  },
+  "run_asset_state": {
+    "generated": 0,
+    "adopted_generated": 0,
+    "drive_new_saves": 0,
+    "external_binary_placements": 0,
+    "new_image_hashes": 0,
+    "native_variable_text_preserved": true,
+    "replaceable_photos_preserved": true,
+    "v7_touched": false
+  },
+  "rollback": {
+    "GW": "1987:2 hidden",
+    "HI": "2023:111 hidden"
+  }
+}
