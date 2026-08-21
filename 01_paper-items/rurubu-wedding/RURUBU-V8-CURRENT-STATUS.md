@@ -6,11 +6,11 @@ Authority order: live Figma → verified Drive → Rurubu evidence → this stat
 Figma file: `bfM0d4c9dCeBv5pCkJ3TNM`
 V6 control: frozen `JC + IX + JB + IZ + IT + JA`
 V7 comparison set: six-role clean-room study, preserved and not preferred
-Production state: `V8_F_6_OF_6_STUDY_SET_COMPLETE / GENERATED_MASTER_PLACEMENT_VERIFIED / NOT_FINAL_WINNER / NOT_PRINT_READY`
+Production state: `V8_F_6_OF_6_STUDY_SET_COMPLETE / STORY_TYPOGRAPHIC_ESSAY_PROMOTED / GENERATED_MASTER_PLACEMENT_VERIFIED / NOT_FINAL_WINNER / NOT_PRINT_READY`
 
 ## Current declaration
 
-`V6_CONTROL_PRESERVED / V7_6_OF_6_PRESERVED / V8_F_CLEANROOM_6_OF_6_CURRENT / V8_DISTINCT_BOOK_DESIGN_SYSTEM / NATIVE_VARIABLE_TEXT_PRESERVED / 5_GENERATED_MASTER_PLACEMENTS_VERIFIED / INTERNAL_PROCESS_COPY_0 / V8_STRUCTURE_QA_PASS / V8_PROFESSIONAL_AUTHENTICITY_IMPROVED / V8_DESTINATION_SPECIFICITY_STILL_WEAK / NOT_PREFERRED / NOT_PRINT_READY`
+`V6_CONTROL_PRESERVED / V7_6_OF_6_PRESERVED / V8_F_CLEANROOM_6_OF_6_CURRENT / V8_DISTINCT_BOOK_DESIGN_SYSTEM / NATIVE_VARIABLE_TEXT_PRESERVED / 5_GENERATED_MASTER_PLACEMENTS_VERIFIED / STORY_FAKE_PHOTO_SLOTS_0 / INTERNAL_PROCESS_COPY_0 / V8_STRUCTURE_QA_PASS / V8_PROFESSIONAL_AUTHENTICITY_IMPROVED / V8_DESTINATION_SPECIFICITY_STILL_WEAK / NOT_PREFERRED / NOT_PRINT_READY`
 
 ## Current V8 F roots
 
@@ -22,8 +22,10 @@ Production state: `V8_F_6_OF_6_STUDY_SET_COMPLETE / GENERATED_MASTER_PLACEMENT_V
    - current generated visual role `2164:6`
    - Drive `1MsisJ-qed1vYjGbMFiylN2DI6Lim_1Ko`
    - hash `10b2245252d959dfeebc8df8fa9502fcba1e848d`
-3. Story/Chronology `2163:22`
+3. Story/Chronology `2171:2`
+   - current direction: typography-led emotional Story + factual Chronology
    - no legitimate current V8 generated image role is claimed
+   - previous fake-photo-slot Story root `2163:22` preserved hidden as rollback at `x=5400 / y=3200`
 4. Memory/Guide `2164:25`
    - current generated visual role `2164:29`
    - Drive `1hmk0-lnk_c7KmurWPAsUMUFB5NpKT1GC`
@@ -46,6 +48,8 @@ V8 folder:
 
 The five current V8 F generated/composed roles above have exact Drive master IDs and exact Figma image hashes recorded separately. Byte identity between a Drive master and an in-file Figma image object is not asserted unless separately verified.
 
+Story intentionally has no Drive image ID because this pass did not fabricate or mislabel an unrelated image as a Story asset.
+
 ## Professional learning shaping current V8
 
 Current V8 decisions combine:
@@ -56,38 +60,42 @@ Current V8 decisions combine:
 - physical-book thinking: page turn, dummy/prototype, paper and binding affect reading rhythm;
 - quiet pages are valid only when they perform a sequence/pacing job;
 - travel/subject desire must survive restraint;
-- reader-facing copy must never expose design-process/schema language.
+- reader-facing copy must never expose design-process/schema language;
+- Japanese text quality must consider mojikumi/kinsoku and mixed Japanese/Latin/numeral rhythm, not only collision-free boxes;
+- an absent legitimate image is not permission to preserve a fake image slot.
 
-The current bounded result is that V8 F feels materially less template/AI-like than the earlier high-energy studies, but still lacks enough destination-specific visual evidence to defeat V6 on travel desire.
+The latest Story test used W3C JLREQ and Adobe Japanese-composition guidance as professional reference. The bounded local result is that a typography-led emotional opening can be more authentic than unresolved photo containers when the facing page already performs the factual chronology job.
 
 ## Current structural QA
 
-Post-placement/post-copy readback:
+Post-Story-promotion readback:
 
 | Role | Native text | Text intersections | 18px safe risk | visible internal process-language fingerprint | IMAGE |
 | --- | ---: | ---: | ---: | ---: | ---: |
 | Outer | 12 | 0 | 0 | 0 | 1 |
 | Profile/Q&A | 18 | 0 | 0 | 0 | 1 |
-| Story/Chronology | 22 | 0 | 0 | 0 | 0 |
+| Story/Chronology | 25 | 0 | 0 | 0 | 0 |
 | Memory/Guide | 20 | 0 | 0 | 0 | 1 |
 | Cafe/Table | 10 | 0 | 0 | 0 | 1 |
 | 1DAY/Model Course | 21 | 0 | 0 | 0 | 1 |
 
-Representative 1400px visual readback was performed across all six current roots after the generated-master and reader-copy pass.
+Story-specific readback:
+- visible old fake photo slots `L_PHOTO_1/2/3`: `0`
+- visible internal design/schema language: `0`
+- three-scale visual readback: 500px thumbnail, 1400px reading, 1588×1123 actual/natural render PASS for this bounded dummy-design study
+- whole-page flattening: `0`
 
 ## Asset truth
 
-Latest V8 F pass:
+Latest Story pass:
 
 - new image-model generation: `0`
 - newly created Drive masters: `0`
-- verified existing V8 generated masters newly adopted into current V8 F: `5`
+- new Figma image placements: `0`
 - V6 image hashes reused: `0`
 - Story image falsely substituted from another semantic role: `0`
 
-The useful transport result is not “Drive is broken.” The current successful route is:
-
-`Drive authority readback → exact existing V8 in-file imageHash → current V8 F replaceable/fixed visual role → screenshot/structure QA`
+This is not counted as a successful new generation → Drive → Figma closure. The current environment did not expose a free image-generation path that could create a role-valid new Story master and safely store it in Drive in this run. The design therefore switched method rather than ending with fake placeholders or repeating an already-known blocked transport route.
 
 For genuinely new future assets, the target remains:
 
@@ -99,7 +107,7 @@ If one external upload route fails, switch method rather than ending the workflo
 
 - **V6** remains the strongest control for immediate travel desire, photographic atmosphere and Rurubu-like excitement.
 - **V7** remains useful as a high-energy clean-room experiment but is weakened by synthetic/schematic image craft.
-- **V8 F** currently has the strongest book/editorial pacing and anti-template signal, and the five generated-master placements make it more honestly judgeable than its placeholder state. It still risks being too destination-neutral.
+- **V8 F** currently has the strongest book/editorial pacing and anti-template signal. Story is now more honest and publication-like because unresolved image containers were removed rather than disguised. V8 still risks being too destination-neutral.
 
 No global winner is promoted.
 
@@ -107,12 +115,14 @@ No global winner is promoted.
 
 1. Do not create V9.
 2. Keep V6, V7 and V8 F intact for comparison.
-3. Produce a genuinely role-specific V8 Story/Chronology visual first; do not fill it with an unrelated asset.
-4. Re-test Outer and Cafe with stronger destination/sensory visual art only if the live comparison proves their current abstract masters are the bottleneck.
-5. New assets must close the full generation → Drive → Figma → crop/hash → three-scale QA loop.
-6. Compare all three versions on both professional editorial quality and travel desire.
-7. Keep DESIGN QA, REAL CONTENT QA, PRINT TEMPLATE/PREFLIGHT and PHYSICAL PROOF separate.
+3. Keep current Story root `2171:2` unless a genuinely role-valid visual clearly beats the typography-led version.
+4. When free image generation is available, produce Story-specific candidates and close generation → Drive → Figma → crop/hash → three-scale QA; do not use unrelated assets.
+5. Re-test Outer and Cafe with stronger destination/sensory art only if live comparison proves current abstract masters are the bottleneck.
+6. Run a deliberate final-copy mojikumi/kinsoku pass after real copy is known.
+7. Compare all three versions on both professional editorial quality and travel desire.
+8. Keep DESIGN QA, REAL CONTENT QA, PRINT TEMPLATE/PREFLIGHT and PHYSICAL PROOF separate.
 
 Detailed evidence:
 
-`01_paper-items/rurubu-wedding/evidence/RURUBU-V8-CLEANROOM-F-SIX-ROLE-STUDY-2026-08-21.md`
+- `01_paper-items/rurubu-wedding/evidence/RURUBU-V8-CLEANROOM-F-SIX-ROLE-STUDY-2026-08-21.md`
+- `01_paper-items/rurubu-wedding/evidence/RURUBU-V8-STORY-TYPOGRAPHIC-ESSAY-PASS-2026-08-21.md`
