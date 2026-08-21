@@ -1,209 +1,161 @@
 # ADD-11 写真共有 / QR案内サイン — QA
 
-Status: `CURRENT / FAMILY_DIVERSITY_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / A5_A4_REFLOW_PASS / LONG_COPY_STRESS_PASS / STRUCTURE_READBACK_PASS / LEGACY_AND_PRIOR_VNEXT_PRESERVED / NOT_PRINT_READY`
-Updated: 2026-08-21
+Status: `CURRENT / PROFESSIONAL_VNEXT_DARKROOM_DEVELOPING_TRAY_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / FAMILY_DIVERSITY_IMPROVED / A5_A4_REFLOW_PASS / LONG_COPY_STRESS_PASS / JAPANESE_SEMANTIC_LINEBREAK_PASS / STRUCTURE_READBACK_PASS / LEGACY_AND_PRIOR_VNEXT_PRESERVED / NOT_PRINT_READY`
+Updated: 2026-08-22
 Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
 
 ## Current selected authority
 
-- latest `main` immediately before promotion: `414cc83a8470965381459e93c07db44f4e9ea82f`
+- latest `main` before this sync: `9d7418b19213cca55731062e8c64d75ca86929ff`
 - Figma file: `PWQ5ygJJt0IlOqj5ri5jng`
-- family-diversity page: `49:2 / FAMILY_DIVERSITY / ADD-11 PHOTO SHARE / 2026-08-21`
-- current A5: `49:39 / CURRENT / ADD-11 / PHOTO LAB ENVELOPE / A5 / FAMILY DIVERSITY 2026-08-21` — `875×1240`
-- current A4: `49:74 / CURRENT / ADD-11 / PHOTO LAB ENVELOPE / A4 / FAMILY DIVERSITY 2026-08-21` — `1240×1754`
-- hidden long-copy stress: A5 `49:109`, A4 `49:144`
-- prior Professional vNext preserved: A5 `45:2`, A4 `45:15`, renamed rollback and hidden
-- prior clean-room V2 and legacy remain preserved
+- Current page: `53:34 / CURRENT_SELECTED / ADD-11 / DARKROOM DEVELOPING TRAY / 2026-08-22`
+- Current A5: `52:2 / CURRENT / ADD-11 / DARKROOM DEVELOPING TRAY / A5` — `875×1240`
+- Current A4: `53:2 / CURRENT / ADD-11 / DARKROOM DEVELOPING TRAY / A4` — `1240×1754`
+- hidden realistic long-copy stress: `52:18 / 53:18`
 - exact Drive authority verified live: `1wuxHEqby_0JWS0bYV0RWCTUotM88Mnxb / ADD-11_写真共有_QR案内サイン`
-- Drive writes: `0`
+- Drive writes for this pass: `0`
 
-## Why the family-scale pass reopened ADD-11
+Canonical current evidence:
 
-The prior `NIGHT ALBUM` family remained a legitimate 90/100 single-item design. At suite scale, however, its dominant navy field plus lagoon rounded capsule plus coral/yellow accent system was close to the already-promoted `FAMILY_SCALE_TEMPLATE_REPETITION` fingerprint.
+- `PROFESSIONAL-VNEXT-DARKROOM-DEVELOPING-TRAY-QA-2026-08-22.md`
 
-The defect was not QR clarity and not missing imagery. It was that the visual language still belonged to the same repeated abstract-color-field family as several other vNext items.
+## Current visual direction — DARKROOM DEVELOPING TRAY
 
-## Clean-room method
+ADD-11 now uses a photographic-processing physical metaphor instead of an envelope/letter metaphor:
 
-New work began from blank frames and did not duplicate or reuse NIGHT ALBUM, prior V2, legacy production, old color fields, old geometry, old QR container, old accent vectors, or old layout groups.
+- deep-ink darkroom environment;
+- black developing tray;
+- one slightly rotated warm print sheet;
+- coral safelight edge;
+- narrow cyan process/chemistry edge;
+- Japanese-first headline `今日の写真を、みんなで現像しよう。`;
+- semantic native placeholders for sharing method, access/privacy scope, retention/expiry, hashtag/notice and QR;
+- yellow size/index tab and native date as production-label details.
 
-Only verified non-visual requirements were carried forward:
+No fake URL, fake QR destination, fake film metadata, scanner UI, generated wedding photography, gradients, shadows or stock-looking decorative imagery are used.
 
-- A5 `875×1240` and A4 `1240×1754` physical roles;
-- photo-sharing / QR guidance function;
-- semantic placeholders for QR, sharing method, privacy, expiry and hashtag;
-- native date `2026.10.24`;
-- final service URL, access scope, privacy wording, expiry and hashtag remain unresolved.
+The previous `PHOTO LAB ENVELOPE` remains a strong retained rollback/history design. It was not deleted or used as construction material for the new clean-room work.
 
-## Three blank-frame directions
+## Why this replaced PHOTO LAB ENVELOPE
 
-Created on `49:2`:
+`PHOTO LAB ENVELOPE` remained a legitimate `92/100` design, but its own earlier council record scored only `3/5` for family fit without template sameness. Later suite work introduced several unrelated letter/envelope/paper-insert artifacts. The new direction preserves photographic specificity while moving the dominant object to a developing tray / print-in-process, improving family diversity without sacrificing QR trust.
 
-1. `49:3 / PHOTO LAB ENVELOPE`
-2. `49:20 / CONTACT SHEET WALL`
-3. `49:30 / SUNSET FILM SLEEVE`
+Professional Design Council: `93/100 / PASS / NO VETO`.
 
-`PHOTO LAB ENVELOPE` was selected for full-size development because it makes the artifact about a recognizable photographic object: film edge + photo-paper insert + QR paper, rather than an abstract poster with a scanner widget.
+- concept clarity / ownability: `15/15`
+- emotional excitement / pick-up appeal: `13/15`
+- Japanese editorial typography: `14/15`
+- composition / hierarchy / rhythm: `14/15`
+- travel / memory integration without cliché: `8/10`
+- photo-share functionality / QR trust: `10/10`
+- print credibility: `9/10`
+- editability / content resilience: `5/5`
+- family fit without template sameness: `5/5`
 
-`CONTACT SHEET WALL` risked becoming a repeated panel/grid system. `SUNSET FILM SLEEVE` was visually warm but more decorative and less immediately legible for QR use.
+## Clean-room / preservation
 
-The A5/A4 candidates were rebuilt separately from blank full-size frames rather than duplicating the thumbnails.
+This pass started from new blank frames using only verified non-visual requirements:
 
-## Current art direction — PHOTO LAB ENVELOPE
+- A5 / A4 physical roles;
+- photo-sharing / QR guidance purpose;
+- confirmed date `2026.10.24`;
+- native semantic placeholders;
+- unresolved URL/privacy/expiry/hashtag facts remain unresolved.
 
-First read:
+New study page: `51:2`.
 
-`今日の景色を、みんなで一冊に。`
+Materially different studies:
 
-Visual system:
+1. `51:3 / CONTINUOUS PROOF STRIP` — rejected after screenshot exposed a Japanese semantic line-break failure and lead/headline collision.
+2. `51:32 / DARKROOM DEVELOPING TRAY` — selected for mature development.
+3. `51:44 / PRINT ARCHIVE TAPE` — rejected because it drifted toward system/UI information-panel grammar.
 
-- warm sand/kraft-like outer field;
-- black film edge with sprocket rhythm as a photography-specific physical cue;
-- large warm photo-paper insert;
-- coral paper tab and cyan photo-paper edge;
-- cream QR paper role with an invisible quiet-zone reserve;
-- native Japanese action/operational copy;
-- yellow date strip as a small print-lab label;
-- no camera icon, scanner orbit, route motif, fake QR destination, card UI, shadows, gradients or stock/generated wedding imagery.
-
-This gives ADD-11 a photography/print-lab grammar distinct from the guest ledger, baggage-ticket, hanging escort rack and other sign/poster artifacts while keeping the broader travel/keepsake family.
-
-## Hybrid authoring roles
-
-- variable guidance/privacy/expiry/hashtag: native editable Figma text;
-- QR: semantic native placeholder in a replaceable paper role with invisible quiet-zone geometry;
-- operational information stack: native Auto Layout;
-- fixed film/photo-paper construction: simple native geometry;
-- editable SVG: `0` — no reusable silhouette required a separate vector asset;
-- generated/composed raster: `0`;
-- IMAGE fills: `0`;
-- rasterized variable copy: `0`.
-
-`IMAGE_GENERATION_NOT_REQUIRED`: the screenshot-supported problem was suite-level abstract-shape repetition, not missing photography. Adding decorative photographs would weaken QR authority and could create fake-documentary or stock/AI risk.
+Prior Current PHOTO LAB ENVELOPE remains untouched at `49:39 / 49:74` in its original page. Prior NIGHT ALBUM, earlier V2 and legacy evidence also remain preserved.
 
 ## Three-scale screenshot QA
 
-A5 `49:39`:
+### A5
 
-- whole / ~500px: PASS — film edge and photo-paper insert read immediately as an item-specific photographic artifact;
-- reading / `706×1000`: PASS — title, QR, four semantic roles, closing and date are clear;
-- actual `875×1240`: structure and type scale remain credible.
+- whole / thumbnail: PASS;
+- reading: PASS;
+- native actual `875×1240`: PASS.
 
-A4 `49:74`:
+The developing tray + rotated print read as one photographic physical object. Headline, sharing roles and QR hierarchy remain clear.
 
-- whole / ~500px: PASS;
-- reading/detail reflow: PASS;
-- actual `1240×1754`: physical paper and QR roles remain proportionate rather than simply scaling the A5 UI.
+### A4
 
-Only after the new family matured was prior `NIGHT ALBUM` re-opened at thumbnail scale. NIGHT ALBUM remains valid history, but its full navy field and rounded lagoon gesture repeat the suite fingerprint more strongly. PHOTO LAB ENVELOPE wins the current family-diversity gate.
+- whole / thumbnail: PASS;
+- reading: PASS;
+- native actual `1240×1754`: PASS.
 
-## Long-copy stress / defect caught during this run
+A4 is an independently rebuilt reflow rather than a scaled A5 clone.
 
-Stress frames:
+## Long-copy / Japanese semantic line-break QA
 
-- A5 `49:109`
-- A4 `49:144`
+Stress roots: `52:18 / 53:18`.
 
-The first metadata readback caught a real failure before promotion.
+The first stress passes caught bad Japanese visual wrapping even though structural overflow was zero. Artificially overlong bracket labels produced splits such as `案 / 内` and `注意事 / 項`.
 
-### Initial A5 failure
+The stress contract was corrected to realistic semantic placeholders without inventing facts:
 
-- dynamic info stack `49:128`: y `520`, height `556`, bottom `1076`;
-- closing copy was y `930`;
-- photo-paper field ended near y `830`.
+- `[公開範囲に関する案内文]`
+- `[保存・削除時期に関する案内文]`
+- `[写真共有時の注意事項]`
 
-Long operational copy therefore escaped the intended physical paper and collided with the closing region.
+Copy lanes were widened where needed without shrinking type. Final A5/A4 stress screenshots: PASS. Stress roots were returned hidden after review.
 
-### Initial A4 failure
+## Structure / hybrid QA
 
-- dynamic info stack `49:163`: y ≈`735.5`, height ≈`794`, bottom ≈`1529.5`;
-- closing copy was y ≈`1315.5`;
-- photo-paper field ended near y `1174`.
+Current A5 `52:2`:
 
-The same failure reproduced in the independent A4 reflow.
-
-### Bounded correction
-
-A5 selected/stress:
-
-- photo-paper and cyan edge height → `900`;
-- close → y `1100`;
-- date strip/text → y `1165/1177`.
-
-A4 selected/stress:
-
-- photo-paper and cyan edge height → `1320`;
-- close → y `1580`;
-- date strip/text → y `1660/1677`.
-
-No font shrink, no QR shrink and no fake summary copy was used to make the stress fit.
-
-Final live stress screenshots:
-
-- A5 `706×1000`: PASS — four long semantic roles stay inside the photo-paper field; close/date remain separated below;
-- A4 `707×1000`: PASS — long-copy hierarchy remains intact inside the enlarged paper role with closing/date clear below.
-
-This is an item-local application of the already-known rule that material movement/expansion of dynamic copy must be freshly revalidated against fixed physical boundaries.
-
-## Structure / editability QA
-
-Current A5 metadata:
-
-- QR paper `49:55`, nested quiet-zone reserve `49:57`;
-- native Auto Layout info stack `49:58`;
-- semantic text remains native auto-height;
+- native visible text `8`;
+- fixed-height text `0`;
+- visible text outside root/role `0`;
 - IMAGE fills `0`.
 
-Current A4 metadata:
+Current A4 `53:2`:
 
-- QR paper `49:90`, quiet-zone reserve `49:92`;
-- native Auto Layout info stack `49:93`;
-- semantic text remains native auto-height;
+- native visible text `8`;
+- fixed-height text `0`;
+- visible text outside root/role `0`;
 - IMAGE fills `0`.
 
-Stress readback confirms Auto Layout expands naturally under long copy instead of clipping, and the corrected photo-paper role now contains that expansion.
+Stress A5/A4:
 
-## Professional Design Council
+- fixed-height text `0 / 0`;
+- outside `0 / 0`;
+- IMAGE fills `0 / 0`.
 
-Score: **92 / 100**.
+Responsibility split:
 
-- Concept clarity / ownability: `15/15`
-- Emotional excitement / pick-up appeal: `13/15`
-- Japanese editorial typography: `14/15`
-- Composition / hierarchy / rhythm: `14/15`
-- Travel / memory integration without cliché: `9/10`
-- Item-specific functionality / QR trust: `10/10`
-- Physical print credibility: `9/10`
-- Editability / content resilience: `5/5`
-- Family fit without template sameness: `3/5`
+- variable/factual/emotional copy: native Figma text;
+- QR: independent semantic native placeholder on replaceable white paper role;
+- tray / print / safelight / process edge / size tab: simple native fixed geometry with explicit physical meaning;
+- SVG `0`;
+- generated/composed raster `0`;
+- IMAGE fills `0`.
 
-No Executive Creative Director, Japanese Editorial or Print Production veto remains after the long-copy paper-field correction.
+`IMAGE_GENERATION_NOT_REQUIRED`: the diagnosed defect was family-level physical-metaphor convergence, not missing photography. Decorative generated photos would reduce truth/QR trust and add stock/AI risk.
 
-## Preservation
+## QR quiet-zone/container decision
 
-Promotion is rollback-safe:
+The mature candidate initially had a thin visible border around the white QR paper. A bounded application of the existing verified quiet-zone/container-subtraction method removed only that stroke while preserving the white paper and geometry. The QR role remained obvious but read less like a UI widget.
 
-- A5/A4 PHOTO LAB ENVELOPE become current;
-- prior NIGHT ALBUM A5/A4 are hidden and retained as rollback/history;
-- earlier V2 and legacy remain retained;
-- three blank-frame concepts and stress frames are hidden evidence, not authoring sources for future clean-room work.
+The real QR is still unresolved. Its final quiet zone and scan behavior must be revalidated with the approved URL.
 
 ## BLOCKED_REQUIRED_INPUT / DEFERRED_FINALIZATION
 
-Still requires authoritative:
+Still required and intentionally not fabricated:
 
 - sharing service / URL and account ownership;
-- access scope, permissions, retention/expiration and consent/privacy wording;
+- access scope / permissions / privacy wording;
+- retention / expiration;
 - hashtag decision;
-- final A5/A4 installation selection and whether A6 is needed;
-- real QR generated from the approved URL;
+- final A5/A4 installation choice and whether A6 is required;
+- real QR from the approved URL;
 - iPhone/Android + low-light/oblique physical scan proof;
-- printer template/profile, bleed/safe area, stand/frame interference, export and delivery.
+- printer template/profile, bleed/safe area, stock, frame/stand interference, export and physical print proof.
 
-The quiet-zone role must be revalidated with the real QR. No URL, permission, hashtag or expiry fact may be fabricated.
+## Previous Current evidence retained
 
-## Current result / next
-
-`FAMILY_DIVERSITY_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / A5_A4_REFLOW_PASS / LONG_COPY_STRESS_PASS / STRUCTURE_READBACK_PASS / LEGACY_AND_PRIOR_VNEXT_PRESERVED / NOT_PRINT_READY`
-
-Next high-value target: family-scale audit of `ADD-12 新郎新婦クイズカード`; redesign only if its dominant visual grammar materially repeats the promoted family-template fingerprint.
+The 2026-08-21 `PHOTO LAB ENVELOPE` Current and its long-copy repair remain valid historical/rollback evidence in Git history and Figma `49:39 / 49:74 / 49:109 / 49:144`. No prior Figma production or rollback node was deleted.
