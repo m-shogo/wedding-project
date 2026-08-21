@@ -1,7 +1,7 @@
 # ADD-07 エスコートカード案内ボード — QA
 
-Status: `CURRENT / FAMILY_DIVERSITY_PROMOTED_A2_A3 / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / LONG_COPY_STRESS_PASS / A3_INDEPENDENT_REFLOW_PASS / PREVIOUS_SUNRISE_V2_LEGACY_PRESERVED / NOT_PRINT_READY`
-Updated: 2026-08-21
+Status: `CURRENT / FAMILY_DIVERSITY_PROMOTED_A2_A3 / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / LONG_COPY_STRESS_PASS / JAPANESE_SEMANTIC_LINEBREAK_PASS / A3_INDEPENDENT_REFLOW_PASS / PREVIOUS_SUNRISE_V2_LEGACY_PRESERVED / NOT_PRINT_READY`
+Updated: 2026-08-22
 Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
 
 ## Current Figma authority
@@ -20,6 +20,7 @@ Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
 
 Current evidence:
 
+- `JAPANESE-FOOTER-LINEBREAK-QA-2026-08-22.md`
 - `FAMILY-DIVERSITY-HANGING-CARD-RACK-PROMOTION-QA-2026-08-21.md`
 - prior professional-vNext evidence retained: `PROFESSIONAL-VNEXT-SUNRISE-DISCOVERY-QA-2026-08-21.md`
 
@@ -53,7 +54,8 @@ A2:
 - whole-item / thumbnail: PASS;
 - reading scale: PASS;
 - actual `1400×1980` render: PASS;
-- post-promotion stable-root screenshot: PASS.
+- post-promotion stable-root screenshot: PASS;
+- post-2026-08-22 semantic-footer repair actual-size screenshot: PASS.
 
 A3:
 
@@ -63,6 +65,20 @@ A3:
 - independent reflow: PASS.
 
 Professional Design Council score: `93/100`; no Executive Creative Director, Japanese Editorial Designer or Print Production Director veto.
+
+## 2026-08-22 A2 Japanese semantic line-break repair
+
+Live screenshot review caught a typographic defect that structure checks did not: A2 footer `カードを見つけたら、次の場所へ。` wrapped with isolated `へ。` on the second line.
+
+Bounded repair:
+
+- Current A2 footer `38:37` and hidden A2 stress footer `36:116` changed only to native semantic lines `カードを見つけたら、\n次の場所へ。`;
+- type remains `Noto Sans JP Medium 28px / 42px`, width `410`, height `84`, `textAutoResize=HEIGHT`;
+- no font shrink, geometry change, new asset, container or decoration;
+- A2 whole/reading/actual-size screenshot: PASS;
+- A3 was separately re-audited and intentionally left unchanged because its footer already reads naturally on one line.
+
+This is a `VERIFIED_LOCAL` receiving-item application of the already-promoted Japanese semantic line-break rule. It does not create a new shared rule.
 
 ## Structure / long-copy QA
 
@@ -104,7 +120,7 @@ Stress proofs are hidden after QA.
 - replaceable image role: not required;
 - Drive write: `0`.
 
-`IMAGE_GENERATION_NOT_REQUIRED`: family-scale abstract-shape repetition was the defect. A physical escort-card rack solves it more directly than decorative travel/Hawaii imagery and keeps the instruction clear.
+`IMAGE_GENERATION_NOT_REQUIRED`: family-scale abstract-shape repetition was the defect. A physical escort-card rack solves it more directly than decorative travel/Hawaii imagery and keeps the instruction clear. The 2026-08-22 repair was typography-only and likewise did not justify generation.
 
 ## Deferred finalization
 
