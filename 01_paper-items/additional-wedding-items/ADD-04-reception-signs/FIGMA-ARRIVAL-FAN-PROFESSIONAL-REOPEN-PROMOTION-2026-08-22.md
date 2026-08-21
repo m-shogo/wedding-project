@@ -3,6 +3,7 @@
 Date: 2026-08-22
 State: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / PROFESSIONAL_REOPEN_PROMOTED / LONG_COPY_STRESS_PASS / ROLLBACK_SAFE / NOT_PRINT_READY`
 Start/latest main before promotion evidence: `aff30628e7a623008bcc67238a1a4be4c745c75e`
+Final evidence sync main before this correction: `b812e724ba0dd1db174eb9fe25f7cb67ca9bf8de`
 Current authority: `docs/automation/non-rurubu-figma-quality-current.md` = `ACTIVE / HOURLY / FIGMA_EDIT_ALLOWED / VISUAL_REOPENED`
 Figma: `qWlF9THLR1G76hLcx1zYOx`
 Drive authority live-readback: `1vjSYrbjzfZs_vyCIpQAbml9_en5RcH_r / ADD-04_受付サイン`
@@ -60,20 +61,22 @@ Compared against prior Current only after the clean-room pair had been built and
 
 The prior Current was visually quieter and credible, but the new pair more clearly matches the current professional brief: joyful, pop, travel-adjacent and memorable without returning to the earlier rounded SUNSHINE-DEPARTURE macro grammar.
 
-## Long-copy stress
+## Long-copy stress and final geometry correction
 
 Hidden stress roots:
 
 - `38:26 / QA / ADD-04 GROOM ARRIVAL FAN / LONG COPY STRESS`;
 - `38:38 / QA / ADD-04 BRIDE ARRIVAL FAN / LONG COPY STRESS`.
 
-Stress used materially longer name and reception-guidance roles. Initial stress brought fixed fan art too close to the expanded guidance lane. The fixed decoration was moved lower only for the stress contract, preserving a stable copy lane rather than shrinking type.
+Stress used materially longer name and reception-guidance roles. The first stress showed that the higher lower-edge fan treatment was too close to expanded guidance. An intermediate experiment moved the fan lower only in the stress proof; this was **not accepted as sufficient resilience**, because production must not require a manual decorative reposition merely when realistic copy grows.
 
-Final stress screenshot: PASS. Long copy remains readable above the fixed celebration field.
+Final correction therefore uses the same long-copy-safe lower fan lane in both selected production candidates and stress roots. To keep the selected design from becoming unnecessarily empty, the native name/guidance rhythm was tightened upward instead of raising decoration into the variable-copy lane.
+
+Final selected and stress screenshots: PASS. The production geometry itself now preserves a stable copy lane for the tested longer name and multi-line guidance; no type shrinking is required.
 
 ## Structure / hybrid QA
 
-Post-promotion production readback:
+Final post-promotion production readback:
 
 - groom `33:2`: native visible text `8`, auto-height `8/8`, outside `0`, IMAGE fills `0`;
 - bride `33:15`: native visible text `8`, auto-height `8/8`, outside `0`, IMAGE fills `0`.
@@ -105,6 +108,8 @@ Stable production root IDs were retained:
 
 - groom `33:2` → `VNEXT_PRO_ADD04_GROOM_ARRIVAL_FAN_SELECTED`;
 - bride `33:15` → `VNEXT_PRO_ADD04_BRIDE_ARRIVAL_FAN_SELECTED`.
+
+The final long-copy-safe geometry from `38:2 / 38:14` was synced back into those stable production roots after the stress correction.
 
 ## Professional Design Council score
 
