@@ -1,23 +1,30 @@
 # ADD-09 ゲストブックサイン — QA
 
-Status: `CURRENT / PROFESSIONAL_VNEXT_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / LONG_COPY_STRESS_PASS / LEGACY_AND_V4_PRESERVED / NOT_PRINT_READY`
+Status: `CURRENT / FAMILY_DIVERSITY_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / LONG_COPY_STRESS_PASS / LEGACY_AND_PRIOR_VNEXT_PRESERVED / NOT_PRINT_READY`
 Updated: 2026-08-21
 Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
 
 ## Live authority
 
-- start/latest `main` before the final Figma/Git write: `5353acadf41622e065218be49835e484622e4a57`
+- start/latest `main` before final promotion: `8f8fc5232b368c0769f1c4c1e4f7c777b03767df`
 - Figma file: `PjFWBpDwaQM5LfvgdqSFvU`
-- selected Professional vNext: `35:2 / CLEANROOM_ADD09_VNEXT_WORDS_AS_SOUVENIR / SELECTED 2026-08-21`
-- vNext long-copy stress: `35:19` — hidden after QA
-- prior selected clean-room V4 preserved unchanged: `16:3 / CLEANROOM_ADD09_V4_JOURNEY_LINE` — hidden after vNext promotion
-- retained legacy production preserved unchanged: `1:3 / FRAME_ADD09_GUEST_BOOK_SIGN`
+- new current: `38:43 / CURRENT / ADD-09 / CLOTHBOUND ARRIVAL LOG / FAMILY DIVERSITY 2026-08-21`
+- long-copy stress: `38:76 / QA / ADD-09 FAMILY DIVERSITY / LONG COPY STRESS` — hidden after QA
+- prior Professional vNext preserved: `35:2 / ROLLBACK / ADD-09 / WORDS AS SOUVENIR / PRE-FAMILY-DIVERSITY`
+- prior selected clean-room V4 preserved: `16:3 / CLEANROOM_ADD09_V4_JOURNEY_LINE`
+- retained legacy production preserved: `1:3 / FRAME_ADD09_GUEST_BOOK_SIGN`
 - exact Drive authority verified live: `1D259ugx13El0JYxvn8yyskIjc2c2liF4 / ADD-09_ゲストブックサイン`
 - Drive write: `0`
 
-## Professional vNext reset
+## Why the family-scale pass reopened ADD-09
 
-The earlier V4 remained structurally and visually credible, but the 2026-08-20 Professional vNext brief raised the aspiration ceiling toward stronger travel / destination warmth / pop / joy / participation. The new pass therefore started from blank frames and did not use V4 or legacy composition as an authoring source.
+The prior `WORDS AS SOUVENIR` direction remained a valid 90/100 single-item design, but at suite scale its dominant grammar repeated the now-promoted failure fingerprint: large coral field + lagoon rounded sweep + yellow disc + navy closure. That grammar had independently appeared across multiple non-Rurubu vNext items and is now governed by `FAMILY_SCALE_TEMPLATE_REPETITION` as a project rule.
+
+The visible problem was therefore not local readability or missing decoration. It was that a valid guest-book sign still looked like another color-field member of the same AI-authored family when placed beside other items.
+
+## Clean-room method
+
+The family-diversity candidate was authored from blank frames on a new page and did not duplicate or reuse `35:2`, V4, legacy production, old vectors, old color fields, old crop, or old layout groups.
 
 Only verified non-visual requirements were carried forward:
 
@@ -25,144 +32,119 @@ Only verified non-visual requirements were carried forward:
 - guest-book sign role;
 - native date `2026.10.24`;
 - semantic roles `[ご記帳のご案内]`, `[記入方法・ペンのご案内]`, `[設置場所・補足情報]`;
-- final writing method / pen placement / installation wording remain unresolved finalization inputs.
+- final writing method, pen placement and installation wording remain unresolved.
 
-## Three blank-frame art-direction thumbnails
+## Three materially different blank-frame directions
 
-New section:
+New page:
 
-- `34:2 / VNEXT_PRO / ADD-09 GUEST BOOK / SUNSHINE NOTES / 2026-08-21`
+- `38:2 / FAMILY_DIVERSITY / ADD-09 GUEST BOOK / 2026-08-21`
 
-Materially different blank-frame concepts:
+Directions:
 
-1. `34:3 / SUNRISE NOTE`
-2. `34:13 / NIGHT LOGBOOK`
-3. `34:22 / POSTCARD BREEZE`
+1. `38:3 / CLOTHBOUND ARRIVAL LOG`
+2. `38:23 / HOTEL REGISTER CLOTH`
+3. `38:33 / FIELD NOTE DESK`
 
-Professional critique:
+The professional critique selected `CLOTHBOUND ARRIVAL LOG` because it gave the guest-book sign an item-specific physical-object metaphor: a stitched travel ledger / keepsake book rather than another tropical poster field. `HOTEL REGISTER CLOTH` risked drifting toward system/register UI, while `FIELD NOTE DESK` was more playful but weaker as a formal wedding guest-book sign.
 
-- A was clear and friendly but read closer to a generic bright sign;
-- B had strong keepsake mood but became too dark for the current arrival/participation brief;
-- C had the strongest emotional phrase, immediate participation energy, and a simple coral/lagoon/sunlight system without fake travel UI.
+The selected full-size frame was then rebuilt separately at `38:43`, not duplicated from the thumbnail.
 
-C was selected as the conceptual direction; the full-size frame was rebuilt separately rather than duplicating the thumbnail.
-
-## Selected full-size direction — WORDS AS SOUVENIR
-
-Selected frame:
-
-- `35:2 / CLEANROOM_ADD09_VNEXT_WORDS_AS_SOUVENIR / SELECTED 2026-08-21`
-- size `1000×1419`
+## Current visual direction — CLOTHBOUND ARRIVAL LOG
 
 Emotional brief:
 
-`旅の思い出は写真だけではなく、ゲストのことばも持ち帰るおみやげになる。`
+`旅の途中で書き残す一冊。ゲストのことばそのものを、ふたりが持ち帰る旅の記録にする。`
 
-First-read headline:
+First read:
 
-`ことばも、旅のおみやげ。`
+`旅のことばを、ここに。`
 
 Visual system:
 
-- bold coral upper field for the participation invitation;
-- warm cream operational field;
-- one lagoon breeze sweep and one yellow sunlight disc as the fixed travel/destination gesture;
-- deep-ocean footer for date closure;
-- Japanese-first hierarchy;
-- direct semantic information rather than cards, route nodes, stamps, badges, or form-like separators.
+- warm paper field rather than a large tropical color block;
+- cobalt cloth spine with visible stitch rhythm as a real binding cue;
+- pale sky page edge;
+- one terracotta index tab;
+- Japanese-first title and instructions;
+- native Auto Layout for dynamic operational copy;
+- no giant sun/circle/capsule, no fake airline device, no form cards, no QR/route/stamp cosplay.
+
+This gives ADD-09 a book/ledger grammar distinct from Passport notebook, Boarding baggage tag, Photo Booth strip, Escort hanging rack and the remaining poster/sign artifacts while staying inside the travel-keepsake world.
 
 ## Hybrid authoring roles
 
 - variable/final copy: native editable Figma text;
 - semantic placeholders: native editable Figma text;
-- dynamic information stack: native Figma Auto Layout;
-- fixed art: a small number of simple native geometric fields;
-- editable SVG: `0` — no reusable silhouette justified a separate SVG asset;
+- dynamic information: native Auto Layout;
+- fixed art: simple native cloth/page/index geometry because it is low-layer-count functional paper construction;
+- editable SVG: `0` — no reusable silhouette justified vector asset work;
 - generated/composed raster: `0`;
 - replaceable image role: `0`;
 - rasterized variable copy: `0`.
 
-Image generation was not started because the live candidate did not expose an image/illustration deficit. Adding destination photography or generic tropical illustration would have increased stock/AI-template risk without improving the participation role.
-
-## Long-copy stress and structure correction
-
-Stress frame:
-
-- `35:19 / QA / VNEXT ADD-09 / WORDS AS SOUVENIR / LONG COPY STRESS`
-
-Realistic longer Japanese copy was tested independently for all three operational roles.
-
-The initial fixed-position stress technically had no text/text intersection, but vertical gaps collapsed to `6–15 px`, producing a visually cramped instruction block. This was treated as a real readability defect rather than accepting the bounding-box PASS.
-
-Bounded correction:
-
-- converted the three label/placeholder pairs into `LAYOUT / INFO STACK`;
-- each pair uses native vertical Auto Layout with internal spacing;
-- the outer stack uses controlled spacing and pushes the closing message naturally;
-- title, fixed art, footer and overall art direction were not changed.
-
-Final stress structure:
-
-- candidate stack height: `385 px`;
-- stress stack height: `631 px`;
-- candidate native text: `11`;
-- stress native text: `11`;
-- `textAutoResize=HEIGHT`: `11/11` in both;
-- IMAGE fills: `0/0`;
-- text outside root: `0/0`;
-- text/text intersections: `0` after correction.
-
-Final long-copy screenshot shows comfortable pair separation and a stable closing message above the footer.
+Image generation was intentionally not started. The screenshot-supported defect was family-scale shape grammar repetition, not missing photography/illustration. Adding tropical imagery would not solve that defect and would increase stock/AI-template risk.
 
 ## Three-scale screenshot QA
 
-Selected vNext was reviewed from live Figma renders at:
+Current `38:43` was reviewed live at:
 
-- whole-item / ~500 px: PASS — headline and participation purpose read immediately; no dashboard/form impression;
-- reading / 705×1000: PASS — semantic instruction sequence and accent-color roles remain clear;
-- actual-size / `1000×1419`: PASS — Japanese type, header field, breeze/sun gesture and footer date remain credible;
-- realistic long-copy / 705×1000: PASS after Auto Layout correction.
+- whole-item / ~500 px: PASS — reads as a bound guest ledger rather than a generic poster/template;
+- reading / 705×1000: PASS — headline → lead → 3 operational roles → closing/date hierarchy is clear;
+- actual size / `1000×1419`: PASS — Japanese type, stitch rhythm, cloth spine, index tab and page edge remain credible without micro-detail dependency.
 
-## Mature comparison against prior selected V4
+Prior selected `35:2` was opened only after the new candidate matured. At 500/1000-scale comparison it remains lively and valid, but its coral/lagoon/yellow rounded-field grammar is materially closer to the repeated suite fingerprint. The new candidate wins the family-diversity gate while preserving guest participation clarity.
 
-Only after vNext completed three-scale + stress + structure QA was prior selected V4 `16:3` opened for comparison.
+## Long-copy stress / defect caught during this run
 
-V4 remains a strong quiet editorial design with a continuous journey line. It is preserved unchanged because it remains valuable history/rollback. Under the current Professional vNext brief, however, it reads more reflective/minimal and less immediately joyful/participatory.
+Stress frame: `38:76`.
 
-The new vNext provides:
+Initial structure:
 
-- stronger first-glance participation energy;
-- clearer `ことば = 旅のおみやげ` concept;
-- brighter destination warmth without literal tropical cliché;
-- more resilient operational-copy structure;
-- no route/infographic semantics competing with the guest-book purpose.
+- selected info stack: `38:63`, height `314`;
+- stress info stack: `38:96`, height `578`, y `645`, bottom `1223`;
+- closing copy was initially y `1198`.
 
-Decision: **Professional vNext clearly wins the current art-direction brief and becomes selected.**
+This revealed a real stress regression: the dynamic stack expanded below the fixed closing-copy anchor even though the normal candidate screenshot looked clean.
+
+Bounded correction:
+
+- moved closing copy in selected/stress to y `1248`;
+- moved the non-semantic bookmark away from the text lane (`x=865`, narrower width);
+- retained title, semantic stack and paper grammar;
+- rerendered the stress frame at reading scale.
+
+Final stress screenshot: PASS. All three long Japanese operational roles remain readable with visible separation, the closing phrase remains below the stack, and the date remains inside the physical page.
+
+## Structure QA
+
+Current `38:43` metadata readback:
+
+- native text nodes: `11`;
+- all authored text uses `textAutoResize=HEIGHT`;
+- dynamic info stack is native vertical Auto Layout;
+- IMAGE fills: `0`;
+- root size: `1000×1419`;
+- no variable copy baked into decoration;
+- old selected and all older history preserved, not overwritten.
+
+Stress metadata confirms the three value fields expand to `132 px` each under the tested long copy and the full stack expands to `578 px`.
 
 ## Professional Design Council score
 
-Selected vNext: **90/100**.
+Current family-diverse candidate: **92/100**.
 
-- Concept clarity / ownability: `14/15`
-- Emotional excitement / pick-up appeal: `14/15`
-- Japanese editorial typography: `13/15`
-- Composition / hierarchy / rhythm: `13/15`
-- Travel / destination warmth without cliché: `9/10`
+- Concept clarity / ownability: `15/15`
+- Emotional excitement / pick-up appeal: `13/15`
+- Japanese editorial typography: `14/15`
+- Composition / hierarchy / rhythm: `14/15`
+- Travel / destination integration without cliché: `9/10`
 - Item-specific functionality: `10/10`
-- Physical print credibility: `9/10`
+- Physical print credibility: `10/10`
 - Editability / content resilience: `4/5`
-- Family fit without template sameness: `4/5`
+- Family fit without template sameness: `3/5`
 
-No Executive Creative Director, Japanese Editorial, or Print Production veto remained after the dynamic-stack correction.
-
-## Preservation / promotion
-
-Promotion did **not** overwrite prior visual history:
-
-- new selected vNext `35:2` remains the live selected clean-room frame;
-- previous selected V4 `16:3` remains intact and is hidden;
-- legacy production `1:3` remains intact;
-- three vNext thumbnails and stress proof remain retained hidden evidence.
+No Executive Creative Director, Japanese Editorial, or Print Production veto remains after the long-copy correction. The family-fit score reflects that the design intentionally keeps a restrained travel-paper family resemblance rather than maximizing novelty for its own sake.
 
 ## Deferred finalization
 
@@ -173,8 +155,10 @@ Keep `NOT_PRINT_READY` until authoritative final inputs/proofs exist:
 - printer bleed/template/profile;
 - 100% physical proof and venue-distance readability.
 
-These do not block progression of the visual pass.
+These do not block visual progression.
 
-## Next
+## Decision / next
 
-Proceed to **ADD-10 クローク / お手洗い / 会場案内サイン** under the same Professional vNext clean-room workflow.
+`38:43` is the new ADD-09 Current. The prior `WORDS AS SOUVENIR` remains preserved as rollback/history.
+
+Next high-value target: family-scale audit of **ADD-10 会場案内サイン**. Redesign only if its current dominant grammar materially repeats the promoted family-template fingerprint; otherwise retain the healthy Current and proceed.
