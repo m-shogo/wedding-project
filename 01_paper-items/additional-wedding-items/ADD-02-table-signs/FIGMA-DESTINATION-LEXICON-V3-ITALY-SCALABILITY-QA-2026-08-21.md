@@ -1,7 +1,7 @@
 # ADD-02 — Destination Lexicon V3 Italy Scalability QA
 
 Date: 2026-08-21
-State: `VERIFIED_LOCAL / THIRD_DESTINATION_TEST / SERIOUS_COMPARISON_CANDIDATE / NOT_PROMOTED`
+State: `VERIFIED_LOCAL / THIRD_DESTINATION_TEST / FAMILY_THUMBNAIL_COMPARED / NOT_PROMOTED`
 Start/live authority SHA before write: `950d4cd1552942868209184b446273e5d94f0345`
 Current: `docs/automation/non-rurubu-figma-quality-current.md` = `ACTIVE / HOURLY / FIGMA_EDIT_ALLOWED / VISUAL_REOPENED`
 Figma file: `LAZAZ0u3RGqtN4bYFPZ3pU`
@@ -96,6 +96,35 @@ Stress screenshot after the repair: PASS. The longest description ends above the
 
 The stress duplicate was returned to hidden QA state after capture.
 
+## Family thumbnail comparison
+
+After Italy reached structural/long-copy maturity, a review-only same-scale board was created:
+
+- `152:2 / QA / VNEXT_V3 / HAWAII-JAPAN-ITALY / FAMILY THUMBNAIL / 2026-08-21`
+
+Top row contained review clones of the three mature V3 anchors:
+
+- HAWAII `149:2`
+- JAPAN `149:21`
+- ITALY `150:2`
+
+Bottom row contained same-scale review clones of the current production roots:
+
+- HAWAII `2:2`
+- JAPAN `2:47`
+- ITALY `2:11`
+
+The board was screenshot-reviewed and then hidden to keep the study page readable. These duplicates are QA evidence only and are not authoring sources.
+
+### Family-level result
+
+The V3 anchors are **more destination-specific by material/atmosphere** than the current abstract family, but two regressions remain visible at family scale:
+
+1. JAPAN and ITALY both drift toward a left dark edge + pale main field + strong upper destination title, showing that distinct material choices can still converge into one layout skeleton.
+2. The V3 row is calmer and more design-specific, but the current production row still communicates celebration/pop/wedding energy more immediately at thumbnail scale.
+
+Therefore `more specific` and `more different` are not sufficient promotion signals. A replacement family must also preserve or improve excitement, warmth, and memorability.
+
 ## Hybrid authoring / asset decision
 
 Current responsibility split:
@@ -111,19 +140,24 @@ No image generation was necessary for this bounded scalability test. The questio
 
 ## Production decision
 
-`CURRENT_PRODUCTION_RETAINED / ITALY_V3_VERIFIED_LOCAL / THIRD_DESTINATION_METHOD_TEST_PASS / NOT_PROMOTED`.
+`CURRENT_PRODUCTION_RETAINED / ITALY_V3_VERIFIED_LOCAL / THIRD_DESTINATION_METHOD_TEST_PASS / FAMILY_ROLLOUT_HOLD / NOT_PROMOTED`.
 
-The test supports the existing local hypothesis that destination-family differentiation improves when each destination owns a materially different material/atmosphere role. It also adds an important constraint: **specificity alone is not sufficient; the candidate must preserve or improve wedding excitement before it can replace a mature production sign.**
+The test supports the existing local hypothesis that destination-family differentiation improves when each destination owns a materially different material/atmosphere role. It also adds two constraints:
+
+- **specificity alone is not sufficient; the candidate must preserve or improve wedding excitement before replacing mature production;**
+- **changing material vocabulary without changing the underlying layout skeleton can create a new template family.**
 
 ## Next highest-value step
 
 1. retain `149:2`, `149:21`, and `150:2` as bounded V3 anchors;
 2. do not copy their layouts to the remaining eight destinations;
-3. test one additional materially different destination only if it uses a new semantic/material source rather than a recolored HAWAII/JAPAN/ITALY structure;
-4. before any family rollout, compare the anchor set at family thumbnail scale for both destination distinctness and celebration energy;
-5. promote only if the method clearly beats the current 11-sign production family, not merely because it is more different.
+3. do not create a fourth destination using the same edge-field + top-title skeleton merely to continue activity;
+4. the next destination experiment, if run, must method-switch at the **layout skeleton level** as well as at material/atmosphere level, and must explicitly target stronger celebration energy;
+5. before any family rollout, compare at family thumbnail scale for destination distinctness, skeleton diversity, and celebration energy;
+6. promote only if the method clearly beats the current 11-sign production family, not merely because it is more different.
 
 ## Learning state
 
 - `DESTINATION_SPECIFICITY_REQUIRES_DISTINCT_MATERIAL_OR_ATMOSPHERE_ROLE`: remains `VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE` within destination-family work.
-- new refinement: `DESTINATION_SPECIFICITY_WITHOUT_CELEBRATION_GAIN_IS_NOT_A_PROMOTION_SIGNAL`: `VERIFIED_LOCAL`.
+- `DESTINATION_SPECIFICITY_WITHOUT_CELEBRATION_GAIN_IS_NOT_A_PROMOTION_SIGNAL`: `VERIFIED_LOCAL`.
+- `MATERIAL_DIVERSITY_CAN_STILL_CONVERGE_ON_ONE_LAYOUT_SKELETON`: `OBSERVED → VERIFIED_LOCAL` in this three-anchor family comparison.
