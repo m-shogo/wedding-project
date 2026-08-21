@@ -6,11 +6,11 @@ Authority order: live Figma → verified Drive → Rurubu evidence → this stat
 Figma file: `bfM0d4c9dCeBv5pCkJ3TNM`
 V6 control: frozen `JC + IX + JB + IZ + IT + JA`
 V7 comparison set: six-role clean-room study, preserved and not preferred
-Production state: `V8_G_OUTER_CURRENT / V8_H_PROFILE_CURRENT / V8_F_OTHER_4_ROLES_CURRENT / STORY_TYPOGRAPHIC_ESSAY_PROMOTED / GENERATED_MASTER_PLACEMENT_VERIFIED / NOT_FINAL_WINNER / NOT_PRINT_READY`
+Production state: `V8_G_OUTER_CURRENT / V8_H_PROFILE_CURRENT / V8_I_CAFE_CURRENT / STORY_TYPOGRAPHIC_ESSAY_PROMOTED / V8_F_OTHER_2_IMAGE_ROLES_CURRENT / GENERATED_MASTER_PLACEMENT_VERIFIED / NOT_FINAL_WINNER / NOT_PRINT_READY`
 
 ## Current declaration
 
-`V6_CONTROL_PRESERVED / V7_6_OF_6_PRESERVED / V8_CLEANROOM_6_OF_6_CURRENT / V8_OUTER_G_COHERENT_IMAGE_FIELD_CURRENT / V8_PROFILE_H_TYPE_PORTRAIT_CURRENT / V8_DISTINCT_BOOK_DESIGN_SYSTEM / NATIVE_VARIABLE_TEXT_PRESERVED / 4_CURRENT_GENERATED_MASTER_PLACEMENTS_PLUS_OUTER_VERIFIED / PROFILE_SYNTHETIC_CONTACT_PROOF_REMOVED_FROM_VISIBLE_GRAMMAR / STORY_FAKE_PHOTO_SLOTS_0 / INTERNAL_PROCESS_COPY_0 / V8_STRUCTURE_QA_PASS / V8_PROFESSIONAL_AUTHENTICITY_IMPROVED / V8_DESTINATION_SPECIFICITY_STILL_WEAK / NOT_GLOBAL_WINNER / NOT_PRINT_READY`
+`V6_CONTROL_PRESERVED / V7_6_OF_6_PRESERVED / V8_CLEANROOM_6_OF_6_CURRENT / V8_OUTER_G_COHERENT_IMAGE_FIELD_CURRENT / V8_PROFILE_H_TYPE_PORTRAIT_CURRENT / V8_CAFE_I_FOOD_MEMORY_SCORE_CURRENT / V8_DISTINCT_BOOK_DESIGN_SYSTEM / NATIVE_VARIABLE_TEXT_PRESERVED / 3_CURRENT_GENERATED_MASTER_PLACEMENTS_VERIFIED / PROFILE_SYNTHETIC_CONTACT_PROOF_REMOVED_FROM_VISIBLE_GRAMMAR / CAFE_SYNTHETIC_TABLE_ESSAY_REMOVED_FROM_VISIBLE_GRAMMAR / STORY_FAKE_PHOTO_SLOTS_0 / INTERNAL_PROCESS_COPY_0 / V8_STRUCTURE_QA_PASS / V8_PROFESSIONAL_AUTHENTICITY_IMPROVED / V8_DESTINATION_SPECIFICITY_STILL_WEAK / NOT_GLOBAL_WINNER / NOT_PRINT_READY`
 
 ## Current V8 roots
 
@@ -32,11 +32,11 @@ Production state: `V8_G_OUTER_CURRENT / V8_H_PROFILE_CURRENT / V8_F_OTHER_4_ROLE
    - current generated visual role `2164:29`
    - Drive `1hmk0-lnk_c7KmurWPAsUMUFB5NpKT1GC`
    - hash `697d4482da8936670e772bf4668d4de0ccb436f5`
-5. Cafe/Table `2164:53`
-   - current generated visual role `2164:57`
-   - Drive `1aqjC7cMXymK7r5MqABiNHjL207OY3XKP`
-   - hash `3a5d3c11226a9d1e9a25bc8a77adce86fe99be28`
-   - right page intentionally text-led; former fake second-photo block removed from the visual grammar
+5. Cafe/Table `2178:2`
+   - current direction: native sensory food-memory score; no current IMAGE role claimed
+   - existing factual/sensory copy preserved and redistributed; no dish/price/menu facts invented
+   - prior generated TABLE_ESSAY master is not used by the current visible grammar
+   - previous Cafe/Table `2164:53` preserved hidden rollback at `x=7200 / y=4550`
 6. 1DAY/Model Course `2164:67`
    - current generated visual role `2164:91`
    - Drive `1KxMoNigZn6yKVu8e1MP9xt7Z-MaQzn-q`
@@ -48,20 +48,29 @@ V8 folder:
 
 `1IKYF-YI6EbEe7qQCVQjClztpQA8CoRIo / RURUBU_V8_EDITORIAL_MONOGRAPH_2026-08-21`
 
-Current legitimate generated/composed roles retain exact Drive master IDs and exact Figma image hashes separately. Byte identity between a Drive master and an in-file Figma image object is not asserted unless separately verified. Profile H and Story intentionally claim no current image role rather than substituting unrelated or synthetic imagery.
+Current legitimate generated/composed roles retain exact Drive master IDs and exact Figma image hashes separately. Byte identity between a Drive master and an in-file Figma image object is not asserted unless separately verified. Profile H, Story and Cafe I intentionally claim no current image role rather than substituting unrelated or synthetic imagery. Their prior Drive masters remain historical/rollback provenance where applicable.
 
-## New professional learning applied to Profile H
+## Professional learning applied in the latest run
 
-Fresh editorial research focused on profile design and the relationship between portrait, typography and editorial identity. The Gentlewoman's creative team describes a profile system where the portrait can carry more visual weight than a large subject name, and where details are reconsidered issue by issue rather than mechanically templated. Veronica Ditting describes editorial design as a dialogue between form, photography and language rather than form alone.
+### Profile H — portrait authority before image-shaped decoration
 
-The current V8 Profile had no legitimate real-person portrait authority, while its generated contact-proof master read as an abstract grid of blocks. That image implied photographic/profile content without actually carrying a person, place, event or useful documentary role. Replacing it with another arbitrary generated block would repeat the same AI-like failure.
+The Gentlewoman profile practice gives legitimate portrait photography strong identity weight and describes details as reconsidered issue by issue rather than mechanically templated. Veronica Ditting describes editorial design as a dialogue between form, photography and language. Because V8 had no legitimate real-person portrait authority, keeping an abstract generated contact-proof block as the profile's largest visual created a false portrait promise.
 
-Bounded local test: duplicate the current Profile/Q&A, hide only the generated contact-proof role, preserve the right Q&A page, and rebuild the left page as a native type portrait using the already-established facts: SHOGO = walking-first traveler, SHI-CHAN = food-first traveler, plus the existing shared-tempo copy. No real-person image is fabricated and no V6/V7 asset is reused.
-
-Result: at 500px the two-person contrast survives as the main left-page read; at 1400px the names and two-tempo distinction hold without decorative image scaffolding; at 1588×1123 actual size the composition remains controlled. Structural QA reports 25 visible native text nodes, 0 IMAGE fills, 0 same-parent text intersections, 0 18px safe-area risks and 0 visible internal-process-language fingerprints.
+Bounded result: Profile H `2177:2` uses native type to express the existing walking-first / food-first identity contrast, preserves the Q&A page, uses no generated recognizable person and reuses no V6/V7 asset.
 
 Learning status: `RSL-189 VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`.
 Failure fingerprint: `F-RSL-189-SYNTHETIC-PROFILE-VISUAL-WITHOUT-PORTRAIT-AUTHORITY`.
+
+### Cafe I — food imagery must have an editorial idea, not merely image-shaped mass
+
+The Gourmand's editorial/art-direction practice treats imagery as an independent contribution to the story rather than generic illustration. The prior V8 TABLE_ESSAY image was technically a legitimate generated/composed master, but at spread scale it read as a schematic plate/menu block and did not add a sufficiently specific sensory or documentary idea.
+
+Bounded local test: duplicate current Cafe/Table, hide only the abstract generated image, preserve all existing food-memory copy, and rebuild the spread with a different composition skeleton. The left page becomes a sensory score from the existing phrases `カップの音 / 窓の光 / 次の店を決める会話`; the right page splits the existing dinner sentence into a factual material list and a larger closing phrase `夜の横浜を、ゆっくり味わう。`. No food item, restaurant, price or menu fact is invented. Decorative English is reduced rather than used to fake editorial density.
+
+Result: the 500px thumbnail preserves a clear left/right tempo difference; 1400px and 1588×1123 reads preserve hierarchy without relying on a schematic image placeholder. Structural QA reports 13 visible native text nodes, 0 IMAGE fills, 0 same-parent text intersections, 0 18px safe-area risks and 0 visible internal-process-language fingerprints.
+
+Learning status: `RSL-190 VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`.
+Failure fingerprint: `F-RSL-190-FOOD-IMAGE-AS-SCHEMATIC-PLACEHOLDER-WITHOUT-INDEPENDENT-EDITORIAL-IDEA`.
 
 ## Current structural QA
 
@@ -71,30 +80,38 @@ Failure fingerprint: `F-RSL-189-SYNTHETIC-PROFILE-VISUAL-WITHOUT-PORTRAIT-AUTHOR
 | Profile/Q&A H | 25 | 0 | 0 | 0 | 0 |
 | Story/Chronology | 25 | 0 | 0 | 0 | 0 |
 | Memory/Guide | 20 | 0 | 0 | 0 | 1 |
-| Cafe/Table | 10 | 0 | 0 | 0 | 1 |
+| Cafe/Table I | 13 | 0 | 0 | 0 | 0 |
 | 1DAY/Model Course | 21 | 0 | 0 | 0 | 1 |
 
-Profile H three-scale visual readback:
-- thumbnail / whole item 500px: PASS and materially less synthetic than prior contact-proof version
+Latest three-scale visual readbacks:
+
+### Profile H
+- 500px whole spread: PASS
+- 1400px reading scale: PASS
+- 1588×1123 actual size: PASS
+- whole-page flattening: `0`
+
+### Cafe I
+- 500px whole spread: PASS and materially less schematic than prior TABLE_ESSAY version
 - 1400px reading scale: PASS
 - 1588×1123 natural/actual-size render: PASS
 - whole-page flattening: `0`
 
-## Asset truth for latest Profile pass
+## Asset truth for latest run
 
 - new image-model generation: `0`
 - newly created Drive masters: `0`
 - new Figma image placements: `0`
 - V6/V7 image hashes reused: `0`
-- prior V8 generated contact-proof master remains only as rollback evidence and is not claimed by current Profile H
+- prior V8 Profile contact-proof and Cafe TABLE_ESSAY masters remain only as historical/rollback provenance, not current visible roles
 
-This is not counted as a generation → Drive → Figma closure. The environment still does not expose a no-approval path for a genuinely new image-model generation during this run. Per the existing failure/method-switch rule, design work does not stop there: roles that are actively harmed by synthetic placeholder imagery may switch to a defensible native editorial solution while genuinely image-dependent roles remain queued for role-specific generation.
+This run does **not** claim generation → Drive → Figma closure. The environment still does not expose a no-approval path for genuinely new image-model generation. Per RSL-005, work does not end at that blocker and does not repeat a known failed transport/generation method merely to create activity. Roles harmed by synthetic placeholder imagery may switch to a defensible native editorial treatment while genuinely image-dependent roles remain queued for role-specific generation.
 
 ## Current comparison decision
 
-- **V6** remains the strongest control for immediate travel desire, photographic atmosphere and Rurubu-like excitement.
+- **V6** remains the strongest control for immediate travel desire, photographic atmosphere and unmistakable Rurubu-like excitement.
 - **V7** remains useful as a high-energy clean-room experiment but is weakened by synthetic/schematic image craft.
-- **V8 current** has the strongest book/editorial pacing and anti-template signal. Profile H improves authenticity by removing an image-shaped placeholder that had no portrait authority. Destination specificity and sensory photography are still weaker than V6 overall.
+- **V8 current** has the strongest book/editorial pacing and anti-template signal. Profile H and Cafe I remove two image-shaped placeholders whose semantic contribution was weaker than their visual mass. However, V8 still lacks V6's destination-specific photographic desire and is intentionally not promoted as global winner.
 
 No global winner is promoted.
 
@@ -102,12 +119,13 @@ No global winner is promoted.
 
 1. Do not create V9.
 2. Keep V6, V7 and all V8 rollback roots intact for comparison.
-3. Keep current Story `2171:2` and Profile H `2177:2` unless genuinely role-valid imagery clearly beats their typographic solutions.
+3. Keep current Story `2171:2`, Profile H `2177:2`, and Cafe I `2178:2` unless genuinely role-valid imagery clearly beats their typographic solutions.
 4. When a no-approval image-generation route is available, create genuinely role-specific destination/sensory candidates and close generation → Drive master → Drive ID readback → Figma placement → crop/hash → three-scale QA.
-5. Cafe/Table is the next obvious anti-AI visual audit because its current left generated role still reads abstract/schematic at spread scale; do not replace it with unrelated imagery.
-6. Run deliberate mojikumi/kinsoku QA after final copy is known.
-7. Compare V6/V7/V8 on both professional editorial quality and travel desire.
-8. Keep DESIGN QA, REAL CONTENT QA, PRINT TEMPLATE/PREFLIGHT and PHYSICAL PROOF separate.
+5. Re-audit Memory/Guide and 1DAY next: they still contain current generated/composed image roles and should be judged for semantic ownership rather than removed by doctrine.
+6. Avoid converting every V8 spread into the same type-only skeleton; neutral cross-scope learning specifically warns that repeated mass distribution can preserve template/AI feeling even when surface treatments differ.
+7. Run deliberate mojikumi/kinsoku QA after final copy is known.
+8. Compare V6/V7/V8 on both professional editorial quality and travel desire.
+9. Keep DESIGN QA, REAL CONTENT QA, PRINT TEMPLATE/PREFLIGHT and PHYSICAL PROOF separate.
 
 Detailed evidence:
 
@@ -115,3 +133,4 @@ Detailed evidence:
 - `01_paper-items/rurubu-wedding/evidence/RURUBU-V8-STORY-TYPOGRAPHIC-ESSAY-PASS-2026-08-21.md`
 - `01_paper-items/rurubu-wedding/evidence/RURUBU-V8-OUTER-G-COHERENT-IMAGE-FIELD-QA-2026-08-21.md`
 - `01_paper-items/rurubu-wedding/evidence/RURUBU-V8-PROFILE-H-TYPE-PORTRAIT-QA-2026-08-21.md`
+- `01_paper-items/rurubu-wedding/evidence/RURUBU-V8-CAFE-I-FOOD-MEMORY-SCORE-QA-2026-08-21.md`
