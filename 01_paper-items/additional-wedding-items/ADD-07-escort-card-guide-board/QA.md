@@ -1,124 +1,110 @@
 # ADD-07 エスコートカード案内ボード — QA
 
-Status: `CURRENT / PROFESSIONAL_VNEXT_SELECTED_A2_A3 / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / LONG_COPY_STRESS_PASS / A3_INDEPENDENT_REFLOW_PASS / PREVIOUS_V2_LEGACY_PRESERVED / NOT_PRINT_READY`
+Status: `CURRENT / FAMILY_DIVERSITY_PROMOTED_A2_A3 / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / LONG_COPY_STRESS_PASS / A3_INDEPENDENT_REFLOW_PASS / PREVIOUS_SUNRISE_V2_LEGACY_PRESERVED / NOT_PRINT_READY`
 Updated: 2026-08-21
 Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
 
 ## Current Figma authority
 
-Professional vNext selected family:
-
 - Figma file: `rplj1IWXP4XVKjWDQRg3dU`
-- vNext page: `31:2 / VNEXT_PRO / ADD-07 ESCORT GUIDE / FIND YOUR JOURNEY / 2026-08-21`
-- selected A2: `32:2 / SELECTED PROFESSIONAL VNEXT / ADD-07 / A2 / SUNRISE DISCOVERY` — `1400×1980`
-- selected A3: `32:16 / SELECTED PROFESSIONAL VNEXT / ADD-07 / A3 / SUNRISE DISCOVERY REFLOW` — `990×1400`
-- hidden A2 long-copy proof: `34:16`
-- hidden A3 long-copy proof: `34:30`
-- previous selected V2 preserved: `14:3 / 14:25`
+- Current A2: `32:2 / CURRENT / ADD-07 / A2 / HANGING CARD RACK / FAMILY-DIVERSE 2026-08-21` — `1400×1980`
+- Current A3: `32:16 / CURRENT / ADD-07 / A3 / HANGING CARD RACK / FAMILY-DIVERSE 2026-08-21` — `990×1400`
+- family-diversity study page: `35:2 / FAMILY_DIVERSITY / ADD-07 ESCORT GUIDE / 2026-08-21`
+- mature clean-room A2 candidate retained: `36:48`
+- mature clean-room A3 candidate retained: `36:71`
+- hidden long-copy proofs: `36:94 / 36:117`
+- previous SUNRISE DISCOVERY A2/A3 preserved hidden: `38:2 / 38:38`
+- previous V2 preserved: `14:3 / 14:25`
 - retained legacy A2/A3 preserved: `1:2 / 1:17`
 - exact Drive authority: `1nPb_yvp1rIlF_L3X0mAnBFSzSuEIllDi / ADD-07_エスコートカード案内ボード`
 
 Current evidence:
 
-- `PROFESSIONAL-VNEXT-SUNRISE-DISCOVERY-QA-2026-08-21.md`
+- `FAMILY-DIVERSITY-HANGING-CARD-RACK-PROMOTION-QA-2026-08-21.md`
+- prior professional-vNext evidence retained: `PROFESSIONAL-VNEXT-SUNRISE-DISCOVERY-QA-2026-08-21.md`
 
-## Professional vNext reset
+## Current direction — HANGING CARD RACK
 
-The prior V2 remains strong structural/rollback evidence but does not waive the current professional vNext art-direction reset.
+Family-scale audit found that SUNRISE DISCOVERY, while individually strong, repeated a suite-level dominant grammar of navy spine + oversized coral disc + lagoon rounded sweep.
 
-New work started from blank frames using only verified dimensions and semantic copy:
+A new clean-room pass used only verified A2/A3 dimensions and semantic requirements. Three blank-frame studies were authored without copying the current/legacy visual construction:
 
-- `エスコートカードをお取りください`;
-- `お名前のカードを見つけて、記載されたテーブルへお進みください。`;
-- `01 お名前を探す`;
-- `02 カードを取る`;
-- `03 行き先の卓へ`;
-- `2026.10.24 / YOKOHAMA`.
+1. `35:3 / INDEX TAB JOURNEY`
+2. `35:18 / PICKUP PEGBOARD`
+3. `35:36 / FOLDOUT MAP STEPS`
 
-No retained V2 route, terminal edge, node layout, card, rail, icon, image or SVG was used as a construction source.
+`PICKUP PEGBOARD` was selected and then rebuilt as a full-size `HANGING CARD RACK` A2/A3 family. The item now derives its identity from the actual guest action: finding and taking a physical escort card.
 
-Three blank-frame A2 directions were created:
+Current visual grammar:
 
-1. `31:3 / ISLAND DEPARTURE`
-2. `31:17 / BOARDING SUNRISE`
-3. `31:31 / THREE TIDES`
+- deep-plum display field;
+- one thin hanging rail;
+- three cream hanging card objects with holes/threads;
+- coral/yellow/lagoon used only as step-number accents;
+- large Japanese instruction above;
+- date/place and a small next-step footer below.
 
-The final selected family was rebuilt as `SUNRISE DISCOVERY` rather than duplicating a concept frame.
+No giant orb/capsule/sweep, route nodes, fake airline semantics, scanner UI, badge, generated people, or stock photography.
 
-## Selected direction — SUNRISE DISCOVERY
+## Three-scale visual QA
 
-A2/A3 family grammar:
+A2:
 
-- narrow deep-ocean physical spine;
-- large Japanese title/lead on warm cream;
-- Step 01 in open cream space;
-- Step 02 inside one oversized coral sunrise;
-- Step 03 lands above one lagoon departure sweep;
-- date/YOKOHAMA remains compact on the navy spine.
+- whole-item / thumbnail: PASS;
+- reading scale: PASS;
+- actual `1400×1980` render: PASS;
+- post-promotion stable-root screenshot: PASS.
 
-A3 is independently re-authored rather than proportionally scaled.
+A3:
 
-No equal cards, progress dots, fake boarding gate, route nodes, barcode, plane, stamp, badge, shadow or gradient.
+- whole-item: PASS;
+- reading scale: PASS;
+- actual `990×1400`: PASS;
+- independent reflow: PASS.
 
-## Screenshot QA / defects fixed
-
-Initial selected screenshot exposed an unintended three-line title wrap and title/lead overlap.
-
-Bounded correction:
-
-- A2 title `104px → 82px`, width `900 → 980`, lead y moved to `500`;
-- A3 title `74px → 58px`, width `650 → 680`, lead y moved to `360`.
-
-Final screenshots:
-
-- A2 whole-item: PASS;
-- A2 reading/native `1400×1980`: PASS;
-- A3 whole-item: PASS;
-- A3 reading/native `990×1400`: PASS;
-- A3 independent reflow: PASS.
-
-Completion-only comparison with retained V2 happened only after vNext maturity. V2 remains a strong quiet route-based editorial board; vNext is preferred under `SUNSHINE DEPARTURE` because the coral sunrise and lagoon departure fields create stronger celebration/discovery energy without losing the Japanese instruction hierarchy.
-
-Professional Design Council score: `89/100`; no Executive Creative Director, Japanese Editorial Designer or Print Production Director veto.
+Professional Design Council score: `93/100`; no Executive Creative Director, Japanese Editorial Designer or Print Production Director veto.
 
 ## Structure / long-copy QA
 
-A2 `32:2`:
+Stress expanded title, lead and all three step phrases. Initial title/lead collision was fixed by widening the title measure and increasing the header-to-card-rack vertical gap rather than shrinking the title.
 
-- `clipsContent=true`;
-- visible native text `10`;
-- every visible text `textAutoResize=HEIGHT`;
-- IMAGE fills `0`;
+Final A2 stress:
+
 - outside text `0`;
-- collisions `0`.
+- collisions `0`;
+- long lead bottom `900`;
+- longest step bottom `1459`;
+- footer bottom `1849`;
+- root bottom `1980`.
 
-A3 `32:16`:
+Final A3 stress:
 
-- `clipsContent=true`;
-- visible native text `10`;
-- every visible text `textAutoResize=HEIGHT`;
-- IMAGE fills `0`;
 - outside text `0`;
-- collisions `0`.
+- collisions `0`;
+- long lead bottom `629`;
+- longest step bottom `1052`;
+- footer bottom `1277`;
+- root bottom `1400`.
 
-Long-copy stress initially exposed title/lead collisions. After opening the lead gap:
+Selected family:
 
-- A2 stress: outside `0`, collisions `0`, long lead bottom `656`, long Step 03 bottom `1599`, root bottom `1980`;
-- A3 stress: outside `0`, collisions `0`, long lead bottom `477`, long Step 03 bottom `1132`, root bottom `1400`.
+- semantic/factual copy remains native editable Figma text;
+- visible text uses `textAutoResize=HEIGHT`;
+- IMAGE fills `0`;
+- variable information baked into fixed art `0`.
 
 Stress proofs are hidden after QA.
 
 ## Hybrid authoring / asset decision
 
 - semantic/factual copy: native editable Figma text;
-- fixed art: simple large native geometry;
+- fixed visual support: simple native paper/card/rail geometry with physical meaning;
 - SVG: not required;
 - generated/composed raster: not required;
-- replaceable image: not required;
-- IMAGE fills: `0`;
+- replaceable image role: not required;
 - Drive write: `0`.
 
-`IMAGE_GENERATION_NOT_REQUIRED`: action discovery/wayfinding remains the bottleneck. Decorative generated travel or Hawaii imagery would compete with the three-step instruction rather than improve it.
+`IMAGE_GENERATION_NOT_REQUIRED`: family-scale abstract-shape repetition was the defect. A physical escort-card rack solves it more directly than decorative travel/Hawaii imagery and keeps the instruction clear.
 
 ## Deferred finalization
 
@@ -131,6 +117,6 @@ Keep `NOT_PRINT_READY` until:
 - installation height/easel lip and 2–4m viewing-distance check;
 - venue lighting/background contrast.
 
-Previous V2/legacy remain intact as rollback/history.
+## Next
 
-Next progression target: `ADD-08 メニュー補助サイン`.
+Family-scale audit `ADD-08 メニュー補助サイン`. Rebuild only if a material dominant-grammar duplication remains; do not redesign solely for activity.
