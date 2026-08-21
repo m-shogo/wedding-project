@@ -78,6 +78,24 @@ Result: `REJECTED_FOR_PROMOTION / USEFUL_DIRECTIONAL_EVIDENCE`.
 
 This is the strongest typography-led study and the cleanest break from repeated blob/capsule geometry. However, live 1000×1480 screenshots show that it still becomes too sparse and gallery-poster-like for the current wedding brief. It improves graphic discipline but reduces warmth, surprise and guest-facing excitement. The destination name is ownable, but the place itself is still under-authored.
 
+## Structure readback
+
+All eight new study roots were read back after the visual comparison:
+
+- every study root remains exactly `1000×1480`;
+- A/B/C HAWAII + JAPAN: `7/7` visible native text roles are `textAutoResize=HEIGHT`;
+- D HAWAII + JAPAN: `7/7` visible native text roles are `textAutoResize=HEIGHT`;
+- IMAGE fills: `0` on all eight study roots;
+- A/B/C/JAPAN-D outside visible text: `0`;
+- D HAWAII reports outside visible text `1` because the `HAWAII` hero is deliberately oversized and clipped beyond the left root edge.
+
+The D HAWAII crop is intentional visual behavior, not an accidental hidden overflow, but it is still a resilience cost: destination-name typography that relies on a frame-edge crop must be re-authored per word length and cannot be treated as a universal family component. This reinforces the decision not to scale D mechanically to all 11 destinations.
+
+Production readback remained healthy and unchanged:
+
+- HAWAII `2:2`: `6/6` visible native text auto-height, outside `0`, IMAGE fills `0`;
+- JAPAN `2:47`: `7/7` visible native text auto-height, outside `0`, IMAGE fills `0`.
+
 ## Comparison to current production
 
 Current family review board:
