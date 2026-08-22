@@ -7,11 +7,11 @@ Figma file: `bfM0d4c9dCeBv5pCkJ3TNM`
 Figma page: `2052:2 / 07_RURUBU_V7_V8_PRO_STUDIES`
 V6 control: frozen `JC + IX + JB + IZ + IT + JA`
 V7 comparison set: six-role clean-room study, preserved and not preferred
-Production state: `V8_AH_OUTER_CURRENT / V8_AK_PROFILE_CURRENT / V8_AL_STORY_CURRENT / V8_AM_MEMORY_CURRENT / V8_AF_CAFE_CURRENT / V8_AO_1DAY_CURRENT / NOT_GLOBAL_WINNER / NOT_PRINT_READY`
+Production state: `V8_AP_OUTER_CURRENT / V8_AK_PROFILE_CURRENT / V8_AL_STORY_CURRENT / V8_AM_MEMORY_CURRENT / V8_AF_CAFE_CURRENT / V8_AO_1DAY_CURRENT / NOT_GLOBAL_WINNER / NOT_PRINT_READY`
 
 ## Current V8 roots
 
-1. **Outer AH `2234:2`** — destination-led `横浜` hierarchy; reader-facing publication furniture; one verified abstract ocean-light supporting master. Previous AB hidden rollback.
+1. **Outer AP `2251:2`** — destination-led `横浜` hierarchy; back-cover reader contents fully reconciled to Japanese section vocabulary (`01 ふたり / 02 物語 / 03 記憶 / 04 食卓 / 05 一日旅`); one verified abstract ocean-light supporting master. Previous AH `2234:2` hidden rollback.
 2. **Profile/Q&A AK `2238:2`** — content-owned Japanese personality hierarchy retained; page furniture `01 / ふたり`; answer-owned Q&A voice retained. Previous AJ `2235:2` hidden rollback. IMAGE `0`.
 3. **Story/Chronology AL `2238:35`** — typography-led emotional story + unequal chronology rhythm; reader furniture `02 / 物語`, `年表 / 2019—2026`, final event `結婚式`. Previous Q `2196:2` hidden rollback. IMAGE `0`.
 4. **Memory/Guide AM `2238:73`** — reflective essay and functional guide remain semantically separated; reader furniture `03 / 記憶`, `寄り道案内`. Previous AD `2228:2` hidden rollback. IMAGE `0`.
@@ -22,7 +22,7 @@ Production state: `V8_AH_OUTER_CURRENT / V8_AK_PROFILE_CURRENT / V8_AL_STORY_CUR
 
 | Role | Native text | Text intersections | 18px safe risk | IMAGE |
 | --- | ---: | ---: | ---: | ---: |
-| Outer AH | 12 | 0 | 0 | 1 |
+| Outer AP | 12 | 0 | 0 | 1 |
 | Profile/Q&A AK | 23 | 0 | 0 | 0 |
 | Story/Chronology AL | 25 | 0 | 0 | 0 |
 | Memory/Guide AM | 22 | 0 | 0 | 0 |
@@ -30,6 +30,8 @@ Production state: `V8_AH_OUTER_CURRENT / V8_AK_PROFILE_CURRENT / V8_AL_STORY_CUR
 | 1DAY/Model Course AO | 21 | 0 | 0 | 0 |
 
 AO was reviewed at whole-item 500px, reading 1400px, and actual-size 1587×1123. Its visible process/schema leakage audit is `0`. The exact time/action data remains `10:00 海辺 / 11:40 カフェ / 15:10 街歩き / 18:30 食卓`.
+
+AP was also reviewed at 500 / 1400 / 1587×1123 after the final `1DAY → 一日旅` index reconciliation. Text intersections `0`, 18px safe risk `0`, and generic schema/process leakage `0`.
 
 ## Drive authority
 
@@ -80,6 +82,23 @@ Shared learning:
 Feedback log:
 `docs/wedding-design-learning-feedback-log.append/2026-08-22-rurubu-v8-1day-destination-owned-reader-copy.md`
 
+### RSL-215 recurrence cleanup — Outer contents index
+
+A post-AO six-root live audit found one remaining schema term on the Outer back-cover contents index: `05 1DAY`.
+
+Rollback-safe AP `2251:2` changed only that final index entry to `05 一日旅`, matching the live reader-facing section vocabulary. No new RSL was invented for this small correction.
+
+Result:
+- 500 / 1400 / 1587×1123 PASS
+- native text `12`
+- IMAGE `1`
+- intersections `0`
+- 18px safe risk `0`
+- generic schema/process leakage `0`
+
+Evidence:
+`01_paper-items/rurubu-wedding/evidence/RURUBU-V8-OUTER-AP-CONTENTS-INDEX-QA-2026-08-22.md`
+
 ## Active prior boundaries
 
 - RSL-215: reader-facing publication furniture should not expose internal schema vocabulary.
@@ -106,20 +125,20 @@ Feedback log:
 
 - **V6 `JC + IX + JB + IZ + IT + JA`** remains strongest for immediate travel desire, photographic atmosphere, and unmistakable Rurubu-like excitement.
 - **V7** remains useful as a high-energy comparison but is weakened by synthetic/schematic image craft.
-- **V8 `AH + AK + AL + AM + AF + AO`** now has stronger destination/content ownership on the 1DAY role while retaining its book/editorial pacing, information integrity and anti-template signal.
+- **V8 `AP + AK + AL + AM + AF + AO`** now has stronger destination/content ownership on the 1DAY role and fully reconciled reader-facing section vocabulary in the Outer contents index, while retaining its book/editorial pacing and anti-template signal.
 - V8 still lacks V6's destination-specific photographic desire and is not promoted as global winner.
 
 ## Next highest-value work
 
 1. Do not create V9.
 2. Preserve V6/V7 and all rollback/rejected V8 roots.
-3. Keep `AH + AK + AL + AM + AF + AO` unless a role-valid alternative wins three-scale and structural QA.
+3. Keep `AP + AK + AL + AM + AF + AO` unless a role-valid alternative wins three-scale and structural QA.
 4. When an approval-free generation route is materially available, close `role-specific brief → generation → Drive master → Drive ID readback → Figma placement → crop/hash → three-scale QA`.
 5. Do not retry the unchanged RSL-208 DNS-blocked upload-submit route without material change.
-6. Audit remaining display type, captions, folios, labels and English for real semantic ownership rather than mechanical translation.
+6. Continue auditing display type, captions, folios and labels for real semantic ownership, but do not mechanically translate identity English with a genuine reader job.
 7. Continue Japanese semantic-wrap and final mojikumi/kinsoku QA.
-8. Compare V6/V7/V8 on both professional editorial quality, destination specificity and travel desire.
+8. Compare V6/V7/V8 on professional editorial quality, destination specificity and travel desire.
 9. Keep DESIGN QA, REAL CONTENT QA, PRINT TEMPLATE/PREFLIGHT and PHYSICAL PROOF separate.
 
 Current state:
-`V8 AH + AK + AL + AM + AF + AO = VERIFIED_LOCAL_DESIGN_STUDIES / DISTINCT_BOOK_EDITORIAL_SYSTEM / READER_FACING_JAPANESE_PUBLICATION_VOICE_IMPROVED / DESTINATION_OWNERSHIP_IMPROVED_ON_1DAY / NATIVE_TEXT_EDITABILITY_PRESERVED / ROLLBACK_SAFE / DESTINATION_PHOTO_POWER_STILL_BELOW_V6 / NOT_GLOBAL_WINNER / NOT_PRINT_READY`
+`V8 AP + AK + AL + AM + AF + AO = VERIFIED_LOCAL_DESIGN_STUDIES / DISTINCT_BOOK_EDITORIAL_SYSTEM / READER_FACING_JAPANESE_PUBLICATION_VOICE_IMPROVED / DESTINATION_OWNERSHIP_IMPROVED_ON_1DAY / SCHEMA_FURNITURE_RECURRENCE_REDUCED / NATIVE_TEXT_EDITABILITY_PRESERVED / ROLLBACK_SAFE / DESTINATION_PHOTO_POWER_STILL_BELOW_V6 / NOT_GLOBAL_WINNER / NOT_PRINT_READY`
