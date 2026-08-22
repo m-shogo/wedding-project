@@ -1,96 +1,108 @@
 # ADD-13 メッセージカード — QA
 
-Status: `CURRENT / PROFESSIONAL_VNEXT_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / LONG_COPY_STRESS_PASS / HANDWRITING_AREA_55_PERCENT_PASS / LEGACY_PRESERVED / ROLLBACK_SAFE / NOT_PRINT_READY`
-Updated: 2026-08-21
+Status: `CURRENT / FAMILY_DIVERSE_RESORT_DESK_LETTER_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / FAMILY_SCALE_TEMPLATE_REPETITION_CLOSED_FOR_ADD13 / LONG_COPY_STRESS_PASS / HANDWRITING_AREA_55_PERCENT_PASS / LEGACY_PRESERVED / ROLLBACK_SAFE / NOT_PRINT_READY`
+Updated: 2026-08-22
 Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
 Professional quality authority: `docs/design-learning/PROFESSIONAL-DESIGN-COUNCIL-VNEXT-2026-08-20.md`
 
 ## Current selected authority
 
 - Figma file: `8ad7bEPAc8I88gs1JxsWhe`
-- selected page: `48:2 / SELECTED / VNEXT PRO / ADD-13 / SUNSHINE POSTCARD / 2026-08-21`
-- selected front: `48:3 / VNEXT_SELECTED_CANDIDATE / ADD13 / FRONT / SUNSHINE POSTCARD`
-- selected back: `48:21 / VNEXT_SELECTED_CANDIDATE / ADD13 / BACK / AFTERGLOW LETTER`
-- hidden long-copy front/back: `48:39 / 48:57`
-- three-direction concept page: `47:2`
-- retained prior clean-room V6: `27:2 / 27:3 / 27:4` — comparison/rollback/history only
-- retained legacy production: `1:3 / 1:13` — comparison/rollback/history only
-- Drive folder: `1Md8oCMsw4F9tZjQueNmQQ2dYR1I7JwZl / ADD-13_Message_Card`
+- Current front: `52:72 / CURRENT / FAMILY-DIVERSE / ADD13 / FRONT / RESORT DESK LETTER`
+- Current back: `52:91 / CURRENT / FAMILY-DIVERSE / ADD13 / BACK / CHECKOUT NOTE`
+- hidden realistic long-copy stress: `52:109 / 52:128`
+- family-diversity studies: `52:2 / 52:20 / 52:54`
+- retained prior Professional vNext SUNSHINE POSTCARD: `48:3 / 48:21` — comparison/rollback/history only
+- retained prior clean-room V6 and legacy production remain preserved
+- exact Drive authority: `1Md8oCMsw4F9tZjQueNmQQ2dYR1I7JwZl / ADD-13_Message_Card`
+- Drive write for the family-diverse promotion: `0`
 
-Canonical vNext evidence:
-- `PROFESSIONAL-VNEXT-SUNSHINE-POSTCARD-QA-2026-08-21.md`
+Canonical current evidence:
+- `FAMILY-DIVERSE-RESORT-DESK-LETTER-QA-2026-08-21.md`
 
-Drive metadata was re-read live. Drive write: `0`.
+## Why Current changed after SUNSHINE POSTCARD
 
-## Clean-room vNext
+`SUNSHINE POSTCARD` remained structurally sound and individually attractive, but family-scale review found that its large rounded coral / mint / sun-like fields repeated a graphic grammar already appearing across unrelated non-Rurubu items. Per the promoted family-scale template-repetition rule, the replacement had to change the physical/artifact grammar rather than merely recolor the same shapes.
 
-The professional vNext was built from blank frames without using retained V6/legacy visual construction as an authoring source. Only verified requirements were carried forward: A6 landscape `148×105 mm`, duplex role, >=55% handwriting area, editable title/prompt/name/date roles, print/readability constraints, and unresolved-input boundaries.
+The selected replacement was therefore authored from blank frames using only verified non-visual requirements: A6 landscape `148×105 mm`, duplex role, >=55% handwriting area, native editable title/prompt/name/date roles, safe-area/readability constraints, and unresolved-input boundaries.
 
-Three new directions were authored:
-- `47:3 / SUNSHINE POSTCARD` — selected;
-- `47:18 / OCEAN LETTER` — stronger contrast but too heavy for the front role;
-- `47:34 / BREEZE LETTER` — rejected because its rounded white writing field read too much like a UI card.
+## Current visual direction — RESORT DESK LETTER
 
-## Current visual direction
+### Front `52:72`
 
-### Front `48:3`
-- warm cream writing surface;
-- Japanese-first `ふたりへ、旅のおみやげを。`;
-- coral / sunlight / mint crop-through movement;
-- broad open writing rules rather than a visible card/container;
-- native `[メッセージテーマ]`, `おなまえ`, date;
-- no fake stamp/barcode/airline credential, generic travel icon or rasterized copy.
+- resort/hotel writing-desk stationery metaphor rather than a colorful postcard graphic;
+- dark resort-green letterhead strip;
+- thin terracotta paper/binding edge;
+- one small butter-yellow folded-corner cue;
+- Japanese-first `旅の途中から、ひとこと。`;
+- broad open handwriting rules remain the dominant function;
+- native `[メッセージテーマ]`, `おなまえ`, date roles;
+- no giant circle/capsule/sun, fake stamp/barcode/airline credential, generic travel icon, gradient, shadow or rasterized copy.
 
-### Back `48:21`
-- deep-ocean left field + warm cream writing field;
-- Japanese-first `旅の余白に、ひとこと。`;
-- open writing rules remain the dominant physical role;
-- coral/mint movement remains on the non-writing side;
-- native `[自由記入]`, name/date roles.
+### Back `52:91`
 
-## Screenshot / refinement QA
+- quieter checkout-note face from the same stationery family;
+- narrow green stationery strip rather than a large rounded decorative field;
+- Japanese-first `帰る前に、ひとこと。`;
+- large uninterrupted writing lane;
+- native `[自由記入]`, name/date roles;
+- no fake postal/transport data or tropical clip-art.
 
-Initial live screenshots caught two meaningful defects before selection:
+The first back screenshot exposed title/guide/free-writing-label crowding. The title and guide/prompt lanes were separated before selection.
 
-1. front Japanese title wrapped awkwardly into three lines;
-2. fixed sun/mint/coral decoration and the back mint wind approached or entered the semantic writing lane.
+## Three-scale screenshot QA
 
-The title was optically reflowed to two lines and fixed decoration was pulled outside the `AREA_HANDWRITING_MAIN` role.
+Live Current re-audit on 2026-08-22 reconfirmed the selected front/back at native `1400×993`.
 
-Three-scale result:
-- front whole-item 500px: PASS;
-- back whole-item 500px: PASS;
-- reading 900px: PASS;
-- native `1400×993` front/back actual-size/detail representation: PASS.
+- front whole-item / reading / actual-size: PASS;
+- back whole-item / reading / actual-size: PASS;
+- handwriting remains the primary use surface rather than decoration;
+- no screenshot-visible UI card/container regression was found.
 
 ## Long-copy / structure QA
 
-Stress roots `48:39 / 48:57` were revealed for realistic long title/theme/prompt review and returned hidden afterward.
+Hidden stress roots remain `52:109 / 52:128`.
 
-Final readback:
-- selected front: native text `6`, IMAGE `0`, outside visible text `0`, collisions `0`;
-- selected back: native text `6`, IMAGE `0`, outside `0`, collisions `0`;
-- stress front: native text `6`, IMAGE `0`, outside `0`, collisions `0`;
-- stress back: native text `6`, IMAGE `0`, outside `0`, collisions `0`.
+Verified structure from the promoted evidence:
 
-Every selected/stress face preserves:
-- canvas `1400×993`;
-- semantic `AREA_HANDWRITING_MAIN = 900×870`;
-- handwriting-area ratio `56.32%`;
-- SPEC minimum `55%`;
-- result `PASS`.
+- selected front: native visible text `6`; fixed-height `0`; IMAGE fills `0`; outside text `0`; collisions `0`;
+- selected back: native visible text `6`; fixed-height `0`; IMAGE fills `0`; outside text `0`; collisions `0`;
+- stress front/back: fixed-height `0`; IMAGE fills `0`; outside `0`; collisions `0`;
+- canvas: `1400×993`;
+- semantic handwriting area: `900×870`;
+- handwriting-area ratio: `56.32%`;
+- SPEC minimum: `55%`;
+- result: PASS.
 
-All variable/factual copy remains native editable. Generated/composed raster `0`; replaceable images `0`; person imagery `0`.
+All variable/factual copy remains native editable Figma text.
 
-## Mature comparison / professional gate
+## Hybrid authoring / image decision
 
-Retained V6 was opened only after the new candidate passed visual, stress and structural QA. V6 remains structurally strong but visually very quiet. The vNext is materially stronger for the current `SUNSHINE DEPARTURE` brief: clearer departure/arrival emotion, stronger thumbnail memory and joyful movement while preserving handwriting-first function.
+- variable/factual copy: native Figma text;
+- writing rules / paper edges: simple native functional geometry;
+- generated/composed raster: `0`;
+- editable SVG: `0`;
+- replaceable image roles: `0`.
 
-Professional Design Council: `92/100`.
+`IMAGE_GENERATION_NOT_REQUIRED_FOR_THIS_ITERATION`: the diagnosed defect was suite-level graphic-grammar repetition, not missing photography or illustration. Generated resort/aircraft/tropical imagery would reduce writing space and increase stock/AI-template risk.
 
-`IMAGE_GENERATION_NOT_REQUIRED_FOR_THIS_ITEM`: the diagnosed problem was art direction and emotional amplitude, not missing photography/illustration. Adding generic postcard/tropical/aircraft imagery would reduce writing space and raise stock/AI-template risk.
+## Professional Design Council
 
-## BLOCKED_REQUIRED_INPUT / DEFERRED_FINALIZATION
+Score: `92/100 / PASS / NO VETO`.
+
+- Concept clarity / ownability: 14/15
+- Emotional excitement / want-to-pick-up: 12/15
+- Japanese editorial craft: 14/15
+- Composition / hierarchy / rhythm: 14/15
+- Travel / hospitality integration without cliché: 8/10
+- Item-specific functionality: 10/10
+- Physical print credibility: 10/10
+- Editability / content resilience: 5/5
+- Family fit without template sameness: 5/5
+
+## Deferred finalization
+
+Remain `NOT_PRINT_READY` until the following are authoritative:
 
 - final title/theme/prompt copy;
 - final signer/name/date policy;
@@ -103,6 +115,6 @@ Do not invent final personal copy or signer details.
 
 ## Result
 
-`PROFESSIONAL_VNEXT_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / LONG_COPY_STRESS_PASS / HANDWRITING_AREA_55_PERCENT_PASS / LEGACY_PRESERVED / NOT_PRINT_READY`
+`FAMILY_DIVERSE_RESORT_DESK_LETTER_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / FAMILY_SCALE_TEMPLATE_REPETITION_CLOSED_FOR_ADD13 / LONG_COPY_STRESS_PASS / HANDWRITING_AREA_55_PERCENT_PASS / LEGACY_PRESERVED / NOT_PRINT_READY`.
 
-Next progression target: `ADD-14 二次会案内`.
+Next progression target remains ADD-14 only if live review finds a material defect; otherwise continue past already-verified items rather than redesigning for novelty alone.
