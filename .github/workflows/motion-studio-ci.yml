@@ -54,3 +54,14 @@ jobs:
 
       - name: Opening V1 composition contract
         run: pnpm exec remotion compositions src/index-opening-v1.ts
+
+      - name: Opening V1 visual smoke stills
+        run: node --no-warnings scripts/render-opening-v1-qa-stills.mts
+
+      - name: Upload Opening V1 visual QA
+        uses: actions/upload-artifact@v4
+        with:
+          name: opening-v1-qa-stills
+          path: motion-studio/out/qa/opening-v1/*.png
+          if-no-files-found: error
+          retention-days: 7

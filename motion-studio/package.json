@@ -11,6 +11,7 @@
     "render": "node --no-warnings scripts/render.mts",
     "render:opening-v1": "pnpm prepare:opening-v1 && pnpm check:opening-photos:strict && remotion render src/index-opening-v1.ts OpeningV1 out/opening/opening_v1.mp4",
     "render:opening-v1:preview": "pnpm prepare:opening-v1 && remotion render src/index-opening-v1.ts OpeningV1 out/preview/opening_v1_preview.mp4 --scale=0.5 --crf=24",
+    "qa:opening-stills": "pnpm prepare:opening-v1 && node --no-warnings scripts/render-opening-v1-qa-stills.mts",
     "check": "pnpm check:motion && pnpm check:assets && pnpm check:parts && pnpm check:presets",
     "check:motion": "node --no-warnings scripts/check-motion.mts",
     "check:assets": "node --no-warnings scripts/check-assets.mts",
