@@ -1,148 +1,137 @@
 # ADD-05 サンキュータグ / プチギフトタグ — QA
 
-Status: `CURRENT / PROFESSIONAL_VNEXT_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / CONFIRMED_COPY_ONLY / PHYSICAL_CLEARANCE_PASS / 45X70_INDEPENDENT_REFLOW_PASS / PREVIOUS_V3_V2_LEGACY_PRESERVED / NOT_PRINT_READY`
-Updated: 2026-08-21
+Status: `CURRENT / PROFESSIONAL_VNEXT_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / FAMILY_SCALE_TEMPLATE_REPETITION_CLOSED_FOR_ADD05 / CONFIRMED_COPY_ONLY / PHYSICAL_CLEARANCE_PASS / 45X70_INDEPENDENT_REFLOW_PASS / ROLLBACK_SAFE / NOT_PRINT_READY`
+Updated: 2026-08-22
 Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
 
 ## Current Figma authority
 
-Professional vNext selected family:
-
 - Figma file: `kAdkOMuAMcFQtTSP8NtWil`
-- vNext page: `24:2 / VNEXT_PRO / ADD-05 THANK YOU TAG / TINY TRAVEL SOUVENIR / 2026-08-21`
-- 50×80 front: `25:2 / SELECTED PROFESSIONAL VNEXT / ADD-05 / FRONT 50X80 / WAVE SOUVENIR`
-- 45×70 front: `25:10 / SELECTED PROFESSIONAL VNEXT / ADD-05 / FRONT 45X70 / WAVE SOUVENIR REFLOW`
-- optional 50×80 back: `25:18 / SELECTED PROFESSIONAL VNEXT / ADD-05 / BACK 50X80 OPTIONAL / AFTERGLOW NOTE`
-- previous selected V3 preserved: `22:3 / 22:11 / 22:17`
-- prior selected V2 preserved: `9:2 / 9:13 / 9:20`
-- retained legacy preserved: `1:2 / 1:12 / 1:19`
+- selected 50×80 front: `31:2 / CURRENT_SELECTED / FAMILY-DIVERSE VNEXT V3 / ADD-05 / FRONT 50X80 / RIBBON FOLD GIFT TAG`
+- selected 45×70 front: `31:10 / CURRENT_SELECTED / FAMILY-DIVERSE VNEXT V3 / ADD-05 / FRONT 45X70 / RIBBON FOLD GIFT TAG REFLOW`
+- selected optional 50×80 back: `31:18 / CURRENT_SELECTED / FAMILY-DIVERSE VNEXT V3 / ADD-05 / BACK 50X80 / RETURN RIBBON NOTE`
+- previous selected `WAVE SOUVENIR`: `25:2 / 25:10 / 25:18`, preserved as hidden history
+- rejected family-diversity V2 `FOLDED GIFT NOTE`: `28:2 / 28:10 / 28:18`, preserved as hidden history
+- V3 direction studies: `30:2 / 30:10 / 30:23`, preserved as hidden history
 - exact Drive authority: `1_V20y77VU1aGrJtqpl7U5XUpC-bQuTxV / ADD-05_サンキュータグ_プチギフトタグ`
 
-Current evidence:
+Current promotion evidence:
 
-- `PROFESSIONAL-VNEXT-WAVE-SOUVENIR-QA-2026-08-21.md`
+- `FAMILY-DIVERSITY-RIBBON-FOLD-V3-PROMOTION-QA-2026-08-21.md`
 
-## vNext clean-room direction
+The earlier `PROFESSIONAL-VNEXT-WAVE-SOUVENIR-QA-2026-08-21.md` remains historical evidence and is no longer the Current visual pointer.
 
-The previous V3 remains valid rollback/structural evidence but does not waive the professional vNext reset.
+## Current direction — RIBBON FOLD
 
-The new work started from blank frames and carried forward only verified facts/physical constraints. Three materially different directions were built:
+The Current family was rebuilt from blank frames after the previous `WAVE SOUVENIR` was found to repeat the suite-level oversized rounded wave/orb grammar. It carries forward only confirmed copy and verified provisional punch geometry.
 
-1. `24:3 / SUNSET TOKEN`
-2. `24:10 / LUGGAGE RIBBON`
-3. `24:18 / WAVE NOTE`
+Three materially different V3 directions were created from blank frames:
 
-`WAVE NOTE` was selected and rebuilt as `WAVE SOUVENIR`.
+1. `GIFT WRAP BAND`
+2. `CLIPPED LUGGAGE LABEL`
+3. `RIBBON FOLD`
 
-The central art direction is one oversized deep-ocean wave plus coral/lagoon movement fields. It creates a brighter travel-souvenir character without plane icons, fake baggage labels, barcodes, route codes, badges, shadows, gradients or generic tropical imagery.
+`RIBBON FOLD` was selected because it gives the object a gift-specific physical reading—warm paper, coral gift ribbon, mango fold and deep-ocean return field—without fake airline credentials, generic tropical decoration, or the repeated rounded-shape family grammar.
 
-The `LUGGAGE RIBBON` study was rejected because making the punch/string axis visually dominant created a device stronger than the thank-you message. Physical relevance alone is not enough to justify a motif.
+## Confirmed copy / physical facts
 
-## Confirmed-copy / physical-authority correction
+Visible authoritative copy only:
 
-A final item-authority read before Current promotion exposed two mismatches in the first selected draft:
+- front: `Thank you.` + `for traveling with us.`
+- optional back: `Have a safe trip home.`
+- date: `2026.10.24`
 
-- exploratory Japanese concept copy was not authoritative production copy;
-- prototype punch geometry did not match the latest verified provisional item geometry.
+Verified provisional punch role:
 
-Selected vNext was corrected before promotion.
+- 50×80: `50×50`, center `(250,80)`
+- 45×70: `50×50`, center `(225,80)`
 
-Final visible selected copy is authoritative only:
+Do not invent guest/product/venue/QR/SNS data, Japanese concept copy, airline class, gate, barcode, destination credential, or another fake transport authority.
 
-- front: `Thank you.` + `for traveling with us.`;
-- optional back: `Have a safe trip home.`;
-- date: `2026.10.24`.
+## Live visual QA — 2026-08-22 readback
 
-Final provisional punch geometry:
+The live selected nodes and exact Drive authority were re-read after `CURRENT_PROMOTION_QA_POINTER_DRIFT` became a project rule.
 
-- 50×80: `50×50`, center `(250,80)`;
-- 45×70: `50×50`, center `(225,80)`.
+### 50×80 front `31:2`
 
-No unconfirmed Japanese wording, guest/product/venue/QR/SNS data, or fake transport credential remains visible in selected vNext.
+- native canvas `500×800`: PASS
+- whole-item/thumbnail hierarchy: PASS
+- `Thank you.` remains the first read
+- punch remains visually clear and separate from copy
+- ribbon/fold gesture reads as gift wrapping rather than a UI rail
+- date is readable against the deep-ocean lower field
 
-## Three-scale / format QA
+### 45×70 front `31:10`
 
-50×80 front `25:2`:
+- native canvas `450×700`: PASS
+- independent reflow remains intact
+- hierarchy remains `Thank you. → body → date`
+- punch and ribbon geometry remain physically legible at the smaller format
 
-- whole-item / thumbnail: PASS;
-- reading scale: PASS;
-- native `500×800`: PASS.
+### Optional back `31:18`
 
-45×70 front `25:10`:
+- native canvas `500×800`: PASS
+- `Have a safe trip home.` remains the first read
+- front/back share material grammar without mirrored-template sameness
+- date remains legible in the lower field
 
-- whole-item: PASS;
-- reading scale: PASS;
-- native `450×700`: PASS;
-- independent reflow: PASS.
+No screenshot-supported defect was found that justifies another visual redesign in this run.
 
-Optional back `25:18`:
+Professional Design Council score remains `90/100`; no Executive Creative Director, Japanese Editorial Designer or Print Production Director veto.
 
-- whole-item: PASS;
-- reading/native `500×800`: PASS;
-- front/back family relationship: PASS without mirrored-template sameness.
+## Structure / hybrid authoring QA
 
-Completion-only comparison with retained production was performed only after vNext maturity. The retained English-serif tag remains competent but quieter/formal; vNext is preferred for `SUNSHINE DEPARTURE` because crop/scale/color create stronger pick-up appeal and souvenir energy while keeping the same authoritative wording and physical punch clarity.
+Current live metadata for `31:2` confirms:
 
-Professional Design Council score: `90/100`; no Executive Creative Director, Japanese Editorial Designer or Print Production Director veto.
+- root `500×800`
+- punch node `50×50`
+- visible semantic copy remains native Figma text
+- no image role is required for the current visual direction
 
-## Structure / physical QA
+Promotion evidence records the selected family as native editable text/vector geometry with IMAGE fills `0`, generated raster assets `0`, SVG roles `0`, and explicit native punch geometry. The Current Figma screenshots remain consistent with that authority.
 
-### 50×80 front `25:2`
+Hybrid split:
 
-- `500×800`, `clipsContent=true`;
-- visible native text `3`;
-- all visible text `textAutoResize=HEIGHT`;
-- IMAGE fills `0`;
-- outside text `0`;
-- text collisions `0`;
-- punch `50×50`, center `(250,80)`.
+- confirmed text/date: native editable Figma text
+- fixed ribbon/paper/fold fields: simple native geometry
+- punch: native physical ellipse role
+- editable SVG: not required
+- generated/composed raster: not required
+- replaceable image role: not required
+- Drive write in this reconciliation: `0`
 
-### 45×70 front `25:10`
+`IMAGE_GENERATION_NOT_REQUIRED`: the current quality problem was authority-pointer drift, not missing photography or illustration. At 45×70 / 50×80 physical size, adding generated imagery would reduce legibility and increase stock/AI-template risk without addressing a diagnosed defect.
 
-- `450×700`, `clipsContent=true`;
-- visible native text `3`;
-- all visible text `textAutoResize=HEIGHT`;
-- IMAGE fills `0`;
-- outside text `0`;
-- text collisions `0`;
-- punch `50×50`, center `(225,80)`.
+## Authority reconciliation — 2026-08-22
 
-### Optional 50×80 back `25:18`
+The canonical QA pointer had drifted behind the live selected family: it still described `25:2 / 25:10 / 25:18 / WAVE SOUVENIR`, while the later verified promotion evidence and live Figma identify `31:2 / 31:10 / 31:18 / RIBBON FOLD` as Current.
 
-- `500×800`, `clipsContent=true`;
-- visible native text `2`;
-- all visible text `textAutoResize=HEIGHT`;
-- IMAGE fills `0`;
-- outside text `0`;
-- text collisions `0`;
-- punch `50×50`, center `(250,80)`.
+This file is now reconciled to the actual Current without changing production Figma or Drive assets.
 
-## Hybrid authoring / asset decision
+Reconciliation chain:
 
-- confirmed text/date: native editable Figma text;
-- fixed art: a few large native color/shape fields;
-- punch: native physical ellipse role;
-- editable SVG: not required;
-- generated/composed raster: not required;
-- replaceable image role: not required;
-- Drive write: `0`.
+`live selected Figma 31:* → FAMILY-DIVERSITY-RIBBON-FOLD-V3-PROMOTION-QA-2026-08-21.md → this canonical QA.md → exact Drive authority 1_V20y77VU1aGrJtqpl7U5XUpC-bQuTxV`
 
-`IMAGE_GENERATION_NOT_REQUIRED`: at this small physical scale, imagery would reduce legibility and increase stock/AI-template risk. The quality problem is object-level hierarchy, punch interaction and souvenir character.
+Earlier designs remain preserved as history/rollback and are not deleted.
 
 ## Deferred finalization / print gate
 
-Keep `NOT_PRINT_READY` until authoritative production inputs exist:
+Keep `NOT_PRINT_READY` until authoritative physical inputs/proofs exist:
 
-- final choice between 50×80 and 45×70;
-- actual gift/package dimensions;
-- attachment/string/ribbon width and method;
-- final punch/tool diameter and stock thickness beyond current provisional geometry;
-- printer bleed/safe template;
-- duplex registration if optional back is used;
-- 100% physical attachment/rotation proof;
-- warm venue-light and rub/ink proof;
-- optional back adoption under the real attachment method.
+- final choice between 50×80 and 45×70
+- actual gift/package dimensions
+- attachment/string/ribbon width and method
+- final punch/tool diameter and stock thickness beyond current provisional geometry
+- printer bleed/safe template
+- duplex registration if optional back is used
+- 100% physical attachment/rotation proof
+- warm venue-light and rub/ink proof
+- optional back adoption under the real attachment method
 
-Previous V3/V2/legacy remain intact as rollback/history.
+These unresolved physical checks do not invalidate the current visual/design selection.
 
-Next progression target: `ADD-06 フォトブースサイン`.
+## Decision
+
+`CURRENT_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / CURRENT_POINTER_RECONCILED / NOT_PRINT_READY`.
+
+Do not reopen ADD-05 merely to create another decorative variation unless physical proof or a new screenshot-supported defect invalidates the Current. Next safe progression target: ADD-06.
