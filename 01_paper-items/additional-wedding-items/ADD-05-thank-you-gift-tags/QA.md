@@ -1,6 +1,6 @@
 # ADD-05 サンキュータグ / プチギフトタグ — QA
 
-Status: `CURRENT / PROFESSIONAL_VNEXT_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / FAMILY_SCALE_TEMPLATE_REPETITION_CLOSED_FOR_ADD05 / CONFIRMED_COPY_ONLY / PHYSICAL_CLEARANCE_PASS / 45X70_INDEPENDENT_REFLOW_PASS / ROLLBACK_SAFE / NOT_PRINT_READY`
+Status: `CURRENT / PROFESSIONAL_VNEXT_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / FAMILY_SCALE_TEMPLATE_REPETITION_CLOSED_FOR_ADD05 / CONFIRMED_COPY_ONLY / PHYSICAL_CLEARANCE_PASS / ACTUAL_SIZE_CONFIRMED_COPY_LEGIBILITY_PASS / 45X70_INDEPENDENT_REFLOW_PASS / ROLLBACK_SAFE / NOT_PRINT_READY`
 Updated: 2026-08-22
 Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
 
@@ -10,14 +10,16 @@ Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
 - selected 50×80 front: `31:2 / CURRENT_SELECTED / FAMILY-DIVERSE VNEXT V3 / ADD-05 / FRONT 50X80 / RIBBON FOLD GIFT TAG`
 - selected 45×70 front: `31:10 / CURRENT_SELECTED / FAMILY-DIVERSE VNEXT V3 / ADD-05 / FRONT 45X70 / RIBBON FOLD GIFT TAG REFLOW`
 - selected optional 50×80 back: `31:18 / CURRENT_SELECTED / FAMILY-DIVERSE VNEXT V3 / ADD-05 / BACK 50X80 / RETURN RIBBON NOTE`
+- actual-size microtype rollback: `34:2 / 34:10 / 34:18`
 - previous selected `WAVE SOUVENIR`: `25:2 / 25:10 / 25:18`, preserved as hidden history
 - rejected family-diversity V2 `FOLDED GIFT NOTE`: `28:2 / 28:10 / 28:18`, preserved as hidden history
 - V3 direction studies: `30:2 / 30:10 / 30:23`, preserved as hidden history
 - exact Drive authority: `1_V20y77VU1aGrJtqpl7U5XUpC-bQuTxV / ADD-05_サンキュータグ_プチギフトタグ`
 
-Current promotion evidence:
+Current evidence:
 
 - `FAMILY-DIVERSITY-RIBBON-FOLD-V3-PROMOTION-QA-2026-08-21.md`
+- `FIGMA-ACTUAL-SIZE-CONFIRMED-COPY-LEGIBILITY-QA-2026-08-22.md`
 
 The earlier `PROFESSIONAL-VNEXT-WAVE-SOUVENIR-QA-2026-08-21.md` remains historical evidence and is no longer the Current visual pointer.
 
@@ -50,8 +52,6 @@ Do not invent guest/product/venue/QR/SNS data, Japanese concept copy, airline cl
 
 ## Live visual QA — 2026-08-22 readback
 
-The live selected nodes and exact Drive authority were re-read after `CURRENT_PROMOTION_QA_POINTER_DRIFT` became a project rule.
-
 ### 50×80 front `31:2`
 
 - native canvas `500×800`: PASS
@@ -59,7 +59,7 @@ The live selected nodes and exact Drive authority were re-read after `CURRENT_PR
 - `Thank you.` remains the first read
 - punch remains visually clear and separate from copy
 - ribbon/fold gesture reads as gift wrapping rather than a UI rail
-- date is readable against the deep-ocean lower field
+- enlarged confirmed supporting line and date remain subordinate but physically more robust
 
 ### 45×70 front `31:10`
 
@@ -67,28 +67,59 @@ The live selected nodes and exact Drive authority were re-read after `CURRENT_PR
 - independent reflow remains intact
 - hierarchy remains `Thank you. → body → date`
 - punch and ribbon geometry remain physically legible at the smaller format
+- enlarged body/date do not collide with fold or lower field
 
 ### Optional back `31:18`
 
 - native canvas `500×800`: PASS
 - `Have a safe trip home.` remains the first read
 - front/back share material grammar without mirrored-template sameness
-- date remains legible in the lower field
-
-No screenshot-supported defect was found that justifies another visual redesign in this run.
+- enlarged date remains subordinate and readable
 
 Professional Design Council score remains `90/100`; no Executive Creative Director, Japanese Editorial Designer or Print Production Director veto.
 
+## Actual-size confirmed-copy legibility repair — 2026-08-22
+
+A physical-unit audit found a real defect that screenshot-only review had missed. The tag canvases use `10 px = 1 mm`; therefore the prior confirmed body/date roles were roughly `5.1–6.24 pt` at final size.
+
+Rollback-first bounded repair:
+
+- 50×80 body `20 → 24 px` (`≈5.67 → 6.80 pt`)
+- 50×80 date `22 → 26 px` (`≈6.24 → 7.37 pt`)
+- 45×70 body `18 → 22 px` (`≈5.10 → 6.24 pt`)
+- 45×70 date `20 → 24 px` (`≈5.67 → 6.80 pt`)
+- optional back date `22 → 26 px` (`≈6.24 → 7.37 pt`)
+
+Hidden complete rollback roots: `34:2 / 34:10 / 34:18`.
+
+The repair changed only confirmed body/date type sizes. Headline, copy, position, punch, ribbon/fold geometry and color fields remain unchanged. Fresh native screenshots PASS for all three Current variants.
+
+This is not an item-wide or project-wide “minimum 8 pt” rule. It is a role-based actual-size legibility correction for confirmed semantic/factual copy on a small physical tag.
+
 ## Structure / hybrid authoring QA
 
-Current live metadata for `31:2` confirms:
+Post-repair live readback:
 
-- root `500×800`
-- punch node `50×50`
-- visible semantic copy remains native Figma text
-- no image role is required for the current visual direction
+### 50×80 front `31:2`
+- native visible text `3`
+- fixed-height `0`
+- outside-root text `0`
+- text-text collision `0`
+- IMAGE fills `0`
 
-Promotion evidence records the selected family as native editable text/vector geometry with IMAGE fills `0`, generated raster assets `0`, SVG roles `0`, and explicit native punch geometry. The Current Figma screenshots remain consistent with that authority.
+### 45×70 front `31:10`
+- native visible text `3`
+- fixed-height `0`
+- outside-root text `0`
+- text-text collision `0`
+- IMAGE fills `0`
+
+### Optional back `31:18`
+- native visible text `2`
+- fixed-height `0`
+- outside-root text `0`
+- text-text collision `0`
+- IMAGE fills `0`
 
 Hybrid split:
 
@@ -98,21 +129,17 @@ Hybrid split:
 - editable SVG: not required
 - generated/composed raster: not required
 - replaceable image role: not required
-- Drive write in this reconciliation: `0`
+- Drive writes in this repair: `0`
 
-`IMAGE_GENERATION_NOT_REQUIRED`: the current quality problem was authority-pointer drift, not missing photography or illustration. At 45×70 / 50×80 physical size, adding generated imagery would reduce legibility and increase stock/AI-template risk without addressing a diagnosed defect.
+`IMAGE_GENERATION_NOT_REQUIRED`: the diagnosed defect was physical microtype, not missing photography or illustration. At 45×70 / 50×80 physical size, generated imagery would reduce legibility and increase stock/AI-template risk without addressing the defect.
 
-## Authority reconciliation — 2026-08-22
+## Authority reconciliation
 
-The canonical QA pointer had drifted behind the live selected family: it still described `25:2 / 25:10 / 25:18 / WAVE SOUVENIR`, while the later verified promotion evidence and live Figma identify `31:2 / 31:10 / 31:18 / RIBBON FOLD` as Current.
+Current chain:
 
-This file is now reconciled to the actual Current without changing production Figma or Drive assets.
+`live selected Figma 31:* → promotion evidence + actual-size legibility evidence → this canonical QA.md → exact Drive authority 1_V20y77VU1aGrJtqpl7U5XUpC-bQuTxV`
 
-Reconciliation chain:
-
-`live selected Figma 31:* → FAMILY-DIVERSITY-RIBBON-FOLD-V3-PROMOTION-QA-2026-08-21.md → this canonical QA.md → exact Drive authority 1_V20y77VU1aGrJtqpl7U5XUpC-bQuTxV`
-
-Earlier designs remain preserved as history/rollback and are not deleted.
+Earlier designs and pre-repair Current copies remain preserved as history/rollback and are not deleted.
 
 ## Deferred finalization / print gate
 
@@ -132,6 +159,6 @@ These unresolved physical checks do not invalidate the current visual/design sel
 
 ## Decision
 
-`CURRENT_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / CURRENT_POINTER_RECONCILED / NOT_PRINT_READY`.
+`CURRENT_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / ACTUAL_SIZE_CONFIRMED_COPY_LEGIBILITY_PASS / CURRENT_POINTER_RECONCILED / NOT_PRINT_READY`.
 
 Do not reopen ADD-05 merely to create another decorative variation unless physical proof or a new screenshot-supported defect invalidates the Current. Next safe progression target: ADD-06.
