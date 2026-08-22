@@ -1,124 +1,133 @@
 # ADD-14 二次会案内 — Figma Design QA
 
-Date: 2026-08-10
-Status: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / ROLLBACK_SAFE / NOT_PRINT_READY`
+Date: 2026-08-22
+Status: `CURRENT / PROFESSIONAL_VNEXT_MIDNIGHT_ZINE_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / A6_A5_REFLOW_PASS / LONG_COPY_STRESS_PASS / JAPANESE_SEMANTIC_LINEBREAK_PASS / STRUCTURE_READBACK_PASS / LEGACY_PRESERVED / BLOCKED_REQUIRED_INPUT / NOT_PRINT_READY`
 
 ## Live authority
+
 - Current: `docs/automation/non-rurubu-figma-quality-current.md`
-- Git main before write: `c5734f16e051acf06436bf289471a71b9f629e12`
+- latest main immediately before this sync: `7864803f61d80229a44308b165b8a28d1d1103d4`
 - Figma production file key: `IygEr140Yqk12LsGL3TFrT`
-- Production nodes: A6 `1:2`, A5 `1:18`
-- Clean-room comparison nodes: A6 `3:2`, A5 `3:27`
-- Long-copy stress nodes: A6 `4:2`, A5 `4:27`
-- Pre-V2 rollback nodes: A6 `5:2`, A5 `5:18`
+- Current selected page: `59:2 / VNEXT_CANDIDATE / ADD-14 / MIDNIGHT ZINE / 2026-08-22`
+- Current A6: `59:3 / VNEXT_SELECTED_CANDIDATE / ADD14 / A6 / MIDNIGHT ZINE`
+- Current A5: `59:15 / VNEXT_SELECTED_CANDIDATE / ADD14 / A5 / MIDNIGHT ZINE`
+- realistic long-copy stress: A6 `59:27`, A5 `59:39`
+- retained prior Current: A6 `56:3`, A5 `56:18` / `VELVET LETTER` — history/rollback only
 - Drive folder: `ADD-14_二次会案内` / `1Oq2Pz2mYo4oaDnO7LMezMrCUizcxaEjs`
+- canonical item QA: `01_paper-items/additional-wedding-items/ADD-14-after-party-guide/QA.md`
+- canonical promotion evidence: `01_paper-items/additional-wedding-items/ADD-14-after-party-guide/PROFESSIONAL-VNEXT-MIDNIGHT-ZINE-PROMOTION-QA-2026-08-22.md`
 
-## Reopened visual audit
-The previous dark one-column layout remained structurally valid but looked like a sparse information template: venue, times, fee, access, RSVP, QR and contact were compressed into a single left-aligned stack, while the replaceable QR area read like an admin/UI block. That earlier structural PASS was therefore not reused as sellable-visual evidence.
+## Current art-direction result
 
-A materially different clean-room direction was built on `99_QA`: warm paper field, deep-night side rail, restrained rust/mint accents, a Japanese serif editorial headline, three-column reception/start/end itinerary rhythm, and a separate bottom information band. The QR role remains a native replaceable frame and is intentionally not a scannable/fabricated code.
+The earlier `VELVET LETTER` remained structurally healthy but a fresh live screenshot audit found that its large pale letter field and visible sage RSVP rectangle were too quiet/form-like for the current after-party role. The RSVP treatment read like a web/form control at whole-item scale, and the overall object no longer carried enough energy for the current `travel / pop / fun / excitement` brief.
 
-Image generation was not required for this item: the screenshot-supported bottleneck was information hierarchy and typography, not missing hero art. No raster asset was generated or added to Drive.
+A new clean-room pass was therefore created from blank frames. No old ADD-14 layout, sleeve, QR box, colored field, decorative node or crop was used as construction material.
 
-## Screenshot QA and correction loop
-- Legacy A6/A5 whole-item inspection: visual reopen required.
-- Clean-room A6/A5 first screenshot: materially stronger editorial hierarchy, but venue-name/address collision was visible.
-- Corrected venue block still failed an intentionally long venue-name stress case.
-- Address was therefore moved into the itinerary band and the time row reflowed downward.
-- Final clean-room A6/A5 whole-item and reading-scale screenshots: PASS.
-- Long-copy stress screenshot with extended venue, address, fee, access, RSVP, contact and notice copy: PASS after the reflow.
-- Production screenshots after promotion: PASS at A6 and A5 scales.
+Three materially different studies were created on `58:2`:
 
-## Production promotion
-The legacy production was preserved on `99_QA` before promotion. Clean-room V2 was then promoted into the existing production root IDs (`1:2` and `1:18`) so downstream references remain stable.
+1. `58:3 / AFTER HOURS BROADSIDE` — rejected because the cyan RSVP field still read too much like a UI callout.
+2. `58:14 / MIDNIGHT ZINE` — selected and matured.
+3. `58:25 / LATE NIGHT WRISTBAND` — rejected because it converged toward transport/ticket artifact grammar already present elsewhere in the suite.
 
-Final production art direction:
-- warm off-white paper field rather than full dark fill;
-- navy night rail with Japanese-first secondary label;
-- `披露宴のあと、もう少しだけ。` as the editorial hierarchy anchor;
-- venue as a distinct top-right authority block;
-- address separated into the itinerary band to improve long-name resilience;
-- reception/start/end presented as three readable columns rather than a stacked form;
-- fee/access/RSVP/contact grouped as print information, not card UI;
-- QR remains a native, replaceable, non-scannable placeholder;
-- no rounded dashboard cards, shadows, gradients, fake transport data, or decorative stock travel motifs.
+## MIDNIGHT ZINE
 
-## Structural readback
-Final production:
-- A6 `1:2`: 592×420, 18 native text nodes, 0 image fills, 0 text nodes outside frame bounds.
-- A5 `1:18`: 840×592, 18 native text nodes, 0 image fills, 0 text nodes outside frame bounds.
-- Replaceable QR frames: A6 `5:54`, A5 `5:78`.
-- Clean-room and long-copy stress variants also read back with 0 image fills and 0 text outside frame bounds.
-- No flatten/raster replacement introduced; variable information remains native editable text.
+First read: `まだ帰らない、夜のつづきへ。`
 
-## Drive readback
-- Folder ID: `1Oq2Pz2mYo4oaDnO7LMezMrCUizcxaEjs`
-- Folder title: `ADD-14_二次会案内`
-- MIME: `application/vnd.google-apps.folder`
-- Current files: 0
-- Drive write: none; no justified raster production asset exists for this item.
+The selected direction uses:
 
-## Deferred / blocked required input
-- Confirm whether an after-party will actually be held. If not, change item state to `NOT_REQUIRED`.
-- Official venue name/address/floor.
-- Reception/start/end times.
-- Fee/payment method.
-- Access/realistic travel time.
-- RSVP method/deadline and contact permission.
-- Final official QR URL and device scan test.
-- Printer template/profile, exact physical bleed/safe-area verification, 100% A6/A5 proof.
+- cobalt editorial side column;
+- large Japanese display typography as the emotional carrier;
+- warm-cream information field;
+- hot-pink print edge and yellow terminal edge;
+- deep-ink footer with date and RSVP as typography rather than a button;
+- restrained `AFTER PARTY` identity with no fake flight/gate/class/barcode semantics;
+- no QR widget, rounded CTA button, gradient, shadow or stock nightlife imagery.
 
-These inputs block finalization, not design progression. ADD-14 now satisfies the reopened visual target and may progress to ADD-15.
+A5 is an independent reflow rather than a scaled A6 clone.
 
-## 2026-08-12 fresh production spot-check — QR placeholder polish
+## Screenshot QA / correction loop
 
-Observed latest `main` immediately before the Figma write: `1fc11f364b19a241d8f5861c14083c43447dd63c`.
+Current A6 `59:3`:
+- whole-item/thumbnail: PASS;
+- reading: PASS;
+- actual `592×420`: PASS.
 
-Fresh A6/A5 screenshots found one remaining production-facing implementation note inside the QR role: `QR / FINAL URL / REQUIRED`. Although structurally harmless, it read like an internal admin label rather than sellable stationery and conflicted with the Current rule that unknown QR destinations remain explicit semantic layout dummies.
+Current A5 `59:15`:
+- whole-item/thumbnail: PASS;
+- reading: PASS;
+- actual `840×592`: PASS;
+- independent reflow: PASS.
 
-Rollback-safe production change:
-- hidden rollback A6: `7:2 / ROLLBACK_ADD14_A6_PRE_QR_PLACEHOLDER_JA_FIX_2026_08_12`
-- hidden rollback A5: `7:27 / ROLLBACK_ADD14_A5_PRE_QR_PLACEHOLDER_JA_FIX_2026_08_12`
-- A6 native text `5:55 / TXT_QR_PLACEHOLDER`: changed to `QR\n[QRリンク先 ·\nLAYOUT DUMMY]`
-- A5 native text `5:79 / TXT_QR_PLACEHOLDER`: changed to the same semantic placeholder
-- production root IDs remained A6 `1:2`, A5 `1:18`
+Long-copy proofs `59:27 / 59:39` caught real failures before selection:
 
-Post-write screenshot QA: PASS at A6 592×420 and A5 840×592. The QR box remains clearly replaceable but no longer displays internal-looking English production instructions.
+- long venue text initially entered the access lane;
+- A6 detail copy ended too close to the footer field;
+- A5 RSVP split `締切` across lines.
 
-Post-write structure readback:
-- A6: 18 native text, 0 IMAGE fill nodes, 0 text outside root, `clipsContent=true`
-- A5: 18 native text, 0 IMAGE fill nodes, 0 text outside root, `clipsContent=true`
-- both rollback copies are hidden
-- no flatten/raster replacement introduced
+The repair widened/repositioned native copy lanes rather than shrinking typography blindly. Final A6/A5 long-copy screenshots PASS, including the promoted Japanese semantic-linebreak gate.
 
-Drive live readback before the Figma write confirmed `1Oq2Pz2mYo4oaDnO7LMezMrCUizcxaEjs / ADD-14_二次会案内`. Drive write: 0. Image generation was not required because the defect was semantic placeholder typography, not missing imagery.
+## Structure readback
 
-## 2026-08-12 fresh production spot-check — placeholder rhythm polish
+A6 selected `59:3`:
+- native visible text `7`;
+- fixed-height text `0`;
+- outside visible text `0`;
+- IMAGE fills `0`.
 
-Observed latest `main` immediately before the production edit: `2091ec72be001ecd6f503482114491a716020865`.
+A5 selected `59:15`:
+- native visible text `7`;
+- fixed-height text `0`;
+- outside visible text `0`;
+- IMAGE fills `0`.
 
-Fresh actual-size screenshots found that the three reception/start/end placeholders were visibly breaking as `[時刻 · DUMMY]` across awkward line boundaries, while the fee/access/RSVP placeholders also exposed uneven `LAYOUT / DUMMY` wrapping. This made the information band look more like an internal form than finished stationery with explicit placeholders.
+A6/A5 stress `59:27 / 59:39`:
+- fixed-height text `0 / 0`;
+- outside visible text `0 / 0`;
+- IMAGE fills `0 / 0`.
 
-Rollback-safe proof created on `99_QA` before editing:
-- A6 `10:2 / ROLLBACK_ADD14_A6_PRE_PLACEHOLDER_RHYTHM_FIX_2026_08_12`
-- A5 `10:27 / ROLLBACK_ADD14_A5_PRE_PLACEHOLDER_RHYTHM_FIX_2026_08_12`
+Responsibility split:
+- variable/factual/emotional copy: native editable text;
+- fixed print fields: simple native geometry;
+- SVG `0`;
+- generated/composed raster `0`;
+- replaceable image role `0`.
 
-Production polish:
-- A6/A5 `TXT_STATUS`: `開催情報未確定 / LAYOUT DUMMY` → `[開催情報 · LAYOUT DUMMY]`.
-- reception/start/end: explicit two-level placeholder `［時刻］` + smaller `LAYOUT DUMMY` marker; A6 time boxes widened to the exact 112 px column interval, A5 to 159.04 px.
-- fee/access/RSVP were compacted without inventing facts: `[金額/支払 · LAYOUT DUMMY]`, `[方法/時間 · LAYOUT DUMMY]`, `[方法/期限 · LAYOUT DUMMY]`.
-- the second-line dummy markers are intentionally smaller than the semantic labels so the three-column itinerary reads as print hierarchy rather than broken template copy.
+## Professional Design Council
 
-Screenshot QA:
-- first attempted correction produced three-line `LAYOUT / DUMMY` wrapping and was explicitly rejected rather than accepted as progress;
-- corrected A6 592×420 and A5 840×592 screenshots show deliberate two-level time placeholders and single-line fee/access/RSVP dummy lines;
-- headline, venue authority block, itinerary rule, QR role and bottom note remain visually unchanged.
+`94 / 100 / PASS / NO VETO`.
 
-Post-write structure readback:
-- A6 `1:2`: 18 native text, 0 IMAGE fill nodes, 0 text outside root, `clipsContent=true`;
-- A5 `1:18`: 18 native text, 0 IMAGE fill nodes, 0 text outside root, `clipsContent=true`;
-- no flatten/raster replacement introduced; all variable information remains native editable text.
+The new candidate clearly wins the current professional brief over retained `VELVET LETTER`; prior production remains preserved as history/rollback.
 
-Drive authority remained `1Oq2Pz2mYo4oaDnO7LMezMrCUizcxaEjs / ADD-14_二次会案内`; Drive write: 0. Image generation was not required because the bottleneck was semantic typography, not imagery.
+## Image / Drive decision
 
-Current result remains `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / ROLLBACK_SAFE / NOT_PRINT_READY`.
+Image generation: `0`.
+
+The diagnosed defect was event-poster energy and UI-like RSVP containment, not missing photography/illustration. Because venue/event facts remain unresolved, generated venue imagery would also reduce factual truth.
+
+Drive authority was revalidated live as `1Oq2Pz2mYo4oaDnO7LMezMrCUizcxaEjs / ADD-14_二次会案内`. Drive write: `0`.
+
+## BLOCKED_REQUIRED_INPUT / DEFERRED_FINALIZATION
+
+Do not fabricate:
+- whether the after-party is held;
+- official venue/address/floor;
+- reception/start/end;
+- fee/payment method;
+- access/travel time;
+- RSVP method/deadline;
+- contact/notice policy;
+- final QR destination if used.
+
+Still deferred:
+- printer template/profile;
+- bleed/safe-area/export settings;
+- physical A6/A5 proof under venue lighting;
+- final content insertion and final PDF/export.
+
+These block finalization, not the Current visual selection.
+
+## Current result
+
+`PROFESSIONAL_VNEXT_MIDNIGHT_ZINE_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / A6_A5_REFLOW_PASS / LONG_COPY_STRESS_PASS / JAPANESE_SEMANTIC_LINEBREAK_PASS / STRUCTURE_READBACK_PASS / LEGACY_PRESERVED / BLOCKED_REQUIRED_INPUT / NOT_PRINT_READY`.
+
+ADD-15 remains blocked on its explicit `Model A / Model B / NOT_REQUIRED` decision and must not be guessed.
