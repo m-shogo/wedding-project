@@ -1,7 +1,7 @@
 # ADD-03 当日タイムテーブルボード — QA
 
 Status: `CURRENT / DAY_BROADSHEET_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / FAMILY_DIVERSITY_PASS / LONG_COPY_STRESS_PASS / AUTO_HEIGHT_PASS / ROLLBACK_SAFE / LEGACY_PRESERVED / NOT_PRINT_READY`
-Updated: 2026-08-22
+Updated: 2026-08-23
 Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
 
 ## Current Figma authority
@@ -18,26 +18,36 @@ Current selected family:
 - A2 long-copy proof: `43:26 / QA / ADD-03 A2 DAY BROADSHEET / LONG COPY STRESS`;
 - A3 long-copy proof: `43:47 / QA / ADD-03 A3 DAY BROADSHEET / LONG COPY STRESS`;
 - pre-family-diversity rollback: `45:2 / 45:22`;
+- pre-2026-08-23 date-tab-subtraction rollbacks: `47:23 / 47:44 / 47:66 / 47:87`;
 - older TIDE DAY and legacy production remain preserved as history/comparison only.
 
 Drive authority: `1uVcXv2Xs0H7juheHk977pt7YxLMJez_j / ADD-03_当日タイムテーブルボード`.
 
-Primary current evidence: `FIGMA-FAMILY-DIVERSITY-DAY-BROADSHEET-PROMOTION-2026-08-21.md`.
+Primary current evidence:
+
+- `FIGMA-FAMILY-DIVERSITY-DAY-BROADSHEET-PROMOTION-2026-08-21.md`;
+- `FIGMA-DAY01-TAB-SUBTRACTION-QA-2026-08-23.md`.
 
 ## Authority-drift correction — 2026-08-22
 
 The live Figma roots and the later family-diversity promotion already selected `DAY BROADSHEET`, but this canonical `QA.md` still pointed to the superseded `TIDE DAY` family. That stale pointer could cause a later agent to inspect or mutate the wrong visual generation.
 
-Live readback now confirms:
+Live readback confirmed the stable production roots and exact Drive authority. This QA file was synchronized to current production truth without rolling back the newer family-diversity work.
 
-- A2 `14:2` name = `VNEXT_PRO_ADD03_DAY_BROADSHEET_A2_SELECTED`;
-- A3 `15:40` name = `VNEXT_PRO_ADD03_DAY_BROADSHEET_A3_SELECTED`;
-- both roots have `fixed-height text 0`;
-- A2 visible native text = `14`, A3 visible native text = `14`;
-- IMAGE fills = `0` on both roots;
-- exact Drive authority folder metadata read back successfully.
+## DAY 01 tab subtraction — 2026-08-23
 
-This QA file is therefore synchronized to current production truth. No Figma mutation or Drive write was required for this authority repair.
+Fresh whole-item review found that the top-right yellow `DAY 01 / 10.24` tab duplicated the already-authoritative native `2026.10.24 SAT / YOKOHAMA` line and added a generic English label without a trim, fold, binding, wayfinding, or other physical function.
+
+A rollback-safe A2 comparison `47:2` hid only `DATE_TAB` and `DATE_TAB_TYPE`. The no-tab version improved headline/date hierarchy while preserving chronology and printed-program character. Before production mutation, A2/A3 Current and both long-copy proofs were copied to hidden rollback roots `47:23 / 47:44 / 47:66 / 47:87`.
+
+The tab roles are now hidden in:
+
+- A2 Current `14:2`;
+- A3 Current `15:40`;
+- A2 long-copy proof `43:26`;
+- A3 long-copy proof `43:47`.
+
+No confirmed date/place information was removed. The completed comparison was hidden after verification.
 
 ## Current visual direction
 
@@ -52,26 +62,29 @@ Current first-glance hierarchy:
 5. large `15:00` + `披露宴`;
 6. warm closing copy.
 
-The composition uses a cobalt binding/spine, warm paper field, simple chronology, thin print rules and a small date tab. The dominant grammar is a physical day-program sheet, not the superseded dark saturated field plus large rounded tide/sun/capsule gestures.
+The composition now uses a cobalt binding/spine, warm paper field, simple chronology and thin print rules without the redundant date badge. The dominant grammar is a physical day-program sheet, not the superseded dark saturated field plus large rounded tide/sun/capsule gestures.
 
 ## Three-scale visual QA
 
-Rechecked live on 2026-08-22:
+Rechecked live after the 2026-08-23 subtraction:
 
-- whole / thumbnail: PASS;
-- reading scale: PASS;
-- high-resolution A2 review: PASS.
+- A2 whole / thumbnail: PASS;
+- A2 reading / high-resolution: PASS;
+- A3 native `990×1400`: PASS;
+- A2 realistic long-copy proof after the same subtraction: PASS.
 
 The timetable remains immediately scannable from large time numerals while Japanese hierarchy stays dominant. No card-grid, fake flight/gate/class data, barcode, repeated badge, shadow or gradient is required.
 
 ## Structure / long-copy QA
 
-Current production readback:
+Current production readback after the date-tab subtraction:
 
-- A2 `14:2`: `1400×1980`, visible native text `14`, auto-height `14/14`, fixed-height `0`, IMAGE fills `0`;
-- A3 `15:40`: `990×1400`, visible native text `14`, auto-height `14/14`, fixed-height `0`, IMAGE fills `0`.
+- A2 `14:2`: `1400×1980`, visible native text `13`, fixed-height `0`, outside visible text `0`, visible date-tab roles `0`, IMAGE fills `0`;
+- A3 `15:40`: `990×1400`, visible native text `13`, fixed-height `0`, outside visible text `0`, text bounding-box collisions `0`, visible date-tab roles `0`, IMAGE fills `0`.
 
-Dedicated long-copy stress remains at `43:26 / 43:47`. Ceremony, transfer and reception guidance were expanded to realistic multi-line Japanese copy and remained within their editorial lanes after the auto-height repair documented in the promotion evidence.
+Dedicated long-copy stress remains at `43:26 / 43:47`. Ceremony, transfer and reception guidance were expanded to realistic multi-line Japanese copy and remain inside their editorial lanes after the same tab subtraction.
+
+A2 geometry reports six text bounding-box intersections between each large time box and its adjacent event/guide boxes. Fresh native screenshot inspection confirms these are pre-existing wide-box overlaps rather than visible glyph collisions and were not introduced by the 2026-08-23 change.
 
 All factual and variable information remains native editable text. No variable copy is baked into SVG or raster.
 
@@ -90,7 +103,8 @@ Do not invent opening time, venue floor, gate, flight number, QR, transport cred
 ## Hybrid authoring / Drive
 
 - native text: factual / variable copy;
-- native editable geometry: binding, rules and date-tab roles with clear print function;
+- native editable geometry: binding and chronology rules with clear print/editorial function;
+- redundant `DAY 01` date badge: removed from Current visibility after bounded proof;
 - reusable SVG: `0` required;
 - generated raster: `0`;
 - replaceable IMAGE fills: `0`;
@@ -100,7 +114,7 @@ Do not invent opening time, venue floor, gate, flight number, QR, transport cred
 
 ## Professional visual judgment
 
-Current Professional Design Council score remains **91 / 100 / PASS / NO VETO** from the family-diversity promotion evidence.
+Current Professional Design Council score remains **91 / 100 / PASS / NO VETO** from the family-diversity promotion evidence. The 2026-08-23 change is a bounded editorial subtraction, not a new visual-generation claim.
 
 `DAY BROADSHEET` replaced `TIDE DAY` because it preserved timetable function while removing a suite-level repeated dark-field + rounded-sweep grammar. The current design should not be reopened merely to create activity; reopen only when fresh screenshot evidence, final copy, printing constraints or physical proof exposes a concrete defect.
 
