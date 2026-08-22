@@ -1,16 +1,18 @@
 # ADD-09 ゲストブックサイン — QA
 
-Status: `CURRENT / PEN_TRAY_WELCOME_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / FAMILY_DIVERSITY_PASS / LONG_COPY_STRESS_PASS / AUTO_HEIGHT_PASS / LEGACY_AND_PRIOR_VNEXT_PRESERVED / NOT_PRINT_READY`
-Updated: 2026-08-21
+Status: `CURRENT / PEN_TRAY_WELCOME_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / FAMILY_DIVERSITY_PASS / LONG_COPY_STRESS_PASS / AUTO_HEIGHT_PASS / CORNER_TAB_SUBTRACTION_PASS / LEGACY_AND_PRIOR_VNEXT_PRESERVED / NOT_PRINT_READY`
+Updated: 2026-08-23
 Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
 
 ## Current live authority
 
 - promotion evidence: `FAMILY-DIVERSITY-PEN-TRAY-PROMOTION-QA-2026-08-21.md`
-- promotion commit: `f3509282b9b5c0522c1341e3d4db6f0f4bb81f5d`
+- latest refinement evidence: `FIGMA-CORNER-TAB-SUBTRACTION-QA-2026-08-23.md`
 - Figma file: `PjFWBpDwaQM5LfvgdqSFvU`
 - Current: `41:56 / CURRENT / ADD-09 / PEN TRAY WELCOME / FAMILY DIVERSITY B / 2026-08-21`
 - long-copy stress: `41:76 / QA / ADD-09 / PEN TRAY WELCOME / LONG COPY STRESS / 2026-08-21` — hidden after QA
+- pre-corner-tab refinement rollback: `47:38 / 47:74` — hidden
+- bounded no-tab comparison: `47:2` — hidden after verification
 - prior Current preserved hidden: `38:43 / HISTORY / PRE-PEN-TRAY CURRENT / CLOTHBOUND ARRIVAL LOG / 2026-08-21`
 - prior Professional vNext preserved: `35:2 / ROLLBACK / ADD-09 / WORDS AS SOUVENIR / PRE-FAMILY-DIVERSITY`
 - prior selected clean-room V4 preserved: `16:3 / CLEANROOM_ADD09_V4_JOURNEY_LINE`
@@ -24,9 +26,9 @@ The previous `CLOTHBOUND ARRIVAL LOG` had already solved the older coral/lagoon/
 
 The Passport is inherently a booklet/keepsake, so a stitched binding is semantically credible there. The Guest Book **sign** communicates a writing action and did not need to become another bound-book cover. Family fit was therefore reopened without invalidating the old structure and long-copy evidence.
 
-## New clean-room directions
+## Clean-room family directions
 
-New page: `41:2 / VNEXT_FAMILY_AUDIT_D / ADD-09 / PEN TRAY / 2026-08-21`.
+Page: `41:2 / VNEXT_FAMILY_AUDIT_D / ADD-09 / PEN TRAY / 2026-08-21`.
 
 Three materially different directions were created from verified non-visual requirements only:
 
@@ -46,47 +48,63 @@ First read:
 
 `旅の途中で、ひとこと。`
 
-Visual system:
+Current visual system:
 
 - warm open paper field;
 - deep hospitality-green top edge and bottom writing-desk field;
-- small mustard check-in tab only as a celebratory accent;
-- one simple terracotta pen gesture in the writing zone;
+- one coral entry rule with a real hierarchy/binding job;
+- one connected pen cue in the writing zone; mustard is retained only as the pen cap where it has physical meaning;
 - Japanese-first title and operational copy;
+- no standalone top-right check-in/accent tab after 2026-08-23 bounded subtraction QA;
 - no stitched binding/spine;
 - no giant circle/capsule/sun system;
 - no fake hotel/airline credentials, form cards, QR/route/stamp cosplay.
+
+### 2026-08-23 corner-tab subtraction
+
+Live whole/reading QA showed the top-right mustard `CORNER / CHECK-IN TAB` had no reader-facing, physical, binding, trim/fold, or navigational function and read as isolated template furniture. A rollback-safe no-tab comparison `47:2` was stronger, so only that fixed accent was removed from Current and long-copy proof.
+
+- Current tab `41:58`: hidden
+- stress tab `41:78`: hidden
+- pre-change rollback: `47:38 / 47:74`
+- whole ~500px: PASS
+- reading ~1000px: PASS
+- actual-size `1000×1419`: PASS
+- realistic long-copy after subtraction: PASS
+
+No typography, dynamic stack, desk geometry, connected pen, facts, or placeholders changed.
 
 ## Hybrid authoring roles
 
 - variable/final copy: native editable Figma text;
 - semantic placeholders: native editable Figma text;
 - dynamic operational information: native vertical Auto Layout;
-- fixed desk/pen/tab geometry: simple editable native geometry with direct physical meaning;
+- fixed desk/pen/paper-edge geometry: simple editable native geometry with direct physical meaning;
 - editable SVG: `0`;
 - generated/composed raster: `0`;
 - replaceable image roles: `0`;
 - IMAGE fills: `0`;
 - Drive writes: `0`.
 
-Image generation was intentionally not started because the diagnosed defect was family-level metaphor repetition, not missing photography/illustration.
+Image generation was intentionally not started because the diagnosed defects were family-level metaphor repetition and later a purposeless fixed accent, not missing photography/illustration.
 
 ## Three-scale QA
 
-Current `41:56`:
+Current `41:56` after the latest refinement:
 
 - whole-item / ~500 px: PASS;
 - reading / 705×1000: PASS;
-- native canvas `1000×1419`: PASS through screenshot + structure review;
-- previous Current was compared only after the new candidate matured.
+- native canvas `1000×1419`: PASS;
+- the page remains warm and asymmetrical without relying on an unexplained top-right color block;
+- the mustard accent still exists only on the connected pen cap, where it has a physical role.
 
-The current now reads as a writing/guest-action sign rather than another stitched book cover, while remaining coherent with the wedding travel/hospitality world.
+The current reads as a writing/guest-action sign rather than another stitched book cover or a decorated template.
 
 ## Long-copy stress and repair
 
 Stress: `41:76`.
 
-First stress screenshot exposed a real defect: dynamic operational copy expanded downward while fixed closing/date roles were visually covered by the fixed desk field.
+Earlier stress QA exposed a real defect: dynamic operational copy expanded downward while fixed closing/date roles were visually covered by the fixed desk field.
 
 A first nested Auto Layout repair was rejected because fixed nested wrappers clipped multiline Japanese values.
 
@@ -106,17 +124,17 @@ Final stress stack `42:40`:
 - desk begins `1135`;
 - remaining reserve `49 px`.
 
-Final stress screenshot: PASS.
+The 2026-08-23 post-subtraction stress screenshot was re-run by temporarily revealing `41:76`; it remains PASS and was re-hidden after verification.
 
 ## Structure QA
 
-Current `41:56`:
+Current `41:56` after latest refinement:
 
 - native visible text: `12`;
 - fixed-height text: `0`;
 - outside visible text: `0`;
-- text-text collisions: `0`;
 - IMAGE fills: `0`;
+- corner check-in tab visible: `false`;
 - dynamic stack `42:28`: y `520`, height `404`, bottom `924`.
 
 Stress `41:76`:
@@ -124,15 +142,15 @@ Stress `41:76`:
 - native visible text: `12`;
 - fixed-height text: `0`;
 - outside visible text: `0`;
-- text-text collisions: `0`;
 - IMAGE fills: `0`;
+- corner check-in tab visible: `false`;
 - dynamic stack `42:40`: bottom `1086` before desk y `1135`.
 
 Stress is hidden after verification.
 
 ## Professional Design Council
 
-Score: **91 / 100 / PASS / NO VETO**.
+Score remains **91 / 100 / PASS / NO VETO**.
 
 - Concept clarity / ownability: `14/15`
 - Emotional excitement / engagement: `12/15`
@@ -146,11 +164,13 @@ Score: **91 / 100 / PASS / NO VETO**.
 
 No Executive Creative Director, Japanese Editorial Designer or Print Production Director veto remains.
 
-## Historical family-diversity evidence
+## Learning state
 
-The former Current `38:43 / CLOTHBOUND ARRIVAL LOG` remains important history. It solved the earlier large abstract color-field repetition and passed its own visual/stress/structure gates. It was superseded only because the suite later revealed a higher-level book-binding metaphor convergence with Passport.
+The 2026-08-23 corner-tab finding is `VERIFIED_LOCAL` only:
 
-Earlier `WORDS AS SOUVENIR`, V4 and legacy production also remain preserved.
+> When a small fixed accent is named after a metaphor such as check-in/ticket/stamp but cannot prove a reader-facing, physical, binding or navigational job, test subtraction at whole-item scale before retaining it.
+
+Do **not** transfer the exact tab treatment, palette, coordinates, guest-book composition or a blanket `remove tabs` rule. Real tabs/folds/ticket stubs with artifact function may be correct elsewhere.
 
 ## Deferred finalization
 
@@ -165,6 +185,8 @@ These do not block further visual progression.
 
 ## Decision / next
 
-`41:56` is the current ADD-09 selected family.
+`41:56` remains the current ADD-09 selected family with the purposeless corner tab removed.
 
-Continue suite-level audit in progression order, but redesign only when a real repeated dominant grammar or physical metaphor is visible. Do not reopen healthy distinct items merely to create activity.
+`CURRENT_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / FAMILY_DIVERSITY_PASS / LONG_COPY_STRESS_PASS / CORNER_TAB_SUBTRACTION_PASS / ROLLBACK_SAFE / NOT_PRINT_READY`.
+
+Continue suite-level audit in progression order, but redesign only when a real screenshot-supported defect, repeated dominant grammar, or physical metaphor problem is visible. Do not reopen healthy distinct items merely to create activity.
