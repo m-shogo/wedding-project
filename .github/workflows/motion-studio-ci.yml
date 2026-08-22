@@ -1,0 +1,50 @@
+name: Motion Studio CI
+
+on:
+  pull_request:
+    paths:
+      - "motion-studio/**"
+      - ".github/workflows/motion-studio-ci.yml"
+  push:
+    paths:
+      - "motion-studio/**"
+      - ".github/workflows/motion-studio-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    defaults:
+      run:
+        working-directory: motion-studio
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: motion-studio/pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: TypeScript
+        run: pnpm typecheck
+
+      - name: Motion / asset / part / preset contracts
+        run: pnpm check
+
+      - name: Opening V1 composition contract
+        run: pnpm exec remotion compositions src/index-opening-v1.ts

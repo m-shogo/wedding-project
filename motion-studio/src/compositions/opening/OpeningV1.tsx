@@ -1,30 +1,26 @@
 import type {ReactNode} from 'react';
 import {
   AbsoluteFill,
+  Img,
   Sequence,
   interpolate,
-  spring,
+  staticFile,
   useCurrentFrame,
   useVideoConfig,
 } from 'remotion';
 import {colors, fonts} from '../../data/theme';
 import {serifFamily} from '../../data/fonts';
 import {openingV1Scenes} from '../../data/openingV1';
+import {openingV1PhotoSlots} from '../../data/openingV1Media';
 import {CloudSea} from './CloudSea';
 
 const sansFamily = fonts.sans;
 
-const fadeForScene = (frame: number, durationFrames: number) => {
-  const fadeOut = interpolate(
-    frame,
-    [Math.max(0, durationFrames - 12), durationFrames],
-    [1, 0],
-    {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'},
-  );
-  return fadeOut;
-};
+type PhotoMotion = 'static' | 'push' | 'drift-left' | 'drift-right';
+type MemoryLayout = 'full' | 'left' | 'right' | 'wide';
+type MemoryPattern = 'okinawa' | 'seoul' | 'hawaii';
 
-const EditorialBase = ({children, dark = false}: {children: ReactNode; dark?: boolean}) => (
+const SceneBase = ({children, dark = false}: {children: ReactNode; dark?: boolean}) => (
   <AbsoluteFill
     style={{
       backgroundColor: dark ? colors.navyDeep : colors.ivory,
@@ -32,58 +28,112 @@ const EditorialBase = ({children, dark = false}: {children: ReactNode; dark?: bo
       overflow: 'hidden',
     }}
   >
-    <div
-      style={{
-        position: 'absolute',
-        inset: 34,
-        border: `1px solid ${dark ? 'rgba(201,178,124,0.28)' : 'rgba(28,42,68,0.16)'}`,
-        pointerEvents: 'none',
-      }}
-    />
     {children}
   </AbsoluteFill>
 );
 
-const SmallLabel = ({children, dark = false}: {children: ReactNode; dark?: boolean}) => (
-  <div
+const Placeholder = ({label, dark = false}: {label: string; dark?: boolean}) => (
+  <AbsoluteFill
     style={{
-      fontFamily: sansFamily,
-      fontSize: 22,
-      letterSpacing: '0.3em',
-      textTransform: 'uppercase',
-      color: dark ? colors.goldLight : colors.gold,
-      fontWeight: 500,
+      backgroundColor: dark ? colors.navy : colors.cloud,
+      alignItems: 'center',
+      justifyContent: 'center',
     }}
   >
-    {children}
-  </div>
+    <div
+      style={{
+        fontFamily: sansFamily,
+        fontSize: 18,
+        letterSpacing: '0.18em',
+        color: dark ? colors.goldLight : colors.beigeDark,
+      }}
+    >
+      {label}
+    </div>
+  </AbsoluteFill>
 );
+
+const PhotoSurface = ({
+  photo,
+  label,
+  frame,
+  durationFrames,
+  motion = 'static',
+  objectPosition = '50% 50%',
+}: {
+  photo: string | null;
+  label: string;
+  frame: number;
+  durationFrames: number;
+  motion?: PhotoMotion;
+  objectPosition?: string;
+}) => {
+  const safeDuration = Math.max(1, durationFrames - 1);
+  const scale =
+    motion === 'push'
+      ? interpolate(frame, [0, safeDuration], [1, 1.024], {
+          extrapolateLeft: 'clamp',
+          extrapolateRight: 'clamp',
+        })
+      : 1;
+  const x =
+    motion === 'drift-left'
+      ? interpolate(frame, [0, safeDuration], [10, -10], {
+          extrapolateLeft: 'clamp',
+          extrapolateRight: 'clamp',
+        })
+      : motion === 'drift-right'
+        ? interpolate(frame, [0, safeDuration], [-10, 10], {
+            extrapolateLeft: 'clamp',
+            extrapolateRight: 'clamp',
+          })
+        : 0;
+
+  if (!photo) {
+    return <Placeholder label={label} />;
+  }
+
+  return (
+    <Img
+      src={staticFile(`photos/${photo}`)}
+      style={{
+        width: '100%',
+        height: '100%',
+        objectFit: 'cover',
+        objectPosition,
+        transform: `translateX(${x}px) scale(${scale})`,
+      }}
+    />
+  );
+};
 
 const DepartureTitle = ({durationFrames}: {durationFrames: number}) => {
   const frame = useCurrentFrame();
-  const opacity = fadeForScene(frame, durationFrames);
-  const y = interpolate(frame, [0, 30], [18, 0], {
+  const fadeIn = interpolate(frame, [0, 18], [0, 1], {
     extrapolateLeft: 'clamp',
     extrapolateRight: 'clamp',
   });
+  const fadeOut = interpolate(
+    frame,
+    [Math.max(0, durationFrames - 10), durationFrames],
+    [1, 0],
+    {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'},
+  );
 
   return (
-    <EditorialBase dark>
+    <SceneBase dark>
       <AbsoluteFill
         style={{
           justifyContent: 'center',
           alignItems: 'center',
-          opacity,
-          transform: `translateY(${y}px)`,
+          opacity: Math.min(fadeIn, fadeOut),
         }}
       >
-        <SmallLabel dark>Welcome aboard</SmallLabel>
         <div
           style={{
-            marginTop: 28,
             fontFamily: serifFamily,
-            fontSize: 108,
-            letterSpacing: '0.08em',
+            fontSize: 104,
+            letterSpacing: '0.035em',
             fontWeight: 500,
           }}
         >
@@ -91,373 +141,301 @@ const DepartureTitle = ({durationFrames}: {durationFrames: number}) => {
         </div>
         <div
           style={{
-            marginTop: 34,
-            display: 'flex',
-            gap: 42,
-            alignItems: 'center',
+            marginTop: 30,
             fontFamily: sansFamily,
-            fontSize: 23,
-            letterSpacing: '0.22em',
+            fontSize: 22,
+            letterSpacing: '0.16em',
             color: colors.beigeDark,
           }}
         >
-          <span>24 OCT 2026</span>
-          <span style={{width: 72, height: 1, backgroundColor: colors.gold}} />
-          <span>YOKOHAMA</span>
+          24 OCT 2026 · YOKOHAMA
         </div>
       </AbsoluteFill>
-    </EditorialBase>
+    </SceneBase>
   );
 };
 
-// 雲は角丸のplaceholderではなく、本番と同じ CloudSea を背景に使う。
-// 対応表(docs/opening-v1-motion-map.md)のセクション2 = drift / rec-03。
-// timeOfDay=morning はStyle Bibleの「朝日・やわらかい空色」に合わせている。
-const CloudTransition = ({durationFrames}: {durationFrames: number}) => {
-  const frame = useCurrentFrame();
-  const opacity = fadeForScene(frame, durationFrames);
+const CloudTransition = () => (
+  <AbsoluteFill style={{overflow: 'hidden'}}>
+    <CloudSea timeOfDay="morning" speed={0.62} cloudOpacity={0.78} zoomTo={1.025} softness={14} />
+  </AbsoluteFill>
+);
 
+const memoryPlans: Record<
+  MemoryPattern,
+  Array<{layout: MemoryLayout; motion: PhotoMotion; objectPosition?: string}>
+> = {
+  okinawa: [
+    {layout: 'full', motion: 'static'},
+    {layout: 'left', motion: 'drift-left'},
+    {layout: 'wide', motion: 'static'},
+  ],
+  seoul: [
+    {layout: 'right', motion: 'static'},
+    {layout: 'full', motion: 'drift-right'},
+    {layout: 'left', motion: 'static'},
+  ],
+  hawaii: [
+    {layout: 'full', motion: 'static'},
+    {layout: 'wide', motion: 'push'},
+    {layout: 'right', motion: 'static'},
+  ],
+};
+
+const PlaceLabel = ({place, light}: {place: string; light: boolean}) => (
+  <div
+    style={{
+      position: 'absolute',
+      left: 72,
+      bottom: 58,
+      fontFamily: sansFamily,
+      fontSize: 20,
+      fontWeight: 600,
+      letterSpacing: '0.14em',
+      color: light ? colors.ivory : colors.navy,
+      textShadow: light ? '0 1px 16px rgba(0,0,0,0.32)' : undefined,
+    }}
+  >
+    {place.toUpperCase()}
+  </div>
+);
+
+const MemoryBeat = ({
+  photo,
+  label,
+  place,
+  layout,
+  motion,
+  frame,
+  durationFrames,
+  showPlace,
+  objectPosition,
+}: {
+  photo: string | null;
+  label: string;
+  place: string;
+  layout: MemoryLayout;
+  motion: PhotoMotion;
+  frame: number;
+  durationFrames: number;
+  showPlace: boolean;
+  objectPosition?: string;
+}) => {
+  if (layout === 'full') {
+    return (
+      <SceneBase dark>
+        <PhotoSurface
+          photo={photo}
+          label={label}
+          frame={frame}
+          durationFrames={durationFrames}
+          motion={motion}
+          objectPosition={objectPosition}
+        />
+        {showPlace ? <PlaceLabel place={place} light /> : null}
+      </SceneBase>
+    );
+  }
+
+  if (layout === 'wide') {
+    return (
+      <SceneBase>
+        <div style={{position: 'absolute', inset: '96px 132px', overflow: 'hidden'}}>
+          <PhotoSurface
+            photo={photo}
+            label={label}
+            frame={frame}
+            durationFrames={durationFrames}
+            motion={motion}
+            objectPosition={objectPosition}
+          />
+        </div>
+        {showPlace ? <PlaceLabel place={place} light={false} /> : null}
+      </SceneBase>
+    );
+  }
+
+  const left = layout === 'left';
   return (
-    <AbsoluteFill style={{opacity, overflow: 'hidden'}}>
-      <CloudSea timeOfDay="morning" speed={0.9} cloudOpacity={0.85} zoomTo={1.06} softness={18} />
-      {/* 他セクションと同じ内枠。EditorialBaseは不透明な下地を敷くのでここでは枠だけ描く */}
+    <SceneBase>
       <div
         style={{
           position: 'absolute',
-          inset: 34,
-          border: '1px solid rgba(255,255,255,0.34)',
-          pointerEvents: 'none',
-        }}
-      />
-      <div style={{position: 'absolute', left: 150, bottom: 120, color: colors.navy}}>
-        <SmallLabel>Altitude</SmallLabel>
-        <div
-          style={{
-            fontFamily: serifFamily,
-            fontSize: 62,
-            letterSpacing: '0.06em',
-            marginTop: 10,
-            // 雲の白に負けないよう、薄く影を敷いて可読性を確保する
-            textShadow: '0 2px 18px rgba(255,255,255,0.55)',
-          }}
-        >
-          The journey begins.
-        </div>
-      </div>
-    </AbsoluteFill>
-  );
-};
-
-type PhotoSlotProps = {
-  slot: string;
-  index: number;
-  width: number;
-  height: number;
-};
-
-const PhotoSlot = ({slot, index, width, height}: PhotoSlotProps) => {
-  const frame = useCurrentFrame();
-  const {fps} = useVideoConfig();
-  const enter = spring({
-    frame: frame - index * 8,
-    fps,
-    config: {damping: 180, stiffness: 75, mass: 0.9},
-  });
-  const y = interpolate(enter, [0, 1], [70, 0]);
-  const opacity = interpolate(enter, [0, 0.35], [0, 1], {
-    extrapolateRight: 'clamp',
-  });
-
-  return (
-    <div
-      style={{
-        width,
-        height,
-        backgroundColor: colors.beige,
-        border: '12px solid #fffdf8',
-        boxShadow: '0 28px 70px rgba(16,25,44,0.15)',
-        transform: `translateY(${y}px) rotate(${(index - 1) * 1.2}deg)`,
-        opacity,
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexDirection: 'column',
-      }}
-    >
-      <div
-        style={{
-          width: '84%',
-          height: '76%',
-          border: `1px solid rgba(28,42,68,0.12)`,
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          backgroundColor: colors.cloud,
+          top: 0,
+          bottom: 0,
+          left: left ? 0 : '34%',
+          width: '66%',
+          overflow: 'hidden',
         }}
       >
-        <div style={{textAlign: 'center'}}>
-          <div
-            style={{
-              fontFamily: sansFamily,
-              fontSize: 18,
-              letterSpacing: '0.24em',
-              color: colors.gold,
-            }}
-          >
-            REAL PHOTO SLOT
-          </div>
-          <div
-            style={{
-              marginTop: 14,
-              fontFamily: serifFamily,
-              fontSize: 38,
-              color: colors.navy,
-              letterSpacing: '0.06em',
-            }}
-          >
-            {slot}
-          </div>
-        </div>
+        <PhotoSurface
+          photo={photo}
+          label={label}
+          frame={frame}
+          durationFrames={durationFrames}
+          motion={motion}
+          objectPosition={objectPosition}
+        />
       </div>
-    </div>
+      {showPlace ? (
+        <div
+          style={{
+            position: 'absolute',
+            left: left ? '72%' : 72,
+            bottom: 80,
+            fontFamily: serifFamily,
+            fontSize: 48,
+            letterSpacing: '0.02em',
+            color: colors.navy,
+          }}
+        >
+          {place}
+        </div>
+      ) : null}
+    </SceneBase>
   );
 };
 
-const PhotoTrio = ({
+const MemoryChapter = ({
   durationFrames,
-  label,
-  title,
-  slots,
+  place,
+  pattern,
+  photos,
 }: {
   durationFrames: number;
-  label: string;
-  title: string;
-  slots: [string, string, string];
+  place: string;
+  pattern: MemoryPattern;
+  photos: readonly [string | null, string | null, string | null];
 }) => {
   const frame = useCurrentFrame();
-  const opacity = fadeForScene(frame, durationFrames);
-  const scale = interpolate(frame, [0, durationFrames], [1, 1.018]);
+  const firstCut = Math.round(durationFrames * 0.29);
+  const secondCut = Math.round(durationFrames * 0.59);
+  const starts = [0, firstCut, secondCut];
+  const ends = [firstCut, secondCut, durationFrames];
+  const beatIndex = frame < firstCut ? 0 : frame < secondCut ? 1 : 2;
+  const beatFrame = frame - starts[beatIndex];
+  const beatDuration = ends[beatIndex] - starts[beatIndex];
+  const plan = memoryPlans[pattern][beatIndex];
 
   return (
-    <EditorialBase>
-      <AbsoluteFill style={{opacity, transform: `scale(${scale})`}}>
-        <div
-          style={{
-            position: 'absolute',
-            top: 100,
-            left: 150,
-            right: 150,
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'baseline',
-          }}
-        >
-          <SmallLabel>{label}</SmallLabel>
-          <div
-            style={{
-              fontFamily: serifFamily,
-              fontSize: 58,
-              letterSpacing: '0.08em',
-            }}
-          >
-            {title}
-          </div>
-        </div>
-        <div
-          style={{
-            position: 'absolute',
-            inset: '220px 120px 110px',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            gap: 54,
-          }}
-        >
-          {slots.map((slot, index) => (
-            <PhotoSlot key={slot} slot={slot} index={index} width={470} height={620} />
-          ))}
-        </div>
-      </AbsoluteFill>
-    </EditorialBase>
+    <MemoryBeat
+      photo={photos[beatIndex]}
+      label={`${place.toUpperCase()} ${String(beatIndex + 1).padStart(2, '0')}`}
+      place={place}
+      layout={plan.layout}
+      motion={plan.motion}
+      frame={beatFrame}
+      durationFrames={beatDuration}
+      showPlace={beatIndex === 0}
+      objectPosition={plan.objectPosition}
+    />
   );
 };
 
 const HeroPhoto = ({
   durationFrames,
-  slot,
-  caption,
+  photo,
+  label,
   index,
 }: {
   durationFrames: number;
-  slot: string;
-  caption: string;
+  photo: string | null;
+  label: string;
   index: number;
 }) => {
   const frame = useCurrentFrame();
-  const opacity = fadeForScene(frame, durationFrames);
-  const zoom = interpolate(frame, [0, durationFrames], [1, 1.035]);
+  const motion: PhotoMotion = index === 0 ? 'push' : 'static';
 
   return (
-    <EditorialBase dark={index % 2 === 1}>
-      <AbsoluteFill style={{opacity}}>
-        <div
-          style={{
-            position: 'absolute',
-            left: 180,
-            right: 180,
-            top: 95,
-            display: 'flex',
-            justifyContent: 'space-between',
-          }}
-        >
-          <SmallLabel dark={index % 2 === 1}>Our journey</SmallLabel>
-          <SmallLabel dark={index % 2 === 1}>{String(index + 1).padStart(2, '0')}</SmallLabel>
-        </div>
-        <div
-          style={{
-            position: 'absolute',
-            left: 245,
-            right: 245,
-            top: 190,
-            bottom: 175,
-            backgroundColor: colors.cloud,
-            border: '14px solid #fffdf8',
-            boxShadow: index % 2 === 1 ? '0 28px 80px rgba(0,0,0,0.28)' : '0 28px 80px rgba(16,25,44,0.16)',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            transform: `scale(${zoom})`,
-          }}
-        >
-          <div style={{textAlign: 'center'}}>
-            <div
-              style={{
-                fontFamily: sansFamily,
-                fontSize: 19,
-                letterSpacing: '0.28em',
-                color: colors.gold,
-              }}
-            >
-              REAL PHOTO SLOT
-            </div>
-            <div
-              style={{
-                fontFamily: serifFamily,
-                fontSize: 64,
-                letterSpacing: '0.08em',
-                color: colors.navy,
-                marginTop: 18,
-              }}
-            >
-              {slot}
-            </div>
-          </div>
-        </div>
-        <div
-          style={{
-            position: 'absolute',
-            left: 0,
-            right: 0,
-            bottom: 86,
-            textAlign: 'center',
-            fontFamily: serifFamily,
-            fontSize: 44,
-            letterSpacing: '0.08em',
-          }}
-        >
-          {caption}
-        </div>
-      </AbsoluteFill>
-    </EditorialBase>
+    <SceneBase dark>
+      <PhotoSurface
+        photo={photo}
+        label={label}
+        frame={frame}
+        durationFrames={durationFrames}
+        motion={motion}
+      />
+    </SceneBase>
   );
 };
 
 const ArrivalRoute = ({durationFrames}: {durationFrames: number}) => {
   const frame = useCurrentFrame();
-  const opacity = fadeForScene(frame, durationFrames);
   const progress = interpolate(frame, [4, Math.max(5, durationFrames - 6)], [0, 1], {
     extrapolateLeft: 'clamp',
     extrapolateRight: 'clamp',
   });
 
   return (
-    <EditorialBase>
-      <AbsoluteFill style={{opacity, justifyContent: 'center', alignItems: 'center'}}>
-        <SmallLabel>Final destination</SmallLabel>
-        <div style={{marginTop: 70, width: 1120, position: 'relative', height: 170}}>
+    <SceneBase>
+      <AbsoluteFill style={{justifyContent: 'center', alignItems: 'center'}}>
+        <div style={{width: 1180, position: 'relative', height: 150}}>
           <div
             style={{
               position: 'absolute',
-              top: 76,
+              top: 74,
               left: 70,
-              width: 980,
-              height: 2,
+              width: 1040,
+              height: 1,
               backgroundColor: colors.beigeDark,
             }}
           />
           <div
             style={{
               position: 'absolute',
-              top: 74,
+              top: 72,
               left: 70,
-              width: 980 * progress,
-              height: 5,
+              width: 1040 * progress,
+              height: 4,
               backgroundColor: colors.roseGold,
             }}
           />
-          <div style={{position: 'absolute', left: 0, top: 24, fontFamily: serifFamily, fontSize: 44}}>HAWAII</div>
-          <div style={{position: 'absolute', right: 0, top: 24, fontFamily: serifFamily, fontSize: 44}}>YOKOHAMA</div>
+          <div style={{position: 'absolute', left: 0, top: 17, fontFamily: sansFamily, fontSize: 24, letterSpacing: '0.12em'}}>
+            HAWAII
+          </div>
+          <div style={{position: 'absolute', right: 0, top: 17, fontFamily: sansFamily, fontSize: 24, letterSpacing: '0.12em'}}>
+            YOKOHAMA
+          </div>
         </div>
       </AbsoluteFill>
-    </EditorialBase>
+    </SceneBase>
   );
 };
 
 const EndingTitle = ({durationFrames}: {durationFrames: number}) => {
   const frame = useCurrentFrame();
-  const opacity = fadeForScene(frame, durationFrames);
-  const y = interpolate(frame, [0, 28], [16, 0], {
-    extrapolateLeft: 'clamp',
-    extrapolateRight: 'clamp',
-  });
+  const opacity = interpolate(
+    frame,
+    [0, 14, Math.max(15, durationFrames - 18), durationFrames],
+    [0, 1, 1, 0],
+    {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'},
+  );
 
   return (
-    <EditorialBase dark>
-      <AbsoluteFill
-        style={{
-          justifyContent: 'center',
-          alignItems: 'center',
-          opacity,
-          transform: `translateY(${y}px)`,
-        }}
-      >
-        <SmallLabel dark>Welcome aboard</SmallLabel>
+    <SceneBase dark>
+      <AbsoluteFill style={{justifyContent: 'center', alignItems: 'center', opacity}}>
         <div
           style={{
-            marginTop: 24,
             fontFamily: serifFamily,
-            fontSize: 92,
-            letterSpacing: '0.07em',
-            textAlign: 'center',
+            fontSize: 96,
+            letterSpacing: '0.035em',
           }}
         >
-          OUR WEDDING JOURNEY
-          <br />
-          BEGINS
+          SHOGO & SHIORI
         </div>
         <div
           style={{
-            marginTop: 34,
+            marginTop: 28,
             fontFamily: sansFamily,
-            fontSize: 22,
-            letterSpacing: '0.25em',
+            fontSize: 21,
+            letterSpacing: '0.16em',
             color: colors.goldLight,
           }}
         >
-          SHOGO & SHIORI · 2026.10.24
+          24 OCT 2026 · YOKOHAMA
         </div>
       </AbsoluteFill>
-    </EditorialBase>
+    </SceneBase>
   );
 };
 
@@ -473,40 +451,40 @@ export const OpeningV1 = () => {
       case 'v1-departure-title':
         return <DepartureTitle durationFrames={durationFrames} />;
       case 'v1-cloud-transition':
-        return <CloudTransition durationFrames={durationFrames} />;
+        return <CloudTransition />;
       case 'v1-photos-okinawa':
         return (
-          <PhotoTrio
+          <MemoryChapter
             durationFrames={durationFrames}
-            label="MEMORY 01"
-            title="Okinawa"
-            slots={['OKINAWA 01', 'OKINAWA 02', 'OKINAWA 03']}
+            place="Okinawa"
+            pattern="okinawa"
+            photos={openingV1PhotoSlots.okinawa}
           />
         );
       case 'v1-photos-seoul':
         return (
-          <PhotoTrio
+          <MemoryChapter
             durationFrames={durationFrames}
-            label="MEMORY 02"
-            title="Seoul"
-            slots={['SEOUL 01', 'SEOUL 02', 'SEOUL 03']}
+            place="Seoul"
+            pattern="seoul"
+            photos={openingV1PhotoSlots.seoul}
           />
         );
       case 'v1-photos-hawaii':
         return (
-          <PhotoTrio
+          <MemoryChapter
             durationFrames={durationFrames}
-            label="MEMORY 03"
-            title="Hawaii"
-            slots={['HAWAII 01', 'HAWAII 02', 'HAWAII 03']}
+            place="Hawaii"
+            pattern="hawaii"
+            photos={openingV1PhotoSlots.hawaii}
           />
         );
       case 'v1-photo-hero-a':
         return (
           <HeroPhoto
             durationFrames={durationFrames}
-            slot="COUPLE HERO 01"
-            caption="The places we found together."
+            photo={openingV1PhotoSlots.heroes[0]}
+            label="COUPLE HERO 01"
             index={0}
           />
         );
@@ -514,8 +492,8 @@ export const OpeningV1 = () => {
         return (
           <HeroPhoto
             durationFrames={durationFrames}
-            slot="COUPLE HERO 02"
-            caption="And the destination we chose together."
+            photo={openingV1PhotoSlots.heroes[1]}
+            label="COUPLE HERO 02"
             index={1}
           />
         );
@@ -524,7 +502,7 @@ export const OpeningV1 = () => {
       case 'v1-ending-title':
         return <EndingTitle durationFrames={durationFrames} />;
       default:
-        return <EditorialBase dark>{null}</EditorialBase>;
+        return <SceneBase dark>{null}</SceneBase>;
     }
   };
 
