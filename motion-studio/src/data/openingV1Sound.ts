@@ -1,32 +1,35 @@
+import {isPlayableAudioAsset} from './assets';
+
 export type OpeningV1SoundRole = 'bgm' | 'ambience';
 
 export type OpeningV1SoundCue = {
   id: string;
   role: OpeningV1SoundRole;
-  file: string | null;
+  assetId: string;
   startSec: number;
   endSec: number;
   volume: number;
   note: string;
 };
 
-// 音ファイルは motion-studio/public/audio/opening/ に置く。
-// file=null のcueはrenderされない。素材が決まったらファイル名だけ入れる。
-// ambienceは「画が変わってから鳴る」のではなく、次の画より少し先に入るJ-cut前提。
+// 音源本体はassets.tsで管理する。
+// candidate / approved / final のaudio素材だけがOpening V1へ入る。
+// missingのままならcue定義があってもrenderされないため、権利未確認素材を誤再生しない。
+// ambienceは次の画より少し先に入るJ-cut前提。
 export const openingV1SoundCues: OpeningV1SoundCue[] = [
   {
     id: 'bgm-main',
     role: 'bgm',
-    file: null,
+    assetId: 'opening-bgm-main',
     startSec: 0,
     endSec: 60,
     volume: 0.78,
-    note: '会場上映/SNS利用条件確認後に本番BGMを設定。',
+    note: '会場上映/SNS利用条件確認後に候補以上へ昇格したBGMだけ再生。',
   },
   {
     id: 'air-prelap',
     role: 'ambience',
-    file: null,
+    assetId: 'opening-air-ambience',
     startSec: 4.45,
     endSec: 9.25,
     volume: 0.12,
@@ -35,7 +38,7 @@ export const openingV1SoundCues: OpeningV1SoundCue[] = [
   {
     id: 'okinawa-sea-prelap',
     role: 'ambience',
-    file: null,
+    assetId: 'opening-okinawa-sea',
     startSec: 8.7,
     endSec: 18.35,
     volume: 0.14,
@@ -44,7 +47,7 @@ export const openingV1SoundCues: OpeningV1SoundCue[] = [
   {
     id: 'seoul-street-prelap',
     role: 'ambience',
-    file: null,
+    assetId: 'opening-seoul-street',
     startSec: 17.55,
     endSec: 27.25,
     volume: 0.1,
@@ -53,7 +56,7 @@ export const openingV1SoundCues: OpeningV1SoundCue[] = [
   {
     id: 'hawaii-ocean-prelap',
     role: 'ambience',
-    file: null,
+    assetId: 'opening-hawaii-ocean',
     startSec: 26.55,
     endSec: 36.35,
     volume: 0.13,
@@ -62,7 +65,7 @@ export const openingV1SoundCues: OpeningV1SoundCue[] = [
   {
     id: 'arrival-roomtone-prelap',
     role: 'ambience',
-    file: null,
+    assetId: 'opening-arrival-roomtone',
     startSec: 51.7,
     endSec: 56.1,
     volume: 0.08,
@@ -70,6 +73,6 @@ export const openingV1SoundCues: OpeningV1SoundCue[] = [
   },
 ];
 
-export const openingV1EnabledSoundCues = openingV1SoundCues.filter(
-  (cue): cue is OpeningV1SoundCue & {file: string} => cue.file !== null,
+export const openingV1EnabledSoundCues = openingV1SoundCues.filter((cue) =>
+  isPlayableAudioAsset(cue.assetId),
 );
