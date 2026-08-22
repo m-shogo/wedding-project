@@ -1,244 +1,127 @@
 # ADD-16 両親贈呈品メッセージカード — QA
 
-Status: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / CLEANROOM_V3_SELECTED / SECONDARY_COPY_READABILITY_HARDENED / HOME_PORT_MICROCOPY_SUBTRACTION_PASS / ORIGIN_DOT_UI_SUBTRACTION_PASS / BACK_ENDPOINT_DOT_UI_SUBTRACTION_PASS / OPEN_HANDWRITTEN_AREA_POLISHED / HANDWRITTEN_HELPER_LABEL_HIDDEN / LONG_COPY_STRESS_PASS / AUTO_HEIGHT_HARDENED / LEGACY_PRESERVED / ROLLBACK_SAFE / NOT_PRINT_READY`
-Updated: 2026-08-20
+Status: `CURRENT / PROFESSIONAL_VNEXT_HOME_TEXTILE_MAT_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / FAMILY_DIVERSITY_PASS / LONG_COPY_STRESS_PASS / AUTO_HEIGHT_PASS / WRITING_SURFACE_PASS / LEGACY_PRESERVED / ROLLBACK_SAFE / NOT_PRINT_READY`
+Updated: 2026-08-22
 Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
+Professional quality authority: `docs/design-learning/PROFESSIONAL-DESIGN-COUNCIL-VNEXT-2026-08-20.md`
 
 ## Current selected authority
 
-The older production `1:2 / 1:13` is retained legacy / rollback history for the reopened clean-room program. The selected current design is clean-room V3 `HOME HORIZON`.
-
-Canonical evidence:
-
-- `FIGMA-CLEANROOM-V3-HOME-HORIZON-QA-2026-08-17.md`
-- `OPEN-HANDWRITTEN-SIGNATURE-AREA-QA-2026-08-18.md`
-- `HANDWRITTEN-LABEL-VISIBILITY-RECONCILIATION-2026-08-19.md`
-- `ORIGIN-DOT-SUBTRACTION-QA-2026-08-19.md`
-- `BACK-ENDPOINT-DOT-SUBTRACTION-QA-2026-08-19.md`
-- `SECONDARY-COPY-READABILITY-QA-2026-08-20.md`
-- subsequent guest-copy / placeholder-status cleanup and native-text auto-height hardening records in the ADD-16 item history.
-
-Live authority:
-
 - Figma file: `ylmVBbwNcnjueYrymNpa3c`
-- clean-room page: `18:2 / CLEANROOM / ADD-16 / V3 HOME HORIZON / 2026-08-17`
-- selected front: `18:3`
-- selected back: `18:14`
-- hidden long-copy front: `18:26`
-- hidden long-copy back: `18:37`
-- retained legacy production: front `1:2`, back `1:13` — comparison/history only
-- Drive folder: `ADD-16_両親贈呈品メッセージカード / 1BOyETtL1_loGXNjGV9S30sJKEhZNjd6O`
+- Current page: `57:2 / CURRENT_SELECTED / ADD-16 / HOME TEXTILE MAT / 2026-08-22`
+- Current front: `57:3 / CURRENT_SELECTED / ADD16 / FRONT / HOME TEXTILE MAT`
+- Current back: `57:17 / CURRENT_SELECTED / ADD16 / BACK / HOME TEXTILE MAT WRITING`
+- hidden realistic long-copy stress: `57:36 / 57:50`
+- three-direction blank-frame study: `56:2`
+- retained previous Current RETURN LETTER HOME: `54:2 / 54:3 / 54:15` — comparison/history only
+- retained HOMEWARD JOURNEY: `45:2 / 45:32 / 45:42` — comparison/history only
+- retained HOME HORIZON: `18:3 / 18:14` — comparison/history only
+- retained legacy: `1:2 / 1:13` — comparison/history only
+- exact Drive authority: `1BOyETtL1_loGXNjGV9S30sJKEhZNjd6O / ADD-16_両親贈呈品メッセージカード`
+- Drive write for this pass: `0`
 
-## Current visual direction
+Canonical current evidence:
+- `PROFESSIONAL-VNEXT-HOME-TEXTILE-MAT-FAMILY-DIVERSITY-QA-2026-08-22.md`
+- item Current entry point: `CURRENT.md`
 
-`HOME HORIZON` translates the travel theme into a quiet home/origin metaphor rather than ticket/passport decoration:
+## Why Current changed after RETURN LETTER HOME
 
-- warm cream paper field;
-- Japanese serif typography with controlled asymmetry;
-- one restrained mint horizon line on each face without a decorative endpoint/control marker;
-- recipient → gratitude headline → optional short metaphor → horizon → date/signature on the front;
-- native auto-layout message stack on the back;
-- no certificate symmetry, side slab, hearts, houses, airplanes, family photos, rounded cards, shadows or script-font decoration;
-- all family-specific/final copy stays native semantic text.
+A later family-scale audit found a higher-order repetition: after abstract circles/capsules were removed, several unrelated Current items had independently converged on letter/envelope/paper-insert metaphors. ADD-16's primary action is not sending a letter; it is giving parents a tactile keepsake carrying gratitude at a departure/homecoming moment.
 
-The optional handwritten-signature role on the back uses an open paper field instead of a complete visible rectangle. The semantic `260×120` writing-area geometry remains in Figma with visible stroke `0`; the internal helper label `自筆署名欄（任意）` is hidden from the guest-facing paper. Editability is preserved without printing a form-like box or production note.
+The replacement therefore had to improve family diversity through a more item-specific physical grammar without sacrificing warmth, writing usability or native editability.
 
-## Decorative English microcopy subtraction — 2026-08-18
+The selected direction was authored from blank frames using only verified non-visual requirements: `700×1036`, front/back message-card role, native editable parent-message/signature/date roles, reverse writing surface, realistic long-copy/long-name resilience and unresolved-input boundaries.
 
-Fresh whole-item review of selected front `18:3` found `META / ORIGIN / HOME PORT` printed directly beneath the mint horizon line. The line + rust origin mark already communicated the fixed origin/home metaphor, while the tiny English label added generic travel-template flavor without reader-facing information.
+## Current visual direction — HOME TEXTILE MAT
 
-Rollback-safe comparison:
+Emotional brief: `育ててもらった時間を、これからの暮らしへ持っていく。`
 
-- `30:2 / QA_ADD16_FRONT_NO_HOME_PORT_MICROCOPY_2026_08_18`;
-- only visible `HOME PORT` microcopy was hidden;
-- horizon line, rust origin mark, recipient, gratitude headline, optional metaphor, date and signature roles were unchanged.
+### Front `57:3`
 
-The subtraction was stronger at whole-item scale: the metaphor remained readable through the Japanese copy and fixed graphic, while the page lost an unnecessary decorative English label.
+- dark forest selvage as the tactile anchor;
+- warm oat paper field;
+- rust + saffron short weave bands;
+- one thread-like vertical rule;
+- Japanese-first `育ててくれた時間を、これからの力に。`;
+- open native parent-message role and signature;
+- restrained date at the lower edge;
+- no envelope flap, paper insert, giant circle/capsule, fake airline credential, barcode, route UI, tropical clip-art or generated family/person imagery.
 
-Before selected-family mutation, hidden rollback copies were saved:
+### Back `57:17`
 
-- `30:13 / ROLLBACK_ADD16_FRONT_PRE_HOME_PORT_SUBTRACTION_2026_08_18`;
-- `30:24 / ROLLBACK_ADD16_FRONT_STRESS_PRE_HOME_PORT_SUBTRACTION_2026_08_18`.
+- open writing mat rather than a letter sheet inside an envelope;
+- same selvage/weave language;
+- Japanese-first `ことばを、持って帰ろう。`;
+- broad unboxed writing surface;
+- seven functional writing rules;
+- separate guide and signature footer lanes;
+- no visible form/card container around the writing role.
 
-The same fixed microcopy visibility change was applied to hidden front stress `18:26` so QA evidence matched selected production.
+## Three-scale screenshot QA
 
-Result: `HOME_PORT_MICROCOPY_SUBTRACTION_PASS`.
+Live re-audit on 2026-08-22 reconfirmed the Current front at native `700×1036`; promoted evidence already records front/back whole-item, reading and native actual-size PASS.
 
-## Origin-dot UI subtraction — 2026-08-19
+The Current retains a strong tactile/homecoming identity without returning to the suite's old rounded-shape or letter/envelope convergence fingerprints.
 
-Fresh actual-size review found that the remaining rust origin circle at the left end of the mint horizon line no longer carried a clear reader-facing job after the `HOME PORT` microcopy had been removed. The horizon line itself still carried the quiet home/origin metaphor, while the isolated endpoint increasingly read like a slider/progress control.
+## Real failures caught before selection
 
-Rollback-safe bounded comparison:
+The professional vNext pass caught and repaired actual failures rather than counting draft creation as progress:
 
-- `35:2 / QA_ADD16_FRONT_NO_ORIGIN_DOT_2026_08_19`;
-- only `DECOR_ORIGIN_MARK` visibility changed;
-- native recipient, gratitude headline, optional metaphor, horizon line, date and signature were unchanged.
-
-The no-dot version was stronger at whole and actual-size scales. Before selected mutation, hidden rollbacks were saved:
-
-- `36:2 / ROLLBACK_ADD16_FRONT_PRE_ORIGIN_DOT_SUBTRACTION_2026_08_19`;
-- `36:13 / ROLLBACK_ADD16_FRONT_STRESS_PRE_ORIGIN_DOT_SUBTRACTION_2026-08-19`.
-
-Adopted state:
-
-- selected `18:10 / DECOR_ORIGIN_MARK`: hidden;
-- stress `18:33 / DECOR_ORIGIN_MARK`: hidden;
-- comparison `35:2`: hidden after adoption.
-
-Post-write selected/stress readback: visible text outside root `0`, text collision `0`, proof-language `0`, IMAGE fills `0`.
-
-Result: `ORIGIN_DOT_UI_SUBTRACTION_PASS`.
-
-## Back endpoint-dot UI subtraction — 2026-08-19
-
-Fresh native `700×1036` back review found that the back face still retained a rust endpoint dot at the right end of the same mint horizon device, even though the front had already removed its endpoint marker.
-
-The back dot had no destination, trim, attachment or handwriting role. The horizon line alone already bound the long message body to the date/signature closure, so the isolated circle increasingly read as a slider/progress terminal.
-
-Rollback-safe comparison:
-
-- `37:2 / QA / ADD16 / BACK / NO_ENDPOINT_DOT / 2026-08-19`.
-
-Only the back `DECOR_ORIGIN_MARK` visibility changed. The horizon line, message stack, optional metaphor, date, signature and semantic handwritten area were unchanged.
-
-Pre-change hidden rollbacks:
-
-- selected back: `37:14`;
-- long-copy back: `37:26`.
-
-Adopted:
-
-- selected `18:21 / DECOR_ORIGIN_MARK`: hidden;
-- stress `18:44 / DECOR_ORIGIN_MARK`: hidden;
-- comparison `37:2`: hidden after adoption.
-
-Selected and long-copy back both passed actual-size review after the subtraction. Readback remained outside visible text `0`, text collision `0`, IMAGE fills `0`.
-
-Result: `BACK_ENDPOINT_DOT_UI_SUBTRACTION_PASS`.
-
-## Handwritten helper-label reconciliation — 2026-08-19
-
-Fresh live readback found the durable QA text lagging behind the selected Figma state:
-
-- `18:24 / AREA_HANDWRITTEN_SIGNATURE`: visible semantic `260×120` geometry, stroke count `0`;
-- `18:25 / META / HANDWRITTEN / 自筆署名欄（任意）`: `visible=false`;
-- `18:23 / TXT_COUPLE_SIGNATURE`: visible native `[ふたりの署名]`.
-
-No Figma mutation was required. The guest-facing paper was already correct; this QA file was reconciled so it no longer claims that the internal helper label is visible/retained on the printed surface.
-
-Result: `HANDWRITTEN_HELPER_LABEL_HIDDEN / AUTHORITY_RECONCILED`.
-
-## Secondary-copy actual-size readability — 2026-08-20
-
-Fresh native `700×1036` review found that the overall HOME HORIZON hierarchy remained strong while several meaningful reader-facing roles were still close to microcopy strength: the front optional journey line was `19px`, front date/signature `17px`, back kicker `18px`, and back optional line/date/signature `17–18px`.
-
-The already `VERIFIED_CROSS_ITEM` non-Rurubu method `Actual-size QA must audit the smallest reader-facing copy` was applied as a QA method only. Exact sizes and the HOME HORIZON art direction remain item-specific.
-
-Rollback-safe comparisons:
-
-- front `41:48`;
-- back `41:59`;
-- front stress `41:71`;
-- back stress `41:82`.
-
-Adopted native-text changes:
-
-Front:
-
-- optional journey line `19 → 21px`;
-- date `17 → 20px`;
-- signature `17 → 20px`.
-
-Back:
-
-- kicker `18 → 20px`;
-- optional journey line `17 → 20px`;
-- date `17 → 20px`;
-- signature `17 → 20px`.
-
-Before production mutation, hidden rollback copies were saved:
-
-- front `42:2`;
-- back `42:13`;
-- front stress `42:25`;
-- back stress `42:36`.
-
-The hidden back stress also still contained the internal `META / HANDWRITTEN / 自筆署名欄（任意）` as a visible child. It never leaked into selected artwork because the stress root was hidden, but it would have appeared when the proof was revealed. The helper is now hidden there as well so selected and stress evidence match.
-
-Post-adoption selected front/back and realistic long-copy front/back all passed native `700×1036` review. Selected/stress readback: outside visible text `0`, text collision `0`, IMAGE fills `0`; selected/stress back visible internal handwritten helper `0`.
-
-Result: `SECONDARY_COPY_READABILITY_HARDENED / QA_HELPER_VISIBILITY_SYNCED`.
+1. `THANK-YOU BROADSIDE` had an unstable oversized date wrap/crop → rejected.
+2. first HOME TEXTILE display mechanically orphaned `を、` → corrected with semantic Japanese line breaking.
+3. realistic front stress orphaned final `に。` and allowed growing body copy to collide with a fixed signature → display/body/signature were rebuilt as native auto-height roles in a vertical stack with a flexible spacer.
+4. first stack mutation attempt failed because required Figma fonts were not loaded → corrected input contract with explicit font loading before retry.
+5. realistic back stress exposed mechanical guide-word breaking / footer-lane collision → guide/signature widths and positions were separated without shrinking type.
 
 ## Structure / long-copy QA
 
-### Selected front `18:3`
+Final selected + stress readback:
 
-- working size: `700×1036`
-- IMAGE fills: `0`
-- visible text outside root: `0`
-- text collision: `0`
-- smallest reader-facing sizes after hardening: date/signature `20px`, optional journey line `21px`;
-- native recipient / gratitude / optional metaphor / date / signature roles retained;
-- decorative origin dot hidden; mint horizon line retained.
+- selected front `57:3`: native visible text `5`; fixed-height `0`; outside `0`; text collisions `0`; IMAGE fills `0`.
+- selected back `57:17`: native visible text `5`; fixed-height `0`; outside `0`; collisions `0`; IMAGE fills `0`.
+- stress front `57:36`: native visible text `5`; fixed-height `0`; outside `0`; collisions `0`; IMAGE fills `0`.
+- stress back `57:50`: native visible text `5`; fixed-height `0`; outside `0`; collisions `0`; IMAGE fills `0`.
 
-### Selected back `18:14`
+Stress roots remain hidden after proof review. All family-specific/final copy stays native editable text.
 
-- working size: `700×1036`
-- IMAGE fills: `0`
-- visible text outside root: `0`
-- text collision: `0`
-- smallest reader-facing size after hardening: `20px`;
-- message body remains native auto-layout so approved Japanese copy can grow without a fixed-height raster/text block;
-- back decorative endpoint dot hidden; mint horizon line retained;
-- `AREA_HANDWRITTEN_SIGNATURE`: `260×120`, visible stroke `0`, semantic geometry retained;
-- internal helper label `META / HANDWRITTEN / 自筆署名欄（任意）`: hidden;
-- guest-facing native signature role `[ふたりの署名]`: visible/editable.
+## Hybrid / image decision
 
-Hidden stress `18:26 / 18:37` uses long recipient, multi-paragraph gratitude body, longer optional metaphor and long couple-signature strings. Both were revalidated at native `700×1036` after secondary-copy hardening: visible text outside root `0`, text collision `0`, IMAGE fills `0`; back helper label remains hidden. Stress roots were returned to hidden QA state after review.
+- variable/factual copy: native Figma text;
+- weave/selvage/writing rules: simple native functional geometry;
+- generated/composed raster: `0`;
+- editable SVG: `0`;
+- replaceable image role: `0`.
 
-Later structural hardening removed nominal fixed-height native-text boxes while preserving the selected composition and stress result.
+`IMAGE_GENERATION_NOT_REQUIRED_FOR_THIS_PASS`: the diagnosed quality gap was cross-suite physical-metaphor convergence, not missing photography/illustration. Generated parents/family are prohibited, and generic tropical/home imagery would weaken specificity and writing function.
 
-## Legacy / family-safety boundary
+## Professional Design Council
 
-Legacy `1:2 / 1:13` remains untouched and is not the selected-current editing target.
+Score: `93/100 / PASS / NO VETO`.
 
-Do not invent family composition, names, forms of address, episodes, dates/memories, gift type or attachment conditions. Final copy must be checked against the actual family/use case and any read-aloud letter.
+- Concept clarity / ownability: 14/15
+- Emotional excitement / want-to-pick-up: 14/15
+- Japanese editorial craft: 14/15
+- Composition / hierarchy / rhythm: 13/15
+- Travel/homecoming integration without cliché: 8/10
+- Item-specific functionality: 10/10
+- Physical print credibility: 10/10
+- Editability / content resilience: 5/5
+- Family fit without template sameness: 5/5
 
-## Image / Drive decision
+## Deferred finalization
 
-`IMAGE_GENERATION_NOT_REQUIRED_FOR_THIS_ITEM`.
-
-The item is text/emotion-led. Adding generated family/photo imagery would add identity/provenance risk without solving a current visual defect. Live Drive metadata on 2026-08-20 matched `1BOyETtL1_loGXNjGV9S30sJKEhZNjd6O`, parent `0ADXt8irGMFGnUk9PVA`. Drive writes: `0`.
-
-## BLOCKED_REQUIRED_INPUT / DEFERRED_FINALIZATION
-
-Still unresolved:
+Still unresolved and intentionally not fabricated:
 
 - one card per family vs one shared card;
 - actual gift/package/attachment method;
 - whether names appear on front;
-- final body length and relation to a read-aloud letter;
-- final copy / signatures / forms of address;
-- vertical vs horizontal writing if requirements change;
-- paper stock, vendor template/profile, bleed/export settings;
+- final body copy / signatures / forms of address;
+- paper stock and whether textile character should be reinforced through stock/ink/finish rather than more digital decoration;
+- printer template/profile, bleed/export settings;
 - physical attachment and 100% print proof.
+
+These remain `BLOCKED_REQUIRED_INPUT / DEFERRED_FINALIZATION` and do not invalidate the current visual/design selection.
 
 ## Result
 
-- clean-room independence: `PASS`
-- sellable visual: `PASS`
-- secondary reader-facing copy actual-size readability: `PASS`
-- decorative English microcopy subtraction: `PASS`
-- front origin-dot UI subtraction: `PASS`
-- back endpoint-dot UI subtraction: `PASS`
-- native semantic editability: `PASS`
-- open handwritten-signature area: `PASS`
-- guest-facing handwritten helper label hidden: `PASS`
-- hidden stress helper visibility synced: `PASS`
-- long-copy stress: `PASS`
-- auto-height hardening: `PASS`
-- family-safety / no fabricated facts: `PASS`
-- legacy preservation: `PASS`
-- Drive authority: `PASS`
-- final family/use-case facts and physical proof: `BLOCKED_REQUIRED_INPUT / DEFERRED_FINALIZATION`
-- print readiness: `NO`
+`PROFESSIONAL_VNEXT_HOME_TEXTILE_MAT_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / FAMILY_DIVERSITY_PASS / LONG_COPY_STRESS_PASS / AUTO_HEIGHT_PASS / WRITING_SURFACE_PASS / LEGACY_PRESERVED / NOT_PRINT_READY`.
