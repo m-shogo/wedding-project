@@ -28,44 +28,45 @@ This is the current strongest six-role V7 study set visible on the live comparis
 4. **Memory / Guide G2** `2299:2`
    - fixed display title retest passed locally
    - editable source preserved separately
-5. **Cafe / Table H** `2296:2`
-   - clean-room tested locally
-   - current photographs remain structural photo dummies, not final Hawaii assets
+5. **Cafe / Table H2** `2308:2`
+   - current V7 Cafe comparison
+   - reader-facing destination close corrected from Yokohama residue to Hawaii
+   - structural photo dummies remain unchanged and are not final Hawaii assets
+   - 500 / 1400 / `1587×1123` visual QA PASS; text intersections `0`
+   - prior H `2296:2` is hidden rollback
 6. **Island Picks + 1DAY C4** `2286:2`
    - current 1DAY comparison role
    - fixed display title tested locally
 
 All six roots remain on page `2052:2`. V6 was not overwritten.
 
-## Latest verified improvement — Profile K
+## Latest verified improvement — Cafe/Table H2
 
-New professional research was used to change a live design decision rather than merely restyle it:
+Fresh professional input was taken from FLUX Hawaii rather than repeating the previous food/travel references. FLUX explicitly frames Hawai‘i through honest local storytelling and insightful photography rather than only a picture-perfect façade, and its redesign writing treats readability, photography, grid and paper behavior as one publication system.
 
-- Masahiro Shintani: editorial expression should serve the person/content; typographic character should arise from the subject rather than designer self-expression.
-- POPEYE 50th interview archive: individual answers/voices are editorial material, not merely questionnaire fields.
-- BRUTUS editorial interview: visual/text presentation should keep the entry approachable while allowing deeper material to follow.
+Rurubu-specific hypothesis tested on Cafe H:
 
-Local hypothesis tested on V7 Profile J:
+> a clean-room destination edition must audit reader-facing copy as well as photography; a polished spread is still semantically false if small copy names the frozen control destination.
 
-> when real answer text exists alongside prompt-only questions, human voice should receive more visual authority than the repeated Q-number schema.
+H2 result:
 
-K result:
+- changed only `夜の横浜を、ゆっくり味わう。` → `夜のハワイを、ゆっくり味わう。`;
+- no layout, photo dummy, crop, color, typographic scale or factual/variable text was changed;
+- 500 / 1400 / 1587×1123 visual QA PASS;
+- visible native text `14`; IMAGE fills `4`; text intersections `0`;
+- the simple 18 px edge audit still flags the existing left folio at 13.7 px from the outer edge exactly as in H, so this is not claimed print-safe until printer authority exists.
 
-- Q1 and Q4 existing answers are the primary/secondary voice beats;
-- Q2/Q3/Q5/Q6 are quieter prompt indexes;
-- large repeated numeric modules were removed where they had no additional editorial job;
-- no invented factual answer was added;
-- no rounded card, shadow, gradient, decorative English or arbitrary rotation was introduced.
+Decision: `H2 ADOPTED AS CURRENT V7 CAFE COMPARISON / VERIFIED_LOCAL DESIGN QA / NOT PREFERRED / NOT PRINT READY`.
 
-Decision: `K ADOPTED AS CURRENT V7 PROFILE COMPARISON / VERIFIED_LOCAL DESIGN QA / NOT PREFERRED`.
+Evidence: `01_paper-items/rurubu-wedding/evidence/RURUBU-V7-CAFE-H2-DESTINATION-COPY-QA-2026-08-23.md`.
 
-Evidence: `01_paper-items/rurubu-wedding/evidence/RURUBU-V7-PROFILE-K-ANSWER-VOICE-QA-2026-08-23.md`.
+Learning: `RSL-230 / F-RSL-230-CONTROL-DESTINATION-COPY-LEAKS-INTO-CLEANROOM-DIRECTION`.
 
-Learning: `RSL-229 / F-RSL-229-QA-PROMPT-MODULES-OUTWEIGH-AVAILABLE-HUMAN-VOICE`.
+Production learning reinforced: the first clone attached to the Plugin API current page `845:2`; the method was immediately switched to explicit `setCurrentPageAsync(2052:2)` + `page.appendChild()` + parent readback. H2 was not promoted until the parent reverified as `2052:2`.
 
 ## V7 Cafe / Table photo bottleneck
 
-Live Cafe H `2296:2` remains structurally useful but its photos are explicitly structural dummies. New food/travel editorial research was converted into a role-specific generation brief instead of pretending the current dummy images are Hawaii assets.
+Live Cafe H2 `2308:2` remains structurally useful but its photos are explicitly structural dummies. The role-specific generation brief remains the authority for future real Hawaii photography.
 
 Figma brief:
 
@@ -75,7 +76,8 @@ Core hypothesis:
 
 - food photo must first create `食べたい`;
 - travel photo must also create `そこに行きたい` through believable place evidence;
-- stylish-but-generic resort stock, sterile flat-lay and tropical shorthand are failures even when polished.
+- stylish-but-generic resort stock, sterile flat-lay and tropical shorthand are failures even when polished;
+- new FLUX Hawaii research strengthens the local-truth check: do not substitute a picture-perfect tourist façade for lived Hawai‘i context.
 
 Evidence: `01_paper-items/rurubu-wedding/evidence/RURUBU-V7-CAFE-TABLE-PHOTO-ART-DIRECTION-BRIEF-2026-08-23.md`.
 
@@ -85,7 +87,7 @@ V7 authority folder reverified:
 
 `1fHt2rf5jvTWyjkmpGu3KhEgjQEiUNV6x / RURUBU_V7_HAWAII_PRO_CLEANROOM_2026-08-21`
 
-A direct query for current children under that folder returned no discoverable child files in this run. Historical Drive master IDs recorded in earlier evidence/status are therefore not silently reasserted as live child truth; reverify exact IDs before reuse.
+No new Drive master was created in the H2 correction. Historical Drive master IDs are not silently reasserted; reverify exact IDs before reuse.
 
 Current run asset state:
 
@@ -99,11 +101,11 @@ Current run asset state:
 
 ## V6 / V7 / V8 comparison note
 
-Thumbnail comparison was re-run on the Profile role:
+Cafe role comparison was rechecked at common visual scale:
 
-- V6 IX `2132:101`: strongest photo/travel-guide richness, but current content is still dummy/final-content incomplete.
-- V7 K `2303:2`: strongest high-energy travel-magazine personality and now less questionnaire/UI-like than J.
-- V8 AW `2278:2`: strongest restraint/keep-and-reread book voice; intentionally materially different from V7.
+- V6 IT `2116:65`: strongest proven photo/information density but remains Yokohama control.
+- V7 H2 `2308:2`: materially different high-energy system; semantically corrected to Hawaii but still blocked by dummy photography.
+- V8 AS `2261:2`: strongest quiet book/editorial restraint; intentionally materially different from V7.
 
 No overall winner is declared. Final Hawaii photography remains a major truth gate for V7.
 
@@ -111,7 +113,8 @@ No overall winner is declared. Final Hawaii photography remains a major truth ga
 
 - RSL-227 fixed identity display authoring remains `VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`; do not convert every title into the same graphic treatment.
 - RSL-194 semantic-role redistribution remains reinforced by Profile J left-side grouping.
-- RSL-229 answer-owned voice is `VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`.
+- RSL-229 answer-owned voice remains `VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`.
+- RSL-230 destination-copy semantic leakage is `VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`.
 - Cafe/Table food-photo observations remain `OBSERVED → ROOT_CAUSE_HYPOTHESIS` until generated candidates are tested in the exact slot.
 
 ## Print / truth gates
@@ -128,6 +131,6 @@ Do not call V7 preferred, complete or print-ready until all relevant gates are s
 
 1. Generate materially different role-specific Hawaii Cafe/Table candidates from brief `2305:2` when a legitimate generation path is available.
 2. Save accepted masters to exact V7 Drive authority, read back Drive IDs, create role derivatives, and place through the verified image-byte/Figma path when needed.
-3. Verify image hash/crop and run thumbnail / reading / actual-size QA in Cafe H.
-4. Re-run common-scale six-role V7 comparison after real photo replacement; do not edit K merely because it is newest.
+3. Verify image hash/crop and run thumbnail / reading / actual-size QA in Cafe H2.
+4. Re-run common-scale six-role V7 comparison after real photo replacement; do not edit H2 merely because it is newest.
 5. Continue blind V6/V7/V8 comparison by role before declaring any preferred system.
