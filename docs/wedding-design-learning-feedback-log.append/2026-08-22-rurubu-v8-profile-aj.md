@@ -1,0 +1,23 @@
+# 2026-08-22 — Rurubu V8 Profile AJ
+
+- Scope: Rurubu WEDDING only
+- Starting live current: Profile Z `2215:2`
+- New current: Profile AJ `2235:2`
+- Old current preserved: Z hidden rollback
+- Visible problem: large Latin names owned the page while the actual personality contrast was visually secondary.
+- Professional hypothesis: editorial/book design should derive hierarchy from fundamental content structure and reader-facing meaning, not identifier display alone.
+- Bounded change: keep Q&A page; demote SHOGO/SHI-CHAN to small identity furniture; promote existing Japanese `まず歩く / まず食べる` content to display type; preserve native text.
+- First-pass failure: 4px text-box overlap between closing copy and caption.
+- Correction: move closing copy upward; structural QA rerun.
+- 500px: PASS
+- 1000px: PASS
+- 1587×1123: PASS
+- Native text: 23
+- IMAGE: 0 visible
+- Text intersections: 0
+- 18px safe risk: 0
+- New image generation: 0
+- Drive new master: 0
+- V6/V7 image reuse: 0
+- Learning: RSL-214 / `F-RSL-214-LATIN-NAME-DISPLAY-MASS-OUTWEIGHS-THE-ACTUAL-EDITORIAL-PERSONALITY-DIFFERENCE`
+- Global decision: V8 remains not final winner and not print-ready; V6 remains stronger for photographic travel desire.
