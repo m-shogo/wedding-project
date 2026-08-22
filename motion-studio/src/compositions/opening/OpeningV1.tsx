@@ -17,6 +17,7 @@ import {CloudSea} from './CloudSea';
 const sansFamily = fonts.sans;
 
 type PhotoMotion = 'static' | 'push' | 'drift-left' | 'drift-right';
+type PhotoFit = 'cover' | 'contain';
 type MemoryLayout = 'full' | 'left' | 'right' | 'wide';
 type MemoryPattern = 'okinawa' | 'seoul' | 'hawaii';
 
@@ -59,6 +60,7 @@ const PhotoSurface = ({
   frame,
   durationFrames,
   motion = 'static',
+  fit = 'cover',
   objectPosition = '50% 50%',
 }: {
   photo: string | null;
@@ -66,6 +68,7 @@ const PhotoSurface = ({
   frame: number;
   durationFrames: number;
   motion?: PhotoMotion;
+  fit?: PhotoFit;
   objectPosition?: string;
 }) => {
   const safeDuration = Math.max(1, durationFrames - 1);
@@ -99,7 +102,7 @@ const PhotoSurface = ({
       style={{
         width: '100%',
         height: '100%',
-        objectFit: 'cover',
+        objectFit: fit,
         objectPosition,
         transform: `translateX(${x}px) scale(${scale})`,
       }}
@@ -230,6 +233,7 @@ const MemoryBeat = ({
           frame={frame}
           durationFrames={durationFrames}
           motion={motion}
+          fit="cover"
           objectPosition={objectPosition}
         />
         {showPlace ? <PlaceLabel place={place} light /> : null}
@@ -247,6 +251,7 @@ const MemoryBeat = ({
             frame={frame}
             durationFrames={durationFrames}
             motion={motion}
+            fit="contain"
             objectPosition={objectPosition}
           />
         </div>
@@ -274,6 +279,7 @@ const MemoryBeat = ({
           frame={frame}
           durationFrames={durationFrames}
           motion={motion}
+          fit="cover"
           objectPosition={objectPosition}
         />
       </div>
@@ -348,13 +354,16 @@ const HeroPhoto = ({
 
   return (
     <SceneBase dark>
-      <PhotoSurface
-        photo={photo}
-        label={label}
-        frame={frame}
-        durationFrames={durationFrames}
-        motion={motion}
-      />
+      <div style={{position: 'absolute', inset: '54px 76px', overflow: 'hidden'}}>
+        <PhotoSurface
+          photo={photo}
+          label={label}
+          frame={frame}
+          durationFrames={durationFrames}
+          motion={motion}
+          fit="contain"
+        />
+      </div>
     </SceneBase>
   );
 };
