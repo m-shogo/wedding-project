@@ -1,80 +1,112 @@
 # ADD-17 子ども向けミニカード / ぬりえ — Current
 
-Status: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / PROFESSIONAL_VNEXT_FOLDOUT_DISCOVERY_MAP_SELECTED / FAMILY_DIVERSITY_PASS / LONG_COPY_VISUAL_PASS / CHILD_ACTIVITY_SURFACE_PASS / LEGACY_PRESERVED / BLOCKED_REQUIRED_INPUT / NOT_PRINT_READY`
-Updated: 2026-08-22
+Status: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / PROFESSIONAL_VNEXT_EXPEDITION_FIELD_SELECTED / FAMILY_DIVERSITY_PASS / LONG_COPY_VISUAL_PASS / CHILD_ACTIVITY_SURFACE_PASS / LEGACY_PRESERVED / BLOCKED_REQUIRED_INPUT / NOT_PRINT_READY`
+Updated: 2026-08-23
 Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
 
-This is the current visual/design authority entry point for the age-independent neutral ADD-17 template. Final real-wedding adoption remains blocked until authoritative child attendance/use information exists. Older FIELD NOTE / WINDOW SEAT / V5 production and QA remain rollback/history evidence.
+This is the current visual/design authority entry point for the age-independent neutral ADD-17 template. Final real-wedding adoption remains blocked until authoritative child attendance/use information exists. Older Foldout Discovery Map / FIELD NOTE / WINDOW SEAT / V5 work remains rollback/history evidence.
 
 ## Selected Figma authority
 
 - file: `PAvkRggJiRuXVypi3RgZCN`
-- current selected front: `62:2 / CURRENT_SELECTED / ADD17 / FRONT / FOLDOUT DISCOVERY MAP`
-- current selected back: `62:22 / CURRENT_SELECTED / ADD17 / BACK / ARRIVAL MAP LOG`
-- hidden realistic stress: `62:46 / 62:66`
-- three blank-frame direction studies: `61:3 / 61:21 / 61:32` — hidden comparison evidence
+- current selected front: `67:3 / CURRENT_SELECTED / ADD17 / FRONT / EXPEDITION FIELD SHEET`
+- current selected back: `67:4 / CURRENT_SELECTED / ADD17 / BACK / DISCOVERY POSTLOG`
+- hidden realistic stress: `69:2 / 69:40`
+- current clean-room page: `67:2 / VNEXT_PRO / ADD-17 / EXPEDITION FIELD SHEET / 2026-08-23`
+- three new blank-frame direction thumbnails: `70:2 / 70:11 / 70:21` — hidden comparison evidence
+- previous Foldout Discovery Map Current: `62:2 / 62:22` — retained rollback/history only
 - previous FIELD NOTE Current: `60:2 / 60:3 / 60:18` — retained comparison/history only
 - prior WINDOW SEAT Current: `47:2 / 48:2 / 48:13` — retained comparison/history only
 - retained V5 production: `2:2 / 2:5` — comparison/history only
 
 ## Current concept
 
-`今日の旅で、見つけたものを残そう。`
+`旅の途中で「見つけた！」が生まれる瞬間を、自由に描ける一枚のフィールドへ。`
 
-The new Current treats the item as a **foldout discovery map / observation sheet**, not a large rounded worksheet card.
+The Current treats the item as a playful **expedition field sheet / discovery note**, while keeping a large child-neutral activity surface open.
 
 Front:
-- cobalt physical binding edge;
-- terracotta header paper;
-- Japanese-first `今日の旅で、見つけたもの。`;
-- central activity surface remains open paper, defined only by small corner/fold marks;
+- pale mint paper field;
+- Japanese-first `旅の途中で、見つけたもの。`;
+- one compact cobalt→pink discovery-route gesture placed outside the main activity surface;
+- reader-facing `きょうの発見 / 01` instead of a generic English concept label;
+- tiny star/wave/spark and four open corner ticks, with no rounded card around the drawing area;
 - native `[お題]`, optional name and date roles;
-- no rounded web-card container around the main drawing area.
+- open footer copy + short yellow rule instead of a rounded UI-like footer container.
 
 Back:
-- `ARRIVAL LOG` kicker;
+- cream open writing field with cobalt top band and coral physical edge;
+- reader-facing `きょうの発見 / 02`;
 - Japanese-first `もうひとつ、見つけたこと。`;
-- open ruled writing field;
-- optional drawing/memo area marked by small corner cues only;
-- no generated child/person/animal imagery or fake transport credential.
+- open writing rules rather than cards/boxes;
+- fixed star/wave cues stay outside the writing field.
 
 All prompts, guidance, optional name and date remain native editable Figma text.
 
-## QA
+## Professional visual QA
 
-Professional Design Council: `93/100 / PASS / NO VETO`.
+Professional Design Council: `94/100 / PASS / NO VETO`.
 
-Selected + realistic stress:
-- canvas `1110×1540`;
-- front native text `7`, back native text `6`;
-- fixed-height visible text `0` across selected + stress;
-- visible text outside root `0`;
+The new direction was selected only after three materially different blank-frame thumbnails were compared:
+
+- `70:2 / A EXPEDITION FIELD` — selected direction;
+- `70:11 / B FOLDED COLOR ATLAS` — stronger paper play but reduced activity openness / too poster-like;
+- `70:21 / C OBSERVATION RIBBON` — distinct but moved toward card/UI semantics.
+
+After the full-size A direction matured, it was compared against the retained Foldout Current. Expedition Field improved the playful/joyful first read and movement while retaining a credible open activity surface and Japanese-first hierarchy.
+
+Whole-item / 500 px: PASS.
+Reading scale: PASS.
+Actual-size / native `1110×1540`: PASS.
+Realistic long-copy front/back: PASS after bounded spacing repair.
+
+## Structure / stress QA
+
+Selected front `67:3`:
+- native text `7`;
+- fixed-height visible text `0`;
+- outside visible text `0`;
 - text-text collision `0`;
 - IMAGE fills `0`.
 
-Native screenshot/structure QA discovered and corrected two meaningful issues before selection:
+Selected back `67:4`:
+- native text `6`;
+- fixed-height visible text `0`;
+- outside visible text `0`;
+- text-text collision `0`;
+- IMAGE fills `0`.
 
-1. realistic front stress produced a mechanically poor Japanese break splitting `聞こえた音`; the stress contract was changed to deliberate clause-level native line breaks rather than shrinking type;
-2. the initial authoring helper used `textAutoResize='HEIGHT'` before `resize()`, silently returning new text to fixed-height behavior; all fonts were loaded, width was assigned first, then auto-height was re-applied and read back.
+Stress `69:2 / 69:40`:
+- front native text `7`, back native text `6`;
+- fixed-height visible text `0`;
+- outside visible text `0`;
+- text-text collision `0`;
+- IMAGE fills `0`.
+
+Meaningful failures caught before promotion:
+
+1. the first full-size direction used three disconnected color bars; they read as generic decoration and were method-switched to one coherent discovery-route gesture;
+2. the first closing copy sat inside a rounded cobalt footer container; it reintroduced pill/card UI grammar and was removed;
+3. initial realistic long-copy placed the long prompt too near an activity corner cue and left insufficient lower reserve for a long optional name; the prompt lane was widened, activity ticks moved lower, and name/date reserve increased without shrinking the main headline.
 
 Canonical evidence:
-- `PROFESSIONAL-VNEXT-FOLDOUT-DISCOVERY-MAP-QA-2026-08-22.md`
-- previous `PROFESSIONAL-VNEXT-FIELD-NOTE-FAMILY-DIVERSITY-QA-2026-08-21.md` remains retained history.
+- `PROFESSIONAL-VNEXT-EXPEDITION-FIELD-PROMOTION-QA-2026-08-23.md`
+- previous `PROFESSIONAL-VNEXT-FOLDOUT-DISCOVERY-MAP-QA-2026-08-22.md` remains rollback/history evidence.
 
 ## Hybrid / image decision
 
-- variable/semantic copy: native text;
-- fixed paper/binding/fold/corner cues: simple native functional geometry;
-- SVG: `0`;
+- variable/semantic/factual copy: native text;
+- route/star/wave/spark: small editable vector/SVG roles;
+- paper fields/rules/activity ticks: simple native functional geometry;
 - generated/composed raster: `0`;
 - replaceable image role: `0`;
 - image generation: `0`.
 
-`IMAGE_GENERATION_NOT_REQUIRED_FOR_THIS_PASS`: the screenshot-supported defect was dominant UI-like activity containment, not missing illustration or photography. Generic travel imagery would reduce activity space and increase stock/AI-template risk.
+`IMAGE_GENERATION_NOT_REQUIRED_FOR_THIS_PASS`: the screenshot-supported bottleneck was playful graphic rhythm versus activity-surface usability, not missing photography or illustration. Generic travel imagery or generated children would reduce function and increase stock/identity risk.
 
 ## Drive
 
-Exact authority confirmed:
+Exact authority confirmed live on 2026-08-23:
 - `1xqxYqJ6_-0nPYSKrWkISHYljiNGIP5mB / ADD-17_子ども向けミニカード_ぬりえ`
 
 Drive writes for this pass: `0`.
