@@ -7,12 +7,12 @@ Figma file: `bfM0d4c9dCeBv5pCkJ3TNM`
 Figma page: `2052:2 / 07_RURUBU_V7_V8_PRO_STUDIES`
 V6 control: frozen `JC + IX + JB + IZ + IT + JA`
 V7 comparison set: six-role clean-room study, preserved and not preferred
-Production state: `V8_AV_OUTER_CURRENT / V8_AK_PROFILE_CURRENT / V8_AL_STORY_CURRENT / V8_AQ_MEMORY_CURRENT / V8_AS_CAFE_CURRENT / V8_AT_1DAY_CURRENT / NOT_GLOBAL_WINNER / NOT_PRINT_READY`
+Production state: `V8_AV_OUTER_CURRENT / V8_AW_PROFILE_CURRENT / V8_AL_STORY_CURRENT / V8_AQ_MEMORY_CURRENT / V8_AS_CAFE_CURRENT / V8_AT_1DAY_CURRENT / NOT_GLOBAL_WINNER / NOT_PRINT_READY`
 
 ## Current V8 roots
 
-1. **Outer AV `2273:24`** — live Figma current. Destination-led `横浜` hierarchy; Japanese reader contents; front deck now uses destination-owned concrete experience language (`海辺、街歩き、好きな店、夜の食卓。 / 横浜の一日を、ページに残す。`). One verified abstract ocean-light supporting master remains. Previous AP `2251:2` is hidden rollback.
-2. **Profile/Q&A AK `2238:2`** — content-owned Japanese personality hierarchy; answer-owned Q&A voice. Previous AJ `2235:2` hidden rollback. IMAGE `0`.
+1. **Outer AV `2273:24`** — live Figma current. Destination-led `横浜` hierarchy; Japanese reader contents; front deck uses destination-owned concrete experience language (`海辺、街歩き、好きな店、夜の食卓。 / 横浜の一日を、ページに残す。`). One verified abstract ocean-light supporting master remains. Previous AP `2251:2` is hidden rollback.
+2. **Profile/Q&A AW `2278:2`** — content-owned Japanese personality hierarchy plus disciplined interview question rail; actual answers remain the personality carrier. Previous AK `2238:2` hidden rollback. IMAGE `0`.
 3. **Story/Chronology AL `2238:35`** — typography-led emotional story + unequal chronology rhythm; reader-facing Japanese furniture. Previous Q `2196:2` hidden rollback. IMAGE `0`.
 4. **Memory/Guide AQ `2256:2`** — concrete sensory memory fragments carry the left-page editorial mass; Guide semantics retained. Previous AM `2238:73` hidden rollback. IMAGE `0`.
 5. **Cafe/Table AS `2261:2`** — sensory Cafe plus Dinner close with explicit closing gravity. Previous AF `2230:26` hidden rollback. IMAGE `0`.
@@ -23,13 +23,15 @@ Production state: `V8_AV_OUTER_CURRENT / V8_AK_PROFILE_CURRENT / V8_AL_STORY_CUR
 | Role | Native text | Text intersections | 18px safe risk | IMAGE |
 | --- | ---: | ---: | ---: | ---: |
 | Outer AV | 12 | 0 | 0 | 1 |
-| Profile/Q&A AK | 23 | 0 | 0 | 0 |
+| Profile/Q&A AW | 23 | 0 | 0 | 0 |
 | Story/Chronology AL | 25 | 0 | 0 | 0 |
 | Memory/Guide AQ | 21 | 0 | 0 | 0 |
 | Cafe/Table AS | 13 | 0 | 0 | 0 |
 | 1DAY/Model Course AT | 19 | 0 | 0 | 0 |
 
-Outer AV was re-verified at 500px whole-item, 1400px reading scale, and native 1587×1123 actual-size. All three visual scales PASS. Parent page: `2052:2`. Current image node `2273:36`, hash `be21a846e961b3a13c24c7476f6a01b12b8d07ff`.
+Outer AV remains verified at 500px whole-item, 1400px reading scale, and native 1587×1123 actual-size. Parent page: `2052:2`. Current image node `2273:36`, hash `be21a846e961b3a13c24c7476f6a01b12b8d07ff`.
+
+Profile/Q&A AW was verified at 500px whole-item, 1400px reading scale and native 1587×1123 actual-size. Final structure readback: native text `23`, IMAGE `0`, text intersections `0`, 18px safe risk `0`, parent `2052:2`.
 
 1DAY AT remains verified at whole-item 500px, reading 1000px, and actual-size 1587×1123; accidental explicit one-character lines `0`.
 
@@ -37,14 +39,21 @@ Working physical geometry remains `420×297 mm`. DESIGN QA is not PRINT QA; exac
 
 ## Live authority reconciliation
 
-GitHub previously listed Outer AP `2251:2`, but live Figma now has:
+### Outer
 
+GitHub previously listed Outer AP `2251:2`, but live Figma has:
 - AP `2251:2` → hidden rollback named `PRE-DESTINATION-DECK`;
 - AV `2273:24` → visible `CURRENT` Outer.
 
-The AP→AV change is bounded to reader-facing front-deck semantics; layout, image role, masthead, `横浜` hierarchy and back cover are retained. Live Figma therefore supersedes the stale GitHub status after reproduced three-scale and structural QA.
+The AP→AV change is bounded to reader-facing front-deck semantics; layout, image role, masthead, `横浜` hierarchy and back cover are retained.
 
 Evidence: `01_paper-items/rurubu-wedding/evidence/RURUBU-V8-AV-OUTER-DESTINATION-DECK-QA-2026-08-22.md`
+
+### Profile/Q&A
+
+AK `2238:2` had one arbitrary horizontal exception: Q2 alone shifted to a different question rail without a content-owned reason. A rollback-safe AW study aligned Q2 with the recurring question/answer rails while retaining answer scale, copy and vertical pacing. AW won 500px / 1400px / actual-size review and structure QA, then became current. AK is hidden rollback.
+
+Evidence: `01_paper-items/rurubu-wedding/evidence/RURUBU-V8-AW-PROFILE-INTERVIEW-RAIL-QA-2026-08-22.md`
 
 ## Drive authority
 
@@ -58,33 +67,58 @@ Verified existing masters retained:
 - table-essay `1aqjC7cMXymK7r5MqABiNHjL207OY3XKP`
 - day-foldout `1KxMoNigZn6yKVu8e1MP9xt7Z-MaQzn-q`
 
-Drive was re-read in this run. There is still **no new role-specific OUTER-01 generated master**. No new Drive master was added.
+Drive was re-read. There is still **no new role-specific OUTER-01 generated master**. No new Drive master was added.
 
 ## Latest professional learning
 
-### RSL-222 — destination-owned cover language
+### RSL-226 — Figma coordinate authority must match the write surface
 
 State: `VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`.
 
-AP's front deck described publication inventory (`写真、年表…`). AV keeps the exact visual system but changes the deck to concrete destination/experience language (`海辺、街歩き、好きな店、夜の食卓。 / 横浜の一日を、ページに残す。`). Three-scale and structural QA pass with no regressions.
+The first AW promotion guard used coordinates observed through metadata; Plugin API `node.x/node.y` used another coordinate context, so the guard failed closed before any mutation. The method switched to reading Plugin API-local coordinates and parent immediately before the coordinate-sensitive write; the second promotion succeeded and current/rollback state was read back.
 
 Failure fingerprint:
-`F-RSL-222-TRAVEL-COVER-SUPPORT-COPY-DESCRIBES-PUBLICATION-INVENTORY-INSTEAD-OF-DESTINATION-EXPERIENCE`
+`F-RSL-226-METADATA-CANVAS-COORDINATES-ASSUMED-EQUAL-TO-PLUGIN-LOCAL-COORDINATES`
 
-Learning: `docs/design-learning/rurubu-shared-learning-feed.append/2026-08-22-rsl-222-223-destination-owned-cover-and-lived-in-photo-brief.md`
+### RSL-225 — interview voice should carry difference, not arbitrary rail drift
+
+State: `VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`.
+
+Fresh editorial-profile research reinforced that the interviewee's personality can be carried by language/pull-quote hierarchy under a restrained system. AW removes AK's unexplained Q2 horizontal drift while preserving the actual answer hierarchy and page pacing.
+
+Failure fingerprint:
+`F-RSL-225-ARBITRARY-HORIZONTAL-QUESTION-DRIFT-SIMULATES-EDITORIAL-VARIATION-WITHOUT-CONTENT-BASIS`
+
+Learning: `docs/design-learning/rurubu-shared-learning-feed.append/2026-08-22-rsl-225-226-interview-rail-and-figma-coordinate-boundary.md`
+
+### RSL-224 — effective PPI is a final-size property
+
+State: `VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`.
+
+The verified Drive ocean-light counterpart is `1600×1200 px`. If used 1:1 at the current Outer role footprint (~`171×102 mm`), width-limited effective resolution is ~`237 ppi`. Adobe's current `300 ppi` high-quality-print guidance is used only as a comparison gate; printer spec remains final authority. OUTER-01 now targets `>=2025 px` usable width and conservatively `>=2400 px` long edge with crop reserve.
+
+Figma companion gate: `2277:2 / TEST_GATE / NOT PRINT READY`.
+
+Exact byte identity between the Drive counterpart and current Figma image hash remains unproven.
+
+Learning: `docs/design-learning/rurubu-shared-learning-feed.append/2026-08-22-rsl-224-effective-ppi-final-size-gate.md`
 
 ### RSL-223 — lived-in destination-photo authenticity
 
 State: `OBSERVED → ROOT_CAUSE_HYPOTHESIS`.
 
-Fresh travel-editorial/photo research shifted the photo brief away from landmark/postcard proof alone and toward observed/lived-in place evidence. Existing Figma brief `2270:2 / V8 / PHOTO ART DIRECTION / OUTER-01 / QA_PASS` was refined to target both `ここへ行きたい` and `この街を歩いてみたい`, and to include plausible traces of actual city use such as pavement, storefront rhythm or harbor infrastructure while preserving the existing 35–50mm, natural-light, realistic-color, crop/text-safe and anti-fake-signage constraints.
+Fresh travel-editorial/photo research shifted the photo brief away from landmark/postcard proof alone and toward observed/lived-in place evidence. Existing Figma brief `2270:2 / V8 / PHOTO ART DIRECTION / OUTER-01 / QA_PASS` targets both `ここへ行きたい` and `この街を歩いてみたい`, including plausible traces of actual city use such as pavement, storefront rhythm or harbor infrastructure while preserving the existing 35–50mm, natural-light, realistic-color, crop/text-safe and anti-fake-signage constraints.
 
-The first expanded brief copy overflowed into the next section and was immediately rejected. The copy was tightened until the original vertical rhythm returned; final brief screenshot QA passed.
-
-RSL-223 is **not** locally verified yet because no new OUTER-01 image was generated/placed this run.
+RSL-223 is **not** locally verified yet because no new OUTER-01 image has been generated and placed.
 
 Failure fingerprint to test:
 `F-RSL-223-DESTINATION-PHOTO-PROVES-PLACE-ONLY-WITH-POSTCARD-LANDMARK-OR-GENERIC-BEAUTY`
+
+### RSL-222 — destination-owned cover language
+
+State: `VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`.
+
+AV's cover deck uses concrete destination/experience language instead of describing publication inventory.
 
 ### RSL-220 — semantic pairing should precede spatial irregularity
 
@@ -109,6 +143,9 @@ The low-resolution probe is never production authority. Production use still req
 
 ## Active boundaries
 
+- RSL-226: coordinate-sensitive Figma writes must read the same Plugin API coordinate/parent surface immediately before mutation.
+- RSL-225: a broken interview rail requires a content-owned reason; consistent rails must not become a rigid template rule.
+- RSL-224: `300 ppi` and the current `2025/2400 px` numbers are comparison/preflight gates, not printer authority or universal project constants.
 - RSL-223 is a photo-generation/selection hypothesis, not a permanent style rule.
 - RSL-222 concrete cover nouns must be rechecked against final real content.
 - RSL-219: quiet pages still need content-owned closing gravity.
@@ -133,26 +170,27 @@ The low-resolution probe is never production authority. Production use still req
 - new production Figma image placements: `0`
 - V6/V7 image hashes reused in production: `0`
 - existing Outer ocean-light remains an abstract supporting role, not Yokohama photography
-- production photo brief `2270:2` was refined; this is preparation, not generated/adopted/placed asset progress
+- new Figma print-photo comparison panel: `2277:2`
+- Profile AW is native typography only; no image was added to manufacture visual richness
 
 ## Current comparison decision
 
 - **V6 `JC + IX + JB + IZ + IT + JA`** remains strongest for immediate travel desire, photographic atmosphere and unmistakable Rurubu-like excitement.
 - **V7** remains useful as a high-energy comparison but is weakened by synthetic/schematic image craft.
-- **V8 `AV + AK + AL + AQ + AS + AT`** has stronger book/editorial pacing and less AI/UI-template residue. AV now uses stronger destination-owned support copy, but the system still lacks V6's destination-specific photographic desire.
+- **V8 `AV + AW + AL + AQ + AS + AT`** has stronger book/editorial pacing and less AI/UI-template residue. AW strengthens interview unity without losing the couple's actual voice. AV still lacks V6's destination-specific photographic desire.
 - V8 is not promoted as global winner.
 
 ## Next highest-value work
 
 1. Do not create V9.
 2. Preserve V6/V7 and all rollback/rejected V8 roots.
-3. Keep `AV + AK + AL + AQ + AS + AT` unless a role-valid alternative wins three-scale and structural QA.
-4. The highest-value asset target is still `OUTER-01` from brief `2270:2`.
+3. Keep `AV + AW + AL + AQ + AS + AT` unless a role-valid alternative wins three-scale and structural QA.
+4. The highest-value asset target remains `OUTER-01` from brief `2270:2` plus print-photo gate `2277:2`.
 5. When a new role-specific generated master becomes available, generate/select materially different candidates, store accepted master in V8 Drive, read back ID, create a verified role derivative, then use RSL-221 if official submit remains blocked: materialized bytes → `figma.createImage` → exact image role → image hash/crop → three-scale QA.
 6. Reject a candidate that is merely a beautiful postcard/landmark image without enough observed/lived-in place evidence; do not invent fake signage or landmarks to force specificity.
-7. Never promote a low-resolution transport probe or screenshot as a production image.
+7. Require final-size/effective-resolution QA and retain crop reserve; never promote a low-resolution transport probe or screenshot as production image.
 8. Continue Japanese semantic-wrap, physical microtype, mojikumi/kinsoku and print-boundary QA.
 9. Keep DESIGN QA, REAL CONTENT QA, PRINT TEMPLATE/PREFLIGHT and PHYSICAL PROOF separate.
 
 Current state:
-`V8 AV + AK + AL + AQ + AS + AT = VERIFIED_LOCAL_DESIGN_STUDIES / DISTINCT_BOOK_EDITORIAL_SYSTEM / OUTER-DESTINATION-COPY-IMPROVED / PHOTO-AUTHENTICITY-HYPOTHESIS-REFINED / DRIVE-BYTES-TO-FIGMA-FALLBACK-PROVEN-LOCAL / NATIVE_TEXT_EDITABILITY_PRESERVED / ROLLBACK_SAFE / DESTINATION_PHOTO_POWER_STILL-BELOW-V6 / NOT_GLOBAL_WINNER / NOT_PRINT_READY`
+`V8 AV + AW + AL + AQ + AS + AT = VERIFIED_LOCAL_DESIGN_STUDIES / DISTINCT_BOOK_EDITORIAL_SYSTEM / INTERVIEW-RAIL-DISCIPLINE-IMPROVED / OUTER-DESTINATION-COPY-IMPROVED / PRINT-PHOTO-GATE-ADDED / PHOTO-AUTHENTICITY-HYPOTHESIS-REFINED / DRIVE-BYTES-TO-FIGMA-FALLBACK-PROVEN-LOCAL / NATIVE_TEXT_EDITABILITY_PRESERVED / ROLLBACK_SAFE / DESTINATION_PHOTO_POWER_STILL-BELOW-V6 / NOT_GLOBAL_WINNER / NOT_PRINT_READY`
