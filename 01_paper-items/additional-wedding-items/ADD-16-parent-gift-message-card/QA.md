@@ -1,7 +1,7 @@
 # ADD-16 両親贈呈品メッセージカード — QA
 
-Status: `CURRENT / PROFESSIONAL_VNEXT_HOME_TEXTILE_MAT_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / FAMILY_DIVERSITY_PASS / LONG_COPY_STRESS_PASS / AUTO_HEIGHT_PASS / WRITING_SURFACE_PASS / LEGACY_PRESERVED / ROLLBACK_SAFE / NOT_PRINT_READY`
-Updated: 2026-08-22
+Status: `CURRENT / PROFESSIONAL_VNEXT_HOME_TEXTILE_MAT_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / FAMILY_DIVERSITY_PASS / LONG_COPY_STRESS_PASS / AUTO_HEIGHT_PASS / JAPANESE_KICKER_FONT_ASSIGNMENT_PASS / WRITING_SURFACE_PASS / LEGACY_PRESERVED / ROLLBACK_SAFE / NOT_PRINT_READY`
+Updated: 2026-08-23
 Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
 Professional quality authority: `docs/design-learning/PROFESSIONAL-DESIGN-COUNCIL-VNEXT-2026-08-20.md`
 
@@ -12,6 +12,8 @@ Professional quality authority: `docs/design-learning/PROFESSIONAL-DESIGN-COUNCI
 - Current front: `57:3 / CURRENT_SELECTED / ADD16 / FRONT / HOME TEXTILE MAT`
 - Current back: `57:17 / CURRENT_SELECTED / ADD16 / BACK / HOME TEXTILE MAT WRITING`
 - hidden realistic long-copy stress: `57:36 / 57:50`
+- pre-2026-08-23 front rollback: `66:2`
+- pre-2026-08-23 front-stress rollback: `66:18`
 - three-direction blank-frame study: `56:2`
 - retained previous Current RETURN LETTER HOME: `54:2 / 54:3 / 54:15` — comparison/history only
 - retained HOMEWARD JOURNEY: `45:2 / 45:32 / 45:42` — comparison/history only
@@ -22,6 +24,7 @@ Professional quality authority: `docs/design-learning/PROFESSIONAL-DESIGN-COUNCI
 
 Canonical current evidence:
 - `PROFESSIONAL-VNEXT-HOME-TEXTILE-MAT-FAMILY-DIVERSITY-QA-2026-08-22.md`
+- `FIGMA-JAPANESE-KICKER-FONT-ASSIGNMENT-QA-2026-08-23.md`
 - item Current entry point: `CURRENT.md`
 
 ## Why Current changed after RETURN LETTER HOME
@@ -43,6 +46,7 @@ Emotional brief: `育ててもらった時間を、これからの暮らしへ�
 - rust + saffron short weave bands;
 - one thread-like vertical rule;
 - Japanese-first `育ててくれた時間を、これからの力に。`;
+- native Japanese kicker `両親へ` explicitly assigned `Noto Sans JP Bold` after the 2026-08-23 fallback-font repair;
 - open native parent-message role and signature;
 - restrained date at the lower edge;
 - no envelope flap, paper insert, giant circle/capsule, fake airline credential, barcode, route UI, tropical clip-art or generated family/person imagery.
@@ -59,11 +63,28 @@ Emotional brief: `育ててもらった時間を、これからの暮らしへ�
 
 ## Three-scale screenshot QA
 
-Live re-audit on 2026-08-22 reconfirmed the Current front at native `700×1036`; promoted evidence already records front/back whole-item, reading and native actual-size PASS.
+Live re-audit on 2026-08-23 reconfirmed the Current front at native `700×1036`; promoted evidence already records front/back whole-item, reading and native actual-size PASS.
 
 The Current retains a strong tactile/homecoming identity without returning to the suite's old rounded-shape or letter/envelope convergence fingerprints.
 
-## Real failures caught before selection
+## Japanese kicker font-assignment repair — 2026-08-23
+
+Fresh native-text readback found that the Japanese front kicker `両親へ` was authored as `Inter Bold` on both Current and the front stress proof. Figma still displayed readable Japanese fallback glyphs, so screenshot-only review had hidden the font-contract mismatch.
+
+Bounded repair:
+
+- Current kicker `57:10`: `Inter Bold → Noto Sans JP Bold`;
+- stress kicker `57:43`: `Inter Bold → Noto Sans JP Bold`;
+- characters, `16 px` size, `24 px` line-height, position, width, color and all surrounding layout remain unchanged;
+- complete pre-repair rollback roots: `66:2 / 66:18`.
+
+Post-repair Current screenshot: PASS at whole, reading and native `700×1036`.
+
+Front stress `57:36` was temporarily revealed after the change and re-hidden after verification. The realistic long Japanese message remains collision-free and does not enter the thread, lower weave, date or trim lanes.
+
+Cross-item read-only probes on WEDDING PASSPORT, BOARDING PASS and ADD-09 found no equivalent Japanese-on-Inter assignment, so the new fingerprint remains `VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`, not a project-wide rule.
+
+## Real failures caught before / after selection
 
 The professional vNext pass caught and repaired actual failures rather than counting draft creation as progress:
 
@@ -72,14 +93,15 @@ The professional vNext pass caught and repaired actual failures rather than coun
 3. realistic front stress orphaned final `に。` and allowed growing body copy to collide with a fixed signature → display/body/signature were rebuilt as native auto-height roles in a vertical stack with a flexible spacer.
 4. first stack mutation attempt failed because required Figma fonts were not loaded → corrected input contract with explicit font loading before retry.
 5. realistic back stress exposed mechanical guide-word breaking / footer-lane collision → guide/signature widths and positions were separated without shrinking type.
+6. later readback found Japanese semantic kicker text assigned to Latin-family `Inter` and relying on fallback → repaired to explicit `Noto Sans JP Bold` with rollback and fresh stress QA.
 
 ## Structure / long-copy QA
 
-Final selected + stress readback:
+Final selected + stress readback after the latest repair:
 
-- selected front `57:3`: native visible text `5`; fixed-height `0`; outside `0`; text collisions `0`; IMAGE fills `0`.
+- selected front `57:3`: native visible text `5`; fixed-height `0`; outside `0`; text collisions `0`; IMAGE fills `0`; kicker `Noto Sans JP Bold`.
 - selected back `57:17`: native visible text `5`; fixed-height `0`; outside `0`; collisions `0`; IMAGE fills `0`.
-- stress front `57:36`: native visible text `5`; fixed-height `0`; outside `0`; collisions `0`; IMAGE fills `0`.
+- stress front `57:36`: native visible text `5`; fixed-height `0`; outside `0`; collisions `0`; IMAGE fills `0`; kicker `Noto Sans JP Bold`.
 - stress back `57:50`: native visible text `5`; fixed-height `0`; outside `0`; collisions `0`; IMAGE fills `0`.
 
 Stress roots remain hidden after proof review. All family-specific/final copy stays native editable text.
@@ -92,11 +114,11 @@ Stress roots remain hidden after proof review. All family-specific/final copy st
 - editable SVG: `0`;
 - replaceable image role: `0`.
 
-`IMAGE_GENERATION_NOT_REQUIRED_FOR_THIS_PASS`: the diagnosed quality gap was cross-suite physical-metaphor convergence, not missing photography/illustration. Generated parents/family are prohibited, and generic tropical/home imagery would weaken specificity and writing function.
+`IMAGE_GENERATION_NOT_REQUIRED_FOR_THIS_PASS`: the diagnosed quality gap was a native typography assignment defect, not missing photography/illustration. Generated parents/family are prohibited, and generic tropical/home imagery would weaken specificity and writing function.
 
 ## Professional Design Council
 
-Score: `93/100 / PASS / NO VETO`.
+Score remains `93/100 / PASS / NO VETO`.
 
 - Concept clarity / ownability: 14/15
 - Emotional excitement / want-to-pick-up: 14/15
@@ -107,6 +129,8 @@ Score: `93/100 / PASS / NO VETO`.
 - Physical print credibility: 10/10
 - Editability / content resilience: 5/5
 - Family fit without template sameness: 5/5
+
+The latest font-assignment repair corrects authored Japanese typography without changing the established visual direction or score.
 
 ## Deferred finalization
 
@@ -124,4 +148,4 @@ These remain `BLOCKED_REQUIRED_INPUT / DEFERRED_FINALIZATION` and do not invalid
 
 ## Result
 
-`PROFESSIONAL_VNEXT_HOME_TEXTILE_MAT_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / FAMILY_DIVERSITY_PASS / LONG_COPY_STRESS_PASS / AUTO_HEIGHT_PASS / WRITING_SURFACE_PASS / LEGACY_PRESERVED / NOT_PRINT_READY`.
+`PROFESSIONAL_VNEXT_HOME_TEXTILE_MAT_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / FAMILY_DIVERSITY_PASS / LONG_COPY_STRESS_PASS / AUTO_HEIGHT_PASS / JAPANESE_KICKER_FONT_ASSIGNMENT_PASS / WRITING_SURFACE_PASS / LEGACY_PRESERVED / NOT_PRINT_READY`.
