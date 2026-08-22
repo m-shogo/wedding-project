@@ -127,6 +127,60 @@ export interface Task {
   notes: string;
 }
 
+// --- クリップ素材集 (読み取り専用) ---
+// 単一情報源は docs/templates/sample-clips.csv と docs/data/recipes.json。
+// src/data/clips.json は `python3 scripts/slice_clips.py sync-dashboard --write` で生成する。
+// dashboard側では編集しない(CSVとの二重管理を避けるため)。
+
+export type ClipPick = "pool" | "candidate" | "picked" | "rejected";
+
+export interface MotionVocabItem {
+  id: string;
+  label: string;
+  use: string;
+}
+
+export interface ClipRecipe {
+  id: string;
+  name: string;
+  chapters: number[];
+  role: string;
+  motion: string[];
+  source_genre: string;
+  beats: string;
+  transition: string;
+  caption: string;
+  avoid: string;
+  motion_studio_alt: string | null;
+}
+
+export interface Clip {
+  clipId: string;
+  sourceFile: string;
+  inTc: string;
+  outTc: string;
+  durationSec: number;
+  chapter: string;
+  role: string;
+  motion: string;
+  tags: string[];
+  captionSpace: string;
+  /** ffmpegと同じ W:H:X:Y。隅の機体・車両を外すのに使う。空なら無加工 */
+  crop: string;
+  rating: number;
+  pick: ClipPick | string;
+  outName: string;
+  notes: string;
+  recipeIds: string[];
+}
+
+export interface ClipLibraryData {
+  source: string;
+  motionVocab: MotionVocabItem[];
+  recipes: ClipRecipe[];
+  clips: Clip[];
+}
+
 export interface AllData {
   movies: MovieProject[];
   scenes: Scene[];

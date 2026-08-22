@@ -335,6 +335,7 @@ export const RemotionRoot = () => {
             speed: 1.4,
             cloudOpacity: 0.85,
             zoomTo: 1.05,
+            softness: 18,
           }}
         />
         <Composition

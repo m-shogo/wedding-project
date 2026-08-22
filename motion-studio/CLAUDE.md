@@ -59,6 +59,17 @@ text(実装済み)/photo/layout/effects に分類。`TextPart` でvariant呼び�
 - `status`は`draft`で追加。`approved`昇格は人間確認必須(AIが勝手に上げない)
 - ルール詳細: `src/components/parts/README.md`
 
+### プリセット(src/data/presetRegistry.ts)
+
+同じテンプレを繰り返し使うとき、propsの組み合わせに名前を付けたもの。
+**テンプレを増やす前に、まずプリセットで足りないかを検討する。**
+
+- `pnpm preset` で一覧、`pnpm preset <id> --still` で見た目確認
+- propsは `pnpm check:presets` が各Compositionのzodスキーマと照合して検証する
+  (スキーマは.tsxでNodeからimportできないため、Root.tsxのid↔schema対応と
+  スキーマ定義をソースから読み取っている。スキーマの二重管理はしない)
+- `status`は`draft`で追加。`approved`昇格は人間確認必須
+
 | ファイル | 役割 |
 |---|---|
 | `openingV1.ts` | 現行Opening V1の60秒timeline正本。写真主役比率とshot責任者を固定 |
@@ -70,6 +81,7 @@ text(実装済み)/photo/layout/effects に分類。`TextPart` でvariant呼び�
 | `photoLibrary.generated.ts` | `pnpm sync:photos` の自動生成。手で編集しない |
 | `aiPromptRegistry.ts` | AI生成のプロンプト履歴。assetIdに紐づけ、生成のたびに1レコード追加 |
 | `partRegistry.ts` | 再利用パーツ(parts/)のメタデータ。`pnpm check:parts`が検証 |
+| `presetRegistry.ts` | テンプレ×propsの名前付き組み合わせ。`pnpm check:presets`がzodスキーマと照合 |
 
 ## テンプレート追加の手順(既存Studio側)
 
@@ -116,7 +128,10 @@ Opening V1だけを直す場合は、不要な既存テンプレ追加を避け�
 pnpm dev                          # 既存Remotion Studio
 pnpm dev:opening-v1               # 60秒Opening V1だけをStudioで確認
 pnpm typecheck                    # tsc
-pnpm check                        # check:motion + check:assets + check:parts(コミット前に必ず)
+pnpm check                        # check:motion + check:assets + check:parts + check:presets(コミット前に必ず)
+pnpm preset                       # プリセット一覧
+pnpm preset <id> --still          # プリセットを静止画で確認
+pnpm preset <id> --render         # プリセットを書き出し
 pnpm render:opening-v1:preview    # 60秒V1を軽量MP4へrender
 pnpm render:opening-v1            # 60秒V1を1080p MP4へrender
 pnpm render <テンプレID> <preset>  # preview / draft / final / prores

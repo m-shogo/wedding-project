@@ -6,6 +6,7 @@ const links = [
   { to: "/", label: "ダッシュボード", icon: "✈" },
   { to: "/storyboard", label: "絵コンテ", icon: "🎬" },
   { to: "/assets", label: "素材ライブラリ", icon: "🗂" },
+  { to: "/clips", label: "クリップ素材集", icon: "🎞" },
   { to: "/video-shot-planner", label: "AI動画 ショット計画", icon: "🧭" },
   { to: "/video-prompt-builder", label: "動画プロンプト", icon: "🎥" },
   { to: "/video-generation-queue", label: "動画生成キュー", icon: "🚀" },

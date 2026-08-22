@@ -1,0 +1,16 @@
+clip_id,source_file,in_tc,out_tc,chapter,role,motion,tags,caption_space,crop,rating,pick,out_name,notes
+clip-001,10_references/media/pool/pexels_4092172_sky_is_not_the_limit.mp4,8.0,13.0,1,背景,parallax,飛行機窓;雲海,yes,,86,candidate,window_clouds_a,Pexels/表記不要/rec-08 窓枠が安定している区間
+clip-002,10_references/media/pool/pexels_4092172_sky_is_not_the_limit.mp4,20.0,25.0,1,背景,parallax,飛行機窓;雲海,yes,,82,candidate,window_clouds_b,Pexels/表記不要/rec-08 別テイク比較用
+clip-003,10_references/media/pool/pexels_4543121_evening_sky.mp4,1.0,6.0,5,背景,drift,夕暮れ;空,yes,,88,candidate,evening_sky_a,Pexels/表記不要/rec-12 到着の余韻向き。オレンジ〜ネイビーがStyle Bibleに合う
+clip-004,10_references/media/pool/pexels_6156696_video_footage_of_a_blue_sky_from_the_air.mp4,10.0,15.0,3,背景,drift,雲海;青空,yes,1760:990:80:90,84,candidate,cloudsea_blue_a,Pexels/表記不要/rec-03 右上の翼をcropで除外(16:9維持のまま1920x1080へ戻す)
+clip-005,10_references/media/pool/pexels_30808497_aerial_view_of_clouds_in_overcast_sky.mp4,1.0,5.0,3,背景,drift,雲海;曇天,yes,,62,pool,cloudsea_grey_a,Pexels/表記不要/rec-03 灰色が強くStyle Bibleの色から外れ気味。色調整前提
+clip-006,10_references/media/pool/pexels_10961750_airplane_landing_on_airport.mp4,0.0,4.0,1,背景,locked,滑走路;夜,yes,,65,pool,runway_night_a,Pexels/表記不要/rec-10 冒頭は車両が写らない。中盤はバス・車が入るため使用不可
+clip-007,10_references/media/pool/pexels_11058632_time_lapse_of_sunset_above_city.mp4,2.0,6.0,3,背景,drift,夜景;街,yes,,58,pool,city_sunset_a,Pexels/表記不要/rec-10 街並みが雑然として上品さに欠ける。保留
+clip-008,10_references/media/pool/pexels_6472910_airplane_wing_while_flying_in_the_sky.mp4,0,1.0,1,背景,parallax,翼,no,,0,rejected,,不採用: 翼にAVIANCAのロゴが全編で写る。Style Bibleのno logo違反
+clip-009,10_references/media/pool/pexels_13973018_an_airline_plane_taxiing_on_the_runway_a.mp4,0,1.0,1,背景,locked,滑走路,no,,0,rejected,,不採用: American Airlinesの機体ロゴが写る。Style Bibleのno logo違反
+clip-010,10_references/media/pool/pexels_4057958_drone_flying_towards_the_sunset_over_the.mp4,6.0,11.0,4,背景,drift,海;夕暮れ;ゴールド,yes,,90,candidate,ocean_golden_a,Pexels/表記不要/rec-09 golden hourで最有力。右手前にアウトリガー舟のシルエットが全編写るが、人物は乗っておらず文字・ロゴも無いためStyle Bible適合。旅情がむしろ出る
+clip-011,10_references/media/pool/pexels_8303109_drone_footage_of_a_sunset_at_the_ocean.mp4,0.5,5.0,4,背景,drift,海;夕暮れ,yes,,80,candidate,ocean_golden_b,Pexels/表記不要/rec-09 水平線と太陽のみで完全にクリーン。clip-010より静かなので、テロップを載せるならこちら
+clip-012,10_references/media/pool/pexels_31288104_tranquil_sunrise_over_serene_coastal_lan.mp4,1.0,5.0,4,背景,drift,海;朝日;海岸,yes,,68,pool,ocean_sunrise_a,Pexels/表記不要/rec-09 陸地が入り海単体より風景寄り。ハワイ章には弱い
+clip-013,10_references/media/pool/pexels_14300105_philadelphia_at_night.mp4,2.0,6.0,3,背景,locked,夜景;都市,yes,,64,pool,city_night_a,Pexels/表記不要/rec-10 ビル頂部を拡大し読める文字・ロゴが無いことを確認済み。ただしシャープでボケ感が無く、マゼンタの照明がStyle Bibleと合わない
+clip-014,10_references/media/pool/pexels_8951964_aerial_shot_of_a_town_during_night_time.mp4,0,1.0,3,背景,locked,夜景;郊外,no,,0,rejected,,不採用: 暗すぎて主役不在。郊外の高速道路で上品さに欠ける。rec-10の狙いと合わない
+clip-015,10_references/media/pool/pexels_34398886_breathtaking_cityscape_at_night_in_black.mp4,0,1.0,3,背景,locked,夜景;白黒,no,,0,rejected,,不採用: 白黒でStyle Bibleのネイビー・ゴールド・空色から外れる。手前が暗く沈む

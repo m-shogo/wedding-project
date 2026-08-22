@@ -28,6 +28,7 @@ const pageCommands: Array<SearchResult & { keywords: string[]; pinned?: boolean 
   { kind: "page", icon: "🌴", label: "編集", title: "Palmier 実行Handoff", id: "palmier-handoff", path: "/palmier-handoff", keywords: ["palmier", "handoff", "編集", "continuity"], pinned: true },
   { kind: "page", icon: "✂", label: "編集", title: "CapCut編集パック", id: "capcut", path: "/capcut", keywords: ["capcut", "編集", "実尺"] },
   { kind: "page", icon: "🗂", label: "制作", title: "素材ライブラリ", id: "assets", path: "/assets", keywords: ["asset", "素材", "動画", "写真"] },
+  { kind: "page", icon: "🎞", label: "制作", title: "クリップ素材集", id: "clips", path: "/clips", keywords: ["clip", "クリップ", "切り出し", "motion", "動き", "レシピ", "recipe"] },
   { kind: "page", icon: "🎬", label: "制作", title: "絵コンテ", id: "storyboard", path: "/storyboard", keywords: ["scene", "storyboard", "シーン", "絵コンテ"] },
 ];
 

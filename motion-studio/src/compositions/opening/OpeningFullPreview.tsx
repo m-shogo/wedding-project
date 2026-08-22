@@ -18,7 +18,7 @@ import {PhotoCardScene} from '../common/PhotoCardScene';
 const renderers: Record<string, () => ReactNode> = {
   搭乗券: () => <BoardingPassIntro {...boardingPassDefaults} />,
   雲海: () => (
-    <CloudSea timeOfDay="morning" speed={1.4} cloudOpacity={0.85} zoomTo={1.05} />
+    <CloudSea timeOfDay="morning" speed={1.4} cloudOpacity={0.85} zoomTo={1.05} softness={18} />
   ),
   '押印連打-全路線': () => (
     <StampRushFullRoute

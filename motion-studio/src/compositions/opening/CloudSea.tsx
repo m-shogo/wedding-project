@@ -12,6 +12,10 @@ export const cloudSeaSchema = z.object({
   speed: z.number().min(0.2).max(8),
   cloudOpacity: z.number().min(0.2).max(1),
   zoomTo: z.number().min(1).max(1.15),
+  // 雲のぼかし半径(px)。大きいほど霞、小さいほど雲の塊が見える。
+  // 42だと ry=70〜140 のellipseに対して強すぎて、雲海ではなく霞に見えた。
+  // Studioのスライダーで調整して Save defaults できる。
+  softness: z.number().min(4).max(60),
 });
 
 export type CloudSeaProps = z.infer<typeof cloudSeaSchema>;
@@ -62,7 +66,7 @@ const makePuffs = (): Puff[] => {
 const puffs = makePuffs();
 
 // 上空から見た雲海。上半分にテロップ余白がある。
-export const CloudSea = ({timeOfDay, speed, cloudOpacity, zoomTo}: CloudSeaProps) => {
+export const CloudSea = ({timeOfDay, speed, cloudOpacity, zoomTo, softness}: CloudSeaProps) => {
   const frame = useCurrentFrame();
   const {width, height, durationInFrames} = useVideoConfig();
   const sky = skies[timeOfDay];
@@ -83,7 +87,7 @@ export const CloudSea = ({timeOfDay, speed, cloudOpacity, zoomTo}: CloudSeaProps
       <AbsoluteFill style={{transform: `scale(${zoom})`}}>
         <svg width={width} height={height} style={{position: 'absolute', inset: 0}}>
           <filter id="sea-blur" x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur stdDeviation={42} />
+            <feGaussianBlur stdDeviation={softness} />
           </filter>
           <g opacity={cloudOpacity}>
             {puffs.map((p, i) => {

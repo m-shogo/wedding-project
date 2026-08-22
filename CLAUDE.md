@@ -39,6 +39,11 @@
 - 品質確認: @docs/10_quality-gates.md
 - テーマ差し替え: @docs/theme-switching.md
 - 素材TODO: @docs/materials-todo.md
+- Opening V1動き対応表: @docs/opening-v1-motion-map.md（9セクション×動き×素材。Palmier作業の指示書）
+- クリップ素材集: @docs/clip-library-guide.md（無料素材を集めて秒単位で切り出し、motion別にストックする。人間・AI共通の入口）
+  - ストック素材の取得は `scripts/fetch_stock.py` の公式API経由のみ。スクレイピングはしない（Pexelsのrobots.txtが検索・download・apiを拒否）。
+- 演出レシピ: @docs/reference-recipes.md（motion×使いどころ。機械可読版は `docs/data/recipes.json`）
+- 無料素材の入手先: @docs/free-sample-sources.md
 - タスク: @docs/task-board.md
 - 素材状態: @02_opening-movie/asset-status.md
 - モーション素材スタジオ: @motion-studio/README.md（Remotionで搭乗券・地図・ハンコ・カウントダウン・写真カードを生成。文字入り素材はAIでなくここで作る）

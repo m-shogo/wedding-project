@@ -26,6 +26,7 @@ motion-studio/exports/previews/**
 06_videos/**
 07_music/**
 10_references/media/**
+!10_references/media/README.md
 
 # Generated AI images from the concept-01 batch script stay local.
 opening-movie/generated/**

@@ -1,0 +1,665 @@
+{
+  "_comment": "自動生成。直接編集しない。docs/templates/sample-clips.csv を編集して `python3 scripts/slice_clips.py sync-dashboard --write` で再生成する。",
+  "source": "docs/templates/sample-clips.csv",
+  "motionVocab": [
+    {
+      "id": "slow-push-in",
+      "label": "ゆっくり寄る",
+      "use": "導入・写真・扉"
+    },
+    {
+      "id": "slow-pull-out",
+      "label": "ゆっくり引く",
+      "use": "締め・全景見せ"
+    },
+    {
+      "id": "slow-pan-left",
+      "label": "左へ横移動",
+      "use": "空・海・地平線"
+    },
+    {
+      "id": "slow-pan-right",
+      "label": "右へ横移動",
+      "use": "空・海・地平線"
+    },
+    {
+      "id": "tilt-up",
+      "label": "上へ振る",
+      "use": "出発・希望・空へ"
+    },
+    {
+      "id": "tilt-down",
+      "label": "下へ振る",
+      "use": "到着・着地・現在へ"
+    },
+    {
+      "id": "drift",
+      "label": "微速で漂う",
+      "use": "雲・水・光の背景"
+    },
+    {
+      "id": "parallax",
+      "label": "前後景がずれる",
+      "use": "機内窓・車窓"
+    },
+    {
+      "id": "rack-focus",
+      "label": "ピント送り",
+      "use": "手元→背景の切替"
+    },
+    {
+      "id": "speed-ramp",
+      "label": "速度を変える",
+      "use": "離陸・高揚・章転換"
+    },
+    {
+      "id": "whip-pan",
+      "label": "振り切ってつなぐ",
+      "use": "冒険章の畳みかけ"
+    },
+    {
+      "id": "match-cut",
+      "label": "形/光でつなぐ",
+      "use": "章と章の間"
+    },
+    {
+      "id": "locked",
+      "label": "固定",
+      "use": "予告編の間・夜景"
+    },
+    {
+      "id": "handheld-subtle",
+      "label": "微手持ち",
+      "use": "ドキュメント感"
+    }
+  ],
+  "recipes": [
+    {
+      "id": "rec-01",
+      "name": "出発の予感",
+      "chapters": [
+        1
+      ],
+      "role": "導入",
+      "motion": [
+        "slow-push-in"
+      ],
+      "source_genre": "旅行CM/航空ブランド",
+      "beats": "3-5秒。静→ほんの少し寄る",
+      "transition": "白/光フェード",
+      "caption": "下中央に一言、余白広め",
+      "avoid": "速い寄り、人物の顔",
+      "motion_studio_alt": null
+    },
+    {
+      "id": "rec-02",
+      "name": "空へ抜ける",
+      "chapters": [
+        1
+      ],
+      "role": "章切替",
+      "motion": [
+        "tilt-up",
+        "speed-ramp"
+      ],
+      "source_genre": "予告編の高揚",
+      "beats": "4秒。地上→空へ上げ切り",
+      "transition": "雲へディゾルブ",
+      "caption": "入れない",
+      "avoid": "同時多重カメラ",
+      "motion_studio_alt": null
+    },
+    {
+      "id": "rec-03",
+      "name": "雲海を流す",
+      "chapters": [
+        1,
+        3
+      ],
+      "role": "背景",
+      "motion": [
+        "drift"
+      ],
+      "source_genre": "旅行フィルムB-roll",
+      "beats": "5秒ループ",
+      "transition": "クロスフェード",
+      "caption": "上部に余白確保",
+      "avoid": "流体CG風の作りすぎ",
+      "motion_studio_alt": "雲海"
+    },
+    {
+      "id": "rec-04",
+      "name": "距離を地図で語る",
+      "chapters": [
+        3
+      ],
+      "role": "つなぎ",
+      "motion": [
+        "slow-push-in"
+      ],
+      "source_genre": "アドベンチャー地図演出",
+      "beats": "4秒。航路がゆっくり伸びる",
+      "transition": "到着地でカット",
+      "caption": "地名はRemotionで載せる",
+      "avoid": "読める文字を焼き込む",
+      "motion_studio_alt": "地図-成田-沖縄"
+    },
+    {
+      "id": "rec-05",
+      "name": "光で章を切る",
+      "chapters": [
+        5
+      ],
+      "role": "章切替",
+      "motion": [
+        "match-cut"
+      ],
+      "source_genre": "予告編/ブランド映像",
+      "beats": "2-3秒。光が満ちて白へ",
+      "transition": "白フェード",
+      "caption": "なし",
+      "avoid": "派手なフレア連発",
+      "motion_studio_alt": "扉-光"
+    },
+    {
+      "id": "rec-06",
+      "name": "予告編の間",
+      "chapters": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "role": "緊張",
+      "motion": [
+        "locked"
+      ],
+      "source_genre": "映画予告編",
+      "beats": "1-2秒静止→一拍→カット",
+      "transition": "黒フェード",
+      "caption": "短い一行だけ",
+      "avoid": "動かしてしまう",
+      "motion_studio_alt": null
+    },
+    {
+      "id": "rec-07",
+      "name": "冒険OPの畳みかけ",
+      "chapters": [
+        4
+      ],
+      "role": "テンポ",
+      "motion": [
+        "whip-pan"
+      ],
+      "source_genre": "冒険アニメOP",
+      "beats": "各0.3-0.6秒を連続",
+      "transition": "スタンプ/whipで連結",
+      "caption": "地名スタンプを重ねる",
+      "avoid": "3連以上の乱発",
+      "motion_studio_alt": "押印連打-全路線"
+    },
+    {
+      "id": "rec-08",
+      "name": "窓の外を流す",
+      "chapters": [
+        1,
+        3
+      ],
+      "role": "背景",
+      "motion": [
+        "parallax"
+      ],
+      "source_genre": "機内・車窓の定番",
+      "beats": "5秒。窓枠固定で外が流れる",
+      "transition": "ディゾルブ",
+      "caption": "窓の暗部に短く",
+      "avoid": "窓枠の変形",
+      "motion_studio_alt": "飛行機窓"
+    },
+    {
+      "id": "rec-09",
+      "name": "海のゴールド",
+      "chapters": [
+        4
+      ],
+      "role": "背景",
+      "motion": [
+        "drift"
+      ],
+      "source_genre": "旅行フィルム夕景",
+      "beats": "5秒ループ",
+      "transition": "クロスフェード",
+      "caption": "きらめきを避けた位置",
+      "avoid": "露出のちらつき",
+      "motion_studio_alt": null
+    },
+    {
+      "id": "rec-10",
+      "name": "夜景の粒",
+      "chapters": [
+        3
+      ],
+      "role": "背景",
+      "motion": [
+        "locked"
+      ],
+      "source_genre": "都市ブランド映像",
+      "beats": "4秒。ボケが静かに明滅",
+      "transition": "黒フェード",
+      "caption": "下中央",
+      "avoid": "カメラを動かす",
+      "motion_studio_alt": null
+    },
+    {
+      "id": "rec-11",
+      "name": "形でつなぐ",
+      "chapters": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "role": "つなぎ",
+      "motion": [
+        "match-cut"
+      ],
+      "source_genre": "予告編の編集文法",
+      "beats": "前カット終端と次カット頭で丸→丸等",
+      "transition": "ハードカット",
+      "caption": "なし",
+      "avoid": "形が合っていないのに使う",
+      "motion_studio_alt": null
+    },
+    {
+      "id": "rec-12",
+      "name": "到着の余韻",
+      "chapters": [
+        5
+      ],
+      "role": "締め",
+      "motion": [
+        "slow-pull-out",
+        "tilt-down"
+      ],
+      "source_genre": "旅行CMの着地",
+      "beats": "5-6秒。引きながら落ち着く",
+      "transition": "入場へ黒フェード",
+      "caption": "日付・会場を静かに",
+      "avoid": "急停止・急ズーム",
+      "motion_studio_alt": null
+    },
+    {
+      "id": "rec-13",
+      "name": "写真に呼吸",
+      "chapters": [],
+      "role": "profile全般",
+      "motion": [
+        "slow-push-in"
+      ],
+      "source_genre": "写真演出の定番",
+      "beats": "100%→108%を8秒",
+      "transition": "クロスフェード",
+      "caption": "顔にかけない",
+      "avoid": "全写真同じ動き",
+      "motion_studio_alt": "写真一枚"
+    },
+    {
+      "id": "rec-14",
+      "name": "手元から世界へ",
+      "chapters": [],
+      "role": "profileつなぎ",
+      "motion": [
+        "rack-focus"
+      ],
+      "source_genre": "ドキュメンタリー",
+      "beats": "3秒。手元→背景へ送る",
+      "transition": "ソフトカット",
+      "caption": "なし",
+      "avoid": "ピント往復",
+      "motion_studio_alt": null
+    }
+  ],
+  "clips": [
+    {
+      "clipId": "clip-001",
+      "sourceFile": "10_references/media/pool/pexels_4092172_sky_is_not_the_limit.mp4",
+      "inTc": "8.0",
+      "outTc": "13.0",
+      "durationSec": 5.0,
+      "chapter": "1",
+      "role": "背景",
+      "motion": "parallax",
+      "tags": [
+        "飛行機窓",
+        "雲海"
+      ],
+      "captionSpace": "yes",
+      "crop": "",
+      "rating": 86,
+      "pick": "candidate",
+      "outName": "window_clouds_a",
+      "notes": "Pexels/表記不要/rec-08 窓枠が安定している区間",
+      "recipeIds": [
+        "rec-08"
+      ]
+    },
+    {
+      "clipId": "clip-002",
+      "sourceFile": "10_references/media/pool/pexels_4092172_sky_is_not_the_limit.mp4",
+      "inTc": "20.0",
+      "outTc": "25.0",
+      "durationSec": 5.0,
+      "chapter": "1",
+      "role": "背景",
+      "motion": "parallax",
+      "tags": [
+        "飛行機窓",
+        "雲海"
+      ],
+      "captionSpace": "yes",
+      "crop": "",
+      "rating": 82,
+      "pick": "candidate",
+      "outName": "window_clouds_b",
+      "notes": "Pexels/表記不要/rec-08 別テイク比較用",
+      "recipeIds": [
+        "rec-08"
+      ]
+    },
+    {
+      "clipId": "clip-003",
+      "sourceFile": "10_references/media/pool/pexels_4543121_evening_sky.mp4",
+      "inTc": "1.0",
+      "outTc": "6.0",
+      "durationSec": 5.0,
+      "chapter": "5",
+      "role": "背景",
+      "motion": "drift",
+      "tags": [
+        "夕暮れ",
+        "空"
+      ],
+      "captionSpace": "yes",
+      "crop": "",
+      "rating": 88,
+      "pick": "candidate",
+      "outName": "evening_sky_a",
+      "notes": "Pexels/表記不要/rec-12 到着の余韻向き。オレンジ〜ネイビーがStyle Bibleに合う",
+      "recipeIds": [
+        "rec-12"
+      ]
+    },
+    {
+      "clipId": "clip-004",
+      "sourceFile": "10_references/media/pool/pexels_6156696_video_footage_of_a_blue_sky_from_the_air.mp4",
+      "inTc": "10.0",
+      "outTc": "15.0",
+      "durationSec": 5.0,
+      "chapter": "3",
+      "role": "背景",
+      "motion": "drift",
+      "tags": [
+        "雲海",
+        "青空"
+      ],
+      "captionSpace": "yes",
+      "crop": "1760:990:80:90",
+      "rating": 84,
+      "pick": "candidate",
+      "outName": "cloudsea_blue_a",
+      "notes": "Pexels/表記不要/rec-03 右上の翼をcropで除外(16:9維持のまま1920x1080へ戻す)",
+      "recipeIds": [
+        "rec-03"
+      ]
+    },
+    {
+      "clipId": "clip-005",
+      "sourceFile": "10_references/media/pool/pexels_30808497_aerial_view_of_clouds_in_overcast_sky.mp4",
+      "inTc": "1.0",
+      "outTc": "5.0",
+      "durationSec": 4.0,
+      "chapter": "3",
+      "role": "背景",
+      "motion": "drift",
+      "tags": [
+        "雲海",
+        "曇天"
+      ],
+      "captionSpace": "yes",
+      "crop": "",
+      "rating": 62,
+      "pick": "pool",
+      "outName": "cloudsea_grey_a",
+      "notes": "Pexels/表記不要/rec-03 灰色が強くStyle Bibleの色から外れ気味。色調整前提",
+      "recipeIds": [
+        "rec-03"
+      ]
+    },
+    {
+      "clipId": "clip-006",
+      "sourceFile": "10_references/media/pool/pexels_10961750_airplane_landing_on_airport.mp4",
+      "inTc": "0.0",
+      "outTc": "4.0",
+      "durationSec": 4.0,
+      "chapter": "1",
+      "role": "背景",
+      "motion": "locked",
+      "tags": [
+        "滑走路",
+        "夜"
+      ],
+      "captionSpace": "yes",
+      "crop": "",
+      "rating": 65,
+      "pick": "pool",
+      "outName": "runway_night_a",
+      "notes": "Pexels/表記不要/rec-10 冒頭は車両が写らない。中盤はバス・車が入るため使用不可",
+      "recipeIds": [
+        "rec-10"
+      ]
+    },
+    {
+      "clipId": "clip-007",
+      "sourceFile": "10_references/media/pool/pexels_11058632_time_lapse_of_sunset_above_city.mp4",
+      "inTc": "2.0",
+      "outTc": "6.0",
+      "durationSec": 4.0,
+      "chapter": "3",
+      "role": "背景",
+      "motion": "drift",
+      "tags": [
+        "夜景",
+        "街"
+      ],
+      "captionSpace": "yes",
+      "crop": "",
+      "rating": 58,
+      "pick": "pool",
+      "outName": "city_sunset_a",
+      "notes": "Pexels/表記不要/rec-10 街並みが雑然として上品さに欠ける。保留",
+      "recipeIds": [
+        "rec-10"
+      ]
+    },
+    {
+      "clipId": "clip-008",
+      "sourceFile": "10_references/media/pool/pexels_6472910_airplane_wing_while_flying_in_the_sky.mp4",
+      "inTc": "0",
+      "outTc": "1.0",
+      "durationSec": 1.0,
+      "chapter": "1",
+      "role": "背景",
+      "motion": "parallax",
+      "tags": [
+        "翼"
+      ],
+      "captionSpace": "no",
+      "crop": "",
+      "rating": 0,
+      "pick": "rejected",
+      "outName": "clip-008",
+      "notes": "不採用: 翼にAVIANCAのロゴが全編で写る。Style Bibleのno logo違反",
+      "recipeIds": []
+    },
+    {
+      "clipId": "clip-009",
+      "sourceFile": "10_references/media/pool/pexels_13973018_an_airline_plane_taxiing_on_the_runway_a.mp4",
+      "inTc": "0",
+      "outTc": "1.0",
+      "durationSec": 1.0,
+      "chapter": "1",
+      "role": "背景",
+      "motion": "locked",
+      "tags": [
+        "滑走路"
+      ],
+      "captionSpace": "no",
+      "crop": "",
+      "rating": 0,
+      "pick": "rejected",
+      "outName": "clip-009",
+      "notes": "不採用: American Airlinesの機体ロゴが写る。Style Bibleのno logo違反",
+      "recipeIds": []
+    },
+    {
+      "clipId": "clip-010",
+      "sourceFile": "10_references/media/pool/pexels_4057958_drone_flying_towards_the_sunset_over_the.mp4",
+      "inTc": "6.0",
+      "outTc": "11.0",
+      "durationSec": 5.0,
+      "chapter": "4",
+      "role": "背景",
+      "motion": "drift",
+      "tags": [
+        "海",
+        "夕暮れ",
+        "ゴールド"
+      ],
+      "captionSpace": "yes",
+      "crop": "",
+      "rating": 90,
+      "pick": "candidate",
+      "outName": "ocean_golden_a",
+      "notes": "Pexels/表記不要/rec-09 golden hourで最有力。右手前にアウトリガー舟のシルエットが全編写るが、人物は乗っておらず文字・ロゴも無いためStyle Bible適合。旅情がむしろ出る",
+      "recipeIds": [
+        "rec-09"
+      ]
+    },
+    {
+      "clipId": "clip-011",
+      "sourceFile": "10_references/media/pool/pexels_8303109_drone_footage_of_a_sunset_at_the_ocean.mp4",
+      "inTc": "0.5",
+      "outTc": "5.0",
+      "durationSec": 4.5,
+      "chapter": "4",
+      "role": "背景",
+      "motion": "drift",
+      "tags": [
+        "海",
+        "夕暮れ"
+      ],
+      "captionSpace": "yes",
+      "crop": "",
+      "rating": 80,
+      "pick": "candidate",
+      "outName": "ocean_golden_b",
+      "notes": "Pexels/表記不要/rec-09 水平線と太陽のみで完全にクリーン。clip-010より静かなので、テロップを載せるならこちら",
+      "recipeIds": [
+        "rec-09"
+      ]
+    },
+    {
+      "clipId": "clip-012",
+      "sourceFile": "10_references/media/pool/pexels_31288104_tranquil_sunrise_over_serene_coastal_lan.mp4",
+      "inTc": "1.0",
+      "outTc": "5.0",
+      "durationSec": 4.0,
+      "chapter": "4",
+      "role": "背景",
+      "motion": "drift",
+      "tags": [
+        "海",
+        "朝日",
+        "海岸"
+      ],
+      "captionSpace": "yes",
+      "crop": "",
+      "rating": 68,
+      "pick": "pool",
+      "outName": "ocean_sunrise_a",
+      "notes": "Pexels/表記不要/rec-09 陸地が入り海単体より風景寄り。ハワイ章には弱い",
+      "recipeIds": [
+        "rec-09"
+      ]
+    },
+    {
+      "clipId": "clip-013",
+      "sourceFile": "10_references/media/pool/pexels_14300105_philadelphia_at_night.mp4",
+      "inTc": "2.0",
+      "outTc": "6.0",
+      "durationSec": 4.0,
+      "chapter": "3",
+      "role": "背景",
+      "motion": "locked",
+      "tags": [
+        "夜景",
+        "都市"
+      ],
+      "captionSpace": "yes",
+      "crop": "",
+      "rating": 64,
+      "pick": "pool",
+      "outName": "city_night_a",
+      "notes": "Pexels/表記不要/rec-10 ビル頂部を拡大し読める文字・ロゴが無いことを確認済み。ただしシャープでボケ感が無く、マゼンタの照明がStyle Bibleと合わない",
+      "recipeIds": [
+        "rec-10"
+      ]
+    },
+    {
+      "clipId": "clip-014",
+      "sourceFile": "10_references/media/pool/pexels_8951964_aerial_shot_of_a_town_during_night_time.mp4",
+      "inTc": "0",
+      "outTc": "1.0",
+      "durationSec": 1.0,
+      "chapter": "3",
+      "role": "背景",
+      "motion": "locked",
+      "tags": [
+        "夜景",
+        "郊外"
+      ],
+      "captionSpace": "no",
+      "crop": "",
+      "rating": 0,
+      "pick": "rejected",
+      "outName": "clip-014",
+      "notes": "不採用: 暗すぎて主役不在。郊外の高速道路で上品さに欠ける。rec-10の狙いと合わない",
+      "recipeIds": [
+        "rec-10"
+      ]
+    },
+    {
+      "clipId": "clip-015",
+      "sourceFile": "10_references/media/pool/pexels_34398886_breathtaking_cityscape_at_night_in_black.mp4",
+      "inTc": "0",
+      "outTc": "1.0",
+      "durationSec": 1.0,
+      "chapter": "3",
+      "role": "背景",
+      "motion": "locked",
+      "tags": [
+        "夜景",
+        "白黒"
+      ],
+      "captionSpace": "no",
+      "crop": "",
+      "rating": 0,
+      "pick": "rejected",
+      "outName": "clip-015",
+      "notes": "不採用: 白黒でStyle Bibleのネイビー・ゴールド・空色から外れる。手前が暗く沈む",
+      "recipeIds": []
+    }
+  ]
+}
