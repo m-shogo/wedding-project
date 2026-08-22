@@ -1,135 +1,122 @@
 # ADD-17 子ども向けミニカード / ぬりえ — Design QA
 
-Updated: 2026-08-14
+Updated: 2026-08-22
 Authority: `docs/automation/non-rurubu-figma-quality-current.md`
-Reopened visual-pass start main SHA: `f2d66130863f2b15705243d3b261217b8d2d9b9c`
 
 ## Current status
 
-`SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / V5_PRODUCTION_POLISHED / ROLLBACK_SAFE / BLOCKED_REQUIRED_INPUT / NOT_PRINT_READY`
+`SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / PROFESSIONAL_VNEXT_FOLDOUT_DISCOVERY_MAP_SELECTED / FAMILY_DIVERSITY_PASS / LONG_COPY_VISUAL_PASS / CHILD_ACTIVITY_SURFACE_PASS / LEGACY_PRESERVED / BLOCKED_REQUIRED_INPUT / NOT_PRINT_READY`
 
-This status applies to the age-independent neutral editable template only. Final adoption remains blocked until authoritative child-attendance/count/age and activity-use information exists.
+This status applies only to the age-independent neutral editable template. Final real-wedding adoption remains blocked until authoritative child-attendance/count/age and activity-use information exists.
 
-## Current live authority — verified 2026-08-14
+## Current live authority
 
 ### Figma
 
 - file key: `PAvkRggJiRuXVypi3RgZCN`
-- production page: `01_PRODUCTION`
-- front: `2:2` — `ADD17/A6_FRONT/BLEED_111x154mm__PRINT_SCALE_10PX_PER_MM`
-- back: `2:5` — `ADD17/A6_BACK/BLEED_111x154mm__PRINT_SCALE_10PX_PER_MM`
-- format: A6 trim 105 × 148 mm, 3 mm bleed model
-- front live readback: 1110×1540, 6 native text, 0 image-fill nodes, `clipsContent=true`
-- back live readback: 1110×1540, 7 native text, 0 image-fill nodes, `clipsContent=true`
-- all variable copy remains native editable text
-- drawing / contour / writing fields remain native vector
-- no child names, ages, count, interests, venue services, QR, or other guest facts were invented
+- current selected front: `62:2 / CURRENT_SELECTED / ADD17 / FRONT / FOLDOUT DISCOVERY MAP`
+- current selected back: `62:22 / CURRENT_SELECTED / ADD17 / BACK / ARRIVAL MAP LOG`
+- hidden realistic stress: `62:46 / 62:66`
+- three blank-frame direction studies: `61:3 / 61:21 / 61:32` — hidden comparison evidence
+- previous FIELD NOTE Current: `60:2 / 60:3 / 60:18` — comparison/history only
+- previous WINDOW SEAT Current: `47:2 / 48:2 / 48:13` — comparison/history only
+- retained V5 production: `2:2 / 2:5` — comparison/history only
+- working canvas: `1110×1540` (A6 trim + bleed model)
 
 ### Google Drive
 
 - folder: `ADD-17_子ども向けミニカード_ぬりえ`
 - Drive ID: `1xqxYqJ6_-0nPYSKrWkISHYljiNGIP5mB`
-- no raster/image asset is required by current production
+- live folder ID/title readback on 2026-08-22: PASS
+- Drive writes for this pass: `0`
 
-## Current production art direction — V5
+## Current visual direction — FOLDOUT DISCOVERY MAP
 
-The historical V4 audit below remains evidence of the first material clean-room redesign, but **V4 is no longer the live production art direction**.
-
-V5 replaced V4 on 2026-08-11 after a fresh screenshot comparison showed that V4's hard rectangular drawing area still read too much like a worksheet. V5 keeps the generous activity space while shifting the visual grammar toward a softer field-journal / observation-page composition:
-
-- Japanese-first editorial hierarchy;
-- narrow teal binding rule and restrained rust registration accents;
-- asymmetric pale observation field with native contour rings on the front;
-- open curved writing baselines on the back rather than repeated rigid rules;
-- small optional sketch area remains secondary;
-- no generated people/children/animals, fake UI, generic travel motif, gradient, shadow, or raster decoration.
-
-V5 promotion authority:
-
-- `01_paper-items/additional-wedding-items/ADD-17-children-mini-card/FIGMA-V5-PROMOTION-2026-08-11.md`
-- V4 rollback before V5 promotion: `15:2` / `15:14`
-- production root IDs remained stable at `2:2` / `2:5`
-
-## Placeholder hierarchy polish — 2026-08-13
-
-Fresh A6 screenshots showed that the V5 prompt placeholders were visually valid but the literal `LAYOUT DUMMY` suffix still competed too strongly with the field labels. Production was polished rollback-safely without changing semantics:
-
-- front prompt `15:43 / TXT_PROMPT` — `[お題 · LAYOUT DUMMY]`
-- back prompt `15:61 / TXT_PROMPT` — `[ひとこと案内 · LAYOUT DUMMY]`
-- only the literal `LAYOUT DUMMY` suffix was demoted to a smaller warm-gray auxiliary hierarchy
-- rollback nodes: front `21:2`, back `21:19`
-- no semantic copy, child facts, geometry, image content, or physical format changed
-
-Evidence: `docs/automation/add-17-children-mini-card-placeholder-hierarchy-2026-08-13.md`
-
-## Fresh screenshot QA — 2026-08-14
-
-Production front/back were re-rendered at their native 1110×1540 canvas size.
+The Current treats the item as a foldout discovery map / observation sheet rather than a worksheet card.
 
 Front:
-
-- Japanese title remains dominant;
-- pale observation field and contour rings read as one integrated editorial field rather than a UI card;
-- activity area remains large and usable;
-- `LAYOUT DUMMY` is visually subordinate to `[お題]`;
-- no clipping, fake controls, stock travel imagery, or generated-person imagery is visible.
+- cobalt physical binding edge;
+- terracotta header paper;
+- Japanese-first `今日の旅で、見つけたもの。`;
+- central activity surface remains open paper, defined only by small corner/fold marks;
+- native `[お題]`, optional name and date roles;
+- no rounded web-card container around the main drawing area.
 
 Back:
+- `ARRIVAL LOG` kicker;
+- Japanese-first `もうひとつ、見つけたこと。`;
+- open ruled writing field;
+- optional drawing/memo area marked by small corner cues only;
+- no generated child/person/animal imagery or fake transport credential.
 
-- curved writing baselines keep a quieter field-journal rhythm;
-- optional sketch corner is secondary and does not collide with the nearby label;
-- `えでもOK` and `小さな絵も、ここに。` remain readable and separated;
-- optional-name field remains native and editable;
-- `LAYOUT DUMMY` is visually subordinate to `[ひとこと案内]`.
+All prompts, guidance, optional name and date remain native editable Figma text.
 
-Result: fresh visual inspection still supports `SELLABLE_VISUAL_QA_PASS` for the neutral template.
+## Three-scale / live screenshot QA
 
-## Structural readback — 2026-08-14
+Live re-audit on 2026-08-22 rendered Current front `62:2` at native `1110×1540`.
 
-Front `2:2`:
+Result: PASS.
 
-- 1110×1540
-- 6 native text / 6 visible
-- 0 image-fill nodes
-- `clipsContent=true`
+- the activity surface remains the dominant use area;
+- the cobalt edge and terracotta header read as physical-map/foldout cues rather than web UI;
+- Japanese hierarchy remains legible;
+- the open central field is not visually contaminated by generic travel illustration;
+- no visible child-specific fabricated fact appears.
 
-Back `2:5`:
+Promoted evidence already records front/back whole, reading, native actual-size and realistic long-copy PASS.
 
-- 1110×1540
-- 7 native text / 7 visible
-- 0 image-fill nodes
-- `clipsContent=true`
+## Structure / stress QA
 
-No flattening or raster replacement was introduced.
+Canonical Current evidence records:
 
-## Image generation / asset decision
+- selected front native text `7`;
+- selected back native text `6`;
+- fixed-height visible text `0` across selected + stress;
+- visible text outside root `0`;
+- text-text collision `0`;
+- IMAGE fills `0`.
 
-`IMAGE_GENERATION_NOT_REQUIRED`.
+Two meaningful failures were caught and corrected before selection:
 
-The screenshot-supported quality problems for ADD-17 were composition and proof-metadata hierarchy, both solved natively. Adding generated decoration would not materially improve the item and would reduce editability. No Drive asset was added or changed.
+1. realistic front stress mechanically split `聞こえた音`; the stress contract was changed to deliberate clause-level native line breaks instead of shrinking type;
+2. the initial authoring helper applied `textAutoResize='HEIGHT'` before `resize()`, silently returning text to fixed-height behavior; fonts were loaded, width was assigned first, then auto-height was applied and read back.
 
-## Historical reopened visual audit — V4, 2026-08-10
+Canonical evidence:
+- `01_paper-items/additional-wedding-items/ADD-17-children-mini-card/CURRENT.md`
+- `01_paper-items/additional-wedding-items/ADD-17-children-mini-card/PROFESSIONAL-VNEXT-FOLDOUT-DISCOVERY-MAP-QA-2026-08-22.md`
+- later `PROFESSIONAL-VNEXT-PLAYFUL-ACTIVITY-REJECTION-QA-2026-08-22.md` confirms a subsequent colorful clean-room experiment was weaker and Current was intentionally retained.
 
-The pre-V4 production was structurally valid but too sparse and worksheet-like to count as sellable visual evidence. A materially different native clean-room comparison was created on `99_QA`:
+## Hybrid / image decision
 
-- section `10:2` — `QA_ADD17_CLEANROOM_VISUAL_V4_2026_08_10`
-- front `10:3` — `QA_ADD17_CLEANROOM_V4_FRONT`
-- back `10:15` — `QA_ADD17_CLEANROOM_V4_BACK`
+- variable/semantic copy: native text;
+- fixed paper/binding/fold/corner cues: simple native functional geometry;
+- SVG: `0`;
+- generated/composed raster: `0`;
+- replaceable image role: `0`;
+- image generation: `0`.
 
-V4 introduced Japanese-first editorial hierarchy, a narrow teal binding rule, restrained rust accents, asymmetric drawing/writing composition, native semantic text, and no raster decoration.
-
-### V4 long-copy stress
-
-- section `10:33` — `QA_ADD17_CLEANROOM_V4_LONG_COPY_STRESS_2026_08_10`
-- front `10:34` — `QA_ADD17_V4_STRESS_FRONT`
-- back `10:46` — `QA_ADD17_V4_STRESS_BACK`
-
-Stress content used explicit `LAYOUT DUMMY` semantics and tested a multi-line activity prompt, longer margin/footer guidance, a multi-line back prompt, and a longer optional-name label. Screenshot QA passed without collisions or clipped text. This remains valid structural/long-copy evidence; it is **not** the current visual-completion proof by itself.
+`IMAGE_GENERATION_NOT_REQUIRED_FOR_THIS_PASS`: the screenshot-supported defect was dominant UI-like activity containment, not missing illustration or photography. Generic travel imagery would reduce activity space and increase stock/AI-template risk.
 
 ## Deferred / blocked finalization
 
-Final adoption remains `BLOCKED_REQUIRED_INPUT` until authoritative information confirms whether children attend and, if so, approximate count/age range and whether this activity is wanted or venue-provided.
+Do not fabricate:
+- whether children attend;
+- age range/count;
+- venue-provided amenities;
+- activity preference;
+- personalization;
+- final copy or paper/pen/crayon handling.
 
-Final paper/printer template, production PDF/export profile, physical 100% proof, pen/crayon usability, edge/bleed verification, and real-use handling remain `DEFERRED_FINALIZATION`.
+Resolution remains one of `NOT_REQUIRED / ADOPT_VNEXT / REDESIGN_REQUIRED` after authoritative input.
 
-Do not repeatedly redesign this neutral template while those inputs are missing. If later confirmed unnecessary, resolve it as `NOT_REQUIRED`; otherwise replace only confirmed semantic copy/operation fields and perform final physical print proof.
+Also deferred:
+- final paper/printer template;
+- production PDF/export profile;
+- 100% physical print proof;
+- pen/crayon usability;
+- edge/bleed verification;
+- real-use handling.
+
+## Result
+
+`PROFESSIONAL_VNEXT_FOLDOUT_DISCOVERY_MAP_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / FAMILY_DIVERSITY_PASS / LONG_COPY_VISUAL_PASS / CHILD_ACTIVITY_SURFACE_PASS / BLOCKED_REQUIRED_INPUT / NOT_PRINT_READY`.
