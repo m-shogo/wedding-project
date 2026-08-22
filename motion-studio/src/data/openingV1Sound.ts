@@ -1,5 +1,3 @@
-import {isPlayableAudioAsset} from './assets';
-
 export type OpeningV1SoundRole = 'bgm' | 'ambience';
 
 export type OpeningV1SoundCue = {
@@ -12,9 +10,9 @@ export type OpeningV1SoundCue = {
   note: string;
 };
 
-// 音源本体はassets.tsで管理する。
-// candidate / approved / final のaudio素材だけがOpening V1へ入る。
-// missingのままならcue定義があってもrenderされないため、権利未確認素材を誤再生しない。
+// 音源本体と採用段階はassets.tsで管理する。
+// このファイルは「いつ、何の音を、どの音量で使うか」だけを持つ純粋データ。
+// 再生可否(candidate / approved / final)はRemotion側で判定する。
 // ambienceは次の画より少し先に入るJ-cut前提。
 export const openingV1SoundCues: OpeningV1SoundCue[] = [
   {
@@ -72,7 +70,3 @@ export const openingV1SoundCues: OpeningV1SoundCue[] = [
     note: '横浜到着カット前に会場へ戻る空気を薄く作る。',
   },
 ];
-
-export const openingV1EnabledSoundCues = openingV1SoundCues.filter((cue) =>
-  isPlayableAudioAsset(cue.assetId),
-);
