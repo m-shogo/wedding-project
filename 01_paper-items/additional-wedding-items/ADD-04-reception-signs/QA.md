@@ -1,7 +1,7 @@
 # ADD-04 受付サイン — QA
 
 Status: `CURRENT / PROFESSIONAL_VNEXT_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / PROFESSIONAL_REOPEN_PROMOTED / LONG_COPY_STRESS_PASS / ROLLBACK_SAFE / NOT_PRINT_READY`
-Updated: 2026-08-22
+Updated: 2026-08-23
 Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
 
 ## Current Figma authority
@@ -14,11 +14,13 @@ Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
 - fresh selected bride source: `38:14`
 - hidden long-copy stress: `38:26 / 38:38`
 - hidden pre-promotion rollback: `39:2 / 39:28`
+- hidden pre-date-lane rollback: `42:26 / 42:38 / 42:50 / 42:62`
 - exact Drive authority: `1vjSYrbjzfZs_vyCIpQAbml9_en5RcH_r / ADD-04_受付サイン`
 
 Current evidence:
 
 - `FIGMA-ARRIVAL-FAN-PROFESSIONAL-REOPEN-PROMOTION-2026-08-22.md`
+- `FIGMA-FACTUAL-DATE-LANE-QA-2026-08-23.md`
 
 Earlier `COUNTER FOLD`, `BREEZE WELCOME`, V4/V3 and legacy work remains preserved as historical/rollback evidence and is no longer the Current visual selection.
 
@@ -34,14 +36,15 @@ Art direction:
 - angular lower paper-fan fields create celebration without returning to repeated rounded capsule/sun grammar;
 - groom: sky / yellow / coral;
 - bride: mint / yellow / rose;
-- date/location is a native factual anchor inside the lower fixed field, with no fake airline credential.
+- date/location remains native factual copy, now placed on a stable cream factual lane above the angled fan rather than crossing the fan's changing color boundary.
 
 ## Three-scale visual QA
 
 - whole-item / ~500 px: PASS;
 - reading / ~700–1000 px: PASS;
 - actual `740×1050`: PASS;
-- groom/bride pair distinction: PASS.
+- groom/bride pair distinction: PASS;
+- post-date-lane screenshot: PASS; `2026.10.24 · YOKOHAMA` is a clearer lower editorial anchor and no longer crosses fixed-art contrast boundaries.
 
 Compared only after clean-room maturity, ARRIVAL FAN is preferred over the prior COUNTER FOLD Current because it raises pickup/threshold energy while preserving immediate reception orientation and family-scale distinction.
 
@@ -49,17 +52,26 @@ Professional Design Council score: `92/100`, no Executive Creative Director, Jap
 
 ## Structure / long-copy QA
 
-Final Current readback:
+Final Current readback after the 2026-08-23 factual-date-lane repair:
 
-- groom `33:2`: visible native text `8`, auto-height `8/8`, outside `0`, IMAGE fills `0`;
-- bride `33:15`: visible native text `8`, auto-height `8/8`, outside `0`, IMAGE fills `0`.
+- groom `33:2`: visible native text `8`, auto-height `8/8`, fixed-height `0`, outside `0`, IMAGE fills `0`;
+- bride `33:15`: visible native text `8`, auto-height `8/8`, fixed-height `0`, outside `0`, IMAGE fills `0`.
 
-Stress roots `38:26 / 38:38` use materially longer name and multi-line reception guidance. Initial stress showed fixed fan art approaching the variable-copy lane. A stress-only decorative adjustment was rejected as insufficient resilience. Final production and stress now use the same long-copy-safe lower fan lane, while the name/guidance rhythm was tightened upward.
+Date/location role on Current and stress:
+
+- native string: `2026.10.24 · YOKOHAMA`;
+- Inter Bold `18px`;
+- `x=56 / y=835 / w=360`;
+- ocean navy on the stable cream field;
+- `textAutoResize=HEIGHT`.
+
+Stress roots `38:26 / 38:38` use materially longer name and multi-line reception guidance. Initial stress showed fixed fan art approaching the variable-copy lane. A stress-only decorative adjustment was rejected as insufficient resilience. Final production and stress use the same long-copy-safe lower fan lane, and the new factual-date lane preserves clear reserve after long copy.
 
 Final stress readback:
 
 - native visible text `8` per root;
 - auto-height `8/8` per root;
+- fixed-height `0`;
 - outside `0`;
 - IMAGE fills `0`;
 - screenshot PASS without type shrinking.
@@ -73,7 +85,7 @@ Final stress readback:
 - replaceable image role: not required;
 - Drive write: `0`.
 
-`IMAGE_GENERATION_NOT_REQUIRED`: the visible bottleneck was reception threshold energy/composition, not missing photography or illustration.
+`IMAGE_GENERATION_NOT_REQUIRED`: the verified defect was native factual text interacting with angled fixed art, not missing photography or illustration.
 
 ## Fact / placeholder contract
 
