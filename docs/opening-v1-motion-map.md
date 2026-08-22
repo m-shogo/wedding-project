@@ -23,8 +23,8 @@ Opening V1を「均等な写真カード＋slow zoomのWeddingテンプレ」に
 | 3 | Okinawa memories | 9 | 約2.6s / 2.7s / 3.7sのhard cut。full → left → wide | 実写真3枚 |
 | 4 | Seoul memories | 9 | 約2.6s / 2.7s / 3.7sのhard cut。right → full → left | 実写真3枚 |
 | 5 | Hawaii memories | 9 | 約2.6s / 2.7s / 3.7sのhard cut。full → wide → right | 実写真3枚 |
-| 6 | Couple hero A | 8 | 1枚full-bleed。ごく小さいpushのみ | 実写真1枚 |
-| 7 | Couple hero B | 8 | 1枚full-bleed。static | 実写真1枚 |
+| 6 | Couple hero A | 8 | 1枚をnative比率優先で大きく表示。ごく小さいpushのみ | 実写真1枚 |
+| 7 | Couple hero B | 8 | 1枚をnative比率優先で大きく表示。static | 実写真1枚 |
 | 8 | Arrival / Yokohama route | 3 | HAWAII → YOKOHAMAの線だけ。説明ラベルなし | Remotion route |
 | 9 | Ending title | 5 | 名前＋日付＋横浜。短いfadeのみ | Remotion text |
 
@@ -56,6 +56,21 @@ hero-02.jpg
 - `opening/` に11枚以上ある場合だけ並び順fallbackを許可。
 - sample画像が1〜10枚だけ存在する状態では勝手に本番slotへ入れない。
 
+## 写真fitの規則
+
+写真をすべて16:9へ切るのは禁止。差し替えだけで事故りにくい初期値を次のように固定する。
+
+| 表示 | fit | 理由 |
+|---|---|---|
+| `full` | `cover` | 画面全体を使う風景・瞬間の強さを優先 |
+| `left` / `right` | `cover` | 非対称レイアウトとして面を作る |
+| `wide` | `contain` | 縦写真・4:3・スマホ写真の元構図を残す |
+| Hero A / B | `contain` | 二人の顔・身体・重要な瞬間をcrop事故から守る |
+
+- `contain`では周囲の余白も編集表現として残す。blur背景で無理に埋めない。
+- `cover`で顔が切れる写真だけ、既存の`objectPosition`を上書きする。
+- 実写真が無い段階で顔認識・自動cropエンジンを増築しない。実写真投入後に必要性を判断する。
+
 ## motionの考え方
 
 ### static
@@ -78,6 +93,7 @@ hero-02.jpg
 - 1秒ごとの派手なtransition
 - zoom transition / whip / glow / film burnの常用
 - 意味のない英字kicker
+- 縦写真をblur背景で無理に16:9化すること
 
 ## cutの考え方
 
@@ -95,7 +111,7 @@ hero-02.jpg
 
 ## 音
 
-現時点ではBGM未投入だが、完成版では映像transitionよりsound continuityを優先する。
+映像transitionよりsound continuityを優先する。
 
 ```text
 A3  必要な会話/現地音
@@ -103,8 +119,9 @@ A2  ambience（空港・海・街）
 A1  BGM
 ```
 
-次の画の環境音を数フレーム〜数十フレーム先行させるJ-cutを優先候補とする。
-whooshを全cutへ付けない。
+`openingV1Sound.ts` にJ-cut用cueを定義し、`assets.ts`でcandidate / approved / finalになった音源だけRemotionへ入る。権利未確認・missing素材はcueがあっても再生しない。
+
+次の画の環境音を数フレーム〜数十フレーム先行させる。whooshを全cutへ付けない。
 
 ## QA
 
@@ -112,15 +129,16 @@ whooshを全cutへ付けない。
 
 1. `pnpm typecheck`
 2. `pnpm check`
-3. `pnpm exec remotion compositions src/index-opening-v1.ts`
-4. 60秒 / 1920x1080 / 30fpsを確認
-5. 主要frameを目視
-6. 実写真投入後は顔crop、視線方向、safe areaを確認
-7. 「cinematic」という言葉を使わず、各cutが良い理由を説明できること
+3. sound cue contract
+4. `pnpm exec remotion compositions src/index-opening-v1.ts`
+5. 60秒 / 1920x1080 / 30fpsを確認
+6. 主要frameを目視
+7. 実写真投入後は顔crop、視線方向、safe area、native比率を確認
+8. 「cinematic」という言葉を使わず、各cutが良い理由を説明できること
 
 ## 現在のボトルネック
 
-実写真11枚の本投入。コード側は写真差し替えを受けられる状態。
+実写真11枚の本投入。コード側は写真差し替え・自然なfit・J-cut音レイヤーを受けられる状態。
 
 素材を増やすより、11枚の選定・crop・順番・音設計を先に詰める。
 
@@ -128,6 +146,7 @@ whooshを全cutへ付けない。
 
 - `motion-studio/src/compositions/opening/OpeningV1.tsx`
 - `motion-studio/src/data/openingV1Media.ts`
+- `motion-studio/src/data/openingV1Sound.ts`
 - `docs/02_style-bible.md`
 - `docs/research/2026-08-22-tiktok-wedding-film-trends.md`
 - `docs/reference-recipes.md`
