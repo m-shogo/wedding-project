@@ -1,176 +1,117 @@
 # ADD-08 メニュー補助サイン — QA
 
-Status: `CURRENT / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / LONG_COPY_STRESS_PASS / CLEANROOM_SELECTED_FAMILY / ALLERGY_JAPANESE_FIRST_CATEGORY_PASS / WORLD_TRIP_TITLE_FIELD_SUBTRACTION_PASS / LEGACY_PRESERVED / NOT_PRINT_READY`
-Updated: 2026-08-20
-Authority: GitHub latest `main` + `docs/automation/non-rurubu-figma-quality-current.md`
+Status: `CURRENT / PROFESSIONAL_VNEXT_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / FAMILY_SCALE_TEMPLATE_REPETITION_CLOSED_FOR_ADD08 / LONG_COPY_STRESS_PASS / ROLLBACK_SAFE / NOT_PRINT_READY`
+Updated: 2026-08-22
+Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
 
 ## Current Figma authority
 
-Figma file: `xvJH23nWjWAApd3yOwr4y3`
+- Figma file: `xvJH23nWjWAApd3yOwr4y3`
+- stable production root: `1:3 / FRAME_MENU_SUPPORT_A4 / CURRENT_SELECTED / VNEXT V3 RESORT TABLECLOTH`
+- mature selected source: `57:2 / FAMILY-DIVERSE VNEXT V3 / ADD-08 / A4 / RESORT TABLECLOTH` — hidden after promotion
+- dedicated long-copy proof: `57:37 / QA / FAMILY-DIVERSE VNEXT V3 / ADD-08 / RESORT TABLECLOTH LONG COPY STRESS` — hidden after QA
+- pre-promotion TABLE SUNSET rollback: `58:2 / ROLLBACK / ADD-08 / PRE-FAMILY-V3 TABLE SUNSET / 2026-08-21`
+- V3 blank-frame studies: `56:2 / 56:32 / 56:50`, retained as hidden comparison/history
+- retained legacy/history remains preserved
+- exact Drive authority: `12D7UPRTDwUx7vLOm1mtaew-sFGHt9FPG / ADD-08_メニュー補助サイン`
 
-Current selected clean-room family:
+Current promotion evidence:
 
-- Drink Menu Guide → V3 `21:3 / CLEANROOM_ADD08_V3_A4_DRINK_LEDGER`
-- Allergy / Dietary Information → V2 `18:19 / CLEANROOM_ADD08_V2_STRONG_A4_ALLERGY_DIETARY`
-- World Trip Special Menu Introduction → V3 `21:43 / CLEANROOM_ADD08_V3_A4_WORLD_TRIP_CHAPTERS`
+- `../ADD-08-menu-support-sign/FAMILY-DIVERSITY-RESORT-TABLECLOTH-V3-PROMOTION-QA-2026-08-21.md`
 
-Current long-copy evidence:
+Earlier Drink / Allergy / World Trip clean-room family evidence remains historical QA only and is no longer the Current visual selection for the canonical A4 production root.
 
-- Drink V3 → `23:34 / QA_CLEANROOM_ADD08_V3_DRINK_LONG_COPY_STRESS_FINAL_2026_08_15`
-- Allergy / Dietary V2 → `18:64 / QA_CLEANROOM_ADD08_V2_A4_ALLERGY_DIETARY_LONG_COPY_STRESS_2026_08_15`
-- World Trip V3 → `23:75 / QA_CLEANROOM_ADD08_V3_WORLD_LONG_COPY_STRESS_FINAL_2026_08_15`
+## Current direction — RESORT TABLECLOTH
 
-Retained legacy production `1:3 / FRAME_MENU_SUPPORT_A4` remains rollback/history only.
+The previous `TABLE SUNSET` was individually strong but repeated the suite-level navy + oversized coral/lagoon rounded-hero grammar. A first family-diversity experiment using index/tab modules was correctly rejected because it became orderly/system-like and lost wedding warmth.
 
-Exact Drive authority, live-read before this reconciliation:
+Per the method-switch rule, a fresh V3 pass started from blank frames using only verified A4/menu/allergy/dietary/staff/date/place semantic roles. It did not reuse old plate/orb/sweep/index geometry.
 
-- `12D7UPRTDwUx7vLOm1mtaew-sFGHt9FPG / ADD-08_メニュー補助サイン`
-- Drive write: `0`.
+Three materially different directions were authored:
 
-## Current clean-room visual family
+1. `RESORT TABLECLOTH`
+2. `NAPKIN CORNER`
+3. `SUNSET MENU CLOTH`
 
-The three selected artifacts intentionally do not repeat one template:
+`RESORT TABLECLOTH` was selected because it ties the visual identity to actual dining/table materiality while retaining tropical/pop energy and Japanese-first readability without cards, fake travel credentials, or stock food imagery.
 
-- **Drink V3** — navy/cream beverage ledger with a broad teal fixed-art field; Japanese section labels and simplified curve artwork.
-- **Allergy / Dietary V2** — Japanese-first safety sign with a functional navy binding field, two clearly separated information columns and restrained mint rules.
-- **World Trip V3** — rust Japanese title on one continuous paper surface, three editorial culinary chapters and one long navy route curve.
+Visual grammar:
 
-All variable/factual menu, drink, allergy, dietary and operational wording remains native editable Figma text. Current selected family uses IMAGE fills `0`; no raster or generated production asset is required by the diagnosed defects.
+- warm cream paper field
+- narrow coral / mango / lagoon / wine textile strip
+- dark selvage line clarifying the cloth edge
+- Japanese-first title and open information lanes
+- category color only where it improves scanning
+- no giant orb/sun/capsule sweep
+- no admin rail, badge, route, shadow, gradient, or generated food image
 
-## Current adopted visual refinements
+## Live visual QA — 2026-08-22 readback
 
-### Drink V3 — retained 2026-08-18/19 cleanup
+Live screenshot of production `1:3` was re-read after the project-wide Current-pointer reconciliation rule was promoted.
 
-The selected Drink V3 has already removed non-semantic infographic/UI residue while preserving the fixed teal art field:
+- whole-item / ~500px-equivalent: PASS
+- reading scale: PASS
+- actual working canvas `1400×1980`: PASS
+- textile field reads as tablecloth/material language rather than equal cards or dashboard modules
+- title `おいしい旅を、いただきます。` has a natural semantic two-line break
+- information hierarchy remains menu/drink → allergy → dietary → staff guidance → reassurance/date/place
+- no screenshot-supported defect was found that justifies another visual redesign in this run
 
-- decorative `DRINK MENU GUIDE` and `WEDDING JOURNEY` filler hidden;
-- fake measure labels `01–06` hidden;
-- section labels are Japanese-first `アルコール / ソフトドリンク / ご案内`;
-- twelve non-semantic measure ticks hidden;
-- internal full-width section rules 02/03 hidden because spacing/headings already group the sections;
-- one opening rule remains because it still binds the intro to the beverage content field;
-- beverage curves and teal fixed-art field retained.
+Professional Design Council score remains `92/100`; no Executive Creative Director, Japanese Editorial Designer or Print Production Director veto.
 
-Three-scale and long-copy evidence remains PASS with outside visible text `0`, collisions `0`, IMAGE `0`.
+## Long-copy / structure QA
 
-Evidence:
+Promotion evidence records both selected source `57:2` and dedicated stress `57:37` as:
 
-- `FIGMA-SELECTED-FAMILY-JAPANESE-FIRST-CLEANUP-2026-08-18.md`
-- `FIGMA-DRINK-V3-MEASURE-TICK-SUBTRACTION-QA-2026-08-19.md`
-- `FIGMA-DRINK-V3-INTERNAL-RULE-SUBTRACTION-QA-2026-08-19.md`
+- visible native text `12`
+- fixed-height text `0`
+- outside-root text `0`
+- text/text collisions `0`
+- IMAGE fills `0`
 
-### Allergy / Dietary V2 — Japanese-first category binding adopted 2026-08-20
+Stress expanded menu/drink, allergy, dietary, staff guidance, and reassurance roles without type shrinking. The stress proof remains hidden internal QA evidence and is not guest-facing production.
 
-A previous bounded test showed that removing the navy top category field entirely weakened page binding, so the field remains. The remaining defect was the isolated English label `ALLERGY / DIETARY INFORMATION` above otherwise Japanese-first operational content.
+Current production `1:3` retains the same promoted visual/content contract.
 
-Adopted native text:
+## Hybrid authoring / asset decision
 
-- selected `18:24 / TXT_MENU_CATEGORY` → `アレルギー・食事制限のご案内`;
-- stress `18:69 / TXT_MENU_CATEGORY` → same wording.
+- semantic/factual copy: native editable Figma text
+- fixed textile/selvage treatment: simple native vector geometry
+- editable SVG: not required
+- generated/composed raster: not required
+- replaceable image role: not required
+- IMAGE fills: `0`
+- Drive write in this reconciliation: `0`
 
-Rollback / comparison:
+`IMAGE_GENERATION_NOT_REQUIRED`: the diagnosed defect was family-scale graphic repetition and insufficient dining-specific materiality, not missing food photography or atmosphere art. Generated food/tropical imagery would add stock/AI-artifact risk without solving a demonstrated defect.
 
-- comparison `48:2` hidden after adoption;
-- pre-change rollback `49:2 / 49:16` hidden/preserved.
+## Authority reconciliation — 2026-08-22
 
-Current selected/stress readback from the 2026-08-20 evidence:
+The canonical QA pointer had drifted behind the live selected production. It still described the older three-artifact Drink / Allergy / World Trip clean-room family, while later verified promotion evidence and live Figma identify `1:3 / RESORT TABLECLOTH` as Current.
 
-- visible native text `8 / 8`;
-- outside visible text `0 / 0`;
-- same-parent text collisions `0 / 0`;
-- visible proof language `0 / 0`;
-- IMAGE fill nodes `0 / 0`.
+This file is now reconciled without changing Figma production or Drive assets.
 
-Fresh live ~500px screenshot in this run: PASS. The navy field still performs a real binding role; only the generic language mismatch was removed.
+Reconciliation chain:
 
-Evidence: `FIGMA-ALLERGY-V2-JAPANESE-CATEGORY-LABEL-QA-2026-08-20.md`.
+`live Figma 1:3 RESORT TABLECLOTH → FAMILY-DIVERSITY-RESORT-TABLECLOTH-V3-PROMOTION-QA-2026-08-21.md → this canonical QA.md → Drive 12D7UPRTDwUx7vLOm1mtaew-sFGHt9FPG`
 
-### World Trip V3 — title containment subtraction adopted 2026-08-20
-
-After earlier target/checkpoint cleanup, the remaining `1400×410` rust title rectangle still behaved like a large web/header section and separated the Japanese title from the paper more strongly than necessary.
-
-Bounded comparisons tested:
-
-- `47:78` shallow rust field;
-- `47:116` no field / native rust typographic title.
-
-The typographic-only direction was stronger and adopted:
-
-- `DECOR / RUST TITLE FIELD` hidden in selected/stress;
-- native rust `TEXT / TITLE` at `y=72`;
-- native `TEXT / INTRO` at `y=348`;
-- chapter content, semantic placeholders, route vector and date preserved.
-
-Rollback:
-
-- selected pre-change `47:154` hidden;
-- stress pre-change `47:192` hidden;
-- comparisons hidden after adoption.
-
-Current selected/stress readback from the 2026-08-20 evidence:
-
-- visible native text `14 / 14`;
-- outside visible text `0 / 0`;
-- same-parent text collisions `0 / 0`;
-- proof language `0 / 0`;
-- IMAGE fills `0 / 0`.
-
-Fresh live ~500px screenshot in this run: PASS. The page now reads as one editorial paper surface rather than a colored web-header plus content section.
-
-Evidence: `FIGMA-WORLD-TRIP-V3-TITLE-FIELD-SUBTRACTION-QA-2026-08-20.md`.
-
-## Retained 2026-08-19 simplification evidence
-
-The following validated changes remain part of the current family and were not reverted:
-
-- Allergy/Dietary dashed center separator removed while top/bottom mint grouping rules remain;
-- World Trip orbit circles and non-semantic checkpoint dots removed while the single long route curve remains;
-- hidden long-copy proofs use semantic Japanese stress text rather than guest-visible `LAYOUT DUMMY` language.
-
-Evidence:
-
-- `FIGMA-ALLERGY-V2-CENTER-SEPARATOR-SUBTRACTION-QA-2026-08-19.md`
-- `FIGMA-WORLD-TRIP-V3-ORBIT-CHECKPOINT-SUBTRACTION-QA-2026-08-19.md`
-
-## Structure / editability QA
-
-Current family contract:
-
-- A4 working size `1400×1980` per selected artifact;
-- variable/factual copy remains native editable text;
-- no final food/drink/allergy facts are baked into SVG/raster;
-- selected family IMAGE fills `0`;
-- long-copy proofs remain separate and hidden after review;
-- rollback/comparison candidates remain preserved;
-- legacy remains preserved and is not overwritten.
-
-No fresh live screenshot in this run exposed a defect requiring a new clean-room version. The two stale 2026-08-20 item-specific adoptions are now reflected by this Current QA file.
-
-## Hybrid authoring / image decision
-
-- variable/factual content: native editable Figma text;
-- fixed curves/rules/fields: editable native vector/geometry;
-- generated/composed raster: `0`;
-- replaceable image role: not required;
-- Drive writes: `0`.
-
-`IMAGE_GENERATION_NOT_REQUIRED`: current defects were generic-English hierarchy and excessive containment/UI-like vector treatment, not missing photography, illustration or paper texture.
+Earlier designs remain preserved as historical/rollback evidence.
 
 ## Deferred finalization
 
-Still `NOT_PRINT_READY` pending authoritative:
+Keep `NOT_PRINT_READY` until authoritative final inputs/proofs exist:
 
-- final food and drink copy;
-- confirmed allergy/dietary wording and venue-operation guidance;
-- final venue/footer wording;
-- printer bleed/template/profile;
-- 100% physical proof and table/venue visibility check;
-- any A5 variants must be independently reflowed rather than mechanically scaled from A4.
+- final menu and drink copy
+- confirmed allergy/dietary wording and venue-operation guidance
+- final venue/footer wording
+- printer bleed/template/profile
+- physical paper/color proof and table/venue visibility check
+- any A5 variant must be independently reflowed rather than mechanically scaled from A4
 
-These are `DEFERRED_FINALIZATION` and do not reopen the current sellable visual family.
+These are `DEFERRED_FINALIZATION` and do not reopen the Current sellable visual selection.
 
-## Current decision
+## Decision
 
-`SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / LONG_COPY_STRESS_PASS / CLEANROOM_SELECTED_FAMILY / ALLERGY_JAPANESE_FIRST_CATEGORY_PASS / WORLD_TRIP_TITLE_FIELD_SUBTRACTION_PASS / LEGACY_PRESERVED / NOT_PRINT_READY`
+`CURRENT_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / CURRENT_POINTER_RECONCILED / LONG_COPY_STRESS_PASS / NOT_PRINT_READY`.
 
-Next progression target: `ADD-09 ゲストブックサイン`.
+Do not reopen ADD-08 merely to create another style variation unless real content, physical proof, or a new screenshot-supported defect invalidates the Current. Next safe progression target: ADD-09.
