@@ -43,12 +43,7 @@ export type Asset = {
   aspect: '16:9' | '9:16' | '3:4' | '4:3' | '1:1' | 'audio';
   usage: string;
   status: AssetStatus;
-  // 実行できるシェルコマンドのみ(例: "pnpm render 搭乗券 final")。
-  // 実行不能なメモを入れない。人間向け説明は recoveryNote に書く。
   regenerateCommand?: string;
-  // 実行コマンドではなく、復旧・確認に必要な人間向けメモ。
-  // AI素材は「どこのファイルを確認/採点すれば再生成できるか」をここに書く。
-  // render素材は regenerateCommand を使うため通常不要。
   recoveryNote?: string;
   note?: string;
 };
@@ -93,7 +88,6 @@ export const assets: Record<string, Asset> = {
   },
 
   // ---- AI背景(ComfyUI生成。Remotionテンプレ版と比較して採用を決める) ----
-  // pathは ~/... で始まるローカル絶対パス → check-assetsは "未生成" 扱い(情報表示のみ)
   'ai-cloud-sea-01': {
     id: 'ai-cloud-sea-01',
     path: '~/ComfyUI-Shared/output/video/',
@@ -124,6 +118,55 @@ export const assets: Record<string, Asset> = {
     usage: 'オープニング本編BGM',
     status: 'missing',
     note: '候補集め: docs/templates/music-candidates.csv。会場上映の利用条件確認必須',
+  },
+  'opening-bgm-main': {
+    id: 'opening-bgm-main',
+    path: 'public/audio/opening/bgm-main.mp3',
+    type: 'audio',
+    aspect: 'audio',
+    usage: 'Opening V1本番BGM。Remotion preview/finalへ直接合成する場合の正本',
+    status: 'missing',
+    note: '権利確認後に候補以上へ昇格する。未確認音源はここへ置いても本番再生しない。',
+  },
+  'opening-air-ambience': {
+    id: 'opening-air-ambience',
+    path: 'public/audio/opening/air-ambience.mp3',
+    type: 'audio',
+    aspect: 'audio',
+    usage: '雲海前後の機内/風 ambience。J-cut用',
+    status: 'missing',
+  },
+  'opening-okinawa-sea': {
+    id: 'opening-okinawa-sea',
+    path: 'public/audio/opening/okinawa-sea.mp3',
+    type: 'audio',
+    aspect: 'audio',
+    usage: '沖縄章へ先行する海/風 ambience。J-cut用',
+    status: 'missing',
+  },
+  'opening-seoul-street': {
+    id: 'opening-seoul-street',
+    path: 'public/audio/opening/seoul-street.mp3',
+    type: 'audio',
+    aspect: 'audio',
+    usage: 'Seoul章へ先行する街 ambience。J-cut用',
+    status: 'missing',
+  },
+  'opening-hawaii-ocean': {
+    id: 'opening-hawaii-ocean',
+    path: 'public/audio/opening/hawaii-ocean.mp3',
+    type: 'audio',
+    aspect: 'audio',
+    usage: 'Hawaii章へ先行する海/風 ambience。J-cut用',
+    status: 'missing',
+  },
+  'opening-arrival-roomtone': {
+    id: 'opening-arrival-roomtone',
+    path: 'public/audio/opening/arrival-roomtone.mp3',
+    type: 'audio',
+    aspect: 'audio',
+    usage: '横浜到着前へ先行する薄いroom tone。J-cut用',
+    status: 'missing',
   },
 
   // ---- 書き出し済みRemotion素材(render presetの出力。CapCutが読む) ----
@@ -174,7 +217,6 @@ export const assets: Record<string, Asset> = {
   },
 };
 
-// IDからパスを引く。存在しないIDは早期にエラーにする。
 export const assetPath = (id: string): string => {
   const asset = assets[id];
   if (!asset) {
@@ -183,24 +225,40 @@ export const assetPath = (id: string): string => {
   return asset.path;
 };
 
-// 写真素材IDを、PhotoCard等のphotos欄に渡す形式(staticFile相対)に変換する。
-// assets.tsのpathは 'public/photos/opening/x.jpg'、テンプレ側は 'opening/x.jpg' を
-// 期待するため、この変換を必ずここで行う(手動でprefixを剥がさない)。
 export const photoPublicPath = (id: string): string => {
   const asset = assets[id];
   if (!asset) {
     throw new Error(`assets.tsに存在しない素材ID: ${id}`);
   }
   if (asset.type !== 'photo') {
-    throw new Error(
-      `photoPublicPathはphoto素材専用: ${id} はtype=${asset.type}`,
-    );
+    throw new Error(`photoPublicPathはphoto素材専用: ${id} はtype=${asset.type}`);
   }
   const prefix = 'public/photos/';
   if (!asset.path.startsWith(prefix)) {
-    throw new Error(
-      `写真素材のpathは${prefix}から始める: ${id} (${asset.path})`,
-    );
+    throw new Error(`写真素材のpathは${prefix}から始める: ${id} (${asset.path})`);
   }
   return asset.path.slice(prefix.length);
+};
+
+export const audioPublicPath = (id: string): string => {
+  const asset = assets[id];
+  if (!asset) {
+    throw new Error(`assets.tsに存在しない素材ID: ${id}`);
+  }
+  if (asset.type !== 'audio') {
+    throw new Error(`audioPublicPathはaudio素材専用: ${id} はtype=${asset.type}`);
+  }
+  const prefix = 'public/audio/';
+  if (!asset.path.startsWith(prefix)) {
+    throw new Error(`Remotion直再生する音源のpathは${prefix}から始める: ${id} (${asset.path})`);
+  }
+  return asset.path.slice(prefix.length);
+};
+
+export const isPlayableAudioAsset = (id: string): boolean => {
+  const asset = assets[id];
+  if (!asset || asset.type !== 'audio') {
+    return false;
+  }
+  return ['candidate', 'approved', 'final'].includes(asset.status);
 };
