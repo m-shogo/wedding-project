@@ -40,6 +40,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Opening V1 media discovery
+        run: pnpm prepare:opening-v1
+
       - name: TypeScript
         run: pnpm typecheck
 
@@ -47,7 +50,7 @@ jobs:
         run: pnpm check
 
       - name: Opening V1 sound contracts
-        run: node --no-warnings scripts/check-opening-sound.mts
+        run: pnpm check:opening-sound
 
       - name: Opening V1 composition contract
         run: pnpm exec remotion compositions src/index-opening-v1.ts
