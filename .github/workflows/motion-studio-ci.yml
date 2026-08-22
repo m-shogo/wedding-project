@@ -45,3 +45,6 @@ jobs:
 
       - name: Motion / asset / part / preset contracts
         run: pnpm check
+
+      - name: Opening V1 composition contract
+        run: pnpm exec remotion compositions src/index-opening-v1.ts
