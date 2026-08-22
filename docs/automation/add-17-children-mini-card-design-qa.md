@@ -1,11 +1,11 @@
 # ADD-17 子ども向けミニカード / ぬりえ — Design QA
 
-Updated: 2026-08-22
+Updated: 2026-08-23
 Authority: `docs/automation/non-rurubu-figma-quality-current.md`
 
 ## Current status
 
-`SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / PROFESSIONAL_VNEXT_FOLDOUT_DISCOVERY_MAP_SELECTED / FAMILY_DIVERSITY_PASS / LONG_COPY_VISUAL_PASS / CHILD_ACTIVITY_SURFACE_PASS / LEGACY_PRESERVED / BLOCKED_REQUIRED_INPUT / NOT_PRINT_READY`
+`SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / PROFESSIONAL_VNEXT_EXPEDITION_FIELD_SELECTED / FAMILY_DIVERSITY_PASS / LONG_COPY_VISUAL_PASS / CHILD_ACTIVITY_SURFACE_PASS / LEGACY_PRESERVED / BLOCKED_REQUIRED_INPUT / NOT_PRINT_READY`
 
 This status applies only to the age-independent neutral editable template. Final real-wedding adoption remains blocked until authoritative child-attendance/count/age and activity-use information exists.
 
@@ -14,10 +14,12 @@ This status applies only to the age-independent neutral editable template. Final
 ### Figma
 
 - file key: `PAvkRggJiRuXVypi3RgZCN`
-- current selected front: `62:2 / CURRENT_SELECTED / ADD17 / FRONT / FOLDOUT DISCOVERY MAP`
-- current selected back: `62:22 / CURRENT_SELECTED / ADD17 / BACK / ARRIVAL MAP LOG`
-- hidden realistic stress: `62:46 / 62:66`
-- three blank-frame direction studies: `61:3 / 61:21 / 61:32` — hidden comparison evidence
+- current selected front: `67:3 / CURRENT_SELECTED / ADD17 / FRONT / EXPEDITION FIELD SHEET`
+- current selected back: `67:4 / CURRENT_SELECTED / ADD17 / BACK / DISCOVERY POSTLOG`
+- hidden realistic stress: `69:2 / 69:40`
+- current clean-room page: `67:2 / VNEXT_PRO / ADD-17 / EXPEDITION FIELD SHEET / 2026-08-23`
+- three current blank-frame directions: `70:2 / 70:11 / 70:21` — hidden comparison evidence
+- previous Foldout Discovery Map Current: `62:2 / 62:22` — rollback/history only
 - previous FIELD NOTE Current: `60:2 / 60:3 / 60:18` — comparison/history only
 - previous WINDOW SEAT Current: `47:2 / 48:2 / 48:13` — comparison/history only
 - retained V5 production: `2:2 / 2:5` — comparison/history only
@@ -27,75 +29,99 @@ This status applies only to the age-independent neutral editable template. Final
 
 - folder: `ADD-17_子ども向けミニカード_ぬりえ`
 - Drive ID: `1xqxYqJ6_-0nPYSKrWkISHYljiNGIP5mB`
-- live folder ID/title readback on 2026-08-22: PASS
+- live folder ID/title readback on 2026-08-23: PASS
 - Drive writes for this pass: `0`
 
-## Current visual direction — FOLDOUT DISCOVERY MAP
+## Current visual direction — EXPEDITION FIELD SHEET
 
-The Current treats the item as a foldout discovery map / observation sheet rather than a worksheet card.
+The Current is a playful expedition field sheet / discovery note rather than a worksheet card or age-specific coloring illustration.
 
 Front:
-- cobalt physical binding edge;
-- terracotta header paper;
-- Japanese-first `今日の旅で、見つけたもの。`;
-- central activity surface remains open paper, defined only by small corner/fold marks;
+- pale mint paper field;
+- Japanese-first `旅の途中で、見つけたもの。`;
+- one compact cobalt→pink discovery-route gesture kept outside the main activity surface;
+- reader-facing `きょうの発見 / 01`;
+- tiny star/wave/spark and four open activity corner ticks rather than a rounded container;
 - native `[お題]`, optional name and date roles;
-- no rounded web-card container around the main drawing area.
+- footer is open editorial copy + a short yellow rule, not a pill/card.
 
 Back:
-- `ARRIVAL LOG` kicker;
+- cream open writing surface;
+- cobalt top band + coral physical edge;
+- reader-facing `きょうの発見 / 02`;
 - Japanese-first `もうひとつ、見つけたこと。`;
-- open ruled writing field;
-- optional drawing/memo area marked by small corner cues only;
+- open writing rules with fixed cues outside the writing area;
 - no generated child/person/animal imagery or fake transport credential.
 
 All prompts, guidance, optional name and date remain native editable Figma text.
 
+## Three-direction professional comparison
+
+Three materially different directions were built from blank frames before selection:
+
+1. `70:2 / EXPEDITION FIELD` — selected; best balance of activity openness, movement and joyful color.
+2. `70:11 / FOLDED COLOR ATLAS` — rejected; tactile but more poster-like and consumed too much activity space.
+3. `70:21 / OBSERVATION RIBBON` — rejected; distinct but prompt/ribbon treatment moved toward card/UI semantics.
+
+The selected direction was then rebuilt at full size rather than promoted from a thumbnail.
+
 ## Three-scale / live screenshot QA
 
-Live re-audit on 2026-08-22 rendered Current front `62:2` at native `1110×1540`.
+Fresh Current and stress screenshots on 2026-08-23:
 
-Result: PASS.
+- whole-item / 500 px: PASS;
+- reading scale: PASS;
+- actual/native `1110×1540`: PASS;
+- realistic front/back long-copy: PASS after bounded spacing repair.
 
-- the activity surface remains the dominant use area;
-- the cobalt edge and terracotta header read as physical-map/foldout cues rather than web UI;
-- Japanese hierarchy remains legible;
-- the open central field is not visually contaminated by generic travel illustration;
-- no visible child-specific fabricated fact appears.
+Compared only after the new candidate matured, the retained Foldout Current remained structurally good but read calmer and more worksheet/editorial. Expedition Field has the stronger playful first impression without losing a credible open activity surface.
 
-Promoted evidence already records front/back whole, reading, native actual-size and realistic long-copy PASS.
+Professional Design Council: `94/100 / PASS / NO VETO`.
 
 ## Structure / stress QA
 
-Canonical Current evidence records:
-
-- selected front native text `7`;
-- selected back native text `6`;
-- fixed-height visible text `0` across selected + stress;
+Current front `67:3`:
+- native text `7`;
+- fixed-height visible text `0`;
 - visible text outside root `0`;
 - text-text collision `0`;
 - IMAGE fills `0`.
 
-Two meaningful failures were caught and corrected before selection:
+Current back `67:4`:
+- native text `6`;
+- fixed-height visible text `0`;
+- visible text outside root `0`;
+- text-text collision `0`;
+- IMAGE fills `0`.
 
-1. realistic front stress mechanically split `聞こえた音`; the stress contract was changed to deliberate clause-level native line breaks instead of shrinking type;
-2. the initial authoring helper applied `textAutoResize='HEIGHT'` before `resize()`, silently returning text to fixed-height behavior; fonts were loaded, width was assigned first, then auto-height was applied and read back.
+Stress `69:2 / 69:40`:
+- front native text `7`, back native text `6`;
+- fixed-height visible text `0`;
+- visible text outside root `0`;
+- text-text collision `0`;
+- IMAGE fills `0`.
+
+Meaningful failures caught and corrected before promotion:
+
+1. three disconnected colored bars read as generic decoration; method-switched to one coherent discovery-route gesture;
+2. a rounded cobalt footer box reintroduced UI/pill grammar; removed and replaced by open native copy + short rule;
+3. initial realistic long-copy placed the long prompt too near a fixed activity corner and left insufficient reserve for a long optional name; prompt width, activity ticks, and lower reserve were redesigned without shrinking the main headline.
 
 Canonical evidence:
 - `01_paper-items/additional-wedding-items/ADD-17-children-mini-card/CURRENT.md`
-- `01_paper-items/additional-wedding-items/ADD-17-children-mini-card/PROFESSIONAL-VNEXT-FOLDOUT-DISCOVERY-MAP-QA-2026-08-22.md`
-- later `PROFESSIONAL-VNEXT-PLAYFUL-ACTIVITY-REJECTION-QA-2026-08-22.md` confirms a subsequent colorful clean-room experiment was weaker and Current was intentionally retained.
+- `01_paper-items/additional-wedding-items/ADD-17-children-mini-card/PROFESSIONAL-VNEXT-EXPEDITION-FIELD-PROMOTION-QA-2026-08-23.md`
+- prior `PROFESSIONAL-VNEXT-FOLDOUT-DISCOVERY-MAP-QA-2026-08-22.md` remains rollback/history evidence.
 
 ## Hybrid / image decision
 
-- variable/semantic copy: native text;
-- fixed paper/binding/fold/corner cues: simple native functional geometry;
-- SVG: `0`;
+- variable/semantic/factual copy: native text;
+- fixed route/star/wave/spark: small editable vector/SVG roles;
+- paper fields/rules/activity ticks: simple native functional geometry;
 - generated/composed raster: `0`;
 - replaceable image role: `0`;
 - image generation: `0`.
 
-`IMAGE_GENERATION_NOT_REQUIRED_FOR_THIS_PASS`: the screenshot-supported defect was dominant UI-like activity containment, not missing illustration or photography. Generic travel imagery would reduce activity space and increase stock/AI-template risk.
+`IMAGE_GENERATION_NOT_REQUIRED_FOR_THIS_PASS`: the screenshot-supported bottleneck was playful graphic rhythm versus activity-surface usability, not missing photography or illustration. Generic travel imagery or generated children would reduce function and increase stock/identity risk.
 
 ## Deferred / blocked finalization
 
@@ -119,4 +145,4 @@ Also deferred:
 
 ## Result
 
-`PROFESSIONAL_VNEXT_FOLDOUT_DISCOVERY_MAP_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / FAMILY_DIVERSITY_PASS / LONG_COPY_VISUAL_PASS / CHILD_ACTIVITY_SURFACE_PASS / BLOCKED_REQUIRED_INPUT / NOT_PRINT_READY`.
+`PROFESSIONAL_VNEXT_EXPEDITION_FIELD_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / FAMILY_DIVERSITY_PASS / LONG_COPY_VISUAL_PASS / CHILD_ACTIVITY_SURFACE_PASS / BLOCKED_REQUIRED_INPUT / NOT_PRINT_READY`.
