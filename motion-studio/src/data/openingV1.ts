@@ -2,7 +2,7 @@ export type OpeningV1Scene = {
   id: string;
   title: string;
   durationSec: number;
-  kind: 'travel-ui' | 'real-photo' | 'motion-placeholder';
+  kind: 'travel-ui' | 'real-photo';
   owner: 'codex' | 'claude-code';
   replacementPolicy: string;
 };
@@ -10,76 +10,68 @@ export type OpeningV1Scene = {
 export const openingV1Scenes: OpeningV1Scene[] = [
   {
     id: 'v1-departure-title',
-    title: 'Departure title',
-    durationSec: 5,
-    kind: 'travel-ui',
-    owner: 'codex',
-    replacementPolicy: 'Remotion native text/UI. AI動画へ文字を焼き込まない。',
-  },
-  {
-    id: 'v1-cloud-transition',
-    title: 'Air / cloud transition',
-    durationSec: 4,
-    kind: 'motion-placeholder',
+    title: 'Photo cold open',
+    durationSec: 2,
+    kind: 'real-photo',
     owner: 'codex',
     replacementPolicy:
-      'V1はRemotion placeholder。実編集で必要性が確認できた時だけAI B-rollへ差し替える。',
+      'hero-01実写真を2秒だけ先見せするcold open。中央の高級風タイトルカードへ戻さない。',
   },
   {
     id: 'v1-photos-okinawa',
     title: 'Okinawa memories',
-    durationSec: 9,
+    durationSec: 11,
     kind: 'real-photo',
     owner: 'claude-code',
-    replacementPolicy: '実写真3枚へ差し替え。人物をAI生成しない。',
+    replacementPolicy: '実写真3枚。hard cut中心。人物をAI生成しない。',
   },
   {
     id: 'v1-photos-seoul',
     title: 'Seoul memories',
-    durationSec: 9,
+    durationSec: 11,
     kind: 'real-photo',
     owner: 'claude-code',
-    replacementPolicy: '実写真3枚へ差し替え。人物をAI生成しない。',
+    replacementPolicy: '実写真3枚。hard cut中心。人物をAI生成しない。',
   },
   {
     id: 'v1-photos-hawaii',
     title: 'Hawaii memories',
-    durationSec: 9,
+    durationSec: 11,
     kind: 'real-photo',
     owner: 'claude-code',
-    replacementPolicy: '実写真3枚へ差し替え。人物をAI生成しない。',
+    replacementPolicy: '実写真3枚。hard cut中心。人物をAI生成しない。',
   },
   {
     id: 'v1-photo-hero-a',
     title: 'Couple hero photo A',
-    durationSec: 8,
+    durationSec: 9,
     kind: 'real-photo',
     owner: 'claude-code',
-    replacementPolicy: '2人の実写真1枚へ差し替え。',
+    replacementPolicy: '2人の実写真1枚。native比率を守り、cropしすぎない。',
   },
   {
     id: 'v1-photo-hero-b',
     title: 'Couple hero photo B',
-    durationSec: 8,
+    durationSec: 9,
     kind: 'real-photo',
     owner: 'claude-code',
-    replacementPolicy: '2人の実写真1枚へ差し替え。',
+    replacementPolicy: '2人の実写真1枚。staticを第一候補にする。',
   },
   {
     id: 'v1-arrival-route',
     title: 'Arrival / Yokohama route',
-    durationSec: 3,
+    durationSec: 4,
     kind: 'travel-ui',
     owner: 'codex',
-    replacementPolicy: 'Remotion native route graphic。読める地名はRemotionで描画。',
+    replacementPolicy: 'Remotion native route graphic。HAWAII → YOKOHAMAだけを簡潔に描く。',
   },
   {
     id: 'v1-ending-title',
-    title: 'Wedding opening title',
-    durationSec: 5,
+    title: 'Documentary end card',
+    durationSec: 3,
     kind: 'travel-ui',
     owner: 'codex',
-    replacementPolicy: 'Remotion native text。PalmierでBGM終端と同期する。',
+    replacementPolicy: 'YOKOHAMA / 2026.10.24だけ。中央セリフ体の高級風カードへ戻さない。',
   },
 ];
 
