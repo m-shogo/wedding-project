@@ -1,13 +1,14 @@
 import {Audio, Sequence, staticFile, useVideoConfig} from 'remotion';
-import {audioPublicPath} from '../../data/assets';
-import {openingV1EnabledSoundCues} from '../../data/openingV1Sound';
+import {audioPublicPath, isPlayableAudioAsset} from '../../data/assets';
+import {openingV1SoundCues} from '../../data/openingV1Sound';
 
 export const OpeningV1AudioLayer = () => {
   const {fps} = useVideoConfig();
+  const enabledCues = openingV1SoundCues.filter((cue) => isPlayableAudioAsset(cue.assetId));
 
   return (
     <>
-      {openingV1EnabledSoundCues.map((cue) => {
+      {enabledCues.map((cue) => {
         const from = Math.round(cue.startSec * fps);
         const durationInFrames = Math.max(1, Math.round((cue.endSec - cue.startSec) * fps));
         const audioPath = audioPublicPath(cue.assetId);
