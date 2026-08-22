@@ -1,7 +1,7 @@
 # ADD-13 メッセージカード — QA
 
 Status: `CURRENT / FAMILY_DIVERSE_RESORT_DESK_LETTER_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / FAMILY_SCALE_TEMPLATE_REPETITION_CLOSED_FOR_ADD13 / LONG_COPY_STRESS_PASS / HANDWRITING_AREA_55_PERCENT_PASS / LEGACY_PRESERVED / ROLLBACK_SAFE / NOT_PRINT_READY`
-Updated: 2026-08-22
+Updated: 2026-08-23
 Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
 Professional quality authority: `docs/design-learning/PROFESSIONAL-DESIGN-COUNCIL-VNEXT-2026-08-20.md`
 
@@ -9,7 +9,7 @@ Professional quality authority: `docs/design-learning/PROFESSIONAL-DESIGN-COUNCI
 
 - Figma file: `8ad7bEPAc8I88gs1JxsWhe`
 - Current front: `52:72 / CURRENT / FAMILY-DIVERSE / ADD13 / FRONT / RESORT DESK LETTER`
-- Current back: `52:91 / CURRENT / FAMILY-DIVERSE / ADD13 / BACK / CHECKOUT NOTE`
+- Current back: `52:91 / CURRENT / FAMILY-DIVERSE / ADD13 / BACK / LETTER 02`
 - hidden realistic long-copy stress: `52:109 / 52:128`
 - family-diversity studies: `52:2 / 52:20 / 52:54`
 - retained prior Professional vNext SUNSHINE POSTCARD: `48:3 / 48:21` — comparison/rollback/history only
@@ -19,6 +19,7 @@ Professional quality authority: `docs/design-learning/PROFESSIONAL-DESIGN-COUNCI
 
 Canonical current evidence:
 - `FAMILY-DIVERSE-RESORT-DESK-LETTER-QA-2026-08-21.md`
+- `FIGMA-BACK-ARTIFACT-LABEL-POLISH-2026-08-23.md`
 
 ## Why Current changed after SUNSHINE POSTCARD
 
@@ -41,21 +42,22 @@ The selected replacement was therefore authored from blank frames using only ver
 
 ### Back `52:91`
 
-- quieter checkout-note face from the same stationery family;
+- quieter second-letter face from the same stationery family;
 - narrow green stationery strip rather than a large rounded decorative field;
+- strip identity is now `LETTER 02`, pairing with the front's `YOKOHAMA · LETTER 01` without implying a hotel checkout instruction;
 - Japanese-first `帰る前に、ひとこと。`;
 - large uninterrupted writing lane;
 - native `[自由記入]`, name/date roles;
 - no fake postal/transport data or tropical clip-art.
 
-The first back screenshot exposed title/guide/free-writing-label crowding. The title and guide/prompt lanes were separated before selection.
+The first back screenshot exposed title/guide/free-writing-label crowding. The title and guide/prompt lanes were separated before selection. A later actual-size re-audit on 2026-08-23 found that `CHECKOUT NOTE` read more like an internal concept label or checkout instruction than guest-facing artifact identity. A rollback-safe comparison first tested `YOKOHAMA · LETTER 02`, rejected it for awkward wrapping in the 120px strip, then selected the shorter `LETTER 02`.
 
 ## Three-scale screenshot QA
 
-Live Current re-audit on 2026-08-22 reconfirmed the selected front/back at native `1400×993`.
+Live Current re-audit on 2026-08-23 reconfirmed the selected front/back at native `1400×993`.
 
 - front whole-item / reading / actual-size: PASS;
-- back whole-item / reading / actual-size: PASS;
+- back whole-item / reading / actual-size: PASS after `LETTER 02` promotion;
 - handwriting remains the primary use surface rather than decoration;
 - no screenshot-visible UI card/container regression was found.
 
@@ -74,6 +76,8 @@ Verified structure from the promoted evidence:
 - SPEC minimum: `55%`;
 - result: PASS.
 
+Post-change stress screenshot QA also exposed an editorial line-break defect in the retained back stress title: the prior long string stranded a Japanese ending at the bottom of the narrow title lane. Current short copy did not fail, so production title typography was left unchanged. The hidden stress title now demonstrates the verified fallback at 28px with explicit semantic line breaks (`帰る前に、 / 今日の思い出と / ふたりへの / 言葉を。`) instead of relying on mechanical wrapping.
+
 All variable/factual copy remains native editable Figma text.
 
 ## Hybrid authoring / image decision
@@ -84,7 +88,7 @@ All variable/factual copy remains native editable Figma text.
 - editable SVG: `0`;
 - replaceable image roles: `0`.
 
-`IMAGE_GENERATION_NOT_REQUIRED_FOR_THIS_ITERATION`: the diagnosed defect was suite-level graphic-grammar repetition, not missing photography or illustration. Generated resort/aircraft/tropical imagery would reduce writing space and increase stock/AI-template risk.
+`IMAGE_GENERATION_NOT_REQUIRED_FOR_THIS_ITERATION`: the diagnosed defects were artifact-label semantics and Japanese editorial line breaking, not missing photography or illustration. Generated resort/aircraft/tropical imagery would reduce writing space and increase stock/AI-template risk.
 
 ## Professional Design Council
 
