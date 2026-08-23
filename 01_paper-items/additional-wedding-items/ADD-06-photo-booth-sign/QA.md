@@ -1,6 +1,6 @@
 # ADD-06 フォトブースサイン — QA
 
-Status: `CURRENT / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / FAMILY_DIVERSITY_PROMOTED / DEVELOPED_PRINT_CUE_PASS / CORAL_TAPE_SUBTRACTION_PASS / LONG_COPY_STRESS_PASS / JAPANESE_SEMANTIC_BREAK_PASS / ROLLBACK_SAFE / NOT_PRINT_READY`
+Status: `CURRENT / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / FAMILY_DIVERSITY_PROMOTED / DEVELOPED_PRINT_CUE_PASS / CORAL_TAPE_SUBTRACTION_PASS / NIGHT_REFLECTION_SUBTRACTION_PASS / LONG_COPY_STRESS_PASS / JAPANESE_SEMANTIC_BREAK_PASS / ROLLBACK_SAFE / NOT_PRINT_READY`
 Updated: 2026-08-23
 Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
 
@@ -13,6 +13,8 @@ Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
 - long-copy proof: `47:19 / QA / FAMILY-DIVERSE ADD-06 / PHOTO STRIP LONG COPY STRESS`
 - fixed-art comparison: `50:2 / QA / ADD-06 / PHOTO STRIP / ABSTRACT DEVELOPED PRINTS / 2026-08-23`
 - tape-subtraction comparison: `51:2 / VERIFIED / ADD-06 / NO AMBIGUOUS CORAL TAPE / 2026-08-23`
+- night-reflection comparison: `52:2 / QA / ADD-06 / DEVELOPED PRINT 3 / NO EXCLAMATION-LIKE REFLECTION / 2026-08-23` — hidden after promotion
+- pre-night-reflection rollbacks: `52:33 / 52:64`
 - pre-tape-subtraction rollbacks: `51:33 / 51:64`
 - pre-developed-print Current rollback: `50:33`
 - pre-developed-print long-copy rollback: `50:49`
@@ -25,6 +27,7 @@ Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
 
 Current evidence:
 
+- `FIGMA-NIGHT-REFLECTION-SUBTRACTION-QA-2026-08-23.md`
 - `FIGMA-CORAL-TAPE-SUBTRACTION-QA-2026-08-23.md`
 - `FIGMA-DEVELOPED-PRINT-CUE-POLISH-2026-08-23.md`
 - `FAMILY-DIVERSITY-PHOTO-STRIP-PROMOTION-QA-2026-08-21.md`
@@ -50,18 +53,20 @@ The left strip contains three clipped fixed-art developed-print scenes:
 
 These are non-person, non-documentary decorative prints. They contain no authoritative copy and do not represent the actual couple or guests.
 
-The former top `DECOR / CORAL TAPE` is now hidden. A rollback-safe comparison proved that it did not visibly attach a photo, bind text/image regions, or represent a trim/mounting/physical requirement. Removing it improved whole-item hierarchy while preserving the photo-strip artifact reading. No fake camera UI, lens reticle, viewfinder, barcode, generated people or stock photography is used.
+The third print previously combined a yellow moon with a narrow vertical yellow reflection bar. Fresh actual-size review showed the assembled pair reading like an exclamation-mark/status pictogram rather than moonlight over water. A rollback-safe comparison hid only the reflection bar; the night-water reading became clearer without losing the photo-strip identity. The reflection is therefore hidden in Current and long-copy proof, with full pre-change rollback preserved.
+
+The former top `DECOR / CORAL TAPE` is also hidden. A rollback-safe comparison proved that it did not visibly attach a photo, bind text/image regions, or represent a trim/mounting/physical requirement. Removing it improved whole-item hierarchy while preserving the photo-strip artifact reading. No fake camera UI, lens reticle, viewfinder, barcode, generated people or stock photography is used.
 
 ## Three-scale visual QA
 
 Current `45:2`:
 
-- whole-item / thumbnail: PASS — the photo-strip artifact remains immediate and the top field is calmer after tape subtraction;
+- whole-item / thumbnail: PASS — the photo-strip artifact remains immediate and the top field is calm;
 - reading scale: PASS — left fixed art supports rather than competes with the Japanese hierarchy;
-- actual `990×1400`: PASS;
-- long-copy proof remains synchronized with the same tape subtraction.
+- actual `990×1400`: PASS — third print reads as moon over water rather than punctuation/UI;
+- long-copy proof remains synchronized with both tape and reflection subtraction.
 
-The previous Professional Design Council score remains valid as the semantic composition/hierarchy did not regress; the bounded fixed-art changes improve item specificity and reduce meaningless decoration.
+The previous Professional Design Council score remains valid as the semantic composition/hierarchy did not regress; the bounded fixed-art changes improve item specificity and reduce meaningless or misleading decoration.
 
 ## Long-copy / Japanese typography QA
 
@@ -79,7 +84,7 @@ The first bounded repair was still too narrow and was rejected. Final proof uses
 - semantic grouping `撮影スペースの場所をご確認のうえ、 / 順番にゆっくりお進みください`;
 - location grouping `[会場内のフォトブース / 設置場所・長い案内名称]`.
 
-Fresh screenshot: PASS. Type was not reduced merely to force the stress to fit.
+Fresh screenshot after the reflection subtraction: PASS. Type was not reduced merely to force the stress to fit.
 
 ## Structure / hybrid QA
 
@@ -90,7 +95,8 @@ Current `45:2`:
 - fixed-height visible text `0`;
 - outside visible text `0`;
 - IMAGE fills `0`;
-- `DECOR / CORAL TAPE` hidden.
+- `DECOR / CORAL TAPE` hidden;
+- `50:79 / PRINT / REFLECTION` hidden.
 
 Stress `47:19`:
 
@@ -99,7 +105,8 @@ Stress `47:19`:
 - fixed-height visible text `0`;
 - outside visible text `0`;
 - IMAGE fills `0`;
-- `DECOR / CORAL TAPE` hidden.
+- `DECOR / CORAL TAPE` hidden;
+- `50:94 / PRINT / REFLECTION` hidden.
 
 Responsibility split:
 
@@ -110,7 +117,9 @@ Responsibility split:
 - replaceable image role: `0`;
 - Drive writes for this pass: `0`.
 
-The tape decision is a `VERIFIED_LOCAL` application of the existing binding-function QA method: a bar/rule/tape is retained only when whole-item review proves a real binding, physical, or semantic job. It is not a new blanket subtraction rule.
+The night-reflection decision is `VERIFIED_LOCAL`: fixed-art primitives must be judged as an assembled visual cue, because individually plausible parts can combine into an unrelated symbol. This is not a rule against vertical reflections or moon/water imagery.
+
+The tape decision remains a `VERIFIED_LOCAL` application of the existing binding-function QA method: a bar/rule/tape is retained only when whole-item review proves a real binding, physical, or semantic job. It is not a new blanket subtraction rule.
 
 ## Deferred finalization
 
