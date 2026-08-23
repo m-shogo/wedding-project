@@ -101,11 +101,13 @@ GitHub PRではMotion Studio CIが自動で:
 - motion / asset / parts / preset contracts
 - sound cue contract
 - Opening V1 composition contract
-- 代表8frameのVisual QA still render
+- **代表10frameのVisual QA still render**
 
 を実行する。
 
 Visual QA artifactを**実際に目視してからmerge**する。
+
+placeholderにも薄いコントラストを付け、full / left / right / wideの写真領域を確認できるようにする。
 
 CI GREENだけで見た目を承認しない。
 
