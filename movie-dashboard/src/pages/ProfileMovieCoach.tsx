@@ -1,6 +1,15 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Header } from "../components/Header";
+import { profileProductionOutcomes } from "../data/profileCoachLearning";
 import { profileCoachPhases } from "../data/profileCoachRoadmap";
+import {
+  getMovieCoachProgress,
+  getOutcomeCompletion,
+  loadCoachProgress,
+  saveCoachProgress,
+  toggleOutcomeChecklistProgress,
+} from "../lib/movieCoach";
 import { useProduction } from "../store/productionStore";
 
 function formatDuration(seconds: number) {
@@ -11,6 +20,12 @@ function formatDuration(seconds: number) {
 
 export function ProfileMovieCoach() {
   const { data } = useProduction();
+  const [coachProgress, setCoachProgress] = useState(loadCoachProgress);
+
+  useEffect(() => {
+    saveCoachProgress(coachProgress);
+  }, [coachProgress]);
+
   const movie = data.movies.find((item) => item.movieId === "profile");
   const scenes = data.scenes.filter((scene) => scene.movieId === "profile");
   const sceneMap = new Map(scenes.map((scene) => [scene.sceneId, scene]));
@@ -29,6 +44,7 @@ export function ProfileMovieCoach() {
 
   const doneScenes = scenes.filter((scene) => scene.status === "done").length;
   const storyNeedsResolution = durationGap !== 0;
+  const coachStats = getMovieCoachProgress("profile", coachProgress);
 
   const nextAction = selectedPhotos < requiredPhotos
     ? {
@@ -58,11 +74,16 @@ export function ProfileMovieCoach() {
         description="派手な演出よりStory。長尺Timelineを、写真選定 → Narrative → Caption → BGM → Full Passの順で完成させる"
       />
 
-      <div className="border-y border-sand-200 dark:border-navy-600 py-5 mb-7 grid grid-cols-2 lg:grid-cols-5 gap-x-6 gap-y-4">
+      <div className="border-y border-sand-200 dark:border-navy-600 py-5 mb-7 grid grid-cols-2 lg:grid-cols-6 gap-x-6 gap-y-4">
         <div>
           <p className="text-[10px] tracking-[0.18em] font-semibold text-navy-400">SCENES</p>
           <p className="mt-1 text-2xl font-mono font-bold text-navy-900 dark:text-sand-100">{doneScenes}/{scenes.length}</p>
-          <p className="text-xs text-navy-400">完成scene</p>
+          <p className="text-xs text-navy-400">production status</p>
+        </div>
+        <div>
+          <p className="text-[10px] tracking-[0.18em] font-semibold text-navy-400">COACH</p>
+          <p className="mt-1 text-2xl font-mono font-bold text-navy-900 dark:text-sand-100">{coachStats.percent}%</p>
+          <p className="text-xs text-navy-400">{coachStats.done}/{coachStats.total} outcomes</p>
         </div>
         <div>
           <p className="text-[10px] tracking-[0.18em] font-semibold text-navy-400">CURRENT PLAN</p>
@@ -114,7 +135,8 @@ export function ProfileMovieCoach() {
       <div className="mb-8 flex flex-wrap gap-3 text-xs">
         <Link to="/profile-planner" className="border-b border-navy-300 text-navy-600 dark:text-navy-300">写真計画 →</Link>
         <Link to="/movie-coach/dictionary" className="border-b border-navy-300 text-navy-600 dark:text-navy-300">逆引きDaVinci辞典 →</Link>
-        <Link to="/movie-coach" className="border-b border-navy-300 text-navy-600 dark:text-navy-300">Opening / Movie Coach →</Link>
+        <Link to="/movie-coach" className="border-b border-navy-300 text-navy-600 dark:text-navy-300">Today / Movie Coach →</Link>
+        <Link to="/movie-coach/review" className="border-b border-navy-300 text-navy-600 dark:text-navy-300">Movie Review →</Link>
       </div>
 
       <div className="space-y-10">
@@ -129,7 +151,12 @@ export function ProfileMovieCoach() {
             (sum, slot) => sum + Math.min(slot.selectedAssetIds.length, slot.requiredCount),
             0,
           );
-          const phaseDone = phaseScenes.length > 0 && phaseScenes.every((scene) => scene.status === "done");
+          const productionScenesDone =
+            phaseScenes.length > 0 && phaseScenes.every((scene) => scene.status === "done");
+          const outcome = profileProductionOutcomes.find((item) => item.outcomeId === phase.phaseId);
+          const completion = outcome
+            ? getOutcomeCompletion(outcome, coachProgress.outcomeChecklist)
+            : { done: 0, total: phase.done.length, percent: 0, complete: false };
 
           return (
             <section key={phase.phaseId} id={phase.phaseId} className="scroll-mt-6">
@@ -143,13 +170,17 @@ export function ProfileMovieCoach() {
                         <span>·</span>
                         <span>{formatDuration(phaseDuration)}</span>
                         {phaseRequired > 0 && <><span>·</span><span>PHOTO {phaseSelected}/{phaseRequired}</span></>}
+                        {productionScenesDone && <><span>·</span><span>SCENES DONE</span></>}
                       </div>
                       <h2 className="mt-1 text-xl font-bold text-navy-900 dark:text-sand-100">{phase.title}</h2>
                       <p className="mt-1 text-sm text-navy-600 dark:text-navy-300">{phase.productionOutcome}</p>
                     </div>
-                    <span className={`text-xs font-mono ${phaseDone ? "text-emerald-700 dark:text-emerald-300" : "text-navy-400"}`}>
-                      {phaseDone ? "DONE" : `${phase.practiceMinutes} MIN STUDY`}
-                    </span>
+                    <div className="text-right">
+                      <span className={`text-sm font-mono font-bold ${completion.complete ? "text-emerald-700 dark:text-emerald-300" : "text-navy-700 dark:text-sand-200"}`}>
+                        {completion.percent}%
+                      </span>
+                      <p className="text-[10px] font-mono text-navy-400">{completion.done}/{completion.total} · {phase.practiceMinutes} MIN</p>
+                    </div>
                   </div>
 
                   <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 py-5 border-b border-sand-200 dark:border-navy-600">
@@ -182,10 +213,34 @@ export function ProfileMovieCoach() {
                       </ol>
                     </div>
                     <div>
-                      <p className="text-[10px] tracking-[0.18em] font-semibold text-emerald-700 dark:text-emerald-300">DONE WHEN</p>
-                      <ul className="mt-3 space-y-1.5 text-sm text-navy-700 dark:text-navy-200">
-                        {phase.done.map((item) => <li key={item}>✓ {item}</li>)}
-                      </ul>
+                      <p className="text-[10px] tracking-[0.18em] font-semibold text-emerald-700 dark:text-emerald-300">DONE WHEN / EVIDENCE</p>
+                      <div className="mt-3 space-y-2">
+                        {outcome
+                          ? outcome.checklist.map((item) => {
+                              const checked = (coachProgress.outcomeChecklist[outcome.outcomeId] ?? []).includes(item.itemId);
+                              return (
+                                <label key={item.itemId} className="flex items-start gap-2 text-sm text-navy-700 dark:text-navy-200 cursor-pointer">
+                                  <input
+                                    type="checkbox"
+                                    checked={checked}
+                                    onChange={() =>
+                                      setCoachProgress((current) =>
+                                        toggleOutcomeChecklistProgress(current, outcome, item.itemId),
+                                      )
+                                    }
+                                    className="mt-0.5 h-4 w-4"
+                                  />
+                                  <span className={checked ? "line-through text-navy-400" : ""}>{item.label}</span>
+                                </label>
+                              );
+                            })
+                          : phase.done.map((item) => <p key={item} className="text-sm text-navy-700 dark:text-navy-200">✓ {item}</p>)}
+                      </div>
+                      {completion.complete && (
+                        <p className="mt-3 text-xs text-emerald-700 dark:text-emerald-300">
+                          ✓ Phase完了。使用SkillへWedding実使用Evidenceを記録済み。
+                        </p>
+                      )}
                       <p className="mt-5 text-[10px] tracking-[0.18em] font-semibold text-red-700 dark:text-red-300">AVOID</p>
                       <ul className="mt-2 space-y-1 text-xs text-navy-500 dark:text-navy-300">
                         {phase.avoid.map((item) => <li key={item}>× {item}</li>)}

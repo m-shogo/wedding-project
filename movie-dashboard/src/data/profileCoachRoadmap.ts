@@ -7,6 +7,10 @@ export interface ProfileCoachPhase {
   learn: string[];
   davinci: string[];
   practiceMinutes: number;
+  priority: number;
+  conceptSkillIds: string[];
+  davinciSkillIds: string[];
+  recipeIds: string[];
   apply: string[];
   done: string[];
   avoid: string[];
@@ -23,6 +27,10 @@ export const profileCoachPhases: ProfileCoachPhase[] = [
     learn: ["Narrative Arc", "Chapter Purpose", "Long-form Pacing", "Emotion Curve"],
     davinci: ["Timeline", "Marker", "Basic Trim"],
     practiceMinutes: 15,
+    priority: 29,
+    conceptSkillIds: ["concept-narrative-arc", "concept-longform-pacing", "concept-emotion-curve", "concept-rhythm"],
+    davinciSkillIds: ["davinci-timeline", "davinci-marker", "davinci-trim"],
+    recipeIds: [],
     apply: [
       "10sceneを仮素材のままTimelineへ並べる",
       "各sceneを『誰の何を伝える時間か』1文で定義する",
@@ -46,6 +54,10 @@ export const profileCoachPhases: ProfileCoachPhase[] = [
     learn: ["Photo Sequencing", "Caption Economy", "Pacing Variation", "Continuity"],
     davinci: ["Trim", "Ripple", "Text", "Transform"],
     practiceMinutes: 15,
+    priority: 28,
+    conceptSkillIds: ["concept-photo-sequencing", "concept-caption-economy", "concept-longform-pacing", "concept-continuity"],
+    davinciSkillIds: ["davinci-trim", "davinci-ripple", "davinci-text", "davinci-transform"],
+    recipeIds: ["rec-13"],
     apply: [
       "各写真へ『この1枚で何が分かるか』を1つ付ける",
       "似た役割の写真が続く場合は片方を外す候補にする",
@@ -65,6 +77,10 @@ export const profileCoachPhases: ProfileCoachPhase[] = [
     learn: ["Editorial Rhythm", "Photo Sequencing", "Visual Variety", "Caption Readability"],
     davinci: ["Trim", "Ripple", "Text", "Transform"],
     practiceMinutes: 15,
+    priority: 27,
+    conceptSkillIds: ["concept-photo-sequencing", "concept-caption-economy", "concept-longform-pacing", "concept-rhythm"],
+    davinciSkillIds: ["davinci-trim", "davinci-ripple", "davinci-text", "davinci-transform"],
+    recipeIds: ["rec-13"],
     apply: [
       "新郎編で使ったmotion presetを一旦外して写真そのものを見る",
       "表情・集合写真・行事写真の並びを変えてリズムを作る",
@@ -84,6 +100,10 @@ export const profileCoachPhases: ProfileCoachPhase[] = [
     learn: ["Narrative Turn", "Match / Hard Cut", "Music Lift", "J-cut / L-cut"],
     davinci: ["Marker", "Trim", "J/L-cut", "Audio Level"],
     practiceMinutes: 12,
+    priority: 26,
+    conceptSkillIds: ["concept-narrative-arc", "concept-continuity", "concept-audio-continuity"],
+    davinciSkillIds: ["davinci-marker", "davinci-trim", "davinci-jl-cut", "davinci-audio-fade"],
+    recipeIds: ["rec-11", "rec-12"],
     apply: [
       "新婦編末尾 → 出会い冒頭をHard Cutだけで一度作る",
       "BGMの変化を画より少し先に入れる案を比較する",
@@ -103,6 +123,10 @@ export const profileCoachPhases: ProfileCoachPhase[] = [
     learn: ["Emotion Curve", "Beat Emphasis", "Photo Contrast", "Color Consistency"],
     davinci: ["Marker", "Trim", "Color", "Transform"],
     practiceMinutes: 15,
+    priority: 25,
+    conceptSkillIds: ["concept-emotion-curve", "concept-photo-sequencing", "concept-rhythm", "concept-color-consistency"],
+    davinciSkillIds: ["davinci-marker", "davinci-trim", "davinci-color-balance", "davinci-transform"],
+    recipeIds: ["rec-01", "rec-06"],
     apply: [
       "最も強い写真を先に決め、そこへ向かう順番を作る",
       "旅行→日常→家族写真のコントラストを試す",
@@ -122,6 +146,10 @@ export const profileCoachPhases: ProfileCoachPhase[] = [
     learn: ["Caption Readability", "Stillness", "Audio Resolution", "Ending Pace"],
     davinci: ["Text", "Audio Fade", "Trim"],
     practiceMinutes: 10,
+    priority: 24,
+    conceptSkillIds: ["concept-caption-economy", "concept-typography", "concept-stillness", "concept-audio-continuity"],
+    davinciSkillIds: ["davinci-text", "davinci-audio-fade", "davinci-trim"],
+    recipeIds: ["rec-12"],
     apply: [
       "メッセージを実時間15秒で読み、長ければ削る",
       "背景写真をStaticで成立させる案を基準にする",
@@ -141,6 +169,10 @@ export const profileCoachPhases: ProfileCoachPhase[] = [
     learn: ["Long-form Pacing", "Narrative Balance", "Audio Continuity", "Color Continuity"],
     davinci: ["Timeline", "Ripple", "Markers", "Fairlight", "Color"],
     practiceMinutes: 20,
+    priority: 23,
+    conceptSkillIds: ["concept-longform-pacing", "concept-narrative-arc", "concept-audio-continuity", "concept-color-consistency"],
+    davinciSkillIds: ["davinci-timeline", "davinci-ripple", "davinci-marker", "davinci-audio-fade", "davinci-color-balance"],
+    recipeIds: [],
     apply: [
       "最初から最後まで止めずに1回見る",
       "退屈した時刻・読めなかった時刻・強かった時刻をMarkerで記録する",

@@ -70,6 +70,7 @@ export interface ProductionOutcome {
   conceptSkillIds: string[];
   davinciSkillIds: string[];
   recipeIds: string[];
+  prerequisiteOutcomeIds?: string[];
   checklist: OutcomeChecklistItem[];
   whyToday: string;
 }
