@@ -87,26 +87,26 @@ export const assets: Record<string, Asset> = {
     status: 'missing',
   },
 
-  // ---- AI背景(ComfyUI生成。Remotionテンプレ版と比較して採用を決める) ----
+  // ---- AI背景(ComfyUI生成。現行Opening V1では必須ではない旧比較候補) ----
   'ai-cloud-sea-01': {
     id: 'ai-cloud-sea-01',
     path: '~/ComfyUI-Shared/output/video/',
     type: 'ai-video',
     aspect: '16:9',
-    usage: '雲海シーンのAI生成候補(op_16系)。Remotion版「雲海」と比較',
+    usage: 'LEGACY比較候補: 雲海AI生成(op_16系)。現行Opening V1には未接続',
     status: 'generated_preview',
     recoveryNote:
-      'ComfyUI Wan2.2で生成済み。~/ComfyUI-Shared/output/video/ のop_16系を採点して採用ファイルを決める',
-    note: '採点: docs/templates/ai-video-scorecard.csv。採用確定後にpathを具体ファイル名に更新しstatusをcandidateへ(人間確認必須)',
+      'ComfyUI Wan2.2で生成済み。~/ComfyUI-Shared/output/video/ のop_16系を過去比較用に保持',
+    note: '現行60秒Photo-first V1では必須AI B-roll 0本。必要性が実写真previewで再確認された場合のみ再評価',
   },
   'ai-door-light-01': {
     id: 'ai-door-light-01',
     path: '~/ComfyUI-Shared/output/video/',
     type: 'ai-video',
     aspect: '16:9',
-    usage: '扉の光のAI生成候補。Remotion版「扉-光」と比較',
+    usage: 'LEGACY比較候補: 扉の光。現行Opening V1には未接続',
     status: 'idea',
-    note: 'ComfyUI未生成。aiPromptRegistry.tsのai-door-light-01-idea-01を参照。生成後にgenerated_previewへ昇格(人間確認必須)',
+    note: '現行V1では生成しない。実写真previewで弱いcutが確定した場合のみ必要性を再評価',
   },
 
   // ---- 音源(Git外。利用条件確認が先) ----
@@ -115,7 +115,7 @@ export const assets: Record<string, Asset> = {
     path: '../07_music/',
     type: 'audio',
     aspect: 'audio',
-    usage: 'オープニング本編BGM',
+    usage: '旧/共通オープニングBGM候補置き場',
     status: 'missing',
     note: '候補集め: docs/templates/music-candidates.csv。会場上映の利用条件確認必須',
   },
@@ -127,14 +127,6 @@ export const assets: Record<string, Asset> = {
     usage: 'Opening V1本番BGM。Remotion preview/finalへ直接合成する場合の正本',
     status: 'missing',
     note: '権利確認後に候補以上へ昇格する。未確認音源はここへ置いても本番再生しない。',
-  },
-  'opening-air-ambience': {
-    id: 'opening-air-ambience',
-    path: 'public/audio/opening/air-ambience.mp3',
-    type: 'audio',
-    aspect: 'audio',
-    usage: '雲海前後の機内/風 ambience。J-cut用',
-    status: 'missing',
   },
   'opening-okinawa-sea': {
     id: 'opening-okinawa-sea',
@@ -169,13 +161,13 @@ export const assets: Record<string, Asset> = {
     status: 'missing',
   },
 
-  // ---- 書き出し済みRemotion素材(render presetの出力。CapCutが読む) ----
+  // ---- 書き出し済みRemotion素材(旧/別用途の短尺素材) ----
   'render-boarding': {
     id: 'render-boarding',
     path: 'out/opening/boarding_pass_intro.mp4',
     type: 'render',
     aspect: '16:9',
-    usage: 'CapCut Track2: 搭乗券イントロ',
+    usage: 'LEGACY短尺: 搭乗券イントロ',
     status: 'generated_preview',
     regenerateCommand: 'pnpm render 搭乗券 final',
   },
@@ -184,7 +176,7 @@ export const assets: Record<string, Asset> = {
     path: 'out/opening/stamp_rush_full_route.mp4',
     type: 'render',
     aspect: '16:9',
-    usage: 'CapCut Track2: スタンプ連打ダイジェスト',
+    usage: 'LEGACY短尺: スタンプ連打ダイジェスト',
     status: 'generated_preview',
     regenerateCommand: 'pnpm render 押印連打-全路線 final',
   },
@@ -193,7 +185,7 @@ export const assets: Record<string, Asset> = {
     path: 'out/opening/countdown_10sec.mp4',
     type: 'render',
     aspect: '16:9',
-    usage: 'CapCut Track2: 入場前カウントダウン',
+    usage: 'LEGACY短尺: 入場前カウントダウン',
     status: 'generated_preview',
     regenerateCommand: 'pnpm render 入場前-秒読 final',
   },
@@ -202,7 +194,7 @@ export const assets: Record<string, Asset> = {
     path: 'out/opening/stamp_okinawa.webm',
     type: 'render',
     aspect: '16:9',
-    usage: 'CapCut Track4: 透過ハンコ(乗算ブレンド推奨)',
+    usage: 'LEGACY短尺: 透過ハンコ',
     status: 'generated_preview',
     regenerateCommand: 'pnpm render 押印-沖縄 final',
   },
@@ -211,7 +203,7 @@ export const assets: Record<string, Asset> = {
     path: 'out/common/cloud_overlay.webm',
     type: 'render',
     aspect: '16:9',
-    usage: 'CapCut Track3: 透過雲オーバーレイ(不透明度50-70%)',
+    usage: 'LEGACY短尺: 透過雲オーバーレイ。現行Opening V1には未接続',
     status: 'generated_preview',
     regenerateCommand: 'pnpm render 雲-透過 final',
   },
