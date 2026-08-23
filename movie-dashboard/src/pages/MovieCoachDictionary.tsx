@@ -7,11 +7,19 @@ import {
   type MovieCoachIntent,
   type MovieCoachIntentCategory,
 } from "../data/movieCoachIntents";
-import { learningSkills, productionOutcomes } from "../data/movieCoach";
-import { getSkillState, learningStateLabel, loadCoachProgress } from "../lib/movieCoach";
+import { profileCoachIntents } from "../data/profileCoachIntents";
+import {
+  allLearningSkills,
+  allProductionOutcomes,
+  getSkillState,
+  learningStateLabel,
+  loadCoachProgress,
+} from "../lib/movieCoach";
 
 const allCategory = "すべて" as const;
 type CategoryFilter = MovieCoachIntentCategory | typeof allCategory;
+const allIntents = [...movieCoachIntents, ...profileCoachIntents];
+const profileIntentIds = new Set(profileCoachIntents.map((intent) => intent.intentId));
 
 function normalize(value: string) {
   return value.toLowerCase().replace(/[\s・/→＋+_-]+/g, "");
@@ -22,7 +30,7 @@ function matchIntent(intent: MovieCoachIntent, query: string) {
   if (!normalizedQuery) return true;
 
   const skillLabels = intent.skillIds
-    .map((skillId) => learningSkills.find((skill) => skill.skillId === skillId)?.label ?? "")
+    .map((skillId) => allLearningSkills.find((skill) => skill.skillId === skillId)?.label ?? "")
     .join(" ");
   const haystack = normalize(
     [
@@ -47,12 +55,12 @@ export function MovieCoachDictionary() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [query, setQuery] = useState(() => searchParams.get("q") ?? "");
   const [category, setCategory] = useState<CategoryFilter>(allCategory);
-  const [selectedId, setSelectedId] = useState(movieCoachIntents[0]?.intentId ?? "");
+  const [selectedId, setSelectedId] = useState(allIntents[0]?.intentId ?? "");
   const [progress] = useState(loadCoachProgress);
 
   const filtered = useMemo(
     () =>
-      movieCoachIntents.filter(
+      allIntents.filter(
         (intent) =>
           (category === allCategory || intent.category === category) && matchIntent(intent, query),
       ),
@@ -64,13 +72,13 @@ export function MovieCoachDictionary() {
 
   const selectedSkills = selected
     ? selected.skillIds
-        .map((skillId) => learningSkills.find((skill) => skill.skillId === skillId))
+        .map((skillId) => allLearningSkills.find((skill) => skill.skillId === skillId))
         .filter((skill) => skill !== undefined)
     : [];
 
   const selectedOutcomes = selected
     ? selected.weddingOutcomeIds
-        .map((outcomeId) => productionOutcomes.find((outcome) => outcome.outcomeId === outcomeId))
+        .map((outcomeId) => allProductionOutcomes.find((outcome) => outcome.outcomeId === outcomeId))
         .filter((outcome) => outcome !== undefined)
     : [];
 
@@ -86,7 +94,7 @@ export function MovieCoachDictionary() {
     <div>
       <Header
         title="逆引きDaVinci辞典"
-        description="ソフトのページ名ではなく『何をしたいか』から、考え方 → DaVinci操作 → Wedding本番へたどる"
+        description="Opening / Profileで『何をしたいか・何が変か』から、考え方 → DaVinci操作 → Wedding本番へたどる"
       />
 
       <div className="mb-6 border-y border-sand-200 dark:border-navy-600 py-4">
@@ -97,7 +105,7 @@ export function MovieCoachDictionary() {
               type="search"
               value={query}
               onChange={(event) => updateQuery(event.target.value)}
-              placeholder="例: 写真を映画っぽくゆっくり寄せたい / 顔を切りたくない / 音を自然につなぎたい"
+              placeholder="例: 写真をゆっくり寄せたい / プロフィールが単調 / コメントが長い / 音を自然につなぎたい"
               className="mt-1 w-full border-0 border-b-2 border-navy-800 dark:border-sand-200 bg-transparent px-0 py-2 text-base text-navy-900 dark:text-sand-100 focus:outline-none"
             />
           </div>
@@ -136,6 +144,7 @@ export function MovieCoachDictionary() {
           <div className="divide-y divide-sand-100 dark:divide-navy-700">
             {filtered.map((intent) => {
               const active = selected?.intentId === intent.intentId;
+              const profileIntent = profileIntentIds.has(intent.intentId);
               return (
                 <button
                   key={intent.intentId}
@@ -149,6 +158,7 @@ export function MovieCoachDictionary() {
                 >
                   <div className="flex items-center gap-2">
                     <span className="text-[10px] font-mono text-navy-400">{intent.category}</span>
+                    <span className="text-[10px] font-mono text-navy-400">{profileIntent ? "PROFILE" : "OPENING / COMMON"}</span>
                     <span className="text-[10px] text-navy-400">{intent.practiceMinutes} min</span>
                   </div>
                   <p className={`mt-1 text-sm ${active ? "font-bold text-navy-900 dark:text-sand-100" : "text-navy-700 dark:text-navy-200"}`}>
@@ -167,6 +177,8 @@ export function MovieCoachDictionary() {
           <article className="min-w-0">
             <div className="border-b-2 border-navy-900 dark:border-sand-100 pb-4">
               <div className="flex flex-wrap items-center gap-2 text-[10px] font-mono text-navy-400">
+                <span>{profileIntentIds.has(selected.intentId) ? "PROFILE" : "OPENING / COMMON"}</span>
+                <span>→</span>
                 <span>{selected.category}</span>
                 <span>→</span>
                 <span>{selected.davinciPage}</span>
@@ -192,7 +204,7 @@ export function MovieCoachDictionary() {
             </div>
 
             <section className="py-6 border-b border-sand-200 dark:border-navy-600">
-              <p className="text-[10px] tracking-[0.18em] font-semibold text-navy-400">3–12 MIN PRACTICE</p>
+              <p className="text-[10px] tracking-[0.18em] font-semibold text-navy-400">PRACTICE</p>
               <ol className="mt-3 space-y-2">
                 {selected.practice.map((step, index) => (
                   <li key={step} className="flex gap-3 text-sm text-navy-700 dark:text-navy-200">
@@ -249,7 +261,16 @@ export function MovieCoachDictionary() {
                 <div className="mt-3 divide-y divide-sand-100 dark:divide-navy-700">
                   {selectedOutcomes.map((outcome) => (
                     <div key={outcome.outcomeId} className="py-2 flex flex-wrap items-center justify-between gap-2">
-                      <span className="text-sm font-semibold text-navy-800 dark:text-sand-100">{outcome.title}</span>
+                      {outcome.movieId === "profile" ? (
+                        <Link
+                          to={`/movie-coach/profile#${outcome.outcomeId}`}
+                          className="text-sm font-semibold text-navy-800 dark:text-sand-100 underline underline-offset-2"
+                        >
+                          {outcome.title} →
+                        </Link>
+                      ) : (
+                        <span className="text-sm font-semibold text-navy-800 dark:text-sand-100">{outcome.title}</span>
+                      )}
                       <span className="text-[10px] font-mono text-navy-400">{outcome.productionRef}</span>
                     </div>
                   ))}
