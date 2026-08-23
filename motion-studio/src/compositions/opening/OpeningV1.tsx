@@ -34,7 +34,9 @@ const SceneBase = ({children, dark = false}: {children: ReactNode; dark?: boolea
 const Placeholder = ({label, dark = false}: {label: string; dark?: boolean}) => (
   <AbsoluteFill
     style={{
-      backgroundColor: dark ? colors.navyDeep : colors.ivory,
+      // Missing-photo QA should reveal the actual image area without introducing
+      // borders/cards that could be mistaken for production design.
+      backgroundColor: dark ? colors.navy : colors.cloud,
       alignItems: 'center',
       justifyContent: 'center',
     }}
