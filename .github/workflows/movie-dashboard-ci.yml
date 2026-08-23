@@ -49,5 +49,8 @@ jobs:
       - name: AI video prompt quality contracts
         run: pnpm check:video-prompt-quality
 
+      - name: Movie Coach registry contracts
+        run: pnpm check:movie-coach
+
       - name: TypeScript and Vite build
         run: pnpm build
