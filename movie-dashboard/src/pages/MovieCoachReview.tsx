@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 import { Header } from "../components/Header";
 import { learningSkills, productionOutcomes } from "../data/movieCoach";
 import {
@@ -205,7 +206,8 @@ export function MovieCoachReview() {
         ) : (
           <div className="divide-y divide-sand-200 dark:divide-navy-600">
             {openFindings.map((finding) => {
-              const categoryDef = movieReviewCategories.find((item) => item.category === finding.category)!;
+              const categoryDef =
+                movieReviewCategories.find((item) => item.category === finding.category) ?? movieReviewCategories[0];
               const outcome = productionOutcomes.find((item) => item.outcomeId === finding.outcomeId);
               return (
                 <article key={finding.findingId} className="py-5">
@@ -229,7 +231,12 @@ export function MovieCoachReview() {
                           const state = getSkillState(skillId, coachProgress.evidence);
                           return (
                             <div key={skillId} className="flex items-center justify-between gap-3 text-xs">
-                              <span className="font-semibold text-navy-700 dark:text-navy-200">{skill.label}</span>
+                              <Link
+                                to={`/movie-coach/dictionary?q=${encodeURIComponent(skill.label)}`}
+                                className="font-semibold text-navy-700 dark:text-navy-200 underline underline-offset-2"
+                              >
+                                {skill.label} →
+                              </Link>
                               <span className="text-navy-400">{learningStateLabel[state]}</span>
                             </div>
                           );
