@@ -137,6 +137,51 @@ export function getOutcomeCompletion(
   return { done, total, percent, complete: total > 0 && done === total };
 }
 
+export function toggleOutcomeChecklistProgress(
+  progress: CoachProgressState,
+  outcome: ProductionOutcome,
+  itemId: string,
+): CoachProgressState {
+  const currentItems = new Set(progress.outcomeChecklist[outcome.outcomeId] ?? []);
+  if (currentItems.has(itemId)) currentItems.delete(itemId);
+  else currentItems.add(itemId);
+
+  const outcomeComplete = outcome.checklist.every((item) => currentItems.has(item.itemId));
+  let evidence = progress.evidence;
+
+  if (outcomeComplete) {
+    const skillIds = [...outcome.conceptSkillIds, ...outcome.davinciSkillIds];
+    const additions: LearningEvidence[] = skillIds
+      .filter(
+        (skillId) =>
+          !hasEvidence(
+            skillId,
+            "used_in_wedding",
+            outcome.outcomeId,
+            progress.evidence,
+          ),
+      )
+      .map((skillId) => ({
+        evidenceId: `${skillId}-used_in_wedding-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+        skillId,
+        state: "used_in_wedding" as const,
+        outcomeId: outcome.outcomeId,
+        createdAt: new Date().toISOString(),
+        note: `Outcome completion: ${outcome.title}`,
+      }));
+    evidence = [...progress.evidence, ...additions];
+  }
+
+  return {
+    ...progress,
+    evidence,
+    outcomeChecklist: {
+      ...progress.outcomeChecklist,
+      [outcome.outcomeId]: Array.from(currentItems),
+    },
+  };
+}
+
 function skillGapScore(outcome: ProductionOutcome, evidence: LearningEvidence[]): number {
   const skillIds = [...outcome.conceptSkillIds, ...outcome.davinciSkillIds];
   const gaps = skillIds.filter((skillId) => {
