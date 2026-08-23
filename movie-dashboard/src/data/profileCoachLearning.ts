@@ -54,7 +54,7 @@ export const profileLearningSkills: LearningSkill[] = [
   },
 ];
 
-export const profileProductionOutcomes: ProductionOutcome[] = profileCoachPhases.map((phase) => ({
+export const profileProductionOutcomes: ProductionOutcome[] = profileCoachPhases.map((phase, index) => ({
   outcomeId: phase.phaseId,
   movieId: "profile",
   title: phase.productionOutcome,
@@ -67,8 +67,12 @@ export const profileProductionOutcomes: ProductionOutcome[] = profileCoachPhases
   conceptSkillIds: phase.conceptSkillIds,
   davinciSkillIds: phase.davinciSkillIds,
   recipeIds: phase.recipeIds,
-  checklist: phase.done.map((label, index) => ({
-    itemId: `done-${index + 1}`,
+  prerequisiteOutcomeIds:
+    index === 0
+      ? ["profile-photo-selection"]
+      : [profileCoachPhases[index - 1].phaseId],
+  checklist: phase.done.map((label, checklistIndex) => ({
+    itemId: `done-${checklistIndex + 1}`,
     label,
   })),
   whyToday: phase.why,
