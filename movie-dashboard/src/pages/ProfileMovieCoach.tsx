@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Header } from "../components/Header";
+import { productionOutcomes } from "../data/movieCoach";
 import { profileProductionOutcomes } from "../data/profileCoachLearning";
 import { profileCoachPhases } from "../data/profileCoachRoadmap";
 import {
@@ -46,6 +47,14 @@ export function ProfileMovieCoach() {
   const storyNeedsResolution = durationGap !== 0;
   const coachStats = getMovieCoachProgress("profile", coachProgress);
 
+  const profileFoundation = productionOutcomes.find(
+    (outcome) => outcome.outcomeId === "profile-photo-selection",
+  );
+  const foundationCompletion = profileFoundation
+    ? getOutcomeCompletion(profileFoundation, coachProgress.outcomeChecklist)
+    : null;
+  const outcomeRegistry = [...productionOutcomes, ...profileProductionOutcomes];
+
   const nextAction = selectedPhotos < requiredPhotos
     ? {
         label: "不足写真を先に埋める",
@@ -53,19 +62,26 @@ export function ProfileMovieCoach() {
         to: "/profile-planner",
         cta: "写真計画へ",
       }
-    : storyNeedsResolution
+    : foundationCompletion && !foundationCompletion.complete
       ? {
-          label: "Story Map / 最終尺を決める",
-          reason: `現在の10scene計画 ${formatDuration(plannedDuration)} に対しproject targetは ${formatDuration(targetDuration)}。差 ${durationGap > 0 ? "+" : ""}${durationGap}秒をEffectで埋めず、BGMと物語から決める。`,
-          to: "#profile-story-map",
-          cta: "Phase 01を見る",
+          label: "写真選定のFoundation Evidenceを確認する",
+          reason: "写真スロットが埋まっていても、Story上の役割と16:9 cropまで確認してから長尺編集へ進む。",
+          to: "#profile-photo-foundation",
+          cta: "Foundationを見る",
         }
-      : {
-          label: "最初の未完成Chapterを編集する",
-          reason: "素材と最終尺が揃ったので、scene単体ではなく人物Arc単位で編集する。",
-          to: "#profile-groom-arc",
-          cta: "Roadmapへ",
-        };
+      : storyNeedsResolution
+        ? {
+            label: "Story Map / 最終尺を決める",
+            reason: `現在の10scene計画 ${formatDuration(plannedDuration)} に対しproject targetは ${formatDuration(targetDuration)}。差 ${durationGap > 0 ? "+" : ""}${durationGap}秒をEffectで埋めず、BGMと物語から決める。`,
+            to: "#profile-story-map",
+            cta: "Phase 01を見る",
+          }
+        : {
+            label: "最初の未完成Chapterを編集する",
+            reason: "素材と最終尺が揃ったので、scene単体ではなく人物Arc単位で編集する。",
+            to: "#profile-groom-arc",
+            cta: "Roadmapへ",
+          };
 
   return (
     <div>
@@ -122,6 +138,46 @@ export function ProfileMovieCoach() {
         </div>
       </section>
 
+      {profileFoundation && foundationCompletion && (
+        <section id="profile-photo-foundation" className="mb-8 scroll-mt-6 border-y border-sand-200 dark:border-navy-600 py-5">
+          <div className="flex flex-wrap items-start justify-between gap-4">
+            <div>
+              <p className="text-[10px] tracking-[0.2em] font-semibold text-navy-400">FOUNDATION OUTCOME</p>
+              <h2 className="mt-1 text-lg font-bold text-navy-900 dark:text-sand-100">{profileFoundation.title}</h2>
+              <p className="mt-1 text-xs text-navy-500 dark:text-navy-300">
+                写真の存在だけでは完了にしません。Story上の役割とcrop判断までEvidenceにします。
+              </p>
+            </div>
+            <div className="text-right">
+              <p className={`font-mono text-lg font-bold ${foundationCompletion.complete ? "text-emerald-700 dark:text-emerald-300" : "text-navy-700 dark:text-sand-200"}`}>
+                {foundationCompletion.percent}%
+              </p>
+              <p className="text-[10px] font-mono text-navy-400">{foundationCompletion.done}/{foundationCompletion.total}</p>
+            </div>
+          </div>
+          <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-3">
+            {profileFoundation.checklist.map((item) => {
+              const checked = (coachProgress.outcomeChecklist[profileFoundation.outcomeId] ?? []).includes(item.itemId);
+              return (
+                <label key={item.itemId} className="flex items-start gap-2 text-sm text-navy-700 dark:text-navy-200 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={checked}
+                    onChange={() =>
+                      setCoachProgress((current) =>
+                        toggleOutcomeChecklistProgress(current, profileFoundation, item.itemId),
+                      )
+                    }
+                    className="mt-0.5 h-4 w-4"
+                  />
+                  <span className={checked ? "line-through text-navy-400" : ""}>{item.label}</span>
+                </label>
+              );
+            })}
+          </div>
+        </section>
+      )}
+
       {durationGap !== 0 && (
         <div className="mb-8 border-y border-amber-200 dark:border-amber-800 py-4">
           <p className="text-xs font-bold tracking-widest text-amber-700 dark:text-amber-300">STORY GATE</p>
@@ -157,6 +213,15 @@ export function ProfileMovieCoach() {
           const completion = outcome
             ? getOutcomeCompletion(outcome, coachProgress.outcomeChecklist)
             : { done: 0, total: phase.done.length, percent: 0, complete: false };
+          const missingPrerequisites = (outcome?.prerequisiteOutcomeIds ?? []).filter((prerequisiteId) => {
+            const prerequisite = outcomeRegistry.find((item) => item.outcomeId === prerequisiteId);
+            return !prerequisite || !getOutcomeCompletion(prerequisite, coachProgress.outcomeChecklist).complete;
+          });
+          const unlocked = missingPrerequisites.length === 0;
+          const missingLabels = missingPrerequisites.map(
+            (prerequisiteId) =>
+              outcomeRegistry.find((item) => item.outcomeId === prerequisiteId)?.shortLabel ?? prerequisiteId,
+          );
 
           return (
             <section key={phase.phaseId} id={phase.phaseId} className="scroll-mt-6">
@@ -171,9 +236,15 @@ export function ProfileMovieCoach() {
                         <span>{formatDuration(phaseDuration)}</span>
                         {phaseRequired > 0 && <><span>·</span><span>PHOTO {phaseSelected}/{phaseRequired}</span></>}
                         {productionScenesDone && <><span>·</span><span>SCENES DONE</span></>}
+                        {!unlocked && <><span>·</span><span className="text-amber-700 dark:text-amber-300">LOCKED</span></>}
                       </div>
                       <h2 className="mt-1 text-xl font-bold text-navy-900 dark:text-sand-100">{phase.title}</h2>
                       <p className="mt-1 text-sm text-navy-600 dark:text-navy-300">{phase.productionOutcome}</p>
+                      {!unlocked && (
+                        <p className="mt-2 text-xs text-amber-700 dark:text-amber-300">
+                          先に完了: {missingLabels.join(" / ")}
+                        </p>
+                      )}
                     </div>
                     <div className="text-right">
                       <span className={`text-sm font-mono font-bold ${completion.complete ? "text-emerald-700 dark:text-emerald-300" : "text-navy-700 dark:text-sand-200"}`}>
@@ -205,7 +276,7 @@ export function ProfileMovieCoach() {
                       <p className="text-[10px] tracking-[0.18em] font-semibold text-navy-400">APPLY TO WEDDING</p>
                       <ol className="mt-3 space-y-2">
                         {phase.apply.map((item, index) => (
-                          <li key={item} className="flex gap-3 text-sm text-navy-700 dark:text-navy-200">
+                          <li key={item} className={`flex gap-3 text-sm ${unlocked ? "text-navy-700 dark:text-navy-200" : "text-navy-400 dark:text-navy-500"}`}>
                             <span className="w-5 shrink-0 font-mono text-navy-400">{index + 1}</span>
                             <span>{item}</span>
                           </li>
@@ -219,10 +290,11 @@ export function ProfileMovieCoach() {
                           ? outcome.checklist.map((item) => {
                               const checked = (coachProgress.outcomeChecklist[outcome.outcomeId] ?? []).includes(item.itemId);
                               return (
-                                <label key={item.itemId} className="flex items-start gap-2 text-sm text-navy-700 dark:text-navy-200 cursor-pointer">
+                                <label key={item.itemId} className={`flex items-start gap-2 text-sm ${unlocked ? "text-navy-700 dark:text-navy-200 cursor-pointer" : "text-navy-400 dark:text-navy-500 cursor-not-allowed"}`}>
                                   <input
                                     type="checkbox"
                                     checked={checked}
+                                    disabled={!unlocked}
                                     onChange={() =>
                                       setCoachProgress((current) =>
                                         toggleOutcomeChecklistProgress(current, outcome, item.itemId),
