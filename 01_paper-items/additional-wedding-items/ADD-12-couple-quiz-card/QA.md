@@ -1,6 +1,6 @@
 # ADD-12 新郎新婦クイズカード — QA
 
-Status: `CURRENT / FAMILY_DIVERSITY_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / LONG_COPY_STRESS_PASS / LEGACY_AND_PRIOR_VNEXT_PRESERVED / ROLLBACK_SAFE / NOT_PRINT_READY`
+Status: `CURRENT / FAMILY_DIVERSITY_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / LONG_COPY_STRESS_PASS / ARTIFACT_LABEL_FIELD_FIT_PASS / LEGACY_AND_PRIOR_VNEXT_PRESERVED / ROLLBACK_SAFE / NOT_PRINT_READY`
 Updated: 2026-08-23
 Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
 Professional quality authority: `docs/design-learning/PROFESSIONAL-DESIGN-COUNCIL-VNEXT-2026-08-20.md`
@@ -12,6 +12,8 @@ Professional quality authority: `docs/design-learning/PROFESSIONAL-DESIGN-COUNCI
 - current front: `59:54 / CURRENT / ADD-12 / ANSWER PUNCH CARD / FRONT / FAMILY DIVERSITY 2026-08-21`
 - current back: `59:84 / CURRENT / ADD-12 / ANSWER PUNCH CARD / BACK / FAMILY DIVERSITY 2026-08-21`
 - hidden stress front/back: `59:99 / 59:129`
+- pre-score-tab-fit back rollback: `66:2`
+- pre-score-tab-fit back-stress rollback: `66:17`
 - pre-2026-08-23 front rollback: `64:32`
 - pre-2026-08-23 front-stress rollback: `64:62`
 - prior Professional vNext retained as rollback: `55:3 / 55:25`
@@ -22,6 +24,7 @@ Professional quality authority: `docs/design-learning/PROFESSIONAL-DESIGN-COUNCI
 Canonical current evidence:
 - family-diversity selection evidence retained in this directory
 - `FIGMA-FLOATING-TOP-TICKET-SUBTRACTION-QA-2026-08-23.md`
+- `FIGMA-BACK-SCORE-TAB-LABEL-FIT-QA-2026-08-23.md`
 
 ## Current visual direction — ANSWER PUNCH CARD
 
@@ -42,6 +45,7 @@ The family-diverse current was created from blank frames, carrying forward only 
 
 - charcoal outer sleeve with a cream inserted response sheet;
 - blue `AFTER THE QUIZ` score tab retained because it carries actual reader-facing artifact identity;
+- the score tab is now `236×54`, wide enough to visually own the complete native label instead of clipping it at the field edge;
 - narrow pink tear edge;
 - Japanese-first `答えの旅は、まだつづく。`;
 - open response/name/message rules;
@@ -68,9 +72,31 @@ Promotion preserved:
 - stress rollback `64:62`;
 - comparison `64:2` hidden as evidence.
 
+## 2026-08-23 back score-tab label-fit QA
+
+Fresh native screenshot review found the fixed blue score tab ended before its own native `AFTER THE QUIZ` label, making the right edge of the label look clipped/unfinished even though the text itself remained on the page.
+
+Pre-change geometry:
+- Current tab `59:86`: `158×54`, x=`72`;
+- Current label `59:88`: x=`108`, `200px` text box;
+- the same mismatch existed in long-copy back `59:131 / 59:133`.
+
+Before production mutation, full rollback copies were saved:
+- Current back `66:2`;
+- long-copy back `66:17`.
+
+Bounded repair:
+- Current score tab `59:86`: width `158 → 236px`;
+- stress score tab `59:131`: width `158 → 236px`;
+- height, color, y-position, native label text, font, font size and copy remain unchanged.
+
+Fresh Current and long-copy screenshots both PASS. `AFTER THE QUIZ` is now completely contained by the physical field that semantically owns it, without changing the Japanese title, response lanes, tear edge or date.
+
+This is typography/field-fit polish inside the preferred Current, not a new visual version.
+
 ## Hybrid authoring roles
 
-- question/answers/response/name/message/date: native editable Figma text;
+- question/answers/response/name/message/date/artifact identity: native editable Figma text;
 - answer flow: native Auto Layout;
 - fixed punched edge/paper/tab/rules: simple native geometry;
 - generated/composed raster: `0`;
@@ -78,7 +104,7 @@ Promotion preserved:
 - IMAGE fills: `0`;
 - variable copy baked into visual assets: `0`.
 
-`IMAGE_GENERATION_NOT_REQUIRED`: current quality bottlenecks are typography, answer fairness, and physical-game-paper clarity, not missing photography or illustration.
+`IMAGE_GENERATION_NOT_REQUIRED`: current quality bottlenecks are typography, answer fairness, physical-game-paper clarity and artifact-field fit, not missing photography or illustration.
 
 ## Screenshot / long-copy / structure QA
 
@@ -96,13 +122,14 @@ Verified contracts:
 - answer roles retain equal typographic treatment;
 - long question and realistic multi-word answers remain inside the A6 page;
 - back long-name/long-message proof retains separated writing lanes;
+- back score-tab label remains fully contained in both Current and stress proof;
 - old currents, prior vNext and rollback frames remain preserved rather than overwritten.
 
-The project-wide Japanese semantic line-break and actual-size factual-microtype rules remain applicable. No new line-break or physical-size defect was found in this 2026-08-23 change.
+The project-wide Japanese semantic line-break and actual-size factual-microtype rules remain applicable. No new line-break or physical-size defect was introduced by the score-tab repair.
 
 ## Professional Design Council
 
-Current family-diverse direction remains **93/100 / PASS / NO VETO**. The 2026-08-23 subtraction removes one unsupported decorative cue without changing the concept, functionality, Japanese typography, answer fairness, physical print credibility, editability, or family identity.
+Current family-diverse direction remains **93/100 / PASS / NO VETO**. The 2026-08-23 score-tab repair removes an accidental clipping signal without changing the concept, functionality, Japanese typography, answer fairness, physical print credibility, editability, or family identity.
 
 ## BLOCKED_REQUIRED_INPUT / DEFERRED_FINALIZATION
 
@@ -125,4 +152,4 @@ Also deferred:
 
 ## Current result
 
-`FAMILY_DIVERSITY_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / LONG_COPY_STRESS_PASS / FLOATING_TOP_TICKET_SUBTRACTION_PASS / LEGACY_AND_PRIOR_VNEXT_PRESERVED / NOT_PRINT_READY`
+`FAMILY_DIVERSITY_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / LONG_COPY_STRESS_PASS / FLOATING_TOP_TICKET_SUBTRACTION_PASS / ARTIFACT_LABEL_FIELD_FIT_PASS / LEGACY_AND_PRIOR_VNEXT_PRESERVED / NOT_PRINT_READY`
