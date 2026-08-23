@@ -153,20 +153,22 @@ fake cloud削除に伴い `air-prelap` はOpening V1 timelineから削除済み�
 
 ## Visual QA
 
-Opening変更PRではCIが8枚のstillを実renderしてartifactへ残す。
+Opening変更PRではCIが**10枚**のstillを実renderしてartifactへ残す。
 
 ```text
 00.8s  cold open
-07.0s  Okinawa
-17.0s  Seoul
-28.0s  Hawaii
+03.0s  Okinawa full + place label
+07.0s  Okinawa left
+14.0s  Seoul right + place label
+25.0s  Hawaii full + place label
+28.0s  Hawaii wide
 39.0s  Hero A
 48.0s  Hero B
 55.0s  Arrival
 58.5s  Ending
 ```
 
-placeholder状態でも、Typography / layout / background / route / accidental blank frameを確認する。
+placeholder状態でも写真領域に薄いコントラストを付け、Typography / full / left / right / wide / route / accidental blank frameを確認する。
 実写真投入後はローカルpreviewでcrop・顔・視線・色・順番を別途確認する。
 
 ## QA
@@ -194,7 +196,7 @@ placeholder状態でも、Typography / layout / background / route / accidental 
 - final 11/11 gate
 - natural fit
 - J-cut音レイヤー
-- Visual QA still
+- 10-frame Visual QA still
 - 60秒composition contract
 
 まで受けられる状態。
