@@ -6,10 +6,14 @@ import ts from "typescript";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const errors = [];
 
+function read(relativePath) {
+  return fs.readFileSync(path.join(root, relativePath), "utf8");
+}
+
 function parse(relativePath) {
   return ts.createSourceFile(
     relativePath,
-    fs.readFileSync(path.join(root, relativePath), "utf8"),
+    read(relativePath),
     ts.ScriptTarget.Latest,
     true,
     ts.ScriptKind.TS,
@@ -79,26 +83,55 @@ function stringArrayProp(objectNode, name) {
     .filter(Boolean);
 }
 
+function checkReferences(items, propertyName, validIds, label) {
+  for (const item of items) {
+    const id =
+      stringProp(item, "intentId") ??
+      stringProp(item, "category") ??
+      "<unknown>";
+    for (const ref of stringArrayProp(item, propertyName)) {
+      if (!validIds.has(ref)) {
+        errors.push(`${label} ${id}: dangling ${propertyName} reference ${ref}`);
+      }
+    }
+  }
+}
+
 const skills = [
   ...variableArray("src/data/movieCoach.ts", "learningSkills"),
   ...variableArray("src/data/profileCoachLearning.ts", "profileLearningSkills"),
 ];
 const validSkillIds = new Set(skills.map((skill) => stringProp(skill, "skillId")).filter(Boolean));
 
+const baseOutcomes = variableArray("src/data/movieCoach.ts", "productionOutcomes");
+const profilePhases = variableArray("src/data/profileCoachRoadmap.ts", "profileCoachPhases");
+const validOutcomeIds = new Set([
+  ...baseOutcomes.map((outcome) => stringProp(outcome, "outcomeId")),
+  ...profilePhases.map((phase) => stringProp(phase, "phaseId")),
+].filter(Boolean));
+
+const clips = JSON.parse(read("src/data/clips.json"));
+const validRecipeIds = new Set((clips.recipes ?? []).map((recipe) => recipe.id));
+
 const categories = variableArray("src/data/movieCoachReview.ts", "movieReviewCategories");
-for (const category of categories) {
-  const categoryId = stringProp(category, "category") ?? "<unknown-category>";
-  for (const skillId of stringArrayProp(category, "profileSkillIds")) {
-    if (!validSkillIds.has(skillId)) {
-      errors.push(`review category ${categoryId}: dangling profileSkillIds reference ${skillId}`);
-    }
-  }
+checkReferences(categories, "profileSkillIds", validSkillIds, "review category");
+
+const profileIntents = variableArray("src/data/profileCoachIntents.ts", "profileCoachIntents");
+checkReferences(profileIntents, "skillIds", validSkillIds, "profile intent");
+checkReferences(profileIntents, "weddingOutcomeIds", validOutcomeIds, "profile intent");
+checkReferences(profileIntents, "recipeIds", validRecipeIds, "profile intent");
+
+const intentIds = profileIntents.map((intent) => stringProp(intent, "intentId"));
+if (new Set(intentIds).size !== intentIds.length) {
+  errors.push("profile intents: duplicate intentId");
 }
 
 if (errors.length > 0) {
-  console.error(`Movie Coach profile review contracts FAILED (${errors.length})`);
+  console.error(`Movie Coach profile route contracts FAILED (${errors.length})`);
   for (const error of errors) console.error(`- ${error}`);
   process.exit(1);
 }
 
-console.log(`Movie Coach profile review contracts OK: ${categories.length} review categories.`);
+console.log(
+  `Movie Coach profile route contracts OK: ${categories.length} review categories, ${profileIntents.length} profile intents.`,
+);
