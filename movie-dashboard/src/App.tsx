@@ -24,6 +24,7 @@ import { QualityGate } from "./pages/QualityGate";
 import { DataManager } from "./pages/DataManager";
 import { SceneDetail } from "./pages/SceneDetail";
 import { ProfilePlanner } from "./pages/ProfilePlanner";
+import { MovieCoach } from "./pages/MovieCoach";
 import { Guide } from "./pages/Guide";
 import { AssetPlacementGuide } from "./pages/AssetPlacementGuide";
 
@@ -36,6 +37,7 @@ export default function App() {
           <Routes>
             <Route element={<Layout />}>
               <Route index element={<Dashboard />} />
+              <Route path="movie-coach" element={<MovieCoach />} />
               <Route path="storyboard" element={<Storyboard />} />
               <Route path="assets" element={<AssetLibrary />} />
               <Route path="clips" element={<ClipLibrary />} />
