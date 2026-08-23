@@ -74,11 +74,19 @@ export function getSkillState(
   evidence: LearningEvidence[],
 ): LearningState {
   let bestIndex = 0;
+  const weddingOutcomes = new Set<string>();
 
   for (const item of evidence) {
     if (item.skillId !== skillId) continue;
     const index = learningStateOrder.indexOf(item.state);
     if (index > bestIndex) bestIndex = index;
+    if (item.state === "used_in_wedding" && item.outcomeId) {
+      weddingOutcomes.add(item.outcomeId);
+    }
+  }
+
+  if (weddingOutcomes.size >= 2) {
+    bestIndex = Math.max(bestIndex, learningStateOrder.indexOf("comfortable"));
   }
 
   return learningStateOrder[bestIndex] ?? "not_started";
@@ -96,6 +104,14 @@ export function hasEvidence(
       item.state === state &&
       item.outcomeId === outcomeId,
   );
+}
+
+export function hasEvidenceAtLeast(
+  skillId: string,
+  state: LearningState,
+  evidence: LearningEvidence[],
+): boolean {
+  return learningStateOrder.indexOf(getSkillState(skillId, evidence)) >= learningStateOrder.indexOf(state);
 }
 
 export function getOutcomeCompletion(
