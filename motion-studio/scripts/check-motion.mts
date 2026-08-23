@@ -1,6 +1,6 @@
 // pnpm check:motion
-// openingProject・sceneRegistry・Root.tsxの整合性を検証する。
-// 失敗時はexit 1。エラーは ❌、警告は ⚠️、情報は ℹ️ で出す。
+// 旧短尺テンプレート群(openingProject / sceneRegistry / Root.tsx)の整合性を検証する。
+// 現行60秒Opening V1の正本ではない。Opening V1は専用Composition / sound / visual QAで検証する。
 
 import {readFileSync} from 'node:fs';
 import {dirname, join} from 'node:path';
@@ -25,17 +25,19 @@ const warn = (msg: string) => {
 const info = (msg: string) => console.log(`ℹ️  ${msg}`);
 const ok = (msg: string) => console.log(`✅ ${msg}`);
 
-// ---- 1. openingProjectのスキーマ検証 ----
+info('LEGACY CHECK: openingProject / sceneRegistry / Root.tsx。現行Opening V1は別系統で検証');
+
+// ---- 1. legacy openingProject schema ----
 const parsed = openingProjectSchema.safeParse(openingProject);
 if (!parsed.success) {
   for (const issue of parsed.error.issues) {
-    err(`openingProject: ${issue.path.join('.')} → ${issue.message}`);
+    err(`legacy openingProject: ${issue.path.join('.')} → ${issue.message}`);
   }
 } else {
-  ok('openingProject: スキーマ検証OK');
+  ok('legacy openingProject: スキーマ検証OK');
 }
 
-// ---- 2. registry自体の健全性 ----
+// ---- 2. legacy registry ----
 const ids = templates.map((t) => t.id);
 const dupIds = ids.filter((id, i) => ids.indexOf(id) !== i);
 for (const d of new Set(dupIds)) {
@@ -55,7 +57,7 @@ for (const t of templates) {
   }
 }
 
-// ---- 3. Root.tsxとregistryの不整合チェック ----
+// ---- 3. legacy Root.tsx ↔ registry ----
 const rootSrc = readFileSync(join(root, 'src/Root.tsx'), 'utf8');
 const compRegex = /id="([^"]+)"[\s\S]*?durationInFrames=\{(\d+)\}/g;
 const rootComps = new Map<string, number>();
@@ -67,7 +69,7 @@ if (rootComps.size === 0) {
 }
 for (const t of templates) {
   if (!rootComps.has(t.id)) {
-    err(`registryにあるがRoot.tsxに無い: ${t.id} → Root.tsxに<Composition>を追加する`);
+    err(`registryにあるがRoot.tsxに無い: ${t.id}`);
   } else if (rootComps.get(t.id) !== t.durationInFrames) {
     err(
       `尺の不整合: ${t.id} → Root.tsx=${rootComps.get(t.id)}f / registry=${t.durationInFrames}f`,
@@ -76,65 +78,59 @@ for (const t of templates) {
 }
 for (const [id] of rootComps) {
   if (!templates.some((t) => t.id === id)) {
-    err(`Root.tsxにあるがregistryに無い: ${id} → sceneRegistry.tsにエントリを追加する`);
+    err(`Root.tsxにあるがregistryに無い: ${id}`);
   }
 }
 if (errors === 0) {
-  ok(`Root.tsx ↔ registry: ${rootComps.size}テンプレートの整合OK`);
+  ok(`legacy Root.tsx ↔ registry: ${rootComps.size}テンプレートの整合OK`);
 }
 
-// ---- 4. シーン構成の検証 ----
+// ---- 4. legacy sequence ----
 let totalSec = 0;
 for (const scene of openingProject.scenes) {
   totalSec += scene.durationSec;
   const t = templates.find((x) => x.id === scene.template);
   if (!t) {
-    err(`scene "${scene.id}": template "${scene.template}" がregistryに存在しない`);
+    err(`legacy scene "${scene.id}": template "${scene.template}" がregistryに存在しない`);
     continue;
   }
   const templateSec = t.durationInFrames / openingProject.fps;
   if (scene.durationSec > templateSec + 0.01) {
-    warn(
-      `scene "${scene.id}": 使用尺${scene.durationSec}s > テンプレ尺${templateSec}s。` +
-        `テンプレのdurationInFramesを伸ばすかシーンを短くする`,
-    );
+    warn(`legacy scene "${scene.id}": 使用尺${scene.durationSec}s > テンプレ尺${templateSec}s`);
   }
   for (const assetId of scene.assets) {
     if (!assets[assetId]) {
-      err(`scene "${scene.id}": 素材ID "${assetId}" がassets.tsに存在しない`);
+      err(`legacy scene "${scene.id}": 素材ID "${assetId}" がassets.tsに存在しない`);
     }
   }
 }
+
 const sceneIds = openingProject.scenes.map((s) => s.id);
 for (const d of new Set(sceneIds.filter((id, i) => sceneIds.indexOf(id) !== i))) {
-  err(`openingProject: scene idが重複: ${d}`);
+  err(`legacy openingProject: scene idが重複: ${d}`);
 }
 
-// 開幕-全体確認(openingProject連動)の尺がシーン合計と一致しているか
 const fullPreview = templates.find((t) => t.id === '開幕-全体確認');
 const expectedPreviewFrames = Math.round(totalSec * openingProject.fps);
 if (fullPreview && fullPreview.durationInFrames !== expectedPreviewFrames) {
   err(
-    `開幕-全体確認の尺がシーン合計と不一致: registry=${fullPreview.durationInFrames}f / ` +
-      `scenes合計=${expectedPreviewFrames}f → Root.tsxとsceneRegistry.tsの両方を${expectedPreviewFrames}に更新する`,
+    `legacy 開幕-全体確認の尺がシーン合計と不一致: registry=${fullPreview.durationInFrames}f / ` +
+      `scenes合計=${expectedPreviewFrames}f`,
   );
 }
 
-// Remotion素材の合計はCapCut目標尺以下が正常(差はCapCutの間・トランジションで埋める)。
-// 合計が目標を超えたときだけ警告する。
+// 82s/105sは旧CapCut制作系の情報。現行60s Opening V1の目標値ではない。
 if (totalSec > openingProject.capcutTargetSec) {
   warn(
-    `Remotion素材合計${totalSec}s がCapCut目標尺${openingProject.capcutTargetSec}s を超過。` +
-      `シーンを削るか目標尺を見直す`,
+    `LEGACY: 短尺素材合計${totalSec}s が旧CapCut目標${openingProject.capcutTargetSec}sを超過`,
   );
 } else {
   info(
-    `Remotion素材合計 ${totalSec}s / CapCut目標尺 ${openingProject.capcutTargetSec}s` +
-      `(差${openingProject.capcutTargetSec - totalSec}s はCapCutの間で演出)`,
+    `LEGACY ONLY: 短尺素材合計 ${totalSec}s / 旧CapCut目標 ${openingProject.capcutTargetSec}s。` +
+      '現行Opening V1は60s Remotion正本のため、この差分で完成尺を判断しない',
   );
 }
 
-// ---- 結果 ----
 console.log('');
 if (errors > 0) {
   console.error(`check:motion 失敗 — エラー${errors}件 / 警告${warnings}件`);
