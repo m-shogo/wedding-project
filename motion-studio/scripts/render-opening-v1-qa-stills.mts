@@ -7,16 +7,19 @@ const studioRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const outDir = join(studioRoot, 'out/qa/opening-v1');
 mkdirSync(outDir, {recursive: true});
 
-// 60秒 / 30fps。各sceneの中央付近を選び、旧cloud/titleのframeを残さない。
+// 60秒 / 30fps。photo placeholderでもproduction layoutを確認できるよう、
+// 地名ラベルとfull/left/right/wideを横断して代表frameを選ぶ。
 const frames = [
   {id: '01-cold-open', frame: 24},
-  {id: '02-okinawa', frame: 210},
-  {id: '03-seoul', frame: 510},
-  {id: '04-hawaii', frame: 840},
-  {id: '05-hero-a', frame: 1170},
-  {id: '06-hero-b', frame: 1440},
-  {id: '07-arrival', frame: 1650},
-  {id: '08-ending', frame: 1755},
+  {id: '02-okinawa-full-label', frame: 90},
+  {id: '03-okinawa-left', frame: 210},
+  {id: '04-seoul-right-label', frame: 420},
+  {id: '05-hawaii-full-label', frame: 750},
+  {id: '06-hawaii-wide', frame: 840},
+  {id: '07-hero-a', frame: 1170},
+  {id: '08-hero-b', frame: 1440},
+  {id: '09-arrival', frame: 1650},
+  {id: '10-ending', frame: 1755},
 ] as const;
 
 const failures: string[] = [];
