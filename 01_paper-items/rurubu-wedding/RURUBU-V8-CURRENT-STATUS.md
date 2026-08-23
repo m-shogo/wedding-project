@@ -5,18 +5,19 @@ Direction: editorial monograph / book-design restraint + controlled travel desir
 Authority order: live Figma → verified Drive → Rurubu evidence → this status
 Figma file: `bfM0d4c9dCeBv5pCkJ3TNM`
 Figma page: `2052:2 / 07_RURUBU_V7_V8_PRO_STUDIES`
+
 V6 control: frozen `JC + IX + JB + IZ + IT + JA`
-V7 comparison set: six-role clean-room study, preserved and not preferred
-Production state: `V8_AV_OUTER_CURRENT / V8_AW2_PROFILE_CURRENT / V8_AL2_STORY_CURRENT / V8_AQ_MEMORY_CURRENT / V8_AS2_CAFE_CURRENT / V8_AT_1DAY_CURRENT / NOT_GLOBAL_WINNER / NOT_PRINT_READY`
+V7 comparison set: `C5 + K + F + G2 + H3 + C6`, preserved and not preferred
+Production state: `V8_AV_OUTER_CURRENT / V8_AW2_PROFILE_CURRENT / V8_AL2_STORY_CURRENT / V8_AQ2_MEMORY_CURRENT / V8_AS2_CAFE_CURRENT / V8_AT_1DAY_CURRENT / NOT_GLOBAL_WINNER / NOT_PRINT_READY`
 
 ## Current V8 roots
 
-1. **Outer AV `2273:24`** — destination-led `横浜` hierarchy; Japanese reader contents; front deck uses destination-owned concrete experience language. One verified abstract ocean-light supporting master remains. Previous AP `2251:2` hidden rollback.
-2. **Profile/Q&A AW2 `2329:2`** — current. Left page preserves AW's content-owned Japanese personality hierarchy. Right page replaces the repeated equal-cadence Q1/Q2/Q3 rail with a content-owned interview field: Q1/Q2 form a paired upper field and Q3 becomes the wider lower emotional close. Every question/answer string remains native and unchanged. Previous AW `2278:2` is hidden rollback. IMAGE `0`.
-3. **Story/Chronology AL2 `2332:2`** — current. Preserves AL's typography-led emotional story and unequal chronology rhythm while removing the left-page vertical prose divider after a bounded binding-function subtraction test. Previous AL `2238:35` is hidden rollback. IMAGE `0`.
-4. **Memory/Guide AQ `2256:2`** — concrete sensory memory fragments carry the left-page editorial mass; Guide semantics retained. Previous AM `2238:73` hidden rollback. IMAGE `0`.
-5. **Cafe/Table AS2 `2325:2`** — current. Keeps AS's factual/native copy and quiet dinner close, but replaces the left page's uniform single-axis sensory stack with content-owned field variation: `カップの音。` + `窓の光。` form two short observational beats, then `次の店を決める会話。` widens into the social beat before the reflective close. Previous AS `2261:2` is hidden rollback. IMAGE `0`.
-6. **1DAY/Model Course AT `2264:2`** — left experiential pace uses two semantically paired statements; right exact time/action data remains unchanged. Previous AR `2257:2` hidden rollback. IMAGE `0`.
+1. **Outer AV `2273:24`** — destination-led `横浜` hierarchy. One verified abstract ocean-light supporting master remains; destination-specific photography is still the largest quality gap versus V6. Previous AP `2251:2` hidden rollback.
+2. **Profile/Q&A AW2 `2329:2`** — content-owned interview field. Q1/Q2 form a paired upper field and Q3 becomes the wider lower emotional close. Exact native question/answer copy unchanged. Previous AW `2278:2` hidden rollback. IMAGE `0`.
+3. **Story/Chronology AL2 `2332:2`** — typography-led story plus unequal chronology rhythm; redundant left-page prose divider removed after binding-function test. Previous AL `2238:35` hidden rollback. IMAGE `0`.
+4. **Memory/Guide AQ2 `2335:2`** — current. Preserves AQ's sensory-memory left page and the semantic `朝 / 昼 / 夕 / 夜` guide, while hiding redundant `01 / 02 / 03 / 04` ordinals so the `寄り道案内` reads as a browsable editorial guide rather than a mandatory step sequence. Previous AQ `2256:2` hidden rollback. IMAGE `0`.
+5. **Cafe/Table AS2 `2325:2`** — content-owned sensory field variation. `カップの音。` + `窓の光。` are short observations; `次の店を決める会話。` widens into the social beat before the reflective close. Previous AS `2261:2` hidden rollback. IMAGE `0`.
+6. **1DAY/Model Course AT `2264:2`** — left experiential pace plus unchanged right exact time/action data. Previous AR `2257:2` hidden rollback. IMAGE `0`.
 
 ## Structural QA
 
@@ -25,108 +26,97 @@ Production state: `V8_AV_OUTER_CURRENT / V8_AW2_PROFILE_CURRENT / V8_AL2_STORY_C
 | Outer AV | 12 | 0 | 0 | 1 |
 | Profile/Q&A AW2 | 23 | 0 | 0 | 0 |
 | Story/Chronology AL2 | 25 | 0 | 0 | 0 |
-| Memory/Guide AQ | 21 | 0 | 0 | 0 |
+| Memory/Guide AQ2 | 17 | 0 | 0 | 0 |
 | Cafe/Table AS2 | 13 | 0 | 0 | 0 |
 | 1DAY/Model Course AT | 19 | 0 | 0 | 0 |
 
-AL2 was verified at 500px whole-item, 1400px reading scale, and native `1587×1123` actual-size. Final pre-promotion structure QA: parent `2052:2`; visible native text `25`; IMAGE fill nodes `0`; text intersections `0`; bounded 18px safe risks `0`; accidental explicit one-character lines `0`; Japanese semantic font mismatch `0`; cloned `L_STORY_DIVIDER / 2332:36` hidden.
-
-Post-promotion readback: AL2 `2332:2` is visible/current at `x=3600 / y=8500`, parent `2052:2`. Previous AL `2238:35` is hidden rollback at `x=300000 / y=8500`.
-
-AW2 remains visible/current at `x=1800 / y=8500`, parent `2052:2`. AW `2278:2` remains hidden rollback at `x=300000`.
-
 Working physical geometry remains `420×297 mm`. DESIGN QA is not PRINT QA; exact printer template, bleed/trim/fold, effective image resolution, PDF preflight and physical proof remain separate gates.
 
-## Latest verified improvement — Story/Chronology AL2
+## Latest verified improvement — Memory/Guide AQ2
 
-Fresh research deliberately moved away from the recent V8 interview/grid/photo references.
+Fresh research deliberately moved to information/atlas design instead of reusing recent V8 interview, prose-divider, quiet-grid or photo-selection references.
 
-- `idea No.391` documents Tsutomu Toda's editorial-design evolution, including the gradual disappearance of overt multilayered graphism while the essence of editorial design remains the subject.
-- `idea No.381` frames Hitoshi Suzuki's practice around the power/science of page and style and `editing = design`.
-- Pentagram's `OfficeUS Atlas` reports that the team rejected both a one-page-per-project encyclopedia and a simple chronology in favor of sequencing that exposed thematic structure.
+Professional observations from Joost Grootens / Studio Joost Grootens:
 
-These are research observations, not permanent rules.
+- an atlas is a collection of information integrated into a theme-based information system, not merely a stack of maps;
+- many information books are tools that readers complete through discovery and comparison rather than strict linear reading;
+- grid, format, paper, color, type and book structure work together as an information system.
+
+Primary/high-quality sources consulted: Studio Joost Grootens archive; nai010 publishers' `I swear I use no art at all`; Domus interview with Joost Grootens. These remain observations, not permanent rules.
 
 Rurubu-specific hypothesis:
 
-> In restrained V8 story design, an internal rule should remain only when it performs a binding, navigation, physical, or semantic job. If type/spacing/alignment already make the relationship legible, the rule may be residual layout scaffolding.
+> In a browse-oriented guide, ordinal numbers should remain only if their order performs a real retrieval or sequence job. When meaningful semantic entry labels already support non-linear reading, an additional `01/02/03/04` layer can falsely imply a step sequence and add UI/checklist residue.
 
-The decision also consumed the neutral non-Rurubu `NRSL-002` method, already verified cross-item: a line/field should prove its binding function at whole-item scale. No non-Rurubu production node, asset, palette, layout, Drive folder or item-specific evidence was copied.
+Rollback-safe AQ2 `2335:2` cloned current AQ `2256:2` and changed only the visibility of four exact ordinal nodes:
 
-Live AL `2238:35` used `L_STORY_DIVIDER / 2238:69` between the main story body and the narrower secondary reflection. Those two voices were already differentiated by position, width, type scale and copy length; the line did not carry chronology, fold/trim, caption, navigation, or image-binding responsibility.
+- `2335:13 / 01` hidden
+- `2335:17 / 02` hidden
+- `2335:21 / 03` hidden
+- `2335:25 / 04` hidden
 
-Rollback-safe AL2 `2332:2` changed only the cloned divider visibility:
-
-- divider `2332:36`: visible → hidden;
-- copy unchanged;
-- typography unchanged;
-- coordinates unchanged;
-- chronology hierarchy unchanged;
-- no card, box, image, decorative English, raster text or additional motif was introduced.
+All native editorial/factual copy, `朝 / 昼 / 夕 / 夜`, typography, positions, colors, spine and folios remain unchanged. No card, box, image, decorative English or replacement motif was added.
 
 Three-scale result:
 
-- 500px whole-item: PASS — less template/form partitioning; the two prose voices remain distinct.
-- 1400px reading scale: PASS — secondary reflection remains attached by spatial/type hierarchy and the left page reads more continuously.
-- 1587×1123 actual-size: PASS — no clipping, collision, accidental wrap or microtype regression.
+- 500px whole-item: PASS — right page reads as semantic day-part entry points instead of numbered steps.
+- 1400px reading: PASS — descriptions remain clearly attached to each day-part label; guide navigation remains unambiguous.
+- 1587×1123 actual-size: PASS — no new wrap, clipping, collision or microtype regression.
+
+Pre-promotion structure QA:
+
+- parent `2052:2`
+- visible native text `17`
+- IMAGE fill nodes `0`
+- text intersections `0`
+- bounded 18px safe risks `0`
+- Japanese semantic font mismatch `0`
+- all four cloned ordinals hidden
+
+Intentional single-character day-part words `朝 / 昼 / 夕 / 夜` are content and are not accidental one-character wrap defects.
 
 Professional critique:
 
-- **Art director:** PASS — story voice and chronology carry the spread rather than residual scaffolding.
-- **Editorial designer:** PASS — reading order and grouping remain unambiguous without the vertical rule.
-- **Book designer:** PASS — quieter construction without turning restraint into empty luxury whitespace.
-- **Typographer:** PASS — Japanese line breaks, punctuation, type hierarchy and line lengths are unchanged.
-- **Photo editor:** PASS by responsibility — no unverified image was added merely to fill the page.
-- **Print designer:** DESIGN QA PASS only — no new bounded safe-area defect, but printer/preflight/physical proof remain unverified.
+- **Art director:** PASS — clearer idea: revisit memory through time-of-day rather than a step interface.
+- **Editorial designer:** PASS — semantic labels carry navigation; ordinal scaffolding is unnecessary for this role.
+- **Book designer:** PASS — more like a browsable printed guide, less like a componentized sequence.
+- **Typographer:** PASS — Japanese hierarchy and line breaks unchanged.
+- **Photo editor:** PASS by responsibility — no unverified photo was added to simulate completeness.
+- **Print designer:** DESIGN QA PASS only; printer/preflight/physical proof remain unverified.
 
-Before/after learning check: PASS. Fresh research changed the live decision from likely spacing/type polish to a bounded one-element subtraction test. Existing shared learning predicted that subtraction is valid only when the rule's binding job can be disproved; AL2 reproduced that outcome in Rurubu.
+Post-promotion live state:
 
-Decision: `AL2 ADOPTED AS CURRENT V8 STORY/CHRONOLOGY / VERIFIED_LOCAL DESIGN QA / NOT GLOBAL WINNER / NOT PRINT READY`.
+- AQ2 `2335:2`: visible/current, `x=0 / y=9850`, parent `2052:2`
+- previous AQ `2256:2`: `ROLLBACK / V8 AQ / MEMORY+GUIDE / PRE-NONLINEAR-BROWSE / HIDDEN`, `visible=false`, `x=300000 / y=9850`
 
-Evidence: `01_paper-items/rurubu-wedding/evidence/RURUBU-V8-AL2-STORY-DIVIDER-SUBTRACTION-QA-2026-08-23.md`.
+Before/after learning check: PASS. Fresh information-design research changed the intervention from likely spacing/density polish to a semantic-navigation test.
 
-Learning: `RSL-237 / F-RSL-237-PROSE-DIVIDER-REPEATS-GROUPING-ALREADY-CARRIED-BY-TYPE-AND-SPATIAL-HIERARCHY`.
+Evidence: `01_paper-items/rurubu-wedding/evidence/RURUBU-V8-AQ2-MEMORY-NONLINEAR-GUIDE-QA-2026-08-23.md`.
 
-## Previous verified improvement — Profile/Q&A AW2
+Learning: `RSL-238 / F-RSL-238-BROWSE-GUIDE-USES-ORDINAL-STEPS-WHEN-SEMANTIC-ENTRY-POINTS-ARE-NONLINEAR`.
 
-AW2 `2329:2` remains current Profile/Q&A. Q1/Q2 form a paired upper field and Q3 becomes the wider lower emotional close while exact question/answer strings remain native and unchanged. It passed 500 / 1400 / actual-size and structure QA.
+## Previous verified improvements retained
 
-Evidence: `01_paper-items/rurubu-wedding/evidence/RURUBU-V8-AW2-PROFILE-CONTENT-OWNED-INTERVIEW-FIELD-QA-2026-08-23.md`.
+- **AL2 `2332:2` / RSL-237** — a prose divider must prove a real binding/navigation/physical job; otherwise test subtraction rollback-safely.
+- **AW2 `2329:2` / RSL-236** — repeated equal Q&A modules can flatten unequal answer salience; content-owned interview variation was verified locally.
+- **AS2 `2325:2` / RSL-235** — quiet editorial design can vary grid position when the content's meaning justifies the variation; avoid symmetry-for-style.
 
-Learning: `RSL-236 / F-RSL-236-INTERVIEW-RAIL-REPEATS-EQUAL-QA-MODULES-DESPITE-UNEQUAL-ANSWER-SALIENCE`.
-
-## Previous verified improvement — Cafe/Table AS2
-
-AS2 `2325:2` remains current Cafe/Table. `カップの音。` + `窓の光。` form two short observations, `次の店を決める会話。` widens into the social beat, and the reflective close remains separate. It passed 500 / 1400 / actual-size and structure QA.
-
-Evidence: `01_paper-items/rurubu-wedding/evidence/RURUBU-V8-AS2-CAFE-CONTENT-OWNED-GRID-VARIATION-QA-2026-08-23.md`.
-
-Learning: `RSL-235 / F-RSL-235-QUIET-SPREAD-EQUALIZES-SENSORY-BEATS-INTO-ONE-AXIS-TEMPLATE`.
+Earlier active learning remains available through the append-only Rurubu feed and item evidence, including effective-PPI, lived-in destination-photo authenticity, destination-owned cover language, semantic pairing, Drive-byte fallback, Japanese-wrap/mojikumi and print-boundary checks.
 
 ## Live authority reconciliation
 
-### Outer
-
-AP `2251:2` remains hidden rollback; AV `2273:24` remains visible current Outer.
-
-### Profile/Q&A
-
-AW2 `2329:2` remains current at `x=1800 / y=8500`. Previous AW `2278:2` remains hidden rollback.
-
-### Story/Chronology
-
-AL2 `2332:2` is current at `x=3600 / y=8500`. Previous AL `2238:35` is named `ROLLBACK / V8 AL / STORY+CHRONOLOGY / PRE-DIVIDER-SUBTRACTION / HIDDEN / 2026-08-23`, `visible=false`, at rollback storage `x=300000 / y=8500`.
-
-### Cafe/Table
-
-AS `2261:2` remains hidden rollback. AS2 `2325:2` remains current Cafe/Table at `x=1800 / y=9850`, parent `2052:2`.
+- AV `2273:24` visible current Outer; AP `2251:2` hidden rollback.
+- AW2 `2329:2` visible current Profile/Q&A at `x=1800 / y=8500`; AW `2278:2` hidden rollback.
+- AL2 `2332:2` visible current Story/Chronology at `x=3600 / y=8500`; AL `2238:35` hidden rollback.
+- AQ2 `2335:2` visible current Memory/Guide at `x=0 / y=9850`; AQ `2256:2` hidden rollback at `x=300000 / y=9850`.
+- AS2 `2325:2` visible current Cafe/Table at `x=1800 / y=9850`; AS `2261:2` hidden rollback.
+- AT `2264:2` visible current 1DAY/Model Course; AR `2257:2` hidden rollback.
 
 ## Drive authority
 
-V8 folder:
-`1IKYF-YI6EbEe7qQCVQjClztpQA8CoRIo / RURUBU_V8_EDITORIAL_MONOGRAPH_2026-08-21`
+V8 folder: `1IKYF-YI6EbEe7qQCVQjClztpQA8CoRIo / RURUBU_V8_EDITORIAL_MONOGRAPH_2026-08-21`.
 
-Re-read on 2026-08-23. Exact folder identity was reconfirmed. Existing recorded masters remain:
+Folder identity was re-read on 2026-08-23. Existing recorded masters remain:
 
 - ocean-light `1L5bMXy7IhPWGgIH6yDJ9mzOpveFYTZYB`
 - contact-proof `1MsisJ-qed1vYjGbMFiylN2DI6Lim_1Ko`
@@ -134,38 +124,18 @@ Re-read on 2026-08-23. Exact folder identity was reconfirmed. Existing recorded 
 - table-essay `1aqjC7cMXymK7r5MqABiNHjL207OY3XKP`
 - day-foldout `1KxMoNigZn6yKVu8e1MP9xt7Z-MaQzn-q`
 
-There is still **no new role-specific OUTER-01 generated master**. AL2 intentionally keeps IMAGE `0`.
+These names do not upgrade schematic assets into legitimate destination photography. There is still no new role-specific `OUTER-01` generated master.
 
-## Learning state
-
-### RSL-237 — prose divider must prove a binding function
+## Learning state — RSL-238
 
 State: `VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`.
 
 Failure fingerprint:
-`F-RSL-237-PROSE-DIVIDER-REPEATS-GROUPING-ALREADY-CARRIED-BY-TYPE-AND-SPATIAL-HIERARCHY`
+`F-RSL-238-BROWSE-GUIDE-USES-ORDINAL-STEPS-WHEN-SEMANTIC-ENTRY-POINTS-ARE-NONLINEAR`
 
-Transferable candidate principle: before retaining a divider between editorial text roles, ask what reader-facing or physical job it performs. If type, spacing and alignment already make the relationship unambiguous, test subtraction rollback-safely at whole-item scale.
+Transferable candidate principle: before retaining ordinal numbers in an editorial guide, ask what retrieval job the order performs. Keep ordinals when sequence, map lookup, chronology, itinerary order or cross-reference depends on them. When semantic entry points are intentionally non-linear and already sufficient, independently test whether removing the ordinal layer reduces UI/checklist residue without harming navigation.
 
-This is not a `remove dividers` rule. A line that binds image/caption, chronology, navigation, fold/trim, or otherwise ambiguous information should remain when evidence supports that function.
-
-Do **not** transfer AL2's exact coordinates, type scale, palette, copy or V8 composition.
-
-### RSL-236 — content-owned interview field from unequal answer salience
-
-State: `VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`.
-
-Failure fingerprint:
-`F-RSL-236-INTERVIEW-RAIL-REPEATS-EQUAL-QA-MODULES-DESPITE-UNEQUAL-ANSWER-SALIENCE`
-
-### RSL-235 — content-owned grid variation inside quiet book design
-
-State: `VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`.
-
-Failure fingerprint:
-`F-RSL-235-QUIET-SPREAD-EQUALIZES-SENSORY-BEATS-INTO-ONE-AXIS-TEMPLATE`
-
-Earlier active learning remains in force, including RSL-226 coordinate authority, RSL-225 interview rail, RSL-224 effective PPI, RSL-223 lived-in destination-photo authenticity, RSL-222 destination-owned cover language, RSL-220 semantic pairing, RSL-221 Drive-byte fallback, and existing reader-facing/Japanese/print-boundary checks.
+This is not a `remove numbering` rule. Do not transfer AQ2's coordinates, `朝/昼/夕/夜` structure, palette, type scale, copy or V8 composition.
 
 ## Asset truth for this run
 
@@ -173,7 +143,7 @@ Earlier active learning remains in force, including RSL-226 coordinate authority
 - newly created Drive masters: `0`
 - new production Figma photo placements: `0`
 - V6/V7 image hashes reused in production: `0`
-- AL2 image fill nodes: `0`
+- AQ2 image fill nodes: `0`
 - native/factual copy changed: `0`
 - V6 control changed: NO
 - V7 production changed: NO
@@ -182,18 +152,18 @@ Earlier active learning remains in force, including RSL-226 coordinate authority
 
 - **V6 `JC + IX + JB + IZ + IT + JA`** remains strongest for immediate travel desire, photographic atmosphere and unmistakable Rurubu-like excitement.
 - **V7 `C5 + K + F + G2 + H3 + C6`** remains a materially different high-energy comparison, but legitimate Hawaii photography is still incomplete.
-- **V8 `AV + AW2 + AL2 + AQ + AS2 + AT`** has stronger book/editorial pacing and less AI/UI-template residue. AL2 removes one unsupported structural separator without weakening story comprehension. AV still lacks V6's destination-specific photographic desire.
+- **V8 `AV + AW2 + AL2 + AQ2 + AS2 + AT`** has stronger book/editorial pacing and less AI/UI-template residue. AQ2 improves browse semantics without adding decorative mass. AV still lacks V6's destination-specific photographic desire.
 - No global winner is declared.
 
 ## Next highest-value work
 
 1. Do not create V9.
 2. Preserve V6/V7 and all rollback/rejected V8 roots.
-3. Keep `AV + AW2 + AL2 + AQ + AS2 + AT` unless a role-valid alternative wins three-scale and structural QA.
+3. Keep `AV + AW2 + AL2 + AQ2 + AS2 + AT` unless a role-valid alternative wins three-scale and structural QA.
 4. Highest-value asset target remains `OUTER-01` from brief `2270:2` plus print-photo gate `2277:2`.
 5. When legitimate role-specific imagery becomes available: materially different candidates → contact-sheet selection → Drive master/readback → exact Figma role → image hash/crop/effective-PPI → three-scale QA.
-6. Continue Japanese semantic-wrap, mojikumi/kinsoku, physical microtype and print-boundary QA.
+6. Continue Japanese semantic-wrap, mojikumi/kinsoku, publication-sequence, physical microtype and print-boundary QA.
 7. Keep DESIGN QA, REAL CONTENT QA, PRINT TEMPLATE/PREFLIGHT and PHYSICAL PROOF separate.
 
 Current state:
-`V8 AV + AW2 + AL2 + AQ + AS2 + AT = VERIFIED_LOCAL_DESIGN_STUDIES / DISTINCT_BOOK_EDITORIAL_SYSTEM / STORY-DIVIDER-SUBTRACTION-VERIFIED / NATIVE_TEXT_EDITABILITY_PRESERVED / ROLLBACK_SAFE / DESTINATION_PHOTO_POWER_STILL-BELOW-V6 / NOT_GLOBAL_WINNER / NOT_PRINT_READY`
+`V8 AV + AW2 + AL2 + AQ2 + AS2 + AT = VERIFIED_LOCAL_DESIGN_STUDIES / DISTINCT_BOOK_EDITORIAL_SYSTEM / NONLINEAR-GUIDE-SEMANTICS-VERIFIED / NATIVE_TEXT_EDITABILITY_PRESERVED / ROLLBACK_SAFE / DESTINATION_PHOTO_POWER_STILL-BELOW-V6 / NOT_GLOBAL_WINNER / NOT_PRINT_READY`
