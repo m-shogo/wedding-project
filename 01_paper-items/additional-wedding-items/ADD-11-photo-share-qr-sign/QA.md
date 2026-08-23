@@ -1,19 +1,21 @@
 # ADD-11 写真共有 / QR案内サイン — QA
 
-Status: `CURRENT / PROFESSIONAL_VNEXT_DARKROOM_DEVELOPING_TRAY_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / FAMILY_DIVERSITY_IMPROVED / A5_A4_REFLOW_PASS / LONG_COPY_STRESS_PASS / JAPANESE_SEMANTIC_LINEBREAK_PASS / INTERNAL_SIZE_LABEL_CLEANUP_PASS / STRUCTURE_READBACK_PASS / LEGACY_AND_PRIOR_VNEXT_PRESERVED / NOT_PRINT_READY`
+Status: `CURRENT / PROFESSIONAL_VNEXT_DARKROOM_DEVELOPING_TRAY_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / FAMILY_DIVERSITY_IMPROVED / A5_A4_REFLOW_PASS / LONG_COPY_STRESS_PASS / JAPANESE_SEMANTIC_LINEBREAK_PASS / INTERNAL_SIZE_LABEL_CLEANUP_PASS / PROCESS_RULE_SUBTRACTION_PASS / STRUCTURE_READBACK_PASS / LEGACY_AND_PRIOR_VNEXT_PRESERVED / NOT_PRINT_READY`
 Updated: 2026-08-23
 Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
 
 ## Current selected authority
 
-- latest refinement evidence: `FIGMA-INTERNAL-SIZE-TAB-CLEANUP-QA-2026-08-23.md`
+- latest refinement evidence: `FIGMA-PROCESS-RULE-SUBTRACTION-QA-2026-08-23.md`
+- prior refinement evidence: `FIGMA-INTERNAL-SIZE-TAB-CLEANUP-QA-2026-08-23.md`
 - Figma file: `PWQ5ygJJt0IlOqj5ri5jng`
 - Current page: `53:34 / CURRENT_SELECTED / ADD-11 / DARKROOM DEVELOPING TRAY / 2026-08-22`
 - Current A5: `52:2 / CURRENT / ADD-11 / DARKROOM DEVELOPING TRAY / A5` — `875×1240`
 - Current A4: `53:2 / CURRENT / ADD-11 / DARKROOM DEVELOPING TRAY / A4` — `1240×1754`
 - hidden realistic long-copy stress: `52:18 / 53:18`
+- pre-process-rule rollbacks: `61:2 / 61:18 / 61:34 / 61:50` — hidden
+- bounded no-process-rule comparisons: `60:2 / 60:18` — hidden after verification
 - pre-size-label-cleanup rollback: `58:2 / 58:18 / 58:34 / 58:50` — hidden
-- bounded no-size-label comparisons: `57:2 / 57:18` — hidden after verification
 - exact Drive authority verified live: `1wuxHEqby_0JWS0bYV0RWCTUotM88Mnxb / ADD-11_写真共有_QR案内サイン`
 - Drive writes for this pass: `0`
 
@@ -33,7 +35,8 @@ ADD-11 uses a photographic-processing physical metaphor instead of an envelope/l
 - Japanese-first headline `今日の写真を、みんなで現像しよう。`;
 - semantic native placeholders for sharing method, access/privacy scope, retention/expiry, hashtag/notice and QR;
 - native date retained as legitimate reader-facing factual furniture;
-- A5/A4 size metadata retained only in Figma node/spec/documentation authority, not printed on the guest-facing sign.
+- A5/A4 size metadata retained only in Figma node/spec/documentation authority, not printed on the guest-facing sign;
+- redundant lower coral `PAPER / PROCESS RULE` removed after rollback-safe comparison on 2026-08-23.
 
 No fake URL, fake QR destination, fake film metadata, scanner UI, generated wedding photography, gradients, shadows or stock-looking decorative imagery are used.
 
@@ -79,21 +82,32 @@ Prior Current PHOTO LAB ENVELOPE remains untouched at `49:39 / 49:74` in its ori
 
 Fresh live screenshots showed a yellow lower-right tab carrying literal `A5` or `A4` on the guest-facing design. Those labels are useful authoring/print-production metadata but have no guest-facing photo-share, QR, navigation, trim, fold or scan function.
 
-Rollback-safe comparisons changed only that furniture:
+Rollback-safe comparisons changed only that furniture, and the stronger result was promoted. A5/A4 paper size remains in Figma/spec/prepress authority rather than guest-facing print.
 
-- `57:2 / QA / ADD-11 / NO INTERNAL SIZE TAB / A5 / 2026-08-23`
-- `57:18 / QA / ADD-11 / NO INTERNAL SIZE TAB / A4 / 2026-08-23`
+## 2026-08-23 process-rule subtraction
 
-Both were stronger, so production and stress roots now hide only:
+Fresh A5 whole/reading review showed the lower coral `PAPER / PROCESS RULE` as an extra horizontal punctuation mark between the sharing/QR region and closing copy. The physical darkroom grammar was already carried by the black developing tray, rotated warm print sheet, coral safelight edge, cyan chemistry edge, and white QR paper.
 
-- A5 Current `52:16 / TRAY / INDEX TAB` + `52:17 / TEXT / SIZE`
-- A4 Current `53:16 / TRAY / INDEX TAB` + `53:17 / TEXT / SIZE`
-- A5 stress `52:32 / 52:33`
-- A4 stress `53:32 / 53:33`
+Rollback-safe comparisons:
 
-Full pre-change rollbacks are preserved at `58:2 / 58:18 / 58:34 / 58:50`.
+- A5 `60:2 / QA / ADD-11 / NO PROCESS RULE / A5 / 2026-08-23`
+- A4 `60:18 / QA / ADD-11 / NO PROCESS RULE / A4 / 2026-08-23`
 
-This applies the already verified cross-item rule that internal proof/status metadata must not leak into guest-facing copy. It does **not** hide unresolved semantic facts: sharing/privacy/retention/QR placeholders remain explicit native text.
+Only the process rule was hidden. Both comparisons were stronger at whole/reading scale, so Current and long-copy proof now hide:
+
+- A5 Current `52:13`
+- A4 Current `53:13`
+- A5 stress `52:29`
+- A4 stress `53:29`
+
+Full pre-change rollbacks are preserved at:
+
+- `61:2` — A5 Current
+- `61:18` — A4 Current
+- `61:34` — A5 long-copy stress
+- `61:50` — A4 long-copy stress
+
+A5 long-copy `52:18` was temporarily revealed after mutation, freshly rendered PASS, and returned hidden. No reader-facing semantic text, QR geometry, paper, tray, safelight, chemistry edge, date or typography changed.
 
 ## Three-scale screenshot QA
 
@@ -102,14 +116,16 @@ This applies the already verified cross-item rule that internal proof/status met
 - whole / thumbnail: PASS;
 - reading: PASS;
 - native actual `875×1240`: PASS;
-- no internal paper-size label visible.
+- no internal paper-size label visible;
+- no redundant process rule visible.
 
 ### A4 Current `53:2`
 
 - whole / thumbnail: PASS;
 - reading: PASS;
 - native actual `1240×1754`: PASS;
-- no internal paper-size label visible.
+- no internal paper-size label visible;
+- no redundant process rule visible.
 
 The developing tray + rotated print read as one photographic physical object. Headline, sharing roles and QR hierarchy remain clear. A4 is an independently rebuilt reflow rather than a scaled A5 clone.
 
@@ -125,48 +141,48 @@ The stress contract was corrected to realistic semantic placeholders without inv
 - `[保存・削除時期に関する案内文]`
 - `[写真共有時の注意事項]`
 
-Copy lanes were widened where needed without shrinking type. Final A5/A4 stress screenshots passed previously.
-
-After the 2026-08-23 paper-size cleanup, A5 stress `52:18` was temporarily revealed and freshly re-screened: PASS. It was returned hidden after review. The A4 stress received the identical bounded size-metadata removal and structure readback.
+Copy lanes were widened where needed without shrinking type. Final A5/A4 stress screenshots passed previously. After process-rule subtraction, A5 stress was freshly re-screened and remained PASS.
 
 ## Structure / hybrid QA
 
-Post-cleanup Current A5 `52:2`:
+Current A5 `52:2`:
 
 - native visible text `7`;
 - fixed-height text `0`;
 - IMAGE fills `0`;
 - internal size text visible `false`;
-- internal size tab visible `false`.
+- internal size tab visible `false`;
+- process rule visible `false`.
 
-Post-cleanup Current A4 `53:2`:
+Current A4 `53:2`:
 
 - native visible text `7`;
 - fixed-height text `0`;
 - IMAGE fills `0`;
 - internal size text visible `false`;
-- internal size tab visible `false`.
+- internal size tab visible `false`;
+- process rule visible `false`.
 
-Stress A5/A4 post-cleanup:
+Stress A5/A4:
 
 - native visible text `7 / 7` when revealed for inspection;
 - fixed-height text `0 / 0`;
 - IMAGE fills `0 / 0`;
-- internal size text/tab visible `false / false`.
-
-The decrease from `8 → 7` visible text nodes is exactly the hidden `A5` / `A4` internal size label. No reader-facing semantic or factual role was removed.
+- internal size text/tab visible `false / false`;
+- process rule visible `false / false`.
 
 Responsibility split:
 
 - variable/factual/emotional copy: native Figma text;
 - QR: independent semantic native placeholder on replaceable white paper role;
-- tray / print / safelight / process edge: simple native fixed geometry with explicit physical meaning;
+- tray / print / safelight / chemistry edge: simple native fixed geometry with explicit physical meaning;
 - paper size: authoring/spec metadata only, kept out of guest-facing print;
+- unsupported lower process rule: hidden after bounded comparison;
 - SVG `0`;
 - generated/composed raster `0`;
 - IMAGE fills `0`.
 
-`IMAGE_GENERATION_NOT_REQUIRED`: the diagnosed defect was internal proof furniture, not missing photography. Decorative generated photos would reduce truth/QR trust and add stock/AI risk.
+`IMAGE_GENERATION_NOT_REQUIRED`: the diagnosed defect was unsupported fixed decoration, not missing photography. Decorative generated photos would reduce truth/QR trust and add stock/AI risk.
 
 ## QR quiet-zone/container decision
 
@@ -176,9 +192,11 @@ The real QR is still unresolved. Its final quiet zone and scan behavior must be 
 
 ## Learning state
 
-The size-label cleanup is a `VERIFIED_LOCAL` receiving-item application of the existing `VERIFIED_CROSS_ITEM` lesson: internal proof/status labels must not become guest-facing copy.
+The process-rule cleanup is `VERIFIED_LOCAL` application of the existing cross-item QA method:
 
-Do not transfer an exact visual subtraction or hide real facts. A4/A5 must remain in Figma node names, item specs, exports/preflight and printer communication. Only the redundant printed proof metadata was removed.
+> A line, rule, rail or edge should be retained only when whole-item review proves a reader-facing, physical, binding, navigational, scan, trim/fold or information-grouping job.
+
+This is not a blanket `remove rules` instruction. The coral safelight edge and cyan chemistry edge remain because they carry the darkroom/developing-print object grammar; only the redundant lower process rule was removed.
 
 ## BLOCKED_REQUIRED_INPUT / DEFERRED_FINALIZATION
 
@@ -199,6 +217,6 @@ The 2026-08-21 `PHOTO LAB ENVELOPE` Current and its long-copy repair remain vali
 
 ## Decision
 
-`DARKROOM DEVELOPING TRAY` remains Current with internal A5/A4 paper-size metadata removed from the guest-facing surface.
+`DARKROOM DEVELOPING TRAY` remains Current with internal A5/A4 paper-size metadata and the redundant lower process rule removed from the guest-facing surface.
 
-`SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / FAMILY_DIVERSITY_IMPROVED / A5_A4_REFLOW_PASS / LONG_COPY_STRESS_PASS / JAPANESE_SEMANTIC_LINEBREAK_PASS / INTERNAL_SIZE_LABEL_CLEANUP_PASS / ROLLBACK_SAFE / NOT_PRINT_READY`.
+`SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / FAMILY_DIVERSITY_IMPROVED / A5_A4_REFLOW_PASS / LONG_COPY_STRESS_PASS / JAPANESE_SEMANTIC_LINEBREAK_PASS / INTERNAL_SIZE_LABEL_CLEANUP_PASS / PROCESS_RULE_SUBTRACTION_PASS / ROLLBACK_SAFE / NOT_PRINT_READY`.
