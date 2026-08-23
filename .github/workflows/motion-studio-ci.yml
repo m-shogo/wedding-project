@@ -57,6 +57,14 @@ jobs:
       - name: Opening V1 sound contracts
         run: pnpm check:opening-sound
 
+      - name: Opening V1 final BGM gate fails closed without cleared media
+        run: |
+          if pnpm check:opening-sound:strict; then
+            echo "final BGM gate unexpectedly passed on a fresh clone"
+            exit 1
+          fi
+          echo "final BGM gate correctly blocks missing/unapproved BGM"
+
       - name: Opening V1 composition contract
         run: pnpm exec remotion compositions src/index-opening-v1.ts
 
