@@ -40,6 +40,11 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Install ffmpeg for render QA
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+
       - name: Opening V1 media discovery
         run: pnpm prepare:opening-v1
 
@@ -54,6 +59,16 @@ jobs:
 
       - name: Opening V1 composition contract
         run: pnpm exec remotion compositions src/index-opening-v1.ts
+
+      - name: Opening V1 final-render QA contract
+        run: |
+          mkdir -p out/qa
+          ffmpeg -hide_banner -loglevel error \
+            -f lavfi -i "color=c=gray:s=640x360:r=30:d=1" \
+            -c:v libx264 -pix_fmt yuv420p -y out/qa/render-contract.mp4
+          node --no-warnings scripts/check-opening-render.mts \
+            out/qa/render-contract.mp4 \
+            --width=640 --height=360 --fps=30 --duration=1 --duration-tolerance=0.05
 
       - name: Opening V1 visual smoke stills
         run: node --no-warnings scripts/render-opening-v1-qa-stills.mts
