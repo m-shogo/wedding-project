@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import { Sidebar } from "./Sidebar";
 import { SearchPalette } from "./SearchPalette";
+import { MovieCoachNowBar } from "./MovieCoachNowBar";
 import { useProduction } from "../store/productionStore";
 import { useToast } from "../store/toastStore";
 import { saveToLocal } from "../lib/exporters";
@@ -11,6 +12,7 @@ export function Layout() {
   const [showShortcuts, setShowShortcuts] = useState(false);
   const { undo, redo, getAllData } = useProduction();
   const { addToast } = useToast();
+  const location = useLocation();
 
   const handleSaveLocal = useCallback(async () => {
     try {
@@ -50,6 +52,7 @@ export function Layout() {
     <div className="flex min-h-screen">
       <Sidebar />
       <main className="flex-1 p-8 overflow-auto dark:bg-navy-900">
+        {location.pathname === "/" && <MovieCoachNowBar />}
         <Outlet />
       </main>
       <SearchPalette open={showSearch} onClose={() => setShowSearch(false)} />
