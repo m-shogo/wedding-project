@@ -9,10 +9,8 @@ import {
   useVideoConfig,
 } from 'remotion';
 import {colors, fonts} from '../../data/theme';
-import {serifFamily} from '../../data/fonts';
 import {openingV1Scenes} from '../../data/openingV1';
 import {openingV1PhotoSlots} from '../../data/openingV1Media';
-import {CloudSea} from './CloudSea';
 
 const sansFamily = fonts.sans;
 
@@ -36,6 +34,8 @@ const SceneBase = ({children, dark = false}: {children: ReactNode; dark?: boolea
 const Placeholder = ({label, dark = false}: {label: string; dark?: boolean}) => (
   <AbsoluteFill
     style={{
+      // Missing-photo QA should reveal the actual image area without introducing
+      // borders/cards that could be mistaken for production design.
       backgroundColor: dark ? colors.navy : colors.cloud,
       alignItems: 'center',
       justifyContent: 'center',
@@ -44,9 +44,9 @@ const Placeholder = ({label, dark = false}: {label: string; dark?: boolean}) => 
     <div
       style={{
         fontFamily: sansFamily,
-        fontSize: 18,
-        letterSpacing: '0.18em',
-        color: dark ? colors.goldLight : colors.beigeDark,
+        fontSize: 16,
+        letterSpacing: '0.14em',
+        color: colors.beigeDark,
       }}
     >
       {label}
@@ -62,6 +62,7 @@ const PhotoSurface = ({
   motion = 'static',
   fit = 'cover',
   objectPosition = '50% 50%',
+  placeholderDark = false,
 }: {
   photo: string | null;
   label: string;
@@ -70,6 +71,7 @@ const PhotoSurface = ({
   motion?: PhotoMotion;
   fit?: PhotoFit;
   objectPosition?: string;
+  placeholderDark?: boolean;
 }) => {
   const safeDuration = Math.max(1, durationFrames - 1);
   const scale =
@@ -93,7 +95,7 @@ const PhotoSurface = ({
         : 0;
 
   if (!photo) {
-    return <Placeholder label={label} />;
+    return <Placeholder label={label} dark={placeholderDark} />;
   }
 
   return (
@@ -110,59 +112,61 @@ const PhotoSurface = ({
   );
 };
 
-const DepartureTitle = ({durationFrames}: {durationFrames: number}) => {
+const PhotoColdOpen = ({durationFrames}: {durationFrames: number}) => {
   const frame = useCurrentFrame();
-  const fadeIn = interpolate(frame, [0, 18], [0, 1], {
+  const copyOpacity = interpolate(frame, [2, 10], [0, 1], {
     extrapolateLeft: 'clamp',
     extrapolateRight: 'clamp',
   });
-  const fadeOut = interpolate(
-    frame,
-    [Math.max(0, durationFrames - 10), durationFrames],
-    [1, 0],
-    {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'},
-  );
 
   return (
     <SceneBase dark>
-      <AbsoluteFill
+      <AbsoluteFill>
+        <PhotoSurface
+          photo={openingV1PhotoSlots.heroes[0]}
+          label="HERO 01 · COLD OPEN"
+          frame={frame}
+          durationFrames={durationFrames}
+          motion="static"
+          fit="contain"
+          placeholderDark
+        />
+      </AbsoluteFill>
+      <div
         style={{
-          justifyContent: 'center',
-          alignItems: 'center',
-          opacity: Math.min(fadeIn, fadeOut),
+          position: 'absolute',
+          left: 68,
+          bottom: 58,
+          opacity: copyOpacity,
+          color: colors.ivory,
+          textShadow: '0 1px 14px rgba(0,0,0,0.38)',
         }}
       >
         <div
           style={{
-            fontFamily: serifFamily,
-            fontSize: 104,
-            letterSpacing: '0.035em',
-            fontWeight: 500,
+            fontFamily: sansFamily,
+            fontSize: 42,
+            fontWeight: 650,
+            letterSpacing: '0.015em',
           }}
         >
-          SHOGO & SHIORI
+          SHOGO + SHIORI
         </div>
         <div
           style={{
-            marginTop: 30,
+            marginTop: 10,
             fontFamily: sansFamily,
-            fontSize: 22,
-            letterSpacing: '0.16em',
-            color: colors.beigeDark,
+            fontSize: 16,
+            fontWeight: 500,
+            letterSpacing: '0.13em',
           }}
         >
-          24 OCT 2026 · YOKOHAMA
+          2026.10.24 · YOKOHAMA
         </div>
-      </AbsoluteFill>
+      </div>
     </SceneBase>
   );
 };
-
-const CloudTransition = () => (
-  <AbsoluteFill style={{overflow: 'hidden'}}>
-    <CloudSea timeOfDay="morning" speed={0.62} cloudOpacity={0.78} zoomTo={1.025} softness={14} />
-  </AbsoluteFill>
-);
 
 const memoryPlans: Record<
   MemoryPattern,
@@ -192,11 +196,11 @@ const PlaceLabel = ({place, light}: {place: string; light: boolean}) => (
       left: 72,
       bottom: 58,
       fontFamily: sansFamily,
-      fontSize: 20,
-      fontWeight: 600,
-      letterSpacing: '0.14em',
+      fontSize: 19,
+      fontWeight: 650,
+      letterSpacing: '0.11em',
       color: light ? colors.ivory : colors.navy,
-      textShadow: light ? '0 1px 16px rgba(0,0,0,0.32)' : undefined,
+      textShadow: light ? '0 1px 14px rgba(0,0,0,0.36)' : undefined,
     }}
   >
     {place.toUpperCase()}
@@ -235,6 +239,7 @@ const MemoryBeat = ({
           motion={motion}
           fit="cover"
           objectPosition={objectPosition}
+          placeholderDark
         />
         {showPlace ? <PlaceLabel place={place} light /> : null}
       </SceneBase>
@@ -289,9 +294,10 @@ const MemoryBeat = ({
             position: 'absolute',
             left: left ? '72%' : 72,
             bottom: 80,
-            fontFamily: serifFamily,
-            fontSize: 48,
-            letterSpacing: '0.02em',
+            fontFamily: sansFamily,
+            fontSize: 34,
+            fontWeight: 650,
+            letterSpacing: '0.015em',
             color: colors.navy,
           }}
         >
@@ -362,6 +368,7 @@ const HeroPhoto = ({
           durationFrames={durationFrames}
           motion={motion}
           fit="contain"
+          placeholderDark
         />
       </div>
     </SceneBase>
@@ -399,10 +406,30 @@ const ArrivalRoute = ({durationFrames}: {durationFrames: number}) => {
               backgroundColor: colors.roseGold,
             }}
           />
-          <div style={{position: 'absolute', left: 0, top: 17, fontFamily: sansFamily, fontSize: 24, letterSpacing: '0.12em'}}>
+          <div
+            style={{
+              position: 'absolute',
+              left: 0,
+              top: 18,
+              fontFamily: sansFamily,
+              fontSize: 22,
+              fontWeight: 600,
+              letterSpacing: '0.1em',
+            }}
+          >
             HAWAII
           </div>
-          <div style={{position: 'absolute', right: 0, top: 17, fontFamily: sansFamily, fontSize: 24, letterSpacing: '0.12em'}}>
+          <div
+            style={{
+              position: 'absolute',
+              right: 0,
+              top: 18,
+              fontFamily: sansFamily,
+              fontSize: 22,
+              fontWeight: 600,
+              letterSpacing: '0.1em',
+            }}
+          >
             YOKOHAMA
           </div>
         </div>
@@ -411,39 +438,48 @@ const ArrivalRoute = ({durationFrames}: {durationFrames: number}) => {
   );
 };
 
-const EndingTitle = ({durationFrames}: {durationFrames: number}) => {
+const DocumentaryEndCard = ({durationFrames}: {durationFrames: number}) => {
   const frame = useCurrentFrame();
   const opacity = interpolate(
     frame,
-    [0, 14, Math.max(15, durationFrames - 18), durationFrames],
+    [0, 8, Math.max(9, durationFrames - 8), durationFrames],
     [0, 1, 1, 0],
     {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'},
   );
 
   return (
     <SceneBase dark>
-      <AbsoluteFill style={{justifyContent: 'center', alignItems: 'center', opacity}}>
+      <div
+        style={{
+          position: 'absolute',
+          left: 72,
+          bottom: 66,
+          opacity,
+          fontFamily: sansFamily,
+        }}
+      >
         <div
           style={{
-            fontFamily: serifFamily,
-            fontSize: 96,
-            letterSpacing: '0.035em',
-          }}
-        >
-          SHOGO & SHIORI
-        </div>
-        <div
-          style={{
-            marginTop: 28,
-            fontFamily: sansFamily,
-            fontSize: 21,
+            fontSize: 17,
+            fontWeight: 650,
             letterSpacing: '0.16em',
             color: colors.goldLight,
           }}
         >
-          24 OCT 2026 · YOKOHAMA
+          YOKOHAMA
         </div>
-      </AbsoluteFill>
+        <div
+          style={{
+            marginTop: 10,
+            fontSize: 34,
+            fontWeight: 650,
+            letterSpacing: '0.015em',
+            color: colors.ivory,
+          }}
+        >
+          2026.10.24
+        </div>
+      </div>
     </SceneBase>
   );
 };
@@ -457,10 +493,8 @@ export const OpeningV1 = () => {
 
   const renderScene = (sceneId: string, durationFrames: number): ReactNode => {
     switch (sceneId) {
-      case 'v1-departure-title':
-        return <DepartureTitle durationFrames={durationFrames} />;
-      case 'v1-cloud-transition':
-        return <CloudTransition />;
+      case 'v1-photo-cold-open':
+        return <PhotoColdOpen durationFrames={durationFrames} />;
       case 'v1-photos-okinawa':
         return (
           <MemoryChapter
@@ -509,7 +543,7 @@ export const OpeningV1 = () => {
       case 'v1-arrival-route':
         return <ArrivalRoute durationFrames={durationFrames} />;
       case 'v1-ending-title':
-        return <EndingTitle durationFrames={durationFrames} />;
+        return <DocumentaryEndCard durationFrames={durationFrames} />;
       default:
         return <SceneBase dark>{null}</SceneBase>;
     }
