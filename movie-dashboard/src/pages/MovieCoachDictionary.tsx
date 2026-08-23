@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { Header } from "../components/Header";
 import {
   movieCoachIntentCategories,
@@ -44,7 +44,8 @@ function matchIntent(intent: MovieCoachIntent, query: string) {
 }
 
 export function MovieCoachDictionary() {
-  const [query, setQuery] = useState("");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [query, setQuery] = useState(() => searchParams.get("q") ?? "");
   const [category, setCategory] = useState<CategoryFilter>(allCategory);
   const [selectedId, setSelectedId] = useState(movieCoachIntents[0]?.intentId ?? "");
   const [progress] = useState(loadCoachProgress);
@@ -73,6 +74,14 @@ export function MovieCoachDictionary() {
         .filter((outcome) => outcome !== undefined)
     : [];
 
+  function updateQuery(value: string) {
+    setQuery(value);
+    const next = new URLSearchParams(searchParams);
+    if (value.trim()) next.set("q", value);
+    else next.delete("q");
+    setSearchParams(next, { replace: true });
+  }
+
   return (
     <div>
       <Header
@@ -87,7 +96,7 @@ export function MovieCoachDictionary() {
             <input
               type="search"
               value={query}
-              onChange={(event) => setQuery(event.target.value)}
+              onChange={(event) => updateQuery(event.target.value)}
               placeholder="例: 写真を映画っぽくゆっくり寄せたい / 顔を切りたくない / 音を自然につなぎたい"
               className="mt-1 w-full border-0 border-b-2 border-navy-800 dark:border-sand-200 bg-transparent px-0 py-2 text-base text-navy-900 dark:text-sand-100 focus:outline-none"
             />
