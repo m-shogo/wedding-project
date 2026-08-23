@@ -192,12 +192,27 @@ function skillGapScore(outcome: ProductionOutcome, evidence: LearningEvidence[])
   return gaps * 4;
 }
 
+function prerequisitesComplete(
+  outcome: ProductionOutcome,
+  progress: CoachProgressState,
+): boolean {
+  const prerequisiteIds = outcome.prerequisiteOutcomeIds ?? [];
+  return prerequisiteIds.every((outcomeId) => {
+    const prerequisite = allProductionOutcomes.find((item) => item.outcomeId === outcomeId);
+    return prerequisite
+      ? getOutcomeCompletion(prerequisite, progress.outcomeChecklist).complete
+      : false;
+  });
+}
+
 export function scoreOutcome(
   outcome: ProductionOutcome,
   progress: CoachProgressState,
 ): number {
   const completion = getOutcomeCompletion(outcome, progress.outcomeChecklist);
-  if (completion.complete) return Number.NEGATIVE_INFINITY;
+  if (completion.complete || !prerequisitesComplete(outcome, progress)) {
+    return Number.NEGATIVE_INFINITY;
+  }
 
   const completionGap = 100 - completion.percent;
   const learningGap = skillGapScore(outcome, progress.evidence);
