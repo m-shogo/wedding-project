@@ -1,7 +1,7 @@
 # ADD-12 新郎新婦クイズカード — QA
 
-Status: `CURRENT / FAMILY_DIVERSITY_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / LONG_COPY_STRESS_PASS / ARTIFACT_LABEL_FIELD_FIT_PASS / LEGACY_AND_PRIOR_VNEXT_PRESERVED / ROLLBACK_SAFE / NOT_PRINT_READY`
-Updated: 2026-08-23
+Status: `CURRENT / FAMILY_DIVERSITY_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / LONG_COPY_STRESS_PASS / ARTIFACT_LABEL_FIELD_FIT_PASS / TEAR_EDGE_SUBTRACTION_PASS / LEGACY_AND_PRIOR_VNEXT_PRESERVED / ROLLBACK_SAFE / NOT_PRINT_READY`
+Updated: 2026-08-24
 Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
 Professional quality authority: `docs/design-learning/PROFESSIONAL-DESIGN-COUNCIL-VNEXT-2026-08-20.md`
 
@@ -12,6 +12,8 @@ Professional quality authority: `docs/design-learning/PROFESSIONAL-DESIGN-COUNCI
 - current front: `59:54 / CURRENT / ADD-12 / ANSWER PUNCH CARD / FRONT / FAMILY DIVERSITY 2026-08-21`
 - current back: `59:84 / CURRENT / ADD-12 / ANSWER PUNCH CARD / BACK / FAMILY DIVERSITY 2026-08-21`
 - hidden stress front/back: `59:99 / 59:129`
+- latest no-tear-edge comparisons: `67:2 / 67:17` — hidden after adoption
+- latest complete pre-tear-edge rollbacks: `67:32 / 67:47` — hidden
 - pre-score-tab-fit back rollback: `66:2`
 - pre-score-tab-fit back-stress rollback: `66:17`
 - pre-2026-08-23 front rollback: `64:32`
@@ -25,6 +27,7 @@ Canonical current evidence:
 - family-diversity selection evidence retained in this directory
 - `FIGMA-FLOATING-TOP-TICKET-SUBTRACTION-QA-2026-08-23.md`
 - `FIGMA-BACK-SCORE-TAB-LABEL-FIT-QA-2026-08-23.md`
+- `FIGMA-BACK-TEAR-EDGE-SUBTRACTION-QA-2026-08-24.md`
 
 ## Current visual direction — ANSWER PUNCH CARD
 
@@ -45,8 +48,8 @@ The family-diverse current was created from blank frames, carrying forward only 
 
 - charcoal outer sleeve with a cream inserted response sheet;
 - blue `AFTER THE QUIZ` score tab retained because it carries actual reader-facing artifact identity;
-- the score tab is now `236×54`, wide enough to visually own the complete native label instead of clipping it at the field edge;
-- narrow pink tear edge;
+- the score tab is `236×54`, wide enough to visually own the complete native label instead of clipping it at the field edge;
+- the former narrow pink `TEAR EDGE` is now hidden after a 2026-08-24 bounded comparison showed that it rendered as a floating color rail rather than a credible perforation/tear/paper-construction cue;
 - Japanese-first `答えの旅は、まだつづく。`;
 - open response/name/message rules;
 - no equal cards, scanner UI or abstract tropical shapes.
@@ -90,21 +93,51 @@ Bounded repair:
 - stress score tab `59:131`: width `158 → 236px`;
 - height, color, y-position, native label text, font, font size and copy remain unchanged.
 
-Fresh Current and long-copy screenshots both PASS. `AFTER THE QUIZ` is now completely contained by the physical field that semantically owns it, without changing the Japanese title, response lanes, tear edge or date.
+Fresh Current and long-copy screenshots both PASS. `AFTER THE QUIZ` is completely contained by the physical field that semantically owns it, without changing the Japanese title, response lanes or date.
 
 This is typography/field-fit polish inside the preferred Current, not a new visual version.
+
+## 2026-08-24 back tear-edge subtraction
+
+Fresh whole / reading / native-size review found `59:87 / DECOR / TEAR EDGE`, a `28×680` pink vertical rectangle at the response-sheet edge, reading as a floating color/status rail rather than a credible tear/perforation or paper-construction cue.
+
+Rollback-safe comparisons changed only that fixed edge visibility:
+
+- Current back: `67:2 / QA / ADD-12 / BACK / NO FLOATING TEAR EDGE / 2026-08-24`;
+- realistic long-copy back: `67:17 / QA / ADD-12 / LONG COPY BACK / NO FLOATING TEAR EDGE / 2026-08-24`.
+
+The charcoal sleeve, cream paper insert, score tab, all wording, response/name/message geometry, date and front face remained unchanged.
+
+Result:
+- whole / thumbnail: PASS and cleaner;
+- reading: PASS;
+- native `620×875`: PASS;
+- realistic long-copy: PASS;
+- no loss of quiz identity or information grouping.
+
+Complete pre-change rollbacks:
+- Current back `67:32`;
+- long-copy back `67:47`.
+
+Promoted state:
+- Current `59:87 / DECOR / TEAR EDGE`: hidden;
+- stress `59:132 / DECOR / TEAR EDGE`: hidden;
+- comparison frames hidden after adoption.
+
+Learning state: `VERIFIED_LOCAL`. This re-applies the established whole-item line/edge/rail function audit; it is not a rule to remove all colored edges or legitimate tear/perforation geometry.
 
 ## Hybrid authoring roles
 
 - question/answers/response/name/message/date/artifact identity: native editable Figma text;
 - answer flow: native Auto Layout;
 - fixed punched edge/paper/tab/rules: simple native geometry;
+- unsupported former tear-edge rail: hidden after bounded comparison;
 - generated/composed raster: `0`;
 - replaceable image role: `0`;
 - IMAGE fills: `0`;
 - variable copy baked into visual assets: `0`.
 
-`IMAGE_GENERATION_NOT_REQUIRED`: current quality bottlenecks are typography, answer fairness, physical-game-paper clarity and artifact-field fit, not missing photography or illustration.
+`IMAGE_GENERATION_NOT_REQUIRED`: current quality bottlenecks are typography, answer fairness and physical-game-paper clarity, not missing photography or illustration.
 
 ## Screenshot / long-copy / structure QA
 
@@ -123,13 +156,17 @@ Verified contracts:
 - long question and realistic multi-word answers remain inside the A6 page;
 - back long-name/long-message proof retains separated writing lanes;
 - back score-tab label remains fully contained in both Current and stress proof;
+- back Current/stress visible native text `9 / 9`;
+- back Current/stress fixed-height visible text `0 / 0`;
+- back Current/stress tear edge hidden;
+- stress back restored hidden after post-change screenshot QA;
 - old currents, prior vNext and rollback frames remain preserved rather than overwritten.
 
-The project-wide Japanese semantic line-break and actual-size factual-microtype rules remain applicable. No new line-break or physical-size defect was introduced by the score-tab repair.
+The project-wide Japanese semantic line-break and actual-size factual-microtype rules remain applicable. No new line-break or physical-size defect was introduced by the tear-edge subtraction.
 
 ## Professional Design Council
 
-Current family-diverse direction remains **93/100 / PASS / NO VETO**. The 2026-08-23 score-tab repair removes an accidental clipping signal without changing the concept, functionality, Japanese typography, answer fairness, physical print credibility, editability, or family identity.
+Current family-diverse direction remains **93/100 / PASS / NO VETO**. The 2026-08-24 subtraction removes a falsely physical floating rail without changing the concept, functionality, Japanese typography, answer fairness, print credibility, editability, or family identity.
 
 ## BLOCKED_REQUIRED_INPUT / DEFERRED_FINALIZATION
 
@@ -152,4 +189,4 @@ Also deferred:
 
 ## Current result
 
-`FAMILY_DIVERSITY_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / LONG_COPY_STRESS_PASS / FLOATING_TOP_TICKET_SUBTRACTION_PASS / ARTIFACT_LABEL_FIELD_FIT_PASS / LEGACY_AND_PRIOR_VNEXT_PRESERVED / NOT_PRINT_READY`
+`FAMILY_DIVERSITY_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / LONG_COPY_STRESS_PASS / FLOATING_TOP_TICKET_SUBTRACTION_PASS / ARTIFACT_LABEL_FIELD_FIT_PASS / TEAR_EDGE_SUBTRACTION_PASS / LEGACY_AND_PRIOR_VNEXT_PRESERVED / NOT_PRINT_READY`
