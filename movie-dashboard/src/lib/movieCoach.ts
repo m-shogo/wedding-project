@@ -1,4 +1,5 @@
 import { emptyBookManifest, learningSkills, productionOutcomes } from "../data/movieCoach";
+import { profileLearningSkills, profileProductionOutcomes } from "../data/profileCoachLearning";
 import type {
   CoachProgressState,
   LearningEvidence,
@@ -8,6 +9,16 @@ import type {
 } from "../types/learning";
 
 export const MOVIE_COACH_STORAGE_KEY = "wedding-movie-coach-progress-v1";
+
+export const allLearningSkills: LearningSkill[] = [
+  ...learningSkills,
+  ...profileLearningSkills,
+];
+
+export const allProductionOutcomes: ProductionOutcome[] = [
+  ...productionOutcomes,
+  ...profileProductionOutcomes,
+];
 
 export const learningStateOrder: LearningState[] = [
   "not_started",
@@ -66,7 +77,7 @@ export function saveCoachProgress(progress: CoachProgressState): void {
 }
 
 export function getSkill(skillId: string): LearningSkill | undefined {
-  return learningSkills.find((skill) => skill.skillId === skillId);
+  return allLearningSkills.find((skill) => skill.skillId === skillId);
 }
 
 export function getSkillState(
@@ -153,7 +164,7 @@ export function scoreOutcome(
 export function selectTodayOutcome(
   progress: CoachProgressState,
 ): ProductionOutcome | null {
-  const ranked = productionOutcomes
+  const ranked = allProductionOutcomes
     .map((outcome) => ({ outcome, score: scoreOutcome(outcome, progress) }))
     .filter((item) => Number.isFinite(item.score))
     .sort((a, b) => b.score - a.score);
@@ -165,7 +176,7 @@ export function getMovieCoachProgress(
   movieId: "opening" | "profile",
   progress: CoachProgressState,
 ): { done: number; total: number; percent: number } {
-  const outcomes = productionOutcomes.filter((outcome) => outcome.movieId === movieId);
+  const outcomes = allProductionOutcomes.filter((outcome) => outcome.movieId === movieId);
   const done = outcomes.filter(
     (outcome) => getOutcomeCompletion(outcome, progress.outcomeChecklist).complete,
   ).length;
