@@ -5,6 +5,7 @@ import { useTheme } from "../store/themeStore";
 const links = [
   { to: "/", label: "ダッシュボード", icon: "✈" },
   { to: "/movie-coach", label: "Movie Coach", icon: "🎓" },
+  { to: "/movie-coach/dictionary", label: "逆引きDaVinci辞典", icon: "⌕" },
   { to: "/storyboard", label: "絵コンテ", icon: "🎬" },
   { to: "/assets", label: "素材ライブラリ", icon: "🗂" },
   { to: "/clips", label: "クリップ素材集", icon: "🎞" },
