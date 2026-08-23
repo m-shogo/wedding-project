@@ -6,92 +6,120 @@ Authority order: live Figma → verified Drive → Rurubu evidence → this stat
 Figma file: `bfM0d4c9dCeBv5pCkJ3TNM`
 Study page: `2052:2 / 07_RURUBU_V7_V8_PRO_STUDIES`
 V6 control: frozen `JC + IX + JB + IZ + IT + JA`
-Production state: `V7_6_OF_6_LIVE_COMPARISON_SET / TESTED_LOCAL / NOT_PREFERRED / NOT_PRINT_READY`
+Production state: `V7_6_OF_6_LIVE_COMPARISON_SET / F2_STORY_CURRENT / TESTED_LOCAL / NOT_PREFERRED / NOT_PRINT_READY`
 
 ## Current live V7 comparison set
 
 1. **Outer / Cover C5** `2314:2`
    - current V7 Outer comparison
-   - preserves C2 fixed `ハワイ / 旅するWEDDING` display lockup and clean-room composition
-   - removes redundant `SUN / SWEETS / DINNER / MEMORY` taxonomy
-   - lower service/index is reader-facing Japanese: `海辺 / 甘い午後 / 夜の食卓 / 寄り道`
-   - issue furniture is `2026.10.24 / 結婚記念号`
+   - fixed `ハワイ / 旅するWEDDING` display lockup retained
+   - redundant English taxonomy removed; lower service/index is reader-facing Japanese
    - 500 / 1400 / `1587×1123` QA PASS
-   - visible native text `18`; IMAGE-fill nodes `6`; text intersections `0`; bounded 18 px safe risks `0`
-   - prior C2 `2282:2` is hidden rollback
+   - native text `18`; IMAGE `6`; text intersections `0`; bounded 18 px safe risks `0`
+   - prior C2 `2282:2` hidden rollback
 2. **Profile / Q&A K** `2303:2`
    - answer-owned voice + compact prompt indexes
-   - native text `30`; visible IMAGE fills `5`; intersections `0`; 18 px safe risk `0`
    - 500 / 1400 / `1587×1123` QA PASS
+   - native text `30`; IMAGE `5`; intersections `0`; 18 px safe risk `0`
    - prior J `2301:2` hidden rollback
-3. **Story / Chronology F** `2290:4`
-   - clean-room tested locally
-   - fixed display title source preserved separately
+3. **Story / Chronology F2** `2351:2`
+   - current V7 Story comparison
+   - left Story close accent retained; redundant mirrored right Chronology close rule removed
+   - right concluding reflection moved upward so chronology closes through year/event/type/space rather than matching furniture
+   - 500 / 1400 / `1587×1123` DESIGN QA PASS
+   - native text `24`; IMAGE `4`; text intersections `0`; bounded 18 px safe risks `0`; one-character/kinsoku probe `0`; Japanese font mismatch `0`
+   - prior F `2290:4` hidden rollback at `x=300000`
 4. **Memory / Guide G2** `2299:2`
    - fixed display title retest passed locally
    - editable source preserved separately
 5. **Cafe / Table H3** `2311:2`
-   - current V7 Cafe comparison
    - food-first fixed Table display title; editable source `2311:24`; placed fixed title `2311:29`
    - structural photo dummies remain non-final
-   - 500 / 1400 / `1587×1123` visual QA PASS
-   - visible native text `13`; visible IMAGE fills `5`; intersections `0`; bounded safe risk `0`
-6. **Island Picks + 1DAY C6** `2316:2`
-   - current V7 1DAY comparison
-   - right page removes redundant oversized `01 / 02 / 03 / 04` timeline numerals while preserving exact times/actions
-   - actual time + unequal photo rhythm now carry route sequence
    - 500 / 1400 / `1587×1123` QA PASS
-   - visible native text `20`; visible IMAGE fills `6`; text intersections `0`; bounded 18 px safe risks `0`; accidental explicit one-character lines `0`
-   - prior C4 `2286:2` is hidden rollback
+   - native text `13`; IMAGE `5`; intersections `0`; bounded safe risk `0`
+6. **Island Picks + 1DAY C6** `2316:2`
+   - right page removes redundant oversized `01 / 02 / 03 / 04` timeline numerals while preserving exact times/actions
+   - time + unequal photo rhythm carry route sequence
+   - 500 / 1400 / `1587×1123` QA PASS
+   - native text `20`; IMAGE `6`; intersections `0`; bounded 18 px safe risks `0`; accidental explicit one-character lines `0`
+   - prior C4 `2286:2` hidden rollback
 
-All six roots remain on page `2052:2`. V6 was not overwritten.
+All six current roots remain on page `2052:2`. V6 was not overwritten.
 
-## Latest verified improvement — 1DAY C6
+## Latest verified improvement — Story / Chronology F2
 
-Fresh research in this run deliberately moved away from recent Hawaii-food and cover-voice references and examined SWITCH Publishing / Coyote plus the photo book `April`.
+Fresh research deliberately rotated away from recent photo-selection, cover, food and book-grid references and focused on Japanese composition/page architecture:
 
-- Coyote positions travel editorial around new encounters and telling stories, not only speed/quantity of information.
-- Coyote explicitly uses `PHOTO STORY` structures where images carry narrative time.
-- Coyote also treats repeated daily life as a form of travel, which argues against reducing a model-course spread to a generic checklist UI.
-- `April` (photography: Kazumi Kurigami; art direction: Kaoru Kasai) turns a multi-place journey archive into a book sequence whose meaning is carried by relational/emotional chronology as well as place facts.
+- W3C *Requirements for Japanese Text Layout (JLREQ)* describes Japanese composition from a designed basic page area and explicit rules for text, headings, figures, tables, punctuation and line composition.
+- JAGAT / Toshi Kobayashi, *基本版面の設定と文字の配置*, describes the basic page area as the structural framework for placing text and illustrations.
 
 Rurubu-specific hypothesis:
 
-> When a model-course page already communicates order through exact time, vertical position and photo sequence, test whether a second oversized numbered-module layer adds reader value or merely duplicates sequence as UI grammar.
+> When the two sides of a spread have materially different editorial jobs, matching separator/close furniture should not survive only to preserve visual symmetry. If chronology already closes through year scale, event hierarchy, spatial progression and final reflection, independently test whether its mirrored close rule adds any reader job.
 
-C6 result:
+This is a local inference from page-architecture research; neither JLREQ nor JAGAT is treated as a rule to remove separators.
 
-- C4 `2286:2` cloned rollback-safe to C6 `2316:2`;
-- right-page oversized `01 / 02 / 03 / 04` numerals hidden;
-- exact `09:00 / 12:30 / 16:00 / 19:00` facts and actions preserved;
-- clock time becomes the navigation anchor;
-- opening / middle / closing time hierarchy made deliberately unequal;
-- middle street-photo role enlarged so photography participates in the narrative sequence;
-- left `4 PICKS` numbering preserved because it has a real picks/navigation job there;
-- 500 / 1400 / `1587×1123` PASS;
-- visible native text `20`; IMAGE-fill nodes `6`; text intersections `0`; bounded 18 px safe risks `0`; accidental explicit one-character lines `0`.
+### Bounded test
 
-Decision: `C6 ADOPTED AS CURRENT V7 1DAY COMPARISON / VERIFIED_LOCAL DESIGN QA / NOT PREFERRED / NOT PRINT READY`.
+F `2290:4` was cloned rollback-safely to F2 `2351:2`.
 
-Evidence: `01_paper-items/rurubu-wedding/evidence/RURUBU-V7-C6-1DAY-PHOTO-STORY-TIME-FLOW-QA-2026-08-23.md`.
+Only two right-page properties changed:
 
-Learning: `RSL-233 / F-RSL-233-NUMBERED-TIMELINE-MODULES-REDUNDANTLY-ENCODE-SEQUENCE-ALREADY-CARRIED-BY-TIME-AND-PHOTO-RHYTHM`.
+- `2351:29 / ACCENT / V7 CHRON CLOSE RULE`: `visible=false`
+- `2351:30 / TEXT / V7 CHRON CLOSE`: `y=978 → 946`
 
-## Previous verified improvement — Outer C5
+Preserved unchanged:
 
-C5 preserved the fixed `ハワイ / 旅するWEDDING` lockup while removing a second English taxonomy that duplicated the cover's reader-facing service/index. It remains the current V7 Outer comparison and passed 500 / 1400 / actual-size QA.
+- left Story close rule
+- factual/native copy
+- fixed Story display title
+- all photo roles/crops
+- palette
+- chronology years/events/notes
 
-Evidence: `01_paper-items/rurubu-wedding/evidence/RURUBU-V7-OUTER-C5-READER-FACING-COVER-FURNITURE-QA-2026-08-23.md`.
+### QA result
 
-Learning: `RSL-232 / F-RSL-232-DUPLICATE-COVER-TAXONOMY-SIMULATES-MAGAZINE-VOICE-WITHOUT-NEW-READER-JOB`.
+- whole-item 500 px: PASS
+- reading 1400 px: PASS
+- actual-size canvas `1587×1123`: PASS for DESIGN QA
+- native text `24`
+- IMAGE `4`
+- text intersections `0`
+- bounded 18 px edge risk `0`
+- accidental explicit one-character / kinsoku probe findings `0`
+- Japanese font mismatch `0`
+
+Professional critique:
+
+- **Art director:** PASS — V7 energy remains, but Story and Chronology no longer share identical closing furniture by default.
+- **Editorial designer:** PASS — each page closes according to its content role.
+- **Book designer:** PASS — theme + variation is stronger than mirrored component grammar.
+- **Typographer:** PASS — native Japanese copy, line breaks and type hierarchy remain unchanged and editable.
+- **Photo editor:** unchanged / REAL-CONTENT-BLOCKED because photography is still structural dummy material.
+- **Print designer:** DESIGN QA only; exact printer template, bleed/trim/fold, effective image resolution and physical proof remain unverified.
+
+Decision: `F2 ADOPTED AS CURRENT V7 STORY COMPARISON / VERIFIED_LOCAL DESIGN QA / NOT PREFERRED / NOT PRINT READY`.
+
+Evidence: `01_paper-items/rurubu-wedding/evidence/RURUBU-V7-STORY-F2-RIGHT-CLOSE-RULE-SUBTRACTION-QA-2026-08-23.md`.
+
+Learning: `RSL-243 / F-RSL-243-MIRRORED-CLOSE-RULES-EQUALIZE-DIFFERENT-EDITORIAL-PAGE-JOBS`, state `VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`.
+
+## Previous verified V7 improvements retained
+
+- **C6 / RSL-233** — exact time + photo rhythm can carry model-course sequence without redundant oversized ordinal modules.
+- **C5 / RSL-232** — duplicate cover taxonomy can simulate magazine voice without adding a reader job.
+- **H3 / RSL-231** — a fixed food headline may deserve role-specific display authorship when meaning inside the phrase has unequal visual jobs.
+- **H2 / RSL-230** — clean-room direction fails when old destination copy leaks into captions/closing copy even if composition is new.
+- **K / RSL-229** — Q&A hierarchy can follow available human voice rather than repeating prompt modules equally.
+- **C2/G2 / RSL-227** — fixed identity-bearing copy may be authored as a dedicated display graphic when locally verified; not a blanket rasterize-text rule.
 
 ## Drive / asset truth
 
-V7 authority folder reverified this run:
+V7 authority folder:
 
 `1fHt2rf5jvTWyjkmpGu3KhEgjQEiUNV6x / RURUBU_V7_HAWAII_PRO_CLEANROOM_2026-08-21`
 
-Current direct folder listing still contains seven PNG assets:
+Recorded children remain:
 
 - `1Mdo5oZF29VIH7ybc5lfLcOSkNzZ_cXI0 / v7_one_day_route_master.png`
 - `13lhDTUgOADqLFgKq25ZqLkZbRhiSWON6 / v7_food_field_note_master.png`
@@ -103,28 +131,21 @@ Current direct folder listing still contains seven PNG assets:
 
 Previously inspected examples are low-complexity structural graphic placeholders, not legitimate Hawaii photography. Filenames are not evidence of final photo authority.
 
-Current run asset state:
-
-- newly generated Hawaii photography: `0`
-- newly adopted generated photography: `0`
-- new Drive master saves: `0`
-- new production Figma photo placements: `0`
-- existing structural graphics called final Hawaii assets: NO
-- native variable/factual text preserved: YES
+This F2 run made no Drive write and no new asset claim.
 
 ## V7 Cafe / Table photo bottleneck
 
-Cafe H3 `2311:2` remains structurally stronger but its photography is still structural dummy evidence. Figma brief `2305:2 / V7 / PHOTO ART DIRECTION / CAFE-TABLE / GENERATION_READY / NOT CURRENT / 2026-08-23` remains the authority for future real Hawaii photography.
+Cafe H3 `2311:2` remains structurally stronger but photography is still structural dummy evidence. Figma brief `2305:2 / V7 / PHOTO ART DIRECTION / CAFE-TABLE / GENERATION_READY / NOT CURRENT / 2026-08-23` remains the authority for future legitimate Hawaii photography.
 
-The image requirement remains: first create `食べたい`, then `そこに行きたい`, with believable Hawaii place evidence and no generic resort-stock, sterile flat-lay, plastic-food, fake-text, or tropical-shorthand dependence.
+The future image requirement remains: first create `食べたい`, then `そこに行きたい`, with believable Hawaii place evidence and without generic resort-stock, sterile flat-lay, plastic-food, fake-text or tropical-shorthand dependence.
 
 ## V6 / V7 / V8 comparison note
 
 No overall winner is declared.
 
-- V6 remains the frozen control and still has the strongest proven destination/photo density.
-- V7 is a materially different six-role high-energy comparison system; C6 improves 1DAY sequencing without sacrificing useful travel information, but photography truth is still incomplete.
-- V8 remains the materially different restrained book/editorial comparison system.
+- V6 remains frozen control and still has the strongest proven destination/photo density.
+- V7 is a materially different six-role high-energy Hawaii comparison system. F2 improves Story/Chronology theme + variation, but legitimate Hawaii photography remains incomplete.
+- V8 remains a materially different restrained book/editorial comparison system.
 
 ## Learning state
 
@@ -134,7 +155,23 @@ No overall winner is declared.
 - RSL-231 fixed food-title responsibility: `VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`
 - RSL-232 duplicate cover taxonomy: `VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`
 - RSL-233 time/photo sequence vs redundant numbered timeline modules: `VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`
-- real-photo observations remain `OBSERVED → ROOT_CAUSE_HYPOTHESIS` until exact-slot generated candidates are tested.
+- RSL-243 mirrored close-rule symmetry across different editorial jobs: `VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`
+- real-photo observations remain below promotion until exact-slot legitimate candidates are tested.
+
+## Asset truth for this run
+
+- new image-model generation: `0`
+- newly created Drive masters: `0`
+- new image hashes: `0`
+- legitimate final photography adopted: `0`
+- production photo placements changed: `0`
+- native/factual copy changes: `0`
+- V6 changes: NO
+- V8 changes: NO
+- V7 Story DESIGN QA: PASS
+- REAL CONTENT QA: BLOCKED on legitimate Hawaii photography
+- PRINT TEMPLATE/PREFLIGHT: NOT VERIFIED
+- PHYSICAL PROOF: NOT VERIFIED
 
 ## Print / truth gates
 
@@ -148,8 +185,8 @@ Do not call V7 preferred, complete or print-ready until independently verified:
 
 ## Next highest-value work
 
-1. Generate materially different role-specific Hawaii Cafe/Table candidates from brief `2305:2` when a legitimate generation path is available.
-2. Save accepted masters to exact V7 Drive authority, read back Drive IDs, create role derivatives, and place through the verified image-byte/Figma path.
-3. Verify image hash/crop/effective PPI and run thumbnail / reading / actual-size QA in Cafe H3.
-4. Re-run common-scale six-role V7 comparison after real photo replacement; do not edit C5, H3 or C6 merely because they are newest.
-5. Continue blind V6/V7/V8 comparison by role before declaring a preferred system.
+1. Preserve V6 and all hidden V7 rollbacks/rejected evidence.
+2. Keep current set `C5 + K + F2 + G2 + H3 + C6` unless a role-valid comparison wins three-scale + structure QA.
+3. Highest-value asset target remains legitimate role-specific Hawaii Cafe/Table photography from brief `2305:2` when a legitimate generation path is available.
+4. Save accepted masters to the exact V7 Drive authority, read back Drive IDs, place through exact replaceable Figma roles, then verify hash/crop/effective PPI and three scales.
+5. Continue common-scale V6/V7/V8 role comparisons; do not create V9 and do not keep styling the newest candidate merely because it is newest.
