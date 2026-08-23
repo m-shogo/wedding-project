@@ -49,7 +49,7 @@ pnpm render:opening-v1
 - `public/photos/opening/` の写真は起動/render前に自動探索される。
 - previewは写真不足でもplaceholderで確認できる。
 - final renderはcanonical 11枚が揃うまで失敗する。
-- Opening変更PRはtypecheckだけでなくVisual QA stillを8枚renderする。
+- Opening変更PRはtypecheckだけでなくVisual QA stillを10枚renderする。
 - still/video/`out/`配下は生成物なのでGit管理しない。
 - Palmier / CapCutは必要な場合のBGM微調整・trim・venue向けfinal polishだけに使う。別timelineを正本にしない。
 
