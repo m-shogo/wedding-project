@@ -2,20 +2,19 @@ export type OpeningV1Scene = {
   id: string;
   title: string;
   durationSec: number;
-  kind: 'travel-ui' | 'real-photo';
+  kind: 'travel-ui' | 'real-photo' | 'motion-placeholder';
   owner: 'codex' | 'claude-code';
   replacementPolicy: string;
 };
 
 export const openingV1Scenes: OpeningV1Scene[] = [
   {
-    id: 'v1-departure-title',
+    id: 'v1-photo-cold-open',
     title: 'Photo cold open',
     durationSec: 2,
     kind: 'real-photo',
     owner: 'codex',
-    replacementPolicy:
-      'hero-01実写真を2秒だけ先見せするcold open。中央の高級風タイトルカードへ戻さない。',
+    replacementPolicy: 'Hero 01の実写真を即表示。AI背景や独立title cardを挟まない。',
   },
   {
     id: 'v1-photos-okinawa',
@@ -23,7 +22,7 @@ export const openingV1Scenes: OpeningV1Scene[] = [
     durationSec: 11,
     kind: 'real-photo',
     owner: 'claude-code',
-    replacementPolicy: '実写真3枚。hard cut中心。人物をAI生成しない。',
+    replacementPolicy: '実写真3枚へ差し替え。人物をAI生成しない。',
   },
   {
     id: 'v1-photos-seoul',
@@ -31,7 +30,7 @@ export const openingV1Scenes: OpeningV1Scene[] = [
     durationSec: 11,
     kind: 'real-photo',
     owner: 'claude-code',
-    replacementPolicy: '実写真3枚。hard cut中心。人物をAI生成しない。',
+    replacementPolicy: '実写真3枚へ差し替え。人物をAI生成しない。',
   },
   {
     id: 'v1-photos-hawaii',
@@ -39,7 +38,7 @@ export const openingV1Scenes: OpeningV1Scene[] = [
     durationSec: 11,
     kind: 'real-photo',
     owner: 'claude-code',
-    replacementPolicy: '実写真3枚。hard cut中心。人物をAI生成しない。',
+    replacementPolicy: '実写真3枚へ差し替え。人物をAI生成しない。',
   },
   {
     id: 'v1-photo-hero-a',
@@ -47,7 +46,7 @@ export const openingV1Scenes: OpeningV1Scene[] = [
     durationSec: 9,
     kind: 'real-photo',
     owner: 'claude-code',
-    replacementPolicy: '2人の実写真1枚。native比率を守り、cropしすぎない。',
+    replacementPolicy: '2人の実写真1枚へ差し替え。native比率を優先。',
   },
   {
     id: 'v1-photo-hero-b',
@@ -55,7 +54,7 @@ export const openingV1Scenes: OpeningV1Scene[] = [
     durationSec: 9,
     kind: 'real-photo',
     owner: 'claude-code',
-    replacementPolicy: '2人の実写真1枚。staticを第一候補にする。',
+    replacementPolicy: '2人の実写真1枚へ差し替え。native比率を優先。',
   },
   {
     id: 'v1-arrival-route',
@@ -63,7 +62,7 @@ export const openingV1Scenes: OpeningV1Scene[] = [
     durationSec: 4,
     kind: 'travel-ui',
     owner: 'codex',
-    replacementPolicy: 'Remotion native route graphic。HAWAII → YOKOHAMAだけを簡潔に描く。',
+    replacementPolicy: 'Remotion native route graphic。HAWAII → YOKOHAMAだけを簡潔に描画。',
   },
   {
     id: 'v1-ending-title',
@@ -71,7 +70,7 @@ export const openingV1Scenes: OpeningV1Scene[] = [
     durationSec: 3,
     kind: 'travel-ui',
     owner: 'codex',
-    replacementPolicy: 'YOKOHAMA / 2026.10.24だけ。中央セリフ体の高級風カードへ戻さない。',
+    replacementPolicy: 'YOKOHAMA / 2026.10.24だけの小さいend card。独立した豪華titleへ戻さない。',
   },
 ];
 
