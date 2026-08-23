@@ -46,7 +46,7 @@ export function Sidebar() {
           <NavLink
             key={link.to}
             to={link.to}
-            end={link.to === "/"}
+            end={link.to === "/" || link.to === "/movie-coach"}
             className={({ isActive }) =>
               `sidebar-link ${isActive ? "sidebar-link-active" : ""}`
             }
