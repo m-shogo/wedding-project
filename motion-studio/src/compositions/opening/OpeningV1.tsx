@@ -44,7 +44,7 @@ const Placeholder = ({label, dark = false}: {label: string; dark?: boolean}) => 
         fontFamily: sansFamily,
         fontSize: 16,
         letterSpacing: '0.14em',
-        color: dark ? colors.beigeDark : colors.beigeDark,
+        color: colors.beigeDark,
       }}
     >
       {label}
@@ -491,7 +491,7 @@ export const OpeningV1 = () => {
 
   const renderScene = (sceneId: string, durationFrames: number): ReactNode => {
     switch (sceneId) {
-      case 'v1-departure-title':
+      case 'v1-photo-cold-open':
         return <PhotoColdOpen durationFrames={durationFrames} />;
       case 'v1-photos-okinawa':
         return (
