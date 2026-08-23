@@ -1,7 +1,7 @@
 # ADD-16 両親贈呈品メッセージカード — Current
 
-Status: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / PROFESSIONAL_VNEXT_HOME_TEXTILE_MAT_SELECTED / FAMILY_DIVERSITY_PASS / LONG_COPY_VISUAL_PASS / AUTO_HEIGHT_PASS / JAPANESE_KICKER_FONT_ASSIGNMENT_PASS / GENERIC_ENGLISH_KICKER_SUBTRACTION_PASS / WRITING_SURFACE_PASS / LEGACY_PRESERVED / NOT_PRINT_READY`
-Updated: 2026-08-23
+Status: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / PROFESSIONAL_VNEXT_HOME_TEXTILE_MAT_SELECTED / FAMILY_DIVERSITY_PASS / LONG_COPY_VISUAL_PASS / AUTO_HEIGHT_PASS / JAPANESE_KICKER_FONT_ASSIGNMENT_PASS / GENERIC_ENGLISH_KICKER_SUBTRACTION_PASS / VERTICAL_THREAD_SUBTRACTION_PASS / WRITING_SURFACE_PASS / LEGACY_PRESERVED / NOT_PRINT_READY`
+Updated: 2026-08-24
 Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
 Professional quality authority: `docs/design-learning/PROFESSIONAL-DESIGN-COUNCIL-VNEXT-2026-08-20.md`
 
@@ -14,6 +14,8 @@ This file is the current item-level selected-authority entry point. RETURN LETTE
 - front: `57:3 / CURRENT_SELECTED / ADD16 / FRONT / HOME TEXTILE MAT`
 - back: `57:17 / CURRENT_SELECTED / ADD16 / BACK / HOME TEXTILE MAT WRITING`
 - hidden realistic long-copy: `57:36 / 57:50`
+- latest no-vertical-thread comparisons: `69:2 / 69:18 / 69:37 / 69:53` — hidden after adoption
+- latest complete pre-thread-subtraction rollbacks: `70:2 / 70:18 / 70:37 / 70:53` — hidden
 - pre-font-repair front rollback: `66:2 / 66:18`
 - pre-English-kicker-subtraction back rollback: `68:2 / 68:21`
 - no-English-kicker comparison: `67:2` — hidden after adoption
@@ -32,19 +34,21 @@ The selected direction treats ADD-16 as a tactile `HOME TEXTILE MAT` keepsake ra
 - dark forest selvage as the main physical anchor;
 - warm oat paper field;
 - rust + saffron short weave bands;
-- one thread-like vertical rule;
+- the former long `THREAD / VERTICAL` rail is hidden after a bounded comparison showed that the selvedge/weft already carried the textile metaphor and the long rule read more like an editorial/UI rail;
 - Japanese-first `育ててくれた時間を、これからの力に。`;
 - explicit `Noto Sans JP Bold` assignment for the front Japanese kicker `両親へ`;
 - open native message/signature roles on the front;
 - open writing surface with functional rules on the reverse;
-- reverse Japanese-first `ことばを、持って帰ろう。` now carries the emotional first read without the former generic English art-direction kicker;
+- reverse Japanese-first `ことばを、持って帰ろう。` carries the emotional first read without the former generic English art-direction kicker;
 - no envelope flap, paper-insert construction, giant circle/capsule, fake airline credential, barcode, route UI, tropical clip-art or generated family/person imagery.
 
 The metaphor is tied to `home / upbringing / keepsake / carrying something into the next life stage`, not reused merely because another paper-object style worked elsewhere.
 
 All message/date/signature/guide roles remain native editable text.
 
-## Latest bounded editorial cleanup — 2026-08-23
+## Latest bounded editorial cleanups — 2026-08-23
+
+### Generic English back kicker
 
 Fresh native-size review of Current back found `FOR THE WORDS WE WANT TO KEEP` above the Japanese display. The phrase did not identify the artifact, destination, function, factual information, or an intentional bilingual role; it duplicated the Japanese message and read as internal concept microcopy.
 
@@ -61,6 +65,23 @@ Adopted Current/stress change:
 
 Fresh Current screenshot and realistic long-copy screenshot both PASS. Stress was re-hidden after proof. This is an application of the already promoted `GENERIC_ENGLISH_INTERNAL_CONCEPT_LABEL` rule, not a new visual-style rule.
 
+### Vertical thread subtraction
+
+Fresh whole/actual-size review found the long `THREAD / VERTICAL` on both sides increasingly read as an editorial rail rather than textile structure. The dark forest selvedge and horizontal weft bands already carried the material metaphor.
+
+Rollback-safe comparisons changed only thread visibility:
+- front `69:2`;
+- back `69:18`;
+- front realistic long-copy `69:37`;
+- back realistic long-copy `69:53`.
+
+All four comparisons passed. Removing the thread increased intentional whitespace on the front and made the back writing field more open without losing textile identity or grouping.
+
+Complete pre-change rollbacks:
+- `70:2 / 70:18 / 70:37 / 70:53`.
+
+Current and stress `THREAD / VERTICAL` roles are hidden. Comparisons and rollbacks remain hidden. Learning state: `VERIFIED_LOCAL`; this is another application of the established whole-item fixed-bar/rail function audit, not a new project-wide visual rule.
+
 ## QA
 
 Professional Design Council: `93/100 / PASS / NO VETO`.
@@ -76,6 +97,7 @@ Selected + realistic stress evidence after the latest cleanup:
 - text-text collisions: `0` in verified semantic lanes;
 - IMAGE fills: `0`;
 - Current/stress generic English kicker: hidden;
+- Current/stress vertical thread: hidden;
 - variable/factual copy remains native editable text;
 - stress roots returned hidden after proof review.
 
@@ -87,25 +109,28 @@ Meaningful failures and repairs retained as learning evidence:
 4. first stack mutation attempt failed before mutation because required Figma fonts were not loaded → input contract corrected with explicit font loading before retry;
 5. realistic back stress exposed a mechanical guide-word break/footer-lane collision → guide/signature widths and positions separated without shrinking type;
 6. Japanese semantic front kicker was assigned to `Inter Bold` and relied on fallback glyphs → repaired to explicit `Noto Sans JP Bold`;
-7. generic English back kicker had no reader-facing job → removed after rollback-safe comparison and fresh long-copy QA.
+7. generic English back kicker had no reader-facing job → removed after rollback-safe comparison and fresh long-copy QA;
+8. long vertical thread was conceptually named but did not prove a rendered physical/binding job → hidden after Current + stress comparison.
 
 Canonical evidence:
 
 - `PROFESSIONAL-VNEXT-HOME-TEXTILE-MAT-FAMILY-DIVERSITY-QA-2026-08-22.md`
 - `FIGMA-JAPANESE-KICKER-FONT-ASSIGNMENT-QA-2026-08-23.md`
 - `FIGMA-BACK-GENERIC-ENGLISH-KICKER-SUBTRACTION-QA-2026-08-23.md`
+- `FIGMA-VERTICAL-THREAD-SUBTRACTION-QA-2026-08-23.md`
 - previous `PROFESSIONAL-VNEXT-RETURN-LETTER-FAMILY-DIVERSITY-QA-2026-08-21.md` remains retained history.
 
 ## Hybrid / image decision
 
 - variable/factual/emotional copy: native text;
 - weave/selvage/writing rules: simple native functional geometry;
+- long vertical thread: hidden after bounded function test;
 - SVG: `0`;
 - generated/composed raster: `0`;
 - replaceable image role: `0`;
 - image generation: `0`.
 
-`IMAGE_GENERATION_NOT_REQUIRED_FOR_THIS_PASS`: the diagnosed quality gap was editorial language hierarchy, not missing photography/illustration. Generating parents/family is prohibited, and generic tropical/home imagery would weaken specificity and writing function rather than solve the root cause.
+`IMAGE_GENERATION_NOT_REQUIRED_FOR_THIS_PASS`: the diagnosed quality gap was editorial/physical meaning of fixed geometry, not missing photography/illustration. Generating parents/family is prohibited, and generic tropical/home imagery would weaken specificity and writing function rather than solve the root cause.
 
 ## Drive
 
