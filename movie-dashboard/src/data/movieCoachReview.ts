@@ -28,6 +28,7 @@ export interface MovieReviewCategoryDefinition {
   label: string;
   question: string;
   skillIds: string[];
+  profileSkillIds?: string[];
   defaultFix: string;
 }
 
@@ -46,6 +47,7 @@ export const movieReviewCategories: MovieReviewCategoryDefinition[] = [
     label: "Timing / Rhythm",
     question: "cutが早い・遅い、写真を読む時間が足りない、BGMとズレていないか？",
     skillIds: ["concept-rhythm", "davinci-trim", "davinci-ripple", "davinci-marker"],
+    profileSkillIds: ["concept-longform-pacing"],
     defaultFix: "Markerを候補点に戻し、写真を読む時間とBGMの両方を見てTrimする。",
   },
   {
@@ -53,6 +55,7 @@ export const movieReviewCategories: MovieReviewCategoryDefinition[] = [
     label: "Crop / Framing",
     question: "顔・手・背景文脈・文字余白が切れていないか？",
     skillIds: ["concept-framing", "davinci-transform"],
+    profileSkillIds: ["concept-photo-sequencing"],
     defaultFix: "Position / Zoomを調整し、無理ならContainや余白ありlayoutへ戻す。",
   },
   {
@@ -60,6 +63,7 @@ export const movieReviewCategories: MovieReviewCategoryDefinition[] = [
     label: "Motion",
     question: "動きが写真より目立つ、全写真が同じ、停止が機械的ではないか？",
     skillIds: ["concept-stillness", "davinci-transform", "davinci-keyframe", "davinci-easing"],
+    profileSkillIds: ["concept-longform-pacing"],
     defaultFix: "まずStaticと比較し、意味が増えるshotだけ小さなmotionを残す。",
   },
   {
@@ -67,6 +71,7 @@ export const movieReviewCategories: MovieReviewCategoryDefinition[] = [
     label: "Typography",
     question: "実時間で読めるか、写真より強くないか、情報階層があるか？",
     skillIds: ["concept-typography", "concept-framing", "davinci-text"],
+    profileSkillIds: ["concept-caption-economy"],
     defaultFix: "文字を小さく詰めず、情報を削る・優先順位を付ける・写真の余白へ移す。",
   },
   {
@@ -81,6 +86,7 @@ export const movieReviewCategories: MovieReviewCategoryDefinition[] = [
     label: "Audio",
     question: "音量差、急なfade、章切替の切れ目、BGMの山とのズレはないか？",
     skillIds: ["concept-audio-continuity", "davinci-audio-fade", "davinci-jl-cut"],
+    profileSkillIds: ["concept-emotion-curve"],
     defaultFix: "映像と音の編集点を分けて比較し、必要ならJ/L-cutか短いfadeを使う。",
   },
   {
@@ -95,6 +101,12 @@ export const movieReviewCategories: MovieReviewCategoryDefinition[] = [
     label: "Story / Meaning",
     question: "このshotが必要な理由、前後との関係、Wedding Movie全体での役割があるか？",
     skillIds: ["concept-rhythm", "concept-continuity", "concept-stillness"],
+    profileSkillIds: [
+      "concept-narrative-arc",
+      "concept-longform-pacing",
+      "concept-photo-sequencing",
+      "concept-emotion-curve",
+    ],
     defaultFix: "Effectを足す前にshotの役割を1文に戻し、役割が無ければ削除候補にする。",
   },
 ];

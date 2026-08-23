@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { Header } from "../components/Header";
-import { learningSkills, productionOutcomes } from "../data/movieCoach";
 import {
   movieReviewCategories,
   openingQaEvidenceSources,
@@ -9,7 +8,13 @@ import {
   type MovieReviewFinding,
   type MovieReviewSource,
 } from "../data/movieCoachReview";
-import { getSkillState, learningStateLabel, loadCoachProgress } from "../lib/movieCoach";
+import {
+  allLearningSkills,
+  allProductionOutcomes,
+  getSkillState,
+  learningStateLabel,
+  loadCoachProgress,
+} from "../lib/movieCoach";
 
 const REVIEW_STORAGE_KEY = "wedding-movie-coach-review-v1";
 
@@ -25,10 +30,33 @@ function loadFindings(): MovieReviewFinding[] {
   }
 }
 
+function skillLearningTarget(skillId: string, profileSpecific: boolean) {
+  const skill = allLearningSkills.find((item) => item.skillId === skillId);
+  if (!skill) return null;
+
+  if (profileSpecific) {
+    const phase = allProductionOutcomes.find(
+      (outcome) =>
+        outcome.movieId === "profile" &&
+        [...outcome.conceptSkillIds, ...outcome.davinciSkillIds].includes(skillId),
+    );
+    return {
+      skill,
+      to: phase ? `/movie-coach/profile#${phase.outcomeId}` : "/movie-coach/profile",
+    };
+  }
+
+  return {
+    skill,
+    to: `/movie-coach/dictionary?q=${encodeURIComponent(skill.label)}`,
+  };
+}
+
 export function MovieCoachReview() {
-  const openingOutcomes = productionOutcomes.filter((outcome) => outcome.movieId === "opening");
+  const openingOutcomes = allProductionOutcomes.filter((outcome) => outcome.movieId === "opening");
+  const profileOutcomes = allProductionOutcomes.filter((outcome) => outcome.movieId === "profile");
   const [findings, setFindings] = useState<MovieReviewFinding[]>(loadFindings);
-  const [outcomeId, setOutcomeId] = useState(openingOutcomes[0]?.outcomeId ?? "");
+  const [outcomeId, setOutcomeId] = useState(openingOutcomes[0]?.outcomeId ?? profileOutcomes[0]?.outcomeId ?? "");
   const [timecode, setTimecode] = useState("00:00.0");
   const [category, setCategory] = useState<MovieReviewCategory>("timing");
   const [note, setNote] = useState("");
@@ -41,6 +69,7 @@ export function MovieCoachReview() {
 
   const openFindings = findings.filter((finding) => finding.status === "open");
   const resolvedFindings = findings.filter((finding) => finding.status === "resolved");
+  const selectedOutcome = allProductionOutcomes.find((outcome) => outcome.outcomeId === outcomeId);
 
   const selectedCategory = useMemo(
     () => movieReviewCategories.find((item) => item.category === category) ?? movieReviewCategories[0],
@@ -89,7 +118,7 @@ export function MovieCoachReview() {
     <div>
       <Header
         title="MOVIE REVIEW"
-        description="Reviewを採点で終わらせず、Finding → Why → Skill → Fix → Re-reviewへ戻す"
+        description="Opening / Profileを同じFinding → Why → Skill → Fix → Re-reviewループで改善する"
       />
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 border-y border-sand-200 dark:border-navy-600 py-4 mb-7">
@@ -102,8 +131,9 @@ export function MovieCoachReview() {
           <p className="mt-1 text-2xl font-mono font-bold text-navy-900 dark:text-sand-100">{resolvedFindings.length}</p>
         </div>
         <div>
-          <p className="text-[10px] tracking-[0.18em] text-navy-400 font-semibold">QA SOURCES</p>
-          <p className="mt-1 text-2xl font-mono font-bold text-navy-900 dark:text-sand-100">{openingQaEvidenceSources.length}</p>
+          <p className="text-[10px] tracking-[0.18em] text-navy-400 font-semibold">OUTCOMES</p>
+          <p className="mt-1 text-2xl font-mono font-bold text-navy-900 dark:text-sand-100">{allProductionOutcomes.length}</p>
+          <p className="text-xs text-navy-400">Opening + Profile</p>
         </div>
         <div>
           <p className="text-[10px] tracking-[0.18em] text-navy-400 font-semibold">LOOP</p>
@@ -114,7 +144,7 @@ export function MovieCoachReview() {
       <section className="mb-9">
         <div className="border-b-2 border-navy-900 dark:border-sand-100 pb-3 mb-4">
           <p className="text-[10px] tracking-[0.2em] font-semibold text-navy-400">ADD REVIEW FINDING</p>
-          <h2 className="mt-1 text-xl font-bold text-navy-900 dark:text-sand-100">今日の10秒で気になったことを1件ずつ分ける</h2>
+          <h2 className="mt-1 text-xl font-bold text-navy-900 dark:text-sand-100">気になったことを1問題 = 1Findingで分ける</h2>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-[1.4fr_0.7fr_1fr_0.8fr] gap-3">
@@ -125,9 +155,16 @@ export function MovieCoachReview() {
               onChange={(event) => setOutcomeId(event.target.value)}
               className="mt-1 w-full border border-sand-200 dark:border-navy-600 bg-white dark:bg-navy-800 px-2 py-2 text-sm text-navy-800 dark:text-sand-100"
             >
-              {openingOutcomes.map((outcome) => (
-                <option key={outcome.outcomeId} value={outcome.outcomeId}>{outcome.title}</option>
-              ))}
+              <optgroup label="Opening Movie">
+                {openingOutcomes.map((outcome) => (
+                  <option key={outcome.outcomeId} value={outcome.outcomeId}>{outcome.title}</option>
+                ))}
+              </optgroup>
+              <optgroup label="Profile Movie">
+                {profileOutcomes.map((outcome) => (
+                  <option key={outcome.outcomeId} value={outcome.outcomeId}>{outcome.title}</option>
+                ))}
+              </optgroup>
             </select>
           </label>
           <label className="text-xs text-navy-500 dark:text-navy-300">
@@ -171,14 +208,16 @@ export function MovieCoachReview() {
             value={note}
             onChange={(event) => setNote(event.target.value)}
             rows={3}
-            placeholder="例: Heroのpushが少し強く、写真よりmotionが先に目に入る"
+            placeholder={selectedOutcome?.movieId === "profile" ? "例: 新郎学生時代が同じテンポで続き、写真一覧に見える" : "例: Heroのpushが少し強く、写真よりmotionが先に目に入る"}
             className="mt-1 w-full border border-sand-200 dark:border-navy-600 bg-white dark:bg-navy-800 px-3 py-2 text-sm text-navy-800 dark:text-sand-100"
           />
         </label>
 
         <div className="mt-3 grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-4 items-start">
           <div className="border-l-2 border-amber-400 pl-4 py-1">
-            <p className="text-[10px] tracking-widest font-semibold text-amber-700 dark:text-amber-300">COACH ROUTING</p>
+            <p className="text-[10px] tracking-widest font-semibold text-amber-700 dark:text-amber-300">
+              COACH ROUTING · {selectedOutcome?.movieId?.toUpperCase() ?? "MOVIE"}
+            </p>
             <p className="mt-1 text-sm text-navy-700 dark:text-navy-200">{selectedCategory.question}</p>
             <p className="mt-1 text-xs text-navy-500 dark:text-navy-300">修正の出発点: {selectedCategory.defaultFix}</p>
           </div>
@@ -202,19 +241,23 @@ export function MovieCoachReview() {
         </div>
 
         {openFindings.length === 0 ? (
-          <p className="py-6 text-sm text-navy-400">Findingはまだありません。previewを見て、1つの問題を1件として追加します。</p>
+          <p className="py-6 text-sm text-navy-400">Findingはまだありません。preview / Full Passを見て、1つの問題を1件として追加します。</p>
         ) : (
           <div className="divide-y divide-sand-200 dark:divide-navy-600">
             {openFindings.map((finding) => {
               const categoryDef =
                 movieReviewCategories.find((item) => item.category === finding.category) ?? movieReviewCategories[0];
-              const outcome = productionOutcomes.find((item) => item.outcomeId === finding.outcomeId);
+              const outcome = allProductionOutcomes.find((item) => item.outcomeId === finding.outcomeId);
+              const profileSkillIds = outcome?.movieId === "profile" ? categoryDef.profileSkillIds ?? [] : [];
+              const routedSkillIds = [...new Set([...categoryDef.skillIds, ...profileSkillIds])];
+
               return (
                 <article key={finding.findingId} className="py-5">
                   <div className="grid grid-cols-1 lg:grid-cols-[110px_1fr_1fr] gap-5">
                     <div>
                       <p className="font-mono text-lg font-bold text-navy-900 dark:text-sand-100">{finding.timecode}</p>
                       <p className="mt-1 text-[10px] uppercase font-mono text-navy-400">{finding.source} / {finding.category}</p>
+                      <p className="mt-1 text-[10px] uppercase font-mono text-navy-400">{outcome?.movieId ?? "unknown"}</p>
                     </div>
                     <div>
                       <p className="text-xs text-navy-400">{outcome?.shortLabel ?? finding.outcomeId}</p>
@@ -225,17 +268,18 @@ export function MovieCoachReview() {
                     <div>
                       <p className="text-[10px] tracking-widest font-semibold text-navy-400">LEARN NEXT</p>
                       <div className="mt-2 space-y-2">
-                        {categoryDef.skillIds.map((skillId) => {
-                          const skill = learningSkills.find((item) => item.skillId === skillId);
-                          if (!skill) return null;
+                        {routedSkillIds.map((skillId) => {
+                          const profileSpecific = profileSkillIds.includes(skillId);
+                          const target = skillLearningTarget(skillId, profileSpecific);
+                          if (!target) return null;
                           const state = getSkillState(skillId, coachProgress.evidence);
                           return (
                             <div key={skillId} className="flex items-center justify-between gap-3 text-xs">
                               <Link
-                                to={`/movie-coach/dictionary?q=${encodeURIComponent(skill.label)}`}
+                                to={target.to}
                                 className="font-semibold text-navy-700 dark:text-navy-200 underline underline-offset-2"
                               >
-                                {skill.label} →
+                                {target.skill.label} →
                               </Link>
                               <span className="text-navy-400">{learningStateLabel[state]}</span>
                             </div>
@@ -267,29 +311,46 @@ export function MovieCoachReview() {
         )}
       </section>
 
-      <section className="mb-10">
-        <div className="border-b-2 border-navy-900 dark:border-sand-100 pb-3 mb-3">
-          <p className="text-[10px] tracking-[0.2em] font-semibold text-navy-400">EXISTING OPENING QA</p>
-          <h2 className="mt-1 text-xl font-bold text-navy-900 dark:text-sand-100">新しい解析基盤を作る前に、既存Evidenceを使う</h2>
-        </div>
-        <div className="divide-y divide-sand-200 dark:divide-navy-600">
-          {openingQaEvidenceSources.map((qa) => (
-            <article key={qa.sourceId} className="py-4 grid grid-cols-1 lg:grid-cols-[1fr_1.2fr] gap-5">
-              <div>
-                <p className="font-bold text-navy-900 dark:text-sand-100">{qa.label}</p>
+      <section className="mb-10 grid grid-cols-1 xl:grid-cols-2 gap-8">
+        <div>
+          <div className="border-b-2 border-navy-900 dark:border-sand-100 pb-3 mb-3">
+            <p className="text-[10px] tracking-[0.2em] font-semibold text-navy-400">EXISTING OPENING QA</p>
+            <h2 className="mt-1 text-lg font-bold text-navy-900 dark:text-sand-100">既存Evidenceを先に使う</h2>
+          </div>
+          <div className="divide-y divide-sand-200 dark:divide-navy-600">
+            {openingQaEvidenceSources.map((qa) => (
+              <article key={qa.sourceId} className="py-4">
+                <p className="font-bold text-sm text-navy-900 dark:text-sand-100">{qa.label}</p>
                 <code className="block mt-2 text-[11px] font-mono text-navy-500 dark:text-navy-300 break-all">{qa.command}</code>
-                <div className="mt-2 flex flex-wrap gap-2">
-                  {qa.reviewCategories.map((item) => (
-                    <span key={item} className="text-[10px] border-b border-sand-300 dark:border-navy-500 text-navy-400">{item}</span>
-                  ))}
-                </div>
-              </div>
-              <div>
-                <p className="text-sm text-navy-700 dark:text-navy-200">{qa.evidence}</p>
-                <p className="mt-2 text-xs leading-5 text-navy-400">境界: {qa.boundary}</p>
-              </div>
-            </article>
-          ))}
+                <p className="mt-2 text-xs text-navy-700 dark:text-navy-200">{qa.evidence}</p>
+                <p className="mt-1 text-[11px] leading-5 text-navy-400">境界: {qa.boundary}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+
+        <div>
+          <div className="border-b-2 border-navy-900 dark:border-sand-100 pb-3 mb-3">
+            <p className="text-[10px] tracking-[0.2em] font-semibold text-navy-400">PROFILE REVIEW EVIDENCE</p>
+            <h2 className="mt-1 text-lg font-bold text-navy-900 dark:text-sand-100">まだ自動解析を捏造しない</h2>
+          </div>
+          <div className="divide-y divide-sand-200 dark:divide-navy-600">
+            <div className="py-4">
+              <p className="font-bold text-sm text-navy-900 dark:text-sand-100">Profile Planner / Scene Data</p>
+              <p className="mt-2 text-xs text-navy-700 dark:text-navy-200">既存photo slot、選定写真、comment、scene purposeをStory / crop Reviewの事実として使う。</p>
+              <Link to="/profile-planner" className="inline-block mt-2 text-xs underline text-navy-600 dark:text-navy-300">Profile Planner →</Link>
+            </div>
+            <div className="py-4">
+              <p className="font-bold text-sm text-navy-900 dark:text-sand-100">Profile Coach DONE WHEN</p>
+              <p className="mt-2 text-xs text-navy-700 dark:text-navy-200">各PhaseのNarrative / Caption / Pacing / Ending条件をReview baselineとして使う。</p>
+              <Link to="/movie-coach/profile" className="inline-block mt-2 text-xs underline text-navy-600 dark:text-navy-300">Profile Movie Coach →</Link>
+            </div>
+            <div className="py-4">
+              <p className="font-bold text-sm text-navy-900 dark:text-sand-100">Full Pass Findings</p>
+              <p className="mt-2 text-xs text-navy-700 dark:text-navy-200">4〜6分を止めずに再生し、退屈・読めない・強い瞬間をtimecode Findingとして残す。</p>
+              <p className="mt-2 text-[11px] leading-5 text-amber-700 dark:text-amber-300">Profile用の自動frame/audio QAはまだ未実装。存在しない解析結果をEvidence扱いしない。</p>
+            </div>
+          </div>
         </div>
       </section>
 
