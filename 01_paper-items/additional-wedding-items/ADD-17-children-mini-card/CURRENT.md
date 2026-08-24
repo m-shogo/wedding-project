@@ -1,6 +1,6 @@
 # ADD-17 子ども向けミニカード / ぬりえ — Current
 
-Status: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / PROFESSIONAL_VNEXT_EXPEDITION_FIELD_SELECTED / FAMILY_DIVERSITY_PASS / LONG_COPY_VISUAL_PASS / CHILD_ACTIVITY_SURFACE_PASS / ACTIVITY_TICK_SUBTRACTION_PASS / DISCOVERY_LABEL_CONTAINMENT_SUBTRACTION_PASS / DISCOVERY_CUE_CONSOLIDATION_PASS / LEGACY_PRESERVED / BLOCKED_REQUIRED_INPUT / NOT_PRINT_READY`
+Status: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / PROFESSIONAL_VNEXT_EXPEDITION_FIELD_SELECTED / FAMILY_DIVERSITY_PASS / LONG_COPY_VISUAL_PASS / CHILD_ACTIVITY_SURFACE_PASS / ACTIVITY_TICK_SUBTRACTION_PASS / DISCOVERY_LABEL_CONTAINMENT_SUBTRACTION_PASS / DISCOVERY_CUE_CONSOLIDATION_PASS / BACK_SIDE_TAPE_SUBTRACTION_PASS / LEGACY_PRESERVED / BLOCKED_REQUIRED_INPUT / NOT_PRINT_READY`
 Updated: 2026-08-24
 Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
 
@@ -13,8 +13,10 @@ This is the current visual/design authority entry point for the age-independent 
 - current selected back: `67:4 / CURRENT_SELECTED / ADD17 / BACK / DISCOVERY POSTLOG`
 - hidden realistic stress: `69:2 / 69:40`
 - current clean-room page: `67:2 / VNEXT_PRO / ADD-17 / EXPEDITION FIELD SHEET / 2026-08-23`
-- latest consolidated-cue comparisons: `79:2 / 79:40 / 79:78 / 79:97` — hidden after adoption
-- latest complete pre-consolidation rollbacks: `80:2 / 80:40 / 80:78 / 80:97` — hidden
+- latest back no-side-tape comparisons: `82:2 / 82:21` — hidden after adoption
+- latest complete pre-side-tape rollbacks: `82:40 / 82:59` — hidden
+- prior consolidated-cue comparisons: `79:2 / 79:40 / 79:78 / 79:97` — hidden after adoption
+- prior complete pre-consolidation rollbacks: `80:2 / 80:40 / 80:78 / 80:97` — hidden
 - prior no-rounded-label comparison: `78:2 / 78:40` — hidden after adoption
 - prior complete pre-label-subtraction rollback: `78:78 / 78:116` — hidden
 - prior no-activity-ticks comparison: `73:2` — hidden after promotion
@@ -29,27 +31,25 @@ This is the current visual/design authority entry point for the age-independent 
 
 `旅の途中で「見つけた！」が生まれる瞬間を、自由に描ける一枚のフィールドへ。`
 
-The Current treats the item as a playful **expedition field sheet / discovery note**, while keeping a large child-neutral activity surface open.
+The Current treats the item as a playful **expedition field sheet / discovery note**, while keeping large child-neutral activity and writing surfaces open.
 
 Front:
 - pale mint paper field;
 - Japanese-first `旅の途中で、見つけたもの。`;
-- one compact cobalt→pink discovery-route gesture placed outside the main activity surface as the dominant movement cue;
-- one outlined star retained as the single secondary discovery symbol;
-- the former isolated pink wave and yellow spark are now hidden after a rollback-safe whole/reading/actual-size + long-copy comparison showed they scattered attention without adding a distinct semantic or physical job;
-- reader-facing native `きょうの発見 / 01` shown directly in coral on the mint paper field;
-- the former large rounded coral carrier behind that kicker remains hidden because it read as generic UI/pill grammar;
-- four former activity-corner ticks remain hidden so the drawing field stays open and does not read like a crop/scanner reticle;
-- native `[お題]`, optional name and date roles;
-- open footer copy + short yellow rule instead of a rounded UI-like footer container.
+- one compact cobalt→pink discovery-route gesture as the dominant movement cue;
+- one outlined star as the single secondary discovery symbol;
+- former isolated wave/spark, rounded kicker carrier and four activity ticks remain hidden after bounded QA;
+- native `きょうの発見 / 01`, `[お題]`, optional name and date roles;
+- open footer copy + short yellow rule.
 
 Back:
-- cream open writing field with cobalt top band and coral physical edge;
+- cream open writing field with cobalt top band;
+- the former full-height coral side tape is now hidden after whole / reading / native-size + long-copy comparison showed it read as an unnecessary rail rather than a convincing physical tape/binding cue;
 - reader-facing `きょうの発見 / 02`;
 - Japanese-first `もうひとつ、見つけたこと。`;
 - open writing rules rather than cards/boxes;
 - one outlined star retained outside the writing field;
-- the former separate pink bottom wave is hidden after the same consolidation comparison showed the star alone was enough to carry the discovery cue while preserving more writing-field calm.
+- former isolated bottom wave remains hidden.
 
 All prompts, guidance, optional name and date remain native editable Figma text.
 
@@ -57,93 +57,81 @@ All prompts, guidance, optional name and date remain native editable Figma text.
 
 Professional Design Council remains `94/100 / PASS / NO VETO`.
 
-The selected direction was originally chosen from three materially different blank-frame directions, then rebuilt at full size. Three later bounded Current-only improvements strengthened the same art direction without reopening the clean-room selection:
+The selected direction was originally chosen from three materially different blank-frame directions, then rebuilt at full size. Later bounded Current-only improvements strengthened the same art direction without reopening the clean-room selection:
 
-1. activity-corner ticks were removed after they read as scanner/crop UI;
-2. the rounded coral carrier behind `きょうの発見 / 01` was removed after it read as generic pill/banner containment while the native label itself remained useful;
-3. remaining isolated secondary discovery marks were consolidated so each face keeps one clear discovery symbol, while the front also keeps the single dominant movement route.
+1. activity-corner ticks removed after reading as scanner/crop UI;
+2. rounded coral carrier behind `きょうの発見 / 01` removed after reading as generic pill/banner containment;
+3. secondary discovery marks consolidated to one dominant route + one star on front and one star on back;
+4. the back coral side tape removed after it read as a floating rail and did not prove a fold/binding/trim/writing job.
 
-Latest consolidation comparison:
-- front Current comparison: `79:2`;
-- front realistic long-copy comparison: `79:40`;
-- back Current comparison: `79:78`;
-- back realistic long-copy comparison: `79:97`;
-- complete pre-change rollbacks: `80:2 / 80:40 / 80:78 / 80:97`.
+Latest side-tape comparison:
+- back Current comparison: `82:2`;
+- back realistic long-copy comparison: `82:21`;
+- complete pre-change rollbacks: `82:40 / 82:59`.
 
-Only the secondary fixed vector cues changed. Wording, typography, route, prompt, name/date, activity/writing surfaces, writing rules, footer and physical paper fields were unchanged.
+Only the back fixed side-tape visibility changed in the latest pass. Wording, typography, writing rules, cobalt header, star, name/date and page size were unchanged.
 
 Whole-item / thumbnail: PASS.
 Reading scale: PASS.
 Actual-size / native `1110×1540`: PASS.
-Realistic long-copy front/back: PASS with the same treatment.
+Realistic long-copy front/back: PASS.
 
 ## Structure / stress QA
 
-Selected front `67:3` after latest consolidation:
+Selected front `67:3`:
 - native text `7`;
 - fixed-height visible text `0`;
 - outside visible text `0`;
 - IMAGE fills `0`;
-- `DECOR / CORAL CORNER FLAG`: hidden;
-- `TEXT / KICKER`: native `Noto Sans JP Bold`, coral fill;
-- four `VECTOR / ACTIVITY TICK *` roles: hidden;
-- `VECTOR / DISCOVERY WAVE`: hidden;
-- `VECTOR / DISCOVERY SPARK`: hidden;
-- `VECTOR / DISCOVERY STAR`: visible;
-- `VECTOR / DISCOVERY ROUTE`: visible.
+- rounded coral carrier hidden;
+- activity ticks hidden;
+- discovery wave/spark hidden;
+- discovery star and route visible.
 
 Selected back `67:4`:
 - native text `6`;
 - fixed-height visible text `0`;
 - outside visible text `0`;
-- text-text collision `0`;
 - IMAGE fills `0`;
-- `VECTOR / BOTTOM WAVE`: hidden;
-- `VECTOR / BOTTOM STAR`: visible.
+- `DECOR / CORAL SIDE TAPE`: hidden;
+- cobalt top band: visible;
+- writing rules: visible;
+- bottom wave hidden;
+- bottom star visible.
 
-Stress front `69:2`:
-- native text `7`;
-- fixed-height visible text `0`;
-- outside visible text `0`;
-- IMAGE fills `0`;
-- same consolidated front cue state.
-
-Stress back `69:40`:
-- native text `6`;
-- fixed-height visible text `0`;
-- outside visible text `0`;
-- IMAGE fills `0`;
-- same consolidated back cue state.
+Stress front `69:2` retains the same front cue state.
+Stress back `69:40` retains the same no-side-tape back state.
+Both stress roots keep fixed-height visible text `0`, outside visible text `0`, and IMAGE fills `0`.
 
 Meaningful failures caught and corrected:
 
 1. three disconnected colored bars read as generic decoration; method-switched to one coherent discovery-route gesture;
-2. a rounded cobalt footer box reintroduced UI/pill grammar; removed and replaced by open native copy + short rule;
-3. realistic long-copy placed the prompt too near a fixed activity corner and reduced lower reserve; prompt width/activity geometry were reworked without shrinking the main headline;
-4. the remaining activity ticks later read more like crop/scanner reticles and were hidden after bounded QA;
-5. the large rounded coral kicker carrier later read as another generic UI/pill container; no-carrier Current + long-copy comparison proved the native label was strong enough on its own;
-6. after those cleanups, the front wave/spark and back wave became redundant isolated cues. Consolidation comparisons proved the route + one star on front and one star on back kept the playful discovery identity with better hierarchy and calmer activity/writing space.
+2. rounded footer box reintroduced UI/pill grammar; replaced by open native copy + short rule;
+3. realistic long-copy required wider prompt/lower reserve;
+4. four activity ticks read like crop/scanner reticles and were removed;
+5. rounded discovery-label carrier read as generic pill/banner containment and was removed;
+6. remaining isolated wave/spark cues became redundant once route/star already carried the concept and were consolidated;
+7. the back full-height coral `tape` did not read as a convincing physical binding/trim cue and behaved like a side rail, so it was removed after rollback-safe comparison.
 
 Canonical evidence:
 - `PROFESSIONAL-VNEXT-EXPEDITION-FIELD-PROMOTION-QA-2026-08-23.md`
 - `ACTIVITY-TICK-SUBTRACTION-QA-2026-08-23.md`
 - `DISCOVERY-LABEL-CONTAINMENT-SUBTRACTION-QA-2026-08-23.md`
 - `DISCOVERY-CUE-CONSOLIDATION-QA-2026-08-24.md`
+- `BACK-CORAL-SIDE-TAPE-SUBTRACTION-QA-2026-08-24.md`
 - previous `PROFESSIONAL-VNEXT-FOLDOUT-DISCOVERY-MAP-QA-2026-08-22.md` remains rollback/history evidence.
 
 ## Hybrid / image decision
 
 - variable/semantic/factual copy: native text;
 - retained discovery route/star: small editable vector/SVG roles;
-- former secondary wave/spark roles: hidden after bounded comparison;
-- paper fields/rules: simple native functional geometry;
-- activity-corner ticks: hidden after bounded comparison;
-- rounded discovery-label carrier: hidden after bounded comparison;
+- paper fields/writing rules/cobalt header: simple native functional geometry;
+- former side tape and secondary decorative cues: hidden after bounded comparison;
 - generated/composed raster: `0`;
 - replaceable image role: `0`;
 - image generation: `0`.
 
-`IMAGE_GENERATION_NOT_REQUIRED_FOR_THIS_PASS`: the screenshot-supported bottleneck was scattered secondary decoration, not missing photography or illustration. Generic travel imagery or generated children would reduce function and increase stock/identity risk.
+`IMAGE_GENERATION_NOT_REQUIRED_FOR_THIS_PASS`: the screenshot-supported bottleneck was an unnecessary fixed rail, not missing photography or illustration. Generic travel imagery or generated children would reduce function and increase stock/identity risk.
 
 ## Drive
 
@@ -154,9 +142,9 @@ Drive writes for this pass: `0`.
 
 ## Learning state
 
-`VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE` for the narrow discovery-cue consolidation result. It is not a rule to reduce all decoration to one symbol. The reusable question is whether additional isolated fixed cues add a distinct semantic / physical / reader-facing job after the primary concept is already clear. Test consolidation rollback-safely at whole-item scale before adoption.
+`VERIFIED_LOCAL` application of the established non-Rurubu physical-cue QA: a layer name such as `tape`, `edge`, or `rail` does not prove physical meaning. Keep it only when the whole artifact shows a reader-facing, binding, fold, trim, or functional job.
 
-Do not transfer ADD-17's palette, star, route geometry, child-card composition or exact cue count to other items.
+No new project rule is created from this single change. Do not transfer ADD-17's palette, star, route geometry, child-card composition or cue count to other items.
 
 ## Final-use blocker
 
