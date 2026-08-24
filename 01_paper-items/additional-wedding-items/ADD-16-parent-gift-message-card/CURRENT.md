@@ -1,6 +1,6 @@
 # ADD-16 両親贈呈品メッセージカード — Current
 
-Status: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / PROFESSIONAL_VNEXT_HOME_TEXTILE_MAT_SELECTED / FAMILY_DIVERSITY_PASS / LONG_COPY_VISUAL_PASS / AUTO_HEIGHT_PASS / JAPANESE_KICKER_FONT_ASSIGNMENT_PASS / GENERIC_ENGLISH_KICKER_SUBTRACTION_PASS / VERTICAL_THREAD_SUBTRACTION_PASS / WRITING_SURFACE_PASS / LEGACY_PRESERVED / NOT_PRINT_READY`
+Status: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / PROFESSIONAL_VNEXT_HOME_TEXTILE_MAT_SELECTED / FAMILY_DIVERSITY_PASS / LONG_COPY_VISUAL_PASS / AUTO_HEIGHT_PASS / JAPANESE_KICKER_FONT_ASSIGNMENT_PASS / GENERIC_ENGLISH_KICKER_SUBTRACTION_PASS / VERTICAL_THREAD_SUBTRACTION_PASS / ACTUAL_SIZE_DATE_LEGIBILITY_PASS / WRITING_SURFACE_PASS / LEGACY_PRESERVED / NOT_PRINT_READY`
 Updated: 2026-08-24
 Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
 Professional quality authority: `docs/design-learning/PROFESSIONAL-DESIGN-COUNCIL-VNEXT-2026-08-20.md`
@@ -14,128 +14,106 @@ This file is the current item-level selected-authority entry point. RETURN LETTE
 - front: `57:3 / CURRENT_SELECTED / ADD16 / FRONT / HOME TEXTILE MAT`
 - back: `57:17 / CURRENT_SELECTED / ADD16 / BACK / HOME TEXTILE MAT WRITING`
 - hidden realistic long-copy: `57:36 / 57:50`
-- latest no-vertical-thread comparisons: `69:2 / 69:18 / 69:37 / 69:53` — hidden after adoption
-- latest complete pre-thread-subtraction rollbacks: `70:2 / 70:18 / 70:37 / 70:53` — hidden
+- latest date-legibility comparison: `72:2 / QA / ADD-16 / FRONT / DATE LEGIBILITY 24PX / 2026-08-24` — hidden after adoption
+- latest complete pre-date-legibility rollbacks: `72:18 / 72:34` — hidden
+- prior no-vertical-thread comparisons: `69:2 / 69:18 / 69:37 / 69:53` — hidden
+- prior pre-thread-subtraction rollbacks: `70:2 / 70:18 / 70:37 / 70:53` — hidden
 - pre-font-repair front rollback: `66:2 / 66:18`
 - pre-English-kicker-subtraction back rollback: `68:2 / 68:21`
-- no-English-kicker comparison: `67:2` — hidden after adoption
+- no-English-kicker comparison: `67:2` — hidden
 - three-direction blank-frame study: `56:2`
-- retained previous Current RETURN LETTER HOME: `54:2 / 54:3 / 54:15` — visual content preserved, comparison/history only
-- retained previous selected HOMEWARD JOURNEY: `45:2 / 45:32 / 45:42` — comparison/history only
+- retained previous Current RETURN LETTER HOME: `54:2 / 54:3 / 54:15` — comparison/history only
+- retained HOMEWARD JOURNEY: `45:2 / 45:32 / 45:42` — comparison/history only
 - retained HOME HORIZON: `18:3 / 18:14` — comparison/history only
 - retained legacy: `1:2 / 1:13` — comparison/history only
 
-## Current visual direction
+## Current visual direction — HOME TEXTILE MAT
 
 Emotional brief: `育ててもらった時間を、これからの暮らしへ持っていく。`
-
-The selected direction treats ADD-16 as a tactile `HOME TEXTILE MAT` keepsake rather than another letter/envelope artifact:
 
 - dark forest selvage as the main physical anchor;
 - warm oat paper field;
 - rust + saffron short weave bands;
-- the former long `THREAD / VERTICAL` rail is hidden after a bounded comparison showed that the selvedge/weft already carried the textile metaphor and the long rule read more like an editorial/UI rail;
+- former long `THREAD / VERTICAL` hidden after it read as an editorial/UI rail rather than textile structure;
 - Japanese-first `育ててくれた時間を、これからの力に。`;
-- explicit `Noto Sans JP Bold` assignment for the front Japanese kicker `両親へ`;
-- open native message/signature roles on the front;
-- open writing surface with functional rules on the reverse;
-- reverse Japanese-first `ことばを、持って帰ろう。` carries the emotional first read without the former generic English art-direction kicker;
-- no envelope flap, paper-insert construction, giant circle/capsule, fake airline credential, barcode, route UI, tropical clip-art or generated family/person imagery.
-
-The metaphor is tied to `home / upbringing / keepsake / carrying something into the next life stage`, not reused merely because another paper-object style worked elsewhere.
+- front kicker `両親へ` explicitly `Noto Sans JP Bold`;
+- open native parent-message/signature roles;
+- confirmed date `2026.10.24` now `Inter Bold / 24 px / 32 px line-height`, promoted from `18 / 26` after actual-size comparison;
+- open reverse writing surface with functional rules;
+- reverse Japanese-first `ことばを、持って帰ろう。` without the former generic English art-direction kicker;
+- no envelope flap, giant circle/capsule, fake airline credential, route UI, tropical clip-art or generated family/person imagery.
 
 All message/date/signature/guide roles remain native editable text.
 
-## Latest bounded editorial cleanups — 2026-08-23
+## Latest bounded typography repair — actual-size date legibility / 2026-08-24
 
-### Generic English back kicker
-
-Fresh native-size review of Current back found `FOR THE WORDS WE WANT TO KEEP` above the Japanese display. The phrase did not identify the artifact, destination, function, factual information, or an intentional bilingual role; it duplicated the Japanese message and read as internal concept microcopy.
+Fresh native `700×1036` review showed the confirmed date on the front was technically readable but visually weak at `18 px / 26 px line-height`.
 
 Rollback-safe comparison:
-- `67:2 / QA / ADD-16 / BACK / NO GENERIC ENGLISH KICKER / 2026-08-23`
+- `72:2 / QA / ADD-16 / FRONT / DATE LEGIBILITY 24PX / 2026-08-24`;
+- only the date typography changed `18 / 26 → 24 / 32`;
+- wording, x/y/width, composition, message/signature, textile geometry and back remained unchanged.
 
-Only the English `TEXT / KICKER` visibility changed. The no-kicker version was stronger at native `700×1036`, so complete hidden rollbacks were created before Current mutation:
-- Current-back rollback `68:2`;
-- back-stress rollback `68:21`.
+The 24px date remained clearly subordinate to the Japanese display while becoming more credible at physical/detail scale.
 
-Adopted Current/stress change:
-- `57:24 / TEXT / KICKER`: hidden;
-- `57:57 / TEXT / KICKER`: hidden.
+Complete hidden pre-change rollbacks:
+- Current front `72:18`;
+- realistic long-copy front `72:34`.
 
-Fresh Current screenshot and realistic long-copy screenshot both PASS. Stress was re-hidden after proof. This is an application of the already promoted `GENERIC_ENGLISH_INTERNAL_CONCEPT_LABEL` rule, not a new visual-style rule.
+Promoted state:
+- Current date `57:16`: `Inter Bold / 24 px / 32 px / textAutoResize=HEIGHT`;
+- stress date `57:49`: same;
+- comparison `72:2`: hidden after verification.
 
-### Vertical thread subtraction
+Fresh whole / reading / native-size and realistic long-copy screenshots: PASS.
 
-Fresh whole/actual-size review found the long `THREAD / VERTICAL` on both sides increasingly read as an editorial rail rather than textile structure. The dark forest selvedge and horizontal weft bands already carried the material metaphor.
+This is a `VERIFIED_LOCAL` application of the already promoted `FACTUAL_MICROTYPE_LOOKS_FINE_ON_SCREEN_BUT_IS_TOO_SMALL_AT_PHYSICAL_SCALE` QA rule. It does not create a universal point-size threshold.
 
-Rollback-safe comparisons changed only thread visibility:
-- front `69:2`;
-- back `69:18`;
-- front realistic long-copy `69:37`;
-- back realistic long-copy `69:53`.
+## Other verified cleanups retained
 
-All four comparisons passed. Removing the thread increased intentional whitespace on the front and made the back writing field more open without losing textile identity or grouping.
-
-Complete pre-change rollbacks:
-- `70:2 / 70:18 / 70:37 / 70:53`.
-
-Current and stress `THREAD / VERTICAL` roles are hidden. Comparisons and rollbacks remain hidden. Learning state: `VERIFIED_LOCAL`; this is another application of the established whole-item fixed-bar/rail function audit, not a new project-wide visual rule.
+- Japanese semantic kicker `両親へ`: explicit `Noto Sans JP Bold`, no Latin-family fallback.
+- generic English back kicker `FOR THE WORDS WE WANT TO KEEP`: hidden after bounded comparison showed no reader-facing job.
+- long `THREAD / VERTICAL`: hidden after Current + stress comparison showed selvedge/weft already carried the textile metaphor.
 
 ## QA
 
 Professional Design Council: `93/100 / PASS / NO VETO`.
 
-Selected + realistic stress evidence after the latest cleanup:
-
+Current + stress after the latest repair:
 - canvas `700×1036`;
 - whole-item / reading / native actual-size: PASS;
-- selected front/back native visible text: `5 / 4`;
-- stress front/back native visible text: `5 / 4`;
-- fixed-height visible text: `0` across selected + stress;
+- realistic long-copy: PASS;
+- selected front/back visible native text: `5 / 4`;
+- stress front/back visible native text: `5 / 4`;
+- fixed-height visible text: `0`;
 - visible text outside root: `0`;
-- text-text collisions: `0` in verified semantic lanes;
 - IMAGE fills: `0`;
-- Current/stress generic English kicker: hidden;
 - Current/stress vertical thread: hidden;
-- variable/factual copy remains native editable text;
-- stress roots returned hidden after proof review.
-
-Meaningful failures and repairs retained as learning evidence:
-
-1. first `THANK-YOU BROADSIDE` study had an unstable oversized date wrap/crop → rejected rather than polished;
-2. first HOME TEXTILE study used an automatic Japanese display wrap that orphaned `を、` → mature candidate used an explicit semantic line break;
-3. realistic front stress orphaned final `に。` and allowed growing message copy to collide with a fixed signature → content roles were rebuilt as native auto-height text inside a fixed-height vertical stack with a flexible spacer;
-4. first stack mutation attempt failed before mutation because required Figma fonts were not loaded → input contract corrected with explicit font loading before retry;
-5. realistic back stress exposed a mechanical guide-word break/footer-lane collision → guide/signature widths and positions separated without shrinking type;
-6. Japanese semantic front kicker was assigned to `Inter Bold` and relied on fallback glyphs → repaired to explicit `Noto Sans JP Bold`;
-7. generic English back kicker had no reader-facing job → removed after rollback-safe comparison and fresh long-copy QA;
-8. long vertical thread was conceptually named but did not prove a rendered physical/binding job → hidden after Current + stress comparison.
+- Current/stress generic English back kicker: hidden;
+- front Current/stress date: `24 px / 32 px / HEIGHT`;
+- variable/factual copy remains native editable text.
 
 Canonical evidence:
-
 - `PROFESSIONAL-VNEXT-HOME-TEXTILE-MAT-FAMILY-DIVERSITY-QA-2026-08-22.md`
 - `FIGMA-JAPANESE-KICKER-FONT-ASSIGNMENT-QA-2026-08-23.md`
 - `FIGMA-BACK-GENERIC-ENGLISH-KICKER-SUBTRACTION-QA-2026-08-23.md`
 - `FIGMA-VERTICAL-THREAD-SUBTRACTION-QA-2026-08-23.md`
-- previous `PROFESSIONAL-VNEXT-RETURN-LETTER-FAMILY-DIVERSITY-QA-2026-08-21.md` remains retained history.
+- `FIGMA-ACTUAL-SIZE-DATE-LEGIBILITY-QA-2026-08-24.md`
 
 ## Hybrid / image decision
 
 - variable/factual/emotional copy: native text;
 - weave/selvage/writing rules: simple native functional geometry;
-- long vertical thread: hidden after bounded function test;
 - SVG: `0`;
 - generated/composed raster: `0`;
 - replaceable image role: `0`;
 - image generation: `0`.
 
-`IMAGE_GENERATION_NOT_REQUIRED_FOR_THIS_PASS`: the diagnosed quality gap was editorial/physical meaning of fixed geometry, not missing photography/illustration. Generating parents/family is prohibited, and generic tropical/home imagery would weaken specificity and writing function rather than solve the root cause.
+`IMAGE_GENERATION_NOT_REQUIRED_FOR_THIS_PASS`: the latest defect was factual typography, not missing photography or illustration. Generated parents/family remain prohibited.
 
 ## Drive
 
-Exact authority live-confirmed:
-
+Exact authority live-confirmed on 2026-08-24:
 - `1BOyETtL1_loGXNjGV9S30sJKEhZNjd6O / ADD-16_両親贈呈品メッセージカード`
 
 Drive writes for the latest pass: `0`.
@@ -143,12 +121,11 @@ Drive writes for the latest pass: `0`.
 ## Deferred finalization
 
 Still unresolved and intentionally not fabricated:
-
 - one card per family vs one shared card;
 - actual gift/package/attachment method;
 - whether names appear on front;
 - final body copy / signatures / forms of address;
-- paper stock and whether textile character should be reinforced through paper/ink/finish rather than more digital decoration;
+- paper stock/finish;
 - vendor template/profile, bleed/export settings;
 - physical attachment and 100% print proof.
 
