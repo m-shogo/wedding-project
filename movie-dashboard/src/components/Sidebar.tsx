@@ -30,6 +30,7 @@ const navSections: SidebarSection[] = [
     label: "LEARN",
     links: [
       { to: "/movie-coach/dictionary", label: "逆引きDaVinci辞典", icon: "⌕" },
+      { to: "/movie-coach/start-rhythm", label: "StaRt Rhythm Lab", icon: "♬" },
       { to: "/movie-coach/timeline", label: "Timeline Anatomy", icon: "≡" },
       { to: "/movie-coach/color", label: "Color Learning", icon: "◐" },
       { to: "/movie-coach/audio", label: "Audio Learning", icon: "♫" },
