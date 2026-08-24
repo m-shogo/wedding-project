@@ -7,7 +7,7 @@ Figma file: `bfM0d4c9dCeBv5pCkJ3TNM`
 Study page: `2052:2 / 07_RURUBU_V7_V8_PRO_STUDIES`
 
 V6 control: frozen `JC + IX + JB + IZ + IT + JA`
-V7 comparison: preserved current live set `C8 + K2 + F3 + G7 + H7 + C6D`
+V7 comparison: preserved current live set `C8 + K2 + F4 + G8 + H8 + C6D`
 Production state: `V8_AV2+AW4+AL3+AQ4+AS5+AT4 / DISTINCT_BOOK_EDITORIAL_SYSTEM / UNPAGINATED_STUDY / TEMPORAL_TRUTH_GATED / REAL_CONTENT_BLOCKED / NOT_GLOBAL_WINNER / NOT_PRINT_READY`
 
 ## Current live V8 comparison set
@@ -19,18 +19,17 @@ Production state: `V8_AV2+AW4+AL3+AQ4+AS5+AT4 / DISTINCT_BOOK_EDITORIAL_SYSTEM /
 5. **Cafe/Table AS5 `2407:25`** — typography-led sensory left page + asymmetric dining photo-essay dummy; unsupported exact `11:40` removed while native `ひと休み` remains.
 6. **1DAY AT4 `2409:37`** — restrained daypart scan `朝 / 昼 / 午後 / 夜` + one place-observation dummy; unsupported exact schedule removed; no route map without verified geography.
 
-Live page readback after the V7 G7 promotion confirms all six V8 current roots remain visible and unchanged under `2052:2`, with V7+V8 current-root pairwise overlap `0`.
+Live page readback after the V7 F4/G8/H8 semantic-section-marker promotion confirms all six V8 current roots remain visible and unchanged under `2052:2`. V8 production nodes, typography, photography, crops, image hashes and factual copy were not changed in this run.
 
 ## Current verified/blocked learning retained
 
 - **RSL-257** exact temporal values require itinerary/schedule authority; V8 Cafe/1DAY remain truth-gated.
 - **RSL-258** cloned-frame mutation targets must use visible semantic roles and exact-one-match/readback.
-- **RSL-207** page-level create/clone/move must explicitly set the authority page and read back parent. Its V7 G6 recurrence was repaired without changing V8 production.
+- **RSL-207** page-level create/clone/move must explicitly set the authority page and read back parent.
 - AQ4's grounded memory copy must not authenticate generic structural photo dummies as real place photography.
 - Unverified folios stay withheld until real page order/count/imposition exist.
 - Schematic route graphics stay excluded until verified geography exists.
-
-No V8 design node, typography, photography, crop, image hash or factual copy changed in the G7 run. Only this comparator pointer was synchronized to the latest live V7 set so durable status matches Figma authority.
+- V7's newly verified semantic-only top-level section-marker treatment is comparison evidence only; it does not authorize copying V7 marker styling or structure into V8.
 
 ## Drive / asset truth
 
@@ -48,7 +47,7 @@ This pass:
 - Drive writes `0`
 - new Drive masters `0`
 - new image hashes `0`
-- final photography adopted `0`.
+- final photography adopted `0`
 
 ## Truth / completion gates
 
