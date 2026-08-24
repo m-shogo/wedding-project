@@ -25,6 +25,7 @@ import { DataManager } from "./pages/DataManager";
 import { SceneDetail } from "./pages/SceneDetail";
 import { ProfilePlanner } from "./pages/ProfilePlanner";
 import { OpeningPhotoIntake } from "./pages/OpeningPhotoIntake";
+import { OpeningBgmIntake } from "./pages/OpeningBgmIntake";
 import { MovieCoach } from "./pages/MovieCoach";
 import { MovieCoachDictionary } from "./pages/MovieCoachDictionary";
 import { ProfileMovieCoach } from "./pages/ProfileMovieCoach";
@@ -64,6 +65,7 @@ export default function App() {
               <Route path="movie-coach/book" element={<BookManifestManager />} />
               <Route path="movie-coach/reference" element={<ReferenceBreakdown />} />
               <Route path="opening-photo-intake" element={<OpeningPhotoIntake />} />
+              <Route path="opening-bgm-intake" element={<OpeningBgmIntake />} />
               <Route path="storyboard" element={<Storyboard />} />
               <Route path="assets" element={<AssetLibrary />} />
               <Route path="clips" element={<ClipLibrary />} />

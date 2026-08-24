@@ -27,6 +27,7 @@ const requiredRoutes = [
   "/movie-coach/compare",
   "/movie-coach/reference",
   "/opening-photo-intake",
+  "/opening-bgm-intake",
   "/video-shot-planner",
   "/video-prompt-builder",
   "/video-generation-queue",
@@ -58,6 +59,7 @@ for (const route of requiredRoutes) {
 
 if (!sidebar.includes('label: "Movie Coach / Today"')) errors.push("primary Movie Coach link must explain Today purpose");
 if (!sidebar.includes('label: "Opening写真11枚"')) errors.push("Opening photo intake must be visible in production navigation");
+if (!sidebar.includes('label: "Opening BGM"')) errors.push("Opening BGM intake must be visible in production navigation");
 if (!sidebar.includes('className="flex-1 p-3 overflow-y-auto"')) errors.push("grouped long navigation must remain scrollable");
 
 if (errors.length) {
