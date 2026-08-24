@@ -24,6 +24,7 @@ import { QualityGate } from "./pages/QualityGate";
 import { DataManager } from "./pages/DataManager";
 import { SceneDetail } from "./pages/SceneDetail";
 import { ProfilePlanner } from "./pages/ProfilePlanner";
+import { OpeningPhotoIntake } from "./pages/OpeningPhotoIntake";
 import { MovieCoach } from "./pages/MovieCoach";
 import { MovieCoachDictionary } from "./pages/MovieCoachDictionary";
 import { ProfileMovieCoach } from "./pages/ProfileMovieCoach";
@@ -62,6 +63,7 @@ export default function App() {
               <Route path="movie-coach/compare" element={<ComparisonLab />} />
               <Route path="movie-coach/book" element={<BookManifestManager />} />
               <Route path="movie-coach/reference" element={<ReferenceBreakdown />} />
+              <Route path="opening-photo-intake" element={<OpeningPhotoIntake />} />
               <Route path="storyboard" element={<Storyboard />} />
               <Route path="assets" element={<AssetLibrary />} />
               <Route path="clips" element={<ClipLibrary />} />
