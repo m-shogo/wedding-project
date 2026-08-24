@@ -36,6 +36,7 @@ import { ShortcutTraining } from "./pages/ShortcutTraining";
 import { ComparisonLab } from "./pages/ComparisonLab";
 import { BookManifestManager } from "./pages/BookManifestManager";
 import { ReferenceBreakdown } from "./pages/ReferenceBreakdown";
+import { AutomationReadiness } from "./pages/AutomationReadiness";
 import { Guide } from "./pages/Guide";
 import { AssetPlacementGuide } from "./pages/AssetPlacementGuide";
 
@@ -51,6 +52,7 @@ export default function App() {
               <Route path="movie-coach" element={<MovieCoach />} />
               <Route path="movie-coach/dictionary" element={<MovieCoachDictionary />} />
               <Route path="movie-coach/profile" element={<ProfileMovieCoach />} />
+              <Route path="movie-coach/auto" element={<AutomationReadiness />} />
               <Route path="movie-coach/review" element={<MovieCoachReview />} />
               <Route path="movie-coach/fusion" element={<FusionNodeTranslator />} />
               <Route path="movie-coach/color" element={<ColorLearning />} />
