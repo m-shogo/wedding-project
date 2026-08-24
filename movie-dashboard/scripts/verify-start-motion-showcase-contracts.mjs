@@ -41,7 +41,7 @@ for (const presetId of new Set(presetIds)) {
   if (!catalog.includes(`p("${presetId}"`)) errors.push(`Showcase references unknown Motion Kit preset: ${presetId}`);
 }
 
-const plannedCount = (data.match(/status: "planned"/g) ?? []).length;
+const plannedCount = (data.match(/status: "planned",/g) ?? []).length;
 if (plannedCount !== slotIds.length) errors.push(`all rough slots must remain planned until artifact review: planned=${plannedCount}, slots=${slotIds.length}`);
 if (/status:\s*"approved"/.test(data)) errors.push("Showcase must not auto-approve slots");
 
