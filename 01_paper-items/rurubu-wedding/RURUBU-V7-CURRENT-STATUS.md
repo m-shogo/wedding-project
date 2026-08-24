@@ -1,6 +1,6 @@
 # るるぶWEDDING V7 — CURRENT STATUS
 
-Date: 2026-08-24
+Date: 2026-08-25
 Direction: Hawaii / high-energy Japanese travel-information editorial, clean-room from V6
 Authority order: live Figma → verified Drive → Rurubu evidence → this status
 Figma file: `bfM0d4c9dCeBv5pCkJ3TNM`
@@ -8,61 +8,70 @@ Study page: `2052:2 / 07_RURUBU_V7_V8_PRO_STUDIES`
 
 V6 control: frozen `JC + IX + JB + IZ + IT + JA`
 V8 comparison: `AV5 + AW8 + AL4 + AQ7 + AS7 + AT5`
-Production state: `V7_6_OF_6_LIVE_COMPARISON_SET / C8+K3+F4+G9+H10+C6D / UNPAGINATED_STUDY / TEMPORAL_TRUTH_GATED / SECTION-ORDER-TRUTH-GATED / PHOTO-SOURCE-TRUTH-GATED / PERSONAL-CONTENT-TRUTH-GATED / PRINT_PROOF_BLOCKED / PRINTER_TEMPLATE_BLOCKED / REAL_CONTENT_BLOCKED / NOT_GLOBAL_WINNER / NOT_PRINT_READY`
+Production state: `V7_6_OF_6_LIVE_COMPARISON_SET / C8+K4+F4+G9+H10+C6D / UNPAGINATED_STUDY / TEMPORAL_TRUTH_GATED / SECTION-ORDER-TRUTH-GATED / PHOTO-SOURCE-TRUTH-GATED / PERSONAL-CONTENT-TRUTH-GATED / PRINT_PROOF_BLOCKED / PRINTER_TEMPLATE_BLOCKED / REAL_CONTENT_BLOCKED / NOT_GLOBAL_WINNER / NOT_PRINT_READY`
 
 ## Current live V7 comparison set
 
 1. **Outer C8 `2381:2`** — current high-energy outer and control until a high-resolution real-photo candidate passes actual-size/detail QA.
-2. **Profile/Q&A K3 `2491:2`** — six unresolved questions now use a truth-aligned typographic hierarchy; stale Q1/Q4 giant ordinals and uniquely visible answer placeholders were removed. REAL-CONTENT-BLOCKED.
+2. **Profile/Q&A K4 `2497:2`** — K3 truth-aligned unanswered-Q&A hierarchy retained; six replaceable profile-value fields now have locally verified variable-copy reserve under synthetic Japanese stress. REAL-CONTENT-BLOCKED.
 3. **Story/Chronology F4 `2427:2`** — six-milestone truth-safe dummy chronology; semantic-only section marker.
 4. **Memory/Guide G9 `2443:2`** — grounded `沖縄 → 韓国 → ハワイ → 横浜`; grounded Hawaii/proposal note separated from unverified photo ownership. REAL-PHOTO-BLOCKED.
 5. **Cafe/Table H10 `2467:2`** — photo-led asymmetric opening; dominant structural photo outweighs cobalt title field. REAL-PHOTO-BLOCKED.
 6. **Island Picks + 1DAY C6D `2413:2`** — truth-safe `朝 / 昼 / 午後 / 夜`; no route map without verified geography; reverse microcopy remains print-proof blocked.
 
-## Latest verified improvement — K3 truth-aligned unanswered Q&A hierarchy
+## Latest verified improvement — K4 variable-copy reserve
 
-K2 had already truth-gated all personal answers, but its right Q&A page retained a visual hierarchy inherited from an older content state: Q1 and Q4 alone had giant `01 / 04` numerals and visible `回答待ち` blocks, while Q2/Q3/Q5/Q6 were compact question-only lines.
+K3 was visually and truth-wise valid with `回答待ち`, but those placeholders were much shorter than plausible eventual profile data. A rollback-safe synthetic stress showed that placeholder fit was masking variable-copy fragility: the `趣味` / `好きなもの` / `チャーム` roles produced weak end-of-line breaks, including a one-character final fragment.
 
-New professional research rotated to interview/editorial typography. The tested principle was that visual emphasis must reflect the **current** editorial message/state, not remain merely because an older state once justified it.
+New professional research rotated to reading behavior and flexible editorial frameworks. JAGAT treats line length, line spacing and type size as readability conditions. Pentagram's *No Man's Land* describes a coherent publication framework as needing enough flexibility to hold materially different editorial content. Neutral `NRSL-001` was consumed only as a QA-method hypothesis: after a meaningful spatial decision involving variable copy, rerun fresh stress evidence.
 
-K3 `2491:2` changed only the Q&A page hierarchy:
+K4 `2497:2` changes only the available measure of the six replaceable profile-value text boxes:
 
-- kicker → `6つの質問`
-- title → `ふたりに、聞きたいこと。`
-- hide giant Q1/Q4 `01 / 04`
-- hide Q1/Q4-only answer placeholders
-- Q1 `Q1　第一印象は？` and Q4 `Q4　これから挑戦 / したいこと。` remain modestly larger as opening/midpoint pacing beats
-- Q2/Q3/Q5/Q6 remain compact prompts
-- no answer, personal fact, card, pill, badge, shadow, gradient or image was invented/added
+- 出身地 `175 → 190`
+- 誕生日 `150 → 170`
+- 趣味 `340 → 370`
+- 休日 `300 → 320`
+- 好きなもの `310 → 390`
+- チャーム `150 → 280`
 
-The first K3 title candidate `ふたりに、聞いてみたいこと。` was truth-safe but too long at reading scale and crowded the adjacent photo boundary. It was shortened and re-tested rather than promoted as-is.
+No current reader-facing copy, font, font size, y-position, photo, crop, palette, Q&A hierarchy, card, badge, shadow or decoration changed.
 
-K3 QA:
+Stress evidence:
+- K3 baseline stress `2496:2` exposed weak Japanese wrapping.
+- K4 stress `2497:50` used explicitly synthetic / non-factual strings.
+- The first K4 stress still left a weak final one-character line in `チャーム`; its width was corrected once more before promotion.
 
-- 500px whole-item: PASS; less questionnaire/UI-like than K2 while retaining V7 energy
-- 1400px reading/page: PASS after title shortening
+K4 current-copy QA:
+- 500px whole-item: PASS
+- 1400px reading/page: PASS
 - 1587×1123 actual-size/detail: DESIGN QA PASS
-- visible native text descendants `26`
-- visible IMAGE-fill descendants `5`
+- visible native text `26`
 - text-text intersections `0`
 - 18px edge risks `0`
+- Japanese→Inter mismatch `0`
 - parent `2052:2`
 
-Promotion:
+K4 stress QA:
+- 500px: PASS
+- 1400px: PASS after correction
+- text-text intersections `0`
+- 18px edge risks `0`
+- Japanese→Inter mismatch `0`
 
-- K3 `2491:2` current at `x=15900 / y=13000`
-- K2 `2391:2` hidden rollback at `x=300000`
+Promotion:
+- K4 `2497:2` current at `x=15900 / y=13000`
+- K3 `2491:2` hidden rollback at `x=300000`
+- K4 stress `2497:50` hidden QA evidence at `x=308000`
 
 Evidence:
-`01_paper-items/rurubu-wedding/evidence/RURUBU-V7-K3-UNANSWERED-QA-HIERARCHY-QA-2026-08-24.md`
+`01_paper-items/rurubu-wedding/evidence/RURUBU-V7-K4-PROFILE-VARIABLE-COPY-RESERVE-QA-2026-08-25.md`
 
 Learning:
-`RSL-265 / VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE` — after content truth/state changes, re-audit hierarchy that was justified by the previous content state. Do not transfer K3 coordinates/sizes as rules.
+`RSL-266 / VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE` — short placeholders do not prove variable-content readiness; test plausible language-specific lengths on a rollback-safe copy before promotion. Exact K4 widths are item-specific and must not transfer.
 
 ## Retained C12 real-Hawaii screen-crop evidence
 
 Verified real source/master:
-
 - source `007.jpg`: Drive `1_rZYWSiXw_IGmSQR6Sg2YkYeNtLEx9k-`
 - V7 candidate master: `v7_outer_hawaii_007_realphoto_candidate_master.jpg`
 - Drive master ID: `1NsFR25Q963Nk847fTMB3elwWy689P8XY`
@@ -70,20 +79,15 @@ Verified real source/master:
 - current Figma screen derivative: imageHash `e9c5d4b516f723b16994a92d0b96a46aaf7619f8`, only `350×233`
 
 Same-condition crop evidence:
-
 - C10 `2483:2` — people-first, SUPERSEDED
 - C11 `2486:2` — environment-heavy, REJECTED
 - **C12 `2486:33`** — people+place balance, `PREFERRED SCREEN-COMPOSITION EVIDENCE`, hidden / NOT CURRENT / NOT FINAL PRINT
 
-C12 remains actual-size blocked by the 350×233 Figma derivative. C8 remains current.
-
-A material capability change existed this run: the official Figma `upload_assets` route became available and the 4500×3000 Drive master was successfully materialized locally. One high-resolution placement attempt was therefore justified under RSL-005. The returned upload submit URL still failed on POST with `Could not resolve host: mcp.figma.com`; readback confirmed C12 hero hash remained unchanged. The same route was not retried again this run.
-
-New print-production research also reconfirmed why this block matters: Adobe documents effective PPI at placed output size as the relevant print-resolution measure and recommends replacing low-resolution proxy/overscaled assets with high-resolution originals before professional output. No actual-size/print promotion was made from the screen derivative.
+C12 remains actual-size blocked by the 350×233 Figma derivative. C8 remains current. The official high-resolution upload route previously failed at POST with `Could not resolve host: mcp.figma.com`; do not repeat that same route until a material capability/environment change occurs.
 
 ## Retained H10 progress
 
-H10 `2467:2` remains the current Cafe/Table comparison. It changed visual mass only: dominant structural photo width `465 → 515`, cobalt title field `328.7 → 278.7`, with all reader-facing copy and image hashes preserved. Three-scale DESIGN QA passed, but all photography remains structural dummy and REAL-CONTENT-BLOCKED.
+H10 `2467:2` remains the current Cafe/Table comparison. It changed visual mass only: dominant structural photo width `465 → 515`, cobalt title field `328.7 → 278.7`, with reader-facing copy and image hashes preserved. Three-scale DESIGN QA passed, but all photography remains structural dummy and REAL-CONTENT-BLOCKED.
 
 ## Retained gates
 
@@ -101,6 +105,7 @@ H10 `2467:2` remains the current Cafe/Table comparison. It changed visual mass o
 - RSL-262: grounded/place-specific copy must not authenticate unverified imagery.
 - RSL-264: environmental-portrait crop balance remains local/hires-blocked.
 - RSL-265: content-state changes require hierarchy re-audit; stale salience must not survive without a current editorial job.
+- RSL-266: placeholder-short replaceable text requires fresh realistic copy stress before variable-content readiness is claimed.
 - folios remain withheld until real pagination/imposition exists.
 - route maps remain excluded until verified geography exists.
 
@@ -112,12 +117,11 @@ V8 comparison authority: `1IKYF-YI6EbEe7qQCVQjClztpQA8CoRIo / RURUBU_V8_EDITORIA
 Current truth:
 - real Outer source: `007.jpg / 1_rZYWSiXw_IGmSQR6Sg2YkYeNtLEx9k-`
 - verified V7 master: `1NsFR25Q963Nk847fTMB3elwWy689P8XY / 4500×3000 / 5,266,253 bytes`
-- Figma screen derivative: hash `e9c5d4b516f723b16994a92d0b96a46aaf7619f8 / 350×233`
 - preferred screen crop evidence: C12 `2486:33`
 - image generation this pass `0`
 - Drive writes this pass `0`
 - new Drive masters this pass `0`
-- high-resolution Figma placement `0 / DNS BLOCKED`
+- high-resolution Figma placement this pass `0`
 - new Figma image hash this pass `0`
 - final photography adoption `0`
 - V6 changes `0`
@@ -130,8 +134,8 @@ V7 is not print-ready. DESIGN QA, REAL CONTENT QA, PRINT TEMPLATE/PREFLIGHT and 
 ## Next highest-value work
 
 1. Preserve frozen V6 and all rollback/rejected/blocked evidence.
-2. Do not retry the current `mcp.figma.com` upload POST route until capability/environment materially changes.
-3. When high-resolution transport is available, use Drive master `1NsFR25Q963Nk847fTMB3elwWy689P8XY` and re-evaluate from the full photograph, using C12 only as a people+place balance hypothesis rather than copying its transform blindly.
-4. Only after high-resolution placement rerun 500 / 1400 / actual-size/detail QA before considering C8 replacement.
+2. When real profile facts arrive, replace `回答待ち` and rerun actual-content + long-copy QA; K4 stress is not a substitute for real content.
+3. Do not retry the current `mcp.figma.com` upload POST route until capability/environment materially changes.
+4. When high-resolution transport is available, use Drive master `1NsFR25Q963Nk847fTMB3elwWy689P8XY` and re-evaluate from the full photograph; C12 is only a people+place balance hypothesis.
 5. Continue legitimate role-specific photography for H10 Cafe/Table and G9 Memory; do not force final photos into dummy-frame geometry.
 6. Continue V6/V7/V8 same-condition comparisons; do not create V9 merely to continue activity.
