@@ -1,9 +1,9 @@
 # ADD-02 — QA
 
-Status: `CURRENT / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / DESTINATION_V4_FULL_FAMILY_PROMOTED / FRANCE_TABLE_NUMBER_REDUNDANCY_SUBTRACTION_PASS / FOOTER_GENERIC_ENGLISH_CLEANUP_PASS / ACTUAL_SIZE_DATE_LEGIBILITY_PASS / ROLLBACK_SAFE / NOT_PRINT_READY`
+Status: `CURRENT / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / DESTINATION_V4_FULL_FAMILY_PROMOTED / FRANCE_TABLE_NUMBER_REDUNDANCY_SUBTRACTION_PASS / FOOTER_GENERIC_ENGLISH_CLEANUP_PASS / ACTUAL_SIZE_DATE_LEGIBILITY_PASS / TAIWAN_DATE_REGISTER_SUBTRACTION_PASS / SPAIN_CLEANROOM_V5_V6_REJECTED / ROLLBACK_SAFE / NOT_PRINT_READY`
 Updated: 2026-08-24
 Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
-Latest `main` observed immediately before this reconciliation: `c8dd1ba191f850c50b706b7d7f45d3e90565b1f8`
+Latest `main` observed immediately before this reconciliation: `e290bcdd326b440ae0730ff32ab631950cf71a96`
 
 ## Current live authority
 
@@ -19,6 +19,7 @@ Canonical evidence:
 - `FIGMA-DESTINATION-V4-FULL-FAMILY-PROMOTION-QA-2026-08-21.md`
 - `FIGMA-FRANCE-TABLE-NUMBER-REDUNDANCY-QA-2026-08-24.md`
 - `FIGMA-FOOTER-MICROTYPE-CLEANUP-QA-2026-08-24.md`
+- `FIGMA-SPAIN-CLEANROOM-REJECTION-TAIWAN-REGISTER-SUBTRACTION-QA-2026-08-24.md`
 
 ## Current family visual state
 
@@ -99,6 +100,75 @@ No destination name, Japanese label, table-number cue, theme/description role, f
 
 This is an item-level application of already-promoted generic-English reader-job QA and actual-size factual-microtype QA. It is not a new rule to make all English/date treatments identical.
 
+## Spain clean-room re-test + Taiwan date-register cleanup — 2026-08-24
+
+### Spain — two new clean-room methods rejected
+
+Fresh professional research used only official Spain-tourism principle-level input around art/culture, contemporary architecture and ceramic craft. No official mark or literal tourism identity was copied.
+
+A new independent study page was created from blank frames:
+
+- `185:2 / VNEXT_STUDY / ADD-02 SPAIN / CLEANROOM / 2026-08-24`
+- `185:3 / A / CERAMIC SUN WINDOW`
+- `185:19 / B / COURTYARD FOLD`
+- `185:37 / C / FESTIVAL BROADSIDE`
+
+The strongest initial direction was matured independently to full size:
+
+- `186:2 / VNEXT_V5 / SPAIN / COURTYARD TILE FOLD / SELECTED CANDIDATE`
+- stress `186:33`
+
+It was rejected because the repeated craft motif visually collapsed into small house/envelope-like icons at whole-item scale.
+
+Method switch:
+
+- `187:2 / VNEXT_V6 / SPAIN / SUNLIT ARCHWAY POSTER / CLEANROOM CANDIDATE`
+- stress `187:14`
+
+V6 removed the icon-like craft repetition and used one large architectural arch gesture, but whole-item comparison showed the opposite regression: it became too quiet/minimal for the required travel-wedding excitement. Current Spain `2:29` remains stronger overall.
+
+Decision: `SPAIN CURRENT RETAINED / V5 REJECTED / V6 REJECTED`. Do not cosmetically retry either failed method without a materially new premise.
+
+### Taiwan — date-register bars removed
+
+Fresh actual-size review of Taiwan `2:38` found three tiny colored register bars above the date:
+
+- `173:129 / TW / REGISTER 1`
+- `173:130 / TW / REGISTER 2`
+- `173:131 / TW / REGISTER 3`
+
+The bars had no reader-facing, physical, binding, trim or information-grouping job and read like a miniature progress/status UI inside the lower-right date paper.
+
+Rollback-safe comparison:
+
+- `187:26 / QA / ADD-02 TAIWAN / NO DATE REGISTER BARS / 2026-08-24`
+
+The no-bar version was cleaner at whole, reading and native `1000×1480` scales while retaining Taiwan's diagonal-weave identity.
+
+Full hidden rollback before production mutation:
+
+- Current `187:43 / ROLLBACK / ADD-02 TAIWAN / PRE-NO-DATE-REGISTER-BARS / 2026-08-24`
+- long-copy `187:60 / ROLLBACK / ADD-02 TAIWAN / LONG COPY / PRE-NO-DATE-REGISTER-BARS / 2026-08-24`
+
+Adopted Current state:
+
+- Current `2:38`: `173:129 / 173:130 / 173:131` hidden
+- long-copy stress `154:20`: `154:34 / 154:35 / 154:36` hidden
+- completed comparison `187:26` hidden after verification
+
+Post-change long-copy stress was temporarily revealed and re-rendered. PASS: long headline/body remain clear of fixed-art bands and the date paper remains isolated/legible without the bars. Stress returned to hidden state.
+
+Live readback:
+
+- Taiwan Current visible native text `6`
+- fixed-height visible text `0`
+- outside visible text `0`
+- IMAGE fills `0`
+- visible register bars `0/3`
+- Taiwan stress visible native text `6` when rendered, fixed-height `0`, outside `0`, IMAGE fills `0`, visible register bars `0/3`
+
+This is a bounded application of the existing reader-job/binding-function QA, not a global rule to remove genuine prepress marks.
+
 ## Current structural gate
 
 - all 11 production roots remain `1000×1480`
@@ -114,7 +184,7 @@ This is an item-level application of already-promoted generic-English reader-job
 Image generation: `0`.
 Drive write: `0`.
 
-The defects were duplicate hierarchy, generic decorative microcopy and actual-size factual typography—not missing photography, illustration or texture. No asset generation was justified.
+The defects were duplicate hierarchy, generic decorative microcopy, actual-size factual typography, redundant register micro-geometry, and clean-room art-direction specificity—not missing photography/illustration. No asset generation was justified.
 
 ## Deferred finalization
 
