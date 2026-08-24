@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1480" height="2100" viewBox="0 0 1480 2100">
+  <title>WEDDING PASSPORT vNext study — Departure Window fixed art</title>
+  <desc>Clean-room fixed-art study only. No authoritative copy. Not production, not adopted.</desc>
+  <rect width="1480" height="2100" fill="#F4EBDD"/>
+  <path d="M1480 0H690C860 210 955 470 955 750C955 1090 820 1360 570 1540L1480 2100Z" fill="#2F5FB5"/>
+  <path d="M1480 1360C1260 1240 1055 1195 850 1218C680 1236 520 1302 370 1415L370 1500C560 1380 752 1330 952 1344C1130 1356 1310 1415 1480 1510Z" fill="#F06A4B"/>
+  <path d="M1480 1455C1270 1388 1080 1378 910 1420C752 1458 610 1538 490 1660L1480 2100Z" fill="#66C6C1"/>
+  <path d="M116 130 L116 1970" stroke="#A94C35" stroke-width="12"/>
+  <path d="M96 250 L136 250 M96 420 L136 420 M96 590 L136 590 M96 760 L136 760 M96 930 L136 930 M96 1100 L136 1100 M96 1270 L136 1270 M96 1440 L136 1440 M96 1610 L136 1610 M96 1780 L136 1780" stroke="#F4EBDD" stroke-width="10"/>
+  <circle cx="1230" cy="270" r="180" fill="#F5C34D"/>
+</svg>
