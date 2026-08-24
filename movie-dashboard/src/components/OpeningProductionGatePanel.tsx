@@ -9,8 +9,8 @@ const phaseTone = {
 
 export function OpeningProductionGatePanel({ compact = false }: { compact?: boolean }) {
   const gate = openingProductionGate;
-  const photosReady = gate.photoMissingCount === 0;
-  const bgmReady = gate.bgm.playable;
+  const photosReady = Number(gate.photoMissingCount) === 0;
+  const bgmReady = Boolean(gate.bgm.playable);
   const previewReady = photosReady && bgmReady;
 
   const phases = [
