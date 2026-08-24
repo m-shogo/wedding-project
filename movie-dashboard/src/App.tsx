@@ -28,6 +28,7 @@ import { MovieCoach } from "./pages/MovieCoach";
 import { MovieCoachDictionary } from "./pages/MovieCoachDictionary";
 import { ProfileMovieCoach } from "./pages/ProfileMovieCoach";
 import { MovieCoachReview } from "./pages/MovieCoachReview";
+import { FusionNodeTranslator } from "./pages/FusionNodeTranslator";
 import { Guide } from "./pages/Guide";
 import { AssetPlacementGuide } from "./pages/AssetPlacementGuide";
 
@@ -44,6 +45,7 @@ export default function App() {
               <Route path="movie-coach/dictionary" element={<MovieCoachDictionary />} />
               <Route path="movie-coach/profile" element={<ProfileMovieCoach />} />
               <Route path="movie-coach/review" element={<MovieCoachReview />} />
+              <Route path="movie-coach/fusion" element={<FusionNodeTranslator />} />
               <Route path="storyboard" element={<Storyboard />} />
               <Route path="assets" element={<AssetLibrary />} />
               <Route path="clips" element={<ClipLibrary />} />
