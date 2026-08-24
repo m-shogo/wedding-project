@@ -32,6 +32,9 @@
 5. `movie-dashboard/README.md` — 絵コンテ、素材、プロンプト、タスクの補助管理。
 6. `docs/00_start-here.md` — 全体ナビ。
 
+Opening V1とは別系統の並行研究トラック（StaRt Director Recipe Catalog、97演出レシピ×14 section）は
+`docs/start-director-recipe-system-overview.md` を索引にする。Opening V1完成の優先度は変えない。
+
 ## motion-studio
 
 Remotion + React + TypeScriptでWedding Movieと必要なモーション素材を作る場所。
@@ -67,6 +70,7 @@ pnpm dev
 - 共有・永続化したい場合はJSONエクスポートし、必要に応じて `src/data/*.json` に反映してcommitする。
 - 大きな画像、動画、音源はGitに入れず、パス・メモ・採否だけ管理する。
 - ダッシュボード機能追加より実際のOpening完成を優先する。
+- `StaRt Motion Showcase` / `Director Recipe Catalog` 画面（並行研究トラック）は相互リンク済み。詳細は `docs/start-director-recipe-system-overview.md`。
 
 ## 優先順位
 
