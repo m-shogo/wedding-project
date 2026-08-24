@@ -33,6 +33,7 @@ import { ColorLearning } from "./pages/ColorLearning";
 import { AudioLearning } from "./pages/AudioLearning";
 import { TimelineAnatomy } from "./pages/TimelineAnatomy";
 import { ShortcutTraining } from "./pages/ShortcutTraining";
+import { ComparisonLab } from "./pages/ComparisonLab";
 import { Guide } from "./pages/Guide";
 import { AssetPlacementGuide } from "./pages/AssetPlacementGuide";
 
@@ -54,6 +55,7 @@ export default function App() {
               <Route path="movie-coach/audio" element={<AudioLearning />} />
               <Route path="movie-coach/timeline" element={<TimelineAnatomy />} />
               <Route path="movie-coach/shortcuts" element={<ShortcutTraining />} />
+              <Route path="movie-coach/compare" element={<ComparisonLab />} />
               <Route path="storyboard" element={<Storyboard />} />
               <Route path="assets" element={<AssetLibrary />} />
               <Route path="clips" element={<ClipLibrary />} />
