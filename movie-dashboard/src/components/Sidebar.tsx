@@ -9,6 +9,7 @@ const links = [
   { to: "/movie-coach/profile", label: "Profile Movie Coach", icon: "▤" },
   { to: "/movie-coach/review", label: "Movie Review", icon: "◎" },
   { to: "/movie-coach/fusion", label: "Fusion Node Translator", icon: "◇" },
+  { to: "/movie-coach/color", label: "Color Learning", icon: "◐" },
   { to: "/storyboard", label: "絵コンテ", icon: "🎬" },
   { to: "/assets", label: "素材ライブラリ", icon: "🗂" },
   { to: "/clips", label: "クリップ素材集", icon: "🎞" },
