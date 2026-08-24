@@ -15,6 +15,7 @@ const requiredRoutes = [
   "/",
   "/movie-coach",
   "/movie-coach/profile",
+  "/movie-coach/auto",
   "/movie-coach/dictionary",
   "/movie-coach/timeline",
   "/movie-coach/color",
@@ -25,6 +26,7 @@ const requiredRoutes = [
   "/movie-coach/review",
   "/movie-coach/compare",
   "/movie-coach/reference",
+  "/opening-photo-intake",
   "/video-shot-planner",
   "/video-prompt-builder",
   "/video-generation-queue",
@@ -55,6 +57,7 @@ for (const route of requiredRoutes) {
 }
 
 if (!sidebar.includes('label: "Movie Coach / Today"')) errors.push("primary Movie Coach link must explain Today purpose");
+if (!sidebar.includes('label: "Opening写真11枚"')) errors.push("Opening photo intake must be visible in production navigation");
 if (!sidebar.includes('className="flex-1 p-3 overflow-y-auto"')) errors.push("grouped long navigation must remain scrollable");
 
 if (errors.length) {
