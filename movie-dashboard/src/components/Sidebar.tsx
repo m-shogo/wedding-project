@@ -2,41 +2,89 @@ import { NavLink } from "react-router-dom";
 import { useProduction } from "../store/productionStore";
 import { useTheme } from "../store/themeStore";
 
-const links = [
-  { to: "/", label: "ダッシュボード", icon: "✈" },
-  { to: "/movie-coach", label: "Movie Coach", icon: "🎓" },
-  { to: "/movie-coach/dictionary", label: "逆引きDaVinci辞典", icon: "⌕" },
-  { to: "/movie-coach/profile", label: "Profile Movie Coach", icon: "▤" },
-  { to: "/movie-coach/review", label: "Movie Review", icon: "◎" },
-  { to: "/movie-coach/fusion", label: "Fusion Node Translator", icon: "◇" },
-  { to: "/movie-coach/color", label: "Color Learning", icon: "◐" },
-  { to: "/movie-coach/audio", label: "Audio Learning", icon: "♫" },
-  { to: "/movie-coach/timeline", label: "Timeline Anatomy", icon: "≡" },
-  { to: "/movie-coach/shortcuts", label: "Shortcut Training", icon: "⌨" },
-  { to: "/movie-coach/compare", label: "Before / After Lab", icon: "⇄" },
-  { to: "/movie-coach/book", label: "Book Manifest", icon: "▥" },
-  { to: "/movie-coach/reference", label: "Reference Breakdown", icon: "⌗" },
-  { to: "/storyboard", label: "絵コンテ", icon: "🎬" },
-  { to: "/assets", label: "素材ライブラリ", icon: "🗂" },
-  { to: "/clips", label: "クリップ素材集", icon: "🎞" },
-  { to: "/video-shot-planner", label: "AI動画 ショット計画", icon: "🧭" },
-  { to: "/video-prompt-builder", label: "動画プロンプト", icon: "🎥" },
-  { to: "/video-generation-queue", label: "動画生成キュー", icon: "🚀" },
-  { to: "/video-preflight", label: "AI動画 プリフライト", icon: "🛡️" },
-  { to: "/video-result-review", label: "AI動画 結果レビュー", icon: "🔎" },
-  { to: "/video-asset-reprobe", label: "AI動画 実体再probe", icon: "🧬" },
-  { to: "/video-failure-lab", label: "AI動画 失敗学習", icon: "🧠" },
-  { to: "/video-model-evidence", label: "AI動画 モデル実績", icon: "📊" },
-  { to: "/palmier-handoff", label: "Palmier 実行Handoff", icon: "🌴" },
-  { to: "/prompts", label: "プロンプト管理", icon: "✨" },
-  { to: "/missing", label: "不足・未確定リスト", icon: "⚠" },
-  { to: "/capcut", label: "CapCut編集パック", icon: "✂" },
-  { to: "/production-map", label: "制作マップ", icon: "🗺" },
-  { to: "/quality", label: "品質ゲート", icon: "🏁" },
-  { to: "/profile-planner", label: "写真計画", icon: "📷" },
-  { to: "/asset-placement-guide", label: "素材置き場ガイド", icon: "📁" },
-  { to: "/data", label: "データ管理", icon: "💾" },
-  { to: "/guide", label: "使い方", icon: "📖" },
+interface SidebarLink {
+  to: string;
+  label: string;
+  icon: string;
+}
+
+interface SidebarSection {
+  sectionId: string;
+  label: string;
+  links: SidebarLink[];
+}
+
+const navSections: SidebarSection[] = [
+  {
+    sectionId: "core",
+    label: "CORE",
+    links: [
+      { to: "/", label: "ダッシュボード", icon: "✈" },
+      { to: "/movie-coach", label: "Movie Coach / Today", icon: "🎓" },
+      { to: "/movie-coach/profile", label: "Profile Movie Coach", icon: "▤" },
+    ],
+  },
+  {
+    sectionId: "learn",
+    label: "LEARN",
+    links: [
+      { to: "/movie-coach/dictionary", label: "逆引きDaVinci辞典", icon: "⌕" },
+      { to: "/movie-coach/timeline", label: "Timeline Anatomy", icon: "≡" },
+      { to: "/movie-coach/color", label: "Color Learning", icon: "◐" },
+      { to: "/movie-coach/audio", label: "Audio Learning", icon: "♫" },
+      { to: "/movie-coach/fusion", label: "Fusion Node Translator", icon: "◇" },
+      { to: "/movie-coach/shortcuts", label: "Shortcut Training", icon: "⌨" },
+      { to: "/movie-coach/book", label: "Book Manifest", icon: "▥" },
+    ],
+  },
+  {
+    sectionId: "review",
+    label: "REVIEW / DECIDE",
+    links: [
+      { to: "/movie-coach/review", label: "Movie Review", icon: "◎" },
+      { to: "/movie-coach/compare", label: "Before / After Lab", icon: "⇄" },
+      { to: "/movie-coach/reference", label: "Reference Breakdown", icon: "⌗" },
+    ],
+  },
+  {
+    sectionId: "ai-video",
+    label: "AI VIDEO",
+    links: [
+      { to: "/video-shot-planner", label: "ショット計画", icon: "🧭" },
+      { to: "/video-prompt-builder", label: "動画プロンプト", icon: "🎥" },
+      { to: "/video-generation-queue", label: "生成キュー", icon: "🚀" },
+      { to: "/video-preflight", label: "プリフライト", icon: "🛡️" },
+      { to: "/video-result-review", label: "結果レビュー", icon: "🔎" },
+      { to: "/video-asset-reprobe", label: "実体再probe", icon: "🧬" },
+      { to: "/video-failure-lab", label: "失敗学習", icon: "🧠" },
+      { to: "/video-model-evidence", label: "モデル実績", icon: "📊" },
+      { to: "/palmier-handoff", label: "Palmier Handoff", icon: "🌴" },
+    ],
+  },
+  {
+    sectionId: "production",
+    label: "PRODUCTION",
+    links: [
+      { to: "/storyboard", label: "絵コンテ", icon: "🎬" },
+      { to: "/assets", label: "素材ライブラリ", icon: "🗂" },
+      { to: "/clips", label: "クリップ素材集", icon: "🎞" },
+      { to: "/profile-planner", label: "写真計画", icon: "📷" },
+      { to: "/prompts", label: "プロンプト管理", icon: "✨" },
+      { to: "/missing", label: "不足・未確定リスト", icon: "⚠" },
+      { to: "/production-map", label: "制作マップ", icon: "🗺" },
+      { to: "/quality", label: "品質ゲート", icon: "🏁" },
+      { to: "/capcut", label: "CapCut編集パック", icon: "✂" },
+    ],
+  },
+  {
+    sectionId: "system",
+    label: "SYSTEM",
+    links: [
+      { to: "/asset-placement-guide", label: "素材置き場ガイド", icon: "📁" },
+      { to: "/data", label: "データ管理", icon: "💾" },
+      { to: "/guide", label: "使い方", icon: "📖" },
+    ],
+  },
 ];
 
 export function Sidebar() {
@@ -51,19 +99,28 @@ export function Sidebar() {
         </h1>
         <p className="text-xs text-navy-400 mt-0.5 dark:text-navy-300">ウェディングムービー制作管理</p>
       </div>
-      <nav className="flex-1 p-3 space-y-1">
-        {links.map((link) => (
-          <NavLink
-            key={link.to}
-            to={link.to}
-            end={link.to === "/" || link.to === "/movie-coach"}
-            className={({ isActive }) =>
-              `sidebar-link ${isActive ? "sidebar-link-active" : ""}`
-            }
-          >
-            <span className="text-lg">{link.icon}</span>
-            {link.label}
-          </NavLink>
+      <nav className="flex-1 p-3 overflow-y-auto">
+        {navSections.map((section, sectionIndex) => (
+          <div key={section.sectionId} className={sectionIndex === 0 ? "" : "mt-5"}>
+            <p className="px-3 mb-1.5 text-[9px] font-semibold tracking-[0.2em] text-navy-300 dark:text-navy-500">
+              {section.label}
+            </p>
+            <div className="space-y-1">
+              {section.links.map((link) => (
+                <NavLink
+                  key={link.to}
+                  to={link.to}
+                  end={link.to === "/" || link.to === "/movie-coach"}
+                  className={({ isActive }) =>
+                    `sidebar-link ${isActive ? "sidebar-link-active" : ""}`
+                  }
+                >
+                  <span className="text-lg">{link.icon}</span>
+                  {link.label}
+                </NavLink>
+              ))}
+            </div>
+          </div>
         ))}
       </nav>
       <div className="p-4 border-t border-sand-100 space-y-2 dark:border-navy-700">
