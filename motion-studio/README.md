@@ -187,6 +187,59 @@ pnpm preset
 
 legacy `開幕-全体確認` 82秒版は順番/歴史確認用。Opening V1の正本ではない。
 
+## Director Recipe Renderer（StaRt拡張、研究/比較用）
+
+`movie-dashboard/src/data/directorRecipeCatalog.ts`（Phase A、97件の演出レシピdata）を、
+実際にRemotionでpreview/renderできるようにする共有レンダラー。
+**Opening V1の正本ではない。** 実写真11枚投入が最優先で、これは並行研究トラック。
+
+設計方針: 97個の個別コンポーネントは作らない。各レシピは `motionPresetIds`
+(既存36 Motion Kit presetへの参照)を持ち、それを6つの共有engineへ機械的にマッピングする。
+
+```text
+directorRecipeCatalog.ts (movie-dashboard, Phase A data)
+  → src/motion-kit/directorRecipeAdapter.ts (recipe → engine + props)
+  → src/compositions/common/DirectorRecipePreview.tsx (1つのdata-driven component)
+  → src/DirectorRecipeRoot.tsx (97件分のCompositionをcatalogから自動登録)
+```
+
+共有engine(`src/motion-kit/engines.tsx`)は6つ。既存4つ + Phase Bで追加した2つ:
+
+| engine | 由来 | 用途 |
+|---|---|---|
+| `TypographyRevealEngine` | 既存(StaRt Motion Kit) | mask/punch/stagger文字 |
+| `CameraTransformEngine` | 既存 | static/push/pull/pan |
+| `TransitionWipeEngine` | 既存 | 方向wipe、color field release |
+| `GraphicHitEngine` | 既存 | triplet/speed-lines/impact |
+| `NativeCutEngine` | **Phase B新規** | hard cut / J-cut / L-cutの編集点そのものを可視化(9レシピが該当) |
+| `PhotoLayoutEngine` | **Phase B新規** | contact sheet / split panel / panel gridの複数写真並び |
+
+`directorRecipeCatalog.ts` はmovie-dashboard側のデータファイルをそのまま相対import
+している(モノレポにpnpm workspaceは無いが、同一Git repo内なのでesbuild/tscとも解決できる)。
+データの単一情報源はmovie-dashboard側のまま。motion-studio側にコピーは作らない。
+
+コマンド:
+
+```sh
+pnpm dev:director-recipes                  # Remotion Studioで97件を確認
+pnpm director-recipes:list                 # 全Composition idを一覧
+pnpm render:director-recipe cam-locked-frame   # 1件だけlow-res renderして確認(既定 scale=0.25 crf=30)
+pnpm check:director-recipes                # 97件全件がresolve可能か + engine契約を検証(pnpm checkに含まれる)
+```
+
+`pnpm check:director-recipes` は以下を検証する。
+
+- 97件全てが `directorRecipeAdapter.ts` を通ってthrowせずresolveすること
+- 使用engineが上記6つの外に出ていないこと(=個別コンポーネントへ逃げていないこと)
+- `DirectorRecipeRoot.tsx` がcatalogをmapして登録している(手書き97個ではない)こと
+- `index-director-recipes.ts` が正しくregisterRootしていること
+
+近似・簡略化していること(Phase C以降の課題):
+
+- `photo-2p5d-parallax` は真の視差(前景/背景レイヤー分離)ではなく、restrained pushで近似
+- `accent-halftone-burst` / `accent-scribble-underline` / `accent-stamp-triplet` は専用ビジュアルが無く、既存のtriplet hitで近似
+- 実写真/実動画の差し込みslotはまだプレースホルダーのみ(`DemoBackdrop` / `REAL PHOTO / VIDEO SLOT`表記)
+
 ## 既存テンプレを書き出す場合
 
 ```sh
