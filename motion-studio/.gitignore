@@ -9,6 +9,10 @@ out/*
 public/photos/*
 !public/photos/.gitkeep
 
+# 実音源もGit管理しない。市販楽曲・私的音源を誤commitしない。
+public/audio/*
+!public/audio/.gitkeep
+
 .DS_Store
 *.log
 exports/**/*.mp4
