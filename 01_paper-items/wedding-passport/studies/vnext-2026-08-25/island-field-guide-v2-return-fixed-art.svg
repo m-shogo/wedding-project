@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1480" height="2100" viewBox="0 0 1480 2100">
+  <title>WEDDING PASSPORT clean-room study — Island Field Guide v2 return fixed art</title>
+  <desc>Fixed-art support only. No authoritative copy. Not production.</desc>
+  <rect width="1480" height="2100" fill="#173E5D"/>
+  <path d="M0 -10H858C744 174 682 374 666 598C644 892 724 1166 912 1390C1036 1538 1180 1650 1350 1728L1020 2100H0V-10Z" fill="#F7F1E7"/>
+  <path d="M0 1246C210 1080 418 1018 626 1036C844 1054 1038 1156 1260 1160C1348 1162 1426 1148 1504 1118" fill="none" stroke="#2C8E93" stroke-width="32" stroke-linecap="round"/>
+  <path d="M0 1386C226 1252 440 1216 648 1248C866 1280 1058 1378 1280 1390C1366 1394 1436 1384 1500 1366" fill="none" stroke="#F0B742" stroke-width="15" stroke-linecap="round"/>
+  <path d="M0 1518C224 1418 438 1412 656 1456C862 1498 1056 1580 1292 1600C1372 1606 1442 1602 1500 1590" fill="none" stroke="#E56A4E" stroke-width="10" stroke-linecap="round"/>
+  <path d="M1150 0C1240 150 1298 298 1324 452C1348 592 1346 720 1312 846L1480 904V0Z" fill="#E56A4E"/>
+  <path d="M1326 0C1380 104 1416 214 1428 330C1438 420 1434 500 1422 578L1480 596V0Z" fill="#F0B742"/>
+</svg>
