@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1480" height="2100" viewBox="0 0 1480 2100">
+  <title>WEDDING PASSPORT vNext study — Sunlit Departure Folio fixed art</title>
+  <desc>Clean-room fixed-art study only. No authoritative copy. Not production, not adopted.</desc>
+  <rect width="1480" height="2100" fill="#F6EBDD"/>
+  <path d="M0 0H1480V650C1220 760 980 790 760 742C520 690 300 560 0 330Z" fill="#F3C44E"/>
+  <path d="M0 0H1480V320C1180 410 900 405 640 320C390 238 180 125 0 40Z" fill="#E7654A"/>
+  <path d="M1480 710C1210 720 990 800 815 955C640 1110 520 1310 460 1550C410 1730 305 1895 0 2100H1480Z" fill="#173F62"/>
+  <path d="M1480 1000C1260 1035 1090 1130 980 1285C870 1440 820 1640 850 1880L1480 2100Z" fill="#5FC4BC"/>
+  <path d="M100 850H600" stroke="#173F62" stroke-width="10"/>
+  <path d="M100 905H460" stroke="#E7654A" stroke-width="10"/>
+  <path d="M100 960H540" stroke="#5FC4BC" stroke-width="10"/>
+  <path d="M90 1700L410 1600L470 1800L150 1900Z" fill="#F6EBDD" opacity=".92"/>
+</svg>
