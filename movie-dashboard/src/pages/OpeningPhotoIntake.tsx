@@ -3,48 +3,56 @@ import { Link } from "react-router-dom";
 import { Header } from "../components/Header";
 import { openingProductionGate } from "../data/openingProductionGate.generated";
 
-const slotBriefs: Record<string, { chapter: string; timing: string; role: string; choose: string; avoid: string }> = {
+type SlotBrief = {
+  chapter: string;
+  timing: string;
+  role: string;
+  choose: string;
+  avoid: string;
+};
+
+const slotBriefs: Record<string, SlotBrief> = {
   "okinawa-01": {
     chapter: "OKINAWA",
     timing: "02–13s / 1枚目",
     role: "章の入口。沖縄だと一目で分かり、2人の旅が始まる写真。",
-    choose: "場所の空気 + 2人の存在が両方読める写真。",
+    choose: "場所の空気と2人の存在が両方読める写真。",
     avoid: "顔だけの寄りで、沖縄らしい文脈が消える写真。",
   },
   "okinawa-02": {
     chapter: "OKINAWA",
     timing: "02–13s / 2枚目",
     role: "章の中盤。1枚目と違う距離感・行動・表情を入れる。",
-    choose: "自然なやり取り、動き、食事、遊びなど旅の体験が伝わる写真。",
+    choose: "自然なやり取り、食事、遊びなど旅の体験が伝わる写真。",
     avoid: "1枚目とほぼ同じ立ち位置・構図。",
   },
   "okinawa-03": {
     chapter: "OKINAWA",
     timing: "02–13s / 3枚目",
-    role: "沖縄章の締め。次のSeoulへ切り替わる前に余韻を作る。",
-    choose: "広さ・景色・印象的な瞬間など、前2枚と役割が違う写真。",
+    role: "沖縄章の締め。Seoulへ切り替わる前の余韻を作る。",
+    choose: "広さ・景色・印象的な瞬間など前2枚と役割が違う写真。",
     avoid: "情報が細かすぎて短時間で読めない写真。",
   },
   "seoul-01": {
     chapter: "SEOUL",
     timing: "13–24s / 1枚目",
-    role: "Seoulへ場所が変わったことを即座に伝える入口。",
+    role: "場所がSeoulへ変わったことを即座に伝える入口。",
     choose: "街・店・夜景など場所の違いが分かり、2人の旅として読める写真。",
     avoid: "沖縄やHawaiiと見分けがつかない背景の写真。",
   },
   "seoul-02": {
     chapter: "SEOUL",
     timing: "13–24s / 2枚目",
-    role: "Seoul章の体験を見せる中盤。",
+    role: "Seoulで何をしたかを見せる体験の写真。",
     choose: "食・街歩き・遊び・表情など、その旅でしかない具体的な瞬間。",
     avoid: "ただ並んでいるだけで1枚目と意味が重なる写真。",
   },
   "seoul-03": {
     chapter: "SEOUL",
     timing: "13–24s / 3枚目",
-    role: "Seoulの締め。章内で最も人間味のある写真でもよい。",
-    choose: "2人らしさ、笑顔、余韻があり、次のHawaiiへ気持ちをつなげられる写真。",
-    avoid: "小さすぎる人物や、主役が分からない写真。",
+    role: "Seoul章の締め。人間味や2人らしさを残してHawaiiへつなぐ。",
+    choose: "笑顔・自然な表情・余韻のある写真。",
+    avoid: "人物が小さすぎる、主役が分からない写真。",
   },
   "hawaii-01": {
     chapter: "HAWAII",
@@ -56,22 +64,22 @@ const slotBriefs: Record<string, { chapter: string; timing: string; role: string
   "hawaii-02": {
     chapter: "HAWAII",
     timing: "24–35s / 2枚目",
-    role: "Hawaii章の感情ピーク候補。3旅行の中でも特に記憶に残る瞬間を置く。",
+    role: "旅行パートの感情ピーク候補。",
     choose: "特別な出来事・表情・関係性が伝わる写真。",
     avoid: "演出を足さないと意味が伝わらない弱い写真。",
   },
   "hawaii-03": {
     chapter: "HAWAII",
     timing: "24–35s / 3枚目",
-    role: "旅行パートの締め。Heroへ渡す前の最後の旅写真。",
+    role: "旅行パートの締め。Heroへ渡す最後の旅写真。",
     choose: "景色と2人の関係がまとまり、旅行章全体を締められる写真。",
     avoid: "Hawaii 01/02と画角・表情がほぼ同じ写真。",
   },
   "hero-01": {
     chapter: "COUPLE HERO A",
     timing: "00–02s + 35–44s",
-    role: "最重要写真。Cold OpenとHero Aの両方で使われるため、最初の2秒で2人だと伝わる必要がある。",
-    choose: "2人が大きく読める、表情が強い、思い出としても象徴的な1枚。",
+    role: "最重要写真。Cold OpenとHero Aの両方で使うため、最初の2秒で2人だと伝わる必要がある。",
+    choose: "2人が大きく読める、表情が強い、思い出として象徴的な1枚。",
     avoid: "集合写真、人物が小さい、暗い、顔が隠れる、説明が必要な写真。",
   },
   "hero-02": {
@@ -92,9 +100,28 @@ const globalChecks = [
   "AIで人物を作り直さない。実写真のcrop / color / motionだけで仕上げる",
 ];
 
+const motionStudioCommands = [
+  "cd motion-studio",
+  "pnpm sync:photos",
+  "pnpm check:opening-photos:strict",
+  "pnpm opening:preflight",
+];
+
+const dashboardCommands = [
+  "cd ../movie-dashboard",
+  "pnpm sync:opening-gate",
+];
+
+const previewCommands = [
+  "cd ../motion-studio",
+  "pnpm render:opening-v1:preview",
+];
+
 export function OpeningPhotoIntake() {
   const [copied, setCopied] = useState<string | null>(null);
   const gate = openingProductionGate;
+  const resolved = Number(gate.resolvedPhotoCount);
+  const total = Number(gate.expectedPhotoCount);
 
   async function copy(text: string) {
     try {
@@ -106,8 +133,22 @@ export function OpeningPhotoIntake() {
     }
   }
 
-  const resolved = Number(gate.resolvedPhotoCount);
-  const total = Number(gate.expectedPhotoCount);
+  function CommandList({ commands }: { commands: string[] }) {
+    return (
+      <div className="space-y-2">
+        {commands.map((command) => (
+          <button
+            key={command}
+            type="button"
+            onClick={() => copy(command)}
+            className="block w-full text-left px-3 py-2 border border-sand-200 dark:border-navy-600 bg-white dark:bg-navy-800 text-xs font-mono text-navy-700 dark:text-navy-200"
+          >
+            {copied === command ? "✓ copied" : command}
+          </button>
+        ))}
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -122,6 +163,9 @@ export function OpeningPhotoIntake() {
           <p className="mt-1 text-4xl font-mono font-bold text-navy-900 dark:text-sand-100">{resolved}/{total}</p>
           <p className={`mt-2 text-sm font-semibold ${resolved === total ? "text-emerald-700 dark:text-emerald-300" : "text-red-700 dark:text-red-300"}`}>
             {resolved === total ? "11枠解決済み" : `あと${total - resolved}枚でFinal photo gate解除`}
+          </p>
+          <p className="mt-3 text-xs leading-5 text-navy-500 dark:text-navy-300">
+            RESOLVED/MISSINGは自己申告ではなく、Motion Studioの実ファイル正本から判定します。
           </p>
         </div>
         <div>
@@ -156,23 +200,23 @@ export function OpeningPhotoIntake() {
                       {slot.resolved ? "RESOLVED" : "MISSING"}
                     </span>
                   </div>
-                  <p className="mt-2 text-sm font-bold text-navy-900 dark:text-sand-100">{brief?.chapter ?? slot.key}</p>
-                  <p className="mt-1 text-xs font-mono text-navy-400">{brief?.timing}</p>
+                  <p className="mt-2 text-sm font-bold text-navy-900 dark:text-sand-100">{brief.chapter}</p>
+                  <p className="mt-1 text-xs font-mono text-navy-400">{brief.timing}</p>
                 </div>
 
                 <div>
                   <p className="text-[10px] tracking-widest font-semibold text-navy-400">ROLE</p>
-                  <p className="mt-1 text-sm leading-6 text-navy-700 dark:text-navy-200">{brief?.role}</p>
+                  <p className="mt-1 text-sm leading-6 text-navy-700 dark:text-navy-200">{brief.role}</p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <p className="text-[10px] tracking-widest font-semibold text-emerald-600">CHOOSE</p>
-                    <p className="mt-1 text-xs leading-5 text-navy-600 dark:text-navy-300">{brief?.choose}</p>
+                    <p className="mt-1 text-xs leading-5 text-navy-600 dark:text-navy-300">{brief.choose}</p>
                   </div>
                   <div>
                     <p className="text-[10px] tracking-widest font-semibold text-red-500">AVOID</p>
-                    <p className="mt-1 text-xs leading-5 text-navy-600 dark:text-navy-300">{brief?.avoid}</p>
+                    <p className="mt-1 text-xs leading-5 text-navy-600 dark:text-navy-300">{brief.avoid}</p>
                   </div>
                 </div>
 
@@ -211,18 +255,20 @@ export function OpeningPhotoIntake() {
 
         <div className="border-t-2 border-navy-900 dark:border-sand-100 pt-4">
           <p className="text-[10px] tracking-[0.2em] font-semibold text-navy-400">AFTER COPY</p>
-          <h2 className="mt-1 text-lg font-bold text-navy-900 dark:text-sand-100">11枚を入れた後の最短コマンド</h2>
-          <div className="mt-3 space-y-2">
-            {["cd motion-studio", "pnpm sync:photos", "pnpm check:opening-photos:strict", "pnpm opening:preflight", "pnpm render:opening-v1:preview"].map((command) => (
-              <button
-                key={command}
-                type="button"
-                onClick={() => copy(command)}
-                className="block w-full text-left px-3 py-2 border border-sand-200 dark:border-navy-600 bg-white dark:bg-navy-800 text-xs font-mono text-navy-700 dark:text-navy-200"
-              >
-                {copied === command ? "✓ copied" : command}
-              </button>
-            ))}
+          <h2 className="mt-1 text-lg font-bold text-navy-900 dark:text-sand-100">11枚投入 → Dashboard同期 → 60秒Preview</h2>
+          <div className="mt-4 space-y-5">
+            <div>
+              <p className="mb-2 text-[10px] tracking-widest font-semibold text-navy-400">1. MOTION STUDIO</p>
+              <CommandList commands={motionStudioCommands} />
+            </div>
+            <div>
+              <p className="mb-2 text-[10px] tracking-widest font-semibold text-navy-400">2. DASHBOARD SNAPSHOT</p>
+              <CommandList commands={dashboardCommands} />
+            </div>
+            <div>
+              <p className="mb-2 text-[10px] tracking-widest font-semibold text-navy-400">3. PREVIEW</p>
+              <CommandList commands={previewCommands} />
+            </div>
           </div>
           <p className="mt-3 text-xs text-navy-500 dark:text-navy-300">
             Preview後に初めてcrop / motion / colorを判断。写真を入れる前に演出を詰めません。
