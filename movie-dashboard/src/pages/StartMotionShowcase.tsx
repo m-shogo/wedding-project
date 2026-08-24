@@ -9,13 +9,31 @@ import {
   startShowcaseSlots,
   type StartShowcaseSection,
 } from "../data/startMotionShowcase";
+import {
+  startExtendedAuthority,
+  startExtendedEditGrammar,
+  startExtendedSections,
+  startExtendedSongFacts,
+} from "../data/startExtendedRhythmMap";
 
 const ALL = "ALL" as const;
 type SectionFilter = StartShowcaseSection | typeof ALL;
 type EnergyFilter = MotionEnergy | typeof ALL;
 
+function formatTime(seconds: number) {
+  const minutes = Math.floor(seconds / 60);
+  const remain = seconds % 60;
+  return `${minutes}:${String(remain).padStart(2, "0")}`;
+}
+
 function downloadJson() {
-  const blob = new Blob([JSON.stringify({ authority: startShowcaseAuthority, slots: startShowcaseSlots }, null, 2)], { type: "application/json;charset=utf-8" });
+  const blob = new Blob([JSON.stringify({
+    authority: startShowcaseAuthority,
+    extendedAuthority: startExtendedAuthority,
+    songFacts: startExtendedSongFacts,
+    rhythmSections: startExtendedSections,
+    slots: startShowcaseSlots,
+  }, null, 2)], { type: "application/json;charset=utf-8" });
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement("a");
   anchor.href = url;
@@ -48,21 +66,80 @@ export function StartMotionShowcase() {
     <div>
       <Header
         title="StaRt MOTION SHOWCASE"
-        description="曲頭→2番サビ後の間奏までを、歌詞slot・実素材slot・Motion KitでPalmierへ渡す研究用rough timeline"
+        description="曲頭→2番サビ後の間奏までを、歌詞slot・実素材slot・Motion Kit・rhythm mapでPalmierへ渡す研究用rough timeline"
       />
+
+      <section className="mb-5 border-2 border-sky-300 dark:border-sky-700 bg-sky-50 dark:bg-sky-900/20 p-5">
+        <p className="text-[10px] tracking-[0.2em] font-semibold text-sky-700 dark:text-sky-300">RESEARCH TIMING REFERENCE</p>
+        <div className="mt-2 flex flex-col xl:flex-row xl:items-end gap-4">
+          <div>
+            <h2 className="text-3xl font-mono font-bold text-sky-950 dark:text-sky-100">約2:09</h2>
+            <p className="mt-1 text-sm text-sky-900 dark:text-sky-200">曲頭 → 2番サビ後の間奏 → Cメロ開始直前。reference endpoint = {startExtendedAuthority.referenceEndSec}s。</p>
+          </div>
+          <div className="xl:ml-auto grid grid-cols-2 md:grid-cols-4 gap-px bg-sky-200 dark:bg-sky-800 min-w-full xl:min-w-[560px]">
+            <div className="bg-white dark:bg-navy-800 p-3"><p className="text-[9px] tracking-widest text-navy-400">TEMPO</p><p className="font-mono font-bold text-lg text-navy-900 dark:text-sand-100">190 BPM</p></div>
+            <div className="bg-white dark:bg-navy-800 p-3"><p className="text-[9px] tracking-widest text-navy-400">PHOTO GRID</p><p className="font-mono font-bold text-lg text-navy-900 dark:text-sand-100">95 BPM</p></div>
+            <div className="bg-white dark:bg-navy-800 p-3"><p className="text-[9px] tracking-widest text-navy-400">NORMAL HOLD</p><p className="font-mono font-bold text-sm text-navy-900 dark:text-sand-100">1.26–2.53s</p></div>
+            <div className="bg-white dark:bg-navy-800 p-3"><p className="text-[9px] tracking-widest text-navy-400">HERO HOLD</p><p className="font-mono font-bold text-sm text-navy-900 dark:text-sand-100">2.53–5.05s</p></div>
+          </div>
+        </div>
+        <p className="mt-3 text-xs leading-5 text-sky-800 dark:text-sky-300">{startExtendedAuthority.endToleranceNote}</p>
+        <p className="mt-1 text-xs leading-5 text-sky-800 dark:text-sky-300">{startExtendedAuthority.editRule}</p>
+      </section>
 
       <section className="mb-8 border-2 border-amber-300 dark:border-amber-700 bg-amber-50 dark:bg-amber-900/20 p-5">
         <p className="text-[10px] tracking-[0.2em] font-semibold text-amber-700 dark:text-amber-300">EXACT TIMING GATE</p>
-        <h2 className="mt-1 text-xl font-bold text-amber-950 dark:text-amber-100">秒数はまだ確定しない — 正規/local音源の波形とMarkerがauthority</h2>
+        <h2 className="mt-1 text-xl font-bold text-amber-950 dark:text-amber-100">約2:09は研究用reference — Final秒数は正規/local音源の波形とMarkerがauthority</h2>
         <p className="mt-2 text-sm leading-6 text-amber-900 dark:text-amber-200">{startShowcaseAuthority.timingRule}</p>
         <p className="mt-2 text-xs leading-5 text-amber-800 dark:text-amber-300">{startShowcaseAuthority.lyricRule}</p>
       </section>
 
+      <section className="mb-8">
+        <div className="mb-3 flex items-end justify-between gap-4">
+          <div>
+            <p className="text-[10px] tracking-[0.2em] font-semibold text-navy-400">EXTENDED RHYTHM MAP</p>
+            <h2 className="mt-1 text-xl font-bold text-navy-900 dark:text-sand-100">0:00 → 2:09をsection / rhythm / wedding演出へ分解</h2>
+          </div>
+          <p className="hidden md:block text-xs font-mono text-navy-400">{startExtendedSections.length} SECTIONS</p>
+        </div>
+        <div className="border-t-2 border-navy-900 dark:border-sand-100 divide-y divide-sand-200 dark:divide-navy-600">
+          {startExtendedSections.map((item) => (
+            <article key={item.id} className="py-4 grid grid-cols-1 xl:grid-cols-[0.75fr_0.8fr_1.4fr_1.7fr] gap-4">
+              <div>
+                <p className="text-[10px] font-mono text-navy-400">{formatTime(item.referenceStartSec)}–{formatTime(item.referenceEndSec)}</p>
+                <h3 className="mt-1 font-bold text-navy-900 dark:text-sand-100">{item.label}</h3>
+                <p className="mt-1 text-[10px] font-mono uppercase text-sky-700 dark:text-sky-300">{item.energy} / {item.density} / {item.cutPolicy}</p>
+              </div>
+              <div className="text-xs leading-5 text-navy-600 dark:text-navy-300">
+                <p className="font-semibold text-navy-800 dark:text-sand-100">LYRIC GRID</p>
+                <p className="mt-1 font-mono">{item.lyricSlots.length ? `${item.lyricSlots[0]} → ${item.lyricSlots[item.lyricSlots.length - 1]}` : "NO LYRIC"}</p>
+                <p className="mt-2">{item.recommendedMotion.join(" / ")}</p>
+              </div>
+              <div className="text-xs leading-5 text-navy-600 dark:text-navy-300">
+                <p className="font-semibold text-navy-800 dark:text-sand-100">MUSIC READ</p>
+                <p className="mt-1">{item.musicalRead}</p>
+              </div>
+              <div className="text-xs leading-5 text-navy-600 dark:text-navy-300">
+                <p><span className="font-semibold text-emerald-700 dark:text-emerald-300">WEDDING:</span> {item.weddingDirection}</p>
+                <p className="mt-2 text-red-600 dark:text-red-300"><span className="font-semibold">AVOID:</span> {item.avoid}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="mb-8 border-l-2 border-sky-500 pl-5">
+        <p className="text-[10px] tracking-[0.2em] font-semibold text-navy-400">EDIT GRAMMAR</p>
+        <ul className="mt-2 space-y-1 text-xs leading-5 text-navy-600 dark:text-navy-300">
+          {startExtendedEditGrammar.map((rule) => <li key={rule}>• {rule}</li>)}
+        </ul>
+      </section>
+
       <section className="mb-8 grid grid-cols-2 lg:grid-cols-5 gap-px bg-sand-200 dark:bg-navy-600">
         <div className="bg-white dark:bg-navy-800 p-4"><p className="text-[10px] tracking-widest text-navy-400">ROUGH SLOTS</p><p className="mt-1 text-3xl font-mono font-bold text-navy-900 dark:text-sand-100">{startShowcaseSlots.length}</p></div>
-        <div className="bg-white dark:bg-navy-800 p-4"><p className="text-[10px] tracking-widest text-navy-400">LYRIC SLOTS</p><p className="mt-1 text-3xl font-mono font-bold text-navy-900 dark:text-sand-100">{startShowcaseSlots.filter((slot) => slot.phraseSlot).length}</p></div>
-        <div className="bg-white dark:bg-navy-800 p-4"><p className="text-[10px] tracking-widest text-navy-400">SECTIONS</p><p className="mt-1 text-3xl font-mono font-bold text-navy-900 dark:text-sand-100">{startShowcaseSections.length}</p></div>
-        <div className="bg-white dark:bg-navy-800 p-4"><p className="text-[10px] tracking-widest text-navy-400">EXACT END</p><p className="mt-1 text-lg font-mono font-bold text-amber-700 dark:text-amber-300">PENDING AUDIO</p></div>
+        <div className="bg-white dark:bg-navy-800 p-4"><p className="text-[10px] tracking-widest text-navy-400">LYRIC SLOTS</p><p className="mt-1 text-3xl font-mono font-bold text-navy-900 dark:text-sand-100">32</p></div>
+        <div className="bg-white dark:bg-navy-800 p-4"><p className="text-[10px] tracking-widest text-navy-400">SECTIONS</p><p className="mt-1 text-3xl font-mono font-bold text-navy-900 dark:text-sand-100">{startExtendedSections.length}</p></div>
+        <div className="bg-white dark:bg-navy-800 p-4"><p className="text-[10px] tracking-widest text-navy-400">FINAL END</p><p className="mt-1 text-lg font-mono font-bold text-amber-700 dark:text-amber-300">LOCAL AUDIO</p></div>
         <div className="bg-white dark:bg-navy-800 p-4"><p className="text-[10px] tracking-widest text-navy-400">APPROVED</p><p className="mt-1 text-3xl font-mono font-bold text-emerald-700 dark:text-emerald-300">0</p></div>
       </section>
 
