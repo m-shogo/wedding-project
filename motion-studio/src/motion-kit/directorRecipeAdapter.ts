@@ -10,14 +10,14 @@
 // resolves, deterministically, to an ordered list of "layers" that reuse one of six shared
 // engines (the original 4 + 2 added in Phase B: native-cut, photo-layout). A recipe with
 // multiple motionPresetIds becomes multiple stacked layers (base + overlays).
-import type {DirectorRecipe} from '../../../movie-dashboard/src/data/directorRecipeCatalog.ts';
-import {directorRecipeCatalog} from '../../../movie-dashboard/src/data/directorRecipeCatalog.ts';
+import type {DirectorRecipe, DirectorRecipeCategory} from '../../../movie-dashboard/src/data/directorRecipeCatalog.ts';
+import {directorRecipeCatalog, directorRecipeCategories} from '../../../movie-dashboard/src/data/directorRecipeCatalog.ts';
 import type {StartMotionPreset} from '../../../movie-dashboard/src/data/startMotionKit.ts';
 import {startMotionPresets} from '../../../movie-dashboard/src/data/startMotionKit.ts';
 import type {MotionIntensity} from './engines';
 
-export {directorRecipeCatalog};
-export type {DirectorRecipe};
+export {directorRecipeCatalog, directorRecipeCategories};
+export type {DirectorRecipe, DirectorRecipeCategory};
 
 export type RecipeRenderEngine =
   | 'typography-reveal'

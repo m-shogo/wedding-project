@@ -234,11 +234,108 @@ pnpm check:director-recipes                # 97件全件がresolve可能か + en
 - `DirectorRecipeRoot.tsx` がcatalogをmapして登録している(手書き97個ではない)こと
 - `index-director-recipes.ts` が正しくregisterRootしていること
 
-近似・簡略化していること(Phase C以降の課題):
+近似・簡略化していること(Phase D以降の課題):
 
 - `photo-2p5d-parallax` は真の視差(前景/背景レイヤー分離)ではなく、restrained pushで近似
 - `accent-halftone-burst` / `accent-scribble-underline` / `accent-stamp-triplet` は専用ビジュアルが無く、既存のtriplet hitで近似
 - 実写真/実動画の差し込みslotはまだプレースホルダーのみ(`DemoBackdrop` / `REAL PHOTO / VIDEO SLOT`表記)
+
+### Preview Catalogue / Director Motion Reel / Category Reels（Phase C）
+
+97件を「データとして存在するだけ」から「見て比較できるプレビュー」にする層。
+**Movie Dashboard側のUI一覧・フィルタ画面はPhase D。ここではRemotion Composition止まり。**
+
+新設ファイル:
+
+```text
+src/motion-kit/directorRecipeReelSelections.ts       Reel/Category Reel/比較セットの選抜ロジック(data-driven, JSX無し)
+src/compositions/common/DirectorRecipeReel.tsx        Reel本体(既存DirectorRecipePreviewを再利用して連結表示するだけ)
+src/compositions/common/DirectorRecipeComparison.tsx  比較グリッド(同一frame上に複数レシピを並べて表示)
+scripts/render-director-recipe-collection.mts          Reel/Category Reel/比較セットのrenderコマンド
+```
+
+`directorRecipeReelSelections.ts` の選抜ロジックが計算(`placeRecipesSequentially` / `reelDurationInFrames` /
+`comparisonDurationInFrames`)を持ち、`.tsx`側はレンダリングだけを担当する。
+これは意図的な分離: `check:director-recipes` はプレーンなNode ESM loaderで `.mts` を直接実行するため、
+JSXを含む `.tsx` を直接importできない(importすると `ERR_UNKNOWN_FILE_EXTENSION` で落ちる)。
+
+#### Director Recipe Highlight Reel
+
+全カテゴリ各2件、カタログ順で20/97件を選抜した通し視聴用reel。カテゴリ網羅を優先し、
+各カテゴリの残りは個別のCategory Reelで見る。
+
+```text
+DirectorRecipeReel-Highlight   20 recipes / 52.07秒（実測）
+```
+
+#### Category Reels（10、`directorRecipeCategories` から自動生成。97件を過不足なく分担）
+
+| Composition id | カテゴリ | 件数 | 尺(実測) |
+|---|---|---:|---:|
+| `DirectorRecipeReel-cinematic-camera` | Cinematic Reel | 9 | 38.60秒 |
+| `DirectorRecipeReel-photo-presentation` | Photo Presentation Reel | 9 | 23.40秒 |
+| `DirectorRecipeReel-typography` | Typography Reel | 9 | 9.80秒 |
+| `DirectorRecipeReel-anime-op-grammar` | Anime OP Reel | 9 | 8.13秒 |
+| `DirectorRecipeReel-cut-transition` | Cut & Transition Reel | 9 | 7.40秒 |
+| `DirectorRecipeReel-rhythm-music-hit` | Rhythm Reel | 9 | 14.93秒 |
+| `DirectorRecipeReel-travel` | Travel Reel | 9 | 21.00秒 |
+| `DirectorRecipeReel-editorial-cm` | Editorial / CM Reel | 9 | 28.60秒 |
+| `DirectorRecipeReel-wedding-emotion` | Wedding Reel | 9 | 36.00秒 |
+| `DirectorRecipeReel-start-specific` | StaRt Reel | 16 | 83.13秒 |
+
+タスク依頼にあった7分類(Cinematic / Anime OP / Travel / Typography / Rhythm / Wedding / StaRt)は
+上表にすべて含まれる。それ以外の3カテゴリ(Photo Presentation / Cut & Transition / Editorial CM)も
+`directorRecipeCategories` を機械的にiterateして同じ仕組みでreel化しており、97件全部がどこかの
+Category Reelに属する(手作業で選んだ7個だけを特別扱いしていない)。
+
+Composition idはRemotionの命名制約(`a-z A-Z 0-9 CJK -` のみ、`_` 不可)のため、
+カテゴリのSNAKE_CASE enum値を `categorySlug()` でkebab-caseへ変換している。
+
+#### 比較セット(最低2組、`comparisonSets`)
+
+同じ編集上の「瞬間」を複数レシピで同時に見せるグリッド。各レシピは自分のframe時計で動くため、
+1枚のframeの中で演出差だけを比較できる。
+
+| Composition id | 内容 | 収録レシピ |
+|---|---|---|
+| `DirectorRecipeComparison-hero-photo-presentation` | 同じHero写真を6つの提示方法で比較 | `photo-full-bleed` / `cam-restrained-push` / `cam-slow-pull` / `photo-negative-space` / `photo-freeze-on-motion` / `photo-editorial-crop` |
+| `DirectorRecipeComparison-three-hit-accent` | 同じ3-hitタイミングを6つのaccent文法で比較 | `rhythm-three-hit` / `typo-word-punch` / `anime-impact-frame` / `travel-passport-stamp` / `cut-soft-impact` / `anime-micro-rgb` |
+
+#### コマンド
+
+```sh
+pnpm exec remotion compositions src/index-director-recipes.ts   # Reel/Category Reel/比較セットのid一覧を含む全件表示
+pnpm dev:director-recipes                                       # Remotion Studioで再生確認
+pnpm render:director-recipe-collection DirectorRecipeReel-Highlight
+pnpm render:director-recipe-collection DirectorRecipeReel-typography
+pnpm render:director-recipe-collection DirectorRecipeComparison-hero-photo-presentation
+pnpm check:director-recipes   # 97件の契約チェックに加え、Highlight Reel/Category Reel/比較セットの
+                               # カバレッジ・重複・尺上限(研究reel1本あたり90秒)も検証。pnpm checkに含まれる
+```
+
+既定は `--scale=0.667 --crf=30`(1920x1080 Composition→1280x720、研究用低bitrate)。
+`--scale=1` を渡せば1080pフルレンダーになる。
+
+実測レンダー(このPhase Cで実施):
+
+```text
+pnpm render:director-recipe-collection DirectorRecipeComparison-hero-photo-presentation
+  → out/director-recipes/DirectorRecipeComparison-hero-photo-presentation.mp4
+  → 1280x720 / h264 / 30fps / 6.06秒 / 296.6 kB / 成功
+
+pnpm render:director-recipe-collection DirectorRecipeReel-typography
+  → out/director-recipes/DirectorRecipeReel-typography.mp4
+  → 1280x720 / h264 / 30fps / 9.80秒 / 595.1 kB / 成功
+```
+
+`out/director-recipes/**` は生成物なのでGit管理しない。
+
+#### Phase D以降への引き継ぎ
+
+- Movie Dashboard側での一覧・フィルタ・ブラウジングUIは未着手(Phase D)。
+- Palmier/DaVinci handoffファイル生成は未着手(Phase F)。
+- Claude/Codex A/Bフレームワークは未着手(Phase G)。
+- 97件全部の高画質1080pフルレンダーは意図的に未実施(研究用途では不要という判断)。歌詞・著作権音源・実在人物のAI生成は一切扱っていない。
 
 ## 既存テンプレを書き出す場合
 
