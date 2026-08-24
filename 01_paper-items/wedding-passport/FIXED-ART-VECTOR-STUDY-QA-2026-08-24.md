@@ -1,6 +1,6 @@
 # WEDDING PASSPORT — Fixed-art Vector Study QA / 2026-08-24
 
-State: `THREE_CLEANROOM_FIXED_ART_STUDIES_CREATED / A+B_ADVANCE_TO_FIGMA_ASSEMBLY / C_HOLD / NO_PRODUCTION_PROMOTION`
+State: `THREE_FRONT_STUDIES + TWO_RETURN_PAIR_STUDIES_CREATED / A+B_ADVANCE_TO_FIGMA_ASSEMBLY / C_HOLD / NO_PRODUCTION_PROMOTION`
 
 ## Authority and scope
 
@@ -31,44 +31,50 @@ Sources:
 
 Transferable conclusion for this item: **increase travel energy through one dominant spatial gesture and publication rhythm while protecting the cover's keepsake-booklet reading.** Do not solve anticipation by adding more planes, stamps, badges or fake transport fields.
 
-## Three clean-room fixed-art studies
+## Three clean-room front fixed-art studies
 
 All three are fixed-art/support studies only. Final names, date, place, headlines and emotional copy must remain native Figma text during assembly.
 
 ### A — Departure Window
 
-File:
+Files:
 - `studies/vnext-2026-08-24/departure-window-fixed-art.svg`
+- paired return study: `studies/vnext-2026-08-24/departure-window-return-fixed-art.svg`
 
 Visual strategy:
-- large curved opening occupying the upper/right field;
+- large curved opening occupying the upper/right field on the front;
 - one bright sun anchor;
 - coral + lagoon movements enter the lower field;
-- narrow left stitch-like vertical rhythm is intentionally physical/supportive rather than a fake passport credential.
+- narrow stitch-like vertical rhythm is intentionally physical/supportive rather than a fake passport credential;
+- the paired return study reverses the dominant light/dark mass and shifts the stitch rhythm to the opposite edge rather than mirroring the front mechanically.
 
 Thumbnail critique:
 - strongest immediate sense of departure, air and forward movement;
 - materially different from FIELD JOURNAL;
 - sufficiently broad native-text-safe cream field remains available;
+- front/back pair now reads as a designed booklet family rather than one isolated cover;
 - primary risk: if native headline/date are too poster-like, the object may lose booklet specificity.
 
 Decision: `ADVANCE_TO_FIGMA_ASSEMBLY`.
 
 ### B — Island Field Guide
 
-File:
+Files:
 - `studies/vnext-2026-08-24/island-field-guide-fixed-art.svg`
+- paired return study: `studies/vnext-2026-08-24/island-field-guide-return-fixed-art.svg`
 
 Visual strategy:
 - coastal/wind rhythm expressed as three asymmetric line weights;
-- dark publication header field;
+- dark publication header field on the front;
 - warm coral/mango coastal light entering from the upper right;
+- return study reverses to a deep-ocean field with a broad cream discovery opening and continues the wind/tide rhythm at a materially different vertical position;
 - lower factual-anchor fields intentionally remain abstract and contain no final wording.
 
 Thumbnail critique:
 - strongest Hawaii/destination atmosphere without tourist icon clusters;
 - most editorial/collectible of the three;
 - avoids literal map labels, flight numbers, tickets and UI;
+- paired return study gives the concept publication pacing rather than a one-page poster gesture;
 - primary risk: can become quiet/gallery-like unless native Japanese type introduces enough celebration scale and warmth.
 
 Decision: `ADVANCE_TO_FIGMA_ASSEMBLY`.
@@ -91,7 +97,7 @@ Thumbnail critique:
 
 Decision: `HOLD / DO_NOT_MATURE_FIRST`.
 
-This is not a permanent rejection. It should only return if A/B fail to produce a mature cover or if a later assembly can prove materially stronger booklet specificity.
+A return study was intentionally **not** created for C in this run. Per the project's failure-dedup and value rules, do not invest further authoring time in the weaker direction until A/B fail or C gains a materially new reason to return.
 
 ## Hybrid authoring split
 
@@ -105,13 +111,13 @@ For the next Figma assembly:
 
 ## QA and adoption boundary
 
-The local SVGs were rendered at approximately 370×525 thumbnail scale before Git write and inspected as a three-way set. This is only fixed-art thumbnail evidence; it is **not** a sellable-cover PASS.
+The local SVGs were rendered at approximately 370×525 thumbnail scale before Git write and inspected as a set. The A/B return studies were also rendered together at the same scale to verify that they are complementary rather than literal mirrors. This is fixed-art thumbnail evidence only; it is **not** a sellable-cover PASS.
 
 Required before any promotion:
 
-1. assemble A and B independently in Figma on blank frames;
+1. assemble A and B independently in Figma on blank front/back frames;
 2. add native Japanese/Latin copy without referencing retained Current composition;
-3. compare A vs B at 500px whole-item scale;
+3. compare A vs B as front/back pairs at 500px whole-item scale;
 4. mature the winner(s) at reading and 1480×2100 actual size;
 5. stress long names/copy and verify native text auto-height;
 6. verify any claimed paper/binding/edge cue actually behaves as a physical or editorial role;
@@ -126,8 +132,9 @@ Per the repeated-failure rule, the run did not keep retrying the same blocked wr
 
 ## Result
 
-- new fixed-art studies: `3`
-- candidates advanced: `A Departure Window`, `B Island Field Guide`
+- new front fixed-art studies: `3`
+- new return fixed-art studies: `2`
+- candidates advanced as front/back families: `A Departure Window`, `B Island Field Guide`
 - candidate held: `C Sunlit Departure Folio`
 - Figma write: `0`
 - Drive write: `0`
