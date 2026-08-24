@@ -152,7 +152,7 @@ export function AutomationReadiness() {
             <button type="button" onClick={() => setFilter("all")} className={`text-xs px-2 py-1 border ${filter === "all" ? "border-navy-800 text-navy-800 dark:border-sand-200 dark:text-sand-100" : "border-sand-200 text-navy-400 dark:border-navy-600"}`}>ALL</button>
             {statusOrder.map((status) => (
               <button key={status} type="button" onClick={() => setFilter(status)} className={`text-xs px-2 py-1 border ${filter === status ? "border-navy-800 dark:border-sand-200" : "border-sand-200 dark:border-navy-600"} ${statusTone[status]}`}>
-                {status.replaceAll("_", " ")} {counts[status]}
+                {status.replace(/_/g, " ")} {counts[status]}
               </button>
             ))}
           </div>
