@@ -12,6 +12,7 @@ const links = [
   { to: "/movie-coach/color", label: "Color Learning", icon: "◐" },
   { to: "/movie-coach/audio", label: "Audio Learning", icon: "♫" },
   { to: "/movie-coach/timeline", label: "Timeline Anatomy", icon: "≡" },
+  { to: "/movie-coach/shortcuts", label: "Shortcut Training", icon: "⌨" },
   { to: "/storyboard", label: "絵コンテ", icon: "🎬" },
   { to: "/assets", label: "素材ライブラリ", icon: "🗂" },
   { to: "/clips", label: "クリップ素材集", icon: "🎞" },
