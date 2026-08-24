@@ -92,7 +92,7 @@ export function validateBookManifest(
     }
 
     const skillIds = Array.isArray(rawChapter.skillIds)
-      ? [...new Set(rawChapter.skillIds.filter((item): item is string => typeof item === "string" && item.trim()).map((item) => item.trim()))]
+      ? [...new Set(rawChapter.skillIds.filter((item): item is string => typeof item === "string" && item.trim().length > 0).map((item) => item.trim()))]
       : [];
     if (skillIds.length === 0) errors.push(`${prefix}.skillIds に1つ以上のSkillが必要です`);
     for (const skillId of skillIds) {
