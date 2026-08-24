@@ -85,6 +85,83 @@ export function TransitionWipeEngine({
   );
 }
 
+export function NativeCutEngine({
+  label = 'CUT',
+  variant = 'hard',
+  intensity = 'M',
+  transparent = false,
+}: {
+  label?: string;
+  variant?: 'hard' | 'j-cut' | 'l-cut';
+  intensity?: MotionIntensity;
+  transparent?: boolean;
+}) {
+  const frame = useCurrentFrame();
+  const {durationInFrames} = useVideoConfig();
+  const strength = intensityScale[intensity];
+  const cutAt = Math.round(durationInFrames / 2);
+  // j-cut: the "next" audio/visual bed leads in before the cut line; l-cut: it lingers after.
+  const bedLead = variant === 'j-cut' ? Math.round(12 * strength) : variant === 'l-cut' ? -Math.round(12 * strength) : 0;
+  const bedStart = cutAt - bedLead;
+  const bedOpacity = interpolate(frame, [bedStart - 6, bedStart], [0, 0.55], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  const isAfterCut = frame >= cutAt;
+
+  return (
+    <AbsoluteFill style={{backgroundColor: transparent ? undefined : isAfterCut ? '#173d5b' : '#0d2035', overflow: 'hidden'}}>
+      <AbsoluteFill style={{background: '#f0d37a', opacity: bedOpacity}} />
+      <div style={{position: 'absolute', left: 0, right: 0, top: '50%', height: 2, background: 'rgba(255,255,255,0.5)', transform: `scaleX(${frame === cutAt ? 1 : 0.4})`, transition: 'none'}} />
+      <div style={{position: 'absolute', left: 90, bottom: 90, fontSize: 26, letterSpacing: '0.14em', color: '#fff', opacity: 0.85}}>
+        {isAfterCut ? 'B' : 'A'} / {label}
+      </div>
+    </AbsoluteFill>
+  );
+}
+
+export function PhotoLayoutEngine({
+  variant = 'contact-sheet',
+  count = 4,
+  intensity = 'M',
+  transparent = false,
+}: {
+  variant?: 'contact-sheet' | 'split-panel' | 'panel-grid';
+  count?: number;
+  intensity?: MotionIntensity;
+  transparent?: boolean;
+}) {
+  const frame = useCurrentFrame();
+  const {fps} = useVideoConfig();
+  const strength = intensityScale[intensity];
+  const panelCount = variant === 'split-panel' ? Math.min(2, Math.max(2, count)) : Math.max(2, count);
+  const columns = variant === 'contact-sheet' ? Math.min(4, panelCount) : panelCount;
+  const gap = 10;
+
+  return (
+    <AbsoluteFill style={{backgroundColor: transparent ? undefined : '#0d2035', padding: 24}}>
+      <div style={{display: 'grid', gridTemplateColumns: `repeat(${columns}, 1fr)`, gap, width: '100%', height: '100%'}}>
+        {Array.from({length: panelCount}).map((_, index) => {
+          const staggerStart = index * Math.round(fps * 0.08);
+          const reveal = interpolate(frame, [staggerStart, staggerStart + Math.round(fps * 0.3)], [0, 1], {
+            extrapolateLeft: 'clamp',
+            extrapolateRight: 'clamp',
+            easing: Easing.out(Easing.cubic),
+          });
+          return (
+            <div
+              key={index}
+              style={{
+                border: '1px solid rgba(255,255,255,0.35)',
+                background: 'rgba(255,255,255,0.06)',
+                opacity: reveal,
+                transform: `scale(${0.92 + reveal * 0.08 * strength})`,
+              }}
+            />
+          );
+        })}
+      </div>
+    </AbsoluteFill>
+  );
+}
+
 export function GraphicHitEngine({
   variant = 'triplet',
   intensity = 'M',
