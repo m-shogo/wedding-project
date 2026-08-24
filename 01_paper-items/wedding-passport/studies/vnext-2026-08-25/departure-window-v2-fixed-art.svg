@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1480" height="2100" viewBox="0 0 1480 2100">
+  <title>WEDDING PASSPORT clean-room study — Departure Window v2 fixed art</title>
+  <desc>Fixed-art support only. No authoritative copy. Not production.</desc>
+  <rect width="1480" height="2100" fill="#F6EFE3"/>
+  <rect x="0" y="0" width="72" height="2100" fill="#7E3F35"/>
+  <path d="M72 0L72 2100" stroke="#D9B49B" stroke-width="4"/>
+  <path d="M26 160V1940" stroke="#F6EFE3" stroke-width="5" stroke-dasharray="34 28"/>
+  <path d="M1480 70C1138 90 932 252 842 512C756 760 790 1058 962 1294C1110 1498 1298 1608 1480 1638V70Z" fill="#193F68"/>
+  <path d="M1480 160C1196 182 1023 330 951 555C886 760 922 997 1052 1170C1161 1314 1298 1400 1480 1428V160Z" fill="#3C72B8"/>
+  <circle cx="1392" cy="394" r="194" fill="#F4C75C"/>
+  <path d="M470 1504C712 1318 974 1264 1224 1326C1326 1350 1413 1390 1508 1450" fill="none" stroke="#EE6F55" stroke-width="72" stroke-linecap="round"/>
+  <path d="M542 1616C768 1486 1010 1460 1238 1514C1344 1538 1424 1574 1508 1624" fill="none" stroke="#57B9B5" stroke-width="30" stroke-linecap="round"/>
+  <path d="M1118 2100H1480V1786C1392 1882 1267 1984 1118 2100Z" fill="#E8DDCE"/>
+</svg>
