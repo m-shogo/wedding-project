@@ -47,14 +47,22 @@ export function getAutomationReadiness(
     return { status: "ready", state, label: "自動化候補", next: "承認済み条件だけAI/Scriptへ渡す" };
   }
 
-  if (stateIndex(state) < stateIndex("practiced")) {
-    return { status: "needs_practice", state, label: "練習してから", next: "まず練習素材で操作する" };
-  }
-  if (stateIndex(state) < stateIndex("used_in_wedding")) {
-    return { status: "needs_wedding_use", state, label: "Weddingで1回使う", next: "本番素材へ自分で適用し、判断基準を残す" };
+  if (skill.automationPolicy === "after_wedding_use") {
+    if (stateIndex(state) < stateIndex("practiced")) {
+      return { status: "needs_practice", state, label: "練習してから", next: "まず練習素材で操作する" };
+    }
+    if (stateIndex(state) < stateIndex("used_in_wedding")) {
+      return { status: "needs_wedding_use", state, label: "Weddingで1回使う", next: "本番素材へ自分で適用し、判断基準を残す" };
+    }
+    return { status: "ready", state, label: "自動化候補", next: "A/BやReviewで承認済みの値だけ自動適用する" };
   }
 
-  return { status: "ready", state, label: "自動化候補", next: "A/BやReviewで承認済みの値だけ自動適用する" };
+  return {
+    status: "human_only",
+    state,
+    label: "Policy未対応",
+    next: "automationPolicyを確認し、人間判断へ戻す",
+  };
 }
 
 export function hasAutomatedEvidence(skillId: string, evidence: LearningEvidence[]) {
