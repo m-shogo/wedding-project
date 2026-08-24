@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import { Header } from "../components/Header";
 import {
   directorRecipeCatalog,
@@ -54,7 +55,9 @@ function copyText(text: string) {
 type Tab = "catalog" | "section-map";
 
 export function DirectorRecipeCatalog() {
-  const [tab, setTab] = useState<Tab>("catalog");
+  const [searchParams] = useSearchParams();
+  const initialTab: Tab = searchParams.get("tab") === "section-map" ? "section-map" : "catalog";
+  const [tab, setTab] = useState<Tab>(initialTab);
   const [category, setCategory] = useState<Filter<DirectorRecipeCategory>>(ALL);
   const [energy, setEnergy] = useState<Filter<MotionEnergy>>(ALL);
   const [source, setSource] = useState<Filter<DirectorRecipeSourceType>>(ALL);
@@ -104,6 +107,13 @@ export function DirectorRecipeCatalog() {
         </p>
         <p className="mt-2 text-xs leading-5 text-sky-800 dark:text-sky-300">
           statusはすべて<code>planned</code>のまま。AIがfavorite/approvedへ自動昇格させることはしない。採否は人間確認が必須。
+        </p>
+        <p className="mt-3 text-xs leading-5 text-sky-800 dark:text-sky-300">
+          「このセクションに何を使うか」を先に見たい場合は
+          <Link to="/movie-coach/start-showcase" className="mx-1 underline font-semibold text-sky-900 dark:text-sky-100">
+            StaRt Motion Showcase
+          </Link>
+          の歌詞slot・rhythm mapから。ここのSECTION MAPタブは、その各sectionに対応するprimary/alternate/avoid recipeとrenderability検証結果を見る画面。
         </p>
       </section>
 

@@ -85,6 +85,13 @@ export function StartMotionShowcase() {
         </div>
         <p className="mt-3 text-xs leading-5 text-sky-800 dark:text-sky-300">{startExtendedAuthority.endToleranceNote}</p>
         <p className="mt-1 text-xs leading-5 text-sky-800 dark:text-sky-300">{startExtendedAuthority.editRule}</p>
+        <p className="mt-3 text-xs leading-5 text-sky-800 dark:text-sky-300">
+          セクションごとの演出候補（97件のDirector Recipe）は
+          <Link to="/movie-coach/director-recipes?tab=section-map" className="mx-1 underline font-semibold text-sky-900 dark:text-sky-100">
+            Director Recipe Catalog — SECTION MAP
+          </Link>
+          で見る。14 sectionそれぞれのprimary/alternate/avoid recipeと、motion-studio側のrenderability検証結果を確認できる。
+        </p>
       </section>
 
       <section className="mb-8 border-2 border-amber-300 dark:border-amber-700 bg-amber-50 dark:bg-amber-900/20 p-5">

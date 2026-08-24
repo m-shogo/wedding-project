@@ -177,10 +177,26 @@ Opening V1が完成した後:
 
 ## 並行研究トラック（Opening V1には未反映）
 
-StaRt Extended Opening / Director Recipe Catalog(Phase A〜G)は、motion-studioで並行して
-育てている研究トラック。Opening V1の作業順を変えない。詳細は
-`motion-studio/README.md`「Director Recipe Renderer」節、Claude/Codex A/B比較は
-`docs/handoff/2026-08-25-codex-ab-comparison-handoff.md`。
+StaRt Extended Opening / Director Recipe Catalog(Phase A〜H)は、motion-studioとmovie-dashboardで
+並行して育てている研究トラック。Opening V1の作業順を変えない。索引は
+`docs/start-director-recipe-system-overview.md`。詳細は`motion-studio/README.md`「Director Recipe
+Renderer」節、Claude/Codex A/B比較は `docs/handoff/2026-08-25-codex-ab-comparison-handoff.md`。
+
+Phase Hで基盤としては一区切り。以後は人間の採否判断待ち。
+
+Next（この研究トラックで、実際に人間が判断すべきこと。Opening V1より後回しでよい）:
+
+- 97件のレシピから、実際にStaRt用に使う4〜8 motion familyへ絞り込む（`status: planned`のまま。
+  AIはapproved/rejectedへ勝手に昇格させない）。
+- Claude/Codex A/Bの実行要否を判断する。実行する場合は
+  `docs/handoff/2026-08-25-codex-ab-comparison-handoff.md` のhandoffプロンプトをそのまま使える。
+
+Later（正規音源・実写真が来てから）:
+
+- 正規ローカル音源の波形とMarkerで、StaRt sectionのFinal秒数を確定する（現状はYouTube reference
+  timingのみのAUDIO_BLOCKED状態）。
+- 実写真が来たら、Director Recipe Previewのプレースホルダー（`DemoBackdrop` / `REAL PHOTO / VIDEO
+  SLOT`）をsource slotへ差し替える（現状はダミー素材のみのMEDIA_BLOCKED状態）。
 
 ## Legacy / Reference
 
