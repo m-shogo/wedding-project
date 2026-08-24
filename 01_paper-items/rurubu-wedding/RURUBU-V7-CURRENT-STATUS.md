@@ -8,90 +8,94 @@ Study page: `2052:2 / 07_RURUBU_V7_V8_PRO_STUDIES`
 
 V6 control: frozen `JC + IX + JB + IZ + IT + JA`
 V8 comparison: preserved `AV2 + AW4 + AL3 + AQ4 + AS5 + AT4`
-Production state: `V7_6_OF_6_LIVE_COMPARISON_SET / C8+K2+F3+G7+H7+C6D / UNPAGINATED_STUDY / TEMPORAL_TRUTH_GATED / PRINT_PROOF_BLOCKED / PRINTER_TEMPLATE_BLOCKED / REAL_CONTENT_BLOCKED / NOT_PREFERRED / NOT_GLOBAL_WINNER / NOT_PRINT_READY`
+Production state: `V7_6_OF_6_LIVE_COMPARISON_SET / C8+K2+F4+G8+H8+C6D / UNPAGINATED_STUDY / TEMPORAL_TRUTH_GATED / SECTION-ORDER-TRUTH-GATED / PRINT_PROOF_BLOCKED / PRINTER_TEMPLATE_BLOCKED / REAL_CONTENT_BLOCKED / NOT_PREFERRED / NOT_GLOBAL_WINNER / NOT_PRINT_READY`
 
 ## Current live V7 comparison set
 
 1. **Outer C8 `2381:2`** — reader-facing microcopy; semantic front `4`; fixed Hawaii display lockup retained.
 2. **Profile/Q&A K2 `2391:2`** — content-truth-gated profile/Q&A shell. Unverified personal values and Q&A answers remain native `回答待ち`; structural photo dummies remain non-final.
-3. **Story/Chronology F3 `2387:2`** — six-milestone content-truth dummy chronology. Unknown years remain `201x / 202x`; verified `2026.02.11 / 入籍` and `2026.10.24 / WEDDING DAY` remain native text.
-4. **Memory/Guide G7 `2424:2`** — grounded route `沖縄 → 韓国 → ハワイ → 横浜`, high-energy numbered scan rhythm, G5 inside-reserve correction, G6 Guide-01 semantic-line correction, plus a second semantic-wrap correction on the left sensory copy. Current state `VERIFIED_LOCAL / REAL-PHOTO-BLOCKED`.
-5. **Cafe/Table H7 `2407:2`** — secondary-photo transition binding retained; unsupported exact `11:40` removed while native `ひと休み` remains directly bound to the dominant Cafe image.
+3. **Story/Chronology F4 `2427:2`** — six-milestone content-truth dummy chronology retained; top-level kicker is semantic-only native `物語`, with no unverified chapter/section sequence prefix.
+4. **Memory/Guide G8 `2428:2`** — grounded route `沖縄 → 韓国 → ハワイ → 横浜`; top-level kicker is semantic-only native `記憶`; internal `01–04` guide numbers remain because they are verified browse anchors inside this spread, not publication-section numbers. REAL-PHOTO-BLOCKED.
+5. **Cafe/Table H8 `2428:35`** — H7 photo-caption/transition work retained; top-level kicker is semantic-only native `食卓`; right-side `夜 / 食卓` remains because it is contextual editorial language rather than section order. REAL-PHOTO-BLOCKED.
 6. **Island Picks + 1DAY C6D `2413:2`** — truth-safe `朝 / 昼 / 午後 / 夜`, no-route-map spatial-truth gate, and locally strengthened reverse microcopy. State remains `TESTED_LOCAL_PRINT-PROOF-BLOCKED`, not press-verified.
 
-Final page readback: all six current V7 roots and all six current V8 roots are visible under page `2052:2`; current-root pairwise overlap `0`. V6 preferred roots remain untouched on their existing authority surface.
+Final page readback after the F4/G8/H8 promotion: all six current V7 roots and all six current V8 roots are visible under page `2052:2`; current V7 root pairwise overlap `0`; F4/G8/H8 text-text intersections `0`. V6 preferred roots remain untouched on their existing authority surface.
 
-## Latest verified improvement — page authority + Japanese semantic wrap
+## Latest verified improvement — semantic section markers instead of unverified partial chapter sequence
 
-### Operational authority repair
+### New/deeper professional research
 
-Fresh direct-node readback discovered G6 `2421:2` on the wrong page `845:2 / 00_RURUBU_START_HERE` while all other current V7/V8 roots belonged to `2052:2`.
+This run rotated away from photo/JLREQ work and studied publication section/chapter marker mechanics. Adobe InDesign treats section prefixes, section markers and chapter numbers as document/book structure: chapter numbering can follow book order and update from the actual document sequence. Running headers likewise derive current section/title information from styled content.
 
-This reproduced existing **RSL-207** (`F-RSL-207-PAGE-CONTEXT-RESET-CAUSES-CURRENT-ROOT-PARENT-AUTHORITY-DRIFT`). The known corrected method was used immediately: resolve exact page → explicit `setCurrentPageAsync(2052:2)` → move existing root → parent readback. No duplicate failure ID was created.
+Rurubu-specific hypothesis: when final page/section order is not authoritative, a partial set of top-level numbers can falsely imply a finished publication architecture. Preserve semantic labels and any numbers that do a real local navigation job, but do not invent or imply a chapter sequence simply to make the spread feel magazine-like.
 
-G6 was moved to `2052:2` before further design work. Final G7 current readback is parent `2052:2 / x10700 / y13000 / visible=true`.
+### Live audit
 
-### New/deeper Japanese typography research
+Current V7 had a partial top-level sequence:
 
-This run deepened Japanese composition research around JLREQ / kinsoku / mojikumi: professional Japanese line composition judges line heads/ends, punctuation and semantic reading rather than merely whether a native text box contains all characters.
+- F3 `2387:5`: `02 / 物語`
+- G7 `2424:3`: `03 / 記憶`
+- H7 `2407:23`: `04 / 食卓`
 
-Rurubu-specific hypothesis: a short particle/punctuation group stranded by machine wrapping is a typographic defect when it visibly damages reading flow. Correct measure/scale/alignment/neighbor geometry together rather than adding a decorative patch or treating technical fit as sufficient.
+But Profile K2 did not expose a corresponding top-level `01`, C6D did not expose a corresponding top-level `05`, and the publication is explicitly `UNPAGINATED_STUDY` with final page/section order unresolved. The numbers therefore looked systematic without a complete authoritative system.
 
-### G6 → G7 bounded test
+This is distinct from internal spread navigation. G7's `01–04` memory-guide anchors have a clear reader-facing browse function and were intentionally retained.
 
-After G6's first line-break repair passed, actual-size review showed `2421:7 / TEXT / V7 MEMORY SENSORY` visually rendering the sentence `思い出を巡りながら、今日の横浜へ。` with `へ。` stranded on the next line.
+### Rollback-safe bounded tests
 
-G7 `2424:2` changed only the cloned native sensory text `2424:7`:
+Three materially different V7 page roles were cloned and tested without changing layout, typography style, photo geometry, copy body, palette or image hashes:
 
-- font size `25 → 23 px`
-- width `410 → 430 px`
-- x/y/height unchanged
-- characters unchanged
-- `Noto Sans JP Bold` retained
-- photography/crops/image hashes/fixed title graphic/other copy unchanged.
+- Story F4 `2427:2`: `02 / 物語` → `物語` (`2427:5`)
+- Memory G8 `2428:2`: `03 / 記憶` → `記憶` (`2428:3`)
+- Cafe H8 `2428:35`: `04 / 食卓` → `食卓` (`2428:56`)
 
-The new text right edge is x `470`, retaining a `35 px` gap before the secondary image at x `505`.
+Three-scale visual QA for all three:
 
-Three-scale QA:
 - 500px whole-item: PASS
-- 1400px reading: PASS
+- 1400px reading/page: PASS
 - 1587×1123 actual-size design screenshot: PASS
 
-Structure QA:
-- visible native text `20`
-- visible IMAGE fills `6`
-- text-text intersections `0`
-- text-image intersections `0`
-- bounded 18px edge risks `0`
-- Japanese font mismatch `0`
-- V7+V8 current-root overlaps `0`.
+Post-promotion structure readback:
+
+- F4/G8/H8 parent: `2052:2`
+- all current: `visible=true`
+- text-text intersections: `0`
+- current V7 root overlap: `0`
+- old F3/G7/H7: hidden rollback at `x=300000`, parent `2052:2`
 
 Professional critique:
-- art direction: high-energy V7 identity unchanged;
-- editorial design: grounded travel sentence now reads as intended rather than machine-wrapped;
-- book design: spread tempo unchanged;
-- typography: awkward `へ。` orphan removed without factual-copy edit;
-- photo editing: images remain structural dummies, not place-authenticated photography;
-- print design: no new printer-safe/final-resolution claim.
+
+- art director: V7 energy remains; removal is not a move toward generic minimalism;
+- editorial designer: top-level section markers now communicate content role rather than unsupported sequence;
+- book designer: the study no longer pretends that final chapter order exists;
+- typographer: same native type system and placement retained; only unsupported numeric prefixes were removed;
+- photo editor: no photo/crop/image-hash changes; all current structural-photo truth gates remain;
+- print designer: no pagination, imposition or printer-readiness claim was added.
 
 Promotion:
-- current G7 `2424:2 / parent 2052:2 / x10700 / y13000 / visible=true`;
-- G6 `2421:2` preserved as hidden rollback at `x=300000`.
+
+- F4 `2427:2` current; F3 `2387:2` hidden rollback.
+- G8 `2428:2` current; G7 `2424:2` hidden rollback.
+- H8 `2428:35` current; H7 `2407:2` hidden rollback.
 
 Learning:
-- **RSL-261** strengthened with a second materially different Japanese semantic-wrap case; state remains `VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`.
-- **RSL-207** recurrence recorded; no new fingerprint. Future page-level promotions must execute exact-page switch + parent readback, not merely remember the lesson.
+
+- No new failure ID was created. This strengthens existing **RSL-251** (`F-RSL-251-PROMINENT-EDITORIAL-NUMBER-SIMULATES-STRUCTURE-WITHOUT-A-READER-FACING-REFERENT`) with a multi-role top-level section-marker reproduction.
+- Adjacent **RSL-247** pagination truth remains relevant, but folios and section markers are kept as separate concrete production surfaces.
+- The verified principle is not “remove numbers.” Keep numbers that perform quantity, sequence, finding, time or local browse work; withhold numbers whose only job is to simulate unverified publication architecture.
 
 Evidence:
-- `01_paper-items/rurubu-wedding/evidence/RURUBU-V7-G6-MEMORY-JAPANESE-LINEBREAK-QA-2026-08-24.md`
-- `01_paper-items/rurubu-wedding/evidence/RURUBU-V7-G7-MEMORY-SEMANTIC-WRAP-PAGE-AUTHORITY-QA-2026-08-24.md`
+- `01_paper-items/rurubu-wedding/evidence/RURUBU-V7-F4-G8-H8-SEMANTIC-SECTION-MARKER-QA-2026-08-24.md`
+- `docs/design-learning/rurubu-shared-learning-feed.append/2026-08-24-rsl-251-v7-section-marker-authority.md`
 
-## Prior truth/production gates retained
+## Prior verified production learning retained
 
+- **RSL-207** page-level create/clone/move requires exact authority-page switch plus parent readback.
+- **RSL-261** Japanese semantic wrap QA remains `VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`.
 - **RSL-260** inside/fold reserve remains printer-template blocked; current pixel reserve is not a universal safe value.
 - **RSL-259** reverse microcopy prepress sensitivity remains `TESTED_LOCAL / PRINT-PROOF-BLOCKED`; C6D's `14 px` is not a project minimum-font rule.
 - **RSL-257** precise temporal data requires authority; V7 Cafe/1DAY keep truth-safe non-exact time wording where real schedule data is unavailable.
-- **RSL-258** cloned-frame mutations must target visible semantic nodes with exactly-one-match/readback because hidden duplicates can intercept character-only selectors.
+- **RSL-258** cloned-frame mutations must target visible semantic roles with exactly-one-match/readback because hidden duplicates can intercept character-only selectors.
 - Unverified folios remain withheld until page order/count/imposition exist.
 - Schematic route graphics do not become geography without verified spatial authority.
 - Plausible dummy personal/history data remains visibly dummy/TODO until real content is supplied.
@@ -104,7 +108,7 @@ V7 authority folder:
 V8 comparison authority:
 `1IKYF-YI6EbEe7qQCVQjClztpQA8CoRIo / RURUBU_V8_EDITORIAL_MONOGRAPH_2026-08-21`
 
-No master is promoted by filename alone. Current visible photos remain structural dummies unless exact source/semantic role is separately verified.
+The V7 folder was re-read before writes and still contained the seven known PNG masters/placeholders. No master is promoted by filename alone. Current visible photos remain structural dummies unless exact source/semantic role is separately verified.
 
 This pass:
 - image generation `0`
@@ -113,18 +117,17 @@ This pass:
 - new image hashes `0`
 - final Hawaii/place photography adopted `0`
 - photo/crop changes `0`
-- factual/native copy character changes `0`
 - V6 changes `0`
-- V8 production changes `0`.
+- V8 production changes `0`
 
 ## Truth / completion gates
 
-V7 remains REAL-CONTENT-BLOCKED where dummies/TODO states are used. C6D remains PRINT-PROOF-BLOCKED. G7 remains REAL-PHOTO-BLOCKED. Do not call V7 print-ready until final legitimate photography/copy, final page order/count, exact printer template, binding/fold/bleed/trim/imposition, effective image resolution, PDF separation/preflight and physical proof are verified.
+V7 remains REAL-CONTENT-BLOCKED where dummies/TODO states are used. C6D remains PRINT-PROOF-BLOCKED. G8/H8 remain REAL-PHOTO-BLOCKED. Do not call V7 print-ready until final legitimate photography/copy, final page order/count/section order, exact printer template, binding/fold/bleed/trim/imposition, effective image resolution, PDF separation/preflight and physical proof are verified.
 
 ## Next highest-value work
 
 1. Preserve frozen V6 and hidden rollback/rejected evidence.
-2. Highest visual bottleneck remains legitimate role-specific photography: V7 H7 Cafe/Table, V8 AV2 Outer, and grounded Memory/Guide roles.
+2. Highest visual bottleneck remains legitimate role-specific photography: V7 H8 Cafe/Table, V8 AV2 Outer, and grounded Memory/Guide roles.
 3. Do not force final images into dummy-frame geometry by default; choose/edit real photographs for editorial role first, then re-evaluate crop/scale/placement.
 4. Apply RSL-207 page-parent verification on every future top-level promotion.
 5. Continue common-scale V6/V7/V8 comparisons; do not create V9 merely to continue activity.
