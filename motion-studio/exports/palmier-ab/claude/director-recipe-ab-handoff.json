@@ -1,0 +1,149 @@
+{
+  "phase": "G",
+  "agentLane": "claude",
+  "palmierProjectName": "START_AB_CLAUDE",
+  "comparisonId": "ab-chorus1-full",
+  "targetStartSec": 38,
+  "targetEndSec": 58,
+  "brief": "StaRt Extended 00:38-00:58 (1 CHORUS A + 1 CHORUS B / THREE-HIT, 20秒)を、startSectionRecipeMap.ts の primary/alternate/avoidと02_opening-movie/asset-status.mdの人物・犬なしルールに従って作る。同一音源・同一20秒・同一brief。Hero写真の提示(chorus-1-a)からHero維持のまま3-hit(chorus-1-b)へ、という構造は崩さない。",
+  "generatedFrom": [
+    "movie-dashboard/src/data/directorRecipeCatalog.ts (Phase A)",
+    "movie-dashboard/src/data/startSectionRecipeMap.ts (Phase E)",
+    "movie-dashboard/src/data/startExtendedRhythmMap.ts",
+    "movie-dashboard/src/data/startClaudeCodexAB.ts (Phase G)"
+  ],
+  "note": "Reference/researched timing, not final. This lane is independent of the other agent's lane — do not read the other lane's output directory while building this one.",
+  "songFacts": {
+    "bpm": 190,
+    "halfTimeBpm": 95,
+    "timeSignature": "4/4",
+    "key": "B major",
+    "quarterBeatSec": 0.3157894736842105,
+    "halfTimeBeatSec": 0.631578947368421,
+    "musicalBarSec": 1.263157894736842,
+    "twoBarPhotoUnitSec": 2.526315789473684,
+    "normalPhotoHold": "2〜4 half-time beats（約1.26〜2.53秒）",
+    "heroPhotoHold": "4〜8 half-time beats（約2.53〜5.05秒）",
+    "microAccent": "190 BPMの1拍またはvocal attack。画面全体ではなく線・stamp・dot・caption emphasisへ使う。"
+  },
+  "evaluationAxes": [
+    {
+      "id": "excitement",
+      "label": "Excitement",
+      "labelJa": "ワクワク感",
+      "direction": "higher-is-better"
+    },
+    {
+      "id": "rhythm",
+      "label": "Rhythm",
+      "labelJa": "リズム",
+      "direction": "higher-is-better"
+    },
+    {
+      "id": "photoReadability",
+      "label": "Photo readability",
+      "labelJa": "写真の可読性",
+      "direction": "higher-is-better"
+    },
+    {
+      "id": "typography",
+      "label": "Typography",
+      "labelJa": "タイポグラフィ",
+      "direction": "higher-is-better"
+    },
+    {
+      "id": "threeHit",
+      "label": "3-hit execution",
+      "labelJa": "3-hit演出",
+      "direction": "higher-is-better"
+    },
+    {
+      "id": "chorusLift",
+      "label": "Chorus lift",
+      "labelJa": "サビの持ち上がり",
+      "direction": "higher-is-better"
+    },
+    {
+      "id": "animeOpFeel",
+      "label": "Anime OP feel",
+      "labelJa": "冒険アニメOP感",
+      "direction": "higher-is-better"
+    },
+    {
+      "id": "aiTemplateRisk",
+      "label": "AI/template risk",
+      "labelJa": "AI高級テンプレ感リスク",
+      "direction": "lower-is-better"
+    },
+    {
+      "id": "overEditingRisk",
+      "label": "Over-editing risk",
+      "labelJa": "編集過多リスク",
+      "direction": "lower-is-better"
+    },
+    {
+      "id": "instructionFollowing",
+      "label": "Instruction following",
+      "labelJa": "指示追従度",
+      "direction": "higher-is-better"
+    },
+    {
+      "id": "timelineCleanliness",
+      "label": "Timeline cleanliness",
+      "labelJa": "タイムラインの整理度",
+      "direction": "higher-is-better"
+    },
+    {
+      "id": "editability",
+      "label": "Editability",
+      "labelJa": "編集のしやすさ",
+      "direction": "higher-is-better"
+    }
+  ],
+  "sections": [
+    {
+      "order": 1,
+      "sectionId": "chorus-1-a",
+      "sectionLabel": "1 CHORUS A",
+      "markerStart": "00:38",
+      "markerEnd": "00:48",
+      "durationSec": 10,
+      "energy": "hit",
+      "density": "high",
+      "avoid": "cut-source-whip (avoid欄『サビ頭をtransitionの派手さで潰す』に直接抵触。) | anime-halftone-flash (halftone flashはchorus-1-bの3-hit専用アクセント。サビ頭で先出しすると本来の3-hitの初出インパクトが減る。) | photo-contact-sheet (サビ頭は最強Hero写真1枚を大きく見せる区間。複数写真並べは主役をぼやけさせる。)",
+      "photoHoldSeconds": "Hero写真を4〜8 half-time beat(約2.53〜5.05秒)保持。最初の0.5〜1秒は完全staticも比較する。",
+      "graphicDensityPolicy": "最小。clean full bleedを優先し、graphicで飾らない。",
+      "typographyLevel": "word-accent",
+      "threeHitPolicy": "(n/a)",
+      "notes": "musicalRead『サビ頭。シンプルな上昇メロディの強さを映像でも素直に受ける』をphoto-full-bleed + cam-locked-frameのstatic-firstで受ける。",
+      "primaryRecipeId": "start-chorus-hero-lift",
+      "alternateRecipeIds": [
+        "cam-25d-parallax",
+        "typo-frame-lock",
+        "wedding-couple-hero-duo"
+      ]
+    },
+    {
+      "order": 2,
+      "sectionId": "chorus-1-b",
+      "sectionLabel": "1 CHORUS B / THREE-HIT",
+      "markerStart": "00:48",
+      "markerEnd": "00:58",
+      "durationSec": 10,
+      "energy": "peak",
+      "density": "peak",
+      "avoid": "cam-slow-pull (slow pullはinterlude-1のrelease向けカメラ。3-hit区間の擬音的な弾みと噛み合わない。) | photo-contact-sheet (weddingDirection『写真を3回切らず、同一Hero上でstamp→line→route dotの3-hit』と矛盾。複数写真を並べると同一Hero維持の原則が崩れる。) | editorial-establishing-wide (establishing wideはdensity低のセットアップ文法。density=peakのこの区間には合わない。)",
+      "photoHoldSeconds": "Hero写真は同一のまま保持。3-hit中は写真自体を切らない(0カット)。",
+      "graphicDensityPolicy": "190BPM micro accentをstamp/line/route-dotへ3回だけ使う。全画面には使わない。",
+      "typographyLevel": "none",
+      "threeHitPolicy": "同一Hero写真を維持したまま stamp → line → route-dot の3-hitで表現する。3-hitごとにfull-screen flash/shake/cutを行わない(既存avoid方針を踏襲)。",
+      "notes": "musicalRead『擬音とリズムの遊びが最も映像化しやすい区間』をstart-triple-hit + rhythm-three-hitのgraphic hit3連で処理し、写真そのものは動かさない。",
+      "primaryRecipeId": "start-triple-hit",
+      "alternateRecipeIds": [
+        "travel-route-dot",
+        "anime-micro-rgb",
+        "anime-halftone-flash"
+      ]
+    }
+  ]
+}

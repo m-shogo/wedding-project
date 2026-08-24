@@ -175,6 +175,13 @@ Opening V1が完成した後:
 
 へ進む。
 
+## 並行研究トラック（Opening V1には未反映）
+
+StaRt Extended Opening / Director Recipe Catalog(Phase A〜G)は、motion-studioで並行して
+育てている研究トラック。Opening V1の作業順を変えない。詳細は
+`motion-studio/README.md`「Director Recipe Renderer」節、Claude/Codex A/B比較は
+`docs/handoff/2026-08-25-codex-ab-comparison-handoff.md`。
+
 ## Legacy / Reference
 
 以下は過去検討として残すが、現在の制作指示には使わない:

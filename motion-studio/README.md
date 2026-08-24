@@ -332,10 +332,32 @@ pnpm render:director-recipe-collection DirectorRecipeReel-typography
 
 #### Phase D以降への引き継ぎ
 
-- Movie Dashboard側での一覧・フィルタ・ブラウジングUIは未着手(Phase D)。
-- Palmier/DaVinci handoffファイル生成は未着手(Phase F)。
-- Claude/Codex A/Bフレームワークは未着手(Phase G)。
+- Movie Dashboard側での一覧・フィルタ・ブラウジングUIは実装済み(Phase D、`movie-dashboard`の`Director Recipe Catalog`ページ)。
+- Palmier/DaVinci handoffファイル生成は実装済み(Phase F、`exports/palmier/`)。
+- Claude/Codex A/Bフレームワークは実装済み(Phase G、下記)。両レーンの実render・winner確定はまだ未実施(人間確認待ち)。
 - 97件全部の高画質1080pフルレンダーは意図的に未実施(研究用途では不要という判断)。歌詞・著作権音源・実在人物のAI生成は一切扱っていない。
+
+### Claude / Codex A/Bフレームワーク（Phase G、研究/比較用）
+
+同一音源・同一20秒(chorus-1-a + chorus-1-b, 00:38-00:58)・同一briefで、Claude CodeとCodex
+CLI/agentの制作結果を人間が公平に見比べるための枠組み。**Opening V1には影響しない。**
+
+```text
+movie-dashboard/src/data/startClaudeCodexAB.ts   12評価軸(rubric付き) + 比較データ + winner null contract
+motion-studio/scripts/export-claude-codex-ab-handoff.mts   Claude/Codex両レーンの独立handoff pack生成
+motion-studio/scripts/check-claude-codex-ab.mts            評価軸の形式 + artifactPath実在 + winner contractを検証(pnpm checkに含まれる)
+docs/handoff/2026-08-25-codex-ab-comparison-handoff.md      Codexへそのまま渡せる完全な依頼プロンプト
+docs/decisions/2026-08-25-claude-codex-ab-framework.md      設計判断とCodex CLI実測結果
+```
+
+```sh
+pnpm export:claude-codex-ab-handoff   # exports/palmier-ab/{claude,codex}/ に独立したhandoffを生成
+pnpm check:claude-codex-ab            # winner!=null なら対応するartifactPathが実在するか等を検証
+```
+
+**winnerはAIが自分では確定しない。** `codexCandidate.artifactPath` / `claudeCandidate.artifactPath`
+は実際にrenderしたファイルのrepo相対パスが入るまで`null`のまま。存在しないパスを入れると
+`check:claude-codex-ab`がbuildを失敗させる。
 
 ## 既存テンプレを書き出す場合
 
