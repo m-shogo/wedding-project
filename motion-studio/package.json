@@ -61,6 +61,7 @@
     "export:home": "node --no-warnings scripts/export-home.mts",
     "export:stills": "node --no-warnings scripts/export-preview-stills.mts",
     "export": "pnpm export:capcut && pnpm export:review && pnpm export:home",
+    "export:palmier-recipe-handoff": "node --no-warnings scripts/export-palmier-recipe-handoff.mts",
     "preset": "node --no-warnings scripts/preset.mts",
     "check:presets": "node --no-warnings scripts/check-presets.mts"
   },
