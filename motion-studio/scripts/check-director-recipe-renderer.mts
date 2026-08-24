@@ -12,7 +12,15 @@
 import {readFileSync} from 'node:fs';
 import {dirname, join} from 'node:path';
 import {fileURLToPath} from 'node:url';
-import {directorRecipeCatalog, resolveAllDirectorRecipes} from '../src/motion-kit/directorRecipeAdapter.ts';
+import {directorRecipeCatalog, directorRecipeCategories, resolveAllDirectorRecipes} from '../src/motion-kit/directorRecipeAdapter.ts';
+import {
+  highlightReelRecipeIds,
+  recipeIdsForCategory,
+  categoryReelLabels,
+  comparisonSets,
+  reelDurationInFrames,
+  comparisonDurationInFrames,
+} from '../src/motion-kit/directorRecipeReelSelections.ts';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 let errors = 0;
@@ -66,10 +74,67 @@ for (const engine of ['TypographyRevealEngine', 'CameraTransformEngine', 'Transi
 const previewSrc = readFileSync(join(root, 'src/compositions/common/DirectorRecipePreview.tsx'), 'utf8');
 if (!previewSrc.includes('export function DirectorRecipePreview')) err('DirectorRecipePreview.tsx must export a single data-driven DirectorRecipePreview component');
 
+// --- Phase C: Highlight Reel / Category Reels / Comparison Sets --------------------------
+// A reel is only useful if it stays sittable-through. 90s at 30fps is a generous cap for a
+// *research* reel covering up to 16 recipes at their full declared duration (final delivery
+// reels, which would be far shorter and hand-trimmed, are a Phase D+ concern).
+const MAX_REEL_FRAMES = 90 * 30;
+
+const highlightIdSet = new Set(highlightReelRecipeIds);
+if (highlightIdSet.size !== highlightReelRecipeIds.length) err('Highlight Reel selection contains duplicate recipe ids.');
+for (const id of highlightReelRecipeIds) {
+  if (!directorRecipeCatalog.some((r) => r.id === id)) err(`Highlight Reel references unknown recipe id "${id}".`);
+}
+const highlightCategoriesCovered = new Set(directorRecipeCatalog.filter((r) => highlightIdSet.has(r.id)).map((r) => r.category));
+if (highlightCategoriesCovered.size !== directorRecipeCategories.length) {
+  err(`Highlight Reel does not cover all categories: ${highlightCategoriesCovered.size}/${directorRecipeCategories.length}.`);
+}
+const highlightFrames = reelDurationInFrames(highlightReelRecipeIds);
+if (highlightFrames > MAX_REEL_FRAMES) err(`Highlight Reel is ${(highlightFrames / 30).toFixed(1)}s, exceeds the ${MAX_REEL_FRAMES / 30}s research-reel cap.`);
+
+let categoryRecipeCount = 0;
+for (const category of directorRecipeCategories) {
+  const ids = recipeIdsForCategory(category);
+  if (ids.length === 0) err(`Category "${category}" has zero recipes; its reel would be empty.`);
+  categoryRecipeCount += ids.length;
+  if (!categoryReelLabels[category]) err(`Category "${category}" has no entry in categoryReelLabels (used for the reel title / README).`);
+  const frames = reelDurationInFrames(ids);
+  if (frames > MAX_REEL_FRAMES) err(`Category Reel "${category}" is ${(frames / 30).toFixed(1)}s, exceeds the ${MAX_REEL_FRAMES / 30}s research-reel cap.`);
+}
+if (categoryRecipeCount !== directorRecipeCatalog.length) {
+  err(`Category Reels together cover ${categoryRecipeCount} recipes, expected all ${directorRecipeCatalog.length} (every recipe belongs to exactly one category reel).`);
+}
+
+if (comparisonSets.length < 2) err(`Phase C requires at least 2 comparison sets, found ${comparisonSets.length}.`);
+for (const set of comparisonSets) {
+  if (set.recipeIds.length < 2) err(`Comparison set "${set.id}" has fewer than 2 recipes.`);
+  const uniqueIds = new Set(set.recipeIds);
+  if (uniqueIds.size !== set.recipeIds.length) err(`Comparison set "${set.id}" contains duplicate recipe ids.`);
+  for (const id of set.recipeIds) {
+    if (!directorRecipeCatalog.some((r) => r.id === id)) err(`Comparison set "${set.id}" references unknown recipe id "${id}".`);
+  }
+  const frames = comparisonDurationInFrames(set.recipeIds);
+  if (!(frames >= 12 && frames <= 240)) err(`Comparison set "${set.id}" duration out of bounds: ${frames} frames.`);
+}
+
+const rootSrcPhaseC = readFileSync(join(root, 'src/DirectorRecipeRoot.tsx'), 'utf8');
+if (!rootSrcPhaseC.includes('directorRecipeCategories.map')) {
+  err('DirectorRecipeRoot.tsx must register Category Reels by iterating directorRecipeCategories (data-driven), not one Composition per category id.');
+}
+if (!rootSrcPhaseC.includes('comparisonSets.map')) {
+  err('DirectorRecipeRoot.tsx must register comparison Compositions by iterating comparisonSets (data-driven).');
+}
+if (!rootSrcPhaseC.includes('DirectorRecipeReel-Highlight')) {
+  err('DirectorRecipeRoot.tsx must register the DirectorRecipeReel-Highlight Composition.');
+}
+
 if (errors) {
   console.error(`Director Recipe renderer contracts FAILED (${errors})`);
   process.exit(1);
 }
 console.log(
   `Director Recipe renderer contracts OK: ${directorRecipeCatalog.length} recipes / ${resolved.reduce((n, r) => n + r.layers.length, 0)} total layers / 6 shared engines (4 existing + 2 Phase B: native-cut, photo-layout).`,
+);
+console.log(
+  `Phase C reels OK: Highlight Reel ${highlightReelRecipeIds.length} recipes / ${(highlightFrames / 30).toFixed(1)}s, ${directorRecipeCategories.length} Category Reels covering all ${categoryRecipeCount} recipes, ${comparisonSets.length} comparison sets.`,
 );
