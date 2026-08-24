@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1480" height="2100" viewBox="0 0 1480 2100">
+  <title>WEDDING PASSPORT vNext study — Island Field Guide return fixed art</title>
+  <desc>Clean-room fixed-art study only. No authoritative copy. Not production, not adopted.</desc>
+  <rect width="1480" height="2100" fill="#153B5C"/>
+  <path d="M0 0H1480V630C1220 600 1010 640 850 755C690 870 580 1030 500 1240C410 1475 245 1680 0 1830Z" fill="#F5F0E5"/>
+  <path d="M0 620C240 530 455 520 645 570C835 620 985 735 1150 900C1260 1010 1365 1075 1480 1110" fill="none" stroke="#2A8F97" stroke-width="42" stroke-linecap="round"/>
+  <path d="M0 760C245 665 465 670 665 735C860 800 1015 920 1185 1085C1290 1185 1385 1240 1480 1270" fill="none" stroke="#F2B83E" stroke-width="22" stroke-linecap="round"/>
+  <path d="M0 890C240 820 455 835 650 910C850 985 1005 1105 1170 1265C1285 1375 1385 1425 1480 1450" fill="none" stroke="#E8684A" stroke-width="14" stroke-linecap="round"/>
+  <rect x="860" y="1640" width="470" height="130" fill="#F5F0E5"/>
+  <rect x="1000" y="1810" width="330" height="24" fill="#2A8F97"/>
+</svg>
