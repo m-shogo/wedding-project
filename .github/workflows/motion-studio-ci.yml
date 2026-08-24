@@ -68,6 +68,9 @@ jobs:
       - name: Opening V1 composition contract
         run: pnpm exec remotion compositions src/index-opening-v1.ts
 
+      - name: StaRt Motion Kit composition contract
+        run: pnpm exec remotion compositions src/index-start-motion-kit.ts
+
       - name: Opening V1 final-render QA contract
         run: |
           mkdir -p out/qa
