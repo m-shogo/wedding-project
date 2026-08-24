@@ -14,6 +14,7 @@ const links = [
   { to: "/movie-coach/timeline", label: "Timeline Anatomy", icon: "≡" },
   { to: "/movie-coach/shortcuts", label: "Shortcut Training", icon: "⌨" },
   { to: "/movie-coach/compare", label: "Before / After Lab", icon: "⇄" },
+  { to: "/movie-coach/book", label: "Book Manifest", icon: "▥" },
   { to: "/storyboard", label: "絵コンテ", icon: "🎬" },
   { to: "/assets", label: "素材ライブラリ", icon: "🗂" },
   { to: "/clips", label: "クリップ素材集", icon: "🎞" },
