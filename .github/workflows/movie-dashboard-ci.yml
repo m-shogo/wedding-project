@@ -4,10 +4,16 @@ on:
   pull_request:
     paths:
       - "movie-dashboard/**"
+      - "motion-studio/src/data/openingV1Media.ts"
+      - "motion-studio/src/data/photoLibrary.generated.ts"
+      - "motion-studio/src/data/assets.ts"
       - ".github/workflows/movie-dashboard-ci.yml"
   push:
     paths:
       - "movie-dashboard/**"
+      - "motion-studio/src/data/openingV1Media.ts"
+      - "motion-studio/src/data/photoLibrary.generated.ts"
+      - "motion-studio/src/data/assets.ts"
       - ".github/workflows/movie-dashboard-ci.yml"
 
 permissions:
