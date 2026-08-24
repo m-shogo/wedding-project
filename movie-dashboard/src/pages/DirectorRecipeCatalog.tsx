@@ -3,6 +3,7 @@ import { Header } from "../components/Header";
 import {
   directorRecipeCatalog,
   directorRecipeCategories,
+  getDirectorRecipeById,
   type DirectorRecipe,
   type DirectorRecipeCategory,
   type DirectorRecipeIntensity,
@@ -11,6 +12,7 @@ import {
 } from "../data/directorRecipeCatalog";
 import { motionEnergies, type MotionEnergy } from "../data/startMotionKit";
 import { startExtendedSections, type StartExtendedSectionId } from "../data/startExtendedRhythmMap";
+import { startSectionRecipeMap } from "../data/startSectionRecipeMap";
 
 const ALL = "ALL" as const;
 type Filter<T> = T | typeof ALL;
@@ -49,7 +51,10 @@ function copyText(text: string) {
   void navigator.clipboard.writeText(text);
 }
 
+type Tab = "catalog" | "section-map";
+
 export function DirectorRecipeCatalog() {
+  const [tab, setTab] = useState<Tab>("catalog");
   const [category, setCategory] = useState<Filter<DirectorRecipeCategory>>(ALL);
   const [energy, setEnergy] = useState<Filter<MotionEnergy>>(ALL);
   const [source, setSource] = useState<Filter<DirectorRecipeSourceType>>(ALL);
@@ -102,6 +107,23 @@ export function DirectorRecipeCatalog() {
         </p>
       </section>
 
+      <section className="mb-6 flex gap-2 border-b border-sand-200 dark:border-navy-600">
+        <button
+          onClick={() => setTab("catalog")}
+          className={`px-4 py-2 text-xs font-semibold tracking-widest ${tab === "catalog" ? "border-b-2 border-navy-900 dark:border-sand-100 text-navy-900 dark:text-sand-100" : "text-navy-400"}`}
+        >
+          CATALOG（97件）
+        </button>
+        <button
+          onClick={() => setTab("section-map")}
+          className={`px-4 py-2 text-xs font-semibold tracking-widest ${tab === "section-map" ? "border-b-2 border-navy-900 dark:border-sand-100 text-navy-900 dark:text-sand-100" : "text-navy-400"}`}
+        >
+          SECTION MAP（14 section）
+        </button>
+      </section>
+
+      {tab === "catalog" && (
+      <>
       <section className="mb-6 grid grid-cols-2 md:grid-cols-4 gap-px bg-sand-200 dark:bg-navy-600">
         <div className="bg-white dark:bg-navy-800 p-4">
           <p className="text-[10px] tracking-widest text-navy-400">TOTAL RECIPES</p>
@@ -303,6 +325,102 @@ pnpm render:director-recipe ${selected.id}`}
           ここに並ぶ97件は候補データ。Opening V1へ機械的に割り当てず、実写真previewで弱いcutが明確になった場合だけ、
           <code className="mx-1">docs/reference-recipes.md</code>の語彙と合わせて個別に検討する。
         </p>
+      </section>
+      </>
+      )}
+
+      {tab === "section-map" && <SectionRecipeMapView />}
+    </div>
+  );
+}
+
+function RecipeChip({ id }: { id: string }) {
+  const recipe = getDirectorRecipeById(id);
+  if (!recipe) {
+    return <span className="inline-block border border-red-300 dark:border-red-700 px-2 py-0.5 text-[11px] text-red-600">unknown: {id}</span>;
+  }
+  return (
+    <span className="inline-block border border-sand-300 dark:border-navy-600 px-2 py-0.5 text-[11px] font-mono text-navy-700 dark:text-sand-200" title={recipe.purpose}>
+      {id}
+    </span>
+  );
+}
+
+function SectionRecipeMapView() {
+  const [expandedId, setExpandedId] = useState<StartExtendedSectionId | null>(startSectionRecipeMap[0]?.sectionId ?? null);
+
+  return (
+    <div>
+      <section className="mb-6 border-2 border-emerald-300 dark:border-emerald-700 bg-emerald-50 dark:bg-emerald-900/20 p-5">
+        <p className="text-[10px] tracking-[0.2em] font-semibold text-emerald-700 dark:text-emerald-300">PHASE E — SECTION ⇄ RECIPE MAPPING</p>
+        <p className="mt-2 text-sm leading-6 text-emerald-900 dark:text-emerald-200">
+          14 section（Extended Rhythm Map）それぞれに対して、primary / alternate / avoidレシピと
+          photo hold秒数・graphic密度・typography・3-hit方針を具体化した設計図。
+          <code className="mx-1">movie-dashboard/src/data/startSectionRecipeMap.ts</code> が単一情報源。
+        </p>
+        <p className="mt-2 text-xs leading-5 text-emerald-800 dark:text-emerald-300">
+          statusはこのファイルには存在しない。採否・昇格は引き続きDirector Recipe Catalog側で人間確認が必須（AIが自動昇格しない）。
+        </p>
+      </section>
+
+      <section className="space-y-3">
+        {startSectionRecipeMap.map((mapping) => {
+          const sectionMeta = startExtendedSections.find((s) => s.id === mapping.sectionId);
+          const isExpanded = expandedId === mapping.sectionId;
+          return (
+            <article key={mapping.sectionId} className="border border-sand-200 dark:border-navy-600">
+              <button
+                onClick={() => setExpandedId(isExpanded ? null : mapping.sectionId)}
+                className="w-full text-left px-4 py-3 flex flex-wrap items-center justify-between gap-2 hover:bg-sand-50 dark:hover:bg-navy-800"
+              >
+                <div>
+                  <p className="text-[10px] font-mono text-navy-400">{mapping.sectionId}</p>
+                  <h3 className="font-bold text-navy-900 dark:text-sand-100">{sectionMeta?.label ?? mapping.sectionId}</h3>
+                </div>
+                <p className="text-[11px] font-mono text-navy-400">
+                  energy: {mapping.energy} / density: {mapping.density} / typography: {mapping.typographyLevel}
+                  {mapping.threeHitPolicy ? " / THREE-HIT" : ""}
+                </p>
+              </button>
+
+              {isExpanded && (
+                <div className="px-4 pb-4 space-y-3 text-xs leading-5 text-navy-600 dark:text-navy-300">
+                  <div>
+                    <p className="font-semibold text-emerald-700 dark:text-emerald-300 mb-1">PRIMARY</p>
+                    <div className="flex flex-wrap gap-1.5">
+                      {mapping.primaryRecipeIds.map((id) => <RecipeChip key={id} id={id} />)}
+                    </div>
+                  </div>
+                  <div>
+                    <p className="font-semibold text-sky-700 dark:text-sky-300 mb-1">ALTERNATE</p>
+                    <div className="flex flex-wrap gap-1.5">
+                      {mapping.alternateRecipeIds.map((id) => <RecipeChip key={id} id={id} />)}
+                    </div>
+                  </div>
+                  <div>
+                    <p className="font-semibold text-red-600 dark:text-red-300 mb-1">AVOID</p>
+                    <ul className="space-y-1">
+                      {mapping.avoidRecipeIds.map((a) => (
+                        <li key={a.recipeId} className="flex flex-wrap items-start gap-2">
+                          <RecipeChip id={a.recipeId} />
+                          <span className="text-navy-500 dark:text-navy-400">{a.reason}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
+                    <p><span className="font-semibold text-navy-800 dark:text-sand-100">PHOTO HOLD:</span> {mapping.photoHoldSeconds}</p>
+                    <p><span className="font-semibold text-navy-800 dark:text-sand-100">GRAPHIC DENSITY:</span> {mapping.graphicDensityPolicy}</p>
+                  </div>
+                  {mapping.threeHitPolicy && (
+                    <p className="border-l-2 border-red-400 pl-3"><span className="font-semibold text-red-600 dark:text-red-300">THREE-HIT POLICY:</span> {mapping.threeHitPolicy}</p>
+                  )}
+                  <p className="border-l-2 border-navy-300 dark:border-navy-600 pl-3"><span className="font-semibold text-navy-800 dark:text-sand-100">NOTES:</span> {mapping.notes}</p>
+                </div>
+              )}
+            </article>
+          );
+        })}
       </section>
     </div>
   );
