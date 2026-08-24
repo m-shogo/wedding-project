@@ -93,14 +93,15 @@ export function OpeningProductionGatePanel({ compact = false }: { compact?: bool
           <div>
             <p className="text-[10px] tracking-[0.18em] font-semibold text-navy-400">DO THIS NOW</p>
             <ol className="mt-3 space-y-2 text-xs leading-5 text-navy-600 dark:text-navy-300">
-              <li><span className="font-mono text-navy-400 mr-2">1</span>写真を <code className="text-[10px]">motion-studio/public/photos/opening/</code> へ配置</li>
-              <li><span className="font-mono text-navy-400 mr-2">2</span><code className="text-[10px]">pnpm sync:photos</code> でLibrary更新</li>
-              <li><span className="font-mono text-navy-400 mr-2">3</span>BGM権利確認後 <code className="text-[10px]">opening-bgm-main</code> をcandidate以上へ</li>
-              <li><span className="font-mono text-navy-400 mr-2">4</span><code className="text-[10px]">pnpm render:opening-v1:preview</code> で60秒確認</li>
+              <li><span className="font-mono text-navy-400 mr-2">1</span>11枠の役割を見て実写真を選ぶ</li>
+              <li><span className="font-mono text-navy-400 mr-2">2</span>canonical名で <code className="text-[10px]">motion-studio/public/photos/opening/</code> へ配置</li>
+              <li><span className="font-mono text-navy-400 mr-2">3</span><code className="text-[10px]">pnpm sync:photos</code> でLibrary更新</li>
+              <li><span className="font-mono text-navy-400 mr-2">4</span>BGM権利確認後に60秒previewへ進む</li>
             </ol>
             <div className="mt-4 flex flex-wrap gap-3 text-xs">
-              <Link to="/asset-placement-guide" className="border-b border-navy-300 text-navy-600 dark:text-navy-300">素材置き場ガイド →</Link>
-              <Link to="/movie-coach/compare" className="border-b border-navy-300 text-navy-600 dark:text-navy-300">Preview後のA/B判断 →</Link>
+              <Link to="/opening-photo-intake" className="px-3 py-2 bg-navy-800 text-white dark:bg-sand-100 dark:text-navy-900">写真11枚を選ぶ →</Link>
+              <Link to="/asset-placement-guide" className="border-b border-navy-300 text-navy-600 dark:text-navy-300 self-center">素材ルール →</Link>
+              <Link to="/movie-coach/compare" className="border-b border-navy-300 text-navy-600 dark:text-navy-300 self-center">Preview後のA/B判断 →</Link>
             </div>
           </div>
         </div>

@@ -66,6 +66,7 @@ const navSections: SidebarSection[] = [
     sectionId: "production",
     label: "PRODUCTION",
     links: [
+      { to: "/opening-photo-intake", label: "Opening写真11枚", icon: "📷" },
       { to: "/storyboard", label: "絵コンテ", icon: "🎬" },
       { to: "/assets", label: "素材ライブラリ", icon: "🗂" },
       { to: "/clips", label: "クリップ素材集", icon: "🎞" },
