@@ -1,67 +1,99 @@
 # WEDDING PASSPORT — Clean-room A2/B2 Figma Assembly Spec / 2026-08-25
 
-State: `READY_FOR_SAFE_FIGMA_ASSEMBLY / REFINED_FIXED_ART_SELECTED / NOT_PRODUCTION`
+State: `EXECUTED / A2_CURRENT_SELECTED / B2_HOLD / SELLABLE_VISUAL_QA_PASS / NOT_PRINT_READY`
 
 This file supersedes only the **fixed-art input selection** in `FIGMA-CLEANROOM-AB-ASSEMBLY-SPEC-2026-08-24.md`. The earlier spec remains authoritative for inherited facts, semantic native-text roles, font capability, long-copy stress, and the comparison gate.
 
-## Use these refined fixed-art inputs
+## Refined fixed-art inputs used
 
 ### A2 — Departure Window v2
 
 - front: `studies/vnext-2026-08-25/departure-window-v2-fixed-art.svg`
 - back: `studies/vnext-2026-08-25/departure-window-v2-return-fixed-art.svg`
 
-Do **not** use the 2026-08-24 A1 pair for the next assembly unless A2 fails structurally.
-
 ### B2 — Island Field Guide v2
 
 - front: `studies/vnext-2026-08-25/island-field-guide-v2-fixed-art.svg`
 - back: `studies/vnext-2026-08-25/island-field-guide-v2-return-fixed-art.svg`
 
-Do **not** use the 2026-08-24 B1 pair for the next assembly unless B2 fails structurally.
+A1/B1 from 2026-08-24 remain superseded studies and were not used for the promoted Current.
 
 ## A2 assembly emphasis
 
-- keep the broad cream field as the Japanese-first reading surface;
-- treat the left bound spine as a physical booklet cue, not as a passport credential rail;
-- do not add another plane, stamp, badge, barcode, scanner line or travel icon;
-- the cropped sun is already the atmosphere anchor; do not duplicate it with another circular badge;
-- the coral motion is the single dominant departure gesture; the lagoon line remains subordinate;
-- headline/date must not turn the cover into a poster at 500px.
+- broad cream field is the Japanese-first reading surface;
+- left bound spine is a physical booklet cue, not a passport credential rail;
+- no added plane, stamp, badge, barcode, scanner line or travel icon;
+- cropped sun is the atmosphere anchor; no duplicate circular badge;
+- coral motion is the single dominant departure gesture; lagoon line remains subordinate;
+- headline/date were reduced from the first assembly until the cover stopped reading as a poster at 500px.
 
 ## B2 assembly emphasis
 
-- no top title box and no bottom factual box should be added back by default;
-- let Japanese typography occupy the open cream field directly;
-- keep the right coastal-light mass mostly free of authoritative copy;
-- the three tide/wind lines are atmosphere, not text rules or form separators;
-- if the first cover feels too quiet, increase typographic contrast/scale/rhythm before adding decorative containers.
+- no top title box and no bottom factual box were reintroduced;
+- Japanese typography sits directly on the open cream field;
+- right coastal-light mass remains mostly free of authoritative copy;
+- tide/wind lines remain atmosphere, not text rules;
+- B2 survived the first review as a serious editorial study but was held because A2 had stronger booklet specificity and travel anticipation.
 
 ## Shared native-copy contract
-
-Reuse the semantic-role contract from the 2026-08-24 spec:
 
 - all reader-facing wording remains native Figma text;
 - width/resize first, final `textAutoResize=HEIGHT` second;
 - confirmed date: `2026.10.24`;
 - confirmed place: `YOKOHAMA`;
 - couple role: `[新郎新婦名]`;
-- issue/information role remains a semantic placeholder if still required;
 - no fake passport / immigration / airline credential data.
 
-## Required first review
+## Executed review result
 
-Before any retained-Current comparison:
+The required sequence was completed exactly in clean-room order:
 
 1. blank-frame A2 front/back;
 2. blank-frame B2 front/back;
 3. native semantic copy only;
 4. ~500px pair review;
-5. reject any pair that fails booklet specificity, travel anticipation, Japanese first read, or no-UI/no-fake-admin constraints;
-6. mature only winner(s) to reading / actual-size / realistic long-copy;
-7. only then compare with retained `181:52 / 181:80`.
+5. first-pass typography collision/wrap repair;
+6. A2 selected for maturation; B2 retained as `HOLD`;
+7. A2 reading/detail review;
+8. realistic long-copy stress with Japanese semantic-line-break correction;
+9. structure readback;
+10. only then retained `181:52 / 181:80 FIELD JOURNAL / RETURN NOTE` comparison;
+11. A2 promoted because it clearly improved travel anticipation and emotional energy while preserving booklet specificity and avoiding fake transport administration.
+
+## Figma evidence
+
+- file: `UbK8KmuWJcDeGScsN49Uor`
+- study page: `199:2 / STUDY / PASSPORT / A2-B2 / 2026-08-25`
+- selected A2 study: `199:3 / 199:15`
+- held B2 study: `199:27 / 199:36`
+- hidden A2 long-copy QA: `202:2 / 202:20`
+- new Current page: `205:2 / CURRENT_SELECTED / PASSPORT / DEPARTURE WINDOW V2 / 2026-08-25`
+- new Current front/back: `205:3 / 205:21`
+- retained prior Current preserved unchanged: `181:52 / 181:80`.
+
+## Structure result
+
+A2 selected front/back and both long-copy stress roots:
+
+- fixed-height text: `0`;
+- visible text outside root: `0`;
+- text-text collisions: `0`;
+- IMAGE fills: `0`;
+- all semantic text: native + `textAutoResize=HEIGHT`.
+
+## Hybrid authoring result
+
+- native semantic/factual/emotional copy: Figma text;
+- fixed visual support: editable SVG node tree;
+- raster/generated images: `0`;
+- replaceable photography: `0`;
+- variable text baked into SVG/raster: `0`.
 
 ## Evidence
+
+Canonical promotion QA:
+
+- `FIGMA-CLEANROOM-A2-DEPARTURE-WINDOW-CURRENT-QA-2026-08-25.md`
 
 Professional fixed-art refinement and rejection rationale:
 
@@ -69,4 +101,10 @@ Professional fixed-art refinement and rejection rationale:
 
 ## Current tool boundary
 
-Figma write must still wait until the connected environment exposes readable approved `figma-use` guidance. Do not bypass that requirement. Read-only screenshots may be used, but retained Current is not a construction reference for A2/B2.
+The previous Figma-write blocker is **resolved** in the current connector environment: approved `figma-use` guidance was successfully loaded and the assembly/promotion was executed through `use_figma` with `resource:figma-use` logged. Do not repeat the obsolete `guidance unavailable` blocker unless a later run observes a real new capability regression.
+
+## Current status
+
+`CURRENT_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / CLEANROOM_A2_PROMOTED / LONG_COPY_STRESS_PASS / AUTO_HEIGHT_PASS / LEGACY_PRESERVED / NOT_PRINT_READY`.
+
+Next production target: `BOARDING PASS`.
