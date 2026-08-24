@@ -7,7 +7,7 @@ Figma file: `bfM0d4c9dCeBv5pCkJ3TNM`
 Study page: `2052:2 / 07_RURUBU_V7_V8_PRO_STUDIES`
 
 V6 control: frozen `JC + IX + JB + IZ + IT + JA`
-V8 comparison: `AV3 + AW7 + AL4 + AQ7 + AS7 + AT5`
+V8 comparison: `AV5 + AW8 + AL4 + AQ7 + AS7 + AT5`
 Production state: `V7_6_OF_6_LIVE_COMPARISON_SET / C8+K2+F4+G9+H9+C6D / UNPAGINATED_STUDY / TEMPORAL_TRUTH_GATED / SECTION-ORDER-TRUTH-GATED / PHOTO-SOURCE-TRUTH-GATED / PRINT_PROOF_BLOCKED / PRINTER_TEMPLATE_BLOCKED / REAL_CONTENT_BLOCKED / NOT_GLOBAL_WINNER / NOT_PRINT_READY`
 
 ## Current live V7 comparison set
@@ -65,6 +65,6 @@ This pass: image generation `0`; Drive writes `0`; new masters `0`; new image ha
 ## Next highest-value work
 
 1. Preserve V6 and all rollback/rejected evidence.
-2. Highest visual bottleneck remains legitimate role-specific photography, especially V7 H9 Cafe/Table and V8 AV3 Outer.
+2. Highest visual bottleneck remains legitimate role-specific photography, especially V7 H9 Cafe/Table and V8 AV5 Outer.
 3. Select/edit legitimate photography before locking final crop/area; do not force final images into dummy-frame geometry.
 4. Continue V6/V7/V8 common-scale comparison; do not create V9 merely to continue activity.
