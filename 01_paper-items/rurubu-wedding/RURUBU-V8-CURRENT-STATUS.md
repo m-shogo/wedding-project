@@ -7,7 +7,7 @@ Figma file: `bfM0d4c9dCeBv5pCkJ3TNM`
 Study page: `2052:2 / 07_RURUBU_V7_V8_PRO_STUDIES`
 
 V6 control: frozen `JC + IX + JB + IZ + IT + JA`
-V7 comparison: `C8 + K2 + F4 + G9 + H9 + C6D`
+V7 comparison: `C8 + K3 + F4 + G9 + H10 + C6D`
 Production state: `V8_AV5+AW8+AL4+AQ7+AS7+AT5 / DISTINCT_BOOK_EDITORIAL_SYSTEM / UNPAGINATED_STUDY / TEMPORAL_TRUTH_GATED / SECTION-ORDER-TRUTH-GATED / PERSONAL-CONTENT-TRUTH-GATED / PHOTO-SOURCE-TRUTH-GATED / REAL_CONTENT_BLOCKED / NOT_GLOBAL_WINNER / NOT_PRINT_READY`
 
 ## Current live V8 comparison set
@@ -79,7 +79,7 @@ V8 remains REAL-CONTENT-BLOCKED and NOT PRINT READY. DESIGN QA is separate from 
 ## Next highest-value work
 
 1. Preserve frozen V6 and all rollback/rejected evidence.
-2. Highest visual bottlenecks remain legitimate role-specific photography: V8 AV5 Outer, V7 H9 Cafe/Table, AS7 Cafe/Table and Memory roles.
+2. Highest visual bottlenecks remain legitimate role-specific photography: V8 AV5 Outer, V7 H10 Cafe/Table, AS7 Cafe/Table and Memory roles.
 3. Select/edit legitimate photography before final crop/area; do not force final images into dummy-frame geometry.
 4. Re-test AV5 after legitimate Outer photography: photo choice may justify a different crop, area or even a return to overlay type if the image itself supports it.
 5. Continue six-role sequence review at whole-item/page/actual scale; do not create V9 merely to continue activity.
