@@ -47,6 +47,7 @@ const navSections: SidebarSection[] = [
       { to: "/movie-coach/review", label: "Movie Review", icon: "◎" },
       { to: "/movie-coach/compare", label: "Before / After Lab", icon: "⇄" },
       { to: "/movie-coach/reference", label: "Reference Breakdown", icon: "⌗" },
+      { to: "/movie-coach/start-showcase", label: "StaRt Motion Showcase", icon: "▶" },
     ],
   },
   {
