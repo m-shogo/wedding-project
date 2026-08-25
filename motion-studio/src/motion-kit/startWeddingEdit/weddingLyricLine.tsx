@@ -13,7 +13,7 @@ import React from 'react';
 import {AbsoluteFill, Sequence, interpolate, useCurrentFrame} from 'remotion';
 import type {LyricPhrase} from '../../data/startWeddingEdit/localLyricsWeddingEdit';
 import {START_WEDDING_EDIT_FPS} from '../../data/startWeddingEdit/sections';
-import {CharacterBuild, HeldNoteStretch, QuestionPause, WhisperReveal} from '../start129/lyricAnimationFamilies';
+import {CharacterBuild, HeldNoteStretch, QuestionPause, WhisperReveal, WordHit} from '../start129/lyricAnimationFamilies';
 import {HandDrawnUnderline} from '../start129/handDrawnPrimitives';
 
 export type WeddingVariant = 'A' | 'B' | 'C';
@@ -124,6 +124,18 @@ const WeddingLyricBody: React.FC<{phrase: LyricPhrase; variant: WeddingVariant}>
 
   if (phrase.text.includes('？') || phrase.text.includes('?')) {
     return <QuestionPause text={phrase.text} startFrame={0} pauseFrame={Math.round(durFrames * 0.7)} fontSize={44} />;
+  }
+
+  if (phrase.semanticType === 'decision') {
+    // 「スタートに戻ろう」等、決意の一言はCharacter Buildの逐次表示ではなく
+    // 一気に着地するWord Hitにする(意味的に迷いなく言い切る言葉のため)
+    return (
+      <WordHit
+        word={{text: phrase.text, hitFrame: Math.round(durFrames * 0.15)}}
+        fontSize={variant === 'B' ? 54 : 42}
+        color={style.color}
+      />
+    );
   }
 
   if (phrase.semanticType === 'loneliness') {
