@@ -1,146 +1,217 @@
-# StaRt Director Recipe System — 索引（Phase A〜H）
+# StaRt Director Recipe System — 索引（Phase A〜I）
 
-**この索引が指す全体は、Opening V1（2026-10-24上映の本番正本）とは別系統の並行研究トラック。**
-Opening V1の作業順・完成優先度を一切変えない。実写真11枚投入が引き続き最優先。
-Opening V1側の正本は `docs/opening-v1-motion-map.md` と `docs/task-board.md`。
+## Authority / 現在の本命
 
-Mrs. GREEN APPLE「StaRt」オープニングムービー案のための研究基盤として、97件の演出レシピ
-（Director Recipe Catalog）を、共有Remotionレンダラーで実際にpreview/render可能な状態まで
-作り、StaRtの14 sectionへのマッピング、Palmier/DaVinciへのhandoff、Claude/Codex A/B比較の
-枠組みまでを一通り整えた。Phase Hはこれらの「まとめ上げ」フェーズ。
+このシステムは、2026-10-24 Wedding Openingの **StaRt Extended Candidate（曲頭 → 2番サビ後間奏 → Cメロ前END）を本命方向として検討・制作するための研究/制作基盤**。
+
+正本は `docs/handoff/START-EXTENDED-MOTION-HANDOFF-2026-08-24.md`。
+
+- **Extended Candidate = 本命方向**
+- **Opening V1 60秒 = Short Candidate / fallback / venue short option / 比較用**
+- どちらも消さない
+- 最終判断は正規音源・実写真・実動画を入れたartifactを見て行う
+
+過去のPhase H文書にあった「Opening V1が本番正本・実写真11枚投入が常に最優先」という表現は、Extended handoffのauthorityと逆転していたため、この索引では採用しない。
+
+## 何が完成しているか
+
+Mrs. GREEN APPLE「StaRt」オープニングムービー案のために、97件の演出レシピ（Director Recipe Catalog）、共有Remotion renderer、StaRt 14 section mapping、Palmier/DaVinci handoff、Claude/Codex A/B frameworkまで実装済み。
+
+ただし **「97件がengineへresolveできる」ことと「97種類の見た目が忠実に実装済み」なことは別**。
+
+現状の完成度は次の3段階で理解する。
+
+1. **Data complete** — 97 recipeの用途・energy・avoid・StaRt section等が定義済み
+2. **Engine-resolvable** — 97/97が6 shared engineへ機械的にresolve可能
+3. **Visual fidelity** — 一部は忠実、一部は近似、一部はplaceholder。ここはまだ改善対象
 
 ## Phase一覧
 
-| Phase | 内容 | 成果物 | PR | マージ済みSHA |
+| Phase | 内容 | 成果物 | PR | merge |
 |---|---|---|---|---|
-| A | Director Recipe Catalogデータモデル（97件） | `movie-dashboard/src/data/directorRecipeCatalog.ts` | [#252](https://github.com/m-shogo/wedding-project/pull/252) | `a5569552` |
-| B | 共有Remotionレンダラー（6 engine） | `motion-studio/src/motion-kit/directorRecipeAdapter.ts`, `src/compositions/common/DirectorRecipePreview.tsx`, `src/motion-kit/engines.tsx` | [#253](https://github.com/m-shogo/wedding-project/pull/253) | `f2144e86` |
-| C | Preview Catalogue / Highlight Reel / Category Reels / 比較セット | `motion-studio/src/motion-kit/directorRecipeReelSelections.ts`, `src/compositions/common/DirectorRecipeReel.tsx`, `DirectorRecipeComparison.tsx`, `scripts/render-director-recipe-collection.mts` | [#255](https://github.com/m-shogo/wedding-project/pull/255) | `5ca1003c` |
-| D | Movie Dashboard閲覧UI | `movie-dashboard/src/pages/DirectorRecipeCatalog.tsx` | [#257](https://github.com/m-shogo/wedding-project/pull/257) | `d11a2cf0` |
-| E | StaRt 14 section ⇄ recipe マッピング | `movie-dashboard/src/data/startSectionRecipeMap.ts` | [#258](https://github.com/m-shogo/wedding-project/pull/258) | `232ae1f3` |
-| F | Palmier / DaVinci handoff | `motion-studio/scripts/export-palmier-recipe-handoff.mts`, `docs/davinci-skill-recipe-map.md` | [#259](https://github.com/m-shogo/wedding-project/pull/259) | `813bf9f5` |
-| G | Claude / Codex A/B比較フレームワーク | `movie-dashboard/src/data/startClaudeCodexAB.ts`, `docs/handoff/2026-08-25-codex-ab-comparison-handoff.md` | [#260](https://github.com/m-shogo/wedding-project/pull/260) | `dc8caff0` |
-| H | 統合・磨き上げ・穴埋め（このPhase） | このドキュメント、`check-start-section-recipe-renderable.mts`、Showcase⇄Catalog相互リンク | (このPR) | (このPRのマージ後に追記) |
+| A | Director Recipe Catalog（97件） | `movie-dashboard/src/data/directorRecipeCatalog.ts` | #252 | `a5569552` |
+| B | 共有Remotion renderer（6 engine） | `motion-studio/src/motion-kit/directorRecipeAdapter.ts` / `engines.tsx` | #253 | `f2144e86` |
+| C | Highlight / Category Reel / Comparison | `DirectorRecipeReel.tsx` / `DirectorRecipeComparison.tsx` | #255 | `5ca1003c` |
+| D | Movie Dashboard catalog UI | `DirectorRecipeCatalog.tsx` | #257 | `d11a2cf0` |
+| E | StaRt 14 section ⇄ recipe map | `startSectionRecipeMap.ts` | #258 | `232ae1f3` |
+| F | Palmier / DaVinci handoff | export scripts / skill map | #259 | `813bf9f5` |
+| G | Claude / Codex A/B framework | `startClaudeCodexAB.ts` | #260 | `dc8caff0` |
+| H | integration / renderability contract | overview / cross-links / section renderability | #261 | `188cc4cb` |
+| I | Claude/Codex A/B実行試行 | Claude 20s composition / Codex sandbox attempt | #268 | `937921af` |
 
 ## 全体構造
 
 ```text
-movie-dashboard/src/data/directorRecipeCatalog.ts (Phase A)
-  ├─ 97 recipes, 10 categories, 6 shared engineへ resolve
-  ↓
-motion-studio/src/motion-kit/directorRecipeAdapter.ts (Phase B)
-  ├─ recipe.motionPresetIds → RecipeLayer[] (engine + props)
-  ↓
-motion-studio/src/compositions/common/DirectorRecipePreview.tsx (Phase B)
-  ├─ 1つのdata-drivenコンポーネントが全97件を描画
-  ↓
+movie-dashboard/src/data/directorRecipeCatalog.ts
+  └─ 97 recipe metadata
+       ↓
+motion-studio/src/motion-kit/directorRecipeAdapter.ts
+  └─ Motion Kit preset → 6 shared engine + props
+       ↓
+motion-studio/src/compositions/common/DirectorRecipePreview.tsx
+  └─ 1 data-driven preview component
+       ↓
 motion-studio/src/DirectorRecipeRoot.tsx
-  ├─ 97 Composition + 10 Category Reel + Highlight Reel + 2 Comparison Set を自動登録 (Phase C)
+  ├─ 97 recipe compositions
+  ├─ 10 category reels
+  ├─ highlight reel
+  ├─ comparison sets
+  ├─ StartAbClaudeChorus1
+  └─ StartAbCodexChorus1
 
-movie-dashboard/src/data/startSectionRecipeMap.ts (Phase E)
-  ├─ 14 StaRt section → primary/alternate/avoid recipe id
-  ↓
-motion-studio/scripts/check-start-section-recipe-renderable.mts (Phase H, NEW)
-  └─ 14 sectionの primary/alternate 全件が実際にresolveDirectorRecipeById()を
-     通ってrenderable engineへ落ちることを検証（movie-dashboard側のID存在チェックだけでは
-     足りなかった「実際にrenderできるか」を motion-studio 側から機械的に閉じる）
-
-movie-dashboard/src/pages/DirectorRecipeCatalog.tsx (Phase D)
-  ├─ CATALOGタブ: 97件をcategory/energy/source/section/intensity/statusで絞り込み
-  └─ SECTION MAPタブ: 14 sectionのprimary/alternate/avoidを見る
-       ↕ 相互リンク (Phase H, NEW)
-movie-dashboard/src/pages/StartMotionShowcase.tsx (既存Motion Kit 36種)
-  └─ 曲頭→2番サビ後間奏の歌詞slot・rhythm map・実素材slotを見る rough timeline
-
-motion-studio/scripts/export-palmier-recipe-handoff.mts (Phase F)
-  └─ exports/palmier/director-recipe-section-handoff.{csv,md,json}
-
-movie-dashboard/src/data/startClaudeCodexAB.ts (Phase G)
-  └─ 12軸rubric + Claude/Codex 独立handoff + winner null contract
+movie-dashboard/src/data/startSectionRecipeMap.ts
+  └─ StaRt 14 section → primary / alternate / avoid
+       ↓
+motion-studio/scripts/check-start-section-recipe-renderable.mts
+  └─ primary / alternate refsがrendererへresolve可能か検証
 ```
 
-## コマンド一覧
+## Renderabilityの意味
+
+`check:start-section-recipes` が保証しているのは、section map内のrecipe idが `resolveDirectorRecipeById()` を通り、6 shared engineのいずれかへ落ちること。
+
+これは重要な機械保証だが、**見た目の完成保証ではない**。
+
+現在把握している近似:
+
+- `photo-2p5d-parallax` → 真のforeground/background depth separationではなくrestrained push近似
+- `accent-halftone-burst` → 専用halftone visual未実装
+- `accent-scribble-underline` → 専用scribble visual未実装
+- 一部stamp系 → generic triplet hitへ近似
+- `native-cut`系 → 実素材2shotのcutではなくedit-point placeholderで説明
+- 実写真/実動画 → `DemoBackdrop` placeholder
+
+よって今後は各recipeへ `visualFidelity`（exact / representative / placeholder）を持たせ、Dashboardでも明示する。
+
+## 「見て選べる」状態の現状
+
+Remotion Studioでは97 Composition / Category Reel / Comparisonを再生・renderできる。
+
+一方、Movie DashboardのCatalogは現状:
+
+- filter
+- recipe説明
+- section map
+- render command copy
+
+が中心で、**Dashboard内でそのまま実動画を再生するinline preview UIではない**。
+
+ユーザーが目指している「知らない演出を動画で見て、その場でFavorite / Maybe / Rejectを選ぶ」状態にはまだ1段足りない。
+
+次フェーズでは:
+
+1. visual fidelityを正直に表示
+2. representative/placeholderを優先的に専用visualへ改善
+3. review artifactをGitではなくActions artifact / local ignored outputへ出す
+4. Dashboardからpreviewを見やすくする導線を作る
+5. 人間採否を記録できるようにする
+
+を行う。
+
+## Phase I A/Bの扱い
+
+Phase Iでは `StartAbClaudeChorus1`（00:38–00:58 research window）を実renderできる状態まで実装した。
+
+Codex laneはCLIを実行したが、その実行環境のChromium sandbox制約でrender artifactを作れなかった。winnerはnullのまま。
+
+重要:
+
+- A/Bは正規StaRt音源なし
+- 実Hero写真なし
+- Claude側もplaceholder映像
+- この状態でClaude/Codexの編集品質の勝者を決めない
+
+さらに、Phase Iで一度review MP4をGitへforce-addしたが、repoの既存方針「生成動画はGit管理しない」と矛盾するため、review fixで撤去する。今後review MP4はGitHub Actions artifactまたはgitignored local outputにする。
+
+## Git media policy
+
+Gitへ入れない:
+
+- 正規StaRt音源
+- 実写真 / 実動画
+- Remotion generated MP4 / MOV / WebM
+- render still大量出力
+
+Gitへ残す:
+
+- source code
+- timeline / marker metadata
+- recipe / section mapping
+- QA contract
+- render command
+- ffprobe等の小さいevidence metadata
+- decision / handoff docs
+
+## コマンド
 
 ### movie-dashboard
 
 ```sh
 cd movie-dashboard
-pnpm dev                              # Director Recipe Catalog / StaRt Motion Showcase を確認
-pnpm build                            # tsc -b && vite build
-pnpm check:director-recipe-catalog    # Phase A契約（97件、10カテゴリ、no pre-approved status）
-pnpm check:start-section-recipe-map   # Phase E契約（14 section網羅、id存在確認、重複チェック）
-pnpm check:movie-coach                # 上記含む全Movie Coach系contract一括
+pnpm dev
+pnpm build
+pnpm check:movie-coach
 ```
 
 ### motion-studio
 
 ```sh
 cd motion-studio
-pnpm dev:director-recipes                          # Remotion Studioで97件確認
-pnpm director-recipes:list                          # 全Composition id一覧
-pnpm render:director-recipe <recipe-id>              # 1件だけlow-res render
-pnpm render:director-recipe-collection <reel-id>     # Reel/Category Reel/比較セットrender
-pnpm check:director-recipes                          # Phase B/C契約（97件resolve, engine制約, Reelカバレッジ）
-pnpm check:start-section-recipes                     # Phase H NEW — 14 sectionのprimary/alternateが
-                                                       # 実際にrenderableかをmotion-studio側から検証
-pnpm export:palmier-recipe-handoff                    # Phase F handoff export
-pnpm check:claude-codex-ab                            # Phase G winner-null contract
-pnpm export:claude-codex-ab-handoff                   # Phase G Claude/Codex独立handoff export
-pnpm check                                            # 上記チェック含む motion-studio 全contract一括
-pnpm typecheck                                        # tsc --noEmit
+pnpm dev:director-recipes
+pnpm director-recipes:list
+pnpm render:director-recipe <recipe-id>
+pnpm render:director-recipe-collection <reel-id>
+pnpm check:director-recipes
+pnpm check:start-section-recipes
+pnpm check:claude-codex-ab
+pnpm export:palmier-recipe-handoff
+pnpm export:claude-codex-ab-handoff
+pnpm typecheck
+pnpm check
 ```
 
-## Phase Hで実施した検証
+## Audio / Media authority
 
-1. **Renderability contract（新規）**: `motion-studio/scripts/check-start-section-recipe-renderable.mts`。
-   `movie-dashboard` 側の `verify-start-section-recipe-map-contracts.mjs` は「recipe idが
-   catalogに存在するか」までしか見ていなかった。新スクリプトは14 section全ての
-   primary/alternateレシピ（実測83件）を `resolveDirectorRecipeById()` に通し、実際に
-   renderer layerへ解決できること・使用engineが6つの共有engineに収まっていることを検証する。
-   `pnpm check`（motion-studio）に組み込み済み。
-2. **実render再現性確認**: `pnpm render:director-recipe-collection DirectorRecipeReel-typography`
-   を実行し、`out/director-recipes/DirectorRecipeReel-typography.mp4` が
-   1280x720 / h264 / 30fps / 9.856秒 / 595,087 bytes で成功することを確認した
-   （Phase Cのメモに記録されていた595.1 kBと一致）。
-3. **相互リンク**: `movie-dashboard/src/pages/StartMotionShowcase.tsx` と
-   `movie-dashboard/src/pages/DirectorRecipeCatalog.tsx` の間に相互リンクを追加。
-   Catalog側は `?tab=section-map` クエリでSECTION MAPタブを直接開けるようにした
-   （Sidebarには元々両方の項目が隣接して存在しており、新規ページは作っていない）。
-4. **`pnpm build` / `pnpm check`**: movie-dashboard・motion-studio双方で実行し、全件成功を確認
-   （詳細はOvernight Reportに記録）。
+### AUDIO
 
-## Phase D以降で残っている簡略化・近似（変更なし、引き続き認識しておくべき事項）
+正規local音源はまだ未投入。
 
-- `photo-2p5d-parallax` は真の視差ではなくrestrained pushで近似。
-- `accent-halftone-burst` / `accent-scribble-underline` / `accent-stamp-triplet` は専用ビジュアルが
-  無く、既存のtriplet hitで近似。
-- 実写真/実動画の差し込みslotはまだプレースホルダー（`DemoBackdrop` / `REAL PHOTO / VIDEO SLOT`）。
-- 97件全部の高画質1080pフルレンダーは意図的に未実施（研究用途では不要という判断）。
+YouTube/外部解析の秒数はresearch referenceとして利用するが、Final timing authorityは:
 
-## 音源・写真のブロッカー（変更なし）
+`cleared local audio → waveform → section marker → beat/onset review`
 
-- **AUDIO_BLOCKED**: 正規ローカル音源が無く、YouTube reference timingのみで研究している。
-  Final秒数は実音源の波形とMarkerが権威。
-- **MEDIA_BLOCKED**: 実写真は投入されておらず、ダミー素材のみで研究している。
+約2:09はFinal固定値ではない。
 
-## 次に人間がやること
+### MEDIA
 
-このPhase Hをもって研究トラックの「基盤としての完成」は一区切り。次に必要な人間判断は
-Overnight Report（`docs/decisions/2026-08-25-start-director-recipe-overnight-report.md`）の
-「ユーザーが次にやること」節を参照。要約:
+実写真/実動画はまだDirector Recipe research previewへ投入されていない。
 
-1. 97件から実際に使う4〜8 motion familyへ絞り込む。
-2. 正規音源が来たらFinal秒数を確定する。
-3. 実写真が来たらsource slotを差し替える。
-4. Codex A/Bを実際に走らせるかどうかを判断する（`docs/handoff/2026-08-25-codex-ab-comparison-handoff.md` にhandoff済み）。
+最終的には実素材で:
 
-## 関連ドキュメント
+- crop safety
+- photo readability
+- negative space
+- hero suitability
+- motion suitability
 
-- `motion-studio/README.md`「Director Recipe Renderer」節
+を確認してから4〜8 motion familyへ絞る。
+
+## 次の優先順位
+
+1. **Director Recipe visual fidelity audit** — exact / representative / placeholderを全97件で機械可視化
+2. **代表的な近似を実visual化** — 2.5D / scribble / halftone / stamp / cut grammar等
+3. **実際に見て選べるpreview導線**を改善
+4. 正規音源投入後、14 section timingをwaveformへsnap
+5. 実写真・実動画投入後、StaRt Extended Showcaseを本物の素材へ差し替え
+6. artifactを見ながら4〜8 motion familyへ削減
+7. Short V1とExtendedを最終比較
+
+## 関連
+
+- `docs/handoff/START-EXTENDED-MOTION-HANDOFF-2026-08-24.md` — 現在のOpening authority
+- `docs/decisions/2026-08-25-start-director-recipe-overnight-report.md`
+- `docs/decisions/2026-08-25-claude-codex-ab-execution-phase-i.md`
 - `docs/decisions/2026-08-25-director-recipe-catalog-research.md`
 - `docs/decisions/2026-08-25-start-section-recipe-mapping.md`
 - `docs/decisions/2026-08-25-director-recipe-palmier-davinci-handoff.md`
-- `docs/decisions/2026-08-25-claude-codex-ab-framework.md`
-- `docs/handoff/START-EXTENDED-MOTION-HANDOFF-2026-08-24.md`
 - `docs/handoff/2026-08-25-codex-ab-comparison-handoff.md`
-- `docs/task-board.md`「並行研究トラック」節
