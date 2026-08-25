@@ -50,6 +50,7 @@ jobs:
           grep -Fq 'ACTUAL_DAVINCI_RENDER' "$runbook"
           grep -Fq 'PALMIER_TIMING_ONLY' "$runbook"
           grep -Fq 'VML_MASK_REVEAL_OPENING_INTRO' "$runbook"
+          grep -Fq 'VML_MASK_REVEAL_<SECTION>_<SCENE_TOKEN>' "$runbook"
           grep -Fq 'Do not claim DaVinci Actual before a file rendered by local DaVinci exists.' "$prompt"
           grep -Fq 'Do not claim Palmier XML before Palmier exports a real timeline XML.' "$prompt"
           grep -Fq 'Do not expand to new Motion Patterns until this vertical slice passes.' "$prompt"
@@ -74,6 +75,24 @@ jobs:
           grep -Fq 'if (current.locked) return intent' "$editable"
           grep -Fq 'authority: "HUMAN_MASTER"' "$production"
           grep -Fq 'palmierDeltaEvidence' "$production"
+
+      - name: Current SceneInstance execution authority
+        shell: bash
+        run: |
+          prompt="docs/prompts/2026-08-25-mask-reveal-local-execution-agent.md"
+          runbook="docs/runbooks/2026-08-25-mask-reveal-local-davinci-actual-gate.md"
+          addendum="docs/runbooks/2026-08-25-mask-reveal-human-master-actual-addendum.md"
+          grep -Fq 'sourceRevision = SceneInstance.updatedAt' "$prompt"
+          grep -Fq 'VML_MASK_REVEAL_<SECTION>_<SCENE_TOKEN>' "$prompt"
+          grep -Fq 'CANONICAL_SCENE_STATE_WITH_LIVE_PROJECT_CONTEXT' "$prompt"
+          grep -Fq 'current Scene' "$prompt"
+          grep -Fq 'Do **not** start from a copied `approximately 0.8 sec` duration.' "$prompt"
+          grep -Fq 'Human seconds remain authority; frame numbers are derived from live fps.' "$runbook"
+          grep -Fq 'JSON / XML / NLE XML are not the Human Master themselves.' "$addendum"
+          if grep -Fq 'save/export the `Editable Source of Truth JSON`' "$addendum"; then
+            echo "Legacy JSON-as-source-of-truth instruction must not return"
+            exit 1
+          fi
 
       - name: Applied-value and property-local evidence contract
         run: node movie-dashboard/scripts/verify-mask-reveal-davinci-applied-evidence-contracts.mjs
