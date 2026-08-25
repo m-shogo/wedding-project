@@ -1,0 +1,94 @@
+name: StaRt Director Review CI
+
+on:
+  pull_request:
+    paths:
+      - "motion-studio/src/DirectorRecipeRoot.tsx"
+      - "motion-studio/src/index-director-recipes.ts"
+      - "motion-studio/src/compositions/common/DirectorRecipe*.tsx"
+      - "motion-studio/src/motion-kit/directorRecipe*.ts"
+      - "motion-studio/src/data/startAb*.ts"
+      - "motion-studio/scripts/check-claude-codex-ab.mts"
+      - "motion-studio/scripts/check-director-recipe-renderer.mts"
+      - "motion-studio/scripts/check-start-section-recipe-renderable.mts"
+      - "movie-dashboard/src/data/startClaudeCodexAB.ts"
+      - ".github/workflows/start-director-review-ci.yml"
+  push:
+    paths:
+      - "motion-studio/src/DirectorRecipeRoot.tsx"
+      - "motion-studio/src/index-director-recipes.ts"
+      - "motion-studio/src/compositions/common/DirectorRecipe*.tsx"
+      - "motion-studio/src/motion-kit/directorRecipe*.ts"
+      - "motion-studio/src/data/startAb*.ts"
+      - "motion-studio/scripts/check-claude-codex-ab.mts"
+      - "motion-studio/scripts/check-director-recipe-renderer.mts"
+      - "motion-studio/scripts/check-start-section-recipe-renderable.mts"
+      - "movie-dashboard/src/data/startClaudeCodexAB.ts"
+      - ".github/workflows/start-director-review-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  review-artifact:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: motion-studio
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: motion-studio/pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install ffmpeg for media QA
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+
+      - name: TypeScript
+        run: pnpm typecheck
+
+      - name: Director Recipe contracts
+        run: |
+          pnpm check:director-recipes
+          pnpm check:start-section-recipes
+          pnpm check:claude-codex-ab
+
+      - name: Director Recipe composition contract
+        run: pnpm exec remotion compositions src/index-director-recipes.ts
+
+      - name: Render Claude chorus-1 A/B review candidate
+        run: |
+          mkdir -p out/ab/claude
+          pnpm exec remotion render src/index-director-recipes.ts StartAbClaudeChorus1 \
+            out/ab/claude/chorus1_ab.mp4 --scale=0.667 --crf=30
+          ffprobe -v error \
+            -show_entries stream=codec_name,width,height,r_frame_rate \
+            -show_entries format=duration,size \
+            -of json out/ab/claude/chorus1_ab.mp4 | tee out/ab/claude/chorus1_ab.ffprobe.json
+
+      - name: Upload Claude A/B review artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: start-ab-claude-chorus1
+          path: |
+            motion-studio/out/ab/claude/chorus1_ab.mp4
+            motion-studio/out/ab/claude/chorus1_ab.ffprobe.json
+          if-no-files-found: error
+          retention-days: 7
