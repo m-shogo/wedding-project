@@ -9,9 +9,10 @@
 // 検証はstill(frame単体)でのみ行っている。動画としての音同期は未検証。
 
 import React from 'react';
-import {AbsoluteFill, interpolate, useCurrentFrame} from 'remotion';
+import {AbsoluteFill, OffthreadVideo, interpolate, staticFile, useCurrentFrame} from 'remotion';
 import {CharacterBuild} from '../../motion-kit/start129/lyricAnimationFamilies';
 import {HandDrawnUnderline} from '../../motion-kit/start129/handDrawnPrimitives';
+import {start129OverlayLibrary} from '../../data/start129/demoAssetLibrary.generated';
 
 const JP = "'Noto Sans JP', sans-serif";
 
@@ -29,8 +30,16 @@ export const TitleSequenceA: React.FC<{word?: string}> = ({word = 'ようこそ'
   const charHits = PLACEHOLDER_HITS(word.length, 10, 5);
   const horizonY = interpolate(f, [14, 34], [54, 62], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
 
+  const glowY = interpolate(f, [0, 375], [42, 58], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  const glowO = interpolate(f, [0, 60, 375], [0.5, 0.7, 0.55], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+
   return (
-    <AbsoluteFill style={{background: '#0A0B0D', justifyContent: 'center', alignItems: 'center'}}>
+    <AbsoluteFill style={{background: '#14161A', justifyContent: 'center', alignItems: 'center'}}>
+      <AbsoluteFill
+        style={{
+          background: `radial-gradient(ellipse 900px 500px at 50% ${glowY}%, rgba(80,90,110,${glowO}) 0%, rgba(20,22,26,0) 70%)`,
+        }}
+      />
       {/* 光の線 → 水平線への変化 */}
       <svg width={1920} height={1080} style={{position: 'absolute', inset: 0}}>
         <line
@@ -63,8 +72,15 @@ export const TitleSequenceB: React.FC<{word?: string}> = ({word = 'ようこそ'
   const panelS = interpolate(f, [hit2 - 2, hit2, hit2 + 6], [0.6, 1.2, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
   const blockW = interpolate(f, [hit3 - 2, hit3, hit3 + 10], [0, 100, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
 
+  const glowX = interpolate(f, [0, 375], [38, 62], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+
   return (
-    <AbsoluteFill style={{background: '#12100D', justifyContent: 'center', alignItems: 'center'}}>
+    <AbsoluteFill style={{background: '#1C1812', justifyContent: 'center', alignItems: 'center'}}>
+      <AbsoluteFill
+        style={{
+          background: `radial-gradient(ellipse 850px 550px at ${glowX}% 55%, rgba(120,95,50,0.55) 0%, rgba(28,24,18,0) 72%)`,
+        }}
+      />
       <AbsoluteFill style={{background: '#F4C95D', clipPath: `inset(0 ${100 - blockW}% 0 0)`}} />
       <div style={{textAlign: 'center', zIndex: 2}}>
         <CharacterBuild text={word} charFrames={charHits} fontSize={104} color="#FFFDF7" />
@@ -86,16 +102,38 @@ export const TitleSequenceC: React.FC<{word?: string}> = ({word = 'ようこそ'
   const baselineW = interpolate(f, [10, 26], [0, 640], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
   const charHits = PLACEHOLDER_HITS(word.length, 14, 4);
   const gridO = interpolate(f, [30, 40], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  // build完了後も背景が完全静止しないよう、Sの角丸shapeを線形にごくわずか回転させ続ける。
+  const maskRotate = interpolate(f, [0, 375], [0, 3.2]);
+  // 単色shapeの輪郭移動だけではfreezedetectに引っかかったため(変化量が画面全体に対し小さすぎる)、
+  // 画面全体を覆う淡いwarm highlightを normal alpha(screen blendではなく)で
+  // ゆっくり左右へ動かし、大きな面積のpixel値を確実に変化させる。
+  const sweepX = interpolate(f, [0, 375], [30, 70]);
 
   return (
     <AbsoluteFill style={{background: '#F2EFE8', justifyContent: 'center', alignItems: 'center'}}>
+      <AbsoluteFill
+        style={{
+          background: `radial-gradient(ellipse 700px 900px at ${sweepX}% 50%, rgba(230,210,180,0.35) 0%, rgba(242,239,232,0) 65%)`,
+        }}
+      />
+      {/* multiply blendの粒子: 明るい背景ではscreen blendが効かないため、
+          暗い粒子をmultiplyで重ねて全frameで確実にpixelが変化するようにする */}
+      {start129OverlayLibrary.dust[0] ? (
+        <AbsoluteFill style={{mixBlendMode: 'multiply', opacity: 0.14, pointerEvents: 'none'}}>
+          <OffthreadVideo
+            src={staticFile(start129OverlayLibrary.dust[0])}
+            style={{width: '100%', height: '100%', objectFit: 'cover'}}
+            muted
+          />
+        </AbsoluteFill>
+      ) : null}
       <div
         style={{
           width: 340,
           height: 340,
           borderRadius: '50% 50% 50% 8%',
           background: '#0A0A0C',
-          transform: `translateY(-140px) scale(${maskScale})`,
+          transform: `translateY(-140px) scale(${maskScale}) rotate(${maskRotate}deg)`,
         }}
       />
       <div style={{position: 'absolute', textAlign: 'center', transform: 'translateY(120px)'}}>

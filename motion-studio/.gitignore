@@ -23,3 +23,8 @@ local/
 public/demo/start-129/
 public/local-start-129/*
 !public/local-start-129/.gitkeep
+
+# StaRt Wedding Edit(曲の先頭〜2番サビ後の間奏まで): 権利確認済みローカル音源・歌詞
+public/local-start-wedding-edit/*
+!public/local-start-wedding-edit/.gitkeep
+src/data/startWeddingEdit/generated.ts

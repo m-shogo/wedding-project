@@ -92,6 +92,12 @@ export type Shot = {
   focus?: {x: number; y: number};
   /** なぜこのshotなのか。QA時に説明できるようにする */
   noteJa: string;
+  /**
+   * 人間可読/編集可能契約(docs/contracts/human-readable-editable-movie-contract.md)。
+   * 未指定はAI_SUGGESTED相当として扱う。HUMAN_SELECTED/LOCKEDはClaude/Codex/Palmier/
+   * 自動処理が無断で上書きしてはいけない。現状の全shotは人間未選定(AI_SUGGESTED)。
+   */
+  status?: 'DEFAULT' | 'AI_SUGGESTED' | 'HUMAN_SELECTED' | 'LOCKED';
 };
 
 export type SectionDesign = {
