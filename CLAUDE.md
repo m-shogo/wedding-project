@@ -16,6 +16,33 @@
 - 人物・犬のAI生成やAI変形は提案しない。
 - `op_01_narita_boarding_gate_ai.png` と `op_11_narita_airport_lobby_ai.png` は人物入り確認済みのため不採用。
 
+## Visual Motion Library / Palmier × DaVinci 共通制作ライン
+
+2026-08-25以降のOpening / Profile共通制作基盤の作業authorityは、
+`docs/prompts/2026-08-25-visual-motion-library-palmier-davinci-complete.md` を参照する。
+このpromptは **ACTIVE / MUTABLE** であり、ユーザーの途中変更に合わせてGitで版管理する。絶対仕様として固定しない。
+
+共通production lineは次を基本とする。
+
+`Visual Motion Library → Prompt Generator → Palmier Rough → NLE XML + Motion Handoff Manifest → DaVinci Resolve Final`
+
+役割:
+
+- Visual Motion Library: 名前を知らなくても実際の動きを見て選ぶ入口。
+- Palmier: 素材選択、trim/split/order、rough timing、rough typography placement等のRough Edit。
+- DaVinci Resolve: Edit / Text / Text+ / Fusion / Color / Fairlight / Deliverを使うFinal Edit。
+- Remotion: Preview生成、比較生成、DaVinciに無いoverlay等で価値がある場合のみ補助。共通production authorityにはしない。
+
+重要:
+
+- Concept PreviewをActual DaVinci Previewとして表示しない。
+- Preview / Implementation / verified artifact or methodを必ず接続する。
+- Reuse Before Buildを徹底し、DaVinci標準 / Fusion標準 / 公式Template / `.drfx` / `.setting` / Reactor / license確認済みasset / repo既存実装を先に調べる。
+- 36 Motion Kit / 97 Director Recipesという件数維持を目的にしない。
+- まず1 PatternのVertical Sliceを本当に最後まで通す。最初はMask Revealを優先する。
+- Movie変更をRurubu / Passport / Paper Item productionへ混ぜない。
+- 長い作業は小さなscopeでレビューし、`latest main → clean branch → tests/Visual QA → PR → squash merge → latest main` を繰り返す。
+
 ## Opening authority
 
 Opening全体の単一authorityは `docs/opening-authority.md`。
@@ -37,18 +64,21 @@ Opening全体の単一authorityは `docs/opening-authority.md`。
 - 正本ドキュメント: `docs/opening-v1-motion-map.md`
 - 作業入口: `docs/task-board.md`
 
-RemotionをShort Candidate実装の正本にする。Palmier / CapCutは必要な場合のfinal polishに限定し、別timelineを正本として育てない。
+**この節のRemotion authorityは既存のOpening V1 Short Candidateに限定する。**
+Short Candidateの既存実装を壊すために移行しない。一方、今後のOpening / Profile共通production lineでは上記のPalmier Rough → DaVinci Finalを優先する。
 
 ## レビュー前の参照順
 
 1. @docs/opening-authority.md
-2. @README.md
-3. @docs/task-board.md
-4. @docs/start-director-recipe-system-overview.md
-5. @docs/opening-v1-motion-map.md
-6. @motion-studio/README.md
-7. @02_opening-movie/asset-status.md
-8. @movie-dashboard/README.md
+2. @docs/prompts/2026-08-25-visual-motion-library-palmier-davinci-complete.md
+3. @docs/reviews/2026-08-25-visual-motion-library-current-audit.md
+4. @README.md
+5. @docs/task-board.md
+6. @docs/start-director-recipe-system-overview.md
+7. @docs/opening-v1-motion-map.md
+8. @motion-studio/README.md
+9. @02_opening-movie/asset-status.md
+10. @movie-dashboard/README.md
 
 ## 参照
 
@@ -60,8 +90,11 @@ RemotionをShort Candidate実装の正本にする。Palmier / CapCutは必要�
 - 動画AI運用: @docs/ai-video-operation.md
 - ローカル動画AIセットアップ: @docs/local-video-ai-setup.md
 - ComfyUI・Codex・ChatGPT連携: @docs/comfy-codex-chatgpt-workflow.md
-- 編集: @docs/05_capcut-editing.md
-- CapCut運用: @docs/capcut-operation.md
+- 編集: @docs/05_capcut-editing.md（legacy/reference。共通Final authorityはDaVinciへ移行）
+- CapCut運用: @docs/capcut-operation.md（legacy/reference）
+- Palmier運用: @docs/palmier-operation.md
+- Visual Motion Library prompt: @docs/prompts/2026-08-25-visual-motion-library-palmier-davinci-complete.md
+- Visual Motion Library current audit: @docs/reviews/2026-08-25-visual-motion-library-current-audit.md
 - 失敗例: @docs/failure-patterns.md
 - ロードマップ: @docs/06_roadmap.md
 - 品質確認: @docs/10_quality-gates.md
@@ -97,7 +130,7 @@ RemotionをShort Candidate実装の正本にする。Palmier / CapCutは必要�
 - `style-director`: 世界観と統一感を見る。
 - `storyboard-planner`: 章構成と1秒単位の流れを見る。
 - `ai-asset-producer`: AI背景素材とプロンプトを見る。必要性が出たshotだけ担当する。
-- `capcut-editor`: 写真演出、BGM合わせ、テロップ配置を見る。
+- `capcut-editor`: legacy/reference。既存CapCut作業の確認用。新しい共通FinalはDaVinciを優先する。
 - `asset-librarian`: 素材の分類、命名、採否ログを見る。
 - `rights-safety-reviewer`: 写真、音源、フォント、AIサービスの権利・プライバシーを見る。
 - `quality-gate-reviewer`: ラフ版、完成前、上映前の品質確認を見る。
