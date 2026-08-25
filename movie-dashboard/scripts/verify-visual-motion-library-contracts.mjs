@@ -7,7 +7,7 @@ const data = fs.readFileSync(path.join(root, "src/data/visualMotionLibrary.ts"),
 const handoff = fs.readFileSync(path.join(root, "src/data/maskRevealHandoff.ts"), "utf8");
 const editable = fs.readFileSync(path.join(root, "src/data/humanEditableMotionIntent.ts"), "utf8");
 const production = fs.readFileSync(path.join(root, "src/data/maskRevealEditableProduction.ts"), "utf8");
-const sceneComposer = fs.readFileSync(path.join(root, "src/data/sceneComposerInstances.ts"), "utf8");
+const sceneComposer = fs.readFileSync(path.join(root, "src/data/visualSceneComposer.ts"), "utf8");
 const workspace = fs.readFileSync(path.join(root, "src/components/MaskRevealEditableWorkspace.tsx"), "utf8");
 const samples = fs.readFileSync(path.join(root, "src/data/motionSampleAssetSets.ts"), "utf8");
 const learning = fs.readFileSync(path.join(root, "src/data/motionLearningLinks.ts"), "utf8");
@@ -47,9 +47,7 @@ for (const token of [
   'palmierInstruction',
   'davinciFinishManifest',
   'machineJson',
-]) {
-  requireText(data, token, `Visual Motion data missing contract token: ${token}`);
-}
+]) requireText(data, token, `Visual Motion data missing contract token: ${token}`);
 
 for (const token of [
   'schemaVersion: "motion-handoff/v1"',
@@ -79,9 +77,7 @@ for (const token of [
   'sampleAssetSetMatched: false',
   'conceptPreviewKeptSeparate: false',
   'false/nullの未確認項目が残る間はProduction Readyへ昇格しない',
-]) {
-  requireText(handoff, token, `Mask Reveal handoff missing contract token: ${token}`);
-}
+]) requireText(handoff, token, `Mask Reveal handoff missing contract token: ${token}`);
 
 for (const token of [
   'schemaVersion: "human-editable-motion/v1"',
@@ -116,9 +112,7 @@ for (const token of [
   'setEditableFieldLock',
   'retargetMaskRevealSection',
   'resolveMaskRevealEditableIntent',
-]) {
-  requireText(editable, token, `Human-editable Mask Reveal model missing: ${token}`);
-}
+]) requireText(editable, token, `Human-editable Mask Reveal model missing: ${token}`);
 
 for (const token of [
   'authority: "HUMAN_MASTER"',
@@ -147,42 +141,51 @@ for (const token of [
   'palmierDeltaEvidence',
   'appliedValue: null',
   'difference: null',
-]) {
-  requireText(production, token, `Human-editable production bridge missing: ${token}`);
-}
+]) requireText(production, token, `Human-editable production bridge missing: ${token}`);
 
 for (const token of [
-  'schemaVersion: "motion-zukan-scene-instance/v1"',
-  'schemaVersion: "motion-zukan-project-timeline/v1"',
+  'recipeId: "scene-recipe-mask-reveal-hero-v1"',
+  'authority: "EDITABLE_DEFAULT_ONLY"',
+  'schemaVersion: "scene-instance/v1"',
+  'schemaVersion: "project-timeline/v1"',
   'schemaVersion: "motion-zukan-composer-state/v1"',
   'authority: "HUMAN_MASTER"',
+  'authority: "STRUCTURED_SCENE_TIMELINE"',
   'legacySceneId: null',
-  'sourceRecipeId: null',
+  'recipeProvenance',
   'targetDurationSeconds',
   'computedDurationSeconds',
   'durationDeltaSeconds',
-  'Math.max(value.sceneDurationSeconds, textEnd)',
+  'Math.max(value.sceneDurationSeconds, textStructuralEnd)',
   'structuredClone(intent)',
+  'humanSelectedFields',
+  'lockedFields',
+  'SceneEdge',
+  'transition: "HARD_CUT"',
   'MOTION_ZUKAN_COMPOSER_STORAGE_KEY',
   'motion-zukan-composer-state-v1',
-  'createMaskRevealSceneInstance',
+  'adoptMaskRevealScene',
   'adoptSceneInstance',
-  'updateSceneInstanceField',
+  'updateMaskRevealSceneField',
   'Property-local correction',
-  'applyHumanSelection(scene.editableIntent, key, value)',
+  'applyHumanSelection(scene.editableIntent, key, value, lock)',
+  'updateMaskRevealSceneFieldLock',
+  'suggestMaskRevealSceneField',
+  'applyAiSuggestion(scene.editableIntent, key, value, reason)',
+  'retargetMaskRevealSceneSection',
+  'updateSceneInstanceField',
   'updateSceneInstanceFieldLock',
   'suggestSceneInstanceField',
-  'applyAiSuggestion(scene.editableIntent, key, value, reason)',
   'retargetSceneInstanceSection',
+  'buildProjectTimeline',
   'totalComputedDurationSeconds',
   'loadMotionZukanComposerState',
   'saveMotionZukanComposerState',
-]) {
-  requireText(sceneComposer, token, `Motion Zukan SceneInstance model missing: ${token}`);
-}
+  'Recipe/default updates are provenance only after adoption',
+]) requireText(sceneComposer, token, `Visual Scene Composer authority missing: ${token}`);
 
 if (sceneComposer.includes("productionStore") || sceneComposer.includes('from "../types/movie"')) {
-  errors.push("Composer SceneInstance must stay separate from the legacy Production/Storyboard store during the MVP migration");
+  errors.push("Composer SceneInstance must stay separate from the legacy Production/Storyboard store during MVP migration");
 }
 
 for (const token of [
@@ -206,12 +209,14 @@ for (const token of [
   'このSceneを採用',
   '別Sceneとして採用',
   '採用済みSceneを編集中。変更はfield単位で自動保存されます。',
-  'PROJECT TIMELINE',
+  'PROJECT TIMELINE / STRUCTURED AUTHORITY',
   '採用したSceneを積み上げる',
   'Legacy Storyboardは壊さず',
+  'Recipeは採用時のprovenance',
   'Target',
   'Computed',
   '人間の値を勝手に縮めず差分を表示しています。',
+  'SceneEdge:',
   'Human Brief',
   'Claude Creative Instruction',
   'Palmier Instruction',
@@ -225,9 +230,7 @@ for (const token of [
   'XMLをこのアプリ側で捏造しません',
   'navigator.clipboard.writeText',
   'buildMaskRevealExecutionOutputs',
-]) {
-  requireText(workspace, token, `Human-editable workspace missing: ${token}`);
-}
+]) requireText(workspace, token, `Human-editable workspace missing: ${token}`);
 
 for (const token of [
   'id: "sample-typography-welcome-v1"',
@@ -243,9 +246,7 @@ for (const token of [
   'usedByPatternIds: ["type-mask-reveal"]',
   'usedByPreviewIds: ["preview-type-mask-reveal-repo-concept"]',
   'status: "READY"',
-]) {
-  requireText(samples, token, `Motion sample asset set missing contract token: ${token}`);
-}
+]) requireText(samples, token, `Motion sample asset set missing contract token: ${token}`);
 
 for (const token of [
   'patternId: "type-mask-reveal"',
@@ -254,9 +255,7 @@ for (const token of [
   'getMotionLearningBundle',
   'fusionLearningRecipes.find',
   'Do not duplicate tutorials here',
-]) {
-  requireText(learning, token, `Motion learning link missing reuse contract token: ${token}`);
-}
+]) requireText(learning, token, `Motion learning link missing reuse contract token: ${token}`);
 requireText(fusionLearning, 'recipeId: "fusion-masked-reveal"', "Existing Fusion masked reveal recipe must remain the learning authority");
 
 for (const token of [
@@ -274,9 +273,7 @@ for (const token of [
   'result: "PASS"',
   'productionAuthority: false',
   'DaVinci Actual / local Resolve verificationとは完全に別扱い',
-]) {
-  requireText(previewEvidence, token, `Mask Reveal Concept evidence missing provenance token: ${token}`);
-}
+]) requireText(previewEvidence, token, `Mask Reveal Concept evidence missing provenance token: ${token}`);
 
 for (const token of [
   '# モーション図鑑',
@@ -291,9 +288,7 @@ for (const token of [
   'Wedding専用ではない',
   '一括rename',
   'Actual MP4が出来ただけでは図鑑項目の完成とはしない',
-]) {
-  requireText(identity, token, `Motion Zukan identity contract missing: ${token}`);
-}
+]) requireText(identity, token, `Motion Zukan identity contract missing: ${token}`);
 
 for (const token of [
   '## モーション図鑑 — 長期プロジェクト名',
@@ -301,31 +296,15 @@ for (const token of [
   'docs/contracts/motion-zukan-identity.md',
   'Wedding Movie 2026は最初の実践Collection / Project',
   'モーション図鑑 → Visual Motion Library → Scene Composer',
-]) {
-  requireText(claude, token, `CLAUDE shared entrypoint missing Motion Zukan identity: ${token}`);
-}
+]) requireText(claude, token, `CLAUDE shared entrypoint missing Motion Zukan identity: ${token}`);
 
-if (/status:\s*"PRODUCTION_READY"/.test(data)) {
-  errors.push("Mask Reveal must not be PRODUCTION_READY before local Resolve render verification");
-}
-if (/sourceType:\s*"ACTUAL_DAVINCI_RENDER"/.test(data)) {
-  errors.push("Mask Reveal must not claim ACTUAL_DAVINCI_RENDER before real local render evidence exists");
-}
-if (/resolveVersion:\s*"[^\"]+"/.test(data)) {
-  errors.push("Resolve version must stay null until a locally tested version is recorded");
-}
-if (/resolveVersion:\s*"[^\"]+"/.test(handoff)) {
-  errors.push("Motion handoff must not invent a Resolve version before local verification");
-}
-if (/productionReady:\s*true/.test(handoff)) {
-  errors.push("Motion handoff verification evidence must remain productionReady=false until every local DaVinci gate is proven");
-}
-if (/productionAuthority:\s*true/.test(previewEvidence)) {
-  errors.push("Repository-generated Concept evidence must never become production authority");
-}
-if (handoff.includes("MOTION:type-mask-reveal") || page.includes("MOTION:type-mask-reveal")) {
-  errors.push("Generic Mask Reveal marker must not reappear; use the section-aware VML_MASK_REVEAL_<SECTION> authority");
-}
+if (/status:\s*"PRODUCTION_READY"/.test(data)) errors.push("Mask Reveal must not be PRODUCTION_READY before local Resolve render verification");
+if (/sourceType:\s*"ACTUAL_DAVINCI_RENDER"/.test(data)) errors.push("Mask Reveal must not claim ACTUAL_DAVINCI_RENDER before real local render evidence exists");
+if (/resolveVersion:\s*"[^\"]+"/.test(data)) errors.push("Resolve version must stay null until a locally tested version is recorded");
+if (/resolveVersion:\s*"[^\"]+"/.test(handoff)) errors.push("Motion handoff must not invent a Resolve version before local verification");
+if (/productionReady:\s*true/.test(handoff)) errors.push("Motion handoff verification evidence must remain productionReady=false until every local DaVinci gate is proven");
+if (/productionAuthority:\s*true/.test(previewEvidence)) errors.push("Repository-generated Concept evidence must never become production authority");
+if (handoff.includes("MOTION:type-mask-reveal") || page.includes("MOTION:type-mask-reveal")) errors.push("Generic Mask Reveal marker must not reappear; use section-aware VML_MASK_REVEAL_<SECTION> authority");
 
 for (const token of [
   'title="モーション図鑑"',
@@ -341,13 +320,11 @@ for (const token of [
   "getLatestPreviewEvidence(preview.id)",
   "CONCEPT RENDER QA ✓ / NOT DAVINCI ACTUAL",
   "期限付きartifactで検証済み。永続MP4がないため、この画面では静止placeholderのまま。",
-]) {
-  requireText(page, token, `Visual Motion page missing: ${token}`);
-}
+]) requireText(page, token, `Visual Motion page missing: ${token}`);
 
 requireText(app, 'path="movie-coach/motion-library"', "Visual Motion Library route missing");
 requireText(sidebar, 'to: "/movie-coach/motion-library"', "Motion Zukan navigation missing");
-requireText(sidebar, 'label: "モーション図鑑"', "Motion Zukan must use the canonical Japanese navigation label");
+requireText(sidebar, 'label: "モーション図鑑"', "Motion Zukan must use canonical Japanese navigation label");
 
 if (errors.length) {
   console.error(`Visual Motion Library contracts FAILED (${errors.length})`);
@@ -355,4 +332,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log("モーション図鑑 contracts OK: canonical identity is shared, legacy Palmier XML / Actual DaVinci gates remain intact, HUMAN_MASTER editable intent can be adopted as an independent SceneInstance, property-local edits persist without rewriting unrelated fields, Project Timeline exposes computed duration, and renders remain evidence only.");
+console.log("モーション図鑑 contracts OK: canonical identity is shared; Mask Reveal keeps legacy Palmier XML / Actual DaVinci truth gates; HUMAN_MASTER intent is adopted into one Visual Scene Composer authority with recipe provenance, property-local edits, locks, persistence, SceneEdge/placements, Opening/Profile timelines, and renders remain evidence only.");
