@@ -225,7 +225,7 @@ export function MotionZukanProductionWorkspace() {
   }
 
   function undo() {
-    const previous = undoRef.current.at(-1);
+    const previous = undoRef.current[undoRef.current.length - 1];
     if (!previous) return;
     undoRef.current = undoRef.current.slice(0, -1);
     redoRef.current = [...redoRef.current, cloneHistoryEntry(composerRef.current, workspaceRef.current)].slice(-40);
@@ -235,7 +235,7 @@ export function MotionZukanProductionWorkspace() {
   }
 
   function redo() {
-    const next = redoRef.current.at(-1);
+    const next = redoRef.current[redoRef.current.length - 1];
     if (!next) return;
     redoRef.current = redoRef.current.slice(0, -1);
     undoRef.current = [...undoRef.current, cloneHistoryEntry(composerRef.current, workspaceRef.current)].slice(-40);

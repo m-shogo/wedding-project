@@ -120,6 +120,8 @@ export function computeMaskRevealSceneDuration(intent: MaskRevealEditableIntent)
     value.holdDurationSeconds +
     value.exitDurationSeconds;
 
+  // IMAGE/VIDEO remains visible for the human target duration.
+  // If text timing runs longer, expose the structural difference instead of silently truncating human choices.
   const computedDurationSeconds = Number(Math.max(value.sceneDurationSeconds, textStructuralEnd).toFixed(3));
   return {
     targetDurationSeconds: Number(value.sceneDurationSeconds.toFixed(3)),
@@ -177,6 +179,8 @@ export function updateMaskRevealSceneField<K extends MaskRevealEditableFieldKey>
   lock = false,
   updatedAt = nowIso(),
 ): MaskRevealSceneInstance {
+  // Property-local correction: change only the human-readable field the person touched.
+  // Unrelated Text / Crop / Timing / Motion fields remain byte-for-byte from the adopted SceneInstance.
   const editableIntent = applyHumanSelection(scene.editableIntent, key, value, lock);
   return refreshSceneDerivedState(scene, editableIntent, updatedAt);
 }
@@ -198,6 +202,7 @@ export function suggestMaskRevealSceneField<K extends MaskRevealEditableFieldKey
   reason: string,
   updatedAt = nowIso(),
 ): MaskRevealSceneInstance {
+  // AI may modify only AI_SUGGESTED. A locked field no-ops; HUMAN_SELECTED remains effective.
   const editableIntent = applyAiSuggestion(scene.editableIntent, key, value, reason);
   return refreshSceneDerivedState(scene, editableIntent, updatedAt);
 }
