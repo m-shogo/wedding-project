@@ -9,13 +9,25 @@ import {fileURLToPath} from 'node:url';
 const studioRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const isFinal = process.argv.includes('--final');
 const isV2 = process.argv.includes('--v2');
+const isV3 = process.argv.includes('--v3');
 const isReview = process.argv.includes('--review');
+const isReviewV3 = process.argv.includes('--review-v3');
 
 let outDir: string;
 let scale: string;
 let crf: string;
 let namePrefix: string;
-if (isReview) {
+if (isReviewV3) {
+  outDir = join(studioRoot, 'out/start-wedding-edit-review-v3');
+  scale = '0.5';
+  crf = '28';
+  namePrefix = 'start_wedding_edit_v3';
+} else if (isV3) {
+  outDir = join(studioRoot, 'out/start-wedding-edit-final-v3');
+  scale = '1';
+  crf = '18';
+  namePrefix = 'start_wedding_edit_v3';
+} else if (isReview) {
   outDir = join(studioRoot, 'out/start-wedding-edit-review-v2');
   scale = '0.5';
   crf = '28';
@@ -34,7 +46,7 @@ if (isReview) {
 mkdirSync(outDir, {recursive: true});
 
 const variants = ['A', 'B', 'C'] as const;
-const modes = (isReview ? ['Clean'] : ['Clean', 'Guide']) as const;
+const modes = (isReview || isReviewV3 ? ['Clean'] : ['Clean', 'Guide']) as const;
 
 const failures: string[] = [];
 for (const v of variants) {

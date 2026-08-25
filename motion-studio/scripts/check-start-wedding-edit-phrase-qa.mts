@@ -6,7 +6,7 @@
 
 import {existsSync, readFileSync} from 'node:fs';
 import {dirname, join} from 'node:path';
-import {fileURLToPath} from 'node:url';
+import {fileURLToPath, pathToFileURL} from 'node:url';
 
 const studioRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const lyricsPath = join(studioRoot, 'local/lyrics-wedding-edit.local.json');
@@ -121,6 +121,79 @@ if (noConfidence.length > 0) {
   warnings.push(`confidence未設定のphraseが${noConfidence.length}件`);
 }
 
+// 8. v3: generated.ts(5 map統合結果)とのcross-consistency検査。
+//    「マップが存在するがcodeから未参照」「突合できていないphraseがある」を検出する。
+const generated = await import(pathToFileURL(join(studioRoot, 'src/data/startWeddingEdit/generated.ts')).href);
+
+const mapsUsed: Record<string, boolean> = generated.weddingEditMapsUsed;
+for (const [name, present] of Object.entries(mapsUsed)) {
+  if (!present) {
+    warnings.push(`local map未検出: ${name}(sync時にfallback/警告扱いになっている可能性)`);
+  }
+}
+
+type EnrichedPhrase = {
+  phraseId: string;
+  selectedAnimation?: string;
+  transitionIntent?: string;
+  confidence?: string;
+  humanReviewRequired?: boolean;
+  importantWords: Array<{word: string; accentSec: number; beatSec: number | null}>;
+  mapStatus: string;
+};
+const enriched: EnrichedPhrase[] = generated.weddingEditLyricPhrases;
+
+const unmatched = enriched.filter((p) => p.mapStatus !== 'MATCHED');
+if (unmatched.length > 0) {
+  errors.push(`mapStatusがMATCHEDでないphraseが${unmatched.length}件: ${unmatched.map((p) => p.phraseId).join(', ')}`);
+}
+
+const noImportantWords = enriched.filter((p) => p.importantWords.length === 0);
+console.log('\n=== importantWords(実accentSec)を持たないphrase(fallback定数使用の可能性) ===');
+if (noImportantWords.length > 0) {
+  console.log(`  ${noImportantWords.map((p) => p.phraseId).join(', ')} (${noImportantWords.length}/${enriched.length}件)`);
+} else {
+  console.log('  なし');
+}
+
+// 最重要修正1で名指しされたphraseは、実accent markerを持っていることを必須にする。
+const REQUIRE_REAL_ACCENT = ['P001', 'P002', 'P004', 'P010', 'P011', 'P018', 'P019', 'P023', 'P026', 'P029', 'P030'];
+for (const id of REQUIRE_REAL_ACCENT) {
+  const p = enriched.find((e) => e.phraseId === id);
+  if (!p) {
+    errors.push(`${id}: generated.tsに存在しない`);
+    continue;
+  }
+  if (p.importantWords.length === 0) {
+    errors.push(`${id}: 実accent marker(importantWords)が0件。fallback定数のまま`);
+  }
+}
+// P004/P019は4段階の意味変化が要求されているため、4語以上を必須にする。
+for (const id of ['P004', 'P019']) {
+  const p = enriched.find((e) => e.phraseId === id);
+  if (p && p.importantWords.length < 4) {
+    errors.push(`${id}: importantWordsが${p.importantWords.length}件(4段階の意味変化には4語以上必要)`);
+  }
+}
+
+const humanReview = enriched.filter((p) => p.humanReviewRequired);
+console.log(`\n=== humanReviewRequired=true のphrase(音声確認が必要) ===`);
+console.log(`  ${humanReview.length}/${enriched.length}件: ${humanReview.map((p) => p.phraseId).join(', ')}`);
+
+// 9. weddingLyricLine.tsxに残る固定fraction fallbackの棚卸し(削除ではなく、
+//    fallback専用パスとして残っていることの透明性チェック)。
+const lyricLineSrc = readFileSync(join(studioRoot, 'src/motion-kit/startWeddingEdit/weddingLyricLine.tsx'), 'utf8');
+const fixedFractionMatches = [...lyricLineSrc.matchAll(/durFrames \* 0\.\d+/g)].map((m) => m[0]);
+console.log(`\n=== 固定fraction fallback定数の残存箇所(marker不在時のみ使用される想定) ===`);
+if (fixedFractionMatches.length > 0) {
+  console.log(`  ${fixedFractionMatches.join(', ')}`);
+} else {
+  console.log('  なし(完全に実accent駆動)');
+}
+if (!lyricLineSrc.includes('weddingLyricFallbackByPhraseId')) {
+  errors.push('weddingLyricLine.tsxにfallback可視化用のweddingLyricFallbackByPhraseIdが無い(Guide overlayのFALLBACK表示ができない)');
+}
+
 console.log('');
 warnings.forEach((w) => console.warn(`⚠️  ${w}`));
 if (errors.length) {
@@ -128,4 +201,6 @@ if (errors.length) {
   console.error(`\nphrase QA: ${errors.length}件のエラー`);
   process.exit(1);
 }
-console.log('✅ phrase-level QA OK (coverage / family分布 / 連続family / StaRt完成 / bridge歌詞混入なし / 2回目僕は探すんだ)');
+console.log(
+  '✅ phrase-level QA OK (coverage / family分布 / 連続family / StaRt完成 / bridge歌詞混入なし / 2回目僕は探すんだ / 5map cross-consistency / 実accent必須phrase充足 / fallback可視化)',
+);

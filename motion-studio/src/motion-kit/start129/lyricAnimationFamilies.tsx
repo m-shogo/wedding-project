@@ -160,20 +160,21 @@ export const ImpactWord: React.FC<{text: string; hitFrame: number; fontSize?: nu
 };
 
 /** 7. Split Conflict: 葛藤を表すphraseで文字が左右へ分離する。 */
-export const SplitConflict: React.FC<{left: string; right: string; startFrame: number; fontSize?: number}> = ({
-  left,
-  right,
-  startFrame,
-  fontSize = 48,
-}) => {
+export const SplitConflict: React.FC<{
+  left: string;
+  right: string;
+  startFrame: number;
+  fontSize?: number;
+  color?: string;
+}> = ({left, right, startFrame, fontSize = 48, color = '#FDFBF5'}) => {
   const f = useCurrentFrame();
   const local = f - startFrame;
   const dx = interpolate(local, [0, 20], [0, 90], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
   const o = interpolate(local, [0, 8], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
   return (
     <div style={{display: 'flex', gap: 4, opacity: o}}>
-      <span style={{...baseTextStyle(fontSize, '#FDFBF5', 600), transform: `translateX(${-dx}px)`}}>{left}</span>
-      <span style={{...baseTextStyle(fontSize, '#FDFBF5', 600), transform: `translateX(${dx}px)`}}>{right}</span>
+      <span style={{...baseTextStyle(fontSize, color, 600), transform: `translateX(${-dx}px)`}}>{left}</span>
+      <span style={{...baseTextStyle(fontSize, color, 600), transform: `translateX(${dx}px)`}}>{right}</span>
     </div>
   );
 };
@@ -198,10 +199,11 @@ export const QuestionPause: React.FC<{
 };
 
 /** 9. Repetition Echo: 反復語が奥行き・位置・色を変えて残る。 */
-export const RepetitionEcho: React.FC<{text: string; occurrences: number[]; fontSize?: number}> = ({
+export const RepetitionEcho: React.FC<{text: string; occurrences: number[]; fontSize?: number; color?: string}> = ({
   text,
   occurrences,
   fontSize = 40,
+  color = '#FDFBF5',
 }) => {
   const f = useCurrentFrame();
   return (
@@ -215,7 +217,7 @@ export const RepetitionEcho: React.FC<{text: string; occurrences: number[]; font
           <span
             key={i}
             style={{
-              ...baseTextStyle(fontSize, '#FDFBF5', 500),
+              ...baseTextStyle(fontSize, color, 500),
               position: 'absolute',
               opacity: o,
               transform: `scale(${scale}) translateX(${i * 12}px)`,

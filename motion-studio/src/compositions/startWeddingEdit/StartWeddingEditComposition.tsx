@@ -4,7 +4,7 @@ import {weddingEditAudioPath, weddingEditLyricPhrases} from '../../data/startWed
 import {WEDDING_EDIT_SECTIONS, weddingEditSectionFrames} from '../../data/startWeddingEdit/sections';
 import {entryOverlapFrames, placeShots, weddingSectionDesign, type WeddingVariant} from '../../data/startWeddingEdit/storyboard';
 import {ShotRenderer} from '../../motion-kit/start129/shotEngine';
-import {WeddingLyricTrack} from '../../motion-kit/startWeddingEdit/weddingLyricLine';
+import {WeddingLyricTrack, weddingLyricFallbackByPhraseId} from '../../motion-kit/startWeddingEdit/weddingLyricLine';
 import {TitleSequenceA, TitleSequenceB, TitleSequenceC} from './TitleOpenA_B_C';
 import {InterludeOverlay} from './InterludeOverlay';
 
@@ -16,6 +16,35 @@ export type StartWeddingEditCompositionProps = {
 export const startWeddingEditDefaultProps: StartWeddingEditCompositionProps = {
   variant: 'A',
   reviewMode: false,
+};
+
+/** Guide専用のphrase debug card。weddingLyricFallbackByPhraseIdは
+ * WeddingLyricTrack(このcomponentより前にJSX上で描画される)が同一render passで
+ * 更新するmodule-scope mapで、固定fraction fallbackが実際に使われた場合だけ
+ * FALLBACK表示を出す(Guide限定。Cleanには一切出さない)。 */
+const GuideDebugCard: React.FC<{phraseId: string; wordsLine: string; children: React.ReactNode}> = ({phraseId, children}) => {
+  const isFallback = weddingLyricFallbackByPhraseId.get(phraseId) === true;
+  return (
+    <AbsoluteFill style={{pointerEvents: 'none'}}>
+      <div
+        style={{
+          position: 'absolute',
+          top: 24,
+          right: 24,
+          color: isFallback ? '#FFD84A' : '#0F0',
+          background: 'rgba(0,0,0,0.55)',
+          padding: '4px 10px',
+          fontFamily: 'monospace',
+          fontSize: 13,
+          lineHeight: 1.5,
+          textAlign: 'right',
+        }}
+      >
+        {children}
+        {isFallback ? <div style={{color: '#FFD84A', fontWeight: 700}}>FALLBACK</div> : null}
+      </div>
+    </AbsoluteFill>
+  );
 };
 
 const TITLE_BY_VARIANT: Record<WeddingVariant, React.FC> = {
@@ -88,28 +117,22 @@ export const StartWeddingEditComposition: React.FC<StartWeddingEditCompositionPr
         ? weddingEditLyricPhrases.map((p) => {
             const from = Math.round(p.startSec * 30);
             const dur = Math.max(1, Math.round(p.endSec * 30) - from);
+            const wordsLine =
+              p.importantWords && p.importantWords.length > 0
+                ? p.importantWords.map((w) => `${w.word}@${w.accentSec.toFixed(2)}s`).join(' / ')
+                : '(no accent marker)';
             return (
               <Sequence key={`guide-${p.phraseId}`} from={from} durationInFrames={dur} name={`guide-${p.phraseId}`}>
-                <AbsoluteFill style={{pointerEvents: 'none'}}>
-                  <div
-                    style={{
-                      position: 'absolute',
-                      top: 24,
-                      right: 24,
-                      color: '#0F0',
-                      background: 'rgba(0,0,0,0.55)',
-                      padding: '4px 10px',
-                      fontFamily: 'monospace',
-                      fontSize: 13,
-                      lineHeight: 1.5,
-                      textAlign: 'right',
-                    }}
-                  >
-                    <div>{p.phraseId} {p.startSec.toFixed(2)}s-{p.endSec.toFixed(2)}s</div>
-                    <div>{p.selectedAnimation ?? 'character-build'}</div>
-                    <div>conf:{p.confidence ?? '?'}</div>
+                <GuideDebugCard phraseId={p.phraseId} wordsLine={wordsLine}>
+                  <div>
+                    {p.phraseId} {p.startSec.toFixed(2)}s-{p.endSec.toFixed(2)}s
                   </div>
-                </AbsoluteFill>
+                  <div>{p.selectedAnimation ?? 'character-build'}</div>
+                  <div>{wordsLine}</div>
+                  <div>transition:{p.transitionIntent ?? '?'}</div>
+                  <div>conf:{p.confidence ?? '?'}</div>
+                  {p.humanReviewRequired ? <div style={{color: '#FF6B4A'}}>HUMAN REVIEW</div> : null}
+                </GuideDebugCard>
               </Sequence>
             );
           })
