@@ -1,20 +1,13 @@
-// Director Recipe Catalog -> shared Remotion engine adapter (Phase B).
+// Director Recipe Catalog -> shared Remotion engine adapter (Phase B/J3).
 //
-// The Director Recipe Catalog (movie-dashboard/src/data/directorRecipeCatalog.ts, Phase A)
-// records 97 editorial "recipes" as data only. It intentionally does NOT implement any
-// renderer. This file is the adapter layer: it maps each recipe's `motionPresetIds`
-// (references into the existing 36-entry Motion Kit, movie-dashboard/src/data/startMotionKit.ts)
-// onto the small set of shared Remotion engines in ./engines.tsx.
-//
-// Design constraint: we do not create one hand-written component per recipe. Every recipe
-// resolves, deterministically, to an ordered list of "layers" that reuse one of six shared
-// engines (the original 4 + 2 added in Phase B: native-cut, photo-layout). A recipe with
-// multiple motionPresetIds becomes multiple stacked layers (base + overlays).
+// The Director Recipe Catalog records 97 editorial recipes as data only. This adapter maps each
+// recipe's Motion Kit preset ids onto a deliberately small shared-engine set. J3 adds dedicated
+// variants for the StaRt-critical visual grammars that were previously only approximated.
 import type {DirectorRecipe, DirectorRecipeCategory} from '../../../movie-dashboard/src/data/directorRecipeCatalog.ts';
 import {directorRecipeCatalog, directorRecipeCategories} from '../../../movie-dashboard/src/data/directorRecipeCatalog.ts';
 import type {StartMotionPreset} from '../../../movie-dashboard/src/data/startMotionKit.ts';
 import {startMotionPresets} from '../../../movie-dashboard/src/data/startMotionKit.ts';
-import type {MotionIntensity} from './engines';
+import type {GraphicHitVariant, MotionIntensity} from './engines';
 
 export {directorRecipeCatalog, directorRecipeCategories};
 export type {DirectorRecipe, DirectorRecipeCategory};
@@ -51,8 +44,6 @@ export function lookupMotionPreset(presetId: string): StartMotionPreset {
 }
 
 function pickIntensity(recipe: DirectorRecipe): MotionIntensity {
-  // Recipes list allowed intensities (usually all of S/M/L). Preview at the middle of the
-  // declared range so the demo is representative without being the loudest variant.
   if (recipe.intensity.includes('M')) return 'M';
   return recipe.intensity[0] ?? 'M';
 }
@@ -61,13 +52,11 @@ function demoText(recipe: DirectorRecipe): string {
   return recipe.label.length > 26 ? `${recipe.label.slice(0, 24)}…` : recipe.label;
 }
 
-/** Camera-transform mode keyed off the preset id (not free text), so it stays deterministic. */
-function cameraModeFor(presetId: string): 'static' | 'push' | 'pull' | 'pan' {
+function cameraModeFor(presetId: string): 'static' | 'push' | 'pull' | 'pan' | 'parallax' {
   if (presetId === 'photo-slow-pull') return 'pull';
   if (presetId === 'photo-directional-pan') return 'pan';
+  if (presetId === 'photo-2p5d-parallax') return 'parallax';
   if (presetId === 'photo-static-hero' || presetId === 'photo-freeze-cutout') return 'static';
-  // photo-small-push, photo-2p5d-parallax (approximated as a restrained push; true parallax
-  // needs per-layer depth separation which is out of scope for a data-driven preview).
   return 'push';
 }
 
@@ -84,11 +73,12 @@ function wipeDirectionFor(presetId: string): 'left' | 'right' | 'up' | 'down' {
   return 'right';
 }
 
-function graphicVariantFor(presetId: string): 'triplet' | 'speed-lines' | 'impact' {
+function graphicVariantFor(presetId: string): GraphicHitVariant {
   if (presetId === 'accent-speed-lines' || presetId === 'accent-cel-shadow-sweep') return 'speed-lines';
   if (presetId === 'accent-impact-frame' || presetId === 'accent-micro-rgb-split') return 'impact';
-  // accent-stamp-triplet, accent-scribble-underline, accent-halftone-burst: closest existing
-  // variant is the triplet hit; a dedicated halftone/scribble look is future scope (Phase C).
+  if (presetId === 'accent-stamp-triplet') return 'stamp-line-dot';
+  if (presetId === 'accent-scribble-underline') return 'scribble';
+  if (presetId === 'accent-halftone-burst') return 'halftone';
   return 'triplet';
 }
 
@@ -136,8 +126,6 @@ function resolveLayer(recipe: DirectorRecipe, presetId: string, intensity: Motio
     return {engine: 'graphic-hit', presetId, intensity, props: {variant: graphicVariantFor(presetId), transparent: true}};
   }
 
-  // sharedEngine === 'native-cut': no dedicated visual preset exists upstream. Render the
-  // edit-point placeholder so every recipe still resolves to something on screen.
   return {
     engine: 'native-cut',
     presetId,
@@ -168,7 +156,6 @@ export function resolveDirectorRecipeById(recipeId: string): ResolvedRecipe {
   return resolveDirectorRecipe(recipe);
 }
 
-/** Used by contract tests / the registry: every recipe must resolve without throwing. */
 export function resolveAllDirectorRecipes(): ResolvedRecipe[] {
   return directorRecipeCatalog.map((recipe) => resolveDirectorRecipe(recipe));
 }
