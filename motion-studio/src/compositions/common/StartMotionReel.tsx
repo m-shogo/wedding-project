@@ -2,6 +2,8 @@ import {AbsoluteFill, Sequence} from 'remotion';
 import {
   CameraTransformEngine,
   GraphicHitEngine,
+  NativeCutEngine,
+  PhotoLayoutEngine,
   TransitionWipeEngine,
   TypographyRevealEngine,
 } from '../../motion-kit/engines';
@@ -59,12 +61,40 @@ function RenderPreset({preset}: {preset: RenderableMotionPreset}) {
     );
   }
 
+  if (preset.engine === 'native-cut') {
+    return <NativeCutEngine label={preset.label} intensity={preset.intensity} variant={preset.mode === 'j-cut' ? 'j-cut' : preset.mode === 'l-cut' ? 'l-cut' : 'hard'} />;
+  }
+
+  if (preset.engine === 'photo-layout') {
+    return (
+      <AbsoluteFill>
+        <PhotoLayoutEngine
+          intensity={preset.intensity}
+          variant={preset.mode === 'split-panel' ? 'split-panel' : preset.mode === 'panel-grid' ? 'panel-grid' : 'contact-sheet'}
+        />
+        <div style={{position: 'absolute', left: 24, bottom: 24, fontSize: 22, fontWeight: 700, color: '#fff'}}>{preset.label}</div>
+      </AbsoluteFill>
+    );
+  }
+
   return (
     <AbsoluteFill>
       <DemoBackdrop label={preset.label} />
       <GraphicHitEngine
         intensity={preset.intensity}
-        variant={preset.mode === 'speed-lines' ? 'speed-lines' : preset.mode === 'impact' ? 'impact' : 'triplet'}
+        variant={
+          preset.mode === 'speed-lines'
+            ? 'speed-lines'
+            : preset.mode === 'impact'
+              ? 'impact'
+              : preset.mode === 'halftone'
+                ? 'halftone'
+                : preset.mode === 'scribble'
+                  ? 'scribble'
+                  : preset.mode === 'stamp-line-dot'
+                    ? 'stamp-line-dot'
+                    : 'triplet'
+        }
       />
     </AbsoluteFill>
   );

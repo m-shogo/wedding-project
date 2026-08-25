@@ -620,6 +620,15 @@ const LOCAL_RENDER_VERIFIED_2026_08_26 = new Set([
   "flash-one-frame-soft",
   "accent-speed-lines",
   "accent-stamp-triplet",
+  "type-char-stagger",
+  "photo-directional-pan",
+  "photo-2p5d-parallax",
+  "photo-contact-sheet-snap",
+  "photo-split-panel",
+  "accent-panel-grid",
+  "accent-halftone-burst",
+  "accent-scribble-underline",
+  "cut-hard-accent",
 ]);
 
 function kitPresetToPreview(preset: StartMotionPreset): MotionPreviewRecord {
@@ -638,7 +647,7 @@ function kitPresetToPreview(preset: StartMotionPreset): MotionPreviewRecord {
       : isRemotion
         ? `motion-studio Motion Kit preset: ${preset.id} (${preset.sharedEngine} engine)。この図鑑追加ではまだ動画を書き出していない。`
         : `${preset.engine}上の技法説明のみ。まだ動画assetは存在しない。`,
-    generatedAt: locallyRendered ? "2026-08-25T17:58:30Z" : null,
+    generatedAt: locallyRendered ? "2026-08-25T18:09:35Z" : null,
     implementationId: `impl-${preset.id}`,
     sampleAssetSetId: sampleAssetSetIdForPreset(preset),
     resolveVersion: null,
