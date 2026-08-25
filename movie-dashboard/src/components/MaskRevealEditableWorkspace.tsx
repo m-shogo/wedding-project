@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { MaskRevealSceneHandoffCard } from "./MaskRevealSceneHandoffCard";
 import {
   applyHumanSelection,
   createDefaultMaskRevealEditableIntent,
@@ -308,6 +309,7 @@ function ProjectTimelinePanel({ state, editingSceneId, onEdit, onDelete }: {
                             <button type="button" onClick={() => onDelete(scene.sceneId)} className="text-[10px] text-red-500">削除</button>
                           </div>
                         </div>
+                        <MaskRevealSceneHandoffCard scene={scene} />
                       </li>
                     );
                   })}
