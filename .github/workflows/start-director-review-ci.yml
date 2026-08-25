@@ -77,7 +77,7 @@ jobs:
         run: |
           mkdir -p out/ab/claude
           pnpm exec remotion render src/index-director-recipes.ts StartAbClaudeChorus1 \
-            out/ab/claude/chorus1_ab.mp4 --scale=0.667 --crf=30
+            out/ab/claude/chorus1_ab.mp4 --scale=0.5 --crf=30
           ffprobe -v error \
             -show_entries stream=codec_name,width,height,r_frame_rate \
             -show_entries format=duration,size \
