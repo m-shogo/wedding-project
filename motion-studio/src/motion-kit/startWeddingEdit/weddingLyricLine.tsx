@@ -23,7 +23,14 @@ import {
   WordHit,
 } from '../start129/lyricAnimationFamilies';
 import {HandDrawnUnderline} from '../start129/handDrawnPrimitives';
-import {BaselineTravel, ChorusBurstFlash, ForegroundReveal, TypeMaskText} from './weddingLyricFamiliesV2';
+import {
+  BaselineTravel,
+  CallAndResponseLayout,
+  ChorusBurstFlash,
+  ForegroundReveal,
+  LyricToTransition,
+  TypeMaskText,
+} from './weddingLyricFamiliesV2';
 
 export type WeddingVariant = 'A' | 'B' | 'C';
 
@@ -205,6 +212,24 @@ const WeddingLyricBody: React.FC<{phrase: LyricPhrase; variant: WeddingVariant}>
 
     case 'type-mask':
       return <TypeMaskText text={phrase.text} fontSize={variant === 'B' ? 66 : 58} />;
+
+    case 'call-and-response-layout': {
+      // 「ほら　寄って集って！　お手を拝借！」を呼びかけ/応答の2段に分割する
+      const idx = phrase.text.indexOf('お手を拝借');
+      const call = idx > 0 ? phrase.text.slice(0, idx) : phrase.text;
+      const response = idx > 0 ? phrase.text.slice(idx) : '';
+      return <CallAndResponseLayout call={call} response={response} color={style.color} fontSize={variant === 'B' ? 46 : 38} />;
+    }
+
+    case 'lyric-to-transition':
+      return (
+        <LyricToTransition
+          text={phrase.text}
+          color={style.color}
+          fontSize={variant === 'B' ? 48 : 40}
+          exitFrame={Math.round(durFrames * 0.75)}
+        />
+      );
 
     case 'character-build':
     default: {

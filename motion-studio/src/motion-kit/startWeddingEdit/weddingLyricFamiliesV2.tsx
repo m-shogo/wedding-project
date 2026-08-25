@@ -107,6 +107,76 @@ export const TypeMaskText: React.FC<{text: string; fontSize?: number}> = ({text,
   );
 };
 
+/** 15. Call-and-Response Layout: 呼びかけと応答を左右(または上下)に分けて時間差で見せる。
+ * 「ほら　寄って集って！」(呼びかけ)→「お手を拝借！」(応答)のような掛け合いに使う。 */
+export const CallAndResponseLayout: React.FC<{call: string; response: string; color: string; fontSize?: number}> = ({
+  call,
+  response,
+  color,
+  fontSize = 42,
+}) => {
+  const f = useCurrentFrame();
+  const callO = interpolate(f, [0, 6], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  const callX = interpolate(f, [0, 8], [-24, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  const respHit = 16;
+  const respO = interpolate(f, [respHit, respHit + 6], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  const respX = interpolate(f, [respHit, respHit + 8], [24, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  const respS = interpolate(f, [respHit, respHit + 4, respHit + 10], [1.3, 1.05, 1], {
+    extrapolateLeft: 'clamp',
+    extrapolateRight: 'clamp',
+  });
+  return (
+    <div>
+      <div style={{fontFamily: JP, fontSize, fontWeight: 600, color, opacity: callO, transform: `translateX(${callX}px)`}}>
+        {call}
+      </div>
+      <div
+        style={{
+          fontFamily: JP,
+          fontSize: fontSize * 1.15,
+          fontWeight: 900,
+          color,
+          opacity: respO,
+          transform: `translateX(${respX}px) scale(${respS})`,
+          marginTop: 6,
+        }}
+      >
+        {response}
+      </div>
+    </div>
+  );
+};
+
+/** 14. Lyric-to-Transition: phrase最後の文字のbaselineが画面全体へ広がるwipeになり、
+ * 次shotへ視覚的に開いていく印象を作る(実際のshot切替はSequence側で別途起きるが、
+ * 退場のタイミングを揃えることで「文字が次画面を開いた」ように見せる)。 */
+export const LyricToTransition: React.FC<{text: string; color: string; fontSize?: number; exitFrame: number}> = ({
+  text,
+  color,
+  fontSize = 42,
+  exitFrame,
+}) => {
+  const f = useCurrentFrame();
+  const o = interpolate(f, [0, 8], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  const wipe = interpolate(f, [exitFrame, exitFrame + 10], [0, 100], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  const textFade = interpolate(f, [exitFrame, exitFrame + 6], [1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  return (
+    <div style={{position: 'relative'}}>
+      <div style={{fontFamily: JP, fontSize, fontWeight: 700, color, opacity: o * textFade}}>{text}</div>
+      <div style={{height: 2, width: '100%', background: color, opacity: 0.7, marginTop: 6}} />
+      {wipe > 0 ? (
+        <AbsoluteFill
+          style={{
+            background: color,
+            clipPath: `inset(0 ${100 - wipe}% 0 0)`,
+            pointerEvents: 'none',
+          }}
+        />
+      ) : null}
+    </div>
+  );
+};
+
 /** Chorus Burst: 3-hit最終段で画面全体に一瞬だけ光が開くeffect layer。写真自体は隠さない。 */
 export const ChorusBurstFlash: React.FC<{hitFrame: number; color?: string}> = ({hitFrame, color = '#FFFFFF'}) => {
   const f = useCurrentFrame();
