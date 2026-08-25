@@ -46,6 +46,11 @@ export interface MotionHandoffManifestV1 {
   };
 }
 
+export interface MaskRevealExecutionOutputs {
+  nleXmlHandoff: string;
+  verificationChecklist: string;
+}
+
 function markerIdFor(section: MaskRevealPromptInput["section"]) {
   return `VML_MASK_REVEAL_${section}`;
 }
@@ -97,6 +102,35 @@ export function buildMaskRevealMotionHandoffManifest(input: MaskRevealPromptInpu
       canonicalTarget: "ACTUAL_DAVINCI_RENDER",
       productionReady: false,
     },
+  };
+}
+
+export function buildMaskRevealExecutionOutputs(input: MaskRevealPromptInput): MaskRevealExecutionOutputs {
+  const manifest = buildMaskRevealMotionHandoffManifest(input);
+  const markerId = manifest.project.markerId;
+
+  return {
+    nleXmlHandoff: [
+      "Palmier → DaVinci NLE XML Handoff",
+      `1. Palmierでrough timing/orderを確定し、対象title位置を ${markerId} として識別する。`,
+      `2. 実timelineから ${manifest.timeline.companionFileName} をDaVinci互換NLE XMLとして書き出す。`,
+      "3. DaVinci ResolveへXMLをimportし、media relink / clip order / title timingを確認する。",
+      `4. ${markerId} の対象区間へ専用title trackでText+ Mask Revealを適用する。`,
+      "5. Palmier側で代替effectを焼き込まない。最終motion authorityはDaVinciに置く。",
+      "6. XMLとmask-reveal-motion-handoff.jsonを必ずセットで扱う。",
+    ].join("\n"),
+    verificationChecklist: [
+      "Mask Reveal completion gate",
+      `[ ] Palmier rough timingを作成し、${markerId} の対象区間を保持`,
+      `[ ] ${manifest.timeline.companionFileName} をPalmier実timelineからexport`,
+      "[ ] DaVinci ResolveへXMLをimportし、media relink / timingを確認",
+      "[ ] Text+ + rectangular mask + keyframe easingで実装",
+      "[ ] 1280x720 / 30fps / WELCOME共通sampleでActual renderを書き出す",
+      "[ ] Concept Previewとは別assetとしてActual Previewを登録",
+      "[ ] local Resolve versionを記録",
+      "[ ] 通常速度と0.5xでVisual QA",
+      "[ ] 全gate通過後だけTESTED / PRODUCTION_READYへ昇格判断",
+    ].join("\n"),
   };
 }
 
