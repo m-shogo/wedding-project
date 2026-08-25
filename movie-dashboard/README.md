@@ -127,6 +127,7 @@ provider-aware prompt
 | 素材ライブラリ | 素材CRUD、フィルタ、パス、一括操作、CSV、サムネイル |
 | クリップ素材集 | 切り出し済みクリップと演出レシピを章・動き(motion)・採否で絞り込む（読み取り専用） |
 | Director Recipe Catalog | 97件をcategory/energy/source/section/intensity/status/visual fidelityで絞り込み、人間のFavorite/Maybe/RejectをlocalStorageへ記録するExtended制作レビュー |
+| StaRt 129秒・3案比較 (`/movie-coach/start-129`) | 旅の記録映画/冒険アニメOP/リズム・タイポMVの3案を14区間タイムラインとTechnique Catalogで比較し、気に入った/保留/使わないとコメントを記録、Claude/Codexへの修正依頼をコピーできる研究用レビュー画面。実装はmotion-studio側(`docs/handoff/start-129-showcase-review-guide.md`) |
 | 動画プロンプト | シーン＋プリセット＋shot intentからモデル別Promptを作成 |
 | 動画生成キュー | 生成待ちPromptをモデル別にまとめ、コピー・testing移行・結果登録・Export |
 | AI動画 結果レビュー | 結果Asset、共通/固有QA、採否、失敗理由、retry lineage |

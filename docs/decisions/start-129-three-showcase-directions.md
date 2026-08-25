@@ -25,11 +25,17 @@
 - 取得スクリプトに実装バグ(Pexels写真検索APIの`/v1/`prefix欠落によるHTTP 403、Cloudflare WAFがPythonデフォルトUser-Agentをブロック)を2件発見・修正済み。
 - 最終的に15role中20ファイル(一部roleは2枚、B案のpanel gridに使うSEOUL_STREET/DETAIL_HANDは意図的に2枚ずつ確保)を採用し、`pnpm sync:start-129-demo-assets`で反映、45枚のQA stillを再renderして目視確認済み。
 
+## movie-dashboard比較UI(2026-08-25 追記)
+
+`movie-dashboard/src/pages/Start129Showcases.tsx`(`/movie-coach/start-129`)を追加した。14区間タイムライン、Technique Catalog(showcase別filter)、気に入った/保留/使わないの記録(localStorage、既存`startHumanReview.ts`と同じ設計)、コメント、Claude/Codexへの修正依頼コピー機能を実装し、開発サーバー上でボタン操作・コメント追加・クリップボードコピーの実動作を確認済み。
+
+このページのデータ(`start129Showcases.ts`)はmotion-studio側の実装(`motion-studio/src/data/start129/`)を要約・複製したものであり、単一情報源ではない。演出の追加・変更はmotion-studio側で行い、このファイルへ手動で同期する。
+
 ## 採用しなかったもの/今回スコープ外
 
-- movie-dashboardの比較UI(`/movie-coach/start-129-showcases`相当)は今回のセッションでは未着手。理由: 129秒×3案の映像実装自体が実render・目視QAまで含めて相当な作業量になり、UIまで含めると検証を伴わない「作っただけ」の成果物が増えるリスクが高いと判断した。次セッションで着手する。
 - 97 Director Recipeとの統合・置き換えは行っていない。既存Director Recipe資産とStart129資産は現時点で独立している(意図的。統合は本番candidate選定後の判断とする)。
 - 正規のStaRt歌詞・音源はダミー素材とは別物であり、今回のPexels取得では扱っていない(引き続き`motion-studio/local/lyrics.local.json` / `local/audio/start-129.mp3`が必要)。
+- movie-dashboardページのデータはmotion-studio側との自動同期機構を持たない(手動複製)。将来、演出を追加・変更したらこのファイルも忘れずに更新する。
 
 ## 本番Openingとの関係
 

@@ -6,9 +6,17 @@
 
 - 写真はPexels(無料ストック)由来のダミー素材が入っている。**新郎新婦本人の写真ではない**。正規実写真・実音源・正規歌詞は引き続き**未投入**(歌詞は「歌詞スロットNN」のplaceholder)。
 - 3案は「完成映像」ではなく「編集文法の比較サンプル」。
-- movie-dashboardの比較画面(クリックで見比べる用)は**まだ無い**。今はRemotion Studio上、またはrenderしたmp4/stillで見る。
 
-## 見る手順
+## 見比べる・記録する(movie-dashboard)
+
+```sh
+cd movie-dashboard
+pnpm dev
+```
+
+`http://localhost:5173/movie-coach/start-129` を開く。14区間タイムラインと使用演出一覧を見ながら、区間・演出ごとに「気に入った/保留/使わない」を記録でき、コメントも残せる。記録は自動でClaude/Codexへの修正依頼文にまとめられ、ボタン一つでコピーできる。
+
+## 実際の映像を見る手順(Remotion Studio)
 
 ```sh
 cd motion-studio
