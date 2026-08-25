@@ -11,6 +11,18 @@ pnpm dev
 
 ブラウザで `/movie-coach/start-selection` を開くと、画面最上部の緑枠に「今やること」が1つだけ表示される。選択・チェック・コメントはブラウザ内へ自動保存される。
 
+## 現在地と完成まで
+
+| 段階 | 状態 | 完了条件 |
+|---|---|---|
+| 1. 制作基盤 | 完了 | 6 family、14 section、Selection UI、研究用Roughが動く |
+| 2. 原本投入 | **現在ここ** | 写真・動画を所定フォルダへ入れ、Hero候補を選ぶ |
+| 3. 素材割り当て | 未着手 | 採用素材が14 sectionへ割り当てられ `MEDIA_BLOCKED` を解除できる |
+| 4. 音源確定 | 未着手 | 利用条件、波形、Marker、終了点を人間確認し `AUDIO_BLOCKED` を解除できる |
+| 5. 実素材Rough | 未着手 | 実写真・実動画・正規音源で全編を目視できる |
+| 6. 修正ラウンド | 未着手 | 区間コメントを反映し、文字・crop・hold・3-hitを調整する |
+| 7. Final | 未着手 | 全画面目視、音量、尺、会場再生条件を確認して本番書き出しする |
+
 ## 制作の順番
 
 1. 推奨6 Motion Familyを確認する。わからなければ変更しない
@@ -20,6 +32,27 @@ pnpm dev
 5. 「Codex用プロンプトをコピー」で選定・コメント・未完了項目を1つにまとめる
 6. Codexへ貼り付け、実素材版Roughの更新を依頼する
 7. renderを目視し、修正コメントを同じ画面へ追記する
+
+## 素材と音源の置き場
+
+原本はリポジトリ内のGit管理外フォルダへ置く。写真・動画・音源ファイル自体はcommitしない。
+
+```text
+05_photos/opening/
+├── couple/          2人・Hero候補
+├── travel/          沖縄・Seoul・Hawaiiなど
+├── family-friends/  家族・友人
+└── venue/           横浜・会場
+
+06_videos/opening/   実動画
+
+07_music/
+├── candidates/      未確定の音源候補
+├── licensed/        会場利用条件を確認した音源
+└── se/              効果音・環境音
+```
+
+選定後、Codexが採用素材だけを `motion-studio/public/` 配下のRemotion runtimeへ接続する。原本は移動・上書きしない。旧V1専用の `motion-studio/public/photos/opening/` や `public/audio/opening/bgm-main.mp3` を、StaRt Extendedの正本として直接使わない。
 
 ## 最初から選ばれている6系統
 

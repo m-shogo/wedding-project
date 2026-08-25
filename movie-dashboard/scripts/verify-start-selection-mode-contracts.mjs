@@ -31,6 +31,10 @@ for (const [source, token, message] of [
   [page, "Codex用プロンプトをコピー", "Codex prompt copy missing"],
   [page, "Shortlist JSONを保存", "shortlist export missing"],
   [page, "AUDIO_BLOCKED / MEDIA_BLOCKED", "blocked authority label missing"],
+  [page, "/05_photos/opening/", "StaRt photo source folder missing"],
+  [page, "/06_videos/opening/", "StaRt video source folder missing"],
+  [page, "/07_music/candidates/", "StaRt candidate audio folder missing"],
+  [page, "/07_music/licensed/", "StaRt licensed audio folder missing"],
   [app, 'path="movie-coach/start-selection"', "Selection Mode route missing"],
   [sidebar, 'to: "/movie-coach/start-selection"', "Selection Mode navigation missing"],
 ]) if (!source.includes(token)) errors.push(message);
