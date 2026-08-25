@@ -20,6 +20,7 @@ const navSections: SidebarSection[] = [
     label: "CORE",
     links: [
       { to: "/", label: "ダッシュボード", icon: "✈" },
+      { to: "/movie-coach/motion-library", label: "動きを見て探す", icon: "▶" },
       { to: "/movie-coach", label: "Movie Coach / Today", icon: "🎓" },
       { to: "/movie-coach/profile", label: "Profile Movie Coach", icon: "▤" },
       { to: "/movie-coach/auto", label: "Auto Mode / Readiness", icon: "⚙" },
