@@ -1,6 +1,10 @@
 import { useMemo, useState } from "react";
 import { Header } from "../components/Header";
-import { buildMaskRevealMotionHandoffJson } from "../data/maskRevealHandoff";
+import {
+  buildMaskRevealExecutionOutputs,
+  buildMaskRevealMotionHandoffJson,
+  type MaskRevealExecutionOutputs,
+} from "../data/maskRevealHandoff";
 import {
   buildMaskRevealPromptOutputs,
   getPatternImplementation,
@@ -23,6 +27,7 @@ export function VisualMotionLibrary() {
   const [input, setInput] = useState<MaskRevealPromptInput>(defaultInput);
   const [outputs, setOutputs] = useState<MotionPromptOutputs | null>(() => buildMaskRevealPromptOutputs(defaultInput));
   const [handoffJson, setHandoffJson] = useState(() => buildMaskRevealMotionHandoffJson(defaultInput));
+  const [executionOutputs, setExecutionOutputs] = useState<MaskRevealExecutionOutputs>(() => buildMaskRevealExecutionOutputs(defaultInput));
   const [copied, setCopied] = useState("");
   const patterns = useMemo(() => searchMotionPatterns(query), [query]);
 
@@ -35,6 +40,7 @@ export function VisualMotionLibrary() {
   function generateOutputs() {
     setOutputs(buildMaskRevealPromptOutputs(input));
     setHandoffJson(buildMaskRevealMotionHandoffJson(input));
+    setExecutionOutputs(buildMaskRevealExecutionOutputs(input));
   }
 
   return (
@@ -181,7 +187,9 @@ export function VisualMotionLibrary() {
                       <OutputCard label="Human Brief" value={outputs.humanBrief} copied={copied} onCopy={copy} />
                       <OutputCard label="Claude Creative Instruction" value={outputs.claudeCreativeInstruction} copied={copied} onCopy={copy} />
                       <OutputCard label="Palmier Instruction" value={outputs.palmierInstruction} copied={copied} onCopy={copy} />
+                      <OutputCard label="NLE XML Handoff" value={executionOutputs.nleXmlHandoff} copied={copied} onCopy={copy} />
                       <OutputCard label="DaVinci Finish Manifest" value={outputs.davinciFinishManifest} copied={copied} onCopy={copy} />
+                      <OutputCard label="Verification Checklist" value={executionOutputs.verificationChecklist} copied={copied} onCopy={copy} />
                       <OutputCard label="Machine JSON" value={outputs.machineJson} copied={copied} onCopy={copy} />
                       <OutputCard label="Motion Handoff Manifest JSON" value={handoffJson} copied={copied} onCopy={copy} />
                     </div>

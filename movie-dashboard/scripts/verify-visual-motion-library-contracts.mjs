@@ -48,6 +48,10 @@ for (const token of [
   'xmlGeneratedExternally: true',
   'companionFileName: "palmier-mask-reveal-timeline.xml"',
   'markerIdFor',
+  '`VML_MASK_REVEAL_${section}`',
+  'buildMaskRevealExecutionOutputs',
+  'nleXmlHandoff',
+  'verificationChecklist',
   'implementationId: "impl-type-mask-reveal-davinci-text-plus"',
   '"opened-in-davinci"',
   '"render-tested"',
@@ -89,6 +93,9 @@ if (/resolveVersion:\s*"[^\"]+"/.test(data)) {
 if (/resolveVersion:\s*"[^\"]+"/.test(handoff)) {
   errors.push("Motion handoff must not invent a Resolve version before local verification");
 }
+if (handoff.includes("MOTION:type-mask-reveal") || page.includes("MOTION:type-mask-reveal")) {
+  errors.push("Generic Mask Reveal marker must not reappear; use the section-aware VML_MASK_REVEAL_<SECTION> authority");
+}
 
 for (const token of [
   "CONCEPT PREVIEW / 実装確認前",
@@ -96,7 +103,9 @@ for (const token of [
   "Human Brief",
   "Claude Creative Instruction",
   "Palmier Instruction",
+  "NLE XML Handoff",
   "DaVinci Finish Manifest",
+  "Verification Checklist",
   "Machine JSON",
   "Motion Handoff Manifest JSON",
   "NLE XML",
@@ -116,4 +125,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log("Visual Motion Library contracts OK: Mask Reveal has a shared neutral WELCOME sample, Palmier NLE XML + sidecar Motion Handoff Manifest, and remains concept-only until local DaVinci verification.");
+console.log("Visual Motion Library contracts OK: Mask Reveal uses one section-aware marker authority, shared WELCOME sample, Palmier NLE XML + sidecar Motion Handoff Manifest, and remains concept-only until local DaVinci verification.");
