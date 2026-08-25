@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="1120" viewBox="0 0 320 1120">
+  <defs>
+    <pattern id="dots" width="12" height="12" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1.2" fill="#201826" opacity="0.14"/>
+    </pattern>
+    <pattern id="grain" width="17" height="17" patternUnits="userSpaceOnUse">
+      <circle cx="4" cy="5" r="1" fill="#F7F0E4" opacity="0.18"/>
+      <circle cx="13" cy="11" r="0.8" fill="#F7F0E4" opacity="0.12"/>
+    </pattern>
+    <clipPath id="f1"><rect x="36" y="54" width="248" height="220" rx="2"/></clipPath>
+    <clipPath id="f2"><rect x="36" y="300" width="248" height="220" rx="2"/></clipPath>
+    <clipPath id="f3"><rect x="36" y="546" width="248" height="220" rx="2"/></clipPath>
+    <clipPath id="f4"><rect x="36" y="792" width="248" height="220" rx="2"/></clipPath>
+  </defs>
+
+  <!-- Serious comparison candidate only. No semantic/factual copy is baked into this asset. -->
+  <rect x="12" y="12" width="296" height="1096" fill="#FAF7EF"/>
+  <rect x="20" y="20" width="280" height="1080" fill="none" stroke="#E7E0D4" stroke-width="2"/>
+
+  <!-- Exposure 1: coastal dawn / horizon -->
+  <g clip-path="url(#f1)">
+    <rect x="36" y="54" width="248" height="220" fill="#6EC7D7"/>
+    <rect x="36" y="170" width="248" height="104" fill="#4AA7A0"/>
+    <circle cx="246" cy="166" r="58" fill="#F26B4F"/>
+    <rect x="36" y="164" width="248" height="10" fill="#F4C84A"/>
+    <rect x="36" y="54" width="248" height="220" fill="url(#dots)"/>
+  </g>
+
+  <!-- Exposure 2: flash bloom -->
+  <g clip-path="url(#f2)">
+    <rect x="36" y="300" width="248" height="220" fill="#EF6A50"/>
+    <rect x="54" y="322" width="212" height="170" fill="#F9F3E8"/>
+    <circle cx="154" cy="400" r="55" fill="#F6B72E"/>
+    <circle cx="192" cy="382" r="82" fill="none" stroke="#F6B72E" stroke-width="10" opacity="0.28"/>
+    <rect x="36" y="300" width="248" height="220" fill="url(#grain)"/>
+  </g>
+
+  <!-- Exposure 3: reception light / movement -->
+  <g clip-path="url(#f3)">
+    <rect x="36" y="546" width="248" height="220" fill="#1F1826"/>
+    <path d="M10 744 C90 662 136 600 222 552" fill="none" stroke="#F26B4F" stroke-width="28" stroke-linecap="round"/>
+    <path d="M54 786 C116 716 178 658 298 594" fill="none" stroke="#F4C84A" stroke-width="14" stroke-linecap="round"/>
+    <path d="M18 682 C118 644 196 620 320 614" fill="none" stroke="#59C8C0" stroke-width="18" stroke-linecap="round"/>
+    <rect x="36" y="546" width="248" height="220" fill="url(#grain)"/>
+  </g>
+
+  <!-- Exposure 4: night water -->
+  <g clip-path="url(#f4)">
+    <rect x="36" y="792" width="248" height="128" fill="#1A1720"/>
+    <rect x="36" y="920" width="248" height="92" fill="#45AAA5"/>
+    <circle cx="232" cy="870" r="25" fill="#F6B72E"/>
+    <path d="M44 947 C84 933 119 955 159 943 C198 931 230 953 281 939" fill="none" stroke="#F7F0E4" stroke-width="5" opacity="0.58"/>
+    <path d="M54 975 C91 962 126 983 166 970 C207 958 239 977 286 967" fill="none" stroke="#F7F0E4" stroke-width="3" opacity="0.38"/>
+    <rect x="36" y="792" width="248" height="220" fill="url(#dots)"/>
+  </g>
+</svg>
