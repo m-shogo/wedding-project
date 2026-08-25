@@ -4,6 +4,7 @@ import {
   createDefaultMaskRevealEditableIntent,
   getEditableDecisionState,
   resolveEditableValue,
+  resolveMaskRevealEditableIntent,
   retargetMaskRevealSection,
   setEditableFieldLock,
   type EditableValue,
@@ -15,6 +16,7 @@ import {
   type PositionPreset,
 } from "../data/humanEditableMotionIntent";
 import { buildMaskRevealEditableProductionOutputs } from "../data/maskRevealEditableProduction";
+import { buildMaskRevealExecutionOutputs } from "../data/maskRevealHandoff";
 
 const positionLabels: Record<PositionPreset, string> = {
   TOP_LEFT: "左上",
@@ -43,7 +45,16 @@ export function MaskRevealEditableWorkspace() {
   const [intent, setIntent] = useState(() => createDefaultMaskRevealEditableIntent("OPENING_INTRO"));
   const [level, setLevel] = useState<Level>("EASY");
   const [copied, setCopied] = useState("");
-  const outputs = useMemo(() => buildMaskRevealEditableProductionOutputs(intent), [intent]);
+  const [outputRevision, setOutputRevision] = useState(0);
+  const outputs = useMemo(() => buildMaskRevealEditableProductionOutputs(intent), [intent, outputRevision]);
+  const resolved = resolveMaskRevealEditableIntent(intent);
+  const executionOutputs = buildMaskRevealExecutionOutputs({
+    text: resolved.text,
+    mediaLabel: resolved.mediaLabel,
+    section: intent.section,
+    intensity: resolved.intensity,
+    durationSeconds: resolved.enterDurationSeconds,
+  });
 
   function select<K extends MaskRevealEditableFieldKey>(key: K, value: MaskRevealEditableFields[K]["defaultValue"]) {
     setIntent((current) => applyHumanSelection(current, key, value));
@@ -146,12 +157,22 @@ export function MaskRevealEditableWorkspace() {
             <OutputCard label="DaVinci Finish Manifest" value={outputs.davinciFinishManifest} copied={copied} onCopy={copy} />
           </div>
         )}
+
+        <button type="button" onClick={() => setOutputRevision((current) => current + 1)} className="mt-6 w-full bg-navy-900 dark:bg-sand-100 text-white dark:text-navy-900 px-4 py-3 text-sm font-semibold">
+          AI指示を作る
+        </button>
+        <p className="mt-2 text-[11px] leading-5 text-navy-400">
+          Palmierからは実timelineのNLE XMLを書き出し、このHuman MasterのMotion Handoff Manifest JSONをsidecarとしてDaVinciへ渡します。XMLをこのアプリ側で捏造しません。
+        </p>
       </div>
 
       <div className="border-t border-sand-200 dark:border-navy-600 p-5 grid grid-cols-1 xl:grid-cols-2 gap-4">
         <OutputCard label="Human Brief" value={outputs.humanBrief} copied={copied} onCopy={copy} />
         <OutputCard label="Claude Creative Instruction" value={outputs.claudeCreativeInstruction} copied={copied} onCopy={copy} />
         <OutputCard label="Palmier Instruction" value={outputs.palmierInstruction} copied={copied} onCopy={copy} />
+        <OutputCard label="NLE XML Handoff" value={executionOutputs.nleXmlHandoff} copied={copied} onCopy={copy} />
+        <OutputCard label="DaVinci Finish Manifest" value={outputs.davinciFinishManifest} copied={copied} onCopy={copy} />
+        <OutputCard label="Verification Checklist" value={executionOutputs.verificationChecklist} copied={copied} onCopy={copy} />
         <OutputCard label="Editable Source of Truth JSON" value={outputs.editableSourceOfTruthJson} copied={copied} onCopy={copy} />
         <OutputCard label="Motion Handoff Manifest JSON" value={outputs.motionHandoffJson} copied={copied} onCopy={copy} />
         <OutputCard label="Machine JSON" value={outputs.machineJson} copied={copied} onCopy={copy} />
