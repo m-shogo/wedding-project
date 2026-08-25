@@ -75,6 +75,7 @@ pnpm dev
 - 大きな画像、動画、音源はGitに入れず、パス・メモ・採否だけ管理する。
 - ダッシュボード機能追加より実際のOpening完成を優先する。
 - `StaRt Motion Showcase` / `Director Recipe Catalog` はExtended制作・人手選定画面として相互リンク済み。詳細は `docs/start-director-recipe-system-overview.md`。
+- 初心者向けの選定→素材準備→Codex一括依頼は `StaRt Selection / Next` から進める。手順は [StaRt Extended Opening 制作ロードマップ](docs/start-extended-production-roadmap.md)。
 
 ## 優先順位
 

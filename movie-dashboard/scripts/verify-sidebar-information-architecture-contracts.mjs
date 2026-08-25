@@ -18,6 +18,7 @@ const requiredRoutes = [
   "/movie-coach/auto",
   "/movie-coach/dictionary",
   "/movie-coach/start-rhythm",
+  "/movie-coach/start-selection",
   "/movie-coach/timeline",
   "/movie-coach/color",
   "/movie-coach/audio",
@@ -60,6 +61,7 @@ for (const route of requiredRoutes) {
 
 if (!sidebar.includes('label: "Movie Coach / Today"')) errors.push("primary Movie Coach link must explain Today purpose");
 if (!sidebar.includes('label: "StaRt Rhythm Lab"')) errors.push("StaRt rhythm study must be visible in learning navigation");
+if (!sidebar.includes('label: "StaRt Selection / Next"')) errors.push("StaRt Selection Mode must expose the next production action");
 if (!sidebar.includes('label: "Opening写真11枚"')) errors.push("Opening photo intake must be visible in production navigation");
 if (!sidebar.includes('label: "Opening BGM"')) errors.push("Opening BGM intake must be visible in production navigation");
 if (!sidebar.includes('className="flex-1 p-3 overflow-y-auto"')) errors.push("grouped long navigation must remain scrollable");

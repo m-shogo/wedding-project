@@ -1,7 +1,9 @@
 # StaRt Director Recipe System — Overnight Report (Phase A〜H)
 
 Date: 2026-08-25
-Status: Phase H完了。研究トラックとしては一区切り。Opening V1（本番正本）には影響なし。
+Status: 履歴記録。現在はStaRt Extendedが本命、Opening V1は非アクティブなShort fallback。
+
+> Authority更新: このレポート作成時のV1優先順位は廃止済み。現在の制作入口はMovie Dashboardの `/movie-coach/start-selection`、実装対象は `StartExtendedOpeningRoughV1`。詳細は `docs/opening-authority.md` と `docs/start-extended-production-roadmap.md` を参照。
 
 ## 1. 完了したPhase一覧とPR / マージ済みSHA
 
@@ -101,14 +103,14 @@ handoffドキュメント（`docs/handoff/2026-08-25-codex-ab-comparison-handoff
    （`movie-dashboard` の Director Recipe Catalog 画面で候補を見比べられる）。
 4. Codex A/Bを実際に実行するかどうかを判断する。実行する場合は
    `docs/handoff/2026-08-25-codex-ab-comparison-handoff.md` のプロンプトをそのまま使える。
-5. **最優先は変わらずOpening V1（`docs/opening-v1-motion-map.md`）の実写真11枚投入**。この研究
-   トラックはOpening V1の後回しでよい並行トラック。
+5. **現在の最優先はStaRt Extended**。Selection Modeの推奨6 familyと14 sectionを起点に、
+   実素材・正規ローカル音源を `StartExtendedOpeningRoughV1` へ投入する。Opening V1はShort fallbackとして保管する。
 
 ## 14. Finalまでの残り
 
 この研究トラック単体のFinalは「97件から絞り込んだ4〜8 motion familyが、正規音源+実写真の
 下で実際にStaRt用最終素材としてrenderされ、人間が採用を確定する」まで。現時点ではその手前の
-「基盤が正しく動くことの機械的な保証」までが完了している。Opening V1本体のFinalとは別工程。
+「基盤が正しく動くことの機械的な保証」までが完了している。現在はこの研究トラックを本命制作へ昇格し、Selection Modeから実素材工程へ進める。
 
 ---
 

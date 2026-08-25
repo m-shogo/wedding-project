@@ -10,11 +10,15 @@ on:
       - "motion-studio/src/motion-kit/engines.tsx"
       - "motion-studio/src/motion-kit/directorRecipe*.ts"
       - "motion-studio/src/data/startAb*.ts"
+      - "motion-studio/src/data/startExtendedOpeningRough.ts"
+      - "motion-studio/src/compositions/common/StartExtendedOpeningRough.tsx"
       - "motion-studio/scripts/check-claude-codex-ab.mts"
       - "motion-studio/scripts/check-director-recipe-renderer.mts"
       - "motion-studio/scripts/check-director-recipe-visual-fidelity.mts"
       - "motion-studio/scripts/verify-director-visual-upgrade-artifact.mts"
       - "motion-studio/scripts/check-start-section-recipe-renderable.mts"
+      - "motion-studio/scripts/check-start-extended-opening-rough.mts"
+      - "movie-dashboard/src/data/startSelectionPlan.ts"
       - "movie-dashboard/src/data/startClaudeCodexAB.ts"
       - "movie-dashboard/src/data/directorRecipeVisualFidelity.ts"
       - ".github/workflows/start-director-review-ci.yml"
@@ -27,11 +31,15 @@ on:
       - "motion-studio/src/motion-kit/engines.tsx"
       - "motion-studio/src/motion-kit/directorRecipe*.ts"
       - "motion-studio/src/data/startAb*.ts"
+      - "motion-studio/src/data/startExtendedOpeningRough.ts"
+      - "motion-studio/src/compositions/common/StartExtendedOpeningRough.tsx"
       - "motion-studio/scripts/check-claude-codex-ab.mts"
       - "motion-studio/scripts/check-director-recipe-renderer.mts"
       - "motion-studio/scripts/check-director-recipe-visual-fidelity.mts"
       - "motion-studio/scripts/verify-director-visual-upgrade-artifact.mts"
       - "motion-studio/scripts/check-start-section-recipe-renderable.mts"
+      - "motion-studio/scripts/check-start-extended-opening-rough.mts"
+      - "movie-dashboard/src/data/startSelectionPlan.ts"
       - "movie-dashboard/src/data/startClaudeCodexAB.ts"
       - "movie-dashboard/src/data/directorRecipeVisualFidelity.ts"
       - ".github/workflows/start-director-review-ci.yml"
@@ -79,6 +87,7 @@ jobs:
           pnpm check:director-recipes
           pnpm check:director-visual-fidelity
           pnpm check:start-section-recipes
+          pnpm check:start-extended-rough
           pnpm check:claude-codex-ab
 
       - name: Director Recipe composition contract
@@ -104,6 +113,26 @@ jobs:
           path: |
             motion-studio/out/review/visual-upgrades/start_director_visual_upgrades_v1.mp4
             motion-studio/out/review/visual-upgrades/start_director_visual_upgrades_v1.ffprobe.json
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Render StaRt Extended starter rough
+        run: |
+          mkdir -p out/start-extended
+          pnpm exec remotion render src/index-director-recipes.ts StartExtendedOpeningRoughV1 \
+            out/start-extended/start_extended_opening_rough_v1.mp4 --scale=0.25 --crf=30
+          ffprobe -v error \
+            -show_entries stream=codec_name,width,height,r_frame_rate \
+            -show_entries format=duration,size \
+            -of json out/start-extended/start_extended_opening_rough_v1.mp4 | tee out/start-extended/start_extended_opening_rough_v1.ffprobe.json
+
+      - name: Upload StaRt Extended starter rough
+        uses: actions/upload-artifact@v4
+        with:
+          name: start-extended-opening-rough-v1
+          path: |
+            motion-studio/out/start-extended/start_extended_opening_rough_v1.mp4
+            motion-studio/out/start-extended/start_extended_opening_rough_v1.ffprobe.json
           if-no-files-found: error
           retention-days: 7
 

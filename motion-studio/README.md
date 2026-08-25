@@ -245,7 +245,7 @@ pnpm check:director-recipes                # 97件全件がresolve可能か + en
 近似・簡略化していること(Phase D以降の課題):
 
 - `photo-2p5d-parallax` は真の視差(前景/背景レイヤー分離)ではなく、restrained pushで近似
-- `accent-halftone-burst` / `accent-scribble-underline` / `accent-stamp-triplet` は専用ビジュアルが無く、既存のtriplet hitで近似
+- `cam-25d-parallax` / `accent-halftone-burst` / `accent-scribble-underline` / `accent-stamp-triplet` は専用ビジュアルへ更新済み。`StartDirectorVisualUpgradesV1`で4種をまとめて比較できる
 - 実写真/実動画の差し込みslotはまだプレースホルダーのみ(`DemoBackdrop` / `REAL PHOTO / VIDEO SLOT`表記)
 
 ### Preview Catalogue / Director Motion Reel / Category Reels（Phase C）

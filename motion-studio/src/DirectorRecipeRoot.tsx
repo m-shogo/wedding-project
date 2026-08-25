@@ -15,6 +15,8 @@ import {
 } from './motion-kit/directorRecipeReelSelections';
 import {startAbChorus1TimelineItems, startAbChorus1TotalFrames} from './data/startAbChorus1Timeline';
 import {startAbCodexChorus1TimelineItems, startAbCodexChorus1TotalFrames} from './data/startAbCodexChorus1Timeline';
+import {StartExtendedOpeningRough} from './compositions/common/StartExtendedOpeningRough';
+import {startExtendedOpeningRoughTotalFrames} from './data/startExtendedOpeningRough';
 
 /**
  * One Composition per Director Recipe Catalog entry, all backed by the same data-driven preview.
@@ -102,6 +104,15 @@ export function DirectorRecipeRoot() {
         fps={30}
         durationInFrames={startAbCodexChorus1TotalFrames}
         defaultProps={{items: startAbCodexChorus1TimelineItems.map((item) => ({id: item.recipeId, durationInFrames: item.durationInFrames}))}}
+      />
+
+      <Composition
+        id="StartExtendedOpeningRoughV1"
+        component={StartExtendedOpeningRough}
+        width={1920}
+        height={1080}
+        fps={30}
+        durationInFrames={startExtendedOpeningRoughTotalFrames}
       />
     </>
   );

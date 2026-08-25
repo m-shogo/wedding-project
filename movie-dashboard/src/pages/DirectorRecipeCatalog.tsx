@@ -18,12 +18,15 @@ import {
   getDirectorRecipeVisualAudit,
   type DirectorVisualFidelity,
 } from "../data/directorRecipeVisualFidelity";
+import {
+  readHumanReviewDecisions,
+  writeHumanReviewDecisions,
+  type HumanReviewDecision,
+} from "../data/startHumanReview";
 
 const ALL = "ALL" as const;
 type Filter<T> = T | typeof ALL;
-type HumanReviewDecision = "favorite" | "maybe" | "reject";
-
-const HUMAN_REVIEW_STORAGE_KEY = "start-director-human-decisions-v1";
+type HumanReviewFilter = HumanReviewDecision | "unreviewed";
 
 const categoryLabels: Record<DirectorRecipeCategory, string> = {
   CINEMATIC_CAMERA: "Cinematic Camera",
@@ -84,16 +87,13 @@ export function DirectorRecipeCatalog() {
   const [intensity, setIntensity] = useState<Filter<DirectorRecipeIntensity>>(ALL);
   const [status, setStatus] = useState<Filter<DirectorRecipeStatus>>(ALL);
   const [fidelity, setFidelity] = useState<Filter<DirectorVisualFidelity>>(ALL);
+  const initialHumanReview = searchParams.get("human");
+  const [humanReview, setHumanReview] = useState<Filter<HumanReviewFilter>>(
+    initialHumanReview === "favorite" || initialHumanReview === "maybe" || initialHumanReview === "reject" || initialHumanReview === "unreviewed" ? initialHumanReview : ALL,
+  );
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [copiedId, setCopiedId] = useState<string | null>(null);
-  const [humanDecisions, setHumanDecisions] = useState<Record<string, HumanReviewDecision>>(() => {
-    try {
-      const saved = window.localStorage.getItem(HUMAN_REVIEW_STORAGE_KEY);
-      return saved ? JSON.parse(saved) as Record<string, HumanReviewDecision> : {};
-    } catch {
-      return {};
-    }
-  });
+  const [humanDecisions, setHumanDecisions] = useState<Record<string, HumanReviewDecision>>(readHumanReviewDecisions);
 
   const filtered = useMemo(
     () =>
@@ -104,9 +104,10 @@ export function DirectorRecipeCatalog() {
         (section === ALL || recipe.recommendedStaRtSections.includes(section)) &&
         (intensity === ALL || recipe.intensity.includes(intensity)) &&
         (status === ALL || recipe.status === status) &&
-        (fidelity === ALL || getDirectorRecipeVisualAudit(recipe).fidelity === fidelity),
+        (fidelity === ALL || getDirectorRecipeVisualAudit(recipe).fidelity === fidelity) &&
+        (humanReview === ALL || (humanReview === "unreviewed" ? !humanDecisions[recipe.id] : humanDecisions[recipe.id] === humanReview)),
       ),
-    [category, energy, source, section, intensity, status, fidelity],
+    [category, energy, source, section, intensity, status, fidelity, humanReview, humanDecisions],
   );
 
   const selected = useMemo(
@@ -126,11 +127,7 @@ export function DirectorRecipeCatalog() {
       const next = {...current};
       if (next[recipeId] === decision) delete next[recipeId];
       else next[recipeId] = decision;
-      try {
-        window.localStorage.setItem(HUMAN_REVIEW_STORAGE_KEY, JSON.stringify(next));
-      } catch {
-        // The UI state still works for this session when storage is unavailable or full.
-      }
+      writeHumanReviewDecisions(next);
       return next;
     });
   }
@@ -198,7 +195,7 @@ export function DirectorRecipeCatalog() {
         </div>
       </section>
 
-      <section className="mb-7 grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-7 gap-3 border-b border-sand-200 dark:border-navy-600 pb-5">
+      <section className="mb-7 grid grid-cols-2 md:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-8 gap-3 border-b border-sand-200 dark:border-navy-600 pb-5">
         <label className="text-[10px] tracking-[0.2em] font-semibold text-navy-400">CATEGORY
           <select value={category} onChange={(e) => setCategory(e.target.value as Filter<DirectorRecipeCategory>)} className="mt-1 block w-full border border-sand-300 dark:border-navy-600 bg-white dark:bg-navy-800 px-3 py-2 text-sm text-navy-800 dark:text-sand-100">
             <option value={ALL}>ALL</option>
@@ -248,6 +245,15 @@ export function DirectorRecipeCatalog() {
             <option value="exact">{fidelityLabels.exact}</option>
             <option value="representative">{fidelityLabels.representative}</option>
             <option value="placeholder">{fidelityLabels.placeholder}</option>
+          </select>
+        </label>
+        <label className="text-[10px] tracking-[0.2em] font-semibold text-navy-400">HUMAN REVIEW
+          <select value={humanReview} onChange={(e) => setHumanReview(e.target.value as Filter<HumanReviewFilter>)} className="mt-1 block w-full border border-sand-300 dark:border-navy-600 bg-white dark:bg-navy-800 px-3 py-2 text-sm text-navy-800 dark:text-sand-100">
+            <option value={ALL}>ALL</option>
+            <option value="favorite">Favoriteのみ</option>
+            <option value="maybe">Maybeのみ</option>
+            <option value="reject">Rejectのみ</option>
+            <option value="unreviewed">未レビューのみ</option>
           </select>
         </label>
       </section>

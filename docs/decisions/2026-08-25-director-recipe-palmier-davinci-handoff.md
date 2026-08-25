@@ -1,7 +1,7 @@
 # Director Recipe Catalog Phase F — Palmier handoff export / DaVinci skillマッピング
 
 日付: 2026-08-25
-状態: 完了（研究トラック。Opening V1の正本ではない）
+状態: 履歴記録（現在はStaRt Extended本命制作の補助資料。現行入口は `/movie-coach/start-selection`）
 
 ## 背景
 

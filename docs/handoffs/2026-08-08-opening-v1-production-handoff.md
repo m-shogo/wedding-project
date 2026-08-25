@@ -1,5 +1,7 @@
 # Opening V1 production handoff — 2026-08-08
 
+> **SUPERSEDED / 履歴資料:** このhandoffのV1優先順位は廃止済み。現在の本命はStaRt Extended、V1は非アクティブなShort fallback。現行手順は `docs/opening-authority.md` と `docs/start-extended-production-roadmap.md` を参照。
+
 ## 目的
 
 2026-10-24の結婚式で実上映するオープニングムービーを完成させる。

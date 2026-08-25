@@ -7,6 +7,7 @@ const data = fs.readFileSync(path.join(root, "src/data/directorRecipeCatalog.ts"
 const motionKit = fs.readFileSync(path.join(root, "src/data/startMotionKit.ts"), "utf8");
 const rhythmMap = fs.readFileSync(path.join(root, "src/data/startExtendedRhythmMap.ts"), "utf8");
 const page = fs.readFileSync(path.join(root, "src/pages/DirectorRecipeCatalog.tsx"), "utf8");
+const humanReview = fs.readFileSync(path.join(root, "src/data/startHumanReview.ts"), "utf8");
 const fidelityAudit = fs.readFileSync(path.join(root, "src/data/directorRecipeVisualFidelity.ts"), "utf8");
 const errors = [];
 
@@ -93,7 +94,7 @@ requireText(data, "getDirectorRecipeById", "id lookup helper missing");
 requireText(fidelityAudit, 'export type DirectorVisualFidelity = "exact" | "representative" | "placeholder"', "visual fidelity audit levels missing");
 requireText(page, "getDirectorRecipeVisualAudit", "catalog UI must expose visual fidelity truth");
 requireText(page, "VISUAL FIDELITY", "catalog UI visual fidelity filter missing");
-requireText(page, "start-director-human-decisions-v1", "human review localStorage namespace missing");
+requireText(humanReview, "start-director-human-decisions-v1", "human review localStorage namespace missing");
 requireText(page, "aria-pressed", "human review controls must expose selected state");
 if (/button disabled[^>]*>[^<]*(Favorite|Maybe|Reject)/.test(page)) errors.push("human review controls must be functional, not disabled placeholders");
 

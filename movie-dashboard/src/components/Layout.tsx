@@ -10,6 +10,7 @@ import { saveToLocal } from "../lib/exporters";
 export function Layout() {
   const [showSearch, setShowSearch] = useState(false);
   const [showShortcuts, setShowShortcuts] = useState(false);
+  const [showMobileNavigation, setShowMobileNavigation] = useState(false);
   const { undo, redo, getAllData } = useProduction();
   const { addToast } = useToast();
   const location = useLocation();
@@ -50,8 +51,19 @@ export function Layout() {
 
   return (
     <div className="flex min-h-screen">
-      <Sidebar />
-      <main className="flex-1 p-8 overflow-auto dark:bg-navy-900">
+      <button
+        type="button"
+        onClick={() => setShowMobileNavigation(true)}
+        className="fixed left-3 top-3 z-30 rounded border border-sand-300 bg-white px-3 py-2 text-sm font-bold text-navy-800 shadow md:hidden dark:border-navy-600 dark:bg-navy-800 dark:text-sand-100"
+        aria-label="メニューを開く"
+      >
+        ☰ メニュー
+      </button>
+      {showMobileNavigation && <button type="button" aria-label="メニューを閉じる" onClick={() => setShowMobileNavigation(false)} className="fixed inset-0 z-30 bg-black/40 md:hidden" />}
+      <div className={`${showMobileNavigation ? "fixed" : "hidden"} inset-y-0 left-0 z-40 md:static md:block`}>
+        <Sidebar onNavigate={() => setShowMobileNavigation(false)} />
+      </div>
+      <main className="min-w-0 flex-1 overflow-auto p-4 pt-16 md:p-8 dark:bg-navy-900">
         {location.pathname === "/" && <MovieCoachNowBar />}
         <Outlet />
       </main>
