@@ -7,8 +7,8 @@ Figma file: `bfM0d4c9dCeBv5pCkJ3TNM`
 Study page: `2052:2 / 07_RURUBU_V7_V8_PRO_STUDIES`
 
 V6 control: frozen `JC + IX + JB + IZ + IT + JA`
-V7 comparison: `C8 + K4 + F4 + G9 + H10 + C6E`
-Production state: `V8_AV5+AW8+AL5+AQ7+AS7+AT6 / DISTINCT_BOOK_EDITORIAL_SYSTEM / UNPAGINATED_STUDY / SOURCE-PLAN-TRUTH-GATED / SECTION-ORDER-TRUTH-GATED / PERSONAL-CONTENT-TRUTH-GATED / PHOTO-SOURCE-TRUTH-GATED / REAL_CONTENT_BLOCKED / NOT_GLOBAL_WINNER / NOT_PRINT_READY`
+V7 comparison: `C8 + K5 + F4 + G9 + H10 + C6E`
+Production state: `V8_AV5+AW8+AL5+AQ7+AS7+AT6 / DISTINCT_BOOK_EDITORIAL_SYSTEM / UNPAGINATED_STUDY / SOURCE-PLAN-TRUTH-GATED / SECTION-ORDER-TRUTH-GATED / PERSONAL-CONTENT-TRUTH-GATED / PHOTO-SOURCE-TRUTH-GATED / CAFE_SINGLE-DINING-ESSAY-DIRECTION / REAL_CONTENT_BLOCKED / NOT_GLOBAL_WINNER / NOT_PRINT_READY`
 
 ## Current live V8 comparison set
 
@@ -17,51 +17,42 @@ Production state: `V8_AV5+AW8+AL5+AQ7+AS7+AT6 / DISTINCT_BOOK_EDITORIAL_SYSTEM /
 3. **Story/Chronology AL5 `2500:2`** — six-milestone truth-safe dummy chronology; intro copy no longer promises a photo-browsing experience when the spread contains no photography.
 4. **Memory/Guide AQ7 `2449:2`** — grounded four-place memory essay; unverified place-photo dummies withheld; text-only closing cadence verified locally.
 5. **Cafe/Table AS7 `2454:25`** — restrained composition retained; place-specific close no longer authenticates the non-final dining photo. REAL-PHOTO-BLOCKED.
-6. **1DAY AT6 `2510:2`** — grounded planning-memo transcript. Uses the same identified 2025 Hawaii plan source as V7 C6E, but translates it independently into a restrained book-design system: date-led opening, three unequal time/place beats, small source-grounded logistics, no unverified place photography, and no route-map simulation.
+6. **1DAY AT6 `2510:2`** — grounded planning-memo transcript using the same source condition as V7 C6E but a materially different restrained book system.
 
-## Latest verified improvement — AT6 grounded planning-memo book transcript
+## V8 Cafe/Table photo direction — single dining essay
 
-AT5 `2434:134` was structurally clean and restrained but generic: `朝 / 海辺 → 昼 / カフェ → 午後 / 街歩き → 夜 / 食卓`. After V7 C6E was grounded in an identified 2025 Hawaii planning memo, this also made the 1DAY comparison content-condition unequal.
+New live photo-art-direction authority: **`2527:2`** at study page `2052:2`.
+AS7 production remains unchanged.
 
-The live Drive document `ハワイ🌺` (`1tuFgCN63Z9Fnadr7qKy6enDZ0fAfTEmRiG2tKLE4UYg`) was re-read before the experiment. Relevant plan entries are `5:00–5:15 hotel pickup → 6:00 Diamond Head → 7:40 KCC Farmers Market → 9:00 hotel return`, plus a planned `16:00–22:00` Kalakaua Avenue event on 2025-11-08. These are **planning-source facts**, not proof that the trip occurred exactly as planned and not current operating-condition authority.
+V8 deliberately does **not** inherit V7's three-photo Cafe/Table set. The V8 hypothesis is one observational dining image that functions like a paragraph in the book:
 
-Fresh professional research rotated to sequence-as-record. MoMA documents Ed Ruscha's *Every Building on the Sunset Strip* (1966) as an accordion artist's book whose continuous format follows a systematically recorded stretch of Los Angeles; Getty preserves the contact sheets and production archive. No Ruscha visual styling is copied. The bounded Rurubu hypothesis was: **a book-design 1DAY spread can let a real source sequence determine temporal cadence without copying V7's dense travel-guide grammar or drawing a UI timeline.**
+- first read: something genuinely appetizing;
+- second read: one human gesture / shared-meal clue, without requiring faces;
+- third read: plate, light, room or place atmosphere;
+- left page remains text-led sensory memory;
+- right page receives one photo essay and then the closing cadence.
 
-AT6 uses:
-- `2025.11.08`
-- `旅行計画メモ / 2日目`
-- `一日を、三つの時刻で残す。`
-- `5:00–5:15 ホテル迎え予定 / 9:00 ホテル帰着予定`
-- `ハワイ / 一日の計画`
-- `早朝の山から、夕方の街へ。`
-- `6:00 ダイヤモンドヘッド`
-- `7:40 KCCファーマーズマーケット`
-- `16:00 カラカウア通り`
-- source-state footer: `2025年の旅行計画メモをもとに構成。予約・開催・時刻は出発前に再確認。`
+The current AS7 `500×330` image slot is explicitly a dummy geometry, not a final photo contract. Select the photograph first, then decide area and crop. Candidate families must be materially different: appetite-led / gesture-led / atmosphere-led. Choose only if one frame can carry `food / gesture / place` without breaking the quiet book rhythm.
 
-The structural waterfront dummy and generic fourth daypart row are withheld. The first AT6 pass became too empty after photo removal; instead of restoring unverified imagery or adding decoration, the source was re-read and the grounded pickup/return logistics were added as a small secondary note.
+Source-truth gate uses the same complete source audit as V7: all **001–036 / 36 Hawaii wedding photographs** were inspected, and 0 supply food/plate/drink/interior/eating-hands evidence. Do not repurpose portrait/beach/waterfront wedding photography into AS7 merely because it is destination-true.
 
-QA:
-- 500px whole-item: PASS
-- 1400px reading/page: PASS
-- 1587×1123 actual-size/detail: DESIGN QA PASS
-- visible native text `15`
-- visible IMAGE fills `0`
-- text intersections `0`
-- 18px edge risks `0`
-- Japanese→Inter mismatch `0`
-- parent `2052:2`
-- current V7/V8 root overlap `0`
+### Production failure learned while building the authority
 
-Promotion:
-- AT6 `2510:2` current at `x=3600 / y=9850`
-- AT5 `2434:134` hidden rollback at `x=300000`
+The first `2527:2` build used auto-layout rows with intended `textAutoResize=HEIGHT`, but each text/row remained fixed at `10px`; screenshot QA showed severe clipping despite successful node creation. The broken state was not accepted.
 
-Evidence:
-`01_paper-items/rurubu-wedding/evidence/RURUBU-V8-AT6-GROUNDED-PLANNING-MEMO-BOOK-TRANSCRIPT-QA-2026-08-25.md`
+Method switched immediately: explicit safe row/text heights, transparent row frames, fixed width, and screenshot/readback QA. The repaired authority now passes:
 
-Learning:
-`RSL-268 / VERIFIED_LOCAL_MULTI-SYSTEM → CROSS_ITEM_CANDIDATE` — an identified planning source can improve both a dense guide system and a restrained book system without forcing one visual grammar. The transferable principle is source-state discipline + content-owned sequence, not V7/V8 layout, color, spacing or typography.
+- screenshot `1400×1080`: PASS;
+- visible native text `20`;
+- text intersections `0`;
+- bottom reserve `214px`;
+- parent `2052:2`.
+
+This is production knowledge, not a V8 visual rule. Do not infer that fixed heights are universally preferred; the lesson is to verify actual text geometry after auto-layout authoring and switch methods when the intended auto-height contract does not materialize.
+
+## Current 1DAY condition
+
+AT6 remains unchanged. Drive source `ハワイ🌺` (`1tuFgCN63Z9Fnadr7qKy6enDZ0fAfTEmRiG2tKLE4UYg`) is a 2025 travel **planning memo**, not a completed-trip diary. V7 C6E and V8 AT6 share the source condition but keep different design grammars. RSL-268 remains `VERIFIED_LOCAL_MULTI-SYSTEM → CROSS_ITEM_CANDIDATE`.
 
 ## Retained gates
 
@@ -74,7 +65,8 @@ Learning:
 - RSL-258: cloned-frame text mutation uses visible semantic roles + exactly-one-match/readback.
 - RSL-262: grounded/place-specific copy must not authenticate unverified imagery.
 - RSL-267: reader-facing copy must not falsely promise missing media/interaction.
-- RSL-268: planning-source truth is distinct from completed-event truth and may drive different editorial systems independently.
+- RSL-268: planning-source truth is distinct from completed-event truth.
+- RSL-270: destination/source truth does not substitute for exact editorial-role fit.
 - unverified folios stay withheld until final page count/order/imposition exist.
 - schematic route graphics stay excluded until verified geography exists.
 
@@ -84,16 +76,19 @@ V8 authority: `1IKYF-YI6EbEe7qQCVQjClztpQA8CoRIo / RURUBU_V8_EDITORIAL_MONOGRAPH
 V7 comparison authority: `1fHt2rf5jvTWyjkmpGu3KhEgjQEiUNV6x / RURUBU_V7_HAWAII_PRO_CLEANROOM_2026-08-21`
 Grounded planning source: `1tuFgCN63Z9Fnadr7qKy6enDZ0fAfTEmRiG2tKLE4UYg / ハワイ🌺`.
 
-This pass: image generation `0`; Drive writes `0`; new Drive masters `0`; new image hashes `0`; final photography `0`; V6 changes `0`; V7 production changes `0`.
+The V8 Drive folder still contains only the five pre-existing schematic masters (`ocean_light`, `contact_proof`, `contour_atlas`, `table_essay`, `day_foldout`). None is promoted to final photography.
+
+This pass: image generation `0`; Drive writes `0`; new Drive masters `0`; new image hashes `0`; production photo placement `0`; final photography `0`; V6 changes `0`; V7 production changes `0`. Figma write: new non-current V8 Cafe/Table photo authority `2527:2`, repaired after a detected clipping failure.
 
 ## Truth / completion gates
 
-V8 remains REAL-CONTENT-BLOCKED and NOT PRINT READY. AT6 is `REAL-CONTENT-PARTIAL`: date/times/stops are source-grounded as a plan, not verified completed-trip history. DESIGN QA is separate from REAL CONTENT QA, printer-template/preflight QA and PHYSICAL PROOF.
+V8 remains REAL-CONTENT-BLOCKED and NOT PRINT READY. DESIGN QA is separate from REAL CONTENT QA, printer-template/preflight QA and PHYSICAL PROOF.
 
 ## Next highest-value work
 
 1. Preserve frozen V6 and all rollback/rejected evidence.
-2. Highest visual bottlenecks remain legitimate role-specific photography: V8 AV5 Outer, V7 H10 Cafe/Table, AS7 Cafe/Table and Memory roles.
-3. Keep V7 C6E and V8 AT6 on the same source condition for comparison; do not normalize their visual grammar.
-4. Select/edit legitimate photography before final crop/area; do not force final images into dummy-frame geometry.
-5. Continue six-role V6/V7/V8 sequence review; do not create V9 merely to continue activity.
+2. Produce/select **V8 AS7 single-dining-essay** candidates independently from V7 H10's three-photo set.
+3. For V7 H10, compare the three distinct photo jobs as a set; for V8 AS7, compare materially different single-frame essays.
+4. Select/edit legitimate photography before final crop/area; never force final images into dummy geometry.
+5. Highest remaining visual bottlenecks: V8 AV5 Outer, V7 H10 Cafe/Table, V8 AS7 Cafe/Table, then Memory roles.
+6. Continue six-role V6/V7/V8 comparison; do not create V9 merely to continue activity.
