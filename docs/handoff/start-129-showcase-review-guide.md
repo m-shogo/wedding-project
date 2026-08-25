@@ -4,7 +4,7 @@
 
 ## 今の状態を先に理解する
 
-- 実写真・実音源・正規歌詞は**まだ入っていない**。すべてplaceholder(抽象背景+「歌詞スロットNN」)。
+- 写真はPexels(無料ストック)由来のダミー素材が入っている。**新郎新婦本人の写真ではない**。正規実写真・実音源・正規歌詞は引き続き**未投入**(歌詞は「歌詞スロットNN」のplaceholder)。
 - 3案は「完成映像」ではなく「編集文法の比較サンプル」。
 - movie-dashboardの比較画面(クリックで見比べる用)は**まだ無い**。今はRemotion Studio上、またはrenderしたmp4/stillで見る。
 
@@ -51,8 +51,9 @@ pnpm qa:start-129
 1. `motion-studio/local/lyrics.local.json` に正規歌詞32句を書き写す(schemaは`src/data/start129/localLyrics.ts`参照)
 2. `motion-studio/local/audio/start-129.mp3`(または.wav/.m4a/.aac)に権利確認済み音源を置く
 3. `pnpm sync:start-129-local` を実行(歌詞/音源をplaceholderから実データへ切り替える)
-4. `PEXELS_API_KEY`を設定し、`python3 scripts/fetch-start-129-demo-assets.py --role <ROLE> --count 3`で候補を見てから`--write`で取得、目視確認後`pnpm sync:start-129-demo-assets`
-5. 気に入った演出・区間をメモし、次のClaude/Codexセッションへ「この演出をA案の◯◯区間からExtended本番へ移植して」のように具体的に依頼する
+4. (任意)ダミー素材をPexelsの別候補へ差し替えたい場合は`python3 scripts/fetch-start-129-demo-assets.py --role <ROLE> --count 3`で候補確認→`--write`で取得→目視確認→`pnpm sync:start-129-demo-assets`。`PEXELS_API_KEY`は`motion-studio/local/.env`に設定済み(Git管理外)
+5. 本番写真(新郎新婦本人)に差し替える場合は、Pexelsダミーを`public/demo/start-129/<ROLE>/`から入れ替えるか、別のroleディレクトリ運用へ切り替える
+6. 気に入った演出・区間をメモし、次のClaude/Codexセッションへ「この演出をA案の◯◯区間からExtended本番へ移植して」のように具体的に依頼する
 
 ## Claude/Codexへ渡す修正依頼の書き方(例)
 

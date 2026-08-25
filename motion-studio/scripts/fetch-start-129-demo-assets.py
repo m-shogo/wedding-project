@@ -62,9 +62,13 @@ VIDEO_ROLES = {"MOVEMENT_LEFT_TO_RIGHT", "MOVEMENT_RIGHT_TO_LEFT", "BROLL_WALK",
 
 
 def pexels_search(query: str, count: int, media: str, api_key: str) -> list[dict]:
-    endpoint = "videos/search" if media == "video" else "search"
-    url = f"https://api.pexels.com/{'videos/' if media == 'video' else ''}search?query={urllib.parse.quote(query)}&per_page={count}"
-    req = urllib.request.Request(url, headers={"Authorization": api_key})
+    base = "https://api.pexels.com/videos/search" if media == "video" else "https://api.pexels.com/v1/search"
+    url = f"{base}?query={urllib.parse.quote(query)}&per_page={count}"
+    # Cloudflare WAF (error 1010) blocks the default Python-urllib user-agent; use a normal one.
+    req = urllib.request.Request(
+        url,
+        headers={"Authorization": api_key, "User-Agent": "Mozilla/5.0 (wedding-project start-129 fetch script)"},
+    )
     with urllib.request.urlopen(req, timeout=20) as resp:
         data = json.loads(resp.read().decode("utf-8"))
     return data.get("videos" if media == "video" else "photos", [])
@@ -72,7 +76,9 @@ def pexels_search(query: str, count: int, media: str, api_key: str) -> list[dict
 
 def download(url: str, dest: Path) -> None:
     dest.parent.mkdir(parents=True, exist_ok=True)
-    urllib.request.urlretrieve(url, dest)
+    req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (wedding-project start-129 fetch script)"})
+    with urllib.request.urlopen(req, timeout=30) as resp, dest.open("wb") as f:
+        f.write(resp.read())
 
 
 def record_provenance(role: str, row: dict) -> None:

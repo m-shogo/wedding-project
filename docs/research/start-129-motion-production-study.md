@@ -31,11 +31,12 @@ Blackmagic Design公式トレーニング、W3C contrast/av accessibility、Pexe
 | B案: 手描きunderline + speed line + panel grid | render・目視。"StaRt!"/"再スタート"のword hitとunderlineが意図通り表示 |
 | C案: ベースライン走査 + 漢字かな階層 | render・目視。placeholder歌詞でも階層(漢字やや大きく/太く)が視認できた |
 | 解説付き(Guide)モードのミニガイド | 3案ともrender確認。ただしcontrast比の自動計測(4.5:1/3:1目標)は未実装。目視で可読とだけ確認 |
+| 無料ダミー素材(Pexels公式API)を15role分取得 | ユーザー提供の`PEXELS_API_KEY`で実取得。20枚を目視し、動物2枚・読める看板密集1枚・識別可能な顔portrait1枚・群衆デモ動画1枚を不採用として差し替え。B案panel gridが同一写真4連打にならないよう、SEOUL_STREET/DETAIL_HANDは2枚ずつ確保 |
 
 ## 未実施・既知の制約
 
-- 正規ローカル音源・歌詞・実写真は未投入(`docs/opening-authority.md`の`AUDIO_BLOCKED`/`MEDIA_BLOCKED`と同じ制約)
-- 無料ダミー素材は取得スクリプト(`scripts/fetch-start-129-demo-assets.py`)のみ実装。`PEXELS_API_KEY`未設定のため実取得は未実行
+- 正規ローカル音源・歌詞・正規実写真(新郎新婦本人)は未投入(`docs/opening-authority.md`の`AUDIO_BLOCKED`/`MEDIA_BLOCKED`と同じ制約)。今回投入したのはPexels由来の無料ダミー素材であり、本番写真ではない
 - movie-dashboardの比較UI画面は未実装
 - Technique Catalogの大半は`ISOLATED`/`CONTEXT_TESTED`止まりで、`PRODUCTION_READY`まで昇格したものは無い
 - contrast比・点滅回数の機械的な自動測定は未実装(目視確認のみ)
+- ダミー素材は15role中11roleが1枚のみ。B案panel gridで使う2role以外は多様性が乏しい
