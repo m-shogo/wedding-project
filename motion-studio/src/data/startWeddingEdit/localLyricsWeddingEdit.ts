@@ -37,6 +37,41 @@ export const RhythmTypeSchema = z.enum([
   'ending',
 ]);
 
+export const SelectedAnimationSchema = z.enum([
+  'character-build',
+  'word-hit',
+  'three-hit-build',
+  'held-note-stretch',
+  'whisper-reveal',
+  'impact-word',
+  'split-conflict',
+  'question-pause',
+  'repetition-echo',
+  'baseline-travel',
+  'type-mask',
+  'foreground-reveal',
+  'lyric-to-transition',
+  'chorus-burst',
+  'call-and-response-layout',
+  'ending-dissolve',
+]);
+
+export const TransitionIntentSchema = z.enum([
+  'hard-cut',
+  'dissolve',
+  'flash-cut',
+  'gather-cut',
+  'route-open',
+  'chorus-burst-in',
+  'photo-panel-open',
+  'split-merge',
+  'chorus-hold',
+  'collision-cut',
+  'motif-callback',
+  'type-mask-open',
+  'hero-hold',
+]);
+
 export const LyricPhraseSchema = z.object({
   phraseId: z.string().regex(/^P\d{3}$/),
   lineNumber: z.number().int().min(1),
@@ -48,6 +83,14 @@ export const LyricPhraseSchema = z.object({
   threeHitFrameSecs: z.tuple([z.number(), z.number(), z.number()]).nullable(),
   rhythmType: RhythmTypeSchema,
   semanticType: SemanticTypeSchema,
+  /** Phase2(2026-08-26): 意味主導で明示選定したanimation family。旧実装のtext正規表現推測を置き換える。 */
+  selectedAnimation: SelectedAnimationSchema.optional(),
+  transitionIntent: TransitionIntentSchema.optional(),
+  /** phrase内で情報量を落とさず保持する終盤の秒(相対ではなく絶対秒)。 */
+  holdSec: z.number().optional(),
+  exitSec: z.number().optional(),
+  confidence: z.enum(['high', 'medium', 'low']).optional(),
+  humanReviewRequired: z.boolean().optional(),
   /**
    * 人間可読/編集可能契約(docs/contracts/human-readable-editable-movie-contract.md)。
    * 未指定はAI_SUGGESTED相当。HUMAN_SELECTED/LOCKEDはAIが無断で上書きしない。

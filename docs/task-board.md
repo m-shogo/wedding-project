@@ -212,6 +212,21 @@ Later（正規音源・実写真が来てから）:
 - 実写真が来たら、Director Recipe Previewのプレースホルダー（`DemoBackdrop` / `REAL PHOTO / VIDEO
   SLOT`）をsource slotへ差し替える（現状はダミー素材のみのMEDIA_BLOCKED状態）。
 
+## StaRt Wedding Edit（feature/start-129-three-showcases、比較研究ブランチ）
+
+Extended/Shortとは別枠の研究branch。曲頭〜2番サビ後の間奏まで(実測145.6秒)を
+実音源・実歌詞・Palmier Pro on-device beat detectionで音楽主導のA/B/C 3案として
+実装している。詳細は `docs/decisions/2026-08-25-start-wedding-edit-scope-change.md`。
+
+2026-08-26時点:
+
+- 冒頭は「ようこそ」ではなく実測beatに同期した「S→StaRt」文字組み立てへ再構築済み
+- 歌詞30 phraseすべてにselectedAnimation(12種類使用、character-build 20%)を明示付与
+- Palmier Proのbeat detection(bpm=187.5実測)で3-hit等の主要点を実測beatへスナップ
+- 誰も音声付きで通し視聴による最終確認はしていない（humanReviewRequired=true）
+- render: `motion-studio/out/start-wedding-edit-final-v2/`
+- 未pushのローカルブランチ。mainへは影響しない
+
 ## Legacy / Reference
 
 以下は過去検討として残すが、現在の制作指示には使わない:

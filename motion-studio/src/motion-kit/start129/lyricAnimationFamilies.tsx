@@ -179,17 +179,18 @@ export const SplitConflict: React.FC<{left: string; right: string; startFrame: n
 };
 
 /** 8. Question Pause: 疑問のphraseで文字が途中停止し、余白を残す。 */
-export const QuestionPause: React.FC<{text: string; startFrame: number; pauseFrame: number; fontSize?: number}> = ({
-  text,
-  startFrame,
-  pauseFrame,
-  fontSize = 52,
-}) => {
+export const QuestionPause: React.FC<{
+  text: string;
+  startFrame: number;
+  pauseFrame: number;
+  fontSize?: number;
+  color?: string;
+}> = ({text, startFrame, pauseFrame, fontSize = 52, color = '#FDFBF5'}) => {
   const f = useCurrentFrame();
   const chars = Array.from(text);
   const visibleCount = f < pauseFrame ? Math.min(chars.length, Math.floor((f - startFrame) / 3)) : chars.length;
   return (
-    <span style={baseTextStyle(fontSize, '#FDFBF5', 500)}>
+    <span style={baseTextStyle(fontSize, color, 500)}>
       {chars.slice(0, Math.max(0, visibleCount)).join('')}
       <span style={{opacity: f >= startFrame && f < pauseFrame ? 0.4 : 0}}>_</span>
     </span>

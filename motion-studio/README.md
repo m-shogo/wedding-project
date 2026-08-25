@@ -443,6 +443,36 @@ python3 scripts/fetch-start-129-demo-assets.py --role HERO_WIDE --count 3 --writ
 pnpm sync:start-129-demo-assets                                                     # 目視確認後、Remotionへ反映
 ```
 
+## StaRt Wedding Edit(音楽主導版。129秒固定を撤回した実装)
+
+`Start129`(上記、129秒/14 section/歌詞32 slot固定)は旧仕様。Wedding Editは
+「曲の先頭〜2番サビ後の間奏が終わる地点」を実測(2026-08-26時点145.6秒)で使う、
+Palmier Pro on-device beat detectionによる実測beat同期版。詳細:
+`../docs/decisions/2026-08-25-start-wedding-edit-scope-change.md`。
+
+- 実音源: `motion-studio/local/audio/StaRt.m4a`(gitignore済み)
+- 実歌詞: 1〜37行目(2回目「僕は探すんだ」まで)を30 phraseとして可変長timing
+- 冒頭は「S→StaRt」を実測beatへ同期させて組み立てる(旧「ようこそ」は削除)
+- 歌詞animation familyは12種類を実使用(character-build 20%、3連続同一familyなし):
+  character-build / word-hit / three-hit-build / held-note-stretch / whisper-reveal /
+  impact-word / split-conflict / question-pause / repetition-echo / baseline-travel /
+  type-mask / foreground-reveal
+- ローカルデータ: `local/{structure,phrase,word-accent,beat,transition}-map.local.json`
+  (すべてgitignore済み。`verifiedByListening: false` — 人間の聴取による最終確認は未実施)
+
+```sh
+pnpm sync:start-wedding-edit-local        # 音源trim + データ検証 + generated.ts更新
+pnpm dev:start-wedding-edit                # Studioで6 Composition確認
+pnpm render:start-wedding-edit:v2          # フル解像度6本 → out/start-wedding-edit-final-v2/
+pnpm typecheck
+pnpm check:start-wedding-edit-phrase-qa    # 歌詞データ契約(coverage/family分布/StaRt完成)
+node --no-warnings scripts/check-start-wedding-edit-render-qa.mts --dir=out/start-wedding-edit-final-v2
+```
+
+既知の限界: 音声を人間が聴取して確認したものではない(この環境に聴取手段が無い)。
+Type Maskは実shot連動ではなく固定写真を使用。Lyric-to-Transition / Call-and-Response
+Layout / Ending Dissolveは独立animation familyとしては未実装。
+
 ## 関連
 
 - `../docs/task-board.md`

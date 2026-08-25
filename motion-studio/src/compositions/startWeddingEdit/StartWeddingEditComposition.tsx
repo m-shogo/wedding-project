@@ -83,6 +83,37 @@ export const StartWeddingEditComposition: React.FC<StartWeddingEditCompositionPr
       })}
 
       <WeddingLyricTrack phrases={weddingEditLyricPhrases} variant={variant} />
+
+      {reviewMode
+        ? weddingEditLyricPhrases.map((p) => {
+            const from = Math.round(p.startSec * 30);
+            const dur = Math.max(1, Math.round(p.endSec * 30) - from);
+            return (
+              <Sequence key={`guide-${p.phraseId}`} from={from} durationInFrames={dur} name={`guide-${p.phraseId}`}>
+                <AbsoluteFill style={{pointerEvents: 'none'}}>
+                  <div
+                    style={{
+                      position: 'absolute',
+                      top: 24,
+                      right: 24,
+                      color: '#0F0',
+                      background: 'rgba(0,0,0,0.55)',
+                      padding: '4px 10px',
+                      fontFamily: 'monospace',
+                      fontSize: 13,
+                      lineHeight: 1.5,
+                      textAlign: 'right',
+                    }}
+                  >
+                    <div>{p.phraseId} {p.startSec.toFixed(2)}s-{p.endSec.toFixed(2)}s</div>
+                    <div>{p.selectedAnimation ?? 'character-build'}</div>
+                    <div>conf:{p.confidence ?? '?'}</div>
+                  </div>
+                </AbsoluteFill>
+              </Sequence>
+            );
+          })
+        : null}
     </AbsoluteFill>
   );
 };
