@@ -35,6 +35,9 @@ for (const [source, token, message] of [
   [page, "/06_videos/opening/", "StaRt video source folder missing"],
   [page, "/07_music/candidates/", "StaRt candidate audio folder missing"],
   [page, "/07_music/licensed/", "StaRt licensed audio folder missing"],
+  [page, "Finderで ⌘⇧G", "Finder navigation tip missing"],
+  [page, "素材投入Tips", "asset intake beginner tips missing"],
+  [page, "Remotionの", "runtime handoff explanation missing"],
   [app, 'path="movie-coach/start-selection"', "Selection Mode route missing"],
   [sidebar, 'to: "/movie-coach/start-selection"', "Selection Mode navigation missing"],
 ]) if (!source.includes(token)) errors.push(message);
