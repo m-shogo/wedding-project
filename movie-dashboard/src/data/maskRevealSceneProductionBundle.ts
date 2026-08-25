@@ -4,6 +4,11 @@ import {
   buildMaskRevealEditableSourceOfTruth,
 } from "./maskRevealEditableProduction";
 import { buildMaskRevealMotionHandoffManifest } from "./maskRevealHandoff";
+import {
+  buildMaskRevealDaVinciValueBridge,
+  MASK_REVEAL_VERTICAL_SLICE_CONTEXT,
+  resolveCanonicalMaskRevealState,
+} from "./maskRevealPresetBridge";
 import type { MaskRevealSceneInstance } from "./visualSceneComposer";
 
 export interface MaskRevealSceneProductionBundleV1 {
@@ -15,6 +20,11 @@ export interface MaskRevealSceneProductionBundleV1 {
   sourceRevision: string;
   sceneMarkerId: string;
   recipeProvenance: MaskRevealSceneInstance["recipeProvenance"];
+  serialization: {
+    format: "JSON";
+    role: "TARGET_SPECIFIC_SIDECAR";
+    humanMaster: false;
+  };
   sceneTiming: {
     targetDurationSeconds: number;
     computedDurationSeconds: number;
@@ -25,6 +35,7 @@ export interface MaskRevealSceneProductionBundleV1 {
     lockedFields: string[];
     editableSourceOfTruth: ReturnType<typeof buildMaskRevealEditableSourceOfTruth>;
     resolvedEditableIntent: ReturnType<typeof resolveMaskRevealEditableIntent>;
+    canonicalSceneState: ReturnType<typeof resolveCanonicalMaskRevealState>;
   };
   timeline: {
     producer: "Palmier";
@@ -46,6 +57,7 @@ export interface MaskRevealSceneProductionBundleV1 {
   davinci: {
     implementationId: "impl-type-mask-reveal-davinci-text-plus";
     finishManifest: string;
+    valueBridge: ReturnType<typeof buildMaskRevealDaVinciValueBridge>;
     verificationEvidence: ReturnType<typeof buildMaskRevealMotionHandoffManifest>["verificationEvidence"];
   };
   preview: {
@@ -80,7 +92,9 @@ export function buildMaskRevealSceneProductionBundle(
 ): MaskRevealSceneProductionBundleV1 {
   const resolved = resolveMaskRevealEditableIntent(scene.editableIntent);
   const editableSourceOfTruth = buildMaskRevealEditableSourceOfTruth(scene.editableIntent);
+  const canonicalSceneState = resolveCanonicalMaskRevealState(scene.editableIntent);
   const production = buildMaskRevealEditableProductionOutputs(scene.editableIntent);
+  const davinciValueBridge = buildMaskRevealDaVinciValueBridge(scene.editableIntent, MASK_REVEAL_VERTICAL_SLICE_CONTEXT);
   const legacyHandoff = buildMaskRevealMotionHandoffManifest({
     text: resolved.text,
     mediaLabel: resolved.mediaLabel,
@@ -100,6 +114,11 @@ export function buildMaskRevealSceneProductionBundle(
     sourceRevision: scene.updatedAt,
     sceneMarkerId,
     recipeProvenance: scene.recipeProvenance,
+    serialization: {
+      format: "JSON",
+      role: "TARGET_SPECIFIC_SIDECAR",
+      humanMaster: false,
+    },
     sceneTiming: {
       targetDurationSeconds: scene.targetDurationSeconds,
       computedDurationSeconds: scene.computedDurationSeconds,
@@ -110,6 +129,7 @@ export function buildMaskRevealSceneProductionBundle(
       lockedFields: [...scene.lockedFields],
       editableSourceOfTruth,
       resolvedEditableIntent: resolved,
+      canonicalSceneState,
     },
     timeline: {
       producer: "Palmier",
@@ -131,6 +151,7 @@ export function buildMaskRevealSceneProductionBundle(
     davinci: {
       implementationId: "impl-type-mask-reveal-davinci-text-plus",
       finishManifest: production.davinciFinishManifest,
+      valueBridge: davinciValueBridge,
       verificationEvidence: {
         ...legacyHandoff.verificationEvidence,
         markerId: sceneMarkerId,
