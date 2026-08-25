@@ -33,8 +33,13 @@ for (const token of [
   'humanBrief',
   'claudeCreativeInstruction',
   'palmierInstruction',
+  'nleXmlHandoff',
   'davinciFinishManifest',
+  'verificationChecklist',
   'machineJson',
+  'MOTION:type-mask-reveal',
+  'DAVINCI_COMPATIBLE_NLE_XML',
+  'ACTUAL_DAVINCI_RENDER',
 ]) {
   requireText(data, token, `Visual Motion data missing contract token: ${token}`);
 }
@@ -51,11 +56,14 @@ if (/resolveVersion:\s*"[^\"]+"/.test(data)) {
 
 for (const token of [
   "CONCEPT PREVIEW / 実装確認前",
+  "CURRENT GATE",
   "AI指示を作る",
   "Human Brief",
   "Claude Creative Instruction",
   "Palmier Instruction",
+  "NLE XML Handoff",
   "DaVinci Finish Manifest",
+  "Verification Checklist",
   "Machine JSON",
   "navigator.clipboard.writeText",
 ]) {
@@ -72,4 +80,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log("Visual Motion Library contracts OK: Mask Reveal vertical slice remains concept-only until local DaVinci verification.");
+console.log("Visual Motion Library contracts OK: Mask Reveal handoff is explicit and remains concept-only until local DaVinci verification.");
