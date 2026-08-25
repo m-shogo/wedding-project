@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { Header } from "../components/Header";
 import { MaskRevealEditableWorkspace } from "../components/MaskRevealEditableWorkspace";
+import { MotionZukanProductionWorkspace } from "../components/MotionZukanProductionWorkspace";
 import { getMotionLearningBundle } from "../data/motionLearningLinks";
 import { getLatestPreviewEvidence } from "../data/motionPreviewEvidence";
 import {
@@ -27,6 +28,8 @@ export function VisualMotionLibrary() {
           36 / 97件を一括移行しない。人間が理解できるScene Duration / Delay / Hold / Position / Direction等を正本にし、Actual DaVinci Renderは実装証拠として紐付ける。
         </p>
       </section>
+
+      <MotionZukanProductionWorkspace />
 
       <label className="block mb-7">
         <span className="text-[10px] tracking-[0.2em] font-semibold text-navy-400">何をしたい？</span>

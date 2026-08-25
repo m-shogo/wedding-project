@@ -78,6 +78,7 @@ export interface MotionZukanComposerState {
 }
 
 export const MOTION_ZUKAN_COMPOSER_STORAGE_KEY = "motion-zukan-composer-state-v1";
+export const MOTION_ZUKAN_COMPOSER_CHANGED_EVENT = "motion-zukan-composer-state-changed";
 
 export const maskRevealHeroSceneRecipe: MaskRevealSceneRecipe = {
   recipeId: "scene-recipe-mask-reveal-hero-v1",
@@ -293,6 +294,50 @@ export function adoptSceneInstance(state: MotionZukanComposerState, scene: MaskR
   return rebuildTimelines({ ...state, scenes, timelines });
 }
 
+export function duplicateSceneInstance(state: MotionZukanComposerState, sceneId: string): MotionZukanComposerState {
+  const source = state.scenes.find((scene) => scene.sceneId === sceneId);
+  if (!source) return state;
+
+  const duplicatedAt = nowIso();
+  const duplicate: MaskRevealSceneInstance = {
+    ...structuredClone(source),
+    sceneId: createSceneId(),
+    legacySceneId: null,
+    createdAt: duplicatedAt,
+    updatedAt: duplicatedAt,
+  };
+  const sourceIndex = state.scenes.findIndex((scene) => scene.sceneId === sceneId);
+  const scenes = [...state.scenes];
+  scenes.splice(sourceIndex + 1, 0, duplicate);
+  const timelines = state.timelines.map((timeline) => {
+    if (timeline.projectId !== source.projectId) return timeline;
+    const ids = [...timeline.sceneIds];
+    const timelineIndex = ids.indexOf(sceneId);
+    ids.splice(timelineIndex >= 0 ? timelineIndex + 1 : ids.length, 0, duplicate.sceneId);
+    return { ...timeline, sceneIds: ids };
+  });
+  return rebuildTimelines({ ...state, scenes, timelines });
+}
+
+export function reorderProjectTimelineScenes(
+  state: MotionZukanComposerState,
+  projectId: SceneProjectId,
+  orderedSceneIds: string[],
+): MotionZukanComposerState {
+  const expectedIds = state.scenes.filter((scene) => scene.projectId === projectId).map((scene) => scene.sceneId);
+  if (
+    expectedIds.length !== orderedSceneIds.length ||
+    expectedIds.some((id) => !orderedSceneIds.includes(id)) ||
+    new Set(orderedSceneIds).size !== orderedSceneIds.length
+  ) {
+    return state;
+  }
+  const timelines = state.timelines.map((timeline) =>
+    timeline.projectId === projectId ? { ...timeline, sceneIds: [...orderedSceneIds] } : timeline,
+  );
+  return rebuildTimelines({ ...state, timelines });
+}
+
 export function removeSceneInstance(state: MotionZukanComposerState, sceneId: string): MotionZukanComposerState {
   const scenes = state.scenes.filter((scene) => scene.sceneId !== sceneId);
   const timelines = state.timelines.map((timeline) => ({
@@ -377,6 +422,9 @@ export function loadMotionZukanComposerState(): MotionZukanComposerState {
 export function saveMotionZukanComposerState(state: MotionZukanComposerState) {
   if (typeof localStorage === "undefined") return;
   localStorage.setItem(MOTION_ZUKAN_COMPOSER_STORAGE_KEY, JSON.stringify(state));
+  if (typeof window !== "undefined") {
+    window.dispatchEvent(new CustomEvent(MOTION_ZUKAN_COMPOSER_CHANGED_EVENT, { detail: state }));
+  }
 }
 
 export function buildMaskRevealSceneExport(scene: MaskRevealSceneInstance) {
