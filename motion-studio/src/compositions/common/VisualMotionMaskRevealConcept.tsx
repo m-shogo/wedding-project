@@ -16,6 +16,7 @@ export function VisualMotionMaskRevealConcept() {
         alignItems: 'center',
         justifyContent: 'center',
         overflow: 'hidden',
+        fontFamily: 'Arial, Helvetica, sans-serif',
       }}
     >
       <TypographyRevealEngine text="WELCOME" intensity="M" mode="mask" transparent />
