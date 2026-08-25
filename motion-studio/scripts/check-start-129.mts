@@ -6,6 +6,7 @@ import {
   START_129_DURATION_FRAMES,
   START_129_FPS,
   START_129_SECTIONS,
+  lyricSlotWindowsForSection,
 } from '../src/data/start129/sections.ts';
 import {START_129_ASSET_ROLES} from '../src/data/start129/assetRoles.ts';
 import {START_129_TECHNIQUES} from '../src/data/start129/techniqueCatalog.ts';
@@ -45,6 +46,33 @@ if (coveredSlots.length !== LYRIC_SLOT_COUNT || !isSequential) {
   errors.push(
     `歌詞32slotが過不足なく順序どおりに割り当てられていない(検出: [${coveredSlots.join(',')}])`,
   );
+}
+
+// 2b. lyricSlotWindowsForSectionが、各slotへ「一度だけ・0フレームより長い」windowを
+//     割り当てていることを検証する。過去に slot範囲の先頭だけしか表示されないバグが
+//     あったため、これは「宣言データの整合性」だけでなく「実際に描画され得るか」を見る。
+const windowSlotCounts = new Map<number, number>();
+for (const section of sortedByOrder) {
+  const windows = lyricSlotWindowsForSection(section);
+  if (section.lyricSlotRange) {
+    const [from, to] = section.lyricSlotRange;
+    const expectedCount = to - from + 1;
+    if (windows.length !== expectedCount) {
+      errors.push(`${section.id}: lyricSlotWindowsForSectionの件数が${windows.length}件(期待${expectedCount}件)`);
+    }
+  }
+  for (const w of windows) {
+    if (w.durationInFrames <= 0) {
+      errors.push(`${section.id}: slot #${w.slotIndex} のdurationInFramesが0以下(${w.durationInFrames})`);
+    }
+    windowSlotCounts.set(w.slotIndex, (windowSlotCounts.get(w.slotIndex) ?? 0) + 1);
+  }
+}
+for (let slot = 1; slot <= LYRIC_SLOT_COUNT; slot += 1) {
+  const count = windowSlotCounts.get(slot) ?? 0;
+  if (count !== 1) {
+    errors.push(`歌詞slot #${slot}: windowが${count}回生成されている(期待1回)`);
+  }
 }
 
 // 3. Technique Catalog: id重複禁止、showcase値の妥当性、componentRef必須

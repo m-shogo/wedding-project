@@ -3,7 +3,7 @@
 
 import React from 'react';
 import {AbsoluteFill, Sequence, interpolate, useCurrentFrame} from 'remotion';
-import {START_129_FPS, START_129_SECTIONS, start129SectionFrames} from '../../data/start129/sections';
+import {START_129_FPS, START_129_SECTIONS, lyricSlotWindowsForSection, start129SectionFrames} from '../../data/start129/sections';
 import type {ResolvedLyricSlot} from '../../data/start129/localLyrics';
 import {StartDemoBackdrop} from './StartDemoBackdrop';
 import {BottomScrim, MiniGuideCard, SectionBadge} from './StartGuideOverlay';
@@ -59,22 +59,43 @@ const EndCard: React.FC<{localFrame: number}> = ({localFrame}) => {
   );
 };
 
-const LyricCaption: React.FC<{lyric: ResolvedLyricSlot}> = ({lyric}) => (
-  <AbsoluteFill style={{justifyContent: 'flex-end', alignItems: 'flex-start', padding: 56}}>
-    <div
-      style={{
-        fontFamily: "'Noto Sans JP', sans-serif",
-        color: '#FDFBF5',
-        fontSize: 34,
-        fontWeight: 500,
-        maxWidth: 900,
-        opacity: lyric.isPlaceholder ? 0.45 : 1,
-      }}
-    >
-      {lyric.text}
-    </div>
-  </AbsoluteFill>
-);
+/** slot windowの中でfade in/holdして次slotへ切り替わる、1歌詞slotぶんのcaption。 */
+const LyricCaption: React.FC<{lyric: ResolvedLyricSlot; durationInFrames: number; reviewMode: boolean}> = ({
+  lyric,
+  durationInFrames,
+  reviewMode,
+}) => {
+  const localFrame = useCurrentFrame();
+  const fadeIn = 6;
+  const fadeOut = 6;
+  const opacity = interpolate(
+    localFrame,
+    [0, fadeIn, Math.max(fadeIn, durationInFrames - fadeOut), durationInFrames],
+    [0, 1, 1, 0],
+    {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'},
+  );
+  return (
+    <AbsoluteFill style={{justifyContent: 'flex-end', alignItems: 'flex-start', padding: 56}}>
+      <div
+        style={{
+          fontFamily: "'Noto Sans JP', sans-serif",
+          color: '#FDFBF5',
+          fontSize: 34,
+          fontWeight: 500,
+          maxWidth: 900,
+          opacity: opacity * (lyric.isPlaceholder ? 0.45 : 1),
+        }}
+      >
+        {lyric.text}
+      </div>
+      {reviewMode ? (
+        <div style={{marginTop: 4, fontSize: 12, color: 'rgba(253,251,245,0.5)', fontFamily: 'monospace'}}>
+          {lyric.slotId}
+        </div>
+      ) : null}
+    </AbsoluteFill>
+  );
+};
 
 const sectionRoleMap: Record<string, Start129AssetRole> = {
   'opening-pickup': 'HERO_WIDE',
@@ -106,9 +127,7 @@ export const StartShowcaseA: React.FC<{reviewMode: boolean; lyricSlots: Resolved
         const {from, durationInFrames} = start129SectionFrames(section);
         const role = sectionRoleMap[section.id];
         const isPushSection = section.id.startsWith('chorus');
-        const lyricForSection = section.lyricSlotRange
-          ? lyricSlots[section.lyricSlotRange[0] - 1]
-          : null;
+        const lyricWindows = lyricSlotWindowsForSection(section);
 
         return (
           <Sequence key={section.id} from={from} durationInFrames={durationInFrames} name={section.labelJa}>
@@ -118,7 +137,16 @@ export const StartShowcaseA: React.FC<{reviewMode: boolean; lyricSlots: Resolved
               <StaticHoldShot role={role} />
             )}
             <BottomScrim />
-            {lyricForSection ? <LyricCaption lyric={lyricForSection} /> : null}
+            {lyricWindows.map((w) => (
+              <Sequence
+                key={w.slotIndex}
+                from={w.localFrom}
+                durationInFrames={w.durationInFrames}
+                name={`lyric-${w.slotIndex}`}
+              >
+                <LyricCaption lyric={lyricSlots[w.slotIndex - 1]} durationInFrames={w.durationInFrames} reviewMode={reviewMode} />
+              </Sequence>
+            ))}
             {section.id === 'interlude-2b' ? <WelcomeMessage localFrame={frame - from} /> : null}
             {section.id === 'end' ? <EndCard localFrame={frame - from} /> : null}
             {reviewMode ? <SectionBadge section={section} secondsElapsed={seconds} /> : null}

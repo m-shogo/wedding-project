@@ -60,10 +60,36 @@ ROLES: dict[str, str] = {
 }
 VIDEO_ROLES = {"MOVEMENT_LEFT_TO_RIGHT", "MOVEMENT_RIGHT_TO_LEFT", "BROLL_WALK", "BROLL_TEXTURE"}
 
+# Pexels orientation filter(landscape/portrait/square)。role の aspectHint と対応させる。
+# 参照: https://www.pexels.com/api/documentation/ (2026-08-25 WebFetchで確認)
+ROLE_ORIENTATION: dict[str, str] = {
+    "HERO_WIDE": "landscape",
+    "DEPARTURE": "landscape",
+    "OKINAWA_WIDE": "landscape",
+    "SEOUL_STREET": "landscape",
+    "HAWAII_WARM": "landscape",
+    "MOVEMENT_LEFT_TO_RIGHT": "landscape",
+    "MOVEMENT_RIGHT_TO_LEFT": "landscape",
+    "NEGATIVE_SPACE": "landscape",
+    "ARRIVAL_YOKOHAMA": "landscape",
+    "END_BREATH": "landscape",
+    "BROLL_WALK": "landscape",
+    "BROLL_TEXTURE": "landscape",
+    "VERTICAL_PORTRAIT": "portrait",
+    # HERO_CLOSE / DETAIL_HAND は4:5(縦長寄り正方形)のためPexelsの3値filterに
+    # 厳密対応しない。orientation指定なしで取得し、目視選定時にaspectを確認する。
+}
 
-def pexels_search(query: str, count: int, media: str, api_key: str) -> list[dict]:
-    base = "https://api.pexels.com/videos/search" if media == "video" else "https://api.pexels.com/v1/search"
-    url = f"{base}?query={urllib.parse.quote(query)}&per_page={count}"
+
+def pexels_search(query: str, count: int, media: str, api_key: str, orientation: str | None) -> list[dict]:
+    # Pexels公式: 写真/動画とも /v1/ 配下が正式パス(2026-08-25 公式ドキュメントで確認)。
+    base = "https://api.pexels.com/v1/videos/search" if media == "video" else "https://api.pexels.com/v1/search"
+    params = {"query": query, "per_page": str(count)}
+    if orientation:
+        params["orientation"] = orientation
+    if media == "video":
+        params["size"] = "medium"  # Full HD相当。large=4K/8Kは不要に大きい
+    url = f"{base}?{urllib.parse.urlencode(params)}"
     # Cloudflare WAF (error 1010) blocks the default Python-urllib user-agent; use a normal one.
     req = urllib.request.Request(
         url,
@@ -109,15 +135,23 @@ def main() -> None:
         sys.exit(1)
 
     roles = list(ROLES.keys()) if args.all else [args.role]
+    failures: list[dict] = []
 
     for role in roles:
         query = ROLES[role]
         media = "video" if role in VIDEO_ROLES else "photo"
-        print(f"\n=== {role} ({media}) query='{query}' ===")
+        orientation = ROLE_ORIENTATION.get(role)
+        print(f"\n=== {role} ({media}) query='{query}' orientation={orientation or '(未指定)'} ===")
         try:
-            items = pexels_search(query, args.count, media, api_key)
+            items = pexels_search(query, args.count, media, api_key, orientation)
         except Exception as e:  # noqa: BLE001
             print(f"  検索失敗: {e}", file=sys.stderr)
+            failures.append({"role": role, "query": query, "media": media, "reason": str(e)})
+            continue
+
+        if not items:
+            print("  候補0件")
+            failures.append({"role": role, "query": query, "media": media, "reason": "0 results"})
             continue
 
         for item in items:
@@ -128,13 +162,23 @@ def main() -> None:
                 page_url = item.get("url", "")
                 ext = ".jpg"
             else:
-                files = sorted(item.get("video_files", []), key=lambda f: f.get("width", 0), reverse=True)
+                # orientation指定通りのfileを優先(APIの検索結果自体は動画単位なので、
+                # video_files内の複数解像度から役割に合う向きを選び直す)。
+                files = item.get("video_files", [])
+                if orientation == "landscape":
+                    landscape_files = [f for f in files if f.get("width", 0) >= f.get("height", 0)]
+                    files = landscape_files or files
+                elif orientation == "portrait":
+                    portrait_files = [f for f in files if f.get("height", 0) > f.get("width", 0)]
+                    files = portrait_files or files
+                files = sorted(files, key=lambda f: f.get("width", 0), reverse=True)
                 src = files[0]["link"] if files else None
                 item_id = item["id"]
                 photographer = item.get("user", {}).get("name", "unknown")
                 page_url = item.get("url", "")
                 ext = ".mp4"
             if not src:
+                failures.append({"role": role, "query": query, "media": media, "reason": f"id {item.get('id')}: no matching video_files for orientation={orientation}"})
                 continue
 
             dest = DEMO_ROOT / role / f"pexels-{item_id}{ext}"
@@ -160,6 +204,15 @@ def main() -> None:
         print("\n取得後は必ず目視確認し、`pnpm sync:start-129-demo-assets` を実行してください。")
     else:
         print("\n(候補表示のみ。実際に取得するには --write を付けてください)")
+
+    # 取得失敗・0件・orientation不一致をJSONへ保存(Dashboardの「未取得・代替待ち」表示用)。
+    report_path = DEMO_ROOT / "_fetch_failures.json"
+    DEMO_ROOT.mkdir(parents=True, exist_ok=True)
+    if failures:
+        report_path.write_text(json.dumps({"generatedAt": time.strftime("%Y-%m-%dT%H:%M:%S"), "failures": failures}, ensure_ascii=False, indent=2), encoding="utf-8")
+        print(f"\n⚠️  取得失敗/代替待ち {len(failures)}件 → {report_path.relative_to(STUDIO_ROOT)}")
+    elif report_path.exists():
+        report_path.write_text(json.dumps({"generatedAt": time.strftime("%Y-%m-%dT%H:%M:%S"), "failures": []}, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
 if __name__ == "__main__":

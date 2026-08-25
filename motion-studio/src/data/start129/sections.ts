@@ -173,3 +173,35 @@ export const findStart129SectionAtSecond = (sec: number): Start129Section => {
 export const START_129_QA_STILL_SECONDS = [
   0, 7, 17, 28, 38, 48, 58, 68, 78, 88, 98, 108, 118, 126, 128,
 ] as const;
+
+export type LyricSlotWindow = {
+  /** 1-indexed歌詞slot番号(localLyrics.tsのslotIdと対応)。 */
+  slotIndex: number;
+  /** section内でのローカルframe開始位置(0-indexed)。 */
+  localFrom: number;
+  durationInFrames: number;
+};
+
+/**
+ * section.lyricSlotRange内の全slotへ、section時間を均等分割してframe windowを割り当てる。
+ *
+ * 修正前は各sectionが `lyricSlotRange[0]` だけを参照し、range内の残りのslotが
+ * 一度も画面へ出ないバグがあった(docs/decisions/start-129-three-showcase-directions.md参照)。
+ * ローカル歌詞に実際の startSec/endSec がある場合は将来そちらを優先する余地を残しつつ、
+ * 現状は「範囲内の全slotを、読める最小限の時間ずつ均等に見せる」ことを保証する。
+ */
+export const lyricSlotWindowsForSection = (section: Start129Section): LyricSlotWindow[] => {
+  if (!section.lyricSlotRange) return [];
+  const [from, to] = section.lyricSlotRange;
+  const {durationInFrames} = start129SectionFrames(section);
+  const slotCount = to - from + 1;
+  const perSlot = Math.floor(durationInFrames / slotCount);
+  const windows: LyricSlotWindow[] = [];
+  for (let i = 0; i < slotCount; i += 1) {
+    const localFrom = i * perSlot;
+    const isLast = i === slotCount - 1;
+    const duration = isLast ? durationInFrames - localFrom : perSlot;
+    windows.push({slotIndex: from + i, localFrom, durationInFrames: duration});
+  }
+  return windows;
+};

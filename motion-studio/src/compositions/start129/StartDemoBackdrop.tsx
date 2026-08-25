@@ -19,7 +19,14 @@ export type StartDemoBackdropProps = {
   role: Start129AssetRole;
   /** 同一role内で何番目の候補を使うか(複数登録時)。既定0。 */
   variantIndex?: number;
-  fit?: 'cover' | 'contain';
+  /**
+   * 'cover': 画面いっぱいに敷き詰める(黒帯無し、周辺crop)。
+   * 'contain': 全体を収める(縦横比が画面と違うと黒帯が出る)。
+   * 'blurred-extend': 縦写真等、画面と縦横比が異なる素材向け。
+   *   背後にぼかしたcover拡張を敷き、前面へcontain画像を重ねることで
+   *   黒帯を出さずに元の構図を保持する(編集で一般的な手法)。
+   */
+  fit?: 'cover' | 'contain' | 'blurred-extend';
   children?: React.ReactNode;
 };
 
@@ -70,17 +77,29 @@ export const StartDemoBackdrop: React.FC<StartDemoBackdropProps> = ({
   const path = candidates[variantIndex % Math.max(candidates.length, 1)];
   const spec = start129AssetRoleSpec(role);
 
+  const renderMedia = (mediaFit: 'cover' | 'contain', extraStyle?: React.CSSProperties) =>
+    spec.kind === 'video' ? (
+      <OffthreadVideo
+        src={staticFile(path!)}
+        style={{width: '100%', height: '100%', objectFit: mediaFit, ...extraStyle}}
+        muted
+      />
+    ) : (
+      <Img src={staticFile(path!)} style={{width: '100%', height: '100%', objectFit: mediaFit, ...extraStyle}} />
+    );
+
   return (
     <AbsoluteFill>
       {path ? (
-        spec.kind === 'video' ? (
-          <OffthreadVideo
-            src={staticFile(path)}
-            style={{width: '100%', height: '100%', objectFit: fit}}
-            muted
-          />
+        fit === 'blurred-extend' ? (
+          <>
+            <AbsoluteFill style={{filter: 'blur(40px) brightness(0.55)', transform: 'scale(1.15)'}}>
+              {renderMedia('cover')}
+            </AbsoluteFill>
+            <AbsoluteFill>{renderMedia('contain')}</AbsoluteFill>
+          </>
         ) : (
-          <Img src={staticFile(path)} style={{width: '100%', height: '100%', objectFit: fit}} />
+          renderMedia(fit)
         )
       ) : (
         <AbstractPlaceholder role={role} />

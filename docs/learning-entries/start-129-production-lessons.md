@@ -43,3 +43,21 @@
 - 工程変更: オーバーレイ候補は、フレーム抽出→黒背景比率の目視確認→screen blend実render、の順で評価する。「暗い背景+疎らな光点」型以外は、全画面用途ではなく、cropした一部だけを使う前提で扱う。
 - 実変更: gold clipの全画面利用を撤去し、dust/sparksへ統一(`StartShowcaseB.tsx` / `StartShowcaseC.tsx`)。goldファイル自体は`_overlays/`に残し、将来cropして使う可能性のためlogだけ残した。
 - 段階: `VERIFIED`(実際にstill render・目視で問題を確認し、置き換え後の再renderでも確認した)。
+
+## Entry 6: 「range先頭だけ参照」は、契約checkを通っても実害を見逃す典型例
+
+- 観察: `StartShowcaseA/B/C.tsx`が`section.lyricSlotRange[0] - 1`でsection内の最初の歌詞slotだけを固定参照していた。結果、32slot中「区間の先頭slotに該当する8slot程度」しか一度も画面へ出ず、残りは永久に非表示だった。`check-start-129.mts`はlyricSlotRangeという**宣言データ**の連続性・網羅性しか見ておらず、この実装バグを検出できていなかった。
+- 原因: 「1 section = 1 lyric」という初期の単純化を、range対応(1 section = 複数lyric)へ拡張した際にrenderロジック側を更新し忘れた。データモデル(sections.ts)は正しく複数slotを持てる形になっていたが、消費側(3案のコンポーネント)が追いついていなかった。
+- 一般化できる原則: データモデルとrender消費側は別のコードパスであり、片方が正しくても他方が古いままになり得る。「rangeを持つデータ構造がある」ことは「rangeの中身が全部描画される」ことを保証しない。
+- 工程変更: 範囲/配列を持つデータを扱うUIコンポーネントを書くときは、必ず「境界(最初/最後)だけでなく中間要素も実際にレンダリングされるか」をrender manifestまたは実stillで確認する。契約checkにも「宣言網羅性」だけでなく「実際に生成されるSequence/Windowの個数と重複有無」を機械検証する項目を持たせる。
+- 実変更: `lyricSlotWindowsForSection()`(sections.ts)を追加し、rangeを均等分割した`<Sequence>`をnestする実装へ変更。`check-start-129.mts`に「各slotが1回だけwindowを持つ」検証を追加。
+- 段階: `VERIFIED`(修正後、section内の複数timepoint(frame 530/610/700/780)でstillを比較し、実際に4つの異なる歌詞slotが順番に表示されることを確認した)。
+
+## Entry 7: 無料素材APIの検索クエリは、地名・方向を含む語ほどデモ/抗議動画を拾いやすい
+
+- 観察: MOVEMENT_RIGHT_TO_LEFT roleの検索クエリ"walking right to left street"が、2回連続でデモ行進(読める抗議看板+複数の識別可能な人物)を返した。1回目は目視で不採用にしたが、同じクエリで再取得した際にも別の抗議動画2本が返ってきた。
+- 原因: ストック素材サイトでは「street」「walking」等の一般語に、報道・ドキュメンタリー系の投稿が多く紐づいている。検索語に地理的・政治的含意のある語("street"の使われ方次第)が入ると、意図しないジャンルへ寄りやすい。
+- 一般化できる原則: 同じ検索語で2回連続して不適切な結果が出た場合、opacityや個別候補の差し替えではなく検索語自体を疑う。人物・看板が映り込みやすいテーマ(街頭、集会、公共空間)の検索語は、"pov"、"pedestrian"、"sidewalk"のような一人称視点・無人称の語へ寄せると安全になりやすい。
+- 工程変更: 素材検索で同一クエリから2回連続NGが出たら、クエリを変更してから再検索する(同じクエリで3回目を試さない)。
+- 実変更: クエリを"pedestrian walking sidewalk pov"へ変更し、POV歩行動画2本を採用。
+- 段階: `PROTOTYPED`(今回1回の観察と対処。次回別roleでも同様の現象が起きたら`PROJECT_RULE`へ)。

@@ -3,7 +3,7 @@
 
 import React from 'react';
 import {AbsoluteFill, Sequence, interpolate, useCurrentFrame} from 'remotion';
-import {START_129_FPS, START_129_SECTIONS, start129SectionFrames} from '../../data/start129/sections';
+import {START_129_FPS, START_129_SECTIONS, lyricSlotWindowsForSection, start129SectionFrames} from '../../data/start129/sections';
 import type {ResolvedLyricSlot} from '../../data/start129/localLyrics';
 import {StartDemoBackdrop} from './StartDemoBackdrop';
 import {SectionBadge, MiniGuideCard} from './StartGuideOverlay';
@@ -35,19 +35,29 @@ const sectionRoleMap: Record<string, Start129AssetRole> = {
 
 const NegativeSpaceCaption: React.FC<{
   lyric: ResolvedLyricSlot;
-  localFrom: number;
   big: boolean;
-}> = ({lyric, localFrom, big}) => (
-  <AbsoluteFill style={{justifyContent: 'flex-end', alignItems: 'flex-start', padding: 60}}>
-    <BaselineScanText
-      text={lyric.text}
-      startFrame={localFrom}
-      durationInFrames={24}
-      fontSize={big ? 88 : 48}
-      color={lyric.isPlaceholder ? 'rgba(253,251,245,0.4)' : '#FDFBF5'}
-    />
-  </AbsoluteFill>
-);
+  durationInFrames: number;
+}> = ({lyric, big, durationInFrames}) => {
+  const localFrame = useCurrentFrame();
+  const revealDuration = Math.min(24, Math.max(8, durationInFrames - 6));
+  const holdOpacity = interpolate(
+    localFrame,
+    [0, Math.max(revealDuration - 4, 4), durationInFrames],
+    [1, 1, 0.85],
+    {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'},
+  );
+  return (
+    <AbsoluteFill style={{justifyContent: 'flex-end', alignItems: 'flex-start', padding: 60, opacity: holdOpacity}}>
+      <BaselineScanText
+        text={lyric.text}
+        startFrame={0}
+        durationInFrames={revealDuration}
+        fontSize={big ? 88 : 48}
+        color={lyric.isPlaceholder ? 'rgba(253,251,245,0.4)' : '#FDFBF5'}
+      />
+    </AbsoluteFill>
+  );
+};
 
 const WelcomeCaption: React.FC<{localFrame: number}> = ({localFrame}) => {
   const iconProgress = useIconReveal(localFrame, 8, 20);
@@ -100,14 +110,28 @@ export const StartShowcaseC: React.FC<{reviewMode: boolean; lyricSlots: Resolved
         const {from, durationInFrames} = start129SectionFrames(section);
         const role = sectionRoleMap[section.id];
         const isChorus = section.id.startsWith('chorus');
-        const lyricForSection = section.lyricSlotRange ? lyricSlots[section.lyricSlotRange[0] - 1] : null;
+        const lyricWindows = lyricSlotWindowsForSection(section);
+        // 黒帯を出さない: 横素材はcover、VERTICAL_PORTRAIT(縦素材)はblurred-extendで
+        // 構図を保ったまま画面いっぱいに拡張する(docs/decisions参照)。
+        const fit = role === 'VERTICAL_PORTRAIT' ? 'blurred-extend' : 'cover';
 
         return (
           <Sequence key={section.id} from={from} durationInFrames={durationInFrames} name={section.labelJa}>
-            <StartDemoBackdrop role={role} fit={isChorus ? 'cover' : 'contain'} />
-            {lyricForSection ? (
-              <NegativeSpaceCaption lyric={lyricForSection} localFrom={0} big={isChorus} />
-            ) : null}
+            <StartDemoBackdrop role={role} fit={fit} />
+            {lyricWindows.map((w) => (
+              <Sequence
+                key={w.slotIndex}
+                from={w.localFrom}
+                durationInFrames={w.durationInFrames}
+                name={`lyric-${w.slotIndex}`}
+              >
+                <NegativeSpaceCaption
+                  lyric={lyricSlots[w.slotIndex - 1]}
+                  big={isChorus}
+                  durationInFrames={w.durationInFrames}
+                />
+              </Sequence>
+            ))}
             {section.id === 'interlude-2b' ? <WelcomeCaption localFrame={frame - from} /> : null}
             {section.id === 'end' ? <EndCaption localFrame={frame - from} /> : null}
             {reviewMode ? <SectionBadge section={section} secondsElapsed={seconds} /> : null}

@@ -31,12 +31,22 @@ Remotion Studioが開いたら、左のCompositions一覧から次を選ぶ。
 
 `-Clean`が完成映像相当(注釈なし)、`-Guide`が解説付き(演出名・目的・素材roleを表示)。
 
-低解像度preview mp4が欲しい場合:
+129秒フルの低解像度mp4は`motion-studio/out/start-129-full/`に6本render済み(2026-08-25時点、Git管理外)。
+
+```text
+start129_A_clean.mp4 / start129_A_guide.mp4
+start129_B_clean.mp4 / start129_B_guide.mp4
+start129_C_clean.mp4 / start129_C_guide.mp4
+```
+
+再renderする場合:
 
 ```sh
-pnpm render:start-129:a   # A案
-pnpm render:start-129:b   # B案
-pnpm render:start-129:c   # C案
+pnpm render:start-129:a   # A案 Clean
+pnpm render:start-129:b   # B案 Clean
+pnpm render:start-129:c   # C案 Clean
+# Guide版は Composition名を Start129-<A|B|C>-Guide に変えて
+# pnpm exec remotion render src/index-start-129.ts Start129-A-Guide out/start-129-full/start129_A_guide.mp4 --scale=0.5 --crf=28
 ```
 
 代表15時点のstill(45枚、A/B/C × Guideモード)を一括render:
@@ -44,6 +54,12 @@ pnpm render:start-129:c   # C案
 ```sh
 pnpm qa:start-129
 # → out/qa/start-129/ にPNGが出る
+```
+
+ローカル素材の向き(landscape/portrait)を機械検証:
+
+```sh
+pnpm check:start-129-media
 ```
 
 ## 選ぶときに見るポイント

@@ -11,28 +11,28 @@ export const start129DemoAssetLibrary: Record<string, string[]> = {
     "demo/start-129/HERO_CLOSE/pexels-30694881.jpg"
   ],
   "DEPARTURE": [
-    "demo/start-129/DEPARTURE/pexels-6050133.jpg"
+    "demo/start-129/DEPARTURE/pexels-1381415.jpg"
   ],
   "OKINAWA_WIDE": [
     "demo/start-129/OKINAWA_WIDE/pexels-27041999.jpg"
   ],
   "SEOUL_STREET": [
-    "demo/start-129/SEOUL_STREET/pexels-11687718.jpg",
-    "demo/start-129/SEOUL_STREET/pexels-17250401.jpg"
+    "demo/start-129/SEOUL_STREET/pexels-11687718.jpg"
   ],
   "HAWAII_WARM": [
-    "demo/start-129/HAWAII_WARM/pexels-26763124.jpg"
+    "demo/start-129/HAWAII_WARM/pexels-4612307.jpg"
   ],
   "DETAIL_HAND": [
     "demo/start-129/DETAIL_HAND/pexels-4641192.jpg",
     "demo/start-129/DETAIL_HAND/pexels-7368311.jpg"
   ],
   "MOVEMENT_LEFT_TO_RIGHT": [
-    "demo/start-129/MOVEMENT_LEFT_TO_RIGHT/pexels-34246589.mp4",
-    "demo/start-129/MOVEMENT_LEFT_TO_RIGHT/pexels-34913017.mp4"
+    "demo/start-129/MOVEMENT_LEFT_TO_RIGHT/pexels-19188177.mp4",
+    "demo/start-129/MOVEMENT_LEFT_TO_RIGHT/pexels-3999419.mp4"
   ],
   "MOVEMENT_RIGHT_TO_LEFT": [
-    "demo/start-129/MOVEMENT_RIGHT_TO_LEFT/pexels-34913017.mp4"
+    "demo/start-129/MOVEMENT_RIGHT_TO_LEFT/pexels-3002456.mp4",
+    "demo/start-129/MOVEMENT_RIGHT_TO_LEFT/pexels-4405576.mp4"
   ],
   "VERTICAL_PORTRAIT": [
     "demo/start-129/VERTICAL_PORTRAIT/pexels-29270634.jpg"
@@ -47,12 +47,14 @@ export const start129DemoAssetLibrary: Record<string, string[]> = {
     "demo/start-129/END_BREATH/pexels-35811343.jpg"
   ],
   "BROLL_WALK": [
+    "demo/start-129/BROLL_WALK/pexels-34418451.mp4",
     "demo/start-129/BROLL_WALK/pexels-3978362.mp4",
     "demo/start-129/BROLL_WALK/pexels-3999622.mp4"
   ],
   "BROLL_TEXTURE": [
-    "demo/start-129/BROLL_TEXTURE/pexels-15786830.mp4",
-    "demo/start-129/BROLL_TEXTURE/pexels-26891698.mp4"
+    "demo/start-129/BROLL_TEXTURE/pexels-19057676.mp4",
+    "demo/start-129/BROLL_TEXTURE/pexels-20592385.mp4",
+    "demo/start-129/BROLL_TEXTURE/pexels-34435555.mp4"
   ]
 };
 
@@ -63,7 +65,7 @@ export const start129OverlayLibrary: {dust: string[]; sparks: string[]; gold: st
     "demo/start-129/_overlays/dust_9665237.mp4"
   ],
   "sparks": [
-    "demo/start-129/_overlays/sparks_9665452.mp4"
+    "demo/start-129/_overlays/sparks_9665448.mp4"
   ],
   "gold": [
     "demo/start-129/_overlays/gold_8516377.mp4"

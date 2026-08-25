@@ -3,7 +3,7 @@
 
 import React from 'react';
 import {AbsoluteFill, Sequence, interpolate, useCurrentFrame} from 'remotion';
-import {START_129_FPS, START_129_SECTIONS, start129SectionFrames} from '../../data/start129/sections';
+import {START_129_FPS, START_129_SECTIONS, lyricSlotWindowsForSection, start129SectionFrames} from '../../data/start129/sections';
 import type {ResolvedLyricSlot} from '../../data/start129/localLyrics';
 import {StartDemoBackdrop} from './StartDemoBackdrop';
 import {SectionBadge, MiniGuideCard} from './StartGuideOverlay';
@@ -15,6 +15,21 @@ import type {Start129AssetRole} from '../../data/start129/assetRoles';
 
 const techniques = start129TechniquesForShowcase('B');
 const findTechnique = (id: string) => techniques.find((t) => t.id === id)!;
+
+/**
+ * B案の恒常的な視覚signature。3-hitの瞬間だけでなく全編を通して、
+ * A案(縁なしfull-bleed)/C案(negative space typography)と一目で見分けられるようにする。
+ * コマ割り(panel)を思わせる控えめな手描き風frameを四隅へ置くだけで、
+ * 常時flash/glow/particleは使わない(Style Bibleの過剰演出回避方針を維持)。
+ */
+const AnimeFrameVignette: React.FC = () => (
+  <AbsoluteFill
+    style={{
+      pointerEvents: 'none',
+      boxShadow: 'inset 0 0 0 3px rgba(244,231,201,0.22), inset 0 0 120px 40px rgba(0,0,0,0.35)',
+    }}
+  />
+);
 
 const sectionRoleMap: Record<string, Start129AssetRole> = {
   'opening-pickup': 'HERO_WIDE',
@@ -65,24 +80,58 @@ const PanelGridReveal: React.FC<{role: Start129AssetRole; localFrame: number; du
   );
 };
 
-const ChorusHitWord: React.FC<{word: string; hitFrame: number; localFrame: number}> = ({
-  word,
-  hitFrame,
-  localFrame,
-}) => {
-  const intensity = interpolate(localFrame, [hitFrame - 4, hitFrame, hitFrame + 8], [0, 1, 0], {
+/**
+ * Chorus区間の主役ショット。修正前は黒背景+固定語を区間まるごと(約10秒)保持しており、
+ * 「写真が主役」という要件に反していた(docs/decisions参照)。
+ * 今回は写真/動画を常に背景に置き、3-hitは0.3〜1.0秒程度の短いaccentに絞る。
+ * 区間中盤で2枚目の候補写真(variantIndex=1)へcutし、9〜10秒の静止保持を避ける。
+ */
+const ChorusShot: React.FC<{
+  role: Start129AssetRole;
+  word: string;
+  hitFrame: number;
+  localFrame: number;
+  durationInFrames: number;
+}> = ({role, word, hitFrame, localFrame, durationInFrames}) => {
+  const hitWindow = 18; // 0.6秒(30fps)。3-hitは短いaccentであり長時間保持しない。
+  const intensity = interpolate(localFrame, [hitFrame - 4, hitFrame, hitFrame + hitWindow], [0, 1, 0], {
     extrapolateLeft: 'clamp',
     extrapolateRight: 'clamp',
   });
+  const midCut = Math.round(durationInFrames * 0.55);
+  const showSecondShot = localFrame >= midCut;
+  const pushScale = interpolate(localFrame, [0, durationInFrames], [1, 1.03], {extrapolateRight: 'clamp'});
+  const wordOpacity = interpolate(localFrame, [hitFrame - 4, hitFrame, hitFrame + hitWindow - 6, hitFrame + hitWindow], [0, 1, 1, 0], {
+    extrapolateLeft: 'clamp',
+    extrapolateRight: 'clamp',
+  });
+
   return (
-    <AbsoluteFill style={{justifyContent: 'center', alignItems: 'center'}}>
-      {/* B案は「楽しさ重視」の文法なので、3-hitの瞬間だけ効果を強めに重ねる */}
-      <SparkleOverlay kind="sparks" opacity={0.5 * intensity} />
-      <SpeedLineBurst vanishX={960} vanishY={540} intensity={intensity} color="rgba(244,231,201,0.45)" />
-      <div style={{fontFamily: "'Noto Sans JP', sans-serif", fontSize: 96, fontWeight: 900, color: '#FDFBF5'}}>
-        {word}
-      </div>
-      <HandDrawnUnderline progressFrom={hitFrame - 6} progressDurationInFrames={16} width={420} />
+    <AbsoluteFill>
+      <AbsoluteFill style={{transform: `scale(${pushScale})`}}>
+        <StartDemoBackdrop role={role} variantIndex={showSecondShot ? 1 : 0} />
+      </AbsoluteFill>
+      <AbsoluteFill style={{background: 'rgba(0,0,0,0.28)'}} />
+      <AbsoluteFill style={{justifyContent: 'center', alignItems: 'center'}}>
+        {/* B案は「楽しさ重視」の文法なので、3-hitの瞬間だけ効果を強めに重ねる */}
+        <SparkleOverlay kind="sparks" opacity={0.5 * intensity} />
+        <SpeedLineBurst vanishX={960} vanishY={540} intensity={intensity} color="rgba(244,231,201,0.55)" />
+        <div
+          style={{
+            fontFamily: "'Noto Sans JP', sans-serif",
+            fontSize: 96,
+            fontWeight: 900,
+            color: '#FDFBF5',
+            opacity: wordOpacity,
+            textShadow: '0 2px 24px rgba(0,0,0,0.6)',
+          }}
+        >
+          {word}
+        </div>
+        <div style={{opacity: wordOpacity}}>
+          <HandDrawnUnderline progressFrom={hitFrame - 6} progressDurationInFrames={16} width={420} />
+        </div>
+      </AbsoluteFill>
     </AbsoluteFill>
   );
 };
@@ -149,15 +198,17 @@ export const StartShowcaseB: React.FC<{reviewMode: boolean; lyricSlots: Resolved
         const role = sectionRoleMap[section.id];
         const isChorus = section.id.startsWith('chorus');
         const isPlayfulB = section.id === 'verse-1b' || section.id === 'verse-2b';
-        const lyricForSection = section.lyricSlotRange ? lyricSlots[section.lyricSlotRange[0] - 1] : null;
+        const lyricWindows = lyricSlotWindowsForSection(section);
 
         return (
           <Sequence key={section.id} from={from} durationInFrames={durationInFrames} name={section.labelJa}>
             {isChorus ? (
-              <ChorusHitWord
+              <ChorusShot
+                role={role}
                 word={section.id === 'chorus-1b' || section.id === 'chorus-2b' ? 'StaRt!' : '再スタート'}
                 hitFrame={Math.round(durationInFrames * 0.15)}
                 localFrame={frame - from}
+                durationInFrames={durationInFrames}
               />
             ) : isPlayfulB ? (
               <PanelGridReveal role={role} localFrame={frame - from} durationInFrames={durationInFrames} />
@@ -169,20 +220,28 @@ export const StartShowcaseB: React.FC<{reviewMode: boolean; lyricSlots: Resolved
             ) : (
               <StartDemoBackdrop role={role} />
             )}
-            {lyricForSection && !isChorus ? (
-              <AbsoluteFill style={{justifyContent: 'flex-start', alignItems: 'flex-end', padding: 40}}>
-                <div
-                  style={{
-                    fontFamily: "'Noto Sans JP', sans-serif",
-                    color: '#FDFBF5',
-                    fontSize: 22,
-                    opacity: lyricForSection.isPlaceholder ? 0.4 : 0.9,
-                  }}
-                >
-                  {lyricForSection.text}
-                </div>
-              </AbsoluteFill>
-            ) : null}
+            {lyricWindows.map((w) => (
+              <Sequence
+                key={w.slotIndex}
+                from={w.localFrom}
+                durationInFrames={w.durationInFrames}
+                name={`lyric-${w.slotIndex}`}
+              >
+                <AbsoluteFill style={{justifyContent: 'flex-start', alignItems: 'flex-end', padding: 40}}>
+                  <div
+                    style={{
+                      fontFamily: "'Noto Sans JP', sans-serif",
+                      color: '#FDFBF5',
+                      fontSize: 22,
+                      opacity: lyricSlots[w.slotIndex - 1].isPlaceholder ? 0.4 : 0.9,
+                      textShadow: '0 1px 8px rgba(0,0,0,0.7)',
+                    }}
+                  >
+                    {lyricSlots[w.slotIndex - 1].text}
+                  </div>
+                </AbsoluteFill>
+              </Sequence>
+            ))}
             {section.id === 'end' ? <EndBurst localFrame={frame - from} /> : null}
             {reviewMode ? <SectionBadge section={section} secondsElapsed={seconds} /> : null}
             {reviewMode && isPlayfulB ? (
@@ -194,6 +253,7 @@ export const StartShowcaseB: React.FC<{reviewMode: boolean; lyricSlots: Resolved
           </Sequence>
         );
       })}
+      <AnimeFrameVignette />
     </AbsoluteFill>
   );
 };
