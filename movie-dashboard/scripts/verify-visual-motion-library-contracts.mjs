@@ -6,6 +6,8 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const data = fs.readFileSync(path.join(root, "src/data/visualMotionLibrary.ts"), "utf8");
 const handoff = fs.readFileSync(path.join(root, "src/data/maskRevealHandoff.ts"), "utf8");
 const samples = fs.readFileSync(path.join(root, "src/data/motionSampleAssetSets.ts"), "utf8");
+const learning = fs.readFileSync(path.join(root, "src/data/motionLearningLinks.ts"), "utf8");
+const fusionLearning = fs.readFileSync(path.join(root, "src/data/fusionNodeTranslator.ts"), "utf8");
 const page = fs.readFileSync(path.join(root, "src/pages/VisualMotionLibrary.tsx"), "utf8");
 const app = fs.readFileSync(path.join(root, "src/App.tsx"), "utf8");
 const sidebar = fs.readFileSync(path.join(root, "src/components/Sidebar.tsx"), "utf8");
@@ -92,6 +94,18 @@ for (const token of [
   requireText(samples, token, `Motion sample asset set missing contract token: ${token}`);
 }
 
+for (const token of [
+  'patternId: "type-mask-reveal"',
+  'fusionRecipeIds: ["fusion-masked-reveal"]',
+  'learningTopics: ["Mask", "Text+", "Keyframe", "Easing", "Merge"]',
+  'getMotionLearningBundle',
+  'fusionLearningRecipes.find',
+  'Do not duplicate tutorials here',
+]) {
+  requireText(learning, token, `Motion learning link missing reuse contract token: ${token}`);
+}
+requireText(fusionLearning, 'recipeId: "fusion-masked-reveal"', "Existing Fusion masked reveal recipe must remain the learning authority");
+
 if (/status:\s*"PRODUCTION_READY"/.test(data)) {
   errors.push("Mask Reveal must not be PRODUCTION_READY before local Resolve render verification");
 }
@@ -125,6 +139,10 @@ for (const token of [
   "NLE XML",
   "XMLをこのアプリ側で捏造しません",
   "navigator.clipboard.writeText",
+  "JUST-IN-TIME LEARNING",
+  "この演出で学べること",
+  "getMotionLearningBundle(pattern.id)",
+  "learning.fusionRecipes.map",
 ]) {
   requireText(page, token, `Visual Motion page missing: ${token}`);
 }
@@ -139,4 +157,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log("Visual Motion Library contracts OK: Mask Reveal uses one section-aware marker authority, shared WELCOME sample, Palmier NLE XML + sidecar Motion Handoff Manifest, pending local verification evidence, and remains concept-only until local DaVinci verification.");
+console.log("Visual Motion Library contracts OK: Mask Reveal reuses the existing Fusion learning recipe for just-in-time learning, preserves one section-aware marker authority, shared WELCOME sample, Palmier NLE XML + sidecar Manifest, and stays concept-only until local DaVinci verification.");
