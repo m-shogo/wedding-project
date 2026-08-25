@@ -1,0 +1,103 @@
+name: Visual Motion Mask Reveal Preview CI
+
+on:
+  pull_request:
+    paths:
+      - "motion-studio/src/compositions/common/VisualMotionMaskRevealConcept.tsx"
+      - "motion-studio/src/StartMotionKitRoot.tsx"
+      - "motion-studio/src/index-start-motion-kit.ts"
+      - "motion-studio/src/motion-kit/engines.tsx"
+      - "motion-studio/scripts/check-visual-motion-mask-reveal-concept.mts"
+      - "motion-studio/scripts/verify-visual-motion-mask-reveal-artifact.mts"
+      - "motion-studio/pnpm-lock.yaml"
+      - "movie-dashboard/src/data/motionSampleAssetSets.ts"
+      - ".github/workflows/visual-motion-mask-reveal-preview-ci.yml"
+  push:
+    paths:
+      - "motion-studio/src/compositions/common/VisualMotionMaskRevealConcept.tsx"
+      - "motion-studio/src/StartMotionKitRoot.tsx"
+      - "motion-studio/src/index-start-motion-kit.ts"
+      - "motion-studio/src/motion-kit/engines.tsx"
+      - "motion-studio/scripts/check-visual-motion-mask-reveal-concept.mts"
+      - "motion-studio/scripts/verify-visual-motion-mask-reveal-artifact.mts"
+      - "motion-studio/pnpm-lock.yaml"
+      - "movie-dashboard/src/data/motionSampleAssetSets.ts"
+      - ".github/workflows/visual-motion-mask-reveal-preview-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  render-concept:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: motion-studio
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: motion-studio/pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install ffmpeg for rendered-pixel QA
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+
+      - name: TypeScript
+        run: pnpm typecheck
+
+      - name: Reuse and sample contracts
+        run: |
+          node --no-warnings scripts/check-visual-motion-mask-reveal-concept.mts
+          pnpm check:start-motion-kit
+
+      - name: Composition contract
+        run: pnpm exec remotion compositions src/index-start-motion-kit.ts
+
+      - name: Render repository-generated concept preview
+        run: |
+          mkdir -p out/visual-motion-library/mask-reveal
+          pnpm exec remotion render src/index-start-motion-kit.ts VisualMotionMaskRevealConceptV1 \
+            out/visual-motion-library/mask-reveal/concept_preview_v1.mp4 --crf=24
+          ffprobe -v error \
+            -count_frames -select_streams v:0 \
+            -show_entries stream=codec_name,width,height,r_frame_rate,nb_read_frames \
+            -show_entries format=duration,size \
+            -of json out/visual-motion-library/mask-reveal/concept_preview_v1.mp4 \
+            | tee out/visual-motion-library/mask-reveal/concept_preview_v1.ffprobe.json
+
+      - name: Independent rendered-pixel oracle
+        run: node --no-warnings scripts/verify-visual-motion-mask-reveal-artifact.mts out/visual-motion-library/mask-reveal/concept_preview_v1.mp4
+
+      - name: Export review stills
+        run: |
+          ffmpeg -v error -ss 0.13 -i out/visual-motion-library/mask-reveal/concept_preview_v1.mp4 -frames:v 1 out/visual-motion-library/mask-reveal/reveal_013s.png
+          ffmpeg -v error -ss 0.70 -i out/visual-motion-library/mask-reveal/concept_preview_v1.mp4 -frames:v 1 out/visual-motion-library/mask-reveal/settled_070s.png
+
+      - name: Upload concept preview evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-motion-mask-reveal-concept-v1
+          path: |
+            motion-studio/out/visual-motion-library/mask-reveal/concept_preview_v1.mp4
+            motion-studio/out/visual-motion-library/mask-reveal/concept_preview_v1.ffprobe.json
+            motion-studio/out/visual-motion-library/mask-reveal/reveal_013s.png
+            motion-studio/out/visual-motion-library/mask-reveal/settled_070s.png
+          if-no-files-found: error
+          retention-days: 7
