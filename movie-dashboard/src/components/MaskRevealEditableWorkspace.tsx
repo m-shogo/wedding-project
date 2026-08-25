@@ -18,18 +18,18 @@ import {
 import { buildMaskRevealEditableProductionOutputs } from "../data/maskRevealEditableProduction";
 import { buildMaskRevealExecutionOutputs } from "../data/maskRevealHandoff";
 import {
+  adoptMaskRevealScene,
   adoptSceneInstance,
   computeMaskRevealSceneDuration,
-  createMaskRevealSceneInstance,
   loadMotionZukanComposerState,
   removeSceneInstance,
   retargetSceneInstanceSection,
   saveMotionZukanComposerState,
   updateSceneInstanceField,
   updateSceneInstanceFieldLock,
+  type MaskRevealSceneInstance,
   type MotionZukanComposerState,
-  type MotionZukanSceneInstance,
-} from "../data/sceneComposerInstances";
+} from "../data/visualSceneComposer";
 
 const positionLabels: Record<PositionPreset, string> = {
   TOP_LEFT: "左上",
@@ -102,26 +102,26 @@ export function MaskRevealEditableWorkspace() {
   }
 
   function adoptCurrentScene() {
-    const scene = createMaskRevealSceneInstance(intent);
+    const scene = adoptMaskRevealScene(intent);
     updateComposer((current) => adoptSceneInstance(current, scene));
-    setEditingSceneId(scene.sceneInstanceId);
+    setEditingSceneId(scene.sceneId);
   }
 
   function adoptAsAnotherScene() {
-    const scene = createMaskRevealSceneInstance(intent, { title: `${resolved.text} / Mask Reveal` });
+    const scene = adoptMaskRevealScene(intent);
     updateComposer((current) => adoptSceneInstance(current, scene));
-    setEditingSceneId(scene.sceneInstanceId);
+    setEditingSceneId(scene.sceneId);
   }
 
-  function editScene(scene: MotionZukanSceneInstance) {
+  function editScene(scene: MaskRevealSceneInstance) {
     setIntent(structuredClone(scene.editableIntent));
-    setEditingSceneId(scene.sceneInstanceId);
+    setEditingSceneId(scene.sceneId);
     setLevel("EASY");
   }
 
-  function deleteScene(sceneInstanceId: string) {
-    updateComposer((current) => removeSceneInstance(current, sceneInstanceId));
-    if (editingSceneId === sceneInstanceId) setEditingSceneId(null);
+  function deleteScene(sceneId: string) {
+    updateComposer((current) => removeSceneInstance(current, sceneId));
+    if (editingSceneId === sceneId) setEditingSceneId(null);
   }
 
   async function copy(label: string, value: string) {
@@ -218,9 +218,7 @@ export function MaskRevealEditableWorkspace() {
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div>
               <p className="text-[10px] tracking-[0.18em] font-semibold text-emerald-700 dark:text-emerald-300">SCENE INSTANCE</p>
-              <p className="mt-1 text-sm font-bold text-navy-900 dark:text-sand-100">
-                Target {timing.targetDurationSeconds.toFixed(1)}秒 / Computed {timing.computedDurationSeconds.toFixed(1)}秒
-              </p>
+              <p className="mt-1 text-sm font-bold text-navy-900 dark:text-sand-100">Target {timing.targetDurationSeconds.toFixed(1)}秒 / Computed {timing.computedDurationSeconds.toFixed(1)}秒</p>
               <p className="mt-1 text-[11px] leading-5 text-navy-500 dark:text-navy-300">
                 {timing.durationDeltaSeconds > 0
                   ? `Text timingがTargetより ${timing.durationDeltaSeconds.toFixed(1)}秒長い状態です。人間の値を勝手に縮めず差分を表示しています。`
@@ -238,17 +236,10 @@ export function MaskRevealEditableWorkspace() {
             </div>
           </div>
         </div>
-        <p className="mt-2 text-[11px] leading-5 text-navy-400">
-          Palmierからは実timelineのNLE XMLを書き出し、このHuman MasterのMotion Handoff Manifest JSONをsidecarとしてDaVinciへ渡します。XMLをこのアプリ側で捏造しません。
-        </p>
+        <p className="mt-2 text-[11px] leading-5 text-navy-400">Palmierからは実timelineのNLE XMLを書き出し、このHuman MasterのMotion Handoff Manifest JSONをsidecarとしてDaVinciへ渡します。XMLをこのアプリ側で捏造しません。</p>
       </div>
 
-      <ProjectTimelinePanel
-        state={composerState}
-        editingSceneId={editingSceneId}
-        onEdit={editScene}
-        onDelete={deleteScene}
-      />
+      <ProjectTimelinePanel state={composerState} editingSceneId={editingSceneId} onEdit={editScene} onDelete={deleteScene} />
 
       <div className="border-t border-sand-200 dark:border-navy-600 p-5 grid grid-cols-1 xl:grid-cols-2 gap-4">
         <OutputCard label="Human Brief" value={outputs.humanBrief} copied={copied} onCopy={copy} />
@@ -265,24 +256,19 @@ export function MaskRevealEditableWorkspace() {
   );
 }
 
-function ProjectTimelinePanel({
-  state,
-  editingSceneId,
-  onEdit,
-  onDelete,
-}: {
+function ProjectTimelinePanel({ state, editingSceneId, onEdit, onDelete }: {
   state: MotionZukanComposerState;
   editingSceneId: string | null;
-  onEdit: (scene: MotionZukanSceneInstance) => void;
-  onDelete: (sceneInstanceId: string) => void;
+  onEdit: (scene: MaskRevealSceneInstance) => void;
+  onDelete: (sceneId: string) => void;
 }) {
   return (
     <section className="border-t border-sand-200 dark:border-navy-600 p-5">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <p className="text-[10px] tracking-[0.2em] font-semibold text-sky-700 dark:text-sky-300">PROJECT TIMELINE</p>
+          <p className="text-[10px] tracking-[0.2em] font-semibold text-sky-700 dark:text-sky-300">PROJECT TIMELINE / STRUCTURED AUTHORITY</p>
           <h4 className="mt-1 text-base font-bold text-navy-900 dark:text-sand-100">採用したSceneを積み上げる</h4>
-          <p className="mt-1 text-[11px] leading-5 text-navy-500 dark:text-navy-300">Legacy Storyboardは壊さず、sceneId連携できるComposer SceneInstanceとして別管理します。</p>
+          <p className="mt-1 text-[11px] leading-5 text-navy-500 dark:text-navy-300">Legacy Storyboardは壊さず、将来sceneIdで連携できるComposer SceneInstanceとして別保存します。Recipeは採用時のprovenanceで、後からSceneを上書きしません。</p>
         </div>
         <p className="text-[10px] text-navy-400">{state.scenes.length} SceneInstance</p>
       </div>
@@ -290,9 +276,9 @@ function ProjectTimelinePanel({
       <div className="mt-4 grid grid-cols-1 xl:grid-cols-2 gap-4">
         {(["opening", "profile"] as const).map((projectId) => {
           const timeline = state.timelines.find((item) => item.projectId === projectId);
-          const scenes = (timeline?.orderedSceneInstanceIds ?? [])
-            .map((id) => state.scenes.find((scene) => scene.sceneInstanceId === id))
-            .filter((scene): scene is MotionZukanSceneInstance => Boolean(scene));
+          const scenes = (timeline?.sceneIds ?? [])
+            .map((id) => state.scenes.find((scene) => scene.sceneId === id))
+            .filter((scene): scene is MaskRevealSceneInstance => Boolean(scene));
           return (
             <div key={projectId} className="border border-sand-200 dark:border-navy-600 p-4">
               <div className="flex items-center justify-between gap-3">
@@ -305,22 +291,21 @@ function ProjectTimelinePanel({
                 <ol className="mt-3 space-y-2">
                   {scenes.map((scene, index) => {
                     const resolvedScene = resolveMaskRevealEditableIntent(scene.editableIntent);
-                    const lockedCount = Object.values(scene.editableIntent.fields).filter((field) => field.locked).length;
+                    const placement = timeline?.placements.find((item) => item.sceneId === scene.sceneId);
                     return (
-                      <li key={scene.sceneInstanceId} className={`border p-3 ${editingSceneId === scene.sceneInstanceId ? "border-sky-400 bg-sky-50/60 dark:bg-sky-950/20" : "border-sand-200 dark:border-navy-600"}`}>
+                      <li key={scene.sceneId} className={`border p-3 ${editingSceneId === scene.sceneId ? "border-sky-400 bg-sky-50/60 dark:bg-sky-950/20" : "border-sand-200 dark:border-navy-600"}`}>
                         <div className="flex items-start justify-between gap-3">
                           <div className="min-w-0">
-                            <p className="text-[10px] text-navy-400">#{index + 1} · {scene.editableIntent.section}</p>
-                            <p className="mt-1 text-xs font-semibold text-navy-800 dark:text-sand-100 truncate">{scene.title}</p>
-                            <p className="mt-1 text-[10px] text-navy-500 dark:text-navy-300">
-                              {positionLabels[resolvedScene.positionPreset]} / {directionLabels[resolvedScene.direction]} / {scene.computedDurationSeconds.toFixed(1)}秒
-                              {lockedCount > 0 ? ` / LOCK ${lockedCount}` : ""}
-                            </p>
+                            <p className="text-[10px] text-navy-400">#{index + 1} · {scene.editableIntent.section} · {scene.recipeProvenance.recipeId}</p>
+                            <p className="mt-1 text-xs font-semibold text-navy-800 dark:text-sand-100 truncate">{resolvedScene.text} / Mask Reveal</p>
+                            <p className="mt-1 text-[10px] text-navy-500 dark:text-navy-300">{positionLabels[resolvedScene.positionPreset]} / {directionLabels[resolvedScene.direction]} / {scene.computedDurationSeconds.toFixed(1)}秒 / {scene.status}</p>
+                            {placement && <p className="mt-1 text-[10px] font-mono text-navy-400">{placement.startSeconds.toFixed(1)}s → {placement.endSeconds.toFixed(1)}s</p>}
                             {scene.durationDeltaSeconds > 0 && <p className="mt-1 text-[10px] text-amber-700 dark:text-amber-300">Targetとの差 +{scene.durationDeltaSeconds.toFixed(1)}秒</p>}
+                            <p className="mt-1 text-[10px] text-navy-400">HUMAN_SELECTED {scene.humanSelectedFields.length} / LOCKED {scene.lockedFields.length}</p>
                           </div>
                           <div className="flex gap-2 shrink-0">
                             <button type="button" onClick={() => onEdit(scene)} className="text-[10px] text-sky-700 dark:text-sky-300">編集</button>
-                            <button type="button" onClick={() => onDelete(scene.sceneInstanceId)} className="text-[10px] text-red-500">削除</button>
+                            <button type="button" onClick={() => onDelete(scene.sceneId)} className="text-[10px] text-red-500">削除</button>
                           </div>
                         </div>
                       </li>
@@ -328,6 +313,7 @@ function ProjectTimelinePanel({
                   })}
                 </ol>
               )}
+              {(timeline?.edges.length ?? 0) > 0 && <p className="mt-3 text-[10px] text-navy-400">SceneEdge: {timeline?.edges.length} / default HARD CUT</p>}
             </div>
           );
         })}
