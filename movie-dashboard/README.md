@@ -127,6 +127,7 @@ provider-aware prompt
 | 素材ライブラリ | 素材CRUD、フィルタ、パス、一括操作、CSV、サムネイル |
 | クリップ素材集 | 切り出し済みクリップと演出レシピを章・動き(motion)・採否で絞り込む（読み取り専用） |
 | Director Recipe Catalog | 97件をcategory/energy/source/section/intensity/status/visual fidelityで絞り込み、人間のFavorite/Maybe/RejectをlocalStorageへ記録するExtended制作レビュー |
+| モーション図鑑(Visual Motion Library) | 既存36 Motion Kit presetを日本語ファースト検索・Preview First Card一覧で発見できるカタログ。Human Master編集(Duration/Delay/Hold等)を持つのはtype-mask-revealのみで、他35件はカタログ段階(実Render/DaVinci実機検証は未実施)。詳細は`docs/decisions/2026-08-26-motion-zukan-catalog-v1.md` |
 | 動画プロンプト | シーン＋プリセット＋shot intentからモデル別Promptを作成 |
 | 動画生成キュー | 生成待ちPromptをモデル別にまとめ、コピー・testing移行・結果登録・Export |
 | AI動画 結果レビュー | 結果Asset、共通/固有QA、採否、失敗理由、retry lineage |
