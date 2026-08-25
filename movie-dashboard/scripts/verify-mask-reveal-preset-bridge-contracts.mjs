@@ -17,6 +17,9 @@ function requireText(source, token, message) {
 for (const token of [
   'type LayerDelayPreset = "IMMEDIATE" | "SHORT_WAIT" | "PHOTO_FIRST"',
   'layerDelayPresetOptions',
+  'label: "すぐ"',
+  'label: "少し待ってから"',
+  'label: "写真をしっかり見せてから"',
   'resolveLayerDelayPreset',
   'detectLayerDelayPreset',
   'positionPresetOptions',
@@ -40,8 +43,8 @@ for (const token of [
 for (const token of [
   'Preset First → Accordion Detail → DaVinci Final Precision',
   '文字を出すタイミング',
-  '少し待ってから',
-  '写真をしっかり見せてから',
+  'layerDelayPresetOptions',
+  'positionPresetOptions',
   'カスタム',
   '詳細設定を見る →',
   '<details open',
@@ -88,4 +91,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log("Mask Reveal Preset / DaVinci Value Bridge contracts OK: easy presets resolve into human-editable canonical values, direct numeric edits surface as Custom, seconds remain Human Master, and DaVinci frames/normalized implementation values are derived through explicit Project Context rather than becoming the source of truth.");
+console.log("Mask Reveal Preset / DaVinci Value Bridge contracts OK: preset labels live in the resolver authority, easy UI consumes those options, direct numeric edits surface as Custom, seconds remain Human Master, and DaVinci frames/normalized implementation values are derived through explicit Project Context rather than becoming the source of truth.");
