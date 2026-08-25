@@ -7,6 +7,7 @@ const data = fs.readFileSync(path.join(root, "src/data/visualMotionLibrary.ts"),
 const handoff = fs.readFileSync(path.join(root, "src/data/maskRevealHandoff.ts"), "utf8");
 const samples = fs.readFileSync(path.join(root, "src/data/motionSampleAssetSets.ts"), "utf8");
 const learning = fs.readFileSync(path.join(root, "src/data/motionLearningLinks.ts"), "utf8");
+const previewEvidence = fs.readFileSync(path.join(root, "src/data/motionPreviewEvidence.ts"), "utf8");
 const fusionLearning = fs.readFileSync(path.join(root, "src/data/fusionNodeTranslator.ts"), "utf8");
 const page = fs.readFileSync(path.join(root, "src/pages/VisualMotionLibrary.tsx"), "utf8");
 const app = fs.readFileSync(path.join(root, "src/App.tsx"), "utf8");
@@ -106,6 +107,25 @@ for (const token of [
 }
 requireText(fusionLearning, 'recipeId: "fusion-masked-reveal"', "Existing Fusion masked reveal recipe must remain the learning authority");
 
+for (const token of [
+  'id: "evidence-type-mask-reveal-concept-2026-08-25"',
+  'previewId: "preview-type-mask-reveal-repo-concept"',
+  'classification: "CONCEPT"',
+  'sourceType: "REPO_GENERATED"',
+  'workflowRunId: 32847587754',
+  'artifactDigest: "sha256:7c2c1f8777311d9fe5e30b05dd6e57da5d8f1b8eb2971521fa277b1bb1f35b6e"',
+  'artifactExpiresAt: "2026-09-01T12:28:01Z"',
+  'persistentAssetPath: null',
+  'frames: 120',
+  'ffprobeVerified: true',
+  'renderedPixelOracle: true',
+  'result: "PASS"',
+  'productionAuthority: false',
+  'DaVinci Actual / local Resolve verificationとは完全に別扱い',
+]) {
+  requireText(previewEvidence, token, `Mask Reveal Concept evidence missing provenance token: ${token}`);
+}
+
 if (/status:\s*"PRODUCTION_READY"/.test(data)) {
   errors.push("Mask Reveal must not be PRODUCTION_READY before local Resolve render verification");
 }
@@ -120,6 +140,9 @@ if (/resolveVersion:\s*"[^\"]+"/.test(handoff)) {
 }
 if (/productionReady:\s*true/.test(handoff)) {
   errors.push("Motion handoff verification evidence must remain productionReady=false until every local DaVinci gate is proven");
+}
+if (/productionAuthority:\s*true/.test(previewEvidence)) {
+  errors.push("Repository-generated Concept evidence must never become production authority");
 }
 if (handoff.includes("MOTION:type-mask-reveal") || page.includes("MOTION:type-mask-reveal")) {
   errors.push("Generic Mask Reveal marker must not reappear; use the section-aware VML_MASK_REVEAL_<SECTION> authority");
@@ -143,6 +166,9 @@ for (const token of [
   "この演出で学べること",
   "getMotionLearningBundle(pattern.id)",
   "learning.fusionRecipes.map",
+  "getLatestPreviewEvidence(preview.id)",
+  "CONCEPT RENDER QA ✓ / NOT DAVINCI ACTUAL",
+  "期限付きartifactで検証済み。永続MP4がないため、この画面では静止placeholderのまま。",
 ]) {
   requireText(page, token, `Visual Motion page missing: ${token}`);
 }
@@ -157,4 +183,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log("Visual Motion Library contracts OK: Mask Reveal reuses the existing Fusion learning recipe for just-in-time learning, preserves one section-aware marker authority, shared WELCOME sample, Palmier NLE XML + sidecar Manifest, and stays concept-only until local DaVinci verification.");
+console.log("Visual Motion Library contracts OK: Mask Reveal keeps verified repository-generated Concept render evidence separate from DaVinci Actual authority, reuses existing Fusion learning, preserves section-aware handoff, and remains non-production until local Resolve verification.");
