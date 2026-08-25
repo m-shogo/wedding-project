@@ -4,6 +4,7 @@ import {
   StartMotionReel,
   startMotionReelDurationFrames,
 } from './compositions/common/StartMotionReel';
+import {VisualMotionMaskRevealConcept} from './compositions/common/VisualMotionMaskRevealConcept';
 
 export function StartMotionKitRoot() {
   return (
@@ -23,6 +24,14 @@ export function StartMotionKitRoot() {
         height={1080}
         fps={30}
         durationInFrames={60}
+      />
+      <Composition
+        id="VisualMotionMaskRevealConceptV1"
+        component={VisualMotionMaskRevealConcept}
+        width={1280}
+        height={720}
+        fps={30}
+        durationInFrames={120}
       />
     </>
   );
