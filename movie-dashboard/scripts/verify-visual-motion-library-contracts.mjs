@@ -5,6 +5,7 @@ import { fileURLToPath } from "node:url";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const data = fs.readFileSync(path.join(root, "src/data/visualMotionLibrary.ts"), "utf8");
 const handoff = fs.readFileSync(path.join(root, "src/data/maskRevealHandoff.ts"), "utf8");
+const samples = fs.readFileSync(path.join(root, "src/data/motionSampleAssetSets.ts"), "utf8");
 const page = fs.readFileSync(path.join(root, "src/pages/VisualMotionLibrary.tsx"), "utf8");
 const app = fs.readFileSync(path.join(root, "src/App.tsx"), "utf8");
 const sidebar = fs.readFileSync(path.join(root, "src/components/Sidebar.tsx"), "utf8");
@@ -25,6 +26,7 @@ for (const token of [
   'verified: false',
   'sourceType: "REPO_GENERATED"',
   'status: "CONCEPT"',
+  'sampleAssetSetId: "sample-typography-welcome-v1"',
   'searchedExistingPatterns: true',
   'searchedDaVinciBuiltins: true',
   'searchedExternalSources: true',
@@ -55,6 +57,24 @@ for (const token of [
   'productionReady: false',
 ]) {
   requireText(handoff, token, `Mask Reveal handoff missing contract token: ${token}`);
+}
+
+for (const token of [
+  'id: "sample-typography-welcome-v1"',
+  'category: "TYPOGRAPHY"',
+  'canonicalText: ["WELCOME"]',
+  'width: 1280',
+  'height: 720',
+  'fps: 30',
+  'durationSeconds: 4',
+  'muted: true',
+  'loopTarget: true',
+  'kind: "PROCEDURAL_NEUTRAL_BACKGROUND"',
+  'usedByPatternIds: ["type-mask-reveal"]',
+  'usedByPreviewIds: ["preview-type-mask-reveal-repo-concept"]',
+  'status: "READY"',
+]) {
+  requireText(samples, token, `Motion sample asset set missing contract token: ${token}`);
 }
 
 if (/status:\s*"PRODUCTION_READY"/.test(data)) {
@@ -96,4 +116,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log("Visual Motion Library contracts OK: Mask Reveal uses Palmier NLE XML + sidecar Motion Handoff Manifest and remains concept-only until local DaVinci verification.");
+console.log("Visual Motion Library contracts OK: Mask Reveal has a shared neutral WELCOME sample, Palmier NLE XML + sidecar Motion Handoff Manifest, and remains concept-only until local DaVinci verification.");
