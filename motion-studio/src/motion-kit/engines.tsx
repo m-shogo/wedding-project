@@ -45,12 +45,56 @@ export function CameraTransformEngine({
 }: {
   children: ReactNode;
   intensity?: MotionIntensity;
-  mode?: 'static' | 'push' | 'pull' | 'pan';
+  mode?: 'static' | 'push' | 'pull' | 'pan' | 'parallax';
 }) {
   const frame = useCurrentFrame();
   const {durationInFrames} = useVideoConfig();
   const strength = intensityScale[intensity];
   const t = interpolate(frame, [0, Math.max(1, durationInFrames - 1)], [0, 1], {extrapolateRight: 'clamp'});
+
+  if (mode === 'parallax') {
+    const backgroundX = interpolate(t, [0, 1], [-10 * strength, 12 * strength]);
+    const foregroundX = interpolate(t, [0, 1], [-54 * strength, 62 * strength]);
+    const backgroundScale = 1.015 + t * 0.025 * strength;
+    const foregroundScale = 1.08 + t * 0.035 * strength;
+    return (
+      <AbsoluteFill style={{overflow: 'hidden', backgroundColor: '#0d2035'}}>
+        <AbsoluteFill style={{transform: `translateX(${backgroundX}px) scale(${backgroundScale})`}}>{children}</AbsoluteFill>
+        <div
+          style={{
+            position: 'absolute',
+            left: '10%',
+            bottom: '-2%',
+            width: '42%',
+            height: '66%',
+            overflow: 'hidden',
+            clipPath: 'polygon(8% 6%, 88% 0, 100% 88%, 18% 100%, 0 42%)',
+            transform: `translateX(${foregroundX}px) scale(${foregroundScale})`,
+            transformOrigin: '50% 80%',
+            boxShadow: '0 34px 70px rgba(0,0,0,0.38)',
+          }}
+        >
+          <AbsoluteFill style={{left: '-18%', width: '136%', transform: `translateX(${-foregroundX * 0.22}px) scale(1.08)`, filter: 'saturate(1.08) contrast(1.04)'}}>
+            {children}
+          </AbsoluteFill>
+        </div>
+        <div
+          style={{
+            position: 'absolute',
+            right: '9%',
+            top: '16%',
+            width: 170,
+            height: 170,
+            borderRadius: 999,
+            border: '2px solid rgba(255,255,255,0.35)',
+            transform: `translateX(${-foregroundX * 0.45}px) translateY(${14 - t * 28 * strength}px)`,
+            opacity: 0.55,
+          }}
+        />
+      </AbsoluteFill>
+    );
+  }
+
   const scale = mode === 'static' ? 1 : mode === 'pull' ? 1.05 - t * 0.04 * strength : 1 + t * 0.045 * strength;
   const translateX = mode === 'pan' ? interpolate(t, [0, 1], [-32 * strength, 32 * strength]) : 0;
 
@@ -100,7 +144,6 @@ export function NativeCutEngine({
   const {durationInFrames} = useVideoConfig();
   const strength = intensityScale[intensity];
   const cutAt = Math.round(durationInFrames / 2);
-  // j-cut: the "next" audio/visual bed leads in before the cut line; l-cut: it lingers after.
   const bedLead = variant === 'j-cut' ? Math.round(12 * strength) : variant === 'l-cut' ? -Math.round(12 * strength) : 0;
   const bedStart = cutAt - bedLead;
   const bedOpacity = interpolate(frame, [bedStart - 6, bedStart], [0, 0.55], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
@@ -162,24 +205,136 @@ export function PhotoLayoutEngine({
   );
 }
 
+export type GraphicHitVariant = 'triplet' | 'speed-lines' | 'impact' | 'stamp-line-dot' | 'scribble' | 'halftone';
+
 export function GraphicHitEngine({
   variant = 'triplet',
   intensity = 'M',
   transparent = true,
 }: {
-  variant?: 'triplet' | 'speed-lines' | 'impact';
+  variant?: GraphicHitVariant;
   intensity?: MotionIntensity;
   transparent?: boolean;
 }) {
   const frame = useCurrentFrame();
   const strength = intensityScale[intensity];
   const hit = (at: number) => interpolate(frame, [at - 1, at, at + 5], [0, 1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  const reveal = (from: number, to: number) => interpolate(frame, [from, to], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: Easing.out(Easing.cubic)});
 
   return (
     <AbsoluteFill style={{backgroundColor: transparent ? undefined : '#0d2035', overflow: 'hidden'}}>
       {variant === 'triplet' && [8, 16, 24].map((at, index) => (
         <div key={at} style={{position: 'absolute', left: `${24 + index * 24}%`, top: '45%', width: 76, height: 76, borderRadius: 999, border: '7px solid #f0d37a', opacity: hit(at), transform: `scale(${0.65 + hit(at) * 0.65 * strength})`}} />
       ))}
+
+      {variant === 'stamp-line-dot' && (
+        <>
+          <div
+            style={{
+              position: 'absolute',
+              left: '22%',
+              top: '40%',
+              width: 122,
+              height: 122,
+              borderRadius: 999,
+              border: '8px double #f0d37a',
+              color: '#f0d37a',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: 20,
+              fontWeight: 900,
+              letterSpacing: '0.12em',
+              opacity: Math.max(hit(8), frame >= 8 ? 0.62 : 0),
+              transform: `rotate(-9deg) scale(${0.7 + hit(8) * 0.55 * strength})`,
+            }}
+          >
+            START
+          </div>
+          <div
+            style={{
+              position: 'absolute',
+              left: '36%',
+              top: '50%',
+              width: '31%',
+              height: 5,
+              background: '#fff',
+              transformOrigin: 'left center',
+              transform: `scaleX(${reveal(14, 19)})`,
+              opacity: 0.9,
+            }}
+          />
+          <div
+            style={{
+              position: 'absolute',
+              left: '68%',
+              top: 'calc(50% - 13px)',
+              width: 30,
+              height: 30,
+              borderRadius: 999,
+              background: '#f0d37a',
+              boxShadow: `0 0 0 ${10 + hit(24) * 20 * strength}px rgba(240,211,122,${0.16 + hit(24) * 0.25})`,
+              opacity: frame >= 22 ? 1 : 0,
+              transform: `scale(${0.72 + hit(24) * 0.8 * strength})`,
+            }}
+          />
+        </>
+      )}
+
+      {variant === 'scribble' && (
+        <svg viewBox="0 0 1200 400" style={{position: 'absolute', left: '13%', top: '33%', width: '74%', height: '36%', overflow: 'visible'}}>
+          <path
+            d="M70 240 C170 205, 250 265, 350 228 S545 202, 640 239 S815 268, 930 216 S1060 214, 1130 236"
+            fill="none"
+            stroke="#f0d37a"
+            strokeWidth={18 * strength}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            pathLength={1}
+            strokeDasharray={1}
+            strokeDashoffset={1 - reveal(4, 18)}
+          />
+          <path
+            d="M110 282 C280 254, 420 306, 565 270 S845 248, 1080 274"
+            fill="none"
+            stroke="rgba(255,255,255,0.78)"
+            strokeWidth={7 * strength}
+            strokeLinecap="round"
+            pathLength={1}
+            strokeDasharray={1}
+            strokeDashoffset={1 - reveal(11, 24)}
+          />
+        </svg>
+      )}
+
+      {variant === 'halftone' && Array.from({length: 63}).map((_, index) => {
+        const col = index % 9;
+        const row = Math.floor(index / 9);
+        const dx = col - 4;
+        const dy = row - 3;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        const p = reveal(3 + distance * 0.8, 12 + distance * 1.2);
+        const size = Math.max(5, (24 - distance * 2.6) * strength);
+        return (
+          <div
+            key={index}
+            style={{
+              position: 'absolute',
+              left: `calc(50% + ${dx * 76}px)`,
+              top: `calc(50% + ${dy * 76}px)`,
+              width: size,
+              height: size,
+              marginLeft: -size / 2,
+              marginTop: -size / 2,
+              borderRadius: 999,
+              background: index % 3 === 0 ? '#f0d37a' : '#fff',
+              opacity: p * (0.45 + 0.45 * strength),
+              transform: `scale(${0.25 + p * 1.35})`,
+            }}
+          />
+        );
+      })}
+
       {variant === 'speed-lines' && Array.from({length: 12}).map((_, index) => {
         const progress = interpolate(frame, [0, 12], [0, 1], {extrapolateRight: 'clamp'});
         return <div key={index} style={{position: 'absolute', left: `${-10 + index * 9}%`, top: `${8 + (index % 6) * 15}%`, width: `${18 + (index % 3) * 8}%`, height: 3, background: '#fff', opacity: 0.18 + 0.5 * strength, transform: `translateX(${progress * 180 * strength}px) rotate(-8deg)`}} />;
