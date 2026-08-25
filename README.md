@@ -6,9 +6,15 @@
 
 ## 現在の最優先
 
-**2026-10-24の上映用Opening V1を完成させる。**
+**2026-10-24の上映用StaRt Extended Candidateを本命方向として本番roughへ進める。**
 
-現行Opening V1:
+Openingの単一authorityは `docs/opening-authority.md`。
+
+- StaRt Extended Candidate = 本命方向
+- Opening V1 60秒 = Short Candidate / venue fallback / 比較用
+- 最終採用は権利確認済みlocal音源と実素材を使ったartifactの人間比較で決める
+
+先に実装済みのShort Candidate:
 
 - 60秒
 - 8scene
@@ -17,7 +23,7 @@
 - Remotionがsource of truth
 - 11枚の実写真を差し替えるだけでpreview/finalへ進める構成
 
-詳細: `docs/opening-v1-motion-map.md`
+Short実装詳細: `docs/opening-v1-motion-map.md`
 
 作業順: `docs/task-board.md`
 
@@ -25,21 +31,19 @@
 
 作業前はこの順で見る。
 
-1. `docs/task-board.md` — 今やること。
-2. `docs/opening-v1-motion-map.md` — Opening V1の60秒構成・編集言語・QA正本。
-3. `motion-studio/README.md` — Remotion実装・render・QA。
-4. `02_opening-movie/asset-status.md` — 既存素材の採否と不足。旧AI素材も含むため、Opening正本より優先しない。
-5. `movie-dashboard/README.md` — 絵コンテ、素材、プロンプト、タスクの補助管理。
-6. `docs/00_start-here.md` — 全体ナビ。
-
-Opening V1とは別系統の並行研究トラック（StaRt Director Recipe Catalog、97演出レシピ×14 section）は
-`docs/start-director-recipe-system-overview.md` を索引にする。Opening V1完成の優先度は変えない。
+1. `docs/opening-authority.md` — Extended / Short / timing / mediaの正本。
+2. `docs/task-board.md` — 今やること。
+3. `docs/start-director-recipe-system-overview.md` — Extended制作基盤。
+4. `docs/opening-v1-motion-map.md` — Short 60秒fallbackの実装・QA正本。
+5. `motion-studio/README.md` — Remotion実装・render・QA。
+6. `02_opening-movie/asset-status.md` — 既存素材の採否と不足。
+7. `movie-dashboard/README.md` — 制作補助管理。
 
 ## motion-studio
 
 Remotion + React + TypeScriptでWedding Movieと必要なモーション素材を作る場所。
 
-Opening V1については、**ここで完成動画までrenderする**。
+Extended / Shortともに、比較可能なartifactは**ここでrenderする**。現行Short実装の操作:
 
 ```sh
 cd motion-studio
@@ -70,16 +74,17 @@ pnpm dev
 - 共有・永続化したい場合はJSONエクスポートし、必要に応じて `src/data/*.json` に反映してcommitする。
 - 大きな画像、動画、音源はGitに入れず、パス・メモ・採否だけ管理する。
 - ダッシュボード機能追加より実際のOpening完成を優先する。
-- `StaRt Motion Showcase` / `Director Recipe Catalog` 画面（並行研究トラック）は相互リンク済み。詳細は `docs/start-director-recipe-system-overview.md`。
+- `StaRt Motion Showcase` / `Director Recipe Catalog` はExtended制作・人手選定画面として相互リンク済み。詳細は `docs/start-director-recipe-system-overview.md`。
 
 ## 優先順位
 
-1. Opening V1完成
-2. プロフィールムービー
-3. 紹介ムービー、その他動画
-4. 必要になったAI B-roll / 背景素材
-5. ダッシュボード・制作基盤の追加改善
-6. その他関連制作物
+1. Extended Candidate本番rough
+2. 同一素材条件のShort Candidate fallback
+3. 人間比較による本番candidate決定
+4. プロフィールムービー
+5. 紹介ムービー、その他動画
+6. 必要性が確定したAI B-roll / 背景素材
+7. ダッシュボード・制作基盤の追加改善
 
 ## Opening V1で戻さないもの
 

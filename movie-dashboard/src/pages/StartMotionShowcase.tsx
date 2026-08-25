@@ -13,7 +13,7 @@ import {
   startExtendedAuthority,
   startExtendedEditGrammar,
   startExtendedSections,
-  startExtendedSongFacts,
+  startExtendedResearchHypotheses,
 } from "../data/startExtendedRhythmMap";
 
 const ALL = "ALL" as const;
@@ -30,7 +30,7 @@ function downloadJson() {
   const blob = new Blob([JSON.stringify({
     authority: startShowcaseAuthority,
     extendedAuthority: startExtendedAuthority,
-    songFacts: startExtendedSongFacts,
+    researchHypotheses: startExtendedResearchHypotheses,
     rhythmSections: startExtendedSections,
     slots: startShowcaseSlots,
   }, null, 2)], { type: "application/json;charset=utf-8" });
@@ -70,17 +70,20 @@ export function StartMotionShowcase() {
       />
 
       <section className="mb-5 border-2 border-sky-300 dark:border-sky-700 bg-sky-50 dark:bg-sky-900/20 p-5">
-        <p className="text-[10px] tracking-[0.2em] font-semibold text-sky-700 dark:text-sky-300">RESEARCH TIMING REFERENCE</p>
+        <div className="flex flex-wrap items-center gap-2">
+          <p className="text-[10px] tracking-[0.2em] font-semibold text-sky-700 dark:text-sky-300">RESEARCH TIMING REFERENCE</p>
+          <span className="border border-amber-500 bg-amber-100 dark:bg-amber-900/30 px-2 py-0.5 text-[10px] font-bold tracking-widest text-amber-800 dark:text-amber-200">AUDIO_BLOCKED</span>
+        </div>
         <div className="mt-2 flex flex-col xl:flex-row xl:items-end gap-4">
           <div>
             <h2 className="text-3xl font-mono font-bold text-sky-950 dark:text-sky-100">約2:09</h2>
             <p className="mt-1 text-sm text-sky-900 dark:text-sky-200">曲頭 → 2番サビ後の間奏 → Cメロ開始直前。reference endpoint = {startExtendedAuthority.referenceEndSec}s。</p>
           </div>
           <div className="xl:ml-auto grid grid-cols-2 md:grid-cols-4 gap-px bg-sky-200 dark:bg-sky-800 min-w-full xl:min-w-[560px]">
-            <div className="bg-white dark:bg-navy-800 p-3"><p className="text-[9px] tracking-widest text-navy-400">TEMPO</p><p className="font-mono font-bold text-lg text-navy-900 dark:text-sand-100">190 BPM</p></div>
-            <div className="bg-white dark:bg-navy-800 p-3"><p className="text-[9px] tracking-widest text-navy-400">PHOTO GRID</p><p className="font-mono font-bold text-lg text-navy-900 dark:text-sand-100">95 BPM</p></div>
-            <div className="bg-white dark:bg-navy-800 p-3"><p className="text-[9px] tracking-widest text-navy-400">NORMAL HOLD</p><p className="font-mono font-bold text-sm text-navy-900 dark:text-sand-100">1.26–2.53s</p></div>
-            <div className="bg-white dark:bg-navy-800 p-3"><p className="text-[9px] tracking-widest text-navy-400">HERO HOLD</p><p className="font-mono font-bold text-sm text-navy-900 dark:text-sand-100">2.53–5.05s</p></div>
+            <div className="bg-white dark:bg-navy-800 p-3"><p className="text-[9px] tracking-widest text-navy-400">TEMPO HYPOTHESIS</p><p className="font-mono font-bold text-lg text-navy-900 dark:text-sand-100">{startExtendedResearchHypotheses.bpm} BPM</p></div>
+            <div className="bg-white dark:bg-navy-800 p-3"><p className="text-[9px] tracking-widest text-navy-400">PHOTO GRID HYPOTHESIS</p><p className="font-mono font-bold text-lg text-navy-900 dark:text-sand-100">{startExtendedResearchHypotheses.halfTimeBpm} BPM</p></div>
+            <div className="bg-white dark:bg-navy-800 p-3"><p className="text-[9px] tracking-widest text-navy-400">NORMAL HOLD HYPOTHESIS</p><p className="font-mono font-bold text-sm text-navy-900 dark:text-sand-100">{startExtendedResearchHypotheses.normalPhotoHold}</p></div>
+            <div className="bg-white dark:bg-navy-800 p-3"><p className="text-[9px] tracking-widest text-navy-400">HERO HOLD HYPOTHESIS</p><p className="font-mono font-bold text-sm text-navy-900 dark:text-sand-100">{startExtendedResearchHypotheses.heroPhotoHold}</p></div>
           </div>
         </div>
         <p className="mt-3 text-xs leading-5 text-sky-800 dark:text-sky-300">{startExtendedAuthority.endToleranceNote}</p>
@@ -95,7 +98,7 @@ export function StartMotionShowcase() {
       </section>
 
       <section className="mb-8 border-2 border-amber-300 dark:border-amber-700 bg-amber-50 dark:bg-amber-900/20 p-5">
-        <p className="text-[10px] tracking-[0.2em] font-semibold text-amber-700 dark:text-amber-300">EXACT TIMING GATE</p>
+        <p className="text-[10px] tracking-[0.2em] font-semibold text-amber-700 dark:text-amber-300">EXACT TIMING GATE — AUDIO_BLOCKED</p>
         <h2 className="mt-1 text-xl font-bold text-amber-950 dark:text-amber-100">約2:09は研究用reference — Final秒数は正規/local音源の波形とMarkerがauthority</h2>
         <p className="mt-2 text-sm leading-6 text-amber-900 dark:text-amber-200">{startShowcaseAuthority.timingRule}</p>
         <p className="mt-2 text-xs leading-5 text-amber-800 dark:text-amber-300">{startShowcaseAuthority.lyricRule}</p>

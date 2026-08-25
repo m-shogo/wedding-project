@@ -45,8 +45,10 @@ export interface StartLyricTimingSlot {
 
 export const startExtendedAuthority = {
   title: "StaRt Extended Rhythm Map",
+  audioState: "AUDIO_BLOCKED" as const,
   timingState: "researched-reference-not-final" as const,
   finalTimingAuthority: "cleared-local-audio-waveform-and-markers" as const,
+  exactEndMarker: null,
   referenceEndSec: 129,
   referenceEndLabel: "約2:09 / Cメロ開始直前",
   endToleranceNote: "外部解析には約2:07開始の例もある。CD/配信/動画の頭出し差を吸収するため、Final ENDは正規/local音源の波形とMarkerで固定する。",
@@ -56,7 +58,7 @@ export const startExtendedAuthority = {
   finalRule: "曲の楽しさはcut数ではなく、遊び心・期待・静止・3-hit・サビlift・releaseの落差で作る。",
 } as const;
 
-export const startExtendedSongFacts = {
+export const startExtendedResearchHypotheses = {
   bpm: 190,
   halfTimeBpm: 95,
   timeSignature: "4/4",

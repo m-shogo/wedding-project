@@ -13,7 +13,21 @@
     "movie-dashboard/src/data/startClaudeCodexAB.ts (Phase G)"
   ],
   "note": "Reference/researched timing, not final. This lane is independent of the other agent's lane — do not read the other lane's output directory while building this one.",
-  "songFacts": {
+  "authority": {
+    "title": "StaRt Extended Rhythm Map",
+    "audioState": "AUDIO_BLOCKED",
+    "timingState": "researched-reference-not-final",
+    "finalTimingAuthority": "cleared-local-audio-waveform-and-markers",
+    "exactEndMarker": null,
+    "referenceEndSec": 129,
+    "referenceEndLabel": "約2:09 / Cメロ開始直前",
+    "endToleranceNote": "外部解析には約2:07開始の例もある。CD/配信/動画の頭出し差を吸収するため、Final ENDは正規/local音源の波形とMarkerで固定する。",
+    "lyricRule": "GitにはLYRIC_###と順番・reference timingのみ保存し、歌詞本文は保存しない。",
+    "mediaRule": "人物・家族・友人・犬は実写真・実動画を主役にし、AIで本人性を生成・変形しない。",
+    "editRule": "190 BPMを全cutへ使わない。95 BPM half-timeを写真の主grid、190 BPMはmicro accentと瞬間hitへ使う。",
+    "finalRule": "曲の楽しさはcut数ではなく、遊び心・期待・静止・3-hit・サビlift・releaseの落差で作る。"
+  },
+  "researchHypotheses": {
     "bpm": 190,
     "halfTimeBpm": 95,
     "timeSignature": "4/4",

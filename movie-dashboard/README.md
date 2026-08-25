@@ -126,7 +126,7 @@ provider-aware prompt
 | 絵コンテ | シーンの追加・編集・削除・複製・並び替え。素材とPromptを紐付ける |
 | 素材ライブラリ | 素材CRUD、フィルタ、パス、一括操作、CSV、サムネイル |
 | クリップ素材集 | 切り出し済みクリップと演出レシピを章・動き(motion)・採否で絞り込む（読み取り専用） |
-| Director Recipe Catalog | 97件の演出レシピをcategory/energy/source/StaRt section/intensity/statusで絞り込み、詳細とmotion-studio render commandを見る（読み取り専用・研究トラック） |
+| Director Recipe Catalog | 97件をcategory/energy/source/section/intensity/status/visual fidelityで絞り込み、人間のFavorite/Maybe/RejectをlocalStorageへ記録するExtended制作レビュー |
 | 動画プロンプト | シーン＋プリセット＋shot intentからモデル別Promptを作成 |
 | 動画生成キュー | 生成待ちPromptをモデル別にまとめ、コピー・testing移行・結果登録・Export |
 | AI動画 結果レビュー | 結果Asset、共通/固有QA、採否、失敗理由、retry lineage |

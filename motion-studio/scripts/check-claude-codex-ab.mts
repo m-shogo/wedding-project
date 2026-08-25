@@ -7,8 +7,8 @@
 // therefore only a warning during an undecided research run.
 //
 // Hard rule:
-//   winner is non-null  =>  every artifact required by that winner must exist on disk in the
-//   review environment. CI that records a decision must render/download those artifacts first.
+//   winner is non-null  =>  both artifacts must exist on disk and every score row must contain
+//   both values or an explicit N/A reason. CI must render/download both artifacts first.
 //
 // Also checks:
 //   - exactly 12 evaluation axes, unique ids, 5-point rubric each
@@ -70,14 +70,7 @@ for (const comparison of startAbComparisons) {
   warnMissingExpectedArtifact('codexCandidate', comparison.codexCandidate.artifactPath);
 
   if (comparison.winner !== null) {
-    const requiredCandidates =
-      comparison.winner === 'claude'
-        ? [comparison.claudeCandidate]
-        : comparison.winner === 'codex'
-          ? [comparison.codexCandidate]
-          : [comparison.claudeCandidate, comparison.codexCandidate];
-
-    for (const candidate of requiredCandidates) {
+    for (const candidate of [comparison.claudeCandidate, comparison.codexCandidate]) {
       if (!artifactExists(candidate.artifactPath)) {
         err(
           `[${comparison.id}] winner=${comparison.winner} requires ${candidate.agent} review media, ` +
@@ -95,6 +88,37 @@ for (const comparison of startAbComparisons) {
     if (!existsSync(abs)) {
       console.warn(`⚠️  [${comparison.id}] ${candidate.agent} handoff pack not found at ${candidate.handoffPath}. Run: pnpm export:claude-codex-ab-handoff`);
     }
+  }
+}
+
+// Negative contract probes: the checked-in seed is intentionally undecided, so these mutations
+// prove that a future winner cannot bypass the two-artifact and complete-score requirements.
+const seed = startAbComparisons[0];
+if (seed) {
+  const decidedBase = {
+    ...seed,
+    winner: 'claude' as const,
+    decidedBy: 'contract-probe',
+    decidedAt: '2026-08-25',
+    scores: seed.scores.map((row) => ({...row, claude: 3 as const, codex: 3 as const})),
+  };
+  const missingOpponent = validateStartAbComparisonShape({
+    ...decidedBase,
+    claudeCandidate: {...seed.claudeCandidate, artifactPath: 'out/claude.mp4'},
+    codexCandidate: {...seed.codexCandidate, artifactPath: null},
+  });
+  if (!missingOpponent.some((issue) => issue.message.includes('codexCandidate.artifactPath'))) {
+    err('negative probe failed: a winner with only one artifact was accepted.');
+  }
+
+  const incompleteScores = validateStartAbComparisonShape({
+    ...decidedBase,
+    claudeCandidate: {...seed.claudeCandidate, artifactPath: 'out/claude.mp4'},
+    codexCandidate: {...seed.codexCandidate, artifactPath: 'out/codex.mp4'},
+    scores: seed.scores.map((row) => ({...row, comment: ''})),
+  });
+  if (!incompleteScores.some((issue) => issue.message.includes('score row'))) {
+    err('negative probe failed: a winner with incomplete scores was accepted.');
   }
 }
 

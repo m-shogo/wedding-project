@@ -2,9 +2,17 @@
 
 Remotion + React + TypeScriptで結婚式ムービーを制作するスタジオ。
 
-## 最優先: Opening V1
+## Opening authority
 
-2026-10-24上映用Opening V1は、**このmotion-studioで60秒の完成動画までrenderする**。
+Opening全体の単一authorityは `../docs/opening-authority.md`。
+
+- StaRt Extended Candidate = 本命方向
+- Opening V1 60秒 = Short Candidate / venue fallback / 比較用
+- このREADMEでShortの実装手順が先に出ることを、Final採用済みという意味にしない
+
+## Short Candidate: Opening V1
+
+Opening V1は、**このmotion-studioで60秒のShort fallbackまでrenderできる実装**。
 
 現行正本:
 
@@ -187,11 +195,11 @@ pnpm preset
 
 legacy `開幕-全体確認` 82秒版は順番/歴史確認用。Opening V1の正本ではない。
 
-## Director Recipe Renderer（StaRt拡張、研究/比較用）
+## Director Recipe Renderer（StaRt Extended本命方向の制作/比較用）
 
 `movie-dashboard/src/data/directorRecipeCatalog.ts`（Phase A、97件の演出レシピdata）を、
 実際にRemotionでpreview/renderできるようにする共有レンダラー。
-**Opening V1の正本ではない。** 実写真11枚投入が最優先で、これは並行研究トラック。
+**Extended本命方向の制作基盤。** ただしcatalog自体をFinal扱いせず、実素材で4〜8 motion familyへ削る。
 
 設計方針: 97個の個別コンポーネントは作らない。各レシピは `motionPresetIds`
 (既存36 Motion Kit presetへの参照)を持ち、それを6つの共有engineへ機械的にマッピングする。

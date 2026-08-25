@@ -14,9 +14,16 @@ import {
 import { motionEnergies, type MotionEnergy } from "../data/startMotionKit";
 import { startExtendedSections, type StartExtendedSectionId } from "../data/startExtendedRhythmMap";
 import { startSectionRecipeMap } from "../data/startSectionRecipeMap";
+import {
+  getDirectorRecipeVisualAudit,
+  type DirectorVisualFidelity,
+} from "../data/directorRecipeVisualFidelity";
 
 const ALL = "ALL" as const;
 type Filter<T> = T | typeof ALL;
+type HumanReviewDecision = "favorite" | "maybe" | "reject";
+
+const HUMAN_REVIEW_STORAGE_KEY = "start-director-human-decisions-v1";
 
 const categoryLabels: Record<DirectorRecipeCategory, string> = {
   CINEMATIC_CAMERA: "Cinematic Camera",
@@ -44,6 +51,18 @@ const statusLabels: Record<DirectorRecipeStatus, string> = {
   rejected: "rejected（不採用）",
 };
 
+const fidelityLabels: Record<DirectorVisualFidelity, string> = {
+  exact: "exact（忠実）",
+  representative: "representative（近似）",
+  placeholder: "placeholder（構造のみ）",
+};
+
+const fidelityClasses: Record<DirectorVisualFidelity, string> = {
+  exact: "border-emerald-400 text-emerald-700 dark:text-emerald-300",
+  representative: "border-amber-400 text-amber-700 dark:text-amber-300",
+  placeholder: "border-red-400 text-red-700 dark:text-red-300",
+};
+
 function categorySlug(category: DirectorRecipeCategory): string {
   return category.toLowerCase().replace(/_/g, "-");
 }
@@ -64,8 +83,17 @@ export function DirectorRecipeCatalog() {
   const [section, setSection] = useState<Filter<StartExtendedSectionId>>(ALL);
   const [intensity, setIntensity] = useState<Filter<DirectorRecipeIntensity>>(ALL);
   const [status, setStatus] = useState<Filter<DirectorRecipeStatus>>(ALL);
+  const [fidelity, setFidelity] = useState<Filter<DirectorVisualFidelity>>(ALL);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [humanDecisions, setHumanDecisions] = useState<Record<string, HumanReviewDecision>>(() => {
+    try {
+      const saved = window.localStorage.getItem(HUMAN_REVIEW_STORAGE_KEY);
+      return saved ? JSON.parse(saved) as Record<string, HumanReviewDecision> : {};
+    } catch {
+      return {};
+    }
+  });
 
   const filtered = useMemo(
     () =>
@@ -75,9 +103,10 @@ export function DirectorRecipeCatalog() {
         (source === ALL || recipe.sourceType === source || recipe.sourceType === "both") &&
         (section === ALL || recipe.recommendedStaRtSections.includes(section)) &&
         (intensity === ALL || recipe.intensity.includes(intensity)) &&
-        (status === ALL || recipe.status === status),
+        (status === ALL || recipe.status === status) &&
+        (fidelity === ALL || getDirectorRecipeVisualAudit(recipe).fidelity === fidelity),
       ),
-    [category, energy, source, section, intensity, status],
+    [category, energy, source, section, intensity, status, fidelity],
   );
 
   const selected = useMemo(
@@ -92,18 +121,32 @@ export function DirectorRecipeCatalog() {
     window.setTimeout(() => setCopiedId((current) => (current === recipe.id ? null : current)), 1600);
   }
 
+  function setHumanDecision(recipeId: string, decision: HumanReviewDecision) {
+    setHumanDecisions((current) => {
+      const next = {...current};
+      if (next[recipeId] === decision) delete next[recipeId];
+      else next[recipeId] = decision;
+      try {
+        window.localStorage.setItem(HUMAN_REVIEW_STORAGE_KEY, JSON.stringify(next));
+      } catch {
+        // The UI state still works for this session when storage is unavailable or full.
+      }
+      return next;
+    });
+  }
+
   return (
     <div>
       <Header
         title="StaRt DIRECTOR RECIPE CATALOG"
-        description="97件の演出レシピをcategory / energy / source / StaRt section / intensity / statusで絞り込んで見る、研究用ブラウジング画面（読み取り専用）"
+        description="97件の演出レシピを制作適合度で絞り込み、人間がFavorite / Maybe / Rejectを端末内に記録するレビュー画面"
       />
 
       <section className="mb-6 border-2 border-sky-300 dark:border-sky-700 bg-sky-50 dark:bg-sky-900/20 p-5">
-        <p className="text-[10px] tracking-[0.2em] font-semibold text-sky-700 dark:text-sky-300">RESEARCH TRACK — NOT OPENING V1</p>
+        <p className="text-[10px] tracking-[0.2em] font-semibold text-sky-700 dark:text-sky-300">EXTENDED PRODUCTION FOUNDATION — NOT FINAL</p>
         <p className="mt-2 text-sm leading-6 text-sky-900 dark:text-sky-200">
-          この画面はDirector Recipe Catalog（movie-dashboard Phase A data）を眺めて比較するための並行研究トラック。
-          Opening V1の正本は<code>docs/opening-v1-motion-map.md</code>のまま。ここでのブラウジングが実写真の差し替え作業より優先されることはない。
+          この画面は本命方向のStaRt Extended Candidateを4〜8 motion familyへ絞るための制作基盤。
+          Opening全体のauthorityは<code>docs/opening-authority.md</code>、60秒Opening V1はShort fallback。Catalog拡張より実素材artifactを優先する。
         </p>
         <p className="mt-2 text-xs leading-5 text-sky-800 dark:text-sky-300">
           statusはすべて<code>planned</code>のまま。AIがfavorite/approvedへ自動昇格させることはしない。採否は人間確認が必須。
@@ -155,7 +198,7 @@ export function DirectorRecipeCatalog() {
         </div>
       </section>
 
-      <section className="mb-7 grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3 border-b border-sand-200 dark:border-navy-600 pb-5">
+      <section className="mb-7 grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-7 gap-3 border-b border-sand-200 dark:border-navy-600 pb-5">
         <label className="text-[10px] tracking-[0.2em] font-semibold text-navy-400">CATEGORY
           <select value={category} onChange={(e) => setCategory(e.target.value as Filter<DirectorRecipeCategory>)} className="mt-1 block w-full border border-sand-300 dark:border-navy-600 bg-white dark:bg-navy-800 px-3 py-2 text-sm text-navy-800 dark:text-sand-100">
             <option value={ALL}>ALL</option>
@@ -199,6 +242,14 @@ export function DirectorRecipeCatalog() {
             <option value="rejected">rejected</option>
           </select>
         </label>
+        <label className="text-[10px] tracking-[0.2em] font-semibold text-navy-400">VISUAL FIDELITY
+          <select value={fidelity} onChange={(e) => setFidelity(e.target.value as Filter<DirectorVisualFidelity>)} className="mt-1 block w-full border border-sand-300 dark:border-navy-600 bg-white dark:bg-navy-800 px-3 py-2 text-sm text-navy-800 dark:text-sand-100">
+            <option value={ALL}>ALL</option>
+            <option value="exact">{fidelityLabels.exact}</option>
+            <option value="representative">{fidelityLabels.representative}</option>
+            <option value="placeholder">{fidelityLabels.placeholder}</option>
+          </select>
+        </label>
       </section>
 
       <div className="grid grid-cols-1 xl:grid-cols-[1.4fr_1fr] gap-6">
@@ -213,6 +264,9 @@ export function DirectorRecipeCatalog() {
                 <p className="text-[10px] font-mono text-navy-400">{recipe.id}</p>
                 <h3 className="mt-1 font-bold text-navy-900 dark:text-sand-100">{recipe.label}</h3>
                 <p className="mt-1 text-[10px] font-mono uppercase text-sky-700 dark:text-sky-300">{categoryLabels[recipe.category]}</p>
+                <span className={`mt-2 inline-block border px-1.5 py-0.5 text-[9px] font-mono uppercase ${fidelityClasses[getDirectorRecipeVisualAudit(recipe).fidelity]}`}>
+                  {getDirectorRecipeVisualAudit(recipe).fidelity}
+                </span>
               </div>
               <div className="text-xs leading-5 text-navy-600 dark:text-navy-300">
                 <p>{recipe.purpose}</p>
@@ -222,6 +276,7 @@ export function DirectorRecipeCatalog() {
               </div>
               <div className="text-xs leading-5 text-navy-600 dark:text-navy-300">
                 <p className="font-mono text-navy-400">status: {recipe.status}</p>
+                <p className="font-mono text-navy-400">human: {humanDecisions[recipe.id] ?? "unreviewed"}</p>
                 <button
                   onClick={(event) => {
                     event.stopPropagation();
@@ -252,6 +307,12 @@ export function DirectorRecipeCatalog() {
                   {categoryLabels[selected.category]} / {selected.subCategory}
                 </p>
                 <p className="mt-1 text-[10px] font-mono text-navy-400">{statusLabels[selected.status]}</p>
+                <p className={`mt-2 inline-block border px-2 py-1 text-[10px] font-mono uppercase ${fidelityClasses[getDirectorRecipeVisualAudit(selected).fidelity]}`}>
+                  visual fidelity: {fidelityLabels[getDirectorRecipeVisualAudit(selected).fidelity]}
+                </p>
+                <p className="mt-2 text-[11px] leading-5 text-navy-500 dark:text-navy-300">
+                  {getDirectorRecipeVisualAudit(selected).reasons.join(" / ")}
+                </p>
               </div>
 
               <div className="text-xs leading-5 text-navy-600 dark:text-navy-300 space-y-2">
@@ -314,14 +375,14 @@ pnpm render:director-recipe ${selected.id}`}
               </div>
 
               <div className="border-t border-sand-200 dark:border-navy-600 pt-3">
-                <p className="text-[10px] tracking-[0.2em] font-semibold text-navy-400">FAVORITE / MAYBE / REJECT（プレースホルダー）</p>
+                <p className="text-[10px] tracking-[0.2em] font-semibold text-navy-400">HUMAN REVIEW — FAVORITE / MAYBE / REJECT</p>
                 <p className="mt-1 text-[11px] leading-5 text-navy-400">
-                  ボタンは将来の人間レビュー機能用の設計余地。押しても状態は変わらない。AIがfavorite/approvedへ自動判定・自動昇格することはしない。
+                  選択はこのブラウザのlocalStorageだけに保存する。Catalogのstatusは変更せず、AIがfavorite/approvedへ自動昇格することはない。同じボタンを再度押すと解除。
                 </p>
                 <div className="mt-2 flex gap-2">
-                  <button disabled className="border border-emerald-300 dark:border-emerald-700 px-3 py-1.5 text-xs text-emerald-500 opacity-50 cursor-not-allowed">☆ Favorite</button>
-                  <button disabled className="border border-amber-300 dark:border-amber-700 px-3 py-1.5 text-xs text-amber-500 opacity-50 cursor-not-allowed">? Maybe</button>
-                  <button disabled className="border border-red-300 dark:border-red-700 px-3 py-1.5 text-xs text-red-500 opacity-50 cursor-not-allowed">✕ Reject</button>
+                  <button onClick={() => setHumanDecision(selected.id, "favorite")} aria-pressed={humanDecisions[selected.id] === "favorite"} className={`border border-emerald-400 px-3 py-1.5 text-xs text-emerald-700 dark:text-emerald-300 ${humanDecisions[selected.id] === "favorite" ? "bg-emerald-100 dark:bg-emerald-900/40 font-bold" : ""}`}>☆ Favorite</button>
+                  <button onClick={() => setHumanDecision(selected.id, "maybe")} aria-pressed={humanDecisions[selected.id] === "maybe"} className={`border border-amber-400 px-3 py-1.5 text-xs text-amber-700 dark:text-amber-300 ${humanDecisions[selected.id] === "maybe" ? "bg-amber-100 dark:bg-amber-900/40 font-bold" : ""}`}>? Maybe</button>
+                  <button onClick={() => setHumanDecision(selected.id, "reject")} aria-pressed={humanDecisions[selected.id] === "reject"} className={`border border-red-400 px-3 py-1.5 text-xs text-red-700 dark:text-red-300 ${humanDecisions[selected.id] === "reject" ? "bg-red-100 dark:bg-red-900/40 font-bold" : ""}`}>✕ Reject</button>
                 </div>
               </div>
             </div>

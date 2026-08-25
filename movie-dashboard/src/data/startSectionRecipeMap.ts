@@ -33,7 +33,7 @@ export interface StartSectionRecipeMapping {
   /** Expected graphic/cut density for this section (mirrors startExtendedSections[].density). */
   density: StartEditDensity;
   /** Photo hold duration guidance, grounded in the 95 BPM half-time grid
-   * (startExtendedSongFacts.normalPhotoHold / heroPhotoHold). */
+   * (startExtendedResearchHypotheses.normalPhotoHold / heroPhotoHold). */
   photoHoldSeconds: string;
   /** How much of the 190 BPM micro-accent grammar (line / stamp / dot / caption emphasis) this
    * section should use. */

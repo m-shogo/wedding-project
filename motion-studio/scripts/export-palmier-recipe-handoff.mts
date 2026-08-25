@@ -1,8 +1,8 @@
 // pnpm export:palmier-recipe-handoff
 //
-// Phase F — Palmier / DaVinci handoff export for the StaRt Director Recipe Catalog research
-// track (Phase A-E, already merged to main). This does NOT touch Opening V1. Opening V1's
-// source of truth stays src/data/openingV1.ts / OpeningV1.tsx per ../CLAUDE.md.
+// Phase F — Palmier / DaVinci handoff export for the StaRt Extended production foundation.
+// Opening authority is defined by ../docs/opening-authority.md; Short implementation remains
+// in src/data/openingV1.ts / OpeningV1.tsx.
 //
 // Input (single source of truth, read-only, not copied):
 //   movie-dashboard/src/data/directorRecipeCatalog.ts   Phase A — 97 recipes, buildPalmierRecipeHandoff()
@@ -30,7 +30,11 @@ import {
   type DirectorRecipe,
 } from '../../movie-dashboard/src/data/directorRecipeCatalog.ts';
 import {startSectionRecipeMap} from '../../movie-dashboard/src/data/startSectionRecipeMap.ts';
-import {startExtendedSections, startExtendedSongFacts} from '../../movie-dashboard/src/data/startExtendedRhythmMap.ts';
+import {
+  startExtendedAuthority,
+  startExtendedResearchHypotheses,
+  startExtendedSections,
+} from '../../movie-dashboard/src/data/startExtendedRhythmMap.ts';
 
 const studioRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const outDir = join(studioRoot, 'exports/palmier');
@@ -138,7 +142,7 @@ if (missingCount > 0) {
 
 // --- CSV ---------------------------------------------------------------------------------
 const csvHeader = [
-  'order', 'section_id', 'section_label', 'marker_start', 'marker_end', 'duration_sec',
+  'order', 'audio_state', 'timing_state', 'section_id', 'section_label', 'marker_start', 'marker_end', 'duration_sec',
   'energy', 'density', 'primary_recipe_id', 'primary_recipe_label', 'primary_recipe_category',
   'motion_preset_ids', 'source_type', 'duration_frames_range', 'duration_sec_range', 'intensity',
   'transition_grammar', 'beat_behavior', 'alternate_recipe_ids', 'avoid_recipe_ids',
@@ -147,7 +151,8 @@ const csvHeader = [
 const csvLines = [csvHeader.join(',')];
 for (const r of rows) {
   csvLines.push([
-    r.order, r.sectionId, r.sectionLabel, r.markerStart, r.markerEnd, r.durationSec,
+    r.order, startExtendedAuthority.audioState, startExtendedAuthority.timingState,
+    r.sectionId, r.sectionLabel, r.markerStart, r.markerEnd, r.durationSec,
     r.energy, r.density, r.primaryRecipeId, r.primaryRecipeLabel, r.primaryRecipeCategory,
     r.motionPresetIds, r.sourceType, r.durationFramesRange, r.durationSecRange, r.intensity,
     r.transitionGrammar, r.beatBehavior, r.alternateRecipeIds, r.avoidRecipeIds,
@@ -167,7 +172,8 @@ writeFileSync(
         'movie-dashboard/src/data/startExtendedRhythmMap.ts',
       ],
       note: 'Reference/researched timing, not final. See startExtendedAuthority.timingState in startExtendedRhythmMap.ts. Not a Palmier project file; import by hand or via read-only MCP inspection.',
-      songFacts: startExtendedSongFacts,
+      authority: startExtendedAuthority,
+      researchHypotheses: startExtendedResearchHypotheses,
       sections: rows,
     },
     null,
@@ -179,7 +185,9 @@ writeFileSync(
 const mdLines: string[] = [];
 mdLines.push('# Palmier Director Recipe Section Handoff');
 mdLines.push('');
-mdLines.push('研究トラック（StaRt Extended Opening, Phase F）。Opening V1の正本ではない。');
+mdLines.push('StaRt Extended Candidateの制作handoff。Opening全体のauthorityは`docs/opening-authority.md`。');
+mdLines.push('');
+mdLines.push('> **AUDIO_BLOCKED:** 以下のmarker・tempo・holdは研究用仮説。権利確認済みlocal音源の波形とMarkerで再確定するまでFinal timingとして使わない。');
 mdLines.push('');
 mdLines.push('生成元:');
 mdLines.push('- `movie-dashboard/src/data/directorRecipeCatalog.ts`（Phase A, 97 recipes）');

@@ -1,7 +1,7 @@
 # DaVinci Resolve スキル ⇄ Director Recipe 逆引き
 
-Phase F。研究トラック（StaRt Extended Opening）。**Opening V1（60秒 Photo-first）の正本ではない。**
-Opening V1はRemotionが正本のまま、Palmier/CapCutはfinal polish専用。詳細は `docs/opening-v1-motion-map.md`。
+Phase F。StaRt Extended Candidateの制作基盤。Opening全体のauthorityは `docs/opening-authority.md`。
+Opening V1はShort CandidateのRemotion実装正本で、Palmier/CapCutはfinal polish専用。
 
 ## このドキュメントの目的
 
@@ -12,7 +12,7 @@ Opening V1はRemotionが正本のまま、Palmier/CapCutはfinal polish専用。
 という方針を明示する。
 
 対象はPalmier/CapCutで足りない領域を DaVinci Resolve で仕上げたい場合、または DaVinci Resolveの
-学習カリキュラムとして使う場合。**このrepoの現行編集ツールはRemotion(Opening V1) / Palmier /
+学習カリキュラムとして使う場合。**このrepoの現行編集ツールはRemotion(Extended / Short) / Palmier /
 CapCut**であり、DaVinci Resolveは今のところ標準ツールに含まれていない。導入を決めた場合の
 準備資料として先に作っておく。
 
