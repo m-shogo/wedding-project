@@ -63,8 +63,8 @@ for (const token of [
   'motion-zukan-composer-state-v1',
   'loadMotionZukanComposerState',
   'saveMotionZukanComposerState',
-  'projectId: "opening"',
-  'projectId: "profile"',
+  'buildProjectTimeline(opening, "opening")',
+  'buildProjectTimeline(profile, "profile")',
   'Recipe/default updates are provenance only after adoption; they must not silently rewrite this SceneInstance.',
 ]) requireText(composer, token, `Visual Scene Composer missing contract: ${token}`);
 
