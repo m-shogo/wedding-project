@@ -29,6 +29,7 @@ const navSections: SidebarSection[] = [
     sectionId: "learn",
     label: "LEARN",
     links: [
+      { to: "/movie-coach/motion-library", label: "動きを見て探す", icon: "▶" },
       { to: "/movie-coach/dictionary", label: "逆引きDaVinci辞典", icon: "⌕" },
       { to: "/movie-coach/start-rhythm", label: "StaRt Rhythm Lab", icon: "♬" },
       { to: "/movie-coach/start-motion-kit", label: "基礎アニメーション図鑑（36）", icon: "✦" },
