@@ -43,6 +43,31 @@
 - Movie変更をRurubu / Passport / Paper Item productionへ混ぜない。
 - 長い作業は小さなscopeでレビューし、`latest main → clean branch → tests/Visual QA → PR → squash merge → latest main` を繰り返す。
 
+## Human-Readable / Human-Editable Movie Contract
+
+Movie系のすべての新規・現在進行・既存再利用作業は `docs/contracts/human-readable-editable-movie-contract.md` に従う。
+
+最上位原則は、**AIの出力を人間が頑張って修正するのではなく、人間が理解・修正できる構造をAIが埋めること。**
+
+この契約は新しいScene Composerだけでなく、以下へ遡及適用する。
+
+- Visual Motion Library / Motion Kit / Director Recipes
+- StaRt Showcase / Selection / Production
+- Profile Movie Coach
+- Prompt Generator / Movie Review / Before-After
+- Palmier Handoff / DaVinci Handoff
+- 現在進行のMask Reveal Vertical Slice
+- 既存Remotion preview/compositionを今後触る場合
+- Opening V1 Short Candidateを明示的に再確認する場合
+
+適用のためだけに過去資産を一括破壊・一括移行しない。**今後触る箇所から小さく適用**する。
+
+人間向けの正本は、Scene Duration / Delay / Motion Duration / Hold / Position / Direction / Distance / Scale / Enter-Hold-Exit / Crop / Text / Media等の意味が分かる値とする。AI専用の不透明なscoreを唯一の正本にしない。
+
+`DEFAULT / AI_SUGGESTED / HUMAN_SELECTED / LOCKED` を必要に応じて区別し、`HUMAN_SELECTED` と `LOCKED` をClaude/Codex/Palmier/自動処理が黙って上書きしない。
+
+UIは原則 `かんたん → 詳細 → DaVinci` の順に開示し、1項目の修正で無関係なScene値を再生成しない。
+
 ## Opening authority
 
 Opening全体の単一authorityは `docs/opening-authority.md`。
@@ -71,14 +96,15 @@ Short Candidateの既存実装を壊すために移行しない。一方、今�
 
 1. @docs/opening-authority.md
 2. @docs/prompts/2026-08-25-visual-motion-library-palmier-davinci-complete.md
-3. @docs/reviews/2026-08-25-visual-motion-library-current-audit.md
-4. @README.md
-5. @docs/task-board.md
-6. @docs/start-director-recipe-system-overview.md
-7. @docs/opening-v1-motion-map.md
-8. @motion-studio/README.md
-9. @02_opening-movie/asset-status.md
-10. @movie-dashboard/README.md
+3. @docs/contracts/human-readable-editable-movie-contract.md
+4. @docs/reviews/2026-08-25-visual-motion-library-current-audit.md
+5. @README.md
+6. @docs/task-board.md
+7. @docs/start-director-recipe-system-overview.md
+8. @docs/opening-v1-motion-map.md
+9. @motion-studio/README.md
+10. @02_opening-movie/asset-status.md
+11. @movie-dashboard/README.md
 
 ## 参照
 
@@ -94,6 +120,7 @@ Short Candidateの既存実装を壊すために移行しない。一方、今�
 - CapCut運用: @docs/capcut-operation.md（legacy/reference）
 - Palmier運用: @docs/palmier-operation.md
 - Visual Motion Library prompt: @docs/prompts/2026-08-25-visual-motion-library-palmier-davinci-complete.md
+- Human-Readable / Human-Editable Movie Contract: @docs/contracts/human-readable-editable-movie-contract.md
 - Visual Motion Library current audit: @docs/reviews/2026-08-25-visual-motion-library-current-audit.md
 - 失敗例: @docs/failure-patterns.md
 - ロードマップ: @docs/06_roadmap.md

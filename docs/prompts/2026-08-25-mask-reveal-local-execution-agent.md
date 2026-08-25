@@ -13,15 +13,44 @@ Your purpose is not to build more architecture. Your purpose is to turn the alre
 ## Read first
 
 1. `docs/prompts/2026-08-25-visual-motion-library-palmier-davinci-complete.md`
-2. `docs/runbooks/2026-08-25-mask-reveal-local-davinci-actual-gate.md`
-3. `docs/research/2026-08-25-davinci-mcp-reuse-evaluation.md`
-4. `movie-dashboard/src/data/visualMotionLibrary.ts`
-5. `movie-dashboard/src/data/maskRevealHandoff.ts`
-6. `movie-dashboard/src/data/motionSampleAssetSets.ts`
-7. `movie-dashboard/src/data/motionPreviewEvidence.ts`
-8. `movie-dashboard/src/data/fusionNodeTranslator.ts`
+2. `docs/contracts/human-readable-editable-movie-contract.md`
+3. `docs/runbooks/2026-08-25-mask-reveal-local-davinci-actual-gate.md`
+4. `docs/research/2026-08-25-davinci-mcp-reuse-evaluation.md`
+5. `movie-dashboard/src/data/visualMotionLibrary.ts`
+6. `movie-dashboard/src/data/maskRevealHandoff.ts`
+7. `movie-dashboard/src/data/motionSampleAssetSets.ts`
+8. `movie-dashboard/src/data/motionPreviewEvidence.ts`
+9. `movie-dashboard/src/data/fusionNodeTranslator.ts`
 
-The complete prompt is mutable. If it was updated after this prompt, the newer complete prompt wins.
+The complete prompt is mutable. If it was updated after this prompt, the newer complete prompt wins. The Human-Readable / Human-Editable Movie Contract is cross-cutting and also applies to this currently running vertical slice.
+
+## Human-editable proof required for this slice
+
+An Actual DaVinci render alone is not enough. The Mask Reveal slice must keep the intended scene reconstructable and understandable by a person.
+
+At minimum preserve or prove these human-readable values:
+
+```text
+Text
+Scene Duration
+Text/Layer Start or Delay
+Enter Motion
+Enter Duration
+Direction
+Final Position
+Hold interval
+Human decision / lock state where applicable
+DaVinci implementation
+```
+
+Rules:
+
+- AI suggestion is not final authority.
+- If a value is `HUMAN_SELECTED` or `LOCKED`, do not silently replace it.
+- A correction to one value such as Delay or Position must not unnecessarily regenerate unrelated scene values.
+- Prefer human-readable values first; implementation-specific Fusion values are derived/detail-level information.
+- Palmier timing approximation must not erase the intended DaVinci finish instruction.
+- The render is evidence of the implementation, not a replacement for editable scene state.
 
 ## Non-negotiable boundaries
 
@@ -124,6 +153,20 @@ Before animation, prove via readback:
 
 Then implement a restrained upward Mask Reveal around 0.8 seconds.
 
+Human-readable target intent for this neutral proof:
+
+```text
+Text: WELCOME
+Scene Duration: 4.0 sec
+Text Start / Delay: explicit and recorded
+Enter: Mask Reveal
+Enter Duration: approximately 0.8 sec, record actual
+Direction: bottom → up
+Final Position: explicit and recorded
+Hold: remainder after reveal, explicit and recorded
+Intensity: restrained
+```
+
 No bounce. No glow. No shake. No decorative effect chain.
 
 Do not make up keyframe numbers only to avoid investigating the local API. Prefer the locally supported MCP/Fusion method. If automation truly cannot author the necessary keyframes, perform only the smallest manual keyframe step and record `automationGap: KEYFRAME_AUTHORING`.
@@ -197,6 +240,8 @@ Expected eligible transitions:
 - actual checksum/provenance
 - fill all completed `motion-verification/v1` checks
 
+In addition, preserve the human-editable intent needed to reconstruct the scene. Do not store only the final MP4 and opaque implementation values.
+
 Do not delete the repository-generated Concept evidence. It remains separate historical provenance.
 
 Run Movie Dashboard contracts/build and visually inspect the UI. It should play the Actual DaVinci MP4 while still making provenance clear.
@@ -220,6 +265,8 @@ Required bundle:
 
 Do not generate fake XML from app code.
 
+The handoff must preserve the human-readable intent and distinguish locked/human-selected values from implementation detail where the current schema supports it.
+
 Import that XML into a disposable/scratch DaVinci project, verify order/timing/relink, apply the already-tested Mask Reveal at the marker, and render again.
 
 If exact Mask Reveal cannot be done in Palmier, that is expected; leave it timing-ready for DaVinci rather than approximating it with a different effect.
@@ -228,7 +275,7 @@ If exact Mask Reveal cannot be done in Palmier, that is expected; leave it timin
 
 The first vertical slice passes only if the following is real and reviewable:
 
-`Visual Motion Library → Mask Reveal selection → Prompt outputs → Palmier Rough → real NLE XML → Motion Handoff Manifest → DaVinci XML import → actual Text+ Mask Reveal → actual DaVinci render → 1x/0.5x Visual QA → Actual Preview registered → version/provenance recorded`
+`Visual Motion Library → Mask Reveal selection → human-readable editable scene intent → Prompt outputs → Palmier Rough → real NLE XML → Motion Handoff Manifest → DaVinci XML import → actual Text+ Mask Reveal → actual DaVinci render → 1x/0.5x Visual QA → Actual Preview registered → version/provenance recorded`
 
 When it passes:
 
@@ -247,7 +294,7 @@ Report facts in four groups:
 Only actions actually executed.
 
 ### Evidence
-Exact Resolve version, rendered file/hash, XML path, checks, CI/PR/merge.
+Exact Resolve version, rendered file/hash, XML path, checks, CI/PR/merge, and the human-editable scene values preserved through the handoff.
 
 ### Remaining blocker
 Only genuine unresolved blockers. Do not list already solved setup as a blocker.
