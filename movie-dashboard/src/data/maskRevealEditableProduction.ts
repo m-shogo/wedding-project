@@ -3,6 +3,7 @@ import {
   listHumanSelectedMaskRevealFields,
   listLockedMaskRevealFields,
   resolveMaskRevealEditableIntent,
+  type EditableValue,
   type MaskRevealEditableFieldKey,
   type MaskRevealEditableIntent,
 } from "./humanEditableMotionIntent";
@@ -57,7 +58,7 @@ export function buildMaskRevealEditableSourceOfTruth(intent: MaskRevealEditableI
         key,
         {
           label: readableFieldName(key),
-          state: getEditableDecisionState(field),
+          state: getEditableDecisionState(field as EditableValue<unknown>),
           default: field.defaultValue,
           aiSuggested: field.aiSuggestedValue,
           aiReason: field.aiReason,
