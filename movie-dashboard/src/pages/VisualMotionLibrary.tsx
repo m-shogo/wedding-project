@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { Header } from "../components/Header";
+import { buildMaskRevealMotionHandoffJson } from "../data/maskRevealHandoff";
 import {
   buildMaskRevealPromptOutputs,
   getPatternImplementation,
@@ -21,6 +22,7 @@ export function VisualMotionLibrary() {
   const [query, setQuery] = useState("");
   const [input, setInput] = useState<MaskRevealPromptInput>(defaultInput);
   const [outputs, setOutputs] = useState<MotionPromptOutputs | null>(() => buildMaskRevealPromptOutputs(defaultInput));
+  const [handoffJson, setHandoffJson] = useState(() => buildMaskRevealMotionHandoffJson(defaultInput));
   const [copied, setCopied] = useState("");
   const patterns = useMemo(() => searchMotionPatterns(query), [query]);
 
@@ -28,6 +30,11 @@ export function VisualMotionLibrary() {
     await navigator.clipboard.writeText(value);
     setCopied(label);
     window.setTimeout(() => setCopied(""), 1400);
+  }
+
+  function generateOutputs() {
+    setOutputs(buildMaskRevealPromptOutputs(input));
+    setHandoffJson(buildMaskRevealMotionHandoffJson(input));
   }
 
   return (
@@ -156,11 +163,14 @@ export function VisualMotionLibrary() {
                       />
                     </Field>
                     <button
-                      onClick={() => setOutputs(buildMaskRevealPromptOutputs(input))}
+                      onClick={generateOutputs}
                       className="w-full bg-navy-900 dark:bg-sand-100 text-white dark:text-navy-900 px-4 py-3 text-sm font-semibold"
                     >
                       AI指示を作る
                     </button>
+                    <p className="text-[11px] leading-5 text-navy-400">
+                      Palmierからは実timelineのNLE XMLを書き出し、この画面のMotion Handoff Manifest JSONをsidecarとしてDaVinciへ渡します。XMLをこのアプリ側で捏造しません。
+                    </p>
                   </div>
                 </div>
 
@@ -173,6 +183,7 @@ export function VisualMotionLibrary() {
                       <OutputCard label="Palmier Instruction" value={outputs.palmierInstruction} copied={copied} onCopy={copy} />
                       <OutputCard label="DaVinci Finish Manifest" value={outputs.davinciFinishManifest} copied={copied} onCopy={copy} />
                       <OutputCard label="Machine JSON" value={outputs.machineJson} copied={copied} onCopy={copy} />
+                      <OutputCard label="Motion Handoff Manifest JSON" value={handoffJson} copied={copied} onCopy={copy} />
                     </div>
                   )}
                 </div>
