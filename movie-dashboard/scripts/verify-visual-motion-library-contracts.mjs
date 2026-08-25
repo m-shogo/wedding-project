@@ -7,6 +7,7 @@ const data = fs.readFileSync(path.join(root, "src/data/visualMotionLibrary.ts"),
 const handoff = fs.readFileSync(path.join(root, "src/data/maskRevealHandoff.ts"), "utf8");
 const editable = fs.readFileSync(path.join(root, "src/data/humanEditableMotionIntent.ts"), "utf8");
 const production = fs.readFileSync(path.join(root, "src/data/maskRevealEditableProduction.ts"), "utf8");
+const sceneComposer = fs.readFileSync(path.join(root, "src/data/sceneComposerInstances.ts"), "utf8");
 const workspace = fs.readFileSync(path.join(root, "src/components/MaskRevealEditableWorkspace.tsx"), "utf8");
 const samples = fs.readFileSync(path.join(root, "src/data/motionSampleAssetSets.ts"), "utf8");
 const learning = fs.readFileSync(path.join(root, "src/data/motionLearningLinks.ts"), "utf8");
@@ -15,6 +16,8 @@ const fusionLearning = fs.readFileSync(path.join(root, "src/data/fusionNodeTrans
 const page = fs.readFileSync(path.join(root, "src/pages/VisualMotionLibrary.tsx"), "utf8");
 const app = fs.readFileSync(path.join(root, "src/App.tsx"), "utf8");
 const sidebar = fs.readFileSync(path.join(root, "src/components/Sidebar.tsx"), "utf8");
+const identity = fs.readFileSync(path.join(root, "../docs/contracts/motion-zukan-identity.md"), "utf8");
+const claude = fs.readFileSync(path.join(root, "../CLAUDE.md"), "utf8");
 const errors = [];
 
 function requireText(source, token, message) {
@@ -149,7 +152,41 @@ for (const token of [
 }
 
 for (const token of [
-  'HUMAN MASTER / EDITABLE SOURCE OF TRUTH',
+  'schemaVersion: "motion-zukan-scene-instance/v1"',
+  'schemaVersion: "motion-zukan-project-timeline/v1"',
+  'schemaVersion: "motion-zukan-composer-state/v1"',
+  'authority: "HUMAN_MASTER"',
+  'legacySceneId: null',
+  'sourceRecipeId: null',
+  'targetDurationSeconds',
+  'computedDurationSeconds',
+  'durationDeltaSeconds',
+  'Math.max(value.sceneDurationSeconds, textEnd)',
+  'structuredClone(intent)',
+  'MOTION_ZUKAN_COMPOSER_STORAGE_KEY',
+  'motion-zukan-composer-state-v1',
+  'createMaskRevealSceneInstance',
+  'adoptSceneInstance',
+  'updateSceneInstanceField',
+  'Property-local correction',
+  'applyHumanSelection(scene.editableIntent, key, value)',
+  'updateSceneInstanceFieldLock',
+  'suggestSceneInstanceField',
+  'applyAiSuggestion(scene.editableIntent, key, value, reason)',
+  'retargetSceneInstanceSection',
+  'totalComputedDurationSeconds',
+  'loadMotionZukanComposerState',
+  'saveMotionZukanComposerState',
+]) {
+  requireText(sceneComposer, token, `Motion Zukan SceneInstance model missing: ${token}`);
+}
+
+if (sceneComposer.includes("productionStore") || sceneComposer.includes('from "../types/movie"')) {
+  errors.push("Composer SceneInstance must stay separate from the legacy Production/Storyboard store during the MVP migration");
+}
+
+for (const token of [
+  'モーション図鑑 / HUMAN MASTER',
   'かんたん',
   '詳細',
   'DaVinci',
@@ -166,6 +203,15 @@ for (const token of [
   'Distance',
   'Scale From',
   'AI指示を作る',
+  'このSceneを採用',
+  '別Sceneとして採用',
+  '採用済みSceneを編集中。変更はfield単位で自動保存されます。',
+  'PROJECT TIMELINE',
+  '採用したSceneを積み上げる',
+  'Legacy Storyboardは壊さず',
+  'Target',
+  'Computed',
+  '人間の値を勝手に縮めず差分を表示しています。',
   'Human Brief',
   'Claude Creative Instruction',
   'Palmier Instruction',
@@ -232,6 +278,33 @@ for (const token of [
   requireText(previewEvidence, token, `Mask Reveal Concept evidence missing provenance token: ${token}`);
 }
 
+for (const token of [
+  '# モーション図鑑',
+  'Status: **ACTIVE / MUTABLE**',
+  '> **モーション図鑑**',
+  'Wedding Movie 2026',
+  'Visual Motion Library',
+  'Scene Recipe Library',
+  'Scene Composer',
+  'Project Timeline',
+  'Production Handoff',
+  'Wedding専用ではない',
+  '一括rename',
+  'Actual MP4が出来ただけでは図鑑項目の完成とはしない',
+]) {
+  requireText(identity, token, `Motion Zukan identity contract missing: ${token}`);
+}
+
+for (const token of [
+  '## モーション図鑑 — 長期プロジェクト名',
+  '正式な日本語名は **「モーション図鑑」**',
+  'docs/contracts/motion-zukan-identity.md',
+  'Wedding Movie 2026は最初の実践Collection / Project',
+  'モーション図鑑 → Visual Motion Library → Scene Composer',
+]) {
+  requireText(claude, token, `CLAUDE shared entrypoint missing Motion Zukan identity: ${token}`);
+}
+
 if (/status:\s*"PRODUCTION_READY"/.test(data)) {
   errors.push("Mask Reveal must not be PRODUCTION_READY before local Resolve render verification");
 }
@@ -255,6 +328,8 @@ if (handoff.includes("MOTION:type-mask-reveal") || page.includes("MOTION:type-ma
 }
 
 for (const token of [
+  'title="モーション図鑑"',
+  'Visual Motion Libraryで動きを見て探し',
   "Mask Reveal 1件を、Actual Renderだけでなく「後から直せる構造」まで通す",
   "人間が理解できるScene Duration / Delay / Hold / Position / Direction等を正本",
   "MaskRevealEditableWorkspace",
@@ -271,8 +346,8 @@ for (const token of [
 }
 
 requireText(app, 'path="movie-coach/motion-library"', "Visual Motion Library route missing");
-requireText(sidebar, 'to: "/movie-coach/motion-library"', "Visual Motion Library navigation missing");
-requireText(sidebar, 'label: "動きを見て探す"', "Visual Motion Library must use beginner-first navigation label");
+requireText(sidebar, 'to: "/movie-coach/motion-library"', "Motion Zukan navigation missing");
+requireText(sidebar, 'label: "モーション図鑑"', "Motion Zukan must use the canonical Japanese navigation label");
 
 if (errors.length) {
   console.error(`Visual Motion Library contracts FAILED (${errors.length})`);
@@ -280,4 +355,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log("Visual Motion Library contracts OK: legacy Palmier XML / Actual DaVinci gates remain intact while HUMAN_MASTER editable intent becomes the production source of truth; property-level selections/locks survive Prompt/Palmier/DaVinci handoff and renders remain evidence only.");
+console.log("モーション図鑑 contracts OK: canonical identity is shared, legacy Palmier XML / Actual DaVinci gates remain intact, HUMAN_MASTER editable intent can be adopted as an independent SceneInstance, property-local edits persist without rewriting unrelated fields, Project Timeline exposes computed duration, and renders remain evidence only.");
