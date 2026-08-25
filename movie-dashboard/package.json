@@ -4,6 +4,7 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
+    "sync:start-materials": "node scripts/sync-start-material-previews.mjs",
     "dev": "vite",
     "build": "tsc -b && vite build",
     "sync:opening-gate": "node scripts/sync-opening-production-gate.mjs --write",

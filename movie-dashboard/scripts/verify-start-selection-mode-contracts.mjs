@@ -6,6 +6,9 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const plan = fs.readFileSync(path.join(root, "src/data/startSelectionPlan.ts"), "utf8");
 const mode = fs.readFileSync(path.join(root, "src/data/startSelectionMode.ts"), "utf8");
 const creative = fs.readFileSync(path.join(root, "src/data/startCreativeIdeas.ts"), "utf8");
+const workspace = fs.readFileSync(path.join(root, "src/data/startProductionWorkspace.ts"), "utf8");
+const workspacePage = fs.readFileSync(path.join(root, "src/pages/StartProductionWorkspace.tsx"), "utf8");
+const materialSync = fs.readFileSync(path.join(root, "scripts/sync-start-material-previews.mjs"), "utf8");
 const page = fs.readFileSync(path.join(root, "src/pages/StartSelectionMode.tsx"), "utf8");
 const app = fs.readFileSync(path.join(root, "src/App.tsx"), "utf8");
 const sidebar = fs.readFileSync(path.join(root, "src/components/Sidebar.tsx"), "utf8");
@@ -53,8 +56,29 @@ for (const [source, token, message] of [
   [page, "Finderで ⌘⇧G", "Finder navigation tip missing"],
   [page, "素材投入Tips", "asset intake beginner tips missing"],
   [page, "Remotionの", "runtime handoff explanation missing"],
+  [page, "/movie-coach/start-production", "Production Workspace handoff missing"],
+  [workspace, "start-production-workspace-v1", "Production Workspace persistence missing"],
+  [workspace, "getStartMaterialDiagnostics", "material diagnostics missing"],
+  [workspace, "getStartIdeaFeasibility", "Creative Idea feasibility missing"],
+  [workspace, "getStartCompletionPhases", "completion phases missing"],
+  [workspace, "buildStartRevisionPrompt", "revision prompt missing"],
+  [workspace, "buildStartFirstRoughPrompt", "first Rough workspace handoff missing"],
+  [workspacePage, "MATERIAL BOARD", "material board missing"],
+  [workspacePage, "sync:start-materials", "beginner material sync command missing"],
+  [workspacePage, "importSyncedMaterials", "synced material import missing"],
+  [workspacePage, "DRAG & ASSIGN", "section drag assignment missing"],
+  [workspacePage, "MATERIAL DIAGNOSTICS", "material diagnostics UI missing"],
+  [workspacePage, "IDEA RECOMMENDER", "Creative Idea recommender missing"],
+  [workspacePage, "A/B COMPARE", "A/B compare mode missing"],
+  [workspacePage, "RENDER REVIEW", "render review comments missing"],
+  [workspacePage, "第2修正プロンプトをコピー", "revision prompt copy missing"],
+  [workspacePage, "phases.map", "completion meter missing"],
   [app, 'path="movie-coach/start-selection"', "Selection Mode route missing"],
+  [app, 'path="movie-coach/start-production"', "Production Workspace route missing"],
   [sidebar, 'to: "/movie-coach/start-selection"', "Selection Mode navigation missing"],
+  [sidebar, 'to: "/movie-coach/start-production"', "Production Workspace navigation missing"],
+  [materialSync, "local-start-materials", "local preview manifest generation missing"],
+  [materialSync, "fs.symlink", "source-preserving local preview link missing"],
 ]) if (!source.includes(token)) errors.push(message);
 
 if (errors.length) {

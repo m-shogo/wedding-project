@@ -45,6 +45,7 @@ const navSections: SidebarSection[] = [
     label: "REVIEW / DECIDE",
     links: [
       { to: "/movie-coach/start-selection", label: "StaRt Selection / Next", icon: "✓" },
+      { to: "/movie-coach/start-production", label: "StaRt制作ワークスペース", icon: "🧩" },
       { to: "/movie-coach/review", label: "Movie Review", icon: "◎" },
       { to: "/movie-coach/compare", label: "Before / After Lab", icon: "⇄" },
       { to: "/movie-coach/reference", label: "Reference Breakdown", icon: "⌗" },
