@@ -163,6 +163,7 @@ export function StartSelectionMode() {
         <p className="text-[10px] font-semibold tracking-[0.2em] text-emerald-700 dark:text-emerald-300">NEXT ACTION</p>
         <h2 className="mt-2 text-xl font-bold text-navy-900 dark:text-sand-100">{getStartNextAction(state)}</h2>
         <p className="mt-2 text-sm text-navy-600 dark:text-navy-300">迷ったら、この緑の枠に書かれた作業だけ進めてください。選択内容はこのブラウザ内へ自動保存されます。</p>
+        <Link to="/movie-coach/start-production" className="mt-4 inline-block bg-emerald-700 px-4 py-2 text-xs font-bold text-white">素材選定・区間割り当て・Renderレビューへ進む →</Link>
       </section>
 
       <section className="mb-7 grid grid-cols-1 gap-px bg-sand-200 md:grid-cols-4 dark:bg-navy-600">

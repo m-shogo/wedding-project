@@ -44,6 +44,7 @@ import { StartMotionKitCatalog } from "./pages/StartMotionKitCatalog";
 import { StartMotionShowcase } from "./pages/StartMotionShowcase";
 import { DirectorRecipeCatalog } from "./pages/DirectorRecipeCatalog";
 import { StartSelectionMode } from "./pages/StartSelectionMode";
+import { StartProductionWorkspace } from "./pages/StartProductionWorkspace";
 import { Guide } from "./pages/Guide";
 import { AssetPlacementGuide } from "./pages/AssetPlacementGuide";
 
@@ -74,6 +75,7 @@ export default function App() {
               <Route path="movie-coach/start-showcase" element={<StartMotionShowcase />} />
               <Route path="movie-coach/director-recipes" element={<DirectorRecipeCatalog />} />
               <Route path="movie-coach/start-selection" element={<StartSelectionMode />} />
+              <Route path="movie-coach/start-production" element={<StartProductionWorkspace />} />
               <Route path="opening-photo-intake" element={<OpeningPhotoIntake />} />
               <Route path="opening-bgm-intake" element={<OpeningBgmIntake />} />
               <Route path="storyboard" element={<Storyboard />} />
