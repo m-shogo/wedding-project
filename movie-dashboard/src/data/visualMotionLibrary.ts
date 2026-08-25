@@ -608,25 +608,44 @@ function kitPresetToImplementation(preset: StartMotionPreset): MotionImplementat
   };
 }
 
+// 2026-08-26に既存のStaRtMotionReelV1(motion-studio, renderableMotionPresetsの8件)を
+// 実際にローカルRemotion renderし、対応するmotionPreviewEvidence.tsへ目視QA記録を追加した。
+// この7件だけ、renderが実在すること(generatedAt/freshness)を反映する。
+// evidence自体はmotionPreviewEvidence.tsが正本で、ここでは日付を重複させない。
+const LOCAL_RENDER_VERIFIED_2026_08_26 = new Set([
+  "type-word-punch",
+  "photo-static-hero",
+  "photo-small-push",
+  "wipe-route-line",
+  "flash-one-frame-soft",
+  "accent-speed-lines",
+  "accent-stamp-triplet",
+]);
+
 function kitPresetToPreview(preset: StartMotionPreset): MotionPreviewRecord {
   const isRemotion = preset.engine === "remotion";
+  const locallyRendered = LOCAL_RENDER_VERIFIED_2026_08_26.has(preset.id);
   return {
     id: `preview-${preset.id}-concept`,
     patternId: preset.id,
     sourceType: isRemotion ? "REPO_GENERATED" : "CONCEPT_ONLY",
     status: "CONCEPT",
-    freshness: "NEEDS_RECHECK",
+    freshness: locallyRendered ? "CURRENT" : "NEEDS_RECHECK",
     assetPath: null,
     posterPath: null,
-    generatedBy: isRemotion
-      ? `motion-studio Motion Kit preset: ${preset.id} (${preset.sharedEngine} engine)。この図鑑追加ではまだ動画を書き出していない。`
-      : `${preset.engine}上の技法説明のみ。まだ動画assetは存在しない。`,
-    generatedAt: null,
+    generatedBy: locallyRendered
+      ? `motion-studio renderable preset: ${preset.id} / StaRtMotionReelV1 (${preset.sharedEngine} engine)。2026-08-26にローカルRemotion renderで目視確認済み(evidenceはmotionPreviewEvidence.ts参照)。`
+      : isRemotion
+        ? `motion-studio Motion Kit preset: ${preset.id} (${preset.sharedEngine} engine)。この図鑑追加ではまだ動画を書き出していない。`
+        : `${preset.engine}上の技法説明のみ。まだ動画assetは存在しない。`,
+    generatedAt: locallyRendered ? "2026-08-25T17:58:30Z" : null,
     implementationId: `impl-${preset.id}`,
     sampleAssetSetId: sampleAssetSetIdForPreset(preset),
     resolveVersion: null,
     verified: false,
-    notes: "Reuse Before Buildに基づき既存実装をカタログ化した段階。Actual Renderで見た目を確認するまでCONCEPT扱いを維持する。",
+    notes: locallyRendered
+      ? "ローカルRemotion renderで見た目を確認済みだが、実写真は未投入(DemoBackdrop placeholder)かつDaVinci Actualではないため、verified/statusはCONCEPTのまま据え置く。"
+      : "Reuse Before Buildに基づき既存実装をカタログ化した段階。Actual Renderで見た目を確認するまでCONCEPT扱いを維持する。",
   };
 }
 

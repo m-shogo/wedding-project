@@ -7,6 +7,7 @@ const read = (relative) => fs.readFileSync(path.join(root, relative), "utf8");
 const data = read("src/data/visualMotionLibrary.ts");
 const motionKit = read("src/data/startMotionKit.ts");
 const samples = read("src/data/motionSampleAssetSets.ts");
+const evidence = read("src/data/motionPreviewEvidence.ts");
 const errors = [];
 
 function requireText(source, token, message) {
@@ -51,8 +52,13 @@ requireText(data, "motionPreviews.push(...kitPatternsExcludingMaskSlide.map(kitP
 
 // Honesty invariants for every generated (non-Mask-Reveal) entry.
 requireText(data, 'humanDecision: "NONE",\n    usageStage: "NEVER",', "Generated patterns must stay humanDecision=NONE / usageStage=NEVER until a human actually adopts them");
-requireText(data, 'verified: false,\n    notes: "この図鑑カタログ化ではローカルRender/DaVinci実機検証を行っていない。', "Generated implementations must admit no local render/DaVinci verification happened yet");
-requireText(data, 'verified: false,\n    notes: "Reuse Before Buildに基づき既存実装をカタログ化した段階。', "Generated previews must admit CONCEPT status until an Actual render exists");
+requireText(data, "この図鑑カタログ化ではローカルRender/DaVinci実機検証を行っていない。", "Generated implementations must admit no local render/DaVinci verification happened yet");
+requireText(data, "Reuse Before Buildに基づき既存実装をカタログ化した段階。", "Generated previews must admit CONCEPT status until an Actual render exists");
+requireText(
+  data,
+  "ローカルRemotion renderで見た目を確認済みだが、実写真は未投入(DemoBackdrop placeholder)かつDaVinci Actualではないため、verified/statusはCONCEPTのまま据え置く。",
+  "Locally-rendered previews must still admit they are not Actual DaVinci evidence and stay unverified",
+);
 
 // Style Bible: 映画予告編風・冒険アニメOP風をデフォルトにしない。ANIME_ACCENT系はOpening◎を既定にしない。
 requireText(
@@ -72,6 +78,22 @@ requireText(samples, 'usedByPatternIds: ["type-mask-reveal"],\n    usedByPreview
 requireText(samples, 'id: "sample-generic-typography-v1"', "Generic typography sample asset set for Motion Zukan v1 missing");
 requireText(samples, 'id: "sample-generic-hero-photo-v1"', "Generic hero-photo sample asset set for Motion Zukan v1 missing");
 requireText(samples, 'id: "sample-generic-multi-photo-v1"', "Generic multi-photo sample asset set for Motion Zukan v1 missing");
+
+// 2026-08-26のローカルRemotion render QAで「見た目確認済み」を名乗る7件は、
+// motionPreviewEvidence.tsに対応するevidence recordを持つこと(主張と証拠の整合)。
+const LOCAL_RENDER_SET_MARKER = "LOCAL_RENDER_VERIFIED_2026_08_26 = new Set([";
+if (data.includes(LOCAL_RENDER_SET_MARKER)) {
+  const start = data.indexOf(LOCAL_RENDER_SET_MARKER) + LOCAL_RENDER_SET_MARKER.length;
+  const end = data.indexOf("]);", start);
+  const claimed = [...data.slice(start, end).matchAll(/"([a-z0-9-]+)"/g)].map((match) => match[1]);
+  for (const id of claimed) {
+    if (!evidence.includes(`patternId: "${id}"`)) {
+      errors.push(`${id}: ローカルRender確認済みと主張しているがmotionPreviewEvidence.tsにevidenceが無い`);
+    }
+  }
+} else {
+  errors.push("LOCAL_RENDER_VERIFIED_2026_08_26 marker missing (expected local render evidence tracking set)");
+}
 
 if (errors.length) {
   console.error(`Motion Zukan Catalog v1 contracts FAILED (${errors.length})`);

@@ -76,8 +76,11 @@ export function VisualMotionLibrary() {
                       <p className="mt-1 text-[9px] leading-4 text-navy-200">
                         {previewEvidence.renderSpec.width}×{previewEvidence.renderSpec.height} / {previewEvidence.renderSpec.fps}fps / {previewEvidence.renderSpec.frames}frames · Human Visual QA {previewEvidence.humanVisualQa.result}
                       </p>
-                      {!previewEvidence.persistentAssetPath && (
+                      {!previewEvidence.persistentAssetPath && previewEvidence.workflowRunId && (
                         <p className="mt-1 text-[9px] leading-4 text-amber-200">期限付きartifactで検証済み。永続MP4がないため、この画面では静止placeholderのまま。</p>
+                      )}
+                      {!previewEvidence.persistentAssetPath && !previewEvidence.workflowRunId && (
+                        <p className="mt-1 text-[9px] leading-4 text-amber-200">ローカルRenderで検証済み(out/配下・Git外の一時ファイル)。永続MP4がないため、この画面では静止placeholderのまま。</p>
                       )}
                     </div>
                   )}
