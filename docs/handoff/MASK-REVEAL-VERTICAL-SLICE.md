@@ -1,148 +1,320 @@
 # Mask Reveal Vertical Slice — Palmier → DaVinci Local Verification
 
-Status: ACTIVE / NOT PRODUCTION READY
-Scope: Movie only
-Pattern: `type-mask-reveal`
-Implementation: `impl-type-mask-reveal-davinci-text-plus`
+Status: ACTIVE / NOT PRODUCTION READY  
+Scope: Movie only  
+Pattern: `type-mask-reveal`  
+Implementation: `impl-type-mask-reveal-davinci-text-plus`  
 Sample asset set: `sample-typography-welcome-v1`
 
 ## Purpose
 
-Mask Reveal 1件を、Visual Motion Libraryで選ぶところからActual DaVinci Previewまで本当に通すための最小handoff。
+Mask Reveal 1件を、Visual Motion Libraryで選ぶところから **real Palmier NLE XML + real DaVinci Actual Preview** まで本当に通すための最小handoff。
 
-この手順が完了するまで、次のMotion Patternをproduction migrationしない。
+このVertical Sliceが完了するまで、次のMotion Patternをproduction migrationしない。
 
-## Authority split
+## Current authority chain
 
-- Visual Motion Library: 選択・入力・Prompt/Manifestの正本
+```text
+Human-readable adopted SceneInstance
+→ Canonical Scene state
+→ fresh Scene production bundle
+→ Palmier real project timeline NLE XML + Scene sidecar
+→ DaVinci import / Scene marker match
+→ live-context expected values
+→ applied/readback + delta
+→ Actual DaVinci render
+→ 1x / 0.5x Visual QA
+```
+
+Authority split:
+
+- SceneInstance human-readable values: production authority
+- Canonical Scene state: tool-independent structured representation
+- JSON sidecar: current Scene state / handoff serialization, **not a separate Human Master**
 - Palmier: Rough timing / placement / timeline ordering
-- Palmier NLE XML: timelineの正本
-- Motion Handoff Manifest JSON: Fusion/Text+などXMLだけでは保持しにくい演出意図の正本
-- DaVinci Resolve: Final motion / render / visual QA
-- Remotion: Concept preview補助のみ。DaVinci実装の証拠にはしない
+- Palmier real NLE XML: real Palmier project timeline interchange
+- DaVinci Resolve: final motion / actual render / final visual QA
+- DaVinci applied/readback: implementation evidence
+- Actual MP4: implementation evidence
+- Remotion: Concept preview helper only
 
-## Step 1 — Visual Motion Library
+JSON / XML / frame numbers / MP4 must not silently replace `HUMAN_SELECTED` or `LOCKED` Scene values.
 
-`/movie-coach/motion-library` を開く。
+## Step 1 — choose one adopted SceneInstance
 
-Mask Revealで次を入力する。
+Open `/movie-coach/motion-library`, select Mask Reveal, and work from one **adopted SceneInstance**.
 
-- text: `WELCOME`
-- section: `OPENING_INTRO`
-- intensity: `S`
-- duration: `0.8 sec`
-- media: 共通Hero Photo、または比較用ニュートラル背景
+Before Palmier/DaVinci execution, record:
 
-生成するもの:
+```text
+sceneId
+sourceRevision = SceneInstance.updatedAt
+projectId
+section
+sceneMarkerId
+humanSelectedFields
+lockedFields
+```
 
-1. Palmier Instruction
-2. DaVinci Finish Manifest
-3. Machine JSON
-4. Motion Handoff Manifest JSON
+Generate a fresh `motion-zukan-scene-production/v1` bundle from that exact Scene.
 
-Motion Handoff Manifestのmarkerは `VML_MASK_REVEAL_OPENING_INTRO` とする。
+If `updatedAt` changes after sidecar/readback generation, the older handoff/evidence is **STALE** and must be regenerated.
 
-## Step 2 — Palmier Rough
+## Step 2 — Human / Canonical values
 
-Palmier側ではExact Mask Revealを無理に再現しない。
+Use current effective Scene values, not copied historical defaults.
 
-やること:
+At minimum trace:
 
-- `WELCOME` のrough title placement
-- 約0.8秒の演出領域を確保
-- `VML_MASK_REVEAL_OPENING_INTRO` と同じ意味のmarker/識別子を保持
-- 使用する背景素材を配置
-- 前後カットの順序と尺を決める
+```text
+Text
+Scene Duration
+Layer Delay
+Motion Delay
+Enter Duration
+Hold Duration
+Position / Offset
+Direction
+Distance
+Scale
+Intensity
+HUMAN_SELECTED / LOCKED state
+```
 
-やらないこと:
+For the neutral proof the text/sample remains `WELCOME` / `sample-typography-welcome-v1`.
 
-- 別の派手なtitle effectへの勝手な置換
-- glow / bounce / shake追加
-- DaVinciで未検証の実装を「完成」と扱う
+Do **not** hard-code a historical `0.8 sec` reveal duration. Use the current Scene's resolved `enterDurationSeconds` and derive frames later from the live Resolve fps.
 
-## Step 3 — Palmier export
+For Mask Reveal v1, active Property units are limited to:
 
-Palmierの実timelineからDaVinci互換NLE XMLを書き出す。
+```text
+Transform
+Mask
+```
 
-推奨ファイル名:
+A Position-only correction must not silently rewrite Mask/Text/Media/Hold or unrelated timing values.
 
-`palmier-mask-reveal-timeline.xml`
+## Step 3 — Scene-specific marker
 
-Visual Motion Libraryから書き出したsidecar:
+Production handoff uses the marker from the fresh Scene production bundle:
 
-`mask-reveal-motion-handoff.json`
+```text
+VML_MASK_REVEAL_<SECTION>_<SCENE_TOKEN>
+```
 
-この2ファイルをセットでDaVinciへ渡す。
+Do not use the old Pattern-only `VML_MASK_REVEAL_OPENING_INTRO` as production authority when an adopted SceneInstance exists.
 
-アプリ側で独自XMLを生成しない。timeline truthはPalmier exportを使う。
+The marker identifies the Scene; it is not an editable motion value.
 
-## Step 4 — DaVinci import
+## Step 4 — Palmier Rough
 
-1. NLE XMLをDaVinci Resolveへimport
-2. marker/対象clip/タイトル位置を確認
-3. `type-mask-reveal` の対象区間を特定
-4. Text+を使用
-5. rectangular maskまたは同等の標準Fusion手法でreveal
-6. keyframe easingを調整
-7. 写真と文字の可読性を優先
+Palmier remains:
 
-禁止:
+`PALMIER_TIMING_ONLY`
 
-- bounce
-- excessive glow
-- excessive motion blur
-- face covering
-- effect-for-effect
+Palmier should:
 
-## Step 5 — Local verification evidence
+- place the rough title/media timing from current Human Scene intent
+- preserve current Scene marker identity
+- preserve project ordering/timing
+- export the **real project timeline** as DaVinci-compatible NLE XML
 
-次の5項目を全て満たすまでImplementationを`PRODUCTION_READY`へ上げない。
+Palmier should not:
 
-- `opened-in-davinci`
-- `implementation-applied`
-- `render-tested`
-- `visual-QA`
-- `resolve-version-recorded`
+- fake exact Fusion Mask Reveal with another effect
+- add glow / bounce / shake
+- overwrite Human Selected / Locked values
+- replace the Scene-specific marker with a Pattern-only marker
 
-ローカルで確認したResolve versionを必ずRegistryへ記録する。Web上の最新版を代入しない。
+If Palmier applies an approximation, preserve separately:
 
-## Step 6 — Actual Preview
+```text
+intended Human value
+Palmier applied value
+difference / delta
+```
 
-共通sampleを使用し、3〜8秒 / 30fps / muted / loop向けでrenderする。
+## Step 5 — Palmier export
 
-推奨名:
+Use the project timeline filename and Scene sidecar filename from the fresh production bundle.
 
-`mask-reveal-welcome-davinci-v1.mp4`
+Required conceptual pair:
 
-登録時に更新するもの:
+```text
+Palmier real project NLE XML
++
+fresh Scene-specific Motion Handoff sidecar
+```
 
-- preview sourceType → `ACTUAL_DAVINCI_RENDER`
-- preview status → `ACTUAL`、QA後に`VERIFIED`
-- implementation status → evidenceに応じて`TESTED` / `PRODUCTION_READY`
-- resolveVersion
-- generatedAt
-- assetPath / posterPath
+Do not generate fake NLE XML from app code.
 
-Concept previewを消す必要はない。比較・履歴として残し、Actualと明確に区別する。
+The sidecar serializes the current Scene/handoff state but does not become an independent Human Master.
 
-## Visual QA
+## Step 6 — DaVinci live context
 
-通常速度と0.5xの両方で確認する。
+Before authoring motion, connect to local Resolve and record real:
 
-確認点:
+```text
+product / edition
+Resolve version
+MCP version if available
+transport
+project name
+timeline name
+width
+height
+fps
+```
 
-- 文字が境界から自然に現れる
-- acceleration / decelerationが不自然でない
-- settle時に不要なbounceがない
-- mask edgeが見えない
-- titleが写真の主役を邪魔しない
-- 0.8秒で読める文字量になっている
-- PreviewとDaVinci implementationが同じ動きを示す
+Neutral requested preview target remains:
+
+```text
+WELCOME
+1280 × 720 target
+30fps target
+~4 sec target
+muted
+```
+
+Requested target is not proof of the live Project Context.
+
+Recompute expected DaVinci values from:
+
+```text
+current Canonical Scene state
++
+live Resolve Project Context
+```
+
+Human seconds remain authority; frame numbers are derived using live fps.
+
+## Step 7 — built-in DaVinci implementation
+
+Use built-in:
+
+`Text+ + Fusion + Rectangle Mask`
+
+Reuse recipe:
+
+`fusion-masked-reveal`
+
+Before animation, prove where supported:
+
+- Text+ exists
+- StyledText matches current Scene text
+- Rectangle Mask exists
+- `Text+.EffectMask` connection exists
+
+Apply the current Scene values. Do not begin from old hard-coded Fusion/frame values.
+
+Keep the effect restrained:
+
+- selected reveal direction
+- natural settle
+- no bounce
+- no excessive glow
+- no shake
+- no decorative effect chain
+- no unnecessary motion blur
+
+If keyframe authoring alone is not safely automatable, record `automationGap: KEYFRAME_AUTHORING` and perform only the smallest manual step.
+
+## Step 8 — applied/readback evidence
+
+Capture `davinci-applied-readback/v1` for the same `sceneId` + `sourceRevision`.
+
+Compare:
+
+```text
+Human value
+→ Canonical value
+→ live-context expected value
+→ applied/readback value
+→ delta
+```
+
+Review:
+
+- StyledText
+- mask connection
+- timing frames
+- final position where provable
+- direction
+- distance / scale where provable
+- LOCKED preservation
+- Transform / Mask property-local integrity
+
+A stale revision or silent locked-value violation is failure.
+
+Applied/readback evidence alone is not completion.
+
+## Step 9 — Actual Preview
+
+Render from local DaVinci.
+
+Candidate neutral output after QA:
+
+`movie-dashboard/public/motion-previews/type-mask-reveal/davinci-actual-v1.mp4`
+
+Candidate poster:
+
+`movie-dashboard/public/motion-previews/type-mask-reveal/davinci-actual-v1-poster.png`
+
+Collect actual:
+
+- Resolve version
+- renderedAt
+- SHA-256
+- codec
+- dimensions
+- fps
+- duration/frame count
+- sample asset set ID
+- implementation ID
+
+Never commit real wedding photos/videos/music through this neutral proof path.
+
+## Step 10 — Visual QA
+
+Check both normal speed and 0.5x.
+
+### 1x
+
+- text clearly reveals rather than only fading
+- intended human timing meaning is preserved
+- final text is crisp/stable
+- no clipping
+- no unnecessary effect
+
+### 0.5x
+
+- acceleration/deceleration is coherent
+- no accidental bounce/overshoot
+- mask edge behaves correctly
+- settle is clean
+- no unwanted motion after settle
+
+If QA fails, correct the relevant Human-readable Property when possible, regenerate fresh derived values, and re-render.
+
+## Step 11 — truth promotion
+
+Do not move to `PRODUCTION_READY` until all required real evidence exists.
+
+Eligible only after proof:
+
+- implementation `AVAILABLE → TESTED → PRODUCTION_READY` when justified
+- actual local Resolve version
+- separate `ACTUAL_DAVINCI_RENDER / VERIFIED` preview
+- actual asset/poster path
+- timestamp/checksum/provenance
+- completed `motion-verification/v1` checks
+
+Keep repository-generated Concept evidence separately. Actual does not erase Concept provenance.
 
 ## Completion gate
 
-このVertical Sliceの完了条件:
+This Vertical Slice completes only when this chain is real:
 
-`Visual Motion Library → Palmier Rough → NLE XML + Motion Handoff Manifest → DaVinci Text+/Fusion → Actual Render → Visual QA → Registry verification`
+`Visual Motion Library → adopted SceneInstance → Human values → Canonical state → fresh Scene bundle → Palmier Rough → real project NLE XML + Scene sidecar → DaVinci import → Scene marker match → live-context expected values → applied/readback + delta → Text+/Rectangle Mask implementation → Actual Render → 1x/0.5x Visual QA → Registry/evidence verification`
 
-ここまで通った後に、`photo-hero-still`へ横展開する。
+Only after this passes may the next slice such as `photo-hero-still` begin, unless the mutable complete prompt changes the next priority.
