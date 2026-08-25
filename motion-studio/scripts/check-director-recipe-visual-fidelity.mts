@@ -1,8 +1,7 @@
 // pnpm check:director-visual-fidelity
 //
-// Post-overnight visual-truth audit. `renderable` only proves a recipe resolves to shared engines;
-// this check makes the separate visual-fidelity layer explicit for all 36 Motion Kit presets and
-// all 97 Director Recipes.
+// Visual-truth audit. `renderable` only proves a recipe resolves to shared engines; this check
+// separately tracks whether the named visual is exact, representative, or placeholder.
 
 import {directorRecipeCatalog} from '../../movie-dashboard/src/data/directorRecipeCatalog.ts';
 import {startMotionPresets} from '../../movie-dashboard/src/data/startMotionKit.ts';
@@ -43,26 +42,36 @@ if (total !== directorRecipeCatalog.length) {
   fail(`fidelity counts do not sum to catalog size: ${JSON.stringify(directorVisualFidelityCounts)}`);
 }
 
-// The audit must stay conservative until dedicated visuals replace current approximations.
-// These known approximation/placeholder presets are sentinel checks against accidental inflation.
-const requiredNonExact = [
+const supportById = new Map(motionPresetVisualSupport.map((item) => [item.presetId, item]));
+
+// These J3 visuals have a dedicated implementation AND were inspected through the rendered
+// StartDirectorVisualUpgradesV1 Actions artifact. Do not regress them to a generic approximation.
+const artifactReviewedExact = [
   'photo-2p5d-parallax',
+  'accent-halftone-burst',
+  'accent-scribble-underline',
+  'accent-stamp-triplet',
+];
+for (const id of artifactReviewedExact) {
+  const item = supportById.get(id);
+  if (!item) fail(`missing artifact-reviewed visual fidelity preset: ${id}`);
+  else if (item.fidelity !== 'exact') fail(`${id} should remain exact after dedicated implementation + artifact review`);
+}
+
+// Remaining known approximations/placeholders stay guarded against accidental inflation.
+const requiredNonExact = [
   'photo-freeze-cutout',
   'cut-hard-accent',
   'cut-match-shape',
   'wipe-route-line',
   'whip-source-matched',
-  'accent-halftone-burst',
-  'accent-scribble-underline',
-  'accent-stamp-triplet',
   'accent-cel-shadow-sweep',
   'accent-micro-rgb-split',
 ];
-const supportById = new Map(motionPresetVisualSupport.map((item) => [item.presetId, item]));
 for (const id of requiredNonExact) {
   const item = supportById.get(id);
   if (!item) fail(`missing sentinel visual fidelity preset: ${id}`);
-  else if (item.fidelity === 'exact') fail(`${id} must not be marked exact until its dedicated visual is implemented and reviewed`);
+  else if (item.fidelity === 'exact') fail(`${id} must not be marked exact until its dedicated visual is implemented and artifact-reviewed`);
 }
 
 if (errors > 0) {
