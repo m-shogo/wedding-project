@@ -3,6 +3,39 @@ import {
   type MaskRevealPromptInput,
 } from "./visualMotionLibrary";
 
+export interface MotionVerificationEvidenceTemplateV1 {
+  schemaVersion: "motion-verification/v1";
+  patternId: "type-mask-reveal";
+  markerId: string;
+  sampleAssetSetId: "sample-typography-welcome-v1";
+  implementationId: "impl-type-mask-reveal-davinci-text-plus";
+  status: "PENDING_LOCAL_DAVINCI";
+  targetPreviewSourceType: "ACTUAL_DAVINCI_RENDER";
+  candidatePreviewAssetPath: null;
+  renderSha256: null;
+  renderedAt: null;
+  resolveVersion: null;
+  renderSpec: {
+    width: 1280;
+    height: 720;
+    fps: 30;
+    durationSeconds: 4;
+    muted: true;
+  };
+  checks: {
+    openedInDavinci: false;
+    implementationApplied: false;
+    renderTested: false;
+    visualQa1x: false;
+    visualQaHalfSpeed: false;
+    resolveVersionRecorded: false;
+    sampleAssetSetMatched: false;
+    conceptPreviewKeptSeparate: false;
+  };
+  productionReady: false;
+  notes: string;
+}
+
 export interface MotionHandoffManifestV1 {
   schemaVersion: "motion-handoff/v1";
   patternId: "type-mask-reveal";
@@ -44,6 +77,7 @@ export interface MotionHandoffManifestV1 {
     canonicalTarget: "ACTUAL_DAVINCI_RENDER";
     productionReady: false;
   };
+  verificationEvidence: MotionVerificationEvidenceTemplateV1;
 }
 
 export interface MaskRevealExecutionOutputs {
@@ -60,13 +94,14 @@ export function buildMaskRevealMotionHandoffManifest(input: MaskRevealPromptInpu
   const text = input.text.trim().slice(0, 24) || "WELCOME";
   const mediaLabel = input.mediaLabel?.trim() || "選択したHero写真";
   const durationSeconds = Math.max(0.4, Math.min(3, input.durationSeconds));
+  const markerId = markerIdFor(input.section);
 
   return {
     schemaVersion: "motion-handoff/v1",
     patternId: "type-mask-reveal",
     project: {
       section: input.section,
-      markerId: markerIdFor(input.section),
+      markerId,
       text,
       mediaLabel,
       durationSeconds,
@@ -102,6 +137,38 @@ export function buildMaskRevealMotionHandoffManifest(input: MaskRevealPromptInpu
       canonicalTarget: "ACTUAL_DAVINCI_RENDER",
       productionReady: false,
     },
+    verificationEvidence: {
+      schemaVersion: "motion-verification/v1",
+      patternId: "type-mask-reveal",
+      markerId,
+      sampleAssetSetId: "sample-typography-welcome-v1",
+      implementationId: "impl-type-mask-reveal-davinci-text-plus",
+      status: "PENDING_LOCAL_DAVINCI",
+      targetPreviewSourceType: "ACTUAL_DAVINCI_RENDER",
+      candidatePreviewAssetPath: null,
+      renderSha256: null,
+      renderedAt: null,
+      resolveVersion: null,
+      renderSpec: {
+        width: 1280,
+        height: 720,
+        fps: 30,
+        durationSeconds: 4,
+        muted: true,
+      },
+      checks: {
+        openedInDavinci: false,
+        implementationApplied: false,
+        renderTested: false,
+        visualQa1x: false,
+        visualQaHalfSpeed: false,
+        resolveVersionRecorded: false,
+        sampleAssetSetMatched: false,
+        conceptPreviewKeptSeparate: false,
+      },
+      productionReady: false,
+      notes: "Actual DaVinci render後に実測値だけを記録する。未実行項目をtrueにしない。",
+    },
   };
 }
 
@@ -129,6 +196,8 @@ export function buildMaskRevealExecutionOutputs(input: MaskRevealPromptInput): M
       "[ ] Concept Previewとは別assetとしてActual Previewを登録",
       "[ ] local Resolve versionを記録",
       "[ ] 通常速度と0.5xでVisual QA",
+      "[ ] Motion Handoff Manifest JSONのverificationEvidenceを実測値で埋める",
+      "[ ] false/nullの未確認項目が残る間はProduction Readyへ昇格しない",
       "[ ] 全gate通過後だけTESTED / PRODUCTION_READYへ昇格判断",
     ].join("\n"),
   };
