@@ -67,6 +67,27 @@ export function reelDurationInFrames(recipeIds: string[]): number {
   return placed.reduce((max, p) => Math.max(max, p.from + p.durationInFrames), 0);
 }
 
+/**
+ * Places recipes back-to-back like placeRecipesSequentially, but with an EXPLICIT duration per
+ * clip instead of each recipe's own resolveDirectorRecipeById() duration. resolveDirectorRecipe's
+ * clampDuration() caps every recipe at 180 frames (a reel-safety default for the 97-composition
+ * catalogue browsing reels) — that cap is intentionally wrong for a comparison that needs to
+ * honor a specific StaRt Extended section's actual reference length (e.g. chorus-1-a/1-b are
+ * 300 frames / 10s each at 30fps per startExtendedRhythmMap.ts, not 180). Used by the Phase G
+ * Claude/Codex A/B comparison composition (see startAbChorus1Timeline.ts). The recipe's own
+ * shared-engine visual (DirectorRecipePreview) still renders unmodified inside each Sequence —
+ * only the outer Sequence length changes, so playback simply holds on the recipe's settled state
+ * for the remainder of the section instead of cutting away early.
+ */
+export function placeRecipesWithDurations(items: {id: string; durationInFrames: number}[]): PlacedRecipe[] {
+  let cursor = 0;
+  return items.map((item) => {
+    const placed: PlacedRecipe = {id: item.id, from: cursor, durationInFrames: item.durationInFrames};
+    cursor += item.durationInFrames;
+    return placed;
+  });
+}
+
 /** Longest single recipe duration among the given ids (comparison sets play simultaneously). */
 export function comparisonDurationInFrames(recipeIds: string[]): number {
   return recipeIds.reduce((max, id) => Math.max(max, resolveDirectorRecipeById(id).durationInFrames), 0);

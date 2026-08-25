@@ -1,6 +1,6 @@
 import {Composition} from 'remotion';
 import {DirectorRecipePreview} from './compositions/common/DirectorRecipePreview';
-import {DirectorRecipeCategoryReel, DirectorRecipeHighlightReel} from './compositions/common/DirectorRecipeReel';
+import {DirectorRecipeCategoryReel, DirectorRecipeCustomReel, DirectorRecipeHighlightReel} from './compositions/common/DirectorRecipeReel';
 import {DirectorRecipeComparisonGrid} from './compositions/common/DirectorRecipeComparison';
 import {directorRecipeCatalog, directorRecipeCategories} from './motion-kit/directorRecipeAdapter';
 import {resolveDirectorRecipe} from './motion-kit/directorRecipeAdapter';
@@ -12,6 +12,8 @@ import {
   comparisonDurationInFrames,
   categorySlug,
 } from './motion-kit/directorRecipeReelSelections';
+import {startAbChorus1TimelineItems, startAbChorus1TotalFrames} from './data/startAbChorus1Timeline';
+import {startAbCodexChorus1TimelineItems, startAbCodexChorus1TotalFrames} from './data/startAbCodexChorus1Timeline';
 
 /**
  * One Composition per Director Recipe Catalog entry (97 as of Phase B), all backed by the
@@ -84,6 +86,34 @@ export function DirectorRecipeRoot() {
           defaultProps={{recipeIds: set.recipeIds}}
         />
       ))}
+
+      {/*
+        Phase G — Claude Code lane of the Claude/Codex A/B comparison
+        (movie-dashboard/src/data/startClaudeCodexAB.ts, "ab-chorus1-full"). StaRt Extended
+        00:38-00:58 (chorus-1-a + chorus-1-b, 20s), each section's own primary recipe held for
+        that section's real reference duration. See startAbChorus1Timeline.ts for the sourcing
+        and the documented deviation from the catalogue's reel-safety duration clamp.
+      */}
+      <Composition
+        id="StartAbClaudeChorus1"
+        component={DirectorRecipeCustomReel}
+        width={1920}
+        height={1080}
+        fps={30}
+        durationInFrames={startAbChorus1TotalFrames}
+        defaultProps={{items: startAbChorus1TimelineItems.map((item) => ({id: item.recipeId, durationInFrames: item.durationInFrames}))}}
+      />
+
+      {/** Codex lane: same shared renderer contract, isolated Composition and timeline data. */}
+      <Composition
+        id="StartAbCodexChorus1"
+        component={DirectorRecipeCustomReel}
+        width={1920}
+        height={1080}
+        fps={30}
+        durationInFrames={startAbCodexChorus1TotalFrames}
+        defaultProps={{items: startAbCodexChorus1TimelineItems.map((item) => ({id: item.recipeId, durationInFrames: item.durationInFrames}))}}
+      />
     </>
   );
 }
