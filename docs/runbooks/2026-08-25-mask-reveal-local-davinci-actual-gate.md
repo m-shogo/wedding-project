@@ -1,228 +1,243 @@
 # Mask Reveal Local DaVinci Actual Gate — 2026-08-25
 
-Status: ACTIVE EXECUTION RUNBOOK  
+Status: ACTIVE EXECUTION RUNBOOK / updated for SceneInstance authority  
 Scope: Movie only / `type-mask-reveal` vertical slice  
-Goal: move from verified repository-generated Concept evidence to **real local DaVinci Actual evidence** without touching the real Opening/Profile timeline until the disposable validation passes.
+Goal: move from repository-generated Concept evidence to **real local DaVinci Actual evidence** without touching the real Opening/Profile timeline until disposable validation and scratch handoff pass.
 
-## Authority
+## Current authority
 
-Read first:
+Read together with:
 
 - `docs/prompts/2026-08-25-visual-motion-library-palmier-davinci-complete.md`
-- `docs/research/2026-08-25-davinci-mcp-reuse-evaluation.md`
-- `movie-dashboard/src/data/visualMotionLibrary.ts`
-- `movie-dashboard/src/data/maskRevealHandoff.ts`
-- `movie-dashboard/src/data/motionSampleAssetSets.ts`
-- `movie-dashboard/src/data/motionPreviewEvidence.ts`
-- `movie-dashboard/src/data/fusionNodeTranslator.ts`
+- `docs/decisions/2026-08-25-motion-zukan-output-format-clarification.md`
+- `docs/decisions/2026-08-25-motion-zukan-preset-first-davinci-value-bridge.md`
+- `docs/decisions/2026-08-26-motion-zukan-property-stack-customization.md`
+- `docs/runbooks/2026-08-25-mask-reveal-sceneinstance-handoff-addendum.md`
+- `docs/runbooks/2026-08-25-mask-reveal-davinci-applied-evidence-gate.md`
+- `movie-dashboard/src/data/maskRevealSceneProductionBundle.ts`
+- `movie-dashboard/src/data/maskRevealDaVinciAppliedEvidence.ts`
 
-Current truth before this run:
+Current truth before local execution:
 
 - Pattern: `type-mask-reveal`
-- DaVinci implementation: `impl-type-mask-reveal-davinci-text-plus`
-- Implementation status: `AVAILABLE`, not tested
-- Current preview: `REPO_GENERATED / CONCEPT`
-- Current Concept render QA: PASS, but `productionAuthority=false`
-- Target: `ACTUAL_DAVINCI_RENDER`
-- Shared sample: `sample-typography-welcome-v1`
-- Marker authority: `VML_MASK_REVEAL_<SECTION>`
+- implementation: `impl-type-mask-reveal-davinci-text-plus`
+- current preview authority: `REPO_GENERATED / CONCEPT`
+- target: `ACTUAL_DAVINCI_RENDER`
+- sample: `sample-typography-welcome-v1`
 - Palmier role: `PALMIER_TIMING_ONLY`
 - DaVinci role: final motion + render
+- Human-readable adopted `SceneInstance` values remain production authority
+- JSON/XML/frame numbers/MP4 are serialization or evidence, not Human Master
 
-## Reuse decision
+Legacy scratch marker `VML_MASK_REVEAL_OPENING_INTRO` may still appear in historical Pattern-level examples, but **production handoff uses the current Scene-specific marker**:
 
-Do not create a wedding-project-specific Resolve bridge first.
+`VML_MASK_REVEAL_<SECTION>_<SCENE_TOKEN>`
 
-Use in this order:
-
-1. DaVinci built-in `Text+` / Fusion / Rectangle Mask
-2. existing repo learning recipe `fusion-masked-reveal`
-3. an already-installed DaVinci Resolve MCP if present
-4. current external `davinci-resolve-mcp` after local compatibility/security probe
-5. smallest manual DaVinci step only when the real scripting/API boundary prevents safe automation
-
-Do not install Reactor, a marketplace title pack, `.drfx`, or a custom `.setting` for Mask Reveal v1. Built-in Resolve is enough.
-
-## External MCP evidence reused
-
-Current reviewed candidate:
-
-- package/repository line: `davinci-resolve-mcp`
-- reviewed README version: `2.69.3`
-- license: MIT
-- README advertises Resolve 18.5+
-- its live validation `tests/live_fusion_mask_title_validation.py` creates a disposable project and verifies:
-  - `resolve_control("get_version")`
-  - Fusion `Text+` insertion
-  - `StyledText` write + independent readback
-  - Rectangle/Ellipse Mask creation
-  - successful connection to `Text+.EffectMask`
-  - honest connection failure when the target has no mask input
-  - cleanup of the disposable project
-
-External evidence is **not our local render evidence**. It only justifies reuse.
-
-## Phase 0 — Git and concurrency safety
+## Phase 0 — Git / concurrency safety
 
 Before local app work:
 
 1. fetch latest `main`
-2. confirm current branch/worktree is clean
+2. confirm clean worktree or preserve unrelated local changes
 3. inspect open PRs
-4. create a Movie-only branch from latest `main`
-5. do not edit Paper Item / Rurubu / Passport files
-6. if another Movie PR touches the same files, stop and reconcile before writing
+4. create a Movie-only branch from latest main
+5. do not touch Paper Item / Rurubu / Passport files
+6. reconcile any conflicting Movie PR before writing
 
-Recommended branch:
+Recommended execution branch:
 
 `movie/local-mask-reveal-davinci-actual`
 
-## Phase 1 — Read-only environment probe
+## Phase 1 — select the adopted SceneInstance
 
-Run from repo root:
+Choose one adopted current Mask Reveal SceneInstance and record:
+
+```text
+sceneId
+sourceRevision = SceneInstance.updatedAt
+projectId
+section
+sceneMarkerId
+humanSelectedFields
+lockedFields
+```
+
+Generate a fresh `motion-zukan-scene-production/v1` bundle from that Scene.
+
+If `updatedAt` changes after export/readback, previous execution evidence is **STALE**. Regenerate before applying anything further.
+
+Do not begin local implementation from copied fixed Fusion values when current human-readable Scene values exist.
+
+## Phase 2 — establish Canonical values
+
+Resolve the current effective Scene values and Canonical state.
+
+At minimum trace:
+
+- text
+- Scene Duration
+- Layer Delay
+- Motion Delay
+- Enter Duration
+- Hold Duration
+- Position / Offset
+- Direction
+- Distance
+- Scale
+- Intensity
+- Human Selected / Locked state
+
+For Mask Reveal v1, the active Property units are:
+
+```text
+Transform
+Mask
+```
+
+Do not add unrelated Blur/Perspective/universal Inspector structures merely for this proof.
+
+## Phase 3 — read-only environment probe
+
+Run:
 
 ```bash
 bash scripts/davinci/mask-reveal-readonly-probe.sh
 ```
 
-This probe is intentionally weak evidence. It only discovers local hints and performs no mutation.
+This performs no mutation. Treat its app/MCP discovery only as hints.
 
-Record, but do not yet promote anything from:
+The authoritative Resolve identity must come from a live Resolve connection or actual Resolve UI, not Finder/bundle metadata alone.
 
-- Resolve application path
-- bundle version/build
-- whether a DaVinci MCP binary/config appears to exist
+## Phase 4 — reuse existing Resolve integration
 
-The authoritative version/edition must come from a live Resolve connection, preferably `resolve_control(action="get_version")` or the actual Resolve UI if a scripting connection is unavailable.
+Use in this order:
 
-## Phase 2 — Reuse existing MCP before installing
+1. DaVinci built-in `Text+` / Fusion / Rectangle Mask
+2. existing repo recipe `fusion-masked-reveal`
+3. already-installed compatible DaVinci MCP
+4. current external `davinci-resolve-mcp` after current compatibility/security check
+5. smallest manual DaVinci action only if the local API genuinely cannot author a required keyframe
 
-Check the machine and Claude Code/MCP configuration before installing anything.
+Do not install Reactor, marketplace effects, paid templates, or custom `.setting` assets for Mask Reveal v1.
 
-If a compatible DaVinci MCP is already present, reuse it.
+If an MCP setup/update is required, recheck current upstream instructions first. Do not blindly execute a stale copied install command.
 
-If none exists, inspect the current upstream documentation/release again before setup. Do not use a stale copied install command blindly.
+If one Resolve UI action is required to expose local scripting/bridge transport, request only that exact action and immediately resume afterwards.
 
-At the time this runbook was written, the upstream quick start was:
+## Phase 5 — authoritative live Resolve context
 
-```bash
-npx davinci-resolve-mcp setup
+Connect to local Resolve and record:
+
+- product / edition
+- full Resolve version
+- MCP version if exposed
+- transport
+- project name
+- timeline name
+- width
+- height
+- fps
+
+Create a disposable project/timeline, not the real wedding project.
+
+Neutral requested preview target remains:
+
+```text
+WELCOME
+1280 × 720 target
+30fps target
+4 sec target
+muted
+neutral dark background
 ```
 
-but current upstream documentation is the authority when the local run actually happens.
+But requested target values are not proof of the live Project Context.
 
-### Studio vs Free edition
+Rebuild the expected DaVinci values from:
 
-Do not guess edition from the app bundle.
+```text
+current Canonical Scene state
++
+live Resolve Project Context
+```
 
-For Studio, the reviewed MCP documentation expects Resolve running with:
+Human seconds remain authority; frame numbers are derived from live fps.
 
-`Preferences > General > External scripting using > Local`
+## Phase 6 — disposable Mask Reveal implementation
 
-For the free edition, the reviewed MCP documents an in-app bridge launched through Resolve `Workspace > Scripts`. Treat that as a compatibility path that must be rechecked against the current upstream and local Resolve version. Do not present it as guaranteed forever.
+Use built-in:
 
-If one UI action is required to expose the local scripting transport, request only that single action, then continue automatically.
-
-## Phase 3 — Authoritative live probe
-
-Before creating any project:
-
-1. connect to Resolve
-2. call/read `get_version`
-3. record:
-   - product / edition string
-   - full version string
-   - MCP version if exposed
-   - transport used: Studio local scripting or free-edition in-app bridge
-4. make no Production Ready / Actual changes yet
-
-Failure to connect is a blocker. Do not substitute the macOS bundle version as proof.
-
-## Phase 4 — Disposable implementation validation
-
-Use a disposable project, never the real Opening/Profile project first.
-
-Suggested project name:
-
-`_wedding_vml_mask_reveal_<timestamp>`
-
-Suggested timeline:
-
-`vml_mask_reveal_validation`
-
-Required timeline/sample contract:
-
-- 1280 × 720
-- 30fps
-- 4 seconds / 120 frames target
-- muted
-- neutral dark background
-- exact text: `WELCOME`
-- no real wedding photo
-- no copyrighted music
-- no third-party template
-
-Required implementation authority:
-
-`DAVINCI_TEXT_PLUS + Fusion Rectangle Mask`
+`Text+ + Rectangle Mask`
 
 Minimum graph intent:
 
-`Text+ → MediaOut` with Rectangle Mask connected to `Text+.EffectMask`.
+`Text+ → MediaOut`, with Rectangle Mask connected to `Text+.EffectMask`.
 
-If a background/merge is needed for the neutral sample, keep it minimal and document it. Do not add decorative nodes.
-
-### Mandatory readbacks
-
-Before animation/render, prove:
+Before animation/render, prove where supported:
 
 - Text+ exists
-- `StyledText` reads back as `WELCOME`
+- StyledText matches current Scene text (`WELCOME` for neutral proof)
 - Rectangle Mask exists
-- mask connection to `Text+.EffectMask` is confirmed
+- mask connection exists
 
-A node graph that merely exists is not enough. Rendering remains mandatory.
+Implement the **current Scene's resolved values**.
 
-## Phase 5 — Mask Reveal animation
+Do not use a copied `approximately 0.8 seconds` as authority. Use current `enterDurationSeconds`, then derive the representable frame timing from live fps.
 
 Visual intent:
 
-- reveal from below/upward into the final text position
-- short and restrained
-- target user duration for v1: approximately 0.8 seconds
-- ease into the settled state
+- reveal follows current direction
+- restrained motion
+- natural settle
 - no bounce
 - no glow
 - no shake
+- no decorative chain
 - no unnecessary motion blur
-- no secondary effects
 
-Do not invent fixed keyframe values merely to automate them.
+If keyframe authoring alone is unsupported:
 
-Use the safest keyframe/input method supported by the locally installed Resolve/MCP version and confirm via readback where possible.
+1. keep all possible setup/readback automated
+2. perform the smallest manual keyframe action
+3. record `automationGap: KEYFRAME_AUTHORING`
+4. still require Actual render evidence
 
-If keyframe authoring is the only unsupported automation gap:
+## Phase 7 — applied/readback evidence
 
-1. keep all setup/readback automated
-2. make the smallest manual keyframe operation in the disposable project
-3. record the gap explicitly as `automationGap: KEYFRAME_AUTHORING`
-4. still require actual render evidence
+Use `davinci-applied-readback/v1`.
 
-Do not build a custom MCP just to avoid one small verified manual step.
+The evidence must use the same `sceneId` and `sourceRevision` as the current Scene production bundle.
 
-## Phase 6 — Actual DaVinci render
+Capture only proven values; unavailable values remain null.
 
-Render the shared neutral sample from DaVinci itself.
+Compare:
 
-Target:
+```text
+Human Scene value
+→ Canonical value
+→ live-context expected DaVinci value
+→ applied/readback value
+→ delta
+```
 
-- H.264 MP4 or another standard preview codec supported by the local Resolve build
-- 1280 × 720
-- 30fps
-- approximately 4 seconds
-- no audio
+Review `LOCKED` preservation explicitly.
 
-Candidate Git-tracked neutral preview path after QA:
+Also review Property-local integrity for active units:
+
+```text
+Transform
+Mask
+```
+
+A one-property correction that silently changes unrelated properties is not a clean correction. Record any real secondary dependency explicitly.
+
+Readback alone is not completion.
+
+## Phase 8 — Actual DaVinci render
+
+Render the neutral sample from local DaVinci itself.
+
+Candidate preview path after QA:
 
 `movie-dashboard/public/motion-previews/type-mask-reveal/davinci-actual-v1.mp4`
 
@@ -230,15 +245,12 @@ Candidate poster:
 
 `movie-dashboard/public/motion-previews/type-mask-reveal/davinci-actual-v1-poster.png`
 
-These may be committed because they contain only the neutral WELCOME sample and built-in Resolve output. Do **not** use this rule to commit real photos, private video, music, paid templates, or other licensed binary assets.
+Only the neutral WELCOME proof may be committed by this path. Never commit private wedding media, copyrighted audio, or paid/licensed template binaries.
 
-## Phase 7 — Actual render evidence
+Collect actual measurements:
 
-For the DaVinci-rendered file, record:
-
-- exact local Resolve version
-- render timestamp
-- render path
+- Resolve version
+- renderedAt
 - SHA-256
 - codec
 - width / height
@@ -247,134 +259,105 @@ For the DaVinci-rendered file, record:
 - sample asset set ID
 - implementation ID
 
-Then QA at both:
+### 1x QA
 
-### 1x
-
-Check:
-
-- text clearly reveals rather than simply fades
-- timing feels restrained
-- final text is crisp and stable
+- clear mask reveal
+- intended timing meaning preserved
+- final text crisp/stable
 - no clipping
-- no accidental movement after settle
-- no extra effect distracts from the text
+- no accidental extra motion/effect
 
-### 0.5x
+### 0.5x QA
 
-Check:
-
-- acceleration/deceleration makes sense
-- no abrupt velocity jump
-- no accidental overshoot/bounce
-- mask edge does not expose unwanted portions
+- coherent acceleration/deceleration
+- no overshoot/bounce
+- mask edge behaves correctly
 - settle is clean
 
-Capture representative stills if useful.
+If either review fails, keep verification false, correct the relevant human-readable property when possible, rebuild derived values, and re-render.
 
-## Phase 8 — Truth promotion rules
+## Phase 9 — promotion rules
 
-Only after all required evidence exists may code change from Concept-only state.
+Only after real evidence exists may code move beyond Concept-only state.
 
-The following updates become eligible:
+Eligible after proof:
 
-### DaVinci implementation
-
-`impl-type-mask-reveal-davinci-text-plus`
-
-- `status`: `TESTED`, then `PRODUCTION_READY` only if all gates pass
-- `tested`: `true`
-- `resolveVersion`: actual local version
-- `verified`: `true`
-
-### Actual preview
-
-Create/register a separate preview record with:
-
-- `sourceType: ACTUAL_DAVINCI_RENDER`
-- `status: VERIFIED`
-- actual MP4 `assetPath`
-- poster path if generated
-- `generatedBy: DaVinci Resolve`
-- actual `generatedAt`
-- implementation ID
-- sample asset set ID
+- implementation `AVAILABLE → TESTED → PRODUCTION_READY` only if all required gates justify it
 - actual Resolve version
-- `verified: true`
+- separate `ACTUAL_DAVINCI_RENDER / VERIFIED` preview record
+- actual preview/poster paths
+- actual timestamp/checksum/provenance
+- completed `motion-verification/v1` checks
 
-Do not overwrite history in a way that erases the repository-generated Concept preview. Both can remain with different provenance.
+Never erase the repository-generated Concept provenance.
 
-### Motion verification evidence
+The Actual MP4 is Implementation Evidence, not Source of Truth.
 
-Fill the `motion-verification/v1` fields using actual measurements only:
+## Phase 10 — Palmier → DaVinci scratch handoff
 
-- `candidatePreviewAssetPath`
-- `renderSha256`
-- `renderedAt`
-- `resolveVersion`
-- every completed check
-- `productionReady`
-
-Any unverified field remains false/null.
-
-## Phase 9 — Palmier → DaVinci handoff proof
-
-Once the disposable DaVinci implementation itself is proven, complete the real handoff mechanics on a scratch Palmier timeline before touching the final Opening timeline.
+After standalone DaVinci proof, create a scratch Palmier project timeline.
 
 Palmier responsibilities:
 
 - rough timing
-- text placement intent
-- marker/section identity
-- export the **real timeline** as DaVinci-compatible NLE XML
+- text/placement intent
+- current Scene-specific marker identity
+- export the **real project timeline** as DaVinci-compatible NLE XML
 
-For Mask Reveal, Palmier remains `PALMIER_TIMING_ONLY`; do not fake a Fusion reveal there.
+For Mask Reveal, Palmier remains `PALMIER_TIMING_ONLY`.
 
-Required pair:
+Use filenames and marker from the fresh Scene production bundle rather than hard-coded Pattern-level names.
 
-- `palmier-mask-reveal-timeline.xml`
-- `mask-reveal-motion-handoff.json`
+Required conceptual pair:
 
-Use marker:
+```text
+Palmier real project NLE XML
++
+fresh Scene-specific Motion Handoff sidecar
+```
 
-`VML_MASK_REVEAL_OPENING_INTRO`
+For Palmier approximation preserve separately:
+
+```text
+intended Human value
+Palmier applied value
+difference / delta
+```
 
 Then:
 
-1. import Palmier XML into DaVinci
+1. import real Palmier XML into disposable/scratch DaVinci project
 2. confirm timing/order/relink
-3. apply the already-verified Mask Reveal implementation at the marker
-4. render again
-5. compare with the disposable implementation result
-6. only then consider the end-to-end vertical slice passed
+3. locate current Scene-specific marker
+4. apply the already-tested Mask Reveal
+5. capture fresh applied/readback evidence
+6. render again
+7. compare with standalone validation result
 
-## Phase 10 — Real wedding project
+## Phase 11 — real wedding project
 
-Do not modify the real Opening/Profile timeline until Phases 1–9 pass.
+Do not modify the real Opening/Profile timeline until the disposable DaVinci and Palmier scratch handoff gates pass.
 
-When they pass:
-
-- reuse the verified implementation
-- use the actual selected wedding media locally
-- never commit private originals
-- keep the effect secondary to Story / Photo / Emotion / Readability / Music
+After they pass, reuse the verified implementation locally with selected real wedding media. Never commit private originals.
 
 ## Failure policy
 
-Never convert a failure into a guessed success.
+Never turn a failed or unavailable observation into a guessed success.
 
 Examples:
 
-- MCP can read graph but render is unchanged → FAIL, investigate render path
-- title inserts on an unexpected track → record API limitation; do not force the real timeline
-- local Resolve version differs from external test version → local render decides
-- Palmier XML export is unavailable → keep NLE XML gate failed; do not invent XML
-- actual file exists but has not been visually reviewed → keep `visualQa1x/visualQaHalfSpeed=false`
+- graph exists but rendered output does not reveal → FAIL
+- local Resolve version differs from external evidence → local evidence wins
+- Palmier XML export unavailable → XML gate remains failed
+- Actual file exists but no 1x/0.5x review → visual QA remains false
+- stale Scene revision → discard/recreate execution evidence
+- locked value silently violated → implementation review fails
+- property-local edit changes unrelated property without explicit dependency → correction review fails
 
 ## Completion gate
 
-Mask Reveal vertical slice is technically complete only when this chain is real:
+Mask Reveal is technically complete only when this chain is real:
 
-`search → Concept preview → meaning → inputs → Prompt outputs → Palmier Rough → real NLE XML → sidecar Manifest → DaVinci import → built-in Text+ Mask Reveal → Actual DaVinci MP4 → 1x/0.5x Visual QA → provenance + version → verified UI preview`
+`search → Concept preview → adopted SceneInstance → Human values → Canonical state → fresh bundle → Palmier Rough → real NLE XML + sidecar → DaVinci import → Scene marker match → expected/live-context values → applied/readback + delta → built-in Text+ Mask Reveal → Actual DaVinci MP4 → 1x/0.5x QA → provenance/version → verified UI preview`
 
-Until then, do not migrate the next 36/97 motions into the new architecture.
+Until then, do not migrate the next Motion Pattern or mass-convert the 36 Motion Kit / 97 Director Recipes.
