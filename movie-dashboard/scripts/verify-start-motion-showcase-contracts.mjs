@@ -52,7 +52,7 @@ for (const token of ["EXACT TIMING GATE", "Palmier rough handoff copy", "JSON ex
 }
 requireText(app, 'path="movie-coach/start-showcase"', "StaRt Motion Showcase route missing");
 requireText(sidebar, 'to: "/movie-coach/start-showcase"', "StaRt Motion Showcase navigation missing");
-requireText(sidebar, 'label: "StaRt Motion Showcase"', "StaRt Motion Showcase nav label missing");
+requireText(sidebar, 'label: "StaRt全体見本"', "StaRt Motion Showcase beginner-facing nav label missing");
 
 if (errors.length) {
   console.error(`StaRt Motion Showcase contracts FAILED (${errors.length})`);

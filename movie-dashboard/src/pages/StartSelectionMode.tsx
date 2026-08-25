@@ -47,7 +47,7 @@ function downloadText(filename: string, text: string, type: string) {
 
 export function StartSelectionMode() {
   const [state, setState] = useState<StartSelectionState>(readStartSelectionState);
-  const [copied, setCopied] = useState<"prompt" | "json" | "render" | null>(null);
+  const [copied, setCopied] = useState<"prompt" | "json" | "render" | "studio" | null>(null);
   const decisions = useMemo(readHumanReviewDecisions, []);
   const shortlist = useMemo(() => buildStartShortlistExport(state, decisions), [state, decisions]);
   const prompt = useMemo(() => buildStartCodexPrompt(state, decisions), [state, decisions]);
@@ -63,7 +63,7 @@ export function StartSelectionMode() {
     });
   }
 
-  function copy(text: string, kind: "prompt" | "json" | "render") {
+  function copy(text: string, kind: "prompt" | "json" | "render" | "studio") {
     void navigator.clipboard.writeText(text);
     setCopied(kind);
     window.setTimeout(() => setCopied((current) => current === kind ? null : current), 1600);
@@ -92,6 +92,34 @@ export function StartSelectionMode() {
   return (
     <div>
       <Header title="StaRt SELECTION MODE" description="選ぶ → 素材を揃える → コメントを1つの依頼文にする。StaRt本編の初心者向け制作ナビ" />
+
+      <section className="mb-6 border-2 border-sky-500 bg-sky-50 p-5 dark:border-sky-700 dark:bg-sky-950/30">
+        <p className="text-[10px] font-semibold tracking-[0.2em] text-sky-700 dark:text-sky-300">ANIMATION LIBRARY — 作ったアニメーションはここ</p>
+        <h2 className="mt-2 text-xl font-bold text-navy-900 dark:text-sand-100">まず「StaRt全体見本」→ 気になったら「演出レシピ図鑑」の順で見ます</h2>
+        <div className="mt-4 grid gap-3 md:grid-cols-3">
+          <Link to="/movie-coach/start-showcase" className="border-2 border-sky-500 bg-white p-4 dark:bg-navy-800">
+            <p className="text-[10px] font-semibold tracking-widest text-sky-700 dark:text-sky-300">最初に見る</p>
+            <h3 className="mt-1 font-bold text-navy-900 dark:text-sand-100">▶ StaRt全体見本</h3>
+            <p className="mt-2 text-xs leading-5 text-navy-600 dark:text-navy-300">曲全体のどこで、どの動きを使うかを見る画面。</p>
+          </Link>
+          <Link to="/movie-coach/director-recipes" className="border border-sand-300 bg-white p-4 dark:border-navy-600 dark:bg-navy-800">
+            <p className="text-[10px] font-semibold tracking-widest text-navy-400">詳しく選ぶ</p>
+            <h3 className="mt-1 font-bold text-navy-900 dark:text-sand-100">🎞 演出レシピ図鑑（97種類）</h3>
+            <p className="mt-2 text-xs leading-5 text-navy-600 dark:text-navy-300">Favorite・Maybe・Rejectを付けて候補を絞る画面。</p>
+          </Link>
+          <Link to="/movie-coach/start-motion-kit" className="border border-sand-300 bg-white p-4 dark:border-navy-600 dark:bg-navy-800">
+            <p className="text-[10px] font-semibold tracking-widest text-navy-400">基礎から見る</p>
+            <h3 className="mt-1 font-bold text-navy-900 dark:text-sand-100">✦ 基礎アニメーション図鑑（36種類）</h3>
+            <p className="mt-2 text-xs leading-5 text-navy-600 dark:text-navy-300">文字・写真・切替・リズムの基本パーツを見る画面。</p>
+          </Link>
+        </div>
+        <div className="mt-4 flex flex-col gap-3 border-t border-sky-200 pt-4 sm:flex-row sm:items-center sm:justify-between dark:border-sky-800">
+          <p className="text-xs leading-5 text-sky-900 dark:text-sky-200"><strong>実際に動くプレビュー：</strong>Remotion Studioを起動すると、作った全Compositionを再生できます。</p>
+          <button onClick={() => copy("cd /Users/m-shogo/Developer/personal/wedding-project/motion-studio && pnpm dev:director-recipes", "studio")} className="shrink-0 border border-sky-700 bg-white px-4 py-2 text-xs font-bold text-sky-900 dark:bg-navy-800 dark:text-sky-200">
+            {copied === "studio" ? "起動コマンドをコピーしました ✓" : "動く図鑑の起動コマンドをコピー"}
+          </button>
+        </div>
+      </section>
 
       <section className="mb-6 border-2 border-emerald-500 bg-emerald-50 p-5 dark:border-emerald-700 dark:bg-emerald-950/30">
         <p className="text-[10px] font-semibold tracking-[0.2em] text-emerald-700 dark:text-emerald-300">NEXT ACTION</p>
