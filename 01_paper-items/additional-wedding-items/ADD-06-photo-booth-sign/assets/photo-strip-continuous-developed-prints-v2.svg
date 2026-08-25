@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="1120" viewBox="0 0 320 1120">
+  <defs>
+    <pattern id="softgrain" width="19" height="19" patternUnits="userSpaceOnUse">
+      <circle cx="4" cy="6" r="0.9" fill="#F7F0E4" opacity="0.12"/>
+      <circle cx="15" cy="13" r="0.7" fill="#F7F0E4" opacity="0.08"/>
+    </pattern>
+    <pattern id="darkgrain" width="17" height="17" patternUnits="userSpaceOnUse">
+      <circle cx="4" cy="5" r="0.8" fill="#211925" opacity="0.11"/>
+      <circle cx="13" cy="11" r="0.6" fill="#211925" opacity="0.07"/>
+    </pattern>
+    <radialGradient id="flash" cx="50%" cy="45%" r="65%">
+      <stop offset="0" stop-color="#FFF8E8"/>
+      <stop offset="0.42" stop-color="#F7D97A"/>
+      <stop offset="1" stop-color="#EE6A50"/>
+    </radialGradient>
+    <clipPath id="f1"><rect x="36" y="48" width="248" height="218"/></clipPath>
+    <clipPath id="f2"><rect x="36" y="292" width="248" height="218"/></clipPath>
+    <clipPath id="f3"><rect x="36" y="536" width="248" height="218"/></clipPath>
+    <clipPath id="f4"><rect x="36" y="780" width="248" height="218"/></clipPath>
+  </defs>
+
+  <!-- Serious comparison candidate only. No semantic/factual copy is baked into this asset. -->
+  <!-- Continuous cream photo-booth paper strip; no fake UI, barcode, camera controls or labels. -->
+  <rect x="12" y="12" width="296" height="1096" fill="#FAF7EF"/>
+
+  <!-- Exposure 1: coastal dawn / horizon, composed as a photographic field rather than an icon card. -->
+  <g clip-path="url(#f1)">
+    <rect x="36" y="48" width="248" height="218" fill="#75C9D7"/>
+    <rect x="36" y="157" width="248" height="109" fill="#4FA9A1"/>
+    <circle cx="250" cy="150" r="64" fill="#F26B4F"/>
+    <rect x="36" y="153" width="248" height="7" fill="#F6C84A" opacity="0.95"/>
+    <path d="M36 208 C84 197 129 211 173 201 C215 191 248 206 284 196" fill="none" stroke="#F7F0E4" stroke-width="4" opacity="0.28"/>
+    <rect x="36" y="48" width="248" height="218" fill="url(#darkgrain)"/>
+  </g>
+
+  <!-- Exposure 2: overexposed flash bloom, deliberately less logo-like than v1. -->
+  <g clip-path="url(#f2)">
+    <rect x="36" y="292" width="248" height="218" fill="#EE6A50"/>
+    <ellipse cx="165" cy="397" rx="122" ry="100" fill="url(#flash)"/>
+    <ellipse cx="116" cy="372" rx="58" ry="48" fill="#FFF8E8" opacity="0.66"/>
+    <path d="M44 480 C91 461 123 471 164 458 C208 444 242 456 278 444" fill="none" stroke="#F6C84A" stroke-width="10" opacity="0.42"/>
+    <rect x="36" y="292" width="248" height="218" fill="url(#softgrain)"/>
+  </g>
+
+  <!-- Exposure 3: reception light trails / movement. -->
+  <g clip-path="url(#f3)">
+    <rect x="36" y="536" width="248" height="218" fill="#201826"/>
+    <path d="M18 736 C84 679 140 609 227 548" fill="none" stroke="#F26B4F" stroke-width="25" stroke-linecap="round" opacity="0.95"/>
+    <path d="M45 768 C109 705 174 646 304 574" fill="none" stroke="#F6C84A" stroke-width="12" stroke-linecap="round" opacity="0.9"/>
+    <path d="M16 668 C108 639 193 614 324 608" fill="none" stroke="#59C8C0" stroke-width="15" stroke-linecap="round" opacity="0.9"/>
+    <circle cx="239" cy="696" r="26" fill="#F7F0E4" opacity="0.16"/>
+    <rect x="36" y="536" width="248" height="218" fill="url(#softgrain)"/>
+  </g>
+
+  <!-- Exposure 4: night water / afterglow. -->
+  <g clip-path="url(#f4)">
+    <rect x="36" y="780" width="248" height="126" fill="#1B1821"/>
+    <rect x="36" y="906" width="248" height="92" fill="#45AAA5"/>
+    <circle cx="228" cy="851" r="25" fill="#F6B72E"/>
+    <path d="M42 932 C83 919 118 940 158 928 C198 916 230 936 281 922" fill="none" stroke="#F7F0E4" stroke-width="4" opacity="0.54"/>
+    <path d="M50 958 C90 947 124 968 165 954 C207 942 239 960 286 950" fill="none" stroke="#F7F0E4" stroke-width="3" opacity="0.34"/>
+    <rect x="36" y="780" width="248" height="218" fill="url(#darkgrain)"/>
+  </g>
+</svg>
