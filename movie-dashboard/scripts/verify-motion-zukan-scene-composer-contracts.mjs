@@ -74,7 +74,8 @@ if (composer.includes("productionStore") || composer.includes('from "../types/mo
 
 for (const token of [
   "モーション図鑑 / HUMAN MASTER",
-  "人間が理解して、1項目ずつ直せるScene",
+  "選ぶだけで成立し、必要なら数字まで降りられるScene",
+  "Preset First → Accordion Detail → DaVinci Final Precision",
   "かんたん",
   "詳細",
   "DaVinci",
@@ -99,4 +100,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log("Motion Zukan Scene Composer contracts OK: Mask Reveal adopts a cloned HUMAN_MASTER SceneInstance, recipe provenance cannot silently rewrite it, property-local edits/locks persist independently, target/computed duration stays visible, and Opening/Profile structured timelines retain SceneEdge authority without replacing the legacy Storyboard model.");
+console.log("Motion Zukan Scene Composer contracts OK: Mask Reveal adopts a cloned HUMAN_MASTER SceneInstance, preset-first UI still preserves property-local human edits/locks, recipe provenance cannot silently rewrite it, target/computed duration stays visible, and Opening/Profile structured timelines retain SceneEdge authority without replacing the legacy Storyboard model.");
