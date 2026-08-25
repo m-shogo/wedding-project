@@ -1,12 +1,14 @@
 // pnpm check:claude-codex-ab
 //
-// Phase G — Claude / Codex A/B comparison framework contract check.
+// Phase G/I — Claude / Codex A/B comparison framework contract check.
 //
-// Verifies, mechanically, the one rule this whole framework depends on:
-//   winner is non-null  =>  the artifactPath(s) it depends on actually exist on disk.
-// Nothing may claim a winner for work that was never produced. This is separate from
-// validateStartAbComparisonShape() in startClaudeCodexAB.ts (pure data-shape checks, no fs
-// access, usable from browser code) — this script adds the filesystem half.
+// Generated review media must NOT be committed to Git. Candidate artifactPath values are allowed
+// to describe the expected local/CI output location while winner is still null. A missing file is
+// therefore only a warning during an undecided research run.
+//
+// Hard rule:
+//   winner is non-null  =>  every artifact required by that winner must exist on disk in the
+//   review environment. CI that records a decision must render/download those artifacts first.
 //
 // Also checks:
 //   - exactly 12 evaluation axes, unique ids, 5-point rubric each
@@ -27,7 +29,6 @@ const err = (msg: string) => {
 };
 const ok = (msg: string) => console.log(`✅ ${msg}`);
 
-// --- axes ------------------------------------------------------------------------------------
 if (startAbAxes.length !== 12) {
   err(`expected exactly 12 evaluation axes, found ${startAbAxes.length}.`);
 } else {
@@ -46,7 +47,6 @@ for (const axis of startAbAxes) {
   }
 }
 
-// --- comparisons -------------------------------------------------------------------------------
 if (startAbComparisons.length === 0) {
   err('startAbComparisons is empty — Phase G expects at least the seed chorus-1 comparison.');
 }
@@ -56,26 +56,40 @@ for (const comparison of startAbComparisons) {
     err(`[${issue.comparisonId}] ${issue.message}`);
   }
 
-  // Filesystem half of the winner contract: this is the part validateStartAbComparisonShape()
-  // (a pure, fs-free function reusable from movie-dashboard browser code) cannot do itself.
-  const checkArtifact = (label: string, path: string | null) => {
-    if (path === null) return;
-    const abs = join(repoRoot, path);
-    if (!existsSync(abs)) {
-      err(`[${comparison.id}] ${label}.artifactPath is set to "${path}" but that file does not exist on disk. Never point a winner at work that wasn't produced.`);
+  const artifactExists = (path: string | null) => path !== null && existsSync(join(repoRoot, path));
+  const warnMissingExpectedArtifact = (label: string, path: string | null) => {
+    if (path !== null && !artifactExists(path)) {
+      console.warn(
+        `⚠️  [${comparison.id}] ${label}.artifactPath describes expected review output "${path}", ` +
+          'but it is not present in this checkout. This is allowed while winner=null; render or download the CI artifact before human scoring.',
+      );
     }
   };
-  checkArtifact('claudeCandidate', comparison.claudeCandidate.artifactPath);
-  checkArtifact('codexCandidate', comparison.codexCandidate.artifactPath);
+
+  warnMissingExpectedArtifact('claudeCandidate', comparison.claudeCandidate.artifactPath);
+  warnMissingExpectedArtifact('codexCandidate', comparison.codexCandidate.artifactPath);
 
   if (comparison.winner !== null) {
+    const requiredCandidates =
+      comparison.winner === 'claude'
+        ? [comparison.claudeCandidate]
+        : comparison.winner === 'codex'
+          ? [comparison.codexCandidate]
+          : [comparison.claudeCandidate, comparison.codexCandidate];
+
+    for (const candidate of requiredCandidates) {
+      if (!artifactExists(candidate.artifactPath)) {
+        err(
+          `[${comparison.id}] winner=${comparison.winner} requires ${candidate.agent} review media, ` +
+            `but artifactPath=${candidate.artifactPath ?? 'null'} is not present. Never record a winner without reviewable media.`,
+        );
+      }
+    }
     console.log(`ℹ️  [${comparison.id}] winner=${comparison.winner} decided by ${comparison.decidedBy ?? '(unknown)'} at ${comparison.decidedAt ?? '(unknown)'}`);
   } else {
     ok(`[${comparison.id}] winner is still null (expected — no human decision recorded yet).`);
   }
 
-  // Handoff pack existence is informational, not fatal: it's fine to define a comparison before
-  // running `pnpm export:claude-codex-ab-handoff`, but warn so it's not forgotten.
   for (const candidate of [comparison.claudeCandidate, comparison.codexCandidate]) {
     const abs = join(repoRoot, candidate.handoffPath);
     if (!existsSync(abs)) {
