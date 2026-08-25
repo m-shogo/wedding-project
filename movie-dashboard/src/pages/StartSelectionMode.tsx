@@ -3,6 +3,11 @@ import { Link } from "react-router-dom";
 import { Header } from "../components/Header";
 import { getDirectorRecipeById } from "../data/directorRecipeCatalog";
 import { getDirectorRecipeVisualAudit } from "../data/directorRecipeVisualFidelity";
+import {
+  startCreativeDirections,
+  startCreativeIdeas,
+  type StartCreativeIdeaCategory,
+} from "../data/startCreativeIdeas";
 import { readHumanReviewDecisions } from "../data/startHumanReview";
 import {
   START_SELECTION_STORAGE_KEY,
@@ -26,6 +31,13 @@ const readinessLabels: Record<keyof StartSelectionState["readiness"], string> = 
   clearedLocalAudio: "使用許諾済みの正規ローカル音源を用意した",
   waveformReviewed: "音源の波形を確認した",
   markersConfirmed: "セクションMarkerと終了点を確定した",
+};
+
+const creativeCategoryLabels: Record<StartCreativeIdeaCategory, string> = {
+  photo: "写真",
+  motion: "動き",
+  typography: "文字",
+  sound: "音",
 };
 
 const startSourceFolders = [
@@ -54,6 +66,7 @@ function downloadText(filename: string, text: string, type: string) {
 
 export function StartSelectionMode() {
   const [state, setState] = useState<StartSelectionState>(readStartSelectionState);
+  const [ideaSectionId, setIdeaSectionId] = useState<StartExtendedSectionId>("opening-pickup");
   const [copied, setCopied] = useState<"prompt" | "json" | "render" | "studio" | null>(null);
   const [copiedAssetPath, setCopiedAssetPath] = useState<string | null>(null);
   const decisions = useMemo(readHumanReviewDecisions, []);
@@ -95,6 +108,17 @@ export function StartSelectionMode() {
   function selectRecipe(sectionId: StartExtendedSectionId, recipeId: string) {
     update((current) => ({...current, recipeBySection: {...current.recipeBySection, [sectionId]: recipeId}}));
   }
+
+  function toggleCreativeIdea(id: string) {
+    update((current) => ({
+      ...current,
+      selectedCreativeIdeaIds: current.selectedCreativeIdeaIds.includes(id)
+        ? current.selectedCreativeIdeaIds.filter((ideaId) => ideaId !== id)
+        : [...current.selectedCreativeIdeaIds, id],
+    }));
+  }
+
+  const visibleCreativeIdeas = startCreativeIdeas.filter((idea) => idea.sectionId === ideaSectionId);
 
   const steps = [
     {label: "1. 系統を選ぶ", done: familyValid, detail: `${state.selectedFamilyIds.length} / 4〜8 family`},
@@ -146,6 +170,73 @@ export function StartSelectionMode() {
           <p className={`text-xs font-bold ${step.done ? "text-emerald-700 dark:text-emerald-300" : "text-navy-800 dark:text-sand-100"}`}>{step.done ? "✓ " : "○ "}{step.label}</p>
           <p className="mt-1 text-[10px] font-mono text-navy-400">{step.detail}</p>
         </div>)}
+      </section>
+
+      <section className="mb-8 border-2 border-fuchsia-500 bg-fuchsia-50 p-5 dark:border-fuchsia-700 dark:bg-fuchsia-950/20">
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <p className="text-[10px] font-semibold tracking-[0.2em] text-fuchsia-700 dark:text-fuchsia-300">CREATIVE IDEA ASSISTANT</p>
+            <h2 className="mt-1 text-xl font-bold text-navy-900 dark:text-sand-100">完成形を想像しながら、使いたい案だけ選ぶ</h2>
+          </div>
+          <span className="border border-fuchsia-400 bg-white px-3 py-1 text-xs font-bold text-fuchsia-800 dark:bg-navy-800 dark:text-fuchsia-200">{state.selectedCreativeIdeaIds.length}案を採用候補に追加済み</span>
+        </div>
+        <p className="mt-2 text-sm leading-6 text-navy-600 dark:text-navy-300">まず全体の方向を1つ選び、区間ごとの案を眺めます。アイデアは必須ではありません。追加した案だけがJSONとCodex用プロンプトへ入り、最終採用はRoughを見て人間が決めます。</p>
+
+        <div className="mt-5">
+          <p className="text-[10px] font-semibold tracking-widest text-fuchsia-700 dark:text-fuchsia-300">1. 全体の雰囲気を選ぶ</p>
+          <div className="mt-2 grid gap-3 lg:grid-cols-3">
+            {startCreativeDirections.map((direction) => {
+              const selected = state.creativeDirectionId === direction.id;
+              return <button key={direction.id} onClick={() => update((current) => ({...current, creativeDirectionId: direction.id}))} className={`border-2 p-4 text-left ${selected ? "border-fuchsia-500 bg-white dark:bg-navy-800" : "border-fuchsia-200 bg-fuchsia-50/50 opacity-70 dark:border-fuchsia-900 dark:bg-navy-900"}`}>
+                <h3 className="font-bold text-navy-900 dark:text-sand-100">{selected ? "✓" : "○"} {direction.label}</h3>
+                <p className="mt-2 text-xs leading-5 text-navy-700 dark:text-navy-200">{direction.summary}</p>
+                <p className="mt-2 text-[11px] leading-5 text-navy-500 dark:text-navy-300"><strong>映像ルール：</strong>{direction.visualRule}</p>
+                <p className="mt-1 text-[11px] leading-5 text-red-600 dark:text-red-300"><strong>注意：</strong>{direction.risk}</p>
+              </button>;
+            })}
+          </div>
+        </div>
+
+        <div className="mt-6 border-t border-fuchsia-200 pt-5 dark:border-fuchsia-800">
+          <div className="flex flex-wrap items-end justify-between gap-3">
+            <label className="text-[10px] font-semibold tracking-widest text-fuchsia-700 dark:text-fuchsia-300">2. アイデアを見る区間
+              <select value={ideaSectionId} onChange={(event) => setIdeaSectionId(event.target.value as StartExtendedSectionId)} className="mt-1 block min-w-64 border border-fuchsia-300 bg-white px-3 py-2 text-sm text-navy-800 dark:border-fuchsia-800 dark:bg-navy-900 dark:text-sand-100">
+                {startExtendedSections.map((section, index) => <option key={section.id} value={section.id}>{index + 1}. {section.label}</option>)}
+              </select>
+            </label>
+            <p className="text-xs text-navy-500 dark:text-navy-300">各区間に2案・全28案。必要素材と注意点も先に確認できます。</p>
+          </div>
+          <div className="mt-3 grid gap-3 lg:grid-cols-2">
+            {visibleCreativeIdeas.map((idea) => {
+              const selected = state.selectedCreativeIdeaIds.includes(idea.id);
+              return <article key={idea.id} className={`border-2 p-4 ${selected ? "border-fuchsia-500 bg-white dark:bg-navy-800" : "border-fuchsia-200 bg-white/70 dark:border-fuchsia-900 dark:bg-navy-900"}`}>
+                <div className="flex items-center justify-between gap-2">
+                  <span className="bg-fuchsia-100 px-2 py-1 text-[10px] font-bold text-fuchsia-800 dark:bg-fuchsia-900 dark:text-fuchsia-200">{creativeCategoryLabels[idea.category]}</span>
+                  <span className="font-mono text-[9px] text-navy-400">{idea.id}</span>
+                </div>
+                <h3 className="mt-3 font-bold text-navy-900 dark:text-sand-100">{idea.title}</h3>
+                <p className="mt-2 text-sm leading-6 text-navy-700 dark:text-navy-200">{idea.suggestion}</p>
+                <p className="mt-2 text-xs leading-5 text-navy-600 dark:text-navy-300"><strong>なぜ効く：</strong>{idea.why}</p>
+                <div className="mt-3 grid gap-2 bg-fuchsia-50 p-3 text-xs leading-5 sm:grid-cols-2 dark:bg-fuchsia-950/30">
+                  <p><strong className="block text-fuchsia-800 dark:text-fuchsia-200">必要素材</strong>{idea.materialHint}</p>
+                  <p><strong className="block text-red-700 dark:text-red-300">注意</strong>{idea.caution}</p>
+                </div>
+                <button onClick={() => toggleCreativeIdea(idea.id)} className={`mt-3 w-full border px-3 py-2 text-xs font-bold ${selected ? "border-red-300 text-red-600" : "border-fuchsia-600 bg-fuchsia-600 text-white"}`}>{selected ? "候補から外す" : "採用候補に追加（Promptへ入る）"}</button>
+              </article>;
+            })}
+          </div>
+          {state.selectedCreativeIdeaIds.length > 0 && <details className="mt-3 border border-fuchsia-300 bg-white p-3 dark:border-fuchsia-800 dark:bg-navy-800">
+            <summary className="cursor-pointer text-xs font-bold text-fuchsia-800 dark:text-fuchsia-200">追加済み{state.selectedCreativeIdeaIds.length}案を確認</summary>
+            <ul className="mt-3 space-y-2 text-xs text-navy-700 dark:text-navy-200">
+              {state.selectedCreativeIdeaIds.map((id) => {
+                const idea = startCreativeIdeas.find((item) => item.id === id);
+                if (!idea) return null;
+                const section = startExtendedSections.find((item) => item.id === idea.sectionId);
+                return <li key={id} className="flex items-center justify-between gap-3 border-t border-fuchsia-100 pt-2 dark:border-fuchsia-900"><span><strong>{section?.label}：</strong>{idea.title}</span><button onClick={() => toggleCreativeIdea(id)} className="shrink-0 text-red-600">外す</button></li>;
+              })}
+            </ul>
+          </details>}
+        </div>
       </section>
 
       <section className="mb-8">
@@ -255,7 +346,7 @@ export function StartSelectionMode() {
         <div className="border-2 border-sky-400 bg-sky-50 p-5 dark:bg-sky-950/20">
           <p className="text-[10px] font-semibold tracking-[0.2em] text-sky-700 dark:text-sky-300">STEP 4 — HANDOFF</p>
           <h2 className="mt-1 text-xl font-bold text-navy-900 dark:text-sand-100">チェックとコメントを1つにまとめる</h2>
-          <p className="mt-2 text-sm leading-6 text-navy-600 dark:text-navy-300">Codex用プロンプトには、選んだ6系統・14区間・Favorite・コメント・未準備項目・安全条件がすべて入ります。</p>
+          <p className="mt-2 text-sm leading-6 text-navy-600 dark:text-navy-300">Codex用プロンプトには、全体方向・追加したCreative Ideas・選んだ6系統・14区間・Favorite・コメント・未準備項目・安全条件がすべて入ります。</p>
           <label className="mt-4 block text-[10px] font-semibold tracking-widest text-navy-400">全体コメント
             <textarea value={state.globalComment} onChange={(event) => update((current) => ({...current, globalComment: event.target.value}))} placeholder="例：全体を楽しく。ただし写真が読める時間は残したい" className="mt-1 min-h-24 w-full border border-sand-300 bg-white p-3 text-sm text-navy-800 dark:border-navy-600 dark:bg-navy-900 dark:text-sand-100" />
           </label>

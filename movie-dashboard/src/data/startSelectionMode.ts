@@ -1,4 +1,9 @@
 import { getDirectorRecipeById } from "./directorRecipeCatalog";
+import {
+  getStartCreativeDirection,
+  getStartCreativeIdea,
+  type StartCreativeDirectionId,
+} from "./startCreativeIdeas";
 import type { HumanReviewDecision } from "./startHumanReview";
 import { startExtendedAuthority, startExtendedSections, type StartExtendedSectionId } from "./startExtendedRhythmMap";
 import { getSectionRecipeMapping } from "./startSectionRecipeMap";
@@ -8,6 +13,8 @@ export type {StartMotionFamilyId, StartMotionFamily, StartStarterSectionPlan} fr
 
 export interface StartSelectionState {
   selectedFamilyIds: StartMotionFamilyId[];
+  creativeDirectionId: StartCreativeDirectionId;
+  selectedCreativeIdeaIds: string[];
   recipeBySection: Record<StartExtendedSectionId, string>;
   commentsBySection: Partial<Record<StartExtendedSectionId, string>>;
   globalComment: string;
@@ -25,6 +32,8 @@ export const START_SELECTION_STORAGE_KEY = "start-extended-selection-mode-v1";
 
 export const defaultStartSelectionState: StartSelectionState = {
   selectedFamilyIds: startMotionFamilies.map((family) => family.id),
+  creativeDirectionId: "balanced-joy",
+  selectedCreativeIdeaIds: [],
   recipeBySection: Object.fromEntries(startStarterSectionPlan.map((item) => [item.sectionId, item.recipeId])) as Record<StartExtendedSectionId, string>,
   commentsBySection: {},
   globalComment: "",
@@ -47,6 +56,7 @@ export function readStartSelectionState(): StartSelectionState {
     return {
       ...defaultStartSelectionState,
       ...parsed,
+      selectedCreativeIdeaIds: parsed.selectedCreativeIdeaIds ?? [],
       recipeBySection: {...defaultStartSelectionState.recipeBySection, ...parsed.recipeBySection},
       commentsBySection: parsed.commentsBySection ?? {},
       readiness: {...defaultStartSelectionState.readiness, ...parsed.readiness},
@@ -65,10 +75,13 @@ export function getStartNextAction(state: StartSelectionState) {
 }
 
 export function buildStartShortlistExport(state: StartSelectionState, decisions: Record<string, HumanReviewDecision>) {
+  const creativeDirection = getStartCreativeDirection(state.creativeDirectionId);
   return {
-    schemaVersion: 1,
+    schemaVersion: 2,
     authority: {audio: startExtendedAuthority.audioState, timing: startExtendedAuthority.timingState, media: "MEDIA_BLOCKED"},
     selectedFamilies: state.selectedFamilyIds.map((id) => startMotionFamilies.find((family) => family.id === id)).filter(Boolean),
+    creativeDirection,
+    selectedCreativeIdeas: state.selectedCreativeIdeaIds.map(getStartCreativeIdea).filter((idea) => idea !== undefined),
     sections: startExtendedSections.map((section) => ({
       id: section.id,
       label: section.label,
@@ -99,12 +112,21 @@ export function buildStartCodexPrompt(state: StartSelectionState, decisions: Rec
     !state.readiness.waveformReviewed && "波形未確認",
     !state.readiness.markersConfirmed && "Marker未確定",
   ].filter(Boolean).join("、") || "なし";
+  const creativeDirection = getStartCreativeDirection(state.creativeDirectionId);
+  const creativeIdeaLines = shortlist.selectedCreativeIdeas.length > 0
+    ? shortlist.selectedCreativeIdeas.map((idea) => {
+      const section = startExtendedSections.find((item) => item.id === idea.sectionId);
+      return `- ${section?.label ?? idea.sectionId} / ${idea.title}: ${idea.suggestion}\n  必要素材: ${idea.materialHint}\n  注意: ${idea.caution}`;
+    }).join("\n")
+    : "なし（アイデアは候補であり、選択は必須ではありません）";
 
   return `# StaRt Extended Opening 制作依頼\n\n` +
     `このリポジトリをpullして最新mainから作業してください。V1は今回の対象外です。\n` +
     `StartExtendedOpeningRoughV1を下記選定に合わせて更新し、初心者が次の操作を判断できるUIも維持してください。\n\n` +
     `## 絶対条件\n- 現在はAUDIO_BLOCKED / MEDIA_BLOCKEDです。仮秒数をFinal扱いしないでください。\n- 正規ローカル音源の波形・Marker確認前に音ハメを確定しないでください。\n- 本人・家族・友人・犬をAI生成または変形しないでください。実素材未投入部分は明示的なplaceholderにしてください。\n- Favorite / Maybe / Rejectは人間の判断です。AIがapprovedへ昇格させないでください。\n- 新しいCatalogを増やすより、この14セクションのRoughと実素材差し替えを優先してください。\n\n` +
     `## 選定Motion Family (${state.selectedFamilyIds.length})\n${state.selectedFamilyIds.map((id) => `- ${startMotionFamilies.find((family) => family.id === id)?.label ?? id}`).join("\n")}\n\n` +
+    `## Creative Direction\n- ${creativeDirection?.label ?? state.creativeDirectionId}: ${creativeDirection?.summary ?? ""}\n- 映像ルール: ${creativeDirection?.visualRule ?? ""}\n- 注意: ${creativeDirection?.risk ?? ""}\n\n` +
+    `## 選択したCreative Ideas (${shortlist.selectedCreativeIdeas.length})\n${creativeIdeaLines}\n\n` +
     `## 14セクション選定\n${sectionLines}\n\n` +
     `## 全体コメント\n${state.globalComment || "なし"}\n\n` +
     `## 現在のブロッカー\n${blockers}\n\n` +
