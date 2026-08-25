@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - "scripts/davinci/mask-reveal-readonly-probe.sh"
+      - "docs/handoff/MASK-REVEAL-VERTICAL-SLICE.md"
       - "docs/runbooks/2026-08-25-mask-reveal-local-davinci-actual-gate.md"
       - "docs/runbooks/2026-08-25-mask-reveal-human-master-actual-addendum.md"
       - "docs/runbooks/2026-08-25-mask-reveal-davinci-applied-evidence-gate.md"
@@ -91,6 +92,26 @@ jobs:
           grep -Fq 'JSON / XML / NLE XML are not the Human Master themselves.' "$addendum"
           if grep -Fq 'save/export the `Editable Source of Truth JSON`' "$addendum"; then
             echo "Legacy JSON-as-source-of-truth instruction must not return"
+            exit 1
+          fi
+
+      - name: Vertical-slice handoff authority
+        shell: bash
+        run: |
+          handoff="docs/handoff/MASK-REVEAL-VERTICAL-SLICE.md"
+          grep -Fq 'sourceRevision = SceneInstance.updatedAt' "$handoff"
+          grep -Fq 'VML_MASK_REVEAL_<SECTION>_<SCENE_TOKEN>' "$handoff"
+          grep -Fq 'PALMIER_TIMING_ONLY' "$handoff"
+          grep -Fq 'JSON sidecar: current Scene state / handoff serialization, **not a separate Human Master**' "$handoff"
+          grep -Fq 'applied/readback + delta' "$handoff"
+          grep -Fq 'Human seconds remain authority; frame numbers are derived using live fps.' "$handoff"
+          grep -Fq 'Do **not** hard-code a historical `0.8 sec` reveal duration.' "$handoff"
+          if grep -Fq 'duration: `0.8 sec`' "$handoff"; then
+            echo "Legacy fixed 0.8 sec production instruction must not return"
+            exit 1
+          fi
+          if grep -Fq 'Motion Handoff Manifest JSON: Fusion/Text+などXMLだけでは保持しにくい演出意図の正本' "$handoff"; then
+            echo "Legacy JSON-as-independent-authority instruction must not return"
             exit 1
           fi
 
