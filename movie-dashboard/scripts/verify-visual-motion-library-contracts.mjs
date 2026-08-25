@@ -5,6 +5,9 @@ import { fileURLToPath } from "node:url";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const data = fs.readFileSync(path.join(root, "src/data/visualMotionLibrary.ts"), "utf8");
 const handoff = fs.readFileSync(path.join(root, "src/data/maskRevealHandoff.ts"), "utf8");
+const editable = fs.readFileSync(path.join(root, "src/data/humanEditableMotionIntent.ts"), "utf8");
+const production = fs.readFileSync(path.join(root, "src/data/maskRevealEditableProduction.ts"), "utf8");
+const workspace = fs.readFileSync(path.join(root, "src/components/MaskRevealEditableWorkspace.tsx"), "utf8");
 const samples = fs.readFileSync(path.join(root, "src/data/motionSampleAssetSets.ts"), "utf8");
 const learning = fs.readFileSync(path.join(root, "src/data/motionLearningLinks.ts"), "utf8");
 const previewEvidence = fs.readFileSync(path.join(root, "src/data/motionPreviewEvidence.ts"), "utf8");
@@ -75,6 +78,109 @@ for (const token of [
   'false/nullの未確認項目が残る間はProduction Readyへ昇格しない',
 ]) {
   requireText(handoff, token, `Mask Reveal handoff missing contract token: ${token}`);
+}
+
+for (const token of [
+  'schemaVersion: "human-editable-motion/v1"',
+  '"DEFAULT" | "AI_SUGGESTED" | "HUMAN_SELECTED" | "LOCKED"',
+  'sceneDurationSeconds',
+  'layerDelaySeconds',
+  'motionDelaySeconds',
+  'enterMotion',
+  'enterDurationSeconds',
+  'holdMotion',
+  'holdDurationSeconds',
+  'exitMotion',
+  'exitDurationSeconds',
+  'staggerDelaySeconds',
+  'positionPreset',
+  'positionXPercent',
+  'positionYPercent',
+  'positionOffsetXPercent',
+  'positionOffsetYPercent',
+  'direction',
+  'distancePercent',
+  'scaleFromPercent',
+  'scaleToPercent',
+  'cropFocus',
+  'intensity',
+  'humanSelectedValue',
+  'locked: boolean',
+  'resolveEditableValue',
+  'if (value.locked) return "LOCKED"',
+  'if (current.locked) return intent',
+  'applyHumanSelection',
+  'setEditableFieldLock',
+  'retargetMaskRevealSection',
+  'resolveMaskRevealEditableIntent',
+]) {
+  requireText(editable, token, `Human-editable Mask Reveal model missing: ${token}`);
+}
+
+for (const token of [
+  'authority: "HUMAN_MASTER"',
+  'HUMAN_SELECTED / LOCKED must never be silently overwritten',
+  'Scene Duration',
+  'Layer Delay',
+  'Motion Delay',
+  'Motion Duration',
+  'Hold',
+  'Stagger Delay',
+  'Position Offset X',
+  'Direction',
+  'Distance',
+  'Scale From',
+  'Crop / Focus',
+  'HUMAN MASTER AUTHORITY',
+  'HUMAN LOCKED',
+  'HUMAN SELECTED',
+  'AI MAY ADJUST',
+  'If a locked value makes the scene invalid, report the conflict. Do not replace it.',
+  'PALMIER ROUGH / HUMAN MASTER AUTHORITY',
+  'intended value, applied value, and delta',
+  'DAVINCI FINAL / HUMAN MASTER AUTHORITY',
+  'Actual render is implementation evidence, not the source of truth.',
+  'schemaVersion: "motion-handoff/v2-human-editable"',
+  'palmierDeltaEvidence',
+  'appliedValue: null',
+  'difference: null',
+]) {
+  requireText(production, token, `Human-editable production bridge missing: ${token}`);
+}
+
+for (const token of [
+  'HUMAN MASTER / EDITABLE SOURCE OF TRUTH',
+  'かんたん',
+  '詳細',
+  'DaVinci',
+  'AI Suggested:',
+  'Reason:',
+  'Human Selected:',
+  'LOCKED 🔒',
+  'Scene Duration',
+  'Layer Delay',
+  'Motion Delay',
+  'Motion Duration',
+  'Hold',
+  'Stagger Delay',
+  'Distance',
+  'Scale From',
+  'AI指示を作る',
+  'Human Brief',
+  'Claude Creative Instruction',
+  'Palmier Instruction',
+  'NLE XML Handoff',
+  'DaVinci Finish Manifest',
+  'Verification Checklist',
+  'Editable Source of Truth JSON',
+  'Machine JSON',
+  'Motion Handoff Manifest JSON',
+  'NLE XML',
+  'XMLをこのアプリ側で捏造しません',
+  'navigator.clipboard.writeText',
+  'buildMaskRevealExecutionOutputs',
+]) {
+  requireText(workspace, token, `Human-editable workspace missing: ${token}`);
 }
 
 for (const token of [
@@ -149,19 +255,10 @@ if (handoff.includes("MOTION:type-mask-reveal") || page.includes("MOTION:type-ma
 }
 
 for (const token of [
+  "Mask Reveal 1件を、Actual Renderだけでなく「後から直せる構造」まで通す",
+  "人間が理解できるScene Duration / Delay / Hold / Position / Direction等を正本",
+  "MaskRevealEditableWorkspace",
   "CONCEPT PREVIEW / 実装確認前",
-  "AI指示を作る",
-  "Human Brief",
-  "Claude Creative Instruction",
-  "Palmier Instruction",
-  "NLE XML Handoff",
-  "DaVinci Finish Manifest",
-  "Verification Checklist",
-  "Machine JSON",
-  "Motion Handoff Manifest JSON",
-  "NLE XML",
-  "XMLをこのアプリ側で捏造しません",
-  "navigator.clipboard.writeText",
   "JUST-IN-TIME LEARNING",
   "この演出で学べること",
   "getMotionLearningBundle(pattern.id)",
@@ -183,4 +280,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log("Visual Motion Library contracts OK: Mask Reveal keeps verified repository-generated Concept render evidence separate from DaVinci Actual authority, reuses existing Fusion learning, preserves section-aware handoff, and remains non-production until local Resolve verification.");
+console.log("Visual Motion Library contracts OK: legacy Palmier XML / Actual DaVinci gates remain intact while HUMAN_MASTER editable intent becomes the production source of truth; property-level selections/locks survive Prompt/Palmier/DaVinci handoff and renders remain evidence only.");
