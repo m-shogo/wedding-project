@@ -78,6 +78,7 @@ export interface MotionZukanComposerState {
 }
 
 export const MOTION_ZUKAN_COMPOSER_STORAGE_KEY = "motion-zukan-composer-state-v1";
+export const MOTION_ZUKAN_COMPOSER_CHANGED_EVENT = "motion-zukan-composer-state-changed";
 
 export const maskRevealHeroSceneRecipe: MaskRevealSceneRecipe = {
   recipeId: "scene-recipe-mask-reveal-hero-v1",
@@ -119,8 +120,6 @@ export function computeMaskRevealSceneDuration(intent: MaskRevealEditableIntent)
     value.holdDurationSeconds +
     value.exitDurationSeconds;
 
-  // IMAGE/VIDEO remains visible for the human target duration.
-  // If text timing runs longer, expose the structural difference instead of silently truncating human choices.
   const computedDurationSeconds = Number(Math.max(value.sceneDurationSeconds, textStructuralEnd).toFixed(3));
   return {
     targetDurationSeconds: Number(value.sceneDurationSeconds.toFixed(3)),
@@ -178,8 +177,6 @@ export function updateMaskRevealSceneField<K extends MaskRevealEditableFieldKey>
   lock = false,
   updatedAt = nowIso(),
 ): MaskRevealSceneInstance {
-  // Property-local correction: change only the human-readable field the person touched.
-  // Unrelated Text / Crop / Timing / Motion fields remain byte-for-byte from the adopted SceneInstance.
   const editableIntent = applyHumanSelection(scene.editableIntent, key, value, lock);
   return refreshSceneDerivedState(scene, editableIntent, updatedAt);
 }
@@ -201,7 +198,6 @@ export function suggestMaskRevealSceneField<K extends MaskRevealEditableFieldKey
   reason: string,
   updatedAt = nowIso(),
 ): MaskRevealSceneInstance {
-  // AI may modify only AI_SUGGESTED. A locked field no-ops; HUMAN_SELECTED remains effective.
   const editableIntent = applyAiSuggestion(scene.editableIntent, key, value, reason);
   return refreshSceneDerivedState(scene, editableIntent, updatedAt);
 }
@@ -293,6 +289,50 @@ export function adoptSceneInstance(state: MotionZukanComposerState, scene: MaskR
   return rebuildTimelines({ ...state, scenes, timelines });
 }
 
+export function duplicateSceneInstance(state: MotionZukanComposerState, sceneId: string): MotionZukanComposerState {
+  const source = state.scenes.find((scene) => scene.sceneId === sceneId);
+  if (!source) return state;
+
+  const duplicatedAt = nowIso();
+  const duplicate: MaskRevealSceneInstance = {
+    ...structuredClone(source),
+    sceneId: createSceneId(),
+    legacySceneId: null,
+    createdAt: duplicatedAt,
+    updatedAt: duplicatedAt,
+  };
+  const sourceIndex = state.scenes.findIndex((scene) => scene.sceneId === sceneId);
+  const scenes = [...state.scenes];
+  scenes.splice(sourceIndex + 1, 0, duplicate);
+  const timelines = state.timelines.map((timeline) => {
+    if (timeline.projectId !== source.projectId) return timeline;
+    const ids = [...timeline.sceneIds];
+    const timelineIndex = ids.indexOf(sceneId);
+    ids.splice(timelineIndex >= 0 ? timelineIndex + 1 : ids.length, 0, duplicate.sceneId);
+    return { ...timeline, sceneIds: ids };
+  });
+  return rebuildTimelines({ ...state, scenes, timelines });
+}
+
+export function reorderProjectTimelineScenes(
+  state: MotionZukanComposerState,
+  projectId: SceneProjectId,
+  orderedSceneIds: string[],
+): MotionZukanComposerState {
+  const expectedIds = state.scenes.filter((scene) => scene.projectId === projectId).map((scene) => scene.sceneId);
+  if (
+    expectedIds.length !== orderedSceneIds.length ||
+    expectedIds.some((id) => !orderedSceneIds.includes(id)) ||
+    new Set(orderedSceneIds).size !== orderedSceneIds.length
+  ) {
+    return state;
+  }
+  const timelines = state.timelines.map((timeline) =>
+    timeline.projectId === projectId ? { ...timeline, sceneIds: [...orderedSceneIds] } : timeline,
+  );
+  return rebuildTimelines({ ...state, timelines });
+}
+
 export function removeSceneInstance(state: MotionZukanComposerState, sceneId: string): MotionZukanComposerState {
   const scenes = state.scenes.filter((scene) => scene.sceneId !== sceneId);
   const timelines = state.timelines.map((timeline) => ({
@@ -377,6 +417,9 @@ export function loadMotionZukanComposerState(): MotionZukanComposerState {
 export function saveMotionZukanComposerState(state: MotionZukanComposerState) {
   if (typeof localStorage === "undefined") return;
   localStorage.setItem(MOTION_ZUKAN_COMPOSER_STORAGE_KEY, JSON.stringify(state));
+  if (typeof window !== "undefined") {
+    window.dispatchEvent(new CustomEvent(MOTION_ZUKAN_COMPOSER_CHANGED_EVENT, { detail: state }));
+  }
 }
 
 export function buildMaskRevealSceneExport(scene: MaskRevealSceneInstance) {
