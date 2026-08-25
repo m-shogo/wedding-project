@@ -4,6 +4,7 @@ import {
   buildMaskRevealEditableSourceOfTruth,
 } from "./maskRevealEditableProduction";
 import { buildMaskRevealMotionHandoffManifest } from "./maskRevealHandoff";
+import { createMaskRevealDaVinciAppliedEvidenceTemplate } from "./maskRevealDaVinciAppliedEvidence";
 import {
   buildMaskRevealDaVinciValueBridge,
   MASK_REVEAL_VERTICAL_SLICE_CONTEXT,
@@ -58,6 +59,7 @@ export interface MaskRevealSceneProductionBundleV1 {
     implementationId: "impl-type-mask-reveal-davinci-text-plus";
     finishManifest: string;
     valueBridge: ReturnType<typeof buildMaskRevealDaVinciValueBridge>;
+    appliedEvidence: ReturnType<typeof createMaskRevealDaVinciAppliedEvidenceTemplate>;
     verificationEvidence: ReturnType<typeof buildMaskRevealMotionHandoffManifest>["verificationEvidence"];
   };
   preview: {
@@ -95,6 +97,7 @@ export function buildMaskRevealSceneProductionBundle(
   const canonicalSceneState = resolveCanonicalMaskRevealState(scene.editableIntent);
   const production = buildMaskRevealEditableProductionOutputs(scene.editableIntent);
   const davinciValueBridge = buildMaskRevealDaVinciValueBridge(scene.editableIntent, MASK_REVEAL_VERTICAL_SLICE_CONTEXT);
+  const davinciAppliedEvidence = createMaskRevealDaVinciAppliedEvidenceTemplate(scene);
   const legacyHandoff = buildMaskRevealMotionHandoffManifest({
     text: resolved.text,
     mediaLabel: resolved.mediaLabel,
@@ -152,6 +155,7 @@ export function buildMaskRevealSceneProductionBundle(
       implementationId: "impl-type-mask-reveal-davinci-text-plus",
       finishManifest: production.davinciFinishManifest,
       valueBridge: davinciValueBridge,
+      appliedEvidence: davinciAppliedEvidence,
       verificationEvidence: {
         ...legacyHandoff.verificationEvidence,
         markerId: sceneMarkerId,
