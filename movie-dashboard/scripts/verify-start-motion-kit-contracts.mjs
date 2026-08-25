@@ -42,7 +42,7 @@ for (const token of ["motionFamilies", "motionEnergies", "motionSources", "motio
 }
 requireText(app, 'path="movie-coach/start-motion-kit"', "Motion Kit route missing");
 requireText(sidebar, 'to: "/movie-coach/start-motion-kit"', "Motion Kit LEARN navigation missing");
-requireText(sidebar, 'label: "StaRt Motion Kit"', "Motion Kit navigation label missing");
+requireText(sidebar, 'label: "基礎アニメーション図鑑（36）"', "Motion Kit beginner-facing navigation label missing");
 
 if (errors.length) {
   console.error(`StaRt Motion Kit contracts FAILED (${errors.length})`);

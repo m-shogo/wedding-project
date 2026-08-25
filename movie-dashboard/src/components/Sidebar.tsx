@@ -31,7 +31,7 @@ const navSections: SidebarSection[] = [
     links: [
       { to: "/movie-coach/dictionary", label: "逆引きDaVinci辞典", icon: "⌕" },
       { to: "/movie-coach/start-rhythm", label: "StaRt Rhythm Lab", icon: "♬" },
-      { to: "/movie-coach/start-motion-kit", label: "StaRt Motion Kit", icon: "✦" },
+      { to: "/movie-coach/start-motion-kit", label: "基礎アニメーション図鑑（36）", icon: "✦" },
       { to: "/movie-coach/timeline", label: "Timeline Anatomy", icon: "≡" },
       { to: "/movie-coach/color", label: "Color Learning", icon: "◐" },
       { to: "/movie-coach/audio", label: "Audio Learning", icon: "♫" },
@@ -48,8 +48,8 @@ const navSections: SidebarSection[] = [
       { to: "/movie-coach/review", label: "Movie Review", icon: "◎" },
       { to: "/movie-coach/compare", label: "Before / After Lab", icon: "⇄" },
       { to: "/movie-coach/reference", label: "Reference Breakdown", icon: "⌗" },
-      { to: "/movie-coach/start-showcase", label: "StaRt Motion Showcase", icon: "▶" },
-      { to: "/movie-coach/director-recipes", label: "Director Recipe Catalog", icon: "🎞" },
+      { to: "/movie-coach/start-showcase", label: "StaRt全体見本", icon: "▶" },
+      { to: "/movie-coach/director-recipes", label: "演出レシピ図鑑（97）", icon: "🎞" },
     ],
   },
   {

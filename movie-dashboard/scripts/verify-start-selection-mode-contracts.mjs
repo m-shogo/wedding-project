@@ -26,6 +26,8 @@ for (const section of sections) {
 for (const [source, token, message] of [
   [mode, 'start-extended-selection-mode-v1', "selection localStorage key missing"],
   [page, "NEXT ACTION", "next-action guide missing"],
+  [page, "作ったアニメーションはここ", "animation library guide missing"],
+  [page, "動く図鑑の起動コマンドをコピー", "Remotion Studio preview command missing"],
   [page, "Codex用プロンプトをコピー", "Codex prompt copy missing"],
   [page, "Shortlist JSONを保存", "shortlist export missing"],
   [page, "AUDIO_BLOCKED / MEDIA_BLOCKED", "blocked authority label missing"],
