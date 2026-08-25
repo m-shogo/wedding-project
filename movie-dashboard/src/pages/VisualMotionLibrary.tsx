@@ -5,6 +5,7 @@ import {
   buildMaskRevealMotionHandoffJson,
   type MaskRevealExecutionOutputs,
 } from "../data/maskRevealHandoff";
+import { getMotionLearningBundle } from "../data/motionLearningLinks";
 import {
   buildMaskRevealPromptOutputs,
   getPatternImplementation,
@@ -72,6 +73,7 @@ export function VisualMotionLibrary() {
         {patterns.map((pattern) => {
           const preview = getPatternPreview(pattern);
           const implementation = getPatternImplementation(pattern);
+          const learning = getMotionLearningBundle(pattern.id);
           return (
             <article key={pattern.id} className="border border-sand-300 dark:border-navy-600 bg-white dark:bg-navy-800">
               <div className="grid grid-cols-1 xl:grid-cols-[1.15fr_1fr]">
@@ -112,6 +114,32 @@ export function VisualMotionLibrary() {
                     <div><dt className="font-semibold">Implementation</dt><dd>{implementation?.status ?? "DISCOVERED"}</dd></div>
                     <div><dt className="font-semibold">Verified</dt><dd>{implementation?.verified ? "YES" : "NO"}</dd></div>
                   </dl>
+
+                  {learning && (
+                    <section className="mt-6 border-t border-sand-200 dark:border-navy-600 pt-5">
+                      <p className="text-[10px] tracking-[0.2em] font-semibold text-sky-700 dark:text-sky-300">JUST-IN-TIME LEARNING</p>
+                      <h3 className="mt-1 text-base font-bold text-navy-900 dark:text-sand-100">この演出で学べること</h3>
+                      <p className="mt-2 text-xs leading-5 text-navy-500 dark:text-navy-300">{learning.whyNow}</p>
+                      <div className="mt-3 flex flex-wrap gap-2">
+                        {learning.learningTopics.map((topic) => (
+                          <span key={topic} className="px-2 py-1 text-[10px] border border-sky-200 dark:border-sky-900 text-sky-700 dark:text-sky-300">{topic}</span>
+                        ))}
+                      </div>
+                      <div className="mt-4 space-y-3">
+                        {learning.fusionRecipes.map((recipe) => (
+                          <div key={recipe.recipeId} className="border border-sand-200 dark:border-navy-600 p-3">
+                            <p className="text-xs font-semibold text-navy-800 dark:text-sand-100">{recipe.title}</p>
+                            <p className="mt-1 text-[11px] leading-5 text-navy-500 dark:text-navy-300">{recipe.goal}</p>
+                            <ol className="mt-2 space-y-1 text-[11px] leading-5 text-navy-500 dark:text-navy-300">
+                              {recipe.steps.map((step, index) => (
+                                <li key={`${recipe.recipeId}-${step.nodeId}-${index}`}>{index + 1}. {step.note}</li>
+                              ))}
+                            </ol>
+                          </div>
+                        ))}
+                      </div>
+                    </section>
+                  )}
                 </div>
               </div>
 
