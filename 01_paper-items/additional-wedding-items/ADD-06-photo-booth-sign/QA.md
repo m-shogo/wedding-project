@@ -1,44 +1,48 @@
 # ADD-06 フォトブースサイン — QA
 
-Status: `CURRENT / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / FAMILY_DIVERSITY_PROMOTED / DEVELOPED_PRINT_CUE_PASS / CORAL_TAPE_SUBTRACTION_PASS / NIGHT_REFLECTION_SUBTRACTION_PASS / PRINT2_TAPE_SUBTRACTION_PASS / LONG_COPY_STRESS_PASS / JAPANESE_SEMANTIC_BREAK_PASS / ROLLBACK_SAFE / NOT_PRINT_READY`
-Updated: 2026-08-24
+Status: `CURRENT / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / CLEANROOM_V3_PROMOTED / CONTINUOUS_STRIP_ARTIFACT_PASS / LONG_COPY_STRESS_PASS / SVG_EDITABILITY_PASS / DRIVE_MASTER_VERIFIED / ROLLBACK_SAFE / NOT_PRINT_READY`
+Updated: 2026-08-25
 Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
 
 ## Current Figma authority
 
 - Figma file: `SVMALDUyhc2chxHa4fvdjx`
-- stable Current root: `45:2 / CURRENT / ADD-06 / PHOTO STRIP DOORWAY / DEVELOPED PRINTS / TAPE-SUBTRACTED 2026-08-23`
-- family-diversity study page: `46:2 / FAMILY_DIVERSITY / ADD-06 PHOTO BOOTH / 2026-08-21`
-- selected independent mature candidate retained: `47:2 / FAMILY-DIVERSE VNEXT / ADD-06 / PHOTO STRIP DOORWAY / SELECTED`
-- long-copy proof: `47:19 / QA / FAMILY-DIVERSE ADD-06 / PHOTO STRIP LONG COPY STRESS`
-- fixed-art comparison: `50:2 / QA / ADD-06 / PHOTO STRIP / ABSTRACT DEVELOPED PRINTS / 2026-08-23`
-- tape-subtraction comparison: `51:2 / VERIFIED / ADD-06 / NO AMBIGUOUS CORAL TAPE / 2026-08-23`
-- night-reflection comparison: `52:2 / QA / ADD-06 / DEVELOPED PRINT 3 / NO EXCLAMATION-LIKE REFLECTION / 2026-08-23` — hidden after promotion
-- print-2 tape subtraction comparison: `54:2 / QA / ADD-06 / DEVELOPED PRINT 2 / NO MAGENTA TAPE / 2026-08-24` — hidden after promotion
-- pre-print-2-tape rollbacks: `54:33 / 54:64`
-- pre-night-reflection rollbacks: `52:33 / 52:64`
-- pre-tape-subtraction rollbacks: `51:33 / 51:64`
-- pre-developed-print Current rollback: `50:33`
-- pre-developed-print long-copy rollback: `50:49`
-- previous FRAME POP rollback: `47:36`
-- previous V6: `42:2`
-- former V3: `25:3`
-- V2 comparison: `23:3`
-- legacy: `1:2 / FRAME_ADD06_A3_PORTRAIT`
-- exact Drive authority: `1Ehk_oQ8vhAGo3DYBbgyOGfA03u0pu5wb / ADD-06_フォトブースサイン`
+- **Current page:** `56:105 / CURRENT_SELECTED / ADD-06 / STRIP IN THE LIGHT / 2026-08-25`
+- **Current root:** `56:106 / CURRENT / ADD-06 / STRIP IN THE LIGHT / CONTINUOUS DEVELOPED PRINTS`
+- hidden Current long-copy proof: `56:157 / QA / LONG COPY / STRIP IN THE LIGHT`
+- clean-room study page: `55:2 / CLEANROOM STUDY / ADD-06 / CONTINUOUS STRIP / 2026-08-25`
+- V3-A study winner: `55:3 / STRIP IN THE LIGHT`
+- V3-B rejected study: `55:54 / AFTERGLOW CONTACT SHEET`
+- study long-copy proof: `55:107`
+- retained pre-promotion Current: `45:2 / CURRENT / ADD-06 / PHOTO STRIP DOORWAY / DEVELOPED PRINTS / TAPE-SUBTRACTED 2026-08-23`
+- retained previous long-copy proof: `47:19`
+- previous family-diversity study: `46:2`
+- previous mature candidate: `47:2`
+- previous bounded fixed-art/tape/reflection studies and all rollback/history nodes remain preserved.
+
+Exact Drive authority:
+
+- folder: `1Ehk_oQ8vhAGo3DYBbgyOGfA03u0pu5wb / ADD-06_フォトブースサイン`
+- adopted SVG master: `1FYhUCWx5yLIY5mo2DXm-aZaVh7Dpidr1 / photo-strip-continuous-developed-prints-v2.svg`
 
 Current evidence:
 
-- `FIGMA-PRINT2-TAPE-SUBTRACTION-QA-2026-08-24.md`
-- `FIGMA-NIGHT-REFLECTION-SUBTRACTION-QA-2026-08-23.md`
-- `FIGMA-CORAL-TAPE-SUBTRACTION-QA-2026-08-23.md`
-- `FIGMA-DEVELOPED-PRINT-CUE-POLISH-2026-08-23.md`
-- `FAMILY-DIVERSITY-PHOTO-STRIP-PROMOTION-QA-2026-08-21.md`
-- prior `PROFESSIONAL-VNEXT-FRAME-POP-QA-2026-08-21.md` remains retained history.
+- `CLEANROOM-V3-STRIP-IN-THE-LIGHT-PROMOTION-QA-2026-08-25.md`
+- `CONTINUOUS-PHOTO-STRIP-V2-REFINEMENT-QA-2026-08-25.md`
+- previous 2026-08-23/24 bounded-polish evidence remains retained history.
 
-## Current direction — PHOTO STRIP DOORWAY / DEVELOPED PRINTS
+## Clean-room Current direction — STRIP IN THE LIGHT
 
-The main identity remains a physical photo strip rather than a generic colorful poster.
+The 2026-08-25 V3 was created from blank Figma frames and did not duplicate the previous production layout, dark full-height left rail, three developed-print card geometry, old vectors, crops or background composition. Only verified size and semantic content roles were re-entered.
+
+The dominant artifact is now one **continuous physical photo-booth strip** containing four non-person abstract exposures:
+
+1. coastal dawn / horizon;
+2. flash bloom;
+3. reception light trails / movement;
+4. night water / afterglow.
+
+The strip is an editable SVG fixed-art role, not generated raster photography and not fake documentary wedding imagery. It contains no authoritative text, fake camera UI, barcode, reticle or guest/couple identity.
 
 Reading hierarchy:
 
@@ -46,89 +50,96 @@ Reading hierarchy:
 2. native `フォトブース`;
 3. native guidance;
 4. date `2026.10.24` and unresolved `[会場内設置場所]`;
-5. small native emotional footer.
+5. small native emotional closing copy.
 
-The left strip contains three clipped fixed-art developed-print scenes:
+The composition uses an open warm-cream editorial field, a slightly rotated continuous strip on the left, and one lower dark physical information field. It no longer relies on a full-height dark UI-like lane containing three separate colorful cards.
 
-- abstract sunrise / horizon / water;
-- abstract flash-paper exposure;
-- abstract night-water exposure.
+## Sellable visual comparison
 
-These are non-person, non-documentary decorative prints. They contain no authoritative copy and do not represent the actual couple or guests.
+Professional Design Council: **94/100 / NO VETO**.
 
-The second developed print previously had a small magenta `PRINT / TAPE` strip above its white flash-paper field. Fresh whole-item and actual-size review showed that strip reading more like a UI/status/progress accent than photographic mounting tape. A rollback-safe comparison hid only that strip. The flash-paper field, coral exposure field, yellow flash circle and dark shadow already preserved the intended developed-print reading, so the magenta strip was removed from Current and stress. Full rollback copies are preserved at `54:33 / 54:64`.
+The clean-room V3 beats retained Current `45:2` at the reopened visual gate because:
 
-The third print previously combined a yellow moon with a narrow vertical yellow reflection bar. Fresh actual-size review showed the assembled pair reading like an exclamation-mark/status pictogram rather than moonlight over water. A rollback-safe comparison hid only the reflection bar; the night-water reading became clearer without losing the photo-strip identity. The reflection is therefore hidden in Current and long-copy proof, with full pre-change rollback preserved.
+- thumbnail scale reads as one real photo-booth strip rather than three independent icon/card modules;
+- Japanese hierarchy remains the first textual read;
+- wedding warmth/pop is carried by a few successive exposure moments rather than decorative badges or camera UI;
+- the layout is more editorial and intentionally asymmetric without becoming sparse/premium-by-emptiness;
+- fixed art remains editable vector while variable copy stays native.
 
-The former top `DECOR / CORAL TAPE` is also hidden. A rollback-safe comparison proved that it did not visibly attach a photo, bind text/image regions, or represent a trim/mounting/physical requirement. Removing it improved whole-item hierarchy while preserving the photo-strip artifact reading. No fake camera UI, lens reticle, viewfinder, barcode, generated people or stock photography is used.
+V3-B was rejected: its dark outer page + centered cream sheet + date field read more like a mounted poster and weakened the immediate photo-booth artifact reading.
 
 ## Three-scale visual QA
 
-Current `45:2`:
+Current `56:106`:
 
-- whole-item / thumbnail: PASS — the photo-strip artifact remains immediate and the top field is calm;
-- reading scale: PASS — left fixed art supports rather than competes with the Japanese hierarchy;
-- actual `990×1400`: PASS — print 2 reads as a small photographic exposure rather than a card/status element, and print 3 reads as moon over water rather than punctuation/UI;
-- long-copy proof remains synchronized with coral-tape, print-2-tape and night-reflection subtraction.
+- whole-item / ≈500px: **PASS** — continuous strip is immediate and Japanese headline remains dominant;
+- reading / ≈1000px: **PASS** — all four exposures remain distinct; flash bloom no longer reads as a logo; no gallery/filmstrip UI impression;
+- actual `990×1400`: **PASS** — paper edge, exposure windows and grain remain credible without visual noise; dark lower field preserves factual contrast.
 
-The previous Professional Design Council score remains valid as the semantic composition/hierarchy did not regress; the bounded fixed-art changes improve item specificity and reduce meaningless or misleading decoration.
+Old Current `45:2` remains intact for comparison/rollback history.
 
 ## Long-copy / Japanese typography QA
 
-Stress proof: `47:19`.
+Current hidden proof: `56:157`.
 
-Fresh post-promotion screenshot review previously caught existing stress-contract line-break defects:
+Stress strings verified:
 
-- mechanical `ご確認の / うえ` split;
-- mechanical `お進みく / ださい` split;
-- mechanical `設置場 / 所` split.
+- `撮影の順番を確認しながら、空いている撮影スペースへゆっくりお進みください。`
+- `[メインダイニング前・フォトブース特設スペース]`
+- `写真を撮って、今日の楽しい思い出をそれぞれのおうちまで持って帰ろう。`
 
-The first bounded repair was still too narrow and was rejected. Final proof uses:
+Result: **PASS**. The long location stays inside the lower dark field; closing copy remains separated beneath it.
 
-- guide width `570`, native auto-height;
-- semantic grouping `撮影スペースの場所をご確認のうえ、 / 順番にゆっくりお進みください`;
-- location grouping `[会場内のフォトブース / 設置場所・長い案内名称]`.
-
-Fresh screenshot after the 2026-08-24 print-2 tape subtraction: PASS. Type was not reduced merely to force the stress to fit.
+During structure QA, the multiline hero exposed a known Figma authoring defect: applying `resize()` after `textAutoResize='HEIGHT'` returned that node to fixed height. The contract was corrected and all seven native text roles in Current and stress were read back as auto-height.
 
 ## Structure / hybrid QA
 
-Current `45:2`:
+Current `56:106`:
 
-- visible native text `7`;
-- auto-height `7/7`;
-- fixed-height visible text `0`;
-- outside visible text `0`;
-- IMAGE fills `0`;
-- `DECOR / CORAL TAPE` hidden;
-- `50:74 / PRINT / TAPE` hidden;
-- `50:79 / PRINT / REFLECTION` hidden.
+- visible native text: `7`;
+- auto-height: `7/7`;
+- fixed-height visible text: `0`;
+- IMAGE fills: `0`;
+- replaceable raster photo role: `0`;
+- generated raster: `0`;
+- semantic/factual text baked into SVG: `0`.
 
-Stress `47:19`:
+Fixed-art SVG:
 
-- visible native text `7`;
-- auto-height `7/7`;
-- fixed-height visible text `0`;
-- outside visible text `0`;
-- IMAGE fills `0`;
-- `DECOR / CORAL TAPE` hidden;
-- `50:89 / PRINT / TAPE` hidden;
-- `50:94 / PRINT / REFLECTION` hidden.
+- Current SVG root: `56:108`;
+- imported as editable Figma vector tree;
+- descendants: `40`;
+- vector-like editable descendants: `28`.
 
 Responsibility split:
 
-- variable/factual copy: native editable Figma text;
-- developed-print fixed art: clipped native vector/shape composition;
-- SVG: `0`;
-- generated raster: `0`;
-- replaceable image role: `0`;
-- Drive writes for this pass: `0`.
+- variable/factual/emotional copy: native Figma text;
+- photo-strip fixed art: editable SVG;
+- final location remains semantic placeholder;
+- no fake guests/couple/children/dog imagery.
 
-The print-2 tape decision is `VERIFIED_LOCAL`: a fixed cue named `TAPE` still has to read as actual mounting/physical attachment at whole-item scale. If it behaves as a UI/status accent and the artifact remains stronger without it, bounded subtraction is appropriate. This is not a blanket rule against photographic tape.
+## Drive asset lifecycle
 
-The night-reflection decision is `VERIFIED_LOCAL`: fixed-art primitives must be judged as an assembled visual cue, because individually plausible parts can combine into an unrelated symbol. This is not a rule against vertical reflections or moon/water imagery.
+Adopted master was saved only after real Figma comparison selected V3-A.
 
-The top tape decision remains a `VERIFIED_LOCAL` application of the existing binding-function QA method: a bar/rule/tape is retained only when whole-item review proves a real binding, physical, or semantic job. It is not a new blanket subtraction rule.
+Drive readback:
+
+- ID: `1FYhUCWx5yLIY5mo2DXm-aZaVh7Dpidr1`;
+- name: `photo-strip-continuous-developed-prints-v2.svg`;
+- MIME: `image/svg+xml`;
+- size: `3124 bytes`;
+- created/modified: `2026-08-25T04:31:36.758Z`;
+- parent: `1Ehk_oQ8vhAGo3DYBbgyOGfA03u0pu5wb`.
+
+This closes the fixed-art lifecycle through `role/candidate → clean-room Figma comparison → visual selection → Drive master verified → promoted Current`.
+
+## Learning state
+
+`VERIFIED_LOCAL` for ADD-06:
+
+A literal physical artifact can be more convincing than multiple individually attractive mini-scenes when the latter read as separate cards/icons. The transferable hypothesis is **not** “always use a continuous strip”; another item should independently test whether consolidating repeated mini-art into one artifact-specific physical object improves whole-item reading.
+
+No project-wide style rule is promoted from this item alone.
 
 ## Deferred finalization
 
