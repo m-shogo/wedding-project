@@ -298,24 +298,16 @@ export const startAbComparisons: StartAbComparison[] = [
     claudeCandidate: {
       agent: "claude",
       projectName: "START_AB_CLAUDE",
-      artifactPath: "motion-studio/exports/ab/claude/chorus1_ab.mp4",
+      artifactPath: null,
       handoffPath: "motion-studio/exports/palmier-ab/claude/director-recipe-ab-handoff.md",
-      notes:
-        "Rendered via DirectorRecipeCustomReel (StartAbClaudeChorus1 composition): chorus-1-a -> start-chorus-hero-lift, " +
-        "chorus-1-b -> start-triple-hit, each held for its section's real 300-frame/10s reference duration " +
-        "(not the 180-frame catalogue reel-safety clamp — see src/data/startAbChorus1Timeline.ts for the documented " +
-        "reasoning). 1280x720, h264, 20.05s, 935.7kB. Uses the shared 6-engine renderer only, no new one-off component. " +
-        "No real Hero photo yet (MEDIA_BLOCKED) — renders DirectorRecipePreview's existing placeholder/demo backdrop.",
+      notes: "",
     },
     codexCandidate: {
       agent: "codex",
       projectName: "START_AB_CODEX",
       artifactPath: null,
       handoffPath: "motion-studio/exports/palmier-ab/codex/director-recipe-ab-handoff.md",
-      notes:
-        "CODEX_BLOCKED: Remotion Chromium could not launch in the macOS sandbox " +
-        "(MachPortRendezvousServer bootstrap_check_in permission denied; render exited with SIGTRAP). " +
-        "StartAbCodexChorus1 is registered as a 600-frame shared-engine composition, but no artifact was produced.",
+      notes: "",
     },
     scores: emptyScoreRows(),
     winner: null,
