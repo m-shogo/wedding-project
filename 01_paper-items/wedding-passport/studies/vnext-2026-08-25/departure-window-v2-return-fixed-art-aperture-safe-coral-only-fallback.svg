@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1480" height="2100" viewBox="0 0 1480 2100">
+  <title>WEDDING PASSPORT Departure Window v2 return — aperture-safe coral-only fallback fixed art</title>
+  <desc>PRE_FIGMA rollback-safe fixed-art candidate. No authoritative copy. Enlarges the upper cream aperture for native identity ownership and removes the subordinate turquoise gesture entirely so factual date/place/couple remain optically clear.</desc>
+  <rect width="1480" height="2100" fill="#193F68"/>
+  <rect x="1408" y="0" width="72" height="2100" fill="#7E3F35"/>
+  <path d="M1408 0V2100" stroke="#D9B49B" stroke-width="4"/>
+  <path d="M1454 160V1940" stroke="#F6EFE3" stroke-width="5" stroke-dasharray="34 28"/>
+
+  <path d="M0 190C362 198 596 326 716 566C844 822 824 1110 672 1376C520 1640 284 1780 0 1810V190Z" fill="#F6EFE3"/>
+  <path d="M0 312C288 322 486 426 586 624C680 810 674 1002 582 1188C474 1404 272 1534 0 1566V312Z" fill="#E8DDCE"/>
+  <circle cx="154" cy="446" r="164" fill="#F4C75C"/>
+
+  <!-- One dominant return gesture only: avoids an amputated subordinate line and preserves a clear factual lane. -->
+  <path d="M-34 1492C188 1374 432 1354 676 1428C906 1498 1116 1644 1518 1746" fill="none" stroke="#EE6F55" stroke-width="54" stroke-linecap="round"/>
+
+  <path d="M0 2100H376C260 1996 132 1904 0 1838V2100Z" fill="#3C72B8"/>
+</svg>
