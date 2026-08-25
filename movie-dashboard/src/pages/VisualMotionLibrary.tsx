@@ -58,10 +58,13 @@ export function VisualMotionLibrary() {
                   ) : (
                     <div className="text-center max-w-lg">
                       <p className="text-[10px] tracking-[0.22em] text-amber-300 font-semibold">CONCEPT PREVIEW / 実装確認前</p>
-                      <p className="mt-5 text-4xl md:text-6xl font-bold tracking-[0.12em]">WELCOME</p>
-                      <p className="mt-5 text-sm leading-6 text-navy-200">
-                        既存RemotionのMask Slideはvisual prior art。DaVinci Actual Renderではなく、人間が編集できる構造の見た目確認用Conceptとして扱う。
-                      </p>
+                      <p className="mt-5 text-2xl md:text-3xl font-bold tracking-[0.08em]">{pattern.commonName}</p>
+                      <p className="mt-5 text-sm leading-6 text-navy-200">{pattern.looksLike}</p>
+                      {implementation && !implementation.installed && (
+                        <p className="mt-3 text-[10px] leading-5 text-amber-200">
+                          {implementation.kind} / まだ実Render・実機検証を行っていない({implementation.studioRequired ? "DaVinci等のアプリ操作が必要" : "motion-studioでの書き出しが未実施"})。
+                        </p>
+                      )}
                     </div>
                   )}
                   <span className="absolute top-3 left-3 px-2 py-1 text-[9px] font-mono border border-white/30 bg-black/30">
