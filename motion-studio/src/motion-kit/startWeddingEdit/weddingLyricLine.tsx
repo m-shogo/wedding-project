@@ -13,7 +13,7 @@ import React from 'react';
 import {AbsoluteFill, Sequence, interpolate, useCurrentFrame} from 'remotion';
 import type {LyricPhrase} from '../../data/startWeddingEdit/localLyricsWeddingEdit';
 import {START_WEDDING_EDIT_FPS} from '../../data/startWeddingEdit/sections';
-import {CharacterBuild, QuestionPause, ThreeHitBuild} from '../start129/lyricAnimationFamilies';
+import {CharacterBuild, HeldNoteStretch, QuestionPause, WhisperReveal} from '../start129/lyricAnimationFamilies';
 import {HandDrawnUnderline} from '../start129/handDrawnPrimitives';
 
 export type WeddingVariant = 'A' | 'B' | 'C';
@@ -37,26 +37,47 @@ const ThreeHitLine: React.FC<{phrase: LyricPhrase; variant: WeddingVariant}> = (
   const unit = unitMatch ? unitMatch[1].slice(0, 2) : '・';
   const rest = unitMatch ? unitMatch[2] : phrase.text;
   const restStartFrame = hitFrames[2] + 6;
+  // Remotion<Sequence>は既定でabsolute-fillラップされ親のtext-align/位置指定から
+  // 外れてしまうため(実際に左上へ飛ぶ表示崩れを確認済み)、ここではネストSequenceを使わず
+  // 現在frameを直接比較して出し分ける。
 
   return (
     <>
-      <ThreeHitBuild
-        hitFrames={hitFrames}
-        stages={[
-          <span style={{fontFamily: "'Noto Sans JP', sans-serif", fontSize: 64, fontWeight: 900, color: style.accent}}>{unit}</span>,
-          <span style={{fontFamily: "'Noto Sans JP', sans-serif", fontSize: 64, fontWeight: 900, color: style.accent}}>{unit.repeat(2)}</span>,
-          <span style={{fontFamily: "'Noto Sans JP', sans-serif", fontSize: 64, fontWeight: 900, color: style.accent}}>{unit.repeat(3)}</span>,
-        ]}
-      />
-      <Sequence from={restStartFrame} name="rest">
-        <CharacterBuild
-          text={rest}
-          charFrames={Array.from({length: rest.length}, (_, i) => i * 3)}
-          fontSize={variant === 'B' ? 56 : 48}
-          color={style.color}
-        />
-      </Sequence>
+      <ThreeHitStagePop hitFrames={hitFrames} texts={[unit, unit.repeat(2), unit.repeat(3)]} color={style.accent} />
+      {/* 3-hit後の言葉(晴れた町に/雨の心)はサビの持続音なのでHeld Note Stretchで
+          文字間・線幅が伸びるように見せる(3回叩いた後の言葉なので単純な文字送りより伸びやかにする) */}
+      <HeldNoteStretch text={rest} startFrame={restStartFrame} holdFrames={18} fontSize={variant === 'B' ? 56 : 48} color={style.color} />
     </>
+  );
+};
+
+/** 3回のhitで同じ場所の文字がパッ→パッパッ→パッパッパッと置き換わりながらpopする(積み重ねない) */
+const ThreeHitStagePop: React.FC<{hitFrames: [number, number, number]; texts: [string, string, string]; color: string}> = ({
+  hitFrames,
+  texts,
+  color,
+}) => {
+  const frame = useCurrentFrame();
+  let stageIndex = -1;
+  for (let i = 0; i < hitFrames.length; i++) {
+    if (frame >= hitFrames[i]) stageIndex = i;
+  }
+  if (stageIndex < 0) return null;
+  const local = frame - hitFrames[stageIndex];
+  const s = interpolate(local, [0, 3, 8], [1.35, 1.1, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  return (
+    <span
+      style={{
+        fontFamily: "'Noto Sans JP', sans-serif",
+        fontSize: 64,
+        fontWeight: 900,
+        color,
+        display: 'inline-block',
+        transform: `scale(${s})`,
+      }}
+    >
+      {texts[stageIndex]}
+    </span>
   );
 };
 
@@ -103,6 +124,11 @@ const WeddingLyricBody: React.FC<{phrase: LyricPhrase; variant: WeddingVariant}>
 
   if (phrase.text.includes('？') || phrase.text.includes('?')) {
     return <QuestionPause text={phrase.text} startFrame={0} pauseFrame={Math.round(durFrames * 0.7)} fontSize={44} />;
+  }
+
+  if (phrase.semanticType === 'loneliness') {
+    // 「静けさと1対1」等、内省的な行は薄く静かに現れるWhisper Revealにする
+    return <WhisperReveal text={phrase.text} startFrame={0} fontSize={variant === 'B' ? 40 : 32} color={style.color} />;
   }
 
   const chars = Array.from(phrase.text);
