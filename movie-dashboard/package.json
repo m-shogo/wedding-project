@@ -5,6 +5,8 @@
   "type": "module",
   "scripts": {
     "sync:start-materials": "node scripts/sync-start-material-previews.mjs",
+    "sync:start-render": "node scripts/sync-start-render-preview.mjs",
+    "prepare:start-review": "cd ../motion-studio && pnpm render:start-extended-rough && cd ../movie-dashboard && pnpm sync:start-render",
     "dev": "vite",
     "build": "tsc -b && vite build",
     "sync:opening-gate": "node scripts/sync-opening-production-gate.mjs --write",
