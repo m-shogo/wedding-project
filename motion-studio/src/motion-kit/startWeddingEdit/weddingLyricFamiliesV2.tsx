@@ -145,41 +145,110 @@ const TYPE_MASK_PHOTOS: Record<string, string> = {
   C: 'demo/start-129/HERO_CLOSE/pexels-10638717.jpg',
 };
 
+/** TypeMaskTextの1segment(prefix/suffix)を描画する。outline+photo-clipの2層は
+ * 常に同じ構造にして、suffixだけ個別のscale/glowを掛けられるようにする。 */
+const MaskSegment: React.FC<{
+  text: string;
+  fontSize: number;
+  photo: string;
+  outline: string;
+  zoom: number;
+  scale: number;
+  glow: number;
+}> = ({text, fontSize, photo, outline, zoom, scale, glow}) => (
+  <span style={{position: 'relative', display: 'inline-block', transform: `scale(${scale})`, transformOrigin: 'left center'}}>
+    {glow > 0 ? (
+      <span
+        style={{
+          position: 'absolute',
+          inset: -22,
+          background: `radial-gradient(ellipse at center, rgba(244,201,93,${glow * 0.6}) 0%, rgba(244,201,93,0) 70%)`,
+          pointerEvents: 'none',
+        }}
+      />
+    ) : null}
+    {/* outline層: text-strokeで文字の形自体を常に視認可能にする */}
+    <span
+      style={{
+        position: 'absolute',
+        inset: 0,
+        fontFamily: JP,
+        fontSize,
+        fontWeight: 900,
+        lineHeight: 1.15,
+        color: 'transparent',
+        WebkitTextStroke: `2px ${outline}`,
+      }}
+    >
+      {text}
+    </span>
+    <span
+      style={{
+        fontFamily: JP,
+        fontSize,
+        fontWeight: 900,
+        lineHeight: 1.15,
+        display: 'inline-block',
+        backgroundImage: `url(${staticFile(photo)})`,
+        backgroundSize: `${zoom}% auto`,
+        backgroundPosition: 'center',
+        backgroundClip: 'text',
+        WebkitBackgroundClip: 'text',
+        color: 'transparent',
+        WebkitTextFillColor: 'transparent',
+      }}
+    >
+      {text}
+    </span>
+  </span>
+);
+
 export const TypeMaskText: React.FC<{
   text: string;
   variant: 'A' | 'B' | 'C';
   fontSize?: number;
-  /** P029「貴方を」のように、実accentSecの瞬間にwhole textをscale-up+glowさせて
-   * showcase momentにするためのlocal frame(このcomponent呼び出し側のSequence基準)。 */
+  /** 実accentSecの瞬間にscale-up+glowさせるためのlocal frame(呼び出し側のSequence基準)。 */
   emphasisFrame?: number;
-}> = ({text, variant, fontSize = 72, emphasisFrame}) => {
+  /** P029「貴方を」のように、textの末尾の一部だけを強調したい場合の部分文字列。
+   * text.endsWith(emphasisSuffix)でない場合は無視され、whole textにfallbackする。 */
+  emphasisSuffix?: string;
+}> = ({text, variant, fontSize = 72, emphasisFrame, emphasisSuffix}) => {
   const f = useCurrentFrame();
   const o = interpolate(f, [0, 14], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
   const zoom = interpolate(f, [0, 220], [100, 118], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
   const photo = TYPE_MASK_PHOTOS[variant];
   const outline = variant === 'C' ? '#0A0A0C' : '#FFFDF7';
-  const emphasisScale =
-    emphasisFrame != null
-      ? interpolate(f, [emphasisFrame - 4, emphasisFrame + 6, emphasisFrame + 24], [1, 1.14, 1.04], {
-          extrapolateLeft: 'clamp',
-          extrapolateRight: 'clamp',
-        })
+
+  const hasWordEmphasis = emphasisFrame != null && !!emphasisSuffix && text.endsWith(emphasisSuffix) && emphasisSuffix.length < text.length;
+  const prefix = hasWordEmphasis ? text.slice(0, text.length - emphasisSuffix!.length) : text;
+  const suffix = hasWordEmphasis ? emphasisSuffix! : '';
+
+  // emphasisSuffixが無い(または末尾一致しない)場合は、従来通りwhole textをpulseさせる。
+  const wholeTextEmphasis = emphasisFrame != null && !hasWordEmphasis;
+  const scaleAt = (frame: number | undefined) =>
+    frame != null
+      ? interpolate(f, [frame - 4, frame + 6, frame + 24], [1, 1.16, 1.04], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'})
       : 1;
-  const emphasisGlow =
-    emphasisFrame != null
-      ? interpolate(f, [emphasisFrame - 4, emphasisFrame + 4, emphasisFrame + 30], [0, 0.9, 0.15], {
-          extrapolateLeft: 'clamp',
-          extrapolateRight: 'clamp',
-        })
+  const glowAt = (frame: number | undefined) =>
+    frame != null
+      ? interpolate(f, [frame - 4, frame + 4, frame + 30], [0, 0.9, 0.15], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'})
       : 0;
+
   return (
-    <div style={{position: 'relative', opacity: o, display: 'inline-block', transform: `scale(${emphasisScale})`}}>
-      {emphasisGlow > 0 ? (
+    <div
+      style={{
+        position: 'relative',
+        opacity: o,
+        display: 'inline-block',
+        transform: wholeTextEmphasis ? `scale(${scaleAt(emphasisFrame)})` : undefined,
+      }}
+    >
+      {wholeTextEmphasis && glowAt(emphasisFrame) > 0 ? (
         <div
           style={{
             position: 'absolute',
             inset: -30,
-            background: `radial-gradient(ellipse at center, rgba(244,201,93,${emphasisGlow * 0.6}) 0%, rgba(244,201,93,0) 70%)`,
+            background: `radial-gradient(ellipse at center, rgba(244,201,93,${glowAt(emphasisFrame) * 0.6}) 0%, rgba(244,201,93,0) 70%)`,
             pointerEvents: 'none',
           }}
         />
@@ -194,38 +263,18 @@ export const TypeMaskText: React.FC<{
         }}
       />
       <div style={{position: 'relative'}}>
-        {/* outline層: text-strokeで文字の形自体を常に視認可能にする */}
-        <div
-          style={{
-            position: 'absolute',
-            inset: 0,
-            fontFamily: JP,
-            fontSize,
-            fontWeight: 900,
-            lineHeight: 1.15,
-            color: 'transparent',
-            WebkitTextStroke: `2px ${outline}`,
-          }}
-        >
-          {text}
-        </div>
-        <div
-          style={{
-            fontFamily: JP,
-            fontSize,
-            fontWeight: 900,
-            lineHeight: 1.15,
-            backgroundImage: `url(${staticFile(photo)})`,
-            backgroundSize: `${zoom}% auto`,
-            backgroundPosition: 'center',
-            backgroundClip: 'text',
-            WebkitBackgroundClip: 'text',
-            color: 'transparent',
-            WebkitTextFillColor: 'transparent',
-          }}
-        >
-          {text}
-        </div>
+        <MaskSegment text={prefix} fontSize={fontSize} photo={photo} outline={outline} zoom={zoom} scale={1} glow={0} />
+        {hasWordEmphasis ? (
+          <MaskSegment
+            text={suffix}
+            fontSize={fontSize}
+            photo={photo}
+            outline={outline}
+            zoom={zoom}
+            scale={scaleAt(emphasisFrame)}
+            glow={glowAt(emphasisFrame)}
+          />
+        ) : null}
       </div>
     </div>
   );

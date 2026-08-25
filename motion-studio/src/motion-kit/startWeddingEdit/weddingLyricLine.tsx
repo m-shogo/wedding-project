@@ -338,8 +338,11 @@ const WeddingLyricBody: React.FC<{phrase: EnrichedLyricPhrase; variant: WeddingV
     }
 
     case 'type-mask': {
-      // P029「貴方を」はaccentSec=106.56sでshowcase momentにする(scale-up+glow pulse)。
+      // P029「貴方を」はaccentSec=106.56sでshowcase momentにする。
+      // importantWordsの単語がtext末尾と一致する場合、その部分文字列だけをscale-up+glowさせる
+      // (全文一律scaleではなく、実際に「貴方を」という単語だけが強調される)。
       const showcaseFrame = single;
+      const emphasisSuffix = wordData?.words[0];
       weddingLyricFallbackByPhraseId.set(phrase.phraseId, showcaseFrame === null);
       return (
         <TypeMaskText
@@ -347,6 +350,7 @@ const WeddingLyricBody: React.FC<{phrase: EnrichedLyricPhrase; variant: WeddingV
           variant={variant}
           fontSize={variant === 'B' ? 66 : 58}
           emphasisFrame={showcaseFrame ?? undefined}
+          emphasisSuffix={emphasisSuffix}
         />
       );
     }
