@@ -25,6 +25,21 @@ requireText(
   'import { startMotionPresets, type StartMotionPreset } from "./startMotionKit";',
   "visualMotionLibrary.ts must import the existing Motion Kit presets instead of re-authoring them",
 );
+
+// 日本語ファースト検索(CLAUDE.md「日本語ファースト」節)のため、35件すべてに
+// 固有の日本語エイリアスが用意されていることを検証する(共通useCase訳だけに頼らない)。
+const aliasBlockMatch = data.match(/const KIT_JAPANESE_ALIASES: Record<string, string\[\]> = \{([\s\S]*?)\n\};/);
+if (!aliasBlockMatch) {
+  errors.push("KIT_JAPANESE_ALIASES table is missing");
+} else {
+  const aliasIds = [...aliasBlockMatch[1].matchAll(/"([a-z0-9-]+)":\s*\[/g)].map((match) => match[1]);
+  if (new Set(aliasIds).size !== aliasIds.length) errors.push("KIT_JAPANESE_ALIASES has duplicate preset ids");
+  for (const id of presetIds) {
+    if (id === "type-mask-slide") continue;
+    if (!aliasIds.includes(id)) errors.push(`${id}: KIT_JAPANESE_ALIASESに日本語エイリアスが無い`);
+  }
+}
+requireText(data, "aliases: [...(KIT_JAPANESE_ALIASES[preset.id] ?? []), preset.label],", "Generated patterns must search-prioritize Japanese aliases over the English label");
 requireText(
   data,
   'const kitPatternsExcludingMaskSlide = startMotionPresets.filter((preset) => preset.id !== "type-mask-slide");',
