@@ -6,13 +6,14 @@ import {
   PhotoLayoutEngine,
   TransitionWipeEngine,
   TypographyRevealEngine,
+  type GraphicHitVariant,
 } from '../../motion-kit/engines';
 import {resolveDirectorRecipeById, type RecipeLayer} from '../../motion-kit/directorRecipeAdapter';
 
 function DemoBackdrop({label, sub}: {label: string; sub: string}) {
   return (
     <AbsoluteFill style={{background: 'linear-gradient(135deg, #0d2035 0%, #173d5b 58%, #315d78 100%)', color: '#fff'}}>
-      <div style={{position: 'absolute', left: 90, top: 80, fontSize: 20, letterSpacing: '0.16em', opacity: 0.7}}>DIRECTOR RECIPE CATALOG / PHASE B</div>
+      <div style={{position: 'absolute', left: 90, top: 80, fontSize: 20, letterSpacing: '0.16em', opacity: 0.7}}>DIRECTOR RECIPE CATALOG / VISUAL REVIEW</div>
       <div style={{position: 'absolute', left: 90, bottom: 150, fontSize: 30, fontWeight: 700, maxWidth: 1000}}>{label}</div>
       <div style={{position: 'absolute', left: 90, bottom: 105, fontSize: 18, opacity: 0.65}}>{sub}</div>
       <div style={{position: 'absolute', right: 90, bottom: 105, fontSize: 18, opacity: 0.6}}>REAL PHOTO / VIDEO SLOT (placeholder)</div>
@@ -28,8 +29,8 @@ function RenderLayer({layer}: {layer: RecipeLayer}) {
   }
   if (engine === 'camera-transform') {
     return (
-      <CameraTransformEngine intensity={intensity} mode={props.mode as 'static' | 'push' | 'pull' | 'pan'}>
-        <DemoBackdrop label="" sub="" />
+      <CameraTransformEngine intensity={intensity} mode={props.mode as 'static' | 'push' | 'pull' | 'pan' | 'parallax'}>
+        <DemoBackdrop label="TRAVEL MEMORY" sub="synthetic depth / replace with real photo after review" />
       </CameraTransformEngine>
     );
   }
@@ -40,17 +41,12 @@ function RenderLayer({layer}: {layer: RecipeLayer}) {
     return <TransitionWipeEngine direction={props.direction as 'left' | 'right' | 'up' | 'down'} intensity={intensity} transparent={props.transparent as boolean} />;
   }
   if (engine === 'graphic-hit') {
-    return <GraphicHitEngine variant={props.variant as 'triplet' | 'speed-lines' | 'impact'} intensity={intensity} transparent={props.transparent as boolean} />;
+    return <GraphicHitEngine variant={props.variant as GraphicHitVariant} intensity={intensity} transparent={props.transparent as boolean} />;
   }
-  // native-cut
   return <NativeCutEngine label={props.label as string} variant={props.variant as 'hard' | 'j-cut' | 'l-cut'} intensity={intensity} transparent />;
 }
 
-/**
- * Renders one Director Recipe by id. This single component backs all 97 Compositions
- * registered in DirectorRecipeRoot.tsx — recipes are data-driven, not hand-written
- * per-recipe components. See src/motion-kit/directorRecipeAdapter.ts for the mapping.
- */
+/** One data-driven preview component backs all Director Recipe compositions. */
 export function DirectorRecipePreview({recipeId}: {recipeId: string}) {
   const {recipe, layers} = resolveDirectorRecipeById(recipeId);
   const hasBaseVisual = layers.some((layer) => layer.engine === 'camera-transform' || layer.engine === 'photo-layout' || layer.engine === 'native-cut');
@@ -59,7 +55,6 @@ export function DirectorRecipePreview({recipeId}: {recipeId: string}) {
     <AbsoluteFill style={{backgroundColor: '#0d2035'}}>
       {!hasBaseVisual && <DemoBackdrop label={recipe.label} sub={`${recipe.category} / ${recipe.subCategory}`} />}
       {layers.map((layer, index) => (
-        // eslint-disable-next-line react/no-array-index-key
         <AbsoluteFill key={`${layer.engine}-${layer.presetId}-${index}`}>
           <RenderLayer layer={layer} />
         </AbsoluteFill>
