@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc">
+  <title id="title">Mask Reveal Concept Preview poster</title>
+  <desc id="desc">Neutral dark preview card showing WELCOME as the shared typography sample.</desc>
+  <rect width="1280" height="720" fill="#101318"/>
+  <text x="640" y="338" text-anchor="middle" fill="#F5F1E8" font-family="Arial, Helvetica, sans-serif" font-size="88" font-weight="700" letter-spacing="8">WELCOME</text>
+  <text x="640" y="408" text-anchor="middle" fill="#9AA4B2" font-family="Arial, Helvetica, sans-serif" font-size="24" letter-spacing="3">MASK REVEAL · CONCEPT PREVIEW</text>
+  <text x="640" y="650" text-anchor="middle" fill="#D6A84B" font-family="Arial, Helvetica, sans-serif" font-size="20">実装確認前 / REPO GENERATED</text>
+</svg>
