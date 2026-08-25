@@ -335,15 +335,8 @@ export function validateStartAbComparisonShape(comparison: StartAbComparison): S
   if (comparison.winner !== null) {
     if (!comparison.decidedBy) push("winner is set but decidedBy is empty — a human must be named.");
     if (!comparison.decidedAt) push("winner is set but decidedAt is empty.");
-    if (comparison.winner === "claude" && !comparison.claudeCandidate.artifactPath) {
-      push("winner=claude but claudeCandidate.artifactPath is null.");
-    }
-    if (comparison.winner === "codex" && !comparison.codexCandidate.artifactPath) {
-      push("winner=codex but codexCandidate.artifactPath is null.");
-    }
-    if (comparison.winner === "tie" && (!comparison.claudeCandidate.artifactPath || !comparison.codexCandidate.artifactPath)) {
-      push("winner=tie but at least one candidate.artifactPath is null.");
-    }
+    if (!comparison.claudeCandidate.artifactPath) push("winner is set but claudeCandidate.artifactPath is null.");
+    if (!comparison.codexCandidate.artifactPath) push("winner is set but codexCandidate.artifactPath is null.");
   } else {
     if (comparison.decidedBy || comparison.decidedAt) {
       push("winner is null but decidedBy/decidedAt is set — inconsistent state.");
@@ -360,6 +353,9 @@ export function validateStartAbComparisonShape(comparison: StartAbComparison): S
       if (value !== null && (value < 1 || value > 5)) {
         push(`score row "${row.axisId}" ${agent} score ${value} is out of the 1-5 range.`);
       }
+    }
+    if (comparison.winner !== null && (row.claude === null || row.codex === null) && !row.comment.trim()) {
+      push(`score row "${row.axisId}" is incomplete — provide both scores or an explicit N/A reason before recording a winner.`);
     }
   }
   if (seenAxisIds.size !== axisIds.size) {

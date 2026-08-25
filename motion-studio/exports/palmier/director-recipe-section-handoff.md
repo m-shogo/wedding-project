@@ -1,6 +1,8 @@
 # Palmier Director Recipe Section Handoff
 
-研究トラック（StaRt Extended Opening, Phase F）。Opening V1の正本ではない。
+StaRt Extended Candidateの制作handoff。Opening全体のauthorityは`docs/opening-authority.md`。
+
+> **AUDIO_BLOCKED:** 以下のmarker・tempo・holdは研究用仮説。権利確認済みlocal音源の波形とMarkerで再確定するまでFinal timingとして使わない。
 
 生成元:
 - `movie-dashboard/src/data/directorRecipeCatalog.ts`（Phase A, 97 recipes）

@@ -1,18 +1,22 @@
 # タスクボード
 
-今やることを迷わないための制作入口。**2026-08-23時点のOpening正本は60秒Photo-first V1**。
+今やることを迷わないための制作入口。単一authorityは `docs/opening-authority.md`。
+
+- **StaRt Extended Candidate = 本命方向**
+- **Opening V1 60秒 = Short Candidate / venue fallback / 比較用**
+- 実装済みShortをFinal採用済みと扱わない
 
 古い90秒 / 105秒 storyboard、CloudSea、AI素材量産、Palmier 10秒試作は履歴・参考であり、現在の制作順を決める正本ではない。
 
-## Now — Opening V1完成を最優先
+## Now — Extended本番roughに必要な実素材を揃える
 
-### 1. 実写真11枚を入れる【最大のボトルネック】
+### 1. Extended / Short共通の実素材authorityを作る【最大のボトルネック】
 
 置き場:
 
 `motion-studio/public/photos/opening/`
 
-canonical filename:
+Shortで既に定義済みの11枚を共通baselineとして入れる:
 
 ```text
 okinawa-01.jpg
@@ -37,13 +41,15 @@ pnpm dev:opening-v1
 
 写真探索は自動。手動 `pnpm sync:photos` は通常不要。
 
-### 2. 実写真previewで編集判断
+Extendedで追加する実写真・実動画は、先に人物・場所・撮影日・縦横比・使用可否を記録し、placeholderのままFinal判断しない。
+
+### 2. 実素材previewでExtended / Shortを編集判断
 
 ```sh
 pnpm render:opening-v1:preview
 ```
 
-確認順:
+Short baseline確認:
 
 1. 顔・身体のcrop
 2. 写真の縦横比
@@ -53,6 +59,8 @@ pnpm render:opening-v1:preview
 6. Cold openでHero 01を再利用することが効いているか
 7. 必要なslotだけ `objectPosition` を調整
 
+同じsource authorityをExtended 14 sectionへ割り当て、97 recipeを増やさず4〜8 motion familyへ削る。
+
 ### 3. BGM / 現地音
 
 - BGM候補と会場上映/SNS利用条件を確認。
@@ -60,7 +68,13 @@ pnpm render:opening-v1:preview
 - `openingV1Sound.ts` のJ-cutを実素材に合わせて微調整。
 - whooshを全cutへ置かない。
 
-### 4. final
+### 4. Extended rough render gate
+
+- `AUDIO_BLOCKED`を解除し、権利確認済みlocal音源の波形から14 section markerを再確定する。
+- `MEDIA_BLOCKED`を解除し、実写真・実動画slotでroughをrenderする。
+- `exact` / `representative` / `placeholder`をDashboardで確認し、placeholderを採用判断へ使わない。
+
+### 5. Short fallback render gate
 
 `pnpm render:opening-v1` は写真11/11が揃っていないと失敗する。
 
@@ -75,7 +89,7 @@ pnpm render:opening-v1:preview
 
 を確認する。
 
-## 現行60秒タイムライン
+## Short Candidate 現行60秒タイムライン
 
 | time | scene | source |
 |---|---|---|
@@ -128,7 +142,7 @@ Visual QAでテンプレ感・生成感が強かったためOpening V1から除�
 
 AI動画を作ること自体を目標にしない。
 
-現行60秒を実写真+BGMで通し、弱いcutが明確になった場合だけ:
+Extended / Shortを実写真+BGMで通し、弱いcutが明確になった場合だけ:
 
 1. そのcutの役割を定義
 2. Prompt Builderでatomic prompt化
@@ -142,7 +156,7 @@ AI動画を作ること自体を目標にしない。
 
 ## Palmier / CapCut
 
-RemotionをOpening V1の正本にする。
+RemotionをShort Candidate実装の正本にする。
 
 Palmier / CapCutは必要になった場合のfinal polishだけ:
 
@@ -165,7 +179,7 @@ Palmier / CapCutは必要になった場合のfinal polishだけ:
 
 ## Later
 
-Opening V1が完成した後:
+Extended / Shortを同一素材条件で比較した後:
 
 - プロフィールムービー
 - 他Wedding Movie
@@ -175,16 +189,16 @@ Opening V1が完成した後:
 
 へ進む。
 
-## 並行研究トラック（Opening V1には未反映）
+## Extended制作基盤
 
-StaRt Extended Opening / Director Recipe Catalog(Phase A〜H)は、motion-studioとmovie-dashboardで
-並行して育てている研究トラック。Opening V1の作業順を変えない。索引は
+StaRt Extended Opening / Director Recipe Catalog(Phase A〜I)は、motion-studioとmovie-dashboardで
+本命方向のroughを作るための制作基盤。索引は
 `docs/start-director-recipe-system-overview.md`。詳細は`motion-studio/README.md`「Director Recipe
 Renderer」節、Claude/Codex A/B比較は `docs/handoff/2026-08-25-codex-ab-comparison-handoff.md`。
 
 Phase Hで基盤としては一区切り。以後は人間の採否判断待ち。
 
-Next（この研究トラックで、実際に人間が判断すべきこと。Opening V1より後回しでよい）:
+Next（基盤拡張ではなく、本番roughへ進むために人間が判断すること）:
 
 - 97件のレシピから、実際にStaRt用に使う4〜8 motion familyへ絞り込む（`status: planned`のまま。
   AIはapproved/rejectedへ勝手に昇格させない）。

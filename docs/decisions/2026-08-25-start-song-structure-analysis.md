@@ -14,7 +14,7 @@
 
 ## 音楽的特徴（既存データからの要約）
 
-`startExtendedSongFacts`（`startExtendedRhythmMap.ts`）より:
+`startExtendedResearchHypotheses`（`startExtendedRhythmMap.ts`）より。以下は音源照合前の仮説:
 
 - BPM 190 / 拍子 4/4 / キー B major
 - 編集の主gridは half-time 95 BPM（1拍 約0.632秒）

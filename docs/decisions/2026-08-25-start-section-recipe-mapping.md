@@ -23,7 +23,7 @@ Phase B/CでMotion Kit presetとRemotion renderer、Phase Dでmovie-dashboard側
   既存`startExtendedSections[].avoid`との整合を理由として明記した
 - `energy` / `density`: `startExtendedSections`のenergy/densityをそのまま踏襲（二重管理を避けるため
   値を変えていない）
-- `photoHoldSeconds`: 95BPM half-time grid基準（`startExtendedSongFacts.normalPhotoHold` / `heroPhotoHold`）
+- `photoHoldSeconds`: 95BPM half-time仮説基準（`startExtendedResearchHypotheses.normalPhotoHold` / `heroPhotoHold`）
 - `graphicDensityPolicy`: 190BPM micro accentをどの程度使うか
 - `typographyLevel`: none〜title-lockの7段階
 - `threeHitPolicy`: chorus-1-b / chorus-2-bの2sectionだけ非null。3-hitはHero写真を維持したまま

@@ -1,8 +1,8 @@
 // pnpm export:claude-codex-ab-handoff
 //
-// Phase G — Claude / Codex A/B comparison framework for the StaRt Extended Opening research
-// track. This does NOT touch Opening V1. Opening V1's source of truth stays
-// motion-studio/src/data/openingV1.ts / OpeningV1.tsx per ../CLAUDE.md.
+// Phase G — Claude / Codex A/B comparison framework for the StaRt Extended production
+// foundation. Opening authority is defined by ../docs/opening-authority.md; Short implementation
+// remains in motion-studio/src/data/openingV1.ts / OpeningV1.tsx.
 //
 // Writes two separate, symmetric handoff packs — one per agent lane — so Claude Code and Codex
 // CLI/agent can each build the SAME 20s slice (chorus-1-a + chorus-1-b, 00:38-00:58) from the
@@ -26,7 +26,11 @@ import {dirname, join} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {getDirectorRecipeById, buildPalmierRecipeHandoff, type DirectorRecipe} from '../../movie-dashboard/src/data/directorRecipeCatalog.ts';
 import {startSectionRecipeMap} from '../../movie-dashboard/src/data/startSectionRecipeMap.ts';
-import {startExtendedSections, startExtendedSongFacts} from '../../movie-dashboard/src/data/startExtendedRhythmMap.ts';
+import {
+  startExtendedAuthority,
+  startExtendedResearchHypotheses,
+  startExtendedSections,
+} from '../../movie-dashboard/src/data/startExtendedRhythmMap.ts';
 import {startAbComparisons, startAbAxes, type StartAbCandidate} from '../../movie-dashboard/src/data/startClaudeCodexAB.ts';
 
 const studioRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -120,7 +124,7 @@ function writeLaneHandoff(candidate: StartAbCandidate, agentLabel: string) {
 
   // --- CSV ---
   const csvHeader = [
-    'order', 'section_id', 'section_label', 'marker_start', 'marker_end', 'duration_sec',
+    'order', 'audio_state', 'timing_state', 'section_id', 'section_label', 'marker_start', 'marker_end', 'duration_sec',
     'energy', 'density', 'primary_recipe_id', 'primary_recipe_label', 'primary_recipe_category',
     'motion_preset_ids', 'source_type', 'duration_sec_range', 'transition_grammar', 'beat_behavior',
     'alternate_recipe_ids', 'avoid_recipe_ids', 'photo_hold_seconds', 'graphic_density_policy',
@@ -129,7 +133,8 @@ function writeLaneHandoff(candidate: StartAbCandidate, agentLabel: string) {
   const csvLines = [csvHeader.join(',')];
   for (const r of rows) {
     csvLines.push([
-      r.order, r.sectionId, r.sectionLabel, r.markerStart, r.markerEnd, r.durationSec,
+      r.order, startExtendedAuthority.audioState, startExtendedAuthority.timingState,
+      r.sectionId, r.sectionLabel, r.markerStart, r.markerEnd, r.durationSec,
       r.energy, r.density, r.primary.id, r.primary.label, r.primary.category,
       r.primary.motionPresetIds.join(' / '), r.primary.sourceType,
       `${framesToSec(r.primary.durationFrames[0])}s-${framesToSec(r.primary.durationFrames[1])}s`,
@@ -159,7 +164,8 @@ function writeLaneHandoff(candidate: StartAbCandidate, agentLabel: string) {
           'movie-dashboard/src/data/startClaudeCodexAB.ts (Phase G)',
         ],
         note: 'Reference/researched timing, not final. This lane is independent of the other agent\'s lane — do not read the other lane\'s output directory while building this one.',
-        songFacts: startExtendedSongFacts,
+        authority: startExtendedAuthority,
+        researchHypotheses: startExtendedResearchHypotheses,
         evaluationAxes: startAbAxes.map((a) => ({id: a.id, label: a.label, labelJa: a.labelJa, direction: a.direction})),
         sections: rows.map((r) => ({...r, primary: undefined, alternates: undefined, primaryRecipeId: r.primary.id, alternateRecipeIds: r.alternates.map((a) => a.id)})),
       },
@@ -174,7 +180,9 @@ function writeLaneHandoff(candidate: StartAbCandidate, agentLabel: string) {
   md.push('');
   md.push(`Palmier / project name for this lane: \`${candidate.projectName}\``);
   md.push('');
-  md.push('研究トラック（StaRt Extended Opening, Phase G）。Opening V1の正本ではない。');
+  md.push('StaRt Extended Candidateの独立A/B制作handoff。Opening全体のauthorityは`docs/opening-authority.md`。');
+  md.push('');
+  md.push('> **AUDIO_BLOCKED:** 以下のmarker・tempo・holdは研究用仮説。権利確認済みlocal音源の波形とMarkerで再確定するまでFinal timingとして使わない。');
   md.push('');
   md.push(`**このファイルは ${agentLabel} 専用レーン。もう一方のレーンの出力ディレクトリは読まない・参照しないこと。**`);
   md.push('');

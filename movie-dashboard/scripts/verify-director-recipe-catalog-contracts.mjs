@@ -6,6 +6,8 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const data = fs.readFileSync(path.join(root, "src/data/directorRecipeCatalog.ts"), "utf8");
 const motionKit = fs.readFileSync(path.join(root, "src/data/startMotionKit.ts"), "utf8");
 const rhythmMap = fs.readFileSync(path.join(root, "src/data/startExtendedRhythmMap.ts"), "utf8");
+const page = fs.readFileSync(path.join(root, "src/pages/DirectorRecipeCatalog.tsx"), "utf8");
+const fidelityAudit = fs.readFileSync(path.join(root, "src/data/directorRecipeVisualFidelity.ts"), "utf8");
 const errors = [];
 
 function requireText(source, token, message) {
@@ -88,6 +90,12 @@ requireText(data, "buildPalmierRecipeHandoff", "Palmier recipe handoff builder m
 requireText(data, "getDirectorRecipesByCategory", "category filter helper missing");
 requireText(data, "getDirectorRecipesBySection", "StaRt section filter helper missing");
 requireText(data, "getDirectorRecipeById", "id lookup helper missing");
+requireText(fidelityAudit, 'export type DirectorVisualFidelity = "exact" | "representative" | "placeholder"', "visual fidelity audit levels missing");
+requireText(page, "getDirectorRecipeVisualAudit", "catalog UI must expose visual fidelity truth");
+requireText(page, "VISUAL FIDELITY", "catalog UI visual fidelity filter missing");
+requireText(page, "start-director-human-decisions-v1", "human review localStorage namespace missing");
+requireText(page, "aria-pressed", "human review controls must expose selected state");
+if (/button disabled[^>]*>[^<]*(Favorite|Maybe|Reject)/.test(page)) errors.push("human review controls must be functional, not disabled placeholders");
 
 // Every recipe must carry the risk-notation fields (aiTemplateRisk / overEditingRisk) non-empty.
 const emptyRiskFields = [...data.matchAll(/aiTemplateRisk: "",/g)];

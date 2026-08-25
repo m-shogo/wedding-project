@@ -2,7 +2,9 @@
 
 Palmier / project name for this lane: `START_AB_CLAUDE`
 
-研究トラック（StaRt Extended Opening, Phase G）。Opening V1の正本ではない。
+StaRt Extended Candidateの独立A/B制作handoff。Opening全体のauthorityは`docs/opening-authority.md`。
+
+> **AUDIO_BLOCKED:** 以下のmarker・tempo・holdは研究用仮説。権利確認済みlocal音源の波形とMarkerで再確定するまでFinal timingとして使わない。
 
 **このファイルは Claude Code 専用レーン。もう一方のレーンの出力ディレクトリは読まない・参照しないこと。**
 

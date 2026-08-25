@@ -16,7 +16,16 @@
 - 人物・犬のAI生成やAI変形は提案しない。
 - `op_01_narita_boarding_gate_ai.png` と `op_11_narita_airport_lobby_ai.png` は人物入り確認済みのため不採用。
 
-## Opening V1 現行正本
+## Opening authority
+
+Opening全体の単一authorityは `docs/opening-authority.md`。
+
+- StaRt Extended Candidate = 本命方向
+- Opening V1 60秒 = Short Candidate / venue fallback / 比較用
+- 実装の完成度をproduct authorityと混同しない
+- Final timingは権利確認済みlocal音源の波形とMarkerで確定する
+
+## Opening V1 Short Candidate実装正本
 
 - source of truth: `motion-studio/src/data/openingV1.ts` / `motion-studio/src/compositions/opening/OpeningV1.tsx`
 - duration: 60秒
@@ -28,16 +37,18 @@
 - 正本ドキュメント: `docs/opening-v1-motion-map.md`
 - 作業入口: `docs/task-board.md`
 
-RemotionをOpening V1の正本にする。Palmier / CapCutは必要な場合のfinal polishに限定し、別timelineを正本として育てない。
+RemotionをShort Candidate実装の正本にする。Palmier / CapCutは必要な場合のfinal polishに限定し、別timelineを正本として育てない。
 
 ## レビュー前の参照順
 
-1. @README.md
-2. @docs/task-board.md
-3. @docs/opening-v1-motion-map.md
-4. @motion-studio/README.md
-5. @02_opening-movie/asset-status.md
-6. @movie-dashboard/README.md
+1. @docs/opening-authority.md
+2. @README.md
+3. @docs/task-board.md
+4. @docs/start-director-recipe-system-overview.md
+5. @docs/opening-v1-motion-map.md
+6. @motion-studio/README.md
+7. @02_opening-movie/asset-status.md
+8. @movie-dashboard/README.md
 
 ## 参照
 
@@ -56,7 +67,8 @@ RemotionをOpening V1の正本にする。Palmier / CapCutは必要な場合のf
 - 品質確認: @docs/10_quality-gates.md
 - テーマ差し替え: @docs/theme-switching.md
 - 素材TODO: @docs/materials-todo.md
-- Opening V1編集言語: @docs/opening-v1-motion-map.md（8scene / 60秒 / Photo-firstの現行正本）
+- Opening authority: @docs/opening-authority.md
+- Opening V1編集言語: @docs/opening-v1-motion-map.md（8scene / 60秒 / Photo-firstのShort fallback実装正本）
 - クリップ素材集: @docs/clip-library-guide.md（必要性が出た時だけ使う。素材収集自体を目的にしない）
 - 演出レシピ: @docs/reference-recipes.md（参考語彙。Openingへ機械的に割り当てない）
 - 無料素材の入手先: @docs/free-sample-sources.md

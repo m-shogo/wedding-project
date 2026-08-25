@@ -4,7 +4,8 @@
 
 このシステムは、2026-10-24 Wedding Openingの **StaRt Extended Candidate（曲頭 → 2番サビ後間奏 → Cメロ前END）を本命方向として検討・制作するための研究/制作基盤**。
 
-正本は `docs/handoff/START-EXTENDED-MOTION-HANDOFF-2026-08-24.md`。
+Opening全体の単一authorityは `docs/opening-authority.md`。Extendedの構成handoffは
+`docs/handoff/START-EXTENDED-MOTION-HANDOFF-2026-08-24.md`。
 
 - **Extended Candidate = 本命方向**
 - **Opening V1 60秒 = Short Candidate / fallback / venue short option / 比較用**
@@ -81,7 +82,8 @@ motion-studio/scripts/check-start-section-recipe-renderable.mts
 - `native-cut`系 → 実素材2shotのcutではなくedit-point placeholderで説明
 - 実写真/実動画 → `DemoBackdrop` placeholder
 
-よって今後は各recipeへ `visualFidelity`（exact / representative / placeholder）を持たせ、Dashboardでも明示する。
+全recipeの `visualFidelity`（exact / representative / placeholder）は
+`movie-dashboard/src/data/directorRecipeVisualFidelity.ts`で監査し、Dashboardでも明示する。
 
 ## 「見て選べる」状態の現状
 
@@ -93,18 +95,18 @@ Remotion Studioでは97 Composition / Category Reel / Comparisonを再生・rend
 - recipe説明
 - section map
 - render command copy
+- visual fidelity表示・filter
+- 人間のFavorite / Maybe / Reject（localStorage、catalog statusとは分離）
 
 が中心で、**Dashboard内でそのまま実動画を再生するinline preview UIではない**。
 
-ユーザーが目指している「知らない演出を動画で見て、その場でFavorite / Maybe / Rejectを選ぶ」状態にはまだ1段足りない。
+人手選定は実装済みだが、Dashboard内で動画を見ながら選ぶinline previewにはまだ1段足りない。
 
 次フェーズでは:
 
-1. visual fidelityを正直に表示
-2. representative/placeholderを優先的に専用visualへ改善
-3. review artifactをGitではなくActions artifact / local ignored outputへ出す
-4. Dashboardからpreviewを見やすくする導線を作る
-5. 人間採否を記録できるようにする
+1. representative/placeholderを優先的に専用visualへ改善
+2. review artifactをGitではなくActions artifact / local ignored outputへ出す
+3. Dashboardからpreviewを見やすくする導線を作る
 
 を行う。
 
@@ -198,17 +200,17 @@ YouTube/外部解析の秒数はresearch referenceとして利用するが、Fin
 
 ## 次の優先順位
 
-1. **Director Recipe visual fidelity audit** — exact / representative / placeholderを全97件で機械可視化
-2. **代表的な近似を実visual化** — 2.5D / scribble / halftone / stamp / cut grammar等
-3. **実際に見て選べるpreview導線**を改善
-4. 正規音源投入後、14 section timingをwaveformへsnap
-5. 実写真・実動画投入後、StaRt Extended Showcaseを本物の素材へ差し替え
-6. artifactを見ながら4〜8 motion familyへ削減
-7. Short V1とExtendedを最終比較
+1. 権利確認済みlocal音源を投入し、`AUDIO_BLOCKED`を解除して14 section timingをwaveformへsnap
+2. 実写真・実動画を投入し、`MEDIA_BLOCKED`を解除してStaRt Extended Showcaseを本物の素材へ差し替え
+3. artifactを見ながら4〜8 motion familyへ削減
+4. representative/placeholderのうち採用候補だけを専用visualへ改善
+5. Dashboardのinline preview導線を改善
+6. Short V1とExtendedを同一素材条件で最終比較
 
 ## 関連
 
-- `docs/handoff/START-EXTENDED-MOTION-HANDOFF-2026-08-24.md` — 現在のOpening authority
+- `docs/opening-authority.md` — 現在のOpening authority
+- `docs/handoff/START-EXTENDED-MOTION-HANDOFF-2026-08-24.md` — Extended構成handoff
 - `docs/decisions/2026-08-25-start-director-recipe-overnight-report.md`
 - `docs/decisions/2026-08-25-claude-codex-ab-execution-phase-i.md`
 - `docs/decisions/2026-08-25-director-recipe-catalog-research.md`
