@@ -8,6 +8,8 @@ import type {ResolvedLyricSlot} from '../../data/start129/localLyrics';
 import {StartDemoBackdrop} from './StartDemoBackdrop';
 import {SectionBadge, MiniGuideCard} from './StartGuideOverlay';
 import {HandDrawnUnderline, SpeedLineBurst} from '../../motion-kit/start129/handDrawnPrimitives';
+import {HeartOutlineIcon, PlaneTrailIcon, useIconReveal} from '../../motion-kit/start129/iconPrimitives';
+import {SparkleOverlay} from './SparkleOverlay';
 import {start129TechniquesForShowcase} from '../../data/start129/techniqueCatalog';
 import type {Start129AssetRole} from '../../data/start129/assetRoles';
 
@@ -74,11 +76,61 @@ const ChorusHitWord: React.FC<{word: string; hitFrame: number; localFrame: numbe
   });
   return (
     <AbsoluteFill style={{justifyContent: 'center', alignItems: 'center'}}>
+      {/* B案は「楽しさ重視」の文法なので、3-hitの瞬間だけ効果を強めに重ねる */}
+      <SparkleOverlay kind="sparks" opacity={0.5 * intensity} />
       <SpeedLineBurst vanishX={960} vanishY={540} intensity={intensity} color="rgba(244,231,201,0.45)" />
       <div style={{fontFamily: "'Noto Sans JP', sans-serif", fontSize: 96, fontWeight: 900, color: '#FDFBF5'}}>
         {word}
       </div>
       <HandDrawnUnderline progressFrom={hitFrame - 6} progressDurationInFrames={16} width={420} />
+    </AbsoluteFill>
+  );
+};
+
+const WelcomeBurst: React.FC<{localFrame: number}> = ({localFrame}) => {
+  const iconProgress = useIconReveal(localFrame, 4, 18);
+  const wordScale = interpolate(localFrame, [0, 10, 16], [0.85, 1.08, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  const subOpacity = interpolate(localFrame, [16, 36], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  return (
+    <AbsoluteFill style={{justifyContent: 'center', alignItems: 'center', background: 'rgba(0,0,0,0.3)'}}>
+      <SparkleOverlay kind="dust" opacity={0.16} />
+      <div style={{display: 'flex', alignItems: 'center', gap: 14, transform: `scale(${wordScale})`}}>
+        <PlaneTrailIcon size={40} progress={iconProgress} />
+        <div style={{fontFamily: "'Noto Sans JP', sans-serif", fontSize: 72, fontWeight: 900, color: '#FDFBF5'}}>
+          ようこそ
+        </div>
+      </div>
+      <HandDrawnUnderline progressFrom={6} progressDurationInFrames={16} width={260} />
+      <div
+        style={{
+          marginTop: 18,
+          fontFamily: "'Noto Sans JP', sans-serif",
+          fontSize: 26,
+          color: '#FDFBF5',
+          opacity: subOpacity,
+        }}
+      >
+        本日はお越しいただき、誠にありがとうございます。
+      </div>
+    </AbsoluteFill>
+  );
+};
+
+const EndBurst: React.FC<{localFrame: number}> = ({localFrame}) => {
+  const iconProgress = useIconReveal(localFrame, 6, 14);
+  const subOpacity = interpolate(localFrame, [16, 34], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  return (
+    <AbsoluteFill style={{justifyContent: 'center', alignItems: 'center', background: 'rgba(0,0,0,0.35)'}}>
+      <SparkleOverlay kind="dust" opacity={0.14} startFromSeconds={4} />
+      <div style={{fontFamily: "'Noto Sans JP', sans-serif", color: '#FDFBF5', fontSize: 40, fontWeight: 700}}>
+        SHOGO &amp; SHIORI
+      </div>
+      <div style={{display: 'flex', alignItems: 'center', gap: 8, marginTop: 10, opacity: subOpacity}}>
+        <HeartOutlineIcon size={18} progress={iconProgress} />
+        <div style={{fontFamily: "'Noto Sans JP', sans-serif", color: '#FDFBF5', fontSize: 18}}>
+          ご来場ありがとうございます
+        </div>
+      </div>
     </AbsoluteFill>
   );
 };
@@ -109,6 +161,11 @@ export const StartShowcaseB: React.FC<{reviewMode: boolean; lyricSlots: Resolved
               />
             ) : isPlayfulB ? (
               <PanelGridReveal role={role} localFrame={frame - from} durationInFrames={durationInFrames} />
+            ) : section.id === 'interlude-2b' ? (
+              <>
+                <StartDemoBackdrop role={role} />
+                <WelcomeBurst localFrame={frame - from} />
+              </>
             ) : (
               <StartDemoBackdrop role={role} />
             )}
@@ -126,13 +183,7 @@ export const StartShowcaseB: React.FC<{reviewMode: boolean; lyricSlots: Resolved
                 </div>
               </AbsoluteFill>
             ) : null}
-            {section.id === 'end' ? (
-              <AbsoluteFill style={{justifyContent: 'center', alignItems: 'center', background: 'rgba(0,0,0,0.35)'}}>
-                <div style={{fontFamily: "'Noto Sans JP', sans-serif", color: '#FDFBF5', fontSize: 40, fontWeight: 700}}>
-                  SHOGO &amp; SHIORI
-                </div>
-              </AbsoluteFill>
-            ) : null}
+            {section.id === 'end' ? <EndBurst localFrame={frame - from} /> : null}
             {reviewMode ? <SectionBadge section={section} secondsElapsed={seconds} /> : null}
             {reviewMode && isPlayfulB ? (
               <MiniGuideCard technique={findTechnique('b-panel-grid-reveal')} showFrom={from} anchor="bottom-right" />

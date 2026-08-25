@@ -55,3 +55,17 @@ export const start129DemoAssetLibrary: Record<string, string[]> = {
     "demo/start-129/BROLL_TEXTURE/pexels-26891698.mp4"
   ]
 };
+
+// キラキラ/粒子オーバーレイ(_overlays/ 配下、ファイル名prefixで種別分け)。
+// 無ければ空配列(SparkleOverlayは何も描画しない)。
+export const start129OverlayLibrary: {dust: string[]; sparks: string[]; gold: string[]} = {
+  "dust": [
+    "demo/start-129/_overlays/dust_9665237.mp4"
+  ],
+  "sparks": [
+    "demo/start-129/_overlays/sparks_9665452.mp4"
+  ],
+  "gold": [
+    "demo/start-129/_overlays/gold_8516377.mp4"
+  ]
+};

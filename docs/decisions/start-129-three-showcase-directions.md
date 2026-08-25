@@ -31,6 +31,16 @@
 
 このページのデータ(`start129Showcases.ts`)はmotion-studio側の実装(`motion-studio/src/data/start129/`)を要約・複製したものであり、単一情報源ではない。演出の追加・変更はmotion-studio側で行い、このファイルへ手動で同期する。
 
+## 来場感謝メッセージ・icon・キラキラ演出(2026-08-25 追記)
+
+ユーザーから「OPムービーに必須なお越しいただきましてありがとうとかは入れて」「svgアイコンとかも使っていい感じに」「無理に作らず素材とかはダウンロードして使ってキラキラエフェクトとかたくさん」との指示を受け、以下を追加した。
+
+- 間奏2B(118-126秒)に「本日はお越しいただき、誠にありがとうございます。」、End(126-129秒)に「ご来場ありがとうございます」相当の一文を、3案それぞれの文法で追加(A: 静止余白+小さいpin icon、B: bold「ようこそ」+plane trail icon、C: baseline scan typography+plane trail icon)。
+- 手描き線画のSVG icon(`iconPrimitives.tsx`: PinIcon / HeartOutlineIcon / PlaneTrailIcon)を自作し、strokeDashoffsetでreveal。塗りつぶし無し・1色のみで、Style Bibleの「gold/glowで高級に見せない」方針を保った。
+- キラキラ/粒子エフェクトはCG自作ではなく、指示どおりPexels公式APIから実際の動画素材をダウンロードして使用(`SparkleOverlay.tsx`)。3候補(dust=黒背景の白い粒子、sparks=黒背景の火花、gold=金のグリッター山)を取得し、目視確認の上、bokeh候補(人の手がメイン被写体で"オーバーレイ"として不適切)を不採用にした。
+- **gold clipは学びの記録として残す**: 密なグリッター質感の動画はscreen blendで全画面に使うと、opacity 0.4はもちろん0.12まで下げても重すぎて写真・文字を覆い隠すことをstill目視で確認した。最終的にdust/sparksへ統一(A/C=dust、B=dust+sparks)。goldクリップ自体は`public/demo/start-129/_overlays/gold_8516377.mp4`に残しているが、現在どのshowcaseからも使用していない。将来的に使うなら、全画面ではなく小さくcropした一部分だけを使うべき。
+- 適用箇所と強度: A案End(dust opacity 0.18)、B案3-hit(sparks、intensity連動で最大0.5)、B案Welcome/End(dust 0.14-0.16)、C案Welcome(dust 0.28)、C案End(dust 0.14)。「たくさん」という要望と、Style Bibleの「粒子・glowの重ね過ぎ」を戒める既存方針との間で、使用区間を来場感謝・End・3-hitの一瞬に絞り、常時表示にはしなかった。
+
 ## 採用しなかったもの/今回スコープ外
 
 - 97 Director Recipeとの統合・置き換えは行っていない。既存Director Recipe資産とStart129資産は現時点で独立している(意図的。統合は本番candidate選定後の判断とする)。

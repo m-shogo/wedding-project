@@ -9,6 +9,8 @@ import {StartDemoBackdrop} from './StartDemoBackdrop';
 import {BottomScrim, MiniGuideCard, SectionBadge} from './StartGuideOverlay';
 import {start129TechniquesForShowcase} from '../../data/start129/techniqueCatalog';
 import type {Start129AssetRole} from '../../data/start129/assetRoles';
+import {HeartOutlineIcon, PinIcon, useIconReveal} from '../../motion-kit/start129/iconPrimitives';
+import {SparkleOverlay} from './SparkleOverlay';
 
 const techniques = start129TechniquesForShowcase('A');
 const findTechnique = (id: string) => techniques.find((t) => t.id === id)!;
@@ -23,6 +25,39 @@ const RestrainedPushShot: React.FC<{role: Start129AssetRole; localFrame: number}
 };
 
 const StaticHoldShot: React.FC<{role: Start129AssetRole}> = ({role}) => <StartDemoBackdrop role={role} />;
+
+const WelcomeMessage: React.FC<{localFrame: number}> = ({localFrame}) => {
+  const iconProgress = useIconReveal(localFrame, 6, 20);
+  const textOpacity = interpolate(localFrame, [6, 26], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  return (
+    <AbsoluteFill style={{justifyContent: 'flex-end', alignItems: 'flex-start', padding: 56}}>
+      <div style={{display: 'flex', alignItems: 'center', gap: 10, opacity: textOpacity}}>
+        <PinIcon size={22} progress={iconProgress} />
+        <div style={{fontFamily: "'Noto Sans JP', sans-serif", color: '#FDFBF5', fontSize: 30, fontWeight: 500}}>
+          本日はお越しいただき、誠にありがとうございます。
+        </div>
+      </div>
+    </AbsoluteFill>
+  );
+};
+
+const EndCard: React.FC<{localFrame: number}> = ({localFrame}) => {
+  const iconProgress = useIconReveal(localFrame, 4, 16);
+  return (
+    <>
+      {/* A案は静止・抑制が基本文法のため、opacityを低く抑えた控えめな一度きりの粒子のみ */}
+      <SparkleOverlay kind="dust" opacity={0.18} />
+      <AbsoluteFill style={{justifyContent: 'flex-end', alignItems: 'flex-start', padding: 56}}>
+        <div style={{display: 'flex', alignItems: 'center', gap: 10}}>
+          <HeartOutlineIcon size={20} progress={iconProgress} />
+          <div style={{fontFamily: "'Noto Sans JP', sans-serif", color: '#FDFBF5', fontSize: 28}}>
+            SHOGO &amp; SHIORI — 2026.10.24 Yokohama
+          </div>
+        </div>
+      </AbsoluteFill>
+    </>
+  );
+};
 
 const LyricCaption: React.FC<{lyric: ResolvedLyricSlot}> = ({lyric}) => (
   <AbsoluteFill style={{justifyContent: 'flex-end', alignItems: 'flex-start', padding: 56}}>
@@ -84,13 +119,8 @@ export const StartShowcaseA: React.FC<{reviewMode: boolean; lyricSlots: Resolved
             )}
             <BottomScrim />
             {lyricForSection ? <LyricCaption lyric={lyricForSection} /> : null}
-            {section.id === 'end' ? (
-              <AbsoluteFill style={{justifyContent: 'flex-end', alignItems: 'flex-start', padding: 56}}>
-                <div style={{fontFamily: "'Noto Sans JP', sans-serif", color: '#FDFBF5', fontSize: 28}}>
-                  SHOGO &amp; SHIORI — 2026.10.24 Yokohama
-                </div>
-              </AbsoluteFill>
-            ) : null}
+            {section.id === 'interlude-2b' ? <WelcomeMessage localFrame={frame - from} /> : null}
+            {section.id === 'end' ? <EndCard localFrame={frame - from} /> : null}
             {reviewMode ? <SectionBadge section={section} secondsElapsed={seconds} /> : null}
             {reviewMode && section.id === 'chorus-1a' ? (
               <MiniGuideCard technique={findTechnique('a-restrained-push')} showFrom={from} />

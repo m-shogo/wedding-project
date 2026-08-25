@@ -34,3 +34,12 @@
 - 工程変更: 外部APIラッパーを書いたら、必ず実際に使うコードパス(この場合はPythonスクリプトそのもの)で1回テスト呼び出しをしてから、本番ループを回す。
 - 実変更: `pexels_search()`のURLを`/v1/search`へ修正、`download()`と検索リクエスト双方に`User-Agent`ヘッダーを追加(コミット済み)。
 - 段階: `VERIFIED`(修正後、実際に30ファイルの取得に成功したことを確認)。
+
+## Entry 5: 「密なグリッター動画」はscreen blend全画面overlayに向かない
+
+- 観察: Pexelsの"gold glitters on the table"クリップをscreen blend・opacity 0.4でEnd/Welcome全画面へ重ねたところ、写真とテキストがほぼ判読不能なほど重くなった。opacity 0.12まで下げても、画面上半分が金色の塊で覆われる状態は変わらなかった。
+- 原因: 「キラキラ動画」と一口に言っても、(a)黒背景に疎らな光点が散る素材(dust/sparks)と、(b)画面いっぱいに敷き詰められた光る質感の素材(gold glitter pile)は、screen blendでの挙動が全く違う。後者はopacityを下げても「明るい面全体」が乗るため、下の写真・文字を覆い隠し続ける。
+- 一般化できる原則: オーバーレイ素材を選ぶときは、取得前のサムネイルだけでなく実際に1フレーム抽出して「背景が十分暗く、輝点が疎らか」を確認してから採用する。opacityの微調整で解決しようとする前に、素材の疎密自体を疑う。
+- 工程変更: オーバーレイ候補は、フレーム抽出→黒背景比率の目視確認→screen blend実render、の順で評価する。「暗い背景+疎らな光点」型以外は、全画面用途ではなく、cropした一部だけを使う前提で扱う。
+- 実変更: gold clipの全画面利用を撤去し、dust/sparksへ統一(`StartShowcaseB.tsx` / `StartShowcaseC.tsx`)。goldファイル自体は`_overlays/`に残し、将来cropして使う可能性のためlogだけ残した。
+- 段階: `VERIFIED`(実際にstill render・目視で問題を確認し、置き換え後の再renderでも確認した)。
