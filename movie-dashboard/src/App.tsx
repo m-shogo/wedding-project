@@ -43,6 +43,7 @@ import { StartRhythmLab } from "./pages/StartRhythmLab";
 import { StartMotionKitCatalog } from "./pages/StartMotionKitCatalog";
 import { StartMotionShowcase } from "./pages/StartMotionShowcase";
 import { DirectorRecipeCatalog } from "./pages/DirectorRecipeCatalog";
+import { Start129Showcases } from "./pages/Start129Showcases";
 import { StartSelectionMode } from "./pages/StartSelectionMode";
 import { StartProductionWorkspace } from "./pages/StartProductionWorkspace";
 import { Guide } from "./pages/Guide";
@@ -74,6 +75,7 @@ export default function App() {
               <Route path="movie-coach/start-motion-kit" element={<StartMotionKitCatalog />} />
               <Route path="movie-coach/start-showcase" element={<StartMotionShowcase />} />
               <Route path="movie-coach/director-recipes" element={<DirectorRecipeCatalog />} />
+              <Route path="movie-coach/start-129" element={<Start129Showcases />} />
               <Route path="movie-coach/start-selection" element={<StartSelectionMode />} />
               <Route path="movie-coach/start-production" element={<StartProductionWorkspace />} />
               <Route path="opening-photo-intake" element={<OpeningPhotoIntake />} />

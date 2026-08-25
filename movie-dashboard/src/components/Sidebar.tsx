@@ -51,6 +51,7 @@ const navSections: SidebarSection[] = [
       { to: "/movie-coach/reference", label: "Reference Breakdown", icon: "⌗" },
       { to: "/movie-coach/start-showcase", label: "StaRt全体見本", icon: "▶" },
       { to: "/movie-coach/director-recipes", label: "演出レシピ図鑑（97）", icon: "🎞" },
+      { to: "/movie-coach/start-129", label: "StaRt 129秒・3案比較", icon: "🎬" },
     ],
   },
   {
