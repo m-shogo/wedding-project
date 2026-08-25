@@ -27,6 +27,7 @@
     "check:start-motion-kit": "node --no-warnings scripts/check-start-motion-kit.mts",
     "check:director-recipes": "node --no-warnings scripts/check-director-recipe-renderer.mts",
     "check:director-visual-fidelity": "node --no-warnings scripts/check-director-recipe-visual-fidelity.mts",
+    "check:director-visual-upgrade-artifact": "node --no-warnings scripts/verify-director-visual-upgrade-artifact.mts",
     "check:start-section-recipes": "node --no-warnings scripts/check-start-section-recipe-renderable.mts",
     "check:claude-codex-ab": "node --no-warnings scripts/check-claude-codex-ab.mts",
     "check:opening-photos": "node --no-warnings scripts/check-opening-photos.mts",

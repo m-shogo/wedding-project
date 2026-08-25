@@ -5,6 +5,7 @@
 
 import {directorRecipeCatalog} from '../../movie-dashboard/src/data/directorRecipeCatalog.ts';
 import {startMotionPresets} from '../../movie-dashboard/src/data/startMotionKit.ts';
+import {readFileSync} from 'node:fs';
 import {
   directorRecipeVisualAudit,
   directorVisualFidelityCounts,
@@ -44,18 +45,30 @@ if (total !== directorRecipeCatalog.length) {
 
 const supportById = new Map(motionPresetVisualSupport.map((item) => [item.presetId, item]));
 
-// These J3 visuals have a dedicated implementation AND were inspected through the rendered
-// StartDirectorVisualUpgradesV1 Actions artifact. Do not regress them to a generic approximation.
-const artifactReviewedExact = [
+// These J3 visuals are exact promotion candidates. Static metadata alone is insufficient:
+// the separate CI rendered-pixel oracle must validate their artifact before merge.
+const exactPromotionCandidates = [
   'photo-2p5d-parallax',
   'accent-halftone-burst',
   'accent-scribble-underline',
   'accent-stamp-triplet',
 ];
-for (const id of artifactReviewedExact) {
+for (const id of exactPromotionCandidates) {
   const item = supportById.get(id);
-  if (!item) fail(`missing artifact-reviewed visual fidelity preset: ${id}`);
-  else if (item.fidelity !== 'exact') fail(`${id} should remain exact after dedicated implementation + artifact review`);
+  if (!item) fail(`missing exact-promotion visual fidelity preset: ${id}`);
+  else if (item.fidelity !== 'exact') fail(`${id} should remain exact while its independent rendered-pixel oracle is required`);
+}
+
+const reviewWorkflow = readFileSync('../.github/workflows/start-director-review-ci.yml', 'utf8');
+const renderStep = reviewWorkflow.indexOf('remotion render src/index-director-recipes.ts StartDirectorVisualUpgradesV1');
+const oracleStep = reviewWorkflow.indexOf('pnpm check:director-visual-upgrade-artifact');
+const uploadStep = reviewWorkflow.indexOf('Upload StaRt visual-upgrade review artifact');
+if (renderStep < 0 || oracleStep < renderStep || uploadStep < oracleStep) {
+  fail('exact visual upgrades require the independent rendered-pixel oracle in Start Director Review CI');
+}
+const oracleSource = readFileSync('scripts/verify-director-visual-upgrade-artifact.mts', 'utf8');
+for (const forbiddenImport of [/from\s+['"][^'"]*\/src\//, /from\s+['"][^'"]*directorRecipeAdapter/, /from\s+['"][^'"]*directorRecipeVisualFidelity/, /from\s+['"][^'"]*DirectorVisualUpgradeReview/]) {
+  if (forbiddenImport.test(oracleSource)) fail(`rendered-pixel oracle must not import implementation/audit source: ${forbiddenImport}`);
 }
 
 // Remaining known approximations/placeholders stay guarded against accidental inflation.

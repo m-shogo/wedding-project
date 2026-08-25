@@ -13,6 +13,7 @@ on:
       - "motion-studio/scripts/check-claude-codex-ab.mts"
       - "motion-studio/scripts/check-director-recipe-renderer.mts"
       - "motion-studio/scripts/check-director-recipe-visual-fidelity.mts"
+      - "motion-studio/scripts/verify-director-visual-upgrade-artifact.mts"
       - "motion-studio/scripts/check-start-section-recipe-renderable.mts"
       - "movie-dashboard/src/data/startClaudeCodexAB.ts"
       - "movie-dashboard/src/data/directorRecipeVisualFidelity.ts"
@@ -29,6 +30,7 @@ on:
       - "motion-studio/scripts/check-claude-codex-ab.mts"
       - "motion-studio/scripts/check-director-recipe-renderer.mts"
       - "motion-studio/scripts/check-director-recipe-visual-fidelity.mts"
+      - "motion-studio/scripts/verify-director-visual-upgrade-artifact.mts"
       - "motion-studio/scripts/check-start-section-recipe-renderable.mts"
       - "movie-dashboard/src/data/startClaudeCodexAB.ts"
       - "movie-dashboard/src/data/directorRecipeVisualFidelity.ts"
@@ -91,6 +93,9 @@ jobs:
             -show_entries stream=codec_name,width,height,r_frame_rate \
             -show_entries format=duration,size \
             -of json out/review/visual-upgrades/start_director_visual_upgrades_v1.mp4 | tee out/review/visual-upgrades/start_director_visual_upgrades_v1.ffprobe.json
+
+      - name: Independent rendered-pixel oracle
+        run: pnpm check:director-visual-upgrade-artifact out/review/visual-upgrades/start_director_visual_upgrades_v1.mp4
 
       - name: Upload StaRt visual-upgrade review artifact
         uses: actions/upload-artifact@v4
