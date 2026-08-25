@@ -29,10 +29,10 @@ const readinessLabels: Record<keyof StartSelectionState["readiness"], string> = 
 };
 
 const startSourceFolders = [
-  {label: "写真の原本", path: "/Users/m-shogo/Developer/personal/wedding-project/05_photos/opening/", note: "couple / travel / family-friends / venue に分ける"},
-  {label: "動画の原本", path: "/Users/m-shogo/Developer/personal/wedding-project/06_videos/opening/", note: "旅行・会場・自然な短い動画を置く"},
-  {label: "音源候補", path: "/Users/m-shogo/Developer/personal/wedding-project/07_music/candidates/", note: "候補段階。ここから本番再生しない"},
-  {label: "利用確認済み音源", path: "/Users/m-shogo/Developer/personal/wedding-project/07_music/licensed/", note: "会場利用条件を確認した音源だけ移す"},
+  {step: "1A", label: "写真の原本", path: "/Users/m-shogo/Developer/personal/wedding-project/05_photos/opening/", note: "couple / travel / family-friends / venue に分ける", formats: "JPG・JPEG・PNG・WEBP（HEIC原本はそのままでOK。採用後に変換）", example: "travel_hawaii_001.jpg"},
+  {step: "1B", label: "動画の原本", path: "/Users/m-shogo/Developer/personal/wedding-project/06_videos/opening/", note: "旅行・会場・自然な短い動画を置く", formats: "MP4・MOV。元動画を短く切らなくてOK", example: "travel_hawaii_walk_001.mov"},
+  {step: "2A", label: "音源候補", path: "/Users/m-shogo/Developer/personal/wedding-project/07_music/candidates/", note: "候補段階。ここから本番再生しない", formats: "MP3・WAV・M4Aなどの手元の候補", example: "start_candidate_original.m4a"},
+  {step: "2B", label: "利用確認済み音源", path: "/Users/m-shogo/Developer/personal/wedding-project/07_music/licensed/", note: "会場利用条件を確認した音源だけ移す", formats: "候補と同じファイル形式でOK", example: "start_licensed_master.m4a"},
 ] as const;
 
 function saveState(state: StartSelectionState) {
@@ -216,16 +216,37 @@ export function StartSelectionMode() {
           <div className="mt-5 border-t border-amber-300 pt-4 dark:border-amber-800">
             <h3 className="font-bold text-navy-900 dark:text-sand-100">まず原本を置く場所</h3>
             <p className="mt-1 text-xs leading-5 text-navy-600 dark:text-navy-300">写真・動画・音源本体はGitへ入りません。ファイル名は後からCodexが整理できるので、まず種類ごとのフォルダへ入れてください。</p>
+            <div className="mt-3 grid gap-2 bg-white p-3 text-xs text-navy-700 sm:grid-cols-3 dark:bg-navy-800 dark:text-navy-200">
+              <div><strong className="block text-amber-700 dark:text-amber-300">① パスをコピー</strong>下のボタンを押す</div>
+              <div><strong className="block text-amber-700 dark:text-amber-300">② Finderで ⌘⇧G</strong>「フォルダへ移動」を開く</div>
+              <div><strong className="block text-amber-700 dark:text-amber-300">③ 貼り付けてEnter</strong>表示された場所へ原本を入れる</div>
+            </div>
             <div className="mt-3 space-y-2">
               {startSourceFolders.map((folder) => <div key={folder.path} className="border border-amber-200 bg-white p-3 dark:border-amber-900 dark:bg-navy-800">
                 <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
-                  <div className="min-w-0"><p className="text-xs font-bold text-navy-800 dark:text-sand-100">{folder.label}</p><code className="mt-1 block overflow-x-auto whitespace-nowrap text-[10px] text-navy-600 dark:text-navy-300">{folder.path}</code><p className="mt-1 text-[10px] text-navy-400">{folder.note}</p></div>
+                  <div className="min-w-0">
+                    <p className="text-xs font-bold text-navy-800 dark:text-sand-100"><span className="mr-2 inline-block bg-amber-200 px-1.5 py-0.5 font-mono text-[9px] text-amber-900 dark:bg-amber-800 dark:text-amber-100">{folder.step}</span>{folder.label}</p>
+                    <code className="mt-1 block overflow-x-auto whitespace-nowrap text-[10px] text-navy-600 dark:text-navy-300">{folder.path}</code>
+                    <p className="mt-1 text-[10px] text-navy-500 dark:text-navy-300">{folder.note}</p>
+                    <p className="mt-1 text-[10px] text-navy-400">対応目安：{folder.formats}</p>
+                    <p className="mt-1 text-[10px] font-mono text-navy-400">ファイル名例：{folder.example}</p>
+                  </div>
                   <button onClick={() => copyAssetPath(folder.path)} className="shrink-0 border border-navy-500 px-2 py-1 text-[10px] text-navy-700 dark:text-sand-200">{copiedAssetPath === folder.path ? "コピー済み ✓" : "パスをコピー"}</button>
                 </div>
               </div>)}
             </div>
+            <details className="mt-3 border border-amber-300 bg-white p-3 dark:border-amber-800 dark:bg-navy-800">
+              <summary className="cursor-pointer text-xs font-bold text-navy-900 dark:text-sand-100">💡 素材投入Tips — 最初はやらなくていいこと</summary>
+              <ul className="mt-3 space-y-2 text-xs leading-5 text-navy-600 dark:text-navy-300">
+                <li>・全部のファイル名を完璧に直さなくてOK。場所や人物が分かる名前なら十分です。</li>
+                <li>・写真を先にトリミング・縮小・色補正しなくてOK。原本を残してください。</li>
+                <li>・動画を先に短く編集しなくてOK。使う区間はRough作成時に選びます。</li>
+                <li>・音源候補を利用確認前に<code>licensed</code>へ入れないでください。</li>
+                <li>・Remotionの<code>public</code>フォルダへ自分でコピーしなくてOK。採用後にCodexが接続します。</li>
+              </ul>
+            </details>
             <div className="mt-3 bg-amber-100 p-3 text-xs leading-5 text-amber-900 dark:bg-amber-900/30 dark:text-amber-200">
-              <strong>次の工程：</strong>写真選定後、Codexが採用素材だけをRemotion用フォルダへ接続し、14セクションへ割り当てます。原本を直接移動・上書きしません。
+              <strong>置き終わったら：</strong>この画面の「使える写真を一覧化した」などをチェックし、Codex用プロンプトをコピーしてください。Codexが採用素材だけをRemotion用フォルダへ接続し、14セクションへ割り当てます。原本を直接移動・上書きしません。
             </div>
             <Link to="/asset-placement-guide" className="mt-3 inline-block border border-navy-700 px-3 py-2 text-xs dark:border-sand-300">全素材の置き場ルールを見る</Link>
           </div>

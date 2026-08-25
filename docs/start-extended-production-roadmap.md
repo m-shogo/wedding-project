@@ -54,6 +54,15 @@ pnpm dev
 
 選定後、Codexが採用素材だけを `motion-studio/public/` 配下のRemotion runtimeへ接続する。原本は移動・上書きしない。旧V1専用の `motion-studio/public/photos/opening/` や `public/audio/opening/bgm-main.mp3` を、StaRt Extendedの正本として直接使わない。
 
+### Finderで開く方法
+
+1. Selection Modeの保存先カードで「パスをコピー」
+2. Finderを開いて `⌘⇧G`
+3. パスを貼り付けてEnter
+4. 表示されたフォルダへ原本を入れる
+
+最初に一括rename、crop、resize、色補正、動画の切り出しを行う必要はない。原本を残し、採用後にCodexがRemotion用コピーを整える。写真runtimeが直接扱える形式はJPG/JPEG/PNG/WEBP。HEIC原本は消さず、採用分だけ後工程で変換する。
+
 ## 最初から選ばれている6系統
 
 - Hero Still: 強い写真を止めて見せる
