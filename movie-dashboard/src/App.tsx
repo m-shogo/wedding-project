@@ -45,6 +45,7 @@ import { StartMotionShowcase } from "./pages/StartMotionShowcase";
 import { DirectorRecipeCatalog } from "./pages/DirectorRecipeCatalog";
 import { StartSelectionMode } from "./pages/StartSelectionMode";
 import { StartProductionWorkspace } from "./pages/StartProductionWorkspace";
+import { VisualMotionLibrary } from "./pages/VisualMotionLibrary";
 import { Guide } from "./pages/Guide";
 import { AssetPlacementGuide } from "./pages/AssetPlacementGuide";
 
@@ -58,6 +59,7 @@ export default function App() {
             <Route element={<Layout />}>
               <Route index element={<Dashboard />} />
               <Route path="movie-coach" element={<MovieCoach />} />
+              <Route path="movie-coach/motion-library" element={<VisualMotionLibrary />} />
               <Route path="movie-coach/dictionary" element={<MovieCoachDictionary />} />
               <Route path="movie-coach/profile" element={<ProfileMovieCoach />} />
               <Route path="movie-coach/auto" element={<AutomationReadiness />} />
