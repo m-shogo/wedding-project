@@ -33,8 +33,6 @@ const support = (
  *   simplified/approximated. It must not be presented as a faithful implementation.
  * - `placeholder` means the renderer mainly proves pipeline/edit-point structure; the named visual
  *   needs real paired media or a dedicated visual before a human can judge it.
- *
- * This intentionally judges more strictly than "resolveDirectorRecipeById() does not throw".
  */
 export const motionPresetVisualSupport: MotionPresetVisualSupport[] = [
   support("type-mask-slide", "exact", "Dedicated mask reveal behavior is represented by TypographyRevealEngine mask mode."),
@@ -53,7 +51,7 @@ export const motionPresetVisualSupport: MotionPresetVisualSupport[] = [
   support("photo-small-push", "exact", "CameraTransformEngine restrained push represents the named small-push grammar."),
   support("photo-slow-pull", "exact", "CameraTransformEngine pull mode represents the named slow-pull grammar."),
   support("photo-directional-pan", "exact", "CameraTransformEngine pan mode demonstrates directional motion; final direction still depends on real composition."),
-  support("photo-2p5d-parallax", "representative", "Current adapter intentionally approximates 2.5D parallax as a restrained push; no foreground/background depth separation exists.", "Add layered foreground/background parallax variant using synthetic demo layers first."),
+  support("photo-2p5d-parallax", "exact", "Artifact-reviewed synthetic foreground/background layers move at distinct speeds, making the 2.5D depth grammar judgeable. A real wedding photo will still require a source-specific non-generative mask."),
   support("photo-freeze-cutout", "representative", "Current adapter treats the photo as static; a true cutout edge/background separation is not shown.", "Add non-AI mask/cutout demo using synthetic shapes or supplied alpha assets."),
   support("photo-contact-sheet-snap", "exact", "PhotoLayoutEngine contact-sheet mode provides the intended multi-photo layout grammar."),
   support("photo-split-panel", "exact", "PhotoLayoutEngine split-panel mode provides the intended 2-panel layout grammar."),
@@ -67,9 +65,9 @@ export const motionPresetVisualSupport: MotionPresetVisualSupport[] = [
   support("color-field-release", "representative", "Opaque transition communicates release, but the intended calm color-field pause has no dedicated hold/settle treatment.", "Add color-field hold/release timing variant."),
   support("accent-speed-lines", "exact", "GraphicHitEngine has a distinct speed-lines variant."),
   support("accent-impact-frame", "exact", "GraphicHitEngine has a distinct impact variant for brief peak frames."),
-  support("accent-halftone-burst", "representative", "Current adapter routes halftone burst to generic triplet graphics; no halftone field is drawn.", "Add halftone-dot burst variant."),
-  support("accent-scribble-underline", "representative", "Current adapter routes scribble underline to generic triplet graphics; no hand-drawn underline path exists.", "Add animated scribble path variant."),
-  support("accent-stamp-triplet", "representative", "Generic triplet proves three hits but does not yet distinguish stamp → line → route dot as three different graphic objects.", "Add dedicated stamp-line-route-dot triplet variant."),
+  support("accent-halftone-burst", "exact", "Artifact review confirms a dedicated expanding halftone-dot field that is visually distinct from generic triplet hits."),
+  support("accent-scribble-underline", "exact", "Artifact review confirms dedicated animated hand-drawn underline paths rather than generic triplet circles."),
+  support("accent-stamp-triplet", "exact", "Artifact review confirms three distinct sequential objects — stamp → line → route dot — while the Hero frame can remain unchanged."),
   support("accent-panel-grid", "exact", "PhotoLayoutEngine panel-grid mode represents the intended 2–3 panel anime-OP grammar."),
   support("accent-cel-shadow-sweep", "representative", "Current adapter maps this to speed lines; a flat cel-shadow shape sweep is not distinct.", "Add cel-shadow polygon sweep variant."),
   support("accent-micro-rgb-split", "representative", "Current adapter maps this to generic impact; channel-edge separation is not rendered.", "Add 2–4 frame RGB channel offset variant."),
