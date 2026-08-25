@@ -16,7 +16,11 @@
 - 人物・犬のAI生成やAI変形は提案しない。
 - `op_01_narita_boarding_gate_ai.png` と `op_11_narita_airport_lobby_ai.png` は人物入り確認済みのため不採用。
 
-## Visual Motion Library / Palmier × DaVinci 共通制作ライン
+## モーション図鑑 / Palmier × DaVinci 共通制作ライン
+
+**ユーザー向けの正本名称は「モーション図鑑」。** `Visual Motion Library` は既存コード・内部識別子・過去資料での技術名/legacy nameとして残してよい。名称変更のためだけに一括renameせず、UI・会話・ユーザー向け説明は今後触る箇所から「モーション図鑑」へ寄せる。
+
+モーション図鑑の設計思想は `docs/decisions/2026-08-25-motion-zukan-product-principles.md`、Scene Composer固有ルールは `docs/contracts/visual-scene-composer-design-rules.md` を参照する。
 
 2026-08-25以降のOpening / Profile共通制作基盤の作業authorityは、
 `docs/prompts/2026-08-25-visual-motion-library-palmier-davinci-complete.md` を参照する。
@@ -24,17 +28,22 @@
 
 共通production lineは次を基本とする。
 
-`Visual Motion Library → Prompt Generator → Palmier Rough → NLE XML + Motion Handoff Manifest → DaVinci Resolve Final`
+`モーション図鑑 (Visual Motion Library) → Scene Recipe / Scene Composer → Structured Timeline → Palmier Rough → NLE XML + Motion Handoff Manifest → DaVinci Resolve Final`
 
 役割:
 
-- Visual Motion Library: 名前を知らなくても実際の動きを見て選ぶ入口。
+- モーション図鑑: 名前を知らなくても実際の動きを見て選び、用途・正式名称・実装方法・変更可能値まで理解できる入口。
+- Scene Recipe: 既存Motion Patternを組み合わせたeditable defaults。完成品や固定Templateとして扱わない。
+- Scene Composer: 自分のImage / Video / Text / Duration / Delay / Motion / Position / Hold等へ差し替えてSceneInstanceを作る中心UI。
+- Structured Timeline: SceneInstanceとScene間関係のProduction Source of Truth。巨大Promptを正本にしない。
 - Palmier: 素材選択、trim/split/order、rough timing、rough typography placement等のRough Edit。
 - DaVinci Resolve: Edit / Text / Text+ / Fusion / Color / Fairlight / Deliverを使うFinal Edit。
 - Remotion: Preview生成、比較生成、DaVinciに無いoverlay等で価値がある場合のみ補助。共通production authorityにはしない。
 
 重要:
 
+- 新しい演出を発明する前に、DaVinci標準 / Fusion標準 / Blackmagic公式 / `.drfx` / `.setting` / Reactor / license確認済みasset / repo既存実装を探して整理・再利用する。**車輪の再発明をしない。**
+- モーション図鑑は文章辞典ではなくPreview-first。自然語（例:「文字が下からシュッ」「写真を少しズーム」）でも探せるようにする。
 - Concept PreviewをActual DaVinci Previewとして表示しない。
 - Preview / Implementation / verified artifact or methodを必ず接続する。
 - Reuse Before Buildを徹底し、DaVinci標準 / Fusion標準 / 公式Template / `.drfx` / `.setting` / Reactor / license確認済みasset / repo既存実装を先に調べる。
@@ -51,7 +60,7 @@ Movie系のすべての新規・現在進行・既存再利用作業は `docs/co
 
 この契約は新しいScene Composerだけでなく、以下へ遡及適用する。
 
-- Visual Motion Library / Motion Kit / Director Recipes
+- モーション図鑑 / Visual Motion Library / Motion Kit / Director Recipes
 - StaRt Showcase / Selection / Production
 - Profile Movie Coach
 - Prompt Generator / Movie Review / Before-After
@@ -97,14 +106,16 @@ Short Candidateの既存実装を壊すために移行しない。一方、今�
 1. @docs/opening-authority.md
 2. @docs/prompts/2026-08-25-visual-motion-library-palmier-davinci-complete.md
 3. @docs/contracts/human-readable-editable-movie-contract.md
-4. @docs/reviews/2026-08-25-visual-motion-library-current-audit.md
-5. @README.md
-6. @docs/task-board.md
-7. @docs/start-director-recipe-system-overview.md
-8. @docs/opening-v1-motion-map.md
-9. @motion-studio/README.md
-10. @02_opening-movie/asset-status.md
-11. @movie-dashboard/README.md
+4. @docs/decisions/2026-08-25-motion-zukan-product-principles.md
+5. @docs/contracts/visual-scene-composer-design-rules.md
+6. @docs/reviews/2026-08-25-visual-motion-library-current-audit.md
+7. @README.md
+8. @docs/task-board.md
+9. @docs/start-director-recipe-system-overview.md
+10. @docs/opening-v1-motion-map.md
+11. @motion-studio/README.md
+12. @02_opening-movie/asset-status.md
+13. @movie-dashboard/README.md
 
 ## 参照
 
@@ -119,6 +130,8 @@ Short Candidateの既存実装を壊すために移行しない。一方、今�
 - 編集: @docs/05_capcut-editing.md（legacy/reference。共通Final authorityはDaVinciへ移行）
 - CapCut運用: @docs/capcut-operation.md（legacy/reference）
 - Palmier運用: @docs/palmier-operation.md
+- モーション図鑑 Product Principles: @docs/decisions/2026-08-25-motion-zukan-product-principles.md
+- Visual Scene Composer Design Rules: @docs/contracts/visual-scene-composer-design-rules.md
 - Visual Motion Library prompt: @docs/prompts/2026-08-25-visual-motion-library-palmier-davinci-complete.md
 - Human-Readable / Human-Editable Movie Contract: @docs/contracts/human-readable-editable-movie-contract.md
 - Visual Motion Library current audit: @docs/reviews/2026-08-25-visual-motion-library-current-audit.md
