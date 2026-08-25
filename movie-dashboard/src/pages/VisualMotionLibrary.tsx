@@ -25,7 +25,8 @@ export function VisualMotionLibrary() {
         <p className="text-[10px] tracking-[0.2em] font-semibold text-emerald-700 dark:text-emerald-300">VERTICAL SLICE / HUMAN MASTER</p>
         <h2 className="mt-1 text-xl font-bold text-navy-900 dark:text-sand-100">Mask Reveal 1件を、Actual Renderだけでなく「後から直せる構造」まで通す</h2>
         <p className="mt-2 text-sm leading-6 text-navy-600 dark:text-navy-300">
-          36 / 97件を一括移行しない。人間が理解できるScene Duration / Delay / Hold / Position / Direction等を正本にし、Actual DaVinci Renderは実装証拠として紐付ける。
+          人間が理解できるScene Duration / Delay / Hold / Position / Direction等を正本として編集できるのはMask Revealのみ。
+          他のMotion Kit presetはブラウズ・検索・用途確認ができるカタログ段階までで、実Render・DaVinci実機検証はまだ行っていない。
         </p>
       </section>
 
@@ -128,9 +129,11 @@ export function VisualMotionLibrary() {
                 </div>
               </div>
 
-              <div className="border-t border-sand-200 dark:border-navy-600 p-6">
-                <MaskRevealEditableWorkspace />
-              </div>
+              {pattern.id === "type-mask-reveal" && (
+                <div className="border-t border-sand-200 dark:border-navy-600 p-6">
+                  <MaskRevealEditableWorkspace />
+                </div>
+              )}
             </article>
           );
         })}
