@@ -27,6 +27,8 @@ export type StartDemoBackdropProps = {
    *   黒帯を出さずに元の構図を保持する(編集で一般的な手法)。
    */
   fit?: 'cover' | 'contain' | 'blurred-extend';
+  /** cover時の注視点。顔や主役が切れないようにshot側から指定する */
+  objectPosition?: string;
   children?: React.ReactNode;
 };
 
@@ -71,6 +73,7 @@ export const StartDemoBackdrop: React.FC<StartDemoBackdropProps> = ({
   role,
   variantIndex = 0,
   fit = 'cover',
+  objectPosition,
   children,
 }) => {
   const candidates = start129DemoAssetLibrary[role] ?? [];
@@ -81,11 +84,14 @@ export const StartDemoBackdrop: React.FC<StartDemoBackdropProps> = ({
     spec.kind === 'video' ? (
       <OffthreadVideo
         src={staticFile(path!)}
-        style={{width: '100%', height: '100%', objectFit: mediaFit, ...extraStyle}}
+        style={{width: '100%', height: '100%', objectFit: mediaFit, objectPosition, ...extraStyle}}
         muted
       />
     ) : (
-      <Img src={staticFile(path!)} style={{width: '100%', height: '100%', objectFit: mediaFit, ...extraStyle}} />
+      <Img
+        src={staticFile(path!)}
+        style={{width: '100%', height: '100%', objectFit: mediaFit, objectPosition, ...extraStyle}}
+      />
     );
 
   return (
