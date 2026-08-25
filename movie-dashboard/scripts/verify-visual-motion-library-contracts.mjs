@@ -149,7 +149,7 @@ for (const token of [
 }
 
 for (const token of [
-  'HUMAN MASTER / EDITABLE SOURCE OF TRUTH',
+  'モーション図鑑 / HUMAN MASTER',
   'かんたん',
   '詳細',
   'DaVinci',
