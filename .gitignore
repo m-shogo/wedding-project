@@ -48,3 +48,11 @@ opening-movie/generated/**
 # Local-only StaRt material thumbnails and manifest (contains private source paths).
 movie-dashboard/public/local-start-materials/
 movie-dashboard/public/local-start-render/
+
+# Local-only StaRt audio/lyrics/beat-map working files (real audio + local API keys).
+motion-studio/local/
+motion-studio/public/local-start-wedding-edit/
+motion-studio/src/data/startWeddingEdit/
+
+# Stock demo photos pulled for local preview only (not canonical wedding photos).
+motion-studio/public/demo/
