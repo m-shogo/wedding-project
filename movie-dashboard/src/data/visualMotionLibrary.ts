@@ -158,7 +158,9 @@ export interface MotionPromptOutputs {
   humanBrief: string;
   claudeCreativeInstruction: string;
   palmierInstruction: string;
+  nleXmlHandoff: string;
   davinciFinishManifest: string;
+  verificationChecklist: string;
   machineJson: string;
 }
 
@@ -307,6 +309,7 @@ function clampMaskRevealInput(input: MaskRevealPromptInput): MaskRevealPromptInp
 export function buildMaskRevealPromptOutputs(rawInput: MaskRevealPromptInput): MotionPromptOutputs {
   const input = clampMaskRevealInput(rawInput);
   const media = input.mediaLabel?.trim() || "選択したHero写真";
+  const markerName = "MOTION:type-mask-reveal";
   const manifest = {
     patternId: "type-mask-reveal",
     text: input.text,
@@ -315,6 +318,11 @@ export function buildMaskRevealPromptOutputs(rawInput: MaskRevealPromptInput): M
     durationSeconds: input.durationSeconds,
     intensity: input.intensity,
     palmierCapability: "PALMIER_TIMING_ONLY",
+    handoff: {
+      markerName,
+      exportFormat: "DAVINCI_COMPATIBLE_NLE_XML",
+      titleTrackIntent: "DEDICATED_TITLE_TRACK",
+    },
     davinciImplementationId: "impl-type-mask-reveal-davinci-text-plus",
     avoid: ["bounce", "glow", "excessive-motion-blur", "covering-subject-face", "effect-for-effect"],
   } as const;
@@ -334,6 +342,7 @@ export function buildMaskRevealPromptOutputs(rawInput: MaskRevealPromptInput): M
       `Section: ${input.section}`,
       `Duration target: ${input.durationSeconds.toFixed(1)} sec`,
       `Intensity: ${input.intensity}`,
+      `Preserve marker: ${markerName}`,
       "Do not replace it with another visual effect without explicitly explaining why.",
       "Keep the real photo unchanged. Do not generate or transform bride/groom/family/friends/dog identity.",
       "Do not claim the DaVinci implementation is verified until a local Resolve render passes visual QA.",
@@ -342,9 +351,18 @@ export function buildMaskRevealPromptOutputs(rawInput: MaskRevealPromptInput): M
       `Use ${media} for ${input.section}.`,
       `Place title: ${input.text}`,
       `Reserve approximately ${input.durationSeconds.toFixed(1)} sec for the title reveal timing.`,
+      `Preserve timeline marker: ${markerName}`,
       "Palmier responsibility is rough timing and placement only for this pattern.",
       "If exact Mask Reveal cannot be reproduced natively, do not invent a substitute effect.",
-      "Leave timing/placement ready for DaVinci finishing and preserve the marker in the handoff.",
+      "Export the rough timeline as DaVinci-compatible NLE XML and keep the marker/timing intent for finishing.",
+    ].join("\n"),
+    nleXmlHandoff: [
+      "Palmier → DaVinci handoff",
+      `1. Rough timing/orderを確定し、${markerName} を対象title位置に残す。`,
+      "2. PalmierからDaVinci-compatible NLE XMLを書き出す。",
+      "3. DaVinci ResolveへXMLを読み込み、media relinkとtimeline timingを確認する。",
+      `4. ${markerName} の位置へ専用title trackでText+ Mask Revealを適用する。`,
+      "5. Palmier側で代替effectを焼き込まない。最終motion authorityはDaVinci。",
     ].join("\n"),
     davinciFinishManifest: [
       `Pattern: ${manifest.patternId}`,
@@ -352,11 +370,24 @@ export function buildMaskRevealPromptOutputs(rawInput: MaskRevealPromptInput): M
       `Media: ${manifest.media}`,
       `Section: ${manifest.section}`,
       `Duration: ${manifest.durationSeconds.toFixed(1)} sec`,
+      `Marker: ${markerName}`,
       `Implementation: ${manifest.davinciImplementationId}`,
       `Intensity: ${manifest.intensity}`,
       "Method: Text+ + rectangular mask/keyframes + eased settle",
+      "Track intent: dedicated title track; preserve underlying real photo/video",
       `Avoid: ${manifest.avoid.join(", ")}`,
-      "Verification required: opened-in-davinci → render-tested → visual-QA → record local Resolve version",
+      "Verification required: XML-imported → opened-in-davinci → render-tested → visual-QA → record local Resolve version",
+    ].join("\n"),
+    verificationChecklist: [
+      "Mask Reveal completion gate",
+      "[ ] Palmier rough timingを作成し、MOTION:type-mask-reveal markerを保持",
+      "[ ] DaVinci-compatible NLE XMLを書き出し、Resolveへimport",
+      "[ ] Text+ + rectangular mask + keyframe easingで実装",
+      "[ ] 実renderを書き出し、Concept previewとは別assetとして保存",
+      "[ ] Preview sourceTypeをACTUAL_DAVINCI_RENDERへ更新",
+      "[ ] local Resolve versionを記録",
+      "[ ] 顔被り・可読性・速度・過剰演出をVisual QA",
+      "[ ] すべて通過後だけTESTED / PRODUCTION_READYを判断",
     ].join("\n"),
     machineJson: JSON.stringify(manifest, null, 2),
   };
