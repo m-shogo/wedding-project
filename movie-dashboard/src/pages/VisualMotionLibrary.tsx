@@ -16,8 +16,8 @@ export function VisualMotionLibrary() {
   return (
     <div>
       <Header
-        title="Visual Motion Library"
-        description="名前を知らなくても動画から選び、人間が理解・部分修正できる正本をPalmier Rough → DaVinci Finalへ渡す"
+        title="モーション図鑑"
+        description="Visual Motion Libraryで動きを見て探し、人間が理解・部分修正できるSceneとして採用し、Palmier Rough → DaVinci Finalへ渡す"
       />
 
       <section className="mb-8 border-l-2 border-emerald-600 pl-5">
