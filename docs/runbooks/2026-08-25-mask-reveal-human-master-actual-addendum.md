@@ -1,25 +1,23 @@
 # Mask Reveal Human Master Actual Gate — Addendum
 
-Status: ACTIVE ADDENDUM  
-Scope: Movie only / current `type-mask-reveal` vertical slice  
-Parent contracts:
+Status: ACTIVE ADDENDUM / aligned with current SceneInstance authority  
+Scope: Movie only / current `type-mask-reveal` vertical slice
+
+Parent contracts and decisions:
 
 1. `docs/contracts/human-readable-editable-movie-contract.md`
 2. `docs/contracts/visual-scene-composer-design-rules.md`
-3. `docs/runbooks/2026-08-25-mask-reveal-local-davinci-actual-gate.md`
+3. `docs/decisions/2026-08-25-motion-zukan-output-format-clarification.md`
+4. `docs/decisions/2026-08-25-motion-zukan-preset-first-davinci-value-bridge.md`
+5. `docs/decisions/2026-08-26-motion-zukan-property-stack-customization.md`
+6. `docs/runbooks/2026-08-25-mask-reveal-davinci-applied-evidence-gate.md`
+7. `docs/runbooks/2026-08-25-mask-reveal-local-davinci-actual-gate.md`
 
-This addendum does **not** restart or replace the current Mask Reveal work. It adds the Human Master requirements to the existing Palmier / DaVinci Actual execution path.
+This addendum does **not** restart or replace the current Mask Reveal work. It defines the Human Master requirements that must survive Palmier / DaVinci execution.
 
 ## Core authority
 
-The master production authority is the human-editable scene intent, not an MP4, not a Fusion graph, and not an AI score.
-
-Current implementation files:
-
-- `movie-dashboard/src/data/humanEditableMotionIntent.ts`
-- `movie-dashboard/src/data/maskRevealEditableProduction.ts`
-- `movie-dashboard/src/components/MaskRevealEditableWorkspace.tsx`
-- `movie-dashboard/src/data/maskRevealHandoff.ts`
+The master production authority is the human-readable, human-editable adopted SceneInstance state.
 
 For the current slice:
 
@@ -35,17 +33,39 @@ authority = HUMAN_MASTER
 - Palmier approximation
 - automation defaults
 - preset/recipe updates
-- DaVinci handoff generation
+- derived DaVinci implementation values
 
 If a locked value cannot be implemented safely, report the conflict. Do not silently replace it.
 
-## Required human-readable source of truth
+## Source of Truth vs serialization
 
-Before the first real DaVinci render, create/export a snapshot of the current editable intent containing at minimum:
+The **Source of Truth** is the human-readable Scene meaning and its property-level decision state.
+
+JSON / XML / NLE XML are not the Human Master themselves. They may serialize or transport the current Scene state.
+
+Correct relation:
 
 ```text
+Human-readable Scene values
+→ Canonical Scene state
+→ optional JSON sidecar serialization
+→ target-specific tool values
+→ applied/readback evidence
+→ Actual render evidence
+```
+
+If an older note says `Editable Source of Truth JSON`, interpret it as **a serialized snapshot of the Human Master**, not as authority independent of the SceneInstance.
+
+## Required human-readable Scene snapshot
+
+Before the first real DaVinci render, preserve a fresh snapshot of the current adopted SceneInstance containing at minimum:
+
+```text
+sceneId
+sourceRevision = SceneInstance.updatedAt
+sceneMarkerId
 Text
-Image / Video
+Image / Video intent
 Scene Duration
 Layer Delay
 Motion Delay
@@ -68,117 +88,94 @@ DEFAULT / AI_SUGGESTED / HUMAN_SELECTED / LOCKED state
 AI recommendation reason where present
 ```
 
-The current schema authority is:
+The current editable schema remains:
 
-```text
-human-editable-motion/v1
-```
+`human-editable-motion/v1`
 
-The generated production/handoff projection may evolve independently, but it must continue to reference the same human-editable intent.
+The production sidecar may serialize these values, but serialization format must not become a competing authority.
 
-## Pre-render snapshot gate
+## Pre-render gate
 
 Before creating the disposable DaVinci animation/render:
 
-1. resolve the current effective values from the Human Master state;
-2. save/export the `Editable Source of Truth JSON`;
-3. record the list of `HUMAN_SELECTED` fields;
-4. record the list of `LOCKED` fields;
-5. record AI suggestion + reason separately from effective human values;
-6. use those effective values to create the DaVinci implementation.
+1. choose one adopted SceneInstance;
+2. record its current `sceneId` and `sourceRevision`;
+3. resolve effective Human values;
+4. resolve Canonical Scene state;
+5. record HUMAN_SELECTED fields;
+6. record LOCKED fields;
+7. generate a fresh Scene production bundle/sidecar serialization;
+8. read live Resolve Project Context;
+9. derive DaVinci implementation values from Canonical values + live context.
 
-Do not start from hard-coded Fusion numbers when a human-readable production value already exists.
+Do not start from hard-coded Fusion numbers when a human-readable value already exists.
 
-Implementation-specific values such as exact Text+ coordinates, Rectangle Mask controls, keyframe frame numbers, or Spline handles are derived detail/evidence.
+Implementation-specific Text+ coordinates, Rectangle Mask controls, keyframe frames, and Spline handles are derived detail/evidence.
 
-## Neutral WELCOME proof values
+## Neutral WELCOME proof
 
 The neutral proof still uses:
 
 - sample: `sample-typography-welcome-v1`
 - text: `WELCOME`
-- 1280 × 720
-- 30fps
-- 4-second neutral preview target
-- muted
+- requested target: 1280 × 720 / 30fps / ~4 sec / muted
 - no real wedding media
 
-But the actual animation must now also be recoverable from the Human Master intent.
+These target properties do not override the adopted Scene's editable animation values.
 
-Example expected readable structure:
+Do not copy a fixed `0.8 sec` reveal duration merely because an older example used it. Use the current Scene's resolved duration and derive representable frames from the live project fps.
 
-```text
-Scene Duration: 4.0 sec
-Text: WELCOME
-Layer Delay: 0.6 sec
-Motion Delay: 0.0 sec
-Enter Motion: MASK_REVEAL
-Enter Duration: 0.6 sec
-Hold: 2.8 sec
-Direction: UP / 下からスッと
-Position: BOTTOM_RIGHT
-X: 80%
-Y: 78%
-Distance: 12%
-Scale: 100% → 100%
-Intensity: S / 弱
-```
-
-These are editable defaults/suggestions unless the human selects/locks them. Do not reinterpret this example as a new immutable preset.
-
-## DaVinci application gate
+## DaVinci application and applied evidence
 
 When implementing in DaVinci:
 
-1. read Human Master effective values;
-2. derive the minimum Text+ / Fusion / Rectangle Mask / Keyframe values needed;
-3. record any derived values separately;
-4. render the neutral Actual Preview;
-5. compare the rendered result back to the human-readable source of truth.
+1. read current Human values;
+2. resolve Canonical state;
+3. capture live Resolve identity/context;
+4. derive expected DaVinci values;
+5. apply the minimum built-in Text+ / Fusion / Rectangle Mask implementation;
+6. capture actual readback where supported;
+7. compare expected vs applied/readback;
+8. preserve delta separately;
+9. render the neutral Actual Preview;
+10. compare the result back to the Human meaning.
 
-The comparison must answer understandable questions:
+Use the evidence chain:
 
-- Did the text start at the intended delay?
-- Did the enter motion use the intended direction?
-- Did it settle at the intended position?
-- Was motion duration close to the intended duration?
-- Was the hold/read interval preserved?
-- Did Scale / Distance / Intensity remain within the intended meaning?
-- Were all `LOCKED` values preserved?
+```text
+Human value
+→ Canonical value
+→ live-context expected value
+→ applied/readback value
+→ delta
+→ Actual DaVinci MP4
+```
+
+The real `Actual DaVinci MP4` is **Implementation Evidence**. It does not become the editable source of truth.
 
 A visually good render that silently violates a locked value is a failed implementation.
 
-## Actual render evidence boundary
+## Property Stack / Property-local correction gate
 
-The real DaVinci MP4 remains:
-
-```text
-Implementation Evidence
-```
-
-It does not become:
+For Mask Reveal v1, only the Properties actually used by the Motion are in scope:
 
 ```text
-Source of Truth
+Transform
+Mask
 ```
 
-The correct relation is:
+Property-local correction gate:
 
-```text
-Human Editable Intent
-        ↓
-DaVinci derived implementation
-        ↓
-Actual DaVinci Render
-        ↓
-Visual / timing / provenance evidence
-```
+- Position-only correction should not silently rewrite Mask/Text/Media/Hold.
+- Delay-only correction should not reselect media or replace the Motion.
+- Direction/Mask correction should not silently reset Transform values.
+- If a real secondary dependency exists, record the exact dependency and exact secondary Property.
 
-Do not reconstruct future editable state by reverse-engineering only the MP4.
+Preset/AI updates must not overwrite HUMAN_SELECTED / LOCKED values.
 
 ## Palmier delta gate
 
-For the scratch Palmier handoff, preserve three concepts separately:
+For scratch Palmier handoff, preserve three concepts separately:
 
 ```text
 Human Decision
@@ -186,92 +183,32 @@ Palmier Applied Value
 Difference / Delta
 ```
 
-Examples:
+Palmier approximation is capability evidence. It must not overwrite the intended Human/DaVinci finish values.
+
+The project-level handoff remains conceptually:
 
 ```text
-Human Layer Delay: 0.8 sec
-Palmier Applied: 0.65 sec
-Delta: -0.15 sec
-```
-
-```text
-Human Position: BOTTOM_RIGHT
-Palmier Applied: approximate lower-right placement
-Delta: APPROX_POSITION
-```
-
-Palmier approximation is evidence about tool capability. It must not overwrite the intended DaVinci finish value.
-
-## NLE XML + sidecar
-
-Continue the existing two-file authority:
-
-```text
-Palmier real timeline NLE XML
+Palmier real project timeline NLE XML
 +
-Motion Handoff Manifest JSON
+fresh Scene-specific Motion Handoff sidecar
 ```
 
-Do not generate fake NLE XML from app code.
+Use the current Scene-specific marker generated from the Scene production bundle. Do not hard-code a Pattern-only marker when the current Scene marker is available.
 
-The sidecar must include or reference:
+## Freshness gate
 
-- Human Master editable source of truth
-- effective values
-- human-selected fields
-- locked fields
-- Palmier intended/applied/delta evidence when available
-- DaVinci implementation ID
-- Actual verification evidence
-
-## Property-local correction gate
-
-When reviewing the Actual render, corrections must be property-local whenever possible.
-
-Examples:
+The Scene production bundle/readback must match the current:
 
 ```text
-Position: BOTTOM_RIGHT → BOTTOM_LEFT
+sceneId
+sourceRevision
 ```
 
-must not implicitly change:
+If `SceneInstance.updatedAt` changes, older sidecar/readback evidence is STALE and must be regenerated.
 
-- Text
-- media
-- Crop / Focus
-- Scene Duration
-- Hold
-- Enter Motion
+Never apply stale derived values to a newer Human Scene revision.
 
-Likewise:
-
-```text
-Enter Duration: 0.6 → 0.8 sec
-```
-
-must not reselect the image, rewrite the title, or replace the motion pattern.
-
-If a dependency requires a secondary change, record the dependency and the exact secondary property affected.
-
-## Scene Composer compatibility
-
-Do not create a second unrelated data model for Scene Composer.
-
-Current direction:
-
-```text
-MotionPattern
-→ MotionInstance
-→ SceneRecipe
-→ SceneInstance
-→ ProjectTimeline
-```
-
-The current Mask Reveal editable intent proves the MotionInstance/SceneInstance-level human-editable values. Future Scene Composer adoption should reuse these concepts rather than flattening the scene into a rendered asset.
-
-Do not mass-migrate 36 Motion Kit / 97 Director Recipes for this addendum.
-
-## Promotion gate update
+## Promotion gate
 
 Mask Reveal is not complete merely because `ACTUAL_DAVINCI_RENDER` exists.
 
@@ -279,8 +216,9 @@ Before `TESTED / PRODUCTION_READY` promotion, require both:
 
 ### Implementation proof
 
-- local Resolve version
-- actual DaVinci render
+- local Resolve version/context
+- expected vs applied/readback evidence
+- Actual DaVinci render
 - 1x Visual QA
 - 0.5x Visual QA
 - checksum/provenance
@@ -288,36 +226,36 @@ Before `TESTED / PRODUCTION_READY` promotion, require both:
 
 ### Human-editability proof
 
-- editable source of truth snapshot exists
-- important fields are understandable
-- HUMAN_SELECTED / LOCKED state survives handoff
-- Actual implementation is compared against human-readable intent
-- a one-property correction can be expressed without scene-wide regeneration
-- Palmier applied/delta evidence does not replace human intent
+- fresh adopted Scene snapshot exists
+- important values are human-readable
+- HUMAN_SELECTED / LOCKED survives handoff
+- applied/readback is compared to the current Scene revision
+- one-property correction can be expressed without scene-wide regeneration
+- Palmier applied/delta evidence does not replace Human intent
 
 If either group is incomplete, keep Production Ready false.
 
 ## Final completion chain
 
-The current vertical slice succeeds only when this is real:
-
 ```text
 Visual Motion Library
-→ Human Master editable Mask Reveal intent
-→ Prompt projections
+→ adopted Human Master SceneInstance
+→ Human values / property decisions
+→ Canonical Scene state
+→ fresh production bundle
 → Palmier Rough
-→ real NLE XML + sidecar
-→ DaVinci import
-→ derived Text+ / Fusion implementation
+→ real project NLE XML + Scene sidecar
+→ DaVinci import / Scene marker match
+→ live-context expected values
+→ applied/readback + Difference / Delta
 → Actual DaVinci MP4
 → 1x / 0.5x QA
-→ compare Actual back to Human Master values
-→ preserve locks / deltas / provenance
+→ locks / property-local integrity / provenance preserved
 → verified UI preview
 ```
 
-The human must be able to answer after completion:
+The human must still be able to answer:
 
 > 「位置だけ直したい」「Delayだけ直したい」「Holdだけ長くしたい」時に、どの値を変えればいいか？
 
-If the answer is not obvious, the slice is not finished.
+If that is not obvious, the vertical slice is not finished.
