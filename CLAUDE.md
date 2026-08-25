@@ -16,6 +16,18 @@
 - 人物・犬のAI生成やAI変形は提案しない。
 - `op_01_narita_boarding_gate_ai.png` と `op_11_narita_airport_lobby_ai.png` は人物入り確認済みのため不採用。
 
+## モーション図鑑 — 長期プロジェクト名
+
+Movie系で育てている、動きを見て探し・理解し・人間が編集し・Sceneとして採用し・Palmier / DaVinciへ渡す長期蓄積プロジェクトの正式な日本語名は **「モーション図鑑」**。
+
+正本: `docs/contracts/motion-zukan-identity.md`
+
+- モーション図鑑そのものはWedding専用ではない。Wedding Movie 2026は最初の実践Collection / Project。
+- 将来はTravel / Vlog / YouTube / SNS / Commercial / Documentary等にも再利用してよい。
+- `Visual Motion Library` は「動きを見て探す」内部機能名、`Scene Composer` は人間がSceneを編集・採用する内部機能名。どちらもモーション図鑑の一部。
+- 既存ID / file path / Motion Kit / Director Recipesを名称変更のためだけに一括renameしない。今後触る箇所から小さく適用する。
+- ブラッシュアップ案は今後追加するため、このidentity contractも **ACTIVE / MUTABLE** とする。
+
 ## Visual Motion Library / Palmier × DaVinci 共通制作ライン
 
 2026-08-25以降のOpening / Profile共通制作基盤の作業authorityは、
@@ -24,11 +36,13 @@
 
 共通production lineは次を基本とする。
 
-`Visual Motion Library → Prompt Generator → Palmier Rough → NLE XML + Motion Handoff Manifest → DaVinci Resolve Final`
+`モーション図鑑 → Visual Motion Library → Scene Composer → Prompt Generator → Palmier Rough → NLE XML + Motion Handoff Manifest → DaVinci Resolve Final`
 
 役割:
 
+- モーション図鑑: 長期的にMotion / Scene / Recipe / implementation / learning / evidenceを蓄積する上位プロジェクト。
 - Visual Motion Library: 名前を知らなくても実際の動きを見て選ぶ入口。
+- Scene Composer: 人間がText / Media / Timing / Position / Motionを編集し、SceneInstanceとして採用・再編集する場所。
 - Palmier: 素材選択、trim/split/order、rough timing、rough typography placement等のRough Edit。
 - DaVinci Resolve: Edit / Text / Text+ / Fusion / Color / Fairlight / Deliverを使うFinal Edit。
 - Remotion: Preview生成、比較生成、DaVinciに無いoverlay等で価値がある場合のみ補助。共通production authorityにはしない。
@@ -95,16 +109,17 @@ Short Candidateの既存実装を壊すために移行しない。一方、今�
 ## レビュー前の参照順
 
 1. @docs/opening-authority.md
-2. @docs/prompts/2026-08-25-visual-motion-library-palmier-davinci-complete.md
-3. @docs/contracts/human-readable-editable-movie-contract.md
-4. @docs/reviews/2026-08-25-visual-motion-library-current-audit.md
-5. @README.md
-6. @docs/task-board.md
-7. @docs/start-director-recipe-system-overview.md
-8. @docs/opening-v1-motion-map.md
-9. @motion-studio/README.md
-10. @02_opening-movie/asset-status.md
-11. @movie-dashboard/README.md
+2. @docs/contracts/motion-zukan-identity.md
+3. @docs/prompts/2026-08-25-visual-motion-library-palmier-davinci-complete.md
+4. @docs/contracts/human-readable-editable-movie-contract.md
+5. @docs/reviews/2026-08-25-visual-motion-library-current-audit.md
+6. @README.md
+7. @docs/task-board.md
+8. @docs/start-director-recipe-system-overview.md
+9. @docs/opening-v1-motion-map.md
+10. @motion-studio/README.md
+11. @02_opening-movie/asset-status.md
+12. @movie-dashboard/README.md
 
 ## 参照
 
@@ -119,6 +134,7 @@ Short Candidateの既存実装を壊すために移行しない。一方、今�
 - 編集: @docs/05_capcut-editing.md（legacy/reference。共通Final authorityはDaVinciへ移行）
 - CapCut運用: @docs/capcut-operation.md（legacy/reference）
 - Palmier運用: @docs/palmier-operation.md
+- モーション図鑑 identity: @docs/contracts/motion-zukan-identity.md
 - Visual Motion Library prompt: @docs/prompts/2026-08-25-visual-motion-library-palmier-davinci-complete.md
 - Human-Readable / Human-Editable Movie Contract: @docs/contracts/human-readable-editable-movie-contract.md
 - Visual Motion Library current audit: @docs/reviews/2026-08-25-visual-motion-library-current-audit.md
@@ -139,25 +155,9 @@ Short Candidateの既存実装を壊すために移行しない。一方、今�
 
 ## 進め方
 
-- 実写真 → preview → crop/focus → cut順 → BGM/現地音 → final QA の順を優先する。
-- 素材整理、構成検討、プロンプト作成、テロップ作成、編集指示書作成を手伝う。
-- 調査が必要な動画AIの料金、無料枠、クレジット消費、最新機能は、必ず公式情報または一次情報で確認する。
-- 受け取った写真・動画・音源・個人情報は慎重に扱い、外部アップロード前に確認する。
-- AI B-rollは現行previewで弱いcutが特定された場合だけ、短いatomic shotとして作る。
-- 実写真、実動画、音源、書き出し済みムービー、大きなAI生成画像/動画は原則Gitに入れず、ログと指示書だけ管理する。
-- `02_opening-movie/sample_image/**` はローカル管理。GitHub上に無いこと自体を欠落扱いしない。
-- BGM、フォント、テンプレート、AI生成サービスの利用条件を上映用とSNS投稿用で分けて確認する。
-- 重要な好み、判断、変更点は、該当ドキュメントまたは `docs/decisions/` に残す。
-- Opening変更PRはCI GREENだけでmergeしない。`opening-v1-qa-stills` artifactを実際に目視する。
-
-## Claude subagents
-
-このリポジトリには `.claude/agents/` に制作向け subagent を置いている。
-
-- `style-director`: 世界観と統一感を見る。
-- `storyboard-planner`: 章構成と1秒単位の流れを見る。
-- `ai-asset-producer`: AI背景素材とプロンプトを見る。必要性が出たshotだけ担当する。
-- `capcut-editor`: legacy/reference。既存CapCut作業の確認用。新しい共通FinalはDaVinciを優先する。
-- `asset-librarian`: 素材の分類、命名、採否ログを見る。
-- `rights-safety-reviewer`: 写真、音源、フォント、AIサービスの権利・プライバシーを見る。
-- `quality-gate-reviewer`: ラフ版、完成前、上映前の品質確認を見る。
+- 既存資料・既存実装を先に読む。
+- 既存の正本を探してから新規ファイルや新規仕組みを作る。
+- 実制作を止めるほど基盤を拡張しない。
+- 判断やルールはGitへ残すが、同じ内容を複数ファイルへ重複して増やさない。
+- 変更はMovie / Paper Item等のscopeを混ぜない。
+- 安全な範囲は自律的に進め、PR / CI / Visual QAを確認する。
