@@ -7,67 +7,72 @@ Figma file: `bfM0d4c9dCeBv5pCkJ3TNM`
 Study page: `2052:2 / 07_RURUBU_V7_V8_PRO_STUDIES`
 
 V6 control: frozen `JC + IX + JB + IZ + IT + JA`
-V8 comparison: `AV5 + AW8 + AL4 + AQ7 + AS7 + AT5`
-Production state: `V7_6_OF_6_LIVE_COMPARISON_SET / C8+K4+F4+G9+H10+C6D / UNPAGINATED_STUDY / TEMPORAL_TRUTH_GATED / SECTION-ORDER-TRUTH-GATED / PHOTO-SOURCE-TRUTH-GATED / PERSONAL-CONTENT-TRUTH-GATED / PRINT_PROOF_BLOCKED / PRINTER_TEMPLATE_BLOCKED / REAL_CONTENT_BLOCKED / NOT_GLOBAL_WINNER / NOT_PRINT_READY`
+V8 comparison: `AV5 + AW8 + AL5 + AQ7 + AS7 + AT5`
+Production state: `V7_6_OF_6_LIVE_COMPARISON_SET / C8+K4+F4+G9+H10+C6E / UNPAGINATED_STUDY / TEMPORAL_SOURCE-PLAN_GROUNDED / SECTION-ORDER-TRUTH-GATED / PHOTO-SOURCE-TRUTH-GATED / PERSONAL-CONTENT-TRUTH-GATED / SPATIAL-TRUTH-GATED / PRINT_PROOF_BLOCKED / PRINTER_TEMPLATE_BLOCKED / REAL_CONTENT_BLOCKED / NOT_GLOBAL_WINNER / NOT_PRINT_READY`
 
 ## Current live V7 comparison set
 
 1. **Outer C8 `2381:2`** — current high-energy outer and control until a high-resolution real-photo candidate passes actual-size/detail QA.
-2. **Profile/Q&A K4 `2497:2`** — K3 truth-aligned unanswered-Q&A hierarchy retained; six replaceable profile-value fields now have locally verified variable-copy reserve under synthetic Japanese stress. REAL-CONTENT-BLOCKED.
+2. **Profile/Q&A K4 `2497:2`** — unanswered-Q&A truth gate plus locally verified variable-copy reserve under synthetic Japanese stress. REAL-CONTENT-BLOCKED.
 3. **Story/Chronology F4 `2427:2`** — six-milestone truth-safe dummy chronology; semantic-only section marker.
 4. **Memory/Guide G9 `2443:2`** — grounded `沖縄 → 韓国 → ハワイ → 横浜`; grounded Hawaii/proposal note separated from unverified photo ownership. REAL-PHOTO-BLOCKED.
 5. **Cafe/Table H10 `2467:2`** — photo-led asymmetric opening; dominant structural photo outweighs cobalt title field. REAL-PHOTO-BLOCKED.
-6. **Island Picks + 1DAY C6D `2413:2`** — truth-safe `朝 / 昼 / 午後 / 夜`; no route map without verified geography; reverse microcopy remains print-proof blocked.
+6. **Island Picks + 1DAY C6E `2505:2`** — current 1DAY comparison. The right page uses a clearly labeled 2025 Hawaii **planning memo** as source for `6:00 ダイヤモンドヘッド → 7:40 KCCファーマーズマーケット → 16:00 カラカウア通り`, while unverified right-page place-photo dummies are withheld. This is verified as a source-plan editorial state, not as proof that the trip occurred exactly as planned.
 
-## Latest verified improvement — K4 variable-copy reserve
+## Latest verified improvement — C6E grounded planning-memo model course
 
-K3 was visually and truth-wise valid with `回答待ち`, but those placeholders were much shorter than plausible eventual profile data. A rollback-safe synthetic stress showed that placeholder fit was masking variable-copy fragility: the `趣味` / `好きなもの` / `チャーム` roles produced weak end-of-line breaks, including a one-character final fragment.
+C6D was structurally clean and truth-safe after replacing unsupported exact times with generic dayparts, but its right page still read as a generic travel-guide template: `朝 / 海から始める → 昼 / 甘いもの休憩 → 午後 / 街を歩く → 夜 / 食卓で締める`.
 
-New professional research rotated to reading behavior and flexible editorial frameworks. JAGAT treats line length, line spacing and type size as readability conditions. Pentagram's *No Man's Land* describes a coherent publication framework as needing enough flexibility to hold materially different editorial content. Neutral `NRSL-001` was consumed only as a QA-method hypothesis: after a meaningful spatial decision involving variable copy, rerun fresh stress evidence.
+A current user Drive source now provides a stronger bounded authority for a different editorial state: the document `ハワイ🌺` (`1tuFgCN63Z9Fnadr7qKy6enDZ0fAfTEmRiG2tKLE4UYg`) is a 2025 Hawaii **travel planning memo**. It records, among other planned items, a 2025-11-08 morning sequence of Diamond Head and KCC Farmers Market and a planned 16:00–22:00 event on Kalakaua Avenue. It is not treated as a completed-trip diary.
 
-K4 `2497:2` changes only the available measure of the six replaceable profile-value text boxes:
+Fresh professional research rotated to travel-guide reader utility rather than reusing recent typography/folio studies. JTB Publishing describes `るるぶ情報版` as a travel-information publication built around `見る / 食べる / 遊ぶ`, fresh information and practical trip planning. Hawaii Tourism Authority / GoHawaii model-plan material likewise treats itinerary order and actionable stop information as a reader job. The project hypothesis was therefore: **when a legitimate planning source exists, a model-course spread can become more useful and more specific by representing that source status honestly instead of retaining generic placeholder sequencing.**
 
-- 出身地 `175 → 190`
-- 誕生日 `150 → 170`
-- 趣味 `340 → 370`
-- 休日 `300 → 320`
-- 好きなもの `310 → 390`
-- チャーム `150 → 280`
+Rollback-safe C6E `2505:2` was cloned from C6D and changed only the right-page 1DAY editorial role:
 
-No current reader-facing copy, font, font size, y-position, photo, crop, palette, Q&A hierarchy, card, badge, shadow or decoration changed.
+- kicker: `旅行メモ / HAWAII 2日目`
+- title: `早朝から夕方まで、オアフを動く。`
+- `6:00 / ダイヤモンドヘッド` + `旅行メモ記載：事前予約。`
+- `7:40 / KCCファーマーズマーケット` + `土曜 7:30〜11:00。朝のうちに。`
+- `16:00 / カラカウア通り` + `旅行メモ：2025.11.08 / 16:00〜22:00`
+- source-status footer: `2025年のハワイ旅行メモをもとに構成。予約・開催・営業時間は出発前に再確認。`
 
-Stress evidence:
-- K3 baseline stress `2496:2` exposed weak Japanese wrapping.
-- K4 stress `2497:50` used explicitly synthetic / non-factual strings.
-- The first K4 stress still left a weak final one-character line in `チャーム`; its width was corrected once more before promotion.
+The right-page dummy photography was **not** allowed to become documentary evidence for those named places. Nodes `2505:20`, `2505:27`, `2505:31` are hidden. The page therefore becomes a text-led, information-dense tempo beat rather than falsely captioning unrelated imagery.
 
-K4 current-copy QA:
-- 500px whole-item: PASS
+The first type-led composition produced two structure collisions (`6:00` with Diamond Head; `7:40` with KCC). They were detected by geometry readback and corrected before promotion. The corrected candidate retains unequal typography rather than repeated cards/modules: coral opening/closing times, a cyan midpoint time, and different place/title alignment.
+
+QA after correction:
+- 500px whole-item: PASS; stronger reader utility and less generic model-course grammar than C6D
 - 1400px reading/page: PASS
 - 1587×1123 actual-size/detail: DESIGN QA PASS
-- visible native text `26`
+- visible native text `21`
+- visible IMAGE fills `3` (left page only)
+- right-page visible place images `0`
 - text-text intersections `0`
 - 18px edge risks `0`
-- Japanese→Inter mismatch `0`
 - parent `2052:2`
-
-K4 stress QA:
-- 500px: PASS
-- 1400px: PASS after correction
-- text-text intersections `0`
-- 18px edge risks `0`
-- Japanese→Inter mismatch `0`
+- current V7/V8 root overlap `0`
 
 Promotion:
-- K4 `2497:2` current at `x=15900 / y=13000`
-- K3 `2491:2` hidden rollback at `x=300000`
-- K4 stress `2497:50` hidden QA evidence at `x=308000`
+- C6E `2505:2` current at `x=3500 / y=13000`
+- C6D `2413:2` hidden rollback at `x=300000`
+
+Truth boundary:
+- exact times are now allowed because they are tied to an identified planning source and visibly labeled as a plan;
+- this does **not** establish that the couple actually followed that sequence or that current opening/event conditions remain unchanged;
+- exact current operating/booking facts still require fresh source verification before final publication.
+
+Evidence:
+`01_paper-items/rurubu-wedding/evidence/RURUBU-V7-C6E-GROUNDED-PLANNING-MEMO-MODEL-COURSE-QA-2026-08-25.md`
+
+Learning:
+`RSL-268 / VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE` — planning-source truth is a valid editorial state distinct from both generic dummy content and completed-event truth. When a source-grounded plan is used, label its state, preserve update-sensitive caveats, and withhold unverified photography that would imply documentary proof.
+
+## Retained K4 variable-copy reserve
+
+K4 `2497:2` remains current Profile/Q&A. Six replaceable profile-value text boxes have locally verified reserve under synthetic Japanese stress. K4 current-copy and stress QA passed with zero text intersections/edge risks/Japanese→Inter mismatch. Real profile values still require fresh REAL CONTENT + long-copy QA; synthetic stress is not a substitute for actual answers.
 
 Evidence:
 `01_paper-items/rurubu-wedding/evidence/RURUBU-V7-K4-PROFILE-VARIABLE-COPY-RESERVE-QA-2026-08-25.md`
-
-Learning:
-`RSL-266 / VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE` — short placeholders do not prove variable-content readiness; test plausible language-specific lengths on a rollback-safe copy before promotion. Exact K4 widths are item-specific and must not transfer.
 
 ## Retained C12 real-Hawaii screen-crop evidence
 
@@ -95,17 +100,19 @@ H10 `2467:2` remains the current Cafe/Table comparison. It changed visual mass o
 - RSL-002: dominant image quality is upstream of actual-size hierarchy approval.
 - RSL-005: do not repeat the same binary-transport failure without a material capability/environment change.
 - RSL-006: before adding imagery, test whether redistributing existing visual mass improves hierarchy.
+- RSL-093: a model-course role must perform a real planning/sequence reader job; more local styling cannot substitute for missing utility.
 - RSL-207: set exact authority page before top-level write and read back parent after.
 - RSL-251: numbers/section markers require a real reader-facing referent.
 - RSL-254: personal claims require source authority.
-- RSL-257: precise time values require itinerary/schedule authority.
+- RSL-257: precise time values require itinerary/schedule authority; C6E demonstrates the allowed case where an identified planning source exists and is labeled as such.
 - RSL-258: cloned-frame text writes target visible semantic roles with exactly-one-match/readback.
 - RSL-260: gutter reserve remains printer-template blocked.
 - RSL-261: Japanese semantic wrap requires screenshot + collision QA.
-- RSL-262: grounded/place-specific copy must not authenticate unverified imagery.
+- RSL-262: grounded/place-specific copy must not authenticate unverified imagery; C6E withholds right-page dummy images for this reason.
 - RSL-264: environmental-portrait crop balance remains local/hires-blocked.
 - RSL-265: content-state changes require hierarchy re-audit; stale salience must not survive without a current editorial job.
 - RSL-266: placeholder-short replaceable text requires fresh realistic copy stress before variable-content readiness is claimed.
+- RSL-268: planning-source truth is distinct from completed-event truth; label it and preserve update-sensitive caveats.
 - folios remain withheld until real pagination/imposition exists.
 - route maps remain excluded until verified geography exists.
 
@@ -113,6 +120,7 @@ H10 `2467:2` remains the current Cafe/Table comparison. It changed visual mass o
 
 V7 authority: `1fHt2rf5jvTWyjkmpGu3KhEgjQEiUNV6x / RURUBU_V7_HAWAII_PRO_CLEANROOM_2026-08-21`
 V8 comparison authority: `1IKYF-YI6EbEe7qQCVQjClztpQA8CoRIo / RURUBU_V8_EDITORIAL_MONOGRAPH_2026-08-21`
+Grounded C6E planning source: `1tuFgCN63Z9Fnadr7qKy6enDZ0fAfTEmRiG2tKLE4UYg / ハワイ🌺`.
 
 Current truth:
 - real Outer source: `007.jpg / 1_rZYWSiXw_IGmSQR6Sg2YkYeNtLEx9k-`
@@ -129,13 +137,14 @@ Current truth:
 
 ## Truth / completion gates
 
-V7 is not print-ready. DESIGN QA, REAL CONTENT QA, PRINT TEMPLATE/PREFLIGHT and PHYSICAL PROOF remain separate. Final legitimate photography/copy, page count/order/imposition, exact printer template, binding/fold/bleed/trim, effective resolution, PDF preflight and physical proof remain required.
+V7 is not print-ready. DESIGN QA, REAL CONTENT QA, PRINT TEMPLATE/PREFLIGHT and PHYSICAL PROOF remain separate. Final legitimate photography/copy, final confirmation of plan-versus-actual itinerary facts, page count/order/imposition, exact printer template, binding/fold/bleed/trim, effective resolution, PDF preflight and physical proof remain required.
 
 ## Next highest-value work
 
 1. Preserve frozen V6 and all rollback/rejected/blocked evidence.
-2. When real profile facts arrive, replace `回答待ち` and rerun actual-content + long-copy QA; K4 stress is not a substitute for real content.
-3. Do not retry the current `mcp.figma.com` upload POST route until capability/environment materially changes.
-4. When high-resolution transport is available, use Drive master `1NsFR25Q963Nk847fTMB3elwWy689P8XY` and re-evaluate from the full photograph; C12 is only a people+place balance hypothesis.
-5. Continue legitimate role-specific photography for H10 Cafe/Table and G9 Memory; do not force final photos into dummy-frame geometry.
-6. Continue V6/V7/V8 same-condition comparisons; do not create V9 merely to continue activity.
+2. Reconcile C6E planning-memo stops with final publication intent: keep them as a clearly labeled planning feature, or replace with verified actual-trip data if that becomes available; do not silently collapse the states.
+3. When real profile facts arrive, replace `回答待ち` and rerun actual-content + long-copy QA.
+4. Do not retry the current `mcp.figma.com` upload POST route until capability/environment materially changes.
+5. When high-resolution transport is available, use Drive master `1NsFR25Q963Nk847fTMB3elwWy689P8XY` and re-evaluate the full Outer photograph; C12 is only a people+place balance hypothesis.
+6. Continue legitimate role-specific photography for H10 Cafe/Table and G9 Memory; do not force final photos into dummy-frame geometry.
+7. Continue V6/V7/V8 same-condition comparisons; do not create V9 merely to continue activity.
