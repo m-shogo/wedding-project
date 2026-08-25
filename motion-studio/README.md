@@ -410,10 +410,45 @@ Gitへ残す:
 - prompt / QA / decision
 - docs / CSV / contract scripts
 
+## StaRt 129秒 3案ショーケース(研究・比較用。Extended/Short本番とは別枠)
+
+`docs/opening-authority.md`のProduct authority(Extended本命/Short fallback)を変更しない、129秒通し比較用の研究実装。詳細: `../docs/handoff/start-129-showcase-review-guide.md`。
+
+- A案(旅の記録映画) / B案(冒険アニメOP) / C案(リズム・タイポMV)
+- 共通14 section・129秒・歌詞32slotデータモデルは `src/data/start129/`
+- 実写真・正規音源・歌詞は未投入(placeholderでrender可能)
+
+```sh
+pnpm dev:start-129              # Studioで6 Composition(A/B/C × Clean/Guide)を確認
+pnpm render:start-129:a         # A案 低解像度preview
+pnpm render:start-129:b         # B案
+pnpm render:start-129:c         # C案
+pnpm qa:start-129                # 代表15時点 × 3案のstillを一括render(要目視)
+pnpm check:start-129             # データ契約チェック(129秒/歌詞32slot順序/重複)。Visual QAの代替にはならない
+```
+
+ローカルデータ配置(すべてGit管理外):
+
+```text
+motion-studio/local/lyrics.local.json     権利確認済み歌詞32句(schema: src/data/start129/localLyrics.ts)
+motion-studio/local/rights.local.json     権利メモ(schema: src/data/start129/localRights.ts)
+motion-studio/local/audio/start-129.mp3   権利確認済み音源(mp3/wav/m4a/aac)
+```
+
+無料ダミー素材(Pexels公式API。`PEXELS_API_KEY`必要):
+
+```sh
+python3 scripts/fetch-start-129-demo-assets.py --role HERO_WIDE --count 3          # 候補確認
+python3 scripts/fetch-start-129-demo-assets.py --role HERO_WIDE --count 3 --write  # 取得
+pnpm sync:start-129-demo-assets                                                     # 目視確認後、Remotionへ反映
+```
+
 ## 関連
 
 - `../docs/task-board.md`
 - `../docs/opening-v1-motion-map.md`
 - `../docs/02_style-bible.md`
+- `../docs/handoff/start-129-showcase-review-guide.md`
+- `../docs/decisions/start-129-three-showcase-directions.md`
 - `CLAUDE.md`
 - `MANUAL.md`

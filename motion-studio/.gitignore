@@ -16,3 +16,10 @@ exports/**/*.webm
 exports/**/*.mov
 exports/**/*.png
 exports/**/*.jpg
+
+# StaRt 129秒 3案ショーケース: 権利確認済みローカル音源・歌詞・rightsメモ
+# (docs/opening-authority.md / docs/task-board.md の音源方針に準拠。Gitへ入れない)
+local/
+public/demo/start-129/
+public/local-start-129/*
+!public/local-start-129/.gitkeep
