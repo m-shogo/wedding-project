@@ -45,6 +45,14 @@ export function VisualMotionLibrary() {
         </p>
       </section>
 
+      <section className="mb-8 border border-amber-300 dark:border-amber-700 bg-amber-50 dark:bg-amber-950/20 px-5 py-4">
+        <p className="text-[10px] tracking-[0.2em] font-semibold text-amber-800 dark:text-amber-300">CURRENT GATE</p>
+        <p className="mt-2 text-sm leading-6 text-navy-700 dark:text-navy-200">
+          次に必要なのは新Pattern追加ではなく、Palmier rough → NLE XML → DaVinci Text+実装 → actual render → Visual QA。
+          下の出力からhandoff手順と完了チェックをそのまま使える。
+        </p>
+      </section>
+
       <label className="block mb-7">
         <span className="text-[10px] tracking-[0.2em] font-semibold text-navy-400">何をしたい？</span>
         <input
@@ -171,7 +179,9 @@ export function VisualMotionLibrary() {
                       <OutputCard label="Human Brief" value={outputs.humanBrief} copied={copied} onCopy={copy} />
                       <OutputCard label="Claude Creative Instruction" value={outputs.claudeCreativeInstruction} copied={copied} onCopy={copy} />
                       <OutputCard label="Palmier Instruction" value={outputs.palmierInstruction} copied={copied} onCopy={copy} />
+                      <OutputCard label="NLE XML Handoff" value={outputs.nleXmlHandoff} copied={copied} onCopy={copy} />
                       <OutputCard label="DaVinci Finish Manifest" value={outputs.davinciFinishManifest} copied={copied} onCopy={copy} />
+                      <OutputCard label="Verification Checklist" value={outputs.verificationChecklist} copied={copied} onCopy={copy} />
                       <OutputCard label="Machine JSON" value={outputs.machineJson} copied={copied} onCopy={copy} />
                     </div>
                   )}
