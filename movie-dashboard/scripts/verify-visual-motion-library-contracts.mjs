@@ -59,6 +59,17 @@ for (const token of [
   '"resolve-version-recorded"',
   'canonicalTarget: "ACTUAL_DAVINCI_RENDER"',
   'productionReady: false',
+  'schemaVersion: "motion-verification/v1"',
+  'sampleAssetSetId: "sample-typography-welcome-v1"',
+  'status: "PENDING_LOCAL_DAVINCI"',
+  'targetPreviewSourceType: "ACTUAL_DAVINCI_RENDER"',
+  'candidatePreviewAssetPath: null',
+  'renderSha256: null',
+  'visualQa1x: false',
+  'visualQaHalfSpeed: false',
+  'sampleAssetSetMatched: false',
+  'conceptPreviewKeptSeparate: false',
+  'false/nullの未確認項目が残る間はProduction Readyへ昇格しない',
 ]) {
   requireText(handoff, token, `Mask Reveal handoff missing contract token: ${token}`);
 }
@@ -93,6 +104,9 @@ if (/resolveVersion:\s*"[^\"]+"/.test(data)) {
 if (/resolveVersion:\s*"[^\"]+"/.test(handoff)) {
   errors.push("Motion handoff must not invent a Resolve version before local verification");
 }
+if (/productionReady:\s*true/.test(handoff)) {
+  errors.push("Motion handoff verification evidence must remain productionReady=false until every local DaVinci gate is proven");
+}
 if (handoff.includes("MOTION:type-mask-reveal") || page.includes("MOTION:type-mask-reveal")) {
   errors.push("Generic Mask Reveal marker must not reappear; use the section-aware VML_MASK_REVEAL_<SECTION> authority");
 }
@@ -125,4 +139,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log("Visual Motion Library contracts OK: Mask Reveal uses one section-aware marker authority, shared WELCOME sample, Palmier NLE XML + sidecar Motion Handoff Manifest, and remains concept-only until local DaVinci verification.");
+console.log("Visual Motion Library contracts OK: Mask Reveal uses one section-aware marker authority, shared WELCOME sample, Palmier NLE XML + sidecar Motion Handoff Manifest, pending local verification evidence, and remains concept-only until local DaVinci verification.");
