@@ -16,20 +16,21 @@ const requireText = (source: string, token: string, message: string) => {
   if (!source.includes(token)) errors.push(message);
 };
 
-for (const engine of ['TypographyRevealEngine', 'CameraTransformEngine', 'TransitionWipeEngine', 'GraphicHitEngine']) {
+for (const engine of ['TypographyRevealEngine', 'CameraTransformEngine', 'TransitionWipeEngine', 'GraphicHitEngine', 'NativeCutEngine', 'PhotoLayoutEngine']) {
   requireText(engines, `function ${engine}`, `shared renderer missing: ${engine}`);
 }
 for (const intensity of ["'S'", "'M'", "'L'"]) requireText(engines, intensity, `motion intensity missing: ${intensity}`);
 requireText(engines, 'transparent?: boolean', 'transparent overlay support missing');
 
 const ids = [...presets.matchAll(/presetId: '([^']+)'/g)].map((match) => match[1]);
-if (ids.length !== 8) errors.push(`renderable subset must contain exactly 8 evidence targets in V1, found ${ids.length}`);
+// 2026-08-26: モーション図鑑v1カタログ化のため8→17へ拡張(既存engineのmodeのみ追加、新規engine機能は無し)。
+if (ids.length !== 17) errors.push(`renderable subset must contain exactly 17 evidence targets in V1, found ${ids.length}`);
 if (new Set(ids).size !== ids.length) errors.push('renderable subset ids must be unique');
 if (ids.length >= 36) errors.push('V1 renderer must not pretend all 36 catalog presets are renderable');
 for (const id of ids) {
   if (!catalog.includes(`p("${id}"`)) errors.push(`renderable preset missing from Movie Coach catalog: ${id}`);
 }
-for (const engine of ['typography-reveal', 'camera-transform', 'transition-wipe', 'graphic-hit']) {
+for (const engine of ['typography-reveal', 'camera-transform', 'transition-wipe', 'graphic-hit', 'native-cut', 'photo-layout']) {
   requireText(presets, `engine: '${engine}'`, `renderable subset must exercise shared engine: ${engine}`);
 }
 
