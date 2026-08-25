@@ -6,6 +6,7 @@ import {
   type MaskRevealExecutionOutputs,
 } from "../data/maskRevealHandoff";
 import { getMotionLearningBundle } from "../data/motionLearningLinks";
+import { getLatestPreviewEvidence } from "../data/motionPreviewEvidence";
 import {
   buildMaskRevealPromptOutputs,
   getPatternImplementation,
@@ -72,6 +73,7 @@ export function VisualMotionLibrary() {
       <section className="space-y-6">
         {patterns.map((pattern) => {
           const preview = getPatternPreview(pattern);
+          const previewEvidence = preview ? getLatestPreviewEvidence(preview.id) : null;
           const implementation = getPatternImplementation(pattern);
           const learning = getMotionLearningBundle(pattern.id);
           return (
@@ -92,6 +94,17 @@ export function VisualMotionLibrary() {
                   <span className="absolute top-3 left-3 px-2 py-1 text-[9px] font-mono border border-white/30 bg-black/30">
                     {preview?.sourceType ?? "MISSING"} / {preview?.status ?? "MISSING"}
                   </span>
+                  {previewEvidence && (
+                    <div className="absolute bottom-3 left-3 right-3 border border-emerald-300/30 bg-black/55 px-3 py-2 text-left">
+                      <p className="text-[10px] font-semibold text-emerald-300">CONCEPT RENDER QA ✓ / NOT DAVINCI ACTUAL</p>
+                      <p className="mt-1 text-[9px] leading-4 text-navy-200">
+                        {previewEvidence.renderSpec.width}×{previewEvidence.renderSpec.height} / {previewEvidence.renderSpec.fps}fps / {previewEvidence.renderSpec.frames}frames · Human Visual QA {previewEvidence.humanVisualQa.result}
+                      </p>
+                      {!previewEvidence.persistentAssetPath && (
+                        <p className="mt-1 text-[9px] leading-4 text-amber-200">期限付きartifactで検証済み。永続MP4がないため、この画面では静止placeholderのまま。</p>
+                      )}
+                    </div>
+                  )}
                 </div>
 
                 <div className="p-6">
