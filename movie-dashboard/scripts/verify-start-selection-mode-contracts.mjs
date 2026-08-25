@@ -9,6 +9,8 @@ const creative = fs.readFileSync(path.join(root, "src/data/startCreativeIdeas.ts
 const workspace = fs.readFileSync(path.join(root, "src/data/startProductionWorkspace.ts"), "utf8");
 const workspacePage = fs.readFileSync(path.join(root, "src/pages/StartProductionWorkspace.tsx"), "utf8");
 const materialSync = fs.readFileSync(path.join(root, "scripts/sync-start-material-previews.mjs"), "utf8");
+const renderSync = fs.readFileSync(path.join(root, "scripts/sync-start-render-preview.mjs"), "utf8");
+const materialAdvice = fs.readFileSync(path.join(root, "src/data/startMaterialAdvice.ts"), "utf8");
 const page = fs.readFileSync(path.join(root, "src/pages/StartSelectionMode.tsx"), "utf8");
 const app = fs.readFileSync(path.join(root, "src/App.tsx"), "utf8");
 const sidebar = fs.readFileSync(path.join(root, "src/components/Sidebar.tsx"), "utf8");
@@ -66,6 +68,9 @@ for (const [source, token, message] of [
   [workspacePage, "MATERIAL BOARD", "material board missing"],
   [workspacePage, "sync:start-materials", "beginner material sync command missing"],
   [workspacePage, "importSyncedMaterials", "synced material import missing"],
+  [workspacePage, "IMAGE ADVISOR", "material image advisor missing"],
+  [workspacePage, "ROUGH PREVIEW SYNC", "Rough preview sync UI missing"],
+  [workspacePage, "prepare:start-review", "one-command Rough review handoff missing"],
   [workspacePage, "DRAG & ASSIGN", "section drag assignment missing"],
   [workspacePage, "MATERIAL DIAGNOSTICS", "material diagnostics UI missing"],
   [workspacePage, "IDEA RECOMMENDER", "Creative Idea recommender missing"],
@@ -79,6 +84,11 @@ for (const [source, token, message] of [
   [sidebar, 'to: "/movie-coach/start-production"', "Production Workspace navigation missing"],
   [materialSync, "local-start-materials", "local preview manifest generation missing"],
   [materialSync, "fs.symlink", "source-preserving local preview link missing"],
+  [renderSync, "local-start-render", "local Rough preview manifest missing"],
+  [renderSync, "fs.symlink", "source-preserving Rough preview link missing"],
+  [workspacePage, "こういう画像が良い", "image selection positive advice missing"],
+  [workspacePage, "避けたい画像", "image selection avoid advice missing"],
+  [materialAdvice, "startMaterialAdviceByCategory", "category-specific image advice missing"],
 ]) if (!source.includes(token)) errors.push(message);
 
 if (errors.length) {

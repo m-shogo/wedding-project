@@ -3,6 +3,7 @@ import {Link} from "react-router-dom";
 import {Header} from "../components/Header";
 import {startCreativeIdeas} from "../data/startCreativeIdeas";
 import {readHumanReviewDecisions} from "../data/startHumanReview";
+import {getStartMaterialAssetAdvice, getStartRegistrationAdvice} from "../data/startMaterialAdvice";
 import {
   START_PRODUCTION_WORKSPACE_STORAGE_KEY,
   buildStartFirstRoughPrompt,
@@ -37,6 +38,14 @@ interface SyncedStartMaterial {
   originalPath: string;
   relativePath: string;
   previewUrl: string;
+}
+
+interface SyncedStartRender {
+  title: string;
+  originalPath: string;
+  previewUrl: string;
+  updatedAt: string;
+  fileSizeBytes: number;
 }
 
 const stageLabels: Record<WorkspaceStage, string> = {
@@ -88,7 +97,9 @@ export function StartProductionWorkspace() {
   const [reviewText, setReviewText] = useState("");
   const [copied, setCopied] = useState<"initial" | "revision" | "json" | null>(null);
   const [syncCopied, setSyncCopied] = useState(false);
+  const [renderSyncCopied, setRenderSyncCopied] = useState(false);
   const [syncedMaterials, setSyncedMaterials] = useState<SyncedStartMaterial[]>([]);
+  const [syncedRender, setSyncedRender] = useState<SyncedStartRender | null>(null);
   const [newAsset, setNewAsset] = useState({title: "", path: "", type: "own_photo" as "own_photo" | "own_video", orientation: "landscape" as PhotoOrientation, category: "travel" as StartMaterialCategory});
   const videoRef = useRef<HTMLVideoElement>(null);
   const decisions = useMemo(readHumanReviewDecisions, []);
@@ -98,6 +109,19 @@ export function StartProductionWorkspace() {
       .then((response) => response.ok ? response.json() as Promise<{materials?: SyncedStartMaterial[]}> : Promise.reject())
       .then((manifest) => setSyncedMaterials(manifest.materials ?? []))
       .catch(() => setSyncedMaterials([]));
+  }, []);
+
+  useEffect(() => {
+    void fetch("/local-start-render/manifest.json", {cache: "no-store"})
+      .then((response) => response.ok ? response.json() as Promise<{render?: SyncedStartRender | null}> : Promise.reject())
+      .then((manifest) => {
+        const render = manifest.render ?? null;
+        setSyncedRender(render);
+        if (render && (!workspace.renderPath || workspace.renderPath.startsWith("/local-start-render/"))) {
+          update((current) => ({...current, renderPath: render.previewUrl}));
+        }
+      })
+      .catch(() => setSyncedRender(null));
   }, []);
 
   const mediaAssets = useMemo(() => getStartOpeningMediaAssets(data.assets), [data.assets]);
@@ -110,6 +134,7 @@ export function StartProductionWorkspace() {
   const initialPrompt = useMemo(() => buildStartFirstRoughPrompt(workspace, selection, data.assets, selectionPrompt), [workspace, selection, data.assets, selectionPrompt]);
   const revisionPrompt = useMemo(() => buildStartRevisionPrompt(workspace, selection, data.assets), [workspace, selection, data.assets]);
   const blockers = diagnostics.filter((item) => item.level === "blocker");
+  const registrationAdvice = getStartRegistrationAdvice(newAsset.category, newAsset.type === "own_photo" ? newAsset.orientation : undefined);
   const nextStage: WorkspaceStage = blockers.some((item) => item.id === "no-media" || item.id === "hero-shortage") ? "materials"
     : blockers.some((item) => item.id === "section-shortage") ? "assign"
       : !workspace.gates.roughRendered ? "handoff"
@@ -201,6 +226,12 @@ export function StartProductionWorkspace() {
     window.setTimeout(() => setSyncCopied(false), 1600);
   }
 
+  function copyRenderSyncCommand() {
+    void navigator.clipboard.writeText("cd /Users/m-shogo/Developer/personal/wedding-project/movie-dashboard && pnpm prepare:start-review && pnpm dev");
+    setRenderSyncCopied(true);
+    window.setTimeout(() => setRenderSyncCopied(false), 1600);
+  }
+
   function comparisonFor(sectionId: StartExtendedSectionId) {
     return workspace.comparisonsBySection[sectionId] ?? getDefaultComparison(sectionId, selection);
   }
@@ -258,18 +289,28 @@ export function StartProductionWorkspace() {
           <select value={newAsset.category} onChange={(event) => setNewAsset((current) => ({...current, category: event.target.value as StartMaterialCategory}))} className="border border-sky-300 bg-white px-2 py-2 text-xs dark:bg-navy-900">{(Object.keys(startMaterialCategoryLabels) as StartMaterialCategory[]).map((category) => <option key={category} value={category}>{startMaterialCategoryLabels[category]}</option>)}</select>
           {newAsset.type === "own_photo" && <select value={newAsset.orientation} onChange={(event) => setNewAsset((current) => ({...current, orientation: event.target.value as PhotoOrientation}))} className="border border-sky-300 bg-white px-2 py-2 text-xs dark:bg-navy-900"><option value="landscape">横</option><option value="portrait">縦</option><option value="square">正方形</option></select>}
         </div>
+        <div className="mt-3 border-l-4 border-fuchsia-500 bg-fuchsia-50 p-4 dark:bg-fuchsia-950/20">
+          <p className="text-[10px] font-bold tracking-widest text-fuchsia-700 dark:text-fuchsia-300">IMAGE ADVISOR — {startMaterialCategoryLabels[newAsset.category]}</p>
+          <h4 className="mt-1 font-bold text-navy-900 dark:text-sand-100">おすすめ：{registrationAdvice.categoryAdvice.headline}</h4>
+          <p className="mt-2 text-xs font-bold text-fuchsia-800 dark:text-fuchsia-200">自分に聞く：{registrationAdvice.categoryAdvice.selectionQuestion}</p>
+          <div className="mt-3 grid gap-3 text-xs leading-5 lg:grid-cols-2"><div><strong className="text-emerald-700 dark:text-emerald-300">こういう画像が良い</strong><ul className="mt-1">{registrationAdvice.categoryAdvice.lookFor.map((item) => <li key={item}>・{item}</li>)}</ul></div><div><strong className="text-red-700 dark:text-red-300">避けたい画像</strong><ul className="mt-1">{registrationAdvice.categoryAdvice.avoid.map((item) => <li key={item}>・{item}</li>)}</ul></div></div>
+          <p className="mt-3 text-xs text-navy-600 dark:text-navy-300"><strong>向く区間：</strong>{registrationAdvice.categoryAdvice.bestSections}</p>
+          {newAsset.type === "own_photo" && <p className="mt-1 text-xs text-navy-600 dark:text-navy-300"><strong>向きのヒント：</strong>{registrationAdvice.orientationNote}</p>}
+        </div>
       </div>
       <div className="mt-4 flex flex-wrap gap-2"><button onClick={() => setMaterialFilter("all")} className={`border px-3 py-1 text-xs ${materialFilter === "all" ? "bg-navy-900 text-white" : "bg-white dark:bg-navy-800"}`}>すべて ({mediaAssets.length})</button>{(Object.keys(startMaterialCategoryLabels) as StartMaterialCategory[]).map((category) => <button key={category} onClick={() => setMaterialFilter(category)} className={`border px-3 py-1 text-xs ${materialFilter === category ? "bg-navy-900 text-white" : "bg-white dark:bg-navy-800"}`}>{startMaterialCategoryLabels[category]}</button>)}</div>
       {filteredAssets.length === 0 ? <div className="mt-4 border-2 border-dashed border-sand-300 p-8 text-center text-sm text-navy-500 dark:border-navy-600 dark:text-navy-300">表示できる素材がありません。上のフォームで原本のパスを登録してください。</div> : <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">{filteredAssets.map((asset) => {
         const meta = ensureMeta(asset.assetId);
         const selected = selectedAssetId === asset.assetId;
         const previewPath = syncedMaterials.find((material) => material.originalPath === asset.path)?.previewUrl ?? asset.path;
+        const assetAdvice = getStartMaterialAssetAdvice(asset, meta);
         return <article key={asset.assetId} draggable onDragStart={(event) => event.dataTransfer.setData("text/start-asset-id", asset.assetId)} onClick={() => setSelectedAssetId(asset.assetId)} className={`cursor-grab border-2 bg-white p-3 dark:bg-navy-800 ${selected ? "border-sky-500" : "border-sand-200 dark:border-navy-600"}`}>
           <div className="relative flex h-32 items-center justify-center overflow-hidden bg-sand-100 text-4xl dark:bg-navy-900">{asset.type === "own_video" ? "🎬" : "📷"}{previewPath && isImagePath(previewPath) && <img src={previewPath} alt={asset.title} className="absolute inset-0 h-full w-full object-cover" onError={(event) => {event.currentTarget.style.display = "none";}} />}</div>
           <div className="mt-3 flex items-start justify-between gap-2"><div><h3 className="text-sm font-bold text-navy-900 dark:text-sand-100">{asset.title}</h3><p className="text-[10px] text-navy-400">{mediaKind(asset)} · {asset.orientation ?? "向き未設定"}</p></div>{meta.isHero && <span className="bg-amber-200 px-2 py-1 text-[9px] font-bold text-amber-900">HERO</span>}</div>
           <code className="mt-2 block truncate text-[9px] text-navy-400">{asset.path || "パス未設定"}</code>
           <select value={meta.category} onClick={(event) => event.stopPropagation()} onChange={(event) => patchMeta(asset.assetId, {category: event.target.value as StartMaterialCategory})} className="mt-3 w-full border border-sand-300 bg-white px-2 py-1 text-xs dark:bg-navy-900">{(Object.keys(startMaterialCategoryLabels) as StartMaterialCategory[]).map((category) => <option key={category} value={category}>{startMaterialCategoryLabels[category]}</option>)}</select>
           <div className="mt-2 grid grid-cols-2 gap-2"><label className="flex items-center gap-2 text-[10px]"><input type="checkbox" checked={meta.isHero} onChange={() => patchMeta(asset.assetId, {isHero: !meta.isHero})} />Hero候補</label><label className="flex items-center gap-2 text-[10px]"><input type="checkbox" checked={meta.hasTextSpace} onChange={() => patchMeta(asset.assetId, {hasTextSpace: !meta.hasTextSpace})} />文字余白あり</label></div>
+          <details className="mt-3 border-t border-fuchsia-200 pt-2 dark:border-fuchsia-900"><summary className="cursor-pointer text-[10px] font-bold text-fuchsia-700 dark:text-fuchsia-300">この画像へのアドバイス</summary><p className="mt-2 text-[10px] font-bold text-navy-700 dark:text-navy-200">{assetAdvice.nextAction}</p>{assetAdvice.strengths.map((item) => <p key={item} className="mt-1 text-[10px] text-emerald-700 dark:text-emerald-300">✓ {item}</p>)}{assetAdvice.checks.map((item) => <p key={item} className="mt-1 text-[10px] text-amber-700 dark:text-amber-300">確認：{item}</p>)}</details>
         </article>;
       })}</div>}
       <div className="mt-4 flex justify-end"><button onClick={() => setActiveStage("assign")} className="bg-navy-900 px-5 py-3 text-sm font-bold text-white dark:bg-sand-100 dark:text-navy-900">次：14区間へ置く →</button></div>
@@ -307,6 +348,10 @@ export function StartProductionWorkspace() {
 
     {activeStage === "review" && <section className="mb-8">
       <div className="border-b-2 border-navy-900 pb-3 dark:border-sand-100"><p className="text-[10px] font-bold tracking-widest text-rose-700 dark:text-rose-300">RENDER REVIEW</p><h2 className="text-xl font-bold text-navy-900 dark:text-sand-100">動画を見ながら修正コメントを残す</h2></div>
+      <div className={`mt-4 border-2 p-4 ${syncedRender ? "border-emerald-400 bg-emerald-50 dark:bg-emerald-950/20" : "border-amber-400 bg-amber-50 dark:bg-amber-950/20"}`}>
+        <div className="flex flex-wrap items-start justify-between gap-3"><div><p className="text-[10px] font-bold tracking-widest text-emerald-700 dark:text-emerald-300">ROUGH PREVIEW SYNC</p><h3 className="mt-1 font-bold text-navy-900 dark:text-sand-100">{syncedRender ? `最新Roughを検出：${syncedRender.title}` : "最新Roughがまだ接続されていません"}</h3>{syncedRender && <p className="mt-1 text-xs text-navy-500 dark:text-navy-300">更新：{new Date(syncedRender.updatedAt).toLocaleString("ja-JP")} · {(syncedRender.fileSizeBytes / 1024 / 1024).toFixed(1)} MB · {workspace.renderPath === syncedRender.previewUrl ? "自動接続済み" : "接続待ち"}</p>}</div><div className="flex flex-col gap-2"><button onClick={copyRenderSyncCommand} className="border border-emerald-600 px-3 py-2 text-xs font-bold text-emerald-800 dark:text-emerald-200">{renderSyncCopied ? "コマンドをコピーしました ✓" : "Rough作成＋接続コマンドをコピー"}</button>{syncedRender && workspace.renderPath !== syncedRender.previewUrl && <button onClick={() => update((current) => ({...current, renderPath: syncedRender.previewUrl}))} className="bg-emerald-700 px-3 py-2 text-xs font-bold text-white">最新Roughへ接続</button>}</div></div>
+        <p className="mt-2 text-xs text-navy-600 dark:text-navy-300">コマンドはRemotionで低解像度Roughを作成し、原本を動かさずレビュー画面用のローカルリンクへ接続します。画面を再読み込みすると自動再生欄へ入ります。</p>
+      </div>
       <div className="mt-4 grid gap-5 xl:grid-cols-[1.2fr_0.8fr]">
         <div><label className="text-[10px] font-bold tracking-widest text-navy-400">RENDER URL / PATH<input value={workspace.renderPath} onChange={(event) => update((current) => ({...current, renderPath: event.target.value}))} placeholder="ブラウザから再生できるMP4/WebM URL" className="mt-1 block w-full border border-rose-300 bg-white px-3 py-2 text-sm dark:bg-navy-900" /></label><div className="mt-3 flex aspect-video items-center justify-center overflow-hidden bg-black">{workspace.renderPath && isVideoPath(workspace.renderPath) ? <video ref={videoRef} controls src={workspace.renderPath} className="h-full w-full" /> : <div className="p-6 text-center text-sm text-white"><p>RenderのURLまたはブラウザから読めるパスを入力してください。</p><p className="mt-2 text-xs text-sand-300">再生できないローカルパスでも、コメントは区間指定で記録できます。</p></div>}</div></div>
         <div className="border border-rose-300 bg-rose-50 p-4 dark:border-rose-800 dark:bg-rose-950/20"><h3 className="font-bold text-navy-900 dark:text-sand-100">現在位置へコメント</h3><p className="mt-1 text-xs text-navy-500 dark:text-navy-300">動画が再生できる場合は、現在の再生位置を自動記録します。</p><select value={reviewSectionId} onChange={(event) => setReviewSectionId(event.target.value as StartExtendedSectionId)} className="mt-3 w-full border border-rose-300 bg-white px-3 py-2 text-sm dark:bg-navy-900">{startExtendedSections.map((section) => <option key={section.id} value={section.id}>{section.label}</option>)}</select><select value={reviewType} onChange={(event) => setReviewType(event.target.value as StartReviewCommentType)} className="mt-2 w-full border border-rose-300 bg-white px-3 py-2 text-sm dark:bg-navy-900">{(Object.keys(startReviewCommentTypeLabels) as StartReviewCommentType[]).map((type) => <option key={type} value={type}>{startReviewCommentTypeLabels[type]}</option>)}</select><textarea value={reviewText} onChange={(event) => setReviewText(event.target.value)} placeholder="例：写真をもう少し長く見せたい" className="mt-2 min-h-28 w-full border border-rose-300 bg-white p-3 text-sm dark:bg-navy-900" /><button onClick={addReviewComment} disabled={!reviewText.trim()} className="mt-2 w-full bg-rose-700 px-3 py-2 text-sm font-bold text-white disabled:opacity-40">現在位置へ追加</button></div>

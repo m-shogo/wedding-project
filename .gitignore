@@ -47,3 +47,4 @@ opening-movie/generated/**
 !90_exports/.gitkeep
 # Local-only StaRt material thumbnails and manifest (contains private source paths).
 movie-dashboard/public/local-start-materials/
+movie-dashboard/public/local-start-render/
