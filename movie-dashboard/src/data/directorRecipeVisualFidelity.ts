@@ -1,5 +1,5 @@
-import {directorRecipeCatalog, type DirectorRecipe} from "./directorRecipeCatalog";
-import {startMotionPresets} from "./startMotionKit";
+import {directorRecipeCatalog, type DirectorRecipe} from "./directorRecipeCatalog.ts";
+import {startMotionPresets} from "./startMotionKit.ts";
 
 export type DirectorVisualFidelity = "exact" | "representative" | "placeholder";
 
@@ -37,7 +37,6 @@ const support = (
  * This intentionally judges more strictly than "resolveDirectorRecipeById() does not throw".
  */
 export const motionPresetVisualSupport: MotionPresetVisualSupport[] = [
-  // Typography: the renderer currently has only mask / punch / stagger visual modes.
   support("type-mask-slide", "exact", "Dedicated mask reveal behavior is represented by TypographyRevealEngine mask mode."),
   support("type-char-stagger", "exact", "Character/element stagger behavior is represented by TypographyRevealEngine stagger mode."),
   support("type-word-punch", "exact", "Single-hit punch behavior is represented by TypographyRevealEngine punch mode."),
@@ -50,8 +49,6 @@ export const motionPresetVisualSupport: MotionPresetVisualSupport[] = [
   support("type-counter-scroll", "representative", "Currently maps to generic mask; counter-scrolling against background motion is not implemented.", "Add counter-scroll mode with directional background relation."),
   support("type-frame-lock", "representative", "Generic mask does not reproduce the intended oversized/off-frame poster lock.", "Add off-frame crop/lock typography layout mode."),
   support("type-quiet-caption", "representative", "Generic mask is more active than the intended static/minimal-fade quiet caption.", "Add static/fade-only typography mode."),
-
-  // Photo / camera.
   support("photo-static-hero", "exact", "CameraTransformEngine static mode faithfully demonstrates a locked Hero frame."),
   support("photo-small-push", "exact", "CameraTransformEngine restrained push represents the named small-push grammar."),
   support("photo-slow-pull", "exact", "CameraTransformEngine pull mode represents the named slow-pull grammar."),
@@ -60,8 +57,6 @@ export const motionPresetVisualSupport: MotionPresetVisualSupport[] = [
   support("photo-freeze-cutout", "representative", "Current adapter treats the photo as static; a true cutout edge/background separation is not shown.", "Add non-AI mask/cutout demo using synthetic shapes or supplied alpha assets."),
   support("photo-contact-sheet-snap", "exact", "PhotoLayoutEngine contact-sheet mode provides the intended multi-photo layout grammar."),
   support("photo-split-panel", "exact", "PhotoLayoutEngine split-panel mode provides the intended 2-panel layout grammar."),
-
-  // Transitions / edit grammar.
   support("cut-hard-accent", "placeholder", "NativeCutEngine visualizes an edit point, but does not yet show a real two-shot hard cut with matched source media.", "Add paired synthetic source shots to NativeCutEngine review mode."),
   support("cut-match-shape", "placeholder", "NativeCutEngine proves the cut slot only; shape correspondence between two shots is not demonstrated.", "Add paired geometry/source demo with an actual shape match."),
   support("wipe-directional-shape", "exact", "TransitionWipeEngine directional wipe represents the named shape-wipe grammar."),
@@ -70,8 +65,6 @@ export const motionPresetVisualSupport: MotionPresetVisualSupport[] = [
   support("flash-one-frame-soft", "representative", "Current transition implementation communicates a brief impact but is not a dedicated one-to-two-frame soft flash treatment.", "Add explicit short impact-frame opacity/luma variant."),
   support("whip-source-matched", "representative", "Directional wipe can illustrate motion direction, but a source-matched camera whip requires two moving clips.", "Add paired synthetic motion-source demo and direction validation."),
   support("color-field-release", "representative", "Opaque transition communicates release, but the intended calm color-field pause has no dedicated hold/settle treatment.", "Add color-field hold/release timing variant."),
-
-  // Anime-OP graphic accents.
   support("accent-speed-lines", "exact", "GraphicHitEngine has a distinct speed-lines variant."),
   support("accent-impact-frame", "exact", "GraphicHitEngine has a distinct impact variant for brief peak frames."),
   support("accent-halftone-burst", "representative", "Current adapter routes halftone burst to generic triplet graphics; no halftone field is drawn.", "Add halftone-dot burst variant."),
@@ -82,68 +75,42 @@ export const motionPresetVisualSupport: MotionPresetVisualSupport[] = [
   support("accent-micro-rgb-split", "representative", "Current adapter maps this to generic impact; channel-edge separation is not rendered.", "Add 2–4 frame RGB channel offset variant."),
 ];
 
-const fidelityRank: Record<DirectorVisualFidelity, number> = {
-  exact: 0,
-  representative: 1,
-  placeholder: 2,
-};
-
+const fidelityRank: Record<DirectorVisualFidelity, number> = {exact: 0, representative: 1, placeholder: 2};
 const supportByPresetId = new Map(motionPresetVisualSupport.map((item) => [item.presetId, item]));
 
 export function getMotionPresetVisualSupport(presetId: string): MotionPresetVisualSupport {
   const item = supportByPresetId.get(presetId);
-  if (!item) {
-    throw new Error(`Missing visual fidelity audit for Motion Kit preset: ${presetId}`);
-  }
+  if (!item) throw new Error(`Missing visual fidelity audit for Motion Kit preset: ${presetId}`);
   return item;
 }
 
-export function getDirectorRecipeVisualAudit(
-  recipe: Pick<DirectorRecipe, "id" | "motionPresetIds">,
-): DirectorRecipeVisualAudit {
+export function getDirectorRecipeVisualAudit(recipe: Pick<DirectorRecipe, "id" | "motionPresetIds">): DirectorRecipeVisualAudit {
   const supports = recipe.motionPresetIds.map(getMotionPresetVisualSupport);
   const worstRank = Math.max(...supports.map((item) => fidelityRank[item.fidelity]));
   const fidelity = (Object.entries(fidelityRank).find(([, rank]) => rank === worstRank)?.[0] ?? "placeholder") as DirectorVisualFidelity;
   const limiting = supports.filter((item) => item.fidelity === fidelity);
-  return {
-    recipeId: recipe.id,
-    fidelity,
-    limitingPresetIds: limiting.map((item) => item.presetId),
-    reasons: limiting.map((item) => item.reason),
-  };
+  return {recipeId: recipe.id, fidelity, limitingPresetIds: limiting.map((item) => item.presetId), reasons: limiting.map((item) => item.reason)};
 }
 
-export const directorRecipeVisualAudit: DirectorRecipeVisualAudit[] = directorRecipeCatalog.map(
-  getDirectorRecipeVisualAudit,
+export const directorRecipeVisualAudit: DirectorRecipeVisualAudit[] = directorRecipeCatalog.map(getDirectorRecipeVisualAudit);
+export const directorVisualFidelityCounts: Record<DirectorVisualFidelity, number> = directorRecipeVisualAudit.reduce<Record<DirectorVisualFidelity, number>>(
+  (counts, item) => {
+    counts[item.fidelity] += 1;
+    return counts;
+  },
+  {exact: 0, representative: 0, placeholder: 0},
 );
 
-export const directorVisualFidelityCounts: Record<DirectorVisualFidelity, number> =
-  directorRecipeVisualAudit.reduce<Record<DirectorVisualFidelity, number>>(
-    (counts, item) => {
-      counts[item.fidelity] += 1;
-      return counts;
-    },
-    {exact: 0, representative: 0, placeholder: 0},
-  );
-
-/** Machine guard: every Motion Kit preset must have exactly one audit row. */
 export function validateMotionPresetVisualSupportCoverage(): string[] {
   const errors: string[] = [];
   const knownIds = new Set(startMotionPresets.map((preset) => preset.id));
   const auditedIds = new Set<string>();
-
   for (const item of motionPresetVisualSupport) {
     if (auditedIds.has(item.presetId)) errors.push(`duplicate visual audit presetId: ${item.presetId}`);
     auditedIds.add(item.presetId);
     if (!knownIds.has(item.presetId)) errors.push(`visual audit references unknown preset: ${item.presetId}`);
-    if (item.fidelity !== "exact" && !item.nextUpgrade) {
-      errors.push(`non-exact preset must state nextUpgrade: ${item.presetId}`);
-    }
+    if (item.fidelity !== "exact" && !item.nextUpgrade) errors.push(`non-exact preset must state nextUpgrade: ${item.presetId}`);
   }
-
-  for (const preset of startMotionPresets) {
-    if (!auditedIds.has(preset.id)) errors.push(`Motion Kit preset has no visual audit: ${preset.id}`);
-  }
-
+  for (const preset of startMotionPresets) if (!auditedIds.has(preset.id)) errors.push(`Motion Kit preset has no visual audit: ${preset.id}`);
   return errors;
 }
