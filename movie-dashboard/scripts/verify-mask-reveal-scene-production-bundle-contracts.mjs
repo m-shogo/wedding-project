@@ -65,7 +65,7 @@ for (const token of [
 
 for (const token of [
   '# Mask Reveal SceneInstance → Palmier / DaVinci Handoff Addendum',
-  'SceneInstanceをProduction Source of Truthとして扱う',
+  '採用済み `SceneInstance` をProduction Source of Truthとして扱う',
   'sourceRevision = SceneInstance.updatedAt',
   'VML_MASK_REVEAL_<SECTION>_<SCENE_TOKEN>',
   'palmier-opening-timeline.xml',
