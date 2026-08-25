@@ -89,6 +89,10 @@ function isoNow() {
   return new Date().toISOString();
 }
 
+function sceneStatusForIntent(intent: MaskRevealEditableIntent): SceneInstanceStatus {
+  return Object.values(intent.fields).some((field) => field.locked) ? "LOCKED" : "ADOPTED";
+}
+
 export function createMaskRevealSceneInstance(
   intent: MaskRevealEditableIntent,
   options: { sceneInstanceId?: string; now?: string; title?: string } = {},
@@ -109,7 +113,7 @@ export function createMaskRevealSceneInstance(
     ...timing,
     editableIntent: cloneIntent(intent),
     authority: "HUMAN_MASTER",
-    status: "ADOPTED",
+    status: sceneStatusForIntent(intent),
     createdAt: now,
     updatedAt: now,
   };
@@ -213,6 +217,7 @@ export function updateSceneInstanceField<K extends MaskRevealEditableFieldKey>(
       title: key === "text" ? `${resolved.text} / Mask Reveal` : scene.title,
       ...timing,
       editableIntent,
+      status: sceneStatusForIntent(editableIntent),
       updatedAt: now,
     };
   });
@@ -225,12 +230,15 @@ export function updateSceneInstanceFieldLock(
   locked: boolean,
   now = isoNow(),
 ) {
-  return replaceScene(state, sceneInstanceId, (scene) => ({
-    ...scene,
-    editableIntent: setEditableFieldLock(scene.editableIntent, key, locked),
-    status: locked ? "LOCKED" : "ADOPTED",
-    updatedAt: now,
-  }));
+  return replaceScene(state, sceneInstanceId, (scene) => {
+    const editableIntent = setEditableFieldLock(scene.editableIntent, key, locked);
+    return {
+      ...scene,
+      editableIntent,
+      status: sceneStatusForIntent(editableIntent),
+      updatedAt: now,
+    };
+  });
 }
 
 export function suggestSceneInstanceField<K extends MaskRevealEditableFieldKey>(
@@ -245,7 +253,7 @@ export function suggestSceneInstanceField<K extends MaskRevealEditableFieldKey>(
     // AI suggestion may change only the suggestion layer. Human selection stays effective;
     // locked values cause applyAiSuggestion to no-op.
     const editableIntent = applyAiSuggestion(scene.editableIntent, key, value, reason);
-    return { ...scene, editableIntent, updatedAt: now };
+    return { ...scene, editableIntent, status: sceneStatusForIntent(editableIntent), updatedAt: now };
   });
 }
 
@@ -266,6 +274,7 @@ export function retargetSceneInstanceSection(
       projectId: nextProjectId,
       editableIntent,
       ...computeMaskRevealSceneDuration(editableIntent),
+      status: sceneStatusForIntent(editableIntent),
       updatedAt: now,
     };
   });
