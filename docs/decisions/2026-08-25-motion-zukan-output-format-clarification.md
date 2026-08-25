@@ -1,8 +1,10 @@
 # モーション図鑑 Output Format Clarification
 
-Status: ACTIVE / MUTABLE  
+Status: ACTIVE / MUTABLE / AUTHORITATIVE CLARIFICATION  
 Date: 2026-08-25  
 Scope: `wedding-project` Movie only
+
+This clarification overrides any older wording that could be read as making JSON / XML / NLE XML / OTIO / `.drt` or another serialization format itself the Human Master.
 
 ## Clarification
 
