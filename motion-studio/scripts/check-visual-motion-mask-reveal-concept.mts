@@ -20,6 +20,7 @@ for (const token of [
   'mode="mask"',
   'transparent',
   "backgroundColor: '#17191c'",
+  "fontFamily: 'Arial, Helvetica, sans-serif'",
   'Repository-generated CONCEPT preview only',
   'NOT evidence',
 ]) {
@@ -65,4 +66,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log('Visual Motion Mask Reveal concept contracts OK: existing TypographyRevealEngine reused with WELCOME 1280x720 / 30fps / 4s sample; concept remains explicitly non-DaVinci evidence.');
+console.log('Visual Motion Mask Reveal concept contracts OK: existing TypographyRevealEngine reused with neutral sans WELCOME 1280x720 / 30fps / 4s sample; concept remains explicitly non-DaVinci evidence.');
