@@ -5,7 +5,10 @@ on:
     paths:
       - "scripts/davinci/mask-reveal-readonly-probe.sh"
       - "docs/runbooks/2026-08-25-mask-reveal-local-davinci-actual-gate.md"
+      - "docs/runbooks/2026-08-25-mask-reveal-human-master-actual-addendum.md"
       - "docs/prompts/2026-08-25-mask-reveal-local-execution-agent.md"
+      - "movie-dashboard/src/data/humanEditableMotionIntent.ts"
+      - "movie-dashboard/src/data/maskRevealEditableProduction.ts"
       - ".github/workflows/mask-reveal-local-gate-ci.yml"
 
 permissions:
@@ -44,3 +47,24 @@ jobs:
           grep -Fq 'Do not claim DaVinci Actual before a file rendered by local DaVinci exists.' "$prompt"
           grep -Fq 'Do not claim Palmier XML before Palmier exports a real timeline XML.' "$prompt"
           grep -Fq 'Do not expand to new Motion Patterns until this vertical slice passes.' "$prompt"
+
+      - name: Human Master editable Actual gate
+        shell: bash
+        run: |
+          addendum="docs/runbooks/2026-08-25-mask-reveal-human-master-actual-addendum.md"
+          editable="movie-dashboard/src/data/humanEditableMotionIntent.ts"
+          production="movie-dashboard/src/data/maskRevealEditableProduction.ts"
+          grep -Fq 'authority = HUMAN_MASTER' "$addendum"
+          grep -Fq 'HUMAN_SELECTED' "$addendum"
+          grep -Fq 'LOCKED' "$addendum"
+          grep -Fq 'Human Decision' "$addendum"
+          grep -Fq 'Palmier Applied Value' "$addendum"
+          grep -Fq 'Difference / Delta' "$addendum"
+          grep -Fq 'Actual DaVinci MP4' "$addendum"
+          grep -Fq 'Implementation Evidence' "$addendum"
+          grep -Fq 'Source of Truth' "$addendum"
+          grep -Fq 'Property-local correction gate' "$addendum"
+          grep -Fq '"DEFAULT" | "AI_SUGGESTED" | "HUMAN_SELECTED" | "LOCKED"' "$editable"
+          grep -Fq 'if (current.locked) return intent' "$editable"
+          grep -Fq 'authority: "HUMAN_MASTER"' "$production"
+          grep -Fq 'palmierDeltaEvidence' "$production"
