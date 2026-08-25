@@ -28,6 +28,13 @@ const readinessLabels: Record<keyof StartSelectionState["readiness"], string> = 
   markersConfirmed: "セクションMarkerと終了点を確定した",
 };
 
+const startSourceFolders = [
+  {label: "写真の原本", path: "/Users/m-shogo/Developer/personal/wedding-project/05_photos/opening/", note: "couple / travel / family-friends / venue に分ける"},
+  {label: "動画の原本", path: "/Users/m-shogo/Developer/personal/wedding-project/06_videos/opening/", note: "旅行・会場・自然な短い動画を置く"},
+  {label: "音源候補", path: "/Users/m-shogo/Developer/personal/wedding-project/07_music/candidates/", note: "候補段階。ここから本番再生しない"},
+  {label: "利用確認済み音源", path: "/Users/m-shogo/Developer/personal/wedding-project/07_music/licensed/", note: "会場利用条件を確認した音源だけ移す"},
+] as const;
+
 function saveState(state: StartSelectionState) {
   try {
     window.localStorage.setItem(START_SELECTION_STORAGE_KEY, JSON.stringify(state));
@@ -48,6 +55,7 @@ function downloadText(filename: string, text: string, type: string) {
 export function StartSelectionMode() {
   const [state, setState] = useState<StartSelectionState>(readStartSelectionState);
   const [copied, setCopied] = useState<"prompt" | "json" | "render" | "studio" | null>(null);
+  const [copiedAssetPath, setCopiedAssetPath] = useState<string | null>(null);
   const decisions = useMemo(readHumanReviewDecisions, []);
   const shortlist = useMemo(() => buildStartShortlistExport(state, decisions), [state, decisions]);
   const prompt = useMemo(() => buildStartCodexPrompt(state, decisions), [state, decisions]);
@@ -67,6 +75,12 @@ export function StartSelectionMode() {
     void navigator.clipboard.writeText(text);
     setCopied(kind);
     window.setTimeout(() => setCopied((current) => current === kind ? null : current), 1600);
+  }
+
+  function copyAssetPath(path: string) {
+    void navigator.clipboard.writeText(path);
+    setCopiedAssetPath(path);
+    window.setTimeout(() => setCopiedAssetPath((current) => current === path ? null : current), 1600);
   }
 
   function toggleFamily(id: StartMotionFamilyId) {
@@ -199,7 +213,22 @@ export function StartSelectionMode() {
               {readinessLabels[key]}
             </label>)}
           </div>
-          <div className="mt-4 flex flex-wrap gap-2 text-xs"><Link to="/opening-photo-intake" className="border border-navy-700 px-3 py-2 dark:border-sand-300">写真準備画面へ</Link><Link to="/opening-bgm-intake" className="border border-navy-700 px-3 py-2 dark:border-sand-300">BGM準備画面へ</Link><Link to="/asset-placement-guide" className="border border-navy-700 px-3 py-2 dark:border-sand-300">素材置き場を見る</Link></div>
+          <div className="mt-5 border-t border-amber-300 pt-4 dark:border-amber-800">
+            <h3 className="font-bold text-navy-900 dark:text-sand-100">まず原本を置く場所</h3>
+            <p className="mt-1 text-xs leading-5 text-navy-600 dark:text-navy-300">写真・動画・音源本体はGitへ入りません。ファイル名は後からCodexが整理できるので、まず種類ごとのフォルダへ入れてください。</p>
+            <div className="mt-3 space-y-2">
+              {startSourceFolders.map((folder) => <div key={folder.path} className="border border-amber-200 bg-white p-3 dark:border-amber-900 dark:bg-navy-800">
+                <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+                  <div className="min-w-0"><p className="text-xs font-bold text-navy-800 dark:text-sand-100">{folder.label}</p><code className="mt-1 block overflow-x-auto whitespace-nowrap text-[10px] text-navy-600 dark:text-navy-300">{folder.path}</code><p className="mt-1 text-[10px] text-navy-400">{folder.note}</p></div>
+                  <button onClick={() => copyAssetPath(folder.path)} className="shrink-0 border border-navy-500 px-2 py-1 text-[10px] text-navy-700 dark:text-sand-200">{copiedAssetPath === folder.path ? "コピー済み ✓" : "パスをコピー"}</button>
+                </div>
+              </div>)}
+            </div>
+            <div className="mt-3 bg-amber-100 p-3 text-xs leading-5 text-amber-900 dark:bg-amber-900/30 dark:text-amber-200">
+              <strong>次の工程：</strong>写真選定後、Codexが採用素材だけをRemotion用フォルダへ接続し、14セクションへ割り当てます。原本を直接移動・上書きしません。
+            </div>
+            <Link to="/asset-placement-guide" className="mt-3 inline-block border border-navy-700 px-3 py-2 text-xs dark:border-sand-300">全素材の置き場ルールを見る</Link>
+          </div>
         </div>
 
         <div className="border-2 border-sky-400 bg-sky-50 p-5 dark:bg-sky-950/20">
