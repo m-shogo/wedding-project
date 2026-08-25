@@ -8,98 +8,96 @@ Study page: `2052:2 / 07_RURUBU_V7_V8_PRO_STUDIES`
 
 V6 control: frozen `JC + IX + JB + IZ + IT + JA`
 V8 comparison: `AV5 + AW8 + AL5 + AQ7 + AS8 + AT6`
-Production state: `V7_6_OF_6_LIVE_COMPARISON_SET / C8+K5+F4+G9+H11+C6E / UNPAGINATED_STUDY / TEMPORAL_SOURCE-PLAN_GROUNDED / SECTION-ORDER-TRUTH-GATED / PHOTO-SOURCE-TRUTH-GATED / CAFE_FULL36_SOURCE-POOL-ROLE-GATED / READER-FACING-DISPLAY-COPY-GATED / PERSONAL-CONTENT-TRUTH-GATED / SPATIAL-TRUTH-GATED / PROFILE_REAL-COUPLE_SMALL-SNAP_PARTIAL / PRINT_PROOF_BLOCKED / PRINTER_TEMPLATE_BLOCKED / REAL_CONTENT_BLOCKED / NOT_GLOBAL_WINNER / NOT_PRINT_READY`
+Production state: `V7_6_OF_6_LIVE_COMPARISON_SET / C8+K8+F4+G9+H11+C6E / UNPAGINATED_STUDY / TEMPORAL_SOURCE-PLAN_GROUNDED / SECTION-ORDER-TRUTH-GATED / PHOTO-SOURCE-TRUTH-GATED / CAFE_FULL36_SOURCE-POOL-ROLE-GATED / READER-FACING-DISPLAY-COPY-GATED / PERSONAL-CONTENT-TRUTH-GATED / SPATIAL-TRUTH-GATED / PROFILE_VERIFIED-COUPLE_EVIDENCE / PROFILE_GENERIC-QA-DUMMIES-WITHHELD / PRINT_PROOF_BLOCKED / PRINTER_TEMPLATE_BLOCKED / REAL_CONTENT_BLOCKED / NOT_GLOBAL_WINNER / NOT_PRINT_READY`
 
 ## Current live V7 comparison set
 
-1. **Outer C8 `2381:2`** — current high-energy outer and control until a high-resolution real-photo candidate passes actual-size/detail QA.
-2. **Profile/Q&A K5 `2516:2`** — K4 variable-copy reserve preserved; two small generic snap roles are actual-couple Hawaii screen derivatives (`004.jpg` / `036.jpg`) used only as couple snapshots, not person-specific identity portraits. Three-scale DESIGN QA passed. High-resolution role placement and final personal answers remain blocked.
+1. **Outer C8 `2381:2`** — current high-energy outer/control until a high-resolution real-photo candidate passes actual-size/detail QA. C12 `2486:33` remains preferred screen-composition evidence for real Hawaii `007.jpg`, not production.
+2. **Profile/Q&A K8 `2546:2`** — current. K7's two large generic Q&A dummies are withheld. The spread now uses only verified real-couple Hawaii `004.jpg` / `036.jpg` screen derivatives as non-person-specific couple evidence, and unanswered Q1–Q6 are organized as `ふたりのこと` / `これからのこと`. Three-scale DESIGN QA passed. Final answers and high-resolution Figma photo placement remain blocked.
 3. **Story/Chronology F4 `2427:2`** — six-milestone truth-safe dummy chronology; semantic-only section marker.
-4. **Memory/Guide G9 `2443:2`** — grounded `沖縄 → 韓国 → ハワイ → 横浜`; grounded Hawaii/proposal note separated from unverified photo ownership. REAL-PHOTO-BLOCKED.
-5. **Cafe/Table H11 `2537:2`** — H10's photo-led asymmetric geometry is preserved, but the fixed Table display is now reader-facing editorial voice: `ひと皿から、旅が深まる。` rather than the photo-brief-like checklist `料理、皿、手元、店の空気。`. The fixed display is a 4× Figma-authored PNG (`2537:29`, hash `0ffb0b20579b07230ce643665adb2b61d68fd882`) with editable hidden source `2537:25`; variable copy and replaceable photo roles remain independent. Three-scale DESIGN QA passed. Current dominant dummy `515×565`, transition dummy `260×175`, table dummy `705×460` remain composition evidence, **not final photo contracts**. REAL-PHOTO-BLOCKED.
-6. **Island Picks + 1DAY C6E `2505:2`** — grounded planning-memo course based on the identified 2025 Hawaii plan source. Right-page unverified place dummies stay withheld; exact times are plan-state facts, not proof of completed travel or current operating conditions.
+4. **Memory/Guide G9 `2443:2`** — grounded `沖縄 → 韓国 → ハワイ → 横浜`; grounded proposal note is separated from unverified photo ownership. REAL-PHOTO-BLOCKED.
+5. **Cafe/Table H11 `2537:2`** — photo-led asymmetric V7 geometry with reader-facing fixed display `ひと皿から、旅が深まる。`; current Cafe/transition/Table images remain structural dummies and are not final photo contracts. REAL-PHOTO-BLOCKED.
+6. **Island Picks + 1DAY C6E `2505:2`** — grounded planning-memo course based on the identified 2025 Hawaii plan source. Right-page unverified place dummies stay withheld; exact times are plan-state facts, not proof of completed travel/current operating conditions.
 
-## Cafe/Table reader-facing display-copy correction
+## Profile/Q&A K8 — current pass
 
-Current production: **H11 `2537:2`**. Hidden rollback: **H10 `2467:2`** at `x=300000 / visible=false`.
+Current: `2546:2 / V7 PRO STUDY K8 / PROFILE+Q&A ... CURRENT` at `x=15900 / y=13000 / parent=2052:2`.
+Hidden rollback: `2541:50 / ROLLBACK / V7 K7 / PROFILE+Q&A / PRE-THEMATIC-QA-AND-REAL-COUPLE-EVIDENCE / HIDDEN` at `x=300000 / visible=false`.
 
-The V7 photo authority correctly evaluates distinct image jobs such as appetite, plate/table detail, gesture/shared meal and place atmosphere. In H10, the large fixed Table display `料理、皿、手元、店の空気。` exposed almost the same checklist vocabulary at reader-facing scale. The idea was valid as art direction but read too much like an internal shot list/schema in the publication.
+K7 still contained two dominant generic structural photos in the Q&A page (`V7_QA_HERO_DUMMY` and `V7_QA_DINNER_DUMMY`) even after verified real-couple imagery had become available. Those assets did not prove anything about the couple or unanswered questions and repeated the same small dummy-image vocabulary already used throughout V7.
 
-H11 keeps the high-energy V7 system but translates the role into reader language instead of borrowing V8 wording:
+K8 changes only the profile/interview editorial role:
 
-- fixed display: `ひと皿から、旅が深まる。`;
-- 4× exported raster master: `2080×600` intrinsic, displayed at `520×150`;
-- fixed image node: `2537:29`, imageHash `0ffb0b20579b07230ce643665adb2b61d68fd882`;
-- hidden editable source: `2537:25` with native `Noto Sans JP Bold` text and one purposeful coral second-beat rule;
-- old fixed display preserved hidden within H11 and full H10 preserved as rollback;
-- no variable/factual copy change, no photo/crop/hash change, no card/pill/shadow/gradient addition.
+- generic Q&A hero/dinner dummy roles hidden;
+- verified Hawaii `004.jpg` screen derivative retained as left Profile support, hash `b77012f2eb0a832acfe6fecd883775832ba029c6`, `250×130`;
+- verified Hawaii `036.jpg` screen derivative used as Q&A-side couple evidence, hash `c80602f1881db70f3a005651f982a0f38b294a9d`, `300×200`;
+- neither image is groom-only/bride-only or answer-specific evidence;
+- unanswered Q1–Q3 grouped under `ふたりのこと`;
+- unanswered Q4–Q6 grouped under `これからのこと`;
+- all unresolved profile values remain native `回答待ち`;
+- no cards, pills, fake answers, gradients or decorative filler added.
 
 QA:
 
-- whole-item / 500–800px: PASS and clearer publication voice than H10;
+- whole-item / 500px: PASS;
 - reading / 1400px: PASS;
 - actual-size / 1587×1123: DESIGN QA PASS;
-- effectively visible native text `11`;
-- text intersections `0`;
-- Japanese→Inter mismatches `0`;
-- parent `2052:2`;
-- V7/V8 current-root pairwise overlap `0`.
-
-This is a design-voice correction only. The photographs remain structural dummies, so REAL CONTENT / final photography / print approval stay blocked.
-
-## Cafe/Table photo authority — full source-pool audit and role-set picture edit
-
-Live Figma authority: **`2305:2`**.
-Hidden rollback before the full-pool pass: **`2526:2`**.
-
-The complete Drive folder `ハワイ写真` (`1A6cea2UHMv3fiZ43PcCCj3BXxXKK-PyV`) was audited **001–036 / 36 of 36** at actual-image level. The verified pool consists of actual-couple beach / lawn / waterfront wedding photography, portrait-led frames, and wedding/shoot props. Across the full pool, **0 images** perform the Cafe/Table jobs of food appetite, plate/drink/table detail, restaurant/interior atmosphere, or eating/shared-meal hands.
-
-Therefore destination truth and editorial-role truth stay separate: **do not place a Hawaii-real portrait/environment image into H11 merely because it is genuinely Hawaii.** RSL-270 remains the full-pool asset-truth result; live-photo promotion still waits for role-correct photography.
-
-The photo authority remains **role-set picture editing**:
-
-1. Cafe dominant — appetite-first food/drink + table/light/place evidence.
-2. Transition — the movement from pause/table toward the next shop/street.
-3. Table dominant — food + plate + hands/shared-meal feeling + place atmosphere.
-
-Do not force candidates into the current dummy rectangles. The current `515×565` Cafe dominant and `705×460` Table dominant are provisional geometry. Select the photographs first, then re-decide crop, area, dominant/support balance, and cobalt-field ratio.
-
-Figma authority QA from the full-pool update remains:
-- screenshot `1200×1165`: PASS;
 - visible native text `28`;
+- visible IMAGE roles `2`, both verified-couple hashes;
 - text intersections `0`;
-- bottom reserve `34px`;
+- 18px edge risks `0`;
+- Japanese→Inter mismatches `0`;
 - parent `2052:2`.
 
-## Current Profile evidence
+Photo/print truth remains separate: Figma uses screen derivatives. Verified Drive masters already exist for `004/036`, but high-resolution role placement and final print/detail proof are still blocked. K8 is current DESIGN evidence, not print-ready.
 
-K5 `2516:2` remains current. `2516:27` uses actual-couple Hawaii `004.jpg` screen derivative; `2516:28` uses actual-couple Hawaii `036.jpg` screen derivative. Both remain couple snapshots and must not be relabeled as groom-only / bride-only portraits. Verified high-resolution candidate masters remain Drive `1L4LH0mozrA2plNT6afM824feBlNjfD4V` and `136mU_OF_QcQCjFNuJAyir05wlhN8UY4L`; Figma still uses screen derivatives, so PRINT/HIRES QA remains blocked.
+Evidence: `01_paper-items/rurubu-wedding/evidence/RURUBU-V7-K8-PROFILE-THEMATIC-QA-REAL-COUPLE-EVIDENCE-QA-2026-08-25.md`.
+Learning: RSL-269 reinforced; generic profile/Q&A placeholder art should be re-audited after verified subject imagery exists rather than retained merely for density.
 
-## Retained high-value evidence and gates
+## Cafe/Table photo authority — retained
 
-- **C12 `2486:33`** remains `PREFERRED SCREEN-COMPOSITION EVIDENCE` for real Hawaii `007.jpg`, but not current/final because the Figma derivative is only `350×233`. Verified Drive master: `1NsFR25Q963Nk847fTMB3elwWy689P8XY / 4500×3000 / 5,266,253 bytes`.
-- High-resolution Outer transport was retried once this pass because official `upload_assets` is now exposed as a material capability change. Drive master materialization succeeded, but POST to the official upload target again failed with `Could not resolve host: mcp.figma.com`; per RSL-005 no identical retry followed and C12 was not mutated.
-- completion states remain separate;
-- do not repeat identical failed binary transport without a material capability/environment change;
-- set exact Figma authority page before top-level writes and read back parent after;
-- numbers/section markers require reader-facing referents;
-- personal claims and precise times require source authority;
-- grounded/place-specific copy must not authenticate unverified imagery;
-- destination/source authenticity does not substitute for exact editorial-role fit;
-- internal shot-list/photo-brief vocabulary must not leak into reader-facing display copy merely because the underlying idea is valid;
-- short placeholders require realistic copy stress before variable-content readiness is claimed;
-- planning-source truth is distinct from completed-event truth;
-- folios remain withheld until real pagination/imposition exists;
-- route maps remain excluded until verified geography exists.
+Live Figma authority: `2305:2`.
+
+The complete Drive folder `ハワイ写真` (`1A6cea2UHMv3fiZ43PcCCj3BXxXKK-PyV`) has been audited `001–036 / 36 of 36`. The verified pool is real couple beach/lawn/waterfront wedding photography and does **not** contain the food/plate/drink/interior/eating-hand evidence required by H11.
+
+Therefore destination truth and editorial-role truth remain separate. Do not place Hawaii-real portraits into H11 merely because they are genuinely Hawaii.
+
+V7 Cafe/Table keeps three distinct picture-edit jobs:
+
+1. Cafe dominant — appetite-first food/drink + table/light/place evidence.
+2. Transition — movement from pause/table toward the next shop/street.
+3. Table dominant — food + plate + hands/shared-meal feeling + place atmosphere.
+
+Current dummy sizes are composition evidence, not final contracts. Select photography first, then re-decide crop, area, dominant/support balance and cobalt-field ratio.
+
+## Retained high-value evidence / gates
+
+- **C12 `2486:33`**: preferred screen composition for verified real Hawaii `007.jpg`; Figma derivative remains too low-resolution for actual-size/print promotion. Verified Drive master: `1NsFR25Q963Nk847fTMB3elwWy689P8XY`, `4500×3000`, `5,266,253 bytes`.
+- **K8 Profile**: design current, but high-resolution `004/036` role placement and final personal answers remain blocked.
+- Completion states remain separate: selected / screen-placed / crop-adopted / high-res-placed / actual-size-verified / print-approved are not interchangeable.
+- Do not repeat identical failed binary transport without a material capability/environment change.
+- Always switch to exact Figma authority page before top-level writes and read back parent after.
+- Numbers/section markers require reader-facing referents.
+- Personal claims and precise times require source authority.
+- Grounded/place-specific copy must not authenticate unverified imagery.
+- Destination/source authenticity does not substitute for editorial-role fit.
+- Internal shot-list/photo-brief vocabulary must not leak into reader-facing display copy.
+- Short placeholders require realistic copy stress before variable-content readiness is claimed.
+- Planning-source truth is distinct from completed-event truth.
+- Folios remain withheld until real pagination/imposition exists.
+- Route maps remain excluded until verified geography exists.
 
 ## Drive / asset truth
 
 V7 authority: `1fHt2rf5jvTWyjkmpGu3KhEgjQEiUNV6x / RURUBU_V7_HAWAII_PRO_CLEANROOM_2026-08-21`
 V8 comparison authority: `1IKYF-YI6EbEe7qQCVQjClztpQA8CoRIo / RURUBU_V8_EDITORIAL_MONOGRAPH_2026-08-21`
-Grounded planning source: `1tuFgCN63Z9Fnadr7qKy6enDZ0fAfTEmRiG2tKLE4UYg / ハワイ🌺`.
-Actual-couple source folder fully audited for Cafe/Table role fit: `1A6cea2UHMv3fiZ43PcCCj3BXxXKK-PyV / ハワイ写真`.
+Grounded planning source: `1tuFgCN63Z9Fnadr7qKy6enDZ0fAfTEmRiG2tKLE4UYg / ハワイ🌺`
+Actual-couple source folder fully audited for Cafe/Table role fit: `1A6cea2UHMv3fiZ43PcCCj3BXxXKK-PyV / ハワイ写真`
+Verified Profile candidate masters:
+- `1L4LH0mozrA2plNT6afM824feBlNjfD4V / 004`
+- `136mU_OF_QcQCjFNuJAyir05wlhN8UY4L / 036`
 
-This pass: image generation `0`; Drive writes `0`; new Drive masters `0`; production photo placement `0`; new high-resolution photo hashes `0`; final photography adoption `0`. Figma writes: H11 `2537:2` promoted, fixed display raster `2537:29` created from editable source `2537:25`, H10 `2467:2` preserved as hidden rollback. One new Figma-authored fixed display imageHash was created: `0ffb0b20579b07230ce643665adb2b61d68fd882`.
+This pass: image generation `0`; Drive writes `0`; new Drive masters `0`; new image hashes `0`; final photography adoption `0`. Figma write: K8 `2546:2` promoted and K7 preserved hidden rollback. No V6/V8 production write.
 
 ## Truth / completion gates
 
@@ -108,9 +106,9 @@ V7 is not print-ready. DESIGN QA, REAL CONTENT QA, PRINT TEMPLATE/PREFLIGHT and 
 ## Next highest-value work
 
 1. Preserve frozen V6 and all rollback/rejected/blocked evidence.
-2. For **H11 Cafe/Table**, stop mining the fully audited 36-photo wedding pool for food roles. Find or produce materially different role-specific candidates for the three photo jobs and compare the **set**, not isolated slots.
+2. For **H11 Cafe/Table**, stop mining the fully audited Hawaii wedding pool for food roles; find/produce materially different role-specific candidates for the three picture-edit jobs and compare the set, not isolated slots.
 3. Select photography before locking final crop/area; do not force final photographs into dummy geometry.
-4. Continue legitimate role-specific photography for G9 Memory without allowing grounded proposal copy to authenticate unrelated photography.
-5. When high-resolution transport changes materially, re-place K5's two real-couple snap roles from verified masters and re-run print/detail QA.
+4. Continue legitimate role-specific photography for G9 Memory without letting grounded proposal copy authenticate unrelated photography.
+5. When high-resolution transport changes materially, replace K8's `004/036` screen derivatives from verified Drive masters and rerun actual-size/detail/photo QA.
 6. When high-resolution transport changes materially, re-evaluate Outer from Drive master `1NsFR25Q963Nk847fTMB3elwWy689P8XY`; C12 remains screen-composition evidence only.
-7. Continue V6/V7/V8 same-condition comparisons; do not create V9 merely to continue activity.
+7. Continue V6/V7/V8 same-condition comparison; do not create V9 merely to continue activity.
