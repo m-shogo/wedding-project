@@ -4,13 +4,15 @@
 
 ## 最優先
 
-**2026-10-24に上映するOpening V1を完成させる。**
+**StaRt Extended Openingを、選定済み4〜8 motion family・14 section・実素材・正規ローカル音源で完成へ近づける。**
 
-基盤・テンプレート・研究を増やすことより、実写真を入れて完成映像へ近づけることを優先する。
+作業入口はMovie Dashboardの `/movie-coach/start-selection`。新しいCatalogやテンプレートを増やす前に、`StartExtendedOpeningRoughV1`を実素材へ置き換える。
 
-## Opening V1 authority
+現時点は `AUDIO_BLOCKED / MEDIA_BLOCKED`。Web上の推測秒をFinal timingにせず、正規ローカル音源の波形とMarkerを人間が確認してから確定する。
 
-現行source of truth:
+## Opening V1（非アクティブなShort fallback / 比較用）
+
+以下は60秒Short候補を再確認する場合だけ使う。StaRt Extendedの現行制作順を上書きしない。
 
 - `src/index-opening-v1.ts`
 - `src/OpeningV1Root.tsx`
@@ -31,9 +33,9 @@
 - RemotionがOpening V1の最終source of truth
 - Palmier / CapCutは必要時のfinal polishのみ
 
-**旧 `開幕-全体確認` 82秒、90秒/105秒storyboard、CloudSea構成をOpening正本として扱わない。**
+**V1・旧 `開幕-全体確認` 82秒・90秒/105秒storyboard・CloudSea構成をExtended正本として扱わない。**
 
-## 現行timeline
+## Short fallback timeline
 
 ```text
 00:00–00:02 Photo cold open
@@ -132,7 +134,7 @@ cue: `src/data/openingV1Sound.ts`
 
 AI動画を作ること自体をゴールにしない。
 
-まず11枚実写真+BGMで60秒previewを通す。
+まずSelection Modeで役割と対象sectionを決め、実素材Roughで弱いcutを特定する。
 
 弱いcutが特定された時だけ:
 
@@ -144,7 +146,18 @@ AI動画を作ること自体をゴールにしない。
 
 有料生成は明示許可があるまで実行しない。
 
-## Openingコマンド
+## StaRt Extendedコマンド
+
+```sh
+pnpm dev:director-recipes
+pnpm render:start-extended-rough
+pnpm check:start-extended-rough
+pnpm typecheck
+pnpm check
+pnpm exec remotion compositions src/index-director-recipes.ts
+```
+
+下記はShort fallbackを明示的に再確認する場合のみ:
 
 ```sh
 pnpm dev:opening-v1
@@ -158,7 +171,19 @@ pnpm qa:opening-stills
 pnpm exec remotion compositions src/index-opening-v1.ts
 ```
 
-## QA
+## StaRt Extended QA
+
+1. Dashboard Selection Modeでmotion familyが4〜8個、sectionが14/14か確認
+2. `pnpm typecheck`
+3. `pnpm check`
+4. composition contractで`StartExtendedOpeningRoughV1`が129秒の研究用Roughとして登録されることを確認
+5. `pnpm render:start-extended-rough`
+6. 実renderを目視し、sectionコメントをSelection Modeへ集約
+7. 正規ローカル音源と実素材が揃うまで `AUDIO_BLOCKED / MEDIA_BLOCKED` を解除しない
+
+CI GREENだけで見た目を承認しない。
+
+## Short fallback QA（必要時のみ）
 
 Opening変更後:
 
@@ -239,6 +264,6 @@ Opening修正時に新テンプレを増やす前に、`OpeningV1.tsx`だけで�
 
 新しい基盤を増やさない。
 
-**実写真11枚 → preview → crop/focus → cut順 → BGM/現地音 → final QA**
+**Selection Modeで推奨6 family確認 → 14 section確認 → 実写真/動画棚卸し → Hero写真選定 → 正規音源の波形/Marker確定 → 実素材Rough → コメント一括prompt → final QA**
 
-の順で進める。
+の順で進める。Favorite / Maybe / Rejectと採用確定は人間が行う。

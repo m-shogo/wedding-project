@@ -1,5 +1,7 @@
 # StaRt Extended Opening / Motion Kit / Palmier / DaVinci — Handoff
 
+> **PARTIALLY SUPERSEDED:** Motion Kit 36 preset完成を最優先とする旧手順は完了済み。現在は `/movie-coach/start-selection` の推奨6 family・14 sectionから `StartExtendedOpeningRoughV1` と実素材工程へ進む。
+
 Date: 2026-08-24
 Repo: `m-shogo/wedding-project`
 Purpose: 新チャットでこの1ファイルを正本として読み、他のWedding作業と衝突せずStaRt Extended Openingの研究・演出・実装を継続する。
@@ -604,7 +606,7 @@ Copy/paste the block below into a new chat.
 
 ### 今回最優先
 
-まず **Motion Kit V1 / 36 preset Catalog** を完成させてください。
+Motion Kit V1 / 36 preset Catalogは完成済み。現在は **StaRt Selection Mode → StartExtendedOpeningRoughV1 → 実素材・正規ローカル音源** を優先してください。
 
 ただし stale branch `feat/start-motion-kit-catalog` へそのまま積まないでください。
 

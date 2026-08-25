@@ -44,6 +44,7 @@ const navSections: SidebarSection[] = [
     sectionId: "review",
     label: "REVIEW / DECIDE",
     links: [
+      { to: "/movie-coach/start-selection", label: "StaRt Selection / Next", icon: "✓" },
       { to: "/movie-coach/review", label: "Movie Review", icon: "◎" },
       { to: "/movie-coach/compare", label: "Before / After Lab", icon: "⇄" },
       { to: "/movie-coach/reference", label: "Reference Breakdown", icon: "⌗" },
@@ -94,7 +95,7 @@ const navSections: SidebarSection[] = [
   },
 ];
 
-export function Sidebar() {
+export function Sidebar({onNavigate}: {onNavigate?: () => void}) {
   const { lastSavedAt } = useProduction();
   const { theme, toggle } = useTheme();
 
@@ -118,6 +119,7 @@ export function Sidebar() {
                   key={link.to}
                   to={link.to}
                   end={link.to === "/" || link.to === "/movie-coach"}
+                  onClick={onNavigate}
                   className={({ isActive }) =>
                     `sidebar-link ${isActive ? "sidebar-link-active" : ""}`
                   }

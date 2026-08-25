@@ -1,5 +1,7 @@
 # Claude / Codex A/B comparison framework (Phase G)
 
+> Authority更新: Opening V1を本番正本とする当時の記述は廃止済み。現在はStaRt Extendedが本命で、このA/Bは人間選定を補助する比較手段としてのみ使う。
+
 Date: 2026-08-25
 Status: 実装完了。実際のwinner判定は未実施（人間確認待ち・設計通り）。
 
@@ -7,8 +9,8 @@ Status: 実装完了。実際のwinner判定は未実施（人間確認待ち・
 
 Director Recipe Catalog Phase A〜F（movie-dashboard 97演出レシピ、motion-studio共有レンダラー、
 Reel/比較セット、Movie Dashboard閲覧UI、StaRt section⇄recipeマッピング、Palmier/DaVinci
-handoff）がmainへマージ済み（`813bf9f5`）。これはStaRt Extended Openingの研究トラックで、
-Opening V1（2026-10-24上映の本番正本）とは別系統。
+handoff）がmainへマージ済み（`813bf9f5`）。現在はStaRt Extended Openingの本命制作基盤で、
+Opening V1は非アクティブなShort fallbackとして別系統に保持する。
 
 Phase Gの目的は、同一音源・同一時間・同一素材・同一briefでClaude CodeとCodex CLI/agentの2系統
 の制作結果を比較できる枠組みを作ること。目的は「どちらが優れているかを自動で決める」ことでは

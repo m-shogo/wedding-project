@@ -1,5 +1,7 @@
 # Codex A/B Comparison — StaRt Chorus 1 (00:38-00:58) — Handoff
 
+> **SUPERSEDED / 比較用履歴資料:** Opening V1を本番正本とする記述は廃止済み。現在はStaRt Extendedが本命で、Selection Modeの人間選定を `StartExtendedOpeningRoughV1` へ反映する。A/Bは必要時の補助比較に限る。
+
 Date: 2026-08-25
 Repo: `m-shogo/wedding-project`
 Phase: G (Claude/Codex A/B comparison framework), built on Phase A-F (director recipe catalog,
@@ -13,14 +15,12 @@ same 20-second slice, without needing any other context from this repo's chat hi
 
 ## 0. Read this first
 
-- This is a **research track**, not Opening V1. Opening V1 (the actual 2026-10-24 wedding
-  film) has its own source of truth at `motion-studio/src/data/openingV1.ts` /
-  `motion-studio/src/compositions/opening/OpeningV1.tsx` and is **not touched** by this work.
-  See `CLAUDE.md` (repo root) and `motion-studio/CLAUDE.md` for that authority.
+- This is a **comparison sub-track** for StaRt Extended. Opening V1 is retained only as an inactive
+  Short fallback and is not the current production authority. See `docs/opening-authority.md`.
 - This handoff is for the **StaRt Extended Opening** research track: an alternate, higher-energy
   editorial concept built around Mrs. GREEN APPLE's "StaRt" as a candidate song, using the
   Director Recipe Catalog (97 recipes) and its Remotion renderer. It lives alongside Opening V1
-  and does not replace it.
+  and is now part of the main Extended production direction.
 - No lyrics, no copyrighted audio, no AI-generated real people are reproduced anywhere in this
   track. Treat "StaRt" as a title/structure reference only — do not transcribe or quote lyrics.
 - **Never decide a winner yourself.** Your job (Codex) is to build one candidate. A human

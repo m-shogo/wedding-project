@@ -76,9 +76,10 @@ motion-studio/scripts/check-start-section-recipe-renderable.mts
 現在把握している近似:
 
 - `photo-2p5d-parallax` → 真のforeground/background depth separationではなくrestrained push近似
-- `accent-halftone-burst` → 専用halftone visual未実装
-- `accent-scribble-underline` → 専用scribble visual未実装
-- 一部stamp系 → generic triplet hitへ近似
+- `cam-25d-parallax` → depth layer分離済み
+- `accent-halftone-burst` → 専用halftone visual実装済み
+- `accent-scribble-underline` → 専用scribble visual実装済み
+- `accent-stamp-triplet` → 専用stamp visual実装済み
 - `native-cut`系 → 実素材2shotのcutではなくedit-point placeholderで説明
 - 実写真/実動画 → `DemoBackdrop` placeholder
 
