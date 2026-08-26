@@ -42,9 +42,25 @@ Resolveのversionが上がった場合も、影響を受けたproperty recordだ
 - `.setting` / `.drfx` / Fusion comp / Python / Luaによる自動再構築の**実装コード自体はまだ書いていない**。`buildCodexRebuildInstruction`はCodexへの指示テンプレートを生成するだけで、Fusion compを実際に生成するジェネレーターではない。
 - Mask Reveal以外のMotion Pattern(35件)への適用は未実施。Mask Reveal以外はまだHuman Master Sceneを持たないため、紐付ける対象がない。
 
+## 追記(2026-08-26): ローカル環境はDaVinci Resolve無料版で、外部scriptingが使えない
+
+この開発環境にDaVinci Resolveがインストールされたため実接続を試みたところ、以下を確認した。
+
+- インストールされているのは`DaVinci Resolve.app`(無料版)21.0.4。Studio版ではない(画面左下の表記も「DaVinci Resolve 21」でStudio表記なし)。
+- Python API(`DaVinciResolveScript.scriptapp('Resolve')`)は接続失敗(`None`)。
+- 環境設定(System/User双方の全パネル)を実際に開いて確認したが、「外部からのスクリプトを使用(External scripting using)」設定項目自体が存在しない。
+- Resolveのログ(`davinci_resolve.log`)にスクリプトサーバー関連の記録が一切ない。
+- Web検索で確認: **Resolve 19.1(2024年11月)以降、外部scripting interfaceはStudio版限定機能になり、無料版では動作しなくなった**。意図的な機能制限であり、今後の無料版アップデートで復活する見込みも無い。
+
+**影響**: このレジストリが`AUTO_REBUILD` / `GENERATED_ARTIFACT`として記述している経路(`ImportFusionComp()`等のResolve scripting API経由の自動再構築)は、**この開発環境のResolveでは実行不可能**。これは新しいproperty分類の変更ではなく、「この環境固有のcapability制約」として区別する。
+
+- Resolve scripting APIの一般的な存在自体(公式ドキュメントに書かれている内容)は引き続き正しい。
+- ただし「このマシンのこのRoseolveで実際にAUTO_REBUILDを試せるか」は`UNKNOWN`(Studio版でのみ再検証可能)。
+- GUI手動操作(Text+ / Fusion / Rectangle Mask等)によるMask Reveal Actual Vertical Sliceの構築自体は、スクリプト不要のため引き続き可能(`docs/runbooks/2026-08-25-mask-reveal-local-davinci-actual-gate.md`のPhase 6が元々想定していたfallback経路)。ユーザーの指示により、この作業は一旦保留し、モーション図鑑カタログ側の作業へ戻った。
+
 ## 次にやるべきこと(優先順位)
 
-1. `docs/research/2026-08-26-movie-tool-learning-run-01.md`が提案する`lost-rebuild-01` Canary(5〜8秒の合成Scene)を実際にPalmier→DaVinciで実行し、初めて`RUNTIME_VERIFIED`なrecordを1件作る。
+1. Studio版DaVinci Resolveが利用可能になったら、`docs/research/2026-08-26-movie-tool-learning-run-01.md`が提案する`lost-rebuild-01` Canary(5〜8秒の合成Scene)を実際にPalmier→DaVinciで実行し、初めて`RUNTIME_VERIFIED`なrecordを1件作る。
 2. Canaryが2回再現してから、該当propertyだけ`evidenceState: "RUNTIME_VERIFIED"`へ昇格する(1回の成功では不十分、既存ルールに準拠)。
 3. Fusion compの実際のgenerator(`.setting`出力)をCodexで試作し、`capabilityTrust`を`GENERATED_ARTIFACT`→`VERIFIED_WRITE`へ動かせるか検証する。
 4. Mask Reveal以外のPatternがHuman Master Sceneを持つようになったら、同じ`maskRevealHandoffFidelity.ts`のパターンを横展開する。
