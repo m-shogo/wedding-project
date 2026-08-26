@@ -7,7 +7,8 @@ import type {DirectorRecipe, DirectorRecipeCategory} from '../../../movie-dashbo
 import {directorRecipeCatalog, directorRecipeCategories} from '../../../movie-dashboard/src/data/directorRecipeCatalog.ts';
 import type {StartMotionPreset} from '../../../movie-dashboard/src/data/startMotionKit.ts';
 import {startMotionPresets} from '../../../movie-dashboard/src/data/startMotionKit.ts';
-import type {CameraTransformMode, GraphicHitVariant, MotionIntensity, TransitionWipeVariant, TypographyRevealMode} from './engines';
+import type {CameraTransformMode, GraphicHitVariant, MotionIntensity, TransitionWipeDirection, TransitionWipeVariant, TypographyRevealMode} from './engines';
+import {resolveTransitionWipeProps} from './transitionWipeResolver.ts';
 
 export {directorRecipeCatalog, directorRecipeCategories};
 export type {DirectorRecipe, DirectorRecipeCategory};
@@ -110,7 +111,7 @@ function wipeVariantFor(presetId: string): TransitionWipeVariant {
   return 'wipe';
 }
 
-function wipeDirectionFor(presetId: string): 'left' | 'right' | 'up' | 'down' {
+function wipeDirectionFor(presetId: string): TransitionWipeDirection {
   if (presetId === 'wipe-paper-edge') return 'left';
   if (presetId === 'flash-one-frame-soft') return 'up';
   if (presetId === 'color-field-release') return 'down';
@@ -157,11 +158,15 @@ function resolveLayer(recipe: DirectorRecipe, presetId: string, intensity: Motio
   }
 
   if (preset.sharedEngine === 'transition-wipe') {
+    // StartMotionReel.tsxと同じresolveTransitionWipePropsを通すことで、direction/variantの
+    // 解決ロジック自体(既定値の与え方)を2箇所で重複させない。presetIdごとのmapping表
+    // (wipeDirectionFor/wipeVariantFor)はDirector Recipe側固有のまま残す。
+    const wipeProps = resolveTransitionWipeProps({direction: wipeDirectionFor(presetId), wipeVariant: wipeVariantFor(presetId)});
     return {
       engine: 'transition-wipe',
       presetId,
       intensity,
-      props: {direction: wipeDirectionFor(presetId), variant: wipeVariantFor(presetId), transparent: presetId !== 'color-field-release'},
+      props: {...wipeProps, transparent: presetId !== 'color-field-release'},
     };
   }
 

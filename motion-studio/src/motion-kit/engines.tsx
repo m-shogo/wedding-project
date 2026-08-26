@@ -1,5 +1,6 @@
 import type {ReactNode} from 'react';
 import {AbsoluteFill, Easing, interpolate, useCurrentFrame, useVideoConfig} from 'remotion';
+import {cubicBezierPoint, ROUTE_LINE_VIEWBOX, routeControlPoints, routePathD} from './routeLineMath';
 
 export type MotionIntensity = 'S' | 'M' | 'L';
 
@@ -330,6 +331,7 @@ export function CameraTransformEngine({
 // 'flash'は1〜3frameだけの淡いimpact(色面wipeではなく全画面の瞬間的な明滅)。
 // 'route-line'は色面ではなく、1本の線が経路のように伸びていく表現。
 export type TransitionWipeVariant = 'wipe' | 'release' | 'shape' | 'paper' | 'flash' | 'route-line';
+export type TransitionWipeDirection = 'left' | 'right' | 'up' | 'down';
 
 export function TransitionWipeEngine({
   direction = 'right',
@@ -337,7 +339,7 @@ export function TransitionWipeEngine({
   transparent = true,
   variant = 'wipe',
 }: {
-  direction?: 'left' | 'right' | 'up' | 'down';
+  direction?: TransitionWipeDirection;
   intensity?: MotionIntensity;
   transparent?: boolean;
   variant?: TransitionWipeVariant;
@@ -366,40 +368,37 @@ export function TransitionWipeEngine({
   }
 
   if (variant === 'route-line') {
-    // wipe-route-line: 色面ではなく、1本の経路線がstrokeDashoffsetで
-    // 伸びていく表現。地図や移動の文脈を線そのもので示す。
-    const lineProgress = interpolate(frame, [2, Math.max(6, Math.round(fps * 0.6))], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: Easing.inOut(Easing.cubic)});
-    const dotProgress = interpolate(frame, [Math.max(6, Math.round(fps * 0.6)) - 4, Math.max(6, Math.round(fps * 0.6))], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
-    const pathD = horizontal ? 'M 40 200 C 300 60, 700 340, 1160 160' : 'M 200 40 C 60 300, 340 700, 160 1160';
+    // wipe-route-line: 色面ではなく、1本の経路線がstrokeDashoffsetで伸びていく表現。
+    // 線とドットは同じcubic bezier制御点・同じprogress(t)から計算するため、ドットは
+    // 必ず線の描画先端の実座標に一致する(HTML divのpercent補間による近似はしない)。
+    // 制御点/座標計算は routeLineMath.ts に切り出し、direction(left/right/up/down)
+    // すべてで同じviewBox(1920x1080)に収まることをそこで保証している。
+    const revealEnd = Math.max(6, Math.round(fps * 0.6));
+    const lineProgress = interpolate(frame, [2, revealEnd], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: Easing.inOut(Easing.cubic)});
+    // ドットは線が伸び始めた直後の数frameで素早く出現し、以後は先端に追従し続ける
+    // (終端直前だけ出現する設計にしない)。
+    const dotAppear = interpolate(frame, [2, 6], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const controlPoints = routeControlPoints(direction);
+    const pathD = routePathD(controlPoints);
+    const dot = cubicBezierPoint(controlPoints, lineProgress);
     return (
       <AbsoluteFill style={{backgroundColor: transparent ? undefined : '#0d2035', overflow: 'hidden'}}>
-        <svg viewBox="0 0 1200 400" style={{position: 'absolute', inset: 0, width: '100%', height: '100%'}}>
+        <svg
+          viewBox={`0 0 ${ROUTE_LINE_VIEWBOX.width} ${ROUTE_LINE_VIEWBOX.height}`}
+          style={{position: 'absolute', inset: 0, width: '100%', height: '100%'}}
+        >
           <path
             d={pathD}
             fill="none"
             stroke="#f0d37a"
-            strokeWidth={6 * strength}
+            strokeWidth={7 * strength}
             strokeLinecap="round"
             pathLength={1}
             strokeDasharray={1}
             strokeDashoffset={1 - lineProgress}
           />
+          <circle cx={dot.x} cy={dot.y} r={9 + dotAppear * 8} fill="#f0d37a" opacity={dotAppear} />
         </svg>
-        <div
-          style={{
-            position: 'absolute',
-            left: horizontal ? `${8 + lineProgress * 84}%` : '50%',
-            top: horizontal ? '50%' : `${8 + lineProgress * 84}%`,
-            width: 16,
-            height: 16,
-            marginLeft: -8,
-            marginTop: -8,
-            borderRadius: 999,
-            background: '#f0d37a',
-            opacity: dotProgress,
-            transform: `scale(${0.6 + dotProgress * 0.6})`,
-          }}
-        />
       </AbsoluteFill>
     );
   }
