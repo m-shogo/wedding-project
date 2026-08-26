@@ -47,4 +47,13 @@ export const renderableMotionPresets: RenderableMotionPreset[] = [
   {presetId: 'type-triplet', engine: 'typography-reveal', intensity: 'L', label: 'Triplet Type', demoText: 'GO', mode: 'triplet'},
   {presetId: 'type-vertical-wipe', engine: 'typography-reveal', intensity: 'M', label: 'Vertical Wipe', demoText: 'CHAPTER', mode: 'vertical-wipe'},
   {presetId: 'wipe-paper-edge', engine: 'transition-wipe', intensity: 'M', label: 'Paper Edge Wipe', mode: 'paper'},
+  // 2026-08-26 batch6: TypographyRevealEngineへword-stagger/counter-scroll mode、
+  // CameraTransformEngineへfreeze mode、GraphicHitEngineへcel-shadow/rgb-split
+  // variantを新規実装。これでdavinci-edit/palmier-native以外(engine: 'remotion')の
+  // 35 Motion Kit presetを全てrenderable化する。
+  {presetId: 'type-type-on-rhythm', engine: 'typography-reveal', intensity: 'M', label: 'Rhythm Type On', demoText: 'OUR JOURNEY', mode: 'word-stagger'},
+  {presetId: 'type-counter-scroll', engine: 'typography-reveal', intensity: 'M', label: 'Counter Scroll', demoText: 'YOKOHAMA → HAWAII', mode: 'counter-scroll'},
+  {presetId: 'photo-freeze-cutout', engine: 'camera-transform', intensity: 'L', label: 'Freeze Cutout', mode: 'freeze'},
+  {presetId: 'accent-cel-shadow-sweep', engine: 'graphic-hit', intensity: 'M', label: 'Cel Shadow Sweep', mode: 'cel-shadow'},
+  {presetId: 'accent-micro-rgb-split', engine: 'graphic-hit', intensity: 'M', label: 'Micro RGB Split', mode: 'rgb-split'},
 ];
