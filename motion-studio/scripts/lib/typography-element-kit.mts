@@ -61,6 +61,7 @@ const loadCanonicalTypographyBlock = (root: string) => {
 
 const buildElementSource = (config: TypographyElementConfig, internalTypographyBlock: string) => `import React, {forwardRef, useImperativeHandle, useRef} from 'react';
 import {
+  AbsoluteFill,
   Easing,
   Interactive,
   Sequence,
