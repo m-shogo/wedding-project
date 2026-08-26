@@ -54,6 +54,11 @@ export type VocalCue = {
   verifiedByListening: boolean;
   confidence: 'high' | 'medium' | 'low';
   reviewComment: string;
+  /** このcue単体だけを補正するoffset(ms)。「パッの2発目だけ早い」といった
+   * 局所修正に使う。phraseOffsetMs/globalContentOffsetMsと二重適用しないよう、
+   * 必ずresolveEffectiveCueTimeMs()経由で合成する(このfieldへ直接他のoffsetを
+   * 足し込まない)。既定0。 */
+  cueOffsetMs: number;
   /** timingSource='audio-analysis'の場合、実際に何を解析根拠にしたか
    * (例: 'vocal-stem-onset-detection'。htdemucsでボーカル分離した音源上での
    * librosa onset検出)。根拠不明のまま'audio-analysis'と自称しないための
@@ -75,6 +80,11 @@ export type TimingPhrase = {
   selectedAnimation: string | null;
   transitionIntent: string | null;
   confidence: 'high' | 'medium' | 'low';
+  /** このphrase内の全cueへ一律適用するoffset(ms)。「このphraseだけ全体的に
+   * 早い/遅い」という補正に使う。cueOffsetMs/globalContentOffsetMsと
+   * 二重適用しないよう、必ずresolveEffectiveCueTimeMs()経由で合成する。
+   * 既定0。 */
+  phraseOffsetMs: number;
   cues: VocalCue[];
   /** phrase全体をverified扱いにできるのは、下のverification.totalPhrases集計で
    * 必須cueがすべてverifiedByListening=trueになった場合だけ。この値はUIの
@@ -268,6 +278,24 @@ export const sourceTimeMsToEditTimeMs = (sourceTimeMs: number, sourceStartMs: nu
 
 /** trim後の編集時間(ms)を、音源の絶対時刻(ms)へ戻す。 */
 export const editTimeMsToSourceTimeMs = (editTimeMs: number, sourceStartMs: number): number => editTimeMs + sourceStartMs;
+
+/** offsetの正本となる唯一の合成関数(P0要件: 二重適用防止のため、
+ * global/phrase/cueのoffset合成をここ以外で行わない)。
+ *
+ *   effectiveTimeMs = cue.timeMs
+ *                    + master.audio.globalContentOffsetMs
+ *                    + phrase.phraseOffsetMs
+ *                    + cue.cueOffsetMs
+ *
+ * previewLatencyOffsetMsとrenderPipelineOffsetMsはここに含めない
+ * (前者はDashboard再生専用、後者はverified=trueになるまでrenderへ
+ * 自動適用しない候補値のため、別途明示的に扱う)。
+ * 呼び出し側でcue.timeMsへ個別にoffsetを足し込んではいけない。 */
+export const resolveEffectiveCueTimeMs = (
+  cue: Pick<VocalCue, 'timeMs' | 'cueOffsetMs'>,
+  phrase: Pick<TimingPhrase, 'phraseOffsetMs'>,
+  audio: Pick<TimingMaster['audio'], 'globalContentOffsetMs'>,
+): number => cue.timeMs + audio.globalContentOffsetMs + phrase.phraseOffsetMs + cue.cueOffsetMs;
 
 /** 優先順位: manual > verified-vocal > audio-analysis > beat-snap > estimated。
  * 複数のtimingSource候補から実際に使う1つを選ぶ共通ルール。 */

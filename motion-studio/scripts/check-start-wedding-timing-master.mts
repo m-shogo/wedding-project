@@ -56,6 +56,11 @@ for (const p of master.phrases) {
   if (p.startMs < lastStart) errors.push(`phrase順序が逆転: ${p.phraseId}(startMs=${p.startMs})`);
   lastStart = p.startMs;
   if (p.endMs <= p.startMs) errors.push(`${p.phraseId}: endMs(${p.endMs}) <= startMs(${p.startMs})`);
+  if (typeof p.phraseOffsetMs !== 'number' || !Number.isFinite(p.phraseOffsetMs)) {
+    errors.push(`${p.phraseId}: phraseOffsetMsが数値でない(${p.phraseOffsetMs})`);
+  } else if (p.phraseOffsetMs !== 0) {
+    warnings.push(`${p.phraseId}: phraseOffsetMs=${p.phraseOffsetMs}(0以外)。resolveEffectiveCueTimeMs()経由でのみ適用されているか確認。`);
+  }
 }
 
 // 4. cue ID重複 + 時刻範囲外
@@ -73,7 +78,20 @@ for (const p of master.phrases) {
     if (c.verifiedByListening && c.timingSource === 'estimated') {
       errors.push(`${c.cueId}: verifiedByListening=trueなのにtimingSource='estimated'(矛盾)`);
     }
+    if (typeof c.cueOffsetMs !== 'number' || !Number.isFinite(c.cueOffsetMs)) {
+      errors.push(`${c.cueId}: cueOffsetMsが数値でない(${c.cueOffsetMs})`);
+    } else if (c.cueOffsetMs !== 0) {
+      warnings.push(`${c.cueId}: cueOffsetMs=${c.cueOffsetMs}(0以外)。resolveEffectiveCueTimeMs()経由でのみ適用されているか確認。`);
+    }
   }
+}
+// offset architecture: audio.renderPipelineOffsetMsが未検証のまま実質的な値を
+// 持つ場合、render/generated.tsへ自動適用されていないことを明示的に警告する
+// (renderPipelineOffsetMsはresolveEffectiveCueTimeMs()の合成式に意図的に含まれない)。
+if (master.audio.renderPipelineOffsetMs != null && !master.audio.renderPipelineOffsetVerified) {
+  warnings.push(
+    `audio.renderPipelineOffsetMs=${master.audio.renderPipelineOffsetMs}msは未検証(verified=false)。人間の聴取確認まで render/generated.ts へ適用しない。`,
+  );
 }
 
 // 5. musicCue cueId重複

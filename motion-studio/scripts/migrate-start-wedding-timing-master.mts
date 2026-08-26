@@ -180,15 +180,22 @@ if (secToMs(editRange.sourceEndSec) > audioMeta.durationMs) fail(`candidateEndMs
 // --- 2. 既存master(あれば)を読み、manual/verified値を保護する -------------
 const existingMaster = existsSync(masterPath) ? (JSON.parse(readFileSync(masterPath, 'utf8')) as TimingMaster) : null;
 const existingCueById = new Map<string, VocalCue>();
+const existingPhraseById = new Map<string, TimingPhrase>();
 if (existingMaster) {
-  for (const p of existingMaster.phrases) for (const c of p.cues) existingCueById.set(c.cueId, c);
+  for (const p of existingMaster.phrases) {
+    existingPhraseById.set(p.phraseId, p);
+    for (const c of p.cues) existingCueById.set(c.cueId, c);
+  }
 }
 const preserveCueIfBetter = (fresh: VocalCue): VocalCue => {
   const prev = existingCueById.get(fresh.cueId);
   if (!prev) return fresh;
   // manualまたはverified-listeningな既存値は絶対に上書きしない。
   if (prev.timingSource === 'manual' || prev.verifiedByListening) return prev;
-  return fresh;
+  // cueOffsetMs(Dashboardで設定される局所補正)は、timingSourceが
+  // manual/verifiedでなくても、再解析で0へリセットしない(offset architecture
+  // のP0要件: 人間が入れた補正値を再migrationで失わない)。
+  return {...fresh, cueOffsetMs: prev.cueOffsetMs ?? 0};
 };
 
 // --- 3. sections構築 --------------------------------------------------------
@@ -369,6 +376,7 @@ const phrases: TimingPhrase[] = lyrics.phrases.map((p) => {
       verifiedByListening: phraseOverride?.verifiedByListening ?? false,
       confidence: (pm?.confidence as VocalCue['confidence']) ?? 'medium',
       reviewComment: phraseOverride?.reviewComment ?? '',
+      cueOffsetMs: 0,
       analysisMethod: onsetSnap != null ? ANALYSIS_METHOD : null,
     }),
   );
@@ -392,6 +400,7 @@ const phrases: TimingPhrase[] = lyrics.phrases.map((p) => {
         verifiedByListening: override?.verifiedByListening ?? false,
         confidence: 'medium',
         reviewComment: override?.reviewComment ?? '',
+        cueOffsetMs: 0,
         analysisMethod: snap != null ? ANALYSIS_METHOD : null,
       }),
     );
@@ -416,6 +425,7 @@ const phrases: TimingPhrase[] = lyrics.phrases.map((p) => {
         verifiedByListening: false,
         confidence: 'medium',
         reviewComment: '',
+        cueOffsetMs: 0,
         analysisMethod: snap != null ? ANALYSIS_METHOD : null,
       }),
     );
@@ -434,6 +444,9 @@ const phrases: TimingPhrase[] = lyrics.phrases.map((p) => {
     semanticType: p.semanticType ?? null,
     selectedAnimation: pm?.selectedAnimation ?? p.selectedAnimation ?? null,
     transitionIntent: tmTransition ?? p.transitionIntent ?? null,
+    // phraseOffsetMs(Dashboardで設定される、このphrase全体への局所補正)は
+    // 再migrationで0へリセットしない(cueOffsetMsと同じ理由)。
+    phraseOffsetMs: existingPhraseById.get(p.phraseId)?.phraseOffsetMs ?? 0,
     confidence: (pm?.confidence as TimingPhrase['confidence']) ?? p.confidence ?? 'medium',
     cues,
     humanReviewRequired: !(phraseOverride?.verifiedByListening ?? false),

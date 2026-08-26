@@ -17,6 +17,7 @@ import {existsSync, mkdirSync, readFileSync, writeFileSync} from 'node:fs';
 import {dirname, join} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import type {TimingMaster} from '../src/data/startWeddingEdit/timingMaster.ts';
+import {resolveEffectiveCueTimeMs} from '../src/data/startWeddingEdit/timingMaster.ts';
 
 const studioRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const localDir = join(studioRoot, 'local');
@@ -61,6 +62,14 @@ mkdirSync(audioOutDir, {recursive: true});
 const {sourceStartMs, globalContentOffsetMs} = master.audio;
 const effectiveEndMs = master.audio.confirmedEndMs ?? master.audio.candidateEndMs;
 const toEditSec = (absoluteMs: number): number => (absoluteMs + globalContentOffsetMs - sourceStartMs) / 1000;
+
+// 重要: cue単体の時刻は、上のtoEditSec()(globalContentOffsetMsのみ適用)ではなく、
+// resolveEffectiveCueTimeMs()(global+phrase+cue offsetを二重適用なく合成する
+// 唯一の正本関数)を経由して変換する。resolveEffectiveCueTimeMs()の戻り値は
+// globalContentOffsetMs適用後の絶対msなので、ここではsourceStartMsの控除だけ行う
+// (toEditSec()を再度通すとglobalContentOffsetMsが二重に加算されてしまう)。
+const toEditSecForCue = (cue: Pick<TimingMaster['phrases'][number]['cues'][number], 'timeMs' | 'cueOffsetMs'>, phrase: Pick<TimingMaster['phrases'][number], 'phraseOffsetMs'>): number =>
+  (resolveEffectiveCueTimeMs(cue, phrase, master.audio) - sourceStartMs) / 1000;
 
 const sourceStartSec = sourceStartMs / 1000;
 const sourceEndSec = effectiveEndMs / 1000;
@@ -121,8 +130,8 @@ const enrichedPhrases = master.phrases.map((p) => {
   const wordCues = p.cues.filter((c) => c.kind === 'word-accent');
   const importantWords: ImportantWordOut[] = wordCues.map((c) => ({
     word: c.text,
-    accentSec: toEditSec(c.timeMs),
-    beatSec: nearestBeatSec(toEditSec(c.timeMs)),
+    accentSec: toEditSecForCue(c, p),
+    beatSec: nearestBeatSec(toEditSecForCue(c, p)),
     timingSource: c.timingSource,
     verifiedByListening: c.verifiedByListening,
     reviewComment: c.reviewComment || null,
@@ -136,7 +145,7 @@ const enrichedPhrases = master.phrases.map((p) => {
     startSec: toEditSec(p.startMs),
     endSec: toEditSec(p.endMs),
     emphasisWord: null as string | null,
-    threeHitFrameSecs: hitCues.length > 0 ? hitCues.map((c) => toEditSec(c.timeMs)) : null,
+    threeHitFrameSecs: hitCues.length > 0 ? hitCues.map((c) => toEditSecForCue(c, p)) : null,
     rhythmType: p.rhythmType,
     semanticType: p.semanticType,
     selectedAnimation: p.selectedAnimation,
@@ -168,11 +177,13 @@ writeFileSync(
   `// このファイルは自動生成。手で編集しない。
 // 再生成: pnpm sync:timing-master (masterを読むだけ。旧7ファイルからの再migrationはしない)
 //
-// v6(2026-08-26、コードレビュー指摘対応): masterId=${JSON.stringify(master.masterId)}
+// v7(2026-08-26、offset architecture分離): masterId=${JSON.stringify(master.masterId)}
 // revision=${master.revision} contentHash=${JSON.stringify(master.contentHash.slice(0, 16))}
 // - timingSourceを5値(manual/verified-vocal/audio-analysis/beat-snap/estimated)へ復元
 // - musicGrid(beats/downbeats/bpm)をmasterから正しく出力(以前は空配列/0だった)
 // - globalContentOffsetMs・sourceStartMsを正しく時間変換へ反映
+// - cue単体の時刻はresolveEffectiveCueTimeMs()経由でphraseOffsetMs/cueOffsetMsも合成
+//   (二重適用防止のため、cue.timeMsへ個別にoffsetを足し込む処理は他に存在しない)
 
 import type {LyricPhrase} from './localLyricsWeddingEdit.ts';
 import type {LocalEditRange} from './localEditRange.ts';
