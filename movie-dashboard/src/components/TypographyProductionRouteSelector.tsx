@@ -11,6 +11,7 @@ import {
 import {
   buildTypographySceneProductionBundle,
   typographyProductionRoutes,
+  type DaVinciTypographyRouteStatus,
   type TypographyProductionPatternId,
 } from "../data/typographySceneProductionRouting";
 import {
@@ -21,6 +22,13 @@ import {
 } from "../data/typographyProductionSelectionStore";
 import type { MaskRevealSceneInstance } from "../data/visualSceneComposer";
 import { downloadText } from "../lib/exporters";
+
+const DAVINCI_ROUTE_SUMMARY: Record<DaVinciTypographyRouteStatus, string> = {
+  DAVINCI_TRANSLATION_NOT_IMPLEMENTED: "DaVinci translator未実装",
+  DAVINCI_ACTUAL_CANDIDATE: "Translator + Actual workflowあり / live未検証",
+  DAVINCI_IMPLEMENTATION_AVAILABLE: "DaVinci live実装あり / Actual未確認",
+  DAVINCI_ACTUAL_VERIFIED: "DaVinci Actual検証済み",
+};
 
 export function TypographyProductionRouteSelector({ scene }: { scene: MaskRevealSceneInstance }) {
   const [revision, setRevision] = useState(0);
@@ -129,7 +137,6 @@ export function TypographyProductionRouteSelector({ scene }: { scene: MaskReveal
       <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-2">
         {typographyProductionRoutes.map((route) => {
           const selected = selection?.patternId === route.patternId;
-          const davinciReady = route.davinciRouteStatus === "DAVINCI_IMPLEMENTATION_AVAILABLE";
           return (
             <button
               key={route.patternId}
@@ -146,7 +153,7 @@ export function TypographyProductionRouteSelector({ scene }: { scene: MaskReveal
                 <span className="text-[8px] font-mono text-navy-400">{route.canonicalMode}</span>
               </div>
               <p className="mt-1 text-[9px] text-navy-400">
-                {davinciReady ? "DaVinci translatorあり / Actual未確認" : "DaVinci translator未実装"}
+                {DAVINCI_ROUTE_SUMMARY[route.davinciRouteStatus]}
               </p>
               {selected ? (
                 <p className="mt-1 text-[9px] font-semibold text-violet-700 dark:text-violet-300">HUMAN_SELECTED ✓</p>
@@ -161,6 +168,9 @@ export function TypographyProductionRouteSelector({ scene }: { scene: MaskReveal
           <p>Selected: {bundle.patternId} / revision {bundle.routeSelection.sourceRevision}</p>
           <p>
             Gate: Remotion Studio {bundle.gate.remotionStudioReady ? "READY" : "NOT_RUN"} / Palmier timing READY / DaVinci visual {bundle.gate.davinciVisualReady ? "IMPLEMENTED" : "BLOCKED"}
+          </p>
+          <p>
+            DaVinci stage: {bundle.davinci.routeStatus} / translator {bundle.davinci.translatorSpecAvailable ? "READY" : "NO"} / Actual workflow {bundle.davinci.actualEvidenceWorkflowAvailable ? "READY" : "NO"} / live {bundle.davinci.liveImplementationAvailable ? "READY" : "NOT_VERIFIED"} / Actual {bundle.davinci.actualVerified ? "PASS" : "NOT_RUN"}
           </p>
           <p>Production ready: NO / blockers: {bundle.gate.blockers.join(", ")}</p>
           {charStaggerActualArtifact ? (
