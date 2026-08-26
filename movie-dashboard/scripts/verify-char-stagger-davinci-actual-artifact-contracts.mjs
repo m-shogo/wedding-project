@@ -28,7 +28,7 @@ for (const token of [
   'STALE_CHAR_STAGGER_ACTUAL_SELECTION',
   'state: "NOT_VERIFIED"',
   'Do not invent Fusion input/property names',
-  'attach a real Follower modifier',
+  'Attach a real Follower modifier',
   'Read back the actual Text+/Follower values and live input/property names',
   'Keep every check NOT_RUN unless that exact step was performed',
   'parameter binding, apply/readback, render, and visual parity evidence',
