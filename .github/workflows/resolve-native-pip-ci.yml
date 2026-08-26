@@ -1,0 +1,171 @@
+name: Resolve Native PiP CI
+
+on:
+  pull_request:
+    paths:
+      - "motion-studio/src/data/resolveNativePIP.ts"
+      - "motion-studio/scripts/prepare-resolve-native-pip-fixture.mts"
+      - "motion-studio/scripts/validate-resolve-native-pip-fixture.mts"
+      - "motion-studio/scripts/resolve-native-pip-runtime-plan.mts"
+      - "motion-studio/scripts/validate-resolve-native-pip-evidence.mts"
+      - "motion-studio/scripts/prepare-resolve-native-pip-session.mts"
+      - "motion-studio/scripts/check-resolve-native-pip.mts"
+      - "docs/research/2026-08-26-movie-tool-learning-run-39-resolve-native-pip.md"
+      - "docs/runbooks/2026-08-26-resolve21-native-pip-canary.md"
+      - "docs/prompts/2026-08-26-resolve21-native-pip-local-actual-agent.md"
+      - ".github/workflows/resolve-native-pip-ci.yml"
+  push:
+    paths:
+      - "motion-studio/src/data/resolveNativePIP.ts"
+      - "motion-studio/scripts/prepare-resolve-native-pip-fixture.mts"
+      - "motion-studio/scripts/validate-resolve-native-pip-fixture.mts"
+      - "motion-studio/scripts/resolve-native-pip-runtime-plan.mts"
+      - "motion-studio/scripts/validate-resolve-native-pip-evidence.mts"
+      - "motion-studio/scripts/prepare-resolve-native-pip-session.mts"
+      - "motion-studio/scripts/check-resolve-native-pip.mts"
+      - "docs/research/2026-08-26-movie-tool-learning-run-39-resolve-native-pip.md"
+      - "docs/runbooks/2026-08-26-resolve21-native-pip-canary.md"
+      - "docs/prompts/2026-08-26-resolve21-native-pip-local-actual-agent.md"
+      - ".github/workflows/resolve-native-pip-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: motion-studio/pnpm-lock.yaml
+
+      - name: Install dependencies
+        working-directory: motion-studio
+        run: pnpm install --frozen-lockfile
+
+      - name: Install ffmpeg
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg
+
+      - name: TypeScript
+        working-directory: motion-studio
+        run: pnpm typecheck
+
+      - name: Native PiP machine-readable contract
+        working-directory: motion-studio
+        run: node --no-warnings scripts/check-resolve-native-pip.mts
+
+      - name: Fixture dry-run stays non-mutating
+        working-directory: motion-studio
+        run: |
+          rm -rf out/canary-inputs/native-pip out/canary-inputs/manifests/DV21-NATIVE-PIP-01.json
+          node --no-warnings scripts/prepare-resolve-native-pip-fixture.mts --dry-run > /tmp/pip-dry-run.txt
+          grep -Fq 'DRY RUN: no fixture files or manifests were written.' /tmp/pip-dry-run.txt
+          test ! -e out/canary-inputs/manifests/DV21-NATIVE-PIP-01.json
+
+      - name: Generate and validate synthetic fixture
+        working-directory: motion-studio
+        run: |
+          node --no-warnings scripts/prepare-resolve-native-pip-fixture.mts
+          node --no-warnings scripts/validate-resolve-native-pip-fixture.mts
+          test -f out/canary-inputs/native-pip/native-pip-top-test-pattern.mp4
+          test -f out/canary-inputs/native-pip/native-pip-background.mp4
+          test -f out/canary-inputs/native-pip/native-pip-human-master.json
+          grep -Fq '"target": 0.35' out/canary-inputs/native-pip/native-pip-human-master.json
+          grep -Fq '"status": "PREPARED"' out/canary-inputs/manifests/DV21-NATIVE-PIP-01.json
+
+      - name: Compile runtime plan
+        working-directory: motion-studio
+        run: |
+          node --no-warnings scripts/resolve-native-pip-runtime-plan.mts > /tmp/pip-plan.md
+          grep -Fq 'DV21-NATIVE-PIP-01' /tmp/pip-plan.md
+          grep -Fq 'Rounding=0.35' /tmp/pip-plan.md
+          grep -Fq 'effect-availability' /tmp/pip-plan.md
+          grep -Fq 'human-late-edit' /tmp/pip-plan.md
+          grep -Fq 'save-reopen-render' /tmp/pip-plan.md
+          grep -Fq 'Minimum independent executions: 2' /tmp/pip-plan.md
+          grep -Fq 'Render required: YES' /tmp/pip-plan.md
+
+      - name: Fresh evidence stays fail closed
+        working-directory: motion-studio
+        run: |
+          node --no-warnings scripts/resolve-native-pip-runtime-plan.mts --evidence-template --execution-id DV21-NATIVE-PIP-CI-FRESH > /tmp/pip-evidence.json
+          node --no-warnings scripts/validate-resolve-native-pip-evidence.mts /tmp/pip-evidence.json
+          grep -Fq '"result": "NOT_RUN"' /tmp/pip-evidence.json
+          grep -Fq '"promotionEligible": false' /tmp/pip-evidence.json
+
+      - name: Promotion requires Inspector-only readbacks and hashed render
+        working-directory: motion-studio
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const e = JSON.parse(fs.readFileSync('/tmp/pip-evidence.json', 'utf8'));
+          e.capturedAt = new Date().toISOString();
+          e.result = 'PASS';
+          e.promotionEligible = true;
+          e.resolve = {product:'DaVinci Resolve',version:'21.0.3-CI-SEMANTIC-ONLY',edition:'FREE',platform:'MACOS',projectName:'CI',timelineName:'CI'};
+          for (const step of e.stepResults) { step.status='PASS'; step.observed='CI semantic fixture only; not runtime evidence.'; }
+          for (const input of e.inputInventory) { input.present=true; input.pathOrRef=`ci://${input.id}`; input.sha256='1'.repeat(64); }
+          e.humanReview={completed:true,notes:['CI semantic fixture only; not runtime evidence.']};
+          fs.writeFileSync('/tmp/pip-promo-missing.json', JSON.stringify(e,null,2));
+          NODE
+          if node --no-warnings scripts/validate-resolve-native-pip-evidence.mts /tmp/pip-promo-missing.json > /tmp/pip-missing.txt 2>&1; then
+            echo 'PiP promotion unexpectedly passed without explicit Inspector/readback/render proof'
+            exit 1
+          fi
+          grep -Fq 'effect-availability.readback.available=true' /tmp/pip-missing.txt
+          grep -Fq 'requires a RENDER artifact' /tmp/pip-missing.txt
+
+          node <<'NODE'
+          const fs = require('fs');
+          const e = JSON.parse(fs.readFileSync('/tmp/pip-promo-missing.json', 'utf8'));
+          const byId = id => e.stepResults.find(s => s.stepId === id);
+          byId('effect-availability').readback.available = true;
+          byId('style-photo-card').readback.fusionOpened = false;
+          byId('human-late-edit').readback.fusionOpened = false;
+          byId('save-reopen-render').readback.postReopenPersisted = true;
+          byId('save-reopen-render').readback.renderVisualMatch = true;
+          e.artifacts.push({kind:'RENDER',path:'ci://native-pip-render.mp4',sha256:'2'.repeat(64)});
+          fs.writeFileSync('/tmp/pip-promo-complete.json', JSON.stringify(e,null,2));
+          NODE
+          node --no-warnings scripts/validate-resolve-native-pip-evidence.mts /tmp/pip-promo-complete.json
+
+      - name: Immutable Session stays pre-runtime and duplicate-safe
+        working-directory: motion-studio
+        run: |
+          execution='DV21-NATIVE-PIP-01-CI-A'
+          node --no-warnings scripts/prepare-resolve-native-pip-session.mts --execution-id "$execution" --reuse-existing
+          test -f "out/canary-sessions/$execution/session.json"
+          test -f "out/canary-sessions/$execution/RUN.md"
+          grep -Fq '"status": "READY_FOR_RUNTIME"' "out/canary-sessions/$execution/session.json"
+          grep -Fq '"runtimeLaunchPerformed": false' "out/canary-sessions/$execution/session.json"
+          grep -Fq '"canaryStateAtPreparation": "READY_TO_EXECUTE"' "out/canary-sessions/$execution/session.json"
+          grep -Fq '"result": "NOT_RUN"' "out/canary-sessions/$execution/evidence.json"
+          before=$(sha256sum "out/canary-sessions/$execution/evidence.json" | awk '{print $1}')
+          if node --no-warnings scripts/prepare-resolve-native-pip-session.mts --execution-id "$execution" --reuse-existing > /tmp/pip-duplicate.txt 2>&1; then
+            echo 'Duplicate native PiP execution ID unexpectedly overwrote a Session'
+            exit 1
+          fi
+          grep -Fq 'Session already exists and will not be overwritten' /tmp/pip-duplicate.txt
+          after=$(sha256sum "out/canary-sessions/$execution/evidence.json" | awk '{print $1}')
+          test "$before" = "$after"
+
+      - name: Runtime honesty markers
+        run: |
+          grep -Fq 'EFFECT_LISTED_IN_DOCS != EFFECT_AVAILABLE_IN_TESTED_EDITION' docs/research/2026-08-26-movie-tool-learning-run-39-resolve-native-pip.md
+          grep -Fq 'STATIC_HUMAN_ADJUSTABILITY != ANIMATION_CAPABILITY' docs/runbooks/2026-08-26-resolve21-native-pip-canary.md
+          grep -Fq 'ONE_PASS != REPRODUCED' docs/prompts/2026-08-26-resolve21-native-pip-local-actual-agent.md
