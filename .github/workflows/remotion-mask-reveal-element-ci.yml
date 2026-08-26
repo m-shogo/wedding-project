@@ -10,6 +10,8 @@ on:
       - "motion-studio/scripts/check-mask-reveal-element-payload.mts"
       - "motion-studio/scripts/build-char-stagger-element-payload.mts"
       - "motion-studio/scripts/check-char-stagger-element-payload.mts"
+      - "motion-studio/scripts/build-type-on-rhythm-element-payload.mts"
+      - "motion-studio/scripts/check-type-on-rhythm-element-payload.mts"
       - "motion-studio/scripts/lib/typography-element-kit.mts"
       - "motion-studio/scripts/lib/check-typography-element.mts"
       - ".github/workflows/remotion-mask-reveal-element-ci.yml"
@@ -23,6 +25,8 @@ on:
       - "motion-studio/scripts/check-mask-reveal-element-payload.mts"
       - "motion-studio/scripts/build-char-stagger-element-payload.mts"
       - "motion-studio/scripts/check-char-stagger-element-payload.mts"
+      - "motion-studio/scripts/build-type-on-rhythm-element-payload.mts"
+      - "motion-studio/scripts/check-type-on-rhythm-element-payload.mts"
       - "motion-studio/scripts/lib/typography-element-kit.mts"
       - "motion-studio/scripts/lib/check-typography-element.mts"
       - ".github/workflows/remotion-mask-reveal-element-ci.yml"
@@ -107,14 +111,19 @@ jobs:
         working-directory: motion-studio
         run: pnpm typecheck
 
-      - name: Generate and validate both canonical Typography Elements
+      - name: Generate and validate canonical Typography Elements
         working-directory: motion-studio
         run: |
-          rm -rf out/research/remotion-elements/mask-reveal out/research/remotion-elements/char-stagger
+          rm -rf \
+            out/research/remotion-elements/mask-reveal \
+            out/research/remotion-elements/char-stagger \
+            out/research/remotion-elements/type-on-rhythm
           node --no-warnings scripts/build-mask-reveal-element-payload.mts
           node --no-warnings scripts/check-mask-reveal-element-payload.mts
           node --no-warnings scripts/build-char-stagger-element-payload.mts
           node --no-warnings scripts/check-char-stagger-element-payload.mts
+          node --no-warnings scripts/build-type-on-rhythm-element-payload.mts
+          node --no-warnings scripts/check-type-on-rhythm-element-payload.mts
 
       - name: Compile and render generated Element sources
         working-directory: motion-studio
@@ -123,16 +132,18 @@ jobs:
           import {Composition, registerRoot} from 'remotion';
           import {WeddingMaskRevealElement} from './mask-reveal/mask-reveal.element-source';
           import {WeddingCharStaggerElement} from './char-stagger/char-stagger.element-source';
+          import {WeddingTypeOnRhythmElement} from './type-on-rhythm/type-on-rhythm.element-source';
 
           const Root = () => (
             <>
               <Composition id="WeddingMaskRevealElementCanary" component={WeddingMaskRevealElement} width={1280} height={720} fps={30} durationInFrames={120} />
               <Composition id="WeddingCharStaggerElementCanary" component={WeddingCharStaggerElement} width={1280} height={720} fps={30} durationInFrames={120} />
+              <Composition id="WeddingTypeOnRhythmElementCanary" component={WeddingTypeOnRhythmElement} width={1280} height={720} fps={30} durationInFrames={120} />
             </>
           );
           registerRoot(Root);
           EOF
-          for id in WeddingMaskRevealElementCanary WeddingCharStaggerElementCanary; do
+          for id in WeddingMaskRevealElementCanary WeddingCharStaggerElementCanary WeddingTypeOnRhythmElementCanary; do
             pnpm exec remotion render \
               out/research/remotion-elements/typography-elements-canary-entry.tsx \
               "$id" \
@@ -150,7 +161,7 @@ jobs:
             echo 'Expected runner-only candidate install to modify package.json';
             exit 1;
           }
-          echo 'typographyElementCount=2'
+          echo 'typographyElementCount=3'
           echo 'elementPayloadValidation=PASS_CANDIDATE_ONLY'
           echo 'interactiveSchemaStaticContract=PASS_CANDIDATE_ONLY'
           echo 'studioControlReadback=NOT_RUN'
