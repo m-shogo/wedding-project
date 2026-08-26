@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { createCharStaggerDaVinciActualArtifact } from "../data/charStaggerDaVinciActualArtifact";
 import {
   buildTypographySceneProductionBundle,
   typographyProductionRoutes,
@@ -11,6 +12,7 @@ import {
   TYPOGRAPHY_PRODUCTION_SELECTION_CHANGED_EVENT,
 } from "../data/typographyProductionSelectionStore";
 import type { MaskRevealSceneInstance } from "../data/visualSceneComposer";
+import { downloadText } from "../lib/exporters";
 
 export function TypographyProductionRouteSelector({ scene }: { scene: MaskRevealSceneInstance }) {
   const [revision, setRevision] = useState(0);
@@ -20,6 +22,13 @@ export function TypographyProductionRouteSelector({ scene }: { scene: MaskReveal
   );
   const bundle = useMemo(
     () => (selection ? buildTypographySceneProductionBundle(scene, selection) : null),
+    [scene, selection],
+  );
+  const charStaggerActualArtifact = useMemo(
+    () =>
+      selection?.patternId === "type-char-stagger"
+        ? createCharStaggerDaVinciActualArtifact(scene, selection)
+        : null,
     [scene, selection],
   );
 
@@ -37,6 +46,14 @@ export function TypographyProductionRouteSelector({ scene }: { scene: MaskReveal
   function clear() {
     clearTypographyProductionSelection(scene.sceneId);
     setRevision((value) => value + 1);
+  }
+
+  function exportCharStaggerActualArtifact() {
+    if (!charStaggerActualArtifact) return;
+    downloadText(
+      JSON.stringify(charStaggerActualArtifact, null, 2),
+      `${scene.sceneId}-type-char-stagger-davinci-actual.json`,
+    );
   }
 
   return (
@@ -94,6 +111,28 @@ export function TypographyProductionRouteSelector({ scene }: { scene: MaskReveal
             Gate: Remotion Studio {bundle.gate.remotionStudioReady ? "READY" : "NOT_RUN"} / Palmier timing READY / DaVinci visual {bundle.gate.davinciVisualReady ? "IMPLEMENTED" : "BLOCKED"}
           </p>
           <p>Production ready: NO / blockers: {bundle.gate.blockers.join(", ")}</p>
+          {charStaggerActualArtifact ? (
+            <div className="mt-2 border border-sky-200 dark:border-sky-800 p-2.5">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <div>
+                  <p className="font-semibold text-sky-700 dark:text-sky-300">Char Stagger / DaVinci Actual canary</p>
+                  <p className="mt-1 text-navy-400">
+                    Parameter binding: NOT_VERIFIED / Apply・Readback・Render・Visual QA: NOT_RUN
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={exportCharStaggerActualArtifact}
+                  className="border border-sky-300 dark:border-sky-700 px-2.5 py-1.5 font-semibold text-sky-700 dark:text-sky-300"
+                >
+                  Actual JSONを書き出す
+                </button>
+              </div>
+              <p className="mt-2 text-navy-400">
+                このJSONはSceneの正本ではなく、実Mac ResolveでText+ / Followerを適用・readback・render確認するためのEVIDENCE_ONLYテンプレートです。
+              </p>
+            </div>
+          ) : null}
         </div>
       ) : (
         <p className="mt-3 text-[9px] leading-4 text-amber-700 dark:text-amber-300">
