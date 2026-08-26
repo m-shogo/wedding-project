@@ -89,22 +89,19 @@ type PhraseMapEntry = {
   exitSec?: number;
 };
 type WordAccentEntry = {word: string; phraseId: string; accentSec: number};
-type ManualWordOverride = {
+// movie-dashboard「歌詞タイミング調整」(vite.config.ts save-overrides middleware)が
+// 実際に書き出すschema。word===nullがphrase全体(start/end)のoverride、
+// wordが文字列ならその語のaccentSec override。1ファイル1配列(discriminated union)。
+type TimingOverrideEntry = {
   phraseId: string;
-  word: string;
-  manualAccentSec?: number;
-  manualOffsetFrames?: number;
-  verifiedByListening?: boolean;
-  reviewComment?: string;
-  updatedAt?: string;
-};
-type ManualPhraseOverride = {
-  phraseId: string;
-  manualStartSec?: number;
-  manualEndSec?: number;
-  verifiedByListening?: boolean;
-  reviewComment?: string;
-  updatedAt?: string;
+  word: string | null;
+  manualAccentSec: number | null;
+  manualOffsetFrames: number | null;
+  manualStartSec?: number | null;
+  manualEndSec?: number | null;
+  verifiedByListening: boolean;
+  reviewComment: string;
+  updatedAt: string;
 };
 
 const structureMap = readJsonIfExists('structure-map.local.json') as {sections?: unknown[]} | null;
@@ -113,25 +110,20 @@ const wordAccentMap = readJsonIfExists('word-accent-map.local.json') as {words?:
 const beatMap = readJsonIfExists('beat-map.local.json') as {beats?: number[]; downbeats?: number[]; bpm?: number} | null;
 const transitionMap = readJsonIfExists('transition-map.local.json') as {transitions?: Record<string, string>} | null;
 
-// 人間が「歌詞タイミング調整」Dashboardで実際に音を聴いて登録した手動値。
+// 人間が「歌詞タイミング調整」Dashboard(movie-dashboard)で実際に音を聴いて登録した手動値。
 // beat-snapされたword-accent-map.local.json本体は正本のまま変更せず、
 // この別ファイルが存在する場合だけ最優先で上書きする(手動値の自動上書き禁止)。
-// 配列(word overridesのみ)、または{words:[...], phrases:[...]}形式のどちらも許容する。
-const manualOverridesRaw = readJsonIfExists('word-accent-map.manual-overrides.local.json') as
-  | ManualWordOverride[]
-  | {words?: ManualWordOverride[]; phrases?: ManualPhraseOverride[]}
-  | null;
-const manualWordOverrides: ManualWordOverride[] = Array.isArray(manualOverridesRaw)
-  ? manualOverridesRaw
-  : (manualOverridesRaw?.words ?? []);
-const manualPhraseOverrides: ManualPhraseOverride[] = Array.isArray(manualOverridesRaw)
-  ? []
-  : (manualOverridesRaw?.phrases ?? []);
+const manualOverridesRaw = readJsonIfExists('word-accent-map.manual-overrides.local.json') as TimingOverrideEntry[] | null;
+const manualOverrides: TimingOverrideEntry[] = manualOverridesRaw ?? [];
+const manualWordOverrides = manualOverrides.filter((o) => o.word !== null && o.manualAccentSec != null);
+const manualPhraseOverrides = manualOverrides.filter(
+  (o) => o.word === null && (o.manualStartSec != null || o.manualEndSec != null || o.verifiedByListening),
+);
 const manualWordByKey = new Map(manualWordOverrides.map((o) => [`${o.phraseId}::${o.word}`, o]));
 const manualPhraseById = new Map(manualPhraseOverrides.map((o) => [o.phraseId, o]));
-if (manualWordOverrides.length > 0 || manualPhraseOverrides.length > 0) {
+if (manualOverrides.length > 0) {
   console.log(
-    `[start-wedding-edit] 手動timing override検出: word ${manualWordOverrides.length}件 / phrase ${manualPhraseOverrides.length}件(聴取確認による人間修正を最優先で適用)`,
+    `[start-wedding-edit] 手動timing override検出: 全${manualOverrides.length}件中 word ${manualWordOverrides.length}件 / phrase ${manualPhraseOverrides.length}件(聴取確認による人間修正を最優先で適用)`,
   );
 }
 

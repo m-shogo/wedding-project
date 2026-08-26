@@ -383,17 +383,44 @@ const EffectLayer: React.FC<{effect: ShotEffect; localFrame: number; duration: n
 // ---------------------------------------------------------------------------
 // ShotRenderer: 1 shotを描く
 // ---------------------------------------------------------------------------
-export const ShotRenderer: React.FC<{shot: PlacedShot; editorialRules?: boolean}> = ({shot, editorialRules}) => {
+/** 歌詞の3-hit等、実accentSecと同じ瞬間に写真側も反応させるための
+ * パンチスケール+flash。localFrameがimpactFrames(shot自身のSequence基準、
+ * StartWeddingEditComposition側でphraseのthreeHitFrameSecsをshot-local frameへ
+ * 変換して渡す)のいずれかに近いほど強く反応する。文字とカメラが「別々に動いている」
+ * (audit項目7)を解消するための実装。 */
+const useImpactPunch = (localFrame: number, impactFrames: number[] | undefined): {scale: number; flash: number} => {
+  if (!impactFrames || impactFrames.length === 0) return {scale: 1, flash: 0};
+  let nearest = -Infinity;
+  for (const f of impactFrames) {
+    if (f <= localFrame && f > nearest) nearest = f;
+  }
+  if (nearest === -Infinity) return {scale: 1, flash: 0};
+  const local = localFrame - nearest;
+  const scale = interpolate(local, [0, 3, 10], [1, 1.06, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  const flash = interpolate(local, [0, 2, 8], [0, 0.32, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  return {scale, flash};
+};
+
+export const ShotRenderer: React.FC<{shot: PlacedShot; editorialRules?: boolean; impactFrames?: number[]}> = ({
+  shot,
+  editorialRules,
+  impactFrames,
+}) => {
   const localFrame = useCurrentFrame();
   const dur = shot.durationInFrames;
   const entry = entryRender(shot.entry, localFrame);
   const mStyle = motionStyle(shot.motion, localFrame, dur);
   const layout = shot.layout ?? {kind: 'full' as const};
   const extras = shot.extraRoles ?? [];
+  const punch = useImpactPunch(localFrame, impactFrames);
+  const mStyleWithPunch: React.CSSProperties = {
+    ...mStyle,
+    transform: `${mStyle.transform ?? ''} scale(${punch.scale})`.trim(),
+  };
 
   return (
     <AbsoluteFill style={{overflow: 'hidden', ...entry.style, clipPath: entry.clipPath}}>
-      <AbsoluteFill style={mStyle}>
+      <AbsoluteFill style={mStyleWithPunch}>
         <LayoutRender
           layout={layout}
           role={shot.role}
@@ -421,6 +448,9 @@ export const ShotRenderer: React.FC<{shot: PlacedShot; editorialRules?: boolean}
       {(shot.effects ?? []).map((e, i) => (
         <EffectLayer key={i} effect={e} localFrame={localFrame} duration={dur} />
       ))}
+      {punch.flash > 0 ? (
+        <AbsoluteFill style={{background: '#FFFFFF', opacity: punch.flash, pointerEvents: 'none', mixBlendMode: 'screen'}} />
+      ) : null}
       {entry.overlay}
     </AbsoluteFill>
   );

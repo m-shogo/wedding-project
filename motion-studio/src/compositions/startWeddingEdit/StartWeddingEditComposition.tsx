@@ -66,6 +66,18 @@ export const StartWeddingEditComposition: React.FC<StartWeddingEditCompositionPr
     sectionShots[section.id] = {shots: placeShots(design, section), sectionStartSec: section.startSec};
   }
 
+  // 「パッパッパッ」等のthreeHitFrameSecsを、文字だけでなく写真/カメラも同じ瞬間に
+  // 反応させるためのsection-local frameへ変換する(audit項目7: 歌詞と映像が別々に
+  // 動いている、への対応)。sectionId→そのsection内で発生するimpact frame一覧。
+  const sectionImpactFrames: Record<string, number[]> = {};
+  for (const p of weddingEditLyricPhrases) {
+    if (!p.threeHitFrameSecs) continue;
+    const section = WEDDING_EDIT_SECTIONS.find((s) => s.id === p.sectionId);
+    if (!section) continue;
+    const frames = p.threeHitFrameSecs.map((s) => Math.round((s - section.startSec) * 30));
+    sectionImpactFrames[p.sectionId] = [...(sectionImpactFrames[p.sectionId] ?? []), ...frames];
+  }
+
   return (
     <AbsoluteFill style={{background: '#0A0A0C'}}>
       {weddingEditAudioPath ? <Audio src={staticFile(weddingEditAudioPath)} /> : null}
@@ -84,19 +96,26 @@ export const StartWeddingEditComposition: React.FC<StartWeddingEditCompositionPr
         const shots = sectionShots[section.id].shots;
         const isInterlude = section.id.startsWith('interlude');
 
+        const impactFramesInSection = sectionImpactFrames[section.id] ?? [];
+
         return (
           <Sequence key={section.id} from={from} durationInFrames={durationInFrames} name={section.labelJa}>
-            {shots.map((shot, i) => (
-              <Sequence
-                key={shot.index}
-                from={shot.localFrom}
-                durationInFrames={shot.durationInFrames + (shots[i + 1] ? entryOverlapFrames(shots[i + 1].entry) : 0)}
-                name={`shot${shot.index + 1}:${shot.role}`}
-                premountFor={12}
-              >
-                <ShotRenderer shot={shot} />
-              </Sequence>
-            ))}
+            {shots.map((shot, i) => {
+              const shotImpactFrames = impactFramesInSection
+                .map((f) => f - shot.localFrom)
+                .filter((lf) => lf >= 0 && lf < shot.durationInFrames);
+              return (
+                <Sequence
+                  key={shot.index}
+                  from={shot.localFrom}
+                  durationInFrames={shot.durationInFrames + (shots[i + 1] ? entryOverlapFrames(shots[i + 1].entry) : 0)}
+                  name={`shot${shot.index + 1}:${shot.role}`}
+                  premountFor={12}
+                >
+                  <ShotRenderer shot={shot} impactFrames={shotImpactFrames} />
+                </Sequence>
+              );
+            })}
             {isInterlude ? <InterludeOverlay sectionId={section.id} variant={variant} /> : null}
             {reviewMode ? (
               <AbsoluteFill style={{pointerEvents: 'none'}}>
