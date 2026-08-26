@@ -77,6 +77,7 @@ const expectedPreparations = {
   'DV21-AUDIO-RECOVERY-01': 'audio',
   'DV21-PALMIER-FCPXML-01': 'palmier',
   'DV21-DRFX-FREE-01': 'drfx',
+  'DV21-LOTTIE-OGRAF-01': 'lottie',
 } as const;
 for (const [canaryId, expectedMode] of Object.entries(expectedPreparations)) {
   const preparation = resolveCanaryInputPreparationCommands[canaryId];
@@ -97,6 +98,11 @@ for (const [canaryId, expectedMode] of Object.entries(expectedPreparations)) {
 const drfxPreparation = resolveCanaryInputPreparationCommands['DV21-DRFX-FREE-01'];
 if (!drfxPreparation?.result.includes('deterministic')) err('DRFX preparation must state deterministic packaging intent');
 if (!drfxPreparation?.result.includes('Runtime install remains pending')) err('DRFX preparation must not imply runtime install success');
+
+const lottiePreparation = resolveCanaryInputPreparationCommands['DV21-LOTTIE-OGRAF-01'];
+if (!lottiePreparation?.result.includes('deterministic')) err('Lottie preparation must state deterministic packaging intent');
+if (!lottiePreparation?.result.includes('self-authored')) err('Lottie preparation must retain self-authored provenance intent');
+if (!lottiePreparation?.result.includes('runtime-pending')) err('Lottie preparation must not imply Resolve import/alpha/editability success');
 
 const sampleManifest = resolveCanaryInputManifestSchema.safeParse({
   schemaVersion: 'resolve-canary-input-manifest/v1',

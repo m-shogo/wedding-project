@@ -28,7 +28,8 @@ function usage() {
   console.log('  audio    Generate a copyright-free synthetic WAV + Human Master target manifest');
   console.log('  palmier  Write the synthetic Palmier scene specification only; real FCPXML still requires Palmier');
   console.log('  drfx     Build deterministic neutral Edit/Generators .drfx candidate + manifests');
-  console.log('  all      Prepare alpha + audio + Palmier scene spec + neutral DRFX candidate');
+  console.log('  lottie   Build deterministic self-authored dotLottie v1 native-import candidate + manifests');
+  console.log('  all      Prepare alpha + audio + Palmier scene spec + neutral DRFX + neutral Lottie candidates');
   console.log('');
   console.log('Options:');
   console.log('  --dry-run         Print planned commands/outputs without creating files');
@@ -40,7 +41,7 @@ if (mode === '--list' || mode === 'list') {
   process.exit(0);
 }
 
-if (!['alpha', 'audio', 'palmier', 'drfx', 'all'].includes(mode)) {
+if (!['alpha', 'audio', 'palmier', 'drfx', 'lottie', 'all'].includes(mode)) {
   console.error(`Unknown mode: ${mode}`);
   usage();
   process.exit(1);
@@ -245,14 +246,21 @@ function preparePalmierSpec() {
   });
 }
 
-function prepareDrfx() {
-  console.log('\n# DV21-DRFX-FREE-01 neutral template bundle');
-  const childArgs = ['--no-warnings', 'scripts/prepare-resolve-drfx-fixture.mts'];
+function runChildFixture(script: string, label: string) {
+  const childArgs = ['--no-warnings', script];
   if (dryRun) childArgs.push('--dry-run');
   const result = spawnSync(process.execPath, childArgs, {cwd: root, stdio: 'inherit'});
-  if (result.status !== 0) {
-    throw new Error(`Neutral DRFX fixture preparation failed (${result.status ?? 'unknown'}).`);
-  }
+  if (result.status !== 0) throw new Error(`${label} preparation failed (${result.status ?? 'unknown'}).`);
+}
+
+function prepareDrfx() {
+  console.log('\n# DV21-DRFX-FREE-01 neutral template bundle');
+  runChildFixture('scripts/prepare-resolve-drfx-fixture.mts', 'Neutral DRFX fixture');
+}
+
+function prepareLottie() {
+  console.log('\n# DV21-LOTTIE-OGRAF-01 neutral dotLottie fixture');
+  runChildFixture('scripts/prepare-resolve-lottie-fixture.mts', 'Neutral Lottie fixture');
 }
 
 try {
@@ -261,6 +269,7 @@ try {
   if (mode === 'audio' || mode === 'all') prepareAudio();
   if (mode === 'palmier' || mode === 'all') preparePalmierSpec();
   if (mode === 'drfx' || mode === 'all') prepareDrfx();
+  if (mode === 'lottie' || mode === 'all') prepareLottie();
   console.log('\nDone. Generated files live under motion-studio/out/canary-inputs or the existing neutral alpha output path and should not be committed as binary evidence by default.');
 } catch (error) {
   console.error(error instanceof Error ? error.message : error);
