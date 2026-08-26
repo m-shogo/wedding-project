@@ -1,66 +1,109 @@
-# BOARDING PASS — Stub label semantic mismatch / 2026-08-26
+# BOARDING PASS — Stub table semantic label correction / 2026-08-26
 
-State: `OBSERVED → ROOT_CAUSE_HYPOTHESIS / BOUNDED_FIGMA_TEST_PENDING / CURRENT_UNCHANGED`
+State: `VERIFIED_LOCAL / ADOPTED / SELLABLE_VISUAL_QA_PASS_RETAINED`
 
 ## Live authority
 
-- latest `main` immediately before write: `8111409c0579a1f332a9323053261b1edc3e628c`
+- latest `main` immediately before Git write: `4fafce010d0eb939b75519282ee6480aa5c2513c`
 - Current authority: `docs/automation/non-rurubu-figma-quality-current.md` = `ACTIVE / HOURLY / FIGMA_EDIT_ALLOWED / VISUAL_REOPENED`
 - hybrid authoring: `docs/design-learning/AI-FIGMA-HYBRID-AUTHORING-POLICY.md`
 - Figma file: `P2PtpMyhyZqHYe1ZBBCD13`
 - current front/back: `63:41 / 63:72`
+- front long-copy stress: `64:2`
 - Drive authority: `1pccCqb47W7z4F9g_224X4U3bS45HA_Ql / 03_航空チケット風_エスコートカード`
-- Drive authority metadata re-read live on 2026-08-26; Drive write `0`.
+- Drive metadata readback: PASS
+- Drive write: `0`
+- image generation: `0`
 
 ## Visible problem
 
-Fresh reading-scale screenshot of current front `63:41` shows an internal semantic inconsistency on the detachable stub:
+The detachable stub used `席` above `[卓番号]`, while the main body correctly used `卓` above the same table-number role.
 
-- main body table label reads `卓` above `[卓番号]`;
-- detachable stub uses the label `席` above the same `[卓番号]` value.
+This was a semantic error rather than a styling preference: the stub named a wedding table-number field as a seat field and introduced unnecessary transport-authenticity semantics.
 
-The stub therefore names a table-number field as a seat field. This is not an overflow or styling problem: the wording changes the meaning of the information carried by the detachable stub.
+Live roles before repair:
 
-The current metadata also confirms separate semantic roles:
+- main table label `63:62 / TEXT / TABLE LABEL` = `卓`
+- main table value `63:63 / TEXT / TABLE` = `[卓番号]`
+- stub label `63:68 / TEXT / STUB SEAT LABEL` = `席`
+- stub value `63:69 / TEXT / STUB TABLE` = `[卓番号]`
 
-- `63:62 / TEXT / TABLE LABEL`
-- `63:63 / TEXT / TABLE`
-- `63:68 / TEXT / STUB SEAT LABEL`
-- `63:69 / TEXT / STUB TABLE`
+The same mismatch existed in front long-copy stress at `64:29`.
 
-## Root-cause hypothesis
+## Bounded comparison
 
-The clean-room ticket structure correctly preserved the table-number value on both the main body and stub, but the stub label inherited a generic transport-ticket concept (`seat`) instead of the actual wedding semantic role (`table`). Because the artifact intentionally avoids fake airline credentials, leaving `席` here creates the exact kind of transport-authenticity overreach the current visual policy is meant to prevent.
+Created rollback-safe comparison:
 
-## Required bounded test
+- `79:2 / QA / BOARDING FRONT / STUB LABEL 卓 CANDIDATE / 2026-08-26`
 
-Do not redesign the ticket and do not change `[卓番号]` geometry.
+Changed only the stub label `席 → 卓`. The ticket layout, stub/perforation, table-value geometry, headline, palette and physical-artifact logic remained unchanged.
 
-When Figma authoring guidance is readable again, create rollback-safe retained-vs-corrected comparison changing only `63:68 / TEXT / STUB SEAT LABEL`:
+The comparison passed and was hidden after promotion.
 
-1. current `席`;
-2. candidate `卓`.
+## Adopted Figma change
 
-Verify:
+Current:
 
-- whole / thumbnail: stub still scans instantly;
-- reading scale: main body and stub use consistent semantics without becoming redundant/noisy;
-- native `1200×550`: no new collision with `[卓番号]`;
-- long-copy stress `64:2`: matching stub label remains correct;
-- `textAutoResize=HEIGHT`, fixed-height count `0`, outside text `0`, IMAGE fill `0` remain unchanged.
+- `63:68 / TEXT / STUB SEAT LABEL`: `席 → 卓`
+- native `Noto Sans JP Bold`
+- `textAutoResize=HEIGHT`
 
-Do not replace with `SEAT`, fake seat-number wording, flight credentials, barcode, gate, or airline terminology.
+Long-copy stress:
 
-## Current visual status
+- `64:29 / TEXT / STUB SEAT LABEL`: `席 → 卓`
+- `textAutoResize=HEIGHT`
 
-The broader `BAGGAGE RIBBON / RETURN LABEL` art direction remains visually strong and current `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS` is not revoked by this single bounded semantic defect before the comparison is executed.
+The semantic node name remains historical; its rendered reader-facing value is now correct. A later structural cleanup may rename the node if useful, but that is not required for visual correctness.
 
-Front/back fresh screenshots otherwise preserve the verified ticket/stub/perforation hierarchy. No image-generation role is justified for this issue.
+## Rollback
 
-## Authoring blocker
+Before Current mutation, full hidden rollback copies were created:
 
-The connected Figma write action requires `figma-use` guidance before mutation. The canonical guidance resource again returned `ResourceNotReadable` on this run. This is the same known authoring-path fingerprint; per the shared failure-dedup rule, do not blind-retry or bypass the contract.
+- `79:33 / ROLLBACK / BOARDING FRONT / PRE-STUB-TABLE-LABEL / 2026-08-26`
+- `79:64 / ROLLBACK / BOARDING FRONT STRESS / PRE-STUB-TABLE-LABEL / 2026-08-26`
+
+## Three-scale screenshot QA
+
+- whole / 500px: PASS; stub still scans as a distinct detachable area;
+- reading / 1000px: PASS; main body and stub now use the same table semantics;
+- actual-size / native `1200×550`: PASS; `卓` and `[卓番号]` remain clear without collision.
+
+No fake `SEAT`, flight, gate, barcode or airline credential was introduced.
+
+## Structure readback
+
+Current `63:41`:
+
+- visible native text `16`;
+- fixed-height text `0`;
+- outside visible text `0`;
+- IMAGE fills `0`;
+- stub label `63:68` = `卓 / HEIGHT`.
+
+Long-copy stress `64:2`:
+
+- visible native text `16`;
+- fixed-height text `0`;
+- outside visible text `0`;
+- IMAGE fills `0`;
+- stub label `64:29` = `卓 / HEIGHT`.
+
+## Visual status
+
+The broader `BAGGAGE RIBBON / RETURN LABEL` art direction remains unchanged and continues to satisfy:
+
+`SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS`.
+
+The correction removes a semantic contradiction without changing the selected 93/100 professional art direction.
+
+## Learning state
+
+`VERIFIED_LOCAL`.
+
+Candidate principle: ticket-inspired wedding artifacts should inherit only the transport semantics that perform a real wedding function. A physical stub may look ticket-like without relabeling a table as a seat.
+
+Do not promote this as a cross-item rule from one correction, and do not transfer Boarding layout/palette/stub geometry to another item.
 
 ## Result
 
-`CURRENT_UNCHANGED / SEMANTIC_STUB_LABEL_MISMATCH_OBSERVED / BOUNDED_FIGMA_TEST_PENDING / DRIVE_UNCHANGED / IMAGE_GENERATION_NOT_REQUIRED / NOT_PRINT_READY`
+`CURRENT_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / STUB_TABLE_SEMANTIC_PASS / LONG_COPY_STRESS_PASS / AUTO_HEIGHT_PASS / ROLLBACK_SAFE / DRIVE_UNCHANGED / IMAGE_GENERATION_NOT_REQUIRED / NOT_PRINT_READY`.
