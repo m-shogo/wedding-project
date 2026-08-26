@@ -86,14 +86,15 @@ for (const token of [
 
 requireText(
   routing,
-  '"type-type-on-rhythm",\n    "word-stagger",\n    "DAVINCI_TRANSLATION_NOT_IMPLEMENTED"',
-  "type-type-on-rhythm route must remain fail-closed",
+  '"type-type-on-rhythm",\n    "word-stagger",\n    "DAVINCI_ACTUAL_CANDIDATE",\n    "impl-type-type-on-rhythm-davinci-text-plus-follower-words"',
+  "type-type-on-rhythm route must expose its word-level translator/evidence workflow as an Actual candidate",
 );
 
 if (/productionReady:\s*true/.test(capture) || /productionReady:\s*true/.test(gate)) errors.push("Evidence path must not auto-promote productionReady");
 if (/automaticPromotionAllowed:\s*true/.test(gate)) errors.push("Evidence gate must not allow automatic promotion");
 if (/visualQa1x:\s*"PASS"/.test(capture) || /visualQaHalfSpeed:\s*"PASS"/.test(capture)) errors.push("Blank evidence template must not fabricate visual QA PASS");
-if (/DAVINCI_IMPLEMENTATION_AVAILABLE[\s\S]{0,140}type-type-on-rhythm/.test(routing)) errors.push("Evidence implementation alone must not promote route");
+if (/DAVINCI_IMPLEMENTATION_AVAILABLE[\s\S]{0,140}type-type-on-rhythm/.test(routing)) errors.push("Evidence implementation alone must not promote route to live implementation");
+if (/DAVINCI_ACTUAL_VERIFIED[\s\S]{0,140}type-type-on-rhythm/.test(routing)) errors.push("Type on Rhythm must not claim Actual verification before real Mac evidence");
 if (!/sourceRevision !== artifact\.sourceRevision/.test(capture)) errors.push("Evidence evaluation must fail-close on revision drift");
 if (!/evidence\.capturedBindingRoles\.length !== requiredBindingRoles\.length/.test(gate)) errors.push("Promotion gate must require all eight live binding roles");
 
@@ -102,4 +103,4 @@ if (errors.length) {
   for (const error of errors) console.error(`- ${error}`);
   process.exit(1);
 }
-console.log("Type-on-rhythm DaVinci Evidence contracts OK: Dashboard exports a bounded Actual JSON and blank readback template only for the selected word-stagger route, requires explicit WORDS unit plus eight live binding roles, rejects stale/mismatched evidence, evaluates canonical readback and visual QA without changing Scene authority, displays promotion blockers, and never upgrades production routing automatically.");
+console.log("Type-on-rhythm DaVinci Evidence contracts OK: Dashboard exports a bounded Actual JSON and blank readback template only for the selected word-stagger route, requires explicit WORDS unit plus eight live binding roles, rejects stale/mismatched evidence, evaluates canonical readback and visual QA without changing Scene authority, exposes an honest Actual-candidate route, and never upgrades live/Actual/production routing automatically.");
