@@ -14,6 +14,9 @@ on:
       - "motion-studio/scripts/check-type-on-rhythm-element-payload.mts"
       - "motion-studio/scripts/lib/typography-element-kit.mts"
       - "motion-studio/scripts/lib/check-typography-element.mts"
+      - "movie-dashboard/src/data/remotionElementCandidates.ts"
+      - "movie-dashboard/scripts/verify-remotion-element-candidates-contracts.mjs"
+      - "movie-dashboard/package.json"
       - ".github/workflows/remotion-mask-reveal-element-ci.yml"
       - "docs/research/2026-08-27-movie-tool-learning-run-46-remotion-typography-elements.md"
   push:
@@ -29,6 +32,9 @@ on:
       - "motion-studio/scripts/check-type-on-rhythm-element-payload.mts"
       - "motion-studio/scripts/lib/typography-element-kit.mts"
       - "motion-studio/scripts/lib/check-typography-element.mts"
+      - "movie-dashboard/src/data/remotionElementCandidates.ts"
+      - "movie-dashboard/scripts/verify-remotion-element-candidates-contracts.mjs"
+      - "movie-dashboard/package.json"
       - ".github/workflows/remotion-mask-reveal-element-ci.yml"
       - "docs/research/2026-08-27-movie-tool-learning-run-46-remotion-typography-elements.md"
 
@@ -38,7 +44,7 @@ permissions:
 jobs:
   validate-element-candidates:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 18
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -54,17 +60,23 @@ jobs:
         with:
           node-version: 22
           cache: pnpm
-          cache-dependency-path: motion-studio/pnpm-lock.yaml
+          cache-dependency-path: |
+            motion-studio/pnpm-lock.yaml
+            movie-dashboard/pnpm-lock.yaml
 
-      - name: Install locked baseline
-        working-directory: motion-studio
-        run: pnpm install --frozen-lockfile
-
-      - name: Baseline typecheck and Mask Reveal reuse contract
-        working-directory: motion-studio
+      - name: Install locked baselines
         run: |
+          cd motion-studio && pnpm install --frozen-lockfile
+          cd ../movie-dashboard && pnpm install --frozen-lockfile
+
+      - name: Baseline contracts
+        run: |
+          cd motion-studio
           pnpm typecheck
           node --no-warnings scripts/check-visual-motion-mask-reveal-concept.mts
+          cd ../movie-dashboard
+          pnpm check:remotion-element-candidates
+          pnpm build
 
       - name: Ephemerally install coherent Remotion 4.0.517 Element toolchain
         working-directory: motion-studio
@@ -153,6 +165,10 @@ jobs:
             sha256sum "out/research/remotion-elements/${id}.mp4"
           done
 
+      - name: Recheck dashboard registry after candidate generation
+        working-directory: movie-dashboard
+        run: pnpm check:remotion-element-candidates
+
       - name: Production dependency graph and Studio Actual remain unpromoted
         working-directory: motion-studio
         run: |
@@ -164,6 +180,7 @@ jobs:
           echo 'typographyElementCount=3'
           echo 'elementPayloadValidation=PASS_CANDIDATE_ONLY'
           echo 'interactiveSchemaStaticContract=PASS_CANDIDATE_ONLY'
+          echo 'motionZukanRegistry=ELEMENT_CANDIDATE_ONLY'
           echo 'studioControlReadback=NOT_RUN'
           echo 'studioInstallActual=NOT_RUN'
           echo 'productionDependencyUpgradePerformed=NO'
