@@ -23,10 +23,13 @@ for (const intensity of ["'S'", "'M'", "'L'"]) requireText(engines, intensity, `
 requireText(engines, 'transparent?: boolean', 'transparent overlay support missing');
 
 const ids = [...presets.matchAll(/presetId: '([^']+)'/g)].map((match) => match[1]);
-// 2026-08-26: モーション図鑑v1カタログ化のため8→17→21→23→25→28へ拡張。
-// hop/lock/outline/release/triplet/vertical-wipe/paperはengineへの新機能実装を伴う
-// (既存modeの使い回しではない)。
-if (ids.length !== 28) errors.push(`renderable subset must contain exactly 28 evidence targets in V1, found ${ids.length}`);
+// 2026-08-26: モーション図鑑v1カタログ化のため8→17→21→23→25→28→33へ拡張。
+// hop/lock/outline/release/triplet/vertical-wipe/paper/word-stagger/counter-scroll/
+// freeze/cel-shadow/rgb-splitはengineへの新機能実装を伴う(既存modeの使い回しではない)。
+// 33件で、engine: 'remotion'の35 Motion Kit presetのうちtype-mask-slide経由分を除く
+// 全件がrenderable化された(davinci-edit/palmier-nativeのcut-match-shape /
+// whip-source-matched / type-quiet-captionはRemotion描画対象外のまま)。
+if (ids.length !== 33) errors.push(`renderable subset must contain exactly 33 evidence targets in V1, found ${ids.length}`);
 if (new Set(ids).size !== ids.length) errors.push('renderable subset ids must be unique');
 if (ids.length >= 36) errors.push('V1 renderer must not pretend all 36 catalog presets are renderable');
 for (const id of ids) {

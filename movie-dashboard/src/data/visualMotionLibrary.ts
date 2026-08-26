@@ -640,6 +640,11 @@ const LOCAL_RENDER_VERIFIED_2026_08_26 = new Set([
   "type-triplet",
   "type-vertical-wipe",
   "wipe-paper-edge",
+  "type-type-on-rhythm",
+  "type-counter-scroll",
+  "photo-freeze-cutout",
+  "accent-cel-shadow-sweep",
+  "accent-micro-rgb-split",
 ]);
 
 function kitPresetToPreview(preset: StartMotionPreset): MotionPreviewRecord {

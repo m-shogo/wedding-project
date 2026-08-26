@@ -11,7 +11,18 @@ import {renderableMotionPresets, type RenderableMotionPreset} from '../../motion
 
 const CLIP_FRAMES = 75;
 
-type TypographyMode = 'mask' | 'punch' | 'stagger' | 'hop' | 'lock' | 'outline' | 'tracking' | 'triplet' | 'vertical-wipe';
+type TypographyMode =
+  | 'mask'
+  | 'punch'
+  | 'stagger'
+  | 'hop'
+  | 'lock'
+  | 'outline'
+  | 'tracking'
+  | 'triplet'
+  | 'vertical-wipe'
+  | 'word-stagger'
+  | 'counter-scroll';
 const TYPOGRAPHY_MODES: Set<string> = new Set<TypographyMode>([
   'mask',
   'punch',
@@ -22,6 +33,8 @@ const TYPOGRAPHY_MODES: Set<string> = new Set<TypographyMode>([
   'tracking',
   'triplet',
   'vertical-wipe',
+  'word-stagger',
+  'counter-scroll',
 ]);
 
 function DemoBackdrop({label}: {label: string}) {
@@ -54,7 +67,17 @@ function RenderPreset({preset}: {preset: RenderableMotionPreset}) {
       <AbsoluteFill style={{overflow: 'hidden'}}>
         <CameraTransformEngine
           intensity={preset.intensity}
-          mode={preset.mode === 'static' ? 'static' : preset.mode === 'pull' ? 'pull' : preset.mode === 'pan' ? 'pan' : 'push'}
+          mode={
+            preset.mode === 'static'
+              ? 'static'
+              : preset.mode === 'pull'
+                ? 'pull'
+                : preset.mode === 'pan'
+                  ? 'pan'
+                  : preset.mode === 'freeze'
+                    ? 'freeze'
+                    : 'push'
+          }
         >
           <DemoBackdrop label={preset.label} />
         </CameraTransformEngine>
@@ -107,7 +130,11 @@ function RenderPreset({preset}: {preset: RenderableMotionPreset}) {
                   ? 'scribble'
                   : preset.mode === 'stamp-line-dot'
                     ? 'stamp-line-dot'
-                    : 'triplet'
+                    : preset.mode === 'cel-shadow'
+                      ? 'cel-shadow'
+                      : preset.mode === 'rgb-split'
+                        ? 'rgb-split'
+                        : 'triplet'
         }
       />
     </AbsoluteFill>

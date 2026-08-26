@@ -1,6 +1,6 @@
 # モーション図鑑 v1: 既存36 Motion Kit presetのカタログ化
 
-日付: 2026-08-26(初版 PR #333〜336 / 追記 PR #338, #339, #345, #349, #352, #354, #357, batch5)
+日付: 2026-08-26(初版 PR #333〜336 / 追記 PR #338, #339, #345, #349, #352, #354, #357, batch5, batch6)
 状態: 実装済み・継続更新中
 関連: `movie-dashboard/src/data/visualMotionLibrary.ts`, `movie-dashboard/src/data/startMotionKit.ts`, `movie-dashboard/src/data/directorRecipeCatalog.ts`, `motion-studio/src/motion-kit/renderablePresets.ts`
 
@@ -40,12 +40,14 @@ Motion」にはほど遠かった。
 1. **Data complete**: 36件全てに日本語名・用途・避ける場面・Opening/Profile適合度
    が入っている。✅
 2. **Discoverable/Browsable**: 検索・カード表示・個別previewテキストまで完了。✅
-3. **Visual fidelity / Actual verification**: **27/36件が完了**(PR #338, #339, #345,
-   #349, #352, #354, #357, batch5)。`motion-studio`の`StaRtMotionReelV1`
-   (28 renderable preset、6 shared engine)を実際にローカルRemotion renderし、
-   静止フレーム抽出+ffprobe/signalstats+一部Pythonでのpixel計測で目視確認した。
-   DaVinci実機検証は引き続き未実施(DaVinci Resolveは無料版をインストール済みだが、
-   外部scripting APIがStudio版限定のためRenderer/自動化検証はできない。詳細は
+3. **Visual fidelity / Actual verification**: **32/36件が完了**(PR #338, #339, #345,
+   #349, #352, #354, #357, batch5, batch6)。これは`engine: 'remotion'`の35 Motion Kit
+   preset全件(`type-mask-slide`経由の1件を含む)が完了したことを意味する。
+   `motion-studio`の`StaRtMotionReelV1`(33 renderable preset、6 shared engine)を
+   実際にローカルRemotion renderし、静止フレーム抽出+ffprobe/signalstats+一部
+   Pythonでのpixel計測で目視確認した。DaVinci実機検証は引き続き未実施
+   (DaVinci Resolveは無料版をインストール済みだが、外部scripting APIがStudio版
+   限定のためRenderer/自動化検証はできない。詳細は
    `docs/decisions/2026-08-26-palmier-davinci-handoff-fidelity-v1.md`の追記を参照)。❌
 
 QAで推測PASSにしなかった実例:
@@ -87,20 +89,40 @@ QAで見つかった**既知の実装限界**(隠さず記録):
   `wipe-directional-shape`と同じ「sweep-inした後の静止状態でシルエットが現れる」
   特性であることが判明。sweep後のframeを追加確認し、ギザギザ自体は実装できて
   いることを確認した。
+- `type-type-on-rhythm`(TypographyRevealEngineへ`mode='word-stagger'`を新規実装、
+  語単位reveal): 最初の実装ではflexコンテナの`gap`スタイルが効かず、
+  「OUR JOURNEY」が「OURJOURNEY」と語間なしで結合して表示されるバグを実render
+  確認で発見。各spanへ`marginRight`を明示指定する方式へ変更し解消した。
+- `photo-freeze-cutout`(CameraTransformEngineへ`mode='freeze'`を新規実装、
+  静止フレーム+cutout枠): 最初の実装ではborderのclip-pathが画面端とほぼ1点でしか
+  接しない形状だったため、border全体がほぼクリップされて見えなくなるバグを実render
+  確認で発見。四隅だけ小さな三角ノッチを入れる形状へ変更し解消した。
+- `accent-cel-shadow-sweep`(GraphicHitEngineへ`variant='cel-shadow'`を新規実装、
+  斜めの影shapeが横切る): 最初の実装では影色をnavy系にしたためDemoBackdropの
+  navy背景とほぼ同化して見えないバグを実render確認で発見。純黒+高不透明度へ
+  変更し解消した。
+- `type-counter-scroll`(TypographyRevealEngineへ`mode='counter-scroll'`を新規実装、
+  継続的なmarquee的スクロール)/`accent-micro-rgb-split`(GraphicHitEngineへ
+  `variant='rgb-split'`を新規実装、短時間のRGB screen blend glitch)は、
+  実render確認で初回から見た目上の破綻なく動作した。
 
 これらはengine拡張(新規機能追加)が必要で、今回のカタログ化のスコープ外として
 `motionPreviewEvidence.ts`のnotesへ明記した。実装したふりをしていない。
 
-残り8件(`type-type-on-rhythm` / `type-counter-scroll` / `photo-freeze-cutout` /
-`cut-match-shape` / `whip-source-matched` / `accent-cel-shadow-sweep` /
-`accent-micro-rgb-split`)は、既存engineのmode/directionを流用するだけでは
-正直に表現できず、真に新しいengine機能(または`davinci-edit`/`palmier-native`
-エンジン自体の実装)が必要なため、今回は見送った。`type-quiet-caption`は
-`engine: davinci-edit`のため元々render対象外。
+残り3件(`cut-match-shape` / `whip-source-matched` / `type-quiet-caption`)は、
+`engine`がそれぞれ`palmier-native` / `davinci-edit` / `davinci-edit`であり、
+そもそもRemotionでのrender対象外(既存engineのmode/directionを流用するだけでは
+正直に表現できず、Palmier native機能またはDaVinci Fusion/Edit自体の実装が必要)。
+これはengine実装が「未着手」なのではなく、モーション図鑑v1のスコープが
+「`engine: 'remotion'`のMotion Kit presetをRemotionでrenderable化する」ことに
+限定されているための構造的な区別であり、無理にRemotionへ寄せていない。
 
 **「36件がカタログとして存在する」ことと「36件が実際に見て選べる」ことは別**。
-27件は見て選べる段階まで進んだが、残り8件は引き続き文章ベースのカタログ
-(`CONCEPT_ONLY`)のままである。
+`engine: 'remotion'`の35件は全てRemotionで見て選べる段階まで進んだが、
+残り3件(palmier-native / davinci-edit)は引き続き文章ベースのカタログ
+(`CONCEPT_ONLY`)のままである。これらをPalmier実機やDaVinci実機で検証する
+ことは、今回のスコープではなく別途のVertical Slice(`docs/handoff/
+MASK-REVEAL-VERTICAL-SLICE.md`のようなPalmier/DaVinci実機確認)が必要。
 
 ## Director Recipe Catalog(97件)との関係
 
@@ -130,9 +152,10 @@ Property単位で修正できる構造)を持つのは引き続き`type-mask-rev
 
 ## 次にやるべきこと(優先順位)
 
-1. 残り8件のうち本当に必要なものだけ、engine拡張(新機能追加)を伴う実装を
-   個別に検討する。全件を無理に埋めない。「見た目が区別できないmodeの使い回し」
-   より「CONCEPT_ONLYのまま正直に残す」方を優先してきた。
+1. 残り3件(`cut-match-shape` / `whip-source-matched` / `type-quiet-caption`)は
+   Remotionでのrenderable化そのものが目的とずれる(palmier-native /
+   davinci-edit)ため、無理にRemotionへ寄せない。Palmier実機・DaVinci実機が
+   利用可能になった時に、それぞれのツールで直接検証する。
 2. 実写真投入後、`sample-generic-hero-photo-v1` / `sample-generic-multi-photo-v1`
    の`visualBase.assetPath`を実素材へ差し替える。
 3. DaVinci Resolveが利用可能な環境が用意されたら、Mask Reveal Vertical Slice
@@ -145,3 +168,7 @@ Property単位で修正できる構造)を持つのは引き続き`type-mask-rev
 5. `PhotoLayoutEngine`のcontact-sheet/panel-grid差別化、`type-char-stagger`/
    `type-tracking-burst`の差別化は、実際にOpening/Profileで両方使いたい場面が
    出た時に優先して着手する(使われない差別化を先回りして作らない)。
+6. `type-counter-scroll`は現状「文字だけが流れる」近似で、`accent-micro-rgb-split`
+   は「画面全体のcolor blend」近似。実際に背景動画やAI B-rollと組み合わせて
+   使いたい場面が出た時に、より精密な実装(背景と文字の相対速度差、edge-onlyの
+   色収差)を検討する。

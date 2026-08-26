@@ -13,11 +13,11 @@ export function TypographyRevealEngine({
 }: {
   text: string;
   intensity?: MotionIntensity;
-  mode?: 'mask' | 'punch' | 'stagger' | 'hop' | 'lock' | 'outline' | 'tracking' | 'triplet' | 'vertical-wipe';
+  mode?: 'mask' | 'punch' | 'stagger' | 'hop' | 'lock' | 'outline' | 'tracking' | 'triplet' | 'vertical-wipe' | 'word-stagger' | 'counter-scroll';
   transparent?: boolean;
 }) {
   const frame = useCurrentFrame();
-  const {fps} = useVideoConfig();
+  const {fps, durationInFrames} = useVideoConfig();
   const strength = intensityScale[intensity];
   const progress = interpolate(frame, [0, Math.round(fps * 0.5)], [0, 1], {
     extrapolateRight: 'clamp',
@@ -54,6 +54,69 @@ export function TypographyRevealEngine({
   const opacity = mode === 'outline' ? outlineAppear : mode === 'triplet' ? tripletOpacity : mode === 'vertical-wipe' ? 1 : progress;
   const color = mode === 'outline' ? `rgba(255,255,255,${outlineFill})` : '#fff';
   const webkitTextStroke = mode === 'outline' ? `${outlineStrokeWidth}px #fff` : undefined;
+
+  if (mode === 'word-stagger') {
+    // type-type-on-rhythmは「文字単位」ではなく「語単位」で音の区切りに合わせて現す
+    // ため、char-stagger(1文字ずつ)とは分割単位が異なる別実装にする。
+    const words = text.split(' ');
+    const perWordDelay = Math.round(fps * 0.22);
+    const wordDuration = Math.round(fps * 0.32);
+    return (
+      <AbsoluteFill style={{backgroundColor: transparent ? undefined : '#0d2035', alignItems: 'center', justifyContent: 'center'}}>
+        <div style={{display: 'flex', padding: '0.15em 0.25em'}}>
+          {words.map((word, index) => {
+            const start = index * perWordDelay;
+            const wordProgress = interpolate(frame, [start, start + wordDuration], [0, 1], {
+              extrapolateLeft: 'clamp',
+              extrapolateRight: 'clamp',
+              easing: Easing.out(Easing.cubic),
+            });
+            return (
+              <span
+                key={`${word}-${index}`}
+                style={{
+                  display: 'inline-block',
+                  opacity: wordProgress,
+                  transform: `translateY(${(1 - wordProgress) * 30 * strength}px)`,
+                  fontSize,
+                  fontWeight: 800,
+                  color: '#fff',
+                  whiteSpace: 'pre',
+                  // flexのgapではなくmarginRightで語間を確保する(空文字ではなく
+                  // 実際のスペース幅を確実に取るため)。
+                  marginRight: index < words.length - 1 ? '0.35em' : 0,
+                }}
+              >
+                {word}
+              </span>
+            );
+          })}
+        </div>
+      </AbsoluteFill>
+    );
+  }
+
+  if (mode === 'counter-scroll') {
+    // 背景の移動と逆向きに、テキストが画面全体を横切り続けるmarquee的な動き。
+    // maskやstaggerのような「1回reveal」ではなく、clip全体で継続する速度差の表現。
+    const scrollX = interpolate(frame, [0, Math.max(1, durationInFrames - 1)], [40 * strength, -140 * strength]);
+    return (
+      <AbsoluteFill style={{backgroundColor: transparent ? undefined : '#0d2035', alignItems: 'center', justifyContent: 'center', overflow: 'hidden'}}>
+        <div
+          style={{
+            whiteSpace: 'nowrap',
+            transform: `translateX(${scrollX}%)`,
+            fontSize,
+            fontWeight: 800,
+            color: '#fff',
+            letterSpacing: '0.04em',
+          }}
+        >
+          {text}
+        </div>
+      </AbsoluteFill>
+    );
+  }
 
   if (mode === 'stagger') {
     const perCharDelay = Math.round(fps * 0.06);
@@ -125,12 +188,62 @@ export function CameraTransformEngine({
 }: {
   children: ReactNode;
   intensity?: MotionIntensity;
-  mode?: 'static' | 'push' | 'pull' | 'pan' | 'parallax';
+  mode?: 'static' | 'push' | 'pull' | 'pan' | 'parallax' | 'freeze';
 }) {
   const frame = useCurrentFrame();
   const {durationInFrames} = useVideoConfig();
   const strength = intensityScale[intensity];
   const t = interpolate(frame, [0, Math.max(1, durationInFrames - 1)], [0, 1], {extrapolateRight: 'clamp'});
+
+  if (mode === 'freeze') {
+    // photo-freeze-cutout: カメラは完全に静止(static)させたまま、hitタイミングで
+    // 実素材cutoutを模した角のあるgraphic frameとlabelを1回だけ叩き込む。
+    // camera-transform自体の「動き」ではなく、静止画に対するgraphic accentの追加。
+    //
+    // 最初の実装ではclip-path(角を斜めに欠いた四角形)をborderに適用していたが、
+    // 頂点がbox端とほぼ1点でしか接しないshapeだったため、border全体がほぼ
+    // クリップされて見えなくなるバグがあった(実render確認で発見)。四隅だけ
+    // 三角形の切り欠き(notch)を入れるshapeへ変更し、辺の大部分はborderが
+    // 確実に見えるようにした。
+    const hitFrame = 8;
+    const hitPulse = Math.max(0, 1 - (frame - hitFrame) / 10);
+    const cutoutScale = frame >= hitFrame ? 0.86 + hitPulse * 0.3 * strength : 0.86;
+    const cutoutOpacity = interpolate(frame, [hitFrame - 2, hitFrame], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const notchedFrame =
+      'polygon(0 6%, 6% 0, 94% 0, 100% 6%, 100% 94%, 94% 100%, 6% 100%, 0 94%)';
+    return (
+      <AbsoluteFill style={{overflow: 'hidden'}}>
+        {children}
+        <div
+          style={{
+            position: 'absolute',
+            inset: '4%',
+            border: '10px solid #fff',
+            clipPath: notchedFrame,
+            opacity: cutoutOpacity * 0.9,
+            transform: `scale(${cutoutScale})`,
+          }}
+        />
+        <div
+          style={{
+            position: 'absolute',
+            left: 110,
+            bottom: 150,
+            fontSize: 26,
+            fontWeight: 900,
+            letterSpacing: '0.1em',
+            color: '#fff',
+            background: '#f0d37a',
+            padding: '6px 16px',
+            opacity: cutoutOpacity,
+            transform: `translateY(${(1 - cutoutOpacity) * 20}px)`,
+          }}
+        >
+          FREEZE
+        </div>
+      </AbsoluteFill>
+    );
+  }
 
   if (mode === 'parallax') {
     const backgroundX = interpolate(t, [0, 1], [-10 * strength, 12 * strength]);
@@ -376,7 +489,7 @@ export function PhotoLayoutEngine({
   );
 }
 
-export type GraphicHitVariant = 'triplet' | 'speed-lines' | 'impact' | 'stamp-line-dot' | 'scribble' | 'halftone';
+export type GraphicHitVariant = 'triplet' | 'speed-lines' | 'impact' | 'stamp-line-dot' | 'scribble' | 'halftone' | 'cel-shadow' | 'rgb-split';
 
 export function GraphicHitEngine({
   variant = 'triplet',
@@ -511,6 +624,48 @@ export function GraphicHitEngine({
         return <div key={index} style={{position: 'absolute', left: `${-10 + index * 9}%`, top: `${8 + (index % 6) * 15}%`, width: `${18 + (index % 3) * 8}%`, height: 3, background: '#fff', opacity: 0.18 + 0.5 * strength, transform: `translateX(${progress * 180 * strength}px) rotate(-8deg)`}} />;
       })}
       {variant === 'impact' && <AbsoluteFill style={{background: '#fff', opacity: hit(8) * 0.75 * strength}} />}
+
+      {variant === 'cel-shadow' && (() => {
+        // accent-cel-shadow-sweep: flatなアニメ風の影shapeが斜めに画面を横切り、
+        // 通過中だけsection colorを暗く落とす(顔の上に長く影を置かない設計)。
+        // 最初の実装ではnavy背景に近い暗さの影色(rgba(6,14,26,...))を使ったため、
+        // 元のnavy gradient backdropとほぼ同化してしまい、実render確認では
+        // 「ほぼ見えない」ことが判明した。純黒+高不透明度へ変更しコントラストを確保。
+        const sweepProgress = interpolate(frame, [2, 20], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: Easing.inOut(Easing.cubic)});
+        const sweepX = interpolate(sweepProgress, [0, 1], [-60, 160]);
+        const tintOpacity = interpolate(frame, [2, 8, 16, 22], [0, 0.45 * strength, 0.45 * strength, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+        return (
+          <>
+            <AbsoluteFill style={{background: '#000', opacity: tintOpacity}} />
+            <div
+              style={{
+                position: 'absolute',
+                top: '-20%',
+                left: `${sweepX}%`,
+                width: '55%',
+                height: '140%',
+                background: 'rgba(0,0,0,0.85)',
+                clipPath: 'polygon(0 0, 60% 0, 30% 100%, -30% 100%)',
+              }}
+            />
+          </>
+        );
+      })()}
+
+      {variant === 'rgb-split' && (() => {
+        // accent-micro-rgb-split: 2〜6frameだけRGB各chをずらして表示するglitch。
+        // 常時glitchにしないため、hit直後のごく短い窓(frame4-8)だけ有効にする。
+        const active = frame >= 4 && frame <= 8;
+        const splitAmount = active ? (1 - Math.abs(frame - 6) / 2) * 14 * strength : 0;
+        if (!active) return null;
+        return (
+          <>
+            <div style={{position: 'absolute', inset: 0, background: 'rgba(255,0,60,0.55)', mixBlendMode: 'screen', transform: `translateX(${-splitAmount}px)`}} />
+            <div style={{position: 'absolute', inset: 0, background: 'rgba(0,255,180,0.5)', mixBlendMode: 'screen', transform: `translateX(${splitAmount}px)`}} />
+            <div style={{position: 'absolute', left: '18%', right: '18%', top: '46%', height: 3, background: '#fff', opacity: 0.85}} />
+          </>
+        );
+      })()}
     </AbsoluteFill>
   );
 }
