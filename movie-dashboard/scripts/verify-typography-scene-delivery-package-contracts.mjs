@@ -39,13 +39,21 @@ for (const token of [
   'buildTypographySceneProductionBundle(scene, selection)',
   'buildMaskRevealSceneProductionBundle(scene)',
   'getTypographyDaVinciActualWorkflow(patternId)',
+  'parseAndValidateTypographySceneDeliveryPackage(',
+  'STALE_TYPOGRAPHY_SCENE_DELIVERY_PACKAGE',
+  'TYPOGRAPHY_SCENE_DELIVERY_ROUTE_MISMATCH',
+  'TYPOGRAPHY_SCENE_DELIVERY_MUST_NOT_EMBED_ACTUAL_PASS',
+  'TYPOGRAPHY_SCENE_DELIVERY_MUST_NOT_EMBED_RELEASE',
 ]) {
   requireText(delivery, token, `delivery package contract missing: ${token}`);
 }
 
 for (const token of [
   "Production packageを書き出す",
+  "Package再検証",
+  "Package revalidation:",
   "package出力 ≠ production release",
+  "Scene更新後の古いpackageは再検証で拒否",
   "Mac Actual",
   "Current stop:",
   "delivery.execution.order.join",
@@ -90,4 +98,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log("Typography Scene Delivery Package contracts OK: Human Master values + current route + Palmier timing + DaVinci workflow + execution order are bundled without fabricating Mac Actual or Release evidence.");
+console.log("Typography Scene Delivery Package contracts OK: Human Master values + current route + Palmier timing + DaVinci workflow + execution order are bundled, stale imports fail closed, and Mac Actual/Release evidence is never fabricated.");
