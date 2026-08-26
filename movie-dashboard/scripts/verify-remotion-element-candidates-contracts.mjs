@@ -19,7 +19,7 @@ const expected = [
   ['type-tracking-burst', 'tracking', 'tracking-burst', 'WeddingTrackingBurstElementCanary'],
   ['type-vertical-wipe', 'vertical-wipe', 'vertical-wipe', 'WeddingVerticalWipeElementCanary'],
 ].map(([id, mode, slug, canary]) => ({
-  id, mode, canary,
+  id, mode, slug, canary,
   builder: `build-${slug}-element-payload.mts`,
   checker: `check-${slug}-element-payload.mts`,
 }));
@@ -38,14 +38,20 @@ for (const item of expected) {
   ]) {
     if (!registry.includes(token)) errors.push(`${item.id} registry missing: ${token}`);
   }
-  for (const token of [item.builder, item.checker, item.canary]) {
-    if (!workflow.includes(token)) errors.push(`${item.id} CI missing: ${token}`);
-  }
   for (const relative of [`motion-studio/scripts/${item.builder}`, `motion-studio/scripts/${item.checker}`]) {
     if (!fs.existsSync(path.join(repoRoot, relative))) errors.push(`${item.id} referenced file missing: ${relative}`);
   }
+  if (!workflow.includes(item.slug)) errors.push(`${item.id} CI slug loop missing: ${item.slug}`);
+  if (!workflow.includes(item.canary)) errors.push(`${item.id} CI canary missing: ${item.canary}`);
 }
 
+for (const token of [
+  'motion-studio/scripts/build-*-element-payload.mts',
+  'motion-studio/scripts/check-*-element-payload.mts',
+  'for slug in mask-reveal char-stagger type-on-rhythm word-punch tracking-burst vertical-wipe',
+]) {
+  if (!workflow.includes(token)) errors.push(`Typography CI scaling contract missing: ${token}`);
+}
 for (const token of [
   'getRemotionElementCandidate',
   'const remotionElement = getRemotionElementCandidate(pattern.id)',
