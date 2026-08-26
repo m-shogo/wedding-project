@@ -17,6 +17,7 @@ export const resolve21AlphaHandoffPolicy: ResolveHandoffSidecar = resolveHandoff
     major: 21,
     testedPatch: '21.0.4',
     edition: 'FREE',
+    platform: 'MACOS',
     page: 'EDIT',
   },
   timeline: {
@@ -90,5 +91,6 @@ export const resolve21AlphaHandoffPolicy: ResolveHandoffSidecar = resolveHandoff
   ],
   notes: [
     'ProRes 4444 command paths already exist in package.json, but Resolve 21 clean import remains a runtime canary.',
+    'Platform is explicit because some Resolve 21 capabilities such as Lottie/OGraf are documented for macOS/Windows rather than universally cross-platform.',
   ],
 });
