@@ -9,6 +9,7 @@ import {
 } from '../src/data/resolveCanaryInputFixtures.ts';
 import {
   palmierCanaryHumanMasterSchema,
+  palmierExportFreshnessSchema,
   palmierRealExportAttachmentSchema,
   palmierRealExportInspectionSchema,
 } from '../src/data/palmierRealExportAttachment.schema.ts';
@@ -20,6 +21,7 @@ const palmierDir = join(motionRoot, 'out', 'canary-inputs', 'palmier');
 const attachedDir = join(palmierDir, 'attached');
 const sceneSpecPath = join(palmierDir, 'palmier-fcpxml-synthetic-scene-spec.json');
 const manifestPath = join(motionRoot, 'out', 'canary-inputs', 'manifests', `${canaryId}.json`);
+const freshnessToleranceMs = 2000;
 
 function usage() {
   console.log('Attach a real Palmier FCPXML to DV21-PALMIER-FCPXML-01');
@@ -27,11 +29,19 @@ function usage() {
   console.log('Inspect only (never changes manifests):');
   console.log('  node --no-warnings scripts/attach-palmier-real-export.mts --fcpxml <FILE.fcpxml> --inspect-only');
   console.log('');
+  console.log('Freshness check only (never claims Palmier provenance and never changes manifests):');
+  console.log('  node --no-warnings scripts/attach-palmier-real-export.mts \\');
+  console.log('    --fcpxml <FILE.fcpxml> \\');
+  console.log('    --export-started-at <ISO8601> \\');
+  console.log('    --check-freshness-only');
+  console.log('');
   console.log('Attach after creating/exporting the neutral scene in Palmier:');
   console.log('  node --no-warnings scripts/attach-palmier-real-export.mts \\');
   console.log('    --fcpxml <FILE.fcpxml> \\');
+  console.log('    --export-started-at <ISO8601> \\');
   console.log('    --attest-real-palmier-export');
   console.log('');
+  console.log('Record --export-started-at immediately before starting the Palmier export.');
   console.log('If a PREPARED Palmier attachment already exists, add --replace-attached-export explicitly.');
 }
 
@@ -84,6 +94,36 @@ function assertTimelineShapedFcpxml(inspection: ReturnType<typeof inspectFcpxml>
   }
 }
 
+function verifyFreshness(path: string, rawExportStartedAt: string | undefined) {
+  if (!rawExportStartedAt) {
+    throw new Error('Full attachment/freshness checking requires --export-started-at <ISO8601> recorded immediately before the Palmier export started.');
+  }
+  const exportStartedAtMs = Date.parse(rawExportStartedAt);
+  if (!Number.isFinite(exportStartedAtMs)) {
+    throw new Error(`--export-started-at is not a valid ISO-8601 timestamp: ${rawExportStartedAt}`);
+  }
+  if (exportStartedAtMs > Date.now() + freshnessToleranceMs) {
+    throw new Error('--export-started-at is in the future beyond the allowed filesystem timestamp tolerance.');
+  }
+
+  const stats = statSync(path);
+  const sourceModifiedAtMs = stats.mtimeMs;
+  if (sourceModifiedAtMs + freshnessToleranceMs < exportStartedAtMs) {
+    throw new Error(
+      `FCPXML is stale relative to this export attempt: sourceModifiedAt=${new Date(sourceModifiedAtMs).toISOString()} exportStartedAt=${new Date(exportStartedAtMs).toISOString()}. Refusing to attach an older artifact.`,
+    );
+  }
+
+  return palmierExportFreshnessSchema.parse({
+    exportStartedAt: new Date(exportStartedAtMs).toISOString(),
+    sourceModifiedAt: new Date(sourceModifiedAtMs).toISOString(),
+    sourceModifiedAtMs,
+    exportStartedAtMs,
+    toleranceMs: freshnessToleranceMs,
+    freshAfterExportStart: true,
+  });
+}
+
 try {
   if (args.includes('--help')) {
     usage();
@@ -109,8 +149,21 @@ try {
     process.exit(0);
   }
 
+  const freshness = verifyFreshness(fcpxmlPath, valueFor('--export-started-at'));
+  if (args.includes('--check-freshness-only')) {
+    console.log(JSON.stringify({
+      freshness,
+      provenance: 'UNVERIFIED_BY_FRESHNESS',
+      guardrails: [
+        'FRESH_ARTIFACT != REAL_PALMIER_PROVENANCE',
+        'FRESH_ARTIFACT != RESOLVE_IMPORT_VERIFIED',
+      ],
+    }, null, 2));
+    process.exit(0);
+  }
+
   if (!args.includes('--attest-real-palmier-export')) {
-    throw new Error('Full attachment requires --attest-real-palmier-export. Structure inspection alone cannot prove Palmier provenance.');
+    throw new Error('Full attachment requires --attest-real-palmier-export. Structure/freshness inspection alone cannot prove Palmier provenance.');
   }
 
   if (!existsSync(sceneSpecPath)) {
@@ -144,6 +197,7 @@ try {
       fcpxmlSha256: fcpxmlHash,
       fcpxmlVersion: inspection.fcpxmlVersion,
       provenanceLevel: 'OPERATOR_ATTESTED_REAL_PALMIER_EXPORT',
+      freshness,
     },
     timeline: palmierFcpxmlSyntheticSceneSpec.timeline,
     expectedElements: palmierFcpxmlSyntheticSceneSpec.requiredElements,
@@ -152,6 +206,7 @@ try {
       ...palmierFcpxmlSyntheticSceneSpec.guardrails,
       'HUMAN_MASTER_EXPECTATION != RESOLVE_OBSERVED_RESULT',
       'OPERATOR_ATTESTATION != CRYPTOGRAPHIC_PROVENANCE',
+      'FILE_EXISTS != FRESH_EXPORT',
     ],
   });
   const humanMasterPath = join(attachedDir, `${prefix}-human-master.json`);
@@ -168,6 +223,7 @@ try {
     fcpxmlSha256: fcpxmlHash,
     fcpxmlVersion: inspection.fcpxmlVersion,
     byteLength: statSync(copiedFcpxmlPath).size,
+    freshness,
     sceneSpecSha256: sceneSpecHash,
     humanMasterPath: toMotionRelative(humanMasterPath),
     humanMasterSha256: humanMasterHash,
@@ -179,6 +235,8 @@ try {
     guardrails: [
       'OPERATOR_ATTESTATION != CRYPTOGRAPHIC_PROVENANCE',
       'FCPXML_STRUCTURE_VALID != REAL_PALMIER_PROVENANCE',
+      'FILE_EXISTS != FRESH_EXPORT',
+      'FRESH_ARTIFACT != REAL_PALMIER_PROVENANCE',
       'PREPARED_INPUT != RESOLVE_IMPORT_VERIFIED',
       'PARSE_SUCCESS != TIMELINE_FIDELITY',
     ],
@@ -197,11 +255,12 @@ try {
     files: [
       {
         id: 'palmier-real-fcpxml',
-        role: 'Operator-attested real Palmier DaVinci/Resolve FCPXML export',
+        role: 'Operator-attested fresh real Palmier DaVinci/Resolve FCPXML export',
         path: toMotionRelative(copiedFcpxmlPath),
         sha256: fcpxmlHash,
         metadata: {
           inspection,
+          freshness,
           provenanceLevel: attachment.provenanceLevel,
           sourceBasename: attachment.sourceBasename,
         },
@@ -225,15 +284,15 @@ try {
       },
       {
         id: 'palmier-export-attachment',
-        role: 'Operator attestation + immutable export/sidecar hashes; support artifact only',
+        role: 'Operator attestation + freshness + immutable export/sidecar hashes; support artifact only',
         path: toMotionRelative(attachmentPath),
         sha256: sha256(attachmentPath),
-        metadata: {schemaVersion: attachment.schemaVersion, provenanceLevel: attachment.provenanceLevel},
+        metadata: {schemaVersion: attachment.schemaVersion, provenanceLevel: attachment.provenanceLevel, freshness},
       },
     ],
     humanMaster,
     expectedInventory: palmierFcpxmlSyntheticSceneSpec,
-    nextAction: 'Prepare DV21-PALMIER-FCPXML-01 with --reuse-existing so the attached PREPARED manifest is preserved, then execute the clean Resolve 21 import canary.',
+    nextAction: 'Prepare DV21-PALMIER-FCPXML-01 with --reuse-existing so the fresh attached PREPARED manifest is preserved, then execute the clean Resolve 21 import canary.',
     guardrails: Array.from(new Set([
       ...palmierFcpxmlSyntheticSceneSpec.guardrails,
       ...attachment.guardrails,
@@ -242,12 +301,15 @@ try {
   });
   writeJson(manifestPath, manifest);
 
-  console.log(`✅ Attached operator-attested Palmier export: ${toMotionRelative(copiedFcpxmlPath)}`);
+  console.log(`✅ Attached fresh operator-attested Palmier export: ${toMotionRelative(copiedFcpxmlPath)}`);
   console.log(`   fcpxmlVersion=${inspection.fcpxmlVersion}`);
   console.log(`   fcpxmlSha256=${fcpxmlHash}`);
+  console.log(`   exportStartedAt=${freshness.exportStartedAt}`);
+  console.log(`   sourceModifiedAt=${freshness.sourceModifiedAt}`);
   console.log(`   humanMaster=${toMotionRelative(humanMasterPath)}`);
   console.log(`   manifest=${toMotionRelative(manifestPath)}`);
   console.log('   provenance=OPERATOR_ATTESTED_REAL_PALMIER_EXPORT');
+  console.log('   freshnessVerified=YES');
   console.log('   runtimeVerified=NO');
   console.log('Next: node --no-warnings scripts/prepare-resolve-canary-session.mts DV21-PALMIER-FCPXML-01 --execution-id <ID> --reuse-existing');
 } catch (error) {

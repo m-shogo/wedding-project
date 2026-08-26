@@ -11,6 +11,15 @@ export const palmierRealExportInspectionSchema = z.object({
   guardrails: z.array(z.string().min(1)).min(1),
 });
 
+export const palmierExportFreshnessSchema = z.object({
+  exportStartedAt: z.string().datetime(),
+  sourceModifiedAt: z.string().datetime(),
+  sourceModifiedAtMs: z.number().nonnegative(),
+  exportStartedAtMs: z.number().nonnegative(),
+  toleranceMs: z.number().int().nonnegative(),
+  freshAfterExportStart: z.literal(true),
+});
+
 export const palmierCanaryHumanMasterSchema = z.object({
   schemaVersion: z.literal('palmier-resolve-canary-human-master/v1'),
   canaryId: z.literal('DV21-PALMIER-FCPXML-01'),
@@ -21,6 +30,7 @@ export const palmierCanaryHumanMasterSchema = z.object({
     fcpxmlSha256: z.string().regex(/^[a-f0-9]{64}$/),
     fcpxmlVersion: z.string(),
     provenanceLevel: z.literal('OPERATOR_ATTESTED_REAL_PALMIER_EXPORT'),
+    freshness: palmierExportFreshnessSchema,
   }),
   timeline: z.record(z.string(), z.unknown()),
   expectedElements: z.array(z.record(z.string(), z.unknown())).min(1),
@@ -37,6 +47,7 @@ export const palmierRealExportAttachmentSchema = z.object({
   fcpxmlSha256: z.string().regex(/^[a-f0-9]{64}$/),
   fcpxmlVersion: z.string().min(1),
   byteLength: z.number().int().positive(),
+  freshness: palmierExportFreshnessSchema,
   sceneSpecSha256: z.string().regex(/^[a-f0-9]{64}$/),
   humanMasterPath: z.string().min(1),
   humanMasterSha256: z.string().regex(/^[a-f0-9]{64}$/),
@@ -49,5 +60,6 @@ export const palmierRealExportAttachmentSchema = z.object({
 });
 
 export type PalmierRealExportInspection = z.infer<typeof palmierRealExportInspectionSchema>;
+export type PalmierExportFreshness = z.infer<typeof palmierExportFreshnessSchema>;
 export type PalmierCanaryHumanMaster = z.infer<typeof palmierCanaryHumanMasterSchema>;
 export type PalmierRealExportAttachment = z.infer<typeof palmierRealExportAttachmentSchema>;
