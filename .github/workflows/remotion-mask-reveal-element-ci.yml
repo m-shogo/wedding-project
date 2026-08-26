@@ -54,7 +54,7 @@ jobs:
           pnpm typecheck
           node --no-warnings scripts/check-visual-motion-mask-reveal-concept.mts
 
-      - name: Ephemerally install Remotion 4.0.517 Element toolchain
+      - name: Ephemerally install coherent Remotion 4.0.517 Element toolchain
         working-directory: motion-studio
         run: |
           cp package.json /tmp/remotion-element-package-baseline.json
@@ -65,7 +65,8 @@ jobs:
             @remotion/google-fonts@4.0.517 \
             @remotion/paths@4.0.517 \
             @remotion/zod-types@4.0.517 \
-            @remotion/studio-protocol@4.0.517
+            @remotion/studio-protocol@4.0.517 \
+            zod@4.4.3
           git diff -- package.json pnpm-lock.yaml > /tmp/remotion-element-ephemeral.diff
           test -s /tmp/remotion-element-ephemeral.diff
 
@@ -73,7 +74,7 @@ jobs:
         working-directory: motion-studio
         run: |
           node <<'NODE'
-          const expected = '4.0.517';
+          const remotionExpected = '4.0.517';
           for (const pkg of [
             'remotion',
             '@remotion/cli',
@@ -84,9 +85,21 @@ jobs:
           ]) {
             const actual = require(`./node_modules/${pkg}/package.json`).version;
             console.log(`${pkg}=${actual}`);
-            if (actual !== expected) process.exitCode = 1;
+            if (actual !== remotionExpected) process.exitCode = 1;
           }
+          const zod = require('./node_modules/zod/package.json').version;
+          console.log(`zod=${zod}`);
+          if (zod !== '4.4.3') process.exitCode = 1;
           NODE
+
+      - name: Candidate version coherence
+        working-directory: motion-studio
+        run: |
+          pnpm exec remotion versions --log=verbose 2>&1 | tee /tmp/remotion-versions.log
+          if grep -q 'Version mismatch:' /tmp/remotion-versions.log; then
+            echo 'Remotion candidate still reports a version mismatch.'
+            exit 1
+          fi
 
       - name: Candidate typecheck
         working-directory: motion-studio
