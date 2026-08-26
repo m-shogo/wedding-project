@@ -58,5 +58,8 @@ jobs:
       - name: Movie Coach registry contracts
         run: pnpm check:movie-coach
 
+      - name: Typography DaVinci Actual run plan contracts
+        run: node scripts/verify-typography-davinci-actual-run-plan-contracts.mjs
+
       - name: TypeScript and Vite build
         run: pnpm build
