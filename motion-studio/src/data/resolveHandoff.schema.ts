@@ -42,6 +42,7 @@ export const runtimeStateSchema = z.enum([
 ]);
 
 export const resolveEditionSchema = z.enum(['FREE', 'STUDIO', 'UNKNOWN']);
+export const resolvePlatformSchema = z.enum(['MACOS', 'WINDOWS', 'LINUX', 'UNKNOWN']);
 
 export const dependencyKindSchema = z.enum([
   'MEDIA',
@@ -112,6 +113,7 @@ export const resolveHandoffSidecarSchema = z.object({
     major: z.literal(21),
     testedPatch: z.string().regex(/^21\.\d+\.\d+(?:\.\d+)?$/),
     edition: resolveEditionSchema,
+    platform: resolvePlatformSchema,
     page: z.enum(['EDIT', 'FUSION', 'COLOR', 'FAIRLIGHT', 'DELIVER', 'MULTI']),
   }),
   timeline: z.object({
