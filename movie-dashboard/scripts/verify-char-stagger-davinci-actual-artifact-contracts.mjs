@@ -31,7 +31,7 @@ for (const token of [
   'attach a real Follower modifier',
   'Read back the actual Text+/Follower values and live input/property names',
   'Keep every check NOT_RUN unless that exact step was performed',
-  'runtime apply/readback',
+  'parameter binding, apply/readback, render, and visual parity evidence',
   'productionReady: false',
   'compareCharStaggerDaVinciActualReadback',
   'readback.sourceRevision !== artifact.sourceRevision',
