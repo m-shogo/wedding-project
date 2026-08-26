@@ -199,10 +199,17 @@ export const RippleThreeHitMoment: React.FC<{
   const wipeProgress = connecting
     ? interpolate(frame - thirdHitLocal, [0, 20], [0, 100], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'})
     : 0;
+  // hit間の静止区間が3秒以上ピクセル完全固定にならないよう、連続push-in+微細な
+  // sine driftをphrase全体へ重ねる(freezedetect QAで検出された欠陥の修正。線形
+  // scaleだけでは1frameあたりの変化量が小さすぎて機械検出上「静止」と判定された
+  // ため、振幅を上げてsine成分を足すことで常に検出可能な変化を保証する)。
+  const phraseDurFrames = Math.max(1, secToFrame(phrase.endSec) - secToFrame(phrase.startSec));
+  const baseDrift = interpolate(frame, [0, phraseDurFrames], [1, 1.06], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  const wobbleX = Math.sin(frame * 0.09) * 6;
 
   return (
     <AbsoluteFill style={{overflow: 'hidden', background: '#0A0A0C'}}>
-      <AbsoluteFill style={{transform: `scale(${punchScale}) translateY(${-cumulativeShiftPx}px)`}}>
+      <AbsoluteFill style={{transform: `scale(${punchScale * baseDrift}) translate(${wobbleX}px, ${-cumulativeShiftPx}px)`}}>
         <StartDemoBackdrop role={RIPPLE_ROLE} variantIndex={1} />
       </AbsoluteFill>
       <RippleMask frame={frame} hitLocalFrames={hitLocalFrames.slice(0, 3)} />
@@ -231,10 +238,17 @@ export const RippleThreeHitMoment: React.FC<{
           </div>
         );
       })}
-      {/* 3打目から次shotへ実際に繋がる縦wipe(色面ではなく、実際の次shot写真をreveal) */}
+      {/* 3打目から次shotへ実際に繋がる縦wipe(色面ではなく、実際の次shot写真をreveal)。
+          reveal後も連続driftを掛け、残り尺でピクセル完全固定にしない。 */}
       {connecting ? (
         <AbsoluteFill style={{clipPath: `inset(${100 - wipeProgress}% 0 0 0)`}}>
-          <StartDemoBackdrop role="HAWAII_WARM" variantIndex={2} />
+          <AbsoluteFill
+            style={{
+              transform: `scale(${interpolate(frame - thirdHitLocal, [0, phraseDurFrames], [1, 1.08], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'})}) translateX(${Math.sin((frame - thirdHitLocal) * 0.08) * 8}px)`,
+            }}
+          >
+            <StartDemoBackdrop role="HAWAII_WARM" variantIndex={2} />
+          </AbsoluteFill>
         </AbsoluteFill>
       ) : null}
     </AbsoluteFill>
@@ -262,21 +276,31 @@ export const SoloUnionMoment: React.FC<{phrase: EnrichedLyricPhrase; variant: We
   const rightShift = 50 * (1 - p);
   const gap = 6 * (1 - p);
   const mergedOpacity = p;
+  // split区間・merge後区間ともに連続driftを持たせ、freezedetectが検出する
+  // ピクセル完全固定を避ける(split区間は左右へのゆっくりした寄せ、merge後は
+  // ゆっくりしたpush-inを継続する)。
+  const phraseDurFrames = Math.max(1, secToFrame(phrase.endSec) - secToFrame(phrase.startSec));
+  const splitDrift = interpolate(frame, [0, mergeLocalFrame], [1, 1.05], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  const mergedDrift = interpolate(frame - mergeLocalFrame, [0, phraseDurFrames], [1.06, 1.14], {
+    extrapolateLeft: 'clamp',
+    extrapolateRight: 'clamp',
+  });
+  const wobbleY = Math.sin(frame * 0.07) * 5;
 
   return (
     <AbsoluteFill style={{overflow: 'hidden', background: '#0A0A0C'}}>
       <AbsoluteFill style={{opacity: 1 - mergedOpacity}}>
         <AbsoluteFill style={{display: 'grid', gridTemplateColumns: `calc(50% - ${gap}px) calc(50% - ${gap}px)`, gap: gap * 2}}>
-          <div style={{position: 'relative', overflow: 'hidden', transform: `translateX(${leftShift}%)`}}>
+          <div style={{position: 'relative', overflow: 'hidden', transform: `translateX(${leftShift}%) scale(${splitDrift})`}}>
             <StartDemoBackdrop role={UNION_LEFT_ROLE} variantIndex={0} />
           </div>
-          <div style={{position: 'relative', overflow: 'hidden', transform: `translateX(${rightShift}%)`}}>
+          <div style={{position: 'relative', overflow: 'hidden', transform: `translateX(${rightShift}%) scale(${splitDrift})`}}>
             <StartDemoBackdrop role={UNION_RIGHT_ROLE} variantIndex={0} />
           </div>
         </AbsoluteFill>
       </AbsoluteFill>
       <AbsoluteFill style={{opacity: mergedOpacity}}>
-        <AbsoluteFill style={{transform: `scale(${interpolate(p, [0, 1], [1.06, 1])})`}}>
+        <AbsoluteFill style={{transform: `scale(${mergedDrift}) translateY(${wobbleY}px)`}}>
           <StartDemoBackdrop role={UNION_MERGED_ROLE} variantIndex={1} />
         </AbsoluteFill>
       </AbsoluteFill>
