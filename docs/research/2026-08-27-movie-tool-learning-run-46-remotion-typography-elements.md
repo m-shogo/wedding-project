@@ -16,6 +16,9 @@ Move from a one-off Mask Reveal Element canary to a repeatable Motion Zukan → 
 - All three Elements expose the same useful Studio surface: text, intensity, color, translate, scale, rotate, opacity.
 - All three use canonical `exitAnimation="fade"`; no wrapper-only motion implementation is introduced.
 - Added a shared artifact validator and CI rendering of all three standalone generated Element sources.
+- Added `movie-dashboard/src/data/remotionElementCandidates.ts` as the machine-readable Motion Zukan → Element readiness registry.
+- Added a dashboard contract checker so `ELEMENT_CANDIDATE` cannot silently become `STUDIO_ACTUAL_VERIFIED` without real Mac evidence.
+- Preserved the Run45 manifest fields used by the existing Mac Actual procedure (`colorControl`, exit metadata, hashes, Actual state).
 
 ## Why these three
 
@@ -37,6 +40,7 @@ canonical TypographyRevealEngine
 → Interactive schema
 → createElementPayload()
 → standalone render canary
+→ Motion Zukan Element readiness registry
 ```
 
 The kit does not reimplement easing, stagger timing, mask motion, word spacing, color semantics, or exit timing.
@@ -45,9 +49,21 @@ Guardrail:
 
 `SHARED_ELEMENT_KIT != SHARED_MOTION_IMPLEMENTATION`
 
+## Readiness model
+
+The dashboard registry separates three states:
+
+```text
+PREVIEW_ONLY
+ELEMENT_CANDIDATE
+STUDIO_ACTUAL_VERIFIED
+```
+
+Run46 records the three Typography treatments as `ELEMENT_CANDIDATE` only. This means the repo has a generated/validated/renderable candidate path; it does not mean Remotion Studio installation or Inspector editing has been proven.
+
 ## Honesty boundary
 
-CI proves source extraction, official payload validation, schema structure and standalone rendering only.
+CI proves source extraction, official payload validation, schema structure and standalone rendering only once the workflow is actually green.
 
 `Studio install / Inspector control mutation / undo-redo / reload-restart` remain `NOT_RUN` until a real Mac Studio Actual is performed.
 
@@ -60,10 +76,10 @@ Additional guardrails:
 
 ## Next implementation target
 
-After this PR is green and merged, connect a small machine-readable Element candidate registry to Motion Zukan so the dashboard can distinguish:
+After this PR receives a real GREEN CI run and is squash-merged:
 
-- Remotion preview only;
-- Element candidate generated + CI-rendered;
-- Studio Actual verified.
+1. surface the Element readiness state on the Motion Zukan UI/cards so a human can distinguish preview-only vs Element candidate at selection time;
+2. prepare one bounded Mac Studio Actual batch for the three Typography Elements, reusing the Run45 confirmation/readback rules;
+3. promote each record independently to `STUDIO_ACTUAL_VERIFIED` only after install confirmation, Inspector mutation, source readback, undo/redo, reload/restart and post-install render all pass.
 
-Do not mark any of the three as Studio Actual verified until the Mac confirmation / Inspector / source-readback sequence has actually been executed.
+Do not mark any of the three as Studio Actual verified until that sequence has actually been executed.
