@@ -6,22 +6,30 @@ on:
       - "motion-studio/src/data/resolveRuntimeCanary.schema.ts"
       - "motion-studio/src/data/resolveRuntimeCanaryPack.ts"
       - "motion-studio/src/data/resolveRuntimeCanaryCapabilityRefs.ts"
+      - "motion-studio/src/data/resolveCanaryInputFixtures.ts"
       - "motion-studio/scripts/resolve-runtime-canary-plan.mts"
       - "motion-studio/scripts/check-resolve-runtime-canary-pack.mts"
+      - "motion-studio/scripts/prepare-resolve-canary-inputs.mts"
+      - "motion-studio/scripts/check-resolve-canary-input-fixtures.mts"
       - "scripts/davinci/resolve21-runtime-readonly-probe.sh"
       - "docs/runbooks/2026-08-26-resolve21-runtime-canary-pack.md"
       - "docs/prompts/2026-08-26-resolve21-runtime-canary-execution-agent.md"
+      - "docs/research/2026-08-26-movie-tool-learning-run-25-resolve-canary-input-readiness.md"
       - ".github/workflows/resolve-runtime-canary-pack-ci.yml"
   push:
     paths:
       - "motion-studio/src/data/resolveRuntimeCanary.schema.ts"
       - "motion-studio/src/data/resolveRuntimeCanaryPack.ts"
       - "motion-studio/src/data/resolveRuntimeCanaryCapabilityRefs.ts"
+      - "motion-studio/src/data/resolveCanaryInputFixtures.ts"
       - "motion-studio/scripts/resolve-runtime-canary-plan.mts"
       - "motion-studio/scripts/check-resolve-runtime-canary-pack.mts"
+      - "motion-studio/scripts/prepare-resolve-canary-inputs.mts"
+      - "motion-studio/scripts/check-resolve-canary-input-fixtures.mts"
       - "scripts/davinci/resolve21-runtime-readonly-probe.sh"
       - "docs/runbooks/2026-08-26-resolve21-runtime-canary-pack.md"
       - "docs/prompts/2026-08-26-resolve21-runtime-canary-execution-agent.md"
+      - "docs/research/2026-08-26-movie-tool-learning-run-25-resolve-canary-input-readiness.md"
       - ".github/workflows/resolve-runtime-canary-pack-ci.yml"
 
 permissions:
@@ -30,7 +38,7 @@ permissions:
 jobs:
   verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 8
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -52,9 +60,18 @@ jobs:
         working-directory: motion-studio
         run: pnpm install --frozen-lockfile
 
+      - name: Install ffmpeg for neutral fixture QA
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+
       - name: Canary pack contract
         working-directory: motion-studio
         run: node --no-warnings scripts/check-resolve-runtime-canary-pack.mts
+
+      - name: Canary input fixture contract
+        working-directory: motion-studio
+        run: node --no-warnings scripts/check-resolve-canary-input-fixtures.mts
 
       - name: Canary compiler smoke
         working-directory: motion-studio
@@ -67,6 +84,36 @@ jobs:
           node --no-warnings scripts/resolve-runtime-canary-plan.mts DV21-AUDIO-RECOVERY-01 --evidence-template > /tmp/audio-canary-evidence.json
           grep -Fq '"promotionEligible": false' /tmp/audio-canary-evidence.json
           grep -Fq '"result": "NOT_RUN"' /tmp/audio-canary-evidence.json
+
+      - name: P0 input planner dry-run
+        working-directory: motion-studio
+        run: |
+          node --no-warnings scripts/prepare-resolve-canary-inputs.mts alpha --dry-run | grep -Fq 'DV21-REMOTION-ALPHA-01 input'
+          node --no-warnings scripts/prepare-resolve-canary-inputs.mts audio --dry-run | grep -Fq 'DV21-AUDIO-RECOVERY-01 inputs'
+          node --no-warnings scripts/prepare-resolve-canary-inputs.mts palmier --dry-run | grep -Fq 'No FCPXML will be synthesized'
+
+      - name: Generate neutral audio input + manifest
+        working-directory: motion-studio
+        run: |
+          node --no-warnings scripts/prepare-resolve-canary-inputs.mts audio
+          test -s out/canary-inputs/audio/synthetic-tone-440hz-6s-48k-stereo.wav
+          test -s out/canary-inputs/audio/audio-human-master.json
+          test -s out/canary-inputs/manifests/DV21-AUDIO-RECOVERY-01.json
+          grep -Fq '"status": "PREPARED"' out/canary-inputs/manifests/DV21-AUDIO-RECOVERY-01.json
+          grep -Fq '"sampleRateHz": 48000' out/canary-inputs/audio/audio-human-master.json
+
+      - name: Generate Palmier scene spec without fake FCPXML
+        working-directory: motion-studio
+        run: |
+          node --no-warnings scripts/prepare-resolve-canary-inputs.mts palmier
+          test -s out/canary-inputs/palmier/palmier-fcpxml-synthetic-scene-spec.json
+          test -s out/canary-inputs/manifests/DV21-PALMIER-FCPXML-01.json
+          grep -Fq '"status": "BLOCKED_REAL_TOOL_EXPORT_REQUIRED"' out/canary-inputs/manifests/DV21-PALMIER-FCPXML-01.json
+          grep -Fq '"mustUseRealPalmier": true' out/canary-inputs/palmier/palmier-fcpxml-synthetic-scene-spec.json
+          if find out/canary-inputs/palmier -type f \( -name '*.fcpxml' -o -name '*.xml' \) | grep -q .; then
+            echo "Palmier preparation must not synthesize NLE XML/FCPXML"
+            exit 1
+          fi
 
       - name: Generic read-only probe shell syntax
         run: bash -n scripts/davinci/resolve21-runtime-readonly-probe.sh
