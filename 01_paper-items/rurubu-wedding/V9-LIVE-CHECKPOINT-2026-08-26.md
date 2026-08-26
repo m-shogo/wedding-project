@@ -8,6 +8,7 @@ This checkpoint records only the dedicated V9 Rurubu production in the existing 
 - V9 page: `08_RURUBU_V9_RURUBU_POP_PRODUCTION` (`2601:2`)
 - Page format: six separate A4 portrait pages, `794 × 1123`
 - Do not overwrite V6/V7/V8 controls or other paper items.
+- V9 Drive authority: `1xJ3HgV6c9ewP5Y2H2Dngsn-0k0C_oiup`
 
 ## Six current production frames
 
@@ -22,69 +23,50 @@ This checkpoint records only the dedicated V9 Rurubu production in the existing 
 
 - 22 `PHOTO_MASK / ... / REPLACEABLE` nodes remain independently replaceable in the six current production frames.
 - Per-page mask counts are 4 / 3 / 2 / 2 / 6 / 5.
-- Photo masks keep image fills; the pass did not flatten page-level images.
+- Photo masks keep image fills; page-level images are not flattened.
 - Generated Profile title remains a separate movable image layer: `2603:2`.
 - Native editable title/chip treatments remain separate from photos.
+- Existing V9 Drive placeholder layers remain separate, including Wedding Guide `2621:113` and Timeline `2621:114`.
 
-## 2026-08-26 density pass
+## 2026-08-26 magazine parts pass
 
-Post-render review found:
+Before mutation, exact-name lookup re-confirmed the live V9 page and all six production frames. The Drive authority was re-listed and confirmed to contain a large asset pool, including three Rurubu WEDDING logo variants, BEST SHOT/PICK UP/date badges, generated section titles, and many newly generated PNG parts.
 
-- Cover already has acceptable Rurubu-pop density and strong hierarchy.
-- Profile had unused lower-page space.
-- Story/Timeline had excessive whitespace and duplicate Timeline labeling.
-- Memory had unused lower-page space despite a strong photo grid.
-- Back-cover header hierarchy was visually crowded.
+Six hidden rollback clones were created before this pass at canvas y=5100.
 
-Changes applied in live Figma:
+A coherent magazine micro-decoration pass then added 12 separate movable V9 parts, two per production page. These are native editable layers, not flattened into photos:
 
-- Preserved hidden rollback clones of Back/Profile/Story/Memory before the density pass.
-- Reduced Back-cover `WEDDING GUIDE` title scale and separated it from the Japanese lead.
-- Hid only the duplicate old Timeline placeholder (`2601:84`); the editable Timeline title remains visible.
-- Added separate movable editorial micro-chips to Profile, Story, Memory, Cover, Back and 1DAY.
-- Added small footer/navigation copy to use previously dead space without touching photo masks.
-- Kept generated Profile title and all replaceable photo nodes unchanged.
+- Cover: `YOKOHAMA WEDDING TRIP`, `MUST SEE!`
+- Back: `SPECIAL CONTENTS`, `KEEP THIS BOOK`
+- Profile/Q&A: `COUPLE FILE`, `3 QUESTIONS`
+- Story/Timeline: `OUR STORY`, `2019 → 2026`
+- Memory/Gallery: `BEST SHOTS`, `6 MEMORIES`
+- 1DAY/Cafe: `1 DAY ROUTE`, `CAFE & TABLE`
+
+The treatment deliberately follows the approved Rurubu-pop language: compact rounded pills, high-contrast cyan/pink/yellow/blue accents, dense editorial signposting, and independent movable parts.
 
 ## QA evidence
 
-Whole-page screenshot QA was performed after mutation on Back cover, Story + Timeline, Memory + Gallery, Cover, Profile + Q&A, and 1DAY + Cafe/Table across the continuation passes.
+Whole-page screenshots were regenerated for all six current production frames after the write.
 
-The first Back-cover pass still read as a collision at page scale. It was corrected in a second mutation by reducing the English title and Japanese lead and moving the footer navigation chip lower.
+A structural QA pass then re-read the live Figma and verified:
 
-### Cover + 1DAY continuation
+- all six current frames remain exactly `794 × 1123`;
+- replaceable photo-mask counts remain exactly `4 / 3 / 2 / 2 / 6 / 5 = 22`;
+- all 12 new `V9 PART / ... / MOVEABLE` frames are present and visible;
+- no direct child exceeds the A4 bottom edge;
+- no photo mask was replaced, merged, or flattened by this pass.
 
-Cover whole-page QA exposed a collision in the bottom three cover captions: added `YOKOHAMA / TRIP / PEOPLE` micro-chips sat over the original `ふたりのこと / 思い出スポット / 1DAY PLAN` labels. A hidden rollback clone was created as `2613:2`, then only the three colliding added chips were hidden. The original captions are readable again and photo masks remain untouched.
+## Failure learning retained
 
-A generated `rurubu_wedding_logo_A_v1.png` Drive master (`1PMFJjPXW7925yFVNNPyYeFzuoeFhCJMU`) was tested as a separate cover image layer. The transport derivative created a Figma image node (`2613:41`) but rendered blank. The editable cover title/subtitle were restored immediately and the failed layer left hidden as evidence.
+`get_metadata` top-level page listing can omit the existing V9 page. Never conclude that V9 is absent solely from the top-level page list. Resolve `08_RURUBU_V9_RURUBU_POP_PRODUCTION` by exact name inside the Figma document before creating/replacing anything.
 
-1DAY + Cafe/Table was strengthened with four concise native editable schedule sublines (`2615:36`, `2615:39`, `2615:42`, `2615:45`). A first pass also added STOP chips, but screenshot QA showed collisions; those chips were hidden and the corrected whole-page render is clean.
-
-### Hierarchy cleanup continuation
-
-A fresh exact-name lookup on the live document confirmed the V9 page still exists with all six A4 production frames. This is important because top-level metadata can omit the page.
-
-Whole-page review then found a remaining real defect on the Back cover: the editable `WEDDING GUIDE` title at `2604:11` duplicated/collided with the Japanese lead even though the smaller pink `WEDDING GUIDE` issue pill already provided the English label. Before mutation, hidden rollback clones were created for Back (`2619:2`), Story (`2619:30`) and Memory (`2619:63`). The duplicate editable Back title `2604:11` was hidden; the pink issue pill was retained. Screenshot QA confirms the header now has one clear Japanese lead plus one English issue label with no overlap.
-
-Story + Timeline received a separate movable `4 MOMENTS` editorial pill (`2619:96`/`2619:97`) beside the timeline guide. Memory + Gallery received a separate movable `6 SPOTS` pill (`2619:98`/`2619:99`) below the six-photo grid. Whole-page screenshots confirm both render without collision and preserve the existing reading order.
-
-Final structure verification after this write confirmed all six production frames are still `794 × 1123`, visible, and contain exactly 22 current replaceable photo masks total. Rollback clones are hidden and excluded from that production count.
-
-## Failure learning
-
-`get_metadata` top-level page listing did not expose the existing V9 page, even though exact-name resolution inside `use_figma` returned page id `2601:2` with all six frames. Therefore:
-
-> Do not conclude that V9 is absent solely from the top-level metadata page list. Resolve the page by exact name inside the Figma document before creating or replacing any V9 page.
-
-Generated image transport learning:
-
-> A Drive PNG can decode locally and still fail to render when converted to an indexed transport PNG and fed through `figma.createImage`. Always screenshot-QA the placed asset before hiding the fallback title. If it renders blank, restore the editable fallback immediately. Do not treat node creation or a returned `imageHash` as visual success.
-
-The direct MCP asset upload path also hit DNS resolution failure from the execution environment, so the failed route was not blindly retried.
+A Drive PNG can decode and still fail to render when transported through an unsuitable indexed-PNG route. Node creation or an `imageHash` is not visual success. Screenshot-QA the placed asset before hiding an editable fallback.
 
 ## Next pass
 
-- Continue actual-size QA across all six as a set, especially Profile typography and bottom-edge safety.
-- Prefer one-image-one-item generated assets from the V9 Drive source folder as separate movable layers, but only mark them placed after screenshot QA proves they render.
-- Use the original transparent/true-color asset path or another verified transport route instead of the indexed-PNG derivative that rendered blank.
-- Increase Rurubu-like information density only where it improves reading order; do not fill space mechanically.
-- Keep photos independently replaceable and never flatten complete pages.
+- Continue using the Drive folder as the visual/asset authority; inspect and place one-image-one-item assets only through a transport route proven to render.
+- Build photo-frame compositions as `frame artwork above + replaceable masked dummy photo below`, so dummy photos never escape the decorative frame.
+- Keep goal/reference imagery beside the production set for side-by-side comparison rather than flattening it into production.
+- Refine page-specific hierarchy after whole-page and actual-size QA; remove any micro-decoration that competes with the primary reading order.
+- Do not touch Passport, Boarding Pass, 青春ふたりきっぷ, ADD items, or V6/V7/V8 controls.
