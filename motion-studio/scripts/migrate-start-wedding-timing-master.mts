@@ -601,6 +601,8 @@ const audio = {
   fadeOutDurationMs: secToMs(editRange.fadeOutDurationSec),
   globalContentOffsetMs: existingMaster?.audio.globalContentOffsetMs ?? 0,
   previewLatencyOffsetMs: existingMaster?.audio.previewLatencyOffsetMs ?? 0,
+  renderPipelineOffsetMs: existingMaster?.audio.renderPipelineOffsetMs ?? null,
+  renderPipelineOffsetVerified: existingMaster?.audio.renderPipelineOffsetVerified ?? false,
   verifiedByListening: existingMaster?.audio.verifiedByListening ?? false,
 };
 

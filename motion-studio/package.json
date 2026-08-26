@@ -13,6 +13,8 @@
     "import:legacy-timing-master:apply": "node --no-warnings scripts/migrate-start-wedding-timing-master.mts --apply",
     "sync:timing-master": "node --no-warnings scripts/sync-start-wedding-timing-master.mts",
     "check:timing-master": "node --no-warnings scripts/check-start-wedding-timing-master.mts",
+    "test:timing-master-manual-preservation": "node --no-warnings scripts/test-timing-master-manual-preservation.mts",
+    "render:av-sync-test": "remotion render src/index-av-sync-test.ts AVSyncTest local/analysis/start-wedding/av-sync-test/av-sync-test.mp4 --scale=0.5 --crf=10",
     "sync:start-wedding-edit-local": "pnpm sync:timing-master",
     "prepare:start-wedding-edit": "pnpm sync:start-wedding-edit-local && pnpm sync:start-129-demo-assets",
     "dev:start-wedding-edit": "pnpm prepare:start-wedding-edit && remotion studio src/index-start-wedding-edit.ts",

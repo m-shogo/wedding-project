@@ -191,6 +191,17 @@ export type TimingMaster = {
     fadeOutDurationMs: number | null;
     globalContentOffsetMs: number;
     previewLatencyOffsetMs: number;
+    /** 実測: AVSyncTest compositionをrender→ffprobe再解析した結果判明した、
+     * render pipeline自体(Remotion+ffmpeg AAC encode+MP4 mux)が持つ
+     * 恒常的なaudio-video遅延(ms、音声が遅れる方向を正とする)。
+     * 2026-08-26の実測では12/12 test pointで42.7ms・分散ゼロ(定数offset、
+     * driftではない)。これはTimingMaster側のcue時刻の誤りではなく、
+     * render pipeline自体の癖であり、globalContentOffsetMs(音源content側の
+     * 補正)とは意味的に別物のため別fieldで持つ。renderPipelineOffsetVerified
+     * =falseの間は、この値を自動的にrenderへ適用しない(人間が実際の
+     * 最終MP4を試聴して妥当性を確認するまでcandidateのまま)。 */
+    renderPipelineOffsetMs: number | null;
+    renderPipelineOffsetVerified: boolean;
     verifiedByListening: boolean;
   };
 
