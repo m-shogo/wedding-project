@@ -60,7 +60,56 @@ Rollback snapshot prefix for all three touched pages:
 
 `ROLLBACK / V9 EDITORIAL RHYTHM PASS / 1787784699934 / ...`
 
-## Structural QA after editorial-rhythm pass
+## 2026-08-27 editorial-index + photo-rhythm pass
+
+A further actual-page review focused on residual UI grammar and repeated equal-size image modules. No new generated assets were added; the Drive pool was used only as live authority/reference and remained unchanged.
+
+### Profile + Q&A
+
+The bottom `TRAVEL / FOOD / PHOTO` taxonomy still read as three interface pills even though the labels themselves are useful indexing information.
+
+- Removed the colored pill fills from `2609:107 / 2609:109 / 2609:111`.
+- Kept the native editable `TRAVEL / FOOD / PHOTO` text.
+- Added one thin category-color editorial rule beneath each label: `2740:271 / 2740:272 / 2740:273`.
+- The result keeps scan/index value while removing button-like containment.
+
+### Memory + Gallery
+
+The same problem remained in the lower `PLACE / PEOPLE / FOOD` index.
+
+- Removed the colored pill fills from `2609:125 / 2609:127 / 2609:129`.
+- Kept the native editable category text.
+- Added thin category-color editorial rules `2740:274 / 2740:275 / 2740:276`.
+- The existing `OUR FAVORITE` accent was retained because it still provides one intentional magazine-style break rather than functioning as repetitive UI.
+
+### 1DAY + Cafe/Table
+
+The three right-column photos were still mechanically equal modules. The masks and their overlays were redistributed without changing photo count or replaceability:
+
+- DAY 01: `510,198 / 248×164`
+- DAY 02: `482,382 / 276×174` — promoted as the dominant middle supporting image
+- DAY 03: `510,580 / 248×164`
+
+Each corresponding frame overlay remains geometrically identical to its photo mask. This introduces a controlled left-right step and one stronger visual beat while keeping the timeline text column stable.
+
+### Cover supporting-photo rhythm
+
+The three cover support roles still used equal widths even though the center role was already taller. A bounded redistribution now gives the bottom strip stronger magazine rhythm:
+
+- MINI 01: `40,780 / 232×154`
+- MINI 02: `302,758 / 190×176`
+- MINI 03: `520,784 / 234×150`
+
+Native captions and their thin editorial rules were optically recentered to the new photo roles. The hero, masthead, names/date and replaceable-photo count were not changed.
+
+Rollback evidence:
+
+- Profile: `2740:2`
+- Memory: `2740:75`
+- 1DAY: `2740:163`
+- Cover: `2741:2`
+
+## Structural QA after editorial-index + photo-rhythm pass
 
 PASS across all six current production frames:
 
@@ -79,14 +128,19 @@ PASS across all six current production frames:
 
 The Story test further supports a narrower principle: when a page becomes too empty after removing UI-like helpers, restore hierarchy with editorial text, crop/scale and simple rules before reintroducing badges/cards.
 
+The new Profile/Memory test adds another bounded result: when taxonomy labels are useful but their rounded containment reads as UI, preserve the native label and move the category color into a thin editorial rule rather than deleting the information.
+
+The 1DAY/Cover photo tests also reinforce that repeated equal-size modules should first be solved by role redistribution and controlled scale/orientation differences before adding new decorative assets.
+
 Do not remove functional labels merely to reduce count. Keep a line, tag, frame, route or container when it visibly improves binding, indexing, scan path or physical/editorial meaning.
 
 ## Next implementation target
 
-1. inspect Cover / Profile / Memory / 1DAY at actual reading scale for remaining weak photo crops or headline/body spacing;
-2. refine photo hierarchy only where the dummy composition is visibly weak, preserving replaceable masks and frame-above/photo-below structure;
-3. continue reducing web-UI grammar only where a concrete visual problem remains;
-4. selectively use existing Drive artwork only when it solves a concrete editorial role;
-5. generate missing assets later as one batch after the assembled six pages expose specific gaps.
+1. re-check Back Cover and Story against the newly more asymmetric Cover/1DAY rhythm so the six-page sequence stays varied but coherent;
+2. inspect Memory and Profile at actual size for copy-to-footer spacing after the index-label subtraction;
+3. refine remaining dummy-photo crop/role hierarchy only where the composition is visibly weak, preserving replaceable masks and frame-above/photo-below structure;
+4. continue reducing web-UI grammar only where a concrete visual problem remains;
+5. selectively use existing Drive artwork only when it solves a concrete editorial role;
+6. generate missing assets later as one batch after the assembled six pages expose specific gaps.
 
 Final real-content / print-ready remains blocked on final real photography/copy and printer bleed/trim/preflight/physical proof.
