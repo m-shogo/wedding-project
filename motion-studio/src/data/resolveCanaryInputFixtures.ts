@@ -146,7 +146,7 @@ export const alphaCanaryFixture = {
   ],
 } as const;
 
-export type ResolveCanaryInputPreparationMode = 'alpha' | 'audio' | 'palmier' | 'drfx';
+export type ResolveCanaryInputPreparationMode = 'alpha' | 'audio' | 'palmier' | 'drfx' | 'lottie';
 export type ResolveCanaryInputPreparation = {
   mode: ResolveCanaryInputPreparationMode;
   command: string;
@@ -178,6 +178,12 @@ export const resolveCanaryInputPreparationCommands: Record<string, ResolveCanary
     command: 'node --no-warnings scripts/prepare-resolve-canary-inputs.mts drfx',
     result: 'Builds a deterministic dependency-free Edit Generator .drfx candidate with a single grouped Color control and writes hash/structure manifests. Runtime install remains pending.',
     manifestPath: 'out/canary-inputs/manifests/DV21-DRFX-FREE-01.json',
+  },
+  'DV21-LOTTIE-OGRAF-01': {
+    mode: 'lottie',
+    command: 'node --no-warnings scripts/prepare-resolve-canary-inputs.mts lottie',
+    result: 'Builds a deterministic self-authored dotLottie v1 fixture with transparent-canvas intent and obvious motion, plus provenance/timing manifests. Resolve import/alpha/editability remain runtime-pending.',
+    manifestPath: 'out/canary-inputs/manifests/DV21-LOTTIE-OGRAF-01.json',
   },
 };
 
