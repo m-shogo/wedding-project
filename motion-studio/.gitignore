@@ -28,3 +28,4 @@ public/local-start-129/*
 public/local-start-wedding-edit/*
 !public/local-start-wedding-edit/.gitkeep
 src/data/startWeddingEdit/generated.ts
+src/data/startWeddingEdit/generated.meta.json
