@@ -1,7 +1,7 @@
 # ADD-17 子ども向けミニカード / ぬりえ — Current
 
-Status: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / PROFESSIONAL_VNEXT_EXPEDITION_FIELD_SELECTED / FAMILY_DIVERSITY_PASS / LONG_COPY_VISUAL_PASS / CHILD_ACTIVITY_SURFACE_PASS / ACTIVITY_TICK_SUBTRACTION_PASS / DISCOVERY_LABEL_CONTAINMENT_SUBTRACTION_PASS / DISCOVERY_CUE_CONSOLIDATION_PASS / BACK_SIDE_TAPE_SUBTRACTION_PASS / LEGACY_PRESERVED / BLOCKED_REQUIRED_INPUT / NOT_PRINT_READY`
-Updated: 2026-08-24
+Status: `SELLABLE_VISUAL_QA_REOPENED + DESIGN_QA_PASS_WITH_PLACEHOLDERS / PROFESSIONAL_VNEXT_EXPEDITION_FIELD_SELECTED / FAMILY_DIVERSITY_PASS / LONG_COPY_VISUAL_PASS / CHILD_ACTIVITY_SURFACE_PASS / ACTIVITY_TICK_SUBTRACTION_PASS / DISCOVERY_LABEL_CONTAINMENT_SUBTRACTION_PASS / DISCOVERY_CUE_CONSOLIDATION_PASS / BACK_SIDE_TAPE_SUBTRACTION_PASS / LOCAL_BACK_HEADER_CONTAINMENT_AUDIT_PENDING / LEGACY_PRESERVED / BLOCKED_REQUIRED_INPUT / NOT_PRINT_READY`
+Updated: 2026-08-27
 Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
 
 This is the current visual/design authority entry point for the age-independent neutral ADD-17 template. Final real-wedding adoption remains blocked until authoritative child attendance/use information exists. Older Foldout Discovery Map / FIELD NOTE / WINDOW SEAT / V5 work remains rollback/history evidence.
@@ -53,9 +53,32 @@ Back:
 
 All prompts, guidance, optional name and date remain native editable Figma text.
 
+## 2026-08-27 sellable-visual reopen — back cobalt header containment
+
+Fresh back renders at whole / ~500px, reading / ~1000px and native `1110×1540` show a new sellable-visual question: the full-width cobalt top band is visually read before the writing sheet and resembles a web/app header or status bar.
+
+The reader-facing native label `きょうの発見 / 02` is legitimate. The reopened role is only the **full-width containment**, not the label itself, the writing surface, or the overall clean-room selection.
+
+Evidence:
+- `OBSERVED-BACK-COBALT-HEADER-CONTAINMENT-2026-08-27.md`
+
+Root-cause hypothesis:
+- the band mixes a valid identity role with unnecessary full-width containment;
+- front already proves the discovery identity can exist as open typography without a full-width carrier;
+- the back may read more like a physical writing sheet if the label is retained without the full-width header.
+
+Next bounded Figma test when mutation guidance is safely available:
+1. `CURRENT` — retain the full-width cobalt band;
+2. `OPEN_LABEL` — hide only the band and retain `きょうの発見 / 02` as native text on the cream sheet;
+3. only if `OPEN_LABEL` loses too much back/front distinction, consider one smaller physically connected edge treatment. Do not create a new decorative family merely to preserve color.
+
+Stop condition: if CURRENT is clearly stronger at whole-item scale, reject this hypothesis and restore `SELLABLE_VISUAL_QA_PASS` without redesigning the rest of ADD-17.
+
+Existing long-copy, auto-height, activity-surface, rollback and factual evidence remains valid while this one role is reopened.
+
 ## Professional visual QA
 
-Professional Design Council remains `94/100 / PASS / NO VETO`.
+Professional Design Council prior score remains `94/100 / PASS / NO VETO` as historical clean-room selection evidence, but the current sellable-visual completion state is temporarily reopened only for the back header containment role.
 
 The selected direction was originally chosen from three materially different blank-frame directions, then rebuilt at full size. Later bounded Current-only improvements strengthened the same art direction without reopening the clean-room selection:
 
@@ -69,12 +92,7 @@ Latest side-tape comparison:
 - back realistic long-copy comparison: `82:21`;
 - complete pre-change rollbacks: `82:40 / 82:59`.
 
-Only the back fixed side-tape visibility changed in the latest pass. Wording, typography, writing rules, cobalt header, star, name/date and page size were unchanged.
-
-Whole-item / thumbnail: PASS.
-Reading scale: PASS.
-Actual-size / native `1110×1540`: PASS.
-Realistic long-copy front/back: PASS.
+Prior whole-item / reading / actual-size / realistic long-copy PASS evidence remains structural/history evidence. The 2026-08-27 cobalt-header question must be resolved before sellable visual PASS is restored.
 
 ## Structure / stress QA
 
@@ -94,7 +112,7 @@ Selected back `67:4`:
 - outside visible text `0`;
 - IMAGE fills `0`;
 - `DECOR / CORAL SIDE TAPE`: hidden;
-- cobalt top band: visible;
+- cobalt top band: visible and now pending bounded containment audit;
 - writing rules: visible;
 - bottom wave hidden;
 - bottom star visible.
@@ -111,7 +129,8 @@ Meaningful failures caught and corrected:
 4. four activity ticks read like crop/scanner reticles and were removed;
 5. rounded discovery-label carrier read as generic pill/banner containment and was removed;
 6. remaining isolated wave/spark cues became redundant once route/star already carried the concept and were consolidated;
-7. the back full-height coral `tape` did not read as a convincing physical binding/trim cue and behaved like a side rail, so it was removed after rollback-safe comparison.
+7. the back full-height coral `tape` did not read as a convincing physical binding/trim cue and behaved like a side rail, so it was removed after rollback-safe comparison;
+8. fresh 2026-08-27 review observed the remaining full-width cobalt back header may reintroduce web-header containment; bounded test pending.
 
 Canonical evidence:
 - `PROFESSIONAL-VNEXT-EXPEDITION-FIELD-PROMOTION-QA-2026-08-23.md`
@@ -119,6 +138,7 @@ Canonical evidence:
 - `DISCOVERY-LABEL-CONTAINMENT-SUBTRACTION-QA-2026-08-23.md`
 - `DISCOVERY-CUE-CONSOLIDATION-QA-2026-08-24.md`
 - `BACK-CORAL-SIDE-TAPE-SUBTRACTION-QA-2026-08-24.md`
+- `OBSERVED-BACK-COBALT-HEADER-CONTAINMENT-2026-08-27.md`
 - previous `PROFESSIONAL-VNEXT-FOLDOUT-DISCOVERY-MAP-QA-2026-08-22.md` remains rollback/history evidence.
 
 ## Hybrid / image decision
@@ -131,20 +151,20 @@ Canonical evidence:
 - replaceable image role: `0`;
 - image generation: `0`.
 
-`IMAGE_GENERATION_NOT_REQUIRED_FOR_THIS_PASS`: the screenshot-supported bottleneck was an unnecessary fixed rail, not missing photography or illustration. Generic travel imagery or generated children would reduce function and increase stock/identity risk.
+`IMAGE_GENERATION_NOT_REQUIRED_FOR_THIS_PASS`: the screenshot-supported bottleneck is containment semantics, not missing photography or illustration. Generic travel imagery or generated children would reduce function and increase stock/identity risk.
 
 ## Drive
 
-Exact authority confirmed live on 2026-08-24:
+Exact authority confirmed live on 2026-08-27:
 - `1xqxYqJ6_-0nPYSKrWkISHYljiNGIP5mB / ADD-17_子ども向けミニカード_ぬりえ`
 
 Drive writes for this pass: `0`.
 
 ## Learning state
 
-`VERIFIED_LOCAL` application of the established non-Rurubu physical-cue QA: a layer name such as `tape`, `edge`, or `rail` does not prove physical meaning. Keep it only when the whole artifact shows a reader-facing, binding, fold, trim, or functional job.
+Current new observation: `OBSERVED → ROOT_CAUSE_HYPOTHESIS / BOUNDED_FIGMA_TEST_PENDING` for full-width back-header containment.
 
-No new project rule is created from this single change. Do not transfer ADD-17's palette, star, route geometry, child-card composition or cue count to other items.
+This is consistent with earlier ADD-17 containment/rail failures but is not yet a new project rule. Do not transfer ADD-17's palette, star, route geometry, child-card composition, cue count, or a blanket `remove headers` behavior to other items.
 
 ## Final-use blocker
 
