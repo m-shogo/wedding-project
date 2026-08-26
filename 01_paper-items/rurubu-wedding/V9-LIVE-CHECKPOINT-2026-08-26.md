@@ -24,6 +24,7 @@ This checkpoint records only the dedicated V9 Rurubu production in the existing 
 - 22 `PHOTO_MASK / ... / REPLACEABLE` nodes remain independently replaceable in the six current production frames.
 - Per-page mask counts are 4 / 3 / 2 / 2 / 6 / 5.
 - Photo masks keep image fills; page-level images are not flattened.
+- Each current photo mask now has a separate geometry-matched `FRAME_OVERLAY / ... / NATIVE FALLBACK / ABOVE PHOTO / MOVEABLE` layer immediately above it.
 - Generated Profile title remains a separate movable image layer: `2603:2`.
 - Native editable title/chip treatments remain separate from photos.
 - Existing V9 Drive placeholder layers remain separate, including Wedding Guide `2621:113` and Timeline `2621:114`.
@@ -94,21 +95,36 @@ The Drive authority still contains the generated Timeline master (`RURUBU_V6_SEC
 
 This is now treated as an external transport blocker rather than a design blocker. Do not keep retrying either identical failure fingerprint inside the same run. Native editable fallback titles remain visible until a transport route is proven by screenshot rendering.
 
+## 2026-08-26 15H photo-frame structure normalization
+
+The six live production pages were re-read specifically against the requested frame/photo layering rule. Before changing the current production, six fresh hidden rollback clones were made.
+
+All 22 photo compositions were normalized from a single image rectangle carrying its own visible border into an explicit two-layer structure:
+
+1. `PHOTO_MASK / ... / REPLACEABLE` — image crop/fill layer below. Its IMAGE fill and `scaleMode=FILL` are preserved, while the visible stroke is removed from the photo layer.
+2. `FRAME_OVERLAY / ... / NATIVE FALLBACK / ABOVE PHOTO / MOVEABLE` — separate no-fill frame layer directly above the matching photo, preserving the previous border thickness and corner radius.
+
+This gives the current dummy-photo build the same production contract intended for the Drive V9 decorative frame PNGs: photo below, frame above, independent replacement/editability. When a real decorative frame asset can be transported successfully, replace only the native fallback overlay; do not flatten or rebuild the photo crop.
+
+A pair-by-pair verification confirmed all 22 frame overlays have geometry matching their photo layer exactly and are later in z-order than the corresponding photo. Whole-page screenshot QA on all six pages confirmed no visible regression after normalization.
+
 ## QA evidence
 
-Whole-page screenshots were regenerated for the current Cover, Back, Profile, Story, Memory, and 1DAY production frames after the 15H changes.
+Whole-page screenshots were regenerated for the current Cover, Back, Profile, Story, Memory, and 1DAY production frames after the 15H changes and again after frame-overlay normalization.
 
 The latest publication-wide structural QA verified:
 
 - all six current frames remain exactly `794 × 1123` and visible;
 - replaceable photo-mask counts remain exactly `4 / 3 / 2 / 2 / 6 / 5 = 22`;
-- every replaceable mask still has an IMAGE fill with `scaleMode=FILL`;
+- all 22 replaceable masks still have an IMAGE fill with `scaleMode=FILL`;
+- all 22 masks have a separate geometry-matched native fallback frame overlay directly above them;
+- all photo-mask visible strokes have been moved to those independent overlay layers rather than baked into the photo layer;
 - no visible direct child overflows its A4 frame;
 - no visible text node has a missing font;
 - no visible production node name contains `PLACEHOLDER`, `DUMMY`, or `TEMP`;
 - no visible text is below 9.5 px after the latest legibility pass;
 - no page was flattened and all photo masks remain independently replaceable;
-- 64 hidden V9 rollback snapshots are retained outside current production frames.
+- rollback snapshots remain hidden and outside current production frames.
 
 This is a strong `DESIGN / DUMMY-CONTENT QA` checkpoint, not final printer-ready evidence. Final photo selection, legitimate final copy, exact printer bleed/trim/safe template, export preflight, effective image resolution, and physical proof are still separate gates.
 
@@ -125,7 +141,7 @@ The 15H transport test reconfirmed two distinct external failure fingerprints: `
 ## Next pass
 
 - Continue using the Drive folder as the visual/asset authority; inspect and place one-image-one-item assets only through a transport route proven to render.
-- Build photo-frame compositions as `frame artwork above + replaceable masked dummy photo below`, so dummy photos never escape the decorative frame.
+- When V9 decorative frame PNG transport becomes available, replace the matching `FRAME_OVERLAY / ... / NATIVE FALLBACK` layer only; keep each underlying replaceable photo crop intact.
 - Keep goal/reference imagery beside the production set for side-by-side comparison rather than flattening it into production.
 - Replace dummy photos later without changing the mask geometry or the editorial layer structure.
 - When printer/template information is available, run true trim/bleed/safe-area and export/preflight QA rather than treating the current 25 px working margin as a printer specification.
