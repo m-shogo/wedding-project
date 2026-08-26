@@ -29,6 +29,7 @@ const canonicalTypographyBlock = canonicalFile.slice(start, end).trim();
 const internalTypographyBlock = canonicalTypographyBlock
   .replace('export type MotionIntensity', 'type MotionIntensity')
   .replace('export type TypographyRevealMode', 'type TypographyRevealMode')
+  .replace('export type TypographyRevealExit', 'type TypographyRevealExit')
   .replace('export function TypographyRevealEngine', 'function TypographyRevealEngine');
 
 if (internalTypographyBlock.includes('export function TypographyRevealEngine')) {
@@ -56,6 +57,7 @@ type WeddingMaskRevealLayerProps = InteractiveBaseProps &
   InteractiveTransformProps & {
     readonly text?: string;
     readonly intensity?: MotionIntensity;
+    readonly color?: string;
   };
 
 const weddingMaskRevealSchema = {
@@ -76,6 +78,11 @@ const weddingMaskRevealSchema = {
       L: {},
     },
   },
+  color: {
+    type: 'color',
+    default: '#ffffff',
+    description: '文字色',
+  },
   ...Interactive.transformSchema,
 } as const satisfies InteractivitySchema;
 
@@ -90,6 +97,7 @@ const WeddingMaskRevealLayerInner = forwardRef<
       controls,
       text = 'WELCOME',
       intensity = 'M',
+      color = '#ffffff',
       name,
       style,
       ...sequenceProps
@@ -122,6 +130,8 @@ const WeddingMaskRevealLayerInner = forwardRef<
             intensity={intensity}
             mode="mask"
             transparent
+            color={color}
+            exitAnimation="fade"
           />
         </div>
       </Sequence>
@@ -141,12 +151,14 @@ const InteractiveWeddingMaskRevealLayer = Interactive.withSchema({
  * Motion Zukan: type-mask-reveal
  * Canonical motion implementation is generated from TypographyRevealEngine above.
  * Studio-facing customization is delegated to Remotion Interactive.withSchema().
+ * The temporary-overlay exit is canonical engine behavior, not an Element-only fade.
  */
 export const WeddingMaskRevealElement: React.FC = () => {
   return (
     <InteractiveWeddingMaskRevealLayer
       text="WELCOME"
       intensity="M"
+      color="#ffffff"
       name="Mask Reveal"
       style={{
         translate: '0px 0px',
@@ -239,6 +251,7 @@ writeFileSync(
         editableFields: [
           'text',
           'intensity',
+          'color',
           'style.translate',
           'style.scale',
           'style.rotate',
@@ -246,20 +259,27 @@ writeFileSync(
         ],
         textLabel: '表示テキスト',
         intensityLabel: '動きの強さ (S=やさしい / M=標準 / L=強い)',
+        colorLabel: '文字色',
         transformSchema: true,
-        colorControl: 'NOT_EXPOSED_CANONICAL_ENGINE_CURRENTLY_HARDCODES_WHITE',
+        colorControl: 'CANONICAL_ENGINE_BACKED',
         transparentControl: 'INTENTIONALLY_NOT_EXPOSED_TECHNICAL_SETTING',
         actualStudioControlReadback: 'NOT_RUN',
       },
-      productionReadiness: 'CANDIDATE_NEEDS_STUDIO_ACTUAL_AND_EXIT_ANIMATION_REVIEW',
+      exitAnimation: {
+        mode: 'CANONICAL_FADE',
+        approximateDurationSeconds: 0.35,
+        elementOnlyImplementation: false,
+        userControl: 'INTENTIONALLY_NOT_EXPOSED_FIXED_TEMPORARY_OVERLAY_BEHAVIOR',
+      },
+      productionReadiness: 'CANDIDATE_NEEDS_STUDIO_ACTUAL',
       actualStudioInstallState: 'NOT_RUN',
       guardrails: [
         'ELEMENT_PAYLOAD_VALID != STUDIO_INSTALL_VERIFIED',
         'INTERACTIVE_SCHEMA_PRESENT != STUDIO_CONTROL_READBACK_VERIFIED',
         'DERIVED_SOURCE != SECOND_MOTION_IMPLEMENTATION',
+        'COLOR_CONTROL_REQUIRES_CANONICAL_ENGINE_PROP',
+        'ELEMENT_EXIT_USES_CANONICAL_ENGINE != ELEMENT_ONLY_DIVERGENCE',
         'REMOTION_PROVIDED_PACKAGES != ELEMENT_DEPENDENCIES',
-        'FAKE_COLOR_CONTROL != HUMAN_ADJUSTABILITY',
-        'ENTRANCE_ONLY_ELEMENT != PRODUCTION_READY_TEMPORARY_OVERLAY',
       ],
     },
     null,
@@ -267,12 +287,14 @@ writeFileSync(
   )}\n`,
 );
 
-console.log('✅ Mask Reveal Element payload validated with official createElementPayload() and Interactive schema source.');
+console.log('✅ Mask Reveal Element payload validated with official createElementPayload(), canonical color and canonical exit fade.');
 console.log(`source=${sourceOutputPath}`);
 console.log(`payload=${payloadOutputPath}`);
 console.log(`canonicalBlockSha256=${canonicalBlockSha256}`);
 console.log(`elementSourceSha256=${elementSourceSha256}`);
 console.log('dependencies=0');
 console.log('studioInteractivity=INTERACTIVE_SCHEMA_CANDIDATE');
+console.log('colorControl=CANONICAL_ENGINE_BACKED');
+console.log('exitAnimation=CANONICAL_FADE');
 console.log('actualStudioControlReadback=NOT_RUN');
 console.log('actualStudioInstallState=NOT_RUN');

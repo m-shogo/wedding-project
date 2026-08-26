@@ -40,10 +40,17 @@ const manifest = JSON.parse(readFileSync(join(outputDir, 'manifest.json'), 'utf8
     editableFields?: string[];
     textLabel?: string;
     intensityLabel?: string;
+    colorLabel?: string;
     transformSchema?: boolean;
     colorControl?: string;
     transparentControl?: string;
     actualStudioControlReadback?: string;
+  };
+  exitAnimation?: {
+    mode?: string;
+    approximateDurationSeconds?: number;
+    elementOnlyImplementation?: boolean;
+    userControl?: string;
   };
   productionReadiness?: string;
   actualStudioInstallState?: string;
@@ -76,6 +83,10 @@ for (const required of [
   "from 'react'",
   "from 'remotion'",
   'function TypographyRevealEngine',
+  "type TypographyRevealExit = 'none' | 'fade'",
+  "color = '#fff'",
+  "exitAnimation = 'none'",
+  "exitAnimation === 'fade'",
   'Interactive.withSchema',
   'Interactive.baseSchema',
   'Interactive.transformSchema',
@@ -83,6 +94,8 @@ for (const required of [
   "description: '表示テキスト'",
   "type: 'enum'",
   "description: '動きの強さ (S=やさしい / M=標準 / L=強い)'",
+  "type: 'color'",
+  "description: '文字色'",
   "componentIdentity: 'com.wedding.motion-zukan.mask-reveal'",
   'const WeddingMaskRevealLayerInner = forwardRef',
   '<Sequence',
@@ -92,6 +105,9 @@ for (const required of [
   'mode="mask"',
   'text="WELCOME"',
   'intensity="M"',
+  'color="#ffffff"',
+  'color={color}',
+  'exitAnimation="fade"',
   "translate: '0px 0px'",
   'scale: 1',
   "rotate: '0deg'",
@@ -108,7 +124,6 @@ for (const forbidden of [
   'process.env',
   'http://',
   'https://',
-  "type: 'color'",
   'transparent: {',
 ]) {
   if (source.includes(forbidden)) fail(`generated source contains forbidden portability/honesty token: ${forbidden}`);
@@ -139,29 +154,39 @@ if (manifest.actualStudioInstallState !== 'NOT_RUN') fail('payload generation mu
 
 const interactive = manifest.studioInteractivity;
 if (interactive?.mechanism !== 'Interactive.withSchema()') fail('Studio interactivity mechanism is not official Interactive.withSchema()');
-for (const field of ['text', 'intensity', 'style.translate', 'style.scale', 'style.rotate', 'style.opacity']) {
+for (const field of ['text', 'intensity', 'color', 'style.translate', 'style.scale', 'style.rotate', 'style.opacity']) {
   if (!interactive?.editableFields?.includes(field)) fail(`missing intended human-editable field: ${field}`);
 }
 if (interactive?.textLabel !== '表示テキスト') fail('Japanese-first text control label drifted');
 if (interactive?.intensityLabel !== '動きの強さ (S=やさしい / M=標準 / L=強い)') fail('Japanese-first intensity control label drifted');
+if (interactive?.colorLabel !== '文字色') fail('Japanese-first color control label drifted');
 if (interactive?.transformSchema !== true) fail('transform schema must remain enabled');
-if (interactive?.colorControl !== 'NOT_EXPOSED_CANONICAL_ENGINE_CURRENTLY_HARDCODES_WHITE') {
-  fail('color control must not be claimed until canonical engine supports it');
+if (interactive?.colorControl !== 'CANONICAL_ENGINE_BACKED') {
+  fail('color control must remain backed by canonical TypographyRevealEngine');
 }
 if (interactive?.transparentControl !== 'INTENTIONALLY_NOT_EXPOSED_TECHNICAL_SETTING') {
   fail('transparent technical setting should not become user-facing by accident');
 }
 if (interactive?.actualStudioControlReadback !== 'NOT_RUN') fail('Studio control readback must remain NOT_RUN before local Actual');
-if (manifest.productionReadiness !== 'CANDIDATE_NEEDS_STUDIO_ACTUAL_AND_EXIT_ANIMATION_REVIEW') {
-  fail('interactive candidate must not be promoted before Studio Actual and exit-animation review');
+
+const exit = manifest.exitAnimation;
+if (exit?.mode !== 'CANONICAL_FADE') fail('Element exit must use the canonical fade capability');
+if (exit?.approximateDurationSeconds !== 0.35) fail('Element exit duration contract drifted');
+if (exit?.elementOnlyImplementation !== false) fail('Element exit must not be implemented only in the wrapper');
+if (exit?.userControl !== 'INTENTIONALLY_NOT_EXPOSED_FIXED_TEMPORARY_OVERLAY_BEHAVIOR') {
+  fail('exit behavior should remain a fixed treatment behavior rather than a noisy first-level control');
+}
+if (manifest.productionReadiness !== 'CANDIDATE_NEEDS_STUDIO_ACTUAL') {
+  fail('candidate must remain unpromoted until Studio Actual is complete');
 }
 
 for (const guardrail of [
   'ELEMENT_PAYLOAD_VALID != STUDIO_INSTALL_VERIFIED',
   'INTERACTIVE_SCHEMA_PRESENT != STUDIO_CONTROL_READBACK_VERIFIED',
   'DERIVED_SOURCE != SECOND_MOTION_IMPLEMENTATION',
-  'FAKE_COLOR_CONTROL != HUMAN_ADJUSTABILITY',
-  'ENTRANCE_ONLY_ELEMENT != PRODUCTION_READY_TEMPORARY_OVERLAY',
+  'COLOR_CONTROL_REQUIRES_CANONICAL_ENGINE_PROP',
+  'ELEMENT_EXIT_USES_CANONICAL_ENGINE != ELEMENT_ONLY_DIVERGENCE',
+  'REMOTION_PROVIDED_PACKAGES != ELEMENT_DEPENDENCIES',
 ]) {
   if (!manifest.guardrails?.includes(guardrail)) fail(`missing Element guardrail: ${guardrail}`);
 }
@@ -172,11 +197,20 @@ const end = engine.indexOf('export type CameraTransformMode');
 if (start < 0 || end <= start) {
   fail('cannot independently locate canonical TypographyRevealEngine block');
 } else {
-  const canonicalBlockSha256 = createHash('sha256')
-    .update(engine.slice(start, end).trim())
-    .digest('hex');
+  const canonicalBlock = engine.slice(start, end).trim();
+  const canonicalBlockSha256 = createHash('sha256').update(canonicalBlock).digest('hex');
   if (manifest.canonicalBlockSha256 !== canonicalBlockSha256) {
     fail('manifest canonical block hash does not match current engines.tsx');
+  }
+  for (const token of [
+    "color = '#fff'",
+    "exitAnimation = 'none'",
+    "color?: string",
+    'exitAnimation?: TypographyRevealExit',
+    "exitAnimation === 'fade'",
+    'opacity: exitOpacity',
+  ]) {
+    if (!canonicalBlock.includes(token)) fail(`canonical TypographyRevealEngine missing safe color/exit contract: ${token}`);
   }
 }
 
@@ -186,10 +220,12 @@ if (errors.length > 0) {
   process.exit(1);
 }
 
-console.log('✅ Mask Reveal Element is canonical-derived, official-validator-backed and carries a Japanese-first Interactive schema without fabricating Studio Actual.');
+console.log('✅ Mask Reveal Element is canonical-derived, official-validator-backed, color-editable and uses canonical exit fade without fabricating Studio Actual.');
 console.log(`elementSourceSha256=${sourceSha256}`);
 console.log('patternId=type-mask-reveal');
 console.log('dependencies=0');
 console.log('studioInteractivity=INTERACTIVE_SCHEMA_CANDIDATE');
+console.log('colorControl=CANONICAL_ENGINE_BACKED');
+console.log('exitAnimation=CANONICAL_FADE');
 console.log('actualStudioControlReadback=NOT_RUN');
 console.log('actualStudioInstallState=NOT_RUN');

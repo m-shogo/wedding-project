@@ -40,9 +40,11 @@ for (const token of [
 for (const token of [
   'export function TypographyRevealEngine',
   "mode = 'mask'",
+  "color = '#fff'",
+  "exitAnimation = 'none'",
   'Easing.out(Easing.cubic)',
 ]) {
-  requireText(engine, token, `Existing TypographyRevealEngine reuse contract missing: ${token}`);
+  requireText(engine, token, `Existing TypographyRevealEngine reuse/default contract missing: ${token}`);
 }
 
 for (const token of [
@@ -59,6 +61,9 @@ for (const token of [
 if (concept.includes('interpolate(') || concept.includes('Easing.')) {
   errors.push('Concept composition must reuse TypographyRevealEngine instead of recreating Mask Reveal timing/easing');
 }
+if (concept.includes('color=') || concept.includes('exitAnimation=')) {
+  errors.push('Neutral Mask Reveal concept must continue relying on canonical color/exit defaults so Run45 capability does not silently change its semantics');
+}
 
 if (errors.length) {
   console.error(`Visual Motion Mask Reveal concept contracts FAILED (${errors.length})`);
@@ -66,4 +71,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log('Visual Motion Mask Reveal concept contracts OK: existing TypographyRevealEngine reused with neutral sans WELCOME 1280x720 / 30fps / 4s sample; concept remains explicitly non-DaVinci evidence.');
+console.log('Visual Motion Mask Reveal concept contracts OK: existing TypographyRevealEngine reused with neutral sans WELCOME 1280x720 / 30fps / 4s sample; Run45 color/exit capabilities retain white + no-exit defaults; concept remains explicitly non-DaVinci evidence.');
