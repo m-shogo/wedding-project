@@ -1,9 +1,23 @@
 import {useState} from "react";
 import {
+  buildTypographyDaVinciActualSessionTemplateJson,
   parseAndEvaluateTypographyDaVinciActualSession,
   type TypographyDaVinciActualSessionEvaluation,
   type TypographyDaVinciActualSessionV1,
 } from "../data/typographyDaVinciActualSession";
+
+function downloadSessionTemplate() {
+  const json = buildTypographyDaVinciActualSessionTemplateJson();
+  const blob = new Blob([json], {type: "application/json"});
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement("a");
+  anchor.href = url;
+  anchor.download = "typography-davinci-actual-session-template.json";
+  document.body.appendChild(anchor);
+  anchor.click();
+  anchor.remove();
+  URL.revokeObjectURL(url);
+}
 
 export function TypographyDaVinciActualSessionImport() {
   const [session, setSession] = useState<TypographyDaVinciActualSessionV1 | null>(null);
@@ -31,8 +45,20 @@ export function TypographyDaVinciActualSessionImport() {
       <summary className="cursor-pointer text-[10px] font-semibold text-violet-700 dark:text-violet-300">
         Mac Actual session JSONを読み戻す
       </summary>
-      <p className="mt-2 text-[9px] leading-4 text-navy-400">
-        Mac Resolveで採取したsession envelopeをローカルで検証します。読み込みだけではroute statusやproduction stateを書き換えません。
+      <div className="mt-2 flex flex-wrap items-start justify-between gap-2">
+        <p className="max-w-3xl text-[9px] leading-4 text-navy-400">
+          Mac Resolveで採取したsession envelopeをローカルで検証します。読み込みだけではroute statusやproduction stateを書き換えません。
+        </p>
+        <button
+          type="button"
+          onClick={downloadSessionTemplate}
+          className="border border-violet-300 dark:border-violet-700 px-2 py-1 text-[8px] font-semibold text-violet-700 dark:text-violet-300"
+        >
+          NOT_RUN session templateを保存
+        </button>
+      </div>
+      <p className="mt-1 text-[8px] leading-3 text-navy-400">
+        templateは9候補・required bindingsを自動展開しますが、evidence欄はすべてNOT_RUN。Mac側で実測した項目だけ更新してください。
       </p>
       <input
         className="mt-2 block w-full text-[9px] text-navy-500"
