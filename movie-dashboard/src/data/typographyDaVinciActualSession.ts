@@ -13,10 +13,7 @@ export interface TypographyDaVinciActualSessionItemV1 {
   rawEvidenceFile: string | null;
   machineParity: ActualEvidenceState;
   bindingResults: Record<string, ActualEvidenceState>;
-  visualQa: {
-    oneX: ActualEvidenceState;
-    halfSpeed: ActualEvidenceState;
-  };
+  visualQa: {oneX: ActualEvidenceState; halfSpeed: ActualEvidenceState};
   reviewedAt: string | null;
 }
 
@@ -48,6 +45,24 @@ export interface TypographyDaVinciActualSessionEvaluation {
   items: TypographyDaVinciActualSessionItemEvaluation[];
 }
 
+export interface TypographyDaVinciActualEvaluationReportV1 {
+  schemaVersion: "typography-davinci-actual-evaluation/v1";
+  authority: "DERIVED_FROM_MAC_ACTUAL_EVIDENCE_SESSION";
+  sourceSession: {sessionId: string; recordedAt: string; resolveVersion: string; machine: string};
+  summary: {
+    validEnvelope: boolean;
+    completeNinePatternCoverage: boolean;
+    eligibleForHumanPromotionReviewCount: number;
+    blockedCount: number;
+    humanPromotionReviewRequired: true;
+    automaticPromotionAllowed: false;
+    productionReady: false;
+  };
+  items: TypographyDaVinciActualSessionItemEvaluation[];
+  issues: string[];
+  guardrails: readonly string[];
+}
+
 const isEvidenceState = (value: unknown): value is ActualEvidenceState =>
   value === "PASS" || value === "FAIL" || value === "NOT_RUN";
 
@@ -66,22 +81,16 @@ export function buildTypographyDaVinciActualSessionTemplate(): TypographyDaVinci
       rawEvidenceFile: null,
       machineParity: "NOT_RUN",
       bindingResults: Object.fromEntries(runItem.requiredBindingRoles.map((role) => [role, "NOT_RUN" as const])),
-      visualQa: {
-        oneX: "NOT_RUN",
-        halfSpeed: "NOT_RUN",
-      },
+      visualQa: {oneX: "NOT_RUN", halfSpeed: "NOT_RUN"},
       reviewedAt: null,
     })),
   };
 }
 
-export function buildTypographyDaVinciActualSessionTemplateJson() {
-  return JSON.stringify(buildTypographyDaVinciActualSessionTemplate(), null, 2);
-}
+export const buildTypographyDaVinciActualSessionTemplateJson = () =>
+  JSON.stringify(buildTypographyDaVinciActualSessionTemplate(), null, 2);
 
-export function evaluateTypographyDaVinciActualSession(
-  session: TypographyDaVinciActualSessionV1,
-): TypographyDaVinciActualSessionEvaluation {
+export function evaluateTypographyDaVinciActualSession(session: TypographyDaVinciActualSessionV1): TypographyDaVinciActualSessionEvaluation {
   const envelopeIssues: string[] = [];
   if (session.schemaVersion !== "typography-davinci-actual-session/v1") envelopeIssues.push("SESSION_SCHEMA_VERSION_MISMATCH");
   if (session.authority !== "MAC_ACTUAL_EVIDENCE_SESSION") envelopeIssues.push("SESSION_AUTHORITY_MISMATCH");
@@ -102,12 +111,8 @@ export function evaluateTypographyDaVinciActualSession(
     if (!isEvidenceState(item.machineParity)) issues.push("MACHINE_PARITY_STATE_INVALID");
     if (!isEvidenceState(item.visualQa?.oneX)) issues.push("VISUAL_QA_1X_STATE_INVALID");
     if (!isEvidenceState(item.visualQa?.halfSpeed)) issues.push("VISUAL_QA_HALF_SPEED_STATE_INVALID");
-
     const requiredRoles = runItem?.requiredBindingRoles ?? [];
-    for (const role of requiredRoles) {
-      if (item.bindingResults?.[role] !== "PASS") issues.push(`REQUIRED_BINDING_NOT_PASS:${role}`);
-    }
-
+    for (const role of requiredRoles) if (item.bindingResults?.[role] !== "PASS") issues.push(`REQUIRED_BINDING_NOT_PASS:${role}`);
     if (item.macActualState === "PASS") {
       if (!item.rawEvidenceFile) issues.push("PASS_REQUIRES_RAW_EVIDENCE_FILE");
       if (item.machineParity !== "PASS") issues.push("PASS_REQUIRES_MACHINE_PARITY");
@@ -115,46 +120,46 @@ export function evaluateTypographyDaVinciActualSession(
       if (item.visualQa?.halfSpeed !== "PASS") issues.push("PASS_REQUIRES_HALF_SPEED_VISUAL_QA");
       if (!item.reviewedAt) issues.push("PASS_REQUIRES_REVIEWED_AT");
     }
-
-    const eligibleForHumanPromotionReview =
-      item.macActualState === "PASS" &&
-      item.machineParity === "PASS" &&
-      item.visualQa?.oneX === "PASS" &&
-      item.visualQa?.halfSpeed === "PASS" &&
-      Boolean(item.reviewedAt) &&
-      Boolean(item.rawEvidenceFile) &&
-      requiredRoles.every((role) => item.bindingResults?.[role] === "PASS") &&
-      issues.length === 0;
-
-    return {
-      patternId: item.patternId,
-      valid: issues.length === 0,
-      eligibleForHumanPromotionReview,
-      productionReady: false as const,
-      issues,
-    };
+    const eligibleForHumanPromotionReview = item.macActualState === "PASS" && item.machineParity === "PASS" && item.visualQa?.oneX === "PASS" && item.visualQa?.halfSpeed === "PASS" && Boolean(item.reviewedAt) && Boolean(item.rawEvidenceFile) && requiredRoles.every((role) => item.bindingResults?.[role] === "PASS") && issues.length === 0;
+    return {patternId: item.patternId, valid: issues.length === 0, eligibleForHumanPromotionReview, productionReady: false as const, issues};
   });
 
   const expectedIds = new Set(typographyDaVinciActualRunPlan.map((item) => item.patternId));
-  const completeNinePatternCoverage =
-    seen.size === expectedIds.size && [...expectedIds].every((patternId) => seen.has(patternId));
+  const completeNinePatternCoverage = seen.size === expectedIds.size && [...expectedIds].every((patternId) => seen.has(patternId));
   if (!completeNinePatternCoverage) envelopeIssues.push("NINE_PATTERN_COVERAGE_INCOMPLETE");
+  return {validEnvelope: envelopeIssues.length === 0, completeNinePatternCoverage, humanPromotionReviewRequired: true, automaticPromotionAllowed: false, productionReady: false, issues: envelopeIssues, items: evaluations};
+}
 
+export function buildTypographyDaVinciActualEvaluationReport(session: TypographyDaVinciActualSessionV1): TypographyDaVinciActualEvaluationReportV1 {
+  const evaluation = evaluateTypographyDaVinciActualSession(session);
+  const eligibleForHumanPromotionReviewCount = evaluation.items.filter((item) => item.eligibleForHumanPromotionReview).length;
   return {
-    validEnvelope: envelopeIssues.length === 0,
-    completeNinePatternCoverage,
-    humanPromotionReviewRequired: true,
-    automaticPromotionAllowed: false,
-    productionReady: false,
-    issues: envelopeIssues,
-    items: evaluations,
+    schemaVersion: "typography-davinci-actual-evaluation/v1",
+    authority: "DERIVED_FROM_MAC_ACTUAL_EVIDENCE_SESSION",
+    sourceSession: {sessionId: session.sessionId, recordedAt: session.recordedAt, resolveVersion: session.resolveVersion, machine: session.machine},
+    summary: {
+      validEnvelope: evaluation.validEnvelope,
+      completeNinePatternCoverage: evaluation.completeNinePatternCoverage,
+      eligibleForHumanPromotionReviewCount,
+      blockedCount: evaluation.items.length - eligibleForHumanPromotionReviewCount,
+      humanPromotionReviewRequired: true,
+      automaticPromotionAllowed: false,
+      productionReady: false,
+    },
+    items: evaluation.items,
+    issues: evaluation.issues,
+    guardrails: [
+      "EVALUATION_REPORT != RAW_MAC_EVIDENCE",
+      "HUMAN_REVIEW_ELIGIBLE != HUMAN_PROMOTED",
+      "HUMAN_PROMOTED != PRODUCTION_READY_WITHOUT_SEPARATE_RELEASE_GATE",
+    ],
   };
 }
 
+export const buildTypographyDaVinciActualEvaluationReportJson = (session: TypographyDaVinciActualSessionV1) =>
+  JSON.stringify(buildTypographyDaVinciActualEvaluationReport(session), null, 2);
+
 export function parseAndEvaluateTypographyDaVinciActualSession(json: string) {
   const parsed = JSON.parse(json) as TypographyDaVinciActualSessionV1;
-  return {
-    session: parsed,
-    evaluation: evaluateTypographyDaVinciActualSession(parsed),
-  };
+  return {session: parsed, evaluation: evaluateTypographyDaVinciActualSession(parsed)};
 }
