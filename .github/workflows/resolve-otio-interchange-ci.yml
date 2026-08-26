@@ -1,0 +1,218 @@
+name: Resolve OTIO Interchange CI
+
+on:
+  pull_request:
+    paths:
+      - "motion-studio/src/data/resolveRuntimeCanary.schema.ts"
+      - "motion-studio/src/data/resolveOTIOInterchange.ts"
+      - "motion-studio/scripts/prepare-resolve-otio-fixture.mts"
+      - "motion-studio/scripts/validate-resolve-otio-fixture.mts"
+      - "motion-studio/scripts/resolve-otio-runtime-plan.mts"
+      - "motion-studio/scripts/validate-resolve-otio-evidence.mts"
+      - "motion-studio/scripts/prepare-resolve-otio-session.mts"
+      - "motion-studio/scripts/inspect-resolve-exported-otio.mts"
+      - "motion-studio/scripts/check-resolve-otio-interchange.mts"
+      - "scripts/davinci/resolve21-otio-api-readonly-probe.sh"
+      - "docs/research/2026-08-26-movie-tool-learning-run-38-resolve-otio-interchange.md"
+      - "docs/runbooks/2026-08-26-resolve21-otio-interchange-canary.md"
+      - "docs/prompts/2026-08-26-resolve21-otio-local-actual-agent.md"
+      - ".github/workflows/resolve-otio-interchange-ci.yml"
+  push:
+    paths:
+      - "motion-studio/src/data/resolveRuntimeCanary.schema.ts"
+      - "motion-studio/src/data/resolveOTIOInterchange.ts"
+      - "motion-studio/scripts/prepare-resolve-otio-fixture.mts"
+      - "motion-studio/scripts/validate-resolve-otio-fixture.mts"
+      - "motion-studio/scripts/resolve-otio-runtime-plan.mts"
+      - "motion-studio/scripts/validate-resolve-otio-evidence.mts"
+      - "motion-studio/scripts/prepare-resolve-otio-session.mts"
+      - "motion-studio/scripts/inspect-resolve-exported-otio.mts"
+      - "motion-studio/scripts/check-resolve-otio-interchange.mts"
+      - "scripts/davinci/resolve21-otio-api-readonly-probe.sh"
+      - "docs/research/2026-08-26-movie-tool-learning-run-38-resolve-otio-interchange.md"
+      - "docs/runbooks/2026-08-26-resolve21-otio-interchange-canary.md"
+      - "docs/prompts/2026-08-26-resolve21-otio-local-actual-agent.md"
+      - ".github/workflows/resolve-otio-interchange-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: motion-studio/pnpm-lock.yaml
+
+      - name: Install dependencies
+        working-directory: motion-studio
+        run: pnpm install --frozen-lockfile
+
+      - name: Install ffmpeg
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg
+
+      - name: TypeScript
+        working-directory: motion-studio
+        run: pnpm typecheck
+
+      - name: OTIO machine-readable contract
+        working-directory: motion-studio
+        run: node --no-warnings scripts/check-resolve-otio-interchange.mts
+
+      - name: Local OTIO API documentation probe stays read-only
+        run: |
+          bash scripts/davinci/resolve21-otio-api-readonly-probe.sh > /tmp/otio-api-probe.txt
+          grep -Fq 'RESOLVE21_OTIO_API_READONLY_PROBE_V1' /tmp/otio-api-probe.txt
+          grep -Fq 'apiCallsPerformed=NO' /tmp/otio-api-probe.txt
+          grep -Fq 'resolveLaunchPerformed=NO' /tmp/otio-api-probe.txt
+          grep -Fq 'mutationsPerformed=NO' /tmp/otio-api-probe.txt
+          grep -Fq 'networkRequestsPerformed=NO' /tmp/otio-api-probe.txt
+          grep -Fq 'guardrail=README_SURFACE_PRESENT != RUNTIME_CALL_VERIFIED' /tmp/otio-api-probe.txt
+
+      - name: Fixture dry-run stays non-mutating
+        working-directory: motion-studio
+        run: |
+          rm -rf out/canary-inputs/otio out/canary-inputs/manifests/DV21-OTIO-INTERCHANGE-01.json
+          node --no-warnings scripts/prepare-resolve-otio-fixture.mts --dry-run > /tmp/otio-dry-run.txt
+          grep -Fq 'DRY RUN: no fixture files or manifests were written.' /tmp/otio-dry-run.txt
+          test ! -e out/canary-inputs/manifests/DV21-OTIO-INTERCHANGE-01.json
+
+      - name: Generate and validate stable OTIO + OTIOZ fixture
+        working-directory: motion-studio
+        run: |
+          node --no-warnings scripts/prepare-resolve-otio-fixture.mts
+          node --no-warnings scripts/validate-resolve-otio-fixture.mts
+          test -f out/canary-inputs/otio/neutral-editorial-core.otio
+          test -f out/canary-inputs/otio/neutral-editorial-core.otioz
+          test -f out/canary-inputs/otio/otio-human-master.json
+          grep -Fq '"OTIO_SCHEMA": "Clip.2"' out/canary-inputs/otio/neutral-editorial-core.otio
+          grep -Fq '"OTIO_SCHEMA": "Marker.2"' out/canary-inputs/otio/neutral-editorial-core.otio
+          if grep -Fq 'Resolve_OTIO' out/canary-inputs/otio/neutral-editorial-core.otio; then
+            echo 'Neutral standards-only input unexpectedly contains Resolve_OTIO metadata'
+            exit 1
+          fi
+
+      - name: Compile OTIO runtime plan
+        working-directory: motion-studio
+        run: |
+          node --no-warnings scripts/resolve-otio-runtime-plan.mts > /tmp/otio-plan.md
+          grep -Fq 'DV21-OTIO-INTERCHANGE-01' /tmp/otio-plan.md
+          grep -Fq 'OTIO released authority: v0.18.1' /tmp/otio-plan.md
+          grep -Fq 'plain-otio-import' /tmp/otio-plan.md
+          grep -Fq 'otioz-import' /tmp/otio-plan.md
+          grep -Fq 'resolve-otio-export-readback' /tmp/otio-plan.md
+          grep -Fq 'roundtrip-reimport' /tmp/otio-plan.md
+          grep -Fq 'Minimum independent executions: 2' /tmp/otio-plan.md
+          grep -Fq 'Render required: NO' /tmp/otio-plan.md
+
+      - name: Export inspector separates standard and vendor metadata
+        working-directory: motion-studio
+        run: |
+          node --no-warnings scripts/inspect-resolve-exported-otio.mts \
+            out/canary-inputs/otio/neutral-editorial-core.otio \
+            --output /tmp/neutral-inspection.json
+          grep -Fq '"present": false' /tmp/neutral-inspection.json
+          node <<'NODE'
+          const fs = require('fs');
+          const src = 'out/canary-inputs/otio/neutral-editorial-core.otio';
+          const data = JSON.parse(fs.readFileSync(src, 'utf8'));
+          data.metadata ||= {};
+          data.metadata.Resolve_OTIO = {'Resolve OTIO Meta Version': 'CI-SYNTHETIC-ONLY'};
+          fs.writeFileSync('/tmp/vendor-probe.otio', JSON.stringify(data, null, 2));
+          NODE
+          node --no-warnings scripts/inspect-resolve-exported-otio.mts /tmp/vendor-probe.otio --output /tmp/vendor-inspection.json
+          grep -Fq '"present": true' /tmp/vendor-inspection.json
+          grep -Fq 'metadata.Resolve_OTIO' /tmp/vendor-inspection.json
+
+      - name: Fresh OTIO evidence stays fail closed
+        working-directory: motion-studio
+        run: |
+          node --no-warnings scripts/resolve-otio-runtime-plan.mts --evidence-template --execution-id DV21-OTIO-CI-FRESH > /tmp/otio-evidence.json
+          node --no-warnings scripts/validate-resolve-otio-evidence.mts /tmp/otio-evidence.json
+          grep -Fq '"result": "NOT_RUN"' /tmp/otio-evidence.json
+          grep -Fq '"promotionEligible": false' /tmp/otio-evidence.json
+
+      - name: Promotion requires hashed Resolve OTIO export
+        working-directory: motion-studio
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const e = JSON.parse(fs.readFileSync('/tmp/otio-evidence.json', 'utf8'));
+          e.capturedAt = new Date().toISOString();
+          e.result = 'PASS';
+          e.promotionEligible = true;
+          for (const step of e.stepResults) {
+            step.status = 'PASS';
+            step.observed = 'CI semantic fixture only; not runtime evidence.';
+          }
+          for (const input of e.inputInventory) {
+            input.present = true;
+            input.pathOrRef = `ci://${input.id}`;
+            input.sha256 = '1'.repeat(64);
+          }
+          e.humanReview.completed = true;
+          e.humanReview.notes = ['CI semantic fixture only; not runtime evidence.'];
+          fs.writeFileSync('/tmp/otio-promo-no-export.json', JSON.stringify(e, null, 2));
+          NODE
+          if node --no-warnings scripts/validate-resolve-otio-evidence.mts /tmp/otio-promo-no-export.json > /tmp/no-export.txt 2>&1; then
+            echo 'OTIO promotion unexpectedly passed without Resolve OTIO export artifact'
+            exit 1
+          fi
+          grep -Fq 'requires an OTIO_EXPORT artifact' /tmp/no-export.txt
+
+          node <<'NODE'
+          const fs = require('fs');
+          const e = JSON.parse(fs.readFileSync('/tmp/otio-promo-no-export.json', 'utf8'));
+          e.artifacts.push({kind:'OTIO_EXPORT', path:'ci://resolve-exported.otio', sha256:null});
+          fs.writeFileSync('/tmp/otio-promo-unhashed.json', JSON.stringify(e, null, 2));
+          NODE
+          if node --no-warnings scripts/validate-resolve-otio-evidence.mts /tmp/otio-promo-unhashed.json > /tmp/unhashed-export.txt 2>&1; then
+            echo 'OTIO promotion unexpectedly passed with unhashed export artifact'
+            exit 1
+          fi
+          grep -Fq 'requires SHA-256 for OTIO_EXPORT artifact' /tmp/unhashed-export.txt
+
+          node <<'NODE'
+          const fs = require('fs');
+          const e = JSON.parse(fs.readFileSync('/tmp/otio-promo-unhashed.json', 'utf8'));
+          e.artifacts[0].sha256 = '2'.repeat(64);
+          fs.writeFileSync('/tmp/otio-promo-hashed.json', JSON.stringify(e, null, 2));
+          NODE
+          node --no-warnings scripts/validate-resolve-otio-evidence.mts /tmp/otio-promo-hashed.json
+
+      - name: Immutable Session preparation remains pre-runtime
+        working-directory: motion-studio
+        run: |
+          execution='DV21-OTIO-INTERCHANGE-01-CI-A'
+          node --no-warnings scripts/prepare-resolve-otio-session.mts --execution-id "$execution" --reuse-existing
+          test -f "out/canary-sessions/$execution/session.json"
+          test -f "out/canary-sessions/$execution/plan.md"
+          test -f "out/canary-sessions/$execution/evidence.json"
+          test -f "out/canary-sessions/$execution/RUN.md"
+          grep -Fq '"status": "READY_FOR_RUNTIME"' "out/canary-sessions/$execution/session.json"
+          grep -Fq '"runtimeLaunchPerformed": false' "out/canary-sessions/$execution/session.json"
+          grep -Fq '"result": "NOT_RUN"' "out/canary-sessions/$execution/evidence.json"
+          grep -Fq '"promotionEligible": false' "out/canary-sessions/$execution/evidence.json"
+          node --no-warnings scripts/validate-resolve-otio-evidence.mts "out/canary-sessions/$execution/evidence.json"
+
+      - name: Runtime honesty markers
+        run: |
+          grep -Fq 'FIXTURE_VALID != RESOLVE_IMPORTED' docs/research/2026-08-26-movie-tool-learning-run-38-resolve-otio-interchange.md
+          grep -Fq 'RESOLVE_OTIO_METADATA_PRESENT != CROSS_NLE_EFFECT_SEMANTICS' docs/runbooks/2026-08-26-resolve21-otio-interchange-canary.md
+          grep -Fq 'ONE_PASS != REPRODUCED' docs/prompts/2026-08-26-resolve21-otio-local-actual-agent.md
