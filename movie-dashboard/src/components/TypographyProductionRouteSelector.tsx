@@ -177,7 +177,7 @@ export function TypographyProductionRouteSelector({ scene }: { scene: MaskReveal
                     onClick={exportCharStaggerActualArtifact}
                     className="border border-sky-300 dark:border-sky-700 px-2.5 py-1.5 font-semibold text-sky-700 dark:text-sky-300"
                   >
-                    Actual JSON
+                    Actual JSONを書き出す
                   </button>
                   <button
                     type="button"
@@ -198,7 +198,7 @@ export function TypographyProductionRouteSelector({ scene }: { scene: MaskReveal
                 </div>
               </div>
               <p className="mt-2 text-navy-400">
-                Actual JSONは作業指示、Readback templateはMac Resolveで実測値・live Fusion input名・1x/half-speed QAを記録するEVIDENCE_ONLY容器です。取込時はsceneId / sourceRevisionをfail-closeで検証します。
+                このEVIDENCE_ONLYテンプレートでは、Actual JSONを作業指示、Readback templateをMac Resolveで実測値・live Fusion input名・1x/half-speed QAを記録する容器として分離します。取込時はsceneId / sourceRevisionをfail-closeで検証します。
               </p>
               {charStaggerEvidenceError ? (
                 <p className="mt-2 border border-red-300 dark:border-red-800 p-2 text-red-700 dark:text-red-300">
