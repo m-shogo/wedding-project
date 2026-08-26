@@ -26,6 +26,12 @@ for (const token of [
   'lockedFields: [...scene.lockedFields]',
   'editableSourceOfTruth',
   'resolvedEditableIntent: resolved',
+  'role: "REFERENCE_ONLY"',
+  'canonicalRegistry: "movie-dashboard/src/data/palmierDavinciHandoffFidelity.ts"',
+  'humanAdjustabilityRegistry: "movie-dashboard/src/data/resolveHumanAdjustability.ts"',
+  'genericSidecarSchema: "motion-studio/src/data/resolveHandoff.schema.ts"',
+  'capabilityIds: maskRevealActiveHandoffPropertyIds',
+  '同じpolicy値をscene bundleへ複製して二重正本にしない。',
   'producer: "Palmier"',
   'expectedFormat: "NLE_XML"',
   'projectTimelineXmlFileName: `palmier-${scene.projectId}-timeline.xml`',
@@ -90,6 +96,9 @@ if (/xmlGeneratedExternally:\s*false/.test(bundle)) {
 if (!bundle.includes('scene.updatedAt') || !bundle.includes('sourceRevision')) {
   errors.push("Scene production bundle must carry SceneInstance freshness/revision evidence");
 }
+if (!bundle.includes('role: "REFERENCE_ONLY"')) {
+  errors.push("Scene bundle must reference Tool Learning policy rather than becoming a duplicate policy authority");
+}
 
 if (errors.length) {
   console.error(`Mask Reveal Scene Production Bundle contracts FAILED (${errors.length})`);
@@ -97,4 +106,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log("Mask Reveal Scene Production Bundle contracts OK: adopted HUMAN_MASTER SceneInstance is the handoff authority; Scene-specific markers avoid collisions; Palmier XML remains external truth; stale bundles fail by revision rule; Actual DaVinci evidence remains pending until real verification.");
+console.log("Mask Reveal Scene Production Bundle contracts OK: adopted HUMAN_MASTER SceneInstance is the handoff authority; Tool Learning policy is referenced rather than duplicated; Scene-specific markers avoid collisions; Palmier XML remains external truth; stale bundles fail by revision rule; Actual DaVinci evidence remains pending until real verification.");
