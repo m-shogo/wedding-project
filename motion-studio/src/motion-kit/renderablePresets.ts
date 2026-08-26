@@ -31,4 +31,9 @@ export const renderableMotionPresets: RenderableMotionPreset[] = [
   {presetId: 'accent-halftone-burst', engine: 'graphic-hit', intensity: 'M', label: 'Halftone Burst', mode: 'halftone'},
   {presetId: 'accent-scribble-underline', engine: 'graphic-hit', intensity: 'M', label: 'Scribble Underline', mode: 'scribble'},
   {presetId: 'cut-hard-accent', engine: 'native-cut', intensity: 'M', label: 'Hard Cut Accent', mode: 'hard'},
+  // 2026-08-26 batch2: 同じくexisting engineのmode/directionだけを追加で使う。
+  {presetId: 'type-tracking-burst', engine: 'typography-reveal', intensity: 'M', label: 'Tracking Burst', demoText: 'ARRIVAL', mode: 'stagger'},
+  {presetId: 'photo-slow-pull', engine: 'camera-transform', intensity: 'M', label: 'Slow Pull', mode: 'pull'},
+  {presetId: 'wipe-directional-shape', engine: 'transition-wipe', intensity: 'M', label: 'Directional Shape Wipe', mode: 'left'},
+  {presetId: 'accent-impact-frame', engine: 'graphic-hit', intensity: 'L', label: 'Impact Frame', mode: 'impact'},
 ];

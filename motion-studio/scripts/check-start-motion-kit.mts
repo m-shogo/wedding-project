@@ -23,8 +23,8 @@ for (const intensity of ["'S'", "'M'", "'L'"]) requireText(engines, intensity, `
 requireText(engines, 'transparent?: boolean', 'transparent overlay support missing');
 
 const ids = [...presets.matchAll(/presetId: '([^']+)'/g)].map((match) => match[1]);
-// 2026-08-26: モーション図鑑v1カタログ化のため8→17へ拡張(既存engineのmodeのみ追加、新規engine機能は無し)。
-if (ids.length !== 17) errors.push(`renderable subset must contain exactly 17 evidence targets in V1, found ${ids.length}`);
+// 2026-08-26: モーション図鑑v1カタログ化のため8→17→21へ拡張(既存engineのmodeのみ追加、新規engine機能は無し)。
+if (ids.length !== 21) errors.push(`renderable subset must contain exactly 21 evidence targets in V1, found ${ids.length}`);
 if (new Set(ids).size !== ids.length) errors.push('renderable subset ids must be unique');
 if (ids.length >= 36) errors.push('V1 renderer must not pretend all 36 catalog presets are renderable');
 for (const id of ids) {
