@@ -23,6 +23,7 @@
     "qa:start-wedding-edit-render:v3": "node --no-warnings scripts/check-start-wedding-edit-render-qa.mts --dir=out/start-wedding-edit-final-v3",
     "check:start-wedding-edit-phrase-qa": "node --no-warnings scripts/check-start-wedding-edit-phrase-qa.mts",
     "check:start-wedding-edit-contrast-qa": "node --no-warnings scripts/check-start-wedding-edit-contrast-qa.mts",
+    "qa:start-wedding-edit-lifecycle-stills": "node --no-warnings scripts/render-start-wedding-edit-lifecycle-stills.mts",
     "check:start-wedding-edit-v2": "pnpm typecheck && pnpm sync:start-wedding-edit-local && pnpm check:start-wedding-edit-phrase-qa && (test -d out/start-wedding-edit-review-v3 && pnpm check:start-wedding-edit-contrast-qa || echo 'skip: out/start-wedding-edit-review-v3が無いためcontrast QAは未実行。pnpm render:start-wedding-edit:review-v3 実行後に pnpm check:start-wedding-edit-contrast-qa を実行すること。')",
     "sync:start-129-demo-assets": "node --no-warnings scripts/sync-start-129-demo-assets.mts",
     "prepare:start-129": "pnpm sync:start-129-local && pnpm sync:start-129-demo-assets",
