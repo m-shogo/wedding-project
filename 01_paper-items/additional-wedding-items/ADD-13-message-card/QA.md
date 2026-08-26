@@ -1,7 +1,7 @@
 # ADD-13 メッセージカード — QA
 
-Status: `CURRENT / FAMILY_DIVERSE_RESORT_DESK_LETTER_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / FAMILY_SCALE_TEMPLATE_REPETITION_CLOSED_FOR_ADD13 / LONG_COPY_STRESS_PASS / HANDWRITING_AREA_55_PERCENT_PASS / FLOATING_DESK_MARK_SUBTRACTION_PASS / CORNER_FOLD_CUE_SUBTRACTION_PASS / PENDING_GUEST_GUIDE_SEMANTIC_AUDIT / LEGACY_PRESERVED / ROLLBACK_SAFE / NOT_PRINT_READY`
-Updated: 2026-08-25
+Status: `CURRENT / FAMILY_DIVERSE_RESORT_DESK_LETTER_SELECTED / SELLABLE_VISUAL_QA_REOPENED + DESIGN_QA_PASS_WITH_PLACEHOLDERS / FAMILY_SCALE_TEMPLATE_REPETITION_CLOSED_FOR_ADD13 / LONG_COPY_STRESS_PASS / HANDWRITING_AREA_55_PERCENT_PASS / FLOATING_DESK_MARK_SUBTRACTION_PASS / CORNER_FOLD_CUE_SUBTRACTION_PASS / LOCAL_SEMANTIC_COPY_REPAIR_PENDING / PENDING_GUEST_GUIDE_SEMANTIC_AUDIT / LEGACY_PRESERVED / ROLLBACK_SAFE / NOT_PRINT_READY`
+Updated: 2026-08-26
 Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
 Professional quality authority: `docs/design-learning/PROFESSIONAL-DESIGN-COUNCIL-VNEXT-2026-08-20.md`
 
@@ -53,7 +53,7 @@ The selected replacement was authored from blank frames using only verified non-
 - large uninterrupted writing lane;
 - the former bottom-right yellow fold cue is now hidden because it touched the final writing-rule region and read more like a marker/warning glyph than a useful physical fold;
 - native `[自由記入]`, name/date roles;
-- `52:100 / TEXT / GUIDE = 書く場所は、広めに。` remains native and structurally valid, but a fresh 2026-08-25 actual-size review found that it may describe the designer's layout intent rather than a guest action. Current is unchanged until a rollback-safe retained-vs-hidden comparison can be run;
+- `52:100 / TEXT / GUIDE = 書く場所は、広めに。` remains native and structurally valid, but fresh native `1400×993` review on 2026-08-26 reconfirmed that it describes the designer's layout intent rather than a guest action. Because this sentence is visible on the finished guest-facing surface and has no reader-facing job, the sellable visual gate is reopened locally until the retained-vs-hidden comparison is completed;
 - no fake postal/transport data or tropical clip-art.
 
 ## 2026-08-23 bounded desk-mark subtraction
@@ -97,13 +97,20 @@ Complete pre-change rollbacks are hidden at `61:39 / 61:58 / 61:76 / 61:95`. Cur
 
 Learning state: `VERIFIED_LOCAL`. This re-applies the existing rule that a named physical cue must prove the claimed physical function at whole-item scale. It does not create a global rule to remove folds/corners.
 
-## 2026-08-25 pending guest-guide semantic audit
+## 2026-08-26 guest-guide semantic audit — sellable visual reopen
 
-Fresh back review reconfirmed a new semantic-audience defect hypothesis on `52:100 / TEXT / GUIDE`:
+Fresh back review reconfirmed the semantic-audience defect on `52:100 / TEXT / GUIDE`:
 
 `書く場所は、広めに。`
 
-The sentence is grammatically natural and structurally valid, but it does not tell the guest what to write, where to submit the card, what pen to use, or another concrete action. At actual-size it instead reads like an explanation of the designer's internal decision to make the handwriting surface large.
+The sentence is grammatically natural and structurally valid, but it does not tell the guest what to write, where to submit the card, what pen to use, or another concrete action. At actual-size it reads like an explanation of the designer's internal decision to make the handwriting surface large.
+
+This is visible finished-product copy, not hidden authoring metadata. Under the reopened sellable visual standard, a production face should not retain designer-internal layout commentary merely because it fits structurally. Therefore:
+
+- structural/design evidence remains valid;
+- handwriting-area evidence remains valid;
+- the selected `RESORT DESK LETTER` art direction remains Current;
+- `SELLABLE_VISUAL_QA_PASS` is locally reopened until the guide role is resolved.
 
 Live bounded-test geometry remains safe:
 - guide `52:100`: x `470`, y `110`, width `430`, height `26`;
@@ -116,9 +123,10 @@ Required next test is intentionally narrow:
 2. guide hidden entirely;
 3. no replacement filler copy unless later authority provides a real reader-facing instruction;
 4. compare whole-item → reading → native `1400×993` → matching long-copy stress;
-5. adopt removal only if the page remains self-explanatory and reads more like finished guest stationery.
+5. adopt removal only if the page remains self-explanatory and reads more like finished guest stationery;
+6. if Current unexpectedly wins, reject the hypothesis and restore the sellable visual gate.
 
-The Current production has **not** been mutated for this hypothesis. `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS` remains valid while the bounded semantic test is pending. Canonical evidence: `OBSERVED-GUEST-FACING-GUIDE-COPY-2026-08-25.md`.
+The Current production has **not** been mutated for this hypothesis. Canonical evidence: `OBSERVED-GUEST-FACING-GUIDE-COPY-2026-08-25.md`.
 
 Current authoring-path blocker: the connected Figma write action requires `figma-use` guidance before mutation, but the readable guidance resource is not exposed in the current connector environment. Do not bypass that contract or repeat speculative production writes. When the guidance path becomes available, execute the two-state comparison directly rather than re-diagnosing the issue.
 
@@ -126,10 +134,11 @@ Learning state: `OBSERVED → ROOT_CAUSE_HYPOTHESIS / BOUNDED_FIGMA_TEST_PENDING
 
 ## Three-scale / long-copy / structure QA
 
-Live Current re-audit on 2026-08-23 reconfirmed front/back at native `1400×993` after both subtraction passes. The back was re-rendered at native `1400×993` again on 2026-08-25 for the pending guide-copy audit.
+Live Current re-audit on 2026-08-23 reconfirmed front/back at native `1400×993` after both subtraction passes. The back was re-rendered at native `1400×993` again on 2026-08-26 for the pending guide-copy audit.
 
 - front whole-item / reading / actual-size: PASS;
-- back whole-item / reading / actual-size: PASS for the current retained-guide state, with the semantic guide-copy hypothesis pending bounded comparison;
+- back hierarchy / writing geometry / actual-size structure: PASS;
+- back finished-product semantic copy: `REOPENED` only for `TEXT / GUIDE`;
 - handwriting remains the primary use surface rather than decoration;
 - no screenshot-visible UI card/container regression.
 
@@ -143,7 +152,7 @@ Verified structure after fold-cue subtraction:
 - semantic handwriting area: `900×870`;
 - handwriting-area ratio: `56.32%`;
 - SPEC minimum: `55%`;
-- result: PASS.
+- result: structural PASS.
 
 The retained back stress also demonstrates semantic Japanese fallback line breaks at 28px rather than mechanical wrapping. All variable/factual copy remains native editable Figma text.
 
@@ -155,11 +164,13 @@ The retained back stress also demonstrates semantic Japanese fallback line break
 - replaceable image roles: `0`;
 - IMAGE fills: `0`.
 
-`IMAGE_GENERATION_NOT_REQUIRED_FOR_THIS_ITERATION`: the diagnosed defects are semantic audience mismatch / nonfunctional fixed accents, not missing photography or illustration. Generated resort/aircraft/tropical imagery would reduce writing space and increase stock/AI-template risk.
+`IMAGE_GENERATION_NOT_REQUIRED_FOR_THIS_ITERATION`: the diagnosed defect is semantic audience mismatch, not missing photography or illustration. Generated resort/aircraft/tropical imagery would reduce writing space and increase stock/AI-template risk.
 
 ## Professional Design Council
 
-Score remains `92/100 / PASS / NO VETO`. The 2026-08-23 subtractions remove unsupported accent noise without changing the artifact concept, Japanese editorial craft, handwriting function, print credibility, editability, or family diversity. The 2026-08-25 guide-copy issue is a pending bounded semantic audit and does not by itself revoke the score before the retained-vs-hidden test.
+Historical score remains `92/100 / PASS / NO VETO` for the selected overall direction. The 2026-08-23 subtractions removed unsupported accent noise without changing the artifact concept, Japanese editorial craft, handwriting function, print credibility, editability, or family diversity.
+
+That historical score is **not sufficient to restore `SELLABLE_VISUAL_QA_PASS` while the newly reconfirmed guest-guide semantic defect remains visible on the Current back face**. Restore the sellable visual gate only after the bounded retained-vs-hidden test is evidenced.
 
 ## Deferred finalization
 
@@ -176,4 +187,4 @@ Do not invent final personal copy or signer details.
 
 ## Result
 
-`FAMILY_DIVERSE_RESORT_DESK_LETTER_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / PENDING_GUEST_GUIDE_SEMANTIC_AUDIT / FAMILY_SCALE_TEMPLATE_REPETITION_CLOSED_FOR_ADD13 / LONG_COPY_STRESS_PASS / HANDWRITING_AREA_55_PERCENT_PASS / FLOATING_DESK_MARK_SUBTRACTION_PASS / CORNER_FOLD_CUE_SUBTRACTION_PASS / LEGACY_PRESERVED / NOT_PRINT_READY`.
+`FAMILY_DIVERSE_RESORT_DESK_LETTER_SELECTED / SELLABLE_VISUAL_QA_REOPENED + DESIGN_QA_PASS_WITH_PLACEHOLDERS / LOCAL_SEMANTIC_COPY_REPAIR_PENDING / PENDING_GUEST_GUIDE_SEMANTIC_AUDIT / FAMILY_SCALE_TEMPLATE_REPETITION_CLOSED_FOR_ADD13 / LONG_COPY_STRESS_PASS / HANDWRITING_AREA_55_PERCENT_PASS / FLOATING_DESK_MARK_SUBTRACTION_PASS / CORNER_FOLD_CUE_SUBTRACTION_PASS / LEGACY_PRESERVED / NOT_PRINT_READY`.
