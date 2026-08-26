@@ -451,7 +451,7 @@ Palmier Pro on-device beat detectionによる実測beat同期版。詳細:
 `../docs/decisions/2026-08-25-start-wedding-edit-scope-change.md`。
 
 - 実音源: `motion-studio/local/audio/StaRt.m4a`(gitignore済み)
-- 実歌詞: 1〜37行目(2回目「僕は探すんだ」まで)を30 phraseとして可変長timing
+- 実歌詞: 1〜37行目(2回目のサビ主要impact行=P030まで)を30 phraseとして可変長timing
 - 冒頭は「S→StaRt」を実測beatへ同期させて組み立てる(旧「ようこそ」は削除)
 - 歌詞animation familyは12種類を実使用(character-build 20%、3連続同一familyなし):
   character-build / word-hit / three-hit-build / held-note-stretch / whisper-reveal /

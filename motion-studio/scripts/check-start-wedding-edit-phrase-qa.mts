@@ -109,10 +109,15 @@ for (const p of phrases) {
   }
 }
 
-// 6. 2回目の「僕は探すんだ」が含まれているか(P030相当)
-const impactPhrases = phrases.filter((p) => p.text === '僕は探すんだ');
-if (impactPhrases.length !== 2) {
-  errors.push(`「僕は探すんだ」の出現回数が${impactPhrases.length}回(期待2回)`);
+// 6. サビの主要impactフレーズ(P015=1回目、P030=2回目、同一歌詞)が両方
+// 存在し、textが完全一致しているか(歌詞本文をこのファイルへ直接埋め込まず、
+// phraseId基準+相互比較で検証する。歌詞本文をGitへ保存しない既存方針対応)。
+const impactPhraseIds = ['P015', 'P030'];
+const impactPhrases = phrases.filter((p) => impactPhraseIds.includes(p.phraseId));
+if (impactPhrases.length !== impactPhraseIds.length) {
+  errors.push(`impact phrase(${impactPhraseIds.join('/')})の出現数が${impactPhrases.length}件(期待${impactPhraseIds.length}件)`);
+} else if (impactPhrases[0].text !== impactPhrases[1].text) {
+  errors.push(`${impactPhraseIds[0]}と${impactPhraseIds[1]}のtextが一致していない(同一歌詞の2回目のはず)`);
 }
 
 // 7. confidence/humanReviewの透明性チェック
@@ -202,5 +207,5 @@ if (errors.length) {
   process.exit(1);
 }
 console.log(
-  '✅ phrase-level QA OK (coverage / family分布 / 連続family / StaRt完成 / bridge歌詞混入なし / 2回目僕は探すんだ / 5map cross-consistency / 実accent必須phrase充足 / fallback可視化)',
+  '✅ phrase-level QA OK (coverage / family分布 / 連続family / StaRt完成 / bridge歌詞混入なし / P015/P030 impact一致 / 5map cross-consistency / 実accent必須phrase充足 / fallback可視化)',
 );

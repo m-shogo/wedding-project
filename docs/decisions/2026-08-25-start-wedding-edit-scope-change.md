@@ -23,9 +23,10 @@
 `motion-studio/local/start-wedding-edit.local.json` の `sourceEndSec` (145.6秒)。
 `Math.ceil(sourceEndSec * fps)` でdurationInFramesを算出し、直接129秒/3870framesを書かない。
 
-歌詞は「やっとこさ幕開けだ」(1行目)から2回目の「僕は探すんだ」(37行目)まで、
-計30 phrase(空行を除く)を可変長で使用する。「I can, You can, We can, って」(39行目)以降は
+歌詞は1行目(P001)から2回目のサビ主要impact行(37行目、P030)まで、
+計30 phrase(空行を除く)を可変長で使用する。39行目以降のブリッジ部分は
 `lyrics-source.local.txt`(全44行)に保持したまま、今回のedit範囲からは除外した。
+(歌詞本文はこのGit管理ドキュメントには掲載しない。既存方針対応、2026-08-27修正)
 
 ## 終了地点の判定方法(重要な限界の明記)
 
@@ -123,7 +124,7 @@ Chorus Burst effect)。
 `scripts/check-start-wedding-edit-phrase-qa.mts`を新規作成。レンダー結果ではなくデータ契約を
 検証: 30phrase coverage・重複/空白検出・family分布(12種以上・character-build 35%以下・
 3連続なし)・冒頭StaRt完成/ようこそ不在(静的ソース検査)・bridge歌詞混入なし・
-「僕は探すんだ」2回出現、を全て機械検証しPASS。
+P015/P030のimpact行一致(2回出現)、を全て機械検証しPASS。
 
 ### 出力先変更
 

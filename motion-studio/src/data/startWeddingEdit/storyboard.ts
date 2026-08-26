@@ -107,7 +107,7 @@ const A_SHOTS: Record<string, Shot[]> = {
     {role: 'BROLL_TEXTURE', variantIndex: 2, sec: 4.0, motion: drift(8.0, 8.0, 1.01), entry: dissolve(16), effects: [grain()], noteJa: '余韻。次章への静かな接続'},
   ],
   'verse-2a': [
-    {role: 'NEGATIVE_SPACE', variantIndex: 2, sec: 2.5, motion: stat(), entry: fade(10), noteJa: '静けさと1対1'},
+    {role: 'NEGATIVE_SPACE', variantIndex: 2, sec: 2.5, motion: stat(), entry: fade(10), noteJa: 'P016静寂ビート(1名negative space)'},
     {role: 'BROLL_TEXTURE', variantIndex: 3, sec: 2.5, motion: drift(12.0, 0.0, 1.01), entry: dissolve(12), noteJa: '俄然負けん気'},
     {role: 'SEOUL_STREET', variantIndex: 3, sec: 2.5, motion: pan(16), entry: dissolve(12), noteJa: 'スタート合図'},
     {role: 'HERO_CLOSE', variantIndex: 3, sec: 2.5, motion: stat(), entry: fade(10), noteJa: '苦悩と煩と悩は上等'},
@@ -120,14 +120,14 @@ const A_SHOTS: Record<string, Shot[]> = {
   ],
   'prechorus-2': [
     {role: 'NEGATIVE_SPACE', variantIndex: 3, sec: 1.0, motion: stat(), entry: fade(8), noteJa: '忘れたくないなぁ'},
-    {role: 'HERO_CLOSE', variantIndex: 4, sec: 1.0, motion: push(1.0, 1.02), entry: dissolve(8), noteJa: 'スタートに戻ろう'},
+    {role: 'HERO_CLOSE', variantIndex: 4, sec: 1.0, motion: push(1.0, 1.02), entry: dissolve(8), noteJa: 'P026冒頭Sモチーフ回想'},
   ],
   'chorus-2': [
     {role: 'HAWAII_WARM', variantIndex: 3, sec: 5.0, motion: drift(30.0, 5.0, 1.03), entry: dissolve(16), effects: [lightLeak()], noteJa: '晴れた町に(2回目)'},
     {role: 'SEOUL_STREET', variantIndex: 4, sec: 5.0, motion: drift(-27.5, 0.0, 1.028), entry: dissolve(16), effects: [grain()], noteJa: '雨の心(2回目)'},
     {role: 'HERO_WIDE', variantIndex: 5, sec: 7.0, motion: drift(42.0, 5.0, 1.03), entry: dissolve(18), noteJa: '否定してくれる貴方を=最も個人的な一行'},
     {role: 'HERO_CLOSE', variantIndex: 5, sec: 7.0, motion: drift(38.5, 4.0, 1.028), entry: fade(16), effects: [glint(50, 48)], noteJa: '貴方を、寄りで感情のhold'},
-    {role: 'HERO_WIDE', variantIndex: 6, sec: 8.0, motion: drift(-48.0, 5.0, 1.03), entry: dissolve(18), effects: [lightLeak()], noteJa: '僕は探すんだ=サビの着地'},
+    {role: 'HERO_WIDE', variantIndex: 6, sec: 8.0, motion: drift(-48.0, 5.0, 1.03), entry: dissolve(18), effects: [lightLeak()], noteJa: 'P015/P030 サビ着地Hero'},
   ],
   'interlude-montage': [
     {role: 'OKINAWA_WIDE', variantIndex: 3, sec: 2.5, motion: pull(1.04, 1.0), entry: dissolve(12), noteJa: '旅の総集編: 沖縄wide'},
@@ -174,11 +174,11 @@ const B_SHOTS: Record<string, Shot[]> = {
     {role: 'HAWAII_WARM', variantIndex: 6, sec: 2.2, motion: push(1.0, 1.05), entry: scalePop(6), layout: strip3, extraRoles: [r('OKINAWA_WIDE', 3), r('SEOUL_STREET', 6)], noteJa: '3-hit 2/3: 晴れた町に、panel化'},
     {role: 'HERO_WIDE', variantIndex: 11, sec: 2.6, motion: pull(1.06, 1.0), entry: wipe(8, 'right'), effects: [speedLines()], noteJa: '3-hit 3/3: Hero着地'},
     {role: 'SEOUL_STREET', variantIndex: 7, sec: 5.0, motion: drift(-27.5, 0.0, 1.028), entry: whip(8, 'left'), effects: [grain()], noteJa: 'チャプチャプチャプ雨の心'},
-    {role: 'HERO_CLOSE', variantIndex: 4, sec: 6.0, motion: drift(33.0, 4.0, 1.028), entry: colorBlock(8, '#5B7FDE'), noteJa: '独りじゃないと否定出来るように'},
-    {role: 'HERO_WIDE', variantIndex: 12, sec: 12.0, motion: drift(72.0, 5.0, 1.03), entry: scalePop(10), effects: [halftone(), speedLines()], noteJa: '僕は探すんだ、Hero burst→hold'},
+    {role: 'HERO_CLOSE', variantIndex: 4, sec: 6.0, motion: drift(33.0, 4.0, 1.028), entry: colorBlock(8, '#5B7FDE'), noteJa: 'P014 統合Hero'},
+    {role: 'HERO_WIDE', variantIndex: 12, sec: 12.0, motion: drift(72.0, 5.0, 1.03), entry: scalePop(10), effects: [halftone(), speedLines()], noteJa: 'P015/P030 Hero burst→hold'},
   ],
   'verse-2a': [
-    {role: 'NEGATIVE_SPACE', variantIndex: 6, sec: 2.5, motion: stat(), entry: wipe(6, 'down'), noteJa: '静けさと1対1'},
+    {role: 'NEGATIVE_SPACE', variantIndex: 6, sec: 2.5, motion: stat(), entry: wipe(6, 'down'), noteJa: 'P016静寂ビート(1名negative space)'},
     {role: 'BROLL_TEXTURE', variantIndex: 5, sec: 2.5, motion: drift(14.0, 0.0, 1.01), entry: whip(6, 'left'), noteJa: '俄然負けん気'},
     {role: 'SEOUL_STREET', variantIndex: 8, sec: 2.5, motion: pan(18), entry: scalePop(6), noteJa: 'スタート合図'},
     {role: 'HERO_CLOSE', variantIndex: 5, sec: 2.5, motion: stat(), entry: colorBlock(6, '#E5615B'), noteJa: '苦悩と煩と悩は上等'},
@@ -191,7 +191,7 @@ const B_SHOTS: Record<string, Shot[]> = {
   ],
   'prechorus-2': [
     {role: 'NEGATIVE_SPACE', variantIndex: 7, sec: 1.0, motion: stat(), entry: wipe(6, 'up'), noteJa: '忘れたくないなぁ'},
-    {role: 'HERO_CLOSE', variantIndex: 6, sec: 1.0, motion: push(1.0, 1.03), entry: scalePop(6), noteJa: 'スタートに戻ろう'},
+    {role: 'HERO_CLOSE', variantIndex: 6, sec: 1.0, motion: push(1.0, 1.03), entry: scalePop(6), noteJa: 'P026冒頭Sモチーフ回想'},
   ],
   'chorus-2': [
     {role: 'HAWAII_WARM', variantIndex: 8, sec: 2.2, motion: stat(), entry: colorBlock(6, '#F4C95D'), effects: [halftone()], noteJa: '3-hit 1/3(2回目)'},
@@ -199,7 +199,7 @@ const B_SHOTS: Record<string, Shot[]> = {
     {role: 'HERO_WIDE', variantIndex: 14, sec: 2.6, motion: pull(1.06, 1.0), entry: wipe(8, 'right'), effects: [speedLines()], noteJa: '3-hit 3/3(2回目)'},
     {role: 'SEOUL_STREET', variantIndex: 10, sec: 5.0, motion: drift(-27.5, 0.0, 1.028), entry: whip(8, 'left'), noteJa: '雨の心(2回目)'},
     {role: 'HERO_CLOSE', variantIndex: 7, sec: 7.0, motion: drift(38.5, 4.0, 1.028), entry: colorBlock(8, '#5B7FDE'), noteJa: '否定してくれる貴方を'},
-    {role: 'HERO_WIDE', variantIndex: 15, sec: 13.0, motion: drift(78.0, 5.0, 1.03), entry: scalePop(10), effects: [halftone(), speedLines()], layout: panel4, extraRoles: [r('OKINAWA_WIDE', 6), r('HAWAII_WARM', 10), r('SEOUL_STREET', 11)], noteJa: '僕は探すんだ、panel-4でHero burst'},
+    {role: 'HERO_WIDE', variantIndex: 15, sec: 13.0, motion: drift(78.0, 5.0, 1.03), entry: scalePop(10), effects: [halftone(), speedLines()], layout: panel4, extraRoles: [r('OKINAWA_WIDE', 6), r('HAWAII_WARM', 10), r('SEOUL_STREET', 11)], noteJa: 'P015/P030 panel-4でHero burst'},
   ],
   'interlude-montage': [
     {role: 'OKINAWA_WIDE', variantIndex: 7, sec: 2.5, motion: pull(1.05, 1.0), entry: whip(8, 'left'), noteJa: 'パン・パン・パンcallback: 沖縄'},
@@ -246,11 +246,11 @@ const C_SHOTS: Record<string, Shot[]> = {
     {role: 'HAWAII_WARM', variantIndex: 13, sec: 2.2, motion: push(1.0, 1.03), entry: iris(6), noteJa: '3-hit 2/3'},
     {role: 'HERO_WIDE', variantIndex: 20, sec: 2.6, motion: pull(1.04, 1.0), entry: slat(8, 4), noteJa: '3-hit 3/3'},
     {role: 'SEOUL_STREET', variantIndex: 13, sec: 5.0, motion: drift(-27.5, 0.0, 1.028), entry: iris(8), layout: split2, extraRoles: [r('OKINAWA_WIDE', 4)], noteJa: 'チャプチャプチャプ雨の心'},
-    {role: 'HERO_CLOSE', variantIndex: 10, sec: 6.0, motion: drift(33.0, 4.0, 1.028), entry: slat(10, 4), noteJa: '独りじゃないと否定出来るように'},
-    {role: 'HERO_WIDE', variantIndex: 21, sec: 12.0, motion: drift(72.0, 5.0, 1.03), entry: iris(10), layout: gridEditorial, noteJa: '僕は探すんだ、gridで着地'},
+    {role: 'HERO_CLOSE', variantIndex: 10, sec: 6.0, motion: drift(33.0, 4.0, 1.028), entry: slat(10, 4), noteJa: 'P014 統合Hero'},
+    {role: 'HERO_WIDE', variantIndex: 21, sec: 12.0, motion: drift(72.0, 5.0, 1.03), entry: iris(10), layout: gridEditorial, noteJa: 'P015/P030 gridで着地'},
   ],
   'verse-2a': [
-    {role: 'NEGATIVE_SPACE', variantIndex: 10, sec: 2.5, motion: stat(), entry: slat(6, 3), noteJa: '静けさと1対1'},
+    {role: 'NEGATIVE_SPACE', variantIndex: 10, sec: 2.5, motion: stat(), entry: slat(6, 3), noteJa: 'P016静寂ビート(1名negative space)'},
     {role: 'BROLL_TEXTURE', variantIndex: 7, sec: 2.5, motion: drift(10.0, 0.0, 1.01), entry: iris(6), noteJa: '俄然負けん気'},
     {role: 'SEOUL_STREET', variantIndex: 14, sec: 2.5, motion: pan(12), entry: slat(6, 3), noteJa: 'スタート合図'},
     {role: 'HERO_CLOSE', variantIndex: 11, sec: 2.5, motion: stat(), entry: iris(6), noteJa: '苦悩と煩と悩は上等'},
@@ -263,7 +263,7 @@ const C_SHOTS: Record<string, Shot[]> = {
   ],
   'prechorus-2': [
     {role: 'NEGATIVE_SPACE', variantIndex: 11, sec: 1.0, motion: stat(), entry: slat(6, 3), noteJa: '忘れたくないなぁ'},
-    {role: 'HERO_CLOSE', variantIndex: 12, sec: 1.0, motion: push(1.0, 1.02), entry: iris(6), noteJa: 'スタートに戻ろう'},
+    {role: 'HERO_CLOSE', variantIndex: 12, sec: 1.0, motion: push(1.0, 1.02), entry: iris(6), noteJa: 'P026冒頭Sモチーフ回想'},
   ],
   'chorus-2': [
     {role: 'HAWAII_WARM', variantIndex: 15, sec: 2.2, motion: stat(), entry: slat(6, 3), layout: gridEditorial, noteJa: '3-hit 1/3(2回目)'},
@@ -271,7 +271,7 @@ const C_SHOTS: Record<string, Shot[]> = {
     {role: 'HERO_WIDE', variantIndex: 23, sec: 2.6, motion: pull(1.04, 1.0), entry: slat(8, 4), noteJa: '3-hit 3/3(2回目)'},
     {role: 'SEOUL_STREET', variantIndex: 15, sec: 5.0, motion: drift(-27.5, 0.0, 1.028), entry: iris(8), noteJa: '雨の心(2回目)'},
     {role: 'HERO_CLOSE', variantIndex: 13, sec: 7.0, motion: drift(38.5, 4.0, 1.028), entry: slat(10, 4), layout: split2, extraRoles: [r('HERO_WIDE', 24)], noteJa: '否定してくれる貴方を'},
-    {role: 'HERO_WIDE', variantIndex: 25, sec: 13.0, motion: drift(78.0, 5.0, 1.03), entry: iris(10), layout: gridEditorial, noteJa: '僕は探すんだ、gridで着地'},
+    {role: 'HERO_WIDE', variantIndex: 25, sec: 13.0, motion: drift(78.0, 5.0, 1.03), entry: iris(10), layout: gridEditorial, noteJa: 'P015/P030 gridで着地'},
   ],
   'interlude-montage': [
     {role: 'OKINAWA_WIDE', variantIndex: 8, sec: 2.5, motion: pull(1.03, 1.0), entry: slat(8, 4), layout: strip3, extraRoles: [r('HAWAII_WARM', 17), r('SEOUL_STREET', 16)], noteJa: 'baseline再登場: photo strip総集編'},

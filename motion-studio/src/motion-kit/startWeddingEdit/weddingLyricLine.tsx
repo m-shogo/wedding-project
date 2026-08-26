@@ -130,7 +130,7 @@ const ThreeHitStagePop: React.FC<{hitFrames: [number, number, number]; texts: [s
   );
 };
 
-/** サビの着地句(「僕は探すんだ」等)。P015=探索の始まり(控えめ)、P030=全体最大のHero(圧倒的)にする。 */
+/** サビの着地句(P015/P030、同一歌詞の1回目/2回目)。P015=探索の始まり(控えめ)、P030=全体最大のHero(圧倒的)にする。 */
 const ImpactWordHold: React.FC<{text: string; fontSize: number; color: string; hero: boolean; accentColor: string}> = ({
   text,
   fontSize,
@@ -173,7 +173,7 @@ const ImpactWordHold: React.FC<{text: string; fontSize: number; color: string; h
   );
 };
 
-/** Split Conflict用: 「もう　苦悩と煩と悩は上等！」を意味の切れ目で2分割する(fallback用) */
+/** Split Conflict用(P019): phrase textを意味の切れ目で2分割する(fallback用) */
 const splitPhraseForConflict = (text: string): {left: string; right: string} => {
   const idx = text.indexOf('は上等');
   if (idx > 0) return {left: text.slice(0, idx), right: text.slice(idx)};
@@ -190,7 +190,7 @@ const extractRepeatedWord = (text: string): string | null => {
   return null;
 };
 
-/** P026「スタートに戻ろう」用: 冒頭Sモチーフ(短い横線+丸)を呼び戻す小さな残像。 */
+/** P026(冒頭Sモチーフ回想の行)用: 冒頭Sモチーフ(短い横線+丸)を呼び戻す小さな残像。 */
 const StartMotifCallback: React.FC<{color: string}> = ({color}) => {
   const f = useCurrentFrame();
   const o = interpolate(f, [0, 8, 20], [0, 0.8, 0.5], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
@@ -283,7 +283,7 @@ const WeddingLyricBody: React.FC<{phrase: EnrichedLyricPhrase; variant: WeddingV
       return <ThreeHitLine phrase={phrase} variant={variant} />;
 
     case 'impact-word': {
-      // P030(2回目の「僕は探すんだ」)は曲全体最大のHero瞬間。P015は探索の始まりとして控えめにする。
+      // P030(2回目のサビ着地句)は曲全体最大のHero瞬間。P015は探索の始まりとして控えめにする。
       const hero = phrase.phraseId === 'P030';
       weddingLyricFallbackByPhraseId.set(phrase.phraseId, false);
       return (
@@ -309,7 +309,7 @@ const WeddingLyricBody: React.FC<{phrase: EnrichedLyricPhrase; variant: WeddingV
 
     case 'word-hit': {
       // P011(さあ/試されよう)は2語なのでWordSequenceBuildで別々のaccentへ着地させる。
-      // P026(スタートに戻ろう)は単発accent+冒頭Sモチーフ回想を追加する。
+      // P026は単発accent+冒頭Sモチーフ回想を追加する。
       if (wordData && wordData.words.length >= 2) {
         weddingLyricFallbackByPhraseId.set(phrase.phraseId, false);
         return <WordSequenceBuild words={wordData.words} frames={wordData.frames} color={style.color} fontSize={variant === 'B' ? 54 : 42} />;
@@ -437,8 +437,8 @@ const WeddingLyricBody: React.FC<{phrase: EnrichedLyricPhrase; variant: WeddingV
     }
 
     case 'call-and-response-layout': {
-      // 「ほら　寄って集って！　お手を拝借！」を呼びかけ/応答の2段に分割し、
-      // 実accentSec(寄って集って/お手を拝借)をそれぞれのhit frameに使う(固定16frame廃止)。
+      // P002の呼びかけ/応答の2段構成を意味の切れ目で分割し、
+      // 実accentSec(各段のaccent word)をそれぞれのhit frameに使う(固定16frame廃止)。
       const idx = phrase.text.indexOf('お手を拝借');
       const call = idx > 0 ? phrase.text.slice(0, idx) : phrase.text;
       const response = idx > 0 ? phrase.text.slice(idx) : '';

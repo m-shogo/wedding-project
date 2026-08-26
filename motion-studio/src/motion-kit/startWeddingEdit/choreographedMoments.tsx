@@ -1,7 +1,7 @@
 // ChoreographyEventを実際に文字・写真・カメラ・transitionへ同時反映する
 // 3つの設計実証moment。
 //
-// P004(武装・創・造・登場) / P013(チャプチャプチャプ) / P014(独りじゃない)。
+// P004(武装・創・造・登場アクセント) / P013(「チャプ」3連打) / P014(「独りじゃない」アクセント)。
 // それぞれ別々の映像文法にする(3つとも同じ「文字が動くだけ」にしない)。
 //
 // 各momentは文字レイヤーとshotレイヤーを別々に描くのではなく、1つのcomponentが
@@ -164,7 +164,7 @@ export const ArmorCreationMoment: React.FC<{phrase: EnrichedLyricPhrase; variant
 };
 
 // ---------------------------------------------------------------------------
-// 2. チャプチャプチャプ — 各発音で波紋(liquid mask)+写真の縦shift。3打目で次shotへ実接続
+// 2. 「チャプ」3連打 — 各発音で波紋(liquid mask)+写真の縦shift。3打目で次shotへ実接続
 // ---------------------------------------------------------------------------
 
 /** SVGのfeTurbulence+feDisplacementMapで水面の波紋を近似する軽量liquid mask。
@@ -311,7 +311,7 @@ export const RippleThreeHitMoment: React.FC<{
 };
 
 // ---------------------------------------------------------------------------
-// 2.5. パッパッパッ　晴れた町に — RippleThreeHitMomentと同じ3-hit構造だが、
+// 2.5. 「パッ」3連打(晴れのイメージ) — RippleThreeHitMomentと同じ3-hit構造だが、
 // 「雨」の湿った質感(liquid-mask/縦shift/wipe)ではなく「晴れ」の質感
 // (白フラッシュが段々強くなり、3発目で画面が奥へ収束してflash-cut)にする。
 // P027(同一歌詞の2回目)でも再利用する。
@@ -539,8 +539,8 @@ export const SoloUnionMoment: React.FC<{
  * weddingLyricLine.tsx側の早期returnもvariant==='B'の時だけ有効にする
  * (isChoreographedForVariantで判定を一元化)。A/Cは壊れず、既存の
  * animation family(WeddingLyricBody通常dispatch)へ自動的にfallbackする。 */
-// P012/P027は「パッパッパッ　晴れた町に」(同一歌詞の1回目/2回目)、
-// P013/P028は「チャプチャプチャプ　雨の心」(同一歌詞の1回目/2回目)。
+// P012/P027は「パッ」3連打(晴れのイメージ、同一歌詞の1回目/2回目)、
+// P013/P028は「チャプ」3連打(雨のイメージ、同一歌詞の1回目/2回目)。
 // 歌詞が同じ2回目は、新規bespoke componentを作らず1回目と同じmomentを
 // そのまま再利用する(Reuse Before Build。歌詞テキストの重複判定ではなく、
 // 事前に確認済みの歌詞構造上の対応関係としてハードコードする)。

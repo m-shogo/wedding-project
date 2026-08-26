@@ -124,8 +124,9 @@ const wordMeta = (
   };
 };
 
-/** P004「そう　武装と創と造で登場！！！！！」用の4 event。
- * 武装/創/造の3発が異なるpanelへ衝突し、登場で全画面Heroへ開放する。 */
+/** P004(「武装」「創」「造」「登場」の4語アクセントを持つ行)用の4 event。
+ * 武装/創/造の3発が異なるpanelへ衝突し、登場で全画面Heroへ開放する。
+ * (歌詞本文はGitへ保存しない既存方針のため、行全体の引用はしない) */
 export const buildArmorCreationEvents = (phrase: EnrichedLyricPhrase, variant: WeddingVariant): ChoreographyEvent[] => {
   const words = phrase.importantWords ?? [];
   const scale = variantIntensityScale(variant);
@@ -170,7 +171,7 @@ export const buildArmorCreationEvents = (phrase: EnrichedLyricPhrase, variant: W
   return events;
 };
 
-/** P013「チャプチャプチャプ　雨の心」用。各発音に個別event、波紋+写真の縦移動、
+/** P013(「チャプ」3連打の行、雨のイメージ)用。各発音に個別event、波紋+写真の縦移動、
  * 3発目で次のshotへ実際に繋がるwipe-connectを持たせる。
  *
  * 重要な訂正: 以前はimportantWords[0](=「チャプ・チャプ・チャプ」を1つの結合語として
@@ -202,8 +203,8 @@ export const buildRippleThreeHitEvents = (phrase: EnrichedLyricPhrase, variant: 
   }));
 };
 
-/** P012/P027「パッパッパッ　晴れた町に」用。同じ3-hitでもP013(チャプチャプチャプ
- * 　雨の心)とは意味が逆(雨→ripple/liquid-mask/縦shift/wipe-connectの湿った
+/** P012/P027(「パッ」3連打の行、晴れのイメージ)用。同じ3-hitでもP013(「チャプ」3連打、
+ * 雨のイメージ)とは意味が逆(雨→ripple/liquid-mask/縦shift/wipe-connectの湿った
  * 質感、パッ→白フラッシュ/画面奥への収束/flash-cutの晴れやかな質感)なので、
  * mediaAction/effectAction/transitionActionを明確に変える。ただしEffectAction/
  * MediaAction等の型自体は既存のvocabulary(white-flash/merge-to-center/
@@ -231,8 +232,9 @@ export const buildSunburstThreeHitEvents = (phrase: EnrichedLyricPhrase, variant
   }));
 };
 
-/** P014「独りじゃないと否定出来るように」用。分割された写真/文字が「独りじゃない」の
- * accentで1つへ統合される(単なるfadeではなく画面構成の変化で意味を表現)。 */
+/** P014(「独りじゃない」という趣旨のaccentを持つ行)用。分割された写真/文字が
+ * そのaccentで1つへ統合される(単なるfadeではなく画面構成の変化で意味を表現)。
+ * (歌詞本文はGitへ保存しない既存方針のため、行全体の引用はしない) */
 /** 静かに保つべきanimation family(whisper/question-pauseは間・余白が意味を持つ)。
  * ここに該当するphraseにはgenericな camera punchを一切足さない
  * (「静かな歌詞は止める」を機械的に保証するための除外リスト)。 */
@@ -316,7 +318,10 @@ export const buildSoloUnionEvents = (phrase: EnrichedLyricPhrase, variant: Weddi
     {
       id: `${phrase.phraseId}-merge`,
       phraseId: phrase.phraseId,
-      word: w?.word ?? '独りじゃない',
+      // 歌詞本文をGitへ保存しない既存方針のため、importantWordsが無い場合の
+      // fallbackに歌詞断片ではなくphraseIdを使う(このwordはrenderで表示に
+      // 使われていない、event側のmetadataのみ)。
+      word: w?.word ?? phrase.phraseId,
       timeSec: mergeSec,
       audioCueType: 'vocal',
       intensity: clampIntensity(4 * scale + 1),
