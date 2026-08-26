@@ -1,6 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
 import { createCharStaggerDaVinciActualArtifact } from "../data/charStaggerDaVinciActualArtifact";
 import {
+  createCharStaggerDaVinciEvidenceCaptureTemplate,
+  evaluateCharStaggerDaVinciEvidenceCapture,
+  parseCharStaggerDaVinciEvidenceCapture,
+  type CharStaggerDaVinciEvaluatedEvidenceV1,
+} from "../data/charStaggerDaVinciEvidenceCapture";
+import {
   buildTypographySceneProductionBundle,
   typographyProductionRoutes,
   type TypographyProductionPatternId,
@@ -16,6 +22,9 @@ import { downloadText } from "../lib/exporters";
 
 export function TypographyProductionRouteSelector({ scene }: { scene: MaskRevealSceneInstance }) {
   const [revision, setRevision] = useState(0);
+  const [charStaggerEvaluatedEvidence, setCharStaggerEvaluatedEvidence] =
+    useState<CharStaggerDaVinciEvaluatedEvidenceV1 | null>(null);
+  const [charStaggerEvidenceError, setCharStaggerEvidenceError] = useState<string | null>(null);
   const selection = useMemo(
     () => loadTypographyProductionSelection(scene),
     [scene.sceneId, scene.updatedAt, revision],
@@ -31,12 +40,24 @@ export function TypographyProductionRouteSelector({ scene }: { scene: MaskReveal
         : null,
     [scene, selection],
   );
+  const charStaggerCaptureTemplate = useMemo(
+    () =>
+      charStaggerActualArtifact
+        ? createCharStaggerDaVinciEvidenceCaptureTemplate(charStaggerActualArtifact)
+        : null,
+    [charStaggerActualArtifact],
+  );
 
   useEffect(() => {
     const refresh = () => setRevision((value) => value + 1);
     window.addEventListener(TYPOGRAPHY_PRODUCTION_SELECTION_CHANGED_EVENT, refresh);
     return () => window.removeEventListener(TYPOGRAPHY_PRODUCTION_SELECTION_CHANGED_EVENT, refresh);
   }, []);
+
+  useEffect(() => {
+    setCharStaggerEvaluatedEvidence(null);
+    setCharStaggerEvidenceError(null);
+  }, [scene.sceneId, scene.updatedAt, selection?.patternId, selection?.sourceRevision]);
 
   function choose(patternId: TypographyProductionPatternId) {
     saveTypographyProductionSelection(scene, patternId);
@@ -53,6 +74,35 @@ export function TypographyProductionRouteSelector({ scene }: { scene: MaskReveal
     downloadText(
       JSON.stringify(charStaggerActualArtifact, null, 2),
       `${scene.sceneId}-type-char-stagger-davinci-actual.json`,
+    );
+  }
+
+  function exportCharStaggerCaptureTemplate() {
+    if (!charStaggerCaptureTemplate) return;
+    downloadText(
+      JSON.stringify(charStaggerCaptureTemplate, null, 2),
+      `${scene.sceneId}-type-char-stagger-davinci-evidence-capture.json`,
+    );
+  }
+
+  async function importCharStaggerCapture(file: File | undefined) {
+    if (!file || !charStaggerActualArtifact) return;
+    try {
+      const capture = parseCharStaggerDaVinciEvidenceCapture(await file.text(), charStaggerActualArtifact);
+      const evaluated = evaluateCharStaggerDaVinciEvidenceCapture(charStaggerActualArtifact, capture);
+      setCharStaggerEvaluatedEvidence(evaluated);
+      setCharStaggerEvidenceError(null);
+    } catch (error) {
+      setCharStaggerEvaluatedEvidence(null);
+      setCharStaggerEvidenceError(error instanceof Error ? error.message : String(error));
+    }
+  }
+
+  function exportCharStaggerEvaluatedEvidence() {
+    if (!charStaggerEvaluatedEvidence) return;
+    downloadText(
+      JSON.stringify(charStaggerEvaluatedEvidence, null, 2),
+      `${scene.sceneId}-type-char-stagger-davinci-evaluated-evidence.json`,
     );
   }
 
@@ -120,17 +170,65 @@ export function TypographyProductionRouteSelector({ scene }: { scene: MaskReveal
                     Parameter binding: NOT_VERIFIED / Apply・Readback・Render・Visual QA: NOT_RUN
                   </p>
                 </div>
-                <button
-                  type="button"
-                  onClick={exportCharStaggerActualArtifact}
-                  className="border border-sky-300 dark:border-sky-700 px-2.5 py-1.5 font-semibold text-sky-700 dark:text-sky-300"
-                >
-                  Actual JSONを書き出す
-                </button>
+                <div className="flex flex-wrap gap-1.5">
+                  <button
+                    type="button"
+                    onClick={exportCharStaggerActualArtifact}
+                    className="border border-sky-300 dark:border-sky-700 px-2.5 py-1.5 font-semibold text-sky-700 dark:text-sky-300"
+                  >
+                    Actual JSON
+                  </button>
+                  <button
+                    type="button"
+                    onClick={exportCharStaggerCaptureTemplate}
+                    className="border border-sky-300 dark:border-sky-700 px-2.5 py-1.5 font-semibold text-sky-700 dark:text-sky-300"
+                  >
+                    Readback template
+                  </button>
+                  <label className="cursor-pointer border border-sky-300 dark:border-sky-700 px-2.5 py-1.5 font-semibold text-sky-700 dark:text-sky-300">
+                    Readback取込
+                    <input
+                      type="file"
+                      accept="application/json,.json"
+                      className="sr-only"
+                      onChange={(event) => void importCharStaggerCapture(event.currentTarget.files?.[0])}
+                    />
+                  </label>
+                </div>
               </div>
               <p className="mt-2 text-navy-400">
-                このJSONはSceneの正本ではなく、実Mac ResolveでText+ / Followerを適用・readback・render確認するためのEVIDENCE_ONLYテンプレートです。
+                Actual JSONは作業指示、Readback templateはMac Resolveで実測値・live Fusion input名・1x/half-speed QAを記録するEVIDENCE_ONLY容器です。取込時はsceneId / sourceRevisionをfail-closeで検証します。
               </p>
+              {charStaggerEvidenceError ? (
+                <p className="mt-2 border border-red-300 dark:border-red-800 p-2 text-red-700 dark:text-red-300">
+                  Readback rejected: {charStaggerEvidenceError}
+                </p>
+              ) : null}
+              {charStaggerEvaluatedEvidence ? (
+                <div className="mt-2 border border-emerald-200 dark:border-emerald-800 p-2">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <div>
+                      <p className="font-semibold text-emerald-700 dark:text-emerald-300">Readback evaluated</p>
+                      <p className="mt-1 text-navy-400">
+                        Machine checks: {charStaggerEvaluatedEvidence.allMachineComparableChecksPass ? "ALL PASS" : "INCOMPLETE / FAIL"} / live bindings {charStaggerEvaluatedEvidence.parameterBindingsCaptured ? "CAPTURED" : "MISSING"}
+                      </p>
+                      <p className="text-navy-400">
+                        Visual QA: 1x {charStaggerEvaluatedEvidence.checks.visualQa1x} / half-speed {charStaggerEvaluatedEvidence.checks.visualQaHalfSpeed}
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={exportCharStaggerEvaluatedEvidence}
+                      className="border border-emerald-300 dark:border-emerald-700 px-2.5 py-1.5 font-semibold text-emerald-700 dark:text-emerald-300"
+                    >
+                      Evaluated evidence
+                    </button>
+                  </div>
+                  <p className="mt-2 text-navy-400">
+                    ここでALL PASSになっても productionReady は自動昇格しません。live parameter bindingのレビューとproduction route昇格は別工程です。
+                  </p>
+                </div>
+              ) : null}
             </div>
           ) : null}
         </div>
