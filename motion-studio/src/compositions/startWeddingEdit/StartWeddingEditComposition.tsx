@@ -56,6 +56,16 @@ const TITLE_BY_VARIANT: Record<WeddingVariant, React.FC> = {
 export const StartWeddingEditComposition: React.FC<StartWeddingEditCompositionProps> = ({variant, reviewMode}) => {
   const Title = TITLE_BY_VARIANT[variant];
 
+  // TypeMaskText等が「今その瞬間に実際に流れているshotの写真」を参照できるよう、
+  // sectionId→{shots, sectionStartSec}のmapを作る(phrase.sectionIdで引ける)。
+  // 固定写真1枚のハードコードを廃止するための最小限の追加(重い処理ではない)。
+  const sectionShots: Record<string, {shots: ReturnType<typeof placeShots>; sectionStartSec: number}> = {};
+  for (const section of WEDDING_EDIT_SECTIONS) {
+    if (section.id === 'intro') continue;
+    const design = weddingSectionDesign(variant, section.id);
+    sectionShots[section.id] = {shots: placeShots(design, section), sectionStartSec: section.startSec};
+  }
+
   return (
     <AbsoluteFill style={{background: '#0A0A0C'}}>
       {weddingEditAudioPath ? <Audio src={staticFile(weddingEditAudioPath)} /> : null}
@@ -71,8 +81,7 @@ export const StartWeddingEditComposition: React.FC<StartWeddingEditCompositionPr
           );
         }
 
-        const design = weddingSectionDesign(variant, section.id);
-        const shots = placeShots(design, section);
+        const shots = sectionShots[section.id].shots;
         const isInterlude = section.id.startsWith('interlude');
 
         return (
@@ -111,7 +120,7 @@ export const StartWeddingEditComposition: React.FC<StartWeddingEditCompositionPr
         );
       })}
 
-      <WeddingLyricTrack phrases={weddingEditLyricPhrases} variant={variant} />
+      <WeddingLyricTrack phrases={weddingEditLyricPhrases} variant={variant} sectionShots={sectionShots} />
 
       {reviewMode
         ? weddingEditLyricPhrases.map((p) => {

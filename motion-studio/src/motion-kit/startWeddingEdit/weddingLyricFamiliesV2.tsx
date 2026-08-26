@@ -4,8 +4,10 @@
 // - WordSequenceBuild: importantWords(word-accent-map由来)を段階的に表示する汎用component。
 //   P001/P004/P011/P019など「複数語を別accentで出す」要求に対応する。
 // - LyricToTransition: 小さい親div内に閉じていたwipeを、真の全画面AbsoluteFillへ分離。
-// - Type Mask: 固定写真のまま(実shot非連動、既知の限界として明記)だが、
-//   背景backplate+outlineでA/B/Cどの背景でも読める安全策を追加。
+// - Type Mask: 呼び出し側(weddingLyricLine.tsx)が今実際に流れているshotの実素材を
+//   `shotAsset`として渡せば、それを文字の中に映す(shot連動)。shotが動画(kind='video')
+//   の場合はbackground-clip:textが使えないため、その瞬間だけvariant別固定写真へ
+//   fallbackする(既知の限界)。背景backplate+outlineでA/B/Cどの背景でも読める安全策も追加。
 // - Foreground Reveal: 実際の前景/背景レイヤー分離が無いダミー素材環境のため、
 //   SVGシルエットを疑似前景として重ね、「文字が前景の後ろを通る」ことを実装する
 //   (実写真の人物セグメンテーションではない。既知の限界として明記)。
@@ -136,7 +138,8 @@ export const ForegroundReveal: React.FC<{text: string; color: string; fontSize?:
   );
 };
 
-/** 11. Type Mask: 文字の内側に写真が見える。既知の限界: 実shot非連動の固定写真。
+/** 11. Type Mask: 文字の内側に写真が見える。`shotAsset`が渡されればそれ(=今実際に
+ * 流れているshotの実素材)を使う。未指定/動画の場合だけ以下のvariant別固定写真を使う。
  * 背景の明暗に関わらず読めるよう、暗backplate+反対色outlineで安全策を取る。
  * variantごとに別写真を割り当てて単調さを避ける。 */
 const TYPE_MASK_PHOTOS: Record<string, string> = {
@@ -212,11 +215,16 @@ export const TypeMaskText: React.FC<{
   /** P029「貴方を」のように、textの末尾の一部だけを強調したい場合の部分文字列。
    * text.endsWith(emphasisSuffix)でない場合は無視され、whole textにfallbackする。 */
   emphasisSuffix?: string;
-}> = ({text, variant, fontSize = 72, emphasisFrame, emphasisSuffix}) => {
+  /** 今実際に流れているshotの実素材(StartWeddingEditComposition側で解決)。
+   * kind==='photo'の場合だけ使う。background-clip:textは動画に使えないため、
+   * kind==='video'または未指定の場合は従来のvariant別固定写真へfallbackする
+   * (既知の限界: shot本体が動画の瞬間はshot連動しない)。 */
+  shotAsset?: {path: string; kind: 'photo' | 'video'};
+}> = ({text, variant, fontSize = 72, emphasisFrame, emphasisSuffix, shotAsset}) => {
   const f = useCurrentFrame();
   const o = interpolate(f, [0, 14], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
   const zoom = interpolate(f, [0, 220], [100, 118], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
-  const photo = TYPE_MASK_PHOTOS[variant];
+  const photo = shotAsset && shotAsset.kind === 'photo' ? shotAsset.path : TYPE_MASK_PHOTOS[variant];
   const outline = variant === 'C' ? '#0A0A0C' : '#FFFDF7';
 
   const hasWordEmphasis = emphasisFrame != null && !!emphasisSuffix && text.endsWith(emphasisSuffix) && emphasisSuffix.length < text.length;

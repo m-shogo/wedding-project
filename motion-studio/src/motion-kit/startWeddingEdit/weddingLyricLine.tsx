@@ -20,6 +20,8 @@ import React from 'react';
 import {AbsoluteFill, Sequence, interpolate, useCurrentFrame} from 'remotion';
 import type {EnrichedLyricPhrase} from '../../data/startWeddingEdit/generated';
 import {START_WEDDING_EDIT_FPS} from '../../data/startWeddingEdit/sections';
+import type {PlacedShot} from '../../data/startWeddingEdit/storyboard';
+import {resolveDemoAsset} from '../../data/start129/resolveDemoAsset';
 import {
   CharacterBuild,
   HeldNoteStretch,
@@ -200,12 +202,43 @@ const StartMotifCallback: React.FC<{color: string}> = ({color}) => {
   );
 };
 
-const WeddingLyricBody: React.FC<{phrase: EnrichedLyricPhrase; variant: WeddingVariant}> = ({phrase, variant}) => {
+/** sectionId→{shots, sectionStartSec}。TypeMaskText等が「今実際に流れているshot」の
+ * 実写真を参照できるようにするための、StartWeddingEditComposition側で作られるmap。 */
+export type SectionShotsMap = Record<string, {shots: PlacedShot[]; sectionStartSec: number}>;
+
+/** phraseの現在の再生位置(phrase-local frame)から、そのsection内で今実際に
+ * 表示されているshotを引き、実素材のpath/kindを解決する。
+ * 1つのphraseが複数shotへまたがることがある(例: P029)ため、phrase開始時ではなく
+ * 呼び出し時のframeで毎回引き直す必要がある。 */
+const currentShotAsset = (
+  phrase: EnrichedLyricPhrase,
+  sectionShots: SectionShotsMap | undefined,
+  phraseLocalFrame: number,
+): {path: string; kind: 'photo' | 'video'} | null => {
+  const entry = sectionShots?.[phrase.sectionId];
+  if (!entry) return null;
+  const sectionLocalFrame = secToFrame(phrase.startSec) - secToFrame(entry.sectionStartSec) + phraseLocalFrame;
+  const shot =
+    entry.shots.find((s) => sectionLocalFrame >= s.localFrom && sectionLocalFrame < s.localFrom + s.durationInFrames) ??
+    entry.shots[entry.shots.length - 1];
+  if (!shot) return null;
+  const asset = resolveDemoAsset(shot.role, shot.variantIndex);
+  if (!asset.path) return null;
+  return {path: asset.path, kind: asset.kind};
+};
+
+const WeddingLyricBody: React.FC<{phrase: EnrichedLyricPhrase; variant: WeddingVariant; sectionShots?: SectionShotsMap}> = ({
+  phrase,
+  variant,
+  sectionShots,
+}) => {
   const style = VARIANT_STYLE[variant];
   const durFrames = Math.max(1, secToFrame(phrase.endSec) - secToFrame(phrase.startSec));
   const anim = phrase.selectedAnimation ?? 'character-build';
   const wordData = wordsToLocalFrames(phrase);
   const single = firstWordFrame(phrase);
+  // フックのルール上、switchの外で無条件に呼ぶ(type-maskの実shot連動でのみ使用)。
+  const frameForShotLookup = useCurrentFrame();
 
   switch (anim) {
     case 'three-hit-build':
@@ -344,6 +377,10 @@ const WeddingLyricBody: React.FC<{phrase: EnrichedLyricPhrase; variant: WeddingV
       const showcaseFrame = single;
       const emphasisSuffix = wordData?.words[0];
       weddingLyricFallbackByPhraseId.set(phrase.phraseId, showcaseFrame === null);
+      // 固定写真ではなく、今実際に流れているshotの実素材を参照する。
+      // shotが動画(kind==='video')の場合はbackground-clip:textが使えないため、
+      // TypeMaskText側で従来の固定写真fallbackへ自動的に戻る(既知の限界)。
+      const shotAsset = currentShotAsset(phrase, sectionShots, frameForShotLookup);
       return (
         <TypeMaskText
           text={phrase.text}
@@ -351,6 +388,7 @@ const WeddingLyricBody: React.FC<{phrase: EnrichedLyricPhrase; variant: WeddingV
           fontSize={variant === 'B' ? 66 : 58}
           emphasisFrame={showcaseFrame ?? undefined}
           emphasisSuffix={emphasisSuffix}
+          shotAsset={shotAsset ?? undefined}
         />
       );
     }
@@ -552,7 +590,7 @@ const TransitionWipeLayer: React.FC<{phrase: EnrichedLyricPhrase; variant: Weddi
 };
 
 /** A案: 映画タイトル的な余白と静けさ。placementで位置を可変にする */
-const WeddingLyricA: React.FC<{phrase: EnrichedLyricPhrase}> = ({phrase}) => {
+const WeddingLyricA: React.FC<{phrase: EnrichedLyricPhrase; sectionShots?: SectionShotsMap}> = ({phrase, sectionShots}) => {
   const frame = useCurrentFrame();
   const o = interpolate(frame, [0, 8], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
   const p = placementFor(phrase.selectedAnimation);
@@ -570,7 +608,7 @@ const WeddingLyricA: React.FC<{phrase: EnrichedLyricPhrase}> = ({phrase}) => {
         }}
       >
         <div style={{opacity: o, textAlign: centered ? 'center' : 'left', textShadow: '0 2px 18px rgba(0,0,0,0.55)'}}>
-          <WeddingLyricBody phrase={phrase} variant="A" />
+          <WeddingLyricBody phrase={phrase} variant="A" sectionShots={sectionShots} />
         </div>
       </AbsoluteFill>
       <TransitionWipeLayer phrase={phrase} variant="A" />
@@ -579,7 +617,7 @@ const WeddingLyricA: React.FC<{phrase: EnrichedLyricPhrase}> = ({phrase}) => {
 };
 
 /** B案: 手描きunderline+背景shape付き。placementで位置を可変にする */
-const WeddingLyricB: React.FC<{phrase: EnrichedLyricPhrase}> = ({phrase}) => {
+const WeddingLyricB: React.FC<{phrase: EnrichedLyricPhrase; sectionShots?: SectionShotsMap}> = ({phrase, sectionShots}) => {
   const frame = useCurrentFrame();
   const o = interpolate(frame, [0, 5], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
   const p = placementFor(phrase.selectedAnimation);
@@ -591,11 +629,11 @@ const WeddingLyricB: React.FC<{phrase: EnrichedLyricPhrase}> = ({phrase}) => {
       >
         <div style={{opacity: o}}>
           {skipCard ? (
-            <WeddingLyricBody phrase={phrase} variant="B" />
+            <WeddingLyricBody phrase={phrase} variant="B" sectionShots={sectionShots} />
           ) : (
             <>
               <div style={{background: 'rgba(18,16,13,0.42)', borderLeft: '5px solid #F4C95D', padding: '10px 22px', borderRadius: 4}}>
-                <WeddingLyricBody phrase={phrase} variant="B" />
+                <WeddingLyricBody phrase={phrase} variant="B" sectionShots={sectionShots} />
               </div>
               <div style={{marginTop: 4, marginLeft: 22}}>
                 <HandDrawnUnderline progressFrom={4} progressDurationInFrames={14} width={260} />
@@ -610,7 +648,7 @@ const WeddingLyricB: React.FC<{phrase: EnrichedLyricPhrase}> = ({phrase}) => {
 };
 
 /** C案: editorial。明背景なので必ず暗文字+背景カードでcontrastを保証する */
-const WeddingLyricC: React.FC<{phrase: EnrichedLyricPhrase}> = ({phrase}) => {
+const WeddingLyricC: React.FC<{phrase: EnrichedLyricPhrase; sectionShots?: SectionShotsMap}> = ({phrase, sectionShots}) => {
   const frame = useCurrentFrame();
   const w = interpolate(frame, [0, 10], [0, 300], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
   const p = placementFor(phrase.selectedAnimation);
@@ -621,7 +659,7 @@ const WeddingLyricC: React.FC<{phrase: EnrichedLyricPhrase}> = ({phrase}) => {
         style={{display: 'flex', flexDirection: 'column', justifyContent: p.justifyContent, alignItems: p.alignItems, padding: p.padding, pointerEvents: 'none'}}
       >
         <div style={{background: 'rgba(242,239,232,0.9)', padding: '10px 20px', borderRadius: 2}}>
-          <WeddingLyricBody phrase={phrase} variant="C" />
+          <WeddingLyricBody phrase={phrase} variant="C" sectionShots={sectionShots} />
           {showBaseline ? <div style={{height: 2, width: w, background: '#0A0A0C', marginTop: 8}} /> : null}
         </div>
       </AbsoluteFill>
@@ -630,14 +668,18 @@ const WeddingLyricC: React.FC<{phrase: EnrichedLyricPhrase}> = ({phrase}) => {
   );
 };
 
-const VARIANT_COMPONENT: Record<WeddingVariant, React.FC<{phrase: EnrichedLyricPhrase}>> = {
+const VARIANT_COMPONENT: Record<WeddingVariant, React.FC<{phrase: EnrichedLyricPhrase; sectionShots?: SectionShotsMap}>> = {
   A: WeddingLyricA,
   B: WeddingLyricB,
   C: WeddingLyricC,
 };
 
 /** 30phrase全体を、それぞれ絶対frame位置のSequenceとして並べる */
-export const WeddingLyricTrack: React.FC<{phrases: EnrichedLyricPhrase[]; variant: WeddingVariant}> = ({phrases, variant}) => {
+export const WeddingLyricTrack: React.FC<{phrases: EnrichedLyricPhrase[]; variant: WeddingVariant; sectionShots?: SectionShotsMap}> = ({
+  phrases,
+  variant,
+  sectionShots,
+}) => {
   const Comp = VARIANT_COMPONENT[variant];
   return (
     <>
@@ -646,7 +688,7 @@ export const WeddingLyricTrack: React.FC<{phrases: EnrichedLyricPhrase[]; varian
         const dur = Math.max(1, secToFrame(p.endSec) - from);
         return (
           <Sequence key={p.phraseId} from={from} durationInFrames={dur} name={`lyric-${p.phraseId}:${p.selectedAnimation}`}>
-            <Comp phrase={p} />
+            <Comp phrase={p} sectionShots={sectionShots} />
           </Sequence>
         );
       })}

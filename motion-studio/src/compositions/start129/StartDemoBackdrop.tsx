@@ -4,8 +4,8 @@
 
 import React from 'react';
 import {AbsoluteFill, Img, OffthreadVideo, staticFile} from 'remotion';
-import {start129DemoAssetLibrary} from '../../data/start129/demoAssetLibrary.generated';
 import {start129AssetRoleSpec, type Start129AssetRole} from '../../data/start129/assetRoles';
+import {resolveDemoAsset} from '../../data/start129/resolveDemoAsset';
 
 const hashHue = (input: string): number => {
   let h = 0;
@@ -76,12 +76,10 @@ export const StartDemoBackdrop: React.FC<StartDemoBackdropProps> = ({
   objectPosition,
   children,
 }) => {
-  const candidates = start129DemoAssetLibrary[role] ?? [];
-  const path = candidates[variantIndex % Math.max(candidates.length, 1)];
-  const spec = start129AssetRoleSpec(role);
+  const {path, kind} = resolveDemoAsset(role, variantIndex);
 
   const renderMedia = (mediaFit: 'cover' | 'contain', extraStyle?: React.CSSProperties) =>
-    spec.kind === 'video' ? (
+    kind === 'video' ? (
       <OffthreadVideo
         src={staticFile(path!)}
         style={{width: '100%', height: '100%', objectFit: mediaFit, objectPosition, ...extraStyle}}
