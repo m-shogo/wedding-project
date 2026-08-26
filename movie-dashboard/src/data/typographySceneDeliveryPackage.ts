@@ -24,6 +24,7 @@ export interface TypographySceneDeliveryPackageV1 {
     engine: "TypographyRevealEngine";
     mode: string;
     humanMasterPreserved: true;
+    humanState: ReturnType<typeof buildMaskRevealSceneProductionBundle>["humanState"];
     rule: string;
   };
   timeline: {
@@ -32,6 +33,7 @@ export interface TypographySceneDeliveryPackageV1 {
     expectedXmlFileName: string;
     sceneMarkerId: string;
     xmlGeneratedExternally: true;
+    instruction: string;
     rule: string;
   };
   davinci: {
@@ -48,6 +50,18 @@ export interface TypographySceneDeliveryPackageV1 {
     standaloneRenderCi: boolean;
     studioInstallActual: "NOT_RUN" | "PASS" | "FAIL";
     studioControlReadbackActual: "NOT_RUN" | "PASS" | "FAIL";
+    rule: string;
+  };
+  execution: {
+    order: readonly [
+      "CONFIRM_CURRENT_SCENE_REVISION",
+      "EXPORT_PALMIER_TIMELINE_WITH_MARKER",
+      "APPLY_DAVINCI_TRANSLATOR",
+      "CAPTURE_MAC_ACTUAL_EVIDENCE",
+      "RUN_HUMAN_PROMOTION_REVIEW",
+      "EVALUATE_SCENE_BOUND_RELEASE_GATE",
+    ];
+    currentStopReason: string;
     rule: string;
   };
   release: {
@@ -115,6 +129,7 @@ export function buildTypographySceneDeliveryPackage(
       engine: "TypographyRevealEngine",
       mode: production.canonical.mode,
       humanMasterPreserved: true,
+      humanState: base.humanState,
       rule: "このpackageはScene/Human MasterとHuman-selected routeから導出する。canonical motion値を別正本として再定義しない。",
     },
     timeline: {
@@ -123,6 +138,7 @@ export function buildTypographySceneDeliveryPackage(
       expectedXmlFileName: production.palmier.timelineXmlFileName,
       sceneMarkerId: production.palmier.markerId,
       xmlGeneratedExternally: true,
+      instruction: base.palmier.instruction,
       rule: "placement/trim/markerはPalmier実timelineが担当する。NLE XMLをDashboard側で捏造せず、Palmierからexportする。",
     },
     davinci: {
@@ -143,6 +159,18 @@ export function buildTypographySceneDeliveryPackage(
       studioInstallActual: production.remotion.studioInstallActual,
       studioControlReadbackActual: production.remotion.studioControlReadbackActual,
       rule: "standalone render CIとRemotion Studio GUI Actualは別証拠。未実行はNOT_RUNのまま保持する。",
+    },
+    execution: {
+      order: [
+        "CONFIRM_CURRENT_SCENE_REVISION",
+        "EXPORT_PALMIER_TIMELINE_WITH_MARKER",
+        "APPLY_DAVINCI_TRANSLATOR",
+        "CAPTURE_MAC_ACTUAL_EVIDENCE",
+        "RUN_HUMAN_PROMOTION_REVIEW",
+        "EVALUATE_SCENE_BOUND_RELEASE_GATE",
+      ],
+      currentStopReason: production.gate.blockers[0] ?? "AWAITING_SCENE_BOUND_RELEASE_GATE",
+      rule: "順序を飛ばさない。特にtranslator/CIの存在だけでMac Actual、Human review、Releaseを済ませた扱いにしない。",
     },
     release: {
       productionReady: false,
