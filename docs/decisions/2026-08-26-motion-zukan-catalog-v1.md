@@ -172,3 +172,44 @@ Property単位で修正できる構造)を持つのは引き続き`type-mask-rev
    は「画面全体のcolor blend」近似。実際に背景動画やAI B-rollと組み合わせて
    使いたい場面が出た時に、より精密な実装(背景と文字の相対速度差、edge-onlyの
    色収差)を検討する。
+
+## 追記(PR #371後のレビュー指摘対応): direction/variant二重意味とroute-lineの座標バグ
+
+PR #371でDirector Recipe側のpreview adapterを専用engine modeへ配線し直したが、
+モーション図鑑本体(`StartMotionReel.tsx`)は未修正のまま残っていた。
+`RenderableMotionPreset`が汎用`mode: string`一つでtransition-wipeの
+`direction`と`variant`両方を表現していたため、`wipe-route-line`
+(`mode: 'right'`)と`flash-one-frame-soft`(`mode: 'up'`)は`StartMotionReel.tsx`
+側では専用variantに一致せず、汎用`variant='wipe'`へ黙って落ちていた。
+
+さらに`route-line`自体の実装にも、SVG pathがcubic bezierなのに先端ドットを
+HTML divのleft/top percent補間で近似していたバグがあった。これにより、
+ドットが曲線上からずれる、`left`方向でも右→左ではなく単純な鏡像になる、
+縦方向(`up`/`down`)の座標がviewBox外へ出る、ドットが終盤の数frameしか
+現れない、という4つの問題が同時に存在していた。
+
+対応:
+
+- `RenderableMotionPreset`へ`direction?: TransitionWipeDirection`と
+  `wipeVariant?: TransitionWipeVariant`を独立フィールドとして追加し、
+  transition-wipe presetでは`mode`を使わない設計へ変更した
+  (`mode`は他engineの既存用途のまま残す)。
+- `motion-kit/transitionWipeResolver.ts`(新規、JSXを含まない純粋関数)で
+  `resolveTransitionWipeProps()`を実装し、`StartMotionReel.tsx`と
+  `directorRecipeAdapter.ts`の両方から呼び出す形へ統一した。
+- `motion-kit/routeLineMath.ts`(新規、同じくJSXなし)へcubic bezierの
+  制御点計算・path文字列生成・線上の座標計算を切り出し、`engines.tsx`の
+  `route-line` variantはこの座標を使って線とドットの両方を同じSVG内へ
+  描画するよう書き直した。方向(`left`/`right`/`up`/`down`)ごとに、
+  主軸(水平/垂直)と走査順序(通常/反転)を切り替えることで、4方向とも
+  同じ1920x1080 viewBoxに収まり、`left`/`up`は実際に逆方向へ走査するように
+  修正した。
+- `check-start-motion-kit.mts`へ、文字列検索ではなく実際に
+  `renderableMotionPresets` / `resolveTransitionWipeProps` /
+  `routeControlPoints` / `cubicBezierPoint` / `routeStaysWithinViewBox`を
+  importして戻り値を検証する回帰チェックを追加した(`wipeVariant`未設定や
+  `mode`の混在も検出する)。
+
+Visual Fidelityの扱いは変更していない。`wipe-route-line`は座標バグを修正した後も
+`check-director-recipe-visual-fidelity.mts`の`requiredNonExact`ガードにより
+`representative`のまま維持している(独立rendered-pixel oracleが別途必要)。

@@ -8,6 +8,7 @@ import {
   TypographyRevealEngine,
 } from '../../motion-kit/engines';
 import {renderableMotionPresets, type RenderableMotionPreset} from '../../motion-kit/renderablePresets';
+import {resolveTransitionWipeProps} from '../../motion-kit/transitionWipeResolver';
 
 const CLIP_FRAMES = 75;
 
@@ -86,14 +87,15 @@ function RenderPreset({preset}: {preset: RenderableMotionPreset}) {
   }
 
   if (preset.engine === 'transition-wipe') {
+    // direction/variantはpreset.direction / preset.wipeVariantという別々の型付きfieldから
+    // resolveTransitionWipeProps(directorRecipeAdapter.tsと共有)で解決する。以前は`mode`一つへ
+    // directionとvariantの両方を押し込めていたため、route-line/flashのような専用variantが
+    // 汎用'wipe'へ黙って落ちるバグがあった。
+    const wipeProps = resolveTransitionWipeProps(preset);
     return (
       <AbsoluteFill>
         <DemoBackdrop label={preset.label} />
-        <TransitionWipeEngine
-          intensity={preset.intensity}
-          direction={preset.mode === 'left' ? 'left' : preset.mode === 'up' ? 'up' : preset.mode === 'down' ? 'down' : 'right'}
-          variant={preset.mode === 'release' ? 'release' : preset.mode === 'shape' ? 'shape' : preset.mode === 'paper' ? 'paper' : 'wipe'}
-        />
+        <TransitionWipeEngine intensity={preset.intensity} direction={wipeProps.direction} variant={wipeProps.variant} />
       </AbsoluteFill>
     );
   }

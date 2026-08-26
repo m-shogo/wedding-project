@@ -8,6 +8,7 @@ import {
   TypographyRevealEngine,
   type CameraTransformMode,
   type GraphicHitVariant,
+  type TransitionWipeDirection,
   type TransitionWipeVariant,
   type TypographyRevealMode,
 } from '../../motion-kit/engines';
@@ -43,7 +44,7 @@ function RenderLayer({layer}: {layer: RecipeLayer}) {
   if (engine === 'transition-wipe') {
     return (
       <TransitionWipeEngine
-        direction={props.direction as 'left' | 'right' | 'up' | 'down'}
+        direction={props.direction as TransitionWipeDirection}
         variant={props.variant as TransitionWipeVariant}
         intensity={intensity}
         transparent={props.transparent as boolean}

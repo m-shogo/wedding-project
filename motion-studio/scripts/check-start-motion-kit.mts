@@ -1,6 +1,10 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
+import {renderableMotionPresets} from '../src/motion-kit/renderablePresets.ts';
+import {resolveTransitionWipeProps} from '../src/motion-kit/transitionWipeResolver.ts';
+import {cubicBezierPoint, routeControlPoints, routeStaysWithinViewBox} from '../src/motion-kit/routeLineMath.ts';
+import type {TransitionWipeDirection, TransitionWipeVariant} from '../src/motion-kit/engines.tsx';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const repoRoot = path.resolve(root, '..');
@@ -45,9 +49,87 @@ requireText(rootFile, 'id="StaRtMotionReelV1"', 'Motion Reel composition missing
 requireText(rootFile, 'id="StaRtMotionOverlayPreview"', 'transparent overlay preview composition missing');
 requireText(index, 'registerRoot(StartMotionKitRoot)', 'StaRt Motion Kit entrypoint missing');
 
+// --- transition-wipe direction/variant wiring regression check ---------------------------
+//
+// Prior bug: StartMotionReel.tsx overloaded a single `mode` string as both direction and
+// variant, so route-line/flash silently fell back to the generic 'wipe' variant. This exercises
+// the real resolveTransitionWipeProps() pure function (the same one StartMotionReel.tsx and
+// directorRecipeAdapter.ts call) against the actual renderableMotionPresets data, instead of
+// grepping source text, so it fails if the wiring regresses again.
+const transitionWipePresets = renderableMotionPresets.filter((preset) => preset.engine === 'transition-wipe');
+if (transitionWipePresets.length === 0) {
+  errors.push('expected at least one engine: "transition-wipe" renderable preset to validate direction/variant wiring against');
+}
+
+const expectedWipeVariantByPresetId: Record<string, TransitionWipeVariant> = {
+  'wipe-route-line': 'route-line',
+  'flash-one-frame-soft': 'flash',
+  'wipe-directional-shape': 'shape',
+  'wipe-paper-edge': 'paper',
+  'color-field-release': 'release',
+};
+for (const [presetId, expectedVariant] of Object.entries(expectedWipeVariantByPresetId)) {
+  const preset = transitionWipePresets.find((entry) => entry.presetId === presetId);
+  if (!preset) {
+    errors.push(`transition-wipe wiring check: expected renderable preset missing: ${presetId}`);
+    continue;
+  }
+  const resolved = resolveTransitionWipeProps(preset);
+  if (resolved.variant !== expectedVariant) {
+    errors.push(`transition-wipe wiring check: ${presetId} resolved variant="${resolved.variant}", expected "${expectedVariant}" (silently fell back to a generic variant?)`);
+  }
+}
+
+// Every transition-wipe preset must set its own `wipeVariant` explicitly. `mode` must not be
+// used to smuggle a direction/variant value for this engine (that ambiguity is exactly what
+// caused the original bug), and an unset `wipeVariant` would silently resolve to the generic
+// 'wipe' via resolveTransitionWipeProps's default — which is fine for a deliberately generic
+// preset, but there is currently no such preset in the catalog, so require it to be explicit.
+for (const preset of transitionWipePresets) {
+  if (preset.mode !== undefined) {
+    errors.push(`transition-wipe wiring check: ${preset.presetId} sets legacy "mode" (="${preset.mode}"); use direction/wipeVariant instead`);
+  }
+  if (preset.wipeVariant === undefined) {
+    errors.push(`transition-wipe wiring check: ${preset.presetId} does not set wipeVariant explicitly (would silently resolve to the generic "wipe")`);
+  }
+}
+
+// --- route-line Bezier geometry regression check ------------------------------------------
+//
+// Prior bug: the leading dot was positioned with independent HTML percent-interpolation while
+// the line was an SVG Bezier path, so the dot did not track the curve, vertical directions
+// escaped the viewBox, and 'left'/'up' did not reverse traversal. This recomputes the same pure
+// geometry the engine renders and asserts on it directly.
+const allDirections: TransitionWipeDirection[] = ['left', 'right', 'up', 'down'];
+for (const direction of allDirections) {
+  if (!routeStaysWithinViewBox(direction)) {
+    errors.push(`route-line geometry check: direction="${direction}" control points fall outside the viewBox`);
+  }
+  const points = routeControlPoints(direction);
+  const start = cubicBezierPoint(points, 0);
+  const end = cubicBezierPoint(points, 1);
+  if (Math.abs(start.x - points[0].x) > 0.001 || Math.abs(start.y - points[0].y) > 0.001) {
+    errors.push(`route-line geometry check: direction="${direction}" t=0 must equal the first control point`);
+  }
+  if (Math.abs(end.x - points[3].x) > 0.001 || Math.abs(end.y - points[3].y) > 0.001) {
+    errors.push(`route-line geometry check: direction="${direction}" t=1 must equal the last control point`);
+  }
+  const primaryAxis = direction === 'left' || direction === 'right' ? 'x' : 'y';
+  const increasing = direction === 'right' || direction === 'down';
+  if (increasing && !(end[primaryAxis] > start[primaryAxis])) {
+    errors.push(`route-line geometry check: direction="${direction}" should travel toward increasing ${primaryAxis}`);
+  }
+  if (!increasing && !(end[primaryAxis] < start[primaryAxis])) {
+    errors.push(`route-line geometry check: direction="${direction}" should travel toward decreasing ${primaryAxis}`);
+  }
+}
+
 if (errors.length) {
   console.error(`StaRt shared renderer contracts FAILED (${errors.length})`);
   for (const error of errors) console.error(`- ${error}`);
   process.exit(1);
 }
-console.log(`StaRt shared renderer contracts OK: ${ids.length} renderable presets / 4 shared engines / transparent overlay preview.`);
+console.log(
+  `StaRt shared renderer contracts OK: ${ids.length} renderable presets / 4 shared engines / transparent overlay preview / ` +
+    `${transitionWipePresets.length} transition-wipe direction+variant wired / route-line geometry within viewBox for all 4 directions.`,
+);
