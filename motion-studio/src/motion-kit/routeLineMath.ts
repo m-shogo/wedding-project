@@ -12,6 +12,16 @@ export interface RoutePoint {
 
 export type RouteControlPoints = [RoutePoint, RoutePoint, RoutePoint, RoutePoint];
 
+export interface RouteArcLengthSample {
+  t: number;
+  length: number;
+}
+
+export interface RouteArcLengthLut {
+  samples: RouteArcLengthSample[];
+  totalLength: number;
+}
+
 // A single canonical viewBox in screen-like coordinates (matches a 16:9 1920x1080 frame at 1/1
 // scale) so horizontal and vertical curves share one coordinate space and neither can wander
 // outside the visible frame regardless of direction.
@@ -69,6 +79,76 @@ export function cubicBezierPoint([p0, p1, p2, p3]: RouteControlPoints, t: number
   const x = mt * mt * mt * p0.x + 3 * mt * mt * clamped * p1.x + 3 * mt * clamped * clamped * p2.x + clamped * clamped * clamped * p3.x;
   const y = mt * mt * mt * p0.y + 3 * mt * mt * clamped * p1.y + 3 * mt * clamped * clamped * p2.y + clamped * clamped * clamped * p3.y;
   return {x, y};
+}
+
+function pointDistance(a: RoutePoint, b: RoutePoint): number {
+  return Math.hypot(b.x - a.x, b.y - a.y);
+}
+
+/**
+ * Deterministic polyline approximation of a cubic Bezier's arc length.
+ *
+ * SVG strokeDashoffset advances by arc-length fraction, not by the Bezier parameter `t`.
+ * Keeping this lookup pure lets Remotion and Node checks use the same conversion without
+ * relying on browser-only getTotalLength()/getPointAtLength() calls.
+ */
+export function buildCubicBezierArcLengthLut(
+  points: RouteControlPoints,
+  segmentCount = 512,
+): RouteArcLengthLut {
+  if (!Number.isInteger(segmentCount) || segmentCount < 2) {
+    throw new Error(`route-line arc-length segmentCount must be an integer >= 2, received ${segmentCount}`);
+  }
+
+  const samples: RouteArcLengthSample[] = [{t: 0, length: 0}];
+  let totalLength = 0;
+  let previous = cubicBezierPoint(points, 0);
+
+  for (let index = 1; index <= segmentCount; index += 1) {
+    const t = index / segmentCount;
+    const current = cubicBezierPoint(points, t);
+    totalLength += pointDistance(previous, current);
+    samples.push({t, length: totalLength});
+    previous = current;
+  }
+
+  return {samples, totalLength};
+}
+
+/** Convert normalized arc progress (the value used by strokeDashoffset) back to Bezier `t`. */
+export function cubicBezierParameterAtArcProgress(
+  lut: RouteArcLengthLut,
+  arcProgress: number,
+): number {
+  const progress = Math.min(1, Math.max(0, arcProgress));
+  if (progress === 0 || lut.totalLength === 0) return 0;
+  if (progress === 1) return 1;
+
+  const targetLength = lut.totalLength * progress;
+  let low = 0;
+  let high = lut.samples.length - 1;
+
+  while (low + 1 < high) {
+    const middle = Math.floor((low + high) / 2);
+    if (lut.samples[middle].length < targetLength) low = middle;
+    else high = middle;
+  }
+
+  const before = lut.samples[low];
+  const after = lut.samples[high];
+  const span = after.length - before.length;
+  if (span === 0) return before.t;
+  const localProgress = (targetLength - before.length) / span;
+  return before.t + (after.t - before.t) * localProgress;
+}
+
+/** Point at a normalized arc-length fraction, matching SVG pathLength/strokeDashoffset semantics. */
+export function cubicBezierPointAtArcProgress(
+  points: RouteControlPoints,
+  arcProgress: number,
+  lut = buildCubicBezierArcLengthLut(points),
+): RoutePoint {
+  return cubicBezierPoint(points, cubicBezierParameterAtArcProgress(lut, arcProgress));
 }
 
 function withinViewBox(point: RoutePoint): boolean {
