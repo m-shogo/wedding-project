@@ -1,21 +1,54 @@
 export const remotionCurrentReleaseCoordinate = {
   checkedAt: '2026-08-26',
   repoLockedVersion: '4.0.475',
+  repoLockedZodVersion: '4.3.6',
   currentReleaseVersion: '4.0.517',
   currentReleasedAt: '2026-08-25T15:09:07Z',
-  source: 'remotion-dev/remotion GitHub releases/latest',
+  candidateZodVersion: '4.4.3',
+  source: 'remotion-dev/remotion GitHub releases/latest + Remotion 4.0.517 CLI version-coherence readback',
   major: 4,
   v5Status: 'NOT_CURRENT_STABLE_REVALIDATION_REQUIRED',
 } as const;
 
+export const remotionCandidateDependencyCohort = {
+  remotionVersion: '4.0.517',
+  zodVersion: '4.4.3',
+  directRemotionPackages: [
+    'remotion',
+    '@remotion/cli',
+    '@remotion/google-fonts',
+    '@remotion/paths',
+    '@remotion/zod-types',
+  ],
+  optionalElementTooling: {
+    package: '@remotion/studio-protocol',
+    version: '4.0.517',
+    productionDependencyState: 'NOT_ADDED',
+  },
+  discoveredBy: 'Run42 Mask Reveal Element Canary',
+  coherenceRunId: 32976279665,
+  checks: {
+    exactRemotionPackageVersions: 'PASS',
+    exactZodVersion: 'PASS',
+    remotionVersionsNoMismatch: 'PASS',
+    typeScript: 'PASS',
+    officialElementPayloadValidation: 'PASS',
+    standaloneElementRender: 'PASS',
+  },
+  rationale:
+    'Remotion 4.0.517 CLI warned that repo zod 4.3.6 was mismatched and required zod 4.4.3. A second ephemeral Canary with zod 4.4.3 removed the mismatch and remained green.',
+} as const;
+
 export const remotionWeddingCompatibilityPolicy = {
   sourceOfTruth: 'WEDDING_REPO_CODE_AND_CANONICAL_MOTION_REGISTRY',
-  latestCompatibilityState: 'EPHEMERAL_CI_GREEN_RUNTIME_STUDIO_QA_REQUIRED',
+  latestCompatibilityState: 'COHERENT_EPHEMERAL_CI_GREEN_RUNTIME_STUDIO_QA_REQUIRED',
   productionDependencyUpgradeState: 'NOT_REQUESTED_YET',
   rules: [
     'LATEST_RELEASE_AVAILABLE != WEDDING_REPO_COMPATIBLE',
     'EPHEMERAL_CI_GREEN != PRODUCTION_LOCKFILE_UPGRADED',
     'CI_RENDER_GREEN != LOCAL_STUDIO_INTERACTION_VERIFIED',
+    'RENDER_SUCCESS_WITH_VERSION_WARNING != VERSION_COHERENT',
+    'REMOTION_VERSION_COHORT != REMOTION_PACKAGES_ONLY',
     'STUDIO_INTERACTIVE != SOURCE_OF_TRUTH_MOVED_OUT_OF_CODE',
     'ELEMENT_PREVIEW_MATCH != CLEAN_PROJECT_INSTALL_VERIFIED',
     'ELEMENT_INSTALL_REQUEST_ACCEPTED != INSTALL_CONFIRMED',
@@ -27,9 +60,12 @@ export const remotionWeddingCompatibilityPolicy = {
 } as const;
 
 export const remotionCurrentCompatibilityEvidence = {
-  canaryRunId: 32973905349,
+  functionalCanaryRunId: 32973905349,
+  coherentCohortRunId: 32976279665,
   candidateVersion: '4.0.517',
+  candidateZodVersion: '4.4.3',
   baselineVersion: '4.0.475',
+  baselineZodVersion: '4.3.6',
   environment: 'GitHub Actions ubuntu-latest / Node 22 / pnpm 10',
   checks: {
     baselineFrozenInstall: 'PASS',
@@ -40,6 +76,8 @@ export const remotionCurrentCompatibilityEvidence = {
     compositionDiscovery: 'PASS',
     neutralH264Render1920x1080: 'PASS',
     ffprobeReadback: 'PASS',
+    coherentZodCandidate: 'PASS_RUN42',
+    remotionVersionsNoMismatch: 'PASS_RUN42',
   },
   discoveredCompatibilityFixes: [
     {
@@ -52,11 +90,21 @@ export const remotionCurrentCompatibilityEvidence = {
       resolution: 'Handle null explicitly with fail-soft rendering/fallback instead of non-null assertions.',
       normalVisualChangeExpected: false,
     },
+    {
+      fingerprint: 'REMOTION_ZOD_VERSION_COHERENCE_WARNING',
+      files: ['package.json', 'pnpm-lock.yaml'],
+      cause:
+        'A Run42 render on Remotion 4.0.517 succeeded but the CLI reported zod 4.3.6 as mismatched and required exact zod 4.4.3.',
+      resolution:
+        'Treat zod 4.4.3 as part of the Remotion 4.0.517 candidate cohort and require `remotion versions --log=verbose` to report no version mismatch before promotion.',
+      productionFilesChangedByResearchRun: false,
+    },
   ],
   remainingBeforeProductionUpgrade: [
-    'Local Remotion Studio launch on the target Mac.',
+    'Local Remotion Studio launch on the target Mac using Remotion 4.0.517 + zod 4.4.3 candidate cohort.',
     'Open representative Wedding compositions and confirm canvas/timeline interaction.',
     'Exercise crop/source-replacement controls that motivate the upgrade.',
+    'Run the Mask Reveal Element clean-project install Actual separately from library visibility.',
     'Run a deliberate package/lock update only after local Studio QA is acceptable.',
   ],
 } as const;
