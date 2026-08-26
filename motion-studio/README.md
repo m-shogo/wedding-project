@@ -469,9 +469,41 @@ pnpm check:start-wedding-edit-phrase-qa    # 歌詞データ契約(coverage/fami
 node --no-warnings scripts/check-start-wedding-edit-render-qa.mts --dir=out/start-wedding-edit-final-v2
 ```
 
-既知の限界: 音声を人間が聴取して確認したものではない(この環境に聴取手段が無い)。
-Type Maskは実shot連動ではなく固定写真を使用。Lyric-to-Transition / Call-and-Response
-Layout / Ending Dissolveは独立animation familyとしては未実装。
+既知の限界: 音声を人間が聴取して確認したものではない(2026-08-26まで、この環境に
+聴取手段が無かった)。Type Maskは実shot連動ではなく固定写真を使用。
+Lyric-to-Transition / Call-and-Response Layout / Ending Dissolveは独立animation
+familyとしては未実装。
+
+### Cue聴取確認(TimingMaster、人間が実際に聴いて`verifiedByListening`を上げる手段)
+
+```sh
+pnpm render:cue-listening-clips   # 全78 cue(vocal cue 73 + letterCue 5)の前後クリップを生成
+open local/analysis/start-wedding/listening-review.local.html   # ブラウザで聴取
+```
+
+聴取結果は `local/analysis/start-wedding/listening-decisions.local.json`(手で作成、
+すべてgitignore済み)へ次の形式で記録する。
+
+```json
+{
+  "verifiedBy": "人間の名前",
+  "decisions": [
+    {"cueId": "P012-H01", "status": "ok"},
+    {"cueId": "P012-H02", "status": "adjust", "deltaMs": -40, "note": "少し早く感じる"},
+    {"cueId": "INTRO-START-S", "status": "reject", "note": "確認できない"}
+  ]
+}
+```
+
+```sh
+pnpm apply:listening-verification   # decisionsに列挙したcueだけへ安全に反映
+pnpm sync:timing-master             # generated.tsへ反映
+```
+
+decisionsに列挙されていないcueは一切変更されない(全件一律verified化はしない)。
+`status=adjust`のdeltaMsは既存`cueOffsetMs`への加算であり、置換ではない
+(二重適用防止のため`resolveEffectiveCueTimeMs()`経由でのみ最終合成される)。
+`status=reject`のcueは`verifiedByListening`をtrueにせず、再確認が必要な状態のまま残す。
 
 ## 関連
 

@@ -15,6 +15,8 @@
     "check:timing-master": "node --no-warnings scripts/check-start-wedding-timing-master.mts",
     "test:timing-master-manual-preservation": "node --no-warnings scripts/test-timing-master-manual-preservation.mts",
     "test:timing-master-offset-composition": "node --no-warnings scripts/test-timing-master-offset-composition.mts",
+    "render:cue-listening-clips": "node --no-warnings scripts/render-cue-listening-clips.mts",
+    "apply:listening-verification": "node --no-warnings scripts/apply-listening-verification.mts",
     "render:av-sync-test": "remotion render src/index-av-sync-test.ts AVSyncTest local/analysis/start-wedding/av-sync-test/av-sync-test.mp4 --scale=0.5 --crf=10",
     "sync:start-wedding-edit-local": "pnpm sync:timing-master",
     "prepare:start-wedding-edit": "pnpm sync:start-wedding-edit-local && pnpm sync:start-129-demo-assets",
