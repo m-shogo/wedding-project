@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { CharStaggerDaVinciPromotionAssessmentView } from "./CharStaggerDaVinciPromotionAssessmentView";
+import { TypeOnRhythmDaVinciEvidencePanel } from "./TypeOnRhythmDaVinciEvidencePanel";
 import { createCharStaggerDaVinciActualArtifact } from "../data/charStaggerDaVinciActualArtifact";
 import {
   createCharStaggerDaVinciEvidenceCaptureTemplate,
@@ -232,6 +233,9 @@ export function TypographyProductionRouteSelector({ scene }: { scene: MaskReveal
                 </div>
               ) : null}
             </div>
+          ) : null}
+          {selection?.patternId === "type-type-on-rhythm" ? (
+            <TypeOnRhythmDaVinciEvidencePanel scene={scene} selection={selection} />
           ) : null}
         </div>
       ) : (
