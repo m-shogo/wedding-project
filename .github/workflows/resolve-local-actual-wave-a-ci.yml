@@ -1,0 +1,86 @@
+name: Resolve Local Actual Wave A CI
+
+on:
+  pull_request:
+    paths:
+      - "motion-studio/scripts/prepare-resolve-local-actual-wave-a.mts"
+      - "docs/prompts/2026-08-26-resolve21-wave-a-local-actual-agent.md"
+      - "docs/research/2026-08-26-movie-tool-learning-run-37-resolve-local-actual-wave-a.md"
+      - ".github/workflows/resolve-local-actual-wave-a-ci.yml"
+  push:
+    paths:
+      - "motion-studio/scripts/prepare-resolve-local-actual-wave-a.mts"
+      - "docs/prompts/2026-08-26-resolve21-wave-a-local-actual-agent.md"
+      - "docs/research/2026-08-26-movie-tool-learning-run-37-resolve-local-actual-wave-a.md"
+      - ".github/workflows/resolve-local-actual-wave-a-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: motion-studio/pnpm-lock.yaml
+
+      - name: Install motion-studio dependencies
+        working-directory: motion-studio
+        run: pnpm install --frozen-lockfile
+
+      - name: TypeScript
+        working-directory: motion-studio
+        run: pnpm typecheck
+
+      - name: Wave A dry-run contains exactly the four intended canaries
+        working-directory: motion-studio
+        run: |
+          node --no-warnings scripts/prepare-resolve-local-actual-wave-a.mts \
+            --execution-prefix CI-WAVE-A \
+            --dry-run > /tmp/wave-a.txt
+          grep -Fq 'DV21-REMOTION-ALPHA-01-CI-WAVE-A' /tmp/wave-a.txt
+          grep -Fq 'DV21-AUDIO-RECOVERY-01-CI-WAVE-A' /tmp/wave-a.txt
+          grep -Fq 'DV21-LOTTIE-OGRAF-01-CI-WAVE-A' /tmp/wave-a.txt
+          grep -Fq 'DV21-DRFX-FREE-01-CI-WAVE-A' /tmp/wave-a.txt
+          grep -Fq 'no input artifacts, sessions, evidence, or Wave A summary were written' /tmp/wave-a.txt
+          test ! -e out/canary-batches/CI-WAVE-A-wave-a.json
+          test ! -e out/canary-sessions/DV21-REMOTION-ALPHA-01-CI-WAVE-A
+          test ! -e out/canary-sessions/DV21-AUDIO-RECOVERY-01-CI-WAVE-A
+          test ! -e out/canary-sessions/DV21-LOTTIE-OGRAF-01-CI-WAVE-A
+          test ! -e out/canary-sessions/DV21-DRFX-FREE-01-CI-WAVE-A
+
+      - name: Alpha reuse is explicit and scoped only to Alpha
+        working-directory: motion-studio
+        run: |
+          node --no-warnings scripts/prepare-resolve-local-actual-wave-a.mts \
+            --execution-prefix CI-WAVE-A-REUSE \
+            --reuse-alpha \
+            --dry-run > /tmp/wave-a-reuse.txt
+          test "$(grep -c -- '--reuse-existing' /tmp/wave-a-reuse.txt)" -eq 1
+          grep -F 'DV21-REMOTION-ALPHA-01-CI-WAVE-A-REUSE' /tmp/wave-a-reuse.txt | grep -Fq -- '--reuse-existing'
+          if grep -F 'DV21-AUDIO-RECOVERY-01-CI-WAVE-A-REUSE' /tmp/wave-a-reuse.txt | grep -Fq -- '--reuse-existing'; then exit 1; fi
+          if grep -F 'DV21-LOTTIE-OGRAF-01-CI-WAVE-A-REUSE' /tmp/wave-a-reuse.txt | grep -Fq -- '--reuse-existing'; then exit 1; fi
+          if grep -F 'DV21-DRFX-FREE-01-CI-WAVE-A-REUSE' /tmp/wave-a-reuse.txt | grep -Fq -- '--reuse-existing'; then exit 1; fi
+
+      - name: Wave A excludes Palmier and keeps human-adjustability boundaries explicit
+        run: |
+          grep -Fq 'Palmier FCPXML is intentionally not in this wave' docs/prompts/2026-08-26-resolve21-wave-a-local-actual-agent.md
+          grep -Fq 'MANUAL_RECOVERY != AUTOMATED_WRITE' docs/prompts/2026-08-26-resolve21-wave-a-local-actual-agent.md
+          grep -Fq 'NATIVE_IMPORT != INTERNAL_PARAMETRIC_EDITABILITY' docs/prompts/2026-08-26-resolve21-wave-a-local-actual-agent.md
+          grep -Fq 'PARAMETRIC_EDITABLE != HUMAN_ADJUSTABLE' docs/prompts/2026-08-26-resolve21-wave-a-local-actual-agent.md
+          grep -Fq 'WAVE_PREPARED != RESOLVE_EXECUTED' docs/research/2026-08-26-movie-tool-learning-run-37-resolve-local-actual-wave-a.md
+          grep -Fq 'DOCUMENTED_CURRENT_RELEASE != LOCAL_RUNTIME_IDENTITY' docs/research/2026-08-26-movie-tool-learning-run-37-resolve-local-actual-wave-a.md
