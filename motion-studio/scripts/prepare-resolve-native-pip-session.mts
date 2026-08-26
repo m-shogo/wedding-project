@@ -94,7 +94,7 @@ try {
   ]));
   const nextAction = 'Open the exact Resolve 21 runtime in a disposable project, verify Picture in Picture availability for that edition, perform only the bounded Inspector edits in plan.md, save/reopen, render, and record observed values in evidence.json.';
 
-  const runInstructions = `# Resolve Native PiP Session — ${canaryId}\n\nExecution ID: \`${executionId}\`  \nStatus: **READY_FOR_RUNTIME**  \nPrepared at: ${new Date().toISOString()}\n\n## Files\n\n- plan: \`plan.md\`\n- evidence: \`evidence.json\`\n- session: \`session.json\`\n- input manifest: \`${manifestRel}\`\n\n## Runtime boundary\n\nThis preparation did not launch DaVinci Resolve.\n\n1. Capture exact live product/version/edition/platform.\n2. Use a disposable timeline only.\n3. Put background on V1 and top source on V2.\n4. Verify Picture in Picture availability before applying it.\n5. Inventory controls before editing.\n6. Build the neutral card without opening Fusion.\n7. Perform bounded late edits to rounding, border, and position/size.\n8. Classify keyframe/animation support separately.\n9. Save/reopen, render a short sample, hash it, and add it as artifact kind \`RENDER\`.\n10. Validate evidence after material edits.\n\nValidator:\n\n\`\`\`bash\nnode --no-warnings scripts/validate-resolve-native-pip-evidence.mts ${toMotionRelative(evidencePath)}\n\`\`\`\n\n## Guardrails\n\n${guardrails.map((item) => `- ${item}`).join('\n')}\n\nOne successful execution is not reproduced truth.\n`;
+  const runInstructions = `# Resolve Native PiP Session — ${canaryId}\n\nExecution ID: \`${executionId}\`  \nStatus: **READY_FOR_RUNTIME**  \nCatalog state: \`${canary.state}\`  \nPrepared at: ${new Date().toISOString()}\n\n## Files\n\n- plan: \`plan.md\`\n- evidence: \`evidence.json\`\n- session: \`session.json\`\n- input manifest: \`${manifestRel}\`\n\n## Runtime boundary\n\nThis preparation did not launch DaVinci Resolve.\n\n1. Capture exact live product/version/edition/platform.\n2. Use a disposable timeline only.\n3. Put background on V1 and top source on V2.\n4. Verify Picture in Picture availability before applying it.\n5. Inventory controls before editing.\n6. Build the neutral card without opening Fusion.\n7. Perform bounded late edits to rounding, border, and position/size.\n8. Classify keyframe/animation support separately.\n9. Save/reopen, render a short sample, hash it, and add it as artifact kind \`RENDER\`.\n10. Validate evidence after material edits.\n\n## Required readback keys for promotion\n\n- \`effect-availability.readback.available = true\`\n- \`style-photo-card.readback.fusionOpened = false\`\n- \`human-late-edit.readback.fusionOpened = false\`\n- \`save-reopen-render.readback.postReopenPersisted = true\`\n- \`save-reopen-render.readback.renderVisualMatch = true\`\n\nValidator:\n\n\`\`\`bash\nnode --no-warnings scripts/validate-resolve-native-pip-evidence.mts ${toMotionRelative(evidencePath)}\n\`\`\`\n\n## Guardrails\n\n${guardrails.map((item) => `- ${item}`).join('\n')}\n\nOne successful execution is not reproduced truth.\n`;
   writeFileSync(runPath, runInstructions, 'utf8');
 
   const session = resolveCanarySessionSchema.parse({
@@ -104,7 +104,7 @@ try {
     createdAt: new Date().toISOString(),
     status: 'READY_FOR_RUNTIME',
     catalogStateAtPreparation: canary.state,
-    canaryStateAtPreparation: 'PENDING_RUNTIME',
+    canaryStateAtPreparation: canary.state,
     inputManifestStatus: manifest.status,
     targetResolveMajor: 21,
     runtimeLaunchPerformed: false,
@@ -124,7 +124,7 @@ try {
   console.log(`✅ Resolve native PiP Session prepared: ${toMotionRelative(sessionDir)}`);
   console.log(`   executionId=${executionId}`);
   console.log('   status=READY_FOR_RUNTIME');
-  console.log('   effectiveCanaryState=PENDING_RUNTIME');
+  console.log(`   catalogState=${canary.state}`);
   console.log('   evidenceResult=NOT_RUN');
   console.log('   runtimeLaunchPerformed=NO');
 } catch (error) {
