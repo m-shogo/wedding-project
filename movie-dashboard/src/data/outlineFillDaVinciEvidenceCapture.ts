@@ -18,6 +18,7 @@ import {
   type DaVinciLiveParameterBindingV1,
   type DaVinciVisualQaV1,
 } from "./davinciFollowerEvidenceContract";
+import {evaluateTypographyDaVinciHumanPromotionGate} from "./typographyDaVinciPromotionPolicy";
 
 export type OutlineFillBindingRole =
   | "TEXT_PLUS_TOOL"
@@ -56,6 +57,9 @@ export interface OutlineFillDaVinciEvaluatedEvidenceV1 {
     visualQaHalfSpeed: OutlineFillActualState;
   };
   allMachineComparableChecksPass: boolean;
+  promotionGate: ReturnType<typeof evaluateTypographyDaVinciHumanPromotionGate>;
+  eligibleForHumanReview: boolean;
+  automaticPromotionAllowed: false;
   productionReady: false;
   rule: string;
 }
@@ -178,6 +182,12 @@ export function evaluateOutlineFillDaVinciEvidenceCapture(artifact: OutlineFillD
   const evaluatedArtifact = attachOutlineFillDaVinciActualReadback(artifact, capture.readback);
   const checks = {...evaluatedArtifact.checks, visualQa1x: capture.visualQa.oneX, visualQaHalfSpeed: capture.visualQa.halfSpeed};
   const machineComparable = [checks.resolveIdentity, checks.textPlusCreated, checks.shadingBindingRecorded, checks.outlineAppearApplied, checks.fillTimingApplied, checks.fillOpacityApplied, checks.strokeWidthApplied, checks.easingApplied, checks.sourceReadback, checks.renderCompleted];
+  const promotionGate = evaluateTypographyDaVinciHumanPromotionGate({
+    patternId: "type-outline-fill",
+    machineChecks: machineComparable,
+    bindings: capture.liveParameterBindings,
+    visualQa: capture.visualQa,
+  });
   return {
     schemaVersion: "outline-fill-davinci-evaluated-evidence/v1",
     authority: "EVIDENCE_ONLY",
@@ -188,8 +198,11 @@ export function evaluateOutlineFillDaVinciEvidenceCapture(artifact: OutlineFillD
     parameterBindingsCaptured: capture.liveParameterBindings.length > 0,
     visualQa: {...capture.visualQa, notes: [...capture.visualQa.notes]},
     checks,
-    allMachineComparableChecksPass: machineComparable.every((state) => state === "PASS"),
+    allMachineComparableChecksPass: promotionGate.machineChecksPass,
+    promotionGate,
+    eligibleForHumanReview: promotionGate.eligibleForHumanReview,
+    automaticPromotionAllowed: false,
     productionReady: false,
-    rule: "Machine parity is meaningful only after live Shading bindings and stroke-width calibration are recorded; promotion remains a separate human-reviewed gate.",
+    rule: "Machine parity is meaningful only after live Shading bindings and stroke-width calibration are recorded; complete evidence may only enter a separate human promotion review and never auto-promotes the route.",
   };
 }
