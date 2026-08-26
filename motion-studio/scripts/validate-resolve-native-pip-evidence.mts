@@ -57,6 +57,24 @@ try {
       if (evidence.stepResults.some((step) => step.status !== 'PASS')) {
         err('promotionEligible requires every native PiP runtime step to PASS');
       }
+
+      const readbackFor = (stepId: string) => evidence.stepResults.find((step) => step.stepId === stepId)?.readback ?? {};
+      if (readbackFor('effect-availability').available !== true) {
+        err('promotionEligible requires effect-availability.readback.available=true');
+      }
+      if (readbackFor('style-photo-card').fusionOpened !== false) {
+        err('promotionEligible requires style-photo-card.readback.fusionOpened=false');
+      }
+      if (readbackFor('human-late-edit').fusionOpened !== false) {
+        err('promotionEligible requires human-late-edit.readback.fusionOpened=false');
+      }
+      if (readbackFor('save-reopen-render').postReopenPersisted !== true) {
+        err('promotionEligible requires save-reopen-render.readback.postReopenPersisted=true');
+      }
+      if (readbackFor('save-reopen-render').renderVisualMatch !== true) {
+        err('promotionEligible requires save-reopen-render.readback.renderVisualMatch=true');
+      }
+
       for (const input of canary.inputs.filter((item) => item.required)) {
         const inventory = evidence.inputInventory.find((item) => item.id === input.id);
         if (!inventory || inventory.present !== true) err(`promotionEligible requires required input present=true: ${input.id}`);
