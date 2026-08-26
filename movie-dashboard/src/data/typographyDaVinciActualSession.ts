@@ -2,9 +2,14 @@ import {
   getTypographyDaVinciActualRunItem,
   typographyDaVinciActualRunPlan,
 } from "./typographyDaVinciActualRunPlan";
+import {
+  evaluateTypographyDaVinciActualReadiness,
+  type TypographyDaVinciActualReadinessStage,
+  type TypographyDaVinciEvidenceState,
+} from "./typographyDaVinciActualReadiness";
 import type {TypographyProductionPatternId} from "./typographySceneProductionRouting";
 
-export type ActualEvidenceState = "PASS" | "FAIL" | "NOT_RUN";
+export type ActualEvidenceState = TypographyDaVinciEvidenceState;
 
 export interface TypographyDaVinciActualSessionItemV1 {
   patternId: TypographyProductionPatternId;
@@ -29,8 +34,15 @@ export interface TypographyDaVinciActualSessionV1 {
 
 export interface TypographyDaVinciActualSessionItemEvaluation {
   patternId: TypographyProductionPatternId;
+  stage: TypographyDaVinciActualReadinessStage;
   valid: boolean;
+  machineEvidenceComplete: boolean;
+  requiredBindingsComplete: boolean;
+  visualQaComplete: boolean;
+  reviewMetadataComplete: boolean;
   eligibleForHumanPromotionReview: boolean;
+  humanPromotionReviewRequired: true;
+  automaticPromotionAllowed: false;
   productionReady: false;
   issues: string[];
 }
@@ -38,6 +50,7 @@ export interface TypographyDaVinciActualSessionItemEvaluation {
 export interface TypographyDaVinciActualSessionEvaluation {
   validEnvelope: boolean;
   completeNinePatternCoverage: boolean;
+  stageCounts: Record<TypographyDaVinciActualReadinessStage, number>;
   humanPromotionReviewRequired: true;
   automaticPromotionAllowed: false;
   productionReady: false;
@@ -52,6 +65,7 @@ export interface TypographyDaVinciActualEvaluationReportV1 {
   summary: {
     validEnvelope: boolean;
     completeNinePatternCoverage: boolean;
+    stageCounts: Record<TypographyDaVinciActualReadinessStage, number>;
     eligibleForHumanPromotionReviewCount: number;
     blockedCount: number;
     humanPromotionReviewRequired: true;
@@ -62,9 +76,6 @@ export interface TypographyDaVinciActualEvaluationReportV1 {
   issues: string[];
   guardrails: readonly string[];
 }
-
-const isEvidenceState = (value: unknown): value is ActualEvidenceState =>
-  value === "PASS" || value === "FAIL" || value === "NOT_RUN";
 
 export function buildTypographyDaVinciActualSessionTemplate(): TypographyDaVinciActualSessionV1 {
   return {
@@ -90,6 +101,13 @@ export function buildTypographyDaVinciActualSessionTemplate(): TypographyDaVinci
 export const buildTypographyDaVinciActualSessionTemplateJson = () =>
   JSON.stringify(buildTypographyDaVinciActualSessionTemplate(), null, 2);
 
+const emptyStageCounts = (): Record<TypographyDaVinciActualReadinessStage, number> => ({
+  NOT_RUN: 0,
+  ACTUAL_IN_PROGRESS: 0,
+  ACTUAL_FAILED: 0,
+  HUMAN_REVIEW_ELIGIBLE: 0,
+});
+
 export function evaluateTypographyDaVinciActualSession(session: TypographyDaVinciActualSessionV1): TypographyDaVinciActualSessionEvaluation {
   const envelopeIssues: string[] = [];
   if (session.schemaVersion !== "typography-davinci-actual-session/v1") envelopeIssues.push("SESSION_SCHEMA_VERSION_MISMATCH");
@@ -100,34 +118,58 @@ export function evaluateTypographyDaVinciActualSession(session: TypographyDaVinc
   if (!session.machine) envelopeIssues.push("MACHINE_IDENTITY_MISSING");
 
   const seen = new Set<string>();
-  const evaluations = session.items.map((item) => {
-    const issues: string[] = [];
+  const evaluations = session.items.map((item): TypographyDaVinciActualSessionItemEvaluation => {
+    const sessionIssues: string[] = [];
     const runItem = getTypographyDaVinciActualRunItem(item.patternId);
-    if (!runItem) issues.push("UNKNOWN_PATTERN_ID");
-    if (seen.has(item.patternId)) issues.push("DUPLICATE_PATTERN_ID");
+    if (!runItem) sessionIssues.push("UNKNOWN_PATTERN_ID");
+    if (seen.has(item.patternId)) sessionIssues.push("DUPLICATE_PATTERN_ID");
     seen.add(item.patternId);
-    if (runItem && item.implementationId !== runItem.implementationId) issues.push("IMPLEMENTATION_ID_MISMATCH");
-    if (!isEvidenceState(item.macActualState)) issues.push("MAC_ACTUAL_STATE_INVALID");
-    if (!isEvidenceState(item.machineParity)) issues.push("MACHINE_PARITY_STATE_INVALID");
-    if (!isEvidenceState(item.visualQa?.oneX)) issues.push("VISUAL_QA_1X_STATE_INVALID");
-    if (!isEvidenceState(item.visualQa?.halfSpeed)) issues.push("VISUAL_QA_HALF_SPEED_STATE_INVALID");
-    const requiredRoles = runItem?.requiredBindingRoles ?? [];
-    for (const role of requiredRoles) if (item.bindingResults?.[role] !== "PASS") issues.push(`REQUIRED_BINDING_NOT_PASS:${role}`);
-    if (item.macActualState === "PASS") {
-      if (!item.rawEvidenceFile) issues.push("PASS_REQUIRES_RAW_EVIDENCE_FILE");
-      if (item.machineParity !== "PASS") issues.push("PASS_REQUIRES_MACHINE_PARITY");
-      if (item.visualQa?.oneX !== "PASS") issues.push("PASS_REQUIRES_1X_VISUAL_QA");
-      if (item.visualQa?.halfSpeed !== "PASS") issues.push("PASS_REQUIRES_HALF_SPEED_VISUAL_QA");
-      if (!item.reviewedAt) issues.push("PASS_REQUIRES_REVIEWED_AT");
+
+    if (!runItem) {
+      return {
+        patternId: item.patternId,
+        stage: "ACTUAL_FAILED",
+        valid: false,
+        machineEvidenceComplete: false,
+        requiredBindingsComplete: false,
+        visualQaComplete: false,
+        reviewMetadataComplete: false,
+        eligibleForHumanPromotionReview: false,
+        humanPromotionReviewRequired: true,
+        automaticPromotionAllowed: false,
+        productionReady: false,
+        issues: sessionIssues,
+      };
     }
-    const eligibleForHumanPromotionReview = item.macActualState === "PASS" && item.machineParity === "PASS" && item.visualQa?.oneX === "PASS" && item.visualQa?.halfSpeed === "PASS" && Boolean(item.reviewedAt) && Boolean(item.rawEvidenceFile) && requiredRoles.every((role) => item.bindingResults?.[role] === "PASS") && issues.length === 0;
-    return {patternId: item.patternId, valid: issues.length === 0, eligibleForHumanPromotionReview, productionReady: false as const, issues};
+
+    const readiness = evaluateTypographyDaVinciActualReadiness(runItem, item);
+    return {
+      patternId: item.patternId,
+      ...readiness,
+      valid: readiness.valid && sessionIssues.length === 0,
+      issues: [...sessionIssues, ...readiness.issues],
+    };
   });
 
   const expectedIds = new Set(typographyDaVinciActualRunPlan.map((item) => item.patternId));
   const completeNinePatternCoverage = seen.size === expectedIds.size && [...expectedIds].every((patternId) => seen.has(patternId));
   if (!completeNinePatternCoverage) envelopeIssues.push("NINE_PATTERN_COVERAGE_INCOMPLETE");
-  return {validEnvelope: envelopeIssues.length === 0, completeNinePatternCoverage, humanPromotionReviewRequired: true, automaticPromotionAllowed: false, productionReady: false, issues: envelopeIssues, items: evaluations};
+
+  const stageCounts = evaluations.reduce((counts, item) => {
+    counts[item.stage] += 1;
+    return counts;
+  }, emptyStageCounts());
+
+  return {
+    validEnvelope: envelopeIssues.length === 0,
+    completeNinePatternCoverage,
+    stageCounts,
+    humanPromotionReviewRequired: true,
+    automaticPromotionAllowed: false,
+    productionReady: false,
+    issues: envelopeIssues,
+    items: evaluations,
+  };
 }
 
 export function buildTypographyDaVinciActualEvaluationReport(session: TypographyDaVinciActualSessionV1): TypographyDaVinciActualEvaluationReportV1 {
@@ -140,6 +182,7 @@ export function buildTypographyDaVinciActualEvaluationReport(session: Typography
     summary: {
       validEnvelope: evaluation.validEnvelope,
       completeNinePatternCoverage: evaluation.completeNinePatternCoverage,
+      stageCounts: {...evaluation.stageCounts},
       eligibleForHumanPromotionReviewCount,
       blockedCount: evaluation.items.length - eligibleForHumanPromotionReviewCount,
       humanPromotionReviewRequired: true,
@@ -150,6 +193,7 @@ export function buildTypographyDaVinciActualEvaluationReport(session: Typography
     issues: evaluation.issues,
     guardrails: [
       "EVALUATION_REPORT != RAW_MAC_EVIDENCE",
+      "ACTUAL_IN_PROGRESS != ACTUAL_PASS",
       "HUMAN_REVIEW_ELIGIBLE != HUMAN_PROMOTED",
       "HUMAN_PROMOTED != PRODUCTION_READY_WITHOUT_SEPARATE_RELEASE_GATE",
     ],
