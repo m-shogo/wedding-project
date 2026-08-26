@@ -51,13 +51,41 @@ export interface TypographyDaVinciActualSessionEvaluation {
 const isEvidenceState = (value: unknown): value is ActualEvidenceState =>
   value === "PASS" || value === "FAIL" || value === "NOT_RUN";
 
+export function buildTypographyDaVinciActualSessionTemplate(): TypographyDaVinciActualSessionV1 {
+  return {
+    schemaVersion: "typography-davinci-actual-session/v1",
+    authority: "MAC_ACTUAL_EVIDENCE_SESSION",
+    sessionId: "FILL_FROM_MAC_ACTUAL_SESSION",
+    recordedAt: "",
+    resolveVersion: "",
+    machine: "",
+    items: typographyDaVinciActualRunPlan.map((runItem) => ({
+      patternId: runItem.patternId,
+      implementationId: runItem.implementationId,
+      macActualState: "NOT_RUN",
+      rawEvidenceFile: null,
+      machineParity: "NOT_RUN",
+      bindingResults: Object.fromEntries(runItem.requiredBindingRoles.map((role) => [role, "NOT_RUN" as const])),
+      visualQa: {
+        oneX: "NOT_RUN",
+        halfSpeed: "NOT_RUN",
+      },
+      reviewedAt: null,
+    })),
+  };
+}
+
+export function buildTypographyDaVinciActualSessionTemplateJson() {
+  return JSON.stringify(buildTypographyDaVinciActualSessionTemplate(), null, 2);
+}
+
 export function evaluateTypographyDaVinciActualSession(
   session: TypographyDaVinciActualSessionV1,
 ): TypographyDaVinciActualSessionEvaluation {
   const envelopeIssues: string[] = [];
   if (session.schemaVersion !== "typography-davinci-actual-session/v1") envelopeIssues.push("SESSION_SCHEMA_VERSION_MISMATCH");
   if (session.authority !== "MAC_ACTUAL_EVIDENCE_SESSION") envelopeIssues.push("SESSION_AUTHORITY_MISMATCH");
-  if (!session.sessionId) envelopeIssues.push("SESSION_ID_MISSING");
+  if (!session.sessionId || session.sessionId === "FILL_FROM_MAC_ACTUAL_SESSION") envelopeIssues.push("SESSION_ID_MISSING");
   if (!session.recordedAt) envelopeIssues.push("RECORDED_AT_MISSING");
   if (!session.resolveVersion) envelopeIssues.push("RESOLVE_VERSION_MISSING");
   if (!session.machine) envelopeIssues.push("MACHINE_IDENTITY_MISSING");
