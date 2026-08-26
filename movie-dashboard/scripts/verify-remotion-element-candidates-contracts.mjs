@@ -18,6 +18,9 @@ const expected = [
   ['type-word-punch', 'punch', 'word-punch', 'WeddingWordPunchElementCanary'],
   ['type-tracking-burst', 'tracking', 'tracking-burst', 'WeddingTrackingBurstElementCanary'],
   ['type-vertical-wipe', 'vertical-wipe', 'vertical-wipe', 'WeddingVerticalWipeElementCanary'],
+  ['type-outline-fill', 'outline', 'outline-fill', 'WeddingOutlineFillElementCanary'],
+  ['type-baseline-hop', 'hop', 'baseline-hop', 'WeddingBaselineHopElementCanary'],
+  ['type-triplet', 'triplet', 'triplet', 'WeddingTypographyTripletElementCanary'],
 ].map(([id, mode, slug, canary]) => ({
   id, mode, slug, canary,
   builder: `build-${slug}-element-payload.mts`,
@@ -48,7 +51,7 @@ for (const item of expected) {
 for (const token of [
   'motion-studio/scripts/build-*-element-payload.mts',
   'motion-studio/scripts/check-*-element-payload.mts',
-  'for slug in mask-reveal char-stagger type-on-rhythm word-punch tracking-burst vertical-wipe',
+  'for slug in mask-reveal char-stagger type-on-rhythm word-punch tracking-burst vertical-wipe outline-fill baseline-hop triplet',
 ]) {
   if (!workflow.includes(token)) errors.push(`Typography CI scaling contract missing: ${token}`);
 }
@@ -73,7 +76,7 @@ for (const relative of ['motion-studio/scripts/prepare-typography-elements-studi
   if (!fs.existsSync(path.join(repoRoot, relative))) errors.push(`Studio Actual batch file missing: ${relative}`);
   if (!workflow.includes(path.basename(relative))) errors.push(`Studio Actual batch file missing from CI: ${relative}`);
 }
-if (!workflow.includes("echo 'typographyElementCount=6'")) errors.push('CI must assert six Typography Element candidates');
+if (!workflow.includes("echo 'typographyElementCount=9'")) errors.push('CI must assert nine Typography Element candidates');
 if (!workflow.includes("echo 'studioActualBatchPrepared=PASS_PREP_ONLY'")) errors.push('CI must distinguish Actual batch prep from Actual execution');
 if (!workflow.includes("echo 'studioInstallActual=NOT_RUN'")) errors.push('CI must keep Studio install Actual NOT_RUN');
 
@@ -82,4 +85,4 @@ if (errors.length) {
   for (const error of errors) console.error(`- ${error}`);
   process.exit(1);
 }
-console.log('Remotion Element candidate contracts OK: 6 Motion Zukan cards surface CI-rendered Element readiness, batch prep is gated, and Studio Actual remains NOT_RUN.');
+console.log('Remotion Element candidate contracts OK: 9 Motion Zukan cards surface CI-rendered Element readiness, batch prep is gated, and Studio Actual remains NOT_RUN.');
