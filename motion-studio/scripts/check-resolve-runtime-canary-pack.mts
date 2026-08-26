@@ -6,6 +6,10 @@ import {
   resolveRuntimeCanaryEvidenceSchema,
   resolveRuntimeCanaryPackSchema,
 } from '../src/data/resolveRuntimeCanary.schema.ts';
+import {
+  getResolveRuntimeCanaryCapabilityRefs,
+  resolveRuntimeCanaryCapabilityRefs,
+} from '../src/data/resolveRuntimeCanaryCapabilityRefs.ts';
 
 let errors = 0;
 const err = (message: string) => {
@@ -24,12 +28,34 @@ if (!parsedPack.success) {
 const ids = resolve21RuntimeCanaryPack.canaries.map((canary) => canary.id);
 if (new Set(ids).size !== ids.length) err('duplicate canary IDs');
 
+const capabilityRefKeys = Object.keys(resolveRuntimeCanaryCapabilityRefs);
+for (const id of ids) {
+  if (!capabilityRefKeys.includes(id)) err(`${id}: typed capability reference mapping missing`);
+}
+for (const refKey of capabilityRefKeys) {
+  if (!ids.includes(refKey)) err(`typed capability reference has no canary: ${refKey}`);
+}
+
 for (const canary of resolve21RuntimeCanaryPack.canaries) {
   const stepIds = canary.steps.map((step) => step.id);
   if (new Set(stepIds).size !== stepIds.length) err(`${canary.id}: duplicate step IDs`);
 
   const evidenceIds = canary.evidenceRequirements.map((evidence) => evidence.id);
   if (new Set(evidenceIds).size !== evidenceIds.length) err(`${canary.id}: duplicate evidence requirement IDs`);
+
+  const typedRefs = getResolveRuntimeCanaryCapabilityRefs(canary.id);
+  if (typedRefs.length === 0) err(`${canary.id}: at least one typed capability reference is required`);
+  for (const ref of typedRefs) {
+    if (!canary.capabilityIds.includes(ref.id)) {
+      err(`${canary.id}: typed ref ${ref.kind}:${ref.id} is not declared in capabilityIds compatibility labels`);
+    }
+    if (!ref.sourceRef.trim()) err(`${canary.id}: typed ref ${ref.id} sourceRef is empty`);
+  }
+  for (const compatibilityId of canary.capabilityIds) {
+    if (!typedRefs.some((ref) => ref.id === compatibilityId)) {
+      err(`${canary.id}: compatibility capabilityId has no typed source mapping: ${compatibilityId}`);
+    }
+  }
 
   if (!canary.isolation.disposableProjectRequired) {
     err(`${canary.id}: disposableProjectRequired must stay true for unresolved runtime canaries`);
@@ -98,9 +124,14 @@ if (fcpxml?.state !== 'BLOCKED_INPUT') {
   err('Palmier FCPXML canary must stay BLOCKED_INPUT until a real Palmier export fixture exists');
 }
 
+const drtRefs = getResolveRuntimeCanaryCapabilityRefs('DV21-DRT-PORTABILITY-01');
+if (!drtRefs.some((ref) => ref.kind === 'RESEARCH_CANARY' && ref.id === 'DV21-DRT-PORT-02')) {
+  err('DRT portability canary must reference the research canary namespace instead of pretending a canonical HandoffProperty exists');
+}
+
 if (errors > 0) {
   console.error(`Resolve runtime canary pack FAILED (${errors})`);
   process.exit(1);
 }
 
-ok(`${ids.length} Resolve runtime canaries parsed with fail-closed evidence templates, disposable-project safety, two-run promotion, and explicit platform/automation boundaries.`);
+ok(`${ids.length} Resolve runtime canaries parsed with fail-closed evidence templates, typed policy references, disposable-project safety, two-run promotion, and explicit platform/automation boundaries.`);
