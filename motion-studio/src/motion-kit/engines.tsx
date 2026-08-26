@@ -13,7 +13,7 @@ export function TypographyRevealEngine({
 }: {
   text: string;
   intensity?: MotionIntensity;
-  mode?: 'mask' | 'punch' | 'stagger';
+  mode?: 'mask' | 'punch' | 'stagger' | 'hop' | 'lock';
   transparent?: boolean;
 }) {
   const frame = useCurrentFrame();
@@ -23,14 +23,39 @@ export function TypographyRevealEngine({
     extrapolateRight: 'clamp',
     easing: Easing.out(Easing.cubic),
   });
+  // hopは着地時に軽く弾む物理的な質感を出すため、Easing.bounceを別トラックとして使う
+  // (progress自体はopacity/scaleの基準として保つ)。
+  const hopProgress = interpolate(frame, [0, Math.round(fps * 0.7)], [0, 1], {
+    extrapolateRight: 'clamp',
+    easing: Easing.bounce,
+  });
   const scale = mode === 'punch' ? interpolate(progress, [0, 1], [1 + 0.18 * strength, 1]) : 1;
-  const translateY = mode === 'mask' ? (1 - progress) * 80 * strength : 0;
+  const translateY =
+    mode === 'mask' ? (1 - progress) * 80 * strength : mode === 'hop' ? (1 - hopProgress) * -90 * strength : 0;
+  const translateX = mode === 'lock' ? 130 * strength : 0;
   const letterSpacing = mode === 'stagger' ? `${interpolate(progress, [0, 1], [0.18 * strength, 0.02])}em` : '0.02em';
+  const fontSize = mode === 'lock' ? 200 : 104;
 
   return (
-    <AbsoluteFill style={{backgroundColor: transparent ? undefined : '#0d2035', alignItems: 'center', justifyContent: 'center'}}>
+    <AbsoluteFill
+      style={{
+        backgroundColor: transparent ? undefined : '#0d2035',
+        alignItems: 'center',
+        justifyContent: mode === 'lock' ? 'flex-start' : 'center',
+        overflow: mode === 'lock' ? 'hidden' : undefined,
+      }}
+    >
       <div style={{overflow: 'hidden', padding: '0.15em 0.25em'}}>
-        <div style={{opacity: progress, transform: `translateY(${translateY}px) scale(${scale})`, letterSpacing, fontSize: 104, fontWeight: 800, color: '#fff'}}>
+        <div
+          style={{
+            opacity: progress,
+            transform: `translateX(${translateX}px) translateY(${translateY}px) scale(${scale})`,
+            letterSpacing,
+            fontSize,
+            fontWeight: 800,
+            color: '#fff',
+          }}
+        >
           {text}
         </div>
       </div>
