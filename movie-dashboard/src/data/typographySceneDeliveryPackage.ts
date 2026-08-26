@@ -1,0 +1,180 @@
+import {buildMaskRevealSceneProductionBundle} from "./maskRevealSceneProductionBundle";
+import {
+  buildTypographySceneProductionBundle,
+  getTypographyProductionRoute,
+  type TypographyProductionSelectionV1,
+} from "./typographySceneProductionRouting";
+import {
+  getTypographyDaVinciActualWorkflow,
+  type TypographyDaVinciActualWorkflowRecord,
+} from "./typographyDaVinciActualWorkflowRegistry";
+import type {MaskRevealSceneInstance} from "./visualSceneComposer";
+
+export interface TypographySceneDeliveryPackageV1 {
+  schemaVersion: "wedding-movie-typography-scene-delivery/v1";
+  authority: "DERIVED_DELIVERY_PACKAGE";
+  identity: {
+    sceneId: string;
+    projectId: "opening" | "profile";
+    sourceRevision: string;
+    patternId: TypographyProductionSelectionV1["patternId"];
+    routeSelectedAt: string;
+  };
+  canonical: {
+    engine: "TypographyRevealEngine";
+    mode: string;
+    humanMasterPreserved: true;
+    rule: string;
+  };
+  timeline: {
+    owner: "Palmier";
+    capability: "PALMIER_TIMING_ONLY";
+    expectedXmlFileName: string;
+    sceneMarkerId: string;
+    xmlGeneratedExternally: true;
+    rule: string;
+  };
+  davinci: {
+    routeStatus: string;
+    implementationId: string | null;
+    translationTarget: "TEXT_PLUS_FUSION";
+    translatorSpecAvailable: boolean;
+    actualWorkflow: null | TypographyDaVinciActualWorkflowRecord;
+    actualEvidenceState: "NOT_RUN";
+    rule: string;
+  };
+  remotion: {
+    payloadSlug: string;
+    standaloneRenderCi: boolean;
+    studioInstallActual: "NOT_RUN" | "PASS" | "FAIL";
+    studioControlReadbackActual: "NOT_RUN" | "PASS" | "FAIL";
+    rule: string;
+  };
+  release: {
+    productionReady: false;
+    releaseDecisionEmbedded: false;
+    requiredInputs: readonly [
+      "CURRENT_SCENE_REVISION",
+      "CURRENT_HUMAN_SELECTED_ROUTE",
+      "MAC_ACTUAL_EVALUATION",
+      "HUMAN_PROMOTION_REVIEW",
+      "SCENE_BOUND_RELEASE_GATE",
+    ];
+    blockers: string[];
+    rule: string;
+  };
+  files: {
+    deliverySidecarFileName: string;
+    palmierTimelineXmlFileName: string;
+    davinciActualArtifactHint: string | null;
+    davinciEvidenceCaptureHint: string | null;
+  };
+  freshness: {
+    sceneRevision: string;
+    selectionRevision: string;
+    fresh: true;
+    rule: string;
+  };
+}
+
+const safeFileToken = (value: string) =>
+  value
+    .trim()
+    .replace(/[^a-zA-Z0-9_-]+/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "") || "scene";
+
+function resolveActualWorkflow(patternId: TypographyProductionSelectionV1["patternId"]) {
+  if (patternId === "type-mask-reveal") return null;
+  return getTypographyDaVinciActualWorkflow(patternId);
+}
+
+export function buildTypographySceneDeliveryPackage(
+  scene: MaskRevealSceneInstance,
+  selection: TypographyProductionSelectionV1,
+): TypographySceneDeliveryPackageV1 {
+  const production = buildTypographySceneProductionBundle(scene, selection);
+  const base = buildMaskRevealSceneProductionBundle(scene);
+  const route = getTypographyProductionRoute(selection.patternId);
+  if (!route) throw new Error(`Missing Typography production route: ${selection.patternId}`);
+  const actualWorkflow = resolveActualWorkflow(selection.patternId);
+  const sceneToken = safeFileToken(scene.sceneId);
+  const patternToken = safeFileToken(selection.patternId);
+
+  return {
+    schemaVersion: "wedding-movie-typography-scene-delivery/v1",
+    authority: "DERIVED_DELIVERY_PACKAGE",
+    identity: {
+      sceneId: scene.sceneId,
+      projectId: scene.projectId,
+      sourceRevision: scene.updatedAt,
+      patternId: selection.patternId,
+      routeSelectedAt: selection.selectedAt,
+    },
+    canonical: {
+      engine: "TypographyRevealEngine",
+      mode: production.canonical.mode,
+      humanMasterPreserved: true,
+      rule: "このpackageはScene/Human MasterとHuman-selected routeから導出する。canonical motion値を別正本として再定義しない。",
+    },
+    timeline: {
+      owner: "Palmier",
+      capability: "PALMIER_TIMING_ONLY",
+      expectedXmlFileName: production.palmier.timelineXmlFileName,
+      sceneMarkerId: production.palmier.markerId,
+      xmlGeneratedExternally: true,
+      rule: "placement/trim/markerはPalmier実timelineが担当する。NLE XMLをDashboard側で捏造せず、Palmierからexportする。",
+    },
+    davinci: {
+      routeStatus: route.davinciRouteStatus,
+      implementationId: route.davinciImplementationId,
+      translationTarget: route.translationTarget,
+      translatorSpecAvailable: route.translatorSpecAvailable,
+      actualWorkflow: actualWorkflow ? {...actualWorkflow} : null,
+      actualEvidenceState: "NOT_RUN",
+      rule:
+        selection.patternId === "type-mask-reveal"
+          ? "Mask Revealは既存DaVinci Text+ implementation/value bridgeを使う。Mac Resolve applied/readback evidenceなしにActual verifiedへ昇格しない。"
+          : "registryのtranslator/Actual artifact/evidence captureを使う。workflowファイルの存在をMac GUI Actual成功へ読み替えない。",
+    },
+    remotion: {
+      payloadSlug: production.remotion.payloadSlug,
+      standaloneRenderCi: production.remotion.standaloneRenderCi,
+      studioInstallActual: production.remotion.studioInstallActual,
+      studioControlReadbackActual: production.remotion.studioControlReadbackActual,
+      rule: "standalone render CIとRemotion Studio GUI Actualは別証拠。未実行はNOT_RUNのまま保持する。",
+    },
+    release: {
+      productionReady: false,
+      releaseDecisionEmbedded: false,
+      requiredInputs: [
+        "CURRENT_SCENE_REVISION",
+        "CURRENT_HUMAN_SELECTED_ROUTE",
+        "MAC_ACTUAL_EVALUATION",
+        "HUMAN_PROMOTION_REVIEW",
+        "SCENE_BOUND_RELEASE_GATE",
+      ],
+      blockers: [...production.gate.blockers],
+      rule: "delivery packageを書き出しただけではRELEASEしない。Production Release Gateはscene revisionとroute selectionへ別途bindingし、古いRELEASEは再利用しない。",
+    },
+    files: {
+      deliverySidecarFileName: `${sceneToken}-${patternToken}-production-package.json`,
+      palmierTimelineXmlFileName: base.timeline.projectTimelineXmlFileName,
+      davinciActualArtifactHint: actualWorkflow?.actualArtifactFile ?? null,
+      davinciEvidenceCaptureHint: actualWorkflow?.evidenceCaptureFile ?? null,
+    },
+    freshness: {
+      sceneRevision: scene.updatedAt,
+      selectionRevision: selection.sourceRevision,
+      fresh: true,
+      rule: "SceneInstance.updatedAtとselection.sourceRevisionが一致した状態でのみ生成する。Scene編集後は人間がrouteを再選択してpackageを再生成する。",
+    },
+  };
+}
+
+export function buildTypographySceneDeliveryPackageJson(
+  scene: MaskRevealSceneInstance,
+  selection: TypographyProductionSelectionV1,
+) {
+  return JSON.stringify(buildTypographySceneDeliveryPackage(scene, selection), null, 2);
+}
