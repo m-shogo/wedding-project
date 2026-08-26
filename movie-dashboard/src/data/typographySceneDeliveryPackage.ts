@@ -1,4 +1,5 @@
 import {buildMaskRevealSceneProductionBundle} from "./maskRevealSceneProductionBundle";
+import type {StudioActualState} from "./remotionElementCandidates";
 import {
   buildTypographySceneProductionBundle,
   getTypographyProductionRoute,
@@ -48,8 +49,8 @@ export interface TypographySceneDeliveryPackageV1 {
   remotion: {
     payloadSlug: string;
     standaloneRenderCi: boolean;
-    studioInstallActual: "NOT_RUN" | "PASS" | "FAIL";
-    studioControlReadbackActual: "NOT_RUN" | "PASS" | "FAIL";
+    studioInstallActual: StudioActualState;
+    studioControlReadbackActual: StudioActualState;
     rule: string;
   };
   execution: {
@@ -158,7 +159,7 @@ export function buildTypographySceneDeliveryPackage(
       standaloneRenderCi: production.remotion.standaloneRenderCi,
       studioInstallActual: production.remotion.studioInstallActual,
       studioControlReadbackActual: production.remotion.studioControlReadbackActual,
-      rule: "standalone render CIとRemotion Studio GUI Actualは別証拠。未実行はNOT_RUNのまま保持する。",
+      rule: "standalone render CIとRemotion Studio GUI Actualは別証拠。未実行・blockedはcanonical StudioActualStateのまま保持する。",
     },
     execution: {
       order: [
