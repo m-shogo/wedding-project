@@ -146,18 +146,32 @@ export const alphaCanaryFixture = {
   ],
 } as const;
 
-export const resolveCanaryInputPreparationCommands: Record<string, {command: string; result: string}> = {
+export type ResolveCanaryInputPreparationMode = 'alpha' | 'audio' | 'palmier';
+export type ResolveCanaryInputPreparation = {
+  mode: ResolveCanaryInputPreparationMode;
+  command: string;
+  result: string;
+  manifestPath: string;
+};
+
+export const resolveCanaryInputPreparationCommands: Record<string, ResolveCanaryInputPreparation> = {
   'DV21-REMOTION-ALPHA-01': {
+    mode: 'alpha',
     command: 'node --no-warnings scripts/prepare-resolve-canary-inputs.mts alpha',
     result: 'Renders the neutral ProRes 4444 source and writes SHA-256 + ffprobe metadata manifest.',
+    manifestPath: 'out/canary-inputs/manifests/DV21-REMOTION-ALPHA-01.json',
   },
   'DV21-AUDIO-RECOVERY-01': {
+    mode: 'audio',
     command: 'node --no-warnings scripts/prepare-resolve-canary-inputs.mts audio',
     result: 'Generates a copyright-free 48kHz stereo tone, exact Human Master envelope, SHA-256, and ffprobe manifest.',
+    manifestPath: 'out/canary-inputs/manifests/DV21-AUDIO-RECOVERY-01.json',
   },
   'DV21-PALMIER-FCPXML-01': {
+    mode: 'palmier',
     command: 'node --no-warnings scripts/prepare-resolve-canary-inputs.mts palmier',
     result: 'Writes only the Palmier synthetic scene specification. Status remains blocked until Palmier itself exports real FCPXML.',
+    manifestPath: 'out/canary-inputs/manifests/DV21-PALMIER-FCPXML-01.json',
   },
 };
 
