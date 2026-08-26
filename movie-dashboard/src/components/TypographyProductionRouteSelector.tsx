@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { CharStaggerDaVinciPromotionAssessmentView } from "./CharStaggerDaVinciPromotionAssessmentView";
 import { createCharStaggerDaVinciActualArtifact } from "../data/charStaggerDaVinciActualArtifact";
 import {
   createCharStaggerDaVinciEvidenceCaptureTemplate,
@@ -224,6 +225,7 @@ export function TypographyProductionRouteSelector({ scene }: { scene: MaskReveal
                       Evaluated evidence
                     </button>
                   </div>
+                  <CharStaggerDaVinciPromotionAssessmentView evidence={charStaggerEvaluatedEvidence} />
                   <p className="mt-2 text-navy-400">
                     ここでALL PASSになっても productionReady は自動昇格しません。live parameter bindingのレビューとproduction route昇格は別工程です。
                   </p>
