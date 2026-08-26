@@ -73,6 +73,12 @@ export type ChoreographyEvent = {
   audioCueType: ChoreographyAudioCue;
   intensity: ChoreographyIntensity;
   timingSource: ChoreographyTimingSource;
+  /** この個別eventが人間の聴取で確認済みか。phrase単位ではなくevent(=発音単位)で
+   * 独立して持つ(3-hitの1発目だけ確認しても2/3発目がverified扱いにならないため)。 */
+  verifiedByListening: boolean;
+  /** 人間が手動で加えたframe offset。無ければnull(=自動marker通り)。 */
+  manualOffsetFrames: number | null;
+  reviewComment: string | null;
   typeAction: TypeAction;
   cameraAction: CameraAction;
   mediaAction: MediaAction;
@@ -95,10 +101,25 @@ const variantIntensityScale = (variant: WeddingVariant): number => (variant === 
 
 const clampIntensity = (n: number): ChoreographyIntensity => Math.max(1, Math.min(5, Math.round(n))) as ChoreographyIntensity;
 
-/** importantWordsのtimingSourceをChoreographyTimingSourceへそのまま写す
- * (word-accent-map側の'manual'|'beat-snap'をそのまま尊重する)。 */
-const wordTimingSource = (phrase: EnrichedLyricPhrase, idx: number): ChoreographyTimingSource =>
-  phrase.importantWords?.[idx]?.timingSource ?? 'estimated';
+/** importantWords[idx]から、verifiedByListening/manualOffsetFrames/reviewCommentを
+ * eventへ個別に持たせるための共通抽出。**必ずidxで引く**(常に[0]を参照すると、
+ * 1発目だけ確認した場合に2/3発目も確認済みに見えてしまうバグになる)。
+ * importantWords側に該当idxのentryが無い(=このhitを個別に追跡するmarkerがまだ
+ * word-accent-mapに存在しない)場合は、estimated/未確認としてfallbackする。
+ * これにより「1発目がmanualでも2/3発目まで確認済みに見える」バグを防ぐ。 */
+const wordMeta = (
+  phrase: EnrichedLyricPhrase,
+  idx: number,
+): {timingSource: ChoreographyTimingSource; verifiedByListening: boolean; manualOffsetFrames: number | null; reviewComment: string | null} => {
+  const w = phrase.importantWords?.[idx];
+  if (!w) return {timingSource: 'estimated', verifiedByListening: false, manualOffsetFrames: null, reviewComment: null};
+  return {
+    timingSource: w.timingSource,
+    verifiedByListening: w.verifiedByListening,
+    manualOffsetFrames: w.timingSource === 'manual' ? 0 : null,
+    reviewComment: w.reviewComment,
+  };
+};
 
 /** P004「そう　武装と創と造で登場！！！！！」用の4 event。
  * 武装/創/造の3発が異なるpanelへ衝突し、登場で全画面Heroへ開放する。 */
@@ -113,7 +134,7 @@ export const buildArmorCreationEvents = (phrase: EnrichedLyricPhrase, variant: W
     timeSec: w.accentSec,
     audioCueType: 'vocal',
     intensity: clampIntensity(3 * scale + 1),
-    timingSource: wordTimingSource(phrase, i),
+    ...wordMeta(phrase, i),
     typeAction: {kind: 'word-punch'},
     cameraAction: {kind: 'shake', amountPx: 4 * scale},
     mediaAction: {kind: 'panel-collide', slot: i, fromDir: dirs[i]},
@@ -132,7 +153,7 @@ export const buildArmorCreationEvents = (phrase: EnrichedLyricPhrase, variant: W
       timeSec: finalWord.accentSec,
       audioCueType: 'impact',
       intensity: 5,
-      timingSource: wordTimingSource(phrase, 3),
+      ...wordMeta(phrase, 3),
       typeAction: {kind: 'hold'},
       cameraAction: {kind: 'push-open', toScale: 1 + 0.1 * scale},
       mediaAction: {kind: 'panel-release'},
@@ -147,7 +168,15 @@ export const buildArmorCreationEvents = (phrase: EnrichedLyricPhrase, variant: W
 };
 
 /** P013「チャプチャプチャプ　雨の心」用。各発音に個別event、波紋+写真の縦移動、
- * 3発目で次のshotへ実際に繋がるwipe-connectを持たせる。 */
+ * 3発目で次のshotへ実際に繋がるwipe-connectを持たせる。
+ *
+ * 重要な訂正: 以前はimportantWords[0](=「チャプ・チャプ・チャプ」を1つの結合語として
+ * 持つ、現行word-accent-mapの唯一のentry)のtimingSource/verifiedByListeningを
+ * 3発すべてに使い回していたため、1発目だけ人間が確認してmanual化した場合、
+ * 2発目・3発目も確認済みに見える不具合があった。各hitはwordMeta(phrase, i)で
+ * 個別のimportantWords[i]を参照するようにし、現行データのようにindex1・2に
+ * 対応するentryがまだ無い場合は必ずestimated/未確認へfallbackする(=
+ * 実際に個別markerが用意されるまで、2発目以降を確認済みと誤表示しない)。 */
 export const buildRippleThreeHitEvents = (phrase: EnrichedLyricPhrase, variant: WeddingVariant): ChoreographyEvent[] => {
   const scale = variantIntensityScale(variant);
   const hitSecs = phrase.threeHitFrameSecs ?? [phrase.startSec, phrase.startSec + 0.32, phrase.startSec + 0.64];
@@ -158,7 +187,7 @@ export const buildRippleThreeHitEvents = (phrase: EnrichedLyricPhrase, variant: 
     timeSec: sec,
     audioCueType: 'impact',
     intensity: clampIntensity((2 + i) * scale + 1),
-    timingSource: phrase.importantWords?.[0]?.timingSource ?? 'beat-snap',
+    ...wordMeta(phrase, i),
     typeAction: {kind: 'word-punch'},
     cameraAction: {kind: 'punch', scale: 1 + (0.02 + i * 0.01) * scale},
     mediaAction: {kind: i < 2 ? 'shift-vertical' : 'ripple', dyPx: (i + 1) * 10 * scale},
@@ -215,7 +244,7 @@ export const buildGenericWordImpactEvents = (phrase: EnrichedLyricPhrase, varian
     timeSec: w.accentSec,
     audioCueType: 'vocal',
     intensity: clampIntensity(base * scale),
-    timingSource: w.timingSource,
+    ...wordMeta(phrase, i),
     typeAction: {kind: 'word-punch'},
     cameraAction: {kind: 'punch', scale: 1 + 0.008 * base * scale},
     mediaAction: {kind: 'none'},
@@ -240,6 +269,9 @@ export const buildSoloUnionEvents = (phrase: EnrichedLyricPhrase, variant: Weddi
       audioCueType: 'silence',
       intensity: clampIntensity(2 * scale + 1),
       timingSource: 'estimated',
+      verifiedByListening: false,
+      manualOffsetFrames: null,
+      reviewComment: null,
       typeAction: {kind: 'none'},
       cameraAction: {kind: 'none'},
       mediaAction: {kind: 'none'},
@@ -256,7 +288,7 @@ export const buildSoloUnionEvents = (phrase: EnrichedLyricPhrase, variant: Weddi
       timeSec: mergeSec,
       audioCueType: 'vocal',
       intensity: clampIntensity(4 * scale + 1),
-      timingSource: wordTimingSource(phrase, 0),
+      ...wordMeta(phrase, 0),
       typeAction: {kind: 'char-reveal'},
       cameraAction: {kind: 'settle'},
       mediaAction: {kind: 'merge-to-center'},

@@ -32,7 +32,7 @@ import {
   WordHit,
 } from '../start129/lyricAnimationFamilies';
 import {HandDrawnUnderline} from '../start129/handDrawnPrimitives';
-import {CHOREOGRAPHED_PHRASE_IDS} from './choreographedMoments';
+import {isChoreographedForVariant} from './choreographedMoments';
 import {
   BaselineTravel,
   CallAndResponseLayout,
@@ -208,20 +208,48 @@ const StartMotifCallback: React.FC<{color: string}> = ({color}) => {
 export type SectionShotsMap = Record<string, {shots: PlacedShot[]; sectionStartSec: number}>;
 
 /** phraseの現在の再生位置(phrase-local frame)から、そのsection内で今実際に
- * 表示されているshotを引き、実素材のpath/kindを解決する。
- * 1つのphraseが複数shotへまたがることがある(例: P029)ため、phrase開始時ではなく
- * 呼び出し時のframeで毎回引き直す必要がある。 */
-const currentShotAsset = (
+ * 表示されているPlacedShot本体を引く。1つのphraseが複数shotへまたがることが
+ * ある(例: P029)ため、phrase開始時ではなく呼び出し時のframeで毎回引き直す
+ * 必要がある。ChoreographedMomentが「実際の次shot」へ接続する際にも、
+ * role/variantIndex/focusを含む生のPlacedShotが必要なためexportする。 */
+export const resolveActiveShot = (
   phrase: EnrichedLyricPhrase,
   sectionShots: SectionShotsMap | undefined,
   phraseLocalFrame: number,
-): {path: string; kind: 'photo' | 'video'} | null => {
+): PlacedShot | null => {
   const entry = sectionShots?.[phrase.sectionId];
   if (!entry) return null;
   const sectionLocalFrame = secToFrame(phrase.startSec) - secToFrame(entry.sectionStartSec) + phraseLocalFrame;
   const shot =
     entry.shots.find((s) => sectionLocalFrame >= s.localFrom && sectionLocalFrame < s.localFrom + s.durationInFrames) ??
     entry.shots[entry.shots.length - 1];
+  return shot ?? null;
+};
+
+/** resolveActiveShotに加えて、そのshot自身のtimeline内でのlocal frame
+ * (=shot.localFromからの経過frame)も返す。ChoreographedMomentが実shotの
+ * motion定義(push/drift等)をそのまま再利用して連続させるために必要。 */
+export const resolveActiveShotWithLocalFrame = (
+  phrase: EnrichedLyricPhrase,
+  sectionShots: SectionShotsMap | undefined,
+  phraseLocalFrame: number,
+): {shot: PlacedShot; ownLocalFrame: number} | null => {
+  const entry = sectionShots?.[phrase.sectionId];
+  if (!entry) return null;
+  const sectionLocalFrame = secToFrame(phrase.startSec) - secToFrame(entry.sectionStartSec) + phraseLocalFrame;
+  const shot = resolveActiveShot(phrase, sectionShots, phraseLocalFrame);
+  if (!shot) return null;
+  return {shot, ownLocalFrame: sectionLocalFrame - shot.localFrom};
+};
+
+/** phraseの現在の再生位置(phrase-local frame)から、そのsection内で今実際に
+ * 表示されているshotを引き、実素材のpath/kindを解決する。 */
+const currentShotAsset = (
+  phrase: EnrichedLyricPhrase,
+  sectionShots: SectionShotsMap | undefined,
+  phraseLocalFrame: number,
+): {path: string; kind: 'photo' | 'video'} | null => {
+  const shot = resolveActiveShot(phrase, sectionShots, phraseLocalFrame);
   if (!shot) return null;
   const asset = resolveDemoAsset(shot.role, shot.variantIndex);
   if (!asset.path) return null;
@@ -243,8 +271,9 @@ const WeddingLyricBody: React.FC<{phrase: EnrichedLyricPhrase; variant: WeddingV
 
   // ChoreographyEventで文字・写真・カメラをまとめて描画するmomentは、
   // ChoreographedMomentRenderer(StartWeddingEditComposition側)が別途描くため、
-  // ここでは文字を二重に描画しない。
-  if ((CHOREOGRAPHED_PHRASE_IDS as readonly string[]).includes(phrase.phraseId)) {
+  // ここでは文字を二重に描画しない。B案専用の暫定措置(既知の問題5)なので、
+  // A/C variantではこの分岐に入らず通常のanimation family dispatchへ進む。
+  if (isChoreographedForVariant(phrase.phraseId, variant)) {
     weddingLyricFallbackByPhraseId.set(phrase.phraseId, false);
     return null;
   }

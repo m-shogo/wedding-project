@@ -5,7 +5,7 @@ import {WEDDING_EDIT_SECTIONS, weddingEditSectionFrames} from '../../data/startW
 import {entryOverlapFrames, placeShots, weddingSectionDesign, type WeddingVariant} from '../../data/startWeddingEdit/storyboard';
 import {ShotRenderer} from '../../motion-kit/start129/shotEngine';
 import {WeddingLyricTrack, weddingLyricFallbackByPhraseId} from '../../motion-kit/startWeddingEdit/weddingLyricLine';
-import {CHOREOGRAPHED_PHRASE_IDS, ChoreographedMomentRenderer} from '../../motion-kit/startWeddingEdit/choreographedMoments';
+import {ChoreographedMomentRenderer, isChoreographedForVariant} from '../../motion-kit/startWeddingEdit/choreographedMoments';
 import {buildGenericWordImpactEvents} from '../../data/startWeddingEdit/choreography';
 import {TitleSequenceA, TitleSequenceB, TitleSequenceC} from './TitleOpenA_B_C';
 import {InterludeOverlay} from './InterludeOverlay';
@@ -89,7 +89,7 @@ export const StartWeddingEditComposition: React.FC<StartWeddingEditCompositionPr
       for (const s of p.threeHitFrameSecs) addImpact(p.sectionId, section.startSec, s);
       continue;
     }
-    if ((CHOREOGRAPHED_PHRASE_IDS as readonly string[]).includes(p.phraseId)) continue;
+    if (isChoreographedForVariant(p.phraseId, variant)) continue;
     for (const ev of buildGenericWordImpactEvents(p, variant)) addImpact(p.sectionId, section.startSec, ev.timeSec);
   }
 
@@ -158,13 +158,13 @@ export const StartWeddingEditComposition: React.FC<StartWeddingEditCompositionPr
           チャプチャプチャプ/独りじゃない)。通常のshot/lyricレイヤーより上に描画し、
           その区間だけ画面全体を差し替える。 */}
       {weddingEditLyricPhrases
-        .filter((p) => (CHOREOGRAPHED_PHRASE_IDS as readonly string[]).includes(p.phraseId))
+        .filter((p) => isChoreographedForVariant(p.phraseId, variant))
         .map((p) => {
           const from = Math.round(p.startSec * 30);
           const dur = Math.max(1, Math.round(p.endSec * 30) - from);
           return (
             <Sequence key={`choreo-${p.phraseId}`} from={from} durationInFrames={dur} name={`choreo-${p.phraseId}`}>
-              <ChoreographedMomentRenderer phrase={p} variant={variant} />
+              <ChoreographedMomentRenderer phrase={p} variant={variant} sectionShots={sectionShots} reviewMode={reviewMode} />
             </Sequence>
           );
         })}

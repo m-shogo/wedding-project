@@ -19,7 +19,10 @@ const easeInOut = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t 
 // ---------------------------------------------------------------------------
 // motion: shot内でmediaがどう動くか
 // ---------------------------------------------------------------------------
-const motionStyle = (motion: ShotMotion, localFrame: number, duration: number): React.CSSProperties => {
+/** ChoreographedMomentが「実際の次shot」へ接続する際、そのshot本来のmotion定義を
+ * 再利用して視覚的に連続させるためexportする(wipe後に別の動きへ急に切り替わらない
+ * ようにするため)。 */
+export const motionStyle = (motion: ShotMotion, localFrame: number, duration: number): React.CSSProperties => {
   const p = duration <= 1 ? 1 : Math.min(1, Math.max(0, localFrame / duration));
   switch (motion.kind) {
     case 'static':

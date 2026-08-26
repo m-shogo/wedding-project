@@ -19,9 +19,10 @@ import {
   buildSoloUnionEvents,
   type ChoreographyEvent,
 } from '../../data/startWeddingEdit/choreography';
-import {resolveDemoAsset} from '../../data/start129/resolveDemoAsset';
 import {StartDemoBackdrop} from '../../compositions/start129/StartDemoBackdrop';
-import type {SectionShotsMap} from './weddingLyricLine';
+import {motionStyle} from '../start129/shotEngine';
+import {resolveActiveShot, resolveActiveShotWithLocalFrame, type SectionShotsMap} from './weddingLyricLine';
+import type {PlacedShot} from '../../data/startWeddingEdit/storyboard';
 
 const secToFrame = (s: number) => Math.round(s * START_WEDDING_EDIT_FPS);
 
@@ -63,19 +64,31 @@ export const ArmorCreationMoment: React.FC<{phrase: EnrichedLyricPhrase; variant
 
   return (
     <AbsoluteFill style={{background: '#0A0A0C', overflow: 'hidden'}}>
-      {/* 3panel: 各panelは自分のeventが来るまで画面外に隠れ、来た瞬間に指定方向から衝突する */}
+      {/* 3panel: 各panelは自分のeventが来るまで完全に非表示(opacity:0)にし、
+          来た瞬間に指定方向から衝突する。以前はcenter panel(dir=0)がtranslateX(0)
+          のまま常時表示されており、発音前から見えてしまう不具合があったため、
+          left/right/centerそれぞれ別の進入方法(横移動 / scale+回転)にし、
+          かつ全panel共通でopacity:0による非表示をarrived判定へ追加した。 */}
       <AbsoluteFill style={{display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 4, opacity: 1 - openProgress}}>
         {events.slice(0, 3).map((ev, i) => {
           const localFrame = frame - (secToFrame(ev.timeSec) - secToFrame(phrase.startSec));
           const arrived = localFrame >= 0;
           const dir = ev.mediaAction.kind === 'panel-collide' ? ev.mediaAction.fromDir : 0;
           const enter = interpolate(localFrame, [0, 10], [1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
-          const tx = arrived ? dir * enter * 60 : dir * 100;
+          const role = ARMOR_ROLES[i];
           const shakeAmt = ev.cameraAction.kind === 'shake' ? ev.cameraAction.amountPx : 0;
           const shake = arrived && localFrame < 8 ? Math.sin(localFrame * 3) * shakeAmt * (1 - localFrame / 8) : 0;
-          const role = ARMOR_ROLES[i];
+          // 中央panel(dir===0)はtranslateXでは画面外へ出せないため、scale+回転による
+          // 別種の進入にする。左右panelは従来通り画面外からの横移動衝突。
+          const transform =
+            dir === 0
+              ? `scale(${arrived ? interpolate(localFrame, [0, 8, 14], [0.25, 1.08, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'}) : 0.25}) rotate(${arrived ? interpolate(localFrame, [0, 10], [-6, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'}) : -6}deg) translateX(${shake}%)`
+              : `translateX(${(arrived ? dir * enter * 60 : dir * 100) + shake}%)`;
           return (
-            <div key={i} style={{position: 'relative', overflow: 'hidden', transform: `translateX(${tx + shake}%)`}}>
+            <div
+              key={i}
+              style={{position: 'relative', overflow: 'hidden', opacity: arrived ? 1 : 0, transform}}
+            >
               <StartDemoBackdrop role={role} variantIndex={i} />
               {arrived && localFrame < 8 ? (
                 <AbsoluteFill style={{background: '#FFFFFF', opacity: (1 - localFrame / 8) * 0.4, mixBlendMode: 'screen'}} />
@@ -152,7 +165,6 @@ export const ArmorCreationMoment: React.FC<{phrase: EnrichedLyricPhrase; variant
 // ---------------------------------------------------------------------------
 // 2. チャプチャプチャプ — 各発音で波紋(liquid mask)+写真の縦shift。3打目で次shotへ実接続
 // ---------------------------------------------------------------------------
-const RIPPLE_ROLE = 'HAWAII_WARM' as const;
 
 /** SVGのfeTurbulence+feDisplacementMapで水面の波紋を近似する軽量liquid mask。
  * 発音ごとに中心から広がるscaleを変え、3回分の波紋が積み重なる。 */
@@ -177,11 +189,52 @@ const RippleMask: React.FC<{frame: number; hitLocalFrames: number[]}> = ({frame,
   );
 };
 
+/** その時点でsectionが実際に表示しているPlacedShotを描画する(role/variantIndex/
+ * focusを実shotから取得し、自身のmotion定義もそのまま再生する)。
+ * 次shotが解決できない場合だけFALLBACK_ROLEを使い、Guide版ではその旨を明示する。 */
+const LiveSectionShot: React.FC<{
+  phrase: EnrichedLyricPhrase;
+  sectionShots: SectionShotsMap | undefined;
+  phraseLocalFrame: number;
+  reviewMode?: boolean;
+  labelJa: string;
+}> = ({phrase, sectionShots, phraseLocalFrame, reviewMode, labelJa}) => {
+  const resolved = resolveActiveShotWithLocalFrame(phrase, sectionShots, phraseLocalFrame);
+  const fallback = !resolved;
+  const role = resolved?.shot.role ?? 'NEGATIVE_SPACE';
+  const variantIndex = resolved?.shot.variantIndex ?? 0;
+  const focus = resolved?.shot.focus;
+  const style = resolved ? motionStyle(resolved.shot.motion, resolved.ownLocalFrame, resolved.shot.durationInFrames) : {};
+  return (
+    <AbsoluteFill style={style}>
+      <StartDemoBackdrop role={role} variantIndex={variantIndex} objectPosition={focus ? `${focus.x}% ${focus.y}%` : undefined} />
+      {reviewMode ? (
+        <div
+          style={{
+            position: 'absolute',
+            top: 8,
+            left: 8,
+            fontFamily: 'monospace',
+            fontSize: 11,
+            color: fallback ? '#FFD84A' : '#7CF29A',
+            background: 'rgba(0,0,0,0.55)',
+            padding: '2px 6px',
+          }}
+        >
+          {labelJa}:{role}#{variantIndex}
+          {fallback ? ' FALLBACK(次shot未解決)' : ''}
+        </div>
+      ) : null}
+    </AbsoluteFill>
+  );
+};
+
 export const RippleThreeHitMoment: React.FC<{
   phrase: EnrichedLyricPhrase;
   variant: WeddingVariant;
   sectionShots?: SectionShotsMap;
-}> = ({phrase, variant}) => {
+  reviewMode?: boolean;
+}> = ({phrase, variant, sectionShots, reviewMode}) => {
   const frame = useCurrentFrame();
   const events = React.useMemo(() => buildRippleThreeHitEvents(phrase, variant), [phrase, variant]);
   const hitLocalFrames = events.map((ev) => secToFrame(ev.timeSec) - secToFrame(phrase.startSec));
@@ -195,22 +248,20 @@ export const RippleThreeHitMoment: React.FC<{
     ? interpolate(current.localFrame, [0, 3, 10], [1, current.event.cameraAction.scale, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'})
     : 1;
   const thirdHitLocal = hitLocalFrames[2] ?? Infinity;
+  // wipeが実際に次shotへ到達するまでの猶予(既存のlyric-to-transition wipeと同じ
+  // +14frameの先読み規約に合わせる)。
+  const revealLookaheadFrames = 14;
   const connecting = frame >= thirdHitLocal;
   const wipeProgress = connecting
     ? interpolate(frame - thirdHitLocal, [0, 20], [0, 100], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'})
     : 0;
-  // hit間の静止区間が3秒以上ピクセル完全固定にならないよう、連続push-in+微細な
-  // sine driftをphrase全体へ重ねる(freezedetect QAで検出された欠陥の修正。線形
-  // scaleだけでは1frameあたりの変化量が小さすぎて機械検出上「静止」と判定された
-  // ため、振幅を上げてsine成分を足すことで常に検出可能な変化を保証する)。
-  const phraseDurFrames = Math.max(1, secToFrame(phrase.endSec) - secToFrame(phrase.startSec));
-  const baseDrift = interpolate(frame, [0, phraseDurFrames], [1, 1.06], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
-  const wobbleX = Math.sin(frame * 0.09) * 6;
 
   return (
     <AbsoluteFill style={{overflow: 'hidden', background: '#0A0A0C'}}>
-      <AbsoluteFill style={{transform: `scale(${punchScale * baseDrift}) translate(${wobbleX}px, ${-cumulativeShiftPx}px)`}}>
-        <StartDemoBackdrop role={RIPPLE_ROLE} variantIndex={1} />
+      {/* base: 固定roleではなく、そのsectionが本来この瞬間に表示している実shotを
+          そのまま表示する(専用moment内でも実素材のタイムラインから外れない)。 */}
+      <AbsoluteFill style={{transform: `scale(${punchScale}) translateY(${-cumulativeShiftPx}px)`}}>
+        <LiveSectionShot phrase={phrase} sectionShots={sectionShots} phraseLocalFrame={frame} reviewMode={reviewMode} labelJa="base" />
       </AbsoluteFill>
       <RippleMask frame={frame} hitLocalFrames={hitLocalFrames.slice(0, 3)} />
       {events.slice(0, 3).map((ev, i) => {
@@ -238,17 +289,20 @@ export const RippleThreeHitMoment: React.FC<{
           </div>
         );
       })}
-      {/* 3打目から次shotへ実際に繋がる縦wipe(色面ではなく、実際の次shot写真をreveal)。
-          reveal後も連続driftを掛け、残り尺でピクセル完全固定にしない。 */}
+      {/* 3打目から次shotへ実際に繋がる縦wipe。以前は色面ですらなくHAWAII_WARM固定
+          写真をハードコードしていたが、resolveActiveShotWithLocalFrameで
+          このsectionが実際に次に表示するPlacedShotを解決し、そのshot自身の
+          motion定義(push/drift等)で描画することで、wipe完了後に通常のshot
+          レイヤーへ視覚的に連続させる(固定roleのハードコード廃止)。 */}
       {connecting ? (
         <AbsoluteFill style={{clipPath: `inset(${100 - wipeProgress}% 0 0 0)`}}>
-          <AbsoluteFill
-            style={{
-              transform: `scale(${interpolate(frame - thirdHitLocal, [0, phraseDurFrames], [1, 1.08], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'})}) translateX(${Math.sin((frame - thirdHitLocal) * 0.08) * 8}px)`,
-            }}
-          >
-            <StartDemoBackdrop role="HAWAII_WARM" variantIndex={2} />
-          </AbsoluteFill>
+          <LiveSectionShot
+            phrase={phrase}
+            sectionShots={sectionShots}
+            phraseLocalFrame={frame + revealLookaheadFrames}
+            reviewMode={reviewMode}
+            labelJa="next"
+          />
         </AbsoluteFill>
       ) : null}
     </AbsoluteFill>
@@ -258,11 +312,28 @@ export const RippleThreeHitMoment: React.FC<{
 // ---------------------------------------------------------------------------
 // 3. 独りじゃない — 分割された写真/文字が「独りじゃない」の発音で1つへ統合される
 // ---------------------------------------------------------------------------
-const UNION_LEFT_ROLE = 'DEPARTURE' as const;
-const UNION_RIGHT_ROLE = 'SEOUL_STREET' as const;
-const UNION_MERGED_ROLE = 'HERO_WIDE' as const;
 
-export const SoloUnionMoment: React.FC<{phrase: EnrichedLyricPhrase; variant: WeddingVariant}> = ({phrase, variant}) => {
+/** section内の「もう1枚」を探す。左panelは現在activeなshot、右panelはその次の
+ * shot(同一section内、末尾なら先頭へ循環)を使うことで、固定roleのハードコード
+ * を廃止しつつ「別々の2枚が1枚へ統合される」という意味を保つ。 */
+const resolveOtherSectionShot = (
+  phrase: EnrichedLyricPhrase,
+  sectionShots: SectionShotsMap | undefined,
+  phraseLocalFrame: number,
+): PlacedShot | null => {
+  const entry = sectionShots?.[phrase.sectionId];
+  const active = resolveActiveShot(phrase, sectionShots, phraseLocalFrame);
+  if (!entry || !active || entry.shots.length < 2) return active;
+  const idx = entry.shots.findIndex((s) => s.index === active.index);
+  return entry.shots[(idx + 1) % entry.shots.length] ?? active;
+};
+
+export const SoloUnionMoment: React.FC<{
+  phrase: EnrichedLyricPhrase;
+  variant: WeddingVariant;
+  sectionShots?: SectionShotsMap;
+  reviewMode?: boolean;
+}> = ({phrase, variant, sectionShots, reviewMode}) => {
   const frame = useCurrentFrame();
   const events = React.useMemo(() => buildSoloUnionEvents(phrase, variant), [phrase, variant]);
   const mergeEvent = events[1];
@@ -276,34 +347,40 @@ export const SoloUnionMoment: React.FC<{phrase: EnrichedLyricPhrase; variant: We
   const rightShift = 50 * (1 - p);
   const gap = 6 * (1 - p);
   const mergedOpacity = p;
-  // split区間・merge後区間ともに連続driftを持たせ、freezedetectが検出する
-  // ピクセル完全固定を避ける(split区間は左右へのゆっくりした寄せ、merge後は
-  // ゆっくりしたpush-inを継続する)。
-  const phraseDurFrames = Math.max(1, secToFrame(phrase.endSec) - secToFrame(phrase.startSec));
-  const splitDrift = interpolate(frame, [0, mergeLocalFrame], [1, 1.05], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
-  const mergedDrift = interpolate(frame - mergeLocalFrame, [0, phraseDurFrames], [1.06, 1.14], {
-    extrapolateLeft: 'clamp',
-    extrapolateRight: 'clamp',
-  });
-  const wobbleY = Math.sin(frame * 0.07) * 5;
+  const leftShot = resolveActiveShot(phrase, sectionShots, frame);
+  const rightShot = resolveOtherSectionShot(phrase, sectionShots, frame);
+  const mergedResolved = resolveActiveShotWithLocalFrame(phrase, sectionShots, frame);
+  const mergedStyle = mergedResolved ? motionStyle(mergedResolved.shot.motion, mergedResolved.ownLocalFrame, mergedResolved.shot.durationInFrames) : {};
 
   return (
     <AbsoluteFill style={{overflow: 'hidden', background: '#0A0A0C'}}>
       <AbsoluteFill style={{opacity: 1 - mergedOpacity}}>
         <AbsoluteFill style={{display: 'grid', gridTemplateColumns: `calc(50% - ${gap}px) calc(50% - ${gap}px)`, gap: gap * 2}}>
-          <div style={{position: 'relative', overflow: 'hidden', transform: `translateX(${leftShift}%) scale(${splitDrift})`}}>
-            <StartDemoBackdrop role={UNION_LEFT_ROLE} variantIndex={0} />
+          <div style={{position: 'relative', overflow: 'hidden', transform: `translateX(${leftShift}%)`}}>
+            <StartDemoBackdrop role={leftShot?.role ?? 'NEGATIVE_SPACE'} variantIndex={leftShot?.variantIndex ?? 0} />
           </div>
-          <div style={{position: 'relative', overflow: 'hidden', transform: `translateX(${rightShift}%) scale(${splitDrift})`}}>
-            <StartDemoBackdrop role={UNION_RIGHT_ROLE} variantIndex={0} />
+          <div style={{position: 'relative', overflow: 'hidden', transform: `translateX(${rightShift}%)`}}>
+            <StartDemoBackdrop role={rightShot?.role ?? 'NEGATIVE_SPACE'} variantIndex={rightShot?.variantIndex ?? 1} />
           </div>
         </AbsoluteFill>
       </AbsoluteFill>
+      {/* merge後: 固定HERO_WIDEのハードコードを廃止し、sectionが実際にこの瞬間
+          表示するshotとそのmotion定義をそのまま使う(統合後に人物=Heroが主役に
+          なる構成は、storyboard側でこの区間にHERO_WIDEを割り当てることで保証する)。 */}
       <AbsoluteFill style={{opacity: mergedOpacity}}>
-        <AbsoluteFill style={{transform: `scale(${mergedDrift}) translateY(${wobbleY}px)`}}>
-          <StartDemoBackdrop role={UNION_MERGED_ROLE} variantIndex={1} />
+        <AbsoluteFill style={mergedStyle}>
+          <StartDemoBackdrop
+            role={mergedResolved?.shot.role ?? 'HERO_WIDE'}
+            variantIndex={mergedResolved?.shot.variantIndex ?? 1}
+            objectPosition={mergedResolved?.shot.focus ? `${mergedResolved.shot.focus.x}% ${mergedResolved.shot.focus.y}%` : undefined}
+          />
         </AbsoluteFill>
       </AbsoluteFill>
+      {reviewMode ? (
+        <div style={{position: 'absolute', top: 8, left: 8, fontFamily: 'monospace', fontSize: 11, color: '#7CF29A', background: 'rgba(0,0,0,0.55)', padding: '2px 6px'}}>
+          left:{leftShot?.role ?? '?'} right:{rightShot?.role ?? '?'} merged:{mergedResolved?.shot.role ?? '?'}
+        </div>
+      ) : null}
       {frame >= mergeLocalFrame ? (
         <div
           style={{
@@ -351,26 +428,37 @@ export const SoloUnionMoment: React.FC<{phrase: EnrichedLyricPhrase; variant: We
   );
 };
 
-// resolveDemoAssetは将来section実shotへ接続する際に使う(現状は直接roleを固定使用)。
-void resolveDemoAsset;
-
 /** ChoreographyEventで文字・写真・カメラを同時制御する設計実証moment一覧。
  * このidを持つphraseは、通常のWeddingLyricBody(文字だけ)とは描画しない
  * (weddingLyricLine.tsxで早期returnし、代わりにこのcomponentが
- * 文字・写真・カメラをまとめて描画する)。 */
+ * 文字・写真・カメラをまとめて描画する)。
+ *
+ * B専用の暫定措置(既知の問題5): この3momentは冒険アニメOP文法のB案専用に
+ * 設計されており、A(記録映画)/C(editorial typography)へ同じ全画面takeover
+ * componentをそのまま適用すると差別化が弱まる。B案完成を優先するため、
+ * ChoreographedMomentRenderer自体はA/C variantに対して常にnullを返し、
+ * weddingLyricLine.tsx側の早期returnもvariant==='B'の時だけ有効にする
+ * (isChoreographedForVariantで判定を一元化)。A/Cは壊れず、既存の
+ * animation family(WeddingLyricBody通常dispatch)へ自動的にfallbackする。 */
 export const CHOREOGRAPHED_PHRASE_IDS = ['P004', 'P013', 'P014'] as const;
 
-export const ChoreographedMomentRenderer: React.FC<{phrase: EnrichedLyricPhrase; variant: WeddingVariant}> = ({
-  phrase,
-  variant,
-}) => {
+export const isChoreographedForVariant = (phraseId: string, variant: WeddingVariant): boolean =>
+  variant === 'B' && (CHOREOGRAPHED_PHRASE_IDS as readonly string[]).includes(phraseId);
+
+export const ChoreographedMomentRenderer: React.FC<{
+  phrase: EnrichedLyricPhrase;
+  variant: WeddingVariant;
+  sectionShots?: SectionShotsMap;
+  reviewMode?: boolean;
+}> = ({phrase, variant, sectionShots, reviewMode}) => {
+  if (!isChoreographedForVariant(phrase.phraseId, variant)) return null;
   switch (phrase.phraseId) {
     case 'P004':
       return <ArmorCreationMoment phrase={phrase} variant={variant} />;
     case 'P013':
-      return <RippleThreeHitMoment phrase={phrase} variant={variant} />;
+      return <RippleThreeHitMoment phrase={phrase} variant={variant} sectionShots={sectionShots} reviewMode={reviewMode} />;
     case 'P014':
-      return <SoloUnionMoment phrase={phrase} variant={variant} />;
+      return <SoloUnionMoment phrase={phrase} variant={variant} sectionShots={sectionShots} reviewMode={reviewMode} />;
     default:
       return null;
   }
