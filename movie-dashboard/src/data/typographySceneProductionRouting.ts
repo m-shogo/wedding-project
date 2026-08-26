@@ -120,13 +120,38 @@ export const typographyProductionRoutes: TypographyProductionRouteDefinition[] =
 export const getTypographyProductionRoute = (patternId: string) =>
   typographyProductionRoutes.find((item) => item.patternId === patternId) ?? null;
 
+export interface TypographyProductionSelectionV1 {
+  schemaVersion: "typography-production-selection/v1";
+  authority: "HUMAN_SELECTED";
+  sceneId: string;
+  sourceRevision: string;
+  patternId: TypographyProductionPatternId;
+  selectedAt: string;
+}
+
+export function createTypographyProductionSelection(
+  scene: MaskRevealSceneInstance,
+  patternId: TypographyProductionPatternId,
+  selectedAt = new Date().toISOString(),
+): TypographyProductionSelectionV1 {
+  return {
+    schemaVersion: "typography-production-selection/v1",
+    authority: "HUMAN_SELECTED",
+    sceneId: scene.sceneId,
+    sourceRevision: scene.updatedAt,
+    patternId,
+    selectedAt,
+  };
+}
+
 export interface TypographySceneProductionBundleV1 {
   schemaVersion: "motion-zukan-typography-production/v1";
-  authority: "HUMAN_MASTER";
+  authority: "DERIVED_FROM_HUMAN_MASTER_AND_HUMAN_SELECTED_ROUTE";
   sceneId: string;
   projectId: "opening" | "profile";
   sourceRevision: string;
   patternId: TypographyProductionPatternId;
+  routeSelection: TypographyProductionSelectionV1;
   canonical: {
     engine: "TypographyRevealEngine";
     mode: RemotionElementCandidateRecord["canonicalMode"];
@@ -171,6 +196,8 @@ export interface TypographySceneProductionBundleV1 {
   };
   freshness: {
     generatedFromSceneUpdatedAt: string;
+    routeSelectionSourceRevision: string;
+    routeSelectionFresh: true;
     rule: string;
   };
 }
@@ -191,10 +218,26 @@ function requireTypographyRoute(patternId: TypographyProductionPatternId) {
   return definition;
 }
 
+function assertFreshRouteSelection(
+  scene: MaskRevealSceneInstance,
+  selection: TypographyProductionSelectionV1,
+) {
+  if (selection.sceneId !== scene.sceneId) {
+    throw new Error(`Typography production selection belongs to ${selection.sceneId}, not ${scene.sceneId}`);
+  }
+  if (selection.sourceRevision !== scene.updatedAt) {
+    throw new Error(
+      `STALE_TYPOGRAPHY_ROUTE_SELECTION: selected from ${selection.sourceRevision}, current scene is ${scene.updatedAt}`,
+    );
+  }
+}
+
 export function buildTypographySceneProductionBundle(
   scene: MaskRevealSceneInstance,
-  patternId: TypographyProductionPatternId,
+  selection: TypographyProductionSelectionV1,
 ): TypographySceneProductionBundleV1 {
+  assertFreshRouteSelection(scene, selection);
+  const patternId = selection.patternId;
   const candidate = requireTypographyCandidate(patternId);
   const definition = requireTypographyRoute(patternId);
   const base = buildMaskRevealSceneProductionBundle(scene);
@@ -216,11 +259,12 @@ export function buildTypographySceneProductionBundle(
 
   return {
     schemaVersion: "motion-zukan-typography-production/v1",
-    authority: "HUMAN_MASTER",
+    authority: "DERIVED_FROM_HUMAN_MASTER_AND_HUMAN_SELECTED_ROUTE",
     sceneId: scene.sceneId,
     projectId: scene.projectId,
     sourceRevision: scene.updatedAt,
     patternId,
+    routeSelection: { ...selection },
     canonical: {
       engine: candidate.canonicalEngine,
       mode: candidate.canonicalMode,
@@ -265,14 +309,16 @@ export function buildTypographySceneProductionBundle(
     },
     freshness: {
       generatedFromSceneUpdatedAt: scene.updatedAt,
-      rule: "SceneInstance.updatedAtが変わったらbundleを再生成する。pattern routeのreadiness変更時も再評価する。",
+      routeSelectionSourceRevision: selection.sourceRevision,
+      routeSelectionFresh: true,
+      rule: "SceneInstance.updatedAtが変わったらroute selectionを人間が再確認して再選択する。stale selectionを自動適用しない。",
     },
   };
 }
 
 export function buildTypographySceneProductionBundleJson(
   scene: MaskRevealSceneInstance,
-  patternId: TypographyProductionPatternId,
+  selection: TypographyProductionSelectionV1,
 ) {
-  return JSON.stringify(buildTypographySceneProductionBundle(scene, patternId), null, 2);
+  return JSON.stringify(buildTypographySceneProductionBundle(scene, selection), null, 2);
 }
