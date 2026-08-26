@@ -20,7 +20,8 @@ This checkpoint records only the dedicated V9 Rurubu production in the existing 
 
 ## Structure verified in live Figma
 
-- 22 `PHOTO_MASK / ... / REPLACEABLE` nodes remain independently replaceable.
+- 22 `PHOTO_MASK / ... / REPLACEABLE` nodes remain independently replaceable in the six current production frames.
+- Per-page mask counts are 4 / 3 / 2 / 2 / 6 / 5.
 - Photo masks keep image fills; the pass did not flatten page-level images.
 - Generated Profile title remains a separate movable image layer: `2603:2`.
 - Native editable title/chip treatments remain separate from photos.
@@ -46,56 +47,43 @@ Changes applied in live Figma:
 
 ## QA evidence
 
-Whole-page screenshot QA was performed after mutation on:
+Whole-page screenshot QA was performed after mutation on Back cover, Story + Timeline, Memory + Gallery, Cover, Profile + Q&A, and 1DAY + Cafe/Table across the continuation passes.
 
-- Back cover
-- Story + Timeline
-- Memory + Gallery
+The first Back-cover pass still read as a collision at page scale. It was corrected in a second mutation by reducing the English title and Japanese lead and moving the footer navigation chip lower.
 
-The first Back-cover pass still read as a collision at page scale. It was corrected in a second mutation by reducing the English title to 30px and Japanese lead to 34px and moving the footer navigation chip lower. Second screenshot QA confirmed clear separation.
+### Cover + 1DAY continuation
 
-## 2026-08-26 cover + 1DAY QA continuation
+Cover whole-page QA exposed a collision in the bottom three cover captions: added `YOKOHAMA / TRIP / PEOPLE` micro-chips sat over the original `ふたりのこと / 思い出スポット / 1DAY PLAN` labels. A hidden rollback clone was created as `2613:2`, then only the three colliding added chips were hidden. The original captions are readable again and photo masks remain untouched.
 
-A later live pass re-read the same V9 page by exact name before writing and verified the six production frames plus the 22 replaceable photo masks again.
+A generated `rurubu_wedding_logo_A_v1.png` Drive master (`1PMFJjPXW7925yFVNNPyYeFzuoeFhCJMU`) was tested as a separate cover image layer. The transport derivative created a Figma image node (`2613:41`) but rendered blank. The editable cover title/subtitle were restored immediately and the failed layer left hidden as evidence.
 
-### Cover
+1DAY + Cafe/Table was strengthened with four concise native editable schedule sublines (`2615:36`, `2615:39`, `2615:42`, `2615:45`). A first pass also added STOP chips, but screenshot QA showed collisions; those chips were hidden and the corrected whole-page render is clean.
 
-Whole-page QA exposed a real collision in the bottom three cover captions: the added `YOKOHAMA / TRIP / PEOPLE` micro-chips were sitting over the original `ふたりのこと / 思い出スポット / 1DAY PLAN` labels. A hidden rollback clone was created as `2613:2`, then only the three colliding added chips were hidden. The original three captions are now readable again, while the cover photo masks remain untouched.
+### Hierarchy cleanup continuation
 
-A generated `rurubu_wedding_logo_A_v1.png` Drive master (`1PMFJjPXW7925yFVNNPyYeFzuoeFhCJMU`) was also tested as a separate cover image layer. The local PNG transport derivative created a valid Figma image node (`2613:41`) but rendered transparent/blank in the whole-page screenshot. The attempted WebP fallback failed before mutation because the embedded base64 payload was invalid. The prior editable cover title/subtitle were therefore restored immediately and the failed PNG layer was left hidden rather than deleting evidence.
+A fresh exact-name lookup on the live document confirmed the V9 page still exists with all six A4 production frames. This is important because top-level metadata can omit the page.
 
-### 1DAY + Cafe/Table
+Whole-page review then found a remaining real defect on the Back cover: the editable `WEDDING GUIDE` title at `2604:11` duplicated/collided with the Japanese lead even though the smaller pink `WEDDING GUIDE` issue pill already provided the English label. Before mutation, hidden rollback clones were created for Back (`2619:2`), Story (`2619:30`) and Memory (`2619:63`). The duplicate editable Back title `2604:11` was hidden; the pink issue pill was retained. Screenshot QA confirms the header now has one clear Japanese lead plus one English issue label with no overlap.
 
-The schedule area still read too sparse at page scale, so a hidden rollback clone was created as `2615:2`. Four concise native editable sublines were added beneath the schedule stops:
+Story + Timeline received a separate movable `4 MOMENTS` editorial pill (`2619:96`/`2619:97`) beside the timeline guide. Memory + Gallery received a separate movable `6 SPOTS` pill (`2619:98`/`2619:99`) below the six-photo grid. Whole-page screenshots confirm both render without collision and preserve the existing reading order.
 
-- `2615:36` — 10:00 editorial note
-- `2615:39` — 11:40 editorial note
-- `2615:42` — 15:10 editorial note
-- `2615:45` — 18:30 editorial note
-
-A first pass also added four STOP chips, but screenshot QA showed the chips colliding with the sublines. Those four chips (`2615:37`, `2615:40`, `2615:43`, `2615:46`) were hidden in the correction pass. A second whole-page screenshot confirmed clean readable sublines with no overlap. The five 1DAY/Cafe photo masks remain unchanged and independently replaceable.
-
-### Additional QA
-
-Profile + Q&A was re-rendered at whole-page scale and remains coherent: the generated profile title is still a separate movable image, Shogo/Shiori photos remain independent masks, and Q&A/footer reading order is intact.
+Final structure verification after this write confirmed all six production frames are still `794 × 1123`, visible, and contain exactly 22 current replaceable photo masks total. Rollback clones are hidden and excluded from that production count.
 
 ## Failure learning
 
-`get_metadata` top-level page listing did not expose the existing V9 page, even though `use_figma` could resolve it by name and returned page id `2601:2` with all six frames. Therefore:
+`get_metadata` top-level page listing did not expose the existing V9 page, even though exact-name resolution inside `use_figma` returned page id `2601:2` with all six frames. Therefore:
 
 > Do not conclude that V9 is absent solely from the top-level metadata page list. Resolve the page by exact name inside the Figma document before creating or replacing any V9 page.
 
-This prevents false rebuilds and duplicate V9 production pages.
-
-Generated image transport learning from the later pass:
+Generated image transport learning:
 
 > A Drive PNG can decode locally and still fail to render when converted to an indexed transport PNG and fed through `figma.createImage`. Always screenshot-QA the placed asset before hiding the fallback title. If it renders blank, restore the editable fallback immediately. Do not treat node creation or a returned `imageHash` as visual success.
 
-The direct MCP asset upload path also hit DNS resolution failure from the execution environment, so this pass did not blindly retry it.
+The direct MCP asset upload path also hit DNS resolution failure from the execution environment, so the failed route was not blindly retried.
 
 ## Next pass
 
-- Continue whole-page and actual-size QA on Back, Story, Memory and the final 1DAY state, then recheck all six as a set.
+- Continue actual-size QA across all six as a set, especially Profile typography and bottom-edge safety.
 - Prefer one-image-one-item generated assets from the V9 Drive source folder as separate movable layers, but only mark them placed after screenshot QA proves they render.
 - Use the original transparent/true-color asset path or another verified transport route instead of the indexed-PNG derivative that rendered blank.
 - Increase Rurubu-like information density only where it improves reading order; do not fill space mechanically.
