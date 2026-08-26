@@ -41,7 +41,16 @@ for (const token of [
   'Capture raw Resolve readback before normalizing units or coordinates.',
   'Prove every required binding role; one visible effect is not sufficient evidence.',
   'Keep automaticPromotionAllowed=false and productionReady=false until a separate human promotion review.',
-]) requireText(runPlan, token, `Actual run plan missing honesty/sequence contract: ${token}`);
+  'schemaVersion: "typography-davinci-actual-run-manifest/v1"',
+  'authority: "PLAN_ONLY_NOT_ACTUAL_EVIDENCE"',
+  'target: "MAC_DAVINCI_RESOLVE_ACTUAL"',
+  '"MANIFEST_GENERATED != MAC_ACTUAL_RUN"',
+  '"TRANSLATOR_READY != LIVE_BINDING_VERIFIED"',
+  '"VISIBLE_EFFECT != REQUIRED_BINDINGS_PROVEN"',
+  '"MACHINE_GATE_ELIGIBLE != HUMAN_PROMOTED"',
+  '"ACTUAL_PASS != PRODUCTION_READY"',
+  "buildTypographyDaVinciActualRunManifestJson",
+]) requireText(runPlan, token, `Actual run plan missing honesty/manifest contract: ${token}`);
 
 for (const token of [
   "Mac Resolve Actual 実行キュー",
@@ -50,6 +59,10 @@ for (const token of [
   "bindings",
   "QA: 1x + half-speed / reviewedAt必須",
   "全候補共通のActual順序",
+  "buildTypographyDaVinciActualRunManifestJson",
+  "typography-davinci-actual-run-manifest.json",
+  "Mac Actual manifest JSONを保存",
+  "PLAN_ONLY_NOT_ACTUAL_EVIDENCE",
   "automaticPromotionAllowed=false / productionReady=false",
 ]) requireText(runQueue, token, `Actual queue UI missing ${token}`);
 
@@ -71,4 +84,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log("Typography DaVinci Actual run plan contracts OK: all 9 Typography routes share one ordered Mac Resolve evidence workflow, retain NOT_RUN honestly, require raw readback + full bindings + 1x/half-speed QA, and forbid automatic production promotion.");
+console.log("Typography DaVinci Actual run plan contracts OK: all 9 Typography routes share one ordered, portable Mac Resolve evidence manifest, retain NOT_RUN honestly, require raw readback + full bindings + 1x/half-speed QA, and forbid automatic production promotion.");
