@@ -6,6 +6,7 @@ import {
   audioRecoveryHumanMaster,
   palmierFcpxmlSyntheticSceneSpec,
   resolveCanaryInputManifestSchema,
+  resolveCanaryInputPreparationCommands,
 } from '../src/data/resolveCanaryInputFixtures.ts';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -71,6 +72,27 @@ if (!palmier.guardrails.includes('SCENE_SPEC != FCPXML_EXPORT')) {
   err('Palmier spec must remain explicitly distinct from a real export');
 }
 
+const expectedPreparations = {
+  'DV21-REMOTION-ALPHA-01': 'alpha',
+  'DV21-AUDIO-RECOVERY-01': 'audio',
+  'DV21-PALMIER-FCPXML-01': 'palmier',
+} as const;
+for (const [canaryId, expectedMode] of Object.entries(expectedPreparations)) {
+  const preparation = resolveCanaryInputPreparationCommands[canaryId];
+  if (!preparation) {
+    err(`structured preparation missing: ${canaryId}`);
+    continue;
+  }
+  if (preparation.mode !== expectedMode) err(`${canaryId}: expected mode=${expectedMode}, got ${preparation.mode}`);
+  const expectedManifest = `out/canary-inputs/manifests/${canaryId}.json`;
+  if (preparation.manifestPath !== expectedManifest) {
+    err(`${canaryId}: manifestPath must stay canonical: ${expectedManifest}`);
+  }
+  if (!preparation.command.endsWith(` ${preparation.mode}`)) {
+    err(`${canaryId}: preparation command and structured mode diverged`);
+  }
+}
+
 const sampleManifest = resolveCanaryInputManifestSchema.safeParse({
   schemaVersion: 'resolve-canary-input-manifest/v1',
   canaryId: 'SAMPLE',
@@ -100,4 +122,4 @@ if (errors > 0) {
   process.exit(1);
 }
 
-ok('Resolve P0 canary input fixtures are neutral, deterministic, source-truth-safe, and real Palmier FCPXML remains explicitly blocked until exported by Palmier.');
+ok('Resolve P0 canary input fixtures and structured session-preparation metadata are neutral, deterministic, source-truth-safe, and real Palmier FCPXML remains explicitly blocked until exported by Palmier.');
