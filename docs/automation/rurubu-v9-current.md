@@ -22,46 +22,52 @@ All six remain `794×1123`.
 
 ## Current editorial state
 
-V9 is now in publication-level refinement. Existing Drive assets are optional design material, not inventory that must be consumed. Readability, Japanese hierarchy, photo rhythm, page balance and authentic magazine pacing override decoration count.
+V9 is in publication-level refinement. Existing Drive assets are optional design material, not inventory that must be consumed. Readability, Japanese hierarchy, photo rhythm, page balance and authentic magazine pacing override decoration count.
 
 Earlier passes removed redundant UI-like cards/pills, opened Profile Q&A and Story Timeline into print-editorial typography, narrowed the Story year rail, enlarged its hero field, editorialized Cover supporting-photo captions, removed empty helper shells, and retained only functional labels/routes.
 
 ## 2026-08-27 print-readability pass
 
-A further whole-publication audit found several residual helper micro-labels that duplicated information already communicated by page titles, photography or editorial captions. These were hidden rather than deleted, after first cloning all six production frames as hidden rollback snapshots.
+A whole-publication audit removed residual helper micro-labels that duplicated page titles, photography or editorial captions, while preserving functional indexing labels and chronology. Back Cover photo captions were raised to 12 px, Memory lower photo captions to 12 px, and the 1DAY travel-note body to 14 px. No new generated assets were added.
 
-### Removed from the live reading layer
+Rollback snapshot prefix:
 
-- Cover: redundant `YOKOHAMA / TRIP / PEOPLE`, `YOKOHAMA WEDDING TRIP`, `MUST SEE!` helper labels.
-- Back Cover: redundant `SPECIAL CONTENTS` and `KEEP THIS BOOK` micro-labels; the actual contents hierarchy remains.
-- Profile: `NEXT → STORY`, `COUPLE FILE`, `3 QUESTIONS`; functional `TRAVEL / FOOD / PHOTO` tags remain.
-- Story: `FIRST MEET / FIRST TRIP / WEDDING DAY / OUR JOURNEY`; the actual year/event/caption chronology remains.
-- Memory: `NEXT → 1DAY`, `BEST SHOTS`, `6 MEMORIES`; functional `PLACE / PEOPLE / FOOD` and photo captions remain.
-- 1DAY: footer navigation/helper labels, duplicate `1 DAY ROUTE / CAFE & TABLE` micros, and `STOP 01–04` mini pills; the time-route, stop headings, editorial notes and main Cafe/Table section remain.
+`ROLLBACK / V9 READABILITY PASS / 1787777299849 / ...`
 
-### Print-size readability improvements
+## 2026-08-27 editorial-rhythm pass
 
-- Back Cover photo captions `VENUE / CAFE / TABLE`: 11 px → 12 px.
-- Memory lower photo captions `BEACH TRIP / DINNER / CAFE TIME`: 10.5 px → 12 px with slightly expanded text boxes.
-- 1DAY travel-note body: 13 px → 14 px.
+A new reading-scale review identified three concrete composition issues and corrected them without adding decorative inventory.
 
-This pass intentionally does not add new generated assets. The goal is to make the current six-page dummy-content edition read like an edited publication rather than an asset showcase.
+### Cover
 
-## Rollback evidence
+- Tightened the layered `るるぶWEDDING` masthead upward by 12 px.
+- Raised the main cover sub-head by 12 px.
+- This reduces unused yellow-header space and strengthens the magazine masthead entry point without changing the hero/photo-mask structure.
 
-All six production frames were cloned immediately before the print-readability pass as hidden nodes named:
+### Back Cover
 
-`ROLLBACK / V9 READABILITY PASS / 1787777299849 / <production frame name>`
+- Hid the remaining visually empty helper/index shell above `この本の中身`.
+- The contents title now enters directly from the photo block, removing a residual empty UI-like pill.
 
-Earlier rollback snapshots also remain hidden. No rollback node is a production candidate.
+### Story + Timeline
 
-## Structural QA after print-readability pass
+- Enlarged the replaceable supporting photo from `205×160` to `230×176` and kept its matching frame overlay geometrically identical.
+- Shifted the `TIMELINE` title group to form a clearer two-column bridge beside the supporting photo.
+- Added one plain editorial bridge line, `4つの出来事でたどる、ふたりの旅。`, plus a thin cyan rule. This is native editable text/geometry, not a badge/card.
+- The bridge fills the previously weak transition between the upper photo/story lead and the year chronology while preserving the open editorial layout.
+
+Rollback snapshot prefix for all three touched pages:
+
+`ROLLBACK / V9 EDITORIAL RHYTHM PASS / 1787784699934 / ...`
+
+## Structural QA after editorial-rhythm pass
 
 PASS across all six current production frames:
 
 - A4 size: `794×1123` × 6
 - visible replaceable photo masks: `4 / 3 / 2 / 2 / 6 / 5` = 22
 - corresponding visible frame overlays: `4 / 3 / 2 / 2 / 6 / 5` = 22
+- photo/frame geometry mismatches: 0
 - visible node overflow outside page bounds: 0
 - visible text below 10.5 px: 0
 - visible rollback nodes: 0
@@ -69,15 +75,17 @@ PASS across all six current production frames:
 
 ## Current design decision
 
-`VERIFIED_LOCAL`: V9 benefits more from selective subtraction and print-size typography than from additional decorative assets at this stage. Magazine density should come from photography, headline hierarchy, asymmetry, captioning and useful indexing—not from exhausting the Drive asset inventory.
+`VERIFIED_LOCAL`: V9 benefits more from selective subtraction, print-size typography, photo hierarchy and deliberate page-to-page pacing than from additional decorative assets at this stage. Magazine density should come from photography, headline hierarchy, asymmetry, captioning and useful indexing—not from exhausting the Drive asset inventory.
+
+The Story test further supports a narrower principle: when a page becomes too empty after removing UI-like helpers, restore hierarchy with editorial text, crop/scale and simple rules before reintroducing badges/cards.
 
 Do not remove functional labels merely to reduce count. Keep a line, tag, frame, route or container when it visibly improves binding, indexing, scan path or physical/editorial meaning.
 
 ## Next implementation target
 
-1. inspect the six pages at actual reading scale for the weakest remaining Japanese headline/body spacing and photo crops;
-2. refine photo hierarchy/crop only where the dummy image composition is visibly weak, preserving replaceable masks and frame-above/photo-below structure;
-3. continue reducing web-UI grammar only when a concrete visual problem remains;
+1. inspect Cover / Profile / Memory / 1DAY at actual reading scale for remaining weak photo crops or headline/body spacing;
+2. refine photo hierarchy only where the dummy composition is visibly weak, preserving replaceable masks and frame-above/photo-below structure;
+3. continue reducing web-UI grammar only where a concrete visual problem remains;
 4. selectively use existing Drive artwork only when it solves a concrete editorial role;
 5. generate missing assets later as one batch after the assembled six pages expose specific gaps.
 
