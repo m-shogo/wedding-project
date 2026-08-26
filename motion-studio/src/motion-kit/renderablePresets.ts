@@ -40,4 +40,7 @@ export const renderableMotionPresets: RenderableMotionPreset[] = [
   // 他のbatchと違い、既存modeの使い回しではなく実際にengineへ新機能を実装した。
   {presetId: 'type-baseline-hop', engine: 'typography-reveal', intensity: 'M', label: 'Baseline Hop', demoText: 'HOP', mode: 'hop'},
   {presetId: 'type-frame-lock', engine: 'typography-reveal', intensity: 'L', label: 'Frame Lock', demoText: 'YOKOHAMA', mode: 'lock'},
+  // 2026-08-26 batch4: 引き続きengineへ新機能(outline mode / release variant)を実装。
+  {presetId: 'type-outline-fill', engine: 'typography-reveal', intensity: 'M', label: 'Outline to Fill', demoText: 'MEMORY', mode: 'outline'},
+  {presetId: 'color-field-release', engine: 'transition-wipe', intensity: 'M', label: 'Color Field Release', mode: 'release'},
 ];
