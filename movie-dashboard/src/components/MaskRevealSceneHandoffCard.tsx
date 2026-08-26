@@ -9,6 +9,7 @@ import { getResolveHandoffEditability } from "../data/resolveHandoffEditability"
 import { getResolveHumanAdjustability } from "../data/resolveHumanAdjustability";
 import type { MaskRevealSceneInstance } from "../data/visualSceneComposer";
 import { downloadText } from "../lib/exporters";
+import { TypographyProductionRouteSelector } from "./TypographyProductionRouteSelector";
 import { TypographyProductionRoutingMatrix } from "./TypographyProductionRoutingMatrix";
 
 const TRANSPORT_LABEL_JA: Record<string, string> = {
@@ -65,6 +66,7 @@ export function MaskRevealSceneHandoffCard({ scene }: { scene: MaskRevealSceneIn
         Human MasterはSceneの人間が理解できる値です。JSON / XML自体はHuman Masterではありません。Sceneを編集するとupdatedAtが変わり、このexportも現在のSceneInstanceから再生成されます。NLE XML自体はPalmier実timelineからexportします。
       </p>
 
+      <TypographyProductionRouteSelector scene={scene} />
       <TypographyProductionRoutingMatrix />
 
       <details className="mt-2">
