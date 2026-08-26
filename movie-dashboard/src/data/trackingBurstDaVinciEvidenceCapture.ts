@@ -18,6 +18,7 @@ import {
   type DaVinciLiveParameterBindingV1,
   type DaVinciVisualQaV1,
 } from "./davinciFollowerEvidenceContract";
+import {evaluateTypographyDaVinciHumanPromotionGate} from "./typographyDaVinciPromotionPolicy";
 
 export type TrackingBurstBindingRole =
   | "TEXT_PLUS_TOOL"
@@ -55,6 +56,9 @@ export interface TrackingBurstDaVinciEvaluatedEvidenceV1 {
     visualQaHalfSpeed: TrackingBurstActualState;
   };
   allMachineComparableChecksPass: boolean;
+  promotionGate: ReturnType<typeof evaluateTypographyDaVinciHumanPromotionGate>;
+  eligibleForHumanReview: boolean;
+  automaticPromotionAllowed: false;
   productionReady: false;
   rule: string;
 }
@@ -96,9 +100,7 @@ const blankReadback = (artifact: TrackingBurstDaVinciActualArtifactV1): Tracking
   notes: [],
 });
 
-export function createTrackingBurstDaVinciEvidenceCaptureTemplate(
-  artifact: TrackingBurstDaVinciActualArtifactV1,
-): TrackingBurstDaVinciEvidenceCaptureV1 {
+export function createTrackingBurstDaVinciEvidenceCaptureTemplate(artifact: TrackingBurstDaVinciActualArtifactV1): TrackingBurstDaVinciEvidenceCaptureV1 {
   return {
     schemaVersion: "tracking-burst-davinci-evidence-capture/v1",
     authority: "EVIDENCE_ONLY",
@@ -115,9 +117,7 @@ function parseReadback(value: unknown): TrackingBurstDaVinciActualReadbackV1 {
   const input = evidenceObject(value, "readback");
   if (input.schemaVersion !== "tracking-burst-davinci-readback/v1") throw new Error("readback.schemaVersion mismatch");
   const easingObserved = input.easingObserved;
-  if (easingObserved !== null && easingObserved !== "EASE_OUT_CUBIC" && easingObserved !== "OTHER") {
-    throw new Error("readback.easingObserved must be EASE_OUT_CUBIC|OTHER|null");
-  }
+  if (easingObserved !== null && easingObserved !== "EASE_OUT_CUBIC" && easingObserved !== "OTHER") throw new Error("readback.easingObserved must be EASE_OUT_CUBIC|OTHER|null");
   return {
     schemaVersion: "tracking-burst-davinci-readback/v1",
     sceneId: evidenceString(input.sceneId, "readback.sceneId"),
@@ -146,23 +146,15 @@ function parseReadback(value: unknown): TrackingBurstDaVinciActualReadbackV1 {
   };
 }
 
-export function parseTrackingBurstDaVinciEvidenceCapture(
-  raw: string,
-  artifact: TrackingBurstDaVinciActualArtifactV1,
-): TrackingBurstDaVinciEvidenceCaptureV1 {
+export function parseTrackingBurstDaVinciEvidenceCapture(raw: string, artifact: TrackingBurstDaVinciActualArtifactV1): TrackingBurstDaVinciEvidenceCaptureV1 {
   const input = evidenceObject(JSON.parse(raw) as unknown, "capture");
   if (input.schemaVersion !== "tracking-burst-davinci-evidence-capture/v1") throw new Error("capture.schemaVersion mismatch");
   if (input.authority !== "EVIDENCE_ONLY") throw new Error("capture.authority must be EVIDENCE_ONLY");
   const sceneId = evidenceString(input.sceneId, "capture.sceneId");
   const sourceRevision = evidenceString(input.sourceRevision, "capture.sourceRevision");
-  assertDaVinciEvidenceIdentity({sceneId, sourceRevision}, artifact, {
-    sceneMismatchMessage: "Tracking Burst capture sceneId mismatch",
-    staleRevisionMessage: "STALE_TRACKING_BURST_EVIDENCE_CAPTURE",
-  });
+  assertDaVinciEvidenceIdentity({sceneId, sourceRevision}, artifact, {sceneMismatchMessage: "Tracking Burst capture sceneId mismatch", staleRevisionMessage: "STALE_TRACKING_BURST_EVIDENCE_CAPTURE"});
   const readback = parseReadback(input.readback);
-  if (readback.sceneId !== sceneId || readback.sourceRevision !== sourceRevision) {
-    throw new Error("capture/readback identity mismatch");
-  }
+  if (readback.sceneId !== sceneId || readback.sourceRevision !== sourceRevision) throw new Error("capture/readback identity mismatch");
   return {
     schemaVersion: "tracking-burst-davinci-evidence-capture/v1",
     authority: "EVIDENCE_ONLY",
@@ -175,32 +167,17 @@ export function parseTrackingBurstDaVinciEvidenceCapture(
   };
 }
 
-export function evaluateTrackingBurstDaVinciEvidenceCapture(
-  artifact: TrackingBurstDaVinciActualArtifactV1,
-  capture: TrackingBurstDaVinciEvidenceCaptureV1,
-): TrackingBurstDaVinciEvaluatedEvidenceV1 {
-  assertDaVinciEvidenceIdentity(capture, artifact, {
-    sceneMismatchMessage: "Tracking Burst capture sceneId mismatch",
-    staleRevisionMessage: "STALE_TRACKING_BURST_EVIDENCE_CAPTURE",
-  });
+export function evaluateTrackingBurstDaVinciEvidenceCapture(artifact: TrackingBurstDaVinciActualArtifactV1, capture: TrackingBurstDaVinciEvidenceCaptureV1): TrackingBurstDaVinciEvaluatedEvidenceV1 {
+  assertDaVinciEvidenceIdentity(capture, artifact, {sceneMismatchMessage: "Tracking Burst capture sceneId mismatch", staleRevisionMessage: "STALE_TRACKING_BURST_EVIDENCE_CAPTURE"});
   const evaluatedArtifact = attachTrackingBurstDaVinciActualReadback(artifact, capture.readback);
-  const checks = {
-    ...evaluatedArtifact.checks,
-    visualQa1x: capture.visualQa.oneX,
-    visualQaHalfSpeed: capture.visualQa.halfSpeed,
-  };
-  const machineComparable = [
-    checks.resolveIdentity,
-    checks.textPlusCreated,
-    checks.characterSpacingInputAttached,
-    checks.nativeUnitCalibrationRecorded,
-    checks.durationApplied,
-    checks.trackingApplied,
-    checks.opacityApplied,
-    checks.easingApplied,
-    checks.sourceReadback,
-    checks.renderCompleted,
-  ];
+  const checks = {...evaluatedArtifact.checks, visualQa1x: capture.visualQa.oneX, visualQaHalfSpeed: capture.visualQa.halfSpeed};
+  const machineComparable = [checks.resolveIdentity, checks.textPlusCreated, checks.characterSpacingInputAttached, checks.nativeUnitCalibrationRecorded, checks.durationApplied, checks.trackingApplied, checks.opacityApplied, checks.easingApplied, checks.sourceReadback, checks.renderCompleted];
+  const promotionGate = evaluateTypographyDaVinciHumanPromotionGate({
+    patternId: "type-tracking-burst",
+    machineChecks: machineComparable,
+    bindings: capture.liveParameterBindings,
+    visualQa: capture.visualQa,
+  });
   return {
     schemaVersion: "tracking-burst-davinci-evaluated-evidence/v1",
     authority: "EVIDENCE_ONLY",
@@ -211,8 +188,11 @@ export function evaluateTrackingBurstDaVinciEvidenceCapture(
     parameterBindingsCaptured: capture.liveParameterBindings.length > 0,
     visualQa: {...capture.visualQa, notes: [...capture.visualQa.notes]},
     checks,
-    allMachineComparableChecksPass: machineComparable.every((state) => state === "PASS"),
+    allMachineComparableChecksPass: promotionGate.machineChecksPass,
+    promotionGate,
+    eligibleForHumanReview: promotionGate.eligibleForHumanReview,
+    automaticPromotionAllowed: false,
     productionReady: false,
-    rule: "Machine comparison is meaningful only after native tracking-unit calibration is actually recorded. Promotion remains a separate human-reviewed gate.",
+    rule: "Native tracking-unit calibration remains mandatory. Complete machine/readback/binding/visual evidence may only enter a separate human promotion review; it cannot auto-promote the route.",
   };
 }

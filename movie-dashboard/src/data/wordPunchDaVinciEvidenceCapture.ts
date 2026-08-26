@@ -18,6 +18,7 @@ import {
   type DaVinciLiveParameterBindingV1,
   type DaVinciVisualQaV1,
 } from "./davinciFollowerEvidenceContract";
+import {evaluateTypographyDaVinciHumanPromotionGate} from "./typographyDaVinciPromotionPolicy";
 
 export type WordPunchBindingRole =
   | "TEXT_PLUS_TOOL"
@@ -53,6 +54,9 @@ export interface WordPunchDaVinciEvaluatedEvidenceV1 {
     visualQaHalfSpeed: WordPunchActualState;
   };
   allMachineComparableChecksPass: boolean;
+  promotionGate: ReturnType<typeof evaluateTypographyDaVinciHumanPromotionGate>;
+  eligibleForHumanReview: boolean;
+  automaticPromotionAllowed: false;
   productionReady: false;
   rule: string;
 }
@@ -190,6 +194,12 @@ export function evaluateWordPunchDaVinciEvidenceCapture(
     checks.sourceReadback,
     checks.renderCompleted,
   ];
+  const promotionGate = evaluateTypographyDaVinciHumanPromotionGate({
+    patternId: "type-word-punch",
+    machineChecks: machineComparable,
+    bindings: capture.liveParameterBindings,
+    visualQa: capture.visualQa,
+  });
   return {
     schemaVersion: "word-punch-davinci-evaluated-evidence/v1",
     authority: "EVIDENCE_ONLY",
@@ -200,8 +210,11 @@ export function evaluateWordPunchDaVinciEvidenceCapture(
     parameterBindingsCaptured: capture.liveParameterBindings.length > 0,
     visualQa: { ...capture.visualQa, notes: [...capture.visualQa.notes] },
     checks,
-    allMachineComparableChecksPass: machineComparable.every((state) => state === "PASS"),
+    allMachineComparableChecksPass: promotionGate.machineChecksPass,
+    promotionGate,
+    eligibleForHumanReview: promotionGate.eligibleForHumanReview,
+    automaticPromotionAllowed: false,
     productionReady: false,
-    rule: "Exact readback and visual QA can be evaluated here, but promotion remains separate. Machine PASS must never silently convert EVIDENCE_ONLY data into a production route.",
+    rule: "Exact readback and visual QA can make Word Punch eligible for a separate human promotion review, but machine PASS never silently converts EVIDENCE_ONLY data into a production route.",
   };
 }
