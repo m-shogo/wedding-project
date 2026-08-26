@@ -61,5 +61,8 @@ jobs:
       - name: Typography DaVinci Actual run plan contracts
         run: node scripts/verify-typography-davinci-actual-run-plan-contracts.mjs
 
+      - name: Typography DaVinci Actual session contracts
+        run: node scripts/verify-typography-davinci-actual-session-contracts.mjs
+
       - name: TypeScript and Vite build
         run: pnpm build
