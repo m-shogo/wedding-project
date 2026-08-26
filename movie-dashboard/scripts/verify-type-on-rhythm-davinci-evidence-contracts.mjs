@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const capture = fs.readFileSync(path.join(root, "src/data/typeOnRhythmDaVinciEvidenceCapture.ts"), "utf8");
+const shared = fs.readFileSync(path.join(root, "src/data/davinciFollowerEvidenceContract.ts"), "utf8");
 const gate = fs.readFileSync(path.join(root, "src/data/typeOnRhythmDaVinciPromotionGate.ts"), "utf8");
 const actual = fs.readFileSync(path.join(root, "src/data/typeOnRhythmDaVinciActualArtifact.ts"), "utf8");
 const panel = fs.readFileSync(path.join(root, "src/components/TypeOnRhythmDaVinciEvidencePanel.tsx"), "utf8");
@@ -18,8 +19,7 @@ for (const token of [
   'createTypeOnRhythmDaVinciEvidenceCaptureTemplate',
   'followerUnit: null',
   'liveParameterBindings: []',
-  'oneX: "NOT_RUN"',
-  'halfSpeed: "NOT_RUN"',
+  'blankDaVinciVisualQa()',
   'Do not infer bindings from documentation',
   'parseTypeOnRhythmDaVinciEvidenceCapture',
   'capture.schemaVersion mismatch',
@@ -28,12 +28,30 @@ for (const token of [
   'capture/readback identity mismatch',
   'readback.followerUnit must be WORDS|null',
   '"FOLLOWER_UNIT"',
+  'parseDaVinciLiveParameterBindings',
+  'parseDaVinciVisualQa',
+  'capturedDaVinciBindingRoles',
+  'assertDaVinciEvidenceIdentity',
   'evaluateTypeOnRhythmDaVinciEvidenceCapture',
   'attachTypeOnRhythmDaVinciActualReadback',
   'checks.wordUnitApplied',
   'allMachineComparableChecksPass: machineComparable.every((item) => item === "PASS")',
   'productionReady: false',
 ]) requireText(capture, token, `Type-on-rhythm evidence capture missing: ${token}`);
+
+for (const token of [
+  'export type DaVinciEvidenceState = "NOT_RUN" | "PASS" | "FAIL"',
+  'DaVinciLiveParameterBindingV1',
+  'DaVinciVisualQaV1',
+  'parseDaVinciLiveParameterBindings',
+  'liveParameterBindings must be an array',
+  'parseDaVinciVisualQa',
+  'capturedDaVinciBindingRoles',
+  'assertDaVinciEvidenceIdentity',
+  'blankDaVinciVisualQa',
+  'oneX: "NOT_RUN"',
+  'halfSpeed: "NOT_RUN"',
+]) requireText(shared, token, `Shared Follower evidence contract missing: ${token}`);
 
 for (const token of [
   'schemaVersion: "type-on-rhythm-davinci-promotion-assessment/v1"',
@@ -95,7 +113,7 @@ if (/automaticPromotionAllowed:\s*true/.test(gate)) errors.push("Evidence gate m
 if (/visualQa1x:\s*"PASS"/.test(capture) || /visualQaHalfSpeed:\s*"PASS"/.test(capture)) errors.push("Blank evidence template must not fabricate visual QA PASS");
 if (/DAVINCI_IMPLEMENTATION_AVAILABLE[\s\S]{0,140}type-type-on-rhythm/.test(routing)) errors.push("Evidence implementation alone must not promote route to live implementation");
 if (/DAVINCI_ACTUAL_VERIFIED[\s\S]{0,140}type-type-on-rhythm/.test(routing)) errors.push("Type on Rhythm must not claim Actual verification before real Mac evidence");
-if (!/sourceRevision !== artifact\.sourceRevision/.test(capture)) errors.push("Evidence evaluation must fail-close on revision drift");
+if (!capture.includes('assertDaVinciEvidenceIdentity')) errors.push("Evidence evaluation must delegate fail-closed identity/revision checks to the shared contract");
 if (!/evidence\.capturedBindingRoles\.length !== requiredBindingRoles\.length/.test(gate)) errors.push("Promotion gate must require all eight live binding roles");
 
 if (errors.length) {
@@ -103,4 +121,4 @@ if (errors.length) {
   for (const error of errors) console.error(`- ${error}`);
   process.exit(1);
 }
-console.log("Type-on-rhythm DaVinci Evidence contracts OK: Dashboard exports a bounded Actual JSON and blank readback template only for the selected word-stagger route, requires explicit WORDS unit plus eight live binding roles, rejects stale/mismatched evidence, evaluates canonical readback and visual QA without changing Scene authority, exposes an honest Actual-candidate route, and never upgrades live/Actual/production routing automatically.");
+console.log("Type-on-rhythm DaVinci Evidence contracts OK: shared Follower evidence validation owns generic binding/state/visual-QA/identity parsing while word-stagger retains explicit WORDS-unit canonical comparison, eight required binding roles, fail-closed promotion review, honest Actual-candidate status, and no automatic live/Actual/production promotion.");
