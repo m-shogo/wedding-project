@@ -142,5 +142,5 @@ jobs:
 
       - name: Runtime honesty markers
         run: |
-          grep -Fq 'ONE_PASS != REPRODUCED' docs/research/2026-08-26-movie-tool-learning-run-36-palmier-v2-runtime-plan.md
-          grep -Fq 'REAL_PALMIER_PROVENANCE != RESOLVE_IMPORT_VERIFIED' docs/prompts/2026-08-26-resolve21-palmier-fcpxml-v2-actual-agent.md
+          grep -Fq 'INTERNALLY_ELIGIBLE_PASS != REPRODUCED' docs/research/2026-08-26-movie-tool-learning-run-36-palmier-v2-runtime-plan.md
+          grep -Fq 'ONE_PASS != REPRODUCED' docs/prompts/2026-08-26-resolve21-palmier-fcpxml-v2-actual-agent.md
