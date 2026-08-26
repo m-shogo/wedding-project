@@ -11,6 +11,19 @@ import {renderableMotionPresets, type RenderableMotionPreset} from '../../motion
 
 const CLIP_FRAMES = 75;
 
+type TypographyMode = 'mask' | 'punch' | 'stagger' | 'hop' | 'lock' | 'outline' | 'tracking' | 'triplet' | 'vertical-wipe';
+const TYPOGRAPHY_MODES: Set<string> = new Set<TypographyMode>([
+  'mask',
+  'punch',
+  'stagger',
+  'hop',
+  'lock',
+  'outline',
+  'tracking',
+  'triplet',
+  'vertical-wipe',
+]);
+
 function DemoBackdrop({label}: {label: string}) {
   return (
     <AbsoluteFill style={{background: 'linear-gradient(135deg, #0d2035 0%, #173d5b 58%, #315d78 100%)', color: '#fff'}}>
@@ -30,21 +43,7 @@ function RenderPreset({preset}: {preset: RenderableMotionPreset}) {
         <TypographyRevealEngine
           text={preset.demoText ?? 'WELCOME'}
           intensity={preset.intensity}
-          mode={
-            preset.mode === 'punch'
-              ? 'punch'
-              : preset.mode === 'stagger'
-                ? 'stagger'
-                : preset.mode === 'hop'
-                  ? 'hop'
-                  : preset.mode === 'lock'
-                    ? 'lock'
-                    : preset.mode === 'outline'
-                      ? 'outline'
-                      : preset.mode === 'tracking'
-                        ? 'tracking'
-                        : 'mask'
-          }
+          mode={TYPOGRAPHY_MODES.has(preset.mode ?? '') ? (preset.mode as TypographyMode) : 'mask'}
         />
       </AbsoluteFill>
     );
@@ -70,7 +69,7 @@ function RenderPreset({preset}: {preset: RenderableMotionPreset}) {
         <TransitionWipeEngine
           intensity={preset.intensity}
           direction={preset.mode === 'left' ? 'left' : preset.mode === 'up' ? 'up' : preset.mode === 'down' ? 'down' : 'right'}
-          variant={preset.mode === 'release' ? 'release' : preset.mode === 'shape' ? 'shape' : 'wipe'}
+          variant={preset.mode === 'release' ? 'release' : preset.mode === 'shape' ? 'shape' : preset.mode === 'paper' ? 'paper' : 'wipe'}
         />
       </AbsoluteFill>
     );

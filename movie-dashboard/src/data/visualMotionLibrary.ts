@@ -637,6 +637,9 @@ const LOCAL_RENDER_VERIFIED_2026_08_26 = new Set([
   "type-frame-lock",
   "type-outline-fill",
   "color-field-release",
+  "type-triplet",
+  "type-vertical-wipe",
+  "wipe-paper-edge",
 ]);
 
 function kitPresetToPreview(preset: StartMotionPreset): MotionPreviewRecord {

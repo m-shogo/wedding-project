@@ -13,7 +13,7 @@ export function TypographyRevealEngine({
 }: {
   text: string;
   intensity?: MotionIntensity;
-  mode?: 'mask' | 'punch' | 'stagger' | 'hop' | 'lock' | 'outline' | 'tracking';
+  mode?: 'mask' | 'punch' | 'stagger' | 'hop' | 'lock' | 'outline' | 'tracking' | 'triplet' | 'vertical-wipe';
   transparent?: boolean;
 }) {
   const frame = useCurrentFrame();
@@ -23,6 +23,14 @@ export function TypographyRevealEngine({
     extrapolateRight: 'clamp',
     easing: Easing.out(Easing.cubic),
   });
+  // tripletは3拍(3-hit)で文字を叩き込む表現。GraphicHitEngineのtripletとは別実装
+  // (こちらは文字自体をscaleで3回パンチする)。
+  const tripletHitFrames = [Math.round(fps * 0.12), Math.round(fps * 0.12) + 6, Math.round(fps * 0.12) + 12];
+  const tripletPulse = (hitFrame: number) => Math.max(0, 1 - (frame - hitFrame) / 6);
+  const tripletScale = mode === 'triplet' ? 1 + 0.25 * strength * tripletHitFrames.reduce((sum, h) => sum + (frame >= h ? tripletPulse(h) : 0), 0) : 1;
+  const tripletOpacity = mode === 'triplet' ? interpolate(frame, [tripletHitFrames[0] - 2, tripletHitFrames[0]], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'}) : 1;
+  // vertical-wipeはclip-pathで上から下へ物理的に切り出す(maskのtranslateYスライドとは別)。
+  const verticalWipeClip = mode === 'vertical-wipe' ? `inset(${(1 - progress) * 100}% 0 0 0)` : undefined;
   // hopは着地時に軽く弾む物理的な質感を出すため、Easing.bounceを別トラックとして使う
   // (progress自体はopacity/scaleの基準として保つ)。
   const hopProgress = interpolate(frame, [0, Math.round(fps * 0.7)], [0, 1], {
@@ -35,7 +43,7 @@ export function TypographyRevealEngine({
   const outlineFill = interpolate(progress, [0.35, 1], [0, 1], {extrapolateLeft: 'clamp'});
   const outlineStrokeWidth = interpolate(progress, [0, 1], [2.5, 0]) * strength;
 
-  const scale = mode === 'punch' ? interpolate(progress, [0, 1], [1 + 0.18 * strength, 1]) : 1;
+  const scale = mode === 'punch' ? interpolate(progress, [0, 1], [1 + 0.18 * strength, 1]) : mode === 'triplet' ? tripletScale : 1;
   const translateY =
     mode === 'mask' ? (1 - progress) * 80 * strength : mode === 'hop' ? (1 - hopProgress) * -90 * strength : 0;
   const translateX = mode === 'lock' ? 130 * strength : 0;
@@ -43,7 +51,7 @@ export function TypographyRevealEngine({
   // 下の文字単位reveal(charProgress)で表現するため、letterSpacingは動かさない。
   const letterSpacing = mode === 'tracking' ? `${interpolate(progress, [0, 1], [0.18 * strength, 0.02])}em` : '0.02em';
   const fontSize = mode === 'lock' ? 200 : 104;
-  const opacity = mode === 'outline' ? outlineAppear : progress;
+  const opacity = mode === 'outline' ? outlineAppear : mode === 'triplet' ? tripletOpacity : mode === 'vertical-wipe' ? 1 : progress;
   const color = mode === 'outline' ? `rgba(255,255,255,${outlineFill})` : '#fff';
   const webkitTextStroke = mode === 'outline' ? `${outlineStrokeWidth}px #fff` : undefined;
 
@@ -91,7 +99,7 @@ export function TypographyRevealEngine({
         overflow: mode === 'lock' ? 'hidden' : undefined,
       }}
     >
-      <div style={{overflow: 'hidden', padding: '0.15em 0.25em'}}>
+      <div style={{overflow: 'hidden', padding: '0.15em 0.25em', clipPath: verticalWipeClip}}>
         <div
           style={{
             opacity,
@@ -184,7 +192,8 @@ export function TransitionWipeEngine({
   transparent?: boolean;
   // 'release'は方向性のあるwipeではなく、一度color fieldへ落として呼吸するholdの表現。
   // 'shape'は矩形の色面ではなく、角のある図形(chevron)そのものが横切る表現。
-  variant?: 'wipe' | 'release' | 'shape';
+  // 'paper'は紙が破れたようなジグザグの端を持つ色面が横切る表現。
+  variant?: 'wipe' | 'release' | 'shape' | 'paper';
 }) {
   const frame = useCurrentFrame();
   const {fps, durationInFrames} = useVideoConfig();
@@ -196,6 +205,35 @@ export function TransitionWipeEngine({
   const horizontal = direction === 'left' || direction === 'right';
   const sign = direction === 'left' || direction === 'up' ? -1 : 1;
   const travel = (1 - progress) * 110 * sign;
+
+  if (variant === 'paper') {
+    const paperProgress = interpolate(frame, [0, Math.max(4, Math.round(fps * 0.55))], [0, 1], {
+      extrapolateRight: 'clamp',
+      easing: Easing.inOut(Easing.cubic),
+    });
+    const paperTravel = (1 - paperProgress) * 130 * sign * strength;
+    // 振幅を大きく(65%〜100%)取ることで、sweepのどの瞬間でも紙が破れたような
+    // ジグザグが画面上で確実に視認できるようにする(小さな振幅では境界の位置に
+    // よって見えたり見えなかったりしてしまうため)。
+    const jaggedRightEdge =
+      'polygon(0 0, 70% 0, 100% 8%, 68% 16%, 100% 24%, 66% 32%, 100% 40%, 68% 48%, 100% 56%, 66% 64%, 100% 72%, 68% 80%, 100% 88%, 70% 100%, 0 100%)';
+    const jaggedBottomEdge =
+      'polygon(0 0, 100% 0, 100% 70%, 92% 100%, 84% 68%, 76% 100%, 68% 66%, 60% 100%, 52% 68%, 44% 100%, 36% 66%, 28% 100%, 20% 68%, 12% 100%, 0 70%)';
+    return (
+      <AbsoluteFill style={{backgroundColor: transparent ? undefined : '#0d2035', overflow: 'hidden'}}>
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            background: '#f0d37a',
+            opacity: 0.95,
+            clipPath: horizontal ? jaggedRightEdge : jaggedBottomEdge,
+            transform: horizontal ? `translateX(${paperTravel}%)` : `translateY(${paperTravel}%)`,
+          }}
+        />
+      </AbsoluteFill>
+    );
+  }
 
   if (variant === 'shape') {
     const shapeProgress = interpolate(frame, [0, Math.max(4, Math.round(fps * 0.55))], [0, 1], {
