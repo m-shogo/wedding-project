@@ -59,8 +59,8 @@ for (const token of [
 
 requireText(
   routing,
-  '"type-type-on-rhythm",\n    "word-stagger",\n    "DAVINCI_TRANSLATION_NOT_IMPLEMENTED"',
-  "type-type-on-rhythm route must remain blocked while Actual bindings are unverified",
+  '"type-type-on-rhythm",\n    "word-stagger",\n    "DAVINCI_ACTUAL_CANDIDATE",\n    "impl-type-type-on-rhythm-davinci-text-plus-follower-words"',
+  "type-type-on-rhythm route must expose the bounded Actual workflow without claiming live verification",
 );
 
 if (/parameterBinding:[\s\S]{0,100}state:\s*"VERIFIED"/.test(artifact)) {
@@ -73,7 +73,10 @@ if (/productionReady:\s*true/.test(artifact)) {
   errors.push("Type-on-rhythm Actual artifact must remain productionReady=false");
 }
 if (/DAVINCI_IMPLEMENTATION_AVAILABLE[\s\S]{0,140}type-type-on-rhythm/.test(routing)) {
-  errors.push("Actual preparation artifact alone must not promote type-type-on-rhythm route");
+  errors.push("Actual preparation artifact alone must not promote type-type-on-rhythm to a live route");
+}
+if (/DAVINCI_ACTUAL_VERIFIED[\s\S]{0,140}type-type-on-rhythm/.test(routing)) {
+  errors.push("Actual preparation artifact must not claim real Mac verification");
 }
 
 if (errors.length) {
@@ -82,4 +85,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log("Type-on-rhythm DaVinci Actual Artifact contracts OK: current Scene text/intensity feeds a bounded word-level Follower canary, canonical translator values remain the comparison source, live Fusion bindings and GUI/render QA stay NOT_VERIFIED/NOT_RUN, word unit/delay/translation/opacity/easing only pass from exact future readback, and production routing remains fail-closed.");
+console.log("Type-on-rhythm DaVinci Actual Artifact contracts OK: current Scene text/intensity feeds a bounded word-level Follower canary, canonical translator values remain the comparison source, live bindings and GUI/render QA stay NOT_VERIFIED/NOT_RUN, and the route is an honest Actual candidate without live/Actual/production auto-promotion.");
