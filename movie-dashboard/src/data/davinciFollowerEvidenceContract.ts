@@ -15,6 +15,21 @@ export interface DaVinciVisualQaV1<State extends DaVinciEvidenceState = DaVinciE
   notes: string[];
 }
 
+export interface DaVinciHumanPromotionGateV1<Role extends string> {
+  schemaVersion: "davinci-human-promotion-gate/v1";
+  authority: "DERIVED_EVIDENCE_GATE";
+  machineChecksPass: boolean;
+  requiredBindingRoles: Role[];
+  capturedBindingRoles: Role[];
+  bindingsComplete: boolean;
+  visualQaComplete: boolean;
+  eligibleForHumanReview: boolean;
+  automaticPromotionAllowed: false;
+  productionReady: false;
+  blockers: string[];
+  rule: string;
+}
+
 export function evidenceObject(value: unknown, label: string): Record<string, unknown> {
   if (typeof value !== "object" || value === null || Array.isArray(value)) {
     throw new Error(`${label} must be an object`);
@@ -113,6 +128,49 @@ export function capturedDaVinciBindingRoles<Role extends string>(
         binding.inputName.trim().length > 0,
     ),
   );
+}
+
+export function evaluateDaVinciHumanPromotionGate<Role extends string>({
+  machineChecks,
+  bindings,
+  requiredBindingRoles,
+  visualQa,
+}: {
+  machineChecks: readonly DaVinciEvidenceState[];
+  bindings: readonly DaVinciLiveParameterBindingV1<Role>[];
+  requiredBindingRoles: readonly Role[];
+  visualQa: DaVinciVisualQaV1;
+}): DaVinciHumanPromotionGateV1<Role> {
+  const machineChecksPass = machineChecks.length > 0 && machineChecks.every((state) => state === "PASS");
+  const capturedBindingRoles = capturedDaVinciBindingRoles(bindings, requiredBindingRoles);
+  const bindingsComplete =
+    requiredBindingRoles.length > 0 && capturedBindingRoles.length === requiredBindingRoles.length;
+  const visualQaComplete =
+    visualQa.oneX === "PASS" &&
+    visualQa.halfSpeed === "PASS" &&
+    typeof visualQa.reviewedAt === "string" &&
+    visualQa.reviewedAt.trim().length > 0;
+  const blockers: string[] = [];
+  if (!machineChecksPass) blockers.push("DAVINCI_MACHINE_EVIDENCE_INCOMPLETE");
+  if (!bindingsComplete) blockers.push("DAVINCI_REQUIRED_BINDINGS_INCOMPLETE");
+  if (!visualQaComplete) blockers.push("DAVINCI_VISUAL_QA_INCOMPLETE");
+  const eligibleForHumanReview = blockers.length === 0;
+  if (eligibleForHumanReview) blockers.push("DAVINCI_HUMAN_PROMOTION_REVIEW_REQUIRED");
+
+  return {
+    schemaVersion: "davinci-human-promotion-gate/v1",
+    authority: "DERIVED_EVIDENCE_GATE",
+    machineChecksPass,
+    requiredBindingRoles: [...requiredBindingRoles],
+    capturedBindingRoles,
+    bindingsComplete,
+    visualQaComplete,
+    eligibleForHumanReview,
+    automaticPromotionAllowed: false,
+    productionReady: false,
+    blockers,
+    rule: "Machine/readback evidence can only make a candidate eligible for a separate human promotion review. It never promotes a Typography route or marks productionReady automatically.",
+  };
 }
 
 export function assertDaVinciEvidenceIdentity(
