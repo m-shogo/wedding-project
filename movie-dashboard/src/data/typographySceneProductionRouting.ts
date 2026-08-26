@@ -112,23 +112,23 @@ export const typographyProductionRoutes: TypographyProductionRouteDefinition[] =
   route(
     "type-outline-fill",
     "outline",
-    "DAVINCI_TRANSLATION_NOT_IMPLEMENTED",
-    null,
-    "outline→fill遷移のstroke/fill parityをDaVinciで再現・検証するまで未対応。",
+    "DAVINCI_ACTUAL_CANDIDATE",
+    "impl-type-outline-fill-davinci-text-plus-shading",
+    "canonical outline→Text+ Shading fill/stroke translatorとbounded Actual evidence workflowを実装済み。実MacでShading element/input identity・stroke native unit・fill/stroke alpha・render parityを確認するまでimplementation availableへは昇格しない。",
   ),
   route(
     "type-baseline-hop",
     "hop",
-    "DAVINCI_TRANSLATION_NOT_IMPLEMENTED",
-    null,
-    "bounce着地のtiming/easingをDaVinci側へ翻訳する実装とrender evidenceが未完了。",
+    "DAVINCI_ACTUAL_CANDIDATE",
+    "impl-type-baseline-hop-davinci-text-plus-baseline",
+    "canonical hop→Text+ baseline/position translatorとbounded Actual evidence workflowを実装済み。Remotion bounce easing、live position binding、座標系/native unit、render parityを実Macで確認するまでimplementation availableへは昇格しない。",
   ),
   route(
     "type-triplet",
     "triplet",
-    "DAVINCI_TRANSLATION_NOT_IMPLEMENTED",
-    null,
-    "3-hit pulseのvisual peakをDaVinci側で一致させるtranslatorが未実装。",
+    "DAVINCI_ACTUAL_CANDIDATE",
+    "impl-type-triplet-davinci-text-plus-transform-pulses",
+    "canonical 3-hit pulse→Text+ Transform translatorとbounded Actual evidence workflowを実装済み。3つのvisible peak/return、live Transform binding、spline parity、render parityを実Macで確認するまでimplementation availableへは昇格しない。",
   ),
 ];
 
