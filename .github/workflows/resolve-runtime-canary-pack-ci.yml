@@ -7,17 +7,20 @@ on:
       - "motion-studio/src/data/resolveRuntimeCanaryPack.ts"
       - "motion-studio/src/data/resolveRuntimeCanaryCapabilityRefs.ts"
       - "motion-studio/src/data/resolveCanaryInputFixtures.ts"
+      - "motion-studio/src/data/resolveCanarySession.schema.ts"
       - "motion-studio/scripts/resolve-runtime-canary-plan.mts"
       - "motion-studio/scripts/check-resolve-runtime-canary-pack.mts"
       - "motion-studio/scripts/prepare-resolve-canary-inputs.mts"
       - "motion-studio/scripts/check-resolve-canary-input-fixtures.mts"
       - "motion-studio/scripts/hydrate-resolve-canary-evidence.mts"
       - "motion-studio/scripts/validate-resolve-canary-evidence.mts"
+      - "motion-studio/scripts/prepare-resolve-canary-session.mts"
       - "scripts/davinci/resolve21-runtime-readonly-probe.sh"
       - "docs/runbooks/2026-08-26-resolve21-runtime-canary-pack.md"
       - "docs/prompts/2026-08-26-resolve21-runtime-canary-execution-agent.md"
       - "docs/research/2026-08-26-movie-tool-learning-run-25-resolve-canary-input-readiness.md"
       - "docs/research/2026-08-26-movie-tool-learning-run-26-evidence-hydration.md"
+      - "docs/research/2026-08-26-movie-tool-learning-run-27-canary-session.md"
       - ".github/workflows/resolve-runtime-canary-pack-ci.yml"
   push:
     paths:
@@ -25,17 +28,20 @@ on:
       - "motion-studio/src/data/resolveRuntimeCanaryPack.ts"
       - "motion-studio/src/data/resolveRuntimeCanaryCapabilityRefs.ts"
       - "motion-studio/src/data/resolveCanaryInputFixtures.ts"
+      - "motion-studio/src/data/resolveCanarySession.schema.ts"
       - "motion-studio/scripts/resolve-runtime-canary-plan.mts"
       - "motion-studio/scripts/check-resolve-runtime-canary-pack.mts"
       - "motion-studio/scripts/prepare-resolve-canary-inputs.mts"
       - "motion-studio/scripts/check-resolve-canary-input-fixtures.mts"
       - "motion-studio/scripts/hydrate-resolve-canary-evidence.mts"
       - "motion-studio/scripts/validate-resolve-canary-evidence.mts"
+      - "motion-studio/scripts/prepare-resolve-canary-session.mts"
       - "scripts/davinci/resolve21-runtime-readonly-probe.sh"
       - "docs/runbooks/2026-08-26-resolve21-runtime-canary-pack.md"
       - "docs/prompts/2026-08-26-resolve21-runtime-canary-execution-agent.md"
       - "docs/research/2026-08-26-movie-tool-learning-run-25-resolve-canary-input-readiness.md"
       - "docs/research/2026-08-26-movie-tool-learning-run-26-evidence-hydration.md"
+      - "docs/research/2026-08-26-movie-tool-learning-run-27-canary-session.md"
       - ".github/workflows/resolve-runtime-canary-pack-ci.yml"
 
 permissions:
@@ -44,7 +50,7 @@ permissions:
 jobs:
   verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 12
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -83,8 +89,10 @@ jobs:
         working-directory: motion-studio
         run: |
           node --no-warnings scripts/resolve-runtime-canary-plan.mts --list | grep -Fq 'DV21-REMOTION-ALPHA-01'
+          node --no-warnings scripts/resolve-runtime-canary-plan.mts --list | grep -Fq 'SESSION_PREP_AVAILABLE'
           node --no-warnings scripts/resolve-runtime-canary-plan.mts DV21-REMOTION-ALPHA-01 | grep -Fq 'ALPHA_SOURCE_RENDER != ALPHA_IMPORT != ALPHA_WORKING_PATH != ALPHA_EXPORT'
           node --no-warnings scripts/resolve-runtime-canary-plan.mts DV21-AUDIO-RECOVERY-01 | grep -Fq 'hydrate-resolve-canary-evidence.mts out/canary-inputs/manifests/DV21-AUDIO-RECOVERY-01.json'
+          node --no-warnings scripts/resolve-runtime-canary-plan.mts DV21-AUDIO-RECOVERY-01 | grep -Fq 'prepare-resolve-canary-session.mts DV21-AUDIO-RECOVERY-01 --execution-id <EXECUTION_ID>'
           node --no-warnings scripts/resolve-runtime-canary-plan.mts DV21-DRT-PORTABILITY-01 --json > /tmp/drt-canary.json
           grep -Fq '"kind": "RESEARCH_CANARY"' /tmp/drt-canary.json
           grep -Fq '"id": "DV21-DRT-PORT-02"' /tmp/drt-canary.json
@@ -133,6 +141,41 @@ jobs:
           fi
           test ! -e /tmp/should-not-exist.json
 
+      - name: Prepare READY audio canary session
+        working-directory: motion-studio
+        run: |
+          execution="DV21-AUDIO-RECOVERY-01-CI-SESSION-A"
+          session="out/canary-sessions/$execution"
+          node --no-warnings scripts/prepare-resolve-canary-session.mts \
+            DV21-AUDIO-RECOVERY-01 \
+            --execution-id "$execution"
+          test -s "$session/session.json"
+          test -s "$session/RUN.md"
+          test -s "$session/plan.md"
+          test -s "$session/evidence.json"
+          node --no-warnings scripts/validate-resolve-canary-evidence.mts "$session/evidence.json"
+          node -e "const s=require('./$session/session.json'); const e=require('./$session/evidence.json'); if(s.status!=='READY_FOR_RUNTIME'||s.runtimeLaunchPerformed!==false||s.networkInstallRequested!==false||s.inputManifestStatus!=='PREPARED'||e.result!=='NOT_RUN'||e.capturedAt!==null||e.promotionEligible!==false||e.stepResults.some(x=>x.status!=='NOT_RUN')) process.exit(1);"
+          grep -Fq 'SESSION_PREPARED != RESOLVE_EXECUTED' "$session/RUN.md"
+          grep -Fq 'This session builder did **not** launch DaVinci Resolve.' "$session/RUN.md"
+
+      - name: Refuse duplicate canary execution ID without overwrite
+        working-directory: motion-studio
+        run: |
+          execution="DV21-AUDIO-RECOVERY-01-CI-SESSION-A"
+          session="out/canary-sessions/$execution"
+          before_evidence="$(sha256sum "$session/evidence.json" | awk '{print $1}')"
+          before_session="$(sha256sum "$session/session.json" | awk '{print $1}')"
+          if node --no-warnings scripts/prepare-resolve-canary-session.mts \
+            DV21-AUDIO-RECOVERY-01 \
+            --execution-id "$execution"; then
+            echo "Session builder unexpectedly overwrote an existing execution ID"
+            exit 1
+          fi
+          after_evidence="$(sha256sum "$session/evidence.json" | awk '{print $1}')"
+          after_session="$(sha256sum "$session/session.json" | awk '{print $1}')"
+          test "$before_evidence" = "$after_evidence"
+          test "$before_session" = "$after_session"
+
       - name: Generate Palmier scene spec without fake FCPXML
         working-directory: motion-studio
         run: |
@@ -156,6 +199,26 @@ jobs:
             --output "$evidence"
           node --no-warnings scripts/validate-resolve-canary-evidence.mts "$evidence"
           node -e "const e=require('./out/canary-evidence/palmier-blocked.json'); if(e.result!=='BLOCKED'||e.promotionEligible!==false||e.inputInventory.some(x=>x.present===true)||!e.artifacts.some(a=>a.kind==='INPUT_SUPPORT')||!e.artifacts.some(a=>a.kind==='INPUT_MANIFEST')) process.exit(1);"
+
+      - name: Prepare BLOCKED Palmier canary session
+        working-directory: motion-studio
+        run: |
+          execution="DV21-PALMIER-FCPXML-01-CI-SESSION-BLOCKED"
+          session="out/canary-sessions/$execution"
+          node --no-warnings scripts/prepare-resolve-canary-session.mts \
+            DV21-PALMIER-FCPXML-01 \
+            --execution-id "$execution"
+          test -s "$session/session.json"
+          test -s "$session/RUN.md"
+          test -s "$session/plan.md"
+          test -s "$session/evidence.json"
+          node --no-warnings scripts/validate-resolve-canary-evidence.mts "$session/evidence.json"
+          node -e "const s=require('./$session/session.json'); const e=require('./$session/evidence.json'); if(s.status!=='BLOCKED_INPUT'||s.runtimeLaunchPerformed!==false||s.networkInstallRequested!==false||s.inputManifestStatus!=='BLOCKED_REAL_TOOL_EXPORT_REQUIRED'||e.result!=='BLOCKED'||e.promotionEligible!==false||e.inputInventory.some(x=>x.present===true)) process.exit(1);"
+          grep -Fq 'Build this neutral scene in Palmier and export it using Palmier' "$session/RUN.md"
+          if find "$session" -type f \( -name '*.fcpxml' -o -name '*.xml' \) | grep -q .; then
+            echo "Blocked Palmier session must not contain synthesized XML/FCPXML"
+            exit 1
+          fi
 
       - name: Generic read-only probe shell syntax
         run: bash -n scripts/davinci/resolve21-runtime-readonly-probe.sh

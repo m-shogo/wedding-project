@@ -12,9 +12,10 @@ Your job is to turn one `PENDING_RUNTIME` capability into honest, repeatable run
 1. `docs/runbooks/2026-08-26-resolve21-runtime-canary-pack.md`
 2. `motion-studio/src/data/resolveRuntimeCanary.schema.ts`
 3. `motion-studio/src/data/resolveRuntimeCanaryPack.ts`
-4. `motion-studio/src/data/resolveHandoff.schema.ts`
-5. the canary-specific research/decision notes referenced by the capability
-6. for Mask Reveal Scene-level proof, also read `docs/runbooks/2026-08-25-mask-reveal-local-davinci-actual-gate.md`
+4. `motion-studio/src/data/resolveCanarySession.schema.ts`
+5. `motion-studio/src/data/resolveHandoff.schema.ts`
+6. the canary-specific research/decision notes referenced by the capability
+7. for Mask Reveal Scene-level proof, also read `docs/runbooks/2026-08-25-mask-reveal-local-davinci-actual-gate.md`
 
 ## First commands
 
@@ -26,17 +27,60 @@ cd motion-studio
 node --no-warnings scripts/resolve-runtime-canary-plan.mts --list
 ```
 
-Select exactly one canary. Compile it before opening or mutating Resolve:
+Select exactly one canary and compile it before opening or mutating Resolve:
 
 ```bash
 node --no-warnings scripts/resolve-runtime-canary-plan.mts <CANARY_ID>
 ```
 
-Generate the evidence skeleton:
+### P0 canaries — preferred path
+
+When the plan says `SESSION_PREP_AVAILABLE`, create one immutable local execution session:
+
+```bash
+node --no-warnings scripts/prepare-resolve-canary-session.mts \
+  <CANARY_ID> \
+  --execution-id <UNIQUE_EXECUTION_ID>
+```
+
+For Alpha only, `--reuse-existing` may be added when the exact existing neutral ProRes render is intentionally being reused.
+
+The session is written under:
+
+```text
+out/canary-sessions/<UNIQUE_EXECUTION_ID>/
+```
+
+Read in this order:
+
+1. `session.json`
+2. `RUN.md`
+3. `plan.md`
+4. `evidence.json`
+
+If `session.status = BLOCKED_INPUT`, do **not** start the Resolve canary. Perform only the `nextAction` needed to obtain the missing real-tool input.
+
+If `session.status = READY_FOR_RUNTIME`, the session still has:
+
+```text
+runtimeLaunchPerformed = false
+result = NOT_RUN
+promotionEligible = false
+```
+
+That is the correct state before actual Resolve execution.
+
+Never rerun the same execution ID to overwrite evidence. Create a new execution ID for an independent run.
+
+### Canaries without automated session prep
+
+Use the manual fail-closed skeleton:
 
 ```bash
 node --no-warnings scripts/resolve-runtime-canary-plan.mts <CANARY_ID> --evidence-template
 ```
+
+Prepare and hash inputs explicitly, then preserve the same evidence discipline used by P0 sessions.
 
 ## Non-negotiable execution rules
 
@@ -48,8 +92,8 @@ node --no-warnings scripts/resolve-runtime-canary-plan.mts <CANARY_ID> --evidenc
 - Do not brute-force undocumented property names.
 - Do not edit Resolve database/project internals directly to manufacture a pass.
 - Do not commit private wedding media, copyrighted audio, paid assets, secrets, or machine-specific private paths.
-- A generated `.drfx`, `.setting`, `.fcpxml`, `.drt`, or render does not prove runtime behavior until imported/read back where required.
-- Keep Human Master / Tool Policy / Runtime Evidence as separate authorities.
+- A generated `.drfx`, `.setting`, `.fcpxml`, `.drt`, session, manifest, or render does not prove runtime behavior until imported/read back where required.
+- Keep Human Master / Tool Policy / Input Manifest / Runtime Evidence as separate authorities.
 
 ## Evidence discipline
 
@@ -75,6 +119,30 @@ Unavailable data stays null. A failed readback is evidence; do not replace it wi
 When the definition requires save/reopen, repeat the important readback after reopen.
 
 When the definition requires render, hash and inspect the actual rendered file.
+
+After material edits to evidence JSON, run:
+
+```bash
+node --no-warnings scripts/validate-resolve-canary-evidence.mts <EVIDENCE_JSON>
+```
+
+The validator checks internal eligibility of one evidence file. It does not prove the required independent-run count.
+
+## Session discipline
+
+Keep these distinctions explicit:
+
+```text
+SESSION_PREPARED != RESOLVE_EXECUTED
+SESSION_READY != CANARY_PASS
+MANIFEST_PREPARED != RUNTIME_EXECUTED
+HASH_MATCH != RESOLVE_IMPORT_SUCCESS
+EVIDENCE_FILE_VALID != MULTI_RUN_PROMOTION_PROVEN
+```
+
+A session is an execution workspace, not proof.
+
+Do not overwrite or delete a failed session after a later success. Independent runs must remain independently identifiable.
 
 ## Promotion discipline
 
@@ -115,17 +183,20 @@ Execute in this order when inputs permit:
 ### Completed
 Only steps actually executed.
 
+### Session
+Canary ID, execution ID, session path, and whether it began READY or BLOCKED.
+
 ### Runtime identity
 Exact Resolve product/version/edition/platform/project/timeline used.
 
 ### Evidence
-Canary ID, execution ID, exact inputs/hashes, step results, readbacks, save/reopen result, render/hash where required, human review.
+Exact inputs/hashes, step results, readbacks, save/reopen result, render/hash where required, human review.
 
 ### Result
 `PASS`, `FAIL`, or `BLOCKED` with the exact criterion that decided it.
 
 ### Promotion
-State whether this run is promotion-eligible. Remember that the catalog still requires the minimum independent execution count.
+State whether this run is internally promotion-eligible. Separately state that the catalog still requires the minimum independent execution count.
 
 ### Next
 Only the next highest-value unblocked canary or the exact fixture needed to unblock it.

@@ -41,6 +41,8 @@ A rendered file, screenshot, FCPXML, DRT, DRFX, or readback JSON is evidence or 
 - input manifest schema/fixtures: `motion-studio/src/data/resolveCanaryInputFixtures.ts`
 - evidence hydrator: `motion-studio/scripts/hydrate-resolve-canary-evidence.mts`
 - evidence semantic validator: `motion-studio/scripts/validate-resolve-canary-evidence.mts`
+- local session schema: `motion-studio/src/data/resolveCanarySession.schema.ts`
+- local session builder: `motion-studio/scripts/prepare-resolve-canary-session.mts`
 - generic read-only probe: `scripts/davinci/resolve21-runtime-readonly-probe.sh`
 - specialized Mask Reveal gate remains valid for `type-mask-reveal`.
 
@@ -89,9 +91,59 @@ promotionEligible = false
 
 Do not hand-edit those fields to claim success before execution evidence exists.
 
-### P0 input prep → hydrated evidence skeleton
+### Preferred P0 path — one local session command
 
-For P0 canaries, prepare the neutral input first:
+When the Canary plan reports `SESSION_PREP_AVAILABLE`, use one unique execution ID:
+
+```bash
+node --no-warnings scripts/prepare-resolve-canary-session.mts \
+  DV21-AUDIO-RECOVERY-01 \
+  --execution-id DV21-AUDIO-RECOVERY-01-20260826-MAC-FREE-A
+```
+
+The builder reuses the existing input-preparation route, validates the generated manifest, hydrates immutable input provenance into evidence, validates that evidence, compiles the Canary plan, and writes one ignored local folder:
+
+```text
+out/canary-sessions/<EXECUTION_ID>/
+├── session.json
+├── RUN.md
+├── plan.md
+└── evidence.json
+```
+
+The builder never launches Resolve. A prepared session is either:
+
+```text
+READY_FOR_RUNTIME
+or
+BLOCKED_INPUT
+```
+
+`READY_FOR_RUNTIME` still means:
+
+```text
+runtimeLaunchPerformed = false
+result = NOT_RUN
+promotionEligible = false
+```
+
+`BLOCKED_INPUT` means the missing real-tool input must be obtained first. Palmier remains blocked until a real Palmier-exported FCPXML exists.
+
+Never reuse an execution ID. If the session directory already exists, the builder fails before overwriting prior evidence.
+
+Therefore:
+
+```text
+SESSION_PREPARED != RESOLVE_EXECUTED
+SESSION_READY != CANARY_PASS
+EXECUTION_ID_REUSE != INDEPENDENT_EXECUTION
+```
+
+### Lower-level P0 input prep → hydrated evidence skeleton
+
+The individual commands remain available for debugging or controlled manual workflows.
+
+Prepare the neutral input:
 
 ```bash
 node --no-warnings scripts/prepare-resolve-canary-inputs.mts alpha
@@ -199,6 +251,7 @@ alpha imports != alpha exports
 manual audio recovery != automated audio write
 DRT imports != dependencies are bundled
 manifest hydrated != runtime executed
+session prepared != runtime executed
 ```
 
 Run the semantic validator whenever an evidence JSON is created or materially edited. The validator checks Canary input IDs, step IDs, capturedAt/result consistency, promotion fail-closed rules, required input presence for promotion, human review requirements, and render-artifact requirements where applicable.
@@ -257,7 +310,13 @@ Use a unique execution ID such as:
 DV21-REMOTION-ALPHA-01-20260826-MAC-FREE-A
 ```
 
-Hydrated evidence defaults to:
+Preferred P0 session storage:
+
+```text
+motion-studio/out/canary-sessions/<EXECUTION_ID>/
+```
+
+Lower-level hydrated evidence defaults to:
 
 ```text
 motion-studio/out/canary-evidence/<EXECUTION_ID>/evidence.json
