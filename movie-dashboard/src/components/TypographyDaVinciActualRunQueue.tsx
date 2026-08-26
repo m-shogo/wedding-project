@@ -36,7 +36,7 @@ export function TypographyDaVinciActualRunQueue() {
       </summary>
       <div className="mt-2 flex flex-wrap items-start justify-between gap-2">
         <p className="max-w-3xl text-[9px] leading-4 text-navy-400">
-          9候補を別々の手順で試すのではなく、同じ証拠順序で上から処理します。translatorやCIの成功はMac Actual PASSへ読み替えません。
+          9候補を別々の手順で再調査せず、manifestに記録した正本ファイルと同じ証拠順序で上から処理します。translatorやCIの成功はMac Actual PASSへ読み替えません。
         </p>
         <button
           type="button"
@@ -59,6 +59,12 @@ export function TypographyDaVinciActualRunQueue() {
             <p className="mt-1 text-[8px] font-mono text-navy-400">mode={item.canonicalMode}</p>
             <p className="mt-1 text-[9px] font-semibold text-sky-700 dark:text-sky-300">次: {ACTION_LABEL[item.nextAction]}</p>
             <p className="mt-1 text-[8px] font-mono leading-3 text-navy-400 break-all">{item.implementationId}</p>
+            <div className="mt-2 border-t border-sand-200 dark:border-navy-600 pt-1.5 space-y-1 text-[8px] font-mono leading-3 text-navy-400">
+              {item.translatorFile ? <p className="break-all">translator: {item.translatorFile}</p> : <p>translator: existing live Mask Reveal bridge</p>}
+              <p className="break-all">artifact: {item.actualArtifactFile}</p>
+              <p className="break-all">evidence: {item.evidenceCaptureFile}</p>
+              <p className="break-all text-sky-700 dark:text-sky-300">verify: {item.verificationCommand}</p>
+            </div>
             {item.requiredBindingRoles.length > 0 ? (
               <p className="mt-1 text-[8px] leading-3 text-navy-400">
                 bindings {item.requiredBindingRoles.length}: {item.requiredBindingRoles.join(" · ")}
@@ -81,7 +87,7 @@ export function TypographyDaVinciActualRunQueue() {
       </div>
 
       <p className="mt-2 border border-amber-200 dark:border-amber-800 p-2 text-[8px] leading-3 text-amber-800 dark:text-amber-200">
-        manifestはPLAN_ONLY_NOT_ACTUAL_EVIDENCE。automaticPromotionAllowed=false / productionReady=false。全machine checks・required live bindings・1x/half-speed QAが揃っても、別Human promotion reviewなしでproductionへ自動昇格しません。
+        manifestはPLAN_ONLY_NOT_ACTUAL_EVIDENCE。ファイル名やverification commandが揃ってもActual実施証拠ではありません。automaticPromotionAllowed=false / productionReady=false。全machine checks・required live bindings・1x/half-speed QAが揃っても、別Human promotion reviewなしでproductionへ自動昇格しません。
       </p>
 
       <TypographyDaVinciActualSessionImport />
