@@ -34,8 +34,7 @@ if (manifestSpecifier !== '^4.0.0' && manifestSpecifier !== expectedResolved) {
 }
 
 for (const [name] of remotionEntries) {
-  const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  const importerPattern = new RegExp(`['\"]?${escaped}['\"]?:\\n\\s+specifier: \\^4\\.0\\.0\\n\\s+version: ${expectedResolved.replace(/\./g, '\\.')}`);
+  const importerPattern = new RegExp(`['\"]?${name}['\"]?:\\n\\s+specifier: \\^4\\.0\\.0\\n\\s+version: ${expectedResolved.replace(/\./g, '\\.')}`);
   if (!importerPattern.test(lockfile)) {
     throw new Error(`Lockfile coherence check failed for ${name}: expected specifier ^4.0.0 resolving to ${expectedResolved}`);
   }
