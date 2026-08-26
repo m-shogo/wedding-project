@@ -1,5 +1,24 @@
-import type {BaselineHopActualState, BaselineHopDaVinciActualArtifactV1, BaselineHopDaVinciActualReadbackV1} from "./baselineHopDaVinciActualArtifact";
-import {assertDaVinciEvidenceIdentity, blankDaVinciVisualQa, evidenceNullableBoolean, evidenceNullableFiniteNumber, evidenceNullableString, evidenceObject, evidenceString, evidenceStringArray, parseDaVinciLiveParameterBindings, parseDaVinciVisualQa, type DaVinciLiveParameterBindingV1, type DaVinciVisualQaV1} from "./davinciFollowerEvidenceContract";
+import {
+  attachBaselineHopDaVinciActualReadback,
+  type BaselineHopActualState,
+  type BaselineHopDaVinciActualArtifactV1,
+  type BaselineHopDaVinciActualReadbackV1,
+} from "./baselineHopDaVinciActualArtifact";
+import {
+  assertDaVinciEvidenceIdentity,
+  blankDaVinciVisualQa,
+  evidenceNullableBoolean,
+  evidenceNullableFiniteNumber,
+  evidenceNullableString,
+  evidenceObject,
+  evidenceString,
+  evidenceStringArray,
+  parseDaVinciLiveParameterBindings,
+  parseDaVinciVisualQa,
+  type DaVinciLiveParameterBindingV1,
+  type DaVinciVisualQaV1,
+} from "./davinciFollowerEvidenceContract";
+import {evaluateTypographyDaVinciHumanPromotionGate} from "./typographyDaVinciPromotionPolicy";
 
 export type BaselineHopBindingRole = "TEXT_PLUS_TOOL" | "BASELINE_POSITION_BINDING" | "POSITION_UNIT_CALIBRATION" | "OPACITY" | "HOP_POSITION" | "OPACITY_EASING" | "BOUNCE_SPLINE";
 export type BaselineHopDaVinciLiveParameterBindingV1 = DaVinciLiveParameterBindingV1<BaselineHopBindingRole>;
@@ -68,4 +87,48 @@ export function parseBaselineHopDaVinciEvidenceCapture(raw: string, artifact: Ba
   const readback = parseReadback(input.readback);
   if (readback.sceneId !== sceneId || readback.sourceRevision !== sourceRevision) throw new Error("capture/readback identity mismatch");
   return {schemaVersion: "baseline-hop-davinci-evidence-capture/v1", authority: "EVIDENCE_ONLY", sceneId, sourceRevision, readback, liveParameterBindings: parseDaVinciLiveParameterBindings(input.liveParameterBindings, allowedBindingRoles), visualQa: parseDaVinciVisualQa(input.visualQa), rule: evidenceString(input.rule, "capture.rule")};
+}
+
+export function evaluateBaselineHopDaVinciEvidenceCapture(
+  artifact: BaselineHopDaVinciActualArtifactV1,
+  capture: BaselineHopDaVinciEvidenceCaptureV1,
+) {
+  assertDaVinciEvidenceIdentity(capture, artifact, {sceneMismatchMessage: "Baseline Hop capture sceneId mismatch", staleRevisionMessage: "STALE_BASELINE_HOP_EVIDENCE_CAPTURE"});
+  const evaluatedArtifact = attachBaselineHopDaVinciActualReadback(artifact, capture.readback);
+  const checks = {
+    ...evaluatedArtifact.checks,
+    visualQa1x: capture.visualQa.oneX,
+    visualQaHalfSpeed: capture.visualQa.halfSpeed,
+  };
+  const promotionGate = evaluateTypographyDaVinciHumanPromotionGate({
+    patternId: "type-baseline-hop",
+    machineChecks: [
+      checks.resolveIdentity,
+      checks.textPlusCreated,
+      checks.baselineBindingRecorded,
+      checks.opacityTimingApplied,
+      checks.hopTimingApplied,
+      checks.positionApplied,
+      checks.opacityEasingApplied,
+      checks.hopEasingApplied,
+      checks.sourceReadback,
+      checks.renderCompleted,
+    ],
+    bindings: capture.liveParameterBindings,
+    visualQa: capture.visualQa,
+  });
+  return {
+    schemaVersion: "baseline-hop-davinci-evaluated-evidence/v1" as const,
+    authority: "EVIDENCE_ONLY" as const,
+    sceneId: artifact.sceneId,
+    sourceRevision: artifact.sourceRevision,
+    evaluatedArtifact: {...evaluatedArtifact, checks},
+    liveParameterBindings: [...capture.liveParameterBindings],
+    visualQa: {...capture.visualQa, notes: [...capture.visualQa.notes]},
+    promotionGate,
+    eligibleForHumanReview: promotionGate.eligibleForHumanReview,
+    automaticPromotionAllowed: false as const,
+    productionReady: false as const,
+    rule: "Baseline Hop can become eligible for a separate human promotion review only after canonical readback parity, all required live bindings, and 1x/half-speed QA pass. No automatic route promotion is allowed.",
+  };
 }
