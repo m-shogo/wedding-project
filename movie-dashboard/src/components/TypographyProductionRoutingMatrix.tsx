@@ -2,7 +2,8 @@ import {
   typographyProductionRoutes,
   type DaVinciTypographyRouteStatus,
 } from "../data/typographySceneProductionRouting";
-import { getRemotionElementCandidate } from "../data/remotionElementCandidates";
+import {getRemotionElementCandidate} from "../data/remotionElementCandidates";
+import {getTypographyDaVinciRequiredBindingRoles} from "../data/typographyDaVinciPromotionPolicy";
 
 const DAVINCI_LABEL: Record<DaVinciTypographyRouteStatus, string> = {
   DAVINCI_TRANSLATION_NOT_IMPLEMENTED: "DaVinci翻訳待ち",
@@ -12,14 +13,10 @@ const DAVINCI_LABEL: Record<DaVinciTypographyRouteStatus, string> = {
 };
 
 const DAVINCI_CLASS: Record<DaVinciTypographyRouteStatus, string> = {
-  DAVINCI_TRANSLATION_NOT_IMPLEMENTED:
-    "border-amber-300 text-amber-700 dark:border-amber-700 dark:text-amber-300",
-  DAVINCI_ACTUAL_CANDIDATE:
-    "border-sky-300 text-sky-700 dark:border-sky-700 dark:text-sky-300",
-  DAVINCI_IMPLEMENTATION_AVAILABLE:
-    "border-violet-300 text-violet-700 dark:border-violet-700 dark:text-violet-300",
-  DAVINCI_ACTUAL_VERIFIED:
-    "border-emerald-300 text-emerald-700 dark:border-emerald-700 dark:text-emerald-300",
+  DAVINCI_TRANSLATION_NOT_IMPLEMENTED: "border-amber-300 text-amber-700 dark:border-amber-700 dark:text-amber-300",
+  DAVINCI_ACTUAL_CANDIDATE: "border-sky-300 text-sky-700 dark:border-sky-700 dark:text-sky-300",
+  DAVINCI_IMPLEMENTATION_AVAILABLE: "border-violet-300 text-violet-700 dark:border-violet-700 dark:text-violet-300",
+  DAVINCI_ACTUAL_VERIFIED: "border-emerald-300 text-emerald-700 dark:border-emerald-700 dark:text-emerald-300",
 };
 
 export function TypographyProductionRoutingMatrix() {
@@ -34,22 +31,18 @@ export function TypographyProductionRoutingMatrix() {
       <div className="mt-2 grid grid-cols-1 lg:grid-cols-2 gap-2">
         {typographyProductionRoutes.map((route) => {
           const candidate = getRemotionElementCandidate(route.patternId);
-          const studioActual =
-            candidate?.studioInstallActual === "PASS" && candidate?.studioControlReadbackActual === "PASS";
+          const studioActual = candidate?.studioInstallActual === "PASS" && candidate?.studioControlReadbackActual === "PASS";
+          const requiredRoles = route.patternId === "type-mask-reveal" ? [] : getTypographyDaVinciRequiredBindingRoles(route.patternId);
 
           return (
             <div key={route.patternId} className="border border-sand-200 dark:border-navy-600 p-2.5">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <span className="text-[10px] font-semibold text-navy-800 dark:text-sand-100">{route.patternId}</span>
-                <span
-                  className={`text-[9px] font-mono px-1.5 py-0.5 border ${DAVINCI_CLASS[route.davinciRouteStatus]}`}
-                >
+                <span className={`text-[9px] font-mono px-1.5 py-0.5 border ${DAVINCI_CLASS[route.davinciRouteStatus]}`}>
                   {DAVINCI_LABEL[route.davinciRouteStatus]}
                 </span>
               </div>
-              <p className="mt-1 text-[9px] font-mono text-navy-400">
-                TypographyRevealEngine / {route.canonicalMode}
-              </p>
+              <p className="mt-1 text-[9px] font-mono text-navy-400">TypographyRevealEngine / {route.canonicalMode}</p>
               <div className="mt-2 grid grid-cols-2 gap-1 text-[9px] text-navy-500 dark:text-navy-300">
                 <span>Element CI: {candidate?.standaloneRenderCi ? "PASS" : "NO"}</span>
                 <span>Studio Actual: {studioActual ? "PASS" : "NOT_RUN"}</span>
@@ -60,16 +53,22 @@ export function TypographyProductionRoutingMatrix() {
                 <span>DaVinci Actual: {route.actualVerified ? "PASS" : "NOT_RUN"}</span>
                 <span>Production: NOT_READY</span>
               </div>
-              {route.davinciImplementationId ? (
-                <p className="mt-1 text-[8px] font-mono text-navy-400 break-all">{route.davinciImplementationId}</p>
+              {requiredRoles.length > 0 ? (
+                <div className="mt-2 border-t border-sand-200 dark:border-navy-600 pt-1.5">
+                  <p className="text-[8px] font-semibold text-sky-700 dark:text-sky-300">
+                    Human Review gate: machine parity + {requiredRoles.length} bindings + 1x/half-speed QA
+                  </p>
+                  <p className="mt-1 text-[8px] font-mono leading-3 text-navy-400 break-words">{requiredRoles.join(" · ")}</p>
+                </div>
               ) : null}
+              {route.davinciImplementationId ? <p className="mt-1 text-[8px] font-mono text-navy-400 break-all">{route.davinciImplementationId}</p> : null}
               <p className="mt-2 text-[9px] leading-4 text-navy-400">{route.rule}</p>
             </div>
           );
         })}
       </div>
       <p className="mt-2 border border-amber-200 dark:border-amber-800 p-2 text-[9px] leading-4 text-amber-800 dark:text-amber-200">
-        Mask Revealはlive実装あり、Char Stagger / Type on Rhythmはtranslator + Actual workflowまで到達しています。ただし実Resolve applied/readback/render parityが未確認の候補をActual検証済み・production-readyとは表示しません。
+        Mask Revealだけがlive実装あり。残り8候補はcanonical translator + bounded Actual workflowまで到達しています。8候補すべてでrequired live bindings・machine parity・1x/half-speed QAを満たしても、別Human promotion reviewなしにActual検証済み/production-readyへ自動昇格しません。
       </p>
     </details>
   );
