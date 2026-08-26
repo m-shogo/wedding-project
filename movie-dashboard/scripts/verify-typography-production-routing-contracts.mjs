@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
+import {fileURLToPath} from "node:url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const read = (relative) => fs.readFileSync(path.join(root, relative), "utf8");
@@ -9,8 +9,10 @@ const matrix = read("src/components/TypographyProductionRoutingMatrix.tsx");
 const selector = read("src/components/TypographyProductionRouteSelector.tsx");
 const candidates = read("src/data/remotionElementCandidates.ts");
 const maskBundle = read("src/data/maskRevealSceneProductionBundle.ts");
+const promotionPolicy = read("src/data/typographyDaVinciPromotionPolicy.ts");
+const sharedEvidence = read("src/data/davinciFollowerEvidenceContract.ts");
 const errors = [];
-const requireText = (source, token, message) => { if (!source.includes(token)) errors.push(message); };
+const requireText = (source, token, message) => {if (!source.includes(token)) errors.push(message);};
 
 const routeContracts = [
   {id: "type-mask-reveal", mode: "mask", state: "DAVINCI_IMPLEMENTATION_AVAILABLE", implementationId: "impl-type-mask-reveal-davinci-text-plus", translator: null, actual: null, capture: null},
@@ -37,8 +39,31 @@ for (const contract of routeContracts) {
     requireText(actual, 'authority: "EVIDENCE_ONLY"', `${contract.id} Actual artifact must remain evidence-only`);
     requireText(actual, 'productionReady: false', `${contract.id} Actual artifact must remain non-production-ready`);
     requireText(capture, 'authority: "EVIDENCE_ONLY"', `${contract.id} evidence capture must remain evidence-only`);
+    requireText(capture, "evaluateTypographyDaVinciHumanPromotionGate", `${contract.id} evidence must use shared Typography promotion gate`);
+    requireText(capture, `patternId: "${contract.id}"`, `${contract.id} evidence must evaluate its own policy`);
+    requireText(capture, "promotionGate", `${contract.id} evaluated evidence must expose promotionGate`);
+    requireText(capture, "eligibleForHumanReview", `${contract.id} evaluated evidence must expose human-review eligibility`);
+    requireText(capture, "automaticPromotionAllowed", `${contract.id} evaluated evidence must explicitly forbid automatic promotion`);
+    requireText(capture, "productionReady: false", `${contract.id} evaluated evidence must remain non-production-ready`);
+    requireText(promotionPolicy, `"${contract.id}"`, `${contract.id} required binding roles missing from centralized policy`);
   }
 }
+
+for (const token of [
+  'schemaVersion: "davinci-human-promotion-gate/v1"',
+  'authority: "DERIVED_EVIDENCE_GATE"',
+  'DAVINCI_MACHINE_EVIDENCE_INCOMPLETE',
+  'DAVINCI_REQUIRED_BINDINGS_INCOMPLETE',
+  'DAVINCI_VISUAL_QA_INCOMPLETE',
+  'DAVINCI_HUMAN_PROMOTION_REVIEW_REQUIRED',
+  'automaticPromotionAllowed: false',
+  'productionReady: false',
+]) requireText(sharedEvidence, token, `Shared DaVinci promotion gate missing safety contract: ${token}`);
+for (const token of [
+  "typographyDaVinciRequiredBindingRoles",
+  "evaluateTypographyDaVinciHumanPromotionGate",
+  'Exclude<TypographyProductionPatternId, "type-mask-reveal">',
+]) requireText(promotionPolicy, token, `Typography promotion policy missing: ${token}`);
 
 requireText(maskBundle, 'implementationId: "impl-type-mask-reveal-davinci-text-plus"', "Mask Reveal live implementation id drifted");
 for (const token of [
@@ -54,6 +79,8 @@ for (const token of [
 ]) requireText(routing, token, `Typography production bundle missing contract token: ${token}`);
 
 const evidenceSpecificContracts = [
+  ["typeOnRhythmDaVinciEvidenceCapture.ts", "checks.wordUnitApplied"],
+  ["typeOnRhythmDaVinciEvidenceCapture.ts", '"FOLLOWER_UNIT"'],
   ["trackingBurstDaVinciEvidenceCapture.ts", '"NATIVE_UNIT_CALIBRATION"'],
   ["trackingBurstDaVinciEvidenceCapture.ts", "normalizedTrackingFromEm"],
   ["verticalWipeDaVinciEvidenceCapture.ts", '"MASK_COORDINATE_CONVENTION"'],
@@ -68,7 +95,7 @@ const evidenceSpecificContracts = [
   ["tripletDaVinciEvidenceCapture.ts", '"HIT_3"'],
   ["tripletDaVinciEvidenceCapture.ts", '"PULSE_DECAY"'],
 ];
-for (const [file, token] of evidenceSpecificContracts) requireText(read(`src/data/${file}`), token, `${file} missing required honest Actual evidence role ${token}`);
+for (const [file, token] of evidenceSpecificContracts) requireText(read(`src/data/${file}`), token, `${file} missing required honest Actual evidence token ${token}`);
 
 for (const [source, label] of [[matrix, "Routing Matrix"], [selector, "Route Selector"]]) {
   for (const token of ["DAVINCI_TRANSLATION_NOT_IMPLEMENTED", "DAVINCI_ACTUAL_CANDIDATE", "DAVINCI_IMPLEMENTATION_AVAILABLE", "DAVINCI_ACTUAL_VERIFIED"]) requireText(source, token, `${label} missing DaVinci state ${token}`);
@@ -81,8 +108,6 @@ if (routeCalls.length !== routeContracts.length) errors.push(`Expected ${routeCo
 if (new Set(routeCalls).size !== routeCalls.length) errors.push("Typography production routes contain duplicate pattern ids");
 for (const contract of routeContracts) if (!routeCalls.includes(contract.id)) errors.push(`Typography route omitted ${contract.id}`);
 
-const implementationAvailable = routeContracts.filter((item) => item.state === "DAVINCI_IMPLEMENTATION_AVAILABLE").map((item) => item.id);
-if (implementationAvailable.length !== 1 || implementationAvailable[0] !== "type-mask-reveal") errors.push("Only Mask Reveal may claim live implementation before real Mac evidence");
 const expectedActualCandidates = routeContracts.filter((item) => item.state === "DAVINCI_ACTUAL_CANDIDATE").map((item) => item.id);
 const actualCandidates = [...routing.matchAll(/route\(\s*\n\s*"(type-[^"]+)",\s*\n\s*"[^"]+",\s*\n\s*"DAVINCI_ACTUAL_CANDIDATE"/g)].map((match) => match[1]);
 if (actualCandidates.length !== expectedActualCandidates.length || expectedActualCandidates.some((id) => !actualCandidates.includes(id))) errors.push(`Actual candidate set drifted: ${actualCandidates.join(", ")}`);
@@ -96,4 +121,4 @@ if (errors.length) {
   for (const error of errors) console.error(`- ${error}`);
   process.exit(1);
 }
-console.log("Typography Production Routing contracts OK: Mask Reveal alone has a live implementation; the other eight canonical Typography modes are honest DaVinci Actual candidates with translators/evidence workflows, while all Mac Actual and production claims remain unverified.");
+console.log("Typography Production Routing contracts OK: Mask Reveal alone has a live implementation; all eight Actual candidates use one shared human-promotion gate with pattern-specific binding requirements, while Mac Actual and production claims remain unverified.");
