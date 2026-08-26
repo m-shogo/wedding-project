@@ -16,6 +16,7 @@ import type {WeddingVariant} from '../../data/startWeddingEdit/storyboard';
 import {
   buildArmorCreationEvents,
   buildRippleThreeHitEvents,
+  buildSunburstThreeHitEvents,
   buildSoloUnionEvents,
   type ChoreographyEvent,
 } from '../../data/startWeddingEdit/choreography';
@@ -310,6 +311,104 @@ export const RippleThreeHitMoment: React.FC<{
 };
 
 // ---------------------------------------------------------------------------
+// 2.5. パッパッパッ　晴れた町に — RippleThreeHitMomentと同じ3-hit構造だが、
+// 「雨」の湿った質感(liquid-mask/縦shift/wipe)ではなく「晴れ」の質感
+// (白フラッシュが段々強くなり、3発目で画面が奥へ収束してflash-cut)にする。
+// P027(同一歌詞の2回目)でも再利用する。
+// ---------------------------------------------------------------------------
+
+export const SunburstThreeHitMoment: React.FC<{
+  phrase: EnrichedLyricPhrase;
+  variant: WeddingVariant;
+  sectionShots?: SectionShotsMap;
+  reviewMode?: boolean;
+}> = ({phrase, variant, sectionShots, reviewMode}) => {
+  const frame = useCurrentFrame();
+  const events = React.useMemo(() => buildSunburstThreeHitEvents(phrase, variant), [phrase, variant]);
+  const hitLocalFrames = events.map((ev) => secToFrame(ev.timeSec) - secToFrame(phrase.startSec));
+  const current = activeEvent(events, phrase.startSec, frame);
+  const punchScale = current && current.event.cameraAction.kind === 'punch'
+    ? interpolate(current.localFrame, [0, 3, 10], [1, current.event.cameraAction.scale, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'})
+    : current && current.event.cameraAction.kind === 'push-open'
+      ? interpolate(current.localFrame, [0, 16], [1, current.event.cameraAction.toScale], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'})
+      : 1;
+  const thirdHitLocal = hitLocalFrames[2] ?? Infinity;
+  const converging = frame >= thirdHitLocal;
+  // flash-cut: wipeで段々明かすRippleとは逆に、一瞬白く飛んでから次shotへ
+  // 硬く切り替わる(晴れやかな瞬間の"眩しさ"を表現)。
+  const flashOpacity = converging
+    ? interpolate(frame - thirdHitLocal, [0, 3, 9], [0, 1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'})
+    : 0;
+  const cutToNext = converging && frame - thirdHitLocal >= 5;
+
+  return (
+    <AbsoluteFill style={{overflow: 'hidden', background: '#0A0A0C'}}>
+      <AbsoluteFill style={{transform: `scale(${punchScale})`}}>
+        <LiveSectionShot
+          phrase={phrase}
+          sectionShots={sectionShots}
+          phraseLocalFrame={cutToNext ? frame + 14 : frame}
+          reviewMode={reviewMode}
+          labelJa={cutToNext ? 'next' : 'base'}
+        />
+      </AbsoluteFill>
+      {/* 段々強くなる暖色の光暈(sunburst)。RippleMaskの水面歪みとは対照的に、
+          中心から広がる柔らかい光の輪だけで「晴れ」を表現する(新規asset不要)。 */}
+      {events.slice(0, 3).map((ev, i) => {
+        const local = frame - hitLocalFrames[i];
+        if (local < 0) return null;
+        // 直前バージョンはpeak opacityが高すぎ、かつ3発分の光が重なって画面全体が
+        // 白飛びした(実render QAで発見・修正)。decay windowを短くして
+        // 次の発音が来る前にほぼ消えるようにし、gradientの不透明範囲も
+        // 中心付近だけへ絞る。
+        const glowOpacity = interpolate(local, [0, 3, 10], [0, ev.effectAction.kind === 'white-flash' ? ev.effectAction.opacity : 0.15, 0], {
+          extrapolateLeft: 'clamp',
+          extrapolateRight: 'clamp',
+        });
+        const glowScale = interpolate(local, [0, 10], [0.5, 1.0 + i * 0.15], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+        return (
+          <AbsoluteFill
+            key={`glow-${i}`}
+            style={{
+              opacity: glowOpacity,
+              background: `radial-gradient(circle at 50% 45%, ${VARIANT_ACCENT[variant]}66 0%, transparent 55%)`,
+              transform: `scale(${glowScale})`,
+              mixBlendMode: 'screen',
+            }}
+          />
+        );
+      })}
+      {events.slice(0, 3).map((ev, i) => {
+        const local = frame - hitLocalFrames[i];
+        if (local < 0) return null;
+        const o = interpolate(local, [0, 4, 16], [0, 1, 0.55], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+        const s = interpolate(local, [0, 4], [1.3, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+        return (
+          <div
+            key={`label-${i}`}
+            style={{
+              position: 'absolute',
+              bottom: 120 + i * 4,
+              left: 90,
+              fontFamily: "'Noto Sans JP', sans-serif",
+              fontWeight: 900,
+              fontSize: variant === 'B' ? 60 : 46,
+              color: VARIANT_TEXT_COLOR[variant],
+              opacity: o,
+              transform: `scale(${s})`,
+              textShadow: '0 2px 16px rgba(0,0,0,0.6)',
+            }}
+          >
+            {'パッ'.repeat(i + 1)}
+          </div>
+        );
+      })}
+      {converging ? <AbsoluteFill style={{background: '#FFFDF7', opacity: flashOpacity}} /> : null}
+    </AbsoluteFill>
+  );
+};
+
+// ---------------------------------------------------------------------------
 // 3. 独りじゃない — 分割された写真/文字が「独りじゃない」の発音で1つへ統合される
 // ---------------------------------------------------------------------------
 
@@ -440,7 +539,12 @@ export const SoloUnionMoment: React.FC<{
  * weddingLyricLine.tsx側の早期returnもvariant==='B'の時だけ有効にする
  * (isChoreographedForVariantで判定を一元化)。A/Cは壊れず、既存の
  * animation family(WeddingLyricBody通常dispatch)へ自動的にfallbackする。 */
-export const CHOREOGRAPHED_PHRASE_IDS = ['P004', 'P013', 'P014'] as const;
+// P012/P027は「パッパッパッ　晴れた町に」(同一歌詞の1回目/2回目)、
+// P013/P028は「チャプチャプチャプ　雨の心」(同一歌詞の1回目/2回目)。
+// 歌詞が同じ2回目は、新規bespoke componentを作らず1回目と同じmomentを
+// そのまま再利用する(Reuse Before Build。歌詞テキストの重複判定ではなく、
+// 事前に確認済みの歌詞構造上の対応関係としてハードコードする)。
+export const CHOREOGRAPHED_PHRASE_IDS = ['P004', 'P012', 'P013', 'P014', 'P027', 'P028'] as const;
 
 export const isChoreographedForVariant = (phraseId: string, variant: WeddingVariant): boolean =>
   variant === 'B' && (CHOREOGRAPHED_PHRASE_IDS as readonly string[]).includes(phraseId);
@@ -455,7 +559,11 @@ export const ChoreographedMomentRenderer: React.FC<{
   switch (phrase.phraseId) {
     case 'P004':
       return <ArmorCreationMoment phrase={phrase} variant={variant} />;
+    case 'P012':
+    case 'P027':
+      return <SunburstThreeHitMoment phrase={phrase} variant={variant} sectionShots={sectionShots} reviewMode={reviewMode} />;
     case 'P013':
+    case 'P028':
       return <RippleThreeHitMoment phrase={phrase} variant={variant} sectionShots={sectionShots} reviewMode={reviewMode} />;
     case 'P014':
       return <SoloUnionMoment phrase={phrase} variant={variant} sectionShots={sectionShots} reviewMode={reviewMode} />;

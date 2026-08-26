@@ -202,6 +202,35 @@ export const buildRippleThreeHitEvents = (phrase: EnrichedLyricPhrase, variant: 
   }));
 };
 
+/** P012/P027「パッパッパッ　晴れた町に」用。同じ3-hitでもP013(チャプチャプチャプ
+ * 　雨の心)とは意味が逆(雨→ripple/liquid-mask/縦shift/wipe-connectの湿った
+ * 質感、パッ→白フラッシュ/画面奥への収束/flash-cutの晴れやかな質感)なので、
+ * mediaAction/effectAction/transitionActionを明確に変える。ただしEffectAction/
+ * MediaAction等の型自体は既存のvocabulary(white-flash/merge-to-center/
+ * flash-cut)をそのまま再利用し、新しいaction種別は追加しない
+ * (Reuse Before Build: 組み合わせだけで別の質感を作る)。 */
+export const buildSunburstThreeHitEvents = (phrase: EnrichedLyricPhrase, variant: WeddingVariant): ChoreographyEvent[] => {
+  const scale = variantIntensityScale(variant);
+  const hitSecs = phrase.threeHitFrameSecs ?? [phrase.startSec, phrase.startSec + 0.32, phrase.startSec + 0.64];
+  return hitSecs.map((sec, i) => ({
+    id: `${phrase.phraseId}-hit-${i}`,
+    phraseId: phrase.phraseId,
+    word: 'パッ',
+    timeSec: sec,
+    audioCueType: 'impact',
+    intensity: clampIntensity((2 + i) * scale + 1),
+    ...wordMeta(phrase, i),
+    typeAction: {kind: 'word-punch'},
+    cameraAction: i === 2 ? {kind: 'push-open', toScale: 1 + 0.08 * scale} : {kind: 'punch', scale: 1 + (0.02 + i * 0.01) * scale},
+    mediaAction: i === 2 ? {kind: 'merge-to-center'} : {kind: 'none'},
+    layoutAction: {kind: 'none'},
+    transitionAction: i === 2 ? {kind: 'flash-cut'} : {kind: 'none'},
+    effectAction: {kind: 'white-flash', opacity: (0.12 + i * 0.07) * scale},
+    easing: 'ease-out',
+    durationFrames: i === 2 ? 18 : 8,
+  }));
+};
+
 /** P014「独りじゃないと否定出来るように」用。分割された写真/文字が「独りじゃない」の
  * accentで1つへ統合される(単なるfadeではなく画面構成の変化で意味を表現)。 */
 /** 静かに保つべきanimation family(whisper/question-pauseは間・余白が意味を持つ)。
