@@ -1,0 +1,83 @@
+name: Resolve Version Truth CI
+
+on:
+  pull_request:
+    paths:
+      - "motion-studio/src/data/resolveHandoff.schema.ts"
+      - "motion-studio/src/data/resolveHandoffPolicy.ts"
+      - "motion-studio/scripts/check-resolve-version-truth.mts"
+      - "docs/decisions/2026-08-26-tool-learning-routing-update-run04.md"
+      - "docs/decisions/2026-08-26-palmier-davinci-handoff-fidelity-v1.md"
+      - "docs/research/2026-08-26-movie-tool-learning-run-05-resolve21-official-manual-crosscheck.md"
+      - "docs/research/2026-08-26-movie-tool-learning-run-30-palmier-export-freshness-and-pr341-salvage.md"
+      - "docs/research/2026-08-26-movie-tool-learning-run-33-resolve-2103-version-truth-correction.md"
+      - ".github/workflows/resolve-version-truth-ci.yml"
+  push:
+    paths:
+      - "motion-studio/src/data/resolveHandoff.schema.ts"
+      - "motion-studio/src/data/resolveHandoffPolicy.ts"
+      - "motion-studio/scripts/check-resolve-version-truth.mts"
+      - "docs/decisions/2026-08-26-tool-learning-routing-update-run04.md"
+      - "docs/decisions/2026-08-26-palmier-davinci-handoff-fidelity-v1.md"
+      - "docs/research/2026-08-26-movie-tool-learning-run-05-resolve21-official-manual-crosscheck.md"
+      - "docs/research/2026-08-26-movie-tool-learning-run-30-palmier-export-freshness-and-pr341-salvage.md"
+      - "docs/research/2026-08-26-movie-tool-learning-run-33-resolve-2103-version-truth-correction.md"
+      - ".github/workflows/resolve-version-truth-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: motion-studio/pnpm-lock.yaml
+
+      - name: Install motion-studio dependencies
+        working-directory: motion-studio
+        run: pnpm install --frozen-lockfile
+
+      - name: TypeScript
+        working-directory: motion-studio
+        run: pnpm typecheck
+
+      - name: Resolve target/tested patch truth
+        working-directory: motion-studio
+        run: node --no-warnings scripts/check-resolve-version-truth.mts
+
+      - name: Existing handoff policy parser stays green
+        working-directory: motion-studio
+        run: pnpm check:motion
+
+      - name: Correction authority is explicit
+        run: |
+          correction="docs/research/2026-08-26-movie-tool-learning-run-33-resolve-2103-version-truth-correction.md"
+          grep -Fq 'DaVinci Resolve 21.0.3 Update' "$correction"
+          grep -Fq 'Date: 2026-07-22' "$correction"
+          grep -Fq 'TARGET_PATCH != TESTED_PATCH' "$correction"
+          grep -Fq '21.0.4 release claim is withdrawn' "$correction"
+          grep -Fq 'Actual GUI/runtime execution requires a local agent such as Codex / Claude Code' "$correction"
+
+      - name: Current policy must not claim 21.0.4 was tested
+        run: |
+          if grep -Fq "testedPatch: '21.0.4'" motion-studio/src/data/resolveHandoffPolicy.ts; then
+            echo 'Pending policy still claims an unverified 21.0.4 runtime'
+            exit 1
+          fi
+          grep -Fq "targetPatch: '21.0.3'" motion-studio/src/data/resolveHandoffPolicy.ts
+          grep -Fq 'testedPatch: null' motion-studio/src/data/resolveHandoffPolicy.ts
