@@ -79,9 +79,11 @@ if (inputPreparation) {
   console.log(`- Hydrate evidence after preparation: node --no-warnings scripts/hydrate-resolve-canary-evidence.mts ${inputPreparation.manifestPath} --execution-id <EXECUTION_ID>`);
   console.log(`- One-command session: node --no-warnings scripts/prepare-resolve-canary-session.mts ${canary.id} --execution-id <EXECUTION_ID>`);
   if (isPalmierRealExportCanary) {
-    console.log('- Palmier remains BLOCKED after scene-spec preparation until a real Palmier export is attached.');
+    console.log('- Palmier remains BLOCKED after scene-spec preparation until a real, fresh Palmier export is attached.');
+    console.log('- Record <ISO8601> immediately before starting the Palmier export and use a unique output path for that attempt.');
     console.log('- Inspect candidate export without claiming provenance: node --no-warnings scripts/attach-palmier-real-export.mts --fcpxml <PALMIER_EXPORT.fcpxml> --inspect-only');
-    console.log('- Attach after operator confirms it is the real Palmier DaVinci/Resolve export: node --no-warnings scripts/attach-palmier-real-export.mts --fcpxml <PALMIER_EXPORT.fcpxml> --attest-real-palmier-export');
+    console.log('- Verify this artifact is fresh for the recorded attempt without claiming provenance: node --no-warnings scripts/attach-palmier-real-export.mts --fcpxml <PALMIER_EXPORT.fcpxml> --export-started-at <ISO8601> --check-freshness-only');
+    console.log('- Attach only after freshness passes and the operator confirms it is the real Palmier DaVinci/Resolve export: node --no-warnings scripts/attach-palmier-real-export.mts --fcpxml <PALMIER_EXPORT.fcpxml> --export-started-at <ISO8601> --attest-real-palmier-export');
     console.log('- Prepare runtime session without regenerating the blocked scene-spec manifest: node --no-warnings scripts/prepare-resolve-canary-session.mts DV21-PALMIER-FCPXML-01 --execution-id <EXECUTION_ID> --reuse-existing');
   }
 } else {
@@ -134,6 +136,8 @@ console.log('');
 console.log('## Guardrails');
 for (const guardrail of canary.guardrails) console.log(`- ${guardrail}`);
 if (isPalmierRealExportCanary) {
+  console.log('- FILE_EXISTS != FRESH_EXPORT');
+  console.log('- FRESH_ARTIFACT != REAL_PALMIER_PROVENANCE');
   console.log('- FCPXML_STRUCTURE_VALID != REAL_PALMIER_PROVENANCE');
   console.log('- OPERATOR_ATTESTATION != CRYPTOGRAPHIC_PROVENANCE');
   console.log('- REAL_EXPORT_ATTACHMENT != RESOLVE_RUNTIME_EVIDENCE');
