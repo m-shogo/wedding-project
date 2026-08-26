@@ -1,6 +1,6 @@
 # ADD-05 サンキュータグ / プチギフトタグ — QA
 
-Status: `CURRENT / PROFESSIONAL_VNEXT_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / FAMILY_SCALE_TEMPLATE_REPETITION_CLOSED_FOR_ADD05 / CONFIRMED_COPY_ONLY / PHYSICAL_CLEARANCE_PASS / ACTUAL_SIZE_CONFIRMED_COPY_LEGIBILITY_PASS / 45X70_INDEPENDENT_REFLOW_PASS / PENDING_RIBBON_FOLD_PHYSICAL_CUE_AUDIT / ROLLBACK_SAFE / NOT_PRINT_READY`
+Status: `CURRENT / PROFESSIONAL_VNEXT_SELECTED / SELLABLE_VISUAL_QA_REOPENED + DESIGN_QA_PASS_WITH_PLACEHOLDERS / FAMILY_SCALE_TEMPLATE_REPETITION_CLOSED_FOR_ADD05 / CONFIRMED_COPY_ONLY / PHYSICAL_CLEARANCE_PASS / ACTUAL_SIZE_CONFIRMED_COPY_LEGIBILITY_PASS / 45X70_INDEPENDENT_REFLOW_PASS / LOCAL_ROLE_REPAIR_PENDING / PENDING_RIBBON_FOLD_PHYSICAL_CUE_AUDIT / ROLLBACK_SAFE / NOT_PRINT_READY`
 Updated: 2026-08-26
 Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
 
@@ -21,6 +21,7 @@ Current evidence:
 - `FAMILY-DIVERSITY-RIBBON-FOLD-V3-PROMOTION-QA-2026-08-21.md`
 - `FIGMA-ACTUAL-SIZE-CONFIRMED-COPY-LEGIBILITY-QA-2026-08-22.md`
 - `OBSERVED-RIBBON-FOLD-PHYSICAL-CUE-2026-08-26.md`
+- `PRE-FIGMA-CONNECTED-FOLD-REJECTION-2026-08-26.md`
 
 The earlier `PROFESSIONAL-VNEXT-WAVE-SOUVENIR-QA-2026-08-21.md` remains historical evidence and is no longer the Current visual pointer.
 
@@ -36,7 +37,9 @@ Three materially different V3 directions were created from blank frames:
 
 `RIBBON FOLD` was selected because it gives the object a gift-specific physical reading—warm paper, coral gift ribbon, mango fold and deep-ocean return field—without fake airline credentials, generic tropical decoration, or the repeated rounded-shape family grammar.
 
-The overall Current remains visually selected while one bounded physical-cue question is pending: fresh 2026-08-26 native screenshots show that the mango horizontal `fold` can read as a detached button/status bar rather than a connected fold of the coral ribbon. This is a local audit of one fixed role, not a full visual reopen of the item.
+Fresh 2026-08-26 native screenshots now show that the mango horizontal `fold` consistently reads as a detached button/status bar rather than a connected fold of the coral ribbon across all three Current faces, with the problem strongest on the smaller 45×70 reflow. Because this is a screenshot-visible artifact-reading defect on every production face, the item's structural/design evidence remains valid but the **sellable visual gate is reopened locally until the remaining Current-vs-subtraction test is completed**.
+
+This is not a whole-item clean-room reopen. Do not create another decorative direction for ADD-05. The only open visual role is the mango fold.
 
 ## Confirmed copy / physical facts
 
@@ -57,7 +60,7 @@ Do not invent guest/product/venue/QR/SNS data, Japanese concept copy, airline cl
 
 ### 50×80 front `31:2`
 
-- native canvas `500×800`: PASS
+- native canvas `500×800`: PASS for hierarchy/structure
 - whole-item/thumbnail hierarchy: PASS
 - `Thank you.` remains the first read
 - punch remains visually clear and separate from copy
@@ -65,7 +68,7 @@ Do not invent guest/product/venue/QR/SNS data, Japanese concept copy, airline cl
 
 ### 45×70 front `31:10`
 
-- native canvas `450×700`: PASS
+- native canvas `450×700`: PASS for hierarchy/structure
 - independent reflow remains intact
 - hierarchy remains `Thank you. → body → date`
 - punch geometry remains physically legible at the smaller format
@@ -73,16 +76,16 @@ Do not invent guest/product/venue/QR/SNS data, Japanese concept copy, airline cl
 
 ### Optional back `31:18`
 
-- native canvas `500×800`: PASS
+- native canvas `500×800`: PASS for hierarchy/structure
 - `Have a safe trip home.` remains the first read
 - front/back share material grammar without mirrored-template sameness
 - enlarged date remains subordinate and readable
 
-Professional Design Council score remains `90/100`; no Executive Creative Director, Japanese Editorial Designer or Print Production Director veto.
+The prior Professional Design Council score `90/100` remains historical evidence for the selected whole-item direction, but it is **not sufficient to restore `SELLABLE_VISUAL_QA_PASS` while the newly observed mango-fold defect remains unresolved**.
 
-## 2026-08-26 pending ribbon-fold physical-cue audit
+## 2026-08-26 ribbon-fold physical-cue audit
 
-Fresh live screenshots and structure readback found a new optical/semantic defect hypothesis isolated to the mango horizontal fold role.
+Fresh live screenshots and structure readback found a repeated optical/semantic defect isolated to the mango horizontal fold role.
 
 Exact live geometry:
 
@@ -101,26 +104,40 @@ Exact live geometry:
 - mango fold `31:21`: `x=42 / y=485 / 130×62`
 - native screenshot: the same detached-crossbar reading reproduces on the reverse composition.
 
-This does **not** invalidate the confirmed copy, microtype, punch, native text, or overall RIBBON FOLD selection. It does invalidate the older blanket statement that the yellow fold role itself is already proven as physical wrapping.
+This does **not** invalidate the confirmed copy, microtype, punch, native text, or the selected RIBBON FOLD art direction. It **does** invalidate the current sellable visual completion until the local role is resolved.
 
-Required bounded test when Figma mutation is available:
+### Connected-fold method: terminal rejection
 
-1. `CURRENT` retained;
-2. `NO_YELLOW_FOLD` — hide only the mango rectangle;
-3. only if subtraction weakens gift-wrap energy, `CONNECTED_FOLD` using the existing Clean Editable SVG serious-comparison candidate;
-4. compare whole-item → reading → native actual-size on all three faces;
-5. rerun punch/copy clearance and structure readback on the winner;
-6. reject the SVG rather than refining it indefinitely if it becomes origami/clip-art-like at `45×70`.
-
-Comparison asset:
+The existing Clean Editable SVG comparison asset:
 
 - `assets/ribbon-fold-connected-junction-candidate.svg`
 - semantic/variable copy baked in: `0`
-- status: serious comparison candidate only; not Drive/adopted production.
 
-Canonical evidence: `OBSERVED-RIBBON-FOLD-PHYSICAL-CUE-2026-08-26.md`.
+was re-evaluated against the live 45×70 geometry. It improves literal connection, but the resulting silhouette reads as an arrow/tab or small origami/clip-art object at the smallest format. That is a stronger pictogram/UI cue than the defect being solved.
 
-Learning state: `OBSERVED → ROOT_CAUSE_HYPOTHESIS / SERIOUS_COMPARISON_ASSET_CREATED / BOUNDED_FIGMA_TEST_PENDING`.
+Therefore:
+
+- `CONNECTED_FOLD = REJECTED_PRE_FIGMA`
+- do not upload it to Drive;
+- do not place it into production;
+- do not create another fold/junction variant without a materially different requirement.
+
+Canonical terminal evidence: `PRE-FIGMA-CONNECTED-FOLD-REJECTION-2026-08-26.md`.
+
+### Only remaining bounded test
+
+When safe Figma mutation is available:
+
+1. retain `CURRENT` as rollback/reference;
+2. create `NO_YELLOW_FOLD` by hiding only the mango rectangle on each of the three materially different faces;
+3. compare whole-item → reading → native actual-size for 50×80 front, 45×70 front and optional back;
+4. rerun punch/copy clearance and structure readback on the winning state;
+5. if subtraction preserves gift-wrap energy and improves artifact reading, promote only that local subtraction;
+6. if Current is stronger, reject the original physical-cue hypothesis and close the audit.
+
+Do not create another whole-item variation or another connected-fold treatment before this subtraction test.
+
+Learning state: `OBSERVED → ROOT_CAUSE_HYPOTHESIS / BOUNDED_FIGMA_TEST_PENDING`; connected-fold branch is terminal `REJECTED_PRE_FIGMA`.
 
 ## Actual-size confirmed-copy legibility repair — 2026-08-22
 
@@ -171,7 +188,7 @@ Hybrid split:
 - coral ribbon / paper fields: simple native geometry
 - current mango fold: simple native geometry under pending local visual audit
 - punch: native physical ellipse role
-- connected-fold comparison: Clean Editable SVG candidate only if subtraction fails
+- connected-fold comparison: `REJECTED_PRE_FIGMA`
 - generated/composed raster: not required
 - replaceable image role: not required
 - Drive writes in this audit: `0`
@@ -182,7 +199,7 @@ Hybrid split:
 
 Current chain:
 
-`live selected Figma 31:* → promotion evidence + actual-size legibility evidence + pending physical-cue evidence → this canonical QA.md → exact Drive authority 1_V20y77VU1aGrJtqpl7U5XUpC-bQuTxV`
+`live selected Figma 31:* → promotion evidence + actual-size legibility evidence + physical-cue evidence + connected-fold rejection → this canonical QA.md → exact Drive authority 1_V20y77VU1aGrJtqpl7U5XUpC-bQuTxV`
 
 Earlier designs and pre-repair Current copies remain preserved as history/rollback and are not deleted.
 
@@ -200,10 +217,10 @@ Keep `NOT_PRINT_READY` until authoritative physical inputs/proofs exist:
 - warm venue-light and rub/ink proof
 - optional back adoption under the real attachment method
 
-These unresolved physical checks do not invalidate the current visual/design selection.
+These unresolved physical checks do not invalidate the structural/design evidence. The local sellable visual completion remains reopened only because the mango-fold role itself is still unresolved.
 
 ## Decision
 
-`CURRENT_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / ACTUAL_SIZE_CONFIRMED_COPY_LEGIBILITY_PASS / PENDING_RIBBON_FOLD_PHYSICAL_CUE_AUDIT / CURRENT_POINTER_RECONCILED / NOT_PRINT_READY`.
+`CURRENT_SELECTED / SELLABLE_VISUAL_QA_REOPENED + DESIGN_QA_PASS_WITH_PLACEHOLDERS / ACTUAL_SIZE_CONFIRMED_COPY_LEGIBILITY_PASS / CONNECTED_FOLD_REJECTED_PRE_FIGMA / NO_YELLOW_FOLD_TEST_PENDING / CURRENT_POINTER_RECONCILED / NOT_PRINT_READY`.
 
-Do not create another whole-item decorative variation for ADD-05. The only open visual work is the bounded mango-fold comparison above. If the Current wins, reject the hypothesis and close the audit; if subtraction or the connected fold wins, promote only that local role with rollback and actual-size proof.
+Do not create another whole-item decorative variation for ADD-05. The only open visual work is `CURRENT` vs `NO_YELLOW_FOLD`. Restore `SELLABLE_VISUAL_QA_PASS` only after that bounded comparison is actually evidenced at whole-item, reading and native actual-size scales.
