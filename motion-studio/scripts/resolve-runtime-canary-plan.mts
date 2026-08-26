@@ -45,6 +45,7 @@ if (!canary) {
 }
 const capabilityRefs = getResolveRuntimeCanaryCapabilityRefs(canary.id);
 const inputPreparation = getResolveCanaryInputPreparation(canary.id);
+const inputManifestPath = inputPreparation ? `out/canary-inputs/manifests/${canary.id}.json` : null;
 
 if (wantsEvidenceTemplate) {
   console.log(JSON.stringify(createResolveRuntimeCanaryEvidenceTemplate(canary.id), null, 2));
@@ -52,7 +53,7 @@ if (wantsEvidenceTemplate) {
 }
 
 if (wantsJson) {
-  console.log(JSON.stringify({...canary, capabilityRefs, inputPreparation: inputPreparation ?? null}, null, 2));
+  console.log(JSON.stringify({...canary, capabilityRefs, inputPreparation: inputPreparation ?? null, inputManifestPath}, null, 2));
   process.exit(0);
 }
 
@@ -72,6 +73,8 @@ console.log('## Input preparation');
 if (inputPreparation) {
   console.log(`- Command: ${inputPreparation.command}`);
   console.log(`- Result: ${inputPreparation.result}`);
+  console.log(`- Manifest: ${inputManifestPath}`);
+  console.log(`- Hydrate evidence after preparation: node --no-warnings scripts/hydrate-resolve-canary-evidence.mts ${inputManifestPath} --execution-id <EXECUTION_ID>`);
 } else {
   console.log('- No automated neutral fixture preparation is registered. Follow the canary input definitions manually.');
 }
@@ -124,3 +127,7 @@ for (const guardrail of canary.guardrails) console.log(`- ${guardrail}`);
 console.log('');
 console.log('Evidence skeleton:');
 console.log(`  node --no-warnings scripts/resolve-runtime-canary-plan.mts ${canary.id} --evidence-template`);
+if (inputManifestPath) {
+  console.log('Hydrated input-provenance skeleton:');
+  console.log(`  node --no-warnings scripts/hydrate-resolve-canary-evidence.mts ${inputManifestPath} --execution-id <EXECUTION_ID>`);
+}

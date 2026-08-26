@@ -11,10 +11,13 @@ on:
       - "motion-studio/scripts/check-resolve-runtime-canary-pack.mts"
       - "motion-studio/scripts/prepare-resolve-canary-inputs.mts"
       - "motion-studio/scripts/check-resolve-canary-input-fixtures.mts"
+      - "motion-studio/scripts/hydrate-resolve-canary-evidence.mts"
+      - "motion-studio/scripts/validate-resolve-canary-evidence.mts"
       - "scripts/davinci/resolve21-runtime-readonly-probe.sh"
       - "docs/runbooks/2026-08-26-resolve21-runtime-canary-pack.md"
       - "docs/prompts/2026-08-26-resolve21-runtime-canary-execution-agent.md"
       - "docs/research/2026-08-26-movie-tool-learning-run-25-resolve-canary-input-readiness.md"
+      - "docs/research/2026-08-26-movie-tool-learning-run-26-evidence-hydration.md"
       - ".github/workflows/resolve-runtime-canary-pack-ci.yml"
   push:
     paths:
@@ -26,10 +29,13 @@ on:
       - "motion-studio/scripts/check-resolve-runtime-canary-pack.mts"
       - "motion-studio/scripts/prepare-resolve-canary-inputs.mts"
       - "motion-studio/scripts/check-resolve-canary-input-fixtures.mts"
+      - "motion-studio/scripts/hydrate-resolve-canary-evidence.mts"
+      - "motion-studio/scripts/validate-resolve-canary-evidence.mts"
       - "scripts/davinci/resolve21-runtime-readonly-probe.sh"
       - "docs/runbooks/2026-08-26-resolve21-runtime-canary-pack.md"
       - "docs/prompts/2026-08-26-resolve21-runtime-canary-execution-agent.md"
       - "docs/research/2026-08-26-movie-tool-learning-run-25-resolve-canary-input-readiness.md"
+      - "docs/research/2026-08-26-movie-tool-learning-run-26-evidence-hydration.md"
       - ".github/workflows/resolve-runtime-canary-pack-ci.yml"
 
 permissions:
@@ -38,7 +44,7 @@ permissions:
 jobs:
   verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 8
+    timeout-minutes: 10
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -78,6 +84,7 @@ jobs:
         run: |
           node --no-warnings scripts/resolve-runtime-canary-plan.mts --list | grep -Fq 'DV21-REMOTION-ALPHA-01'
           node --no-warnings scripts/resolve-runtime-canary-plan.mts DV21-REMOTION-ALPHA-01 | grep -Fq 'ALPHA_SOURCE_RENDER != ALPHA_IMPORT != ALPHA_WORKING_PATH != ALPHA_EXPORT'
+          node --no-warnings scripts/resolve-runtime-canary-plan.mts DV21-AUDIO-RECOVERY-01 | grep -Fq 'hydrate-resolve-canary-evidence.mts out/canary-inputs/manifests/DV21-AUDIO-RECOVERY-01.json'
           node --no-warnings scripts/resolve-runtime-canary-plan.mts DV21-DRT-PORTABILITY-01 --json > /tmp/drt-canary.json
           grep -Fq '"kind": "RESEARCH_CANARY"' /tmp/drt-canary.json
           grep -Fq '"id": "DV21-DRT-PORT-02"' /tmp/drt-canary.json
@@ -102,6 +109,30 @@ jobs:
           grep -Fq '"status": "PREPARED"' out/canary-inputs/manifests/DV21-AUDIO-RECOVERY-01.json
           grep -Fq '"sampleRateHz": 48000' out/canary-inputs/audio/audio-human-master.json
 
+      - name: Hydrate audio evidence without claiming runtime
+        working-directory: motion-studio
+        run: |
+          evidence="out/canary-evidence/audio-hydrated.json"
+          node --no-warnings scripts/hydrate-resolve-canary-evidence.mts \
+            out/canary-inputs/manifests/DV21-AUDIO-RECOVERY-01.json \
+            --execution-id DV21-AUDIO-RECOVERY-01-CI-HYDRATED \
+            --output "$evidence"
+          node --no-warnings scripts/validate-resolve-canary-evidence.mts "$evidence"
+          node -e "const e=require('./out/canary-evidence/audio-hydrated.json'); const m=Object.fromEntries(e.inputInventory.map(x=>[x.id,x])); if(e.result!=='NOT_RUN'||e.capturedAt!==null||e.promotionEligible!==false||m['synthetic-audio']?.present!==true||m['audio-human-master']?.present!==true||e.stepResults.some(s=>s.status!=='NOT_RUN')||!e.artifacts.some(a=>a.kind==='INPUT_MANIFEST')||!e.notes.includes('MANIFEST_PREPARED != RUNTIME_EXECUTED')) process.exit(1);"
+
+      - name: Hydration fails closed on input hash mismatch
+        working-directory: motion-studio
+        run: |
+          printf 'tamper' >> out/canary-inputs/audio/synthetic-tone-440hz-6s-48k-stereo.wav
+          if node --no-warnings scripts/hydrate-resolve-canary-evidence.mts \
+            out/canary-inputs/manifests/DV21-AUDIO-RECOVERY-01.json \
+            --execution-id DV21-AUDIO-RECOVERY-01-CI-TAMPERED \
+            --output /tmp/should-not-exist.json; then
+            echo "Hydration unexpectedly accepted a tampered input"
+            exit 1
+          fi
+          test ! -e /tmp/should-not-exist.json
+
       - name: Generate Palmier scene spec without fake FCPXML
         working-directory: motion-studio
         run: |
@@ -114,6 +145,17 @@ jobs:
             echo "Palmier preparation must not synthesize NLE XML/FCPXML"
             exit 1
           fi
+
+      - name: Hydrate Palmier block without inventing real export
+        working-directory: motion-studio
+        run: |
+          evidence="out/canary-evidence/palmier-blocked.json"
+          node --no-warnings scripts/hydrate-resolve-canary-evidence.mts \
+            out/canary-inputs/manifests/DV21-PALMIER-FCPXML-01.json \
+            --execution-id DV21-PALMIER-FCPXML-01-CI-BLOCKED \
+            --output "$evidence"
+          node --no-warnings scripts/validate-resolve-canary-evidence.mts "$evidence"
+          node -e "const e=require('./out/canary-evidence/palmier-blocked.json'); if(e.result!=='BLOCKED'||e.promotionEligible!==false||e.inputInventory.some(x=>x.present===true)||!e.artifacts.some(a=>a.kind==='INPUT_SUPPORT')||!e.artifacts.some(a=>a.kind==='INPUT_MANIFEST')) process.exit(1);"
 
       - name: Generic read-only probe shell syntax
         run: bash -n scripts/davinci/resolve21-runtime-readonly-probe.sh

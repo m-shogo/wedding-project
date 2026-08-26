@@ -37,6 +37,10 @@ A rendered file, screenshot, FCPXML, DRT, DRFX, or readback JSON is evidence or 
 - catalog: `motion-studio/src/data/resolveRuntimeCanaryPack.ts`
 - compiler: `motion-studio/scripts/resolve-runtime-canary-plan.mts`
 - verifier: `motion-studio/scripts/check-resolve-runtime-canary-pack.mts`
+- P0 input preparer: `motion-studio/scripts/prepare-resolve-canary-inputs.mts`
+- input manifest schema/fixtures: `motion-studio/src/data/resolveCanaryInputFixtures.ts`
+- evidence hydrator: `motion-studio/scripts/hydrate-resolve-canary-evidence.mts`
+- evidence semantic validator: `motion-studio/scripts/validate-resolve-canary-evidence.mts`
 - generic read-only probe: `scripts/davinci/resolve21-runtime-readonly-probe.sh`
 - specialized Mask Reveal gate remains valid for `type-mask-reveal`.
 
@@ -84,6 +88,50 @@ promotionEligible = false
 ```
 
 Do not hand-edit those fields to claim success before execution evidence exists.
+
+### P0 input prep → hydrated evidence skeleton
+
+For P0 canaries, prepare the neutral input first:
+
+```bash
+node --no-warnings scripts/prepare-resolve-canary-inputs.mts alpha
+node --no-warnings scripts/prepare-resolve-canary-inputs.mts audio
+node --no-warnings scripts/prepare-resolve-canary-inputs.mts palmier
+```
+
+Then hydrate verified path/hash provenance into the fail-closed evidence skeleton:
+
+```bash
+node --no-warnings scripts/hydrate-resolve-canary-evidence.mts \
+  out/canary-inputs/manifests/DV21-AUDIO-RECOVERY-01.json \
+  --execution-id DV21-AUDIO-RECOVERY-01-20260826-MAC-FREE-A
+```
+
+Validate the evidence file before and after runtime edits:
+
+```bash
+node --no-warnings scripts/validate-resolve-canary-evidence.mts \
+  out/canary-evidence/DV21-AUDIO-RECOVERY-01-20260826-MAC-FREE-A/evidence.json
+```
+
+Hydration is deliberately conservative:
+
+```text
+PREPARED_MANIFEST -> evidence.result = NOT_RUN
+BLOCKED_REAL_TOOL_EXPORT_REQUIRED -> evidence.result = BLOCKED
+promotionEligible = false
+capturedAt = null
+```
+
+Only manifest file IDs that exactly match Canary input IDs are marked `present=true`. Unmatched preparation/support files are stored as `INPUT_SUPPORT` artifacts instead. A SHA-256 mismatch or missing file aborts hydration before evidence is written.
+
+Therefore:
+
+```text
+MANIFEST_PREPARED != RUNTIME_EXECUTED
+INPUT_SUPPORT != REQUIRED_RUNTIME_INPUT
+HASH_MATCH != RESOLVE_IMPORT_SUCCESS
+```
 
 ## Canary order
 
@@ -150,7 +198,10 @@ FCPXML parses != timeline fidelity
 alpha imports != alpha exports
 manual audio recovery != automated audio write
 DRT imports != dependencies are bundled
+manifest hydrated != runtime executed
 ```
+
+Run the semantic validator whenever an evidence JSON is created or materially edited. The validator checks Canary input IDs, step IDs, capturedAt/result consistency, promotion fail-closed rules, required input presence for promotion, human review requirements, and render-artifact requirements where applicable.
 
 ## Save/reopen rule
 
@@ -194,6 +245,8 @@ required save/reopen completed
 required render completed
 ```
 
+The per-file semantic validator can prove that one evidence file is internally eligible; it cannot by itself prove the multi-run `minimumIndependentExecutions` requirement. Cross-execution promotion still requires comparing independent evidence records.
+
 If a later Resolve patch invalidates the behavior, move the capability to `NEEDS_REVALIDATION`; do not preserve a stale `RUNTIME_VERIFIED` label.
 
 ## Evidence storage
@@ -204,7 +257,13 @@ Use a unique execution ID such as:
 DV21-REMOTION-ALPHA-01-20260826-MAC-FREE-A
 ```
 
-If evidence contains only neutral/non-private data, it may be committed under a dedicated Movie evidence path in a focused PR. If it contains private paths/media/project names, keep the raw local evidence out of Git and commit only a sanitized summary/hash where appropriate.
+Hydrated evidence defaults to:
+
+```text
+motion-studio/out/canary-evidence/<EXECUTION_ID>/evidence.json
+```
+
+`motion-studio/out/` remains Git-ignored. If evidence contains only neutral/non-private data, it may later be sanitized and committed under a dedicated Movie evidence path in a focused PR. If it contains private paths/media/project names, keep the raw local evidence out of Git and commit only a sanitized summary/hash where appropriate.
 
 Never overwrite previous independent evidence to make the latest run look cleaner.
 
