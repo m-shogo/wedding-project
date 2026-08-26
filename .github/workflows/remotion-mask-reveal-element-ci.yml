@@ -18,6 +18,11 @@ on:
       - "movie-dashboard/scripts/verify-remotion-element-candidates-contracts.mjs"
       - "movie-dashboard/package.json"
       - ".github/workflows/remotion-mask-reveal-element-ci.yml"
+      - "docs/research/2026-08-26-movie-tool-learning-run-42-remotion-mask-reveal-element.md"
+      - "docs/research/2026-08-26-movie-tool-learning-run-44-remotion-element-human-adjustability.md"
+      - "docs/research/2026-08-26-movie-tool-learning-run-45-remotion-canonical-color-exit.md"
+      - "docs/prompts/2026-08-26-remotion-mask-reveal-element-local-actual-agent.md"
+      - "docs/prompts/2026-08-26-remotion-mask-reveal-run45-color-exit-local-actual-agent.md"
       - "docs/research/2026-08-27-movie-tool-learning-run-46-remotion-typography-elements.md"
   push:
     paths:
@@ -36,6 +41,11 @@ on:
       - "movie-dashboard/scripts/verify-remotion-element-candidates-contracts.mjs"
       - "movie-dashboard/package.json"
       - ".github/workflows/remotion-mask-reveal-element-ci.yml"
+      - "docs/research/2026-08-26-movie-tool-learning-run-42-remotion-mask-reveal-element.md"
+      - "docs/research/2026-08-26-movie-tool-learning-run-44-remotion-element-human-adjustability.md"
+      - "docs/research/2026-08-26-movie-tool-learning-run-45-remotion-canonical-color-exit.md"
+      - "docs/prompts/2026-08-26-remotion-mask-reveal-element-local-actual-agent.md"
+      - "docs/prompts/2026-08-26-remotion-mask-reveal-run45-color-exit-local-actual-agent.md"
       - "docs/research/2026-08-27-movie-tool-learning-run-46-remotion-typography-elements.md"
 
 permissions:
@@ -184,3 +194,4 @@ jobs:
           echo 'studioControlReadback=NOT_RUN'
           echo 'studioInstallActual=NOT_RUN'
           echo 'productionDependencyUpgradePerformed=NO'
+          echo 'thirdPartyElementInstallPerformed=NO'
