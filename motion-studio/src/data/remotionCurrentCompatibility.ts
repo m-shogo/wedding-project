@@ -10,11 +10,12 @@ export const remotionCurrentReleaseCoordinate = {
 
 export const remotionWeddingCompatibilityPolicy = {
   sourceOfTruth: 'WEDDING_REPO_CODE_AND_CANONICAL_MOTION_REGISTRY',
-  latestCompatibilityState: 'PENDING_EPHEMERAL_CI',
+  latestCompatibilityState: 'EPHEMERAL_CI_GREEN_RUNTIME_STUDIO_QA_REQUIRED',
   productionDependencyUpgradeState: 'NOT_REQUESTED_YET',
   rules: [
     'LATEST_RELEASE_AVAILABLE != WEDDING_REPO_COMPATIBLE',
     'EPHEMERAL_CI_GREEN != PRODUCTION_LOCKFILE_UPGRADED',
+    'CI_RENDER_GREEN != LOCAL_STUDIO_INTERACTION_VERIFIED',
     'STUDIO_INTERACTIVE != SOURCE_OF_TRUTH_MOVED_OUT_OF_CODE',
     'ELEMENT_PREVIEW_MATCH != CLEAN_PROJECT_INSTALL_VERIFIED',
     'ELEMENT_INSTALL_REQUEST_ACCEPTED != INSTALL_CONFIRMED',
@@ -22,6 +23,41 @@ export const remotionWeddingCompatibilityPolicy = {
     'ELEMENT_DEPENDENCY_DECLARED != DEPENDENCY_POLICY_APPROVED',
     'CUSTOM_EDITOR_FEATURE_NAME != CUSTOM_INSPECTOR_VALUE_EDITOR',
     'REMOTION_V4_LICENSE != REMOTION_V5_LICENSE',
+  ],
+} as const;
+
+export const remotionCurrentCompatibilityEvidence = {
+  canaryRunId: 32973905349,
+  candidateVersion: '4.0.517',
+  baselineVersion: '4.0.475',
+  environment: 'GitHub Actions ubuntu-latest / Node 22 / pnpm 10',
+  checks: {
+    baselineFrozenInstall: 'PASS',
+    baselineTypeScript: 'PASS',
+    candidateInstallAllDirectRemotionPackages: 'PASS',
+    candidateTypeScript: 'PASS_AFTER_COMPATIBILITY_FIX',
+    canonicalMotionContracts: 'PASS',
+    compositionDiscovery: 'PASS',
+    neutralH264Render1920x1080: 'PASS',
+    ffprobeReadback: 'PASS',
+  },
+  discoveredCompatibilityFixes: [
+    {
+      fingerprint: 'REMOTION_PATH_SAMPLING_NULLABLE_TYPE',
+      files: [
+        'src/components/opening/PlaneOnRoute.tsx',
+        'src/compositions/opening/StampRushFullRoute.tsx',
+      ],
+      cause: '@remotion/paths current 4.x types expose the planned v5 null return for out-of-range path sampling.',
+      resolution: 'Handle null explicitly with fail-soft rendering/fallback instead of non-null assertions.',
+      normalVisualChangeExpected: false,
+    },
+  ],
+  remainingBeforeProductionUpgrade: [
+    'Local Remotion Studio launch on the target Mac.',
+    'Open representative Wedding compositions and confirm canvas/timeline interaction.',
+    'Exercise crop/source-replacement controls that motivate the upgrade.',
+    'Run a deliberate package/lock update only after local Studio QA is acceptable.',
   ],
 } as const;
 
