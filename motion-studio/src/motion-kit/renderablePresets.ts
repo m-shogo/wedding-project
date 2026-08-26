@@ -43,4 +43,8 @@ export const renderableMotionPresets: RenderableMotionPreset[] = [
   // 2026-08-26 batch4: 引き続きengineへ新機能(outline mode / release variant)を実装。
   {presetId: 'type-outline-fill', engine: 'typography-reveal', intensity: 'M', label: 'Outline to Fill', demoText: 'MEMORY', mode: 'outline'},
   {presetId: 'color-field-release', engine: 'transition-wipe', intensity: 'M', label: 'Color Field Release', mode: 'release'},
+  // 2026-08-26 batch5: 引き続きengineへ新機能(triplet mode / vertical-wipe mode / paper variant)を実装。
+  {presetId: 'type-triplet', engine: 'typography-reveal', intensity: 'L', label: 'Triplet Type', demoText: 'GO', mode: 'triplet'},
+  {presetId: 'type-vertical-wipe', engine: 'typography-reveal', intensity: 'M', label: 'Vertical Wipe', demoText: 'CHAPTER', mode: 'vertical-wipe'},
+  {presetId: 'wipe-paper-edge', engine: 'transition-wipe', intensity: 'M', label: 'Paper Edge Wipe', mode: 'paper'},
 ];

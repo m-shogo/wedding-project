@@ -1,6 +1,6 @@
 # モーション図鑑 v1: 既存36 Motion Kit presetのカタログ化
 
-日付: 2026-08-26(初版 PR #333〜336 / 追記 PR #338, #339, #345)
+日付: 2026-08-26(初版 PR #333〜336 / 追記 PR #338, #339, #345, #349, #352, #354, #357, batch5)
 状態: 実装済み・継続更新中
 関連: `movie-dashboard/src/data/visualMotionLibrary.ts`, `movie-dashboard/src/data/startMotionKit.ts`, `movie-dashboard/src/data/directorRecipeCatalog.ts`, `motion-studio/src/motion-kit/renderablePresets.ts`
 
@@ -40,12 +40,13 @@ Motion」にはほど遠かった。
 1. **Data complete**: 36件全てに日本語名・用途・避ける場面・Opening/Profile適合度
    が入っている。✅
 2. **Discoverable/Browsable**: 検索・カード表示・個別previewテキストまで完了。✅
-3. **Visual fidelity / Actual verification**: **22/36件が完了**(PR #338, #339, #345)。
-   `motion-studio`の`StaRtMotionReelV1`(既存6 shared engineが対応済みのmode/
-   directionだけを使い、新規engine機能は追加せず21件をrenderable化)を実際に
-   ローカルRemotion renderし、静止フレーム抽出+ffprobe/signalstatsで目視確認した。
-   DaVinci実機検証は引き続き未実施(この開発環境にDaVinci Resolveはインストール
-   されていない)。❌
+3. **Visual fidelity / Actual verification**: **27/36件が完了**(PR #338, #339, #345,
+   #349, #352, #354, #357, batch5)。`motion-studio`の`StaRtMotionReelV1`
+   (28 renderable preset、6 shared engine)を実際にローカルRemotion renderし、
+   静止フレーム抽出+ffprobe/signalstats+一部Pythonでのpixel計測で目視確認した。
+   DaVinci実機検証は引き続き未実施(DaVinci Resolveは無料版をインストール済みだが、
+   外部scripting APIがStudio版限定のためRenderer/自動化検証はできない。詳細は
+   `docs/decisions/2026-08-26-palmier-davinci-handoff-fidelity-v1.md`の追記を参照)。❌
 
 QAで推測PASSにしなかった実例:
 - `accent-stamp-triplet`は最初のサンプルframeでは3-hitの合間に当たりスタンプが
@@ -67,22 +68,38 @@ QAで見つかった**既知の実装限界**(隠さず記録):
 - ~~`wipe-directional-shape`は「図形(shape)が横切る」という名称に対し、実装は
   図形オブジェクトではなく色面wipeの近似。~~ → 追記(2026-08-26):
   TransitionWipeEngineへ`variant='shape'`(clip-pathによる先端の尖った
-  chevron図形)を新規実装し解消。実render確認済み。
+  chevron図形)を新規実装し解消。実render確認済み。ただしさらに追記
+  (2026-08-26, `wipe-paper-edge`調査時): この実装は「chevronの先端が画面を
+  横切ってsweepする」動きではなく、「直線的にsweep-inした後、静止状態で
+  chevronのシルエットが現れる」動きだったことが後日判明した(clip-path多角形+
+  translateでのsweep方式の一般的な特性)。見た目自体は矩形wipeと明確に区別
+  できるため`PASS`判定は維持するが、動きの説明は不正確だったため
+  `motionPreviewEvidence.ts`のobservationsで訂正済み。
+- `type-triplet`(TypographyRevealEngineへ`mode='triplet'`を新規実装、3-hitの
+  scale punch): 実render確認済みだが、目視だけでは変化を確信できないほど
+  効果が控えめだったため、Pythonで対象領域の輝度ピクセルのbounding boxを
+  計測し、hitタイミングで有意にサイズが大きいことを数値で確認した
+  (`motionPreviewEvidence.ts`参照)。強度を上げるかはHuman判断待ち。
+- `type-vertical-wipe`(TypographyRevealEngineへ`mode='vertical-wipe'`を新規実装、
+  縦方向clip-path reveal): 実render確認済み、既存の横方向`mask`と明確に区別できる。
+- `wipe-paper-edge`(TransitionWipeEngineへ`variant='paper'`を新規実装、破れ紙風の
+  ギザギザwipe): 最初のサンプルframe(sweep中)ではギザギザが見えず、
+  `wipe-directional-shape`と同じ「sweep-inした後の静止状態でシルエットが現れる」
+  特性であることが判明。sweep後のframeを追加確認し、ギザギザ自体は実装できて
+  いることを確認した。
 
 これらはengine拡張(新規機能追加)が必要で、今回のカタログ化のスコープ外として
 `motionPreviewEvidence.ts`のnotesへ明記した。実装したふりをしていない。
 
-残り14件(`type-outline-fill` / `type-baseline-hop` / `type-vertical-wipe` /
-`type-type-on-rhythm` / `type-triplet` / `type-counter-scroll` / `type-frame-lock` /
-`photo-freeze-cutout` / `cut-match-shape` / `wipe-paper-edge` /
-`whip-source-matched` / `color-field-release` / `accent-cel-shadow-sweep` /
+残り8件(`type-type-on-rhythm` / `type-counter-scroll` / `photo-freeze-cutout` /
+`cut-match-shape` / `whip-source-matched` / `accent-cel-shadow-sweep` /
 `accent-micro-rgb-split`)は、既存engineのmode/directionを流用するだけでは
 正直に表現できず、真に新しいengine機能(または`davinci-edit`/`palmier-native`
 エンジン自体の実装)が必要なため、今回は見送った。`type-quiet-caption`は
 `engine: davinci-edit`のため元々render対象外。
 
 **「36件がカタログとして存在する」ことと「36件が実際に見て選べる」ことは別**。
-22件は見て選べる段階まで進んだが、残り14件は引き続き文章ベースのカタログ
+27件は見て選べる段階まで進んだが、残り8件は引き続き文章ベースのカタログ
 (`CONCEPT_ONLY`)のままである。
 
 ## Director Recipe Catalog(97件)との関係
@@ -113,7 +130,7 @@ Property単位で修正できる構造)を持つのは引き続き`type-mask-rev
 
 ## 次にやるべきこと(優先順位)
 
-1. 残り14件のうち本当に必要なものだけ、engine拡張(新機能追加)を伴う実装を
+1. 残り8件のうち本当に必要なものだけ、engine拡張(新機能追加)を伴う実装を
    個別に検討する。全件を無理に埋めない。「見た目が区別できないmodeの使い回し」
    より「CONCEPT_ONLYのまま正直に残す」方を優先してきた。
 2. 実写真投入後、`sample-generic-hero-photo-v1` / `sample-generic-multi-photo-v1`
