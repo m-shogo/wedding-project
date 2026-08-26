@@ -4,39 +4,53 @@ Use this prompt on the target Mac only. This is a **local Actual verification**,
 
 ## Mission
 
-Verify that Wedding Motion Studio is not only CI-compatible with Remotion `4.0.517`, but also usable in the real Remotion Studio GUI for the editing tasks that justify upgrading.
-
-The existing repo baseline remains `4.0.475`. Run40 already proved, in GitHub Actions, that an ephemeral `4.0.517` install passes TypeScript, canonical contracts, composition discovery and a neutral H.264 render after null-safe path sampling fixes.
-
-This run must answer the remaining question:
+Verify that Wedding Motion Studio is not only CI-compatible but genuinely usable in the real Remotion Studio GUI with the current coherent candidate cohort:
 
 ```text
-Does Remotion Studio 4.0.517 actually feel and behave correctly on the target Mac for Wedding editing?
+remotion                  4.0.517
+@remotion/cli             4.0.517
+@remotion/google-fonts    4.0.517
+@remotion/paths           4.0.517
+@remotion/zod-types       4.0.517
+zod                       4.4.3
+```
+
+Why `zod 4.4.3` is mandatory for this Actual:
+
+- the production repo currently uses exact `zod 4.3.6`;
+- Run42 proved a Remotion 4.0.517 render can succeed while still warning that `zod 4.3.6` is mismatched;
+- a second Canary with exact `zod 4.4.3` passed `remotion versions --log=verbose`, TypeScript, official Element payload validation and render;
+- therefore the target-Mac Actual must test the **coherent cohort**, not a warning-bearing partial upgrade.
+
+Guardrail:
+
+```text
+RENDER_SUCCESS_WITH_VERSION_WARNING != VERSION_COHERENT
 ```
 
 ## Hard boundaries
 
-- Do **not** touch or rebase PR #385 / TimingMaster / audio-analysis work.
+- Do **not** touch, rebase, clean, stage or commit PR #385 / TimingMaster / audio-analysis work.
 - Do **not** work in another agent's dirty worktree.
 - Do **not** change `main` directly.
-- Do **not** commit a production `package.json` / `pnpm-lock.yaml` upgrade merely because the GUI launches.
+- Do **not** commit a production `package.json` / `pnpm-lock.yaml` upgrade in this run.
 - Do **not** install random third-party Elements or npm packages.
-- Do **not** expose private Wedding assets, private URLs, tokens, API keys, paid-template source or personal paths in committed evidence.
-- Do **not** claim `Studio Actual PASS` from screenshots alone. Perform the actions and record readback.
-- Do **not** use non-null assertions to undo the Run40 path-sampling safety fix.
+- Do **not** expose private Wedding photos, private asset URLs, tokens, API keys, paid-template source or personal filesystem paths in committed evidence.
+- Do **not** claim Studio Actual PASS from screenshots alone. Perform the interaction and record readback.
+- Do **not** undo the null-safe Run40 path-sampling repair with non-null assertions.
 
-Guardrails:
+State boundaries:
 
 ```text
-CI_RENDER_GREEN != LOCAL_STUDIO_INTERACTION_VERIFIED
+COHERENT_CI_GREEN != LOCAL_STUDIO_USABLE
 STUDIO_LAUNCHES != HUMAN_EDITABILITY_VERIFIED
 ELEMENT_LIBRARY_VISIBLE != ELEMENT_INSTALL_VERIFIED
-TEMPORARY_4_0_517_WORKTREE != PRODUCTION_LOCKFILE_UPGRADE
+LOCAL_ACTUAL_GO != PRODUCTION_LOCK_UPGRADED
 ```
 
 ## 1. Protect concurrent work
 
-From the repo root:
+From the normal repo root:
 
 ```bash
 git status --short
@@ -46,7 +60,7 @@ git worktree list
 
 If the current worktree is dirty or belongs to another task, leave it untouched.
 
-Fetch current `main`, then create a disposable local worktree from current main. Use a unique branch name, for example:
+Create a disposable worktree from the latest remote main:
 
 ```bash
 git fetch origin main
@@ -54,7 +68,7 @@ git worktree add ../wedding-remotion-actual -b local/remotion-4.0.517-studio-act
 cd ../wedding-remotion-actual
 ```
 
-Before continuing, record:
+Record:
 
 ```bash
 git rev-parse HEAD
@@ -63,22 +77,28 @@ git status --short
 
 Expected: clean worktree.
 
-## 2. Verify the baseline first
+## 2. Baseline verification
 
 ```bash
 cd motion-studio
 pnpm install --frozen-lockfile
 pnpm exec remotion --version
+node -p "require('./node_modules/zod/package.json').version"
 pnpm typecheck
 ```
 
-Record the resolved baseline Remotion version. It should correspond to the repo lock coordinate (`4.0.475`) before the temporary update.
+Expected baseline coordinate before temporary candidate install:
+
+```text
+Remotion lock: 4.0.475
+zod:          4.3.6
+```
 
 Do not continue if the baseline itself is broken.
 
-## 3. Temporarily install the candidate in this worktree only
+## 3. Install the coherent candidate in this disposable worktree only
 
-Save baseline hashes first:
+Save baseline identity first:
 
 ```bash
 shasum -a 256 package.json pnpm-lock.yaml
@@ -86,7 +106,7 @@ cp package.json /tmp/wedding-remotion-package-baseline.json
 cp pnpm-lock.yaml /tmp/wedding-remotion-lock-baseline.yaml
 ```
 
-Then update only the five direct Remotion packages used by this repo:
+Install the coherent candidate:
 
 ```bash
 pnpm add --save-exact \
@@ -94,24 +114,41 @@ pnpm add --save-exact \
   @remotion/cli@4.0.517 \
   @remotion/google-fonts@4.0.517 \
   @remotion/paths@4.0.517 \
-  @remotion/zod-types@4.0.517
+  @remotion/zod-types@4.0.517 \
+  zod@4.4.3
 ```
 
-Verify exact installed versions:
+Assert exact versions:
 
 ```bash
-pnpm exec remotion --version
 node <<'NODE'
-const expected = '4.0.517';
-for (const pkg of ['remotion','@remotion/cli','@remotion/google-fonts','@remotion/paths','@remotion/zod-types']) {
+const remotionVersion = '4.0.517';
+for (const pkg of [
+  'remotion',
+  '@remotion/cli',
+  '@remotion/google-fonts',
+  '@remotion/paths',
+  '@remotion/zod-types',
+]) {
   const actual = require(`./node_modules/${pkg}/package.json`).version;
   console.log(`${pkg}=${actual}`);
-  if (actual !== expected) process.exitCode = 1;
+  if (actual !== remotionVersion) process.exitCode = 1;
 }
+const zod = require('./node_modules/zod/package.json').version;
+console.log(`zod=${zod}`);
+if (zod !== '4.4.3') process.exitCode = 1;
 NODE
 ```
 
-Then re-run:
+Now run the coherence gate:
+
+```bash
+pnpm exec remotion versions --log=verbose 2>&1 | tee /tmp/wedding-remotion-versions.txt
+```
+
+FAIL this Actual immediately if the output contains an unexplained version mismatch / wrong-version warning.
+
+Then run:
 
 ```bash
 pnpm typecheck
@@ -122,9 +159,9 @@ pnpm check:presets
 pnpm check:director-recipes
 ```
 
-If these fail, stop GUI testing and record the exact failure. Do not patch around it silently.
+Do not silently patch around failures before recording the exact failure fingerprint.
 
-## 4. Launch Studio 4.0.517
+## 4. Launch Studio
 
 Start the normal Studio:
 
@@ -132,36 +169,43 @@ Start the normal Studio:
 pnpm dev
 ```
 
-If the command prints a local URL rather than opening automatically, open that URL in the normal browser.
+Record only non-private environment coordinates:
 
-Record:
+```text
+candidate Remotion version
+candidate zod version
+macOS version
+uname -m
+node -v
+pnpm -v
+browser if relevant
+```
 
-- Remotion version shown/confirmed by CLI;
-- macOS version;
-- CPU architecture (`uname -m`);
-- Node version (`node -v`);
-- pnpm version (`pnpm -v`);
-- browser used for Studio if relevant.
-
-Do not record a machine username or home-directory path in committed evidence.
+Do not commit username/home-directory paths.
 
 ## 5. Core Studio Actual checks
 
-Use neutral or synthetic compositions wherever possible. Do not publish screenshots containing private Wedding photos.
+Use neutral or synthetic compositions whenever possible.
 
-### A. Studio launch and composition discovery
+Record every check as:
 
-Verify:
+```text
+PASS | FAIL | BLOCKED | NOT_APPLICABLE
+```
 
-1. Studio opens without a fatal error.
+### A. Launch / composition / Canvas / Timeline
+
+Verify all of these by actual interaction:
+
+1. Studio opens without fatal error.
 2. Composition list appears.
-3. Open at least one neutral composition and one representative Wedding composition.
-4. Canvas renders rather than remaining blank/erroring.
-5. Timeline appears and scrubbing changes the preview.
-6. Play/pause works.
-7. Selecting a sequence/item updates the relevant Inspector.
-
-Record each as `PASS`, `FAIL`, or `BLOCKED` with a short observation.
+3. A neutral composition opens.
+4. A representative Wedding composition opens.
+5. Canvas renders.
+6. Timeline renders.
+7. Scrubbing changes the preview.
+8. Play/pause works.
+9. Selecting an editable item updates the relevant Inspector/editor surface.
 
 ### B. Run40 path-sampling regression
 
@@ -170,22 +214,28 @@ Open a composition that exercises the paper-plane route / Stamp Rush route.
 Verify:
 
 - no runtime exception from `getPointAtLength()` / `getTangentAtLength()`;
-- the plane appears on a normal valid route;
-- scrubbing near the beginning and end does not crash Studio;
+- the plane appears on a valid route;
+- scrubbing at the beginning, middle and end remains stable;
 - route scene remains visually plausible.
 
-This is required because Run40 changed `PlaneOnRoute.tsx` and `StampRushFullRoute.tsx` to handle nullable path sampling safely.
+If this fails, classify:
 
-### C. Crop control — main upgrade value
+```text
+PATH_SAMPLING_RUNTIME_REGRESSION
+```
 
-On an item where Studio exposes crop controls:
+Do not reintroduce non-null assertions as a quick fix.
 
-1. Locate the native crop controls.
-2. Make a clearly visible temporary crop adjustment.
-3. Confirm Canvas updates immediately.
-4. Undo.
-5. Redo.
-6. Return to the original value.
+### C. Native crop control
+
+On an item where the current Studio exposes crop controls:
+
+1. locate crop controls;
+2. make a clearly visible temporary crop change;
+3. verify Canvas live update;
+4. undo;
+5. redo;
+6. restore original state.
 
 Record:
 
@@ -197,16 +247,22 @@ redoWorks
 returnedToOriginal
 ```
 
-Do not infer success from the release notes. This must be observed in the real Studio.
+If the control is unavailable because of current component structure, use:
+
+```text
+BLOCKED_BY_COMPONENT_STRUCTURE
+```
+
+Do not manufacture a new component solely to make this test pass.
 
 ### D. Media source replacement
 
-On a replaceable media item, using a **safe local test asset**:
+Using a safe local neutral asset:
 
-1. Locate the native source replacement affordance.
-2. Replace the source with a temporary neutral asset.
-3. Confirm Canvas updates.
-4. Restore the original source before finishing.
+1. locate native source replacement if exposed;
+2. replace a source temporarily;
+3. verify Canvas changes;
+4. restore the original source.
 
 Record:
 
@@ -217,24 +273,26 @@ canvasUpdated
 originalRestored
 ```
 
-If the current Wedding component structure does not expose this natively, record `BLOCKED_BY_COMPONENT_STRUCTURE`; do not force a rewrite during this Actual run.
-
-### E. Inspector / Human Master usability
+### E. Inspector / human adjustability
 
 For at least one prop-driven composition:
 
-- edit a safe numeric/string/boolean prop in Studio;
-- verify the Canvas reflects it;
-- restore the original value;
-- note whether the control label is understandable without opening source.
+- edit a safe string, number or boolean;
+- verify Canvas changes;
+- restore original value;
+- judge whether the label is understandable without opening source.
 
-If any existing schema field uses zod `.describe()`, check whether the description appears as a tooltip/help surface. If none currently use `.describe()`, record `NOT_APPLICABLE_CURRENT_SCHEMA` rather than creating one just for this test.
+If a current schema already uses zod `.describe()`, verify its tooltip/help behavior. If none does, record:
+
+```text
+NOT_APPLICABLE_CURRENT_SCHEMA
+```
+
+Do not add a fake `.describe()` field just to produce a PASS.
 
 ### F. Code-editor handoff
 
-Verify whether `Open in editor` / editor picker is present.
-
-You may test opening a source location if it does not disturb another editor session. Do not change committed editor configuration merely for this test.
+Observe/test the current `Open in editor` behavior if available.
 
 Record:
 
@@ -244,15 +302,15 @@ editorDetected
 sourceLocationOpened
 ```
 
-Remember: this feature is external code-editor integration, not a custom Inspector widget system.
+Remember: this is external code-editor integration, not arbitrary custom Inspector widgets.
 
-### G. Elements / library UI
+### G. Elements/library surface
 
-Verify whether the current Studio exposes the Elements/library browsing surface described by v4.0.517.
+Observe whether the current Studio exposes Elements/library browsing.
 
-Do **not** install arbitrary third-party Elements.
+Do **not** install arbitrary third-party Elements in this run.
 
-Record only:
+Record:
 
 ```text
 elementLibrarySurfaceVisible
@@ -260,24 +318,26 @@ externalLibraryConfigSurfaceVisibleOrNotObserved
 thirdPartyInstallPerformed=false
 ```
 
-Visibility is not installation verification.
+The Wedding Mask Reveal clean-install Actual is a **separate canary**. Visibility alone is not install verification.
 
 ### H. Save / reload / restart
 
-Make one harmless temporary Studio edit in the disposable worktree, then:
+Make one harmless temporary Studio edit in the disposable worktree and then:
 
-1. reload the browser page;
-2. confirm expected state behavior;
-3. stop Studio;
-4. restart `pnpm dev`;
-5. reopen the same composition;
-6. verify no corruption/fatal error.
+1. inspect tracked diff;
+2. reload browser;
+3. verify expected behavior;
+4. stop Studio;
+5. restart Studio;
+6. reopen the same composition;
+7. verify no corruption/fatal error;
+8. restore the temporary edit before final cleanup unless preserving it is necessary for evidence.
 
-If the edit writes source, inspect the diff and record exactly what changed. Restore the temporary edit before the final evidence snapshot unless preserving it is required to prove the mechanism.
+Record exactly which tracked file changed, if any.
 
-## 6. Render after GUI interaction
+## 6. Post-GUI neutral render
 
-Stop Studio if needed and run a neutral render:
+After GUI interaction:
 
 ```bash
 rm -f out/common/stamp_test_preview.mp4
@@ -287,38 +347,40 @@ ffprobe -v error \
   -show_entries format=duration \
   -of json \
   out/common/stamp_test_preview.mp4
+shasum -a 256 out/common/stamp_test_preview.mp4
 ```
 
 Expected core readback:
 
 ```text
 codec_name = h264
-width = 1920
-height = 1080
+width      = 1920
+height     = 1080
 ```
 
-Hash the output:
+This proves post-GUI render health, not visual parity.
 
-```bash
-shasum -a 256 out/common/stamp_test_preview.mp4
-```
+## 7. Evidence report
 
-This is not visual parity proof; it proves the post-GUI candidate environment still renders a valid neutral output.
-
-## 7. Evidence format
-
-Create a local JSON report first. Suggested path inside the disposable worktree:
+Write raw local evidence under ignored output, for example:
 
 ```text
 motion-studio/out/research/remotion-4.0.517-studio-actual/report.json
 ```
 
-Suggested shape:
+Minimum shape:
 
 ```json
 {
-  "candidateVersion": "4.0.517",
-  "baselineVersion": "4.0.475",
+  "candidate": {
+    "remotion": "4.0.517",
+    "zod": "4.4.3",
+    "versionCoherence": "PASS|FAIL"
+  },
+  "baseline": {
+    "remotion": "4.0.475",
+    "zod": "4.3.6"
+  },
   "gitMainSha": "...",
   "environment": {
     "macOS": "...",
@@ -340,9 +402,8 @@ Suggested shape:
     "saveReloadRestart": "PASS|FAIL|BLOCKED",
     "neutralRenderAfterGui": "PASS|FAIL|BLOCKED"
   },
-  "observations": [],
+  "failures": [],
   "render": {
-    "path": "out/common/stamp_test_preview.mp4",
     "sha256": "...",
     "codec": "h264",
     "width": 1920,
@@ -352,38 +413,64 @@ Suggested shape:
 }
 ```
 
-Do not put personal filesystem paths or private asset names in the committed summary.
+Do not put private filenames or personal paths in the committed summary.
 
 ## 8. Promotion rule
 
-Recommend a real production dependency upgrade only if all of these are true:
+`GO` requires all of these:
 
-- candidate package identity is exactly `4.0.517`;
-- baseline and candidate checks pass;
-- Studio launches on the target Mac;
-- representative compositions render and scrub correctly;
-- Run40 path-sampling regression is clean;
-- crop controls work in actual use;
-- no critical source-replacement regression is found;
-- save/reload/restart is stable;
-- post-GUI neutral render succeeds;
-- no unexplained source mutation remains.
+- exact Remotion family = `4.0.517`;
+- exact zod = `4.4.3`;
+- `remotion versions --log=verbose` has no unexplained mismatch;
+- baseline/candidate checks pass;
+- Studio launches on target Mac;
+- representative compositions render/scrub;
+- path-sampling regression is clean;
+- crop behavior is actually usable or its applicability is honestly classified;
+- no critical source-replacement regression;
+- save/reload/restart stable;
+- post-GUI render succeeds;
+- no unexplained tracked-source mutation.
 
-Elements/library visibility is **not required** to upgrade if core Studio editing is healthy, but Elements must remain `UNVERIFIED` until a separate clean-project install canary is performed.
+`GO` means only:
 
-## 9. What to return
+> Open a separate bounded production dependency-upgrade PR for the coherent candidate cohort.
 
-Return a concise result with:
+It does **not** authorize changing main in this run.
+
+## 9. Failure fingerprints
+
+Use specific classifications where possible:
+
+```text
+VERSION_IDENTITY_MISMATCH
+VERSION_COHERENCE_MISMATCH
+STUDIO_LAUNCH_FAILURE
+CANVAS_RUNTIME_FAILURE
+TIMELINE_INTERACTION_FAILURE
+PATH_SAMPLING_RUNTIME_REGRESSION
+CROP_CONTROL_UNAVAILABLE_OR_BROKEN
+MEDIA_SOURCE_REPLACEMENT_UNAVAILABLE_OR_BROKEN
+COMPONENT_STRUCTURE_BLOCKS_NATIVE_EDITABILITY
+SAVE_RELOAD_PERSISTENCE_FAILURE
+POST_GUI_RENDER_FAILURE
+```
+
+Record reproduction before changing code.
+
+## 10. Return to the user
+
+Return:
 
 1. exact git SHA tested;
-2. exact Remotion versions;
-3. environment coordinate without personal paths;
-4. PASS/FAIL/BLOCKED table;
-5. all failures with reproduction steps;
-6. screenshots only if they contain no private Wedding content;
+2. exact Remotion + zod versions;
+3. `remotion versions` coherence result;
+4. non-private environment coordinate;
+5. PASS/FAIL/BLOCKED table;
+6. failure reproduction steps;
 7. render hash/readback;
-8. `GO`, `NO_GO`, or `NEEDS_MORE_EVIDENCE` for production lock upgrade;
-9. whether Codex/Claude changed any tracked source during the test;
-10. confirmation that PR #385 / TimingMaster work was untouched.
+8. `GO|NO_GO|NEEDS_MORE_EVIDENCE`;
+9. tracked-source mutation yes/no;
+10. confirmation that PR #385 / TimingMaster was untouched.
 
-If the result is `GO`, stop there. Do not perform the production lock upgrade in the same Actual run unless separately instructed.
+If `GO`, stop. Do not perform the production lock upgrade unless separately instructed.

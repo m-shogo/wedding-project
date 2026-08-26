@@ -6,12 +6,18 @@ on:
       - "motion-studio/src/data/remotionCurrentCompatibility.ts"
       - "motion-studio/scripts/check-remotion-current-compat.mts"
       - "docs/research/2026-08-26-movie-tool-learning-run-40-remotion-current-compat.md"
+      - "docs/research/2026-08-26-movie-tool-learning-run-43-remotion-zod-coherence.md"
+      - "docs/prompts/2026-08-26-remotion-4-0-517-studio-local-actual-agent.md"
+      - "docs/runbooks/2026-08-26-remotion-4-0-517-studio-actual.md"
       - ".github/workflows/remotion-current-compat-ci.yml"
   push:
     paths:
       - "motion-studio/src/data/remotionCurrentCompatibility.ts"
       - "motion-studio/scripts/check-remotion-current-compat.mts"
       - "docs/research/2026-08-26-movie-tool-learning-run-40-remotion-current-compat.md"
+      - "docs/research/2026-08-26-movie-tool-learning-run-43-remotion-zod-coherence.md"
+      - "docs/prompts/2026-08-26-remotion-4-0-517-studio-local-actual-agent.md"
+      - "docs/runbooks/2026-08-26-remotion-4-0-517-studio-actual.md"
       - ".github/workflows/remotion-current-compat-ci.yml"
 
 permissions:
@@ -55,7 +61,7 @@ jobs:
         working-directory: motion-studio
         run: pnpm typecheck
 
-      - name: Ephemerally install Remotion 4.0.517 family
+      - name: Ephemerally install coherent Remotion 4.0.517 candidate cohort
         working-directory: motion-studio
         run: |
           cp package.json /tmp/remotion-package-baseline.json
@@ -65,22 +71,37 @@ jobs:
             @remotion/cli@4.0.517 \
             @remotion/google-fonts@4.0.517 \
             @remotion/paths@4.0.517 \
-            @remotion/zod-types@4.0.517
+            @remotion/zod-types@4.0.517 \
+            zod@4.4.3
           git diff -- package.json pnpm-lock.yaml > /tmp/remotion-4.0.517-ephemeral.diff
           test -s /tmp/remotion-4.0.517-ephemeral.diff
           echo 'EPHEMERAL_CI_GREEN != PRODUCTION_LOCKFILE_UPGRADED'
 
-      - name: Verify all direct Remotion packages resolve to 4.0.517
+      - name: Verify exact candidate versions
         working-directory: motion-studio
         run: |
           node <<'NODE'
-          const expected = '4.0.517';
+          const expectedRemotion = '4.0.517';
           for (const pkg of ['remotion','@remotion/cli','@remotion/google-fonts','@remotion/paths','@remotion/zod-types']) {
             const actual = require(`./node_modules/${pkg}/package.json`).version;
             console.log(`${pkg}=${actual}`);
-            if (actual !== expected) process.exitCode = 1;
+            if (actual !== expectedRemotion) process.exitCode = 1;
           }
+          const zod = require('./node_modules/zod/package.json').version;
+          console.log(`zod=${zod}`);
+          if (zod !== '4.4.3') process.exitCode = 1;
           NODE
+
+      - name: Candidate version coherence
+        working-directory: motion-studio
+        run: |
+          set -o pipefail
+          pnpm exec remotion versions --log=verbose 2>&1 | tee /tmp/remotion-versions.txt
+          if grep -Eqi 'Version mismatch|wrong versions|required [0-9]+\.[0-9]+\.[0-9]+' /tmp/remotion-versions.txt; then
+            echo 'Remotion candidate cohort still reports a version mismatch.'
+            exit 1
+          fi
+          echo 'RENDER_SUCCESS_WITH_VERSION_WARNING != VERSION_COHERENT'
 
       - name: Latest TypeScript compatibility
         working-directory: motion-studio
@@ -119,6 +140,8 @@ jobs:
             exit 1;
           }
           echo 'latestCompatibilityCandidate=4.0.517'
+          echo 'candidateZod=4.4.3'
           echo 'repoLockedBaseline=4.0.475'
+          echo 'repoLockedZod=4.3.6'
           echo 'productionUpgradePerformed=NO'
           echo 'runtimeStudioManualQA=STILL_REQUIRED_BEFORE_PRODUCTION_UPGRADE'
