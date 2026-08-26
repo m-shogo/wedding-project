@@ -10,6 +10,8 @@ on:
       - "motion-studio/scripts/check-mask-reveal-element-payload.mts"
       - ".github/workflows/remotion-mask-reveal-element-ci.yml"
       - "docs/research/2026-08-26-movie-tool-learning-run-42-remotion-mask-reveal-element.md"
+      - "docs/research/2026-08-26-movie-tool-learning-run-44-remotion-element-human-adjustability.md"
+      - "docs/prompts/2026-08-26-remotion-mask-reveal-element-local-actual-agent.md"
   push:
     paths:
       - "motion-studio/src/motion-kit/engines.tsx"
@@ -19,6 +21,8 @@ on:
       - "motion-studio/scripts/check-mask-reveal-element-payload.mts"
       - ".github/workflows/remotion-mask-reveal-element-ci.yml"
       - "docs/research/2026-08-26-movie-tool-learning-run-42-remotion-mask-reveal-element.md"
+      - "docs/research/2026-08-26-movie-tool-learning-run-44-remotion-element-human-adjustability.md"
+      - "docs/prompts/2026-08-26-remotion-mask-reveal-element-local-actual-agent.md"
 
 permissions:
   contents: read
@@ -95,8 +99,9 @@ jobs:
       - name: Candidate version coherence
         working-directory: motion-studio
         run: |
+          set -o pipefail
           pnpm exec remotion versions --log=verbose 2>&1 | tee /tmp/remotion-versions.log
-          if grep -q 'Version mismatch:' /tmp/remotion-versions.log; then
+          if grep -Eqi 'Version mismatch|wrong versions|required [0-9]+\.[0-9]+\.[0-9]+' /tmp/remotion-versions.log; then
             echo 'Remotion candidate still reports a version mismatch.'
             exit 1
           fi
@@ -105,14 +110,14 @@ jobs:
         working-directory: motion-studio
         run: pnpm typecheck
 
-      - name: Derive source and validate with official createElementPayload
+      - name: Derive canonical source and validate Interactive Element payload
         working-directory: motion-studio
         run: |
           rm -rf out/research/remotion-elements/mask-reveal
           node --no-warnings scripts/build-mask-reveal-element-payload.mts
           node --no-warnings scripts/check-mask-reveal-element-payload.mts
 
-      - name: Compile and render the generated standalone Element source
+      - name: Compile and render generated Interactive Element source
         working-directory: motion-studio
         run: |
           cat > out/research/remotion-elements/mask-reveal/canary-entry.tsx <<'EOF'
@@ -141,7 +146,7 @@ jobs:
           test -s out/research/remotion-elements/mask-reveal/mask-reveal.element-canary.mp4
           sha256sum out/research/remotion-elements/mask-reveal/mask-reveal.element-canary.mp4
 
-      - name: Production dependency graph remains unpromoted
+      - name: Production dependency graph and Studio Actual remain unpromoted
         working-directory: motion-studio
         run: |
           test -s /tmp/remotion-element-ephemeral.diff
@@ -150,6 +155,8 @@ jobs:
             exit 1;
           }
           echo 'elementPayloadValidation=PASS_CANDIDATE_ONLY'
+          echo 'interactiveSchemaStaticContract=PASS_CANDIDATE_ONLY'
+          echo 'studioControlReadback=NOT_RUN'
           echo 'studioInstallActual=NOT_RUN'
           echo 'productionDependencyUpgradePerformed=NO'
           echo 'thirdPartyElementInstallPerformed=NO'
