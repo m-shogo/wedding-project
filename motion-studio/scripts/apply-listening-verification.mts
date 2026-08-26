@@ -107,6 +107,7 @@ for (const d of input.decisions) {
   if (d.status === 'ok') {
     cue.verifiedByListening = true;
     cue.timingSource = 'verified-vocal';
+    cue.confidenceScore = 1.0; // 人間が実際に聴いて確認したため、機械的confidenceScoreも1.0にする
     cue.reviewComment = d.note ? `[verified-by-listening] ${d.note}` : '[verified-by-listening] OK';
     applied.push(d.cueId);
   } else if (d.status === 'adjust') {
@@ -118,6 +119,7 @@ for (const d of input.decisions) {
     cue.cueOffsetMs = cue.cueOffsetMs + d.deltaMs;
     cue.verifiedByListening = true;
     cue.timingSource = 'verified-vocal';
+    cue.confidenceScore = 1.0; // 人間が実際に聴いて補正込みで確認したため1.0にする
     cue.reviewComment = `[verified-by-listening, adjusted ${d.deltaMs}ms] ${d.note ?? ''}`.trim();
     applied.push(d.cueId);
   } else if (d.status === 'reject') {

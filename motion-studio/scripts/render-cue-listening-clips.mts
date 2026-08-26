@@ -54,6 +54,7 @@ type ClipEntry = {
   designedSourceMs: number;
   timingSource: string;
   confidence: string | null;
+  confidenceScore: number | null;
   analysisMethod: string | null;
   clipFile: string;
   clipStartSec: number;
@@ -90,13 +91,16 @@ for (const p of master.phrases) {
       designedSourceMs: effectiveMs,
       timingSource: c.timingSource,
       confidence: c.confidence,
+      confidenceScore: c.confidenceScore,
       analysisMethod: c.analysisMethod,
       ...clip,
     });
   }
 }
 
-// 2. StaRt letterCues(冒頭の文字組み立て、5件)
+// 2. StaRt letterCues(冒頭の文字組み立て、5件。LetterCueはconfidenceScoreを
+// 持たない簡易schemaのため、beat-snap/estimatedを想定した固定値で代用する
+// [聴取優先度の目安であり、VocalCueのconfidenceScoreと同一の算出根拠ではない])
 for (const b of master.editorialBlocks) {
   for (const c of b.letterCues ?? []) {
     const effectiveMs = c.timeMs + master.audio.globalContentOffsetMs;
@@ -110,13 +114,22 @@ for (const b of master.editorialBlocks) {
       designedSourceMs: effectiveMs,
       timingSource: c.timingSource,
       confidence: null,
+      confidenceScore: c.timingSource === 'beat-snap' ? 0.4 : c.timingSource === 'estimated' ? 0.15 : null,
       analysisMethod: null,
       ...clip,
     });
   }
 }
 
-entries.sort((a, b) => a.designedSourceMs - b.designedSourceMs);
+// 聴取優先度: confidenceScoreが低い(=根拠が弱い)cueを上に出す。
+// 同点は曲順(designedSourceMs)で安定させる。限られた聴取時間で
+// 「怪しいところから」確認できるようにするための並び順。
+entries.sort((a, b) => {
+  const ca = a.confidenceScore ?? 1;
+  const cb = b.confidenceScore ?? 1;
+  if (ca !== cb) return ca - cb;
+  return a.designedSourceMs - b.designedSourceMs;
+});
 writeFileSync(manifestPath, JSON.stringify({masterId: master.masterId, masterRevision: master.revision, entries}, null, 2) + '\n');
 
 const escapeHtml = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -129,7 +142,7 @@ const rows = entries
     <td>${escapeHtml(e.kind)}</td>
     <td>${escapeHtml(e.text)}</td>
     <td>${escapeHtml(e.timingSource)}</td>
-    <td>${e.confidence ?? ''}</td>
+    <td style="color:${e.confidenceScore != null && e.confidenceScore < 0.5 ? '#f2a53f' : '#eee'}">${e.confidenceScore != null ? e.confidenceScore.toFixed(2) : ''}</td>
     <td>
       <audio controls preload="none" src="listening-clips/${e.clipFile}"></audio>
       <span style="color:#888;font-size:12px">(クリップ内 ${e.cueOffsetInClipSec.toFixed(2)}s地点が設計時刻)</span>
@@ -160,9 +173,10 @@ writeFileSync(
 <p class="note">これはローカル専用の確認用HTML(Git管理外・著作権音源から切り出したクリップを含む)。
 各行の音声を実際に聴いて、「設計時刻(クリップ内の再生位置)」がボーカル/アクセントと合っているか確認する。
 ズレている場合は、cueIdと感じたズレ(ms、+は遅らせる/-は早める)を控えておき、
-apply-listening-verification.mtsで反映する。</p>
+apply-listening-verification.mtsで反映する。<b>confidenceScoreが低い行(オレンジ文字、0.5未満)ほど
+根拠が弱いため上に並べている。時間が無い場合はオレンジの行だけでも優先して確認する。</b></p>
 <table>
-<thead><tr><th>cueId</th><th>設計秒</th><th>種別</th><th>text</th><th>timingSource</th><th>confidence</th><th>再生</th></tr></thead>
+<thead><tr><th>cueId</th><th>設計秒</th><th>種別</th><th>text</th><th>timingSource</th><th>confidenceScore</th><th>再生</th></tr></thead>
 <tbody>
 ${rows}
 </tbody>

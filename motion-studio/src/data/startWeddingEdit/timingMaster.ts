@@ -64,6 +64,18 @@ export type VocalCue = {
    * librosa onset検出)。根拠不明のまま'audio-analysis'と自称しないための
    * 追跡フィールド。manual/beat-snap/estimatedの場合はnull。 */
   analysisMethod: string | null;
+  /** 数値の機械的信頼度(0.0〜1.0)。既存のconfidence('high'/'medium'/'low',
+   * 人間が読む大まかな区分)とは別物であり、どちらもverifiedByListeningとは
+   * 独立している(confidenceScore=1.0でも人間が未確認ならverifiedByListening
+   * はfalseのまま)。algorithm: manual/verified-vocal=1.0、audio-analysisは
+   * 実onset候補とのdiffMsが0に近いほど1.0へ、ANALYSIS_SNAP_WINDOW_MS
+   * 境界に近いほど0.5へ線形に下がる、beat-snap=0.4(構造的に妥当だが
+   * ボーカル未検証)、estimated=0.15(根拠薄い均等fallback)。 */
+  confidenceScore: number;
+  /** timingSource='audio-analysis'の場合、実際に検出された生のonset時刻(ms、
+   * 絶対値・snap前)。デバッグ/Dashboard表示用の追跡情報であり、timeMsの
+   * 計算根拠を人間が確認できるようにするためのfield。それ以外のkindではnull。 */
+  detectedAtMs: number | null;
 };
 
 export type TimingPhrase = {

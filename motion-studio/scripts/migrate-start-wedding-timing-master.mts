@@ -319,8 +319,8 @@ const ANALYSIS_SNAP_WINDOW_MS = 250;
 /** 実vocal onset解析結果から、指定時刻へ最も近い候補を探す(window内のみ)。
  * 見つかった場合だけaudio-analysisとして採用し、見つからない場合は呼び出し元の
  * 既存ロジック(beat-snap/estimated)へfallbackする(解析していない値を
- * audio-analysisと自称しないため)。 */
-const snapToVocalOnset = (approxMs: number): number | null => {
+ * audio-analysisと自称しないため)。diffMsも返し、confidenceScore算出に使う。 */
+const snapToVocalOnset = (approxMs: number): {ms: number; diffMs: number} | null => {
   if (vocalOnsetsMs.length === 0) return null;
   let best = vocalOnsetsMs[0];
   let bestDiff = Math.abs(vocalOnsetsMs[0] - approxMs);
@@ -331,7 +331,24 @@ const snapToVocalOnset = (approxMs: number): number | null => {
       bestDiff = d;
     }
   }
-  return bestDiff <= ANALYSIS_SNAP_WINDOW_MS ? best : null;
+  return bestDiff <= ANALYSIS_SNAP_WINDOW_MS ? {ms: best, diffMs: bestDiff} : null;
+};
+
+/** 数値confidenceScore(0.0〜1.0)。timingSourceごとに算出根拠を分ける
+ * (verifiedByListeningとは独立。confidenceScoreが高くても人間未確認なら
+ * verifiedByListeningはfalseのまま)。 */
+const confidenceScoreFor = (
+  timingSource: VocalCue['timingSource'],
+  snapDiffMs: number | null,
+): number => {
+  if (timingSource === 'manual' || timingSource === 'verified-vocal') return 1.0;
+  if (timingSource === 'audio-analysis' && snapDiffMs != null) {
+    // diffMs=0 → 1.0、diffMs=ANALYSIS_SNAP_WINDOW_MS(境界) → 0.5、線形補間
+    const ratio = Math.min(1, snapDiffMs / ANALYSIS_SNAP_WINDOW_MS);
+    return Math.round((1.0 - ratio * 0.5) * 1000) / 1000;
+  }
+  if (timingSource === 'beat-snap') return 0.4;
+  return 0.15; // estimated
 };
 if (vocalOnsetsMs.length > 0) {
   info(`実ボーカル解析結果を検出: onset候補${vocalOnsetsMs.length}件(stemAlignmentOffsetMs=${alignmentCandidates!.stemAlignmentOffsetMs}ms)。±${ANALYSIS_SNAP_WINDOW_MS}ms以内の候補があるcueをaudio-analysisへ格上げする。`);
@@ -364,6 +381,8 @@ const phrases: TimingPhrase[] = lyrics.phrases.map((p) => {
   const onsetApprox = secToMs(startSec);
   const onsetSnap = phraseOverride?.manualStartSec == null ? snapToVocalOnset(onsetApprox) : null;
   if (onsetSnap != null) snappedCount++;
+  const onsetTimingSource: VocalCue['timingSource'] =
+    phraseOverride?.manualStartSec != null ? 'manual' : onsetSnap != null ? 'audio-analysis' : pm ? 'audio-analysis' : 'estimated';
   cues.push(
     preserveCueIfBetter({
       cueId: `${p.phraseId}-ONSET`,
@@ -371,13 +390,15 @@ const phrases: TimingPhrase[] = lyrics.phrases.map((p) => {
       kind: 'phrase-onset',
       text: p.text,
       occurrenceIndex: 0,
-      timeMs: onsetSnap ?? onsetApprox,
-      timingSource: phraseOverride?.manualStartSec != null ? 'manual' : onsetSnap != null ? 'audio-analysis' : pm ? 'audio-analysis' : 'estimated',
+      timeMs: onsetSnap?.ms ?? onsetApprox,
+      timingSource: onsetTimingSource,
       verifiedByListening: phraseOverride?.verifiedByListening ?? false,
       confidence: (pm?.confidence as VocalCue['confidence']) ?? 'medium',
       reviewComment: phraseOverride?.reviewComment ?? '',
       cueOffsetMs: 0,
       analysisMethod: onsetSnap != null ? ANALYSIS_METHOD : null,
+      confidenceScore: confidenceScoreFor(onsetTimingSource, onsetSnap?.diffMs ?? null),
+      detectedAtMs: onsetSnap?.ms ?? null,
     }),
   );
   // word-accent cue(反復語も含め、出現順で安定ID: W01, W02, ...)
@@ -388,6 +409,8 @@ const phrases: TimingPhrase[] = lyrics.phrases.map((p) => {
     const approxMs = secToMs(accentSec);
     const snap = override?.manualAccentSec == null ? snapToVocalOnset(approxMs) : null;
     if (snap != null) snappedCount++;
+    const wordTimingSource: VocalCue['timingSource'] =
+      override?.manualAccentSec != null ? 'manual' : snap != null ? 'audio-analysis' : nearestBeatMs(approxMs, beatsMs) != null ? 'beat-snap' : 'estimated';
     cues.push(
       preserveCueIfBetter({
         cueId: `${p.phraseId}-W${String(i + 1).padStart(2, '0')}`,
@@ -395,13 +418,15 @@ const phrases: TimingPhrase[] = lyrics.phrases.map((p) => {
         kind: 'word-accent',
         text: w.word,
         occurrenceIndex: i,
-        timeMs: snap ?? approxMs,
-        timingSource: override?.manualAccentSec != null ? 'manual' : snap != null ? 'audio-analysis' : nearestBeatMs(approxMs, beatsMs) != null ? 'beat-snap' : 'estimated',
+        timeMs: snap?.ms ?? approxMs,
+        timingSource: wordTimingSource,
         verifiedByListening: override?.verifiedByListening ?? false,
         confidence: 'medium',
         reviewComment: override?.reviewComment ?? '',
         cueOffsetMs: 0,
         analysisMethod: snap != null ? ANALYSIS_METHOD : null,
+        confidenceScore: confidenceScoreFor(wordTimingSource, snap?.diffMs ?? null),
+        detectedAtMs: snap?.ms ?? null,
       }),
     );
   });
@@ -413,6 +438,7 @@ const phrases: TimingPhrase[] = lyrics.phrases.map((p) => {
     const approxMs = secToMs(sec);
     const snap = snapToVocalOnset(approxMs);
     if (snap != null) snappedCount++;
+    const hitTimingSource: VocalCue['timingSource'] = snap != null ? 'audio-analysis' : nearestBeatMs(approxMs, beatsMs) != null ? 'beat-snap' : 'estimated';
     cues.push(
       preserveCueIfBetter({
         cueId: `${p.phraseId}-H${String(i + 1).padStart(2, '0')}`,
@@ -420,13 +446,15 @@ const phrases: TimingPhrase[] = lyrics.phrases.map((p) => {
         kind: 'syllable-hit',
         text: hitWord,
         occurrenceIndex: i,
-        timeMs: snap ?? approxMs,
-        timingSource: snap != null ? 'audio-analysis' : nearestBeatMs(approxMs, beatsMs) != null ? 'beat-snap' : 'estimated',
+        timeMs: snap?.ms ?? approxMs,
+        timingSource: hitTimingSource,
         verifiedByListening: false,
         confidence: 'medium',
         reviewComment: '',
         cueOffsetMs: 0,
         analysisMethod: snap != null ? ANALYSIS_METHOD : null,
+        confidenceScore: confidenceScoreFor(hitTimingSource, snap?.diffMs ?? null),
+        detectedAtMs: snap?.ms ?? null,
       }),
     );
   });

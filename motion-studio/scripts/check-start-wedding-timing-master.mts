@@ -83,6 +83,21 @@ for (const p of master.phrases) {
     } else if (c.cueOffsetMs !== 0) {
       warnings.push(`${c.cueId}: cueOffsetMs=${c.cueOffsetMs}(0以外)。resolveEffectiveCueTimeMs()経由でのみ適用されているか確認。`);
     }
+    // confidenceScore: 0.0〜1.0の範囲、かつverifiedByListeningとは独立した値である
+    // ことを検査する(confidenceScore=1.0でもverifiedByListening=falseはあり得る、
+    // その逆にmanualなのにconfidenceScoreが低いのは矛盾ではない設計だが、
+    // manual/verified-vocalなら実装上は必ず1.0になるはずなので矛盾を検出する)。
+    if (typeof c.confidenceScore !== 'number' || !Number.isFinite(c.confidenceScore) || c.confidenceScore < 0 || c.confidenceScore > 1) {
+      errors.push(`${c.cueId}: confidenceScoreが0.0〜1.0の範囲外(${c.confidenceScore})`);
+    } else if ((c.timingSource === 'manual' || c.timingSource === 'verified-vocal') && c.confidenceScore !== 1.0) {
+      errors.push(`${c.cueId}: timingSource='${c.timingSource}'なのにconfidenceScore=${c.confidenceScore}(1.0であるべき)`);
+    }
+    if (c.detectedAtMs != null && (typeof c.detectedAtMs !== 'number' || !Number.isFinite(c.detectedAtMs))) {
+      errors.push(`${c.cueId}: detectedAtMsが数値でない(${c.detectedAtMs})`);
+    }
+    if (c.timingSource === 'audio-analysis' && c.detectedAtMs == null) {
+      warnings.push(`${c.cueId}: timingSource='audio-analysis'だがdetectedAtMsが無い(再migration前のデータの可能性)`);
+    }
   }
 }
 // offset architecture: audio.renderPipelineOffsetMsが未検証のまま実質的な値を
