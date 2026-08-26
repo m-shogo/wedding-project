@@ -1,0 +1,55 @@
+{
+	Tools = ordered() {
+		WeddingNeutralSolid = GroupOperator {
+			Inputs = ordered() {
+				ColorRed = InstanceInput {
+					SourceOp = "NeutralBackground",
+					Source = "TopLeftRed",
+					Name = "Color",
+					ControlGroup = 4,
+					Default = 0.93,
+				},
+				ColorGreen = InstanceInput {
+					SourceOp = "NeutralBackground",
+					Source = "TopLeftGreen",
+					ControlGroup = 4,
+					Default = 0.90,
+				},
+				ColorBlue = InstanceInput {
+					SourceOp = "NeutralBackground",
+					Source = "TopLeftBlue",
+					ControlGroup = 4,
+					Default = 0.84,
+				},
+				ColorAlpha = InstanceInput {
+					SourceOp = "NeutralBackground",
+					Source = "TopLeftAlpha",
+					ControlGroup = 4,
+					Default = 1,
+				},
+			},
+			Outputs = {
+				MainOutput1 = InstanceOutput {
+					SourceOp = "NeutralBackground",
+					Source = "Output",
+				},
+			},
+			ViewInfo = GroupInfo { Pos = { 0, 0 } },
+			Tools = ordered() {
+				NeutralBackground = Background {
+					Inputs = {
+						Width = Input { Value = 1920, },
+						Height = Input { Value = 1080, },
+						UseFrameFormatSettings = Input { Value = 1, },
+						TopLeftRed = Input { Value = 0.93, },
+						TopLeftGreen = Input { Value = 0.90, },
+						TopLeftBlue = Input { Value = 0.84, },
+						TopLeftAlpha = Input { Value = 1, },
+					},
+					ViewInfo = OperatorInfo { Pos = { 0, 0 } },
+				},
+			},
+		},
+	},
+	ActiveTool = "WeddingNeutralSolid",
+}
