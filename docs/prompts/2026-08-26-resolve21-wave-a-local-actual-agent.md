@@ -199,6 +199,43 @@ Use the synthetic tone and Human Master values.
 
 **Manual/native recovery comes first.** Recreate the requested fade and dB points with the supported Edit/Fairlight UI. Record actual representable timing/value precision.
 
+### Preferred native clip-envelope path
+
+Blackmagic Design's current official Fairlight page documents a direct clip-level path that should be tried before escalating to track automation or scripting:
+
+1. use the fade handles on the clip edges for fade-in/fade-out;
+2. use the clip gain line in the middle of the audio clip for clip level;
+3. to vary clip volume over time, use the documented modifier-click on the gain line to add keyframes (`Option` is the shortcut named on Blackmagic's current English documentation), then move those points to the Human Master times/levels;
+4. use the Clip Inspector level control when it gives clearer numeric readback for the tested operation;
+5. use Fairlight track automation/automation curves only when the desired behavior is genuinely track/bus automation rather than a clip envelope.
+
+Official source coordinate:
+
+```text
+Blackmagic Design -> DaVinci Resolve -> Fairlight -> Clip Adjustments / Full Automation Control
+https://www.blackmagicdesign.com/products/davinciresolve/fairlight
+checked 2026-08-26
+```
+
+On a non-Mac platform, record the actual modifier/shortcut exposed by that runtime instead of blindly assuming the macOS `Option` label.
+
+Record which native surface was used for each Human Master target:
+
+```text
+fade handle
+clip gain line keyframe
+Clip Inspector
+track automation curve
+other supported native surface
+```
+
+Prefer the simplest native surface that preserves the intended **clip** envelope and remains easy to understand after reopen.
+
+```text
+CLIP_GAIN_KEYFRAMES != TRACK_AUTOMATION_CURVE
+CLIP_ENVELOPE_RECOVERY != TRACK_MIX_AUTOMATION
+```
+
 Then perform only the smallest supported scripting mutation probe already justified by the local/runtime API surface.
 
 Never loop through guessed property names.
@@ -207,6 +244,7 @@ Record separately:
 
 ```text
 manual recovery result
+native surface used per target
 post-reopen values
 listening result
 script surface used
@@ -357,7 +395,7 @@ For each of the four canaries:
 Report separately:
 
 - Alpha: normal Edit/Deliver steps required
-- Audio: native UI precision and recovery friction
+- Audio: native UI precision, native surface used, and recovery friction
 - Lottie: Edit-level vs internal editability
 - DRFX: Inspector-level ease of use
 
