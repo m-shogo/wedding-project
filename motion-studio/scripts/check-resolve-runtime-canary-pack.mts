@@ -45,16 +45,30 @@ for (const canary of resolve21RuntimeCanaryPack.canaries) {
 
   const typedRefs = getResolveRuntimeCanaryCapabilityRefs(canary.id);
   if (typedRefs.length === 0) err(`${canary.id}: at least one typed capability reference is required`);
+
+  const exactPolicyRefs = typedRefs.filter((ref) => ref.kind !== 'RESEARCH_CANARY');
+  const researchRefs = typedRefs.filter((ref) => ref.kind === 'RESEARCH_CANARY');
+
   for (const ref of typedRefs) {
+    if (!ref.sourceRef.trim()) err(`${canary.id}: typed ref ${ref.id} sourceRef is empty`);
+  }
+
+  // Canonical Handoff/Tool capability refs must match the compatibility labels exactly.
+  // Research canaries intentionally live in their own namespace and therefore do not have to
+  // reuse a compatibility label that could be mistaken for a canonical property ID.
+  for (const ref of exactPolicyRefs) {
     if (!canary.capabilityIds.includes(ref.id)) {
       err(`${canary.id}: typed ref ${ref.kind}:${ref.id} is not declared in capabilityIds compatibility labels`);
     }
-    if (!ref.sourceRef.trim()) err(`${canary.id}: typed ref ${ref.id} sourceRef is empty`);
   }
-  for (const compatibilityId of canary.capabilityIds) {
-    if (!typedRefs.some((ref) => ref.id === compatibilityId)) {
-      err(`${canary.id}: compatibility capabilityId has no typed source mapping: ${compatibilityId}`);
+  if (researchRefs.length === 0) {
+    for (const compatibilityId of canary.capabilityIds) {
+      if (!exactPolicyRefs.some((ref) => ref.id === compatibilityId)) {
+        err(`${canary.id}: compatibility capabilityId has no typed source mapping: ${compatibilityId}`);
+      }
     }
+  } else if (exactPolicyRefs.length === 0 && canary.capabilityIds.length === 0) {
+    err(`${canary.id}: research-backed canary still needs a human-readable compatibility capability label`);
   }
 
   if (!canary.isolation.disposableProjectRequired) {
@@ -128,10 +142,13 @@ const drtRefs = getResolveRuntimeCanaryCapabilityRefs('DV21-DRT-PORTABILITY-01')
 if (!drtRefs.some((ref) => ref.kind === 'RESEARCH_CANARY' && ref.id === 'DV21-DRT-PORT-02')) {
   err('DRT portability canary must reference the research canary namespace instead of pretending a canonical HandoffProperty exists');
 }
+if (drtRefs.some((ref) => ref.kind === 'HANDOFF_PROPERTY')) {
+  err('DRT portability must not invent a canonical HandoffProperty until one is actually promoted into the registry');
+}
 
 if (errors > 0) {
   console.error(`Resolve runtime canary pack FAILED (${errors})`);
   process.exit(1);
 }
 
-ok(`${ids.length} Resolve runtime canaries parsed with fail-closed evidence templates, typed policy references, disposable-project safety, two-run promotion, and explicit platform/automation boundaries.`);
+ok(`${ids.length} Resolve runtime canaries parsed with fail-closed evidence templates, typed policy/research references, disposable-project safety, two-run promotion, and explicit platform/automation boundaries.`);
