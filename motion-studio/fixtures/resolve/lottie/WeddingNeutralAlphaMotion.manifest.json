@@ -1,0 +1,22 @@
+{
+  "version": "1",
+  "generator": "wedding-project neutral canary",
+  "activeAnimationId": "wedding-neutral-alpha-motion",
+  "animations": [
+    {
+      "id": "wedding-neutral-alpha-motion",
+      "autoplay": true,
+      "loop": true,
+      "speed": 1,
+      "direction": 1,
+      "playMode": "normal"
+    }
+  ],
+  "author": "wedding-project",
+  "description": "Self-authored neutral alpha and motion canary with no external assets.",
+  "custom": {
+    "source": "SELF_AUTHORED_SYNTHETIC",
+    "copyrightedContent": false,
+    "thirdPartyAssets": []
+  }
+}
