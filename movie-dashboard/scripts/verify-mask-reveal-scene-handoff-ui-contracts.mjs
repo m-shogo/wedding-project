@@ -6,6 +6,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const card = fs.readFileSync(path.join(root, "src/components/MaskRevealSceneHandoffCard.tsx"), "utf8");
 const workspace = fs.readFileSync(path.join(root, "src/components/MaskRevealEditableWorkspace.tsx"), "utf8");
 const bundle = fs.readFileSync(path.join(root, "src/data/maskRevealSceneProductionBundle.ts"), "utf8");
+const adjustability = fs.readFileSync(path.join(root, "src/data/resolveHumanAdjustability.ts"), "utf8");
 const outputClarification = fs.readFileSync(path.join(root, "../docs/decisions/2026-08-25-motion-zukan-output-format-clarification.md"), "utf8");
 const presetBridge = fs.readFileSync(path.join(root, "../docs/decisions/2026-08-25-motion-zukan-preset-first-davinci-value-bridge.md"), "utf8");
 const errors = [];
@@ -36,8 +37,30 @@ for (const token of [
   'JSON / XML自体はHuman Masterではありません。',
   'Sceneを編集するとupdatedAtが変わり、このexportも現在のSceneInstanceから再生成されます。',
   'NLE XML自体はPalmier実timelineからexportします。',
+  'getResolveHumanAdjustability',
+  'Human adjustability:',
+  'Platform:',
+  'Late edit QA:',
+  'Editability(内部parameterをどこまで編集できるか)と Human Adjustability(人間がどれだけ簡単に直せるか)は別判定です。',
 ]) {
   requireText(card, token, `Scene Handoff UI missing: ${token}`);
+}
+
+for (const token of [
+  'export type HumanAdjustabilityClass =',
+  '"EASY_INSPECTOR"',
+  '"EASY_TIMELINE"',
+  '"GUIDED_FUSION"',
+  '"ASSISTED_MANUAL"',
+  '"BAKED"',
+  'export type ResolvePlatformScope = "ALL_DESKTOP" | "MACOS_WINDOWS" | "UNKNOWN"',
+  'propertyId: "text-properties"',
+  'propertyId: "lottie-overlay"',
+  'platformScope: "MACOS_WINDOWS"',
+  'propertyId: "audio-volume-keyframes"',
+  'evidenceState: "PENDING_RUNTIME"',
+]) {
+  requireText(adjustability, token, `Human adjustability authority missing: ${token}`);
 }
 
 for (const token of [
@@ -91,4 +114,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log("Mask Reveal Scene Handoff UI contracts OK: Human-readable Scene values remain Human Master; live SceneInstance drives target-specific sidecar export; JSON/XML are serialization only; Palmier XML remains external; DaVinci Actual visibly stays PENDING until real evidence exists.");
+console.log("Mask Reveal Scene Handoff UI contracts OK: Human-readable Scene values remain Human Master; live SceneInstance drives target-specific sidecar export; JSON/XML are serialization only; Palmier XML remains external; DaVinci Actual visibly stays PENDING until real evidence exists; Human Adjustability and platform scope remain separate from internal Editability.");
