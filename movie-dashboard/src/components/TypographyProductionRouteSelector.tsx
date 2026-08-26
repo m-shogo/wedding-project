@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { CharStaggerDaVinciPromotionAssessmentView } from "./CharStaggerDaVinciPromotionAssessmentView";
 import { TypeOnRhythmDaVinciEvidencePanel } from "./TypeOnRhythmDaVinciEvidencePanel";
+import { WordPunchDaVinciEvidencePanel } from "./WordPunchDaVinciEvidencePanel";
 import { createCharStaggerDaVinciActualArtifact } from "../data/charStaggerDaVinciActualArtifact";
 import {
   createCharStaggerDaVinciEvidenceCaptureTemplate,
@@ -183,28 +184,15 @@ export function TypographyProductionRouteSelector({ scene }: { scene: MaskReveal
                   </p>
                 </div>
                 <div className="flex flex-wrap gap-1.5">
-                  <button
-                    type="button"
-                    onClick={exportCharStaggerActualArtifact}
-                    className="border border-sky-300 dark:border-sky-700 px-2.5 py-1.5 font-semibold text-sky-700 dark:text-sky-300"
-                  >
+                  <button type="button" onClick={exportCharStaggerActualArtifact} className="border border-sky-300 dark:border-sky-700 px-2.5 py-1.5 font-semibold text-sky-700 dark:text-sky-300">
                     Actual JSONを書き出す
                   </button>
-                  <button
-                    type="button"
-                    onClick={exportCharStaggerCaptureTemplate}
-                    className="border border-sky-300 dark:border-sky-700 px-2.5 py-1.5 font-semibold text-sky-700 dark:text-sky-300"
-                  >
+                  <button type="button" onClick={exportCharStaggerCaptureTemplate} className="border border-sky-300 dark:border-sky-700 px-2.5 py-1.5 font-semibold text-sky-700 dark:text-sky-300">
                     Readback template
                   </button>
                   <label className="cursor-pointer border border-sky-300 dark:border-sky-700 px-2.5 py-1.5 font-semibold text-sky-700 dark:text-sky-300">
                     Readback取込
-                    <input
-                      type="file"
-                      accept="application/json,.json"
-                      className="sr-only"
-                      onChange={(event) => void importCharStaggerCapture(event.currentTarget.files?.[0])}
-                    />
+                    <input type="file" accept="application/json,.json" className="sr-only" onChange={(event) => void importCharStaggerCapture(event.currentTarget.files?.[0])} />
                   </label>
                 </div>
               </div>
@@ -228,11 +216,7 @@ export function TypographyProductionRouteSelector({ scene }: { scene: MaskReveal
                         Visual QA: 1x {charStaggerEvaluatedEvidence.checks.visualQa1x} / half-speed {charStaggerEvaluatedEvidence.checks.visualQaHalfSpeed}
                       </p>
                     </div>
-                    <button
-                      type="button"
-                      onClick={exportCharStaggerEvaluatedEvidence}
-                      className="border border-emerald-300 dark:border-emerald-700 px-2.5 py-1.5 font-semibold text-emerald-700 dark:text-emerald-300"
-                    >
+                    <button type="button" onClick={exportCharStaggerEvaluatedEvidence} className="border border-emerald-300 dark:border-emerald-700 px-2.5 py-1.5 font-semibold text-emerald-700 dark:text-emerald-300">
                       Evaluated evidence
                     </button>
                   </div>
@@ -246,6 +230,9 @@ export function TypographyProductionRouteSelector({ scene }: { scene: MaskReveal
           ) : null}
           {selection?.patternId === "type-type-on-rhythm" ? (
             <TypeOnRhythmDaVinciEvidencePanel scene={scene} selection={selection} />
+          ) : null}
+          {selection?.patternId === "type-word-punch" ? (
+            <WordPunchDaVinciEvidencePanel scene={scene} selection={selection} />
           ) : null}
         </div>
       ) : (
