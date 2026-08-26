@@ -46,6 +46,7 @@ if (!canary) {
 const capabilityRefs = getResolveRuntimeCanaryCapabilityRefs(canary.id);
 const inputPreparation = getResolveCanaryInputPreparation(canary.id);
 const inputManifestPath = inputPreparation?.manifestPath ?? null;
+const isPalmierRealExportCanary = canary.id === 'DV21-PALMIER-FCPXML-01';
 
 if (wantsEvidenceTemplate) {
   console.log(JSON.stringify(createResolveRuntimeCanaryEvidenceTemplate(canary.id), null, 2));
@@ -77,6 +78,12 @@ if (inputPreparation) {
   console.log(`- Manifest: ${inputPreparation.manifestPath}`);
   console.log(`- Hydrate evidence after preparation: node --no-warnings scripts/hydrate-resolve-canary-evidence.mts ${inputPreparation.manifestPath} --execution-id <EXECUTION_ID>`);
   console.log(`- One-command session: node --no-warnings scripts/prepare-resolve-canary-session.mts ${canary.id} --execution-id <EXECUTION_ID>`);
+  if (isPalmierRealExportCanary) {
+    console.log('- Palmier remains BLOCKED after scene-spec preparation until a real Palmier export is attached.');
+    console.log('- Inspect candidate export without claiming provenance: node --no-warnings scripts/attach-palmier-real-export.mts --fcpxml <PALMIER_EXPORT.fcpxml> --inspect-only');
+    console.log('- Attach after operator confirms it is the real Palmier DaVinci/Resolve export: node --no-warnings scripts/attach-palmier-real-export.mts --fcpxml <PALMIER_EXPORT.fcpxml> --attest-real-palmier-export');
+    console.log('- Prepare runtime session without regenerating the blocked scene-spec manifest: node --no-warnings scripts/prepare-resolve-canary-session.mts DV21-PALMIER-FCPXML-01 --execution-id <EXECUTION_ID> --reuse-existing');
+  }
 } else {
   console.log('- No automated neutral fixture/session preparation is registered. Follow the canary input definitions manually.');
 }
@@ -126,6 +133,11 @@ console.log(`- Render required: ${canary.promotion.requiresRender ? 'YES' : 'NO'
 console.log('');
 console.log('## Guardrails');
 for (const guardrail of canary.guardrails) console.log(`- ${guardrail}`);
+if (isPalmierRealExportCanary) {
+  console.log('- FCPXML_STRUCTURE_VALID != REAL_PALMIER_PROVENANCE');
+  console.log('- OPERATOR_ATTESTATION != CRYPTOGRAPHIC_PROVENANCE');
+  console.log('- REAL_EXPORT_ATTACHMENT != RESOLVE_RUNTIME_EVIDENCE');
+}
 console.log('');
 console.log('Evidence skeleton:');
 console.log(`  node --no-warnings scripts/resolve-runtime-canary-plan.mts ${canary.id} --evidence-template`);
@@ -133,5 +145,5 @@ if (inputPreparation) {
   console.log('Hydrated input-provenance skeleton:');
   console.log(`  node --no-warnings scripts/hydrate-resolve-canary-evidence.mts ${inputPreparation.manifestPath} --execution-id <EXECUTION_ID>`);
   console.log('Prepared local canary session:');
-  console.log(`  node --no-warnings scripts/prepare-resolve-canary-session.mts ${canary.id} --execution-id <EXECUTION_ID>`);
+  console.log(`  node --no-warnings scripts/prepare-resolve-canary-session.mts ${canary.id} --execution-id <EXECUTION_ID>${isPalmierRealExportCanary ? ' --reuse-existing' : ''}`);
 }

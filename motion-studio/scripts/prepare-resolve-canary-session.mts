@@ -21,6 +21,8 @@ function usage() {
   console.log('  node --no-warnings scripts/prepare-resolve-canary-session.mts <CANARY_ID> --execution-id <ID> [--reuse-existing]');
   console.log('');
   console.log('Creates an ignored local session folder containing plan.md, evidence.json, RUN.md, and session.json.');
+  console.log('For alpha, --reuse-existing reuses the existing neutral render.');
+  console.log('For Palmier, --reuse-existing preserves a previously attached PREPARED real-export manifest.');
   console.log('This command does not launch DaVinci Resolve and does not claim runtime PASS.');
 }
 
@@ -72,8 +74,8 @@ try {
   }
 
   const reuseExisting = args.includes('--reuse-existing');
-  if (reuseExisting && preparation.mode !== 'alpha') {
-    throw new Error('--reuse-existing is only supported for the alpha preparation route.');
+  if (reuseExisting && !['alpha', 'palmier'].includes(preparation.mode)) {
+    throw new Error('--reuse-existing is supported only for alpha or an already-attached Palmier real export.');
   }
 
   const sessionDir = join(motionRoot, 'out', 'canary-sessions', executionId);
@@ -81,11 +83,31 @@ try {
     throw new Error(`Session already exists and will not be overwritten: ${toMotionRelative(sessionDir)}`);
   }
 
-  const prepArgs = ['--no-warnings', 'scripts/prepare-resolve-canary-inputs.mts', preparation.mode];
-  if (reuseExisting) prepArgs.push('--reuse-existing');
-  run(process.execPath, prepArgs);
-
   const manifestPath = join(motionRoot, preparation.manifestPath);
+  const reuseAttachedPalmier = reuseExisting && preparation.mode === 'palmier';
+
+  if (reuseAttachedPalmier) {
+    if (!existsSync(manifestPath)) {
+      throw new Error('No Palmier manifest exists to reuse. Prepare the scene spec, attach a real Palmier export, then retry --reuse-existing.');
+    }
+    const existing = resolveCanaryInputManifestSchema.parse(JSON.parse(readFileSync(manifestPath, 'utf8')));
+    if (existing.canaryId !== canaryId) {
+      throw new Error(`Prepared manifest canary mismatch: expected=${canaryId} actual=${existing.canaryId}`);
+    }
+    if (existing.status !== 'PREPARED') {
+      throw new Error('Palmier --reuse-existing requires a PREPARED manifest created by attach-palmier-real-export.mts; BLOCKED scene-spec manifests are not runtime-ready.');
+    }
+    const ids = new Set(existing.files.map((file) => file.id));
+    for (const requiredId of ['palmier-real-fcpxml', 'human-master-sidecar']) {
+      if (!ids.has(requiredId)) throw new Error(`Palmier PREPARED manifest is missing required attached input: ${requiredId}`);
+    }
+    console.log(`↺ preserving attached Palmier PREPARED manifest: ${preparation.manifestPath}`);
+  } else {
+    const prepArgs = ['--no-warnings', 'scripts/prepare-resolve-canary-inputs.mts', preparation.mode];
+    if (reuseExisting && preparation.mode === 'alpha') prepArgs.push('--reuse-existing');
+    run(process.execPath, prepArgs);
+  }
+
   if (!existsSync(manifestPath)) throw new Error(`Expected input manifest missing after preparation: ${preparation.manifestPath}`);
   const manifest = resolveCanaryInputManifestSchema.parse(JSON.parse(readFileSync(manifestPath, 'utf8')));
   if (manifest.canaryId !== canaryId) {

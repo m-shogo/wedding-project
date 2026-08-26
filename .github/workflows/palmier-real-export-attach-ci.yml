@@ -1,0 +1,115 @@
+name: Palmier Real Export Attachment CI
+
+on:
+  pull_request:
+    paths:
+      - "motion-studio/src/data/palmierRealExportAttachment.schema.ts"
+      - "motion-studio/scripts/attach-palmier-real-export.mts"
+      - "motion-studio/scripts/prepare-resolve-canary-session.mts"
+      - "motion-studio/scripts/resolve-runtime-canary-plan.mts"
+      - "docs/runbooks/2026-08-26-palmier-real-export-attach.md"
+      - "docs/research/2026-08-26-movie-tool-learning-run-28-palmier-real-export-attach.md"
+      - ".github/workflows/palmier-real-export-attach-ci.yml"
+  push:
+    paths:
+      - "motion-studio/src/data/palmierRealExportAttachment.schema.ts"
+      - "motion-studio/scripts/attach-palmier-real-export.mts"
+      - "motion-studio/scripts/prepare-resolve-canary-session.mts"
+      - "motion-studio/scripts/resolve-runtime-canary-plan.mts"
+      - "docs/runbooks/2026-08-26-palmier-real-export-attach.md"
+      - "docs/research/2026-08-26-movie-tool-learning-run-28-palmier-real-export-attach.md"
+      - ".github/workflows/palmier-real-export-attach-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  guard:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: motion-studio/pnpm-lock.yaml
+
+      - name: Install motion-studio dependencies
+        working-directory: motion-studio
+        run: pnpm install --frozen-lockfile
+
+      - name: TypeScript
+        working-directory: motion-studio
+        run: pnpm typecheck
+
+      - name: Prepare only the blocked Palmier scene spec
+        working-directory: motion-studio
+        run: |
+          node --no-warnings scripts/prepare-resolve-canary-inputs.mts palmier
+          grep -Fq '"status": "BLOCKED_REAL_TOOL_EXPORT_REQUIRED"' out/canary-inputs/manifests/DV21-PALMIER-FCPXML-01.json
+          if find out/canary-inputs/palmier -type f \( -name '*.fcpxml' -o -name '*.xml' \) | grep -q .; then
+            echo "Scene-spec preparation must never synthesize FCPXML"
+            exit 1
+          fi
+
+      - name: Inspect generic FCPXML without claiming Palmier provenance
+        working-directory: motion-studio
+        run: |
+          cat > /tmp/generic-structure.fcpxml <<'XML'
+          <?xml version="1.0" encoding="UTF-8"?>
+          <fcpxml version="1.10">
+            <library><event name="CI"><project name="CI"><sequence><spine/></sequence></project></event></library>
+          </fcpxml>
+          XML
+          node --no-warnings scripts/attach-palmier-real-export.mts \
+            --fcpxml /tmp/generic-structure.fcpxml \
+            --inspect-only > /tmp/inspection.json
+          grep -Fq '"fcpxmlRootDetected": true' /tmp/inspection.json
+          grep -Fq '"fcpxmlVersion": "1.10"' /tmp/inspection.json
+          grep -Fq '"provenance": "UNVERIFIED_BY_STRUCTURE"' /tmp/inspection.json
+          grep -Fq 'FCPXML_STRUCTURE_VALID != REAL_PALMIER_PROVENANCE' /tmp/inspection.json
+
+      - name: Refuse full attachment without explicit real-Palmier attestation
+        working-directory: motion-studio
+        run: |
+          before="$(sha256sum out/canary-inputs/manifests/DV21-PALMIER-FCPXML-01.json | awk '{print $1}')"
+          if node --no-warnings scripts/attach-palmier-real-export.mts \
+            --fcpxml /tmp/generic-structure.fcpxml; then
+            echo "Attachment unexpectedly succeeded without attestation"
+            exit 1
+          fi
+          after="$(sha256sum out/canary-inputs/manifests/DV21-PALMIER-FCPXML-01.json | awk '{print $1}')"
+          test "$before" = "$after"
+          grep -Fq '"status": "BLOCKED_REAL_TOOL_EXPORT_REQUIRED"' out/canary-inputs/manifests/DV21-PALMIER-FCPXML-01.json
+
+      - name: Refuse Palmier reuse while manifest is still blocked
+        working-directory: motion-studio
+        run: |
+          execution="DV21-PALMIER-FCPXML-01-CI-REUSE-MUST-FAIL"
+          if node --no-warnings scripts/prepare-resolve-canary-session.mts \
+            DV21-PALMIER-FCPXML-01 \
+            --execution-id "$execution" \
+            --reuse-existing; then
+            echo "Blocked Palmier manifest unexpectedly became runtime-ready"
+            exit 1
+          fi
+          test ! -e "out/canary-sessions/$execution"
+
+      - name: Canary plan exposes the honest attachment route
+        working-directory: motion-studio
+        run: |
+          node --no-warnings scripts/resolve-runtime-canary-plan.mts DV21-PALMIER-FCPXML-01 > /tmp/palmier-plan.txt
+          grep -Fq 'attach-palmier-real-export.mts --fcpxml <PALMIER_EXPORT.fcpxml> --inspect-only' /tmp/palmier-plan.txt
+          grep -Fq -- '--attest-real-palmier-export' /tmp/palmier-plan.txt
+          grep -Fq 'prepare-resolve-canary-session.mts DV21-PALMIER-FCPXML-01 --execution-id <EXECUTION_ID> --reuse-existing' /tmp/palmier-plan.txt
+          grep -Fq 'OPERATOR_ATTESTATION != CRYPTOGRAPHIC_PROVENANCE' /tmp/palmier-plan.txt
