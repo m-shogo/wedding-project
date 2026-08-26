@@ -1,7 +1,7 @@
 # ADD-05 — Ribbon Fold Physical-Cue Audit
 
 Date: 2026-08-26
-State: `OBSERVED → ROOT_CAUSE_HYPOTHESIS / BOUNDED_FIGMA_TEST_PENDING`
+State: `OBSERVED → ROOT_CAUSE_HYPOTHESIS / SERIOUS_COMPARISON_ASSET_CREATED / BOUNDED_FIGMA_TEST_PENDING`
 Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
 
 ## Scope
@@ -54,6 +54,21 @@ Do not change:
 - deep-ocean lower field;
 - canvas sizes.
 
+## Pre-Figma serious comparison asset — 2026-08-26
+
+A clean editable SVG candidate was created specifically for the `CONNECTED_FOLD` bounded role:
+
+- Git path: `01_paper-items/additional-wedding-items/ADD-05-thank-you-gift-tags/assets/ribbon-fold-connected-junction-candidate.svg`
+- commit: `ddfb6aec4a7f732330a3adb4bdd9dda0a33d6c2d`
+- canvas: `160×80`
+- semantic/variable copy baked in: `0`
+- gradient/shadow/fake UI/fake transport cue: `0`
+- purpose: test whether a flat, visibly turning/tucking mango flap reads as one physical ribbon junction rather than a floating button/status bar.
+
+The SVG uses a flat main flap plus two flat return planes. It is intentionally a **serious comparison candidate only**, not a production asset. Do not save it to Drive or promote it to Current until direct Figma whole/reading/actual-size comparison proves it beats both `CURRENT` and `NO_YELLOW_FOLD`.
+
+If the candidate becomes too illustrative, origami-like, bulky, or attention-stealing at 45×70, reject it rather than refining it indefinitely.
+
 ## Expected improvement
 
 The winning state should read immediately as a small gift tag rather than a clean UI-like composition with a floating horizontal control. If `NO_YELLOW_FOLD` is strongest, subtraction is allowed. If `CONNECTED_FOLD` is stronger, the retained cue must prove its physical role. If Current wins, reject the hypothesis and keep the existing fold.
@@ -78,10 +93,11 @@ The defect is optical/semantic, not overflow. Existing structure and confirmed-c
 ## Hybrid authoring decision
 
 - variable/factual copy: native Figma text;
-- coral ribbon and candidate fold geometry: simple fixed editable geometry is sufficient for the bounded test;
+- coral ribbon: current simple native geometry remains unchanged in the bounded test;
+- `NO_YELLOW_FOLD`: no replacement asset;
+- `CONNECTED_FOLD`: editable SVG candidate is allowed because the fold silhouette benefits from a coherent reusable flat graphic and contains no variable information;
 - generated raster: `0` required;
-- SVG: `0` required for the initial bounded test;
-- Drive write: `0` until a materially stronger adopted/comparison asset actually exists.
+- Drive write: `0` until a materially stronger adopted/comparison asset actually wins in Figma.
 
 ## Learning state
 
@@ -91,4 +107,4 @@ Do not publish a new cross-item rule from this observation. The transferable que
 
 ## Next action
 
-Execute the 3-state bounded Figma comparison at whole-item → reading → actual-size on all three tag faces, then rerun punch/copy clearance and structure readback on the winner before any Current mutation.
+Execute the 3-state bounded Figma comparison at whole-item → reading → actual-size on all three tag faces. Test `NO_YELLOW_FOLD` first because it is the lowest-complexity repair. Test the SVG `CONNECTED_FOLD` only if subtraction weakens gift-wrap energy. Then rerun punch/copy clearance and structure readback on the winner before any Current mutation.
