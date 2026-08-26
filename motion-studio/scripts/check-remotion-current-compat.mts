@@ -1,6 +1,7 @@
 import {readFileSync} from 'node:fs';
 import {join} from 'node:path';
 import {
+  remotionCurrentCompatibilityEvidence,
   remotionCurrentFeatureDelta,
   remotionCurrentReleaseCoordinate,
   remotionLicenseCoordinate,
@@ -34,9 +35,29 @@ if (remotionCurrentReleaseCoordinate.currentReleaseVersion !== '4.0.517') err('c
 const currentPatch = Number(remotionCurrentReleaseCoordinate.currentReleaseVersion.split('.')[2]);
 const lockedPatch = Number(remotionCurrentReleaseCoordinate.repoLockedVersion.split('.')[2]);
 if (currentPatch - lockedPatch !== 42) err(`expected 42 patch releases of coordinate distance, got ${currentPatch - lockedPatch}`);
-if (remotionWeddingCompatibilityPolicy.latestCompatibilityState !== 'PENDING_EPHEMERAL_CI') err('compatibility state must remain pending before current-version canary runs');
+if (remotionWeddingCompatibilityPolicy.latestCompatibilityState !== 'EPHEMERAL_CI_GREEN_RUNTIME_STUDIO_QA_REQUIRED') {
+  err('compatibility result must preserve CI-green / local-Studio-QA-required boundary');
+}
 if (remotionWeddingCompatibilityPolicy.productionDependencyUpgradeState !== 'NOT_REQUESTED_YET') err('production lock upgrade must remain separate from compatibility canary');
 if (!remotionLicenseCoordinate.v5ChangeAnnounced) err('v5 license revalidation boundary disappeared');
+
+if (remotionCurrentCompatibilityEvidence.candidateVersion !== remotionCurrentReleaseCoordinate.currentReleaseVersion) {
+  err('compatibility evidence candidate version does not match current release coordinate');
+}
+if (remotionCurrentCompatibilityEvidence.baselineVersion !== remotionCurrentReleaseCoordinate.repoLockedVersion) {
+  err('compatibility evidence baseline version does not match repo lock coordinate');
+}
+for (const [name, result] of Object.entries(remotionCurrentCompatibilityEvidence.checks)) {
+  if (!String(result).startsWith('PASS')) err(`compatibility evidence is not passing: ${name}=${result}`);
+}
+const pathFix = remotionCurrentCompatibilityEvidence.discoveredCompatibilityFixes.find(
+  (item) => item.fingerprint === 'REMOTION_PATH_SAMPLING_NULLABLE_TYPE',
+);
+if (!pathFix) err('path-sampling nullable compatibility fingerprint is missing');
+if (pathFix?.resolution.includes('non-null assertions') !== true) err('path-sampling fix must explicitly reject non-null-assertion-only repair');
+if (remotionCurrentCompatibilityEvidence.remainingBeforeProductionUpgrade.length < 3) {
+  err('production upgrade must retain local Studio/manual QA gates');
+}
 
 const feature = (id: string) => remotionCurrentFeatureDelta.find((item) => item.id === id);
 for (const id of ['studio-crop', 'studio-code-editor-integration', 'studio-3d-transform-controls', 'zod-description-tooltips', 'agent-skills-and-context', 'elements-studio-protocol', 'studio-library-browser', 'renderer-fast-start', 'gsap-package']) {
@@ -72,6 +93,7 @@ if (!remotionStudioProtocolBoundary.weddingPolicy.includes('Use official createE
 for (const guardrail of [
   'LATEST_RELEASE_AVAILABLE != WEDDING_REPO_COMPATIBLE',
   'EPHEMERAL_CI_GREEN != PRODUCTION_LOCKFILE_UPGRADED',
+  'CI_RENDER_GREEN != LOCAL_STUDIO_INTERACTION_VERIFIED',
   'STUDIO_INTERACTIVE != SOURCE_OF_TRUTH_MOVED_OUT_OF_CODE',
   'ELEMENT_SOURCE_PUBLIC != SAFE_FOR_SECRETS_OR_PRIVATE_ASSET_URLS',
   'ELEMENT_DEPENDENCY_DECLARED != DEPENDENCY_POLICY_APPROVED',
@@ -86,8 +108,9 @@ if (errors > 0) {
   process.exit(1);
 }
 
-console.log('✅ Remotion current compatibility contract preserves locked-vs-latest, Studio Protocol, security and v5 revalidation boundaries.');
+console.log('✅ Remotion current compatibility contract preserves locked-vs-latest, CI evidence, Studio Protocol, security and v5 revalidation boundaries.');
 console.log(`locked=${remotionCurrentReleaseCoordinate.repoLockedVersion}`);
 console.log(`current=${remotionCurrentReleaseCoordinate.currentReleaseVersion}`);
 console.log(`patchDistance=${currentPatch - lockedPatch}`);
+console.log(`compatibilityState=${remotionWeddingCompatibilityPolicy.latestCompatibilityState}`);
 console.log('productionUpgradePerformed=NO');
