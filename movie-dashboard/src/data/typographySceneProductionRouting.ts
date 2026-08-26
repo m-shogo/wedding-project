@@ -17,9 +17,16 @@ export type TypographyProductionPatternId =
   | "type-baseline-hop"
   | "type-triplet";
 
+/**
+ * DaVinci readiness is deliberately staged. A deterministic translator and an Actual-capture
+ * workflow are useful engineering progress, but neither means the live Resolve implementation
+ * has been applied/read back, and an available implementation is still not Actual-verified.
+ */
 export type DaVinciTypographyRouteStatus =
+  | "DAVINCI_TRANSLATION_NOT_IMPLEMENTED"
+  | "DAVINCI_ACTUAL_CANDIDATE"
   | "DAVINCI_IMPLEMENTATION_AVAILABLE"
-  | "DAVINCI_TRANSLATION_NOT_IMPLEMENTED";
+  | "DAVINCI_ACTUAL_VERIFIED";
 
 export interface TypographyProductionRouteDefinition {
   patternId: TypographyProductionPatternId;
@@ -28,6 +35,10 @@ export interface TypographyProductionRouteDefinition {
   davinciRouteStatus: DaVinciTypographyRouteStatus;
   davinciImplementationId: string | null;
   translationTarget: "TEXT_PLUS_FUSION";
+  translatorSpecAvailable: boolean;
+  actualEvidenceWorkflowAvailable: boolean;
+  liveImplementationAvailable: boolean;
+  actualVerified: boolean;
   rule: string;
 }
 
@@ -37,19 +48,33 @@ const route = (
   davinciRouteStatus: DaVinciTypographyRouteStatus,
   davinciImplementationId: string | null,
   rule: string,
-): TypographyProductionRouteDefinition => ({
-  patternId,
-  canonicalMode,
-  palmierCapability: "PALMIER_TIMING_ONLY",
-  davinciRouteStatus,
-  davinciImplementationId,
-  translationTarget: "TEXT_PLUS_FUSION",
-  rule,
-});
+): TypographyProductionRouteDefinition => {
+  const translatorSpecAvailable = davinciRouteStatus !== "DAVINCI_TRANSLATION_NOT_IMPLEMENTED";
+  const actualEvidenceWorkflowAvailable = davinciRouteStatus !== "DAVINCI_TRANSLATION_NOT_IMPLEMENTED";
+  const liveImplementationAvailable =
+    davinciRouteStatus === "DAVINCI_IMPLEMENTATION_AVAILABLE" ||
+    davinciRouteStatus === "DAVINCI_ACTUAL_VERIFIED";
+  const actualVerified = davinciRouteStatus === "DAVINCI_ACTUAL_VERIFIED";
+
+  return {
+    patternId,
+    canonicalMode,
+    palmierCapability: "PALMIER_TIMING_ONLY",
+    davinciRouteStatus,
+    davinciImplementationId,
+    translationTarget: "TEXT_PLUS_FUSION",
+    translatorSpecAvailable,
+    actualEvidenceWorkflowAvailable,
+    liveImplementationAvailable,
+    actualVerified,
+    rule,
+  };
+};
 
 /**
  * Motion Zukan Typography 9候補 → production pipeline の正本。
- * Remotion Element候補であることと、DaVinciで同等表現を実装済みであることを混同しない。
+ * Remotion Element候補、translator spec、Actual workflow、live implementation、Actual verification
+ * を別状態として扱い、前段の成功を後段の成功へ読み替えない。
  */
 export const typographyProductionRoutes: TypographyProductionRouteDefinition[] = [
   route(
@@ -57,21 +82,21 @@ export const typographyProductionRoutes: TypographyProductionRouteDefinition[] =
     "mask",
     "DAVINCI_IMPLEMENTATION_AVAILABLE",
     "impl-type-mask-reveal-davinci-text-plus",
-    "既存Text+実装とvalue bridgeを再利用できる。Actual applied evidenceが埋まるまではproduction-ready扱いしない。",
+    "既存Text+実装とvalue bridgeを再利用できる。live implementationはあるが、実Resolve applied-value/readback evidenceが埋まるまではActual verified / production-ready扱いしない。",
   ),
   route(
     "type-char-stagger",
     "stagger",
-    "DAVINCI_TRANSLATION_NOT_IMPLEMENTED",
-    null,
-    "文字単位staggerのText+/Fusion translationを実装・検証してからDaVinci routeを昇格する。",
+    "DAVINCI_ACTUAL_CANDIDATE",
+    "impl-type-char-stagger-davinci-text-plus-follower",
+    "canonical stagger→Text+ Follower translatorとActual evidence workflowは実装済み。live Resolve binding/readback/render parityが未検証なのでimplementation availableへはまだ昇格しない。",
   ),
   route(
     "type-type-on-rhythm",
     "word-stagger",
-    "DAVINCI_TRANSLATION_NOT_IMPLEMENTED",
-    null,
-    "語単位timingをPalmier placementとは分離し、Text+/Fusion側のword revealとして実装するまで未対応。",
+    "DAVINCI_ACTUAL_CANDIDATE",
+    "impl-type-type-on-rhythm-davinci-text-plus-follower-words",
+    "canonical word-stagger→Text+ Follower WORDS translatorとActual evidence workflowは実装済み。FOLLOWER_UNIT=WORDSを含むlive binding/readback/render parityが未検証なのでimplementation availableへはまだ昇格しない。",
   ),
   route(
     "type-word-punch",
@@ -183,6 +208,10 @@ export interface TypographySceneProductionBundleV1 {
     routeStatus: DaVinciTypographyRouteStatus;
     implementationId: string | null;
     translationTarget: "TEXT_PLUS_FUSION";
+    translatorSpecAvailable: boolean;
+    actualEvidenceWorkflowAvailable: boolean;
+    liveImplementationAvailable: boolean;
+    actualVerified: boolean;
     visualImplementationReady: boolean;
     actualAppliedEvidence: "NOT_RUN";
     rule: string;
@@ -245,17 +274,20 @@ export function buildTypographySceneProductionBundle(
     candidate.readiness === "STUDIO_ACTUAL_VERIFIED" &&
     candidate.studioInstallActual === "PASS" &&
     candidate.studioControlReadbackActual === "PASS";
-  const davinciVisualReady = definition.davinciRouteStatus === "DAVINCI_IMPLEMENTATION_AVAILABLE";
+  const davinciVisualReady = definition.liveImplementationAvailable;
   const blockers: string[] = [];
 
   if (!remotionStudioReady) {
     blockers.push("REMOTION_STUDIO_ACTUAL_NOT_VERIFIED");
   }
-  if (!davinciVisualReady) {
+  if (!definition.translatorSpecAvailable) {
     blockers.push("DAVINCI_TRANSLATION_NOT_IMPLEMENTED");
+  } else if (!definition.liveImplementationAvailable) {
+    blockers.push("DAVINCI_ACTUAL_CANDIDATE_NOT_LIVE_IMPLEMENTATION");
   }
-  // Even Mask Reveal still needs real applied-value/readback evidence before final promotion.
-  blockers.push("DAVINCI_ACTUAL_APPLIED_EVIDENCE_NOT_RUN");
+  if (!definition.actualVerified) {
+    blockers.push("DAVINCI_ACTUAL_APPLIED_EVIDENCE_NOT_RUN");
+  }
 
   return {
     schemaVersion: "motion-zukan-typography-production/v1",
@@ -296,6 +328,10 @@ export function buildTypographySceneProductionBundle(
       routeStatus: definition.davinciRouteStatus,
       implementationId: definition.davinciImplementationId,
       translationTarget: definition.translationTarget,
+      translatorSpecAvailable: definition.translatorSpecAvailable,
+      actualEvidenceWorkflowAvailable: definition.actualEvidenceWorkflowAvailable,
+      liveImplementationAvailable: definition.liveImplementationAvailable,
+      actualVerified: definition.actualVerified,
       visualImplementationReady: davinciVisualReady,
       actualAppliedEvidence: "NOT_RUN",
       rule: definition.rule,
