@@ -1,0 +1,156 @@
+name: Resolve Lottie Neutral Fixture CI
+
+on:
+  pull_request:
+    paths:
+      - "motion-studio/fixtures/resolve/lottie/**"
+      - "motion-studio/src/data/resolveLottieFixture.schema.ts"
+      - "motion-studio/src/data/resolveLottieFixture.ts"
+      - "motion-studio/src/data/resolveCanaryInputFixtures.ts"
+      - "motion-studio/scripts/prepare-resolve-lottie-fixture.mts"
+      - "motion-studio/scripts/prepare-resolve-canary-inputs.mts"
+      - "motion-studio/scripts/check-resolve-canary-input-fixtures.mts"
+      - "scripts/davinci/deterministic-dotlottie-pack.py"
+      - "docs/research/2026-08-26-movie-tool-learning-run-31-lottie-neutral-fixture.md"
+      - "docs/runbooks/2026-08-26-resolve21-lottie-ograft-canary.md"
+      - ".github/workflows/resolve-lottie-neutral-fixture-ci.yml"
+  push:
+    paths:
+      - "motion-studio/fixtures/resolve/lottie/**"
+      - "motion-studio/src/data/resolveLottieFixture.schema.ts"
+      - "motion-studio/src/data/resolveLottieFixture.ts"
+      - "motion-studio/src/data/resolveCanaryInputFixtures.ts"
+      - "motion-studio/scripts/prepare-resolve-lottie-fixture.mts"
+      - "motion-studio/scripts/prepare-resolve-canary-inputs.mts"
+      - "motion-studio/scripts/check-resolve-canary-input-fixtures.mts"
+      - "scripts/davinci/deterministic-dotlottie-pack.py"
+      - "docs/research/2026-08-26-movie-tool-learning-run-31-lottie-neutral-fixture.md"
+      - "docs/runbooks/2026-08-26-resolve21-lottie-ograft-canary.md"
+      - ".github/workflows/resolve-lottie-neutral-fixture-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: motion-studio/pnpm-lock.yaml
+
+      - name: Install motion-studio dependencies
+        working-directory: motion-studio
+        run: pnpm install --frozen-lockfile
+
+      - name: Python packer syntax
+        run: python3 -m py_compile scripts/davinci/deterministic-dotlottie-pack.py
+
+      - name: TypeScript
+        working-directory: motion-studio
+        run: pnpm typecheck
+
+      - name: Canary input registry contract
+        working-directory: motion-studio
+        run: node --no-warnings scripts/check-resolve-canary-input-fixtures.mts
+
+      - name: Lottie planner dry-run
+        working-directory: motion-studio
+        run: |
+          node --no-warnings scripts/prepare-resolve-canary-inputs.mts lottie --dry-run > /tmp/lottie-dry-run.txt
+          grep -Fq 'DV21-LOTTIE-OGRAF-01 neutral dotLottie fixture' /tmp/lottie-dry-run.txt
+          grep -Fq 'dotLottieSpecVersion=1' /tmp/lottie-dry-run.txt
+          grep -Fq 'source=SELF_AUTHORED_SYNTHETIC' /tmp/lottie-dry-run.txt
+          grep -Fq 'runtimeState=PENDING_RUNTIME' /tmp/lottie-dry-run.txt
+
+      - name: Generate deterministic dotLottie fixture
+        working-directory: motion-studio
+        run: |
+          node --no-warnings scripts/prepare-resolve-canary-inputs.mts lottie
+          test -s out/canary-inputs/lottie/WeddingNeutralAlphaMotion.lottie
+          test -s out/canary-inputs/lottie/WeddingNeutralAlphaMotion.fixture.json
+          test -s out/canary-inputs/manifests/DV21-LOTTIE-OGRAF-01.json
+          sha256sum out/canary-inputs/lottie/WeddingNeutralAlphaMotion.lottie | awk '{print $1}' > /tmp/lottie-hash-a
+          grep -Fq '"runtimeState": "PENDING_RUNTIME"' out/canary-inputs/lottie/WeddingNeutralAlphaMotion.fixture.json
+          grep -Fq '"copyrightedContent": false' out/canary-inputs/lottie/WeddingNeutralAlphaMotion.fixture.json
+          grep -Fq 'DOTLOTTIE_ARCHIVE_VALID != RESOLVE_IMPORTABLE' out/canary-inputs/manifests/DV21-LOTTIE-OGRAF-01.json
+
+      - name: Verify dotLottie v1 hierarchy and self-authored source contract
+        working-directory: motion-studio
+        run: |
+          python3 - <<'PY'
+          import json, pathlib, zipfile
+          path = pathlib.Path('out/canary-inputs/lottie/WeddingNeutralAlphaMotion.lottie')
+          with zipfile.ZipFile(path) as z:
+              infos = z.infolist()
+              assert [i.filename for i in infos] == [
+                  'animations/wedding-neutral-alpha-motion.json',
+                  'manifest.json',
+              ]
+              assert all(i.date_time == (1980, 1, 1, 0, 0, 0) for i in infos)
+              assert all('..' not in pathlib.PurePosixPath(i.filename).parts for i in infos)
+              manifest = json.loads(z.read('manifest.json'))
+              animation = json.loads(z.read('animations/wedding-neutral-alpha-motion.json'))
+          assert manifest['version'] == '1'
+          assert manifest['activeAnimationId'] == 'wedding-neutral-alpha-motion'
+          assert [x['id'] for x in manifest['animations']] == ['wedding-neutral-alpha-motion']
+          assert manifest['custom'] == {
+              'source': 'SELF_AUTHORED_SYNTHETIC',
+              'copyrightedContent': False,
+              'thirdPartyAssets': [],
+          }
+          assert animation['fr'] == 30 and animation['ip'] == 0 and animation['op'] == 90
+          assert animation['w'] == 512 and animation['h'] == 512
+          assert animation['assets'] == []
+          assert len(animation['layers']) == 1 and animation['layers'][0]['ty'] == 4
+          assert animation['layers'][0]['ks']['p']['a'] == 1
+          source = json.dumps([manifest, animation])
+          for token in ['http://', 'https://', 'data:image', 'images/', 'fonts/']:
+              assert token not in source, token
+          PY
+
+      - name: Regeneration keeps the dotLottie binary hash deterministic
+        working-directory: motion-studio
+        run: |
+          node --no-warnings scripts/prepare-resolve-canary-inputs.mts lottie
+          sha256sum out/canary-inputs/lottie/WeddingNeutralAlphaMotion.lottie | awk '{print $1}' > /tmp/lottie-hash-b
+          diff -u /tmp/lottie-hash-a /tmp/lottie-hash-b
+
+      - name: Hydrate Lottie evidence without claiming Resolve import
+        working-directory: motion-studio
+        run: |
+          evidence="out/canary-evidence/lottie-hydrated.json"
+          node --no-warnings scripts/hydrate-resolve-canary-evidence.mts \
+            out/canary-inputs/manifests/DV21-LOTTIE-OGRAF-01.json \
+            --execution-id DV21-LOTTIE-OGRAF-01-CI-HYDRATED \
+            --output "$evidence"
+          node --no-warnings scripts/validate-resolve-canary-evidence.mts "$evidence"
+          node -e "const e=require('./out/canary-evidence/lottie-hydrated.json'); const i=e.inputInventory.find(x=>x.id==='neutral-lottie'); if(e.result!=='NOT_RUN'||e.capturedAt!==null||e.promotionEligible!==false||i?.present!==true||e.stepResults.some(x=>x.status!=='NOT_RUN')) process.exit(1);"
+
+      - name: Prepare Lottie runtime session without launching Resolve
+        working-directory: motion-studio
+        run: |
+          execution="DV21-LOTTIE-OGRAF-01-CI-SESSION-A"
+          session="out/canary-sessions/$execution"
+          node --no-warnings scripts/prepare-resolve-canary-session.mts \
+            DV21-LOTTIE-OGRAF-01 \
+            --execution-id "$execution"
+          test -s "$session/session.json"
+          test -s "$session/evidence.json"
+          node --no-warnings scripts/validate-resolve-canary-evidence.mts "$session/evidence.json"
+          node -e "const s=require('./$session/session.json'); const e=require('./$session/evidence.json'); const i=e.inputInventory.find(x=>x.id==='neutral-lottie'); if(s.status!=='READY_FOR_RUNTIME'||s.runtimeLaunchPerformed!==false||e.result!=='NOT_RUN'||e.promotionEligible!==false||i?.present!==true) process.exit(1);"
+          grep -Fq 'NATIVE_IMPORT != INTERNAL_PARAMETRIC_EDITABILITY' "$session/RUN.md"
+          grep -Fq 'ALPHA_INTENT != RESOLVE_ALPHA_PROOF' "$session/RUN.md"
