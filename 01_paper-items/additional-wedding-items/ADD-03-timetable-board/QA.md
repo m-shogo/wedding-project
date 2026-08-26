@@ -1,7 +1,7 @@
 # ADD-03 当日タイムテーブルボード — QA
 
-Status: `CURRENT / DAY_BROADSHEET_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / FAMILY_DIVERSITY_PASS / LONG_COPY_STRESS_PASS / AUTO_HEIGHT_PASS / ROLLBACK_SAFE / LEGACY_PRESERVED / NOT_PRINT_READY`
-Updated: 2026-08-23
+Status: `CURRENT / DAY_BROADSHEET_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / FAMILY_DIVERSITY_PASS / LONG_COPY_STRESS_PASS / AUTO_HEIGHT_PASS / ROLLBACK_SAFE / LEGACY_PRESERVED / V8_TIME_CASCADE_A2_PREFIGMA_CANDIDATE / NOT_PRINT_READY`
+Updated: 2026-08-27
 Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
 
 ## Current Figma authority
@@ -26,7 +26,8 @@ Drive authority: `1uVcXv2Xs0H7juheHk977pt7YxLMJez_j / ADD-03_当日タイムテ�
 Primary current evidence:
 
 - `FIGMA-FAMILY-DIVERSITY-DAY-BROADSHEET-PROMOTION-2026-08-21.md`;
-- `FIGMA-DAY01-TAB-SUBTRACTION-QA-2026-08-23.md`.
+- `FIGMA-DAY01-TAB-SUBTRACTION-QA-2026-08-23.md`;
+- `CLEANROOM-V8-PREFIGMA-COMPOSITION-PROXY-QA-2026-08-27.md` (pre-Figma candidate narrowing only; not production evidence).
 
 ## Authority-drift correction — 2026-08-22
 
@@ -117,6 +118,32 @@ Do not invent opening time, venue floor, gate, flight number, QR, transport cred
 Current Professional Design Council score remains **91 / 100 / PASS / NO VETO** from the family-diversity promotion evidence. The 2026-08-23 change is a bounded editorial subtraction, not a new visual-generation claim.
 
 `DAY BROADSHEET` replaced `TIDE DAY` because it preserved timetable function while removing a suite-level repeated dark-field + rounded-sweep grammar. The current design should not be reopened merely to create activity; reopen only when fresh screenshot evidence, final copy, printing constraints or physical proof exposes a concrete defect.
+
+## Clean-room V8 pre-Figma narrowing — 2026-08-27
+
+The existing `CLEANROOM-V8-TYPE-FIRST-ASSEMBLY-BRIEF-2026-08-26.md` defined three independent native-type directions. While Figma mutation guidance was unavailable, the run used non-production blank-origin A2 composition proxies to test those premises without changing Current or creating another fixed-art generation.
+
+Result:
+
+- `TIME CASCADE`: strongest movement / chronology premise;
+- `OPEN COLUMN SHIFT`: `REJECTED_PRE_FIGMA` because inactive paper mass became premium-by-emptiness / layout-exercise spacing;
+- `CROPPED TIME BROADSIDE`: `REJECTED_PRE_FIGMA` because the cropped numerals became a festival-poster gesture and increased trim/safe-area risk.
+
+The first `TIME CASCADE` long-copy proxy also exposed a real design requirement: a short-placeholder layout let the 14:40 guidance collide with / escape its intended lane. A refined `TIME CASCADE A2` kept the large time typography and changed only copy-lane geometry so realistic multi-line ceremony / transfer / reception guidance had dedicated space.
+
+This is **not** Figma three-scale evidence and does not alter Current status. It narrows the next safe authoring action to one serious candidate instead of spending a future run building three already-understood directions.
+
+When Figma mutation is available, the next action is:
+
+1. create one new blank A2 frame for `TIME CASCADE A2`;
+2. author all facts/guidance as native Japanese text with `textAutoResize=HEIGHT`;
+3. test realistic long-copy immediately;
+4. run ~500px → ~1000px → native `1400×1980` → structure readback;
+5. only then reveal retained `DAY BROADSHEET` for final comparison.
+
+No SVG, generated raster, replaceable image, Drive write or production mutation is justified before that test.
+
+Learning state: `TESTED_LOCAL_PRE_FIGMA`. Do not promote the staggered-time treatment as a cross-item rule before real Figma evidence.
 
 ## Historical QA retained
 
