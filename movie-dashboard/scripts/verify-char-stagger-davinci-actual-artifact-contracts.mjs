@@ -7,6 +7,7 @@ const artifact = fs.readFileSync(path.join(root, "src/data/charStaggerDaVinciAct
 const translator = fs.readFileSync(path.join(root, "src/data/charStaggerDaVinciTranslator.ts"), "utf8");
 const routing = fs.readFileSync(path.join(root, "src/data/typographySceneProductionRouting.ts"), "utf8");
 const maskEvidence = fs.readFileSync(path.join(root, "src/data/maskRevealDaVinciAppliedEvidence.ts"), "utf8");
+const selector = fs.readFileSync(path.join(root, "src/components/TypographyProductionRouteSelector.tsx"), "utf8");
 const errors = [];
 
 const requireText = (source, token, message) => {
@@ -41,6 +42,13 @@ for (const token of [
   'opacityFromDelta',
   'easingMatches',
   'attachCharStaggerDaVinciActualReadback',
+  'function exactDeltaState',
+  'values.every((value) => value === 0) ? "PASS" : "FAIL"',
+  'function booleanComparisonState',
+  'sequentialDelayApplied: exactDeltaState(comparison.delayFrameDelta, comparison.durationFrameDelta)',
+  'translationApplied: exactDeltaState(',
+  'opacityApplied: exactDeltaState(comparison.opacityFromDelta, comparison.opacityToDelta)',
+  'easingApplied: booleanComparisonState(comparison.easingMatches)',
 ]) {
   requireText(artifact, token, `Char Stagger Actual artifact missing contract: ${token}`);
 }
@@ -63,6 +71,18 @@ for (const token of [
   requireText(maskEvidence, token, `Existing Mask Reveal evidence pattern missing reusable boundary: ${token}`);
 }
 
+for (const token of [
+  'createCharStaggerDaVinciActualArtifact(scene, selection)',
+  'selection?.patternId === "type-char-stagger"',
+  'Actual JSONを書き出す',
+  'JSON.stringify(charStaggerActualArtifact, null, 2)',
+  'type-char-stagger-davinci-actual.json',
+  'Parameter binding: NOT_VERIFIED',
+  'EVIDENCE_ONLYテンプレート',
+]) {
+  requireText(selector, token, `Char Stagger Actual export UI missing contract: ${token}`);
+}
+
 requireText(
   routing,
   '"type-char-stagger",\n    "stagger",\n    "DAVINCI_TRANSLATION_NOT_IMPLEMENTED"',
@@ -81,6 +101,12 @@ if (/productionReady:\s*true/.test(artifact)) {
 if (/DAVINCI_IMPLEMENTATION_AVAILABLE[\s\S]{0,120}type-char-stagger/.test(routing)) {
   errors.push("Actual preparation artifact alone must not promote Char Stagger to an implemented DaVinci route");
 }
+if (/sequentialDelayApplied:\s*readback\.perCharacterDelayFrames !== null \? "PASS"/.test(artifact)) {
+  errors.push("Reading a delay value is not enough for PASS; it must match the canonical translator spec");
+}
+if (/easingApplied:\s*readback\.easingObserved !== null \? "PASS"/.test(artifact)) {
+  errors.push("Reading an easing value is not enough for PASS; it must match EASE_OUT_CUBIC");
+}
 
 if (errors.length) {
   console.error(`Char Stagger DaVinci Actual Artifact contracts FAILED (${errors.length})`);
@@ -88,4 +114,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log("Char Stagger DaVinci Actual Artifact contracts OK: the bounded canary derives text/intensity from current Scene authority, uses a clearly non-Human-Master white/30fps test baseline, reuses the existing evidence-only boundary, leaves live Fusion parameter bindings unverified and all GUI/render QA NOT_RUN, compares future readback to the canonical translator spec, and keeps production routing fail-closed.");
+console.log("Char Stagger DaVinci Actual Artifact contracts OK: the bounded canary derives text/intensity from current Scene authority, exports an evidence-only JSON from the Scene handoff, uses a clearly non-Human-Master white/30fps test baseline, leaves live Fusion parameter bindings unverified and GUI/render QA NOT_RUN, and only marks delay/translation/opacity/easing PASS when future readback exactly matches the canonical translator spec; production routing stays fail-closed.");
