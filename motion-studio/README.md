@@ -466,6 +466,8 @@ pnpm dev:start-wedding-edit                # Studioで6 Composition確認
 pnpm render:start-wedding-edit:v2          # フル解像度6本 → out/start-wedding-edit-final-v2/
 pnpm typecheck
 pnpm check:start-wedding-edit-phrase-qa    # 歌詞データ契約(coverage/family分布/StaRt完成)
+pnpm check:timing-master                    # TimingMasterのschema/整合性(offset architecture含む)
+pnpm check:choreography-event-timing        # ChoreographyEvent.timeSecに隠れたoffset加算が無いかの静的検査
 node --no-warnings scripts/check-start-wedding-edit-render-qa.mts --dir=out/start-wedding-edit-final-v2
 ```
 
