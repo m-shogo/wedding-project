@@ -92,7 +92,7 @@ try {
     throw new Error(`Prepared manifest canary mismatch: expected=${canaryId} actual=${manifest.canaryId}`);
   }
 
-  mkdirSync(sessionDir, {recursive: false});
+  mkdirSync(sessionDir, {recursive: true});
   const planPath = join(sessionDir, 'plan.md');
   const evidencePath = join(sessionDir, 'evidence.json');
   const runInstructionsPath = join(sessionDir, 'RUN.md');
