@@ -10,7 +10,7 @@ export const resolveCanarySessionSchema = z.object({
   inputManifestStatus: z.enum(['PREPARED', 'BLOCKED_REAL_TOOL_EXPORT_REQUIRED']),
   targetResolveMajor: z.literal(21),
   runtimeLaunchPerformed: z.literal(false),
-  networkRequestsPerformed: z.literal(false),
+  networkInstallRequested: z.literal(false),
   paths: z.object({
     sessionDir: z.string().min(1),
     inputManifest: z.string().min(1),
