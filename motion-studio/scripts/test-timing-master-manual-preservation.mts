@@ -41,9 +41,17 @@ process.on('SIGINT', () => {
 
 try {
   const master = JSON.parse(originalRaw) as TimingMaster;
-  const targetPhrase = master.phrases.find((p) => p.cues.length > 0);
-  if (!targetPhrase) throw new Error('cueを持つphraseが無い');
-  const targetCue = targetPhrase.cues[0];
+  // 重要: phrase.cues[0]は常にphrase-onset cueであり、そのtimeMsは今や
+  // phrase.startMsそのものと同一の正本になった(2026-08-27のRender Truth
+  // 修正)。ここへ意図的に大きく異常な値(+12345ms)を書き込むと、phrase.startMs
+  // も連動して異常値になり、次phraseとの順序逆転を引き起こして
+  // migrate --apply自体がfail()で中止される(これは新しい正しい安全動作であり
+  // バグではない)。このtestは「manual/verified値がcue単体として保持される」
+  // ことの検証が目的なので、phrase.startMsへ影響しないword-accent cueを
+  // 対象に選ぶ(phrase-onset以外)。
+  const targetPhrase = master.phrases.find((p) => p.cues.some((c) => c.kind === 'word-accent'));
+  if (!targetPhrase) throw new Error('word-accent cueを持つphraseが無い');
+  const targetCue = targetPhrase.cues.find((c) => c.kind === 'word-accent')!;
   const originalCueSnapshot = {...targetCue};
 
   // 意図的に「実際の値とは異なる」manual値へ書き換える(上書きされていないか

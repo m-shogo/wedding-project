@@ -109,6 +109,32 @@ if (master.audio.renderPipelineOffsetMs != null && !master.audio.renderPipelineO
   );
 }
 
+// Render Truth監査(2026-08-27)P0対応:
+// 4a. phrase順序・重なりの回帰防止(canonical start補正の副作用でstartMs逆転や
+//     endMs重なりが再発しないことを保証する。migrate scriptがすでにclamp/fail
+//     しているはずだが、schema checkerでも独立に再検証する)。
+let lastPhraseEndMs = -Infinity;
+for (const p of master.phrases) {
+  if (p.endMs <= p.startMs) errors.push(`${p.phraseId}: endMs(${p.endMs}) <= startMs(${p.startMs})(canonical start補正後)`);
+  if (p.startMs < lastPhraseEndMs - 0.5) {
+    errors.push(`${p.phraseId}: startMs(${p.startMs})が前phraseのendMs(${lastPhraseEndMs})より前(overlap未解消)`);
+  }
+  lastPhraseEndMs = p.endMs;
+}
+
+// 4b. 同一phrase内のordered cue group(syllable-hit)がH01<H02<H03の狭義単調増加
+//     であることを保証する(item13/14: 1 onset→複数critical cueの重複割当を
+//     再発させないための回帰check。実際にP013-H01/H02が同一onsetへ収束する
+//     bugを2026-08-27に発見・修正した)。
+for (const p of master.phrases) {
+  const hits = p.cues.filter((c) => c.kind === 'syllable-hit').sort((a, b) => a.cueId.localeCompare(b.cueId));
+  for (let i = 1; i < hits.length; i++) {
+    if (hits[i].timeMs <= hits[i - 1].timeMs) {
+      errors.push(`${p.phraseId}: ${hits[i - 1].cueId}(${hits[i - 1].timeMs}ms) と ${hits[i].cueId}(${hits[i].timeMs}ms) が単調増加でない(onset重複割当の疑い)`);
+    }
+  }
+}
+
 // 5. musicCue cueId重複
 const seenMusicCueIds = new Set<string>();
 for (const m of master.musicCues) {

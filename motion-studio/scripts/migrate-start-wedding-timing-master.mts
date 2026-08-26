@@ -320,11 +320,13 @@ const ANALYSIS_SNAP_WINDOW_MS = 250;
  * 見つかった場合だけaudio-analysisとして採用し、見つからない場合は呼び出し元の
  * 既存ロジック(beat-snap/estimated)へfallbackする(解析していない値を
  * audio-analysisと自称しないため)。diffMsも返し、confidenceScore算出に使う。 */
-const snapToVocalOnset = (approxMs: number): {ms: number; diffMs: number} | null => {
+const snapToVocalOnset = (approxMs: number, minExclusiveMs: number | null = null): {ms: number; diffMs: number} | null => {
   if (vocalOnsetsMs.length === 0) return null;
-  let best = vocalOnsetsMs[0];
-  let bestDiff = Math.abs(vocalOnsetsMs[0] - approxMs);
-  for (const o of vocalOnsetsMs) {
+  const candidates = minExclusiveMs == null ? vocalOnsetsMs : vocalOnsetsMs.filter((o) => o > minExclusiveMs);
+  if (candidates.length === 0) return null;
+  let best = candidates[0];
+  let bestDiff = Math.abs(candidates[0] - approxMs);
+  for (const o of candidates) {
     const d = Math.abs(o - approxMs);
     if (d < bestDiff) {
       best = o;
@@ -383,24 +385,30 @@ const phrases: TimingPhrase[] = lyrics.phrases.map((p) => {
   if (onsetSnap != null) snappedCount++;
   const onsetTimingSource: VocalCue['timingSource'] =
     phraseOverride?.manualStartSec != null ? 'manual' : onsetSnap != null ? 'audio-analysis' : pm ? 'audio-analysis' : 'estimated';
-  cues.push(
-    preserveCueIfBetter({
-      cueId: `${p.phraseId}-ONSET`,
-      phraseId: p.phraseId,
-      kind: 'phrase-onset',
-      text: p.text,
-      occurrenceIndex: 0,
-      timeMs: onsetSnap?.ms ?? onsetApprox,
-      timingSource: onsetTimingSource,
-      verifiedByListening: phraseOverride?.verifiedByListening ?? false,
-      confidence: (pm?.confidence as VocalCue['confidence']) ?? 'medium',
-      reviewComment: phraseOverride?.reviewComment ?? '',
-      cueOffsetMs: 0,
-      analysisMethod: onsetSnap != null ? ANALYSIS_METHOD : null,
-      confidenceScore: confidenceScoreFor(onsetTimingSource, onsetSnap?.diffMs ?? null),
-      detectedAtMs: onsetSnap?.ms ?? null,
-    }),
-  );
+  // P0根本修正(2026-08-27、Render Truth監査): 以前はこのONSET cueへ実測onset値
+  // (onsetSnap)を保存する一方、phrase本体のstartMs/endMs(実際にSequence from=へ
+  // 使われる値)は下のreturn文で`secToMs(startSec)`という「legacy値」を別途
+  // 再計算しており、ONSET cueの実測値が一切renderへ反映されないという不整合が
+  // あった(「実音声解析で正しいphrase-onsetを発見→ONSET cueには保存→しかし
+  // 実際のphrase Sequenceは古いphrase.startMsで開始」)。ONSET cueを唯一の
+  // 正本にし、phrase.startMsはこのcueのtimeMsをそのまま使う(下記参照)。
+  const onsetCue = preserveCueIfBetter({
+    cueId: `${p.phraseId}-ONSET`,
+    phraseId: p.phraseId,
+    kind: 'phrase-onset',
+    text: p.text,
+    occurrenceIndex: 0,
+    timeMs: onsetSnap?.ms ?? onsetApprox,
+    timingSource: onsetTimingSource,
+    verifiedByListening: phraseOverride?.verifiedByListening ?? false,
+    confidence: (pm?.confidence as VocalCue['confidence']) ?? 'medium',
+    reviewComment: phraseOverride?.reviewComment ?? '',
+    cueOffsetMs: 0,
+    analysisMethod: onsetSnap != null ? ANALYSIS_METHOD : null,
+    confidenceScore: confidenceScoreFor(onsetTimingSource, onsetSnap?.diffMs ?? null),
+    detectedAtMs: onsetSnap?.ms ?? null,
+  });
+  cues.push(onsetCue);
   // word-accent cue(反復語も含め、出現順で安定ID: W01, W02, ...)
   const words = wordsByPhraseId.get(p.phraseId) ?? [];
   words.forEach((w, i) => {
@@ -434,10 +442,20 @@ const phrases: TimingPhrase[] = lyrics.phrases.map((p) => {
   // H01/H02/H03という安定IDを振る。textには反復onomatopoeia全体ではなく、
   // その1発の実際の表示語(例:「パッ」)を入れる(phrase全文を入れない)。
   const hitWord = p.text.match(/^((?:パッ|チャプ|ラ){1,2})/)?.[1] ?? p.text.slice(0, 2);
+  // P0根本修正(2026-08-27、item13/14対応): 各hitを独立にnearest-neighbor snapする
+  // と、H01とH02が同一onset候補へ重複割当されるcollisionが起き得る(実測で
+  // P013-H01/H02が両方40704.6msへ収束していたことを確認)。3-hit等の
+  // ordered cueは`H01 < H02 < H03`の狭義単調増加を保証する必要があるため、
+  // ordered greedy(前のhitに割り当てたonsetより後の候補だけを次のhitの
+  // 検索対象にする、最小限の安全な実装)で1 onset→1 critical cueを保証する。
+  let lastAssignedOnsetMs: number | null = null;
   (p.threeHitFrameSecs ?? []).forEach((sec, i) => {
     const approxMs = secToMs(sec);
-    const snap = snapToVocalOnset(approxMs);
-    if (snap != null) snappedCount++;
+    const snap = snapToVocalOnset(approxMs, lastAssignedOnsetMs);
+    if (snap != null) {
+      snappedCount++;
+      lastAssignedOnsetMs = snap.ms;
+    }
     const hitTimingSource: VocalCue['timingSource'] = snap != null ? 'audio-analysis' : nearestBeatMs(approxMs, beatsMs) != null ? 'beat-snap' : 'estimated';
     cues.push(
       preserveCueIfBetter({
@@ -459,13 +477,26 @@ const phrases: TimingPhrase[] = lyrics.phrases.map((p) => {
     );
   });
 
+  // canonical phrase start/end: ONSET cue(=phrase.cues[0]と同じ実体)の
+  // timeMsをそのままphrase.startMsとして使う(二重正本の解消)。durationは
+  // legacy値(旧startSec/endSecの差)を保つ(item8: 次phraseとの境界/held-note/
+  // exit/section整合を壊すリスクを最小化するための保守的な方法。次phraseとの
+  // 重なり検出は全phrase構築後に別途警告する)。
+  const legacyDurationMs = secToMs(endSec) - secToMs(startSec);
+  const canonicalStartMs = onsetCue.timeMs;
+  const canonicalEndMs = canonicalStartMs + legacyDurationMs;
+  const phraseStartShiftMs = canonicalStartMs - secToMs(startSec);
+  if (Math.abs(phraseStartShiftMs) >= 1) {
+    info(`${p.phraseId}: phrase.startMsをlegacy値からONSET cue実測値へ補正(${phraseStartShiftMs > 0 ? '+' : ''}${phraseStartShiftMs.toFixed(1)}ms、根拠=${onsetCue.timingSource}${onsetCue.analysisMethod ? `/${onsetCue.analysisMethod}` : ''})`);
+  }
+
   return {
     phraseId: p.phraseId,
     lineNumber: p.lineNumber,
     sectionId: p.sectionId,
     text: p.text,
-    startMs: secToMs(startSec),
-    endMs: secToMs(endSec),
+    startMs: canonicalStartMs,
+    endMs: canonicalEndMs,
     holdMs: pm?.holdSec != null ? secToMs(pm.holdSec) : p.holdSec != null ? secToMs(p.holdSec) : null,
     exitMs: pm?.exitSec != null ? secToMs(pm.exitSec) : p.exitSec != null ? secToMs(p.exitSec) : null,
     rhythmType: p.rhythmType ?? null,
@@ -480,6 +511,29 @@ const phrases: TimingPhrase[] = lyrics.phrases.map((p) => {
     humanReviewRequired: !(phraseOverride?.verifiedByListening ?? false),
   };
 });
+
+// canonical start補正の副作用として、隣接phraseが重なる場合がある
+// (P006-P007等で実測、最大378ms)。放置すると2つのphrase Sequenceが
+// 同時にactiveになり、特にChoreographedMoment(全画面takeover)同士が
+// 重なると2つの演出が同時に描画される深刻な事故になる(P013/P014で確認)。
+// item8の安全策として、各phraseのendMsを「次phraseのcanonical startMs」を
+// 超えないようclampする(重なりを機械的に解消する。開始時刻[startMs]は
+// onset実測値のまま変更しない。durationが短くなるだけで、意味のある
+// 開始位置は保持される)。開始順序自体の逆転(startMs[i] > startMs[i+1])は
+// このclampでは解決できないため、検出したらfailさせ、人間の確認を要求する。
+for (let i = 0; i < phrases.length - 1; i++) {
+  const cur = phrases[i];
+  const next = phrases[i + 1];
+  if (cur.startMs > next.startMs) {
+    fail(`${cur.phraseId}(startMs=${cur.startMs}) が次の${next.phraseId}(startMs=${next.startMs})より後ろになっている(canonical start補正による順序逆転)。自動修正しない。phrase-map.local.json等でmanualStartSecを設定して解決してください。`);
+    continue;
+  }
+  if (cur.endMs > next.startMs) {
+    const overlapMs = cur.endMs - next.startMs;
+    info(`${cur.phraseId}(end=${cur.endMs}ms)を${next.phraseId}(start=${next.startMs}ms)に合わせてclamp(${overlapMs.toFixed(1)}ms短縮。canonical start補正による重なりを機械的に解消)。`);
+    cur.endMs = next.startMs;
+  }
+}
 
 // --- 5. musicCues(section境界を最小限のtransition cueとして記録) -----------
 // structure-map.local.json自身が「ffmpeg RMS/spectrogram解析」を明記しているため、
