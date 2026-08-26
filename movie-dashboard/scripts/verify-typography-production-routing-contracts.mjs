@@ -33,7 +33,20 @@ for (const [patternId, mode] of expected) {
 
 for (const token of [
   'schemaVersion: "motion-zukan-typography-production/v1"',
-  'authority: "HUMAN_MASTER"',
+  'authority: "DERIVED_FROM_HUMAN_MASTER_AND_HUMAN_SELECTED_ROUTE"',
+  'schemaVersion: "typography-production-selection/v1"',
+  'authority: "HUMAN_SELECTED"',
+  'createTypographyProductionSelection',
+  'sourceRevision: scene.updatedAt',
+  'selectedAt',
+  'assertFreshRouteSelection(scene, selection)',
+  'selection.sceneId !== scene.sceneId',
+  'selection.sourceRevision !== scene.updatedAt',
+  'STALE_TYPOGRAPHY_ROUTE_SELECTION',
+  'routeSelection: { ...selection }',
+  'routeSelectionSourceRevision: selection.sourceRevision',
+  'routeSelectionFresh: true',
+  'stale selectionを自動適用しない。',
   'buildMaskRevealSceneProductionBundle(scene)',
   'candidate.readiness === "STUDIO_ACTUAL_VERIFIED"',
   'candidate.studioInstallActual === "PASS"',
@@ -75,11 +88,6 @@ for (const [patternId] of expected) {
   if (!routeCalls.includes(patternId)) errors.push(`Typography production route list omitted ${patternId}`);
 }
 
-const availableCount = (routing.match(/"DAVINCI_IMPLEMENTATION_AVAILABLE"/g) ?? []).length;
-// One occurrence is the union type and one is the actual Mask Reveal route/check expression.
-if (availableCount < 2) {
-  errors.push("No concrete DaVinci implementation route is registered");
-}
 const concreteAvailableRoutes = [...routing.matchAll(/route\(\s*\n\s*"(type-[^"]+)",\s*\n\s*"[^"]+",\s*\n\s*"DAVINCI_IMPLEMENTATION_AVAILABLE"/g)]
   .map((match) => match[1]);
 if (concreteAvailableRoutes.length !== 1 || concreteAvailableRoutes[0] !== "type-mask-reveal") {
@@ -95,6 +103,12 @@ if (/actualAppliedEvidence:\s*"PASS"/.test(routing)) {
 if (/xmlGeneratedExternally:\s*false/.test(routing)) {
   errors.push("Typography production routing must not pretend the dashboard generated Palmier XML");
 }
+if (/authority:\s*"HUMAN_MASTER"/.test(routing)) {
+  errors.push("Derived Typography route bundle must not call a caller-selected pattern HUMAN_MASTER");
+}
+if (!routing.includes('selection.sourceRevision !== scene.updatedAt')) {
+  errors.push("Typography route selection must fail closed when the SceneInstance revision changes");
+}
 
 if (errors.length) {
   console.error(`Typography Production Routing contracts FAILED (${errors.length})`);
@@ -102,4 +116,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log("Typography Production Routing contracts OK: all nine canonical Typography Element candidates are routed into the production bundle; Palmier remains timing-only/external-XML truth; only Mask Reveal claims an implemented DaVinci translation; the other eight stay explicitly blocked; Studio and DaVinci Actual evidence remain NOT_RUN until real verification.");
+console.log("Typography Production Routing contracts OK: all nine canonical Typography Element candidates are routed into production via an explicit HUMAN_SELECTED route selection bound to the SceneInstance revision; stale selections fail closed; Palmier remains timing-only/external-XML truth; only Mask Reveal claims an implemented DaVinci translation; Studio and DaVinci Actual evidence remain NOT_RUN until real verification.");
