@@ -4,6 +4,7 @@ import {
   buildMaskRevealEditableSourceOfTruth,
 } from "./maskRevealEditableProduction";
 import { buildMaskRevealMotionHandoffManifest } from "./maskRevealHandoff";
+import { maskRevealActiveHandoffPropertyIds } from "./maskRevealHandoffFidelity";
 import { createMaskRevealDaVinciAppliedEvidenceTemplate } from "./maskRevealDaVinciAppliedEvidence";
 import {
   buildMaskRevealDaVinciValueBridge,
@@ -25,6 +26,14 @@ export interface MaskRevealSceneProductionBundleV1 {
     format: "JSON";
     role: "TARGET_SPECIFIC_SIDECAR";
     humanMaster: false;
+  };
+  handoffPolicy: {
+    role: "REFERENCE_ONLY";
+    canonicalRegistry: "movie-dashboard/src/data/palmierDavinciHandoffFidelity.ts";
+    humanAdjustabilityRegistry: "movie-dashboard/src/data/resolveHumanAdjustability.ts";
+    genericSidecarSchema: "motion-studio/src/data/resolveHandoff.schema.ts";
+    capabilityIds: readonly string[];
+    rule: string;
   };
   sceneTiming: {
     targetDurationSeconds: number;
@@ -121,6 +130,14 @@ export function buildMaskRevealSceneProductionBundle(
       format: "JSON",
       role: "TARGET_SPECIFIC_SIDECAR",
       humanMaster: false,
+    },
+    handoffPolicy: {
+      role: "REFERENCE_ONLY",
+      canonicalRegistry: "movie-dashboard/src/data/palmierDavinciHandoffFidelity.ts",
+      humanAdjustabilityRegistry: "movie-dashboard/src/data/resolveHumanAdjustability.ts",
+      genericSidecarSchema: "motion-studio/src/data/resolveHandoff.schema.ts",
+      capabilityIds: maskRevealActiveHandoffPropertyIds,
+      rule: "Scene/Human Master値をこのbundleへ保持し、Tool LearningのTransport/Editability/Human Adjustability/Runtime policyはcanonical registryを参照する。同じpolicy値をscene bundleへ複製して二重正本にしない。",
     },
     sceneTiming: {
       targetDurationSeconds: scene.targetDurationSeconds,
