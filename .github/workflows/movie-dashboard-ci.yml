@@ -67,6 +67,9 @@ jobs:
       - name: Typography DaVinci Human promotion review contracts
         run: node scripts/verify-typography-davinci-human-promotion-review-contracts.mjs
 
+      - name: Typography DaVinci Production Release Gate contracts
+        run: node scripts/verify-typography-davinci-production-release-gate-contracts.mjs
+
       - name: Baseline Hop DaVinci contracts
         run: node scripts/verify-baseline-hop-davinci-contracts.mjs
 
