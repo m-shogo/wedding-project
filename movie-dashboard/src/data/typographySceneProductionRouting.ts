@@ -17,11 +17,6 @@ export type TypographyProductionPatternId =
   | "type-baseline-hop"
   | "type-triplet";
 
-/**
- * DaVinci readiness is deliberately staged. A deterministic translator and an Actual-capture
- * workflow are useful engineering progress, but neither means the live Resolve implementation
- * has been applied/read back, and an available implementation is still not Actual-verified.
- */
 export type DaVinciTypographyRouteStatus =
   | "DAVINCI_TRANSLATION_NOT_IMPLEMENTED"
   | "DAVINCI_ACTUAL_CANDIDATE"
@@ -101,9 +96,9 @@ export const typographyProductionRoutes: TypographyProductionRouteDefinition[] =
   route(
     "type-word-punch",
     "punch",
-    "DAVINCI_TRANSLATION_NOT_IMPLEMENTED",
-    null,
-    "scale punchのvisual peakをDaVinci側で一致確認するtranslatorが未実装。",
+    "DAVINCI_ACTUAL_CANDIDATE",
+    "impl-type-word-punch-davinci-text-plus-transform",
+    "canonical punch→Text+ + whole-title Transform translatorとbounded Actual evidence workflowは実装済み。live Transform input binding/readback/render parityが未検証なのでimplementation availableへはまだ昇格しない。",
   ),
   route(
     "type-tracking-burst",
@@ -277,17 +272,13 @@ export function buildTypographySceneProductionBundle(
   const davinciVisualReady = definition.liveImplementationAvailable;
   const blockers: string[] = [];
 
-  if (!remotionStudioReady) {
-    blockers.push("REMOTION_STUDIO_ACTUAL_NOT_VERIFIED");
-  }
+  if (!remotionStudioReady) blockers.push("REMOTION_STUDIO_ACTUAL_NOT_VERIFIED");
   if (!definition.translatorSpecAvailable) {
     blockers.push("DAVINCI_TRANSLATION_NOT_IMPLEMENTED");
   } else if (!definition.liveImplementationAvailable) {
     blockers.push("DAVINCI_ACTUAL_CANDIDATE_NOT_LIVE_IMPLEMENTATION");
   }
-  if (!definition.actualVerified) {
-    blockers.push("DAVINCI_ACTUAL_APPLIED_EVIDENCE_NOT_RUN");
-  }
+  if (!definition.actualVerified) blockers.push("DAVINCI_ACTUAL_APPLIED_EVIDENCE_NOT_RUN");
 
   return {
     schemaVersion: "motion-zukan-typography-production/v1",
