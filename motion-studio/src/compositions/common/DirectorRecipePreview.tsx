@@ -6,7 +6,10 @@ import {
   PhotoLayoutEngine,
   TransitionWipeEngine,
   TypographyRevealEngine,
+  type CameraTransformMode,
   type GraphicHitVariant,
+  type TransitionWipeVariant,
+  type TypographyRevealMode,
 } from '../../motion-kit/engines';
 import {resolveDirectorRecipeById, type RecipeLayer} from '../../motion-kit/directorRecipeAdapter';
 
@@ -25,11 +28,11 @@ function RenderLayer({layer}: {layer: RecipeLayer}) {
   const {engine, intensity, props} = layer;
 
   if (engine === 'typography-reveal') {
-    return <TypographyRevealEngine text={props.text as string} intensity={intensity} mode={props.mode as 'mask' | 'punch' | 'stagger'} transparent={props.transparent as boolean} />;
+    return <TypographyRevealEngine text={props.text as string} intensity={intensity} mode={props.mode as TypographyRevealMode} transparent={props.transparent as boolean} />;
   }
   if (engine === 'camera-transform') {
     return (
-      <CameraTransformEngine intensity={intensity} mode={props.mode as 'static' | 'push' | 'pull' | 'pan' | 'parallax'}>
+      <CameraTransformEngine intensity={intensity} mode={props.mode as CameraTransformMode}>
         <DemoBackdrop label="TRAVEL MEMORY" sub="synthetic depth / replace with real photo after review" />
       </CameraTransformEngine>
     );
@@ -38,7 +41,14 @@ function RenderLayer({layer}: {layer: RecipeLayer}) {
     return <PhotoLayoutEngine variant={props.variant as 'contact-sheet' | 'split-panel' | 'panel-grid'} count={props.count as number} intensity={intensity} transparent />;
   }
   if (engine === 'transition-wipe') {
-    return <TransitionWipeEngine direction={props.direction as 'left' | 'right' | 'up' | 'down'} intensity={intensity} transparent={props.transparent as boolean} />;
+    return (
+      <TransitionWipeEngine
+        direction={props.direction as 'left' | 'right' | 'up' | 'down'}
+        variant={props.variant as TransitionWipeVariant}
+        intensity={intensity}
+        transparent={props.transparent as boolean}
+      />
+    );
   }
   if (engine === 'graphic-hit') {
     return <GraphicHitEngine variant={props.variant as GraphicHitVariant} intensity={intensity} transparent={props.transparent as boolean} />;

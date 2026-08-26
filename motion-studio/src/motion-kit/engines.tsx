@@ -5,6 +5,20 @@ export type MotionIntensity = 'S' | 'M' | 'L';
 
 const intensityScale: Record<MotionIntensity, number> = {S: 0.55, M: 0.8, L: 1};
 
+export type TypographyRevealMode =
+  | 'mask'
+  | 'punch'
+  | 'stagger'
+  | 'hop'
+  | 'lock'
+  | 'outline'
+  | 'tracking'
+  | 'triplet'
+  | 'vertical-wipe'
+  | 'word-stagger'
+  | 'counter-scroll'
+  | 'quiet';
+
 export function TypographyRevealEngine({
   text,
   intensity = 'M',
@@ -13,7 +27,7 @@ export function TypographyRevealEngine({
 }: {
   text: string;
   intensity?: MotionIntensity;
-  mode?: 'mask' | 'punch' | 'stagger' | 'hop' | 'lock' | 'outline' | 'tracking' | 'triplet' | 'vertical-wipe' | 'word-stagger' | 'counter-scroll';
+  mode?: TypographyRevealMode;
   transparent?: boolean;
 }) {
   const frame = useCurrentFrame();
@@ -92,6 +106,20 @@ export function TypographyRevealEngine({
             );
           })}
         </div>
+      </AbsoluteFill>
+    );
+  }
+
+  if (mode === 'quiet') {
+    // type-quiet-caption: 「動かさないか最小fadeで読む時間を守る」ため、
+    // 他modeと違いtranslate/scaleを一切使わず、ゆっくりしたopacity fadeのみ。
+    const quietOpacity = interpolate(frame, [0, Math.round(fps * 1.1)], [0, 1], {
+      extrapolateRight: 'clamp',
+      easing: Easing.out(Easing.quad),
+    });
+    return (
+      <AbsoluteFill style={{backgroundColor: transparent ? undefined : '#0d2035', alignItems: 'center', justifyContent: 'center'}}>
+        <div style={{opacity: quietOpacity, fontSize, fontWeight: 600, color: '#fff', letterSpacing: '0.02em'}}>{text}</div>
       </AbsoluteFill>
     );
   }
@@ -181,6 +209,8 @@ export function TypographyRevealEngine({
   );
 }
 
+export type CameraTransformMode = 'static' | 'push' | 'pull' | 'pan' | 'parallax' | 'freeze';
+
 export function CameraTransformEngine({
   children,
   intensity = 'M',
@@ -188,7 +218,7 @@ export function CameraTransformEngine({
 }: {
   children: ReactNode;
   intensity?: MotionIntensity;
-  mode?: 'static' | 'push' | 'pull' | 'pan' | 'parallax' | 'freeze';
+  mode?: CameraTransformMode;
 }) {
   const frame = useCurrentFrame();
   const {durationInFrames} = useVideoConfig();
@@ -294,6 +324,13 @@ export function CameraTransformEngine({
   return <AbsoluteFill style={{transform: `translateX(${translateX}px) scale(${scale})`}}>{children}</AbsoluteFill>;
 }
 
+// 'release'は方向性のあるwipeではなく、一度color fieldへ落として呼吸するholdの表現。
+// 'shape'は矩形の色面ではなく、角のある図形(chevron)そのものが横切る表現。
+// 'paper'は紙が破れたようなジグザグの端を持つ色面が横切る表現。
+// 'flash'は1〜3frameだけの淡いimpact(色面wipeではなく全画面の瞬間的な明滅)。
+// 'route-line'は色面ではなく、1本の線が経路のように伸びていく表現。
+export type TransitionWipeVariant = 'wipe' | 'release' | 'shape' | 'paper' | 'flash' | 'route-line';
+
 export function TransitionWipeEngine({
   direction = 'right',
   intensity = 'M',
@@ -303,10 +340,7 @@ export function TransitionWipeEngine({
   direction?: 'left' | 'right' | 'up' | 'down';
   intensity?: MotionIntensity;
   transparent?: boolean;
-  // 'release'は方向性のあるwipeではなく、一度color fieldへ落として呼吸するholdの表現。
-  // 'shape'は矩形の色面ではなく、角のある図形(chevron)そのものが横切る表現。
-  // 'paper'は紙が破れたようなジグザグの端を持つ色面が横切る表現。
-  variant?: 'wipe' | 'release' | 'shape' | 'paper';
+  variant?: TransitionWipeVariant;
 }) {
   const frame = useCurrentFrame();
   const {fps, durationInFrames} = useVideoConfig();
@@ -318,6 +352,57 @@ export function TransitionWipeEngine({
   const horizontal = direction === 'left' || direction === 'right';
   const sign = direction === 'left' || direction === 'up' ? -1 : 1;
   const travel = (1 - progress) * 110 * sign;
+
+  if (variant === 'flash') {
+    // flash-one-frame-soft: 色面が横切るwipeではなく、1〜3frameだけの淡い
+    // 全画面impact。GraphicHitEngineのimpact variantと似た考え方だが、
+    // こちらはtransition-wipe engine内で完結させる(directionに依存しない)。
+    const flashOpacity = interpolate(frame, [0, 1, 3], [0, 0.6 * strength, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return (
+      <AbsoluteFill style={{backgroundColor: transparent ? undefined : '#0d2035'}}>
+        <AbsoluteFill style={{background: '#fff', opacity: flashOpacity}} />
+      </AbsoluteFill>
+    );
+  }
+
+  if (variant === 'route-line') {
+    // wipe-route-line: 色面ではなく、1本の経路線がstrokeDashoffsetで
+    // 伸びていく表現。地図や移動の文脈を線そのもので示す。
+    const lineProgress = interpolate(frame, [2, Math.max(6, Math.round(fps * 0.6))], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: Easing.inOut(Easing.cubic)});
+    const dotProgress = interpolate(frame, [Math.max(6, Math.round(fps * 0.6)) - 4, Math.max(6, Math.round(fps * 0.6))], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    const pathD = horizontal ? 'M 40 200 C 300 60, 700 340, 1160 160' : 'M 200 40 C 60 300, 340 700, 160 1160';
+    return (
+      <AbsoluteFill style={{backgroundColor: transparent ? undefined : '#0d2035', overflow: 'hidden'}}>
+        <svg viewBox="0 0 1200 400" style={{position: 'absolute', inset: 0, width: '100%', height: '100%'}}>
+          <path
+            d={pathD}
+            fill="none"
+            stroke="#f0d37a"
+            strokeWidth={6 * strength}
+            strokeLinecap="round"
+            pathLength={1}
+            strokeDasharray={1}
+            strokeDashoffset={1 - lineProgress}
+          />
+        </svg>
+        <div
+          style={{
+            position: 'absolute',
+            left: horizontal ? `${8 + lineProgress * 84}%` : '50%',
+            top: horizontal ? '50%' : `${8 + lineProgress * 84}%`,
+            width: 16,
+            height: 16,
+            marginLeft: -8,
+            marginTop: -8,
+            borderRadius: 999,
+            background: '#f0d37a',
+            opacity: dotProgress,
+            transform: `scale(${0.6 + dotProgress * 0.6})`,
+          }}
+        />
+      </AbsoluteFill>
+    );
+  }
 
   if (variant === 'paper') {
     const paperProgress = interpolate(frame, [0, Math.max(4, Math.round(fps * 0.55))], [0, 1], {
