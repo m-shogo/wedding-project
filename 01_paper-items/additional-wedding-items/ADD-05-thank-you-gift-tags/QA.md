@@ -1,7 +1,7 @@
 # ADD-05 サンキュータグ / プチギフトタグ — QA
 
-Status: `CURRENT / PROFESSIONAL_VNEXT_SELECTED / SELLABLE_VISUAL_QA_REOPENED + DESIGN_QA_PASS_WITH_PLACEHOLDERS / FAMILY_SCALE_TEMPLATE_REPETITION_CLOSED_FOR_ADD05 / CONFIRMED_COPY_ONLY / PHYSICAL_CLEARANCE_PASS / ACTUAL_SIZE_CONFIRMED_COPY_LEGIBILITY_PASS / 45X70_INDEPENDENT_REFLOW_PASS / LOCAL_ROLE_REPAIR_PENDING / PENDING_RIBBON_FOLD_PHYSICAL_CUE_AUDIT / ROLLBACK_SAFE / NOT_PRINT_READY`
-Updated: 2026-08-26
+Status: `CURRENT / PROFESSIONAL_VNEXT_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / FAMILY_SCALE_TEMPLATE_REPETITION_CLOSED_FOR_ADD05 / CONFIRMED_COPY_ONLY / PHYSICAL_CLEARANCE_PASS / ACTUAL_SIZE_CONFIRMED_COPY_LEGIBILITY_PASS / 45X70_INDEPENDENT_REFLOW_PASS / NO_YELLOW_FOLD_PROMOTION_PASS / ROLLBACK_SAFE / NOT_PRINT_READY`
+Updated: 2026-08-27
 Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
 
 ## Current Figma authority
@@ -10,6 +10,8 @@ Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
 - selected 50×80 front: `31:2 / CURRENT_SELECTED / FAMILY-DIVERSE VNEXT V3 / ADD-05 / FRONT 50X80 / RIBBON FOLD GIFT TAG`
 - selected 45×70 front: `31:10 / CURRENT_SELECTED / FAMILY-DIVERSE VNEXT V3 / ADD-05 / FRONT 45X70 / RIBBON FOLD GIFT TAG REFLOW`
 - selected optional 50×80 back: `31:18 / CURRENT_SELECTED / FAMILY-DIVERSE VNEXT V3 / ADD-05 / BACK 50X80 / RETURN RIBBON NOTE`
+- pre-no-yellow-fold rollback: `39:2 / 39:10 / 39:18`
+- no-yellow-fold comparison roots: `38:2 / 38:10 / 38:18`, hidden after verification
 - actual-size microtype rollback: `34:2 / 34:10 / 34:18`
 - previous selected `WAVE SOUVENIR`: `25:2 / 25:10 / 25:18`, preserved as hidden history
 - rejected family-diversity V2 `FOLDED GIFT NOTE`: `28:2 / 28:10 / 28:18`, preserved as hidden history
@@ -22,12 +24,11 @@ Current evidence:
 - `FIGMA-ACTUAL-SIZE-CONFIRMED-COPY-LEGIBILITY-QA-2026-08-22.md`
 - `OBSERVED-RIBBON-FOLD-PHYSICAL-CUE-2026-08-26.md`
 - `PRE-FIGMA-CONNECTED-FOLD-REJECTION-2026-08-26.md`
+- `FIGMA-NO-YELLOW-FOLD-PROMOTION-QA-2026-08-27.md`
 
-The earlier `PROFESSIONAL-VNEXT-WAVE-SOUVENIR-QA-2026-08-21.md` remains historical evidence and is no longer the Current visual pointer.
+## Current direction — RIBBON FOLD, simplified physical cue
 
-## Current direction — RIBBON FOLD
-
-The Current family was rebuilt from blank frames after the previous `WAVE SOUVENIR` was found to repeat the suite-level oversized rounded wave/orb grammar. It carries forward only confirmed copy and verified provisional punch geometry.
+The Current family was originally rebuilt from blank frames after the previous `WAVE SOUVENIR` repeated the suite-level oversized rounded-wave/orb grammar. It carries forward only confirmed copy and verified provisional punch geometry.
 
 Three materially different V3 directions were created from blank frames:
 
@@ -35,11 +36,21 @@ Three materially different V3 directions were created from blank frames:
 2. `CLIPPED LUGGAGE LABEL`
 3. `RIBBON FOLD`
 
-`RIBBON FOLD` was selected because it gives the object a gift-specific physical reading—warm paper, coral gift ribbon, mango fold and deep-ocean return field—without fake airline credentials, generic tropical decoration, or the repeated rounded-shape family grammar.
+`RIBBON FOLD` remained the strongest art direction because it reads as a warm paper gift tag with a strong coral wrapping ribbon and deep-ocean return field, without fake airline credentials or generic tropical decoration.
 
-Fresh 2026-08-26 native screenshots now show that the mango horizontal `fold` consistently reads as a detached button/status bar rather than a connected fold of the coral ribbon across all three Current faces, with the problem strongest on the smaller 45×70 reflow. Because this is a screenshot-visible artifact-reading defect on every production face, the item's structural/design evidence remains valid but the **sellable visual gate is reopened locally until the remaining Current-vs-subtraction test is completed**.
+A later actual-size audit found that the mango/yellow horizontal `fold` did not read as a connected ribbon turn. Across the 50×80 front, 45×70 front and optional back, it read more like a detached button/status bar, with the defect strongest at 45×70.
 
-This is not a whole-item clean-room reopen. Do not create another decorative direction for ADD-05. The only open visual role is the mango fold.
+The connected-fold SVG alternative was then rejected pre-Figma because the silhouette became arrow/tab/origami-like at the smallest format. Per the failure stop condition, that method remains terminal `REJECTED_PRE_FIGMA`.
+
+On 2026-08-27, the only remaining bounded comparison was executed: `CURRENT` vs `NO_YELLOW_FOLD`. Hiding only the mango/yellow rectangle improved all three materially different faces while preserving the gift-tag / wrapping identity through the coral ribbon, punch, paper field and typography. The subtraction was promoted to Current.
+
+Current mango roles are therefore intentionally hidden:
+
+- 50×80 front: `31:5 / RIBBON FOLD / MANGO`
+- 45×70 front: `31:13 / RIBBON FOLD / MANGO`
+- optional back: `31:21 / RIBBON FOLD / MANGO`
+
+Do not reintroduce a connected-fold pictogram or create another fold treatment without a materially different requirement.
 
 ## Confirmed copy / physical facts
 
@@ -56,152 +67,112 @@ Verified provisional punch role:
 
 Do not invent guest/product/venue/QR/SNS data, Japanese concept copy, airline class, gate, barcode, destination credential, or another fake transport authority.
 
-## Live visual QA — 2026-08-22 readback
+## 2026-08-27 NO_YELLOW_FOLD visual QA
 
 ### 50×80 front `31:2`
 
-- native canvas `500×800`: PASS for hierarchy/structure
-- whole-item/thumbnail hierarchy: PASS
-- `Thank you.` remains the first read
+- native canvas `500×800`: PASS
+- whole-item/thumbnail: PASS
+- reading scale: PASS
+- actual-size: PASS
+- `Thank you.` remains first read
 - punch remains visually clear and separate from copy
-- enlarged confirmed supporting line and date remain subordinate but physically more robust
+- coral ribbon remains sufficient as the wrapping gesture
+- detached mango/status-bar cue removed
 
 ### 45×70 front `31:10`
 
-- native canvas `450×700`: PASS for hierarchy/structure
+- native canvas `450×700`: PASS
 - independent reflow remains intact
 - hierarchy remains `Thank you. → body → date`
-- punch geometry remains physically legible at the smaller format
-- enlarged body/date do not collide with the lower field
+- punch remains physically legible
+- this smaller format shows the clearest improvement after removing the detached mango crossbar
 
 ### Optional back `31:18`
 
-- native canvas `500×800`: PASS for hierarchy/structure
-- `Have a safe trip home.` remains the first read
-- front/back share material grammar without mirrored-template sameness
-- enlarged date remains subordinate and readable
+- native canvas `500×800`: PASS
+- `Have a safe trip home.` remains first read
+- front/back retain family relation without mirrored-template sameness
+- reverse composition is cleaner without the detached mango crossbar
 
-The prior Professional Design Council score `90/100` remains historical evidence for the selected whole-item direction, but it is **not sufficient to restore `SELLABLE_VISUAL_QA_PASS` while the newly observed mango-fold defect remains unresolved**.
+The prior Professional Design Council score `90/100` remains historical whole-item evidence; the newly executed three-face actual-size comparison now closes the specific visual defect that had reopened the sellable gate.
 
-## 2026-08-26 ribbon-fold physical-cue audit
+## Rollback / comparison evidence
 
-Fresh live screenshots and structure readback found a repeated optical/semantic defect isolated to the mango horizontal fold role.
+Fresh rollback-safe comparisons created for the final audit:
 
-Exact live geometry:
+- `38:2` — NO_YELLOW_FOLD 50×80 front
+- `38:10` — NO_YELLOW_FOLD 45×70 front
+- `38:18` — NO_YELLOW_FOLD back
 
-### 50×80 front `31:2`
-- coral ribbon `31:4`: `x=330 / y=0 / 74×800`
-- mango fold `31:5`: `x=286 / y=450 / 162×70`
-- native screenshot: the mango shape reads as a detached horizontal rectangle crossing the ribbon rather than a material turn.
+Complete rollback clones created before Current mutation:
 
-### 45×70 front `31:10`
-- coral ribbon `31:12`: `x=296 / y=0 / 66×700`
-- mango fold `31:13`: `x=258 / y=392 / 142×64`
-- native screenshot: the issue is strongest at the smaller physical format and becomes more button/status-bar-like.
+- `39:2` — PRE-NO-YELLOW-FOLD 50×80 front
+- `39:10` — PRE-NO-YELLOW_FOLD 45×70 front
+- `39:18` — PRE-NO-YELLOW-FOLD back
 
-### Optional 50×80 back `31:18`
-- coral ribbon `31:20`: `x=72 / y=0 / 70×800`
-- mango fold `31:21`: `x=42 / y=485 / 130×62`
-- native screenshot: the same detached-crossbar reading reproduces on the reverse composition.
+After promotion, comparison roots were hidden and rollback roots remain hidden history.
 
-This does **not** invalidate the confirmed copy, microtype, punch, native text, or the selected RIBBON FOLD art direction. It **does** invalidate the current sellable visual completion until the local role is resolved.
+## Actual-size confirmed-copy legibility
 
-### Connected-fold method: terminal rejection
+The tag canvases use `10 px = 1 mm`. A prior audit corrected confirmed body/date roles that were too small at physical size:
 
-The existing Clean Editable SVG comparison asset:
+- 50×80 body `20 → 24 px`
+- 50×80 date `22 → 26 px`
+- 45×70 body `18 → 22 px`
+- 45×70 date `20 → 24 px`
+- optional back date `22 → 26 px`
 
-- `assets/ribbon-fold-connected-junction-candidate.svg`
-- semantic/variable copy baked in: `0`
+Hidden pre-microtype rollbacks: `34:2 / 34:10 / 34:18`.
 
-was re-evaluated against the live 45×70 geometry. It improves literal connection, but the resulting silhouette reads as an arrow/tab or small origami/clip-art object at the smallest format. That is a stronger pictogram/UI cue than the defect being solved.
+The 2026-08-27 no-yellow-fold repair changed none of these text sizes or positions.
 
-Therefore:
-
-- `CONNECTED_FOLD = REJECTED_PRE_FIGMA`
-- do not upload it to Drive;
-- do not place it into production;
-- do not create another fold/junction variant without a materially different requirement.
-
-Canonical terminal evidence: `PRE-FIGMA-CONNECTED-FOLD-REJECTION-2026-08-26.md`.
-
-### Only remaining bounded test
-
-When safe Figma mutation is available:
-
-1. retain `CURRENT` as rollback/reference;
-2. create `NO_YELLOW_FOLD` by hiding only the mango rectangle on each of the three materially different faces;
-3. compare whole-item → reading → native actual-size for 50×80 front, 45×70 front and optional back;
-4. rerun punch/copy clearance and structure readback on the winning state;
-5. if subtraction preserves gift-wrap energy and improves artifact reading, promote only that local subtraction;
-6. if Current is stronger, reject the original physical-cue hypothesis and close the audit.
-
-Do not create another whole-item variation or another connected-fold treatment before this subtraction test.
-
-Learning state: `OBSERVED → ROOT_CAUSE_HYPOTHESIS / BOUNDED_FIGMA_TEST_PENDING`; connected-fold branch is terminal `REJECTED_PRE_FIGMA`.
-
-## Actual-size confirmed-copy legibility repair — 2026-08-22
-
-A physical-unit audit found a real defect that screenshot-only review had missed. The tag canvases use `10 px = 1 mm`; therefore the prior confirmed body/date roles were roughly `5.1–6.24 pt` at final size.
-
-Rollback-first bounded repair:
-
-- 50×80 body `20 → 24 px` (`≈5.67 → 6.80 pt`)
-- 50×80 date `22 → 26 px` (`≈6.24 → 7.37 pt`)
-- 45×70 body `18 → 22 px` (`≈5.10 → 6.24 pt`)
-- 45×70 date `20 → 24 px` (`≈5.67 → 6.80 pt`)
-- optional back date `22 → 26 px` (`≈6.24 → 7.37 pt`)
-
-Hidden complete rollback roots: `34:2 / 34:10 / 34:18`.
-
-The repair changed only confirmed body/date type sizes. Headline, copy, position, punch, ribbon/fold geometry and color fields remain unchanged. Fresh native screenshots PASS for all three Current variants.
-
-This is not an item-wide or project-wide “minimum 8 pt” rule. It is a role-based actual-size legibility correction for confirmed semantic/factual copy on a small physical tag.
-
-## Structure / hybrid authoring QA
-
-Post-repair live readback:
+## Structure / hybrid authoring readback — 2026-08-27
 
 ### 50×80 front `31:2`
-- native visible text `3`
-- fixed-height `0`
+- visible native text `3`
+- fixed-height text `0`
 - outside-root text `0`
-- text-text collision `0`
 - IMAGE fills `0`
+- mango fold hidden
+- punch `31:6`, `50×50`, visible
 
 ### 45×70 front `31:10`
-- native visible text `3`
-- fixed-height `0`
+- visible native text `3`
+- fixed-height text `0`
 - outside-root text `0`
-- text-text collision `0`
 - IMAGE fills `0`
+- mango fold hidden
+- punch `31:14`, `50×50`, visible
 
 ### Optional back `31:18`
-- native visible text `2`
-- fixed-height `0`
+- visible native text `2`
+- fixed-height text `0`
 - outside-root text `0`
-- text-text collision `0`
 - IMAGE fills `0`
+- mango fold hidden
+- punch `31:22`, `50×50`, visible
 
 Hybrid split:
 
 - confirmed text/date: native editable Figma text
 - coral ribbon / paper fields: simple native geometry
-- current mango fold: simple native geometry under pending local visual audit
 - punch: native physical ellipse role
-- connected-fold comparison: `REJECTED_PRE_FIGMA`
+- connected-fold comparison asset: terminal `REJECTED_PRE_FIGMA`
 - generated/composed raster: not required
 - replaceable image role: not required
-- Drive writes in this audit: `0`
+- image generation in final repair: `0`
+- Drive writes in final repair: `0`
 
-`IMAGE_GENERATION_NOT_REQUIRED`: the diagnosed defect is physical-cue geometry, not missing photography or illustration. At 45×70 / 50×80 physical size, generated imagery would reduce legibility and increase stock/AI-template risk without addressing the defect.
+`IMAGE_GENERATION_NOT_REQUIRED`: the diagnosed defect was fixed-geometry semantics, not missing photography or illustration. At 45×70 / 50×80 physical size, generated imagery would reduce legibility and increase stock/AI-template risk without addressing the defect.
 
 ## Authority reconciliation
 
 Current chain:
 
-`live selected Figma 31:* → promotion evidence + actual-size legibility evidence + physical-cue evidence + connected-fold rejection → this canonical QA.md → exact Drive authority 1_V20y77VU1aGrJtqpl7U5XUpC-bQuTxV`
+`live selected Figma 31:* with mango folds hidden → current promotion + actual-size legibility + physical-cue + connected-fold rejection + no-yellow-fold promotion evidence → this canonical QA.md → exact Drive authority 1_V20y77VU1aGrJtqpl7U5XUpC-bQuTxV`
 
-Earlier designs and pre-repair Current copies remain preserved as history/rollback and are not deleted.
+Old visual states remain preserved as rollback/history and are not deleted.
 
 ## Deferred finalization / print gate
 
@@ -217,10 +188,10 @@ Keep `NOT_PRINT_READY` until authoritative physical inputs/proofs exist:
 - warm venue-light and rub/ink proof
 - optional back adoption under the real attachment method
 
-These unresolved physical checks do not invalidate the structural/design evidence. The local sellable visual completion remains reopened only because the mango-fold role itself is still unresolved.
+These unresolved physical checks do not invalidate the current sellable visual/structural evidence.
 
 ## Decision
 
-`CURRENT_SELECTED / SELLABLE_VISUAL_QA_REOPENED + DESIGN_QA_PASS_WITH_PLACEHOLDERS / ACTUAL_SIZE_CONFIRMED_COPY_LEGIBILITY_PASS / CONNECTED_FOLD_REJECTED_PRE_FIGMA / NO_YELLOW_FOLD_TEST_PENDING / CURRENT_POINTER_RECONCILED / NOT_PRINT_READY`.
+`CURRENT_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / ACTUAL_SIZE_CONFIRMED_COPY_LEGIBILITY_PASS / NO_YELLOW_FOLD_PROMOTION_PASS / CONNECTED_FOLD_REJECTED_PRE_FIGMA / CURRENT_POINTER_RECONCILED / ROLLBACK_SAFE / NOT_PRINT_READY`.
 
-Do not create another whole-item decorative variation for ADD-05. The only open visual work is `CURRENT` vs `NO_YELLOW_FOLD`. Restore `SELLABLE_VISUAL_QA_PASS` only after that bounded comparison is actually evidenced at whole-item, reading and native actual-size scales.
+ADD-05's local ribbon-fold visual audit is closed. Do not create another decorative fold direction unless a new physical requirement or screenshot-visible defect appears.
