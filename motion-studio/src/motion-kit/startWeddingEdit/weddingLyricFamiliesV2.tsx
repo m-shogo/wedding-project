@@ -397,12 +397,21 @@ export const LyricToTransitionText: React.FC<{text: string; color: string; fontS
 };
 
 /** Lyric-to-Transitionの全画面wipe本体。呼び出し側(WeddingLyricA/B/C)が
- * placementの外側、AbsoluteFillの直接の子として配置すること。 */
-export const LyricToTransitionWipe: React.FC<{exitFrame: number; color: string; variant: 'A' | 'B' | 'C'}> = ({
-  exitFrame,
-  color,
-  variant,
-}) => {
+ * placementの外側、AbsoluteFillの直接の子として配置すること。
+ *
+ * 重要な訂正: 旧実装は単色AbsoluteFillをclip-pathで拡大するだけで、
+ * 「wipeの向こう側に次のshotが見える」演出になっていなかった(色面が
+ * 画面全体を覆っているだけで、実際には何もrevealしていなかった)。
+ * revealAssetTop(このphrase自身のsectionで、wipe通過直後に実際に流れる
+ * 次shotの実素材)が渡された場合、その写真をclip範囲内へ実際に描画し、
+ * 色は境界の細いflashとしてのみ残す。videoや素材未解決の場合だけ、
+ * 従来の単色fallbackへ戻る(既知の限界)。 */
+export const LyricToTransitionWipe: React.FC<{
+  exitFrame: number;
+  color: string;
+  variant: 'A' | 'B' | 'C';
+  revealAsset?: {path: string; kind: 'photo' | 'video'} | null;
+}> = ({exitFrame, color, variant, revealAsset}) => {
   const f = useCurrentFrame();
   const wipe = interpolate(f, [exitFrame, exitFrame + 12], [0, 100], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
   const fadeBack = interpolate(f, [exitFrame + 12, exitFrame + 20], [1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
@@ -411,15 +420,37 @@ export const LyricToTransitionWipe: React.FC<{exitFrame: number; color: string; 
     variant === 'C'
       ? `inset(0 0 ${100 - wipe}% 0)` // Cは下から上(gridを組む印象)
       : `inset(0 ${100 - wipe}% 0 0)`; // A/Bは左から右
+  const canRevealPhoto = revealAsset && revealAsset.kind === 'photo';
   return (
-    <AbsoluteFill
-      style={{
-        background: color,
-        clipPath: clip,
-        opacity: fadeBack,
-        pointerEvents: 'none',
-      }}
-    />
+    <AbsoluteFill style={{pointerEvents: 'none'}}>
+      {canRevealPhoto ? (
+        <AbsoluteFill style={{clipPath: clip, opacity: fadeBack}}>
+          <img
+            src={staticFile(revealAsset!.path)}
+            style={{width: '100%', height: '100%', objectFit: 'cover'}}
+            alt=""
+          />
+          {/* 境界の細いcolor flash: 単色で覆うのではなく、境界線としてだけ色を残す */}
+          <AbsoluteFill
+            style={{
+              background:
+                variant === 'C'
+                  ? `linear-gradient(to top, ${color} 0%, rgba(0,0,0,0) 6%)`
+                  : `linear-gradient(to right, rgba(0,0,0,0) 94%, ${color} 100%)`,
+              opacity: 0.7,
+            }}
+          />
+        </AbsoluteFill>
+      ) : (
+        <AbsoluteFill
+          style={{
+            background: color,
+            clipPath: clip,
+            opacity: fadeBack,
+          }}
+        />
+      )}
+    </AbsoluteFill>
   );
 };
 

@@ -583,7 +583,11 @@ const placementFor = (anim: string | undefined): Placement => {
 };
 
 /** lyric-to-transitionのwipeは小さいplacement divの外、AbsoluteFillの直接の子として描画する必要がある。 */
-const TransitionWipeLayer: React.FC<{phrase: EnrichedLyricPhrase; variant: WeddingVariant}> = ({phrase, variant}) => {
+const TransitionWipeLayer: React.FC<{phrase: EnrichedLyricPhrase; variant: WeddingVariant; sectionShots?: SectionShotsMap}> = ({
+  phrase,
+  variant,
+  sectionShots,
+}) => {
   if (phrase.selectedAnimation !== 'lyric-to-transition') return null;
   const style = VARIANT_STYLE[variant];
   const durFrames = Math.max(1, secToFrame(phrase.endSec) - secToFrame(phrase.startSec));
@@ -591,7 +595,10 @@ const TransitionWipeLayer: React.FC<{phrase: EnrichedLyricPhrase; variant: Weddi
   const exitFrame =
     phrase.exitSec != null ? secToFrame(phrase.exitSec) - secToFrame(phrase.startSec) : Math.round(durFrames * 0.75);
   const wipeColor = variant === 'C' ? '#0A0A0C' : variant === 'B' ? style.accent : '#FFFDF7';
-  return <LyricToTransitionWipe exitFrame={exitFrame} color={wipeColor} variant={variant} />;
+  // wipeが完了する少し先(exitFrame+14)で実際に流れているshotを「次に見せる画」として
+  // 先読みし、単色で覆うだけでなくその写真を実際にrevealする。
+  const revealAsset = currentShotAsset(phrase, sectionShots, exitFrame + 14);
+  return <LyricToTransitionWipe exitFrame={exitFrame} color={wipeColor} variant={variant} revealAsset={revealAsset} />;
 };
 
 /** A案: 映画タイトル的な余白と静けさ。placementで位置を可変にする */
@@ -616,7 +623,7 @@ const WeddingLyricA: React.FC<{phrase: EnrichedLyricPhrase; sectionShots?: Secti
           <WeddingLyricBody phrase={phrase} variant="A" sectionShots={sectionShots} />
         </div>
       </AbsoluteFill>
-      <TransitionWipeLayer phrase={phrase} variant="A" />
+      <TransitionWipeLayer phrase={phrase} variant="A" sectionShots={sectionShots} />
     </>
   );
 };
@@ -647,7 +654,7 @@ const WeddingLyricB: React.FC<{phrase: EnrichedLyricPhrase; sectionShots?: Secti
           )}
         </div>
       </AbsoluteFill>
-      <TransitionWipeLayer phrase={phrase} variant="B" />
+      <TransitionWipeLayer phrase={phrase} variant="B" sectionShots={sectionShots} />
     </>
   );
 };
@@ -668,7 +675,7 @@ const WeddingLyricC: React.FC<{phrase: EnrichedLyricPhrase; sectionShots?: Secti
           {showBaseline ? <div style={{height: 2, width: w, background: '#0A0A0C', marginTop: 8}} /> : null}
         </div>
       </AbsoluteFill>
-      <TransitionWipeLayer phrase={phrase} variant="C" />
+      <TransitionWipeLayer phrase={phrase} variant="C" sectionShots={sectionShots} />
     </>
   );
 };

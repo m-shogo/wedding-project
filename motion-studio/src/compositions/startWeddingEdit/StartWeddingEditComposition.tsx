@@ -128,8 +128,12 @@ export const StartWeddingEditComposition: React.FC<StartWeddingEditCompositionPr
             const dur = Math.max(1, Math.round(p.endSec * 30) - from);
             const wordsLine =
               p.importantWords && p.importantWords.length > 0
-                ? p.importantWords.map((w) => `${w.word}@${w.accentSec.toFixed(2)}s`).join(' / ')
+                ? p.importantWords
+                    .map((w) => `${w.word}@${w.accentSec.toFixed(2)}s${w.timingSource === 'manual' ? '✓manual' : '(beat-snap)'}`)
+                    .join(' / ')
                 : '(no accent marker)';
+            const anyManual = p.importantWords?.some((w) => w.timingSource === 'manual') ?? false;
+            const anyVerified = p.importantWords?.some((w) => w.verifiedByListening) ?? false;
             return (
               <Sequence key={`guide-${p.phraseId}`} from={from} durationInFrames={dur} name={`guide-${p.phraseId}`}>
                 <GuideDebugCard phraseId={p.phraseId} wordsLine={wordsLine}>
@@ -140,6 +144,10 @@ export const StartWeddingEditComposition: React.FC<StartWeddingEditCompositionPr
                   <div>{wordsLine}</div>
                   <div>transition:{p.transitionIntent ?? '?'}</div>
                   <div>conf:{p.confidence ?? '?'}</div>
+                  {!anyManual && p.importantWords && p.importantWords.length > 0 ? (
+                    <div style={{color: '#8CA0FF'}}>timing:beat-snap(未検証)</div>
+                  ) : null}
+                  {anyVerified ? <div style={{color: '#7CF29A'}}>聴取確認済み語あり</div> : null}
                   {p.humanReviewRequired ? <div style={{color: '#FF6B4A'}}>HUMAN REVIEW</div> : null}
                 </GuideDebugCard>
               </Sequence>

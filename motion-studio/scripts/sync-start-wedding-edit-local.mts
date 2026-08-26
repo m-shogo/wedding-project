@@ -89,12 +89,51 @@ type PhraseMapEntry = {
   exitSec?: number;
 };
 type WordAccentEntry = {word: string; phraseId: string; accentSec: number};
+type ManualWordOverride = {
+  phraseId: string;
+  word: string;
+  manualAccentSec?: number;
+  manualOffsetFrames?: number;
+  verifiedByListening?: boolean;
+  reviewComment?: string;
+  updatedAt?: string;
+};
+type ManualPhraseOverride = {
+  phraseId: string;
+  manualStartSec?: number;
+  manualEndSec?: number;
+  verifiedByListening?: boolean;
+  reviewComment?: string;
+  updatedAt?: string;
+};
 
 const structureMap = readJsonIfExists('structure-map.local.json') as {sections?: unknown[]} | null;
 const phraseMap = readJsonIfExists('phrase-map.local.json') as {phrases?: PhraseMapEntry[]} | null;
 const wordAccentMap = readJsonIfExists('word-accent-map.local.json') as {words?: WordAccentEntry[]} | null;
 const beatMap = readJsonIfExists('beat-map.local.json') as {beats?: number[]; downbeats?: number[]; bpm?: number} | null;
 const transitionMap = readJsonIfExists('transition-map.local.json') as {transitions?: Record<string, string>} | null;
+
+// 人間が「歌詞タイミング調整」Dashboardで実際に音を聴いて登録した手動値。
+// beat-snapされたword-accent-map.local.json本体は正本のまま変更せず、
+// この別ファイルが存在する場合だけ最優先で上書きする(手動値の自動上書き禁止)。
+// 配列(word overridesのみ)、または{words:[...], phrases:[...]}形式のどちらも許容する。
+const manualOverridesRaw = readJsonIfExists('word-accent-map.manual-overrides.local.json') as
+  | ManualWordOverride[]
+  | {words?: ManualWordOverride[]; phrases?: ManualPhraseOverride[]}
+  | null;
+const manualWordOverrides: ManualWordOverride[] = Array.isArray(manualOverridesRaw)
+  ? manualOverridesRaw
+  : (manualOverridesRaw?.words ?? []);
+const manualPhraseOverrides: ManualPhraseOverride[] = Array.isArray(manualOverridesRaw)
+  ? []
+  : (manualOverridesRaw?.phrases ?? []);
+const manualWordByKey = new Map(manualWordOverrides.map((o) => [`${o.phraseId}::${o.word}`, o]));
+const manualPhraseById = new Map(manualPhraseOverrides.map((o) => [o.phraseId, o]));
+if (manualWordOverrides.length > 0 || manualPhraseOverrides.length > 0) {
+  console.log(
+    `[start-wedding-edit] 手動timing override検出: word ${manualWordOverrides.length}件 / phrase ${manualPhraseOverrides.length}件(聴取確認による人間修正を最優先で適用)`,
+  );
+}
 
 const mapsPresent = {
   structureMap: structureMap !== null,
@@ -131,9 +170,20 @@ const nearestBeat = (t: number): number | null => {
   return best;
 };
 
-// 4. phraseIdをキーに相互突合し、importantWords/beatSecを統合する
+// 4. phraseIdをキーに相互突合し、importantWords/beatSecを統合する。
+//    timingSourceの優先順位: manual(人間が聴いて修正) > beat-snap(自動beat検出への
+//    近似、現状の既定) > none(marker無し、呼び出し側でfallback定数を使う)。
+//    手動override(word-accent-map.manual-overrides.local.json)が存在する語は、
+//    beat-snap値を一切使わずmanualAccentSecへ完全に差し替える。
 type EnrichedPhrase = (typeof lyrics.phrases)[number] & {
-  importantWords: Array<{word: string; accentSec: number; beatSec: number | null}>;
+  importantWords: Array<{
+    word: string;
+    accentSec: number;
+    beatSec: number | null;
+    timingSource: 'manual' | 'beat-snap';
+    verifiedByListening: boolean;
+    reviewComment: string | null;
+  }>;
   mapStatus: 'MATCHED' | 'FALLBACK_NO_MAP_ENTRY';
 };
 
@@ -152,23 +202,42 @@ const enrichedPhrases: EnrichedPhrase[] = lyrics.phrases.map((p) => {
     fail(`${p.phraseId}: transitionIntent不一致 lyrics="${p.transitionIntent}" transition-map="${tmTransition}"`);
   }
 
+  const phraseOverride = manualPhraseById.get(p.phraseId);
+  const startSec = phraseOverride?.manualStartSec ?? p.startSec;
+  const endSec = phraseOverride?.manualEndSec ?? p.endSec;
+  if (phraseOverride?.manualStartSec != null || phraseOverride?.manualEndSec != null) {
+    console.log(`[start-wedding-edit] ${p.phraseId}: phrase範囲を手動override適用 [${startSec}, ${endSec}]`);
+  }
+
   const words = wordsByPhraseId.get(p.phraseId) ?? [];
   const importantWords = words.map((w) => {
-    if (w.accentSec < p.startSec - 0.3 || w.accentSec > p.endSec + 0.3) {
+    const override = manualWordByKey.get(`${p.phraseId}::${w.word}`);
+    const accentSec = override?.manualAccentSec ?? w.accentSec;
+    if (accentSec < startSec - 0.3 || accentSec > endSec + 0.3) {
       warn(
-        `${p.phraseId}: word-accent-map "${w.word}" accentSec=${w.accentSec}がphrase範囲[${p.startSec},${p.endSec}]から外れている`,
+        `${p.phraseId}: word-accent-map "${w.word}" accentSec=${accentSec}がphrase範囲[${startSec},${endSec}]から外れている`,
       );
     }
-    return {word: w.word, accentSec: w.accentSec, beatSec: nearestBeat(w.accentSec)};
+    return {
+      word: w.word,
+      accentSec,
+      beatSec: nearestBeat(accentSec),
+      timingSource: override?.manualAccentSec != null ? ('manual' as const) : ('beat-snap' as const),
+      verifiedByListening: override?.verifiedByListening ?? false,
+      reviewComment: override?.reviewComment ?? null,
+    };
   });
 
   return {
     ...p,
+    startSec,
+    endSec,
     transitionIntent: tmTransition ?? p.transitionIntent,
     holdSec: pm?.holdSec ?? p.holdSec,
     exitSec: pm?.exitSec ?? p.exitSec,
     confidence: pm?.confidence ?? p.confidence,
-    humanReviewRequired: pm?.humanReviewRequired ?? p.humanReviewRequired ?? true,
+    // 人間がphraseレベルで聴取確認済みとマークした場合だけhumanReviewRequiredを解除する。
+    humanReviewRequired: phraseOverride?.verifiedByListening ? false : (pm?.humanReviewRequired ?? p.humanReviewRequired ?? true),
     importantWords,
     mapStatus: pm ? 'MATCHED' : 'FALLBACK_NO_MAP_ENTRY',
   };
@@ -231,11 +300,25 @@ writeFileSync(
 // phraseIdで相互突合・統合済み。importantWords(word+accentSec+beatSec)は
 // word-accent-map由来。selectedAnimation/transitionIntentの矛盾はsync時に
 // エラーとして検出済み(このファイルが生成できている時点で矛盾なし)。
+//
+// v4追記: importantWordsにtimingSource('manual'|'beat-snap')と
+// verifiedByListeningを追加。word-accent-map.local.json本体は依然として
+// beat-snap値(ドラム等のbeatへの近似であり、実際の発音開始位置の独立計測ではない)。
+// motion-studio/local/word-accent-map.manual-overrides.local.json に、
+// movie-dashboardの「歌詞タイミング調整」で人間が実際に聴いて登録した値がある場合、
+// そちらがtimingSource='manual'として最優先される。
 
 import type {LyricPhrase} from './localLyricsWeddingEdit.ts';
 import type {LocalEditRange} from './localEditRange.ts';
 
-export type ImportantWord = {word: string; accentSec: number; beatSec: number | null};
+export type ImportantWord = {
+  word: string;
+  accentSec: number;
+  beatSec: number | null;
+  timingSource: 'manual' | 'beat-snap';
+  verifiedByListening: boolean;
+  reviewComment: string | null;
+};
 export type EnrichedLyricPhrase = LyricPhrase & {
   importantWords: ImportantWord[];
   mapStatus: 'MATCHED' | 'FALLBACK_NO_MAP_ENTRY';
@@ -255,6 +338,15 @@ export const weddingEditMapsUsed = ${JSON.stringify(mapsPresent)};
 `,
 );
 const matchedCount = enrichedPhrases.filter((p) => p.mapStatus === 'MATCHED').length;
+const allWords = enrichedPhrases.flatMap((p) => p.importantWords);
+const manualCount = allWords.filter((w) => w.timingSource === 'manual').length;
+const verifiedCount = allWords.filter((w) => w.verifiedByListening).length;
 console.log(
   `[start-wedding-edit] generated.ts 更新: durationInFrames=${durationInFrames} (${editRange.sourceEndSec}s @ 30fps), phrases=${lyrics.phrases.length}, phrase-map突合=${matchedCount}/${lyrics.phrases.length}, importantWords付きphrase=${enrichedPhrases.filter((p) => p.importantWords.length > 0).length}`,
 );
+console.log(
+  `[start-wedding-edit] timing透明性: word ${allWords.length}件中 manual(人間修正)=${manualCount}件 / beat-snap(自動近似のまま)=${allWords.length - manualCount}件 / 聴取確認済み=${verifiedCount}件`,
+);
+if (manualCount === 0) {
+  warn('手動timing overrideが0件。全wordが依然としてbeat-snap値のまま(人間の聴取による発音位置の独立検証は未実施)。');
+}
