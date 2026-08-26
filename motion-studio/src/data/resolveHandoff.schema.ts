@@ -83,6 +83,17 @@ export const humanMasterValueSchema = z.object({
   resolveControl: z.string().optional(),
 });
 
+export const executionScopeSchema = z.object({
+  timeline: z.string().optional(),
+  clipIds: z.array(z.string()).default([]),
+  trackIds: z.array(z.string()).default([]),
+  allowedEdits: z.array(z.string()).min(1),
+  forbiddenEdits: z.array(z.string()).min(1),
+  preconditions: z.array(z.string()).default([]),
+  abortIf: z.array(z.string()).min(1),
+  postEditReadback: z.array(z.string()).min(1),
+});
+
 export const capabilityHandoffSchema = z.object({
   capabilityId: z.string().min(1),
   sourceTool: z.string().min(1),
@@ -117,6 +128,7 @@ export const resolveHandoffSidecarSchema = z.object({
     platform: resolvePlatformSchema,
     page: z.enum(['EDIT', 'FUSION', 'COLOR', 'FAIRLIGHT', 'DELIVER', 'MULTI']),
   }),
+  executionScope: executionScopeSchema,
   timeline: z.object({
     fps: z.number().positive(),
     width: z.number().int().positive(),
