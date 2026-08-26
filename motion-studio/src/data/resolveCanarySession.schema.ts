@@ -6,6 +6,7 @@ export const resolveCanarySessionSchema = z.object({
   executionId: z.string().min(1),
   createdAt: z.string().datetime(),
   status: z.enum(['READY_FOR_RUNTIME', 'BLOCKED_INPUT']),
+  catalogStateAtPreparation: z.string().min(1).optional(),
   canaryStateAtPreparation: z.string().min(1),
   inputManifestStatus: z.enum(['PREPARED', 'BLOCKED_REAL_TOOL_EXPORT_REQUIRED']),
   targetResolveMajor: z.literal(21),
