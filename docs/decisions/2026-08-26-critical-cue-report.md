@@ -1,7 +1,7 @@
 # Critical Cue Report — StaRt Wedding Edit
 
 Status: MACHINE_GENERATED / 自動生成(再生成: `node --no-warnings scripts/generate-critical-cue-report.mts`)
-masterId: start-wedding-edit-master / revision: 10 / contentHash: 57840623cba4cddd...
+masterId: start-wedding-edit-master / revision: 13 / contentHash: dcc64af3cf82e083...
 生成日時からの再現性: このrevisionのmasterから決定的に再生成される(手動編集しない)。
 
 ## 対象
@@ -41,7 +41,7 @@ phrase-onset行の「text」列は、既存方針(歌詞本文をGitへ保存し
 | P012-H02 | パッパッ | syllable-hit | 33204.5 | 33204.5 | 33204.5 | 0.0 | vocal-stem-onset-detection(htdemucs+librosa) | 0.929 | 92.9 | audio-analysis | no |
 | P012-H03 | パッパッ | syllable-hit | 33540.0 | 33540.0 | — | — | — | 0.400 | 102.2 | beat-snap | no |
 | P013-H01 | チャプチャプ | syllable-hit | 40704.6 | 40704.6 | 40704.6 | 0.0 | vocal-stem-onset-detection(htdemucs+librosa) | 0.591 | 129.3 | audio-analysis | no |
-| P013-H02 | チャプチャプ | syllable-hit | 40704.6 | 40704.6 | 40704.6 | 0.0 | vocal-stem-onset-detection(htdemucs+librosa) | 0.769 | — | audio-analysis | no |
+| P013-H02 | チャプチャプ | syllable-hit | 40936.8 | 40936.8 | 40936.8 | 0.0 | vocal-stem-onset-detection(htdemucs+librosa) | 0.766 | — | audio-analysis | no |
 | P013-H03 | チャプチャプ | syllable-hit | 41169.0 | 41169.0 | 41169.0 | 0.0 | vocal-stem-onset-detection(htdemucs+librosa) | 0.938 | — | audio-analysis | no |
 | P015-ONSET | [歌詞本文は非掲載。cueId接頭辞のphraseIdで参照] | phrase-onset | 58910.0 | 58910.0 | — | — | — | 0.150 | 510.8 | audio-analysis | no |
 | P022-ONSET | [歌詞本文は非掲載。cueId接頭辞のphraseIdで参照] | phrase-onset | 76220.0 | 76220.0 | — | — | — | 0.150 | 379.0 | audio-analysis | no |

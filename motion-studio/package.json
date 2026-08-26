@@ -14,6 +14,7 @@
     "sync:timing-master": "node --no-warnings scripts/sync-start-wedding-timing-master.mts",
     "check:timing-master": "node --no-warnings scripts/check-start-wedding-timing-master.mts",
     "check:choreography-event-timing": "node --no-warnings scripts/check-choreography-event-timing-consistency.mts",
+    "check:post60-regression": "node --no-warnings scripts/check-start-wedding-post60-regression.mts",
     "test:timing-master-manual-preservation": "node --no-warnings scripts/test-timing-master-manual-preservation.mts",
     "test:timing-master-offset-composition": "node --no-warnings scripts/test-timing-master-offset-composition.mts",
     "render:cue-listening-clips": "node --no-warnings scripts/render-cue-listening-clips.mts",

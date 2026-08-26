@@ -468,6 +468,7 @@ pnpm typecheck
 pnpm check:start-wedding-edit-phrase-qa    # 歌詞データ契約(coverage/family分布/StaRt完成)
 pnpm check:timing-master                    # TimingMasterのschema/整合性(offset architecture含む)
 pnpm check:choreography-event-timing        # ChoreographyEvent.timeSecに隠れたoffset加算が無いかの静的検査
+pnpm check:post60-regression                 # 60秒以降のcanonical→generated変換一致(Render Truth監査対応)
 node --no-warnings scripts/check-start-wedding-edit-render-qa.mts --dir=out/start-wedding-edit-final-v2
 ```
 
