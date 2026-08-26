@@ -1,0 +1,57 @@
+name: Typography DaVinci Actual Contracts
+
+on:
+  pull_request:
+    paths:
+      - "movie-dashboard/src/data/baselineHopDaVinciTranslator.ts"
+      - "movie-dashboard/src/data/baselineHopDaVinciActualArtifact.ts"
+      - "movie-dashboard/src/data/baselineHopDaVinciEvidenceCapture.ts"
+      - "movie-dashboard/src/data/tripletDaVinciTranslator.ts"
+      - "movie-dashboard/src/data/tripletDaVinciActualArtifact.ts"
+      - "movie-dashboard/src/data/tripletDaVinciEvidenceCapture.ts"
+      - "movie-dashboard/src/data/typographyDaVinciPromotionPolicy.ts"
+      - "movie-dashboard/src/data/typographySceneProductionRouting.ts"
+      - "movie-dashboard/scripts/verify-baseline-hop-davinci-contracts.mjs"
+      - "movie-dashboard/scripts/verify-triplet-davinci-contracts.mjs"
+      - ".github/workflows/typography-davinci-actual-contracts.yml"
+  push:
+    branches: [main]
+    paths:
+      - "movie-dashboard/src/data/baselineHopDaVinciTranslator.ts"
+      - "movie-dashboard/src/data/baselineHopDaVinciActualArtifact.ts"
+      - "movie-dashboard/src/data/baselineHopDaVinciEvidenceCapture.ts"
+      - "movie-dashboard/src/data/tripletDaVinciTranslator.ts"
+      - "movie-dashboard/src/data/tripletDaVinciActualArtifact.ts"
+      - "movie-dashboard/src/data/tripletDaVinciEvidenceCapture.ts"
+      - "movie-dashboard/src/data/typographyDaVinciPromotionPolicy.ts"
+      - "movie-dashboard/src/data/typographySceneProductionRouting.ts"
+      - "movie-dashboard/scripts/verify-baseline-hop-davinci-contracts.mjs"
+      - "movie-dashboard/scripts/verify-triplet-davinci-contracts.mjs"
+      - ".github/workflows/typography-davinci-actual-contracts.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  contracts:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: movie-dashboard
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.13.1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: movie-dashboard/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - name: Baseline Hop canonical → Actual contracts
+        run: node scripts/verify-baseline-hop-davinci-contracts.mjs
+      - name: Triplet canonical → Actual contracts
+        run: node scripts/verify-triplet-davinci-contracts.mjs
+      - name: Dashboard typecheck/build
+        run: pnpm build
