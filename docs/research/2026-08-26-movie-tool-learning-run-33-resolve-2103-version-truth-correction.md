@@ -77,6 +77,8 @@ A legacy sidecar with a real string `testedPatch` remains schema-compatible. Thi
 
 ## Retracted claims
 
+The **21.0.4 release claim is withdrawn** from Current authority.
+
 The following claims are no longer Current authority unless independently reproduced:
 
 - `Resolve Actual baseline: 21.0.4`
