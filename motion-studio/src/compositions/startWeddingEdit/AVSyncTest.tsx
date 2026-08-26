@@ -18,24 +18,26 @@ import {AbsoluteFill, Audio, Sequence, staticFile} from 'remotion';
 const FPS = 30;
 const secToFrame = (s: number) => Math.round(s * FPS);
 
-/** 実TimingMasterの重要cueのうち代表12件を、2秒間隔の設計時刻へ再配置した
- * test slot。実際の曲内での時刻ではなく、pipeline検証用の圧縮タイムライン。 */
+/** 前回(v1)は1〜23秒の12点のみで、そこから145.6秒地点の誤差を線形回帰で
+ * 「予測」していた(外挿であり実測ではない)。今回(v2)は実曲の全長145.6秒を
+ * 実際にカバーするtest slotへ拡張し、intro/verse/chorus/middle/final-chorus/
+ * endingに相当する位置で本当に計測する(外挿ではなく実測でconstant-offset/
+ * driftを判定するため)。 */
 export const AV_SYNC_TEST_POINTS: Array<{cueId: string; designTimeSec: number}> = [
-  {cueId: 'P001-ONSET', designTimeSec: 1.0},
-  {cueId: 'P004-W01(武装)', designTimeSec: 3.0},
-  {cueId: 'P004-W02(創)', designTimeSec: 5.0},
-  {cueId: 'P004-W03(造)', designTimeSec: 7.0},
-  {cueId: 'P004-W04(登場)', designTimeSec: 9.0},
-  {cueId: 'P012-H01(パッ1)', designTimeSec: 11.0},
-  {cueId: 'P012-H02(パッ2)', designTimeSec: 13.0},
-  {cueId: 'P012-H03(パッ3)', designTimeSec: 15.0},
-  {cueId: 'P013-H01(チャプ1)', designTimeSec: 17.0},
-  {cueId: 'P013-H02(チャプ2)', designTimeSec: 19.0},
-  {cueId: 'P013-H03(チャプ3)', designTimeSec: 21.0},
-  {cueId: 'INTRO-START-S', designTimeSec: 23.0},
+  {cueId: 'ANCHOR-INTRO', designTimeSec: 2.0},
+  {cueId: 'ANCHOR-VERSE1', designTimeSec: 16.0},
+  {cueId: 'ANCHOR-PRECHORUS1', designTimeSec: 30.0},
+  {cueId: 'ANCHOR-CHORUS1', designTimeSec: 45.0},
+  {cueId: 'ANCHOR-VERSE2', designTimeSec: 60.0},
+  {cueId: 'ANCHOR-MIDDLE', designTimeSec: 75.0},
+  {cueId: 'ANCHOR-PRECHORUS2', designTimeSec: 90.0},
+  {cueId: 'ANCHOR-CHORUS2A', designTimeSec: 105.0},
+  {cueId: 'ANCHOR-CHORUS2B', designTimeSec: 120.0},
+  {cueId: 'ANCHOR-INTERLUDE', designTimeSec: 135.0},
+  {cueId: 'ANCHOR-ENDING', designTimeSec: 144.0},
 ];
 
-export const AV_SYNC_TEST_DURATION_SEC = 25;
+export const AV_SYNC_TEST_DURATION_SEC = 146;
 export const avSyncTestDurationInFrames = secToFrame(AV_SYNC_TEST_DURATION_SEC);
 
 const FlashAndClick: React.FC<{cueId: string}> = ({cueId}) => (

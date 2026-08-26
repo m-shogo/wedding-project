@@ -20,18 +20,17 @@ MP4_PATH = STUDIO_ROOT / "local/analysis/start-wedding/av-sync-test/av-sync-test
 OUT_JSON = STUDIO_ROOT / "local/analysis/start-wedding/av-sync-test-result.local.json"
 
 DESIGN_POINTS = [
-    ("P001-ONSET", 1.0),
-    ("P004-W01(武装)", 3.0),
-    ("P004-W02(創)", 5.0),
-    ("P004-W03(造)", 7.0),
-    ("P004-W04(登場)", 9.0),
-    ("P012-H01(パッ1)", 11.0),
-    ("P012-H02(パッ2)", 13.0),
-    ("P012-H03(パッ3)", 15.0),
-    ("P013-H01(チャプ1)", 17.0),
-    ("P013-H02(チャプ2)", 19.0),
-    ("P013-H03(チャプ3)", 21.0),
-    ("INTRO-START-S", 23.0),
+    ("ANCHOR-INTRO", 2.0),
+    ("ANCHOR-VERSE1", 16.0),
+    ("ANCHOR-PRECHORUS1", 30.0),
+    ("ANCHOR-CHORUS1", 45.0),
+    ("ANCHOR-VERSE2", 60.0),
+    ("ANCHOR-MIDDLE", 75.0),
+    ("ANCHOR-PRECHORUS2", 90.0),
+    ("ANCHOR-CHORUS2A", 105.0),
+    ("ANCHOR-CHORUS2B", 120.0),
+    ("ANCHOR-INTERLUDE", 135.0),
+    ("ANCHOR-ENDING", 144.0),
 ]
 FPS = 30
 SR = 44100
@@ -128,10 +127,12 @@ def main() -> None:
         summary["driftRegression"] = {
             "interceptMs": round(float(intercept), 3),
             "slopeMsPerSec": round(float(slope), 5),
-            "predictedErrorAt145_6sMs": round(float(intercept + slope * 145.6), 2),
+            "regressionPredictedAt145_6sMs": round(float(intercept + slope * 145.6), 2),
             "interpretation": (
                 "slopeがほぼ0ならconstant offset(全体で同じズレ)。"
                 "slopeが有意ならprogressive drift(時間経過で誤差が拡大)。"
+                "v2ではANCHOR-ENDING(144.0s)を実測しているため、regressionPredictedAt145_6sMsは"
+                "参考値(外挿)であり、実測値はpoints配列のANCHOR-ENDING行を直接見ること。"
             ),
         }
 

@@ -204,12 +204,18 @@ export type TimingMaster = {
     /** 実測: AVSyncTest compositionをrender→ffprobe再解析した結果判明した、
      * render pipeline自体(Remotion+ffmpeg AAC encode+MP4 mux)が持つ
      * 恒常的なaudio-video遅延(ms、音声が遅れる方向を正とする)。
-     * 2026-08-26の実測では12/12 test pointで42.7ms・分散ゼロ(定数offset、
-     * driftではない)。これはTimingMaster側のcue時刻の誤りではなく、
-     * render pipeline自体の癖であり、globalContentOffsetMs(音源content側の
-     * 補正)とは意味的に別物のため別fieldで持つ。renderPipelineOffsetVerified
-     * =falseの間は、この値を自動的にrenderへ適用しない(人間が実際の
-     * 最終MP4を試聴して妥当性を確認するまでcandidateのまま)。 */
+     * 2026-08-26 v1実測: 1〜23秒(曲全体の16%)を2秒間隔12点でカバーし12/12点で
+     * 42.7ms・分散ゼロ。ただしこの時点の「145.6秒地点の誤差」は線形回帰による
+     * 外挿にすぎなかった。
+     * 2026-08-26 v2実測(本fieldの根拠): intro/verse/pre-chorus/chorus/middle/
+     * interlude/endingに相当する0〜144秒(曲全体の実質ほぼ全域)を11点で
+     * 直接カバーし、ANCHOR-ENDING(144.0秒)を含む11/11点すべてで同一の
+     * 42.7ms・分散ゼロを実測(外挿ではなく実測)。これはTimingMaster側の
+     * cue時刻の誤りではなく、render pipeline自体の癖であり、
+     * globalContentOffsetMs(音源content側の補正)とは意味的に別物のため
+     * 別fieldで持つ。renderPipelineOffsetVerified=falseの間は、この値を
+     * 自動的にrenderへ適用しない(人間が実際の最終MP4を試聴して妥当性を
+     * 確認するまでcandidateのまま)。 */
     renderPipelineOffsetMs: number | null;
     renderPipelineOffsetVerified: boolean;
     verifiedByListening: boolean;
