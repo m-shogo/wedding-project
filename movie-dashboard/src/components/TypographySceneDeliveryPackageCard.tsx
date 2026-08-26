@@ -64,6 +64,10 @@ export function TypographySceneDeliveryPackageCard({scene}: {scene: MaskRevealSc
         <span>Translator: {delivery.davinci.translatorSpecAvailable ? "AVAILABLE" : "MISSING"}</span>
         <span>Release: {delivery.release.productionReady ? "READY" : "BLOCKED"}</span>
       </div>
+      <div className="mt-2 border border-sky-100 dark:border-sky-900 p-2 text-[8px] leading-4 text-navy-400">
+        <p className="font-mono">Current stop: {delivery.execution.currentStopReason}</p>
+        <p className="mt-1">{delivery.execution.order.join(" → ")}</p>
+      </div>
       {delivery.davinci.actualWorkflow ? (
         <p className="mt-2 text-[8px] leading-4 text-navy-400">Mac Actual: {delivery.davinci.actualWorkflow.actualArtifactFile} → {delivery.davinci.actualWorkflow.evidenceCaptureFile} → {delivery.davinci.actualWorkflow.verificationCommand}</p>
       ) : null}
