@@ -13,7 +13,7 @@ export function TypographyRevealEngine({
 }: {
   text: string;
   intensity?: MotionIntensity;
-  mode?: 'mask' | 'punch' | 'stagger' | 'hop' | 'lock' | 'outline';
+  mode?: 'mask' | 'punch' | 'stagger' | 'hop' | 'lock' | 'outline' | 'tracking';
   transparent?: boolean;
 }) {
   const frame = useCurrentFrame();
@@ -39,11 +39,48 @@ export function TypographyRevealEngine({
   const translateY =
     mode === 'mask' ? (1 - progress) * 80 * strength : mode === 'hop' ? (1 - hopProgress) * -90 * strength : 0;
   const translateX = mode === 'lock' ? 130 * strength : 0;
-  const letterSpacing = mode === 'stagger' ? `${interpolate(progress, [0, 1], [0.18 * strength, 0.02])}em` : '0.02em';
+  // trackingは字間burst(type-tracking-burst)。stagger(type-char-stagger)は
+  // 下の文字単位reveal(charProgress)で表現するため、letterSpacingは動かさない。
+  const letterSpacing = mode === 'tracking' ? `${interpolate(progress, [0, 1], [0.18 * strength, 0.02])}em` : '0.02em';
   const fontSize = mode === 'lock' ? 200 : 104;
   const opacity = mode === 'outline' ? outlineAppear : progress;
   const color = mode === 'outline' ? `rgba(255,255,255,${outlineFill})` : '#fff';
   const webkitTextStroke = mode === 'outline' ? `${outlineStrokeWidth}px #fff` : undefined;
+
+  if (mode === 'stagger') {
+    const perCharDelay = Math.round(fps * 0.06);
+    const charDuration = Math.round(fps * 0.28);
+    return (
+      <AbsoluteFill style={{backgroundColor: transparent ? undefined : '#0d2035', alignItems: 'center', justifyContent: 'center'}}>
+        <div style={{display: 'flex', padding: '0.15em 0.25em'}}>
+          {text.split('').map((char, index) => {
+            const start = index * perCharDelay;
+            const charProgress = interpolate(frame, [start, start + charDuration], [0, 1], {
+              extrapolateLeft: 'clamp',
+              extrapolateRight: 'clamp',
+              easing: Easing.out(Easing.cubic),
+            });
+            return (
+              <span
+                key={`${char}-${index}`}
+                style={{
+                  display: 'inline-block',
+                  opacity: charProgress,
+                  transform: `translateY(${(1 - charProgress) * 40 * strength}px)`,
+                  fontSize,
+                  fontWeight: 800,
+                  color: '#fff',
+                  whiteSpace: 'pre',
+                }}
+              >
+                {char}
+              </span>
+            );
+          })}
+        </div>
+      </AbsoluteFill>
+    );
+  }
 
   return (
     <AbsoluteFill
