@@ -205,7 +205,12 @@ export function MotionZukanProductionWorkspace() {
     suppressComposerEventRef.current = true;
     setComposer(next);
     saveMotionZukanComposerState(next);
-    suppressComposerEventRef.current = false;
+    // saveMotionZukanComposerState now defers its event dispatch to a macrotask (see its
+    // definition), so the suppress flag must be reset via a macrotask too, queued after it,
+    // otherwise it flips back to false before the deferred dispatch this call caused arrives.
+    setTimeout(() => {
+      suppressComposerEventRef.current = false;
+    }, 0);
   }
 
   function persistWorkspace(next: MotionZukanProductionWorkspaceState) {

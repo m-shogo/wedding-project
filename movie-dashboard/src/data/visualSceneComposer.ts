@@ -423,7 +423,13 @@ export function saveMotionZukanComposerState(state: MotionZukanComposerState) {
   if (typeof localStorage === "undefined") return;
   localStorage.setItem(MOTION_ZUKAN_COMPOSER_STORAGE_KEY, JSON.stringify(state));
   if (typeof window !== "undefined") {
-    window.dispatchEvent(new CustomEvent(MOTION_ZUKAN_COMPOSER_CHANGED_EVENT, { detail: state }));
+    // Deferred to a macrotask (not just a microtask — React 18/19's automatic batching itself
+    // runs via a microtask, so a queueMicrotask dispatch was still inside that same batching
+    // window) so a listener's setState (e.g. MotionZukanProductionWorkspace syncing to this
+    // same state) never runs while React still considers the caller "rendering".
+    setTimeout(() => {
+      window.dispatchEvent(new CustomEvent(MOTION_ZUKAN_COMPOSER_CHANGED_EVENT, { detail: state }));
+    }, 0);
   }
 }
 

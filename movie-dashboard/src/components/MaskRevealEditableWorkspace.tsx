@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { MaskRevealSceneHandoffCard } from "./MaskRevealSceneHandoffCard";
 import {
   applyHumanSelection,
@@ -76,13 +76,18 @@ export function MaskRevealEditableWorkspace() {
     durationSeconds: resolved.enterDurationSeconds,
   });
 
+  // saveMotionZukanComposerState dispatches MOTION_ZUKAN_COMPOSER_CHANGED_EVENT, which other
+  // components (e.g. MotionZukanProductionWorkspace) listen to and call setState from. Doing
+  // that synchronously inside the setComposerState updater fires it while this component is
+  // still rendering, which React warns about ("Cannot update a component while rendering a
+  // different component"). Persist as a side effect after the state actually changes instead.
   function updateComposer(updater: (current: MotionZukanComposerState) => MotionZukanComposerState) {
-    setComposerState((current) => {
-      const next = updater(current);
-      saveMotionZukanComposerState(next);
-      return next;
-    });
+    setComposerState((current) => updater(current));
   }
+
+  useEffect(() => {
+    saveMotionZukanComposerState(composerState);
+  }, [composerState]);
 
   function select<K extends MaskRevealEditableFieldKey>(key: K, value: MaskRevealEditableFields[K]["defaultValue"]) {
     setIntent((current) => applyHumanSelection(current, key, value));
