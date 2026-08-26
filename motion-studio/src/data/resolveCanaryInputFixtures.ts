@@ -146,4 +146,23 @@ export const alphaCanaryFixture = {
   ],
 } as const;
 
+export const resolveCanaryInputPreparationCommands: Record<string, {command: string; result: string}> = {
+  'DV21-REMOTION-ALPHA-01': {
+    command: 'node --no-warnings scripts/prepare-resolve-canary-inputs.mts alpha',
+    result: 'Renders the neutral ProRes 4444 source and writes SHA-256 + ffprobe metadata manifest.',
+  },
+  'DV21-AUDIO-RECOVERY-01': {
+    command: 'node --no-warnings scripts/prepare-resolve-canary-inputs.mts audio',
+    result: 'Generates a copyright-free 48kHz stereo tone, exact Human Master envelope, SHA-256, and ffprobe manifest.',
+  },
+  'DV21-PALMIER-FCPXML-01': {
+    command: 'node --no-warnings scripts/prepare-resolve-canary-inputs.mts palmier',
+    result: 'Writes only the Palmier synthetic scene specification. Status remains blocked until Palmier itself exports real FCPXML.',
+  },
+};
+
+export function getResolveCanaryInputPreparation(canaryId: string) {
+  return resolveCanaryInputPreparationCommands[canaryId];
+}
+
 export type ResolveCanaryInputManifest = z.infer<typeof resolveCanaryInputManifestSchema>;
