@@ -1,0 +1,123 @@
+name: Resolve Local Actual Batch CI
+
+on:
+  pull_request:
+    paths:
+      - "motion-studio/src/data/resolveCanarySession.schema.ts"
+      - "motion-studio/scripts/prepare-resolve-canary-session.mts"
+      - "motion-studio/scripts/prepare-resolve-local-actual-batch.mts"
+      - "docs/prompts/2026-08-26-resolve21-lottie-drfx-local-actual-agent.md"
+      - ".github/workflows/resolve-local-actual-batch-ci.yml"
+  push:
+    paths:
+      - "motion-studio/src/data/resolveCanarySession.schema.ts"
+      - "motion-studio/scripts/prepare-resolve-canary-session.mts"
+      - "motion-studio/scripts/prepare-resolve-local-actual-batch.mts"
+      - "docs/prompts/2026-08-26-resolve21-lottie-drfx-local-actual-agent.md"
+      - ".github/workflows/resolve-local-actual-batch-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: motion-studio/pnpm-lock.yaml
+
+      - name: Install motion-studio dependencies
+        working-directory: motion-studio
+        run: pnpm install --frozen-lockfile
+
+      - name: TypeScript
+        working-directory: motion-studio
+        run: pnpm typecheck
+
+      - name: Batch planner dry-run never launches Resolve
+        working-directory: motion-studio
+        run: |
+          node --no-warnings scripts/prepare-resolve-local-actual-batch.mts \
+            --execution-prefix RUN32-CI-DRY \
+            --dry-run > /tmp/run32-dry.txt
+          grep -Fq 'DV21-LOTTIE-OGRAF-01-RUN32-CI-DRY' /tmp/run32-dry.txt
+          grep -Fq 'DV21-DRFX-FREE-01-RUN32-CI-DRY' /tmp/run32-dry.txt
+          grep -Fq 'DRY RUN: no input artifacts, sessions, evidence, or batch summary were written.' /tmp/run32-dry.txt
+          test ! -e out/canary-batches/RUN32-CI-DRY.json
+          test ! -e out/canary-sessions/DV21-LOTTIE-OGRAF-01-RUN32-CI-DRY
+          test ! -e out/canary-sessions/DV21-DRFX-FREE-01-RUN32-CI-DRY
+
+      - name: Prepare immutable Lottie and DRFX Actual batch
+        working-directory: motion-studio
+        run: |
+          prefix="RUN32-CI-A"
+          node --no-warnings scripts/prepare-resolve-local-actual-batch.mts \
+            --execution-prefix "$prefix"
+          test -s "out/canary-batches/$prefix.json"
+          test -s "out/canary-sessions/DV21-LOTTIE-OGRAF-01-$prefix/session.json"
+          test -s "out/canary-sessions/DV21-DRFX-FREE-01-$prefix/session.json"
+          node - <<'NODE'
+          const fs = require('node:fs');
+          const prefix = 'RUN32-CI-A';
+          const batch = JSON.parse(fs.readFileSync(`out/canary-batches/${prefix}.json`, 'utf8'));
+          if (batch.schemaVersion !== 'resolve-local-actual-batch/v1') process.exit(1);
+          if (batch.runtimeLaunchPerformed !== false) process.exit(1);
+          if (batch.sessions.length !== 2) process.exit(1);
+          const expected = new Set(['DV21-LOTTIE-OGRAF-01', 'DV21-DRFX-FREE-01']);
+          for (const item of batch.sessions) {
+            if (!expected.delete(item.canaryId)) process.exit(1);
+            if (item.sessionStatus !== 'READY_FOR_RUNTIME') process.exit(1);
+            if (item.effectiveCanaryStateAtPreparation !== 'PENDING_RUNTIME') process.exit(1);
+            if (item.evidenceResult !== 'NOT_RUN') process.exit(1);
+            if (item.runtimeLaunchPerformed !== false) process.exit(1);
+            if (item.promotionEligible !== false) process.exit(1);
+            const session = JSON.parse(fs.readFileSync(item.sessionPath, 'utf8'));
+            if (session.catalogStateAtPreparation === undefined) process.exit(1);
+            if (session.canaryStateAtPreparation !== 'PENDING_RUNTIME') process.exit(1);
+            if (!session.guardrails.includes('PREPARED_MANIFEST_CAN_CLEAR_INPUT_BLOCK_ONLY') && session.catalogStateAtPreparation === 'BLOCKED_INPUT') process.exit(1);
+            const evidence = JSON.parse(fs.readFileSync(item.evidencePath, 'utf8'));
+            if (evidence.result !== 'NOT_RUN' || evidence.capturedAt !== null || evidence.promotionEligible !== false) process.exit(1);
+            if (evidence.stepResults.some((step) => step.status !== 'NOT_RUN')) process.exit(1);
+          }
+          if (expected.size !== 0) process.exit(1);
+          NODE
+          grep -Fq 'Effective canary state: `PENDING_RUNTIME`' "out/canary-sessions/DV21-LOTTIE-OGRAF-01-$prefix/RUN.md"
+          grep -Fq 'Effective canary state: `PENDING_RUNTIME`' "out/canary-sessions/DV21-DRFX-FREE-01-$prefix/RUN.md"
+
+      - name: Duplicate batch prefix fails before overwrite
+        working-directory: motion-studio
+        run: |
+          prefix="RUN32-CI-A"
+          before_batch="$(sha256sum "out/canary-batches/$prefix.json" | awk '{print $1}')"
+          before_lottie="$(sha256sum "out/canary-sessions/DV21-LOTTIE-OGRAF-01-$prefix/session.json" | awk '{print $1}')"
+          before_drfx="$(sha256sum "out/canary-sessions/DV21-DRFX-FREE-01-$prefix/session.json" | awk '{print $1}')"
+          if node --no-warnings scripts/prepare-resolve-local-actual-batch.mts \
+            --execution-prefix "$prefix"; then
+            echo "Duplicate Actual batch unexpectedly overwrote immutable sessions"
+            exit 1
+          fi
+          test "$before_batch" = "$(sha256sum "out/canary-batches/$prefix.json" | awk '{print $1}')"
+          test "$before_lottie" = "$(sha256sum "out/canary-sessions/DV21-LOTTIE-OGRAF-01-$prefix/session.json" | awk '{print $1}')"
+          test "$before_drfx" = "$(sha256sum "out/canary-sessions/DV21-DRFX-FREE-01-$prefix/session.json" | awk '{print $1}')"
+
+      - name: Agent prompt preserves runtime honesty boundary
+        run: |
+          grep -Fq 'GitHub CI can prove deterministic fixture generation' docs/prompts/2026-08-26-resolve21-lottie-drfx-local-actual-agent.md
+          grep -Fq 'Never mutate the real wedding Opening/Profile project' docs/prompts/2026-08-26-resolve21-lottie-drfx-local-actual-agent.md
+          grep -Fq 'NATIVE_IMPORT != INTERNAL_PARAMETRIC_EDITABILITY' docs/prompts/2026-08-26-resolve21-lottie-drfx-local-actual-agent.md
+          grep -Fq 'DRFX_ARCHIVE_VALID != RESOLVE_INSTALLABLE' docs/prompts/2026-08-26-resolve21-lottie-drfx-local-actual-agent.md
+          grep -Fq 'Do not automatically commit local screenshots' docs/prompts/2026-08-26-resolve21-lottie-drfx-local-actual-agent.md
