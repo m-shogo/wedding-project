@@ -183,7 +183,8 @@ export function TransitionWipeEngine({
   intensity?: MotionIntensity;
   transparent?: boolean;
   // 'release'は方向性のあるwipeではなく、一度color fieldへ落として呼吸するholdの表現。
-  variant?: 'wipe' | 'release';
+  // 'shape'は矩形の色面ではなく、角のある図形(chevron)そのものが横切る表現。
+  variant?: 'wipe' | 'release' | 'shape';
 }) {
   const frame = useCurrentFrame();
   const {fps, durationInFrames} = useVideoConfig();
@@ -195,6 +196,30 @@ export function TransitionWipeEngine({
   const horizontal = direction === 'left' || direction === 'right';
   const sign = direction === 'left' || direction === 'up' ? -1 : 1;
   const travel = (1 - progress) * 110 * sign;
+
+  if (variant === 'shape') {
+    const shapeProgress = interpolate(frame, [0, Math.max(4, Math.round(fps * 0.55))], [0, 1], {
+      extrapolateRight: 'clamp',
+      easing: Easing.inOut(Easing.cubic),
+    });
+    const shapeTravel = (1 - shapeProgress) * 130 * sign * strength;
+    return (
+      <AbsoluteFill style={{backgroundColor: transparent ? undefined : '#0d2035', overflow: 'hidden'}}>
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            background: '#f0d37a',
+            opacity: 0.95,
+            clipPath: horizontal
+              ? 'polygon(0 0, 68% 0, 100% 50%, 68% 100%, 0 100%)'
+              : 'polygon(0 0, 100% 0, 100% 68%, 50% 100%, 0 68%)',
+            transform: horizontal ? `translateX(${shapeTravel}%)` : `translateY(${shapeTravel}%)`,
+          }}
+        />
+      </AbsoluteFill>
+    );
+  }
 
   if (variant === 'release') {
     const inEnd = Math.round(fps * 0.35);

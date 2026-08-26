@@ -34,7 +34,7 @@ export const renderableMotionPresets: RenderableMotionPreset[] = [
   // 2026-08-26 batch2: 同じくexisting engineのmode/directionだけを追加で使う。
   {presetId: 'type-tracking-burst', engine: 'typography-reveal', intensity: 'M', label: 'Tracking Burst', demoText: 'ARRIVAL', mode: 'tracking'},
   {presetId: 'photo-slow-pull', engine: 'camera-transform', intensity: 'M', label: 'Slow Pull', mode: 'pull'},
-  {presetId: 'wipe-directional-shape', engine: 'transition-wipe', intensity: 'M', label: 'Directional Shape Wipe', mode: 'left'},
+  {presetId: 'wipe-directional-shape', engine: 'transition-wipe', intensity: 'M', label: 'Directional Shape Wipe', mode: 'shape'},
   {presetId: 'accent-impact-frame', engine: 'graphic-hit', intensity: 'L', label: 'Impact Frame', mode: 'impact'},
   // 2026-08-26 batch3: TypographyRevealEngineへ新modeを2つ追加(hop/lock)して対応。
   // 他のbatchと違い、既存modeの使い回しではなく実際にengineへ新機能を実装した。

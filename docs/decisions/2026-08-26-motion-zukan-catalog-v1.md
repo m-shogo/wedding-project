@@ -64,8 +64,10 @@ QAで見つかった**既知の実装限界**(隠さず記録):
   見た目の差別化ができていない。~~ → 追記(2026-08-26): `type-char-stagger`を
   文字単位の個別reveal(真のstagger)、`type-tracking-burst`を新設
   `mode='tracking'`(letterSpacing burst専用)へ分離し解消。実render確認済み。
-- `wipe-directional-shape`は「図形(shape)が横切る」という名称に対し、実装は
-  図形オブジェクトではなく色面wipeの近似。
+- ~~`wipe-directional-shape`は「図形(shape)が横切る」という名称に対し、実装は
+  図形オブジェクトではなく色面wipeの近似。~~ → 追記(2026-08-26):
+  TransitionWipeEngineへ`variant='shape'`(clip-pathによる先端の尖った
+  chevron図形)を新規実装し解消。実render確認済み。
 
 これらはengine拡張(新規機能追加)が必要で、今回のカタログ化のスコープ外として
 `motionPreviewEvidence.ts`のnotesへ明記した。実装したふりをしていない。
