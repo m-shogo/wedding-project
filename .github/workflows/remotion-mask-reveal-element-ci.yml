@@ -14,7 +14,11 @@ on:
       - "motion-studio/scripts/check-type-on-rhythm-element-payload.mts"
       - "motion-studio/scripts/lib/typography-element-kit.mts"
       - "motion-studio/scripts/lib/check-typography-element.mts"
+      - "motion-studio/scripts/prepare-typography-elements-studio-actual-batch.mts"
+      - "motion-studio/scripts/check-typography-elements-studio-actual-batch.mts"
       - "movie-dashboard/src/data/remotionElementCandidates.ts"
+      - "movie-dashboard/src/components/RemotionElementReadinessPanel.tsx"
+      - "movie-dashboard/src/pages/VisualMotionLibrary.tsx"
       - "movie-dashboard/scripts/verify-remotion-element-candidates-contracts.mjs"
       - "movie-dashboard/package.json"
       - ".github/workflows/remotion-mask-reveal-element-ci.yml"
@@ -37,7 +41,11 @@ on:
       - "motion-studio/scripts/check-type-on-rhythm-element-payload.mts"
       - "motion-studio/scripts/lib/typography-element-kit.mts"
       - "motion-studio/scripts/lib/check-typography-element.mts"
+      - "motion-studio/scripts/prepare-typography-elements-studio-actual-batch.mts"
+      - "motion-studio/scripts/check-typography-elements-studio-actual-batch.mts"
       - "movie-dashboard/src/data/remotionElementCandidates.ts"
+      - "movie-dashboard/src/components/RemotionElementReadinessPanel.tsx"
+      - "movie-dashboard/src/pages/VisualMotionLibrary.tsx"
       - "movie-dashboard/scripts/verify-remotion-element-candidates-contracts.mjs"
       - "movie-dashboard/package.json"
       - ".github/workflows/remotion-mask-reveal-element-ci.yml"
@@ -147,6 +155,12 @@ jobs:
           node --no-warnings scripts/build-type-on-rhythm-element-payload.mts
           node --no-warnings scripts/check-type-on-rhythm-element-payload.mts
 
+      - name: Prepare bounded Mac Studio Actual batch artifacts
+        working-directory: motion-studio
+        run: |
+          node --no-warnings scripts/prepare-typography-elements-studio-actual-batch.mts
+          node --no-warnings scripts/check-typography-elements-studio-actual-batch.mts
+
       - name: Compile and render generated Element sources
         working-directory: motion-studio
         run: |
@@ -177,7 +191,9 @@ jobs:
 
       - name: Recheck dashboard registry after candidate generation
         working-directory: movie-dashboard
-        run: pnpm check:remotion-element-candidates
+        run: |
+          pnpm check:remotion-element-candidates
+          pnpm build
 
       - name: Production dependency graph and Studio Actual remain unpromoted
         working-directory: motion-studio
@@ -191,6 +207,7 @@ jobs:
           echo 'elementPayloadValidation=PASS_CANDIDATE_ONLY'
           echo 'interactiveSchemaStaticContract=PASS_CANDIDATE_ONLY'
           echo 'motionZukanRegistry=ELEMENT_CANDIDATE_ONLY'
+          echo 'studioActualBatchPrepared=PASS_PREP_ONLY'
           echo 'studioControlReadback=NOT_RUN'
           echo 'studioInstallActual=NOT_RUN'
           echo 'productionDependencyUpgradePerformed=NO'
