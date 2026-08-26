@@ -4,6 +4,8 @@ import {
   buildMaskRevealSceneProductionBundle,
   buildMaskRevealSceneProductionBundleJson,
 } from "../data/maskRevealSceneProductionBundle";
+import { resolveCodexAutomationGuardrail } from "../data/resolveAutomationAvailability";
+import { getResolveHandoffEditability } from "../data/resolveHandoffEditability";
 import type { MaskRevealSceneInstance } from "../data/visualSceneComposer";
 import { downloadText } from "../lib/exporters";
 
@@ -22,6 +24,7 @@ export function MaskRevealSceneHandoffCard({ scene }: { scene: MaskRevealSceneIn
   const bundle = useMemo(() => buildMaskRevealSceneProductionBundle(scene), [scene]);
   const json = useMemo(() => buildMaskRevealSceneProductionBundleJson(scene), [scene]);
   const fidelity = useMemo(() => buildMaskRevealHandoffFidelityReport(), []);
+  const resolveEditionGuardrail = useMemo(() => resolveCodexAutomationGuardrail("UNKNOWN"), []);
 
   async function copyJson() {
     await navigator.clipboard.writeText(json);
@@ -74,21 +77,33 @@ export function MaskRevealSceneHandoffCard({ scene }: { scene: MaskRevealSceneIn
             ? "全項目がRuntime Verified(実Resolve Canaryで確認済み)です。"
             : "この一覧はPalmierソースコード/Resolve公式資料に基づく研究段階の分類です(PENDING_RUNTIME)。実Resolveでの動作確認はまだ行っていません。"}
         </p>
+        <p className="mt-2 border border-amber-200 dark:border-amber-800 p-2 text-[10px] leading-4 text-amber-800 dark:text-amber-200">
+          Automation availability: {resolveEditionGuardrail}
+        </p>
         <div className="mt-2 space-y-2">
-          {fidelity.properties.map((property) => (
-            <div key={property.id} className="border border-sand-200 dark:border-navy-600 p-2">
-              <div className="flex flex-wrap items-center justify-between gap-2">
-                <span className="text-[10px] font-semibold text-navy-800 dark:text-sand-100">{property.japaneseName}</span>
-                <span className="text-[9px] font-mono px-1.5 py-0.5 border border-navy-300 dark:border-navy-600 text-navy-500 dark:text-navy-300">
-                  {property.transportClass} / {TRANSPORT_LABEL_JA[property.transportClass]}
-                </span>
+          {fidelity.properties.map((property) => {
+            const editability = getResolveHandoffEditability(property.id);
+            return (
+              <div key={property.id} className="border border-sand-200 dark:border-navy-600 p-2">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <span className="text-[10px] font-semibold text-navy-800 dark:text-sand-100">{property.japaneseName}</span>
+                  <span className="text-[9px] font-mono px-1.5 py-0.5 border border-navy-300 dark:border-navy-600 text-navy-500 dark:text-navy-300">
+                    {property.transportClass} / {TRANSPORT_LABEL_JA[property.transportClass]}
+                  </span>
+                </div>
+                <p className="mt-1 text-[10px] leading-4 text-navy-500 dark:text-navy-300">{property.recoveryInstructionJa}</p>
+                <p className="mt-1 text-[9px] leading-4 text-navy-400">
+                  Native: {property.nativeRoute} / Automation: {property.automationClass} / Capability: {property.capabilityTrust} / Evidence: {property.evidenceState}
+                </p>
+                {editability ? (
+                  <div className="mt-2 border-l-2 border-sky-300 dark:border-sky-700 pl-2">
+                    <p className="text-[9px] font-mono text-sky-700 dark:text-sky-300">Editability: {editability.editabilityClass} / {editability.evidenceState}</p>
+                    <p className="mt-1 text-[9px] leading-4 text-navy-400">{editability.instructionJa}</p>
+                  </div>
+                ) : null}
               </div>
-              <p className="mt-1 text-[10px] leading-4 text-navy-500 dark:text-navy-300">{property.recoveryInstructionJa}</p>
-              <p className="mt-1 text-[9px] leading-4 text-navy-400">
-                Native: {property.nativeRoute} / Automation: {property.automationClass} / Capability: {property.capabilityTrust} / Evidence: {property.evidenceState}
-              </p>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </details>
     </section>
