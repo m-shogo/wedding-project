@@ -20,15 +20,7 @@ import {
 } from "./davinciFollowerEvidenceContract";
 import {evaluateTypographyDaVinciHumanPromotionGate} from "./typographyDaVinciPromotionPolicy";
 
-export type CharStaggerBindingRole =
-  | "TEXT_PLUS_TOOL"
-  | "FOLLOWER_MODIFIER"
-  | "FOLLOWER_DELAY"
-  | "FOLLOWER_ORDER"
-  | "TRANSLATE_Y"
-  | "OPACITY"
-  | "EASING";
-
+export type CharStaggerBindingRole = "TEXT_PLUS_TOOL" | "FOLLOWER_MODIFIER" | "FOLLOWER_DELAY" | "FOLLOWER_ORDER" | "TRANSLATE_Y" | "OPACITY" | "EASING";
 export type CharStaggerDaVinciLiveParameterBindingV1 = DaVinciLiveParameterBindingV1<CharStaggerBindingRole>;
 
 export interface CharStaggerDaVinciEvidenceCaptureV1 {
@@ -60,51 +52,20 @@ export interface CharStaggerDaVinciEvaluatedEvidenceV1 {
   rule: string;
 }
 
-const allowedBindingRoles = [
-  "TEXT_PLUS_TOOL",
-  "FOLLOWER_MODIFIER",
-  "FOLLOWER_DELAY",
-  "FOLLOWER_ORDER",
-  "TRANSLATE_Y",
-  "OPACITY",
-  "EASING",
-] as const satisfies readonly CharStaggerBindingRole[];
+const allowedBindingRoles = ["TEXT_PLUS_TOOL", "FOLLOWER_MODIFIER", "FOLLOWER_DELAY", "FOLLOWER_ORDER", "TRANSLATE_Y", "OPACITY", "EASING"] as const satisfies readonly CharStaggerBindingRole[];
 
 const blankReadback = (artifact: CharStaggerDaVinciActualArtifactV1): CharStaggerDaVinciActualReadbackV1 => ({
-  schemaVersion: "char-stagger-davinci-readback/v1",
-  sceneId: artifact.sceneId,
-  sourceRevision: artifact.sourceRevision,
-  capturedAt: "",
-  resolveProduct: "",
-  resolveVersion: "",
-  transport: "",
-  projectName: "",
-  timelineName: "",
-  textPlusToolFound: null,
-  followerModifierFound: null,
-  styledText: null,
-  colorCss: null,
-  followerOrder: null,
-  perCharacterDelayFrames: null,
-  characterDurationFrames: null,
-  translateYFromPixels: null,
-  translateYToPixels: null,
-  opacityFrom: null,
-  opacityTo: null,
-  easingObserved: null,
-  renderedPreviewPath: null,
-  notes: [],
+  schemaVersion: "char-stagger-davinci-readback/v1", sceneId: artifact.sceneId, sourceRevision: artifact.sourceRevision,
+  capturedAt: "", resolveProduct: "", resolveVersion: "", transport: "", projectName: "", timelineName: "",
+  textPlusToolFound: null, followerModifierFound: null, styledText: null, colorCss: null, followerOrder: null,
+  perCharacterDelayFrames: null, characterDurationFrames: null, translateYFromPixels: null, translateYToPixels: null,
+  opacityFrom: null, opacityTo: null, easingObserved: null, renderedPreviewPath: null, notes: [],
 });
 
 export function createCharStaggerDaVinciEvidenceCaptureTemplate(artifact: CharStaggerDaVinciActualArtifactV1): CharStaggerDaVinciEvidenceCaptureV1 {
   return {
-    schemaVersion: "char-stagger-davinci-evidence-capture/v1",
-    authority: "EVIDENCE_ONLY",
-    sceneId: artifact.sceneId,
-    sourceRevision: artifact.sourceRevision,
-    readback: blankReadback(artifact),
-    liveParameterBindings: [],
-    visualQa: blankDaVinciVisualQa(),
+    schemaVersion: "char-stagger-davinci-evidence-capture/v1", authority: "EVIDENCE_ONLY", sceneId: artifact.sceneId, sourceRevision: artifact.sourceRevision,
+    readback: blankReadback(artifact), liveParameterBindings: [], visualQa: blankDaVinciVisualQa(),
     rule: "Fill this file only from a real Mac Resolve Actual. Do not infer live Fusion tool/input names from docs. Keep NOT_RUN for any step that was not actually performed. This capture is evidence only and must never overwrite HUMAN_SELECTED Scene authority automatically.",
   };
 }
@@ -118,28 +79,15 @@ function parseReadback(value: unknown): CharStaggerDaVinciActualReadbackV1 {
   if (easingObserved !== null && easingObserved !== "EASE_OUT_CUBIC" && easingObserved !== "OTHER") throw new Error("readback.easingObserved must be EASE_OUT_CUBIC|OTHER|null");
   return {
     schemaVersion: "char-stagger-davinci-readback/v1",
-    sceneId: evidenceString(input.sceneId, "readback.sceneId"),
-    sourceRevision: evidenceString(input.sourceRevision, "readback.sourceRevision"),
-    capturedAt: evidenceString(input.capturedAt, "readback.capturedAt"),
-    resolveProduct: evidenceString(input.resolveProduct, "readback.resolveProduct"),
-    resolveVersion: evidenceString(input.resolveVersion, "readback.resolveVersion"),
-    transport: evidenceString(input.transport, "readback.transport"),
-    projectName: evidenceString(input.projectName, "readback.projectName"),
-    timelineName: evidenceString(input.timelineName, "readback.timelineName"),
-    textPlusToolFound: evidenceNullableBoolean(input.textPlusToolFound, "readback.textPlusToolFound"),
-    followerModifierFound: evidenceNullableBoolean(input.followerModifierFound, "readback.followerModifierFound"),
-    styledText: evidenceNullableString(input.styledText, "readback.styledText"),
-    colorCss: evidenceNullableString(input.colorCss, "readback.colorCss"),
-    followerOrder,
-    perCharacterDelayFrames: evidenceNullableFiniteNumber(input.perCharacterDelayFrames, "readback.perCharacterDelayFrames"),
-    characterDurationFrames: evidenceNullableFiniteNumber(input.characterDurationFrames, "readback.characterDurationFrames"),
-    translateYFromPixels: evidenceNullableFiniteNumber(input.translateYFromPixels, "readback.translateYFromPixels"),
-    translateYToPixels: evidenceNullableFiniteNumber(input.translateYToPixels, "readback.translateYToPixels"),
-    opacityFrom: evidenceNullableFiniteNumber(input.opacityFrom, "readback.opacityFrom"),
-    opacityTo: evidenceNullableFiniteNumber(input.opacityTo, "readback.opacityTo"),
-    easingObserved,
-    renderedPreviewPath: evidenceNullableString(input.renderedPreviewPath, "readback.renderedPreviewPath"),
-    notes: evidenceStringArray(input.notes, "readback.notes"),
+    sceneId: evidenceString(input.sceneId, "readback.sceneId"), sourceRevision: evidenceString(input.sourceRevision, "readback.sourceRevision"),
+    capturedAt: evidenceString(input.capturedAt, "readback.capturedAt"), resolveProduct: evidenceString(input.resolveProduct, "readback.resolveProduct"), resolveVersion: evidenceString(input.resolveVersion, "readback.resolveVersion"),
+    transport: evidenceString(input.transport, "readback.transport"), projectName: evidenceString(input.projectName, "readback.projectName"), timelineName: evidenceString(input.timelineName, "readback.timelineName"),
+    textPlusToolFound: evidenceNullableBoolean(input.textPlusToolFound, "readback.textPlusToolFound"), followerModifierFound: evidenceNullableBoolean(input.followerModifierFound, "readback.followerModifierFound"),
+    styledText: evidenceNullableString(input.styledText, "readback.styledText"), colorCss: evidenceNullableString(input.colorCss, "readback.colorCss"), followerOrder,
+    perCharacterDelayFrames: evidenceNullableFiniteNumber(input.perCharacterDelayFrames, "readback.perCharacterDelayFrames"), characterDurationFrames: evidenceNullableFiniteNumber(input.characterDurationFrames, "readback.characterDurationFrames"),
+    translateYFromPixels: evidenceNullableFiniteNumber(input.translateYFromPixels, "readback.translateYFromPixels"), translateYToPixels: evidenceNullableFiniteNumber(input.translateYToPixels, "readback.translateYToPixels"),
+    opacityFrom: evidenceNullableFiniteNumber(input.opacityFrom, "readback.opacityFrom"), opacityTo: evidenceNullableFiniteNumber(input.opacityTo, "readback.opacityTo"), easingObserved,
+    renderedPreviewPath: evidenceNullableString(input.renderedPreviewPath, "readback.renderedPreviewPath"), notes: evidenceStringArray(input.notes, "readback.notes"),
   };
 }
 
@@ -152,16 +100,7 @@ export function parseCharStaggerDaVinciEvidenceCapture(raw: string, artifact: Ch
   assertDaVinciEvidenceIdentity({sceneId, sourceRevision}, artifact, {sceneMismatchMessage: "Char Stagger capture sceneId mismatch", staleRevisionMessage: "STALE_CHAR_STAGGER_EVIDENCE_CAPTURE"});
   const readback = parseReadback(input.readback);
   if (readback.sceneId !== sceneId || readback.sourceRevision !== sourceRevision) throw new Error("capture/readback identity mismatch");
-  return {
-    schemaVersion: "char-stagger-davinci-evidence-capture/v1",
-    authority: "EVIDENCE_ONLY",
-    sceneId,
-    sourceRevision,
-    readback,
-    liveParameterBindings: parseDaVinciLiveParameterBindings(input.liveParameterBindings, allowedBindingRoles),
-    visualQa: parseDaVinciVisualQa(input.visualQa),
-    rule: evidenceString(input.rule, "capture.rule"),
-  };
+  return {schemaVersion: "char-stagger-davinci-evidence-capture/v1", authority: "EVIDENCE_ONLY", sceneId, sourceRevision, readback, liveParameterBindings: parseDaVinciLiveParameterBindings(input.liveParameterBindings, allowedBindingRoles), visualQa: parseDaVinciVisualQa(input.visualQa), rule: evidenceString(input.rule, "capture.rule")};
 }
 
 export function evaluateCharStaggerDaVinciEvidenceCapture(artifact: CharStaggerDaVinciActualArtifactV1, capture: CharStaggerDaVinciEvidenceCaptureV1): CharStaggerDaVinciEvaluatedEvidenceV1 {
@@ -169,27 +108,13 @@ export function evaluateCharStaggerDaVinciEvidenceCapture(artifact: CharStaggerD
   const evaluatedArtifact = attachCharStaggerDaVinciActualReadback(artifact, capture.readback);
   const checks = {...evaluatedArtifact.checks, visualQa1x: capture.visualQa.oneX, visualQaHalfSpeed: capture.visualQa.halfSpeed};
   const machineComparable = [checks.resolveIdentity, checks.textPlusCreated, checks.followerAttached, checks.sequentialDelayApplied, checks.translationApplied, checks.opacityApplied, checks.easingApplied, checks.sourceReadback, checks.renderCompleted];
-  const promotionGate = evaluateTypographyDaVinciHumanPromotionGate({
-    patternId: "type-char-stagger",
-    machineChecks: machineComparable,
-    bindings: capture.liveParameterBindings,
-    visualQa: capture.visualQa,
-  });
+  const promotionGate = evaluateTypographyDaVinciHumanPromotionGate({patternId: "type-char-stagger", machineChecks: machineComparable, bindings: capture.liveParameterBindings, visualQa: capture.visualQa});
   return {
-    schemaVersion: "char-stagger-davinci-evaluated-evidence/v1",
-    authority: "EVIDENCE_ONLY",
-    sceneId: artifact.sceneId,
-    sourceRevision: artifact.sourceRevision,
-    evaluatedArtifact: {...evaluatedArtifact, checks},
-    liveParameterBindings: [...capture.liveParameterBindings],
-    parameterBindingsCaptured: capture.liveParameterBindings.length > 0,
-    visualQa: {...capture.visualQa, notes: [...capture.visualQa.notes]},
-    checks,
-    allMachineComparableChecksPass: promotionGate.machineChecksPass,
-    promotionGate,
-    eligibleForHumanReview: promotionGate.eligibleForHumanReview,
-    automaticPromotionAllowed: false,
-    productionReady: false,
-    rule: "Exact readback equality and visual QA can make Char Stagger eligible for a separate human promotion review only after every required Follower binding is captured. Machine PASS never auto-promotes production routing.",
+    schemaVersion: "char-stagger-davinci-evaluated-evidence/v1", authority: "EVIDENCE_ONLY", sceneId: artifact.sceneId, sourceRevision: artifact.sourceRevision,
+    evaluatedArtifact: {...evaluatedArtifact, checks}, liveParameterBindings: [...capture.liveParameterBindings], parameterBindingsCaptured: capture.liveParameterBindings.length > 0,
+    visualQa: {...capture.visualQa, notes: [...capture.visualQa.notes]}, checks,
+    allMachineComparableChecksPass: machineComparable.every((state) => state === "PASS"),
+    promotionGate, eligibleForHumanReview: promotionGate.eligibleForHumanReview, automaticPromotionAllowed: false, productionReady: false,
+    rule: "Production routing must be promoted separately only after exact readback equality, every required live Follower binding, 1x/half-speed visual QA, and a distinct human promotion review. Machine PASS never auto-promotes production routing.",
   };
 }
