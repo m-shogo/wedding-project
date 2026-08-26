@@ -295,7 +295,12 @@ const WeddingLyricBody: React.FC<{phrase: EnrichedLyricPhrase; variant: WeddingV
         return <BouncyLaLa hitFrame={laLaHit} restText={phrase.text.replace('ラララララ♪', '').trim()} color={style.color} variant={variant} />;
       }
       weddingLyricFallbackByPhraseId.set(phrase.phraseId, false);
-      return <WhisperReveal text={phrase.text} startFrame={0} fontSize={variant === 'B' ? 40 : 32} color={style.color} />;
+      // P024(0.86秒=26frame)のような短いphraseでは既定24frameのfade-inが表示時間の
+      // 大半を占め、実質読めないまま終わる。durFramesの40%(最短6frame)へ短縮する。
+      const rampFrames = Math.max(6, Math.min(24, Math.round(durFrames * 0.4)));
+      return (
+        <WhisperReveal text={phrase.text} startFrame={0} fontSize={variant === 'B' ? 40 : 32} color={style.color} rampFrames={rampFrames} />
+      );
     }
 
     case 'held-note-stretch': {

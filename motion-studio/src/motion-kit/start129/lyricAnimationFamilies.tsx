@@ -124,17 +124,23 @@ export const HeldNoteStretch: React.FC<{
   );
 };
 
-/** 5. Whisper Reveal: 小さい声で薄く静かに現れる。 */
-export const WhisperReveal: React.FC<{text: string; startFrame: number; fontSize?: number; color?: string}> = ({
+/** 5. Whisper Reveal: 小さい声で薄く静かに現れる。
+ * rampFrames(既定24): fade-in+blur解消にかける時間。P024(0.86秒=26frame)のように
+ * phrase自体が短い場合、既定の24frameだと表示時間の9割以上が「まだ薄い/ぼやけている」
+ * 状態のまま終わってしまい、実質読めないままphraseが終わる不具合があった。
+ * 呼び出し側でdurFrames(phraseの全長)に応じて短縮したrampFramesを渡すことで、
+ * 短いphraseでも表示時間の大半を「読める状態」にする。 */
+export const WhisperReveal: React.FC<{text: string; startFrame: number; fontSize?: number; color?: string; rampFrames?: number}> = ({
   text,
   startFrame,
   fontSize = 30,
   color = '#FDFBF5',
+  rampFrames = 24,
 }) => {
   const f = useCurrentFrame();
   const local = f - startFrame;
-  const o = interpolate(local, [0, 24], [0, 0.55], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
-  const blur = interpolate(local, [0, 24], [6, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  const o = interpolate(local, [0, rampFrames], [0, 0.55], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  const blur = interpolate(local, [0, rampFrames], [6, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
   return (
     <span style={{...baseTextStyle(fontSize, color, 300), opacity: o, filter: `blur(${blur}px)`}}>{text}</span>
   );
