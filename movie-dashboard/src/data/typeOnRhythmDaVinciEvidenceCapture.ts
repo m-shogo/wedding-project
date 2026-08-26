@@ -7,7 +7,6 @@ import {
 import {
   assertDaVinciEvidenceIdentity,
   blankDaVinciVisualQa,
-  capturedDaVinciBindingRoles,
   evidenceNullableBoolean,
   evidenceNullableFiniteNumber,
   evidenceNullableString,
@@ -19,6 +18,7 @@ import {
   type DaVinciLiveParameterBindingV1,
   type DaVinciVisualQaV1,
 } from "./davinciFollowerEvidenceContract";
+import {evaluateTypographyDaVinciHumanPromotionGate} from "./typographyDaVinciPromotionPolicy";
 
 export type TypeOnRhythmBindingRole =
   | "TEXT_PLUS_TOOL"
@@ -30,8 +30,7 @@ export type TypeOnRhythmBindingRole =
   | "OPACITY"
   | "EASING";
 
-export type TypeOnRhythmLiveParameterBindingV1 =
-  DaVinciLiveParameterBindingV1<TypeOnRhythmBindingRole>;
+export type TypeOnRhythmLiveParameterBindingV1 = DaVinciLiveParameterBindingV1<TypeOnRhythmBindingRole>;
 
 export interface TypeOnRhythmDaVinciEvidenceCaptureV1 {
   schemaVersion: "type-on-rhythm-davinci-evidence-capture/v1";
@@ -55,6 +54,9 @@ export interface TypeOnRhythmDaVinciEvaluatedEvidenceV1 {
   visualQa: TypeOnRhythmDaVinciEvidenceCaptureV1["visualQa"];
   checks: ReturnType<typeof attachTypeOnRhythmDaVinciActualReadback>["checks"];
   allMachineComparableChecksPass: boolean;
+  promotionGate: ReturnType<typeof evaluateTypographyDaVinciHumanPromotionGate>;
+  eligibleForHumanReview: boolean;
+  automaticPromotionAllowed: false;
   productionReady: false;
   rule: string;
 }
@@ -70,9 +72,7 @@ const allowedBindingRoles = [
   "EASING",
 ] as const satisfies readonly TypeOnRhythmBindingRole[];
 
-const blankReadback = (
-  artifact: TypeOnRhythmDaVinciActualArtifactV1,
-): TypeOnRhythmDaVinciActualReadbackV1 => ({
+const blankReadback = (artifact: TypeOnRhythmDaVinciActualArtifactV1): TypeOnRhythmDaVinciActualReadbackV1 => ({
   schemaVersion: "type-on-rhythm-davinci-readback/v1",
   sceneId: artifact.sceneId,
   sourceRevision: artifact.sourceRevision,
@@ -99,9 +99,7 @@ const blankReadback = (
   notes: [],
 });
 
-export function createTypeOnRhythmDaVinciEvidenceCaptureTemplate(
-  artifact: TypeOnRhythmDaVinciActualArtifactV1,
-): TypeOnRhythmDaVinciEvidenceCaptureV1 {
+export function createTypeOnRhythmDaVinciEvidenceCaptureTemplate(artifact: TypeOnRhythmDaVinciActualArtifactV1): TypeOnRhythmDaVinciEvidenceCaptureV1 {
   return {
     schemaVersion: "type-on-rhythm-davinci-evidence-capture/v1",
     authority: "EVIDENCE_ONLY",
@@ -119,9 +117,7 @@ function parseReadback(value: unknown): TypeOnRhythmDaVinciActualReadbackV1 {
   if (input.schemaVersion !== "type-on-rhythm-davinci-readback/v1") throw new Error("readback.schemaVersion mismatch");
   if (input.followerUnit !== null && input.followerUnit !== "WORDS") throw new Error("readback.followerUnit must be WORDS|null");
   if (input.followerOrder !== null && input.followerOrder !== "LEFT_TO_RIGHT") throw new Error("readback.followerOrder must be LEFT_TO_RIGHT|null");
-  if (input.easingObserved !== null && input.easingObserved !== "EASE_OUT_CUBIC" && input.easingObserved !== "OTHER") {
-    throw new Error("readback.easingObserved must be EASE_OUT_CUBIC|OTHER|null");
-  }
+  if (input.easingObserved !== null && input.easingObserved !== "EASE_OUT_CUBIC" && input.easingObserved !== "OTHER") throw new Error("readback.easingObserved must be EASE_OUT_CUBIC|OTHER|null");
   return {
     schemaVersion: "type-on-rhythm-davinci-readback/v1",
     sceneId: evidenceString(input.sceneId, "readback.sceneId"),
@@ -150,23 +146,13 @@ function parseReadback(value: unknown): TypeOnRhythmDaVinciActualReadbackV1 {
   };
 }
 
-export function parseTypeOnRhythmDaVinciEvidenceCapture(
-  raw: string,
-  artifact: TypeOnRhythmDaVinciActualArtifactV1,
-): TypeOnRhythmDaVinciEvidenceCaptureV1 {
+export function parseTypeOnRhythmDaVinciEvidenceCapture(raw: string, artifact: TypeOnRhythmDaVinciActualArtifactV1): TypeOnRhythmDaVinciEvidenceCaptureV1 {
   const input = evidenceObject(JSON.parse(raw) as unknown, "capture");
   if (input.schemaVersion !== "type-on-rhythm-davinci-evidence-capture/v1") throw new Error("capture.schemaVersion mismatch");
   if (input.authority !== "EVIDENCE_ONLY") throw new Error("capture.authority must be EVIDENCE_ONLY");
   const sceneId = evidenceString(input.sceneId, "capture.sceneId");
   const sourceRevision = evidenceString(input.sourceRevision, "capture.sourceRevision");
-  assertDaVinciEvidenceIdentity(
-    { sceneId, sourceRevision },
-    artifact,
-    {
-      sceneMismatchMessage: "Type-on-rhythm capture sceneId mismatch",
-      staleRevisionMessage: "STALE_TYPE_ON_RHYTHM_EVIDENCE_CAPTURE",
-    },
-  );
+  assertDaVinciEvidenceIdentity({sceneId, sourceRevision}, artifact, {sceneMismatchMessage: "Type-on-rhythm capture sceneId mismatch", staleRevisionMessage: "STALE_TYPE_ON_RHYTHM_EVIDENCE_CAPTURE"});
   const readback = parseReadback(input.readback);
   if (readback.sceneId !== sceneId || readback.sourceRevision !== sourceRevision) throw new Error("capture/readback identity mismatch");
   return {
@@ -181,34 +167,32 @@ export function parseTypeOnRhythmDaVinciEvidenceCapture(
   };
 }
 
-export function evaluateTypeOnRhythmDaVinciEvidenceCapture(
-  artifact: TypeOnRhythmDaVinciActualArtifactV1,
-  capture: TypeOnRhythmDaVinciEvidenceCaptureV1,
-): TypeOnRhythmDaVinciEvaluatedEvidenceV1 {
-  assertDaVinciEvidenceIdentity(capture, artifact, {
-    sceneMismatchMessage: "Type-on-rhythm capture sceneId mismatch",
-    staleRevisionMessage: "STALE_TYPE_ON_RHYTHM_EVIDENCE_CAPTURE",
-  });
+export function evaluateTypeOnRhythmDaVinciEvidenceCapture(artifact: TypeOnRhythmDaVinciActualArtifactV1, capture: TypeOnRhythmDaVinciEvidenceCaptureV1): TypeOnRhythmDaVinciEvaluatedEvidenceV1 {
+  assertDaVinciEvidenceIdentity(capture, artifact, {sceneMismatchMessage: "Type-on-rhythm capture sceneId mismatch", staleRevisionMessage: "STALE_TYPE_ON_RHYTHM_EVIDENCE_CAPTURE"});
   const evaluatedArtifact = attachTypeOnRhythmDaVinciActualReadback(artifact, capture.readback);
-  const checks = { ...evaluatedArtifact.checks, visualQa1x: capture.visualQa.oneX, visualQaHalfSpeed: capture.visualQa.halfSpeed };
-  const machineComparable = [
-    checks.resolveIdentity, checks.textPlusCreated, checks.followerAttached, checks.wordUnitApplied,
-    checks.sequentialDelayApplied, checks.translationApplied, checks.opacityApplied, checks.easingApplied,
-    checks.sourceReadback, checks.renderCompleted,
-  ];
-  const capturedBindingRoles = capturedDaVinciBindingRoles(capture.liveParameterBindings, allowedBindingRoles);
+  const checks = {...evaluatedArtifact.checks, visualQa1x: capture.visualQa.oneX, visualQaHalfSpeed: capture.visualQa.halfSpeed};
+  const machineComparable = [checks.resolveIdentity, checks.textPlusCreated, checks.followerAttached, checks.wordUnitApplied, checks.sequentialDelayApplied, checks.translationApplied, checks.opacityApplied, checks.easingApplied, checks.sourceReadback, checks.renderCompleted];
+  const promotionGate = evaluateTypographyDaVinciHumanPromotionGate({
+    patternId: "type-type-on-rhythm",
+    machineChecks: machineComparable,
+    bindings: capture.liveParameterBindings,
+    visualQa: capture.visualQa,
+  });
   return {
     schemaVersion: "type-on-rhythm-davinci-evaluated-evidence/v1",
     authority: "EVIDENCE_ONLY",
     sceneId: artifact.sceneId,
     sourceRevision: artifact.sourceRevision,
-    evaluatedArtifact: { ...evaluatedArtifact, checks },
+    evaluatedArtifact: {...evaluatedArtifact, checks},
     liveParameterBindings: [...capture.liveParameterBindings],
-    capturedBindingRoles,
-    visualQa: { ...capture.visualQa, notes: [...capture.visualQa.notes] },
+    capturedBindingRoles: [...promotionGate.capturedBindingRoles] as TypeOnRhythmBindingRole[],
+    visualQa: {...capture.visualQa, notes: [...capture.visualQa.notes]},
     checks,
-    allMachineComparableChecksPass: machineComparable.every((item) => item === "PASS"),
+    allMachineComparableChecksPass: promotionGate.machineChecksPass,
+    promotionGate,
+    eligibleForHumanReview: promotionGate.eligibleForHumanReview,
+    automaticPromotionAllowed: false,
     productionReady: false,
-    rule: "Readback equality, word-unit confirmation, binding completeness, and visual QA are evidence only. Production routing remains a separate human-reviewed promotion after real Mac Resolve Actual.",
+    rule: "FOLLOWER_UNIT=WORDS remains a machine comparison and a required live binding. Only complete word-unit/readback/binding/visual evidence may enter a separate human promotion review; automatic route promotion remains forbidden.",
   };
 }
