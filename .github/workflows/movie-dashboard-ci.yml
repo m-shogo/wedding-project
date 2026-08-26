@@ -64,5 +64,14 @@ jobs:
       - name: Typography DaVinci Actual session contracts
         run: node scripts/verify-typography-davinci-actual-session-contracts.mjs
 
+      - name: Baseline Hop DaVinci contracts
+        run: node scripts/verify-baseline-hop-davinci-contracts.mjs
+
+      - name: Triplet DaVinci contracts
+        run: node scripts/verify-triplet-davinci-contracts.mjs
+
+      - name: Typography DaVinci Actual workflow registry
+        run: node scripts/verify-typography-davinci-actual-workflow-registry.mjs
+
       - name: TypeScript and Vite build
         run: pnpm build
