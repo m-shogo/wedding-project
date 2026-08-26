@@ -112,9 +112,9 @@ export const typographyProductionRoutes: TypographyProductionRouteDefinition[] =
   route(
     "type-outline-fill",
     "outline",
-    "DAVINCI_TRANSLATION_NOT_IMPLEMENTED",
-    null,
-    "outline→fill遷移のstroke/fill parityをDaVinciで再現・検証するまで未対応。",
+    "DAVINCI_ACTUAL_CANDIDATE",
+    "impl-type-outline-fill-davinci-text-plus-shading",
+    "canonical outline→fill / stroke-width translatorとbounded Actual evidence workflowを実装済み。実MacでText+ Shading fill/stroke binding identity・stroke native unit calibration・exact readback・render parityを確認するまでimplementation availableへは昇格しない。",
   ),
   route(
     "type-baseline-hop",
