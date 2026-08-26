@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
+import {fileURLToPath} from "node:url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const card = fs.readFileSync(path.join(root, "src/components/MaskRevealSceneHandoffCard.tsx"), "utf8");
@@ -18,144 +18,59 @@ function requireText(source, token, message) {
 }
 
 for (const token of [
-  'buildMaskRevealSceneProductionBundle(scene)',
-  'buildMaskRevealSceneProductionBundleJson(scene)',
-  'EXPORT / ADAPTER',
-  'bundle.sceneMarkerId',
-  'Scene revision:',
-  'bundle.sourceRevision',
-  'Palmier Timeline:',
-  'bundle.timeline.projectTimelineXmlFileName',
-  'Sidecar JSON:',
-  'bundle.timeline.sidecarFileName',
-  'DaVinci Actual:',
-  '"PENDING"',
-  'Sidecar JSONをコピー',
-  'Sidecar JSONを書き出す',
-  'Export詳細を見る',
-  'navigator.clipboard.writeText(json)',
-  'downloadText(json, bundle.timeline.sidecarFileName)',
-  'Human MasterはSceneの人間が理解できる値です。',
-  'JSON / XML自体はHuman Masterではありません。',
+  'buildMaskRevealSceneProductionBundle(scene)', 'buildMaskRevealSceneProductionBundleJson(scene)', 'EXPORT / ADAPTER',
+  'bundle.sceneMarkerId', 'Scene revision:', 'bundle.sourceRevision', 'Palmier Timeline:', 'bundle.timeline.projectTimelineXmlFileName',
+  'Sidecar JSON:', 'bundle.timeline.sidecarFileName', 'DaVinci Actual:', '"PENDING"', 'Sidecar JSONをコピー', 'Sidecar JSONを書き出す',
+  'Export詳細を見る', 'navigator.clipboard.writeText(json)', 'downloadText(json, bundle.timeline.sidecarFileName)',
+  'Human MasterはSceneの人間が理解できる値です。', 'JSON / XML自体はHuman Masterではありません。',
   'Sceneを編集するとupdatedAtが変わり、このexportも現在のSceneInstanceから再生成されます。',
-  'NLE XML自体はPalmier実timelineからexportします。',
-  'getResolveHumanAdjustability',
-  'Human adjustability:',
-  'Platform:',
-  'Late edit QA:',
+  'NLE XML自体はPalmier実timelineからexportします。', 'getResolveHumanAdjustability', 'Human adjustability:', 'Platform:', 'Late edit QA:',
   'Editability(内部parameterをどこまで編集できるか)と Human Adjustability(人間がどれだけ簡単に直せるか)は別判定です。',
-  'import { TypographyProductionRoutingMatrix } from "./TypographyProductionRoutingMatrix"',
-  '<TypographyProductionRoutingMatrix />',
-]) {
-  requireText(card, token, `Scene Handoff UI missing: ${token}`);
-}
+  'import { TypographyProductionRoutingMatrix } from "./TypographyProductionRoutingMatrix"', '<TypographyProductionRoutingMatrix />',
+]) requireText(card, token, `Scene Handoff UI missing: ${token}`);
 
 for (const token of [
-  'Typography 9候補のProduction Routingを見る',
-  'typographyProductionRoutes.map',
-  'getRemotionElementCandidate(route.patternId)',
-  'DAVINCI_LABEL',
-  'DaVinci翻訳待ち',
-  'Actual候補',
-  'live実装あり',
-  'Actual検証済み',
-  'Element CI:',
-  'Studio Actual:',
-  'Palmier timing: READY',
-  'Translator:',
-  'Actual workflow:',
-  'Live binding:',
-  'DaVinci Actual:',
-  'Production: NOT_READY',
-  'Mask Revealはlive実装あり、Char Stagger / Type on Rhythmはtranslator + Actual workflowまで到達しています。',
-  'Actual検証済み・production-readyとは表示しません。',
-]) {
-  requireText(routingMatrix, token, `Typography routing matrix missing honesty/control token: ${token}`);
-}
+  'Typography 9候補のProduction Routingを見る', 'typographyProductionRoutes.map', 'getRemotionElementCandidate(route.patternId)',
+  'DAVINCI_LABEL', 'DaVinci翻訳待ち', 'Actual候補', 'live実装あり', 'Actual検証済み', 'Element CI:', 'Studio Actual:',
+  'Palmier timing: READY', 'Translator:', 'Actual workflow:', 'Live binding:', 'DaVinci Actual:', 'Production: NOT_READY',
+  'Mask Revealだけがlive実装あり。残り8候補はcanonical translator + bounded Actual workflowまで到達しています。',
+  '別Human promotion reviewなしにActual検証済み/production-readyへ自動昇格しません。',
+  'Human Review gate:', 'bindings + 1x/half-speed QA',
+]) requireText(routingMatrix, token, `Typography routing matrix missing honesty/control token: ${token}`);
 
 for (const token of [
-  'export type HumanAdjustabilityClass =',
-  '"EASY_INSPECTOR"',
-  '"EASY_TIMELINE"',
-  '"GUIDED_FUSION"',
-  '"ASSISTED_MANUAL"',
-  '"BAKED"',
-  'export type ResolvePlatformScope = "ALL_DESKTOP" | "MACOS_WINDOWS" | "UNKNOWN"',
-  'propertyId: "text-properties"',
-  'propertyId: "lottie-overlay"',
-  'platformScope: "MACOS_WINDOWS"',
-  'propertyId: "audio-volume-keyframes"',
-  'evidenceState: "PENDING_RUNTIME"',
-]) {
-  requireText(adjustability, token, `Human adjustability authority missing: ${token}`);
-}
+  'export type HumanAdjustabilityClass =', '"EASY_INSPECTOR"', '"EASY_TIMELINE"', '"GUIDED_FUSION"', '"ASSISTED_MANUAL"', '"BAKED"',
+  'export type ResolvePlatformScope = "ALL_DESKTOP" | "MACOS_WINDOWS" | "UNKNOWN"', 'propertyId: "text-properties"', 'propertyId: "lottie-overlay"',
+  'platformScope: "MACOS_WINDOWS"', 'propertyId: "audio-volume-keyframes"', 'evidenceState: "PENDING_RUNTIME"',
+]) requireText(adjustability, token, `Human adjustability authority missing: ${token}`);
 
 for (const token of [
-  'import { MaskRevealSceneHandoffCard } from "./MaskRevealSceneHandoffCard"',
-  '<MaskRevealSceneHandoffCard scene={scene} />',
+  'import { MaskRevealSceneHandoffCard } from "./MaskRevealSceneHandoffCard"', '<MaskRevealSceneHandoffCard scene={scene} />',
   '採用済みSceneを編集中。変更はfield単位で自動保存されます。',
-]) {
-  requireText(workspace, token, `Scene Handoff card not connected to live adopted SceneInstance: ${token}`);
-}
+]) requireText(workspace, token, `Scene Handoff card not connected to live adopted SceneInstance: ${token}`);
 
-for (const token of [
-  'xmlGeneratedExternally: true',
-  'productionReady: false',
-  'sourceRevision: scene.updatedAt',
-]) {
+for (const token of ['xmlGeneratedExternally: true', 'productionReady: false', 'sourceRevision: scene.updatedAt']) {
   requireText(bundle, token, `Scene Handoff UI dependency lost production truth: ${token}`);
 }
-
-for (const token of [
-  'DAVINCI_TRANSLATION_NOT_IMPLEMENTED',
-  'DAVINCI_ACTUAL_CANDIDATE',
-  'DAVINCI_IMPLEMENTATION_AVAILABLE',
-  'DAVINCI_ACTUAL_VERIFIED',
-  'actualAppliedEvidence: "NOT_RUN"',
-  'productionReady: false',
-]) {
+for (const token of ['DAVINCI_TRANSLATION_NOT_IMPLEMENTED', 'DAVINCI_ACTUAL_CANDIDATE', 'DAVINCI_IMPLEMENTATION_AVAILABLE', 'DAVINCI_ACTUAL_VERIFIED', 'actualAppliedEvidence: "NOT_RUN"', 'productionReady: false']) {
   requireText(routing, token, `Typography routing authority missing honest state: ${token}`);
 }
-
-for (const token of [
-  'AUTHORITATIVE CLARIFICATION',
-  '`JSON` は正本フォーマットではない。',
-  'Human-readable production values',
-  'Canonical structured scene state',
-  'Target-specific exporter / adapter',
-  'Human-friendly in, tool-native out.',
-]) {
+for (const token of ['AUTHORITATIVE CLARIFICATION', '`JSON` は正本フォーマットではない。', 'Human-readable production values', 'Canonical structured scene state', 'Target-specific exporter / adapter', 'Human-friendly in, tool-native out.']) {
   requireText(outputClarification, token, `Output format authority missing: ${token}`);
 }
-
-for (const token of [
-  'Preset First → Accordion Detail → DaVinci Final Precision.',
-  '人間向けPreset → 正規化された内部値 → DaVinci実装値',
-  'Preset labelからDaVinci値へ直接飛ばさない。',
-]) {
+for (const token of ['Preset First → Accordion Detail → DaVinci Final Precision.', '人間向けPreset → 正規化された内部値 → DaVinci実装値', 'Preset labelからDaVinci値へ直接飛ばさない。']) {
   requireText(presetBridge, token, `Preset-first bridge authority missing: ${token}`);
 }
 
-if (card.includes('HUMAN MASTER HANDOFF')) {
-  errors.push('Scene export UI must not label JSON/XML serialization itself as HUMAN MASTER HANDOFF');
-}
-if (/\.xml[`"']\s*,?\s*JSON\.stringify/.test(card) || /downloadText\([^\n]*\.xml/.test(card)) {
-  errors.push("Scene Handoff UI must not generate or download fake Palmier NLE XML");
-}
-if (!card.includes('bundle.preview.productionReady ? "VERIFIED" : "PENDING"')) {
-  errors.push("Scene Handoff UI must visibly fail-close DaVinci Actual as PENDING until verified");
-}
-if (/DaVinci Actual:\s*PASS/.test(routingMatrix)) {
-  errors.push("Typography routing matrix must not fabricate DaVinci Actual PASS");
-}
-if (!routingMatrix.includes('route.actualVerified ? "PASS" : "NOT_RUN"')) {
-  errors.push("Typography routing matrix must derive DaVinci Actual display from staged route truth");
-}
+if (card.includes('HUMAN MASTER HANDOFF')) errors.push('Scene export UI must not label JSON/XML serialization itself as HUMAN MASTER HANDOFF');
+if (/\.xml[`"']\s*,?\s*JSON\.stringify/.test(card) || /downloadText\([^\n]*\.xml/.test(card)) errors.push("Scene Handoff UI must not generate or download fake Palmier NLE XML");
+if (!card.includes('bundle.preview.productionReady ? "VERIFIED" : "PENDING"')) errors.push("Scene Handoff UI must visibly fail-close DaVinci Actual as PENDING until verified");
+if (/DaVinci Actual:\s*PASS/.test(routingMatrix)) errors.push("Typography routing matrix must not fabricate DaVinci Actual PASS");
+if (!routingMatrix.includes('route.actualVerified ? "PASS" : "NOT_RUN"')) errors.push("Typography routing matrix must derive DaVinci Actual display from staged route truth");
 
 if (errors.length) {
   console.error(`Mask Reveal Scene Handoff UI contracts FAILED (${errors.length})`);
   for (const error of errors) console.error(`- ${error}`);
   process.exit(1);
 }
-
-console.log("Mask Reveal Scene Handoff UI contracts OK: Human-readable Scene values remain Human Master; live SceneInstance drives target-specific sidecar export; Typography routes expose translator/workflow/live/Actual as separate stages; Palmier XML remains external; DaVinci Actual stays PENDING/NOT_RUN without real evidence; Human Adjustability remains separate from internal Editability.");
+console.log("Mask Reveal Scene Handoff UI contracts OK: Human-readable Scene values remain Human Master; Typography routing now exposes eight Actual-candidate promotion requirements without inventing applied evidence; Palmier XML remains external; DaVinci Actual stays PENDING/NOT_RUN until real Mac verification.");
