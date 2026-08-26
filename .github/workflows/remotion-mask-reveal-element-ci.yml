@@ -1,0 +1,155 @@
+name: Remotion Mask Reveal Element CI
+
+on:
+  pull_request:
+    paths:
+      - "motion-studio/src/motion-kit/engines.tsx"
+      - "motion-studio/src/compositions/common/VisualMotionMaskRevealConcept.tsx"
+      - "motion-studio/src/StartMotionKitRoot.tsx"
+      - "motion-studio/scripts/build-mask-reveal-element-payload.mts"
+      - "motion-studio/scripts/check-mask-reveal-element-payload.mts"
+      - ".github/workflows/remotion-mask-reveal-element-ci.yml"
+      - "docs/research/2026-08-26-movie-tool-learning-run-42-remotion-mask-reveal-element.md"
+  push:
+    paths:
+      - "motion-studio/src/motion-kit/engines.tsx"
+      - "motion-studio/src/compositions/common/VisualMotionMaskRevealConcept.tsx"
+      - "motion-studio/src/StartMotionKitRoot.tsx"
+      - "motion-studio/scripts/build-mask-reveal-element-payload.mts"
+      - "motion-studio/scripts/check-mask-reveal-element-payload.mts"
+      - ".github/workflows/remotion-mask-reveal-element-ci.yml"
+      - "docs/research/2026-08-26-movie-tool-learning-run-42-remotion-mask-reveal-element.md"
+
+permissions:
+  contents: read
+
+jobs:
+  validate-element-candidate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: motion-studio/pnpm-lock.yaml
+
+      - name: Install locked baseline
+        working-directory: motion-studio
+        run: pnpm install --frozen-lockfile
+
+      - name: Baseline typecheck and existing Mask Reveal reuse contract
+        working-directory: motion-studio
+        run: |
+          pnpm typecheck
+          node --no-warnings scripts/check-visual-motion-mask-reveal-concept.mts
+
+      - name: Ephemerally install coherent Remotion 4.0.517 Element toolchain
+        working-directory: motion-studio
+        run: |
+          cp package.json /tmp/remotion-element-package-baseline.json
+          cp pnpm-lock.yaml /tmp/remotion-element-lock-baseline.yaml
+          pnpm add --save-exact \
+            remotion@4.0.517 \
+            @remotion/cli@4.0.517 \
+            @remotion/google-fonts@4.0.517 \
+            @remotion/paths@4.0.517 \
+            @remotion/zod-types@4.0.517 \
+            @remotion/studio-protocol@4.0.517 \
+            zod@4.4.3
+          git diff -- package.json pnpm-lock.yaml > /tmp/remotion-element-ephemeral.diff
+          test -s /tmp/remotion-element-ephemeral.diff
+
+      - name: Verify exact candidate versions
+        working-directory: motion-studio
+        run: |
+          node <<'NODE'
+          const remotionExpected = '4.0.517';
+          for (const pkg of [
+            'remotion',
+            '@remotion/cli',
+            '@remotion/google-fonts',
+            '@remotion/paths',
+            '@remotion/zod-types',
+            '@remotion/studio-protocol',
+          ]) {
+            const actual = require(`./node_modules/${pkg}/package.json`).version;
+            console.log(`${pkg}=${actual}`);
+            if (actual !== remotionExpected) process.exitCode = 1;
+          }
+          const zod = require('./node_modules/zod/package.json').version;
+          console.log(`zod=${zod}`);
+          if (zod !== '4.4.3') process.exitCode = 1;
+          NODE
+
+      - name: Candidate version coherence
+        working-directory: motion-studio
+        run: |
+          pnpm exec remotion versions --log=verbose 2>&1 | tee /tmp/remotion-versions.log
+          if grep -q 'Version mismatch:' /tmp/remotion-versions.log; then
+            echo 'Remotion candidate still reports a version mismatch.'
+            exit 1
+          fi
+
+      - name: Candidate typecheck
+        working-directory: motion-studio
+        run: pnpm typecheck
+
+      - name: Derive source and validate with official createElementPayload
+        working-directory: motion-studio
+        run: |
+          rm -rf out/research/remotion-elements/mask-reveal
+          node --no-warnings scripts/build-mask-reveal-element-payload.mts
+          node --no-warnings scripts/check-mask-reveal-element-payload.mts
+
+      - name: Compile and render the generated standalone Element source
+        working-directory: motion-studio
+        run: |
+          cat > out/research/remotion-elements/mask-reveal/canary-entry.tsx <<'EOF'
+          import {Composition, registerRoot} from 'remotion';
+          import {WeddingMaskRevealElement} from './mask-reveal.element-source';
+
+          const Root = () => (
+            <Composition
+              id="WeddingMaskRevealElementCanary"
+              component={WeddingMaskRevealElement}
+              width={1280}
+              height={720}
+              fps={30}
+              durationInFrames={120}
+            />
+          );
+
+          registerRoot(Root);
+          EOF
+          pnpm exec remotion render \
+            out/research/remotion-elements/mask-reveal/canary-entry.tsx \
+            WeddingMaskRevealElementCanary \
+            out/research/remotion-elements/mask-reveal/mask-reveal.element-canary.mp4 \
+            --scale=0.25 \
+            --crf=30
+          test -s out/research/remotion-elements/mask-reveal/mask-reveal.element-canary.mp4
+          sha256sum out/research/remotion-elements/mask-reveal/mask-reveal.element-canary.mp4
+
+      - name: Production dependency graph remains unpromoted
+        working-directory: motion-studio
+        run: |
+          test -s /tmp/remotion-element-ephemeral.diff
+          cmp -s /tmp/remotion-element-package-baseline.json package.json && {
+            echo 'Expected runner-only candidate install to modify package.json';
+            exit 1;
+          }
+          echo 'elementPayloadValidation=PASS_CANDIDATE_ONLY'
+          echo 'studioInstallActual=NOT_RUN'
+          echo 'productionDependencyUpgradePerformed=NO'
+          echo 'thirdPartyElementInstallPerformed=NO'
