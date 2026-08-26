@@ -9,6 +9,7 @@ on:
       - "motion-studio/scripts/resolve-runtime-canary-plan.mts"
       - "docs/runbooks/2026-08-26-palmier-real-export-attach.md"
       - "docs/research/2026-08-26-movie-tool-learning-run-28-palmier-real-export-attach.md"
+      - "docs/research/2026-08-26-movie-tool-learning-run-30-palmier-export-freshness-and-pr341-salvage.md"
       - ".github/workflows/palmier-real-export-attach-ci.yml"
   push:
     paths:
@@ -18,6 +19,7 @@ on:
       - "motion-studio/scripts/resolve-runtime-canary-plan.mts"
       - "docs/runbooks/2026-08-26-palmier-real-export-attach.md"
       - "docs/research/2026-08-26-movie-tool-learning-run-28-palmier-real-export-attach.md"
+      - "docs/research/2026-08-26-movie-tool-learning-run-30-palmier-export-freshness-and-pr341-salvage.md"
       - ".github/workflows/palmier-real-export-attach-ci.yml"
 
 permissions:
@@ -79,15 +81,47 @@ jobs:
           grep -Fq '"provenance": "UNVERIFIED_BY_STRUCTURE"' /tmp/inspection.json
           grep -Fq 'FCPXML_STRUCTURE_VALID != REAL_PALMIER_PROVENANCE' /tmp/inspection.json
 
+      - name: Refuse stale FCPXML relative to this export attempt
+        working-directory: motion-studio
+        run: |
+          cp /tmp/generic-structure.fcpxml /tmp/stale-structure.fcpxml
+          touch -d '2026-01-01 00:00:00 UTC' /tmp/stale-structure.fcpxml
+          started="$(date -u +'%Y-%m-%dT%H:%M:%S.000Z')"
+          if node --no-warnings scripts/attach-palmier-real-export.mts \
+            --fcpxml /tmp/stale-structure.fcpxml \
+            --export-started-at "$started" \
+            --check-freshness-only > /tmp/stale-out.txt 2>&1; then
+            echo "Freshness check unexpectedly accepted a stale FCPXML"
+            exit 1
+          fi
+          grep -Fq 'FCPXML is stale relative to this export attempt' /tmp/stale-out.txt
+
+      - name: Freshness-only check does not claim Palmier provenance
+        working-directory: motion-studio
+        run: |
+          started="$(date -u -d '1 second ago' +'%Y-%m-%dT%H:%M:%S.000Z')"
+          touch /tmp/generic-structure.fcpxml
+          node --no-warnings scripts/attach-palmier-real-export.mts \
+            --fcpxml /tmp/generic-structure.fcpxml \
+            --export-started-at "$started" \
+            --check-freshness-only > /tmp/freshness.json
+          grep -Fq '"freshAfterExportStart": true' /tmp/freshness.json
+          grep -Fq '"provenance": "UNVERIFIED_BY_FRESHNESS"' /tmp/freshness.json
+          grep -Fq 'FRESH_ARTIFACT != REAL_PALMIER_PROVENANCE' /tmp/freshness.json
+
       - name: Refuse full attachment without explicit real-Palmier attestation
         working-directory: motion-studio
         run: |
           before="$(sha256sum out/canary-inputs/manifests/DV21-PALMIER-FCPXML-01.json | awk '{print $1}')"
+          started="$(date -u -d '1 second ago' +'%Y-%m-%dT%H:%M:%S.000Z')"
+          touch /tmp/generic-structure.fcpxml
           if node --no-warnings scripts/attach-palmier-real-export.mts \
-            --fcpxml /tmp/generic-structure.fcpxml; then
+            --fcpxml /tmp/generic-structure.fcpxml \
+            --export-started-at "$started" > /tmp/no-attestation.txt 2>&1; then
             echo "Attachment unexpectedly succeeded without attestation"
             exit 1
           fi
+          grep -Fq 'Full attachment requires --attest-real-palmier-export' /tmp/no-attestation.txt
           after="$(sha256sum out/canary-inputs/manifests/DV21-PALMIER-FCPXML-01.json | awk '{print $1}')"
           test "$before" = "$after"
           grep -Fq '"status": "BLOCKED_REAL_TOOL_EXPORT_REQUIRED"' out/canary-inputs/manifests/DV21-PALMIER-FCPXML-01.json
@@ -110,6 +144,8 @@ jobs:
         run: |
           node --no-warnings scripts/resolve-runtime-canary-plan.mts DV21-PALMIER-FCPXML-01 > /tmp/palmier-plan.txt
           grep -Fq 'attach-palmier-real-export.mts --fcpxml <PALMIER_EXPORT.fcpxml> --inspect-only' /tmp/palmier-plan.txt
+          grep -Fq -- '--export-started-at <ISO8601>' /tmp/palmier-plan.txt
           grep -Fq -- '--attest-real-palmier-export' /tmp/palmier-plan.txt
           grep -Fq 'prepare-resolve-canary-session.mts DV21-PALMIER-FCPXML-01 --execution-id <EXECUTION_ID> --reuse-existing' /tmp/palmier-plan.txt
+          grep -Fq 'FILE_EXISTS != FRESH_EXPORT' /tmp/palmier-plan.txt
           grep -Fq 'OPERATOR_ATTESTATION != CRYPTOGRAPHIC_PROVENANCE' /tmp/palmier-plan.txt
