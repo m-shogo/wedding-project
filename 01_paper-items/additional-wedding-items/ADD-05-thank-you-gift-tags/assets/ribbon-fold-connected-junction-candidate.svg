@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="80" viewBox="0 0 160 80" fill="none">
+  <!-- ADD-05 serious comparison candidate only. No semantic/variable copy. -->
+  <!-- Main fold flap: intended to sit across the existing coral vertical ribbon. -->
+  <path d="M0 12H126L160 40L126 68H0V12Z" fill="#F6B93B"/>
+  <!-- Flat folded underside: creates a visible material turn without shadow/gradient. -->
+  <path d="M126 12L160 40L126 40V12Z" fill="#D99022"/>
+  <!-- Small return edge: visually connects the flap to the ribbon junction. -->
+  <path d="M126 40H160L126 68V40Z" fill="#E6A02B"/>
+</svg>
