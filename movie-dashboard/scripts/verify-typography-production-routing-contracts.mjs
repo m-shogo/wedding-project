@@ -17,6 +17,9 @@ const wordPunchActual = fs.readFileSync(path.join(root, "src/data/wordPunchDaVin
 const trackingTranslator = fs.readFileSync(path.join(root, "src/data/trackingBurstDaVinciTranslator.ts"), "utf8");
 const trackingActual = fs.readFileSync(path.join(root, "src/data/trackingBurstDaVinciActualArtifact.ts"), "utf8");
 const trackingCapture = fs.readFileSync(path.join(root, "src/data/trackingBurstDaVinciEvidenceCapture.ts"), "utf8");
+const verticalTranslator = fs.readFileSync(path.join(root, "src/data/verticalWipeDaVinciTranslator.ts"), "utf8");
+const verticalActual = fs.readFileSync(path.join(root, "src/data/verticalWipeDaVinciActualArtifact.ts"), "utf8");
+const verticalCapture = fs.readFileSync(path.join(root, "src/data/verticalWipeDaVinciEvidenceCapture.ts"), "utf8");
 const errors = [];
 
 const requireText = (source, token, message) => {
@@ -98,6 +101,7 @@ for (const [source, implementationId, label] of [
   [rhythmTranslator, "impl-type-type-on-rhythm-davinci-text-plus-follower-words", "Type on Rhythm translator"],
   [wordPunchTranslator, "impl-type-word-punch-davinci-text-plus-transform", "Word Punch translator"],
   [trackingTranslator, "impl-type-tracking-burst-davinci-text-plus-tracking", "Tracking Burst translator"],
+  [verticalTranslator, "impl-type-vertical-wipe-davinci-text-plus-mask", "Vertical Wipe translator"],
 ]) {
   requireText(source, implementationId, `${label} no longer proves its routed implementation id`);
 }
@@ -106,6 +110,7 @@ for (const [source, translatorBuilder, creator, label] of [
   [rhythmActual, "buildTypeOnRhythmDaVinciTranslatorSpec", "createTypeOnRhythmDaVinciActualArtifact", "Type on Rhythm Actual artifact"],
   [wordPunchActual, "buildWordPunchDaVinciTranslatorSpec", "createWordPunchDaVinciActualArtifact", "Word Punch Actual artifact"],
   [trackingActual, "buildTrackingBurstDaVinciTranslatorSpec", "createTrackingBurstDaVinciActualArtifact", "Tracking Burst Actual artifact"],
+  [verticalActual, "buildVerticalWipeDaVinciTranslatorSpec", "createVerticalWipeDaVinciActualArtifact", "Vertical Wipe Actual artifact"],
 ]) {
   requireText(source, translatorBuilder, `${label} no longer derives expected values from its canonical translator`);
   requireText(source, creator, `${label} no longer exposes its bounded Actual artifact creator`);
@@ -114,12 +119,16 @@ for (const [source, translatorBuilder, creator, label] of [
 }
 requireText(trackingCapture, '"NATIVE_UNIT_CALIBRATION"', "Tracking Burst routing may be a candidate only while native-unit calibration remains explicit evidence");
 requireText(trackingCapture, "normalizedTrackingFromEm", "Tracking Burst evidence must preserve normalized canonical comparison values");
+requireText(verticalCapture, '"MASK_COORDINATE_CONVENTION"', "Vertical Wipe routing may be a candidate only while mask coordinate evidence remains explicit");
+requireText(verticalCapture, '"MASK_INVERSION"', "Vertical Wipe routing must retain inversion evidence");
+requireText(verticalCapture, "normalizedTopInsetFrom", "Vertical Wipe evidence must preserve normalized canonical reveal values");
 
 for (const [token, label] of [
   ['"type-char-stagger",\n    "stagger",\n    "DAVINCI_ACTUAL_CANDIDATE",\n    "impl-type-char-stagger-davinci-text-plus-follower"', "Char Stagger"],
   ['"type-type-on-rhythm",\n    "word-stagger",\n    "DAVINCI_ACTUAL_CANDIDATE",\n    "impl-type-type-on-rhythm-davinci-text-plus-follower-words"', "Type on Rhythm"],
   ['"type-word-punch",\n    "punch",\n    "DAVINCI_ACTUAL_CANDIDATE",\n    "impl-type-word-punch-davinci-text-plus-transform"', "Word Punch"],
   ['"type-tracking-burst",\n    "tracking",\n    "DAVINCI_ACTUAL_CANDIDATE",\n    "impl-type-tracking-burst-davinci-text-plus-tracking"', "Tracking Burst"],
+  ['"type-vertical-wipe",\n    "vertical-wipe",\n    "DAVINCI_ACTUAL_CANDIDATE",\n    "impl-type-vertical-wipe-davinci-text-plus-mask"', "Vertical Wipe"],
 ]) {
   requireText(routing, token, `${label} must be staged as an Actual candidate backed by its translator/evidence workflow`);
 }
@@ -147,7 +156,7 @@ if (implementationAvailable.length !== 1 || implementationAvailable[0] !== "type
 }
 
 const actualCandidates = [...routing.matchAll(/route\(\s*\n\s*"(type-[^"]+)",\s*\n\s*"[^"]+",\s*\n\s*"DAVINCI_ACTUAL_CANDIDATE"/g)].map((match) => match[1]);
-const expectedActualCandidates = ["type-char-stagger", "type-type-on-rhythm", "type-word-punch", "type-tracking-burst"];
+const expectedActualCandidates = ["type-char-stagger", "type-type-on-rhythm", "type-word-punch", "type-tracking-burst", "type-vertical-wipe"];
 if (actualCandidates.length !== expectedActualCandidates.length || expectedActualCandidates.some((id) => !actualCandidates.includes(id))) {
   errors.push(`Actual candidates must be exactly ${expectedActualCandidates.join(", ")}; got ${actualCandidates.join(", ")}`);
 }
@@ -167,4 +176,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log("Typography Production Routing contracts OK: all nine candidates use four-stage DaVinci readiness; Mask Reveal alone has a live implementation, Char Stagger / Type on Rhythm / Word Punch / Tracking Burst are honest Actual candidates backed by canonical translators and evidence artifacts, four remain untranslated, and no route fabricates Mac Actual verification or production readiness.");
+console.log("Typography Production Routing contracts OK: all nine candidates use four-stage DaVinci readiness; Mask Reveal alone has a live implementation, Char Stagger / Type on Rhythm / Word Punch / Tracking Burst / Vertical Wipe are honest Actual candidates backed by canonical translators and evidence artifacts, three remain untranslated, and no route fabricates Mac Actual verification or production readiness.");
