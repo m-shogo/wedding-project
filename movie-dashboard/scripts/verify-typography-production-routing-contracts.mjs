@@ -12,6 +12,8 @@ const charTranslator = fs.readFileSync(path.join(root, "src/data/charStaggerDaVi
 const charActual = fs.readFileSync(path.join(root, "src/data/charStaggerDaVinciActualArtifact.ts"), "utf8");
 const rhythmTranslator = fs.readFileSync(path.join(root, "src/data/typeOnRhythmDaVinciTranslator.ts"), "utf8");
 const rhythmActual = fs.readFileSync(path.join(root, "src/data/typeOnRhythmDaVinciActualArtifact.ts"), "utf8");
+const wordPunchTranslator = fs.readFileSync(path.join(root, "src/data/wordPunchDaVinciTranslator.ts"), "utf8");
+const wordPunchActual = fs.readFileSync(path.join(root, "src/data/wordPunchDaVinciActualArtifact.ts"), "utf8");
 const errors = [];
 
 const requireText = (source, token, message) => {
@@ -86,21 +88,19 @@ requireText(
   '"DAVINCI_IMPLEMENTATION_AVAILABLE",\n    "impl-type-mask-reveal-davinci-text-plus"',
   "Mask Reveal must reuse the existing DaVinci implementation route",
 );
-requireText(
-  maskBundle,
-  'implementationId: "impl-type-mask-reveal-davinci-text-plus"',
-  "Mask Reveal source bundle no longer exposes the implementation reused by the routing registry",
-);
+requireText(maskBundle, 'implementationId: "impl-type-mask-reveal-davinci-text-plus"', "Mask Reveal source bundle no longer exposes the implementation reused by the routing registry");
 
 for (const [source, implementationId, label] of [
   [charTranslator, "impl-type-char-stagger-davinci-text-plus-follower", "Char Stagger translator"],
   [rhythmTranslator, "impl-type-type-on-rhythm-davinci-text-plus-follower-words", "Type on Rhythm translator"],
+  [wordPunchTranslator, "impl-type-word-punch-davinci-text-plus-transform", "Word Punch translator"],
 ]) {
   requireText(source, implementationId, `${label} no longer proves its routed implementation id`);
 }
 for (const [source, translatorBuilder, creator, label] of [
   [charActual, "buildCharStaggerDaVinciTranslatorSpec", "createCharStaggerDaVinciActualArtifact", "Char Stagger Actual artifact"],
   [rhythmActual, "buildTypeOnRhythmDaVinciTranslatorSpec", "createTypeOnRhythmDaVinciActualArtifact", "Type on Rhythm Actual artifact"],
+  [wordPunchActual, "buildWordPunchDaVinciTranslatorSpec", "createWordPunchDaVinciActualArtifact", "Word Punch Actual artifact"],
 ]) {
   requireText(source, translatorBuilder, `${label} no longer derives expected values from its canonical translator`);
   requireText(source, creator, `${label} no longer exposes its bounded Actual artifact creator`);
@@ -108,95 +108,50 @@ for (const [source, translatorBuilder, creator, label] of [
   requireText(source, 'productionReady: false', `${label} must remain non-production-ready`);
 }
 
-requireText(
-  routing,
-  '"type-char-stagger",\n    "stagger",\n    "DAVINCI_ACTUAL_CANDIDATE",\n    "impl-type-char-stagger-davinci-text-plus-follower"',
-  "Char Stagger must be staged as an Actual candidate backed by its translator/evidence workflow",
-);
-requireText(
-  routing,
-  '"type-type-on-rhythm",\n    "word-stagger",\n    "DAVINCI_ACTUAL_CANDIDATE",\n    "impl-type-type-on-rhythm-davinci-text-plus-follower-words"',
-  "Type on Rhythm must be staged as an Actual candidate backed by its translator/evidence workflow",
-);
+for (const [token, label] of [
+  ['"type-char-stagger",\n    "stagger",\n    "DAVINCI_ACTUAL_CANDIDATE",\n    "impl-type-char-stagger-davinci-text-plus-follower"', "Char Stagger"],
+  ['"type-type-on-rhythm",\n    "word-stagger",\n    "DAVINCI_ACTUAL_CANDIDATE",\n    "impl-type-type-on-rhythm-davinci-text-plus-follower-words"', "Type on Rhythm"],
+  ['"type-word-punch",\n    "punch",\n    "DAVINCI_ACTUAL_CANDIDATE",\n    "impl-type-word-punch-davinci-text-plus-transform"', "Word Punch"],
+]) {
+  requireText(routing, token, `${label} must be staged as an Actual candidate backed by its translator/evidence workflow`);
+}
 
 for (const [source, label] of [[matrix, "Routing Matrix"], [selector, "Route Selector"]]) {
-  for (const token of [
-    "DAVINCI_TRANSLATION_NOT_IMPLEMENTED",
-    "DAVINCI_ACTUAL_CANDIDATE",
-    "DAVINCI_IMPLEMENTATION_AVAILABLE",
-    "DAVINCI_ACTUAL_VERIFIED",
-  ]) {
+  for (const token of ["DAVINCI_TRANSLATION_NOT_IMPLEMENTED", "DAVINCI_ACTUAL_CANDIDATE", "DAVINCI_IMPLEMENTATION_AVAILABLE", "DAVINCI_ACTUAL_VERIFIED"]) {
     requireText(source, token, `${label} missing staged DaVinci state ${token}`);
   }
 }
-for (const token of [
-  "Actual候補",
-  "live実装あり",
-  "Actual検証済み",
-  "Translator:",
-  "Actual workflow:",
-  "Live binding:",
-  "Production: NOT_READY",
-]) {
+for (const token of ["Actual候補", "live実装あり", "Actual検証済み", "Translator:", "Actual workflow:", "Live binding:", "Production: NOT_READY"]) {
   requireText(matrix, token, `Routing Matrix missing human-readable readiness evidence: ${token}`);
 }
-for (const token of [
-  "Translator + Actual workflowあり / live未検証",
-  "DaVinci live実装あり / Actual未確認",
-  "DaVinci stage:",
-  "bundle.davinci.translatorSpecAvailable",
-  "bundle.davinci.actualEvidenceWorkflowAvailable",
-  "bundle.davinci.liveImplementationAvailable",
-  "bundle.davinci.actualVerified",
-]) {
+for (const token of ["Translator + Actual workflowあり / live未検証", "DaVinci live実装あり / Actual未確認", "DaVinci stage:", "bundle.davinci.translatorSpecAvailable", "bundle.davinci.actualEvidenceWorkflowAvailable", "bundle.davinci.liveImplementationAvailable", "bundle.davinci.actualVerified"]) {
   requireText(selector, token, `Route Selector missing staged DaVinci readiness evidence: ${token}`);
 }
 
 const routeCalls = [...routing.matchAll(/\n\s*route\(\n\s*"(type-[^"]+)"/g)].map((match) => match[1]);
-if (routeCalls.length !== expected.length) {
-  errors.push(`Expected ${expected.length} Typography production routes, found ${routeCalls.length}`);
-}
-if (new Set(routeCalls).size !== routeCalls.length) {
-  errors.push("Typography production routes contain duplicate pattern ids");
-}
-for (const [patternId] of expected) {
-  if (!routeCalls.includes(patternId)) errors.push(`Typography production route list omitted ${patternId}`);
-}
+if (routeCalls.length !== expected.length) errors.push(`Expected ${expected.length} Typography production routes, found ${routeCalls.length}`);
+if (new Set(routeCalls).size !== routeCalls.length) errors.push("Typography production routes contain duplicate pattern ids");
+for (const [patternId] of expected) if (!routeCalls.includes(patternId)) errors.push(`Typography production route list omitted ${patternId}`);
 
-const implementationAvailable = [...routing.matchAll(/route\(\s*\n\s*"(type-[^"]+)",\s*\n\s*"[^"]+",\s*\n\s*"DAVINCI_IMPLEMENTATION_AVAILABLE"/g)]
-  .map((match) => match[1]);
+const implementationAvailable = [...routing.matchAll(/route\(\s*\n\s*"(type-[^"]+)",\s*\n\s*"[^"]+",\s*\n\s*"DAVINCI_IMPLEMENTATION_AVAILABLE"/g)].map((match) => match[1]);
 if (implementationAvailable.length !== 1 || implementationAvailable[0] !== "type-mask-reveal") {
   errors.push(`Only type-mask-reveal may claim a live DaVinci implementation right now; got ${implementationAvailable.join(", ")}`);
 }
 
-const actualCandidates = [...routing.matchAll(/route\(\s*\n\s*"(type-[^"]+)",\s*\n\s*"[^"]+",\s*\n\s*"DAVINCI_ACTUAL_CANDIDATE"/g)]
-  .map((match) => match[1]);
-const expectedActualCandidates = ["type-char-stagger", "type-type-on-rhythm"];
+const actualCandidates = [...routing.matchAll(/route\(\s*\n\s*"(type-[^"]+)",\s*\n\s*"[^"]+",\s*\n\s*"DAVINCI_ACTUAL_CANDIDATE"/g)].map((match) => match[1]);
+const expectedActualCandidates = ["type-char-stagger", "type-type-on-rhythm", "type-word-punch"];
 if (actualCandidates.length !== expectedActualCandidates.length || expectedActualCandidates.some((id) => !actualCandidates.includes(id))) {
   errors.push(`Actual candidates must be exactly ${expectedActualCandidates.join(", ")}; got ${actualCandidates.join(", ")}`);
 }
 
-const actualVerified = [...routing.matchAll(/route\(\s*\n\s*"(type-[^"]+)",\s*\n\s*"[^"]+",\s*\n\s*"DAVINCI_ACTUAL_VERIFIED"/g)]
-  .map((match) => match[1]);
-if (actualVerified.length !== 0) {
-  errors.push(`No Typography route may claim DaVinci Actual verification without real Mac evidence; got ${actualVerified.join(", ")}`);
-}
+const actualVerified = [...routing.matchAll(/route\(\s*\n\s*"(type-[^"]+)",\s*\n\s*"[^"]+",\s*\n\s*"DAVINCI_ACTUAL_VERIFIED"/g)].map((match) => match[1]);
+if (actualVerified.length !== 0) errors.push(`No Typography route may claim DaVinci Actual verification without real Mac evidence; got ${actualVerified.join(", ")}`);
 
-if (/productionReady:\s*true/.test(routing)) {
-  errors.push("Typography production routing must not claim productionReady before real applied evidence");
-}
-if (/actualAppliedEvidence:\s*"PASS"/.test(routing)) {
-  errors.push("Typography production routing must not fabricate DaVinci Actual evidence");
-}
-if (/xmlGeneratedExternally:\s*false/.test(routing)) {
-  errors.push("Typography production routing must not pretend the dashboard generated Palmier XML");
-}
-if (/authority:\s*"HUMAN_MASTER"/.test(routing)) {
-  errors.push("Derived Typography route bundle must not call a caller-selected pattern HUMAN_MASTER");
-}
-if (!routing.includes('selection.sourceRevision !== scene.updatedAt')) {
-  errors.push("Typography route selection must fail closed when the SceneInstance revision changes");
-}
+if (/productionReady:\s*true/.test(routing)) errors.push("Typography production routing must not claim productionReady before real applied evidence");
+if (/actualAppliedEvidence:\s*"PASS"/.test(routing)) errors.push("Typography production routing must not fabricate DaVinci Actual evidence");
+if (/xmlGeneratedExternally:\s*false/.test(routing)) errors.push("Typography production routing must not pretend the dashboard generated Palmier XML");
+if (/authority:\s*"HUMAN_MASTER"/.test(routing)) errors.push("Derived Typography route bundle must not call a caller-selected pattern HUMAN_MASTER");
+if (!routing.includes('selection.sourceRevision !== scene.updatedAt')) errors.push("Typography route selection must fail closed when the SceneInstance revision changes");
 
 if (errors.length) {
   console.error(`Typography Production Routing contracts FAILED (${errors.length})`);
@@ -204,4 +159,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log("Typography Production Routing contracts OK: all nine candidates use four-stage DaVinci readiness in data/UI; Mask Reveal alone has a live implementation, Char Stagger and Type on Rhythm are honest Actual candidates whose artifacts derive expected values from canonical translators, six remain untranslated, and no route fabricates Mac Actual verification or production readiness.");
+console.log("Typography Production Routing contracts OK: all nine candidates use four-stage DaVinci readiness; Mask Reveal alone has a live implementation, Char Stagger / Type on Rhythm / Word Punch are honest Actual candidates backed by canonical translators and evidence artifacts, five remain untranslated, and no route fabricates Mac Actual verification or production readiness.");
