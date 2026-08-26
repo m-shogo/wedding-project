@@ -36,4 +36,8 @@ export const renderableMotionPresets: RenderableMotionPreset[] = [
   {presetId: 'photo-slow-pull', engine: 'camera-transform', intensity: 'M', label: 'Slow Pull', mode: 'pull'},
   {presetId: 'wipe-directional-shape', engine: 'transition-wipe', intensity: 'M', label: 'Directional Shape Wipe', mode: 'left'},
   {presetId: 'accent-impact-frame', engine: 'graphic-hit', intensity: 'L', label: 'Impact Frame', mode: 'impact'},
+  // 2026-08-26 batch3: TypographyRevealEngineへ新modeを2つ追加(hop/lock)して対応。
+  // 他のbatchと違い、既存modeの使い回しではなく実際にengineへ新機能を実装した。
+  {presetId: 'type-baseline-hop', engine: 'typography-reveal', intensity: 'M', label: 'Baseline Hop', demoText: 'HOP', mode: 'hop'},
+  {presetId: 'type-frame-lock', engine: 'typography-reveal', intensity: 'L', label: 'Frame Lock', demoText: 'YOKOHAMA', mode: 'lock'},
 ];

@@ -30,7 +30,17 @@ function RenderPreset({preset}: {preset: RenderableMotionPreset}) {
         <TypographyRevealEngine
           text={preset.demoText ?? 'WELCOME'}
           intensity={preset.intensity}
-          mode={preset.mode === 'punch' ? 'punch' : preset.mode === 'stagger' ? 'stagger' : 'mask'}
+          mode={
+            preset.mode === 'punch'
+              ? 'punch'
+              : preset.mode === 'stagger'
+                ? 'stagger'
+                : preset.mode === 'hop'
+                  ? 'hop'
+                  : preset.mode === 'lock'
+                    ? 'lock'
+                    : 'mask'
+          }
         />
       </AbsoluteFill>
     );

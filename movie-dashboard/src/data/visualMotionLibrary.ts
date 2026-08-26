@@ -633,6 +633,8 @@ const LOCAL_RENDER_VERIFIED_2026_08_26 = new Set([
   "photo-slow-pull",
   "wipe-directional-shape",
   "accent-impact-frame",
+  "type-baseline-hop",
+  "type-frame-lock",
 ]);
 
 function kitPresetToPreview(preset: StartMotionPreset): MotionPreviewRecord {
@@ -651,7 +653,7 @@ function kitPresetToPreview(preset: StartMotionPreset): MotionPreviewRecord {
       : isRemotion
         ? `motion-studio Motion Kit preset: ${preset.id} (${preset.sharedEngine} engine)。この図鑑追加ではまだ動画を書き出していない。`
         : `${preset.engine}上の技法説明のみ。まだ動画assetは存在しない。`,
-    generatedAt: locallyRendered ? "2026-08-26T01:07:44Z" : null,
+    generatedAt: locallyRendered ? "2026-08-26T01:27:57Z" : null,
     implementationId: `impl-${preset.id}`,
     sampleAssetSetId: sampleAssetSetIdForPreset(preset),
     resolveVersion: null,
