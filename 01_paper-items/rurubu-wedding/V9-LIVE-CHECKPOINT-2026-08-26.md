@@ -74,19 +74,41 @@ A six-page screenshot review identified a real finishing issue: several folio/da
 
 Five fresh hidden rollback clones were created immediately before this pass.
 
+## 2026-08-26 15H finish / readability pass
+
+The current six-page set was reviewed again at whole-page scale, then inspected structurally for clipping, tiny text, photo-mask integrity, and generated-asset transport.
+
+- Memory + Gallery: the lower three photos now have separate movable captions `BEACH TRIP / DINNER / CAFE TIME`, completing the 01–06 photo rhythm instead of leaving photos 04–06 as number-only tiles.
+- Back cover: tiny `VENUE / CAFE / TABLE / BACK COVER` text was increased for better reading-size legibility without changing the photo masks.
+- Back cover lead: the two-line lead text box was enlarged so its 50 px line height is no longer structurally clipped.
+- Story + Timeline: the lead was shortened to `出会ってから、今日まで。 / ページをめくるたび、思い出がよみがえる。`, reduced to 22 px with 32 px line height, and given sufficient box height so it no longer relies on overflow/wrap behavior.
+- Memory + Gallery: the large two-line closing statement received sufficient height for its 46 px line height while retaining the same visual position and hierarchy.
+- Fresh hidden rollback clones were created before the Memory/Back caption pass and before the three text-box corrections.
+
+### Generated Timeline asset transport check
+
+The Drive authority still contains the generated Timeline master (`RURUBU_V6_SECTION_TIMELINE_GENERATED_V1_2026-08-15.png`) and the local transparent transport derivative was re-tested through two distinct routes.
+
+1. Direct `figma.base64Decode(...)` with a compact ~9 KB transparent PNG still returned `Invalid base64 string`; the Figma write was atomic, so no live production node was created or changed.
+2. `upload_assets` successfully issued a single-use `mcp.figma.com` submit URL, but the runtime `curl` path still failed DNS resolution with `Could not resolve host: mcp.figma.com`.
+
+This is now treated as an external transport blocker rather than a design blocker. Do not keep retrying either identical failure fingerprint inside the same run. Native editable fallback titles remain visible until a transport route is proven by screenshot rendering.
+
 ## QA evidence
 
-Whole-page screenshots were regenerated after the finalization pass for all six current production frames.
+Whole-page screenshots were regenerated for the current Cover, Back, Profile, Story, Memory, and 1DAY production frames after the 15H changes.
 
-A final structural QA pass verified:
+The latest publication-wide structural QA verified:
 
 - all six current frames remain exactly `794 × 1123` and visible;
 - replaceable photo-mask counts remain exactly `4 / 3 / 2 / 2 / 6 / 5 = 22`;
-- no visible node overflows its A4 frame;
+- every replaceable mask still has an IMAGE fill with `scaleMode=FILL`;
+- no visible direct child overflows its A4 frame;
 - no visible text node has a missing font;
 - no visible production node name contains `PLACEHOLDER`, `DUMMY`, or `TEMP`;
+- no visible text is below 9.5 px after the latest legibility pass;
 - no page was flattened and all photo masks remain independently replaceable;
-- rollback snapshots remain hidden and outside current production frames.
+- 64 hidden V9 rollback snapshots are retained outside current production frames.
 
 This is a strong `DESIGN / DUMMY-CONTENT QA` checkpoint, not final printer-ready evidence. Final photo selection, legitimate final copy, exact printer bleed/trim/safe template, export preflight, effective image resolution, and physical proof are still separate gates.
 
@@ -94,9 +116,11 @@ This is a strong `DESIGN / DUMMY-CONTENT QA` checkpoint, not final printer-ready
 
 `get_metadata` top-level page listing can omit the existing V9 page. Never conclude that V9 is absent solely from the top-level page list. Resolve `08_RURUBU_V9_RURUBU_POP_PRODUCTION` by exact name inside the Figma document before creating/replacing anything.
 
-A Drive PNG can decode and still fail to render when transported through an unsuitable indexed-PNG route. Node creation or an `imageHash` is not visual success. Screenshot-QA the placed asset before hiding an editable fallback.
+A Drive PNG can decode and still fail to render when transported through an unsuitable route. Node creation or an `imageHash` is not visual success. Screenshot-QA the placed asset before hiding an editable fallback.
 
 A Figma helper in the 13H pass initially assumed six-digit hex and received `#fff`; the write failed atomically with a NaN paint validation error. No live changes were applied by the failed call. Re-read live state, then retry only after normalizing to `#ffffff` (or make future color parsers support three-digit hex explicitly).
+
+The 15H transport test reconfirmed two distinct external failure fingerprints: `base64Decode: Invalid base64 string` and runtime DNS failure for `mcp.figma.com`. These routes must not be looped repeatedly without a changed transport condition.
 
 ## Next pass
 
