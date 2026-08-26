@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="1980" viewBox="0 0 1400 1980">
+  <title>ADD-03 clean-room v5 fixed art — Daylight Sweep</title>
+  <desc>Editable fixed-art only. No variable copy, dates, times, venue facts, names, QR, or guest data are embedded.</desc>
+  <rect width="1400" height="1980" fill="#F5F0E4"/>
+  <path d="M-180 210 C 240 32, 690 58, 1110 245 C 1320 338, 1470 440, 1580 570 L 1458 772 C 1292 608, 1080 492, 820 406 C 472 292, 126 286, -130 388 Z" fill="#F36C4F"/>
+  <path d="M-120 126 C 272 -12, 722 22, 1132 182 C 1268 235, 1398 307, 1508 392 L 1438 500 C 1308 409, 1168 343, 1014 292 C 642 168, 266 156, -112 266 Z" fill="#F2BE3A"/>
+  <path d="M0 0 H86 V1980 H0 Z" fill="#173B69"/>
+  <path d="M86 0 H102 V1980 H86 Z" fill="#50B9B0"/>
+  <path d="M1240 1320 C 1122 1410, 1020 1528, 958 1662 C 916 1754, 894 1856, 890 1980 H1400 V1246 C 1340 1264, 1284 1288, 1240 1320 Z" fill="#173B69"/>
+  <path d="M1180 1442 C 1088 1512, 1020 1604, 982 1708 C 950 1792, 936 1882, 934 1980 H1044 C 1042 1888, 1054 1808, 1078 1736 C 1110 1640, 1162 1556, 1238 1488 Z" fill="#50B9B0"/>
+</svg>
