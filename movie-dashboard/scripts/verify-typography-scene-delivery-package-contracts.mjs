@@ -19,12 +19,20 @@ for (const token of [
   'schemaVersion: "wedding-movie-typography-scene-delivery/v1"',
   'authority: "DERIVED_DELIVERY_PACKAGE"',
   'humanMasterPreserved: true',
+  'humanState: base.humanState',
   'owner: "Palmier"',
   'capability: "PALMIER_TIMING_ONLY"',
   'xmlGeneratedExternally: true',
+  'instruction: base.palmier.instruction',
   'actualEvidenceState: "NOT_RUN"',
   'productionReady: false',
   'releaseDecisionEmbedded: false',
+  '"CONFIRM_CURRENT_SCENE_REVISION"',
+  '"EXPORT_PALMIER_TIMELINE_WITH_MARKER"',
+  '"APPLY_DAVINCI_TRANSLATOR"',
+  '"CAPTURE_MAC_ACTUAL_EVIDENCE"',
+  '"RUN_HUMAN_PROMOTION_REVIEW"',
+  '"EVALUATE_SCENE_BOUND_RELEASE_GATE"',
   '"MAC_ACTUAL_EVALUATION"',
   '"HUMAN_PROMOTION_REVIEW"',
   '"SCENE_BOUND_RELEASE_GATE"',
@@ -39,6 +47,8 @@ for (const token of [
   "Production packageを書き出す",
   "package出力 ≠ production release",
   "Mac Actual",
+  "Current stop:",
+  "delivery.execution.order.join",
   "delivery.files.palmierTimelineXmlFileName",
   "delivery.timeline.sceneMarkerId",
 ]) {
@@ -80,4 +90,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log("Typography Scene Delivery Package contracts OK: Scene revision + human-selected route + Palmier timing + DaVinci workflow are bundled without fabricating Mac Actual or Release evidence.");
+console.log("Typography Scene Delivery Package contracts OK: Human Master values + current route + Palmier timing + DaVinci workflow + execution order are bundled without fabricating Mac Actual or Release evidence.");
