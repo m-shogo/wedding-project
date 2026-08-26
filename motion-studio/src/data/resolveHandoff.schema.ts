@@ -110,6 +110,8 @@ export const capabilityHandoffSchema = z.object({
   guardrails: z.array(z.string()).default([]),
 });
 
+const resolvePatchSchema = z.string().regex(/^21\.\d+\.\d+(?:\.\d+)?$/);
+
 export const resolveHandoffSidecarSchema = z.object({
   schemaVersion: z.literal('1.0'),
   artifactId: z.string().min(1),
@@ -123,7 +125,8 @@ export const resolveHandoffSidecarSchema = z.object({
   }),
   resolve: z.object({
     major: z.literal(21),
-    testedPatch: z.string().regex(/^21\.\d+\.\d+(?:\.\d+)?$/),
+    targetPatch: resolvePatchSchema.optional(),
+    testedPatch: resolvePatchSchema.nullable(),
     edition: resolveEditionSchema,
     platform: resolvePlatformSchema,
     page: z.enum(['EDIT', 'FUSION', 'COLOR', 'FAIRLIGHT', 'DELIVER', 'MULTI']),
