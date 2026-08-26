@@ -55,10 +55,13 @@ QAで推測PASSにしなかった実例:
   外していたため、タイミングを合わせた追加確認の上で`PASS`と判定した。
 
 QAで見つかった**既知の実装限界**(隠さず記録):
-- `PhotoLayoutEngine`の`contact-sheet`と`panel-grid`が現状どちらもデフォルト
-  4列グリッドで、見た目上区別できない。
+- ~~`PhotoLayoutEngine`の`contact-sheet`と`panel-grid`が現状どちらもデフォルト
+  4列グリッドで、見た目上区別できない。~~ → 追記(2026-08-26): `gridTemplateAreas`で
+  panel-gridを大小非対称の4コマレイアウトへ変更し解消(4件以外の枚数は引き続き
+  均等gridへfallback)。`motionPreviewEvidence.ts`のevidenceを実render確認の上
+  更新済み。
 - `type-char-stagger`と`type-tracking-burst`が現状同じ`stagger` modeを共有しており、
-  見た目の差別化ができていない。
+  見た目の差別化ができていない(未解消)。
 - `wipe-directional-shape`は「図形(shape)が横切る」という名称に対し、実装は
   図形オブジェクトではなく色面wipeの近似。
 

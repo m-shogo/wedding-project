@@ -213,6 +213,11 @@ export function NativeCutEngine({
   );
 }
 
+// panel-grid(コマ割り)は4枚の時だけ非対称レイアウトにする。それ以外の枚数は
+// contact-sheetと同じ均等grid(近似)にfallbackし、その旨をコメントで明記する。
+const PANEL_GRID_AREAS_FOR_FOUR = ['a', 'b', 'c', 'd'];
+const PANEL_GRID_TEMPLATE_AREAS_FOR_FOUR = '"a a b" "a a c" "d d d"';
+
 export function PhotoLayoutEngine({
   variant = 'contact-sheet',
   count = 4,
@@ -228,12 +233,24 @@ export function PhotoLayoutEngine({
   const {fps} = useVideoConfig();
   const strength = intensityScale[intensity];
   const panelCount = variant === 'split-panel' ? Math.min(2, Math.max(2, count)) : Math.max(2, count);
-  const columns = variant === 'contact-sheet' ? Math.min(4, panelCount) : panelCount;
-  const gap = 10;
+  const isPanelGrid = variant === 'panel-grid';
+  const useAsymmetricPanelGrid = isPanelGrid && panelCount === 4;
+  const columns = variant === 'contact-sheet' ? Math.min(4, panelCount) : useAsymmetricPanelGrid ? 3 : panelCount;
+  const gap = isPanelGrid ? 6 : 10;
 
   return (
     <AbsoluteFill style={{backgroundColor: transparent ? undefined : '#0d2035', padding: 24}}>
-      <div style={{display: 'grid', gridTemplateColumns: `repeat(${columns}, 1fr)`, gap, width: '100%', height: '100%'}}>
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: `repeat(${columns}, 1fr)`,
+          gridTemplateRows: useAsymmetricPanelGrid ? 'repeat(3, 1fr)' : undefined,
+          gridTemplateAreas: useAsymmetricPanelGrid ? PANEL_GRID_TEMPLATE_AREAS_FOR_FOUR : undefined,
+          gap,
+          width: '100%',
+          height: '100%',
+        }}
+      >
         {Array.from({length: panelCount}).map((_, index) => {
           const staggerStart = index * Math.round(fps * 0.08);
           const reveal = interpolate(frame, [staggerStart, staggerStart + Math.round(fps * 0.3)], [0, 1], {
@@ -245,7 +262,8 @@ export function PhotoLayoutEngine({
             <div
               key={index}
               style={{
-                border: '1px solid rgba(255,255,255,0.35)',
+                gridArea: useAsymmetricPanelGrid ? PANEL_GRID_AREAS_FOR_FOUR[index] : undefined,
+                border: isPanelGrid ? '3px solid #fff' : '1px solid rgba(255,255,255,0.35)',
                 background: 'rgba(255,255,255,0.06)',
                 opacity: reveal,
                 transform: `scale(${0.92 + reveal * 0.08 * strength})`,
