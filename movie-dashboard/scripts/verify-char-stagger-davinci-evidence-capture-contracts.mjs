@@ -103,8 +103,8 @@ for (const token of [
 
 requireText(
   routing,
-  '"type-char-stagger",\n    "stagger",\n    "DAVINCI_TRANSLATION_NOT_IMPLEMENTED"',
-  "Char Stagger must remain blocked until Actual evidence is separately reviewed and promoted",
+  '"type-char-stagger",\n    "stagger",\n    "DAVINCI_ACTUAL_CANDIDATE",\n    "impl-type-char-stagger-davinci-text-plus-follower"',
+  "Char Stagger must expose its translator/evidence workflow as an Actual candidate without claiming live verification",
 );
 
 if (/productionReady:\s*true/.test(capture) || /productionReady:\s*true/.test(gate)) {
@@ -114,7 +114,10 @@ if (/automaticPromotionAllowed:\s*true/.test(gate)) {
   errors.push("Promotion assessment must never allow automatic route promotion");
 }
 if (/DAVINCI_IMPLEMENTATION_AVAILABLE[\s\S]{0,120}type-char-stagger/.test(routing)) {
-  errors.push("Readback capture implementation alone must not promote Char Stagger DaVinci route");
+  errors.push("Readback capture implementation alone must not promote Char Stagger to live DaVinci implementation");
+}
+if (/DAVINCI_ACTUAL_VERIFIED[\s\S]{0,120}type-char-stagger/.test(routing)) {
+  errors.push("Char Stagger must not claim Actual verification before real Mac evidence");
 }
 if (/visualQa1x:\s*"PASS"/.test(capture) || /visualQaHalfSpeed:\s*"PASS"/.test(capture)) {
   errors.push("Evidence capture template must not fabricate visual QA PASS");
@@ -132,4 +135,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log("Char Stagger DaVinci Evidence Capture contracts OK: Dashboard exports a blank evidence-only readback template, accepts only schema/scene/revision-matched Actual captures, records all seven live Fusion binding roles separately from canonical authority, evaluates machine-comparable values against the canonical translator, carries explicit 1x/half-speed QA states, and derives a fail-closed human-promotion-review eligibility gate without ever changing the production route or productionReady state automatically.");
+console.log("Char Stagger DaVinci Evidence Capture contracts OK: Dashboard exports a blank evidence-only readback template, accepts only schema/scene/revision-matched Actual captures, records all seven live Fusion binding roles separately from canonical authority, evaluates machine-comparable values against the canonical translator, carries explicit 1x/half-speed QA states, and exposes an honest Actual-candidate route without live/Actual/production auto-promotion.");
