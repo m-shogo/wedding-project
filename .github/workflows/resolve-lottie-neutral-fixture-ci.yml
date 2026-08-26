@@ -12,7 +12,7 @@ on:
       - "motion-studio/scripts/check-resolve-canary-input-fixtures.mts"
       - "scripts/davinci/deterministic-dotlottie-pack.py"
       - "docs/research/2026-08-26-movie-tool-learning-run-31-lottie-neutral-fixture.md"
-      - "docs/runbooks/2026-08-26-resolve21-lottie-ograft-canary.md"
+      - "docs/runbooks/2026-08-26-resolve21-lottie-ograf-canary.md"
       - ".github/workflows/resolve-lottie-neutral-fixture-ci.yml"
   push:
     paths:
@@ -25,7 +25,7 @@ on:
       - "motion-studio/scripts/check-resolve-canary-input-fixtures.mts"
       - "scripts/davinci/deterministic-dotlottie-pack.py"
       - "docs/research/2026-08-26-movie-tool-learning-run-31-lottie-neutral-fixture.md"
-      - "docs/runbooks/2026-08-26-resolve21-lottie-ograft-canary.md"
+      - "docs/runbooks/2026-08-26-resolve21-lottie-ograf-canary.md"
       - ".github/workflows/resolve-lottie-neutral-fixture-ci.yml"
 
 permissions:
