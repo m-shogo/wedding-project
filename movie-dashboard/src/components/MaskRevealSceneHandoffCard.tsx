@@ -6,6 +6,7 @@ import {
 } from "../data/maskRevealSceneProductionBundle";
 import { resolveCodexAutomationGuardrail } from "../data/resolveAutomationAvailability";
 import { getResolveHandoffEditability } from "../data/resolveHandoffEditability";
+import { getResolveHumanAdjustability } from "../data/resolveHumanAdjustability";
 import type { MaskRevealSceneInstance } from "../data/visualSceneComposer";
 import { downloadText } from "../lib/exporters";
 
@@ -80,9 +81,13 @@ export function MaskRevealSceneHandoffCard({ scene }: { scene: MaskRevealSceneIn
         <p className="mt-2 border border-amber-200 dark:border-amber-800 p-2 text-[10px] leading-4 text-amber-800 dark:text-amber-200">
           Automation availability: {resolveEditionGuardrail}
         </p>
+        <p className="mt-2 text-[9px] leading-4 text-navy-400">
+          Editability(内部parameterをどこまで編集できるか)と Human Adjustability(人間がどれだけ簡単に直せるか)は別判定です。
+        </p>
         <div className="mt-2 space-y-2">
           {fidelity.properties.map((property) => {
             const editability = getResolveHandoffEditability(property.id);
+            const adjustability = getResolveHumanAdjustability(property.id);
             return (
               <div key={property.id} className="border border-sand-200 dark:border-navy-600 p-2">
                 <div className="flex flex-wrap items-center justify-between gap-2">
@@ -99,6 +104,15 @@ export function MaskRevealSceneHandoffCard({ scene }: { scene: MaskRevealSceneIn
                   <div className="mt-2 border-l-2 border-sky-300 dark:border-sky-700 pl-2">
                     <p className="text-[9px] font-mono text-sky-700 dark:text-sky-300">Editability: {editability.editabilityClass} / {editability.evidenceState}</p>
                     <p className="mt-1 text-[9px] leading-4 text-navy-400">{editability.instructionJa}</p>
+                  </div>
+                ) : null}
+                {adjustability ? (
+                  <div className="mt-2 border-l-2 border-violet-300 dark:border-violet-700 pl-2">
+                    <p className="text-[9px] font-mono text-violet-700 dark:text-violet-300">
+                      Human adjustability: {adjustability.adjustabilityClass} / Platform: {adjustability.platformScope} / {adjustability.evidenceState}
+                    </p>
+                    <p className="mt-1 text-[9px] leading-4 text-navy-400">{adjustability.humanInstructionJa}</p>
+                    <p className="mt-1 text-[9px] leading-4 text-navy-400">Late edit QA: {adjustability.lateEditCheckJa}</p>
                   </div>
                 ) : null}
               </div>

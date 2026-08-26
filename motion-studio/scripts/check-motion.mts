@@ -9,6 +9,10 @@ import {openingProject} from '../src/data/openingProject.ts';
 import {openingProjectSchema} from '../src/data/openingProject.schema.ts';
 import {templates} from '../src/data/sceneRegistry.ts';
 import {assets} from '../src/data/assets.ts';
+import {resolveHandoffSidecarSchema} from '../src/data/resolveHandoff.schema.ts';
+import {resolve21AlphaHandoffPolicy} from '../src/data/resolveHandoffPolicy.ts';
+import {generatedAssetProvenanceSchema} from '../src/data/generatedAsset.schema.ts';
+import {generatedVideoProvenancePolicy} from '../src/data/generatedAssetPolicy.ts';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 let errors = 0;
@@ -26,6 +30,25 @@ const info = (msg: string) => console.log(`ℹ️  ${msg}`);
 const ok = (msg: string) => console.log(`✅ ${msg}`);
 
 info('LEGACY CHECK: openingProject / sceneRegistry / Root.tsx。現行Opening V1は別系統で検証');
+
+// ---- 0. cross-tool handoff / generated-asset contracts ----
+const handoffParsed = resolveHandoffSidecarSchema.safeParse(resolve21AlphaHandoffPolicy);
+if (!handoffParsed.success) {
+  for (const issue of handoffParsed.error.issues) {
+    err(`Resolve handoff contract: ${issue.path.join('.')} → ${issue.message}`);
+  }
+} else {
+  ok('Resolve 21 handoff sidecar policy: runtime parse OK');
+}
+
+const generatedAssetParsed = generatedAssetProvenanceSchema.safeParse(generatedVideoProvenancePolicy);
+if (!generatedAssetParsed.success) {
+  for (const issue of generatedAssetParsed.error.issues) {
+    err(`generated asset provenance: ${issue.path.join('.')} → ${issue.message}`);
+  }
+} else {
+  ok('generated asset provenance policy: runtime parse OK');
+}
 
 // ---- 1. legacy openingProject schema ----
 const parsed = openingProjectSchema.safeParse(openingProject);
