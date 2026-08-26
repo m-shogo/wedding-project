@@ -206,3 +206,49 @@ export function buildTypographySceneDeliveryPackageJson(
 ) {
   return JSON.stringify(buildTypographySceneDeliveryPackage(scene, selection), null, 2);
 }
+
+export function parseAndValidateTypographySceneDeliveryPackage(
+  raw: string,
+  scene: MaskRevealSceneInstance,
+  selection: TypographyProductionSelectionV1,
+): TypographySceneDeliveryPackageV1 {
+  const parsed = JSON.parse(raw) as Partial<TypographySceneDeliveryPackageV1>;
+  if (
+    parsed.schemaVersion !== "wedding-movie-typography-scene-delivery/v1" ||
+    parsed.authority !== "DERIVED_DELIVERY_PACKAGE"
+  ) {
+    throw new Error("TYPOGRAPHY_SCENE_DELIVERY_ENVELOPE_MISMATCH");
+  }
+  if (parsed.identity?.sceneId !== scene.sceneId || parsed.identity?.projectId !== scene.projectId) {
+    throw new Error("TYPOGRAPHY_SCENE_DELIVERY_SCENE_MISMATCH");
+  }
+  if (
+    parsed.identity?.sourceRevision !== scene.updatedAt ||
+    parsed.freshness?.sceneRevision !== scene.updatedAt ||
+    parsed.freshness?.selectionRevision !== selection.sourceRevision
+  ) {
+    throw new Error("STALE_TYPOGRAPHY_SCENE_DELIVERY_PACKAGE");
+  }
+  if (
+    parsed.identity?.patternId !== selection.patternId ||
+    parsed.identity?.routeSelectedAt !== selection.selectedAt
+  ) {
+    throw new Error("TYPOGRAPHY_SCENE_DELIVERY_ROUTE_MISMATCH");
+  }
+  if (parsed.timeline?.xmlGeneratedExternally !== true || parsed.timeline?.owner !== "Palmier") {
+    throw new Error("TYPOGRAPHY_SCENE_DELIVERY_TIMELINE_AUTHORITY_MISMATCH");
+  }
+  if (parsed.davinci?.actualEvidenceState !== "NOT_RUN") {
+    throw new Error("TYPOGRAPHY_SCENE_DELIVERY_MUST_NOT_EMBED_ACTUAL_PASS");
+  }
+  if (
+    parsed.release?.productionReady !== false ||
+    parsed.release?.releaseDecisionEmbedded !== false
+  ) {
+    throw new Error("TYPOGRAPHY_SCENE_DELIVERY_MUST_NOT_EMBED_RELEASE");
+  }
+  if (parsed.freshness?.fresh !== true) {
+    throw new Error("TYPOGRAPHY_SCENE_DELIVERY_FRESHNESS_NOT_CONFIRMED");
+  }
+  return parsed as TypographySceneDeliveryPackageV1;
+}
