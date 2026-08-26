@@ -1,11 +1,13 @@
 import {useState} from "react";
 import {
+  buildTypographyDaVinciActualEvaluationReport,
   buildTypographyDaVinciActualEvaluationReportJson,
   buildTypographyDaVinciActualSessionTemplateJson,
   parseAndEvaluateTypographyDaVinciActualSession,
   type TypographyDaVinciActualSessionEvaluation,
   type TypographyDaVinciActualSessionV1,
 } from "../data/typographyDaVinciActualSession";
+import {TypographyDaVinciHumanPromotionReview} from "./TypographyDaVinciHumanPromotionReview";
 
 function downloadJson(fileName: string, json: string) {
   const blob = new Blob([json], {type: "application/json"});
@@ -105,6 +107,7 @@ export function TypographyDaVinciActualSessionImport() {
           <p className="border border-amber-200 dark:border-amber-800 p-2 text-[8px] leading-3 text-amber-800 dark:text-amber-200">
             eligible for separate Human promotion review: {eligibleCount}/9。HUMAN_REVIEW_ELIGIBLEはHuman promotedではありません。automaticPromotionAllowed=false / productionReady=false。session import/evaluation report成功をproduction昇格へ読み替えません。
           </p>
+          <TypographyDaVinciHumanPromotionReview report={buildTypographyDaVinciActualEvaluationReport(session)} />
         </div>
       ) : null}
     </details>
