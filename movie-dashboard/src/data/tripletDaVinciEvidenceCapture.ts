@@ -1,5 +1,24 @@
-import type {TripletActualState, TripletDaVinciActualArtifactV1, TripletDaVinciActualReadbackV1} from "./tripletDaVinciActualArtifact";
-import {assertDaVinciEvidenceIdentity, blankDaVinciVisualQa, evidenceNullableBoolean, evidenceNullableFiniteNumber, evidenceNullableString, evidenceObject, evidenceString, evidenceStringArray, parseDaVinciLiveParameterBindings, parseDaVinciVisualQa, type DaVinciLiveParameterBindingV1, type DaVinciVisualQaV1} from "./davinciFollowerEvidenceContract";
+import {
+  attachTripletDaVinciActualReadback,
+  type TripletActualState,
+  type TripletDaVinciActualArtifactV1,
+  type TripletDaVinciActualReadbackV1,
+} from "./tripletDaVinciActualArtifact";
+import {
+  assertDaVinciEvidenceIdentity,
+  blankDaVinciVisualQa,
+  evidenceNullableBoolean,
+  evidenceNullableFiniteNumber,
+  evidenceNullableString,
+  evidenceObject,
+  evidenceString,
+  evidenceStringArray,
+  parseDaVinciLiveParameterBindings,
+  parseDaVinciVisualQa,
+  type DaVinciLiveParameterBindingV1,
+  type DaVinciVisualQaV1,
+} from "./davinciFollowerEvidenceContract";
+import {evaluateTypographyDaVinciHumanPromotionGate} from "./typographyDaVinciPromotionPolicy";
 
 export type TripletBindingRole = "TEXT_PLUS_TOOL" | "TRANSFORM_BINDING" | "HIT_1" | "HIT_2" | "HIT_3" | "PULSE_DECAY" | "OPACITY";
 export type TripletDaVinciLiveParameterBindingV1 = DaVinciLiveParameterBindingV1<TripletBindingRole>;
@@ -57,4 +76,48 @@ export function parseTripletDaVinciEvidenceCapture(raw: string, artifact: Triple
   };
   if (readback.sceneId !== sceneId || readback.sourceRevision !== sourceRevision) throw new Error("capture/readback identity mismatch");
   return {schemaVersion: "triplet-davinci-evidence-capture/v1", authority: "EVIDENCE_ONLY", sceneId, sourceRevision, readback, liveParameterBindings: parseDaVinciLiveParameterBindings(input.liveParameterBindings, allowedBindingRoles), visualQa: parseDaVinciVisualQa(input.visualQa), rule: evidenceString(input.rule, "capture.rule")};
+}
+
+export function evaluateTripletDaVinciEvidenceCapture(
+  artifact: TripletDaVinciActualArtifactV1,
+  capture: TripletDaVinciEvidenceCaptureV1,
+) {
+  assertDaVinciEvidenceIdentity(capture, artifact, {sceneMismatchMessage: "Triplet capture sceneId mismatch", staleRevisionMessage: "STALE_TRIPLET_EVIDENCE_CAPTURE"});
+  const evaluatedArtifact = attachTripletDaVinciActualReadback(artifact, capture.readback);
+  const checks = {
+    ...evaluatedArtifact.checks,
+    visualQa1x: capture.visualQa.oneX,
+    visualQaHalfSpeed: capture.visualQa.halfSpeed,
+  };
+  const promotionGate = evaluateTypographyDaVinciHumanPromotionGate({
+    patternId: "type-triplet",
+    machineChecks: [
+      checks.resolveIdentity,
+      checks.textPlusCreated,
+      checks.transformBindingRecorded,
+      checks.hitFramesApplied,
+      checks.pulseDurationApplied,
+      checks.scalePeaksApplied,
+      checks.opacityApplied,
+      checks.pulseShapeApplied,
+      checks.sourceReadback,
+      checks.renderCompleted,
+    ],
+    bindings: capture.liveParameterBindings,
+    visualQa: capture.visualQa,
+  });
+  return {
+    schemaVersion: "triplet-davinci-evaluated-evidence/v1" as const,
+    authority: "EVIDENCE_ONLY" as const,
+    sceneId: artifact.sceneId,
+    sourceRevision: artifact.sourceRevision,
+    evaluatedArtifact: {...evaluatedArtifact, checks},
+    liveParameterBindings: [...capture.liveParameterBindings],
+    visualQa: {...capture.visualQa, notes: [...capture.visualQa.notes]},
+    promotionGate,
+    eligibleForHumanReview: promotionGate.eligibleForHumanReview,
+    automaticPromotionAllowed: false as const,
+    productionReady: false as const,
+    rule: "Triplet can become eligible for a separate human promotion review only when all three hits, decay, opacity, live bindings and 1x/half-speed visual parity pass. A single visible pulse is never sufficient.",
+  };
 }
