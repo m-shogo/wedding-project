@@ -225,6 +225,7 @@ export const buildTypographyElement = async (config: TypographyElementConfig) =>
     sourceStrategy: 'DERIVED_FROM_SHARED_CANONICAL_TYPOGRAPHY_ELEMENT_KIT',
     dependencies: [],
     dimensions: {width: 1280, height: 720},
+    fpsForExistingConceptPreview: 30,
     durationInFrames: config.durationInFrames,
     installationMode: 'wrapped',
     officialValidator: '@remotion/studio-protocol createElementPayload()',
@@ -235,19 +236,26 @@ export const buildTypographyElement = async (config: TypographyElementConfig) =>
       intensityLabel: '動きの強さ (S=やさしい / M=標準 / L=強い)',
       colorLabel: '文字色',
       transformSchema: true,
+      colorControl: 'CANONICAL_ENGINE_BACKED',
+      transparentControl: 'INTENTIONALLY_NOT_EXPOSED_TECHNICAL_SETTING',
       actualStudioControlReadback: 'NOT_RUN',
     },
     exitAnimation: {
       mode: 'CANONICAL_FADE',
+      approximateDurationSeconds: 0.35,
       elementOnlyImplementation: false,
+      userControl: 'INTENTIONALLY_NOT_EXPOSED_FIXED_TEMPORARY_OVERLAY_BEHAVIOR',
     },
     productionReadiness: 'CANDIDATE_NEEDS_STUDIO_ACTUAL',
     actualStudioInstallState: 'NOT_RUN',
     guardrails: [
       'ELEMENT_PAYLOAD_VALID != STUDIO_INSTALL_VERIFIED',
+      'INTERACTIVE_SCHEMA_PRESENT != STUDIO_CONTROL_READBACK_VERIFIED',
       'DERIVED_SOURCE != SECOND_MOTION_IMPLEMENTATION',
+      'COLOR_CONTROL_REQUIRES_CANONICAL_ENGINE_PROP',
       'SHARED_ELEMENT_KIT != SHARED_MOTION_IMPLEMENTATION',
       'ELEMENT_EXIT_USES_CANONICAL_ENGINE != ELEMENT_ONLY_DIVERGENCE',
+      'REMOTION_PROVIDED_PACKAGES != ELEMENT_DEPENDENCIES',
     ],
   };
   writeFileSync(manifestOutputPath, `${JSON.stringify(manifest, null, 2)}\n`);
@@ -256,6 +264,8 @@ export const buildTypographyElement = async (config: TypographyElementConfig) =>
   console.log(`source=${sourceOutputPath}`);
   console.log(`payload=${payloadOutputPath}`);
   console.log(`elementSourceSha256=${manifest.elementSourceSha256}`);
+  console.log('colorControl=CANONICAL_ENGINE_BACKED');
+  console.log('exitAnimation=CANONICAL_FADE');
   console.log('actualStudioControlReadback=NOT_RUN');
   console.log('actualStudioInstallState=NOT_RUN');
 };
