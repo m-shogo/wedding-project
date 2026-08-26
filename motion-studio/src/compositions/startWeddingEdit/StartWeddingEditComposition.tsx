@@ -5,6 +5,7 @@ import {WEDDING_EDIT_SECTIONS, weddingEditSectionFrames} from '../../data/startW
 import {entryOverlapFrames, placeShots, weddingSectionDesign, type WeddingVariant} from '../../data/startWeddingEdit/storyboard';
 import {ShotRenderer} from '../../motion-kit/start129/shotEngine';
 import {WeddingLyricTrack, weddingLyricFallbackByPhraseId} from '../../motion-kit/startWeddingEdit/weddingLyricLine';
+import {CHOREOGRAPHED_PHRASE_IDS, ChoreographedMomentRenderer} from '../../motion-kit/startWeddingEdit/choreographedMoments';
 import {TitleSequenceA, TitleSequenceB, TitleSequenceC} from './TitleOpenA_B_C';
 import {InterludeOverlay} from './InterludeOverlay';
 
@@ -138,6 +139,21 @@ export const StartWeddingEditComposition: React.FC<StartWeddingEditCompositionPr
           </Sequence>
         );
       })}
+
+      {/* ChoreographyEventで文字・写真・カメラを同時制御するmoment(武装創造/
+          チャプチャプチャプ/独りじゃない)。通常のshot/lyricレイヤーより上に描画し、
+          その区間だけ画面全体を差し替える。 */}
+      {weddingEditLyricPhrases
+        .filter((p) => (CHOREOGRAPHED_PHRASE_IDS as readonly string[]).includes(p.phraseId))
+        .map((p) => {
+          const from = Math.round(p.startSec * 30);
+          const dur = Math.max(1, Math.round(p.endSec * 30) - from);
+          return (
+            <Sequence key={`choreo-${p.phraseId}`} from={from} durationInFrames={dur} name={`choreo-${p.phraseId}`}>
+              <ChoreographedMomentRenderer phrase={p} variant={variant} />
+            </Sequence>
+          );
+        })}
 
       <WeddingLyricTrack phrases={weddingEditLyricPhrases} variant={variant} sectionShots={sectionShots} />
 

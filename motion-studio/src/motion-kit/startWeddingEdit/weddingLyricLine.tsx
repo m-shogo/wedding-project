@@ -32,6 +32,7 @@ import {
   WordHit,
 } from '../start129/lyricAnimationFamilies';
 import {HandDrawnUnderline} from '../start129/handDrawnPrimitives';
+import {CHOREOGRAPHED_PHRASE_IDS} from './choreographedMoments';
 import {
   BaselineTravel,
   CallAndResponseLayout,
@@ -239,6 +240,14 @@ const WeddingLyricBody: React.FC<{phrase: EnrichedLyricPhrase; variant: WeddingV
   const single = firstWordFrame(phrase);
   // フックのルール上、switchの外で無条件に呼ぶ(type-maskの実shot連動でのみ使用)。
   const frameForShotLookup = useCurrentFrame();
+
+  // ChoreographyEventで文字・写真・カメラをまとめて描画するmomentは、
+  // ChoreographedMomentRenderer(StartWeddingEditComposition側)が別途描くため、
+  // ここでは文字を二重に描画しない。
+  if ((CHOREOGRAPHED_PHRASE_IDS as readonly string[]).includes(phrase.phraseId)) {
+    weddingLyricFallbackByPhraseId.set(phrase.phraseId, false);
+    return null;
+  }
 
   switch (anim) {
     case 'three-hit-build':
