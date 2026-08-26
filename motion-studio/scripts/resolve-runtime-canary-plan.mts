@@ -4,6 +4,7 @@ import {
   resolve21RuntimeCanaryPack,
 } from '../src/data/resolveRuntimeCanaryPack.ts';
 import {getResolveRuntimeCanaryCapabilityRefs} from '../src/data/resolveRuntimeCanaryCapabilityRefs.ts';
+import {getResolveCanaryInputPreparation} from '../src/data/resolveCanaryInputFixtures.ts';
 
 const args = process.argv.slice(2);
 const wantsJson = args.includes('--json');
@@ -15,7 +16,8 @@ function printList() {
   console.log('Resolve 21 Runtime Canary Pack');
   console.log('');
   for (const canary of resolve21RuntimeCanaryPack.canaries) {
-    console.log(`${canary.id}\t${canary.priority}\t${canary.state}\t${canary.title}`);
+    const prep = getResolveCanaryInputPreparation(canary.id);
+    console.log(`${canary.id}\t${canary.priority}\t${canary.state}\t${prep ? 'INPUT_PREP_AVAILABLE' : 'INPUT_PREP_MANUAL'}\t${canary.title}`);
   }
   console.log('');
   console.log('Usage:');
@@ -42,6 +44,7 @@ if (!canary) {
   process.exit(1);
 }
 const capabilityRefs = getResolveRuntimeCanaryCapabilityRefs(canary.id);
+const inputPreparation = getResolveCanaryInputPreparation(canary.id);
 
 if (wantsEvidenceTemplate) {
   console.log(JSON.stringify(createResolveRuntimeCanaryEvidenceTemplate(canary.id), null, 2));
@@ -49,7 +52,7 @@ if (wantsEvidenceTemplate) {
 }
 
 if (wantsJson) {
-  console.log(JSON.stringify({...canary, capabilityRefs}, null, 2));
+  console.log(JSON.stringify({...canary, capabilityRefs, inputPreparation: inputPreparation ?? null}, null, 2));
   process.exit(0);
 }
 
@@ -65,6 +68,14 @@ for (const ref of capabilityRefs) {
   console.log(`- ${ref.kind}:${ref.id} -> ${ref.sourceRef}`);
 }
 console.log('');
+console.log('## Input preparation');
+if (inputPreparation) {
+  console.log(`- Command: ${inputPreparation.command}`);
+  console.log(`- Result: ${inputPreparation.result}`);
+} else {
+  console.log('- No automated neutral fixture preparation is registered. Follow the canary input definitions manually.');
+}
+console.log('');
 console.log('## Safety scope');
 console.log(`- Disposable project required: ${canary.isolation.disposableProjectRequired ? 'YES' : 'NO'}`);
 console.log(`- Real wedding project mutation forbidden: ${canary.isolation.realWeddingProjectMutationForbidden ? 'YES' : 'NO'}`);
@@ -74,7 +85,7 @@ console.log('');
 console.log('## Inputs');
 for (const input of canary.inputs) {
   console.log(`- [${input.required ? 'required' : 'optional'}] ${input.id} (${input.kind}): ${input.sourceRef}`);
-  if (input.preparationCommand) console.log(`  prepare: ${input.preparationCommand}`);
+  if (input.preparationCommand) console.log(`  legacy prepare hint: ${input.preparationCommand}`);
   if (input.notes) console.log(`  note: ${input.notes}`);
 }
 console.log('');
