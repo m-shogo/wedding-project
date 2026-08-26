@@ -3,6 +3,7 @@ import {
   getResolveRuntimeCanary,
   resolve21RuntimeCanaryPack,
 } from '../src/data/resolveRuntimeCanaryPack.ts';
+import {getResolveRuntimeCanaryCapabilityRefs} from '../src/data/resolveRuntimeCanaryCapabilityRefs.ts';
 
 const args = process.argv.slice(2);
 const wantsJson = args.includes('--json');
@@ -18,10 +19,10 @@ function printList() {
   }
   console.log('');
   console.log('Usage:');
-  console.log('  pnpm resolve:canary --list');
-  console.log('  pnpm resolve:canary <CANARY_ID>');
-  console.log('  pnpm resolve:canary <CANARY_ID> --json');
-  console.log('  pnpm resolve:canary <CANARY_ID> --evidence-template');
+  console.log('  node --no-warnings scripts/resolve-runtime-canary-plan.mts --list');
+  console.log('  node --no-warnings scripts/resolve-runtime-canary-plan.mts <CANARY_ID>');
+  console.log('  node --no-warnings scripts/resolve-runtime-canary-plan.mts <CANARY_ID> --json');
+  console.log('  node --no-warnings scripts/resolve-runtime-canary-plan.mts <CANARY_ID> --evidence-template');
 }
 
 if (wantsList) {
@@ -40,6 +41,7 @@ if (!canary) {
   printList();
   process.exit(1);
 }
+const capabilityRefs = getResolveRuntimeCanaryCapabilityRefs(canary.id);
 
 if (wantsEvidenceTemplate) {
   console.log(JSON.stringify(createResolveRuntimeCanaryEvidenceTemplate(canary.id), null, 2));
@@ -47,7 +49,7 @@ if (wantsEvidenceTemplate) {
 }
 
 if (wantsJson) {
-  console.log(JSON.stringify(canary, null, 2));
+  console.log(JSON.stringify({...canary, capabilityRefs}, null, 2));
   process.exit(0);
 }
 
@@ -58,7 +60,10 @@ console.log(`Current state: ${canary.state}`);
 console.log(`Purpose: ${canary.purpose}`);
 console.log(`Resolve target: 21.x / editions=${canary.target.editions.join(',')} / platforms=${canary.target.platforms.join(',')}`);
 console.log(`Pages: ${canary.target.pages.join(' -> ')}`);
-console.log(`Capabilities: ${canary.capabilityIds.join(', ')}`);
+console.log('Capability references:');
+for (const ref of capabilityRefs) {
+  console.log(`- ${ref.kind}:${ref.id} -> ${ref.sourceRef}`);
+}
 console.log('');
 console.log('## Safety scope');
 console.log(`- Disposable project required: ${canary.isolation.disposableProjectRequired ? 'YES' : 'NO'}`);
@@ -107,4 +112,4 @@ console.log('## Guardrails');
 for (const guardrail of canary.guardrails) console.log(`- ${guardrail}`);
 console.log('');
 console.log('Evidence skeleton:');
-console.log(`  pnpm resolve:canary ${canary.id} --evidence-template`);
+console.log(`  node --no-warnings scripts/resolve-runtime-canary-plan.mts ${canary.id} --evidence-template`);
