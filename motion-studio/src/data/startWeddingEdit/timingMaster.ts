@@ -126,6 +126,17 @@ export type MusicCue = {
 
 export type EditorialBlockType = 'welcome' | 'couple-profile' | 'title' | 'thank-you' | 'end-card';
 
+/** title種別のblock(S/StaRt等)で、1文字ずつ実cueへ同期させるための
+ * 個別cue。musicGrid.beatsMsが不足する区間では均等fallbackを使うが、
+ * その場合はtimingSource='estimated'を必ず持たせ、Guideへ表示できるようにする。 */
+export type LetterCue = {
+  cueId: string;
+  text: string;
+  timeMs: number;
+  timingSource: TimingSourceKind;
+  verifiedByListening: boolean;
+};
+
 /** 歌詞ではない演出block(ウェルカム・新郎新婦紹介・タイトル等)。 */
 export type EditorialBlock = {
   blockId: string;
@@ -137,12 +148,28 @@ export type EditorialBlock = {
   textLines: string[];
   photoRoles: string[];
   verifiedByListening: boolean;
+  /** title種別のみ使用。文字ごとの安定cue(INTRO-START-S等)。 */
+  letterCues?: LetterCue[];
+};
+
+/** 音楽グリッド(BPM/beat/downbeat)。旧beat-map.local.jsonの内容をmasterへ
+ * 正式に取り込み、generated.tsが空配列を出力しないようにするための型。 */
+export type MusicGrid = {
+  bpm: number | null;
+  beatsMs: number[];
+  downbeatsMs: number[];
+  source: 'manual' | 'audio-analysis' | 'legacy-import';
+  verifiedByListening: boolean;
 };
 
 export type TimingMaster = {
   schemaVersion: number;
   masterId: string;
   revision: number;
+  /** revision管理用: timestamp/revision/provenance.updatedAt等の揮発フィールドを
+   * 除いたcanonical contentのhash。同じ内容でmigration/saveを繰り返しても
+   * このhashが変わらなければrevisionを増やさない(computeMasterContentHash参照)。 */
+  contentHash: string;
   status: TimingMasterStatus;
 
   audio: {
@@ -150,6 +177,8 @@ export type TimingMaster = {
     sha256: string;
     durationMs: number;
     sampleRate: number | null;
+    channels: number | null;
+    codec: string | null;
     sourceStartMs: number;
     candidateEndMs: number;
     confirmedEndMs: number | null;
@@ -160,6 +189,7 @@ export type TimingMaster = {
     verifiedByListening: boolean;
   };
 
+  musicGrid: MusicGrid;
   sections: TimingSection[];
   phrases: TimingPhrase[];
   musicCues: MusicCue[];
@@ -191,13 +221,16 @@ export const secToMs = (sec: number): number => Math.round(sec * 1000);
 export const msToSec = (ms: number): number => ms / 1000;
 
 /** 音源上の絶対時刻(ms)を、Composition(=sourceStartMsを0とした編集後の
- * timeline)上のframeへ変換する。fpsはCompositionごとに変わりうるため引数で渡す。 */
-export const audioTimeMsToCompositionFrame = (audioTimeMs: number, sourceStartMs: number, fps: number): number =>
-  Math.round(((audioTimeMs - sourceStartMs) / 1000) * fps);
+ * timeline)上のframeへ変換する。fpsはCompositionごとに変わりうるため引数で渡す。
+ * globalOffsetMs(既定0)はaudio.globalContentOffsetMsを渡す想定で、
+ * 全歌詞が同じ方向へズレている場合の一括補正に使う。previewLatencyOffsetMsは
+ * ここに混ぜない(ブラウザ再生専用、render frameには影響させない)。 */
+export const audioTimeMsToCompositionFrame = (audioTimeMs: number, sourceStartMs: number, fps: number, globalOffsetMs = 0): number =>
+  Math.round(((audioTimeMs + globalOffsetMs - sourceStartMs) / 1000) * fps);
 
 /** Composition frameから音源上の絶対時刻(ms)へ戻す(逆変換)。 */
-export const compositionFrameToAudioTimeMs = (frame: number, sourceStartMs: number, fps: number): number =>
-  Math.round((frame / fps) * 1000) + sourceStartMs;
+export const compositionFrameToAudioTimeMs = (frame: number, sourceStartMs: number, fps: number, globalOffsetMs = 0): number =>
+  Math.round((frame / fps) * 1000) + sourceStartMs - globalOffsetMs;
 
 /** 音源の絶対時刻(ms)を、trim後の編集時間(0始まり、ms)へ変換する。 */
 export const sourceTimeMsToEditTimeMs = (sourceTimeMs: number, sourceStartMs: number): number => sourceTimeMs - sourceStartMs;
@@ -264,3 +297,27 @@ export const canBeTimingMasterVerified = (master: TimingMaster): {ok: true} | {o
   if (hasEstimated) reasons.push('timingSource=estimatedのcueが残存');
   return reasons.length === 0 ? {ok: true} : {ok: false, reasons};
 };
+
+/** revisionを意味のある変更時だけ増やすための、canonical(=決定的で揮発フィールドを
+ * 含まない)payloadを作る。timestamp/revision/contentHash自体/verification集計
+ * (常にcues等から再計算できる派生値)を除外することで、「保存し直しただけ」では
+ * 中身が変わらない限りhashも変わらないようにする。実際のhash計算(sha256)は
+ * Node専用(crypto)なのでスクリプト側(migrate/sync)で行い、ここでは
+ * hash対象のpayloadを決定するロジックだけを共有する(ブラウザ環境からも
+ * importされうるこのファイルにNode専用importを持ち込まないため)。 */
+export const canonicalMasterPayloadForHash = (
+  master: Omit<TimingMaster, 'contentHash' | 'revision' | 'verification' | 'provenance'> & {
+    verification?: TimingMaster['verification'];
+    provenance?: TimingMaster['provenance'];
+  },
+): unknown => ({
+  schemaVersion: master.schemaVersion,
+  masterId: master.masterId,
+  status: master.status,
+  audio: {...master.audio},
+  musicGrid: master.musicGrid,
+  sections: master.sections,
+  phrases: master.phrases,
+  musicCues: master.musicCues,
+  editorialBlocks: master.editorialBlocks,
+});

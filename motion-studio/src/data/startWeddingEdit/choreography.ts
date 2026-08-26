@@ -22,7 +22,10 @@ import type {WeddingVariant} from './storyboard';
 
 export type ChoreographyIntensity = 1 | 2 | 3 | 4 | 5;
 export type ChoreographyAudioCue = 'vocal' | 'beat' | 'impact' | 'silence';
-export type ChoreographyTimingSource = 'manual' | 'beat-snap' | 'estimated';
+// generated.ts(ImportantWord.timingSource)が実際に持つ5値と一致させる
+// (以前は3値に単純化していたため、verified-vocal/audio-analysisが
+// 'estimated'等へ潰れて見える不具合があった)。
+export type ChoreographyTimingSource = 'manual' | 'verified-vocal' | 'audio-analysis' | 'beat-snap' | 'estimated';
 
 export type TypeAction =
   | {kind: 'none'}

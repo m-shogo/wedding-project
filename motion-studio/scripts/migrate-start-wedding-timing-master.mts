@@ -2,41 +2,52 @@
 // start-wedding-edit.local.json + word-accent-map.manual-overrides.local.json)から
 // local/start-wedding-timing-master.local.json(唯一の正本)を生成する。
 //
+// 重要な訂正(コードレビュー指摘対応): このscriptは通常のdev/render/QAからは
+// 実行しない。通常導線は sync-start-wedding-timing-master.mts(masterを読むだけ、
+// 書き換えない)。このscriptは「初回のlegacy import」または「明示的な再取り込み」
+// でのみ人間が実行する。package.jsonでは既定でdry-run(import:legacy-timing-master)、
+// 実際に書き込む場合は import:legacy-timing-master:apply を明示的に叩く。
+//
 // 安全性の要件(元ファイルを壊さない):
 //   - 元ファイルを上書き・削除しない(読むだけ)
 //   - manual値(manual-overrides由来)を必ず最優先する
 //   - 既存masterが既にある場合、その中のverifiedByListening=true/timingSource='manual'な
 //     値を新しい派生値で上書きしない(再実行しても人間の確認結果を消さない)
-//   - --dry-run で書き込まず差分だけ表示できる
-//   - 実行のたびにtimestamp付きbackupを local/_backups/ へ残す
+//   - --dry-run で書き込まず差分だけ表示できる(既定)
+//   - revisionはcanonical content hashが変わった場合だけ増やす(timestamp等の
+//     揮発フィールドは対象外。同じ入力で再実行してもrevisionは増えない)
+//   - 実際に書き込む場合、実行のたびにtimestamp付きbackupを local/_backups/ へ残す
 //
 // 使い方:
-//   node --no-warnings scripts/migrate-start-wedding-timing-master.mts --dry-run
-//   node --no-warnings scripts/migrate-start-wedding-timing-master.mts
+//   node --no-warnings scripts/migrate-start-wedding-timing-master.mts --dry-run (既定)
+//   node --no-warnings scripts/migrate-start-wedding-timing-master.mts --apply
 
+import {execFileSync} from 'node:child_process';
 import {createHash} from 'node:crypto';
 import {existsSync, mkdirSync, readFileSync, writeFileSync} from 'node:fs';
 import {dirname, join} from 'node:path';
 import {fileURLToPath} from 'node:url';
-import type {
-  CoupleProfile,
-} from '../src/data/startWeddingEdit/coupleProfile.ts';
+import type {CoupleProfile} from '../src/data/startWeddingEdit/coupleProfile.ts';
 import {parseCoupleProfile, EMPTY_COUPLE_PROFILE} from '../src/data/startWeddingEdit/coupleProfile.ts';
 import type {
   EditorialBlock,
+  LetterCue,
   MusicCue,
+  MusicGrid,
   SectionKind,
   TimingMaster,
   TimingPhrase,
   TimingSection,
   VocalCue,
 } from '../src/data/startWeddingEdit/timingMaster.ts';
-import {TIMING_MASTER_SCHEMA_VERSION, countVerification, nearestBeatMs, secToMs} from '../src/data/startWeddingEdit/timingMaster.ts';
+import {TIMING_MASTER_SCHEMA_VERSION, canonicalMasterPayloadForHash, countVerification, nearestBeatMs, secToMs} from '../src/data/startWeddingEdit/timingMaster.ts';
 
 const studioRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const localDir = join(studioRoot, 'local');
 const masterPath = join(localDir, 'start-wedding-timing-master.local.json');
-const isDryRun = process.argv.includes('--dry-run');
+// 既定はdry-run。書き込むには明示的に--applyを渡す(--dry-runも受け付けるが冗長)。
+const isApply = process.argv.includes('--apply');
+const isDryRun = !isApply;
 
 const readJson = <T,>(name: string): T | null => {
   const p = join(localDir, name);
@@ -51,6 +62,8 @@ const fail = (msg: string) => {
 };
 const warn = (msg: string) => console.warn(`[migrate-timing-master] ⚠️  ${msg}`);
 const info = (msg: string) => console.log(`[migrate-timing-master] ${msg}`);
+
+if (isDryRun) info('--dry-run(既定)。書き込むには --apply を付けてください。');
 
 // --- 1. 入力読み込み -------------------------------------------------------
 type EditRangeRaw = {
@@ -95,7 +108,7 @@ const phraseMap = readJson<{
   phrases: Array<{phraseId: string; selectedAnimation?: string; transitionIntent?: string; confidence?: string; holdSec?: number; exitSec?: number}>;
 }>('phrase-map.local.json');
 const wordAccentMap = readJson<{words: Array<{word: string; phraseId: string; accentSec: number}>}>('word-accent-map.local.json');
-const beatMap = readJson<{beats: number[]; bpm?: number}>('beat-map.local.json');
+const beatMap = readJson<{beats: number[]; downbeats?: number[]; bpm?: number}>('beat-map.local.json');
 const transitionMap = readJson<{transitions: Record<string, string>}>('transition-map.local.json');
 type ManualOverride = {
   phraseId: string;
@@ -111,9 +124,9 @@ type ManualOverride = {
 const manualOverrides = readJson<ManualOverride[]>('word-accent-map.manual-overrides.local.json') ?? [];
 
 if (!structureMap) warn('structure-map.local.json が無い。sectionはlyrics由来のsectionIdだけで最小構成にする。');
-if (!phraseMap) warn('phrase-map.local.json が無い。selectedAnimation/transitionIntent補完なし。');
+if (!phraseMap) warn('phrase-map.local.json が無い。selectedAnimation/transitionIntent補完なし。phrase-onsetはestimated扱いになる。');
 if (!wordAccentMap) warn('word-accent-map.local.json が無い。importantWords無しのphraseが増える。');
-if (!beatMap) warn('beat-map.local.json が無い。beat-snap不可。');
+if (!beatMap) warn('beat-map.local.json が無い。beat-snap/musicGrid不可。');
 if (!transitionMap) warn('transition-map.local.json が無い。transitionIntent補完なし。');
 
 const audioCandidates = ['StaRt.m4a', 'start-wedding-edit.m4a', 'start-edit.m4a'];
@@ -133,7 +146,36 @@ if (!audioPath) {
   process.exit(1);
 }
 const audioSha256 = createHash('sha256').update(readFileSync(audioPath)).digest('hex');
-info(`音源: ${audioFileName} sha256=${audioSha256.slice(0, 12)}...`);
+
+// --- 1b. 音源メタデータをffprobeで実測する(重要な訂正: 以前はdurationMs=0/
+// sampleRate=nullのまま放置していた)。 -------------------------------------
+type AudioMeta = {durationMs: number; sampleRate: number | null; channels: number | null; codec: string | null};
+const probeAudio = (path: string): AudioMeta => {
+  try {
+    const out = execFileSync(
+      'ffprobe',
+      ['-v', 'error', '-select_streams', 'a:0', '-show_entries', 'stream=sample_rate,channels,codec_name:format=duration', '-of', 'json', path],
+      {encoding: 'utf-8'},
+    );
+    const parsed = JSON.parse(out) as {streams?: Array<{sample_rate?: string; channels?: number; codec_name?: string}>; format?: {duration?: string}};
+    const stream = parsed.streams?.[0];
+    return {
+      durationMs: parsed.format?.duration ? Math.round(Number(parsed.format.duration) * 1000) : 0,
+      sampleRate: stream?.sample_rate ? Number(stream.sample_rate) : null,
+      channels: stream?.channels ?? null,
+      codec: stream?.codec_name ?? null,
+    };
+  } catch (e) {
+    warn(`ffprobe失敗: ${(e as Error).message}。durationMs/sampleRate/channels/codecは0/nullのまま。`);
+    return {durationMs: 0, sampleRate: null, channels: null, codec: null};
+  }
+};
+const audioMeta = probeAudio(audioPath);
+info(
+  `音源: ${audioFileName} sha256=${audioSha256.slice(0, 12)}... duration=${audioMeta.durationMs}ms sampleRate=${audioMeta.sampleRate}Hz channels=${audioMeta.channels} codec=${audioMeta.codec}`,
+);
+if (audioMeta.durationMs === 0) fail('音源のdurationMsが0(ffprobe失敗)。masterへ書き込めません。');
+if (secToMs(editRange.sourceEndSec) > audioMeta.durationMs) fail(`candidateEndMs(${secToMs(editRange.sourceEndSec)}ms)が音源全長(${audioMeta.durationMs}ms)を超えている。`);
 
 // --- 2. 既存master(あれば)を読み、manual/verified値を保護する -------------
 const existingMaster = existsSync(masterPath) ? (JSON.parse(readFileSync(masterPath, 'utf8')) as TimingMaster) : null;
@@ -176,6 +218,10 @@ const sections: TimingSection[] = (structureMap?.sections ?? []).map((s) => {
       {timeMs: secToMs(s.endSec), value: (isChorus ? 4 : 2) as 1 | 2 | 3 | 4 | 5},
     ],
     mood: [],
+    // structure-map.local.jsonの各section confidence(medium/high)は、その
+    // ファイル自身がffmpeg RMS/spectrogram解析+Palmier Pro beat detectionの
+    // 結果と明記しているため、ここは実際に解析由来と言える(audio-analysis)。
+    // legacy importでのみ真である前提を明示するため、narrativeRoleに残す。
     narrativeRole: s.note ?? s.role,
     visualDensity: isChorus ? 'high' : 'medium',
     cameraEnergy: isChorus ? 'high' : 'medium',
@@ -186,6 +232,18 @@ const sections: TimingSection[] = (structureMap?.sections ?? []).map((s) => {
   };
 });
 
+// --- 3b. musicGrid(beat-map.local.jsonを正式にmasterへ取り込む) ------------
+// 重要な訂正: 以前のsync scriptがbeats/downbeats/bpmを空配列/0で出力しており、
+// 「StaRt文字は実測beat同期」という説明が事実と異なっていた。ここでmasterへ
+// 正式に格納し、sync scriptがそのまま出力することで解消する。
+const musicGrid: MusicGrid = {
+  bpm: beatMap?.bpm ?? null,
+  beatsMs: (beatMap?.beats ?? []).map(secToMs),
+  downbeatsMs: (beatMap?.downbeats ?? []).map(secToMs),
+  source: beatMap ? 'legacy-import' : 'manual',
+  verifiedByListening: false,
+};
+
 // --- 4. phrases + cues構築 ---------------------------------------------------
 const phraseMapById = new Map((phraseMap?.phrases ?? []).map((p) => [p.phraseId, p]));
 const wordsByPhraseId = new Map<string, Array<{word: string; accentSec: number}>>();
@@ -194,15 +252,37 @@ for (const w of wordAccentMap?.words ?? []) {
   arr.push({word: w.word, accentSec: w.accentSec});
   wordsByPhraseId.set(w.phraseId, arr);
 }
-const manualWordByKey = new Map(
-  manualOverrides.filter((o) => o.word !== null && o.manualAccentSec != null).map((o) => [`${o.phraseId}::${o.word}`, o]),
-);
+
+// 重要な訂正: legacy manual overrideは`${phraseId}::${word}`というキーで
+// 保存されているため、同一phrase内に同じ語が複数回出現する場合
+// (「パッ」「チャプ」「ララ」等)、どのoccurrenceへ適用すべきか一意に決まらない。
+// 以前は問答無用で全occurrenceへ同じoverrideをコピーしていたが、これは
+// 新しいcueId制度(occurrence個別追跡)の利点を壊す。ここでは、対象語が
+// そのphrase内で1回しか出現しない場合だけ自動適用し、複数回出現する場合は
+// ambiguousとして報告するだけに留める(自動コピーしない)。
+const manualWordOverrides = manualOverrides.filter((o) => o.word !== null && o.manualAccentSec != null);
 const manualPhraseById = new Map(
   manualOverrides
     .filter((o) => o.word === null && (o.manualStartSec != null || o.manualEndSec != null || o.verifiedByListening))
     .map((o) => [o.phraseId, o]),
 );
-const beatsMs = (beatMap?.beats ?? []).map(secToMs);
+const ambiguousLegacyOverrides: string[] = [];
+const manualWordByKey = new Map<string, ManualOverride>();
+for (const o of manualWordOverrides) {
+  const words = wordsByPhraseId.get(o.phraseId) ?? [];
+  const occurrences = words.filter((w) => w.word === o.word);
+  if (occurrences.length > 1) {
+    ambiguousLegacyOverrides.push(`${o.phraseId}::${o.word}(${occurrences.length}箇所出現、自動適用せず)`);
+    continue;
+  }
+  manualWordByKey.set(`${o.phraseId}::${o.word}`, o);
+}
+if (ambiguousLegacyOverrides.length > 0) {
+  warn(`ambiguous legacy override(反復語のため自動適用しない): ${ambiguousLegacyOverrides.join(', ')}`);
+  warn('  → DashboardからcueId単位(occurrenceIndex明示)で個別に手動確定してください。');
+}
+
+const beatsMs = musicGrid.beatsMs;
 
 const phrases: TimingPhrase[] = lyrics.phrases.map((p) => {
   const pm = phraseMapById.get(p.phraseId);
@@ -219,7 +299,12 @@ const phrases: TimingPhrase[] = lyrics.phrases.map((p) => {
   const endSec = phraseOverride?.manualEndSec ?? p.endSec;
 
   const cues: VocalCue[] = [];
-  // phrase-onset cue(必ず1つ)
+  // phrase-onset cue(必ず1つ)。
+  // 重要な訂正: 以前は根拠を問わず一律'audio-analysis'にしていた。
+  // phrase-map.local.jsonに対応entry(pm)がある場合のみ、そのファイルが
+  // 自己申告するPalmier/ffmpeg解析の裏付けがあるとみなしaudio-analysisとする。
+  // pmが無い場合は「lyrics JSONの数値をそのまま使っているだけ」であり、
+  // 独立した解析の裏付けが無いためestimatedとする。
   cues.push(
     preserveCueIfBetter({
       cueId: `${p.phraseId}-ONSET`,
@@ -228,7 +313,7 @@ const phrases: TimingPhrase[] = lyrics.phrases.map((p) => {
       text: p.text,
       occurrenceIndex: 0,
       timeMs: secToMs(startSec),
-      timingSource: phraseOverride?.manualStartSec != null ? 'manual' : 'audio-analysis',
+      timingSource: phraseOverride?.manualStartSec != null ? 'manual' : pm ? 'audio-analysis' : 'estimated',
       verifiedByListening: phraseOverride?.verifiedByListening ?? false,
       confidence: (pm?.confidence as VocalCue['confidence']) ?? 'medium',
       reviewComment: phraseOverride?.reviewComment ?? '',
@@ -255,14 +340,16 @@ const phrases: TimingPhrase[] = lyrics.phrases.map((p) => {
     );
   });
   // 3-hit(syllable-hit)cue: 「パッ」「チャプ」等の反復onomatopoeiaを個別確認できるように
-  // H01/H02/H03という安定IDを振る(文字列キーでは反復語を区別できない問題への対応)。
+  // H01/H02/H03という安定IDを振る。textには反復onomatopoeia全体ではなく、
+  // その1発の実際の表示語(例:「パッ」)を入れる(phrase全文を入れない)。
+  const hitWord = p.text.match(/^((?:パッ|チャプ|ラ){1,2})/)?.[1] ?? p.text.slice(0, 2);
   (p.threeHitFrameSecs ?? []).forEach((sec, i) => {
     cues.push(
       preserveCueIfBetter({
         cueId: `${p.phraseId}-H${String(i + 1).padStart(2, '0')}`,
         phraseId: p.phraseId,
         kind: 'syllable-hit',
-        text: p.text,
+        text: hitWord,
         occurrenceIndex: i,
         timeMs: secToMs(sec),
         timingSource: nearestBeatMs(secToMs(sec), beatsMs) != null ? 'beat-snap' : 'estimated',
@@ -293,21 +380,19 @@ const phrases: TimingPhrase[] = lyrics.phrases.map((p) => {
 });
 
 // --- 5. musicCues(section境界を最小限のtransition cueとして記録) -----------
+// structure-map.local.json自身が「ffmpeg RMS/spectrogram解析」を明記しているため、
+// ここのaudio-analysisは自己申告根拠のある分類(estimatedへの格下げは不要)。
 const musicCues: MusicCue[] = (structureMap?.sections ?? []).map((s, i) => ({
   cueId: `SECTION-${s.id}-START`,
   timeMs: secToMs(s.startSec),
   type: i === 0 ? 'silence' : s.role === 'chorus' ? 'chorus-entry' : 'transition',
   strength: (s.role === 'chorus' ? 4 : 2) as 1 | 2 | 3 | 4 | 5,
-  description: `${s.id}開始(structure-map由来、beat-map bpm=${beatMap?.bpm ?? '不明'})`,
+  description: `${s.id}開始(structure-map由来: ffmpeg RMS/spectrogram解析。beat-map bpm=${beatMap?.bpm ?? '不明'})`,
   timingSource: 'audio-analysis',
   verifiedByListening: false,
 }));
 
 // --- 6. editorialBlocks(冒頭ウェルカム/新郎新婦紹介/S/StaRt) -----------------
-// 実音源で最初の歌声(P001 onset)が始まる時刻を、intro全体の終端として使う。
-// これより前(0〜firstVocalMs)の範囲内に、ようこそ→タグライン→新郎→新婦→合流→
-// S→StaRtの7段階を、beat-mapのbeatへスナップしながら比例配置する。
-// 秒数を先に決め打ちせず、実際に使える長さから逆算する(過剰な推測をしない)。
 const firstVocalMs = secToMs(lyrics.phrases[0]?.startSec ?? 12.5);
 const coupleProfileRaw = readJson<Record<string, unknown>>('couple-profile.local.json');
 const coupleProfileParsed = coupleProfileRaw ? parseCoupleProfile(coupleProfileRaw) : null;
@@ -316,7 +401,6 @@ const coupleProfile: CoupleProfile = coupleProfileParsed?.ok ? coupleProfilePars
 const snap = (ms: number) => nearestBeatMs(ms, beatsMs) ?? ms;
 const introShowsProfiles = coupleProfile.showIntroduction && coupleProfile.groom.name !== '' && coupleProfile.bride.name !== '';
 
-// 7段階を比例配分する重み(ようこそ/タグラインを長め、紹介は短く、S/StaRtへ収束)。
 const introWeights = introShowsProfiles
   ? [{key: 'welcome', w: 2.2}, {key: 'tagline', w: 2.6}, {key: 'groom', w: 1.5}, {key: 'bride', w: 1.5}, {key: 'merge', w: 1.0}, {key: 's', w: 1.4}, {key: 'starttitle', w: 1.8}]
   : [{key: 'welcome', w: 2.4}, {key: 'tagline', w: 2.8}, {key: 's', w: 1.6}, {key: 'starttitle', w: 2.2}];
@@ -331,13 +415,35 @@ introWeights.forEach(({key, w}) => {
   introSlots[key] = {startMs, endMs};
 });
 
+// StaRt titleの5文字を、そのblock区間内の実測beatへ個別cueとして割り当てる。
+// beatが5個未満の場合は均等fallbackにし、timingSourceを'estimated'にする
+// (「実測beat同期」と虚偽表示しないため)。
+const buildStartLetterCues = (blockStartMs: number, blockEndMs: number): LetterCue[] => {
+  const letters = ['S', 't', 'a', 'R', 't'];
+  const ids = ['S', 'T1', 'A', 'R', 'T2'];
+  const beatsInRange = beatsMs.filter((b) => b >= blockStartMs && b <= blockEndMs);
+  const useReal = beatsInRange.length >= letters.length;
+  return letters.map((ch, i) => {
+    const timeMs = useReal
+      ? beatsInRange[Math.round((i * (beatsInRange.length - 1)) / (letters.length - 1))]
+      : Math.round(blockStartMs + ((blockEndMs - blockStartMs) * i) / letters.length);
+    return {
+      cueId: `INTRO-START-${ids[i]}`,
+      text: ch,
+      timeMs,
+      timingSource: useReal ? ('beat-snap' as const) : ('estimated' as const),
+      verifiedByListening: false,
+    };
+  });
+};
+
 const editorialBlocks: EditorialBlock[] = [];
 editorialBlocks.push({
   blockId: 'intro-welcome',
   type: 'welcome',
   startMs: introSlots.welcome.startMs,
   endMs: introSlots.welcome.endMs,
-  linkedMusicCueIds: [],
+  linkedMusicCueIds: ['SECTION-intro-START'].filter((id) => musicCues.some((m) => m.cueId === id)),
   energy: 2,
   textLines: coupleProfile.welcomeLines,
   photoRoles: [],
@@ -410,6 +516,7 @@ editorialBlocks.push({
   textLines: ['StaRt'],
   photoRoles: [],
   verifiedByListening: false,
+  letterCues: buildStartLetterCues(introSlots.starttitle.startMs, introSlots.starttitle.endMs),
 });
 
 if (hadError) {
@@ -417,31 +524,44 @@ if (hadError) {
   process.exit(1);
 }
 
-// --- 7. master組み立て -------------------------------------------------------
+// --- 7. master組み立て + canonical content hashでrevision判定 ----------------
 const now = new Date().toISOString();
-const master: TimingMaster = {
+const audio = {
+  fileName: audioFileName,
+  sha256: audioSha256,
+  durationMs: audioMeta.durationMs,
+  sampleRate: audioMeta.sampleRate,
+  channels: audioMeta.channels,
+  codec: audioMeta.codec,
+  sourceStartMs: secToMs(editRange.sourceStartSec),
+  candidateEndMs: secToMs(editRange.sourceEndSec),
+  confirmedEndMs: existingMaster?.audio.confirmedEndMs ?? null,
+  fadeOutStartMs: secToMs(editRange.fadeOutStartSec),
+  fadeOutDurationMs: secToMs(editRange.fadeOutDurationSec),
+  globalContentOffsetMs: existingMaster?.audio.globalContentOffsetMs ?? 0,
+  previewLatencyOffsetMs: existingMaster?.audio.previewLatencyOffsetMs ?? 0,
+  verifiedByListening: existingMaster?.audio.verifiedByListening ?? false,
+};
+
+const candidatePayload = {
   schemaVersion: TIMING_MASTER_SCHEMA_VERSION,
   masterId: existingMaster?.masterId ?? 'start-wedding-edit-master',
-  revision: (existingMaster?.revision ?? 0) + 1,
-  status: existingMaster?.status ?? 'MASTER_MIGRATED',
-  audio: {
-    fileName: audioFileName,
-    sha256: audioSha256,
-    durationMs: existingMaster?.audio.durationMs ?? 0,
-    sampleRate: existingMaster?.audio.sampleRate ?? null,
-    sourceStartMs: secToMs(editRange.sourceStartSec),
-    candidateEndMs: secToMs(editRange.sourceEndSec),
-    confirmedEndMs: existingMaster?.audio.confirmedEndMs ?? null,
-    fadeOutStartMs: secToMs(editRange.fadeOutStartSec),
-    fadeOutDurationMs: secToMs(editRange.fadeOutDurationSec),
-    globalContentOffsetMs: existingMaster?.audio.globalContentOffsetMs ?? 0,
-    previewLatencyOffsetMs: existingMaster?.audio.previewLatencyOffsetMs ?? 0,
-    verifiedByListening: existingMaster?.audio.verifiedByListening ?? false,
-  },
+  status: existingMaster?.status ?? ('MASTER_MIGRATED' as const),
+  audio,
+  musicGrid,
   sections,
   phrases,
   musicCues,
   editorialBlocks,
+};
+const newContentHash = createHash('sha256').update(JSON.stringify(canonicalMasterPayloadForHash(candidatePayload))).digest('hex');
+const contentChanged = existingMaster?.contentHash !== newContentHash;
+const nextRevision = existingMaster ? (contentChanged ? existingMaster.revision + 1 : existingMaster.revision) : 1;
+
+const master: TimingMaster = {
+  ...candidatePayload,
+  revision: nextRevision,
+  contentHash: newContentHash,
   verification: {
     ...countVerification({phrases, musicCues}),
     verifiedBy: existingMaster?.verification.verifiedBy ?? null,
@@ -460,19 +580,31 @@ const master: TimingMaster = {
       'couple-profile.local.json',
     ],
     createdAt: existingMaster?.provenance.createdAt ?? now,
-    updatedAt: now,
+    updatedAt: contentChanged || !existingMaster ? now : existingMaster.provenance.updatedAt,
   },
 };
 
 const v = master.verification;
 info(
-  `sections=${master.sections.length} phrases=${master.phrases.length} cues=${v.totalVocalCues}(verified=${v.verifiedVocalCues}) musicCues=${v.totalMusicCues} editorialBlocks=${master.editorialBlocks.length}`,
+  `sections=${master.sections.length} phrases=${master.phrases.length} cues=${v.totalVocalCues}(verified=${v.verifiedVocalCues}) musicCues=${v.totalMusicCues} editorialBlocks=${master.editorialBlocks.length} musicGrid.beats=${musicGrid.beatsMs.length}`,
 );
-info(`intro editorial blocks(0-${firstVocalMs}ms、7段階${introShowsProfiles ? '全部' : '紹介省略(showIntroduction=false)'}):`);
+info(`revision: ${existingMaster?.revision ?? '(新規)'} → ${nextRevision} (contentHash ${contentChanged ? '変化あり' : '変化なし'})`);
+info(`intro editorial blocks(0-${firstVocalMs}ms、${introShowsProfiles ? '7' : '4'}ブロック構成):`);
 for (const b of master.editorialBlocks) info(`  ${b.blockId}: ${b.startMs}ms-${b.endMs}ms (${(b.endMs - b.startMs) / 1000}s) "${b.textLines.join(' / ')}"`);
+const startBlock = master.editorialBlocks.find((b) => b.blockId === 'intro-start-title');
+if (startBlock?.letterCues) {
+  const usesReal = startBlock.letterCues.every((c) => c.timingSource === 'beat-snap');
+  info(`  StaRt letterCues(${usesReal ? '実測beat使用' : 'ESTIMATED_FALLBACK: beat不足のため均等間隔'}):`);
+  for (const c of startBlock.letterCues) info(`    ${c.cueId}: "${c.text}" @ ${c.timeMs}ms (${c.timingSource})`);
+}
 
 if (isDryRun) {
-  info('--dry-run: ファイルは書き込みません。');
+  info('--dry-run: ファイルは書き込みません。書き込むには --apply を付けて再実行してください。');
+  process.exit(0);
+}
+
+if (!contentChanged && existingMaster) {
+  info('内容に実質変化なし。revisionは維持されます(既存ファイルへの再書き込みも行いません)。');
   process.exit(0);
 }
 
@@ -484,4 +616,4 @@ if (existsSync(masterPath)) {
   info(`既存masterをbackup: local/_backups/start-wedding-timing-master.${stamp}.json`);
 }
 writeFileSync(masterPath, JSON.stringify(master, null, 2) + '\n');
-info(`書き込み完了: local/start-wedding-timing-master.local.json (revision=${master.revision})`);
+info(`書き込み完了: local/start-wedding-timing-master.local.json (revision=${master.revision}, contentHash=${master.contentHash.slice(0, 12)}...)`);

@@ -18,7 +18,7 @@
 
 import React from 'react';
 import {AbsoluteFill, Sequence, interpolate, useCurrentFrame} from 'remotion';
-import {weddingEditEditorialBlocks, weddingEditBeatMap} from '../../data/startWeddingEdit/generated';
+import {weddingEditEditorialBlocks, weddingEditBeatMap, type GeneratedLetterCue} from '../../data/startWeddingEdit/generated';
 import {StartDemoBackdrop} from '../start129/StartDemoBackdrop';
 
 const FPS = 30;
@@ -230,18 +230,31 @@ const SLineBlock: React.FC<{blockStartSec: number; blockEndSec: number}> = ({blo
  * このblock区間内の実測beatへ均等5文字を割り当てる(捏造fractionにしない)。
  * 最後の文字で本編画面が完成し、次shot(P001の実shot)へのgraphic match cutを
  * 予告するため、末尾で白フラッシュ+わずかな拡大を残す(straight cut方針との両立)。 */
-const StartTitleBlock: React.FC<{blockStartSec: number; blockEndSec: number}> = ({blockStartSec, blockEndSec}) => {
+const StartTitleBlock: React.FC<{blockStartSec: number; blockEndSec: number; letterCues?: GeneratedLetterCue[]}> = ({
+  blockStartSec,
+  blockEndSec,
+  letterCues,
+}) => {
   const frame = useCurrentFrame();
   const durFrames = secToFrame(blockEndSec - blockStartSec);
   const letters = ['S', 't', 'a', 'R', 't'];
-  const beats = beatFramesIn(blockStartSec, blockEndSec).map((f) => f - secToFrame(blockStartSec));
-  // beatが5個未満の場合(実測beatが疎な区間)は、区間内で均等かつbeatへ丸めたframeを使う
-  // (完全な捏造ではなく、実測beat配列が存在する場合はそちらを優先する)。
-  const letterFrames =
-    beats.length >= letters.length
-      ? letters.map((_, i) => beats[Math.round((i * (beats.length - 1)) / (letters.length - 1))])
-      : letters.map((_, i) => Math.round((i * durFrames) / letters.length));
-  const lockFrame = letterFrames[letterFrames.length - 1] + 8;
+  // 重要な訂正: 以前はweddingEditBeatMap.beatsが常に空配列だったため、実質
+  // 均等fallbackしか使われていなかった(「実測beat同期」という説明が事実と
+  // 異なっていた)。今はmaster.editorialBlocks[].letterCues(migrate scriptが
+  // 実測beatまたはestimated fallbackを明示的に記録したもの)をそのまま使う。
+  const usingRealCues = letterCues && letterCues.length === letters.length;
+  // 実beatはmigrate script側で別途blockStartMs/EndMsの近傍から選ぶため、
+  // ごく僅かにblock境界の外(端数msの丸め違い)へ出ることがある。durFrames内へ
+  // clampして、以降のinterpolate(lockFrame, durFrames等)が単調増加を維持する
+  // ようにする(実測beatを使うこと自体は変えない。表示位置の安全域だけの措置)。
+  const clampFrame = (f: number) => Math.max(0, Math.min(durFrames - 1, f));
+  const letterFrames = (
+    usingRealCues
+      ? letterCues.map((c) => secToFrame(c.timeSec - blockStartSec))
+      : letters.map((_, i) => Math.round((i * durFrames) / letters.length))
+  ).map(clampFrame);
+  const isEstimatedFallback = !usingRealCues || letterCues.some((c) => c.timingSource === 'estimated');
+  const lockFrame = Math.min(durFrames - 2, letterFrames[letterFrames.length - 1] + 8);
   const pulse = useBeatPulse(frame, beatFramesIn(blockStartSec, blockEndSec).map((f) => f - secToFrame(blockStartSec)), 10);
   const flashO = interpolate(frame, [durFrames - 10, durFrames - 2, durFrames], [0, 0.5, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
   const finalScale = interpolate(frame, [lockFrame, durFrames], [1, 1.05 + pulse * 0.02], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
@@ -334,7 +347,11 @@ export const IntroNarrativeB: React.FC = () => {
       )}
       {seq(merge, 'intro-merge', merge && <MergeBlock photoRole={merge.photoRoles[0] ?? 'HERO_WIDE'} />)}
       {seq(sLine, 'intro-s-line', sLine && <SLineBlock blockStartSec={sLine.startSec} blockEndSec={sLine.endSec} />)}
-      {seq(startTitle, 'intro-start-title', startTitle && <StartTitleBlock blockStartSec={startTitle.startSec} blockEndSec={startTitle.endSec} />)}
+      {seq(
+        startTitle,
+        'intro-start-title',
+        startTitle && <StartTitleBlock blockStartSec={startTitle.startSec} blockEndSec={startTitle.endSec} letterCues={startTitle.letterCues} />,
+      )}
     </AbsoluteFill>
   );
 };
