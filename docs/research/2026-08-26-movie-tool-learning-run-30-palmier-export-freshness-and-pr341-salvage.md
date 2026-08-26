@@ -4,6 +4,8 @@ Date: 2026-08-26
 Status: IMPLEMENTED GUARDRAIL / RESOLVE RUNTIME STILL PENDING  
 Scope: Movie Tool Learning only
 
+> **Run 33 correction:** Run 30 originally described Resolve 21.0.4 as the current Wedding baseline. That statement is superseded. Blackmagic Design's current Support Center lists DaVinci Resolve 21.0.3 (2026-07-22) as the current Resolve 21 update. Treat 21.0.3 as the planning target and capture the exact tested patch only from live runtime evidence.
+
 ## Why this run exists
 
 Run 28 made it possible to attach an operator-attested real Palmier DaVinci/Resolve FCPXML without inventing provenance. Run 29 made the first neutral DRFX recovery fixture deterministic and runtime-session-ready.
@@ -239,13 +241,20 @@ FAIRLIGHT_ANIMATOR != FAIRLIGHT_AUDIO_AUTOMATION_WRITE
 
 Audio Volume/Fade therefore remains an assisted/runtime-revalidation path until a real supported write surface is reproduced.
 
-## 9. Version authority correction during salvage
+## 9. Version authority — corrected by Run 33
 
-Some PR #341 notes were written against a 21.0.3 baseline.
+Some PR #341 notes were written against a 21.0.3 baseline. Run 30 originally rejected those version-sensitive statements because it assumed a 21.0.4 Wedding baseline. That assumption was not supported by reproducible runtime evidence.
 
-The current Wedding Tool Learning baseline is **Resolve 21.0.4**. Version-sensitive claims from the old branch are therefore not copied verbatim.
+Current authority is now:
 
-Historical evidence remains useful, but future runtime evidence must capture the exact live:
+```text
+planning target = Resolve 21.0.3
+actually tested patch = unset until live Actual
+```
+
+Blackmagic Design's Support Center lists DaVinci Resolve 21.0.3 dated 2026-07-22 as the current Resolve 21 update at this research date.
+
+Future runtime evidence must capture the exact live:
 
 ```text
 product
@@ -254,9 +263,11 @@ edition
 platform
 ```
 
-Guardrail:
+Guardrails:
 
 ```text
+TARGET_PATCH != TESTED_PATCH
+DOCUMENTED_CURRENT_RELEASE != LOCAL_RUNTIME_IDENTITY
 PATCH_UPDATE => REVALIDATE_DEPENDENT_CAPABILITIES_ONLY
 ```
 
@@ -293,12 +304,12 @@ Run 30 does not resolve the highest-value actuals:
 
 ## PR #341 disposition
 
-After this Run 30 knowledge salvage is merged, PR #341 should be closed as superseded rather than merged wholesale.
+PR #341 was closed as superseded rather than merged wholesale.
 
 Reason:
 
 - its durable guardrails are retained here or already implemented by Runs 28–30;
 - its useful OTIO/project-context/native-routing distinctions are consolidated here;
 - its Issue #182 correction is preserved;
-- version-sensitive 21.0.3 wording is intentionally not reintroduced into the 21.0.4 baseline;
+- version-sensitive knowledge is now interpreted against the corrected 21.0.3 planning baseline and must still be revalidated on the exact live runtime;
 - keeping both the old six-document branch and the consolidated current authority open would create duplicate/conflicting research truth.
