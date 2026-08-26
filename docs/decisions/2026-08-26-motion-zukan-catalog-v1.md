@@ -60,8 +60,10 @@ QAで見つかった**既知の実装限界**(隠さず記録):
   panel-gridを大小非対称の4コマレイアウトへ変更し解消(4件以外の枚数は引き続き
   均等gridへfallback)。`motionPreviewEvidence.ts`のevidenceを実render確認の上
   更新済み。
-- `type-char-stagger`と`type-tracking-burst`が現状同じ`stagger` modeを共有しており、
-  見た目の差別化ができていない(未解消)。
+- ~~`type-char-stagger`と`type-tracking-burst`が現状同じ`stagger` modeを共有しており、
+  見た目の差別化ができていない。~~ → 追記(2026-08-26): `type-char-stagger`を
+  文字単位の個別reveal(真のstagger)、`type-tracking-burst`を新設
+  `mode='tracking'`(letterSpacing burst専用)へ分離し解消。実render確認済み。
 - `wipe-directional-shape`は「図形(shape)が横切る」という名称に対し、実装は
   図形オブジェクトではなく色面wipeの近似。
 

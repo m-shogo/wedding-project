@@ -41,7 +41,9 @@ function RenderPreset({preset}: {preset: RenderableMotionPreset}) {
                     ? 'lock'
                     : preset.mode === 'outline'
                       ? 'outline'
-                      : 'mask'
+                      : preset.mode === 'tracking'
+                        ? 'tracking'
+                        : 'mask'
           }
         />
       </AbsoluteFill>
