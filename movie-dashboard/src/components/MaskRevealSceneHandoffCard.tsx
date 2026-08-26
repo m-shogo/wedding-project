@@ -4,6 +4,7 @@ import {
   buildMaskRevealSceneProductionBundle,
   buildMaskRevealSceneProductionBundleJson,
 } from "../data/maskRevealSceneProductionBundle";
+import { resolveCodexAutomationGuardrail } from "../data/resolveAutomationAvailability";
 import type { MaskRevealSceneInstance } from "../data/visualSceneComposer";
 import { downloadText } from "../lib/exporters";
 
@@ -22,6 +23,7 @@ export function MaskRevealSceneHandoffCard({ scene }: { scene: MaskRevealSceneIn
   const bundle = useMemo(() => buildMaskRevealSceneProductionBundle(scene), [scene]);
   const json = useMemo(() => buildMaskRevealSceneProductionBundleJson(scene), [scene]);
   const fidelity = useMemo(() => buildMaskRevealHandoffFidelityReport(), []);
+  const resolveEditionGuardrail = useMemo(() => resolveCodexAutomationGuardrail("UNKNOWN"), []);
 
   async function copyJson() {
     await navigator.clipboard.writeText(json);
@@ -73,6 +75,9 @@ export function MaskRevealSceneHandoffCard({ scene }: { scene: MaskRevealSceneIn
           {fidelity.allRuntimeVerified
             ? "全項目がRuntime Verified(実Resolve Canaryで確認済み)です。"
             : "この一覧はPalmierソースコード/Resolve公式資料に基づく研究段階の分類です(PENDING_RUNTIME)。実Resolveでの動作確認はまだ行っていません。"}
+        </p>
+        <p className="mt-2 border border-amber-200 dark:border-amber-800 p-2 text-[10px] leading-4 text-amber-800 dark:text-amber-200">
+          Automation availability: {resolveEditionGuardrail}
         </p>
         <div className="mt-2 space-y-2">
           {fidelity.properties.map((property) => (
