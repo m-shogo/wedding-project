@@ -1,0 +1,53 @@
+name: Typography Scene Delivery Package CI
+
+on:
+  pull_request:
+    paths:
+      - "movie-dashboard/src/data/typographySceneDeliveryPackage.ts"
+      - "movie-dashboard/src/components/TypographySceneDeliveryPackageCard.tsx"
+      - "movie-dashboard/src/components/MaskRevealSceneHandoffCard.tsx"
+      - "movie-dashboard/src/data/typographySceneProductionRouting.ts"
+      - "movie-dashboard/src/data/typographyDaVinciActualWorkflowRegistry.ts"
+      - "movie-dashboard/scripts/verify-typography-scene-delivery-package-contracts.mjs"
+      - ".github/workflows/typography-scene-delivery-package-ci.yml"
+  push:
+    branches: [main]
+    paths:
+      - "movie-dashboard/src/data/typographySceneDeliveryPackage.ts"
+      - "movie-dashboard/src/components/TypographySceneDeliveryPackageCard.tsx"
+      - "movie-dashboard/src/components/MaskRevealSceneHandoffCard.tsx"
+      - "movie-dashboard/src/data/typographySceneProductionRouting.ts"
+      - "movie-dashboard/src/data/typographyDaVinciActualWorkflowRegistry.ts"
+      - "movie-dashboard/scripts/verify-typography-scene-delivery-package-contracts.mjs"
+      - ".github/workflows/typography-scene-delivery-package-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  delivery-package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: movie-dashboard/pnpm-lock.yaml
+      - name: Install Movie Dashboard
+        working-directory: movie-dashboard
+        run: pnpm install --frozen-lockfile
+      - name: Verify upstream Typography routing contracts
+        working-directory: movie-dashboard
+        run: |
+          node scripts/verify-typography-production-routing-contracts.mjs
+          node scripts/verify-typography-davinci-actual-workflow-registry.mjs
+      - name: Verify delivery package honesty contracts
+        working-directory: movie-dashboard
+        run: node scripts/verify-typography-scene-delivery-package-contracts.mjs
+      - name: Typecheck and build Movie Dashboard
+        working-directory: movie-dashboard
+        run: pnpm build

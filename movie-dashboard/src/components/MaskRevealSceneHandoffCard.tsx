@@ -12,6 +12,7 @@ import { downloadText } from "../lib/exporters";
 import { TypographyDaVinciProductionReleaseGateForScene } from "./TypographyDaVinciProductionReleaseGateForScene";
 import { TypographyProductionRouteSelector } from "./TypographyProductionRouteSelector";
 import { TypographyProductionRoutingMatrix } from "./TypographyProductionRoutingMatrix";
+import { TypographySceneDeliveryPackageCard } from "./TypographySceneDeliveryPackageCard";
 
 const TRANSPORT_LABEL_JA: Record<string, string> = {
   EXACT: "そのまま転送",
@@ -68,6 +69,7 @@ export function MaskRevealSceneHandoffCard({ scene }: { scene: MaskRevealSceneIn
       </p>
 
       <TypographyProductionRouteSelector scene={scene} />
+      <TypographySceneDeliveryPackageCard scene={scene} />
       <TypographyDaVinciProductionReleaseGateForScene scene={scene} />
       <TypographyProductionRoutingMatrix />
 
