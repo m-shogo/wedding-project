@@ -94,11 +94,18 @@ requireText(
 
 for (const [source, implementationId, label] of [
   [charTranslator, "impl-type-char-stagger-davinci-text-plus-follower", "Char Stagger translator"],
-  [charActual, "impl-type-char-stagger-davinci-text-plus-follower", "Char Stagger Actual artifact"],
   [rhythmTranslator, "impl-type-type-on-rhythm-davinci-text-plus-follower-words", "Type on Rhythm translator"],
-  [rhythmActual, "impl-type-type-on-rhythm-davinci-text-plus-follower-words", "Type on Rhythm Actual artifact"],
 ]) {
   requireText(source, implementationId, `${label} no longer proves its routed implementation id`);
+}
+for (const [source, translatorBuilder, creator, label] of [
+  [charActual, "buildCharStaggerDaVinciTranslatorSpec", "createCharStaggerDaVinciActualArtifact", "Char Stagger Actual artifact"],
+  [rhythmActual, "buildTypeOnRhythmDaVinciTranslatorSpec", "createTypeOnRhythmDaVinciActualArtifact", "Type on Rhythm Actual artifact"],
+]) {
+  requireText(source, translatorBuilder, `${label} no longer derives expected values from its canonical translator`);
+  requireText(source, creator, `${label} no longer exposes its bounded Actual artifact creator`);
+  requireText(source, 'authority: "EVIDENCE_ONLY"', `${label} must remain evidence-only`);
+  requireText(source, 'productionReady: false', `${label} must remain non-production-ready`);
 }
 
 requireText(
@@ -197,4 +204,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log("Typography Production Routing contracts OK: all nine candidates use four-stage DaVinci readiness in both data and UI; Mask Reveal alone has a live implementation, Char Stagger and Type on Rhythm are honest Actual candidates backed by translator + evidence workflows, six remain untranslated, and no route fabricates Mac Actual verification or production readiness.");
+console.log("Typography Production Routing contracts OK: all nine candidates use four-stage DaVinci readiness in data/UI; Mask Reveal alone has a live implementation, Char Stagger and Type on Rhythm are honest Actual candidates whose artifacts derive expected values from canonical translators, six remain untranslated, and no route fabricates Mac Actual verification or production readiness.");
