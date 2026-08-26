@@ -11,8 +11,12 @@ on:
       - "movie-dashboard/src/data/tripletDaVinciEvidenceCapture.ts"
       - "movie-dashboard/src/data/typographyDaVinciPromotionPolicy.ts"
       - "movie-dashboard/src/data/typographySceneProductionRouting.ts"
+      - "movie-dashboard/src/data/typographyDaVinciActualWorkflowRegistry.ts"
+      - "movie-dashboard/src/data/typographyDaVinciActualRunPlan.ts"
+      - "movie-dashboard/src/components/TypographyDaVinciActualRunQueue.tsx"
       - "movie-dashboard/scripts/verify-baseline-hop-davinci-contracts.mjs"
       - "movie-dashboard/scripts/verify-triplet-davinci-contracts.mjs"
+      - "movie-dashboard/scripts/verify-typography-davinci-actual-workflow-registry.mjs"
       - ".github/workflows/typography-davinci-actual-contracts.yml"
   push:
     branches: [main]
@@ -25,8 +29,12 @@ on:
       - "movie-dashboard/src/data/tripletDaVinciEvidenceCapture.ts"
       - "movie-dashboard/src/data/typographyDaVinciPromotionPolicy.ts"
       - "movie-dashboard/src/data/typographySceneProductionRouting.ts"
+      - "movie-dashboard/src/data/typographyDaVinciActualWorkflowRegistry.ts"
+      - "movie-dashboard/src/data/typographyDaVinciActualRunPlan.ts"
+      - "movie-dashboard/src/components/TypographyDaVinciActualRunQueue.tsx"
       - "movie-dashboard/scripts/verify-baseline-hop-davinci-contracts.mjs"
       - "movie-dashboard/scripts/verify-triplet-davinci-contracts.mjs"
+      - "movie-dashboard/scripts/verify-typography-davinci-actual-workflow-registry.mjs"
       - ".github/workflows/typography-davinci-actual-contracts.yml"
 
 permissions:
@@ -53,5 +61,7 @@ jobs:
         run: node scripts/verify-baseline-hop-davinci-contracts.mjs
       - name: Triplet canonical → Actual contracts
         run: node scripts/verify-triplet-davinci-contracts.mjs
+      - name: Actual workflow registry
+        run: node scripts/verify-typography-davinci-actual-workflow-registry.mjs
       - name: Dashboard typecheck/build
         run: pnpm build
