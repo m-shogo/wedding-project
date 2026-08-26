@@ -1,4 +1,4 @@
-name: Remotion Mask Reveal Element CI
+name: Remotion Typography Elements CI
 
 on:
   pull_request:
@@ -8,10 +8,12 @@ on:
       - "motion-studio/src/StartMotionKitRoot.tsx"
       - "motion-studio/scripts/build-mask-reveal-element-payload.mts"
       - "motion-studio/scripts/check-mask-reveal-element-payload.mts"
+      - "motion-studio/scripts/build-char-stagger-element-payload.mts"
+      - "motion-studio/scripts/check-char-stagger-element-payload.mts"
+      - "motion-studio/scripts/lib/typography-element-kit.mts"
+      - "motion-studio/scripts/lib/check-typography-element.mts"
       - ".github/workflows/remotion-mask-reveal-element-ci.yml"
-      - "docs/research/2026-08-26-movie-tool-learning-run-42-remotion-mask-reveal-element.md"
-      - "docs/research/2026-08-26-movie-tool-learning-run-44-remotion-element-human-adjustability.md"
-      - "docs/prompts/2026-08-26-remotion-mask-reveal-element-local-actual-agent.md"
+      - "docs/research/2026-08-27-movie-tool-learning-run-46-remotion-typography-elements.md"
   push:
     paths:
       - "motion-studio/src/motion-kit/engines.tsx"
@@ -19,16 +21,18 @@ on:
       - "motion-studio/src/StartMotionKitRoot.tsx"
       - "motion-studio/scripts/build-mask-reveal-element-payload.mts"
       - "motion-studio/scripts/check-mask-reveal-element-payload.mts"
+      - "motion-studio/scripts/build-char-stagger-element-payload.mts"
+      - "motion-studio/scripts/check-char-stagger-element-payload.mts"
+      - "motion-studio/scripts/lib/typography-element-kit.mts"
+      - "motion-studio/scripts/lib/check-typography-element.mts"
       - ".github/workflows/remotion-mask-reveal-element-ci.yml"
-      - "docs/research/2026-08-26-movie-tool-learning-run-42-remotion-mask-reveal-element.md"
-      - "docs/research/2026-08-26-movie-tool-learning-run-44-remotion-element-human-adjustability.md"
-      - "docs/prompts/2026-08-26-remotion-mask-reveal-element-local-actual-agent.md"
+      - "docs/research/2026-08-27-movie-tool-learning-run-46-remotion-typography-elements.md"
 
 permissions:
   contents: read
 
 jobs:
-  validate-element-candidate:
+  validate-element-candidates:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -52,7 +56,7 @@ jobs:
         working-directory: motion-studio
         run: pnpm install --frozen-lockfile
 
-      - name: Baseline typecheck and existing Mask Reveal reuse contract
+      - name: Baseline typecheck and Mask Reveal reuse contract
         working-directory: motion-studio
         run: |
           pnpm typecheck
@@ -79,14 +83,7 @@ jobs:
         run: |
           node <<'NODE'
           const remotionExpected = '4.0.517';
-          for (const pkg of [
-            'remotion',
-            '@remotion/cli',
-            '@remotion/google-fonts',
-            '@remotion/paths',
-            '@remotion/zod-types',
-            '@remotion/studio-protocol',
-          ]) {
+          for (const pkg of ['remotion','@remotion/cli','@remotion/google-fonts','@remotion/paths','@remotion/zod-types','@remotion/studio-protocol']) {
             const actual = require(`./node_modules/${pkg}/package.json`).version;
             console.log(`${pkg}=${actual}`);
             if (actual !== remotionExpected) process.exitCode = 1;
@@ -110,41 +107,40 @@ jobs:
         working-directory: motion-studio
         run: pnpm typecheck
 
-      - name: Derive canonical source and validate Interactive Element payload
+      - name: Generate and validate both canonical Typography Elements
         working-directory: motion-studio
         run: |
-          rm -rf out/research/remotion-elements/mask-reveal
+          rm -rf out/research/remotion-elements/mask-reveal out/research/remotion-elements/char-stagger
           node --no-warnings scripts/build-mask-reveal-element-payload.mts
           node --no-warnings scripts/check-mask-reveal-element-payload.mts
+          node --no-warnings scripts/build-char-stagger-element-payload.mts
+          node --no-warnings scripts/check-char-stagger-element-payload.mts
 
-      - name: Compile and render generated Interactive Element source
+      - name: Compile and render generated Element sources
         working-directory: motion-studio
         run: |
-          cat > out/research/remotion-elements/mask-reveal/canary-entry.tsx <<'EOF'
+          cat > out/research/remotion-elements/typography-elements-canary-entry.tsx <<'EOF'
           import {Composition, registerRoot} from 'remotion';
-          import {WeddingMaskRevealElement} from './mask-reveal.element-source';
+          import {WeddingMaskRevealElement} from './mask-reveal/mask-reveal.element-source';
+          import {WeddingCharStaggerElement} from './char-stagger/char-stagger.element-source';
 
           const Root = () => (
-            <Composition
-              id="WeddingMaskRevealElementCanary"
-              component={WeddingMaskRevealElement}
-              width={1280}
-              height={720}
-              fps={30}
-              durationInFrames={120}
-            />
+            <>
+              <Composition id="WeddingMaskRevealElementCanary" component={WeddingMaskRevealElement} width={1280} height={720} fps={30} durationInFrames={120} />
+              <Composition id="WeddingCharStaggerElementCanary" component={WeddingCharStaggerElement} width={1280} height={720} fps={30} durationInFrames={120} />
+            </>
           );
-
           registerRoot(Root);
           EOF
-          pnpm exec remotion render \
-            out/research/remotion-elements/mask-reveal/canary-entry.tsx \
-            WeddingMaskRevealElementCanary \
-            out/research/remotion-elements/mask-reveal/mask-reveal.element-canary.mp4 \
-            --scale=0.25 \
-            --crf=30
-          test -s out/research/remotion-elements/mask-reveal/mask-reveal.element-canary.mp4
-          sha256sum out/research/remotion-elements/mask-reveal/mask-reveal.element-canary.mp4
+          for id in WeddingMaskRevealElementCanary WeddingCharStaggerElementCanary; do
+            pnpm exec remotion render \
+              out/research/remotion-elements/typography-elements-canary-entry.tsx \
+              "$id" \
+              "out/research/remotion-elements/${id}.mp4" \
+              --scale=0.25 --crf=30
+            test -s "out/research/remotion-elements/${id}.mp4"
+            sha256sum "out/research/remotion-elements/${id}.mp4"
+          done
 
       - name: Production dependency graph and Studio Actual remain unpromoted
         working-directory: motion-studio
@@ -154,9 +150,9 @@ jobs:
             echo 'Expected runner-only candidate install to modify package.json';
             exit 1;
           }
+          echo 'typographyElementCount=2'
           echo 'elementPayloadValidation=PASS_CANDIDATE_ONLY'
           echo 'interactiveSchemaStaticContract=PASS_CANDIDATE_ONLY'
           echo 'studioControlReadback=NOT_RUN'
           echo 'studioInstallActual=NOT_RUN'
           echo 'productionDependencyUpgradePerformed=NO'
-          echo 'thirdPartyElementInstallPerformed=NO'
