@@ -4,6 +4,8 @@ import { fileURLToPath } from "node:url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const routing = fs.readFileSync(path.join(root, "src/data/typographySceneProductionRouting.ts"), "utf8");
+const matrix = fs.readFileSync(path.join(root, "src/components/TypographyProductionRoutingMatrix.tsx"), "utf8");
+const selector = fs.readFileSync(path.join(root, "src/components/TypographyProductionRouteSelector.tsx"), "utf8");
 const candidates = fs.readFileSync(path.join(root, "src/data/remotionElementCandidates.ts"), "utf8");
 const maskBundle = fs.readFileSync(path.join(root, "src/data/maskRevealSceneProductionBundle.ts"), "utf8");
 const charTranslator = fs.readFileSync(path.join(root, "src/data/charStaggerDaVinciTranslator.ts"), "utf8");
@@ -110,6 +112,39 @@ requireText(
   "Type on Rhythm must be staged as an Actual candidate backed by its translator/evidence workflow",
 );
 
+for (const [source, label] of [[matrix, "Routing Matrix"], [selector, "Route Selector"]]) {
+  for (const token of [
+    "DAVINCI_TRANSLATION_NOT_IMPLEMENTED",
+    "DAVINCI_ACTUAL_CANDIDATE",
+    "DAVINCI_IMPLEMENTATION_AVAILABLE",
+    "DAVINCI_ACTUAL_VERIFIED",
+  ]) {
+    requireText(source, token, `${label} missing staged DaVinci state ${token}`);
+  }
+}
+for (const token of [
+  "Actual候補",
+  "live実装あり",
+  "Actual検証済み",
+  "Translator:",
+  "Actual workflow:",
+  "Live binding:",
+  "Production: NOT_READY",
+]) {
+  requireText(matrix, token, `Routing Matrix missing human-readable readiness evidence: ${token}`);
+}
+for (const token of [
+  "Translator + Actual workflowあり / live未検証",
+  "DaVinci live実装あり / Actual未確認",
+  "DaVinci stage:",
+  "bundle.davinci.translatorSpecAvailable",
+  "bundle.davinci.actualEvidenceWorkflowAvailable",
+  "bundle.davinci.liveImplementationAvailable",
+  "bundle.davinci.actualVerified",
+]) {
+  requireText(selector, token, `Route Selector missing staged DaVinci readiness evidence: ${token}`);
+}
+
 const routeCalls = [...routing.matchAll(/\n\s*route\(\n\s*"(type-[^"]+)"/g)].map((match) => match[1]);
 if (routeCalls.length !== expected.length) {
   errors.push(`Expected ${expected.length} Typography production routes, found ${routeCalls.length}`);
@@ -162,4 +197,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log("Typography Production Routing contracts OK: all nine candidates use four-stage DaVinci readiness; Mask Reveal alone has a live implementation, Char Stagger and Type on Rhythm are honest Actual candidates backed by translator + evidence workflows, six remain untranslated, and no route fabricates Mac Actual verification or production readiness.");
+console.log("Typography Production Routing contracts OK: all nine candidates use four-stage DaVinci readiness in both data and UI; Mask Reveal alone has a live implementation, Char Stagger and Type on Rhythm are honest Actual candidates backed by translator + evidence workflows, six remain untranslated, and no route fabricates Mac Actual verification or production readiness.");
