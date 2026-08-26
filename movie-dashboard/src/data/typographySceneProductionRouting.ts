@@ -105,9 +105,9 @@ export const typographyProductionRoutes: TypographyProductionRouteDefinition[] =
   route(
     "type-vertical-wipe",
     "vertical-wipe",
-    "DAVINCI_TRANSLATION_NOT_IMPLEMENTED",
-    null,
-    "clip reveal相当をText+/Fusion maskへ翻訳する実装とrender evidenceが未完了。",
+    "DAVINCI_ACTUAL_CANDIDATE",
+    "impl-type-vertical-wipe-davinci-text-plus-mask",
+    "canonical clip-only vertical wipe→Fusion mask reveal translatorとbounded Actual evidence workflowを実装済み。実Macでmask tool/input・座標系・Invert・normalized reveal bounds・render parityを確認するまでimplementation availableへは昇格しない。",
   ),
   route(
     "type-outline-fill",
