@@ -4,21 +4,27 @@ on:
   pull_request:
     paths:
       - "movie-dashboard/src/data/typographySceneDeliveryPackage.ts"
+      - "movie-dashboard/src/data/typographyProjectDeliveryBatch.ts"
       - "movie-dashboard/src/components/TypographySceneDeliveryPackageCard.tsx"
+      - "movie-dashboard/src/components/TypographyProjectDeliveryBatchCard.tsx"
       - "movie-dashboard/src/components/MaskRevealSceneHandoffCard.tsx"
       - "movie-dashboard/src/data/typographySceneProductionRouting.ts"
       - "movie-dashboard/src/data/typographyDaVinciActualWorkflowRegistry.ts"
       - "movie-dashboard/scripts/verify-typography-scene-delivery-package-contracts.mjs"
+      - "movie-dashboard/scripts/verify-typography-project-delivery-batch-contracts.mjs"
       - ".github/workflows/typography-scene-delivery-package-ci.yml"
   push:
     branches: [main]
     paths:
       - "movie-dashboard/src/data/typographySceneDeliveryPackage.ts"
+      - "movie-dashboard/src/data/typographyProjectDeliveryBatch.ts"
       - "movie-dashboard/src/components/TypographySceneDeliveryPackageCard.tsx"
+      - "movie-dashboard/src/components/TypographyProjectDeliveryBatchCard.tsx"
       - "movie-dashboard/src/components/MaskRevealSceneHandoffCard.tsx"
       - "movie-dashboard/src/data/typographySceneProductionRouting.ts"
       - "movie-dashboard/src/data/typographyDaVinciActualWorkflowRegistry.ts"
       - "movie-dashboard/scripts/verify-typography-scene-delivery-package-contracts.mjs"
+      - "movie-dashboard/scripts/verify-typography-project-delivery-batch-contracts.mjs"
       - ".github/workflows/typography-scene-delivery-package-ci.yml"
 
 permissions:
@@ -45,9 +51,11 @@ jobs:
         run: |
           node scripts/verify-typography-production-routing-contracts.mjs
           node scripts/verify-typography-davinci-actual-workflow-registry.mjs
-      - name: Verify delivery package honesty contracts
+      - name: Verify Scene and Project delivery honesty contracts
         working-directory: movie-dashboard
-        run: node scripts/verify-typography-scene-delivery-package-contracts.mjs
+        run: |
+          node scripts/verify-typography-scene-delivery-package-contracts.mjs
+          node scripts/verify-typography-project-delivery-batch-contracts.mjs
       - name: Typecheck and build Movie Dashboard
         working-directory: movie-dashboard
         run: pnpm build
