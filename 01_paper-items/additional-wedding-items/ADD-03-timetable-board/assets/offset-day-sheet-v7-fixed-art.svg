@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="1980" viewBox="0 0 1400 1980">
+  <title>ADD-03 clean-room v7 fixed art — Offset Day Sheet</title>
+  <desc>Editable fixed-art only. No variable copy, dates, times, venue facts, names, QR, guest data, or reader-facing text are embedded.</desc>
+  <rect width="1400" height="1980" fill="#173B69"/>
+  <!-- offset backing sheet: a single physical-paper gesture, not event-by-event encoding -->
+  <path d="M28 82 L1350 0 L1400 1885 L82 1980 Z" fill="#55B9B0"/>
+  <!-- primary day sheet -->
+  <path d="M88 42 L1400 88 L1348 1928 L0 1888 Z" fill="#F5F0E4"/>
+  <!-- celebratory folded corner, top right -->
+  <path d="M1120 78 L1400 88 L1390 365 Z" fill="#F36C4F"/>
+  <path d="M1236 82 L1400 88 L1396 245 Z" fill="#F2BE3A"/>
+  <!-- one restrained print registration accent; must remain subordinate to native typography -->
+  <rect x="88" y="148" width="148" height="10" fill="#173B69"/>
+  <!-- lower closing fold: one counterweight, not a route/node/module -->
+  <path d="M0 1650 L190 1880 L0 1888 Z" fill="#F36C4F"/>
+</svg>
