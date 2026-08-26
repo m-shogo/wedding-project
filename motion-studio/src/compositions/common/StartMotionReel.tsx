@@ -70,7 +70,7 @@ function RenderPreset({preset}: {preset: RenderableMotionPreset}) {
         <TransitionWipeEngine
           intensity={preset.intensity}
           direction={preset.mode === 'left' ? 'left' : preset.mode === 'up' ? 'up' : preset.mode === 'down' ? 'down' : 'right'}
-          variant={preset.mode === 'release' ? 'release' : 'wipe'}
+          variant={preset.mode === 'release' ? 'release' : preset.mode === 'shape' ? 'shape' : 'wipe'}
         />
       </AbsoluteFill>
     );
