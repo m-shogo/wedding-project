@@ -5,6 +5,7 @@ on:
     paths:
       - "motion-studio/src/data/resolveRuntimeCanary.schema.ts"
       - "motion-studio/src/data/resolveRuntimeCanaryPack.ts"
+      - "motion-studio/src/data/resolveRuntimeCanaryCapabilityRefs.ts"
       - "motion-studio/scripts/resolve-runtime-canary-plan.mts"
       - "motion-studio/scripts/check-resolve-runtime-canary-pack.mts"
       - "scripts/davinci/resolve21-runtime-readonly-probe.sh"
@@ -15,6 +16,7 @@ on:
     paths:
       - "motion-studio/src/data/resolveRuntimeCanary.schema.ts"
       - "motion-studio/src/data/resolveRuntimeCanaryPack.ts"
+      - "motion-studio/src/data/resolveRuntimeCanaryCapabilityRefs.ts"
       - "motion-studio/scripts/resolve-runtime-canary-plan.mts"
       - "motion-studio/scripts/check-resolve-runtime-canary-pack.mts"
       - "scripts/davinci/resolve21-runtime-readonly-probe.sh"
@@ -59,6 +61,9 @@ jobs:
         run: |
           node --no-warnings scripts/resolve-runtime-canary-plan.mts --list | grep -Fq 'DV21-REMOTION-ALPHA-01'
           node --no-warnings scripts/resolve-runtime-canary-plan.mts DV21-REMOTION-ALPHA-01 | grep -Fq 'ALPHA_SOURCE_RENDER != ALPHA_IMPORT != ALPHA_WORKING_PATH != ALPHA_EXPORT'
+          node --no-warnings scripts/resolve-runtime-canary-plan.mts DV21-DRT-PORTABILITY-01 --json > /tmp/drt-canary.json
+          grep -Fq '"kind": "RESEARCH_CANARY"' /tmp/drt-canary.json
+          grep -Fq '"id": "DV21-DRT-PORT-02"' /tmp/drt-canary.json
           node --no-warnings scripts/resolve-runtime-canary-plan.mts DV21-AUDIO-RECOVERY-01 --evidence-template > /tmp/audio-canary-evidence.json
           grep -Fq '"promotionEligible": false' /tmp/audio-canary-evidence.json
           grep -Fq '"result": "NOT_RUN"' /tmp/audio-canary-evidence.json
