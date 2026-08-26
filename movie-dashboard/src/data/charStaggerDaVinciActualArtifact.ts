@@ -90,6 +90,16 @@ function delta(expected: number, applied: number | null) {
   return applied === null ? null : Number((applied - expected).toFixed(6));
 }
 
+function exactDeltaState(...values: Array<number | null>): CharStaggerActualState {
+  if (values.some((value) => value === null)) return "NOT_RUN";
+  return values.every((value) => value === 0) ? "PASS" : "FAIL";
+}
+
+function booleanComparisonState(value: boolean | null): CharStaggerActualState {
+  if (value === null) return "NOT_RUN";
+  return value ? "PASS" : "FAIL";
+}
+
 function assertCharStaggerSelection(scene: MaskRevealSceneInstance, selection: TypographyProductionSelectionV1) {
   if (selection.patternId !== "type-char-stagger") {
     throw new Error(`Char Stagger Actual requires type-char-stagger selection, got ${selection.patternId}`);
@@ -192,6 +202,7 @@ export function attachCharStaggerDaVinciActualReadback(
   readback: CharStaggerDaVinciActualReadbackV1,
 ) {
   const comparison = compareCharStaggerDaVinciActualReadback(artifact, readback);
+  const hasReadbackIdentity = Boolean(readback.capturedAt && readback.transport && readback.projectName && readback.timelineName);
   return {
     ...artifact,
     readback,
@@ -201,11 +212,14 @@ export function attachCharStaggerDaVinciActualReadback(
       resolveIdentity: readback.resolveProduct && readback.resolveVersion ? "PASS" as const : "FAIL" as const,
       textPlusCreated: readback.textPlusToolFound === true ? "PASS" as const : readback.textPlusToolFound === false ? "FAIL" as const : "NOT_RUN" as const,
       followerAttached: readback.followerModifierFound === true ? "PASS" as const : readback.followerModifierFound === false ? "FAIL" as const : "NOT_RUN" as const,
-      sequentialDelayApplied: readback.perCharacterDelayFrames !== null ? "PASS" as const : "NOT_RUN" as const,
-      translationApplied: readback.translateYFromPixels !== null && readback.translateYToPixels !== null ? "PASS" as const : "NOT_RUN" as const,
-      opacityApplied: readback.opacityFrom !== null && readback.opacityTo !== null ? "PASS" as const : "NOT_RUN" as const,
-      easingApplied: readback.easingObserved !== null ? "PASS" as const : "NOT_RUN" as const,
-      sourceReadback: "PASS" as const,
+      sequentialDelayApplied: exactDeltaState(comparison.delayFrameDelta, comparison.durationFrameDelta),
+      translationApplied: exactDeltaState(
+        comparison.translateYFromDeltaPixels,
+        comparison.translateYToDeltaPixels,
+      ),
+      opacityApplied: exactDeltaState(comparison.opacityFromDelta, comparison.opacityToDelta),
+      easingApplied: booleanComparisonState(comparison.easingMatches),
+      sourceReadback: hasReadbackIdentity ? "PASS" as const : "FAIL" as const,
       renderCompleted: readback.renderedPreviewPath ? "PASS" as const : "NOT_RUN" as const,
     },
     productionReady: false as const,
