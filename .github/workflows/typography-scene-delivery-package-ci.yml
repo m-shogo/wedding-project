@@ -40,6 +40,11 @@ jobs:
       - name: Install Movie Dashboard
         working-directory: movie-dashboard
         run: pnpm install --frozen-lockfile
+      - name: Verify upstream Typography routing contracts
+        working-directory: movie-dashboard
+        run: |
+          node scripts/verify-typography-production-routing-contracts.mjs
+          node scripts/verify-typography-davinci-actual-workflow-registry.mjs
       - name: Verify delivery package honesty contracts
         working-directory: movie-dashboard
         run: node scripts/verify-typography-scene-delivery-package-contracts.mjs
