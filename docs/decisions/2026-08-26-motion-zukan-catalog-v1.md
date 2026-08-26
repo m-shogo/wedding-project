@@ -1,8 +1,8 @@
 # モーション図鑑 v1: 既存36 Motion Kit presetのカタログ化
 
-日付: 2026-08-26
-状態: 実装済み(PR #333, #334, #335)
-関連: `movie-dashboard/src/data/visualMotionLibrary.ts`, `movie-dashboard/src/data/startMotionKit.ts`, `movie-dashboard/src/data/directorRecipeCatalog.ts`
+日付: 2026-08-26(初版 PR #333〜336 / 追記 PR #338, #339, #345)
+状態: 実装済み・継続更新中
+関連: `movie-dashboard/src/data/visualMotionLibrary.ts`, `movie-dashboard/src/data/startMotionKit.ts`, `movie-dashboard/src/data/directorRecipeCatalog.ts`, `motion-studio/src/motion-kit/renderablePresets.ts`
 
 ## 背景
 
@@ -40,14 +40,43 @@ Motion」にはほど遠かった。
 1. **Data complete**: 36件全てに日本語名・用途・避ける場面・Opening/Profile適合度
    が入っている。✅
 2. **Discoverable/Browsable**: 検索・カード表示・個別previewテキストまで完了。✅
-3. **Visual fidelity / Actual verification**: 未着手。全て`CONCEPT`
-   (実Render無し)、DaVinci実機検証も未実施(この開発環境にDaVinci Resolveは
-   インストールされていない)。❌
+3. **Visual fidelity / Actual verification**: **22/36件が完了**(PR #338, #339, #345)。
+   `motion-studio`の`StaRtMotionReelV1`(既存6 shared engineが対応済みのmode/
+   directionだけを使い、新規engine機能は追加せず21件をrenderable化)を実際に
+   ローカルRemotion renderし、静止フレーム抽出+ffprobe/signalstatsで目視確認した。
+   DaVinci実機検証は引き続き未実施(この開発環境にDaVinci Resolveはインストール
+   されていない)。❌
+
+QAで推測PASSにしなかった実例:
+- `accent-stamp-triplet`は最初のサンプルframeでは3-hitの合間に当たりスタンプが
+  写っておらず、一度`PENDING`として記録した上で、追加frameを確認してから
+  `PASS`へ格上げした。
+- `accent-impact-frame`も同様に、最初のサンプルではimpactの瞬間(frame8前後)を
+  外していたため、タイミングを合わせた追加確認の上で`PASS`と判定した。
+
+QAで見つかった**既知の実装限界**(隠さず記録):
+- `PhotoLayoutEngine`の`contact-sheet`と`panel-grid`が現状どちらもデフォルト
+  4列グリッドで、見た目上区別できない。
+- `type-char-stagger`と`type-tracking-burst`が現状同じ`stagger` modeを共有しており、
+  見た目の差別化ができていない。
+- `wipe-directional-shape`は「図形(shape)が横切る」という名称に対し、実装は
+  図形オブジェクトではなく色面wipeの近似。
+
+これらはengine拡張(新規機能追加)が必要で、今回のカタログ化のスコープ外として
+`motionPreviewEvidence.ts`のnotesへ明記した。実装したふりをしていない。
+
+残り14件(`type-outline-fill` / `type-baseline-hop` / `type-vertical-wipe` /
+`type-type-on-rhythm` / `type-triplet` / `type-counter-scroll` / `type-frame-lock` /
+`photo-freeze-cutout` / `cut-match-shape` / `wipe-paper-edge` /
+`whip-source-matched` / `color-field-release` / `accent-cel-shadow-sweep` /
+`accent-micro-rgb-split`)は、既存engineのmode/directionを流用するだけでは
+正直に表現できず、真に新しいengine機能(または`davinci-edit`/`palmier-native`
+エンジン自体の実装)が必要なため、今回は見送った。`type-quiet-caption`は
+`engine: davinci-edit`のため元々render対象外。
 
 **「36件がカタログとして存在する」ことと「36件が実際に見て選べる」ことは別**。
-次のフェーズで優先すべきは、件数を増やすことではなく、代表的なMotionから実際に
-`motion-studio`でRemotion renderして`REPO_GENERATED`のConcept Evidence
-(既存`motionPreviewEvidence.ts`のMask Reveal例と同じ形式)を積み上げることである。
+22件は見て選べる段階まで進んだが、残り14件は引き続き文章ベースのカタログ
+(`CONCEPT_ONLY`)のままである。
 
 ## Director Recipe Catalog(97件)との関係
 
@@ -77,9 +106,9 @@ Property単位で修正できる構造)を持つのは引き続き`type-mask-rev
 
 ## 次にやるべきこと(優先順位)
 
-1. 代表的な数件(sharedEngineごとに1〜2件)を実際に`motion-studio`で
-   Remotion renderし、`motionPreviewEvidence.ts`と同じ形式でConcept Evidence
-   を記録する。全36件を一度にrenderする必要はない。
+1. 残り14件のうち本当に必要なものだけ、engine拡張(新機能追加)を伴う実装を
+   個別に検討する。全件を無理に埋めない。「見た目が区別できないmodeの使い回し」
+   より「CONCEPT_ONLYのまま正直に残す」方を優先してきた。
 2. 実写真投入後、`sample-generic-hero-photo-v1` / `sample-generic-multi-photo-v1`
    の`visualBase.assetPath`を実素材へ差し替える。
 3. DaVinci Resolveが利用可能な環境が用意されたら、Mask Reveal Vertical Slice
@@ -89,3 +118,6 @@ Property単位で修正できる構造)を持つのは引き続き`type-mask-rev
    使われた実績(`usageStage`が`ROUGH`/`FINAL`になる)を積むことを優先する。
    使われなかったMotionを後から`humanDecision: "REJECT"`で落とす方が、
    最初から絞り込むより安全。
+5. `PhotoLayoutEngine`のcontact-sheet/panel-grid差別化、`type-char-stagger`/
+   `type-tracking-burst`の差別化は、実際にOpening/Profileで両方使いたい場面が
+   出た時に優先して着手する(使われない差別化を先回りして作らない)。
