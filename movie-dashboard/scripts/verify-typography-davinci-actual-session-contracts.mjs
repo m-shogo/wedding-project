@@ -61,9 +61,13 @@ for (const token of [
 for (const token of [
   "buildTypographyDaVinciActualSessionTemplateJson", "typography-davinci-actual-session-template.json",
   "NOT_RUN session templateを保存", "evidence欄はすべてNOT_RUN", "Mac Actual session JSONを読み戻す",
-  "読み込みだけではroute statusやproduction stateを書き換えません。", "HUMAN_REVIEW_ELIGIBLE", "BLOCKED",
+  "読み込みだけではroute statusやproduction stateを書き換えません。",
+  "evaluation.stageCounts.NOT_RUN", "evaluation.stageCounts.ACTUAL_IN_PROGRESS", "evaluation.stageCounts.ACTUAL_FAILED",
+  "evaluation.stageCounts.HUMAN_REVIEW_ELIGIBLE", "item.stage", "item.machineEvidenceComplete",
+  "item.requiredBindingsComplete", "item.visualQaComplete", "item.reviewMetadataComplete",
   "buildTypographyDaVinciActualEvaluationReportJson", "derived evaluation reportを保存",
   "DERIVED_FROM_MAC_ACTUAL_EVIDENCE_SESSION", "raw evidenceの代替ではなく、Gitへ残す判定結果です。",
+  "HUMAN_REVIEW_ELIGIBLEはHuman promotedではありません。",
   "automaticPromotionAllowed=false / productionReady=false",
 ]) requireText(importer, token, `Actual session import UI missing: ${token}`);
 
