@@ -1,8 +1,9 @@
-import { useEffect, useMemo, useState } from "react";
-import { CharStaggerDaVinciPromotionAssessmentView } from "./CharStaggerDaVinciPromotionAssessmentView";
-import { TypeOnRhythmDaVinciEvidencePanel } from "./TypeOnRhythmDaVinciEvidencePanel";
-import { WordPunchDaVinciEvidencePanel } from "./WordPunchDaVinciEvidencePanel";
-import { createCharStaggerDaVinciActualArtifact } from "../data/charStaggerDaVinciActualArtifact";
+import {useEffect, useMemo, useState} from "react";
+import {CharStaggerDaVinciPromotionAssessmentView} from "./CharStaggerDaVinciPromotionAssessmentView";
+import {TypeOnRhythmDaVinciEvidencePanel} from "./TypeOnRhythmDaVinciEvidencePanel";
+import {WordPunchDaVinciEvidencePanel} from "./WordPunchDaVinciEvidencePanel";
+import {TypographyDaVinciPromotionRequirements} from "./TypographyDaVinciPromotionRequirements";
+import {createCharStaggerDaVinciActualArtifact} from "../data/charStaggerDaVinciActualArtifact";
 import {
   createCharStaggerDaVinciEvidenceCaptureTemplate,
   evaluateCharStaggerDaVinciEvidenceCapture,
@@ -21,8 +22,8 @@ import {
   saveTypographyProductionSelection,
   TYPOGRAPHY_PRODUCTION_SELECTION_CHANGED_EVENT,
 } from "../data/typographyProductionSelectionStore";
-import type { MaskRevealSceneInstance } from "../data/visualSceneComposer";
-import { downloadText } from "../lib/exporters";
+import type {MaskRevealSceneInstance} from "../data/visualSceneComposer";
+import {downloadText} from "../lib/exporters";
 
 const DAVINCI_ROUTE_SUMMARY: Record<DaVinciTypographyRouteStatus, string> = {
   DAVINCI_TRANSLATION_NOT_IMPLEMENTED: "DaVinci translator未実装",
@@ -31,7 +32,7 @@ const DAVINCI_ROUTE_SUMMARY: Record<DaVinciTypographyRouteStatus, string> = {
   DAVINCI_ACTUAL_VERIFIED: "DaVinci Actual検証済み",
 };
 
-export function TypographyProductionRouteSelector({ scene }: { scene: MaskRevealSceneInstance }) {
+export function TypographyProductionRouteSelector({scene}: {scene: MaskRevealSceneInstance}) {
   const [revision, setRevision] = useState(0);
   const [charStaggerEvaluatedEvidence, setCharStaggerEvaluatedEvidence] = useState<CharStaggerDaVinciEvaluatedEvidenceV1 | null>(null);
   const [charStaggerEvidenceError, setCharStaggerEvidenceError] = useState<string | null>(null);
@@ -134,6 +135,7 @@ export function TypographyProductionRouteSelector({ scene }: { scene: MaskReveal
           <p>Gate: Remotion Studio {bundle.gate.remotionStudioReady ? "READY" : "NOT_RUN"} / Palmier timing READY / DaVinci visual {bundle.gate.davinciVisualReady ? "IMPLEMENTED" : "BLOCKED"}</p>
           <p>DaVinci stage: {bundle.davinci.routeStatus} / translator {bundle.davinci.translatorSpecAvailable ? "READY" : "NO"} / Actual workflow {bundle.davinci.actualEvidenceWorkflowAvailable ? "READY" : "NO"} / live {bundle.davinci.liveImplementationAvailable ? "READY" : "NOT_VERIFIED"} / Actual {bundle.davinci.actualVerified ? "PASS" : "NOT_RUN"}</p>
           <p>Production ready: NO / blockers: {bundle.gate.blockers.join(", ")}</p>
+          <TypographyDaVinciPromotionRequirements patternId={bundle.patternId} />
           {charStaggerActualArtifact ? (
             <div className="mt-2 border border-sky-200 dark:border-sky-800 p-2.5">
               <div className="flex flex-wrap items-center justify-between gap-2">

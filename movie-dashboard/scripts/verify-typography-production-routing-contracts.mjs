@@ -7,6 +7,7 @@ const read = (relative) => fs.readFileSync(path.join(root, relative), "utf8");
 const routing = read("src/data/typographySceneProductionRouting.ts");
 const matrix = read("src/components/TypographyProductionRoutingMatrix.tsx");
 const selector = read("src/components/TypographyProductionRouteSelector.tsx");
+const requirements = read("src/components/TypographyDaVinciPromotionRequirements.tsx");
 const candidates = read("src/data/remotionElementCandidates.ts");
 const maskBundle = read("src/data/maskRevealSceneProductionBundle.ts");
 const promotionPolicy = read("src/data/typographyDaVinciPromotionPolicy.ts");
@@ -65,6 +66,26 @@ for (const token of [
   'Exclude<TypographyProductionPatternId, "type-mask-reveal">',
 ]) requireText(promotionPolicy, token, `Typography promotion policy missing: ${token}`);
 
+for (const token of [
+  "TypographyDaVinciPromotionRequirements",
+  "getTypographyDaVinciRequiredBindingRoles",
+  "Machine parity",
+  "Live bindings",
+  "Visual QA",
+  "1x PASS + half-speed PASS + reviewedAt実記録",
+  "FOLLOWER_UNIT",
+  "wordUnitApplied=PASS",
+  "automaticPromotionAllowed: NO",
+  "productionReady: NO",
+]) requireText(requirements, token, `Typography promotion requirements UI missing: ${token}`);
+requireText(selector, "<TypographyDaVinciPromotionRequirements patternId={bundle.patternId} />", "Selected Typography route must show its promotion requirements");
+for (const token of [
+  "getTypographyDaVinciRequiredBindingRoles",
+  "Human Review gate:",
+  "machine parity +",
+  "bindings + 1x/half-speed QA",
+]) requireText(matrix, token, `Routing Matrix must expose promotion requirements: ${token}`);
+
 requireText(maskBundle, 'implementationId: "impl-type-mask-reveal-davinci-text-plus"', "Mask Reveal live implementation id drifted");
 for (const token of [
   '"DAVINCI_TRANSLATION_NOT_IMPLEMENTED"', '"DAVINCI_ACTUAL_CANDIDATE"', '"DAVINCI_IMPLEMENTATION_AVAILABLE"', '"DAVINCI_ACTUAL_VERIFIED"',
@@ -121,4 +142,4 @@ if (errors.length) {
   for (const error of errors) console.error(`- ${error}`);
   process.exit(1);
 }
-console.log("Typography Production Routing contracts OK: Mask Reveal alone has a live implementation; all eight Actual candidates use one shared human-promotion gate with pattern-specific binding requirements, while Mac Actual and production claims remain unverified.");
+console.log("Typography Production Routing contracts OK: all eight Actual candidates use one shared human-promotion policy and expose the exact machine/binding/visual requirements in the Dashboard without fabricating Mac Actual or production readiness.");
