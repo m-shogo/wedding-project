@@ -1183,6 +1183,41 @@ export function LyricTimingStudio() {
         </div>
       </SectionCard>
 
+      {(() => {
+        const confirmedCount = phrases.filter((p) => {
+          const entry = overrides[keyOf(p.phraseId, null)];
+          return !p.humanReviewRequired || entry?.verifiedByListening;
+        }).length;
+        const allConfirmed = confirmedCount === phrases.length && phrases.length > 0;
+        const goToNextUnconfirmed = () => {
+          const startIdx = activePhraseId ? phrases.findIndex((p) => p.phraseId === activePhraseId) + 1 : 0;
+          const ordered = [...phrases.slice(startIdx), ...phrases.slice(0, startIdx)];
+          const next = ordered.find((p) => {
+            const entry = overrides[keyOf(p.phraseId, null)];
+            return p.humanReviewRequired && !entry?.verifiedByListening;
+          });
+          if (next) focusPhrase(next);
+        };
+        return (
+          <div
+            className={`mb-4 flex items-center justify-between rounded-lg border px-4 py-2 text-sm ${
+              allConfirmed
+                ? "border-emerald-300 bg-emerald-50 text-emerald-900 dark:border-emerald-700 dark:bg-emerald-950 dark:text-emerald-100"
+                : "border-sand-300 bg-sand-50 text-navy-800 dark:border-navy-600 dark:bg-navy-800 dark:text-sand-100"
+            }`}
+          >
+            <span>
+              {allConfirmed ? "✅ 全phrase 聴取確認済み(同期完了)" : `確認進捗: ${confirmedCount} / ${phrases.length}件 確認済み`}
+            </span>
+            {!allConfirmed && (
+              <button className={btnClass} onClick={goToNextUnconfirmed}>
+                次の未確認phraseへ →
+              </button>
+            )}
+          </div>
+        );
+      })()}
+
       <div className="grid grid-cols-1 xl:grid-cols-[1fr_300px] gap-6">
         {/* phrase list */}
         <SectionCard title={`Phrase / Word (${phrases.length}件)`}>
