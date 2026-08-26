@@ -7,7 +7,7 @@ import type {DirectorRecipe, DirectorRecipeCategory} from '../../../movie-dashbo
 import {directorRecipeCatalog, directorRecipeCategories} from '../../../movie-dashboard/src/data/directorRecipeCatalog.ts';
 import type {StartMotionPreset} from '../../../movie-dashboard/src/data/startMotionKit.ts';
 import {startMotionPresets} from '../../../movie-dashboard/src/data/startMotionKit.ts';
-import type {GraphicHitVariant, MotionIntensity} from './engines';
+import type {CameraTransformMode, GraphicHitVariant, MotionIntensity, TransitionWipeVariant, TypographyRevealMode} from './engines';
 
 export {directorRecipeCatalog, directorRecipeCategories};
 export type {DirectorRecipe, DirectorRecipeCategory};
@@ -52,18 +52,62 @@ function demoText(recipe: DirectorRecipe): string {
   return recipe.label.length > 26 ? `${recipe.label.slice(0, 24)}…` : recipe.label;
 }
 
-function cameraModeFor(presetId: string): 'static' | 'push' | 'pull' | 'pan' | 'parallax' {
+function cameraModeFor(presetId: string): CameraTransformMode {
   if (presetId === 'photo-slow-pull') return 'pull';
   if (presetId === 'photo-directional-pan') return 'pan';
   if (presetId === 'photo-2p5d-parallax') return 'parallax';
-  if (presetId === 'photo-static-hero' || presetId === 'photo-freeze-cutout') return 'static';
+  if (presetId === 'photo-freeze-cutout') return 'freeze';
+  if (presetId === 'photo-static-hero') return 'static';
   return 'push';
 }
 
-function typographyModeFor(preset: StartMotionPreset): 'mask' | 'punch' | 'stagger' {
-  if (preset.beatBehavior === 'single-hit') return 'punch';
-  if (preset.beatBehavior === 'stagger' || preset.beatBehavior === 'triplet') return 'stagger';
-  return 'mask';
+// presetIdごとに、engines.tsxが実際に持つ専用modeへ精密にmapする。
+// 以前はpreset.beatBehaviorからの粗い推測(single-hit/stagger/triplet→punch/stagger)
+// だったため、tracking/outline/hop/lock/triplet/vertical-wipe/word-stagger/
+// counter-scroll/quietの専用modeが実装済みでも汎用mask/punch/staggerへ
+// フォールバックしてしまっていた。directorRecipeVisualFidelity.tsの
+// "representative"判定の多くはこの粗いmapping自体が原因だったため、
+// 2026-08-26に既存engineの専用modeへ繋ぎ直した(新しいengine機能の追加ではない)。
+function typographyModeFor(preset: StartMotionPreset): TypographyRevealMode {
+  switch (preset.id) {
+    case 'type-mask-slide':
+      return 'mask';
+    case 'type-char-stagger':
+      return 'stagger';
+    case 'type-word-punch':
+      return 'punch';
+    case 'type-tracking-burst':
+      return 'tracking';
+    case 'type-outline-fill':
+      return 'outline';
+    case 'type-baseline-hop':
+      return 'hop';
+    case 'type-vertical-wipe':
+      return 'vertical-wipe';
+    case 'type-type-on-rhythm':
+      return 'word-stagger';
+    case 'type-triplet':
+      return 'triplet';
+    case 'type-counter-scroll':
+      return 'counter-scroll';
+    case 'type-frame-lock':
+      return 'lock';
+    case 'type-quiet-caption':
+      return 'quiet';
+    default:
+      if (preset.beatBehavior === 'single-hit') return 'punch';
+      if (preset.beatBehavior === 'stagger' || preset.beatBehavior === 'triplet') return 'stagger';
+      return 'mask';
+  }
+}
+
+function wipeVariantFor(presetId: string): TransitionWipeVariant {
+  if (presetId === 'wipe-paper-edge') return 'paper';
+  if (presetId === 'wipe-directional-shape') return 'shape';
+  if (presetId === 'wipe-route-line') return 'route-line';
+  if (presetId === 'flash-one-frame-soft') return 'flash';
+  if (presetId === 'color-field-release') return 'release';
+  return 'wipe';
 }
 
 function wipeDirectionFor(presetId: string): 'left' | 'right' | 'up' | 'down' {
@@ -74,8 +118,10 @@ function wipeDirectionFor(presetId: string): 'left' | 'right' | 'up' | 'down' {
 }
 
 function graphicVariantFor(presetId: string): GraphicHitVariant {
-  if (presetId === 'accent-speed-lines' || presetId === 'accent-cel-shadow-sweep') return 'speed-lines';
-  if (presetId === 'accent-impact-frame' || presetId === 'accent-micro-rgb-split') return 'impact';
+  if (presetId === 'accent-speed-lines') return 'speed-lines';
+  if (presetId === 'accent-cel-shadow-sweep') return 'cel-shadow';
+  if (presetId === 'accent-micro-rgb-split') return 'rgb-split';
+  if (presetId === 'accent-impact-frame') return 'impact';
   if (presetId === 'accent-stamp-triplet') return 'stamp-line-dot';
   if (presetId === 'accent-scribble-underline') return 'scribble';
   if (presetId === 'accent-halftone-burst') return 'halftone';
@@ -115,7 +161,7 @@ function resolveLayer(recipe: DirectorRecipe, presetId: string, intensity: Motio
       engine: 'transition-wipe',
       presetId,
       intensity,
-      props: {direction: wipeDirectionFor(presetId), transparent: presetId !== 'color-field-release'},
+      props: {direction: wipeDirectionFor(presetId), variant: wipeVariantFor(presetId), transparent: presetId !== 'color-field-release'},
     };
   }
 
