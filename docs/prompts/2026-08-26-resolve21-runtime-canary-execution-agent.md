@@ -46,7 +46,7 @@ node --no-warnings scripts/prepare-resolve-canary-session.mts \
 
 For Alpha, `--reuse-existing` may be added when the exact existing neutral ProRes render is intentionally being reused.
 
-For Palmier, do **not** use `--reuse-existing` while the scene-spec manifest is BLOCKED. First obtain a genuine Palmier DaVinci/Resolve FCPXML export, inspect it, attach it with explicit operator attestation, then create the runtime session with `--reuse-existing` so the PREPARED attachment manifest is preserved:
+For Palmier, do **not** use `--reuse-existing` while the scene-spec manifest is BLOCKED. First obtain a genuine **fresh** Palmier DaVinci/Resolve FCPXML export. Record an ISO-8601 timestamp immediately before starting the Palmier export and prefer a unique output path for each attempt. Then inspect structure, verify freshness, attach with explicit operator attestation, and only then create the runtime session with `--reuse-existing` so the PREPARED attachment manifest is preserved:
 
 ```bash
 node --no-warnings scripts/attach-palmier-real-export.mts \
@@ -55,6 +55,12 @@ node --no-warnings scripts/attach-palmier-real-export.mts \
 
 node --no-warnings scripts/attach-palmier-real-export.mts \
   --fcpxml <PALMIER_EXPORT.fcpxml> \
+  --export-started-at <ISO8601> \
+  --check-freshness-only
+
+node --no-warnings scripts/attach-palmier-real-export.mts \
+  --fcpxml <PALMIER_EXPORT.fcpxml> \
+  --export-started-at <ISO8601> \
   --attest-real-palmier-export
 
 node --no-warnings scripts/prepare-resolve-canary-session.mts \
@@ -63,9 +69,11 @@ node --no-warnings scripts/prepare-resolve-canary-session.mts \
   --reuse-existing
 ```
 
-`--inspect-only` never proves provenance. The attach flag means the operator explicitly confirms that the file really came from Palmier's Resolve export path. Keep these distinctions:
+`--inspect-only` never proves provenance. `--check-freshness-only` proves only that the candidate file is fresh relative to the recorded export attempt; it still does not prove Palmier created it. The attach flag means the operator explicitly confirms that the file really came from Palmier's Resolve export path. Keep these distinctions:
 
 ```text
+FILE_EXISTS != FRESH_EXPORT
+FRESH_ARTIFACT != REAL_PALMIER_PROVENANCE
 FCPXML_STRUCTURE_VALID != REAL_PALMIER_PROVENANCE
 OPERATOR_ATTESTATION != CRYPTOGRAPHIC_PROVENANCE
 REAL_EXPORT_ATTACHMENT != RESOLVE_RUNTIME_EVIDENCE
@@ -199,7 +207,7 @@ Execute in this order when inputs permit:
 
 1. `DV21-REMOTION-ALPHA-01`
 2. `DV21-AUDIO-RECOVERY-01`
-3. `DV21-PALMIER-FCPXML-01` once a real Palmier export exists
+3. `DV21-PALMIER-FCPXML-01` once a real fresh Palmier export exists
 4. `DV21-LOTTIE-OGRAF-01`
 5. `DV21-DRFX-FREE-01`
 6. `DV21-DRT-PORTABILITY-01`
