@@ -58,11 +58,23 @@ for (const expected of [
   if (!remotionStudioProtocolBoundary.officialBehavior.includes(expected)) err(`Studio Protocol boundary missing: ${expected}`);
 }
 
+const limits = remotionStudioProtocolBoundary.createElementPayloadV1Limits;
+if (limits.maxPayloadCharactersExclusive !== 250000) err('Studio Protocol payload max drifted');
+if (limits.maxSourceCodeCharactersExclusive !== 200000) err('Studio Protocol source-code max drifted');
+if (limits.maxDependencies !== 100) err('Studio Protocol dependency max drifted');
+if (limits.durationInFrames.min !== 1 || limits.durationInFrames.max !== 100000000) err('Studio Protocol duration limits drifted');
+if (limits.sourceComponentRule !== 'EXACTLY_ONE_EXPORTED_NAMED_REACT_COMPONENT') err('Element source-component rule drifted');
+if (!limits.installationModes.includes('wrapped') || !limits.installationModes.includes('component-owned-sequence')) err('Element installation modes drifted');
+if (!remotionStudioProtocolBoundary.weddingPolicy.includes('Use official createElementPayload() instead of reimplementing payload validation.')) {
+  err('reuse-before-build rule for official createElementPayload() is missing');
+}
+
 for (const guardrail of [
   'LATEST_RELEASE_AVAILABLE != WEDDING_REPO_COMPATIBLE',
   'EPHEMERAL_CI_GREEN != PRODUCTION_LOCKFILE_UPGRADED',
   'STUDIO_INTERACTIVE != SOURCE_OF_TRUTH_MOVED_OUT_OF_CODE',
   'ELEMENT_SOURCE_PUBLIC != SAFE_FOR_SECRETS_OR_PRIVATE_ASSET_URLS',
+  'ELEMENT_DEPENDENCY_DECLARED != DEPENDENCY_POLICY_APPROVED',
   'CUSTOM_EDITOR_FEATURE_NAME != CUSTOM_INSPECTOR_VALUE_EDITOR',
   'REMOTION_V4_LICENSE != REMOTION_V5_LICENSE',
 ]) {
