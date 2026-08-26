@@ -1,0 +1,79 @@
+name: Resolve Runtime Canary Pack CI
+
+on:
+  pull_request:
+    paths:
+      - "motion-studio/src/data/resolveRuntimeCanary.schema.ts"
+      - "motion-studio/src/data/resolveRuntimeCanaryPack.ts"
+      - "motion-studio/scripts/resolve-runtime-canary-plan.mts"
+      - "motion-studio/scripts/check-resolve-runtime-canary-pack.mts"
+      - "scripts/davinci/resolve21-runtime-readonly-probe.sh"
+      - "docs/runbooks/2026-08-26-resolve21-runtime-canary-pack.md"
+      - "docs/prompts/2026-08-26-resolve21-runtime-canary-execution-agent.md"
+      - ".github/workflows/resolve-runtime-canary-pack-ci.yml"
+  push:
+    paths:
+      - "motion-studio/src/data/resolveRuntimeCanary.schema.ts"
+      - "motion-studio/src/data/resolveRuntimeCanaryPack.ts"
+      - "motion-studio/scripts/resolve-runtime-canary-plan.mts"
+      - "motion-studio/scripts/check-resolve-runtime-canary-pack.mts"
+      - "scripts/davinci/resolve21-runtime-readonly-probe.sh"
+      - "docs/runbooks/2026-08-26-resolve21-runtime-canary-pack.md"
+      - "docs/prompts/2026-08-26-resolve21-runtime-canary-execution-agent.md"
+      - ".github/workflows/resolve-runtime-canary-pack-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: motion-studio/pnpm-lock.yaml
+
+      - name: Install motion-studio dependencies
+        working-directory: motion-studio
+        run: pnpm install --frozen-lockfile
+
+      - name: Canary pack contract
+        working-directory: motion-studio
+        run: node --no-warnings scripts/check-resolve-runtime-canary-pack.mts
+
+      - name: Canary compiler smoke
+        working-directory: motion-studio
+        run: |
+          node --no-warnings scripts/resolve-runtime-canary-plan.mts --list | grep -Fq 'DV21-REMOTION-ALPHA-01'
+          node --no-warnings scripts/resolve-runtime-canary-plan.mts DV21-REMOTION-ALPHA-01 | grep -Fq 'ALPHA_SOURCE_RENDER != ALPHA_IMPORT != ALPHA_WORKING_PATH != ALPHA_EXPORT'
+          node --no-warnings scripts/resolve-runtime-canary-plan.mts DV21-AUDIO-RECOVERY-01 --evidence-template > /tmp/audio-canary-evidence.json
+          grep -Fq '"promotionEligible": false' /tmp/audio-canary-evidence.json
+          grep -Fq '"result": "NOT_RUN"' /tmp/audio-canary-evidence.json
+
+      - name: Generic read-only probe shell syntax
+        run: bash -n scripts/davinci/resolve21-runtime-readonly-probe.sh
+
+      - name: Generic read-only probe contract
+        shell: bash
+        run: |
+          probe="scripts/davinci/resolve21-runtime-readonly-probe.sh"
+          grep -Fq 'mutationsPerformed=NO' "$probe"
+          grep -Fq 'networkRequestsPerformed=NO' "$probe"
+          grep -Fq 'This script does NOT launch Resolve, install software, edit config, write project files,' "$probe"
+          if grep -Eq '(^|[[:space:]])(curl|wget|npx|rm|mv|cp)([[:space:]]|$)|npm[[:space:]]+(install|i)([[:space:]]|$)|defaults[[:space:]]+write' "$probe"; then
+            echo "Generic read-only probe contains a forbidden mutating/network command"
+            exit 1
+          fi
