@@ -39,7 +39,9 @@ function RenderPreset({preset}: {preset: RenderableMotionPreset}) {
                   ? 'hop'
                   : preset.mode === 'lock'
                     ? 'lock'
-                    : 'mask'
+                    : preset.mode === 'outline'
+                      ? 'outline'
+                      : 'mask'
           }
         />
       </AbsoluteFill>
@@ -66,6 +68,7 @@ function RenderPreset({preset}: {preset: RenderableMotionPreset}) {
         <TransitionWipeEngine
           intensity={preset.intensity}
           direction={preset.mode === 'left' ? 'left' : preset.mode === 'up' ? 'up' : preset.mode === 'down' ? 'down' : 'right'}
+          variant={preset.mode === 'release' ? 'release' : 'wipe'}
         />
       </AbsoluteFill>
     );

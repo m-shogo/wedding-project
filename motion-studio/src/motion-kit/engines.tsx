@@ -13,7 +13,7 @@ export function TypographyRevealEngine({
 }: {
   text: string;
   intensity?: MotionIntensity;
-  mode?: 'mask' | 'punch' | 'stagger' | 'hop' | 'lock';
+  mode?: 'mask' | 'punch' | 'stagger' | 'hop' | 'lock' | 'outline';
   transparent?: boolean;
 }) {
   const frame = useCurrentFrame();
@@ -29,12 +29,21 @@ export function TypographyRevealEngine({
     extrapolateRight: 'clamp',
     easing: Easing.bounce,
   });
+  // outlineは「線から塗りへ」変わる表現のため、全体opacityは早めに1へ到達させ、
+  // 塗り(fillOpacity)とWebkitTextStrokeの太さを別トラックで進行させる。
+  const outlineAppear = interpolate(frame, [0, 4], [0, 1], {extrapolateRight: 'clamp'});
+  const outlineFill = interpolate(progress, [0.35, 1], [0, 1], {extrapolateLeft: 'clamp'});
+  const outlineStrokeWidth = interpolate(progress, [0, 1], [2.5, 0]) * strength;
+
   const scale = mode === 'punch' ? interpolate(progress, [0, 1], [1 + 0.18 * strength, 1]) : 1;
   const translateY =
     mode === 'mask' ? (1 - progress) * 80 * strength : mode === 'hop' ? (1 - hopProgress) * -90 * strength : 0;
   const translateX = mode === 'lock' ? 130 * strength : 0;
   const letterSpacing = mode === 'stagger' ? `${interpolate(progress, [0, 1], [0.18 * strength, 0.02])}em` : '0.02em';
   const fontSize = mode === 'lock' ? 200 : 104;
+  const opacity = mode === 'outline' ? outlineAppear : progress;
+  const color = mode === 'outline' ? `rgba(255,255,255,${outlineFill})` : '#fff';
+  const webkitTextStroke = mode === 'outline' ? `${outlineStrokeWidth}px #fff` : undefined;
 
   return (
     <AbsoluteFill
@@ -48,12 +57,13 @@ export function TypographyRevealEngine({
       <div style={{overflow: 'hidden', padding: '0.15em 0.25em'}}>
         <div
           style={{
-            opacity: progress,
+            opacity,
             transform: `translateX(${translateX}px) translateY(${translateY}px) scale(${scale})`,
             letterSpacing,
             fontSize,
             fontWeight: 800,
-            color: '#fff',
+            color,
+            WebkitTextStroke: webkitTextStroke,
           }}
         >
           {text}
@@ -130,13 +140,16 @@ export function TransitionWipeEngine({
   direction = 'right',
   intensity = 'M',
   transparent = true,
+  variant = 'wipe',
 }: {
   direction?: 'left' | 'right' | 'up' | 'down';
   intensity?: MotionIntensity;
   transparent?: boolean;
+  // 'release'は方向性のあるwipeではなく、一度color fieldへ落として呼吸するholdの表現。
+  variant?: 'wipe' | 'release';
 }) {
   const frame = useCurrentFrame();
-  const {fps} = useVideoConfig();
+  const {fps, durationInFrames} = useVideoConfig();
   const strength = intensityScale[intensity];
   const progress = interpolate(frame, [0, Math.max(4, Math.round(fps * 0.45))], [0, 1], {
     extrapolateRight: 'clamp',
@@ -145,6 +158,21 @@ export function TransitionWipeEngine({
   const horizontal = direction === 'left' || direction === 'right';
   const sign = direction === 'left' || direction === 'up' ? -1 : 1;
   const travel = (1 - progress) * 110 * sign;
+
+  if (variant === 'release') {
+    const inEnd = Math.round(fps * 0.35);
+    const outStart = Math.max(inEnd + 1, durationInFrames - Math.round(fps * 0.45));
+    const fieldOpacity = interpolate(frame, [0, inEnd, outStart, durationInFrames - 1], [0, 0.85 * strength, 0.85 * strength, 0], {
+      extrapolateLeft: 'clamp',
+      extrapolateRight: 'clamp',
+      easing: Easing.inOut(Easing.cubic),
+    });
+    return (
+      <AbsoluteFill style={{backgroundColor: transparent ? undefined : '#0d2035'}}>
+        <AbsoluteFill style={{background: '#f0d37a', opacity: fieldOpacity}} />
+      </AbsoluteFill>
+    );
+  }
 
   return (
     <AbsoluteFill style={{backgroundColor: transparent ? undefined : '#0d2035', overflow: 'hidden'}}>
