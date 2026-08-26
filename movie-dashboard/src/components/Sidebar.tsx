@@ -73,6 +73,7 @@ const navSections: SidebarSection[] = [
     sectionId: "production",
     label: "PRODUCTION",
     links: [
+      { to: "/lyric-timing", label: "歌詞タイミング調整", icon: "🎧" },
       { to: "/opening-photo-intake", label: "Opening写真11枚", icon: "📷" },
       { to: "/opening-bgm-intake", label: "Opening BGM", icon: "♫" },
       { to: "/storyboard", label: "絵コンテ", icon: "🎬" },
