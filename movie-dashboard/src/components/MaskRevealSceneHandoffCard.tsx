@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { buildMaskRevealHandoffFidelityReport } from "../data/maskRevealHandoffFidelity";
 import {
   buildMaskRevealSceneProductionBundle,
   buildMaskRevealSceneProductionBundleJson,
@@ -6,10 +7,21 @@ import {
 import type { MaskRevealSceneInstance } from "../data/visualSceneComposer";
 import { downloadText } from "../lib/exporters";
 
+const TRANSPORT_LABEL_JA: Record<string, string> = {
+  EXACT: "そのまま転送",
+  APPROX: "転送されるが要確認",
+  REBUILD_VALUES: "値から再構築",
+  REBUILD_ASSET: "素材を再import",
+  REBUILD_INTENT: "意図だけ再現",
+  BAKE_OPTION: "焼き込みで代替",
+  LOST: "転送されない",
+};
+
 export function MaskRevealSceneHandoffCard({ scene }: { scene: MaskRevealSceneInstance }) {
   const [copied, setCopied] = useState(false);
   const bundle = useMemo(() => buildMaskRevealSceneProductionBundle(scene), [scene]);
   const json = useMemo(() => buildMaskRevealSceneProductionBundleJson(scene), [scene]);
+  const fidelity = useMemo(() => buildMaskRevealHandoffFidelityReport(), []);
 
   async function copyJson() {
     await navigator.clipboard.writeText(json);
@@ -51,6 +63,33 @@ export function MaskRevealSceneHandoffCard({ scene }: { scene: MaskRevealSceneIn
       <details className="mt-2">
         <summary className="cursor-pointer text-[10px] text-sky-700 dark:text-sky-300">Export詳細を見る</summary>
         <pre className="mt-2 max-h-80 overflow-auto border border-sand-200 dark:border-navy-600 p-3 text-[10px] leading-5 whitespace-pre-wrap text-navy-500 dark:text-navy-300">{json}</pre>
+      </details>
+
+      <details className="mt-3">
+        <summary className="cursor-pointer text-[10px] text-sky-700 dark:text-sky-300">
+          Palmier → DaVinci Handoff Fidelity({fidelity.transportedCount}件転送 / {fidelity.rebuildCount}件要再構築)
+        </summary>
+        <p className="mt-2 text-[10px] leading-4 text-amber-700 dark:text-amber-300">
+          {fidelity.allRuntimeVerified
+            ? "全項目がRuntime Verified(実Resolve Canaryで確認済み)です。"
+            : "この一覧はPalmierソースコード/Resolve公式資料に基づく研究段階の分類です(PENDING_RUNTIME)。実Resolveでの動作確認はまだ行っていません。"}
+        </p>
+        <div className="mt-2 space-y-2">
+          {fidelity.properties.map((property) => (
+            <div key={property.id} className="border border-sand-200 dark:border-navy-600 p-2">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <span className="text-[10px] font-semibold text-navy-800 dark:text-sand-100">{property.japaneseName}</span>
+                <span className="text-[9px] font-mono px-1.5 py-0.5 border border-navy-300 dark:border-navy-600 text-navy-500 dark:text-navy-300">
+                  {property.transportClass} / {TRANSPORT_LABEL_JA[property.transportClass]}
+                </span>
+              </div>
+              <p className="mt-1 text-[10px] leading-4 text-navy-500 dark:text-navy-300">{property.recoveryInstructionJa}</p>
+              <p className="mt-1 text-[9px] leading-4 text-navy-400">
+                Native: {property.nativeRoute} / Automation: {property.automationClass} / Capability: {property.capabilityTrust} / Evidence: {property.evidenceState}
+              </p>
+            </div>
+          ))}
+        </div>
       </details>
     </section>
   );
