@@ -12,6 +12,7 @@ export const resolve21AlphaHandoffPolicy: ResolveHandoffSidecar = resolveHandoff
     projectRef: 'motion-studio',
     runtimeVersion: '4.0.475',
     compositionOrTimeline: 'runtime-canary-placeholder',
+    humanMasterRef: 'motion-studio/src/Root.tsx + composition schema/default props',
   },
   resolve: {
     major: 21,
@@ -19,6 +20,42 @@ export const resolve21AlphaHandoffPolicy: ResolveHandoffSidecar = resolveHandoff
     edition: 'FREE',
     platform: 'MACOS',
     page: 'EDIT',
+  },
+  executionScope: {
+    timeline: '<explicit timeline name required at execution time>',
+    clipIds: [],
+    trackIds: [],
+    allowedEdits: [
+      'import the named alpha artifact',
+      'place it only in the explicitly selected/identified timeline scope',
+      'trim, reposition, scale or adjust clip opacity when the Human Master requests it',
+      'read back the changed clip-level values',
+    ],
+    forbiddenEdits: [
+      'replace important photos automatically',
+      'change final copy automatically',
+      'reorder scenes automatically',
+      'delete clips/tracks automatically',
+      'rewrite unrelated timeline items',
+    ],
+    preconditions: [
+      'Confirm Resolve major/patch/edition/platform before applying the recipe.',
+      'Confirm the intended timeline and target clip/track scope before any mutation.',
+      'Confirm the source artifact and dependency sidecar refer to the same composition/render.',
+    ],
+    abortIf: [
+      'timeline or target scope is ambiguous',
+      'expected source artifact is missing or stale',
+      'Resolve version/edition/platform does not match the recipe assumptions',
+      'the requested edit requires an unsupported capability or changes a high-impact decision',
+    ],
+    postEditReadback: [
+      'target clip identity and placement',
+      'trim/duration',
+      'position/scale/opacity values changed by this operation',
+      'alpha composite checkpoint',
+      'save/reopen checkpoint when promotion to Trusted is being evaluated',
+    ],
   },
   timeline: {
     fps: 30,
