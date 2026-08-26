@@ -1,6 +1,6 @@
 import type {ReactNode} from 'react';
 import {AbsoluteFill, Easing, interpolate, useCurrentFrame, useVideoConfig} from 'remotion';
-import {cubicBezierPoint, ROUTE_LINE_VIEWBOX, routeControlPoints, routePathD} from './routeLineMath';
+import {buildCubicBezierArcLengthLut, cubicBezierPointAtArcProgress, ROUTE_LINE_VIEWBOX, routeControlPoints, routePathD} from './routeLineMath';
 
 export type MotionIntensity = 'S' | 'M' | 'L';
 
@@ -369,8 +369,8 @@ export function TransitionWipeEngine({
 
   if (variant === 'route-line') {
     // wipe-route-line: 色面ではなく、1本の経路線がstrokeDashoffsetで伸びていく表現。
-    // 線とドットは同じcubic bezier制御点・同じprogress(t)から計算するため、ドットは
-    // 必ず線の描画先端の実座標に一致する(HTML divのpercent補間による近似はしない)。
+    // SVGのstrokeDashoffsetは弧長比で進むため、ドットも同じ弧長progressをBezierの
+    // parameter tへ逆変換して配置する。単に同じ数値をtへ渡すと曲線途中で線端とずれる。
     // 制御点/座標計算は routeLineMath.ts に切り出し、direction(left/right/up/down)
     // すべてで同じviewBox(1920x1080)に収まることをそこで保証している。
     const revealEnd = Math.max(6, Math.round(fps * 0.6));
@@ -380,7 +380,8 @@ export function TransitionWipeEngine({
     const dotAppear = interpolate(frame, [2, 6], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
     const controlPoints = routeControlPoints(direction);
     const pathD = routePathD(controlPoints);
-    const dot = cubicBezierPoint(controlPoints, lineProgress);
+    const arcLengthLut = buildCubicBezierArcLengthLut(controlPoints);
+    const dot = cubicBezierPointAtArcProgress(controlPoints, lineProgress, arcLengthLut);
     return (
       <AbsoluteFill style={{backgroundColor: transparent ? undefined : '#0d2035', overflow: 'hidden'}}>
         <svg

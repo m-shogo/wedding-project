@@ -213,3 +213,26 @@ HTML divのleft/top percent補間で近似していたバグがあった。こ�
 Visual Fidelityの扱いは変更していない。`wipe-route-line`は座標バグを修正した後も
 `check-director-recipe-visual-fidelity.mts`の`requiredNonExact`ガードにより
 `representative`のまま維持している(独立rendered-pixel oracleが別途必要)。
+
+## 追記(PR #374後のレビュー指摘対応): route-lineの弧長同期とpreset mapping正本化
+
+PR #374ではSVG pathとドットを同じcubic bezier制御点・同じ数値progressへ統一したが、
+SVGの`strokeDashoffset`はパスの**弧長比**で進む一方、`cubicBezierPoint(points, t)`の
+`t`はBezier parameterであり、両者は一般に一致しない。対象曲線を数値確認すると、
+中間区間で線端とドットに約24〜28pxの差が残っていた。
+
+対応:
+
+- `routeLineMath.ts`へ決定的なarc-length lookup table生成、弧長progressからBezier
+  parameterへの逆変換、弧長progress上の座標計算を追加した。
+- Remotion側のドットは`strokeDashoffset`と同じ弧長progressを使うよう変更した。
+- production lookup(512分割)を高精度reference(32768分割)と4方向・複数progressで
+  比較し、viewBox座標上1px以内であることを`check-start-motion-kit.mts`で検証する。
+- transition preset 6件の`presetId → direction / variant`を
+  `transitionWipeResolver.ts`のcanonical mappingへ集約し、Motion ReelとDirector
+  Recipeが同じ正本を使うようにした。Director Recipeの全transition layerも
+  canonical mappingと一致することを回帰チェックする。
+
+`wipe-route-line`のVisual Fidelityは引き続き`representative`。この数学的回帰チェックと
+ローカル目視は描画バグ修正の証拠だが、独立rendered-pixel oracleによる`exact`昇格条件を
+置き換えない。

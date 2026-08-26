@@ -2,8 +2,15 @@ import fs from 'node:fs';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {renderableMotionPresets} from '../src/motion-kit/renderablePresets.ts';
-import {resolveTransitionWipeProps} from '../src/motion-kit/transitionWipeResolver.ts';
-import {cubicBezierPoint, routeControlPoints, routeStaysWithinViewBox} from '../src/motion-kit/routeLineMath.ts';
+import {resolveTransitionWipeProps, resolveTransitionWipePresetProps} from '../src/motion-kit/transitionWipeResolver.ts';
+import {
+  buildCubicBezierArcLengthLut,
+  cubicBezierPointAtArcProgress,
+  cubicBezierPoint,
+  routeControlPoints,
+  routeStaysWithinViewBox,
+} from '../src/motion-kit/routeLineMath.ts';
+import {resolveAllDirectorRecipes} from '../src/motion-kit/directorRecipeAdapter.ts';
 import type {TransitionWipeDirection, TransitionWipeVariant} from '../src/motion-kit/engines.tsx';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -78,6 +85,19 @@ for (const [presetId, expectedVariant] of Object.entries(expectedWipeVariantByPr
   if (resolved.variant !== expectedVariant) {
     errors.push(`transition-wipe wiring check: ${presetId} resolved variant="${resolved.variant}", expected "${expectedVariant}" (silently fell back to a generic variant?)`);
   }
+  const canonical = resolveTransitionWipePresetProps(presetId);
+  if (resolved.direction !== canonical.direction || resolved.variant !== canonical.variant) {
+    errors.push(`transition-wipe wiring check: Motion Reel ${presetId} does not match canonical direction/variant mapping`);
+  }
+}
+
+for (const recipe of resolveAllDirectorRecipes()) {
+  for (const layer of recipe.layers.filter((entry) => entry.engine === 'transition-wipe')) {
+    const canonical = resolveTransitionWipePresetProps(layer.presetId);
+    if (layer.props.direction !== canonical.direction || layer.props.variant !== canonical.variant) {
+      errors.push(`transition-wipe wiring check: Director Recipe ${recipe.recipe.id}/${layer.presetId} does not match canonical direction/variant mapping`);
+    }
+  }
 }
 
 // Every transition-wipe preset must set its own `wipeVariant` explicitly. `mode` must not be
@@ -122,6 +142,17 @@ for (const direction of allDirections) {
   if (!increasing && !(end[primaryAxis] < start[primaryAxis])) {
     errors.push(`route-line geometry check: direction="${direction}" should travel toward decreasing ${primaryAxis}`);
   }
+
+  const productionLut = buildCubicBezierArcLengthLut(points);
+  const referenceLut = buildCubicBezierArcLengthLut(points, 32768);
+  for (const progress of [0, 0.1, 0.25, 0.5, 0.75, 0.9, 1]) {
+    const productionPoint = cubicBezierPointAtArcProgress(points, progress, productionLut);
+    const referencePoint = cubicBezierPointAtArcProgress(points, progress, referenceLut);
+    const errorPixels = Math.hypot(productionPoint.x - referencePoint.x, productionPoint.y - referencePoint.y);
+    if (errorPixels > 1) {
+      errors.push(`route-line arc-length check: direction="${direction}" progress=${progress} dot error=${errorPixels.toFixed(3)}px exceeds 1px`);
+    }
+  }
 }
 
 if (errors.length) {
@@ -131,5 +162,5 @@ if (errors.length) {
 }
 console.log(
   `StaRt shared renderer contracts OK: ${ids.length} renderable presets / 4 shared engines / transparent overlay preview / ` +
-    `${transitionWipePresets.length} transition-wipe direction+variant wired / route-line geometry within viewBox for all 4 directions.`,
+    `${transitionWipePresets.length} transition-wipe direction+variant wired / route-line geometry within viewBox and arc-length dot error <=1px for all 4 directions.`,
 );

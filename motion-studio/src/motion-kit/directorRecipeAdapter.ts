@@ -7,8 +7,8 @@ import type {DirectorRecipe, DirectorRecipeCategory} from '../../../movie-dashbo
 import {directorRecipeCatalog, directorRecipeCategories} from '../../../movie-dashboard/src/data/directorRecipeCatalog.ts';
 import type {StartMotionPreset} from '../../../movie-dashboard/src/data/startMotionKit.ts';
 import {startMotionPresets} from '../../../movie-dashboard/src/data/startMotionKit.ts';
-import type {CameraTransformMode, GraphicHitVariant, MotionIntensity, TransitionWipeDirection, TransitionWipeVariant, TypographyRevealMode} from './engines';
-import {resolveTransitionWipeProps} from './transitionWipeResolver.ts';
+import type {CameraTransformMode, GraphicHitVariant, MotionIntensity, TypographyRevealMode} from './engines';
+import {resolveTransitionWipePresetProps} from './transitionWipeResolver.ts';
 
 export {directorRecipeCatalog, directorRecipeCategories};
 export type {DirectorRecipe, DirectorRecipeCategory};
@@ -102,22 +102,6 @@ function typographyModeFor(preset: StartMotionPreset): TypographyRevealMode {
   }
 }
 
-function wipeVariantFor(presetId: string): TransitionWipeVariant {
-  if (presetId === 'wipe-paper-edge') return 'paper';
-  if (presetId === 'wipe-directional-shape') return 'shape';
-  if (presetId === 'wipe-route-line') return 'route-line';
-  if (presetId === 'flash-one-frame-soft') return 'flash';
-  if (presetId === 'color-field-release') return 'release';
-  return 'wipe';
-}
-
-function wipeDirectionFor(presetId: string): TransitionWipeDirection {
-  if (presetId === 'wipe-paper-edge') return 'left';
-  if (presetId === 'flash-one-frame-soft') return 'up';
-  if (presetId === 'color-field-release') return 'down';
-  return 'right';
-}
-
 function graphicVariantFor(presetId: string): GraphicHitVariant {
   if (presetId === 'accent-speed-lines') return 'speed-lines';
   if (presetId === 'accent-cel-shadow-sweep') return 'cel-shadow';
@@ -158,10 +142,9 @@ function resolveLayer(recipe: DirectorRecipe, presetId: string, intensity: Motio
   }
 
   if (preset.sharedEngine === 'transition-wipe') {
-    // StartMotionReel.tsxと同じresolveTransitionWipePropsを通すことで、direction/variantの
-    // 解決ロジック自体(既定値の与え方)を2箇所で重複させない。presetIdごとのmapping表
-    // (wipeDirectionFor/wipeVariantFor)はDirector Recipe側固有のまま残す。
-    const wipeProps = resolveTransitionWipeProps({direction: wipeDirectionFor(presetId), wipeVariant: wipeVariantFor(presetId)});
+    // Motion Reelと同じcanonical presetId mappingを使い、片方だけgeneric wipeへ戻る
+    // regressionを構造的に防ぐ。
+    const wipeProps = resolveTransitionWipePresetProps(presetId);
     return {
       engine: 'transition-wipe',
       presetId,
