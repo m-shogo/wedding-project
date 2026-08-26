@@ -146,7 +146,7 @@ export const alphaCanaryFixture = {
   ],
 } as const;
 
-export type ResolveCanaryInputPreparationMode = 'alpha' | 'audio' | 'palmier';
+export type ResolveCanaryInputPreparationMode = 'alpha' | 'audio' | 'palmier' | 'drfx';
 export type ResolveCanaryInputPreparation = {
   mode: ResolveCanaryInputPreparationMode;
   command: string;
@@ -172,6 +172,12 @@ export const resolveCanaryInputPreparationCommands: Record<string, ResolveCanary
     command: 'node --no-warnings scripts/prepare-resolve-canary-inputs.mts palmier',
     result: 'Writes only the Palmier synthetic scene specification. Status remains blocked until Palmier itself exports real FCPXML.',
     manifestPath: 'out/canary-inputs/manifests/DV21-PALMIER-FCPXML-01.json',
+  },
+  'DV21-DRFX-FREE-01': {
+    mode: 'drfx',
+    command: 'node --no-warnings scripts/prepare-resolve-canary-inputs.mts drfx',
+    result: 'Builds a deterministic dependency-free Edit Generator .drfx candidate with a single grouped Color control and writes hash/structure manifests. Runtime install remains pending.',
+    manifestPath: 'out/canary-inputs/manifests/DV21-DRFX-FREE-01.json',
   },
 };
 

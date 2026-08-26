@@ -27,7 +27,8 @@ function usage() {
   console.log('  alpha    Render/reuse neutral Remotion ProRes 4444 and write hash/ffprobe manifest');
   console.log('  audio    Generate a copyright-free synthetic WAV + Human Master target manifest');
   console.log('  palmier  Write the synthetic Palmier scene specification only; real FCPXML still requires Palmier');
-  console.log('  all      Prepare alpha + audio + Palmier scene spec');
+  console.log('  drfx     Build deterministic neutral Edit/Generators .drfx candidate + manifests');
+  console.log('  all      Prepare alpha + audio + Palmier scene spec + neutral DRFX candidate');
   console.log('');
   console.log('Options:');
   console.log('  --dry-run         Print planned commands/outputs without creating files');
@@ -39,7 +40,7 @@ if (mode === '--list' || mode === 'list') {
   process.exit(0);
 }
 
-if (!['alpha', 'audio', 'palmier', 'all'].includes(mode)) {
+if (!['alpha', 'audio', 'palmier', 'drfx', 'all'].includes(mode)) {
   console.error(`Unknown mode: ${mode}`);
   usage();
   process.exit(1);
@@ -244,11 +245,22 @@ function preparePalmierSpec() {
   });
 }
 
+function prepareDrfx() {
+  console.log('\n# DV21-DRFX-FREE-01 neutral template bundle');
+  const childArgs = ['--no-warnings', 'scripts/prepare-resolve-drfx-fixture.mts'];
+  if (dryRun) childArgs.push('--dry-run');
+  const result = spawnSync(process.execPath, childArgs, {cwd: root, stdio: 'inherit'});
+  if (result.status !== 0) {
+    throw new Error(`Neutral DRFX fixture preparation failed (${result.status ?? 'unknown'}).`);
+  }
+}
+
 try {
   ensureDir(manifestDir);
   if (mode === 'alpha' || mode === 'all') prepareAlpha();
   if (mode === 'audio' || mode === 'all') prepareAudio();
   if (mode === 'palmier' || mode === 'all') preparePalmierSpec();
+  if (mode === 'drfx' || mode === 'all') prepareDrfx();
   console.log('\nDone. Generated files live under motion-studio/out/canary-inputs or the existing neutral alpha output path and should not be committed as binary evidence by default.');
 } catch (error) {
   console.error(error instanceof Error ? error.message : error);
