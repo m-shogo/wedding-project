@@ -69,7 +69,7 @@ export function TypographyProductionRoutingMatrix() {
         })}
       </div>
       <p className="mt-2 border border-amber-200 dark:border-amber-800 p-2 text-[9px] leading-4 text-amber-800 dark:text-amber-200">
-        Mask Revealはlive実装あり、Char Stagger / Type on Rhythmはtranslator + Actual workflowまで到達しています。ただし実Resolve applied/readback/render parityが未確認の候補をActual検証済み・production-readyとは表示しません。
+        Mask Revealはlive実装あり、Char Stagger / Type on Rhythm / Word Punchはtranslator + Actual workflowまで到達しています。ただし実Resolve applied/readback/render parityが未確認の候補をActual検証済み・production-readyとは表示しません。
       </p>
     </details>
   );
