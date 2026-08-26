@@ -5,6 +5,7 @@ import {fileURLToPath} from "node:url";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const read = (relative) => fs.readFileSync(path.join(root, relative), "utf8");
 const session = read("src/data/typographyDaVinciActualSession.ts");
+const readiness = read("src/data/typographyDaVinciActualReadiness.ts");
 const importer = read("src/components/TypographyDaVinciActualSessionImport.tsx");
 const queue = read("src/components/TypographyDaVinciActualRunQueue.tsx");
 const plan = read("src/data/typographyDaVinciActualRunPlan.ts");
@@ -16,19 +17,46 @@ for (const token of [
   'macActualState: "NOT_RUN"', 'machineParity: "NOT_RUN"', 'oneX: "NOT_RUN"', 'halfSpeed: "NOT_RUN"',
   'reviewedAt: null', 'rawEvidenceFile: null',
   'Object.fromEntries(runItem.requiredBindingRoles.map((role) => [role, "NOT_RUN" as const]))',
-  'FILL_FROM_MAC_ACTUAL_SESSION', 'IMPLEMENTATION_ID_MISMATCH', 'DUPLICATE_PATTERN_ID', 'UNKNOWN_PATTERN_ID',
-  'NINE_PATTERN_COVERAGE_INCOMPLETE', 'PASS_REQUIRES_RAW_EVIDENCE_FILE', 'PASS_REQUIRES_MACHINE_PARITY',
-  'PASS_REQUIRES_1X_VISUAL_QA', 'PASS_REQUIRES_HALF_SPEED_VISUAL_QA', 'PASS_REQUIRES_REVIEWED_AT',
-  'REQUIRED_BINDING_NOT_PASS:', 'eligibleForHumanPromotionReview', 'humanPromotionReviewRequired: true',
+  'FILL_FROM_MAC_ACTUAL_SESSION', 'DUPLICATE_PATTERN_ID', 'UNKNOWN_PATTERN_ID',
+  'NINE_PATTERN_COVERAGE_INCOMPLETE', 'eligibleForHumanPromotionReview', 'humanPromotionReviewRequired: true',
   'automaticPromotionAllowed: false', 'productionReady: false', 'buildTypographyDaVinciActualSessionTemplateJson',
   'parseAndEvaluateTypographyDaVinciActualSession',
+  'evaluateTypographyDaVinciActualReadiness',
+  'stageCounts',
   'schemaVersion: "typography-davinci-actual-evaluation/v1"',
   'authority: "DERIVED_FROM_MAC_ACTUAL_EVIDENCE_SESSION"',
   'eligibleForHumanPromotionReviewCount', 'blockedCount',
-  '"EVALUATION_REPORT != RAW_MAC_EVIDENCE"', '"HUMAN_REVIEW_ELIGIBLE != HUMAN_PROMOTED"',
+  '"EVALUATION_REPORT != RAW_MAC_EVIDENCE"', '"ACTUAL_IN_PROGRESS != ACTUAL_PASS"',
+  '"HUMAN_REVIEW_ELIGIBLE != HUMAN_PROMOTED"',
   '"HUMAN_PROMOTED != PRODUCTION_READY_WITHOUT_SEPARATE_RELEASE_GATE"',
   'buildTypographyDaVinciActualEvaluationReportJson',
 ]) requireText(session, token, `Actual session/evaluation contract missing: ${token}`);
+
+for (const token of [
+  '"NOT_RUN"',
+  '"ACTUAL_IN_PROGRESS"',
+  '"ACTUAL_FAILED"',
+  '"HUMAN_REVIEW_ELIGIBLE"',
+  'IMPLEMENTATION_ID_MISMATCH',
+  'MAC_ACTUAL_STATE_INVALID',
+  'MACHINE_PARITY_STATE_INVALID',
+  'VISUAL_QA_1X_STATE_INVALID',
+  'VISUAL_QA_HALF_SPEED_STATE_INVALID',
+  'REQUIRED_BINDING_STATE_INVALID:',
+  'REQUIRED_BINDING_NOT_PASS:',
+  'PASS_REQUIRES_RAW_EVIDENCE_FILE',
+  'PASS_REQUIRES_MACHINE_PARITY',
+  'PASS_REQUIRES_1X_VISUAL_QA',
+  'PASS_REQUIRES_HALF_SPEED_VISUAL_QA',
+  'PASS_REQUIRES_REVIEWED_AT',
+  'machineEvidenceComplete',
+  'requiredBindingsComplete',
+  'visualQaComplete',
+  'reviewMetadataComplete',
+  'humanPromotionReviewRequired: true',
+  'automaticPromotionAllowed: false',
+  'productionReady: false',
+]) requireText(readiness, token, `Shared Actual readiness contract missing: ${token}`);
 
 for (const token of [
   "buildTypographyDaVinciActualSessionTemplateJson", "typography-davinci-actual-session-template.json",
@@ -47,17 +75,21 @@ requireText(plan, 'authority: "PLAN_ONLY_NOT_ACTUAL_EVIDENCE"', "Plan/session/ev
 
 if (/macActualState:\s*"PASS"/.test(session)) errors.push("Session template must not hardcode Mac Actual PASS");
 if (/machineParity:\s*"PASS"/.test(session)) errors.push("Session template must not hardcode machine parity PASS");
-if (/automaticPromotionAllowed:\s*true/.test(session) || /productionReady:\s*true/.test(session)) errors.push("Session/evaluation must never auto-promote to production");
+if (/automaticPromotionAllowed:\s*true/.test(session + readiness) || /productionReady:\s*true/.test(session + readiness)) errors.push("Session/readiness evaluation must never auto-promote to production");
 
 for (const token of [
-  'item.macActualState === "PASS"', 'item.machineParity === "PASS"', 'item.visualQa?.oneX === "PASS"',
-  'item.visualQa?.halfSpeed === "PASS"', 'Boolean(item.reviewedAt)', 'Boolean(item.rawEvidenceFile)',
-  'requiredRoles.every((role) => item.bindingResults?.[role] === "PASS")',
-]) requireText(session, token, `Human-review eligibility missing evidence guard: ${token}`);
+  'item.macActualState === "PASS"',
+  'item.machineParity === "PASS"',
+  'item.visualQa?.oneX === "PASS"',
+  'item.visualQa?.halfSpeed === "PASS"',
+  'Boolean(item.reviewedAt)',
+  'Boolean(item.rawEvidenceFile)',
+  'runItem.requiredBindingRoles.every((role) => item.bindingResults?.[role] === "PASS")',
+]) requireText(readiness, token, `Human-review eligibility missing shared evidence guard: ${token}`);
 
 if (errors.length) {
   console.error(`Typography DaVinci Actual session contracts FAILED (${errors.length})`);
   for (const error of errors) console.error(`- ${error}`);
   process.exit(1);
 }
-console.log("Typography DaVinci Actual session contracts OK: Mac evidence round-trips through a non-mutating validator and a Git-ready derived evaluation report while raw evidence remains authoritative and production promotion remains manual.");
+console.log("Typography DaVinci Actual session contracts OK: all nine session items use one staged readiness evaluator, raw Mac evidence remains authoritative, and Human promotion / production promotion remain explicit separate gates.");
