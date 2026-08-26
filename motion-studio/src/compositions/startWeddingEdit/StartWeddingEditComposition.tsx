@@ -6,6 +6,7 @@ import {entryOverlapFrames, placeShots, weddingSectionDesign, type WeddingVarian
 import {ShotRenderer} from '../../motion-kit/start129/shotEngine';
 import {WeddingLyricTrack, weddingLyricFallbackByPhraseId} from '../../motion-kit/startWeddingEdit/weddingLyricLine';
 import {CHOREOGRAPHED_PHRASE_IDS, ChoreographedMomentRenderer} from '../../motion-kit/startWeddingEdit/choreographedMoments';
+import {buildGenericWordImpactEvents} from '../../data/startWeddingEdit/choreography';
 import {TitleSequenceA, TitleSequenceB, TitleSequenceC} from './TitleOpenA_B_C';
 import {InterludeOverlay} from './InterludeOverlay';
 
@@ -70,13 +71,26 @@ export const StartWeddingEditComposition: React.FC<StartWeddingEditCompositionPr
   // 「パッパッパッ」等のthreeHitFrameSecsを、文字だけでなく写真/カメラも同じ瞬間に
   // 反応させるためのsection-local frameへ変換する(audit項目7: 歌詞と映像が別々に
   // 動いている、への対応)。sectionId→そのsection内で発生するimpact frame一覧。
+  //
+  // v2: threeHitFrameSecs以外のphraseにも、ChoreographyEvent
+  // (buildGenericWordImpactEvents)由来のcamera punch eventを一般化して適用する。
+  // これにより「文字だけが動いていないか」の対象範囲を3-hit限定から広げる。
+  // ChoreographedMomentRenderer側で全画面takeoverするP004/P013/P014は、
+  // 通常shotの下に重複してpunchを掛けると二重反応になるため除外する。
   const sectionImpactFrames: Record<string, number[]> = {};
+  const addImpact = (sectionId: string, sectionStartSec: number, timeSec: number) => {
+    const f = Math.round((timeSec - sectionStartSec) * 30);
+    sectionImpactFrames[sectionId] = [...(sectionImpactFrames[sectionId] ?? []), f];
+  };
   for (const p of weddingEditLyricPhrases) {
-    if (!p.threeHitFrameSecs) continue;
     const section = WEDDING_EDIT_SECTIONS.find((s) => s.id === p.sectionId);
     if (!section) continue;
-    const frames = p.threeHitFrameSecs.map((s) => Math.round((s - section.startSec) * 30));
-    sectionImpactFrames[p.sectionId] = [...(sectionImpactFrames[p.sectionId] ?? []), ...frames];
+    if (p.threeHitFrameSecs) {
+      for (const s of p.threeHitFrameSecs) addImpact(p.sectionId, section.startSec, s);
+      continue;
+    }
+    if ((CHOREOGRAPHED_PHRASE_IDS as readonly string[]).includes(p.phraseId)) continue;
+    for (const ev of buildGenericWordImpactEvents(p, variant)) addImpact(p.sectionId, section.startSec, ev.timeSec);
   }
 
   return (

@@ -172,6 +172,61 @@ export const buildRippleThreeHitEvents = (phrase: EnrichedLyricPhrase, variant: 
 
 /** P014「独りじゃないと否定出来るように」用。分割された写真/文字が「独りじゃない」の
  * accentで1つへ統合される(単なるfadeではなく画面構成の変化で意味を表現)。 */
+/** 静かに保つべきanimation family(whisper/question-pauseは間・余白が意味を持つ)。
+ * ここに該当するphraseにはgenericな camera punchを一切足さない
+ * (「静かな歌詞は止める」を機械的に保証するための除外リスト)。 */
+const QUIET_ANIMATIONS = new Set(['whisper-reveal', 'question-pause']);
+
+/** rhythmTypeから基準intensityへ変換する。サビ前(rising)は溜め寄り、
+ * stop-and-go(衝突)は強め、sustained(持続音)は抑制、single-hitは中程度。 */
+const baseIntensityForRhythm = (rhythmType: string | null | undefined): number => {
+  switch (rhythmType) {
+    case 'three-hit':
+      return 4.5;
+    case 'stop-and-go':
+      return 4;
+    case 'rising':
+      return 2.5;
+    case 'single-hit':
+      return 3;
+    case 'sustained':
+      return 1.5;
+    default:
+      return 2;
+  }
+};
+
+/** 汎用: どのphraseでも、importantWordsの各accentSecへcamera punch actionを
+ * 割り当てる。既存の3-hit impact機構(threeHitFrameSecs)を、3-hit以外の
+ * emphasisWordや衝突表現へも一般化したもの。「静かな歌詞は止める」を守るため、
+ * QUIET_ANIMATIONSに該当するphraseは常に空配列を返す(camera反応なし)。
+ * これにより、ChoreographyEventが3箇所の専用momentだけでなく、
+ * importantWordsを持つ他の多くのphraseでも文字とカメラ/写真を同じ瞬間に
+ * 連動させる(強弱はrhythmType/variantから決まり、フレーズごとに手で調整しない)。 */
+export const buildGenericWordImpactEvents = (phrase: EnrichedLyricPhrase, variant: WeddingVariant): ChoreographyEvent[] => {
+  if (QUIET_ANIMATIONS.has(phrase.selectedAnimation ?? '')) return [];
+  if (!phrase.importantWords || phrase.importantWords.length === 0) return [];
+  const scale = variantIntensityScale(variant);
+  const base = baseIntensityForRhythm(phrase.rhythmType);
+  return phrase.importantWords.map((w, i) => ({
+    id: `${phrase.phraseId}-word-${i}`,
+    phraseId: phrase.phraseId,
+    word: w.word,
+    timeSec: w.accentSec,
+    audioCueType: 'vocal',
+    intensity: clampIntensity(base * scale),
+    timingSource: w.timingSource,
+    typeAction: {kind: 'word-punch'},
+    cameraAction: {kind: 'punch', scale: 1 + 0.008 * base * scale},
+    mediaAction: {kind: 'none'},
+    layoutAction: {kind: 'none'},
+    transitionAction: {kind: 'none'},
+    effectAction: {kind: 'none'},
+    easing: 'ease-out',
+    durationFrames: 10,
+  }));
+};
+
 export const buildSoloUnionEvents = (phrase: EnrichedLyricPhrase, variant: WeddingVariant): ChoreographyEvent[] => {
   const scale = variantIntensityScale(variant);
   const w = phrase.importantWords?.[0];
