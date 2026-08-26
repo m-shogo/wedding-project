@@ -69,6 +69,45 @@ The SVG uses a flat main flap plus two flat return planes. It is intentionally a
 
 If the candidate becomes too illustrative, origami-like, bulky, or attention-stealing at 45×70, reject it rather than refining it indefinitely.
 
+## Live actual-size revalidation — 2026-08-26 20:30 JST
+
+The three Current faces were re-rendered live at their native canvases and the exact geometry was read back from Figma before any new write:
+
+### 50×80 front `31:2`
+
+- canvas: `500×800`
+- coral ribbon: `31:4`, `x=330 / y=0 / 74×800`
+- mango fold: `31:5`, `x=286 / y=450 / 162×70`
+- result: issue remains clearly visible at native size; the mango role reads as a detached horizontal rectangle crossing the ribbon rather than a material turn.
+
+### 45×70 front `31:10`
+
+- canvas: `450×700`
+- coral ribbon: `31:12`, `x=296 / y=0 / 66×700`
+- mango fold: `31:13`, `x=258 / y=392 / 142×64`
+- result: issue is strongest here because the smaller physical format makes the horizontal rectangle more control-like and visually bulky relative to the tag.
+
+### Optional 50×80 back `31:18`
+
+- canvas: `500×800`
+- coral ribbon: `31:20`, `x=72 / y=0 / 70×800`
+- mango fold: `31:21`, `x=42 / y=485 / 130×62`
+- result: the same detached-crossbar reading independently reproduces on the reverse composition.
+
+This makes the observation stronger than a single-face taste concern: the same physical-cue ambiguity is visible on three materially different faces/reflows while the coral ribbon itself still reads correctly.
+
+The exact Drive authority was also re-read live and remains the folder `1_V20y77VU1aGrJtqpl7U5XUpC-bQuTxV / ADD-05_サンキュータグ_プチギフトタグ`.
+
+### Test priority after revalidation
+
+The next Figma experiment remains deliberately ordered:
+
+1. test `NO_YELLOW_FOLD` first because it is the lowest-complexity repair and directly tests whether the yellow role is unnecessary;
+2. only if subtraction materially weakens gift-wrap energy, test the existing clean editable `CONNECTED_FOLD` SVG;
+3. reject the SVG rather than iterating it if it becomes origami/clip-art-like at `45×70`.
+
+No new decorative candidate is justified before this bounded comparison.
+
 ## Expected improvement
 
 The winning state should read immediately as a small gift tag rather than a clean UI-like composition with a floating horizontal control. If `NO_YELLOW_FOLD` is strongest, subtraction is allowed. If `CONNECTED_FOLD` is stronger, the retained cue must prove its physical role. If Current wins, reject the hypothesis and keep the existing fold.
