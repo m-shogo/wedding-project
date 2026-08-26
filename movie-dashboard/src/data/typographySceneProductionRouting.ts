@@ -17,11 +17,6 @@ export type TypographyProductionPatternId =
   | "type-baseline-hop"
   | "type-triplet";
 
-/**
- * DaVinci readiness is deliberately staged. A deterministic translator and an Actual-capture
- * workflow are useful engineering progress, but neither means the live Resolve implementation
- * has been applied/read back, and an available implementation is still not Actual-verified.
- */
 export type DaVinciTypographyRouteStatus =
   | "DAVINCI_TRANSLATION_NOT_IMPLEMENTED"
   | "DAVINCI_ACTUAL_CANDIDATE"
@@ -71,11 +66,6 @@ const route = (
   };
 };
 
-/**
- * Motion Zukan Typography 9候補 → production pipeline の正本。
- * Remotion Element候補、translator spec、Actual workflow、live implementation、Actual verification
- * を別状態として扱い、前段の成功を後段の成功へ読み替えない。
- */
 export const typographyProductionRoutes: TypographyProductionRouteDefinition[] = [
   route(
     "type-mask-reveal",
@@ -101,9 +91,9 @@ export const typographyProductionRoutes: TypographyProductionRouteDefinition[] =
   route(
     "type-word-punch",
     "punch",
-    "DAVINCI_TRANSLATION_NOT_IMPLEMENTED",
-    null,
-    "scale punchのvisual peakをDaVinci側で一致確認するtranslatorが未実装。",
+    "DAVINCI_ACTUAL_CANDIDATE",
+    "impl-type-word-punch-davinci-text-plus-transform",
+    "canonical punch→Text+ + whole-title Transform translatorとbounded Actual evidence workflowを実装済み。live Fusion input名、apply/readback、render parityはMac Resolveで未検証なのでimplementation availableへはまだ昇格しない。",
   ),
   route(
     "type-tracking-burst",
@@ -233,31 +223,22 @@ export interface TypographySceneProductionBundleV1 {
 
 function requireTypographyCandidate(patternId: TypographyProductionPatternId) {
   const candidate = getRemotionElementCandidate(patternId);
-  if (!candidate) {
-    throw new Error(`Missing Remotion Element candidate for production route: ${patternId}`);
-  }
+  if (!candidate) throw new Error(`Missing Remotion Element candidate for production route: ${patternId}`);
   return candidate;
 }
 
 function requireTypographyRoute(patternId: TypographyProductionPatternId) {
   const definition = getTypographyProductionRoute(patternId);
-  if (!definition) {
-    throw new Error(`Missing Typography production route: ${patternId}`);
-  }
+  if (!definition) throw new Error(`Missing Typography production route: ${patternId}`);
   return definition;
 }
 
-function assertFreshRouteSelection(
-  scene: MaskRevealSceneInstance,
-  selection: TypographyProductionSelectionV1,
-) {
+function assertFreshRouteSelection(scene: MaskRevealSceneInstance, selection: TypographyProductionSelectionV1) {
   if (selection.sceneId !== scene.sceneId) {
     throw new Error(`Typography production selection belongs to ${selection.sceneId}, not ${scene.sceneId}`);
   }
   if (selection.sourceRevision !== scene.updatedAt) {
-    throw new Error(
-      `STALE_TYPOGRAPHY_ROUTE_SELECTION: selected from ${selection.sourceRevision}, current scene is ${scene.updatedAt}`,
-    );
+    throw new Error(`STALE_TYPOGRAPHY_ROUTE_SELECTION: selected from ${selection.sourceRevision}, current scene is ${scene.updatedAt}`);
   }
 }
 
@@ -277,17 +258,13 @@ export function buildTypographySceneProductionBundle(
   const davinciVisualReady = definition.liveImplementationAvailable;
   const blockers: string[] = [];
 
-  if (!remotionStudioReady) {
-    blockers.push("REMOTION_STUDIO_ACTUAL_NOT_VERIFIED");
-  }
+  if (!remotionStudioReady) blockers.push("REMOTION_STUDIO_ACTUAL_NOT_VERIFIED");
   if (!definition.translatorSpecAvailable) {
     blockers.push("DAVINCI_TRANSLATION_NOT_IMPLEMENTED");
   } else if (!definition.liveImplementationAvailable) {
     blockers.push("DAVINCI_ACTUAL_CANDIDATE_NOT_LIVE_IMPLEMENTATION");
   }
-  if (!definition.actualVerified) {
-    blockers.push("DAVINCI_ACTUAL_APPLIED_EVIDENCE_NOT_RUN");
-  }
+  if (!definition.actualVerified) blockers.push("DAVINCI_ACTUAL_APPLIED_EVIDENCE_NOT_RUN");
 
   return {
     schemaVersion: "motion-zukan-typography-production/v1",
@@ -297,10 +274,7 @@ export function buildTypographySceneProductionBundle(
     sourceRevision: scene.updatedAt,
     patternId,
     routeSelection: { ...selection },
-    canonical: {
-      engine: candidate.canonicalEngine,
-      mode: candidate.canonicalMode,
-    },
+    canonical: { engine: candidate.canonicalEngine, mode: candidate.canonicalMode },
     remotion: {
       readiness: candidate.readiness,
       payloadSlug: candidate.payloadSlug,
