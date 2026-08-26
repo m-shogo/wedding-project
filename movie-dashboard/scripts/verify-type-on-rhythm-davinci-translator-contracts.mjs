@@ -53,8 +53,8 @@ for (const token of [
 
 requireText(
   routing,
-  '"type-type-on-rhythm",\n    "word-stagger",\n    "DAVINCI_TRANSLATION_NOT_IMPLEMENTED"',
-  "type-type-on-rhythm route must remain fail-closed until Resolve Actual is proven",
+  '"type-type-on-rhythm",\n    "word-stagger",\n    "DAVINCI_ACTUAL_CANDIDATE",\n    "impl-type-type-on-rhythm-davinci-text-plus-follower-words"',
+  "type-type-on-rhythm route must expose its deterministic translator + evidence workflow as an Actual candidate",
 );
 
 if (/runtimeApplyState:\s*"PASS"/.test(translator) || /runtimeReadbackState:\s*"PASS"/.test(translator)) {
@@ -64,7 +64,10 @@ if (/liveParameterBindingState:\s*"VERIFIED"/.test(translator)) {
   errors.push("Word-level Follower parameter bindings are not yet live-verified");
 }
 if (/DAVINCI_IMPLEMENTATION_AVAILABLE[\s\S]{0,140}type-type-on-rhythm/.test(routing)) {
-  errors.push("Deterministic translator spec alone must not promote type-type-on-rhythm route");
+  errors.push("Deterministic translator + evidence plumbing must not promote type-type-on-rhythm to live implementation");
+}
+if (/DAVINCI_ACTUAL_VERIFIED[\s\S]{0,140}type-type-on-rhythm/.test(routing)) {
+  errors.push("Type on Rhythm must not be promoted to Actual verified without real Mac Resolve evidence");
 }
 
 if (errors.length) {
@@ -73,4 +76,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log("Type-on-rhythm DaVinci Translator contracts OK: the deterministic word-level Follower spec matches canonical 0.22s word delay / 0.32s duration / 30px*intensity Y reveal / opacity / cubic-out semantics, uses Blackmagic's official word-level Follower capability only as capability evidence, and keeps live binding, apply/readback, render parity, and production routing unverified until Mac Resolve Actual.");
+console.log("Type-on-rhythm DaVinci Translator contracts OK: deterministic word-level Follower values match canonical 0.22s word delay / 0.32s duration / 30px*intensity reveal / opacity / cubic-out semantics; the route is an honest Actual candidate while live bindings, apply/readback, render parity and Actual verification remain unproven until Mac Resolve Actual.");

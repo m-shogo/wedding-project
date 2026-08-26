@@ -38,8 +38,12 @@ for (const token of [
   'loadTypographyProductionSelection(scene)',
   'buildTypographySceneProductionBundle(scene, selection)',
   'HUMAN_SELECTED ✓',
-  'DaVinci translatorあり / Actual未確認',
+  'DAVINCI_ROUTE_SUMMARY',
   'DaVinci translator未実装',
+  'Translator + Actual workflowあり / live未検証',
+  'DaVinci live実装あり / Actual未確認',
+  'DaVinci Actual検証済み',
+  'DaVinci stage:',
   'Production ready: NO',
   '既存Sceneを勝手に別モーションへ変更しないため',
 ]) {
@@ -58,8 +62,10 @@ for (const token of [
   'STALE_TYPOGRAPHY_ROUTE_SELECTION',
   'productionReady: false',
   'actualAppliedEvidence: "NOT_RUN"',
+  '"DAVINCI_ACTUAL_CANDIDATE"',
+  '"DAVINCI_ACTUAL_VERIFIED"',
 ]) {
-  requireText(routing, token, `Production routing lost selection honesty contract: ${token}`);
+  requireText(routing, token, `Production routing lost selection/readiness honesty contract: ${token}`);
 }
 
 if (/default.*type-mask-reveal/i.test(selector) || /saveTypographyProductionSelection\(scene,\s*"type-mask-reveal"/.test(selector)) {
@@ -71,6 +77,9 @@ if (/studioInstallActual:\s*"PASS"/.test(store) || /actualAppliedEvidence:\s*"PA
 if (!store.includes('if (selection.sourceRevision !== scene.updatedAt) return null;')) {
   errors.push("Stale persisted Typography route selection must fail closed on load");
 }
+if (!selector.includes('DAVINCI_ROUTE_SUMMARY[route.davinciRouteStatus]')) {
+  errors.push("Selection UI must derive the human-readable DaVinci stage from the route truth instead of a two-state shortcut");
+}
 
 if (errors.length) {
   console.error(`Typography Production Selection contracts FAILED (${errors.length})`);
@@ -78,4 +87,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log("Typography Production Selection contracts OK: a human can explicitly choose one of nine production routes per adopted Scene; the choice is persisted separately from tool evidence, bound to the exact Scene revision, stale choices fail closed/prune, unselected scenes remain unmodified, and Studio/DaVinci Actual evidence is never fabricated.");
+console.log("Typography Production Selection contracts OK: a human can explicitly choose one of nine production routes per adopted Scene; the choice is persisted separately from tool evidence, bound to the exact Scene revision, stale choices fail closed/prune, the selector renders four-stage DaVinci readiness instead of a two-state shortcut, and Studio/DaVinci Actual evidence is never fabricated.");

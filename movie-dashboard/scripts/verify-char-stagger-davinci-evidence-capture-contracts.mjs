@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const capture = fs.readFileSync(path.join(root, "src/data/charStaggerDaVinciEvidenceCapture.ts"), "utf8");
+const shared = fs.readFileSync(path.join(root, "src/data/davinciFollowerEvidenceContract.ts"), "utf8");
 const gate = fs.readFileSync(path.join(root, "src/data/charStaggerDaVinciPromotionGate.ts"), "utf8");
 const artifact = fs.readFileSync(path.join(root, "src/data/charStaggerDaVinciActualArtifact.ts"), "utf8");
 const selector = fs.readFileSync(path.join(root, "src/components/TypographyProductionRouteSelector.tsx"), "utf8");
@@ -20,8 +21,7 @@ for (const token of [
   'authority: "EVIDENCE_ONLY"',
   'createCharStaggerDaVinciEvidenceCaptureTemplate',
   'liveParameterBindings: []',
-  'oneX: "NOT_RUN"',
-  'halfSpeed: "NOT_RUN"',
+  'blankDaVinciVisualQa()',
   'Do not infer live Fusion tool/input names from docs',
   'parseCharStaggerDaVinciEvidenceCapture',
   'capture.schemaVersion mismatch',
@@ -29,7 +29,9 @@ for (const token of [
   'STALE_CHAR_STAGGER_EVIDENCE_CAPTURE',
   'capture/readback identity mismatch',
   'readback.schemaVersion mismatch',
-  'liveParameterBindings must be an array',
+  'parseDaVinciLiveParameterBindings',
+  'parseDaVinciVisualQa',
+  'assertDaVinciEvidenceIdentity',
   'evaluateCharStaggerDaVinciEvidenceCapture',
   'attachCharStaggerDaVinciActualReadback',
   'visualQa1x: capture.visualQa.oneX',
@@ -40,6 +42,21 @@ for (const token of [
   'Production routing must be promoted separately',
 ]) {
   requireText(capture, token, `Char Stagger evidence capture missing contract: ${token}`);
+}
+
+for (const token of [
+  'export type DaVinciEvidenceState = "NOT_RUN" | "PASS" | "FAIL"',
+  'DaVinciLiveParameterBindingV1',
+  'DaVinciVisualQaV1',
+  'parseDaVinciLiveParameterBindings',
+  'liveParameterBindings must be an array',
+  'parseDaVinciVisualQa',
+  'assertDaVinciEvidenceIdentity',
+  'blankDaVinciVisualQa',
+  'oneX: "NOT_RUN"',
+  'halfSpeed: "NOT_RUN"',
+]) {
+  requireText(shared, token, `Shared Follower evidence contract missing: ${token}`);
 }
 
 for (const token of [
@@ -103,8 +120,8 @@ for (const token of [
 
 requireText(
   routing,
-  '"type-char-stagger",\n    "stagger",\n    "DAVINCI_TRANSLATION_NOT_IMPLEMENTED"',
-  "Char Stagger must remain blocked until Actual evidence is separately reviewed and promoted",
+  '"type-char-stagger",\n    "stagger",\n    "DAVINCI_ACTUAL_CANDIDATE",\n    "impl-type-char-stagger-davinci-text-plus-follower"',
+  "Char Stagger must expose its translator/evidence workflow as an Actual candidate without claiming live verification",
 );
 
 if (/productionReady:\s*true/.test(capture) || /productionReady:\s*true/.test(gate)) {
@@ -114,13 +131,16 @@ if (/automaticPromotionAllowed:\s*true/.test(gate)) {
   errors.push("Promotion assessment must never allow automatic route promotion");
 }
 if (/DAVINCI_IMPLEMENTATION_AVAILABLE[\s\S]{0,120}type-char-stagger/.test(routing)) {
-  errors.push("Readback capture implementation alone must not promote Char Stagger DaVinci route");
+  errors.push("Readback capture implementation alone must not promote Char Stagger to live DaVinci implementation");
+}
+if (/DAVINCI_ACTUAL_VERIFIED[\s\S]{0,120}type-char-stagger/.test(routing)) {
+  errors.push("Char Stagger must not claim Actual verification before real Mac evidence");
 }
 if (/visualQa1x:\s*"PASS"/.test(capture) || /visualQaHalfSpeed:\s*"PASS"/.test(capture)) {
   errors.push("Evidence capture template must not fabricate visual QA PASS");
 }
-if (!/sceneId !== artifact\.sceneId/.test(capture) || !/sourceRevision !== artifact\.sourceRevision/.test(capture)) {
-  errors.push("Evidence evaluation must fail-close on Scene identity and revision drift");
+if (!capture.includes('assertDaVinciEvidenceIdentity')) {
+  errors.push("Evidence evaluation must delegate fail-closed Scene identity/revision checks to the shared contract");
 }
 if (!/capturedRoles\.length !== REQUIRED_BINDING_ROLES\.length/.test(gate)) {
   errors.push("Promotion review eligibility must require every live parameter binding role");
@@ -132,4 +152,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log("Char Stagger DaVinci Evidence Capture contracts OK: Dashboard exports a blank evidence-only readback template, accepts only schema/scene/revision-matched Actual captures, records all seven live Fusion binding roles separately from canonical authority, evaluates machine-comparable values against the canonical translator, carries explicit 1x/half-speed QA states, and derives a fail-closed human-promotion-review eligibility gate without ever changing the production route or productionReady state automatically.");
+console.log("Char Stagger DaVinci Evidence Capture contracts OK: shared Follower evidence validation now owns generic binding/state/visual-QA/identity parsing while Char Stagger retains its canonical-specific readback comparison, seven required roles, fail-closed human promotion gate, and honest Actual-candidate status without automatic live/Actual/production promotion.");

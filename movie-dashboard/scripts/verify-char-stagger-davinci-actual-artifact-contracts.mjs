@@ -85,8 +85,8 @@ for (const token of [
 
 requireText(
   routing,
-  '"type-char-stagger",\n    "stagger",\n    "DAVINCI_TRANSLATION_NOT_IMPLEMENTED"',
-  "Char Stagger production route must stay blocked while Actual parameter bindings are unverified",
+  '"type-char-stagger",\n    "stagger",\n    "DAVINCI_ACTUAL_CANDIDATE",\n    "impl-type-char-stagger-davinci-text-plus-follower"',
+  "Char Stagger production route must expose the bounded Actual workflow without claiming live verification",
 );
 
 if (/parameterBinding:[\s\S]{0,100}state:\s*"VERIFIED"/.test(artifact)) {
@@ -99,7 +99,10 @@ if (/productionReady:\s*true/.test(artifact)) {
   errors.push("Char Stagger Actual artifact must remain productionReady=false until promotion logic is separately proven");
 }
 if (/DAVINCI_IMPLEMENTATION_AVAILABLE[\s\S]{0,120}type-char-stagger/.test(routing)) {
-  errors.push("Actual preparation artifact alone must not promote Char Stagger to an implemented DaVinci route");
+  errors.push("Actual preparation artifact alone must not promote Char Stagger to a live DaVinci route");
+}
+if (/DAVINCI_ACTUAL_VERIFIED[\s\S]{0,120}type-char-stagger/.test(routing)) {
+  errors.push("Actual preparation artifact must not claim real Mac verification");
 }
 if (/sequentialDelayApplied:\s*readback\.perCharacterDelayFrames !== null \? "PASS"/.test(artifact)) {
   errors.push("Reading a delay value is not enough for PASS; it must match the canonical translator spec");
@@ -114,4 +117,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log("Char Stagger DaVinci Actual Artifact contracts OK: the bounded canary derives text/intensity from current Scene authority, exports an evidence-only JSON from the Scene handoff, uses a clearly non-Human-Master white/30fps test baseline, leaves live Fusion parameter bindings unverified and GUI/render QA NOT_RUN, and only marks delay/translation/opacity/easing PASS when future readback exactly matches the canonical translator spec; production routing stays fail-closed.");
+console.log("Char Stagger DaVinci Actual Artifact contracts OK: the bounded canary derives text/intensity from current Scene authority, exports evidence-only JSON, keeps live Fusion bindings and GUI/render QA NOT_RUN, only accepts exact canonical readback matches, and exposes an Actual-candidate route without live/Actual/production auto-promotion.");

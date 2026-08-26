@@ -52,15 +52,18 @@ for (const token of [
 
 requireText(
   routing,
-  '"type-char-stagger",\n    "stagger",\n    "DAVINCI_TRANSLATION_NOT_IMPLEMENTED"',
-  "Production routing must remain blocked until a real Fusion application path is implemented and verified",
+  '"type-char-stagger",\n    "stagger",\n    "DAVINCI_ACTUAL_CANDIDATE",\n    "impl-type-char-stagger-davinci-text-plus-follower"',
+  "Production routing must expose the deterministic translator + evidence workflow as an Actual candidate",
 );
 
 if (/runtimeApplyState:\s*"PASS"/.test(translator) || /renderParityState:\s*"PASS"/.test(translator)) {
   errors.push("Char Stagger translator must not fabricate Resolve runtime/render parity evidence");
 }
 if (/DAVINCI_IMPLEMENTATION_AVAILABLE[\s\S]{0,120}type-char-stagger/.test(routing)) {
-  errors.push("Char Stagger must not be promoted to implemented DaVinci route from translator spec alone");
+  errors.push("Char Stagger must not be promoted to live DaVinci implementation from translator/evidence plumbing alone");
+}
+if (/DAVINCI_ACTUAL_VERIFIED[\s\S]{0,120}type-char-stagger/.test(routing)) {
+  errors.push("Char Stagger must not be promoted to Actual verified without real Mac Resolve evidence");
 }
 
 if (errors.length) {
@@ -69,4 +72,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log("Char Stagger DaVinci Translator contracts OK: canonical 0.06s per-character delay / 0.28s character motion / 40px*intensity translate / cubic-out opacity are deterministically mapped to a Fusion Text+ Follower spec, while runtime apply/readback/render parity remain NOT_RUN and the production route remains fail-closed.");
+console.log("Char Stagger DaVinci Translator contracts OK: canonical 0.06s per-character delay / 0.28s character motion / 40px*intensity translate / cubic-out opacity map deterministically to a Fusion Text+ Follower spec; the route is an honest Actual candidate while runtime apply/readback/render parity stay NOT_RUN and live/Actual promotion stays blocked.");
