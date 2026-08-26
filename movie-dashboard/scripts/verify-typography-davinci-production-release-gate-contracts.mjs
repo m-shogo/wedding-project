@@ -6,6 +6,8 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const read = (relative) => fs.readFileSync(path.join(root, relative), "utf8");
 const gate = read("src/data/typographyDaVinciProductionReleaseGate.ts");
 const ui = read("src/components/TypographyDaVinciProductionReleaseGate.tsx");
+const sceneBinding = read("src/components/TypographyDaVinciProductionReleaseGateForScene.tsx");
+const handoff = read("src/components/MaskRevealSceneHandoffCard.tsx");
 const selectionStore = read("src/data/typographyProductionSelectionStore.ts");
 const humanReview = read("src/data/typographyDaVinciHumanPromotionReview.ts");
 const errors = [];
@@ -58,6 +60,19 @@ for (const token of [
 ]) requireText(ui, token, `Production release gate UI missing: ${token}`);
 
 for (const token of [
+  'loadTypographyProductionSelection',
+  'TYPOGRAPHY_PRODUCTION_SELECTION_CHANGED_EVENT',
+  '[scene.sceneId, scene.updatedAt, revision]',
+  'if (!selection)',
+  '<TypographyDaVinciProductionReleaseGate scene={scene} selection={selection} />',
+]) requireText(sceneBinding, token, `Scene-bound release gate adapter missing: ${token}`);
+
+for (const token of [
+  'import { TypographyDaVinciProductionReleaseGateForScene } from "./TypographyDaVinciProductionReleaseGateForScene"',
+  '<TypographyDaVinciProductionReleaseGateForScene scene={scene} />',
+]) requireText(handoff, token, `Scene handoff does not surface production release gate: ${token}`);
+
+for (const token of [
   'selection.sourceRevision !== scene.updatedAt',
   'pruneStaleTypographyProductionSelections',
 ]) requireText(selectionStore, token, `Release gate relies on missing selection freshness boundary: ${token}`);
@@ -86,4 +101,4 @@ if (errors.length) {
   for (const error of errors) console.error(`- ${error}`);
   process.exit(1);
 }
-console.log("Typography DaVinci Production Release Gate contracts OK: templates default HOLD, RELEASE is bound to the exact current Scene revision/route selection and verified Human promotion, reviewer/time are mandatory, and stale Scene or route changes fail closed before productionReady can become true.");
+console.log("Typography DaVinci Production Release Gate contracts OK: templates default HOLD, RELEASE is bound to the exact current Scene revision/route selection and verified Human promotion, the UI is reachable from Scene handoff and follows route-selection changes, and stale Scene or route changes fail closed before productionReady can become true.");
