@@ -45,17 +45,30 @@ A coherent magazine micro-decoration pass then added 12 separate movable V9 part
 
 The treatment deliberately follows the approved Rurubu-pop language: compact rounded pills, high-contrast cyan/pink/yellow/blue accents, dense editorial signposting, and independent movable parts.
 
+## 2026-08-26 13H editorial polish pass
+
+The live six-page production was re-read before each write and refined as an editorial system rather than by flattening pages.
+
+- Cover: retained the dense left-side index and hero hierarchy, completed the three lower photo-pick rhythm with `BEST SHOT! / MEMORY / PICK UP`, and added a compact `ISSUE 01` marker.
+- Back cover: added independent `VENUE / CAFE / TABLE` photo labels, a `PAGE 02` marker, and one-line descriptions under all four contents entries so the page reads as a real magazine index rather than a bare list.
+- Profile + Q&A: converted the three questions into white bordered editorial cards, changed the top photo labels to `GROOM / BRIDE`, added `COUPLE TALK`, and replaced production-facing answer placeholders with guest-facing dummy editorial copy. `PAGE 03` remains separate and movable.
+- Story + Timeline: added scrapbook-style tape to the hero photo, `PHOTO 01`, short captions for all four timeline moments, and `PAGE 04`. The four 2019/2021/2023/2026 rows remain separate editable event cards.
+- Memory + Gallery: completed photo numbering `01–06`, added `PHOTO 01`, and added `PAGE 05` while retaining all six independent photo masks.
+- 1DAY + Cafe/Table: added `PHOTO 01–03`, `FOOD 01–02`, and `PAGE 06`; filled the previous dead space with a guest-facing `TRIP MEMO` card instead of production instructions.
+
+Fresh hidden rollback clones were created around these polish passes before modifying the live frames.
+
 ## QA evidence
 
-Whole-page screenshots were regenerated for all six current production frames after the write.
+Whole-page screenshots were regenerated throughout the polish work, including final checks of Cover, Back, Profile, Story, Memory, and 1DAY at A4 reading scale.
 
-A structural QA pass then re-read the live Figma and verified:
+A structural QA pass verified:
 
-- all six current frames remain exactly `794 × 1123`;
+- all six current frames remain exactly `794 × 1123` and visible;
 - replaceable photo-mask counts remain exactly `4 / 3 / 2 / 2 / 6 / 5 = 22`;
-- all 12 new `V9 PART / ... / MOVEABLE` frames are present and visible;
-- no direct child exceeds the A4 bottom edge;
-- no photo mask was replaced, merged, or flattened by this pass.
+- photo masks remain independent and no page was flattened;
+- new page/photo labels are separate movable layers;
+- rollback snapshots remain hidden and outside current production frames.
 
 ## Failure learning retained
 
@@ -63,10 +76,13 @@ A structural QA pass then re-read the live Figma and verified:
 
 A Drive PNG can decode and still fail to render when transported through an unsuitable indexed-PNG route. Node creation or an `imageHash` is not visual success. Screenshot-QA the placed asset before hiding an editable fallback.
 
+A Figma helper in the 13H pass initially assumed six-digit hex and received `#fff`; the write failed atomically with a NaN paint validation error. No live changes were applied by the failed call. Re-read live state, then retry only after normalizing to `#ffffff` (or make future color parsers support three-digit hex explicitly).
+
 ## Next pass
 
 - Continue using the Drive folder as the visual/asset authority; inspect and place one-image-one-item assets only through a transport route proven to render.
 - Build photo-frame compositions as `frame artwork above + replaceable masked dummy photo below`, so dummy photos never escape the decorative frame.
 - Keep goal/reference imagery beside the production set for side-by-side comparison rather than flattening it into production.
-- Refine page-specific hierarchy after whole-page and actual-size QA; remove any micro-decoration that competes with the primary reading order.
+- Continue whole-page / reading-scale / actual-size QA and remove any micro-decoration that competes with the primary scan path.
+- Replace dummy photos later without changing the mask geometry or the editorial layer structure.
 - Do not touch Passport, Boarding Pass, 青春ふたりきっぷ, ADD items, or V6/V7/V8 controls.
