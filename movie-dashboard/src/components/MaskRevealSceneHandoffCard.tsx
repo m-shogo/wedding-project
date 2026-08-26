@@ -12,6 +12,7 @@ import { downloadText } from "../lib/exporters";
 import { TypographyDaVinciProductionReleaseGateForScene } from "./TypographyDaVinciProductionReleaseGateForScene";
 import { TypographyProductionRouteSelector } from "./TypographyProductionRouteSelector";
 import { TypographyProductionRoutingMatrix } from "./TypographyProductionRoutingMatrix";
+import { TypographyProjectDeliveryBatchCard } from "./TypographyProjectDeliveryBatchCard";
 import { TypographySceneDeliveryPackageCard } from "./TypographySceneDeliveryPackageCard";
 
 const TRANSPORT_LABEL_JA: Record<string, string> = {
@@ -70,6 +71,7 @@ export function MaskRevealSceneHandoffCard({ scene }: { scene: MaskRevealSceneIn
 
       <TypographyProductionRouteSelector scene={scene} />
       <TypographySceneDeliveryPackageCard scene={scene} />
+      <TypographyProjectDeliveryBatchCard projectId={scene.projectId} />
       <TypographyDaVinciProductionReleaseGateForScene scene={scene} />
       <TypographyProductionRoutingMatrix />
 
