@@ -15,7 +15,8 @@ Your job is to turn one `PENDING_RUNTIME` capability into honest, repeatable run
 4. `motion-studio/src/data/resolveCanarySession.schema.ts`
 5. `motion-studio/src/data/resolveHandoff.schema.ts`
 6. the canary-specific research/decision notes referenced by the capability
-7. for Mask Reveal Scene-level proof, also read `docs/runbooks/2026-08-25-mask-reveal-local-davinci-actual-gate.md`
+7. for Palmier FCPXML, also read `docs/runbooks/2026-08-26-palmier-real-export-attach.md`
+8. for Mask Reveal Scene-level proof, also read `docs/runbooks/2026-08-25-mask-reveal-local-davinci-actual-gate.md`
 
 ## First commands
 
@@ -43,7 +44,32 @@ node --no-warnings scripts/prepare-resolve-canary-session.mts \
   --execution-id <UNIQUE_EXECUTION_ID>
 ```
 
-For Alpha only, `--reuse-existing` may be added when the exact existing neutral ProRes render is intentionally being reused.
+For Alpha, `--reuse-existing` may be added when the exact existing neutral ProRes render is intentionally being reused.
+
+For Palmier, do **not** use `--reuse-existing` while the scene-spec manifest is BLOCKED. First obtain a genuine Palmier DaVinci/Resolve FCPXML export, inspect it, attach it with explicit operator attestation, then create the runtime session with `--reuse-existing` so the PREPARED attachment manifest is preserved:
+
+```bash
+node --no-warnings scripts/attach-palmier-real-export.mts \
+  --fcpxml <PALMIER_EXPORT.fcpxml> \
+  --inspect-only
+
+node --no-warnings scripts/attach-palmier-real-export.mts \
+  --fcpxml <PALMIER_EXPORT.fcpxml> \
+  --attest-real-palmier-export
+
+node --no-warnings scripts/prepare-resolve-canary-session.mts \
+  DV21-PALMIER-FCPXML-01 \
+  --execution-id <UNIQUE_EXECUTION_ID> \
+  --reuse-existing
+```
+
+`--inspect-only` never proves provenance. The attach flag means the operator explicitly confirms that the file really came from Palmier's Resolve export path. Keep these distinctions:
+
+```text
+FCPXML_STRUCTURE_VALID != REAL_PALMIER_PROVENANCE
+OPERATOR_ATTESTATION != CRYPTOGRAPHIC_PROVENANCE
+REAL_EXPORT_ATTACHMENT != RESOLVE_RUNTIME_EVIDENCE
+```
 
 The session is written under:
 
