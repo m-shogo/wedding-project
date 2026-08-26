@@ -12,6 +12,7 @@ on:
       - "motion-studio/scripts/prepare-resolve-otio-session.mts"
       - "motion-studio/scripts/inspect-resolve-exported-otio.mts"
       - "motion-studio/scripts/check-resolve-otio-interchange.mts"
+      - "scripts/davinci/resolve21-otio-api-readonly-probe.sh"
       - "docs/research/2026-08-26-movie-tool-learning-run-38-resolve-otio-interchange.md"
       - "docs/runbooks/2026-08-26-resolve21-otio-interchange-canary.md"
       - "docs/prompts/2026-08-26-resolve21-otio-local-actual-agent.md"
@@ -27,6 +28,7 @@ on:
       - "motion-studio/scripts/prepare-resolve-otio-session.mts"
       - "motion-studio/scripts/inspect-resolve-exported-otio.mts"
       - "motion-studio/scripts/check-resolve-otio-interchange.mts"
+      - "scripts/davinci/resolve21-otio-api-readonly-probe.sh"
       - "docs/research/2026-08-26-movie-tool-learning-run-38-resolve-otio-interchange.md"
       - "docs/runbooks/2026-08-26-resolve21-otio-interchange-canary.md"
       - "docs/prompts/2026-08-26-resolve21-otio-local-actual-agent.md"
@@ -72,6 +74,16 @@ jobs:
       - name: OTIO machine-readable contract
         working-directory: motion-studio
         run: node --no-warnings scripts/check-resolve-otio-interchange.mts
+
+      - name: Local OTIO API documentation probe stays read-only
+        run: |
+          bash scripts/davinci/resolve21-otio-api-readonly-probe.sh > /tmp/otio-api-probe.txt
+          grep -Fq 'RESOLVE21_OTIO_API_READONLY_PROBE_V1' /tmp/otio-api-probe.txt
+          grep -Fq 'apiCallsPerformed=NO' /tmp/otio-api-probe.txt
+          grep -Fq 'resolveLaunchPerformed=NO' /tmp/otio-api-probe.txt
+          grep -Fq 'mutationsPerformed=NO' /tmp/otio-api-probe.txt
+          grep -Fq 'networkRequestsPerformed=NO' /tmp/otio-api-probe.txt
+          grep -Fq 'guardrail=README_SURFACE_PRESENT != RUNTIME_CALL_VERIFIED' /tmp/otio-api-probe.txt
 
       - name: Fixture dry-run stays non-mutating
         working-directory: motion-studio
