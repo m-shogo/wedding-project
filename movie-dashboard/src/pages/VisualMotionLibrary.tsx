@@ -2,8 +2,10 @@ import { useMemo, useState } from "react";
 import { Header } from "../components/Header";
 import { MaskRevealEditableWorkspace } from "../components/MaskRevealEditableWorkspace";
 import { MotionZukanProductionWorkspace } from "../components/MotionZukanProductionWorkspace";
+import { RemotionElementReadinessPanel } from "../components/RemotionElementReadinessPanel";
 import { getMotionLearningBundle } from "../data/motionLearningLinks";
 import { getLatestPreviewEvidence } from "../data/motionPreviewEvidence";
+import { getRemotionElementCandidate } from "../data/remotionElementCandidates";
 import {
   getPatternImplementation,
   getPatternPreview,
@@ -48,6 +50,7 @@ export function VisualMotionLibrary() {
           const previewEvidence = preview ? getLatestPreviewEvidence(preview.id) : null;
           const implementation = getPatternImplementation(pattern);
           const learning = getMotionLearningBundle(pattern.id);
+          const remotionElement = getRemotionElementCandidate(pattern.id);
 
           return (
             <article key={pattern.id} className="border border-sand-300 dark:border-navy-600 bg-white dark:bg-navy-800">
@@ -106,6 +109,8 @@ export function VisualMotionLibrary() {
                     <div><dt className="font-semibold">Implementation</dt><dd>{implementation?.status ?? "DISCOVERED"}</dd></div>
                     <div><dt className="font-semibold">Verified</dt><dd>{implementation?.verified ? "YES" : "NO"}</dd></div>
                   </dl>
+
+                  {remotionElement && <RemotionElementReadinessPanel candidate={remotionElement} />}
 
                   {learning && (
                     <section className="mt-6 border-t border-sand-200 dark:border-navy-600 pt-5">
