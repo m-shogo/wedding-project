@@ -4,6 +4,7 @@ import {
 } from "../data/typographySceneProductionRouting";
 import {getRemotionElementCandidate} from "../data/remotionElementCandidates";
 import {getTypographyDaVinciRequiredBindingRoles} from "../data/typographyDaVinciPromotionPolicy";
+import {TypographyDaVinciActualRunQueue} from "./TypographyDaVinciActualRunQueue";
 
 const DAVINCI_LABEL: Record<DaVinciTypographyRouteStatus, string> = {
   DAVINCI_TRANSLATION_NOT_IMPLEMENTED: "DaVinci翻訳待ち",
@@ -70,6 +71,7 @@ export function TypographyProductionRoutingMatrix() {
       <p className="mt-2 border border-amber-200 dark:border-amber-800 p-2 text-[9px] leading-4 text-amber-800 dark:text-amber-200">
         Mask Revealだけがlive実装あり。残り8候補はcanonical translator + bounded Actual workflowまで到達しています。8候補すべてでrequired live bindings・machine parity・1x/half-speed QAを満たしても、別Human promotion reviewなしにActual検証済み/production-readyへ自動昇格しません。
       </p>
+      <TypographyDaVinciActualRunQueue />
     </details>
   );
 }
