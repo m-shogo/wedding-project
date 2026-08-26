@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="1980" viewBox="0 0 1400 1980">
+  <title>ADD-03 clean-room v6 fixed art — Typographic Departure</title>
+  <desc>Editable fixed-art only. No variable copy, dates, times, venue facts, names, QR, or guest data are embedded.</desc>
+  <rect width="1400" height="1980" fill="#F5F0E4"/>
+  <!-- single upper departure gesture: cut-paper shadow + foreground plane -->
+  <path d="M760 -90 L1510 -90 L1510 420 L1030 310 Z" fill="#F2BE3A"/>
+  <path d="M860 -90 L1510 -90 L1510 520 L1110 385 Z" fill="#F36C4F"/>
+  <!-- narrow physical binding cue, intentionally not a full-height sidebar -->
+  <path d="M0 0 H88 V620 H0 Z" fill="#173B69"/>
+  <path d="M88 0 H104 V620 H88 Z" fill="#50B9B0"/>
+  <!-- lower closing counterweight; one plane, no event-by-event encoding -->
+  <path d="M1010 1680 L1400 1490 V1980 H820 Z" fill="#173B69"/>
+  <path d="M1128 1748 L1400 1610 V1980 H990 Z" fill="#50B9B0"/>
+</svg>
