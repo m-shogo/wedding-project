@@ -4,6 +4,8 @@ import { fileURLToPath } from "node:url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const card = fs.readFileSync(path.join(root, "src/components/MaskRevealSceneHandoffCard.tsx"), "utf8");
+const routingMatrix = fs.readFileSync(path.join(root, "src/components/TypographyProductionRoutingMatrix.tsx"), "utf8");
+const routing = fs.readFileSync(path.join(root, "src/data/typographySceneProductionRouting.ts"), "utf8");
 const workspace = fs.readFileSync(path.join(root, "src/components/MaskRevealEditableWorkspace.tsx"), "utf8");
 const bundle = fs.readFileSync(path.join(root, "src/data/maskRevealSceneProductionBundle.ts"), "utf8");
 const adjustability = fs.readFileSync(path.join(root, "src/data/resolveHumanAdjustability.ts"), "utf8");
@@ -42,8 +44,26 @@ for (const token of [
   'Platform:',
   'Late edit QA:',
   'Editability(内部parameterをどこまで編集できるか)と Human Adjustability(人間がどれだけ簡単に直せるか)は別判定です。',
+  'import { TypographyProductionRoutingMatrix } from "./TypographyProductionRoutingMatrix"',
+  '<TypographyProductionRoutingMatrix />',
 ]) {
   requireText(card, token, `Scene Handoff UI missing: ${token}`);
+}
+
+for (const token of [
+  'Typography 9候補のProduction Routingを見る',
+  'typographyProductionRoutes.map',
+  'getRemotionElementCandidate(route.patternId)',
+  'DaVinci routeあり',
+  'DaVinci翻訳待ち',
+  'Element CI:',
+  'Studio Actual:',
+  'Palmier timing: READY',
+  'DaVinci Actual: NOT_RUN',
+  'type-mask-reveal のみです。',
+  'production-readyではありません。',
+]) {
+  requireText(routingMatrix, token, `Typography routing matrix missing honesty/control token: ${token}`);
 }
 
 for (const token of [
@@ -80,6 +100,15 @@ for (const token of [
 }
 
 for (const token of [
+  'DAVINCI_IMPLEMENTATION_AVAILABLE',
+  'DAVINCI_TRANSLATION_NOT_IMPLEMENTED',
+  'actualAppliedEvidence: "NOT_RUN"',
+  'productionReady: false',
+]) {
+  requireText(routing, token, `Typography routing authority missing honest state: ${token}`);
+}
+
+for (const token of [
   'AUTHORITATIVE CLARIFICATION',
   '`JSON` は正本フォーマットではない。',
   'Human-readable production values',
@@ -107,6 +136,9 @@ if (/\.xml[`"']\s*,?\s*JSON\.stringify/.test(card) || /downloadText\([^\n]*\.xml
 if (!card.includes('bundle.preview.productionReady ? "VERIFIED" : "PENDING"')) {
   errors.push("Scene Handoff UI must visibly fail-close DaVinci Actual as PENDING until verified");
 }
+if (/DaVinci Actual:\s*PASS/.test(routingMatrix)) {
+  errors.push("Typography routing matrix must not fabricate DaVinci Actual PASS");
+}
 
 if (errors.length) {
   console.error(`Mask Reveal Scene Handoff UI contracts FAILED (${errors.length})`);
@@ -114,4 +146,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log("Mask Reveal Scene Handoff UI contracts OK: Human-readable Scene values remain Human Master; live SceneInstance drives target-specific sidecar export; JSON/XML are serialization only; Palmier XML remains external; DaVinci Actual visibly stays PENDING until real evidence exists; Human Adjustability and platform scope remain separate from internal Editability.");
+console.log("Mask Reveal Scene Handoff UI contracts OK: Human-readable Scene values remain Human Master; live SceneInstance drives target-specific sidecar export; Typography 9-candidate production routes are visible without overstating DaVinci coverage; Palmier XML remains external; DaVinci Actual visibly stays PENDING/NOT_RUN until real evidence exists; Human Adjustability remains separate from internal Editability.");
