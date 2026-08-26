@@ -76,6 +76,7 @@ const expectedPreparations = {
   'DV21-REMOTION-ALPHA-01': 'alpha',
   'DV21-AUDIO-RECOVERY-01': 'audio',
   'DV21-PALMIER-FCPXML-01': 'palmier',
+  'DV21-DRFX-FREE-01': 'drfx',
 } as const;
 for (const [canaryId, expectedMode] of Object.entries(expectedPreparations)) {
   const preparation = resolveCanaryInputPreparationCommands[canaryId];
@@ -92,6 +93,10 @@ for (const [canaryId, expectedMode] of Object.entries(expectedPreparations)) {
     err(`${canaryId}: preparation command and structured mode diverged`);
   }
 }
+
+const drfxPreparation = resolveCanaryInputPreparationCommands['DV21-DRFX-FREE-01'];
+if (!drfxPreparation?.result.includes('deterministic')) err('DRFX preparation must state deterministic packaging intent');
+if (!drfxPreparation?.result.includes('Runtime install remains pending')) err('DRFX preparation must not imply runtime install success');
 
 const sampleManifest = resolveCanaryInputManifestSchema.safeParse({
   schemaVersion: 'resolve-canary-input-manifest/v1',
@@ -122,4 +127,4 @@ if (errors > 0) {
   process.exit(1);
 }
 
-ok('Resolve P0 canary input fixtures and structured session-preparation metadata are neutral, deterministic, source-truth-safe, and real Palmier FCPXML remains explicitly blocked until exported by Palmier.');
+ok('Resolve Canary input fixtures and structured session-preparation metadata are neutral, deterministic where applicable, source-truth-safe, and real-tool/runtime boundaries remain explicit.');
