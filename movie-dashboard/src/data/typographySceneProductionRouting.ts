@@ -98,9 +98,9 @@ export const typographyProductionRoutes: TypographyProductionRouteDefinition[] =
   route(
     "type-tracking-burst",
     "tracking",
-    "DAVINCI_TRANSLATION_NOT_IMPLEMENTED",
-    null,
-    "tracking animationをText+ character spacingへ翻訳する実装とrender evidenceが未完了。",
+    "DAVINCI_ACTUAL_CANDIDATE",
+    "impl-type-tracking-burst-davinci-text-plus-tracking",
+    "canonical tracking→Text+ character-spacing translatorとbounded Actual evidence workflowを実装済み。Resolve native tracking単位は推測せず、実Macでlive input identity・raw値・normalized em-equivalent calibration・render parityを確認するまでimplementation availableへは昇格しない。",
   ),
   route(
     "type-vertical-wipe",
