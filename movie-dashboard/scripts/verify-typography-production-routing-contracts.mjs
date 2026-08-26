@@ -20,6 +20,15 @@ const trackingCapture = fs.readFileSync(path.join(root, "src/data/trackingBurstD
 const verticalTranslator = fs.readFileSync(path.join(root, "src/data/verticalWipeDaVinciTranslator.ts"), "utf8");
 const verticalActual = fs.readFileSync(path.join(root, "src/data/verticalWipeDaVinciActualArtifact.ts"), "utf8");
 const verticalCapture = fs.readFileSync(path.join(root, "src/data/verticalWipeDaVinciEvidenceCapture.ts"), "utf8");
+const outlineTranslator = fs.readFileSync(path.join(root, "src/data/outlineFillDaVinciTranslator.ts"), "utf8");
+const outlineActual = fs.readFileSync(path.join(root, "src/data/outlineFillDaVinciActualArtifact.ts"), "utf8");
+const outlineCapture = fs.readFileSync(path.join(root, "src/data/outlineFillDaVinciEvidenceCapture.ts"), "utf8");
+const hopTranslator = fs.readFileSync(path.join(root, "src/data/baselineHopDaVinciTranslator.ts"), "utf8");
+const hopActual = fs.readFileSync(path.join(root, "src/data/baselineHopDaVinciActualArtifact.ts"), "utf8");
+const hopCapture = fs.readFileSync(path.join(root, "src/data/baselineHopDaVinciEvidenceCapture.ts"), "utf8");
+const tripletTranslator = fs.readFileSync(path.join(root, "src/data/tripletDaVinciTranslator.ts"), "utf8");
+const tripletActual = fs.readFileSync(path.join(root, "src/data/tripletDaVinciActualArtifact.ts"), "utf8");
+const tripletCapture = fs.readFileSync(path.join(root, "src/data/tripletDaVinciEvidenceCapture.ts"), "utf8");
 const errors = [];
 
 const requireText = (source, token, message) => {
@@ -102,6 +111,9 @@ for (const [source, implementationId, label] of [
   [wordPunchTranslator, "impl-type-word-punch-davinci-text-plus-transform", "Word Punch translator"],
   [trackingTranslator, "impl-type-tracking-burst-davinci-text-plus-tracking", "Tracking Burst translator"],
   [verticalTranslator, "impl-type-vertical-wipe-davinci-text-plus-mask", "Vertical Wipe translator"],
+  [outlineTranslator, "impl-type-outline-fill-davinci-text-plus-shading", "Outline Fill translator"],
+  [hopTranslator, "impl-type-baseline-hop-davinci-text-plus-baseline", "Baseline Hop translator"],
+  [tripletTranslator, "impl-type-triplet-davinci-text-plus-transform-pulses", "Triplet translator"],
 ]) {
   requireText(source, implementationId, `${label} no longer proves its routed implementation id`);
 }
@@ -111,6 +123,9 @@ for (const [source, translatorBuilder, creator, label] of [
   [wordPunchActual, "buildWordPunchDaVinciTranslatorSpec", "createWordPunchDaVinciActualArtifact", "Word Punch Actual artifact"],
   [trackingActual, "buildTrackingBurstDaVinciTranslatorSpec", "createTrackingBurstDaVinciActualArtifact", "Tracking Burst Actual artifact"],
   [verticalActual, "buildVerticalWipeDaVinciTranslatorSpec", "createVerticalWipeDaVinciActualArtifact", "Vertical Wipe Actual artifact"],
+  [outlineActual, "buildOutlineFillDaVinciTranslatorSpec", "createOutlineFillDaVinciActualArtifact", "Outline Fill Actual artifact"],
+  [hopActual, "buildBaselineHopDaVinciTranslatorSpec", "createBaselineHopDaVinciActualArtifact", "Baseline Hop Actual artifact"],
+  [tripletActual, "buildTripletDaVinciTranslatorSpec", "createTripletDaVinciActualArtifact", "Triplet Actual artifact"],
 ]) {
   requireText(source, translatorBuilder, `${label} no longer derives expected values from its canonical translator`);
   requireText(source, creator, `${label} no longer exposes its bounded Actual artifact creator`);
@@ -122,14 +137,24 @@ requireText(trackingCapture, "normalizedTrackingFromEm", "Tracking Burst evidenc
 requireText(verticalCapture, '"MASK_COORDINATE_CONVENTION"', "Vertical Wipe routing may be a candidate only while mask coordinate evidence remains explicit");
 requireText(verticalCapture, '"MASK_INVERSION"', "Vertical Wipe routing must retain inversion evidence");
 requireText(verticalCapture, "normalizedTopInsetFrom", "Vertical Wipe evidence must preserve normalized canonical reveal values");
+requireText(outlineCapture, '"SHADING_BINDING"', "Outline Fill routing may be a candidate only while live Shading binding remains explicit evidence");
+requireText(hopCapture, '"BASELINE_BINDING"', "Baseline Hop routing may be a candidate only while live baseline/position binding remains explicit evidence");
+requireText(tripletCapture, '"HIT_1"', "Triplet routing must retain first-hit evidence");
+requireText(tripletCapture, '"HIT_2"', "Triplet routing must retain second-hit evidence");
+requireText(tripletCapture, '"HIT_3"', "Triplet routing must retain third-hit evidence");
 
-for (const [token, label] of [
-  ['"type-char-stagger",\n    "stagger",\n    "DAVINCI_ACTUAL_CANDIDATE",\n    "impl-type-char-stagger-davinci-text-plus-follower"', "Char Stagger"],
-  ['"type-type-on-rhythm",\n    "word-stagger",\n    "DAVINCI_ACTUAL_CANDIDATE",\n    "impl-type-type-on-rhythm-davinci-text-plus-follower-words"', "Type on Rhythm"],
-  ['"type-word-punch",\n    "punch",\n    "DAVINCI_ACTUAL_CANDIDATE",\n    "impl-type-word-punch-davinci-text-plus-transform"', "Word Punch"],
-  ['"type-tracking-burst",\n    "tracking",\n    "DAVINCI_ACTUAL_CANDIDATE",\n    "impl-type-tracking-burst-davinci-text-plus-tracking"', "Tracking Burst"],
-  ['"type-vertical-wipe",\n    "vertical-wipe",\n    "DAVINCI_ACTUAL_CANDIDATE",\n    "impl-type-vertical-wipe-davinci-text-plus-mask"', "Vertical Wipe"],
-]) {
+const actualCandidateContracts = [
+  ["type-char-stagger", "stagger", "impl-type-char-stagger-davinci-text-plus-follower", "Char Stagger"],
+  ["type-type-on-rhythm", "word-stagger", "impl-type-type-on-rhythm-davinci-text-plus-follower-words", "Type on Rhythm"],
+  ["type-word-punch", "punch", "impl-type-word-punch-davinci-text-plus-transform", "Word Punch"],
+  ["type-tracking-burst", "tracking", "impl-type-tracking-burst-davinci-text-plus-tracking", "Tracking Burst"],
+  ["type-vertical-wipe", "vertical-wipe", "impl-type-vertical-wipe-davinci-text-plus-mask", "Vertical Wipe"],
+  ["type-outline-fill", "outline", "impl-type-outline-fill-davinci-text-plus-shading", "Outline Fill"],
+  ["type-baseline-hop", "hop", "impl-type-baseline-hop-davinci-text-plus-baseline", "Baseline Hop"],
+  ["type-triplet", "triplet", "impl-type-triplet-davinci-text-plus-transform-pulses", "Triplet"],
+];
+for (const [patternId, mode, implementationId, label] of actualCandidateContracts) {
+  const token = `"${patternId}",\n    "${mode}",\n    "DAVINCI_ACTUAL_CANDIDATE",\n    "${implementationId}"`;
   requireText(routing, token, `${label} must be staged as an Actual candidate backed by its translator/evidence workflow`);
 }
 
@@ -156,7 +181,7 @@ if (implementationAvailable.length !== 1 || implementationAvailable[0] !== "type
 }
 
 const actualCandidates = [...routing.matchAll(/route\(\s*\n\s*"(type-[^"]+)",\s*\n\s*"[^"]+",\s*\n\s*"DAVINCI_ACTUAL_CANDIDATE"/g)].map((match) => match[1]);
-const expectedActualCandidates = ["type-char-stagger", "type-type-on-rhythm", "type-word-punch", "type-tracking-burst", "type-vertical-wipe"];
+const expectedActualCandidates = actualCandidateContracts.map(([patternId]) => patternId);
 if (actualCandidates.length !== expectedActualCandidates.length || expectedActualCandidates.some((id) => !actualCandidates.includes(id))) {
   errors.push(`Actual candidates must be exactly ${expectedActualCandidates.join(", ")}; got ${actualCandidates.join(", ")}`);
 }
@@ -176,4 +201,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log("Typography Production Routing contracts OK: all nine candidates use four-stage DaVinci readiness; Mask Reveal alone has a live implementation, Char Stagger / Type on Rhythm / Word Punch / Tracking Burst / Vertical Wipe are honest Actual candidates backed by canonical translators and evidence artifacts, three remain untranslated, and no route fabricates Mac Actual verification or production readiness.");
+console.log("Typography Production Routing contracts OK: all nine candidates use four-stage DaVinci readiness; Mask Reveal alone has a live implementation, the other eight are honest Actual candidates backed by canonical translators and evidence artifacts, and no route fabricates Mac Actual verification or production readiness.");
