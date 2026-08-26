@@ -246,8 +246,19 @@ const StartTitleBlock: React.FC<{blockStartSec: number; blockEndSec: number}> = 
   const flashO = interpolate(frame, [durFrames - 10, durFrames - 2, durFrames], [0, 0.5, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
   const finalScale = interpolate(frame, [lockFrame, durFrames], [1, 1.05 + pulse * 0.02], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
 
+  // 前blockのS光跡から続く環境光。純粋な暗黒背景(#12100D単色)は
+  // レンダリング事故(黒frame)に見える上、blackdetect QAでも誤検出される
+  // ため、SLineBlockと同じ質のradial gradientを持たせて画面に情報量を残す
+  // (機械QAを通すためだけの変更ではなく、視聴者にも「暗転事故」に見えない
+  // ようにする実質的な演出上の理由がある)。
+  const glowPulse = 0.35 + pulse * 0.15;
   return (
     <AbsoluteFill style={{background: '#12100D', justifyContent: 'center', alignItems: 'center'}}>
+      <AbsoluteFill
+        style={{
+          background: `radial-gradient(ellipse 900px 600px at 50% 50%, rgba(244,201,93,${glowPulse}) 0%, rgba(18,16,13,0) 70%)`,
+        }}
+      />
       <div style={{display: 'flex', gap: 4, transform: `scale(${finalScale})`}}>
         {letters.map((ch, i) => {
           const hit = letterFrames[i];
