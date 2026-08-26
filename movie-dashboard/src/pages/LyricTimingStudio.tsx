@@ -174,6 +174,18 @@ export function LyricTimingStudio() {
   const [saveMessage, setSaveMessage] = useState<string | null>(null);
   const [promptText, setPromptText] = useState("");
 
+  // ---------- 終了位置確認(145.6秒問題) ----------
+  const [endConfirmed, setEndConfirmed] = useState(false);
+  const [endVerificationMethod, setEndVerificationMethod] = useState<string>("");
+  const [endDraftEnd, setEndDraftEnd] = useState<number>(0);
+  const [endDraftFadeStart, setEndDraftFadeStart] = useState<number>(0);
+  const [endDraftFadeDur, setEndDraftFadeDur] = useState<number>(0.5);
+  const [endComment, setEndComment] = useState("");
+  const [endSaveMessage, setEndSaveMessage] = useState<string | null>(null);
+  const [endSaving, setEndSaving] = useState(false);
+  const btnClass =
+    "rounded border border-gray-300 px-2 py-1 text-xs hover:bg-gray-100 dark:border-gray-600 dark:hover:bg-gray-800";
+
   // 常に最新値をkeyboard handler / rAFから読むためのref
   const stateRef = useRef({
     activePhraseId,
@@ -204,7 +216,15 @@ export function LyricTimingStudio() {
       const lyricsJson = (await lyricsRes.json()) as Phrase[];
       const wordsJson = (await wordsRes.json()) as WordAccent[];
       const beatsJson = beatsRes.ok ? ((await beatsRes.json()) as { beats?: number[] }) : { beats: [] };
-      const editJson = editRes.ok ? ((await editRes.json()) as { sourceEndSec?: number }) : {};
+      const editJson = editRes.ok
+        ? ((await editRes.json()) as {
+            sourceEndSec?: number;
+            fadeOutStartSec?: number;
+            fadeOutDurationSec?: number;
+            verifiedByListening?: boolean;
+            verificationMethod?: string;
+          })
+        : {};
       const overrideList = overridesRes.ok ? ((await overridesRes.json()) as OverrideEntry[]) : [];
 
       setPhrases(lyricsJson);
@@ -220,6 +240,13 @@ export function LyricTimingStudio() {
         setViewStart(0);
         setViewSpan(end);
       }
+      setEndDraftEnd(end);
+      setEndDraftFadeStart(
+        typeof editJson.fadeOutStartSec === "number" ? editJson.fadeOutStartSec : Math.max(0, end - 0.5),
+      );
+      setEndDraftFadeDur(typeof editJson.fadeOutDurationSec === "number" ? editJson.fadeOutDurationSec : 0.5);
+      setEndConfirmed(Boolean(editJson.verifiedByListening));
+      setEndVerificationMethod(editJson.verificationMethod ?? "");
 
       const map: OverrideMap = {};
       for (const entry of overrideList) {
@@ -392,6 +419,39 @@ export function LyricTimingStudio() {
     },
     [getTime, seekTo],
   );
+
+  const loopEndCandidate = useCallback(() => {
+    setLoopStart(Math.max(0, endDraftEnd - 4));
+    setLoopEnd(Math.min(sourceEndSec + 8, endDraftEnd + 4));
+    setLoopEnabled(true);
+    seekTo(Math.max(0, endDraftEnd - 4));
+  }, [endDraftEnd, sourceEndSec, seekTo]);
+
+  const confirmEndPosition = useCallback(async () => {
+    setEndSaving(true);
+    setEndSaveMessage(null);
+    try {
+      const res = await fetch("/api/timing/save-end-position", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          sourceEndSec: endDraftEnd,
+          fadeOutStartSec: endDraftFadeStart,
+          fadeOutDurationSec: endDraftFadeDur,
+          confirmedComment: endComment,
+        }),
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      setEndConfirmed(true);
+      setEndVerificationMethod("human-listening-confirmed");
+      setSourceEndSec(endDraftEnd);
+      setEndSaveMessage("確定しました。motion-studio側で pnpm sync:start-wedding-edit-local を実行してください。");
+    } catch (error) {
+      setEndSaveMessage(`保存失敗: ${String(error)}`);
+    } finally {
+      setEndSaving(false);
+    }
+  }, [endDraftEnd, endDraftFadeStart, endDraftFadeDur, endComment]);
 
   const togglePlay = useCallback(() => {
     const audio = audioRef.current;
@@ -868,6 +928,104 @@ export function LyricTimingStudio() {
         ドラムのbeatと声の出だしは別の瞬間です。ここで聴いて直した値が正本(HUMAN_SELECTED)になります。
         元ファイルは上書きせず、<code>word-accent-map.manual-overrides.local.json</code> へ別レイヤーとして保存します。
       </div>
+
+      {/* 終了位置確認(145.6秒問題) */}
+      <SectionCard title="終了位置確認(2番後の間奏が終わる位置)" className="mb-6">
+        <div
+          className={`mb-3 rounded-md border px-3 py-2 text-xs ${
+            endConfirmed
+              ? "border-emerald-300 bg-emerald-50 text-emerald-900 dark:border-emerald-700 dark:bg-emerald-950 dark:text-emerald-100"
+              : "border-amber-300 bg-amber-50 text-amber-900 dark:border-amber-700 dark:bg-amber-950 dark:text-amber-100"
+          }`}
+        >
+          {endConfirmed ? (
+            <>✅ 人間が確定済み ({endVerificationMethod})</>
+          ) : (
+            <>
+              ⚠️ 現在値は波形解析による<strong>推定</strong>です(verifiedByListening=false)。
+              人間が実際に聴いて「この位置で確定」を押すまで、この秒数を本仕様にしません。
+            </>
+          )}
+        </div>
+        <div className="flex flex-wrap items-end gap-4 text-xs">
+          <label className="flex flex-col gap-1">
+            最終frame(終了位置) 秒
+            <div className="flex items-center gap-1">
+              <button className={btnClass} onClick={() => setEndDraftEnd((v) => v - 3 / FPS)}>
+                -3f
+              </button>
+              <button className={btnClass} onClick={() => setEndDraftEnd((v) => v - 1 / FPS)}>
+                -1f
+              </button>
+              <input
+                type="number"
+                step={0.001}
+                className="w-24 rounded border px-2 py-1 dark:bg-gray-800"
+                value={endDraftEnd.toFixed(3)}
+                onChange={(e) => setEndDraftEnd(Number(e.target.value))}
+              />
+              <button className={btnClass} onClick={() => setEndDraftEnd((v) => v + 1 / FPS)}>
+                +1f
+              </button>
+              <button className={btnClass} onClick={() => setEndDraftEnd((v) => v + 3 / FPS)}>
+                +3f
+              </button>
+              <button className={btnClass} onClick={() => setEndDraftEnd((v) => v - 0.05)}>
+                -50ms
+              </button>
+              <button className={btnClass} onClick={() => setEndDraftEnd((v) => v + 0.05)}>
+                +50ms
+              </button>
+            </div>
+          </label>
+          <label className="flex flex-col gap-1">
+            fade開始位置 秒
+            <input
+              type="number"
+              step={0.01}
+              className="w-24 rounded border px-2 py-1 dark:bg-gray-800"
+              value={endDraftFadeStart.toFixed(3)}
+              onChange={(e) => setEndDraftFadeStart(Number(e.target.value))}
+            />
+          </label>
+          <label className="flex flex-col gap-1">
+            fade長さ 秒
+            <input
+              type="number"
+              step={0.01}
+              className="w-20 rounded border px-2 py-1 dark:bg-gray-800"
+              value={endDraftFadeDur.toFixed(3)}
+              onChange={(e) => setEndDraftFadeDur(Number(e.target.value))}
+            />
+          </label>
+          <button className={btnClass} onClick={loopEndCandidate}>
+            この付近をループ再生
+          </button>
+          <button className={btnClass} onClick={() => seekTo(endDraftEnd)}>
+            この位置へシーク
+          </button>
+        </div>
+        <label className="mt-2 flex flex-col gap-1 text-xs">
+          コメント(任意)
+          <input
+            type="text"
+            className="w-full rounded border px-2 py-1 dark:bg-gray-800"
+            value={endComment}
+            onChange={(e) => setEndComment(e.target.value)}
+            placeholder="例: 145.6sで切ると次のI canの頭が少し被る気がする"
+          />
+        </label>
+        <div className="mt-3 flex items-center gap-3">
+          <button
+            className="rounded bg-emerald-600 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-700 disabled:opacity-50"
+            disabled={endSaving}
+            onClick={() => void confirmEndPosition()}
+          >
+            {endSaving ? "保存中…" : "この位置で確定"}
+          </button>
+          {endSaveMessage && <span className="text-xs text-gray-600 dark:text-gray-300">{endSaveMessage}</span>}
+        </div>
+      </SectionCard>
 
       {/* transport */}
       <SectionCard title="再生とマーカー" className="mb-6">

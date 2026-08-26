@@ -214,6 +214,71 @@ function saveOverrides(req: IncomingMessage, res: ServerResponse) {
   });
 }
 
+/**
+ * 終了位置確認(145.6秒問題)。start-wedding-edit.local.json は元々
+ * verifiedByListening フィールドを持つ小さな単一設定ファイルであり、
+ * 「人間がこの位置で確定した」という決定そのものを表す正本として扱う
+ * (word-accent-mapのような大きな自動生成データセットとは違い、
+ * 別レイヤーへ逃がさずこのファイル自体を人間の確定値で更新する)。
+ * ただし明示的な「この位置で確定」操作がない限り、verifiedByListeningは
+ * falseのまま=145.6秒は推定のまま、という状態を保つ。
+ */
+function saveEndPosition(req: IncomingMessage, res: ServerResponse) {
+  if (req.method !== "POST") {
+    sendJson(res, 405, { error: "Method not allowed" });
+    return;
+  }
+  let body = "";
+  req.on("data", (chunk: Buffer) => {
+    body += chunk.toString();
+  });
+  req.on("end", () => {
+    let incoming: {
+      sourceEndSec: number;
+      fadeOutStartSec: number;
+      fadeOutDurationSec: number;
+      confirmedComment?: string;
+    };
+    try {
+      incoming = JSON.parse(body) as typeof incoming;
+    } catch {
+      sendJson(res, 400, { error: "Invalid JSON" });
+      return;
+    }
+    if (
+      typeof incoming.sourceEndSec !== "number" ||
+      typeof incoming.fadeOutStartSec !== "number" ||
+      typeof incoming.fadeOutDurationSec !== "number"
+    ) {
+      sendJson(res, 400, { error: "sourceEndSec/fadeOutStartSec/fadeOutDurationSecが必要です" });
+      return;
+    }
+    const existing = readLocalJson(timingPaths.weddingEdit) as Record<string, unknown> | null;
+    if (!existing) {
+      sendJson(res, 404, { error: "start-wedding-edit.local.json が読み込めません" });
+      return;
+    }
+    const updated = {
+      ...existing,
+      sourceEndSec: incoming.sourceEndSec,
+      fadeOutStartSec: incoming.fadeOutStartSec,
+      fadeOutDurationSec: incoming.fadeOutDurationSec,
+      verifiedByListening: true,
+      verificationMethod: "human-listening-confirmed",
+      verificationNote: `人間が「終了位置確認」UIで実際に音を聴きながら確定した値。${
+        incoming.confirmedComment ? `コメント: ${incoming.confirmedComment}` : ""
+      } (${new Date().toISOString()})`,
+    };
+    try {
+      fs.writeFileSync(timingPaths.weddingEdit, JSON.stringify(updated, null, 2) + "\n", "utf-8");
+    } catch (error) {
+      sendJson(res, 500, { error: `write failed: ${String(error)}` });
+      return;
+    }
+    sendJson(res, 200, { ok: true, path: timingPaths.weddingEdit, updated });
+  });
+}
+
 export default defineConfig({
   plugins: [
     react(),
@@ -294,6 +359,8 @@ export default defineConfig({
         server.middlewares.use("/api/timing/audio", serveAudio);
 
         server.middlewares.use("/api/timing/save-overrides", saveOverrides);
+
+        server.middlewares.use("/api/timing/save-end-position", saveEndPosition);
       },
     },
   ],
