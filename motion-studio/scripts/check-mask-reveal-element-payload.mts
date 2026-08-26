@@ -35,7 +35,19 @@ const manifest = JSON.parse(readFileSync(join(outputDir, 'manifest.json'), 'utf8
   durationInFrames?: number;
   installationMode?: string;
   officialValidator?: string;
+  studioInteractivity?: {
+    mechanism?: string;
+    editableFields?: string[];
+    textLabel?: string;
+    intensityLabel?: string;
+    transformSchema?: boolean;
+    colorControl?: string;
+    transparentControl?: string;
+    actualStudioControlReadback?: string;
+  };
+  productionReadiness?: string;
   actualStudioInstallState?: string;
+  guardrails?: string[];
 };
 
 const errors: string[] = [];
@@ -46,7 +58,9 @@ if (payload.type !== 'remotion-element' || payload.version !== 1) {
 }
 if (payload.element?.slug !== 'wedding/mask-reveal') fail('unexpected Element slug');
 if (payload.element?.displayName !== 'Wedding Mask Reveal') fail('unexpected Element displayName');
-if (payload.element?.installationMode !== 'wrapped') fail('Mask Reveal must use wrapped installation mode');
+if (payload.element?.installationMode !== 'wrapped') {
+  fail('Mask Reveal must remain wrapped unless component-owned Sequence is deliberately revalidated');
+}
 if (payload.element?.dimensions?.width !== 1280 || payload.element?.dimensions?.height !== 720) {
   fail('Element dimensions must match the existing 1280x720 concept preview');
 }
@@ -54,20 +68,38 @@ if (payload.element?.durationInFrames !== 120 && payload.durationInFrames !== 12
   fail('Element duration must match the existing 120-frame concept preview');
 }
 if (!Array.isArray(payload.element?.dependencies) || payload.element.dependencies.length !== 0) {
-  fail('Mask Reveal Element must have zero declared dependencies; remotion is project-provided');
+  fail('Mask Reveal Element must have zero declared dependencies; react/remotion are project-provided');
 }
 if (payload.element?.sourceCode !== source) fail('payload sourceCode differs from generated source artifact');
 
 for (const required of [
+  "from 'react'",
   "from 'remotion'",
   'function TypographyRevealEngine',
-  'export function WeddingMaskRevealElement',
+  'Interactive.withSchema',
+  'Interactive.baseSchema',
+  'Interactive.transformSchema',
+  "type: 'text-content'",
+  "description: '表示テキスト'",
+  "type: 'enum'",
+  "description: '動きの強さ (S=やさしい / M=標準 / L=強い)'",
+  "componentIdentity: 'com.wedding.motion-zukan.mask-reveal'",
+  'const WeddingMaskRevealLayerInner = forwardRef',
+  '<Sequence',
+  'controls={controls}',
+  'outlineRef={outlineRef}',
+  'export const WeddingMaskRevealElement',
   'mode="mask"',
-  "text = 'WELCOME'",
-  "intensity = 'M'",
+  'text="WELCOME"',
+  'intensity="M"',
+  "translate: '0px 0px'",
+  'scale: 1',
+  "rotate: '0deg'",
+  'opacity: 1',
 ]) {
   if (!source.includes(required)) fail(`generated source missing: ${required}`);
 }
+
 for (const forbidden of [
   "from './",
   'from "./',
@@ -76,8 +108,10 @@ for (const forbidden of [
   'process.env',
   'http://',
   'https://',
+  "type: 'color'",
+  'transparent: {',
 ]) {
-  if (source.includes(forbidden)) fail(`generated source contains forbidden portability/privacy token: ${forbidden}`);
+  if (source.includes(forbidden)) fail(`generated source contains forbidden portability/honesty token: ${forbidden}`);
 }
 
 const exportedComponents = Array.from(
@@ -93,13 +127,44 @@ if (manifest.patternId !== 'type-mask-reveal') fail('manifest patternId drifted'
 if (manifest.legacyPresetId !== 'type-mask-slide') fail('manifest legacy preset drifted');
 if (manifest.canonicalSource !== 'src/motion-kit/engines.tsx#TypographyRevealEngine') fail('canonical source locator drifted');
 if (manifest.elementComponent !== 'WeddingMaskRevealElement') fail('manifest component name drifted');
-if (manifest.sourceStrategy !== 'DERIVED_FROM_CANONICAL_ENGINE_PLUS_THIN_WRAPPER') fail('source strategy must remain derived, not copied');
+if (manifest.sourceStrategy !== 'DERIVED_FROM_CANONICAL_ENGINE_PLUS_INTERACTIVE_WRAPPER') {
+  fail('source strategy must remain canonical-derived plus interactive wrapper');
+}
 if (!Array.isArray(manifest.dependencies) || manifest.dependencies.length !== 0) fail('manifest dependencies must remain empty');
 if (manifest.dimensions?.width !== 1280 || manifest.dimensions?.height !== 720) fail('manifest dimensions drifted');
 if (manifest.fpsForExistingConceptPreview !== 30 || manifest.durationInFrames !== 120) fail('manifest preview timing drifted');
 if (manifest.installationMode !== 'wrapped') fail('manifest installation mode drifted');
 if (manifest.officialValidator !== '@remotion/studio-protocol createElementPayload()') fail('official validator provenance missing');
 if (manifest.actualStudioInstallState !== 'NOT_RUN') fail('payload generation must not fabricate Studio install success');
+
+const interactive = manifest.studioInteractivity;
+if (interactive?.mechanism !== 'Interactive.withSchema()') fail('Studio interactivity mechanism is not official Interactive.withSchema()');
+for (const field of ['text', 'intensity', 'style.translate', 'style.scale', 'style.rotate', 'style.opacity']) {
+  if (!interactive?.editableFields?.includes(field)) fail(`missing intended human-editable field: ${field}`);
+}
+if (interactive?.textLabel !== '表示テキスト') fail('Japanese-first text control label drifted');
+if (interactive?.intensityLabel !== '動きの強さ (S=やさしい / M=標準 / L=強い)') fail('Japanese-first intensity control label drifted');
+if (interactive?.transformSchema !== true) fail('transform schema must remain enabled');
+if (interactive?.colorControl !== 'NOT_EXPOSED_CANONICAL_ENGINE_CURRENTLY_HARDCODES_WHITE') {
+  fail('color control must not be claimed until canonical engine supports it');
+}
+if (interactive?.transparentControl !== 'INTENTIONALLY_NOT_EXPOSED_TECHNICAL_SETTING') {
+  fail('transparent technical setting should not become user-facing by accident');
+}
+if (interactive?.actualStudioControlReadback !== 'NOT_RUN') fail('Studio control readback must remain NOT_RUN before local Actual');
+if (manifest.productionReadiness !== 'CANDIDATE_NEEDS_STUDIO_ACTUAL_AND_EXIT_ANIMATION_REVIEW') {
+  fail('interactive candidate must not be promoted before Studio Actual and exit-animation review');
+}
+
+for (const guardrail of [
+  'ELEMENT_PAYLOAD_VALID != STUDIO_INSTALL_VERIFIED',
+  'INTERACTIVE_SCHEMA_PRESENT != STUDIO_CONTROL_READBACK_VERIFIED',
+  'DERIVED_SOURCE != SECOND_MOTION_IMPLEMENTATION',
+  'FAKE_COLOR_CONTROL != HUMAN_ADJUSTABILITY',
+  'ENTRANCE_ONLY_ELEMENT != PRODUCTION_READY_TEMPORARY_OVERLAY',
+]) {
+  if (!manifest.guardrails?.includes(guardrail)) fail(`missing Element guardrail: ${guardrail}`);
+}
 
 const engine = readFileSync(join(root, 'src/motion-kit/engines.tsx'), 'utf8');
 const start = engine.indexOf('export type MotionIntensity');
@@ -121,8 +186,10 @@ if (errors.length > 0) {
   process.exit(1);
 }
 
-console.log('✅ Mask Reveal Element artifact is canonical-derived, dependency-free, official-validator-backed and still honestly NOT_RUN for Studio install.');
+console.log('✅ Mask Reveal Element is canonical-derived, official-validator-backed and carries a Japanese-first Interactive schema without fabricating Studio Actual.');
 console.log(`elementSourceSha256=${sourceSha256}`);
 console.log('patternId=type-mask-reveal');
 console.log('dependencies=0');
+console.log('studioInteractivity=INTERACTIVE_SCHEMA_CANDIDATE');
+console.log('actualStudioControlReadback=NOT_RUN');
 console.log('actualStudioInstallState=NOT_RUN');

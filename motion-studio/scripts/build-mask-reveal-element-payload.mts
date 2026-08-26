@@ -1,6 +1,6 @@
 import {createHash} from 'node:crypto';
 import {mkdirSync, readFileSync, writeFileSync} from 'node:fs';
-import {dirname, join} from 'node:path';
+import {join} from 'node:path';
 
 const root = process.cwd();
 const enginePath = join(root, 'src/motion-kit/engines.tsx');
@@ -35,33 +35,128 @@ if (internalTypographyBlock.includes('export function TypographyRevealEngine')) 
   throw new Error('TypographyRevealEngine export was not internalized');
 }
 
-const elementSource = `import {AbsoluteFill, Easing, interpolate, useCurrentFrame, useVideoConfig} from 'remotion';
+const elementSource = `import React, {forwardRef, useImperativeHandle, useRef} from 'react';
+import {
+  AbsoluteFill,
+  Easing,
+  Interactive,
+  Sequence,
+  interpolate,
+  useCurrentFrame,
+  useVideoConfig,
+  type InteractiveBaseProps,
+  type InteractiveTransformProps,
+  type InteractivitySchema,
+  type SequenceControls,
+} from 'remotion';
 
 ${internalTypographyBlock}
 
+type WeddingMaskRevealLayerProps = InteractiveBaseProps &
+  InteractiveTransformProps & {
+    readonly text?: string;
+    readonly intensity?: MotionIntensity;
+  };
+
+const weddingMaskRevealSchema = {
+  ...Interactive.baseSchema,
+  text: {
+    type: 'text-content',
+    default: 'WELCOME',
+    description: '表示テキスト',
+  },
+  intensity: {
+    type: 'enum',
+    default: 'M',
+    description: '動きの強さ (S=やさしい / M=標準 / L=強い)',
+    keyframable: false,
+    variants: {
+      S: {},
+      M: {},
+      L: {},
+    },
+  },
+  ...Interactive.transformSchema,
+} as const satisfies InteractivitySchema;
+
+const WeddingMaskRevealLayerInner = forwardRef<
+  HTMLDivElement,
+  WeddingMaskRevealLayerProps & {
+    readonly controls: SequenceControls | undefined;
+  }
+>(
+  (
+    {
+      controls,
+      text = 'WELCOME',
+      intensity = 'M',
+      name,
+      style,
+      ...sequenceProps
+    },
+    ref,
+  ) => {
+    const outlineRef = useRef<HTMLDivElement>(null);
+    useImperativeHandle(ref, () => outlineRef.current as HTMLDivElement, []);
+
+    return (
+      <Sequence
+        layout="none"
+        {...sequenceProps}
+        controls={controls}
+        name={name ?? '<WeddingMaskReveal>'}
+        outlineRef={outlineRef}
+      >
+        <div
+          ref={outlineRef}
+          style={{
+            position: 'relative',
+            width: 1280,
+            height: 720,
+            overflow: 'hidden',
+            ...style,
+          }}
+        >
+          <TypographyRevealEngine
+            text={text}
+            intensity={intensity}
+            mode="mask"
+            transparent
+          />
+        </div>
+      </Sequence>
+    );
+  },
+);
+
+const InteractiveWeddingMaskRevealLayer = Interactive.withSchema({
+  Component: WeddingMaskRevealLayerInner,
+  componentName: '<WeddingMaskReveal>',
+  componentIdentity: 'com.wedding.motion-zukan.mask-reveal',
+  schema: weddingMaskRevealSchema,
+  supportsEffects: false,
+});
+
 /**
  * Motion Zukan: type-mask-reveal
- * Derived from the canonical TypographyRevealEngine implementation.
- * Keep the motion implementation above generated from engines.tsx; do not fork it here.
+ * Canonical motion implementation is generated from TypographyRevealEngine above.
+ * Studio-facing customization is delegated to Remotion Interactive.withSchema().
  */
-export function WeddingMaskRevealElement({
-  text = 'WELCOME',
-  intensity = 'M',
-  transparent = true,
-}: {
-  text?: string;
-  intensity?: MotionIntensity;
-  transparent?: boolean;
-}) {
+export const WeddingMaskRevealElement: React.FC = () => {
   return (
-    <TypographyRevealEngine
-      text={text}
-      intensity={intensity}
-      mode="mask"
-      transparent={transparent}
+    <InteractiveWeddingMaskRevealLayer
+      text="WELCOME"
+      intensity="M"
+      name="Mask Reveal"
+      style={{
+        translate: '0px 0px',
+        scale: 1,
+        rotate: '0deg',
+        opacity: 1,
+      }}
     />
   );
-}
+};
 `;
 
 for (const forbidden of ["from './", 'from "./', "from '../", 'from "../']) {
@@ -83,9 +178,6 @@ const elementSourceSha256 = createHash('sha256').update(elementSource).digest('h
 mkdirSync(outputDir, {recursive: true});
 writeFileSync(sourceOutputPath, elementSource);
 
-// Keep @remotion/studio-protocol out of the production dependency graph for this
-// candidate run. CI installs the official 4.0.517 package ephemerally, then this
-// dynamic import invokes its real createElementPayload() implementation.
 type CreateElementPayload = (input: {
   displayName: string;
   slug: string;
@@ -135,18 +227,39 @@ writeFileSync(
       canonicalBlockSha256,
       elementSourceSha256,
       elementComponent: 'WeddingMaskRevealElement',
-      sourceStrategy: 'DERIVED_FROM_CANONICAL_ENGINE_PLUS_THIN_WRAPPER',
+      sourceStrategy: 'DERIVED_FROM_CANONICAL_ENGINE_PLUS_INTERACTIVE_WRAPPER',
       dependencies: [],
       dimensions: {width: 1280, height: 720},
       fpsForExistingConceptPreview: 30,
       durationInFrames: 120,
       installationMode: 'wrapped',
       officialValidator: '@remotion/studio-protocol createElementPayload()',
+      studioInteractivity: {
+        mechanism: 'Interactive.withSchema()',
+        editableFields: [
+          'text',
+          'intensity',
+          'style.translate',
+          'style.scale',
+          'style.rotate',
+          'style.opacity',
+        ],
+        textLabel: '表示テキスト',
+        intensityLabel: '動きの強さ (S=やさしい / M=標準 / L=強い)',
+        transformSchema: true,
+        colorControl: 'NOT_EXPOSED_CANONICAL_ENGINE_CURRENTLY_HARDCODES_WHITE',
+        transparentControl: 'INTENTIONALLY_NOT_EXPOSED_TECHNICAL_SETTING',
+        actualStudioControlReadback: 'NOT_RUN',
+      },
+      productionReadiness: 'CANDIDATE_NEEDS_STUDIO_ACTUAL_AND_EXIT_ANIMATION_REVIEW',
       actualStudioInstallState: 'NOT_RUN',
       guardrails: [
         'ELEMENT_PAYLOAD_VALID != STUDIO_INSTALL_VERIFIED',
+        'INTERACTIVE_SCHEMA_PRESENT != STUDIO_CONTROL_READBACK_VERIFIED',
         'DERIVED_SOURCE != SECOND_MOTION_IMPLEMENTATION',
         'REMOTION_PROVIDED_PACKAGES != ELEMENT_DEPENDENCIES',
+        'FAKE_COLOR_CONTROL != HUMAN_ADJUSTABILITY',
+        'ENTRANCE_ONLY_ELEMENT != PRODUCTION_READY_TEMPORARY_OVERLAY',
       ],
     },
     null,
@@ -154,10 +267,12 @@ writeFileSync(
   )}\n`,
 );
 
-console.log('✅ Mask Reveal Element payload validated by official createElementPayload().');
+console.log('✅ Mask Reveal Element payload validated with official createElementPayload() and Interactive schema source.');
 console.log(`source=${sourceOutputPath}`);
 console.log(`payload=${payloadOutputPath}`);
 console.log(`canonicalBlockSha256=${canonicalBlockSha256}`);
 console.log(`elementSourceSha256=${elementSourceSha256}`);
 console.log('dependencies=0');
+console.log('studioInteractivity=INTERACTIVE_SCHEMA_CANDIDATE');
+console.log('actualStudioControlReadback=NOT_RUN');
 console.log('actualStudioInstallState=NOT_RUN');
