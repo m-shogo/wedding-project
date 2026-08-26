@@ -54,6 +54,11 @@ export type VocalCue = {
   verifiedByListening: boolean;
   confidence: 'high' | 'medium' | 'low';
   reviewComment: string;
+  /** timingSource='audio-analysis'の場合、実際に何を解析根拠にしたか
+   * (例: 'vocal-stem-onset-detection'。htdemucsでボーカル分離した音源上での
+   * librosa onset検出)。根拠不明のまま'audio-analysis'と自称しないための
+   * 追跡フィールド。manual/beat-snap/estimatedの場合はnull。 */
+  analysisMethod: string | null;
 };
 
 export type TimingPhrase = {
@@ -211,6 +216,21 @@ export type TimingMaster = {
     createdAt: string;
     updatedAt: string;
   };
+
+  /** 実際に音源へ解析を実行した記録(実行していなければnull)。
+   * 「audio-analysis」と自称する値がある場合、必ずこのrunに紐づく根拠が
+   * あることを期待する(check-start-wedding-timing-master.mtsで検査)。 */
+  analysisRun: {
+    runId: string;
+    audioSha256: string;
+    tool: string;
+    toolVersion: Record<string, string>;
+    model: string | null;
+    generatedAt: string;
+    stemAlignmentOffsetMs: number;
+    stemAlignmentVerified: boolean;
+    vocalOnsetCandidateCount: number;
+  } | null;
 };
 
 // ---------------------------------------------------------------------------
@@ -320,4 +340,7 @@ export const canonicalMasterPayloadForHash = (
   phrases: master.phrases,
   musicCues: master.musicCues,
   editorialBlocks: master.editorialBlocks,
+  // generatedAtは除外(揮発)。runId/tool/stemAlignmentOffsetMs等は実質的な
+  // 解析結果の変化を表すためhash対象に含める。
+  analysisRun: master.analysisRun ? {...master.analysisRun, generatedAt: undefined} : null,
 });

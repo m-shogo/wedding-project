@@ -284,6 +284,55 @@ if (ambiguousLegacyOverrides.length > 0) {
 
 const beatsMs = musicGrid.beatsMs;
 
+// --- 4a. 実ボーカル解析結果(あれば)を読み込む -------------------------------
+// scripts/analyze_start_wedding_vocals.py(htdemucsでボーカル分離→librosaで
+// onset検出)の出力。存在しない場合は解析なしとして扱い、audio-analysisを
+// 自称しない(estimatedのまま)。
+type AlignmentCandidates = {
+  runId: string;
+  audioSha256: string;
+  tool: string;
+  toolVersion: Record<string, string>;
+  model: string | null;
+  generatedAt: string;
+  stemAlignmentOffsetMs: number;
+  stemAlignmentVerified: boolean;
+  vocalOnsetCandidatesMs: number[];
+};
+const alignmentCandidates = readJson<AlignmentCandidates>('analysis/start-wedding/alignment-candidates.local.json');
+if (alignmentCandidates && alignmentCandidates.audioSha256 !== audioSha256) {
+  warn(
+    `alignment-candidates.local.jsonのaudioSha256が現在の音源と不一致(解析時=${alignmentCandidates.audioSha256.slice(0, 12)}... 現在=${audioSha256.slice(0, 12)}...)。この解析結果は使用しない。`,
+  );
+}
+const vocalOnsetsMs =
+  alignmentCandidates && alignmentCandidates.audioSha256 === audioSha256 ? alignmentCandidates.vocalOnsetCandidatesMs : [];
+const ANALYSIS_METHOD = 'vocal-stem-onset-detection(htdemucs+librosa)';
+const ANALYSIS_SNAP_WINDOW_MS = 250;
+/** 実vocal onset解析結果から、指定時刻へ最も近い候補を探す(window内のみ)。
+ * 見つかった場合だけaudio-analysisとして採用し、見つからない場合は呼び出し元の
+ * 既存ロジック(beat-snap/estimated)へfallbackする(解析していない値を
+ * audio-analysisと自称しないため)。 */
+const snapToVocalOnset = (approxMs: number): number | null => {
+  if (vocalOnsetsMs.length === 0) return null;
+  let best = vocalOnsetsMs[0];
+  let bestDiff = Math.abs(vocalOnsetsMs[0] - approxMs);
+  for (const o of vocalOnsetsMs) {
+    const d = Math.abs(o - approxMs);
+    if (d < bestDiff) {
+      best = o;
+      bestDiff = d;
+    }
+  }
+  return bestDiff <= ANALYSIS_SNAP_WINDOW_MS ? best : null;
+};
+if (vocalOnsetsMs.length > 0) {
+  info(`実ボーカル解析結果を検出: onset候補${vocalOnsetsMs.length}件(stemAlignmentOffsetMs=${alignmentCandidates!.stemAlignmentOffsetMs}ms)。±${ANALYSIS_SNAP_WINDOW_MS}ms以内の候補があるcueをaudio-analysisへ格上げする。`);
+} else {
+  warn('実ボーカル解析結果が無い(local/analysis/start-wedding/alignment-candidates.local.json)。phrase-onset等は従来通りlegacy値/estimatedのまま。');
+}
+let snappedCount = 0;
+
 const phrases: TimingPhrase[] = lyrics.phrases.map((p) => {
   const pm = phraseMapById.get(p.phraseId);
   const tmTransition = transitionMap?.transitions[p.phraseId];
@@ -301,10 +350,13 @@ const phrases: TimingPhrase[] = lyrics.phrases.map((p) => {
   const cues: VocalCue[] = [];
   // phrase-onset cue(必ず1つ)。
   // 重要な訂正: 以前は根拠を問わず一律'audio-analysis'にしていた。
-  // phrase-map.local.jsonに対応entry(pm)がある場合のみ、そのファイルが
-  // 自己申告するPalmier/ffmpeg解析の裏付けがあるとみなしaudio-analysisとする。
-  // pmが無い場合は「lyrics JSONの数値をそのまま使っているだけ」であり、
-  // 独立した解析の裏付けが無いためestimatedとする。
+  // 今は実際にhtdemucs+librosaでボーカル分離・onset検出した結果
+  // (vocalOnsetsMs)が±250ms以内にあるcueだけを'audio-analysis'とし、
+  // 無ければphrase-map.local.jsonの自己申告根拠があるかどうかで
+  // audio-analysis/estimatedを判定する(根拠の無い過大表示をしない)。
+  const onsetApprox = secToMs(startSec);
+  const onsetSnap = phraseOverride?.manualStartSec == null ? snapToVocalOnset(onsetApprox) : null;
+  if (onsetSnap != null) snappedCount++;
   cues.push(
     preserveCueIfBetter({
       cueId: `${p.phraseId}-ONSET`,
@@ -312,11 +364,12 @@ const phrases: TimingPhrase[] = lyrics.phrases.map((p) => {
       kind: 'phrase-onset',
       text: p.text,
       occurrenceIndex: 0,
-      timeMs: secToMs(startSec),
-      timingSource: phraseOverride?.manualStartSec != null ? 'manual' : pm ? 'audio-analysis' : 'estimated',
+      timeMs: onsetSnap ?? onsetApprox,
+      timingSource: phraseOverride?.manualStartSec != null ? 'manual' : onsetSnap != null ? 'audio-analysis' : pm ? 'audio-analysis' : 'estimated',
       verifiedByListening: phraseOverride?.verifiedByListening ?? false,
       confidence: (pm?.confidence as VocalCue['confidence']) ?? 'medium',
       reviewComment: phraseOverride?.reviewComment ?? '',
+      analysisMethod: onsetSnap != null ? ANALYSIS_METHOD : null,
     }),
   );
   // word-accent cue(反復語も含め、出現順で安定ID: W01, W02, ...)
@@ -324,6 +377,9 @@ const phrases: TimingPhrase[] = lyrics.phrases.map((p) => {
   words.forEach((w, i) => {
     const override = manualWordByKey.get(`${p.phraseId}::${w.word}`);
     const accentSec = override?.manualAccentSec ?? w.accentSec;
+    const approxMs = secToMs(accentSec);
+    const snap = override?.manualAccentSec == null ? snapToVocalOnset(approxMs) : null;
+    if (snap != null) snappedCount++;
     cues.push(
       preserveCueIfBetter({
         cueId: `${p.phraseId}-W${String(i + 1).padStart(2, '0')}`,
@@ -331,11 +387,12 @@ const phrases: TimingPhrase[] = lyrics.phrases.map((p) => {
         kind: 'word-accent',
         text: w.word,
         occurrenceIndex: i,
-        timeMs: secToMs(accentSec),
-        timingSource: override?.manualAccentSec != null ? 'manual' : nearestBeatMs(secToMs(accentSec), beatsMs) != null ? 'beat-snap' : 'estimated',
+        timeMs: snap ?? approxMs,
+        timingSource: override?.manualAccentSec != null ? 'manual' : snap != null ? 'audio-analysis' : nearestBeatMs(approxMs, beatsMs) != null ? 'beat-snap' : 'estimated',
         verifiedByListening: override?.verifiedByListening ?? false,
         confidence: 'medium',
         reviewComment: override?.reviewComment ?? '',
+        analysisMethod: snap != null ? ANALYSIS_METHOD : null,
       }),
     );
   });
@@ -344,6 +401,9 @@ const phrases: TimingPhrase[] = lyrics.phrases.map((p) => {
   // その1発の実際の表示語(例:「パッ」)を入れる(phrase全文を入れない)。
   const hitWord = p.text.match(/^((?:パッ|チャプ|ラ){1,2})/)?.[1] ?? p.text.slice(0, 2);
   (p.threeHitFrameSecs ?? []).forEach((sec, i) => {
+    const approxMs = secToMs(sec);
+    const snap = snapToVocalOnset(approxMs);
+    if (snap != null) snappedCount++;
     cues.push(
       preserveCueIfBetter({
         cueId: `${p.phraseId}-H${String(i + 1).padStart(2, '0')}`,
@@ -351,11 +411,12 @@ const phrases: TimingPhrase[] = lyrics.phrases.map((p) => {
         kind: 'syllable-hit',
         text: hitWord,
         occurrenceIndex: i,
-        timeMs: secToMs(sec),
-        timingSource: nearestBeatMs(secToMs(sec), beatsMs) != null ? 'beat-snap' : 'estimated',
+        timeMs: snap ?? approxMs,
+        timingSource: snap != null ? 'audio-analysis' : nearestBeatMs(approxMs, beatsMs) != null ? 'beat-snap' : 'estimated',
         verifiedByListening: false,
         confidence: 'medium',
         reviewComment: '',
+        analysisMethod: snap != null ? ANALYSIS_METHOD : null,
       }),
     );
   });
@@ -543,6 +604,21 @@ const audio = {
   verifiedByListening: existingMaster?.audio.verifiedByListening ?? false,
 };
 
+const analysisRun =
+  alignmentCandidates && alignmentCandidates.audioSha256 === audioSha256
+    ? {
+        runId: alignmentCandidates.runId,
+        audioSha256: alignmentCandidates.audioSha256,
+        tool: alignmentCandidates.tool,
+        toolVersion: alignmentCandidates.toolVersion,
+        model: alignmentCandidates.model,
+        generatedAt: alignmentCandidates.generatedAt,
+        stemAlignmentOffsetMs: alignmentCandidates.stemAlignmentOffsetMs,
+        stemAlignmentVerified: alignmentCandidates.stemAlignmentVerified,
+        vocalOnsetCandidateCount: alignmentCandidates.vocalOnsetCandidatesMs.length,
+      }
+    : existingMaster?.analysisRun ?? null;
+
 const candidatePayload = {
   schemaVersion: TIMING_MASTER_SCHEMA_VERSION,
   masterId: existingMaster?.masterId ?? 'start-wedding-edit-master',
@@ -553,6 +629,7 @@ const candidatePayload = {
   phrases,
   musicCues,
   editorialBlocks,
+  analysisRun,
 };
 const newContentHash = createHash('sha256').update(JSON.stringify(canonicalMasterPayloadForHash(candidatePayload))).digest('hex');
 const contentChanged = existingMaster?.contentHash !== newContentHash;
@@ -588,6 +665,7 @@ const v = master.verification;
 info(
   `sections=${master.sections.length} phrases=${master.phrases.length} cues=${v.totalVocalCues}(verified=${v.verifiedVocalCues}) musicCues=${v.totalMusicCues} editorialBlocks=${master.editorialBlocks.length} musicGrid.beats=${musicGrid.beatsMs.length}`,
 );
+info(`実ボーカル解析でaudio-analysisへ格上げされたcue: ${snappedCount}件(±${ANALYSIS_SNAP_WINDOW_MS}ms以内の実onsetが見つかったもの)`);
 info(`revision: ${existingMaster?.revision ?? '(新規)'} → ${nextRevision} (contentHash ${contentChanged ? '変化あり' : '変化なし'})`);
 info(`intro editorial blocks(0-${firstVocalMs}ms、${introShowsProfiles ? '7' : '4'}ブロック構成):`);
 for (const b of master.editorialBlocks) info(`  ${b.blockId}: ${b.startMs}ms-${b.endMs}ms (${(b.endMs - b.startMs) / 1000}s) "${b.textLines.join(' / ')}"`);
