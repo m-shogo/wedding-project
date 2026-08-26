@@ -6,6 +6,8 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const capture = fs.readFileSync(path.join(root, "src/data/typeOnRhythmDaVinciEvidenceCapture.ts"), "utf8");
 const gate = fs.readFileSync(path.join(root, "src/data/typeOnRhythmDaVinciPromotionGate.ts"), "utf8");
 const actual = fs.readFileSync(path.join(root, "src/data/typeOnRhythmDaVinciActualArtifact.ts"), "utf8");
+const panel = fs.readFileSync(path.join(root, "src/components/TypeOnRhythmDaVinciEvidencePanel.tsx"), "utf8");
+const selector = fs.readFileSync(path.join(root, "src/components/TypographyProductionRouteSelector.tsx"), "utf8");
 const routing = fs.readFileSync(path.join(root, "src/data/typographySceneProductionRouting.ts"), "utf8");
 const errors = [];
 const requireText = (source, token, message) => { if (!source.includes(token)) errors.push(message); };
@@ -57,6 +59,31 @@ for (const token of [
   'productionReady: false',
 ]) requireText(actual, token, `Type-on-rhythm Actual honesty contract missing: ${token}`);
 
+for (const token of [
+  'createTypeOnRhythmDaVinciActualArtifact',
+  'createTypeOnRhythmDaVinciEvidenceCaptureTemplate',
+  'parseTypeOnRhythmDaVinciEvidenceCapture',
+  'evaluateTypeOnRhythmDaVinciEvidenceCapture',
+  'assessTypeOnRhythmDaVinciPromotionEligibility',
+  'Type on Rhythm / word-level Follower Actual',
+  'Follower unit: WORDS expected',
+  'Actual JSONを書き出す',
+  'Readback template',
+  'Readback取込',
+  'Readback rejected:',
+  'Machine checks:',
+  'Live binding roles:',
+  'Visual QA: 1x',
+  'Promotion review:',
+  'Automatic promotion: NO / productionReady: NO',
+]) requireText(panel, token, `Type-on-rhythm evidence UI missing: ${token}`);
+
+for (const token of [
+  'TypeOnRhythmDaVinciEvidencePanel',
+  'selection?.patternId === "type-type-on-rhythm"',
+  '<TypeOnRhythmDaVinciEvidencePanel scene={scene} selection={selection} />',
+]) requireText(selector, token, `Typography route selector missing type-on-rhythm evidence wiring: ${token}`);
+
 requireText(
   routing,
   '"type-type-on-rhythm",\n    "word-stagger",\n    "DAVINCI_TRANSLATION_NOT_IMPLEMENTED"',
@@ -75,4 +102,4 @@ if (errors.length) {
   for (const error of errors) console.error(`- ${error}`);
   process.exit(1);
 }
-console.log("Type-on-rhythm DaVinci Evidence contracts OK: blank Mac Actual capture starts NOT_RUN, requires explicit WORDS unit plus eight live binding roles, rejects stale/mismatched evidence, evaluates canonical readback without changing Scene authority, and only becomes eligible for a separate human promotion review after machine checks, bindings, 1x/half-speed QA and review timestamp are complete.");
+console.log("Type-on-rhythm DaVinci Evidence contracts OK: Dashboard exports a bounded Actual JSON and blank readback template only for the selected word-stagger route, requires explicit WORDS unit plus eight live binding roles, rejects stale/mismatched evidence, evaluates canonical readback and visual QA without changing Scene authority, displays promotion blockers, and never upgrades production routing automatically.");
