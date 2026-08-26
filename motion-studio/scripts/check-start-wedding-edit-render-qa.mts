@@ -34,12 +34,22 @@ if (files.length !== 6) {
   process.exit(1);
 }
 
+// 意図的な静止・余白として許可する区間(絶対秒、[startSec, endSec])。
+// ここに無い3秒以上の完全静止だけを「unexpected freeze」として不具合扱いする。
+// QAを通すためだけに演出意図の無い揺れ(sine wobble等)を足す代わりに、
+// 本当に静止させたい区間はここへ明示登録する運用にする(2026-08-26)。
+const INTENTIONAL_HOLD_RANGES: Array<{startSec: number; endSec: number; reasonJa: string}> = [];
+
+const isIntentionalHold = (freezeStartSec: number, freezeEndSec: number): boolean =>
+  INTENTIONAL_HOLD_RANGES.some((r) => freezeStartSec >= r.startSec - 0.5 && freezeEndSec <= r.endSec + 0.5);
+
 const errors: string[] = [];
 const warnings: string[] = [];
+const intentionalHoldsFound: string[] = [];
 
 const ffprobe = (args: string[]) => execFileSync('ffprobe', args, {encoding: 'utf-8'}).trim();
 
-console.log(`検査対象: out/start-wedding-edit (期待duration ${expectedDuration}s)\n`);
+console.log(`検査対象: out/start-wedding-edit (期待duration ${expectedDuration}s = candidateEndSec。verifiedByListening=${editRange.verifiedByListening}、確定ではない)\n`);
 
 const sceneCounts: Record<string, number> = {};
 
@@ -91,20 +101,37 @@ for (const f of files) {
   line.push(`black ${black}`);
   if (black > 0) errors.push(`${f}: 0.4秒以上の黒frameが${black}箇所`);
 
-  const freeze = (() => {
+  // freezedetectの生ログからfreeze_start/freeze_durationのペアを抽出し、
+  // INTENTIONAL_HOLD_RANGESに含まれる区間は「意図的なhold」として区別する。
+  // 「常にpixelを変化させること」がQAの目的ではなく、意図しない静止・
+  // render停止だけを不具合として検出することが目的(既知の問題3への対応)。
+  const {unexpectedFreeze, intentionalHold} = (() => {
     try {
-      const r = execFileSync(
+      const raw = execFileSync(
         'sh',
-        ['-c', `ffmpeg -i "${path}" -vf "freezedetect=n=-45dB:d=3.0" -an -f null - 2>&1 | grep -c freeze_start || true`],
+        ['-c', `ffmpeg -i "${path}" -vf "freezedetect=n=-45dB:d=3.0" -an -f null - 2>&1 | grep -E "freeze_start|freeze_duration" || true`],
         {encoding: 'utf-8'},
       );
-      return Number(r.trim() || '0');
+      const starts = [...raw.matchAll(/freeze_start:\s*([\d.]+)/g)].map((m) => Number(m[1]));
+      const durations = [...raw.matchAll(/freeze_duration:\s*([\d.]+)/g)].map((m) => Number(m[1]));
+      let unexpected = 0;
+      let intentional = 0;
+      starts.forEach((s, i) => {
+        const d = durations[i] ?? 0;
+        if (isIntentionalHold(s, s + d)) {
+          intentional++;
+          intentionalHoldsFound.push(`${f}: ${s.toFixed(1)}s-${(s + d).toFixed(1)}s(意図的hold)`);
+        } else {
+          unexpected++;
+          errors.push(`${f}: unexpected freeze ${s.toFixed(1)}s-${(s + d).toFixed(1)}s(3秒以上の完全静止。INTENTIONAL_HOLD_RANGESに無い)`);
+        }
+      });
+      return {unexpectedFreeze: unexpected, intentionalHold: intentional};
     } catch {
-      return 0;
+      return {unexpectedFreeze: 0, intentionalHold: 0};
     }
   })();
-  line.push(`freeze3s ${freeze}`);
-  if (freeze > 0) errors.push(`${f}: 3秒以上の完全静止が${freeze}箇所`);
+  line.push(`freeze3s unexpected=${unexpectedFreeze} intentional=${intentionalHold}`);
 
   const scenes = (() => {
     try {
@@ -139,6 +166,10 @@ if (cleanScenes.length === 3) {
 }
 
 console.log('');
+if (intentionalHoldsFound.length) {
+  console.log('意図的hold(不具合として扱わない):');
+  intentionalHoldsFound.forEach((h) => console.log(`  ${h}`));
+}
 warnings.forEach((w) => console.warn(`⚠️  ${w}`));
 if (errors.length) {
   errors.forEach((e) => console.error(`❌ ${e}`));
