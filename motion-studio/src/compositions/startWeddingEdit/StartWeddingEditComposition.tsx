@@ -7,7 +7,8 @@ import {ShotRenderer} from '../../motion-kit/start129/shotEngine';
 import {WeddingLyricTrack, weddingLyricFallbackByPhraseId} from '../../motion-kit/startWeddingEdit/weddingLyricLine';
 import {ChoreographedMomentRenderer, isChoreographedForVariant} from '../../motion-kit/startWeddingEdit/choreographedMoments';
 import {buildGenericWordImpactEvents} from '../../data/startWeddingEdit/choreography';
-import {TitleSequenceA, TitleSequenceB, TitleSequenceC} from './TitleOpenA_B_C';
+import {TitleSequenceA, TitleSequenceC} from './TitleOpenA_B_C';
+import {IntroNarrativeB} from './IntroNarrativeB';
 import {InterludeOverlay} from './InterludeOverlay';
 
 export type StartWeddingEditCompositionProps = {
@@ -49,9 +50,12 @@ const GuideDebugCard: React.FC<{phraseId: string; wordsLine: string; children: R
   );
 };
 
+// B案の冒頭は既知の問題への対応としてIntroNarrativeB(ようこそ→タグライン→
+// (紹介)→S→StaRt)へ置き換えた。A/Cは「B完成後」の方針(既知の問題5)により
+// 既存のTitleSequenceA/Cのまま変更しない。
 const TITLE_BY_VARIANT: Record<WeddingVariant, React.FC> = {
   A: TitleSequenceA,
-  B: TitleSequenceB,
+  B: IntroNarrativeB,
   C: TitleSequenceC,
 };
 
