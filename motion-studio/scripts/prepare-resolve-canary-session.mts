@@ -145,8 +145,15 @@ try {
   const nextAction = blocked
     ? manifest.nextAction
     : `Open Resolve manually, create/confirm a disposable project, capture exact live runtime identity, then execute ${canaryId} using plan.md and record only observed values in evidence.json.`;
+  const sessionGuardrails = Array.from(new Set([
+    'SESSION_PREPARED != RESOLVE_EXECUTED',
+    'SESSION_READY != CANARY_PASS',
+    'MANIFEST_PREPARED != RUNTIME_EXECUTED',
+    'EXECUTION_ID_MUST_NOT_OVERWRITE_PRIOR_EVIDENCE',
+    ...manifest.guardrails,
+  ]));
 
-  const runInstructions = `# Resolve Canary Session — ${canaryId}\n\nExecution ID: \`${executionId}\`  \nStatus: **${status}**  \nPrepared at: ${new Date().toISOString()}\n\n## Files\n\n- Canary plan: \`plan.md\`\n- Hydrated evidence: \`evidence.json\`\n- Session metadata: \`session.json\`\n- Input manifest: \`${preparation.manifestPath}\`\n\n## Next action\n\n${nextAction}\n\n## Runtime boundary\n\nThis session builder did **not** launch DaVinci Resolve.\n\nBefore any Resolve mutation:\n\n1. use a disposable project/timeline\n2. confirm the real wedding Opening/Profile project is not the target\n3. capture exact live product/version/edition/platform\n4. follow \`plan.md\` step by step\n5. edit \`evidence.json\` only with values actually observed\n6. keep unavailable values null / NOT_RUN / BLOCKED / FAIL\n7. re-run the semantic validator after material evidence edits\n\nValidator:\n\n\`\`\`bash\nnode --no-warnings scripts/validate-resolve-canary-evidence.mts ${toMotionRelative(evidencePath)}\n\`\`\`\n\n## Guardrails\n\n- SESSION_PREPARED != RESOLVE_EXECUTED\n- SESSION_READY != CANARY_PASS\n- MANIFEST_PREPARED != RUNTIME_EXECUTED\n- one execution ID must never overwrite prior evidence\n- do not promote canonical policy from one successful execution\n`;
+  const runInstructions = `# Resolve Canary Session — ${canaryId}\n\nExecution ID: \`${executionId}\`  \nStatus: **${status}**  \nPrepared at: ${new Date().toISOString()}\n\n## Files\n\n- Canary plan: \`plan.md\`\n- Hydrated evidence: \`evidence.json\`\n- Session metadata: \`session.json\`\n- Input manifest: \`${preparation.manifestPath}\`\n\n## Next action\n\n${nextAction}\n\n## Runtime boundary\n\nThis session builder did **not** launch DaVinci Resolve.\n\nBefore any Resolve mutation:\n\n1. use a disposable project/timeline\n2. confirm the real wedding Opening/Profile project is not the target\n3. capture exact live product/version/edition/platform\n4. follow \`plan.md\` step by step\n5. edit \`evidence.json\` only with values actually observed\n6. keep unavailable values null / NOT_RUN / BLOCKED / FAIL\n7. re-run the semantic validator after material evidence edits\n\nValidator:\n\n\`\`\`bash\nnode --no-warnings scripts/validate-resolve-canary-evidence.mts ${toMotionRelative(evidencePath)}\n\`\`\`\n\n## Guardrails\n\n${sessionGuardrails.map((guardrail) => `- ${guardrail}`).join('\n')}\n\n- do not promote canonical policy from one successful execution\n`;
   writeFileSync(runInstructionsPath, runInstructions, 'utf8');
 
   const session = resolveCanarySessionSchema.parse({
@@ -168,13 +175,7 @@ try {
       runInstructions: toMotionRelative(runInstructionsPath),
     },
     nextAction,
-    guardrails: Array.from(new Set([
-      'SESSION_PREPARED != RESOLVE_EXECUTED',
-      'SESSION_READY != CANARY_PASS',
-      'MANIFEST_PREPARED != RUNTIME_EXECUTED',
-      'EXECUTION_ID_MUST_NOT_OVERWRITE_PRIOR_EVIDENCE',
-      ...manifest.guardrails,
-    ])),
+    guardrails: sessionGuardrails,
   });
   writeFileSync(sessionJsonPath, `${JSON.stringify(session, null, 2)}\n`, 'utf8');
 
