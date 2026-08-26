@@ -4,6 +4,8 @@
 状態: 実装済み(canonical data + UI + verifier)。Runtime検証は未実施。
 関連: `movie-dashboard/src/data/palmierDavinciHandoffFidelity.ts`, `movie-dashboard/src/data/maskRevealHandoffFidelity.ts`, `movie-dashboard/src/components/MaskRevealSceneHandoffCard.tsx`, `docs/research/2026-08-26-movie-tool-learning-run-01.md`, `docs/research/2026-08-26-movie-tool-learning-run-02.md`
 
+> **Run 33 correction (2026-08-26):** このDecisionの旧版には「ローカル無料版DaVinci Resolve 21.0.4を確認した」という追記があったが、その観測を裏付ける再現可能なruntime evidenceはrepoに保存されておらず、Blackmagic Designの現行Support Centerが示す最新Resolve 21配布は21.0.3 (2026-07-22)である。したがって旧21.0.4観測はCurrent authorityから撤回する。現在は`targetPatch=21.0.3`をplanning baselineとし、`testedPatch`はActual Canaryがlive runtime identityを記録するまで未設定とする。
+
 ## 背景
 
 `docs/research/2026-08-26-movie-tool-learning-run-01.md` / `-02.md` は、Palmierの実exporterソース(`FCPXMLExporter.swift`)とDaVinci Resolve 21公式資料を根拠に、「PalmierからDaVinciへ何が転送され、何が失われ、失われたものをどう復元できるか」を評価した研究記録。ユーザーの指示で、この知見を研究docのまま放置せず、モーション図鑑が実際に使えるCanonical data・UI・Adapter・Verifierへ昇格した。
@@ -42,25 +44,51 @@ Resolveのversionが上がった場合も、影響を受けたproperty recordだ
 - `.setting` / `.drfx` / Fusion comp / Python / Luaによる自動再構築の**実装コード自体はまだ書いていない**。`buildCodexRebuildInstruction`はCodexへの指示テンプレートを生成するだけで、Fusion compを実際に生成するジェネレーターではない。
 - Mask Reveal以外のMotion Pattern(35件)への適用は未実施。Mask Reveal以外はまだHuman Master Sceneを持たないため、紐付ける対象がない。
 
-## 追記(2026-08-26): ローカル環境はDaVinci Resolve無料版で、外部scriptingが使えない
+## Run 33 correction: 旧「ローカル21.0.4観測」の扱い
 
-この開発環境にDaVinci Resolveがインストールされたため実接続を試みたところ、以下を確認した。
+このDecisionの旧版には、ローカル環境について次のような観測メモがあった。
 
-- インストールされているのは`DaVinci Resolve.app`(無料版)21.0.4。Studio版ではない(画面左下の表記も「DaVinci Resolve 21」でStudio表記なし)。
-- Python API(`DaVinciResolveScript.scriptapp('Resolve')`)は接続失敗(`None`)。
-- 環境設定(System/User双方の全パネル)を実際に開いて確認したが、「外部からのスクリプトを使用(External scripting using)」設定項目自体が存在しない。
-- Resolveのログ(`davinci_resolve.log`)にスクリプトサーバー関連の記録が一切ない。
-- Web検索で確認: **Resolve 19.1(2024年11月)以降、外部scripting interfaceはStudio版限定機能になり、無料版では動作しなくなった**。意図的な機能制限であり、今後の無料版アップデートで復活する見込みも無い。
+- `DaVinci Resolve.app`無料版21.0.4と判断した
+- Python API接続が`None`
+- External scripting設定項目が見つからない
+- その結果、無料版では外部scriptingを使えないと判断した
 
-**影響**: このレジストリが`AUTO_REBUILD` / `GENERATED_ARTIFACT`として記述している経路(`ImportFusionComp()`等のResolve scripting API経由の自動再構築)は、**この開発環境のResolveでは実行不可能**。これは新しいproperty分類の変更ではなく、「この環境固有のcapability制約」として区別する。
+しかし、これらを同一executionとして再現可能にするSession/evidence/runtime identity captureがrepoに保存されていない。さらに、2026-08-26時点のBlackmagic Design Support Centerが示す最新Resolve 21配布は21.0.3であり、21.0.4の公式配布根拠を確認できない。
 
-- Resolve scripting APIの一般的な存在自体(公式ドキュメントに書かれている内容)は引き続き正しい。
-- ただし「このマシンのこのRoseolveで実際にAUTO_REBUILDを試せるか」は`UNKNOWN`(Studio版でのみ再検証可能)。
-- GUI手動操作(Text+ / Fusion / Rectangle Mask等)によるMask Reveal Actual Vertical Sliceの構築自体は、スクリプト不要のため引き続き可能(`docs/runbooks/2026-08-25-mask-reveal-local-davinci-actual-gate.md`のPhase 6が元々想定していたfallback経路)。ユーザーの指示により、この作業は一旦保留し、モーション図鑑カタログ側の作業へ戻った。
+したがって今後は:
+
+```text
+OLD_LOCAL_NOTE != RUNTIME_EVIDENCE
+TARGET_PATCH != TESTED_PATCH
+DOCUMENTED_CURRENT_RELEASE != LOCAL_RUNTIME_IDENTITY
+```
+
+として扱う。
+
+旧メモから得た「Free/Studioやexternal scripting capabilityを実環境ごとに確認する」という教訓自体は維持するが、**21.0.4というversion値やFree版scripting制約を、その旧メモだけでCurrent Runtime Verifiedへ昇格しない**。
+
+Actualでは必ず:
+
+1. immutable Canary Sessionを先に作る
+2. live Resolve product/version/edition/platformを記録する
+3. そのexact runtimeでcapabilityを観測する
+4. evidence validatorを通す
+5. 独立execution countを満たすまでcanonical promotionしない
+
+という順序を使う。
+
+## 現在のversion authority
+
+- Resolve planning target: `21.0.3`
+- Resolve tested patch: `null` / Actual待ち
+- exact installed local runtime: Actual Canaryで再取得するまで未確定
+
+`resolveHandoffPolicy.ts`もこの区別をmachine-readableに保持する。
 
 ## 次にやるべきこと(優先順位)
 
-1. Studio版DaVinci Resolveが利用可能になったら、`docs/research/2026-08-26-movie-tool-learning-run-01.md`が提案する`lost-rebuild-01` Canary(5〜8秒の合成Scene)を実際にPalmier→DaVinciで実行し、初めて`RUNTIME_VERIFIED`なrecordを1件作る。
-2. Canaryが2回再現してから、該当propertyだけ`evidenceState: "RUNTIME_VERIFIED"`へ昇格する(1回の成功では不十分、既存ルールに準拠)。
-3. Fusion compの実際のgenerator(`.setting`出力)をCodexで試作し、`capabilityTrust`を`GENERATED_ARTIFACT`→`VERIFIED_WRITE`へ動かせるか検証する。
-4. Mask Reveal以外のPatternがHuman Master Sceneを持つようになったら、同じ`maskRevealHandoffFidelity.ts`のパターンを横展開する。
+1. まず現在インストールされているResolveで`docs/prompts/2026-08-26-resolve21-lottie-drfx-local-actual-agent.md`を使い、live runtime identityを取得してLottie/DRFX Actualを実行する。Free/Studioやpatchは事前推測せず観測値を保存する。
+2. 実Palmier exportが利用できるローカル環境で`DV21-PALMIER-FCPXML-01`をunblockし、clean Resolve import/readbackを実行する。
+3. Canaryが2回再現してから、該当propertyだけ`evidenceState: "RUNTIME_VERIFIED"`相当へ昇格する(1回の成功では不十分、既存ルールに準拠)。
+4. Studio scriptingが必要なrecipeは、actual edition/runtimeがそのsurfaceを本当に提供する場合だけ別Canaryで検証する。
+5. Mask Reveal以外のPatternがHuman Master Sceneを持つようになったら、同じ`maskRevealHandoffFidelity.ts`のパターンを横展開する。
