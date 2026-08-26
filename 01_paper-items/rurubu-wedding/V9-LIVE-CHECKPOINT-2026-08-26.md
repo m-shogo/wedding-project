@@ -69,6 +69,32 @@ Story + Timeline received a separate movable `4 MOMENTS` editorial pill (`2619:9
 
 Final structure verification after this write confirmed all six production frames are still `794 × 1123`, visible, and contain exactly 22 current replaceable photo masks total. Rollback clones are hidden and excluded from that production count.
 
+### Drive parts staging continuation
+
+The V9 Drive source folder was opened through the connected Drive authority and actual generated files were fetched rather than inferred from filenames. Verified one-image-one-item candidates include:
+
+- Cafe & Table title — Drive id `1Ayx8DuUowqnB2x93E-m3dqVq0zZHIan4`
+- Wedding Guide title — Drive id `1XH5xBKL7heox5YfDolc1i9y8d3p4cc4R`
+- Timeline title — Drive id `1ukg7Hmj8mkDVJGA-tTs6gqSM-LLAg3Fm`
+- Message title — Drive id `1NbIe93cPeKafbSl5syaj9ATJGmPmvBJM`
+- Goal/reference sheet — Drive id `17_XsnVTZpDSdEVn_lxaNd_mIjlDWPNxq`
+
+Before staging, live Figma was re-resolved by exact V9 page name and Back, Story/Timeline, and 1DAY/Cafe were whole-page screenshot reviewed. Hidden rollback clones were then created before this Drive-parts pass:
+
+- Back rollback — `2621:2`
+- Story rollback — `2621:30`
+- 1DAY rollback — `2621:65`
+
+A dedicated side-by-side comparison frame was created at page level as `V9 / REFERENCE / DRIVE GOAL + PARTS 2026-08-26` (`2621:111`) with reference-image slot `2621:112`. Production pages received separate movable Drive-asset slots without changing any photo mask:
+
+- Back `WEDDING GUIDE` asset slot — `2621:113`
+- Story `TIMELINE` asset slot — `2621:114`
+- 1DAY `CAFE & TABLE` asset slot — `2621:115`
+
+These slots are separate scene nodes; they do not flatten pages and do not replace or merge with photo masks.
+
+The source files were downloaded from Drive and visually inspected before transport. The Cafe/Table, Wedding Guide, and Timeline files are individual transparent PNG title/decorations, while the `02_42_21` sheet is a multi-item goal/reference board and must remain reference-only.
+
 ## Failure learning
 
 `get_metadata` top-level page listing did not expose the existing V9 page, even though exact-name resolution inside `use_figma` returned page id `2601:2` with all six frames. Therefore:
@@ -81,10 +107,17 @@ Generated image transport learning:
 
 The direct MCP asset upload path also hit DNS resolution failure from the execution environment, so the failed route was not blindly retried.
 
+Additional Drive-parts transport evidence from the staging continuation:
+
+> `upload_assets` successfully issued a Figma MCP submit URL, but the execution container could not resolve `mcp.figma.com`, so no upload POST reached Figma. A compact WebP derivative was rejected by `figma.createImage` as unsupported. A compact true-color RGBA PNG returned an image hash, but screenshot QA of the asset node rendered blank/transparent. A compact JPEG derivative was also rejected as unsupported in this Plugin execution path. Therefore none of these preview transports is allowed to replace the native fallback title yet.
+
+> The correct response is to preserve the Drive master IDs, keep the separate V9 asset slots and rollbacks, and retry through a transport route only when screenshot QA proves real pixels are present. Never hide the existing readable native title because a node or image hash exists.
+
 ## Next pass
 
+- Keep the `2621:111` reference board next to production and populate it with the Drive goal sheet once a verified pixel transport path is available.
+- Populate `2621:113` / `2621:114` / `2621:115` with the verified Drive masters only after screenshot QA confirms rendering; native readable titles remain the fallback until then.
 - Continue actual-size QA across all six as a set, especially Profile typography and bottom-edge safety.
 - Prefer one-image-one-item generated assets from the V9 Drive source folder as separate movable layers, but only mark them placed after screenshot QA proves they render.
-- Use the original transparent/true-color asset path or another verified transport route instead of the indexed-PNG derivative that rendered blank.
 - Increase Rurubu-like information density only where it improves reading order; do not fill space mechanically.
 - Keep photos independently replaceable and never flatten complete pages.
