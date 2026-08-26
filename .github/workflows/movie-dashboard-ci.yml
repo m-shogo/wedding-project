@@ -64,6 +64,9 @@ jobs:
       - name: Typography DaVinci Actual session contracts
         run: node scripts/verify-typography-davinci-actual-session-contracts.mjs
 
+      - name: Typography DaVinci Human promotion review contracts
+        run: node scripts/verify-typography-davinci-human-promotion-review-contracts.mjs
+
       - name: Baseline Hop DaVinci contracts
         run: node scripts/verify-baseline-hop-davinci-contracts.mjs
 
