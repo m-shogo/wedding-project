@@ -108,9 +108,47 @@ This gives the current dummy-photo build the same production contract intended f
 
 A pair-by-pair verification confirmed all 22 frame overlays have geometry matching their photo layer exactly and are later in z-order than the corresponding photo. Whole-page screenshot QA on all six pages confirmed no visible regression after normalization.
 
+## 2026-08-26 17H Story generated-part fallback + design-complete QA
+
+The live V9 Story page was re-read and a new transport route was tested using a tiny true-color RGBA PNG represented as a direct `Uint8Array`, bypassing both base64 decoding and the blocked `mcp.figma.com` upload host.
+
+- Figma accepted the bytes and returned `imageHash=fe24b5b5c9c3265bbd356147328ed4af45f65192` on separate image node `2675:84`.
+- Screenshot QA of that node did **not** prove valid rendered pixels; it rendered effectively blank/black and did not appear on the Story whole-page screenshot.
+- The node was therefore renamed `FAILED_RENDER / V9 GENERATED TIMELINE / KEEP FOR EVIDENCE` and hidden. It is not part of visible production.
+- A fresh hidden rollback was preserved before replacement work.
+- The plain editable `TIMELINE` heading was replaced with a fully editable native Rurubu-style sticker composed of separate cyan / white / pink layers, white `TIMELINE` text, and a small yellow sparkle. The native sticker parts are `2676:85`–`2676:89` and remain separate movable layers.
+- A tiny duplicate year-range label was removed after screenshot QA because it competed with the `FIRST MEET` chip.
+
+A new publication-wide final design/dummy-content QA was then run against all six live production frames.
+
+Verified live state:
+
+- six visible A4 production frames, each exactly `794 × 1123`;
+- photo masks: `4 / 3 / 2 / 2 / 6 / 5 = 22`;
+- separate photo-frame overlays: `4 / 3 / 2 / 2 / 6 / 5 = 22`;
+- zero visible direct-child overflow;
+- zero visible missing-font nodes;
+- zero visible text nodes below 9.5 px;
+- zero visible node names containing `PLACEHOLDER`, `DUMMY`, `TEMP`, or `FAILED_RENDER`;
+- the failed Timeline image test remains hidden;
+- the old native Timeline title remains hidden as rollback/fallback evidence;
+- the new native Story Timeline sticker is visible;
+- no page is flattened and all 22 photo crops remain independently replaceable;
+- hidden V9 rollback snapshots remain available outside production.
+
+### Current completion boundary
+
+The **V9 design / dummy-content production is complete enough to freeze as the current visual master**. Remaining work is not another layout-generation pass; it is content/print finalization:
+
+1. replace dummy photos with the final legitimate photo set without changing mask geometry;
+2. replace dummy editorial copy where final wording is required;
+3. swap native fallback frame overlays for Drive decorative frame PNGs only if a transport route is proven by screenshot rendering;
+4. apply the actual printer trim/bleed/safe template and run export/preflight/effective-resolution QA;
+5. make a physical or printer proof before calling the piece printer-ready.
+
 ## QA evidence
 
-Whole-page screenshots were regenerated for the current Cover, Back, Profile, Story, Memory, and 1DAY production frames after the 15H changes and again after frame-overlay normalization.
+Whole-page screenshots were regenerated for the current Cover, Back, Profile, Story, Memory, and 1DAY production frames after the 15H changes, after frame-overlay normalization, and after the 17H Story Timeline sticker refinement.
 
 The latest publication-wide structural QA verified:
 
@@ -121,12 +159,12 @@ The latest publication-wide structural QA verified:
 - all photo-mask visible strokes have been moved to those independent overlay layers rather than baked into the photo layer;
 - no visible direct child overflows its A4 frame;
 - no visible text node has a missing font;
-- no visible production node name contains `PLACEHOLDER`, `DUMMY`, or `TEMP`;
+- no visible production node name contains `PLACEHOLDER`, `DUMMY`, `TEMP`, or `FAILED_RENDER`;
 - no visible text is below 9.5 px after the latest legibility pass;
 - no page was flattened and all photo masks remain independently replaceable;
 - rollback snapshots remain hidden and outside current production frames.
 
-This is a strong `DESIGN / DUMMY-CONTENT QA` checkpoint, not final printer-ready evidence. Final photo selection, legitimate final copy, exact printer bleed/trim/safe template, export preflight, effective image resolution, and physical proof are still separate gates.
+This is now the frozen `DESIGN / DUMMY-CONTENT VISUAL MASTER` checkpoint, not final printer-ready evidence. Final photo selection, legitimate final copy, exact printer bleed/trim/safe template, export preflight, effective image resolution, and physical proof are still separate gates.
 
 ## Failure learning retained
 
@@ -138,11 +176,13 @@ A Figma helper in the 13H pass initially assumed six-digit hex and received `#ff
 
 The 15H transport test reconfirmed two distinct external failure fingerprints: `base64Decode: Invalid base64 string` and runtime DNS failure for `mcp.figma.com`. These routes must not be looped repeatedly without a changed transport condition.
 
+The 17H direct-byte test adds a third distinct failure fingerprint: `figma.createImage(Uint8Array)` can return an image hash and create a node while screenshot QA still shows no usable rendered pixels. `imageHash exists` is therefore explicitly not accepted as asset-placement success.
+
 ## Next pass
 
-- Continue using the Drive folder as the visual/asset authority; inspect and place one-image-one-item assets only through a transport route proven to render.
+- Treat the current six-page V9 as the frozen design/dummy-content visual master; do not add decorative filler just to keep iterating.
+- Continue using the Drive folder as the visual/asset authority for final photo/frame/title swaps.
 - When V9 decorative frame PNG transport becomes available, replace the matching `FRAME_OVERLAY / ... / NATIVE FALLBACK` layer only; keep each underlying replaceable photo crop intact.
-- Keep goal/reference imagery beside the production set for side-by-side comparison rather than flattening it into production.
-- Replace dummy photos later without changing the mask geometry or the editorial layer structure.
+- Replace dummy photos later without changing the mask geometry or editorial layer structure.
 - When printer/template information is available, run true trim/bleed/safe-area and export/preflight QA rather than treating the current 25 px working margin as a printer specification.
 - Do not touch Passport, Boarding Pass, 青春ふたりきっぷ, ADD items, or V6/V7/V8 controls.
