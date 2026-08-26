@@ -46,7 +46,7 @@ permissions:
 jobs:
   validate-element-candidates:
     runs-on: ubuntu-latest
-    timeout-minutes: 22
+    timeout-minutes: 24
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -134,8 +134,11 @@ jobs:
             out/research/remotion-elements/type-on-rhythm \
             out/research/remotion-elements/word-punch \
             out/research/remotion-elements/tracking-burst \
-            out/research/remotion-elements/vertical-wipe
-          for slug in mask-reveal char-stagger type-on-rhythm word-punch tracking-burst vertical-wipe; do
+            out/research/remotion-elements/vertical-wipe \
+            out/research/remotion-elements/outline-fill \
+            out/research/remotion-elements/baseline-hop \
+            out/research/remotion-elements/triplet
+          for slug in mask-reveal char-stagger type-on-rhythm word-punch tracking-burst vertical-wipe outline-fill baseline-hop triplet; do
             node --no-warnings "scripts/build-${slug}-element-payload.mts"
             node --no-warnings "scripts/check-${slug}-element-payload.mts"
           done
@@ -157,6 +160,9 @@ jobs:
           import {WeddingWordPunchElement} from './word-punch/word-punch.element-source';
           import {WeddingTrackingBurstElement} from './tracking-burst/tracking-burst.element-source';
           import {WeddingVerticalWipeElement} from './vertical-wipe/vertical-wipe.element-source';
+          import {WeddingOutlineFillElement} from './outline-fill/outline-fill.element-source';
+          import {WeddingBaselineHopElement} from './baseline-hop/baseline-hop.element-source';
+          import {WeddingTypographyTripletElement} from './triplet/triplet.element-source';
 
           const Root = () => (
             <>
@@ -166,11 +172,14 @@ jobs:
               <Composition id="WeddingWordPunchElementCanary" component={WeddingWordPunchElement} width={1280} height={720} fps={30} durationInFrames={120} />
               <Composition id="WeddingTrackingBurstElementCanary" component={WeddingTrackingBurstElement} width={1280} height={720} fps={30} durationInFrames={120} />
               <Composition id="WeddingVerticalWipeElementCanary" component={WeddingVerticalWipeElement} width={1280} height={720} fps={30} durationInFrames={120} />
+              <Composition id="WeddingOutlineFillElementCanary" component={WeddingOutlineFillElement} width={1280} height={720} fps={30} durationInFrames={120} />
+              <Composition id="WeddingBaselineHopElementCanary" component={WeddingBaselineHopElement} width={1280} height={720} fps={30} durationInFrames={120} />
+              <Composition id="WeddingTypographyTripletElementCanary" component={WeddingTypographyTripletElement} width={1280} height={720} fps={30} durationInFrames={120} />
             </>
           );
           registerRoot(Root);
           EOF
-          for id in WeddingMaskRevealElementCanary WeddingCharStaggerElementCanary WeddingTypeOnRhythmElementCanary WeddingWordPunchElementCanary WeddingTrackingBurstElementCanary WeddingVerticalWipeElementCanary; do
+          for id in WeddingMaskRevealElementCanary WeddingCharStaggerElementCanary WeddingTypeOnRhythmElementCanary WeddingWordPunchElementCanary WeddingTrackingBurstElementCanary WeddingVerticalWipeElementCanary WeddingOutlineFillElementCanary WeddingBaselineHopElementCanary WeddingTypographyTripletElementCanary; do
             pnpm exec remotion render \
               out/research/remotion-elements/typography-elements-canary-entry.tsx \
               "$id" \
@@ -194,7 +203,7 @@ jobs:
             echo 'Expected runner-only candidate install to modify package.json';
             exit 1;
           }
-          echo 'typographyElementCount=6'
+          echo 'typographyElementCount=9'
           echo 'elementPayloadValidation=PASS_CANDIDATE_ONLY'
           echo 'interactiveSchemaStaticContract=PASS_CANDIDATE_ONLY'
           echo 'motionZukanRegistry=ELEMENT_CANDIDATE_ONLY'

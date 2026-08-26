@@ -16,6 +16,9 @@ const candidates = [
   ['type-word-punch', 'wedding/word-punch', 'word-punch'],
   ['type-tracking-burst', 'wedding/tracking-burst', 'tracking-burst'],
   ['type-vertical-wipe', 'wedding/vertical-wipe', 'vertical-wipe'],
+  ['type-outline-fill', 'wedding/outline-fill', 'outline-fill'],
+  ['type-baseline-hop', 'wedding/baseline-hop', 'baseline-hop'],
+  ['type-triplet', 'wedding/typography-triplet', 'triplet'],
 ].map(([patternId, slug, sourceDir]) => ({
   patternId,
   slug,

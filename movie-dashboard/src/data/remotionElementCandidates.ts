@@ -9,7 +9,7 @@ export interface RemotionElementCandidateRecord {
   patternId: string;
   readiness: RemotionElementReadiness;
   canonicalEngine: "TypographyRevealEngine";
-  canonicalMode: "mask" | "stagger" | "word-stagger" | "punch" | "tracking" | "vertical-wipe";
+  canonicalMode: "mask" | "stagger" | "word-stagger" | "punch" | "tracking" | "vertical-wipe" | "outline" | "hop" | "triplet";
   payloadSlug: string;
   builderScript: string;
   checkerScript: string;
@@ -60,6 +60,24 @@ export const remotionElementCandidates: RemotionElementCandidateRecord[] = [
     payloadSlug: "wedding/vertical-wipe", builderScript: "motion-studio/scripts/build-vertical-wipe-element-payload.mts", checkerScript: "motion-studio/scripts/check-vertical-wipe-element-payload.mts",
     editableFields, standaloneRenderCi: true, studioInstallActual: "NOT_RUN", studioControlReadbackActual: "NOT_RUN", productionDependencyPromoted: false,
     notes: "Run48。縦方向clip revealのcanonical modeをElement化。Mac Studio Actualは未実行。",
+  },
+  {
+    patternId: "type-outline-fill", readiness: "ELEMENT_CANDIDATE", canonicalEngine: "TypographyRevealEngine", canonicalMode: "outline",
+    payloadSlug: "wedding/outline-fill", builderScript: "motion-studio/scripts/build-outline-fill-element-payload.mts", checkerScript: "motion-studio/scripts/check-outline-fill-element-payload.mts",
+    editableFields, standaloneRenderCi: true, studioInstallActual: "NOT_RUN", studioControlReadbackActual: "NOT_RUN", productionDependencyPromoted: false,
+    notes: "Run49。輪郭線から塗りへ変わるcanonical outline modeをElement化。Mac Studio Actualは未実行。",
+  },
+  {
+    patternId: "type-baseline-hop", readiness: "ELEMENT_CANDIDATE", canonicalEngine: "TypographyRevealEngine", canonicalMode: "hop",
+    payloadSlug: "wedding/baseline-hop", builderScript: "motion-studio/scripts/build-baseline-hop-element-payload.mts", checkerScript: "motion-studio/scripts/check-baseline-hop-element-payload.mts",
+    editableFields, standaloneRenderCi: true, studioInstallActual: "NOT_RUN", studioControlReadbackActual: "NOT_RUN", productionDependencyPromoted: false,
+    notes: "Run49。軽いbounce着地のcanonical hop modeをElement化。Mac Studio Actualは未実行。",
+  },
+  {
+    patternId: "type-triplet", readiness: "ELEMENT_CANDIDATE", canonicalEngine: "TypographyRevealEngine", canonicalMode: "triplet",
+    payloadSlug: "wedding/typography-triplet", builderScript: "motion-studio/scripts/build-triplet-element-payload.mts", checkerScript: "motion-studio/scripts/check-triplet-element-payload.mts",
+    editableFields, standaloneRenderCi: true, studioInstallActual: "NOT_RUN", studioControlReadbackActual: "NOT_RUN", productionDependencyPromoted: false,
+    notes: "Run49。3-hit pulseのcanonical triplet modeをElement化。Mac Studio Actualは未実行。",
   },
 ];
 

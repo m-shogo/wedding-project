@@ -13,6 +13,9 @@ const expectedIds = [
   'type-word-punch',
   'type-tracking-burst',
   'type-vertical-wipe',
+  'type-outline-fill',
+  'type-baseline-hop',
+  'type-triplet',
 ];
 
 for (const path of [
