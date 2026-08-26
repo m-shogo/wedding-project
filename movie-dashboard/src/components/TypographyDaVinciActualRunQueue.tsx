@@ -4,6 +4,7 @@ import {
   typographyDaVinciSharedActualSteps,
   type TypographyDaVinciActualNextAction,
 } from "../data/typographyDaVinciActualRunPlan";
+import {TypographyDaVinciActualSessionImport} from "./TypographyDaVinciActualSessionImport";
 
 const ACTION_LABEL: Record<TypographyDaVinciActualNextAction, string> = {
   CAPTURE_EXISTING_LIVE_READBACK: "既存live実装のActual採取",
@@ -82,6 +83,8 @@ export function TypographyDaVinciActualRunQueue() {
       <p className="mt-2 border border-amber-200 dark:border-amber-800 p-2 text-[8px] leading-3 text-amber-800 dark:text-amber-200">
         manifestはPLAN_ONLY_NOT_ACTUAL_EVIDENCE。automaticPromotionAllowed=false / productionReady=false。全machine checks・required live bindings・1x/half-speed QAが揃っても、別Human promotion reviewなしでproductionへ自動昇格しません。
       </p>
+
+      <TypographyDaVinciActualSessionImport />
     </details>
   );
 }
