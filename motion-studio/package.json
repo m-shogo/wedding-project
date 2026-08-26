@@ -50,7 +50,7 @@
     "qa:start-129": "pnpm prepare:start-129 && node --no-warnings scripts/render-start-129-qa-stills.mts",
     "prepare:opening-v1": "pnpm sync:photos && pnpm check:opening-photos && pnpm opening:preflight",
     "dev:opening-v1": "pnpm prepare:opening-v1 && remotion studio src/index-opening-v1.ts",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "node --no-warnings scripts/ensure-generated-placeholder.mts && tsc --noEmit",
     "render": "node --no-warnings scripts/render.mts",
     "render:start-motion-reel": "remotion render src/index-start-motion-kit.ts StaRtMotionReelV1 out/motion-kit/start_motion_reel_v1.mp4",
     "render:director-recipe": "node --no-warnings scripts/render-director-recipe.mts",
