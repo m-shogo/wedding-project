@@ -1,5 +1,6 @@
 import {typographyProductionRoutes, type TypographyProductionPatternId} from "./typographySceneProductionRouting";
 import {getTypographyDaVinciRequiredBindingRoles} from "./typographyDaVinciPromotionPolicy";
+import {getTypographyDaVinciActualWorkflow} from "./typographyDaVinciActualWorkflowRegistry";
 
 export type TypographyDaVinciActualNextAction =
   | "CAPTURE_EXISTING_LIVE_READBACK"
@@ -14,6 +15,11 @@ export interface TypographyDaVinciActualRunItem {
   priority: number;
   nextAction: TypographyDaVinciActualNextAction;
   requiredBindingRoles: string[];
+  translatorFile: string | null;
+  actualArtifactFile: string;
+  evidenceCaptureFile: string;
+  verificationCommand: string;
+  evidenceAuthority: "EVIDENCE_ONLY";
   machineParityRequired: true;
   visualQaRequired: readonly ["1X", "HALF_SPEED"];
   reviewedAtRequired: true;
@@ -37,6 +43,7 @@ const priorityOrder: TypographyProductionPatternId[] = [
 
 export const typographyDaVinciSharedActualSteps = [
   "Open an isolated Mac Resolve sandbox; do not touch wedding production timelines.",
+  "Open the exact translator / Actual artifact / evidence capture files listed in this manifest instead of re-discovering the workflow.",
   "Apply the routed implementationId and record the exact live tool/input identities.",
   "Capture raw Resolve readback before normalizing units or coordinates.",
   "Compare the readback against the canonical TypographyRevealEngine translator output.",
@@ -44,6 +51,7 @@ export const typographyDaVinciSharedActualSteps = [
   "Review the rendered motion at 1x speed.",
   "Review the rendered motion at half speed to expose timing/easing defects.",
   "Record reviewedAt from the real human review session.",
+  "Run the listed verificationCommand after saving evidence.",
   "Keep automaticPromotionAllowed=false and productionReady=false until a separate human promotion review.",
 ] as const;
 
@@ -54,6 +62,7 @@ export const typographyDaVinciActualRunPlan: TypographyDaVinciActualRunItem[] = 
 
   const requiredBindingRoles =
     route.patternId === "type-mask-reveal" ? [] : getTypographyDaVinciRequiredBindingRoles(route.patternId);
+  const workflow = route.patternId === "type-mask-reveal" ? null : getTypographyDaVinciActualWorkflow(route.patternId);
   const nextAction: TypographyDaVinciActualNextAction = route.actualVerified
     ? "HUMAN_PROMOTION_REVIEW"
     : route.liveImplementationAvailable
@@ -69,6 +78,11 @@ export const typographyDaVinciActualRunPlan: TypographyDaVinciActualRunItem[] = 
     priority: priorityOrder.indexOf(route.patternId) + 1,
     nextAction,
     requiredBindingRoles,
+    translatorFile: workflow?.translatorFile ?? null,
+    actualArtifactFile: workflow?.actualArtifactFile ?? "src/data/maskRevealSceneProductionBundle.ts",
+    evidenceCaptureFile: workflow?.evidenceCaptureFile ?? "src/data/maskRevealDaVinciAppliedEvidence.ts",
+    verificationCommand: workflow?.verificationCommand ?? "pnpm check:mask-reveal-davinci-applied-evidence",
+    evidenceAuthority: "EVIDENCE_ONLY",
     machineParityRequired: true,
     visualQaRequired: ["1X", "HALF_SPEED"],
     reviewedAtRequired: true,
@@ -78,7 +92,7 @@ export const typographyDaVinciActualRunPlan: TypographyDaVinciActualRunItem[] = 
     rule:
       route.patternId === "type-mask-reveal"
         ? "既存live実装は存在するが、Mac Resolve applied-value/readback/render evidenceを実測するまでActual PASSへ昇格しない。"
-        : "translatorとbounded evidence workflowの存在はActual成功ではない。Mac Resolveでraw readback、全required bindings、canonical parity、1x/half-speed QAを実証する。",
+        : "translatorとbounded evidence workflowの存在はActual成功ではない。manifest記載の正本ファイルを使い、Mac Resolveでraw readback、全required bindings、canonical parity、1x/half-speed QAを実証する。",
   };
 });
 
@@ -104,6 +118,7 @@ export function buildTypographyDaVinciActualRunManifest(
     items: typographyDaVinciActualRunPlan.map((item) => ({...item, requiredBindingRoles: [...item.requiredBindingRoles]})),
     guardrails: [
       "MANIFEST_GENERATED != MAC_ACTUAL_RUN",
+      "WORKFLOW_FILE_LISTED != WORKFLOW_EXECUTED",
       "TRANSLATOR_READY != LIVE_BINDING_VERIFIED",
       "VISIBLE_EFFECT != REQUIRED_BINDINGS_PROVEN",
       "MACHINE_GATE_ELIGIBLE != HUMAN_PROMOTED",
