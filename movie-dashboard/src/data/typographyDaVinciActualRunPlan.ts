@@ -82,5 +82,39 @@ export const typographyDaVinciActualRunPlan: TypographyDaVinciActualRunItem[] = 
   };
 });
 
+export interface TypographyDaVinciActualRunManifestV1 {
+  schemaVersion: "typography-davinci-actual-run-manifest/v1";
+  authority: "PLAN_ONLY_NOT_ACTUAL_EVIDENCE";
+  generatedAt: string;
+  target: "MAC_DAVINCI_RESOLVE_ACTUAL";
+  sharedSteps: readonly string[];
+  items: TypographyDaVinciActualRunItem[];
+  guardrails: readonly string[];
+}
+
+export function buildTypographyDaVinciActualRunManifest(
+  generatedAt = new Date().toISOString(),
+): TypographyDaVinciActualRunManifestV1 {
+  return {
+    schemaVersion: "typography-davinci-actual-run-manifest/v1",
+    authority: "PLAN_ONLY_NOT_ACTUAL_EVIDENCE",
+    generatedAt,
+    target: "MAC_DAVINCI_RESOLVE_ACTUAL",
+    sharedSteps: typographyDaVinciSharedActualSteps,
+    items: typographyDaVinciActualRunPlan.map((item) => ({...item, requiredBindingRoles: [...item.requiredBindingRoles]})),
+    guardrails: [
+      "MANIFEST_GENERATED != MAC_ACTUAL_RUN",
+      "TRANSLATOR_READY != LIVE_BINDING_VERIFIED",
+      "VISIBLE_EFFECT != REQUIRED_BINDINGS_PROVEN",
+      "MACHINE_GATE_ELIGIBLE != HUMAN_PROMOTED",
+      "ACTUAL_PASS != PRODUCTION_READY",
+    ],
+  };
+}
+
+export function buildTypographyDaVinciActualRunManifestJson(generatedAt?: string) {
+  return JSON.stringify(buildTypographyDaVinciActualRunManifest(generatedAt), null, 2);
+}
+
 export const getTypographyDaVinciActualRunItem = (patternId: TypographyProductionPatternId) =>
   typographyDaVinciActualRunPlan.find((item) => item.patternId === patternId) ?? null;
