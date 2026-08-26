@@ -108,6 +108,7 @@ export const resolveHandoffSidecarSchema = z.object({
     projectRef: z.string().min(1),
     runtimeVersion: z.string().min(1),
     compositionOrTimeline: z.string().min(1),
+    humanMasterRef: z.string().min(1).optional(),
   }),
   resolve: z.object({
     major: z.literal(21),
