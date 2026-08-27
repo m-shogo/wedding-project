@@ -35,7 +35,14 @@ const checkpoints = [
 ] as const;
 
 type QaState = 'NOT_RUN' | 'PASS' | 'FAIL' | 'SKIPPED';
-
+type PhotoEvidence = {
+  slot: string;
+  file: string;
+  sha256: string;
+  qa: {crop: QaState; focus: QaState; color: QaState; motion: QaState};
+};
+type CheckpointEvidence = {id: string; frame: number; purpose: string; visual: QaState; readability: QaState};
+type AudioEvidence = {assetId: string; file: string | null; sha256: string | null; timing: QaState; level: QaState};
 type Evidence = {
   schemaVersion: 'opening-v1-preview-review/v1';
   authority: 'HUMAN_PREVIEW_REVIEW_EVIDENCE';
@@ -43,16 +50,11 @@ type Evidence = {
   preview: {path: string; sha256: string};
   presentationSha256: string;
   soundCueSha256: string;
-  photos: Array<{
-    slot: string;
-    file: string;
-    sha256: string;
-    qa: {crop: QaState; focus: QaState; color: QaState; motion: QaState};
-  }>;
-  checkpoints: Array<{id: string; frame: number; purpose: string; visual: QaState; readability: QaState}>;
+  photos: PhotoEvidence[];
+  checkpoints: CheckpointEvidence[];
   audio: {
     bgm: {assetId: string; file: string; sha256: string; timing: QaState; level: QaState};
-    ambience: Array<{assetId: string; file: string | null; sha256: string | null; timing: QaState; level: QaState}>;
+    ambience: AudioEvidence[];
   };
   review: {overall: QaState; reviewer: string | null; reviewedAt: string | null; notes: string};
 };
@@ -64,6 +66,8 @@ const normalizeStem = (file: string) => {
   const ext = extname(file);
   return file.slice(0, file.length - ext.length).toLowerCase().replaceAll('_', '-');
 };
+const isQaState = (value: unknown): value is QaState => value === 'NOT_RUN' || value === 'PASS' || value === 'FAIL' || value === 'SKIPPED';
+const photoQaAxes = ['crop', 'focus', 'color', 'motion'] as const;
 
 function findCanonicalPhotos() {
   if (!existsSync(photoDir)) throw new Error('OPENING_PREVIEW_REVIEW_PHOTO_DIR_MISSING');
@@ -156,9 +160,20 @@ function verifyEvidence(strict: boolean) {
     if (strict) process.exit(1);
     return;
   }
-  const evidence = JSON.parse(readFileSync(evidencePath, 'utf8')) as Evidence;
   const errors: string[] = [];
   const fail = (message: string) => errors.push(message);
+  let evidence: Evidence | null = null;
+  try {
+    evidence = JSON.parse(readFileSync(evidencePath, 'utf8')) as Evidence;
+  } catch {
+    fail('OPENING_PREVIEW_REVIEW_EVIDENCE_INVALID_JSON');
+  }
+  if (!evidence) {
+    console.log(`Opening V1 preview review: BLOCKED (${errors.length})`);
+    for (const error of errors) console.log(`BLOCK / ${error}`);
+    if (strict) process.exit(1);
+    return;
+  }
   if (evidence.schemaVersion !== 'opening-v1-preview-review/v1') fail('SCHEMA_VERSION');
   if (evidence.authority !== 'HUMAN_PREVIEW_REVIEW_EVIDENCE') fail('AUTHORITY');
 
@@ -169,41 +184,114 @@ function verifyEvidence(strict: boolean) {
     fail(error instanceof Error ? error.message : String(error));
   }
   if (current) {
-    if (evidence.preview.sha256 !== current.preview.sha256) fail('STALE_PREVIEW_SHA256');
+    if (evidence.preview.path !== current.preview.path || evidence.preview.sha256 !== current.preview.sha256) fail('STALE_PREVIEW_SHA256');
     if (evidence.presentationSha256 !== current.presentationSha256) fail('STALE_PRESENTATION_CONFIG');
     if (evidence.soundCueSha256 !== current.soundCueSha256) fail('STALE_SOUND_CUES');
-    for (const photo of current.photos) {
-      const saved = evidence.photos.find((item) => item.slot === photo.slot);
-      if (!saved) fail(`PHOTO_EVIDENCE_MISSING:${photo.slot}`);
-      else if (saved.sha256 !== photo.sha256 || saved.file !== photo.file) fail(`STALE_PHOTO:${photo.slot}`);
+  }
+
+  if (!Array.isArray(evidence.photos)) {
+    fail('PHOTO_EVIDENCE_NOT_ARRAY');
+  } else {
+    const ids = evidence.photos.map((photo) => photo?.slot).filter((slot): slot is string => typeof slot === 'string');
+    const duplicates = ids.filter((slot, index) => ids.indexOf(slot) !== index);
+    for (const slot of [...new Set(duplicates)]) fail(`PHOTO_EVIDENCE_DUPLICATE:${slot}`);
+    const canonical = new Set(expectedPhotoSlots as readonly string[]);
+    for (const saved of evidence.photos) {
+      if (!saved || typeof saved.slot !== 'string' || !canonical.has(saved.slot)) fail(`PHOTO_EVIDENCE_UNKNOWN:${saved?.slot ?? 'INVALID'}`);
     }
-    if (evidence.audio.bgm.sha256 !== current.bgm.sha256 || evidence.audio.bgm.file !== current.bgm.file) fail('STALE_BGM');
-    for (const ambience of current.ambience) {
-      const saved = evidence.audio.ambience.find((item) => item.assetId === ambience.assetId);
-      if (!saved) fail(`AMBIENCE_EVIDENCE_MISSING:${ambience.assetId}`);
-      else if (saved.sha256 !== ambience.sha256 || saved.file !== ambience.file) fail(`STALE_AMBIENCE:${ambience.assetId}`);
+    if (current) {
+      for (const photo of current.photos) {
+        const matching = evidence.photos.filter((item) => item?.slot === photo.slot);
+        if (matching.length === 0) fail(`PHOTO_EVIDENCE_MISSING:${photo.slot}`);
+        else if (matching.length === 1 && (matching[0].sha256 !== photo.sha256 || matching[0].file !== photo.file)) fail(`STALE_PHOTO:${photo.slot}`);
+      }
+    }
+    if (evidence.photos.length !== expectedPhotoSlots.length) fail(`PHOTO_EVIDENCE_COUNT:${evidence.photos.length}/${expectedPhotoSlots.length}`);
+    for (const photo of evidence.photos) {
+      if (!photo?.qa || typeof photo.qa !== 'object') {
+        fail(`PHOTO_QA_INVALID:${photo?.slot ?? 'INVALID'}`);
+        continue;
+      }
+      for (const axis of photoQaAxes) {
+        const state = photo.qa[axis];
+        if (!isQaState(state)) fail(`PHOTO_QA_INVALID:${photo.slot}:${axis}`);
+        else if (state !== 'PASS') fail(`PHOTO_QA_${state}:${photo.slot}:${axis}`);
+      }
     }
   }
 
-  for (const photo of evidence.photos) {
-    for (const [axis, state] of Object.entries(photo.qa)) {
-      if (state !== 'PASS') fail(`PHOTO_QA_${state}:${photo.slot}:${axis}`);
+  if (!Array.isArray(evidence.checkpoints)) {
+    fail('CHECKPOINT_EVIDENCE_NOT_ARRAY');
+  } else {
+    const ids = evidence.checkpoints.map((checkpoint) => checkpoint?.id).filter((id): id is string => typeof id === 'string');
+    const duplicates = ids.filter((id, index) => ids.indexOf(id) !== index);
+    for (const id of [...new Set(duplicates)]) fail(`CHECKPOINT_EVIDENCE_DUPLICATE:${id}`);
+    const canonical = new Set(checkpoints.map((checkpoint) => checkpoint.id));
+    for (const saved of evidence.checkpoints) {
+      if (!saved || typeof saved.id !== 'string' || !canonical.has(saved.id as (typeof checkpoints)[number]['id'])) fail(`CHECKPOINT_EVIDENCE_UNKNOWN:${saved?.id ?? 'INVALID'}`);
+    }
+    if (evidence.checkpoints.length !== checkpoints.length) fail(`CHECKPOINT_EVIDENCE_COUNT:${evidence.checkpoints.length}/${checkpoints.length}`);
+    for (const checkpoint of checkpoints) {
+      const matching = evidence.checkpoints.filter((saved) => saved?.id === checkpoint.id);
+      if (matching.length === 0) {
+        fail(`CHECKPOINT_EVIDENCE_MISSING:${checkpoint.id}`);
+        continue;
+      }
+      if (matching.length !== 1) continue;
+      const saved = matching[0];
+      if (saved.frame !== checkpoint.frame || saved.purpose !== checkpoint.purpose) fail(`CHECKPOINT_EVIDENCE_STALE:${checkpoint.id}`);
+      if (!isQaState(saved.visual)) fail(`CHECKPOINT_VISUAL_INVALID:${checkpoint.id}`);
+      else if (saved.visual !== 'PASS') fail(`CHECKPOINT_VISUAL_${saved.visual}:${checkpoint.id}`);
+      if (!isQaState(saved.readability)) fail(`CHECKPOINT_READABILITY_INVALID:${checkpoint.id}`);
+      else if (saved.readability !== 'PASS') fail(`CHECKPOINT_READABILITY_${saved.readability}:${checkpoint.id}`);
     }
   }
-  for (const checkpoint of evidence.checkpoints) {
-    if (checkpoint.visual !== 'PASS') fail(`CHECKPOINT_VISUAL_${checkpoint.visual}:${checkpoint.id}`);
-    if (checkpoint.readability !== 'PASS') fail(`CHECKPOINT_READABILITY_${checkpoint.readability}:${checkpoint.id}`);
+
+  if (!evidence.audio?.bgm || typeof evidence.audio.bgm.assetId !== 'string') {
+    fail('BGM_EVIDENCE_INVALID');
+  } else if (current) {
+    if (evidence.audio.bgm.assetId !== current.bgm.assetId || evidence.audio.bgm.sha256 !== current.bgm.sha256 || evidence.audio.bgm.file !== current.bgm.file) fail('STALE_BGM');
   }
-  if (evidence.audio.bgm.timing !== 'PASS') fail(`BGM_TIMING_${evidence.audio.bgm.timing}`);
-  if (evidence.audio.bgm.level !== 'PASS') fail(`BGM_LEVEL_${evidence.audio.bgm.level}`);
-  for (const ambience of evidence.audio.ambience) {
-    const expected = ambience.file ? 'PASS' : 'SKIPPED';
-    if (ambience.timing !== expected) fail(`AMBIENCE_TIMING_${ambience.timing}:${ambience.assetId}:EXPECTED_${expected}`);
-    if (ambience.level !== expected) fail(`AMBIENCE_LEVEL_${ambience.level}:${ambience.assetId}:EXPECTED_${expected}`);
+  if (evidence.audio?.bgm) {
+    if (!isQaState(evidence.audio.bgm.timing)) fail('BGM_TIMING_INVALID');
+    else if (evidence.audio.bgm.timing !== 'PASS') fail(`BGM_TIMING_${evidence.audio.bgm.timing}`);
+    if (!isQaState(evidence.audio.bgm.level)) fail('BGM_LEVEL_INVALID');
+    else if (evidence.audio.bgm.level !== 'PASS') fail(`BGM_LEVEL_${evidence.audio.bgm.level}`);
   }
-  if (evidence.review.overall !== 'PASS') fail(`OVERALL_${evidence.review.overall}`);
-  if (!evidence.review.reviewer?.trim()) fail('REVIEWER_MISSING');
-  if (!evidence.review.reviewedAt || Number.isNaN(Date.parse(evidence.review.reviewedAt))) fail('REVIEWED_AT_INVALID');
+
+  if (!Array.isArray(evidence.audio?.ambience)) {
+    fail('AMBIENCE_EVIDENCE_NOT_ARRAY');
+  } else {
+    const ids = evidence.audio.ambience.map((item) => item?.assetId).filter((id): id is string => typeof id === 'string');
+    const duplicates = ids.filter((id, index) => ids.indexOf(id) !== index);
+    for (const id of [...new Set(duplicates)]) fail(`AMBIENCE_EVIDENCE_DUPLICATE:${id}`);
+    if (current) {
+      const canonicalIds = new Set(current.ambience.map((item) => item.assetId));
+      for (const saved of evidence.audio.ambience) {
+        if (!saved || typeof saved.assetId !== 'string' || !canonicalIds.has(saved.assetId)) fail(`AMBIENCE_EVIDENCE_UNKNOWN:${saved?.assetId ?? 'INVALID'}`);
+      }
+      if (evidence.audio.ambience.length !== current.ambience.length) fail(`AMBIENCE_EVIDENCE_COUNT:${evidence.audio.ambience.length}/${current.ambience.length}`);
+      for (const ambience of current.ambience) {
+        const matching = evidence.audio.ambience.filter((item) => item?.assetId === ambience.assetId);
+        if (matching.length === 0) {
+          fail(`AMBIENCE_EVIDENCE_MISSING:${ambience.assetId}`);
+          continue;
+        }
+        if (matching.length !== 1) continue;
+        const saved = matching[0];
+        if (saved.sha256 !== ambience.sha256 || saved.file !== ambience.file) fail(`STALE_AMBIENCE:${ambience.assetId}`);
+        const expected = ambience.file ? 'PASS' : 'SKIPPED';
+        if (!isQaState(saved.timing)) fail(`AMBIENCE_TIMING_INVALID:${ambience.assetId}`);
+        else if (saved.timing !== expected) fail(`AMBIENCE_TIMING_${saved.timing}:${ambience.assetId}:EXPECTED_${expected}`);
+        if (!isQaState(saved.level)) fail(`AMBIENCE_LEVEL_INVALID:${ambience.assetId}`);
+        else if (saved.level !== expected) fail(`AMBIENCE_LEVEL_${saved.level}:${ambience.assetId}:EXPECTED_${expected}`);
+      }
+    }
+  }
+
+  if (evidence.review?.overall !== 'PASS') fail(`OVERALL_${evidence.review?.overall ?? 'INVALID'}`);
+  if (!evidence.review?.reviewer?.trim()) fail('REVIEWER_MISSING');
+  if (!evidence.review?.reviewedAt || Number.isNaN(Date.parse(evidence.review.reviewedAt))) fail('REVIEWED_AT_INVALID');
 
   if (errors.length > 0) {
     console.log(`Opening V1 preview review: BLOCKED (${errors.length})`);
@@ -211,7 +299,7 @@ function verifyEvidence(strict: boolean) {
     if (strict) process.exit(1);
     return;
   }
-  console.log('Opening V1 preview review: PASS — evidence matches current preview/media/config and all human QA axes are approved.');
+  console.log('Opening V1 preview review: PASS — evidence matches canonical photo/checkpoint/audio identities, current preview/media/config and all human QA axes are approved.');
 }
 
 if (mode === 'init') initializeEvidence();
