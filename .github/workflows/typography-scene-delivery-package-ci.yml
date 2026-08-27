@@ -5,6 +5,8 @@ on:
     paths:
       - "movie-dashboard/src/data/typographySceneDeliveryPackage.ts"
       - "movie-dashboard/src/data/typographyProjectDeliveryBatch.ts"
+      - "movie-dashboard/src/data/projectProductionHandoffManifest.ts"
+      - "movie-dashboard/src/data/motionZukanProductionWorkspace.ts"
       - "movie-dashboard/src/components/TypographySceneDeliveryPackageCard.tsx"
       - "movie-dashboard/src/components/TypographyProjectDeliveryBatchCard.tsx"
       - "movie-dashboard/src/components/MaskRevealSceneHandoffCard.tsx"
@@ -12,12 +14,15 @@ on:
       - "movie-dashboard/src/data/typographyDaVinciActualWorkflowRegistry.ts"
       - "movie-dashboard/scripts/verify-typography-scene-delivery-package-contracts.mjs"
       - "movie-dashboard/scripts/verify-typography-project-delivery-batch-contracts.mjs"
+      - "movie-dashboard/scripts/verify-project-production-handoff-manifest-contracts.mjs"
       - ".github/workflows/typography-scene-delivery-package-ci.yml"
   push:
     branches: [main]
     paths:
       - "movie-dashboard/src/data/typographySceneDeliveryPackage.ts"
       - "movie-dashboard/src/data/typographyProjectDeliveryBatch.ts"
+      - "movie-dashboard/src/data/projectProductionHandoffManifest.ts"
+      - "movie-dashboard/src/data/motionZukanProductionWorkspace.ts"
       - "movie-dashboard/src/components/TypographySceneDeliveryPackageCard.tsx"
       - "movie-dashboard/src/components/TypographyProjectDeliveryBatchCard.tsx"
       - "movie-dashboard/src/components/MaskRevealSceneHandoffCard.tsx"
@@ -25,6 +30,7 @@ on:
       - "movie-dashboard/src/data/typographyDaVinciActualWorkflowRegistry.ts"
       - "movie-dashboard/scripts/verify-typography-scene-delivery-package-contracts.mjs"
       - "movie-dashboard/scripts/verify-typography-project-delivery-batch-contracts.mjs"
+      - "movie-dashboard/scripts/verify-project-production-handoff-manifest-contracts.mjs"
       - ".github/workflows/typography-scene-delivery-package-ci.yml"
 
 permissions:
@@ -51,11 +57,12 @@ jobs:
         run: |
           node scripts/verify-typography-production-routing-contracts.mjs
           node scripts/verify-typography-davinci-actual-workflow-registry.mjs
-      - name: Verify Scene and Project delivery honesty contracts
+      - name: Verify Scene, Project and Production handoff honesty contracts
         working-directory: movie-dashboard
         run: |
           node scripts/verify-typography-scene-delivery-package-contracts.mjs
           node scripts/verify-typography-project-delivery-batch-contracts.mjs
+          node scripts/verify-project-production-handoff-manifest-contracts.mjs
       - name: Typecheck and build Movie Dashboard
         working-directory: movie-dashboard
         run: pnpm build
