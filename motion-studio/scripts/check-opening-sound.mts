@@ -4,6 +4,7 @@ import {fileURLToPath} from 'node:url';
 import {assets} from '../src/data/assets.ts';
 import {openingV1TotalSec} from '../src/data/openingV1.ts';
 import {openingV1SoundCues} from '../src/data/openingV1Sound.ts';
+import {verifyBgmIntakeReceipt} from './verify-production-bgm-intake-receipt.mts';
 
 const studioRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const strict = process.argv.includes('--strict');
@@ -67,7 +68,15 @@ if (strict) {
     const absolutePath = join(studioRoot, asset.path);
     if (!existsSync(absolutePath)) {
       err(`final render不可 — BGM実ファイルが無い: ${asset.path}`);
+      continue;
     }
+    const receipt = verifyBgmIntakeReceipt({project: 'opening', targetPath: absolutePath});
+    if (!receipt.current) {
+      err('final render不可 — Opening BGM canonical intake receiptがmissing/stale');
+      for (const blocker of receipt.blockers) err(`BGM receipt: ${blocker}`);
+      continue;
+    }
+    console.log('✅ Opening V1 BGM intake receipt: CURRENT SHA-bound copy provenance');
   }
 }
 
