@@ -5,6 +5,7 @@ import {fileURLToPath} from 'node:url';
 
 const studioRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const bundlePath = join(studioRoot, 'out/handoff/opening-v1/opening-v1-production-bundle.json');
+const timelineCsvPath = join(studioRoot, 'out/handoff/opening-v1/opening-v1-palmier-timeline.csv');
 const evidencePath = join(studioRoot, 'out/qa/opening-v1-davinci-finishing-evidence.json');
 const mode = process.argv.includes('--init') ? 'init' : process.argv.includes('--strict') ? 'strict' : 'status';
 
@@ -15,6 +16,7 @@ type ProductionBundle = {
   authority: 'FINAL_RENDER_BOUND_HANDOFF';
   finalRender: {path: string; sha256: string};
   humanPreviewReview: {evidenceSha256: string; reviewer: string | null; reviewedAt: string | null; overall: string};
+  palmier: {timelineCsv: string; timelineCsvSha256: string};
   davinci: {expectedSha256: string; productionReady: false};
 };
 
@@ -66,6 +68,9 @@ function loadBundle(): {bundle: ProductionBundle; bundleSha256: string} {
   if (bundle.authority !== 'FINAL_RENDER_BOUND_HANDOFF') throw new Error('DAVINCI_FINISHING_BUNDLE_AUTHORITY_MISMATCH');
   if (bundle.davinci.productionReady !== false) throw new Error('DAVINCI_FINISHING_UPSTREAM_BUNDLE_MUST_FAIL_CLOSED');
   if (bundle.finalRender.sha256 !== bundle.davinci.expectedSha256) throw new Error('DAVINCI_FINISHING_UPSTREAM_SHA_CONTRACT_MISMATCH');
+  if (bundle.palmier?.timelineCsv !== rel(timelineCsvPath)) throw new Error('DAVINCI_FINISHING_PALMIER_TIMELINE_PATH_MISMATCH');
+  if (!existsSync(timelineCsvPath)) throw new Error('DAVINCI_FINISHING_PALMIER_TIMELINE_MISSING');
+  if (bundle.palmier?.timelineCsvSha256 !== shaFile(timelineCsvPath)) throw new Error('DAVINCI_FINISHING_PALMIER_TIMELINE_SHA_MISMATCH');
   return {bundle, bundleSha256: shaFile(bundlePath)};
 }
 
@@ -188,7 +193,7 @@ function verifyEvidence(strict: boolean) {
     return;
   }
 
-  console.log('Opening V1 DaVinci finishing evidence: ACTUAL_VERIFIED — current production bundle and source render match the recorded Mac Resolve evidence.');
+  console.log('Opening V1 DaVinci finishing evidence: ACTUAL_VERIFIED — current production bundle, Palmier timeline and source render match the recorded Mac Resolve evidence.');
   console.log('productionReady remains false here; final delivery approval is a separate human decision.');
 }
 
