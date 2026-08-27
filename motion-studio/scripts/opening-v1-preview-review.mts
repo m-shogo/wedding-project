@@ -176,6 +176,8 @@ function verifyEvidence(strict: boolean) {
   }
   if (evidence.schemaVersion !== 'opening-v1-preview-review/v1') fail('SCHEMA_VERSION');
   if (evidence.authority !== 'HUMAN_PREVIEW_REVIEW_EVIDENCE') fail('AUTHORITY');
+  const boundAtMs = Date.parse(evidence.boundAt);
+  if (!evidence.boundAt || Number.isNaN(boundAtMs)) fail('BOUND_AT_INVALID');
 
   let current: ReturnType<typeof currentBindings> | null = null;
   try {
@@ -291,7 +293,9 @@ function verifyEvidence(strict: boolean) {
 
   if (evidence.review?.overall !== 'PASS') fail(`OVERALL_${evidence.review?.overall ?? 'INVALID'}`);
   if (!evidence.review?.reviewer?.trim()) fail('REVIEWER_MISSING');
-  if (!evidence.review?.reviewedAt || Number.isNaN(Date.parse(evidence.review.reviewedAt))) fail('REVIEWED_AT_INVALID');
+  const reviewedAtMs = evidence.review?.reviewedAt ? Date.parse(evidence.review.reviewedAt) : Number.NaN;
+  if (!evidence.review?.reviewedAt || Number.isNaN(reviewedAtMs)) fail('REVIEWED_AT_INVALID');
+  else if (!Number.isNaN(boundAtMs) && reviewedAtMs < boundAtMs) fail('REVIEWED_BEFORE_BINDING');
 
   if (errors.length > 0) {
     console.log(`Opening V1 preview review: BLOCKED (${errors.length})`);
@@ -299,7 +303,7 @@ function verifyEvidence(strict: boolean) {
     if (strict) process.exit(1);
     return;
   }
-  console.log('Opening V1 preview review: PASS — evidence matches canonical photo/checkpoint/audio identities, current preview/media/config and all human QA axes are approved.');
+  console.log('Opening V1 preview review: PASS — evidence matches canonical photo/checkpoint/audio identities, current preview/media/config and all human QA axes are approved after the current evidence binding.');
 }
 
 if (mode === 'init') initializeEvidence();
