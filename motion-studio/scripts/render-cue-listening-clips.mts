@@ -83,7 +83,17 @@ type ClipEntry = {
   clipStartSec: number;
   cueOffsetInClipSec: number;
   isGoldenAnchorCandidate: boolean;
+  isCritical: boolean;
+  is60sPlus: boolean;
+  isLowConfidence: boolean;
+  isUnverified: boolean;
 };
+
+// generate-critical-cue-report.mtsの「Critical」定義と揃える(syllable-hit /
+// letterCue / confidenceScore<=0.2のphrase-onset)。定義を2箇所へ書くこと自体は
+// 許容するが、判定基準がズレないよう同じ閾値・同じkind集合を使う。
+const isCriticalEntry = (kind: string, confidenceScore: number | null): boolean =>
+  kind === 'syllable-hit' || kind === 'letter-cue' || (kind === 'phrase-onset' && confidenceScore != null && confidenceScore <= 0.2);
 
 const entries: ClipEntry[] = [];
 
@@ -118,6 +128,10 @@ for (const p of master.phrases) {
       confidenceScore: c.confidenceScore,
       analysisMethod: c.analysisMethod,
       isGoldenAnchorCandidate: GOLDEN_ANCHOR_CANDIDATE_CUE_IDS.has(c.cueId),
+      isCritical: isCriticalEntry(c.kind, c.confidenceScore),
+      is60sPlus: effectiveMs >= 60000,
+      isLowConfidence: c.confidenceScore != null && c.confidenceScore < 0.5,
+      isUnverified: !c.verifiedByListening,
       ...clip,
     });
   }
@@ -142,6 +156,10 @@ for (const b of master.editorialBlocks) {
       confidenceScore: c.timingSource === 'beat-snap' ? 0.4 : c.timingSource === 'estimated' ? 0.15 : null,
       analysisMethod: null,
       isGoldenAnchorCandidate: GOLDEN_ANCHOR_CANDIDATE_CUE_IDS.has(c.cueId),
+      isCritical: isCriticalEntry('letter-cue', null),
+      is60sPlus: effectiveMs >= 60000,
+      isLowConfidence: c.timingSource === 'estimated',
+      isUnverified: !c.verifiedByListening,
       ...clip,
     });
   }
@@ -163,10 +181,15 @@ entries.sort((a, b) => {
 writeFileSync(manifestPath, JSON.stringify({masterId: master.masterId, masterRevision: master.revision, entries}, null, 2) + '\n');
 
 const escapeHtml = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+// data-*属性はfilterチェックボックス(client-side JS)から参照する。
+// サーバサイド計算はここで完結させ、ブラウザ側はtrue/falseの読み取りだけにする
+// (フィルタロジックの二重実装を避ける)。
+const rowDataAttrs = (e: ClipEntry): string =>
+  `data-critical="${e.isCritical}" data-post60="${e.is60sPlus}" data-lowconf="${e.isLowConfidence}" data-unverified="${e.isUnverified}" data-golden="${e.isGoldenAnchorCandidate}"`;
 const rows = entries
   .map(
     (e) => `
-  <tr style="${e.isGoldenAnchorCandidate ? 'background:rgba(244,201,93,0.12);' : ''}">
+  <tr ${rowDataAttrs(e)} style="${e.isGoldenAnchorCandidate ? 'background:rgba(244,201,93,0.12);' : ''}">
     <td>${e.isGoldenAnchorCandidate ? '⭐ ' : ''}${escapeHtml(e.cueId)}</td>
     <td>${(e.designedSourceMs / 1000).toFixed(3)}s</td>
     <td>${escapeHtml(e.kind)}</td>
@@ -196,6 +219,11 @@ writeFileSync(
   audio { height: 30px; vertical-align: middle; }
   h1 { font-size: 18px; }
   p.note { color: #f2a53f; }
+  .filters { display: flex; gap: 16px; flex-wrap: wrap; margin: 12px 0 16px; padding: 10px 12px; background: #1a1a1c; border-radius: 6px; }
+  .filters label { font-size: 13px; cursor: pointer; user-select: none; }
+  .filters input { margin-right: 4px; }
+  #filterCount { color: #888; font-size: 12px; margin-left: 8px; }
+  tr.hidden-by-filter { display: none; }
 </style>
 </head>
 <body>
@@ -208,12 +236,43 @@ apply-listening-verification.mtsで反映する。<b>⭐印(黄色背景)の10�
 0.5未満)ほど根拠が弱いため上に並べている。時間が無い場合は⭐→オレンジの順で確認する。
 ⭐の行を確認してOKだった場合は、apply-listening-verification.mtsのdecisionへ
 "goldenAnchor": trueを追加するとGolden Anchor(以後上書きされない基準点)として確定する。</b></p>
+<div class="filters">
+  <label><input type="checkbox" data-filter="critical" /> Critical(3-hit/letterCue/低confidence onset)</label>
+  <label><input type="checkbox" data-filter="post60" /> 60s+</label>
+  <label><input type="checkbox" data-filter="lowconf" /> Low Confidence(&lt;0.5)</label>
+  <label><input type="checkbox" data-filter="unverified" /> Unverified</label>
+  <label><input type="checkbox" data-filter="golden" /> Golden Anchor Candidate</label>
+  <span id="filterCount"></span>
+</div>
 <table>
 <thead><tr><th>cueId</th><th>設計秒</th><th>種別</th><th>text</th><th>timingSource</th><th>confidenceScore</th><th>再生</th></tr></thead>
-<tbody>
+<tbody id="cueRows">
 ${rows}
 </tbody>
 </table>
+<script>
+// フィルタは「チェックが1つも無ければ全行表示、1つ以上チェックされたら
+// OR条件で該当行だけ表示」という単純な仕組み(複雑なquery builderは作らない)。
+// 行データはサーバサイド(render-cue-listening-clips.mts)で計算済みのdata-*
+// 属性をそのまま読むだけで、ここでフィルタ判定ロジックを再実装しない。
+(function () {
+  var checkboxes = Array.prototype.slice.call(document.querySelectorAll('.filters input[type=checkbox]'));
+  var rows = Array.prototype.slice.call(document.querySelectorAll('#cueRows tr'));
+  var countEl = document.getElementById('filterCount');
+  function apply() {
+    var active = checkboxes.filter(function (cb) { return cb.checked; }).map(function (cb) { return cb.getAttribute('data-filter'); });
+    var shown = 0;
+    rows.forEach(function (tr) {
+      var visible = active.length === 0 || active.some(function (key) { return tr.getAttribute('data-' + key) === 'true'; });
+      tr.classList.toggle('hidden-by-filter', !visible);
+      if (visible) shown++;
+    });
+    countEl.textContent = shown + ' / ' + rows.length + ' 行表示中';
+  }
+  checkboxes.forEach(function (cb) { cb.addEventListener('change', apply); });
+  apply();
+})();
+</script>
 </body>
 </html>
 `,
