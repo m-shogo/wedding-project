@@ -12,6 +12,7 @@
 //   - manual値保持(masterのmanualエントリがbackupより減っていないか、の簡易チェック)
 //   - TIMING_MASTER_VERIFIED昇格条件
 
+import {execFileSync} from 'node:child_process';
 import {createHash} from 'node:crypto';
 import {existsSync, readFileSync} from 'node:fs';
 import {dirname, join} from 'node:path';
@@ -44,6 +45,37 @@ if (!existsSync(audioPath)) {
   const actual = createHash('sha256').update(readFileSync(audioPath)).digest('hex');
   if (actual !== master.audio.sha256) {
     errors.push(`音源sha256不一致: master=${master.audio.sha256.slice(0, 12)}... 実ファイル=${actual.slice(0, 12)}...`);
+  }
+  // 2b. source-duration-consistency: sha256が一致していても、durationMs/
+  // sampleRate/channels/codecがffprobeの実測値とズレていないかを独立に
+  // 再検証する(migrate script自体のprobeAudio()にバグがあった場合や、
+  // 手動でmasterのaudioフィールドが編集された場合の検出用)。
+  try {
+    const out = execFileSync(
+      'ffprobe',
+      ['-v', 'error', '-select_streams', 'a:0', '-show_entries', 'stream=sample_rate,channels,codec_name:format=duration', '-of', 'json', audioPath],
+      {encoding: 'utf-8'},
+    );
+    const parsed = JSON.parse(out) as {streams?: Array<{sample_rate?: string; channels?: number; codec_name?: string}>; format?: {duration?: string}};
+    const stream = parsed.streams?.[0];
+    const actualDurationMs = parsed.format?.duration ? Math.round(Number(parsed.format.duration) * 1000) : null;
+    const actualSampleRate = stream?.sample_rate ? Number(stream.sample_rate) : null;
+    const actualChannels = stream?.channels ?? null;
+    const actualCodec = stream?.codec_name ?? null;
+    if (actualDurationMs != null && Math.abs(actualDurationMs - master.audio.durationMs) > 5) {
+      errors.push(`source-duration-consistency違反: master.audio.durationMs=${master.audio.durationMs}ms、実ffprobe=${actualDurationMs}ms(差=${Math.abs(actualDurationMs - master.audio.durationMs)}ms)`);
+    }
+    if (actualSampleRate != null && actualSampleRate !== master.audio.sampleRate) {
+      errors.push(`source-duration-consistency違反: master.audio.sampleRate=${master.audio.sampleRate}、実ffprobe=${actualSampleRate}`);
+    }
+    if (actualChannels != null && actualChannels !== master.audio.channels) {
+      errors.push(`source-duration-consistency違反: master.audio.channels=${master.audio.channels}、実ffprobe=${actualChannels}`);
+    }
+    if (actualCodec != null && actualCodec !== master.audio.codec) {
+      warnings.push(`source-duration-consistency: master.audio.codec=${master.audio.codec}、実ffprobe=${actualCodec}(codec名の表記差の可能性もあるためwarning)`);
+    }
+  } catch (e) {
+    warnings.push(`ffprobeによるsource-duration-consistency再検証に失敗: ${(e as Error).message}`);
   }
 }
 
