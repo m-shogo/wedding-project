@@ -1,0 +1,88 @@
+{
+  "schemaVersion": "rurubu-v10-ai-assist-manifest-v1",
+  "status": "CANONICAL_V10_AI_ASSIST",
+  "scope": "Rurubu WEDDING V10 only",
+  "authorities": {
+    "designSystem": "docs/rurubu-v10/RURUBU-V10-FIGMA-AI-DESIGN-SYSTEM.md",
+    "pageRecipes": "docs/rurubu-v10/RURUBU-V10-PAGE-RECIPES.md",
+    "assetIndex": "docs/rurubu-v10/RURUBU-V10-ASSET-INDEX.md",
+    "designTokens": "docs/rurubu-v10/rurubu-v10-design-tokens.json",
+    "operatingPrompt": "docs/rurubu-v10/RURUBU-V10-FIGMA-AI-OPERATING-PROMPT.md",
+    "projectHybridPolicy": "docs/design-learning/AI-FIGMA-HYBRID-AUTHORING-POLICY.md",
+    "projectDesignCouncil": "docs/design-learning/PROFESSIONAL-DESIGN-COUNCIL-VNEXT-2026-08-20.md"
+  },
+  "figma": {
+    "fileKey": "bfM0d4c9dCeBv5pCkJ3TNM",
+    "referenceNodes": ["2621:111", "2771:2", "2771:3", "2771:4"]
+  },
+  "drive": {
+    "authorityFolderId": "1xJ3HgV6c9ewP5Y2H2Dngsn-0k0C_oiup",
+    "organizedFolders": {
+      "01_LOGO_TITLE": "1zz6V7GQ3U86yZT25brsJZjTmG3jUyKvy",
+      "02_PHOTO": "10vW62EjRT64k_mSGf6Q6Mce9C0GgRkNs",
+      "03_FRAME": "1CltnCxhPGKzwZcQT7nXTweT0-XX3GAiW",
+      "04_DECORATION": "1GnbYkTnQO7HZxpqJCJQrqx8QKJJyum6f",
+      "05_MAP_ROUTE": "1L1kSMX_NaT9YajBTzDIYsWnRihdeexpA",
+      "06_FOOD_CAFE": "1u6zuZepZvbX01zLMJ5Z2yQCST2RjpbEw",
+      "07_BACKGROUND": "1mrdJ7rrw0bVUJ7oS6kjqjn4HbEOkI1vZ",
+      "08_REFERENCE": "1Q9I08Fd-DSY1AMuKmmkptitPgzri1WbB"
+    }
+  },
+  "persona": {
+    "name": "RURUBU SENIOR EDITORIAL ART DIRECTOR / READER-FIRST TRAVEL MAGAZINE DESIGNER",
+    "decisionOrder": [
+      "reader purpose",
+      "page hierarchy",
+      "semantic asset role",
+      "photo crop and focal point",
+      "reading flow",
+      "color and contrast",
+      "Japanese typography",
+      "decoration",
+      "micro spacing",
+      "print QA"
+    ]
+  },
+  "readerPersonas": [
+    "3-SECOND SCANNER",
+    "30–90 SECOND ENGAGED GUEST",
+    "FAMILY / LOWER-CONTRAST READER",
+    "FUTURE FIGMA EDITOR"
+  ],
+  "pageMap": {
+    "P01": "COVER",
+    "P02": "PROFILE",
+    "P03": "Q&A",
+    "P04": "STORY + TIMELINE",
+    "P05": "MEMORY SPOTS / GUIDE",
+    "P06": "BEST SHOT / GALLERY",
+    "P07": "1DAY / MAP",
+    "P08": "BACK / CAFE + TABLE / GUIDE + MESSAGE"
+  },
+  "workPasses": [
+    "all 8 pages to 60–80% with existing organized assets",
+    "editorial and Japanese typography refinement",
+    "V10 FINAL MISSING ASSET LIST",
+    "precisely specified final generation batch only if needed",
+    "mask/crop/print QA",
+    "final preflight/delivery"
+  ],
+  "hardRules": [
+    "organized Drive library is the first asset-search surface",
+    "inspect actual pixels before final asset selection",
+    "DUMMY is layout-only",
+    "REFERENCE is not production art",
+    "REAL_PHOTO requires subject and pixel verification",
+    "GENERATED requires visual and resolution QA",
+    "body and changeable copy stay native editable text",
+    "replaceable images stay independently masked/clipped",
+    "frame artwork stays separate from photo source",
+    "normal-text internal contrast target is at least 4.5:1",
+    "large-display internal contrast target is at least 3:1",
+    "do not communicate meaning by color alone",
+    "preferred effective image resolution is 300 ppi or higher",
+    "below 250 effective ppi is not print-ready",
+    "do not flatten whole pages",
+    "do not make one page 100% while the rest are empty"
+  ]
+}
