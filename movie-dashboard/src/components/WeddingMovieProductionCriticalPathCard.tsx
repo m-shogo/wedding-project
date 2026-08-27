@@ -38,6 +38,15 @@ export function WeddingMovieProductionCriticalPathCard({projectId}: {projectId: 
           </p>
           <p className="mt-1 text-[8px] text-navy-500 dark:text-navy-300">{current?.detail ?? "No remaining canonical production blocker."}</p>
           {current?.path ? <code className="mt-1 block break-all text-[8px] text-navy-400">{current.path}</code> : null}
+          {current?.blockerCodes.length ? (
+            <div className="mt-2 flex flex-wrap gap-1">
+              {current.blockerCodes.map((code) => (
+                <code key={code} className="border border-red-200 dark:border-red-900 px-1.5 py-0.5 text-[8px] text-red-700 dark:text-red-300">
+                  {code}
+                </code>
+              ))}
+            </div>
+          ) : null}
         </div>
         <button type="button" onClick={() => downloadText(json, "wedding-movie-production-critical-path.json")} className="border border-amber-300 dark:border-amber-700 px-2.5 py-1.5 text-[9px] font-semibold text-amber-700 dark:text-amber-300">
           Critical pathを書き出す

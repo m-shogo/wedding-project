@@ -65,6 +65,7 @@ function actionTargetsFor(projectId: "opening" | "profile", stageName: string): 
 
 function inputLanesFor(projectId: "opening" | "profile", stageName: string): InputLane[] {
   if (projectId === "opening" && stageName === "media") {
+    const openingBgmStatus = String(openingProductionGate.bgm.status);
     return [
       {
         id: "photos",
@@ -79,10 +80,14 @@ function inputLanesFor(projectId: "opening" | "profile", stageName: string): Inp
         id: "bgm",
         label: "Opening BGM",
         state: openingProductionGate.bgm.ready ? "READY" : "BLOCKED",
-        detail: `file=${openingProductionGate.bgm.fileExists ? "FOUND" : "MISSING"} / status=${openingProductionGate.bgm.status} / receipt=${openingProductionGate.bgm.intakeReceiptCurrent ? "CURRENT" : "MISSING_OR_STALE"}`,
+        detail: `file=${openingProductionGate.bgm.fileExists ? "FOUND" : "MISSING"} / status=${openingBgmStatus} / receipt=${openingProductionGate.bgm.intakeReceiptCurrent ? "CURRENT" : "MISSING_OR_STALE"}`,
         intakePath: openingProductionGate.bgm.intakeReceiptPath,
         receiptCurrent: openingProductionGate.bgm.intakeReceiptCurrent,
-        blockerCodes: [...openingProductionGate.bgm.intakeReceiptBlockerCodes],
+        blockerCodes: [
+          ...openingProductionGate.bgm.intakeReceiptBlockerCodes,
+          ...(openingProductionGate.bgm.fileExists ? [] : ["OPENING_BGM_FILE_MISSING"]),
+          ...(openingProductionGate.bgm.ready ? [] : [`OPENING_BGM_STATUS_${openingBgmStatus}`]),
+        ],
       },
     ];
   }
@@ -116,6 +121,31 @@ function inputLanesFor(projectId: "opening" | "profile", stageName: string): Inp
   return [];
 }
 
+function stageBlockerCodesFor(projectId: "opening" | "profile", stageName: string, inputLanes: readonly InputLane[]) {
+  const laneCodes = inputLanes.flatMap((lane) => lane.blockerCodes ?? []);
+  if (laneCodes.length > 0) return [...new Set(laneCodes)];
+
+  if (projectId === "opening") {
+    if (stageName === "previewSourceBinding" || stageName === "previewReview") {
+      return [...openingProductionStatus.sourceRevalidation.realMediaPreview.blockers];
+    }
+    if (stageName === "finalRenderReview") {
+      return [...openingProductionStatus.sourceRevalidation.finalRender.blockers];
+    }
+  }
+
+  if (projectId === "profile") {
+    if (stageName === "finalRenderReview") {
+      return [...profileProductionStatus.sourceRevalidation.finalRender.blockers];
+    }
+    if (stageName === "assembly") {
+      return [...profileProductionStatus.sourceRevalidation.realMediaPreview.blockers];
+    }
+  }
+
+  return [];
+}
+
 function summarizeProject(
   projectId: "opening" | "profile",
   overallState: string,
@@ -127,6 +157,7 @@ function summarizeProject(
   const ordered = order.map((name) => ({name, ...stages[name]}));
   const currentIndex = ordered.findIndex((stage) => stage.state !== "PASS");
   const current = currentIndex >= 0 ? ordered[currentIndex] : null;
+  const inputLanes = current ? inputLanesFor(projectId, current.name) : [];
   return {
     projectId,
     overallState,
@@ -137,9 +168,10 @@ function summarizeProject(
           state: current.state,
           detail: current.detail,
           ...(current.path ? {path: current.path} : {}),
+          blockerCodes: stageBlockerCodesFor(projectId, current.name, inputLanes),
           recovery: [...current.recovery],
           actionTargets: actionTargetsFor(projectId, current.name),
-          inputLanes: inputLanesFor(projectId, current.name),
+          inputLanes,
         }
       : null,
     downstreamBlockedStages: currentIndex >= 0
@@ -174,6 +206,7 @@ export function buildWeddingMovieProductionCriticalPath() {
     projects: {opening, profile},
     guardrails: [
       "CRITICAL_PATH_VISIBLE != PRODUCTION_APPROVED",
+      "BLOCKER_CODE_VISIBLE != BLOCKER_RESOLVED",
       "INPUT_LANE_READY != PROJECT_PRODUCTION_READY",
       "RECOVERY_COMMAND_VISIBLE != RECOVERY_EXECUTED",
       "ACTION_TARGET_VISIBLE != ACTION_COMPLETED",
