@@ -5,6 +5,7 @@ import {
 } from "../data/profileProductionStatusHandoff";
 import type {SceneProjectId} from "../data/visualSceneComposer";
 import {downloadText} from "../lib/exporters";
+import {OpeningProductionStatusHandoffCard} from "./OpeningProductionStatusHandoffCard";
 
 const stageLabel: Record<string, string> = {
   assembly: "Assembly",
@@ -21,6 +22,7 @@ export function ProfileProductionStatusHandoffCard({projectId}: {projectId: Scen
   const status = useMemo(() => buildProfileProductionStatusHandoff(), []);
   const json = useMemo(() => buildProfileProductionStatusHandoffJson(), []);
 
+  if (projectId === "opening") return <OpeningProductionStatusHandoffCard projectId={projectId} />;
   if (projectId !== "profile") return null;
 
   const production = status.profile.production;
