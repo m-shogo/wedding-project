@@ -44,6 +44,22 @@ export function WeddingMovieProductionCriticalPathCard({projectId}: {projectId: 
         </button>
       </div>
 
+      {current?.inputLanes.length ? (
+        <div className="mt-2 grid gap-1 sm:grid-cols-2">
+          {current.inputLanes.map((lane) => (
+            <div key={lane.id} className="border border-amber-200 dark:border-amber-800 px-2 py-1.5 text-[8px] text-navy-500 dark:text-navy-300">
+              <div className="flex items-center justify-between gap-2">
+                <span className="font-semibold text-navy-700 dark:text-sand-100">{lane.label}</span>
+                <span className={lane.state === "READY" ? "font-semibold text-emerald-600 dark:text-emerald-300" : "font-semibold text-amber-700 dark:text-amber-300"}>{lane.state}</span>
+              </div>
+              <div className="mt-1">{lane.detail}</div>
+              {lane.intakePath ? <code className="mt-1 block break-all text-navy-400">{lane.intakePath}</code> : null}
+              {lane.blockerCodes?.length ? <div className="mt-1 break-all">BLOCK: {lane.blockerCodes.join(" / ")}</div> : null}
+            </div>
+          ))}
+        </div>
+      ) : null}
+
       {current ? (
         <div className="mt-2 grid gap-2 sm:grid-cols-2">
           <div className="border border-amber-200 dark:border-amber-800 p-2 text-[8px] leading-4 text-navy-500 dark:text-navy-300">

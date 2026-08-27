@@ -17,19 +17,26 @@ const errors = [];
 const need = (source, token, message) => { if (!source.includes(token)) errors.push(message); };
 
 for (const token of [
-  'wedding-movie-production-critical-path-dashboard/v1',
-  'DERIVED_FROM_MOTION_STUDIO_PRODUCTION_STATUS',
+  'wedding-movie-production-critical-path-dashboard/v2',
+  'DERIVED_FROM_MOTION_STUDIO_PRODUCTION_STATUS_AND_INPUT_GATES',
+  'openingProductionGate',
+  'profileProductionGate',
   'openingProductionStatus.stages',
   'profileProductionStatus.stages',
   'currentCriticalStage',
   'downstreamBlockedStages',
-  'actionTargetsFor(projectId, current.name)',
+  'inputLanesFor(projectId, current.name)',
+  'openingProductionGate.photos.intakeReceiptCurrent',
+  'openingProductionGate.bgm.intakeReceiptCurrent',
+  'profileProductionGate.media.intakeReceiptCurrent',
+  'profileProductionGate.bgm.rightsState',
   'route: "/opening-photo-intake"',
   'route: "/opening-bgm-intake"',
   'route: "/profile-media-intake"',
   'route: "/profile-bgm-intake"',
   'route: "/profile-planner"',
   'BGM実ファイル・intake receipt・上映権利確認をcurrent SHAへ固定する',
+  'INPUT_LANE_READY != PROJECT_PRODUCTION_READY',
   'ACTION_TARGET_VISIBLE != ACTION_COMPLETED',
   'productionReady: opening.productionReady && profile.productionReady',
   'CI_STATUS != MAC_DAVINCI_ACTUAL',
@@ -39,6 +46,10 @@ for (const token of [
   'NOW / PRODUCTION CRITICAL PATH',
   'current?.detail',
   'current.path',
+  'current.inputLanes',
+  'lane.detail',
+  'lane.intakePath',
+  'lane.blockerCodes',
   'current.recovery',
   'current.actionTargets',
   'to={target.route}',
@@ -103,4 +114,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log('Wedding Movie production critical-path dashboard OK: current blocker, dedicated Profile media/BGM intake, actionable routes, downstream waiting stages and cross-project readiness remain visible/exportable without promoting Human QA or Mac Actual.');
+console.log('Wedding Movie production critical-path dashboard OK: current blocker, independent input lanes with receipt/rights truth, actionable intake routes, downstream stages and cross-project readiness remain visible/exportable without promoting Human QA or Mac Actual.');
