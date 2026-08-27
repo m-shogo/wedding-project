@@ -1,0 +1,67 @@
+name: Profile V1 Dashboard Handoff CI
+
+on:
+  pull_request:
+    paths:
+      - "01_profile-movie/**"
+      - "motion-studio/src/data/profileV1ProductionPlan.ts"
+      - "motion-studio/scripts/profile-v1-assembly-preflight.mts"
+      - "movie-dashboard/scripts/sync-profile-production-gate.mjs"
+      - "movie-dashboard/scripts/verify-profile-v1-dashboard-handoff-contracts.mjs"
+      - "movie-dashboard/src/data/profileProductionGate.generated.ts"
+      - "movie-dashboard/src/data/projectProductionHandoffManifest.ts"
+      - "movie-dashboard/src/components/TypographyProjectDeliveryBatchCard.tsx"
+      - ".github/workflows/profile-v1-dashboard-handoff-ci.yml"
+  push:
+    paths:
+      - "01_profile-movie/**"
+      - "motion-studio/src/data/profileV1ProductionPlan.ts"
+      - "motion-studio/scripts/profile-v1-assembly-preflight.mts"
+      - "movie-dashboard/scripts/sync-profile-production-gate.mjs"
+      - "movie-dashboard/scripts/verify-profile-v1-dashboard-handoff-contracts.mjs"
+      - "movie-dashboard/src/data/profileProductionGate.generated.ts"
+      - "movie-dashboard/src/data/projectProductionHandoffManifest.ts"
+      - "movie-dashboard/src/components/TypographyProjectDeliveryBatchCard.tsx"
+      - ".github/workflows/profile-v1-dashboard-handoff-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    defaults:
+      run:
+        working-directory: movie-dashboard
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: movie-dashboard/pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Profile production gate generated snapshot is current
+        run: node scripts/sync-profile-production-gate.mjs --check
+
+      - name: Profile Dashboard handoff honesty contracts
+        run: node scripts/verify-profile-v1-dashboard-handoff-contracts.mjs
+
+      - name: Existing project production handoff contracts
+        run: node scripts/verify-project-production-handoff-manifest-contracts.mjs
+
+      - name: Typecheck and build Movie Dashboard
+        run: pnpm build
