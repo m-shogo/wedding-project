@@ -1,0 +1,58 @@
+name: Profile V1 Final Assembly CI
+
+on:
+  pull_request:
+    paths:
+      - "motion-studio/src/compositions/profile/ProfileV1.tsx"
+      - "motion-studio/src/ProfileV1Root.tsx"
+      - "motion-studio/scripts/render-profile-v1-production.mts"
+      - "motion-studio/scripts/check-profile-render.mts"
+      - "motion-studio/scripts/check-profile-v1-production-composition.mts"
+      - "motion-studio/scripts/profile-v1-assembly-preflight.mts"
+      - ".github/workflows/profile-v1-final-assembly-ci.yml"
+  push:
+    branches: [main]
+    paths:
+      - "motion-studio/src/compositions/profile/ProfileV1.tsx"
+      - "motion-studio/src/ProfileV1Root.tsx"
+      - "motion-studio/scripts/render-profile-v1-production.mts"
+      - "motion-studio/scripts/check-profile-render.mts"
+      - "motion-studio/scripts/check-profile-v1-production-composition.mts"
+      - "motion-studio/scripts/profile-v1-assembly-preflight.mts"
+      - ".github/workflows/profile-v1-final-assembly-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: motion-studio
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+          run_install: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: motion-studio/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - name: TypeScript
+        run: pnpm typecheck
+      - name: Profile V1 production composition contract
+        run: node --no-warnings scripts/check-profile-v1-production-composition.mts
+      - name: Production composition is registered
+        run: pnpm exec remotion compositions src/index-profile-v1.ts
+      - name: Fresh clone cannot render production candidate
+        run: |
+          if node --no-warnings scripts/render-profile-v1-production.mts; then
+            echo "Profile V1 production render unexpectedly bypassed missing real-media/Human/BGM gates"
+            exit 1
+          fi
+          echo "Profile V1 production render correctly fails closed before rendering on a fresh clone"
