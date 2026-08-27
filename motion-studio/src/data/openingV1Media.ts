@@ -13,6 +13,22 @@ export type OpeningV1PhotoKey =
   | 'hero-01'
   | 'hero-02';
 
+// Canonical role order is shared with Dashboard handoff generation. It is metadata only:
+// role resolution must never fall back to array position.
+const orderedKeys: OpeningV1PhotoKey[] = [
+  'okinawa-01',
+  'okinawa-02',
+  'okinawa-03',
+  'seoul-01',
+  'seoul-02',
+  'seoul-03',
+  'hawaii-01',
+  'hawaii-02',
+  'hawaii-03',
+  'hero-01',
+  'hero-02',
+];
+
 const aliases: Record<OpeningV1PhotoKey, string[]> = {
   'okinawa-01': ['okinawa-01', 'okinawa01', 'okinawa-1'],
   'okinawa-02': ['okinawa-02', 'okinawa02', 'okinawa-2'],
