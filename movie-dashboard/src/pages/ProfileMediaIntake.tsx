@@ -49,7 +49,7 @@ export function ProfileMediaIntake() {
           <div className={`p-4 ${mediaReady ? "bg-emerald-50 dark:bg-emerald-900/20" : "bg-white dark:bg-navy-800"}`}>
             <p className="text-[10px] tracking-[0.16em] font-semibold text-navy-400">REAL MEDIA</p>
             <p className="mt-1 text-2xl font-mono font-bold text-navy-900 dark:text-sand-100">{gate.resolvedMediaCount}/{gate.expectedMediaCount}</p>
-            <p className="mt-1 text-xs text-navy-500 dark:text-navy-300">public/profile/ にcanonical stem名で配置</p>
+            <p className="mt-1 text-xs text-navy-500 dark:text-navy-300">motion-studio/public/profile/ にcanonical stem名で配置</p>
           </div>
           <div className={`p-4 ${bgmReady ? "bg-emerald-50 dark:bg-emerald-900/20" : "bg-white dark:bg-navy-800"}`}>
             <p className="text-[10px] tracking-[0.16em] font-semibold text-navy-400">BGM</p>
