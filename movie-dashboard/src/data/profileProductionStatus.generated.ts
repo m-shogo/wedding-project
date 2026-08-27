@@ -4,7 +4,8 @@
 export const profileProductionStatus = {
   "source": {
     "status": "motion-studio/scripts/profile-v1-production-status.mts",
-    "palmierHandoff": "motion-studio/scripts/profile-v1-palmier-handoff-contract.mts"
+    "palmierHandoff": "motion-studio/scripts/profile-v1-palmier-handoff-contract.mts",
+    "davinciHandoff": "motion-studio/scripts/profile-v1-davinci-handoff-contract.mts"
   },
   "overallState": "ASSEMBLY_REQUIRED",
   "stages": {
@@ -57,6 +58,65 @@ export const profileProductionStatus = {
           ]
         }
       }
+    },
+    "davinci": {
+      "contractVersion": "profile-v1-davinci-handoff/v1",
+      "current": false,
+      "sourceAuthorities": [
+        "scripts/export-profile-v1-production-bundle.mts#bundle.davinci",
+        "src/data/profileV1GeneratedAccentRegistry.ts#profileV1GeneratedAccentImplementations",
+        "scripts/profile-v1-davinci-finishing-evidence.mts"
+      ],
+      "upstreamPalmier": {
+        "timelinePath": "out/handoff/profile-v1/profile-v1-palmier-timeline.csv",
+        "generatedAccentAuthority": "PROFILE_V1_GENERATED_ACCENT_REGISTRY"
+      },
+      "handoffAsset": {
+        "path": "out/profile/profile_v1.mp4",
+        "expectedSha256": null,
+        "shaBound": true,
+        "intendedUse": "FINISHING_AND_OUTPUT_QA"
+      },
+      "generatedAccentRoutes": [
+        {
+          "slotId": "departure-boarding-title",
+          "chapterId": "departure",
+          "implementation": "PROFILE_BOARDING_TITLE_CARD",
+          "canonicalReuse": "COMPOSITION_SPECIFIC_GRAPHIC"
+        },
+        {
+          "slotId": "intersection-route",
+          "chapterId": "intersection",
+          "implementation": "MOTION_ZUKAN_ROUTE_LINE",
+          "canonicalReuse": "TransitionWipeEngine/route-line"
+        },
+        {
+          "slotId": "arrival-door-light",
+          "chapterId": "arrival",
+          "implementation": "OPENING_DOOR_LIGHT_REUSE",
+          "canonicalReuse": "DoorLight"
+        }
+      ],
+      "actualEvidence": {
+        "path": "out/qa/profile-v1-davinci-finishing-evidence.json",
+        "schemaVersion": "profile-v1-davinci-finishing-evidence/v1",
+        "authority": "MAC_DAVINCI_ACTUAL_EVIDENCE",
+        "requiredChecks": [
+          "source_render_sha_readback",
+          "resolve_version_project_timeline",
+          "timeline_insertion",
+          "duration_and_fps",
+          "color_finish",
+          "audio_finish",
+          "title_safe_and_framing",
+          "playback_1x",
+          "playback_half_speed",
+          "export_duration_dimensions_fps_audio",
+          "watched_with_sound",
+          "human_overall_review"
+        ]
+      },
+      "productionReady": false
     }
   },
   "nextActions": [
