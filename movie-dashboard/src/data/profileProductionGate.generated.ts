@@ -252,7 +252,14 @@ export const profileProductionGate = {
     "assetId": "profile-bgm-main",
     "path": "public/audio/profile/bgm-main.mp3",
     "fileExists": false,
+    "intakeReceiptCurrent": false,
+    "intakeReceiptPath": "out/intake/profile-bgm-intake.json",
+    "intakeReceiptBlockerCodes": [
+      "BGM_RECEIPT_MISSING"
+    ],
     "rightsState": "NOT_RUN",
+    "rightsApprovalPath": "out/qa/profile-v1-bgm-rights-approval.json",
+    "rightsBoundSha256": null,
     "ready": false
   },
   "structureReview": {
