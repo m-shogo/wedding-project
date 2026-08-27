@@ -9,24 +9,12 @@ export const profileProductionStatus = {
   },
   "overallState": "ASSEMBLY_REQUIRED",
   "stages": {
-    "assembly": {
-      "state": "BLOCKED"
-    },
-    "finalRender": {
-      "state": "NOT_RUN"
-    },
-    "finalRenderReview": {
-      "state": "NOT_RUN"
-    },
-    "productionBundle": {
-      "state": "NOT_RUN"
-    },
-    "davinciFinishing": {
-      "state": "NOT_RUN"
-    },
-    "finalDeliveryApproval": {
-      "state": "NOT_RUN"
-    }
+    "assembly": {"state": "BLOCKED"},
+    "finalRender": {"state": "NOT_RUN"},
+    "finalRenderReview": {"state": "NOT_RUN"},
+    "productionBundle": {"state": "NOT_RUN"},
+    "davinciFinishing": {"state": "NOT_RUN"},
+    "finalDeliveryApproval": {"state": "NOT_RUN"}
   },
   "readiness": {
     "assemblyReady": false,
@@ -36,6 +24,23 @@ export const profileProductionStatus = {
     "macDaVinciActual": "NOT_RUN",
     "finalDeliveryApproved": false,
     "productionReady": false
+  },
+  "sourceRevalidation": {
+    "realMediaPreview": {
+      "state": "NOT_RUN",
+      "blockers": [],
+      "recovery": []
+    },
+    "finalRender": {
+      "state": "NOT_RUN",
+      "blockers": [],
+      "recovery": []
+    },
+    "guardrails": [
+      "SOURCE_CHANGED => RE_RENDER_REQUIRED",
+      "RE_RENDER_REQUIRED => RE_REVIEW_REQUIRED",
+      "OLD_HUMAN_REVIEW != CURRENT_RENDER_IMPLEMENTATION"
+    ]
   },
   "handoff": {
     "palmier": {
@@ -49,13 +54,7 @@ export const profileProductionStatus = {
         "sceneTimeline": {
           "path": "out/handoff/profile-v1/profile-v1-palmier-timeline.csv",
           "shaBound": true,
-          "carries": [
-            "chapter_boundary",
-            "chapter_role",
-            "edit_intent",
-            "generated_accent_routes",
-            "final_render_sha256"
-          ]
+          "carries": ["chapter_boundary","chapter_role","edit_intent","generated_accent_routes","final_render_sha256"]
         }
       }
     },
@@ -78,24 +77,9 @@ export const profileProductionStatus = {
         "intendedUse": "FINISHING_AND_OUTPUT_QA"
       },
       "generatedAccentRoutes": [
-        {
-          "slotId": "departure-boarding-title",
-          "chapterId": "departure",
-          "implementation": "PROFILE_BOARDING_TITLE_CARD",
-          "canonicalReuse": "COMPOSITION_SPECIFIC_GRAPHIC"
-        },
-        {
-          "slotId": "intersection-route",
-          "chapterId": "intersection",
-          "implementation": "MOTION_ZUKAN_ROUTE_LINE",
-          "canonicalReuse": "TransitionWipeEngine/route-line"
-        },
-        {
-          "slotId": "arrival-door-light",
-          "chapterId": "arrival",
-          "implementation": "OPENING_DOOR_LIGHT_REUSE",
-          "canonicalReuse": "DoorLight"
-        }
+        {"slotId":"departure-boarding-title","chapterId":"departure","implementation":"PROFILE_BOARDING_TITLE_CARD","canonicalReuse":"COMPOSITION_SPECIFIC_GRAPHIC"},
+        {"slotId":"intersection-route","chapterId":"intersection","implementation":"MOTION_ZUKAN_ROUTE_LINE","canonicalReuse":"TransitionWipeEngine/route-line"},
+        {"slotId":"arrival-door-light","chapterId":"arrival","implementation":"OPENING_DOOR_LIGHT_REUSE","canonicalReuse":"DoorLight"}
       ],
       "actualEvidence": {
         "path": "out/qa/profile-v1-davinci-finishing-evidence.json",
@@ -107,18 +91,7 @@ export const profileProductionStatus = {
           "strict": "pnpm profile:davinci-finishing:strict"
         },
         "requiredChecks": [
-          "source_render_sha_readback",
-          "resolve_version_project_timeline",
-          "timeline_insertion",
-          "duration_and_fps",
-          "color_finish",
-          "audio_finish",
-          "title_safe_and_framing",
-          "playback_1x",
-          "playback_half_speed",
-          "export_duration_dimensions_fps_audio",
-          "watched_with_sound",
-          "human_overall_review"
+          "source_render_sha_readback","resolve_version_project_timeline","timeline_insertion","duration_and_fps","color_finish","audio_finish","title_safe_and_framing","playback_1x","playback_half_speed","export_duration_dimensions_fps_audio","watched_with_sound","human_overall_review"
         ]
       },
       "productionReady": false
