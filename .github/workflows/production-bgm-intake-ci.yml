@@ -1,0 +1,57 @@
+name: Production BGM Intake CI
+
+on:
+  pull_request:
+    paths:
+      - "motion-studio/scripts/intake-production-bgm.mts"
+      - "motion-studio/scripts/check-production-bgm-intake.mts"
+      - ".github/workflows/production-bgm-intake-ci.yml"
+  push:
+    branches: [main]
+    paths:
+      - "motion-studio/scripts/intake-production-bgm.mts"
+      - "motion-studio/scripts/check-production-bgm-intake.mts"
+      - ".github/workflows/production-bgm-intake-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    defaults:
+      run:
+        working-directory: motion-studio
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Verify canonical BGM intake behavior
+        run: node --no-warnings scripts/check-production-bgm-intake.mts
+
+      - name: Verify rights and source safety boundaries
+        run: |
+          for token in \
+            "DRY RUN PASS: no BGM copied" \
+            "UNSUPPORTED_SOURCE_EXTENSION" \
+            "TARGET_EXISTS" \
+            "COPY VERIFY FAILED" \
+            "wedding-production-bgm-intake-receipt/v1" \
+            "rightsClearedByIntake: false" \
+            "humanCreativeQaState: 'NOT_RUN'" \
+            "macDaVinciActualState: 'NOT_RUN'" \
+            "productionReady: false" \
+            "RIGHTS STATE: NOT CLEARED BY INTAKE"; do
+            grep -q -- "$token" scripts/intake-production-bgm.mts || { echo "missing BGM intake safety token: $token"; exit 1; }
+          done
+          if grep -Eq "renameSync|unlinkSync|rmSync\(.*source|writeFileSync\(.*source" scripts/intake-production-bgm.mts; then
+            echo "BGM intake must not rename/delete/rewrite source audio"
+            exit 1
+          fi
+          echo "BGM intake source preservation + Human rights boundary verified"
