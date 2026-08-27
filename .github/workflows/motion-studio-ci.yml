@@ -123,26 +123,47 @@ jobs:
           done
           echo "DaVinci finishing correctly remains NOT_RUN until bundle-bound Mac Resolve Actual is recorded"
 
+      - name: Opening V1 final delivery approval remains human-only and fail-closed
+        run: |
+          pnpm opening:final-delivery-approval
+          if pnpm opening:final-delivery-approval:strict; then
+            echo "final delivery approval unexpectedly passed without bundle-bound human approval"
+            exit 1
+          fi
+          for token in \
+            "opening-v1-final-delivery-approval/v1" \
+            "HUMAN_FINAL_DELIVERY_APPROVAL" \
+            "decision: 'HOLD'" \
+            "productionReady: false" \
+            "STALE_FINAL_DELIVERY_BUNDLE_SHA" \
+            "STALE_FINAL_DELIVERY_DAVINCI_EVIDENCE_SHA" \
+            "FINAL_DELIVERY_DECISION_" \
+            "productionReady=true is valid only"; do
+            grep -q "$token" scripts/opening-v1-final-delivery-approval.mts || { echo "missing final approval contract token: $token"; exit 1; }
+          done
+          echo "final delivery approval cannot be manufactured by CI and only becomes production-ready after explicit SHA-bound human approval"
+
       - name: Opening V1 production status identifies the exact first blocker
         run: |
           mkdir -p out/qa
           node --no-warnings scripts/opening-v1-production-status.mts --json > out/qa/opening-v1-production-status.json
-          node -e "const fs=require('fs'); const r=JSON.parse(fs.readFileSync('out/qa/opening-v1-production-status.json','utf8')); if(r.schemaVersion!=='opening-v1-production-status/v1') process.exit(1); if(r.authority!=='DERIVED_PRODUCTION_STATUS') process.exit(1); if(r.overallState!=='MEDIA_REQUIRED') process.exit(1); if(r.stages.media.state!=='BLOCKED') process.exit(1); if(r.stages.previewRender.state!=='NOT_RUN') process.exit(1); if(r.readiness.macDaVinciActualVerified!==false) process.exit(1); if(r.readiness.productionReady!==false) process.exit(1);"
+          node -e "const fs=require('fs'); const r=JSON.parse(fs.readFileSync('out/qa/opening-v1-production-status.json','utf8')); if(r.schemaVersion!=='opening-v1-production-status/v1') process.exit(1); if(r.authority!=='DERIVED_PRODUCTION_STATUS') process.exit(1); if(r.overallState!=='MEDIA_REQUIRED') process.exit(1); if(r.stages.media.state!=='BLOCKED') process.exit(1); if(r.stages.previewRender.state!=='NOT_RUN') process.exit(1); if(r.stages.finalDeliveryApproval.state!=='NOT_RUN') process.exit(1); if(r.readiness.macDaVinciActualVerified!==false) process.exit(1); if(r.readiness.finalDeliveryApproved!==false) process.exit(1); if(r.readiness.productionReady!==false) process.exit(1);"
           if pnpm opening:production-status:strict; then
-            echo "production status unexpectedly reached DaVinci Actual on a fresh clone"
+            echo "production status unexpectedly reached human final delivery approval on a fresh clone"
             exit 1
           fi
           for token in \
             "opening-v1-production-status/v1" \
             "MEDIA_REQUIRED" \
-            "AWAITING_FINAL_DELIVERY_APPROVAL" \
+            "FINAL_DELIVERY_APPROVAL_INIT_REQUIRED" \
+            "FINAL_DELIVERY_APPROVAL_REQUIRED_OR_STALE" \
+            "PRODUCTION_READY" \
             "PRODUCTION_BUNDLE_STALE" \
             "DAVINCI_ACTUAL_REQUIRED_OR_STALE" \
-            "productionReady: false" \
-            "CI_MUST_NOT_PROMOTE_MAC_GUI_ACTUAL"; do
+            "CI_MUST_NOT_APPROVE_FINAL_DELIVERY"; do
             grep -q "$token" scripts/opening-v1-production-status.mts || { echo "missing production status contract token: $token"; exit 1; }
           done
-          echo "production status correctly reports the first actionable blocker without trusting downstream artifacts"
+          echo "production status correctly requires the explicit final human approval after DaVinci Actual"
 
       - name: Opening V1 final BGM gate fails closed without cleared media
         run: |
