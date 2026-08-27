@@ -7,6 +7,7 @@ const studioRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const bundlePath = join(studioRoot, 'out/handoff/opening-v1/opening-v1-production-bundle.json');
 const timelineCsvPath = join(studioRoot, 'out/handoff/opening-v1/opening-v1-palmier-timeline.csv');
 const soundCueCsvPath = join(studioRoot, 'out/handoff/opening-v1/opening-v1-palmier-sound-cues.csv');
+const finalReviewPath = join(studioRoot, 'out/qa/opening-v1-final-render-review.json');
 const evidencePath = join(studioRoot, 'out/qa/opening-v1-davinci-finishing-evidence.json');
 const mode = process.argv.includes('--init') ? 'init' : process.argv.includes('--strict') ? 'strict' : 'status';
 
@@ -17,6 +18,18 @@ type ProductionBundle = {
   authority: 'FINAL_RENDER_BOUND_HANDOFF';
   finalRender: {path: string; sha256: string};
   humanPreviewReview: {evidenceSha256: string; reviewer: string | null; reviewedAt: string | null; overall: string};
+  humanFinalRenderReview: {
+    evidencePath: string;
+    evidenceSha256: string;
+    boundAt: string;
+    finalRenderPath: string;
+    finalRenderSha256: string;
+    renderSourceFingerprintSha256: string;
+    reviewer: string | null;
+    reviewedAt: string | null;
+    overall: string;
+    notes: string;
+  };
   palmier: {
     handoffContractVersion: string;
     timelineCsv: string;
@@ -75,6 +88,15 @@ function loadBundle(): {bundle: ProductionBundle; bundleSha256: string} {
   if (bundle.authority !== 'FINAL_RENDER_BOUND_HANDOFF') throw new Error('DAVINCI_FINISHING_BUNDLE_AUTHORITY_MISMATCH');
   if (bundle.davinci.productionReady !== false) throw new Error('DAVINCI_FINISHING_UPSTREAM_BUNDLE_MUST_FAIL_CLOSED');
   if (bundle.finalRender.sha256 !== bundle.davinci.expectedSha256) throw new Error('DAVINCI_FINISHING_UPSTREAM_SHA_CONTRACT_MISMATCH');
+
+  if (!existsSync(finalReviewPath)) throw new Error('DAVINCI_FINISHING_FINAL_RENDER_REVIEW_MISSING');
+  if (bundle.humanFinalRenderReview?.evidencePath !== rel(finalReviewPath)) throw new Error('DAVINCI_FINISHING_FINAL_RENDER_REVIEW_PATH_MISMATCH');
+  if (bundle.humanFinalRenderReview?.evidenceSha256 !== shaFile(finalReviewPath)) throw new Error('DAVINCI_FINISHING_FINAL_RENDER_REVIEW_SHA_MISMATCH');
+  if (bundle.humanFinalRenderReview?.overall !== 'PASS') throw new Error('DAVINCI_FINISHING_FINAL_RENDER_REVIEW_NOT_PASS');
+  if (!bundle.humanFinalRenderReview?.reviewer?.trim()) throw new Error('DAVINCI_FINISHING_FINAL_RENDER_REVIEWER_MISSING');
+  if (bundle.humanFinalRenderReview?.finalRenderPath !== bundle.finalRender.path) throw new Error('DAVINCI_FINISHING_FINAL_REVIEW_RENDER_PATH_MISMATCH');
+  if (bundle.humanFinalRenderReview?.finalRenderSha256 !== bundle.finalRender.sha256) throw new Error('DAVINCI_FINISHING_FINAL_REVIEW_RENDER_SHA_MISMATCH');
+
   if (bundle.palmier?.handoffContractVersion !== 'opening-v1-palmier-handoff/v2') throw new Error('DAVINCI_FINISHING_PALMIER_HANDOFF_CONTRACT_STALE');
   if (bundle.palmier?.timelineCsv !== rel(timelineCsvPath)) throw new Error('DAVINCI_FINISHING_PALMIER_TIMELINE_PATH_MISMATCH');
   if (!existsSync(timelineCsvPath)) throw new Error('DAVINCI_FINISHING_PALMIER_TIMELINE_MISSING');
@@ -227,7 +249,7 @@ function verifyEvidence(strict: boolean) {
     return;
   }
 
-  console.log('Opening V1 DaVinci finishing evidence: ACTUAL_VERIFIED — current production bundle, versioned Palmier scene/sound handoff, source render and exported movie bytes match the recorded Mac Resolve evidence.');
+  console.log('Opening V1 DaVinci finishing evidence: ACTUAL_VERIFIED — current production bundle, Human final-render review, versioned Palmier scene/sound handoff, source render and exported movie bytes match the recorded Mac Resolve evidence.');
   console.log('productionReady remains false here; final delivery approval is a separate human decision.');
 }
 
