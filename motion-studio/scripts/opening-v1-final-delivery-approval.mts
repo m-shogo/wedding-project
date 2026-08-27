@@ -119,9 +119,23 @@ function verifyApproval(strict: boolean) {
     fail(error instanceof Error ? error.message : String(error));
   }
 
-  const approval = JSON.parse(readFileSync(approvalPath, 'utf8')) as FinalDeliveryApproval;
+  let approval: FinalDeliveryApproval | null = null;
+  try {
+    approval = JSON.parse(readFileSync(approvalPath, 'utf8')) as FinalDeliveryApproval;
+  } catch {
+    fail('FINAL_DELIVERY_APPROVAL_INVALID_JSON');
+  }
+  if (!approval) {
+    console.log(`Opening V1 final delivery approval: HOLD/BLOCKED (${errors.length})`);
+    for (const error of errors) console.log(`BLOCK / ${error}`);
+    if (strict) process.exit(1);
+    return;
+  }
+
   if (approval.schemaVersion !== 'opening-v1-final-delivery-approval/v1') fail('FINAL_DELIVERY_APPROVAL_SCHEMA');
   if (approval.authority !== 'HUMAN_FINAL_DELIVERY_APPROVAL') fail('FINAL_DELIVERY_APPROVAL_AUTHORITY');
+  if (approval.productionBundle.path !== rel(bundlePath)) fail('FINAL_DELIVERY_APPROVAL_BUNDLE_PATH');
+  if (approval.davinciEvidence.path !== rel(davinciEvidencePath)) fail('FINAL_DELIVERY_APPROVAL_DAVINCI_EVIDENCE_PATH');
 
   if (current) {
     if (approval.productionBundle.sha256 !== current.bundleSha256) fail('STALE_FINAL_DELIVERY_BUNDLE_SHA');
@@ -134,9 +148,13 @@ function verifyApproval(strict: boolean) {
     }
   }
 
+  const boundAtMs = Date.parse(approval.boundAt);
+  const decidedAtMs = approval.decidedAt ? Date.parse(approval.decidedAt) : Number.NaN;
+  if (!approval.boundAt || Number.isNaN(boundAtMs)) fail('FINAL_DELIVERY_BOUND_AT_INVALID');
   if (approval.decision !== 'APPROVE') fail(`FINAL_DELIVERY_DECISION_${approval.decision}`);
   if (!approval.approver?.trim()) fail('FINAL_DELIVERY_APPROVER_MISSING');
-  if (!approval.decidedAt || Number.isNaN(Date.parse(approval.decidedAt))) fail('FINAL_DELIVERY_DECIDED_AT_INVALID');
+  if (!approval.decidedAt || Number.isNaN(decidedAtMs)) fail('FINAL_DELIVERY_DECIDED_AT_INVALID');
+  else if (!Number.isNaN(boundAtMs) && decidedAtMs < boundAtMs) fail('FINAL_DELIVERY_DECIDED_BEFORE_BINDING');
   if (approval.productionReady !== (approval.decision === 'APPROVE')) fail('FINAL_DELIVERY_PRODUCTION_READY_MUST_MATCH_DECISION');
 
   if (errors.length > 0) {
