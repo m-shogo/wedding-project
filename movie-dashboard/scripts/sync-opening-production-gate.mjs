@@ -40,11 +40,11 @@ function normalizedBasename(filePath) {
 
 const resolvedSlots = orderedKeys.map((key) => {
   const aliasSet = aliases[key] ?? [key];
-  const semanticMatch = openingPhotos.find((filePath) => {
+  const semanticMatches = openingPhotos.filter((filePath) => {
     const base = normalizedBasename(filePath);
     return aliasSet.includes(base);
   });
-  const resolvedPath = semanticMatch ?? null;
+  const resolvedPath = semanticMatches.length === 1 ? semanticMatches[0] : null;
   return { key, resolved: resolvedPath !== null, path: resolvedPath };
 });
 
