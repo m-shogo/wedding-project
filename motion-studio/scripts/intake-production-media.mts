@@ -1,4 +1,5 @@
-import {copyFileSync, existsSync, mkdirSync, readdirSync, statSync} from 'node:fs';
+import {createHash} from 'node:crypto';
+import {copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync} from 'node:fs';
 import {dirname, extname, join, resolve} from 'node:path';
 import {fileURLToPath, pathToFileURL} from 'node:url';
 import {aliases as openingAliases, orderedKeys} from '../src/data/openingV1PhotoRoles.ts';
@@ -37,6 +38,29 @@ type IntakePlan = {
   readyToApply: boolean;
 };
 
+export type IntakeReceiptCopy = {
+  id: string;
+  sourceFile: string;
+  targetFile: string;
+  bytes: number;
+  sha256: string;
+  sourceTargetMatch: true;
+};
+
+export type IntakeReceipt = {
+  schemaVersion: 'wedding-production-media-intake-receipt/v1';
+  project: Project;
+  createdAt: string;
+  expectedCount: number;
+  copiedCount: number;
+  sourcePreserved: true;
+  copyBytesVerified: true;
+  humanQaState: 'NOT_RUN';
+  macDaVinciActualState: 'NOT_RUN';
+  productionReady: false;
+  copies: IntakeReceiptCopy[];
+};
+
 const studioRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const imageExts = new Set(['.jpg', '.jpeg', '.png', '.webp']);
 const videoExts = new Set(['.mp4', '.mov', '.m4v', '.webm']);
@@ -53,6 +77,8 @@ const acceptsKind = (kind: MediaKind, file: string) => {
   if (kind === 'video') return videoExts.has(ext);
   return imageExts.has(ext) || videoExts.has(ext);
 };
+
+const sha256File = (file: string) => createHash('sha256').update(readFileSync(file)).digest('hex');
 
 export const getIntakeSpecs = (project: Project): IntakeSpec[] => {
   if (project === 'opening') {
@@ -159,10 +185,50 @@ export const buildIntakePlan = ({
   };
 };
 
-export const applyIntakePlan = (plan: IntakePlan) => {
+export const applyIntakePlan = (plan: IntakePlan, createdAt = new Date().toISOString()): IntakeReceipt => {
   if (!plan.readyToApply) throw new Error('Intake plan is not safe to apply. Resolve blockers first.');
   mkdirSync(plan.targetDirectory, {recursive: true});
-  for (const copy of plan.copies) copyFileSync(copy.sourcePath, copy.targetPath);
+
+  const copies: IntakeReceiptCopy[] = [];
+  for (const copy of plan.copies) {
+    const sourceSha = sha256File(copy.sourcePath);
+    const sourceBytes = statSync(copy.sourcePath).size;
+    copyFileSync(copy.sourcePath, copy.targetPath);
+    const targetSha = sha256File(copy.targetPath);
+    const targetBytes = statSync(copy.targetPath).size;
+    if (sourceSha !== targetSha || sourceBytes !== targetBytes) {
+      throw new Error(`COPY VERIFY FAILED: ${copy.sourceFile} -> ${copy.targetFile}`);
+    }
+    copies.push({
+      id: copy.id,
+      sourceFile: copy.sourceFile,
+      targetFile: copy.targetFile,
+      bytes: targetBytes,
+      sha256: targetSha,
+      sourceTargetMatch: true,
+    });
+  }
+
+  return {
+    schemaVersion: 'wedding-production-media-intake-receipt/v1',
+    project: plan.project,
+    createdAt,
+    expectedCount: plan.expectedCount,
+    copiedCount: copies.length,
+    sourcePreserved: true,
+    copyBytesVerified: true,
+    humanQaState: 'NOT_RUN',
+    macDaVinciActualState: 'NOT_RUN',
+    productionReady: false,
+    copies,
+  };
+};
+
+export const writeIntakeReceipt = (receipt: IntakeReceipt, receiptPath: string) => {
+  const destination = resolve(receiptPath);
+  mkdirSync(dirname(destination), {recursive: true});
+  writeFileSync(destination, `${JSON.stringify(receipt, null, 2)}\n`, 'utf8');
+  return destination;
 };
 
 const readArg = (name: string) => {
@@ -188,11 +254,12 @@ const printPlan = (plan: IntakePlan) => {
 const main = () => {
   const project = readArg('--project') as Project | undefined;
   const source = readArg('--source');
+  const receiptPath = readArg('--receipt');
   const apply = process.argv.includes('--apply');
   const overwrite = process.argv.includes('--overwrite');
 
   if (project !== 'opening' && project !== 'profile') {
-    console.error('Usage: --project opening|profile --source <directory> [--apply] [--overwrite]');
+    console.error('Usage: --project opening|profile --source <directory> [--apply] [--overwrite] [--receipt <json-path>]');
     process.exit(2);
   }
   if (!source) {
@@ -210,11 +277,18 @@ const main = () => {
 
   if (!apply) {
     console.log('DRY RUN PASS: no files copied. Re-run with --apply to copy canonical files.');
+    if (receiptPath) console.log('RECEIPT NOT WRITTEN: receipts prove completed copy bytes and are only emitted after --apply.');
     process.exit(0);
   }
 
-  applyIntakePlan(plan);
-  console.log(`APPLIED: copied ${plan.copies.length} files without modifying source files.`);
+  const receipt = applyIntakePlan(plan);
+  console.log(`APPLIED: copied and SHA-verified ${receipt.copiedCount} files without modifying source files.`);
+  if (receiptPath) {
+    const destination = writeIntakeReceipt(receipt, receiptPath);
+    console.log(`RECEIPT: ${destination}`);
+  } else {
+    console.log('RECEIPT: not requested. Use --receipt <json-path> to persist SHA-bound intake evidence.');
+  }
   console.log(project === 'opening'
     ? 'NEXT: pnpm prepare:opening-v1'
     : 'NEXT: pnpm prepare:profile-v1');
