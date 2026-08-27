@@ -74,6 +74,14 @@ for (const p of master.phrases) {
     if (c.timeMs < p.startMs - 300 || c.timeMs > p.endMs + 300) {
       warnings.push(`${c.cueId}: timeMs=${c.timeMs}がphrase範囲[${p.startMs},${p.endMs}]から300ms超で外れている`);
     }
+    // Clamp Integrity Gate(item P0-2): endMs clamp(隣接phrase重なり解消)後に、
+    // impact/hit cueがそのphraseの表示区間より後ろへはみ出すのは、ChoreographedMoment
+    // (全画面takeover)を含め見た目が壊れる重大な事故になり得るため、緩衝無しの
+    // 厳密errorにする(startMs側は語の立ち上がり検出誤差を許容し430行付近の
+    // warningのみに留める。endMs側だけ厳密にする)。
+    if (c.timeMs > p.endMs) {
+      errors.push(`${c.cueId}: timeMs=${c.timeMs}がphrase endMs(${p.endMs})を超過(clamp integrity違反。impact/hitがphrase区間外で発生する)`);
+    }
     // verified状態の整合: verifiedByListening=trueならtimingSourceがestimatedのままは矛盾。
     if (c.verifiedByListening && c.timingSource === 'estimated') {
       errors.push(`${c.cueId}: verifiedByListening=trueなのにtimingSource='estimated'(矛盾)`);
