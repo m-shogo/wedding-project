@@ -11,6 +11,15 @@ const evidencePath = join(studioRoot, 'out/qa/profile-v1-real-media-review.json'
 const runtimeManifestPath = join(studioRoot, 'src/data/profileV1RuntimeMedia.generated.ts');
 const productionPlanPath = join(studioRoot, 'src/data/profileV1ProductionPlan.ts');
 const previewComponentPath = join(studioRoot, 'src/compositions/profile/ProfileV1RealMediaPreview.tsx');
+const previewSourcePaths = [
+  'src/index-profile-v1.ts',
+  'src/ProfileV1Root.tsx',
+  'src/compositions/profile/ProfileV1RealMediaPreview.tsx',
+  'scripts/render-profile-v1-real-media-preview.mts',
+  'src/data/profileV1RuntimeMedia.generated.ts',
+  'src/data/profileV1ProductionPlan.ts',
+  'src/data/theme.ts',
+] as const;
 const mode = process.argv.includes('--init')
   ? 'init'
   : process.argv.includes('--strict')
@@ -30,6 +39,7 @@ type RuntimeSlot = {
   extension: string | null;
   resolved: boolean;
 };
+type PreviewSource = {path: string; sha256: string};
 
 type MediaEvidence = {
   slot: string;
@@ -60,6 +70,8 @@ type Evidence = {
   authority: 'HUMAN_REAL_MEDIA_PREVIEW_REVIEW';
   boundAt: string;
   preview: {path: string; sha256: string};
+  previewSourceFingerprintSha256: string;
+  previewSources: PreviewSource[];
   runtimeManifestSha256: string;
   productionPlanSha256: string;
   previewComponentSha256: string;
@@ -85,6 +97,18 @@ const rel = (path: string) => relative(studioRoot, path).replaceAll('\\', '/');
 const qaAxes = ['crop', 'focus', 'color', 'emotionalFit', 'contentAccuracy'] as const;
 const chapterQaAxes = ['visualFlow', 'readability', 'mediaRoleFit'] as const;
 const isQaState = (value: unknown): value is QaState => value === 'NOT_RUN' || value === 'PASS' || value === 'FAIL';
+
+function previewSourceBinding() {
+  const previewSources = previewSourcePaths.map((path) => {
+    const absolute = join(studioRoot, path);
+    if (!existsSync(absolute)) throw new Error(`PROFILE_REAL_MEDIA_PREVIEW_SOURCE_MISSING:${path}`);
+    return {path, sha256: shaFile(absolute)};
+  });
+  const previewSourceFingerprintSha256 = shaBuffer(
+    previewSources.map((source) => `${source.path}\0${source.sha256}`).join('\n'),
+  );
+  return {previewSourceFingerprintSha256, previewSources};
+}
 
 function currentBindings() {
   if (!existsSync(previewPath)) {
@@ -115,6 +139,7 @@ function currentBindings() {
 
   return {
     preview: {path: rel(previewPath), sha256: shaFile(previewPath)},
+    ...previewSourceBinding(),
     runtimeManifestSha256: shaFile(runtimeManifestPath),
     productionPlanSha256: shaFile(productionPlanPath),
     previewComponentSha256: shaFile(previewComponentPath),
@@ -130,6 +155,8 @@ function initializeEvidence() {
     authority: 'HUMAN_REAL_MEDIA_PREVIEW_REVIEW',
     boundAt: new Date().toISOString(),
     preview: current.preview,
+    previewSourceFingerprintSha256: current.previewSourceFingerprintSha256,
+    previewSources: current.previewSources,
     runtimeManifestSha256: current.runtimeManifestSha256,
     productionPlanSha256: current.productionPlanSha256,
     previewComponentSha256: current.previewComponentSha256,
@@ -159,6 +186,7 @@ function initializeEvidence() {
   mkdirSync(dirname(evidencePath), {recursive: true});
   writeFileSync(evidencePath, `${JSON.stringify(evidence, null, 2)}\n`);
   console.log(`Profile V1 real-media review evidence initialized: ${rel(evidencePath)}`);
+  console.log(`previewSourceFingerprintSha256=${evidence.previewSourceFingerprintSha256}`);
   console.log('All Human visual/content verdicts remain NOT_RUN; BGM and Mac DaVinci Actual stay separate.');
 }
 
@@ -246,6 +274,14 @@ function evaluate() {
 
   if (current) {
     if (evidence.preview.path !== current.preview.path || evidence.preview.sha256 !== current.preview.sha256) blockers.push('STALE_REAL_MEDIA_PREVIEW');
+    if (evidence.previewSourceFingerprintSha256 !== current.previewSourceFingerprintSha256) blockers.push('STALE_REAL_MEDIA_PREVIEW_SOURCE_FINGERPRINT');
+    const savedSources = new Map(Array.isArray(evidence.previewSources) ? evidence.previewSources.map((source) => [source.path, source.sha256]) : []);
+    for (const source of current.previewSources) {
+      if (savedSources.get(source.path) !== source.sha256) blockers.push(`STALE_REAL_MEDIA_PREVIEW_SOURCE:${source.path}`);
+    }
+    if (!Array.isArray(evidence.previewSources) || evidence.previewSources.length !== current.previewSources.length) {
+      blockers.push(`PREVIEW_SOURCE_COUNT:${Array.isArray(evidence.previewSources) ? evidence.previewSources.length : 0}/${current.previewSources.length}`);
+    }
     if (evidence.runtimeManifestSha256 !== current.runtimeManifestSha256) blockers.push('STALE_RUNTIME_MEDIA_MANIFEST');
     if (evidence.productionPlanSha256 !== current.productionPlanSha256) blockers.push('STALE_PROFILE_PRODUCTION_PLAN');
     if (evidence.previewComponentSha256 !== current.previewComponentSha256) blockers.push('STALE_REAL_MEDIA_PREVIEW_COMPONENT');
