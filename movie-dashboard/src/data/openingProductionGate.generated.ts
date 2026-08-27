@@ -22,17 +22,61 @@ export const openingProductionGate = {
     ]
   },
   "photoSlots": [
-    {"key":"okinawa-01","resolved":false,"path":null},
-    {"key":"okinawa-02","resolved":false,"path":null},
-    {"key":"okinawa-03","resolved":false,"path":null},
-    {"key":"seoul-01","resolved":false,"path":null},
-    {"key":"seoul-02","resolved":false,"path":null},
-    {"key":"seoul-03","resolved":false,"path":null},
-    {"key":"hawaii-01","resolved":false,"path":null},
-    {"key":"hawaii-02","resolved":false,"path":null},
-    {"key":"hawaii-03","resolved":false,"path":null},
-    {"key":"hero-01","resolved":false,"path":null},
-    {"key":"hero-02","resolved":false,"path":null}
+    {
+      "key": "okinawa-01",
+      "resolved": false,
+      "path": null
+    },
+    {
+      "key": "okinawa-02",
+      "resolved": false,
+      "path": null
+    },
+    {
+      "key": "okinawa-03",
+      "resolved": false,
+      "path": null
+    },
+    {
+      "key": "seoul-01",
+      "resolved": false,
+      "path": null
+    },
+    {
+      "key": "seoul-02",
+      "resolved": false,
+      "path": null
+    },
+    {
+      "key": "seoul-03",
+      "resolved": false,
+      "path": null
+    },
+    {
+      "key": "hawaii-01",
+      "resolved": false,
+      "path": null
+    },
+    {
+      "key": "hawaii-02",
+      "resolved": false,
+      "path": null
+    },
+    {
+      "key": "hawaii-03",
+      "resolved": false,
+      "path": null
+    },
+    {
+      "key": "hero-01",
+      "resolved": false,
+      "path": null
+    },
+    {
+      "key": "hero-02",
+      "resolved": false,
+      "path": null
+    }
   ],
   "bgm": {
     "assetId": "opening-bgm-main",
@@ -41,14 +85,40 @@ export const openingProductionGate = {
     "fileExists": false,
     "intakeReceiptCurrent": false,
     "intakeReceiptPath": "out/intake/opening-bgm-intake.json",
-    "intakeReceiptBlockerCodes": ["BGM_RECEIPT_MISSING"],
+    "intakeReceiptBlockerCodes": [
+      "BGM_RECEIPT_MISSING"
+    ],
     "ready": false
   },
   "ambience": [
-    {"assetId":"opening-okinawa-sea","status":"missing","playable":false,"fileExists":false,"ready":false},
-    {"assetId":"opening-seoul-street","status":"missing","playable":false,"fileExists":false,"ready":false},
-    {"assetId":"opening-hawaii-ocean","status":"missing","playable":false,"fileExists":false,"ready":false},
-    {"assetId":"opening-arrival-roomtone","status":"missing","playable":false,"fileExists":false,"ready":false}
+    {
+      "assetId": "opening-okinawa-sea",
+      "status": "missing",
+      "playable": false,
+      "fileExists": false,
+      "ready": false
+    },
+    {
+      "assetId": "opening-seoul-street",
+      "status": "missing",
+      "playable": false,
+      "fileExists": false,
+      "ready": false
+    },
+    {
+      "assetId": "opening-hawaii-ocean",
+      "status": "missing",
+      "playable": false,
+      "fileExists": false,
+      "ready": false
+    },
+    {
+      "assetId": "opening-arrival-roomtone",
+      "status": "missing",
+      "playable": false,
+      "fileExists": false,
+      "ready": false
+    }
   ],
   "finalBlocked": true,
   "nextAction": "node --no-warnings scripts/intake-production-media.mts --project opening --source \"/ABS/PATH/TO/opening-media\"",
