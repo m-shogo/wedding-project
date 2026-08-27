@@ -9,9 +9,11 @@ const evidencePath = join(studioRoot, 'out/qa/profile-v1-full-structure-review.j
 const componentPath = join(studioRoot, 'src/compositions/profile/ProfileV1FullStructurePreview.tsx');
 const productionPlanPath = join(studioRoot, 'src/data/profileV1ProductionPlan.ts');
 const sourcePlanPath = join(studioRoot, '../01_profile-movie/chapter-plan.md');
+const jsonMode = process.argv.includes('--json');
 const mode = process.argv.includes('--init') ? 'init' : process.argv.includes('--strict') ? 'strict' : 'status';
 
 type QaState = 'NOT_RUN' | 'PASS' | 'FAIL';
+type ReviewState = 'NOT_RUN' | 'BLOCKED' | 'PASS';
 type ChapterId = 'departure' | 'separate-journeys' | 'intersection' | 'adventure' | 'arrival';
 type Evidence = {
   schemaVersion: 'profile-v1-full-structure-review/v1';
@@ -46,10 +48,35 @@ type Evidence = {
   productionReady: false;
 };
 
+type CurrentBindings = {
+  preview: {path: string; sha256: string};
+  component: {path: string; sha256: string};
+  productionPlan: {path: string; sha256: string};
+  sourcePlan: {path: string; sha256: string};
+};
+
+type StatusReport = {
+  schemaVersion: 'profile-v1-full-structure-review-status/v1';
+  authority: 'DERIVED_STRUCTURE_REVIEW_STATUS';
+  state: ReviewState;
+  evidencePath: string;
+  boundPreviewSha256: string | null;
+  currentPreviewSha256: string | null;
+  reviewer: string | null;
+  reviewedAt: string | null;
+  blockers: string[];
+  humanReviewComplete: boolean;
+  realMediaReviewed: false;
+  bgmReviewed: false;
+  contentAccuracyReviewed: false;
+  macDaVinciActual: 'NOT_RUN';
+  productionReady: false;
+};
+
 const shaFile = (path: string) => createHash('sha256').update(readFileSync(path)).digest('hex');
 const rel = (path: string) => relative(studioRoot, path).replaceAll('\\', '/');
 
-function currentBindings() {
+function currentBindings(): CurrentBindings {
   for (const [label, path] of [
     ['PROFILE_FULL_STRUCTURE_PREVIEW_MISSING', previewPath],
     ['PROFILE_FULL_STRUCTURE_COMPONENT_MISSING', componentPath],
@@ -93,16 +120,30 @@ function initializeEvidence() {
   console.log('All human verdicts remain NOT_RUN; structure review cannot approve real media, BGM, content accuracy, Mac Actual or production readiness.');
 }
 
-function verifyEvidence(strict: boolean) {
+function evaluateEvidence(): StatusReport {
   if (!existsSync(evidencePath)) {
-    console.log('Profile full structure review: NOT_RUN (evidence file missing)');
-    if (strict) process.exit(1);
-    return;
+    return {
+      schemaVersion: 'profile-v1-full-structure-review-status/v1',
+      authority: 'DERIVED_STRUCTURE_REVIEW_STATUS',
+      state: 'NOT_RUN',
+      evidencePath: rel(evidencePath),
+      boundPreviewSha256: null,
+      currentPreviewSha256: existsSync(previewPath) ? shaFile(previewPath) : null,
+      reviewer: null,
+      reviewedAt: null,
+      blockers: ['STRUCTURE_REVIEW_EVIDENCE_MISSING'],
+      humanReviewComplete: false,
+      realMediaReviewed: false,
+      bgmReviewed: false,
+      contentAccuracyReviewed: false,
+      macDaVinciActual: 'NOT_RUN',
+      productionReady: false,
+    };
   }
 
   const errors: string[] = [];
   const fail = (message: string) => errors.push(message);
-  let current: ReturnType<typeof currentBindings> | null = null;
+  let current: CurrentBindings | null = null;
   try {
     current = currentBindings();
   } catch (error) {
@@ -143,16 +184,38 @@ function verifyEvidence(strict: boolean) {
   if (evidence.macDaVinciActual !== 'NOT_RUN') fail('STRUCTURE_REVIEW_MUST_NOT_CLAIM_MAC_DAVINCI_ACTUAL');
   if (evidence.productionReady !== false) fail('STRUCTURE_REVIEW_MUST_NOT_CLAIM_PRODUCTION_READY');
 
-  if (errors.length > 0) {
-    console.log(`Profile full structure review: BLOCKED (${errors.length})`);
-    for (const error of errors) console.log(`BLOCK / ${error}`);
-    if (strict) process.exit(1);
-    return;
-  }
+  return {
+    schemaVersion: 'profile-v1-full-structure-review-status/v1',
+    authority: 'DERIVED_STRUCTURE_REVIEW_STATUS',
+    state: errors.length === 0 ? 'PASS' : 'BLOCKED',
+    evidencePath: rel(evidencePath),
+    boundPreviewSha256: evidence.preview?.sha256 ?? null,
+    currentPreviewSha256: current?.preview.sha256 ?? null,
+    reviewer: evidence.review?.reviewer ?? null,
+    reviewedAt: evidence.review?.reviewedAt ?? null,
+    blockers: errors,
+    humanReviewComplete: errors.length === 0,
+    realMediaReviewed: false,
+    bgmReviewed: false,
+    contentAccuracyReviewed: false,
+    macDaVinciActual: 'NOT_RUN',
+    productionReady: false,
+  };
+}
 
-  console.log('Profile full structure review: PASS for the current SHA-bound neutral 5-chapter structure preview.');
-  console.log('realMediaReviewed=false bgmReviewed=false contentAccuracyReviewed=false macDaVinciActual=NOT_RUN productionReady=false remain mandatory boundaries.');
+function reportStatus(strict: boolean) {
+  const report = evaluateEvidence();
+  if (jsonMode) {
+    console.log(JSON.stringify(report, null, 2));
+  } else if (report.state === 'PASS') {
+    console.log('Profile full structure review: PASS for the current SHA-bound neutral 5-chapter structure preview.');
+    console.log('realMediaReviewed=false bgmReviewed=false contentAccuracyReviewed=false macDaVinciActual=NOT_RUN productionReady=false remain mandatory boundaries.');
+  } else {
+    console.log(`Profile full structure review: ${report.state} (${report.blockers.length})`);
+    for (const error of report.blockers) console.log(`BLOCK / ${error}`);
+  }
+  if (strict && report.state !== 'PASS') process.exit(1);
 }
 
 if (mode === 'init') initializeEvidence();
-else verifyEvidence(mode === 'strict');
+else reportStatus(mode === 'strict');
