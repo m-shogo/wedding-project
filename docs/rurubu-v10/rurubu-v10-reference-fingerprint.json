@@ -1,0 +1,90 @@
+{
+  "schemaVersion": "rurubu-v10-reference-fingerprint-v1",
+  "status": "CANONICAL_AI_ASSIST",
+  "scope": "Rurubu WEDDING V10 only",
+  "referenceNodes": ["2771:2", "2771:3", "2771:4"],
+  "principles": [
+    {"id":"dominant_gesture","rule":"one unmistakable first read per page","signals":["oversized Japanese title","hero photo","large map/route","large numbered/topic marker"]},
+    {"id":"asymmetry_local_order","rule":"global asymmetry with locally readable clusters"},
+    {"id":"mixed_image_weight","rule":"visible hero/support/micro image hierarchy; avoid equal photo slots"},
+    {"id":"visual_planes","rule":"use background/atmosphere, information surface, and foreground accent planes"},
+    {"id":"edge_tension","rule":"use at least one controlled edge/bleed gesture when semantically appropriate while keeping critical text safe"},
+    {"id":"editorial_clusters","rule":"group by meaning such as photo+label+caption or time+activity+micro-photo instead of generic UI cards"},
+    {"id":"controlled_imperfection","rule":"selective small rotation, optical alignment, taped/polaroid/ribbon gestures; never randomize everything"},
+    {"id":"title_silhouette","rule":"hero title must have a recognizable visual silhouette beyond just large bold type"},
+    {"id":"micro_information","rule":"create magazine density with useful short reads, never invented filler facts"},
+    {"id":"color_jobs","rule":"one dominant, one support, one surprise accent plus stable reading ink/paper"}
+  ],
+  "fatalAiTells": [
+    "uniform card dashboard grammar",
+    "identical corner radii across most content",
+    "perfectly even gaps everywhere",
+    "centered-everything composition",
+    "default 2x2 or 3xN equal module grid",
+    "all photos same size aspect and frame",
+    "same dominant rhythm on every page",
+    "generic luxury whitespace replacing editorial density",
+    "meaningless English decorative filler",
+    "stickers used only to fill holes",
+    "single undifferentiated type system",
+    "generated fake text in production graphics",
+    "reference or dummy artwork treated as production",
+    "body copy shrunk to preserve decoration"
+  ],
+  "score": {
+    "total": 100,
+    "pass": 80,
+    "hardFailIfFatalTellVisible": true,
+    "categories": {
+      "hierarchy": 20,
+      "compositionAsymmetry": 20,
+      "imageBehavior": 15,
+      "editorialDensity": 15,
+      "typography": 15,
+      "colorContrast": 10,
+      "textureTactileCharacter": 5
+    },
+    "bands": [
+      {"min":90,"max":100,"label":"REFERENCE_LEVEL_CANDIDATE"},
+      {"min":80,"max":89,"label":"CREDIBLE_REFINE"},
+      {"min":70,"max":79,"label":"AI_TEMPLATE_LIKE_REVISE_STRUCTURE"},
+      {"min":0,"max":69,"label":"REBUILD_STRUCTURE"}
+    ]
+  },
+  "pageCompositionVerbs": {
+    "P01":"CROP + STACK + BURST",
+    "P02":"PAIR + LABEL + FACT",
+    "P03":"NUMBER + QUESTION + ANSWER",
+    "P04":"FLOW + MILESTONE + PHOTO",
+    "P05":"SEQUENCE + ANCHOR + INTERRUPTION",
+    "P06":"HERO + SATELLITES + DESTINATION",
+    "P07":"ROUTE + TIME + FOOD",
+    "P08":"RESOLVE + UTILITY + MESSAGE"
+  },
+  "adjacentPageVariation": [
+    "do not repeat hero position by default",
+    "do not repeat identical photo-frame rhythm",
+    "do not repeat the same title alignment",
+    "do not repeat the same dominant color by default"
+  ],
+  "comparisonLoop": [
+    "capture current screenshot at thumbnail scale",
+    "choose closest reference role among 2771:2 2771:3 2771:4",
+    "compare first read image-scale variation useful reading destinations card-likeness edge overlap title silhouette and A5 readability",
+    "identify largest reference-distance cause",
+    "make one structural correction before micro-spacing",
+    "never solve weak reference match by merely adding stickers"
+  ],
+  "requiredReport": [
+    "closestReferenceNode",
+    "referenceMatchScore",
+    "lowestTwoCategories",
+    "fatalAiTell",
+    "largestReferenceDistanceCause",
+    "structuralCorrection",
+    "placedSemanticAssetsAndDriveIds",
+    "actualSizeReadability",
+    "maskWarnings",
+    "resolutionWarnings"
+  ]
+}
