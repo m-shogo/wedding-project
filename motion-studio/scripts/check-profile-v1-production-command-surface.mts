@@ -73,10 +73,40 @@ if (!scripts['prepare:profile-v1']?.includes('pnpm profile:assembly-preflight'))
   errors.push('prepare:profile-v1 must still report assembly readiness after generated-accent/media checks');
 }
 
+const mediaGatePath = join(root, 'scripts/profile-v1-media-input-gate.mts');
+if (!existsSync(mediaGatePath)) {
+  errors.push('missing Profile real-media input gate');
+} else {
+  const mediaGate = readFileSync(mediaGatePath, 'utf8');
+  for (const token of [
+    'profile-v1-assembly-preflight/v1',
+    'finalRenderEligible',
+    'PROFILE_REAL_MEDIA_INPUTS_NOT_READY',
+    'assertProfileV1MediaInputsReady',
+  ]) {
+    if (!mediaGate.includes(token)) errors.push(`Profile real-media input gate missing contract token: ${token}`);
+  }
+}
+for (const scriptName of ['render-profile-v1-real-media-preview.mts', 'render-profile-v1-real-media-qa-stills.mts']) {
+  const path = join(root, 'scripts', scriptName);
+  const source = readFileSync(path, 'utf8');
+  if (!source.includes("from './profile-v1-media-input-gate.mts'")) {
+    errors.push(`${scriptName} must import the Profile media input gate`);
+  }
+  if (!source.includes('assertProfileV1MediaInputsReady(studioRoot)')) {
+    errors.push(`${scriptName} must fail closed on missing 17 media slots/current cleared BGM before Remotion`);
+  }
+  const gateIndex = source.indexOf('assertProfileV1MediaInputsReady(studioRoot)');
+  const remotionIndex = source.indexOf("'remotion'");
+  if (gateIndex < 0 || remotionIndex < 0 || gateIndex >= remotionIndex) {
+    errors.push(`${scriptName} must run the media input gate before invoking Remotion`);
+  }
+}
+
 if (errors.length) {
   console.error(`Profile V1 production command surface FAILED (${errors.length})`);
   for (const error of errors) console.error(`- ${error}`);
   process.exit(1);
 }
 
-console.log(`Profile V1 production command surface OK: ${Object.keys(expected).length} guarded commands validate Motion Zukan generated accents, refresh runtime media, and bind Human preview/final review initialization to freshly rendered current artifacts without bypassing production gates.`);
+console.log(`Profile V1 production command surface OK: ${Object.keys(expected).length} guarded commands validate Motion Zukan generated accents, refresh runtime media, require all 17 canonical media slots plus current cleared BGM before real-media preview/stills, and bind Human preview/final review initialization to freshly rendered current artifacts without bypassing production gates.`);
