@@ -91,7 +91,26 @@ export function WeddingMovieProductionCriticalPathCard({projectId}: {projectId: 
           </div>
           <div className="border border-sand-200 dark:border-navy-700 p-2 text-[8px] leading-4 text-navy-500 dark:text-navy-300">
             <p className="font-semibold">この後に解放される工程</p>
-            <div>{project.downstreamBlockedStages.map((stage) => stageLabels[stage.name] ?? stage.name).join(" → ") || "none"}</div>
+            <div className="mt-1 space-y-1">
+              {project.downstreamBlockedStages.length > 0 ? project.downstreamBlockedStages.map((stage) => (
+                <div key={stage.name} className="border border-sand-100 dark:border-navy-800 px-1.5 py-1">
+                  <div className="font-semibold">{stageLabels[stage.name] ?? stage.name} / {stage.state}</div>
+                  <div>{stage.detail}</div>
+                  {stage.path ? <code className="block break-all text-navy-400">{stage.path}</code> : null}
+                  {stage.blockerCodes.length > 0 ? <div>BLOCK: {stage.blockerCodes.join(" / ")}</div> : null}
+                  {stage.recovery.length > 0 ? <div>recovery: {stage.recovery.join(" → ")}</div> : null}
+                  {stage.actionTargets.length > 0 ? (
+                    <div className="mt-1 flex flex-wrap gap-1">
+                      {stage.actionTargets.map((target) => (
+                        <Link key={`${stage.name}-${target.route}-${target.label}`} to={target.route} title={target.purpose} className="border border-sand-300 dark:border-navy-600 px-1.5 py-0.5 font-semibold">
+                          {target.label} →
+                        </Link>
+                      ))}
+                    </div>
+                  ) : null}
+                </div>
+              )) : <div>none</div>}
+            </div>
           </div>
         </div>
       ) : null}
