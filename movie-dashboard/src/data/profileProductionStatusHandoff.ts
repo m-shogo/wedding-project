@@ -66,6 +66,7 @@ export function buildProfileProductionStatusHandoff() {
         overallState: profileProductionStatus.overallState,
         stages: profileProductionStatus.stages,
         readiness: profileProductionStatus.readiness,
+        sourceRevalidation: profileProductionStatus.sourceRevalidation,
         palmierHandoff: profileProductionStatus.handoff.palmier,
         davinciHandoff: profileProductionStatus.handoff.davinci,
         nextActions: [...profileProductionStatus.nextActions],
@@ -82,6 +83,9 @@ export function buildProfileProductionStatusHandoff() {
       "NEXT_ACTION_EXPORTED != ACTION_COMPLETED",
       "GENERATED_ACCENT_IMPLEMENTED != HUMAN_REAL_MEDIA_QA_PASS",
       "OPTIONAL_GENERATED_ROLE != REQUIRED_REAL_MEDIA_SLOT",
+      "SOURCE_CHANGED => RE_RENDER_REQUIRED",
+      "RE_RENDER_REQUIRED => RE_REVIEW_REQUIRED",
+      "OLD_HUMAN_REVIEW != CURRENT_RENDER_IMPLEMENTATION",
     ],
   };
 }
