@@ -50,6 +50,9 @@ for (const token of [
   "CHAPTER_EVIDENCE_MISSING:",
   "CHAPTER_EVIDENCE_STALE_TITLE:",
   "CHAPTER_QA_INVALID:",
+  "BOUND_AT_INVALID",
+  "REVIEWED_BEFORE_BINDING",
+  "reviewedAtMs < boundAtMs",
   "REVIEWER_MISSING",
   "mode === 'strict' && !status.humanReviewComplete",
 ]) {
@@ -64,6 +67,10 @@ for (const forbidden of [
   "humanReviewComplete: true",
 ]) {
   if (review.includes(forbidden)) errors.push(`Profile real-media review fabricates approval/readiness: ${forbidden}`);
+}
+
+if (!review.includes('reviewedAtMs < boundAtMs')) {
+  errors.push('Profile real-media Human review must occur after its current preview evidence binding');
 }
 
 for (const token of [
@@ -81,4 +88,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log('Profile V1 real-media Human QA contracts OK: review evidence is bound to preview, canonical 17-slot identities, canonical 5-chapter identities, runtime manifest and production plan; malformed/duplicate/stale identities fail closed and verdicts cannot promote BGM/Mac Actual/production readiness.');
+console.log('Profile V1 real-media Human QA contracts OK: review evidence is bound to preview, canonical 17-slot identities, canonical 5-chapter identities, runtime manifest and production plan; the Human review must occur after the current evidence binding, malformed/duplicate/stale identities fail closed, and verdicts cannot promote BGM/Mac Actual/production readiness.');
