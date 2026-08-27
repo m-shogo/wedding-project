@@ -5,10 +5,27 @@ import {fileURLToPath} from 'node:url';
 
 const studioRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const outDir = join(studioRoot, 'out/qa/opening-v1');
+const allowMissingMediaSmoke = process.argv.includes('--allow-missing-media-smoke');
+
+if (!allowMissingMediaSmoke) {
+  const gate = spawnSync(
+    process.execPath,
+    ['--no-warnings', 'scripts/opening-v1-assembly-preflight.mts', '--strict'],
+    {cwd: studioRoot, encoding: 'utf8'},
+  );
+  if (gate.status !== 0) {
+    console.error((gate.stderr || gate.stdout || 'Opening V1 assembly input gate failed').trim());
+    process.exit(gate.status ?? 1);
+  }
+} else {
+  console.log('SMOKE ONLY / explicit placeholder still rendering allowed; this is not production QA evidence.');
+}
+
 mkdirSync(outDir, {recursive: true});
 
-// 60秒 / 30fps。photo placeholderでもproduction layoutを確認できるよう、
-// 地名ラベルとfull/left/right/wideを横断して代表frameを選ぶ。
+// 60秒 / 30fps。通常のproduction QAでは実写真+BGM gateを必須にする。
+// CIがplaceholder/missing-state layoutだけを検証する場合に限り、明示的な
+// --allow-missing-media-smoke を使用してproduction evidenceと区別する。
 const frames = [
   {id: '01-cold-open', frame: 24},
   {id: '02-okinawa-full-label', frame: 90},
@@ -60,4 +77,4 @@ if (failures.length > 0) {
   process.exit(1);
 }
 
-console.log(`✅ Opening V1 QA stills: ${frames.length}枚`);
+console.log(`✅ Opening V1 QA stills: ${frames.length}枚${allowMissingMediaSmoke ? ' (SMOKE ONLY)' : ''}`);
