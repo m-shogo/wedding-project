@@ -7,14 +7,15 @@ const studioRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const outDir = join(studioRoot, 'out/qa/profile-v1-real-media');
 mkdirSync(outDir, {recursive: true});
 
-// One representative midpoint per canonical chapter. On a fresh clone these intentionally
-// render explicit REAL MEDIA MISSING surfaces; on a media-populated machine the same frames
-// render the exact runtime-manifest files and become the Human real-media QA input.
+// One representative interior slot midpoint per canonical chapter. Avoid exact slot boundaries:
+// the preview intentionally fades one slot out before the next fades in, so a boundary frame can
+// be fully transparent even though the composition is healthy. On a fresh clone these frames render
+// explicit REAL MEDIA MISSING surfaces; with real media they become the same Human QA checkpoints.
 const frames = [
   {id: '01-departure', frame: 90},
-  {id: '02-separate-journeys', frame: 270},
+  {id: '02-separate-journeys', frame: 248},
   {id: '03-intersection', frame: 450},
-  {id: '04-adventure', frame: 630},
+  {id: '04-adventure', frame: 608},
   {id: '05-arrival', frame: 810},
 ] as const;
 const failures: string[] = [];
