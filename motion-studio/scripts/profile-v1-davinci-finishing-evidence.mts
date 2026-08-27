@@ -62,16 +62,28 @@ function verify(strict:boolean){
   if(!existsSync(evidencePath)){console.log('Profile DaVinci finishing evidence: NOT_RUN'); if(strict)process.exit(1); return;}
   const errors:string[]=[]; let loaded:ReturnType<typeof loadBundle>|null=null;
   try{loaded=loadBundle();}catch(e){errors.push(e instanceof Error?e.message:String(e));}
-  const ev=JSON.parse(readFileSync(evidencePath,'utf8')) as Evidence;
+  let ev:Evidence|null=null;
+  try{ev=JSON.parse(readFileSync(evidencePath,'utf8')) as Evidence;}catch{errors.push('PROFILE_DAVINCI_EVIDENCE_INVALID_JSON');}
+  if(!ev){console.log(`Profile DaVinci finishing evidence: BLOCKED (${errors.length})`);for(const e of errors)console.log(`BLOCK / ${e}`);if(strict)process.exit(1);return;}
   if(ev.schemaVersion!=='profile-v1-davinci-finishing-evidence/v1'||ev.authority!=='MAC_DAVINCI_ACTUAL_EVIDENCE')errors.push('PROFILE_DAVINCI_EVIDENCE_CONTRACT');
   if(ev.productionReady!==false)errors.push('PROFILE_DAVINCI_MUST_NOT_SELF_PROMOTE');
-  if(loaded){if(ev.bundle.sha256!==loaded.bundleSha256)errors.push('STALE_PROFILE_DAVINCI_BUNDLE'); if(ev.sourceRender.expectedSha256!==loaded.bundle.finalRender.sha256)errors.push('STALE_PROFILE_DAVINCI_SOURCE_SHA');}
+  if(loaded){
+    if(ev.bundle.path!==rel(bundlePath))errors.push('STALE_PROFILE_DAVINCI_BUNDLE_PATH');
+    if(ev.bundle.sha256!==loaded.bundleSha256)errors.push('STALE_PROFILE_DAVINCI_BUNDLE');
+    if(ev.sourceRender.path!==loaded.bundle.finalRender.path)errors.push('STALE_PROFILE_DAVINCI_SOURCE_PATH');
+    if(ev.sourceRender.expectedSha256!==loaded.bundle.finalRender.sha256)errors.push('STALE_PROFILE_DAVINCI_SOURCE_SHA');
+  }
   if(ev.sourceRender.shaMatch!=='PASS'||!ev.sourceRender.readbackSha256||ev.sourceRender.readbackSha256!==ev.sourceRender.expectedSha256)errors.push('PROFILE_DAVINCI_SOURCE_READBACK_NOT_PASS');
   if(!ev.resolve.version?.trim()||!ev.resolve.projectName?.trim()||!ev.resolve.timelineName?.trim())errors.push('PROFILE_DAVINCI_RESOLVE_METADATA_MISSING');
   for(const [k,v] of Object.entries({...ev.resolve,...ev.finishing,duration:ev.export.duration,dimensions:ev.export.dimensions,fps:ev.export.fps,audioPresent:ev.export.audioPresent,watchedWithSound:ev.export.watchedWithSound})) if(['timelineInsertion','durationAndFps','color','audio','titleSafeAndFraming','playback1x','playbackHalfSpeed','duration','dimensions','fps','audioPresent','watchedWithSound'].includes(k)&&v!=='PASS')errors.push(`PROFILE_DAVINCI_${k}_${v}`);
   if(!ev.export.path?.trim()||!ev.export.sha256?.trim())errors.push('PROFILE_DAVINCI_EXPORT_BINDING_MISSING');
+  if(ev.export.path?.trim()&&ev.export.sha256?.trim()){
+    const exportPath=join(root,ev.export.path);
+    if(!existsSync(exportPath))errors.push('PROFILE_DAVINCI_EXPORT_FILE_MISSING');
+    else if(sha(exportPath)!==ev.export.sha256)errors.push('PROFILE_DAVINCI_EXPORT_SHA_MISMATCH');
+  }
   if(ev.review.overall!=='PASS'||!ev.review.reviewer?.trim()||!ev.review.reviewedAt||Number.isNaN(Date.parse(ev.review.reviewedAt)))errors.push('PROFILE_DAVINCI_HUMAN_REVIEW_NOT_PASS');
   if(errors.length){console.log(`Profile DaVinci finishing evidence: BLOCKED (${errors.length})`); for(const e of errors)console.log(`BLOCK / ${e}`); if(strict)process.exit(1); return;}
-  console.log('Profile DaVinci finishing evidence: ACTUAL_VERIFIED — current canonical Motion Zukan accent routes, bundle/source and Palmier timeline match real Mac Resolve evidence.');
+  console.log('Profile DaVinci finishing evidence: ACTUAL_VERIFIED — current canonical Motion Zukan accent routes, bundle/source, Palmier timeline and exported movie bytes match real Mac Resolve evidence.');
 }
 if(mode==='init')init();else verify(mode==='strict');
