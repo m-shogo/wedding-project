@@ -6,6 +6,7 @@ import {fileURLToPath} from 'node:url';
 
 const studioRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const previewPath = join(studioRoot, 'out/preview/opening_v1_preview.mp4');
+const previewSourceFingerprintPath = join(studioRoot, 'out/qa/opening-v1-preview-source-fingerprint.json');
 const previewReviewPath = join(studioRoot, 'out/qa/opening-v1-preview-review.json');
 const finalRenderPath = join(studioRoot, 'out/opening/opening_v1.mp4');
 const bundlePath = join(studioRoot, 'out/handoff/opening-v1/opening-v1-production-bundle.json');
@@ -20,6 +21,7 @@ type StageState = 'PASS' | 'BLOCKED' | 'NOT_RUN' | 'MISSING' | 'STALE';
 type OverallState =
   | 'MEDIA_REQUIRED'
   | 'PREVIEW_RENDER_REQUIRED'
+  | 'PREVIEW_SOURCE_BINDING_REQUIRED_OR_STALE'
   | 'PREVIEW_REVIEW_INIT_REQUIRED'
   | 'HUMAN_PREVIEW_REVIEW_REQUIRED_OR_STALE'
   | 'FINAL_RENDER_REQUIRED'
@@ -131,14 +133,41 @@ function previewRenderStage(mediaReady: boolean): Stage {
     : {state: 'MISSING', detail: 'Render the current real-media preview.', path: rel(previewPath)};
 }
 
-function previewReviewStage(previewReady: boolean): Stage {
+function previewSourceBindingStage(previewReady: boolean): Stage {
   if (!previewReady) {
-    return {state: 'NOT_RUN', detail: 'Blocked upstream until the preview MP4 exists.', path: rel(previewReviewPath)};
+    return {state: 'NOT_RUN', detail: 'Blocked upstream until the preview MP4 exists.', path: rel(previewSourceFingerprintPath)};
+  }
+  if (!existsSync(previewSourceFingerprintPath)) {
+    return {
+      state: 'MISSING',
+      detail: 'Preview exists but has no render-source fingerprint binding yet.',
+      path: rel(previewSourceFingerprintPath),
+    };
+  }
+  const result = runNode('scripts/opening-v1-preview-source-fingerprint.mts', ['--strict']);
+  if (result.status === 0) {
+    return {
+      state: 'PASS',
+      detail: 'Preview MP4 is SHA-bound to the current Opening render implementation.',
+      path: rel(previewSourceFingerprintPath),
+    };
+  }
+  return {
+    state: 'STALE',
+    detail: 'Preview render-source binding is stale. Re-render before trusting human review.',
+    path: rel(previewSourceFingerprintPath),
+    blockers: [...outputLines(result.stdout), ...outputLines(result.stderr)],
+  };
+}
+
+function previewReviewStage(previewSourceBindingReady: boolean): Stage {
+  if (!previewSourceBindingReady) {
+    return {state: 'NOT_RUN', detail: 'Blocked upstream until the preview render-source binding is current.', path: rel(previewReviewPath)};
   }
   if (!existsSync(previewReviewPath)) {
     return {
       state: 'MISSING',
-      detail: 'Human review evidence has not been initialized for this preview.',
+      detail: 'Human review evidence has not been initialized for this source-bound preview.',
       path: rel(previewReviewPath),
     };
   }
@@ -267,7 +296,9 @@ const assembly = readAssembly();
 const mediaReady = assembly.stage.state === 'PASS';
 const previewRender = previewRenderStage(mediaReady);
 const previewReady = previewRender.state === 'PASS';
-const previewReview = previewReviewStage(previewReady);
+const previewSourceBinding = previewSourceBindingStage(previewReady);
+const previewSourceBindingReady = previewSourceBinding.state === 'PASS';
+const previewReview = previewReviewStage(previewSourceBindingReady);
 const previewReviewReady = previewReview.state === 'PASS';
 const finalRender = finalRenderStage(previewReviewReady);
 const finalRenderReady = finalRender.state === 'PASS';
@@ -286,12 +317,18 @@ if (!mediaReady) {
 } else if (!previewReady) {
   overallState = 'PREVIEW_RENDER_REQUIRED';
   nextActions = ['pnpm render:opening-v1:preview', 'pnpm opening:production-status'];
+} else if (!previewSourceBindingReady) {
+  overallState = 'PREVIEW_SOURCE_BINDING_REQUIRED_OR_STALE';
+  nextActions = [
+    'pnpm opening:preview-review:init でfresh preview render + source fingerprint + review templateを一括再初期化',
+    'pnpm opening:preview-review:strict',
+  ];
 } else if (previewReview.state === 'MISSING') {
   overallState = 'PREVIEW_REVIEW_INIT_REQUIRED';
   nextActions = ['pnpm opening:preview-review:init', '実preview/stillsを人間が確認してevidenceを記録', 'pnpm opening:preview-review:strict'];
 } else if (!previewReviewReady) {
   overallState = 'HUMAN_PREVIEW_REVIEW_REQUIRED_OR_STALE';
-  nextActions = ['現在のpreview/media/configに対してhuman QAを完了または再初期化', 'pnpm opening:preview-review:strict'];
+  nextActions = ['現在のsource-bound preview/media/configに対してhuman QAを完了または再初期化', 'pnpm opening:preview-review:strict'];
 } else if (finalRender.state === 'MISSING') {
   overallState = 'FINAL_RENDER_REQUIRED';
   nextActions = ['pnpm render:opening-v1', 'pnpm opening:production-status'];
@@ -328,6 +365,7 @@ const report = {
   stages: {
     media: assembly.stage,
     previewRender,
+    previewSourceBinding,
     previewReview,
     finalRender,
     productionBundle,
@@ -337,6 +375,7 @@ const report = {
   readiness: {
     finalRenderEligible: assembly.report?.readiness?.finalRenderEligible === true,
     mixReady: assembly.report?.readiness?.mixReady === true,
+    previewSourceBound: previewSourceBindingReady,
     humanPreviewApproved: previewReviewReady,
     finalRenderQaPass: finalRenderReady,
     productionBundleCurrent: bundleReady,
@@ -369,6 +408,7 @@ const report = {
   },
   nextActions,
   guardrails: [
+    'PREVIEW_SOURCE_FINGERPRINT_STALE => HUMAN_PREVIEW_REVIEW_NOT_TRUSTED',
     'DAVINCI_ACTUAL_VERIFIED != FINAL_DELIVERY_APPROVED',
     'APPROVAL_TEMPLATE != APPROVED',
     'MISSING_OR_STALE_UPSTREAM => DOWNSTREAM_NOT_TRUSTED',
@@ -390,7 +430,7 @@ if (jsonMode) {
     for (const blocker of stage.blockers ?? []) console.log(`  BLOCK / ${blocker}`);
   }
   console.log(`Palmier handoff=${report.handoff.palmier.contractVersion} current=${report.handoff.palmier.current ? 'YES' : 'NO'} timeline=${report.handoff.palmier.artifacts.sceneTimeline.path} sound=${report.handoff.palmier.artifacts.soundCues.path}`);
-  console.log(`readyForFinalDeliveryApproval=${report.readiness.readyForFinalDeliveryApproval ? 'YES' : 'NO'} finalDeliveryApproved=${finalDeliveryApproved ? 'YES' : 'NO'} productionReady=${finalDeliveryApproved ? 'YES' : 'NO'}`);
+  console.log(`previewSourceBound=${report.readiness.previewSourceBound ? 'YES' : 'NO'} readyForFinalDeliveryApproval=${report.readiness.readyForFinalDeliveryApproval ? 'YES' : 'NO'} finalDeliveryApproved=${finalDeliveryApproved ? 'YES' : 'NO'} productionReady=${finalDeliveryApproved ? 'YES' : 'NO'}`);
   console.log(`NEXT / ${nextActions.join(' → ')}`);
   console.log('JSON / pnpm opening:production-status -- --json');
 }
