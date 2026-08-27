@@ -46,6 +46,18 @@ export const openingProductionStatus = {
     "finalDeliveryApproved": false,
     "productionReady": false
   },
+  "sourceRevalidation": {
+    "realMediaPreview": {
+      "state": "NOT_RUN",
+      "blockers": [],
+      "recovery": []
+    },
+    "guardrails": [
+      "SOURCE_CHANGED => RE_RENDER_REQUIRED",
+      "RE_RENDER_REQUIRED => RE_REVIEW_REQUIRED",
+      "OLD_HUMAN_REVIEW != CURRENT_RENDER_IMPLEMENTATION"
+    ]
+  },
   "handoff": {
     "palmier": {
       "contractVersion": "opening-v1-palmier-handoff/v2",

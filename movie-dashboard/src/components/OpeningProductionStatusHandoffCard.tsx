@@ -27,6 +27,7 @@ export function OpeningProductionStatusHandoffCard({projectId}: {projectId: Scen
 
   const production = status.opening.production;
   const media = status.opening.media;
+  const sourceRevalidation = production.sourceRevalidation;
   const palmier = production.palmierHandoff;
   const davinci = production.davinciHandoff;
 
@@ -76,6 +77,16 @@ export function OpeningProductionStatusHandoffCard({projectId}: {projectId: Scen
         <div className="border border-sand-200 dark:border-navy-700 px-2 py-1.5">Final approval: {production.readiness.finalDeliveryApproved ? "APPROVED" : "NOT APPROVED"}</div>
       </div>
 
+      <div className="mt-2 border border-amber-200 dark:border-amber-800 p-2">
+        <p className="text-[8px] font-semibold text-amber-700 dark:text-amber-300">SOURCE REVALIDATION</p>
+        <div className="mt-1 text-[8px] leading-4 text-navy-500 dark:text-navy-300">
+          <div>Real-media preview source: <span className="font-semibold">{sourceRevalidation.realMediaPreview.state}</span></div>
+          {sourceRevalidation.realMediaPreview.blockers.length > 0 ? <div>blockers: {sourceRevalidation.realMediaPreview.blockers.join(" / ")}</div> : null}
+          {sourceRevalidation.realMediaPreview.recovery.length > 0 ? <div>recovery: {sourceRevalidation.realMediaPreview.recovery.join(" → ")}</div> : null}
+        </div>
+        <p className="mt-1 text-[8px] text-navy-400">{sourceRevalidation.guardrails.join(" / ")}</p>
+      </div>
+
       <div className="mt-2 border border-violet-200 dark:border-violet-800 p-2">
         <div className="flex flex-wrap items-center justify-between gap-1">
           <p className="text-[8px] font-semibold text-violet-700 dark:text-violet-300">PALMIER HANDOFF / {palmier.contractVersion}</p>
@@ -123,7 +134,7 @@ export function OpeningProductionStatusHandoffCard({projectId}: {projectId: Scen
 
       <p className="mt-2 text-[8px] leading-4 text-navy-400">
         このstatusはMEDIA_REQUIRED / NOT_RUNも含めて現在状態とPalmier / DaVinci handoff contractを外へ渡すためのenvelopeです。Statusのexport可否とproduction readinessは分離しています。
-        `STATUS_EXPORTABLE != FINAL_RENDER_ELIGIBLE` / `PREVIEW_SOURCE_FINGERPRINT_STALE =&gt; HUMAN_PREVIEW_REVIEW_NOT_TRUSTED` / `HANDOFF_METADATA_EXPORTED != HANDOFF_ARTIFACTS_CURRENT` / `DAVINCI_HANDOFF_CURRENT != MAC_DAVINCI_ACTUAL_VERIFIED` / `DAVINCI_ACTUAL_VERIFIED != FINAL_DELIVERY_APPROVED`
+        `STATUS_EXPORTABLE != FINAL_RENDER_ELIGIBLE` / `PREVIEW_SOURCE_FINGERPRINT_STALE =&gt; HUMAN_PREVIEW_REVIEW_NOT_TRUSTED` / `SOURCE_CHANGED =&gt; RE_RENDER_REQUIRED =&gt; RE_REVIEW_REQUIRED` / `HANDOFF_METADATA_EXPORTED != HANDOFF_ARTIFACTS_CURRENT` / `DAVINCI_HANDOFF_CURRENT != MAC_DAVINCI_ACTUAL_VERIFIED` / `DAVINCI_ACTUAL_VERIFIED != FINAL_DELIVERY_APPROVED`
       </p>
 
       <details className="mt-2">
