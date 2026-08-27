@@ -49,7 +49,7 @@ for (const token of [
   '"resolvedMediaCount": 0',
   '"mediaMissingCount": 17',
   '"assetId": "profile-bgm-main"',
-  '"rightsState": "NOT_CLEARED"',
+  '"rightsState": "NOT_RUN"',
   '"blockingGatePass": false',
   '"preview": "NOT_RUN"',
   '"humanContent": "NOT_RUN"',
@@ -86,4 +86,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log("Profile V1 Dashboard Handoff contracts OK: the 5-chapter/17-media Motion Studio gate is synced into production handoff export and UI, BGM rights/Human QA/Mac Actual remain fail-closed, and productionReady is never manufactured.");
+console.log("Profile V1 Dashboard Handoff contracts OK: the 5-chapter/17-media Motion Studio gate is synced into production handoff export and UI, BGM rights start NOT_RUN and require separate human approval, Human QA/Mac Actual remain fail-closed, and productionReady is never manufactured.");
