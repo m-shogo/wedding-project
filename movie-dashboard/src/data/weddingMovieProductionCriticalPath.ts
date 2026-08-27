@@ -28,7 +28,8 @@ function actionTargetsFor(projectId: "opening" | "profile", stageName: string): 
   }
   if (projectId === "profile" && stageName === "assembly") {
     return [
-      {label: "Profile 17素材を確認", route: "/profile-media-intake", purpose: "Profile V1の5章・17素材とBGMのcanonical intake状態を確認する"},
+      {label: "Profile 17素材を確認", route: "/profile-media-intake", purpose: "Profile V1の5章・17素材のcanonical intake状態を確認する"},
+      {label: "Profile BGM Gateを進める", route: "/profile-bgm-intake", purpose: "BGM実ファイル・intake receipt・上映権利確認をcurrent SHAへ固定する"},
       {label: "Profile Plannerを開く", route: "/profile-planner", purpose: "実写真・動画を章構成へ割り当てる"},
     ];
   }
