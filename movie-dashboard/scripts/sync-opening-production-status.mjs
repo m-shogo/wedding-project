@@ -7,47 +7,21 @@ const dashboardRoot=path.resolve(path.dirname(fileURLToPath(import.meta.url)),".
 const repoRoot=path.resolve(dashboardRoot,"..");
 const motionStudioRoot=path.join(repoRoot,"motion-studio");
 const statusPath=path.join(motionStudioRoot,"scripts/opening-v1-production-status.mts");
-const finalRenderReviewPath=path.join(motionStudioRoot,"scripts/opening-v1-final-render-review.mts");
 const davinciPath=path.join(motionStudioRoot,"scripts/opening-v1-davinci-handoff-contract.mts");
 const outputPath=path.join(dashboardRoot,"src/data/openingProductionStatus.generated.ts");
 const report=JSON.parse(execFileSync(process.execPath,["--no-warnings",statusPath,"--json"],{cwd:motionStudioRoot,encoding:"utf8"}));
-const finalRenderReview=JSON.parse(execFileSync(process.execPath,["--no-warnings",finalRenderReviewPath,"--json"],{cwd:motionStudioRoot,encoding:"utf8"}));
 const davinci=JSON.parse(execFileSync(process.execPath,["--no-warnings",davinciPath,"--json"],{cwd:motionStudioRoot,encoding:"utf8"}));
 if(report.schemaVersion!=="opening-v1-production-status/v1"||report.authority!=="DERIVED_PRODUCTION_STATUS")throw new Error(`Unexpected Opening production status contract: ${report.schemaVersion}/${report.authority}`);
-if(finalRenderReview.schemaVersion!=="opening-v1-final-render-review-status/v1"||finalRenderReview.authority!=="DERIVED_FINAL_RENDER_REVIEW_STATUS")throw new Error(`Unexpected Opening final render review contract: ${finalRenderReview.schemaVersion}/${finalRenderReview.authority}`);
+if(report.stages?.finalRenderReview==null||report.readiness?.humanFinalRenderApproved==null)throw new Error("Opening production status must own canonical final-render Human review state");
 if(report.handoff?.palmier?.contractVersion!=="opening-v1-palmier-handoff/v2")throw new Error(`Unexpected Opening Palmier handoff contract: ${report.handoff?.palmier?.contractVersion??"missing"}`);
 if(davinci.schemaVersion!=="opening-v1-davinci-handoff/v1"||davinci.authority!=="MOTION_STUDIO_OPENING_DAVINCI_HANDOFF")throw new Error(`Unexpected Opening DaVinci handoff contract: ${davinci.schemaVersion}/${davinci.authority}`);
 
-const finalReviewStage={
-  state:finalRenderReview.state,
-  blockers:Array.isArray(finalRenderReview.blockers)?finalRenderReview.blockers.map(String):[],
-  humanReviewComplete:finalRenderReview.humanReviewComplete===true,
-  path:"out/qa/opening-v1-final-render-review.json",
-};
-const finalRenderPassed=report.stages?.finalRender?.state==="PASS";
-const finalReviewNeedsInit=finalRenderPassed&&finalReviewStage.state==="NOT_RUN";
-const finalReviewNeedsHuman=finalRenderPassed&&finalReviewStage.state!=="PASS"&&!finalReviewNeedsInit;
-const effectiveOverallState=finalReviewNeedsInit
-  ? "FINAL_RENDER_REVIEW_INIT_REQUIRED"
-  : finalReviewNeedsHuman
-    ? "HUMAN_FINAL_RENDER_REVIEW_REQUIRED_OR_STALE"
-    : report.overallState;
-const effectiveNextActions=finalReviewNeedsInit
-  ? [
-      "pnpm opening:final-render-review:init",
-      "final MP4を人間が通し視聴してvisual/timing/readability/BGM/encodingを判定",
-      "pnpm opening:final-render-review:strict",
-    ]
-  : finalReviewNeedsHuman
-    ? [
-        "current final MP4 / render source / upstream reviewに対してHuman final-render QAを完了または再初期化",
-        "pnpm opening:final-render-review:strict",
-      ]
-    : [...report.nextActions];
-
-const stageNames=["media","previewRender","previewSourceBinding","previewReview","finalRender","productionBundle","davinciFinishing","finalDeliveryApproval"];
+const stageNames=["media","previewRender","previewSourceBinding","previewReview","finalRender","finalRenderReview","productionBundle","davinciFinishing","finalDeliveryApproval"];
 const sourceStage=report.stages.previewSourceBinding;
 const sourceBlockers=Array.isArray(sourceStage?.blockers)?sourceStage.blockers.map(String):[];
+const finalReviewStage=report.stages.finalRenderReview;
+const finalReviewBlockers=Array.isArray(finalReviewStage?.blockers)?finalReviewStage.blockers.map(String):[];
+const finalRenderPassed=report.stages.finalRender.state==="PASS";
 const sourceRevalidation={
   realMediaPreview:{
     state:sourceStage.state==="STALE"
@@ -73,13 +47,13 @@ const sourceRevalidation={
       ? "NOT_RUN"
       : finalReviewStage.state==="PASS"
         ? "CURRENT"
-        : finalReviewStage.state==="NOT_RUN"
+        : finalReviewStage.state==="MISSING"
           ? "FINAL_REVIEW_INIT_REQUIRED"
           : "RE_REVIEW_REQUIRED",
-    blockers:[...finalReviewStage.blockers],
+    blockers:finalReviewBlockers,
     recovery:!finalRenderPassed||finalReviewStage.state==="PASS"
       ? []
-      : finalReviewStage.state==="NOT_RUN"
+      : finalReviewStage.state==="MISSING"
         ? ["pnpm opening:final-render-review:init","final MP4をHuman QA","pnpm opening:final-render-review:strict"]
         : ["current final MP4を再Human QA","pnpm opening:final-render-review:strict"],
   },
@@ -93,44 +67,39 @@ const sourceRevalidation={
 };
 const finalReviewAuthority="out/qa/opening-v1-final-render-review.json";
 const palmierSourceAuthorities=[...new Set([...report.handoff.palmier.sourceAuthorities,finalReviewAuthority])];
+const davinciSourceAuthorities=[...new Set([...davinci.sourceAuthorities,finalReviewAuthority])];
 const snapshot={
   source:{
     status:"motion-studio/scripts/opening-v1-production-status.mts",
     previewSourceBinding:"motion-studio/scripts/opening-v1-preview-source-fingerprint.mts",
-    finalRenderReview:"motion-studio/scripts/opening-v1-final-render-review.mts",
+    finalRenderReview:"motion-studio/scripts/opening-v1-production-status.mts#stages.finalRenderReview",
     davinciHandoff:"motion-studio/scripts/opening-v1-davinci-handoff-contract.mts",
   },
-  overallState:effectiveOverallState,
-  stages:{
-    ...Object.fromEntries(stageNames.map((name)=>[name,{state:report.stages[name].state}])),
-    finalRenderReview:{state:finalReviewStage.state},
-  },
-  readiness:{
-    ...report.readiness,
-    humanFinalRenderApproved:finalReviewStage.state==="PASS",
-  },
+  overallState:report.overallState,
+  stages:Object.fromEntries(stageNames.map((name)=>[name,{state:report.stages[name].state}])),
+  readiness:{...report.readiness},
   sourceRevalidation,
   handoff:{
     palmier:{
       contractVersion:report.handoff.palmier.contractVersion,
-      current:report.handoff.palmier.current&&finalReviewStage.state==="PASS",
+      current:report.handoff.palmier.current,
       sourceAuthorities:palmierSourceAuthorities,
       artifacts:{
-        sceneTimeline:{...report.handoff.palmier.artifacts.sceneTimeline, carries:[...report.handoff.palmier.artifacts.sceneTimeline.carries]},
-        soundCues:{...report.handoff.palmier.artifacts.soundCues, carries:[...report.handoff.palmier.artifacts.soundCues.carries]},
+        sceneTimeline:{...report.handoff.palmier.artifacts.sceneTimeline,carries:[...report.handoff.palmier.artifacts.sceneTimeline.carries]},
+        soundCues:{...report.handoff.palmier.artifacts.soundCues,carries:[...report.handoff.palmier.artifacts.soundCues.carries]},
       },
     },
     davinci:{
       contractVersion:davinci.schemaVersion,
-      current:davinci.current&&finalReviewStage.state==="PASS",
-      sourceAuthorities:[...davinci.sourceAuthorities,finalReviewAuthority],
+      current:davinci.current&&report.readiness.humanFinalRenderApproved===true,
+      sourceAuthorities:davinciSourceAuthorities,
       upstreamPalmier:davinci.upstreamPalmier,
       handoffAsset:davinci.handoffAsset,
       actualEvidence:{...davinci.actualEvidence,requiredChecks:[...davinci.actualEvidence.requiredChecks]},
       productionReady:false,
     },
   },
-  nextActions:effectiveNextActions,
+  nextActions:[...report.nextActions],
 };
 const output=`// AUTO-GENERATED by scripts/sync-opening-production-status.mjs\n// Motion Studio production status is the authority. Do not edit by hand.\n\nexport const openingProductionStatus = ${JSON.stringify(snapshot,null,2)} as const;\n`;
 if(process.argv.includes("--write")){fs.writeFileSync(outputPath,output,"utf8");console.log(`Opening production status synced: ${snapshot.overallState}, previewSource=${snapshot.sourceRevalidation.realMediaPreview.state}, finalReview=${snapshot.sourceRevalidation.finalRender.state}, davinci=${snapshot.handoff.davinci.contractVersion}`);process.exit(0)}
