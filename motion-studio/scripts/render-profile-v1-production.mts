@@ -6,9 +6,9 @@ import {fileURLToPath} from 'node:url';
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const run = (command: string, args: string[]) => spawnSync(command, args, {cwd: root, encoding: 'utf8', stdio: 'inherit'});
 
-const preflight = run(process.execPath, ['--no-warnings', 'scripts/profile-v1-assembly-preflight.mts', '--strict']);
+const preflight = run(process.execPath, ['--no-warnings', 'scripts/profile-v1-production-preflight.mts', '--strict']);
 if (preflight.status !== 0) {
-  console.error('Profile V1 production render blocked: assembly preflight is not ready.');
+  console.error('Profile V1 production render blocked: generated accent contracts and assembly readiness must both pass.');
   process.exit(1);
 }
 
