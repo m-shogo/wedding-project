@@ -5,7 +5,7 @@ export const openingProductionStatus = {
   "source": {
     "status": "motion-studio/scripts/opening-v1-production-status.mts",
     "previewSourceBinding": "motion-studio/scripts/opening-v1-preview-source-fingerprint.mts",
-    "finalRenderReview": "motion-studio/scripts/opening-v1-final-render-review.mts",
+    "finalRenderReview": "motion-studio/scripts/opening-v1-production-status.mts#stages.finalRenderReview",
     "davinciHandoff": "motion-studio/scripts/opening-v1-davinci-handoff-contract.mts"
   },
   "overallState": "MEDIA_REQUIRED",
@@ -25,6 +25,9 @@ export const openingProductionStatus = {
     "finalRender": {
       "state": "NOT_RUN"
     },
+    "finalRenderReview": {
+      "state": "NOT_RUN"
+    },
     "productionBundle": {
       "state": "NOT_RUN"
     },
@@ -32,9 +35,6 @@ export const openingProductionStatus = {
       "state": "NOT_RUN"
     },
     "finalDeliveryApproval": {
-      "state": "NOT_RUN"
-    },
-    "finalRenderReview": {
       "state": "NOT_RUN"
     }
   },
@@ -59,9 +59,7 @@ export const openingProductionStatus = {
     },
     "finalRender": {
       "state": "NOT_RUN",
-      "blockers": [
-        "FINAL_RENDER_REVIEW_EVIDENCE_MISSING"
-      ],
+      "blockers": [],
       "recovery": []
     },
     "guardrails": [
