@@ -34,14 +34,14 @@ const effectiveOverallState=finalReviewNeedsInit
     : report.overallState;
 const effectiveNextActions=finalReviewNeedsInit
   ? [
-      "node --no-warnings scripts/init-opening-v1-final-render-review.mts",
+      "pnpm opening:final-render-review:init",
       "final MP4を人間が通し視聴してvisual/timing/readability/BGM/encodingを判定",
-      "node --no-warnings scripts/opening-v1-final-render-review.mts --strict",
+      "pnpm opening:final-render-review:strict",
     ]
   : finalReviewNeedsHuman
     ? [
         "current final MP4 / render source / upstream reviewに対してHuman final-render QAを完了または再初期化",
-        "node --no-warnings scripts/opening-v1-final-render-review.mts --strict",
+        "pnpm opening:final-render-review:strict",
       ]
     : [...report.nextActions];
 
@@ -80,8 +80,8 @@ const sourceRevalidation={
     recovery:!finalRenderPassed||finalReviewStage.state==="PASS"
       ? []
       : finalReviewStage.state==="NOT_RUN"
-        ? ["node --no-warnings scripts/init-opening-v1-final-render-review.mts","final MP4をHuman QA","node --no-warnings scripts/opening-v1-final-render-review.mts --strict"]
-        : ["current final MP4を再Human QA","node --no-warnings scripts/opening-v1-final-render-review.mts --strict"],
+        ? ["pnpm opening:final-render-review:init","final MP4をHuman QA","pnpm opening:final-render-review:strict"]
+        : ["current final MP4を再Human QA","pnpm opening:final-render-review:strict"],
   },
   guardrails:[
     "SOURCE_CHANGED => RE_RENDER_REQUIRED",
