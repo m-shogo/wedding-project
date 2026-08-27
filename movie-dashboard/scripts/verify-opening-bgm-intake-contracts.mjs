@@ -13,6 +13,10 @@ for (const token of [
   "openingProductionGate",
   "opening-bgm-main",
   "motion-studio/public/audio/opening/bgm-main.mp3",
+  "motion-studio/out/intake/opening-bgm-intake.json",
+  "scripts/intake-production-bgm.mts --project opening",
+  "--apply --receipt out/intake/opening-bgm-intake.json",
+  "scripts/verify-production-bgm-intake-receipt.mts --project opening",
   "pnpm check:opening-sound",
   "pnpm check:opening-sound:strict",
   "pnpm sync:opening-gate",
@@ -20,6 +24,9 @@ for (const token of [
   "OpeningProductionHandoffExportButton",
   "<OpeningProductionHandoffExportButton />",
   "<OpeningProductionHandoffExportButton compact />",
+  "DRY_RUN_PASS != FILE_COPIED",
+  "RECEIPT_CURRENT != RIGHTS_CLEARED",
+  "FILE_FOUND != RECEIPT_CURRENT",
   "HANDOFF_EXPORTED != PRODUCTION_READY",
   "CI_MUST_NOT_PROMOTE_MAC_GUI_ACTUAL",
 ]) {
@@ -38,17 +45,21 @@ for (const token of [
 for (const principle of [
   "会場上映",
   "音源の入手元",
+  "canonical intake receipt",
   "SNS / 配布は別判断",
   "確認Evidenceを残す",
 ]) {
-  if (!page.includes(principle)) errors.push(`BGM rights principle missing: ${principle}`);
+  if (!page.includes(principle)) errors.push(`BGM rights/provenance principle missing: ${principle}`);
 }
 
 if (!page.includes("AIが権利確認を推測してcandidate / approved / finalへ勝手に変更しません")) {
   errors.push("BGM intake must preserve the human rights-confirmation gate");
 }
-if (!page.includes("この画面に「権利OK」チェックを作ってsource stateを偽装しません")) {
-  errors.push("BGM intake must not use self-reported rights state as production truth");
+if (!page.includes("Receiptは「正しくcopyされた」証拠であって権利承認ではありません")) {
+  errors.push("BGM receipt must not be represented as rights approval");
+}
+if (page.includes("mkdir -p motion-studio/public/audio/opening") || page.includes("権利確認済み音源を motion-studio/public/audio/opening/bgm-main.mp3 として配置")) {
+  errors.push("Opening BGM intake must not route users through direct manual target copy");
 }
 if (!app.includes('path="opening-bgm-intake"')) {
   errors.push("Opening BGM Intake route missing");
@@ -72,4 +83,4 @@ if (errors.length > 0) {
   process.exit(1);
 }
 
-console.log("Opening BGM Intake contracts OK: rights-first / strict-gate / preview handoff / production-status JSON export preserved.");
+console.log("Opening BGM Intake contracts OK: source-preserving receipt-bound intake, Human rights promotion, strict-gate, preview handoff and production-status JSON export preserved.");
