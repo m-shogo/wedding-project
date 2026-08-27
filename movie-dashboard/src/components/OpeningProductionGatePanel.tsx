@@ -117,10 +117,10 @@ export function OpeningProductionGatePanel({ compact = false }: { compact?: bool
               <p className="text-[10px] tracking-[0.18em] font-semibold text-navy-400">DO THIS NOW</p>
               <ol className="mt-3 space-y-2 text-xs leading-5 text-navy-600 dark:text-navy-300">
                 <li><span className="font-mono text-navy-400 mr-2">1</span>実写真11枠をcanonical名で揃える</li>
-                <li><span className="font-mono text-navy-400 mr-2">2</span>CANONICAL INTAKE CLIをDRY RUN → <code className="text-[10px]">--apply</code> でsource非破壊copy + SHA receipt</li>
+                <li><span className="font-mono text-navy-400 mr-2">2</span>CANONICAL INTAKE CLIをDRY RUNし、PASS後だけ <code className="text-[10px]">--apply</code> でsource非破壊copy + SHA receipt</li>
                 <li><span className="font-mono text-navy-400 mr-2">3</span>receipt verifierで11 targetの現在bytes/SHAを確認</li>
                 <li><span className="font-mono text-navy-400 mr-2">4</span>BGMのfile + receipt + 会場上映条件を確認</li>
-                <li><span className="font-mono text-navy-400 mr-2">5</span>canonical assembly gateが通ったら60秒previewへ</li>
+                <li><span className="font-mono text-navy-400 mr-2">5</span>写真+BGMが揃ったら60秒previewへ。canonical assembly gateがreceiptも再検証する</li>
               </ol>
               <div className="mt-4 flex flex-wrap gap-3 text-xs">
                 {!photosReady && <Link to="/opening-photo-intake" className="px-3 py-2 bg-navy-800 text-white dark:bg-sand-100 dark:text-navy-900">写真11枚を選ぶ →</Link>}
