@@ -1,4 +1,5 @@
 import {useMemo} from "react";
+import {Link} from "react-router-dom";
 import {
   buildWeddingMovieProductionCriticalPath,
   buildWeddingMovieProductionCriticalPathJson,
@@ -48,6 +49,20 @@ export function WeddingMovieProductionCriticalPathCard({projectId}: {projectId: 
           <div className="border border-amber-200 dark:border-amber-800 p-2 text-[8px] leading-4 text-navy-500 dark:text-navy-300">
             <p className="font-semibold text-amber-700 dark:text-amber-300">今やること</p>
             {current.recovery.length > 0 ? current.recovery.map((action, index) => <div key={`${index}-${action}`}>{index + 1}. <code>{action}</code></div>) : project.nextActions.map((action, index) => <div key={`${index}-${action}`}>{index + 1}. <code>{action}</code></div>)}
+            {current.actionTargets.length > 0 ? (
+              <div className="mt-2 flex flex-wrap gap-1.5">
+                {current.actionTargets.map((target) => (
+                  <Link
+                    key={`${target.route}-${target.label}`}
+                    to={target.route}
+                    title={target.purpose}
+                    className="border border-amber-300 dark:border-amber-700 px-2 py-1 font-semibold text-amber-700 dark:text-amber-300"
+                  >
+                    {target.label} →
+                  </Link>
+                ))}
+              </div>
+            ) : null}
           </div>
           <div className="border border-sand-200 dark:border-navy-700 p-2 text-[8px] leading-4 text-navy-500 dark:text-navy-300">
             <p className="font-semibold">この後に解放される工程</p>
