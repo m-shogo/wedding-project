@@ -17,7 +17,7 @@ type BgmIntakePlan = {
   blockers: string[];
 };
 
-type BgmIntakeReceipt = {
+export type BgmIntakeReceipt = {
   schemaVersion: 'wedding-production-bgm-intake-receipt/v1';
   project: Project;
   createdAt: string;
@@ -35,14 +35,24 @@ type BgmIntakeReceipt = {
 };
 
 const studioRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
-const canonicalTarget = (project: Project) => project === 'opening'
+export const defaultBgmTarget = (project: Project) => project === 'opening'
   ? join(studioRoot, 'public/audio/opening/bgm-main.mp3')
   : join(studioRoot, 'public/audio/profile/bgm-main.mp3');
 const sha256File = (file: string) => createHash('sha256').update(readFileSync(file)).digest('hex');
 
-export const buildBgmIntakePlan = ({project, sourcePath, overwrite = false}: {project: Project; sourcePath: string; overwrite?: boolean}): BgmIntakePlan => {
+export const buildBgmIntakePlan = ({
+  project,
+  sourcePath,
+  targetPath = defaultBgmTarget(project),
+  overwrite = false,
+}: {
+  project: Project;
+  sourcePath: string;
+  targetPath?: string;
+  overwrite?: boolean;
+}): BgmIntakePlan => {
   const source = resolve(sourcePath);
-  const target = canonicalTarget(project);
+  const target = resolve(targetPath);
   const blockers: string[] = [];
   const extension = extname(source).toLowerCase();
 
@@ -57,7 +67,7 @@ export const buildBgmIntakePlan = ({project, sourcePath, overwrite = false}: {pr
     sourcePath: source,
     sourceFile: basename(source),
     targetPath: target,
-    targetFile: 'bgm-main.mp3',
+    targetFile: basename(target),
     sourceExtension: extension,
     targetExists,
     readyToApply: blockers.length === 0,
