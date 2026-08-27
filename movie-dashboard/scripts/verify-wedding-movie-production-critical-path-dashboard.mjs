@@ -28,16 +28,22 @@ for (const token of [
   'currentCriticalStage',
   'downstreamBlockedStages',
   'inputLanesFor(projectId, current.name)',
-  'stageBlockerCodesFor(projectId, current.name, inputLanes)',
+  'type BlockerProvenance = "INPUT_GATE" | "SOURCE_REVALIDATION" | "NORMALIZED_STAGE_STATE" | "NONE"',
+  'stageBlockerInfoFor',
+  'provenance: "INPUT_GATE"',
+  'provenance: "SOURCE_REVALIDATION"',
+  'provenance: "NONE"',
+  'blockerProvenanceFor',
+  '"NORMALIZED_STAGE_STATE"',
   'normalizedStageBlockerCodes',
   'ARTIFACT_MISSING:',
   'ARTIFACT_STALE:',
   'STAGE_BLOCKED:',
   'UPSTREAM_BLOCKED:',
-  'currentRawBlockers',
-  'blockerCodes: normalizedStageBlockerCodes(current.name, current, currentRawBlockers)',
+  'currentBlockerInfo',
+  'blockerProvenance: blockerProvenanceFor(current, currentBlockerInfo)',
   'ordered.slice(currentIndex + 1).map',
-  'blockerCodes: normalizedStageBlockerCodes(stage.name, stage, rawBlockers, upstreamStageName)',
+  'blockerProvenance: blockerProvenanceFor(stage, blockerInfo)',
   'recovery: [...stage.recovery]',
   'actionTargets: actionTargetsFor(projectId, stage.name)',
   'openingProductionGate.photos.intakeReceiptCurrent',
@@ -62,6 +68,8 @@ for (const token of [
   'BGM実ファイル・intake receipt・上映権利確認をcurrent SHAへ固定する',
   'BLOCKER_CODE_VISIBLE != BLOCKER_RESOLVED',
   'NORMALIZED_BLOCKER_CODE != RAW_MOTION_STUDIO_EVIDENCE',
+  'BLOCKER_PROVENANCE_INPUT_GATE != RAW_STAGE_BLOCKERS',
+  'BLOCKER_PROVENANCE_SOURCE_REVALIDATION != FULL_STAGE_EVIDENCE',
   'INPUT_LANE_READY != PROJECT_PRODUCTION_READY',
   'ACTION_TARGET_VISIBLE != ACTION_COMPLETED',
   'productionReady: opening.productionReady && profile.productionReady',
@@ -87,6 +95,12 @@ for (const token of [
 
 for (const token of [
   'NOW / PRODUCTION CRITICAL PATH',
+  'blockerProvenanceLabels',
+  'INPUT_GATE: "input gate evidence"',
+  'SOURCE_REVALIDATION: "source revalidation evidence"',
+  'NORMALIZED_STAGE_STATE: "derived waiting-state code"',
+  'current.blockerProvenance',
+  'stage.blockerProvenance',
   'current?.detail',
   'current.path',
   'current?.blockerCodes.length',
@@ -163,4 +177,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log('Wedding Movie production critical-path dashboard OK: current and downstream stages preserve blocker codes, artifact paths, canonical recovery and action routing while independent input lanes retain Profile/Opening receipt + rights truth without promoting Human QA or Mac Actual.');
+console.log('Wedding Movie production critical-path dashboard OK: blocker provenance distinguishes input-gate/source-revalidation evidence from normalized waiting-state codes while current/downstream artifact, recovery and action routing remain exportable without promoting Human QA or Mac Actual.');
