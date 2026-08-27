@@ -3,6 +3,7 @@ import {existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync} from 'node
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 import {applyBgmIntakePlan, buildBgmIntakePlan, writeBgmIntakeReceipt} from './intake-production-bgm.mts';
+import {verifyBgmIntakeReceipt} from './verify-production-bgm-intake-receipt.mts';
 
 const root = mkdtempSync(join(tmpdir(), 'wedding-bgm-intake-'));
 const openingSource = join(root, 'opening-source.mp3');
@@ -30,6 +31,15 @@ try {
   const openingReceiptPath = join(root, 'receipts', 'opening-bgm.json');
   writeBgmIntakeReceipt(openingReceipt, openingReceiptPath);
   if (JSON.parse(readFileSync(openingReceiptPath, 'utf8')).sha256 !== openingReceipt.sha256) throw new Error('Opening BGM persisted receipt changed SHA');
+  const openingCurrent = verifyBgmIntakeReceipt({project: 'opening', receiptPath: openingReceiptPath, targetPath: openingTarget});
+  if (!openingCurrent.current) throw new Error(`Fresh Opening BGM receipt should verify: ${JSON.stringify(openingCurrent)}`);
+
+  writeFileSync(openingTarget, 'opening-bgm-bytes-changed-after-intake');
+  const openingStale = verifyBgmIntakeReceipt({project: 'opening', receiptPath: openingReceiptPath, targetPath: openingTarget});
+  if (openingStale.current || !openingStale.blockers.some((item) => item.startsWith('BGM_TARGET_BYTES_CHANGED:') || item.startsWith('BGM_TARGET_SHA_CHANGED:'))) {
+    throw new Error(`Mutated Opening BGM must stale receipt: ${JSON.stringify(openingStale)}`);
+  }
+  writeFileSync(openingTarget, 'opening-bgm-bytes');
 
   const existingPlan = buildBgmIntakePlan({project: 'opening', sourcePath: openingSource, targetPath: openingTarget});
   if (existingPlan.readyToApply || !existingPlan.blockers.some((item) => item.startsWith('TARGET_EXISTS:'))) throw new Error('Existing Opening BGM target must fail closed without --overwrite');
@@ -40,6 +50,12 @@ try {
   if (profileReceipt.sha256 !== sha256('profile-bgm-bytes')) throw new Error('Profile BGM receipt SHA mismatch');
   if (!existsSync(profileSource) || readFileSync(profileSource, 'utf8') !== 'profile-bgm-bytes') throw new Error('Profile BGM source modified');
   if (readFileSync(profileTarget, 'utf8') !== 'profile-bgm-bytes') throw new Error('Profile BGM copied bytes changed');
+  const profileReceiptPath = join(root, 'receipts', 'profile-bgm.json');
+  writeBgmIntakeReceipt(profileReceipt, profileReceiptPath);
+  if (!verifyBgmIntakeReceipt({project: 'profile', receiptPath: profileReceiptPath, targetPath: profileTarget}).current) throw new Error('Fresh Profile BGM receipt should verify');
+
+  const missingReceipt = verifyBgmIntakeReceipt({project: 'opening', receiptPath: join(root, 'receipts/missing.json'), targetPath: openingTarget});
+  if (missingReceipt.current || !missingReceipt.blockers.some((item) => item.startsWith('BGM_RECEIPT_MISSING:'))) throw new Error('Missing BGM receipt must fail closed');
 
   const unsupportedPlan = buildBgmIntakePlan({project: 'profile', sourcePath: unsupportedSource, targetPath: join(root, 'targets/unsupported/bgm-main.mp3')});
   if (unsupportedPlan.readyToApply || !unsupportedPlan.blockers.some((item) => item.startsWith('UNSUPPORTED_SOURCE_EXTENSION:'))) throw new Error('Non-MP3 BGM must fail closed instead of silent transcoding');
@@ -47,7 +63,7 @@ try {
   const missingPlan = buildBgmIntakePlan({project: 'opening', sourcePath: join(root, 'missing.mp3'), targetPath: join(root, 'targets/missing/bgm-main.mp3')});
   if (missingPlan.readyToApply || !missingPlan.blockers.some((item) => item.startsWith('SOURCE_MISSING:'))) throw new Error('Missing BGM source must fail closed');
 
-  console.log('Production BGM intake contracts OK: Opening/Profile MP3 copy is source-preserving and SHA-verified, existing targets and non-MP3 sources fail closed, and intake never clears rights or Human/Mac production gates.');
+  console.log('Production BGM intake contracts OK: source-preserving SHA copy, fresh/stale receipt verification, target collision and non-MP3 fail-close, and Human rights boundary verified.');
 } finally {
   rmSync(root, {recursive: true, force: true});
 }
