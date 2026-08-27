@@ -3,7 +3,8 @@
 
 export const profileProductionStatus = {
   "source": {
-    "status": "motion-studio/scripts/profile-v1-production-status.mts"
+    "status": "motion-studio/scripts/profile-v1-production-status.mts",
+    "palmierHandoff": "motion-studio/scripts/profile-v1-palmier-handoff-contract.mts"
   },
   "overallState": "ASSEMBLY_REQUIRED",
   "stages": {
@@ -34,6 +35,29 @@ export const profileProductionStatus = {
     "macDaVinciActual": "NOT_RUN",
     "finalDeliveryApproved": false,
     "productionReady": false
+  },
+  "handoff": {
+    "palmier": {
+      "contractVersion": "profile-v1-palmier-handoff/v1",
+      "current": false,
+      "sourceAuthorities": [
+        "src/data/profileV1ProductionPlan.ts#profileV1Chapters",
+        "src/data/profileV1GeneratedAccentRegistry.ts#profileV1GeneratedAccentImplementations"
+      ],
+      "artifacts": {
+        "sceneTimeline": {
+          "path": "out/handoff/profile-v1/profile-v1-palmier-timeline.csv",
+          "shaBound": true,
+          "carries": [
+            "chapter_boundary",
+            "chapter_role",
+            "edit_intent",
+            "generated_accent_routes",
+            "final_render_sha256"
+          ]
+        }
+      }
+    }
   },
   "nextActions": [
     "Profile実素材を public/profile/ へcanonical stem名で投入",

@@ -27,6 +27,7 @@ export function ProfileProductionStatusHandoffCard({projectId}: {projectId: Scen
 
   const production = status.profile.production;
   const generatedAccents = status.profile.generatedAccents;
+  const palmier = production.palmierHandoff;
   const productionReady = production.readiness.productionReady;
 
   return (
@@ -68,6 +69,20 @@ export function ProfileProductionStatusHandoffCard({projectId}: {projectId: Scen
       </div>
 
       <div className="mt-2 border border-fuchsia-100 dark:border-fuchsia-900 p-2">
+        <div className="flex flex-wrap items-center justify-between gap-1">
+          <p className="text-[8px] font-semibold text-fuchsia-700 dark:text-fuchsia-300">PALMIER HANDOFF / {palmier.contractVersion}</p>
+          <span className="text-[8px] text-navy-400">artifacts={palmier.current ? "CURRENT" : "NOT_EXPORTED_OR_STALE"}</span>
+        </div>
+        <div className="mt-1 text-[8px] leading-4 text-navy-500 dark:text-navy-300">
+          <div>scene timeline: <code>{palmier.artifacts.sceneTimeline.path}</code></div>
+          <div>carries: {palmier.artifacts.sceneTimeline.carries.join(" / ")}</div>
+        </div>
+        <p className="mt-1 text-[8px] text-navy-400">
+          HANDOFF_METADATA_EXPORTED != HANDOFF_ARTIFACTS_CURRENT / PALMIER_TIMELINE_SHA_MATCH != MAC_DAVINCI_ACTUAL_VERIFIED
+        </p>
+      </div>
+
+      <div className="mt-2 border border-fuchsia-100 dark:border-fuchsia-900 p-2">
         <p className="text-[8px] font-semibold text-fuchsia-700 dark:text-fuchsia-300">GENERATED ACCENTS / CANONICAL ROUTES</p>
         <div className="mt-1 grid gap-1 sm:grid-cols-3">
           {generatedAccents.accents.map((accent) => (
@@ -95,7 +110,7 @@ export function ProfileProductionStatusHandoffCard({projectId}: {projectId: Scen
       </div>
 
       <p className="mt-2 text-[8px] leading-4 text-navy-400">
-        このstatusはBLOCKED / NOT_RUNも含めて現在状態を外へ渡すためのenvelopeです。Assembly manifestの可否とは別なので、未完成でも書き出せます。
+        このstatusはBLOCKED / NOT_RUNも含めて現在状態とPalmier handoff contractを外へ渡すためのenvelopeです。Assembly manifestの可否とは別なので、未完成でも書き出せます。
         `ASSEMBLY_READY != PRODUCTION_READY` / `MAC_DAVINCI_ACTUAL_VERIFIED != FINAL_DELIVERY_APPROVED` / `GENERATED_ACCENT_IMPLEMENTED != HUMAN_REAL_MEDIA_QA_PASS`
       </p>
 

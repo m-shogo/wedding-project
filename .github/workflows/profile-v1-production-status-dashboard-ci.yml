@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - "motion-studio/scripts/profile-v1-production-status.mts"
+      - "motion-studio/scripts/profile-v1-palmier-handoff-contract.mts"
       - "motion-studio/scripts/profile-v1-generated-accent-manifest.mts"
       - "motion-studio/src/data/profileV1GeneratedAccentRegistry.ts"
       - "motion-studio/src/data/profileV1ProductionPlan.ts"
@@ -20,6 +21,7 @@ on:
     branches: [main]
     paths:
       - "motion-studio/scripts/profile-v1-production-status.mts"
+      - "motion-studio/scripts/profile-v1-palmier-handoff-contract.mts"
       - "motion-studio/scripts/profile-v1-generated-accent-manifest.mts"
       - "motion-studio/src/data/profileV1GeneratedAccentRegistry.ts"
       - "motion-studio/src/data/profileV1ProductionPlan.ts"
