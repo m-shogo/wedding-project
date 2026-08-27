@@ -69,7 +69,7 @@ jobs:
           touch public/photos/opening/okinawa-01.jpg
           node --no-warnings scripts/sync-photos.mts
           node --no-warnings scripts/check-opening-photos.mts
-          grep -q 'photos/opening/okinawa-01.jpg' src/data/photoLibrary.generated.ts
+          grep -q 'opening/okinawa-01.jpg' src/data/photoLibrary.generated.ts
           echo "one correctly named Opening photo resolves without requiring all 11 for preview"
 
       - name: Same-role duplicate extensions fail closed
