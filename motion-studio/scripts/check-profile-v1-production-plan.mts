@@ -57,10 +57,16 @@ for (const token of [
   'profile-v1-bgm-rights-approval.mts',
   "schemaVersion: 'profile-v1-bgm-rights-status/v1'",
   'rightsStatus.rightsCleared',
-  "previewQaState: 'NOT_RUN'",
-  "humanContentQaState: 'NOT_RUN'",
+  'profile-v1-real-media-review.mts',
+  "schemaVersion: 'profile-v1-real-media-review-status/v1'",
+  "authority: 'DERIVED_REAL_MEDIA_REVIEW_STATUS'",
+  "previewQaState: realMediaReview.state",
+  "humanContentQaState: realMediaReview.state",
+  'realMediaReview.humanReviewComplete',
+  'assemblyReady',
   "macDaVinciActualState: 'NOT_RUN'",
   'productionReady: false',
+  'strict && !assemblyReady',
 ]) {
   if (!preflight.includes(token)) fail(`Profile V1 preflight honesty token missing: ${token}`);
 }
@@ -92,4 +98,4 @@ if (errors.length > 0) {
   process.exit(1);
 }
 
-console.log(`Profile V1 production plan contracts OK: 5 canonical chapters, ${profileV1RequiredMediaSlots.length} minimum real-media roles, generated graphics separated, and BGM rights require current-SHA human approval before assembly readiness.`);
+console.log(`Profile V1 production plan contracts OK: 5 canonical chapters, ${profileV1RequiredMediaSlots.length} minimum real-media roles, BGM rights and SHA-bound Human real-media QA are both required before assembly readiness; Mac Actual remains separate.`);
