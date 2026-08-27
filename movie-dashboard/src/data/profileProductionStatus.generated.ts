@@ -11,32 +11,55 @@ export const profileProductionStatus = {
   "stages": {
     "assembly": {
       "state": "BLOCKED",
-      "detail": "Generated accent contracts or assembly inputs/Human QA are not all ready."
+      "detail": "Generated accent contracts or assembly inputs/Human QA are not all ready.",
+      "recovery": [
+        "Profile実素材を public/profile/ へcanonical stem名で投入",
+        "pnpm prepare:profile-v1"
+      ]
     },
     "finalRender": {
       "state": "NOT_RUN",
       "detail": "Blocked by full production preflight readiness.",
-      "path": "out/profile/profile_v1.mp4"
+      "path": "out/profile/profile_v1.mp4",
+      "recovery": [
+        "pnpm render:profile-v1",
+        "pnpm check:profile-render"
+      ]
     },
     "finalRenderReview": {
       "state": "NOT_RUN",
       "detail": "Blocked until final render QA passes.",
-      "path": "out/qa/profile-v1-final-render-review.json"
+      "path": "out/qa/profile-v1-final-render-review.json",
+      "recovery": [
+        "pnpm profile:final-render-review:init",
+        "pnpm profile:final-render-review:strict"
+      ]
     },
     "productionBundle": {
       "state": "NOT_RUN",
       "detail": "Blocked until current Human final-render review passes.",
-      "path": "out/handoff/profile-v1/profile-v1-production-bundle.json"
+      "path": "out/handoff/profile-v1/profile-v1-production-bundle.json",
+      "recovery": [
+        "pnpm export:profile-v1-production-bundle"
+      ]
     },
     "davinciFinishing": {
       "state": "NOT_RUN",
       "detail": "Blocked until production bundle is current.",
-      "path": "out/qa/profile-v1-davinci-finishing-evidence.json"
+      "path": "out/qa/profile-v1-davinci-finishing-evidence.json",
+      "recovery": [
+        "pnpm profile:davinci-finishing:init",
+        "pnpm profile:davinci-finishing:strict"
+      ]
     },
     "finalDeliveryApproval": {
       "state": "NOT_RUN",
       "detail": "Blocked until Mac DaVinci Actual is verified.",
-      "path": "out/qa/profile-v1-final-delivery-approval.json"
+      "path": "out/qa/profile-v1-final-delivery-approval.json",
+      "recovery": [
+        "pnpm profile:final-delivery-approval:init",
+        "pnpm profile:final-delivery-approval:strict"
+      ]
     }
   },
   "readiness": {
