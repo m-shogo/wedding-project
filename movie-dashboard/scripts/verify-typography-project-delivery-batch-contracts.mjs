@@ -32,8 +32,8 @@ for (const token of [
 }
 
 for (const token of [
-  '全Scene package一括書き出し',
-  'disabled={!ready}',
+  'Typography package一括書き出し',
+  'disabled={!routeReady}',
   '未選択/stale Sceneをsilent skipしません',
   'productionReady=NO',
   'listTypographyProductionSelections()',
