@@ -14,6 +14,14 @@ const jsonMode=process.argv.includes('--json'); const strict=process.argv.includ
 type State='PASS'|'BLOCKED'|'NOT_RUN'|'MISSING'|'STALE'; type Stage={state:State;detail:string;path?:string;blockers?:string[]};
 const rel=(p:string)=>relative(root,p).replaceAll('\\','/'); const sha=(p:string)=>createHash('sha256').update(readFileSync(p)).digest('hex');
 const run=(script:string,args:string[]=[])=>spawnSync(process.execPath,['--no-warnings',script,...args],{cwd:root,encoding:'utf8'}); const lines=(v:string|null|undefined)=>(v??'').split(/\r?\n/).map(x=>x.trim()).filter(Boolean);
+const aliasAction=(action:string)=>({
+  'node --no-warnings scripts/profile-v1-assembly-preflight.mts':'pnpm profile:assembly-preflight',
+  'node --no-warnings scripts/profile-v1-bgm-rights-approval.mts --init':'pnpm profile:bgm-rights:init',
+  'node --no-warnings scripts/profile-v1-bgm-rights-approval.mts --strict':'pnpm profile:bgm-rights:strict',
+  'node --no-warnings scripts/render-profile-v1-real-media-preview.mts':'pnpm render:profile-v1:real-media-preview',
+  'node --no-warnings scripts/profile-v1-real-media-review.mts --init':'pnpm profile:real-media-review:init',
+  'node --no-warnings scripts/profile-v1-real-media-review.mts --strict':'pnpm profile:real-media-review:strict',
+}[action]??action);
 
 const ar=run('scripts/profile-v1-assembly-preflight.mts',['--json']); let assemblyReport:any=null; let assembly:Stage;
 if(ar.status!==0)assembly={state:'BLOCKED',detail:'Assembly preflight failed.',blockers:[...lines(ar.stdout),...lines(ar.stderr)]};else{try{assemblyReport=JSON.parse(ar.stdout)}catch{}const ready=assemblyReport?.readiness?.assemblyReady===true;assembly={state:ready?'PASS':'BLOCKED',detail:ready?'17 media + BGM rights + structure + real-media Human QA are ready.':'Assembly inputs/Human QA are not all ready.',blockers:ready?[]:(assemblyReport?.readiness?.blockers??[])};}
@@ -24,7 +32,7 @@ const davinci:Stage=bundle.state!=='PASS'?{state:'NOT_RUN',detail:'Blocked until
 const approval:Stage=davinci.state!=='PASS'?{state:'NOT_RUN',detail:'Blocked until Mac DaVinci Actual is verified.',path:rel(approvalPath)}:!existsSync(approvalPath)?{state:'MISSING',detail:'Initialize explicit Human final delivery approval.',path:rel(approvalPath)}:(()=>{const r=run('scripts/profile-v1-final-delivery-approval.mts',['--strict']);return r.status===0?{state:'PASS',detail:'Current DaVinci export has explicit SHA-bound Human approval.',path:rel(approvalPath)}:{state:'BLOCKED',detail:'Final delivery approval is HOLD/incomplete/stale.',path:rel(approvalPath),blockers:[...lines(r.stdout),...lines(r.stderr)]};})();
 
 let overallState:string;let nextActions:string[];
-if(assembly.state!=='PASS'){overallState='ASSEMBLY_REQUIRED';nextActions=assemblyReport?.nextActions??['pnpm prepare:profile-v1'];}
+if(assembly.state!=='PASS'){overallState='ASSEMBLY_REQUIRED';nextActions=(assemblyReport?.nextActions??['pnpm prepare:profile-v1']).map(aliasAction);}
 else if(finalRender.state==='MISSING'){overallState='FINAL_RENDER_REQUIRED';nextActions=['pnpm render:profile-v1'];}
 else if(finalRender.state!=='PASS'){overallState='FINAL_RENDER_QA_FAILED';nextActions=['pnpm check:profile-render','final render QA failureを修正して再render'];}
 else if(finalReview.state==='MISSING'){overallState='FINAL_RENDER_REVIEW_INIT_REQUIRED';nextActions=['pnpm profile:final-render-review:init','最終MP4を音声付きで人間確認','pnpm profile:final-render-review:strict'];}
