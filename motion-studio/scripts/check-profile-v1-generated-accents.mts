@@ -1,8 +1,8 @@
 import {readFileSync} from 'node:fs';
 import {dirname, join} from 'node:path';
 import {fileURLToPath} from 'node:url';
+import {profileV1GeneratedAccentImplementations} from '../src/data/profileV1GeneratedAccentRegistry.ts';
 import {profileV1OptionalGeneratedSlots} from '../src/data/profileV1ProductionPlan.ts';
-import {profileV1GeneratedAccentImplementations} from '../src/compositions/profile/ProfileV1GeneratedAccents.tsx';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const production = readFileSync(join(root, 'src/compositions/profile/ProfileV1.tsx'), 'utf8');
@@ -48,7 +48,7 @@ for (const token of [
   "intensity=\"S\"",
   '<DoorLight',
   'durationInFramesOverride={accentDuration}',
-  'PROFILE_BOARDING_TITLE_CARD',
+  'BOARDING',
 ]) {
   if (!accents.includes(token)) errors.push(`generated accent implementation token missing: ${token}`);
 }
