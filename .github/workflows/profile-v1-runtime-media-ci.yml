@@ -1,0 +1,49 @@
+name: Profile V1 Runtime Media CI
+
+on:
+  pull_request:
+    paths:
+      - "motion-studio/public/profile/**"
+      - "motion-studio/src/data/profileV1ProductionPlan.ts"
+      - "motion-studio/src/data/profileV1RuntimeMedia.generated.ts"
+      - "motion-studio/scripts/sync-profile-v1-runtime-media.mts"
+      - "motion-studio/scripts/check-profile-v1-runtime-media.mts"
+      - ".github/workflows/profile-v1-runtime-media-ci.yml"
+  push:
+    paths:
+      - "motion-studio/public/profile/**"
+      - "motion-studio/src/data/profileV1ProductionPlan.ts"
+      - "motion-studio/src/data/profileV1RuntimeMedia.generated.ts"
+      - "motion-studio/scripts/sync-profile-v1-runtime-media.mts"
+      - "motion-studio/scripts/check-profile-v1-runtime-media.mts"
+      - ".github/workflows/profile-v1-runtime-media-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    defaults:
+      run:
+        working-directory: motion-studio
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Runtime media snapshot is current
+        run: node --no-warnings scripts/sync-profile-v1-runtime-media.mts
+
+      - name: Runtime media contracts
+        run: node --no-warnings scripts/check-profile-v1-runtime-media.mts
+
+      - name: Fresh clone remains 0 of 17
+        run: |
+          node -e "const fs=require('fs'); const s=fs.readFileSync('src/data/profileV1RuntimeMedia.generated.ts','utf8'); if(!s.includes('\"expectedCount\": 17')) process.exit(1); if(!s.includes('\"resolvedCount\": 0')) process.exit(1); if(!s.includes('\"missingCount\": 17')) process.exit(1); if(s.includes('\"resolved\": true')) process.exit(1);"
+          echo "Profile runtime media correctly fails empty rather than mapping unrelated files"
