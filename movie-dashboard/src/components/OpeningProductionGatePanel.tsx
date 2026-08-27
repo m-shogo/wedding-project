@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { openingProductionGate } from "../data/openingProductionGate.generated";
 import {OpeningProductionHandoffExportButton} from "./OpeningProductionHandoffExportButton";
+import {ProductionMediaIntakeCliGuide} from "./ProductionMediaIntakeCliGuide";
 
 const phaseTone = {
   blocked: "border-red-200 bg-red-50 text-red-800 dark:border-red-800 dark:bg-red-900/20 dark:text-red-200",
@@ -76,40 +77,47 @@ export function OpeningProductionGatePanel({ compact = false }: { compact?: bool
       </div>
 
       {!compact && (
-        <div className="p-4 md:p-5 grid grid-cols-1 lg:grid-cols-[1.4fr_1fr] gap-5">
-          <div>
-            <p className="text-[10px] tracking-[0.18em] font-semibold text-navy-400">PHOTO SLOTS</p>
-            <div className="mt-3 grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-2">
-              {gate.photoSlots.map((slot) => (
-                <div key={slot.key} className={`border px-2.5 py-2 ${slot.resolved ? "border-emerald-200 bg-emerald-50 dark:border-emerald-800 dark:bg-emerald-900/20" : "border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-900/20"}`}>
-                  <p className="text-[10px] font-mono text-navy-600 dark:text-navy-300">{slot.key}</p>
-                  <p className={`mt-1 text-[10px] font-semibold ${slot.resolved ? "text-emerald-700 dark:text-emerald-300" : "text-red-700 dark:text-red-300"}`}>
-                    {slot.resolved ? "RESOLVED" : "MISSING"}
-                  </p>
-                </div>
-              ))}
+        <>
+          {!photosReady && (
+            <div className="p-4 md:p-5 border-b border-sand-200 dark:border-navy-600">
+              <ProductionMediaIntakeCliGuide project="opening" />
             </div>
-            <div className="mt-4">
-              <OpeningProductionHandoffExportButton />
+          )}
+          <div className="p-4 md:p-5 grid grid-cols-1 lg:grid-cols-[1.4fr_1fr] gap-5">
+            <div>
+              <p className="text-[10px] tracking-[0.18em] font-semibold text-navy-400">PHOTO SLOTS</p>
+              <div className="mt-3 grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-2">
+                {gate.photoSlots.map((slot) => (
+                  <div key={slot.key} className={`border px-2.5 py-2 ${slot.resolved ? "border-emerald-200 bg-emerald-50 dark:border-emerald-800 dark:bg-emerald-900/20" : "border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-900/20"}`}>
+                    <p className="text-[10px] font-mono text-navy-600 dark:text-navy-300">{slot.key}</p>
+                    <p className={`mt-1 text-[10px] font-semibold ${slot.resolved ? "text-emerald-700 dark:text-emerald-300" : "text-red-700 dark:text-red-300"}`}>
+                      {slot.resolved ? "RESOLVED" : "MISSING"}
+                    </p>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-4">
+                <OpeningProductionHandoffExportButton />
+              </div>
             </div>
-          </div>
 
-          <div>
-            <p className="text-[10px] tracking-[0.18em] font-semibold text-navy-400">DO THIS NOW</p>
-            <ol className="mt-3 space-y-2 text-xs leading-5 text-navy-600 dark:text-navy-300">
-              <li><span className="font-mono text-navy-400 mr-2">1</span>実写真11枠をcanonical名で揃える</li>
-              <li><span className="font-mono text-navy-400 mr-2">2</span>BGMの会場上映条件と音源入手元を確認</li>
-              <li><span className="font-mono text-navy-400 mr-2">3</span>権利確認済み音源だけを <code className="text-[10px]">opening-bgm-main</code> へ接続</li>
-              <li><span className="font-mono text-navy-400 mr-2">4</span>写真+BGMが揃ったら60秒previewへ</li>
-            </ol>
-            <div className="mt-4 flex flex-wrap gap-3 text-xs">
-              {!photosReady && <Link to="/opening-photo-intake" className="px-3 py-2 bg-navy-800 text-white dark:bg-sand-100 dark:text-navy-900">写真11枚を選ぶ →</Link>}
-              {!bgmReady && <Link to="/opening-bgm-intake" className="px-3 py-2 bg-navy-800 text-white dark:bg-sand-100 dark:text-navy-900">BGM Gateを進める →</Link>}
-              <OpeningProductionHandoffExportButton compact />
-              <Link to="/movie-coach/compare" className="border-b border-navy-300 text-navy-600 dark:text-navy-300 self-center">Preview後のA/B判断 →</Link>
+            <div>
+              <p className="text-[10px] tracking-[0.18em] font-semibold text-navy-400">DO THIS NOW</p>
+              <ol className="mt-3 space-y-2 text-xs leading-5 text-navy-600 dark:text-navy-300">
+                <li><span className="font-mono text-navy-400 mr-2">1</span>実写真11枠をcanonical名で揃える</li>
+                <li><span className="font-mono text-navy-400 mr-2">2</span>CANONICAL INTAKE CLIをDRY RUNし、PASS後だけ <code className="text-[10px]">--apply</code> でsource非破壊copy</li>
+                <li><span className="font-mono text-navy-400 mr-2">3</span>BGMの会場上映条件と音源入手元を確認</li>
+                <li><span className="font-mono text-navy-400 mr-2">4</span>写真+BGMが揃ったら60秒previewへ</li>
+              </ol>
+              <div className="mt-4 flex flex-wrap gap-3 text-xs">
+                {!photosReady && <Link to="/opening-photo-intake" className="px-3 py-2 bg-navy-800 text-white dark:bg-sand-100 dark:text-navy-900">写真11枚を選ぶ →</Link>}
+                {!bgmReady && <Link to="/opening-bgm-intake" className="px-3 py-2 bg-navy-800 text-white dark:bg-sand-100 dark:text-navy-900">BGM Gateを進める →</Link>}
+                <OpeningProductionHandoffExportButton compact />
+                <Link to="/movie-coach/compare" className="border-b border-navy-300 text-navy-600 dark:text-navy-300 self-center">Preview後のA/B判断 →</Link>
+              </div>
             </div>
           </div>
-        </div>
+        </>
       )}
     </section>
   );
