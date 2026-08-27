@@ -5,6 +5,7 @@ import {
   type MotionZukanProductionWorkspaceState,
 } from "./motionZukanProductionWorkspace";
 import {openingProductionGate} from "./openingProductionGate.generated";
+import {openingV1PhotoPlanForSlot} from "./openingV1PhotoProductionPlan";
 import {
   buildTypographyProjectDeliveryBatch,
   type TypographyProjectDeliveryBatchV1,
@@ -25,6 +26,19 @@ export interface OpeningV1ProductionMediaGateV1 {
     key: string;
     resolved: boolean;
     path: string | null;
+    chapter: string;
+    ordinalInChapter: number;
+    placements: Array<{
+      startSeconds: number;
+      endSeconds: number;
+      role: string;
+    }>;
+    qa: {
+      crop: "NOT_RUN";
+      focus: "NOT_RUN";
+      color: "NOT_RUN";
+      motion: "NOT_RUN";
+    };
   }>;
   bgm: {
     assetId: string;
@@ -96,11 +110,19 @@ function buildOpeningV1ProductionMediaGate(projectId: SceneProjectId): OpeningV1
     expectedPhotoCount: openingProductionGate.expectedPhotoCount,
     resolvedPhotoCount: openingProductionGate.resolvedPhotoCount,
     photoMissingCount: openingProductionGate.photoMissingCount,
-    photoSlots: openingProductionGate.photoSlots.map((slot) => ({
-      key: slot.key,
-      resolved: slot.resolved,
-      path: slot.path,
-    })),
+    photoSlots: openingProductionGate.photoSlots.map((slot) => {
+      const plan = openingV1PhotoPlanForSlot(slot.key);
+      if (!plan) throw new Error(`OPENING_V1_PHOTO_PLAN_MISSING:${slot.key}`);
+      return {
+        key: slot.key,
+        resolved: slot.resolved,
+        path: slot.path,
+        chapter: plan.chapter,
+        ordinalInChapter: plan.ordinalInChapter,
+        placements: plan.placements.map((placement) => ({...placement})),
+        qa: {...plan.qa},
+      };
+    }),
     bgm: {...openingProductionGate.bgm},
     ambience: openingProductionGate.ambience.map((asset) => ({...asset})),
     ambiencePlayableCount,
@@ -200,7 +222,7 @@ export function buildProjectProductionHandoffManifest(
       productionReady: false,
       blockers,
       warnings,
-      rule: "Assembly-readyは全Sceneのcurrent Typography package + Production Workspace final checksに加え、OpeningではMotion Studio正本の11写真/BGM blocking gateが揃った状態だけを示す。現地音はmix readinessとして別表示する。DaVinci Mac Actual / Human promotion / Scene-bound Release GateなしにproductionReadyへ昇格しない。",
+      rule: "Assembly-readyは全Sceneのcurrent Typography package + Production Workspace final checksに加え、OpeningではMotion Studio正本の11写真/BGM blocking gateが揃った状態だけを示す。11写真にはOpening V1の配置時間とcrop/focus/color/motion QA=NOT_RUNを添付する。現地音はmix readinessとして別表示する。DaVinci Mac Actual / Human promotion / Scene-bound Release GateなしにproductionReadyへ昇格しない。",
     },
   };
 }
