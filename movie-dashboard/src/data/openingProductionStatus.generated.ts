@@ -14,9 +14,13 @@ export const openingProductionStatus = {
       "state": "BLOCKED",
       "detail": "Real photos and/or cleared BGM are still missing.",
       "recovery": [
-        "実写真11枚をcanonical filenameで投入",
-        "pnpm sync:photos",
-        "pnpm opening:assembly-preflight"
+        "node --no-warnings scripts/intake-production-media.mts --project opening --source \"/ABS/PATH/TO/opening-media\"",
+        "node --no-warnings scripts/intake-production-media.mts --project opening --source \"/ABS/PATH/TO/opening-media\" --apply --overwrite --receipt out/intake/opening-media-intake.json",
+        "node --no-warnings scripts/verify-production-media-intake-receipt.mts --project opening",
+        "pnpm prepare:opening-v1",
+        "node --no-warnings scripts/intake-production-bgm.mts --project opening --source \"/ABS/PATH/TO/opening-bgm.mp3\"",
+        "node --no-warnings scripts/intake-production-bgm.mts --project opening --source \"/ABS/PATH/TO/opening-bgm.mp3\" --apply --receipt out/intake/opening-bgm-intake.json",
+        "node --no-warnings scripts/verify-production-bgm-intake-receipt.mts --project opening"
       ]
     },
     "previewRender": {
@@ -201,8 +205,12 @@ export const openingProductionStatus = {
     }
   },
   "nextActions": [
-    "実写真11枚をcanonical filenameで投入",
-    "pnpm sync:photos",
-    "pnpm opening:assembly-preflight"
+    "node --no-warnings scripts/intake-production-media.mts --project opening --source \"/ABS/PATH/TO/opening-media\"",
+    "node --no-warnings scripts/intake-production-media.mts --project opening --source \"/ABS/PATH/TO/opening-media\" --apply --overwrite --receipt out/intake/opening-media-intake.json",
+    "node --no-warnings scripts/verify-production-media-intake-receipt.mts --project opening",
+    "pnpm prepare:opening-v1",
+    "node --no-warnings scripts/intake-production-bgm.mts --project opening --source \"/ABS/PATH/TO/opening-bgm.mp3\"",
+    "node --no-warnings scripts/intake-production-bgm.mts --project opening --source \"/ABS/PATH/TO/opening-bgm.mp3\" --apply --receipt out/intake/opening-bgm-intake.json",
+    "node --no-warnings scripts/verify-production-bgm-intake-receipt.mts --project opening"
   ]
 } as const;
