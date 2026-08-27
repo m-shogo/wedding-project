@@ -7,6 +7,8 @@ const read = (relative) => fs.readFileSync(path.join(root, relative), "utf8");
 
 const model = read("src/data/weddingMovieProductionCriticalPath.ts");
 const card = read("src/components/WeddingMovieProductionCriticalPathCard.tsx");
+const profileIntake = read("src/pages/ProfileMediaIntake.tsx");
+const app = read("src/App.tsx");
 const sceneHandoff = read("src/components/MaskRevealSceneHandoffCard.tsx");
 const openingHandoff = read("src/data/openingProductionStatusHandoff.ts");
 const profileHandoff = read("src/data/profileProductionStatusHandoff.ts");
@@ -23,7 +25,7 @@ for (const token of [
   'actionTargetsFor(projectId, current.name)',
   'route: "/opening-photo-intake"',
   'route: "/opening-bgm-intake"',
-  'route: "/movie-coach/profile"',
+  'route: "/profile-media-intake"',
   'route: "/profile-planner"',
   'ACTION_TARGET_VISIBLE != ACTION_COMPLETED',
   'productionReady: opening.productionReady && profile.productionReady',
@@ -45,6 +47,22 @@ for (const token of [
 ]) need(card, token, `critical-path UI missing ${token}`);
 
 for (const token of [
+  'PROFILE MEDIA INTAKE',
+  'profileProductionGate',
+  'gate.mediaSlots.filter',
+  'slot.canonicalStem',
+  'public/profile/<canonical-stem>',
+  'public/audio/profile/bgm-main.mp3',
+  'pnpm prepare:profile-v1',
+  'Human QA / Mac DaVinci Actual / final approval',
+]) need(profileIntake, token, `Profile media intake missing ${token}`);
+
+for (const token of [
+  'ProfileMediaIntake',
+  'path="profile-media-intake" element={<ProfileMediaIntake />}',
+]) need(app, token, `App Profile intake routing missing ${token}`);
+
+for (const token of [
   'WeddingMovieProductionCriticalPathCard',
   '<WeddingMovieProductionCriticalPathCard projectId={scene.projectId} />',
 ]) need(sceneHandoff, token, `Scene handoff critical-path routing missing ${token}`);
@@ -59,7 +77,7 @@ for (const [name, source, projectKey] of [
   need(source, 'CRITICAL_PATH_EXPORTED != RECOVERY_EXECUTED', `${name} handoff missing recovery guardrail`);
 }
 
-for (const source of [model, card, openingHandoff, profileHandoff]) {
+for (const source of [model, card, profileIntake, openingHandoff, profileHandoff]) {
   if (source.includes('macDaVinciActualVerified: true') || source.includes('productionReady: true')) {
     errors.push('Critical-path dashboard hardcodes Actual or production readiness');
   }
@@ -71,4 +89,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log('Wedding Movie production critical-path dashboard OK: current blocker, recovery, actionable intake routes, downstream waiting stages and cross-project readiness remain visible/exportable without promoting Human QA or Mac Actual.');
+console.log('Wedding Movie production critical-path dashboard OK: current blocker, dedicated Profile media intake, actionable routes, downstream waiting stages and cross-project readiness remain visible/exportable without promoting Human QA or Mac Actual.');
