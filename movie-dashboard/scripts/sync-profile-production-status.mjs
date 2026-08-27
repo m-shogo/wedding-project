@@ -25,12 +25,26 @@ const stageRecovery={
   davinciFinishing:["pnpm profile:davinci-finishing:init","pnpm profile:davinci-finishing:strict"],
   finalDeliveryApproval:["pnpm profile:final-delivery-approval:init","pnpm profile:final-delivery-approval:strict"],
 };
-const stageSnapshot=(name,stage)=>({
-  state:String(stage?.state??"NOT_RUN"),
-  detail:String(stage?.detail??"No stage detail reported."),
-  ...(stage?.path?{path:String(stage.path)}:{}),
-  recovery:[...(stageRecovery[name]??[])],
-});
+const stageDependencies={
+  assembly:[],
+  finalRender:["assembly"],
+  finalRenderReview:["finalRender"],
+  productionBundle:["finalRenderReview"],
+  davinciFinishing:["productionBundle"],
+  finalDeliveryApproval:["davinciFinishing"],
+};
+const stageSnapshot=(name,stage)=>{
+  const dependsOn=[...(stageDependencies[name]??[])];
+  const upstreamPass=dependsOn.every((dependency)=>report.stages?.[dependency]?.state==="PASS");
+  return {
+    state:String(stage?.state??"NOT_RUN"),
+    detail:String(stage?.detail??"No stage detail reported."),
+    ...(stage?.path?{path:String(stage.path)}:{}),
+    dependsOn,
+    actionableNow:stage?.state!=="PASS"&&upstreamPass,
+    recovery:[...(stageRecovery[name]??[])],
+  };
+};
 const blockersFor=(name)=>Array.isArray(report.stages?.[name]?.blockers)?report.stages[name].blockers.map(String):[];
 const previewSourcePrefixes=[
   "REAL_MEDIA_REVIEW:STALE_REAL_MEDIA_PREVIEW",
