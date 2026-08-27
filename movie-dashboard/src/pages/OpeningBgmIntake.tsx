@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Header } from "../components/Header";
+import {OpeningProductionHandoffExportButton} from "../components/OpeningProductionHandoffExportButton";
 import { openingProductionGate } from "../data/openingProductionGate.generated";
 
 const rightsChecks = [
@@ -100,6 +101,10 @@ export function OpeningBgmIntake() {
         </div>
       </section>
 
+      <section className="mb-8 border-t-2 border-violet-400 dark:border-violet-700 pt-4">
+        <OpeningProductionHandoffExportButton />
+      </section>
+
       <section className="mb-10">
         <div className="border-b-2 border-navy-900 dark:border-sand-100 pb-3 mb-4">
           <p className="text-[10px] tracking-[0.2em] font-semibold text-navy-400">RIGHTS FIRST</p>
@@ -172,8 +177,13 @@ export function OpeningBgmIntake() {
       <div className="flex flex-wrap gap-4 text-xs">
         <Link to="/" className="border-b border-navy-300 text-navy-600 dark:text-navy-300">Production Gateへ戻る →</Link>
         <Link to="/opening-photo-intake" className="border-b border-navy-300 text-navy-600 dark:text-navy-300">写真11枚のIntake →</Link>
+        <OpeningProductionHandoffExportButton compact />
         <Link to="/movie-coach/audio" className="border-b border-navy-300 text-navy-600 dark:text-navy-300">Audio Learning →</Link>
       </div>
+
+      <p className="mt-5 text-[10px] text-navy-400">
+        HANDOFF_EXPORTED != PRODUCTION_READY / CI_MUST_NOT_PROMOTE_MAC_GUI_ACTUAL
+      </p>
     </div>
   );
 }
