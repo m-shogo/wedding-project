@@ -160,6 +160,10 @@ for (const token of [
   'gate.bgm.fileExists',
   'gate.bgm.rightsState',
   'motion-studio/public/audio/profile/bgm-main.mp3',
+  'motion-studio/out/intake/profile-bgm-intake.json',
+  'scripts/intake-production-bgm.mts --project profile',
+  '--apply --receipt out/intake/profile-bgm-intake.json',
+  'scripts/verify-production-bgm-intake-receipt.mts --project profile',
   'pnpm profile:bgm-rights:init',
   'profile-v1-bgm-rights-approval.json',
   'pnpm profile:bgm-rights:strict',
@@ -167,7 +171,9 @@ for (const token of [
   '<ProfileProductionHandoffExportButton />',
   '<ProfileProductionHandoffExportButton compact />',
   'Human approvalをUIで偽装しない',
-  'FILE_FOUND != RIGHTS_CLEARED',
+  'DRY_RUN_PASS != FILE_COPIED',
+  'RECEIPT_CURRENT != RIGHTS_CLEARED',
+  'FILE_FOUND != RECEIPT_CURRENT',
   'BGM_READY != PRODUCTION_READY',
   'HANDOFF_EXPORTED != PRODUCTION_READY',
 ]) {
@@ -251,4 +257,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log("Profile V1 Dashboard Handoff contracts OK: canonical chapter role/editIntent, local no-upload 17-media filename precheck, dedicated BGM intake, compact production handoff JSON export, SHA-bound Human rights/structure/real-media QA, critical path and Palmier/DaVinci status stay connected while Mac Actual/production release remain separate and fail-closed.");
+console.log("Profile V1 Dashboard Handoff contracts OK: canonical chapter role/editIntent, local no-upload 17-media filename precheck, receipt-bound BGM intake, compact production handoff JSON export, SHA-bound Human rights/structure/real-media QA, critical path and Palmier/DaVinci status stay connected while Mac Actual/production release remain separate and fail-closed.");

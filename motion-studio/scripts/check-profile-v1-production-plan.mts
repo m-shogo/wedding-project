@@ -77,8 +77,10 @@ for (const token of [
   "usageScope: 'WEDDING_SCREENING'",
   "decision: 'HOLD'",
   'rightsCleared: false',
-  'shaFile(bgmPath)',
+  "verifyBgmIntakeReceipt({project: 'profile'",
+  'PROFILE_BGM_INTAKE_RECEIPT_STALE',
   'STALE_PROFILE_BGM_RIGHTS_APPROVAL_SHA',
+  'PROFILE_BGM_RIGHTS_DECISION_PREDATES_BINDING',
   'PROFILE_BGM_RIGHTS_APPROVER_MISSING',
   'PROFILE_BGM_RIGHTS_EVIDENCE_NOTE_MISSING',
   'PROFILE_BGM_RIGHTS_CLEARED_MUST_MATCH_DECISION',
@@ -98,4 +100,4 @@ if (errors.length > 0) {
   process.exit(1);
 }
 
-console.log(`Profile V1 production plan contracts OK: 5 canonical chapters, ${profileV1RequiredMediaSlots.length} minimum real-media roles, BGM rights and SHA-bound Human real-media QA are both required before assembly readiness; Mac Actual remains separate.`);
+console.log(`Profile V1 production plan contracts OK: 5 canonical chapters, ${profileV1RequiredMediaSlots.length} minimum real-media roles, intake-receipt-bound BGM rights and SHA-bound Human real-media QA are required before assembly readiness; Mac Actual remains separate.`);

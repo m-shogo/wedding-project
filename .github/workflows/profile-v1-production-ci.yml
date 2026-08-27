@@ -10,6 +10,8 @@ on:
       - "motion-studio/src/index-profile-v1.ts"
       - "motion-studio/scripts/profile-v1-assembly-preflight.mts"
       - "motion-studio/scripts/profile-v1-bgm-rights-approval.mts"
+      - "motion-studio/scripts/intake-production-bgm.mts"
+      - "motion-studio/scripts/verify-production-bgm-intake-receipt.mts"
       - "motion-studio/scripts/profile-v1-departure-preview-review.mts"
       - "motion-studio/scripts/profile-v1-full-structure-review.mts"
       - "motion-studio/scripts/check-profile-v1-production-plan.mts"
@@ -28,6 +30,8 @@ on:
       - "motion-studio/src/index-profile-v1.ts"
       - "motion-studio/scripts/profile-v1-assembly-preflight.mts"
       - "motion-studio/scripts/profile-v1-bgm-rights-approval.mts"
+      - "motion-studio/scripts/intake-production-bgm.mts"
+      - "motion-studio/scripts/verify-production-bgm-intake-receipt.mts"
       - "motion-studio/scripts/profile-v1-departure-preview-review.mts"
       - "motion-studio/scripts/profile-v1-full-structure-review.mts"
       - "motion-studio/scripts/check-profile-v1-production-plan.mts"
@@ -91,14 +95,16 @@ jobs:
           fi
           echo "Profile V1 preflight correctly preserves NOT_RUN structure review while failing closed until real media and human-cleared BGM exist"
 
-      - name: Profile BGM rights approval cannot be manufactured by CI
+      - name: Profile BGM rights approval requires canonical intake receipt and cannot be manufactured by CI
         run: |
           if node --no-warnings scripts/profile-v1-bgm-rights-approval.mts --init; then
-            echo "BGM approval init unexpectedly succeeded without a BGM file"
+            echo "BGM approval init unexpectedly succeeded without a BGM file + intake receipt"
             exit 1
           fi
-          mkdir -p public/audio/profile
-          printf 'ci-placeholder-not-real-audio' > public/audio/profile/bgm-main.mp3
+          mkdir -p out/ci-bgm-source out/intake
+          printf 'ci-placeholder-not-real-audio' > out/ci-bgm-source/profile-source.mp3
+          node --no-warnings scripts/intake-production-bgm.mts --project profile --source out/ci-bgm-source/profile-source.mp3 --apply --receipt out/intake/profile-bgm-intake.json
+          node --no-warnings scripts/verify-production-bgm-intake-receipt.mts --project profile
           node --no-warnings scripts/profile-v1-bgm-rights-approval.mts --init
           node -e "const fs=require('fs'); const a=JSON.parse(fs.readFileSync('out/qa/profile-v1-bgm-rights-approval.json','utf8')); if(a.schemaVersion!=='profile-v1-bgm-rights-approval/v1') process.exit(1); if(a.authority!=='HUMAN_BGM_RIGHTS_APPROVAL') process.exit(1); if(a.decision!=='HOLD') process.exit(1); if(a.rightsCleared!==false) process.exit(1); if(a.approver!==null) process.exit(1); if(!a.bgm.sha256) process.exit(1);"
           if node --no-warnings scripts/profile-v1-bgm-rights-approval.mts --strict; then
@@ -107,8 +113,8 @@ jobs:
           fi
           printf 'changed-ci-placeholder' > public/audio/profile/bgm-main.mp3
           node --no-warnings scripts/profile-v1-bgm-rights-approval.mts --json > out/qa/profile-v1-bgm-rights-status.json
-          node -e "const fs=require('fs'); const r=JSON.parse(fs.readFileSync('out/qa/profile-v1-bgm-rights-status.json','utf8')); if(!r.blockers.includes('STALE_PROFILE_BGM_RIGHTS_APPROVAL_SHA')) process.exit(1); if(r.rightsCleared!==false) process.exit(1);"
-          echo "Profile BGM rights init is HOLD-only, strict remains blocked, and changing the BGM invalidates the bound approval SHA"
+          node -e "const fs=require('fs'); const r=JSON.parse(fs.readFileSync('out/qa/profile-v1-bgm-rights-status.json','utf8')); if(!r.blockers.includes('PROFILE_BGM_INTAKE_RECEIPT_STALE')) process.exit(1); if(!r.blockers.includes('STALE_PROFILE_BGM_RIGHTS_APPROVAL_SHA')) process.exit(1); if(r.intakeReceipt.current!==false) process.exit(1); if(r.rightsCleared!==false) process.exit(1);"
+          echo "Profile BGM rights init requires current intake provenance, stays HOLD-only, and target mutation invalidates both receipt and Human SHA binding"
 
       - name: Render Profile V1 departure structure preview
         run: node --no-warnings scripts/render-profile-v1-departure-structure-preview.mts
