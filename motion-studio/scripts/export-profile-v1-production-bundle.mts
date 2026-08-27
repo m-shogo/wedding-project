@@ -18,6 +18,7 @@ const bundlePath = join(outDir, 'profile-v1-production-bundle.json');
 const timelinePath = join(outDir, 'profile-v1-palmier-timeline.csv');
 const bgmPath = join(root, 'public/audio/profile/bgm-main.mp3');
 const sha = (path: string) => createHash('sha256').update(readFileSync(path)).digest('hex');
+const shaText = (value: string) => createHash('sha256').update(value).digest('hex');
 const rel = (path: string) => relative(root, path).replaceAll('\\', '/');
 const run = (script: string, args: string[] = []) => spawnSync(process.execPath, ['--no-warnings', script, ...args], {cwd: root, encoding: 'utf8'});
 
@@ -64,34 +65,6 @@ const timeline = profileV1Chapters.map((chapter, index) => ({
   durationSec: 6,
 }));
 const finalSha = sha(finalPath);
-const bundle = {
-  schemaVersion: 'profile-v1-production-bundle/v1', authority: 'FINAL_RENDER_BOUND_HANDOFF', generatedAt: new Date().toISOString(),
-  composition: {id: 'ProfileV1', width: 1920, height: 1080, fps: 30, durationSeconds: 30},
-  finalRender: {path: rel(finalPath), sha256: finalSha, qaContract: 'check-profile-render.mts=PASS_AT_EXPORT'},
-  humanFinalRenderReview: {evidencePath: rel(reviewPath), evidenceSha256: sha(reviewPath)},
-  upstreamHumanEvidence: {realMediaReviewSha256: sha(realReviewPath), structureReviewSha256: sha(structureReviewPath), bgmRightsApprovalSha256: sha(bgmApprovalPath)},
-  bgm: {path: rel(bgmPath), sha256: sha(bgmPath)}, media, timeline, generatedAccents,
-  palmier: {
-    handoffMode: 'REFERENCE_TIMELINE_AND_FINAL_RENDER',
-    timelineCsv: rel(timelinePath),
-    generatedAccentAuthority: 'PROFILE_V1_GENERATED_ACCENT_REGISTRY',
-    instruction: '5章30秒のchapter boundary・edit intent・generated accent route・final render SHAを正本として扱い、変更が必要ならMotion Studio正本へ戻す。',
-  },
-  davinci: {
-    handoffAsset: rel(finalPath),
-    expectedSha256: finalSha,
-    intendedUse: 'FINISHING_AND_OUTPUT_QA',
-    generatedAccentRoutes: generatedAccents.map(({slotId, chapterId, label, note, implementation, canonicalReuse}) => ({slotId, chapterId, label, note, implementation, canonicalReuse})),
-    macActualState: 'NOT_RUN',
-    productionReady: false,
-  },
-  guardrails: [
-    'FINAL_RENDER_REVIEW_PASS != DAVINCI_ACTUAL_VERIFIED',
-    'GENERATED_ACCENT_ROUTE_EXPORTED != MAC_DAVINCI_ACTUAL_VERIFIED',
-    'BUNDLE_EXPORTED != PRODUCTION_READY',
-    'RENDER_SHA_MISMATCH => STOP_AND_REGENERATE_HANDOFF',
-  ],
-};
 const esc = (v: unknown) => /[",\n]/.test(String(v)) ? `"${String(v).replaceAll('"', '""')}"` : String(v);
 const rows = [
   ['order','chapter_id','title','start_sec','end_sec','duration_sec','role','edit_intent','generated_accent_routes','final_render_sha256'],
@@ -108,11 +81,44 @@ const rows = [
     finalSha,
   ]),
 ];
+const timelineCsv = `${rows.map((row) => row.map(esc).join(',')).join('\n')}\n`;
+const timelineSha = shaText(timelineCsv);
+const bundle = {
+  schemaVersion: 'profile-v1-production-bundle/v1', authority: 'FINAL_RENDER_BOUND_HANDOFF', generatedAt: new Date().toISOString(),
+  composition: {id: 'ProfileV1', width: 1920, height: 1080, fps: 30, durationSeconds: 30},
+  finalRender: {path: rel(finalPath), sha256: finalSha, qaContract: 'check-profile-render.mts=PASS_AT_EXPORT'},
+  humanFinalRenderReview: {evidencePath: rel(reviewPath), evidenceSha256: sha(reviewPath)},
+  upstreamHumanEvidence: {realMediaReviewSha256: sha(realReviewPath), structureReviewSha256: sha(structureReviewPath), bgmRightsApprovalSha256: sha(bgmApprovalPath)},
+  bgm: {path: rel(bgmPath), sha256: sha(bgmPath)}, media, timeline, generatedAccents,
+  palmier: {
+    handoffMode: 'REFERENCE_TIMELINE_AND_FINAL_RENDER',
+    timelineCsv: rel(timelinePath),
+    timelineCsvSha256: timelineSha,
+    generatedAccentAuthority: 'PROFILE_V1_GENERATED_ACCENT_REGISTRY',
+    instruction: '5章30秒のchapter boundary・edit intent・generated accent route・final render SHAを正本として扱い、変更が必要ならMotion Studio正本へ戻す。',
+  },
+  davinci: {
+    handoffAsset: rel(finalPath),
+    expectedSha256: finalSha,
+    intendedUse: 'FINISHING_AND_OUTPUT_QA',
+    generatedAccentRoutes: generatedAccents.map(({slotId, chapterId, label, note, implementation, canonicalReuse}) => ({slotId, chapterId, label, note, implementation, canonicalReuse})),
+    macActualState: 'NOT_RUN',
+    productionReady: false,
+  },
+  guardrails: [
+    'FINAL_RENDER_REVIEW_PASS != DAVINCI_ACTUAL_VERIFIED',
+    'GENERATED_ACCENT_ROUTE_EXPORTED != MAC_DAVINCI_ACTUAL_VERIFIED',
+    'PALMIER_TIMELINE_SHA_MISMATCH => STOP_AND_REGENERATE_HANDOFF',
+    'BUNDLE_EXPORTED != PRODUCTION_READY',
+    'RENDER_SHA_MISMATCH => STOP_AND_REGENERATE_HANDOFF',
+  ],
+};
 mkdirSync(outDir, {recursive: true});
+writeFileSync(timelinePath, timelineCsv);
 writeFileSync(bundlePath, `${JSON.stringify(bundle, null, 2)}\n`);
-writeFileSync(timelinePath, `${rows.map((row) => row.map(esc).join(',')).join('\n')}\n`);
 console.log(`Profile V1 production bundle exported: ${rel(bundlePath)}`);
 console.log(`Palmier timeline exported: ${rel(timelinePath)}`);
+console.log(`palmierTimelineSha256=${timelineSha}`);
 console.log(`generatedAccentRoutes=${generatedAccents.length}`);
 console.log(`finalRenderSha256=${finalSha}`);
 console.log('DaVinci Mac Actual remains NOT_RUN; productionReady=false.');
