@@ -9,30 +9,14 @@ export const openingProductionStatus = {
   },
   "overallState": "MEDIA_REQUIRED",
   "stages": {
-    "media": {
-      "state": "BLOCKED"
-    },
-    "previewRender": {
-      "state": "NOT_RUN"
-    },
-    "previewSourceBinding": {
-      "state": "NOT_RUN"
-    },
-    "previewReview": {
-      "state": "NOT_RUN"
-    },
-    "finalRender": {
-      "state": "NOT_RUN"
-    },
-    "productionBundle": {
-      "state": "NOT_RUN"
-    },
-    "davinciFinishing": {
-      "state": "NOT_RUN"
-    },
-    "finalDeliveryApproval": {
-      "state": "NOT_RUN"
-    }
+    "media": {"state": "BLOCKED"},
+    "previewRender": {"state": "NOT_RUN"},
+    "previewSourceBinding": {"state": "NOT_RUN"},
+    "previewReview": {"state": "NOT_RUN"},
+    "finalRender": {"state": "NOT_RUN"},
+    "productionBundle": {"state": "NOT_RUN"},
+    "davinciFinishing": {"state": "NOT_RUN"},
+    "finalDeliveryApproval": {"state": "NOT_RUN"}
   },
   "readiness": {
     "finalRenderEligible": false,
@@ -46,6 +30,18 @@ export const openingProductionStatus = {
     "finalDeliveryApproved": false,
     "productionReady": false
   },
+  "sourceRevalidation": {
+    "realMediaPreview": {
+      "state": "NOT_RUN",
+      "blockers": [],
+      "recovery": []
+    },
+    "guardrails": [
+      "SOURCE_CHANGED => RE_RENDER_REQUIRED",
+      "RE_RENDER_REQUIRED => RE_REVIEW_REQUIRED",
+      "OLD_HUMAN_REVIEW != CURRENT_RENDER_IMPLEMENTATION"
+    ]
+  },
   "handoff": {
     "palmier": {
       "contractVersion": "opening-v1-palmier-handoff/v2",
@@ -58,23 +54,12 @@ export const openingProductionStatus = {
         "sceneTimeline": {
           "path": "out/handoff/opening-v1/opening-v1-palmier-timeline.csv",
           "shaBound": true,
-          "carries": [
-            "scene_boundary",
-            "replacement_policy",
-            "final_render_sha256"
-          ]
+          "carries": ["scene_boundary","replacement_policy","final_render_sha256"]
         },
         "soundCues": {
           "path": "out/handoff/opening-v1/opening-v1-palmier-sound-cues.csv",
           "shaBound": true,
-          "carries": [
-            "bgm",
-            "ambience_j_cut",
-            "start_end",
-            "volume",
-            "note",
-            "final_render_sha256"
-          ]
+          "carries": ["bgm","ambience_j_cut","start_end","volume","note","final_render_sha256"]
         }
       }
     },
@@ -106,18 +91,7 @@ export const openingProductionStatus = {
           "strict": "pnpm opening:davinci-finishing:strict"
         },
         "requiredChecks": [
-          "source_render_sha_readback",
-          "resolve_version_project_timeline",
-          "timeline_insertion",
-          "duration_and_fps",
-          "color_finish",
-          "audio_finish",
-          "title_safe_and_framing",
-          "playback_1x",
-          "playback_half_speed",
-          "export_duration_dimensions_fps_audio",
-          "watched_with_sound",
-          "human_overall_review"
+          "source_render_sha_readback","resolve_version_project_timeline","timeline_insertion","duration_and_fps","color_finish","audio_finish","title_safe_and_framing","playback_1x","playback_half_speed","export_duration_dimensions_fps_audio","watched_with_sound","human_overall_review"
         ]
       },
       "productionReady": false
