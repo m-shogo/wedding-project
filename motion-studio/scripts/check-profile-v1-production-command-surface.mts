@@ -10,8 +10,9 @@ const scripts = pkg.scripts ?? {};
 const errors: string[] = [];
 
 const expected: Record<string, string> = {
-  'prepare:profile-v1': 'pnpm profile:media:sync && pnpm profile:media:check && pnpm profile:assembly-preflight',
+  'prepare:profile-v1': 'pnpm profile:generated-accents:check && pnpm profile:media:sync && pnpm profile:media:check && pnpm profile:assembly-preflight',
   'dev:profile-v1': 'pnpm prepare:profile-v1 && remotion studio src/index-profile-v1.ts',
+  'profile:generated-accents:check': 'node --no-warnings scripts/check-profile-v1-generated-accents.mts',
   'profile:media:sync': 'node --no-warnings scripts/sync-profile-v1-runtime-media.mts --write',
   'profile:media:check': 'node --no-warnings scripts/check-profile-v1-runtime-media.mts',
   'profile:assembly-preflight': 'node --no-warnings scripts/profile-v1-assembly-preflight.mts',
@@ -65,8 +66,11 @@ for (const required of [
 if (scripts['render:profile-v1']?.includes('remotion render')) {
   errors.push('render:profile-v1 must use the guarded production renderer, not bypass it with raw remotion render');
 }
-if (!scripts['prepare:profile-v1']?.startsWith('pnpm profile:media:sync')) {
-  errors.push('prepare:profile-v1 must refresh runtime media before checking/preflighting');
+if (!scripts['prepare:profile-v1']?.startsWith('pnpm profile:generated-accents:check && pnpm profile:media:sync')) {
+  errors.push('prepare:profile-v1 must validate canonical generated accents before refreshing runtime media');
+}
+if (!scripts['prepare:profile-v1']?.includes('pnpm profile:assembly-preflight')) {
+  errors.push('prepare:profile-v1 must still report assembly readiness after generated-accent/media checks');
 }
 
 if (errors.length) {
@@ -75,4 +79,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log(`Profile V1 production command surface OK: ${Object.keys(expected).length} guarded commands map to existing canonical scripts without bypassing production gates.`);
+console.log(`Profile V1 production command surface OK: ${Object.keys(expected).length} guarded commands validate Motion Zukan generated accents, refresh runtime media, and map to existing canonical scripts without bypassing production gates.`);
