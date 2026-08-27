@@ -47,3 +47,34 @@ jobs:
         run: |
           node -e "const fs=require('fs'); const s=fs.readFileSync('src/data/profileV1RuntimeMedia.generated.ts','utf8'); if(!s.includes('\"expectedCount\": 17')) process.exit(1); if(!s.includes('\"resolvedCount\": 0')) process.exit(1); if(!s.includes('\"missingCount\": 17')) process.exit(1); if(s.includes('\"resolved\": true')) process.exit(1);"
           echo "Profile runtime media correctly fails empty rather than mapping unrelated files"
+
+      - name: Real media can advance from 0 of 17 without breaking the checker
+        run: |
+          mkdir -p public/profile
+          touch public/profile/groom-childhood.jpg
+          node --no-warnings scripts/sync-profile-v1-runtime-media.mts --write
+          node --no-warnings scripts/check-profile-v1-runtime-media.mts
+          node -e "const fs=require('fs'); const s=fs.readFileSync('src/data/profileV1RuntimeMedia.generated.ts','utf8'); if(!s.includes('\"resolvedCount\": 1')) process.exit(1); if(!s.includes('\"missingCount\": 16')) process.exit(1); if(!s.includes('\"file\": \"groom-childhood.jpg\"')) process.exit(1);"
+          echo "Profile runtime media accepts a correctly named real photo and advances to 1/17"
+
+      - name: Same-stem ambiguity fails closed
+        run: |
+          touch public/profile/groom-childhood.png
+          node --no-warnings scripts/sync-profile-v1-runtime-media.mts --write
+          if node --no-warnings scripts/check-profile-v1-runtime-media.mts; then
+            echo "runtime media checker unexpectedly accepted two compatible files for one canonical stem"
+            exit 1
+          fi
+          rm public/profile/groom-childhood.png
+          node --no-warnings scripts/sync-profile-v1-runtime-media.mts --write
+          echo "duplicate canonical stem correctly fails closed"
+
+      - name: Kind mismatch fails closed
+        run: |
+          touch public/profile/adventure-dog.mp4
+          node --no-warnings scripts/sync-profile-v1-runtime-media.mts --write
+          if node --no-warnings scripts/check-profile-v1-runtime-media.mts; then
+            echo "runtime media checker unexpectedly accepted video for photo-only adventure-dog slot"
+            exit 1
+          fi
+          echo "photo-only slot correctly rejects same-stem video"
