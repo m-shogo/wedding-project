@@ -1,0 +1,64 @@
+name: Profile V1 Production CI
+
+on:
+  pull_request:
+    paths:
+      - "01_profile-movie/**"
+      - "motion-studio/src/data/profileV1ProductionPlan.ts"
+      - "motion-studio/scripts/profile-v1-assembly-preflight.mts"
+      - "motion-studio/scripts/check-profile-v1-production-plan.mts"
+      - ".github/workflows/profile-v1-production-ci.yml"
+  push:
+    paths:
+      - "01_profile-movie/**"
+      - "motion-studio/src/data/profileV1ProductionPlan.ts"
+      - "motion-studio/scripts/profile-v1-assembly-preflight.mts"
+      - "motion-studio/scripts/check-profile-v1-production-plan.mts"
+      - ".github/workflows/profile-v1-production-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    defaults:
+      run:
+        working-directory: motion-studio
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: motion-studio/pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: TypeScript
+        run: pnpm typecheck
+
+      - name: Profile V1 canonical production plan
+        run: node --no-warnings scripts/check-profile-v1-production-plan.mts
+
+      - name: Profile V1 preflight stays honest on a fresh clone
+        run: |
+          mkdir -p out/qa
+          node --no-warnings scripts/profile-v1-assembly-preflight.mts --json > out/qa/profile-v1-assembly-preflight.json
+          node -e "const fs=require('fs'); const r=JSON.parse(fs.readFileSync('out/qa/profile-v1-assembly-preflight.json','utf8')); if(r.schemaVersion!=='profile-v1-assembly-preflight/v1') process.exit(1); if(r.authority!=='MOTION_STUDIO_DERIVED_PREFLIGHT') process.exit(1); if(r.chapters.length!==5) process.exit(1); if(r.media.expectedCount!==17) process.exit(1); if(r.media.readyCount!==0) process.exit(1); if(r.audio.rightsState!=='NOT_CLEARED') process.exit(1); if(r.readiness.finalRenderEligible!==false) process.exit(1); if(r.readiness.previewQaState!=='NOT_RUN') process.exit(1); if(r.readiness.humanContentQaState!=='NOT_RUN') process.exit(1); if(r.readiness.macDaVinciActualState!=='NOT_RUN') process.exit(1); if(r.readiness.productionReady!==false) process.exit(1);"
+          if node --no-warnings scripts/profile-v1-assembly-preflight.mts --strict; then
+            echo "Profile V1 preflight unexpectedly passed without real media and human-cleared BGM"
+            exit 1
+          fi
+          echo "Profile V1 preflight correctly fails closed until minimum representative real media and BGM rights evidence exist"
