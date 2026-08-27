@@ -10,6 +10,7 @@ const workspace = read("src/data/motionZukanProductionWorkspace.ts");
 const projectBatch = read("src/data/typographyProjectDeliveryBatch.ts");
 const openingGate = read("src/data/openingProductionGate.generated.ts");
 const openingPhotoPlan = read("src/data/openingV1PhotoProductionPlan.ts");
+const profileGate = read("src/data/profileProductionGate.generated.ts");
 
 const errors = [];
 const requireText = (source, token, message) => {
@@ -41,6 +42,13 @@ for (const token of [
   'OPENING_V1_BGM:',
   'OPENING_V1_AMBIENCE:',
   'openingV1MediaBlockingGatePass',
+  'import {profileProductionGate} from "./profileProductionGate.generated"',
+  'authority: "MOTION_STUDIO_PROFILE_V1_MEDIA_GATE"',
+  'if (projectId !== "profile") return null',
+  'profileV1Media: ProfileV1ProductionMediaGateV1 | null',
+  'PROFILE_V1_MEDIA:',
+  'PROFILE_V1_BGM:',
+  'profileV1MediaBlockingGatePass',
   'productionReady: false',
   'DaVinci Mac Actual / Human promotion / Scene-bound Release Gate',
 ]) {
@@ -58,7 +66,12 @@ for (const token of [
   'openingMedia.bgm.playable',
   'openingMedia.ambiencePlayableCount',
   'openingMedia.photoSlots.map',
-  '11写真/BGM blocking gate',
+  '写真/BGM blocking gate',
+  'PROFILE V1 / MOTION STUDIO MEDIA GATE',
+  'profileMedia.resolvedMediaCount',
+  'profileMedia.bgm.rightsState',
+  'profileMedia.chapters.map',
+  'profileMedia.mediaSlots.map',
   'manifest.handoff.warnings',
   'manifest.productionWorkspace.finalChecks.map',
   'productionReady=NO',
@@ -106,6 +119,19 @@ for (const token of [
   requireText(openingPhotoPlan, token, `Opening photo production plan contract missing: ${token}`);
 }
 
+for (const token of [
+  '"chapterCount": 5',
+  '"expectedMediaCount": 17',
+  '"mediaMissingCount": 17',
+  '"assetId": "profile-bgm-main"',
+  '"rightsState": "NOT_CLEARED"',
+  '"blockingGatePass": false',
+  '"macDaVinciActual": "NOT_RUN"',
+  '"productionReady": false',
+]) {
+  requireText(profileGate, token, `Profile generated production gate contract missing: ${token}`);
+}
+
 requireText(projectBatch, 'productionReady: false', "Typography project batch no longer fails closed");
 
 for (const forbidden of [
@@ -121,4 +147,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log("Project Production Handoff Manifest contracts OK: current Typography packages and workspace state are joined with the Motion Studio Opening V1 11-photo/BGM blocking gate, photo placement/QA plan and ambience mix readiness, without claiming Mac Actual or production release.");
+console.log("Project Production Handoff Manifest contracts OK: current Typography/workspace state is joined with Opening 11-photo/BGM/ambience and Profile 5-chapter/17-media/BGM-rights gates, while Human QA, Mac Actual and production release remain fail-closed.");
