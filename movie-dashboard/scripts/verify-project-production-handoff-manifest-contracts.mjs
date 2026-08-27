@@ -124,7 +124,7 @@ for (const token of [
   '"expectedMediaCount": 17',
   '"mediaMissingCount": 17',
   '"assetId": "profile-bgm-main"',
-  '"rightsState": "NOT_CLEARED"',
+  '"rightsState": "NOT_RUN"',
   '"blockingGatePass": false',
   '"macDaVinciActual": "NOT_RUN"',
   '"productionReady": false',
@@ -147,4 +147,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log("Project Production Handoff Manifest contracts OK: current Typography/workspace state is joined with Opening 11-photo/BGM/ambience and Profile 5-chapter/17-media/BGM-rights gates, while Human QA, Mac Actual and production release remain fail-closed.");
+console.log("Project Production Handoff Manifest contracts OK: current Typography/workspace state is joined with Opening 11-photo/BGM/ambience and Profile 5-chapter/17-media/BGM-rights gates; Profile rights begin NOT_RUN until a separate human approval is current; Human QA, Mac Actual and release remain fail-closed.");
