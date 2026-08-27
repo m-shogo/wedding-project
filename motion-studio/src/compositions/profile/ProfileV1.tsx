@@ -2,6 +2,7 @@ import {loadFont} from '@remotion/google-fonts/NotoSansJP';
 import {AbsoluteFill, Audio, Easing, Img, OffthreadVideo, Sequence, interpolate, staticFile, useCurrentFrame, useVideoConfig} from 'remotion';
 import {profileV1Chapters} from '../../data/profileV1ProductionPlan';
 import {profileV1RuntimeMedia} from '../../data/profileV1RuntimeMedia.generated';
+import {ProfileV1GeneratedAccents} from './ProfileV1GeneratedAccents';
 
 const {fontFamily} = loadFont('normal', {weights: ['400', '700', '800'], ignoreTooManyRequestsWarning: true});
 const chapterDurationSec = 6;
@@ -57,6 +58,12 @@ export const ProfileV1 = () => {
               <Slot slot={slot} title={chapter.title} chapterIndex={chapterIndex} duration={duration} />
             </Sequence>;
           })}
+          <ProfileV1GeneratedAccents
+            chapterId={chapter.id}
+            chapterTitle={chapter.title}
+            chapterIndex={chapterIndex}
+            duration={chapterDuration}
+          />
         </AbsoluteFill>
       </Sequence>;
     })}
