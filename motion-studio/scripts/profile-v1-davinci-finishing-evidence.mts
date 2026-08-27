@@ -2,6 +2,7 @@ import {createHash} from 'node:crypto';
 import {existsSync, mkdirSync, readFileSync, writeFileSync} from 'node:fs';
 import {dirname, join, relative} from 'node:path';
 import {fileURLToPath} from 'node:url';
+import {profileV1GeneratedAccentImplementations} from '../src/data/profileV1GeneratedAccentRegistry.ts';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const bundlePath = join(root, 'out/handoff/profile-v1/profile-v1-production-bundle.json');
@@ -9,12 +10,19 @@ const timelinePath = join(root, 'out/handoff/profile-v1/profile-v1-palmier-timel
 const evidencePath = join(root, 'out/qa/profile-v1-davinci-finishing-evidence.json');
 const mode = process.argv.includes('--init') ? 'init' : process.argv.includes('--strict') ? 'strict' : 'status';
 type Qa = 'NOT_RUN' | 'PASS' | 'FAIL';
+type GeneratedAccentRoute = {
+  slotId:string;
+  chapterId:string;
+  implementation:string;
+  canonicalReuse:string;
+};
 type Bundle = {
   schemaVersion:'profile-v1-production-bundle/v1';
   authority:'FINAL_RENDER_BOUND_HANDOFF';
   finalRender:{path:string;sha256:string};
-  palmier:{timelineCsv:string;timelineCsvSha256:string};
-  davinci:{expectedSha256:string;productionReady:false};
+  generatedAccents:GeneratedAccentRoute[];
+  palmier:{timelineCsv:string;timelineCsvSha256:string;generatedAccentAuthority:string};
+  davinci:{expectedSha256:string;generatedAccentRoutes:GeneratedAccentRoute[];productionReady:false};
 };
 type Evidence = {
   schemaVersion:'profile-v1-davinci-finishing-evidence/v1'; authority:'MAC_DAVINCI_ACTUAL_EVIDENCE'; boundAt:string;
@@ -26,11 +34,17 @@ type Evidence = {
 };
 const sha=(p:string)=>createHash('sha256').update(readFileSync(p)).digest('hex');
 const rel=(p:string)=>relative(root,p).replaceAll('\\','/');
+const accentSignature=(value:GeneratedAccentRoute)=>`${value.slotId}|${value.chapterId}|${value.implementation}|${value.canonicalReuse}`;
+const expectedAccentRoutes=profileV1GeneratedAccentImplementations.map(accentSignature).sort();
+const sameAccentRoutes=(routes:GeneratedAccentRoute[]|undefined)=>Array.isArray(routes)&&JSON.stringify(routes.map(accentSignature).sort())===JSON.stringify(expectedAccentRoutes);
 function loadBundle(){
   if(!existsSync(bundlePath)) throw new Error('PROFILE_DAVINCI_BUNDLE_MISSING');
   const bundle=JSON.parse(readFileSync(bundlePath,'utf8')) as Bundle;
   if(bundle.schemaVersion!=='profile-v1-production-bundle/v1'||bundle.authority!=='FINAL_RENDER_BOUND_HANDOFF') throw new Error('PROFILE_DAVINCI_BUNDLE_CONTRACT');
   if(bundle.davinci.productionReady!==false||bundle.finalRender.sha256!==bundle.davinci.expectedSha256) throw new Error('PROFILE_DAVINCI_BUNDLE_SHA_CONTRACT');
+  if(!sameAccentRoutes(bundle.generatedAccents)) throw new Error('PROFILE_DAVINCI_GENERATED_ACCENT_ROUTES_STALE');
+  if(bundle.palmier?.generatedAccentAuthority!=='PROFILE_V1_GENERATED_ACCENT_REGISTRY') throw new Error('PROFILE_DAVINCI_PALMIER_ACCENT_AUTHORITY_MISSING');
+  if(!sameAccentRoutes(bundle.davinci?.generatedAccentRoutes)) throw new Error('PROFILE_DAVINCI_DAVINCI_ACCENT_ROUTES_STALE');
   if(bundle.palmier?.timelineCsv!==rel(timelinePath)) throw new Error('PROFILE_DAVINCI_PALMIER_TIMELINE_PATH_MISMATCH');
   if(!existsSync(timelinePath)) throw new Error('PROFILE_DAVINCI_PALMIER_TIMELINE_MISSING');
   if(bundle.palmier?.timelineCsvSha256!==sha(timelinePath)) throw new Error('PROFILE_DAVINCI_PALMIER_TIMELINE_SHA_MISMATCH');
@@ -58,6 +72,6 @@ function verify(strict:boolean){
   if(!ev.export.path?.trim()||!ev.export.sha256?.trim())errors.push('PROFILE_DAVINCI_EXPORT_BINDING_MISSING');
   if(ev.review.overall!=='PASS'||!ev.review.reviewer?.trim()||!ev.review.reviewedAt||Number.isNaN(Date.parse(ev.review.reviewedAt)))errors.push('PROFILE_DAVINCI_HUMAN_REVIEW_NOT_PASS');
   if(errors.length){console.log(`Profile DaVinci finishing evidence: BLOCKED (${errors.length})`); for(const e of errors)console.log(`BLOCK / ${e}`); if(strict)process.exit(1); return;}
-  console.log('Profile DaVinci finishing evidence: ACTUAL_VERIFIED — current bundle/source/Palmier timeline match real Mac Resolve evidence.');
+  console.log('Profile DaVinci finishing evidence: ACTUAL_VERIFIED — current canonical Motion Zukan accent routes, bundle/source and Palmier timeline match real Mac Resolve evidence.');
 }
 if(mode==='init')init();else verify(mode==='strict');
