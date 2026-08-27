@@ -42,6 +42,8 @@ export function ProfileBgmIntake() {
   const [copied, setCopied] = useState<string | null>(null);
   const gate = profileProductionGate;
   const fileExists = Boolean(gate.bgm.fileExists);
+  const receiptCurrent = Boolean(gate.bgm.intakeReceiptCurrent);
+  const receiptBlockers = [...gate.bgm.intakeReceiptBlockerCodes];
   const rightsState = String(gate.bgm.rightsState);
   const rightsCleared = rightsState === "CLEARED";
   const ready = Boolean(gate.bgm.ready);
@@ -63,13 +65,23 @@ export function ProfileBgmIntake() {
         description="Profile V1のBGMをsource-preserving canonical intake + SHA receipt + Human rights approvalでproduction gateへ接続する"
       />
 
-      <section className="mb-8 border-y border-sand-200 dark:border-navy-600 py-5 grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <section className="mb-8 border-y border-sand-200 dark:border-navy-600 py-5 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
         <div>
           <p className="text-[10px] tracking-[0.18em] font-semibold text-navy-400">FILE</p>
           <p className={`mt-1 text-2xl font-mono font-bold ${fileExists ? "text-emerald-700 dark:text-emerald-300" : "text-red-700 dark:text-red-300"}`}>
             {fileExists ? "FOUND" : "MISSING"}
           </p>
           <code className="mt-2 block break-all text-[10px] text-navy-500 dark:text-navy-300">{gate.bgm.path}</code>
+        </div>
+        <div>
+          <p className="text-[10px] tracking-[0.18em] font-semibold text-navy-400">INTAKE RECEIPT</p>
+          <p className={`mt-1 text-2xl font-mono font-bold ${receiptCurrent ? "text-emerald-700 dark:text-emerald-300" : "text-amber-700 dark:text-amber-300"}`}>
+            {receiptCurrent ? "CURRENT" : "MISSING / STALE"}
+          </p>
+          <code className="mt-2 block break-all text-[10px] text-navy-500 dark:text-navy-300">{gate.bgm.intakeReceiptPath}</code>
+          {!receiptCurrent && receiptBlockers.length > 0 ? (
+            <p className="mt-2 text-[10px] leading-4 text-amber-700 dark:text-amber-300">{receiptBlockers.join(" / ")}</p>
+          ) : null}
         </div>
         <div>
           <p className="text-[10px] tracking-[0.18em] font-semibold text-navy-400">RIGHTS APPROVAL</p>
@@ -148,7 +160,7 @@ export function ProfileBgmIntake() {
             ))}
           </div>
           <p className="mt-3 text-[10px] leading-4 text-navy-400">
-            DRY_RUN_PASS != FILE_COPIED / RECEIPT_CURRENT != RIGHTS_CLEARED / RIGHTS_CLEARED != HUMAN_CREATIVE_APPROVAL
+            DRY_RUN_PASS != FILE_COPIED / FILE_FOUND != RECEIPT_CURRENT / RECEIPT_CURRENT != RIGHTS_CLEARED / RIGHTS_CLEARED != HUMAN_CREATIVE_APPROVAL
           </p>
         </div>
       </section>
