@@ -39,7 +39,7 @@ for (const token of [
   "const soundCuePath = join(root, 'out/handoff/opening-v1/opening-v1-palmier-sound-cues.csv');",
   'handoffContractVersion?: string;',
   'soundCueCsv?: string;',
-  'soundCueCsvSha256?: string;',
+  'soundCueCsvSha256?: string',
   "errors.push('BUNDLE_PALMIER_HANDOFF_CONTRACT_STALE')",
   "errors.push('BUNDLE_PALMIER_TIMELINE_PATH_STALE')",
   "errors.push('BUNDLE_PALMIER_TIMELINE_MISSING')",
