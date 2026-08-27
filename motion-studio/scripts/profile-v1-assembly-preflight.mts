@@ -207,26 +207,32 @@ const report = {
   nextActions: !mediaReady
     ? [
         `Profile実素材を ${profileV1ProductionContract.mediaDirectory}/ へcanonical stem名で投入`,
-        'node --no-warnings scripts/profile-v1-assembly-preflight.mts',
+        'pnpm prepare:profile-v1',
       ]
     : !bgmFileExists
-      ? ['権利確認対象BGMを public/audio/profile/bgm-main.mp3 へ配置', 'BGM rights approvalを初期化']
+      ? ['権利確認対象BGMを public/audio/profile/bgm-main.mp3 へ配置', 'pnpm profile:bgm-rights:init']
       : !bgmReady
         ? [
-            'node --no-warnings scripts/profile-v1-bgm-rights-approval.mts --init',
+            'pnpm profile:bgm-rights:init',
             '生成されたHOLD artifactを人間が権利証拠に基づいて編集',
-            'node --no-warnings scripts/profile-v1-bgm-rights-approval.mts --strict',
+            'pnpm profile:bgm-rights:strict',
           ]
         : structureReview.state !== 'PASS'
-          ? ['30秒全5章structure previewを人間確認', 'structure review evidenceをPASSへ更新', '実素材preview QAへ進む']
+          ? [
+              'pnpm render:profile-v1:structure-preview',
+              'pnpm profile:structure-review:init',
+              '30秒全5章structure previewを人間確認してreview evidenceを更新',
+              'pnpm profile:structure-review:strict',
+            ]
           : realMediaReview.state !== 'PASS'
             ? [
-                'node --no-warnings scripts/render-profile-v1-real-media-preview.mts',
-                'node --no-warnings scripts/profile-v1-real-media-review.mts --init',
+                'pnpm render:profile-v1:real-media-preview',
+                'pnpm qa:profile-v1:real-media-stills',
+                'pnpm profile:real-media-review:init',
                 '17素材のcrop/focus/color/emotional-fit/contentと5章flow/readability/role fitを人間確認',
-                'node --no-warnings scripts/profile-v1-real-media-review.mts --strict',
+                'pnpm profile:real-media-review:strict',
               ]
-            : ['Profile assembly input + structure + real-media Human QA ready', 'final render / DaVinci handoffへ進む'],
+            : ['Profile assembly input + structure + real-media Human QA ready', 'pnpm render:profile-v1'],
 };
 
 if (jsonMode) {
