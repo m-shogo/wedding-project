@@ -38,13 +38,13 @@ function normalizedBasename(filePath) {
   return (dot >= 0 ? file.slice(0, dot) : file).toLowerCase().replaceAll("_", "-");
 }
 
-const resolvedSlots = orderedKeys.map((key, index) => {
+const resolvedSlots = orderedKeys.map((key) => {
   const aliasSet = aliases[key] ?? [key];
   const semanticMatch = openingPhotos.find((filePath) => {
     const base = normalizedBasename(filePath);
-    return aliasSet.some((alias) => base.includes(alias));
+    return aliasSet.includes(base);
   });
-  const resolvedPath = semanticMatch ?? (openingPhotos.length >= orderedKeys.length ? openingPhotos[index] ?? null : null);
+  const resolvedPath = semanticMatch ?? null;
   return { key, resolved: resolvedPath !== null, path: resolvedPath };
 });
 
