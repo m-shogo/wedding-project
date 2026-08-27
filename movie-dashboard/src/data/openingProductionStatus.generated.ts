@@ -12,47 +12,81 @@ export const openingProductionStatus = {
   "stages": {
     "media": {
       "state": "BLOCKED",
-      "detail": "Real photos and/or cleared BGM are still missing."
+      "detail": "Real photos and/or cleared BGM are still missing.",
+      "recovery": [
+        "実写真11枚をcanonical filenameで投入",
+        "pnpm sync:photos",
+        "pnpm opening:assembly-preflight"
+      ]
     },
     "previewRender": {
       "state": "NOT_RUN",
       "detail": "Blocked upstream by real-media gate.",
-      "path": "out/preview/opening_v1_preview.mp4"
+      "path": "out/preview/opening_v1_preview.mp4",
+      "recovery": [
+        "pnpm render:opening-v1:preview"
+      ]
     },
     "previewSourceBinding": {
       "state": "NOT_RUN",
       "detail": "Blocked upstream until the preview MP4 exists.",
-      "path": "out/qa/opening-v1-preview-source-fingerprint.json"
+      "path": "out/qa/opening-v1-preview-source-fingerprint.json",
+      "recovery": [
+        "pnpm opening:preview-review:init",
+        "pnpm opening:preview-review:strict"
+      ]
     },
     "previewReview": {
       "state": "NOT_RUN",
       "detail": "Blocked upstream until the preview render-source binding is current.",
-      "path": "out/qa/opening-v1-preview-review.json"
+      "path": "out/qa/opening-v1-preview-review.json",
+      "recovery": [
+        "pnpm opening:preview-review:init",
+        "pnpm opening:preview-review:strict"
+      ]
     },
     "finalRender": {
       "state": "NOT_RUN",
       "detail": "Blocked upstream until current human preview review passes.",
-      "path": "out/opening/opening_v1.mp4"
+      "path": "out/opening/opening_v1.mp4",
+      "recovery": [
+        "pnpm render:opening-v1"
+      ]
     },
     "finalRenderReview": {
       "state": "NOT_RUN",
       "detail": "Blocked upstream until final render technical QA passes.",
-      "path": "out/qa/opening-v1-final-render-review.json"
+      "path": "out/qa/opening-v1-final-render-review.json",
+      "recovery": [
+        "pnpm opening:final-render-review:init",
+        "pnpm opening:final-render-review:strict"
+      ]
     },
     "productionBundle": {
       "state": "NOT_RUN",
       "detail": "Blocked until current Human final-render review passes.",
-      "path": "out/handoff/opening-v1/opening-v1-production-bundle.json"
+      "path": "out/handoff/opening-v1/opening-v1-production-bundle.json",
+      "recovery": [
+        "pnpm opening:production-bundle:finalize"
+      ]
     },
     "davinciFinishing": {
       "state": "NOT_RUN",
       "detail": "Blocked upstream until the production bundle is current.",
-      "path": "out/qa/opening-v1-davinci-finishing-evidence.json"
+      "path": "out/qa/opening-v1-davinci-finishing-evidence.json",
+      "recovery": [
+        "pnpm opening:davinci-finishing:init",
+        "pnpm opening:davinci-finishing:strict"
+      ]
     },
     "finalDeliveryApproval": {
       "state": "NOT_RUN",
       "detail": "Blocked upstream until current Mac DaVinci Actual is verified.",
-      "path": "out/qa/opening-v1-final-delivery-approval.json"
+      "path": "out/qa/opening-v1-final-delivery-approval.json",
+      "recovery": [
+        "pnpm opening:final-delivery-approval:init",
+        "pnpm opening:final-delivery-approval:strict"
+      ]
     }
   },
   "readiness": {
