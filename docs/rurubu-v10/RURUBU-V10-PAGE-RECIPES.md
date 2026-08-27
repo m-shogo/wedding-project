@@ -4,16 +4,33 @@ Status: `V10_CANONICAL_PAGE_RECIPE`
 
 Format: A5 portrait, 148 × 210 mm trim, 3 mm bleed, 8 pages.
 
-Purpose: remove blank-canvas ambiguity for Figma AI. These are composition recipes, not rigid templates. Live confirmed content wins if a semantic page role changes, but the hierarchy/density/readability principles remain.
+Live Figma production page: `09_RURUBU_V10_A5_8P_PRODUCTION` (`2787:2`).
+
+Purpose: remove blank-canvas ambiguity for Figma AI. These are composition recipes, not rigid templates. The page-role mapping below is synchronized to the live V10 production skeleton and should be rechecked against Figma before every structural write.
 
 Global rule: first get all eight pages to ~60–80% with existing organized Drive assets. Do not finish one page to 100% while the rest are empty.
+
+## Live page map
+
+| Page | Figma frame | Live role |
+|---|---|---|
+| P01 | `2787:3` | COVER |
+| P02 | `2787:9` | PROFILE |
+| P03 | `2787:15` | Q&A |
+| P04 | `2787:22` | STORY |
+| P05 | `2787:28` | TIMELINE + MEMORY |
+| P06 | `2787:35` | MEMORY SPOTS + GALLERY |
+| P07 | `2787:42` | 1DAY + CAFE TABLE |
+| P08 | `2787:49` | BACK COVER |
+
+If this live mapping changes later, Figma live state wins and this file must be updated rather than silently applying stale page numbers.
 
 ---
 
 ## P01 — COVER
 
 ### Page job
-Within 3 seconds: `This is Rurubu WEDDING, this is Shogo + Shiori's joyful travel-themed wedding booklet, and it feels worth opening.`
+Within 3 seconds: `This is Rurubu WEDDING, this is the couple's joyful travel-themed wedding booklet, and it feels worth opening.`
 
 ### Hierarchy
 1. Rurubu/Wedding hero logo or title.
@@ -28,7 +45,7 @@ Within 3 seconds: `This is Rurubu WEDDING, this is Shogo + Shiori's joyful trave
 - `PHOTO_CUTOUT_*` × 1–2.
 - `BADGE_COVER_DATE_*` × 1.
 - `DECORATION_*` × 2–4 purposeful accents.
-- optional `ROUTE_*` × 1 if it creates real compositional movement.
+- optional `ROUTE_*` × 1 only if it creates real compositional movement.
 
 ### Scale
 - hero photo: ~60–85% of page width or equivalent visual area.
@@ -55,9 +72,9 @@ Do not place white small text on cyan/yellow/coral.
 Let a guest understand who the two people are quickly, then discover small personality details.
 
 ### Hierarchy
-1. `ふたりのプロフィール` / profile title.
+1. profile title.
 2. Bride/Groom photo pair with differentiated but balanced treatment.
-3. Names + core profile facts.
+3. names + core profile facts.
 4. short personality facts.
 5. small playful accents.
 
@@ -66,7 +83,7 @@ Let a guest understand who the two people are quickly, then discover small perso
 - verified real profile photos where available; otherwise `DUMMY_PHOTO_PROFILE_*` only for layout.
 - `FRAME_PROFILE_*` or selected global portrait frames × 2.
 - `DECORATION_*` × 2–4.
-- optional corgi/travel motif × 1 only if it supports the couple's story rather than filling a hole.
+- optional personal/travel motif × 1 only if it supports the story rather than filling a hole.
 
 ### Layout behavior
 - two people need equal editorial respect but not necessarily symmetric rectangles.
@@ -75,9 +92,9 @@ Let a guest understand who the two people are quickly, then discover small perso
 
 ### Color behavior
 Dominant: `PAPER` / `WARM_CREAM`.
-Support: `PINK_STRONG` + `LAGOON_CYAN` as person/section accents if labels remain explicit.
+Support: `PINK_STRONG` + `LAGOON_CYAN` as person/section accents only with explicit labels.
 Body: `INK`.
-Do not rely on pink=bride / blue=groom as the only identification.
+Do not rely on color alone to identify each person.
 
 ### Anti-patterns
 - gender-coded color being the only label;
@@ -86,10 +103,10 @@ Do not rely on pink=bride / blue=groom as the only identification.
 
 ---
 
-## P03 — Q&A / TWO-PERSON DETAILS
+## P03 — Q&A
 
 ### Page job
-Make the couple feel human, playful, and easy to read; questions should be scannable and answers comfortable.
+Make the couple feel human and playful while questions remain highly scannable and answers comfortable to read.
 
 ### Hierarchy
 1. Q&A title.
@@ -99,9 +116,9 @@ Make the couple feel human, playful, and easy to read; questions should be scann
 
 ### Asset recipe
 - `TITLE_PROFILE_QA_*` × 1.
-- `FRAME_PROFILE_QA_*` × 1 only as a visual support/reference if its text is not authoritative; keep final Q&A native.
+- `FRAME_PROFILE_QA_*` × 0–1 as visual construction support only; authoritative Q&A stays native text.
 - supporting photo/cutout × 1–2.
-- `FRAME_GLOBAL_CALLOUT_*` / speech-bubble family × 1–3, but do not box every answer.
+- selected callout/speech-bubble frames × 1–3; do not box every answer.
 - `DECORATION_*` × 1–3.
 
 ### Typography
@@ -110,7 +127,7 @@ Make the couple feel human, playful, and easy to read; questions should be scann
 - maintain strong vertical spacing between question groups.
 
 ### Color behavior
-Use one question-accent color and one answer-accent color only if labels/position also identify structure.
+One question accent and one support accent are enough. Labels/position must also identify structure.
 Long answers remain `INK` on `PAPER`/`WARM_CREAM`.
 
 ### Anti-patterns
@@ -120,190 +137,203 @@ Long answers remain `INK` on `PAPER`/`WARM_CREAM`.
 
 ---
 
-## P04 — STORY + TIMELINE
+## P04 — STORY
 
 ### Page job
-Tell the relationship story as a sequence, not as a spreadsheet.
+Tell the relationship story emotionally before the reader reaches the more structured chronology on P05.
 
 ### Hierarchy
-1. Story title.
-2. one emotional photo/visual anchor.
-3. chronological line / timeline milestones.
-4. short narrative captions.
+1. `ふたりのこと` / story title.
+2. one emotional hero photo or story anchor.
+3. short narrative blocks / memorable episodes.
+4. 1–2 supporting photos/cutouts.
+5. restrained editorial accents.
 
 ### Asset recipe
 - `TITLE_STORY_FUTARI_NO_KOTO_*` × 1.
-- `TITLE_STORY_TIMELINE_*` × 1 secondary if needed.
-- `FRAME_STORY_TIMELINE_*` × 1 as a visual construction aid; final facts/copy remain native.
-- story photo/cutout × 2–3.
-- `ROUTE_*` × 0–1 only if it helps sequence.
-- stamp/camera/heart decoration × 2–4.
+- story real/dummy photos × 2–3 according to verification state.
+- `FRAME_GLOBAL_*` or story-appropriate frame × 1–3.
+- stamp/camera/heart/travel decoration × 1–3.
+- no timeline-specific graphic unless it genuinely belongs to a story teaser.
 
 ### Layout behavior
-- timeline may bend/step/alternate, but reading order must remain unmistakable.
-- dates should be visually stronger than long description text.
-- one milestone may be enlarged as the emotional peak.
+- let one image or one sentence act as the emotional anchor.
+- narrative text needs a calm reading field.
+- asymmetry is encouraged, but reading order must remain obvious.
+- leave chronology-heavy dates to P05 instead of making P04 another stepper.
+
+### Color behavior
+Dominant: `PAPER` or `WARM_CREAM`.
+Emotional accent: `CORAL` / `PINK_STRONG`.
+Secondary travel accent: `LAGOON_CYAN` or `MINT`.
+Body: `INK`.
+
+### Anti-patterns
+- corporate timeline UI on P04;
+- every story paragraph in its own card;
+- decorative travel objects competing with the actual story.
+
+---
+
+## P05 — TIMELINE + MEMORY
+
+### Page job
+Make the chronological path unmistakable while mixing in selective memory highlights so it reads like an editorial journey, not a project roadmap.
+
+### Hierarchy
+1. timeline title / date entry point.
+2. chronological spine or obvious sequence.
+3. milestone dates.
+4. short milestone descriptions.
+5. selected memory photo highlights.
+
+### Asset recipe
+- `TITLE_STORY_TIMELINE_*` × 1 when suitable.
+- `FRAME_STORY_TIMELINE_*` × 0–1 as construction/reference support; final facts remain native text.
+- memory/story photos × 2–4.
+- `ROUTE_*` × 0–1 only if it improves true chronological order.
+- stamp/camera/heart accents × 1–3.
+
+### Layout behavior
+- timeline may bend, step or alternate, but order must be unmistakable.
+- dates should be visually stronger than long descriptions.
+- one milestone can be intentionally enlarged as the emotional peak.
+- memory photos should interrupt or support chronology, not obscure it.
 
 ### Color behavior
 Dominant: `PAPER`.
-Sequence accent: `PINK_STRONG` or `COBALT`.
-Highlight milestone: `SUNNY_YELLOW` with `INK` text.
+Sequence accent: `COBALT` or `PINK_STRONG`.
+Highlight milestone: `SUNNY_YELLOW` with `INK`.
 Do not color every milestone differently.
 
 ### Anti-patterns
 - corporate roadmap/stepper UI;
 - identical timeline nodes;
-- ornamental airplane route that does not match chronology.
+- ornamental airplane route that does not match chronology;
+- too many photos making the time order ambiguous.
 
 ---
 
-## P05 — MEMORY SPOTS / TRAVEL GUIDE
+## P06 — MEMORY SPOTS + GALLERY
 
 ### Page job
-Make guests want to browse memorable places as if reading a compact travel feature.
+Combine the useful browseability of a compact travel feature with an emotional photo gallery. Guests should understand memorable places first, then enjoy the imagery.
 
 ### Hierarchy
-1. Memory Spot title.
-2. largest destination image.
-3. 2–4 smaller destination stories.
-4. short place labels/captions.
-5. travel-guide accents.
+1. `MEMORY SPOT` title.
+2. one largest destination/photo anchor.
+3. 2–4 smaller memory/destination stories.
+4. `BEST SHOT` / gallery accent where useful.
+5. short labels/captions.
 
 ### Asset recipe
-- `TITLE_MEMORY_MEMORY_SPOT_*` × 1.
-- `GENERATED_PHOTO_MEMORY_*` / verified real travel photos × 3–5.
-- `FRAME_MEMORY_*` / postcard or travel frames × 2–4.
-- `MAP_*` or `ROUTE_*` × 0–1 where semantically useful.
-- travel/camera/stamp decoration × 2–4.
+- `TITLE_MEMORY_MEMORY_SPOT_*` × 1 primary.
+- `TITLE_MEMORY_BEST_SHOT_*` or `BADGE_MEMORY_BEST_SHOT_*` × 0–1 secondary.
+- `TITLE_MEMORY_GALLERY_*` × 0–1 if hierarchy remains clean.
+- `GENERATED_PHOTO_MEMORY_*` / verified real travel photos × 3–6.
+- mixed photo frames × 2–5.
+- `MAP_*` / `ROUTE_*` × 0–1 only when semantically useful.
+- camera/stamp/travel decoration × 1–3.
 
 ### Layout behavior
 - one image clearly dominates.
-- remaining photos use mixed shapes/scale.
-- destination name must remain close to its image.
-- supporting captions should not cross confusingly between photos.
+- supporting photos use mixed shape/scale; avoid four equal cards even if placeholder masks started that way.
+- destination name/caption stays close to its image.
+- photography should carry more of the visual weight than stickers.
 
 ### Color behavior
-Dominant: `LAGOON_CYAN` or `COBALT` accents against `PAPER`.
-Warm counterpoint: `CORAL` or `SUNNY_YELLOW`.
+Let photography lead. Use `PAPER` with either `COBALT`/`LAGOON_CYAN` or `PINK_STRONG` as the main graphic accent.
+Warm counterpoint: `CORAL` / `SUNNY_YELLOW` sparingly.
 Body: `INK`.
 
 ### Anti-patterns
 - equal destination cards;
-- labels detached from their photos;
-- too much blue text on blue photography.
+- same frame repeated everywhere;
+- labels detached from photos;
+- stickers filling every gap;
+- gallery images too small to enjoy at A5.
 
 ---
 
-## P06 — BEST SHOT / GALLERY
+## P07 — 1DAY + CAFE TABLE
 
 ### Page job
-Create the most photo-driven, emotional page: a visual pause with selective captions, not another information grid.
-
-### Hierarchy
-1. `BEST SHOT` title/badge.
-2. hero photo.
-3. 3–6 supporting photos.
-4. tiny number of short captions.
-
-### Asset recipe
-- `TITLE_MEMORY_BEST_SHOT_*` or `BADGE_MEMORY_BEST_SHOT_*` × 1.
-- `TITLE_MEMORY_GALLERY_*` optional secondary.
-- photo frames × 3–6, deliberately mixed.
-- hero/support photos × 4–7.
-- decoration × 1–3 only; photography carries the page.
-
-### Layout behavior
-- collage is allowed, but avoid random rotation everywhere.
-- hero image should feel intentional and largest.
-- use breathing room around at least one photo cluster.
-
-### Color behavior
-Let photography dominate.
-Use `PAPER` + one strong accent, often `PINK_STRONG` or `COBALT`.
-If photo colors are already saturated, reduce surrounding chroma.
-
-### Anti-patterns
-- same frame repeated 6 times;
-- stickers on every empty gap;
-- captions crossing photo boundaries;
-- gallery thumbnails too small to enjoy in print.
-
----
-
-## P07 — 1DAY MODEL COURSE / MAP
-
-### Page job
-Make a playful but genuinely understandable travel-course page where sequence and place are obvious.
+Make the 1DAY sequence understandable while using cafe/food/table content as visual rewards inside the itinerary rather than a disconnected second page.
 
 ### Hierarchy
 1. 1DAY title.
 2. route/sequence spine.
-3. 4–6 timed/place stops.
-4. food/place photo highlights.
-5. short practical labels.
+3. 4–6 timed/place stops where confirmed.
+4. strongest cafe/food/table visual.
+5. supporting food/place photos and practical labels.
 
 ### Asset recipe
-- `TITLE_1DAY_*` × 1.
-- `TITLE_MAP_*` × 0–1 secondary.
+- `TITLE_1DAY_*` × 1 primary.
+- `TITLE_CAFE_*` × 0–1 secondary.
+- `TITLE_MAP_*` × 0–1 only if a real map section exists.
 - `ROUTE_GLOBAL_*` × 0–1.
 - `MAP_GLOBAL_*` × 0–1.
-- travel/food photos × 2–4.
-- frames/callouts × 2–4.
-- small travel accents × 1–3.
+- `GENERATED_FOOD_*` / cafe/table photo candidates × 1–3.
+- travel photos × 1–3.
+- frames/callouts × 1–3.
+- small travel/food accents × 1–3.
 
 ### Layout behavior
-- route is semantic: it must connect actual ordered stops, not merely decorate.
-- time/place text remains native and close to each stop.
-- strongest food/place image can interrupt the route visually without breaking order.
+- route is semantic: it must connect actual ordered stops, not decorate randomly.
+- time/place text stays native and close to each stop.
+- food/table imagery can be a high-impact interruption in the route, but sequence must remain recoverable immediately.
+- cafe information should feel integrated into the day, not bolted on as a separate dashboard card.
 
 ### Color behavior
 Dominant: `LAGOON_CYAN` / `PAPER`.
 Route/structure: `COBALT` or `DEEP_TEAL`.
-Highlight: `SUNNY_YELLOW` with `INK`.
+Food highlight: `CORAL` / `SUNNY_YELLOW` with `INK`.
 
 ### Anti-patterns
-- fake transit map complexity;
-- route dots that do not correspond to content;
-- tiny itinerary copy around oversized decoration.
+- fake transit-map complexity;
+- route dots unrelated to content;
+- tiny itinerary copy around oversized food art;
+- one half page = route UI, other half = unrelated cafe card UI.
 
 ---
 
-## P08 — BACK / CAFE + TABLE / WEDDING GUIDE + MESSAGE
+## P08 — BACK COVER
 
 ### Page job
-Close the booklet warmly. Give the remaining useful guide/cafe/table information without making the back page feel like an appendix dump.
+Close the booklet warmly and memorably. This is a back cover, not a dumping ground for leftover sections.
 
 ### Hierarchy
-1. closing/guide/cafe title depending on final content authority.
-2. one useful visual block (food/table/guide).
-3. short final message.
-4. optional date/name reprise.
+1. closing visual or restrained closing title.
+2. short final message.
+3. optional date/name reprise.
+4. 1–2 supporting photos or small guide/cafe remnant only when genuinely useful.
 5. minimal closing decoration.
 
 ### Asset recipe
-- `TITLE_BACK_*` / `TITLE_CAFE_*` / `TITLE_GUIDE_*` depending on live content.
-- `GENERATED_FOOD_CAFE_*` × 1–2.
-- `GENERATED_PHOTO_TABLE_*` × 0–1.
-- callout/frame × 1–3.
+- `TITLE_BACK_*` × 0–1.
+- closing hero/support photo × 1–3.
+- `BADGE_COVER_DATE_*` × 0–1 for a subtle reprise.
+- `GENERATED_FOOD_*` / table visual only if final content authority explicitly requires it here.
+- callout/frame × 0–2.
 - closing decoration × 1–2.
-- date/name badge optional × 1.
 
 ### Layout behavior
-- reduce density slightly versus P05/P07 so the booklet has a closing cadence.
+- reduce density from P05/P07 so the booklet has a closing cadence.
 - final message needs a calm reading field.
-- avoid putting essential final message directly over photography.
+- essential message should not sit directly over busy photography.
+- preserve a clear back-cover silhouette at thumbnail scale.
 
 ### Color behavior
-Dominant: `WARM_CREAM` or `PAPER`.
+Dominant: `WARM_CREAM` / `PAPER`, or one verified dark field if reversed type passes.
 Support: `PINK_STRONG` / `CORAL`.
-Optional closing surprise: `MINT` or `SUNNY_YELLOW`.
-Body: `INK`.
+Optional surprise: `MINT` / `SUNNY_YELLOW`.
+Body: `INK` on light fields.
 
 ### Anti-patterns
-- treating the back page as a junk drawer;
+- treating P08 as a junk drawer;
 - every remaining asset forced in;
 - low-contrast sentimental copy;
-- giant decorative title that leaves no room for the actual message.
+- giant decorative title that leaves no room for the actual closing message.
 
 ---
 
@@ -311,31 +341,33 @@ Body: `INK`.
 
 The eight pages should not all have the same density.
 
-Recommended tempo:
-- P01: very high impact / high energy.
-- P02: medium-high, structured.
-- P03: medium, reading-oriented.
-- P04: medium-high, sequential.
-- P05: high, browseable travel feature.
-- P06: photo-led emotional pause.
-- P07: high, information + route.
-- P08: medium, warm closing.
+Recommended live-V10 tempo:
+- P01 COVER: very high impact / high energy.
+- P02 PROFILE: medium-high, structured.
+- P03 Q&A: medium, reading-oriented.
+- P04 STORY: medium-high, emotional narrative.
+- P05 TIMELINE + MEMORY: high, sequential information.
+- P06 MEMORY SPOTS + GALLERY: high, browseable and photo-led.
+- P07 1DAY + CAFE TABLE: high, information + food/travel reward.
+- P08 BACK COVER: medium/quiet, warm closing.
 
-A good book alternates `impact → read → story → browse → pause → guide → close` rather than repeating one dashboard grammar.
+The publication should feel like `impact → know them → read them → feel the story → follow the journey → browse memories → enjoy the day → close warmly`, not eight repetitions of one dashboard grammar.
 
 # Cross-page color rhythm
 
-Do not assign a totally unrelated palette to every page. Use the shared token family, but rotate dominance:
+Do not assign an unrelated palette to every page. Use the shared token family, but rotate dominance:
 - strong blue/cyan page next to a warmer cream/pink page;
 - photo-heavy page with reduced graphic color after a dense information page;
-- reserve `SUNNY_YELLOW` as a burst/highlight, not a full-book body background.
+- reserve `SUNNY_YELLOW` as a burst/highlight, not a full-book body background;
+- never rely on page color alone to communicate page role.
 
 # AI completion gate per page
 
 Before marking a page at `ASSET_FIRST_80`:
+- live Figma page role still matches this recipe;
 - page job is obvious at 3-second scan;
 - required major asset roles are placed;
-- semantic filenames are recorded;
+- semantic filenames + Drive IDs are recorded;
 - photo hierarchy is visible;
 - body copy has a stable readable zone;
 - dominant/support/accent colors are selected;
@@ -343,4 +375,5 @@ Before marking a page at `ASSET_FIRST_80`:
 - no `REFERENCE_` is used as production art;
 - no `DUMMY_` is described as final real imagery;
 - masks/clips are in place for replaceable images;
-- no known low-res asset is silently enlarged.
+- no known low-res asset is silently enlarged;
+- page still contributes the intended whole-book rhythm.
