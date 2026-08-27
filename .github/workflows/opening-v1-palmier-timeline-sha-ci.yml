@@ -1,0 +1,62 @@
+name: Opening V1 Palmier Timeline SHA CI
+
+on:
+  pull_request:
+    paths:
+      - "motion-studio/scripts/export-opening-v1-production-bundle.mts"
+      - "motion-studio/scripts/opening-v1-production-status.mts"
+      - "motion-studio/scripts/check-opening-v1-palmier-timeline-sha-binding.mts"
+      - ".github/workflows/opening-v1-palmier-timeline-sha-ci.yml"
+  push:
+    branches: [main]
+    paths:
+      - "motion-studio/scripts/export-opening-v1-production-bundle.mts"
+      - "motion-studio/scripts/opening-v1-production-status.mts"
+      - "motion-studio/scripts/check-opening-v1-palmier-timeline-sha-binding.mts"
+      - ".github/workflows/opening-v1-palmier-timeline-sha-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    defaults:
+      run:
+        working-directory: motion-studio
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: motion-studio/pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: TypeScript
+        run: pnpm typecheck
+
+      - name: Verify Opening Palmier timeline SHA binding
+        run: node --no-warnings scripts/check-opening-v1-palmier-timeline-sha-binding.mts
+
+      - name: Fresh clone status remains fail-closed before real media
+        run: |
+          pnpm prepare:opening-v1
+          node --no-warnings scripts/opening-v1-production-status.mts --json > /tmp/opening-status.json
+          node -e "const fs=require('fs'); const r=JSON.parse(fs.readFileSync('/tmp/opening-status.json','utf8')); if(r.overallState!=='MEDIA_REQUIRED') process.exit(1); if(r.readiness.productionReady!==false) process.exit(1); if(r.readiness.macDaVinciActualVerified!==false) process.exit(1);"
+          if pnpm opening:production-status:strict; then
+            echo "Opening production status unexpectedly passed on fresh clone"
+            exit 1
+          fi
