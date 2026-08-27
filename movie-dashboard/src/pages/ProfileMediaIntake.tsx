@@ -16,6 +16,10 @@ export function ProfileMediaIntake() {
   const mediaFilesReady = gate.media.fileReady;
   const receiptCurrent = gate.media.intakeReceiptCurrent;
   const bgmReady = gate.bgm.ready;
+  const bgmFileExists = gate.bgm.fileExists;
+  const bgmReceiptCurrent = gate.bgm.intakeReceiptCurrent;
+  const bgmRightsState = String(gate.bgm.rightsState);
+  const bgmRightsCleared = bgmRightsState === "CLEARED";
   const assemblyReady = gate.blockingGatePass;
   const localValidationSlots = gate.mediaSlots.map((slot) => ({
     id: slot.id,
@@ -39,7 +43,7 @@ export function ProfileMediaIntake() {
               {assemblyReady ? "実素材Gateクリア — previewへ" : "17素材の実ファイル + SHA receipt + BGMを揃える"}
             </h2>
             <p className="mt-2 text-sm text-navy-600 dark:text-navy-300">
-              素材 {gate.resolvedMediaCount}/{gate.expectedMediaCount} / media receipt {receiptCurrent ? "CURRENT" : "MISSING / STALE"} / BGM {bgmReady ? "READY" : gate.bgm.rightsState}
+              素材 {gate.resolvedMediaCount}/{gate.expectedMediaCount} / media receipt {receiptCurrent ? "CURRENT" : "MISSING / STALE"} / BGM file {bgmFileExists ? "FOUND" : "MISSING"} / BGM receipt {bgmReceiptCurrent ? "CURRENT" : "MISSING / STALE"} / rights {bgmRightsState}
             </p>
           </div>
           <span className={`px-2.5 py-1 text-[10px] font-mono font-bold ${assemblyReady ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300" : "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300"}`}>
@@ -47,7 +51,7 @@ export function ProfileMediaIntake() {
           </span>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-px bg-sand-200 dark:bg-navy-600">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-px bg-sand-200 dark:bg-navy-600">
           <div className={`p-4 ${mediaFilesReady ? "bg-emerald-50 dark:bg-emerald-900/20" : "bg-white dark:bg-navy-800"}`}>
             <p className="text-[10px] tracking-[0.16em] font-semibold text-navy-400">REAL MEDIA FILES</p>
             <p className="mt-1 text-2xl font-mono font-bold text-navy-900 dark:text-sand-100">{gate.resolvedMediaCount}/{gate.expectedMediaCount}</p>
@@ -62,16 +66,25 @@ export function ProfileMediaIntake() {
             </p>
             <code className="mt-1 block break-all text-[9px] text-navy-400">motion-studio/{gate.media.intakeReceiptPath}</code>
           </div>
-          <div className={`p-4 ${bgmReady ? "bg-emerald-50 dark:bg-emerald-900/20" : "bg-white dark:bg-navy-800"}`}>
-            <p className="text-[10px] tracking-[0.16em] font-semibold text-navy-400">BGM</p>
-            <p className="mt-1 text-2xl font-mono font-bold text-navy-900 dark:text-sand-100">{bgmReady ? "READY" : "BLOCKED"}</p>
-            <p className="mt-1 text-xs text-navy-500 dark:text-navy-300 break-all">{gate.bgm.path}</p>
-            {!bgmReady ? <Link to="/profile-bgm-intake" className="mt-2 inline-block border-b border-navy-300 text-[10px] text-navy-600 dark:text-navy-300">BGM rights gateを開く →</Link> : null}
+          <div className={`p-4 ${bgmFileExists && bgmReceiptCurrent ? "bg-emerald-50 dark:bg-emerald-900/20" : "bg-white dark:bg-navy-800"}`}>
+            <p className="text-[10px] tracking-[0.16em] font-semibold text-navy-400">BGM FILE + RECEIPT</p>
+            <p className="mt-1 text-sm font-mono font-bold text-navy-900 dark:text-sand-100">{bgmFileExists ? "FILE FOUND" : "FILE MISSING"}</p>
+            <p className={`mt-1 text-xs font-mono font-bold ${bgmReceiptCurrent ? "text-emerald-700 dark:text-emerald-300" : "text-amber-700 dark:text-amber-300"}`}>
+              RECEIPT {bgmReceiptCurrent ? "CURRENT" : "MISSING / STALE"}
+            </p>
+            <code className="mt-1 block break-all text-[9px] text-navy-400">motion-studio/{gate.bgm.intakeReceiptPath}</code>
+            {!bgmReceiptCurrent && gate.bgm.intakeReceiptBlockerCodes.length ? <p className="mt-1 break-all text-[9px] text-amber-700 dark:text-amber-300">{gate.bgm.intakeReceiptBlockerCodes.join(" / ")}</p> : null}
+          </div>
+          <div className={`p-4 ${bgmRightsCleared ? "bg-emerald-50 dark:bg-emerald-900/20" : "bg-white dark:bg-navy-800"}`}>
+            <p className="text-[10px] tracking-[0.16em] font-semibold text-navy-400">BGM RIGHTS</p>
+            <p className="mt-1 text-2xl font-mono font-bold text-navy-900 dark:text-sand-100">{bgmRightsState}</p>
+            <p className="mt-1 text-xs text-navy-500 dark:text-navy-300">current BGM SHAへHuman上映権利判断を固定</p>
+            {!bgmReady ? <Link to="/profile-bgm-intake" className="mt-2 inline-block border-b border-navy-300 text-[10px] text-navy-600 dark:text-navy-300">BGM intake / rights gateを開く →</Link> : null}
           </div>
           <div className={`p-4 ${mediaReady && bgmReady ? "bg-emerald-50 dark:bg-emerald-900/20" : "bg-white dark:bg-navy-800"}`}>
             <p className="text-[10px] tracking-[0.16em] font-semibold text-navy-400">NEXT COMMAND</p>
             <p className="mt-1 text-sm font-mono font-bold text-navy-900 dark:text-sand-100">pnpm prepare:profile-v1</p>
-            <p className="mt-1 text-xs text-navy-500 dark:text-navy-300">17 filesだけでは解除しない。current receipt + BGM後にpreview準備へ</p>
+            <p className="mt-1 text-xs text-navy-500 dark:text-navy-300">17 filesだけでは解除しない。media receipt + BGM file + BGM receipt + rights後にpreview準備へ</p>
           </div>
         </div>
       </section>
@@ -138,7 +151,7 @@ export function ProfileMediaIntake() {
           <li><span className="font-mono text-navy-400 mr-2">2</span>上のLOCAL PRECHECKでcanonical filename / extension / duplicateを一括確認</li>
           <li><span className="font-mono text-navy-400 mr-2">3</span>CANONICAL INTAKE CLIをDRY RUNし、PASS後だけ <code className="text-xs">--apply</code> でsource非破壊copy + SHA receipt保存</li>
           <li><span className="font-mono text-navy-400 mr-2">4</span><code className="text-xs">verify-production-media-intake-receipt.mts --project profile</code> で17 targetのbytes/SHAがCURRENTか確認</li>
-          <li><span className="font-mono text-navy-400 mr-2">5</span><Link to="/profile-bgm-intake" className="border-b border-navy-300">Profile BGM rights gate</Link> で現在のBGM SHAへHuman rights approvalを固定</li>
+          <li><span className="font-mono text-navy-400 mr-2">5</span><Link to="/profile-bgm-intake" className="border-b border-navy-300">Profile BGM intake / rights gate</Link> でBGM file + receipt + current SHAへのHuman rights approvalを揃える</li>
           <li><span className="font-mono text-navy-400 mr-2">6</span><code className="text-xs">pnpm prepare:profile-v1</code> → real-media preview → Human crop/focus/color/content QAへ</li>
         </ol>
         <div className="mt-4 flex flex-wrap gap-3 text-xs">
@@ -151,7 +164,7 @@ export function ProfileMediaIntake() {
       </section>
 
       <p className="mt-5 text-[10px] text-navy-400">
-        17/17 FILE FOUND != MEDIA READY。SHA receiptがCURRENTで、BGM gateも通って初めてpreview input readyです。Human QA / Mac DaVinci Actual / final approval は自動PASSしません。
+        17/17 FILE FOUND != MEDIA READY。media SHA receipt、BGM実ファイル、BGM intake receipt、Human rights approvalが全てcurrentで初めてpreview input readyです。Human QA / Mac DaVinci Actual / final approval は自動PASSしません。
       </p>
     </div>
   );
