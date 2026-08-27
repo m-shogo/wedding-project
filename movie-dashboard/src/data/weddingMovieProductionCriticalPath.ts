@@ -146,6 +146,16 @@ function stageBlockerCodesFor(projectId: "opening" | "profile", stageName: strin
   return [];
 }
 
+function normalizedStageBlockerCodes(stageName: string, stage: StageSnapshot, rawCodes: readonly string[], upstreamStageName?: string) {
+  if (rawCodes.length > 0) return [...new Set(rawCodes)];
+  if (stage.state === "PASS") return [];
+  if (stage.state === "MISSING") return [`ARTIFACT_MISSING:${stageName}`];
+  if (stage.state === "STALE") return [`ARTIFACT_STALE:${stageName}`];
+  if (stage.state === "BLOCKED") return [`STAGE_BLOCKED:${stageName}`];
+  if (stage.state === "NOT_RUN" && upstreamStageName) return [`UPSTREAM_BLOCKED:${upstreamStageName}`];
+  return [`STAGE_${stage.state}:${stageName}`];
+}
+
 function summarizeProject(
   projectId: "opening" | "profile",
   overallState: string,
@@ -158,6 +168,7 @@ function summarizeProject(
   const currentIndex = ordered.findIndex((stage) => stage.state !== "PASS");
   const current = currentIndex >= 0 ? ordered[currentIndex] : null;
   const inputLanes = current ? inputLanesFor(projectId, current.name) : [];
+  const currentRawBlockers = current ? stageBlockerCodesFor(projectId, current.name, inputLanes) : [];
   return {
     projectId,
     overallState,
@@ -168,14 +179,27 @@ function summarizeProject(
           state: current.state,
           detail: current.detail,
           ...(current.path ? {path: current.path} : {}),
-          blockerCodes: stageBlockerCodesFor(projectId, current.name, inputLanes),
+          blockerCodes: normalizedStageBlockerCodes(current.name, current, currentRawBlockers),
           recovery: [...current.recovery],
           actionTargets: actionTargetsFor(projectId, current.name),
           inputLanes,
         }
       : null,
     downstreamBlockedStages: currentIndex >= 0
-      ? ordered.slice(currentIndex + 1).map((stage) => ({name: stage.name, state: stage.state, detail: stage.detail}))
+      ? ordered.slice(currentIndex + 1).map((stage, offset) => {
+          const inputLanes = inputLanesFor(projectId, stage.name);
+          const rawBlockers = stageBlockerCodesFor(projectId, stage.name, inputLanes);
+          const upstreamStageName = ordered[currentIndex + offset]?.name ?? current?.name;
+          return {
+            name: stage.name,
+            state: stage.state,
+            detail: stage.detail,
+            ...(stage.path ? {path: stage.path} : {}),
+            blockerCodes: normalizedStageBlockerCodes(stage.name, stage, rawBlockers, upstreamStageName),
+            recovery: [...stage.recovery],
+            actionTargets: actionTargetsFor(projectId, stage.name),
+          };
+        })
       : [],
     nextActions: [...nextActions],
   };
@@ -207,6 +231,7 @@ export function buildWeddingMovieProductionCriticalPath() {
     guardrails: [
       "CRITICAL_PATH_VISIBLE != PRODUCTION_APPROVED",
       "BLOCKER_CODE_VISIBLE != BLOCKER_RESOLVED",
+      "NORMALIZED_BLOCKER_CODE != RAW_MOTION_STUDIO_EVIDENCE",
       "INPUT_LANE_READY != PROJECT_PRODUCTION_READY",
       "RECOVERY_COMMAND_VISIBLE != RECOVERY_EXECUTED",
       "ACTION_TARGET_VISIBLE != ACTION_COMPLETED",
