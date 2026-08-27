@@ -1,99 +1,88 @@
+import {execFileSync} from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
-import { fileURLToPath, pathToFileURL } from "node:url";
+import {fileURLToPath} from "node:url";
 
 const dashboardRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const repoRoot = path.resolve(dashboardRoot, "..");
-const photoRolesPath = path.join(repoRoot, "motion-studio/src/data/openingV1PhotoRoles.ts");
-const photoLibraryPath = path.join(repoRoot, "motion-studio/src/data/photoLibrary.generated.ts");
-const assetsPath = path.join(repoRoot, "motion-studio/src/data/assets.ts");
+const studioRoot = path.join(repoRoot, "motion-studio");
+const preflightPath = path.join(studioRoot, "scripts/opening-v1-assembly-preflight.mts");
 const outputPath = path.join(dashboardRoot, "src/data/openingProductionGate.generated.ts");
 
-const {aliases, orderedKeys} = await import(pathToFileURL(photoRolesPath).href);
-const photoLibrarySource = fs.readFileSync(photoLibraryPath, "utf8");
-const assetsSource = fs.readFileSync(assetsPath, "utf8");
+const report = JSON.parse(
+  execFileSync(process.execPath, ["--no-warnings", preflightPath, "--json"], {
+    cwd: studioRoot,
+    encoding: "utf8",
+  }),
+);
 
-function extractQuotedValues(source) {
-  return [...source.matchAll(/["']([^"']+)["']/g)].map((match) => match[1]);
+if (report.schemaVersion !== "opening-v1-assembly-preflight/v1") {
+  throw new Error(`Unexpected Opening V1 preflight schema: ${report.schemaVersion}`);
 }
 
-const openingMatch = photoLibrarySource.match(/"opening"\s*:\s*\[([\s\S]*?)\]/);
-if (!openingMatch) throw new Error("photoLibrary.generated.ts: opening array not found");
-const openingPhotos = extractQuotedValues(openingMatch[1]);
-
-function normalizedBasename(filePath) {
-  const file = filePath.split("/").pop() ?? filePath;
-  const dot = file.lastIndexOf(".");
-  return (dot >= 0 ? file.slice(0, dot) : file).toLowerCase().replaceAll("_", "-");
-}
-
-const resolvedSlots = orderedKeys.map((key) => {
-  const aliasSet = aliases[key] ?? [key];
-  const semanticMatches = openingPhotos.filter((filePath) => {
-    const base = normalizedBasename(filePath);
-    return aliasSet.includes(base);
-  });
-  const resolvedPath = semanticMatches.length === 1 ? semanticMatches[0] : null;
-  return { key, resolved: resolvedPath !== null, path: resolvedPath };
-});
-
-function assetStatus(assetId) {
-  const marker = `'${assetId}': {`;
-  const start = assetsSource.indexOf(marker);
-  if (start < 0) throw new Error(`assets.ts: ${assetId} not found`);
-  const end = assetsSource.indexOf("\n  },", start);
-  const block = assetsSource.slice(start, end < 0 ? assetsSource.length : end);
-  const statusMatch = block.match(/status:\s*'([^']+)'/);
-  if (!statusMatch) throw new Error(`assets.ts: ${assetId} status not found`);
-  return statusMatch[1];
-}
-
-const playableStatuses = new Set(["candidate", "approved", "final"]);
-const bgmStatus = assetStatus("opening-bgm-main");
-const ambienceIds = [
-  "opening-okinawa-sea",
-  "opening-seoul-street",
-  "opening-hawaii-ocean",
-  "opening-arrival-roomtone",
-];
-const ambience = ambienceIds.map((assetId) => {
-  const status = assetStatus(assetId);
-  return { assetId, status, playable: playableStatuses.has(status) };
-});
-const resolvedPhotoCount = resolvedSlots.filter((slot) => slot.resolved).length;
-const photoMissingCount = orderedKeys.length - resolvedPhotoCount;
-const bgmPlayable = playableStatuses.has(bgmStatus);
-const finalBlocked = photoMissingCount > 0 || !bgmPlayable;
-
+const blockerCodes = (items = []) => items.map((item) => String(item).split(":", 1)[0]);
+const bgm = report.audio.bgm[0] ?? null;
 const snapshot = {
   source: {
-    photos: "motion-studio/src/data/photoLibrary.generated.ts",
+    preflight: "motion-studio/scripts/opening-v1-assembly-preflight.mts",
     photoResolver: "motion-studio/src/data/openingV1Media.ts",
     audio: "motion-studio/src/data/assets.ts",
   },
-  expectedPhotoCount: orderedKeys.length,
-  resolvedPhotoCount,
-  photoMissingCount,
-  photoSlots: resolvedSlots,
-  bgm: {
-    assetId: "opening-bgm-main",
-    status: bgmStatus,
-    playable: bgmPlayable,
+  expectedPhotoCount: report.photos.expectedCount,
+  resolvedPhotoCount: report.photos.readyCount,
+  photoMissingCount: report.photos.expectedCount - report.photos.readyCount,
+  photos: {
+    ready: report.photos.ready,
+    fileReady: report.photos.fileReady,
+    intakeReceiptCurrent: report.photos.intakeReceiptCurrent,
+    intakeReceiptPath: report.photos.intakeReceiptPath,
+    intakeReceiptVerifiedCount: report.photos.intakeReceiptVerifiedCount,
+    intakeReceiptExpectedCount: report.photos.expectedCount,
+    intakeReceiptBlockerCodes: blockerCodes(report.photos.intakeReceiptBlockers),
   },
-  ambience,
-  finalBlocked,
-  nextAction: photoMissingCount > 0
-    ? `実写真${photoMissingCount}枚を motion-studio/public/photos/opening/ へ入れ、pnpm sync:photos を実行する`
-    : !bgmPlayable
-      ? "権利確認済みBGMを opening-bgm-main へ登録し candidate 以上へ昇格する"
-      : "60秒Opening previewをrenderし、crop / motion / color / audio QAへ進む",
+  photoSlots: report.photos.slots.map((slot) => ({
+    key: slot.slot,
+    resolved: slot.ready,
+    path: slot.file ? `photos/opening/${slot.file}` : null,
+  })),
+  bgm: bgm
+    ? {
+        assetId: bgm.assetId,
+        status: bgm.status,
+        playable: bgm.playable,
+        fileExists: bgm.fileExists,
+        intakeReceiptCurrent: report.audio.bgmIntakeReceiptCurrent,
+        intakeReceiptPath: report.audio.bgmIntakeReceiptPath,
+        intakeReceiptBlockerCodes: blockerCodes(report.audio.bgmIntakeReceiptBlockers),
+        ready: report.audio.bgmReady,
+      }
+    : {
+        assetId: "opening-bgm-main",
+        status: "missing",
+        playable: false,
+        fileExists: false,
+        intakeReceiptCurrent: false,
+        intakeReceiptPath: "out/intake/opening-bgm-intake.json",
+        intakeReceiptBlockerCodes: ["BGM_RECEIPT_UNAVAILABLE"],
+        ready: false,
+      },
+  ambience: report.audio.ambience.map((row) => ({
+    assetId: row.assetId,
+    status: row.status,
+    playable: row.playable,
+    fileExists: row.fileExists,
+    ready: row.ready,
+  })),
+  finalBlocked: !report.readiness.finalRenderEligible,
+  nextAction: report.nextActions[0] ?? "Opening V1 assembly preflightを再確認する",
+  nextActions: report.nextActions,
 };
 
 const output = `// AUTO-GENERATED by scripts/sync-opening-production-gate.mjs\n// Source of truth remains in motion-studio. Do not edit by hand.\n\nexport const openingProductionGate = ${JSON.stringify(snapshot, null, 2)} as const;\n`;
 
 if (process.argv.includes("--write")) {
   fs.writeFileSync(outputPath, output, "utf8");
-  console.log(`Opening production gate synced: ${resolvedPhotoCount}/${orderedKeys.length} photos, BGM=${bgmStatus}`);
+  console.log(`Opening production gate synced: ${snapshot.resolvedPhotoCount}/${snapshot.expectedPhotoCount} photos, receipt=${snapshot.photos.intakeReceiptCurrent ? "CURRENT" : "MISSING_OR_STALE"}, BGM=${snapshot.bgm.ready ? "READY" : "BLOCKED"}`);
   process.exit(0);
 }
 
@@ -105,8 +94,8 @@ if (!fs.existsSync(outputPath)) {
 const current = fs.readFileSync(outputPath, "utf8");
 if (current !== output) {
   console.error("Opening production gate is stale. Run: pnpm sync:opening-gate");
-  console.error(`Current source state: ${resolvedPhotoCount}/${orderedKeys.length} photos, BGM=${bgmStatus}`);
+  console.error(`Current source state: ${snapshot.resolvedPhotoCount}/${snapshot.expectedPhotoCount} photos, receipt=${snapshot.photos.intakeReceiptCurrent ? "CURRENT" : "MISSING_OR_STALE"}, BGM=${snapshot.bgm.ready ? "READY" : "BLOCKED"}`);
   process.exit(1);
 }
 
-console.log(`Opening production gate current: ${resolvedPhotoCount}/${orderedKeys.length} photos, BGM=${bgmStatus}, blocked=${finalBlocked}`);
+console.log(`Opening production gate current: ${snapshot.resolvedPhotoCount}/${snapshot.expectedPhotoCount} photos, receipt=${snapshot.photos.intakeReceiptCurrent ? "CURRENT" : "MISSING_OR_STALE"}, BGM=${snapshot.bgm.ready ? "READY" : "BLOCKED"}, blocked=${snapshot.finalBlocked}`);

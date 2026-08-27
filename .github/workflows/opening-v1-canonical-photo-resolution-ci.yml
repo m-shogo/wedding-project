@@ -6,6 +6,7 @@ on:
       - "motion-studio/src/data/openingV1Media.ts"
       - "motion-studio/scripts/check-opening-photos.mts"
       - "motion-studio/scripts/sync-photos.mts"
+      - "motion-studio/scripts/opening-v1-assembly-preflight.mts"
       - "movie-dashboard/scripts/sync-opening-production-gate.mjs"
       - ".github/workflows/opening-v1-canonical-photo-resolution-ci.yml"
   push:
@@ -14,6 +15,7 @@ on:
       - "motion-studio/src/data/openingV1Media.ts"
       - "motion-studio/scripts/check-opening-photos.mts"
       - "motion-studio/scripts/sync-photos.mts"
+      - "motion-studio/scripts/opening-v1-assembly-preflight.mts"
       - "movie-dashboard/scripts/sync-opening-production-gate.mjs"
       - ".github/workflows/opening-v1-canonical-photo-resolution-ci.yml"
 
@@ -39,6 +41,7 @@ jobs:
           const fs = require('fs');
           const media = fs.readFileSync('motion-studio/src/data/openingV1Media.ts', 'utf8');
           const checker = fs.readFileSync('motion-studio/scripts/check-opening-photos.mts', 'utf8');
+          const preflight = fs.readFileSync('motion-studio/scripts/opening-v1-assembly-preflight.mts', 'utf8');
           const dashboard = fs.readFileSync('movie-dashboard/scripts/sync-opening-production-gate.mjs', 'utf8');
           const errors = [];
 
@@ -49,9 +52,12 @@ jobs:
           if (!checker.includes('ambiguous.length > 0')) errors.push('operator checker must detect ambiguous semantic roles');
           if (!checker.includes('枚数や並び順では自動割当しません')) errors.push('operator checker must explain that order fallback is forbidden');
           if (checker.includes('sorted fallback')) errors.push('operator checker still advertises removed sorted fallback');
+          if (!preflight.includes("verifyIntakeReceipt({project: 'opening'")) errors.push('assembly preflight must bind canonical photo resolution to SHA intake receipt');
 
-          if (!dashboard.includes('openingPhotos.filter')) errors.push('Dashboard gate sync must collect all semantic candidates');
-          if (!dashboard.includes('semanticMatches.length === 1')) errors.push('Dashboard gate sync must require exactly one semantic match');
+          if (!dashboard.includes('opening-v1-assembly-preflight.mts')) errors.push('Dashboard gate sync must delegate to canonical Opening assembly preflight');
+          if (!dashboard.includes('report.photos.slots.map')) errors.push('Dashboard gate sync must consume canonical preflight photo slots');
+          if (!dashboard.includes('report.photos.intakeReceiptCurrent')) errors.push('Dashboard gate sync must preserve photo receipt currentness');
+          if (dashboard.includes('openingPhotos.filter') || dashboard.includes('semanticMatches.length === 1')) errors.push('Dashboard must not duplicate canonical photo resolver logic');
           if (dashboard.includes('openingPhotos.length >=') || dashboard.includes('openingPhotos[index]')) errors.push('Dashboard must not recreate array-length/order fallback');
 
           if (errors.length) {
@@ -59,7 +65,7 @@ jobs:
             for (const error of errors) console.error(`- ${error}`);
             process.exit(1);
           }
-          console.log('Opening canonical photo resolution OK end-to-end: missing, unrelated and ambiguous role matches all fail closed.');
+          console.log('Opening canonical photo resolution OK end-to-end: Motion Studio owns semantic matching + receipt binding; Dashboard delegates without recreating fallback logic.');
           NODE
 
       - name: One real role can resolve while other slots remain placeholders
@@ -70,7 +76,7 @@ jobs:
           node --no-warnings scripts/sync-photos.mts
           node --no-warnings scripts/check-opening-photos.mts
           grep -q 'opening/okinawa-01.jpg' src/data/photoLibrary.generated.ts
-          echo "one correctly named Opening photo resolves without requiring all 11 for preview"
+          echo "one correctly named Opening photo resolves independently while production assembly remains fail-closed until all receipt-bound inputs are ready"
 
       - name: Same-role duplicate extensions fail closed
         working-directory: motion-studio

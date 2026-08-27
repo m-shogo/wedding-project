@@ -11,30 +11,38 @@ const phaseTone = {
 
 export function OpeningProductionGatePanel({ compact = false }: { compact?: boolean }) {
   const gate = openingProductionGate;
-  const photosReady = Number(gate.photoMissingCount) === 0;
-  const bgmReady = Boolean(gate.bgm.playable);
-  const previewReady = photosReady && bgmReady;
+  const photoFilesReady = gate.photos.fileReady;
+  const photoReceiptCurrent = gate.photos.intakeReceiptCurrent;
+  const photosReady = gate.photos.ready;
+  const bgmReady = gate.bgm.ready;
+  const previewReady = !gate.finalBlocked;
 
   const phases = [
     {
       step: "01",
-      label: "REAL PHOTOS",
+      label: "REAL PHOTOS / SHA RECEIPT",
       value: `${gate.resolvedPhotoCount}/${gate.expectedPhotoCount}`,
-      detail: photosReady ? "11枠すべて解決済み" : `${gate.photoMissingCount}枚不足`,
+      detail: photosReady
+        ? `11 files + ${gate.photos.intakeReceiptVerifiedCount}/${gate.photos.intakeReceiptExpectedCount} SHA CURRENT`
+        : photoFilesReady
+          ? "11 files found / intake receipt MISSING or STALE"
+          : `${gate.photoMissingCount} files不足 / receipt ${photoReceiptCurrent ? "CURRENT" : "BLOCKED"}`,
       tone: photosReady ? "ready" : "blocked",
     },
     {
       step: "02",
-      label: "BGM RIGHTS / FILE",
-      value: gate.bgm.playable ? "READY" : gate.bgm.status.toUpperCase(),
-      detail: gate.bgm.playable ? "candidate以上" : "権利確認・本体投入待ち",
+      label: "BGM FILE / RECEIPT / RIGHTS",
+      value: bgmReady ? "READY" : gate.bgm.status.toUpperCase(),
+      detail: bgmReady
+        ? "file + receipt + candidate以上"
+        : `file=${gate.bgm.fileExists ? "YES" : "NO"} receipt=${gate.bgm.intakeReceiptCurrent ? "CURRENT" : "BLOCKED"}`,
       tone: bgmReady ? "ready" : "blocked",
     },
     {
       step: "03",
       label: "60s PREVIEW",
       value: previewReady ? "UNLOCKED" : "LOCKED",
-      detail: previewReady ? "renderへ進める" : "写真+BGM後に解放",
+      detail: previewReady ? "canonical assembly gate通過" : "写真receipt + BGM後に解放",
       tone: previewReady ? "ready" : "waiting",
     },
     {
@@ -54,7 +62,7 @@ export function OpeningProductionGatePanel({ compact = false }: { compact?: bool
             OPENING V1 / PRODUCTION GATE
           </p>
           <h2 className="mt-1 text-xl font-bold text-navy-900 dark:text-sand-100">
-            {gate.finalBlocked ? "学習より先に、本番素材を入れる" : "本番素材Gateクリア — 60秒previewへ"}
+            {gate.finalBlocked ? "本番素材 + SHA receiptを先に揃える" : "Canonical Assembly Gateクリア — 60秒previewへ"}
           </h2>
           <p className="mt-2 text-sm text-navy-600 dark:text-navy-300">{gate.nextAction}</p>
         </div>
@@ -85,16 +93,20 @@ export function OpeningProductionGatePanel({ compact = false }: { compact?: bool
           )}
           <div className="p-4 md:p-5 grid grid-cols-1 lg:grid-cols-[1.4fr_1fr] gap-5">
             <div>
-              <p className="text-[10px] tracking-[0.18em] font-semibold text-navy-400">PHOTO SLOTS</p>
+              <p className="text-[10px] tracking-[0.18em] font-semibold text-navy-400">PHOTO SLOTS / FILE DISCOVERY</p>
               <div className="mt-3 grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-2">
                 {gate.photoSlots.map((slot) => (
                   <div key={slot.key} className={`border px-2.5 py-2 ${slot.resolved ? "border-emerald-200 bg-emerald-50 dark:border-emerald-800 dark:bg-emerald-900/20" : "border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-900/20"}`}>
                     <p className="text-[10px] font-mono text-navy-600 dark:text-navy-300">{slot.key}</p>
                     <p className={`mt-1 text-[10px] font-semibold ${slot.resolved ? "text-emerald-700 dark:text-emerald-300" : "text-red-700 dark:text-red-300"}`}>
-                      {slot.resolved ? "RESOLVED" : "MISSING"}
+                      {slot.resolved ? "FILE FOUND" : "MISSING"}
                     </p>
                   </div>
                 ))}
+              </div>
+              <div className="mt-3 border border-sand-200 dark:border-navy-600 p-3 text-[10px] text-navy-500 dark:text-navy-300">
+                <p>SHA receipt: <strong>{photoReceiptCurrent ? "CURRENT" : "MISSING / STALE"}</strong> — {gate.photos.intakeReceiptVerifiedCount}/{gate.photos.intakeReceiptExpectedCount} target verified</p>
+                <code className="mt-1 block break-all text-navy-400">motion-studio/{gate.photos.intakeReceiptPath}</code>
               </div>
               <div className="mt-4">
                 <OpeningProductionHandoffExportButton />
@@ -105,9 +117,10 @@ export function OpeningProductionGatePanel({ compact = false }: { compact?: bool
               <p className="text-[10px] tracking-[0.18em] font-semibold text-navy-400">DO THIS NOW</p>
               <ol className="mt-3 space-y-2 text-xs leading-5 text-navy-600 dark:text-navy-300">
                 <li><span className="font-mono text-navy-400 mr-2">1</span>実写真11枠をcanonical名で揃える</li>
-                <li><span className="font-mono text-navy-400 mr-2">2</span>CANONICAL INTAKE CLIをDRY RUNし、PASS後だけ <code className="text-[10px]">--apply</code> でsource非破壊copy</li>
-                <li><span className="font-mono text-navy-400 mr-2">3</span>BGMの会場上映条件と音源入手元を確認</li>
-                <li><span className="font-mono text-navy-400 mr-2">4</span>写真+BGMが揃ったら60秒previewへ</li>
+                <li><span className="font-mono text-navy-400 mr-2">2</span>CANONICAL INTAKE CLIをDRY RUNし、PASS後だけ <code className="text-[10px]">--apply</code> でsource非破壊copy + SHA receipt</li>
+                <li><span className="font-mono text-navy-400 mr-2">3</span>receipt verifierで11 targetの現在bytes/SHAを確認</li>
+                <li><span className="font-mono text-navy-400 mr-2">4</span>BGMのfile + receipt + 会場上映条件を確認</li>
+                <li><span className="font-mono text-navy-400 mr-2">5</span>写真+BGMが揃ったら60秒previewへ。canonical assembly gateがreceiptも再検証する</li>
               </ol>
               <div className="mt-4 flex flex-wrap gap-3 text-xs">
                 {!photosReady && <Link to="/opening-photo-intake" className="px-3 py-2 bg-navy-800 text-white dark:bg-sand-100 dark:text-navy-900">写真11枚を選ぶ →</Link>}
