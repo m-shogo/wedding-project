@@ -4,6 +4,7 @@ import {fileURLToPath} from 'node:url';
 import {assets} from '../src/data/assets.ts';
 import {openingV1Presentation} from '../src/data/openingV1Presentation.ts';
 import {openingV1SoundCues} from '../src/data/openingV1Sound.ts';
+import {verifyBgmIntakeReceipt} from './verify-production-bgm-intake-receipt.mts';
 
 const studioRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const openingPhotoDir = join(studioRoot, 'public/photos/opening');
@@ -72,7 +73,8 @@ const audioFileState = (assetId: string) => {
   if (!asset) throw new Error(`Opening V1 audio asset missing from registry: ${assetId}`);
   const playable = playableStatuses.has(asset.status);
   const localPublicPath = asset.path.startsWith('public/audio/');
-  const fileExists = localPublicPath ? existsSync(join(studioRoot, asset.path)) : false;
+  const absolutePath = localPublicPath ? join(studioRoot, asset.path) : null;
+  const fileExists = absolutePath ? existsSync(absolutePath) : false;
   return {
     assetId,
     status: asset.status,
@@ -97,7 +99,12 @@ const bgmRows = soundPlan.filter((row) => row.role === 'bgm');
 const ambienceRows = soundPlan.filter((row) => row.role === 'ambience');
 const photosReadyCount = photoPlan.filter((row) => row.ready).length;
 const photosReady = photosReadyCount === photoPlan.length;
-const bgmReady = bgmRows.length === 1 && bgmRows.every((row) => row.ready);
+const bgmAssetReady = bgmRows.length === 1 && bgmRows.every((row) => row.ready);
+const bgmReceipt = bgmRows.length === 1 && bgmRows[0]?.path.startsWith('public/audio/')
+  ? verifyBgmIntakeReceipt({project: 'opening', targetPath: join(studioRoot, bgmRows[0].path)})
+  : null;
+const bgmReceiptCurrent = bgmReceipt?.current === true;
+const bgmReady = bgmAssetReady && bgmReceiptCurrent;
 const ambienceReadyCount = ambienceRows.filter((row) => row.ready).length;
 const ambienceReady = ambienceReadyCount === ambienceRows.length;
 const finalRenderEligible = photosReady && bgmReady;
@@ -107,10 +114,22 @@ const blockers = [
   ...photoPlan.filter((row) => !row.ready).map((row) => `PHOTO_MISSING:${row.slot}`),
   ...bgmRows.filter((row) => !row.ready).map((row) => `BGM_NOT_READY:${row.assetId}:${row.status}`),
   ...(bgmRows.length !== 1 ? [`BGM_CUE_COUNT:${bgmRows.length}`] : []),
+  ...(bgmRows.length === 1 && !bgmReceiptCurrent
+    ? [
+        'BGM_INTAKE_RECEIPT_STALE',
+        ...(bgmReceipt?.blockers ?? ['BGM_RECEIPT_UNAVAILABLE']).map((blocker) => `BGM_INTAKE:${blocker}`),
+      ]
+    : []),
 ];
 const mixWarnings = ambienceRows
   .filter((row) => !row.ready)
   .map((row) => `AMBIENCE_NOT_READY:${row.assetId}:${row.status}`);
+
+const canonicalBgmIntakeActions = [
+  'node --no-warnings scripts/intake-production-bgm.mts --project opening --source "/ABS/PATH/TO/opening-bgm.mp3"',
+  'node --no-warnings scripts/intake-production-bgm.mts --project opening --source "/ABS/PATH/TO/opening-bgm.mp3" --apply --receipt out/intake/opening-bgm-intake.json',
+  'node --no-warnings scripts/verify-production-bgm-intake-receipt.mts --project opening',
+];
 
 const report = {
   schemaVersion: 'opening-v1-assembly-preflight/v1' as const,
@@ -123,6 +142,10 @@ const report = {
   },
   audio: {
     bgmReady,
+    bgmAssetReady,
+    bgmIntakeReceiptCurrent: bgmReceiptCurrent,
+    bgmIntakeReceiptPath: bgmReceipt?.receiptPath ? `out/intake/opening-bgm-intake.json` : null,
+    bgmIntakeReceiptBlockers: bgmReceipt?.blockers ?? ['BGM_RECEIPT_UNAVAILABLE'],
     bgm: bgmRows,
     ambienceReady,
     ambienceReadyCount,
@@ -139,17 +162,19 @@ const report = {
   },
   nextActions: !photosReady
     ? ['実写真11枚をcanonical filenameで投入', 'pnpm sync:photos', 'pnpm opening:assembly-preflight']
-    : !bgmReady
-      ? ['権利確認済みBGMをopening-bgm-mainへ登録しcandidate以上へ昇格', 'pnpm opening:assembly-preflight']
-      : !ambienceReady
-        ? ['60秒previewをrenderしてcrop/focus/motionを確認', '必要ならJ-cut現地音4種を投入', 'pnpm opening:assembly-preflight -- --mix-strict']
-        : ['pnpm render:opening-v1:preview', 'crop/focus/color/motion/audio QA', '問題解消後にpnpm render:opening-v1'],
+    : !bgmRows[0]?.fileExists || !bgmReceiptCurrent
+      ? canonicalBgmIntakeActions
+      : !bgmAssetReady
+        ? ['BGMの会場上映条件/Evidenceを人間確認', 'assets.tsのopening-bgm-mainをcandidate以上へ明示昇格', 'pnpm check:opening-sound:strict']
+        : !ambienceReady
+          ? ['60秒previewをrenderしてcrop/focus/motionを確認', '必要ならJ-cut現地音4種を投入', 'pnpm opening:assembly-preflight -- --mix-strict']
+          : ['pnpm render:opening-v1:preview', 'crop/focus/color/motion/audio QA', '問題解消後にpnpm render:opening-v1'],
 };
 
 if (jsonMode) {
   console.log(JSON.stringify(report, null, 2));
 } else {
-  console.log(`Opening V1 assembly preflight: photos=${photosReadyCount}/${photoPlan.length} BGM=${bgmReady ? 'READY' : 'BLOCKED'} ambience=${ambienceReadyCount}/${ambienceRows.length}`);
+  console.log(`Opening V1 assembly preflight: photos=${photosReadyCount}/${photoPlan.length} BGM=${bgmReady ? 'READY' : 'BLOCKED'} receipt=${bgmReceiptCurrent ? 'CURRENT' : 'MISSING_OR_STALE'} ambience=${ambienceReadyCount}/${ambienceRows.length}`);
   console.log(`finalRenderEligible=${finalRenderEligible ? 'YES' : 'NO'} mixReady=${mixReady ? 'YES' : 'NO'} renderQa=NOT_RUN MacDaVinciActual=NOT_RUN`);
   for (const blocker of blockers) console.log(`BLOCK / ${blocker}`);
   for (const warning of mixWarnings) console.log(`WARN  / ${warning}`);
