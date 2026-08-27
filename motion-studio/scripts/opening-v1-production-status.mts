@@ -9,6 +9,7 @@ const previewPath = join(studioRoot, 'out/preview/opening_v1_preview.mp4');
 const previewReviewPath = join(studioRoot, 'out/qa/opening-v1-preview-review.json');
 const finalRenderPath = join(studioRoot, 'out/opening/opening_v1.mp4');
 const bundlePath = join(studioRoot, 'out/handoff/opening-v1/opening-v1-production-bundle.json');
+const timelineCsvPath = join(studioRoot, 'out/handoff/opening-v1/opening-v1-palmier-timeline.csv');
 const davinciEvidencePath = join(studioRoot, 'out/qa/opening-v1-davinci-finishing-evidence.json');
 const finalApprovalPath = join(studioRoot, 'out/qa/opening-v1-final-delivery-approval.json');
 const jsonMode = process.argv.includes('--json');
@@ -55,6 +56,7 @@ type ProductionBundle = {
   authority?: string;
   finalRender?: {path?: string; sha256?: string};
   humanPreviewReview?: {evidencePath?: string; evidenceSha256?: string};
+  palmier?: {timelineCsv?: string; timelineCsvSha256?: string};
   davinci?: {expectedSha256?: string; productionReady?: boolean};
 };
 
@@ -187,9 +189,12 @@ function bundleStage(finalRenderReady: boolean): Stage {
   if (bundle.davinci?.productionReady !== false) errors.push('BUNDLE_MUST_FAIL_CLOSED');
   if (!existsSync(previewReviewPath)) errors.push('BUNDLE_PREVIEW_REVIEW_EVIDENCE_MISSING');
   else if (bundle.humanPreviewReview?.evidenceSha256 !== shaFile(previewReviewPath)) errors.push('BUNDLE_PREVIEW_REVIEW_SHA_STALE');
+  if (bundle.palmier?.timelineCsv !== rel(timelineCsvPath)) errors.push('BUNDLE_PALMIER_TIMELINE_PATH_STALE');
+  if (!existsSync(timelineCsvPath)) errors.push('BUNDLE_PALMIER_TIMELINE_MISSING');
+  else if (bundle.palmier?.timelineCsvSha256 !== shaFile(timelineCsvPath)) errors.push('BUNDLE_PALMIER_TIMELINE_SHA_STALE');
 
   return errors.length === 0
-    ? {state: 'PASS', detail: 'Production bundle is current against final render and human preview evidence.', path: rel(bundlePath)}
+    ? {state: 'PASS', detail: 'Production bundle is current against final render, human preview evidence and Palmier timeline.', path: rel(bundlePath)}
     : {state: 'STALE', detail: 'Production bundle must be regenerated from current approved artifacts.', path: rel(bundlePath), blockers: errors};
 }
 
@@ -287,7 +292,7 @@ if (!mediaReady) {
   nextActions = ['pnpm export:opening-v1-production-bundle', 'pnpm opening:production-status'];
 } else if (!bundleReady) {
   overallState = 'PRODUCTION_BUNDLE_STALE';
-  nextActions = ['現在のfinal render/human reviewからproduction bundleを再生成', 'pnpm export:opening-v1-production-bundle'];
+  nextActions = ['現在のfinal render/human review/Palmier timelineからproduction bundleを再生成', 'pnpm export:opening-v1-production-bundle'];
 } else if (davinciFinishing.state === 'MISSING') {
   overallState = 'DAVINCI_EVIDENCE_INIT_REQUIRED';
   nextActions = ['pnpm opening:davinci-finishing:init', 'Mac DaVinci Resolveでbundle-bound Actualを実施', 'pnpm opening:davinci-finishing:strict'];
@@ -334,6 +339,7 @@ const report = {
     'DAVINCI_ACTUAL_VERIFIED != FINAL_DELIVERY_APPROVED',
     'APPROVAL_TEMPLATE != APPROVED',
     'MISSING_OR_STALE_UPSTREAM => DOWNSTREAM_NOT_TRUSTED',
+    'PALMIER_TIMELINE_SHA_MISMATCH => PRODUCTION_BUNDLE_STALE',
     'CI_MUST_NOT_PROMOTE_MAC_GUI_ACTUAL',
     'CI_MUST_NOT_APPROVE_FINAL_DELIVERY',
   ],
