@@ -255,7 +255,7 @@ export const profileProductionGate = {
     "intakeReceiptCurrent": false,
     "intakeReceiptPath": "out/intake/profile-bgm-intake.json",
     "intakeReceiptBlockerCodes": [
-      "RECEIPT_MISSING"
+      "BGM_RECEIPT_MISSING"
     ],
     "rightsState": "NOT_RUN",
     "rightsApprovalPath": "out/qa/profile-v1-bgm-rights-approval.json",
