@@ -6,6 +6,7 @@ const studioRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const read = (path: string) => readFileSync(join(studioRoot, path), 'utf8');
 const exporter = read('scripts/export-opening-v1-production-bundle.mts');
 const status = read('scripts/opening-v1-production-status.mts');
+const davinci = read('scripts/opening-v1-davinci-finishing-evidence.mts');
 
 const errors: string[] = [];
 const requireText = (source: string, token: string, message: string) => {
@@ -35,6 +36,16 @@ for (const token of [
   requireText(status, token, `Opening production status missing Palmier SHA validation: ${token}`);
 }
 
+for (const token of [
+  "const timelineCsvPath = join(studioRoot, 'out/handoff/opening-v1/opening-v1-palmier-timeline.csv');",
+  'palmier: {timelineCsv: string; timelineCsvSha256: string};',
+  "throw new Error('DAVINCI_FINISHING_PALMIER_TIMELINE_PATH_MISMATCH')",
+  "throw new Error('DAVINCI_FINISHING_PALMIER_TIMELINE_MISSING')",
+  "throw new Error('DAVINCI_FINISHING_PALMIER_TIMELINE_SHA_MISMATCH')",
+]) {
+  requireText(davinci, token, `Opening DaVinci evidence direct path missing Palmier SHA validation: ${token}`);
+}
+
 if (exporter.indexOf('const timelineCsvSha256 = shaText(timelineCsv);') > exporter.indexOf('const bundle = {')) {
   errors.push('Palmier timeline SHA must be computed before the bundle object is constructed');
 }
@@ -43,6 +54,9 @@ if (exporter.indexOf('writeFileSync(timelineCsvPath, timelineCsv);') > exporter.
 }
 if (status.includes("timelineCsvSha256?: string") && !status.includes('shaFile(timelineCsvPath)')) {
   errors.push('Production status declares Palmier timeline SHA but does not compare it to the current CSV');
+}
+if (davinci.includes('timelineCsvSha256: string') && !davinci.includes('shaFile(timelineCsvPath)')) {
+  errors.push('DaVinci evidence declares Palmier timeline SHA but does not compare it to the current CSV');
 }
 
 for (const forbidden of [
@@ -58,4 +72,4 @@ if (errors.length > 0) {
   process.exit(1);
 }
 
-console.log('Opening Palmier timeline SHA binding contracts OK: bundle records the deterministic CSV hash, production status rejects path/missing/hash drift, and Mac Actual remains separate.');
+console.log('Opening Palmier timeline SHA binding contracts OK: bundle records the deterministic CSV hash, production status rejects drift, direct DaVinci evidence also fail-closes, and Mac Actual remains separate.');
