@@ -1,0 +1,61 @@
+name: Opening V1 Canonical Photo Resolution CI
+
+on:
+  pull_request:
+    paths:
+      - "motion-studio/src/data/openingV1Media.ts"
+      - "motion-studio/scripts/check-opening-photos.mts"
+      - ".github/workflows/opening-v1-canonical-photo-resolution-ci.yml"
+  push:
+    branches: [main]
+    paths:
+      - "motion-studio/src/data/openingV1Media.ts"
+      - "motion-studio/scripts/check-opening-photos.mts"
+      - ".github/workflows/opening-v1-canonical-photo-resolution-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  canonical-photo-resolution:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Verify Opening photo roles fail closed
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const media = fs.readFileSync('motion-studio/src/data/openingV1Media.ts', 'utf8');
+          const checker = fs.readFileSync('motion-studio/scripts/check-opening-photos.mts', 'utf8');
+          const errors = [];
+
+          if (!media.includes('aliasSet.includes(base)')) {
+            errors.push('Opening photo resolver must use exact normalized alias equality');
+          }
+          if (!media.includes('return semanticMatch ?? null')) {
+            errors.push('Missing semantic photo roles must remain null');
+          }
+          if (media.includes('openingPhotos.length >=') || media.includes('orderedKeys.indexOf')) {
+            errors.push('Array-length/order fallback must not assign production photo roles');
+          }
+          if (!media.includes('Production slots are semantic roles, not array positions')) {
+            errors.push('Fail-close semantic-role boundary is missing');
+          }
+          if (!checker.includes('枚数や並び順では自動割当しません')) {
+            errors.push('Operator-facing checker must explain that order fallback is forbidden');
+          }
+          if (checker.includes('sorted fallback')) {
+            errors.push('Checker still advertises the removed sorted fallback');
+          }
+
+          if (errors.length) {
+            console.error(`Opening canonical photo resolution FAILED (${errors.length})`);
+            for (const error of errors) console.error(`- ${error}`);
+            process.exit(1);
+          }
+
+          console.log('Opening canonical photo resolution OK: semantic filename match only; unrelated 11+ files cannot silently fill production slots.');
+          NODE
