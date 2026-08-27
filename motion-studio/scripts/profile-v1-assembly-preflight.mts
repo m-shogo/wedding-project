@@ -182,6 +182,24 @@ const canonicalBgmIntakeActions = [
   'node --no-warnings scripts/intake-production-bgm.mts --project profile --source "/ABS/PATH/TO/profile-bgm.mp3" --apply --receipt out/intake/profile-bgm-intake.json',
   'node --no-warnings scripts/verify-production-bgm-intake-receipt.mts --project profile',
 ];
+const bgmRightsApprovalActions = [
+  'node --no-warnings scripts/profile-v1-bgm-rights-approval.mts --init',
+  '生成されたHOLD artifactを人間が権利証拠に基づいて編集',
+  'node --no-warnings scripts/profile-v1-bgm-rights-approval.mts --strict',
+];
+const inputRecoveryActions = [
+  ...(!mediaReady
+    ? [
+        `Profile実素材を ${profileV1ProductionContract.mediaDirectory}/ へcanonical stem名で投入`,
+        'node --no-warnings scripts/profile-v1-assembly-preflight.mts',
+      ]
+    : []),
+  ...(!bgmFileExists || !bgmReceiptCurrent
+    ? canonicalBgmIntakeActions
+    : !bgmReady
+      ? bgmRightsApprovalActions
+      : []),
+];
 
 const report = {
   schemaVersion: 'profile-v1-assembly-preflight/v1' as const,
@@ -220,29 +238,18 @@ const report = {
     macDaVinciActualState: 'NOT_RUN' as const,
     productionReady: false,
   },
-  nextActions: !mediaReady
-    ? [
-        `Profile実素材を ${profileV1ProductionContract.mediaDirectory}/ へcanonical stem名で投入`,
-        'node --no-warnings scripts/profile-v1-assembly-preflight.mts',
-      ]
-    : !bgmFileExists || !bgmReceiptCurrent
-      ? canonicalBgmIntakeActions
-      : !bgmReady
+  nextActions: inputRecoveryActions.length > 0
+    ? inputRecoveryActions
+    : structureReview.state !== 'PASS'
+      ? ['30秒全5章structure previewを人間確認', 'structure review evidenceをPASSへ更新', '実素材preview QAへ進む']
+      : realMediaReview.state !== 'PASS'
         ? [
-            'node --no-warnings scripts/profile-v1-bgm-rights-approval.mts --init',
-            '生成されたHOLD artifactを人間が権利証拠に基づいて編集',
-            'node --no-warnings scripts/profile-v1-bgm-rights-approval.mts --strict',
+            'node --no-warnings scripts/render-profile-v1-real-media-preview.mts',
+            'node --no-warnings scripts/profile-v1-real-media-review.mts --init',
+            '17素材のcrop/focus/color/emotional-fit/contentと5章flow/readability/role fitを人間確認',
+            'node --no-warnings scripts/profile-v1-real-media-review.mts --strict',
           ]
-        : structureReview.state !== 'PASS'
-          ? ['30秒全5章structure previewを人間確認', 'structure review evidenceをPASSへ更新', '実素材preview QAへ進む']
-          : realMediaReview.state !== 'PASS'
-            ? [
-                'node --no-warnings scripts/render-profile-v1-real-media-preview.mts',
-                'node --no-warnings scripts/profile-v1-real-media-review.mts --init',
-                '17素材のcrop/focus/color/emotional-fit/contentと5章flow/readability/role fitを人間確認',
-                'node --no-warnings scripts/profile-v1-real-media-review.mts --strict',
-              ]
-            : ['Profile assembly input + structure + real-media Human QA ready', 'final render / DaVinci handoffへ進む'],
+        : ['Profile assembly input + structure + real-media Human QA ready', 'final render / DaVinci handoffへ進む'],
 };
 
 if (jsonMode) {
