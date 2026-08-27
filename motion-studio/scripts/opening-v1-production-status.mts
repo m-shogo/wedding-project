@@ -10,6 +10,7 @@ const previewReviewPath = join(studioRoot, 'out/qa/opening-v1-preview-review.jso
 const finalRenderPath = join(studioRoot, 'out/opening/opening_v1.mp4');
 const bundlePath = join(studioRoot, 'out/handoff/opening-v1/opening-v1-production-bundle.json');
 const davinciEvidencePath = join(studioRoot, 'out/qa/opening-v1-davinci-finishing-evidence.json');
+const finalApprovalPath = join(studioRoot, 'out/qa/opening-v1-final-delivery-approval.json');
 const jsonMode = process.argv.includes('--json');
 const strict = process.argv.includes('--strict');
 
@@ -25,7 +26,9 @@ type OverallState =
   | 'PRODUCTION_BUNDLE_STALE'
   | 'DAVINCI_EVIDENCE_INIT_REQUIRED'
   | 'DAVINCI_ACTUAL_REQUIRED_OR_STALE'
-  | 'AWAITING_FINAL_DELIVERY_APPROVAL';
+  | 'FINAL_DELIVERY_APPROVAL_INIT_REQUIRED'
+  | 'FINAL_DELIVERY_APPROVAL_REQUIRED_OR_STALE'
+  | 'PRODUCTION_READY';
 
 type Stage = {
   state: StageState;
@@ -217,6 +220,33 @@ function davinciStage(bundleReady: boolean): Stage {
   };
 }
 
+function finalApprovalStage(davinciReady: boolean): Stage {
+  if (!davinciReady) {
+    return {state: 'NOT_RUN', detail: 'Blocked upstream until current Mac DaVinci Actual is verified.', path: rel(finalApprovalPath)};
+  }
+  if (!existsSync(finalApprovalPath)) {
+    return {
+      state: 'MISSING',
+      detail: 'Initialize the human final delivery approval bound to the current DaVinci export.',
+      path: rel(finalApprovalPath),
+    };
+  }
+  const result = runNode('scripts/opening-v1-final-delivery-approval.mts', ['--strict']);
+  if (result.status === 0) {
+    return {
+      state: 'PASS',
+      detail: 'Current DaVinci export has explicit SHA-bound human final delivery approval.',
+      path: rel(finalApprovalPath),
+    };
+  }
+  return {
+    state: 'BLOCKED',
+    detail: 'Final delivery approval is HOLD, incomplete, failed, or stale against current upstream evidence.',
+    path: rel(finalApprovalPath),
+    blockers: [...outputLines(result.stdout), ...outputLines(result.stderr)],
+  };
+}
+
 const assembly = readAssembly();
 const mediaReady = assembly.stage.state === 'PASS';
 const previewRender = previewRenderStage(mediaReady);
@@ -229,6 +259,8 @@ const productionBundle = bundleStage(finalRenderReady);
 const bundleReady = productionBundle.state === 'PASS';
 const davinciFinishing = davinciStage(bundleReady);
 const davinciReady = davinciFinishing.state === 'PASS';
+const finalDeliveryApproval = finalApprovalStage(davinciReady);
+const finalDeliveryApproved = finalDeliveryApproval.state === 'PASS';
 
 let overallState: OverallState;
 let nextActions: string[];
@@ -262,9 +294,15 @@ if (!mediaReady) {
 } else if (!davinciReady) {
   overallState = 'DAVINCI_ACTUAL_REQUIRED_OR_STALE';
   nextActions = ['Mac DaVinci Resolve Actualの未完了/FAIL/stale項目を解消', 'pnpm opening:davinci-finishing:strict'];
+} else if (finalDeliveryApproval.state === 'MISSING') {
+  overallState = 'FINAL_DELIVERY_APPROVAL_INIT_REQUIRED';
+  nextActions = ['pnpm opening:final-delivery-approval:init', 'DaVinci final exportを人間が最終確認', 'approval artifactを明示APPROVEする'];
+} else if (!finalDeliveryApproved) {
+  overallState = 'FINAL_DELIVERY_APPROVAL_REQUIRED_OR_STALE';
+  nextActions = ['current SHA-bound final delivery approvalを完了または再初期化', 'pnpm opening:final-delivery-approval:strict'];
 } else {
-  overallState = 'AWAITING_FINAL_DELIVERY_APPROVAL';
-  nextActions = ['DaVinci Actual済みexportを人間が最終確認', 'final delivery approvalを別artifactとして記録するまではproductionReadyへ昇格しない'];
+  overallState = 'PRODUCTION_READY';
+  nextActions = ['承認済みDaVinci export SHAを上映用正本として固定', '媒体コピー/会場再生テスト等の外部運用は別管理'];
 }
 
 const report = {
@@ -278,6 +316,7 @@ const report = {
     finalRender,
     productionBundle,
     davinciFinishing,
+    finalDeliveryApproval,
   },
   readiness: {
     finalRenderEligible: assembly.report?.readiness?.finalRenderEligible === true,
@@ -287,14 +326,16 @@ const report = {
     productionBundleCurrent: bundleReady,
     macDaVinciActualVerified: davinciReady,
     readyForFinalDeliveryApproval: davinciReady,
-    productionReady: false as const,
+    finalDeliveryApproved,
+    productionReady: finalDeliveryApproved,
   },
   nextActions,
   guardrails: [
-    'STATUS_PASS != FINAL_DELIVERY_APPROVED',
-    'DAVINCI_ACTUAL_VERIFIED != PRODUCTION_READY',
+    'DAVINCI_ACTUAL_VERIFIED != FINAL_DELIVERY_APPROVED',
+    'APPROVAL_TEMPLATE != APPROVED',
     'MISSING_OR_STALE_UPSTREAM => DOWNSTREAM_NOT_TRUSTED',
     'CI_MUST_NOT_PROMOTE_MAC_GUI_ACTUAL',
+    'CI_MUST_NOT_APPROVE_FINAL_DELIVERY',
   ],
 };
 
@@ -306,9 +347,9 @@ if (jsonMode) {
     console.log(`${stage.state.padEnd(7)} / ${name} / ${stage.detail}`);
     for (const blocker of stage.blockers ?? []) console.log(`  BLOCK / ${blocker}`);
   }
-  console.log(`readyForFinalDeliveryApproval=${report.readiness.readyForFinalDeliveryApproval ? 'YES' : 'NO'} productionReady=NO`);
+  console.log(`readyForFinalDeliveryApproval=${report.readiness.readyForFinalDeliveryApproval ? 'YES' : 'NO'} finalDeliveryApproved=${finalDeliveryApproved ? 'YES' : 'NO'} productionReady=${finalDeliveryApproved ? 'YES' : 'NO'}`);
   console.log(`NEXT / ${nextActions.join(' → ')}`);
   console.log('JSON / pnpm opening:production-status -- --json');
 }
 
-if (strict && !davinciReady) process.exit(1);
+if (strict && !finalDeliveryApproved) process.exit(1);
