@@ -7,7 +7,15 @@ const davinci=readFileSync(join(root,'scripts/profile-v1-davinci-finishing-evide
 const approval=readFileSync(join(root,'scripts/profile-v1-final-delivery-approval.mts'),'utf8');
 const status=readFileSync(join(root,'scripts/profile-v1-production-status.mts'),'utf8');
 const errors:string[]=[];const need=(s:string,t:string,w:string)=>{if(!s.includes(t))errors.push(`${w} missing ${t}`)};
-for(const t of ['HUMAN_FINAL_RENDER_REVIEW','profile-v1-final-render-review/v1','STALE_FINAL_RENDER','productionReady: false'])need(review,t,'review');
+for(const t of [
+  'HUMAN_FINAL_RENDER_REVIEW',
+  'profile-v1-final-render-review/v1',
+  'STALE_FINAL_RENDER',
+  'productionReady: false',
+  'BOUND_AT_INVALID',
+  'REVIEWED_BEFORE_BINDING',
+  'reviewedAtMs < boundAtMs',
+])need(review,t,'review');
 for(const t of [
   'profile-v1-production-bundle/v1',
   'FINAL_RENDER_BOUND_HANDOFF',
@@ -87,6 +95,7 @@ for(const t of [
 ])need(status,t,'status');
 if(bundle.includes("['assembly', 'scripts/profile-v1-assembly-preflight.mts'"))errors.push('bundle must use full production preflight rather than bypass generated-accent contracts');
 if(review.includes('productionReady: true')||bundle.includes('productionReady: true')||davinci.includes('productionReady:true'))errors.push('upstream layers must not self-promote productionReady=true');
+if(!review.includes('reviewedAtMs < boundAtMs'))errors.push('final render Human review must occur after its current evidence binding');
 if(!approval.includes("a.productionReady!==(a.decision==='APPROVE')"))errors.push('final approval must bind productionReady to explicit APPROVE');
 if(!approval.includes('a.productionBundle.path!==rel(bundlePath)')||!approval.includes('a.davinciEvidence.path!==rel(davinciPath)'))errors.push('final approval must bind canonical bundle/evidence paths');
 if(!approval.includes('decidedAtMs<boundAtMs'))errors.push('final approval must reject approval timestamps older than the current binding');
@@ -96,4 +105,4 @@ if(davinci.includes('generatedAccents:GeneratedAccentRoute[]')&&!davinci.include
 if(davinci.includes('generatedAccentRoutes:GeneratedAccentRoute[]')&&!davinci.includes('sameAccentRoutes(bundle.davinci?.generatedAccentRoutes)'))errors.push('DaVinci direct path must compare DaVinci accent routes with canonical Motion Zukan registry');
 if(!davinci.includes('existsSync(exportPath)')||!davinci.includes('sha(exportPath)!==ev.export.sha256'))errors.push('DaVinci Actual must verify the declared exported movie exists and matches its recorded SHA');
 if(errors.length){console.error(`Profile V1 final handoff contracts FAILED (${errors.length})`);for(const e of errors)console.error(`- ${e}`);process.exit(1)}
-console.log('Profile V1 final handoff contracts OK: direct DaVinci evidence validates canonical Motion Zukan generated-accent routes, SHA-bound Palmier timeline, source render, exported movie bytes and a Human review made after evidence binding, while only a current path/SHA-bound Human final approval made after binding can yield productionReady.');
+console.log('Profile V1 final handoff contracts OK: final render Human review is temporally bound to the current render evidence; DaVinci evidence validates canonical Motion Zukan generated-accent routes, SHA-bound Palmier timeline, source render, exported movie bytes and a Human review made after evidence binding; only a current path/SHA-bound Human final approval made after binding can yield productionReady.');
