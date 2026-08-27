@@ -14,6 +14,7 @@ const bundlePath = join(outDir, 'opening-v1-production-bundle.json');
 const timelineCsvPath = join(outDir, 'opening-v1-palmier-timeline.csv');
 
 const shaFile = (path: string) => createHash('sha256').update(readFileSync(path)).digest('hex');
+const shaText = (text: string) => createHash('sha256').update(text).digest('hex');
 const rel = (path: string) => relative(studioRoot, path).replaceAll('\\', '/');
 const run = (args: string[]) => spawnSync(process.execPath, ['--no-warnings', ...args], {
   cwd: studioRoot,
@@ -96,6 +97,27 @@ if (cursor !== openingV1TotalSec || openingV1TotalSec !== 60) {
 }
 
 const finalRenderSha256 = shaFile(finalRenderPath);
+const csvEscape = (value: unknown) => {
+  const text = String(value);
+  return /[",\n]/.test(text) ? `"${text.replaceAll('"', '""')}"` : text;
+};
+const csvRows = [
+  ['order', 'scene_id', 'title', 'start_sec', 'end_sec', 'duration_sec', 'kind', 'owner', 'final_render_sha256'],
+  ...sceneTimeline.map((scene) => [
+    scene.order,
+    scene.sceneId,
+    scene.title,
+    scene.startSec,
+    scene.endSec,
+    scene.durationSec,
+    scene.kind,
+    scene.owner,
+    finalRenderSha256,
+  ]),
+];
+const timelineCsv = `${csvRows.map((row) => row.map(csvEscape).join(',')).join('\n')}\n`;
+const timelineCsvSha256 = shaText(timelineCsv);
+
 const bundle = {
   schemaVersion: 'opening-v1-production-bundle/v1',
   authority: 'FINAL_RENDER_BOUND_HANDOFF',
@@ -133,6 +155,7 @@ const bundle = {
   palmier: {
     handoffMode: 'REFERENCE_TIMELINE_AND_FINAL_RENDER',
     timelineCsv: rel(timelineCsvPath),
+    timelineCsvSha256,
     instruction: '60秒のscene boundaryとfinal render SHAを正本として扱い、編集時に別renderへ差し替えない。必要な再編集はMotion Studio正本へ戻してpreview reviewを再実行する。',
   },
   davinci: {
@@ -151,6 +174,7 @@ const bundle = {
     'HUMAN_PREVIEW_REVIEW_PASS != FINAL_DELIVERY_APPROVED',
     'BUNDLE_EXPORTED != PRODUCTION_READY',
     'RENDER_SHA_MISMATCH => STOP_AND_REGENERATE_HANDOFF',
+    'PALMIER_TIMELINE_SHA_MISMATCH => STOP_AND_REGENERATE_HANDOFF',
   ],
   nextActions: [
     'Palmierでscene boundaryとintentを確認し、正本renderを置換しない',
@@ -160,30 +184,12 @@ const bundle = {
   ],
 };
 
-const csvEscape = (value: unknown) => {
-  const text = String(value);
-  return /[",\n]/.test(text) ? `"${text.replaceAll('"', '""')}"` : text;
-};
-const csvRows = [
-  ['order', 'scene_id', 'title', 'start_sec', 'end_sec', 'duration_sec', 'kind', 'owner', 'final_render_sha256'],
-  ...sceneTimeline.map((scene) => [
-    scene.order,
-    scene.sceneId,
-    scene.title,
-    scene.startSec,
-    scene.endSec,
-    scene.durationSec,
-    scene.kind,
-    scene.owner,
-    finalRenderSha256,
-  ]),
-];
-
 mkdirSync(outDir, {recursive: true});
+writeFileSync(timelineCsvPath, timelineCsv);
 writeFileSync(bundlePath, `${JSON.stringify(bundle, null, 2)}\n`);
-writeFileSync(timelineCsvPath, `${csvRows.map((row) => row.map(csvEscape).join(',')).join('\n')}\n`);
 
 console.log(`Opening V1 production bundle exported: ${rel(bundlePath)}`);
 console.log(`Palmier timeline exported: ${rel(timelineCsvPath)}`);
 console.log(`finalRenderSha256=${finalRenderSha256}`);
+console.log(`timelineCsvSha256=${timelineCsvSha256}`);
 console.log('DaVinci Mac Actual remains NOT_RUN; productionReady=false.');
