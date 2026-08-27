@@ -51,6 +51,12 @@ type RightsStatus = {
   authority: 'DERIVED_BGM_RIGHTS_STATUS';
   state: 'NOT_RUN' | 'BLOCKED' | 'CLEARED';
   bgm: {path: string; sha256: string} | null;
+  intakeReceipt: {
+    current: boolean;
+    receiptPath: string;
+    targetPath: string;
+    blockers: string[];
+  };
   approvalPath: string;
   blockers: string[];
   rightsCleared: boolean;
@@ -131,7 +137,8 @@ if (
 }
 
 const bgmRightsState = rightsStatus.state;
-const bgmReady = bgmFileExists && rightsStatus.rightsCleared;
+const bgmReceiptCurrent = rightsStatus.intakeReceipt.current;
+const bgmReady = bgmFileExists && bgmReceiptCurrent && rightsStatus.rightsCleared;
 const finalRenderEligible = mediaReady && bgmReady;
 const assemblyReady =
   finalRenderEligible &&
@@ -170,6 +177,12 @@ const chapterRows = profileV1Chapters.map((chapter) => {
   };
 });
 
+const canonicalBgmIntakeActions = [
+  'node --no-warnings scripts/intake-production-bgm.mts --project profile --source "/ABS/PATH/TO/profile-bgm.mp3"',
+  'node --no-warnings scripts/intake-production-bgm.mts --project profile --source "/ABS/PATH/TO/profile-bgm.mp3" --apply --receipt out/intake/profile-bgm-intake.json',
+  'node --no-warnings scripts/verify-production-bgm-intake-receipt.mts --project profile',
+];
+
 const report = {
   schemaVersion: 'profile-v1-assembly-preflight/v1' as const,
   authority: 'MOTION_STUDIO_DERIVED_PREFLIGHT' as const,
@@ -186,6 +199,9 @@ const report = {
     assetId: profileV1ProductionContract.bgmAssetId,
     path: 'public/audio/profile/bgm-main.mp3',
     fileExists: bgmFileExists,
+    intakeReceiptCurrent: bgmReceiptCurrent,
+    intakeReceiptPath: rightsStatus.intakeReceipt.receiptPath,
+    intakeReceiptBlockers: rightsStatus.intakeReceipt.blockers,
     rightsState: bgmRightsState,
     rightsApprovalPath: rightsStatus.approvalPath,
     rightsBoundSha256: rightsStatus.bgm?.sha256 ?? null,
@@ -209,8 +225,8 @@ const report = {
         `Profile実素材を ${profileV1ProductionContract.mediaDirectory}/ へcanonical stem名で投入`,
         'node --no-warnings scripts/profile-v1-assembly-preflight.mts',
       ]
-    : !bgmFileExists
-      ? ['権利確認対象BGMを public/audio/profile/bgm-main.mp3 へ配置', 'BGM rights approvalを初期化']
+    : !bgmFileExists || !bgmReceiptCurrent
+      ? canonicalBgmIntakeActions
       : !bgmReady
         ? [
             'node --no-warnings scripts/profile-v1-bgm-rights-approval.mts --init',
@@ -233,7 +249,7 @@ if (jsonMode) {
   console.log(JSON.stringify(report, null, 2));
 } else {
   console.log(
-    `Profile V1 assembly preflight: chapters=${chapterRows.filter((chapter) => chapter.ready).length}/${chapterRows.length} media=${readyMediaCount}/${mediaSlots.length} BGM=${bgmReady ? 'READY' : `BLOCKED/${bgmRightsState}`} structure=${structureReview.state} realMediaQA=${realMediaReview.state}`,
+    `Profile V1 assembly preflight: chapters=${chapterRows.filter((chapter) => chapter.ready).length}/${chapterRows.length} media=${readyMediaCount}/${mediaSlots.length} BGM=${bgmReady ? 'READY' : `BLOCKED/${bgmRightsState}`} receipt=${bgmReceiptCurrent ? 'CURRENT' : 'MISSING_OR_STALE'} structure=${structureReview.state} realMediaQA=${realMediaReview.state}`,
   );
   console.log(`finalRenderEligible=${finalRenderEligible ? 'YES' : 'NO'} assemblyReady=${assemblyReady ? 'YES' : 'NO'} structurePreviewQA=${structureReview.state} realMediaPreviewQA=${realMediaReview.state} HumanContentQA=${realMediaReview.state} MacDaVinciActual=NOT_RUN productionReady=NO`);
   for (const blocker of blockers) console.log(`BLOCK / ${blocker}`);
