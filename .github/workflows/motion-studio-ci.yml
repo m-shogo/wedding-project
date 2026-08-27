@@ -126,7 +126,7 @@ jobs:
       - name: Opening V1 production status identifies the exact first blocker
         run: |
           mkdir -p out/qa
-          pnpm opening:production-status -- --json > out/qa/opening-v1-production-status.json
+          node --no-warnings scripts/opening-v1-production-status.mts --json > out/qa/opening-v1-production-status.json
           node -e "const fs=require('fs'); const r=JSON.parse(fs.readFileSync('out/qa/opening-v1-production-status.json','utf8')); if(r.schemaVersion!=='opening-v1-production-status/v1') process.exit(1); if(r.authority!=='DERIVED_PRODUCTION_STATUS') process.exit(1); if(r.overallState!=='MEDIA_REQUIRED') process.exit(1); if(r.stages.media.state!=='BLOCKED') process.exit(1); if(r.stages.previewRender.state!=='NOT_RUN') process.exit(1); if(r.readiness.macDaVinciActualVerified!==false) process.exit(1); if(r.readiness.productionReady!==false) process.exit(1);"
           if pnpm opening:production-status:strict; then
             echo "production status unexpectedly reached DaVinci Actual on a fresh clone"
