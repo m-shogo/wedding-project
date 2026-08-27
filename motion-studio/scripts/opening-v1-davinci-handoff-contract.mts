@@ -58,7 +58,6 @@ const report = {
   current: blockers.length === 0,
   sourceAuthorities: [
     'scripts/export-opening-v1-production-bundle.mts#bundle.davinci',
-    'out/qa/opening-v1-final-render-review.json',
     'scripts/opening-v1-davinci-finishing-evidence.mts',
   ],
   requiredHumanFinalRenderReview: {
