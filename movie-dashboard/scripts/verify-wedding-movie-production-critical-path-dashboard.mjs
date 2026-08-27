@@ -29,6 +29,17 @@ for (const token of [
   'downstreamBlockedStages',
   'inputLanesFor(projectId, current.name)',
   'stageBlockerCodesFor(projectId, current.name, inputLanes)',
+  'normalizedStageBlockerCodes',
+  'ARTIFACT_MISSING:',
+  'ARTIFACT_STALE:',
+  'STAGE_BLOCKED:',
+  'UPSTREAM_BLOCKED:',
+  'currentRawBlockers',
+  'blockerCodes: normalizedStageBlockerCodes(current.name, current, currentRawBlockers)',
+  'ordered.slice(currentIndex + 1).map',
+  'blockerCodes: normalizedStageBlockerCodes(stage.name, stage, rawBlockers, upstreamStageName)',
+  'recovery: [...stage.recovery]',
+  'actionTargets: actionTargetsFor(projectId, stage.name)',
   'openingProductionGate.photos.intakeReceiptCurrent',
   'openingProductionGate.bgm.intakeReceiptCurrent',
   'openingProductionStatus.sourceRevalidation.realMediaPreview.blockers',
@@ -43,7 +54,6 @@ for (const token of [
   'PROFILE_BGM_RIGHTS_',
   'OPENING_BGM_FILE_MISSING',
   'OPENING_BGM_STATUS_',
-  'blockerCodes: stageBlockerCodesFor',
   'route: "/opening-photo-intake"',
   'route: "/opening-bgm-intake"',
   'route: "/profile-media-intake"',
@@ -51,6 +61,7 @@ for (const token of [
   'route: "/profile-planner"',
   'BGM実ファイル・intake receipt・上映権利確認をcurrent SHAへ固定する',
   'BLOCKER_CODE_VISIBLE != BLOCKER_RESOLVED',
+  'NORMALIZED_BLOCKER_CODE != RAW_MOTION_STUDIO_EVIDENCE',
   'INPUT_LANE_READY != PROJECT_PRODUCTION_READY',
   'ACTION_TARGET_VISIBLE != ACTION_COMPLETED',
   'productionReady: opening.productionReady && profile.productionReady',
@@ -89,6 +100,10 @@ for (const token of [
   'to={target.route}',
   'target.purpose',
   'project.downstreamBlockedStages',
+  'stage.blockerCodes.length > 0',
+  'stage.recovery.length > 0',
+  'stage.actionTargets.length > 0',
+  'stage.actionTargets.map',
   'wedding-movie-production-critical-path.json',
   'Opening:',
   'Profile:',
@@ -148,4 +163,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log('Wedding Movie production critical-path dashboard OK: current blocker codes, independent input lanes with Profile/Opening receipt + rights truth, actionable intake routes, downstream stages and cross-project readiness remain visible/exportable without promoting Human QA or Mac Actual.');
+console.log('Wedding Movie production critical-path dashboard OK: current and downstream stages preserve blocker codes, artifact paths, canonical recovery and action routing while independent input lanes retain Profile/Opening receipt + rights truth without promoting Human QA or Mac Actual.');
