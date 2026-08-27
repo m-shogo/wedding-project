@@ -15,11 +15,7 @@ export const profileProductionGate = {
       "order": 1,
       "title": "出発",
       "role": "旅行テーマの世界観を提示してプロフィール本編へ出発する。",
-      "editIntent": [
-        "10秒試作から成立確認",
-        "BGMと短いテロップを合わせる",
-        "AI背景は仮素材に限定可能"
-      ],
+      "editIntent": ["10秒試作から成立確認", "BGMと短いテロップを合わせる", "AI背景は仮素材に限定可能"],
       "requiredCount": 3,
       "readyCount": 0,
       "ready": false
@@ -29,11 +25,7 @@ export const profileProductionGate = {
       "order": 2,
       "title": "それぞれの旅",
       "role": "新郎新婦それぞれの幼少期から学生・友人期までの歩みを見せる。",
-      "editIntent": [
-        "写真中心",
-        "ゆっくりズーム",
-        "テロップは短く"
-      ],
+      "editIntent": ["写真中心", "ゆっくりズーム", "テロップは短く"],
       "requiredCount": 4,
       "readyCount": 0,
       "ready": false
@@ -43,10 +35,7 @@ export const profileProductionGate = {
       "order": 3,
       "title": "交差",
       "role": "出会い・交際・同棲を、二人の写真と航路表現でつなぐ。",
-      "editIntent": [
-        "写真の感情を優先",
-        "地図や航路で章切り替え"
-      ],
+      "editIntent": ["写真の感情を優先", "地図や航路で章切り替え"],
       "requiredCount": 3,
       "readyCount": 0,
       "ready": false
@@ -56,10 +45,7 @@ export const profileProductionGate = {
       "order": 4,
       "title": "冒険",
       "role": "旅行・犬・楽しい思い出を明るくテンポ良く見せる。",
-      "editIntent": [
-        "前章より少しテンポを上げる",
-        "笑いと明るさを入れる"
-      ],
+      "editIntent": ["前章より少しテンポを上げる", "笑いと明るさを入れる"],
       "requiredCount": 4,
       "readyCount": 0,
       "ready": false
@@ -69,11 +55,7 @@ export const profileProductionGate = {
       "order": 5,
       "title": "到着",
       "role": "現在・入籍・結婚式から披露宴入場へつなぐ。",
-      "editIntent": [
-        "現在の二人を主役にする",
-        "横浜・会場へ接続",
-        "光や到着の演出で締める"
-      ],
+      "editIntent": ["現在の二人を主役にする", "横浜・会場へ接続", "光や到着の演出で締める"],
       "requiredCount": 3,
       "readyCount": 0,
       "ready": false
@@ -82,160 +64,33 @@ export const profileProductionGate = {
   "expectedMediaCount": 17,
   "resolvedMediaCount": 0,
   "mediaMissingCount": 17,
+  "media": {
+    "ready": false,
+    "fileReady": false,
+    "intakeReceiptCurrent": false,
+    "intakeReceiptPath": "out/intake/profile-media-intake.json",
+    "intakeReceiptVerifiedCount": 0,
+    "intakeReceiptExpectedCount": 17,
+    "intakeReceiptBlockerCodes": ["RECEIPT_MISSING"]
+  },
   "mediaSlots": [
-    {
-      "id": "departure-airport",
-      "chapterId": "departure",
-      "label": "空港",
-      "kind": "photo-or-video",
-      "canonicalStem": "departure-airport",
-      "file": null,
-      "ready": false
-    },
-    {
-      "id": "departure-runway",
-      "chapterId": "departure",
-      "label": "滑走路",
-      "kind": "photo-or-video",
-      "canonicalStem": "departure-runway",
-      "file": null,
-      "ready": false
-    },
-    {
-      "id": "departure-window-clouds",
-      "chapterId": "departure",
-      "label": "飛行機窓・雲",
-      "kind": "photo-or-video",
-      "canonicalStem": "departure-window-clouds",
-      "file": null,
-      "ready": false
-    },
-    {
-      "id": "groom-childhood",
-      "chapterId": "separate-journeys",
-      "label": "新郎 幼少期・家族",
-      "kind": "photo",
-      "canonicalStem": "groom-childhood",
-      "file": null,
-      "ready": false
-    },
-    {
-      "id": "groom-school-friends",
-      "chapterId": "separate-journeys",
-      "label": "新郎 学生・友人",
-      "kind": "photo",
-      "canonicalStem": "groom-school-friends",
-      "file": null,
-      "ready": false
-    },
-    {
-      "id": "bride-childhood",
-      "chapterId": "separate-journeys",
-      "label": "新婦 幼少期・家族",
-      "kind": "photo",
-      "canonicalStem": "bride-childhood",
-      "file": null,
-      "ready": false
-    },
-    {
-      "id": "bride-school-friends",
-      "chapterId": "separate-journeys",
-      "label": "新婦 学生・友人",
-      "kind": "photo",
-      "canonicalStem": "bride-school-friends",
-      "file": null,
-      "ready": false
-    },
-    {
-      "id": "couple-early",
-      "chapterId": "intersection",
-      "label": "出会い・交際初期",
-      "kind": "photo",
-      "canonicalStem": "couple-early",
-      "file": null,
-      "ready": false
-    },
-    {
-      "id": "couple-daily",
-      "chapterId": "intersection",
-      "label": "日常・同棲",
-      "kind": "photo",
-      "canonicalStem": "couple-daily",
-      "file": null,
-      "ready": false
-    },
-    {
-      "id": "couple-trip",
-      "chapterId": "intersection",
-      "label": "二人の旅行",
-      "kind": "photo",
-      "canonicalStem": "couple-trip",
-      "file": null,
-      "ready": false
-    },
-    {
-      "id": "adventure-hawaii",
-      "chapterId": "adventure",
-      "label": "ハワイ",
-      "kind": "photo",
-      "canonicalStem": "adventure-hawaii",
-      "file": null,
-      "ready": false
-    },
-    {
-      "id": "adventure-trip",
-      "chapterId": "adventure",
-      "label": "旅行",
-      "kind": "photo",
-      "canonicalStem": "adventure-trip",
-      "file": null,
-      "ready": false
-    },
-    {
-      "id": "adventure-dog",
-      "chapterId": "adventure",
-      "label": "犬との思い出",
-      "kind": "photo",
-      "canonicalStem": "adventure-dog",
-      "file": null,
-      "ready": false
-    },
-    {
-      "id": "adventure-fun",
-      "chapterId": "adventure",
-      "label": "楽しい思い出",
-      "kind": "photo",
-      "canonicalStem": "adventure-fun",
-      "file": null,
-      "ready": false
-    },
-    {
-      "id": "arrival-current-couple",
-      "chapterId": "arrival",
-      "label": "現在の二人",
-      "kind": "photo",
-      "canonicalStem": "arrival-current-couple",
-      "file": null,
-      "ready": false
-    },
-    {
-      "id": "arrival-registration",
-      "chapterId": "arrival",
-      "label": "入籍",
-      "kind": "photo",
-      "canonicalStem": "arrival-registration",
-      "file": null,
-      "ready": false
-    },
-    {
-      "id": "arrival-yokohama",
-      "chapterId": "arrival",
-      "label": "横浜・会場",
-      "kind": "photo-or-video",
-      "canonicalStem": "arrival-yokohama",
-      "file": null,
-      "ready": false
-    }
+    {"id":"departure-airport","chapterId":"departure","label":"空港","kind":"photo-or-video","canonicalStem":"departure-airport","file":null,"ready":false},
+    {"id":"departure-runway","chapterId":"departure","label":"滑走路","kind":"photo-or-video","canonicalStem":"departure-runway","file":null,"ready":false},
+    {"id":"departure-window-clouds","chapterId":"departure","label":"飛行機窓・雲","kind":"photo-or-video","canonicalStem":"departure-window-clouds","file":null,"ready":false},
+    {"id":"groom-childhood","chapterId":"separate-journeys","label":"新郎 幼少期・家族","kind":"photo","canonicalStem":"groom-childhood","file":null,"ready":false},
+    {"id":"groom-school-friends","chapterId":"separate-journeys","label":"新郎 学生・友人","kind":"photo","canonicalStem":"groom-school-friends","file":null,"ready":false},
+    {"id":"bride-childhood","chapterId":"separate-journeys","label":"新婦 幼少期・家族","kind":"photo","canonicalStem":"bride-childhood","file":null,"ready":false},
+    {"id":"bride-school-friends","chapterId":"separate-journeys","label":"新婦 学生・友人","kind":"photo","canonicalStem":"bride-school-friends","file":null,"ready":false},
+    {"id":"couple-early","chapterId":"intersection","label":"出会い・交際初期","kind":"photo","canonicalStem":"couple-early","file":null,"ready":false},
+    {"id":"couple-daily","chapterId":"intersection","label":"日常・同棲","kind":"photo","canonicalStem":"couple-daily","file":null,"ready":false},
+    {"id":"couple-trip","chapterId":"intersection","label":"二人の旅行","kind":"photo","canonicalStem":"couple-trip","file":null,"ready":false},
+    {"id":"adventure-hawaii","chapterId":"adventure","label":"ハワイ","kind":"photo","canonicalStem":"adventure-hawaii","file":null,"ready":false},
+    {"id":"adventure-trip","chapterId":"adventure","label":"旅行","kind":"photo","canonicalStem":"adventure-trip","file":null,"ready":false},
+    {"id":"adventure-dog","chapterId":"adventure","label":"犬との思い出","kind":"photo","canonicalStem":"adventure-dog","file":null,"ready":false},
+    {"id":"adventure-fun","chapterId":"adventure","label":"楽しい思い出","kind":"photo","canonicalStem":"adventure-fun","file":null,"ready":false},
+    {"id":"arrival-current-couple","chapterId":"arrival","label":"現在の二人","kind":"photo","canonicalStem":"arrival-current-couple","file":null,"ready":false},
+    {"id":"arrival-registration","chapterId":"arrival","label":"入籍","kind":"photo","canonicalStem":"arrival-registration","file":null,"ready":false},
+    {"id":"arrival-yokohama","chapterId":"arrival","label":"横浜・会場","kind":"photo-or-video","canonicalStem":"arrival-yokohama","file":null,"ready":false}
   ],
   "bgm": {
     "assetId": "profile-bgm-main",
@@ -251,9 +106,7 @@ export const profileProductionGate = {
     "currentPreviewSha256": null,
     "reviewer": null,
     "reviewedAt": null,
-    "blockers": [
-      "STRUCTURE_REVIEW_EVIDENCE_MISSING"
-    ],
+    "blockers": ["STRUCTURE_REVIEW_EVIDENCE_MISSING"],
     "humanReviewComplete": false
   },
   "blockingGatePass": false,
@@ -266,7 +119,12 @@ export const profileProductionGate = {
   },
   "productionReady": false,
   "nextActions": [
-    "Profile実素材を public/profile/ へcanonical stem名で投入",
-    "node --no-warnings scripts/profile-v1-assembly-preflight.mts"
+    "node --no-warnings scripts/intake-production-media.mts --project profile --source \"/ABS/PATH/TO/profile-media\"",
+    "node --no-warnings scripts/intake-production-media.mts --project profile --source \"/ABS/PATH/TO/profile-media\" --apply --overwrite --receipt out/intake/profile-media-intake.json",
+    "node --no-warnings scripts/verify-production-media-intake-receipt.mts --project profile",
+    "pnpm prepare:profile-v1",
+    "node --no-warnings scripts/intake-production-bgm.mts --project profile --source \"/ABS/PATH/TO/profile-bgm.mp3\"",
+    "node --no-warnings scripts/intake-production-bgm.mts --project profile --source \"/ABS/PATH/TO/profile-bgm.mp3\" --apply --receipt out/intake/profile-bgm-intake.json",
+    "node --no-warnings scripts/verify-production-bgm-intake-receipt.mts --project profile"
   ]
 } as const;
