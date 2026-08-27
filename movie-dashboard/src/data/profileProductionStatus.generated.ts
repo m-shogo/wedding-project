@@ -34,5 +34,9 @@ export const profileProductionStatus = {
     "macDaVinciActual": "NOT_RUN",
     "finalDeliveryApproved": false,
     "productionReady": false
-  }
+  },
+  "nextActions": [
+    "Profile実素材を public/profile/ へcanonical stem名で投入",
+    "pnpm prepare:profile-v1"
+  ]
 } as const;

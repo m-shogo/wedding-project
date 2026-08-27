@@ -66,9 +66,20 @@ export function ProfileProductionStatusHandoffCard({projectId}: {projectId: Scen
         })}
       </div>
 
+      <div className="mt-2 border border-fuchsia-100 dark:border-fuchsia-900 p-2">
+        <p className="text-[8px] font-semibold text-fuchsia-700 dark:text-fuchsia-300">NEXT ACTIONS</p>
+        <ol className="mt-1 space-y-1 text-[8px] leading-4 text-navy-500 dark:text-navy-300">
+          {production.nextActions.map((action, index) => (
+            <li key={`${index}-${action}`}>
+              {index + 1}. <code>{action}</code>
+            </li>
+          ))}
+        </ol>
+      </div>
+
       <p className="mt-2 text-[8px] leading-4 text-navy-400">
         このstatusはBLOCKED / NOT_RUNも含めて現在状態を外へ渡すためのenvelopeです。Assembly manifestの可否とは別なので、未完成でも書き出せます。
-        `ASSEMBLY_READY != PRODUCTION_READY` / `MAC_DAVINCI_ACTUAL_VERIFIED != FINAL_DELIVERY_APPROVED`
+        `ASSEMBLY_READY != PRODUCTION_READY` / `MAC_DAVINCI_ACTUAL_VERIFIED != FINAL_DELIVERY_APPROVED` / `NEXT_ACTION_EXPORTED != ACTION_COMPLETED`
       </p>
 
       <details className="mt-2">
