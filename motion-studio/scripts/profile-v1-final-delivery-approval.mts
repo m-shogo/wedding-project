@@ -33,10 +33,15 @@ function init(){
 function verify(strict:boolean){
   if(!existsSync(approvalPath)){console.log('Profile final delivery approval: NOT_RUN');if(strict)process.exit(1);return;}
   const errors:string[]=[];let c:ReturnType<typeof current>|null=null;try{c=current();}catch(e){errors.push(e instanceof Error?e.message:String(e));}
-  const a=JSON.parse(readFileSync(approvalPath,'utf8')) as Approval;
+  let a:Approval|null=null;try{a=JSON.parse(readFileSync(approvalPath,'utf8')) as Approval;}catch{errors.push('PROFILE_FINAL_APPROVAL_INVALID_JSON');}
+  if(!a){console.log(`Profile final delivery approval: HOLD/BLOCKED (${errors.length})`);for(const e of errors)console.log(`BLOCK / ${e}`);if(strict)process.exit(1);return;}
   if(a.schemaVersion!=='profile-v1-final-delivery-approval/v1'||a.authority!=='HUMAN_FINAL_DELIVERY_APPROVAL')errors.push('PROFILE_FINAL_APPROVAL_CONTRACT');
+  if(a.productionBundle.path!==rel(bundlePath))errors.push('PROFILE_FINAL_APPROVAL_BUNDLE_PATH');
+  if(a.davinciEvidence.path!==rel(davinciPath))errors.push('PROFILE_FINAL_APPROVAL_DAVINCI_EVIDENCE_PATH');
   if(c){if(a.productionBundle.sha256!==c.bundleSha)errors.push('STALE_PROFILE_FINAL_BUNDLE');if(a.davinciEvidence.sha256!==c.davinciSha)errors.push('STALE_PROFILE_FINAL_DAVINCI_EVIDENCE');if(a.sourceRender.path!==c.bundle.finalRender.path||a.sourceRender.sha256!==c.bundle.finalRender.sha256)errors.push('STALE_PROFILE_FINAL_SOURCE');if(a.davinciExport.path!==c.davinci.export.path||a.davinciExport.sha256!==c.davinci.export.sha256)errors.push('STALE_PROFILE_FINAL_EXPORT');}
-  if(a.decision!=='APPROVE')errors.push(`PROFILE_FINAL_DECISION_${a.decision}`);if(!a.approver?.trim())errors.push('PROFILE_FINAL_APPROVER_MISSING');if(!a.decidedAt||Number.isNaN(Date.parse(a.decidedAt)))errors.push('PROFILE_FINAL_DECIDED_AT_INVALID');if(a.productionReady!==(a.decision==='APPROVE'))errors.push('PROFILE_FINAL_PRODUCTION_READY_MISMATCH');
+  const boundAtMs=Date.parse(a.boundAt);const decidedAtMs=a.decidedAt?Date.parse(a.decidedAt):Number.NaN;
+  if(!a.boundAt||Number.isNaN(boundAtMs))errors.push('PROFILE_FINAL_BOUND_AT_INVALID');
+  if(a.decision!=='APPROVE')errors.push(`PROFILE_FINAL_DECISION_${a.decision}`);if(!a.approver?.trim())errors.push('PROFILE_FINAL_APPROVER_MISSING');if(!a.decidedAt||Number.isNaN(decidedAtMs))errors.push('PROFILE_FINAL_DECIDED_AT_INVALID');else if(!Number.isNaN(boundAtMs)&&decidedAtMs<boundAtMs)errors.push('PROFILE_FINAL_DECIDED_BEFORE_BINDING');if(a.productionReady!==(a.decision==='APPROVE'))errors.push('PROFILE_FINAL_PRODUCTION_READY_MISMATCH');
   if(errors.length){console.log(`Profile final delivery approval: HOLD/BLOCKED (${errors.length})`);for(const e of errors)console.log(`BLOCK / ${e}`);if(strict)process.exit(1);return;}console.log('Profile final delivery approval: APPROVED — current DaVinci export is explicitly human-approved.');
 }
 if(mode==='init')init();else verify(mode==='strict');
