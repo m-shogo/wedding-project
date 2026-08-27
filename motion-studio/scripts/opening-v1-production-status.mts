@@ -345,11 +345,34 @@ const report = {
     finalDeliveryApproved,
     productionReady: finalDeliveryApproved,
   },
+  handoff: {
+    palmier: {
+      contractVersion: 'opening-v1-palmier-handoff/v2' as const,
+      current: bundleReady,
+      sourceAuthorities: [
+        'src/data/openingV1.ts#openingV1Scenes',
+        'src/data/openingV1Sound.ts#openingV1SoundCues',
+      ],
+      artifacts: {
+        sceneTimeline: {
+          path: rel(timelineCsvPath),
+          shaBound: true,
+          carries: ['scene_boundary', 'replacement_policy', 'final_render_sha256'],
+        },
+        soundCues: {
+          path: rel(soundCueCsvPath),
+          shaBound: true,
+          carries: ['bgm', 'ambience_j_cut', 'start_end', 'volume', 'note', 'final_render_sha256'],
+        },
+      },
+    },
+  },
   nextActions,
   guardrails: [
     'DAVINCI_ACTUAL_VERIFIED != FINAL_DELIVERY_APPROVED',
     'APPROVAL_TEMPLATE != APPROVED',
     'MISSING_OR_STALE_UPSTREAM => DOWNSTREAM_NOT_TRUSTED',
+    'HANDOFF_METADATA_EXPORTED != HANDOFF_ARTIFACTS_CURRENT',
     'PALMIER_HANDOFF_CONTRACT_VERSION_MISMATCH => PRODUCTION_BUNDLE_STALE',
     'PALMIER_TIMELINE_SHA_MISMATCH => PRODUCTION_BUNDLE_STALE',
     'PALMIER_SOUND_CUE_SHA_MISMATCH => PRODUCTION_BUNDLE_STALE',
@@ -366,6 +389,7 @@ if (jsonMode) {
     console.log(`${stage.state.padEnd(7)} / ${name} / ${stage.detail}`);
     for (const blocker of stage.blockers ?? []) console.log(`  BLOCK / ${blocker}`);
   }
+  console.log(`Palmier handoff=${report.handoff.palmier.contractVersion} current=${report.handoff.palmier.current ? 'YES' : 'NO'} timeline=${report.handoff.palmier.artifacts.sceneTimeline.path} sound=${report.handoff.palmier.artifacts.soundCues.path}`);
   console.log(`readyForFinalDeliveryApproval=${report.readiness.readyForFinalDeliveryApproval ? 'YES' : 'NO'} finalDeliveryApproved=${finalDeliveryApproved ? 'YES' : 'NO'} productionReady=${finalDeliveryApproved ? 'YES' : 'NO'}`);
   console.log(`NEXT / ${nextActions.join(' → ')}`);
   console.log('JSON / pnpm opening:production-status -- --json');

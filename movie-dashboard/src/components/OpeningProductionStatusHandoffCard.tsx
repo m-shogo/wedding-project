@@ -26,6 +26,7 @@ export function OpeningProductionStatusHandoffCard({projectId}: {projectId: Scen
 
   const production = status.opening.production;
   const media = status.opening.media;
+  const palmier = production.palmierHandoff;
 
   return (
     <section className="mt-3 border border-sky-300 dark:border-sky-800 p-3">
@@ -72,6 +73,28 @@ export function OpeningProductionStatusHandoffCard({projectId}: {projectId: Scen
         <div className="border border-sand-200 dark:border-navy-700 px-2 py-1.5">Final approval: {production.readiness.finalDeliveryApproved ? "APPROVED" : "NOT APPROVED"}</div>
       </div>
 
+      <div className="mt-2 border border-violet-200 dark:border-violet-800 p-2">
+        <div className="flex flex-wrap items-center justify-between gap-1">
+          <p className="text-[8px] font-semibold text-violet-700 dark:text-violet-300">PALMIER HANDOFF / {palmier.contractVersion}</p>
+          <span className="text-[8px] text-violet-600 dark:text-violet-300">artifacts={palmier.current ? "CURRENT" : "NOT_EXPORTED_OR_STALE"}</span>
+        </div>
+        <div className="mt-1 grid gap-1 sm:grid-cols-2 text-[8px] leading-4 text-navy-500 dark:text-navy-300">
+          <div className="border border-violet-100 dark:border-violet-900 p-1.5">
+            <p className="font-semibold">Scene timeline</p>
+            <code className="break-all">{palmier.artifacts.sceneTimeline.path}</code>
+            <p>{palmier.artifacts.sceneTimeline.carries.join(" / ")}</p>
+          </div>
+          <div className="border border-violet-100 dark:border-violet-900 p-1.5">
+            <p className="font-semibold">Sound cues</p>
+            <code className="break-all">{palmier.artifacts.soundCues.path}</code>
+            <p>{palmier.artifacts.soundCues.carries.join(" / ")}</p>
+          </div>
+        </div>
+        <p className="mt-1 text-[8px] text-navy-400">
+          Motion Studio正本から派生するSHA-bound handoffです。metadataが見えていてもartifact currentを意味しません。
+        </p>
+      </div>
+
       <div className="mt-2 border border-sky-100 dark:border-sky-900 p-2">
         <p className="text-[8px] font-semibold text-sky-700 dark:text-sky-300">NEXT ACTIONS</p>
         <ol className="mt-1 space-y-1 text-[8px] leading-4 text-navy-500 dark:text-navy-300">
@@ -84,8 +107,8 @@ export function OpeningProductionStatusHandoffCard({projectId}: {projectId: Scen
       </div>
 
       <p className="mt-2 text-[8px] leading-4 text-navy-400">
-        このstatusはMEDIA_REQUIRED / NOT_RUNも含めて現在状態を外へ渡すためのenvelopeです。Statusのexport可否とproduction readinessは分離しています。
-        `STATUS_EXPORTABLE != FINAL_RENDER_ELIGIBLE` / `DAVINCI_ACTUAL_VERIFIED != FINAL_DELIVERY_APPROVED` / `NEXT_ACTION_EXPORTED != ACTION_COMPLETED`
+        このstatusはMEDIA_REQUIRED / NOT_RUNも含めて現在状態とPalmier handoff contractを外へ渡すためのenvelopeです。Statusのexport可否とproduction readinessは分離しています。
+        `STATUS_EXPORTABLE != FINAL_RENDER_ELIGIBLE` / `HANDOFF_METADATA_EXPORTED != HANDOFF_ARTIFACTS_CURRENT` / `DAVINCI_ACTUAL_VERIFIED != FINAL_DELIVERY_APPROVED` / `NEXT_ACTION_EXPORTED != ACTION_COMPLETED`
       </p>
 
       <details className="mt-2">
