@@ -10,6 +10,13 @@ const render = spawnSync('pnpm', ['render:opening-v1:preview'], {
 });
 if (render.status !== 0) process.exit(render.status ?? 1);
 
+const sourceBinding = spawnSync(
+  process.execPath,
+  ['--no-warnings', 'scripts/opening-v1-preview-source-fingerprint.mts', '--write'],
+  {cwd: studioRoot, stdio: 'inherit'},
+);
+if (sourceBinding.status !== 0) process.exit(sourceBinding.status ?? 1);
+
 const init = spawnSync(
   process.execPath,
   ['--no-warnings', 'scripts/opening-v1-preview-review.mts', '--init'],
@@ -17,4 +24,4 @@ const init = spawnSync(
 );
 if (init.status !== 0) process.exit(init.status ?? 1);
 
-console.log('Opening V1 Human review evidence was initialized only after a fresh current-input preview render.');
+console.log('Opening V1 Human review evidence was initialized only after a fresh current-input preview render and render-source fingerprint binding.');
