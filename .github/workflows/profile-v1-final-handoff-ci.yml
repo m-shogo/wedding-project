@@ -9,6 +9,15 @@ on:
       - "motion-studio/scripts/profile-v1-final-delivery-approval.mts"
       - "motion-studio/scripts/profile-v1-production-status.mts"
       - "motion-studio/scripts/check-profile-v1-final-handoff-contracts.mts"
+      - "motion-studio/src/index-profile-v1.ts"
+      - "motion-studio/src/compositions/profile/ProfileV1.tsx"
+      - "motion-studio/src/compositions/profile/ProfileV1GeneratedAccents.tsx"
+      - "motion-studio/src/compositions/opening/DoorLight.tsx"
+      - "motion-studio/src/motion-kit/engines.tsx"
+      - "motion-studio/src/motion-kit/transitionWipeResolver.ts"
+      - "motion-studio/src/data/profileV1GeneratedAccentRegistry.ts"
+      - "motion-studio/src/data/profileV1RuntimeMedia.generated.ts"
+      - "motion-studio/src/data/profileV1ProductionPlan.ts"
       - ".github/workflows/profile-v1-final-handoff-ci.yml"
   push:
     branches: [main]
@@ -19,6 +28,15 @@ on:
       - "motion-studio/scripts/profile-v1-final-delivery-approval.mts"
       - "motion-studio/scripts/profile-v1-production-status.mts"
       - "motion-studio/scripts/check-profile-v1-final-handoff-contracts.mts"
+      - "motion-studio/src/index-profile-v1.ts"
+      - "motion-studio/src/compositions/profile/ProfileV1.tsx"
+      - "motion-studio/src/compositions/profile/ProfileV1GeneratedAccents.tsx"
+      - "motion-studio/src/compositions/opening/DoorLight.tsx"
+      - "motion-studio/src/motion-kit/engines.tsx"
+      - "motion-studio/src/motion-kit/transitionWipeResolver.ts"
+      - "motion-studio/src/data/profileV1GeneratedAccentRegistry.ts"
+      - "motion-studio/src/data/profileV1RuntimeMedia.generated.ts"
+      - "motion-studio/src/data/profileV1ProductionPlan.ts"
       - ".github/workflows/profile-v1-final-handoff-ci.yml"
 
 permissions:
