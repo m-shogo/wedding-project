@@ -106,10 +106,9 @@ for (const scriptName of ['render-profile-v1-real-media-preview.mts', 'render-pr
   if (gateIndex < 0 || remotionIndex < 0 || gateIndex >= remotionIndex) {
     errors.push(`${scriptName} must run the media input gate before invoking Remotion`);
   }
-}
-const qaStillsSource = readFileSync(join(root, 'scripts/render-profile-v1-real-media-qa-stills.mts'), 'utf8');
-for (const token of ['--allow-missing-media-smoke', 'SMOKE ONLY', 'this is not production QA evidence']) {
-  if (!qaStillsSource.includes(token)) errors.push(`Profile QA stills missing explicit smoke-only guardrail: ${token}`);
+  for (const token of ['--allow-missing-media-smoke', 'SMOKE ONLY', 'this is not production']) {
+    if (!source.includes(token)) errors.push(`${scriptName} missing explicit smoke-only guardrail: ${token}`);
+  }
 }
 
 if (errors.length) {
@@ -118,4 +117,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log(`Profile V1 production command surface OK: ${Object.keys(expected).length} guarded commands validate Motion Zukan generated accents, refresh runtime media, require all 17 canonical media slots plus current cleared BGM before real-media preview/production QA stills, isolate missing-media smoke behind an explicit CI-only flag, and bind Human preview/final review initialization to freshly rendered current artifacts without bypassing production gates.`);
+console.log(`Profile V1 production command surface OK: ${Object.keys(expected).length} guarded commands validate Motion Zukan generated accents, refresh runtime media, require all 17 canonical media slots plus current cleared BGM before real-media preview/production QA stills, isolate missing-media smoke behind explicit CI-only flags that package production commands cannot expose, and bind Human preview/final review initialization to freshly rendered current artifacts without bypassing production gates.`);
