@@ -51,7 +51,7 @@ const photoPlan = expectedPhotoSlots.map((slot) => {
       : openingV1Presentation.heroes.b
     : openingV1Presentation.memories[group as 'okinawa' | 'seoul' | 'hawaii'][ordinal - 1];
   if (!plan) throw new Error(`Opening V1 presentation plan missing for ${slot}`);
-  const fit = 'layout' in plan && plan.layout === 'wide' ? 'contain' : plan.fit ?? 'cover';
+  const fit = 'fit' in plan ? plan.fit : plan.layout === 'wide' ? 'contain' : 'cover';
   return {
     slot,
     file,
