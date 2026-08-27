@@ -18,6 +18,12 @@ for (const token of [
   "profileV1ProductionContract",
   "runtime.resolvedCount !== 17",
   "shaFile(absolute)",
+  "previewSourceFingerprintSha256",
+  "previewSources: PreviewSource[]",
+  "src/index-profile-v1.ts",
+  "src/ProfileV1Root.tsx",
+  "scripts/render-profile-v1-real-media-preview.mts",
+  "src/data/theme.ts",
   "runtimeManifestSha256",
   "productionPlanSha256",
   "previewComponentSha256",
@@ -35,6 +41,9 @@ for (const token of [
   "macDaVinciActual: 'NOT_RUN'",
   "productionReady: false",
   "STALE_REAL_MEDIA_PREVIEW",
+  "STALE_REAL_MEDIA_PREVIEW_SOURCE_FINGERPRINT",
+  "STALE_REAL_MEDIA_PREVIEW_SOURCE:",
+  "PREVIEW_SOURCE_COUNT:",
   "STALE_RUNTIME_MEDIA_MANIFEST",
   "STALE_PROFILE_PRODUCTION_PLAN",
   "STALE_REAL_MEDIA_PREVIEW_COMPONENT",
@@ -72,6 +81,12 @@ for (const forbidden of [
 if (!review.includes('reviewedAtMs < boundAtMs')) {
   errors.push('Profile real-media Human review must occur after its current preview evidence binding');
 }
+if (!review.includes('evidence.previewSourceFingerprintSha256 !== current.previewSourceFingerprintSha256')) {
+  errors.push('Profile real-media Human review must invalidate when the preview render implementation fingerprint changes');
+}
+if (!review.includes('savedSources.get(source.path) !== source.sha256')) {
+  errors.push('Profile real-media Human review must compare each current preview source by path and SHA');
+}
 
 for (const token of [
   "'ProfileV1RealMediaPreview'",
@@ -88,4 +103,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log('Profile V1 real-media Human QA contracts OK: review evidence is bound to preview, canonical 17-slot identities, canonical 5-chapter identities, runtime manifest and production plan; the Human review must occur after the current evidence binding, malformed/duplicate/stale identities fail closed, and verdicts cannot promote BGM/Mac Actual/production readiness.');
+console.log('Profile V1 real-media Human QA contracts OK: review evidence is bound to the preview movie plus current index/root/composition/render-command/theme implementation, canonical 17-slot identities, canonical 5-chapter identities, runtime manifest and production plan; Human review must occur after the current binding, source/media/chapter drift fails closed, and verdicts cannot promote BGM/Mac Actual/production readiness.');
