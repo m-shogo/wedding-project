@@ -4,6 +4,8 @@ on:
   pull_request:
     paths:
       - "motion-studio/package.json"
+      - "motion-studio/scripts/opening-photo-preflight.mts"
+      - "motion-studio/scripts/check-opening-photo-preflight-intake-contract.mts"
       - "motion-studio/scripts/init-opening-v1-final-render-review.mts"
       - "motion-studio/scripts/opening-v1-final-render-review.mts"
       - "motion-studio/scripts/export-opening-v1-production-bundle.mts"
@@ -13,6 +15,8 @@ on:
     branches: [main]
     paths:
       - "motion-studio/package.json"
+      - "motion-studio/scripts/opening-photo-preflight.mts"
+      - "motion-studio/scripts/check-opening-photo-preflight-intake-contract.mts"
       - "motion-studio/scripts/init-opening-v1-final-render-review.mts"
       - "motion-studio/scripts/opening-v1-final-render-review.mts"
       - "motion-studio/scripts/export-opening-v1-production-bundle.mts"
@@ -43,6 +47,8 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - name: Opening production command surface
         run: node --no-warnings scripts/check-opening-v1-production-command-surface.mts
+      - name: Opening prepare-time photo intake contract
+        run: node --no-warnings scripts/check-opening-photo-preflight-intake-contract.mts
       - name: TypeScript
         run: pnpm typecheck
       - name: Human review boundary remains fail-closed on fresh clone
