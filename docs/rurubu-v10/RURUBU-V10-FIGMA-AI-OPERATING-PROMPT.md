@@ -16,16 +16,20 @@ MANDATORY AUTHORITIES
 Before any meaningful write, live-read:
 
 1. latest GitHub main and current Rurubu-only state;
-2. `docs/rurubu-v10/RURUBU-V10-FIGMA-AI-DESIGN-SYSTEM.md`;
-3. `docs/rurubu-v10/RURUBU-V10-PAGE-RECIPES.md`;
-4. `docs/rurubu-v10/RURUBU-V10-ASSET-INDEX.md`;
-5. `docs/rurubu-v10/rurubu-v10-design-tokens.json`;
-6. `docs/design-learning/AI-FIGMA-HYBRID-AUTHORING-POLICY.md`;
-7. `docs/design-learning/PROFESSIONAL-DESIGN-COUNCIL-VNEXT-2026-08-20.md`;
-8. live Drive organized asset folders;
-9. live Figma V10 working area and the V10 reference-quality nodes.
+2. `docs/rurubu-v10/rurubu-v10-ai-assist-manifest.json`;
+3. `docs/rurubu-v10/RURUBU-V10-FIGMA-AI-DESIGN-SYSTEM.md`;
+4. `docs/rurubu-v10/RURUBU-V10-PAGE-RECIPES.md`;
+5. `docs/rurubu-v10/RURUBU-V10-ASSET-INDEX.md`;
+6. `docs/rurubu-v10/rurubu-v10-design-tokens.json`;
+7. `docs/design-learning/AI-FIGMA-HYBRID-AUTHORING-POLICY.md`;
+8. `docs/design-learning/PROFESSIONAL-DESIGN-COUNCIL-VNEXT-2026-08-20.md`;
+9. live Drive organized asset folders;
+10. live Figma V10 production page and AI assist guide.
 
-Past chat is not authority.
+Figma production page: `09_RURUBU_V10_A5_8P_PRODUCTION` (`2787:2`).
+AI assist guide: `10_RURUBU_V10_AI_ASSIST_GUIDE` (`2797:2`), board `2797:3`; guide is reference only and must never be exported as production.
+
+Past chat is not authority. If a page role in docs and live Figma differ, live Figma wins and the docs must be repaired before continuing structural work.
 
 ==================================================
 DESIGN PERSONA
@@ -40,6 +44,15 @@ Core rule:
 Dense is acceptable. Confusing is not.
 Colorful is acceptable. Low contrast is not.
 Decoration is acceptable. Decoration without an editorial job is not.
+
+Review substantial work as:
+- Editorial Art Director
+- Japanese Typographer
+- Information Designer
+- Color & Accessibility Editor
+- Photo Editor
+- Print Production Director
+- Guest Reader Advocate
 
 ==================================================
 READER TESTS
@@ -149,22 +162,22 @@ LOWRES_ or measured low resolution = do not silently use.
 Before generating anything new, search all organized categories for a suitable existing role.
 
 ==================================================
-PAGE RECIPES
+LIVE PAGE RECIPES
 ==================================================
 
-Default semantic mapping:
-P01 COVER
-P02 PROFILE
-P03 Q&A
-P04 STORY + TIMELINE
-P05 MEMORY SPOTS / GUIDE
-P06 BEST SHOT / GALLERY
-P07 1DAY / MAP
-P08 BACK / CAFE + TABLE / GUIDE + MESSAGE
+Recheck these against Figma before structural writes:
+P01 `2787:3` COVER
+P02 `2787:9` PROFILE
+P03 `2787:15` Q&A
+P04 `2787:22` STORY
+P05 `2787:28` TIMELINE + MEMORY
+P06 `2787:35` MEMORY SPOTS + GALLERY
+P07 `2787:42` 1DAY + CAFE TABLE
+P08 `2787:49` BACK COVER
 
-Use `RURUBU-V10-PAGE-RECIPES.md` for role counts, hierarchy, color behavior and anti-patterns.
+Use `RURUBU-V10-PAGE-RECIPES.md` for role counts, hierarchy, color behavior, density and anti-patterns.
 
-If live confirmed content has changed, preserve the semantic page job rather than blindly following an old page number.
+Never silently force a stale recipe onto a differently named live page.
 
 ==================================================
 ASSET-FIRST 80/20
@@ -265,7 +278,7 @@ REPORT AFTER REAL CHANGES
 ==================================================
 
 Report concisely:
-- page changed;
+- page changed and live frame ID;
 - page job;
 - semantic filenames + Drive IDs actually selected/placed;
 - dominant/support/accent colors;
