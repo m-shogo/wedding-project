@@ -49,11 +49,18 @@ jobs:
             "copyFileSync" \
             "TARGET EXISTS" \
             "BLOCKED: no files copied" \
-            "without modifying source files"; do
+            "without modifying source files" \
+            "wedding-production-media-intake-receipt/v1" \
+            "COPY VERIFY FAILED" \
+            "copyBytesVerified: true" \
+            "humanQaState: 'NOT_RUN'" \
+            "macDaVinciActualState: 'NOT_RUN'" \
+            "productionReady: false" \
+            "--receipt"; do
             grep -q -- "$token" scripts/intake-production-media.mts || { echo "missing intake safety token: $token"; exit 1; }
           done
           if grep -Eq "renameSync|unlinkSync|rmSync\(.*source|writeFileSync\(.*source" scripts/intake-production-media.mts; then
             echo "intake CLI must not rename/delete/rewrite source media"
             exit 1
           fi
-          echo "intake CLI safety contract verified"
+          echo "intake CLI safety + SHA receipt contract verified"
