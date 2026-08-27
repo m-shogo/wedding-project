@@ -20,6 +20,12 @@ for (const token of [
   'profileProductionStatus.stages',
   'currentCriticalStage',
   'downstreamBlockedStages',
+  'actionTargetsFor(projectId, current.name)',
+  'route: "/opening-photo-intake"',
+  'route: "/opening-bgm-intake"',
+  'route: "/movie-coach/profile"',
+  'route: "/profile-planner"',
+  'ACTION_TARGET_VISIBLE != ACTION_COMPLETED',
   'productionReady: opening.productionReady && profile.productionReady',
   'CI_STATUS != MAC_DAVINCI_ACTUAL',
 ]) need(model, token, `critical-path model missing ${token}`);
@@ -29,6 +35,9 @@ for (const token of [
   'current?.detail',
   'current.path',
   'current.recovery',
+  'current.actionTargets',
+  'to={target.route}',
+  'target.purpose',
   'project.downstreamBlockedStages',
   'wedding-movie-production-critical-path.json',
   'Opening:',
@@ -62,4 +71,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log('Wedding Movie production critical-path dashboard OK: current blocker, recovery, downstream waiting stages and cross-project readiness remain visible/exportable without promoting Human QA or Mac Actual.');
+console.log('Wedding Movie production critical-path dashboard OK: current blocker, recovery, actionable intake routes, downstream waiting stages and cross-project readiness remain visible/exportable without promoting Human QA or Mac Actual.');
