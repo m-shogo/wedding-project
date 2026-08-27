@@ -14,6 +14,10 @@ const rightsChecks = [
     detail: "利用条件を満たす正規の音源を使う。動画サイト等から抜き出した音源を本番正本にしない。",
   },
   {
+    label: "canonical intake receipt",
+    detail: "元音源を壊さずcanonical targetへcopyし、bytes + SHA-256をreceiptへ残す。candidate昇格後もstrict gateでcurrent receiptを再検証する。",
+  },
+  {
     label: "SNS / 配布は別判断",
     detail: "会場上映OKでも、SNS投稿・オンライン共有・配布まで同じ条件とは限らない。用途を分けて確認する。",
   },
@@ -23,10 +27,11 @@ const rightsChecks = [
   },
 ];
 
-const fileCommands = [
-  "mkdir -p motion-studio/public/audio/opening",
-  "# 権利確認済み音源を motion-studio/public/audio/opening/bgm-main.mp3 として配置",
+const intakeCommands = [
   "cd motion-studio",
+  "node --no-warnings scripts/intake-production-bgm.mts --project opening --source \"/ABS/PATH/TO/opening-bgm.mp3\"",
+  "node --no-warnings scripts/intake-production-bgm.mts --project opening --source \"/ABS/PATH/TO/opening-bgm.mp3\" --apply --receipt out/intake/opening-bgm-intake.json",
+  "node --no-warnings scripts/verify-production-bgm-intake-receipt.mts --project opening",
   "pnpm check:opening-sound",
 ];
 
@@ -70,7 +75,7 @@ export function OpeningBgmIntake() {
     <div>
       <Header
         title="OPENING BGM INTAKE"
-        description="曲を入れることより先に利用条件を確認し、権利確認済みの本体だけをOpening V1へ接続する"
+        description="Opening V1のBGMをsource-preserving canonical intake + SHA receipt + Human rights evidenceでFinal sound gateへ接続する"
       />
 
       <section className="mb-8 border-y border-sand-200 dark:border-navy-600 py-5 grid grid-cols-1 lg:grid-cols-[0.8fr_1.2fr] gap-7">
@@ -84,19 +89,20 @@ export function OpeningBgmIntake() {
           </div>
           <p className="mt-3 text-sm leading-6 text-navy-600 dark:text-navy-300">
             {playable
-              ? "candidate以上のstatus。strict sound gateでは、さらに実ファイルの存在も検査します。"
-              : "現在はFinal BGM gateを解除できません。権利確認と実ファイル投入が先です。"}
+              ? "candidate以上のstatus。strict sound gateでは実ファイルとcurrent intake receiptを再検証します。"
+              : "現在はFinal BGM gateを解除できません。canonical intake・権利確認・明示的status昇格が先です。"}
           </p>
         </div>
         <div>
           <p className="text-[10px] tracking-[0.2em] font-semibold text-navy-400">SOURCE OF TRUTH</p>
           <div className="mt-2 space-y-2 text-xs text-navy-600 dark:text-navy-300">
-            <p><code>motion-studio/src/data/assets.ts</code> — path / status / note</p>
+            <p><code>motion-studio/out/intake/opening-bgm-intake.json</code> — copy provenance / bytes / SHA-256</p>
+            <p><code>motion-studio/src/data/assets.ts</code> — path / status / rights note</p>
             <p><code>motion-studio/src/data/openingV1Sound.ts</code> — 0–60s BGM cue / volume</p>
-            <p><code>motion-studio/scripts/check-opening-sound.mts</code> — Final strict gate</p>
+            <p><code>motion-studio/scripts/check-opening-sound.mts</code> — receipt-bound Final strict gate</p>
           </div>
           <p className="mt-3 text-xs text-navy-400">
-            この画面に「権利OK」チェックを作ってsource stateを偽装しません。Final可否はMotion Studio正本だけで決まります。
+            Receiptは「正しくcopyされた」証拠であって権利承認ではありません。Final可否はMotion Studio正本だけで決まります。
           </p>
         </div>
       </section>
@@ -107,8 +113,8 @@ export function OpeningBgmIntake() {
 
       <section className="mb-10">
         <div className="border-b-2 border-navy-900 dark:border-sand-100 pb-3 mb-4">
-          <p className="text-[10px] tracking-[0.2em] font-semibold text-navy-400">RIGHTS FIRST</p>
-          <h2 className="mt-1 text-xl font-bold text-navy-900 dark:text-sand-100">candidateへ上げる前に確認する4点</h2>
+          <p className="text-[10px] tracking-[0.2em] font-semibold text-navy-400">RIGHTS + PROVENANCE</p>
+          <h2 className="mt-1 text-xl font-bold text-navy-900 dark:text-sand-100">candidateへ上げる前に確認する5点</h2>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-sand-200 dark:bg-navy-600 border border-sand-200 dark:border-navy-600">
           {rightsChecks.map((item, index) => (
@@ -127,21 +133,19 @@ export function OpeningBgmIntake() {
 
       <section className="mb-10 grid grid-cols-1 xl:grid-cols-2 gap-8">
         <div className="border-t-2 border-navy-900 dark:border-sand-100 pt-4">
-          <p className="text-[10px] tracking-[0.2em] font-semibold text-navy-400">CANONICAL FILE</p>
-          <h2 className="mt-1 text-lg font-bold text-navy-900 dark:text-sand-100">本番BGMの配置先</h2>
-          <button
-            type="button"
-            onClick={() => copy("motion-studio/public/audio/opening/bgm-main.mp3")}
-            className="mt-3 w-full text-left px-3 py-3 border border-sand-200 dark:border-navy-600 bg-sand-50 dark:bg-navy-900 text-xs font-mono text-navy-700 dark:text-navy-200"
-          >
-            {copied === "motion-studio/public/audio/opening/bgm-main.mp3" ? "✓ copied" : "motion-studio/public/audio/opening/bgm-main.mp3"}
-          </button>
+          <p className="text-[10px] tracking-[0.2em] font-semibold text-navy-400">CANONICAL INTAKE</p>
+          <h2 className="mt-1 text-lg font-bold text-navy-900 dark:text-sand-100">DRY RUN → SHA-verified apply</h2>
+          <CopyLine text="motion-studio/public/audio/opening/bgm-main.mp3" />
+          <div className="mt-2"><CopyLine text="motion-studio/out/intake/opening-bgm-intake.json" /></div>
           <p className="mt-3 text-xs leading-5 text-navy-500 dark:text-navy-300">
-            音源本体はGitへ入れません。権利未確認の音源をここへ置いても、statusがmissingの間は本番再生されません。
+            手動copyを正規ルートにしません。DRY RUNでsource/targetを確認し、明示`--apply --receipt`で元音源を保持したままcopy。直後にsource/target bytes + SHA-256を照合します。
           </p>
           <div className="mt-4 space-y-2">
-            {fileCommands.map((command) => <CopyLine key={command} text={command} />)}
+            {intakeCommands.map((command) => <CopyLine key={command} text={command} />)}
           </div>
+          <p className="mt-3 text-[10px] text-navy-400">
+            DRY_RUN_PASS != FILE_COPIED / RECEIPT_CURRENT != RIGHTS_CLEARED / INTAKE_DONE != PRODUCTION_READY
+          </p>
         </div>
 
         <div className="border-t-2 border-navy-900 dark:border-sand-100 pt-4">
@@ -150,7 +154,7 @@ export function OpeningBgmIntake() {
           <div className="mt-3 border border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-900/20 p-4">
             <p className="text-xs font-semibold text-amber-800 dark:text-amber-200">人間確認Gate</p>
             <p className="mt-1 text-xs leading-5 text-amber-700 dark:text-amber-300">
-              `assets.ts` のルールどおり、AIが権利確認を推測してcandidate / approved / finalへ勝手に変更しません。確認Evidenceが揃った段階で明示的に昇格します。
+              intake receiptは権利を承認しません。確認Evidenceが揃った後だけ `assets.ts` の `opening-bgm-main` をcandidate / approved / finalへ明示的に昇格します。AIが権利確認を推測してcandidate / approved / finalへ勝手に変更しません。
             </p>
           </div>
           <div className="mt-4 space-y-2">
@@ -158,19 +162,19 @@ export function OpeningBgmIntake() {
             <CopyLine text="status: 'candidate'" />
           </div>
           <p className="mt-3 text-xs text-navy-400">
-            candidateは「利用条件を確認し、採用候補として再生可能」の段階。creative final approvalとは分離します。
+            candidate後もstrict sound gateはcurrent intake receiptを再検証するため、投入後にBGM bytesが変わればSTALEで停止します。
           </p>
         </div>
       </section>
 
       <section className="mb-10 border-t-2 border-navy-900 dark:border-sand-100 pt-4">
         <p className="text-[10px] tracking-[0.2em] font-semibold text-navy-400">AFTER PROMOTION</p>
-        <h2 className="mt-1 text-lg font-bold text-navy-900 dark:text-sand-100">Strict gate → Dashboard同期 → 60秒Preview</h2>
+        <h2 className="mt-1 text-lg font-bold text-navy-900 dark:text-sand-100">Receipt-bound strict gate → Dashboard同期 → 60秒Preview</h2>
         <div className="mt-4 grid grid-cols-1 lg:grid-cols-2 gap-2">
           {finalGateCommands.map((command) => <CopyLine key={command} text={command} />)}
         </div>
         <p className="mt-3 text-xs text-navy-500 dark:text-navy-300">
-          写真11/11も揃えば60秒Previewで初めて「曲の山と写真cutが合うか」「音が映像を急かしていないか」を判断します。
+          写真11/11も揃えば60秒Previewで初めて「曲の山と写真cutが合うか」「音が映像を急かしていないか」をHuman QAします。
         </p>
       </section>
 
@@ -182,7 +186,7 @@ export function OpeningBgmIntake() {
       </div>
 
       <p className="mt-5 text-[10px] text-navy-400">
-        HANDOFF_EXPORTED != PRODUCTION_READY / CI_MUST_NOT_PROMOTE_MAC_GUI_ACTUAL
+        FILE_FOUND != RECEIPT_CURRENT / RECEIPT_CURRENT != RIGHTS_CLEARED / HANDOFF_EXPORTED != PRODUCTION_READY / CI_MUST_NOT_PROMOTE_MAC_GUI_ACTUAL
       </p>
     </div>
   );
