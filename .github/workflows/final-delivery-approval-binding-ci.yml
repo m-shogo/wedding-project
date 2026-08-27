@@ -1,0 +1,55 @@
+name: Final Delivery Approval Binding CI
+
+on:
+  pull_request:
+    paths:
+      - "motion-studio/scripts/opening-v1-final-delivery-approval.mts"
+      - "motion-studio/scripts/profile-v1-final-delivery-approval.mts"
+      - "motion-studio/scripts/check-final-delivery-approval-human-review-binding.mts"
+      - ".github/workflows/final-delivery-approval-binding-ci.yml"
+  push:
+    branches: [main]
+    paths:
+      - "motion-studio/scripts/opening-v1-final-delivery-approval.mts"
+      - "motion-studio/scripts/profile-v1-final-delivery-approval.mts"
+      - "motion-studio/scripts/check-final-delivery-approval-human-review-binding.mts"
+      - ".github/workflows/final-delivery-approval-binding-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    defaults:
+      run:
+        working-directory: motion-studio
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+          run_install: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: motion-studio/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - name: Human final-render review binding contracts
+        run: node --no-warnings scripts/check-final-delivery-approval-human-review-binding.mts
+      - name: TypeScript
+        run: pnpm typecheck
+      - name: Fresh clone final approvals remain fail-closed
+        run: |
+          pnpm opening:final-delivery-approval
+          pnpm profile:final-delivery-approval
+          if pnpm opening:final-delivery-approval:strict; then
+            echo "Opening final approval unexpectedly passed without production evidence"
+            exit 1
+          fi
+          if pnpm profile:final-delivery-approval:strict; then
+            echo "Profile final approval unexpectedly passed without production evidence"
+            exit 1
+          fi
