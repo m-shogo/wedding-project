@@ -26,7 +26,17 @@ for(const t of [
   "macActualState: 'NOT_RUN'",
   'productionReady: false',
 ])need(bundle,t,'bundle');
-for(const t of ['profile-v1-davinci-finishing-evidence/v1','MAC_DAVINCI_ACTUAL_EVIDENCE','STALE_PROFILE_DAVINCI_BUNDLE','productionReady:false'])need(davinci,t,'davinci');
+for(const t of [
+  'profile-v1-davinci-finishing-evidence/v1',
+  'MAC_DAVINCI_ACTUAL_EVIDENCE',
+  'STALE_PROFILE_DAVINCI_BUNDLE',
+  "const timelinePath = join(root, 'out/handoff/profile-v1/profile-v1-palmier-timeline.csv');",
+  'palmier:{timelineCsv:string;timelineCsvSha256:string}',
+  'PROFILE_DAVINCI_PALMIER_TIMELINE_PATH_MISMATCH',
+  'PROFILE_DAVINCI_PALMIER_TIMELINE_MISSING',
+  'PROFILE_DAVINCI_PALMIER_TIMELINE_SHA_MISMATCH',
+  'productionReady:false',
+])need(davinci,t,'davinci');
 for(const t of ['profile-v1-final-delivery-approval/v1','HUMAN_FINAL_DELIVERY_APPROVAL',"decision:'HOLD'",'productionReady:false',"a.decision!=='APPROVE'",'PROFILE_FINAL_PRODUCTION_READY_MISMATCH'])need(approval,t,'approval');
 for(const t of [
   'profile-v1-production-status/v1',
@@ -47,5 +57,6 @@ for(const t of [
 if(bundle.includes("['assembly', 'scripts/profile-v1-assembly-preflight.mts'"))errors.push('bundle must use full production preflight rather than bypass generated-accent contracts');
 if(review.includes('productionReady: true')||bundle.includes('productionReady: true')||davinci.includes('productionReady:true'))errors.push('upstream layers must not self-promote productionReady=true');
 if(!approval.includes("a.productionReady!==(a.decision==='APPROVE')"))errors.push('final approval must bind productionReady to explicit APPROVE');
+if(davinci.includes('timelineCsvSha256:string')&&!davinci.includes('sha(timelinePath)'))errors.push('DaVinci direct path must compare current Palmier timeline SHA before init/strict');
 if(errors.length){console.error(`Profile V1 final handoff contracts FAILED (${errors.length})`);for(const e of errors)console.error(`- ${e}`);process.exit(1)}
-console.log('Profile V1 final handoff contracts OK: final bundle carries canonical Motion Zukan generated-accent routes and a SHA-bound Palmier timeline to DaVinci, while only current SHA-bound explicit Human final approval can yield productionReady.');
+console.log('Profile V1 final handoff contracts OK: final bundle carries canonical Motion Zukan generated-accent routes and a SHA-bound Palmier timeline, direct DaVinci evidence validates the current timeline too, and only current SHA-bound explicit Human final approval can yield productionReady.');
