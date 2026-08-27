@@ -4,69 +4,38 @@ import {dirname, join, relative} from 'node:path';
 import {spawnSync} from 'node:child_process';
 import {fileURLToPath} from 'node:url';
 
-const root = join(dirname(fileURLToPath(import.meta.url)), '..');
-const finalPath = join(root, 'out/profile/profile_v1.mp4');
-const reviewPath = join(root, 'out/qa/profile-v1-final-render-review.json');
-const bundlePath = join(root, 'out/handoff/profile-v1/profile-v1-production-bundle.json');
-const jsonMode = process.argv.includes('--json');
-const strict = process.argv.includes('--strict');
-type StageState = 'PASS' | 'BLOCKED' | 'NOT_RUN' | 'MISSING' | 'STALE';
-type Stage = {state: StageState; detail: string; path?: string; blockers?: string[]};
-const rel = (path: string) => relative(root, path).replaceAll('\\', '/');
-const sha = (path: string) => createHash('sha256').update(readFileSync(path)).digest('hex');
-const run = (script: string, args: string[] = []) => spawnSync(process.execPath, ['--no-warnings', script, ...args], {cwd: root, encoding: 'utf8'});
-const lines = (value: string | null | undefined) => (value ?? '').split(/\r?\n/).map((v) => v.trim()).filter(Boolean);
+const root=join(dirname(fileURLToPath(import.meta.url)),'..');
+const finalPath=join(root,'out/profile/profile_v1.mp4');
+const reviewPath=join(root,'out/qa/profile-v1-final-render-review.json');
+const bundlePath=join(root,'out/handoff/profile-v1/profile-v1-production-bundle.json');
+const davinciPath=join(root,'out/qa/profile-v1-davinci-finishing-evidence.json');
+const approvalPath=join(root,'out/qa/profile-v1-final-delivery-approval.json');
+const jsonMode=process.argv.includes('--json'); const strict=process.argv.includes('--strict');
+type State='PASS'|'BLOCKED'|'NOT_RUN'|'MISSING'|'STALE'; type Stage={state:State;detail:string;path?:string;blockers?:string[]};
+const rel=(p:string)=>relative(root,p).replaceAll('\\','/'); const sha=(p:string)=>createHash('sha256').update(readFileSync(p)).digest('hex');
+const run=(script:string,args:string[]=[])=>spawnSync(process.execPath,['--no-warnings',script,...args],{cwd:root,encoding:'utf8'}); const lines=(v:string|null|undefined)=>(v??'').split(/\r?\n/).map(x=>x.trim()).filter(Boolean);
 
-const assemblyRun = run('scripts/profile-v1-assembly-preflight.mts', ['--json']);
-let assemblyReport: any = null;
-let assembly: Stage;
-if (assemblyRun.status !== 0) assembly = {state: 'BLOCKED', detail: 'Assembly preflight failed.', blockers: [...lines(assemblyRun.stdout), ...lines(assemblyRun.stderr)]};
-else {
-  try { assemblyReport = JSON.parse(assemblyRun.stdout); } catch { assemblyReport = null; }
-  const ready = assemblyReport?.readiness?.assemblyReady === true;
-  assembly = {state: ready ? 'PASS' : 'BLOCKED', detail: ready ? '17 media + BGM rights + structure + real-media Human QA are ready.' : 'Assembly inputs/Human QA are not all ready.', blockers: ready ? [] : (assemblyReport?.readiness?.blockers ?? [])};
-}
+const ar=run('scripts/profile-v1-assembly-preflight.mts',['--json']); let assemblyReport:any=null; let assembly:Stage;
+if(ar.status!==0)assembly={state:'BLOCKED',detail:'Assembly preflight failed.',blockers:[...lines(ar.stdout),...lines(ar.stderr)]};else{try{assemblyReport=JSON.parse(ar.stdout)}catch{}const ready=assemblyReport?.readiness?.assemblyReady===true;assembly={state:ready?'PASS':'BLOCKED',detail:ready?'17 media + BGM rights + structure + real-media Human QA are ready.':'Assembly inputs/Human QA are not all ready.',blockers:ready?[]:(assemblyReport?.readiness?.blockers??[])};}
+const finalRender:Stage=assembly.state!=='PASS'?{state:'NOT_RUN',detail:'Blocked by assembly readiness.',path:rel(finalPath)}:!existsSync(finalPath)?{state:'MISSING',detail:'Render the current ProfileV1 production candidate.',path:rel(finalPath)}:(()=>{const r=run('scripts/check-profile-render.mts',['out/profile/profile_v1.mp4']);return r.status===0?{state:'PASS',detail:'Final render passes technical media QA.',path:rel(finalPath)}:{state:'BLOCKED',detail:'Final render technical QA failed.',path:rel(finalPath),blockers:[...lines(r.stdout),...lines(r.stderr)]};})();
+const finalReview:Stage=finalRender.state!=='PASS'?{state:'NOT_RUN',detail:'Blocked until final render QA passes.',path:rel(reviewPath)}:!existsSync(reviewPath)?{state:'MISSING',detail:'Initialize Human final-render review.',path:rel(reviewPath)}:(()=>{const r=run('scripts/profile-v1-final-render-review.mts',['--strict']);return r.status===0?{state:'PASS',detail:'Human final-render review is current and PASS.',path:rel(reviewPath)}:{state:'BLOCKED',detail:'Human final-render review is incomplete/failed/stale.',path:rel(reviewPath),blockers:[...lines(r.stdout),...lines(r.stderr)]};})();
+let bundle:Stage;if(finalReview.state!=='PASS')bundle={state:'NOT_RUN',detail:'Blocked until current Human final-render review passes.',path:rel(bundlePath)};else if(!existsSync(bundlePath))bundle={state:'MISSING',detail:'Export SHA-bound Profile production bundle.',path:rel(bundlePath)};else{const b:string[]=[];try{const x=JSON.parse(readFileSync(bundlePath,'utf8')) as any;if(x.schemaVersion!=='profile-v1-production-bundle/v1')b.push('BUNDLE_SCHEMA_MISMATCH');if(x.authority!=='FINAL_RENDER_BOUND_HANDOFF')b.push('BUNDLE_AUTHORITY_MISMATCH');if(x.finalRender?.sha256!==sha(finalPath))b.push('BUNDLE_FINAL_RENDER_SHA_STALE');if(x.humanFinalRenderReview?.evidenceSha256!==sha(reviewPath))b.push('BUNDLE_FINAL_REVIEW_SHA_STALE');if(x.davinci?.expectedSha256!==sha(finalPath))b.push('BUNDLE_DAVINCI_SHA_STALE');if(x.davinci?.productionReady!==false)b.push('BUNDLE_MUST_FAIL_CLOSED');}catch{b.push('BUNDLE_INVALID_JSON')}bundle=b.length?{state:'STALE',detail:'Bundle must be regenerated from current approved artifacts.',path:rel(bundlePath),blockers:b}:{state:'PASS',detail:'Bundle is current and ready for Mac DaVinci finishing.',path:rel(bundlePath)};}
+const davinci:Stage=bundle.state!=='PASS'?{state:'NOT_RUN',detail:'Blocked until production bundle is current.',path:rel(davinciPath)}:!existsSync(davinciPath)?{state:'MISSING',detail:'Initialize bundle-bound Mac DaVinci finishing evidence.',path:rel(davinciPath)}:(()=>{const r=run('scripts/profile-v1-davinci-finishing-evidence.mts',['--strict']);return r.status===0?{state:'PASS',detail:'Mac DaVinci Actual evidence is current and complete.',path:rel(davinciPath)}:{state:'BLOCKED',detail:'Mac DaVinci Actual is incomplete/failed/stale.',path:rel(davinciPath),blockers:[...lines(r.stdout),...lines(r.stderr)]};})();
+const approval:Stage=davinci.state!=='PASS'?{state:'NOT_RUN',detail:'Blocked until Mac DaVinci Actual is verified.',path:rel(approvalPath)}:!existsSync(approvalPath)?{state:'MISSING',detail:'Initialize explicit Human final delivery approval.',path:rel(approvalPath)}:(()=>{const r=run('scripts/profile-v1-final-delivery-approval.mts',['--strict']);return r.status===0?{state:'PASS',detail:'Current DaVinci export has explicit SHA-bound Human approval.',path:rel(approvalPath)}:{state:'BLOCKED',detail:'Final delivery approval is HOLD/incomplete/stale.',path:rel(approvalPath),blockers:[...lines(r.stdout),...lines(r.stderr)]};})();
 
-const finalRender: Stage = assembly.state !== 'PASS'
-  ? {state: 'NOT_RUN', detail: 'Blocked by assembly readiness.', path: rel(finalPath)}
-  : !existsSync(finalPath)
-    ? {state: 'MISSING', detail: 'Render the current ProfileV1 production candidate.', path: rel(finalPath)}
-    : (() => { const r = run('scripts/check-profile-render.mts', ['out/profile/profile_v1.mp4']); return r.status === 0 ? {state: 'PASS', detail: 'Final render passes technical media QA.', path: rel(finalPath)} : {state: 'BLOCKED', detail: 'Final render technical QA failed.', path: rel(finalPath), blockers: [...lines(r.stdout), ...lines(r.stderr)]}; })();
-
-const finalReview: Stage = finalRender.state !== 'PASS'
-  ? {state: 'NOT_RUN', detail: 'Blocked until final render QA passes.', path: rel(reviewPath)}
-  : !existsSync(reviewPath)
-    ? {state: 'MISSING', detail: 'Initialize Human final-render review.', path: rel(reviewPath)}
-    : (() => { const r = run('scripts/profile-v1-final-render-review.mts', ['--strict']); return r.status === 0 ? {state: 'PASS', detail: 'Human final-render review is current and PASS.', path: rel(reviewPath)} : {state: 'BLOCKED', detail: 'Human final-render review is incomplete/failed/stale.', path: rel(reviewPath), blockers: [...lines(r.stdout), ...lines(r.stderr)]}; })();
-
-let bundle: Stage;
-if (finalReview.state !== 'PASS') bundle = {state: 'NOT_RUN', detail: 'Blocked until current Human final-render review passes.', path: rel(bundlePath)};
-else if (!existsSync(bundlePath)) bundle = {state: 'MISSING', detail: 'Export SHA-bound Profile production bundle.', path: rel(bundlePath)};
-else {
-  const blockers: string[] = [];
-  try {
-    const b = JSON.parse(readFileSync(bundlePath, 'utf8')) as any;
-    if (b.schemaVersion !== 'profile-v1-production-bundle/v1') blockers.push('BUNDLE_SCHEMA_MISMATCH');
-    if (b.authority !== 'FINAL_RENDER_BOUND_HANDOFF') blockers.push('BUNDLE_AUTHORITY_MISMATCH');
-    if (b.finalRender?.sha256 !== sha(finalPath)) blockers.push('BUNDLE_FINAL_RENDER_SHA_STALE');
-    if (b.humanFinalRenderReview?.evidenceSha256 !== sha(reviewPath)) blockers.push('BUNDLE_FINAL_REVIEW_SHA_STALE');
-    if (b.davinci?.expectedSha256 !== sha(finalPath)) blockers.push('BUNDLE_DAVINCI_SHA_STALE');
-    if (b.davinci?.productionReady !== false) blockers.push('BUNDLE_MUST_FAIL_CLOSED');
-  } catch { blockers.push('BUNDLE_INVALID_JSON'); }
-  bundle = blockers.length ? {state: 'STALE', detail: 'Bundle must be regenerated from current approved artifacts.', path: rel(bundlePath), blockers} : {state: 'PASS', detail: 'Bundle is current and ready for Mac DaVinci finishing.', path: rel(bundlePath)};
-}
-
-let overallState: string;
-let nextActions: string[];
-if (assembly.state !== 'PASS') { overallState = 'ASSEMBLY_REQUIRED'; nextActions = assemblyReport?.nextActions ?? ['Profile assembly blockersを解消']; }
-else if (finalRender.state === 'MISSING') { overallState = 'FINAL_RENDER_REQUIRED'; nextActions = ['node --no-warnings scripts/render-profile-v1-production.mts']; }
-else if (finalRender.state !== 'PASS') { overallState = 'FINAL_RENDER_QA_FAILED'; nextActions = ['final render QA failureを修正']; }
-else if (finalReview.state === 'MISSING') { overallState = 'FINAL_RENDER_REVIEW_INIT_REQUIRED'; nextActions = ['node --no-warnings scripts/profile-v1-final-render-review.mts --init', '最終MP4を音声付きで人間確認']; }
-else if (finalReview.state !== 'PASS') { overallState = 'HUMAN_FINAL_RENDER_REVIEW_REQUIRED_OR_STALE'; nextActions = ['current final renderに対するHuman reviewを完了']; }
-else if (bundle.state === 'MISSING') { overallState = 'PRODUCTION_BUNDLE_REQUIRED'; nextActions = ['node --no-warnings scripts/export-profile-v1-production-bundle.mts']; }
-else if (bundle.state !== 'PASS') { overallState = 'PRODUCTION_BUNDLE_STALE'; nextActions = ['current artifactsからproduction bundleを再生成']; }
-else { overallState = 'AWAITING_DAVINCI_ACTUAL'; nextActions = ['Mac DaVinci finishing evidence layerを初期化・実行', 'Actual未実施のままproductionReadyへ昇格しない']; }
-
-const report = {schemaVersion: 'profile-v1-production-status/v1', authority: 'DERIVED_PRODUCTION_STATUS', overallState, stages: {assembly, finalRender, finalRenderReview: finalReview, productionBundle: bundle}, readiness: {assemblyReady: assembly.state === 'PASS', finalRenderQaPass: finalRender.state === 'PASS', humanFinalRenderReviewPass: finalReview.state === 'PASS', bundleCurrent: bundle.state === 'PASS', macDaVinciActual: 'NOT_RUN', productionReady: false}, nextActions};
-if (jsonMode) console.log(JSON.stringify(report, null, 2)); else { console.log(`Profile V1 production status: ${overallState}`); for (const [name, stage] of Object.entries(report.stages)) console.log(`${name}=${stage.state} / ${stage.detail}`); console.log(`NEXT / ${nextActions.join(' → ')}`); }
-if (strict && overallState !== 'AWAITING_DAVINCI_ACTUAL') process.exit(1);
+let overallState:string;let nextActions:string[];
+if(assembly.state!=='PASS'){overallState='ASSEMBLY_REQUIRED';nextActions=assemblyReport?.nextActions??['Profile assembly blockersを解消'];}
+else if(finalRender.state==='MISSING'){overallState='FINAL_RENDER_REQUIRED';nextActions=['node --no-warnings scripts/render-profile-v1-production.mts'];}
+else if(finalRender.state!=='PASS'){overallState='FINAL_RENDER_QA_FAILED';nextActions=['final render QA failureを修正'];}
+else if(finalReview.state==='MISSING'){overallState='FINAL_RENDER_REVIEW_INIT_REQUIRED';nextActions=['node --no-warnings scripts/profile-v1-final-render-review.mts --init','最終MP4を音声付きで人間確認'];}
+else if(finalReview.state!=='PASS'){overallState='HUMAN_FINAL_RENDER_REVIEW_REQUIRED_OR_STALE';nextActions=['current final renderに対するHuman reviewを完了'];}
+else if(bundle.state==='MISSING'){overallState='PRODUCTION_BUNDLE_REQUIRED';nextActions=['node --no-warnings scripts/export-profile-v1-production-bundle.mts'];}
+else if(bundle.state!=='PASS'){overallState='PRODUCTION_BUNDLE_STALE';nextActions=['current artifactsからproduction bundleを再生成'];}
+else if(davinci.state==='MISSING'){overallState='DAVINCI_EVIDENCE_INIT_REQUIRED';nextActions=['node --no-warnings scripts/profile-v1-davinci-finishing-evidence.mts --init','Mac DaVinci Resolveで実Actualを実施'];}
+else if(davinci.state!=='PASS'){overallState='DAVINCI_ACTUAL_REQUIRED_OR_STALE';nextActions=['Mac DaVinci Actualの未完了/FAIL/stale項目を解消'];}
+else if(approval.state==='MISSING'){overallState='FINAL_DELIVERY_APPROVAL_INIT_REQUIRED';nextActions=['node --no-warnings scripts/profile-v1-final-delivery-approval.mts --init','DaVinci final exportを人間が最終確認'];}
+else if(approval.state!=='PASS'){overallState='FINAL_DELIVERY_APPROVAL_REQUIRED_OR_STALE';nextActions=['current SHA-bound final approvalを明示APPROVEまたは再初期化'];}
+else{overallState='PRODUCTION_READY';nextActions=['承認済みDaVinci export SHAを上映用正本として固定'];}
+const productionReady=approval.state==='PASS';
+const report={schemaVersion:'profile-v1-production-status/v1',authority:'DERIVED_PRODUCTION_STATUS',overallState,stages:{assembly,finalRender,finalRenderReview:finalReview,productionBundle:bundle,davinciFinishing:davinci,finalDeliveryApproval:approval},readiness:{assemblyReady:assembly.state==='PASS',finalRenderQaPass:finalRender.state==='PASS',humanFinalRenderReviewPass:finalReview.state==='PASS',bundleCurrent:bundle.state==='PASS',macDaVinciActual:davinci.state==='PASS'?'ACTUAL_VERIFIED':'NOT_RUN',finalDeliveryApproved:approval.state==='PASS',productionReady},nextActions};
+if(jsonMode)console.log(JSON.stringify(report,null,2));else{console.log(`Profile V1 production status: ${overallState}`);for(const [name,stage] of Object.entries(report.stages))console.log(`${name}=${stage.state} / ${stage.detail}`);console.log(`NEXT / ${nextActions.join(' → ')}`);}if(strict&&!productionReady)process.exit(1);
