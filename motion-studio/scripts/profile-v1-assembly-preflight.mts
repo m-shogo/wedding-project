@@ -103,7 +103,7 @@ const report = {
   nextActions: !mediaReady
     ? [
         `Profile実素材を ${profileV1ProductionContract.mediaDirectory}/ へcanonical stem名で投入`,
-        'pnpm profile:assembly-preflight',
+        'node --no-warnings scripts/profile-v1-assembly-preflight.mts',
       ]
     : !bgmFileExists
       ? ['権利確認対象BGMを public/audio/profile/bgm-main.mp3 へ配置', '利用条件を人間が確認']
@@ -121,7 +121,7 @@ if (jsonMode) {
   console.log(`finalRenderEligible=${finalRenderEligible ? 'YES' : 'NO'} previewQA=NOT_RUN HumanContentQA=NOT_RUN MacDaVinciActual=NOT_RUN productionReady=NO`);
   for (const blocker of blockers) console.log(`BLOCK / ${blocker}`);
   console.log(`NEXT / ${report.nextActions.join(' → ')}`);
-  console.log('JSON / pnpm profile:assembly-preflight -- --json');
+  console.log('JSON / node --no-warnings scripts/profile-v1-assembly-preflight.mts --json');
 }
 
 if (strict && !finalRenderEligible) process.exit(1);
