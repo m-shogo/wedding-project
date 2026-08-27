@@ -10,6 +10,7 @@ on:
       - "motion-studio/src/data/profileV1RuntimeMedia.generated.ts"
       - "motion-studio/src/data/profileV1ProductionPlan.ts"
       - "motion-studio/src/compositions/profile/ProfileV1RealMediaPreview.tsx"
+      - "motion-studio/scripts/profile-v1-media-input-gate.mts"
       - "motion-studio/scripts/render-profile-v1-real-media-preview.mts"
       - "motion-studio/scripts/profile-v1-real-media-review.mts"
       - "motion-studio/scripts/check-profile-v1-real-media-review.mts"
@@ -24,6 +25,7 @@ on:
       - "motion-studio/src/data/profileV1RuntimeMedia.generated.ts"
       - "motion-studio/src/data/profileV1ProductionPlan.ts"
       - "motion-studio/src/compositions/profile/ProfileV1RealMediaPreview.tsx"
+      - "motion-studio/scripts/profile-v1-media-input-gate.mts"
       - "motion-studio/scripts/render-profile-v1-real-media-preview.mts"
       - "motion-studio/scripts/profile-v1-real-media-review.mts"
       - "motion-studio/scripts/check-profile-v1-real-media-review.mts"
@@ -65,8 +67,8 @@ jobs:
       - name: Real-media Human QA contracts
         run: node --no-warnings scripts/check-profile-v1-real-media-review.mts
 
-      - name: Render real-media review input
-        run: node --no-warnings scripts/render-profile-v1-real-media-preview.mts
+      - name: Render explicit missing-media smoke input
+        run: node --no-warnings scripts/render-profile-v1-real-media-preview.mts --allow-missing-media-smoke
 
       - name: Fresh clone cannot manufacture Human review
         run: |
@@ -81,12 +83,12 @@ jobs:
             echo "Real-media Human QA unexpectedly passed without evidence"
             exit 1
           fi
-          echo "Profile real-media preview may render missing-state UI in CI, but Human QA cannot initialize or pass until all 17 real media files exist"
+          echo "CI smoke may render the explicit missing-state UI, but production preview/review cannot initialize or pass until all 17 real media files and current cleared BGM exist"
 
-      - name: Upload review input and status
+      - name: Upload smoke input and status
         uses: actions/upload-artifact@v4
         with:
-          name: profile-v1-real-media-human-review-input
+          name: profile-v1-real-media-human-review-smoke-input
           path: |
             motion-studio/out/preview/profile_v1_real_media_preview.mp4
             motion-studio/out/qa/profile-v1-real-media-review-status.json

@@ -2,9 +2,23 @@ import {spawnSync} from 'node:child_process';
 import {mkdirSync} from 'node:fs';
 import {dirname, join} from 'node:path';
 import {fileURLToPath} from 'node:url';
+import {assertProfileV1MediaInputsReady} from './profile-v1-media-input-gate.mts';
 
 const studioRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const output = join(studioRoot, 'out/preview/profile_v1_real_media_preview.mp4');
+const allowMissingMediaSmoke = process.argv.includes('--allow-missing-media-smoke');
+
+if (!allowMissingMediaSmoke) {
+  try {
+    assertProfileV1MediaInputsReady(studioRoot);
+  } catch (error) {
+    console.error(error instanceof Error ? error.message : String(error));
+    process.exit(1);
+  }
+} else {
+  console.log('SMOKE ONLY / explicit missing-media preview allowed; this is not production review evidence.');
+}
+
 mkdirSync(dirname(output), {recursive: true});
 
 const result = spawnSync(
@@ -23,4 +37,4 @@ const result = spawnSync(
 );
 
 if (result.status !== 0) process.exit(result.status ?? 1);
-console.log(`✅ Profile V1 real-media preview: ${output}`);
+console.log(`✅ Profile V1 real-media preview: ${output}${allowMissingMediaSmoke ? ' (SMOKE ONLY)' : ''}`);
