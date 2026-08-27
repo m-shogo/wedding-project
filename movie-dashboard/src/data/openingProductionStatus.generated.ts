@@ -5,34 +5,20 @@ export const openingProductionStatus = {
   "source": {
     "status": "motion-studio/scripts/opening-v1-production-status.mts",
     "previewSourceBinding": "motion-studio/scripts/opening-v1-preview-source-fingerprint.mts",
+    "finalRenderReview": "motion-studio/scripts/opening-v1-final-render-review.mts",
     "davinciHandoff": "motion-studio/scripts/opening-v1-davinci-handoff-contract.mts"
   },
   "overallState": "MEDIA_REQUIRED",
   "stages": {
-    "media": {
-      "state": "BLOCKED"
-    },
-    "previewRender": {
-      "state": "NOT_RUN"
-    },
-    "previewSourceBinding": {
-      "state": "NOT_RUN"
-    },
-    "previewReview": {
-      "state": "NOT_RUN"
-    },
-    "finalRender": {
-      "state": "NOT_RUN"
-    },
-    "productionBundle": {
-      "state": "NOT_RUN"
-    },
-    "davinciFinishing": {
-      "state": "NOT_RUN"
-    },
-    "finalDeliveryApproval": {
-      "state": "NOT_RUN"
-    }
+    "media": {"state": "BLOCKED"},
+    "previewRender": {"state": "NOT_RUN"},
+    "previewSourceBinding": {"state": "NOT_RUN"},
+    "previewReview": {"state": "NOT_RUN"},
+    "finalRender": {"state": "NOT_RUN"},
+    "productionBundle": {"state": "NOT_RUN"},
+    "davinciFinishing": {"state": "NOT_RUN"},
+    "finalDeliveryApproval": {"state": "NOT_RUN"},
+    "finalRenderReview": {"state": "NOT_RUN"}
   },
   "readiness": {
     "finalRenderEligible": false,
@@ -44,7 +30,8 @@ export const openingProductionStatus = {
     "macDaVinciActualVerified": false,
     "readyForFinalDeliveryApproval": false,
     "finalDeliveryApproved": false,
-    "productionReady": false
+    "productionReady": false,
+    "humanFinalRenderApproved": false
   },
   "sourceRevalidation": {
     "realMediaPreview": {
@@ -52,10 +39,19 @@ export const openingProductionStatus = {
       "blockers": [],
       "recovery": []
     },
+    "finalRender": {
+      "state": "NOT_RUN",
+      "blockers": [
+        "FINAL_RENDER_REVIEW_EVIDENCE_MISSING"
+      ],
+      "recovery": []
+    },
     "guardrails": [
       "SOURCE_CHANGED => RE_RENDER_REQUIRED",
       "RE_RENDER_REQUIRED => RE_REVIEW_REQUIRED",
-      "OLD_HUMAN_REVIEW != CURRENT_RENDER_IMPLEMENTATION"
+      "OLD_HUMAN_REVIEW != CURRENT_RENDER_IMPLEMENTATION",
+      "PREVIEW_REVIEW_PASS != FINAL_RENDER_REVIEW_PASS",
+      "FINAL_RENDER_OR_SOURCE_CHANGED => FINAL_RENDER_RE_REVIEW_REQUIRED"
     ]
   },
   "handoff": {
@@ -64,29 +60,19 @@ export const openingProductionStatus = {
       "current": false,
       "sourceAuthorities": [
         "src/data/openingV1.ts#openingV1Scenes",
-        "src/data/openingV1Sound.ts#openingV1SoundCues"
+        "src/data/openingV1Sound.ts#openingV1SoundCues",
+        "out/qa/opening-v1-final-render-review.json"
       ],
       "artifacts": {
         "sceneTimeline": {
           "path": "out/handoff/opening-v1/opening-v1-palmier-timeline.csv",
           "shaBound": true,
-          "carries": [
-            "scene_boundary",
-            "replacement_policy",
-            "final_render_sha256"
-          ]
+          "carries": ["scene_boundary","replacement_policy","final_render_sha256"]
         },
         "soundCues": {
           "path": "out/handoff/opening-v1/opening-v1-palmier-sound-cues.csv",
           "shaBound": true,
-          "carries": [
-            "bgm",
-            "ambience_j_cut",
-            "start_end",
-            "volume",
-            "note",
-            "final_render_sha256"
-          ]
+          "carries": ["bgm","ambience_j_cut","start_end","volume","note","final_render_sha256"]
         }
       }
     },
@@ -95,7 +81,8 @@ export const openingProductionStatus = {
       "current": false,
       "sourceAuthorities": [
         "scripts/export-opening-v1-production-bundle.mts#bundle.davinci",
-        "scripts/opening-v1-davinci-finishing-evidence.mts"
+        "scripts/opening-v1-davinci-finishing-evidence.mts",
+        "out/qa/opening-v1-final-render-review.json"
       ],
       "upstreamPalmier": {
         "requiredContractVersion": "opening-v1-palmier-handoff/v2",
