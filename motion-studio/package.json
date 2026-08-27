@@ -58,7 +58,7 @@
     "opening:assembly-preflight:mix-strict": "node --no-warnings scripts/opening-v1-assembly-preflight.mts --mix-strict",
     "opening:preview-review:init": "node --no-warnings scripts/init-opening-v1-preview-review.mts",
     "opening:preview-review": "node --no-warnings scripts/opening-v1-preview-review.mts",
-    "opening:preview-review:strict": "node --no-warnings scripts/opening-v1-preview-review.mts --strict",
+    "opening:preview-review:strict": "node --no-warnings scripts/opening-v1-preview-source-fingerprint.mts --strict && node --no-warnings scripts/opening-v1-preview-review.mts --strict",
     "opening:davinci-finishing:init": "node --no-warnings scripts/opening-v1-davinci-finishing-evidence.mts --init",
     "opening:davinci-finishing": "node --no-warnings scripts/opening-v1-davinci-finishing-evidence.mts",
     "opening:davinci-finishing:strict": "node --no-warnings scripts/opening-v1-davinci-finishing-evidence.mts --strict",
