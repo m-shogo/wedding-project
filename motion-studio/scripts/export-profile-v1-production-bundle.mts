@@ -3,7 +3,7 @@ import {existsSync, mkdirSync, readFileSync, writeFileSync} from 'node:fs';
 import {dirname, join, relative} from 'node:path';
 import {spawnSync} from 'node:child_process';
 import {fileURLToPath} from 'node:url';
-import {profileV1Chapters} from '../src/data/profileV1ProductionPlan.ts';
+import {profileV1Chapters, profileV1OptionalGeneratedSlots} from '../src/data/profileV1ProductionPlan.ts';
 import {profileV1RuntimeMedia} from '../src/data/profileV1RuntimeMedia.generated.ts';
 import {profileV1GeneratedAccentImplementations} from '../src/data/profileV1GeneratedAccentRegistry.ts';
 
@@ -39,17 +39,18 @@ const media = profileV1RuntimeMedia.slots.map((slot) => {
   return {slot: slot.id, chapterId: slot.chapterId, label: slot.label, file: rel(absolute), extension: slot.extension, sha256: sha(absolute)};
 });
 
-const generatedAccents = profileV1GeneratedAccentImplementations.map((accent) => ({
-  slotId: accent.slotId,
-  chapterId: accent.chapterId,
-  label: accent.label,
-  purpose: accent.purpose,
-  implementation: accent.implementation,
-  canonicalReuse: accent.canonicalReuse,
-  palmierInstruction: accent.palmierInstruction,
-  davinciInstruction: accent.davinciInstruction,
-  verification: accent.verification,
-}));
+const generatedAccents = profileV1GeneratedAccentImplementations.map((accent) => {
+  const slot = profileV1OptionalGeneratedSlots.find((candidate) => candidate.id === accent.slotId);
+  if (!slot || slot.chapterId !== accent.chapterId) throw new Error(`PROFILE_BUNDLE_ACCENT_SLOT_MISMATCH:${accent.slotId}`);
+  return {
+    slotId: accent.slotId,
+    chapterId: accent.chapterId,
+    label: slot.label,
+    note: slot.note,
+    implementation: accent.implementation,
+    canonicalReuse: accent.canonicalReuse,
+  };
+});
 
 const timeline = profileV1Chapters.map((chapter, index) => ({
   order: chapter.order,
@@ -80,7 +81,7 @@ const bundle = {
     handoffAsset: rel(finalPath),
     expectedSha256: finalSha,
     intendedUse: 'FINISHING_AND_OUTPUT_QA',
-    generatedAccentRoutes: generatedAccents.map(({slotId, chapterId, implementation, canonicalReuse, davinciInstruction, verification}) => ({slotId, chapterId, implementation, canonicalReuse, davinciInstruction, verification})),
+    generatedAccentRoutes: generatedAccents.map(({slotId, chapterId, label, note, implementation, canonicalReuse}) => ({slotId, chapterId, label, note, implementation, canonicalReuse})),
     macActualState: 'NOT_RUN',
     productionReady: false,
   },
