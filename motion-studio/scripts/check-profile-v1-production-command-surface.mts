@@ -28,7 +28,7 @@ const expected: Record<string, string> = {
   'profile:real-media-review:strict': 'node --no-warnings scripts/profile-v1-real-media-review.mts --strict',
   'render:profile-v1': 'node --no-warnings scripts/render-profile-v1-production.mts',
   'check:profile-render': 'node --no-warnings scripts/check-profile-render.mts out/profile/profile_v1.mp4',
-  'profile:final-render-review:init': 'node --no-warnings scripts/profile-v1-final-render-review.mts --init',
+  'profile:final-render-review:init': 'node --no-warnings scripts/init-profile-v1-final-render-review.mts',
   'profile:final-render-review:strict': 'node --no-warnings scripts/profile-v1-final-render-review.mts --strict',
   'export:profile-v1-production-bundle': 'node --no-warnings scripts/export-profile-v1-production-bundle.mts',
   'profile:davinci-finishing:init': 'node --no-warnings scripts/profile-v1-davinci-finishing-evidence.mts --init',
@@ -79,4 +79,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log(`Profile V1 production command surface OK: ${Object.keys(expected).length} guarded commands validate Motion Zukan generated accents, refresh runtime media, and bind Human review initialization to a fresh current-input preview without bypassing production gates.`);
+console.log(`Profile V1 production command surface OK: ${Object.keys(expected).length} guarded commands validate Motion Zukan generated accents, refresh runtime media, and bind Human preview/final review initialization to freshly rendered current artifacts without bypassing production gates.`);
