@@ -17,6 +17,7 @@
     "check:post60-regression": "node --no-warnings scripts/check-start-wedding-post60-regression.mts",
     "check:preview-offset-isolation": "node --no-warnings scripts/check-preview-offset-isolation.mts",
     "check:full-song-identity": "node --no-warnings scripts/check-start-wedding-full-song-identity.mts",
+    "check:minimum-usable-duration": "node --no-warnings scripts/check-start-wedding-minimum-usable-duration.mts",
     "test:timing-master-manual-preservation": "node --no-warnings scripts/test-timing-master-manual-preservation.mts",
     "test:timing-master-offset-composition": "node --no-warnings scripts/test-timing-master-offset-composition.mts",
     "render:cue-listening-clips": "node --no-warnings scripts/render-cue-listening-clips.mts",

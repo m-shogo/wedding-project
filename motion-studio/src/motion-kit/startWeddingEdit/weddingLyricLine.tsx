@@ -59,21 +59,27 @@ const VARIANT_STYLE: Record<WeddingVariant, {color: string; accent: string; font
  * 単純なmapとして最後の状態を保持する(1phrase=1Sequenceなので競合しない)。 */
 export const weddingLyricFallbackByPhraseId = new Map<string, boolean>();
 
-/** importantWordsをlocal frame配列に変換する。1件も無ければnullを返しfallbackを促す。 */
+/** importantWordsをlocal frame配列に変換する。1件も無ければnullを返しfallbackを促す。
+ * accentSecがphrase.startSecより前を指す場合(audio-analysisの検出差で、
+ * word-accent cueの方がphrase onset cueより早く検出されることがある。
+ * 例: P019/P024はaudio-analysis confidence 0.9台の実accentがonsetより
+ * 早い)、負のlocal frameになりSequence開始前にhitが「終わって」しまい、
+ * visual impactが一切見えなくなる。audio truth(phrase.startSec)は書き
+ * 換えず、animation側の描画位置だけを0へclampする。 */
 const wordsToLocalFrames = (phrase: EnrichedLyricPhrase): {words: string[]; frames: number[]} | null => {
   if (!phrase.importantWords || phrase.importantWords.length === 0) return null;
   const startFrame = secToFrame(phrase.startSec);
   return {
     words: phrase.importantWords.map((w) => w.word),
-    frames: phrase.importantWords.map((w) => secToFrame(w.accentSec) - startFrame),
+    frames: phrase.importantWords.map((w) => Math.max(0, secToFrame(w.accentSec) - startFrame)),
   };
 };
 
-/** 単一accentだけ欲しい呼び出し用。無ければnull。 */
+/** 単一accentだけ欲しい呼び出し用。無ければnull。clamp理由は上記コメント参照。 */
 const firstWordFrame = (phrase: EnrichedLyricPhrase): number | null => {
   const w = phrase.importantWords?.[0];
   if (!w) return null;
-  return secToFrame(w.accentSec) - secToFrame(phrase.startSec);
+  return Math.max(0, secToFrame(w.accentSec) - secToFrame(phrase.startSec));
 };
 
 /** 3-hit onomatopoeia(パッパッパッ/チャプチャプチャプ)の描画。3回のhitで積み上がる。 */
