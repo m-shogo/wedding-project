@@ -202,6 +202,8 @@ function evaluate() {
   if (evidence.bgmReviewed !== false) blockers.push('BGM_REVIEW_MUST_REMAIN_SEPARATE');
   if (evidence.macDaVinciActual !== 'NOT_RUN') blockers.push('MAC_DAVINCI_ACTUAL_MUST_REMAIN_SEPARATE');
   if (evidence.productionReady !== false) blockers.push('REAL_MEDIA_REVIEW_CANNOT_PROMOTE_PRODUCTION');
+  const boundAtMs = Date.parse(evidence.boundAt);
+  if (!evidence.boundAt || Number.isNaN(boundAtMs)) blockers.push('BOUND_AT_INVALID');
 
   let current: ReturnType<typeof currentBindings> | null = null;
   try {
@@ -298,7 +300,9 @@ function evaluate() {
 
   if (!evidence.review || evidence.review.overall !== 'PASS') blockers.push(`OVERALL_${evidence.review?.overall ?? 'INVALID'}`);
   if (!evidence.review?.reviewer?.trim()) blockers.push('REVIEWER_MISSING');
-  if (!evidence.review?.reviewedAt || Number.isNaN(Date.parse(evidence.review.reviewedAt))) blockers.push('REVIEWED_AT_INVALID');
+  const reviewedAtMs = evidence.review?.reviewedAt ? Date.parse(evidence.review.reviewedAt) : Number.NaN;
+  if (!evidence.review?.reviewedAt || Number.isNaN(reviewedAtMs)) blockers.push('REVIEWED_AT_INVALID');
+  else if (!Number.isNaN(boundAtMs) && reviewedAtMs < boundAtMs) blockers.push('REVIEWED_BEFORE_BINDING');
 
   const mediaReviewed = Array.isArray(evidence.media)
     ? evidence.media.filter((media) => media?.qa && qaAxes.every((axis) => media.qa[axis] === 'PASS')).length
