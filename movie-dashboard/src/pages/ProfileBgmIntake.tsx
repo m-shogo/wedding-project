@@ -35,9 +35,10 @@ const commands = [
 export function ProfileBgmIntake() {
   const [copied, setCopied] = useState<string | null>(null);
   const gate = profileProductionGate;
-  const fileExists = gate.bgm.fileExists;
-  const rightsCleared = gate.bgm.rightsState === "CLEARED";
-  const ready = gate.bgm.ready;
+  const fileExists = Boolean(gate.bgm.fileExists);
+  const rightsState = String(gate.bgm.rightsState);
+  const rightsCleared = rightsState === "CLEARED";
+  const ready = Boolean(gate.bgm.ready);
 
   async function copy(text: string) {
     try {
@@ -67,7 +68,7 @@ export function ProfileBgmIntake() {
         <div>
           <p className="text-[10px] tracking-[0.18em] font-semibold text-navy-400">RIGHTS APPROVAL</p>
           <p className={`mt-1 text-2xl font-mono font-bold ${rightsCleared ? "text-emerald-700 dark:text-emerald-300" : "text-amber-700 dark:text-amber-300"}`}>
-            {gate.bgm.rightsState}
+            {rightsState}
           </p>
           <p className="mt-2 text-xs text-navy-500 dark:text-navy-300">Human approval / WEDDING_SCREENING / current BGM SHA-bound</p>
         </div>
