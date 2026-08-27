@@ -67,6 +67,8 @@ function verify(strict:boolean){
   if(!ev){console.log(`Profile DaVinci finishing evidence: BLOCKED (${errors.length})`);for(const e of errors)console.log(`BLOCK / ${e}`);if(strict)process.exit(1);return;}
   if(ev.schemaVersion!=='profile-v1-davinci-finishing-evidence/v1'||ev.authority!=='MAC_DAVINCI_ACTUAL_EVIDENCE')errors.push('PROFILE_DAVINCI_EVIDENCE_CONTRACT');
   if(ev.productionReady!==false)errors.push('PROFILE_DAVINCI_MUST_NOT_SELF_PROMOTE');
+  const boundAtMs=Date.parse(ev.boundAt);
+  if(!ev.boundAt||Number.isNaN(boundAtMs))errors.push('PROFILE_DAVINCI_BOUND_AT_INVALID');
   if(loaded){
     if(ev.bundle.path!==rel(bundlePath))errors.push('STALE_PROFILE_DAVINCI_BUNDLE_PATH');
     if(ev.bundle.sha256!==loaded.bundleSha256)errors.push('STALE_PROFILE_DAVINCI_BUNDLE');
@@ -82,7 +84,9 @@ function verify(strict:boolean){
     if(!existsSync(exportPath))errors.push('PROFILE_DAVINCI_EXPORT_FILE_MISSING');
     else if(sha(exportPath)!==ev.export.sha256)errors.push('PROFILE_DAVINCI_EXPORT_SHA_MISMATCH');
   }
-  if(ev.review.overall!=='PASS'||!ev.review.reviewer?.trim()||!ev.review.reviewedAt||Number.isNaN(Date.parse(ev.review.reviewedAt)))errors.push('PROFILE_DAVINCI_HUMAN_REVIEW_NOT_PASS');
+  const reviewedAtMs=ev.review.reviewedAt?Date.parse(ev.review.reviewedAt):Number.NaN;
+  if(ev.review.overall!=='PASS'||!ev.review.reviewer?.trim()||!ev.review.reviewedAt||Number.isNaN(reviewedAtMs))errors.push('PROFILE_DAVINCI_HUMAN_REVIEW_NOT_PASS');
+  else if(!Number.isNaN(boundAtMs)&&reviewedAtMs<boundAtMs)errors.push('PROFILE_DAVINCI_REVIEWED_BEFORE_BINDING');
   if(errors.length){console.log(`Profile DaVinci finishing evidence: BLOCKED (${errors.length})`); for(const e of errors)console.log(`BLOCK / ${e}`); if(strict)process.exit(1); return;}
   console.log('Profile DaVinci finishing evidence: ACTUAL_VERIFIED — current canonical Motion Zukan accent routes, bundle/source, Palmier timeline and exported movie bytes match real Mac Resolve evidence.');
 }
