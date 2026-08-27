@@ -3,27 +3,6 @@ import type {ProfileV1ChapterId} from '../../data/profileV1ProductionPlan';
 import {TransitionWipeEngine} from '../../motion-kit/engines';
 import {DoorLight} from '../opening/DoorLight';
 
-export const profileV1GeneratedAccentImplementations = [
-  {
-    slotId: 'departure-boarding-title',
-    chapterId: 'departure',
-    implementation: 'PROFILE_BOARDING_TITLE_CARD',
-    canonicalReuse: 'COMPOSITION_SPECIFIC_GRAPHIC',
-  },
-  {
-    slotId: 'intersection-route',
-    chapterId: 'intersection',
-    implementation: 'MOTION_ZUKAN_ROUTE_LINE',
-    canonicalReuse: 'TransitionWipeEngine/route-line',
-  },
-  {
-    slotId: 'arrival-door-light',
-    chapterId: 'arrival',
-    implementation: 'OPENING_DOOR_LIGHT_REUSE',
-    canonicalReuse: 'DoorLight',
-  },
-] as const;
-
 const BoardingTitleAccent = ({title, chapterIndex, duration}: {title: string; chapterIndex: number; duration: number}) => {
   const frame = useCurrentFrame();
   const visibleUntil = Math.min(duration - 1, 48);
