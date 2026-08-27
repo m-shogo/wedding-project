@@ -101,6 +101,11 @@ export const profileProductionStatus = {
         "path": "out/qa/profile-v1-davinci-finishing-evidence.json",
         "schemaVersion": "profile-v1-davinci-finishing-evidence/v1",
         "authority": "MAC_DAVINCI_ACTUAL_EVIDENCE",
+        "commands": {
+          "init": "pnpm profile:davinci-finishing:init",
+          "status": "pnpm profile:davinci-finishing",
+          "strict": "pnpm profile:davinci-finishing:strict"
+        },
         "requiredChecks": [
           "source_render_sha_readback",
           "resolve_version_project_timeline",
