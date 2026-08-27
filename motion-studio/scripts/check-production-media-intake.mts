@@ -3,6 +3,7 @@ import {existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync} from 'node
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 import {applyIntakePlan, buildIntakePlan, getIntakeSpecs, writeIntakeReceipt} from './intake-production-media.mts';
+import {verifyIntakeReceipt} from './verify-production-media-intake-receipt.mts';
 
 const root = mkdtempSync(join(tmpdir(), 'wedding-media-intake-'));
 const openingSource = join(root, 'opening-source');
@@ -45,14 +46,24 @@ try {
   if (!heroReceipt) throw new Error('opening receipt missing hero-01');
   if (heroReceipt.sha256 !== sha256('opening:hero-01') || heroReceipt.bytes !== Buffer.byteLength('opening:hero-01') || !heroReceipt.sourceTargetMatch) throw new Error('opening receipt did not bind copied bytes');
 
-  const receiptPath = join(root, 'receipts', 'opening.json');
-  writeIntakeReceipt(openingReceipt, receiptPath);
-  const persistedReceipt = JSON.parse(readFileSync(receiptPath, 'utf8'));
+  const openingReceiptPath = join(root, 'receipts', 'opening.json');
+  writeIntakeReceipt(openingReceipt, openingReceiptPath);
+  const persistedReceipt = JSON.parse(readFileSync(openingReceiptPath, 'utf8'));
   if (persistedReceipt.copies.find((item: {id: string}) => item.id === 'hero-01')?.sha256 !== heroReceipt.sha256) throw new Error('persisted receipt changed SHA evidence');
+
+  const openingCurrent = verifyIntakeReceipt({project: 'opening', receiptPath: openingReceiptPath, targetDirectory: openingTarget});
+  if (!openingCurrent.current || openingCurrent.verifiedCount !== 11) throw new Error(`fresh opening receipt should verify: ${JSON.stringify(openingCurrent)}`);
 
   if (!existsSync(join(openingTarget, 'hero-01.jpg'))) throw new Error('opening apply did not create canonical target');
   if (!existsSync(join(openingSource, 'couple01.JPG'))) throw new Error('opening apply modified source file');
   if (readFileSync(join(openingTarget, 'hero-01.jpg'), 'utf8') !== 'opening:hero-01') throw new Error('opening copied bytes changed');
+
+  writeFileSync(join(openingTarget, 'hero-01.jpg'), 'opening:hero-01:changed-after-intake');
+  const openingStale = verifyIntakeReceipt({project: 'opening', receiptPath: openingReceiptPath, targetDirectory: openingTarget});
+  if (openingStale.current || !openingStale.errors.some((error) => error.startsWith('TARGET_BYTES_CHANGED: hero-01') || error.startsWith('TARGET_SHA_CHANGED: hero-01'))) {
+    throw new Error(`mutated canonical target must stale receipt: ${JSON.stringify(openingStale)}`);
+  }
+  writeFileSync(join(openingTarget, 'hero-01.jpg'), 'opening:hero-01');
 
   const postApplyPlan = buildIntakePlan({
     project: 'opening',
@@ -77,10 +88,17 @@ try {
   if (profilePlan.expectedCount !== 17 || profilePlan.resolvedCount !== 17) throw new Error('profile plan count mismatch');
   const profileReceipt = applyIntakePlan(profilePlan, '2026-08-28T00:00:01.000Z');
   if (profileReceipt.copiedCount !== 17 || profileReceipt.copies.some((item) => !item.sourceTargetMatch || item.sha256.length !== 64)) throw new Error('profile receipt must SHA-verify all 17 media slots');
+  const profileReceiptPath = join(root, 'receipts', 'profile.json');
+  writeIntakeReceipt(profileReceipt, profileReceiptPath);
+  const profileCurrent = verifyIntakeReceipt({project: 'profile', receiptPath: profileReceiptPath, targetDirectory: profileTarget});
+  if (!profileCurrent.current || profileCurrent.verifiedCount !== 17) throw new Error(`fresh profile receipt should verify: ${JSON.stringify(profileCurrent)}`);
 
   const firstProfile = profileSpecs[0];
   const firstExtension = firstProfile.kind === 'photo' ? '.jpg' : '.mp4';
   if (!existsSync(join(profileTarget, `${firstProfile.canonicalStem}${firstExtension}`))) throw new Error('profile underscore normalization did not create canonical target');
+
+  const missingReceipt = verifyIntakeReceipt({project: 'profile', receiptPath: join(root, 'receipts', 'missing.json'), targetDirectory: profileTarget});
+  if (missingReceipt.current || !missingReceipt.errors.some((error) => error.startsWith('RECEIPT_MISSING:'))) throw new Error('missing receipt must fail closed');
 
   const duplicateSource = join(root, 'duplicate-source');
   await import('node:fs').then(({mkdirSync}) => mkdirSync(duplicateSource, {recursive: true}));
@@ -90,7 +108,7 @@ try {
   if (duplicatePlan.readyToApply) throw new Error('ambiguous canonical role must not be ready to apply');
   if (!duplicatePlan.ambiguous.some((item) => item.id === 'hero-01')) throw new Error('duplicate alias ambiguity was not detected');
 
-  console.log('Production media intake contracts OK: Opening aliases -> canonical targets, Profile kind-aware 17-slot import, source preservation, SHA-verified copy receipts, existing-target protection, and ambiguity fail-close verified.');
+  console.log('Production media intake contracts OK: Opening aliases -> canonical targets, Profile kind-aware 17-slot import, source preservation, SHA-verified copy receipts, receipt freshness fail-close, existing-target protection, and ambiguity fail-close verified.');
 } finally {
   rmSync(root, {recursive: true, force: true});
 }

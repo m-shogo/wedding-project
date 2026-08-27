@@ -2,6 +2,7 @@ import {existsSync, readdirSync, statSync} from 'node:fs';
 import {dirname, extname, join} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {aliases, orderedKeys} from '../src/data/openingV1PhotoRoles.ts';
+import {verifyIntakeReceipt} from './verify-production-media-intake-receipt.mts';
 
 const studioRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const openingDir = join(studioRoot, 'public/photos/opening');
@@ -60,5 +61,12 @@ if (missing.length > 0) {
 }
 
 if (missing.length === 0) {
-  console.log('✅ Opening V1 real-photo gate: 11/11');
+  const receipt = verifyIntakeReceipt({project: 'opening', targetDirectory: openingDir});
+  if (!receipt.current) {
+    console.error('❌ Opening V1 real-photo gate: 11/11だがcanonical intake receiptがmissing/stale');
+    for (const error of receipt.errors) console.error(`- ${error}`);
+    console.error('再投入: canonical intake DRY RUN → --apply --receipt out/intake/opening-media-intake.json');
+    process.exit(1);
+  }
+  console.log(`✅ Opening V1 real-photo gate: 11/11 + intake receipt CURRENT (${receipt.verifiedCount}/${receipt.expectedCount} SHA)`);
 }
