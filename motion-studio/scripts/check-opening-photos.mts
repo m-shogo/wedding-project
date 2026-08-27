@@ -44,7 +44,7 @@ for (const slot of expected) {
 if (files.length >= expected.length && missing.length > 0) {
   console.warn(
     `⚠️  opening/には${files.length}枚ありますがcanonical名が${missing.length}枠不足。` +
-      'previewではsorted fallbackが使われる場合がありますが、本番renderでは取り違え防止のためcanonical名を要求します。',
+      '枚数や並び順では自動割当しません。取り違え防止のためcanonical名へリネームしてください。',
   );
 }
 
