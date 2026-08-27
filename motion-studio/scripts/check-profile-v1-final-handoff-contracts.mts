@@ -30,6 +30,12 @@ for(const t of [
   'profile-v1-davinci-finishing-evidence/v1',
   'MAC_DAVINCI_ACTUAL_EVIDENCE',
   'STALE_PROFILE_DAVINCI_BUNDLE',
+  'STALE_PROFILE_DAVINCI_BUNDLE_PATH',
+  'STALE_PROFILE_DAVINCI_SOURCE_PATH',
+  'PROFILE_DAVINCI_EXPORT_FILE_MISSING',
+  'PROFILE_DAVINCI_EXPORT_SHA_MISMATCH',
+  "const exportPath=join(root,ev.export.path)",
+  'sha(exportPath)!==ev.export.sha256',
   "profileV1GeneratedAccentImplementations",
   'generatedAccents:GeneratedAccentRoute[]',
   'generatedAccentAuthority:string',
@@ -69,5 +75,6 @@ if(!approval.includes("a.productionReady!==(a.decision==='APPROVE')"))errors.pus
 if(davinci.includes('timelineCsvSha256:string')&&!davinci.includes('sha(timelinePath)'))errors.push('DaVinci direct path must compare current Palmier timeline SHA before init/strict');
 if(davinci.includes('generatedAccents:GeneratedAccentRoute[]')&&!davinci.includes('sameAccentRoutes(bundle.generatedAccents)'))errors.push('DaVinci direct path must compare bundle accent routes with canonical Motion Zukan registry');
 if(davinci.includes('generatedAccentRoutes:GeneratedAccentRoute[]')&&!davinci.includes('sameAccentRoutes(bundle.davinci?.generatedAccentRoutes)'))errors.push('DaVinci direct path must compare DaVinci accent routes with canonical Motion Zukan registry');
+if(!davinci.includes('existsSync(exportPath)')||!davinci.includes('sha(exportPath)!==ev.export.sha256'))errors.push('DaVinci Actual must verify the declared exported movie exists and matches its recorded SHA');
 if(errors.length){console.error(`Profile V1 final handoff contracts FAILED (${errors.length})`);for(const e of errors)console.error(`- ${e}`);process.exit(1)}
-console.log('Profile V1 final handoff contracts OK: direct DaVinci evidence validates canonical Motion Zukan generated-accent routes and the SHA-bound Palmier timeline before Mac Actual, while only current SHA-bound explicit Human final approval can yield productionReady.');
+console.log('Profile V1 final handoff contracts OK: direct DaVinci evidence validates canonical Motion Zukan generated-accent routes, SHA-bound Palmier timeline, source render and exported movie bytes before Mac Actual, while only current SHA-bound explicit Human final approval can yield productionReady.');
