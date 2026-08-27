@@ -3,6 +3,7 @@ import {
   StartWeddingEditComposition,
   startWeddingEditDefaultProps,
 } from './compositions/startWeddingEdit/StartWeddingEditComposition';
+import {P017EchoComparison} from './compositions/startWeddingEdit/P017EchoComparison';
 import {weddingEditDurationInFrames, weddingEditFps} from './data/startWeddingEdit/generated';
 
 const WIDTH = 1920;
@@ -36,5 +37,15 @@ export const StartWeddingEditRoot = () => (
         defaultProps={{...startWeddingEditDefaultProps, variant, reviewMode: true}}
       />
     ))}
+    {/* TASK2(2026-08-27): P017のecho/caption card重なりについて、人間がA/B/C/Dから
+        選べる比較用composition。本番のStartWeddingEdit-*-Cleanは変更しない。 */}
+    <Composition
+      id="P017EchoComparison"
+      component={P017EchoComparison}
+      durationInFrames={90}
+      fps={weddingEditFps}
+      width={WIDTH}
+      height={HEIGHT}
+    />
   </>
 );
