@@ -14,6 +14,16 @@
   "figma": {
     "fileKey": "bfM0d4c9dCeBv5pCkJ3TNM",
     "productionPage": { "id": "2787:2", "name": "09_RURUBU_V10_A5_8P_PRODUCTION" },
+    "productionFrames": {
+      "P01": { "id": "2787:3", "role": "COVER" },
+      "P02": { "id": "2787:9", "role": "PROFILE" },
+      "P03": { "id": "2787:15", "role": "Q&A" },
+      "P04": { "id": "2787:22", "role": "STORY" },
+      "P05": { "id": "2787:28", "role": "TIMELINE + MEMORY" },
+      "P06": { "id": "2787:35", "role": "MEMORY SPOTS + GALLERY" },
+      "P07": { "id": "2787:42", "role": "1DAY + CAFE TABLE" },
+      "P08": { "id": "2787:49", "role": "BACK COVER" }
+    },
     "aiAssistGuide": {
       "pageId": "2797:2",
       "pageName": "10_RURUBU_V10_AI_ASSIST_GUIDE",
@@ -61,11 +71,11 @@
     "P01": "COVER",
     "P02": "PROFILE",
     "P03": "Q&A",
-    "P04": "STORY + TIMELINE",
-    "P05": "MEMORY SPOTS / GUIDE",
-    "P06": "BEST SHOT / GALLERY",
-    "P07": "1DAY / MAP",
-    "P08": "BACK / CAFE + TABLE / GUIDE + MESSAGE"
+    "P04": "STORY",
+    "P05": "TIMELINE + MEMORY",
+    "P06": "MEMORY SPOTS + GALLERY",
+    "P07": "1DAY + CAFE TABLE",
+    "P08": "BACK COVER"
   },
   "workPasses": [
     "all 8 pages to 60–80% with existing organized assets",
@@ -76,6 +86,7 @@
     "final preflight/delivery"
   ],
   "hardRules": [
+    "live Figma page role wins over stale page-number assumptions",
     "organized Drive library is the first asset-search surface",
     "inspect actual pixels before final asset selection",
     "DUMMY is layout-only",
