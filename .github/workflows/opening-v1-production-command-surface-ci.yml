@@ -1,0 +1,58 @@
+name: Opening V1 Production Command Surface CI
+
+on:
+  pull_request:
+    paths:
+      - "motion-studio/package.json"
+      - "motion-studio/scripts/init-opening-v1-final-render-review.mts"
+      - "motion-studio/scripts/opening-v1-final-render-review.mts"
+      - "motion-studio/scripts/export-opening-v1-production-bundle.mts"
+      - "motion-studio/scripts/check-opening-v1-production-command-surface.mts"
+      - ".github/workflows/opening-v1-production-command-surface-ci.yml"
+  push:
+    branches: [main]
+    paths:
+      - "motion-studio/package.json"
+      - "motion-studio/scripts/init-opening-v1-final-render-review.mts"
+      - "motion-studio/scripts/opening-v1-final-render-review.mts"
+      - "motion-studio/scripts/export-opening-v1-production-bundle.mts"
+      - "motion-studio/scripts/check-opening-v1-production-command-surface.mts"
+      - ".github/workflows/opening-v1-production-command-surface-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    defaults:
+      run:
+        working-directory: motion-studio
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+          run_install: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: motion-studio/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - name: Opening production command surface
+        run: node --no-warnings scripts/check-opening-v1-production-command-surface.mts
+      - name: TypeScript
+        run: pnpm typecheck
+      - name: Human review boundary remains fail-closed on fresh clone
+        run: |
+          pnpm opening:final-render-review
+          if pnpm opening:final-render-review:strict; then
+            echo "final-render Human review unexpectedly passed on fresh clone"
+            exit 1
+          fi
+          if pnpm opening:production-bundle:finalize; then
+            echo "production bundle finalize unexpectedly passed before Human final-MP4 review"
+            exit 1
+          fi
