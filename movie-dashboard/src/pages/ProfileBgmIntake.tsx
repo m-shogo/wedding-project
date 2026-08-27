@@ -1,6 +1,7 @@
 import {useState} from "react";
 import {Link} from "react-router-dom";
 import {Header} from "../components/Header";
+import {ProfileProductionHandoffExportButton} from "../components/ProfileProductionHandoffExportButton";
 import {profileProductionGate} from "../data/profileProductionGate.generated";
 
 const rightsChecks = [
@@ -81,6 +82,10 @@ export function ProfileBgmIntake() {
         </div>
       </section>
 
+      <section className="mb-8 border-t-2 border-violet-400 dark:border-violet-700 pt-4">
+        <ProfileProductionHandoffExportButton />
+      </section>
+
       <section className="mb-10">
         <div className="border-b-2 border-navy-900 dark:border-sand-100 pb-3 mb-4">
           <p className="text-[10px] tracking-[0.18em] font-semibold text-navy-400">HUMAN RIGHTS GATE</p>
@@ -142,12 +147,13 @@ export function ProfileBgmIntake() {
 
       <div className="flex flex-wrap gap-4 text-xs">
         <Link to="/profile-media-intake" className="border-b border-navy-300 text-navy-600 dark:text-navy-300">17素材Intakeへ戻る →</Link>
+        <ProfileProductionHandoffExportButton compact />
         <Link to="/movie-coach/audio" className="border-b border-navy-300 text-navy-600 dark:text-navy-300">Audio Learning →</Link>
         <Link to="/movie-coach/profile" className="border-b border-navy-300 text-navy-600 dark:text-navy-300">Profile Movie Coach →</Link>
       </div>
 
       <p className="mt-5 text-[10px] text-navy-400">
-        FILE_FOUND != RIGHTS_CLEARED / RIGHTS_CLEARED != HUMAN_CREATIVE_APPROVAL / BGM_READY != PRODUCTION_READY
+        FILE_FOUND != RIGHTS_CLEARED / RIGHTS_CLEARED != HUMAN_CREATIVE_APPROVAL / BGM_READY != PRODUCTION_READY / HANDOFF_EXPORTED != PRODUCTION_READY
       </p>
     </div>
   );
