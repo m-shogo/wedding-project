@@ -5,12 +5,14 @@ on:
     paths:
       - "motion-studio/src/data/openingV1Media.ts"
       - "motion-studio/scripts/check-opening-photos.mts"
+      - "movie-dashboard/scripts/sync-opening-production-gate.mjs"
       - ".github/workflows/opening-v1-canonical-photo-resolution-ci.yml"
   push:
     branches: [main]
     paths:
       - "motion-studio/src/data/openingV1Media.ts"
       - "motion-studio/scripts/check-opening-photos.mts"
+      - "movie-dashboard/scripts/sync-opening-production-gate.mjs"
       - ".github/workflows/opening-v1-canonical-photo-resolution-ci.yml"
 
 permissions:
@@ -24,24 +26,29 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Verify Opening photo roles fail closed
+      - name: Verify Opening photo roles fail closed end-to-end
         run: |
           node <<'NODE'
           const fs = require('fs');
           const media = fs.readFileSync('motion-studio/src/data/openingV1Media.ts', 'utf8');
           const checker = fs.readFileSync('motion-studio/scripts/check-opening-photos.mts', 'utf8');
+          const dashboard = fs.readFileSync('movie-dashboard/scripts/sync-opening-production-gate.mjs', 'utf8');
           const errors = [];
 
-          if (!media.includes('aliasSet.includes(base)')) errors.push('resolver must use exact normalized alias equality');
-          if (!media.includes('return semanticMatch ?? null')) errors.push('missing semantic roles must remain null');
-          if (media.includes('openingPhotos.length >=') || media.includes('orderedKeys.indexOf')) errors.push('array-length/order fallback must not assign production photo roles');
-          if (!checker.includes('枚数や並び順では自動割当しません')) errors.push('checker must explain that order fallback is forbidden');
-          if (checker.includes('sorted fallback')) errors.push('checker still advertises removed sorted fallback');
+          if (!media.includes('aliasSet.includes(base)')) errors.push('Motion Studio resolver must use exact normalized alias equality');
+          if (!media.includes('return semanticMatch ?? null')) errors.push('Motion Studio missing semantic roles must remain null');
+          if (media.includes('openingPhotos.length >=') || media.includes('orderedKeys.indexOf(key)')) errors.push('Motion Studio array-length/order fallback must not assign production photo roles');
+          if (!checker.includes('枚数や並び順では自動割当しません')) errors.push('operator checker must explain that order fallback is forbidden');
+          if (checker.includes('sorted fallback')) errors.push('operator checker still advertises removed sorted fallback');
+
+          if (!dashboard.includes('aliasSet.includes(base)')) errors.push('Dashboard gate sync must use exact normalized alias equality');
+          if (!dashboard.includes('const resolvedPath = semanticMatch ?? null')) errors.push('Dashboard missing semantic roles must remain null');
+          if (dashboard.includes('openingPhotos.length >=') || dashboard.includes('openingPhotos[index]')) errors.push('Dashboard must not recreate array-length/order fallback');
 
           if (errors.length) {
             console.error(`Opening canonical photo resolution FAILED (${errors.length})`);
             for (const error of errors) console.error(`- ${error}`);
             process.exit(1);
           }
-          console.log('Opening canonical photo resolution OK: semantic filename match only; unrelated 11+ files cannot silently fill production slots.');
+          console.log('Opening canonical photo resolution OK end-to-end: Motion Studio and Dashboard both preserve semantic roles and fail closed.');
           NODE
