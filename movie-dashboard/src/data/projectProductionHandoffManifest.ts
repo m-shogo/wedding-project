@@ -10,6 +10,7 @@ import {
 } from "./typographyProjectDeliveryBatch";
 import type {TypographyProductionSelectionV1} from "./typographySceneProductionRouting";
 import type {
+  MaskRevealSceneInstance,
   MotionZukanComposerState,
   SceneProjectId,
 } from "./visualSceneComposer";
@@ -70,7 +71,7 @@ export function buildProjectProductionHandoffManifest(
   const finalChecksPass = finalChecks.every((check) => check.ok);
   const projectScenes = timeline.sceneIds
     .map((sceneId) => composer.scenes.find((scene) => scene.sceneId === sceneId && scene.projectId === projectId))
-    .filter((scene): scene is NonNullable<typeof scene> => Boolean(scene));
+    .filter((scene): scene is MaskRevealSceneInstance => Boolean(scene));
   const assetById = new Map(workspace.assets.map((asset) => [asset.assetId, asset]));
   const scenes = projectScenes.map((scene) => {
     const meta = sceneMetaFor(workspace, scene.sceneId);
