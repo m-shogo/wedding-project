@@ -84,12 +84,12 @@ jobs:
         run: |
           mkdir -p out/qa
           node --no-warnings scripts/profile-v1-assembly-preflight.mts --json > out/qa/profile-v1-assembly-preflight.json
-          node -e "const fs=require('fs'); const r=JSON.parse(fs.readFileSync('out/qa/profile-v1-assembly-preflight.json','utf8')); if(r.schemaVersion!=='profile-v1-assembly-preflight/v1') process.exit(1); if(r.authority!=='MOTION_STUDIO_DERIVED_PREFLIGHT') process.exit(1); if(r.chapters.length!==5) process.exit(1); if(r.media.expectedCount!==17) process.exit(1); if(r.media.readyCount!==0) process.exit(1); if(r.audio.rightsState!=='NOT_RUN') process.exit(1); if(r.readiness.finalRenderEligible!==false) process.exit(1); if(r.readiness.previewQaState!=='NOT_RUN') process.exit(1); if(r.readiness.humanContentQaState!=='NOT_RUN') process.exit(1); if(r.readiness.macDaVinciActualState!=='NOT_RUN') process.exit(1); if(r.readiness.productionReady!==false) process.exit(1);"
+          node -e "const fs=require('fs'); const r=JSON.parse(fs.readFileSync('out/qa/profile-v1-assembly-preflight.json','utf8')); if(r.schemaVersion!=='profile-v1-assembly-preflight/v1') process.exit(1); if(r.authority!=='MOTION_STUDIO_DERIVED_PREFLIGHT') process.exit(1); if(r.chapters.length!==5) process.exit(1); if(r.media.expectedCount!==17) process.exit(1); if(r.media.readyCount!==0) process.exit(1); if(r.audio.rightsState!=='NOT_RUN') process.exit(1); if(r.structureReview.state!=='NOT_RUN') process.exit(1); if(r.structureReview.humanReviewComplete!==false) process.exit(1); if(!r.structureReview.blockers.includes('STRUCTURE_REVIEW_EVIDENCE_MISSING')) process.exit(1); if(r.readiness.finalRenderEligible!==false) process.exit(1); if(r.readiness.structurePreviewQaState!=='NOT_RUN') process.exit(1); if(r.readiness.previewQaState!=='NOT_RUN') process.exit(1); if(r.readiness.humanContentQaState!=='NOT_RUN') process.exit(1); if(r.readiness.macDaVinciActualState!=='NOT_RUN') process.exit(1); if(r.readiness.productionReady!==false) process.exit(1);"
           if node --no-warnings scripts/profile-v1-assembly-preflight.mts --strict; then
             echo "Profile V1 preflight unexpectedly passed without real media and human-cleared BGM"
             exit 1
           fi
-          echo "Profile V1 preflight correctly fails closed until minimum representative real media and BGM rights evidence exist"
+          echo "Profile V1 preflight correctly preserves NOT_RUN structure review while failing closed until real media and human-cleared BGM exist"
 
       - name: Profile BGM rights approval cannot be manufactured by CI
         run: |
@@ -130,11 +130,13 @@ jobs:
         run: |
           node --no-warnings scripts/profile-v1-full-structure-review.mts --init
           node -e "const fs=require('fs'); const r=JSON.parse(fs.readFileSync('out/qa/profile-v1-full-structure-review.json','utf8')); if(r.schemaVersion!=='profile-v1-full-structure-review/v1') process.exit(1); if(r.authority!=='HUMAN_FULL_STRUCTURE_REVIEW') process.exit(1); if(r.chapters.length!==5) process.exit(1); if(r.review.overall!=='NOT_RUN') process.exit(1); if(r.review.reviewer!==null) process.exit(1); if(r.transitions.chapterFlow!=='NOT_RUN'||r.transitions.emotionalArc!=='NOT_RUN') process.exit(1); if(r.realMediaReviewed!==false||r.bgmReviewed!==false||r.contentAccuracyReviewed!==false) process.exit(1); if(r.macDaVinciActual!=='NOT_RUN'||r.productionReady!==false) process.exit(1); for(const c of r.chapters){if(c.chapterOrder!=='NOT_RUN'||c.visualHierarchy!=='NOT_RUN'||c.pacing!=='NOT_RUN'||c.mediaRoleClarity!=='NOT_RUN') process.exit(1)}"
+          node --no-warnings scripts/profile-v1-full-structure-review.mts --json > out/qa/profile-v1-full-structure-review-status.json
+          node -e "const fs=require('fs'); const r=JSON.parse(fs.readFileSync('out/qa/profile-v1-full-structure-review-status.json','utf8')); if(r.schemaVersion!=='profile-v1-full-structure-review-status/v1') process.exit(1); if(r.authority!=='DERIVED_STRUCTURE_REVIEW_STATUS') process.exit(1); if(r.state!=='BLOCKED') process.exit(1); if(r.humanReviewComplete!==false) process.exit(1); if(r.realMediaReviewed!==false||r.bgmReviewed!==false||r.contentAccuracyReviewed!==false) process.exit(1); if(r.macDaVinciActual!=='NOT_RUN'||r.productionReady!==false) process.exit(1);"
           if node --no-warnings scripts/profile-v1-full-structure-review.mts --strict; then
             echo "Full structure review unexpectedly passed without a human verdict"
             exit 1
           fi
-          echo "Profile full structure preview is SHA-bound but Human structure review remains NOT_RUN and cannot promote real media/BGM/content/Mac Actual/production"
+          echo "Profile full structure preview is SHA-bound; derived status is BLOCKED until Human review, and cannot promote real media/BGM/content/Mac Actual/production"
 
       - name: Profile V1 departure visual smoke stills
         run: node --no-warnings scripts/render-profile-v1-departure-qa-stills.mts
