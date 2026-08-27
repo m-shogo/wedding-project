@@ -76,6 +76,15 @@ export type VocalCue = {
    * 絶対値・snap前)。デバッグ/Dashboard表示用の追跡情報であり、timeMsの
    * 計算根拠を人間が確認できるようにするためのfield。それ以外のkindではnull。 */
   detectedAtMs: number | null;
+  /** Golden Anchor(Phase4)。人間が「ここは正しい」と明示的に確認した代表地点
+   * (intro/first vocal/first strong hit/chorus entry/60s+/three-hit/final
+   * chorus/ending等、曲全体に分散させた8〜12箇所)にのみtrueを立てる。
+   * verifiedByListening=trueが前提条件(Golden Anchorは常にverified、逆は
+   * 限らない)。true化した後は、migration/re-analysisで絶対に上書き・
+   * 解除しない(preserveCueIfBetter()で保護)。将来のforced-alignment等の
+   * 新手法をこの曲で評価する際のground truthとしても使う(Phase16)。
+   * 既定false。 */
+  goldenAnchor: boolean;
 };
 
 export type TimingPhrase = {

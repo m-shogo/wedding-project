@@ -106,6 +106,12 @@ for (const p of master.phrases) {
     if (c.timingSource === 'audio-analysis' && c.detectedAtMs == null) {
       warnings.push(`${c.cueId}: timingSource='audio-analysis'だがdetectedAtMsが無い(再migration前のデータの可能性)`);
     }
+    // Golden Anchor(Phase4): goldenAnchor=trueならverifiedByListening=trueが
+    // 必須の前提条件(矛盾があればpreserveCueIfBetter()の保護ロジックが
+    // 正しく機能しない可能性があるため、schema levelでも検出する)。
+    if (c.goldenAnchor && !c.verifiedByListening) {
+      errors.push(`${c.cueId}: goldenAnchor=trueなのにverifiedByListening=false(矛盾。Golden Anchorは人間確認済みが前提)`);
+    }
   }
 }
 // offset architecture: audio.renderPipelineOffsetMsが未検証のまま実質的な値を

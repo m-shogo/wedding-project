@@ -41,6 +41,11 @@ type Decision = {
   status: 'ok' | 'adjust' | 'reject';
   deltaMs?: number;
   note?: string;
+  /** Phase4 Golden Anchor。status='ok'/'adjust'と組み合わせた場合のみ有効
+   * (人間が実際に確認したcueだけをgoldenAnchor化できる。status='reject'
+   * では無視する)。一度trueにしたら以後migration/re-analysisで絶対に
+   * 上書きされない(preserveCueIfBetter()で保護)。 */
+  goldenAnchor?: boolean;
 };
 
 if (!existsSync(masterPath)) {
@@ -108,6 +113,7 @@ for (const d of input.decisions) {
     cue.verifiedByListening = true;
     cue.timingSource = 'verified-vocal';
     cue.confidenceScore = 1.0; // 人間が実際に聴いて確認したため、機械的confidenceScoreも1.0にする
+    if (d.goldenAnchor) cue.goldenAnchor = true;
     cue.reviewComment = d.note ? `[verified-by-listening] ${d.note}` : '[verified-by-listening] OK';
     applied.push(d.cueId);
   } else if (d.status === 'adjust') {
@@ -120,6 +126,7 @@ for (const d of input.decisions) {
     cue.verifiedByListening = true;
     cue.timingSource = 'verified-vocal';
     cue.confidenceScore = 1.0; // 人間が実際に聴いて補正込みで確認したため1.0にする
+    if (d.goldenAnchor) cue.goldenAnchor = true;
     cue.reviewComment = `[verified-by-listening, adjusted ${d.deltaMs}ms] ${d.note ?? ''}`.trim();
     applied.push(d.cueId);
   } else if (d.status === 'reject') {

@@ -45,6 +45,29 @@ mkdirSync(outDir, {recursive: true});
 const WINDOW_BEFORE_SEC = 1.0;
 const WINDOW_AFTER_SEC = 1.2;
 
+// Phase4 Golden Anchor候補(2026-08-27選定): 曲全体(intro〜final chorus/ending)に
+// 分散した10箇所。ユーザー指示のHuman Verification順(「1.Golden Anchor候補→
+// 2.60秒以降→3.3-hit→4.Critical Cue→...」)に対応するため、listening-review
+// では他の優先度(confidenceScore)より先にこれらを最上位へ表示する。
+// 選定根拠: intro/first vocal(P001)、chorus-1の3-hit family2件(P012/P013)、
+// chorus-1climax付近60秒境界(P015)、post-60最高confidence(P017)、
+// verse-2(P020)、chorus-2の3-hit family2件(P027/P028)、interlude手前(P029)、
+// final chorus/ending(P030)。実際にGolden Anchor化されるのは、人間が
+// apply-listening-verification.mtsでgoldenAnchor:trueとして確定した後のみ
+// (ここではあくまで「優先的に確認すべき候補」の一覧)。
+const GOLDEN_ANCHOR_CANDIDATE_CUE_IDS = new Set([
+  'P001-ONSET',
+  'P012-H01',
+  'P013-H01',
+  'P015-W01',
+  'P017-W01',
+  'P020-ONSET',
+  'P027-H01',
+  'P028-H03',
+  'P029-ONSET',
+  'P030-W01',
+]);
+
 type ClipEntry = {
   cueId: string;
   phraseId: string | null;
@@ -59,6 +82,7 @@ type ClipEntry = {
   clipFile: string;
   clipStartSec: number;
   cueOffsetInClipSec: number;
+  isGoldenAnchorCandidate: boolean;
 };
 
 const entries: ClipEntry[] = [];
@@ -93,6 +117,7 @@ for (const p of master.phrases) {
       confidence: c.confidence,
       confidenceScore: c.confidenceScore,
       analysisMethod: c.analysisMethod,
+      isGoldenAnchorCandidate: GOLDEN_ANCHOR_CANDIDATE_CUE_IDS.has(c.cueId),
       ...clip,
     });
   }
@@ -116,15 +141,20 @@ for (const b of master.editorialBlocks) {
       confidence: null,
       confidenceScore: c.timingSource === 'beat-snap' ? 0.4 : c.timingSource === 'estimated' ? 0.15 : null,
       analysisMethod: null,
+      isGoldenAnchorCandidate: GOLDEN_ANCHOR_CANDIDATE_CUE_IDS.has(c.cueId),
       ...clip,
     });
   }
 }
 
-// 聴取優先度: confidenceScoreが低い(=根拠が弱い)cueを上に出す。
-// 同点は曲順(designedSourceMs)で安定させる。限られた聴取時間で
-// 「怪しいところから」確認できるようにするための並び順。
+// 聴取優先度(Phase10「Human Verification順」対応):
+//   1. Golden Anchor候補(曲全体に分散した代表10箇所)を最優先で最上位に出す
+//   2. その中でも/その他は、confidenceScoreが低い(=根拠が弱い)cueを上に出す
+//   3. 同点は曲順(designedSourceMs)で安定させる
+// 限られた聴取時間で「まず全体を代表する箇所→怪しいところ」の順に
+// 確認できるようにするための並び順。
 entries.sort((a, b) => {
+  if (a.isGoldenAnchorCandidate !== b.isGoldenAnchorCandidate) return a.isGoldenAnchorCandidate ? -1 : 1;
   const ca = a.confidenceScore ?? 1;
   const cb = b.confidenceScore ?? 1;
   if (ca !== cb) return ca - cb;
@@ -136,8 +166,8 @@ const escapeHtml = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;')
 const rows = entries
   .map(
     (e) => `
-  <tr>
-    <td>${escapeHtml(e.cueId)}</td>
+  <tr style="${e.isGoldenAnchorCandidate ? 'background:rgba(244,201,93,0.12);' : ''}">
+    <td>${e.isGoldenAnchorCandidate ? '⭐ ' : ''}${escapeHtml(e.cueId)}</td>
     <td>${(e.designedSourceMs / 1000).toFixed(3)}s</td>
     <td>${escapeHtml(e.kind)}</td>
     <td>${escapeHtml(e.text)}</td>
@@ -173,8 +203,11 @@ writeFileSync(
 <p class="note">これはローカル専用の確認用HTML(Git管理外・著作権音源から切り出したクリップを含む)。
 各行の音声を実際に聴いて、「設計時刻(クリップ内の再生位置)」がボーカル/アクセントと合っているか確認する。
 ズレている場合は、cueIdと感じたズレ(ms、+は遅らせる/-は早める)を控えておき、
-apply-listening-verification.mtsで反映する。<b>confidenceScoreが低い行(オレンジ文字、0.5未満)ほど
-根拠が弱いため上に並べている。時間が無い場合はオレンジの行だけでも優先して確認する。</b></p>
+apply-listening-verification.mtsで反映する。<b>⭐印(黄色背景)の10行はGolden Anchor候補
+(曲全体に分散した代表箇所)で最優先。それ以外はconfidenceScoreが低い行(オレンジ文字、
+0.5未満)ほど根拠が弱いため上に並べている。時間が無い場合は⭐→オレンジの順で確認する。
+⭐の行を確認してOKだった場合は、apply-listening-verification.mtsのdecisionへ
+"goldenAnchor": trueを追加するとGolden Anchor(以後上書きされない基準点)として確定する。</b></p>
 <table>
 <thead><tr><th>cueId</th><th>設計秒</th><th>種別</th><th>text</th><th>timingSource</th><th>confidenceScore</th><th>再生</th></tr></thead>
 <tbody>

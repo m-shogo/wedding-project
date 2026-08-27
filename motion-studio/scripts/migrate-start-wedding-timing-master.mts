@@ -191,7 +191,12 @@ const preserveCueIfBetter = (fresh: VocalCue): VocalCue => {
   const prev = existingCueById.get(fresh.cueId);
   if (!prev) return fresh;
   // manualまたはverified-listeningな既存値は絶対に上書きしない。
-  if (prev.timingSource === 'manual' || prev.verifiedByListening) return prev;
+  // Golden Anchor(Phase4)はverifiedByListening=trueが前提条件のため、
+  // このverifiedByListeningチェックだけで既に保護されている
+  // (goldenAnchor単体の追加チェックは不要だが、将来の実装ミスで
+  // goldenAnchor=trueかつverifiedByListening=falseという矛盾状態が
+  // 発生した場合の防御としてgoldenAnchorも明示的に見る)。
+  if (prev.timingSource === 'manual' || prev.verifiedByListening || prev.goldenAnchor) return prev;
   // cueOffsetMs(Dashboardで設定される局所補正)は、timingSourceが
   // manual/verifiedでなくても、再解析で0へリセットしない(offset architecture
   // のP0要件: 人間が入れた補正値を再migrationで失わない)。
@@ -407,6 +412,11 @@ const phrases: TimingPhrase[] = lyrics.phrases.map((p) => {
     analysisMethod: onsetSnap != null ? ANALYSIS_METHOD : null,
     confidenceScore: confidenceScoreFor(onsetTimingSource, onsetSnap?.diffMs ?? null),
     detectedAtMs: onsetSnap?.ms ?? null,
+    // goldenAnchorは常にfalseで構築する。既にtrueな既存値はpreserveCueIfBetter()の
+    // 早期returnで完全に保護される(goldenAnchorはverifiedByListening=trueを
+    // 前提条件とするため、その時点で`prev`がそのまま返る)ので、ここでは
+    // 「新規/未確認cueの既定値」だけを表現すればよい。
+    goldenAnchor: false,
   });
   cues.push(onsetCue);
   // word-accent cue(反復語も含め、出現順で安定ID: W01, W02, ...)
@@ -435,6 +445,7 @@ const phrases: TimingPhrase[] = lyrics.phrases.map((p) => {
         analysisMethod: snap != null ? ANALYSIS_METHOD : null,
         confidenceScore: confidenceScoreFor(wordTimingSource, snap?.diffMs ?? null),
         detectedAtMs: snap?.ms ?? null,
+        goldenAnchor: false,
       }),
     );
   });
@@ -473,6 +484,7 @@ const phrases: TimingPhrase[] = lyrics.phrases.map((p) => {
         analysisMethod: snap != null ? ANALYSIS_METHOD : null,
         confidenceScore: confidenceScoreFor(hitTimingSource, snap?.diffMs ?? null),
         detectedAtMs: snap?.ms ?? null,
+        goldenAnchor: false,
       }),
     );
   });
