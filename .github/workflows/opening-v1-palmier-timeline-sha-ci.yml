@@ -5,6 +5,7 @@ on:
     paths:
       - "motion-studio/scripts/export-opening-v1-production-bundle.mts"
       - "motion-studio/scripts/opening-v1-production-status.mts"
+      - "motion-studio/scripts/opening-v1-davinci-finishing-evidence.mts"
       - "motion-studio/scripts/check-opening-v1-palmier-timeline-sha-binding.mts"
       - ".github/workflows/opening-v1-palmier-timeline-sha-ci.yml"
   push:
@@ -12,6 +13,7 @@ on:
     paths:
       - "motion-studio/scripts/export-opening-v1-production-bundle.mts"
       - "motion-studio/scripts/opening-v1-production-status.mts"
+      - "motion-studio/scripts/opening-v1-davinci-finishing-evidence.mts"
       - "motion-studio/scripts/check-opening-v1-palmier-timeline-sha-binding.mts"
       - ".github/workflows/opening-v1-palmier-timeline-sha-ci.yml"
 
