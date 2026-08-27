@@ -5,10 +5,17 @@ import {fileURLToPath} from 'node:url';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const bundlePath = join(root, 'out/handoff/profile-v1/profile-v1-production-bundle.json');
+const timelinePath = join(root, 'out/handoff/profile-v1/profile-v1-palmier-timeline.csv');
 const evidencePath = join(root, 'out/qa/profile-v1-davinci-finishing-evidence.json');
 const mode = process.argv.includes('--init') ? 'init' : process.argv.includes('--strict') ? 'strict' : 'status';
 type Qa = 'NOT_RUN' | 'PASS' | 'FAIL';
-type Bundle = {schemaVersion:'profile-v1-production-bundle/v1'; authority:'FINAL_RENDER_BOUND_HANDOFF'; finalRender:{path:string;sha256:string}; davinci:{expectedSha256:string;productionReady:false}};
+type Bundle = {
+  schemaVersion:'profile-v1-production-bundle/v1';
+  authority:'FINAL_RENDER_BOUND_HANDOFF';
+  finalRender:{path:string;sha256:string};
+  palmier:{timelineCsv:string;timelineCsvSha256:string};
+  davinci:{expectedSha256:string;productionReady:false};
+};
 type Evidence = {
   schemaVersion:'profile-v1-davinci-finishing-evidence/v1'; authority:'MAC_DAVINCI_ACTUAL_EVIDENCE'; boundAt:string;
   bundle:{path:string;sha256:string}; sourceRender:{path:string;expectedSha256:string;readbackSha256:string|null;shaMatch:Qa};
@@ -24,6 +31,9 @@ function loadBundle(){
   const bundle=JSON.parse(readFileSync(bundlePath,'utf8')) as Bundle;
   if(bundle.schemaVersion!=='profile-v1-production-bundle/v1'||bundle.authority!=='FINAL_RENDER_BOUND_HANDOFF') throw new Error('PROFILE_DAVINCI_BUNDLE_CONTRACT');
   if(bundle.davinci.productionReady!==false||bundle.finalRender.sha256!==bundle.davinci.expectedSha256) throw new Error('PROFILE_DAVINCI_BUNDLE_SHA_CONTRACT');
+  if(bundle.palmier?.timelineCsv!==rel(timelinePath)) throw new Error('PROFILE_DAVINCI_PALMIER_TIMELINE_PATH_MISMATCH');
+  if(!existsSync(timelinePath)) throw new Error('PROFILE_DAVINCI_PALMIER_TIMELINE_MISSING');
+  if(bundle.palmier?.timelineCsvSha256!==sha(timelinePath)) throw new Error('PROFILE_DAVINCI_PALMIER_TIMELINE_SHA_MISMATCH');
   const source=join(root,bundle.finalRender.path);
   if(!existsSync(source)||sha(source)!==bundle.finalRender.sha256) throw new Error('PROFILE_DAVINCI_SOURCE_RENDER_STALE');
   return {bundle,bundleSha256:sha(bundlePath),source};
@@ -48,6 +58,6 @@ function verify(strict:boolean){
   if(!ev.export.path?.trim()||!ev.export.sha256?.trim())errors.push('PROFILE_DAVINCI_EXPORT_BINDING_MISSING');
   if(ev.review.overall!=='PASS'||!ev.review.reviewer?.trim()||!ev.review.reviewedAt||Number.isNaN(Date.parse(ev.review.reviewedAt)))errors.push('PROFILE_DAVINCI_HUMAN_REVIEW_NOT_PASS');
   if(errors.length){console.log(`Profile DaVinci finishing evidence: BLOCKED (${errors.length})`); for(const e of errors)console.log(`BLOCK / ${e}`); if(strict)process.exit(1); return;}
-  console.log('Profile DaVinci finishing evidence: ACTUAL_VERIFIED — current bundle/source match real Mac Resolve evidence.');
+  console.log('Profile DaVinci finishing evidence: ACTUAL_VERIFIED — current bundle/source/Palmier timeline match real Mac Resolve evidence.');
 }
 if(mode==='init')init();else verify(mode==='strict');
