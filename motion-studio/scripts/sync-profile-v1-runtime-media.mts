@@ -39,13 +39,29 @@ const acceptsKind = (kind: (typeof profileV1RequiredMediaSlots)[number]['kind'],
   return false;
 };
 
+const ambiguities: {id: string; canonicalStem: string; compatibleFiles: string[]}[] = [];
+const incompatibilities: {id: string; canonicalStem: string; kind: string; incompatibleFiles: string[]}[] = [];
+
 const slots = profileV1RequiredMediaSlots.map((slot) => {
   const candidates = filesByStem.get(slot.canonicalStem) ?? [];
   const compatibleFiles = candidates.filter((file) => acceptsKind(slot.kind, file));
   const incompatibleFiles = candidates.filter((file) => !acceptsKind(slot.kind, file));
-  const ambiguous = compatibleFiles.length > 1;
-  const file = compatibleFiles.length === 1 ? compatibleFiles[0] : null;
 
+  if (compatibleFiles.length > 1) {
+    ambiguities.push({id: slot.id, canonicalStem: slot.canonicalStem, compatibleFiles});
+  }
+  if (incompatibleFiles.length > 0) {
+    incompatibilities.push({
+      id: slot.id,
+      canonicalStem: slot.canonicalStem,
+      kind: slot.kind,
+      incompatibleFiles,
+    });
+  }
+
+  // Exactly one kind-compatible file is required. Zero stays missing; two or more stay
+  // unresolved so extension order can never silently decide which real memory is used.
+  const file = compatibleFiles.length === 1 ? compatibleFiles[0] : null;
   return {
     id: slot.id,
     chapterId: slot.chapterId,
@@ -56,9 +72,6 @@ const slots = profileV1RequiredMediaSlots.map((slot) => {
     staticFilePath: file ? `profile/${file}` : null,
     extension: file ? extname(file).toLowerCase() : null,
     resolved: Boolean(file),
-    ambiguous,
-    compatibleFiles,
-    incompatibleFiles,
   };
 });
 
@@ -69,8 +82,10 @@ const snapshot = {
   expectedCount: slots.length,
   resolvedCount: slots.filter((slot) => slot.resolved).length,
   missingCount: slots.filter((slot) => !slot.resolved).length,
-  ambiguousCount: slots.filter((slot) => slot.ambiguous).length,
-  incompatibleCount: slots.filter((slot) => slot.incompatibleFiles.length > 0).length,
+  ambiguousCount: ambiguities.length,
+  incompatibleCount: incompatibilities.length,
+  ambiguities,
+  incompatibilities,
   slots,
 };
 
