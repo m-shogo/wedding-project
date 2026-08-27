@@ -6,7 +6,9 @@ on:
       - "motion-studio/package.json"
       - "motion-studio/scripts/init-profile-v1-real-media-review.mts"
       - "motion-studio/scripts/init-opening-v1-preview-review.mts"
+      - "motion-studio/scripts/opening-v1-preview-source-fingerprint.mts"
       - "motion-studio/scripts/verify-preview-review-init-contracts.mts"
+      - "motion-studio/scripts/verify-opening-preview-source-fingerprint-contracts.mts"
       - ".github/workflows/movie-preview-review-init-ci.yml"
   push:
     branches: [main]
@@ -14,7 +16,9 @@ on:
       - "motion-studio/package.json"
       - "motion-studio/scripts/init-profile-v1-real-media-review.mts"
       - "motion-studio/scripts/init-opening-v1-preview-review.mts"
+      - "motion-studio/scripts/opening-v1-preview-source-fingerprint.mts"
       - "motion-studio/scripts/verify-preview-review-init-contracts.mts"
+      - "motion-studio/scripts/verify-opening-preview-source-fingerprint-contracts.mts"
       - ".github/workflows/movie-preview-review-init-ci.yml"
 
 permissions:
@@ -49,6 +53,9 @@ jobs:
 
       - name: Verify preview review initialization contracts
         run: node --no-warnings scripts/verify-preview-review-init-contracts.mts
+
+      - name: Verify Opening preview render-source binding
+        run: node --no-warnings scripts/verify-opening-preview-source-fingerprint-contracts.mts
 
       - name: Typecheck Motion Studio
         run: pnpm typecheck
