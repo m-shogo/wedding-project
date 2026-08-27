@@ -57,6 +57,13 @@ for (const token of [
   'profile-v1-bgm-rights-approval.mts',
   "schemaVersion: 'profile-v1-bgm-rights-status/v1'",
   'rightsStatus.rightsCleared',
+  'rightsStatus.intakeReceipt.current',
+  'intakeReceiptCurrent: bgmReceiptCurrent',
+  'intakeReceiptPath: rightsStatus.intakeReceipt.receiptPath',
+  'scripts/intake-production-bgm.mts --project profile',
+  '--apply --receipt out/intake/profile-bgm-intake.json',
+  'scripts/verify-production-bgm-intake-receipt.mts --project profile',
+  '!bgmFileExists || !bgmReceiptCurrent',
   'profile-v1-real-media-review.mts',
   "schemaVersion: 'profile-v1-real-media-review-status/v1'",
   "authority: 'DERIVED_REAL_MEDIA_REVIEW_STATUS'",
@@ -91,6 +98,7 @@ for (const token of [
 for (const forbidden of ['productionReady: true', "macDaVinciActualState: 'PASS'"]) {
   if (preflight.includes(forbidden)) fail(`Profile V1 preflight fabricates readiness: ${forbidden}`);
 }
+if (preflight.includes('権利確認対象BGMを public/audio/profile/bgm-main.mp3 へ配置')) fail('Profile BGM recovery must not route through direct manual target copy');
 if (rightsApproval.includes("decision: 'APPROVE',")) fail('BGM rights approval must never initialize pre-approved');
 if (rightsApproval.includes('rightsCleared: true,')) fail('BGM rights approval must never hardcode rights cleared');
 
@@ -100,4 +108,4 @@ if (errors.length > 0) {
   process.exit(1);
 }
 
-console.log(`Profile V1 production plan contracts OK: 5 canonical chapters, ${profileV1RequiredMediaSlots.length} minimum real-media roles, intake-receipt-bound BGM rights and SHA-bound Human real-media QA are required before assembly readiness; Mac Actual remains separate.`);
+console.log(`Profile V1 production plan contracts OK: 5 canonical chapters, ${profileV1RequiredMediaSlots.length} minimum real-media roles, receipt-aware BGM recovery + rights and SHA-bound Human real-media QA are required before assembly readiness; Mac Actual remains separate.`);
