@@ -37,6 +37,26 @@ export const profileProductionStatus = {
     "finalDeliveryApproved": false,
     "productionReady": false
   },
+  "sourceRevalidation": {
+    "realMediaPreview": {
+      "state": "NOT_RUN",
+      "blockers": [],
+      "recovery": [
+        "pnpm render:profile-v1:real-media-preview",
+        "pnpm profile:real-media-review:init"
+      ]
+    },
+    "finalRender": {
+      "state": "NOT_RUN",
+      "blockers": [],
+      "recovery": []
+    },
+    "guardrails": [
+      "SOURCE_CHANGED => RE_RENDER_REQUIRED",
+      "RE_RENDER_REQUIRED => RE_REVIEW_REQUIRED",
+      "OLD_HUMAN_REVIEW != CURRENT_RENDER_IMPLEMENTATION"
+    ]
+  },
   "handoff": {
     "palmier": {
       "contractVersion": "profile-v1-palmier-handoff/v1",
