@@ -1,5 +1,6 @@
 import {Link} from "react-router-dom";
 import {Header} from "../components/Header";
+import {ProfileProductionHandoffExportButton} from "../components/ProfileProductionHandoffExportButton";
 import {profileProductionGate} from "../data/profileProductionGate.generated";
 
 const kindLabel: Record<string, string> = {
@@ -54,6 +55,10 @@ export function ProfileMediaIntake() {
             <p className="mt-1 text-xs text-navy-500 dark:text-navy-300">17素材+BGMが揃った後にreal-media preview準備へ</p>
           </div>
         </div>
+      </section>
+
+      <section className="mb-8 border-t-2 border-violet-400 dark:border-violet-700 pt-4">
+        <ProfileProductionHandoffExportButton />
       </section>
 
       <div className="space-y-8">
@@ -111,6 +116,7 @@ export function ProfileMediaIntake() {
         <div className="mt-4 flex flex-wrap gap-3 text-xs">
           <Link to="/profile-planner" className="px-3 py-2 bg-navy-800 text-white dark:bg-sand-100 dark:text-navy-900">写真計画を開く →</Link>
           <Link to="/profile-bgm-intake" className="px-3 py-2 border border-navy-700 dark:border-sand-300 text-navy-700 dark:text-sand-200">BGM Gateを開く →</Link>
+          <ProfileProductionHandoffExportButton compact />
           <Link to="/movie-coach/profile" className="border-b border-navy-300 text-navy-600 dark:text-navy-300 self-center">Profile Movie Coach →</Link>
           <Link to="/movie-coach/compare" className="border-b border-navy-300 text-navy-600 dark:text-navy-300 self-center">Preview後のHuman QA →</Link>
         </div>
