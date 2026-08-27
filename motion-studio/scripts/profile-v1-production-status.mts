@@ -15,7 +15,7 @@ type State='PASS'|'BLOCKED'|'NOT_RUN'|'MISSING'|'STALE'; type Stage={state:State
 const rel=(p:string)=>relative(root,p).replaceAll('\\','/'); const sha=(p:string)=>createHash('sha256').update(readFileSync(p)).digest('hex');
 const run=(script:string,args:string[]=[])=>spawnSync(process.execPath,['--no-warnings',script,...args],{cwd:root,encoding:'utf8'}); const lines=(v:string|null|undefined)=>(v??'').split(/\r?\n/).map(x=>x.trim()).filter(Boolean);
 const aliasAction=(action:string)=>({
-  'node --no-warnings scripts/profile-v1-assembly-preflight.mts':'pnpm profile:assembly-preflight',
+  'node --no-warnings scripts/profile-v1-assembly-preflight.mts':'pnpm prepare:profile-v1',
   'node --no-warnings scripts/profile-v1-bgm-rights-approval.mts --init':'pnpm profile:bgm-rights:init',
   'node --no-warnings scripts/profile-v1-bgm-rights-approval.mts --strict':'pnpm profile:bgm-rights:strict',
   'node --no-warnings scripts/render-profile-v1-real-media-preview.mts':'pnpm render:profile-v1:real-media-preview',
