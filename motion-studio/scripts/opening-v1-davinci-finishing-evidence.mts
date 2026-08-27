@@ -155,12 +155,25 @@ function verifyEvidence(strict: boolean) {
     fail(error instanceof Error ? error.message : String(error));
   }
 
-  const evidence = JSON.parse(readFileSync(evidencePath, 'utf8')) as FinishingEvidence;
+  let evidence: FinishingEvidence | null = null;
+  try {
+    evidence = JSON.parse(readFileSync(evidencePath, 'utf8')) as FinishingEvidence;
+  } catch {
+    fail('DAVINCI_FINISHING_EVIDENCE_INVALID_JSON');
+  }
+  if (!evidence) {
+    console.log(`Opening V1 DaVinci finishing evidence: BLOCKED (${errors.length})`);
+    for (const error of errors) console.log(`BLOCK / ${error}`);
+    if (strict) process.exit(1);
+    return;
+  }
+
   if (evidence.schemaVersion !== 'opening-v1-davinci-finishing-evidence/v1') fail('DAVINCI_FINISHING_EVIDENCE_SCHEMA');
   if (evidence.authority !== 'MAC_DAVINCI_ACTUAL_EVIDENCE') fail('DAVINCI_FINISHING_EVIDENCE_AUTHORITY');
   if (evidence.productionReady !== false) fail('DAVINCI_FINISHING_EVIDENCE_MUST_NOT_SELF_PROMOTE');
 
   if (bundle && bundleSha256) {
+    if (evidence.bundle.path !== rel(bundlePath)) fail('STALE_DAVINCI_FINISHING_BUNDLE_PATH');
     if (evidence.bundle.sha256 !== bundleSha256) fail('STALE_DAVINCI_FINISHING_BUNDLE_SHA');
     if (evidence.sourceRender.path !== bundle.finalRender.path) fail('STALE_DAVINCI_SOURCE_RENDER_PATH');
     if (evidence.sourceRender.expectedSha256 !== bundle.finalRender.sha256) fail('STALE_DAVINCI_SOURCE_EXPECTED_SHA');
@@ -193,6 +206,11 @@ function verifyEvidence(strict: boolean) {
   }
   if (!evidence.export.path?.trim()) fail('DAVINCI_EXPORT_PATH_MISSING');
   if (!evidence.export.sha256?.trim()) fail('DAVINCI_EXPORT_SHA_MISSING');
+  if (evidence.export.path?.trim() && evidence.export.sha256?.trim()) {
+    const exportPath = join(studioRoot, evidence.export.path);
+    if (!existsSync(exportPath)) fail('DAVINCI_EXPORT_FILE_MISSING');
+    else if (shaFile(exportPath) !== evidence.export.sha256) fail('DAVINCI_EXPORT_SHA_MISMATCH');
+  }
   if (evidence.review.overall !== 'PASS') fail(`DAVINCI_OVERALL_${evidence.review.overall}`);
   if (!evidence.review.reviewer?.trim()) fail('DAVINCI_REVIEWER_MISSING');
   if (!evidence.review.reviewedAt || Number.isNaN(Date.parse(evidence.review.reviewedAt))) fail('DAVINCI_REVIEWED_AT_INVALID');
@@ -204,7 +222,7 @@ function verifyEvidence(strict: boolean) {
     return;
   }
 
-  console.log('Opening V1 DaVinci finishing evidence: ACTUAL_VERIFIED — current production bundle, versioned Palmier scene/sound handoff and source render match the recorded Mac Resolve evidence.');
+  console.log('Opening V1 DaVinci finishing evidence: ACTUAL_VERIFIED — current production bundle, versioned Palmier scene/sound handoff, source render and exported movie bytes match the recorded Mac Resolve evidence.');
   console.log('productionReady remains false here; final delivery approval is a separate human decision.');
 }
 
