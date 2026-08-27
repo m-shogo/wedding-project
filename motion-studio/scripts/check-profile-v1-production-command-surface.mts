@@ -72,6 +72,11 @@ if (!scripts['prepare:profile-v1']?.startsWith('pnpm profile:generated-accents:c
 if (!scripts['prepare:profile-v1']?.includes('pnpm profile:assembly-preflight')) {
   errors.push('prepare:profile-v1 must still report assembly readiness after generated-accent/media checks');
 }
+for (const name of ['render:profile-v1:real-media-preview', 'qa:profile-v1:real-media-stills']) {
+  if (scripts[name]?.includes('--allow-missing-media-smoke')) {
+    errors.push(`${name} must never expose the CI-only missing-media smoke bypass`);
+  }
+}
 
 const mediaGatePath = join(root, 'scripts/profile-v1-media-input-gate.mts');
 if (!existsSync(mediaGatePath)) {
@@ -102,6 +107,10 @@ for (const scriptName of ['render-profile-v1-real-media-preview.mts', 'render-pr
     errors.push(`${scriptName} must run the media input gate before invoking Remotion`);
   }
 }
+const qaStillsSource = readFileSync(join(root, 'scripts/render-profile-v1-real-media-qa-stills.mts'), 'utf8');
+for (const token of ['--allow-missing-media-smoke', 'SMOKE ONLY', 'this is not production QA evidence']) {
+  if (!qaStillsSource.includes(token)) errors.push(`Profile QA stills missing explicit smoke-only guardrail: ${token}`);
+}
 
 if (errors.length) {
   console.error(`Profile V1 production command surface FAILED (${errors.length})`);
@@ -109,4 +118,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log(`Profile V1 production command surface OK: ${Object.keys(expected).length} guarded commands validate Motion Zukan generated accents, refresh runtime media, require all 17 canonical media slots plus current cleared BGM before real-media preview/stills, and bind Human preview/final review initialization to freshly rendered current artifacts without bypassing production gates.`);
+console.log(`Profile V1 production command surface OK: ${Object.keys(expected).length} guarded commands validate Motion Zukan generated accents, refresh runtime media, require all 17 canonical media slots plus current cleared BGM before real-media preview/production QA stills, isolate missing-media smoke behind an explicit CI-only flag, and bind Human preview/final review initialization to freshly rendered current artifacts without bypassing production gates.`);
