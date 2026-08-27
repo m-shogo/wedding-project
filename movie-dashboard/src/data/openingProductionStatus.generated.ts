@@ -10,15 +10,33 @@ export const openingProductionStatus = {
   },
   "overallState": "MEDIA_REQUIRED",
   "stages": {
-    "media": {"state": "BLOCKED"},
-    "previewRender": {"state": "NOT_RUN"},
-    "previewSourceBinding": {"state": "NOT_RUN"},
-    "previewReview": {"state": "NOT_RUN"},
-    "finalRender": {"state": "NOT_RUN"},
-    "productionBundle": {"state": "NOT_RUN"},
-    "davinciFinishing": {"state": "NOT_RUN"},
-    "finalDeliveryApproval": {"state": "NOT_RUN"},
-    "finalRenderReview": {"state": "NOT_RUN"}
+    "media": {
+      "state": "BLOCKED"
+    },
+    "previewRender": {
+      "state": "NOT_RUN"
+    },
+    "previewSourceBinding": {
+      "state": "NOT_RUN"
+    },
+    "previewReview": {
+      "state": "NOT_RUN"
+    },
+    "finalRender": {
+      "state": "NOT_RUN"
+    },
+    "productionBundle": {
+      "state": "NOT_RUN"
+    },
+    "davinciFinishing": {
+      "state": "NOT_RUN"
+    },
+    "finalDeliveryApproval": {
+      "state": "NOT_RUN"
+    },
+    "finalRenderReview": {
+      "state": "NOT_RUN"
+    }
   },
   "readiness": {
     "finalRenderEligible": false,
@@ -67,12 +85,23 @@ export const openingProductionStatus = {
         "sceneTimeline": {
           "path": "out/handoff/opening-v1/opening-v1-palmier-timeline.csv",
           "shaBound": true,
-          "carries": ["scene_boundary","replacement_policy","final_render_sha256"]
+          "carries": [
+            "scene_boundary",
+            "replacement_policy",
+            "final_render_sha256"
+          ]
         },
         "soundCues": {
           "path": "out/handoff/opening-v1/opening-v1-palmier-sound-cues.csv",
           "shaBound": true,
-          "carries": ["bgm","ambience_j_cut","start_end","volume","note","final_render_sha256"]
+          "carries": [
+            "bgm",
+            "ambience_j_cut",
+            "start_end",
+            "volume",
+            "note",
+            "final_render_sha256"
+          ]
         }
       }
     },
