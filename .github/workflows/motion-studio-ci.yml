@@ -123,6 +123,26 @@ jobs:
           done
           echo "DaVinci finishing correctly remains NOT_RUN until bundle-bound Mac Resolve Actual is recorded"
 
+      - name: Opening V1 final delivery approval remains human-only and fail-closed
+        run: |
+          pnpm opening:final-delivery-approval
+          if pnpm opening:final-delivery-approval:strict; then
+            echo "final delivery approval unexpectedly passed without bundle-bound human approval"
+            exit 1
+          fi
+          for token in \
+            "opening-v1-final-delivery-approval/v1" \
+            "HUMAN_FINAL_DELIVERY_APPROVAL" \
+            "decision: 'HOLD'" \
+            "productionReady: false" \
+            "STALE_FINAL_DELIVERY_BUNDLE_SHA" \
+            "STALE_FINAL_DELIVERY_DAVINCI_EVIDENCE_SHA" \
+            "FINAL_DELIVERY_DECISION_" \
+            "productionReady=true is valid only"; do
+            grep -q "$token" scripts/opening-v1-final-delivery-approval.mts || { echo "missing final approval contract token: $token"; exit 1; }
+          done
+          echo "final delivery approval cannot be manufactured by CI and only becomes production-ready after explicit SHA-bound human approval"
+
       - name: Opening V1 production status identifies the exact first blocker
         run: |
           mkdir -p out/qa
