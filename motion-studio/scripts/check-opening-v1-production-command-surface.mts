@@ -12,6 +12,7 @@ const expected: Record<string, string> = {
   'dev:opening-v1': 'pnpm prepare:opening-v1 && remotion studio src/index-opening-v1.ts',
   'render:opening-v1': 'node --no-warnings scripts/init-opening-v1-final-render-review.mts',
   'render:opening-v1:preview': 'pnpm prepare:opening-v1 && pnpm opening:assembly-preflight:strict && remotion render src/index-opening-v1.ts OpeningV1 out/preview/opening_v1_preview.mp4 --scale=0.5 --crf=24',
+  'qa:opening-stills': 'pnpm prepare:opening-v1 && node --no-warnings scripts/render-opening-v1-qa-stills.mts',
   'opening:assembly-preflight:strict': 'node --no-warnings scripts/opening-v1-assembly-preflight.mts --strict',
   'opening:preview-review:init': 'node --no-warnings scripts/init-opening-v1-preview-review.mts',
   'opening:preview-review': 'node --no-warnings scripts/opening-v1-preview-review.mts',
@@ -47,6 +48,24 @@ if (assemblyStrictIndex < 0) errors.push('render:opening-v1:preview must require
 if (remotionRenderIndex < 0) errors.push('render:opening-v1:preview must retain the canonical OpeningV1 Remotion render');
 if (assemblyStrictIndex >= remotionRenderIndex) errors.push('render:opening-v1:preview must run assembly-preflight:strict before invoking Remotion');
 
+const qaCommand = scripts['qa:opening-stills'] ?? '';
+if (qaCommand.includes('--allow-missing-media-smoke')) errors.push('qa:opening-stills must never expose the CI-only missing-media smoke bypass');
+const qaStillsPath = join(root, 'scripts/render-opening-v1-qa-stills.mts');
+const qaStills = readFileSync(qaStillsPath, 'utf8');
+for (const token of [
+  "scripts/opening-v1-assembly-preflight.mts', '--strict'",
+  '--allow-missing-media-smoke',
+  'SMOKE ONLY',
+  'this is not production QA evidence',
+]) {
+  if (!qaStills.includes(token)) errors.push(`Opening QA stills missing production/smoke guardrail: ${token}`);
+}
+const qaGateIndex = qaStills.indexOf("'scripts/opening-v1-assembly-preflight.mts', '--strict'");
+const qaRemotionIndex = qaStills.indexOf("'remotion'");
+if (qaGateIndex < 0 || qaRemotionIndex < 0 || qaGateIndex >= qaRemotionIndex) {
+  errors.push('Opening QA stills must run the strict assembly input gate before Remotion in normal production mode');
+}
+
 const render = scripts['render:opening-v1'] ?? '';
 if (render.includes('export:opening-v1-production-bundle')) errors.push('render:opening-v1 must stop after fresh render + Human final-review initialization; it must not export the production bundle before Human review');
 if (!render.includes('init-opening-v1-final-render-review.mts')) errors.push('render:opening-v1 must use the guarded fresh-render/final-review initializer');
@@ -59,4 +78,4 @@ if (errors.length) {
   for (const error of errors) console.error(`- ${error}`);
   process.exit(1);
 }
-console.log(`Opening V1 production command surface OK: ${Object.keys(expected).length} guarded commands enforce strict assembly before preview, then fresh render -> Human final MP4 review -> production bundle finalize -> DaVinci Actual -> final approval without premature export.`);
+console.log(`Opening V1 production command surface OK: ${Object.keys(expected).length} guarded commands enforce strict assembly before preview and production QA stills, isolate placeholder smoke behind an explicit CI-only flag, then fresh render -> Human final MP4 review -> production bundle finalize -> DaVinci Actual -> final approval without premature export.`);
