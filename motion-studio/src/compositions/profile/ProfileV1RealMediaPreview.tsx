@@ -1,6 +1,12 @@
+import {loadFont} from '@remotion/google-fonts/NotoSansJP';
 import {AbsoluteFill, Easing, Img, OffthreadVideo, interpolate, staticFile, useCurrentFrame, useVideoConfig} from 'remotion';
 import {profileV1Chapters} from '../../data/profileV1ProductionPlan';
 import {profileV1RuntimeMedia} from '../../data/profileV1RuntimeMedia.generated';
+
+const {fontFamily: profileJapaneseFontFamily} = loadFont('normal', {
+  weights: ['400', '700', '800'],
+  ignoreTooManyRequestsWarning: true,
+});
 
 const chapterDurationSec = 6;
 const videoExtensions = new Set(['.mp4', '.mov', '.m4v', '.webm']);
@@ -54,7 +60,7 @@ export const ProfileV1RealMediaPreview = () => {
       style={{
         background: '#07131f',
         color: '#fff',
-        fontFamily: 'Arial, Helvetica, sans-serif',
+        fontFamily: `${profileJapaneseFontFamily}, "Hiragino Kaku Gothic ProN", Meiryo, sans-serif`,
         overflow: 'hidden',
       }}
     >
