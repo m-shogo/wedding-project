@@ -52,6 +52,7 @@ export function ProfileMediaIntake() {
             <p className="text-[10px] tracking-[0.16em] font-semibold text-navy-400">REAL MEDIA FILES</p>
             <p className="mt-1 text-2xl font-mono font-bold text-navy-900 dark:text-sand-100">{gate.resolvedMediaCount}/{gate.expectedMediaCount}</p>
             <p className="mt-1 text-xs text-navy-500 dark:text-navy-300">{mediaFilesReady ? "17 canonical target found" : "canonical target不足"}</p>
+            <code className="mt-1 block text-[9px] text-navy-400">motion-studio/public/profile/</code>
           </div>
           <div className={`p-4 ${receiptCurrent ? "bg-emerald-50 dark:bg-emerald-900/20" : "bg-white dark:bg-navy-800"}`}>
             <p className="text-[10px] tracking-[0.16em] font-semibold text-navy-400">MEDIA SHA RECEIPT</p>
