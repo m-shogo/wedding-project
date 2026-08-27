@@ -79,7 +79,6 @@ export const openingProductionStatus = {
       "sourceAuthorities": [
         "src/data/openingV1.ts#openingV1Scenes",
         "src/data/openingV1Sound.ts#openingV1SoundCues",
-        "out/qa/opening-v1-final-render-review.json",
         "out/qa/opening-v1-final-render-review.json"
       ],
       "artifacts": {
