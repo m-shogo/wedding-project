@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - "motion-studio/scripts/opening-v1-production-status.mts"
+      - "motion-studio/scripts/opening-v1-davinci-handoff-contract.mts"
       - "movie-dashboard/scripts/sync-opening-production-status.mjs"
       - "movie-dashboard/scripts/verify-opening-production-status-handoff.mjs"
       - "movie-dashboard/src/data/openingProductionGate.generated.ts"
@@ -16,6 +17,7 @@ on:
     branches: [main]
     paths:
       - "motion-studio/scripts/opening-v1-production-status.mts"
+      - "motion-studio/scripts/opening-v1-davinci-handoff-contract.mts"
       - "movie-dashboard/scripts/sync-opening-production-status.mjs"
       - "movie-dashboard/scripts/verify-opening-production-status-handoff.mjs"
       - "movie-dashboard/src/data/openingProductionGate.generated.ts"
