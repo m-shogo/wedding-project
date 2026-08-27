@@ -11,6 +11,7 @@ const projectBatch = read("src/data/typographyProjectDeliveryBatch.ts");
 const openingGate = read("src/data/openingProductionGate.generated.ts");
 const openingPhotoPlan = read("src/data/openingV1PhotoProductionPlan.ts");
 const profileGate = read("src/data/profileProductionGate.generated.ts");
+const profileRealMediaGate = read("src/data/profileRealMediaReviewGate.generated.ts");
 
 const errors = [];
 const requireText = (source, token, message) => {
@@ -43,14 +44,19 @@ for (const token of [
   'OPENING_V1_AMBIENCE:',
   'openingV1MediaBlockingGatePass',
   'import {profileProductionGate} from "./profileProductionGate.generated"',
+  'import {profileRealMediaReviewGate} from "./profileRealMediaReviewGate.generated"',
   'authority: "MOTION_STUDIO_PROFILE_V1_MEDIA_GATE"',
   'if (projectId !== "profile") return null',
   'profileV1Media: ProfileV1ProductionMediaGateV1 | null',
+  'realMediaReview:',
+  'profileRealMediaReviewGate.humanReviewComplete',
   'PROFILE_V1_MEDIA:',
   'PROFILE_V1_BGM:',
+  'PROFILE_V1_STRUCTURE_REVIEW:',
+  'PROFILE_V1_REAL_MEDIA_REVIEW:',
   'profileV1MediaBlockingGatePass',
   'productionReady: false',
-  'DaVinci Mac Actual / Human promotion / Scene-bound Release Gate',
+  'BGM audio QA / Mac DaVinci Actual / Human promotion / Scene-bound Release Gate',
 ]) {
   requireText(manifest, token, `production handoff manifest missing: ${token}`);
 }
@@ -131,6 +137,17 @@ for (const token of [
 ]) {
   requireText(profileGate, token, `Profile generated production gate contract missing: ${token}`);
 }
+for (const token of [
+  '"state": "NOT_RUN"',
+  '"humanReviewComplete": false',
+  '"mediaExpected": 17',
+  '"mediaReviewed": 0',
+  '"REAL_MEDIA_REVIEW_EVIDENCE_MISSING"',
+  '"macDaVinciActual": "NOT_RUN"',
+  '"productionReady": false',
+]) {
+  requireText(profileRealMediaGate, token, `Profile generated Human real-media gate contract missing: ${token}`);
+}
 
 requireText(projectBatch, 'productionReady: false', "Typography project batch no longer fails closed");
 
@@ -140,6 +157,8 @@ for (const forbidden of [
 ]) {
   if (manifest.includes(forbidden)) errors.push(`manifest hardcodes unsafe readiness: ${forbidden}`);
 }
+if (profileRealMediaGate.includes('"state": "PASS"')) errors.push("Profile real-media Human QA must not be pre-approved");
+if (profileRealMediaGate.includes('"humanReviewComplete": true')) errors.push("Profile real-media Human QA completion must not be fabricated");
 
 if (errors.length) {
   console.error(`Project Production Handoff Manifest contracts FAILED (${errors.length})`);
@@ -147,4 +166,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log("Project Production Handoff Manifest contracts OK: current Typography/workspace state is joined with Opening 11-photo/BGM/ambience and Profile 5-chapter/17-media/BGM-rights gates; Profile rights begin NOT_RUN until a separate human approval is current; Human QA, Mac Actual and release remain fail-closed.");
+console.log("Project Production Handoff Manifest contracts OK: current Typography/workspace state is joined with Opening gates and Profile 5-chapter/17-media/BGM/structure/Human real-media gates; Mac Actual and release remain separate and fail-closed.");

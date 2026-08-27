@@ -7,9 +7,12 @@ on:
       - "motion-studio/src/data/profileV1ProductionPlan.ts"
       - "motion-studio/scripts/profile-v1-assembly-preflight.mts"
       - "motion-studio/scripts/profile-v1-full-structure-review.mts"
+      - "motion-studio/scripts/profile-v1-real-media-review.mts"
       - "movie-dashboard/scripts/sync-profile-production-gate.mjs"
+      - "movie-dashboard/scripts/sync-profile-real-media-review-gate.mjs"
       - "movie-dashboard/scripts/verify-profile-v1-dashboard-handoff-contracts.mjs"
       - "movie-dashboard/src/data/profileProductionGate.generated.ts"
+      - "movie-dashboard/src/data/profileRealMediaReviewGate.generated.ts"
       - "movie-dashboard/src/data/projectProductionHandoffManifest.ts"
       - "movie-dashboard/src/components/TypographyProjectDeliveryBatchCard.tsx"
       - ".github/workflows/profile-v1-dashboard-handoff-ci.yml"
@@ -19,9 +22,12 @@ on:
       - "motion-studio/src/data/profileV1ProductionPlan.ts"
       - "motion-studio/scripts/profile-v1-assembly-preflight.mts"
       - "motion-studio/scripts/profile-v1-full-structure-review.mts"
+      - "motion-studio/scripts/profile-v1-real-media-review.mts"
       - "movie-dashboard/scripts/sync-profile-production-gate.mjs"
+      - "movie-dashboard/scripts/sync-profile-real-media-review-gate.mjs"
       - "movie-dashboard/scripts/verify-profile-v1-dashboard-handoff-contracts.mjs"
       - "movie-dashboard/src/data/profileProductionGate.generated.ts"
+      - "movie-dashboard/src/data/profileRealMediaReviewGate.generated.ts"
       - "movie-dashboard/src/data/projectProductionHandoffManifest.ts"
       - "movie-dashboard/src/components/TypographyProjectDeliveryBatchCard.tsx"
       - ".github/workflows/profile-v1-dashboard-handoff-ci.yml"
@@ -58,6 +64,9 @@ jobs:
 
       - name: Profile production gate generated snapshot is current
         run: node scripts/sync-profile-production-gate.mjs --check
+
+      - name: Profile real-media Human QA generated snapshot is current
+        run: node scripts/sync-profile-real-media-review-gate.mjs --check
 
       - name: Profile Dashboard handoff honesty contracts
         run: node scripts/verify-profile-v1-dashboard-handoff-contracts.mjs

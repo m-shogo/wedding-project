@@ -74,6 +74,19 @@ type StructureReviewStatus = {
   productionReady: false;
 };
 
+type RealMediaReviewStatus = {
+  schemaVersion: 'profile-v1-real-media-review-status/v1';
+  authority: 'DERIVED_REAL_MEDIA_REVIEW_STATUS';
+  state: 'NOT_RUN' | 'BLOCKED' | 'PASS';
+  humanReviewComplete: boolean;
+  blockers: string[];
+  mediaExpected: 17;
+  mediaReviewed: number;
+  bgmReviewed: false;
+  macDaVinciActual: 'NOT_RUN';
+  productionReady: false;
+};
+
 const rightsRun = spawnSync(
   process.execPath,
   ['--no-warnings', 'scripts/profile-v1-bgm-rights-approval.mts', '--json'],
@@ -101,13 +114,45 @@ if (
   throw new Error('PROFILE_STRUCTURE_REVIEW_STATUS_CONTRACT');
 }
 
+const realMediaReviewRun = spawnSync(
+  process.execPath,
+  ['--no-warnings', 'scripts/profile-v1-real-media-review.mts', '--json'],
+  {cwd: studioRoot, encoding: 'utf8'},
+);
+if (realMediaReviewRun.status !== 0) {
+  throw new Error(`PROFILE_REAL_MEDIA_REVIEW_STATUS_FAILED:${realMediaReviewRun.stderr || realMediaReviewRun.stdout}`);
+}
+const realMediaReview = JSON.parse(realMediaReviewRun.stdout) as RealMediaReviewStatus;
+if (
+  realMediaReview.schemaVersion !== 'profile-v1-real-media-review-status/v1' ||
+  realMediaReview.authority !== 'DERIVED_REAL_MEDIA_REVIEW_STATUS'
+) {
+  throw new Error('PROFILE_REAL_MEDIA_REVIEW_STATUS_CONTRACT');
+}
+
 const bgmRightsState = rightsStatus.state;
 const bgmReady = bgmFileExists && rightsStatus.rightsCleared;
 const finalRenderEligible = mediaReady && bgmReady;
+const assemblyReady =
+  finalRenderEligible &&
+  structureReview.state === 'PASS' &&
+  structureReview.humanReviewComplete &&
+  realMediaReview.state === 'PASS' &&
+  realMediaReview.humanReviewComplete;
 
 const blockers = [
   ...mediaSlots.filter((slot) => !slot.ready).map((slot) => `MEDIA_MISSING:${slot.id}`),
   ...rightsStatus.blockers.map((blocker) => `BGM_RIGHTS:${blocker}`),
+  ...(structureReview.state === 'PASS'
+    ? []
+    : structureReview.blockers.length > 0
+      ? structureReview.blockers.map((blocker) => `STRUCTURE_REVIEW:${blocker}`)
+      : [`STRUCTURE_REVIEW:${structureReview.state}`]),
+  ...(realMediaReview.state === 'PASS'
+    ? []
+    : realMediaReview.blockers.length > 0
+      ? realMediaReview.blockers.map((blocker) => `REAL_MEDIA_REVIEW:${blocker}`)
+      : [`REAL_MEDIA_REVIEW:${realMediaReview.state}`]),
 ];
 
 const chapterRows = profileV1Chapters.map((chapter) => {
@@ -147,12 +192,14 @@ const report = {
     ready: bgmReady,
   },
   structureReview,
+  realMediaReview,
   readiness: {
     finalRenderEligible,
+    assemblyReady,
     blockers,
     structurePreviewQaState: structureReview.state,
-    previewQaState: 'NOT_RUN' as const,
-    humanContentQaState: 'NOT_RUN' as const,
+    previewQaState: realMediaReview.state,
+    humanContentQaState: realMediaReview.state,
     audioQaState: 'NOT_RUN' as const,
     macDaVinciActualState: 'NOT_RUN' as const,
     productionReady: false,
@@ -172,22 +219,26 @@ const report = {
           ]
         : structureReview.state !== 'PASS'
           ? ['30秒全5章structure previewを人間確認', 'structure review evidenceをPASSへ更新', '実素材preview QAへ進む']
-          : ['実素材previewをrender', 'crop/focus/color/content/audioを人間確認', 'DaVinci handoffへ進む'],
+          : realMediaReview.state !== 'PASS'
+            ? [
+                'node --no-warnings scripts/render-profile-v1-real-media-preview.mts',
+                'node --no-warnings scripts/profile-v1-real-media-review.mts --init',
+                '17素材のcrop/focus/color/emotional-fit/contentと5章flow/readability/role fitを人間確認',
+                'node --no-warnings scripts/profile-v1-real-media-review.mts --strict',
+              ]
+            : ['Profile assembly input + structure + real-media Human QA ready', 'final render / DaVinci handoffへ進む'],
 };
 
 if (jsonMode) {
   console.log(JSON.stringify(report, null, 2));
 } else {
   console.log(
-    `Profile V1 assembly preflight: chapters=${chapterRows.filter((chapter) => chapter.ready).length}/${chapterRows.length} media=${readyMediaCount}/${mediaSlots.length} BGM=${bgmReady ? 'READY' : `BLOCKED/${bgmRightsState}`} structure=${structureReview.state}`,
+    `Profile V1 assembly preflight: chapters=${chapterRows.filter((chapter) => chapter.ready).length}/${chapterRows.length} media=${readyMediaCount}/${mediaSlots.length} BGM=${bgmReady ? 'READY' : `BLOCKED/${bgmRightsState}`} structure=${structureReview.state} realMediaQA=${realMediaReview.state}`,
   );
-  console.log(`finalRenderEligible=${finalRenderEligible ? 'YES' : 'NO'} structurePreviewQA=${structureReview.state} realMediaPreviewQA=NOT_RUN HumanContentQA=NOT_RUN MacDaVinciActual=NOT_RUN productionReady=NO`);
+  console.log(`finalRenderEligible=${finalRenderEligible ? 'YES' : 'NO'} assemblyReady=${assemblyReady ? 'YES' : 'NO'} structurePreviewQA=${structureReview.state} realMediaPreviewQA=${realMediaReview.state} HumanContentQA=${realMediaReview.state} MacDaVinciActual=NOT_RUN productionReady=NO`);
   for (const blocker of blockers) console.log(`BLOCK / ${blocker}`);
-  if (structureReview.state !== 'PASS') {
-    console.log(`INFO / STRUCTURE_REVIEW_${structureReview.state}:${structureReview.evidencePath}`);
-  }
   console.log(`NEXT / ${report.nextActions.join(' → ')}`);
   console.log('JSON / node --no-warnings scripts/profile-v1-assembly-preflight.mts --json');
 }
 
-if (strict && !finalRenderEligible) process.exit(1);
+if (strict && !assemblyReady) process.exit(1);
