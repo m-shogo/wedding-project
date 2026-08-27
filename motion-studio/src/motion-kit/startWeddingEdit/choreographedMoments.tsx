@@ -30,21 +30,43 @@ const secToFrame = (s: number) => Math.round(s * START_WEDDING_EDIT_FPS);
 const VARIANT_TEXT_COLOR: Record<WeddingVariant, string> = {A: '#FDFBF5', B: '#FFFDF7', C: '#0A0A0C'};
 const VARIANT_ACCENT: Record<WeddingVariant, string> = {A: '#F4C95D', B: '#F4C95D', C: '#0A0A0C'};
 
+/** P0-5/P0-6(2026-08-27、Visual Impact Peak architecture、最小実装):
+ * camera punch(scale)のinterpolate曲線は[0,3,10]で、入力3のところで
+ * peak(最大scale)へ到達する設計になっている。event.timeSecをそのまま
+ * animation開始(localFrame=0)として使うと、実際に画面上でscaleが
+ * 最大になる瞬間はaudio hitの3frame(30fpsで100ms)後になり、
+ * 「audio hitに合わせたつもり」が実際には常に100ms遅れて見える構造的な
+ * バグになる。visualImpactLeadInFramesは、animation自体をaudio hitより
+ * その分だけ早く開始させ、curveのpeak(interpolate入力=leadInFrames)が
+ * 正確にaudio hitのframeへ来るようにするための値。
+ * 対象を限定した理由: 現時点ではcamera punch/push-openのscale曲線
+ * (activeEvent()経由でcurrent.localFrameを使う箇所)にのみ適用する。
+ * text label・ripple mask等の他のcurveはこのcommitでは未対応
+ * (audio hitちょうどから開始する従来のまま)。全animation familyへの
+ * 適用はP0-5の残作業として別途行う。 */
+const VISUAL_IMPACT_LEAD_IN_FRAMES = 3;
+
 /** 直近に発生したeventと、そこからのlocal経過frameを返す。1つのcomponentが
- * 複数eventを跨いで連続描画できるようにする最小限のスケジューラ。 */
+ * 複数eventを跨いで連続描画できるようにする最小限のスケジューラ。
+ * leadInFramesを渡すと、event発生のleadInFrames前からactiveとして扱い、
+ * localFrameがleadInFramesの時点で「真のaudio hit frame」になるよう
+ * オフセットする(curveのpeak breakpointをleadInFramesに合わせて呼び出す
+ * 前提。audio hit自体[event.timeSec]は一切変更しない、純粋に描画側の
+ * 開始frameだけを前倒しする)。 */
 const activeEvent = (
   events: ChoreographyEvent[],
   phraseStartSec: number,
   frame: number,
+  leadInFrames = 0,
 ): {event: ChoreographyEvent; localFrame: number; index: number} | null => {
   let bestIdx = -1;
   for (let i = 0; i < events.length; i++) {
     const f = secToFrame(events[i].timeSec) - secToFrame(phraseStartSec);
-    if (f <= frame) bestIdx = i;
+    if (f - leadInFrames <= frame) bestIdx = i;
   }
   if (bestIdx < 0) return null;
   const f = secToFrame(events[bestIdx].timeSec) - secToFrame(phraseStartSec);
-  return {event: events[bestIdx], localFrame: frame - f, index: bestIdx};
+  return {event: events[bestIdx], localFrame: frame - f + leadInFrames, index: bestIdx};
 };
 
 // ---------------------------------------------------------------------------
@@ -239,7 +261,7 @@ export const RippleThreeHitMoment: React.FC<{
   const frame = useCurrentFrame();
   const events = React.useMemo(() => buildRippleThreeHitEvents(phrase, variant), [phrase, variant]);
   const hitLocalFrames = events.map((ev) => secToFrame(ev.timeSec) - secToFrame(phrase.startSec));
-  const current = activeEvent(events, phrase.startSec, frame);
+  const current = activeEvent(events, phrase.startSec, frame, VISUAL_IMPACT_LEAD_IN_FRAMES);
   const cumulativeShiftPx = events.reduce((acc, ev) => {
     const f = secToFrame(ev.timeSec) - secToFrame(phrase.startSec);
     if (frame < f || ev.mediaAction.kind !== 'shift-vertical') return acc;
@@ -326,7 +348,7 @@ export const SunburstThreeHitMoment: React.FC<{
   const frame = useCurrentFrame();
   const events = React.useMemo(() => buildSunburstThreeHitEvents(phrase, variant), [phrase, variant]);
   const hitLocalFrames = events.map((ev) => secToFrame(ev.timeSec) - secToFrame(phrase.startSec));
-  const current = activeEvent(events, phrase.startSec, frame);
+  const current = activeEvent(events, phrase.startSec, frame, VISUAL_IMPACT_LEAD_IN_FRAMES);
   const punchScale = current && current.event.cameraAction.kind === 'punch'
     ? interpolate(current.localFrame, [0, 3, 10], [1, current.event.cameraAction.scale, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'})
     : current && current.event.cameraAction.kind === 'push-open'
