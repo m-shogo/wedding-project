@@ -171,6 +171,7 @@ const bundle = {
   timeline: sceneTimeline,
   soundCues: openingV1SoundCues.map((cue) => ({...cue})),
   palmier: {
+    handoffContractVersion: 'opening-v1-palmier-handoff/v2',
     handoffMode: 'REFERENCE_TIMELINE_AND_FINAL_RENDER',
     timelineCsv: rel(timelineCsvPath),
     timelineCsvSha256,
@@ -194,6 +195,7 @@ const bundle = {
     'HUMAN_PREVIEW_REVIEW_PASS != FINAL_DELIVERY_APPROVED',
     'BUNDLE_EXPORTED != PRODUCTION_READY',
     'RENDER_SHA_MISMATCH => STOP_AND_REGENERATE_HANDOFF',
+    'PALMIER_HANDOFF_CONTRACT_VERSION_MISMATCH => STOP_AND_REGENERATE_HANDOFF',
     'PALMIER_TIMELINE_SHA_MISMATCH => STOP_AND_REGENERATE_HANDOFF',
     'PALMIER_SOUND_CUE_SHA_MISMATCH => STOP_AND_REGENERATE_HANDOFF',
   ],
