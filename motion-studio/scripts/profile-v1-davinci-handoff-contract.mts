@@ -7,6 +7,7 @@ import {profileV1GeneratedAccentImplementations} from '../src/data/profileV1Gene
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const bundlePath = join(root, 'out/handoff/profile-v1/profile-v1-production-bundle.json');
 const timelinePath = join(root, 'out/handoff/profile-v1/profile-v1-palmier-timeline.csv');
+const finalReviewPath = join(root, 'out/qa/profile-v1-final-render-review.json');
 const evidencePath = join(root, 'out/qa/profile-v1-davinci-finishing-evidence.json');
 const defaultRenderPath = 'out/profile/profile_v1.mp4';
 const rel = (path: string) => relative(root, path).replaceAll('\\', '/');
@@ -30,6 +31,26 @@ if (bundle) {
   if (bundle.davinci?.productionReady !== false) blockers.push('PROFILE_DAVINCI_BUNDLE_MUST_FAIL_CLOSED');
   if (bundle.finalRender?.path !== bundle.davinci?.handoffAsset) blockers.push('PROFILE_DAVINCI_HANDOFF_ASSET_PATH_MISMATCH');
   if (bundle.finalRender?.sha256 !== bundle.davinci?.expectedSha256) blockers.push('PROFILE_DAVINCI_EXPECTED_SHA_MISMATCH');
+
+  if (!existsSync(finalReviewPath)) blockers.push('PROFILE_DAVINCI_FINAL_RENDER_REVIEW_MISSING');
+  else {
+    let review: any = null;
+    try { review = JSON.parse(readFileSync(finalReviewPath, 'utf8')); }
+    catch { blockers.push('PROFILE_DAVINCI_FINAL_RENDER_REVIEW_INVALID_JSON'); }
+    if (review) {
+      if (review.schemaVersion !== 'profile-v1-final-render-review/v1') blockers.push('PROFILE_DAVINCI_FINAL_RENDER_REVIEW_SCHEMA');
+      if (review.authority !== 'HUMAN_FINAL_RENDER_REVIEW') blockers.push('PROFILE_DAVINCI_FINAL_RENDER_REVIEW_AUTHORITY');
+      if (review.review?.overall !== 'PASS') blockers.push('PROFILE_DAVINCI_FINAL_RENDER_REVIEW_NOT_PASS');
+      if (!review.review?.reviewer?.trim()) blockers.push('PROFILE_DAVINCI_FINAL_RENDER_REVIEWER_MISSING');
+      if (review.finalRender?.path !== bundle.finalRender?.path) blockers.push('PROFILE_DAVINCI_FINAL_REVIEW_RENDER_PATH_MISMATCH');
+      if (review.finalRender?.sha256 !== bundle.finalRender?.sha256) blockers.push('PROFILE_DAVINCI_FINAL_REVIEW_RENDER_SHA_MISMATCH');
+      if (review.macDaVinciActual !== 'NOT_RUN') blockers.push('PROFILE_DAVINCI_FINAL_REVIEW_MUST_PRECEDE_ACTUAL');
+      if (review.productionReady !== false) blockers.push('PROFILE_DAVINCI_FINAL_REVIEW_MUST_FAIL_CLOSED');
+    }
+    if (bundle.humanFinalRenderReview?.evidencePath !== rel(finalReviewPath)) blockers.push('PROFILE_DAVINCI_FINAL_RENDER_REVIEW_PATH_STALE');
+    if (bundle.humanFinalRenderReview?.evidenceSha256 !== sha(finalReviewPath)) blockers.push('PROFILE_DAVINCI_FINAL_RENDER_REVIEW_SHA_STALE');
+  }
+
   if (!sameRoutes(bundle.generatedAccents)) blockers.push('PROFILE_DAVINCI_GENERATED_ACCENT_ROUTES_STALE');
   if (!sameRoutes(bundle.davinci?.generatedAccentRoutes)) blockers.push('PROFILE_DAVINCI_DAVINCI_ACCENT_ROUTES_STALE');
   if (bundle.palmier?.generatedAccentAuthority !== 'PROFILE_V1_GENERATED_ACCENT_REGISTRY') blockers.push('PROFILE_DAVINCI_PALMIER_ACCENT_AUTHORITY_MISSING');
@@ -50,6 +71,13 @@ const report = {
     'src/data/profileV1GeneratedAccentRegistry.ts#profileV1GeneratedAccentImplementations',
     'scripts/profile-v1-davinci-finishing-evidence.mts',
   ],
+  requiredHumanFinalRenderReview: {
+    path: rel(finalReviewPath),
+    schemaVersion: 'profile-v1-final-render-review/v1',
+    authority: 'HUMAN_FINAL_RENDER_REVIEW',
+    mustMatchBundleFinalRenderSha: true,
+    mustPassBeforeDaVinciActual: true,
+  },
   upstreamPalmier: {
     timelinePath: rel(timelinePath),
     generatedAccentAuthority: 'PROFILE_V1_GENERATED_ACCENT_REGISTRY',
@@ -88,6 +116,7 @@ const report = {
   productionReady: false,
   blockers,
   guardrails: [
+    'FINAL_RENDER_REVIEW_PASS != DAVINCI_ACTUAL_VERIFIED',
     'DAVINCI_HANDOFF_CURRENT != MAC_DAVINCI_ACTUAL_VERIFIED',
     'GENERATED_ACCENT_ROUTE_EXPORTED != MAC_DAVINCI_ACTUAL_VERIFIED',
     'DAVINCI_EVIDENCE_TEMPLATE != ACTUAL_EVIDENCE_PASS',
