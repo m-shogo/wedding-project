@@ -46,15 +46,8 @@ const snapshot = {
     label: slot.label,
     kind: slot.kind,
     canonicalStem: slot.canonicalStem,
-    note: slot.note,
     file: slot.file,
     ready: slot.ready,
-    qa: {
-      crop: slot.cropQaState,
-      focus: slot.focusQaState,
-      color: slot.colorQaState,
-      emotionalFit: slot.emotionalFitQaState,
-    },
   })),
   bgm: {
     assetId: report.audio.assetId,
