@@ -4,10 +4,12 @@ on:
   pull_request:
     paths:
       - "motion-studio/public/profile/**"
+      - "motion-studio/src/index-profile-v1.ts"
+      - "motion-studio/src/ProfileV1Root.tsx"
+      - "motion-studio/src/data/theme.ts"
       - "motion-studio/src/data/profileV1RuntimeMedia.generated.ts"
       - "motion-studio/src/data/profileV1ProductionPlan.ts"
       - "motion-studio/src/compositions/profile/ProfileV1RealMediaPreview.tsx"
-      - "motion-studio/src/ProfileV1Root.tsx"
       - "motion-studio/scripts/render-profile-v1-real-media-preview.mts"
       - "motion-studio/scripts/profile-v1-real-media-review.mts"
       - "motion-studio/scripts/check-profile-v1-real-media-review.mts"
@@ -16,10 +18,12 @@ on:
     branches: [main]
     paths:
       - "motion-studio/public/profile/**"
+      - "motion-studio/src/index-profile-v1.ts"
+      - "motion-studio/src/ProfileV1Root.tsx"
+      - "motion-studio/src/data/theme.ts"
       - "motion-studio/src/data/profileV1RuntimeMedia.generated.ts"
       - "motion-studio/src/data/profileV1ProductionPlan.ts"
       - "motion-studio/src/compositions/profile/ProfileV1RealMediaPreview.tsx"
-      - "motion-studio/src/ProfileV1Root.tsx"
       - "motion-studio/scripts/render-profile-v1-real-media-preview.mts"
       - "motion-studio/scripts/profile-v1-real-media-review.mts"
       - "motion-studio/scripts/check-profile-v1-real-media-review.mts"
