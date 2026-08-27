@@ -8,6 +8,7 @@
     "assetIndex": "docs/rurubu-v10/RURUBU-V10-ASSET-INDEX.md",
     "designTokens": "docs/rurubu-v10/rurubu-v10-design-tokens.json",
     "operatingPrompt": "docs/rurubu-v10/RURUBU-V10-FIGMA-AI-OPERATING-PROMPT.md",
+    "referenceFingerprintAntiAiGate": "docs/rurubu-v10/RURUBU-V10-REFERENCE-FINGERPRINT-ANTI-AI-GATE.md",
     "photoProxyQualityBoundary": "docs/rurubu-v10/RURUBU-V10-PHOTO-PROXY-QUALITY-BOUNDARY.md",
     "projectHybridPolicy": "docs/design-learning/AI-FIGMA-HYBRID-AUTHORING-POLICY.md",
     "projectDesignCouncil": "docs/design-learning/PROFESSIONAL-DESIGN-COUNCIL-VNEXT-2026-08-20.md"
@@ -96,9 +97,17 @@
     "P07": "1DAY + CAFE TABLE",
     "P08": "BACK COVER"
   },
+  "referenceMatch": {
+    "scoreAuthority": "docs/rurubu-v10/RURUBU-V10-REFERENCE-FINGERPRINT-ANTI-AI-GATE.md",
+    "passScore": 80,
+    "requiresNoFatalAiTell": true,
+    "reviewScales": ["thumbnail / 3-second scan", "reading scale", "A5 actual size", "grayscale hierarchy"],
+    "compareNodes": ["2771:2", "2771:3", "2771:4"]
+  },
   "workPasses": [
     "all 8 pages to 60–80% with existing organized assets",
     "editorial and Japanese typography refinement",
+    "reference-distance comparison and anti-AI structural correction",
     "V10 FINAL MISSING ASSET LIST",
     "precisely specified final generation batch only if needed",
     "mask/crop/print QA",
@@ -124,6 +133,9 @@
     "preferred effective resolution for final graphics and final photography is 300 ppi or higher",
     "below 250 effective ppi is not print-ready for final promoted assets",
     "do not flatten whole pages",
-    "do not make one page 100% while the rest are empty"
+    "do not make one page 100% while the rest are empty",
+    "reference-match pass requires score 80 or higher and no fatal AI-look tell",
+    "if reference match is weak, fix hierarchy/composition before adding decoration or micro-spacing",
+    "adjacent pages must not repeat the same dominant composition verb, hero position, photo-frame rhythm and dominant color by default"
   ]
 }
