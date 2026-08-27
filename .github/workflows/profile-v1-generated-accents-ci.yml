@@ -11,6 +11,9 @@ on:
       - "motion-studio/src/data/profileV1ProductionPlan.ts"
       - "motion-studio/src/data/profileV1GeneratedAccentRegistry.ts"
       - "motion-studio/scripts/check-profile-v1-generated-accents.mts"
+      - "motion-studio/scripts/profile-v1-production-preflight.mts"
+      - "motion-studio/scripts/check-profile-v1-production-preflight.mts"
+      - "motion-studio/scripts/render-profile-v1-production.mts"
       - "motion-studio/scripts/render-profile-v1-generated-accent-qa-stills.mts"
       - ".github/workflows/profile-v1-generated-accents-ci.yml"
   push:
@@ -24,6 +27,9 @@ on:
       - "motion-studio/src/data/profileV1ProductionPlan.ts"
       - "motion-studio/src/data/profileV1GeneratedAccentRegistry.ts"
       - "motion-studio/scripts/check-profile-v1-generated-accents.mts"
+      - "motion-studio/scripts/profile-v1-production-preflight.mts"
+      - "motion-studio/scripts/check-profile-v1-production-preflight.mts"
+      - "motion-studio/scripts/render-profile-v1-production.mts"
       - "motion-studio/scripts/render-profile-v1-generated-accent-qa-stills.mts"
       - ".github/workflows/profile-v1-generated-accents-ci.yml"
 
@@ -62,6 +68,9 @@ jobs:
 
       - name: Generated-role coverage and reuse contracts
         run: node --no-warnings scripts/check-profile-v1-generated-accents.mts
+
+      - name: Production preflight fail-closed contracts
+        run: node --no-warnings scripts/check-profile-v1-production-preflight.mts
 
       - name: Generated-role visual smoke stills
         run: node --no-warnings scripts/render-profile-v1-generated-accent-qa-stills.mts
