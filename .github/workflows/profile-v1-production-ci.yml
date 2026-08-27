@@ -10,9 +10,11 @@ on:
       - "motion-studio/src/index-profile-v1.ts"
       - "motion-studio/scripts/profile-v1-assembly-preflight.mts"
       - "motion-studio/scripts/profile-v1-bgm-rights-approval.mts"
+      - "motion-studio/scripts/profile-v1-departure-preview-review.mts"
       - "motion-studio/scripts/check-profile-v1-production-plan.mts"
       - "motion-studio/scripts/check-profile-v1-departure-preview.mts"
       - "motion-studio/scripts/render-profile-v1-departure-qa-stills.mts"
+      - "motion-studio/scripts/render-profile-v1-departure-structure-preview.mts"
       - ".github/workflows/profile-v1-production-ci.yml"
   push:
     paths:
@@ -23,9 +25,11 @@ on:
       - "motion-studio/src/index-profile-v1.ts"
       - "motion-studio/scripts/profile-v1-assembly-preflight.mts"
       - "motion-studio/scripts/profile-v1-bgm-rights-approval.mts"
+      - "motion-studio/scripts/profile-v1-departure-preview-review.mts"
       - "motion-studio/scripts/check-profile-v1-production-plan.mts"
       - "motion-studio/scripts/check-profile-v1-departure-preview.mts"
       - "motion-studio/scripts/render-profile-v1-departure-qa-stills.mts"
+      - "motion-studio/scripts/render-profile-v1-departure-structure-preview.mts"
       - ".github/workflows/profile-v1-production-ci.yml"
 
 permissions:
@@ -34,7 +38,7 @@ permissions:
 jobs:
   validate:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 12
     defaults:
       run:
         working-directory: motion-studio
@@ -97,6 +101,19 @@ jobs:
           node -e "const fs=require('fs'); const r=JSON.parse(fs.readFileSync('out/qa/profile-v1-bgm-rights-status.json','utf8')); if(!r.blockers.includes('STALE_PROFILE_BGM_RIGHTS_APPROVAL_SHA')) process.exit(1); if(r.rightsCleared!==false) process.exit(1);"
           echo "Profile BGM rights init is HOLD-only, strict remains blocked, and changing the BGM invalidates the bound approval SHA"
 
+      - name: Render Profile V1 departure structure preview
+        run: node --no-warnings scripts/render-profile-v1-departure-structure-preview.mts
+
+      - name: Profile departure structure review remains human-only
+        run: |
+          node --no-warnings scripts/profile-v1-departure-preview-review.mts --init
+          node -e "const fs=require('fs'); const r=JSON.parse(fs.readFileSync('out/qa/profile-v1-departure-structure-review.json','utf8')); if(r.schemaVersion!=='profile-v1-departure-structure-review/v1') process.exit(1); if(r.authority!=='HUMAN_STRUCTURE_PREVIEW_REVIEW') process.exit(1); if(r.review.overall!=='NOT_RUN') process.exit(1); if(r.review.reviewer!==null) process.exit(1); if(r.realMediaReviewed!==false) process.exit(1); if(r.bgmReviewed!==false) process.exit(1); if(r.productionReady!==false) process.exit(1); for(const c of r.checkpoints){if(c.timing!=='NOT_RUN'||c.visualFlow!=='NOT_RUN'||c.readability!=='NOT_RUN') process.exit(1)}"
+          if node --no-warnings scripts/profile-v1-departure-preview-review.mts --strict; then
+            echo "Structure review unexpectedly passed without a human verdict"
+            exit 1
+          fi
+          echo "Profile departure preview is SHA-bound but Human structure review remains NOT_RUN and cannot promote real media/BGM/production"
+
       - name: Profile V1 departure visual smoke stills
         run: node --no-warnings scripts/render-profile-v1-departure-qa-stills.mts
 
@@ -104,6 +121,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: profile-v1-departure-visual-qa
-          path: motion-studio/out/qa/profile-v1-departure/*.png
+          path: |
+            motion-studio/out/qa/profile-v1-departure/*.png
+            motion-studio/out/preview/profile_v1_departure_structure_preview.mp4
           if-no-files-found: error
           retention-days: 7
