@@ -1,7 +1,7 @@
 import {copyFileSync, existsSync, mkdirSync, readdirSync, statSync} from 'node:fs';
 import {dirname, extname, join, resolve} from 'node:path';
 import {fileURLToPath, pathToFileURL} from 'node:url';
-import {aliases as openingAliases, orderedKeys} from '../src/data/openingV1Media.ts';
+import {aliases as openingAliases, orderedKeys} from '../src/data/openingV1PhotoRoles.ts';
 import {profileV1RequiredMediaSlots} from '../src/data/profileV1ProductionPlan.ts';
 
 type Project = 'opening' | 'profile';
