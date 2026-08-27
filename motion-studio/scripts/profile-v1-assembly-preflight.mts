@@ -207,32 +207,26 @@ const report = {
   nextActions: !mediaReady
     ? [
         `Profile実素材を ${profileV1ProductionContract.mediaDirectory}/ へcanonical stem名で投入`,
-        'pnpm prepare:profile-v1',
+        'node --no-warnings scripts/profile-v1-assembly-preflight.mts',
       ]
     : !bgmFileExists
-      ? ['権利確認対象BGMを public/audio/profile/bgm-main.mp3 へ配置', 'pnpm profile:bgm-rights:init']
+      ? ['権利確認対象BGMを public/audio/profile/bgm-main.mp3 へ配置', 'BGM rights approvalを初期化']
       : !bgmReady
         ? [
-            'pnpm profile:bgm-rights:init',
+            'node --no-warnings scripts/profile-v1-bgm-rights-approval.mts --init',
             '生成されたHOLD artifactを人間が権利証拠に基づいて編集',
-            'pnpm profile:bgm-rights:strict',
+            'node --no-warnings scripts/profile-v1-bgm-rights-approval.mts --strict',
           ]
         : structureReview.state !== 'PASS'
-          ? [
-              'pnpm render:profile-v1:structure-preview',
-              'pnpm profile:structure-review:init',
-              '30秒全5章structure previewを人間確認してreview evidenceを更新',
-              'pnpm profile:structure-review:strict',
-            ]
+          ? ['30秒全5章structure previewを人間確認', 'structure review evidenceをPASSへ更新', '実素材preview QAへ進む']
           : realMediaReview.state !== 'PASS'
             ? [
-                'pnpm render:profile-v1:real-media-preview',
-                'pnpm qa:profile-v1:real-media-stills',
-                'pnpm profile:real-media-review:init',
+                'node --no-warnings scripts/render-profile-v1-real-media-preview.mts',
+                'node --no-warnings scripts/profile-v1-real-media-review.mts --init',
                 '17素材のcrop/focus/color/emotional-fit/contentと5章flow/readability/role fitを人間確認',
-                'pnpm profile:real-media-review:strict',
+                'node --no-warnings scripts/profile-v1-real-media-review.mts --strict',
               ]
-            : ['Profile assembly input + structure + real-media Human QA ready', 'pnpm render:profile-v1'],
+            : ['Profile assembly input + structure + real-media Human QA ready', 'final render / DaVinci handoffへ進む'],
 };
 
 if (jsonMode) {
