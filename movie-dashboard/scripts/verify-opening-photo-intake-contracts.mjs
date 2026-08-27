@@ -8,6 +8,7 @@ const app = fs.readFileSync(path.join(root, "src/App.tsx"), "utf8");
 const gatePanel = fs.readFileSync(path.join(root, "src/components/OpeningProductionGatePanel.tsx"), "utf8");
 const handoffButton = fs.readFileSync(path.join(root, "src/components/OpeningProductionHandoffExportButton.tsx"), "utf8");
 const handoff = fs.readFileSync(path.join(root, "src/data/openingProductionStatusHandoff.ts"), "utf8");
+const localMediaValidator = fs.readFileSync(path.join(root, "src/components/LocalMediaIntakeValidator.tsx"), "utf8");
 const errors = [];
 
 const canonicalSlots = [
@@ -36,8 +37,26 @@ for (const token of [
   "pnpm opening:preflight",
   "pnpm sync:opening-gate",
   "pnpm render:opening-v1:preview",
+  "LocalMediaIntakeValidator",
+  "localValidationSlots",
+  "11写真をコピーする前にcanonical名を一括検査",
 ]) {
   if (!page.includes(token)) errors.push(`photo intake workflow missing: ${token}`);
+}
+
+for (const token of [
+  "LOCAL PRECHECK / NO UPLOAD",
+  "multiple",
+  ".jpg,.jpeg,.png,.webp,.mp4,.mov,.webm",
+  "canonicalStem",
+  "extensionAllowed",
+  "unexpected",
+  "invalidExtension",
+  "duplicates",
+  "NAMES READY",
+  "LOCAL_NAME_CHECK_PASS != FILE_COPIED / FILE_COPIED != PRODUCTION_READY",
+]) {
+  if (!localMediaValidator.includes(token)) errors.push(`local media intake validator missing: ${token}`);
 }
 
 for (const token of [
@@ -87,6 +106,9 @@ if (!gatePanel.includes('to="/opening-photo-intake"')) {
 if (handoffButton.includes("productionReady: true")) {
   errors.push("Opening handoff export must not fabricate production readiness");
 }
+if (localMediaValidator.includes("upload(")) {
+  errors.push("local filename precheck must not upload media");
+}
 
 if (errors.length > 0) {
   console.error(`Opening Photo Intake contracts FAILED (${errors.length})`);
@@ -94,4 +116,4 @@ if (errors.length > 0) {
   process.exit(1);
 }
 
-console.log(`Opening Photo Intake contracts OK: ${canonicalSlots.length} canonical slots / full sync-preview handoff / production-status JSON export.`);
+console.log(`Opening Photo Intake contracts OK: ${canonicalSlots.length} canonical slots / local no-upload filename precheck / full sync-preview handoff / production-status JSON export.`);

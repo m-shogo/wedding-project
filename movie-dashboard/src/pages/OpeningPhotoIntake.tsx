@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Header } from "../components/Header";
+import { LocalMediaIntakeValidator } from "../components/LocalMediaIntakeValidator";
 import { openingProductionGate } from "../data/openingProductionGate.generated";
 
 type SlotBrief = {
@@ -122,6 +123,12 @@ export function OpeningPhotoIntake() {
   const gate = openingProductionGate;
   const resolved = Number(gate.resolvedPhotoCount);
   const total = Number(gate.expectedPhotoCount);
+  const localValidationSlots = gate.photoSlots.map((slot) => ({
+    id: slot.key,
+    canonicalStem: slot.key,
+    label: slotBriefs[slot.key]?.chapter ?? slot.key,
+    kind: "photo" as const,
+  }));
 
   async function copy(text: string) {
     try {
@@ -177,6 +184,11 @@ export function OpeningPhotoIntake() {
           </div>
         </div>
       </section>
+
+      <LocalMediaIntakeValidator
+        slots={localValidationSlots}
+        title="11写真をコピーする前にcanonical名を一括検査"
+      />
 
       <section className="mb-10">
         <div className="border-b-2 border-navy-900 dark:border-sand-100 pb-3 mb-4 flex items-end justify-between gap-4">

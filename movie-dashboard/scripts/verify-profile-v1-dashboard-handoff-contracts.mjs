@@ -10,6 +10,7 @@ const profileGate = read("src/data/profileProductionGate.generated.ts");
 const realMediaGate = read("src/data/profileRealMediaReviewGate.generated.ts");
 const profileStatusHandoff = read("src/data/profileProductionStatusHandoff.ts");
 const profileHandoffExport = read("src/components/ProfileProductionHandoffExportButton.tsx");
+const localMediaValidator = read("src/components/LocalMediaIntakeValidator.tsx");
 const profileMediaIntake = read("src/pages/ProfileMediaIntake.tsx");
 const profileBgmIntake = read("src/pages/ProfileBgmIntake.tsx");
 const app = read("src/App.tsx");
@@ -119,6 +120,21 @@ for (const token of [
 }
 
 for (const token of [
+  'LOCAL PRECHECK / NO UPLOAD',
+  'multiple',
+  '.jpg,.jpeg,.png,.webp,.mp4,.mov,.webm',
+  'canonicalStem',
+  'extensionAllowed',
+  'unexpected',
+  'invalidExtension',
+  'duplicates',
+  'NAMES READY',
+  'LOCAL_NAME_CHECK_PASS != FILE_COPIED / FILE_COPIED != PRODUCTION_READY',
+]) {
+  requireText(localMediaValidator, token, `Local media intake validator contract missing: ${token}`);
+}
+
+for (const token of [
   'PROFILE MEDIA INTAKE',
   'profileProductionGate',
   'gate.mediaSlots.filter',
@@ -126,6 +142,10 @@ for (const token of [
   'motion-studio/public/profile/',
   'to="/profile-bgm-intake"',
   'pnpm prepare:profile-v1',
+  'LocalMediaIntakeValidator',
+  'localValidationSlots',
+  '17素材をコピーする前にcanonical名を一括検査',
+  'LOCAL PRECHECKでcanonical filename / extension / duplicateを一括確認',
   'ProfileProductionHandoffExportButton',
   '<ProfileProductionHandoffExportButton />',
   '<ProfileProductionHandoffExportButton compact />',
@@ -231,4 +251,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log("Profile V1 Dashboard Handoff contracts OK: canonical chapter role/editIntent, dedicated 17-media/BGM intake, compact production handoff JSON export, SHA-bound Human rights/structure/real-media QA, critical path and Palmier/DaVinci status stay connected while Mac Actual/production release remain separate and fail-closed.");
+console.log("Profile V1 Dashboard Handoff contracts OK: canonical chapter role/editIntent, local no-upload 17-media filename precheck, dedicated BGM intake, compact production handoff JSON export, SHA-bound Human rights/structure/real-media QA, critical path and Palmier/DaVinci status stay connected while Mac Actual/production release remain separate and fail-closed.");
