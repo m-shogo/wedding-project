@@ -8,6 +8,8 @@ on:
       - "movie-dashboard/scripts/verify-profile-production-status-handoff.mjs"
       - "movie-dashboard/src/data/profileProductionStatus.generated.ts"
       - "movie-dashboard/src/data/profileProductionStatusHandoff.ts"
+      - "movie-dashboard/src/components/ProfileProductionStatusHandoffCard.tsx"
+      - "movie-dashboard/src/components/MaskRevealSceneHandoffCard.tsx"
       - ".github/workflows/profile-v1-production-status-dashboard-ci.yml"
   push:
     branches: [main]
@@ -17,6 +19,8 @@ on:
       - "movie-dashboard/scripts/verify-profile-production-status-handoff.mjs"
       - "movie-dashboard/src/data/profileProductionStatus.generated.ts"
       - "movie-dashboard/src/data/profileProductionStatusHandoff.ts"
+      - "movie-dashboard/src/components/ProfileProductionStatusHandoffCard.tsx"
+      - "movie-dashboard/src/components/MaskRevealSceneHandoffCard.tsx"
       - ".github/workflows/profile-v1-production-status-dashboard-ci.yml"
 
 permissions:
@@ -43,7 +47,7 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - name: Generated Profile full production status is current
         run: node scripts/sync-profile-production-status.mjs --check
-      - name: Profile production-status export contracts
+      - name: Profile production-status export and UI contracts
         run: node scripts/verify-profile-production-status-handoff.mjs
       - name: Typecheck and build Movie Dashboard
         run: pnpm build
