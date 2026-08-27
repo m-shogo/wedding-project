@@ -82,6 +82,17 @@ export const profileProductionGate = {
   "expectedMediaCount": 17,
   "resolvedMediaCount": 0,
   "mediaMissingCount": 17,
+  "media": {
+    "ready": false,
+    "fileReady": false,
+    "intakeReceiptCurrent": false,
+    "intakeReceiptPath": "out/intake/profile-media-intake.json",
+    "intakeReceiptVerifiedCount": 0,
+    "intakeReceiptExpectedCount": 17,
+    "intakeReceiptBlockerCodes": [
+      "RECEIPT_MISSING"
+    ]
+  },
   "mediaSlots": [
     {
       "id": "departure-airport",
@@ -266,7 +277,12 @@ export const profileProductionGate = {
   },
   "productionReady": false,
   "nextActions": [
-    "Profile実素材を public/profile/ へcanonical stem名で投入",
-    "node --no-warnings scripts/profile-v1-assembly-preflight.mts"
+    "node --no-warnings scripts/intake-production-media.mts --project profile --source \"/ABS/PATH/TO/profile-media\"",
+    "node --no-warnings scripts/intake-production-media.mts --project profile --source \"/ABS/PATH/TO/profile-media\" --apply --overwrite --receipt out/intake/profile-media-intake.json",
+    "node --no-warnings scripts/verify-production-media-intake-receipt.mts --project profile",
+    "pnpm prepare:profile-v1",
+    "node --no-warnings scripts/intake-production-bgm.mts --project profile --source \"/ABS/PATH/TO/profile-bgm.mp3\"",
+    "node --no-warnings scripts/intake-production-bgm.mts --project profile --source \"/ABS/PATH/TO/profile-bgm.mp3\" --apply --receipt out/intake/profile-bgm-intake.json",
+    "node --no-warnings scripts/verify-production-bgm-intake-receipt.mts --project profile"
   ]
 } as const;
