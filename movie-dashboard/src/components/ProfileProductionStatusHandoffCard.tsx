@@ -27,6 +27,7 @@ export function ProfileProductionStatusHandoffCard({projectId}: {projectId: Scen
 
   const production = status.profile.production;
   const generatedAccents = status.profile.generatedAccents;
+  const sourceRevalidation = production.sourceRevalidation;
   const palmier = production.palmierHandoff;
   const davinci = production.davinciHandoff;
   const productionReady = production.readiness.productionReady;
@@ -52,6 +53,25 @@ export function ProfileProductionStatusHandoffCard({projectId}: {projectId: Scen
           const complete = !incompleteStageStates.has(state);
           return <div key={key} className={`border px-2 py-1.5 text-[8px] ${complete ? "border-emerald-200 text-emerald-700 dark:border-emerald-800 dark:text-emerald-300" : "border-amber-200 text-amber-700 dark:border-amber-800 dark:text-amber-300"}`}><span className="font-semibold">{stageLabel[key] ?? key}</span>: {state}</div>;
         })}
+      </div>
+
+      <div className="mt-2 border border-amber-200 dark:border-amber-800 p-2">
+        <p className="text-[8px] font-semibold text-amber-700 dark:text-amber-300">SOURCE REVALIDATION</p>
+        <div className="mt-1 grid gap-1 sm:grid-cols-2">
+          <div className="border border-amber-100 dark:border-amber-900 px-2 py-1.5 text-[8px] leading-4 text-navy-500 dark:text-navy-300">
+            <div className="font-semibold">Real-media preview source</div>
+            <div>{sourceRevalidation.realMediaPreview.state}</div>
+            {sourceRevalidation.realMediaPreview.blockers.length > 0 ? <div>blockers: {sourceRevalidation.realMediaPreview.blockers.join(" / ")}</div> : null}
+            {sourceRevalidation.realMediaPreview.recovery.length > 0 ? <div>recovery: {sourceRevalidation.realMediaPreview.recovery.join(" → ")}</div> : null}
+          </div>
+          <div className="border border-amber-100 dark:border-amber-900 px-2 py-1.5 text-[8px] leading-4 text-navy-500 dark:text-navy-300">
+            <div className="font-semibold">Final render source</div>
+            <div>{sourceRevalidation.finalRender.state}</div>
+            {sourceRevalidation.finalRender.blockers.length > 0 ? <div>blockers: {sourceRevalidation.finalRender.blockers.join(" / ")}</div> : null}
+            {sourceRevalidation.finalRender.recovery.length > 0 ? <div>recovery: {sourceRevalidation.finalRender.recovery.join(" → ")}</div> : null}
+          </div>
+        </div>
+        <p className="mt-1 text-[8px] text-navy-400">{sourceRevalidation.guardrails.join(" / ")}</p>
       </div>
 
       <div className="mt-2 border border-fuchsia-100 dark:border-fuchsia-900 p-2">
