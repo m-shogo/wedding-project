@@ -1,5 +1,6 @@
 import {Link} from "react-router-dom";
 import {Header} from "../components/Header";
+import {LocalMediaIntakeValidator} from "../components/LocalMediaIntakeValidator";
 import {ProfileProductionHandoffExportButton} from "../components/ProfileProductionHandoffExportButton";
 import {profileProductionGate} from "../data/profileProductionGate.generated";
 
@@ -13,6 +14,12 @@ export function ProfileMediaIntake() {
   const mediaReady = Number(gate.mediaMissingCount) === 0;
   const bgmReady = gate.bgm.ready;
   const assemblyReady = gate.blockingGatePass;
+  const localValidationSlots = gate.mediaSlots.map((slot) => ({
+    id: slot.id,
+    canonicalStem: slot.canonicalStem,
+    label: slot.label,
+    kind: slot.kind,
+  }));
 
   return (
     <div>
@@ -56,6 +63,11 @@ export function ProfileMediaIntake() {
           </div>
         </div>
       </section>
+
+      <LocalMediaIntakeValidator
+        slots={localValidationSlots}
+        title="17素材をコピーする前にcanonical名を一括検査"
+      />
 
       <section className="mb-8 border-t-2 border-violet-400 dark:border-violet-700 pt-4">
         <ProfileProductionHandoffExportButton />
@@ -109,9 +121,10 @@ export function ProfileMediaIntake() {
         <p className="text-[10px] tracking-[0.18em] font-semibold text-navy-400">DO THIS NOW</p>
         <ol className="mt-3 space-y-2 text-sm leading-6 text-navy-600 dark:text-navy-300">
           <li><span className="font-mono text-navy-400 mr-2">1</span>17 roleに合う実写真/動画を選ぶ</li>
-          <li><span className="font-mono text-navy-400 mr-2">2</span>各ファイルを上記canonical stem名で <code className="text-xs">motion-studio/public/profile/</code> に配置</li>
-          <li><span className="font-mono text-navy-400 mr-2">3</span><Link to="/profile-bgm-intake" className="border-b border-navy-300">Profile BGM rights gate</Link> で現在のBGM SHAへHuman rights approvalを固定</li>
-          <li><span className="font-mono text-navy-400 mr-2">4</span><code className="text-xs">pnpm prepare:profile-v1</code> → real-media preview → Human crop/focus/color/content QAへ</li>
+          <li><span className="font-mono text-navy-400 mr-2">2</span>上のLOCAL PRECHECKでcanonical filename / extension / duplicateを一括確認</li>
+          <li><span className="font-mono text-navy-400 mr-2">3</span>PASSした各ファイルを <code className="text-xs">motion-studio/public/profile/</code> に配置</li>
+          <li><span className="font-mono text-navy-400 mr-2">4</span><Link to="/profile-bgm-intake" className="border-b border-navy-300">Profile BGM rights gate</Link> で現在のBGM SHAへHuman rights approvalを固定</li>
+          <li><span className="font-mono text-navy-400 mr-2">5</span><code className="text-xs">pnpm prepare:profile-v1</code> → real-media preview → Human crop/focus/color/content QAへ</li>
         </ol>
         <div className="mt-4 flex flex-wrap gap-3 text-xs">
           <Link to="/profile-planner" className="px-3 py-2 bg-navy-800 text-white dark:bg-sand-100 dark:text-navy-900">写真計画を開く →</Link>
