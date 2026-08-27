@@ -8,6 +8,8 @@ const manifest = read("src/data/projectProductionHandoffManifest.ts");
 const batchCard = read("src/components/TypographyProjectDeliveryBatchCard.tsx");
 const profileGate = read("src/data/profileProductionGate.generated.ts");
 const realMediaGate = read("src/data/profileRealMediaReviewGate.generated.ts");
+const profileStatusHandoff = read("src/data/profileProductionStatusHandoff.ts");
+const profileHandoffExport = read("src/components/ProfileProductionHandoffExportButton.tsx");
 const profileMediaIntake = read("src/pages/ProfileMediaIntake.tsx");
 const profileBgmIntake = read("src/pages/ProfileBgmIntake.tsx");
 const app = read("src/App.tsx");
@@ -92,6 +94,31 @@ for (const token of [
 }
 
 for (const token of [
+  'PROFILE_PRODUCTION_STATUS_HANDOFF_SCHEMA',
+  'mediaSlots.map',
+  'intakeDirectory: "motion-studio/public/profile/"',
+  'bgm: {...profileProductionGate.bgm}',
+  'criticalPath: criticalPath.projects.profile',
+  'palmierHandoff: profileProductionStatus.handoff.palmier',
+  'davinciHandoff: profileProductionStatus.handoff.davinci',
+  'buildProfileProductionStatusHandoffJson',
+]) {
+  requireText(profileStatusHandoff, token, `Profile production-status handoff missing export payload: ${token}`);
+}
+
+for (const token of [
+  'buildProfileProductionStatusHandoffJson',
+  'downloadText',
+  'profile-v1-production-handoff.json',
+  'PROFILE PRODUCTION HANDOFF',
+  '17素材・BGM・critical path・Palmier / DaVinci状態を1 JSONへ',
+  'BLOCKED / NOT_RUN',
+  'export自体はproductionReadyへの昇格ではありません',
+]) {
+  requireText(profileHandoffExport, token, `Profile handoff export control missing: ${token}`);
+}
+
+for (const token of [
   'PROFILE MEDIA INTAKE',
   'profileProductionGate',
   'gate.mediaSlots.filter',
@@ -99,6 +126,9 @@ for (const token of [
   'motion-studio/public/profile/',
   'to="/profile-bgm-intake"',
   'pnpm prepare:profile-v1',
+  'ProfileProductionHandoffExportButton',
+  '<ProfileProductionHandoffExportButton />',
+  '<ProfileProductionHandoffExportButton compact />',
   'Human QA / Mac DaVinci Actual / final approval',
 ]) {
   requireText(profileMediaIntake, token, `Profile media intake contract missing: ${token}`);
@@ -113,9 +143,13 @@ for (const token of [
   'pnpm profile:bgm-rights:init',
   'profile-v1-bgm-rights-approval.json',
   'pnpm profile:bgm-rights:strict',
+  'ProfileProductionHandoffExportButton',
+  '<ProfileProductionHandoffExportButton />',
+  '<ProfileProductionHandoffExportButton compact />',
   'Human approvalをUIで偽装しない',
   'FILE_FOUND != RIGHTS_CLEARED',
   'BGM_READY != PRODUCTION_READY',
+  'HANDOFF_EXPORTED != PRODUCTION_READY',
 ]) {
   requireText(profileBgmIntake, token, `Profile BGM intake contract missing: ${token}`);
 }
@@ -189,6 +223,7 @@ if (realMediaGate.includes('"state": "PASS"')) errors.push("generated Profile re
 if (realMediaGate.includes('"humanReviewComplete": true')) errors.push("generated Profile real-media Human QA must not be fabricated");
 if (realMediaGate.includes('"productionReady": true')) errors.push("real-media review cannot promote production readiness");
 if (profileBgmIntake.includes('rightsCleared = true') || profileBgmIntake.includes('productionReady: true')) errors.push("Profile BGM intake must not fabricate rights or production readiness");
+if (profileHandoffExport.includes('productionReady: true')) errors.push("Profile handoff export must not fabricate production readiness");
 
 if (errors.length) {
   console.error(`Profile V1 Dashboard Handoff contracts FAILED (${errors.length})`);
@@ -196,4 +231,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log("Profile V1 Dashboard Handoff contracts OK: canonical chapter role/editIntent, dedicated 17-media intake, SHA-bound Human BGM rights gate, structure review, and real-media Human QA stay visible while Mac Actual/production release remain separate and fail-closed.");
+console.log("Profile V1 Dashboard Handoff contracts OK: canonical chapter role/editIntent, dedicated 17-media/BGM intake, compact production handoff JSON export, SHA-bound Human rights/structure/real-media QA, critical path and Palmier/DaVinci status stay connected while Mac Actual/production release remain separate and fail-closed.");
