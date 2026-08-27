@@ -26,7 +26,7 @@ for (const token of [
 
 for (const token of [
   'NOW / PRODUCTION CRITICAL PATH',
-  'current.detail',
+  'current?.detail',
   'current.path',
   'current.recovery',
   'project.downstreamBlockedStages',
