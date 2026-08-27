@@ -11,25 +11,14 @@ if (!page) throw new Error('V10 production page 2787:2 not found');
 await figma.setCurrentPageAsync(page);
 
 const FRAME_IDS = [
-  '2787:3',
-  '2787:9',
-  '2787:15',
-  '2787:22',
-  '2787:28',
-  '2787:35',
-  '2787:42',
-  '2787:49',
+  '2787:3', '2787:9', '2787:15', '2787:22',
+  '2787:28', '2787:35', '2787:42', '2787:49',
 ];
 
 const ROLES = [
-  'COVER',
-  'PROFILE',
-  'Q&A',
-  'STORY',
-  'TIMELINE + MEMORY',
-  'MEMORY SPOTS + GALLERY',
-  '1DAY + CAFE TABLE',
-  'BACK COVER',
+  'COVER', 'PROFILE', 'Q&A', 'STORY',
+  'TIMELINE + MEMORY', 'MEMORY SPOTS + GALLERY',
+  '1DAY + CAFE TABLE', 'BACK COVER',
 ];
 
 const IGNORE_NAME = /TRIM|BLEED|SAFE|GUIDE/i;
@@ -75,7 +64,6 @@ function collectMeaningfulShapes(root) {
 
 function signatureDistance(a, b) {
   if (!a.length || !b.length) return 1;
-
   const used = new Set();
   let cost = 0;
   let matched = 0;
@@ -83,7 +71,6 @@ function signatureDistance(a, b) {
   for (const source of a) {
     let best = Infinity;
     let bestIndex = -1;
-
     for (let i = 0; i < b.length; i++) {
       if (used.has(i)) continue;
       const target = b[i];
@@ -97,7 +84,6 @@ function signatureDistance(a, b) {
         bestIndex = i;
       }
     }
-
     if (bestIndex >= 0 && best < 0.32) {
       used.add(bestIndex);
       cost += best;
@@ -123,21 +109,15 @@ for (let index = 0; index < FRAME_IDS.length; index++) {
 
   const rotatedShapeCount = shapes.filter(s => Math.abs(s.rotation) >= 0.5).length;
   const edgeShapeCount = shapes.filter(s =>
-    s.x < 0.03 ||
-    s.y < 0.03 ||
-    s.x + s.w > 0.97 ||
-    s.y + s.h > 0.97
+    s.x < 0.03 || s.y < 0.03 || s.x + s.w > 0.97 || s.y + s.h > 0.97
   ).length;
 
   const sizeGroups = {};
   const radiusGroups = {};
-
   for (const shape of shapes) {
     const sizeKey = `${Math.round(shape.w * 100)}x${Math.round(shape.h * 100)}`;
     sizeGroups[sizeKey] = (sizeGroups[sizeKey] || 0) + 1;
-    if (shape.radius != null) {
-      radiusGroups[shape.radius] = (radiusGroups[shape.radius] || 0) + 1;
-    }
+    if (shape.radius != null) radiusGroups[shape.radius] = (radiusGroups[shape.radius] || 0) + 1;
   }
 
   const repeatedSizeMax = Math.max(0, ...Object.values(sizeGroups));
@@ -147,8 +127,13 @@ for (let index = 0; index < FRAME_IDS.length; index++) {
     ? sortedAreas[0] / Math.max(sortedAreas[1], 0.001)
     : (sortedAreas.length ? 99 : 0);
 
-  const emptySkeleton = texts.length === 0 && imageNodes.length === 0;
-  const mode = emptySkeleton ? 'PREPROD_SKELETON' : 'PRODUCTION_CANDIDATE';
+  // Canonical docs define PRODUCTION_CANDIDATE as having meaningful copy/editorial
+  // structure AND rendered visual content. One native text node alone must not promote
+  // a transport/mask skeleton into scored production mode.
+  const hasMeaningfulText = texts.length >= 2;
+  const hasMeaningfulImage = imageNodes.length >= 1;
+  const productionCandidate = hasMeaningfulText && hasMeaningfulImage;
+  const mode = productionCandidate ? 'PRODUCTION_CANDIDATE' : 'PREPROD_SKELETON';
   const fatal = [];
   const warnings = [];
 
@@ -157,7 +142,15 @@ for (let index = 0; index < FRAME_IDS.length; index++) {
     shapes.length >= 4 &&
     repeatedRadiusMax / Math.max(shapes.length, 1) >= 0.6;
 
-  if (emptySkeleton) warnings.push('PREPROD_SKELETON_NO_TEXT_OR_IMAGE');
+  if (!productionCandidate) {
+    if (!hasMeaningfulText && !hasMeaningfulImage) {
+      warnings.push('PREPROD_SKELETON_NO_TEXT_OR_IMAGE');
+    } else if (!hasMeaningfulImage) {
+      warnings.push('PREPROD_SKELETON_NO_RENDERED_IMAGE');
+    } else {
+      warnings.push('PREPROD_SKELETON_INSUFFICIENT_EDITORIAL_TEXT');
+    }
+  }
   if (equalModuleGrid) fatal.push('EQUAL_MODULE_GRID');
   if (uniformCornerRadius) fatal.push('UNIFORM_CORNER_RADIUS');
   if (shapes.length >= 4 && dominance < 1.25) warnings.push('WEAK_DOMINANT_GESTURE');
@@ -174,6 +167,10 @@ for (let index = 0; index < FRAME_IDS.length; index++) {
     frameId: root.id,
     role: ROLES[index],
     mode,
+    contentReadiness: {
+      hasMeaningfulText,
+      hasMeaningfulImage,
+    },
     shapeCount: shapes.length,
     textCount: texts.length,
     imageFillCount: imageNodes.length,
