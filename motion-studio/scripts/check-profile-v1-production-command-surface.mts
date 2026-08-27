@@ -24,7 +24,7 @@ const expected: Record<string, string> = {
   'render:profile-v1:structure-preview': 'node --no-warnings scripts/render-profile-v1-full-structure-preview.mts',
   'render:profile-v1:real-media-preview': 'pnpm prepare:profile-v1 && node --no-warnings scripts/render-profile-v1-real-media-preview.mts',
   'qa:profile-v1:real-media-stills': 'pnpm prepare:profile-v1 && node --no-warnings scripts/render-profile-v1-real-media-qa-stills.mts',
-  'profile:real-media-review:init': 'node --no-warnings scripts/profile-v1-real-media-review.mts --init',
+  'profile:real-media-review:init': 'node --no-warnings scripts/init-profile-v1-real-media-review.mts',
   'profile:real-media-review:strict': 'node --no-warnings scripts/profile-v1-real-media-review.mts --strict',
   'render:profile-v1': 'node --no-warnings scripts/render-profile-v1-production.mts',
   'check:profile-render': 'node --no-warnings scripts/check-profile-render.mts out/profile/profile_v1.mp4',
@@ -79,4 +79,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log(`Profile V1 production command surface OK: ${Object.keys(expected).length} guarded commands validate Motion Zukan generated accents, refresh runtime media, and map to existing canonical scripts without bypassing production gates.`);
+console.log(`Profile V1 production command surface OK: ${Object.keys(expected).length} guarded commands validate Motion Zukan generated accents, refresh runtime media, and bind Human review initialization to a fresh current-input preview without bypassing production gates.`);
