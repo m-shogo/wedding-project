@@ -1,6 +1,7 @@
 import {Link} from "react-router-dom";
 import {Header} from "../components/Header";
 import {LocalMediaIntakeValidator} from "../components/LocalMediaIntakeValidator";
+import {ProductionMediaIntakeCliGuide} from "../components/ProductionMediaIntakeCliGuide";
 import {ProfileProductionHandoffExportButton} from "../components/ProfileProductionHandoffExportButton";
 import {profileProductionGate} from "../data/profileProductionGate.generated";
 
@@ -69,6 +70,8 @@ export function ProfileMediaIntake() {
         title="17素材をコピーする前にcanonical名を一括検査"
       />
 
+      <ProductionMediaIntakeCliGuide project="profile" />
+
       <section className="mb-8 border-t-2 border-violet-400 dark:border-violet-700 pt-4">
         <ProfileProductionHandoffExportButton />
       </section>
@@ -122,7 +125,7 @@ export function ProfileMediaIntake() {
         <ol className="mt-3 space-y-2 text-sm leading-6 text-navy-600 dark:text-navy-300">
           <li><span className="font-mono text-navy-400 mr-2">1</span>17 roleに合う実写真/動画を選ぶ</li>
           <li><span className="font-mono text-navy-400 mr-2">2</span>上のLOCAL PRECHECKでcanonical filename / extension / duplicateを一括確認</li>
-          <li><span className="font-mono text-navy-400 mr-2">3</span>PASSした各ファイルを <code className="text-xs">motion-studio/public/profile/</code> に配置</li>
+          <li><span className="font-mono text-navy-400 mr-2">3</span>CANONICAL INTAKE CLIをDRY RUNし、PASS後だけ <code className="text-xs">--apply</code> でsource非破壊copy</li>
           <li><span className="font-mono text-navy-400 mr-2">4</span><Link to="/profile-bgm-intake" className="border-b border-navy-300">Profile BGM rights gate</Link> で現在のBGM SHAへHuman rights approvalを固定</li>
           <li><span className="font-mono text-navy-400 mr-2">5</span><code className="text-xs">pnpm prepare:profile-v1</code> → real-media preview → Human crop/focus/color/content QAへ</li>
         </ol>
