@@ -20,7 +20,7 @@ import {
   buildSoloUnionEvents,
   type ChoreographyEvent,
 } from '../../data/startWeddingEdit/choreography';
-import {StartDemoBackdrop} from '../../compositions/start129/StartDemoBackdrop';
+import {WeddingRealOrDemoBackdrop as StartDemoBackdrop} from '../../compositions/startWeddingEdit/WeddingRealOrDemoBackdrop';
 import {motionStyle} from '../start129/shotEngine';
 import {resolveActiveShot, resolveActiveShotWithLocalFrame, type SectionShotsMap} from './weddingLyricLine';
 import type {PlacedShot} from '../../data/startWeddingEdit/storyboard';

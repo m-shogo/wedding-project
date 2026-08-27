@@ -19,7 +19,7 @@
 import React from 'react';
 import {AbsoluteFill, Sequence, interpolate, useCurrentFrame} from 'remotion';
 import {weddingEditEditorialBlocks, weddingEditBeatMap, type GeneratedLetterCue} from '../../data/startWeddingEdit/generated';
-import {StartDemoBackdrop} from '../start129/StartDemoBackdrop';
+import {WeddingRealOrDemoBackdrop as StartDemoBackdrop} from './WeddingRealOrDemoBackdrop';
 
 const FPS = 30;
 const secToFrame = (s: number) => Math.round(s * FPS);

@@ -4,8 +4,8 @@
 // のType Mask等)から同じroleの実素材を参照する手段が無かった。ここへ抽出することで、
 // 「同じshotが今画面に出しているのと同じ写真」を他のcomponentからも安全に参照できる。
 
-import {start129AssetRoleSpec, type Start129AssetRole} from './assetRoles';
-import {start129DemoAssetLibrary} from './demoAssetLibrary.generated';
+import {start129AssetRoleSpec, type Start129AssetRole} from './assetRoles.ts';
+import {start129DemoAssetLibrary} from './demoAssetLibrary.generated.ts';
 
 export type ResolvedDemoAsset = {
   path: string | undefined;

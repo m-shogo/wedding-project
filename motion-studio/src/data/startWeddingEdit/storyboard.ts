@@ -7,9 +7,9 @@
 // (frame数学とrender方法は音源の長さに依存しない汎用部品のため)。
 
 import type {Start129AssetRole} from '../start129/assetRoles';
-import type {Shot, ShotEffect, ShotEntry, ShotLayout, ShotMotion} from '../start129/storyboard';
-import {entryOverlapFrames} from '../start129/storyboard';
-import {START_WEDDING_EDIT_FPS, WEDDING_EDIT_SECTIONS, type WeddingEditSection} from './sections';
+import type {Shot, ShotEffect, ShotEntry, ShotLayout, ShotMotion} from '../start129/storyboard.ts';
+import {entryOverlapFrames} from '../start129/storyboard.ts';
+import {START_WEDDING_EDIT_FPS, WEDDING_EDIT_SECTIONS, type WeddingEditSection} from './sections.ts';
 
 export {entryOverlapFrames};
 export type {Shot, ShotEntry};
