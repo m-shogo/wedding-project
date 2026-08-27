@@ -7,6 +7,7 @@ import {
   type OpeningPhotoFocus,
   type OpeningPhotoMotion,
 } from '../src/data/openingV1Presentation.ts';
+import {verifyIntakeReceipt} from './verify-production-media-intake-receipt.mts';
 
 const studioRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const openingDir = join(studioRoot, 'public/photos/opening');
@@ -95,26 +96,47 @@ const rows: SlotRow[] = [
 ];
 
 const ready = rows.filter((row) => row.status === 'ready').length;
+const filesReady = ready === rows.length;
 const coverReady = rows.filter((row) => row.status === 'ready' && row.fit === 'cover').length;
+const intakeReceipt = verifyIntakeReceipt({project: 'opening', targetDirectory: openingDir});
+const intakeReceiptCurrent = intakeReceipt.current;
+const productionPhotoReady = filesReady && intakeReceiptCurrent;
+const canonicalIntakeActions = [
+  'node --no-warnings scripts/intake-production-media.mts --project opening --source "/ABS/PATH/TO/opening-media"',
+  'node --no-warnings scripts/intake-production-media.mts --project opening --source "/ABS/PATH/TO/opening-media" --apply --overwrite --receipt out/intake/opening-media-intake.json',
+  'node --no-warnings scripts/verify-production-media-intake-receipt.mts --project opening',
+  'pnpm prepare:opening-v1',
+];
+
+const report = {
+  schemaVersion: 'opening-photo-preflight/v2' as const,
+  authority: 'OPENING_CANONICAL_PHOTO_INTAKE_PREFLIGHT' as const,
+  ready,
+  total: rows.length,
+  filesReady,
+  productionPhotoReady,
+  coverCropChecks: coverReady,
+  directory: 'public/photos/opening',
+  intakeReceipt: {
+    current: intakeReceiptCurrent,
+    path: 'out/intake/opening-media-intake.json',
+    verifiedCount: intakeReceipt.verifiedCount,
+    blockers: intakeReceipt.errors,
+  },
+  rows,
+  nextActions: productionPhotoReady
+    ? coverReady > 0
+      ? [`previewでcover ${coverReady}枠の顔/身体cropを確認`, '必要な枠だけopeningV1Presentation.tsのfocusを調整']
+      : ['pnpm render:opening-v1:preview']
+    : canonicalIntakeActions,
+};
 
 if (jsonMode) {
-  console.log(
-    JSON.stringify(
-      {
-        ready,
-        total: rows.length,
-        coverCropChecks: coverReady,
-        directory: 'public/photos/opening',
-        rows,
-      },
-      null,
-      2,
-    ),
-  );
+  console.log(JSON.stringify(report, null, 2));
   process.exit(0);
 }
 
-console.log(`Opening V1 photo preflight: ${ready}/${rows.length}`);
+console.log(`Opening V1 photo preflight: files=${ready}/${rows.length} receipt=${intakeReceiptCurrent ? 'CURRENT' : 'MISSING_OR_STALE'} productionPhotoReady=${productionPhotoReady ? 'YES' : 'NO'}`);
 console.log('');
 console.log('status  slot          file                     role                  layout  fit      motion       focus    crop');
 console.log('------  ------------  -----------------------  --------------------  ------  -------  -----------  -------  ------------');
@@ -127,14 +149,15 @@ for (const row of rows) {
   const fit = row.fit.padEnd(7);
   const motion = row.motion.padEnd(11);
   const focus = `${row.focus.x}/${row.focus.y}`.padEnd(7);
-  console.log(
-    `${status.padEnd(6)}  ${row.slot.padEnd(12)}  ${file}  ${role}  ${layout}  ${fit}  ${motion}  ${focus}  ${row.cropCheck}`,
-  );
+  console.log(`${status.padEnd(6)}  ${row.slot.padEnd(12)}  ${file}  ${role}  ${layout}  ${fit}  ${motion}  ${focus}  ${row.cropCheck}`);
 }
 
 console.log('');
-if (ready < rows.length) {
-  console.log(`次: missing ${rows.length - ready}枠をcanonical filenameで置く → pnpm render:opening-v1:preview`);
+if (!productionPhotoReady) {
+  console.log(`BLOCK / 11 FILES FOUND != SHA RECEIPT CURRENT`);
+  for (const blocker of intakeReceipt.errors) console.log(`BLOCK / PHOTO_INTAKE:${blocker}`);
+  console.log('次:');
+  for (const action of canonicalIntakeActions) console.log(`  - ${action}`);
 } else if (coverReady > 0) {
   console.log(`次: previewでcover ${coverReady}枠の顔/身体cropを確認 → 必要な枠だけopeningV1Presentation.tsのfocusを調整`);
 } else {
