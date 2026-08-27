@@ -16,6 +16,11 @@ for (const token of [
   'scripts/intake-production-media.mts --project opening',
   'scripts/verify-production-media-intake-receipt.mts --project opening',
   '11 FILES FOUND != SHA RECEIPT CURRENT',
+  "'scripts/opening-v1-assembly-preflight.mts', '--json'",
+  'assemblyRecovery.inputRecovery?.photos?.state',
+  'assemblyRecovery.inputRecovery?.bgm?.state',
+  'Parallel production inputs: photos=',
+  '並行で進められるproduction input recovery:',
 ]) {
   if (!source.includes(token)) errors.push(`Opening photo preflight missing canonical intake contract: ${token}`);
 }
@@ -33,4 +38,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log('Opening photo preflight intake contract OK: prepare-time photo inspection distinguishes file presence from SHA-current production intake provenance and routes recovery through canonical intake + receipt verification.');
+console.log('Opening photo preflight intake contract OK: prepare-time inspection distinguishes file presence from SHA-current provenance and surfaces canonical photo + BGM recovery in parallel before Studio/preview work.');
