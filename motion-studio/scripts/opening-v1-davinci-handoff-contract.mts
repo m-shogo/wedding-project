@@ -62,6 +62,11 @@ const report = {
     path: rel(evidencePath),
     schemaVersion: 'opening-v1-davinci-finishing-evidence/v1',
     authority: 'MAC_DAVINCI_ACTUAL_EVIDENCE',
+    commands: {
+      init: 'pnpm opening:davinci-finishing:init',
+      status: 'pnpm opening:davinci-finishing',
+      strict: 'pnpm opening:davinci-finishing:strict',
+    },
     requiredChecks: [
       'source_render_sha_readback',
       'resolve_version_project_timeline',
