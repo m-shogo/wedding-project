@@ -2,6 +2,7 @@ import {profileGeneratedAccents} from "./profileGeneratedAccents.generated";
 import {profileProductionGate} from "./profileProductionGate.generated";
 import {profileProductionStatus} from "./profileProductionStatus.generated";
 import {profileRealMediaReviewGate} from "./profileRealMediaReviewGate.generated";
+import {buildWeddingMovieProductionCriticalPath} from "./weddingMovieProductionCriticalPath";
 
 export const PROFILE_PRODUCTION_STATUS_HANDOFF_SCHEMA = "wedding-profile-production-status-handoff/v1" as const;
 
@@ -10,6 +11,7 @@ export const PROFILE_PRODUCTION_STATUS_HANDOFF_SCHEMA = "wedding-profile-product
  * assembly manifestをproduction-readyへ意味変更せず、Motion Studioの後段statusとPalmier/DaVinci handoff contractを追加で運ぶ。
  */
 export function buildProfileProductionStatusHandoff() {
+  const criticalPath = buildWeddingMovieProductionCriticalPath();
   return {
     schemaVersion: PROFILE_PRODUCTION_STATUS_HANDOFF_SCHEMA,
     authority: "MOTION_STUDIO_DERIVED_PROFILE_STATUS_HANDOFF" as const,
@@ -71,6 +73,13 @@ export function buildProfileProductionStatusHandoff() {
         davinciHandoff: profileProductionStatus.handoff.davinci,
         nextActions: [...profileProductionStatus.nextActions],
       },
+      criticalPath: criticalPath.projects.profile,
+    },
+    crossProjectCriticalPath: {
+      productionReady: criticalPath.productionReady,
+      opening: criticalPath.projects.opening,
+      profile: criticalPath.projects.profile,
+      guardrails: [...criticalPath.guardrails],
     },
     guardrails: [
       "ASSEMBLY_READY != PRODUCTION_READY",
@@ -86,6 +95,7 @@ export function buildProfileProductionStatusHandoff() {
       "SOURCE_CHANGED => RE_RENDER_REQUIRED",
       "RE_RENDER_REQUIRED => RE_REVIEW_REQUIRED",
       "OLD_HUMAN_REVIEW != CURRENT_RENDER_IMPLEMENTATION",
+      "CRITICAL_PATH_EXPORTED != RECOVERY_EXECUTED",
     ],
   };
 }

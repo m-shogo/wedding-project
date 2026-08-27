@@ -1,9 +1,11 @@
 import {openingProductionGate} from "./openingProductionGate.generated";
 import {openingProductionStatus} from "./openingProductionStatus.generated";
+import {buildWeddingMovieProductionCriticalPath} from "./weddingMovieProductionCriticalPath";
 
 export const OPENING_PRODUCTION_STATUS_HANDOFF_SCHEMA = "wedding-opening-production-status-handoff/v1" as const;
 
 export function buildOpeningProductionStatusHandoff() {
+  const criticalPath = buildWeddingMovieProductionCriticalPath();
   return {
     schemaVersion: OPENING_PRODUCTION_STATUS_HANDOFF_SCHEMA,
     authority: "MOTION_STUDIO_DERIVED_OPENING_STATUS_HANDOFF" as const,
@@ -32,6 +34,13 @@ export function buildOpeningProductionStatusHandoff() {
         davinciHandoff: openingProductionStatus.handoff.davinci,
         nextActions: [...openingProductionStatus.nextActions],
       },
+      criticalPath: criticalPath.projects.opening,
+    },
+    crossProjectCriticalPath: {
+      productionReady: criticalPath.productionReady,
+      opening: criticalPath.projects.opening,
+      profile: criticalPath.projects.profile,
+      guardrails: [...criticalPath.guardrails],
     },
     guardrails: [
       "STATUS_EXPORTABLE != FINAL_RENDER_ELIGIBLE",
@@ -49,6 +58,7 @@ export function buildOpeningProductionStatusHandoff() {
       "MEDIA_REQUIREMENT_EXPORTED != MEDIA_RESOLVED",
       "HANDOFF_METADATA_EXPORTED != HANDOFF_ARTIFACTS_CURRENT",
       "NEXT_ACTION_EXPORTED != ACTION_COMPLETED",
+      "CRITICAL_PATH_EXPORTED != RECOVERY_EXECUTED",
     ],
   };
 }
