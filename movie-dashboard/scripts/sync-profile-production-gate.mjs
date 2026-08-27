@@ -111,8 +111,6 @@ const current = fs.readFileSync(outputPath, "utf8");
 if (current !== output) {
   console.error("Profile production gate is stale. Run: node scripts/sync-profile-production-gate.mjs --write");
   console.error(`Current source state: ${snapshot.resolvedMediaCount}/${snapshot.expectedMediaCount} media, receipt=${snapshot.media.intakeReceiptCurrent ? "CURRENT" : "MISSING_OR_STALE"}, BGM=${snapshot.bgm.fileExists ? "FOUND" : "MISSING"}/${snapshot.bgm.intakeReceiptCurrent ? "RECEIPT_CURRENT" : "RECEIPT_MISSING_OR_STALE"}/${snapshot.bgm.rightsState}, structure=${snapshot.structureReview.state}`);
-  console.error("--- EXPECTED GENERATED SNAPSHOT ---");
-  console.error(output);
   process.exit(1);
 }
 
