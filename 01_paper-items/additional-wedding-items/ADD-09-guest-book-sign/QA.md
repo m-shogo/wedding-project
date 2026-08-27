@@ -1,16 +1,18 @@
 # ADD-09 ゲストブックサイン — QA
 
-Status: `CURRENT / PEN_TRAY_WELCOME_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / FAMILY_DIVERSITY_PASS / LONG_COPY_STRESS_PASS / AUTO_HEIGHT_PASS / CORNER_TAB_SUBTRACTION_PASS / DESK_PAPER_EDGE_SUBTRACTION_PASS / LEGACY_AND_PRIOR_VNEXT_PRESERVED / NOT_PRINT_READY`
-Updated: 2026-08-24
+Status: `CURRENT / PEN_TRAY_WELCOME_SELECTED / SELLABLE_VISUAL_QA_REOPENED + DESIGN_QA_PASS_WITH_PLACEHOLDERS / FAMILY_DIVERSITY_PASS / LONG_COPY_STRESS_PASS / AUTO_HEIGHT_PASS / CORNER_TAB_SUBTRACTION_PASS / DESK_PAPER_EDGE_SUBTRACTION_PASS / LOCAL_TOP_HOSPITALITY_EDGE_AUDIT_PENDING / LEGACY_AND_PRIOR_VNEXT_PRESERVED / NOT_PRINT_READY`
+Updated: 2026-08-27
 Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
 
 ## Current live authority
 
 - promotion evidence: `FAMILY-DIVERSITY-PEN-TRAY-PROMOTION-QA-2026-08-21.md`
-- latest refinement evidence: `FIGMA-DESK-PAPER-EDGE-SUBTRACTION-QA-2026-08-24.md`
+- latest visual reopen evidence: `OBSERVED-TOP-HOSPITALITY-EDGE-WEB-HEADER-RISK-2026-08-27.md`
+- latest completed refinement evidence: `FIGMA-DESK-PAPER-EDGE-SUBTRACTION-QA-2026-08-24.md`
 - previous refinement evidence: `FIGMA-CORNER-TAB-SUBTRACTION-QA-2026-08-23.md`
 - Figma file: `PjFWBpDwaQM5LfvgdqSFvU`
 - Current: `41:56 / CURRENT / ADD-09 / PEN TRAY WELCOME / NO AMBIGUOUS PAPER EDGE / 2026-08-24`
+- current top hospitality edge: `41:57 / TOP / HOSPITALITY EDGE` — **audit pending; do not mutate without bounded comparison**
 - long-copy stress: `41:76 / QA / ADD-09 / PEN TRAY WELCOME / LONG COPY / NO AMBIGUOUS PAPER EDGE / 2026-08-24` — hidden after QA
 - pre-paper-edge rollbacks: `52:2 / 52:38` — hidden
 - bounded no-paper-edge comparison: `51:2` — hidden after verification
@@ -22,6 +24,36 @@ Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
 - retained legacy production preserved: `1:3 / FRAME_ADD09_GUEST_BOOK_SIGN`
 - exact Drive authority live-confirmed: `1D259ugx13El0JYxvn8yyskIjc2c2liF4 / ADD-09_ゲストブックサイン`
 - Drive write: `0`
+
+## 2026-08-27 visual reopen — top hospitality edge
+
+Fresh whole-item, reading-scale and native `1000×1419` screenshots re-exposed one material visual concern in the otherwise-strong Current.
+
+`41:57 / TOP / HOSPITALITY EDGE` is a full-width `1000×54` deep hospitality-green strip placed exactly on the canvas top edge. At whole/read/actual size it reads before the paper field and behaves like a web/app header or status bar more than a credible paper, binding, trim, hierarchy or guest-facing role.
+
+Live metadata confirms the role is structurally independent from the writing surface:
+
+- top edge: `x=0 / y=0 / w=1000 / h=54`;
+- kicker begins at `y=92`;
+- headline begins at `y=165`;
+- bottom writing desk begins at `y=1135`;
+- previously ambiguous corner tab `41:58` and desk paper edge `41:72` are already hidden.
+
+The bottom dark-green writing-desk field and connected pen still have direct physical/guest-action meaning. The question is only whether the separate full-width top strip still earns its place.
+
+Relevant shared-learning fingerprint: `FULL_WIDTH_DECORATIVE_EDGE_READS_AS_WEB_HEADER`, already independently reproduced in ADD-06 and ADD-17. This remains only a receiving-item hypothesis here; it does not authorize automatic subtraction. ADD-10 / ADD-14 remain useful counterexamples where top/full-width fields have real navigational or emotional jobs.
+
+Next bounded Figma test:
+
+1. duplicate Current and long-copy proof rollback-safely;
+2. keep all typography, Auto Layout, desk, connected pen, colors and copy unchanged;
+3. compare `CURRENT` vs `OPEN_PAPER_TOP`, hiding only the copied `TOP / HOSPITALITY EDGE`;
+4. inspect ~500px, ~1000px, native `1000×1419`, realistic long-copy, then structure readback;
+5. adopt only if the open-paper version is clearly stronger and does not make the top feel unfinished.
+
+Do not create replacement top bars/ornaments before this simplest bounded test. If Current wins, reject the hypothesis and restore the sellable gate.
+
+Until that comparison is executed, the sellable visual gate is locally reopened while all previously verified structure/long-copy evidence remains valid.
 
 ## Why ADD-09 reopened a second time
 
@@ -54,7 +86,8 @@ First read:
 Current visual system:
 
 - warm open paper field;
-- deep hospitality-green top edge and bottom writing-desk field;
+- deep hospitality-green bottom writing-desk field;
+- full-width deep hospitality-green top edge currently under bounded visual re-audit;
 - one coral entry rule with a real hierarchy/binding job;
 - one connected pen cue in the writing zone; mustard is retained only as the pen cap where it has physical meaning;
 - Japanese-first title and operational copy;
@@ -99,6 +132,7 @@ No typography, dynamic stack, desk geometry, connected pen, facts, placeholders 
 - semantic placeholders: native editable Figma text;
 - dynamic operational information: native vertical Auto Layout;
 - fixed writing desk and connected pen: simple editable native geometry with direct physical meaning;
+- full-width top hospitality edge: simple native geometry, currently under bounded visual audit;
 - ambiguous pale-blue desk edge: removed rather than replaced;
 - editable SVG: `0`;
 - generated/composed raster: `0`;
@@ -106,19 +140,18 @@ No typography, dynamic stack, desk geometry, connected pen, facts, placeholders 
 - IMAGE fills: `0`;
 - Drive writes: `0`.
 
-Image generation was intentionally not started because the diagnosed defects were family-level metaphor repetition and later purposeless/ambiguous fixed accents, not missing photography or illustration.
+Image generation is not currently justified because the diagnosed defect is fixed-geometry containment, not missing photography or illustration.
 
 ## Three-scale QA
 
-Current `41:56` after the latest refinement:
+Completed Current evidence before the 2026-08-27 top-edge reopen:
 
-- whole-item / ~500 px: PASS;
-- reading / 705×1000: PASS;
-- native canvas `1000×1419`: PASS;
-- the page remains warm and asymmetrical without an unexplained top-right block or UI-like desk rail;
-- the mustard accent remains only on the connected pen cap, where it has a physical role.
+- whole-item / ~500 px: prior PASS;
+- reading / 705×1000: prior PASS;
+- native canvas `1000×1419`: prior PASS;
+- realistic long-copy: prior PASS.
 
-The Current reads as a writing/guest-action sign rather than another stitched book cover or a decorated template.
+The fresh 2026-08-27 re-audit specifically reopens the full-width top edge at all three visual scales. Do not use the older global PASS as proof that this role is already resolved.
 
 ## Long-copy stress and repair
 
@@ -146,9 +179,11 @@ Final stress stack `42:40`:
 
 The 2026-08-24 post-subtraction stress proof was temporarily revealed and remains visually PASS without the pale-blue edge; it was re-hidden after verification.
 
+The pending top-edge comparison must rerun this realistic stress proof because a sellable visual gate cannot be restored from short-copy screenshots alone.
+
 ## Structure QA
 
-Current `41:56` after latest refinement:
+Current `41:56` after latest completed refinement:
 
 - native visible text: `12`;
 - fixed-height text: `0`;
@@ -156,6 +191,7 @@ Current `41:56` after latest refinement:
 - IMAGE fills: `0`;
 - corner check-in tab visible: `false`;
 - `DESK / PAPER EDGE` visible: `false`;
+- `TOP / HOSPITALITY EDGE` visible: `true` pending audit;
 - dynamic stack `42:28`: y `520`, height `404`, bottom `924`.
 
 Stress `41:76`:
@@ -173,27 +209,21 @@ A naive root-relative collision scan reports overlaps because child coordinates 
 
 ## Professional Design Council
 
-Score remains **91 / 100 / PASS / NO VETO**.
+Historical score before the latest top-edge reopen: **91 / 100 / PASS / NO VETO**.
 
-- Concept clarity / ownability: `14/15`
-- Emotional excitement / engagement: `12/15`
-- Japanese editorial typography: `14/15`
-- Composition / hierarchy / rhythm: `14/15`
-- Travel / hospitality integration without cliché: `8/10`
-- Guest-book-sign functionality: `10/10`
-- Physical print credibility: `9/10`
-- Editability / realistic-copy resilience: `5/5`
-- Family fit without template sameness: `5/5`
-
-No Executive Creative Director, Japanese Editorial Designer or Print Production Director veto remains.
+That historical score remains useful composition context but does not close the new screenshot-supported sellable visual defect by itself. The top-edge role must pass its bounded comparison before `SELLABLE_VISUAL_QA_PASS` is restored.
 
 ## Learning state
 
-2026-08-24 result: `VERIFIED_LOCAL` application of the existing binding-function QA method.
+2026-08-24 desk-edge result: `VERIFIED_LOCAL` application of the existing binding-function QA method.
 
-> A layer named `paper edge` is not automatically a credible physical cue. At whole-item scale it still has to read as a real paper/binding/trim relationship. If it instead reads like an isolated UI separator, test bounded subtraction before retaining it.
+2026-08-27 top-edge state: `OBSERVED → ROOT_CAUSE_HYPOTHESIS / BOUNDED_FIGMA_TEST_PENDING`.
 
-Do not transfer the exact pale-blue color, desk geometry, coordinates, guest-book composition or a blanket `remove paper edges` rule. Real paper edges with convincing overlap, thickness, fold, trim or material function may be correct elsewhere.
+Receiving-item hypothesis only:
+
+> A full-width decorative edge with no trim, fold, binding, physical-artifact, hierarchy or reader-facing job can make a print composition read like a web/app header.
+
+Do not transfer exact green treatment, coordinates, guest-book composition, or a blanket `remove top edges` rule. The test must remain item-specific and rollback-safe.
 
 ## Deferred finalization
 
@@ -208,8 +238,8 @@ These do not block further visual progression.
 
 ## Decision / next
 
-`41:56` remains the Current ADD-09 selected family with the ambiguous paper-edge rail removed.
+ADD-09 remains the Current selected family structurally, but its sellable visual gate is locally reopened for one bounded role:
 
-`CURRENT_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / FAMILY_DIVERSITY_PASS / LONG_COPY_STRESS_PASS / CORNER_TAB_SUBTRACTION_PASS / DESK_PAPER_EDGE_SUBTRACTION_PASS / ROLLBACK_SAFE / NOT_PRINT_READY`.
+`CURRENT_SELECTED / SELLABLE_VISUAL_QA_REOPENED + DESIGN_QA_PASS_WITH_PLACEHOLDERS / LOCAL_TOP_HOSPITALITY_EDGE_AUDIT_PENDING / FAMILY_DIVERSITY_PASS / LONG_COPY_STRESS_PASS / CORNER_TAB_SUBTRACTION_PASS / DESK_PAPER_EDGE_SUBTRACTION_PASS / ROLLBACK_SAFE / NOT_PRINT_READY`.
 
-Continue suite-level audit in progression order, but redesign only when a real screenshot-supported defect, repeated dominant grammar, or physical metaphor problem is visible. Next safe target: ADD-10.
+Next writable-Figma action: compare `CURRENT` vs `OPEN_PAPER_TOP` by hiding only the cloned top hospitality edge, then rerun whole / reading / native-size / long-copy / structure readback. Continue ADD-10 onward read-only while this bounded mutation is blocked.
