@@ -13,6 +13,14 @@
   },
   "figma": {
     "fileKey": "bfM0d4c9dCeBv5pCkJ3TNM",
+    "productionPage": { "id": "2787:2", "name": "09_RURUBU_V10_A5_8P_PRODUCTION" },
+    "aiAssistGuide": {
+      "pageId": "2797:2",
+      "pageName": "10_RURUBU_V10_AI_ASSIST_GUIDE",
+      "boardId": "2797:3",
+      "boardName": "REFERENCE / RURUBU V10 AI ASSIST / NOT PRODUCTION",
+      "productionUse": false
+    },
     "referenceNodes": ["2621:111", "2771:2", "2771:3", "2771:4"]
   },
   "drive": {
