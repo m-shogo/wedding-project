@@ -1,6 +1,7 @@
 import {existsSync, readFileSync, readdirSync, statSync} from 'node:fs';
 import {extname, join} from 'node:path';
 import {profileV1RequiredMediaSlots} from '../src/data/profileV1ProductionPlan.ts';
+import {verifyIntakeReceipt} from './verify-production-media-intake-receipt.mts';
 
 const root = process.cwd();
 const mediaRoot = join(root, 'public/profile');
@@ -78,6 +79,7 @@ for (const file of files) {
   filesByStem.set(stem, list);
 }
 
+let currentResolvedCount = 0;
 if (generated) {
   if (generated.schemaVersion !== 'profile-v1-runtime-media/v1') errors.push('Profile runtime media schemaVersion drift');
   if (generated.authority !== 'GENERATED_FROM_CANONICAL_PROFILE_MEDIA_DIRECTORY') errors.push('Profile runtime media authority drift');
@@ -115,8 +117,17 @@ if (generated) {
     if (expectedFile) resolvedCount += 1;
   }
 
+  currentResolvedCount = resolvedCount;
   if (generated.resolvedCount !== resolvedCount) errors.push('Profile runtime media resolvedCount is inconsistent with current real media');
   if (generated.missingCount !== profileV1RequiredMediaSlots.length - resolvedCount) errors.push('Profile runtime media missingCount is inconsistent with current real media');
+}
+
+if (currentResolvedCount === profileV1RequiredMediaSlots.length) {
+  const receipt = verifyIntakeReceipt({project: 'profile', targetDirectory: mediaRoot});
+  if (!receipt.current) {
+    errors.push('Profile runtime media is 17/17 but canonical intake receipt is missing/stale');
+    errors.push(...receipt.errors.map((error) => `Profile intake receipt: ${error}`));
+  }
 }
 
 if (errors.length) {
@@ -127,5 +138,7 @@ if (errors.length) {
 
 console.log(
   `Profile V1 runtime media contracts OK: ${generated?.resolvedCount ?? 0}/${profileV1RequiredMediaSlots.length} canonical slots; ` +
-    'real media may increase from 0/17 to 17/17, while duplicate stems and kind mismatches fail closed.',
+    (currentResolvedCount === profileV1RequiredMediaSlots.length
+      ? '17/17 real media + intake receipt CURRENT; duplicate stems, kind mismatches, or stale receipt fail closed.'
+      : 'real media may increase from 0/17 to 17/17; full real-media state requires a current SHA-bound intake receipt.'),
 );
