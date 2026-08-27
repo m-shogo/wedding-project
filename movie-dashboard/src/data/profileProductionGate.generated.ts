@@ -212,7 +212,7 @@ export const profileProductionGate = {
     "assetId": "profile-bgm-main",
     "path": "public/audio/profile/bgm-main.mp3",
     "fileExists": false,
-    "rightsState": "NOT_CLEARED",
+    "rightsState": "NOT_RUN",
     "ready": false
   },
   "blockingGatePass": false,

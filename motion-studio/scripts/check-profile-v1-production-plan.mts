@@ -12,6 +12,7 @@ const studioRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const repoRoot = join(studioRoot, '..');
 const chapterPlan = readFileSync(join(repoRoot, '01_profile-movie/chapter-plan.md'), 'utf8');
 const preflight = readFileSync(join(studioRoot, 'scripts/profile-v1-assembly-preflight.mts'), 'utf8');
+const rightsApproval = readFileSync(join(studioRoot, 'scripts/profile-v1-bgm-rights-approval.mts'), 'utf8');
 const errors: string[] = [];
 const fail = (message: string) => errors.push(message);
 
@@ -39,12 +40,8 @@ for (const token of ['空港', '幼少期', '二人の写真', 'ハワイ', '犬
   if (!chapterPlan.includes(token)) fail(`source chapter requirement missing: ${token}`);
 }
 
-if (profileV1RequiredMediaSlots.length !== 17) {
-  fail(`expected 17 minimum representative real-media slots, got ${profileV1RequiredMediaSlots.length}`);
-}
-if (profileV1OptionalGeneratedSlots.length !== 3) {
-  fail(`expected 3 optional generated graphic roles, got ${profileV1OptionalGeneratedSlots.length}`);
-}
+if (profileV1RequiredMediaSlots.length !== 17) fail(`expected 17 minimum representative real-media slots, got ${profileV1RequiredMediaSlots.length}`);
+if (profileV1OptionalGeneratedSlots.length !== 3) fail(`expected 3 optional generated graphic roles, got ${profileV1OptionalGeneratedSlots.length}`);
 
 const duplicateStem = profileV1RequiredMediaSlots.find(
   (slot, index, all) => all.findIndex((candidate) => candidate.canonicalStem === slot.canonicalStem) !== index,
@@ -57,19 +54,37 @@ if (!dogSlot?.note.includes('AI置換しない')) fail('real dog asset boundary 
 for (const token of [
   "schemaVersion: 'profile-v1-assembly-preflight/v1'",
   "authority: 'MOTION_STUDIO_DERIVED_PREFLIGHT'",
-  "bgmRightsState = 'NOT_CLEARED'",
+  'profile-v1-bgm-rights-approval.mts',
+  "schemaVersion: 'profile-v1-bgm-rights-status/v1'",
+  'rightsStatus.rightsCleared',
   "previewQaState: 'NOT_RUN'",
   "humanContentQaState: 'NOT_RUN'",
   "macDaVinciActualState: 'NOT_RUN'",
   'productionReady: false',
-  'BGM_RIGHTS_NOT_CLEARED',
 ]) {
   if (!preflight.includes(token)) fail(`Profile V1 preflight honesty token missing: ${token}`);
 }
 
-for (const forbidden of ['productionReady: true', "bgmRightsState = 'CLEARED'", "macDaVinciActualState: 'PASS'"]) {
+for (const token of [
+  "schemaVersion: 'profile-v1-bgm-rights-approval/v1'",
+  "authority: 'HUMAN_BGM_RIGHTS_APPROVAL'",
+  "usageScope: 'WEDDING_SCREENING'",
+  "decision: 'HOLD'",
+  'rightsCleared: false',
+  'shaFile(bgmPath)',
+  'STALE_PROFILE_BGM_RIGHTS_APPROVAL_SHA',
+  'PROFILE_BGM_RIGHTS_APPROVER_MISSING',
+  'PROFILE_BGM_RIGHTS_EVIDENCE_NOTE_MISSING',
+  'PROFILE_BGM_RIGHTS_CLEARED_MUST_MATCH_DECISION',
+]) {
+  if (!rightsApproval.includes(token)) fail(`Profile V1 BGM rights approval contract missing: ${token}`);
+}
+
+for (const forbidden of ['productionReady: true', "macDaVinciActualState: 'PASS'"]) {
   if (preflight.includes(forbidden)) fail(`Profile V1 preflight fabricates readiness: ${forbidden}`);
 }
+if (rightsApproval.includes("decision: 'APPROVE',")) fail('BGM rights approval must never initialize pre-approved');
+if (rightsApproval.includes('rightsCleared: true,')) fail('BGM rights approval must never hardcode rights cleared');
 
 if (errors.length > 0) {
   console.error(`Profile V1 production plan contracts FAILED (${errors.length})`);
@@ -77,4 +92,4 @@ if (errors.length > 0) {
   process.exit(1);
 }
 
-console.log(`Profile V1 production plan contracts OK: 5 canonical chapters, ${profileV1RequiredMediaSlots.length} minimum real-media roles, optional generated graphics separated, BGM rights/Human QA/Mac Actual fail closed.`);
+console.log(`Profile V1 production plan contracts OK: 5 canonical chapters, ${profileV1RequiredMediaSlots.length} minimum real-media roles, generated graphics separated, and BGM rights require current-SHA human approval before assembly readiness.`);
