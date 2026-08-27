@@ -9,7 +9,7 @@ const kindLabel: Record<string, string> = {
 
 export function ProfileMediaIntake() {
   const gate = profileProductionGate;
-  const mediaReady = gate.mediaMissingCount === 0;
+  const mediaReady = Number(gate.mediaMissingCount) === 0;
   const bgmReady = gate.bgm.ready;
   const assemblyReady = gate.blockingGatePass;
 
