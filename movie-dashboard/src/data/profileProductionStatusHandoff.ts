@@ -51,6 +51,7 @@ export function buildProfileProductionStatusHandoff() {
         overallState: profileProductionStatus.overallState,
         stages: profileProductionStatus.stages,
         readiness: profileProductionStatus.readiness,
+        nextActions: [...profileProductionStatus.nextActions],
       },
     },
     guardrails: [
@@ -59,6 +60,7 @@ export function buildProfileProductionStatusHandoff() {
       "PRODUCTION_BUNDLE_CURRENT != MAC_DAVINCI_ACTUAL_VERIFIED",
       "MAC_DAVINCI_ACTUAL_VERIFIED != FINAL_DELIVERY_APPROVED",
       "MEDIA_REQUIREMENT_EXPORTED != MEDIA_RESOLVED",
+      "NEXT_ACTION_EXPORTED != ACTION_COMPLETED",
     ],
   };
 }
