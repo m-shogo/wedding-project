@@ -1,31 +1,20 @@
 import fs from "node:fs";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
 const dashboardRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const repoRoot = path.resolve(dashboardRoot, "..");
-const mediaPath = path.join(repoRoot, "motion-studio/src/data/openingV1Media.ts");
+const photoRolesPath = path.join(repoRoot, "motion-studio/src/data/openingV1PhotoRoles.ts");
 const photoLibraryPath = path.join(repoRoot, "motion-studio/src/data/photoLibrary.generated.ts");
 const assetsPath = path.join(repoRoot, "motion-studio/src/data/assets.ts");
 const outputPath = path.join(dashboardRoot, "src/data/openingProductionGate.generated.ts");
 
-const mediaSource = fs.readFileSync(mediaPath, "utf8");
+const {aliases, orderedKeys} = await import(pathToFileURL(photoRolesPath).href);
 const photoLibrarySource = fs.readFileSync(photoLibraryPath, "utf8");
 const assetsSource = fs.readFileSync(assetsPath, "utf8");
 
 function extractQuotedValues(source) {
   return [...source.matchAll(/["']([^"']+)["']/g)].map((match) => match[1]);
-}
-
-const orderedMatch = mediaSource.match(/const orderedKeys:[^=]+\=\s*\[([\s\S]*?)\];/);
-if (!orderedMatch) throw new Error("openingV1Media.ts: orderedKeys not found");
-const orderedKeys = extractQuotedValues(orderedMatch[1]);
-
-const aliasesMatch = mediaSource.match(/const aliases:[\s\S]*?=\s*\{([\s\S]*?)\n\};\n\nconst openingPhotos/);
-if (!aliasesMatch) throw new Error("openingV1Media.ts: aliases not found");
-const aliases = {};
-for (const match of aliasesMatch[1].matchAll(/'([^']+)'\s*:\s*\[([^\]]*)\]/g)) {
-  aliases[match[1]] = extractQuotedValues(match[2]);
 }
 
 const openingMatch = photoLibrarySource.match(/"opening"\s*:\s*\[([\s\S]*?)\]/);
