@@ -6,6 +6,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const page = fs.readFileSync(path.join(root, "src/pages/OpeningBgmIntake.tsx"), "utf8");
 const app = fs.readFileSync(path.join(root, "src/App.tsx"), "utf8");
 const gate = fs.readFileSync(path.join(root, "src/components/OpeningProductionGatePanel.tsx"), "utf8");
+const handoffButton = fs.readFileSync(path.join(root, "src/components/OpeningProductionHandoffExportButton.tsx"), "utf8");
 const errors = [];
 
 for (const token of [
@@ -16,8 +17,22 @@ for (const token of [
   "pnpm check:opening-sound:strict",
   "pnpm sync:opening-gate",
   "pnpm render:opening-v1:preview",
+  "OpeningProductionHandoffExportButton",
+  "<OpeningProductionHandoffExportButton />",
+  "<OpeningProductionHandoffExportButton compact />",
+  "HANDOFF_EXPORTED != PRODUCTION_READY",
+  "CI_MUST_NOT_PROMOTE_MAC_GUI_ACTUAL",
 ]) {
   if (!page.includes(token)) errors.push(`BGM intake workflow missing: ${token}`);
+}
+
+for (const token of [
+  "buildOpeningProductionStatusHandoffJson",
+  "opening-v1-production-handoff.json",
+  "OPENING PRODUCTION HANDOFF",
+  "BLOCKED / NOT_RUN",
+]) {
+  if (!handoffButton.includes(token)) errors.push(`Opening BGM handoff export control missing: ${token}`);
 }
 
 for (const principle of [
@@ -44,6 +59,12 @@ if (!gate.includes('to="/opening-bgm-intake"')) {
 if (!gate.includes('to="/opening-photo-intake"')) {
   errors.push("BGM integration must not remove Opening Photo Intake link");
 }
+if (!gate.includes("OpeningProductionHandoffExportButton")) {
+  errors.push("Opening production gate must surface canonical handoff export");
+}
+if (handoffButton.includes("productionReady: true")) {
+  errors.push("Opening handoff export must not fabricate production readiness");
+}
 
 if (errors.length > 0) {
   console.error(`Opening BGM Intake contracts FAILED (${errors.length})`);
@@ -51,4 +72,4 @@ if (errors.length > 0) {
   process.exit(1);
 }
 
-console.log("Opening BGM Intake contracts OK: rights-first / strict-gate / preview handoff preserved.");
+console.log("Opening BGM Intake contracts OK: rights-first / strict-gate / preview handoff / production-status JSON export preserved.");

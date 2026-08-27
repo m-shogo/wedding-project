@@ -6,6 +6,8 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const page = fs.readFileSync(path.join(root, "src/pages/OpeningPhotoIntake.tsx"), "utf8");
 const app = fs.readFileSync(path.join(root, "src/App.tsx"), "utf8");
 const gatePanel = fs.readFileSync(path.join(root, "src/components/OpeningProductionGatePanel.tsx"), "utf8");
+const handoffButton = fs.readFileSync(path.join(root, "src/components/OpeningProductionHandoffExportButton.tsx"), "utf8");
+const handoff = fs.readFileSync(path.join(root, "src/data/openingProductionStatusHandoff.ts"), "utf8");
 const errors = [];
 
 const canonicalSlots = [
@@ -38,6 +40,38 @@ for (const token of [
   if (!page.includes(token)) errors.push(`photo intake workflow missing: ${token}`);
 }
 
+for (const token of [
+  "OpeningProductionHandoffExportButton",
+  "<OpeningProductionHandoffExportButton />",
+  "<OpeningProductionHandoffExportButton compact />",
+]) {
+  if (!gatePanel.includes(token)) errors.push(`Opening production gate handoff export missing: ${token}`);
+}
+
+for (const token of [
+  "buildOpeningProductionStatusHandoffJson",
+  "downloadText",
+  "opening-v1-production-handoff.json",
+  "OPENING PRODUCTION HANDOFF",
+  "11写真・BGM/ambience・critical path・Palmier / DaVinci状態を1 JSONへ",
+  "BLOCKED / NOT_RUN",
+  "export自体はproductionReadyへの昇格ではありません",
+]) {
+  if (!handoffButton.includes(token)) errors.push(`Opening production handoff export control missing: ${token}`);
+}
+
+for (const token of [
+  "photoSlots: openingProductionGate.photoSlots.map",
+  'intakeDirectory: "motion-studio/public/photos/opening/"',
+  "bgm: {...openingProductionGate.bgm}",
+  "ambience: openingProductionGate.ambience.map",
+  "criticalPath: criticalPath.projects.opening",
+  "palmierHandoff: openingProductionStatus.handoff.palmier",
+  "davinciHandoff: openingProductionStatus.handoff.davinci",
+]) {
+  if (!handoff.includes(token)) errors.push(`Opening production handoff payload missing: ${token}`);
+}
+
 if (!page.includes("RESOLVED/MISSINGは自己申告ではなく")) {
   errors.push("photo intake must state that progress comes from real source state");
 }
@@ -50,6 +84,9 @@ if (!app.includes('path="opening-photo-intake"')) {
 if (!gatePanel.includes('to="/opening-photo-intake"')) {
   errors.push("Production Gate must deep-link to Opening Photo Intake");
 }
+if (handoffButton.includes("productionReady: true")) {
+  errors.push("Opening handoff export must not fabricate production readiness");
+}
 
 if (errors.length > 0) {
   console.error(`Opening Photo Intake contracts FAILED (${errors.length})`);
@@ -57,4 +94,4 @@ if (errors.length > 0) {
   process.exit(1);
 }
 
-console.log(`Opening Photo Intake contracts OK: ${canonicalSlots.length} canonical slots / full sync-preview handoff.`);
+console.log(`Opening Photo Intake contracts OK: ${canonicalSlots.length} canonical slots / full sync-preview handoff / production-status JSON export.`);
