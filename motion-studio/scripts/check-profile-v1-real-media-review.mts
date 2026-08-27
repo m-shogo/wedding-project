@@ -39,9 +39,17 @@ for (const token of [
   "STALE_PROFILE_PRODUCTION_PLAN",
   "STALE_REAL_MEDIA_PREVIEW_COMPONENT",
   "STALE_CANONICAL_PLAN_FINGERPRINT",
-  "STALE_MEDIA:",
-  "MEDIA_QA_",
-  "CHAPTER_VISUAL_FLOW_",
+  "MEDIA_EVIDENCE_DUPLICATE:",
+  "MEDIA_EVIDENCE_UNKNOWN:",
+  "MEDIA_EVIDENCE_MISSING:",
+  "saved.chapterId !== item.chapterId",
+  "saved.label !== item.label",
+  "MEDIA_QA_INVALID:",
+  "CHAPTER_EVIDENCE_DUPLICATE:",
+  "CHAPTER_EVIDENCE_UNKNOWN:",
+  "CHAPTER_EVIDENCE_MISSING:",
+  "CHAPTER_EVIDENCE_STALE_TITLE:",
+  "CHAPTER_QA_INVALID:",
   "REVIEWER_MISSING",
   "mode === 'strict' && !status.humanReviewComplete",
 ]) {
@@ -73,4 +81,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log('Profile V1 real-media Human QA contracts OK: review evidence is bound to preview, all 17 media files, runtime manifest and canonical plan; verdicts initialize NOT_RUN and cannot promote BGM/Mac Actual/production readiness.');
+console.log('Profile V1 real-media Human QA contracts OK: review evidence is bound to preview, canonical 17-slot identities, canonical 5-chapter identities, runtime manifest and production plan; malformed/duplicate/stale identities fail closed and verdicts cannot promote BGM/Mac Actual/production readiness.');
