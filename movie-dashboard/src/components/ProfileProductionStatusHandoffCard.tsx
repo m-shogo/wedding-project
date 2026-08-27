@@ -15,6 +15,8 @@ const stageLabel: Record<string, string> = {
   finalDeliveryApproval: "Final approval",
 };
 
+const incompleteStageStates = new Set(["NOT_RUN", "BLOCKED", "MISSING", "STALE"]);
+
 export function ProfileProductionStatusHandoffCard({projectId}: {projectId: SceneProjectId}) {
   const status = useMemo(() => buildProfileProductionStatusHandoff(), []);
   const json = useMemo(() => buildProfileProductionStatusHandoffJson(), []);
@@ -48,14 +50,18 @@ export function ProfileProductionStatusHandoffCard({projectId}: {projectId: Scen
       </div>
 
       <div className="mt-2 grid grid-cols-2 gap-1 sm:grid-cols-3">
-        {Object.entries(production.stages).map(([key, stage]) => (
-          <div
-            key={key}
-            className={`border px-2 py-1.5 text-[8px] ${stage.state === "PASS" || stage.state === "ACTUAL_VERIFIED" || stage.state === "APPROVED" ? "border-emerald-200 text-emerald-700 dark:border-emerald-800 dark:text-emerald-300" : "border-amber-200 text-amber-700 dark:border-amber-800 dark:text-amber-300"}`}
-          >
-            <span className="font-semibold">{stageLabel[key] ?? key}</span>: {stage.state}
-          </div>
-        ))}
+        {Object.entries(production.stages).map(([key, stage]) => {
+          const state = String(stage.state);
+          const complete = !incompleteStageStates.has(state);
+          return (
+            <div
+              key={key}
+              className={`border px-2 py-1.5 text-[8px] ${complete ? "border-emerald-200 text-emerald-700 dark:border-emerald-800 dark:text-emerald-300" : "border-amber-200 text-amber-700 dark:border-amber-800 dark:text-amber-300"}`}
+            >
+              <span className="font-semibold">{stageLabel[key] ?? key}</span>: {state}
+            </div>
+          );
+        })}
       </div>
 
       <p className="mt-2 text-[8px] leading-4 text-navy-400">
