@@ -133,15 +133,22 @@ export function TypographyProjectDeliveryBatchCard({projectId}: {projectId: Scen
               {profileMedia.blockingGatePass ? "BLOCKING GATE PASS" : "BLOCKING GATE BLOCKED"}
             </span>
           </div>
-          <div className="mt-1 grid grid-cols-1 gap-1 sm:grid-cols-3 text-[8px]">
+          <div className="mt-1 grid grid-cols-1 gap-1 sm:grid-cols-4 text-[8px]">
             <div className="border border-sand-200 dark:border-navy-700 px-2 py-1.5">実素材 {profileMedia.resolvedMediaCount}/{profileMedia.expectedMediaCount}</div>
             <div className="border border-sand-200 dark:border-navy-700 px-2 py-1.5">BGM {profileMedia.bgm.ready ? "READY" : `BLOCKED / ${profileMedia.bgm.rightsState}`}</div>
-            <div className="border border-sand-200 dark:border-navy-700 px-2 py-1.5">QA preview={profileMedia.qa.preview} / Mac={profileMedia.qa.macDaVinciActual}</div>
+            <div className="border border-sand-200 dark:border-navy-700 px-2 py-1.5">Structure {profileMedia.structureReview.state}</div>
+            <div className="border border-sand-200 dark:border-navy-700 px-2 py-1.5">Real preview={profileMedia.qa.preview} / Mac={profileMedia.qa.macDaVinciActual}</div>
+          </div>
+          <div className="mt-2 border border-fuchsia-100 dark:border-fuchsia-900 px-2 py-1.5 text-[7px] text-fuchsia-800 dark:text-fuchsia-200">
+            Structure review: {profileMedia.structureReview.state} / evidence={profileMedia.structureReview.evidencePath}
+            {profileMedia.structureReview.reviewer ? ` / reviewer=${profileMedia.structureReview.reviewer}` : " / reviewer=NOT_RUN"}
           </div>
           <div className="mt-2 grid grid-cols-1 gap-1 sm:grid-cols-5">
             {profileMedia.chapters.map((chapter) => (
-              <div key={chapter.chapterId} className={`border px-2 py-1 text-[7px] ${chapter.ready ? "border-emerald-200 text-emerald-700 dark:border-emerald-800 dark:text-emerald-300" : "border-amber-200 text-amber-700 dark:border-amber-800 dark:text-amber-300"}`}>
-                {chapter.order}. {chapter.title} {chapter.readyCount}/{chapter.requiredCount}
+              <div key={chapter.chapterId} className={`border px-2 py-1.5 text-[7px] ${chapter.ready ? "border-emerald-200 text-emerald-700 dark:border-emerald-800 dark:text-emerald-300" : "border-amber-200 text-amber-700 dark:border-amber-800 dark:text-amber-300"}`}>
+                <div className="font-semibold">{chapter.order}. {chapter.title} {chapter.readyCount}/{chapter.requiredCount}</div>
+                <div className="mt-1 leading-3 opacity-80">{chapter.role}</div>
+                <div className="mt-1 leading-3 opacity-60">{chapter.editIntent.join(" / ")}</div>
               </div>
             ))}
           </div>
@@ -155,7 +162,7 @@ export function TypographyProjectDeliveryBatchCard({projectId}: {projectId: Scen
           {!profileMedia.blockingGatePass ? (
             <p className="mt-2 text-[8px] leading-4 text-amber-800 dark:text-amber-200">次: {profileMedia.nextActions.join(" → ")}</p>
           ) : (
-            <p className="mt-2 text-[8px] leading-4 text-emerald-800 dark:text-emerald-200">5章17実素材roleとBGM gateが揃っています。preview / Human content / audio QAへ進めます。</p>
+            <p className="mt-2 text-[8px] leading-4 text-emerald-800 dark:text-emerald-200">5章17実素材roleとBGM gateが揃っています。章ごとのedit intentをhandoffへ保持したまま、実素材preview / Human content / audio QAへ進めます。</p>
           )}
         </div>
       ) : null}
@@ -189,7 +196,7 @@ export function TypographyProjectDeliveryBatchCard({projectId}: {projectId: Scen
         </p>
       ) : (
         <p className="mt-2 border border-emerald-200 dark:border-emerald-800 p-2 text-[8px] leading-4 text-emerald-800 dark:text-emerald-200">
-          Palmier→DaVinci assembly用のScene/素材/曲マーカー/デザイン/Typography情報が揃っています。ただしMac Actual / Human review / Scene Releaseは未完了なら各Sceneで別途必要です。
+          Palmier→DaVinci assembly用のScene/素材/曲マーカー/デザイン/Typography情報が揃っています。Profileは章role/editIntentとstructure review状態も同じmanifestへ保持します。ただしMac Actual / Human review / Scene Releaseは別証拠です。
         </p>
       )}
 

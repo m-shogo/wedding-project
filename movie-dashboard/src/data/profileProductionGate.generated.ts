@@ -5,7 +5,8 @@ export const profileProductionGate = {
   "source": {
     "preflight": "motion-studio/scripts/profile-v1-assembly-preflight.mts",
     "plan": "motion-studio/src/data/profileV1ProductionPlan.ts",
-    "chapterPlan": "01_profile-movie/chapter-plan.md"
+    "chapterPlan": "01_profile-movie/chapter-plan.md",
+    "structureReview": "motion-studio/scripts/profile-v1-full-structure-review.mts"
   },
   "chapterCount": 5,
   "chapters": [
@@ -13,6 +14,12 @@ export const profileProductionGate = {
       "chapterId": "departure",
       "order": 1,
       "title": "出発",
+      "role": "旅行テーマの世界観を提示してプロフィール本編へ出発する。",
+      "editIntent": [
+        "10秒試作から成立確認",
+        "BGMと短いテロップを合わせる",
+        "AI背景は仮素材に限定可能"
+      ],
       "requiredCount": 3,
       "readyCount": 0,
       "ready": false
@@ -21,6 +28,12 @@ export const profileProductionGate = {
       "chapterId": "separate-journeys",
       "order": 2,
       "title": "それぞれの旅",
+      "role": "新郎新婦それぞれの幼少期から学生・友人期までの歩みを見せる。",
+      "editIntent": [
+        "写真中心",
+        "ゆっくりズーム",
+        "テロップは短く"
+      ],
       "requiredCount": 4,
       "readyCount": 0,
       "ready": false
@@ -29,6 +42,11 @@ export const profileProductionGate = {
       "chapterId": "intersection",
       "order": 3,
       "title": "交差",
+      "role": "出会い・交際・同棲を、二人の写真と航路表現でつなぐ。",
+      "editIntent": [
+        "写真の感情を優先",
+        "地図や航路で章切り替え"
+      ],
       "requiredCount": 3,
       "readyCount": 0,
       "ready": false
@@ -37,6 +55,11 @@ export const profileProductionGate = {
       "chapterId": "adventure",
       "order": 4,
       "title": "冒険",
+      "role": "旅行・犬・楽しい思い出を明るくテンポ良く見せる。",
+      "editIntent": [
+        "前章より少しテンポを上げる",
+        "笑いと明るさを入れる"
+      ],
       "requiredCount": 4,
       "readyCount": 0,
       "ready": false
@@ -45,6 +68,12 @@ export const profileProductionGate = {
       "chapterId": "arrival",
       "order": 5,
       "title": "到着",
+      "role": "現在・入籍・結婚式から披露宴入場へつなぐ。",
+      "editIntent": [
+        "現在の二人を主役にする",
+        "横浜・会場へ接続",
+        "光や到着の演出で締める"
+      ],
       "requiredCount": 3,
       "readyCount": 0,
       "ready": false
@@ -215,8 +244,21 @@ export const profileProductionGate = {
     "rightsState": "NOT_RUN",
     "ready": false
   },
+  "structureReview": {
+    "state": "NOT_RUN",
+    "evidencePath": "out/qa/profile-v1-full-structure-review.json",
+    "boundPreviewSha256": null,
+    "currentPreviewSha256": null,
+    "reviewer": null,
+    "reviewedAt": null,
+    "blockers": [
+      "STRUCTURE_REVIEW_EVIDENCE_MISSING"
+    ],
+    "humanReviewComplete": false
+  },
   "blockingGatePass": false,
   "qa": {
+    "structurePreview": "NOT_RUN",
     "preview": "NOT_RUN",
     "humanContent": "NOT_RUN",
     "audio": "NOT_RUN",

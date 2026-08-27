@@ -18,12 +18,18 @@ for (const token of [
   'authority: "MOTION_STUDIO_PROFILE_V1_MEDIA_GATE"',
   'if (projectId !== "profile") return null',
   'profileV1Media: ProfileV1ProductionMediaGateV1 | null',
+  'role: string',
+  'editIntent: readonly string[]',
+  'structureReview:',
   'profileV1Media = buildProfileV1ProductionMediaGate(projectId)',
+  'editIntent: [...chapter.editIntent]',
+  'blockers: [...profileProductionGate.structureReview.blockers]',
   'profileV1MediaBlockingGatePass',
   'PROFILE_V1_MEDIA:',
   'PROFILE_V1_BGM:',
+  'PROFILE_V1_STRUCTURE_REVIEW:',
   'profileV1MediaBlockingGatePass;',
-  'Profileでは5章17実素材role + BGM権利gate',
+  'Profileの章role/editIntentとSHA-bound structure review状態もhandoffへ保持',
   'productionReady: false',
 ]) {
   requireText(manifest, token, `Profile handoff manifest contract missing: ${token}`);
@@ -34,10 +40,14 @@ for (const token of [
   'profileMedia.resolvedMediaCount',
   'profileMedia.expectedMediaCount',
   'profileMedia.bgm.rightsState',
+  'profileMedia.structureReview.state',
+  'profileMedia.structureReview.evidencePath',
   'profileMedia.qa.macDaVinciActual',
   'profileMedia.chapters.map',
+  'chapter.role',
+  'chapter.editIntent.join',
   'profileMedia.mediaSlots.map',
-  'Profileは5章17実素材role/BGM権利',
+  '章ごとのedit intentをhandoffへ保持',
   'disabled={!assemblyReady}',
 ]) {
   requireText(batchCard, token, `Profile handoff UI contract missing: ${token}`);
@@ -48,9 +58,18 @@ for (const token of [
   '"expectedMediaCount": 17',
   '"resolvedMediaCount": 0',
   '"mediaMissingCount": 17',
+  '"role": "旅行テーマの世界観を提示してプロフィール本編へ出発する。"',
+  '"editIntent": [',
+  '"写真中心"',
+  '"現在の二人を主役にする"',
   '"assetId": "profile-bgm-main"',
   '"rightsState": "NOT_RUN"',
+  '"structureReview": {',
+  '"state": "NOT_RUN"',
+  '"STRUCTURE_REVIEW_EVIDENCE_MISSING"',
+  '"humanReviewComplete": false',
   '"blockingGatePass": false',
+  '"structurePreview": "NOT_RUN"',
   '"preview": "NOT_RUN"',
   '"humanContent": "NOT_RUN"',
   '"macDaVinciActual": "NOT_RUN"',
@@ -62,8 +81,14 @@ for (const token of [
 
 for (const token of [
   'profile-v1-assembly-preflight.mts',
+  'structureReview: "motion-studio/scripts/profile-v1-full-structure-review.mts"',
   'execFileSync(process.execPath',
   'report.schemaVersion !== "profile-v1-assembly-preflight/v1"',
+  'role: chapter.role',
+  'editIntent: chapter.editIntent',
+  'state: report.structureReview.state',
+  'humanReviewComplete: report.structureReview.humanReviewComplete',
+  'structurePreview: report.readiness.structurePreviewQaState',
   'report.readiness.finalRenderEligible',
   'report.readiness.macDaVinciActualState',
   'profileProductionGate.generated.ts',
@@ -79,6 +104,8 @@ for (const forbidden of [
 }
 if (profileGate.includes('"rightsState": "CLEARED"')) errors.push("generated Profile BGM rights must not be pre-cleared");
 if (profileGate.includes('"macDaVinciActual": "PASS"')) errors.push("generated Profile Mac Actual must not be fabricated");
+if (profileGate.includes('"structurePreview": "PASS"')) errors.push("generated Profile structure review must not be pre-approved");
+if (profileGate.includes('"humanReviewComplete": true')) errors.push("generated Profile structure human review must not be fabricated");
 
 if (errors.length) {
   console.error(`Profile V1 Dashboard Handoff contracts FAILED (${errors.length})`);
@@ -86,4 +113,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log("Profile V1 Dashboard Handoff contracts OK: the 5-chapter/17-media Motion Studio gate is synced into production handoff export and UI, BGM rights start NOT_RUN and require separate human approval, Human QA/Mac Actual remain fail-closed, and productionReady is never manufactured.");
+console.log("Profile V1 Dashboard Handoff contracts OK: the canonical five-chapter role/editIntent plus SHA-bound structure-review state are preserved through the generated gate, UI and production handoff export; real-media/BGM/content/Mac Actual gates remain separate and productionReady is never manufactured.");

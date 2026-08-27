@@ -56,6 +56,24 @@ type RightsStatus = {
   rightsCleared: boolean;
 };
 
+type StructureReviewStatus = {
+  schemaVersion: 'profile-v1-full-structure-review-status/v1';
+  authority: 'DERIVED_STRUCTURE_REVIEW_STATUS';
+  state: 'NOT_RUN' | 'BLOCKED' | 'PASS';
+  evidencePath: string;
+  boundPreviewSha256: string | null;
+  currentPreviewSha256: string | null;
+  reviewer: string | null;
+  reviewedAt: string | null;
+  blockers: string[];
+  humanReviewComplete: boolean;
+  realMediaReviewed: false;
+  bgmReviewed: false;
+  contentAccuracyReviewed: false;
+  macDaVinciActual: 'NOT_RUN';
+  productionReady: false;
+};
+
 const rightsRun = spawnSync(
   process.execPath,
   ['--no-warnings', 'scripts/profile-v1-bgm-rights-approval.mts', '--json'],
@@ -65,6 +83,22 @@ if (rightsRun.status !== 0) throw new Error(`PROFILE_BGM_RIGHTS_STATUS_FAILED:${
 const rightsStatus = JSON.parse(rightsRun.stdout) as RightsStatus;
 if (rightsStatus.schemaVersion !== 'profile-v1-bgm-rights-status/v1' || rightsStatus.authority !== 'DERIVED_BGM_RIGHTS_STATUS') {
   throw new Error('PROFILE_BGM_RIGHTS_STATUS_CONTRACT');
+}
+
+const structureReviewRun = spawnSync(
+  process.execPath,
+  ['--no-warnings', 'scripts/profile-v1-full-structure-review.mts', '--json'],
+  {cwd: studioRoot, encoding: 'utf8'},
+);
+if (structureReviewRun.status !== 0) {
+  throw new Error(`PROFILE_STRUCTURE_REVIEW_STATUS_FAILED:${structureReviewRun.stderr || structureReviewRun.stdout}`);
+}
+const structureReview = JSON.parse(structureReviewRun.stdout) as StructureReviewStatus;
+if (
+  structureReview.schemaVersion !== 'profile-v1-full-structure-review-status/v1' ||
+  structureReview.authority !== 'DERIVED_STRUCTURE_REVIEW_STATUS'
+) {
+  throw new Error('PROFILE_STRUCTURE_REVIEW_STATUS_CONTRACT');
 }
 
 const bgmRightsState = rightsStatus.state;
@@ -112,9 +146,11 @@ const report = {
     rightsBoundSha256: rightsStatus.bgm?.sha256 ?? null,
     ready: bgmReady,
   },
+  structureReview,
   readiness: {
     finalRenderEligible,
     blockers,
+    structurePreviewQaState: structureReview.state,
     previewQaState: 'NOT_RUN' as const,
     humanContentQaState: 'NOT_RUN' as const,
     audioQaState: 'NOT_RUN' as const,
@@ -134,17 +170,22 @@ const report = {
             '生成されたHOLD artifactを人間が権利証拠に基づいて編集',
             'node --no-warnings scripts/profile-v1-bgm-rights-approval.mts --strict',
           ]
-        : ['Profile V1 preview compositionを実装・render', 'crop/focus/color/content/audioを人間確認', 'DaVinci handoffへ進む'],
+        : structureReview.state !== 'PASS'
+          ? ['30秒全5章structure previewを人間確認', 'structure review evidenceをPASSへ更新', '実素材preview QAへ進む']
+          : ['実素材previewをrender', 'crop/focus/color/content/audioを人間確認', 'DaVinci handoffへ進む'],
 };
 
 if (jsonMode) {
   console.log(JSON.stringify(report, null, 2));
 } else {
   console.log(
-    `Profile V1 assembly preflight: chapters=${chapterRows.filter((chapter) => chapter.ready).length}/${chapterRows.length} media=${readyMediaCount}/${mediaSlots.length} BGM=${bgmReady ? 'READY' : `BLOCKED/${bgmRightsState}`}`,
+    `Profile V1 assembly preflight: chapters=${chapterRows.filter((chapter) => chapter.ready).length}/${chapterRows.length} media=${readyMediaCount}/${mediaSlots.length} BGM=${bgmReady ? 'READY' : `BLOCKED/${bgmRightsState}`} structure=${structureReview.state}`,
   );
-  console.log(`finalRenderEligible=${finalRenderEligible ? 'YES' : 'NO'} previewQA=NOT_RUN HumanContentQA=NOT_RUN MacDaVinciActual=NOT_RUN productionReady=NO`);
+  console.log(`finalRenderEligible=${finalRenderEligible ? 'YES' : 'NO'} structurePreviewQA=${structureReview.state} realMediaPreviewQA=NOT_RUN HumanContentQA=NOT_RUN MacDaVinciActual=NOT_RUN productionReady=NO`);
   for (const blocker of blockers) console.log(`BLOCK / ${blocker}`);
+  if (structureReview.state !== 'PASS') {
+    console.log(`INFO / STRUCTURE_REVIEW_${structureReview.state}:${structureReview.evidencePath}`);
+  }
   console.log(`NEXT / ${report.nextActions.join(' → ')}`);
   console.log('JSON / node --no-warnings scripts/profile-v1-assembly-preflight.mts --json');
 }
