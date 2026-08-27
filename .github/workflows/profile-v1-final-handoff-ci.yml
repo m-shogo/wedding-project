@@ -5,6 +5,8 @@ on:
     paths:
       - "motion-studio/scripts/profile-v1-final-render-review.mts"
       - "motion-studio/scripts/export-profile-v1-production-bundle.mts"
+      - "motion-studio/scripts/profile-v1-davinci-finishing-evidence.mts"
+      - "motion-studio/scripts/profile-v1-final-delivery-approval.mts"
       - "motion-studio/scripts/profile-v1-production-status.mts"
       - "motion-studio/scripts/check-profile-v1-final-handoff-contracts.mts"
       - ".github/workflows/profile-v1-final-handoff-ci.yml"
@@ -13,6 +15,8 @@ on:
     paths:
       - "motion-studio/scripts/profile-v1-final-render-review.mts"
       - "motion-studio/scripts/export-profile-v1-production-bundle.mts"
+      - "motion-studio/scripts/profile-v1-davinci-finishing-evidence.mts"
+      - "motion-studio/scripts/profile-v1-final-delivery-approval.mts"
       - "motion-studio/scripts/profile-v1-production-status.mts"
       - "motion-studio/scripts/check-profile-v1-final-handoff-contracts.mts"
       - ".github/workflows/profile-v1-final-handoff-ci.yml"
@@ -54,8 +58,32 @@ jobs:
             echo "Profile production bundle unexpectedly exported without final Human review"
             exit 1
           fi
-      - name: Production status identifies first blocker and stays fail-closed
+      - name: Fresh clone cannot manufacture Mac DaVinci Actual
+        run: |
+          if node --no-warnings scripts/profile-v1-davinci-finishing-evidence.mts --init; then
+            echo "Profile DaVinci evidence unexpectedly initialized without a current production bundle"
+            exit 1
+          fi
+          if node --no-warnings scripts/profile-v1-davinci-finishing-evidence.mts --strict; then
+            echo "Profile DaVinci evidence unexpectedly passed without real Mac GUI Actual"
+            exit 1
+          fi
+      - name: Fresh clone cannot manufacture final delivery approval
+        run: |
+          if node --no-warnings scripts/profile-v1-final-delivery-approval.mts --init; then
+            echo "Profile final approval unexpectedly initialized without verified DaVinci Actual"
+            exit 1
+          fi
+          if node --no-warnings scripts/profile-v1-final-delivery-approval.mts --strict; then
+            echo "Profile final approval unexpectedly passed without explicit Human approval"
+            exit 1
+          fi
+      - name: Production status identifies first blocker and keeps downstream NOT_RUN
         run: |
           mkdir -p out/qa
           node --no-warnings scripts/profile-v1-production-status.mts --json > out/qa/profile-v1-production-status.json
-          node -e "const fs=require('fs'); const r=JSON.parse(fs.readFileSync('out/qa/profile-v1-production-status.json','utf8')); if(r.schemaVersion!=='profile-v1-production-status/v1')process.exit(1); if(r.overallState!=='ASSEMBLY_REQUIRED')process.exit(1); if(r.stages.finalRender.state!=='NOT_RUN')process.exit(1); if(r.stages.finalRenderReview.state!=='NOT_RUN')process.exit(1); if(r.stages.productionBundle.state!=='NOT_RUN')process.exit(1); if(r.readiness.macDaVinciActual!=='NOT_RUN'||r.readiness.productionReady!==false)process.exit(1);"
+          node -e "const fs=require('fs'); const r=JSON.parse(fs.readFileSync('out/qa/profile-v1-production-status.json','utf8')); if(r.schemaVersion!=='profile-v1-production-status/v1')process.exit(1); if(r.overallState!=='ASSEMBLY_REQUIRED')process.exit(1); for(const key of ['finalRender','finalRenderReview','productionBundle','davinciFinishing','finalDeliveryApproval']){if(r.stages[key].state!=='NOT_RUN')process.exit(1)} if(r.readiness.macDaVinciActual!=='NOT_RUN'||r.readiness.finalDeliveryApproved!==false||r.readiness.productionReady!==false)process.exit(1);"
+          if node --no-warnings scripts/profile-v1-production-status.mts --strict; then
+            echo "Profile production status unexpectedly reached PRODUCTION_READY in CI"
+            exit 1
+          fi
