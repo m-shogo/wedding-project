@@ -101,9 +101,14 @@ function inputLanesFor(projectId: "opening" | "profile", stageName: string): Inp
         id: "bgm",
         label: "Profile BGM",
         state: profileProductionGate.bgm.ready ? "READY" : "BLOCKED",
-        detail: `file=${profileProductionGate.bgm.fileExists ? "FOUND" : "MISSING"} / rights=${profileProductionGate.bgm.rightsState}`,
-        intakePath: "out/intake/profile-bgm-intake.json",
-        blockerCodes: profileProductionGate.bgm.ready ? [] : ["PROFILE_BGM_FILE_OR_RIGHTS_NOT_READY"],
+        detail: `file=${profileProductionGate.bgm.fileExists ? "FOUND" : "MISSING"} / receipt=${profileProductionGate.bgm.intakeReceiptCurrent ? "CURRENT" : "MISSING_OR_STALE"} / rights=${profileProductionGate.bgm.rightsState}`,
+        intakePath: profileProductionGate.bgm.intakeReceiptPath,
+        receiptCurrent: profileProductionGate.bgm.intakeReceiptCurrent,
+        blockerCodes: [
+          ...profileProductionGate.bgm.intakeReceiptBlockerCodes,
+          ...(profileProductionGate.bgm.fileExists ? [] : ["PROFILE_BGM_FILE_MISSING"]),
+          ...(profileProductionGate.bgm.rightsState === "CLEARED" ? [] : [`PROFILE_BGM_RIGHTS_${profileProductionGate.bgm.rightsState}`]),
+        ],
       },
     ];
   }
