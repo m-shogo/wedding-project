@@ -1,12 +1,25 @@
-import {existsSync, readdirSync, statSync} from 'node:fs';
+import {existsSync, readFileSync, readdirSync, statSync} from 'node:fs';
 import {dirname, extname, join} from 'node:path';
 import {fileURLToPath} from 'node:url';
-import {aliases, orderedKeys} from '../src/data/openingV1Media.ts';
 
 const studioRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const openingDir = join(studioRoot, 'public/photos/opening');
+const mediaSourcePath = join(studioRoot, 'src/data/openingV1Media.ts');
 const strict = process.argv.includes('--strict');
 const imageExts = new Set(['.jpg', '.jpeg', '.png', '.webp']);
+
+const mediaSource = readFileSync(mediaSourcePath, 'utf8');
+const extractQuotedValues = (source: string): string[] =>
+  [...source.matchAll(/["']([^"']+)["']/g)].map((match) => match[1]);
+const orderedMatch = mediaSource.match(/const orderedKeys:[^=]+\=\s*\[([\s\S]*?)\];/);
+if (!orderedMatch) throw new Error('openingV1Media.ts: orderedKeys not found');
+const orderedKeys = extractQuotedValues(orderedMatch[1]);
+const aliasesMatch = mediaSource.match(/const aliases:[\s\S]*?=\s*\{([\s\S]*?)\n\};\n\nconst openingPhotos/);
+if (!aliasesMatch) throw new Error('openingV1Media.ts: aliases not found');
+const aliases: Record<string, string[]> = {};
+for (const match of aliasesMatch[1].matchAll(/'([^']+)'\s*:\s*\[([^\]]*)\]/g)) {
+  aliases[match[1]] = extractQuotedValues(match[2]);
+}
 
 const normalizeStem = (file: string): string => {
   const ext = extname(file);
@@ -23,7 +36,7 @@ const files = existsSync(openingDir)
 const matchesBySlot = new Map(
   orderedKeys.map((slot) => [
     slot,
-    files.filter((file) => aliases[slot].includes(normalizeStem(file))),
+    files.filter((file) => (aliases[slot] ?? [slot]).includes(normalizeStem(file))),
   ]),
 );
 const missing = orderedKeys.filter((slot) => (matchesBySlot.get(slot)?.length ?? 0) === 0);
