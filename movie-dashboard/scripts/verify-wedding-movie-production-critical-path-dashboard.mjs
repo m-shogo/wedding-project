@@ -26,7 +26,9 @@ for (const token of [
   'route: "/opening-photo-intake"',
   'route: "/opening-bgm-intake"',
   'route: "/profile-media-intake"',
+  'route: "/profile-bgm-intake"',
   'route: "/profile-planner"',
+  'BGM実ファイル・intake receipt・上映権利確認をcurrent SHAへ固定する',
   'ACTION_TARGET_VISIBLE != ACTION_COMPLETED',
   'productionReady: opening.productionReady && profile.productionReady',
   'CI_STATUS != MAC_DAVINCI_ACTUAL',
@@ -60,6 +62,8 @@ for (const token of [
 for (const token of [
   'ProfileMediaIntake',
   'path="profile-media-intake" element={<ProfileMediaIntake />}',
+  'ProfileBgmIntake',
+  'path="profile-bgm-intake" element={<ProfileBgmIntake />}',
 ]) need(app, token, `App Profile intake routing missing ${token}`);
 
 for (const token of [
@@ -89,4 +93,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log('Wedding Movie production critical-path dashboard OK: current blocker, dedicated Profile media intake, actionable routes, downstream waiting stages and cross-project readiness remain visible/exportable without promoting Human QA or Mac Actual.');
+console.log('Wedding Movie production critical-path dashboard OK: current blocker, dedicated Profile media/BGM intake, actionable routes, downstream waiting stages and cross-project readiness remain visible/exportable without promoting Human QA or Mac Actual.');
