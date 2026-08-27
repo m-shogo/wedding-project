@@ -1,0 +1,21 @@
+import fs from "node:fs";
+import path from "node:path";
+import {fileURLToPath} from "node:url";
+const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),"..");
+const read=(p)=>fs.readFileSync(path.join(root,p),"utf8");
+const sync=read("scripts/sync-opening-production-status.mjs");
+const generated=read("src/data/openingProductionStatus.generated.ts");
+const handoff=read("src/data/openingProductionStatusHandoff.ts");
+const card=read("src/components/OpeningProductionStatusHandoffCard.tsx");
+const projectStatusSlot=read("src/components/ProfileProductionStatusHandoffCard.tsx");
+const errors=[];const need=(s,t,m)=>{if(!s.includes(t))errors.push(m)};
+for(const t of ['opening-v1-production-status.mts','opening-v1-production-status/v1','DERIVED_PRODUCTION_STATUS','openingProductionStatus.generated.ts','productionReady'])need(sync,t,`Opening status sync missing ${t}`);
+for(const t of ['"overallState": "MEDIA_REQUIRED"','"media": {','"previewRender": {','"previewReview": {','"finalRender": {','"productionBundle": {','"davinciFinishing": {','"finalDeliveryApproval": {','"state": "BLOCKED"','"state": "NOT_RUN"','"macDaVinciActualVerified": false','"finalDeliveryApproved": false','"productionReady": false'])need(generated,t,`generated Opening status missing ${t}`);
+for(const t of ['wedding-opening-production-status-handoff/v1','MOTION_STUDIO_DERIVED_OPENING_STATUS_HANDOFF','openingProductionGate.expectedPhotoCount','openingProductionGate.bgm','openingProductionStatus.overallState','openingProductionStatus.stages','openingProductionStatus.readiness','STATUS_EXPORTABLE != FINAL_RENDER_ELIGIBLE','DAVINCI_ACTUAL_VERIFIED != FINAL_DELIVERY_APPROVED'])need(handoff,t,`Opening handoff envelope missing ${t}`);
+for(const t of ['buildOpeningProductionStatusHandoff()','buildOpeningProductionStatusHandoffJson()','projectId !== "opening"','Opening production statusを書き出す','opening-production-status-handoff.json','production.overallState','production.readiness.productionReady','production.readiness.macDaVinciActualVerified','Object.entries(production.stages)','MEDIA_REQUIRED / NOT_RUNも含めて現在状態を外へ渡す'])need(card,t,`Opening status UI missing ${t}`);
+for(const t of ['OpeningProductionStatusHandoffCard','projectId === "opening"','<OpeningProductionStatusHandoffCard projectId={projectId} />'])need(projectStatusSlot,t,`Existing project production-status slot does not route Opening status: ${t}`);
+if(card.includes('disabled={!productionReady}')||card.includes('disabled={!finalRenderEligible}'))errors.push('Opening status export must remain available while blocked');
+if(generated.includes('"macDaVinciActualVerified": true'))errors.push('Dashboard snapshot fabricates Mac DaVinci Actual');
+if(generated.includes('"productionReady": true'))errors.push('Dashboard snapshot fabricates production readiness');
+if(errors.length){console.error(`Opening production-status handoff FAILED (${errors.length})`);for(const e of errors)console.error(`- ${e}`);process.exit(1)}
+console.log('Opening production-status handoff OK: Motion Studio media/preview/final-render/DaVinci/final-approval states reach the existing Motion Zukan handoff UI and remain exportable while blocked without fabricating readiness.');
