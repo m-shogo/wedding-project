@@ -7,7 +7,9 @@ const read = (relative) => fs.readFileSync(path.join(root, relative), "utf8");
 const manifest = read("src/data/projectProductionHandoffManifest.ts");
 const batchCard = read("src/components/TypographyProjectDeliveryBatchCard.tsx");
 const profileGate = read("src/data/profileProductionGate.generated.ts");
+const realMediaGate = read("src/data/profileRealMediaReviewGate.generated.ts");
 const sync = read("scripts/sync-profile-production-gate.mjs");
+const realMediaSync = read("scripts/sync-profile-real-media-review-gate.mjs");
 const errors = [];
 const requireText = (source, token, message) => {
   if (!source.includes(token)) errors.push(message);
@@ -15,21 +17,30 @@ const requireText = (source, token, message) => {
 
 for (const token of [
   'import {profileProductionGate} from "./profileProductionGate.generated"',
+  'import {profileRealMediaReviewGate} from "./profileRealMediaReviewGate.generated"',
   'authority: "MOTION_STUDIO_PROFILE_V1_MEDIA_GATE"',
   'if (projectId !== "profile") return null',
   'profileV1Media: ProfileV1ProductionMediaGateV1 | null',
   'role: string',
   'editIntent: readonly string[]',
   'structureReview:',
+  'realMediaReview:',
   'profileV1Media = buildProfileV1ProductionMediaGate(projectId)',
   'editIntent: [...chapter.editIntent]',
   'blockers: [...profileProductionGate.structureReview.blockers]',
+  'state: profileRealMediaReviewGate.state',
+  'humanReviewComplete: profileRealMediaReviewGate.humanReviewComplete',
+  'mediaReviewed: profileRealMediaReviewGate.mediaReviewed',
+  'inputGatePass = profileProductionGate.blockingGatePass',
+  'profileProductionGate.structureReview.humanReviewComplete',
+  'profileRealMediaReviewGate.humanReviewComplete',
   'profileV1MediaBlockingGatePass',
   'PROFILE_V1_MEDIA:',
   'PROFILE_V1_BGM:',
   'PROFILE_V1_STRUCTURE_REVIEW:',
+  'PROFILE_V1_REAL_MEDIA_REVIEW:',
   'profileV1MediaBlockingGatePass;',
-  'Profileの章role/editIntentとSHA-bound structure review状態もhandoffへ保持',
+  'SHA-bound structure review + SHA-bound real-media Human QA',
   'productionReady: false',
 ]) {
   requireText(manifest, token, `Profile handoff manifest contract missing: ${token}`);
@@ -65,9 +76,7 @@ for (const token of [
   '"assetId": "profile-bgm-main"',
   '"rightsState": "NOT_RUN"',
   '"structureReview": {',
-  '"state": "NOT_RUN"',
   '"STRUCTURE_REVIEW_EVIDENCE_MISSING"',
-  '"humanReviewComplete": false',
   '"blockingGatePass": false',
   '"structurePreview": "NOT_RUN"',
   '"preview": "NOT_RUN"',
@@ -76,7 +85,7 @@ for (const token of [
   '"productionReady": false',
   '"id": "adventure-dog"',
 ]) {
-  requireText(profileGate, token, `Profile generated gate contract missing: ${token}`);
+  requireText(profileGate, token, `Profile generated media gate contract missing: ${token}`);
 }
 
 for (const token of [
@@ -93,7 +102,36 @@ for (const token of [
   'report.readiness.macDaVinciActualState',
   'profileProductionGate.generated.ts',
 ]) {
-  requireText(sync, token, `Profile gate sync contract missing: ${token}`);
+  requireText(sync, token, `Profile media gate sync contract missing: ${token}`);
+}
+
+for (const token of [
+  'profile-v1-real-media-review.mts',
+  'profile-v1-real-media-review-status/v1',
+  'DERIVED_REAL_MEDIA_REVIEW_STATUS',
+  'humanReviewComplete: status.humanReviewComplete',
+  'mediaExpected: status.mediaExpected',
+  'mediaReviewed: status.mediaReviewed',
+  'bgmReviewed: status.bgmReviewed',
+  'macDaVinciActual: status.macDaVinciActual',
+  'productionReady: status.productionReady',
+  'profileRealMediaReviewGate.generated.ts',
+]) {
+  requireText(realMediaSync, token, `Profile real-media gate sync contract missing: ${token}`);
+}
+
+for (const token of [
+  '"source": "motion-studio/scripts/profile-v1-real-media-review.mts"',
+  '"state": "NOT_RUN"',
+  '"humanReviewComplete": false',
+  '"REAL_MEDIA_REVIEW_EVIDENCE_MISSING"',
+  '"mediaExpected": 17',
+  '"mediaReviewed": 0',
+  '"bgmReviewed": false',
+  '"macDaVinciActual": "NOT_RUN"',
+  '"productionReady": false',
+]) {
+  requireText(realMediaGate, token, `Profile generated real-media review gate missing: ${token}`);
 }
 
 for (const forbidden of [
@@ -106,6 +144,9 @@ if (profileGate.includes('"rightsState": "CLEARED"')) errors.push("generated Pro
 if (profileGate.includes('"macDaVinciActual": "PASS"')) errors.push("generated Profile Mac Actual must not be fabricated");
 if (profileGate.includes('"structurePreview": "PASS"')) errors.push("generated Profile structure review must not be pre-approved");
 if (profileGate.includes('"humanReviewComplete": true')) errors.push("generated Profile structure human review must not be fabricated");
+if (realMediaGate.includes('"state": "PASS"')) errors.push("generated Profile real-media review must not be pre-approved");
+if (realMediaGate.includes('"humanReviewComplete": true')) errors.push("generated Profile real-media Human QA must not be fabricated");
+if (realMediaGate.includes('"productionReady": true')) errors.push("real-media review cannot promote production readiness");
 
 if (errors.length) {
   console.error(`Profile V1 Dashboard Handoff contracts FAILED (${errors.length})`);
@@ -113,4 +154,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log("Profile V1 Dashboard Handoff contracts OK: the canonical five-chapter role/editIntent plus SHA-bound structure-review state are preserved through the generated gate, UI and production handoff export; real-media/BGM/content/Mac Actual gates remain separate and productionReady is never manufactured.");
+console.log("Profile V1 Dashboard Handoff contracts OK: canonical chapter role/editIntent, SHA-bound structure review, and SHA-bound 17-media Human QA are preserved through generated gates and production handoff; BGM audio/Mac Actual/production release stay separate and fail-closed.");
