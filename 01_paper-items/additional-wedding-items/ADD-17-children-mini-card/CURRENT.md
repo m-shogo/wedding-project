@@ -1,6 +1,6 @@
 # ADD-17 子ども向けミニカード / ぬりえ — Current
 
-Status: `SELLABLE_VISUAL_QA_REOPENED + DESIGN_QA_PASS_WITH_PLACEHOLDERS / PROFESSIONAL_VNEXT_EXPEDITION_FIELD_SELECTED / FAMILY_DIVERSITY_PASS / LONG_COPY_VISUAL_PASS / CHILD_ACTIVITY_SURFACE_PASS / ACTIVITY_TICK_SUBTRACTION_PASS / DISCOVERY_LABEL_CONTAINMENT_SUBTRACTION_PASS / DISCOVERY_CUE_CONSOLIDATION_PASS / BACK_SIDE_TAPE_SUBTRACTION_PASS / LOCAL_BACK_HEADER_CONTAINMENT_AUDIT_PENDING / LEGACY_PRESERVED / BLOCKED_REQUIRED_INPUT / NOT_PRINT_READY`
+Status: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / PROFESSIONAL_VNEXT_EXPEDITION_FIELD_SELECTED / FAMILY_DIVERSITY_PASS / LONG_COPY_VISUAL_PASS / CHILD_ACTIVITY_SURFACE_PASS / ACTIVITY_TICK_SUBTRACTION_PASS / DISCOVERY_LABEL_CONTAINMENT_SUBTRACTION_PASS / DISCOVERY_CUE_CONSOLIDATION_PASS / BACK_SIDE_TAPE_SUBTRACTION_PASS / BACK_OPEN_LABEL_PROMOTION_PASS / LEGACY_PRESERVED / BLOCKED_REQUIRED_INPUT / NOT_PRINT_READY`
 Updated: 2026-08-27
 Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
 
@@ -13,86 +13,79 @@ This is the current visual/design authority entry point for the age-independent 
 - current selected back: `67:4 / CURRENT_SELECTED / ADD17 / BACK / DISCOVERY POSTLOG`
 - hidden realistic stress: `69:2 / 69:40`
 - current clean-room page: `67:2 / VNEXT_PRO / ADD-17 / EXPEDITION FIELD SHEET / 2026-08-23`
-- latest back no-side-tape comparisons: `82:2 / 82:21` — hidden after adoption
-- latest complete pre-side-tape rollbacks: `82:40 / 82:59` — hidden
-- prior consolidated-cue comparisons: `79:2 / 79:40 / 79:78 / 79:97` — hidden after adoption
-- prior complete pre-consolidation rollbacks: `80:2 / 80:40 / 80:78 / 80:97` — hidden
-- prior no-rounded-label comparison: `78:2 / 78:40` — hidden after adoption
-- prior complete pre-label-subtraction rollback: `78:78 / 78:116` — hidden
-- prior no-activity-ticks comparison: `73:2` — hidden after promotion
-- prior pre-tick-subtraction rollback: `74:2 / 74:40` — hidden
+- latest OPEN_LABEL comparisons: `83:2 / 83:21` — hidden after adoption
+- latest complete pre-OPEN_LABEL rollbacks: `83:40 / 83:59` — hidden
+- prior no-side-tape comparisons: `82:2 / 82:21` — hidden after adoption
+- prior complete pre-side-tape rollbacks: `82:40 / 82:59` — hidden
+- prior consolidated-cue comparisons: `79:2 / 79:40 / 79:78 / 79:97` — hidden
+- prior no-rounded-label comparison: `78:2 / 78:40` — hidden
+- prior no-activity-ticks comparison: `73:2` — hidden
 - three blank-frame direction thumbnails: `70:2 / 70:11 / 70:21` — hidden comparison evidence
-- previous Foldout Discovery Map Current: `62:2 / 62:22` — retained rollback/history only
-- previous FIELD NOTE Current: `60:2 / 60:3 / 60:18` — retained comparison/history only
-- prior WINDOW SEAT Current: `47:2 / 48:2 / 48:13` — retained comparison/history only
+- previous Foldout Discovery Map Current: `62:2 / 62:22` — rollback/history only
+- previous FIELD NOTE Current: `60:2 / 60:3 / 60:18` — comparison/history only
 - retained V5 production: `2:2 / 2:5` — comparison/history only
 
 ## Current concept
 
 `旅の途中で「見つけた！」が生まれる瞬間を、自由に描ける一枚のフィールドへ。`
 
-The Current treats the item as a playful **expedition field sheet / discovery note**, while keeping large child-neutral activity and writing surfaces open.
-
 Front:
-- pale mint paper field;
+- pale mint open activity field;
 - Japanese-first `旅の途中で、見つけたもの。`;
-- one compact cobalt→pink discovery-route gesture as the dominant movement cue;
-- one outlined star as the single secondary discovery symbol;
-- former isolated wave/spark, rounded kicker carrier and four activity ticks remain hidden after bounded QA;
-- native `きょうの発見 / 01`, `[お題]`, optional name and date roles;
-- open footer copy + short yellow rule.
+- one cobalt→pink discovery-route gesture + one outlined star;
+- native `きょうの発見 / 01`, `[お題]`, optional name/date;
+- former rounded carrier, activity ticks and redundant wave/spark cues remain hidden.
 
 Back:
-- cream open writing field with cobalt top band;
-- the former full-height coral side tape is now hidden after whole / reading / native-size + long-copy comparison showed it read as an unnecessary rail rather than a convincing physical tape/binding cue;
-- reader-facing `きょうの発見 / 02`;
+- cream open writing field;
+- native `きょうの発見 / 02` now retained as open navy typography without a full-width carrier;
 - Japanese-first `もうひとつ、見つけたこと。`;
-- open writing rules rather than cards/boxes;
-- one outlined star retained outside the writing field;
-- former isolated bottom wave remains hidden.
+- open writing rules, one outlined star, native guide/name/date roles;
+- former full-height coral side tape, bottom wave and full-width cobalt top band remain hidden after bounded QA.
 
 All prompts, guidance, optional name and date remain native editable Figma text.
 
-## 2026-08-27 sellable-visual reopen — back cobalt header containment
+## 2026-08-27 back OPEN_LABEL promotion
 
-Fresh back renders at whole / ~500px, reading / ~1000px and native `1110×1540` show a new sellable-visual question: the full-width cobalt top band is visually read before the writing sheet and resembles a web/app header or status bar.
+Fresh whole / reading / native-size review had reopened only the back cobalt containment role because `67:24 / DECOR / COBALT TOP BAND` read like a web/app header before the physical writing sheet.
 
-The reader-facing native label `きょうの発見 / 02` is legitimate. The reopened role is only the **full-width containment**, not the label itself, the writing surface, or the overall clean-room selection.
+A rollback-safe `CURRENT vs OPEN_LABEL` test was completed:
+- Current comparison: `83:2`
+- realistic long-copy comparison: `83:21`
+- full pre-change rollbacks: `83:40 / 83:59`
+
+OPEN_LABEL won at all tested scales. Promoted bounded delta:
+- `67:24 / DECOR / COBALT TOP BAND` → hidden;
+- `67:26 / TEXT / KICKER` stays native `Noto Sans JP Bold 25`, recolored from white to existing navy display color;
+- stress equivalents `69:41` band hidden and `69:43` native kicker navy;
+- no replacement decoration added.
 
 Evidence:
-- `OBSERVED-BACK-COBALT-HEADER-CONTAINMENT-2026-08-27.md`
-
-Root-cause hypothesis:
-- the band mixes a valid identity role with unnecessary full-width containment;
-- front already proves the discovery identity can exist as open typography without a full-width carrier;
-- the back may read more like a physical writing sheet if the label is retained without the full-width header.
-
-Next bounded Figma test when mutation guidance is safely available:
-1. `CURRENT` — retain the full-width cobalt band;
-2. `OPEN_LABEL` — hide only the band and retain `きょうの発見 / 02` as native text on the cream sheet;
-3. only if `OPEN_LABEL` loses too much back/front distinction, consider one smaller physically connected edge treatment. Do not create a new decorative family merely to preserve color.
-
-Stop condition: if CURRENT is clearly stronger at whole-item scale, reject this hypothesis and restore `SELLABLE_VISUAL_QA_PASS` without redesigning the rest of ADD-17.
-
-Existing long-copy, auto-height, activity-surface, rollback and factual evidence remains valid while this one role is reopened.
+- `BACK-COBALT-HEADER-OPEN-LABEL-PROMOTION-QA-2026-08-27.md`
+- prior observation: `OBSERVED-BACK-COBALT-HEADER-CONTAINMENT-2026-08-27.md`
 
 ## Professional visual QA
 
-Professional Design Council prior score remains `94/100 / PASS / NO VETO` as historical clean-room selection evidence, but the current sellable-visual completion state is temporarily reopened only for the back header containment role.
+Professional Design Council historical clean-room score remains `94/100 / PASS / NO VETO`.
 
-The selected direction was originally chosen from three materially different blank-frame directions, then rebuilt at full size. Later bounded Current-only improvements strengthened the same art direction without reopening the clean-room selection:
+Current bounded improvements after the blank-frame selection now include:
+1. activity ticks removed after reading as crop/scanner UI;
+2. rounded coral discovery-label carrier removed after reading as pill/banner containment;
+3. secondary discovery cues consolidated;
+4. back coral side tape removed after reading as a floating rail;
+5. back full-width cobalt header removed after it read as web/app containment while the native identity label remained sufficient on the cream sheet.
 
-1. activity-corner ticks removed after reading as scanner/crop UI;
-2. rounded coral carrier behind `きょうの発見 / 01` removed after reading as generic pill/banner containment;
-3. secondary discovery marks consolidated to one dominant route + one star on front and one star on back;
-4. the back coral side tape removed after it read as a floating rail and did not prove a fold/binding/trim/writing job.
+The 2026-08-27 reopened sellable-visual question is closed. `SELLABLE_VISUAL_QA_PASS` is restored.
 
-Latest side-tape comparison:
-- back Current comparison: `82:2`;
-- back realistic long-copy comparison: `82:21`;
-- complete pre-change rollbacks: `82:40 / 82:59`.
+## Three-scale screenshot QA
 
-Prior whole-item / reading / actual-size / realistic long-copy PASS evidence remains structural/history evidence. The 2026-08-27 cobalt-header question must be resolved before sellable visual PASS is restored.
+Latest OPEN_LABEL promotion:
+- whole / ~500px: PASS — physical writing sheet reads before any container;
+- reading / ~1000px: PASS — kicker → title → prompt → writing field hierarchy is clear;
+- native `1110×1540`: PASS — open kicker and writing surface remain optically stable;
+- realistic long-copy: PASS on `83:21` before promotion.
+
+Front retains prior whole / reading / actual-size / long-copy PASS.
 
 ## Structure / stress QA
 
@@ -100,58 +93,50 @@ Selected front `67:3`:
 - native text `7`;
 - fixed-height visible text `0`;
 - outside visible text `0`;
-- IMAGE fills `0`;
-- rounded coral carrier hidden;
-- activity ticks hidden;
-- discovery wave/spark hidden;
-- discovery star and route visible.
+- IMAGE fills `0`.
 
-Selected back `67:4`:
+Selected back `67:4` post-promotion:
 - native text `6`;
 - fixed-height visible text `0`;
 - outside visible text `0`;
 - IMAGE fills `0`;
-- `DECOR / CORAL SIDE TAPE`: hidden;
-- cobalt top band: visible and now pending bounded containment audit;
+- cobalt top band: hidden;
+- native kicker: visible, navy, `Noto Sans JP Bold 25`;
+- coral side tape: hidden;
 - writing rules: visible;
-- bottom wave hidden;
-- bottom star visible.
+- bottom wave: hidden;
+- bottom star: visible.
 
-Stress front `69:2` retains the same front cue state.
-Stress back `69:40` retains the same no-side-tape back state.
-Both stress roots keep fixed-height visible text `0`, outside visible text `0`, and IMAGE fills `0`.
+Stress back `69:40`:
+- root remains hidden as QA evidence;
+- native text `6`;
+- fixed-height visible text `0`;
+- outside visible text `0`;
+- IMAGE fills `0`;
+- cobalt top band hidden;
+- native kicker visible and navy.
 
-Meaningful failures caught and corrected:
+## Canonical evidence
 
-1. three disconnected colored bars read as generic decoration; method-switched to one coherent discovery-route gesture;
-2. rounded footer box reintroduced UI/pill grammar; replaced by open native copy + short rule;
-3. realistic long-copy required wider prompt/lower reserve;
-4. four activity ticks read like crop/scanner reticles and were removed;
-5. rounded discovery-label carrier read as generic pill/banner containment and was removed;
-6. remaining isolated wave/spark cues became redundant once route/star already carried the concept and were consolidated;
-7. the back full-height coral `tape` did not read as a convincing physical binding/trim cue and behaved like a side rail, so it was removed after rollback-safe comparison;
-8. fresh 2026-08-27 review observed the remaining full-width cobalt back header may reintroduce web-header containment; bounded test pending.
-
-Canonical evidence:
 - `PROFESSIONAL-VNEXT-EXPEDITION-FIELD-PROMOTION-QA-2026-08-23.md`
 - `ACTIVITY-TICK-SUBTRACTION-QA-2026-08-23.md`
 - `DISCOVERY-LABEL-CONTAINMENT-SUBTRACTION-QA-2026-08-23.md`
 - `DISCOVERY-CUE-CONSOLIDATION-QA-2026-08-24.md`
 - `BACK-CORAL-SIDE-TAPE-SUBTRACTION-QA-2026-08-24.md`
 - `OBSERVED-BACK-COBALT-HEADER-CONTAINMENT-2026-08-27.md`
-- previous `PROFESSIONAL-VNEXT-FOLDOUT-DISCOVERY-MAP-QA-2026-08-22.md` remains rollback/history evidence.
+- `BACK-COBALT-HEADER-OPEN-LABEL-PROMOTION-QA-2026-08-27.md`
 
 ## Hybrid / image decision
 
 - variable/semantic/factual copy: native text;
-- retained discovery route/star: small editable vector/SVG roles;
-- paper fields/writing rules/cobalt header: simple native functional geometry;
-- former side tape and secondary decorative cues: hidden after bounded comparison;
+- retained discovery route/star: editable vector roles;
+- writing rules: simple native geometry;
+- former side tape / full-width back header / redundant cues: hidden after bounded comparison;
 - generated/composed raster: `0`;
 - replaceable image role: `0`;
 - image generation: `0`.
 
-`IMAGE_GENERATION_NOT_REQUIRED_FOR_THIS_PASS`: the screenshot-supported bottleneck is containment semantics, not missing photography or illustration. Generic travel imagery or generated children would reduce function and increase stock/identity risk.
+`IMAGE_GENERATION_NOT_REQUIRED_FOR_THIS_PASS`: the screenshot-supported bottleneck was containment semantics, not missing photography or illustration. No child/person imagery was generated.
 
 ## Drive
 
@@ -162,18 +147,12 @@ Drive writes for this pass: `0`.
 
 ## Learning state
 
-Current new observation: `OBSERVED → ROOT_CAUSE_HYPOTHESIS / BOUNDED_FIGMA_TEST_PENDING` for full-width back-header containment.
+`VERIFIED_LOCAL`: a valid identity label does not automatically justify a full-width carrier. Test label meaning and containment geometry separately; if the carrier becomes the dominant web/UI reading, compare open native typography before inventing a replacement decoration.
 
-This is consistent with earlier ADD-17 containment/rail failures but is not yet a new project rule. Do not transfer ADD-17's palette, star, route geometry, child-card composition, cue count, or a blanket `remove headers` behavior to other items.
+Do not promote a blanket `remove headers` rule and do not transfer ADD-17 palette, star, route geometry, child-card composition or cue count to other items.
 
 ## Final-use blocker
 
-Do not fabricate:
-- whether children attend;
-- age range/count;
-- venue-provided amenities;
-- activity preference;
-- personalization;
-- final copy or paper/pen/crayon handling.
+Do not fabricate child attendance, age range/count, venue amenities, activity preference, personalization, final copy or paper/pen/crayon handling.
 
 Resolution remains one of `NOT_REQUIRED / ADOPT_VNEXT / REDESIGN_REQUIRED` after authoritative input. Physical/vendor proof remains `NOT_PRINT_READY`.
