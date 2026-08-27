@@ -9,6 +9,8 @@ const model = read("src/data/weddingMovieProductionCriticalPath.ts");
 const card = read("src/components/WeddingMovieProductionCriticalPathCard.tsx");
 const profileIntake = read("src/pages/ProfileMediaIntake.tsx");
 const profileBgmIntake = read("src/pages/ProfileBgmIntake.tsx");
+const profileGateSync = read("scripts/sync-profile-production-gate.mjs");
+const profileGate = read("src/data/profileProductionGate.generated.ts");
 const app = read("src/App.tsx");
 const sceneHandoff = read("src/components/MaskRevealSceneHandoffCard.tsx");
 const openingHandoff = read("src/data/openingProductionStatusHandoff.ts");
@@ -29,7 +31,12 @@ for (const token of [
   'openingProductionGate.photos.intakeReceiptCurrent',
   'openingProductionGate.bgm.intakeReceiptCurrent',
   'profileProductionGate.media.intakeReceiptCurrent',
+  'profileProductionGate.bgm.intakeReceiptCurrent',
+  'profileProductionGate.bgm.intakeReceiptPath',
+  'profileProductionGate.bgm.intakeReceiptBlockerCodes',
   'profileProductionGate.bgm.rightsState',
+  'PROFILE_BGM_FILE_MISSING',
+  'PROFILE_BGM_RIGHTS_',
   'route: "/opening-photo-intake"',
   'route: "/opening-bgm-intake"',
   'route: "/profile-media-intake"',
@@ -41,6 +48,23 @@ for (const token of [
   'productionReady: opening.productionReady && profile.productionReady',
   'CI_STATUS != MAC_DAVINCI_ACTUAL',
 ]) need(model, token, `critical-path model missing ${token}`);
+
+for (const token of [
+  'report.audio.intakeReceiptCurrent',
+  'report.audio.intakeReceiptPath',
+  'report.audio.intakeReceiptBlockers',
+  'report.audio.rightsApprovalPath',
+  'report.audio.rightsBoundSha256',
+  'bgmReceiptBlockerCodes',
+]) need(profileGateSync, token, `Profile production gate sync missing BGM receipt contract ${token}`);
+
+for (const token of [
+  '"intakeReceiptCurrent": false',
+  '"intakeReceiptPath": "out/intake/profile-bgm-intake.json"',
+  '"intakeReceiptBlockerCodes": [',
+  '"rightsApprovalPath": "out/qa/profile-v1-bgm-rights-approval.json"',
+  '"rightsBoundSha256": null',
+]) need(profileGate, token, `Generated Profile gate missing BGM receipt truth ${token}`);
 
 for (const token of [
   'NOW / PRODUCTION CRITICAL PATH',
@@ -114,4 +138,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log('Wedding Movie production critical-path dashboard OK: current blocker, independent input lanes with receipt/rights truth, actionable intake routes, downstream stages and cross-project readiness remain visible/exportable without promoting Human QA or Mac Actual.');
+console.log('Wedding Movie production critical-path dashboard OK: current blocker, independent input lanes with Profile/Opening receipt + rights truth, actionable intake routes, downstream stages and cross-project readiness remain visible/exportable without promoting Human QA or Mac Actual.');
