@@ -11,7 +11,7 @@ const expected: Record<string, string> = {
   'prepare:opening-v1': 'pnpm sync:photos && pnpm check:opening-photos && pnpm opening:preflight',
   'dev:opening-v1': 'pnpm prepare:opening-v1 && remotion studio src/index-opening-v1.ts',
   'render:opening-v1': 'node --no-warnings scripts/init-opening-v1-final-render-review.mts',
-  'render:opening-v1:preview': 'pnpm prepare:opening-v1 && remotion render src/index-opening-v1.ts OpeningV1 out/preview/opening_v1_preview.mp4 --scale=0.5 --crf=24',
+  'render:opening-v1:preview': 'pnpm prepare:opening-v1 && pnpm opening:assembly-preflight:strict && remotion render src/index-opening-v1.ts OpeningV1 out/preview/opening_v1_preview.mp4 --scale=0.5 --crf=24',
   'opening:assembly-preflight:strict': 'node --no-warnings scripts/opening-v1-assembly-preflight.mts --strict',
   'opening:preview-review:init': 'node --no-warnings scripts/init-opening-v1-preview-review.mts',
   'opening:preview-review': 'node --no-warnings scripts/opening-v1-preview-review.mts',
@@ -40,6 +40,13 @@ for (const name of ['opening:final-render-review','opening:davinci-finishing','o
   if (!scripts[name]) errors.push(`missing non-strict inspection command: ${name}`);
 }
 
+const preview = scripts['render:opening-v1:preview'] ?? '';
+const assemblyStrictIndex = preview.indexOf('pnpm opening:assembly-preflight:strict');
+const remotionRenderIndex = preview.indexOf('remotion render src/index-opening-v1.ts OpeningV1');
+if (assemblyStrictIndex < 0) errors.push('render:opening-v1:preview must require the strict real-media/BGM assembly gate');
+if (remotionRenderIndex < 0) errors.push('render:opening-v1:preview must retain the canonical OpeningV1 Remotion render');
+if (assemblyStrictIndex >= remotionRenderIndex) errors.push('render:opening-v1:preview must run assembly-preflight:strict before invoking Remotion');
+
 const render = scripts['render:opening-v1'] ?? '';
 if (render.includes('export:opening-v1-production-bundle')) errors.push('render:opening-v1 must stop after fresh render + Human final-review initialization; it must not export the production bundle before Human review');
 if (!render.includes('init-opening-v1-final-render-review.mts')) errors.push('render:opening-v1 must use the guarded fresh-render/final-review initializer');
@@ -52,4 +59,4 @@ if (errors.length) {
   for (const error of errors) console.error(`- ${error}`);
   process.exit(1);
 }
-console.log(`Opening V1 production command surface OK: ${Object.keys(expected).length} guarded commands enforce fresh render -> Human final MP4 review -> production bundle finalize -> DaVinci Actual -> final approval without premature export.`);
+console.log(`Opening V1 production command surface OK: ${Object.keys(expected).length} guarded commands enforce strict assembly before preview, then fresh render -> Human final MP4 review -> production bundle finalize -> DaVinci Actual -> final approval without premature export.`);
