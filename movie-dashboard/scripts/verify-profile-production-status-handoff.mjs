@@ -1,0 +1,16 @@
+import fs from "node:fs";
+import path from "node:path";
+import {fileURLToPath} from "node:url";
+const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),"..");
+const read=(p)=>fs.readFileSync(path.join(root,p),"utf8");
+const sync=read("scripts/sync-profile-production-status.mjs");
+const generated=read("src/data/profileProductionStatus.generated.ts");
+const handoff=read("src/data/profileProductionStatusHandoff.ts");
+const errors=[];const need=(s,t,m)=>{if(!s.includes(t))errors.push(m)};
+for(const t of ['profile-v1-production-status.mts','profile-v1-production-status/v1','DERIVED_PRODUCTION_STATUS','finalDeliveryApproval','productionReady','profileProductionStatus.generated.ts'])need(sync,t,`status sync missing ${t}`);
+for(const t of ['"overallState": "ASSEMBLY_REQUIRED"','"assembly": {','"finalRender": {','"davinciFinishing": {','"finalDeliveryApproval": {','"state": "BLOCKED"','"state": "NOT_RUN"','"macDaVinciActual": "NOT_RUN"','"finalDeliveryApproved": false','"productionReady": false'])need(generated,t,`generated status missing ${t}`);
+for(const t of ['wedding-profile-production-status-handoff/v1','MOTION_STUDIO_DERIVED_PROFILE_STATUS_HANDOFF','profileProductionStatus.overallState','profileProductionStatus.stages','profileProductionStatus.readiness','chapter.role','chapter.editIntent','profileRealMediaReviewGate.humanReviewComplete','ASSEMBLY_READY != PRODUCTION_READY','MAC_DAVINCI_ACTUAL_VERIFIED != FINAL_DELIVERY_APPROVED'])need(handoff,t,`handoff envelope missing ${t}`);
+if(generated.includes('"macDaVinciActual": "ACTUAL_VERIFIED"'))errors.push('Dashboard snapshot fabricates Mac Actual');
+if(generated.includes('"productionReady": true'))errors.push('Dashboard snapshot fabricates production readiness');
+if(errors.length){console.error(`Profile production-status handoff FAILED (${errors.length})`);for(const e of errors)console.error(`- ${e}`);process.exit(1)}
+console.log('Profile production-status handoff OK: Motion Studio final-render/DaVinci/final-approval states are available to Dashboard export without altering assembly-ready semantics or fabricating readiness.');
