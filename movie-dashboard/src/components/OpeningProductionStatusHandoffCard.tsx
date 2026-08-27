@@ -27,6 +27,7 @@ export function OpeningProductionStatusHandoffCard({projectId}: {projectId: Scen
   const production = status.opening.production;
   const media = status.opening.media;
   const palmier = production.palmierHandoff;
+  const davinci = production.davinciHandoff;
 
   return (
     <section className="mt-3 border border-sky-300 dark:border-sky-800 p-3">
@@ -90,9 +91,21 @@ export function OpeningProductionStatusHandoffCard({projectId}: {projectId: Scen
             <p>{palmier.artifacts.soundCues.carries.join(" / ")}</p>
           </div>
         </div>
-        <p className="mt-1 text-[8px] text-navy-400">
-          Motion Studio正本から派生するSHA-bound handoffです。metadataが見えていてもartifact currentを意味しません。
-        </p>
+      </div>
+
+      <div className="mt-2 border border-indigo-200 dark:border-indigo-800 p-2">
+        <div className="flex flex-wrap items-center justify-between gap-1">
+          <p className="text-[8px] font-semibold text-indigo-700 dark:text-indigo-300">DAVINCI HANDOFF / {davinci.contractVersion}</p>
+          <span className="text-[8px] text-indigo-600 dark:text-indigo-300">handoff={davinci.current ? "CURRENT" : "NOT_EXPORTED_OR_STALE"}</span>
+        </div>
+        <div className="mt-1 text-[8px] leading-4 text-navy-500 dark:text-navy-300">
+          <div>source: <code className="break-all">{davinci.handoffAsset.path}</code></div>
+          <div>expected SHA: <code>{davinci.handoffAsset.expectedSha256 ?? "PENDING_BUNDLE_EXPORT"}</code></div>
+          <div>use: {davinci.handoffAsset.intendedUse}</div>
+          <div>Actual evidence: <code className="break-all">{davinci.actualEvidence.path}</code></div>
+          <div>required: {davinci.actualEvidence.requiredChecks.join(" / ")}</div>
+        </div>
+        <p className="mt-1 text-[8px] text-navy-400">DAVINCI_HANDOFF_CURRENT != MAC_DAVINCI_ACTUAL_VERIFIED</p>
       </div>
 
       <div className="mt-2 border border-sky-100 dark:border-sky-900 p-2">
@@ -107,8 +120,8 @@ export function OpeningProductionStatusHandoffCard({projectId}: {projectId: Scen
       </div>
 
       <p className="mt-2 text-[8px] leading-4 text-navy-400">
-        このstatusはMEDIA_REQUIRED / NOT_RUNも含めて現在状態とPalmier handoff contractを外へ渡すためのenvelopeです。Statusのexport可否とproduction readinessは分離しています。
-        `STATUS_EXPORTABLE != FINAL_RENDER_ELIGIBLE` / `HANDOFF_METADATA_EXPORTED != HANDOFF_ARTIFACTS_CURRENT` / `DAVINCI_ACTUAL_VERIFIED != FINAL_DELIVERY_APPROVED` / `NEXT_ACTION_EXPORTED != ACTION_COMPLETED`
+        このstatusはMEDIA_REQUIRED / NOT_RUNも含めて現在状態とPalmier / DaVinci handoff contractを外へ渡すためのenvelopeです。Statusのexport可否とproduction readinessは分離しています。
+        `STATUS_EXPORTABLE != FINAL_RENDER_ELIGIBLE` / `HANDOFF_METADATA_EXPORTED != HANDOFF_ARTIFACTS_CURRENT` / `DAVINCI_HANDOFF_CURRENT != MAC_DAVINCI_ACTUAL_VERIFIED` / `DAVINCI_ACTUAL_VERIFIED != FINAL_DELIVERY_APPROVED`
       </p>
 
       <details className="mt-2">

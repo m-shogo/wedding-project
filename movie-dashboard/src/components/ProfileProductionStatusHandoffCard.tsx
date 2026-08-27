@@ -28,27 +28,20 @@ export function ProfileProductionStatusHandoffCard({projectId}: {projectId: Scen
   const production = status.profile.production;
   const generatedAccents = status.profile.generatedAccents;
   const palmier = production.palmierHandoff;
+  const davinci = production.davinciHandoff;
   const productionReady = production.readiness.productionReady;
 
   return (
     <section className="mt-3 border border-fuchsia-300 dark:border-fuchsia-800 p-3">
       <div className="flex flex-wrap items-start justify-between gap-2">
         <div>
-          <p className="text-[9px] tracking-[0.16em] font-semibold text-fuchsia-700 dark:text-fuchsia-300">
-            PROFILE V1 / FINAL PRODUCTION STATUS
-          </p>
-          <p className="mt-1 text-[10px] font-semibold text-navy-800 dark:text-sand-100">
-            {production.overallState}
-          </p>
+          <p className="text-[9px] tracking-[0.16em] font-semibold text-fuchsia-700 dark:text-fuchsia-300">PROFILE V1 / FINAL PRODUCTION STATUS</p>
+          <p className="mt-1 text-[10px] font-semibold text-navy-800 dark:text-sand-100">{production.overallState}</p>
           <p className="mt-1 text-[8px] text-navy-400">
             productionReady={productionReady ? "YES" : "NO"} / Mac DaVinci={production.readiness.macDaVinciActual} / generated accents={generatedAccents.count}
           </p>
         </div>
-        <button
-          type="button"
-          onClick={() => downloadText(json, "profile-production-status-handoff.json")}
-          className="border border-fuchsia-300 dark:border-fuchsia-700 px-2.5 py-1.5 text-[9px] font-semibold text-fuchsia-700 dark:text-fuchsia-300"
-        >
+        <button type="button" onClick={() => downloadText(json, "profile-production-status-handoff.json")} className="border border-fuchsia-300 dark:border-fuchsia-700 px-2.5 py-1.5 text-[9px] font-semibold text-fuchsia-700 dark:text-fuchsia-300">
           Profile production statusを書き出す
         </button>
       </div>
@@ -57,14 +50,7 @@ export function ProfileProductionStatusHandoffCard({projectId}: {projectId: Scen
         {Object.entries(production.stages).map(([key, stage]) => {
           const state = String(stage.state);
           const complete = !incompleteStageStates.has(state);
-          return (
-            <div
-              key={key}
-              className={`border px-2 py-1.5 text-[8px] ${complete ? "border-emerald-200 text-emerald-700 dark:border-emerald-800 dark:text-emerald-300" : "border-amber-200 text-amber-700 dark:border-amber-800 dark:text-amber-300"}`}
-            >
-              <span className="font-semibold">{stageLabel[key] ?? key}</span>: {state}
-            </div>
-          );
+          return <div key={key} className={`border px-2 py-1.5 text-[8px] ${complete ? "border-emerald-200 text-emerald-700 dark:border-emerald-800 dark:text-emerald-300" : "border-amber-200 text-amber-700 dark:border-amber-800 dark:text-amber-300"}`}><span className="font-semibold">{stageLabel[key] ?? key}</span>: {state}</div>;
         })}
       </div>
 
@@ -77,9 +63,22 @@ export function ProfileProductionStatusHandoffCard({projectId}: {projectId: Scen
           <div>scene timeline: <code>{palmier.artifacts.sceneTimeline.path}</code></div>
           <div>carries: {palmier.artifacts.sceneTimeline.carries.join(" / ")}</div>
         </div>
-        <p className="mt-1 text-[8px] text-navy-400">
-          HANDOFF_METADATA_EXPORTED != HANDOFF_ARTIFACTS_CURRENT / PALMIER_TIMELINE_SHA_MATCH != MAC_DAVINCI_ACTUAL_VERIFIED
-        </p>
+      </div>
+
+      <div className="mt-2 border border-indigo-200 dark:border-indigo-800 p-2">
+        <div className="flex flex-wrap items-center justify-between gap-1">
+          <p className="text-[8px] font-semibold text-indigo-700 dark:text-indigo-300">DAVINCI HANDOFF / {davinci.contractVersion}</p>
+          <span className="text-[8px] text-indigo-600 dark:text-indigo-300">handoff={davinci.current ? "CURRENT" : "NOT_EXPORTED_OR_STALE"}</span>
+        </div>
+        <div className="mt-1 text-[8px] leading-4 text-navy-500 dark:text-navy-300">
+          <div>source: <code className="break-all">{davinci.handoffAsset.path}</code></div>
+          <div>expected SHA: <code>{davinci.handoffAsset.expectedSha256 ?? "PENDING_BUNDLE_EXPORT"}</code></div>
+          <div>use: {davinci.handoffAsset.intendedUse}</div>
+          <div>Actual evidence: <code className="break-all">{davinci.actualEvidence.path}</code></div>
+          <div>required: {davinci.actualEvidence.requiredChecks.join(" / ")}</div>
+          <div>canonical accent routes: {davinci.generatedAccentRoutes.length}</div>
+        </div>
+        <p className="mt-1 text-[8px] text-navy-400">DAVINCI_HANDOFF_CURRENT != MAC_DAVINCI_ACTUAL_VERIFIED / GENERATED_ACCENT_ROUTE_EXPORTED != MAC_DAVINCI_ACTUAL_VERIFIED</p>
       </div>
 
       <div className="mt-2 border border-fuchsia-100 dark:border-fuchsia-900 p-2">
@@ -87,37 +86,24 @@ export function ProfileProductionStatusHandoffCard({projectId}: {projectId: Scen
         <div className="mt-1 grid gap-1 sm:grid-cols-3">
           {generatedAccents.accents.map((accent) => (
             <div key={accent.slotId} className="border border-sand-200 dark:border-navy-700 px-2 py-1.5 text-[8px] leading-4 text-navy-500 dark:text-navy-300">
-              <div className="font-semibold">{accent.label}</div>
-              <div>{accent.implementation}</div>
-              <div className="opacity-70">reuse: {accent.canonicalReuse}</div>
+              <div className="font-semibold">{accent.label}</div><div>{accent.implementation}</div><div className="opacity-70">reuse: {accent.canonicalReuse}</div>
             </div>
           ))}
         </div>
-        <p className="mt-1 text-[8px] text-navy-400">
-          visualSmokeOnly={generatedAccents.evidence.visualSmokeOnly ? "YES" : "NO"} / MacDaVinci={generatedAccents.evidence.macDaVinciActual} / productionReady={generatedAccents.evidence.productionReady ? "YES" : "NO"}
-        </p>
+        <p className="mt-1 text-[8px] text-navy-400">visualSmokeOnly={generatedAccents.evidence.visualSmokeOnly ? "YES" : "NO"} / MacDaVinci={generatedAccents.evidence.macDaVinciActual} / productionReady={generatedAccents.evidence.productionReady ? "YES" : "NO"}</p>
       </div>
 
       <div className="mt-2 border border-fuchsia-100 dark:border-fuchsia-900 p-2">
         <p className="text-[8px] font-semibold text-fuchsia-700 dark:text-fuchsia-300">NEXT ACTIONS</p>
-        <ol className="mt-1 space-y-1 text-[8px] leading-4 text-navy-500 dark:text-navy-300">
-          {production.nextActions.map((action, index) => (
-            <li key={`${index}-${action}`}>
-              {index + 1}. <code>{action}</code>
-            </li>
-          ))}
-        </ol>
+        <ol className="mt-1 space-y-1 text-[8px] leading-4 text-navy-500 dark:text-navy-300">{production.nextActions.map((action, index) => <li key={`${index}-${action}`}>{index + 1}. <code>{action}</code></li>)}</ol>
       </div>
 
       <p className="mt-2 text-[8px] leading-4 text-navy-400">
-        このstatusはBLOCKED / NOT_RUNも含めて現在状態とPalmier handoff contractを外へ渡すためのenvelopeです。Assembly manifestの可否とは別なので、未完成でも書き出せます。
-        `ASSEMBLY_READY != PRODUCTION_READY` / `MAC_DAVINCI_ACTUAL_VERIFIED != FINAL_DELIVERY_APPROVED` / `GENERATED_ACCENT_IMPLEMENTED != HUMAN_REAL_MEDIA_QA_PASS`
+        このstatusはBLOCKED / NOT_RUNも含めて現在状態とPalmier / DaVinci handoff contractを外へ渡すためのenvelopeです。Assembly manifestの可否とは別なので、未完成でも書き出せます。
+        `ASSEMBLY_READY != PRODUCTION_READY` / `HANDOFF_METADATA_EXPORTED != HANDOFF_ARTIFACTS_CURRENT` / `DAVINCI_HANDOFF_CURRENT != MAC_DAVINCI_ACTUAL_VERIFIED` / `MAC_DAVINCI_ACTUAL_VERIFIED != FINAL_DELIVERY_APPROVED`
       </p>
 
-      <details className="mt-2">
-        <summary className="cursor-pointer text-[8px] text-fuchsia-700 dark:text-fuchsia-300">Profile production status JSON</summary>
-        <pre className="mt-2 max-h-72 overflow-auto whitespace-pre-wrap border border-sand-200 dark:border-navy-600 p-2 text-[8px] leading-4 text-navy-500 dark:text-navy-300">{json}</pre>
-      </details>
+      <details className="mt-2"><summary className="cursor-pointer text-[8px] text-fuchsia-700 dark:text-fuchsia-300">Profile production status JSON</summary><pre className="mt-2 max-h-72 overflow-auto whitespace-pre-wrap border border-sand-200 dark:border-navy-600 p-2 text-[8px] leading-4 text-navy-500 dark:text-navy-300">{json}</pre></details>
     </section>
   );
 }

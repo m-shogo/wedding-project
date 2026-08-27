@@ -3,7 +3,8 @@
 
 export const openingProductionStatus = {
   "source": {
-    "status": "motion-studio/scripts/opening-v1-production-status.mts"
+    "status": "motion-studio/scripts/opening-v1-production-status.mts",
+    "davinciHandoff": "motion-studio/scripts/opening-v1-davinci-handoff-contract.mts"
   },
   "overallState": "MEDIA_REQUIRED",
   "stages": {
@@ -71,6 +72,50 @@ export const openingProductionStatus = {
           ]
         }
       }
+    },
+    "davinci": {
+      "contractVersion": "opening-v1-davinci-handoff/v1",
+      "current": false,
+      "sourceAuthorities": [
+        "scripts/export-opening-v1-production-bundle.mts#bundle.davinci",
+        "scripts/opening-v1-davinci-finishing-evidence.mts"
+      ],
+      "upstreamPalmier": {
+        "requiredContractVersion": "opening-v1-palmier-handoff/v2",
+        "timelinePath": "out/handoff/opening-v1/opening-v1-palmier-timeline.csv",
+        "soundCuePath": "out/handoff/opening-v1/opening-v1-palmier-sound-cues.csv"
+      },
+      "handoffAsset": {
+        "path": "out/opening/opening_v1.mp4",
+        "expectedSha256": null,
+        "shaBound": true,
+        "intendedUse": "FINISHING_AND_OUTPUT_QA"
+      },
+      "actualEvidence": {
+        "path": "out/qa/opening-v1-davinci-finishing-evidence.json",
+        "schemaVersion": "opening-v1-davinci-finishing-evidence/v1",
+        "authority": "MAC_DAVINCI_ACTUAL_EVIDENCE",
+        "commands": {
+          "init": "pnpm opening:davinci-finishing:init",
+          "status": "pnpm opening:davinci-finishing",
+          "strict": "pnpm opening:davinci-finishing:strict"
+        },
+        "requiredChecks": [
+          "source_render_sha_readback",
+          "resolve_version_project_timeline",
+          "timeline_insertion",
+          "duration_and_fps",
+          "color_finish",
+          "audio_finish",
+          "title_safe_and_framing",
+          "playback_1x",
+          "playback_half_speed",
+          "export_duration_dimensions_fps_audio",
+          "watched_with_sound",
+          "human_overall_review"
+        ]
+      },
+      "productionReady": false
     }
   },
   "nextActions": [
