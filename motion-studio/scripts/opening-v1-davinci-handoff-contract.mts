@@ -7,6 +7,7 @@ const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const bundlePath = join(root, 'out/handoff/opening-v1/opening-v1-production-bundle.json');
 const timelinePath = join(root, 'out/handoff/opening-v1/opening-v1-palmier-timeline.csv');
 const soundCuePath = join(root, 'out/handoff/opening-v1/opening-v1-palmier-sound-cues.csv');
+const finalReviewPath = join(root, 'out/qa/opening-v1-final-render-review.json');
 const evidencePath = join(root, 'out/qa/opening-v1-davinci-finishing-evidence.json');
 const defaultRenderPath = 'out/opening/opening_v1.mp4';
 const rel = (path: string) => relative(root, path).replaceAll('\\', '/');
@@ -27,6 +28,18 @@ if (bundle) {
   if (bundle.davinci?.productionReady !== false) blockers.push('OPENING_DAVINCI_BUNDLE_MUST_FAIL_CLOSED');
   if (bundle.finalRender?.path !== bundle.davinci?.handoffAsset) blockers.push('OPENING_DAVINCI_HANDOFF_ASSET_PATH_MISMATCH');
   if (bundle.finalRender?.sha256 !== bundle.davinci?.expectedSha256) blockers.push('OPENING_DAVINCI_EXPECTED_SHA_MISMATCH');
+
+  if (!existsSync(finalReviewPath)) blockers.push('OPENING_DAVINCI_FINAL_RENDER_REVIEW_MISSING');
+  else {
+    const finalReviewSha = sha(finalReviewPath);
+    if (bundle.humanFinalRenderReview?.evidencePath !== rel(finalReviewPath)) blockers.push('OPENING_DAVINCI_FINAL_RENDER_REVIEW_PATH_STALE');
+    if (bundle.humanFinalRenderReview?.evidenceSha256 !== finalReviewSha) blockers.push('OPENING_DAVINCI_FINAL_RENDER_REVIEW_SHA_STALE');
+    if (bundle.humanFinalRenderReview?.overall !== 'PASS') blockers.push('OPENING_DAVINCI_FINAL_RENDER_REVIEW_NOT_PASS');
+    if (bundle.humanFinalRenderReview?.finalRenderPath !== bundle.finalRender?.path) blockers.push('OPENING_DAVINCI_FINAL_REVIEW_RENDER_PATH_MISMATCH');
+    if (bundle.humanFinalRenderReview?.finalRenderSha256 !== bundle.finalRender?.sha256) blockers.push('OPENING_DAVINCI_FINAL_REVIEW_RENDER_SHA_MISMATCH');
+    if (!bundle.humanFinalRenderReview?.reviewer) blockers.push('OPENING_DAVINCI_FINAL_RENDER_REVIEWER_MISSING');
+  }
+
   if (bundle.palmier?.handoffContractVersion !== 'opening-v1-palmier-handoff/v2') blockers.push('OPENING_DAVINCI_PALMIER_CONTRACT_STALE');
   if (bundle.palmier?.timelineCsv !== rel(timelinePath)) blockers.push('OPENING_DAVINCI_PALMIER_TIMELINE_PATH_MISMATCH');
   if (!existsSync(timelinePath)) blockers.push('OPENING_DAVINCI_PALMIER_TIMELINE_MISSING');
@@ -45,8 +58,16 @@ const report = {
   current: blockers.length === 0,
   sourceAuthorities: [
     'scripts/export-opening-v1-production-bundle.mts#bundle.davinci',
+    'out/qa/opening-v1-final-render-review.json',
     'scripts/opening-v1-davinci-finishing-evidence.mts',
   ],
+  requiredHumanFinalRenderReview: {
+    path: rel(finalReviewPath),
+    schemaVersion: 'opening-v1-final-render-review/v1',
+    authority: 'HUMAN_FINAL_RENDER_REVIEW',
+    mustMatchBundleFinalRenderSha: true,
+    mustPassBeforeDaVinciActual: true,
+  },
   upstreamPalmier: {
     requiredContractVersion: 'opening-v1-palmier-handoff/v2',
     timelinePath: rel(timelinePath),
@@ -85,6 +106,8 @@ const report = {
   productionReady: false,
   blockers,
   guardrails: [
+    'PREVIEW_REVIEW_PASS != FINAL_RENDER_REVIEW_PASS',
+    'HUMAN_FINAL_RENDER_REVIEW_PASS != DAVINCI_ACTUAL_VERIFIED',
     'DAVINCI_HANDOFF_CURRENT != MAC_DAVINCI_ACTUAL_VERIFIED',
     'DAVINCI_EVIDENCE_TEMPLATE != ACTUAL_EVIDENCE_PASS',
     'MAC_DAVINCI_ACTUAL_VERIFIED != FINAL_DELIVERY_APPROVED',
