@@ -1,0 +1,90 @@
+name: Profile V1 Real Media Review CI
+
+on:
+  pull_request:
+    paths:
+      - "motion-studio/public/profile/**"
+      - "motion-studio/src/data/profileV1RuntimeMedia.generated.ts"
+      - "motion-studio/src/data/profileV1ProductionPlan.ts"
+      - "motion-studio/src/compositions/profile/ProfileV1RealMediaPreview.tsx"
+      - "motion-studio/src/ProfileV1Root.tsx"
+      - "motion-studio/scripts/render-profile-v1-real-media-preview.mts"
+      - "motion-studio/scripts/profile-v1-real-media-review.mts"
+      - "motion-studio/scripts/check-profile-v1-real-media-review.mts"
+      - ".github/workflows/profile-v1-real-media-review-ci.yml"
+  push:
+    branches: [main]
+    paths:
+      - "motion-studio/public/profile/**"
+      - "motion-studio/src/data/profileV1RuntimeMedia.generated.ts"
+      - "motion-studio/src/data/profileV1ProductionPlan.ts"
+      - "motion-studio/src/compositions/profile/ProfileV1RealMediaPreview.tsx"
+      - "motion-studio/src/ProfileV1Root.tsx"
+      - "motion-studio/scripts/render-profile-v1-real-media-preview.mts"
+      - "motion-studio/scripts/profile-v1-real-media-review.mts"
+      - "motion-studio/scripts/check-profile-v1-real-media-review.mts"
+      - ".github/workflows/profile-v1-real-media-review-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    defaults:
+      run:
+        working-directory: motion-studio
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: motion-studio/pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: TypeScript
+        run: pnpm typecheck
+
+      - name: Real-media Human QA contracts
+        run: node --no-warnings scripts/check-profile-v1-real-media-review.mts
+
+      - name: Render real-media review input
+        run: node --no-warnings scripts/render-profile-v1-real-media-preview.mts
+
+      - name: Fresh clone cannot manufacture Human review
+        run: |
+          mkdir -p out/qa
+          node --no-warnings scripts/profile-v1-real-media-review.mts --json > out/qa/profile-v1-real-media-review-status.json
+          node -e "const fs=require('fs'); const r=JSON.parse(fs.readFileSync('out/qa/profile-v1-real-media-review-status.json','utf8')); if(r.schemaVersion!=='profile-v1-real-media-review-status/v1') process.exit(1); if(r.authority!=='DERIVED_REAL_MEDIA_REVIEW_STATUS') process.exit(1); if(r.state!=='NOT_RUN') process.exit(1); if(r.humanReviewComplete!==false) process.exit(1); if(r.mediaExpected!==17||r.mediaReviewed!==0) process.exit(1); if(r.bgmReviewed!==false||r.macDaVinciActual!=='NOT_RUN'||r.productionReady!==false) process.exit(1);"
+          if node --no-warnings scripts/profile-v1-real-media-review.mts --init; then
+            echo "Real-media review init unexpectedly succeeded with 0/17 canonical media"
+            exit 1
+          fi
+          if node --no-warnings scripts/profile-v1-real-media-review.mts --strict; then
+            echo "Real-media Human QA unexpectedly passed without evidence"
+            exit 1
+          fi
+          echo "Profile real-media preview may render missing-state UI in CI, but Human QA cannot initialize or pass until all 17 real media files exist"
+
+      - name: Upload review input and status
+        uses: actions/upload-artifact@v4
+        with:
+          name: profile-v1-real-media-human-review-input
+          path: |
+            motion-studio/out/preview/profile_v1_real_media_preview.mp4
+            motion-studio/out/qa/profile-v1-real-media-review-status.json
+          if-no-files-found: error
+          retention-days: 7
