@@ -56,6 +56,7 @@ export function ProfileProductionStatusHandoffCard({projectId}: {projectId: Scen
               <div><span className="font-semibold">{stageLabel[key] ?? key}</span>: {state}</div>
               <div className="text-navy-500 dark:text-navy-300">{stage.detail}</div>
               {"path" in stage && stage.path ? <code className="block break-all text-navy-400">{stage.path}</code> : null}
+              {stage.recovery.length > 0 ? <div className="text-navy-400">recovery: {stage.recovery.join(" → ")}</div> : null}
             </div>
           );
         })}
@@ -125,7 +126,7 @@ export function ProfileProductionStatusHandoffCard({projectId}: {projectId: Scen
       </div>
 
       <p className="mt-2 text-[8px] leading-4 text-navy-400">
-        このstatusはBLOCKED / NOT_RUNも含めて現在状態・理由・artifact pathとPalmier / DaVinci handoff contractを外へ渡すためのenvelopeです。Assembly manifestの可否とは別なので、未完成でも書き出せます。
+        このstatusはBLOCKED / NOT_RUNも含めて現在状態・理由・artifact path・正規recovery commandとPalmier / DaVinci handoff contractを外へ渡すためのenvelopeです。Assembly manifestの可否とは別なので、未完成でも書き出せます。
         `ASSEMBLY_READY != PRODUCTION_READY` / `HANDOFF_METADATA_EXPORTED != HANDOFF_ARTIFACTS_CURRENT` / `DAVINCI_HANDOFF_CURRENT != MAC_DAVINCI_ACTUAL_VERIFIED` / `MAC_DAVINCI_ACTUAL_VERIFIED != FINAL_DELIVERY_APPROVED`
       </p>
 
