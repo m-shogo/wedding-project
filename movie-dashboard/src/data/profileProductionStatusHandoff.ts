@@ -1,3 +1,4 @@
+import {profileGeneratedAccents} from "./profileGeneratedAccents.generated";
 import {profileProductionGate} from "./profileProductionGate.generated";
 import {profileProductionStatus} from "./profileProductionStatus.generated";
 import {profileRealMediaReviewGate} from "./profileRealMediaReviewGate.generated";
@@ -38,6 +39,20 @@ export function buildProfileProductionStatusHandoff() {
           intakeDirectory: "motion-studio/public/profile/",
         })),
       },
+      generatedAccents: {
+        count: profileGeneratedAccents.count,
+        authority: profileGeneratedAccents.authority,
+        accents: profileGeneratedAccents.accents.map((accent) => ({
+          slotId: accent.slotId,
+          chapterId: accent.chapterId,
+          label: accent.label,
+          implementation: accent.implementation,
+          canonicalReuse: accent.canonicalReuse,
+          source: accent.source,
+          realMediaRequired: accent.realMediaRequired,
+        })),
+        evidence: profileGeneratedAccents.productionEvidence,
+      },
       bgm: {...profileProductionGate.bgm},
       structureReview: {...profileProductionGate.structureReview},
       realMediaHumanQa: {
@@ -61,6 +76,8 @@ export function buildProfileProductionStatusHandoff() {
       "MAC_DAVINCI_ACTUAL_VERIFIED != FINAL_DELIVERY_APPROVED",
       "MEDIA_REQUIREMENT_EXPORTED != MEDIA_RESOLVED",
       "NEXT_ACTION_EXPORTED != ACTION_COMPLETED",
+      "GENERATED_ACCENT_IMPLEMENTED != HUMAN_REAL_MEDIA_QA_PASS",
+      "OPTIONAL_GENERATED_ROLE != REQUIRED_REAL_MEDIA_SLOT",
     ],
   };
 }
