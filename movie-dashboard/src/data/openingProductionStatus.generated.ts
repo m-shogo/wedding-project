@@ -39,5 +39,10 @@ export const openingProductionStatus = {
     "readyForFinalDeliveryApproval": false,
     "finalDeliveryApproved": false,
     "productionReady": false
-  }
+  },
+  "nextActions": [
+    "実写真11枚をcanonical filenameで投入",
+    "pnpm sync:photos",
+    "pnpm opening:assembly-preflight"
+  ]
 } as const;

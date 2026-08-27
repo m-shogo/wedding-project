@@ -72,9 +72,20 @@ export function OpeningProductionStatusHandoffCard({projectId}: {projectId: Scen
         <div className="border border-sand-200 dark:border-navy-700 px-2 py-1.5">Final approval: {production.readiness.finalDeliveryApproved ? "APPROVED" : "NOT APPROVED"}</div>
       </div>
 
+      <div className="mt-2 border border-sky-100 dark:border-sky-900 p-2">
+        <p className="text-[8px] font-semibold text-sky-700 dark:text-sky-300">NEXT ACTIONS</p>
+        <ol className="mt-1 space-y-1 text-[8px] leading-4 text-navy-500 dark:text-navy-300">
+          {production.nextActions.map((action, index) => (
+            <li key={`${index}-${action}`}>
+              {index + 1}. <code>{action}</code>
+            </li>
+          ))}
+        </ol>
+      </div>
+
       <p className="mt-2 text-[8px] leading-4 text-navy-400">
         このstatusはMEDIA_REQUIRED / NOT_RUNも含めて現在状態を外へ渡すためのenvelopeです。Statusのexport可否とproduction readinessは分離しています。
-        `STATUS_EXPORTABLE != FINAL_RENDER_ELIGIBLE` / `DAVINCI_ACTUAL_VERIFIED != FINAL_DELIVERY_APPROVED`
+        `STATUS_EXPORTABLE != FINAL_RENDER_ELIGIBLE` / `DAVINCI_ACTUAL_VERIFIED != FINAL_DELIVERY_APPROVED` / `NEXT_ACTION_EXPORTED != ACTION_COMPLETED`
       </p>
 
       <details className="mt-2">
