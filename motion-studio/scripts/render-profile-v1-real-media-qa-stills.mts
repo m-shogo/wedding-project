@@ -6,20 +6,25 @@ import {assertProfileV1MediaInputsReady} from './profile-v1-media-input-gate.mts
 
 const studioRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const outDir = join(studioRoot, 'out/qa/profile-v1-real-media');
+const allowMissingMediaSmoke = process.argv.includes('--allow-missing-media-smoke');
 
-try {
-  assertProfileV1MediaInputsReady(studioRoot);
-} catch (error) {
-  console.error(error instanceof Error ? error.message : String(error));
-  process.exit(1);
+if (!allowMissingMediaSmoke) {
+  try {
+    assertProfileV1MediaInputsReady(studioRoot);
+  } catch (error) {
+    console.error(error instanceof Error ? error.message : String(error));
+    process.exit(1);
+  }
+} else {
+  console.log('SMOKE ONLY / explicit missing-media rendering allowed; this is not production QA evidence.');
 }
 
 mkdirSync(outDir, {recursive: true});
 
 // One representative interior slot midpoint per canonical chapter. Avoid exact slot boundaries:
 // the preview intentionally fades one slot out before the next fades in, so a boundary frame can
-// be fully transparent even though the composition is healthy. These checkpoints are production
-// evidence and must only render after all 17 canonical media slots plus cleared current BGM exist.
+// be fully transparent even though the composition is healthy. Normal production QA requires all
+// real inputs. CI may pass --allow-missing-media-smoke only to prove the explicit MISSING surfaces.
 const frames = [
   {id: '01-departure', frame: 90},
   {id: '02-separate-journeys', frame: 248},
@@ -59,4 +64,4 @@ if (failures.length > 0) {
   console.error(`Profile V1 real-media visual smoke failed: ${failures.join(', ')}`);
   process.exit(1);
 }
-console.log(`✅ Profile V1 real-media QA stills: ${frames.length}枚`);
+console.log(`✅ Profile V1 real-media QA stills: ${frames.length}枚${allowMissingMediaSmoke ? ' (SMOKE ONLY)' : ''}`);
