@@ -20,6 +20,13 @@ const stageLabels: Record<string, string> = {
   finalDeliveryApproval: "Final approval",
 };
 
+const blockerProvenanceLabels: Record<string, string> = {
+  INPUT_GATE: "input gate evidence",
+  SOURCE_REVALIDATION: "source revalidation evidence",
+  NORMALIZED_STAGE_STATE: "derived waiting-state code",
+  NONE: "no blocker evidence",
+};
+
 export function WeddingMovieProductionCriticalPathCard({projectId}: {projectId: SceneProjectId}) {
   const report = useMemo(() => buildWeddingMovieProductionCriticalPath(), []);
   const json = useMemo(() => buildWeddingMovieProductionCriticalPathJson(), []);
@@ -39,12 +46,15 @@ export function WeddingMovieProductionCriticalPathCard({projectId}: {projectId: 
           <p className="mt-1 text-[8px] text-navy-500 dark:text-navy-300">{current?.detail ?? "No remaining canonical production blocker."}</p>
           {current?.path ? <code className="mt-1 block break-all text-[8px] text-navy-400">{current.path}</code> : null}
           {current?.blockerCodes.length ? (
-            <div className="mt-2 flex flex-wrap gap-1">
-              {current.blockerCodes.map((code) => (
-                <code key={code} className="border border-red-200 dark:border-red-900 px-1.5 py-0.5 text-[8px] text-red-700 dark:text-red-300">
-                  {code}
-                </code>
-              ))}
+            <div className="mt-2">
+              <div className="mb-1 text-[8px] text-navy-400">evidence: {blockerProvenanceLabels[current.blockerProvenance] ?? current.blockerProvenance}</div>
+              <div className="flex flex-wrap gap-1">
+                {current.blockerCodes.map((code) => (
+                  <code key={code} className="border border-red-200 dark:border-red-900 px-1.5 py-0.5 text-[8px] text-red-700 dark:text-red-300">
+                    {code}
+                  </code>
+                ))}
+              </div>
             </div>
           ) : null}
         </div>
@@ -97,7 +107,7 @@ export function WeddingMovieProductionCriticalPathCard({projectId}: {projectId: 
                   <div className="font-semibold">{stageLabels[stage.name] ?? stage.name} / {stage.state}</div>
                   <div>{stage.detail}</div>
                   {stage.path ? <code className="block break-all text-navy-400">{stage.path}</code> : null}
-                  {stage.blockerCodes.length > 0 ? <div>BLOCK: {stage.blockerCodes.join(" / ")}</div> : null}
+                  {stage.blockerCodes.length > 0 ? <div>BLOCK [{blockerProvenanceLabels[stage.blockerProvenance] ?? stage.blockerProvenance}]: {stage.blockerCodes.join(" / ")}</div> : null}
                   {stage.recovery.length > 0 ? <div>recovery: {stage.recovery.join(" → ")}</div> : null}
                   {stage.actionTargets.length > 0 ? (
                     <div className="mt-1 flex flex-wrap gap-1">

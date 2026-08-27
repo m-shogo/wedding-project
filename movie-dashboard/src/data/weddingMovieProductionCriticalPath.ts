@@ -28,6 +28,8 @@ type InputLane = {
   blockerCodes?: readonly string[];
 };
 
+type BlockerProvenance = "INPUT_GATE" | "SOURCE_REVALIDATION" | "NORMALIZED_STAGE_STATE" | "NONE";
+
 const openingOrder = ["media", "previewRender", "previewSourceBinding", "previewReview", "finalRender", "finalRenderReview", "productionBundle", "davinciFinishing", "finalDeliveryApproval"] as const;
 const profileOrder = ["assembly", "finalRender", "finalRenderReview", "productionBundle", "davinciFinishing", "finalDeliveryApproval"] as const;
 
@@ -121,29 +123,33 @@ function inputLanesFor(projectId: "opening" | "profile", stageName: string): Inp
   return [];
 }
 
-function stageBlockerCodesFor(projectId: "opening" | "profile", stageName: string, inputLanes: readonly InputLane[]) {
+function stageBlockerInfoFor(projectId: "opening" | "profile", stageName: string, inputLanes: readonly InputLane[]): {codes: string[]; provenance: BlockerProvenance} {
   const laneCodes = inputLanes.flatMap((lane) => lane.blockerCodes ?? []);
-  if (laneCodes.length > 0) return [...new Set(laneCodes)];
+  if (laneCodes.length > 0) return {codes: [...new Set(laneCodes)], provenance: "INPUT_GATE"};
 
   if (projectId === "opening") {
     if (stageName === "previewSourceBinding" || stageName === "previewReview") {
-      return [...openingProductionStatus.sourceRevalidation.realMediaPreview.blockers];
+      const codes = [...openingProductionStatus.sourceRevalidation.realMediaPreview.blockers];
+      if (codes.length > 0) return {codes, provenance: "SOURCE_REVALIDATION"};
     }
     if (stageName === "finalRenderReview") {
-      return [...openingProductionStatus.sourceRevalidation.finalRender.blockers];
+      const codes = [...openingProductionStatus.sourceRevalidation.finalRender.blockers];
+      if (codes.length > 0) return {codes, provenance: "SOURCE_REVALIDATION"};
     }
   }
 
   if (projectId === "profile") {
     if (stageName === "finalRenderReview") {
-      return [...profileProductionStatus.sourceRevalidation.finalRender.blockers];
+      const codes = [...profileProductionStatus.sourceRevalidation.finalRender.blockers];
+      if (codes.length > 0) return {codes, provenance: "SOURCE_REVALIDATION"};
     }
     if (stageName === "assembly") {
-      return [...profileProductionStatus.sourceRevalidation.realMediaPreview.blockers];
+      const codes = [...profileProductionStatus.sourceRevalidation.realMediaPreview.blockers];
+      if (codes.length > 0) return {codes, provenance: "SOURCE_REVALIDATION"};
     }
   }
 
-  return [];
+  return {codes: [], provenance: "NONE"};
 }
 
 function normalizedStageBlockerCodes(stageName: string, stage: StageSnapshot, rawCodes: readonly string[], upstreamStageName?: string) {
@@ -154,6 +160,11 @@ function normalizedStageBlockerCodes(stageName: string, stage: StageSnapshot, ra
   if (stage.state === "BLOCKED") return [`STAGE_BLOCKED:${stageName}`];
   if (stage.state === "NOT_RUN" && upstreamStageName) return [`UPSTREAM_BLOCKED:${upstreamStageName}`];
   return [`STAGE_${stage.state}:${stageName}`];
+}
+
+function blockerProvenanceFor(stage: StageSnapshot, info: {codes: readonly string[]; provenance: BlockerProvenance}): BlockerProvenance {
+  if (info.codes.length > 0) return info.provenance;
+  return stage.state === "PASS" ? "NONE" : "NORMALIZED_STAGE_STATE";
 }
 
 function summarizeProject(
@@ -168,7 +179,7 @@ function summarizeProject(
   const currentIndex = ordered.findIndex((stage) => stage.state !== "PASS");
   const current = currentIndex >= 0 ? ordered[currentIndex] : null;
   const inputLanes = current ? inputLanesFor(projectId, current.name) : [];
-  const currentRawBlockers = current ? stageBlockerCodesFor(projectId, current.name, inputLanes) : [];
+  const currentBlockerInfo = current ? stageBlockerInfoFor(projectId, current.name, inputLanes) : {codes: [], provenance: "NONE" as const};
   return {
     projectId,
     overallState,
@@ -179,7 +190,8 @@ function summarizeProject(
           state: current.state,
           detail: current.detail,
           ...(current.path ? {path: current.path} : {}),
-          blockerCodes: normalizedStageBlockerCodes(current.name, current, currentRawBlockers),
+          blockerCodes: normalizedStageBlockerCodes(current.name, current, currentBlockerInfo.codes),
+          blockerProvenance: blockerProvenanceFor(current, currentBlockerInfo),
           recovery: [...current.recovery],
           actionTargets: actionTargetsFor(projectId, current.name),
           inputLanes,
@@ -187,15 +199,16 @@ function summarizeProject(
       : null,
     downstreamBlockedStages: currentIndex >= 0
       ? ordered.slice(currentIndex + 1).map((stage, offset) => {
-          const inputLanes = inputLanesFor(projectId, stage.name);
-          const rawBlockers = stageBlockerCodesFor(projectId, stage.name, inputLanes);
+          const stageInputLanes = inputLanesFor(projectId, stage.name);
+          const blockerInfo = stageBlockerInfoFor(projectId, stage.name, stageInputLanes);
           const upstreamStageName = ordered[currentIndex + offset]?.name ?? current?.name;
           return {
             name: stage.name,
             state: stage.state,
             detail: stage.detail,
             ...(stage.path ? {path: stage.path} : {}),
-            blockerCodes: normalizedStageBlockerCodes(stage.name, stage, rawBlockers, upstreamStageName),
+            blockerCodes: normalizedStageBlockerCodes(stage.name, stage, blockerInfo.codes, upstreamStageName),
+            blockerProvenance: blockerProvenanceFor(stage, blockerInfo),
             recovery: [...stage.recovery],
             actionTargets: actionTargetsFor(projectId, stage.name),
           };
@@ -232,6 +245,8 @@ export function buildWeddingMovieProductionCriticalPath() {
       "CRITICAL_PATH_VISIBLE != PRODUCTION_APPROVED",
       "BLOCKER_CODE_VISIBLE != BLOCKER_RESOLVED",
       "NORMALIZED_BLOCKER_CODE != RAW_MOTION_STUDIO_EVIDENCE",
+      "BLOCKER_PROVENANCE_INPUT_GATE != RAW_STAGE_BLOCKERS",
+      "BLOCKER_PROVENANCE_SOURCE_REVALIDATION != FULL_STAGE_EVIDENCE",
       "INPUT_LANE_READY != PROJECT_PRODUCTION_READY",
       "RECOVERY_COMMAND_VISIBLE != RECOVERY_EXECUTED",
       "ACTION_TARGET_VISIBLE != ACTION_COMPLETED",
