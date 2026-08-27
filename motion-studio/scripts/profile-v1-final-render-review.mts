@@ -61,6 +61,8 @@ function evaluate() {
   if (e.authority !== 'HUMAN_FINAL_RENDER_REVIEW') blockers.push('AUTHORITY');
   if (e.macDaVinciActual !== 'NOT_RUN') blockers.push('MAC_DAVINCI_ACTUAL_MUST_REMAIN_SEPARATE');
   if (e.productionReady !== false) blockers.push('FINAL_RENDER_REVIEW_CANNOT_PROMOTE_PRODUCTION');
+  const boundAtMs = Date.parse(e.boundAt);
+  if (!e.boundAt || Number.isNaN(boundAtMs)) blockers.push('BOUND_AT_INVALID');
   try {
     const c = current();
     if (e.finalRender.path !== c.finalRender.path || e.finalRender.sha256 !== c.finalRender.sha256) blockers.push('STALE_FINAL_RENDER');
@@ -71,7 +73,9 @@ function evaluate() {
   } catch (error) { blockers.push(error instanceof Error ? error.message : String(error)); }
   for (const axis of ['visual','timing','chapterFlow','textReadability','bgmTiming','bgmLevel','overall'] as const) if (e.review[axis] !== 'PASS') blockers.push(`${axis.toUpperCase()}_${e.review[axis]}`);
   if (!e.review.reviewer?.trim()) blockers.push('REVIEWER_MISSING');
-  if (!e.review.reviewedAt || Number.isNaN(Date.parse(e.review.reviewedAt))) blockers.push('REVIEWED_AT_INVALID');
+  const reviewedAtMs = e.review.reviewedAt ? Date.parse(e.review.reviewedAt) : Number.NaN;
+  if (!e.review.reviewedAt || Number.isNaN(reviewedAtMs)) blockers.push('REVIEWED_AT_INVALID');
+  else if (!Number.isNaN(boundAtMs) && reviewedAtMs < boundAtMs) blockers.push('REVIEWED_BEFORE_BINDING');
   return {schemaVersion: 'profile-v1-final-render-review-status/v1', authority: 'DERIVED_FINAL_RENDER_REVIEW_STATUS', state: blockers.length ? ('BLOCKED' as const) : ('PASS' as const), blockers, humanReviewComplete: blockers.length === 0, productionReady: false};
 }
 
