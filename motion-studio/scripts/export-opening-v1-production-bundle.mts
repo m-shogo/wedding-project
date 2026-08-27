@@ -12,6 +12,7 @@ const previewReviewPath = join(studioRoot, 'out/qa/opening-v1-preview-review.jso
 const outDir = join(studioRoot, 'out/handoff/opening-v1');
 const bundlePath = join(outDir, 'opening-v1-production-bundle.json');
 const timelineCsvPath = join(outDir, 'opening-v1-palmier-timeline.csv');
+const soundCueCsvPath = join(outDir, 'opening-v1-palmier-sound-cues.csv');
 
 const shaFile = (path: string) => createHash('sha256').update(readFileSync(path)).digest('hex');
 const shaText = (text: string) => createHash('sha256').update(text).digest('hex');
@@ -101,8 +102,8 @@ const csvEscape = (value: unknown) => {
   const text = String(value);
   return /[",\n]/.test(text) ? `"${text.replaceAll('"', '""')}"` : text;
 };
-const csvRows = [
-  ['order', 'scene_id', 'title', 'start_sec', 'end_sec', 'duration_sec', 'kind', 'owner', 'final_render_sha256'],
+const timelineRows = [
+  ['order', 'scene_id', 'title', 'start_sec', 'end_sec', 'duration_sec', 'kind', 'owner', 'replacement_policy', 'final_render_sha256'],
   ...sceneTimeline.map((scene) => [
     scene.order,
     scene.sceneId,
@@ -112,11 +113,28 @@ const csvRows = [
     scene.durationSec,
     scene.kind,
     scene.owner,
+    scene.replacementPolicy,
     finalRenderSha256,
   ]),
 ];
-const timelineCsv = `${csvRows.map((row) => row.map(csvEscape).join(',')).join('\n')}\n`;
+const timelineCsv = `${timelineRows.map((row) => row.map(csvEscape).join(',')).join('\n')}\n`;
 const timelineCsvSha256 = shaText(timelineCsv);
+
+const soundCueRows = [
+  ['cue_id', 'role', 'asset_id', 'start_sec', 'end_sec', 'volume', 'note', 'final_render_sha256'],
+  ...openingV1SoundCues.map((cue) => [
+    cue.id,
+    cue.role,
+    cue.assetId,
+    cue.startSec,
+    cue.endSec,
+    cue.volume,
+    cue.note,
+    finalRenderSha256,
+  ]),
+];
+const soundCueCsv = `${soundCueRows.map((row) => row.map(csvEscape).join(',')).join('\n')}\n`;
+const soundCueCsvSha256 = shaText(soundCueCsv);
 
 const bundle = {
   schemaVersion: 'opening-v1-production-bundle/v1',
@@ -156,7 +174,9 @@ const bundle = {
     handoffMode: 'REFERENCE_TIMELINE_AND_FINAL_RENDER',
     timelineCsv: rel(timelineCsvPath),
     timelineCsvSha256,
-    instruction: '60秒のscene boundaryとfinal render SHAを正本として扱い、編集時に別renderへ差し替えない。必要な再編集はMotion Studio正本へ戻してpreview reviewを再実行する。',
+    soundCueCsv: rel(soundCueCsvPath),
+    soundCueCsvSha256,
+    instruction: '60秒のscene boundary・replacement policy・J-cut/BGM cue timing・final render SHAを正本として扱う。編集時に別renderや独自cueへ差し替えず、必要な再編集はMotion Studio正本へ戻してpreview reviewを再実行する。',
   },
   davinci: {
     handoffAsset: rel(finalRenderPath),
@@ -175,9 +195,10 @@ const bundle = {
     'BUNDLE_EXPORTED != PRODUCTION_READY',
     'RENDER_SHA_MISMATCH => STOP_AND_REGENERATE_HANDOFF',
     'PALMIER_TIMELINE_SHA_MISMATCH => STOP_AND_REGENERATE_HANDOFF',
+    'PALMIER_SOUND_CUE_SHA_MISMATCH => STOP_AND_REGENERATE_HANDOFF',
   ],
   nextActions: [
-    'Palmierでscene boundaryとintentを確認し、正本renderを置換しない',
+    'Palmierでscene boundary・replacement policy・sound cue timingを確認し、正本renderを置換しない',
     'DaVinciへfinal renderを挿入しSHA一致対象であることを確認',
     '実機でcolor/audio/output QAを行い各Actual evidenceを別途記録',
     'Mac Actual未実施のままproductionReadyへ昇格しない',
@@ -186,10 +207,13 @@ const bundle = {
 
 mkdirSync(outDir, {recursive: true});
 writeFileSync(timelineCsvPath, timelineCsv);
+writeFileSync(soundCueCsvPath, soundCueCsv);
 writeFileSync(bundlePath, `${JSON.stringify(bundle, null, 2)}\n`);
 
 console.log(`Opening V1 production bundle exported: ${rel(bundlePath)}`);
 console.log(`Palmier timeline exported: ${rel(timelineCsvPath)}`);
+console.log(`Palmier sound cues exported: ${rel(soundCueCsvPath)}`);
 console.log(`finalRenderSha256=${finalRenderSha256}`);
 console.log(`timelineCsvSha256=${timelineCsvSha256}`);
+console.log(`soundCueCsvSha256=${soundCueCsvSha256}`);
 console.log('DaVinci Mac Actual remains NOT_RUN; productionReady=false.');
