@@ -31,6 +31,30 @@ type RuntimeSlot = {
   resolved: boolean;
 };
 
+type MediaEvidence = {
+  slot: string;
+  chapterId: string;
+  label: string;
+  file: string;
+  extension: string;
+  sha256: string;
+  qa: {
+    crop: QaState;
+    focus: QaState;
+    color: QaState;
+    emotionalFit: QaState;
+    contentAccuracy: QaState;
+  };
+};
+
+type ChapterEvidence = {
+  chapterId: string;
+  title: string;
+  visualFlow: QaState;
+  readability: QaState;
+  mediaRoleFit: QaState;
+};
+
 type Evidence = {
   schemaVersion: 'profile-v1-real-media-review/v1';
   authority: 'HUMAN_REAL_MEDIA_PREVIEW_REVIEW';
@@ -40,28 +64,8 @@ type Evidence = {
   productionPlanSha256: string;
   previewComponentSha256: string;
   canonicalPlanFingerprint: string;
-  media: Array<{
-    slot: string;
-    chapterId: string;
-    label: string;
-    file: string;
-    extension: string;
-    sha256: string;
-    qa: {
-      crop: QaState;
-      focus: QaState;
-      color: QaState;
-      emotionalFit: QaState;
-      contentAccuracy: QaState;
-    };
-  }>;
-  chapters: Array<{
-    chapterId: string;
-    title: string;
-    visualFlow: QaState;
-    readability: QaState;
-    mediaRoleFit: QaState;
-  }>;
+  media: MediaEvidence[];
+  chapters: ChapterEvidence[];
   review: {overall: QaState; reviewer: string | null; reviewedAt: string | null; notes: string};
   bgmReviewed: false;
   macDaVinciActual: 'NOT_RUN';
@@ -78,6 +82,9 @@ const shaBuffer = (value: Buffer | string) => createHash('sha256').update(value)
 const shaFile = (path: string) => shaBuffer(readFileSync(path));
 const shaJson = (value: unknown) => shaBuffer(JSON.stringify(value));
 const rel = (path: string) => relative(studioRoot, path).replaceAll('\\', '/');
+const qaAxes = ['crop', 'focus', 'color', 'emotionalFit', 'contentAccuracy'] as const;
+const chapterQaAxes = ['visualFlow', 'readability', 'mediaRoleFit'] as const;
+const isQaState = (value: unknown): value is QaState => value === 'NOT_RUN' || value === 'PASS' || value === 'FAIL';
 
 function currentBindings() {
   if (!existsSync(previewPath)) {
@@ -203,36 +210,99 @@ function evaluate() {
     blockers.push(error instanceof Error ? error.message : String(error));
   }
 
+  if (!Array.isArray(evidence.media)) {
+    blockers.push('MEDIA_REVIEW_NOT_ARRAY');
+  } else {
+    const mediaIds = evidence.media.map((item) => item?.slot).filter((slot): slot is string => typeof slot === 'string');
+    const duplicateMediaIds = mediaIds.filter((slot, index) => mediaIds.indexOf(slot) !== index);
+    for (const slot of [...new Set(duplicateMediaIds)]) blockers.push(`MEDIA_EVIDENCE_DUPLICATE:${slot}`);
+
+    if (current) {
+      const canonicalMediaIds = new Set(current.media.map((item) => item.slot));
+      for (const saved of evidence.media) {
+        if (!saved || typeof saved.slot !== 'string' || !canonicalMediaIds.has(saved.slot)) {
+          blockers.push(`MEDIA_EVIDENCE_UNKNOWN:${saved?.slot ?? 'INVALID'}`);
+        }
+      }
+      for (const item of current.media) {
+        const matching = evidence.media.filter((candidate) => candidate?.slot === item.slot);
+        if (matching.length !== 1) {
+          if (matching.length === 0) blockers.push(`MEDIA_EVIDENCE_MISSING:${item.slot}`);
+          continue;
+        }
+        const saved = matching[0];
+        if (
+          saved.file !== item.file ||
+          saved.sha256 !== item.sha256 ||
+          saved.extension !== item.extension ||
+          saved.chapterId !== item.chapterId ||
+          saved.label !== item.label
+        ) blockers.push(`STALE_MEDIA:${item.slot}`);
+      }
+    }
+  }
+
   if (current) {
     if (evidence.preview.path !== current.preview.path || evidence.preview.sha256 !== current.preview.sha256) blockers.push('STALE_REAL_MEDIA_PREVIEW');
     if (evidence.runtimeManifestSha256 !== current.runtimeManifestSha256) blockers.push('STALE_RUNTIME_MEDIA_MANIFEST');
     if (evidence.productionPlanSha256 !== current.productionPlanSha256) blockers.push('STALE_PROFILE_PRODUCTION_PLAN');
     if (evidence.previewComponentSha256 !== current.previewComponentSha256) blockers.push('STALE_REAL_MEDIA_PREVIEW_COMPONENT');
     if (evidence.canonicalPlanFingerprint !== current.canonicalPlanFingerprint) blockers.push('STALE_CANONICAL_PLAN_FINGERPRINT');
-    for (const item of current.media) {
-      const saved = evidence.media.find((candidate) => candidate.slot === item.slot);
-      if (!saved) blockers.push(`MEDIA_EVIDENCE_MISSING:${item.slot}`);
-      else if (saved.file !== item.file || saved.sha256 !== item.sha256 || saved.extension !== item.extension) blockers.push(`STALE_MEDIA:${item.slot}`);
+  }
+
+  if (!Array.isArray(evidence.media) || evidence.media.length !== 17) blockers.push(`MEDIA_REVIEW_COUNT:${Array.isArray(evidence.media) ? evidence.media.length : 0}/17`);
+  if (Array.isArray(evidence.media)) {
+    for (const media of evidence.media) {
+      if (!media || typeof media.qa !== 'object' || media.qa === null) {
+        blockers.push(`MEDIA_QA_INVALID:${media?.slot ?? 'INVALID'}`);
+        continue;
+      }
+      for (const axis of qaAxes) {
+        const state = media.qa[axis];
+        if (!isQaState(state)) blockers.push(`MEDIA_QA_INVALID:${media.slot}:${axis}`);
+        else if (state !== 'PASS') blockers.push(`MEDIA_QA_${state}:${media.slot}:${axis}`);
+      }
     }
   }
 
-  if (evidence.media.length !== 17) blockers.push(`MEDIA_REVIEW_COUNT:${evidence.media.length}/17`);
-  for (const media of evidence.media) {
-    for (const [axis, state] of Object.entries(media.qa)) {
-      if (state !== 'PASS') blockers.push(`MEDIA_QA_${state}:${media.slot}:${axis}`);
+  if (!Array.isArray(evidence.chapters)) {
+    blockers.push('CHAPTER_REVIEW_NOT_ARRAY');
+  } else {
+    if (evidence.chapters.length !== profileV1Chapters.length) blockers.push(`CHAPTER_REVIEW_COUNT:${evidence.chapters.length}/${profileV1Chapters.length}`);
+    const chapterIds = evidence.chapters.map((chapter) => chapter?.chapterId).filter((id): id is string => typeof id === 'string');
+    const duplicateChapterIds = chapterIds.filter((id, index) => chapterIds.indexOf(id) !== index);
+    for (const id of [...new Set(duplicateChapterIds)]) blockers.push(`CHAPTER_EVIDENCE_DUPLICATE:${id}`);
+
+    const canonicalChapterIds = new Set(profileV1Chapters.map((chapter) => chapter.id));
+    for (const saved of evidence.chapters) {
+      if (!saved || typeof saved.chapterId !== 'string' || !canonicalChapterIds.has(saved.chapterId)) {
+        blockers.push(`CHAPTER_EVIDENCE_UNKNOWN:${saved?.chapterId ?? 'INVALID'}`);
+      }
+    }
+    for (const chapter of profileV1Chapters) {
+      const matching = evidence.chapters.filter((saved) => saved?.chapterId === chapter.id);
+      if (matching.length === 0) {
+        blockers.push(`CHAPTER_EVIDENCE_MISSING:${chapter.id}`);
+        continue;
+      }
+      if (matching.length !== 1) continue;
+      const saved = matching[0];
+      if (saved.title !== chapter.title) blockers.push(`CHAPTER_EVIDENCE_STALE_TITLE:${chapter.id}`);
+      for (const axis of chapterQaAxes) {
+        const state = saved[axis];
+        if (!isQaState(state)) blockers.push(`CHAPTER_QA_INVALID:${chapter.id}:${axis}`);
+        else if (state !== 'PASS') blockers.push(`CHAPTER_${axis.toUpperCase()}_${state}:${chapter.id}`);
+      }
     }
   }
-  if (evidence.chapters.length !== 5) blockers.push(`CHAPTER_REVIEW_COUNT:${evidence.chapters.length}/5`);
-  for (const chapter of evidence.chapters) {
-    if (chapter.visualFlow !== 'PASS') blockers.push(`CHAPTER_VISUAL_FLOW_${chapter.visualFlow}:${chapter.chapterId}`);
-    if (chapter.readability !== 'PASS') blockers.push(`CHAPTER_READABILITY_${chapter.readability}:${chapter.chapterId}`);
-    if (chapter.mediaRoleFit !== 'PASS') blockers.push(`CHAPTER_MEDIA_ROLE_FIT_${chapter.mediaRoleFit}:${chapter.chapterId}`);
-  }
-  if (evidence.review.overall !== 'PASS') blockers.push(`OVERALL_${evidence.review.overall}`);
-  if (!evidence.review.reviewer?.trim()) blockers.push('REVIEWER_MISSING');
-  if (!evidence.review.reviewedAt || Number.isNaN(Date.parse(evidence.review.reviewedAt))) blockers.push('REVIEWED_AT_INVALID');
 
-  const mediaReviewed = evidence.media.filter((media) => Object.values(media.qa).every((state) => state === 'PASS')).length;
+  if (!evidence.review || evidence.review.overall !== 'PASS') blockers.push(`OVERALL_${evidence.review?.overall ?? 'INVALID'}`);
+  if (!evidence.review?.reviewer?.trim()) blockers.push('REVIEWER_MISSING');
+  if (!evidence.review?.reviewedAt || Number.isNaN(Date.parse(evidence.review.reviewedAt))) blockers.push('REVIEWED_AT_INVALID');
+
+  const mediaReviewed = Array.isArray(evidence.media)
+    ? evidence.media.filter((media) => media?.qa && qaAxes.every((axis) => media.qa[axis] === 'PASS')).length
+    : 0;
   const humanReviewComplete = blockers.length === 0;
   return {
     schemaVersion: 'profile-v1-real-media-review-status/v1',
