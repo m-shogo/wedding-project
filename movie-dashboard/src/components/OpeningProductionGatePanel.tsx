@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { openingProductionGate } from "../data/openingProductionGate.generated";
+import {OpeningProductionHandoffExportButton} from "./OpeningProductionHandoffExportButton";
 
 const phaseTone = {
   blocked: "border-red-200 bg-red-50 text-red-800 dark:border-red-800 dark:bg-red-900/20 dark:text-red-200",
@@ -88,6 +89,9 @@ export function OpeningProductionGatePanel({ compact = false }: { compact?: bool
                 </div>
               ))}
             </div>
+            <div className="mt-4">
+              <OpeningProductionHandoffExportButton />
+            </div>
           </div>
 
           <div>
@@ -101,6 +105,7 @@ export function OpeningProductionGatePanel({ compact = false }: { compact?: bool
             <div className="mt-4 flex flex-wrap gap-3 text-xs">
               {!photosReady && <Link to="/opening-photo-intake" className="px-3 py-2 bg-navy-800 text-white dark:bg-sand-100 dark:text-navy-900">写真11枚を選ぶ →</Link>}
               {!bgmReady && <Link to="/opening-bgm-intake" className="px-3 py-2 bg-navy-800 text-white dark:bg-sand-100 dark:text-navy-900">BGM Gateを進める →</Link>}
+              <OpeningProductionHandoffExportButton compact />
               <Link to="/movie-coach/compare" className="border-b border-navy-300 text-navy-600 dark:text-navy-300 self-center">Preview後のA/B判断 →</Link>
             </div>
           </div>
