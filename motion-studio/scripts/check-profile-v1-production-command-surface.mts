@@ -78,6 +78,23 @@ for (const name of ['render:profile-v1:real-media-preview', 'qa:profile-v1:real-
   }
 }
 
+const assemblyPath = join(root, 'scripts/profile-v1-assembly-preflight.mts');
+const assembly = readFileSync(assemblyPath, 'utf8');
+for (const token of [
+  "import {verifyIntakeReceipt} from './verify-production-media-intake-receipt.mts';",
+  "verifyIntakeReceipt({project: 'profile', targetDirectory: mediaRoot})",
+  'const mediaReady = mediaFilesReady && mediaReceiptCurrent;',
+  'MEDIA_INTAKE_RECEIPT_STALE',
+  'out/intake/profile-media-intake.json',
+  'scripts/intake-production-media.mts --project profile',
+  'scripts/verify-production-media-intake-receipt.mts --project profile',
+]) {
+  if (!assembly.includes(token)) errors.push(`Profile assembly missing SHA-bound media intake contract: ${token}`);
+}
+if (assembly.includes(`Profile実素材を ${'${profileV1ProductionContract.mediaDirectory}'}/ へcanonical stem名で投入`)) {
+  errors.push('Profile assembly recovery must not treat raw canonical filename placement as production provenance');
+}
+
 const mediaGatePath = join(root, 'scripts/profile-v1-media-input-gate.mts');
 if (!existsSync(mediaGatePath)) {
   errors.push('missing Profile real-media input gate');
@@ -117,4 +134,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log(`Profile V1 production command surface OK: ${Object.keys(expected).length} guarded commands validate Motion Zukan generated accents, refresh runtime media, require all 17 canonical media slots plus current cleared BGM before real-media preview/production QA stills, isolate missing-media smoke behind explicit CI-only flags that package production commands cannot expose, and bind Human preview/final review initialization to freshly rendered current artifacts without bypassing production gates.`);
+console.log(`Profile V1 production command surface OK: ${Object.keys(expected).length} guarded commands validate Motion Zukan generated accents, refresh runtime media, require all 17 canonical media slots to match a current SHA-bound production intake receipt plus current cleared BGM before real-media preview/production QA stills, isolate missing-media smoke behind explicit CI-only flags that package production commands cannot expose, and bind Human preview/final review initialization to freshly rendered current artifacts without bypassing production gates.`);

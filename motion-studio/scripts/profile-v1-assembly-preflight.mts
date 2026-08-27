@@ -7,6 +7,7 @@ import {
   profileV1ProductionContract,
   profileV1RequiredMediaSlots,
 } from '../src/data/profileV1ProductionPlan.ts';
+import {verifyIntakeReceipt} from './verify-production-media-intake-receipt.mts';
 
 const studioRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const mediaRoot = join(studioRoot, profileV1ProductionContract.mediaDirectory);
@@ -43,7 +44,10 @@ const mediaSlots = profileV1RequiredMediaSlots.map((slot) => {
 });
 
 const readyMediaCount = mediaSlots.filter((slot) => slot.ready).length;
-const mediaReady = readyMediaCount === mediaSlots.length;
+const mediaFilesReady = readyMediaCount === mediaSlots.length;
+const mediaReceipt = verifyIntakeReceipt({project: 'profile', targetDirectory: mediaRoot});
+const mediaReceiptCurrent = mediaReceipt.current;
+const mediaReady = mediaFilesReady && mediaReceiptCurrent;
 const bgmFileExists = existsSync(audioPath);
 
 type RightsStatus = {
@@ -149,6 +153,12 @@ const assemblyReady =
 
 const blockers = [
   ...mediaSlots.filter((slot) => !slot.ready).map((slot) => `MEDIA_MISSING:${slot.id}`),
+  ...(!mediaReceiptCurrent
+    ? [
+        'MEDIA_INTAKE_RECEIPT_STALE',
+        ...mediaReceipt.errors.map((error) => `MEDIA_INTAKE:${error}`),
+      ]
+    : []),
   ...rightsStatus.blockers.map((blocker) => `BGM_RIGHTS:${blocker}`),
   ...(structureReview.state === 'PASS'
     ? []
@@ -177,6 +187,12 @@ const chapterRows = profileV1Chapters.map((chapter) => {
   };
 });
 
+const canonicalMediaIntakeActions = [
+  'node --no-warnings scripts/intake-production-media.mts --project profile --source "/ABS/PATH/TO/profile-media"',
+  'node --no-warnings scripts/intake-production-media.mts --project profile --source "/ABS/PATH/TO/profile-media" --apply --overwrite --receipt out/intake/profile-media-intake.json',
+  'node --no-warnings scripts/verify-production-media-intake-receipt.mts --project profile',
+  'pnpm prepare:profile-v1',
+];
 const canonicalBgmIntakeActions = [
   'node --no-warnings scripts/intake-production-bgm.mts --project profile --source "/ABS/PATH/TO/profile-bgm.mp3"',
   'node --no-warnings scripts/intake-production-bgm.mts --project profile --source "/ABS/PATH/TO/profile-bgm.mp3" --apply --receipt out/intake/profile-bgm-intake.json',
@@ -188,12 +204,7 @@ const bgmRightsApprovalActions = [
   'node --no-warnings scripts/profile-v1-bgm-rights-approval.mts --strict',
 ];
 const inputRecoveryActions = [
-  ...(!mediaReady
-    ? [
-        `Profile実素材を ${profileV1ProductionContract.mediaDirectory}/ へcanonical stem名で投入`,
-        'node --no-warnings scripts/profile-v1-assembly-preflight.mts',
-      ]
-    : []),
+  ...(!mediaReady ? canonicalMediaIntakeActions : []),
   ...(!bgmFileExists || !bgmReceiptCurrent
     ? canonicalBgmIntakeActions
     : !bgmReady
@@ -209,8 +220,13 @@ const report = {
   media: {
     directory: profileV1ProductionContract.mediaDirectory,
     ready: mediaReady,
+    fileReady: mediaFilesReady,
     readyCount: readyMediaCount,
     expectedCount: mediaSlots.length,
+    intakeReceiptCurrent: mediaReceiptCurrent,
+    intakeReceiptPath: 'out/intake/profile-media-intake.json',
+    intakeReceiptVerifiedCount: mediaReceipt.verifiedCount,
+    intakeReceiptBlockers: mediaReceipt.errors,
     slots: mediaSlots,
   },
   audio: {
@@ -256,7 +272,7 @@ if (jsonMode) {
   console.log(JSON.stringify(report, null, 2));
 } else {
   console.log(
-    `Profile V1 assembly preflight: chapters=${chapterRows.filter((chapter) => chapter.ready).length}/${chapterRows.length} media=${readyMediaCount}/${mediaSlots.length} BGM=${bgmReady ? 'READY' : `BLOCKED/${bgmRightsState}`} receipt=${bgmReceiptCurrent ? 'CURRENT' : 'MISSING_OR_STALE'} structure=${structureReview.state} realMediaQA=${realMediaReview.state}`,
+    `Profile V1 assembly preflight: chapters=${chapterRows.filter((chapter) => chapter.ready).length}/${chapterRows.length} media=${readyMediaCount}/${mediaSlots.length} files=${mediaFilesReady ? 'READY' : 'BLOCKED'} mediaReceipt=${mediaReceiptCurrent ? 'CURRENT' : 'MISSING_OR_STALE'} BGM=${bgmReady ? 'READY' : `BLOCKED/${bgmRightsState}`} bgmReceipt=${bgmReceiptCurrent ? 'CURRENT' : 'MISSING_OR_STALE'} structure=${structureReview.state} realMediaQA=${realMediaReview.state}`,
   );
   console.log(`finalRenderEligible=${finalRenderEligible ? 'YES' : 'NO'} assemblyReady=${assemblyReady ? 'YES' : 'NO'} structurePreviewQA=${structureReview.state} realMediaPreviewQA=${realMediaReview.state} HumanContentQA=${realMediaReview.state} MacDaVinciActual=NOT_RUN productionReady=NO`);
   for (const blocker of blockers) console.log(`BLOCK / ${blocker}`);
