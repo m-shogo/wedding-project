@@ -7,7 +7,7 @@ export const PROFILE_PRODUCTION_STATUS_HANDOFF_SCHEMA = "wedding-profile-product
 
 /**
  * Motion Zukan / DashboardからProfile制作を外へ渡す際のcompact production-status envelope。
- * assembly manifestをproduction-readyへ意味変更せず、Motion Studioの後段statusを追加で運ぶ。
+ * assembly manifestをproduction-readyへ意味変更せず、Motion Studioの後段statusとPalmier handoff contractを追加で運ぶ。
  */
 export function buildProfileProductionStatusHandoff() {
   return {
@@ -66,6 +66,7 @@ export function buildProfileProductionStatusHandoff() {
         overallState: profileProductionStatus.overallState,
         stages: profileProductionStatus.stages,
         readiness: profileProductionStatus.readiness,
+        palmierHandoff: profileProductionStatus.handoff.palmier,
         nextActions: [...profileProductionStatus.nextActions],
       },
     },
@@ -75,6 +76,7 @@ export function buildProfileProductionStatusHandoff() {
       "PRODUCTION_BUNDLE_CURRENT != MAC_DAVINCI_ACTUAL_VERIFIED",
       "MAC_DAVINCI_ACTUAL_VERIFIED != FINAL_DELIVERY_APPROVED",
       "MEDIA_REQUIREMENT_EXPORTED != MEDIA_RESOLVED",
+      "HANDOFF_METADATA_EXPORTED != HANDOFF_ARTIFACTS_CURRENT",
       "NEXT_ACTION_EXPORTED != ACTION_COMPLETED",
       "GENERATED_ACCENT_IMPLEMENTED != HUMAN_REAL_MEDIA_QA_PASS",
       "OPTIONAL_GENERATED_ROLE != REQUIRED_REAL_MEDIA_SLOT",
