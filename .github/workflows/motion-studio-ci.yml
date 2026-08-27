@@ -57,6 +57,21 @@ jobs:
       - name: Opening V1 sound contracts
         run: pnpm check:opening-sound
 
+      - name: Opening V1 assembly preflight report stays honest on fresh clone
+        run: |
+          mkdir -p out/qa
+          node --no-warnings scripts/opening-v1-assembly-preflight.mts --json > out/qa/opening-v1-assembly-preflight.json
+          node -e "const fs=require('fs'); const r=JSON.parse(fs.readFileSync('out/qa/opening-v1-assembly-preflight.json','utf8')); if(r.schemaVersion!=='opening-v1-assembly-preflight/v1') process.exit(1); if(r.photos.expectedCount!==11) process.exit(1); if(r.readiness.finalRenderEligible!==false) process.exit(1); if(r.readiness.renderQaState!=='NOT_RUN') process.exit(1); if(r.readiness.macDaVinciActualState!=='NOT_RUN') process.exit(1);"
+          if pnpm opening:assembly-preflight:strict; then
+            echo "assembly preflight unexpectedly passed without real photos/BGM"
+            exit 1
+          fi
+          if pnpm opening:assembly-preflight:mix-strict; then
+            echo "mix-strict preflight unexpectedly passed without ambience"
+            exit 1
+          fi
+          echo "assembly preflight correctly reports JSON and fails closed on missing real media"
+
       - name: Opening V1 final BGM gate fails closed without cleared media
         run: |
           if pnpm check:opening-sound:strict; then
