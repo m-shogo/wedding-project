@@ -65,6 +65,8 @@ export interface ProfileV1ProductionMediaGateV1 {
     chapterId: string;
     order: number;
     title: string;
+    role: string;
+    editIntent: readonly string[];
     requiredCount: number;
     readyCount: number;
     ready: boolean;
@@ -88,7 +90,18 @@ export interface ProfileV1ProductionMediaGateV1 {
     rightsState: string;
     ready: boolean;
   };
+  structureReview: {
+    state: "NOT_RUN" | "BLOCKED" | "PASS";
+    evidencePath: string;
+    boundPreviewSha256: string | null;
+    currentPreviewSha256: string | null;
+    reviewer: string | null;
+    reviewedAt: string | null;
+    blockers: readonly string[];
+    humanReviewComplete: boolean;
+  };
   qa: {
+    structurePreview: "NOT_RUN" | "BLOCKED" | "PASS";
     preview: "NOT_RUN";
     humanContent: "NOT_RUN";
     audio: "NOT_RUN";
@@ -180,12 +193,19 @@ function buildProfileV1ProductionMediaGate(projectId: SceneProjectId): ProfileV1
   return {
     authority: "MOTION_STUDIO_PROFILE_V1_MEDIA_GATE",
     chapterCount: profileProductionGate.chapterCount,
-    chapters: profileProductionGate.chapters.map((chapter) => ({...chapter})),
+    chapters: profileProductionGate.chapters.map((chapter) => ({
+      ...chapter,
+      editIntent: [...chapter.editIntent],
+    })),
     expectedMediaCount: profileProductionGate.expectedMediaCount,
     resolvedMediaCount: profileProductionGate.resolvedMediaCount,
     mediaMissingCount: profileProductionGate.mediaMissingCount,
     mediaSlots: profileProductionGate.mediaSlots.map((slot) => ({...slot})),
     bgm: {...profileProductionGate.bgm},
+    structureReview: {
+      ...profileProductionGate.structureReview,
+      blockers: [...profileProductionGate.structureReview.blockers],
+    },
     qa: {...profileProductionGate.qa},
     blockingGatePass: profileProductionGate.blockingGatePass,
     nextActions: [...profileProductionGate.nextActions],
@@ -258,9 +278,14 @@ export function buildProjectProductionHandoffManifest(
       ? [`PROFILE_V1_BGM:${profileV1Media.bgm.assetId}:${profileV1Media.bgm.rightsState}`]
       : []),
   ];
-  const warnings = openingV1Media && !openingV1Media.ambienceReadyForMix
-    ? [`OPENING_V1_AMBIENCE:${openingV1Media.ambiencePlayableCount}/${openingV1Media.ambienceExpectedCount}:MIX_NOT_READY`]
-    : [];
+  const warnings = [
+    ...(openingV1Media && !openingV1Media.ambienceReadyForMix
+      ? [`OPENING_V1_AMBIENCE:${openingV1Media.ambiencePlayableCount}/${openingV1Media.ambienceExpectedCount}:MIX_NOT_READY`]
+      : []),
+    ...(profileV1Media && profileV1Media.structureReview.state !== "PASS"
+      ? [`PROFILE_V1_STRUCTURE_REVIEW:${profileV1Media.structureReview.state}`]
+      : []),
+  ];
   const readyForAssembly =
     typography.summary.batchReadyForPalmierDaVinciHandoff &&
     finalChecksPass &&
@@ -291,7 +316,7 @@ export function buildProjectProductionHandoffManifest(
       productionReady: false,
       blockers,
       warnings,
-      rule: "Assembly-readyは全Sceneのcurrent Typography package + Production Workspace final checksに加え、OpeningではMotion Studio正本の11写真/BGM gate、Profileでは5章17実素材role + BGM権利gateが揃った状態だけを示す。各media gateのHuman QA / Mac ActualはNOT_RUNを保持し、DaVinci Mac Actual / Human promotion / Scene-bound Release GateなしにproductionReadyへ昇格しない。",
+      rule: "Assembly-readyは全Sceneのcurrent Typography package + Production Workspace final checksに加え、OpeningではMotion Studio正本の11写真/BGM gate、Profileでは5章17実素材role + BGM権利gateが揃った状態だけを示す。Profileの章role/editIntentとSHA-bound structure review状態もhandoffへ保持するが、structure reviewは実素材/BGM/content/Mac Actualの代替ではない。各media gateのHuman QA / Mac ActualはNOT_RUNを保持し、DaVinci Mac Actual / Human promotion / Scene-bound Release GateなしにproductionReadyへ昇格しない。",
     },
   };
 }
