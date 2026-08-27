@@ -6,6 +6,7 @@ import {
 } from "./motionZukanProductionWorkspace";
 import {openingProductionGate} from "./openingProductionGate.generated";
 import {openingV1PhotoPlanForSlot} from "./openingV1PhotoProductionPlan";
+import {profileProductionGate} from "./profileProductionGate.generated";
 import {
   buildTypographyProjectDeliveryBatch,
   type TypographyProjectDeliveryBatchV1,
@@ -57,6 +58,46 @@ export interface OpeningV1ProductionMediaGateV1 {
   nextAction: string;
 }
 
+export interface ProfileV1ProductionMediaGateV1 {
+  authority: "MOTION_STUDIO_PROFILE_V1_MEDIA_GATE";
+  chapterCount: number;
+  chapters: Array<{
+    chapterId: string;
+    order: number;
+    title: string;
+    requiredCount: number;
+    readyCount: number;
+    ready: boolean;
+  }>;
+  expectedMediaCount: number;
+  resolvedMediaCount: number;
+  mediaMissingCount: number;
+  mediaSlots: Array<{
+    id: string;
+    chapterId: string;
+    label: string;
+    kind: string;
+    canonicalStem: string;
+    file: string | null;
+    ready: boolean;
+  }>;
+  bgm: {
+    assetId: string;
+    path: string;
+    fileExists: boolean;
+    rightsState: string;
+    ready: boolean;
+  };
+  qa: {
+    preview: "NOT_RUN";
+    humanContent: "NOT_RUN";
+    audio: "NOT_RUN";
+    macDaVinciActual: "NOT_RUN";
+  };
+  blockingGatePass: boolean;
+  nextActions: string[];
+}
+
 export interface ProjectProductionHandoffManifestV1 {
   schemaVersion: "wedding-movie-project-production-handoff/v1";
   authority: "DERIVED_HANDOFF_MANIFEST";
@@ -92,6 +133,7 @@ export interface ProjectProductionHandoffManifestV1 {
       updatedAt: string;
     } | null;
     openingV1Media: OpeningV1ProductionMediaGateV1 | null;
+    profileV1Media: ProfileV1ProductionMediaGateV1 | null;
   };
   handoff: {
     readyForPalmierDaVinciAssembly: boolean;
@@ -130,6 +172,23 @@ function buildOpeningV1ProductionMediaGate(projectId: SceneProjectId): OpeningV1
     ambienceReadyForMix: ambiencePlayableCount === openingProductionGate.ambience.length,
     blockingGatePass: !openingProductionGate.finalBlocked,
     nextAction: openingProductionGate.nextAction,
+  };
+}
+
+function buildProfileV1ProductionMediaGate(projectId: SceneProjectId): ProfileV1ProductionMediaGateV1 | null {
+  if (projectId !== "profile") return null;
+  return {
+    authority: "MOTION_STUDIO_PROFILE_V1_MEDIA_GATE",
+    chapterCount: profileProductionGate.chapterCount,
+    chapters: profileProductionGate.chapters.map((chapter) => ({...chapter})),
+    expectedMediaCount: profileProductionGate.expectedMediaCount,
+    resolvedMediaCount: profileProductionGate.resolvedMediaCount,
+    mediaMissingCount: profileProductionGate.mediaMissingCount,
+    mediaSlots: profileProductionGate.mediaSlots.map((slot) => ({...slot})),
+    bgm: {...profileProductionGate.bgm},
+    qa: {...profileProductionGate.qa},
+    blockingGatePass: profileProductionGate.blockingGatePass,
+    nextActions: [...profileProductionGate.nextActions],
   };
 }
 
@@ -180,7 +239,9 @@ export function buildProjectProductionHandoffManifest(
     }));
   const design = workspace.designSettings.find((item) => item.projectId === projectId) ?? null;
   const openingV1Media = buildOpeningV1ProductionMediaGate(projectId);
+  const profileV1Media = buildProfileV1ProductionMediaGate(projectId);
   const openingV1MediaBlockingGatePass = openingV1Media?.blockingGatePass ?? true;
+  const profileV1MediaBlockingGatePass = profileV1Media?.blockingGatePass ?? true;
   const blockers = [
     ...typography.blockers,
     ...finalChecks.filter((check) => !check.ok).map((check) => `FINAL_CHECK:${check.id}:${check.detail}`),
@@ -190,6 +251,12 @@ export function buildProjectProductionHandoffManifest(
     ...(openingV1Media && !openingV1Media.bgm.playable
       ? [`OPENING_V1_BGM:${openingV1Media.bgm.assetId}:${openingV1Media.bgm.status}`]
       : []),
+    ...(profileV1Media && profileV1Media.mediaMissingCount > 0
+      ? [`PROFILE_V1_MEDIA:${profileV1Media.resolvedMediaCount}/${profileV1Media.expectedMediaCount}:MISSING_${profileV1Media.mediaMissingCount}`]
+      : []),
+    ...(profileV1Media && !profileV1Media.bgm.ready
+      ? [`PROFILE_V1_BGM:${profileV1Media.bgm.assetId}:${profileV1Media.bgm.rightsState}`]
+      : []),
   ];
   const warnings = openingV1Media && !openingV1Media.ambienceReadyForMix
     ? [`OPENING_V1_AMBIENCE:${openingV1Media.ambiencePlayableCount}/${openingV1Media.ambienceExpectedCount}:MIX_NOT_READY`]
@@ -197,7 +264,8 @@ export function buildProjectProductionHandoffManifest(
   const readyForAssembly =
     typography.summary.batchReadyForPalmierDaVinciHandoff &&
     finalChecksPass &&
-    openingV1MediaBlockingGatePass;
+    openingV1MediaBlockingGatePass &&
+    profileV1MediaBlockingGatePass;
 
   return {
     schemaVersion: "wedding-movie-project-production-handoff/v1",
@@ -216,13 +284,14 @@ export function buildProjectProductionHandoffManifest(
         updatedAt: design.updatedAt,
       } : null,
       openingV1Media,
+      profileV1Media,
     },
     handoff: {
       readyForPalmierDaVinciAssembly: readyForAssembly,
       productionReady: false,
       blockers,
       warnings,
-      rule: "Assembly-readyは全Sceneのcurrent Typography package + Production Workspace final checksに加え、OpeningではMotion Studio正本の11写真/BGM blocking gateが揃った状態だけを示す。11写真にはOpening V1の配置時間とcrop/focus/color/motion QA=NOT_RUNを添付する。現地音はmix readinessとして別表示する。DaVinci Mac Actual / Human promotion / Scene-bound Release GateなしにproductionReadyへ昇格しない。",
+      rule: "Assembly-readyは全Sceneのcurrent Typography package + Production Workspace final checksに加え、OpeningではMotion Studio正本の11写真/BGM gate、Profileでは5章17実素材role + BGM権利gateが揃った状態だけを示す。各media gateのHuman QA / Mac ActualはNOT_RUNを保持し、DaVinci Mac Actual / Human promotion / Scene-bound Release GateなしにproductionReadyへ昇格しない。",
     },
   };
 }
