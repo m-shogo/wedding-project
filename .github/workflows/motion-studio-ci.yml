@@ -72,6 +72,18 @@ jobs:
           fi
           echo "assembly preflight correctly reports JSON and fails closed on missing real media"
 
+      - name: Opening V1 preview review evidence starts NOT_RUN and fails closed
+        run: |
+          pnpm opening:preview-review
+          if pnpm opening:preview-review:strict; then
+            echo "preview review unexpectedly passed without human evidence"
+            exit 1
+          fi
+          for token in "opening-v1-preview-review/v1" "STALE_PREVIEW_SHA256" "STALE_PHOTO" "STALE_BGM" "crop: 'NOT_RUN'" "focus: 'NOT_RUN'" "color: 'NOT_RUN'" "motion: 'NOT_RUN'"; do
+            grep -q "$token" scripts/opening-v1-preview-review.mts || { echo "missing preview review contract token: $token"; exit 1; }
+          done
+          echo "preview review correctly remains NOT_RUN until a human reviews evidence bound to current media"
+
       - name: Opening V1 final BGM gate fails closed without cleared media
         run: |
           if pnpm check:opening-sound:strict; then
