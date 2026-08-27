@@ -6,6 +6,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const read = (relative) => fs.readFileSync(path.join(root, relative), "utf8");
 const guide = read("src/components/ProductionMediaIntakeCliGuide.tsx");
 const profile = read("src/pages/ProfileMediaIntake.tsx");
+const openingGate = read("src/components/OpeningProductionGatePanel.tsx");
 const errors = [];
 
 const requireText = (source, token, message) => {
@@ -39,7 +40,19 @@ for (const token of [
   requireText(profile, token, `Profile media intake CLI wiring missing: ${token}`);
 }
 
-if (guide.includes('productionReady: true') || profile.includes('productionReady: true')) {
+for (const token of [
+  'ProductionMediaIntakeCliGuide',
+  '<ProductionMediaIntakeCliGuide project="opening" />',
+  '!photosReady',
+  'CANONICAL INTAKE CLIをDRY RUNし',
+  '--apply',
+  'source非破壊copy',
+  '写真+BGMが揃ったら60秒previewへ',
+]) {
+  requireText(openingGate, token, `Opening production gate CLI wiring missing: ${token}`);
+}
+
+if (guide.includes('productionReady: true') || profile.includes('productionReady: true') || openingGate.includes('productionReady: true')) {
   errors.push("media intake dashboard guide must not fabricate production readiness");
 }
 
@@ -49,4 +62,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log("Production Media Intake Dashboard Guide contracts OK: Profile exposes canonical dry-run -> explicit apply -> prepare commands, while source preservation and Human/Mac production gates remain explicit.");
+console.log("Production Media Intake Dashboard Guide contracts OK: Opening and Profile expose canonical dry-run -> explicit apply -> prepare commands, while source preservation and Human/Mac production gates remain explicit.");
