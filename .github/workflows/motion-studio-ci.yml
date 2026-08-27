@@ -103,6 +103,26 @@ jobs:
           done
           echo "final render handoff correctly stays blocked until current media, human preview review and final render all exist"
 
+      - name: Opening V1 DaVinci finishing evidence starts NOT_RUN and fails closed
+        run: |
+          pnpm opening:davinci-finishing
+          if pnpm opening:davinci-finishing:strict; then
+            echo "DaVinci finishing evidence unexpectedly passed without Mac Actual"
+            exit 1
+          fi
+          for token in \
+            "opening-v1-davinci-finishing-evidence/v1" \
+            "MAC_DAVINCI_ACTUAL_EVIDENCE" \
+            "STALE_DAVINCI_FINISHING_BUNDLE_SHA" \
+            "SOURCE_READBACK_SHA_MISMATCH" \
+            "timelineInsertion: 'NOT_RUN'" \
+            "playback1x: 'NOT_RUN'" \
+            "watchedWithSound: 'NOT_RUN'" \
+            "productionReady: false"; do
+            grep -q "$token" scripts/opening-v1-davinci-finishing-evidence.mts || { echo "missing DaVinci finishing contract token: $token"; exit 1; }
+          done
+          echo "DaVinci finishing correctly remains NOT_RUN until bundle-bound Mac Resolve Actual is recorded"
+
       - name: Opening V1 final BGM gate fails closed without cleared media
         run: |
           if pnpm check:opening-sound:strict; then
