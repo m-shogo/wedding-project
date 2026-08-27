@@ -1,0 +1,44 @@
+name: Wedding Movie Production Critical Path CI
+
+on:
+  pull_request:
+    paths:
+      - "motion-studio/scripts/wedding-movie-production-critical-path.mts"
+      - "motion-studio/scripts/verify-wedding-movie-production-critical-path.mjs"
+      - "motion-studio/scripts/opening-v1-production-status.mts"
+      - "motion-studio/scripts/profile-v1-production-status.mts"
+      - ".github/workflows/wedding-movie-production-critical-path-ci.yml"
+  push:
+    branches: [main]
+    paths:
+      - "motion-studio/scripts/wedding-movie-production-critical-path.mts"
+      - "motion-studio/scripts/verify-wedding-movie-production-critical-path.mjs"
+      - "motion-studio/scripts/opening-v1-production-status.mts"
+      - "motion-studio/scripts/profile-v1-production-status.mts"
+      - ".github/workflows/wedding-movie-production-critical-path-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: motion-studio/pnpm-lock.yaml
+      - name: Install Motion Studio dependencies
+        working-directory: motion-studio
+        run: pnpm install --frozen-lockfile
+      - name: Verify cross-project production critical path
+        working-directory: motion-studio
+        run: node scripts/verify-wedding-movie-production-critical-path.mjs
+      - name: Typecheck Motion Studio
+        working-directory: motion-studio
+        run: pnpm exec tsc --noEmit
