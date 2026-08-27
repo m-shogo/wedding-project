@@ -13,20 +13,6 @@ export type OpeningV1PhotoKey =
   | 'hero-01'
   | 'hero-02';
 
-const orderedKeys: OpeningV1PhotoKey[] = [
-  'okinawa-01',
-  'okinawa-02',
-  'okinawa-03',
-  'seoul-01',
-  'seoul-02',
-  'seoul-03',
-  'hawaii-01',
-  'hawaii-02',
-  'hawaii-03',
-  'hero-01',
-  'hero-02',
-];
-
 const aliases: Record<OpeningV1PhotoKey, string[]> = {
   'okinawa-01': ['okinawa-01', 'okinawa01', 'okinawa-1'],
   'okinawa-02': ['okinawa-02', 'okinawa02', 'okinawa-2'],
@@ -53,20 +39,13 @@ export const resolveOpeningV1Photo = (key: OpeningV1PhotoKey): string | null => 
   const aliasSet = aliases[key];
   const semanticMatch = openingPhotos.find((path) => {
     const base = normalizedBasename(path);
-    return aliasSet.some((alias) => base.includes(alias));
+    return aliasSet.includes(base);
   });
 
-  if (semanticMatch) {
-    return semanticMatch;
-  }
-
-  // 11枚ちょうど以上を opening/ に入れた場合だけ、並び順での差し替えも許可する。
-  // 少数のsample画像を誤って本番slotへ割り当てないため、11枚未満ではfallbackしない。
-  if (openingPhotos.length >= orderedKeys.length) {
-    return openingPhotos[orderedKeys.indexOf(key)] ?? null;
-  }
-
-  return null;
+  // Production slots are semantic roles, not array positions. Never assign an unrelated
+  // image merely because opening/ happens to contain 11+ files. Missing semantic matches
+  // stay null so preflight/render gates fail closed instead of silently swapping memories.
+  return semanticMatch ?? null;
 };
 
 export const openingV1PhotoSlots = {
