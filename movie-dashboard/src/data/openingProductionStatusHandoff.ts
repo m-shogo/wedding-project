@@ -12,6 +12,13 @@ export function buildOpeningProductionStatusHandoff() {
         expectedPhotoCount: openingProductionGate.expectedPhotoCount,
         resolvedPhotoCount: openingProductionGate.resolvedPhotoCount,
         photoMissingCount: openingProductionGate.photoMissingCount,
+        photoSlots: openingProductionGate.photoSlots.map((slot) => ({
+          key: slot.key,
+          resolved: slot.resolved,
+          path: slot.path,
+          preferredFileStem: slot.key,
+          intakeDirectory: "motion-studio/public/photos/opening/",
+        })),
         bgm: {...openingProductionGate.bgm},
         ambience: openingProductionGate.ambience.map((item) => ({...item})),
         finalBlocked: openingProductionGate.finalBlocked,
@@ -27,6 +34,7 @@ export function buildOpeningProductionStatusHandoff() {
       "FINAL_RENDER_ELIGIBLE != PRODUCTION_READY",
       "DAVINCI_ACTUAL_VERIFIED != FINAL_DELIVERY_APPROVED",
       "CI_MUST_NOT_PROMOTE_MAC_GUI_ACTUAL",
+      "MEDIA_REQUIREMENT_EXPORTED != MEDIA_RESOLVED",
     ],
   };
 }
