@@ -125,10 +125,35 @@ const mixWarnings = ambienceRows
   .filter((row) => !row.ready)
   .map((row) => `AMBIENCE_NOT_READY:${row.assetId}:${row.status}`);
 
+const canonicalPhotoIntakeActions = [
+  '実写真11枚をcanonical filenameで投入',
+  'pnpm sync:photos',
+  'pnpm opening:assembly-preflight',
+];
 const canonicalBgmIntakeActions = [
   'node --no-warnings scripts/intake-production-bgm.mts --project opening --source "/ABS/PATH/TO/opening-bgm.mp3"',
   'node --no-warnings scripts/intake-production-bgm.mts --project opening --source "/ABS/PATH/TO/opening-bgm.mp3" --apply --receipt out/intake/opening-bgm-intake.json',
   'node --no-warnings scripts/verify-production-bgm-intake-receipt.mts --project opening',
+];
+const bgmNeedsIntake = !bgmRows[0]?.fileExists || !bgmReceiptCurrent;
+const bgmNeedsApproval = !bgmNeedsIntake && !bgmAssetReady;
+const inputRecovery = {
+  photos: {
+    state: photosReady ? 'READY' as const : 'BLOCKED' as const,
+    actions: photosReady ? [] : canonicalPhotoIntakeActions,
+  },
+  bgm: {
+    state: bgmReady ? 'READY' as const : 'BLOCKED' as const,
+    actions: bgmNeedsIntake
+      ? canonicalBgmIntakeActions
+      : bgmNeedsApproval
+        ? ['BGMの会場上映条件/Evidenceを人間確認', 'assets.tsのopening-bgm-mainをcandidate以上へ明示昇格', 'pnpm check:opening-sound:strict']
+        : [],
+  },
+};
+const parallelInputActions = [
+  ...inputRecovery.photos.actions,
+  ...inputRecovery.bgm.actions,
 ];
 
 const report = {
@@ -160,15 +185,12 @@ const report = {
     renderQaState: 'NOT_RUN' as const,
     macDaVinciActualState: 'NOT_RUN' as const,
   },
-  nextActions: !photosReady
-    ? ['実写真11枚をcanonical filenameで投入', 'pnpm sync:photos', 'pnpm opening:assembly-preflight']
-    : !bgmRows[0]?.fileExists || !bgmReceiptCurrent
-      ? canonicalBgmIntakeActions
-      : !bgmAssetReady
-        ? ['BGMの会場上映条件/Evidenceを人間確認', 'assets.tsのopening-bgm-mainをcandidate以上へ明示昇格', 'pnpm check:opening-sound:strict']
-        : !ambienceReady
-          ? ['60秒previewをrenderしてcrop/focus/motionを確認', '必要ならJ-cut現地音4種を投入', 'pnpm opening:assembly-preflight -- --mix-strict']
-          : ['pnpm render:opening-v1:preview', 'crop/focus/color/motion/audio QA', '問題解消後にpnpm render:opening-v1'],
+  inputRecovery,
+  nextActions: parallelInputActions.length > 0
+    ? parallelInputActions
+    : !ambienceReady
+      ? ['60秒previewをrenderしてcrop/focus/motionを確認', '必要ならJ-cut現地音4種を投入', 'pnpm opening:assembly-preflight -- --mix-strict']
+      : ['pnpm render:opening-v1:preview', 'crop/focus/color/motion/audio QA', '問題解消後にpnpm render:opening-v1'],
 };
 
 if (jsonMode) {
@@ -178,6 +200,7 @@ if (jsonMode) {
   console.log(`finalRenderEligible=${finalRenderEligible ? 'YES' : 'NO'} mixReady=${mixReady ? 'YES' : 'NO'} renderQa=NOT_RUN MacDaVinciActual=NOT_RUN`);
   for (const blocker of blockers) console.log(`BLOCK / ${blocker}`);
   for (const warning of mixWarnings) console.log(`WARN  / ${warning}`);
+  console.log(`INPUT / photos=${inputRecovery.photos.state} bgm=${inputRecovery.bgm.state}`);
   console.log(`NEXT / ${report.nextActions.join(' → ')}`);
   console.log('JSON / pnpm opening:assembly-preflight -- --json');
 }
