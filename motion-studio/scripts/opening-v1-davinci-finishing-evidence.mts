@@ -172,6 +172,9 @@ function verifyEvidence(strict: boolean) {
   if (evidence.authority !== 'MAC_DAVINCI_ACTUAL_EVIDENCE') fail('DAVINCI_FINISHING_EVIDENCE_AUTHORITY');
   if (evidence.productionReady !== false) fail('DAVINCI_FINISHING_EVIDENCE_MUST_NOT_SELF_PROMOTE');
 
+  const boundAtMs = Date.parse(evidence.boundAt);
+  if (!evidence.boundAt || Number.isNaN(boundAtMs)) fail('DAVINCI_FINISHING_BOUND_AT_INVALID');
+
   if (bundle && bundleSha256) {
     if (evidence.bundle.path !== rel(bundlePath)) fail('STALE_DAVINCI_FINISHING_BUNDLE_PATH');
     if (evidence.bundle.sha256 !== bundleSha256) fail('STALE_DAVINCI_FINISHING_BUNDLE_SHA');
@@ -213,7 +216,9 @@ function verifyEvidence(strict: boolean) {
   }
   if (evidence.review.overall !== 'PASS') fail(`DAVINCI_OVERALL_${evidence.review.overall}`);
   if (!evidence.review.reviewer?.trim()) fail('DAVINCI_REVIEWER_MISSING');
-  if (!evidence.review.reviewedAt || Number.isNaN(Date.parse(evidence.review.reviewedAt))) fail('DAVINCI_REVIEWED_AT_INVALID');
+  const reviewedAtMs = evidence.review.reviewedAt ? Date.parse(evidence.review.reviewedAt) : Number.NaN;
+  if (!evidence.review.reviewedAt || Number.isNaN(reviewedAtMs)) fail('DAVINCI_REVIEWED_AT_INVALID');
+  else if (!Number.isNaN(boundAtMs) && reviewedAtMs < boundAtMs) fail('DAVINCI_REVIEWED_BEFORE_BINDING');
 
   if (errors.length > 0) {
     console.log(`Opening V1 DaVinci finishing evidence: BLOCKED (${errors.length})`);
