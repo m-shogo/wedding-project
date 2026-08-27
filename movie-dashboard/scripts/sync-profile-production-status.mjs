@@ -17,6 +17,11 @@ if(report.schemaVersion!=="profile-v1-production-status/v1"||report.authority!==
 if(palmier.schemaVersion!=="profile-v1-palmier-handoff/v1"||palmier.authority!=="MOTION_STUDIO_PROFILE_PALMIER_HANDOFF")throw new Error(`Unexpected Profile Palmier handoff contract: ${palmier.schemaVersion}/${palmier.authority}`);
 if(davinci.schemaVersion!=="profile-v1-davinci-handoff/v1"||davinci.authority!=="MOTION_STUDIO_PROFILE_DAVINCI_HANDOFF")throw new Error(`Unexpected Profile DaVinci handoff contract: ${davinci.schemaVersion}/${davinci.authority}`);
 const stageNames=["assembly","finalRender","finalRenderReview","productionBundle","davinciFinishing","finalDeliveryApproval"];
+const stageSnapshot=(stage)=>({
+  state:String(stage?.state??"NOT_RUN"),
+  detail:String(stage?.detail??"No stage detail reported."),
+  ...(stage?.path?{path:String(stage.path)}:{}),
+});
 const blockersFor=(name)=>Array.isArray(report.stages?.[name]?.blockers)?report.stages[name].blockers.map(String):[];
 const previewSourcePrefixes=[
   "REAL_MEDIA_REVIEW:STALE_REAL_MEDIA_PREVIEW",
@@ -87,7 +92,7 @@ const snapshot={
     davinciHandoff:"motion-studio/scripts/profile-v1-davinci-handoff-contract.mts",
   },
   overallState:report.overallState,
-  stages:Object.fromEntries(stageNames.map((name)=>[name,{state:report.stages[name].state}])),
+  stages:Object.fromEntries(stageNames.map((name)=>[name,stageSnapshot(report.stages[name])])),
   readiness:{...report.readiness},
   sourceRevalidation,
   handoff:{

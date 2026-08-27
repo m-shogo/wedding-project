@@ -10,22 +10,33 @@ export const profileProductionStatus = {
   "overallState": "ASSEMBLY_REQUIRED",
   "stages": {
     "assembly": {
-      "state": "BLOCKED"
+      "state": "BLOCKED",
+      "detail": "Generated accent contracts or assembly inputs/Human QA are not all ready."
     },
     "finalRender": {
-      "state": "NOT_RUN"
+      "state": "NOT_RUN",
+      "detail": "Blocked by full production preflight readiness.",
+      "path": "out/profile/profile_v1.mp4"
     },
     "finalRenderReview": {
-      "state": "NOT_RUN"
+      "state": "NOT_RUN",
+      "detail": "Blocked until final render QA passes.",
+      "path": "out/qa/profile-v1-final-render-review.json"
     },
     "productionBundle": {
-      "state": "NOT_RUN"
+      "state": "NOT_RUN",
+      "detail": "Blocked until current Human final-render review passes.",
+      "path": "out/handoff/profile-v1/profile-v1-production-bundle.json"
     },
     "davinciFinishing": {
-      "state": "NOT_RUN"
+      "state": "NOT_RUN",
+      "detail": "Blocked until production bundle is current.",
+      "path": "out/qa/profile-v1-davinci-finishing-evidence.json"
     },
     "finalDeliveryApproval": {
-      "state": "NOT_RUN"
+      "state": "NOT_RUN",
+      "detail": "Blocked until Mac DaVinci Actual is verified.",
+      "path": "out/qa/profile-v1-final-delivery-approval.json"
     }
   },
   "readiness": {

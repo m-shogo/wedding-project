@@ -17,6 +17,11 @@ if(report.handoff?.palmier?.contractVersion!=="opening-v1-palmier-handoff/v2")th
 if(davinci.schemaVersion!=="opening-v1-davinci-handoff/v1"||davinci.authority!=="MOTION_STUDIO_OPENING_DAVINCI_HANDOFF")throw new Error(`Unexpected Opening DaVinci handoff contract: ${davinci.schemaVersion}/${davinci.authority}`);
 
 const stageNames=["media","previewRender","previewSourceBinding","previewReview","finalRender","finalRenderReview","productionBundle","davinciFinishing","finalDeliveryApproval"];
+const stageSnapshot=(stage)=>({
+  state:String(stage?.state??"NOT_RUN"),
+  detail:String(stage?.detail??"No stage detail reported."),
+  ...(stage?.path?{path:String(stage.path)}:{}),
+});
 const sourceStage=report.stages.previewSourceBinding;
 const sourceBlockers=Array.isArray(sourceStage?.blockers)?sourceStage.blockers.map(String):[];
 const finalReviewStage=report.stages.finalRenderReview;
@@ -76,7 +81,7 @@ const snapshot={
     davinciHandoff:"motion-studio/scripts/opening-v1-davinci-handoff-contract.mts",
   },
   overallState:report.overallState,
-  stages:Object.fromEntries(stageNames.map((name)=>[name,{state:report.stages[name].state}])),
+  stages:Object.fromEntries(stageNames.map((name)=>[name,stageSnapshot(report.stages[name])])),
   readiness:{...report.readiness},
   sourceRevalidation,
   handoff:{
