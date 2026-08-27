@@ -19,6 +19,7 @@ FINAL_SYNC_VERIFIED:       NO
 OPENING_MEDIA_SCHEMA_READY:        YES
 OPENING_MEDIA_PREFLIGHT_READY:     YES
 OPENING_REAL_MEDIA_PLUMBING_READY: YES
+OPENING_REAL_MEDIA_FOCUS_READY:    YES
 OPENING_REAL_MEDIA_READY:          NO
 OPENING_VISUAL_POLISH_READY:       PARTIAL
 OPENING_TIMING_FROZEN:             NO
@@ -42,6 +43,14 @@ OPENING_FINAL_RENDER_READY:        NO
   demoのまま)で実証済み。manifest空の状態でのB-clean regressionは、
   raw video frame(SHA-256)が配線前と完全一致することを確認した
   (`2026-08-27-real-media-plumbing-completion.md`参照)。
+- **OPENING_REAL_MEDIA_FOCUS_READY = YES(新設)**: real media manifestの
+  `focusX`/`focusY`/`fit`を、shot固有の`focus`/`fit`指定が無い場合だけの
+  fallbackとして`StartDemoBackdrop`へ配線した(優先順位: shot固有 > real
+  manifest > 既定値、をnullish coalescingで保証)。synthetic manifestでの
+  ロジック直接検証・実render(REAL/DEMO/PLACEHOLDERの3段fallback全て)で
+  実証済み。manifest空でのB-clean regressionも無変更(raw video frame
+  SHA-256一致)。詳細: `2026-08-27-real-media-focus-fit-and-fallback-chain-
+  proof.md`。
 - **OPENING_REAL_MEDIA_READY = NO**: 実素材投入0件(`START_WEDDING_REAL_MEDIA`
   配列は空)。`docs/decisions/2026-08-27-real-media-collection-priority-list.md`
   のP0 role(HERO_WIDE/HERO_CLOSE/SEOUL_STREET/HAWAII_WARM)から着手する。

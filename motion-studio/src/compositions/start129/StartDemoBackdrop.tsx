@@ -19,7 +19,17 @@ const hashHue = (input: string): number => {
  * 既定はresolveDemoAsset(このファイル下部)。呼び出し元(例: StaRt Wedding Edit)
  * が独自のresolver(real → demo → placeholderのfallback chain等)を注入
  * できるようにするための共通契約。sourceTypeは任意(debug表示用、TASK9)。 */
-export type StartDemoAssetResolution = {path?: string; kind: 'photo' | 'video'; sourceType?: 'real' | 'demo' | 'placeholder'};
+export type StartDemoAssetResolution = {
+  path?: string;
+  kind: 'photo' | 'video';
+  sourceType?: 'real' | 'demo' | 'placeholder';
+  /** resolverが解決したasset自身が持つ推奨focus/fit(例: real media manifestの
+   * focusX/focusY/fit)。呼び出し元(shot.focus等)が明示指定していない場合
+   * だけのfallbackとして使う(TASK1、優先順位: shot固有指定 > ここ > 既定値)。 */
+  focusX?: number;
+  focusY?: number;
+  fit?: 'cover' | 'contain' | 'blurred-extend';
+};
 export type StartDemoAssetResolver = (role: Start129AssetRole, variantIndex: number) => StartDemoAssetResolution;
 
 export type StartDemoBackdropProps = {
@@ -86,33 +96,40 @@ const AbstractPlaceholder: React.FC<{role: Start129AssetRole}> = ({role}) => {
 export const StartDemoBackdrop: React.FC<StartDemoBackdropProps> = ({
   role,
   variantIndex = 0,
-  fit = 'cover',
+  fit,
   objectPosition,
   assetResolver,
   showSourceBadge = false,
   children,
 }) => {
   const resolve: StartDemoAssetResolver = assetResolver ?? resolveDemoAsset;
-  const {path, kind, sourceType} = resolve(role, variantIndex);
+  const {path, kind, sourceType, focusX, focusY, fit: resolvedFit} = resolve(role, variantIndex);
+
+  // 優先順位(TASK1): shot固有指定(呼び出し元propとして明示された値) >
+  // resolverが返したasset自身の推奨値(real media manifestのfocusX/focusY/fit等) >
+  // 既定値('cover'、objectPositionは未指定=中央)。
+  // Real Media側の値がstoryboard(shot.focus等)の意図を勝手に上書きしないことを保証する。
+  const effectiveFit = fit ?? resolvedFit ?? 'cover';
+  const effectiveObjectPosition = objectPosition ?? (focusX != null && focusY != null ? `${focusX}% ${focusY}%` : undefined);
 
   const renderMedia = (mediaFit: 'cover' | 'contain', extraStyle?: React.CSSProperties) =>
     kind === 'video' ? (
       <OffthreadVideo
         src={staticFile(path!)}
-        style={{width: '100%', height: '100%', objectFit: mediaFit, objectPosition, ...extraStyle}}
+        style={{width: '100%', height: '100%', objectFit: mediaFit, objectPosition: effectiveObjectPosition, ...extraStyle}}
         muted
       />
     ) : (
       <Img
         src={staticFile(path!)}
-        style={{width: '100%', height: '100%', objectFit: mediaFit, objectPosition, ...extraStyle}}
+        style={{width: '100%', height: '100%', objectFit: mediaFit, objectPosition: effectiveObjectPosition, ...extraStyle}}
       />
     );
 
   return (
     <AbsoluteFill>
       {path ? (
-        fit === 'blurred-extend' ? (
+        effectiveFit === 'blurred-extend' ? (
           <>
             <AbsoluteFill style={{filter: 'blur(40px) brightness(0.55)', transform: 'scale(1.15)'}}>
               {renderMedia('cover')}
@@ -120,7 +137,7 @@ export const StartDemoBackdrop: React.FC<StartDemoBackdropProps> = ({
             <AbsoluteFill>{renderMedia('contain')}</AbsoluteFill>
           </>
         ) : (
-          renderMedia(fit)
+          renderMedia(effectiveFit)
         )
       ) : (
         <AbstractPlaceholder role={role} />

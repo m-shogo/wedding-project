@@ -61,7 +61,15 @@ export const START_WEDDING_REAL_MEDIA: RealMediaAsset[] = [];
 
 const isUsable = (asset: RealMediaAsset): boolean => asset.status === 'approved' || asset.status === 'final';
 
-export type ResolvedWeddingMediaAsset = ResolvedDemoAsset & {source: 'real' | 'demo' | 'placeholder'; assetId: string | null};
+export type ResolvedWeddingMediaAsset = ResolvedDemoAsset & {
+  source: 'real' | 'demo' | 'placeholder';
+  assetId: string | null;
+  /** real解決時のみ、manifest由来のfocus/fit(TASK1、shot.focus等が未指定の
+   * 場合だけのfallbackとしてrenderer側で使う)。demo/placeholder解決時はnull。 */
+  focusX: number | null;
+  focusY: number | null;
+  fit: RealMediaFit | null;
+};
 
 /** role+variantIndexから実際に使う素材を解決する。real → demo → placeholderの
  * fallback chainはStartDemoBackdrop側の既存placeholder fallback(pathが
@@ -70,18 +78,35 @@ export const resolveWeddingMediaAsset = (role: Start129AssetRole, variantIndex: 
   const realCandidates = START_WEDDING_REAL_MEDIA.filter((a) => a.role === role && isUsable(a));
   if (realCandidates.length > 0) {
     const real = realCandidates[variantIndex % realCandidates.length];
-    return {path: `real/start-wedding/${real.file}`, kind: real.kind, source: 'real', assetId: real.assetId};
+    return {
+      path: `real/start-wedding/${real.file}`,
+      kind: real.kind,
+      source: 'real',
+      assetId: real.assetId,
+      focusX: real.focusX,
+      focusY: real.focusY,
+      fit: real.fit,
+    };
   }
   const demo = resolveDemoAsset(role, variantIndex);
-  return {...demo, source: demo.path ? 'demo' : 'placeholder', assetId: null};
+  return {...demo, source: demo.path ? 'demo' : 'placeholder', assetId: null, focusX: null, focusY: null, fit: null};
 };
 
 /** shotEngine.tsx(ShotRenderer/LayoutRender)・StartDemoBackdropへそのまま
  * 注入できる形のresolver(TASK4)。resolveWeddingMediaAsset()の薄いadapterで、
- * ロジックの二重実装はしない(sourceフィールド名だけsourceTypeへ合わせる)。 */
+ * ロジックの二重実装はしない(sourceフィールド名だけsourceTypeへ合わせる)。
+ * focusX/focusY/fitはnullの場合キーごとundefinedへ変換し、StartDemoBackdrop
+ * 側のnullish coalescing fallback(shot.focus優先)がそのまま機能するようにする。 */
 export const weddingAssetResolver: StartDemoAssetResolver = (role, variantIndex) => {
   const resolved = resolveWeddingMediaAsset(role, variantIndex);
-  return {path: resolved.path, kind: resolved.kind, sourceType: resolved.source};
+  return {
+    path: resolved.path,
+    kind: resolved.kind,
+    sourceType: resolved.source,
+    focusX: resolved.focusX ?? undefined,
+    focusY: resolved.focusY ?? undefined,
+    fit: resolved.fit ?? undefined,
+  };
 };
 
 export type RealMediaStatusSummary = {
