@@ -9,6 +9,7 @@ const batchCard = read("src/components/TypographyProjectDeliveryBatchCard.tsx");
 const workspace = read("src/data/motionZukanProductionWorkspace.ts");
 const projectBatch = read("src/data/typographyProjectDeliveryBatch.ts");
 const openingGate = read("src/data/openingProductionGate.generated.ts");
+const openingPhotoPlan = read("src/data/openingV1PhotoProductionPlan.ts");
 
 const errors = [];
 const requireText = (source, token, message) => {
@@ -26,9 +27,13 @@ for (const token of [
   'workspace.musicMarkers',
   'workspace.designSettings',
   'import {openingProductionGate} from "./openingProductionGate.generated"',
+  'openingV1PhotoPlanForSlot',
   'authority: "MOTION_STUDIO_OPENING_V1_MEDIA_GATE"',
   'if (projectId !== "opening") return null',
   'photoMissingCount: openingProductionGate.photoMissingCount',
+  'OPENING_V1_PHOTO_PLAN_MISSING',
+  'placements: plan.placements.map',
+  'qa: {...plan.qa}',
   'bgm: {...openingProductionGate.bgm}',
   'ambience: openingProductionGate.ambience.map',
   'blockingGatePass: !openingProductionGate.finalBlocked',
@@ -81,6 +86,26 @@ for (const token of [
   requireText(openingGate, token, `Opening generated production gate contract missing: ${token}`);
 }
 
+for (const slot of [
+  "okinawa-01", "okinawa-02", "okinawa-03",
+  "seoul-01", "seoul-02", "seoul-03",
+  "hawaii-01", "hawaii-02", "hawaii-03",
+  "hero-01", "hero-02",
+]) {
+  requireText(openingPhotoPlan, `slotKey: "${slot}"`, `Opening photo production plan missing slot: ${slot}`);
+}
+for (const token of [
+  'startSeconds: 0, endSeconds: 2, role: "cold-open"',
+  'startSeconds: 35, endSeconds: 44, role: "hero-a"',
+  'startSeconds: 44, endSeconds: 53, role: "hero-b"',
+  'crop: "NOT_RUN"',
+  'focus: "NOT_RUN"',
+  'color: "NOT_RUN"',
+  'motion: "NOT_RUN"',
+]) {
+  requireText(openingPhotoPlan, token, `Opening photo production plan contract missing: ${token}`);
+}
+
 requireText(projectBatch, 'productionReady: false', "Typography project batch no longer fails closed");
 
 for (const forbidden of [
@@ -96,4 +121,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log("Project Production Handoff Manifest contracts OK: current Typography packages and workspace state are joined with the Motion Studio Opening V1 11-photo/BGM blocking gate plus ambience mix readiness, without claiming Mac Actual or production release.");
+console.log("Project Production Handoff Manifest contracts OK: current Typography packages and workspace state are joined with the Motion Studio Opening V1 11-photo/BGM blocking gate, photo placement/QA plan and ambience mix readiness, without claiming Mac Actual or production release.");
