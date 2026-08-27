@@ -11,6 +11,9 @@ const requireText = (source: string, token: string, message: string) => {
 };
 
 for (const token of [
+  "@remotion/google-fonts/NotoSansJP",
+  "profileJapaneseFontFamily",
+  "ignoreTooManyRequestsWarning: true",
   "profileV1RuntimeMedia",
   "profileV1Chapters",
   "staticFile(slot.staticFilePath)",
@@ -27,6 +30,7 @@ for (const token of [
 }
 
 for (const forbidden of [
+  "fontFamily: 'Arial, Helvetica, sans-serif'",
   'openingPhotos',
   'hero-01',
   'productionReady: true',
@@ -53,4 +57,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log('Profile V1 real-media preview contracts OK: canonical runtime media is rendered when resolved, missing slots stay explicit, image/video handling is extension-aware, and Human/Mac QA remains NOT_RUN.');
+console.log('Profile V1 real-media preview contracts OK: canonical runtime media is rendered when resolved, Japanese glyphs use an explicit Remotion font, missing slots stay explicit, and Human/Mac QA remains NOT_RUN.');
