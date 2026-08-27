@@ -28,7 +28,7 @@ function actionTargetsFor(projectId: "opening" | "profile", stageName: string): 
   }
   if (projectId === "profile" && stageName === "assembly") {
     return [
-      {label: "Profile素材設計を開く", route: "/movie-coach/profile", purpose: "Profile V1の5章・17素材roleと不足素材を確認する"},
+      {label: "Profile 17素材を確認", route: "/profile-media-intake", purpose: "Profile V1の5章・17素材とBGMのcanonical intake状態を確認する"},
       {label: "Profile Plannerを開く", route: "/profile-planner", purpose: "実写真・動画を章構成へ割り当てる"},
     ];
   }
