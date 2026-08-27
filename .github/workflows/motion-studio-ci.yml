@@ -84,6 +84,25 @@ jobs:
           done
           echo "preview review correctly remains NOT_RUN until a human reviews evidence bound to current media"
 
+      - name: Opening V1 final render production bundle fails closed without approved media
+        run: |
+          if pnpm export:opening-v1-production-bundle; then
+            echo "final render handoff unexpectedly exported without media/review/final render"
+            exit 1
+          fi
+          for token in \
+            "opening-v1-production-bundle/v1" \
+            "FINAL_RENDER_BOUND_HANDOFF" \
+            "finalRenderSha256" \
+            "macActualState: 'NOT_RUN'" \
+            "productionReady: false" \
+            "RENDER_SHA_MISMATCH" \
+            "opening-v1-production-bundle.json" \
+            "opening-v1-palmier-timeline.csv"; do
+            grep -q "$token" scripts/export-opening-v1-production-bundle.mts || { echo "missing final handoff contract token: $token"; exit 1; }
+          done
+          echo "final render handoff correctly stays blocked until current media, human preview review and final render all exist"
+
       - name: Opening V1 final BGM gate fails closed without cleared media
         run: |
           if pnpm check:opening-sound:strict; then
