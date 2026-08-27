@@ -9,6 +9,7 @@ import {downloadText} from "../lib/exporters";
 const stageLabel: Record<string, string> = {
   media: "Real media",
   previewRender: "Preview render",
+  previewSourceBinding: "Preview source binding",
   previewReview: "Human preview QA",
   finalRender: "Final render",
   productionBundle: "Production bundle",
@@ -67,8 +68,9 @@ export function OpeningProductionStatusHandoffCard({projectId}: {projectId: Scen
         })}
       </div>
 
-      <div className="mt-2 grid grid-cols-2 gap-1 sm:grid-cols-4 text-[8px] text-navy-500 dark:text-navy-300">
+      <div className="mt-2 grid grid-cols-2 gap-1 sm:grid-cols-5 text-[8px] text-navy-500 dark:text-navy-300">
         <div className="border border-sand-200 dark:border-navy-700 px-2 py-1.5">Final render eligible: {production.readiness.finalRenderEligible ? "YES" : "NO"}</div>
+        <div className="border border-sand-200 dark:border-navy-700 px-2 py-1.5">Preview source: {production.readiness.previewSourceBound ? "CURRENT" : "NOT BOUND"}</div>
         <div className="border border-sand-200 dark:border-navy-700 px-2 py-1.5">Human preview: {production.readiness.humanPreviewApproved ? "PASS" : "NOT PASS"}</div>
         <div className="border border-sand-200 dark:border-navy-700 px-2 py-1.5">Mac DaVinci: {production.readiness.macDaVinciActualVerified ? "VERIFIED" : "NOT_RUN"}</div>
         <div className="border border-sand-200 dark:border-navy-700 px-2 py-1.5">Final approval: {production.readiness.finalDeliveryApproved ? "APPROVED" : "NOT APPROVED"}</div>
@@ -121,7 +123,7 @@ export function OpeningProductionStatusHandoffCard({projectId}: {projectId: Scen
 
       <p className="mt-2 text-[8px] leading-4 text-navy-400">
         このstatusはMEDIA_REQUIRED / NOT_RUNも含めて現在状態とPalmier / DaVinci handoff contractを外へ渡すためのenvelopeです。Statusのexport可否とproduction readinessは分離しています。
-        `STATUS_EXPORTABLE != FINAL_RENDER_ELIGIBLE` / `HANDOFF_METADATA_EXPORTED != HANDOFF_ARTIFACTS_CURRENT` / `DAVINCI_HANDOFF_CURRENT != MAC_DAVINCI_ACTUAL_VERIFIED` / `DAVINCI_ACTUAL_VERIFIED != FINAL_DELIVERY_APPROVED`
+        `STATUS_EXPORTABLE != FINAL_RENDER_ELIGIBLE` / `PREVIEW_SOURCE_FINGERPRINT_STALE =&gt; HUMAN_PREVIEW_REVIEW_NOT_TRUSTED` / `HANDOFF_METADATA_EXPORTED != HANDOFF_ARTIFACTS_CURRENT` / `DAVINCI_HANDOFF_CURRENT != MAC_DAVINCI_ACTUAL_VERIFIED` / `DAVINCI_ACTUAL_VERIFIED != FINAL_DELIVERY_APPROVED`
       </p>
 
       <details className="mt-2">
