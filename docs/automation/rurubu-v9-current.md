@@ -109,7 +109,23 @@ Rollback evidence:
 - 1DAY: `2740:163`
 - Cover: `2741:2`
 
-## Structural QA after editorial-index + photo-rhythm pass
+## 2026-08-27 Back Cover footer editorial pass
+
+A publication-sequence review found that the Back Cover's bottom signature and route still read as two large interface pills after the rest of the page had been editorialized.
+
+- Removed the blue rounded fill from `2601:53 / BACK CLOSE / BG` while preserving the editable couple/date text `2601:54`.
+- Recolored the couple/date text to navy and kept it as the primary footer signature.
+- Removed the yellow rounded fill from `2609:105 / DECOR / BACK / MAP / MOVEABLE` while preserving editable route text `2609:106`.
+- Added a thin blue editorial rule `2744:82` under the couple/date line and a thin yellow route rule `2744:83` under the route line.
+- Visual screenshot QA confirms the footer now reads as a print colophon/route close rather than UI controls, while preserving useful identity and travel-theme information.
+
+Rollback evidence:
+
+- Back Cover: `2744:2`
+
+One first write attempt failed atomically because direct assignment to `TEXT.width` is unsupported in this Plugin API path. No partial canvas change occurred. The corrected method omitted the direct width assignment and completed successfully; this failure fingerprint should not be repeated.
+
+## Structural QA after Back Cover footer pass
 
 PASS across all six current production frames:
 
@@ -128,16 +144,18 @@ PASS across all six current production frames:
 
 The Story test further supports a narrower principle: when a page becomes too empty after removing UI-like helpers, restore hierarchy with editorial text, crop/scale and simple rules before reintroducing badges/cards.
 
-The new Profile/Memory test adds another bounded result: when taxonomy labels are useful but their rounded containment reads as UI, preserve the native label and move the category color into a thin editorial rule rather than deleting the information.
+The Profile/Memory test adds another bounded result: when taxonomy labels are useful but their rounded containment reads as UI, preserve the native label and move the category color into a thin editorial rule rather than deleting the information.
 
-The 1DAY/Cover photo tests also reinforce that repeated equal-size modules should first be solved by role redistribution and controlled scale/orientation differences before adding new decorative assets.
+The 1DAY/Cover photo tests reinforce that repeated equal-size modules should first be solved by role redistribution and controlled scale/orientation differences before adding new decorative assets.
+
+The Back Cover footer test extends the same principle to publication closure: identity/route information may remain, while large rounded containers can be replaced by type + rule when their only role is visual containment.
 
 Do not remove functional labels merely to reduce count. Keep a line, tag, frame, route or container when it visibly improves binding, indexing, scan path or physical/editorial meaning.
 
 ## Next implementation target
 
-1. re-check Back Cover and Story against the newly more asymmetric Cover/1DAY rhythm so the six-page sequence stays varied but coherent;
-2. inspect Memory and Profile at actual size for copy-to-footer spacing after the index-label subtraction;
+1. compare Back Cover and Story against the newly more asymmetric Cover/1DAY rhythm at whole-publication scale and preserve their quieter roles unless a concrete weakness appears;
+2. inspect Memory and Profile actual-size copy-to-footer spacing after the index-label subtraction;
 3. refine remaining dummy-photo crop/role hierarchy only where the composition is visibly weak, preserving replaceable masks and frame-above/photo-below structure;
 4. continue reducing web-UI grammar only where a concrete visual problem remains;
 5. selectively use existing Drive artwork only when it solves a concrete editorial role;
