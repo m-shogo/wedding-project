@@ -78,7 +78,7 @@ for (const token of [
   'NOW / PRODUCTION CRITICAL PATH',
   'current?.detail',
   'current.path',
-  'current.blockerCodes.length',
+  'current?.blockerCodes.length',
   'current.blockerCodes.map',
   'current.inputLanes',
   'lane.detail',
