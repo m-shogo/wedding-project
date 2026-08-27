@@ -41,7 +41,10 @@ export const profileProductionStatus = {
     "realMediaPreview": {
       "state": "NOT_RUN",
       "blockers": [],
-      "recovery": []
+      "recovery": [
+        "pnpm render:profile-v1:real-media-preview",
+        "pnpm profile:real-media-review:init"
+      ]
     },
     "finalRender": {
       "state": "NOT_RUN",
