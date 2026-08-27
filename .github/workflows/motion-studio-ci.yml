@@ -84,6 +84,27 @@ jobs:
           done
           echo "preview review correctly remains NOT_RUN until a human reviews evidence bound to current media"
 
+      - name: Opening V1 final render Human review remains separate and fail-closed
+        run: |
+          node --no-warnings scripts/opening-v1-final-render-review.mts
+          if node --no-warnings scripts/opening-v1-final-render-review.mts --strict; then
+            echo "final render Human review unexpectedly passed without current final MP4 evidence"
+            exit 1
+          fi
+          for token in \
+            "opening-v1-final-render-review/v1" \
+            "HUMAN_FINAL_RENDER_REVIEW" \
+            "STALE_FINAL_RENDER" \
+            "STALE_RENDER_SOURCE_FINGERPRINT" \
+            "REVIEWED_BEFORE_BINDING" \
+            "finalEncodingPlayback: 'NOT_RUN'" \
+            "macDaVinciActual: 'NOT_RUN'" \
+            "productionReady: false"; do
+            grep -q "$token" scripts/opening-v1-final-render-review.mts || { echo "missing final render Human review contract token: $token"; exit 1; }
+          done
+          grep -q "fresh guarded production render" scripts/init-opening-v1-final-render-review.mts
+          echo "final render Human review correctly stays separate from preview review, technical QA and DaVinci Actual"
+
       - name: Opening V1 final render production bundle fails closed without approved media
         run: |
           if pnpm export:opening-v1-production-bundle; then
@@ -93,6 +114,10 @@ jobs:
           for token in \
             "opening-v1-production-bundle/v1" \
             "FINAL_RENDER_BOUND_HANDOFF" \
+            "humanFinalRenderReview" \
+            "opening-v1-final-render-review.mts" \
+            "HUMAN_PREVIEW_REVIEW_PASS != HUMAN_FINAL_RENDER_REVIEW_PASS" \
+            "FINAL_RENDER_OR_RENDER_SOURCE_CHANGED => RE_RENDER_AND_RE_REVIEW" \
             "finalRenderSha256" \
             "macActualState: 'NOT_RUN'" \
             "productionReady: false" \
@@ -101,7 +126,7 @@ jobs:
             "opening-v1-palmier-timeline.csv"; do
             grep -q "$token" scripts/export-opening-v1-production-bundle.mts || { echo "missing final handoff contract token: $token"; exit 1; }
           done
-          echo "final render handoff correctly stays blocked until current media, human preview review and final render all exist"
+          echo "final render handoff correctly stays blocked until current media, preview review, final MP4 Human review and final render all exist"
 
       - name: Opening V1 DaVinci finishing evidence starts NOT_RUN and fails closed
         run: |
