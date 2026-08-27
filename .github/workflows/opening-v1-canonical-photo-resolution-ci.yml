@@ -5,6 +5,7 @@ on:
     paths:
       - "motion-studio/src/data/openingV1Media.ts"
       - "motion-studio/scripts/check-opening-photos.mts"
+      - "motion-studio/scripts/sync-photos.mts"
       - "movie-dashboard/scripts/sync-opening-production-gate.mjs"
       - ".github/workflows/opening-v1-canonical-photo-resolution-ci.yml"
   push:
@@ -12,6 +13,7 @@ on:
     paths:
       - "motion-studio/src/data/openingV1Media.ts"
       - "motion-studio/scripts/check-opening-photos.mts"
+      - "motion-studio/scripts/sync-photos.mts"
       - "movie-dashboard/scripts/sync-opening-production-gate.mjs"
       - ".github/workflows/opening-v1-canonical-photo-resolution-ci.yml"
 
@@ -26,6 +28,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
       - name: Verify Opening photo roles fail closed end-to-end
         run: |
           node <<'NODE'
@@ -35,14 +42,16 @@ jobs:
           const dashboard = fs.readFileSync('movie-dashboard/scripts/sync-opening-production-gate.mjs', 'utf8');
           const errors = [];
 
+          if (!media.includes('openingPhotos.filter')) errors.push('Motion Studio resolver must collect all semantic candidates');
           if (!media.includes('aliasSet.includes(base)')) errors.push('Motion Studio resolver must use exact normalized alias equality');
-          if (!media.includes('return semanticMatch ?? null')) errors.push('Motion Studio missing semantic roles must remain null');
+          if (!media.includes('semanticMatches.length === 1')) errors.push('Motion Studio must require exactly one semantic match');
           if (media.includes('openingPhotos.length >=') || media.includes('orderedKeys.indexOf(key)')) errors.push('Motion Studio array-length/order fallback must not assign production photo roles');
+          if (!checker.includes('ambiguous.length > 0')) errors.push('operator checker must detect ambiguous semantic roles');
           if (!checker.includes('枚数や並び順では自動割当しません')) errors.push('operator checker must explain that order fallback is forbidden');
           if (checker.includes('sorted fallback')) errors.push('operator checker still advertises removed sorted fallback');
 
-          if (!dashboard.includes('aliasSet.includes(base)')) errors.push('Dashboard gate sync must use exact normalized alias equality');
-          if (!dashboard.includes('const resolvedPath = semanticMatch ?? null')) errors.push('Dashboard missing semantic roles must remain null');
+          if (!dashboard.includes('openingPhotos.filter')) errors.push('Dashboard gate sync must collect all semantic candidates');
+          if (!dashboard.includes('semanticMatches.length === 1')) errors.push('Dashboard gate sync must require exactly one semantic match');
           if (dashboard.includes('openingPhotos.length >=') || dashboard.includes('openingPhotos[index]')) errors.push('Dashboard must not recreate array-length/order fallback');
 
           if (errors.length) {
@@ -50,5 +59,26 @@ jobs:
             for (const error of errors) console.error(`- ${error}`);
             process.exit(1);
           }
-          console.log('Opening canonical photo resolution OK end-to-end: Motion Studio and Dashboard both preserve semantic roles and fail closed.');
+          console.log('Opening canonical photo resolution OK end-to-end: missing, unrelated and ambiguous role matches all fail closed.');
           NODE
+
+      - name: One real role can resolve while other slots remain placeholders
+        working-directory: motion-studio
+        run: |
+          mkdir -p public/photos/opening
+          touch public/photos/opening/okinawa-01.jpg
+          node --no-warnings scripts/sync-photos.mts
+          node --no-warnings scripts/check-opening-photos.mts
+          grep -q 'opening/okinawa-01.jpg' src/data/photoLibrary.generated.ts
+          echo "one correctly named Opening photo resolves without requiring all 11 for preview"
+
+      - name: Same-role duplicate extensions fail closed
+        working-directory: motion-studio
+        run: |
+          touch public/photos/opening/okinawa-01.png
+          node --no-warnings scripts/sync-photos.mts
+          if node --no-warnings scripts/check-opening-photos.mts; then
+            echo "Opening photo checker unexpectedly accepted two files for okinawa-01"
+            exit 1
+          fi
+          echo "Opening photo ambiguity correctly fails closed instead of selecting by extension/order"

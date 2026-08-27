@@ -15,7 +15,7 @@ export type OpeningV1PhotoKey =
 
 // Canonical role order is shared with Dashboard handoff generation. It is metadata only:
 // role resolution must never fall back to array position.
-const orderedKeys: OpeningV1PhotoKey[] = [
+export const orderedKeys: OpeningV1PhotoKey[] = [
   'okinawa-01',
   'okinawa-02',
   'okinawa-03',
@@ -29,7 +29,7 @@ const orderedKeys: OpeningV1PhotoKey[] = [
   'hero-02',
 ];
 
-const aliases: Record<OpeningV1PhotoKey, string[]> = {
+export const aliases: Record<OpeningV1PhotoKey, string[]> = {
   'okinawa-01': ['okinawa-01', 'okinawa01', 'okinawa-1'],
   'okinawa-02': ['okinawa-02', 'okinawa02', 'okinawa-2'],
   'okinawa-03': ['okinawa-03', 'okinawa03', 'okinawa-3'],
@@ -45,7 +45,7 @@ const aliases: Record<OpeningV1PhotoKey, string[]> = {
 
 const openingPhotos = photoLibrary.opening ?? [];
 
-const normalizedBasename = (path: string): string => {
+export const normalizedBasename = (path: string): string => {
   const file = path.split('/').pop() ?? path;
   const dot = file.lastIndexOf('.');
   return (dot >= 0 ? file.slice(0, dot) : file).toLowerCase().replaceAll('_', '-');
@@ -53,15 +53,15 @@ const normalizedBasename = (path: string): string => {
 
 export const resolveOpeningV1Photo = (key: OpeningV1PhotoKey): string | null => {
   const aliasSet = aliases[key];
-  const semanticMatch = openingPhotos.find((path) => {
+  const semanticMatches = openingPhotos.filter((path) => {
     const base = normalizedBasename(path);
     return aliasSet.includes(base);
   });
 
-  // Production slots are semantic roles, not array positions. Never assign an unrelated
-  // image merely because opening/ happens to contain 11+ files. Missing semantic matches
-  // stay null so preflight/render gates fail closed instead of silently swapping memories.
-  return semanticMatch ?? null;
+  // Production slots are semantic roles, not array positions. Exactly one semantic match
+  // is required. Missing or ambiguous matches stay null so filename order/extensions can
+  // never silently decide which real memory is used.
+  return semanticMatches.length === 1 ? semanticMatches[0] : null;
 };
 
 export const openingV1PhotoSlots = {
