@@ -26,6 +26,7 @@ export function ProfileProductionStatusHandoffCard({projectId}: {projectId: Scen
   if (projectId !== "profile") return null;
 
   const production = status.profile.production;
+  const generatedAccents = status.profile.generatedAccents;
   const productionReady = production.readiness.productionReady;
 
   return (
@@ -39,7 +40,7 @@ export function ProfileProductionStatusHandoffCard({projectId}: {projectId: Scen
             {production.overallState}
           </p>
           <p className="mt-1 text-[8px] text-navy-400">
-            productionReady={productionReady ? "YES" : "NO"} / Mac DaVinci={production.readiness.macDaVinciActual}
+            productionReady={productionReady ? "YES" : "NO"} / Mac DaVinci={production.readiness.macDaVinciActual} / generated accents={generatedAccents.count}
           </p>
         </div>
         <button
@@ -67,6 +68,22 @@ export function ProfileProductionStatusHandoffCard({projectId}: {projectId: Scen
       </div>
 
       <div className="mt-2 border border-fuchsia-100 dark:border-fuchsia-900 p-2">
+        <p className="text-[8px] font-semibold text-fuchsia-700 dark:text-fuchsia-300">GENERATED ACCENTS / CANONICAL ROUTES</p>
+        <div className="mt-1 grid gap-1 sm:grid-cols-3">
+          {generatedAccents.accents.map((accent) => (
+            <div key={accent.slotId} className="border border-sand-200 dark:border-navy-700 px-2 py-1.5 text-[8px] leading-4 text-navy-500 dark:text-navy-300">
+              <div className="font-semibold">{accent.label}</div>
+              <div>{accent.implementation}</div>
+              <div className="opacity-70">reuse: {accent.canonicalReuse}</div>
+            </div>
+          ))}
+        </div>
+        <p className="mt-1 text-[8px] text-navy-400">
+          visualSmokeOnly={generatedAccents.evidence.visualSmokeOnly ? "YES" : "NO"} / MacDaVinci={generatedAccents.evidence.macDaVinciActual} / productionReady={generatedAccents.evidence.productionReady ? "YES" : "NO"}
+        </p>
+      </div>
+
+      <div className="mt-2 border border-fuchsia-100 dark:border-fuchsia-900 p-2">
         <p className="text-[8px] font-semibold text-fuchsia-700 dark:text-fuchsia-300">NEXT ACTIONS</p>
         <ol className="mt-1 space-y-1 text-[8px] leading-4 text-navy-500 dark:text-navy-300">
           {production.nextActions.map((action, index) => (
@@ -79,7 +96,7 @@ export function ProfileProductionStatusHandoffCard({projectId}: {projectId: Scen
 
       <p className="mt-2 text-[8px] leading-4 text-navy-400">
         このstatusはBLOCKED / NOT_RUNも含めて現在状態を外へ渡すためのenvelopeです。Assembly manifestの可否とは別なので、未完成でも書き出せます。
-        `ASSEMBLY_READY != PRODUCTION_READY` / `MAC_DAVINCI_ACTUAL_VERIFIED != FINAL_DELIVERY_APPROVED` / `NEXT_ACTION_EXPORTED != ACTION_COMPLETED`
+        `ASSEMBLY_READY != PRODUCTION_READY` / `MAC_DAVINCI_ACTUAL_VERIFIED != FINAL_DELIVERY_APPROVED` / `GENERATED_ACCENT_IMPLEMENTED != HUMAN_REAL_MEDIA_QA_PASS`
       </p>
 
       <details className="mt-2">

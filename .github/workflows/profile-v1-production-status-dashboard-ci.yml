@@ -4,9 +4,14 @@ on:
   pull_request:
     paths:
       - "motion-studio/scripts/profile-v1-production-status.mts"
+      - "motion-studio/scripts/profile-v1-generated-accent-manifest.mts"
+      - "motion-studio/src/data/profileV1GeneratedAccentRegistry.ts"
+      - "motion-studio/src/data/profileV1ProductionPlan.ts"
       - "movie-dashboard/scripts/sync-profile-production-status.mjs"
+      - "movie-dashboard/scripts/sync-profile-generated-accents.mjs"
       - "movie-dashboard/scripts/verify-profile-production-status-handoff.mjs"
       - "movie-dashboard/src/data/profileProductionStatus.generated.ts"
+      - "movie-dashboard/src/data/profileGeneratedAccents.generated.ts"
       - "movie-dashboard/src/data/profileProductionStatusHandoff.ts"
       - "movie-dashboard/src/components/ProfileProductionStatusHandoffCard.tsx"
       - "movie-dashboard/src/components/MaskRevealSceneHandoffCard.tsx"
@@ -15,9 +20,14 @@ on:
     branches: [main]
     paths:
       - "motion-studio/scripts/profile-v1-production-status.mts"
+      - "motion-studio/scripts/profile-v1-generated-accent-manifest.mts"
+      - "motion-studio/src/data/profileV1GeneratedAccentRegistry.ts"
+      - "motion-studio/src/data/profileV1ProductionPlan.ts"
       - "movie-dashboard/scripts/sync-profile-production-status.mjs"
+      - "movie-dashboard/scripts/sync-profile-generated-accents.mjs"
       - "movie-dashboard/scripts/verify-profile-production-status-handoff.mjs"
       - "movie-dashboard/src/data/profileProductionStatus.generated.ts"
+      - "movie-dashboard/src/data/profileGeneratedAccents.generated.ts"
       - "movie-dashboard/src/data/profileProductionStatusHandoff.ts"
       - "movie-dashboard/src/components/ProfileProductionStatusHandoffCard.tsx"
       - "movie-dashboard/src/components/MaskRevealSceneHandoffCard.tsx"
@@ -47,6 +57,8 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - name: Generated Profile full production status is current
         run: node scripts/sync-profile-production-status.mjs --check
+      - name: Generated Profile accent implementation routes are current
+        run: node scripts/sync-profile-generated-accents.mjs --check
       - name: Profile production-status export and UI contracts
         run: node scripts/verify-profile-production-status-handoff.mjs
       - name: Typecheck and build Movie Dashboard
