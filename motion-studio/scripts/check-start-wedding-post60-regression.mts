@@ -111,6 +111,40 @@ for (const p of master.phrases) {
 }
 console.log(`60秒以降のword-accent cue plumbing検証: ミスマッチ${cueMismatches}件`);
 
+// P0-4追加: syllable-hit(3-hit)cueもthreeHitCueIds経由でcueId厳密照合する
+// (word-accentだけでなく、P027/P028等60秒以降のthree-hit-build phraseの
+// 3発それぞれについてもcanonical→generatedのplumbingを検証する)。
+let hitCueMismatches = 0;
+for (const p of master.phrases) {
+  if (p.startMs < 60000) continue;
+  const hitCues = p.cues.filter((c) => c.kind === 'syllable-hit').sort((a, b) => a.timeMs - b.timeMs);
+  if (hitCues.length === 0) continue;
+  const generated = generatedModule.weddingEditLyricPhrases.find((gp) => gp.phraseId === p.phraseId) as
+    | {threeHitFrameSecs?: number[] | null; threeHitCueIds?: string[] | null}
+    | undefined;
+  if (!generated?.threeHitCueIds || !generated.threeHitFrameSecs) {
+    hitCueMismatches += hitCues.length;
+    errors.push(`${p.phraseId}: generated.tsにthreeHitCueIds/threeHitFrameSecsが無い(3-hit cueが${hitCues.length}件あるのに)`);
+    continue;
+  }
+  for (const c of hitCues) {
+    const idx = generated.threeHitCueIds.indexOf(c.cueId);
+    if (idx === -1) {
+      hitCueMismatches++;
+      errors.push(`${c.cueId}: generated.tsのthreeHitCueIdsにcueId完全一致するentryが無い(cueId propagation漏れ)`);
+      continue;
+    }
+    const expectedSec = (resolveEffectiveCueTimeMs(c, p, master.audio) - sourceStartMs) / 1000;
+    const generatedSec = generated.threeHitFrameSecs[idx];
+    const deltaMs = Math.abs(generatedSec - expectedSec) * 1000;
+    if (deltaMs > MS_TOLERANCE) {
+      hitCueMismatches++;
+      errors.push(`${c.cueId}: threeHitFrameSecs[${idx}](${generatedSec.toFixed(4)}s)がcanonical期待値(${expectedSec.toFixed(4)}s)と±${MS_TOLERANCE.toFixed(1)}ms超で不一致(delta=${deltaMs.toFixed(1)}ms)`);
+    }
+  }
+}
+console.log(`60秒以降のsyllable-hit cue plumbing検証: ミスマッチ${hitCueMismatches}件`);
+
 if (errors.length > 0) {
   console.error(`\n❌ post60-regression: ${errors.length}件のエラー`);
   errors.forEach((e) => console.error(`  - ${e}`));

@@ -148,6 +148,12 @@ const enrichedPhrases = master.phrases.map((p) => {
     endSec: toEditSec(p.endMs),
     emphasisWord: null as string | null,
     threeHitFrameSecs: hitCues.length > 0 ? hitCues.map((c) => toEditSecForCue(c, p)) : null,
+    // P0-4(2026-08-27、Render Truth再監査): threeHitFrameSecsは基底LyricPhrase
+    // schema(zod tuple)のため型を変更できないが、これだけではcue identity
+    // (どのcueIdがどのindexか)が失われ、post60-regression等でcueId厳密照合が
+    // できない。同じ並び順(timeMs昇順)でthreeHitCueIdsを別fieldとして
+    // 追加し、index対応でcueIdを引けるようにする。
+    threeHitCueIds: hitCues.length > 0 ? hitCues.map((c) => c.cueId) : null,
     rhythmType: p.rhythmType,
     semanticType: p.semanticType,
     selectedAnimation: p.selectedAnimation,
@@ -202,6 +208,9 @@ export type ImportantWord = {
 export type EnrichedLyricPhrase = LyricPhrase & {
   importantWords: ImportantWord[];
   mapStatus: 'MATCHED' | 'FALLBACK_NO_MAP_ENTRY';
+  /** threeHitFrameSecs(基底LyricPhrase由来のnumber tuple)と同じ並び順
+   * (timeMs昇順)のcueId列。post60-regression等でのcueId厳密照合に使う。 */
+  threeHitCueIds: [string, string, string] | null;
 };
 
 export const weddingEditAudioPath: string | null = ${JSON.stringify(audioRelativePath)};

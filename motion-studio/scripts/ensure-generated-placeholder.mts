@@ -52,6 +52,7 @@ export type ImportantWord = {
 export type EnrichedLyricPhrase = LyricPhrase & {
   importantWords: ImportantWord[];
   mapStatus: 'MATCHED' | 'FALLBACK_NO_MAP_ENTRY';
+  threeHitCueIds: [string, string, string] | null;
 };
 
 export const weddingEditAudioPath: string | null = null;
