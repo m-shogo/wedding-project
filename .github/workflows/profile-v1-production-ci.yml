@@ -5,17 +5,27 @@ on:
     paths:
       - "01_profile-movie/**"
       - "motion-studio/src/data/profileV1ProductionPlan.ts"
+      - "motion-studio/src/compositions/profile/**"
+      - "motion-studio/src/ProfileV1Root.tsx"
+      - "motion-studio/src/index-profile-v1.ts"
       - "motion-studio/scripts/profile-v1-assembly-preflight.mts"
       - "motion-studio/scripts/profile-v1-bgm-rights-approval.mts"
       - "motion-studio/scripts/check-profile-v1-production-plan.mts"
+      - "motion-studio/scripts/check-profile-v1-departure-preview.mts"
+      - "motion-studio/scripts/render-profile-v1-departure-qa-stills.mts"
       - ".github/workflows/profile-v1-production-ci.yml"
   push:
     paths:
       - "01_profile-movie/**"
       - "motion-studio/src/data/profileV1ProductionPlan.ts"
+      - "motion-studio/src/compositions/profile/**"
+      - "motion-studio/src/ProfileV1Root.tsx"
+      - "motion-studio/src/index-profile-v1.ts"
       - "motion-studio/scripts/profile-v1-assembly-preflight.mts"
       - "motion-studio/scripts/profile-v1-bgm-rights-approval.mts"
       - "motion-studio/scripts/check-profile-v1-production-plan.mts"
+      - "motion-studio/scripts/check-profile-v1-departure-preview.mts"
+      - "motion-studio/scripts/render-profile-v1-departure-qa-stills.mts"
       - ".github/workflows/profile-v1-production-ci.yml"
 
 permissions:
@@ -24,7 +34,7 @@ permissions:
 jobs:
   validate:
     runs-on: ubuntu-latest
-    timeout-minutes: 8
+    timeout-minutes: 10
     defaults:
       run:
         working-directory: motion-studio
@@ -53,6 +63,9 @@ jobs:
 
       - name: Profile V1 canonical production plan
         run: node --no-warnings scripts/check-profile-v1-production-plan.mts
+
+      - name: Profile V1 departure structure preview contract
+        run: node --no-warnings scripts/check-profile-v1-departure-preview.mts
 
       - name: Profile V1 preflight stays honest on a fresh clone
         run: |
@@ -83,3 +96,14 @@ jobs:
           node --no-warnings scripts/profile-v1-bgm-rights-approval.mts --json > out/qa/profile-v1-bgm-rights-status.json
           node -e "const fs=require('fs'); const r=JSON.parse(fs.readFileSync('out/qa/profile-v1-bgm-rights-status.json','utf8')); if(!r.blockers.includes('STALE_PROFILE_BGM_RIGHTS_APPROVAL_SHA')) process.exit(1); if(r.rightsCleared!==false) process.exit(1);"
           echo "Profile BGM rights init is HOLD-only, strict remains blocked, and changing the BGM invalidates the bound approval SHA"
+
+      - name: Profile V1 departure visual smoke stills
+        run: node --no-warnings scripts/render-profile-v1-departure-qa-stills.mts
+
+      - name: Upload Profile V1 departure visual QA
+        uses: actions/upload-artifact@v4
+        with:
+          name: profile-v1-departure-visual-qa
+          path: motion-studio/out/qa/profile-v1-departure/*.png
+          if-no-files-found: error
+          retention-days: 7
