@@ -31,6 +31,24 @@
       "boardName": "REFERENCE / RURUBU V10 AI ASSIST / NOT PRODUCTION",
       "productionUse": false
     },
+    "readabilityTokens": {
+      "colorVariableCollection": {
+        "id": "VariableCollectionId:2800:2",
+        "name": "RURUBU V10 / READABILITY COLORS",
+        "mode": "Print / sRGB Working"
+      },
+      "textStylePrefix": "RURUBU V10/Readability/",
+      "textStyles": [
+        "Section Title Fallback",
+        "Subhead",
+        "Body",
+        "Body Emphasis",
+        "Caption",
+        "Micro Meta",
+        "Serif Reading Accent"
+      ],
+      "usage": "Use these as readability/support defaults. Do not force expressive hero/editorial titles into the fallback style when a stronger role-specific title treatment is appropriate."
+    },
     "referenceNodes": ["2621:111", "2771:2", "2771:3", "2771:4"]
   },
   "drive": {
