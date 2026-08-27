@@ -69,27 +69,106 @@ export const openingProductionStatus = {
     "productionReady": false
   },
   "sourceRevalidation": {
-    "realMediaPreview": {"state": "NOT_RUN","blockers": [],"recovery": []},
-    "finalRender": {"state": "NOT_RUN","blockers": [],"recovery": []},
-    "guardrails": ["SOURCE_CHANGED => RE_RENDER_REQUIRED","RE_RENDER_REQUIRED => RE_REVIEW_REQUIRED","OLD_HUMAN_REVIEW != CURRENT_RENDER_IMPLEMENTATION","PREVIEW_REVIEW_PASS != FINAL_RENDER_REVIEW_PASS","FINAL_RENDER_OR_SOURCE_CHANGED => FINAL_RENDER_RE_REVIEW_REQUIRED"]
+    "realMediaPreview": {
+      "state": "NOT_RUN",
+      "blockers": [],
+      "recovery": []
+    },
+    "finalRender": {
+      "state": "NOT_RUN",
+      "blockers": [],
+      "recovery": []
+    },
+    "guardrails": [
+      "SOURCE_CHANGED => RE_RENDER_REQUIRED",
+      "RE_RENDER_REQUIRED => RE_REVIEW_REQUIRED",
+      "OLD_HUMAN_REVIEW != CURRENT_RENDER_IMPLEMENTATION",
+      "PREVIEW_REVIEW_PASS != FINAL_RENDER_REVIEW_PASS",
+      "FINAL_RENDER_OR_SOURCE_CHANGED => FINAL_RENDER_RE_REVIEW_REQUIRED"
+    ]
   },
   "handoff": {
     "palmier": {
-      "contractVersion": "opening-v1-palmier-handoff/v2","current": false,
-      "sourceAuthorities": ["src/data/openingV1.ts#openingV1Scenes","src/data/openingV1Sound.ts#openingV1SoundCues","out/qa/opening-v1-final-render-review.json"],
+      "contractVersion": "opening-v1-palmier-handoff/v2",
+      "current": false,
+      "sourceAuthorities": [
+        "src/data/openingV1.ts#openingV1Scenes",
+        "src/data/openingV1Sound.ts#openingV1SoundCues",
+        "out/qa/opening-v1-final-render-review.json"
+      ],
       "artifacts": {
-        "sceneTimeline": {"path": "out/handoff/opening-v1/opening-v1-palmier-timeline.csv","shaBound": true,"carries": ["scene_boundary","replacement_policy","final_render_sha256"]},
-        "soundCues": {"path": "out/handoff/opening-v1/opening-v1-palmier-sound-cues.csv","shaBound": true,"carries": ["bgm","ambience_j_cut","start_end","volume","note","final_render_sha256"]}
+        "sceneTimeline": {
+          "path": "out/handoff/opening-v1/opening-v1-palmier-timeline.csv",
+          "shaBound": true,
+          "carries": [
+            "scene_boundary",
+            "replacement_policy",
+            "final_render_sha256"
+          ]
+        },
+        "soundCues": {
+          "path": "out/handoff/opening-v1/opening-v1-palmier-sound-cues.csv",
+          "shaBound": true,
+          "carries": [
+            "bgm",
+            "ambience_j_cut",
+            "start_end",
+            "volume",
+            "note",
+            "final_render_sha256"
+          ]
+        }
       }
     },
     "davinci": {
-      "contractVersion": "opening-v1-davinci-handoff/v1","current": false,
-      "sourceAuthorities": ["scripts/export-opening-v1-production-bundle.mts#bundle.davinci","scripts/opening-v1-davinci-finishing-evidence.mts","out/qa/opening-v1-final-render-review.json"],
-      "upstreamPalmier": {"requiredContractVersion": "opening-v1-palmier-handoff/v2","timelinePath": "out/handoff/opening-v1/opening-v1-palmier-timeline.csv","soundCuePath": "out/handoff/opening-v1/opening-v1-palmier-sound-cues.csv"},
-      "handoffAsset": {"path": "out/opening/opening_v1.mp4","expectedSha256": null,"shaBound": true,"intendedUse": "FINISHING_AND_OUTPUT_QA"},
-      "actualEvidence": {"path": "out/qa/opening-v1-davinci-finishing-evidence.json","schemaVersion": "opening-v1-davinci-finishing-evidence/v1","authority": "MAC_DAVINCI_ACTUAL_EVIDENCE","commands": {"init": "pnpm opening:davinci-finishing:init","status": "pnpm opening:davinci-finishing","strict": "pnpm opening:davinci-finishing:strict"},"requiredChecks": ["source_render_sha_readback","resolve_version_project_timeline","timeline_insertion","duration_and_fps","color_finish","audio_finish","title_safe_and_framing","playback_1x","playback_half_speed","export_duration_dimensions_fps_audio","watched_with_sound","human_overall_review"]},
+      "contractVersion": "opening-v1-davinci-handoff/v1",
+      "current": false,
+      "sourceAuthorities": [
+        "scripts/export-opening-v1-production-bundle.mts#bundle.davinci",
+        "scripts/opening-v1-davinci-finishing-evidence.mts",
+        "out/qa/opening-v1-final-render-review.json"
+      ],
+      "upstreamPalmier": {
+        "requiredContractVersion": "opening-v1-palmier-handoff/v2",
+        "timelinePath": "out/handoff/opening-v1/opening-v1-palmier-timeline.csv",
+        "soundCuePath": "out/handoff/opening-v1/opening-v1-palmier-sound-cues.csv"
+      },
+      "handoffAsset": {
+        "path": "out/opening/opening_v1.mp4",
+        "expectedSha256": null,
+        "shaBound": true,
+        "intendedUse": "FINISHING_AND_OUTPUT_QA"
+      },
+      "actualEvidence": {
+        "path": "out/qa/opening-v1-davinci-finishing-evidence.json",
+        "schemaVersion": "opening-v1-davinci-finishing-evidence/v1",
+        "authority": "MAC_DAVINCI_ACTUAL_EVIDENCE",
+        "commands": {
+          "init": "pnpm opening:davinci-finishing:init",
+          "status": "pnpm opening:davinci-finishing",
+          "strict": "pnpm opening:davinci-finishing:strict"
+        },
+        "requiredChecks": [
+          "source_render_sha_readback",
+          "resolve_version_project_timeline",
+          "timeline_insertion",
+          "duration_and_fps",
+          "color_finish",
+          "audio_finish",
+          "title_safe_and_framing",
+          "playback_1x",
+          "playback_half_speed",
+          "export_duration_dimensions_fps_audio",
+          "watched_with_sound",
+          "human_overall_review"
+        ]
+      },
       "productionReady": false
     }
   },
-  "nextActions": ["実写真11枚をcanonical filenameで投入","pnpm sync:photos","pnpm opening:assembly-preflight"]
+  "nextActions": [
+    "実写真11枚をcanonical filenameで投入",
+    "pnpm sync:photos",
+    "pnpm opening:assembly-preflight"
+  ]
 } as const;
