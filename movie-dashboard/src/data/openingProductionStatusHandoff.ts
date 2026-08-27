@@ -27,6 +27,7 @@ export function buildOpeningProductionStatusHandoff() {
         overallState: openingProductionStatus.overallState,
         stages: openingProductionStatus.stages,
         readiness: openingProductionStatus.readiness,
+        palmierHandoff: openingProductionStatus.handoff.palmier,
         nextActions: [...openingProductionStatus.nextActions],
       },
     },
@@ -36,6 +37,7 @@ export function buildOpeningProductionStatusHandoff() {
       "DAVINCI_ACTUAL_VERIFIED != FINAL_DELIVERY_APPROVED",
       "CI_MUST_NOT_PROMOTE_MAC_GUI_ACTUAL",
       "MEDIA_REQUIREMENT_EXPORTED != MEDIA_RESOLVED",
+      "HANDOFF_METADATA_EXPORTED != HANDOFF_ARTIFACTS_CURRENT",
       "NEXT_ACTION_EXPORTED != ACTION_COMPLETED",
     ],
   };
