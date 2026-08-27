@@ -22,11 +22,18 @@ const ROLES = [
 ];
 
 const IGNORE_NAME = /TRIM|BLEED|SAFE|GUIDE/i;
+const NONPRODUCTION_IMAGE_NAME = /PENDING(?: PIXEL)? TRANSPORT|FAILED RENDER|REJECTED FINAL GRAPHIC|REFERENCE|DUMMY/i;
+const REFERENCE_OR_DUMMY_NAME = /REFERENCE|DUMMY/i;
 const round3 = n => Math.round(n * 1000) / 1000;
 
-function hasVisibleImageFill(node) {
+function hasRawVisibleImageFill(node) {
   if (!('fills' in node) || !Array.isArray(node.fills)) return false;
   return node.fills.some(p => p && p.type === 'IMAGE' && p.visible !== false);
+}
+
+function hasMeaningfulVisibleImageFill(node) {
+  if (NONPRODUCTION_IMAGE_NAME.test(node.name || '')) return false;
+  return hasRawVisibleImageFill(node);
 }
 
 function collectMeaningfulShapes(root) {
@@ -105,7 +112,10 @@ for (let index = 0; index < FRAME_IDS.length; index++) {
   const shapes = collectMeaningfulShapes(root);
   const descendants = root.findAll(n => 'visible' in n && n.visible !== false);
   const texts = descendants.filter(n => n.type === 'TEXT');
-  const imageNodes = descendants.filter(hasVisibleImageFill);
+  const rawImageNodes = descendants.filter(hasRawVisibleImageFill);
+  const imageNodes = descendants.filter(hasMeaningfulVisibleImageFill);
+  const ignoredNonproductionImageNodes = rawImageNodes.filter(n => NONPRODUCTION_IMAGE_NAME.test(n.name || ''));
+  const referenceOrDummyImageNodes = rawImageNodes.filter(n => REFERENCE_OR_DUMMY_NAME.test(n.name || ''));
 
   const rotatedShapeCount = shapes.filter(s => Math.abs(s.rotation) >= 0.5).length;
   const edgeShapeCount = shapes.filter(s =>
@@ -128,8 +138,9 @@ for (let index = 0; index < FRAME_IDS.length; index++) {
     : (sortedAreas.length ? 99 : 0);
 
   // Canonical docs define PRODUCTION_CANDIDATE as having meaningful copy/editorial
-  // structure AND rendered visual content. One native text node alone must not promote
-  // a transport/mask skeleton into scored production mode.
+  // structure AND rendered production visual content. An IMAGE paint is not enough
+  // when its semantic node is explicitly pending, rejected, failed, reference-only,
+  // or dummy/layout-only.
   const hasMeaningfulText = texts.length >= 2;
   const hasMeaningfulImage = imageNodes.length >= 1;
   const productionCandidate = hasMeaningfulText && hasMeaningfulImage;
@@ -150,6 +161,13 @@ for (let index = 0; index < FRAME_IDS.length; index++) {
     } else {
       warnings.push('PREPROD_SKELETON_INSUFFICIENT_EDITORIAL_TEXT');
     }
+  }
+  if (ignoredNonproductionImageNodes.length > 0) {
+    warnings.push('IGNORED_NONPRODUCTION_IMAGE_FILL');
+  }
+  if (referenceOrDummyImageNodes.length > 0) {
+    if (productionCandidate) fatal.push('REFERENCE_OR_DUMMY_AS_PRODUCTION');
+    else warnings.push('REFERENCE_OR_DUMMY_VISIBLE_IN_SKELETON');
   }
   if (equalModuleGrid) fatal.push('EQUAL_MODULE_GRID');
   if (uniformCornerRadius) fatal.push('UNIFORM_CORNER_RADIUS');
@@ -174,6 +192,10 @@ for (let index = 0; index < FRAME_IDS.length; index++) {
     shapeCount: shapes.length,
     textCount: texts.length,
     imageFillCount: imageNodes.length,
+    rawImageFillCount: rawImageNodes.length,
+    ignoredNonproductionImageFillCount: ignoredNonproductionImageNodes.length,
+    ignoredNonproductionImageNodes: ignoredNonproductionImageNodes.map(n => ({id: n.id, name: n.name})),
+    referenceOrDummyImageCount: referenceOrDummyImageNodes.length,
     repeatedSizeMax,
     repeatedRadiusMax,
     dominance: round3(dominance),
