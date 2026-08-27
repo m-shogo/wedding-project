@@ -13,6 +13,8 @@ export const openingProductionStatus = {
     "media": {
       "state": "BLOCKED",
       "detail": "Real photos and/or cleared BGM are still missing.",
+      "dependsOn": [],
+      "actionableNow": true,
       "recovery": [
         "実写真11枚をcanonical filenameで投入",
         "pnpm sync:photos",
@@ -23,70 +25,65 @@ export const openingProductionStatus = {
       "state": "NOT_RUN",
       "detail": "Blocked upstream by real-media gate.",
       "path": "out/preview/opening_v1_preview.mp4",
-      "recovery": [
-        "pnpm render:opening-v1:preview"
-      ]
+      "dependsOn": ["media"],
+      "actionableNow": false,
+      "recovery": ["pnpm render:opening-v1:preview"]
     },
     "previewSourceBinding": {
       "state": "NOT_RUN",
       "detail": "Blocked upstream until the preview MP4 exists.",
       "path": "out/qa/opening-v1-preview-source-fingerprint.json",
-      "recovery": [
-        "pnpm opening:preview-review:init",
-        "pnpm opening:preview-review:strict"
-      ]
+      "dependsOn": ["previewRender"],
+      "actionableNow": false,
+      "recovery": ["pnpm opening:preview-review:init","pnpm opening:preview-review:strict"]
     },
     "previewReview": {
       "state": "NOT_RUN",
       "detail": "Blocked upstream until the preview render-source binding is current.",
       "path": "out/qa/opening-v1-preview-review.json",
-      "recovery": [
-        "pnpm opening:preview-review:init",
-        "pnpm opening:preview-review:strict"
-      ]
+      "dependsOn": ["previewSourceBinding"],
+      "actionableNow": false,
+      "recovery": ["pnpm opening:preview-review:init","pnpm opening:preview-review:strict"]
     },
     "finalRender": {
       "state": "NOT_RUN",
       "detail": "Blocked upstream until current human preview review passes.",
       "path": "out/opening/opening_v1.mp4",
-      "recovery": [
-        "pnpm render:opening-v1"
-      ]
+      "dependsOn": ["previewReview"],
+      "actionableNow": false,
+      "recovery": ["pnpm render:opening-v1"]
     },
     "finalRenderReview": {
       "state": "NOT_RUN",
       "detail": "Blocked upstream until final render technical QA passes.",
       "path": "out/qa/opening-v1-final-render-review.json",
-      "recovery": [
-        "pnpm opening:final-render-review:init",
-        "pnpm opening:final-render-review:strict"
-      ]
+      "dependsOn": ["finalRender"],
+      "actionableNow": false,
+      "recovery": ["pnpm opening:final-render-review:init","pnpm opening:final-render-review:strict"]
     },
     "productionBundle": {
       "state": "NOT_RUN",
       "detail": "Blocked until current Human final-render review passes.",
       "path": "out/handoff/opening-v1/opening-v1-production-bundle.json",
-      "recovery": [
-        "pnpm opening:production-bundle:finalize"
-      ]
+      "dependsOn": ["finalRenderReview"],
+      "actionableNow": false,
+      "recovery": ["pnpm opening:production-bundle:finalize"]
     },
     "davinciFinishing": {
       "state": "NOT_RUN",
       "detail": "Blocked upstream until the production bundle is current.",
       "path": "out/qa/opening-v1-davinci-finishing-evidence.json",
-      "recovery": [
-        "pnpm opening:davinci-finishing:init",
-        "pnpm opening:davinci-finishing:strict"
-      ]
+      "dependsOn": ["productionBundle"],
+      "actionableNow": false,
+      "recovery": ["pnpm opening:davinci-finishing:init","pnpm opening:davinci-finishing:strict"]
     },
     "finalDeliveryApproval": {
       "state": "NOT_RUN",
       "detail": "Blocked upstream until current Mac DaVinci Actual is verified.",
       "path": "out/qa/opening-v1-final-delivery-approval.json",
-      "recovery": [
-        "pnpm opening:final-delivery-approval:init",
-        "pnpm opening:final-delivery-approval:strict"
-      ]
+      "dependsOn": ["davinciFinishing"],
+      "actionableNow": false,
+      "recovery": ["pnpm opening:final-delivery-approval:init","pnpm opening:final-delivery-approval:strict"]
     }
   },
   "readiness": {
@@ -103,106 +100,29 @@ export const openingProductionStatus = {
     "productionReady": false
   },
   "sourceRevalidation": {
-    "realMediaPreview": {
-      "state": "NOT_RUN",
-      "blockers": [],
-      "recovery": []
-    },
-    "finalRender": {
-      "state": "NOT_RUN",
-      "blockers": [],
-      "recovery": []
-    },
-    "guardrails": [
-      "SOURCE_CHANGED => RE_RENDER_REQUIRED",
-      "RE_RENDER_REQUIRED => RE_REVIEW_REQUIRED",
-      "OLD_HUMAN_REVIEW != CURRENT_RENDER_IMPLEMENTATION",
-      "PREVIEW_REVIEW_PASS != FINAL_RENDER_REVIEW_PASS",
-      "FINAL_RENDER_OR_SOURCE_CHANGED => FINAL_RENDER_RE_REVIEW_REQUIRED"
-    ]
+    "realMediaPreview": {"state": "NOT_RUN","blockers": [],"recovery": []},
+    "finalRender": {"state": "NOT_RUN","blockers": [],"recovery": []},
+    "guardrails": ["SOURCE_CHANGED => RE_RENDER_REQUIRED","RE_RENDER_REQUIRED => RE_REVIEW_REQUIRED","OLD_HUMAN_REVIEW != CURRENT_RENDER_IMPLEMENTATION","PREVIEW_REVIEW_PASS != FINAL_RENDER_REVIEW_PASS","FINAL_RENDER_OR_SOURCE_CHANGED => FINAL_RENDER_RE_REVIEW_REQUIRED"]
   },
   "handoff": {
     "palmier": {
       "contractVersion": "opening-v1-palmier-handoff/v2",
       "current": false,
-      "sourceAuthorities": [
-        "src/data/openingV1.ts#openingV1Scenes",
-        "src/data/openingV1Sound.ts#openingV1SoundCues",
-        "out/qa/opening-v1-final-render-review.json"
-      ],
+      "sourceAuthorities": ["src/data/openingV1.ts#openingV1Scenes","src/data/openingV1Sound.ts#openingV1SoundCues","out/qa/opening-v1-final-render-review.json"],
       "artifacts": {
-        "sceneTimeline": {
-          "path": "out/handoff/opening-v1/opening-v1-palmier-timeline.csv",
-          "shaBound": true,
-          "carries": [
-            "scene_boundary",
-            "replacement_policy",
-            "final_render_sha256"
-          ]
-        },
-        "soundCues": {
-          "path": "out/handoff/opening-v1/opening-v1-palmier-sound-cues.csv",
-          "shaBound": true,
-          "carries": [
-            "bgm",
-            "ambience_j_cut",
-            "start_end",
-            "volume",
-            "note",
-            "final_render_sha256"
-          ]
-        }
+        "sceneTimeline": {"path": "out/handoff/opening-v1/opening-v1-palmier-timeline.csv","shaBound": true,"carries": ["scene_boundary","replacement_policy","final_render_sha256"]},
+        "soundCues": {"path": "out/handoff/opening-v1/opening-v1-palmier-sound-cues.csv","shaBound": true,"carries": ["bgm","ambience_j_cut","start_end","volume","note","final_render_sha256"]}
       }
     },
     "davinci": {
       "contractVersion": "opening-v1-davinci-handoff/v1",
       "current": false,
-      "sourceAuthorities": [
-        "scripts/export-opening-v1-production-bundle.mts#bundle.davinci",
-        "scripts/opening-v1-davinci-finishing-evidence.mts",
-        "out/qa/opening-v1-final-render-review.json"
-      ],
-      "upstreamPalmier": {
-        "requiredContractVersion": "opening-v1-palmier-handoff/v2",
-        "timelinePath": "out/handoff/opening-v1/opening-v1-palmier-timeline.csv",
-        "soundCuePath": "out/handoff/opening-v1/opening-v1-palmier-sound-cues.csv"
-      },
-      "handoffAsset": {
-        "path": "out/opening/opening_v1.mp4",
-        "expectedSha256": null,
-        "shaBound": true,
-        "intendedUse": "FINISHING_AND_OUTPUT_QA"
-      },
-      "actualEvidence": {
-        "path": "out/qa/opening-v1-davinci-finishing-evidence.json",
-        "schemaVersion": "opening-v1-davinci-finishing-evidence/v1",
-        "authority": "MAC_DAVINCI_ACTUAL_EVIDENCE",
-        "commands": {
-          "init": "pnpm opening:davinci-finishing:init",
-          "status": "pnpm opening:davinci-finishing",
-          "strict": "pnpm opening:davinci-finishing:strict"
-        },
-        "requiredChecks": [
-          "source_render_sha_readback",
-          "resolve_version_project_timeline",
-          "timeline_insertion",
-          "duration_and_fps",
-          "color_finish",
-          "audio_finish",
-          "title_safe_and_framing",
-          "playback_1x",
-          "playback_half_speed",
-          "export_duration_dimensions_fps_audio",
-          "watched_with_sound",
-          "human_overall_review"
-        ]
-      },
+      "sourceAuthorities": ["scripts/export-opening-v1-production-bundle.mts#bundle.davinci","scripts/opening-v1-davinci-finishing-evidence.mts","out/qa/opening-v1-final-render-review.json"],
+      "upstreamPalmier": {"requiredContractVersion": "opening-v1-palmier-handoff/v2","timelinePath": "out/handoff/opening-v1/opening-v1-palmier-timeline.csv","soundCuePath": "out/handoff/opening-v1/opening-v1-palmier-sound-cues.csv"},
+      "handoffAsset": {"path": "out/opening/opening_v1.mp4","expectedSha256": null,"shaBound": true,"intendedUse": "FINISHING_AND_OUTPUT_QA"},
+      "actualEvidence": {"path": "out/qa/opening-v1-davinci-finishing-evidence.json","schemaVersion": "opening-v1-davinci-finishing-evidence/v1","authority": "MAC_DAVINCI_ACTUAL_EVIDENCE","commands": {"init": "pnpm opening:davinci-finishing:init","status": "pnpm opening:davinci-finishing","strict": "pnpm opening:davinci-finishing:strict"},"requiredChecks": ["source_render_sha_readback","resolve_version_project_timeline","timeline_insertion","duration_and_fps","color_finish","audio_finish","title_safe_and_framing","playback_1x","playback_half_speed","export_duration_dimensions_fps_audio","watched_with_sound","human_overall_review"]},
       "productionReady": false
     }
   },
-  "nextActions": [
-    "実写真11枚をcanonical filenameで投入",
-    "pnpm sync:photos",
-    "pnpm opening:assembly-preflight"
-  ]
+  "nextActions": ["実写真11枚をcanonical filenameで投入","pnpm sync:photos","pnpm opening:assembly-preflight"]
 } as const;
