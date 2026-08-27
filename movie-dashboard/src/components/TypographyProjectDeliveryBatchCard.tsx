@@ -61,6 +61,7 @@ export function TypographyProjectDeliveryBatchCard({projectId}: {projectId: Scen
   const routeReady = batch.summary.batchReadyForPalmierDaVinciHandoff;
   const assemblyReady = manifest.handoff.readyForPalmierDaVinciAssembly;
   const openingMedia = manifest.productionWorkspace.openingV1Media;
+  const profileMedia = manifest.productionWorkspace.profileV1Media;
 
   return (
     <section className="mt-3 border border-emerald-200 dark:border-emerald-800 p-3">
@@ -103,15 +104,9 @@ export function TypographyProjectDeliveryBatchCard({projectId}: {projectId: Scen
             </span>
           </div>
           <div className="mt-1 grid grid-cols-1 gap-1 sm:grid-cols-3 text-[8px]">
-            <div className="border border-sand-200 dark:border-navy-700 px-2 py-1.5">
-              写真 {openingMedia.resolvedPhotoCount}/{openingMedia.expectedPhotoCount}
-            </div>
-            <div className="border border-sand-200 dark:border-navy-700 px-2 py-1.5">
-              BGM {openingMedia.bgm.playable ? "PLAYABLE" : `BLOCKED / ${openingMedia.bgm.status}`}
-            </div>
-            <div className="border border-sand-200 dark:border-navy-700 px-2 py-1.5">
-              現地音 {openingMedia.ambiencePlayableCount}/{openingMedia.ambienceExpectedCount} {openingMedia.ambienceReadyForMix ? "MIX READY" : "MIX NOT READY"}
-            </div>
+            <div className="border border-sand-200 dark:border-navy-700 px-2 py-1.5">写真 {openingMedia.resolvedPhotoCount}/{openingMedia.expectedPhotoCount}</div>
+            <div className="border border-sand-200 dark:border-navy-700 px-2 py-1.5">BGM {openingMedia.bgm.playable ? "PLAYABLE" : `BLOCKED / ${openingMedia.bgm.status}`}</div>
+            <div className="border border-sand-200 dark:border-navy-700 px-2 py-1.5">現地音 {openingMedia.ambiencePlayableCount}/{openingMedia.ambienceExpectedCount} {openingMedia.ambienceReadyForMix ? "MIX READY" : "MIX NOT READY"}</div>
           </div>
           <div className="mt-2 grid grid-cols-2 gap-1 sm:grid-cols-4">
             {openingMedia.photoSlots.map((slot) => (
@@ -126,6 +121,41 @@ export function TypographyProjectDeliveryBatchCard({projectId}: {projectId: Scen
             <p className="mt-2 text-[8px] leading-4 text-amber-800 dark:text-amber-200">写真/BGM blocking gateは通過。現地音4種はfinal blockではなくmix readinessとして残っています。</p>
           ) : (
             <p className="mt-2 text-[8px] leading-4 text-emerald-800 dark:text-emerald-200">11写真・BGM・現地音がMotion Studio正本で揃っています。crop / motion / color / audio QAへ進めます。</p>
+          )}
+        </div>
+      ) : null}
+
+      {profileMedia ? (
+        <div className="mt-2 border border-fuchsia-200 dark:border-fuchsia-800 p-2">
+          <div className="flex flex-wrap items-center justify-between gap-2 text-[8px]">
+            <span className="font-semibold text-fuchsia-800 dark:text-fuchsia-200">PROFILE V1 / MOTION STUDIO MEDIA GATE</span>
+            <span className={profileMedia.blockingGatePass ? "text-emerald-700 dark:text-emerald-300" : "text-amber-700 dark:text-amber-300"}>
+              {profileMedia.blockingGatePass ? "BLOCKING GATE PASS" : "BLOCKING GATE BLOCKED"}
+            </span>
+          </div>
+          <div className="mt-1 grid grid-cols-1 gap-1 sm:grid-cols-3 text-[8px]">
+            <div className="border border-sand-200 dark:border-navy-700 px-2 py-1.5">実素材 {profileMedia.resolvedMediaCount}/{profileMedia.expectedMediaCount}</div>
+            <div className="border border-sand-200 dark:border-navy-700 px-2 py-1.5">BGM {profileMedia.bgm.ready ? "READY" : `BLOCKED / ${profileMedia.bgm.rightsState}`}</div>
+            <div className="border border-sand-200 dark:border-navy-700 px-2 py-1.5">QA preview={profileMedia.qa.preview} / Mac={profileMedia.qa.macDaVinciActual}</div>
+          </div>
+          <div className="mt-2 grid grid-cols-1 gap-1 sm:grid-cols-5">
+            {profileMedia.chapters.map((chapter) => (
+              <div key={chapter.chapterId} className={`border px-2 py-1 text-[7px] ${chapter.ready ? "border-emerald-200 text-emerald-700 dark:border-emerald-800 dark:text-emerald-300" : "border-amber-200 text-amber-700 dark:border-amber-800 dark:text-amber-300"}`}>
+                {chapter.order}. {chapter.title} {chapter.readyCount}/{chapter.requiredCount}
+              </div>
+            ))}
+          </div>
+          <div className="mt-2 grid grid-cols-2 gap-1 sm:grid-cols-4">
+            {profileMedia.mediaSlots.map((slot) => (
+              <div key={slot.id} className={`border px-2 py-1 text-[7px] ${slot.ready ? "border-emerald-200 text-emerald-700 dark:border-emerald-800 dark:text-emerald-300" : "border-amber-200 text-amber-700 dark:border-amber-800 dark:text-amber-300"}`}>
+                {slot.ready ? "PASS" : "MISSING"} / {slot.label}
+              </div>
+            ))}
+          </div>
+          {!profileMedia.blockingGatePass ? (
+            <p className="mt-2 text-[8px] leading-4 text-amber-800 dark:text-amber-200">次: {profileMedia.nextActions.join(" → ")}</p>
+          ) : (
+            <p className="mt-2 text-[8px] leading-4 text-emerald-800 dark:text-emerald-200">5章17実素材roleとBGM gateが揃っています。preview / Human content / audio QAへ進めます。</p>
           )}
         </div>
       ) : null}
@@ -155,7 +185,7 @@ export function TypographyProjectDeliveryBatchCard({projectId}: {projectId: Scen
         </p>
       ) : !assemblyReady ? (
         <p className="mt-2 border border-amber-200 dark:border-amber-800 p-2 text-[8px] leading-4 text-amber-800 dark:text-amber-200">
-          Typography routeは揃っていますが、実制作handoffは停止中です。Production Workspace final checksに加えて、OpeningではMotion Studio正本の11写真/BGM blocking gateも解消してください。現地音はmix readinessとして別表示されます。
+          Typography routeは揃っていますが、実制作handoffは停止中です。Workspace final checksに加え、Openingは11写真/BGM、Profileは5章17実素材role/BGM権利のMotion Studio gateを解消してください。
         </p>
       ) : (
         <p className="mt-2 border border-emerald-200 dark:border-emerald-800 p-2 text-[8px] leading-4 text-emerald-800 dark:text-emerald-200">
