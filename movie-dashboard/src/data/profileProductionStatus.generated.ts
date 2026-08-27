@@ -13,8 +13,13 @@ export const profileProductionStatus = {
       "state": "BLOCKED",
       "detail": "Generated accent contracts or assembly inputs/Human QA are not all ready.",
       "recovery": [
-        "Profile実素材を public/profile/ へcanonical stem名で投入",
-        "pnpm prepare:profile-v1"
+        "node --no-warnings scripts/intake-production-media.mts --project profile --source \"/ABS/PATH/TO/profile-media\"",
+        "node --no-warnings scripts/intake-production-media.mts --project profile --source \"/ABS/PATH/TO/profile-media\" --apply --overwrite --receipt out/intake/profile-media-intake.json",
+        "node --no-warnings scripts/verify-production-media-intake-receipt.mts --project profile",
+        "pnpm prepare:profile-v1",
+        "node --no-warnings scripts/intake-production-bgm.mts --project profile --source \"/ABS/PATH/TO/profile-bgm.mp3\"",
+        "node --no-warnings scripts/intake-production-bgm.mts --project profile --source \"/ABS/PATH/TO/profile-bgm.mp3\" --apply --receipt out/intake/profile-bgm-intake.json",
+        "node --no-warnings scripts/verify-production-bgm-intake-receipt.mts --project profile"
       ]
     },
     "finalRender": {
@@ -179,7 +184,12 @@ export const profileProductionStatus = {
     }
   },
   "nextActions": [
-    "Profile実素材を public/profile/ へcanonical stem名で投入",
-    "pnpm prepare:profile-v1"
+    "node --no-warnings scripts/intake-production-media.mts --project profile --source \"/ABS/PATH/TO/profile-media\"",
+    "node --no-warnings scripts/intake-production-media.mts --project profile --source \"/ABS/PATH/TO/profile-media\" --apply --overwrite --receipt out/intake/profile-media-intake.json",
+    "node --no-warnings scripts/verify-production-media-intake-receipt.mts --project profile",
+    "pnpm prepare:profile-v1",
+    "node --no-warnings scripts/intake-production-bgm.mts --project profile --source \"/ABS/PATH/TO/profile-bgm.mp3\"",
+    "node --no-warnings scripts/intake-production-bgm.mts --project profile --source \"/ABS/PATH/TO/profile-bgm.mp3\" --apply --receipt out/intake/profile-bgm-intake.json",
+    "node --no-warnings scripts/verify-production-bgm-intake-receipt.mts --project profile"
   ]
 } as const;
