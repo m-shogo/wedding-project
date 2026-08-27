@@ -1,7 +1,9 @@
+import {openingProductionGate} from "./openingProductionGate.generated";
 import {openingProductionStatus} from "./openingProductionStatus.generated";
+import {profileProductionGate} from "./profileProductionGate.generated";
 import {profileProductionStatus} from "./profileProductionStatus.generated";
 
-export const WEDDING_MOVIE_PRODUCTION_CRITICAL_PATH_SCHEMA = "wedding-movie-production-critical-path-dashboard/v1" as const;
+export const WEDDING_MOVIE_PRODUCTION_CRITICAL_PATH_SCHEMA = "wedding-movie-production-critical-path-dashboard/v2" as const;
 
 type StageSnapshot = {
   state: string;
@@ -14,6 +16,16 @@ type ActionTarget = {
   label: string;
   route: string;
   purpose: string;
+};
+
+type InputLane = {
+  id: string;
+  label: string;
+  state: "READY" | "BLOCKED";
+  detail: string;
+  intakePath?: string;
+  receiptCurrent?: boolean;
+  blockerCodes?: readonly string[];
 };
 
 const openingOrder = ["media", "previewRender", "previewSourceBinding", "previewReview", "finalRender", "finalRenderReview", "productionBundle", "davinciFinishing", "finalDeliveryApproval"] as const;
@@ -51,6 +63,53 @@ function actionTargetsFor(projectId: "opening" | "profile", stageName: string): 
   return [];
 }
 
+function inputLanesFor(projectId: "opening" | "profile", stageName: string): InputLane[] {
+  if (projectId === "opening" && stageName === "media") {
+    return [
+      {
+        id: "photos",
+        label: "写真11枠",
+        state: openingProductionGate.photos.ready ? "READY" : "BLOCKED",
+        detail: `${openingProductionGate.resolvedPhotoCount}/${openingProductionGate.expectedPhotoCount} files / receipt=${openingProductionGate.photos.intakeReceiptCurrent ? "CURRENT" : "MISSING_OR_STALE"}`,
+        intakePath: openingProductionGate.photos.intakeReceiptPath,
+        receiptCurrent: openingProductionGate.photos.intakeReceiptCurrent,
+        blockerCodes: [...openingProductionGate.photos.intakeReceiptBlockerCodes],
+      },
+      {
+        id: "bgm",
+        label: "Opening BGM",
+        state: openingProductionGate.bgm.ready ? "READY" : "BLOCKED",
+        detail: `file=${openingProductionGate.bgm.fileExists ? "FOUND" : "MISSING"} / status=${openingProductionGate.bgm.status} / receipt=${openingProductionGate.bgm.intakeReceiptCurrent ? "CURRENT" : "MISSING_OR_STALE"}`,
+        intakePath: openingProductionGate.bgm.intakeReceiptPath,
+        receiptCurrent: openingProductionGate.bgm.intakeReceiptCurrent,
+        blockerCodes: [...openingProductionGate.bgm.intakeReceiptBlockerCodes],
+      },
+    ];
+  }
+  if (projectId === "profile" && stageName === "assembly") {
+    return [
+      {
+        id: "media",
+        label: "Profile 17素材",
+        state: profileProductionGate.media.ready ? "READY" : "BLOCKED",
+        detail: `${profileProductionGate.resolvedMediaCount}/${profileProductionGate.expectedMediaCount} media / receipt=${profileProductionGate.media.intakeReceiptCurrent ? "CURRENT" : "MISSING_OR_STALE"}`,
+        intakePath: profileProductionGate.media.intakeReceiptPath,
+        receiptCurrent: profileProductionGate.media.intakeReceiptCurrent,
+        blockerCodes: [...profileProductionGate.media.intakeReceiptBlockerCodes],
+      },
+      {
+        id: "bgm",
+        label: "Profile BGM",
+        state: profileProductionGate.bgm.ready ? "READY" : "BLOCKED",
+        detail: `file=${profileProductionGate.bgm.fileExists ? "FOUND" : "MISSING"} / rights=${profileProductionGate.bgm.rightsState}`,
+        intakePath: "out/intake/profile-bgm-intake.json",
+        blockerCodes: profileProductionGate.bgm.ready ? [] : ["PROFILE_BGM_FILE_OR_RIGHTS_NOT_READY"],
+      },
+    ];
+  }
+  return [];
+}
+
 function summarizeProject(
   projectId: "opening" | "profile",
   overallState: string,
@@ -74,6 +133,7 @@ function summarizeProject(
           ...(current.path ? {path: current.path} : {}),
           recovery: [...current.recovery],
           actionTargets: actionTargetsFor(projectId, current.name),
+          inputLanes: inputLanesFor(projectId, current.name),
         }
       : null,
     downstreamBlockedStages: currentIndex >= 0
@@ -103,11 +163,12 @@ export function buildWeddingMovieProductionCriticalPath() {
 
   return {
     schemaVersion: WEDDING_MOVIE_PRODUCTION_CRITICAL_PATH_SCHEMA,
-    authority: "DERIVED_FROM_MOTION_STUDIO_PRODUCTION_STATUS" as const,
+    authority: "DERIVED_FROM_MOTION_STUDIO_PRODUCTION_STATUS_AND_INPUT_GATES" as const,
     productionReady: opening.productionReady && profile.productionReady,
     projects: {opening, profile},
     guardrails: [
       "CRITICAL_PATH_VISIBLE != PRODUCTION_APPROVED",
+      "INPUT_LANE_READY != PROJECT_PRODUCTION_READY",
       "RECOVERY_COMMAND_VISIBLE != RECOVERY_EXECUTED",
       "ACTION_TARGET_VISIBLE != ACTION_COMPLETED",
       "DOWNSTREAM_WAITING != DOWNSTREAM_FAILED",
