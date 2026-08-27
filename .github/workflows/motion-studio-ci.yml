@@ -214,13 +214,21 @@ jobs:
             out/qa/render-contract.mp4 \
             --width=640 --height=360 --fps=30 --duration=1 --duration-tolerance=0.05
 
-      - name: Opening V1 visual smoke stills
-        run: node --no-warnings scripts/render-opening-v1-qa-stills.mts
+      - name: Opening V1 production QA stills fail closed without real inputs
+        run: |
+          if node --no-warnings scripts/render-opening-v1-qa-stills.mts; then
+            echo "production QA stills unexpectedly rendered without real photos/current cleared BGM"
+            exit 1
+          fi
+          echo "production QA stills correctly require current assembly inputs"
 
-      - name: Upload Opening V1 visual QA
+      - name: Opening V1 placeholder visual smoke stills remain explicit
+        run: node --no-warnings scripts/render-opening-v1-qa-stills.mts --allow-missing-media-smoke
+
+      - name: Upload Opening V1 visual smoke
         uses: actions/upload-artifact@v4
         with:
-          name: opening-v1-qa-stills
+          name: opening-v1-visual-smoke
           path: motion-studio/out/qa/opening-v1/*.png
           if-no-files-found: error
           retention-days: 7
