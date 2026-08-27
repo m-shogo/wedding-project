@@ -28,12 +28,29 @@ const stageRecovery={
   davinciFinishing:["pnpm opening:davinci-finishing:init","pnpm opening:davinci-finishing:strict"],
   finalDeliveryApproval:["pnpm opening:final-delivery-approval:init","pnpm opening:final-delivery-approval:strict"],
 };
-const stageSnapshot=(name,stage)=>({
-  state:String(stage?.state??"NOT_RUN"),
-  detail:String(stage?.detail??"No stage detail reported."),
-  ...(stage?.path?{path:String(stage.path)}:{}),
-  recovery:[...(stageRecovery[name]??[])],
-});
+const stageDependencies={
+  media:[],
+  previewRender:["media"],
+  previewSourceBinding:["previewRender"],
+  previewReview:["previewSourceBinding"],
+  finalRender:["previewReview"],
+  finalRenderReview:["finalRender"],
+  productionBundle:["finalRenderReview"],
+  davinciFinishing:["productionBundle"],
+  finalDeliveryApproval:["davinciFinishing"],
+};
+const stageSnapshot=(name,stage)=>{
+  const dependsOn=[...(stageDependencies[name]??[])];
+  const upstreamPass=dependsOn.every((dependency)=>report.stages?.[dependency]?.state==="PASS");
+  return {
+    state:String(stage?.state??"NOT_RUN"),
+    detail:String(stage?.detail??"No stage detail reported."),
+    ...(stage?.path?{path:String(stage.path)}:{}),
+    dependsOn,
+    actionableNow:stage?.state!=="PASS"&&upstreamPass,
+    recovery:[...(stageRecovery[name]??[])],
+  };
+};
 const sourceStage=report.stages.previewSourceBinding;
 const sourceBlockers=Array.isArray(sourceStage?.blockers)?sourceStage.blockers.map(String):[];
 const finalReviewStage=report.stages.finalRenderReview;
