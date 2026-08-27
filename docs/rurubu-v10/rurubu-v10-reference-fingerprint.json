@@ -3,6 +3,16 @@
   "status": "CANONICAL_AI_ASSIST",
   "scope": "Rurubu WEDDING V10 only",
   "referenceNodes": ["2771:2", "2771:3", "2771:4"],
+  "closestReferenceByPage": {
+    "P01": {"primary":"2771:4","reason":"cover hierarchy, oversized title, hero crop, coverline density, edge tension"},
+    "P02": {"primary":"2771:2","reason":"profile pairing, fact labels, portrait hierarchy"},
+    "P03": {"primary":"2771:2","reason":"numbered Q&A repetition with editorial variation"},
+    "P04": {"primary":"2771:3","secondary":"2771:2","reason":"narrative flow should borrow destination/route energy plus profile-like readable fact clusters"},
+    "P05": {"primary":"2771:3","reason":"sequence, memory interruption, travel-route density"},
+    "P06": {"primary":"2771:3","reason":"memory spots, mixed gallery scale, destination labels"},
+    "P07": {"primary":"2771:3","reason":"1DAY schedule, map/route, food accents and time hierarchy"},
+    "P08": {"primary":"2771:4","reason":"guide/utility/back-cover information with calmer closure"}
+  },
   "principles": [
     {"id":"dominant_gesture","rule":"one unmistakable first read per page","signals":["oversized Japanese title","hero photo","large map/route","large numbered/topic marker"]},
     {"id":"asymmetry_local_order","rule":"global asymmetry with locally readable clusters"},
@@ -69,11 +79,17 @@
   ],
   "comparisonLoop": [
     "capture current screenshot at thumbnail scale",
-    "choose closest reference role among 2771:2 2771:3 2771:4",
+    "choose closest reference from closestReferenceByPage",
     "compare first read image-scale variation useful reading destinations card-likeness edge overlap title silhouette and A5 readability",
     "identify largest reference-distance cause",
     "make one structural correction before micro-spacing",
     "never solve weak reference match by merely adding stickers"
+  ],
+  "antiOverfit": [
+    "copy editorial behavior, not literal layout",
+    "do not copy reference fake text, people, logos or invented travel facts",
+    "do not force every page to match the same reference density if the semantic page job is quieter",
+    "readability, factual correctness, editability, mask safety and print constraints override literal similarity"
   ],
   "requiredReport": [
     "closestReferenceNode",
