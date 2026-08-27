@@ -1,3 +1,4 @@
+import {spawnSync} from 'node:child_process';
 import {existsSync, readdirSync, statSync} from 'node:fs';
 import {dirname, extname, join} from 'node:path';
 import {fileURLToPath} from 'node:url';
@@ -24,6 +25,14 @@ type SlotRow = {
   motion: OpeningPhotoMotion;
   focus: OpeningPhotoFocus;
   cropCheck: 'required' | 'native-frame';
+};
+
+type AssemblyRecovery = {
+  inputRecovery?: {
+    photos?: {state?: string; actions?: string[]};
+    bgm?: {state?: string; actions?: string[]};
+  };
+  nextActions?: string[];
 };
 
 const normalizeStem = (file: string): string => {
@@ -108,6 +117,33 @@ const canonicalIntakeActions = [
   'pnpm prepare:opening-v1',
 ];
 
+const assemblyResult = spawnSync(process.execPath, ['--no-warnings', 'scripts/opening-v1-assembly-preflight.mts', '--json'], {
+  cwd: studioRoot,
+  encoding: 'utf8',
+});
+let assemblyRecovery: AssemblyRecovery = {};
+if (assemblyResult.status === 0) {
+  try {
+    assemblyRecovery = JSON.parse(assemblyResult.stdout) as AssemblyRecovery;
+  } catch {
+    assemblyRecovery = {};
+  }
+}
+const parallelInputRecovery = {
+  photos: {
+    state: assemblyRecovery.inputRecovery?.photos?.state ?? (productionPhotoReady ? 'READY' : 'BLOCKED'),
+    actions: assemblyRecovery.inputRecovery?.photos?.actions ?? (productionPhotoReady ? [] : canonicalIntakeActions),
+  },
+  bgm: {
+    state: assemblyRecovery.inputRecovery?.bgm?.state ?? 'BLOCKED',
+    actions: assemblyRecovery.inputRecovery?.bgm?.actions ?? [],
+  },
+};
+const parallelActions = [
+  ...parallelInputRecovery.photos.actions,
+  ...parallelInputRecovery.bgm.actions,
+];
+
 const report = {
   schemaVersion: 'opening-photo-preflight/v2' as const,
   authority: 'OPENING_CANONICAL_PHOTO_INTAKE_PREFLIGHT' as const,
@@ -123,12 +159,15 @@ const report = {
     verifiedCount: intakeReceipt.verifiedCount,
     blockers: intakeReceipt.errors,
   },
+  parallelInputRecovery,
   rows,
-  nextActions: productionPhotoReady
-    ? coverReady > 0
-      ? [`previewでcover ${coverReady}枠の顔/身体cropを確認`, '必要な枠だけopeningV1Presentation.tsのfocusを調整']
-      : ['pnpm render:opening-v1:preview']
-    : canonicalIntakeActions,
+  nextActions: parallelActions.length > 0
+    ? parallelActions
+    : productionPhotoReady
+      ? coverReady > 0
+        ? [`previewでcover ${coverReady}枠の顔/身体cropを確認`, '必要な枠だけopeningV1Presentation.tsのfocusを調整']
+        : ['pnpm render:opening-v1:preview']
+      : canonicalIntakeActions,
 };
 
 if (jsonMode) {
@@ -137,6 +176,7 @@ if (jsonMode) {
 }
 
 console.log(`Opening V1 photo preflight: files=${ready}/${rows.length} receipt=${intakeReceiptCurrent ? 'CURRENT' : 'MISSING_OR_STALE'} productionPhotoReady=${productionPhotoReady ? 'YES' : 'NO'}`);
+console.log(`Parallel production inputs: photos=${parallelInputRecovery.photos.state} BGM=${parallelInputRecovery.bgm.state}`);
 console.log('');
 console.log('status  slot          file                     role                  layout  fit      motion       focus    crop');
 console.log('------  ------------  -----------------------  --------------------  ------  -------  -----------  -------  ------------');
@@ -154,10 +194,12 @@ for (const row of rows) {
 
 console.log('');
 if (!productionPhotoReady) {
-  console.log(`BLOCK / 11 FILES FOUND != SHA RECEIPT CURRENT`);
+  console.log('BLOCK / 11 FILES FOUND != SHA RECEIPT CURRENT');
   for (const blocker of intakeReceipt.errors) console.log(`BLOCK / PHOTO_INTAKE:${blocker}`);
-  console.log('次:');
-  for (const action of canonicalIntakeActions) console.log(`  - ${action}`);
+}
+if (parallelActions.length > 0) {
+  console.log('並行で進められるproduction input recovery:');
+  for (const action of parallelActions) console.log(`  - ${action}`);
 } else if (coverReady > 0) {
   console.log(`次: previewでcover ${coverReady}枠の顔/身体cropを確認 → 必要な枠だけopeningV1Presentation.tsのfocusを調整`);
 } else {
