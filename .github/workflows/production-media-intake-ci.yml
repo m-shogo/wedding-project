@@ -1,0 +1,59 @@
+name: Production Media Intake CI
+
+on:
+  pull_request:
+    paths:
+      - "motion-studio/scripts/intake-production-media.mts"
+      - "motion-studio/scripts/check-production-media-intake.mts"
+      - "motion-studio/src/data/openingV1PhotoRoles.ts"
+      - "motion-studio/src/data/openingV1Media.ts"
+      - "motion-studio/src/data/profileV1ProductionPlan.ts"
+      - ".github/workflows/production-media-intake-ci.yml"
+  push:
+    branches: [main]
+    paths:
+      - "motion-studio/scripts/intake-production-media.mts"
+      - "motion-studio/scripts/check-production-media-intake.mts"
+      - "motion-studio/src/data/openingV1PhotoRoles.ts"
+      - "motion-studio/src/data/openingV1Media.ts"
+      - "motion-studio/src/data/profileV1ProductionPlan.ts"
+      - ".github/workflows/production-media-intake-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    defaults:
+      run:
+        working-directory: motion-studio
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Verify canonical production media intake
+        run: node --no-warnings scripts/check-production-media-intake.mts
+
+      - name: Verify CLI stays dry-run by default and source-preserving
+        run: |
+          for token in \
+            "DRY RUN PASS: no files copied" \
+            "--apply" \
+            "copyFileSync" \
+            "TARGET EXISTS" \
+            "BLOCKED: no files copied" \
+            "without modifying source files"; do
+            grep -q -- "$token" scripts/intake-production-media.mts || { echo "missing intake safety token: $token"; exit 1; }
+          done
+          if grep -Eq "renameSync|unlinkSync|rmSync\(.*source|writeFileSync\(.*source" scripts/intake-production-media.mts; then
+            echo "intake CLI must not rename/delete/rewrite source media"
+            exit 1
+          fi
+          echo "intake CLI safety contract verified"
