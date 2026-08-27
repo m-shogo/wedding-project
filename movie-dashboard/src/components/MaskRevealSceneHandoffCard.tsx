@@ -9,6 +9,7 @@ import { getResolveHandoffEditability } from "../data/resolveHandoffEditability"
 import { getResolveHumanAdjustability } from "../data/resolveHumanAdjustability";
 import type { MaskRevealSceneInstance } from "../data/visualSceneComposer";
 import { downloadText } from "../lib/exporters";
+import { ProfileProductionStatusHandoffCard } from "./ProfileProductionStatusHandoffCard";
 import { TypographyDaVinciProductionReleaseGateForScene } from "./TypographyDaVinciProductionReleaseGateForScene";
 import { TypographyProductionRouteSelector } from "./TypographyProductionRouteSelector";
 import { TypographyProductionRoutingMatrix } from "./TypographyProductionRoutingMatrix";
@@ -72,6 +73,7 @@ export function MaskRevealSceneHandoffCard({ scene }: { scene: MaskRevealSceneIn
       <TypographyProductionRouteSelector scene={scene} />
       <TypographySceneDeliveryPackageCard scene={scene} />
       <TypographyProjectDeliveryBatchCard projectId={scene.projectId} />
+      {scene.projectId === "profile" ? <ProfileProductionStatusHandoffCard /> : null}
       <TypographyDaVinciProductionReleaseGateForScene scene={scene} />
       <TypographyProductionRoutingMatrix />
 
