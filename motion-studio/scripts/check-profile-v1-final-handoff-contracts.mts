@@ -34,6 +34,9 @@ for(const t of [
   'STALE_PROFILE_DAVINCI_SOURCE_PATH',
   'PROFILE_DAVINCI_EXPORT_FILE_MISSING',
   'PROFILE_DAVINCI_EXPORT_SHA_MISMATCH',
+  'PROFILE_DAVINCI_BOUND_AT_INVALID',
+  'PROFILE_DAVINCI_REVIEWED_BEFORE_BINDING',
+  'reviewedAtMs<boundAtMs',
   "const exportPath=join(root,ev.export.path)",
   'sha(exportPath)!==ev.export.sha256',
   "profileV1GeneratedAccentImplementations",
@@ -87,9 +90,10 @@ if(review.includes('productionReady: true')||bundle.includes('productionReady: t
 if(!approval.includes("a.productionReady!==(a.decision==='APPROVE')"))errors.push('final approval must bind productionReady to explicit APPROVE');
 if(!approval.includes('a.productionBundle.path!==rel(bundlePath)')||!approval.includes('a.davinciEvidence.path!==rel(davinciPath)'))errors.push('final approval must bind canonical bundle/evidence paths');
 if(!approval.includes('decidedAtMs<boundAtMs'))errors.push('final approval must reject approval timestamps older than the current binding');
+if(!davinci.includes('reviewedAtMs<boundAtMs'))errors.push('DaVinci Actual must reject Human review timestamps older than the evidence binding');
 if(davinci.includes('timelineCsvSha256:string')&&!davinci.includes('sha(timelinePath)'))errors.push('DaVinci direct path must compare current Palmier timeline SHA before init/strict');
 if(davinci.includes('generatedAccents:GeneratedAccentRoute[]')&&!davinci.includes('sameAccentRoutes(bundle.generatedAccents)'))errors.push('DaVinci direct path must compare bundle accent routes with canonical Motion Zukan registry');
 if(davinci.includes('generatedAccentRoutes:GeneratedAccentRoute[]')&&!davinci.includes('sameAccentRoutes(bundle.davinci?.generatedAccentRoutes)'))errors.push('DaVinci direct path must compare DaVinci accent routes with canonical Motion Zukan registry');
 if(!davinci.includes('existsSync(exportPath)')||!davinci.includes('sha(exportPath)!==ev.export.sha256'))errors.push('DaVinci Actual must verify the declared exported movie exists and matches its recorded SHA');
 if(errors.length){console.error(`Profile V1 final handoff contracts FAILED (${errors.length})`);for(const e of errors)console.error(`- ${e}`);process.exit(1)}
-console.log('Profile V1 final handoff contracts OK: direct DaVinci evidence validates canonical Motion Zukan generated-accent routes, SHA-bound Palmier timeline, source render and exported movie bytes before Mac Actual, while only a current path/SHA-bound Human approval made after binding can yield productionReady.');
+console.log('Profile V1 final handoff contracts OK: direct DaVinci evidence validates canonical Motion Zukan generated-accent routes, SHA-bound Palmier timeline, source render, exported movie bytes and a Human review made after evidence binding, while only a current path/SHA-bound Human final approval made after binding can yield productionReady.');
