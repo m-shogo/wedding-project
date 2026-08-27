@@ -8,6 +8,7 @@ const read = (relative) => fs.readFileSync(path.join(root, relative), "utf8");
 const model = read("src/data/weddingMovieProductionCriticalPath.ts");
 const card = read("src/components/WeddingMovieProductionCriticalPathCard.tsx");
 const profileIntake = read("src/pages/ProfileMediaIntake.tsx");
+const profileBgmIntake = read("src/pages/ProfileBgmIntake.tsx");
 const app = read("src/App.tsx");
 const sceneHandoff = read("src/components/MaskRevealSceneHandoffCard.tsx");
 const openingHandoff = read("src/data/openingProductionStatusHandoff.ts");
@@ -54,10 +55,19 @@ for (const token of [
   'gate.mediaSlots.filter',
   'slot.canonicalStem',
   'public/profile/<canonical-stem>',
-  'public/audio/profile/bgm-main.mp3',
   'pnpm prepare:profile-v1',
   'Human QA / Mac DaVinci Actual / final approval',
 ]) need(profileIntake, token, `Profile media intake missing ${token}`);
+
+for (const token of [
+  'PROFILE BGM INTAKE',
+  'profileProductionGate',
+  'motion-studio/public/audio/profile/bgm-main.mp3',
+  'motion-studio/out/intake/profile-bgm-intake.json',
+  'verify-production-bgm-intake-receipt.mts --project profile',
+  'pnpm profile:bgm-rights:strict',
+  'current intake receipt + Human approval',
+]) need(profileBgmIntake, token, `Profile BGM intake missing ${token}`);
 
 for (const token of [
   'ProfileMediaIntake',
@@ -81,7 +91,7 @@ for (const [name, source, projectKey] of [
   need(source, 'CRITICAL_PATH_EXPORTED != RECOVERY_EXECUTED', `${name} handoff missing recovery guardrail`);
 }
 
-for (const source of [model, card, profileIntake, openingHandoff, profileHandoff]) {
+for (const source of [model, card, profileIntake, profileBgmIntake, openingHandoff, profileHandoff]) {
   if (source.includes('macDaVinciActualVerified: true') || source.includes('productionReady: true')) {
     errors.push('Critical-path dashboard hardcodes Actual or production readiness');
   }
