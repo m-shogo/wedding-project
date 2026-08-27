@@ -25,6 +25,7 @@ import { DataManager } from "./pages/DataManager";
 import { SceneDetail } from "./pages/SceneDetail";
 import { ProfilePlanner } from "./pages/ProfilePlanner";
 import { ProfileMediaIntake } from "./pages/ProfileMediaIntake";
+import { ProfileBgmIntake } from "./pages/ProfileBgmIntake";
 import { OpeningPhotoIntake } from "./pages/OpeningPhotoIntake";
 import { OpeningBgmIntake } from "./pages/OpeningBgmIntake";
 import { MovieCoach } from "./pages/MovieCoach";
@@ -82,6 +83,7 @@ export default function App() {
               <Route path="opening-photo-intake" element={<OpeningPhotoIntake />} />
               <Route path="opening-bgm-intake" element={<OpeningBgmIntake />} />
               <Route path="profile-media-intake" element={<ProfileMediaIntake />} />
+              <Route path="profile-bgm-intake" element={<ProfileBgmIntake />} />
               <Route path="storyboard" element={<Storyboard />} />
               <Route path="assets" element={<AssetLibrary />} />
               <Route path="clips" element={<ClipLibrary />} />

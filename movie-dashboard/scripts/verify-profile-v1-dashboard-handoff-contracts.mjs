@@ -8,6 +8,9 @@ const manifest = read("src/data/projectProductionHandoffManifest.ts");
 const batchCard = read("src/components/TypographyProjectDeliveryBatchCard.tsx");
 const profileGate = read("src/data/profileProductionGate.generated.ts");
 const realMediaGate = read("src/data/profileRealMediaReviewGate.generated.ts");
+const profileMediaIntake = read("src/pages/ProfileMediaIntake.tsx");
+const profileBgmIntake = read("src/pages/ProfileBgmIntake.tsx");
+const app = read("src/App.tsx");
 const sync = read("scripts/sync-profile-production-gate.mjs");
 const realMediaSync = read("scripts/sync-profile-real-media-review-gate.mjs");
 const errors = [];
@@ -89,6 +92,44 @@ for (const token of [
 }
 
 for (const token of [
+  'PROFILE MEDIA INTAKE',
+  'profileProductionGate',
+  'gate.mediaSlots.filter',
+  'slot.canonicalStem',
+  'motion-studio/public/profile/',
+  'to="/profile-bgm-intake"',
+  'pnpm prepare:profile-v1',
+  'Human QA / Mac DaVinci Actual / final approval',
+]) {
+  requireText(profileMediaIntake, token, `Profile media intake contract missing: ${token}`);
+}
+
+for (const token of [
+  'PROFILE BGM INTAKE',
+  'profileProductionGate',
+  'gate.bgm.fileExists',
+  'gate.bgm.rightsState',
+  'motion-studio/public/audio/profile/bgm-main.mp3',
+  'pnpm profile:bgm-rights:init',
+  'profile-v1-bgm-rights-approval.json',
+  'pnpm profile:bgm-rights:strict',
+  'Human approvalをUIで偽装しない',
+  'FILE_FOUND != RIGHTS_CLEARED',
+  'BGM_READY != PRODUCTION_READY',
+]) {
+  requireText(profileBgmIntake, token, `Profile BGM intake contract missing: ${token}`);
+}
+
+for (const token of [
+  'ProfileMediaIntake',
+  'path="profile-media-intake" element={<ProfileMediaIntake />}',
+  'ProfileBgmIntake',
+  'path="profile-bgm-intake" element={<ProfileBgmIntake />}',
+]) {
+  requireText(app, token, `Profile intake App routing missing: ${token}`);
+}
+
+for (const token of [
   'profile-v1-assembly-preflight.mts',
   'structureReview: "motion-studio/scripts/profile-v1-full-structure-review.mts"',
   'execFileSync(process.execPath',
@@ -147,6 +188,7 @@ if (profileGate.includes('"humanReviewComplete": true')) errors.push("generated 
 if (realMediaGate.includes('"state": "PASS"')) errors.push("generated Profile real-media review must not be pre-approved");
 if (realMediaGate.includes('"humanReviewComplete": true')) errors.push("generated Profile real-media Human QA must not be fabricated");
 if (realMediaGate.includes('"productionReady": true')) errors.push("real-media review cannot promote production readiness");
+if (profileBgmIntake.includes('rightsCleared = true') || profileBgmIntake.includes('productionReady: true')) errors.push("Profile BGM intake must not fabricate rights or production readiness");
 
 if (errors.length) {
   console.error(`Profile V1 Dashboard Handoff contracts FAILED (${errors.length})`);
@@ -154,4 +196,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log("Profile V1 Dashboard Handoff contracts OK: canonical chapter role/editIntent, SHA-bound structure review, and SHA-bound 17-media Human QA are preserved through generated gates and production handoff; BGM audio/Mac Actual/production release stay separate and fail-closed.");
+console.log("Profile V1 Dashboard Handoff contracts OK: canonical chapter role/editIntent, dedicated 17-media intake, SHA-bound Human BGM rights gate, structure review, and real-media Human QA stay visible while Mac Actual/production release remain separate and fail-closed.");

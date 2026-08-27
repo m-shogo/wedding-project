@@ -46,6 +46,7 @@ export function ProfileMediaIntake() {
             <p className="text-[10px] tracking-[0.16em] font-semibold text-navy-400">BGM</p>
             <p className="mt-1 text-2xl font-mono font-bold text-navy-900 dark:text-sand-100">{bgmReady ? "READY" : "BLOCKED"}</p>
             <p className="mt-1 text-xs text-navy-500 dark:text-navy-300 break-all">{gate.bgm.path}</p>
+            {!bgmReady ? <Link to="/profile-bgm-intake" className="mt-2 inline-block border-b border-navy-300 text-[10px] text-navy-600 dark:text-navy-300">BGM rights gateを開く →</Link> : null}
           </div>
           <div className={`p-4 ${assemblyReady ? "bg-emerald-50 dark:bg-emerald-900/20" : "bg-white dark:bg-navy-800"}`}>
             <p className="text-[10px] tracking-[0.16em] font-semibold text-navy-400">NEXT COMMAND</p>
@@ -104,11 +105,12 @@ export function ProfileMediaIntake() {
         <ol className="mt-3 space-y-2 text-sm leading-6 text-navy-600 dark:text-navy-300">
           <li><span className="font-mono text-navy-400 mr-2">1</span>17 roleに合う実写真/動画を選ぶ</li>
           <li><span className="font-mono text-navy-400 mr-2">2</span>各ファイルを上記canonical stem名で <code className="text-xs">motion-studio/public/profile/</code> に配置</li>
-          <li><span className="font-mono text-navy-400 mr-2">3</span>上映条件を確認したBGMだけを <code className="text-xs">public/audio/profile/bgm-main.mp3</code> に接続</li>
+          <li><span className="font-mono text-navy-400 mr-2">3</span><Link to="/profile-bgm-intake" className="border-b border-navy-300">Profile BGM rights gate</Link> で現在のBGM SHAへHuman rights approvalを固定</li>
           <li><span className="font-mono text-navy-400 mr-2">4</span><code className="text-xs">pnpm prepare:profile-v1</code> → real-media preview → Human crop/focus/color/content QAへ</li>
         </ol>
         <div className="mt-4 flex flex-wrap gap-3 text-xs">
           <Link to="/profile-planner" className="px-3 py-2 bg-navy-800 text-white dark:bg-sand-100 dark:text-navy-900">写真計画を開く →</Link>
+          <Link to="/profile-bgm-intake" className="px-3 py-2 border border-navy-700 dark:border-sand-300 text-navy-700 dark:text-sand-200">BGM Gateを開く →</Link>
           <Link to="/movie-coach/profile" className="border-b border-navy-300 text-navy-600 dark:text-navy-300 self-center">Profile Movie Coach →</Link>
           <Link to="/movie-coach/compare" className="border-b border-navy-300 text-navy-600 dark:text-navy-300 self-center">Preview後のHuman QA →</Link>
         </div>
