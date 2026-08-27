@@ -7,12 +7,24 @@ export const profileProductionStatus = {
   },
   "overallState": "ASSEMBLY_REQUIRED",
   "stages": {
-    "assembly": {"state": "BLOCKED"},
-    "finalRender": {"state": "NOT_RUN"},
-    "finalRenderReview": {"state": "NOT_RUN"},
-    "productionBundle": {"state": "NOT_RUN"},
-    "davinciFinishing": {"state": "NOT_RUN"},
-    "finalDeliveryApproval": {"state": "NOT_RUN"}
+    "assembly": {
+      "state": "BLOCKED"
+    },
+    "finalRender": {
+      "state": "NOT_RUN"
+    },
+    "finalRenderReview": {
+      "state": "NOT_RUN"
+    },
+    "productionBundle": {
+      "state": "NOT_RUN"
+    },
+    "davinciFinishing": {
+      "state": "NOT_RUN"
+    },
+    "finalDeliveryApproval": {
+      "state": "NOT_RUN"
+    }
   },
   "readiness": {
     "assemblyReady": false,
