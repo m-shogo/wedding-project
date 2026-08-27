@@ -9,6 +9,7 @@
     "designTokens": "docs/rurubu-v10/rurubu-v10-design-tokens.json",
     "operatingPrompt": "docs/rurubu-v10/RURUBU-V10-FIGMA-AI-OPERATING-PROMPT.md",
     "referenceFingerprintAntiAiGate": "docs/rurubu-v10/RURUBU-V10-REFERENCE-FINGERPRINT-ANTI-AI-GATE.md",
+    "referenceFingerprintMachine": "docs/rurubu-v10/rurubu-v10-reference-fingerprint.json",
     "photoProxyQualityBoundary": "docs/rurubu-v10/RURUBU-V10-PHOTO-PROXY-QUALITY-BOUNDARY.md",
     "projectHybridPolicy": "docs/design-learning/AI-FIGMA-HYBRID-AUTHORING-POLICY.md",
     "projectDesignCouncil": "docs/design-learning/PROFESSIONAL-DESIGN-COUNCIL-VNEXT-2026-08-20.md"
@@ -31,6 +32,8 @@
       "pageName": "10_RURUBU_V10_AI_ASSIST_GUIDE",
       "boardId": "2797:3",
       "boardName": "REFERENCE / RURUBU V10 AI ASSIST / NOT PRODUCTION",
+      "antiAiReferenceBoardId": "2804:2",
+      "antiAiReferenceBoardName": "REFERENCE / RURUBU V10 REFERENCE FINGERPRINT + ANTI-AI GATE / NOT PRODUCTION",
       "productionUse": false
     },
     "readabilityTokens": {
@@ -99,6 +102,8 @@
   },
   "referenceMatch": {
     "scoreAuthority": "docs/rurubu-v10/RURUBU-V10-REFERENCE-FINGERPRINT-ANTI-AI-GATE.md",
+    "machineReadableAuthority": "docs/rurubu-v10/rurubu-v10-reference-fingerprint.json",
+    "figmaGuideBoardId": "2804:2",
     "passScore": 80,
     "requiresNoFatalAiTell": true,
     "reviewScales": ["thumbnail / 3-second scan", "reading scale", "A5 actual size", "grayscale hierarchy"],
