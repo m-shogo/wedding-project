@@ -32,16 +32,14 @@ for (const token of [
   "'PALMIER_SOUND_CUE_SHA_MISMATCH => STOP_AND_REGENERATE_HANDOFF'",
   'writeFileSync(timelineCsvPath, timelineCsv);',
   'writeFileSync(soundCueCsvPath, soundCueCsv);',
-]) {
-  requireText(exporter, token, `Opening production bundle exporter missing Palmier handoff contract: ${token}`);
-}
+]) requireText(exporter, token, `Opening production bundle exporter missing Palmier handoff contract: ${token}`);
 
 for (const token of [
-  "const timelineCsvPath = join(studioRoot, 'out/handoff/opening-v1/opening-v1-palmier-timeline.csv');",
-  "const soundCueCsvPath = join(studioRoot, 'out/handoff/opening-v1/opening-v1-palmier-sound-cues.csv');",
+  "const timelinePath = join(root, 'out/handoff/opening-v1/opening-v1-palmier-timeline.csv');",
+  "const soundCuePath = join(root, 'out/handoff/opening-v1/opening-v1-palmier-sound-cues.csv');",
   'handoffContractVersion?: string;',
   'soundCueCsv?: string;',
-  'soundCueCsvSha256?: string;',
+  'soundCueCsvSha256?: string',
   "errors.push('BUNDLE_PALMIER_HANDOFF_CONTRACT_STALE')",
   "errors.push('BUNDLE_PALMIER_TIMELINE_PATH_STALE')",
   "errors.push('BUNDLE_PALMIER_TIMELINE_MISSING')",
@@ -51,9 +49,7 @@ for (const token of [
   "errors.push('BUNDLE_PALMIER_SOUND_CUE_SHA_STALE')",
   "'PALMIER_HANDOFF_CONTRACT_VERSION_MISMATCH => PRODUCTION_BUNDLE_STALE'",
   "'PALMIER_SOUND_CUE_SHA_MISMATCH => PRODUCTION_BUNDLE_STALE'",
-]) {
-  requireText(status, token, `Opening production status missing Palmier handoff validation: ${token}`);
-}
+]) requireText(status, token, `Opening production status missing Palmier handoff validation: ${token}`);
 
 for (const token of [
   "const timelineCsvPath = join(studioRoot, 'out/handoff/opening-v1/opening-v1-palmier-timeline.csv');",
@@ -68,39 +64,18 @@ for (const token of [
   "throw new Error('DAVINCI_FINISHING_PALMIER_SOUND_CUE_PATH_MISMATCH')",
   "throw new Error('DAVINCI_FINISHING_PALMIER_SOUND_CUE_MISSING')",
   "throw new Error('DAVINCI_FINISHING_PALMIER_SOUND_CUE_SHA_MISMATCH')",
-]) {
-  requireText(davinci, token, `Opening DaVinci evidence direct path missing Palmier handoff validation: ${token}`);
-}
+]) requireText(davinci, token, `Opening DaVinci evidence direct path missing Palmier handoff validation: ${token}`);
 
-if (exporter.indexOf('const timelineCsvSha256 = shaText(timelineCsv);') > exporter.indexOf('const bundle = {')) {
-  errors.push('Palmier timeline SHA must be computed before the bundle object is constructed');
-}
-if (exporter.indexOf('const soundCueCsvSha256 = shaText(soundCueCsv);') > exporter.indexOf('const bundle = {')) {
-  errors.push('Palmier sound cue SHA must be computed before the bundle object is constructed');
-}
-if (exporter.indexOf('writeFileSync(timelineCsvPath, timelineCsv);') > exporter.indexOf('writeFileSync(bundlePath')) {
-  errors.push('Palmier timeline should be written before the bundle so the handoff closes in dependency order');
-}
-if (exporter.indexOf('writeFileSync(soundCueCsvPath, soundCueCsv);') > exporter.indexOf('writeFileSync(bundlePath')) {
-  errors.push('Palmier sound cue file should be written before the bundle so the handoff closes in dependency order');
-}
-if (status.includes('timelineCsvSha256?: string') && !status.includes('shaFile(timelineCsvPath)')) {
-  errors.push('Production status declares Palmier timeline SHA but does not compare it to the current CSV');
-}
-if (status.includes('soundCueCsvSha256?: string') && !status.includes('shaFile(soundCueCsvPath)')) {
-  errors.push('Production status declares Palmier sound cue SHA but does not compare it to the current CSV');
-}
-if (davinci.includes('timelineCsvSha256: string') && !davinci.includes('shaFile(timelineCsvPath)')) {
-  errors.push('DaVinci evidence declares Palmier timeline SHA but does not compare it to the current CSV');
-}
-if (davinci.includes('soundCueCsvSha256: string') && !davinci.includes('shaFile(soundCueCsvPath)')) {
-  errors.push('DaVinci evidence declares Palmier sound cue SHA but does not compare it to the current CSV');
-}
+if (exporter.indexOf('const timelineCsvSha256 = shaText(timelineCsv);') > exporter.indexOf('const bundle = {')) errors.push('Palmier timeline SHA must be computed before the bundle object is constructed');
+if (exporter.indexOf('const soundCueCsvSha256 = shaText(soundCueCsv);') > exporter.indexOf('const bundle = {')) errors.push('Palmier sound cue SHA must be computed before the bundle object is constructed');
+if (exporter.indexOf('writeFileSync(timelineCsvPath, timelineCsv);') > exporter.indexOf('writeFileSync(bundlePath')) errors.push('Palmier timeline should be written before the bundle so the handoff closes in dependency order');
+if (exporter.indexOf('writeFileSync(soundCueCsvPath, soundCueCsv);') > exporter.indexOf('writeFileSync(bundlePath')) errors.push('Palmier sound cue file should be written before the bundle so the handoff closes in dependency order');
+if (status.includes('timelineCsvSha256?: string') && !(status.includes('sha(timelinePath)') || status.includes('shaFile(timelineCsvPath)'))) errors.push('Production status declares Palmier timeline SHA but does not compare it to the current CSV');
+if (status.includes('soundCueCsvSha256?: string') && !(status.includes('sha(soundCuePath)') || status.includes('shaFile(soundCueCsvPath)'))) errors.push('Production status declares Palmier sound cue SHA but does not compare it to the current CSV');
+if (davinci.includes('timelineCsvSha256: string') && !davinci.includes('shaFile(timelineCsvPath)')) errors.push('DaVinci evidence declares Palmier timeline SHA but does not compare it to the current CSV');
+if (davinci.includes('soundCueCsvSha256: string') && !davinci.includes('shaFile(soundCueCsvPath)')) errors.push('DaVinci evidence declares Palmier sound cue SHA but does not compare it to the current CSV');
 
-for (const forbidden of [
-  "macActualState: 'PASS'",
-  'productionReady: true',
-]) {
+for (const forbidden of ["macActualState: 'PASS'", 'productionReady: true']) {
   if (exporter.includes(forbidden)) errors.push(`Exporter fabricates readiness: ${forbidden}`);
 }
 

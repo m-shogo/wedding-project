@@ -44,12 +44,12 @@ export const openingProductionStatus = {
     "previewSourceBound": false,
     "humanPreviewApproved": false,
     "finalRenderQaPass": false,
+    "humanFinalRenderApproved": false,
     "productionBundleCurrent": false,
     "macDaVinciActualVerified": false,
     "readyForFinalDeliveryApproval": false,
     "finalDeliveryApproved": false,
-    "productionReady": false,
-    "humanFinalRenderApproved": false
+    "productionReady": false
   },
   "sourceRevalidation": {
     "realMediaPreview": {
