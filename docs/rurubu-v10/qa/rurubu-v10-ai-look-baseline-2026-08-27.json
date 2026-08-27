@@ -1,0 +1,48 @@
+{
+  "schemaVersion": "rurubu-v10-ai-look-linter-report-v1",
+  "status": "VERIFIED_LIVE_BASELINE_PREPROD_SKELETON",
+  "dateJst": "2026-08-27",
+  "figma": {
+    "fileKey": "bfM0d4c9dCeBv5pCkJ3TNM",
+    "productionPageId": "2787:2",
+    "productionPageName": "09_RURUBU_V10_A5_8P_PRODUCTION",
+    "qaGuideBoardId": "2808:2",
+    "qaGuideBoardName": "REFERENCE / V10 LIVE AI-LOOK LINTER + VISUAL DIFF BASELINE / NOT PRODUCTION"
+  },
+  "summary": {
+    "qaMode": "PREPROD_SKELETON",
+    "skeletonPages": 8,
+    "productionCandidatePages": 0,
+    "referenceMatchScore": null,
+    "referenceMatchScoreReason": "Do not manufacture a final score before meaningful production text/image/editorial clusters exist.",
+    "pagesWithTemplateRisk": ["P03", "P05", "P07"],
+    "largestReferenceDistanceCause": "placeholder geometry still controls composition instead of editorial hierarchy controlling geometry"
+  },
+  "pages": {
+    "P01": {"frameId":"2787:3","role":"COVER","shapeCount":4,"textCount":0,"imageFillCount":0,"dominance":1.17,"fatal":[],"warnings":["PREPROD_SKELETON_NO_TEXT_OR_IMAGE","WEAK_DOMINANT_GESTURE"],"closestReference":["2771:4"]},
+    "P02": {"frameId":"2787:9","role":"PROFILE","shapeCount":6,"textCount":0,"imageFillCount":0,"dominance":2.196,"fatal":[],"warnings":["PREPROD_SKELETON_NO_TEXT_OR_IMAGE","ZERO_CONTROLLED_IMPERFECTION","NO_EDGE_TENSION"],"closestReference":["2771:2"]},
+    "P03": {"frameId":"2787:15","role":"Q&A","shapeCount":5,"textCount":0,"imageFillCount":0,"dominance":1.744,"fatal":["EQUAL_MODULE_GRID","UNIFORM_CORNER_RADIUS"],"warnings":["PREPROD_SKELETON_NO_TEXT_OR_IMAGE","ZERO_CONTROLLED_IMPERFECTION","NO_EDGE_TENSION"],"closestReference":["2771:2"]},
+    "P04": {"frameId":"2787:22","role":"STORY","shapeCount":4,"textCount":0,"imageFillCount":0,"dominance":2.278,"fatal":[],"warnings":["PREPROD_SKELETON_NO_TEXT_OR_IMAGE"],"closestReference":["2771:3","2771:2"]},
+    "P05": {"frameId":"2787:28","role":"TIMELINE + MEMORY","shapeCount":5,"textCount":0,"imageFillCount":0,"dominance":1.699,"fatal":["UNIFORM_CORNER_RADIUS"],"warnings":["PREPROD_SKELETON_NO_TEXT_OR_IMAGE","ZERO_CONTROLLED_IMPERFECTION"],"closestReference":["2771:3"]},
+    "P06": {"frameId":"2787:35","role":"MEMORY SPOTS + GALLERY","shapeCount":6,"textCount":0,"imageFillCount":0,"dominance":1.296,"fatal":[],"warnings":["PREPROD_SKELETON_NO_TEXT_OR_IMAGE","ZERO_CONTROLLED_IMPERFECTION","NO_EDGE_TENSION"],"closestReference":["2771:3"]},
+    "P07": {"frameId":"2787:42","role":"1DAY + CAFE TABLE","shapeCount":5,"textCount":0,"imageFillCount":0,"dominance":1.426,"fatal":["UNIFORM_CORNER_RADIUS"],"warnings":["PREPROD_SKELETON_NO_TEXT_OR_IMAGE","ZERO_CONTROLLED_IMPERFECTION","NO_EDGE_TENSION"],"closestReference":["2771:3"]},
+    "P08": {"frameId":"2787:49","role":"BACK COVER","shapeCount":3,"textCount":0,"imageFillCount":0,"dominance":5.462,"fatal":[],"warnings":["PREPROD_SKELETON_NO_TEXT_OR_IMAGE"],"closestReference":["2771:4"]}
+  },
+  "highestPageSignatureSimilarities": [
+    {"a":"P03","b":"P07","similarityPct":98,"severity":"HIGH_RISK"},
+    {"a":"P01","b":"P04","similarityPct":93,"severity":"HIGH_RISK"},
+    {"a":"P06","b":"P07","similarityPct":87,"severity":"HIGH_RISK"},
+    {"a":"P03","b":"P06","similarityPct":86,"severity":"HIGH_RISK"},
+    {"a":"P04","b":"P05","similarityPct":82,"severity":"REVIEW"},
+    {"a":"P04","b":"P08","similarityPct":81,"severity":"REVIEW"},
+    {"a":"P01","b":"P08","similarityPct":78,"severity":"REVIEW"},
+    {"a":"P02","b":"P04","similarityPct":75,"severity":"REVIEW"}
+  ],
+  "verifiedCapabilities": {
+    "structuralLinterRun": true,
+    "wholeBookScreenshotReview": true,
+    "referenceVisualDiffBaseline": true,
+    "figmaQaBoardCreated": true,
+    "productionReferenceScoringStarted": false
+  }
+}
