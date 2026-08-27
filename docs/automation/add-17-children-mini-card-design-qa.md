@@ -1,11 +1,11 @@
 # ADD-17 子ども向けミニカード / ぬりえ — Design QA
 
-Updated: 2026-08-24
+Updated: 2026-08-27
 Authority: `docs/automation/non-rurubu-figma-quality-current.md`
 
 ## Current status
 
-`SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / PROFESSIONAL_VNEXT_EXPEDITION_FIELD_SELECTED / FAMILY_DIVERSITY_PASS / LONG_COPY_VISUAL_PASS / CHILD_ACTIVITY_SURFACE_PASS / ACTIVITY_TICK_SUBTRACTION_PASS / DISCOVERY_LABEL_CONTAINMENT_SUBTRACTION_PASS / DISCOVERY_CUE_CONSOLIDATION_PASS / BACK_SIDE_TAPE_SUBTRACTION_PASS / LEGACY_PRESERVED / BLOCKED_REQUIRED_INPUT / NOT_PRINT_READY`
+`SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / PROFESSIONAL_VNEXT_EXPEDITION_FIELD_SELECTED / FAMILY_DIVERSITY_PASS / LONG_COPY_VISUAL_PASS / CHILD_ACTIVITY_SURFACE_PASS / ACTIVITY_TICK_SUBTRACTION_PASS / DISCOVERY_LABEL_CONTAINMENT_SUBTRACTION_PASS / DISCOVERY_CUE_CONSOLIDATION_PASS / BACK_SIDE_TAPE_SUBTRACTION_PASS / BACK_OPEN_LABEL_PROMOTION_PASS / LEGACY_PRESERVED / BLOCKED_REQUIRED_INPUT / NOT_PRINT_READY`
 
 This status applies only to the age-independent neutral editable template. Final real-wedding adoption remains blocked until authoritative child-attendance/count/age and activity-use information exists.
 
@@ -18,70 +18,52 @@ This status applies only to the age-independent neutral editable template. Final
 - current selected back: `67:4 / CURRENT_SELECTED / ADD17 / BACK / DISCOVERY POSTLOG`
 - hidden realistic stress: `69:2 / 69:40`
 - current clean-room page: `67:2 / VNEXT_PRO / ADD-17 / EXPEDITION FIELD SHEET / 2026-08-23`
-- latest back no-side-tape comparisons: `82:2 / 82:21` — hidden after verification
-- latest complete pre-side-tape rollbacks: `82:40 / 82:59` — hidden
-- prior cue-consolidation comparisons: `79:2 / 79:40 / 79:78 / 79:97` — hidden
-- prior pre-consolidation rollbacks: `80:2 / 80:40 / 80:78 / 80:97` — hidden
-- prior no-rounded-label comparisons: `78:2 / 78:40` — hidden
-- prior pre-label rollbacks: `78:78 / 78:116` — hidden
-- prior no-activity-ticks comparison: `73:2` — hidden
-- prior pre-tick rollback: `74:2 / 74:40` — hidden
-- three blank-frame directions: `70:2 / 70:11 / 70:21` — hidden comparison evidence
-- working canvas: `1110×1540` (A6 trim + bleed model)
+- latest OPEN_LABEL comparisons: `83:2 / 83:21` — hidden after adoption
+- latest complete pre-OPEN_LABEL rollbacks: `83:40 / 83:59` — hidden
+- prior no-side-tape comparisons: `82:2 / 82:21` — hidden
+- prior pre-side-tape rollbacks: `82:40 / 82:59` — hidden
+- working canvas: `1110×1540`.
 
 ### Google Drive
 
 - folder: `ADD-17_子ども向けミニカード_ぬりえ`
 - Drive ID: `1xqxYqJ6_-0nPYSKrWkISHYljiNGIP5mB`
-- live folder ID/title readback on 2026-08-24: PASS
+- live ID/title readback on 2026-08-27: PASS
 - Drive writes for this pass: `0`
 
 ## Current visual direction — EXPEDITION FIELD SHEET
 
-Front remains the selected playful expedition field sheet: mint paper field, Japanese-first display, one cobalt→pink discovery route, one outlined star, open activity surface, native prompt/name/date, and open footer. Prior rounded UI carrier, activity ticks, and redundant wave/spark cues remain hidden.
+Front remains the selected playful expedition field sheet: mint paper field, Japanese-first display, one cobalt→pink discovery route, one outlined star, open activity surface and native prompt/name/date roles.
 
-Back is now a calmer discovery postlog:
+Back is now an open discovery postlog rather than a header-contained panel:
 - cream open writing surface;
-- cobalt top band retained;
-- former full-height coral side tape hidden after rollback-safe comparison showed it behaved like a generic side rail rather than a necessary binding/fold/trim cue;
-- native `きょうの発見 / 02` and Japanese-first headline;
+- full-width cobalt top band hidden after rollback-safe `CURRENT vs OPEN_LABEL` comparison;
+- native `きょうの発見 / 02` retained as navy `Noto Sans JP Bold 25` on the cream sheet;
+- Japanese-first `もうひとつ、見つけたこと。`;
 - open writing rules;
 - one outlined star retained;
-- former bottom wave remains hidden.
+- prior coral side tape and bottom wave remain hidden.
 
 All prompts, guidance, optional name and date remain native editable Figma text.
 
-## Professional comparison / Current-only improvements
+## Latest bounded improvement — back OPEN_LABEL
 
-The selected direction was originally built from three materially different blank-frame directions:
+Fresh whole / reading / native-size screenshots had reopened only the full-width cobalt back-header containment because it read like a web/app header before the physical writing sheet.
 
-1. `70:2 / EXPEDITION FIELD` — selected;
-2. `70:11 / FOLDED COLOR ATLAS` — rejected;
-3. `70:21 / OBSERVATION RIBBON` — rejected.
+Bounded comparison:
+- Current back comparison: `83:2`;
+- realistic long-copy comparison: `83:21`;
+- complete pre-change rollbacks: `83:40 / 83:59`.
 
-Bounded improvements applied after selection:
-- activity-corner ticks removed after reading as crop/scanner UI;
-- rounded coral kicker carrier removed after reading as generic pill/banner containment;
-- secondary discovery cues consolidated;
-- back coral side tape removed after whole / reading / native-size + long-copy comparison showed no functional or physical job.
+Promoted delta:
+- hide `67:24 / DECOR / COBALT TOP BAND`;
+- retain `67:26 / TEXT / KICKER` as native text and recolor it to the existing navy display color;
+- apply the same state to stress back `69:40` (`69:41` hidden, `69:43` native/navy);
+- add no replacement decoration.
 
-Latest side-tape comparison:
-- Current back comparison: `82:2`;
-- realistic long-copy comparison: `82:21`;
-- complete pre-change rollbacks: `82:40 / 82:59`.
+The comparison won at whole / ~500px, reading / ~1000px, native `1110×1540` and realistic long-copy scale.
 
-Only the back fixed side-tape visibility changed in this pass. Copy, typography, rules, cobalt header, star, name/date and dimensions were unchanged.
-
-## Three-scale / live screenshot QA
-
-Fresh back screenshots on 2026-08-24 after side-tape subtraction:
-- whole-item / thumbnail: PASS;
-- reading scale: PASS;
-- actual/native `1110×1540`: PASS;
-- realistic long-copy back: PASS after temporary live reveal and re-hide.
-
-Front remained unchanged and retains prior whole / reading / actual-size / long-copy PASS.
-Professional Design Council remains `94/100 / PASS / NO VETO`.
+Front remained unchanged. Professional Design Council historical clean-room score remains `94/100 / PASS / NO VETO`.
 
 ## Structure / stress QA
 
@@ -89,55 +71,57 @@ Current front `67:3`:
 - native text `7`;
 - fixed-height visible text `0`;
 - visible text outside root `0`;
-- IMAGE fills `0`;
-- route + one star visible; prior redundant cues hidden.
+- IMAGE fills `0`.
 
-Current back `67:4`:
+Current back `67:4` post-promotion:
 - native text `6`;
 - fixed-height visible text `0`;
 - visible text outside root `0`;
 - IMAGE fills `0`;
-- `DECOR / CORAL SIDE TAPE`: hidden;
-- cobalt top band: visible;
-- writing rules: visible;
-- bottom star: visible;
-- bottom wave: hidden.
+- cobalt top band hidden;
+- native kicker visible/navy;
+- coral side tape hidden;
+- writing rules visible;
+- bottom star visible;
+- bottom wave hidden.
 
-Stress front `69:2` retains the same front state.
-Stress back `69:40` retains the same no-side-tape state with native text `6`, fixed-height visible text `0`, outside visible text `0`, IMAGE fills `0`.
+Stress back `69:40` remains hidden as QA evidence and keeps native text `6`, fixed-height visible text `0`, outside visible text `0`, IMAGE fills `0`, cobalt top band hidden and the native kicker visible/navy.
 
-Canonical evidence:
+## Canonical evidence
+
 - `01_paper-items/additional-wedding-items/ADD-17-children-mini-card/CURRENT.md`
 - `01_paper-items/additional-wedding-items/ADD-17-children-mini-card/PROFESSIONAL-VNEXT-EXPEDITION-FIELD-PROMOTION-QA-2026-08-23.md`
 - `01_paper-items/additional-wedding-items/ADD-17-children-mini-card/ACTIVITY-TICK-SUBTRACTION-QA-2026-08-23.md`
 - `01_paper-items/additional-wedding-items/ADD-17-children-mini-card/DISCOVERY-LABEL-CONTAINMENT-SUBTRACTION-QA-2026-08-23.md`
 - `01_paper-items/additional-wedding-items/ADD-17-children-mini-card/DISCOVERY-CUE-CONSOLIDATION-QA-2026-08-24.md`
 - `01_paper-items/additional-wedding-items/ADD-17-children-mini-card/BACK-CORAL-SIDE-TAPE-SUBTRACTION-QA-2026-08-24.md`
+- `01_paper-items/additional-wedding-items/ADD-17-children-mini-card/OBSERVED-BACK-COBALT-HEADER-CONTAINMENT-2026-08-27.md`
+- `01_paper-items/additional-wedding-items/ADD-17-children-mini-card/BACK-COBALT-HEADER-OPEN-LABEL-PROMOTION-QA-2026-08-27.md`
 
 ## Hybrid / image decision
 
 - variable/semantic/factual copy: native text;
-- retained route/star: editable vector/SVG roles;
-- writing rules and cobalt header: simple native functional geometry;
-- former side tape and redundant decorative cues: hidden after bounded QA;
+- retained route/star: editable vector roles;
+- writing rules: simple native geometry;
+- former side tape, full-width back header and redundant decorative cues: hidden after bounded QA;
 - generated/composed raster: `0`;
 - replaceable image role: `0`;
 - image generation: `0`.
 
-`IMAGE_GENERATION_NOT_REQUIRED_FOR_THIS_PASS`: the screenshot-supported bottleneck was an unnecessary fixed rail, not missing photography or illustration. Generic travel imagery or generated children would reduce function and increase stock/identity risk.
+`IMAGE_GENERATION_NOT_REQUIRED_FOR_THIS_PASS`: the screenshot-supported bottleneck was containment grammar, not missing photography or illustration. No child/person imagery was generated.
 
 ## Learning state
 
-`VERIFIED_LOCAL`: layer names such as `tape`, `edge`, `rail`, or `paper edge` are not evidence of physical meaning. Keep the cue only when the whole artifact shows a real reader-facing, binding, trim, fold, or functional job.
+`VERIFIED_LOCAL`: a valid identity label does not automatically justify a full-width carrier. Test the label and its containment separately; where the carrier dominates as web/UI grammar, compare open native typography before inventing replacement decoration.
 
-No new project rule is created from this pass.
+Do not create a blanket `remove headers` rule and do not transfer ADD-17 palette, route, star, composition or cue count to other items.
 
 ## Deferred / blocked finalization
 
-Do not fabricate child attendance, age range/count, activity preference, personalization, venue amenities, final copy, or paper/pen/crayon handling.
+Do not fabricate child attendance, age range/count, activity preference, personalization, venue amenities, final copy or paper/pen/crayon handling.
 
-Also deferred: final printer template/profile, 100% physical print proof, edge/bleed verification, and real-use handling.
+Also deferred: final printer template/profile, 100% physical print proof, edge/bleed verification and real-use handling.
 
 ## Result
 
-`PROFESSIONAL_VNEXT_EXPEDITION_FIELD_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / BACK_SIDE_TAPE_SUBTRACTION_PASS / BLOCKED_REQUIRED_INPUT / NOT_PRINT_READY`.
+`PROFESSIONAL_VNEXT_EXPEDITION_FIELD_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / BACK_OPEN_LABEL_PROMOTION_PASS / BLOCKED_REQUIRED_INPUT / NOT_PRINT_READY`.
