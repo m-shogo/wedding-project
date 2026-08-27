@@ -29,3 +29,9 @@ public/local-start-wedding-edit/*
 !public/local-start-wedding-edit/.gitkeep
 src/data/startWeddingEdit/generated.ts
 src/data/startWeddingEdit/generated.meta.json
+
+# StaRt Wedding Edit Real Media(実Wedding写真・動画本体)。
+# manifest(src/data/startWeddingEdit/realMedia.ts)自体はGit管理するが、
+# 実ファイルはpublic/photos/と同じ扱いでGit管理しない。
+public/real/start-wedding/*
+!public/real/start-wedding/.gitkeep

@@ -1,4 +1,12 @@
-# main Conflict Inventory(read-only、TASK10-12)
+# main Conflict Inventory(read-only、TASK10-12、TASK16で再計測)
+
+## 再計測(TASK16)
+
+同日中に再度`git fetch origin main`して再計測した。main側はさらに
+コミットが進んでいた(ahead側は270 behind / 68 ahead まで拡大)が、
+**motion-studio/movie-dashboard配下で重複するファイルは変わらず4件のまま**
+(package.json/App.tsx/Sidebar.tsx/README.md)。分類も変わらずSAFE。
+mergeやrebaseは実施していない。
 
 Status: RECORD(read-only調査。mergeやrebaseは実施していない)
 merge-base: `80c59e8`(HEAD側)/ 実行時点のorigin/main

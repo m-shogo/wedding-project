@@ -4,6 +4,7 @@ import {weddingEditAudioPath, weddingEditLyricPhrases} from '../../data/startWed
 import {WEDDING_EDIT_SECTIONS, weddingEditSectionFrames} from '../../data/startWeddingEdit/sections';
 import {entryOverlapFrames, placeShots, weddingSectionDesign, type WeddingVariant} from '../../data/startWeddingEdit/storyboard';
 import {ShotRenderer} from '../../motion-kit/start129/shotEngine';
+import {weddingAssetResolver} from '../../data/startWeddingEdit/realMedia';
 import {WeddingLyricTrack, weddingLyricFallbackByPhraseId} from '../../motion-kit/startWeddingEdit/weddingLyricLine';
 import {ChoreographedMomentRenderer, isChoreographedForVariant} from '../../motion-kit/startWeddingEdit/choreographedMoments';
 import {buildGenericWordImpactEvents} from '../../data/startWeddingEdit/choreography';
@@ -131,7 +132,7 @@ export const StartWeddingEditComposition: React.FC<StartWeddingEditCompositionPr
                   name={`shot${shot.index + 1}:${shot.role}`}
                   premountFor={12}
                 >
-                  <ShotRenderer shot={shot} impactFrames={shotImpactFrames} />
+                  <ShotRenderer shot={shot} impactFrames={shotImpactFrames} assetResolver={weddingAssetResolver} showSourceBadge={reviewMode} />
                 </Sequence>
               );
             })}

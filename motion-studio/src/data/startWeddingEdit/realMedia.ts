@@ -21,6 +21,7 @@
 
 import {resolveDemoAsset, type ResolvedDemoAsset} from '../start129/resolveDemoAsset.ts';
 import type {Start129AssetRole} from '../start129/assetRoles.ts';
+import type {StartDemoAssetResolver} from '../../compositions/start129/StartDemoBackdrop.tsx';
 
 export type RealMediaKind = 'photo' | 'video';
 export type RealMediaOrientation = 'landscape' | 'portrait' | 'square';
@@ -73,6 +74,14 @@ export const resolveWeddingMediaAsset = (role: Start129AssetRole, variantIndex: 
   }
   const demo = resolveDemoAsset(role, variantIndex);
   return {...demo, source: demo.path ? 'demo' : 'placeholder', assetId: null};
+};
+
+/** shotEngine.tsx(ShotRenderer/LayoutRender)・StartDemoBackdropへそのまま
+ * 注入できる形のresolver(TASK4)。resolveWeddingMediaAsset()の薄いadapterで、
+ * ロジックの二重実装はしない(sourceフィールド名だけsourceTypeへ合わせる)。 */
+export const weddingAssetResolver: StartDemoAssetResolver = (role, variantIndex) => {
+  const resolved = resolveWeddingMediaAsset(role, variantIndex);
+  return {path: resolved.path, kind: resolved.kind, sourceType: resolved.source};
 };
 
 export type RealMediaStatusSummary = {

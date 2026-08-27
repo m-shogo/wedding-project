@@ -16,12 +16,13 @@ FINAL_SYNC_VERIFIED:       NO
 ## Opening Production(新設)
 
 ```text
-OPENING_MEDIA_SCHEMA_READY:    YES
-OPENING_MEDIA_PREFLIGHT_READY: YES
-OPENING_REAL_MEDIA_READY:      NO
-OPENING_VISUAL_POLISH_READY:   PARTIAL
-OPENING_TIMING_FROZEN:         NO
-OPENING_FINAL_RENDER_READY:    NO
+OPENING_MEDIA_SCHEMA_READY:        YES
+OPENING_MEDIA_PREFLIGHT_READY:     YES
+OPENING_REAL_MEDIA_PLUMBING_READY: YES
+OPENING_REAL_MEDIA_READY:          NO
+OPENING_VISUAL_POLISH_READY:       PARTIAL
+OPENING_TIMING_FROZEN:             NO
+OPENING_FINAL_RENDER_READY:        NO
 ```
 
 ### 根拠
@@ -32,9 +33,20 @@ OPENING_FINAL_RENDER_READY:    NO
 - **OPENING_MEDIA_PREFLIGHT_READY = YES**:
   `check-start-wedding-real-media-preflight.mts`が実行可能。manifest 0件でも
   正しく`MEDIA_BLOCKED`を返す(エラーではない)。
+- **OPENING_REAL_MEDIA_PLUMBING_READY = YES(新設)**: 「配線が完成しているか」
+  を「実素材が投入されているか」と区別するための状態。共有`shotEngine.tsx`
+  (`ShotRenderer`/`LayoutRender`)へ`assetResolver`のoptional dependency
+  injectionを実装し、B案41 shot全て(bespoke 6 phrase・intro含む)が
+  real→demo→placeholderのfallback chainを通ることをsynthetic real
+  manifestでの実render(sourceType="REAL"のGuide badge表示、他roleは
+  demoのまま)で実証済み。manifest空の状態でのB-clean regressionは、
+  raw video frame(SHA-256)が配線前と完全一致することを確認した
+  (`2026-08-27-real-media-plumbing-completion.md`参照)。
 - **OPENING_REAL_MEDIA_READY = NO**: 実素材投入0件(`START_WEDDING_REAL_MEDIA`
   配列は空)。`docs/decisions/2026-08-27-real-media-collection-priority-list.md`
   のP0 role(HERO_WIDE/HERO_CLOSE/SEOUL_STREET/HAWAII_WARM)から着手する。
+  配線(plumbing)は完成しているため、実素材を追加してstatusを承認するだけで
+  自動的に反映される。
 - **OPENING_VISUAL_POLISH_READY = PARTIAL**: 全30 phraseのVisual QA完了
   (`2026-08-27-b-clean-30-30-visual-qa-full.md`)、P017はA/B/C/D比較案まで
   準備済み(Final未選択)、P021はplaceholder資産起因として保留。bespoke

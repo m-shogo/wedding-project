@@ -8,7 +8,7 @@
 
 import React from 'react';
 import {AbsoluteFill, interpolate, useCurrentFrame} from 'remotion';
-import {StartDemoBackdrop} from '../../compositions/start129/StartDemoBackdrop';
+import {StartDemoBackdrop, type StartDemoAssetResolver} from '../../compositions/start129/StartDemoBackdrop';
 import {SparkleOverlay} from '../../compositions/start129/SparkleOverlay';
 import type {PlacedShot, ShotEffect, ShotEntry, ShotLayout, ShotMotion} from '../../data/start129/storyboard';
 import type {Start129AssetRole} from '../../data/start129/assetRoles';
@@ -169,11 +169,15 @@ const LayoutRender: React.FC<{
   focus?: {x: number; y: number};
   /** C案のgridで罫線を出すか */
   editorialRules?: boolean;
-}> = ({layout, role, variantIndex, extras, focus, editorialRules}) => {
+  /** 省略時は既存のresolveDemoAsset(挙動変更なし)。StaRt Wedding Edit等が
+   * real media resolverを注入する場合だけ指定する。 */
+  assetResolver?: StartDemoAssetResolver;
+  showSourceBadge?: boolean;
+}> = ({layout, role, variantIndex, extras, focus, editorialRules, assetResolver, showSourceBadge}) => {
   const objectPosition = focus ? `${focus.x}% ${focus.y}%` : undefined;
   const cell = (r: Start129AssetRole, vi: number, key: React.Key) => (
     <div key={key} style={{position: 'relative', overflow: 'hidden', width: '100%', height: '100%'}}>
-      <StartDemoBackdrop role={r} variantIndex={vi} objectPosition={objectPosition} />
+      <StartDemoBackdrop role={r} variantIndex={vi} objectPosition={objectPosition} assetResolver={assetResolver} showSourceBadge={showSourceBadge} />
     </div>
   );
   const gap = editorialRules ? 6 : 4;
@@ -181,7 +185,7 @@ const LayoutRender: React.FC<{
 
   switch (layout.kind) {
     case 'full':
-      return <StartDemoBackdrop role={role} variantIndex={variantIndex} objectPosition={objectPosition} />;
+      return <StartDemoBackdrop role={role} variantIndex={variantIndex} objectPosition={objectPosition} assetResolver={assetResolver} showSourceBadge={showSourceBadge} />;
     case 'split-2': {
       const r = layout.ratio ?? 0.5;
       return (
@@ -212,7 +216,7 @@ const LayoutRender: React.FC<{
       return (
         <AbsoluteFill style={{display: 'grid', gridTemplateColumns: '64% 36%', gridTemplateRows: '1fr 1fr', gap, background: bg}}>
           <div style={{gridRow: '1 / 3', position: 'relative', overflow: 'hidden'}}>
-            <StartDemoBackdrop role={role} variantIndex={variantIndex} objectPosition={objectPosition} />
+            <StartDemoBackdrop role={role} variantIndex={variantIndex} objectPosition={objectPosition} assetResolver={assetResolver} showSourceBadge={showSourceBadge} />
           </div>
           {extras[0] ? cell(extras[0].role, extras[0].variantIndex, 'b') : <div />}
           {extras[1] ? cell(extras[1].role, extras[1].variantIndex, 'c') : <div />}
@@ -222,7 +226,7 @@ const LayoutRender: React.FC<{
       return (
         <AbsoluteFill>
           {extras[0] ? (
-            <StartDemoBackdrop role={extras[0].role} variantIndex={extras[0].variantIndex} />
+            <StartDemoBackdrop role={extras[0].role} variantIndex={extras[0].variantIndex} assetResolver={assetResolver} showSourceBadge={showSourceBadge} />
           ) : (
             <AbsoluteFill style={{background: bg}} />
           )}
@@ -238,12 +242,12 @@ const LayoutRender: React.FC<{
               boxShadow: '0 12px 48px rgba(0,0,0,0.4)',
             }}
           >
-            <StartDemoBackdrop role={role} variantIndex={variantIndex} />
+            <StartDemoBackdrop role={role} variantIndex={variantIndex} assetResolver={assetResolver} showSourceBadge={showSourceBadge} />
           </div>
         </AbsoluteFill>
       );
     case 'stack':
-      return <StartDemoBackdrop role={role} variantIndex={variantIndex} objectPosition={objectPosition} />;
+      return <StartDemoBackdrop role={role} variantIndex={variantIndex} objectPosition={objectPosition} assetResolver={assetResolver} showSourceBadge={showSourceBadge} />;
   }
 };
 
@@ -404,11 +408,16 @@ const useImpactPunch = (localFrame: number, impactFrames: number[] | undefined):
   return {scale, flash};
 };
 
-export const ShotRenderer: React.FC<{shot: PlacedShot; editorialRules?: boolean; impactFrames?: number[]}> = ({
-  shot,
-  editorialRules,
-  impactFrames,
-}) => {
+export const ShotRenderer: React.FC<{
+  shot: PlacedShot;
+  editorialRules?: boolean;
+  impactFrames?: number[];
+  /** 省略時は既存のresolveDemoAsset(挙動変更なし)。StaRt Wedding Editが
+   * real media resolverを注入する場合だけ指定する。Start129/Director Recipe等
+   * 既存の呼び出し元は変更不要。 */
+  assetResolver?: StartDemoAssetResolver;
+  showSourceBadge?: boolean;
+}> = ({shot, editorialRules, impactFrames, assetResolver, showSourceBadge}) => {
   const localFrame = useCurrentFrame();
   const dur = shot.durationInFrames;
   const entry = entryRender(shot.entry, localFrame);
@@ -431,6 +440,8 @@ export const ShotRenderer: React.FC<{shot: PlacedShot; editorialRules?: boolean;
           extras={extras}
           focus={shot.focus}
           editorialRules={editorialRules}
+          assetResolver={assetResolver}
+          showSourceBadge={showSourceBadge}
         />
       </AbsoluteFill>
       {/* parallax時は同じ素材を前景として少し速く動かし、擬似的な奥行きを作る */}
@@ -445,7 +456,7 @@ export const ShotRenderer: React.FC<{shot: PlacedShot; editorialRules?: boolean;
             pointerEvents: 'none',
           }}
         >
-          <StartDemoBackdrop role={shot.role} variantIndex={shot.variantIndex} />
+          <StartDemoBackdrop role={shot.role} variantIndex={shot.variantIndex} assetResolver={assetResolver} showSourceBadge={showSourceBadge} />
         </AbsoluteFill>
       ) : null}
       {(shot.effects ?? []).map((e, i) => (

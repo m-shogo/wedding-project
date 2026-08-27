@@ -15,6 +15,13 @@ const hashHue = (input: string): number => {
   return h;
 };
 
+/** role+variantIndexから実際のasset(path/kind)を解決する関数の型。
+ * 既定はresolveDemoAsset(このファイル下部)。呼び出し元(例: StaRt Wedding Edit)
+ * が独自のresolver(real → demo → placeholderのfallback chain等)を注入
+ * できるようにするための共通契約。sourceTypeは任意(debug表示用、TASK9)。 */
+export type StartDemoAssetResolution = {path?: string; kind: 'photo' | 'video'; sourceType?: 'real' | 'demo' | 'placeholder'};
+export type StartDemoAssetResolver = (role: Start129AssetRole, variantIndex: number) => StartDemoAssetResolution;
+
 export type StartDemoBackdropProps = {
   role: Start129AssetRole;
   /** 同一role内で何番目の候補を使うか(複数登録時)。既定0。 */
@@ -29,6 +36,13 @@ export type StartDemoBackdropProps = {
   fit?: 'cover' | 'contain' | 'blurred-extend';
   /** cover時の注視点。顔や主役が切れないようにshot側から指定する */
   objectPosition?: string;
+  /** 省略時はresolveDemoAsset(既存動作)。呼び出し元がreal media resolver等を
+   * 注入する場合だけ指定する(Start129/Director Recipe等、既存の呼び出し元は
+   * 一切変更不要でこれまで通りdemo assetを使い続ける)。 */
+  assetResolver?: StartDemoAssetResolver;
+  /** trueの場合、右上に解決元(REAL/DEMO/PLACEHOLDER)を小さく表示する
+   * (TASK9、debug/guide表示専用。既定false、本番Cleanでは使わない)。 */
+  showSourceBadge?: boolean;
   children?: React.ReactNode;
 };
 
@@ -74,9 +88,12 @@ export const StartDemoBackdrop: React.FC<StartDemoBackdropProps> = ({
   variantIndex = 0,
   fit = 'cover',
   objectPosition,
+  assetResolver,
+  showSourceBadge = false,
   children,
 }) => {
-  const {path, kind} = resolveDemoAsset(role, variantIndex);
+  const resolve: StartDemoAssetResolver = assetResolver ?? resolveDemoAsset;
+  const {path, kind, sourceType} = resolve(role, variantIndex);
 
   const renderMedia = (mediaFit: 'cover' | 'contain', extraStyle?: React.CSSProperties) =>
     kind === 'video' ? (
@@ -108,6 +125,24 @@ export const StartDemoBackdrop: React.FC<StartDemoBackdropProps> = ({
       ) : (
         <AbstractPlaceholder role={role} />
       )}
+      {showSourceBadge ? (
+        <div
+          style={{
+            position: 'absolute',
+            top: 4,
+            right: 4,
+            fontFamily: 'monospace',
+            fontSize: 10,
+            fontWeight: 700,
+            color: sourceType === 'real' ? '#7CF29A' : sourceType === 'demo' ? '#8CA0FF' : '#FFD84A',
+            background: 'rgba(0,0,0,0.55)',
+            padding: '1px 5px',
+            pointerEvents: 'none',
+          }}
+        >
+          {(sourceType ?? (path ? 'demo' : 'placeholder')).toUpperCase()}
+        </div>
+      ) : null}
       {children}
     </AbsoluteFill>
   );
