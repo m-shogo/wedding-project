@@ -1,0 +1,55 @@
+name: Opening V1 Production Status Dashboard CI
+
+on:
+  pull_request:
+    paths:
+      - "motion-studio/scripts/opening-v1-production-status.mts"
+      - "movie-dashboard/scripts/sync-opening-production-status.mjs"
+      - "movie-dashboard/scripts/verify-opening-production-status-handoff.mjs"
+      - "movie-dashboard/src/data/openingProductionGate.generated.ts"
+      - "movie-dashboard/src/data/openingProductionStatus.generated.ts"
+      - "movie-dashboard/src/data/openingProductionStatusHandoff.ts"
+      - "movie-dashboard/src/components/OpeningProductionStatusHandoffCard.tsx"
+      - "movie-dashboard/src/components/ProfileProductionStatusHandoffCard.tsx"
+      - ".github/workflows/opening-v1-production-status-dashboard-ci.yml"
+  push:
+    branches: [main]
+    paths:
+      - "motion-studio/scripts/opening-v1-production-status.mts"
+      - "movie-dashboard/scripts/sync-opening-production-status.mjs"
+      - "movie-dashboard/scripts/verify-opening-production-status-handoff.mjs"
+      - "movie-dashboard/src/data/openingProductionGate.generated.ts"
+      - "movie-dashboard/src/data/openingProductionStatus.generated.ts"
+      - "movie-dashboard/src/data/openingProductionStatusHandoff.ts"
+      - "movie-dashboard/src/components/OpeningProductionStatusHandoffCard.tsx"
+      - "movie-dashboard/src/components/ProfileProductionStatusHandoffCard.tsx"
+      - ".github/workflows/opening-v1-production-status-dashboard-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: movie-dashboard
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+          run_install: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: movie-dashboard/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - name: Generated Opening full production status is current
+        run: node scripts/sync-opening-production-status.mjs --check
+      - name: Opening production-status export and UI contracts
+        run: node scripts/verify-opening-production-status-handoff.mjs
+      - name: Typecheck and build Movie Dashboard
+        run: pnpm build
