@@ -1,7 +1,7 @@
 # Critical Cue Report — StaRt Wedding Edit
 
 Status: MACHINE_GENERATED / 自動生成(再生成: `node --no-warnings scripts/generate-critical-cue-report.mts`)
-masterId: start-wedding-edit-master / revision: 13 / contentHash: dcc64af3cf82e083...
+masterId: start-wedding-edit-master / revision: 14 / contentHash: f2156061936024ec...
 生成日時からの再現性: このrevisionのmasterから決定的に再生成される(手動編集しない)。
 
 ## 対象

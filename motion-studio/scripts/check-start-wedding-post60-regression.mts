@@ -78,20 +78,34 @@ for (const anchorSec of ANCHOR_SECONDS) {
 // 追加: 60秒以降の全cueについて、resolveEffectiveCueTimeMs()の結果と
 // generated.ts側の値(importantWords[].accentSec等)が一致しているかも
 // 抜き取り検証する(cue単位のplumbing検証)。
+//
+// P0-3根本修正(2026-08-27、Render Truth再監査): 以前は`accentSec近傍
+// (±500ms)`でcueを検索してPASS判定していたが、500msは同期検査としては
+// 広すぎ、かつ「近い別のcueを誤って拾ってPASSしてしまう」リスクがある
+// (ユーザー指摘: 禁止事項「近い別cueを500ms windowで拾ってPASS」)。
+// generated.ts側のImportantWordへcueIdを伝播させ(sync-start-wedding-
+// timing-master.mts側で対応済み)、ここではcueId完全一致で対応するentryを
+// 探し、時刻はFRAME_TOLERANCE(±1frame)以内の厳密一致のみ許容する。
 let cueMismatches = 0;
 for (const p of master.phrases) {
   if (p.startMs < 60000) continue;
   const generated = generatedModule.weddingEditLyricPhrases.find((gp) => gp.phraseId === p.phraseId) as
-    | {importantWords?: Array<{word: string; accentSec: number}>}
+    | {importantWords?: Array<{cueId: string; word: string; accentSec: number}>}
     | undefined;
   if (!generated?.importantWords) continue;
   for (const c of p.cues) {
     if (c.kind !== 'word-accent') continue;
     const expectedSec = (resolveEffectiveCueTimeMs(c, p, master.audio) - sourceStartMs) / 1000;
-    const match = generated.importantWords.find((w) => Math.abs(w.accentSec - expectedSec) < 0.5);
+    const match = generated.importantWords.find((w) => w.cueId === c.cueId);
     if (!match) {
       cueMismatches++;
-      errors.push(`${c.cueId}: generated.tsのimportantWordsにaccentSec≈${expectedSec.toFixed(3)}sの一致するentryが無い`);
+      errors.push(`${c.cueId}: generated.tsのimportantWordsにcueId完全一致するentryが無い(cueId propagation漏れ)`);
+      continue;
+    }
+    const deltaMs = Math.abs(match.accentSec - expectedSec) * 1000;
+    if (deltaMs > MS_TOLERANCE) {
+      cueMismatches++;
+      errors.push(`${c.cueId}: cueId一致entryのaccentSec(${match.accentSec.toFixed(4)}s)がcanonical期待値(${expectedSec.toFixed(4)}s)と±${MS_TOLERANCE.toFixed(1)}ms超で不一致(delta=${deltaMs.toFixed(1)}ms)`);
     }
   }
 }

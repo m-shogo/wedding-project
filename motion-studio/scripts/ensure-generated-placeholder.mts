@@ -41,6 +41,7 @@ import type {LyricPhrase} from './localLyricsWeddingEdit.ts';
 import type {LocalEditRange} from './localEditRange.ts';
 
 export type ImportantWord = {
+  cueId: string;
   word: string;
   accentSec: number;
   beatSec: number | null;

@@ -122,6 +122,23 @@ for (const p of master.phrases) {
   lastPhraseEndMs = p.endMs;
 }
 
+// 4a-2. holdMs/exitMsがphrase範囲[startMs,endMs]内に収まっており、
+//       hold<=exitの順序を保っていることを保証する(item P0-1: canonical
+//       start補正・endMs clampの副作用で、legacy absolute timestampのまま
+//       残ったholdMs/exitMsが範囲外へはみ出すbugを2026-08-27に発見・修正した。
+//       P009/P010/P011/P026で実測)。
+for (const p of master.phrases) {
+  if (p.holdMs != null && (p.holdMs < p.startMs || p.holdMs > p.endMs)) {
+    errors.push(`${p.phraseId}: holdMs(${p.holdMs})がphrase範囲[${p.startMs},${p.endMs}]外`);
+  }
+  if (p.exitMs != null && (p.exitMs < p.startMs || p.exitMs > p.endMs)) {
+    errors.push(`${p.phraseId}: exitMs(${p.exitMs})がphrase範囲[${p.startMs},${p.endMs}]外`);
+  }
+  if (p.holdMs != null && p.exitMs != null && p.holdMs > p.exitMs) {
+    errors.push(`${p.phraseId}: holdMs(${p.holdMs}) > exitMs(${p.exitMs})`);
+  }
+}
+
 // 4b. 同一phrase内のordered cue group(syllable-hit)がH01<H02<H03の狭義単調増加
 //     であることを保証する(item13/14: 1 onset→複数critical cueの重複割当を
 //     再発させないための回帰check。実際にP013-H01/H02が同一onsetへ収束する

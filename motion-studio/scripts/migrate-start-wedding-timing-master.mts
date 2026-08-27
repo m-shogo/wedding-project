@@ -535,6 +535,32 @@ for (let i = 0; i < phrases.length - 1; i++) {
   }
 }
 
+// P0根本修正(2026-08-27、Render Truth再監査): 上のendMs clampにより、
+// 一部phraseのholdMs/exitMsが(legacy absolute timestampのまま残っていたため)
+// 新しい短いendMsの外側へはみ出す状態が実際に発生した(P009/P010/P011/P026で
+// 実測: exitMsがendMsを超過)。holdMs/exitMsは「phraseの表示区間内の相対的な
+// タイミング」を表す値であり、区間そのものが短縮されたら追従して収まる
+// べきなので、endMsを上限としてclampする(startMsを下限として、
+// hold<=exitの順序も保つ)。大規模なrelativeToPhraseStartMsへのschema
+// rewriteは目的化せず、既存の絶対msフィールドのまま安全にclampする。
+for (const p of phrases) {
+  if (p.holdMs != null) {
+    const clamped = Math.min(Math.max(p.holdMs, p.startMs), p.endMs);
+    if (clamped !== p.holdMs) {
+      info(`${p.phraseId}: holdMs=${p.holdMs}を[${p.startMs},${p.endMs}]の範囲へclamp(${clamped})。`);
+      p.holdMs = clamped;
+    }
+  }
+  if (p.exitMs != null) {
+    const lowerBound = p.holdMs ?? p.startMs;
+    const clamped = Math.min(Math.max(p.exitMs, lowerBound), p.endMs);
+    if (clamped !== p.exitMs) {
+      info(`${p.phraseId}: exitMs=${p.exitMs}を[${lowerBound},${p.endMs}]の範囲へclamp(${clamped})。`);
+      p.exitMs = clamped;
+    }
+  }
+}
+
 // --- 5. musicCues(section境界を最小限のtransition cueとして記録) -----------
 // structure-map.local.json自身が「ffmpeg RMS/spectrogram解析」を明記しているため、
 // ここのaudio-analysisは自己申告根拠のある分類(estimatedへの格下げは不要)。

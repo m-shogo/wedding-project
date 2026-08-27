@@ -103,6 +103,7 @@ const audioRelativePath = 'local-start-wedding-edit/audio/start-wedding-edit.m4a
 // 5値をそのまま出力する(ImportantWord.timingSourceの型を拡張)。
 type TimingSourceOut = 'manual' | 'verified-vocal' | 'audio-analysis' | 'beat-snap' | 'estimated';
 type ImportantWordOut = {
+  cueId: string;
   word: string;
   accentSec: number;
   beatSec: number | null;
@@ -129,6 +130,7 @@ const nearestBeatSec = (sec: number): number | null => {
 const enrichedPhrases = master.phrases.map((p) => {
   const wordCues = p.cues.filter((c) => c.kind === 'word-accent');
   const importantWords: ImportantWordOut[] = wordCues.map((c) => ({
+    cueId: c.cueId,
     word: c.text,
     accentSec: toEditSecForCue(c, p),
     beatSec: nearestBeatSec(toEditSecForCue(c, p)),
@@ -189,6 +191,7 @@ import type {LyricPhrase} from './localLyricsWeddingEdit.ts';
 import type {LocalEditRange} from './localEditRange.ts';
 
 export type ImportantWord = {
+  cueId: string;
   word: string;
   accentSec: number;
   beatSec: number | null;
