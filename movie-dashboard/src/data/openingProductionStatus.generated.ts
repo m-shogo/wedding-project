@@ -5,6 +5,7 @@ export const openingProductionStatus = {
   "source": {
     "status": "motion-studio/scripts/opening-v1-production-status.mts",
     "previewSourceBinding": "motion-studio/scripts/opening-v1-preview-source-fingerprint.mts",
+    "finalRenderReview": "motion-studio/scripts/opening-v1-final-render-review.mts",
     "davinciHandoff": "motion-studio/scripts/opening-v1-davinci-handoff-contract.mts"
   },
   "overallState": "MEDIA_REQUIRED",
@@ -32,6 +33,9 @@ export const openingProductionStatus = {
     },
     "finalDeliveryApproval": {
       "state": "NOT_RUN"
+    },
+    "finalRenderReview": {
+      "state": "NOT_RUN"
     }
   },
   "readiness": {
@@ -44,7 +48,8 @@ export const openingProductionStatus = {
     "macDaVinciActualVerified": false,
     "readyForFinalDeliveryApproval": false,
     "finalDeliveryApproved": false,
-    "productionReady": false
+    "productionReady": false,
+    "humanFinalRenderApproved": false
   },
   "sourceRevalidation": {
     "realMediaPreview": {
@@ -52,10 +57,19 @@ export const openingProductionStatus = {
       "blockers": [],
       "recovery": []
     },
+    "finalRender": {
+      "state": "NOT_RUN",
+      "blockers": [
+        "FINAL_RENDER_REVIEW_EVIDENCE_MISSING"
+      ],
+      "recovery": []
+    },
     "guardrails": [
       "SOURCE_CHANGED => RE_RENDER_REQUIRED",
       "RE_RENDER_REQUIRED => RE_REVIEW_REQUIRED",
-      "OLD_HUMAN_REVIEW != CURRENT_RENDER_IMPLEMENTATION"
+      "OLD_HUMAN_REVIEW != CURRENT_RENDER_IMPLEMENTATION",
+      "PREVIEW_REVIEW_PASS != FINAL_RENDER_REVIEW_PASS",
+      "FINAL_RENDER_OR_SOURCE_CHANGED => FINAL_RENDER_RE_REVIEW_REQUIRED"
     ]
   },
   "handoff": {
@@ -64,7 +78,8 @@ export const openingProductionStatus = {
       "current": false,
       "sourceAuthorities": [
         "src/data/openingV1.ts#openingV1Scenes",
-        "src/data/openingV1Sound.ts#openingV1SoundCues"
+        "src/data/openingV1Sound.ts#openingV1SoundCues",
+        "out/qa/opening-v1-final-render-review.json"
       ],
       "artifacts": {
         "sceneTimeline": {
@@ -95,7 +110,8 @@ export const openingProductionStatus = {
       "current": false,
       "sourceAuthorities": [
         "scripts/export-opening-v1-production-bundle.mts#bundle.davinci",
-        "scripts/opening-v1-davinci-finishing-evidence.mts"
+        "scripts/opening-v1-davinci-finishing-evidence.mts",
+        "out/qa/opening-v1-final-render-review.json"
       ],
       "upstreamPalmier": {
         "requiredContractVersion": "opening-v1-palmier-handoff/v2",
