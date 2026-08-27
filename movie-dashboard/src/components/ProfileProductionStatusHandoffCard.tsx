@@ -47,11 +47,17 @@ export function ProfileProductionStatusHandoffCard({projectId}: {projectId: Scen
         </button>
       </div>
 
-      <div className="mt-2 grid grid-cols-2 gap-1 sm:grid-cols-3">
+      <div className="mt-2 grid gap-1 sm:grid-cols-2">
         {Object.entries(production.stages).map(([key, stage]) => {
           const state = String(stage.state);
           const complete = !incompleteStageStates.has(state);
-          return <div key={key} className={`border px-2 py-1.5 text-[8px] ${complete ? "border-emerald-200 text-emerald-700 dark:border-emerald-800 dark:text-emerald-300" : "border-amber-200 text-amber-700 dark:border-amber-800 dark:text-amber-300"}`}><span className="font-semibold">{stageLabel[key] ?? key}</span>: {state}</div>;
+          return (
+            <div key={key} className={`border px-2 py-1.5 text-[8px] leading-4 ${complete ? "border-emerald-200 text-emerald-700 dark:border-emerald-800 dark:text-emerald-300" : "border-amber-200 text-amber-700 dark:border-amber-800 dark:text-amber-300"}`}>
+              <div><span className="font-semibold">{stageLabel[key] ?? key}</span>: {state}</div>
+              <div className="text-navy-500 dark:text-navy-300">{stage.detail}</div>
+              {"path" in stage && stage.path ? <code className="block break-all text-navy-400">{stage.path}</code> : null}
+            </div>
+          );
         })}
       </div>
 
@@ -119,7 +125,7 @@ export function ProfileProductionStatusHandoffCard({projectId}: {projectId: Scen
       </div>
 
       <p className="mt-2 text-[8px] leading-4 text-navy-400">
-        このstatusはBLOCKED / NOT_RUNも含めて現在状態とPalmier / DaVinci handoff contractを外へ渡すためのenvelopeです。Assembly manifestの可否とは別なので、未完成でも書き出せます。
+        このstatusはBLOCKED / NOT_RUNも含めて現在状態・理由・artifact pathとPalmier / DaVinci handoff contractを外へ渡すためのenvelopeです。Assembly manifestの可否とは別なので、未完成でも書き出せます。
         `ASSEMBLY_READY != PRODUCTION_READY` / `HANDOFF_METADATA_EXPORTED != HANDOFF_ARTIFACTS_CURRENT` / `DAVINCI_HANDOFF_CURRENT != MAC_DAVINCI_ACTUAL_VERIFIED` / `MAC_DAVINCI_ACTUAL_VERIFIED != FINAL_DELIVERY_APPROVED`
       </p>
 
