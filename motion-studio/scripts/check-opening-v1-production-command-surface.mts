@@ -41,6 +41,23 @@ for (const name of ['opening:final-render-review','opening:davinci-finishing','o
   if (!scripts[name]) errors.push(`missing non-strict inspection command: ${name}`);
 }
 
+const assemblyPath = join(root, 'scripts/opening-v1-assembly-preflight.mts');
+const assembly = readFileSync(assemblyPath, 'utf8');
+for (const token of [
+  "import {verifyIntakeReceipt} from './verify-production-media-intake-receipt.mts';",
+  "verifyIntakeReceipt({project: 'opening', targetDirectory: openingPhotoDir})",
+  'const photosReady = photoFilesReady && photoReceiptCurrent;',
+  'PHOTO_INTAKE_RECEIPT_STALE',
+  'out/intake/opening-media-intake.json',
+  'scripts/intake-production-media.mts --project opening',
+  'scripts/verify-production-media-intake-receipt.mts --project opening',
+]) {
+  if (!assembly.includes(token)) errors.push(`Opening assembly missing SHA-bound photo intake contract: ${token}`);
+}
+if (assembly.includes("'実写真11枚をcanonical filenameで投入',\n  'pnpm sync:photos'")) {
+  errors.push('Opening assembly recovery must not treat raw filename placement + sync as canonical production provenance');
+}
+
 const preview = scripts['render:opening-v1:preview'] ?? '';
 const assemblyStrictIndex = preview.indexOf('pnpm opening:assembly-preflight:strict');
 const remotionRenderIndex = preview.indexOf('remotion render src/index-opening-v1.ts OpeningV1');
@@ -78,4 +95,4 @@ if (errors.length) {
   for (const error of errors) console.error(`- ${error}`);
   process.exit(1);
 }
-console.log(`Opening V1 production command surface OK: ${Object.keys(expected).length} guarded commands enforce strict assembly before preview and production QA stills, isolate placeholder smoke behind an explicit CI-only flag, then fresh render -> Human final MP4 review -> production bundle finalize -> DaVinci Actual -> final approval without premature export.`);
+console.log(`Opening V1 production command surface OK: ${Object.keys(expected).length} guarded commands require SHA-current canonical photo intake + BGM assembly before preview and production QA stills, isolate placeholder smoke behind an explicit CI-only flag, then fresh render -> Human final MP4 review -> production bundle finalize -> DaVinci Actual -> final approval without premature export.`);
