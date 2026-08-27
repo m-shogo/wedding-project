@@ -5,6 +5,7 @@ import {assets} from '../src/data/assets.ts';
 import {openingV1Presentation} from '../src/data/openingV1Presentation.ts';
 import {openingV1SoundCues} from '../src/data/openingV1Sound.ts';
 import {verifyBgmIntakeReceipt} from './verify-production-bgm-intake-receipt.mts';
+import {verifyIntakeReceipt} from './verify-production-media-intake-receipt.mts';
 
 const studioRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const openingPhotoDir = join(studioRoot, 'public/photos/opening');
@@ -98,7 +99,10 @@ const soundPlan = openingV1SoundCues.map((cue) => ({
 const bgmRows = soundPlan.filter((row) => row.role === 'bgm');
 const ambienceRows = soundPlan.filter((row) => row.role === 'ambience');
 const photosReadyCount = photoPlan.filter((row) => row.ready).length;
-const photosReady = photosReadyCount === photoPlan.length;
+const photoFilesReady = photosReadyCount === photoPlan.length;
+const photoReceipt = verifyIntakeReceipt({project: 'opening', targetDirectory: openingPhotoDir});
+const photoReceiptCurrent = photoReceipt.current;
+const photosReady = photoFilesReady && photoReceiptCurrent;
 const bgmAssetReady = bgmRows.length === 1 && bgmRows.every((row) => row.ready);
 const bgmReceipt = bgmRows.length === 1 && bgmRows[0]?.path.startsWith('public/audio/')
   ? verifyBgmIntakeReceipt({project: 'opening', targetPath: join(studioRoot, bgmRows[0].path)})
@@ -112,6 +116,12 @@ const mixReady = finalRenderEligible && ambienceReady;
 
 const blockers = [
   ...photoPlan.filter((row) => !row.ready).map((row) => `PHOTO_MISSING:${row.slot}`),
+  ...(photoFilesReady && !photoReceiptCurrent
+    ? [
+        'PHOTO_INTAKE_RECEIPT_STALE',
+        ...photoReceipt.errors.map((error) => `PHOTO_INTAKE:${error}`),
+      ]
+    : []),
   ...bgmRows.filter((row) => !row.ready).map((row) => `BGM_NOT_READY:${row.assetId}:${row.status}`),
   ...(bgmRows.length !== 1 ? [`BGM_CUE_COUNT:${bgmRows.length}`] : []),
   ...(bgmRows.length === 1 && !bgmReceiptCurrent
@@ -126,21 +136,27 @@ const mixWarnings = ambienceRows
   .map((row) => `AMBIENCE_NOT_READY:${row.assetId}:${row.status}`);
 
 const canonicalPhotoIntakeActions = [
-  '実写真11枚をcanonical filenameで投入',
-  'pnpm sync:photos',
-  'pnpm opening:assembly-preflight',
+  'node --no-warnings scripts/intake-production-media.mts --project opening --source "/ABS/PATH/TO/opening-media"',
+  'node --no-warnings scripts/intake-production-media.mts --project opening --source "/ABS/PATH/TO/opening-media" --apply --overwrite --receipt out/intake/opening-media-intake.json',
+  'node --no-warnings scripts/verify-production-media-intake-receipt.mts --project opening',
+  'pnpm prepare:opening-v1',
 ];
 const canonicalBgmIntakeActions = [
   'node --no-warnings scripts/intake-production-bgm.mts --project opening --source "/ABS/PATH/TO/opening-bgm.mp3"',
   'node --no-warnings scripts/intake-production-bgm.mts --project opening --source "/ABS/PATH/TO/opening-bgm.mp3" --apply --receipt out/intake/opening-bgm-intake.json',
   'node --no-warnings scripts/verify-production-bgm-intake-receipt.mts --project opening',
 ];
+const photosNeedIntake = !photoFilesReady || !photoReceiptCurrent;
 const bgmNeedsIntake = !bgmRows[0]?.fileExists || !bgmReceiptCurrent;
 const bgmNeedsApproval = !bgmNeedsIntake && !bgmAssetReady;
 const inputRecovery = {
   photos: {
     state: photosReady ? 'READY' as const : 'BLOCKED' as const,
-    actions: photosReady ? [] : canonicalPhotoIntakeActions,
+    fileReady: photoFilesReady,
+    intakeReceiptCurrent: photoReceiptCurrent,
+    intakeReceiptPath: 'out/intake/opening-media-intake.json',
+    intakeReceiptBlockers: photoReceipt.errors,
+    actions: photosNeedIntake ? canonicalPhotoIntakeActions : [],
   },
   bgm: {
     state: bgmReady ? 'READY' as const : 'BLOCKED' as const,
@@ -161,8 +177,13 @@ const report = {
   authority: 'MOTION_STUDIO_DERIVED_PREFLIGHT' as const,
   photos: {
     ready: photosReady,
+    fileReady: photoFilesReady,
     readyCount: photosReadyCount,
     expectedCount: photoPlan.length,
+    intakeReceiptCurrent: photoReceiptCurrent,
+    intakeReceiptPath: 'out/intake/opening-media-intake.json',
+    intakeReceiptVerifiedCount: photoReceipt.verifiedCount,
+    intakeReceiptBlockers: photoReceipt.errors,
     slots: photoPlan,
   },
   audio: {
@@ -196,7 +217,7 @@ const report = {
 if (jsonMode) {
   console.log(JSON.stringify(report, null, 2));
 } else {
-  console.log(`Opening V1 assembly preflight: photos=${photosReadyCount}/${photoPlan.length} BGM=${bgmReady ? 'READY' : 'BLOCKED'} receipt=${bgmReceiptCurrent ? 'CURRENT' : 'MISSING_OR_STALE'} ambience=${ambienceReadyCount}/${ambienceRows.length}`);
+  console.log(`Opening V1 assembly preflight: photos=${photosReadyCount}/${photoPlan.length} files=${photoFilesReady ? 'READY' : 'BLOCKED'} receipt=${photoReceiptCurrent ? 'CURRENT' : 'MISSING_OR_STALE'} BGM=${bgmReady ? 'READY' : 'BLOCKED'} bgmReceipt=${bgmReceiptCurrent ? 'CURRENT' : 'MISSING_OR_STALE'} ambience=${ambienceReadyCount}/${ambienceRows.length}`);
   console.log(`finalRenderEligible=${finalRenderEligible ? 'YES' : 'NO'} mixReady=${mixReady ? 'YES' : 'NO'} renderQa=NOT_RUN MacDaVinciActual=NOT_RUN`);
   for (const blocker of blockers) console.log(`BLOCK / ${blocker}`);
   for (const warning of mixWarnings) console.log(`WARN  / ${warning}`);
