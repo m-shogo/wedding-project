@@ -4,6 +4,7 @@
 export const openingProductionStatus = {
   "source": {
     "status": "motion-studio/scripts/opening-v1-production-status.mts",
+    "previewSourceBinding": "motion-studio/scripts/opening-v1-preview-source-fingerprint.mts",
     "davinciHandoff": "motion-studio/scripts/opening-v1-davinci-handoff-contract.mts"
   },
   "overallState": "MEDIA_REQUIRED",
@@ -12,6 +13,9 @@ export const openingProductionStatus = {
       "state": "BLOCKED"
     },
     "previewRender": {
+      "state": "NOT_RUN"
+    },
+    "previewSourceBinding": {
       "state": "NOT_RUN"
     },
     "previewReview": {
@@ -33,6 +37,7 @@ export const openingProductionStatus = {
   "readiness": {
     "finalRenderEligible": false,
     "mixReady": false,
+    "previewSourceBound": false,
     "humanPreviewApproved": false,
     "finalRenderQaPass": false,
     "productionBundleCurrent": false,
