@@ -8,6 +8,7 @@ const manifest = read("src/data/projectProductionHandoffManifest.ts");
 const batchCard = read("src/components/TypographyProjectDeliveryBatchCard.tsx");
 const workspace = read("src/data/motionZukanProductionWorkspace.ts");
 const projectBatch = read("src/data/typographyProjectDeliveryBatch.ts");
+const openingGate = read("src/data/openingProductionGate.generated.ts");
 
 const errors = [];
 const requireText = (source, token, message) => {
@@ -24,7 +25,17 @@ for (const token of [
   'sourceRef: asset.sourceRef',
   'workspace.musicMarkers',
   'workspace.designSettings',
-  'typography.summary.batchReadyForPalmierDaVinciHandoff && finalChecksPass',
+  'import {openingProductionGate} from "./openingProductionGate.generated"',
+  'authority: "MOTION_STUDIO_OPENING_V1_MEDIA_GATE"',
+  'if (projectId !== "opening") return null',
+  'photoMissingCount: openingProductionGate.photoMissingCount',
+  'bgm: {...openingProductionGate.bgm}',
+  'ambience: openingProductionGate.ambience.map',
+  'blockingGatePass: !openingProductionGate.finalBlocked',
+  'OPENING_V1_PHOTOS:',
+  'OPENING_V1_BGM:',
+  'OPENING_V1_AMBIENCE:',
+  'openingV1MediaBlockingGatePass',
   'productionReady: false',
   'DaVinci Mac Actual / Human promotion / Scene-bound Release Gate',
 ]) {
@@ -37,7 +48,13 @@ for (const token of [
   '実制作handoff manifest',
   'disabled={!assemblyReady}',
   'workspace checks',
-  'Production Workspace final checks',
+  'OPENING V1 / MOTION STUDIO MEDIA GATE',
+  'openingMedia.resolvedPhotoCount',
+  'openingMedia.bgm.playable',
+  'openingMedia.ambiencePlayableCount',
+  'openingMedia.photoSlots.map',
+  '11写真/BGM blocking gate',
+  'manifest.handoff.warnings',
   'manifest.productionWorkspace.finalChecks.map',
   'productionReady=NO',
 ]) {
@@ -52,6 +69,16 @@ for (const finalCheck of [
   'id: "duplicate-usage-reviewed"',
 ]) {
   requireText(workspace, finalCheck, `Production Workspace final check missing: ${finalCheck}`);
+}
+
+for (const token of [
+  '"expectedPhotoCount": 11',
+  '"photoSlots": [',
+  '"assetId": "opening-bgm-main"',
+  '"ambience": [',
+  '"finalBlocked": true',
+]) {
+  requireText(openingGate, token, `Opening generated production gate contract missing: ${token}`);
 }
 
 requireText(projectBatch, 'productionReady: false', "Typography project batch no longer fails closed");
@@ -69,4 +96,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log("Project Production Handoff Manifest contracts OK: current Typography packages, assigned real assets, Scene completion, duplicate/placeholder checks, music markers and design settings are bundled for assembly without claiming Mac Actual or production release.");
+console.log("Project Production Handoff Manifest contracts OK: current Typography packages and workspace state are joined with the Motion Studio Opening V1 11-photo/BGM blocking gate plus ambience mix readiness, without claiming Mac Actual or production release.");
