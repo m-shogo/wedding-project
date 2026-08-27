@@ -91,6 +91,8 @@ const sourceRevalidation={
     "FINAL_RENDER_OR_SOURCE_CHANGED => FINAL_RENDER_RE_REVIEW_REQUIRED",
   ],
 };
+const finalReviewAuthority="out/qa/opening-v1-final-render-review.json";
+const palmierSourceAuthorities=[...new Set([...report.handoff.palmier.sourceAuthorities,finalReviewAuthority])];
 const snapshot={
   source:{
     status:"motion-studio/scripts/opening-v1-production-status.mts",
@@ -112,7 +114,7 @@ const snapshot={
     palmier:{
       contractVersion:report.handoff.palmier.contractVersion,
       current:report.handoff.palmier.current&&finalReviewStage.state==="PASS",
-      sourceAuthorities:[...report.handoff.palmier.sourceAuthorities,"out/qa/opening-v1-final-render-review.json"],
+      sourceAuthorities:palmierSourceAuthorities,
       artifacts:{
         sceneTimeline:{...report.handoff.palmier.artifacts.sceneTimeline, carries:[...report.handoff.palmier.artifacts.sceneTimeline.carries]},
         soundCues:{...report.handoff.palmier.artifacts.soundCues, carries:[...report.handoff.palmier.artifacts.soundCues.carries]},
@@ -121,7 +123,7 @@ const snapshot={
     davinci:{
       contractVersion:davinci.schemaVersion,
       current:davinci.current&&finalReviewStage.state==="PASS",
-      sourceAuthorities:[...davinci.sourceAuthorities,"out/qa/opening-v1-final-render-review.json"],
+      sourceAuthorities:[...davinci.sourceAuthorities,finalReviewAuthority],
       upstreamPalmier:davinci.upstreamPalmier,
       handoffAsset:davinci.handoffAsset,
       actualEvidence:{...davinci.actualEvidence,requiredChecks:[...davinci.actualEvidence.requiredChecks]},
