@@ -27,6 +27,16 @@ export function buildProfileProductionStatusHandoff() {
         expected: profileProductionGate.expectedMediaCount,
         resolved: profileProductionGate.resolvedMediaCount,
         missing: profileProductionGate.mediaMissingCount,
+        slots: profileProductionGate.mediaSlots.map((slot) => ({
+          id: slot.id,
+          chapterId: slot.chapterId,
+          label: slot.label,
+          kind: slot.kind,
+          canonicalStem: slot.canonicalStem,
+          file: slot.file,
+          ready: slot.ready,
+          intakeDirectory: "motion-studio/public/profile/",
+        })),
       },
       bgm: {...profileProductionGate.bgm},
       structureReview: {...profileProductionGate.structureReview},
@@ -48,6 +58,7 @@ export function buildProfileProductionStatusHandoff() {
       "HUMAN_REAL_MEDIA_QA_PASS != FINAL_RENDER_REVIEW_PASS",
       "PRODUCTION_BUNDLE_CURRENT != MAC_DAVINCI_ACTUAL_VERIFIED",
       "MAC_DAVINCI_ACTUAL_VERIFIED != FINAL_DELIVERY_APPROVED",
+      "MEDIA_REQUIREMENT_EXPORTED != MEDIA_RESOLVED",
     ],
   };
 }
