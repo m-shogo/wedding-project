@@ -3,8 +3,9 @@ import {existsSync, mkdirSync, readFileSync, writeFileSync} from 'node:fs';
 import {dirname, join, relative} from 'node:path';
 import {spawnSync} from 'node:child_process';
 import {fileURLToPath} from 'node:url';
-import {profileV1Chapters} from '../src/data/profileV1ProductionPlan.ts';
+import {profileV1Chapters, profileV1OptionalGeneratedSlots} from '../src/data/profileV1ProductionPlan.ts';
 import {profileV1RuntimeMedia} from '../src/data/profileV1RuntimeMedia.generated.ts';
+import {profileV1GeneratedAccentImplementations} from '../src/data/profileV1GeneratedAccentRegistry.ts';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const finalPath = join(root, 'out/profile/profile_v1.mp4');
@@ -23,7 +24,7 @@ const run = (script: string, args: string[] = []) => spawnSync(process.execPath,
 const required = [finalPath, reviewPath, realReviewPath, structureReviewPath, bgmApprovalPath, bgmPath];
 for (const path of required) if (!existsSync(path)) { console.error(`Profile production bundle blocked: missing ${rel(path)}`); process.exit(1); }
 for (const [label, script, args] of [
-  ['assembly', 'scripts/profile-v1-assembly-preflight.mts', ['--strict']],
+  ['production preflight', 'scripts/profile-v1-production-preflight.mts', ['--strict']],
   ['render QA', 'scripts/check-profile-render.mts', ['out/profile/profile_v1.mp4']],
   ['final Human review', 'scripts/profile-v1-final-render-review.mts', ['--strict']],
 ] as const) {
@@ -38,8 +39,29 @@ const media = profileV1RuntimeMedia.slots.map((slot) => {
   return {slot: slot.id, chapterId: slot.chapterId, label: slot.label, file: rel(absolute), extension: slot.extension, sha256: sha(absolute)};
 });
 
+const generatedAccents = profileV1GeneratedAccentImplementations.map((accent) => {
+  const slot = profileV1OptionalGeneratedSlots.find((candidate) => candidate.id === accent.slotId);
+  if (!slot || slot.chapterId !== accent.chapterId) throw new Error(`PROFILE_BUNDLE_ACCENT_SLOT_MISMATCH:${accent.slotId}`);
+  return {
+    slotId: accent.slotId,
+    chapterId: accent.chapterId,
+    label: slot.label,
+    note: slot.note,
+    implementation: accent.implementation,
+    canonicalReuse: accent.canonicalReuse,
+  };
+});
+
 const timeline = profileV1Chapters.map((chapter, index) => ({
-  order: chapter.order, chapterId: chapter.id, title: chapter.title, role: chapter.role, editIntent: [...chapter.editIntent], startSec: index * 6, endSec: (index + 1) * 6, durationSec: 6,
+  order: chapter.order,
+  chapterId: chapter.id,
+  title: chapter.title,
+  role: chapter.role,
+  editIntent: [...chapter.editIntent],
+  generatedAccents: generatedAccents.filter((accent) => accent.chapterId === chapter.id),
+  startSec: index * 6,
+  endSec: (index + 1) * 6,
+  durationSec: 6,
 }));
 const finalSha = sha(finalPath);
 const bundle = {
@@ -48,17 +70,49 @@ const bundle = {
   finalRender: {path: rel(finalPath), sha256: finalSha, qaContract: 'check-profile-render.mts=PASS_AT_EXPORT'},
   humanFinalRenderReview: {evidencePath: rel(reviewPath), evidenceSha256: sha(reviewPath)},
   upstreamHumanEvidence: {realMediaReviewSha256: sha(realReviewPath), structureReviewSha256: sha(structureReviewPath), bgmRightsApprovalSha256: sha(bgmApprovalPath)},
-  bgm: {path: rel(bgmPath), sha256: sha(bgmPath)}, media, timeline,
-  palmier: {handoffMode: 'REFERENCE_TIMELINE_AND_FINAL_RENDER', timelineCsv: rel(timelinePath), instruction: '5章30秒のchapter boundary・edit intent・final render SHAを正本として扱い、変更が必要ならMotion Studio正本へ戻す。'},
-  davinci: {handoffAsset: rel(finalPath), expectedSha256: finalSha, intendedUse: 'FINISHING_AND_OUTPUT_QA', macActualState: 'NOT_RUN', productionReady: false},
-  guardrails: ['FINAL_RENDER_REVIEW_PASS != DAVINCI_ACTUAL_VERIFIED', 'BUNDLE_EXPORTED != PRODUCTION_READY', 'RENDER_SHA_MISMATCH => STOP_AND_REGENERATE_HANDOFF'],
+  bgm: {path: rel(bgmPath), sha256: sha(bgmPath)}, media, timeline, generatedAccents,
+  palmier: {
+    handoffMode: 'REFERENCE_TIMELINE_AND_FINAL_RENDER',
+    timelineCsv: rel(timelinePath),
+    generatedAccentAuthority: 'PROFILE_V1_GENERATED_ACCENT_REGISTRY',
+    instruction: '5章30秒のchapter boundary・edit intent・generated accent route・final render SHAを正本として扱い、変更が必要ならMotion Studio正本へ戻す。',
+  },
+  davinci: {
+    handoffAsset: rel(finalPath),
+    expectedSha256: finalSha,
+    intendedUse: 'FINISHING_AND_OUTPUT_QA',
+    generatedAccentRoutes: generatedAccents.map(({slotId, chapterId, label, note, implementation, canonicalReuse}) => ({slotId, chapterId, label, note, implementation, canonicalReuse})),
+    macActualState: 'NOT_RUN',
+    productionReady: false,
+  },
+  guardrails: [
+    'FINAL_RENDER_REVIEW_PASS != DAVINCI_ACTUAL_VERIFIED',
+    'GENERATED_ACCENT_ROUTE_EXPORTED != MAC_DAVINCI_ACTUAL_VERIFIED',
+    'BUNDLE_EXPORTED != PRODUCTION_READY',
+    'RENDER_SHA_MISMATCH => STOP_AND_REGENERATE_HANDOFF',
+  ],
 };
 const esc = (v: unknown) => /[",\n]/.test(String(v)) ? `"${String(v).replaceAll('"', '""')}"` : String(v);
-const rows = [['order','chapter_id','title','start_sec','end_sec','duration_sec','role','edit_intent','final_render_sha256'], ...timeline.map((c) => [c.order,c.chapterId,c.title,c.startSec,c.endSec,c.durationSec,c.role,c.editIntent.join(' / '),finalSha])];
+const rows = [
+  ['order','chapter_id','title','start_sec','end_sec','duration_sec','role','edit_intent','generated_accent_routes','final_render_sha256'],
+  ...timeline.map((c) => [
+    c.order,
+    c.chapterId,
+    c.title,
+    c.startSec,
+    c.endSec,
+    c.durationSec,
+    c.role,
+    c.editIntent.join(' / '),
+    c.generatedAccents.map((accent) => `${accent.slotId}:${accent.implementation}:${accent.canonicalReuse}`).join(' / '),
+    finalSha,
+  ]),
+];
 mkdirSync(outDir, {recursive: true});
 writeFileSync(bundlePath, `${JSON.stringify(bundle, null, 2)}\n`);
 writeFileSync(timelinePath, `${rows.map((row) => row.map(esc).join(',')).join('\n')}\n`);
 console.log(`Profile V1 production bundle exported: ${rel(bundlePath)}`);
 console.log(`Palmier timeline exported: ${rel(timelinePath)}`);
+console.log(`generatedAccentRoutes=${generatedAccents.length}`);
 console.log(`finalRenderSha256=${finalSha}`);
 console.log('DaVinci Mac Actual remains NOT_RUN; productionReady=false.');
