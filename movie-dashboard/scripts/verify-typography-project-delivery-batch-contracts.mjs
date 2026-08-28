@@ -6,6 +6,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const read = (relative) => fs.readFileSync(path.join(root, relative), "utf8");
 const batch = read("src/data/typographyProjectDeliveryBatch.ts");
 const card = read("src/components/TypographyProjectDeliveryBatchCard.tsx");
+const revalidationCard = read("src/components/ProjectTypographyRoleHandoffRevalidationCard.tsx");
 const handoff = read("src/components/MaskRevealSceneHandoffCard.tsx");
 const scenePackage = read("src/data/typographySceneDeliveryPackage.ts");
 const roleManifest = read("src/data/projectTypographyRoleHandoffManifest.ts");
@@ -44,6 +45,13 @@ for (const token of [
   'davinciGuiActual: "NOT_RUN"',
   'productionReady: false',
   'buildTypographyProjectDeliveryBatch(projectId, composer.scenes, timeline, selections, roleContexts)',
+  'parseAndValidateProjectTypographyRoleHandoffManifest(',
+  'PROJECT_ROLE_HANDOFF_ENVELOPE_MISMATCH',
+  'PROJECT_ROLE_HANDOFF_AUTHORITY_MISMATCH',
+  'PROJECT_ROLE_HANDOFF_PROJECT_MISMATCH',
+  'PROJECT_ROLE_HANDOFF_MUST_NOT_CLAIM_ACTUAL_OR_PRODUCTION_READY',
+  'STALE_OR_DRIFTED_PROJECT_ROLE_HANDOFF_MANIFEST',
+  'canonicalJson(parsed) !== canonicalJson(expected)',
 ]) requireText(roleManifest, token, `role-aware project handoff missing: ${token}`);
 
 for (const token of [
@@ -69,8 +77,22 @@ for (const token of [
   '${projectId}-production-role-handoff-manifest.json',
 ]) requireText(card, token, `project batch UI missing: ${token}`);
 
+for (const token of [
+  'PROJECT ROLE HANDOFF / REVALIDATION',
+  '実制作handoff再検証',
+  'parseAndValidateProjectTypographyRoleHandoffManifest(',
+  'listTypographyProductionSelections()',
+  'listTypographyProductionRoleContexts()',
+  'MOTION_ZUKAN_PRODUCTION_WORKSPACE_CHANGED_EVENT',
+  'TYPOGRAPHY_PRODUCTION_ROLE_CONTEXT_CHANGED_EVENT',
+  'Studio GUI Actual / DaVinci GUI Actualは実行していないためNOT_RUN',
+  'Revalidation: {state}',
+]) requireText(revalidationCard, token, `project role revalidation UI missing: ${token}`);
+
 requireText(handoff, 'import { TypographyProjectDeliveryBatchCard }', "Scene handoff does not import project batch card");
 requireText(handoff, '<TypographyProjectDeliveryBatchCard projectId={scene.projectId} />', "Scene handoff does not render project batch card");
+requireText(handoff, 'import { ProjectTypographyRoleHandoffRevalidationCard }', "Scene handoff does not import project revalidation card");
+requireText(handoff, '<ProjectTypographyRoleHandoffRevalidationCard projectId={scene.projectId} />', "Scene handoff does not render project revalidation card");
 requireText(scenePackage, 'actualEvidenceState: "NOT_RUN"', "Scene package no longer preserves NOT_RUN Actual evidence");
 requireText(scenePackage, 'productionReady: false', "Scene package no longer fails closed for production readiness");
 
@@ -80,6 +102,7 @@ for (const forbidden of ['productionReady: true', 'batchReadyForPalmierDaVinciHa
 for (const forbidden of ['studioGuiActual: "PASS"', 'davinciGuiActual: "PASS"', 'productionReady: true']) {
   if (roleManifest.includes(forbidden)) errors.push(`role-aware project handoff fabricates production evidence: ${forbidden}`);
   if (card.includes(forbidden)) errors.push(`project batch UI fabricates production evidence: ${forbidden}`);
+  if (revalidationCard.includes(forbidden)) errors.push(`project revalidation UI fabricates production evidence: ${forbidden}`);
 }
 
 if (errors.length) {
@@ -88,4 +111,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log("Typography Project Delivery Batch contracts OK: UI export requires current human route + persisted role context, exposes role/class per Scene, emits the role-aware project manifest, and keeps Studio/DaVinci Actual plus productionReady unclaimed.");
+console.log("Typography Project Delivery Batch contracts OK: UI export requires current route + persisted role context, project handoff files can be fail-close revalidated against current state, and Studio/DaVinci Actual plus productionReady remain unclaimed.");
