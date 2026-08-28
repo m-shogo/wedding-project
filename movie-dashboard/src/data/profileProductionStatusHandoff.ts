@@ -94,12 +94,12 @@ export function buildProfileProductionStatusHandoff() {
         nextGate: buildNextGate(profileCriticalPath),
         nextActions: [...profileProductionStatus.nextActions],
       },
-      criticalPath: profileCriticalPath,
+      criticalPath: criticalPath.projects.profile,
     },
     crossProjectCriticalPath: {
       productionReady: criticalPath.productionReady,
       opening: criticalPath.projects.opening,
-      profile: profileCriticalPath,
+      profile: criticalPath.projects.profile,
       guardrails: [...criticalPath.guardrails],
     },
     guardrails: [
