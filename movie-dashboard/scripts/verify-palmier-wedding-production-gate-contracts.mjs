@@ -21,7 +21,7 @@ requireText(helper, "MAC_DAVINCI_ACTUAL_VERIFIED != FINAL_DELIVERY_APPROVED", "f
 requireText(helper, "MAC_DAVINCI_ACTUAL_NOT_RUN != MAC_DAVINCI_ACTUAL_VERIFIED", "Mac Actual fail-close guardrail");
 requireText(helper, "nextGate: production.nextGate", "canonical next gate passthrough");
 requireText(helper, "macDaVinciActualVerified: production.readiness.macDaVinciActualVerified", "Opening Actual readiness normalization");
-requireText(helper, 'macDaVinciActualVerified: production.readiness.macDaVinciActual === "ACTUAL_VERIFIED"', "Profile Actual readiness normalization");
+requireText(helper, 'macDaVinciActualVerified: String(production.readiness.macDaVinciActual) === "ACTUAL_VERIFIED"', "Profile Actual readiness normalization");
 requireText(helper, "bridge: buildBridge(production.palmierHandoff, production.davinciHandoff, deliveryReadiness)", "canonical Palmier-DaVinci bridge derivation");
 requireText(helper, '"PALMIER_NOT_CURRENT"', "Palmier stale bridge state");
 requireText(helper, '"DAVINCI_HANDOFF_NOT_CURRENT"', "DaVinci handoff stale bridge state");
