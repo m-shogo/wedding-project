@@ -39,14 +39,23 @@ requireText(helper, 'authority: "SHA_BOUND_FINAL_RENDER"', "SHA-bound recovery a
 requireText(helper, 'authority: "CRITICAL_PATH_PRE_BUNDLE"', "pre-bundle recovery authority");
 requireText(helper, "sourceRenderSha256", "final render SHA recovery provenance");
 requireText(helper, "PRE_BUNDLE_RECOVERY_IS_NOT_FINAL_RENDER_SHA_BOUND", "pre-bundle honesty guardrail");
+requireText(helper, "deriveEffectiveProductionState", "effective production state derivation");
+requireText(helper, '"WEDDING_PRODUCTION_BLOCKED"', "Wedding production blocked effective state");
+requireText(helper, '"REMOTION_STUDIO_TOOLING_BLOCKED"', "Remotion dependency blocked effective state");
+requireText(helper, 'effective.effectiveProductionState === "PRODUCTION_READY"', "effective production readiness authority");
+requireText(helper, "blockingAuthorities", "blocking authority propagation");
 requireText(helper, "projects.every((project) => project.productionReady)", "cross-project readiness aggregation");
-requireText(helper, "production.nextGate.state === \"PRODUCTION_READY\" && !toolingDependency.blocking", "adopted tooling dependency fail-close readiness");
 requireText(helper, "remotionStudioToolingDependency: toolingDependency", "project dependency snapshot propagation");
 requireText(helper, "ELEMENT_ADOPTED_AND_STUDIO_ACTUAL_NOT_VERIFIED => WEDDING_PRODUCTION_BLOCKED", "adopted tooling fail-close guardrail");
+requireText(helper, "CANONICAL_NEXT_GATE_READY != EFFECTIVE_PRODUCTION_READY_WHEN_ADOPTED_DEPENDENCY_BLOCKS", "effective-vs-canonical guardrail");
 requireText(helper, "UNADOPTED_ELEMENT_TOOLING_STATE_IS_NON_BLOCKING", "unadopted tooling non-blocking guardrail");
+requireText(helper, "effective-production-state:", "Markdown effective production state export");
+requireText(helper, "blocking-authorities:", "Markdown blocking authority export");
 requireText(helper, "remotion-studio-project-dependency-state:", "Markdown dependency state export");
 requireText(helper, "remotion-studio-project-dependency-blocking:", "Markdown dependency blocking export");
 requireText(helper, "remotion-studio-project-adopted-candidates:", "Markdown adopted candidate export");
+requireText(helper, "remotion-studio-dependency-recovery-actions:", "structured dependency recovery section");
+requireText(helper, "markdownToolingRecoveryAction", "structured dependency recovery formatter");
 requireText(helper, "remotion-studio-dependency-recovery:", "Markdown dependency recovery export");
 requireText(helper, "function markdownRecoveryAction", "structured recovery Markdown formatter");
 requireText(helper, 'action.kind === "ROUTE"', "route recovery serialization");
@@ -74,6 +83,10 @@ requireText(dependency, '"STUDIO_ACTUAL_REQUIRED"', "Studio Actual required depe
 requireText(dependency, '"HUMAN_REVIEW_REQUIRED"', "Human review required dependency state");
 requireText(dependency, '"DEPENDENCY_PROMOTION_REQUIRED"', "promotion required dependency state");
 requireText(dependency, "const blocking = adopted && state !== \"READY\"", "adopted dependency fail-close rule");
+requireText(dependency, "buildRecoveryActions", "state-specific recovery action builder");
+requireText(dependency, 'kind: "COMMAND"', "command recovery action");
+requireText(dependency, 'kind: "HUMAN"', "human recovery action");
+requireText(dependency, "RECOVERY_ACTION_EXPORTED != RECOVERY_EXECUTED", "recovery action honesty guardrail");
 requireText(dependency, "ELEMENT_CANDIDATE_EXISTS != WEDDING_PROJECT_ADOPTED", "candidate is not adoption guardrail");
 requireText(dependency, "CI_MUST_NOT_PROMOTE_STUDIO_GUI_ACTUAL", "CI Actual honesty guardrail");
 

@@ -36,8 +36,14 @@ for (const token of [
   '"HUMAN_REVIEW_REQUIRED"',
   '"DEPENDENCY_PROMOTION_REQUIRED"',
   'const blocking = adopted && state !== "READY"',
+  "buildRecoveryActions",
+  'kind: "COMMAND"',
+  'kind: "HUMAN"',
+  "recoveryActions",
+  "adoptedCandidateCount",
   '"ELEMENT_CANDIDATE_EXISTS != WEDDING_PROJECT_ADOPTED"',
   '"UNADOPTED_ELEMENT_TOOLING_STATE_IS_NON_BLOCKING"',
+  '"RECOVERY_ACTION_EXPORTED != RECOVERY_EXECUTED"',
   '"CI_MUST_NOT_PROMOTE_STUDIO_GUI_ACTUAL"',
 ]) need(dependency, token, "explicit adoption dependency");
 
@@ -58,7 +64,13 @@ for (const token of [
   "remotionStudioToolingDependency: toolingDependency",
   'buildRemotionStudioToolingProductionDependency("opening")',
   'buildRemotionStudioToolingProductionDependency("profile")',
-  'production.nextGate.state === "PRODUCTION_READY" && !toolingDependency.blocking',
+  "deriveEffectiveProductionState",
+  '"WEDDING_PRODUCTION_BLOCKED"',
+  '"REMOTION_STUDIO_TOOLING_BLOCKED"',
+  'effective.effectiveProductionState === "PRODUCTION_READY"',
+  "blockingAuthorities",
+  "effective-production-state:",
+  "blocking-authorities:",
   "remotion-studio-tooling-state:",
   "remotion-studio-summary:",
   "remotion-studio-summary-schema:",
@@ -68,11 +80,15 @@ for (const token of [
   "remotion-studio-human-reviewed:",
   "remotion-studio-production-dependency-promoted:",
   "remotion-studio-project-adopted:",
+  "remotion-studio-project-adopted-count:",
   "remotion-studio-project-dependency-state:",
   "remotion-studio-project-dependency-blocking:",
   "remotion-studio-project-adopted-candidates:",
+  "remotion-studio-dependency-recovery-actions:",
+  "markdownToolingRecoveryAction",
   "tooling evidence is non-blocking unless a project explicitly adopts an Element dependency",
   '"ELEMENT_ADOPTED_AND_STUDIO_ACTUAL_NOT_VERIFIED => WEDDING_PRODUCTION_BLOCKED"',
+  '"CANONICAL_NEXT_GATE_READY != EFFECTIVE_PRODUCTION_READY_WHEN_ADOPTED_DEPENDENCY_BLOCKS"',
   '"UNADOPTED_ELEMENT_TOOLING_STATE_IS_NON_BLOCKING"',
 ]) need(palmier, token, "Palmier");
 
@@ -81,4 +97,4 @@ if (errors.length) {
   for (const error of errors) console.error(`- ${error}`);
   process.exit(1);
 }
-console.log("Remotion Studio tooling handoff contracts PASS: raw tooling evidence remains non-blocking; only explicit project adoption can create a fail-closed Wedding production dependency, without fabricating GUI Actual.");
+console.log("Remotion Studio tooling handoff contracts PASS: effective production state distinguishes the canonical Wedding next gate from an explicitly adopted Remotion Studio dependency, with structured fail-closed recovery and no fabricated GUI Actual.");
