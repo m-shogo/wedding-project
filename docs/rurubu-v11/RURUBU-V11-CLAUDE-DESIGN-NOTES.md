@@ -1,9 +1,48 @@
 # Rurubu WEDDING V11 — Claude Independent Design Notes
 
-Status: IN_PROGRESS (P01/P02/P06 partially built, P03/P04/P05/P07/P08 skeleton-only)
+Status: IN_PROGRESS (P01/P02/P03 built and de-AI-ified, P06 hero only, P04/P05/P07/P08 skeleton-only)
 Scope: Rurubu WEDDING V11 only. Does not touch V9/V10 production or Movie work.
 Branch: `claude/rurubu-v11` (isolated git worktree, does not share a working directory with any other session)
 Figma: file `bfM0d4c9dCeBv5pCkJ3TNM`, new page `11_RURUBU_V11_CLAUDE_A5_8P_PRODUCTION` (id `2949:2`)
+
+## Correction — the pages looked "AI-generated" (ダサい); root cause was typography, not decoration
+
+The user flagged a lingering "AIっぽさ / ダサい" feel after the first pass and asked for
+web/SNS research into the actual cause, explicitly warning against just adding more
+generated sticker PNGs to compensate. Researched via WebSearch/WebFetch (see sources
+below). Findings applied:
+
+1. **`Inter` for every text node was itself the tell.** Multiple independent Japanese
+   design-critique articles name Inter specifically as the most common "AI/SaaS
+   default" font, chosen by AI tools because it's the most-downloaded Google Font, not
+   because it fits the brief. It also has no native Japanese glyphs, so every JP
+   character was silently falling back to *some* substitute glyph source — uncontrolled
+   typography is itself a symptom.
+   → Replaced **all** text across P01/P02/P03/P06 with an explicit, deliberate pairing:
+   `Zen Maru Gothic Black/Bold` for display voice (titles, pill labels, numbers —
+   rounded, warm, has real personality, distinctly not corporate-gothic),
+   `Shippori Mincho SemiBold` for small kickers (a serif in a small dose reads as
+   "edited", a classic magazine contrast trick), `Noto Sans JP Regular/Medium` for
+   body copy. Confirmed live via `figma.listAvailableFontsAsync()`: 143 Japanese-capable
+   font families are available in this environment — Inter was a lazy default, not a
+   constraint.
+2. **Everything was sized to the same "safe medium" weight** — the classic AI-design
+   failure mode ("どこかを強調＝どこかを捨てる、をAIはしたがらない"). Fixed on P01's
+   cover-line pills: two are now visibly larger/bolder (プロフィール, メモリースポット)
+   and the rest quieter, with uneven vertical gaps (9/14/9/14/9px) instead of one
+   constant gap — real hierarchy sacrifice instead of six equal rows.
+3. **Pill widths were originally estimated by a character-count formula**, which broke
+   under the new (wider) Japanese font and caused visible text-wrap/clipping bugs in two
+   places (a pill's Japanese label wrapping outside its own background; P02's title and
+   kicker overflowing the trim's right edge after being resized). Fixed by measuring
+   real rendered width via a temporary `textAutoResize = 'WIDTH_AND_HEIGHT'` node before
+   sizing the container, then re-clamping both kicker and title against `trim.width`
+   explicitly. Both re-verified by screenshot after the fix, not assumed correct.
+4. Deliberately did **not** add more decoration/sticker assets to chase this problem —
+   per the user's explicit instruction that "AI can't really fix Figma decoration by
+   adding more of it," this was purely a typography/hierarchy pass, no new Drive assets.
+
+Sources consulted: [なぜAIのデザインは「それっぽいのにダサい」のか](https://note.com/ai_arai_ally/n/n93c360efff9c), [AIでデザインを作る人がやりがちな失敗7選](https://note.com/m_aicreator04/n/n987ed1514d4e), [AIっぽいデザインを脱却する方法完全ガイド2026](https://nextage-tech.com/blog/2026/06/08/post-7030/).
 
 ## Correction — V10 was located; V11 geometry was wrong and has been fixed
 
