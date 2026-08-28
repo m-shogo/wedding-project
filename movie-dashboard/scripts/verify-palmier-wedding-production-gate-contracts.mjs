@@ -40,6 +40,15 @@ requireText(page, "Wedding Production Authority", "visible production authority 
 requireText(page, "project.nextGate.blockerCodes", "stable blocker code rendering");
 requireText(page, "project.nextGate.recovery", "canonical recovery rendering");
 requireText(page, "project.nextGate.actionTargets", "canonical action target routing");
+requireText(page, "Palmier → DaVinci bridge", "visible Palmier-DaVinci bridge card");
+requireText(page, "project.bridge.palmierCurrent", "visible Palmier currentness");
+requireText(page, "project.bridge.davinciHandoffCurrent", "visible DaVinci handoff currentness");
+requireText(page, "project.bridge.macDaVinciActualVerified", "visible Mac Actual verification");
+requireText(page, "project.bridge.finalDeliveryApproved", "visible final approval state");
+requireText(page, 'project.bridge.state === "MAC_DAVINCI_ACTUAL_NOT_VERIFIED"', "Actual commands shown only at Mac Actual gate");
+requireText(page, "project.bridge.actualEvidencePath", "visible Actual evidence path");
+requireText(page, "Object.entries(project.bridge.actualCommands)", "visible canonical Actual commands");
+requireText(page, "Mac / Resolve GUI Actualを実行していない限りverifiedへ昇格しません", "visible Actual fail-close warning");
 requireText(page, "exportは状態を運ぶだけで、Human QAやMac DaVinci Actualを自動昇格しません", "visible fail-close explanation");
 
 console.log("Palmier Wedding production gate contracts: PASS");
