@@ -16,6 +16,7 @@ if(report.stages?.finalRenderReview==null||report.readiness?.humanFinalRenderApp
 if(report.handoff?.palmier?.contractVersion!=="opening-v1-palmier-handoff/v2")throw new Error(`Unexpected Opening Palmier handoff contract: ${report.handoff?.palmier?.contractVersion??"missing"}`);
 if(davinci.schemaVersion!=="opening-v1-davinci-handoff/v1"||davinci.authority!=="MOTION_STUDIO_OPENING_DAVINCI_HANDOFF")throw new Error(`Unexpected Opening DaVinci handoff contract: ${davinci.schemaVersion}/${davinci.authority}`);
 if(davinci.productionRecovery?.schemaVersion!=="wedding-davinci-production-recovery-export/v1"||davinci.productionRecovery?.requiredCurrent!==true)throw new Error("Opening DaVinci handoff must expose required production recovery sidecar contract");
+if(!Array.isArray(davinci.blockers))throw new Error("Opening DaVinci handoff must expose stable blocker codes");
 
 const stageNames=["media","previewRender","previewSourceBinding","previewReview","finalRender","finalRenderReview","productionBundle","davinciFinishing","finalDeliveryApproval"];
 const stageRecovery={
@@ -110,6 +111,7 @@ const snapshot={
     davinci:{
       contractVersion:davinci.schemaVersion,
       current:davinci.current&&report.readiness.humanFinalRenderApproved===true,
+      blockerCodes:davinci.blockers.map(String),
       sourceAuthorities:davinciSourceAuthorities,
       upstreamPalmier:davinci.upstreamPalmier,
       handoffAsset:davinci.handoffAsset,
