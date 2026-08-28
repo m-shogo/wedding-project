@@ -21,6 +21,38 @@ export type RemotionStudioToolingDependencyState =
   | "DEPENDENCY_PROMOTION_REQUIRED"
   | "READY";
 
+export type RemotionStudioToolingDependencyStateInput = {
+  adopted: boolean;
+  studioActualVerified: boolean;
+  humanReviewed: boolean;
+  dependencyPromoted: boolean;
+};
+
+export function resolveRemotionStudioToolingDependencyState({
+  adopted,
+  studioActualVerified,
+  humanReviewed,
+  dependencyPromoted,
+}: RemotionStudioToolingDependencyStateInput): RemotionStudioToolingDependencyState {
+  if (!adopted) return "NOT_ADOPTED";
+  if (!studioActualVerified) return "STUDIO_ACTUAL_REQUIRED";
+  if (!humanReviewed) return "HUMAN_REVIEW_REQUIRED";
+  if (!dependencyPromoted) return "DEPENDENCY_PROMOTION_REQUIRED";
+  return "READY";
+}
+
+export const remotionStudioToolingDependencyStateScenarios = [
+  {label: "unadopted", input: {adopted: false, studioActualVerified: false, humanReviewed: false, dependencyPromoted: false}, expected: "NOT_ADOPTED"},
+  {label: "adopted-before-studio-actual", input: {adopted: true, studioActualVerified: false, humanReviewed: false, dependencyPromoted: false}, expected: "STUDIO_ACTUAL_REQUIRED"},
+  {label: "studio-actual-before-human-review", input: {adopted: true, studioActualVerified: true, humanReviewed: false, dependencyPromoted: false}, expected: "HUMAN_REVIEW_REQUIRED"},
+  {label: "human-review-before-promotion", input: {adopted: true, studioActualVerified: true, humanReviewed: true, dependencyPromoted: false}, expected: "DEPENDENCY_PROMOTION_REQUIRED"},
+  {label: "fully-promoted", input: {adopted: true, studioActualVerified: true, humanReviewed: true, dependencyPromoted: true}, expected: "READY"},
+] as const satisfies readonly {
+  label: string;
+  input: RemotionStudioToolingDependencyStateInput;
+  expected: RemotionStudioToolingDependencyState;
+}[];
+
 export type RemotionStudioToolingDependencyRecoveryAction = {
   kind: "COMMAND" | "HUMAN";
   label: string;
@@ -77,16 +109,12 @@ export function buildRemotionStudioToolingProductionDependency(movieId: WeddingM
   const studioActualVerified = tooling.currentRepoState === "VERIFIED";
   const humanReviewed = tooling.humanReviewed;
   const dependencyPromoted = tooling.productionDependencyPromoted;
-
-  const state: RemotionStudioToolingDependencyState = !adopted
-    ? "NOT_ADOPTED"
-    : !studioActualVerified
-      ? "STUDIO_ACTUAL_REQUIRED"
-      : !humanReviewed
-        ? "HUMAN_REVIEW_REQUIRED"
-        : !dependencyPromoted
-          ? "DEPENDENCY_PROMOTION_REQUIRED"
-          : "READY";
+  const state = resolveRemotionStudioToolingDependencyState({
+    adopted,
+    studioActualVerified,
+    humanReviewed,
+    dependencyPromoted,
+  });
 
   const blocking = adopted && state !== "READY";
   const recoveryActions = buildRecoveryActions(state, tooling);
@@ -114,6 +142,7 @@ export function buildRemotionStudioToolingProductionDependency(movieId: WeddingM
       "STUDIO_ACTUAL_VERIFIED != HUMAN_REVIEWED",
       "HUMAN_REVIEWED != PRODUCTION_DEPENDENCY_PROMOTED",
       "UNADOPTED_ELEMENT_TOOLING_STATE_IS_NON_BLOCKING",
+      "DEPENDENCY_STATE_RESOLVER_IS_SINGLE_AUTHORITY",
       "RECOVERY_ACTION_EXPORTED != RECOVERY_EXECUTED",
       "CI_MUST_NOT_PROMOTE_STUDIO_GUI_ACTUAL",
     ],
