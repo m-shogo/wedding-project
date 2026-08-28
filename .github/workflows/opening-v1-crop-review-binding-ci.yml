@@ -1,0 +1,51 @@
+name: Opening V1 Crop Review Binding CI
+
+on:
+  pull_request:
+    paths:
+      - 'motion-studio/scripts/opening-v1-crop-review-evidence.mts'
+      - 'motion-studio/src/data/openingV1Presentation.ts'
+      - 'motion-studio/src/data/openingV1PhotoPresentation.ts'
+      - 'motion-studio/src/data/openingV1PhotoRoles.ts'
+      - '.github/workflows/opening-v1-crop-review-binding-ci.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'motion-studio/scripts/opening-v1-crop-review-evidence.mts'
+      - 'motion-studio/src/data/openingV1Presentation.ts'
+      - 'motion-studio/src/data/openingV1PhotoPresentation.ts'
+      - 'motion-studio/src/data/openingV1PhotoRoles.ts'
+      - '.github/workflows/opening-v1-crop-review-binding-ci.yml'
+
+jobs:
+  crop-review-binding:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: motion-studio
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: motion-studio/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - name: Typecheck Motion Studio
+        run: pnpm typecheck
+      - name: Verify revision invalidation semantics
+        run: node --no-warnings scripts/opening-v1-crop-review-evidence.mts --self-test
+      - name: Verify missing Human evidence stays NOT_RUN
+        run: |
+          node --no-warnings scripts/opening-v1-crop-review-evidence.mts --json > /tmp/crop-review.json
+          node - <<'NODE'
+          const fs = require('node:fs');
+          const report = JSON.parse(fs.readFileSync('/tmp/crop-review.json', 'utf8'));
+          if (report.state !== 'NOT_RUN') throw new Error(`expected NOT_RUN without Human evidence, got ${report.state}`);
+          if (report.macStudioActual !== 'NOT_RUN') throw new Error('Mac Studio Actual must remain NOT_RUN in CI');
+          if (report.macDaVinciActual !== 'NOT_RUN') throw new Error('DaVinci Actual must remain NOT_RUN in CI');
+          if (report.productionReady !== false) throw new Error('crop review must not promote production readiness');
+          NODE

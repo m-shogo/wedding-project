@@ -5,6 +5,7 @@ export const openingProductionGate = {
   "source": {
     "preflight": "motion-studio/scripts/opening-v1-assembly-preflight.mts",
     "cropQaPreflight": "motion-studio/scripts/opening-v1-crop-qa-preflight.mts",
+    "cropReview": "motion-studio/scripts/opening-v1-crop-review-evidence.mts",
     "photoResolver": "motion-studio/src/data/openingV1Media.ts",
     "photoPresentation": "motion-studio/src/data/openingV1PhotoPresentation.ts",
     "audio": "motion-studio/src/data/assets.ts"
@@ -29,6 +30,12 @@ export const openingProductionGate = {
       "coverCount": 7,
       "coverPresentCount": 0,
       "humanCropQaState": "NOT_RUN",
+      "humanCropQaReviewedCount": 0,
+      "humanCropQaRequiredCount": 0,
+      "humanCropQaBlockerCodes": [
+        "OPENING_CROP_REVIEW_EVIDENCE_MISSING"
+      ],
+      "evidencePath": "out/qa/opening-v1-crop-review-evidence.json",
       "macStudioActualState": "NOT_RUN",
       "macDaVinciActualState": "NOT_RUN",
       "productionReady": false
