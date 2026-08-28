@@ -1,0 +1,48 @@
+name: Wedding DaVinci Final Delivery Preflight CI
+
+on:
+  pull_request:
+    paths:
+      - "motion-studio/scripts/wedding-davinci-delivery-readiness.mts"
+      - "motion-studio/scripts/wedding-davinci-delivery-readiness-snapshot.mts"
+      - "motion-studio/scripts/wedding-davinci-final-delivery-preflight.mts"
+      - "motion-studio/scripts/check-wedding-davinci-final-delivery-preflight.mts"
+      - ".github/workflows/wedding-davinci-final-delivery-preflight-ci.yml"
+  push:
+    branches: [main]
+    paths:
+      - "motion-studio/scripts/wedding-davinci-delivery-readiness.mts"
+      - "motion-studio/scripts/wedding-davinci-delivery-readiness-snapshot.mts"
+      - "motion-studio/scripts/wedding-davinci-final-delivery-preflight.mts"
+      - "motion-studio/scripts/check-wedding-davinci-final-delivery-preflight.mts"
+      - ".github/workflows/wedding-davinci-final-delivery-preflight-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+          run_install: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Verify CURRENT snapshot never bypasses upstream Wedding readiness
+        working-directory: motion-studio
+        run: node --no-warnings scripts/check-wedding-davinci-final-delivery-preflight.mts
+      - name: Verify missing snapshot fails final-delivery strict gate
+        working-directory: motion-studio
+        shell: bash
+        run: |
+          rm -f out/handoff/wedding/wedding-davinci-delivery-readiness.json
+          node --no-warnings scripts/wedding-davinci-final-delivery-preflight.mts --json | grep '"state": "SNAPSHOT_REQUIRED"'
+          if node --no-warnings scripts/wedding-davinci-final-delivery-preflight.mts --strict; then
+            echo "strict final-delivery preflight unexpectedly passed without snapshot" >&2
+            exit 1
+          fi
