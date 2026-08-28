@@ -1,5 +1,7 @@
 import {remotionElementStudioActualBatch} from "./remotionElementCandidates";
 
+export type RemotionStudioActualToolingState = "NOT_RUN" | "VERIFIED";
+
 /**
  * Production handoffで参照するRemotion Studio Actual tooling evidence。
  * これはTypography Element toolingの証拠参照であり、Opening/Profileのproduction gateではない。
@@ -17,7 +19,7 @@ export function buildRemotionStudioActualToolingEvidence() {
     strictCommand: batch.evidence.strictCommand,
     candidateCount: batch.evidence.candidateCount,
     checkAxesPerCandidate: batch.evidence.checkAxesPerCandidate,
-    currentRepoState: batch.evidence.currentRepoState,
+    currentRepoState: batch.evidence.currentRepoState as RemotionStudioActualToolingState,
     humanReviewed: batch.evidence.humanReviewed,
     productionDependencyPromoted: batch.productionDependencyPromoted,
     guardrails: [

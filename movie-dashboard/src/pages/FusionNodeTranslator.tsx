@@ -55,7 +55,9 @@ export function FusionNodeTranslator() {
           <Link to="/palmier-handoff" className="shrink-0 px-3 py-2 rounded-lg bg-navy-700 text-white text-xs hover:bg-navy-800">Production Handoffを見る →</Link>
         </div>
         <div className="mt-4 grid gap-3 lg:grid-cols-2">
-          {productionGate.projects.map((project) => (
+          {productionGate.projects.map((project) => {
+            const studio = project.remotionStudioToolingEvidence;
+            return (
             <div key={project.movieId} className="rounded-lg border border-current/15 bg-white/70 dark:bg-navy-800/50 p-3">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <p className="text-sm font-bold text-navy-800 dark:text-sand-100">{project.title}</p>
@@ -67,6 +69,28 @@ export function FusionNodeTranslator() {
                 <p>{project.bridge.macDaVinciActualVerified ? "✓" : "○"} Mac DaVinci Actual verified</p>
                 <p>{project.bridge.finalDeliveryApproved ? "✓" : "○"} Final delivery approved</p>
               </div>
+
+              <div className="mt-3 rounded border border-sky-200 bg-sky-50/70 p-2 dark:border-sky-800 dark:bg-sky-900/15">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <p className="text-[10px] font-semibold tracking-widest text-sky-800 dark:text-sky-200">REMOTION STUDIO TOOLING AUTHORITY</p>
+                  <code className={`text-[9px] ${studio.currentRepoState === "VERIFIED" ? "text-emerald-700 dark:text-emerald-300" : "text-sky-700 dark:text-sky-300"}`}>{studio.currentRepoState}</code>
+                </div>
+                <p className="mt-1 text-[10px] leading-4 text-sky-800 dark:text-sky-200">Motion図鑑 Typography Element toolingのActual証拠参照です。Wedding production gate / Mac DaVinci Actualとは別authorityです。</p>
+                <div className="mt-2 grid grid-cols-2 gap-2 text-[10px] text-navy-600 dark:text-navy-200">
+                  <p><strong>Candidates:</strong> {studio.candidateCount}</p>
+                  <p><strong>Checks each:</strong> {studio.checkAxesPerCandidate}</p>
+                  <p>{studio.humanReviewed ? "✓" : "○"} Human reviewed</p>
+                  <p>{studio.productionDependencyPromoted ? "✓" : "○"} Production dependency promoted</p>
+                </div>
+                <p className="mt-2 break-all text-[9px] text-navy-400"><strong>Summary:</strong> {studio.summaryPath}</p>
+                <p className="mt-1 break-all text-[9px] text-navy-400"><strong>Evidence:</strong> {studio.evidencePath}</p>
+                <div className="mt-2 grid gap-1">
+                  <code className="block break-all rounded bg-white/80 px-2 py-1 text-[9px] text-sky-800 dark:bg-navy-950/30 dark:text-sky-200">status: {studio.statusCommand}</code>
+                  <code className="block break-all rounded bg-white/80 px-2 py-1 text-[9px] text-sky-800 dark:bg-navy-950/30 dark:text-sky-200">strict: {studio.strictCommand}</code>
+                </div>
+                <p className="mt-2 text-[9px] font-semibold text-sky-800 dark:text-sky-200">Tooling evidenceを表示・exportしてもStudio Actual verifiedにはなりません。Element未採用ならWedding productionをBLOCKしません。</p>
+              </div>
+
               {!project.productionReady && (
                 <div className="mt-3 border-t border-current/10 pt-2">
                   <p className="text-[11px] text-navy-500 dark:text-navy-300"><strong>NOW:</strong> {project.nextGate.stage ?? project.overallState}</p>
@@ -137,7 +161,8 @@ export function FusionNodeTranslator() {
                 </div>
               )}
             </div>
-          ))}
+            );
+          })}
         </div>
       </section>
 
