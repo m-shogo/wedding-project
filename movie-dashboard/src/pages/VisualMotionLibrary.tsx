@@ -4,6 +4,7 @@ import { MaskRevealEditableWorkspace } from "../components/MaskRevealEditableWor
 import { MotionZukanProductionWorkspace } from "../components/MotionZukanProductionWorkspace";
 import { ProfileRealMediaQaAuditCard } from "../components/ProfileRealMediaQaAuditCard";
 import { RemotionElementReadinessPanel } from "../components/RemotionElementReadinessPanel";
+import { WeddingDavinciDeliveryReadinessCard } from "../components/WeddingDavinciDeliveryReadinessCard";
 import { getMotionLearningBundle } from "../data/motionLearningLinks";
 import { getLatestPreviewEvidence } from "../data/motionPreviewEvidence";
 import { getRemotionElementCandidate } from "../data/remotionElementCandidates";
@@ -34,6 +35,7 @@ export function VisualMotionLibrary() {
       </section>
 
       <MotionZukanProductionWorkspace />
+      <WeddingDavinciDeliveryReadinessCard />
       <div className="mb-10">
         <ProfileRealMediaQaAuditCard />
       </div>
