@@ -1,3 +1,4 @@
+import {blockerRecoveryActionsFor, movieProductionBlockerRecoveryGuardrails} from "./movieProductionBlockerRecovery";
 import {movieProductionStageBlockerCodes} from "./movieProductionStageBlockerCodes.generated";
 import {openingProductionGate} from "./openingProductionGate.generated";
 import {openingProductionStatus} from "./openingProductionStatus.generated";
@@ -49,19 +50,13 @@ function actionTargetsFor(projectId: "opening" | "profile", stageName: string): 
     ];
   }
   if (stageName === "previewReview" || stageName === "finalRenderReview") {
-    return [
-      {label: "比較・Human QAを開く", route: "/movie-coach/compare", purpose: "current renderを人間が比較・確認する"},
-    ];
+    return [{label: "比較・Human QAを開く", route: "/movie-coach/compare", purpose: "current renderを人間が比較・確認する"}];
   }
   if (stageName === "productionBundle") {
-    return [
-      {label: "Palmier Handoffを開く", route: "/palmier-handoff", purpose: "current production bundleとtimeline handoffを確認する"},
-    ];
+    return [{label: "Palmier Handoffを開く", route: "/palmier-handoff", purpose: "current production bundleとtimeline handoffを確認する"}];
   }
   if (stageName === "davinciFinishing") {
-    return [
-      {label: "DaVinci/Fusion導線を開く", route: "/movie-coach/fusion", purpose: "Mac Actual前のnative handoffとverification routeを確認する"},
-    ];
+    return [{label: "DaVinci/Fusion導線を開く", route: "/movie-coach/fusion", purpose: "Mac Actual前のnative handoffとverification routeを確認する"}];
   }
   return [];
 }
@@ -189,6 +184,7 @@ function summarizeProject(
   const current = currentIndex >= 0 ? ordered[currentIndex] : null;
   const inputLanes = current ? inputLanesFor(projectId, current.name) : [];
   const currentBlockerInfo = current ? stageBlockerInfoFor(projectId, current.name, inputLanes) : {codes: [], provenance: "NONE" as const};
+  const currentBlockerCodes = current ? normalizedStageBlockerCodes(current.name, current, currentBlockerInfo.codes) : [];
   return {
     projectId,
     overallState,
@@ -199,8 +195,9 @@ function summarizeProject(
           state: current.state,
           detail: current.detail,
           ...(current.path ? {path: current.path} : {}),
-          blockerCodes: normalizedStageBlockerCodes(current.name, current, currentBlockerInfo.codes),
+          blockerCodes: currentBlockerCodes,
           blockerProvenance: blockerProvenanceFor(current, currentBlockerInfo),
+          blockerActions: blockerRecoveryActionsFor(projectId, currentBlockerCodes),
           recovery: [...current.recovery],
           actionTargets: actionTargetsFor(projectId, current.name),
           inputLanes,
@@ -211,13 +208,15 @@ function summarizeProject(
           const stageInputLanes = inputLanesFor(projectId, stage.name);
           const blockerInfo = stageBlockerInfoFor(projectId, stage.name, stageInputLanes);
           const upstreamStageName = ordered[currentIndex + offset]?.name ?? current?.name;
+          const blockerCodes = normalizedStageBlockerCodes(stage.name, stage, blockerInfo.codes, upstreamStageName);
           return {
             name: stage.name,
             state: stage.state,
             detail: stage.detail,
             ...(stage.path ? {path: stage.path} : {}),
-            blockerCodes: normalizedStageBlockerCodes(stage.name, stage, blockerInfo.codes, upstreamStageName),
+            blockerCodes,
             blockerProvenance: blockerProvenanceFor(stage, blockerInfo),
+            blockerActions: blockerRecoveryActionsFor(projectId, blockerCodes),
             recovery: [...stage.recovery],
             actionTargets: actionTargetsFor(projectId, stage.name),
           };
@@ -263,6 +262,7 @@ export function buildWeddingMovieProductionCriticalPath() {
       "ACTION_TARGET_VISIBLE != ACTION_COMPLETED",
       "DOWNSTREAM_WAITING != DOWNSTREAM_FAILED",
       "CI_STATUS != MAC_DAVINCI_ACTUAL",
+      ...movieProductionBlockerRecoveryGuardrails,
     ],
   };
 }
