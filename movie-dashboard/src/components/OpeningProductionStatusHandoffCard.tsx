@@ -33,6 +33,7 @@ export function OpeningProductionStatusHandoffCard({projectId}: {projectId: Scen
   const sourceRevalidation = production.sourceRevalidation;
   const palmier = production.palmierHandoff;
   const davinci = production.davinciHandoff;
+  const recovery = davinci.productionRecovery;
 
   return (
     <section className="mt-3 border border-sky-300 dark:border-sky-800 p-3">
@@ -145,7 +146,18 @@ export function OpeningProductionStatusHandoffCard({projectId}: {projectId: Scen
           <div>Actual evidence: <code className="break-all">{davinci.actualEvidence.path}</code></div>
           <div>required: {davinci.actualEvidence.requiredChecks.join(" / ")}</div>
         </div>
-        <p className="mt-1 text-[8px] text-navy-400">HUMAN_CROP_REVIEW_PASS != HUMAN_PREVIEW_REVIEW_PASS / HUMAN_FINAL_RENDER_REVIEW_PASS != DAVINCI_ACTUAL_VERIFIED / DAVINCI_HANDOFF_CURRENT != MAC_DAVINCI_ACTUAL_VERIFIED</p>
+        <div className="mt-2 border border-indigo-100 dark:border-indigo-900 p-1.5 text-[8px] leading-4 text-navy-500 dark:text-navy-300">
+          <div className="flex flex-wrap items-center justify-between gap-1">
+            <span className="font-semibold">DaVinci recovery sidecar</span>
+            <span>{recovery.requiredCurrent ? "CURRENT REQUIRED" : "OPTIONAL"}</span>
+          </div>
+          <div>path: <code className="break-all">{recovery.path}</code></div>
+          <div>Actual state: <span className="font-semibold">{recovery.actualState}</span></div>
+          <div>render SHA: <code>{recovery.sourceRenderSha256 ?? "PENDING_RECOVERY_EXPORT"}</code></div>
+          <div>crop SHA: <code>{recovery.cropReviewEvidenceSha256 ?? "PENDING_RECOVERY_EXPORT"}</code></div>
+          <div>crop fingerprint: <code>{recovery.cropReviewBindingFingerprintSha256 ?? "PENDING_RECOVERY_EXPORT"}</code></div>
+        </div>
+        <p className="mt-1 text-[8px] text-navy-400">CROP_REVIEW_CHANGED =&gt; DAVINCI_RECOVERY_SIDECAR_STALE / HUMAN_CROP_REVIEW_PASS != HUMAN_PREVIEW_REVIEW_PASS / HUMAN_FINAL_RENDER_REVIEW_PASS != DAVINCI_ACTUAL_VERIFIED / DAVINCI_RECOVERY_SIDECAR_CURRENT != MAC_DAVINCI_ACTUAL_VERIFIED</p>
       </div>
 
       <div className="mt-2 border border-sky-100 dark:border-sky-900 p-2">
@@ -157,7 +169,7 @@ export function OpeningProductionStatusHandoffCard({projectId}: {projectId: Scen
 
       <p className="mt-2 text-[8px] leading-4 text-navy-400">
         このstatusはMEDIA_REQUIRED / NOT_RUNも含めて現在状態・理由・artifact path・正規recovery commandとPalmier / DaVinci handoff contractを外へ渡すためのenvelopeです。Statusのexport可否とproduction readinessは分離しています。
-        `PHOTO_SHA_OR_EFFECTIVE_FOCUS_OR_FIT_CHANGED =&gt; HUMAN_CROP_REVIEW_STALE` / `HUMAN_CROP_REVIEW_PASS != HUMAN_PREVIEW_REVIEW_PASS` / `STATUS_EXPORTABLE != FINAL_RENDER_ELIGIBLE` / `PREVIEW_REVIEW_PASS != FINAL_RENDER_REVIEW_PASS` / `FINAL_RENDER_OR_SOURCE_CHANGED =&gt; FINAL_RENDER_RE_REVIEW_REQUIRED` / `HANDOFF_METADATA_EXPORTED != HANDOFF_ARTIFACTS_CURRENT` / `HUMAN_FINAL_RENDER_REVIEW_PASS != DAVINCI_ACTUAL_VERIFIED` / `DAVINCI_ACTUAL_VERIFIED != FINAL_DELIVERY_APPROVED`
+        `PHOTO_SHA_OR_EFFECTIVE_FOCUS_OR_FIT_CHANGED =&gt; HUMAN_CROP_REVIEW_STALE` / `CROP_REVIEW_CHANGED =&gt; DAVINCI_RECOVERY_SIDECAR_STALE` / `HUMAN_CROP_REVIEW_PASS != HUMAN_PREVIEW_REVIEW_PASS` / `STATUS_EXPORTABLE != FINAL_RENDER_ELIGIBLE` / `PREVIEW_REVIEW_PASS != FINAL_RENDER_REVIEW_PASS` / `FINAL_RENDER_OR_SOURCE_CHANGED =&gt; FINAL_RENDER_RE_REVIEW_REQUIRED` / `HANDOFF_METADATA_EXPORTED != HANDOFF_ARTIFACTS_CURRENT` / `HUMAN_FINAL_RENDER_REVIEW_PASS != DAVINCI_ACTUAL_VERIFIED` / `DAVINCI_ACTUAL_VERIFIED != FINAL_DELIVERY_APPROVED`
       </p>
 
       <details className="mt-2">
