@@ -17,12 +17,14 @@ const config = movieId === 'opening'
       sidecar: 'out/handoff/opening-v1/opening-v1-davinci-production-recovery.json',
       schemaVersion: 'opening-v1-production-bundle/v1',
       cropReview: 'out/qa/opening-v1-crop-review-evidence.json',
+      realMediaReview: null,
     }
   : {
       bundle: 'out/handoff/profile-v1/profile-v1-production-bundle.json',
       sidecar: 'out/handoff/profile-v1/profile-v1-davinci-production-recovery.json',
       schemaVersion: 'profile-v1-production-bundle/v1',
       cropReview: null,
+      realMediaReview: 'out/qa/profile-v1-real-media-review.json',
     };
 
 const bundlePath = join(root, config.bundle);
@@ -85,6 +87,69 @@ if (movieId === 'opening') {
   };
 }
 
+let profileRealMediaQaBinding: null | {
+  path: string;
+  evidenceSha256: string;
+  bindingFingerprintSha256: string;
+  previewSourceFingerprintSha256: string;
+  canonicalPlanFingerprint: string;
+} = null;
+if (movieId === 'profile') {
+  const reviewPath = join(root, config.realMediaReview!);
+  if (!existsSync(reviewPath)) {
+    console.error('DaVinci production recovery export blocked: Profile real-media Human QA evidence missing');
+    process.exit(1);
+  }
+  let review: any;
+  try {
+    review = JSON.parse(readFileSync(reviewPath, 'utf8'));
+  } catch {
+    console.error('DaVinci production recovery export blocked: Profile real-media Human QA evidence invalid JSON');
+    process.exit(1);
+  }
+  const currentReviewSha = shaFile(reviewPath);
+  if (
+    review.schemaVersion !== 'profile-v1-real-media-review/v1' ||
+    review.authority !== 'HUMAN_REAL_MEDIA_PREVIEW_REVIEW' ||
+    review.review?.overall !== 'PASS' ||
+    !review.review?.reviewer?.trim() ||
+    review.macDaVinciActual !== 'NOT_RUN' ||
+    review.productionReady !== false
+  ) {
+    console.error('DaVinci production recovery export blocked: Profile real-media Human QA contract is not current PASS evidence');
+    process.exit(1);
+  }
+  const bound = bundle.realMediaHumanQa;
+  if (
+    bound?.evidencePath !== config.realMediaReview ||
+    bound?.evidenceSha256 !== currentReviewSha ||
+    !bound?.bindingFingerprintSha256 ||
+    bound?.previewSourceFingerprintSha256 !== review.previewSourceFingerprintSha256 ||
+    bound?.canonicalPlanFingerprint !== review.canonicalPlanFingerprint ||
+    bound?.overall !== 'PASS'
+  ) {
+    console.error('DaVinci production recovery export blocked: Profile real-media Human QA bundle binding is stale');
+    process.exit(1);
+  }
+  if (
+    bundle.upstreamHumanEvidence?.realMediaReviewSha256 !== currentReviewSha ||
+    bundle.upstreamHumanEvidence?.realMediaReviewBindingFingerprintSha256 !== bound.bindingFingerprintSha256 ||
+    bundle.palmier?.realMediaHumanQaBindingFingerprintSha256 !== bound.bindingFingerprintSha256 ||
+    bundle.davinci?.expectedRealMediaHumanQaEvidenceSha256 !== currentReviewSha ||
+    bundle.davinci?.expectedRealMediaHumanQaBindingFingerprintSha256 !== bound.bindingFingerprintSha256
+  ) {
+    console.error('DaVinci production recovery export blocked: Profile Palmier/DaVinci Human QA binding is stale');
+    process.exit(1);
+  }
+  profileRealMediaQaBinding = {
+    path: config.realMediaReview,
+    evidenceSha256: currentReviewSha,
+    bindingFingerprintSha256: bound.bindingFingerprintSha256,
+    previewSourceFingerprintSha256: review.previewSourceFingerprintSha256,
+    canonicalPlanFingerprint: review.canonicalPlanFingerprint,
+  };
+}
+
 const recovery = buildWeddingDavinciProductionRecovery(movieId);
 if (recovery.artifactPath !== bundle.finalRender?.path || recovery.artifactPath !== bundle.davinci?.handoffAsset) {
   console.error('DaVinci production recovery export blocked: handoff artifact path mismatch');
@@ -109,6 +174,13 @@ const payload = {
       cropReviewEvidenceSha256: openingCropBinding.evidenceSha256,
       cropReviewBindingFingerprintSha256: openingCropBinding.bindingFingerprintSha256,
     } : {}),
+    ...(profileRealMediaQaBinding ? {
+      realMediaHumanQaEvidencePath: profileRealMediaQaBinding.path,
+      realMediaHumanQaEvidenceSha256: profileRealMediaQaBinding.evidenceSha256,
+      realMediaHumanQaBindingFingerprintSha256: profileRealMediaQaBinding.bindingFingerprintSha256,
+      realMediaHumanQaPreviewSourceFingerprintSha256: profileRealMediaQaBinding.previewSourceFingerprintSha256,
+      realMediaHumanQaCanonicalPlanFingerprint: profileRealMediaQaBinding.canonicalPlanFingerprint,
+    } : {}),
   },
   recovery,
 };
@@ -121,5 +193,9 @@ console.log(`finalRenderSha256=${bundle.finalRender.sha256}`);
 if (openingCropBinding) {
   console.log(`cropReviewEvidenceSha256=${openingCropBinding.evidenceSha256}`);
   console.log(`cropReviewBindingFingerprintSha256=${openingCropBinding.bindingFingerprintSha256}`);
+}
+if (profileRealMediaQaBinding) {
+  console.log(`realMediaHumanQaEvidenceSha256=${profileRealMediaQaBinding.evidenceSha256}`);
+  console.log(`realMediaHumanQaBindingFingerprintSha256=${profileRealMediaQaBinding.bindingFingerprintSha256}`);
 }
 console.log('Mac DaVinci Actual remains NOT_RUN; recovery export is not execution evidence.');

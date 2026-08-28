@@ -8,6 +8,7 @@ import {weddingProductionRecoverySchema} from '../src/data/resolveHandoff.schema
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const exporter = readFileSync(join(root, 'scripts/export-wedding-davinci-production-recovery.mts'), 'utf8');
 const orchestrator = readFileSync(join(root, 'scripts/export-wedding-production-handoff.mts'), 'utf8');
+const profileBundleExporter = readFileSync(join(root, 'scripts/export-profile-v1-production-bundle.mts'), 'utf8');
 const openingHandoff = readFileSync(join(root, 'scripts/opening-v1-davinci-handoff-contract.mts'), 'utf8');
 const profileHandoff = readFileSync(join(root, 'scripts/profile-v1-davinci-handoff-contract.mts'), 'utf8');
 
@@ -80,10 +81,42 @@ for (const required of [
   'cropReviewEvidencePath: openingCropBinding.path',
   'cropReviewEvidenceSha256: openingCropBinding.evidenceSha256',
   'cropReviewBindingFingerprintSha256: openingCropBinding.bindingFingerprintSha256',
+  "realMediaReview: 'out/qa/profile-v1-real-media-review.json'",
+  "review.schemaVersion !== 'profile-v1-real-media-review/v1'",
+  "review.authority !== 'HUMAN_REAL_MEDIA_PREVIEW_REVIEW'",
+  "review.review?.overall !== 'PASS'",
+  "review.macDaVinciActual !== 'NOT_RUN'",
+  "bundle.realMediaHumanQa",
+  "bound?.evidenceSha256 !== currentReviewSha",
+  "bundle.palmier?.realMediaHumanQaBindingFingerprintSha256 !== bound.bindingFingerprintSha256",
+  "bundle.davinci?.expectedRealMediaHumanQaEvidenceSha256 !== currentReviewSha",
+  "bundle.davinci?.expectedRealMediaHumanQaBindingFingerprintSha256 !== bound.bindingFingerprintSha256",
+  'realMediaHumanQaEvidencePath: profileRealMediaQaBinding.path',
+  'realMediaHumanQaEvidenceSha256: profileRealMediaQaBinding.evidenceSha256',
+  'realMediaHumanQaBindingFingerprintSha256: profileRealMediaQaBinding.bindingFingerprintSha256',
+  'realMediaHumanQaPreviewSourceFingerprintSha256: profileRealMediaQaBinding.previewSourceFingerprintSha256',
+  'realMediaHumanQaCanonicalPlanFingerprint: profileRealMediaQaBinding.canonicalPlanFingerprint',
   "FINAL_RENDER_BOUND_DAVINCI_RECOVERY",
   "Mac DaVinci Actual remains NOT_RUN; recovery export is not execution evidence.",
 ]) {
   if (!exporter.includes(required)) throw new Error(`exporter fail-close contract missing: ${required}`);
+}
+
+for (const required of [
+  "realMediaReview.schemaVersion !== 'profile-v1-real-media-review/v1'",
+  "realMediaReview.authority !== 'HUMAN_REAL_MEDIA_PREVIEW_REVIEW'",
+  "realMediaReview.review?.overall !== 'PASS'",
+  "realMediaReview.macDaVinciActual !== 'NOT_RUN'",
+  'realMediaReviewBindingFingerprintSha256',
+  'realMediaHumanQa: realMediaHumanQaBinding',
+  'realMediaReviewBindingFingerprintSha256,',
+  'realMediaHumanQaBindingFingerprintSha256: realMediaReviewBindingFingerprintSha256',
+  'expectedRealMediaHumanQaEvidenceSha256: realMediaReviewEvidenceSha256',
+  'expectedRealMediaHumanQaBindingFingerprintSha256: realMediaReviewBindingFingerprintSha256',
+  'PROFILE_REAL_MEDIA_HUMAN_QA_CHANGED => REGENERATE_PRODUCTION_HANDOFF',
+  'PROFILE_REAL_MEDIA_HUMAN_QA_BINDING_EXPORTED != MAC_DAVINCI_ACTUAL_VERIFIED',
+]) {
+  if (!profileBundleExporter.includes(required)) throw new Error(`profile bundle Human QA binding missing: ${required}`);
 }
 
 for (const required of [
@@ -137,4 +170,24 @@ if (profileHandoff.includes('OPENING_DAVINCI_RECOVERY_CROP_REVIEW_SHA_STALE')) {
   throw new Error('profile: Opening-specific crop recovery contract leaked into Profile handoff');
 }
 
-console.log('Wedding DaVinci production recovery export + target-safe handoff contracts: PASS (Opening recovery is crop-evidence SHA/fingerprint bound).');
+for (const required of [
+  "PROFILE_DAVINCI_REAL_MEDIA_HUMAN_QA_MISSING",
+  "bundle.realMediaHumanQa?.evidenceSha256 !== currentRealMediaReviewSha256",
+  "PROFILE_DAVINCI_REAL_MEDIA_HUMAN_QA_SHA_STALE",
+  "bundle.realMediaHumanQa?.previewSourceFingerprintSha256 !== currentRealMediaReview.previewSourceFingerprintSha256",
+  "PROFILE_DAVINCI_REAL_MEDIA_HUMAN_QA_PREVIEW_SOURCE_STALE",
+  "recoverySidecar.sourceBundle?.realMediaHumanQaEvidenceSha256 !== bundle?.realMediaHumanQa?.evidenceSha256",
+  "PROFILE_DAVINCI_RECOVERY_REAL_MEDIA_HUMAN_QA_SHA_STALE",
+  "recoverySidecar.sourceBundle?.realMediaHumanQaBindingFingerprintSha256 !== bundle?.realMediaHumanQa?.bindingFingerprintSha256",
+  "PROFILE_DAVINCI_RECOVERY_REAL_MEDIA_HUMAN_QA_FINGERPRINT_STALE",
+  'realMediaHumanQaEvidenceSha256: recoverySidecar?.sourceBundle?.realMediaHumanQaEvidenceSha256 ?? null',
+  'realMediaHumanQaBindingFingerprintSha256: recoverySidecar?.sourceBundle?.realMediaHumanQaBindingFingerprintSha256 ?? null',
+  'PROFILE_REAL_MEDIA_HUMAN_QA_CHANGED => DAVINCI_RECOVERY_SIDECAR_STALE',
+]) {
+  if (!profileHandoff.includes(required)) throw new Error(`profile: Human-QA-bound recovery revalidation missing: ${required}`);
+}
+if (openingHandoff.includes('PROFILE_DAVINCI_RECOVERY_REAL_MEDIA_HUMAN_QA_SHA_STALE')) {
+  throw new Error('opening: Profile-specific real-media Human QA recovery contract leaked into Opening handoff');
+}
+
+console.log('Wedding DaVinci production recovery export + target-safe handoff contracts: PASS (Opening recovery is crop-evidence bound; Profile recovery is real-media Human-QA evidence SHA/fingerprint bound).');

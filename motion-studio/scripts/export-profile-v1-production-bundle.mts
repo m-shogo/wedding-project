@@ -44,6 +44,51 @@ const finalReview = JSON.parse(readFileSync(reviewPath, 'utf8')) as {
 if (finalReview.schemaVersion !== 'profile-v1-final-render-review/v1' || finalReview.authority !== 'HUMAN_FINAL_RENDER_REVIEW') throw new Error('PROFILE_BUNDLE_FINAL_REVIEW_CONTRACT');
 if (finalReview.review.overall !== 'PASS' || !finalReview.review.reviewer?.trim()) throw new Error('PROFILE_BUNDLE_FINAL_REVIEW_NOT_PASS');
 
+const realMediaReview = JSON.parse(readFileSync(realReviewPath, 'utf8')) as {
+  schemaVersion: string;
+  authority: string;
+  boundAt: string;
+  preview: {path: string; sha256: string};
+  previewSourceFingerprintSha256: string;
+  runtimeManifestSha256: string;
+  productionPlanSha256: string;
+  previewComponentSha256: string;
+  canonicalPlanFingerprint: string;
+  media: Array<{slot: string; sha256: string; qa: Record<string, string>}>;
+  chapters: Array<{chapterId: string; visualFlow: string; readability: string; mediaRoleFit: string}>;
+  review: {overall: string; reviewer: string | null; reviewedAt: string | null};
+  macDaVinciActual: string;
+  productionReady: boolean;
+};
+if (realMediaReview.schemaVersion !== 'profile-v1-real-media-review/v1' || realMediaReview.authority !== 'HUMAN_REAL_MEDIA_PREVIEW_REVIEW') throw new Error('PROFILE_BUNDLE_REAL_MEDIA_REVIEW_CONTRACT');
+if (realMediaReview.review?.overall !== 'PASS' || !realMediaReview.review?.reviewer?.trim()) throw new Error('PROFILE_BUNDLE_REAL_MEDIA_REVIEW_NOT_PASS');
+if (realMediaReview.macDaVinciActual !== 'NOT_RUN' || realMediaReview.productionReady !== false) throw new Error('PROFILE_BUNDLE_REAL_MEDIA_REVIEW_MUST_PRECEDE_DAVINCI_ACTUAL');
+const realMediaReviewEvidenceSha256 = sha(realReviewPath);
+const realMediaReviewBindingFingerprintSha256 = shaText(JSON.stringify({
+  evidenceSha256: realMediaReviewEvidenceSha256,
+  boundAt: realMediaReview.boundAt,
+  previewSha256: realMediaReview.preview?.sha256 ?? null,
+  previewSourceFingerprintSha256: realMediaReview.previewSourceFingerprintSha256,
+  runtimeManifestSha256: realMediaReview.runtimeManifestSha256,
+  productionPlanSha256: realMediaReview.productionPlanSha256,
+  previewComponentSha256: realMediaReview.previewComponentSha256,
+  canonicalPlanFingerprint: realMediaReview.canonicalPlanFingerprint,
+  media: realMediaReview.media?.map((item) => ({slot: item.slot, sha256: item.sha256, qa: item.qa})) ?? [],
+  chapters: realMediaReview.chapters ?? [],
+  reviewedAt: realMediaReview.review?.reviewedAt ?? null,
+}));
+const realMediaHumanQaBinding = {
+  evidencePath: rel(realReviewPath),
+  evidenceSha256: realMediaReviewEvidenceSha256,
+  bindingFingerprintSha256: realMediaReviewBindingFingerprintSha256,
+  boundAt: realMediaReview.boundAt,
+  previewSha256: realMediaReview.preview?.sha256 ?? null,
+  previewSourceFingerprintSha256: realMediaReview.previewSourceFingerprintSha256,
+  canonicalPlanFingerprint: realMediaReview.canonicalPlanFingerprint,
+  overall: realMediaReview.review.overall,
+  reviewedAt: realMediaReview.review.reviewedAt,
+};
+
 const media = profileV1RuntimeMedia.slots.map((slot) => {
   if (!slot.resolved || !slot.staticFilePath || !slot.extension) throw new Error(`PROFILE_BUNDLE_MEDIA_UNRESOLVED:${slot.id}`);
   const absolute = join(root, 'public', slot.staticFilePath);
@@ -111,26 +156,37 @@ const bundle = {
     overall: finalReview.review.overall,
     notes: finalReview.review.notes,
   },
-  upstreamHumanEvidence: {realMediaReviewSha256: sha(realReviewPath), structureReviewSha256: sha(structureReviewPath), bgmRightsApprovalSha256: sha(bgmApprovalPath)},
+  realMediaHumanQa: realMediaHumanQaBinding,
+  upstreamHumanEvidence: {
+    realMediaReviewSha256: realMediaReviewEvidenceSha256,
+    realMediaReviewBindingFingerprintSha256,
+    structureReviewSha256: sha(structureReviewPath),
+    bgmRightsApprovalSha256: sha(bgmApprovalPath),
+  },
   bgm: {path: rel(bgmPath), sha256: sha(bgmPath)}, media, timeline, generatedAccents,
   palmier: {
     handoffMode: 'REFERENCE_TIMELINE_AND_FINAL_RENDER',
     timelineCsv: rel(timelinePath),
     timelineCsvSha256: timelineSha,
     generatedAccentAuthority: 'PROFILE_V1_GENERATED_ACCENT_REGISTRY',
-    instruction: '5章30秒のchapter boundary・edit intent・generated accent route・final render SHAを正本として扱い、変更が必要ならMotion Studio正本へ戻す。',
+    realMediaHumanQaBindingFingerprintSha256: realMediaReviewBindingFingerprintSha256,
+    instruction: '5章30秒のchapter boundary・edit intent・generated accent route・final render SHAを正本として扱い、変更が必要ならMotion Studio正本へ戻す。real-media Human QA binding fingerprintが変わった場合はhandoffを再生成する。',
   },
   davinci: {
     handoffAsset: rel(finalPath),
     expectedSha256: finalSha,
     intendedUse: 'FINISHING_AND_OUTPUT_QA',
     generatedAccentRoutes: generatedAccents.map(({slotId, chapterId, label, note, implementation, canonicalReuse}) => ({slotId, chapterId, label, note, implementation, canonicalReuse})),
+    expectedRealMediaHumanQaEvidenceSha256: realMediaReviewEvidenceSha256,
+    expectedRealMediaHumanQaBindingFingerprintSha256: realMediaReviewBindingFingerprintSha256,
     macActualState: 'NOT_RUN',
     productionReady: false,
   },
   guardrails: [
     'FINAL_RENDER_REVIEW_PASS != DAVINCI_ACTUAL_VERIFIED',
     'FINAL_RENDER_OR_RENDER_SOURCE_CHANGED => RE_RENDER_AND_RE_REVIEW',
+    'PROFILE_REAL_MEDIA_HUMAN_QA_CHANGED => REGENERATE_PRODUCTION_HANDOFF',
+    'PROFILE_REAL_MEDIA_HUMAN_QA_BINDING_EXPORTED != MAC_DAVINCI_ACTUAL_VERIFIED',
     'GENERATED_ACCENT_ROUTE_EXPORTED != MAC_DAVINCI_ACTUAL_VERIFIED',
     'PALMIER_TIMELINE_SHA_MISMATCH => STOP_AND_REGENERATE_HANDOFF',
     'BUNDLE_EXPORTED != PRODUCTION_READY',
@@ -144,6 +200,8 @@ console.log(`Profile V1 production bundle exported: ${rel(bundlePath)}`);
 console.log(`Palmier timeline exported: ${rel(timelinePath)}`);
 console.log(`palmierTimelineSha256=${timelineSha}`);
 console.log(`generatedAccentRoutes=${generatedAccents.length}`);
+console.log(`realMediaHumanQaEvidenceSha256=${realMediaReviewEvidenceSha256}`);
+console.log(`realMediaHumanQaBindingFingerprintSha256=${realMediaReviewBindingFingerprintSha256}`);
 console.log(`finalRenderReviewEvidenceSha256=${sha(reviewPath)}`);
 console.log(`finalRenderSha256=${finalSha}`);
 console.log('DaVinci Mac Actual remains NOT_RUN; productionReady=false.');

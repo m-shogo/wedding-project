@@ -123,13 +123,15 @@ export const profileProductionStatus = {
       "current": false,
       "sourceAuthorities": [
         "scripts/export-profile-v1-production-bundle.mts#bundle.davinci",
+        "scripts/profile-v1-real-media-review.mts",
         "scripts/export-wedding-davinci-production-recovery.mts",
         "src/data/profileV1GeneratedAccentRegistry.ts#profileV1GeneratedAccentImplementations",
         "scripts/profile-v1-davinci-finishing-evidence.mts"
       ],
       "upstreamPalmier": {
         "timelinePath": "out/handoff/profile-v1/profile-v1-palmier-timeline.csv",
-        "generatedAccentAuthority": "PROFILE_V1_GENERATED_ACCENT_REGISTRY"
+        "generatedAccentAuthority": "PROFILE_V1_GENERATED_ACCENT_REGISTRY",
+        "realMediaHumanQaBindingFingerprintSha256": null
       },
       "handoffAsset": {
         "path": "out/profile/profile_v1.mp4",
@@ -162,6 +164,8 @@ export const profileProductionStatus = {
         "schemaVersion": "wedding-davinci-production-recovery-export/v1",
         "authority": "FINAL_RENDER_BOUND_DAVINCI_RECOVERY",
         "sourceRenderSha256": null,
+        "realMediaHumanQaEvidenceSha256": null,
+        "realMediaHumanQaBindingFingerprintSha256": null,
         "actualState": "NOT_RUN",
         "requiredCurrent": true
       },
