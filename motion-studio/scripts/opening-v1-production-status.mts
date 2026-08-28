@@ -5,6 +5,7 @@ import {dirname, join, relative} from 'node:path';
 import {fileURLToPath} from 'node:url';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
+const cropReviewPath = join(root, 'out/qa/opening-v1-crop-review-evidence.json');
 const previewPath = join(root, 'out/preview/opening_v1_preview.mp4');
 const previewSourcePath = join(root, 'out/qa/opening-v1-preview-source-fingerprint.json');
 const previewReviewPath = join(root, 'out/qa/opening-v1-preview-review.json');
@@ -29,11 +30,13 @@ type ProductionBundle = {
   schemaVersion?: string;
   authority?: string;
   finalRender?: {path?: string; sha256?: string};
+  humanCropReview?: {evidencePath?: string; evidenceSha256?: string; bindingFingerprintSha256?: string; overall?: string};
   humanPreviewReview?: {evidencePath?: string; evidenceSha256?: string};
   humanFinalRenderReview?: {evidencePath?: string; evidenceSha256?: string; finalRenderSha256?: string; renderSourceFingerprintSha256?: string};
-  palmier?: {handoffContractVersion?: string; timelineCsv?: string; timelineCsvSha256?: string; soundCueCsv?: string; soundCueCsvSha256?: string};
-  davinci?: {expectedSha256?: string; productionReady?: boolean};
+  palmier?: {handoffContractVersion?: string; cropReviewBindingFingerprintSha256?: string; timelineCsv?: string; timelineCsvSha256?: string; soundCueCsv?: string; soundCueCsvSha256?: string};
+  davinci?: {expectedSha256?: string; expectedCropReviewEvidenceSha256?: string; expectedCropReviewBindingFingerprintSha256?: string; productionReady?: boolean};
 };
+type CropEvidence = {bindingFingerprintSha256?: string; overall?: string};
 
 const rel = (path: string) => relative(root, path).replaceAll('\\', '/');
 const sha = (path: string) => createHash('sha256').update(readFileSync(path)).digest('hex');
@@ -69,8 +72,21 @@ function readAssembly(): {stage: Stage; report: AssemblyReport | null} {
 
 const assembly = readAssembly();
 const mediaReady = assembly.stage.state === 'PASS';
-const previewRender: Stage = !mediaReady
-  ? {state: 'NOT_RUN', detail: 'Blocked upstream by real-media gate.', path: rel(previewPath)}
+const cropReview: Stage = !mediaReady
+  ? {state: 'NOT_RUN', detail: 'Blocked upstream until real media/BGM assembly gate passes.', path: rel(cropReviewPath)}
+  : !existsSync(cropReviewPath)
+    ? {state: 'MISSING', detail: 'Initialize Human crop review for current real photos and effective focus/fit.', path: rel(cropReviewPath)}
+    : (() => {
+        const result = run('scripts/opening-v1-crop-review-evidence.mts', ['--strict']);
+        if (result.status === 0) return {state: 'PASS', detail: 'Human crop review is current for photo SHA + effective focus/fit.', path: rel(cropReviewPath)};
+        const blockers = [...lines(result.stdout), ...lines(result.stderr)];
+        const stale = blockers.some((line) => line.includes('_STALE'));
+        return {state: stale ? 'STALE' : 'BLOCKED', detail: 'Human crop review is incomplete, failed, or stale against current photo/presentation revision.', path: rel(cropReviewPath), blockers};
+      })();
+const cropReviewReady = cropReview.state === 'PASS';
+
+const previewRender: Stage = !cropReviewReady
+  ? {state: 'NOT_RUN', detail: 'Blocked upstream until current Human crop review passes.', path: rel(previewPath)}
   : existsSync(previewPath)
     ? {state: 'PASS', detail: 'Preview MP4 exists for human review.', path: rel(previewPath)}
     : {state: 'MISSING', detail: 'Render the current real-media preview.', path: rel(previewPath)};
@@ -123,7 +139,7 @@ let productionBundle: Stage;
 if (finalRenderReview.state !== 'PASS') {
   productionBundle = {state: 'NOT_RUN', detail: 'Blocked until current Human final-render review passes.', path: rel(bundlePath)};
 } else if (!existsSync(bundlePath)) {
-  productionBundle = {state: 'MISSING', detail: 'Export the SHA-bound Palmier/DaVinci production bundle.', path: rel(bundlePath)};
+  productionBundle = {state: 'MISSING', detail: 'Export the crop-bound SHA-bound Palmier/DaVinci production bundle.', path: rel(bundlePath)};
 } else {
   const errors: string[] = [];
   try {
@@ -134,6 +150,19 @@ if (finalRenderReview.state !== 'PASS') {
     if (bundle.finalRender?.sha256 !== finalSha) errors.push('BUNDLE_FINAL_RENDER_SHA_STALE');
     if (bundle.davinci?.expectedSha256 !== finalSha) errors.push('BUNDLE_DAVINCI_EXPECTED_SHA_STALE');
     if (bundle.davinci?.productionReady !== false) errors.push('BUNDLE_MUST_FAIL_CLOSED');
+    if (!existsSync(cropReviewPath)) errors.push('BUNDLE_CROP_REVIEW_EVIDENCE_MISSING');
+    else {
+      const cropSha = sha(cropReviewPath);
+      let crop: CropEvidence | null = null;
+      try { crop = JSON.parse(readFileSync(cropReviewPath, 'utf8')) as CropEvidence; } catch { errors.push('BUNDLE_CROP_REVIEW_EVIDENCE_INVALID_JSON'); }
+      if (bundle.humanCropReview?.evidencePath !== rel(cropReviewPath)) errors.push('BUNDLE_CROP_REVIEW_PATH_STALE');
+      if (bundle.humanCropReview?.evidenceSha256 !== cropSha) errors.push('BUNDLE_CROP_REVIEW_SHA_STALE');
+      if (bundle.davinci?.expectedCropReviewEvidenceSha256 !== cropSha) errors.push('BUNDLE_DAVINCI_CROP_REVIEW_SHA_STALE');
+      if (crop?.overall !== 'PASS') errors.push('BUNDLE_CROP_REVIEW_NOT_PASS');
+      if (crop?.bindingFingerprintSha256 && bundle.humanCropReview?.bindingFingerprintSha256 !== crop.bindingFingerprintSha256) errors.push('BUNDLE_CROP_REVIEW_FINGERPRINT_STALE');
+      if (crop?.bindingFingerprintSha256 && bundle.palmier?.cropReviewBindingFingerprintSha256 !== crop.bindingFingerprintSha256) errors.push('BUNDLE_PALMIER_CROP_REVIEW_FINGERPRINT_STALE');
+      if (crop?.bindingFingerprintSha256 && bundle.davinci?.expectedCropReviewBindingFingerprintSha256 !== crop.bindingFingerprintSha256) errors.push('BUNDLE_DAVINCI_CROP_REVIEW_FINGERPRINT_STALE');
+    }
     if (!existsSync(previewReviewPath)) errors.push('BUNDLE_PREVIEW_REVIEW_EVIDENCE_MISSING');
     else if (bundle.humanPreviewReview?.evidenceSha256 !== sha(previewReviewPath)) errors.push('BUNDLE_PREVIEW_REVIEW_SHA_STALE');
     if (!existsSync(finalReviewPath)) errors.push('BUNDLE_FINAL_REVIEW_EVIDENCE_MISSING');
@@ -143,7 +172,7 @@ if (finalRenderReview.state !== 'PASS') {
       if (bundle.humanFinalRenderReview?.evidenceSha256 !== finalReviewSha) errors.push('BUNDLE_FINAL_REVIEW_SHA_STALE');
       if (bundle.humanFinalRenderReview?.finalRenderSha256 !== finalSha) errors.push('BUNDLE_FINAL_REVIEW_RENDER_SHA_STALE');
     }
-    if (bundle.palmier?.handoffContractVersion !== 'opening-v1-palmier-handoff/v2') errors.push('BUNDLE_PALMIER_HANDOFF_CONTRACT_STALE');
+    if (bundle.palmier?.handoffContractVersion !== 'opening-v1-palmier-handoff/v3') errors.push('BUNDLE_PALMIER_HANDOFF_CONTRACT_STALE');
     if (bundle.palmier?.timelineCsv !== rel(timelinePath)) errors.push('BUNDLE_PALMIER_TIMELINE_PATH_STALE');
     if (!existsSync(timelinePath)) errors.push('BUNDLE_PALMIER_TIMELINE_MISSING');
     else if (bundle.palmier?.timelineCsvSha256 !== sha(timelinePath)) errors.push('BUNDLE_PALMIER_TIMELINE_SHA_STALE');
@@ -154,14 +183,14 @@ if (finalRenderReview.state !== 'PASS') {
     errors.push('BUNDLE_INVALID_JSON');
   }
   productionBundle = errors.length === 0
-    ? {state: 'PASS', detail: 'Production bundle is current against final render, Human preview/final reviews and versioned Palmier scene/sound handoff.', path: rel(bundlePath)}
-    : {state: 'STALE', detail: 'Production bundle must be regenerated from current approved artifacts and current Palmier handoff contract.', path: rel(bundlePath), blockers: errors};
+    ? {state: 'PASS', detail: 'Production bundle is current against Human crop/preview/final reviews, final render and versioned Palmier scene/sound handoff.', path: rel(bundlePath)}
+    : {state: 'STALE', detail: 'Production bundle must be regenerated from current crop/preview/final review and current Palmier handoff.', path: rel(bundlePath), blockers: errors};
 }
 
 const davinciFinishing: Stage = productionBundle.state !== 'PASS'
   ? {state: 'NOT_RUN', detail: 'Blocked upstream until the production bundle is current.', path: rel(davinciPath)}
   : !existsSync(davinciPath)
-    ? {state: 'MISSING', detail: 'Initialize bundle-bound DaVinci finishing evidence before the real Mac Resolve session.', path: rel(davinciPath)}
+    ? {state: 'MISSING', detail: 'Initialize crop-bound bundle DaVinci finishing evidence before the real Mac Resolve session.', path: rel(davinciPath)}
     : (() => {
         const result = run('scripts/opening-v1-davinci-finishing-evidence.mts', ['--strict']);
         return result.status === 0
@@ -192,6 +221,8 @@ const approved = finalDeliveryApproval.state === 'PASS';
 let overallState: string;
 let nextActions: string[];
 if (!mediaReady) {overallState = 'MEDIA_REQUIRED'; nextActions = assembly.report?.nextActions ?? ['実写真/BGMのblocking mediaを揃える', 'pnpm opening:production-status'];}
+else if (cropReview.state === 'MISSING') {overallState = 'CROP_REVIEW_INIT_REQUIRED'; nextActions = ['node --no-warnings scripts/opening-v1-crop-review-evidence.mts --init', 'cover slotを人間確認しreviewer/reviewedAt/PASSを記録', 'node --no-warnings scripts/opening-v1-crop-review-evidence.mts --strict'];}
+else if (!cropReviewReady) {overallState = 'HUMAN_CROP_REVIEW_REQUIRED_OR_STALE'; nextActions = ['現在の写真SHA/focus/fitに対してHuman crop QAを完了または再初期化', 'node --no-warnings scripts/opening-v1-crop-review-evidence.mts --strict'];}
 else if (!previewReady) {overallState = 'PREVIEW_RENDER_REQUIRED'; nextActions = ['pnpm render:opening-v1:preview', 'pnpm opening:production-status'];}
 else if (!previewSourceReady) {overallState = 'PREVIEW_SOURCE_BINDING_REQUIRED_OR_STALE'; nextActions = ['pnpm opening:preview-review:init', 'pnpm opening:preview-review:strict'];}
 else if (previewReview.state === 'MISSING') {overallState = 'PREVIEW_REVIEW_INIT_REQUIRED'; nextActions = ['pnpm opening:preview-review:init', '実preview/stillsを人間が確認してevidenceを記録', 'pnpm opening:preview-review:strict'];}
@@ -201,7 +232,7 @@ else if (!finalReady) {overallState = 'FINAL_RENDER_QA_FAILED'; nextActions = ['
 else if (finalRenderReview.state === 'MISSING') {overallState = 'FINAL_RENDER_REVIEW_INIT_REQUIRED'; nextActions = ['pnpm opening:final-render-review:init', 'final MP4を音声付きで人間確認', 'pnpm opening:final-render-review:strict'];}
 else if (!finalReviewReady) {overallState = 'HUMAN_FINAL_RENDER_REVIEW_REQUIRED_OR_STALE'; nextActions = ['current final MP4 / render sourceに対するHuman final-render QAを完了または再初期化', 'pnpm opening:final-render-review:strict'];}
 else if (productionBundle.state === 'MISSING') {overallState = 'PRODUCTION_BUNDLE_REQUIRED'; nextActions = ['pnpm export:opening-v1-production-bundle', 'pnpm opening:production-status'];}
-else if (!bundleReady) {overallState = 'PRODUCTION_BUNDLE_STALE'; nextActions = ['現在のfinal render/Human preview+final review/Palmier scene+sound handoffからproduction bundleを再生成', 'pnpm export:opening-v1-production-bundle'];}
+else if (!bundleReady) {overallState = 'PRODUCTION_BUNDLE_STALE'; nextActions = ['現在のcrop/final render/Human reviews/Palmier handoffからproduction bundleを再生成', 'pnpm export:opening-v1-production-bundle'];}
 else if (davinciFinishing.state === 'MISSING') {overallState = 'DAVINCI_EVIDENCE_INIT_REQUIRED'; nextActions = ['pnpm opening:davinci-finishing:init', 'Mac DaVinci Resolveでbundle-bound Actualを実施', 'pnpm opening:davinci-finishing:strict'];}
 else if (!davinciReady) {overallState = 'DAVINCI_ACTUAL_REQUIRED_OR_STALE'; nextActions = ['Mac DaVinci Resolve Actualの未完了/FAIL/stale項目を解消', 'pnpm opening:davinci-finishing:strict'];}
 else if (finalDeliveryApproval.state === 'MISSING') {overallState = 'FINAL_DELIVERY_APPROVAL_INIT_REQUIRED'; nextActions = ['pnpm opening:final-delivery-approval:init', 'DaVinci final exportを人間が最終確認', 'pnpm opening:final-delivery-approval:strict'];}
@@ -210,6 +241,7 @@ else {overallState = 'PRODUCTION_READY'; nextActions = ['承認済みDaVinci exp
 
 const stages = {
   media: withStableBlockerCodes(assembly.stage),
+  cropReview: withStableBlockerCodes(cropReview),
   previewRender: withStableBlockerCodes(previewRender),
   previewSourceBinding: withStableBlockerCodes(previewSourceBinding),
   previewReview: withStableBlockerCodes(previewReview),
@@ -228,6 +260,7 @@ const report = {
   readiness: {
     finalRenderEligible: assembly.report?.readiness?.finalRenderEligible === true,
     mixReady: assembly.report?.readiness?.mixReady === true,
+    humanCropReviewApproved: cropReviewReady,
     previewSourceBound: previewSourceReady,
     humanPreviewApproved: previewReviewReady,
     finalRenderQaPass: finalReady,
@@ -240,11 +273,11 @@ const report = {
   },
   handoff: {
     palmier: {
-      contractVersion: 'opening-v1-palmier-handoff/v2' as const,
+      contractVersion: 'opening-v1-palmier-handoff/v3' as const,
       current: bundleReady,
-      sourceAuthorities: ['src/data/openingV1.ts#openingV1Scenes', 'src/data/openingV1Sound.ts#openingV1SoundCues', 'out/qa/opening-v1-final-render-review.json'],
+      sourceAuthorities: ['out/qa/opening-v1-crop-review-evidence.json', 'src/data/openingV1.ts#openingV1Scenes', 'src/data/openingV1Sound.ts#openingV1SoundCues', 'out/qa/opening-v1-final-render-review.json'],
       artifacts: {
-        sceneTimeline: {path: rel(timelinePath), shaBound: true, carries: ['scene_boundary', 'replacement_policy', 'final_render_sha256']},
+        sceneTimeline: {path: rel(timelinePath), shaBound: true, carries: ['scene_boundary', 'replacement_policy', 'final_render_sha256', 'crop_review_binding']},
         soundCues: {path: rel(soundCuePath), shaBound: true, carries: ['bgm', 'ambience_j_cut', 'start_end', 'volume', 'note', 'final_render_sha256']},
       },
     },
@@ -253,6 +286,10 @@ const report = {
   guardrails: [
     'RAW_BLOCKER_DETAIL != STABLE_BLOCKER_CODE',
     'ABSOLUTE_PATH_OR_LOG_DETAIL_MUST_NOT_ENTER_BLOCKER_CODES',
+    'PHOTO_SHA_OR_EFFECTIVE_FOCUS_OR_FIT_CHANGED => HUMAN_CROP_REVIEW_STALE',
+    'HUMAN_CROP_REVIEW_PASS != HUMAN_PREVIEW_REVIEW_PASS',
+    'CROP_REVIEW_EVIDENCE_SHA_MISMATCH => PRODUCTION_BUNDLE_STALE',
+    'CROP_REVIEW_BINDING_FINGERPRINT_MISMATCH => PRODUCTION_BUNDLE_STALE',
     'PREVIEW_SOURCE_FINGERPRINT_STALE => HUMAN_PREVIEW_REVIEW_NOT_TRUSTED',
     'HUMAN_PREVIEW_REVIEW_PASS != HUMAN_FINAL_RENDER_REVIEW_PASS',
     'FINAL_RENDER_OR_RENDER_SOURCE_CHANGED => HUMAN_FINAL_RENDER_REVIEW_STALE',
@@ -277,7 +314,7 @@ else {
     for (const code of stage.blockerCodes ?? []) console.log(`  BLOCK_CODE / ${code}`);
   }
   console.log(`Palmier handoff=${report.handoff.palmier.contractVersion} current=${report.handoff.palmier.current ? 'YES' : 'NO'} timeline=${report.handoff.palmier.artifacts.sceneTimeline.path} sound=${report.handoff.palmier.artifacts.soundCues.path}`);
-  console.log(`previewSourceBound=${report.readiness.previewSourceBound ? 'YES' : 'NO'} humanFinalRenderApproved=${report.readiness.humanFinalRenderApproved ? 'YES' : 'NO'} readyForFinalDeliveryApproval=${report.readiness.readyForFinalDeliveryApproval ? 'YES' : 'NO'} finalDeliveryApproved=${approved ? 'YES' : 'NO'} productionReady=${approved ? 'YES' : 'NO'}`);
+  console.log(`humanCropReviewApproved=${report.readiness.humanCropReviewApproved ? 'YES' : 'NO'} previewSourceBound=${report.readiness.previewSourceBound ? 'YES' : 'NO'} humanFinalRenderApproved=${report.readiness.humanFinalRenderApproved ? 'YES' : 'NO'} readyForFinalDeliveryApproval=${report.readiness.readyForFinalDeliveryApproval ? 'YES' : 'NO'} finalDeliveryApproved=${approved ? 'YES' : 'NO'} productionReady=${approved ? 'YES' : 'NO'}`);
   console.log(`NEXT / ${nextActions.join(' → ')}`);
   console.log('JSON / pnpm opening:production-status -- --json');
 }
