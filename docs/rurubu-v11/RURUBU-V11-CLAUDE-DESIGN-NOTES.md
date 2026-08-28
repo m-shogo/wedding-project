@@ -311,3 +311,26 @@ screenshot: no collision with the existing photo/question layout.
 
 User's next direction: push further toward matching real Rurubu magazine
 conventions specifically ("るるぶと瓜二つ" — near-identical to actual Rurubu).
+
+## Final density pass — real Rurubu conventions (numbered spot pins, map pin)
+
+Per "るるぶと瓜二つくらいがいい" — pushed toward specific real-Rurubu visual
+conventions rather than generic decoration:
+- P05/P06: added circled, colored, numbered spot badges (①②③ style) directly on
+  the destination/memory photos — the classic Rurubu "numbered map pin on photo"
+  device, distinct from the text-only "MEMORY SPOT 01/02" kickers already present.
+- P07: added a map-pin icon (`MAP_GLOBAL_LOCATION_PIN_HEART_CORAL_01`) beside the
+  venue line.
+
+Caught one upload silently failing: the map-pin's first `upload_assets` call
+returned `success:true` but with no `placedOnNodeId` in the response and the
+node's fill stayed `SOLID` on inspection — retried the exact same call and it
+succeeded the second time with `placedOnNodeId` present. Root-caused as a
+transient issue, not a logic bug, but caught by checking `fills[0].type`
+directly rather than trusting the first response.
+
+Ran a final combined audit across all 8 pages: 0 Inter-font nodes, 0 image-role
+rectangles still showing an unfilled placeholder color (except the two
+intentionally-labeled "実写真未投入" Okinawa/Seoul slots on P05), 3 overflow
+entries (the same three intentional corner-decoration bleeds noted throughout
+this document, not bugs).
