@@ -57,13 +57,26 @@ export function FusionNodeTranslator() {
         <div className="mt-4 grid gap-3 lg:grid-cols-2">
           {productionGate.projects.map((project) => {
             const studio = project.remotionStudioToolingEvidence;
+            const dependency = project.remotionStudioToolingDependency;
             return (
             <div key={project.movieId} className="rounded-lg border border-current/15 bg-white/70 dark:bg-navy-800/50 p-3">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <p className="text-sm font-bold text-navy-800 dark:text-sand-100">{project.title}</p>
-                <code className={`text-[10px] ${project.bridge.state === "READY" ? "text-emerald-700 dark:text-emerald-300" : "text-amber-700 dark:text-amber-300"}`}>{project.bridge.state}</code>
+                <code className={`text-[10px] ${project.productionReady ? "text-emerald-700 dark:text-emerald-300" : "text-amber-700 dark:text-amber-300"}`}>{project.effectiveProductionState}</code>
               </div>
-              <div className="mt-2 grid gap-1 text-[11px] text-navy-600 dark:text-navy-200">
+
+              <div className="mt-3 rounded border border-violet-200 bg-violet-50/70 p-2 dark:border-violet-800 dark:bg-violet-900/15">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <p className="text-[10px] font-semibold tracking-widest text-violet-800 dark:text-violet-200">EFFECTIVE PRODUCTION STATE</p>
+                  <code className={`text-[9px] ${project.productionReady ? "text-emerald-700 dark:text-emerald-300" : "text-violet-700 dark:text-violet-300"}`}>{project.effectiveProductionState}</code>
+                </div>
+                <p className="mt-1 text-[10px] leading-4 text-violet-800 dark:text-violet-200">Wedding canonical nextGateと、明示採用されたRemotion Studio dependencyを統合した実効stateです。Fusion独自判定ではなくPalmierと同じ中央resolverを使用します。</p>
+                <p className="mt-2 text-[10px] text-navy-600 dark:text-navy-200"><strong>Blocking authorities:</strong> {project.blockingAuthorities.length > 0 ? project.blockingAuthorities.join(", ") : "none"}</p>
+                <p className="mt-1 text-[10px] text-navy-600 dark:text-navy-200"><strong>Wedding NOW:</strong> {project.nextGate.stage ?? "PRODUCTION_READY"}</p>
+                <p className="mt-1 break-all text-[9px] text-navy-400"><strong>Artifact:</strong> {project.nextGate.artifactPath ?? "—"}</p>
+              </div>
+
+              <div className="mt-3 grid gap-1 text-[11px] text-navy-600 dark:text-navy-200">
                 <p>{project.bridge.palmierCurrent ? "✓" : "○"} Palmier current · {project.bridge.palmierContractVersion}</p>
                 <p>{project.bridge.davinciHandoffCurrent ? "✓" : "○"} DaVinci handoff current · {project.bridge.davinciContractVersion}</p>
                 <p>{project.bridge.macDaVinciActualVerified ? "✓" : "○"} Mac DaVinci Actual verified</p>
@@ -89,6 +102,42 @@ export function FusionNodeTranslator() {
                   <code className="block break-all rounded bg-white/80 px-2 py-1 text-[9px] text-sky-800 dark:bg-navy-950/30 dark:text-sky-200">strict: {studio.strictCommand}</code>
                 </div>
                 <p className="mt-2 text-[9px] font-semibold text-sky-800 dark:text-sky-200">Tooling evidenceを表示・exportしてもStudio Actual verifiedにはなりません。Element未採用ならWedding productionをBLOCKしません。</p>
+              </div>
+
+              <div className={`mt-3 rounded border p-2 ${dependency.blocking ? "border-amber-200 bg-amber-50/80 dark:border-amber-800 dark:bg-amber-900/15" : "border-emerald-200 bg-emerald-50/60 dark:border-emerald-800 dark:bg-emerald-900/10"}`}>
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <p className="text-[10px] font-semibold tracking-widest text-navy-600 dark:text-navy-200">REMOTION PROJECT DEPENDENCY</p>
+                  <code className={`text-[9px] ${dependency.blocking ? "text-amber-700 dark:text-amber-300" : "text-emerald-700 dark:text-emerald-300"}`}>{dependency.state}</code>
+                </div>
+                <div className="mt-2 grid grid-cols-2 gap-2 text-[10px] text-navy-600 dark:text-navy-200">
+                  <p>{dependency.adopted ? "✓" : "○"} Project adopted</p>
+                  <p>{dependency.blocking ? "●" : "○"} Blocking</p>
+                  <p>{dependency.studioActualVerified ? "✓" : "○"} Studio Actual</p>
+                  <p>{dependency.humanReviewed ? "✓" : "○"} Human review</p>
+                  <p>{dependency.dependencyPromoted ? "✓" : "○"} Dependency promoted</p>
+                  <p><strong>Adopted:</strong> {dependency.adoptedCandidateCount}</p>
+                </div>
+                <p className="mt-2 break-all text-[9px] text-navy-400"><strong>Candidate IDs:</strong> {dependency.adoptedCandidateIds.length > 0 ? dependency.adoptedCandidateIds.join(", ") : "none"}</p>
+                {dependency.recoveryActions.length > 0 && (
+                  <div className="mt-2 grid gap-2">
+                    {dependency.recoveryActions.map((action) => (
+                      <div key={`${action.kind}-${action.label}`} className="rounded border border-current/10 bg-white/70 p-2 dark:bg-navy-900/20">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <code className="text-[9px] text-navy-400">{action.kind}</code>
+                          <span className="text-[11px] font-semibold text-navy-700 dark:text-sand-100">{action.label}</span>
+                        </div>
+                        <p className="mt-1 text-[10px] leading-4 text-navy-500 dark:text-navy-300">{action.purpose}</p>
+                        {action.kind === "COMMAND" && action.command && (
+                          <code className="mt-1 block break-all rounded bg-navy-950/5 px-2 py-1 text-[9px] text-navy-600 dark:bg-white/5 dark:text-navy-200">{action.command}</code>
+                        )}
+                        {action.kind === "HUMAN" && (
+                          <p className="mt-1 text-[9px] font-semibold text-amber-700 dark:text-amber-300">Human action required · Fusion画面から自動昇格しません</p>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+                <p className="mt-2 text-[9px] font-semibold text-navy-500 dark:text-navy-300">Candidateが存在するだけでは非ブロッキング。Wedding projectへ明示採用した場合だけ、Studio Actual → Human review → promotion完了までfail-closeします。</p>
               </div>
 
               {!project.productionReady && (

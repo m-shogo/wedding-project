@@ -9,11 +9,15 @@ export const DAVINCI_WEDDING_PRODUCTION_RECOVERY_SCHEMA = "wedding-davinci-produ
 
 export type DaVinciWeddingProductionRecoveryAction =
   PalmierWeddingProductionProject["nextGate"]["blockerActions"][number];
+export type DaVinciRemotionStudioDependencyRecoveryAction =
+  PalmierWeddingProductionProject["remotionStudioToolingDependency"]["recoveryActions"][number];
 
 export type DaVinciWeddingProductionRecoveryProject = {
   movieId: PalmierWeddingProductionMovieId;
   title: string;
   productionReady: boolean;
+  effectiveProductionState: PalmierWeddingProductionProject["effectiveProductionState"];
+  blockingAuthorities: string[];
   stage: string | null;
   artifactPath: string | null;
   recoveryAuthority: PalmierWeddingProductionProject["bridge"]["recovery"]["authority"];
@@ -54,6 +58,20 @@ export type DaVinciWeddingProductionRecoveryProject = {
     productionDependencyPromoted: boolean;
     guardrails: string[];
   };
+  remotionStudioDependency: {
+    authority: PalmierWeddingProductionProject["remotionStudioToolingDependency"]["authority"];
+    adopted: boolean;
+    adoptedCandidateIds: string[];
+    adoptedCandidateCount: number;
+    state: PalmierWeddingProductionProject["remotionStudioToolingDependency"]["state"];
+    blocking: boolean;
+    studioActualVerified: boolean;
+    humanReviewed: boolean;
+    dependencyPromoted: boolean;
+    recoveryActions: DaVinciRemotionStudioDependencyRecoveryAction[];
+    recovery: string[];
+    guardrails: string[];
+  };
 };
 
 export type DaVinciWeddingProductionRecoveryBundle = {
@@ -69,13 +87,22 @@ function cloneAction(action: DaVinciWeddingProductionRecoveryAction): DaVinciWed
   return {...action};
 }
 
+function cloneDependencyAction(
+  action: DaVinciRemotionStudioDependencyRecoveryAction,
+): DaVinciRemotionStudioDependencyRecoveryAction {
+  return {...action};
+}
+
 function projectRecovery(project: PalmierWeddingProductionProject): DaVinciWeddingProductionRecoveryProject {
   const recovery = project.bridge.recovery;
   const studio = project.remotionStudioToolingEvidence;
+  const dependency = project.remotionStudioToolingDependency;
   return {
     movieId: project.movieId,
     title: project.title,
     productionReady: project.productionReady,
+    effectiveProductionState: project.effectiveProductionState,
+    blockingAuthorities: [...project.blockingAuthorities],
     stage: project.nextGate.stage,
     artifactPath: project.nextGate.artifactPath,
     recoveryAuthority: recovery.authority,
@@ -112,6 +139,20 @@ function projectRecovery(project: PalmierWeddingProductionProject): DaVinciWeddi
       productionDependencyPromoted: studio.productionDependencyPromoted,
       guardrails: [...studio.guardrails],
     },
+    remotionStudioDependency: {
+      authority: dependency.authority,
+      adopted: dependency.adopted,
+      adoptedCandidateIds: [...dependency.adoptedCandidateIds],
+      adoptedCandidateCount: dependency.adoptedCandidateCount,
+      state: dependency.state,
+      blocking: dependency.blocking,
+      studioActualVerified: dependency.studioActualVerified,
+      humanReviewed: dependency.humanReviewed,
+      dependencyPromoted: dependency.dependencyPromoted,
+      recoveryActions: dependency.recoveryActions.map(cloneDependencyAction),
+      recovery: [...dependency.recovery],
+      guardrails: [...dependency.guardrails],
+    },
   };
 }
 
@@ -131,7 +172,9 @@ export function buildDaVinciWeddingProductionRecoveryBundleFromGate(
       "SHA_BOUND_RECOVERY_EXPORTED != MAC_DAVINCI_ACTUAL_VERIFIED",
       "DAVINCI_ACTUAL_COMMAND_EXPORTED != MAC_DAVINCI_ACTUAL_VERIFIED",
       "REMOTION_STUDIO_TOOLING_REFERENCE_EXPORTED != STUDIO_ACTUAL_VERIFIED",
+      "REMOTION_STUDIO_DEPENDENCY_EXPORTED != DEPENDENCY_RECOVERY_EXECUTED",
       "REMOTION_STUDIO_TOOLING_NOT_ADOPTED => NON_BLOCKING_FOR_DAVINCI_RECOVERY",
+      "ADOPTED_REMOTION_STUDIO_DEPENDENCY_BLOCKS_DAVINCI_PRODUCTION_UNTIL_READY",
       "MAC_DAVINCI_ACTUAL_REMAINS_NOT_RUN_UNTIL_GUI_EVIDENCE_IS_CURRENT",
     ],
   };
@@ -152,6 +195,13 @@ function markdownRecoveryAction(action: DaVinciWeddingProductionRecoveryAction) 
   return `- [${action.kind}] ${action.label} | ${target} | ${action.purpose}`;
 }
 
+function markdownDependencyAction(action: DaVinciRemotionStudioDependencyRecoveryAction) {
+  const target = action.kind === "COMMAND" && action.command
+    ? `command=${action.command}`
+    : "human-action-required";
+  return `- [${action.kind}] ${action.label} | ${target} | ${action.purpose}`;
+}
+
 export function buildDaVinciWeddingProductionRecoveryMarkdown(selectedMovieId: string) {
   const bundle = buildDaVinciWeddingProductionRecoveryBundle(selectedMovieId);
   const lines = [
@@ -164,10 +214,13 @@ export function buildDaVinciWeddingProductionRecoveryMarkdown(selectedMovieId: s
 
   for (const project of bundle.projects) {
     const studio = project.remotionStudioTooling;
+    const dependency = project.remotionStudioDependency;
     lines.push(
       "",
       `## ${project.title}`,
       `production-ready: ${project.productionReady ? "yes" : "no"}`,
+      `effective-production-state: ${project.effectiveProductionState}`,
+      `blocking-authorities: ${project.blockingAuthorities.length > 0 ? project.blockingAuthorities.join(", ") : "none"}`,
       `stage: ${project.stage ?? "PRODUCTION_READY"}`,
       `artifact: ${project.artifactPath ?? "—"}`,
       `recovery-authority: ${project.recoveryAuthority}`,
@@ -204,6 +257,20 @@ export function buildDaVinciWeddingProductionRecoveryMarkdown(selectedMovieId: s
       `tooling-status: ${studio.statusCommand}`,
       `tooling-strict: ${studio.strictCommand}`,
       "tooling-note: reference export is not Studio Actual verification and remains non-blocking unless this Wedding project explicitly adopts an Element dependency",
+      "",
+      "### Remotion Studio project dependency",
+      `dependency-authority: ${dependency.authority}`,
+      `dependency-adopted: ${dependency.adopted ? "yes" : "no"}`,
+      `dependency-adopted-count: ${dependency.adoptedCandidateCount}`,
+      `dependency-adopted-candidates: ${dependency.adoptedCandidateIds.length > 0 ? dependency.adoptedCandidateIds.join(", ") : "none"}`,
+      `dependency-state: ${dependency.state}`,
+      `dependency-blocking: ${dependency.blocking ? "yes" : "no"}`,
+      `dependency-studio-actual-verified: ${dependency.studioActualVerified ? "yes" : "no"}`,
+      `dependency-human-reviewed: ${dependency.humanReviewed ? "yes" : "no"}`,
+      `dependency-promoted: ${dependency.dependencyPromoted ? "yes" : "no"}`,
+      "dependency-recovery-actions:",
+      ...(dependency.recoveryActions.length > 0 ? dependency.recoveryActions.map(markdownDependencyAction) : ["- none"]),
+      "dependency-note: candidate existence alone is non-blocking; explicit Wedding adoption fails closed until Studio Actual, Human review, and promotion are complete",
     );
   }
 
