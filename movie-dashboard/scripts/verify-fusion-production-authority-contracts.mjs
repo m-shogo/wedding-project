@@ -85,5 +85,16 @@ requireText(recoverySource, 'DAVINCI_RECOVERY_ACTION_EXPORTED != DAVINCI_TIMELIN
 requireText(recoverySource, 'SHA_BOUND_RECOVERY_EXPORTED != MAC_DAVINCI_ACTUAL_VERIFIED', 'SHA-bound recovery is not Actual verification');
 requireText(recoverySource, 'MAC_DAVINCI_ACTUAL_REMAINS_NOT_RUN_UNTIL_GUI_EVIDENCE_IS_CURRENT', 'Mac Actual NOT_RUN guardrail');
 requireText(recoverySource, 'buildDaVinciWeddingProductionRecoveryJson', 'machine-readable DaVinci recovery export');
+requireText(recoverySource, 'buildDaVinciWeddingProductionRecoveryMarkdown', 'human-readable DaVinci recovery export');
+requireText(recoverySource, '# DaVinci Wedding Production Recovery', 'DaVinci recovery Markdown heading');
+requireText(recoverySource, '### Palmier → DaVinci bridge', 'bridge Markdown section');
+requireText(recoverySource, '### Remotion Studio tooling reference', 'Studio tooling Markdown section');
+requireText(recoverySource, 'tooling-summary-schema:', 'Studio tooling summary schema in Markdown');
+requireText(recoverySource, 'tooling-human-reviewed:', 'Studio Human review state in Markdown');
+requireText(recoverySource, 'tooling-production-dependency-promoted:', 'Studio dependency promotion state in Markdown');
+requireText(recoverySource, 'tooling-status:', 'Studio status command in Markdown');
+requireText(recoverySource, 'tooling-strict:', 'Studio strict command in Markdown');
+requireText(recoverySource, 'reference export is not Studio Actual verification', 'Studio tooling Markdown honesty note');
+requireText(recoverySource, 'command export or evidence init is not Mac DaVinci Actual verification', 'DaVinci Actual Markdown honesty note');
 
 console.log('Fusion Wedding production authority contracts: PASS');
