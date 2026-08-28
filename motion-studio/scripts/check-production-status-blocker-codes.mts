@@ -30,6 +30,7 @@ function verify(label: string, report: ReturnType<typeof readStatus>) {
       if (!allowedCode.test(code)) throw new Error(`${label}:${stageName}: unstable blocker code syntax: ${code}`);
       if (code.includes('/') || code.includes('\\') || code.includes(' ')) throw new Error(`${label}:${stageName}: blocker code leaked path/log detail: ${code}`);
     }
+    if (stage.blockerCodes.length > 0) console.log(`${label}:${stageName}: blockerCodes=${stage.blockerCodes.join(',')}`);
   }
   if (rawBlockerStageCount === 0) throw new Error(`${label}: fresh-clone status should expose at least one real blocking stage`);
   if (stableCodeCount === 0) throw new Error(`${label}: fresh-clone status should expose at least one stable blocker code`);
