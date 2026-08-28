@@ -15,6 +15,11 @@ const requireText = (source: string, token: string, message: string) => {
 
 for (const token of [
   "const shaText = (text: string)",
+  "const cropReviewPath = join(studioRoot, 'out/qa/opening-v1-crop-review-evidence.json');",
+  "run(['scripts/opening-v1-crop-review-evidence.mts', '--strict'])",
+  'bindingFingerprintSha256: cropEvidence.bindingFingerprintSha256',
+  'expectedCropReviewEvidenceSha256: shaFile(cropReviewPath)',
+  'expectedCropReviewBindingFingerprintSha256: cropEvidence.bindingFingerprintSha256',
   "const soundCueCsvPath = join(outDir, 'opening-v1-palmier-sound-cues.csv');",
   "['order', 'scene_id', 'title', 'start_sec', 'end_sec', 'duration_sec', 'kind', 'owner', 'replacement_policy', 'final_render_sha256']",
   'scene.replacementPolicy',
@@ -22,17 +27,18 @@ for (const token of [
   '...openingV1SoundCues.map((cue) => [',
   'const timelineCsvSha256 = shaText(timelineCsv);',
   'const soundCueCsvSha256 = shaText(soundCueCsv);',
-  "handoffContractVersion: 'opening-v1-palmier-handoff/v2'",
   'timelineCsv: rel(timelineCsvPath)',
   'timelineCsvSha256,',
   'soundCueCsv: rel(soundCueCsvPath)',
   'soundCueCsvSha256,',
+  "'CROP_REVIEW_EVIDENCE_SHA_MISMATCH => STOP_AND_REGENERATE_HANDOFF'",
+  "'CROP_REVIEW_BINDING_FINGERPRINT_MISMATCH => STOP_AND_REGENERATE_HANDOFF'",
   "'PALMIER_HANDOFF_CONTRACT_VERSION_MISMATCH => STOP_AND_REGENERATE_HANDOFF'",
   "'PALMIER_TIMELINE_SHA_MISMATCH => STOP_AND_REGENERATE_HANDOFF'",
   "'PALMIER_SOUND_CUE_SHA_MISMATCH => STOP_AND_REGENERATE_HANDOFF'",
   'writeFileSync(timelineCsvPath, timelineCsv);',
   'writeFileSync(soundCueCsvPath, soundCueCsv);',
-]) requireText(exporter, token, `Opening production bundle exporter missing Palmier handoff contract: ${token}`);
+]) requireText(exporter, token, `Opening production bundle exporter missing crop/Palmier handoff contract: ${token}`);
 
 for (const token of [
   "const timelinePath = join(root, 'out/handoff/opening-v1/opening-v1-palmier-timeline.csv');",
@@ -52,8 +58,15 @@ for (const token of [
 ]) requireText(status, token, `Opening production status missing Palmier handoff validation: ${token}`);
 
 for (const token of [
+  "const cropReviewPath = join(studioRoot, 'out/qa/opening-v1-crop-review-evidence.json');",
   "const timelineCsvPath = join(studioRoot, 'out/handoff/opening-v1/opening-v1-palmier-timeline.csv');",
   "const soundCueCsvPath = join(studioRoot, 'out/handoff/opening-v1/opening-v1-palmier-sound-cues.csv');",
+  'humanCropReview:',
+  'expectedCropReviewEvidenceSha256:',
+  'expectedCropReviewBindingFingerprintSha256:',
+  "throw new Error('DAVINCI_FINISHING_CROP_REVIEW_MISSING')",
+  "throw new Error('DAVINCI_FINISHING_CROP_REVIEW_SHA_MISMATCH')",
+  "throw new Error('DAVINCI_FINISHING_CROP_REVIEW_FINGERPRINT_MISMATCH')",
   'handoffContractVersion: string;',
   'soundCueCsv: string;',
   'soundCueCsvSha256: string;',
@@ -64,7 +77,7 @@ for (const token of [
   "throw new Error('DAVINCI_FINISHING_PALMIER_SOUND_CUE_PATH_MISMATCH')",
   "throw new Error('DAVINCI_FINISHING_PALMIER_SOUND_CUE_MISSING')",
   "throw new Error('DAVINCI_FINISHING_PALMIER_SOUND_CUE_SHA_MISMATCH')",
-]) requireText(davinci, token, `Opening DaVinci evidence direct path missing Palmier handoff validation: ${token}`);
+]) requireText(davinci, token, `Opening DaVinci evidence direct path missing crop/Palmier validation: ${token}`);
 
 if (exporter.indexOf('const timelineCsvSha256 = shaText(timelineCsv);') > exporter.indexOf('const bundle = {')) errors.push('Palmier timeline SHA must be computed before the bundle object is constructed');
 if (exporter.indexOf('const soundCueCsvSha256 = shaText(soundCueCsv);') > exporter.indexOf('const bundle = {')) errors.push('Palmier sound cue SHA must be computed before the bundle object is constructed');
@@ -80,9 +93,9 @@ for (const forbidden of ["macActualState: 'PASS'", 'productionReady: true']) {
 }
 
 if (errors.length > 0) {
-  console.error(`Opening Palmier handoff contracts FAILED (${errors.length})`);
+  console.error(`Opening crop/Palmier handoff contracts FAILED (${errors.length})`);
   for (const error of errors) console.error(`- ${error}`);
   process.exit(1);
 }
 
-console.log('Opening Palmier handoff contracts OK: scene replacement intent and canonical J-cut/BGM cues are exported as versioned SHA-bound artifacts, status/direct DaVinci reject drift, and Mac Actual remains separate.');
+console.log('Opening handoff contracts OK: current Human crop binding plus scene replacement intent and J-cut/BGM cues are SHA-bound, DaVinci rejects crop drift, and Mac Actual remains separate.');
