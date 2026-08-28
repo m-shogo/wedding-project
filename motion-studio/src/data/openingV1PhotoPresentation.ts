@@ -18,6 +18,25 @@ export type OpeningV1PhotoMetadata = {
  */
 export const openingV1PhotoMetadata: Partial<Record<OpeningV1PhotoKey, OpeningV1PhotoMetadata>> = {};
 
+export const validateOpeningV1PhotoMetadata = (
+  metadata: Partial<Record<OpeningV1PhotoKey, OpeningV1PhotoMetadata>> = openingV1PhotoMetadata,
+): string[] => {
+  const errors: string[] = [];
+  for (const [key, value] of Object.entries(metadata)) {
+    if (!value) continue;
+    if (value.focus) {
+      const {x, y} = value.focus;
+      if (!Number.isFinite(x) || !Number.isFinite(y) || x < 0 || x > 100 || y < 0 || y > 100) {
+        errors.push(`${key}: focus must stay within 0-100, got ${x}/${y}`);
+      }
+    }
+    if (value.fit !== undefined && value.fit !== 'cover' && value.fit !== 'contain') {
+      errors.push(`${key}: unsupported fit ${String(value.fit)}`);
+    }
+  }
+  return errors;
+};
+
 export const resolveOpeningV1PhotoPresentation = ({
   sceneFocus,
   sceneFit,
@@ -30,9 +49,16 @@ export const resolveOpeningV1PhotoPresentation = ({
   assetFocus?: OpeningV1PhotoFocus;
   assetFit?: OpeningV1PhotoFit;
   defaultFit?: OpeningV1PhotoFit;
-}): {focus?: OpeningV1PhotoFocus; fit: OpeningV1PhotoFit} => ({
+}): {
+  focus?: OpeningV1PhotoFocus;
+  fit: OpeningV1PhotoFit;
+  focusSource: 'scene' | 'asset' | 'default';
+  fitSource: 'scene' | 'asset' | 'default';
+} => ({
   // Production precedence: explicit scene/storyboard direction > approved asset hint > default.
   // Asset metadata must never silently overwrite a choreographed scene crop.
   focus: sceneFocus ?? assetFocus,
   fit: sceneFit ?? assetFit ?? defaultFit,
+  focusSource: sceneFocus ? 'scene' : assetFocus ? 'asset' : 'default',
+  fitSource: sceneFit ? 'scene' : assetFit ? 'asset' : 'default',
 });
