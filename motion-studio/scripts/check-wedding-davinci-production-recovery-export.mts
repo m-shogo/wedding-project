@@ -7,6 +7,8 @@ import {weddingProductionRecoverySchema} from '../src/data/resolveHandoff.schema
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const exporter = readFileSync(join(root, 'scripts/export-wedding-davinci-production-recovery.mts'), 'utf8');
 const orchestrator = readFileSync(join(root, 'scripts/export-wedding-production-handoff.mts'), 'utf8');
+const openingHandoff = readFileSync(join(root, 'scripts/opening-v1-davinci-handoff-contract.mts'), 'utf8');
+const profileHandoff = readFileSync(join(root, 'scripts/profile-v1-davinci-handoff-contract.mts'), 'utf8');
 
 for (const movieId of ['opening', 'profile'] as const) {
   const recovery = buildWeddingDavinciProductionRecovery(movieId);
@@ -56,4 +58,22 @@ if (bundleIndex < 0 || recoveryIndex < 0 || bundleIndex >= recoveryIndex) {
   throw new Error('handoff orchestrator must export the production bundle before DaVinci recovery');
 }
 
-console.log('Wedding DaVinci production recovery export contracts: PASS');
+for (const [movieId, handoff] of [['opening', openingHandoff], ['profile', profileHandoff]] as const) {
+  for (const required of [
+    "blockerCodes: Array.isArray(recoverySidecar?.recovery?.blockerCodes)",
+    "blockerActions: Array.isArray(recoverySidecar?.recovery?.blockerActions)",
+    "canonicalRecovery: Array.isArray(recoverySidecar?.recovery?.canonicalRecovery)",
+    "guardrails: Array.isArray(recoverySidecar?.recovery?.guardrails)",
+    'DAVINCI_RECOVERY_ACTION_EXPORTED != RECOVERY_EXECUTED',
+  ]) {
+    if (!handoff.includes(required)) throw new Error(`${movieId}: DaVinci handoff recovery surface missing: ${required}`);
+  }
+  if (!handoff.includes('MAC_DAVINCI_ACTUAL_NOT_VERIFIED')) {
+    throw new Error(`${movieId}: DaVinci handoff must validate the stable Mac Actual blocker code`);
+  }
+  if (!handoff.includes("action?.kind === 'HUMAN'")) {
+    throw new Error(`${movieId}: DaVinci handoff must fail closed when Human recovery action is missing`);
+  }
+}
+
+console.log('Wedding DaVinci production recovery export + handoff surface contracts: PASS');
