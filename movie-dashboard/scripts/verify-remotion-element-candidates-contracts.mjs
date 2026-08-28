@@ -80,9 +80,34 @@ if (!workflow.includes("echo 'typographyElementCount=9'")) errors.push('CI must 
 if (!workflow.includes("echo 'studioActualBatchPrepared=PASS_PREP_ONLY'")) errors.push('CI must distinguish Actual batch prep from Actual execution');
 if (!workflow.includes("echo 'studioInstallActual=NOT_RUN'")) errors.push('CI must keep Studio install Actual NOT_RUN');
 
+for (const token of [
+  'remotionElementStudioActualBatch',
+  'schemaVersion: \"remotion-element-studio-actual-batch/v1\"',
+  'authority: \"MOTION_ZUKAN_REMOTION_STUDIO_ACTUAL_BATCH_HANDOFF\"',
+  'studioVersionTarget: \"4.0.517\"',
+  'artifactRoot: \"movie-dashboard/out/remotion-element-actual-batch\"',
+  'scripts/prepare-typography-elements-studio-actual-batch.mts',
+  'scripts/check-typography-elements-studio-actual-batch.mts',
+  'candidateIds: remotionElementCandidates.map((candidate) => candidate.patternId)',
+  'requestTransport: \"NOT_RUN\"',
+  'confirmationDialog: \"NOT_RUN\"',
+  'studioInstall: \"NOT_RUN\"',
+  'controlReadback: \"NOT_RUN\"',
+  'timelineInsertion: \"NOT_RUN\"',
+  'postInstallRender: \"NOT_RUN\"',
+  'STUDIO_ACTUAL_BATCH_HANDOFF_EXPORTED != STUDIO_ACTUAL_VERIFIED',
+  'STUDIO_ACTUAL_VERIFIED != PRODUCTION_DEPENDENCY_PROMOTED',
+]) {
+  if (!registry.includes(token)) errors.push(`Studio Actual batch handoff contract missing: ${token}`);
+}
+
+const expectedIdIndexes = expected.map((item) => registry.indexOf(`patternId: \"${item.id}\"`));
+if (expectedIdIndexes.some((index) => index < 0)) errors.push('Studio Actual batch candidate source is incomplete');
+if (expectedIdIndexes.length !== 9) errors.push('Studio Actual batch must stay aligned to nine registry candidates');
+
 if (errors.length) {
   console.error(`Remotion Element candidate contracts FAILED (${errors.length})`);
   for (const error of errors) console.error(`- ${error}`);
   process.exit(1);
 }
-console.log('Remotion Element candidate contracts OK: 9 Motion Zukan cards surface CI-rendered Element readiness, batch prep is gated, and Studio Actual remains NOT_RUN.');
+console.log('Remotion Element candidate contracts OK: 9 Motion Zukan cards surface CI-rendered Element readiness, machine-readable Studio Actual batch handoff is available, and GUI Actual remains NOT_RUN.');
