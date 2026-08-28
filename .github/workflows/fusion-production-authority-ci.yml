@@ -5,6 +5,7 @@ on:
     paths:
       - "movie-dashboard/src/pages/FusionNodeTranslator.tsx"
       - "movie-dashboard/src/lib/palmierWeddingProductionGate.ts"
+      - "movie-dashboard/src/lib/davinciWeddingProductionRecovery.ts"
       - "movie-dashboard/src/data/openingProductionStatusHandoff.ts"
       - "movie-dashboard/src/data/profileProductionStatusHandoff.ts"
       - "movie-dashboard/scripts/verify-fusion-production-authority-contracts.mjs"
@@ -14,6 +15,7 @@ on:
     paths:
       - "movie-dashboard/src/pages/FusionNodeTranslator.tsx"
       - "movie-dashboard/src/lib/palmierWeddingProductionGate.ts"
+      - "movie-dashboard/src/lib/davinciWeddingProductionRecovery.ts"
       - "movie-dashboard/src/data/openingProductionStatusHandoff.ts"
       - "movie-dashboard/src/data/profileProductionStatusHandoff.ts"
       - "movie-dashboard/scripts/verify-fusion-production-authority-contracts.mjs"
