@@ -76,7 +76,7 @@ export function TypographySceneDeliveryPackageCard({scene}: {scene: MaskRevealSc
     }
   }
 
-  if (!delivery || !json) {
+  if (!selection || !delivery || !json) {
     return (
       <section className="mt-3 border border-sky-200 dark:border-sky-800 p-3">
         <p className="text-[9px] tracking-[0.16em] font-semibold text-sky-700 dark:text-sky-300">SCENE DELIVERY PACKAGE</p>
