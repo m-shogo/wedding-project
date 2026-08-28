@@ -408,3 +408,22 @@ Executed:
 Final audit after this pass: 0 Inter nodes, overflow count down to 2 (the
 remaining two are the same known intentional corner-decoration bleeds on P03/P08;
 P01's is gone now that its floral corner was removed).
+
+## "もっと派手にして" — depth, weight, and impact pass
+
+Continued pushing boldness per explicit request. Added, all verified by
+screenshot:
+
+- **Drop shadows** on every pinned/rotated photo frame (P02/P03/P04/P06/P07)
+  and on the P01 date badge, P01 issue badge, and P06's on-photo title tab —
+  real lift/depth instead of flat pasted rectangles.
+- **Q&A answer rules thickened** from 2px hairlines at reduced opacity to solid
+  5px color blocks — much stronger visual rhythm down the page.
+- **P07 schedule rows** gained a solid orange left-edge stripe per row (in
+  addition to the existing time-dot), a stronger "guidebook timetable" feel.
+- **P06's on-photo title tab** made fully opaque (was 92%) and given its own
+  shadow, matching the rest of this pass instead of sitting flat.
+
+Final full-file audit: 0 Inter nodes, 0 unfilled image placeholders, overflow
+count 2 (still only the two known intentional corner-decoration bleeds on
+P03/P08).
