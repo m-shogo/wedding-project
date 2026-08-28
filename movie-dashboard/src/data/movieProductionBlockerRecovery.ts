@@ -65,6 +65,22 @@ const palmierRecovery: MovieProductionBlockerRecoveryAction = {
   purpose: "current final render/reviewからproduction bundle・timeline handoffを再生成する",
 };
 
+const openingDavinciRecoveryExport: MovieProductionBlockerRecoveryAction = {
+  id: "opening-davinci-recovery-export",
+  label: "Opening DaVinci handoffを再生成",
+  kind: "COMMAND",
+  command: "pnpm export:opening-v1-production-bundle",
+  purpose: "current Human final-render reviewからproduction bundleとSHA-bound DaVinci recovery sidecarを一括再生成する。Mac Actualは実行しない",
+};
+
+const profileDavinciRecoveryExport: MovieProductionBlockerRecoveryAction = {
+  id: "profile-davinci-recovery-export",
+  label: "Profile DaVinci handoffを再生成",
+  kind: "COMMAND",
+  command: "pnpm export:profile-v1-production-bundle",
+  purpose: "current Human final-render reviewからproduction bundleとSHA-bound DaVinci recovery sidecarを一括再生成する。Mac Actualは実行しない",
+};
+
 const davinciRecovery: MovieProductionBlockerRecoveryAction = {
   id: "davinci-actual",
   label: "DaVinci Actual導線を確認",
@@ -85,6 +101,9 @@ function actionsForCode(projectId: MovieProductionProjectId, code: string): Movi
   if (projectId === "opening") {
     if (code === "PHOTO_MISSING" || code.startsWith("PHOTO_") || code.startsWith("MEDIA_INTAKE:")) return [openingPhotoRecovery];
     if (code.startsWith("BGM_") || code.startsWith("BGM_INTAKE:")) return [openingBgmRecovery];
+    if (code.startsWith("OPENING_DAVINCI_RECOVERY_") || code.startsWith("OPENING_DAVINCI_BUNDLE_")) {
+      return [openingDavinciRecoveryExport, davinciRecovery];
+    }
   }
 
   if (projectId === "profile") {
@@ -92,6 +111,9 @@ function actionsForCode(projectId: MovieProductionProjectId, code: string): Movi
     if (code.startsWith("BGM_RIGHTS:") || code.startsWith("PROFILE_BGM_")) return [profileBgmRecovery];
     if (code.startsWith("STRUCTURE_REVIEW:")) return [profileStructureReviewRecovery];
     if (code.startsWith("REAL_MEDIA_REVIEW:")) return [profileRealMediaReviewRecovery];
+    if (code.startsWith("PROFILE_DAVINCI_RECOVERY_") || code.startsWith("PROFILE_DAVINCI_BUNDLE_")) {
+      return [profileDavinciRecoveryExport, davinciRecovery];
+    }
   }
 
   if (code.startsWith("BUNDLE_") || code.startsWith("ARTIFACT_STALE:productionBundle") || code.startsWith("ARTIFACT_MISSING:productionBundle")) return [palmierRecovery];
@@ -111,5 +133,6 @@ export function blockerRecoveryActionsFor(projectId: MovieProductionProjectId, b
 export const movieProductionBlockerRecoveryGuardrails = [
   "RECOVERY_ACTION_VISIBLE != RECOVERY_EXECUTED",
   "RECOVERY_ACTION_ROUTE != HUMAN_QA_PASS",
+  "DAVINCI_HANDOFF_REGEN_COMMAND_VISIBLE != DAVINCI_HANDOFF_CURRENT",
   "DAVINCI_RECOVERY_ROUTE_VISIBLE != MAC_DAVINCI_ACTUAL",
 ] as const;
