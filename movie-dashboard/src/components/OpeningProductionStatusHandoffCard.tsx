@@ -1,10 +1,11 @@
 import {useMemo} from "react";
-import {
-  buildOpeningProductionStatusHandoff,
-  buildOpeningProductionStatusHandoffJson,
-} from "../data/openingProductionStatusHandoff";
 import type {SceneProjectId} from "../data/visualSceneComposer";
+import {
+  buildOpeningEffectiveProductionHandoff,
+  buildOpeningEffectiveProductionHandoffJson,
+} from "../lib/effectiveProductionHandoffExport";
 import {downloadText} from "../lib/exporters";
+import {EffectiveProductionNextGateSummary} from "./EffectiveProductionNextGateSummary";
 
 const stageLabel: Record<string, string> = {
   media: "Real media",
@@ -21,12 +22,13 @@ const stageLabel: Record<string, string> = {
 const incompleteStageStates = new Set(["NOT_RUN", "BLOCKED", "MISSING", "STALE"]);
 
 export function OpeningProductionStatusHandoffCard({projectId}: {projectId: SceneProjectId}) {
-  const status = useMemo(() => buildOpeningProductionStatusHandoff(), []);
-  const json = useMemo(() => buildOpeningProductionStatusHandoffJson(), []);
+  const status = useMemo(() => buildOpeningEffectiveProductionHandoff(), []);
+  const json = useMemo(() => buildOpeningEffectiveProductionHandoffJson(), []);
 
   if (projectId !== "opening") return null;
 
   const production = status.opening.production;
+  const effective = status.effectiveProduction;
   const media = status.opening.media;
   const sourceRevalidation = production.sourceRevalidation;
   const palmier = production.palmierHandoff;
@@ -39,13 +41,15 @@ export function OpeningProductionStatusHandoffCard({projectId}: {projectId: Scen
           <p className="text-[9px] tracking-[0.16em] font-semibold text-sky-700 dark:text-sky-300">OPENING V1 / FINAL PRODUCTION STATUS</p>
           <p className="mt-1 text-[10px] font-semibold text-navy-800 dark:text-sand-100">{production.overallState}</p>
           <p className="mt-1 text-[8px] text-navy-400">
-            photos={media.resolvedPhotoCount}/{media.expectedPhotoCount} / BGM={media.bgm.playable ? "PLAYABLE" : media.bgm.status} / productionReady={production.readiness.productionReady ? "YES" : "NO"}
+            photos={media.resolvedPhotoCount}/{media.expectedPhotoCount} / BGM={media.bgm.playable ? "PLAYABLE" : media.bgm.status} / canonicalReady={production.readiness.productionReady ? "YES" : "NO"} / effectiveReady={effective.productionReady ? "YES" : "NO"}
           </p>
         </div>
         <button type="button" onClick={() => downloadText(json, "opening-production-status-handoff.json")} className="border border-sky-300 dark:border-sky-700 px-2.5 py-1.5 text-[9px] font-semibold text-sky-700 dark:text-sky-300">
           Opening production statusを書き出す
         </button>
       </div>
+
+      <EffectiveProductionNextGateSummary projectLabel="Opening" gate={effective.effectiveNextGate} />
 
       <div className="mt-2 grid gap-1 sm:grid-cols-2">
         {Object.entries(production.stages).map(([key, stage]) => {
@@ -119,19 +123,19 @@ export function OpeningProductionStatusHandoffCard({projectId}: {projectId: Scen
       </div>
 
       <div className="mt-2 border border-sky-100 dark:border-sky-900 p-2">
-        <p className="text-[8px] font-semibold text-sky-700 dark:text-sky-300">NEXT ACTIONS</p>
+        <p className="text-[8px] font-semibold text-sky-700 dark:text-sky-300">NEXT ACTIONS / CANONICAL WEDDING</p>
         <ol className="mt-1 space-y-1 text-[8px] leading-4 text-navy-500 dark:text-navy-300">
           {production.nextActions.map((action, index) => <li key={`${index}-${action}`}>{index + 1}. <code>{action}</code></li>)}
         </ol>
       </div>
 
       <p className="mt-2 text-[8px] leading-4 text-navy-400">
-        このstatusはMEDIA_REQUIRED / NOT_RUNも含めて現在状態・理由・artifact path・正規recovery commandとPalmier / DaVinci handoff contractを外へ渡すためのenvelopeです。Statusのexport可否とproduction readinessは分離しています。
-        `STATUS_EXPORTABLE != FINAL_RENDER_ELIGIBLE` / `PREVIEW_REVIEW_PASS != FINAL_RENDER_REVIEW_PASS` / `FINAL_RENDER_OR_SOURCE_CHANGED =&gt; FINAL_RENDER_RE_REVIEW_REQUIRED` / `HANDOFF_METADATA_EXPORTED != HANDOFF_ARTIFACTS_CURRENT` / `HUMAN_FINAL_RENDER_REVIEW_PASS != DAVINCI_ACTUAL_VERIFIED` / `DAVINCI_ACTUAL_VERIFIED != FINAL_DELIVERY_APPROVED`
+        このstatusはMEDIA_REQUIRED / NOT_RUNも含めたcanonical Wedding evidenceに、実際のeffective production authorityをoverlayして外へ渡します。Canonical READYでも明示採用Remotion dependencyが未完了ならeffectiveReadyはNOです。
+        `STATUS_EXPORTABLE != FINAL_RENDER_ELIGIBLE` / `CANONICAL_READY != EFFECTIVE_READY_WHEN_ADOPTED_REMOTION_BLOCKS` / `PREVIEW_REVIEW_PASS != FINAL_RENDER_REVIEW_PASS` / `HANDOFF_METADATA_EXPORTED != HANDOFF_ARTIFACTS_CURRENT` / `HUMAN_FINAL_RENDER_REVIEW_PASS != DAVINCI_ACTUAL_VERIFIED` / `DAVINCI_ACTUAL_VERIFIED != FINAL_DELIVERY_APPROVED`
       </p>
 
       <details className="mt-2">
-        <summary className="cursor-pointer text-[8px] text-sky-700 dark:text-sky-300">Opening production status JSON</summary>
+        <summary className="cursor-pointer text-[8px] text-sky-700 dark:text-sky-300">Opening effective production status JSON</summary>
         <pre className="mt-2 max-h-72 overflow-auto whitespace-pre-wrap border border-sand-200 dark:border-navy-600 p-2 text-[8px] leading-4 text-navy-500 dark:text-navy-300">{json}</pre>
       </details>
     </section>
