@@ -22,13 +22,19 @@ for (const token of [
   "PROFILE_DAVINCI_ACTUAL_AUDIT_RENDER_SHA_STALE",
   "PROFILE_DAVINCI_ACTUAL_AUDIT_HUMAN_QA_SHA_STALE",
   "PROFILE_DAVINCI_ACTUAL_AUDIT_HUMAN_QA_FINGERPRINT_STALE",
+  "PROFILE_DAVINCI_ACTUAL_AUDIT_APPROVAL_RECOVERY_SHA_STALE",
+  "PROFILE_DAVINCI_ACTUAL_AUDIT_APPROVAL_EVIDENCE_SHA_STALE",
+  "PROFILE_DAVINCI_ACTUAL_AUDIT_APPROVAL_HUMAN_QA_SHA_STALE",
+  "PROFILE_DAVINCI_ACTUAL_AUDIT_APPROVAL_HUMAN_QA_FINGERPRINT_STALE",
   "evidence.productionRecovery?.sha256 !== recoverySha256",
+  "approval.davinciEvidence?.sha256 !== evidenceSha256",
   "state = 'NOT_RUN'",
   "state = 'STALE'",
   "state = 'CURRENT_PASS'",
   "productionReady: false",
   "ACTUAL_EVIDENCE_EXISTS != MAC_DAVINCI_ACTUAL_VERIFIED",
   "RECOVERY_SIDECAR_CHANGED => ACTUAL_EVIDENCE_STALE",
+  "ACTUAL_EVIDENCE_OR_RECOVERY_CHANGED => FINAL_APPROVAL_STALE",
   "CURRENT_PASS != FINAL_DELIVERY_APPROVED",
 ]) need(audit, token, "Profile DaVinci Actual audit contract missing");
 
@@ -38,6 +44,8 @@ for (const token of [
   "audit.productionReady !== false",
   "audit.state === \"CURRENT_PASS\"",
   "audit.actualEvidence?.allChecksPass !== true",
+  "audit.finalApproval.current",
+  "audit.finalApproval.decision !== \"NOT_RUN\"",
 ]) need(sync, token, "Profile DaVinci Actual audit sync missing");
 
 for (const token of [
@@ -46,16 +54,24 @@ for (const token of [
   '"productionReady": false',
   '"exists": false',
   '"reviewOverall": "NOT_RUN"',
-  '"ACTUAL_EVIDENCE_EXISTS != MAC_DAVINCI_ACTUAL_VERIFIED"',
+  '"finalApproval": {',
+  '"decision": "NOT_RUN"',
+  '"boundRecoverySha256": null',
+  '"boundDavinciEvidenceSha256": null',
+  '"ACTUAL_EVIDENCE_OR_RECOVERY_CHANGED => FINAL_APPROVAL_STALE"',
 ]) need(generated, token, "Generated Profile DaVinci Actual audit must stay fail-closed");
 
 for (const token of [
-  "DAVINCI ACTUAL / RECOVERY BINDING AUDIT",
+  "PROFILE DAVINCI ACTUAL / RECOVERY / FINAL APPROVAL AUDIT",
   "audit.recovery.sha256",
   "audit.actualEvidence.boundRecoverySha256",
   "audit.actualEvidence.boundSourceRenderSha256",
   "audit.actualEvidence.boundRealMediaHumanQaEvidenceSha256",
   "audit.actualEvidence.boundRealMediaHumanQaBindingFingerprintSha256",
+  "audit.finalApproval.sha256",
+  "audit.finalApproval.current",
+  "audit.finalApproval.boundRecoverySha256",
+  "audit.finalApproval.boundDavinciEvidenceSha256",
   "audit.mismatches.join",
   "audit.actualEvidence.allChecksPass",
 ]) need(card, token, "Profile DaVinci Actual audit UI missing");
@@ -77,4 +93,4 @@ if (errors.length) {
   for (const error of errors) console.error(`- ${error}`);
   process.exit(1);
 }
-console.log("Profile DaVinci Actual binding audit contracts OK: recovery SHA, render SHA and Profile Human-QA SHA/fingerprint are compared against the bound Actual template, stale reasons are visible in Motion Zukan, and Mac GUI Actual / final approval / production readiness remain independent and fail-closed.");
+console.log("Profile DaVinci Actual binding audit contracts OK: recovery/render/Human-QA SHA chain and Human final approval are compared against current bound Actual evidence, stale reasons are visible in Motion Zukan, and Mac GUI Actual/final approval/production readiness remain independent and fail-closed.");
