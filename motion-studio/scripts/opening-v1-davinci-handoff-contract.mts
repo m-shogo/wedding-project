@@ -82,6 +82,9 @@ if (recoverySidecar) {
   if (recoverySidecar.sourceBundle?.schemaVersion !== bundle?.schemaVersion) blockers.push('OPENING_DAVINCI_RECOVERY_BUNDLE_SCHEMA_STALE');
   if (recoverySidecar.sourceBundle?.finalRenderPath !== bundle?.finalRender?.path) blockers.push('OPENING_DAVINCI_RECOVERY_RENDER_PATH_STALE');
   if (recoverySidecar.sourceBundle?.finalRenderSha256 !== bundle?.finalRender?.sha256) blockers.push('OPENING_DAVINCI_RECOVERY_RENDER_SHA_STALE');
+  if (recoverySidecar.sourceBundle?.cropReviewEvidencePath !== rel(cropReviewPath)) blockers.push('OPENING_DAVINCI_RECOVERY_CROP_REVIEW_PATH_STALE');
+  if (recoverySidecar.sourceBundle?.cropReviewEvidenceSha256 !== bundle?.humanCropReview?.evidenceSha256) blockers.push('OPENING_DAVINCI_RECOVERY_CROP_REVIEW_SHA_STALE');
+  if (recoverySidecar.sourceBundle?.cropReviewBindingFingerprintSha256 !== bundle?.humanCropReview?.bindingFingerprintSha256) blockers.push('OPENING_DAVINCI_RECOVERY_CROP_REVIEW_FINGERPRINT_STALE');
   if (recoverySidecar.recovery?.authority !== 'MOTION_STUDIO_DAVINCI_PRODUCTION_RECOVERY') blockers.push('OPENING_DAVINCI_RECOVERY_INNER_AUTHORITY_MISMATCH');
   if (recoverySidecar.recovery?.movieId !== 'opening') blockers.push('OPENING_DAVINCI_RECOVERY_MOVIE_MISMATCH');
   if (recoverySidecar.recovery?.stage !== 'davinciFinishing') blockers.push('OPENING_DAVINCI_RECOVERY_STAGE_MISMATCH');
@@ -138,6 +141,8 @@ const report = {
     schemaVersion: 'wedding-davinci-production-recovery-export/v1',
     authority: 'FINAL_RENDER_BOUND_DAVINCI_RECOVERY',
     sourceRenderSha256: recoverySidecar?.sourceBundle?.finalRenderSha256 ?? null,
+    cropReviewEvidenceSha256: recoverySidecar?.sourceBundle?.cropReviewEvidenceSha256 ?? null,
+    cropReviewBindingFingerprintSha256: recoverySidecar?.sourceBundle?.cropReviewBindingFingerprintSha256 ?? null,
     actualState: recoverySidecar?.recovery?.actual?.state ?? 'NOT_RUN',
     ...(recoverySidecar ? {
       blockerCodes: Array.isArray(recoverySidecar.recovery?.blockerCodes) ? [...recoverySidecar.recovery.blockerCodes] : [],
@@ -177,6 +182,7 @@ const report = {
   guardrails: [
     'PHOTO_SHA_OR_EFFECTIVE_FOCUS_OR_FIT_CHANGED => CROP_REVIEW_STALE',
     'CROP_REVIEW_STALE => DAVINCI_HANDOFF_NOT_CURRENT',
+    'CROP_REVIEW_CHANGED => DAVINCI_RECOVERY_SIDECAR_STALE',
     'PREVIEW_REVIEW_PASS != FINAL_RENDER_REVIEW_PASS',
     'HUMAN_FINAL_RENDER_REVIEW_PASS != DAVINCI_ACTUAL_VERIFIED',
     'DAVINCI_RECOVERY_SIDECAR_CURRENT != MAC_DAVINCI_ACTUAL_VERIFIED',
