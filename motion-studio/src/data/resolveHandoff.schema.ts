@@ -110,6 +110,51 @@ export const capabilityHandoffSchema = z.object({
   guardrails: z.array(z.string()).default([]),
 });
 
+export const productionRecoveryActionSchema = z.object({
+  id: z.string().min(1),
+  kind: z.enum(['ROUTE', 'COMMAND', 'HUMAN']),
+  label: z.string().min(1),
+  purpose: z.string().min(1),
+  route: z.string().min(1).optional(),
+  command: z.string().min(1).optional(),
+});
+
+export const weddingProductionRecoverySchema = z.object({
+  authority: z.literal('MOTION_STUDIO_DAVINCI_PRODUCTION_RECOVERY'),
+  movieId: z.enum(['opening', 'profile']),
+  productionReady: z.boolean(),
+  stage: z.string().nullable(),
+  artifactPath: z.string().nullable(),
+  blockerCodes: z.array(z.string().min(1)),
+  blockerActions: z.array(productionRecoveryActionSchema),
+  canonicalRecovery: z.array(z.string().min(1)),
+  bridge: z.object({
+    state: z.enum([
+      'PALMIER_NOT_CURRENT',
+      'DAVINCI_HANDOFF_NOT_CURRENT',
+      'MAC_DAVINCI_ACTUAL_NOT_VERIFIED',
+      'FINAL_DELIVERY_APPROVAL_REQUIRED',
+      'READY',
+    ]),
+    palmierCurrent: z.boolean(),
+    davinciHandoffCurrent: z.boolean(),
+    macDaVinciActualVerified: z.boolean(),
+    finalDeliveryApproved: z.boolean(),
+    palmierContractVersion: z.string().min(1),
+    davinciContractVersion: z.string().min(1),
+  }),
+  actual: z.object({
+    state: z.enum(['NOT_RUN', 'ACTUAL_VERIFIED']),
+    evidencePath: z.string().min(1),
+    commands: z.object({
+      init: z.string().min(1),
+      status: z.string().min(1),
+      strict: z.string().min(1),
+    }),
+  }),
+  guardrails: z.array(z.string().min(1)).min(1),
+});
+
 const resolvePatchSchema = z.string().regex(/^21\.\d+\.\d+(?:\.\d+)?$/);
 
 export const resolveHandoffSidecarSchema = z.object({
@@ -149,9 +194,12 @@ export const resolveHandoffSidecarSchema = z.object({
   humanMaster: z.array(humanMasterValueSchema).default([]),
   dependencies: z.array(dependencySchema).default([]),
   capabilities: z.array(capabilityHandoffSchema).min(1),
+  productionRecovery: weddingProductionRecoverySchema.optional(),
   highImpactDecisions: z.array(z.string()).default([]),
   notes: z.array(z.string()).default([]),
 });
 
 export type ResolveHandoffSidecar = z.infer<typeof resolveHandoffSidecarSchema>;
 export type CapabilityHandoff = z.infer<typeof capabilityHandoffSchema>;
+export type ProductionRecoveryAction = z.infer<typeof productionRecoveryActionSchema>;
+export type WeddingProductionRecovery = z.infer<typeof weddingProductionRecoverySchema>;
