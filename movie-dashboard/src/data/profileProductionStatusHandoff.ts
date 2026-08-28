@@ -1,3 +1,4 @@
+import {profileDavinciActualBindingAudit} from "./profileDavinciActualBindingAudit.generated";
 import {profileGeneratedAccents} from "./profileGeneratedAccents.generated";
 import {profileProductionGate} from "./profileProductionGate.generated";
 import {profileProductionStatus} from "./profileProductionStatus.generated";
@@ -98,6 +99,7 @@ export function buildProfileProductionStatusHandoff() {
         sourceRevalidation: profileProductionStatus.sourceRevalidation,
         palmierHandoff: profileProductionStatus.handoff.palmier,
         davinciHandoff: profileProductionStatus.handoff.davinci,
+        davinciActualBindingAudit: profileDavinciActualBindingAudit,
         remotionStudioToolingEvidence: buildRemotionStudioActualToolingEvidence(),
         nextGate: buildNextGate(profileCriticalPath),
         nextActions: [...profileProductionStatus.nextActions],
@@ -115,6 +117,7 @@ export function buildProfileProductionStatusHandoff() {
       "HUMAN_REAL_MEDIA_QA_PASS != FINAL_RENDER_REVIEW_PASS",
       "PRODUCTION_BUNDLE_CURRENT != MAC_DAVINCI_ACTUAL_VERIFIED",
       "DAVINCI_HANDOFF_CURRENT != MAC_DAVINCI_ACTUAL_VERIFIED",
+      "DAVINCI_RECOVERY_OR_ACTUAL_CHANGED => FINAL_APPROVAL_STALE",
       "MAC_DAVINCI_ACTUAL_VERIFIED != FINAL_DELIVERY_APPROVED",
       "MEDIA_REQUIREMENT_EXPORTED != MEDIA_RESOLVED",
       "HANDOFF_METADATA_EXPORTED != HANDOFF_ARTIFACTS_CURRENT",
