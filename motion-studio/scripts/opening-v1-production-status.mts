@@ -19,7 +19,7 @@ const jsonMode = process.argv.includes('--json');
 const strict = process.argv.includes('--strict');
 
 type State = 'PASS' | 'BLOCKED' | 'NOT_RUN' | 'MISSING' | 'STALE';
-type Stage = {state: State; detail: string; path?: string; blockers?: string[]};
+type Stage = {state: State; detail: string; path?: string; blockers?: string[]; blockerCodes?: string[]};
 type AssemblyReport = {
   schemaVersion?: string;
   readiness?: {finalRenderEligible?: boolean; mixReady?: boolean; blockers?: string[]; mixWarnings?: string[]};
@@ -39,6 +39,13 @@ const rel = (path: string) => relative(root, path).replaceAll('\\', '/');
 const sha = (path: string) => createHash('sha256').update(readFileSync(path)).digest('hex');
 const run = (script: string, args: string[] = []) => spawnSync(process.execPath, ['--no-warnings', script, ...args], {cwd: root, encoding: 'utf8'});
 const lines = (value: string | null | undefined) => (value ?? '').split(/\r?\n/).map((line) => line.trim()).filter(Boolean);
+const blockerCodeFrom = (value: string) => value.match(/(?:^|[\s"'`\[\](),])([A-Z][A-Z0-9_]+(?::[A-Z0-9_.-]+)*)/)?.[1] ?? null;
+const stableBlockerCodes = (values: readonly string[] | undefined) => {
+  const raw = values ?? [];
+  const codes = [...new Set(raw.map(blockerCodeFrom).filter((value): value is string => Boolean(value)))];
+  return codes.length > 0 ? codes : raw.length > 0 ? ['UNCLASSIFIED_STAGE_BLOCKER'] : [];
+};
+const withStableBlockerCodes = (stage: Stage): Stage => ({...stage, blockerCodes: stableBlockerCodes(stage.blockers)});
 
 function readAssembly(): {stage: Stage; report: AssemblyReport | null} {
   const result = run('scripts/opening-v1-assembly-preflight.mts', ['--json']);
@@ -201,11 +208,23 @@ else if (finalDeliveryApproval.state === 'MISSING') {overallState = 'FINAL_DELIV
 else if (!approved) {overallState = 'FINAL_DELIVERY_APPROVAL_REQUIRED_OR_STALE'; nextActions = ['current SHA-bound final delivery approvalを完了または再初期化', 'pnpm opening:final-delivery-approval:strict'];}
 else {overallState = 'PRODUCTION_READY'; nextActions = ['承認済みDaVinci export SHAを上映用正本として固定', '媒体コピー/会場再生テスト等の外部運用は別管理'];}
 
+const stages = {
+  media: withStableBlockerCodes(assembly.stage),
+  previewRender: withStableBlockerCodes(previewRender),
+  previewSourceBinding: withStableBlockerCodes(previewSourceBinding),
+  previewReview: withStableBlockerCodes(previewReview),
+  finalRender: withStableBlockerCodes(finalRender),
+  finalRenderReview: withStableBlockerCodes(finalRenderReview),
+  productionBundle: withStableBlockerCodes(productionBundle),
+  davinciFinishing: withStableBlockerCodes(davinciFinishing),
+  finalDeliveryApproval: withStableBlockerCodes(finalDeliveryApproval),
+};
+
 const report = {
   schemaVersion: 'opening-v1-production-status/v1' as const,
   authority: 'DERIVED_PRODUCTION_STATUS' as const,
   overallState,
-  stages: {media: assembly.stage, previewRender, previewSourceBinding, previewReview, finalRender, finalRenderReview, productionBundle, davinciFinishing, finalDeliveryApproval},
+  stages,
   readiness: {
     finalRenderEligible: assembly.report?.readiness?.finalRenderEligible === true,
     mixReady: assembly.report?.readiness?.mixReady === true,
@@ -232,6 +251,8 @@ const report = {
   },
   nextActions,
   guardrails: [
+    'RAW_BLOCKER_DETAIL != STABLE_BLOCKER_CODE',
+    'ABSOLUTE_PATH_OR_LOG_DETAIL_MUST_NOT_ENTER_BLOCKER_CODES',
     'PREVIEW_SOURCE_FINGERPRINT_STALE => HUMAN_PREVIEW_REVIEW_NOT_TRUSTED',
     'HUMAN_PREVIEW_REVIEW_PASS != HUMAN_FINAL_RENDER_REVIEW_PASS',
     'FINAL_RENDER_OR_RENDER_SOURCE_CHANGED => HUMAN_FINAL_RENDER_REVIEW_STALE',
@@ -253,7 +274,7 @@ else {
   console.log(`Opening V1 production status: ${overallState}`);
   for (const [name, stage] of Object.entries(report.stages)) {
     console.log(`${stage.state.padEnd(7)} / ${name} / ${stage.detail}`);
-    for (const blocker of stage.blockers ?? []) console.log(`  BLOCK / ${blocker}`);
+    for (const code of stage.blockerCodes ?? []) console.log(`  BLOCK_CODE / ${code}`);
   }
   console.log(`Palmier handoff=${report.handoff.palmier.contractVersion} current=${report.handoff.palmier.current ? 'YES' : 'NO'} timeline=${report.handoff.palmier.artifacts.sceneTimeline.path} sound=${report.handoff.palmier.artifacts.soundCues.path}`);
   console.log(`previewSourceBound=${report.readiness.previewSourceBound ? 'YES' : 'NO'} humanFinalRenderApproved=${report.readiness.humanFinalRenderApproved ? 'YES' : 'NO'} readyForFinalDeliveryApproval=${report.readiness.readyForFinalDeliveryApproval ? 'YES' : 'NO'} finalDeliveryApproved=${approved ? 'YES' : 'NO'} productionReady=${approved ? 'YES' : 'NO'}`);
