@@ -158,3 +158,32 @@ every position/size was multiplied by `k` in code.
    biography — `docs/materials-todo.md` is still mostly unfilled for this couple.
 3. Only after all 8 reach ~60–80%: run/adapt the anti-AI linter, write the
    missing asset list, then consider a PR.
+
+## All 8 pages now have real structure (asset-first 60-80% pass)
+
+Built P04 (STORY), P05 (TIMELINE + MEMORY), P07 (1DAY + CAFE), P08 (BACK COVER) from
+scratch with the corrected font system applied from the start (no Inter used at all
+this pass). P06's satellite spots remain an open TODO (Okinawa/Seoul candidate assets
+were rejected on QA, documented above).
+
+Honesty notes for this pass:
+- P04's flow milestones (出会い/交際スタート/プロポーズ/入籍) show `20XX.XX` — these
+  specific dates appeared in the user-provided "ideal" reference image, but that image
+  is an AI-generated concept mockup with garbled text elsewhere (`Wedding Journing`,
+  `Shago & Bhiori`), so its dates were **not** treated as confirmed fact. Only
+  `2026.10.24`(結婚式) is used, since that date is corroborated by
+  `docs/opening-authority.md` project-wide. The other four are native, clearly
+  lower-contrast placeholder text awaiting real input.
+- P05: Okinawa and Seoul destination photo slots are explicitly rendered as light-gray
+  boxes labeled "実写真未投入" (real photo not yet supplied) rather than filled with
+  a substitute — only the Hawaii slot has a real photo, since that's the only
+  destination with a verified real couple photo in the Drive library so far.
+- P07's schedule times are explicitly labeled "一般的な進行の目安です" (a general/
+  typical flow, not a confirmed final timing for this specific wedding) — the venue
+  name `ART GRACE PORTSIDE VILLA, YOKOHAMA` is reused because it already appears
+  consistently across V10's own asset filenames/pages, not invented fresh here.
+- P08's guest-message area is genuinely empty (ruled lines only) — no placeholder
+  prose was written in as if it were the couple's actual message.
+
+Next: user-requested final polish pass across all 8 pages (typography/hierarchy
+consistency check, P06 satellite resolution once real Okinawa/Seoul photos exist).
