@@ -48,12 +48,25 @@ for (const token of [
 
 for (const token of [
   'Typography package一括書き出し',
+  '実制作handoff manifest',
   'disabled={!routeReady}',
   '未選択/stale Sceneをsilent skipしません',
   'productionReady=NO',
   'listTypographyProductionSelections()',
+  'listTypographyProductionRoleContexts()',
+  'buildTypographyProjectDeliveryBatch(projectId, composer.scenes, timeline, selections, roleContexts)',
+  'buildTypographyProjectDeliveryBatchJson(projectId, composer.scenes, timeline, selections, roleContexts)',
+  'buildProjectTypographyRoleHandoffManifest(projectId, composer, workspace, selections, roleContexts)',
+  'buildProjectTypographyRoleHandoffManifestJson(projectId, composer, workspace, selections, roleContexts)',
+  'TYPOGRAPHY_PRODUCTION_ROLE_CONTEXT_CHANGED_EVENT',
   'MOTION_ZUKAN_COMPOSER_CHANGED_EVENT',
   'TYPOGRAPHY_PRODUCTION_SELECTION_CHANGED_EVENT',
+  'item.productionRole',
+  'item.selectionClass',
+  'item.roleContextStatus',
+  'roleManifest.roleHandoff.studioGuiActual',
+  'roleManifest.roleHandoff.davinciGuiActual',
+  '${projectId}-production-role-handoff-manifest.json',
 ]) requireText(card, token, `project batch UI missing: ${token}`);
 
 requireText(handoff, 'import { TypographyProjectDeliveryBatchCard }', "Scene handoff does not import project batch card");
@@ -66,6 +79,7 @@ for (const forbidden of ['productionReady: true', 'batchReadyForPalmierDaVinciHa
 }
 for (const forbidden of ['studioGuiActual: "PASS"', 'davinciGuiActual: "PASS"', 'productionReady: true']) {
   if (roleManifest.includes(forbidden)) errors.push(`role-aware project handoff fabricates production evidence: ${forbidden}`);
+  if (card.includes(forbidden)) errors.push(`project batch UI fabricates production evidence: ${forbidden}`);
 }
 
 if (errors.length) {
@@ -74,4 +88,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log("Typography Project Delivery Batch contracts OK: current human route + persisted role context can be required for project handoff, stale/missing context fails closed, and Studio/DaVinci Actual plus productionReady remain unclaimed.");
+console.log("Typography Project Delivery Batch contracts OK: UI export requires current human route + persisted role context, exposes role/class per Scene, emits the role-aware project manifest, and keeps Studio/DaVinci Actual plus productionReady unclaimed.");
