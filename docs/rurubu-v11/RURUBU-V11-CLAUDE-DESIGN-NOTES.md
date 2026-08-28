@@ -299,3 +299,15 @@ block below it by the same offset, so relative spacing was preserved exactly.
 
 Final full-file re-audit: 0 Inter nodes, 3 overflow entries (all the same
 intentional corner-decoration bleeds as the previous audit, no new bugs).
+
+## Q&A corgi title — user explicitly authorized
+
+The user gave explicit master authorization to use the corgi-mascot title asset on
+P03, overriding the earlier caution about the project's no-AI-dog-imagery rule
+(that rule protects against generating/altering imagery of the couple's actual
+dogs; the user clarified a generic decorative mascot illustration is fine).
+Placed `TITLE_PROFILE_QA_POP_A.png`, replacing P03's native title. Re-verified by
+screenshot: no collision with the existing photo/question layout.
+
+User's next direction: push further toward matching real Rurubu magazine
+conventions specifically ("るるぶと瓜二つ" — near-identical to actual Rurubu).
