@@ -58,6 +58,10 @@ requireText(gateSource, 'CRITICAL_PATH_PRE_BUNDLE', 'pre-bundle recovery authori
 requireText(gateSource, 'sourceRenderSha256', 'recovery render SHA provenance');
 requireText(gateSource, 'normalizeRecoverySnapshot', 'recovery authority normalization');
 requireText(gateSource, 'remotionStudioToolingEvidence', 'Remotion Studio tooling evidence carrier');
+requireText(gateSource, 'remotionStudioToolingDependency', 'Remotion Studio dependency carrier');
+requireText(gateSource, 'effectiveProductionState', 'effective production state carrier');
+requireText(gateSource, 'blockingAuthorities', 'effective blocking authority carrier');
+requireText(gateSource, 'CANONICAL_NEXT_GATE_READY != EFFECTIVE_PRODUCTION_READY_WHEN_ADOPTED_DEPENDENCY_BLOCKS', 'effective state honesty guardrail');
 requireText(gateSource, 'PRE_BUNDLE_RECOVERY_IS_NOT_FINAL_RENDER_SHA_BOUND', 'pre-bundle honesty guardrail');
 requireText(gateSource, 'SHA_BOUND_RECOVERY_EXPORTED != RECOVERY_EXECUTED', 'SHA-bound execution guardrail');
 
@@ -67,6 +71,8 @@ requireText(studioEvidenceSource, 'ELEMENT_NOT_ADOPTED_BY_PROJECT => TOOLING_ACT
 
 requireText(recoverySource, 'wedding-davinci-production-recovery/v1', 'DaVinci recovery schema');
 requireText(recoverySource, 'MOTION_STUDIO_DAVINCI_PRODUCTION_RECOVERY', 'DaVinci recovery authority');
+requireText(recoverySource, 'effectiveProductionState: project.effectiveProductionState', 'effective production state propagation');
+requireText(recoverySource, 'blockingAuthorities: [...project.blockingAuthorities]', 'blocking authority propagation');
 requireText(recoverySource, 'artifactPath: project.nextGate.artifactPath', 'artifact path propagation');
 requireText(recoverySource, 'recoveryAuthority: recovery.authority', 'selected recovery authority propagation');
 requireText(recoverySource, 'sourceRenderSha256: recovery.sourceRenderSha256', 'render SHA provenance propagation');
@@ -79,6 +85,7 @@ requireText(recoverySource, 'davinciContractVersion: project.bridge.davinciContr
 requireText(recoverySource, 'evidencePath: project.bridge.actualEvidencePath', 'DaVinci Actual evidence path propagation');
 requireText(recoverySource, 'commands: {...project.bridge.actualCommands}', 'DaVinci Actual command propagation');
 requireText(recoverySource, 'const studio = project.remotionStudioToolingEvidence', 'Studio tooling evidence source');
+requireText(recoverySource, 'const dependency = project.remotionStudioToolingDependency', 'Studio project dependency source');
 requireText(recoverySource, 'authority: studio.authority', 'Studio tooling authority propagation');
 requireText(recoverySource, 'summaryPath: studio.summaryPath', 'Studio tooling summary path propagation');
 requireText(recoverySource, 'summarySchemaVersion: studio.summarySchemaVersion', 'Studio tooling summary schema propagation');
@@ -92,8 +99,20 @@ requireText(recoverySource, 'currentRepoState: studio.currentRepoState', 'Studio
 requireText(recoverySource, 'humanReviewed: studio.humanReviewed', 'Studio tooling Human review propagation');
 requireText(recoverySource, 'productionDependencyPromoted: studio.productionDependencyPromoted', 'Studio tooling dependency promotion propagation');
 requireText(recoverySource, 'guardrails: [...studio.guardrails]', 'Studio tooling guardrail propagation');
+requireText(recoverySource, 'authority: dependency.authority', 'project dependency authority propagation');
+requireText(recoverySource, 'adoptedCandidateIds: [...dependency.adoptedCandidateIds]', 'adopted candidate propagation');
+requireText(recoverySource, 'state: dependency.state', 'project dependency state propagation');
+requireText(recoverySource, 'blocking: dependency.blocking', 'project dependency blocking propagation');
+requireText(recoverySource, 'studioActualVerified: dependency.studioActualVerified', 'dependency Studio Actual propagation');
+requireText(recoverySource, 'humanReviewed: dependency.humanReviewed', 'dependency Human review propagation');
+requireText(recoverySource, 'dependencyPromoted: dependency.dependencyPromoted', 'dependency promotion propagation');
+requireText(recoverySource, 'recoveryActions: dependency.recoveryActions.map(cloneDependencyAction)', 'dependency structured recovery propagation');
+requireText(recoverySource, 'recovery: [...dependency.recovery]', 'dependency canonical recovery propagation');
+requireText(recoverySource, 'guardrails: [...dependency.guardrails]', 'dependency guardrail propagation');
 requireText(recoverySource, 'REMOTION_STUDIO_TOOLING_REFERENCE_EXPORTED != STUDIO_ACTUAL_VERIFIED', 'DaVinci Studio tooling export fail-close guardrail');
+requireText(recoverySource, 'REMOTION_STUDIO_DEPENDENCY_EXPORTED != DEPENDENCY_RECOVERY_EXECUTED', 'DaVinci dependency export fail-close guardrail');
 requireText(recoverySource, 'REMOTION_STUDIO_TOOLING_NOT_ADOPTED => NON_BLOCKING_FOR_DAVINCI_RECOVERY', 'DaVinci non-adopted tooling non-blocking guardrail');
+requireText(recoverySource, 'ADOPTED_REMOTION_STUDIO_DEPENDENCY_BLOCKS_DAVINCI_PRODUCTION_UNTIL_READY', 'adopted dependency fail-close guardrail');
 requireText(recoverySource, 'DAVINCI_RECOVERY_EXPORTED != RECOVERY_EXECUTED', 'recovery export fail-close guardrail');
 requireText(recoverySource, 'DAVINCI_RECOVERY_ACTION_EXPORTED != DAVINCI_TIMELINE_MUTATED', 'timeline mutation fail-close guardrail');
 requireText(recoverySource, 'SHA_BOUND_RECOVERY_EXPORTED != MAC_DAVINCI_ACTUAL_VERIFIED', 'SHA-bound recovery is not Actual verification');
@@ -101,8 +120,16 @@ requireText(recoverySource, 'MAC_DAVINCI_ACTUAL_REMAINS_NOT_RUN_UNTIL_GUI_EVIDEN
 requireText(recoverySource, 'buildDaVinciWeddingProductionRecoveryJson', 'machine-readable DaVinci recovery export');
 requireText(recoverySource, 'buildDaVinciWeddingProductionRecoveryMarkdown', 'human-readable DaVinci recovery export');
 requireText(recoverySource, '# DaVinci Wedding Production Recovery', 'DaVinci recovery Markdown heading');
+requireText(recoverySource, 'effective-production-state:', 'effective production state in Markdown');
+requireText(recoverySource, 'blocking-authorities:', 'blocking authorities in Markdown');
 requireText(recoverySource, '### Palmier → DaVinci bridge', 'bridge Markdown section');
 requireText(recoverySource, '### Remotion Studio tooling reference', 'Studio tooling Markdown section');
+requireText(recoverySource, '### Remotion Studio project dependency', 'Studio project dependency Markdown section');
+requireText(recoverySource, 'dependency-adopted-candidates:', 'adopted candidates in Markdown');
+requireText(recoverySource, 'dependency-state:', 'dependency state in Markdown');
+requireText(recoverySource, 'dependency-blocking:', 'dependency blocking state in Markdown');
+requireText(recoverySource, 'dependency-recovery-actions:', 'dependency recovery actions in Markdown');
+requireText(recoverySource, 'candidate existence alone is non-blocking', 'dependency fail-close Markdown note');
 requireText(recoverySource, 'tooling-summary-schema:', 'Studio tooling summary schema in Markdown');
 requireText(recoverySource, 'tooling-human-reviewed:', 'Studio Human review state in Markdown');
 requireText(recoverySource, 'tooling-production-dependency-promoted:', 'Studio dependency promotion state in Markdown');
