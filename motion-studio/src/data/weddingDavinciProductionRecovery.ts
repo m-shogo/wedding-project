@@ -9,7 +9,7 @@ export type WeddingMovieId = 'opening' | 'profile';
 const config = {
   opening: {
     artifactPath: 'out/opening/opening_v1.mp4',
-    palmierContractVersion: 'opening-v1-palmier-handoff/v2',
+    palmierContractVersion: 'opening-v1-palmier-handoff/v3',
     davinciContractVersion: 'opening-v1-davinci-handoff/v1',
     evidencePath: 'out/qa/opening-v1-davinci-finishing-evidence.json',
     commands: {
