@@ -5,6 +5,7 @@ import {fileURLToPath} from "node:url";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const source = fs.readFileSync(path.join(root, "src/pages/FusionNodeTranslator.tsx"), "utf8");
 const recoverySource = fs.readFileSync(path.join(root, "src/lib/davinciWeddingProductionRecovery.ts"), "utf8");
+const gateSource = fs.readFileSync(path.join(root, "src/lib/palmierWeddingProductionGate.ts"), "utf8");
 
 const requireText = (haystack, text, label) => {
   if (!haystack.includes(text)) throw new Error(`missing ${label}: ${text}`);
@@ -37,18 +38,29 @@ requireText(source, 'コマンド表示・initだけではActual verifiedにな�
 requireText(source, '実際にResolve GUIで確認・exportしていない限り、このgateはPASSにしません', 'Actual fail-close warning');
 requireText(source, 'to="/palmier-handoff"', 'canonical production handoff navigation');
 
+requireText(gateSource, 'SHA_BOUND_FINAL_RENDER', 'SHA-bound recovery authority');
+requireText(gateSource, 'CRITICAL_PATH_PRE_BUNDLE', 'pre-bundle recovery authority');
+requireText(gateSource, 'sourceRenderSha256', 'recovery render SHA provenance');
+requireText(gateSource, 'normalizeRecoverySnapshot', 'recovery authority normalization');
+requireText(gateSource, 'PRE_BUNDLE_RECOVERY_IS_NOT_FINAL_RENDER_SHA_BOUND', 'pre-bundle honesty guardrail');
+requireText(gateSource, 'SHA_BOUND_RECOVERY_EXPORTED != RECOVERY_EXECUTED', 'SHA-bound execution guardrail');
+
 requireText(recoverySource, 'wedding-davinci-production-recovery/v1', 'DaVinci recovery schema');
 requireText(recoverySource, 'MOTION_STUDIO_DAVINCI_PRODUCTION_RECOVERY', 'DaVinci recovery authority');
 requireText(recoverySource, 'artifactPath: project.nextGate.artifactPath', 'artifact path propagation');
-requireText(recoverySource, 'blockerCodes: [...project.nextGate.blockerCodes]', 'stable blocker propagation');
-requireText(recoverySource, 'blockerActions: project.nextGate.blockerActions.map(cloneAction)', 'structured recovery action propagation');
-requireText(recoverySource, 'canonicalRecovery: [...project.nextGate.recovery]', 'canonical recovery propagation');
+requireText(recoverySource, 'recoveryAuthority: recovery.authority', 'selected recovery authority propagation');
+requireText(recoverySource, 'sourceRenderSha256: recovery.sourceRenderSha256', 'render SHA provenance propagation');
+requireText(recoverySource, 'blockerCodes: [...recovery.blockerCodes]', 'authority-aware stable blocker propagation');
+requireText(recoverySource, 'blockerActions: recovery.blockerActions.map(cloneAction)', 'authority-aware structured action propagation');
+requireText(recoverySource, 'canonicalRecovery: [...recovery.canonicalRecovery]', 'authority-aware canonical recovery propagation');
+requireText(recoverySource, 'recoveryGuardrails: [...recovery.guardrails]', 'recovery-specific guardrail propagation');
 requireText(recoverySource, 'palmierContractVersion: project.bridge.palmierContractVersion', 'Palmier contract provenance');
 requireText(recoverySource, 'davinciContractVersion: project.bridge.davinciContractVersion', 'DaVinci contract provenance');
 requireText(recoverySource, 'evidencePath: project.bridge.actualEvidencePath', 'DaVinci Actual evidence path propagation');
 requireText(recoverySource, 'commands: {...project.bridge.actualCommands}', 'DaVinci Actual command propagation');
 requireText(recoverySource, 'DAVINCI_RECOVERY_EXPORTED != RECOVERY_EXECUTED', 'recovery export fail-close guardrail');
 requireText(recoverySource, 'DAVINCI_RECOVERY_ACTION_EXPORTED != DAVINCI_TIMELINE_MUTATED', 'timeline mutation fail-close guardrail');
+requireText(recoverySource, 'SHA_BOUND_RECOVERY_EXPORTED != MAC_DAVINCI_ACTUAL_VERIFIED', 'SHA-bound recovery is not Actual verification');
 requireText(recoverySource, 'MAC_DAVINCI_ACTUAL_REMAINS_NOT_RUN_UNTIL_GUI_EVIDENCE_IS_CURRENT', 'Mac Actual NOT_RUN guardrail');
 requireText(recoverySource, 'buildDaVinciWeddingProductionRecoveryJson', 'machine-readable DaVinci recovery export');
 
