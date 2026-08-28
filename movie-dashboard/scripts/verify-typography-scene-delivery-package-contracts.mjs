@@ -6,6 +6,8 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const read = (relative) => fs.readFileSync(path.join(root, relative), "utf8");
 const delivery = read("src/data/typographySceneDeliveryPackage.ts");
 const card = read("src/components/TypographySceneDeliveryPackageCard.tsx");
+const roleStore = read("src/data/typographyProductionRoleContextStore.ts");
+const roleDelivery = read("src/data/typographySceneRoleDeliveryPackage.ts");
 const handoff = read("src/components/MaskRevealSceneHandoffCard.tsx");
 const routing = read("src/data/typographySceneProductionRouting.ts");
 const registry = read("src/data/typographyDaVinciActualWorkflowRegistry.ts");
@@ -44,52 +46,54 @@ for (const token of [
   'TYPOGRAPHY_SCENE_DELIVERY_ROUTE_MISMATCH',
   'TYPOGRAPHY_SCENE_DELIVERY_MUST_NOT_EMBED_ACTUAL_PASS',
   'TYPOGRAPHY_SCENE_DELIVERY_MUST_NOT_EMBED_RELEASE',
-]) {
-  requireText(delivery, token, `delivery package contract missing: ${token}`);
-}
+]) requireText(delivery, token, `delivery package contract missing: ${token}`);
 
 for (const token of [
   "Production packageを書き出す",
+  "Role handoffを書き出す",
   "Package再検証",
   "Package revalidation:",
   "package出力 ≠ production release",
-  "Scene更新後の古いpackageは再検証で拒否",
+  "Scene更新後の古いpackage/Role contextは拒否",
+  "PERSISTED HUMAN CONTEXT",
+  "saveTypographyProductionRoleContext(scene, selection, guide.role)",
+  "loadTypographyProductionRoleContext(scene, selection)",
   "Mac Actual",
   "Current stop:",
   "delivery.execution.order.join",
   "delivery.files.palmierTimelineXmlFileName",
   "delivery.timeline.sceneMarkerId",
-]) {
-  requireText(card, token, `delivery package UI missing: ${token}`);
-}
+]) requireText(card, token, `delivery package UI missing: ${token}`);
+
+for (const token of [
+  'schemaVersion: "typography-production-role-context/v1"',
+  'authority: "HUMAN_SELECTED_ROLE_CONTEXT"',
+  'context.sourceRevision === scene.updatedAt',
+  'context.patternId === selection.patternId',
+  'context.routeSelectedAt === selection.selectedAt',
+  'TYPOGRAPHY_ROLE_CONTEXT_REQUIRES_CURRENT_ROUTE_SELECTION',
+]) requireText(roleStore, token, `persisted role context contract missing: ${token}`);
+
+for (const token of [
+  'schemaVersion: "wedding-movie-typography-role-delivery/v1"',
+  'studioGuiActual: "NOT_RUN"',
+  'davinciGuiActual: "NOT_RUN"',
+  'productionReady: false',
+]) requireText(roleDelivery, token, `role delivery honesty contract missing: ${token}`);
 
 requireText(handoff, 'import { TypographySceneDeliveryPackageCard }', "Scene handoff does not import delivery package card");
 requireText(handoff, '<TypographySceneDeliveryPackageCard scene={scene} />', "Scene handoff does not render delivery package card");
 
-for (const patternId of [
-  "type-mask-reveal",
-  "type-char-stagger",
-  "type-type-on-rhythm",
-  "type-word-punch",
-  "type-tracking-burst",
-  "type-vertical-wipe",
-  "type-outline-fill",
-  "type-baseline-hop",
-  "type-triplet",
-]) {
+for (const patternId of ["type-mask-reveal", "type-char-stagger", "type-type-on-rhythm", "type-word-punch", "type-tracking-burst", "type-vertical-wipe", "type-outline-fill", "type-baseline-hop", "type-triplet"]) {
   requireText(routing, `"${patternId}"`, `production routing missing ${patternId}`);
-  if (patternId !== "type-mask-reveal") {
-    requireText(registry, `patternId: "${patternId}"`, `Actual workflow registry missing ${patternId}`);
-  }
+  if (patternId !== "type-mask-reveal") requireText(registry, `patternId: "${patternId}"`, `Actual workflow registry missing ${patternId}`);
 }
 
-for (const forbidden of [
-  'actualEvidenceState: "PASS"',
-  'productionReady: true',
-  'releaseDecisionEmbedded: true',
-  'xmlGeneratedExternally: false',
-]) {
+for (const forbidden of ['actualEvidenceState: "PASS"', 'productionReady: true', 'releaseDecisionEmbedded: true', 'xmlGeneratedExternally: false']) {
   if (delivery.includes(forbidden)) errors.push(`delivery package fabricates production evidence: ${forbidden}`);
+}
+for (const forbidden of ['studioGuiActual: "PASS"', 'davinciGuiActual: "PASS"', 'productionReady: true']) {
+  if (roleDelivery.includes(forbidden)) errors.push(`role delivery fabricates production evidence: ${forbidden}`);
 }
 
 if (errors.length) {
@@ -98,4 +102,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log("Typography Scene Delivery Package contracts OK: Human Master values + current route + Palmier timing + DaVinci workflow + execution order are bundled, stale imports fail closed, and Mac Actual/Release evidence is never fabricated.");
+console.log("Typography Scene Delivery Package contracts OK: Human Master + current route + revision-bound persisted Human role context are bundled without fabricating Studio/DaVinci Actual or production release evidence.");
