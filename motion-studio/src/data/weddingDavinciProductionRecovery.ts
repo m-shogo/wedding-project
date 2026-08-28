@@ -2,6 +2,7 @@ import {
   weddingProductionRecoverySchema,
   type WeddingProductionRecovery,
 } from './resolveHandoff.schema.ts';
+import {assertProductionRecoveryActionTargets} from './productionRecoveryActionContract.ts';
 
 export type WeddingMovieId = 'opening' | 'profile';
 
@@ -32,7 +33,7 @@ const config = {
 
 export function buildWeddingDavinciProductionRecovery(movieId: WeddingMovieId): WeddingProductionRecovery {
   const movie = config[movieId];
-  return weddingProductionRecoverySchema.parse({
+  const recovery = weddingProductionRecoverySchema.parse({
     authority: 'MOTION_STUDIO_DAVINCI_PRODUCTION_RECOVERY',
     movieId,
     productionReady: false,
@@ -91,9 +92,12 @@ export function buildWeddingDavinciProductionRecovery(movieId: WeddingMovieId): 
     guardrails: [
       'PRODUCTION_BUNDLE_EXPORTED != MAC_DAVINCI_ACTUAL_VERIFIED',
       'DAVINCI_RECOVERY_EXPORTED != RECOVERY_EXECUTED',
+      'RECOVERY_ACTION_KIND_REQUIRES_MATCHING_TARGET',
       'DAVINCI_ACTUAL_EVIDENCE_TEMPLATE != MAC_DAVINCI_ACTUAL_VERIFIED',
       'MAC_DAVINCI_ACTUAL_REMAINS_NOT_RUN_UNTIL_GUI_EVIDENCE_IS_CURRENT',
       'MAC_DAVINCI_ACTUAL_VERIFIED != FINAL_DELIVERY_APPROVED',
     ],
   });
+  assertProductionRecoveryActionTargets(recovery.blockerActions, `${movieId} DaVinci recovery`);
+  return recovery;
 }
