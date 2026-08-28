@@ -334,3 +334,46 @@ rectangles still showing an unfilled placeholder color (except the two
 intentionally-labeled "実写真未投入" Okinawa/Seoul slots on P05), 3 overflow
 entries (the same three intentional corner-decoration bleeds noted throughout
 this document, not bugs).
+
+## Foundational redesign — "るるぶにして思想根底から変えて"
+
+User judged the previous pass (glossy bubble-letter title lockups, pastel-pink-led
+palette) as still not genuinely Rurubu — closer to generic kawaii-mobile-game
+merch than an actual travel guidebook. Asked to change the design philosophy at
+the root, not add more decoration on top.
+
+Confirmed direction via one clarifying question before executing (to avoid a
+second wasted redesign cycle): shift to real Rurubu magazine/guidebook structure
+— orange/red brand color as the structural spine, boxed practical information,
+numbered-pin-to-photo cross-referencing, color-coded running-head tabs, and a
+restrained, editorial masthead instead of a glossy sticker logo.
+
+Executed across all 8 pages:
+
+1. **Folio system** — added a consistent bottom-corner running-head tab to
+   P02–P08 (orange `#E74F1B` background, white section-name label + page number
+   in Zen Maru Gothic Black), alternating left/right like a real bound
+   book's inner/outer margins. P01 has none, matching real magazine convention
+   (covers don't carry a folio).
+2. **Removed every glossy bubble-letter title lockup**, including the corgi one
+   on P03 that had just been added — full consistency mattered more than keeping
+   a asset already placed. Replaced all of them with a repeatable native masthead
+   component: a short orange accent bar + small Shippori Mincho English kicker +
+   large black/white Zen Maru Gothic Black Japanese title. Same recipe on every
+   inside page; P06 got a compact on-photo variant (white tab + orange bar) since
+   its hero photo needed to stay the visual lead.
+3. **P01 cover**: removed the glossy `LOGO_COVER_RURUBU_WEDDING_EDITORIAL_B` sticker
+   entirely and replaced it with a native "るるぶ" wordmark (64px Zen Maru Gothic
+   Black) + orange underline bar + "WEDDING" kicker — the same masthead grammar
+   as the inside pages, now anchoring the whole book's identity instead of a
+   one-off decorative asset.
+
+Caught and fixed one real bug during this pass: P02's new masthead title
+overflowed the safe area by 57px (the fixed 30pt size was sized for a different
+column width than the one actually available on that page). Fixed by shrinking
+to fit the measured available width (22pt) rather than reusing a single global
+constant blindly.
+
+Final full-file audit after the redesign: 0 Inter nodes, 0 unintentional unfilled
+image placeholders, 3 overflow entries — the same three intentional corner-bleed
+decorations noted throughout this document.
