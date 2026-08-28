@@ -8,6 +8,7 @@ import {downloadText} from "../lib/exporters";
 
 const stageLabel: Record<string, string> = {
   media: "Real media",
+  cropReview: "Human crop QA",
   previewRender: "Preview render",
   previewSourceBinding: "Preview source binding",
   previewReview: "Human preview QA",
@@ -28,6 +29,7 @@ export function OpeningProductionStatusHandoffCard({projectId}: {projectId: Scen
 
   const production = status.opening.production;
   const media = status.opening.media;
+  const cropReview = media.cropReview;
   const sourceRevalidation = production.sourceRevalidation;
   const palmier = production.palmierHandoff;
   const davinci = production.davinciHandoff;
@@ -39,7 +41,7 @@ export function OpeningProductionStatusHandoffCard({projectId}: {projectId: Scen
           <p className="text-[9px] tracking-[0.16em] font-semibold text-sky-700 dark:text-sky-300">OPENING V1 / FINAL PRODUCTION STATUS</p>
           <p className="mt-1 text-[10px] font-semibold text-navy-800 dark:text-sand-100">{production.overallState}</p>
           <p className="mt-1 text-[8px] text-navy-400">
-            photos={media.resolvedPhotoCount}/{media.expectedPhotoCount} / BGM={media.bgm.playable ? "PLAYABLE" : media.bgm.status} / productionReady={production.readiness.productionReady ? "YES" : "NO"}
+            photos={media.resolvedPhotoCount}/{media.expectedPhotoCount} / crop={cropReview.state} / BGM={media.bgm.playable ? "PLAYABLE" : media.bgm.status} / productionReady={production.readiness.productionReady ? "YES" : "NO"}
           </p>
         </div>
         <button type="button" onClick={() => downloadText(json, "opening-production-status-handoff.json")} className="border border-sky-300 dark:border-sky-700 px-2.5 py-1.5 text-[9px] font-semibold text-sky-700 dark:text-sky-300">
@@ -62,8 +64,9 @@ export function OpeningProductionStatusHandoffCard({projectId}: {projectId: Scen
         })}
       </div>
 
-      <div className="mt-2 grid grid-cols-2 gap-1 sm:grid-cols-6 text-[8px] text-navy-500 dark:text-navy-300">
+      <div className="mt-2 grid grid-cols-2 gap-1 sm:grid-cols-7 text-[8px] text-navy-500 dark:text-navy-300">
         <div className="border border-sand-200 dark:border-navy-700 px-2 py-1.5">Final render eligible: {production.readiness.finalRenderEligible ? "YES" : "NO"}</div>
+        <div className="border border-sand-200 dark:border-navy-700 px-2 py-1.5">Human crop: {production.readiness.humanCropReviewApproved ? "PASS" : cropReview.state}</div>
         <div className="border border-sand-200 dark:border-navy-700 px-2 py-1.5">Preview source: {production.readiness.previewSourceBound ? "CURRENT" : "NOT BOUND"}</div>
         <div className="border border-sand-200 dark:border-navy-700 px-2 py-1.5">Human preview: {production.readiness.humanPreviewApproved ? "PASS" : "NOT PASS"}</div>
         <div className="border border-sand-200 dark:border-navy-700 px-2 py-1.5">Human final MP4: {production.readiness.humanFinalRenderApproved ? "PASS" : "NOT PASS"}</div>
@@ -72,9 +75,33 @@ export function OpeningProductionStatusHandoffCard({projectId}: {projectId: Scen
       </div>
 
       <div className="mt-2 border border-amber-200 dark:border-amber-800 p-2">
+        <div className="flex flex-wrap items-center justify-between gap-1">
+          <p className="text-[8px] font-semibold text-amber-700 dark:text-amber-300">HUMAN CROP REVIEW / SCENE &gt; ASSET &gt; DEFAULT</p>
+          <span className="text-[8px] font-semibold text-amber-700 dark:text-amber-300">{cropReview.state}</span>
+        </div>
+        <div className="mt-1 grid gap-1 sm:grid-cols-2 text-[8px] leading-4 text-navy-500 dark:text-navy-300">
+          <div>
+            <div>reviewed: {cropReview.reviewedCount}/{cropReview.requiredCount}</div>
+            <div>precedence: {cropReview.precedence}</div>
+            <div>evidence: <code className="break-all">{cropReview.evidencePath}</code></div>
+          </div>
+          <div>
+            <div>Mac Studio Actual: <span className="font-semibold">{cropReview.macStudioActualState}</span></div>
+            <div>DaVinci Actual: <span className="font-semibold">{cropReview.macDaVinciActualState}</span></div>
+            <div>crop evidence productionReady: {cropReview.productionReady ? "YES" : "NO"}</div>
+          </div>
+        </div>
+        {cropReview.blockerCodes.length > 0 ? <p className="mt-1 text-[8px] text-amber-700 dark:text-amber-300">blockers: {cropReview.blockerCodes.join(" / ")}</p> : null}
+        <p className="mt-1 text-[8px] text-navy-400">写真SHAまたはeffective focus/fitが変わると以前のHuman crop PASSはSTALEになります。crop review PASSはpreview review PASSやDaVinci Actualを意味しません。</p>
+      </div>
+
+      <div className="mt-2 border border-amber-200 dark:border-amber-800 p-2">
         <p className="text-[8px] font-semibold text-amber-700 dark:text-amber-300">SOURCE / HUMAN REVIEW REVALIDATION</p>
         <div className="mt-1 text-[8px] leading-4 text-navy-500 dark:text-navy-300">
-          <div>Real-media preview source: <span className="font-semibold">{sourceRevalidation.realMediaPreview.state}</span></div>
+          <div>Crop review binding: <span className="font-semibold">{sourceRevalidation.cropReview.state}</span></div>
+          {sourceRevalidation.cropReview.blockers.length > 0 ? <div>crop blockers: {sourceRevalidation.cropReview.blockers.join(" / ")}</div> : null}
+          {sourceRevalidation.cropReview.recovery.length > 0 ? <div>crop recovery: {sourceRevalidation.cropReview.recovery.join(" → ")}</div> : null}
+          <div className="mt-1">Real-media preview source: <span className="font-semibold">{sourceRevalidation.realMediaPreview.state}</span></div>
           {sourceRevalidation.realMediaPreview.blockers.length > 0 ? <div>preview blockers: {sourceRevalidation.realMediaPreview.blockers.join(" / ")}</div> : null}
           {sourceRevalidation.realMediaPreview.recovery.length > 0 ? <div>preview recovery: {sourceRevalidation.realMediaPreview.recovery.join(" → ")}</div> : null}
           <div className="mt-1">Final MP4 Human review: <span className="font-semibold">{sourceRevalidation.finalRender.state}</span></div>
@@ -111,11 +138,14 @@ export function OpeningProductionStatusHandoffCard({projectId}: {projectId: Scen
         <div className="mt-1 text-[8px] leading-4 text-navy-500 dark:text-navy-300">
           <div>source: <code className="break-all">{davinci.handoffAsset.path}</code></div>
           <div>expected SHA: <code>{davinci.handoffAsset.expectedSha256 ?? "PENDING_BUNDLE_EXPORT"}</code></div>
+          <div>crop evidence: <code className="break-all">{davinci.requiredHumanCropReview.path}</code></div>
+          <div>crop SHA: <code>{davinci.requiredHumanCropReview.evidenceSha256 ?? "PENDING_CROP_REVIEW"}</code></div>
+          <div>crop fingerprint: <code>{davinci.requiredHumanCropReview.bindingFingerprintSha256 ?? "PENDING_CROP_REVIEW"}</code></div>
           <div>use: {davinci.handoffAsset.intendedUse}</div>
           <div>Actual evidence: <code className="break-all">{davinci.actualEvidence.path}</code></div>
           <div>required: {davinci.actualEvidence.requiredChecks.join(" / ")}</div>
         </div>
-        <p className="mt-1 text-[8px] text-navy-400">HUMAN_FINAL_RENDER_REVIEW_PASS != DAVINCI_ACTUAL_VERIFIED / DAVINCI_HANDOFF_CURRENT != MAC_DAVINCI_ACTUAL_VERIFIED</p>
+        <p className="mt-1 text-[8px] text-navy-400">HUMAN_CROP_REVIEW_PASS != HUMAN_PREVIEW_REVIEW_PASS / HUMAN_FINAL_RENDER_REVIEW_PASS != DAVINCI_ACTUAL_VERIFIED / DAVINCI_HANDOFF_CURRENT != MAC_DAVINCI_ACTUAL_VERIFIED</p>
       </div>
 
       <div className="mt-2 border border-sky-100 dark:border-sky-900 p-2">
@@ -127,7 +157,7 @@ export function OpeningProductionStatusHandoffCard({projectId}: {projectId: Scen
 
       <p className="mt-2 text-[8px] leading-4 text-navy-400">
         このstatusはMEDIA_REQUIRED / NOT_RUNも含めて現在状態・理由・artifact path・正規recovery commandとPalmier / DaVinci handoff contractを外へ渡すためのenvelopeです。Statusのexport可否とproduction readinessは分離しています。
-        `STATUS_EXPORTABLE != FINAL_RENDER_ELIGIBLE` / `PREVIEW_REVIEW_PASS != FINAL_RENDER_REVIEW_PASS` / `FINAL_RENDER_OR_SOURCE_CHANGED =&gt; FINAL_RENDER_RE_REVIEW_REQUIRED` / `HANDOFF_METADATA_EXPORTED != HANDOFF_ARTIFACTS_CURRENT` / `HUMAN_FINAL_RENDER_REVIEW_PASS != DAVINCI_ACTUAL_VERIFIED` / `DAVINCI_ACTUAL_VERIFIED != FINAL_DELIVERY_APPROVED`
+        `PHOTO_SHA_OR_EFFECTIVE_FOCUS_OR_FIT_CHANGED =&gt; HUMAN_CROP_REVIEW_STALE` / `HUMAN_CROP_REVIEW_PASS != HUMAN_PREVIEW_REVIEW_PASS` / `STATUS_EXPORTABLE != FINAL_RENDER_ELIGIBLE` / `PREVIEW_REVIEW_PASS != FINAL_RENDER_REVIEW_PASS` / `FINAL_RENDER_OR_SOURCE_CHANGED =&gt; FINAL_RENDER_RE_REVIEW_REQUIRED` / `HANDOFF_METADATA_EXPORTED != HANDOFF_ARTIFACTS_CURRENT` / `HUMAN_FINAL_RENDER_REVIEW_PASS != DAVINCI_ACTUAL_VERIFIED` / `DAVINCI_ACTUAL_VERIFIED != FINAL_DELIVERY_APPROVED`
       </p>
 
       <details className="mt-2">
