@@ -6,6 +6,9 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const read = (relative) => fs.readFileSync(path.join(root, relative), "utf8");
 const opening = read("src/data/openingProductionStatusHandoff.ts");
 const profile = read("src/data/profileProductionStatusHandoff.ts");
+const openingUi = read("src/components/OpeningProductionHandoffExportButton.tsx");
+const profileUi = read("src/components/ProfileProductionHandoffExportButton.tsx");
+const nextGateUi = read("src/components/ProductionNextGateSummary.tsx");
 const errors = [];
 
 const need = (source, token, label) => {
@@ -38,10 +41,40 @@ for (const [label, source, project] of [
 need(opening, "const openingCriticalPath = criticalPath.projects.opening", "Opening");
 need(profile, "const profileCriticalPath = criticalPath.projects.profile", "Profile");
 
+for (const [label, source, project, builder] of [
+  ["Opening UI", openingUi, "Opening", "buildOpeningProductionStatusHandoff"],
+  ["Profile UI", profileUi, "Profile", "buildProfileProductionStatusHandoff"],
+]) {
+  for (const token of [
+    builder,
+    "production.nextGate",
+    "ProductionNextGateSummary",
+    `projectLabel=\"${project}\"`,
+    "state={nextGate.state}",
+    "stage={nextGate.stage}",
+    "artifactPath={nextGate.artifactPath}",
+    "blockerCodes={nextGate.blockerCodes}",
+    "recovery={nextGate.recovery}",
+  ]) need(source, token, label);
+}
+
+for (const token of [
+  'state: "BLOCKED" | "PRODUCTION_READY"',
+  "NEXT GATE",
+  "ARTIFACT:",
+  "blockerCodes.map",
+  "CANONICAL RECOVERY",
+  "recovery.map",
+]) need(nextGateUi, token, "Next-gate UI");
+
+if (nextGateUi.includes("NOT_RUN = PASS") || nextGateUi.includes("productionReady = true")) {
+  errors.push("Next-gate UI must remain display-only and must not promote production state");
+}
+
 if (errors.length) {
   console.error(`Production handoff next-gate contracts FAILED (${errors.length})`);
   for (const error of errors) console.error(`- ${error}`);
   process.exit(1);
 }
 
-console.log("Production handoff next-gate contracts OK: Opening/Profile exports expose the canonical current stage, stable blocker codes, artifact path and recovery without promoting Human QA or Mac DaVinci Actual.");
+console.log("Production handoff next-gate contracts OK: Opening/Profile exports and handoff cards expose the canonical current stage, stable blocker codes, artifact path and recovery without promoting Human QA or Mac DaVinci Actual.");
