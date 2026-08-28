@@ -1,8 +1,8 @@
 # BOARDING PASS — V4 Clean-room Tide Signal
 
-State: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / V4_CURRENT_SELECTED / LONG_COPY_STRESS_PASS / LEGACY_PRESERVED / NOT_PRINT_READY`
+State: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / V4_CURRENT_SELECTED / LONG_COPY_STRESS_PASS / PRINT_SIZE_READABILITY_HARDENED / LEGACY_PRESERVED / NOT_PRINT_READY`
 
-Latest promotion run start-main SHA: `0f7c9297cc24fd56c06bef4407b01f33c36f344d`; latest-main re-read before final Figma/Git writes: `530024bf35392692f488d4e5230c1414012357cb`.
+Latest promotion run start-main SHA: `0f7c9297cc24fd56c06bef4407b01f33c36f344d`; latest-main re-read before final Figma/Git writes: `e3fee562c347d9308162488ac47df6840b6cb454`.
 
 ## Authority / scope
 
@@ -100,6 +100,50 @@ Stress included:
 
 Post-repair stress screenshots show all stressed reader-facing content visible with no collision. The intentionally extreme table placeholder can wrap on the stub, but remains contained and readable; ordinary table assignments have substantially more margin.
 
+## Print-first actual-size correction — 2026-08-29
+
+The current V4 canvas remains `1200×550`. Under the established physical working scale this corresponds to `120×55 mm` (`10 Figma units = 1 mm`), so Figma font-size units convert to physical point size by approximately `px × 0.2835`.
+
+A fresh print audit found several structurally valid but physically undersized critical roles:
+
+- `DATE / CEREMONY / TABLE` labels at `15 px ≈ 4.25 pt`;
+- guide/place/back-couple text at `18 px ≈ 5.10 pt`;
+- back message at `20 px ≈ 5.67 pt`;
+- stub guest at `22 px ≈ 6.24 pt`;
+- critical date/time/table values at `24 px ≈ 6.80 pt`.
+
+Those sizes are acceptable as screen microtype but too weak as dependable final wedding stationery information. Rather than adding decoration, the V4 production typography was increased while keeping the existing Auto Layout system.
+
+Applied production changes:
+
+- Front `81:3`
+  - guest label `82:5`: `18 → 20 px`;
+  - `DATE / CEREMONY / TABLE` labels `82:10,13,16`: `15 → 18 px` (`≈ 5.10 pt`);
+  - corresponding values `82:11,14,17`: `24 → 28 px` (`≈ 7.94 pt`), line-height `36 px`;
+  - `YOKOHAMA` `82:18`: `18 → 20 px`;
+  - final guide `82:19`: `18 → 22 px` (`≈ 6.24 pt`), line-height `30 px`;
+  - stub kicker `82:21`: `18 → 20 px`;
+  - stub guest `82:22`: `22 → 26 px` (`≈ 7.37 pt`), line-height `36 px`;
+  - stub table label `82:23`: `15 → 18 px`.
+- Back `81:4`
+  - kicker `82:27`: `18 → 20 px`;
+  - message `82:29`: `20 → 24 px` (`≈ 6.80 pt`), line-height `36 px`;
+  - date/place `82:31`: `19 → 22 px` (`≈ 6.24 pt`), line-height `28 px`;
+  - couple role `82:32`: `18 → 22 px`, line-height `30 px`.
+
+The same typography increases were applied to hidden long-copy proof roles `84:71,76,77,79,80,82,83,84,85,87,88,89,98,100,102,103` so the existing stress evidence remains representative of production rather than testing an easier smaller-text version.
+
+Post-write live readback:
+
+- Front `81:3`: no visible text outside `1200×550`; primary info Auto Layout expanded only `332 → 338 px`; detail row groups expanded `54 → 58 px`; stub stack `194 → 196 px`.
+- Back `81:4`: no visible text outside frame; back letter stack expanded `311 → 325 px` and remains contained.
+- Front long-copy proof `84:53`: visible text `17`, outside `0` after new print-size typography.
+- Back long-copy proof `84:92`: visible text `5`, outside `0` after new print-size typography.
+- raster IMAGE fills remain `0`; effective raster PPI is therefore `N/A` for this correction and no `RESOLUTION_WARNING` is introduced.
+- thinnest current visible composed-vector strokes are `3 Figma units ≈ 0.3 mm`; still subject to printer/ink/profile proof before final approval.
+
+This correction improves physical readability but does not resolve vendor perforation tolerance, trim/safe placement around the detachable stub, CMYK conversion, stock/finishing, PDF preflight, overprint/knockout, or physical tear/attachment behavior. `DESIGN_COMPLETE != PRINT_READY` remains enforced.
+
 ## Three-scale / actual-size visual QA
 
 Front and Back were reviewed at thumbnail/reading scale and native `1200×550` actual canvas size after the fixes.
@@ -116,8 +160,8 @@ Final live readback:
 
 - Front `81:3`: visible native text `17` / fixed-height text `0` / outside visible text `0` / IMAGE fills `0` / `clipsContent=true`;
 - Back `81:4`: visible native text `5` / fixed-height text `0` / outside visible text `0` / IMAGE fills `0` / `clipsContent=true`;
-- Front stress `84:53`: outside visible text `0`;
-- Back stress `84:92`: outside visible text `0`;
+- Front stress `84:53`: outside visible text `0` after print-size correction;
+- Back stress `84:92`: outside visible text `0` after print-size correction;
 - page-wide flattening: `0`.
 
 ## Completion-only legacy comparison
@@ -149,12 +193,14 @@ Drive authority was live-read back as folder `1pccCqb47W7z4F9g_224X4U3bS45HA_Ql 
 - detachable-stub typography needs its own stress boundary; passing the main ticket body is insufficient;
 - Auto Layout can successfully absorb long copy while a separate background/material field still fails, so stress QA must inspect both text containment and the visual surface behind expanded text;
 - extending the physical paper field plus tightening vertical rhythm was superior to shrinking body copy;
-- no-image generation is the correct result when screenshot evidence points to containment and typography rather than a missing visual asset.
+- no-image generation is the correct result when screenshot evidence points to containment and typography rather than a missing visual asset;
+- small-ticket structural PASS can conceal 4–6 pt-equivalent critical text; point-equivalent actual-size audit is required before treating readability as print evidence;
+- hidden stress proofs must be kept typography-equivalent to production after print-size changes or their PASS becomes stale.
 
 ## Deferred / next
 
-Keep `NOT_PRINT_READY` until final guest/table/guide values, vendor perforation tolerances, paper stock, printer profile, finishing, and physical proof exist.
+Keep `NOT_PRINT_READY` until final guest/table/guide values, vendor perforation tolerances, exact trim/bleed/safe template, paper stock, printer profile, PDF preflight, overprint/knockout/transparency checks, finishing, and 100%/physical proof exist.
 
-BOARDING PASS V4 is now selected at `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS`.
+BOARDING PASS V4 remains selected at `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / PRINT_SIZE_READABILITY_HARDENED / NOT_PRINT_READY`.
 
-Next clean-room V4 target: `青春ふたりきっぷ`, from a blank frame using facts/constraints only and without visual reuse from retained production.
+Next target: `青春ふたりきっぷ` print-first re-audit from its current V4 authority, using facts/constraints only and without visual reuse from retained production.
