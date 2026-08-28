@@ -1,0 +1,50 @@
+name: Wedding DaVinci Readiness Snapshot CI
+
+on:
+  pull_request:
+    paths:
+      - "motion-studio/scripts/opening-v1-davinci-actual-binding-audit.mts"
+      - "motion-studio/scripts/profile-v1-davinci-actual-binding-audit.mts"
+      - "motion-studio/scripts/wedding-davinci-delivery-readiness.mts"
+      - "motion-studio/scripts/wedding-davinci-delivery-readiness-snapshot.mts"
+      - "motion-studio/scripts/check-wedding-davinci-delivery-readiness-snapshot.mts"
+      - ".github/workflows/wedding-davinci-readiness-snapshot-ci.yml"
+  push:
+    branches: [main]
+    paths:
+      - "motion-studio/scripts/opening-v1-davinci-actual-binding-audit.mts"
+      - "motion-studio/scripts/profile-v1-davinci-actual-binding-audit.mts"
+      - "motion-studio/scripts/wedding-davinci-delivery-readiness.mts"
+      - "motion-studio/scripts/wedding-davinci-delivery-readiness-snapshot.mts"
+      - "motion-studio/scripts/check-wedding-davinci-delivery-readiness-snapshot.mts"
+      - ".github/workflows/wedding-davinci-readiness-snapshot-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+          run_install: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Verify transported Wedding DaVinci readiness snapshot fail-close behavior
+        working-directory: motion-studio
+        run: node --no-warnings scripts/check-wedding-davinci-delivery-readiness-snapshot.mts
+      - name: Verify missing persisted snapshot remains NOT_RUN and strict-current fails closed
+        working-directory: motion-studio
+        shell: bash
+        run: |
+          rm -f out/handoff/wedding/wedding-davinci-delivery-readiness.json
+          node --no-warnings scripts/wedding-davinci-delivery-readiness-snapshot.mts --json | grep '"state": "NOT_RUN"'
+          if node --no-warnings scripts/wedding-davinci-delivery-readiness-snapshot.mts --strict-current; then
+            echo "strict-current unexpectedly passed without a transported snapshot" >&2
+            exit 1
+          fi
