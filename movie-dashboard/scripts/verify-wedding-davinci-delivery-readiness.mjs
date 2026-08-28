@@ -58,6 +58,8 @@ for (const token of [
   'Manifest生成',
   'Snapshot再検証',
   'Final Delivery strict',
+  'buildWeddingDavinciOperatorPacketJson',
+  'NOT_PROMOTED_BY_PACKET',
 ]) {
   if (!preflightSource.includes(token)) fail(`Dashboard final preflight model missing ${token}`);
 }
@@ -76,6 +78,12 @@ for (const token of [
   'FINAL DELIVERY PREFLIGHT / COMMAND SURFACE',
   'CURRENT BLOCKERS',
   'preflight.commands.map',
+  'buildWeddingDavinciOperatorPacketJson',
+  'new Blob',
+  'URL.createObjectURL',
+  'wedding-davinci-operator-packet.json',
+  'DaVinci Operator Packet JSONを保存',
+  '保存してもMac/Studio/DaVinci ActualやHuman approvalはPASSになりません',
 ]) {
   if (!componentSource.includes(token)) fail(`Wedding readiness card missing ${token}`);
 }
@@ -83,4 +91,4 @@ for (const token of [
 const zukanSource = readFileSync(resolve(dashboardRoot, 'src/pages/VisualMotionLibrary.tsx'), 'utf8');
 if (!zukanSource.includes('WeddingDavinciDeliveryReadinessCard')) fail('Motion Zukan must surface wedding-wide readiness');
 
-console.log(`Wedding DaVinci readiness + final delivery command surface OK: state=${report.state} opening=${report.opening.nextGate} profile=${report.profile.nextGate}`);
+console.log(`Wedding DaVinci readiness + operator packet download surface OK: state=${report.state} opening=${report.opening.nextGate} profile=${report.profile.nextGate}`);
