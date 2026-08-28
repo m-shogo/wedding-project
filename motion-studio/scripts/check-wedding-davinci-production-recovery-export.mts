@@ -6,6 +6,7 @@ import {weddingProductionRecoverySchema} from '../src/data/resolveHandoff.schema
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const exporter = readFileSync(join(root, 'scripts/export-wedding-davinci-production-recovery.mts'), 'utf8');
+const orchestrator = readFileSync(join(root, 'scripts/export-wedding-production-handoff.mts'), 'utf8');
 
 for (const movieId of ['opening', 'profile'] as const) {
   const recovery = buildWeddingDavinciProductionRecovery(movieId);
@@ -37,6 +38,22 @@ for (const required of [
   "Mac DaVinci Actual remains NOT_RUN; recovery export is not execution evidence.",
 ]) {
   if (!exporter.includes(required)) throw new Error(`exporter fail-close contract missing: ${required}`);
+}
+
+for (const required of [
+  "productionExporter: 'scripts/export-opening-v1-production-bundle.mts'",
+  "productionExporter: 'scripts/export-profile-v1-production-bundle.mts'",
+  "const recovery = run('scripts/export-wedding-davinci-production-recovery.mts'",
+  'production bundle export failed; DaVinci recovery was not exported.',
+  'recovery sidecar export failed.',
+  'Mac DaVinci Actual remains NOT_RUN; handoff export does not execute Resolve GUI work.',
+]) {
+  if (!orchestrator.includes(required)) throw new Error(`handoff orchestrator contract missing: ${required}`);
+}
+const bundleIndex = orchestrator.indexOf('const bundle = run(config.productionExporter)');
+const recoveryIndex = orchestrator.indexOf("const recovery = run('scripts/export-wedding-davinci-production-recovery.mts'");
+if (bundleIndex < 0 || recoveryIndex < 0 || bundleIndex >= recoveryIndex) {
+  throw new Error('handoff orchestrator must export the production bundle before DaVinci recovery');
 }
 
 console.log('Wedding DaVinci production recovery export contracts: PASS');
