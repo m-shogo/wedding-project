@@ -1,8 +1,8 @@
 # WEDDING PASSPORT — Figma V4 clean-room shell QA
 
 Date: 2026-08-28
-State: `V4_STRUCTURAL_SHELL_CREATED / REFERENCE_LED / THREE_SCALE_QA_PARTIAL_PASS / FIXED_IDENTITY_ASSET_MISSING / NOT_PRINT_READY`
-Start/latest main before write: `9616e2136cb84d21eb48d194cef65082ab54b188`
+State: `V4_STRUCTURAL_SHELL_CREATED / REFERENCE_LED / SEATING_PRINT_READABILITY_IMPROVED / THREE_SCALE_QA_PARTIAL_PASS / FIXED_IDENTITY_ASSET_MISSING / NOT_PRINT_READY`
+Start/latest main before this write: `b3d085e330fd3e91e2cb2a3938d9b199404c331a`
 Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
 Figma authority: `UbK8KmuWJcDeGScsN49Uor`
 Drive authority: `1LnGb9tq_Vswe-GKO6UxfvKMAZuShEaaw`
@@ -26,7 +26,7 @@ All four roots use the provisional `1480 × 2100` working canvas. Existing histo
 ## Hybrid authoring split
 
 - native Figma text: titles, date/location, couple placeholders, message copy, menu/drink content, table labels, guest-name placeholders and other factual/variable fields;
-- native/simple vector geometry: rules, central index axis, low-detail placeholder meridian/orbit geometry;
+- native/simple vector geometry: rules and the low-detail placeholder meridian/orbit geometry on the front;
 - generated/composed raster: none placed yet;
 - replaceable photography: none required by this first Passport V4 shell;
 - fixed generated identity role: still intentionally missing; the central front role remains a low-information placeholder only.
@@ -37,71 +37,76 @@ Fonts used in the V4 shell: `Noto Sans JP Regular`, `Noto Sans JP Medium`, `Inte
 
 ### Front accidental fill correction
 
-The initial front rendered as a large muted-gold/brown field even though the frame background was deep navy. Readback showed `DECOR / INNER HAIRLINE` had been created as a `1340 × 1960` filled rectangle rather than a hairline. It was corrected to `fills=0`, `strokes=1` with a muted-gold 2 px stroke. The corrected front now renders as the intended deep-navy booklet field.
+The initial front rendered as a large muted-gold/brown field even though the frame background was deep navy. Readback showed `DECOR / INNER HAIRLINE` had been created as a `1340 × 1960` filled rectangle rather than a hairline. It was corrected to `fills=0`, `strokes=1` with a muted-gold 2 px stroke.
 
 ### Front title/date hierarchy correction
 
-The first native title auto-height expanded to roughly `402 px` and collided with the date band. The title was re-authored as:
+The first native title auto-height expanded and collided with the date band. The title was re-authored as `ふたりの旅のしおり / WEDDING PASSPORT` with a 96 px primary size. The dashed box around the fixed-identity placeholder was removed because it read as UI-like containment.
 
-`ふたりの旅のしおり / WEDDING PASSPORT`
+### Front internal-copy print-safety correction — 2026-08-28
 
-with a 96 px primary size and final observed title height `230 px`. The gold rule moved to `y=600`, date to `y=655`, and location to `y=735`. The dashed box around the fixed-identity placeholder was removed because it read as UI-like containment; only a quiet meridian/orbit placeholder remains.
+Fresh actual render showed guest-facing internal authoring text `このページの文字情報は後から編集できます` still visible at the bottom of the cover. This violates the Current rule against printing internal authoring language. Node `226:14 / TEXT / ISSUE NOTE` was hidden. Fresh screenshot after mutation confirms the sentence no longer appears on the printed face.
 
-### Seating overflow and microtype correction
+### Seating print-readability reallocation — 2026-08-28
 
-The first 11-table shell placed table 06 below the page edge. Table groups were compacted to a 250 px vertical rhythm without reducing the required content count. Final readback:
+Fresh native-size review showed a large decorative central `TABLE INDEX` field consuming horizontal space while 77 guest-name slots were compressed to 22 px / 26 px line height (about 6.2 pt nominal at the provisional `10 px = 1 mm` scale). The decorative role was not carrying enough reader value to justify that loss of print legibility.
 
-- table 06 rule `y=1908`;
-- table 11 rule `y=1658`;
-- every guest role still contains seven native placeholders;
-- guest text `22 px`, explicit line height `26 px`;
-- each 7-name guest list height `182 px`;
-- maximum guest-list bottom `1928 < 2100` frame height.
+The V4 seating root `226:71` was therefore changed without touching old production:
 
-At the provisional `10 px = 1 mm` working scale, 22 px is about 2.2 mm, or approximately 6.2 pt nominal. It is visible in the 100% Figma render but remains near the lower practical range for a dense seating list. Long-real-name stress and physical/100% print proof are still required before promotion.
+- hid central decorative nodes `226:76`, `226:77`, `226:78`, `226:79`;
+- widened both guest columns from `390 px` to `560 px`;
+- right column moved from `x=980` to `x=810`;
+- retained all 11 tables and exactly seven native guest placeholders per table;
+- guest-name text increased from `22 px / 26 px` to `25 px / 30 px`;
+- table vertical rhythm re-authored to `startY=360`, `278 px` step;
+- final left table 06 guest-list bottom is `2027 < 2100`;
+- footer remains in-bounds and the right-side table 11 ends substantially earlier.
+
+At the provisional working scale, 25 px is about 2.5 mm or roughly 7.1 pt nominal. This is a meaningful print-legibility improvement without reducing required guest capacity. Real-name long-copy and physical/100% print proof remain required before promotion.
 
 ## Reference-led visual result
 
 ### Front
 
-Deep navy is dominant, warm ivory is text/support, muted gold is restrained accent. The native title/date hierarchy now reads clearly without card/UI grammar. The central identity role is deliberately quiet and currently incomplete; it does not yet provide the premium fixed booklet identity required to close the reference gap.
+Deep navy is dominant, warm ivory is text/support, muted gold is restrained accent. The native title/date hierarchy reads clearly without card/UI grammar. The central identity role is deliberately incomplete and remains the largest visual gap to the current Passport reference.
 
 ### Back
 
-Warm-ivory field with an asymmetric deep-navy lower/right closing field. Native thank-you/message copy retains a large text-safe area. It reads as a booklet closing face rather than a web panel, but final copy stress and print-color proof remain pending.
+Warm-ivory field with an asymmetric deep-navy closing field. Native thank-you/message copy retains a large text-safe area. Final copy stress and print-color proof remain pending.
 
 ### Menu + drink
 
-Native copy is the visual hero. Food and drink have intentionally unequal column weights and do not use rounded cards. The current shell is clean and readable; no generated texture has yet been justified. A fixed paper/material field should only be generated if later reference comparison shows the flat ivory field is materially under-resolved.
+Native copy is the visual hero. Food and drink have intentionally unequal column weights and do not use rounded cards. No generated texture is currently justified.
 
 ### Seating
 
-Eleven table groups are distributed around a central index field; table/name finding remains primary. No literal map, card grid or generated decoration was added. All 11 groups fit after correction. The current structure is readable, but guest-name microtype needs long-name and physical print proof before a sellable/print-ready claim.
+The previous large center index field has been removed from the active visual hierarchy. The page is now a direct two-column lookup surface with wider name measures and larger native guest text. The result is less decorative but more credible as an A5 print utility page and more aligned with the reader-first purpose of the Passport interior.
 
 ## Screenshot QA
 
-Fresh screenshots were reviewed during this run at:
+Fresh screenshots reviewed during the latest run:
 
-- thumbnail / ~500 px: front, back, menu, seating;
-- reading / ~1000 px: menu and seating;
-- actual-size / native `1480 × 2100`: front and seating.
+- front `226:2`: reading / actual-size oriented render after hiding internal copy;
+- menu `226:26`: reading scale;
+- seating `226:71`: actual-size/native geometry before and after the print-readability change.
 
-Observed result:
+Latest observed result:
 
-- front: clear first read after the title/date correction; no dashed UI container remains; central fixed identity still visibly incomplete;
-- back: coherent close, native message readable, no obvious web-card grammar;
-- menu: food/drink hierarchy clear and non-equal; no repeated card system;
-- seating: all 11 tables visible and in-bounds; seven native guest placeholders remain per table.
+- front: internal editing note is gone; first-read remains title → date/location → fixed-identity area → couple names;
+- menu: food/drink hierarchy remains clear and non-equal;
+- seating: all 11 tables remain visible and in-bounds; table lookup is faster; guest names have materially more horizontal room and larger type; no center decorative panel competes with the data.
 
-This is a structural/reference-led shell pass, not `SELLABLE_VISUAL_QA_PASS`. The reference study still has stronger fixed front identity than the current placeholder shell.
+This is still not `SELLABLE_VISUAL_QA_PASS`. Front fixed identity remains under-resolved versus the reference study.
 
 ## Generated asset / Drive status
 
-Generated assets: `0`
-Drive writes: `0`
-Raster PPI status: `N/A` because no raster asset is placed in these new V4 roots yet.
+Generated assets this run: `0`
+Drive writes this run: `0`
+Raster PPI status: `N/A` because no raster asset is placed in the V4 roots yet.
 
-The existing pre-generation brief's `FINAL MISSING ASSET LIST` remains active. After seeing the first clean-room composition, asset A — the front fixed identity field — is now a confirmed high-value missing role. It should be generated/selected only from the existing role brief and must target >=300 ppi effective at its final placement. Asset B — subtle interior paper treatment — is still conditional and should not be generated unless the flat interior materially loses the reference comparison.
+Drive image search found older Passport assets such as `passport_emblem_globe_plane_laurel_v2.png` (`1DRuep9shagE_007KEIHY7NmKcxA4HzRc`) and prior paper-texture masters. They were **not adopted** because the V4 clean-room rule prohibits reusing old production/generated visual assets as the new V4 identity. The search therefore confirms that the missing front identity role still needs a new V4-specific candidate rather than silently reusing legacy art.
+
+The existing `FINAL MISSING ASSET LIST` remains active. Asset A — front fixed identity field — is confirmed high-value and must target >=300 ppi effective at final placement. Asset B — subtle interior paper treatment — remains conditional and should not be generated unless a later reference comparison proves the flat field materially under-resolved.
 
 ## Print-first status
 
@@ -123,9 +128,9 @@ The historically documented 3 mm bleed and 5 mm safe inset remain provisional la
 
 ## Next exact task
 
-1. Preserve these four V4 roots and old production unchanged.
-2. Run realistic long-copy/long-name stress on menu and seating without shrinking text below a defensible print threshold.
-3. Produce/select materially different candidates for the already-specified front fixed identity role when an approved generation path is available; do not generate fake text, official crests, generic airplanes, or passport credentials.
+1. Preserve all four V4 roots and old production unchanged.
+2. Run long-name stress against the new 560 px / 25 px seating measure; do not solve overflow by shrinking below the current print floor.
+3. Produce/select materially different V4-specific candidates for the front fixed identity role when a generation path is available; do not reuse the old emblem, generate fake text, official crests, generic airplanes, or passport credentials.
 4. Save only serious/adopted raster masters to the exact Passport Drive authority and read back file IDs/metadata.
 5. Place the adopted asset below native title/date, then rerun thumbnail / reading / actual-size / effective-PPI QA.
-6. Only after the V4 is independently mature, compare it with retained production and decide whether it earns `SELLABLE_VISUAL_QA_PASS`.
+6. Only after V4 is independently mature, compare it with retained production and decide whether it earns `SELLABLE_VISUAL_QA_PASS`.
