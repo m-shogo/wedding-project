@@ -5,14 +5,20 @@ on:
     paths:
       - 'movie-dashboard/src/data/openingProductionStatusHandoff.ts'
       - 'movie-dashboard/src/data/profileProductionStatusHandoff.ts'
+      - 'movie-dashboard/src/data/remotionStudioActualToolingEvidence.ts'
+      - 'movie-dashboard/src/lib/palmierWeddingProductionGate.ts'
       - 'movie-dashboard/scripts/verify-production-handoff-next-gate-contracts.mjs'
+      - 'movie-dashboard/scripts/verify-remotion-studio-tooling-handoff-contracts.mjs'
       - '.github/workflows/movie-production-handoff-next-gate-ci.yml'
   push:
     branches: [main]
     paths:
       - 'movie-dashboard/src/data/openingProductionStatusHandoff.ts'
       - 'movie-dashboard/src/data/profileProductionStatusHandoff.ts'
+      - 'movie-dashboard/src/data/remotionStudioActualToolingEvidence.ts'
+      - 'movie-dashboard/src/lib/palmierWeddingProductionGate.ts'
       - 'movie-dashboard/scripts/verify-production-handoff-next-gate-contracts.mjs'
+      - 'movie-dashboard/scripts/verify-remotion-studio-tooling-handoff-contracts.mjs'
       - '.github/workflows/movie-production-handoff-next-gate-ci.yml'
 
 jobs:
@@ -33,4 +39,5 @@ jobs:
           cache-dependency-path: movie-dashboard/pnpm-lock.yaml
       - run: pnpm install --frozen-lockfile
       - run: node scripts/verify-production-handoff-next-gate-contracts.mjs
+      - run: node scripts/verify-remotion-studio-tooling-handoff-contracts.mjs
       - run: pnpm build

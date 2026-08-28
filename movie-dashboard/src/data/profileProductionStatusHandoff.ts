@@ -3,6 +3,7 @@ import {profileProductionGate} from "./profileProductionGate.generated";
 import {profileProductionStatus} from "./profileProductionStatus.generated";
 import {profileRealMediaReviewGate} from "./profileRealMediaReviewGate.generated";
 import type {MovieProductionBlockerRecoveryAction} from "./movieProductionBlockerRecovery";
+import {buildRemotionStudioActualToolingEvidence} from "./remotionStudioActualToolingEvidence";
 import {buildWeddingMovieProductionCriticalPath} from "./weddingMovieProductionCriticalPath";
 
 export const PROFILE_PRODUCTION_STATUS_HANDOFF_SCHEMA = "wedding-profile-production-status-handoff/v1" as const;
@@ -96,6 +97,7 @@ export function buildProfileProductionStatusHandoff() {
         sourceRevalidation: profileProductionStatus.sourceRevalidation,
         palmierHandoff: profileProductionStatus.handoff.palmier,
         davinciHandoff: profileProductionStatus.handoff.davinci,
+        remotionStudioToolingEvidence: buildRemotionStudioActualToolingEvidence(),
         nextGate: buildNextGate(profileCriticalPath),
         nextActions: [...profileProductionStatus.nextActions],
       },
@@ -125,6 +127,8 @@ export function buildProfileProductionStatusHandoff() {
       "SOURCE_CHANGED => RE_RENDER_REQUIRED",
       "RE_RENDER_REQUIRED => RE_REVIEW_REQUIRED",
       "OLD_HUMAN_REVIEW != CURRENT_RENDER_IMPLEMENTATION",
+      "REMOTION_STUDIO_TOOLING_EVIDENCE_EXPORTED != STUDIO_ACTUAL_VERIFIED",
+      "REMOTION_STUDIO_TOOLING_EVIDENCE != WEDDING_PRODUCTION_GATE",
       "CRITICAL_PATH_EXPORTED != RECOVERY_EXECUTED",
     ],
   };

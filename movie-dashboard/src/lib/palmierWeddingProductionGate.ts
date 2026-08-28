@@ -3,8 +3,10 @@ import {buildProfileProductionStatusHandoff} from "../data/profileProductionStat
 
 export type PalmierWeddingProductionMovieId = "opening" | "profile";
 
-type ProductionNextGate = ReturnType<typeof buildOpeningProductionStatusHandoff>["opening"]["production"]["nextGate"];
+type OpeningProduction = ReturnType<typeof buildOpeningProductionStatusHandoff>["opening"]["production"];
+type ProductionNextGate = OpeningProduction["nextGate"];
 type ProductionRecoveryAction = ProductionNextGate["blockerActions"][number];
+type RemotionStudioToolingEvidence = OpeningProduction["remotionStudioToolingEvidence"];
 
 export type PalmierDavinciRecoverySnapshot = {
   authority: "SHA_BOUND_FINAL_RENDER" | "CRITICAL_PATH_PRE_BUNDLE";
@@ -38,6 +40,7 @@ export type PalmierWeddingProductionProject = {
   overallState: string;
   productionReady: boolean;
   nextGate: ProductionNextGate;
+  remotionStudioToolingEvidence: RemotionStudioToolingEvidence;
   bridge: PalmierDavinciProductionBridge;
 };
 
@@ -157,6 +160,7 @@ function openingProject(): PalmierWeddingProductionProject {
     overallState: production.overallState,
     productionReady: production.nextGate.state === "PRODUCTION_READY",
     nextGate: production.nextGate,
+    remotionStudioToolingEvidence: production.remotionStudioToolingEvidence,
     bridge: buildBridge(production.palmierHandoff, production.davinciHandoff, deliveryReadiness, production.nextGate),
   };
 }
@@ -174,6 +178,7 @@ function profileProject(): PalmierWeddingProductionProject {
     overallState: production.overallState,
     productionReady: production.nextGate.state === "PRODUCTION_READY",
     nextGate: production.nextGate,
+    remotionStudioToolingEvidence: production.remotionStudioToolingEvidence,
     bridge: buildBridge(production.palmierHandoff, production.davinciHandoff, deliveryReadiness, production.nextGate),
   };
 }
@@ -200,6 +205,8 @@ export function buildPalmierWeddingProductionGate(selectedMovieId: string): Palm
       "DAVINCI_ACTUAL_COMMAND_EXPORTED != MAC_DAVINCI_ACTUAL_VERIFIED",
       "SHA_BOUND_RECOVERY_EXPORTED != RECOVERY_EXECUTED",
       "MAC_DAVINCI_ACTUAL_VERIFIED != FINAL_DELIVERY_APPROVED",
+      "REMOTION_STUDIO_TOOLING_EVIDENCE_EXPORTED != STUDIO_ACTUAL_VERIFIED",
+      "REMOTION_STUDIO_TOOLING_EVIDENCE != WEDDING_PRODUCTION_GATE",
       "HUMAN_QA_NOT_RUN != HUMAN_QA_PASS",
       "MAC_DAVINCI_ACTUAL_NOT_RUN != MAC_DAVINCI_ACTUAL_VERIFIED",
     ],
@@ -224,6 +231,7 @@ export function buildPalmierWeddingProductionMarkdown(gate: PalmierWeddingProduc
   ];
 
   for (const project of gate.projects) {
+    const studio = project.remotionStudioToolingEvidence;
     lines.push(
       "",
       `## ${project.title}`,
@@ -234,6 +242,15 @@ export function buildPalmierWeddingProductionMarkdown(gate: PalmierWeddingProduc
       `blocker-codes: ${project.nextGate.blockerCodes.length > 0 ? project.nextGate.blockerCodes.join(", ") : "none"}`,
       "recovery-actions:",
       ...(project.nextGate.blockerActions.length > 0 ? project.nextGate.blockerActions.map(markdownRecoveryAction) : ["- none"]),
+      `remotion-studio-tooling-state: ${studio.currentRepoState}`,
+      `remotion-studio-summary: ${studio.summaryPath}`,
+      `remotion-studio-summary-schema: ${studio.summarySchemaVersion}`,
+      `remotion-studio-summary-authority: ${studio.summaryAuthority}`,
+      `remotion-studio-status: ${studio.statusCommand}`,
+      `remotion-studio-strict: ${studio.strictCommand}`,
+      `remotion-studio-human-reviewed: ${studio.humanReviewed ? "yes" : "no"}`,
+      `remotion-studio-production-dependency-promoted: ${studio.productionDependencyPromoted ? "yes" : "no"}`,
+      "remotion-studio-note: tooling evidence is non-blocking unless a project explicitly adopts an Element dependency; exported summary is not Studio Actual verification",
       `palmier-davinci-bridge: ${project.bridge.state}`,
       `palmier-current: ${project.bridge.palmierCurrent ? "yes" : "no"} (${project.bridge.palmierContractVersion})`,
       `davinci-handoff-current: ${project.bridge.davinciHandoffCurrent ? "yes" : "no"} (${project.bridge.davinciContractVersion})`,

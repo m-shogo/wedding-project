@@ -1,6 +1,7 @@
 import {openingProductionGate} from "./openingProductionGate.generated";
 import {openingProductionStatus} from "./openingProductionStatus.generated";
 import type {MovieProductionBlockerRecoveryAction} from "./movieProductionBlockerRecovery";
+import {buildRemotionStudioActualToolingEvidence} from "./remotionStudioActualToolingEvidence";
 import {buildWeddingMovieProductionCriticalPath} from "./weddingMovieProductionCriticalPath";
 
 export const OPENING_PRODUCTION_STATUS_HANDOFF_SCHEMA = "wedding-opening-production-status-handoff/v1" as const;
@@ -57,6 +58,7 @@ export function buildOpeningProductionStatusHandoff() {
         sourceRevalidation: openingProductionStatus.sourceRevalidation,
         palmierHandoff: openingProductionStatus.handoff.palmier,
         davinciHandoff: openingProductionStatus.handoff.davinci,
+        remotionStudioToolingEvidence: buildRemotionStudioActualToolingEvidence(),
         nextGate: buildNextGate(openingCriticalPath),
         nextActions: [...openingProductionStatus.nextActions],
       },
@@ -88,6 +90,8 @@ export function buildOpeningProductionStatusHandoff() {
       "ACTION_TARGET_EXPORTED != ACTION_COMPLETED",
       "BLOCKER_ACTION_EXPORTED != RECOVERY_EXECUTED",
       "STABLE_BLOCKER_CODE != RAW_BLOCKER_DETAIL",
+      "REMOTION_STUDIO_TOOLING_EVIDENCE_EXPORTED != STUDIO_ACTUAL_VERIFIED",
+      "REMOTION_STUDIO_TOOLING_EVIDENCE != WEDDING_PRODUCTION_GATE",
       "CRITICAL_PATH_EXPORTED != RECOVERY_EXECUTED",
     ],
   };
