@@ -81,5 +81,37 @@ export const remotionElementCandidates: RemotionElementCandidateRecord[] = [
   },
 ];
 
+/**
+ * 9 Typography ElementsをMac Studio GUIでまとめてActual検証するための機械可読handoff。
+ * CIでbatch artifactを準備・検査できても、Studio confirmation / install / control readbackはActualではない限りNOT_RUNのまま。
+ */
+export const remotionElementStudioActualBatch = {
+  schemaVersion: "remotion-element-studio-actual-batch/v1",
+  authority: "MOTION_ZUKAN_REMOTION_STUDIO_ACTUAL_BATCH_HANDOFF",
+  studioVersionTarget: "4.0.517",
+  artifactRoot: "movie-dashboard/out/remotion-element-actual-batch",
+  prepareCommand: "cd motion-studio && node --no-warnings scripts/prepare-typography-elements-studio-actual-batch.mts",
+  checkCommand: "cd motion-studio && node --no-warnings scripts/check-typography-elements-studio-actual-batch.mts",
+  candidateIds: remotionElementCandidates.map((candidate) => candidate.patternId),
+  actual: {
+    requestTransport: "NOT_RUN" as StudioActualState,
+    confirmationDialog: "NOT_RUN" as StudioActualState,
+    studioInstall: "NOT_RUN" as StudioActualState,
+    controlReadback: "NOT_RUN" as StudioActualState,
+    timelineInsertion: "NOT_RUN" as StudioActualState,
+    postInstallRender: "NOT_RUN" as StudioActualState,
+  },
+  productionDependencyPromoted: false,
+  guardrails: [
+    "BATCH_PREPARED != BATCH_EXECUTED",
+    "AWAITING_CONFIRMATION != INSTALL_CONFIRMED",
+    "ELEMENT_FILE_WRITTEN != TIMELINE_INSERTION_VERIFIED",
+    "CONTROL_VISIBLE != CONTROL_MUTATION_PERSISTED",
+    "REQUEST_TRANSPORT_PASS != STUDIO_ACTUAL_PASS",
+    "STUDIO_ACTUAL_BATCH_HANDOFF_EXPORTED != STUDIO_ACTUAL_VERIFIED",
+    "STUDIO_ACTUAL_VERIFIED != PRODUCTION_DEPENDENCY_PROMOTED",
+  ],
+} as const;
+
 export const getRemotionElementCandidate = (patternId: string) =>
   remotionElementCandidates.find((candidate) => candidate.patternId === patternId) ?? null;
