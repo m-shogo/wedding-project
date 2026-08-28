@@ -1,5 +1,6 @@
 import {openingProductionGate} from "./openingProductionGate.generated";
 import {openingProductionStatus} from "./openingProductionStatus.generated";
+import type {MovieProductionBlockerRecoveryAction} from "./movieProductionBlockerRecovery";
 import {buildWeddingMovieProductionCriticalPath} from "./weddingMovieProductionCriticalPath";
 
 export const OPENING_PRODUCTION_STATUS_HANDOFF_SCHEMA = "wedding-opening-production-status-handoff/v1" as const;
@@ -12,6 +13,7 @@ const buildNextGate = (project: ReturnType<typeof buildWeddingMovieProductionCri
         stage: current.name,
         artifactPath: current.path ?? null,
         blockerCodes: [...current.blockerCodes],
+        blockerActions: current.blockerActions.map((action) => ({...action})),
         recovery: [...current.recovery],
         actionTargets: current.actionTargets.map((target) => ({...target})),
       }
@@ -20,6 +22,7 @@ const buildNextGate = (project: ReturnType<typeof buildWeddingMovieProductionCri
         stage: null,
         artifactPath: null,
         blockerCodes: [] as string[],
+        blockerActions: [] as MovieProductionBlockerRecoveryAction[],
         recovery: [] as string[],
         actionTargets: [] as Array<{label: string; route: string; purpose: string}>,
       };
@@ -83,6 +86,7 @@ export function buildOpeningProductionStatusHandoff() {
       "NEXT_ACTION_EXPORTED != ACTION_COMPLETED",
       "NEXT_GATE_EXPORTED != NEXT_GATE_COMPLETED",
       "ACTION_TARGET_EXPORTED != ACTION_COMPLETED",
+      "BLOCKER_ACTION_EXPORTED != RECOVERY_EXECUTED",
       "STABLE_BLOCKER_CODE != RAW_BLOCKER_DETAIL",
       "CRITICAL_PATH_EXPORTED != RECOVERY_EXECUTED",
     ],
