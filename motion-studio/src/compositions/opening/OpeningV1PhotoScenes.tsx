@@ -7,6 +7,7 @@ import {
 } from 'remotion';
 import type {ReactNode} from 'react';
 import {colors, fonts} from '../../data/theme';
+import type {OpeningV1ResolvedPhoto} from '../../data/openingV1Media';
 import {
   focusToObjectPosition,
   openingV1Presentation,
@@ -15,6 +16,7 @@ import {
   type OpeningPhotoFit,
   type OpeningPhotoMotion,
 } from '../../data/openingV1Presentation';
+import {resolveOpeningV1PhotoPresentation} from '../../data/openingV1PhotoPresentation';
 
 const sansFamily = fonts.sans;
 
@@ -58,16 +60,16 @@ const PhotoSurface = ({
   durationFrames,
   motion,
   fit,
-  objectPosition,
+  focus,
   placeholderDark = false,
 }: {
-  photo: string | null;
+  photo: OpeningV1ResolvedPhoto;
   label: string;
   frame: number;
   durationFrames: number;
   motion: OpeningPhotoMotion;
-  fit: OpeningPhotoFit;
-  objectPosition: string;
+  fit?: OpeningPhotoFit;
+  focus?: {x: number; y: number};
   placeholderDark?: boolean;
 }) => {
   const safeDuration = Math.max(1, durationFrames - 1);
@@ -91,18 +93,25 @@ const PhotoSurface = ({
           })
         : 0;
 
-  if (!photo) {
+  if (!photo.path) {
     return <Placeholder label={label} dark={placeholderDark} />;
   }
 
+  const presentation = resolveOpeningV1PhotoPresentation({
+    sceneFocus: focus,
+    sceneFit: fit,
+    assetFocus: photo.focus,
+    assetFit: photo.fit,
+  });
+
   return (
     <Img
-      src={staticFile(`photos/${photo}`)}
+      src={staticFile(`photos/${photo.path}`)}
       style={{
         width: '100%',
         height: '100%',
-        objectFit: fit,
-        objectPosition,
+        objectFit: presentation.fit,
+        objectPosition: presentation.focus ? focusToObjectPosition(presentation.focus) : undefined,
         transform: `translateX(${x}px) scale(${scale})`,
       }}
     />
@@ -114,7 +123,7 @@ export const PhotoColdOpen = ({
   photo,
 }: {
   durationFrames: number;
-  photo: string | null;
+  photo: OpeningV1ResolvedPhoto;
 }) => {
   const frame = useCurrentFrame();
   const plan = openingV1Presentation.coldOpen;
@@ -132,7 +141,7 @@ export const PhotoColdOpen = ({
         durationFrames={durationFrames}
         motion={plan.motion}
         fit={plan.fit}
-        objectPosition={focusToObjectPosition(plan.focus)}
+        focus={plan.focus}
         placeholderDark
       />
       <div
@@ -200,7 +209,7 @@ const MemoryBeat = ({
   durationFrames,
   showPlace,
 }: {
-  photo: string | null;
+  photo: OpeningV1ResolvedPhoto;
   label: string;
   place: string;
   layout: OpeningMemoryLayout;
@@ -210,8 +219,6 @@ const MemoryBeat = ({
   durationFrames: number;
   showPlace: boolean;
 }) => {
-  const objectPosition = focusToObjectPosition(focus);
-
   if (layout === 'full') {
     return (
       <SceneBase dark>
@@ -222,7 +229,7 @@ const MemoryBeat = ({
           durationFrames={durationFrames}
           motion={motion}
           fit="cover"
-          objectPosition={objectPosition}
+          focus={focus}
           placeholderDark
         />
         {showPlace ? <PlaceLabel place={place} light /> : null}
@@ -241,7 +248,7 @@ const MemoryBeat = ({
             durationFrames={durationFrames}
             motion={motion}
             fit="contain"
-            objectPosition={objectPosition}
+            focus={focus}
           />
         </div>
         {showPlace ? <PlaceLabel place={place} light={false} /> : null}
@@ -269,7 +276,7 @@ const MemoryBeat = ({
           durationFrames={durationFrames}
           motion={motion}
           fit="cover"
-          objectPosition={objectPosition}
+          focus={focus}
         />
       </div>
       {showPlace ? (
@@ -301,7 +308,7 @@ export const MemoryChapter = ({
   durationFrames: number;
   place: string;
   pattern: OpeningMemoryPattern;
-  photos: readonly [string | null, string | null, string | null];
+  photos: readonly [OpeningV1ResolvedPhoto, OpeningV1ResolvedPhoto, OpeningV1ResolvedPhoto];
 }) => {
   const frame = useCurrentFrame();
   const firstCut = Math.round(durationFrames * 0.29);
@@ -333,7 +340,7 @@ export const HeroPhoto = ({
   role,
 }: {
   durationFrames: number;
-  photo: string | null;
+  photo: OpeningV1ResolvedPhoto;
   label: string;
   role: 'a' | 'b';
 }) => {
@@ -350,7 +357,7 @@ export const HeroPhoto = ({
           durationFrames={durationFrames}
           motion={plan.motion}
           fit={plan.fit}
-          objectPosition={focusToObjectPosition(plan.focus)}
+          focus={plan.focus}
           placeholderDark
         />
       </div>
