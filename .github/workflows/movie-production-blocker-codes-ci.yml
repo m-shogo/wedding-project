@@ -3,9 +3,15 @@ name: Movie Production Blocker Codes CI
 on:
   pull_request:
     paths:
-      - "motion-studio/scripts/opening-v1-production-status.mts"
-      - "motion-studio/scripts/profile-v1-production-status.mts"
+      - "motion-studio/scripts/opening-v1-*.mts"
+      - "motion-studio/scripts/profile-v1-*.mts"
       - "motion-studio/scripts/check-production-status-blocker-codes.mts"
+      - "motion-studio/src/opening/**"
+      - "motion-studio/src/profile/**"
+      - "motion-studio/public/opening/**"
+      - "motion-studio/public/profile/**"
+      - "motion-studio/package.json"
+      - "movie-dashboard/package.json"
       - "movie-dashboard/scripts/sync-production-stage-blocker-codes.mjs"
       - "movie-dashboard/src/data/movieProductionStageBlockerCodes.generated.ts"
       - "movie-dashboard/src/data/weddingMovieProductionCriticalPath.ts"
@@ -13,9 +19,15 @@ on:
   push:
     branches: [main]
     paths:
-      - "motion-studio/scripts/opening-v1-production-status.mts"
-      - "motion-studio/scripts/profile-v1-production-status.mts"
+      - "motion-studio/scripts/opening-v1-*.mts"
+      - "motion-studio/scripts/profile-v1-*.mts"
       - "motion-studio/scripts/check-production-status-blocker-codes.mts"
+      - "motion-studio/src/opening/**"
+      - "motion-studio/src/profile/**"
+      - "motion-studio/public/opening/**"
+      - "motion-studio/public/profile/**"
+      - "motion-studio/package.json"
+      - "movie-dashboard/package.json"
       - "movie-dashboard/scripts/sync-production-stage-blocker-codes.mjs"
       - "movie-dashboard/src/data/movieProductionStageBlockerCodes.generated.ts"
       - "movie-dashboard/src/data/weddingMovieProductionCriticalPath.ts"
