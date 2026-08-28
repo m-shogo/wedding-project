@@ -2,6 +2,7 @@ import {readFileSync} from 'node:fs';
 import {dirname, join} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {buildWeddingDavinciProductionRecovery} from '../src/data/weddingDavinciProductionRecovery.ts';
+import {assertProductionRecoveryActionTargets} from '../src/data/productionRecoveryActionContract.ts';
 import {weddingProductionRecoverySchema} from '../src/data/resolveHandoff.schema.ts';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -10,9 +11,38 @@ const orchestrator = readFileSync(join(root, 'scripts/export-wedding-production-
 const openingHandoff = readFileSync(join(root, 'scripts/opening-v1-davinci-handoff-contract.mts'), 'utf8');
 const profileHandoff = readFileSync(join(root, 'scripts/profile-v1-davinci-handoff-contract.mts'), 'utf8');
 
+function expectTargetContractFailure(label: string, actions: Parameters<typeof assertProductionRecoveryActionTargets>[0]) {
+  let failed = false;
+  try {
+    assertProductionRecoveryActionTargets(actions, label);
+  } catch {
+    failed = true;
+  }
+  if (!failed) throw new Error(`${label}: invalid recovery action target contract was accepted`);
+}
+
+assertProductionRecoveryActionTargets([
+  {id: 'valid-route', kind: 'ROUTE', label: 'route', purpose: 'route', route: '/movie-coach/motion-library'},
+  {id: 'valid-command', kind: 'COMMAND', label: 'command', purpose: 'command', command: 'pnpm status'},
+  {id: 'valid-human', kind: 'HUMAN', label: 'human', purpose: 'human'},
+], 'valid synthetic recovery actions');
+expectTargetContractFailure('route-without-target', [
+  {id: 'invalid-route', kind: 'ROUTE', label: 'route', purpose: 'route'},
+]);
+expectTargetContractFailure('command-without-target', [
+  {id: 'invalid-command', kind: 'COMMAND', label: 'command', purpose: 'command'},
+]);
+expectTargetContractFailure('human-with-executable-target', [
+  {id: 'invalid-human', kind: 'HUMAN', label: 'human', purpose: 'human', command: 'pnpm unsafe'},
+]);
+expectTargetContractFailure('route-with-command-target', [
+  {id: 'ambiguous-route', kind: 'ROUTE', label: 'route', purpose: 'route', route: '/movie-coach/motion-library', command: 'pnpm ambiguous'},
+]);
+
 for (const movieId of ['opening', 'profile'] as const) {
   const recovery = buildWeddingDavinciProductionRecovery(movieId);
   const parsed = weddingProductionRecoverySchema.parse(recovery);
+  assertProductionRecoveryActionTargets(parsed.blockerActions, `${movieId} parsed recovery`);
   if (parsed.movieId !== movieId) throw new Error(`${movieId}: movie id drift`);
   if (parsed.productionReady) throw new Error(`${movieId}: recovery export must not claim production ready`);
   if (parsed.actual.state !== 'NOT_RUN') throw new Error(`${movieId}: Mac DaVinci Actual must start NOT_RUN`);
@@ -20,6 +50,9 @@ for (const movieId of ['opening', 'profile'] as const) {
   if (parsed.bridge.finalDeliveryApproved) throw new Error(`${movieId}: export must not approve final delivery`);
   if (parsed.blockerCodes.join(',') !== 'MAC_DAVINCI_ACTUAL_NOT_VERIFIED') {
     throw new Error(`${movieId}: post-bundle blocker must be Mac Actual`);
+  }
+  if (!parsed.guardrails.includes('RECOVERY_ACTION_KIND_REQUIRES_MATCHING_TARGET')) {
+    throw new Error(`${movieId}: recovery action target guardrail missing`);
   }
   for (const command of ['init', 'status', 'strict'] as const) {
     if (!parsed.actual.commands[command].includes(`${movieId}:davinci-finishing`)) {
@@ -76,4 +109,4 @@ for (const [movieId, handoff] of [['opening', openingHandoff], ['profile', profi
   }
 }
 
-console.log('Wedding DaVinci production recovery export + handoff surface contracts: PASS');
+console.log('Wedding DaVinci production recovery export + target-safe handoff contracts: PASS');
