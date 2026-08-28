@@ -6,11 +6,14 @@ on:
       - "motion-studio/scripts/opening-v1-davinci-actual-binding-audit.mts"
       - "motion-studio/scripts/profile-v1-davinci-actual-binding-audit.mts"
       - "motion-studio/scripts/wedding-davinci-delivery-readiness.mts"
+      - "motion-studio/scripts/wedding-davinci-delivery-readiness-snapshot.mts"
+      - "motion-studio/scripts/wedding-davinci-final-delivery-preflight.mts"
       - "movie-dashboard/src/data/openingDavinciActualBindingAudit.generated.ts"
       - "movie-dashboard/src/data/profileDavinciActualBindingAudit.generated.ts"
       - "movie-dashboard/src/data/openingProductionStatusHandoff.ts"
       - "movie-dashboard/src/data/profileProductionStatusHandoff.ts"
       - "movie-dashboard/src/data/weddingDavinciDeliveryReadiness.ts"
+      - "movie-dashboard/src/data/weddingDavinciFinalDeliveryPreflight.ts"
       - "movie-dashboard/src/components/WeddingDavinciDeliveryReadinessCard.tsx"
       - "movie-dashboard/src/pages/VisualMotionLibrary.tsx"
       - "movie-dashboard/scripts/verify-wedding-davinci-delivery-readiness.mjs"
@@ -21,11 +24,14 @@ on:
       - "motion-studio/scripts/opening-v1-davinci-actual-binding-audit.mts"
       - "motion-studio/scripts/profile-v1-davinci-actual-binding-audit.mts"
       - "motion-studio/scripts/wedding-davinci-delivery-readiness.mts"
+      - "motion-studio/scripts/wedding-davinci-delivery-readiness-snapshot.mts"
+      - "motion-studio/scripts/wedding-davinci-final-delivery-preflight.mts"
       - "movie-dashboard/src/data/openingDavinciActualBindingAudit.generated.ts"
       - "movie-dashboard/src/data/profileDavinciActualBindingAudit.generated.ts"
       - "movie-dashboard/src/data/openingProductionStatusHandoff.ts"
       - "movie-dashboard/src/data/profileProductionStatusHandoff.ts"
       - "movie-dashboard/src/data/weddingDavinciDeliveryReadiness.ts"
+      - "movie-dashboard/src/data/weddingDavinciFinalDeliveryPreflight.ts"
       - "movie-dashboard/src/components/WeddingDavinciDeliveryReadinessCard.tsx"
       - "movie-dashboard/src/pages/VisualMotionLibrary.tsx"
       - "movie-dashboard/scripts/verify-wedding-davinci-delivery-readiness.mjs"
@@ -49,7 +55,7 @@ jobs:
           node-version: 22
           cache: pnpm
           cache-dependency-path: movie-dashboard/pnpm-lock.yaml
-      - name: Verify cross-project readiness command and Motion Zukan surface
+      - name: Verify cross-project readiness command and Motion Zukan final delivery surface
         working-directory: movie-dashboard
         run: node scripts/verify-wedding-davinci-delivery-readiness.mjs
       - name: Install Movie Dashboard dependencies
