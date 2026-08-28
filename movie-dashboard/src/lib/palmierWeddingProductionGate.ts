@@ -36,11 +36,18 @@ export type PalmierDavinciProductionBridge = {
   recovery: PalmierDavinciRecoverySnapshot;
 };
 
+export type PalmierEffectiveProductionState =
+  | "WEDDING_PRODUCTION_BLOCKED"
+  | "REMOTION_STUDIO_TOOLING_BLOCKED"
+  | "PRODUCTION_READY";
+
 export type PalmierWeddingProductionProject = {
   movieId: PalmierWeddingProductionMovieId;
   title: string;
   overallState: string;
   productionReady: boolean;
+  effectiveProductionState: PalmierEffectiveProductionState;
+  blockingAuthorities: string[];
   nextGate: ProductionNextGate;
   remotionStudioToolingEvidence: RemotionStudioToolingEvidence;
   remotionStudioToolingDependency: RemotionStudioToolingProductionDependency;
@@ -150,10 +157,29 @@ function buildBridge(
   };
 }
 
+function deriveEffectiveProductionState(
+  nextGate: ProductionNextGate,
+  toolingDependency: RemotionStudioToolingProductionDependency,
+) {
+  const weddingBlocked = nextGate.state !== "PRODUCTION_READY";
+  const toolingBlocked = toolingDependency.blocking;
+  const effectiveProductionState: PalmierEffectiveProductionState = weddingBlocked
+    ? "WEDDING_PRODUCTION_BLOCKED"
+    : toolingBlocked
+      ? "REMOTION_STUDIO_TOOLING_BLOCKED"
+      : "PRODUCTION_READY";
+  const blockingAuthorities = [
+    ...(weddingBlocked ? ["MOTION_STUDIO_WEDDING_PRODUCTION_GATE"] : []),
+    ...(toolingBlocked ? [toolingDependency.authority] : []),
+  ];
+  return {effectiveProductionState, blockingAuthorities};
+}
+
 function openingProject(): PalmierWeddingProductionProject {
   const handoff = buildOpeningProductionStatusHandoff();
   const production = handoff.opening.production;
   const toolingDependency = buildRemotionStudioToolingProductionDependency("opening");
+  const effective = deriveEffectiveProductionState(production.nextGate, toolingDependency);
   const deliveryReadiness: NormalizedDeliveryReadiness = {
     macDaVinciActualVerified: production.readiness.macDaVinciActualVerified,
     finalDeliveryApproved: production.readiness.finalDeliveryApproved,
@@ -162,7 +188,9 @@ function openingProject(): PalmierWeddingProductionProject {
     movieId: "opening",
     title: "Opening Movie",
     overallState: production.overallState,
-    productionReady: production.nextGate.state === "PRODUCTION_READY" && !toolingDependency.blocking,
+    productionReady: effective.effectiveProductionState === "PRODUCTION_READY",
+    effectiveProductionState: effective.effectiveProductionState,
+    blockingAuthorities: effective.blockingAuthorities,
     nextGate: production.nextGate,
     remotionStudioToolingEvidence: production.remotionStudioToolingEvidence,
     remotionStudioToolingDependency: toolingDependency,
@@ -174,6 +202,7 @@ function profileProject(): PalmierWeddingProductionProject {
   const handoff = buildProfileProductionStatusHandoff();
   const production = handoff.profile.production;
   const toolingDependency = buildRemotionStudioToolingProductionDependency("profile");
+  const effective = deriveEffectiveProductionState(production.nextGate, toolingDependency);
   const deliveryReadiness: NormalizedDeliveryReadiness = {
     macDaVinciActualVerified: String(production.readiness.macDaVinciActual) === "ACTUAL_VERIFIED",
     finalDeliveryApproved: production.readiness.finalDeliveryApproved,
@@ -182,7 +211,9 @@ function profileProject(): PalmierWeddingProductionProject {
     movieId: "profile",
     title: "Profile Movie",
     overallState: production.overallState,
-    productionReady: production.nextGate.state === "PRODUCTION_READY" && !toolingDependency.blocking,
+    productionReady: effective.effectiveProductionState === "PRODUCTION_READY",
+    effectiveProductionState: effective.effectiveProductionState,
+    blockingAuthorities: effective.blockingAuthorities,
     nextGate: production.nextGate,
     remotionStudioToolingEvidence: production.remotionStudioToolingEvidence,
     remotionStudioToolingDependency: toolingDependency,
@@ -215,6 +246,7 @@ export function buildPalmierWeddingProductionGate(selectedMovieId: string): Palm
       "REMOTION_STUDIO_TOOLING_EVIDENCE_EXPORTED != STUDIO_ACTUAL_VERIFIED",
       "ELEMENT_CANDIDATE_EXISTS != WEDDING_PROJECT_ADOPTED",
       "ELEMENT_ADOPTED_AND_STUDIO_ACTUAL_NOT_VERIFIED => WEDDING_PRODUCTION_BLOCKED",
+      "CANONICAL_NEXT_GATE_READY != EFFECTIVE_PRODUCTION_READY_WHEN_ADOPTED_DEPENDENCY_BLOCKS",
       "UNADOPTED_ELEMENT_TOOLING_STATE_IS_NON_BLOCKING",
       "HUMAN_QA_NOT_RUN != HUMAN_QA_PASS",
       "MAC_DAVINCI_ACTUAL_NOT_RUN != MAC_DAVINCI_ACTUAL_VERIFIED",
@@ -228,6 +260,13 @@ function markdownRecoveryAction(action: ProductionRecoveryAction) {
     : action.kind === "COMMAND" && action.command
       ? `command=${action.command}`
       : "human-action-required";
+  return `- [${action.kind}] ${action.label} | ${target} | ${action.purpose}`;
+}
+
+function markdownToolingRecoveryAction(action: RemotionStudioToolingProductionDependency["recoveryActions"][number]) {
+  const target = action.kind === "COMMAND" && action.command
+    ? `command=${action.command}`
+    : "human-action-required";
   return `- [${action.kind}] ${action.label} | ${target} | ${action.purpose}`;
 }
 
@@ -247,6 +286,8 @@ export function buildPalmierWeddingProductionMarkdown(gate: PalmierWeddingProduc
       `## ${project.title}`,
       `overall-state: ${project.overallState}`,
       `production-ready: ${project.productionReady ? "yes" : "no"}`,
+      `effective-production-state: ${project.effectiveProductionState}`,
+      `blocking-authorities: ${project.blockingAuthorities.length > 0 ? project.blockingAuthorities.join(", ") : "none"}`,
       `next-stage: ${project.nextGate.stage ?? "PRODUCTION_READY"}`,
       `artifact: ${project.nextGate.artifactPath ?? "—"}`,
       `blocker-codes: ${project.nextGate.blockerCodes.length > 0 ? project.nextGate.blockerCodes.join(", ") : "none"}`,
@@ -261,9 +302,12 @@ export function buildPalmierWeddingProductionMarkdown(gate: PalmierWeddingProduc
       `remotion-studio-human-reviewed: ${studio.humanReviewed ? "yes" : "no"}`,
       `remotion-studio-production-dependency-promoted: ${studio.productionDependencyPromoted ? "yes" : "no"}`,
       `remotion-studio-project-adopted: ${dependency.adopted ? "yes" : "no"}`,
+      `remotion-studio-project-adopted-count: ${dependency.adoptedCandidateCount}`,
       `remotion-studio-project-dependency-state: ${dependency.state}`,
       `remotion-studio-project-dependency-blocking: ${dependency.blocking ? "yes" : "no"}`,
       `remotion-studio-project-adopted-candidates: ${dependency.adoptedCandidateIds.length > 0 ? dependency.adoptedCandidateIds.join(", ") : "none"}`,
+      "remotion-studio-dependency-recovery-actions:",
+      ...(dependency.recoveryActions.length > 0 ? dependency.recoveryActions.map(markdownToolingRecoveryAction) : ["- none"]),
       "remotion-studio-note: tooling evidence is non-blocking unless a project explicitly adopts an Element dependency; an adopted dependency fails closed until current Studio Actual + Human review + promotion are complete",
       `palmier-davinci-bridge: ${project.bridge.state}`,
       `palmier-current: ${project.bridge.palmierCurrent ? "yes" : "no"} (${project.bridge.palmierContractVersion})`,
