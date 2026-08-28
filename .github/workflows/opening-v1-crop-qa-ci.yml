@@ -1,0 +1,70 @@
+name: Opening V1 Crop QA CI
+
+on:
+  pull_request:
+    paths:
+      - "motion-studio/src/data/openingV1PhotoPresentation.ts"
+      - "motion-studio/scripts/check-opening-v1-focus-fit.mts"
+      - "motion-studio/scripts/opening-v1-crop-qa-preflight.mts"
+      - "movie-dashboard/scripts/sync-opening-production-gate.mjs"
+      - "movie-dashboard/src/data/openingProductionGate.generated.ts"
+      - ".github/workflows/opening-v1-crop-qa-ci.yml"
+  push:
+    branches: [main]
+    paths:
+      - "motion-studio/src/data/openingV1PhotoPresentation.ts"
+      - "motion-studio/scripts/check-opening-v1-focus-fit.mts"
+      - "motion-studio/scripts/opening-v1-crop-qa-preflight.mts"
+      - "movie-dashboard/scripts/sync-opening-production-gate.mjs"
+      - "movie-dashboard/src/data/openingProductionGate.generated.ts"
+      - ".github/workflows/opening-v1-crop-qa-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  crop-qa-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Verify focus fit authority and metadata validation
+        working-directory: motion-studio
+        run: node --no-warnings scripts/check-opening-v1-focus-fit.mts
+
+      - name: Verify crop QA preflight stays honest on fresh clone
+        working-directory: motion-studio
+        run: |
+          node --no-warnings scripts/opening-v1-crop-qa-preflight.mts --json --strict > /tmp/opening-crop-qa.json
+          node - <<'NODE'
+          const fs = require('fs');
+          const r = JSON.parse(fs.readFileSync('/tmp/opening-crop-qa.json', 'utf8'));
+          if (r.schemaVersion !== 'opening-v1-crop-qa-preflight/v1') process.exit(1);
+          if (r.precedence !== 'SCENE > ASSET > DEFAULT') process.exit(1);
+          if (r.metadataValid !== true) process.exit(1);
+          if (r.summary.expectedCount !== 11) process.exit(1);
+          if (r.summary.coverCount !== 7) process.exit(1);
+          if (r.summary.humanCropQaState !== 'NOT_RUN') process.exit(1);
+          if (r.summary.macStudioActualState !== 'NOT_RUN') process.exit(1);
+          if (r.summary.macDaVinciActualState !== 'NOT_RUN') process.exit(1);
+          if (r.summary.productionReady !== false) process.exit(1);
+          if (!r.slots.every((s) => s.humanCropQaState === 'NOT_RUN')) process.exit(1);
+          console.log('Opening V1 crop QA fresh-clone evidence boundary: PASS');
+          NODE
+
+      - name: Verify Dashboard projection is current
+        working-directory: movie-dashboard
+        run: node scripts/sync-opening-production-gate.mjs --check

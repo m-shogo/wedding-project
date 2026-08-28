@@ -4,7 +4,9 @@
 export const openingProductionGate = {
   "source": {
     "preflight": "motion-studio/scripts/opening-v1-assembly-preflight.mts",
+    "cropQaPreflight": "motion-studio/scripts/opening-v1-crop-qa-preflight.mts",
     "photoResolver": "motion-studio/src/data/openingV1Media.ts",
+    "photoPresentation": "motion-studio/src/data/openingV1PhotoPresentation.ts",
     "audio": "motion-studio/src/data/assets.ts"
   },
   "expectedPhotoCount": 11,
@@ -19,63 +21,129 @@ export const openingProductionGate = {
     "intakeReceiptExpectedCount": 11,
     "intakeReceiptBlockerCodes": [
       "RECEIPT_MISSING"
-    ]
+    ],
+    "cropQa": {
+      "precedence": "SCENE > ASSET > DEFAULT",
+      "metadataValid": true,
+      "assetHintCount": 0,
+      "coverCount": 7,
+      "coverPresentCount": 0,
+      "humanCropQaState": "NOT_RUN",
+      "macStudioActualState": "NOT_RUN",
+      "macDaVinciActualState": "NOT_RUN",
+      "productionReady": false
+    }
   },
   "photoSlots": [
     {
       "key": "okinawa-01",
       "resolved": false,
-      "path": null
+      "path": null,
+      "cropQaRequired": true,
+      "humanCropQaState": "NOT_RUN",
+      "scenePresentation": {"focus": {"x": 50, "y": 50}, "fit": "cover"},
+      "assetHint": null,
+      "effectivePresentation": {"focus": {"x": 50, "y": 50}, "fit": "cover", "focusSource": "scene", "fitSource": "scene"}
     },
     {
       "key": "okinawa-02",
       "resolved": false,
-      "path": null
+      "path": null,
+      "cropQaRequired": true,
+      "humanCropQaState": "NOT_RUN",
+      "scenePresentation": {"focus": {"x": 50, "y": 50}, "fit": "cover"},
+      "assetHint": null,
+      "effectivePresentation": {"focus": {"x": 50, "y": 50}, "fit": "cover", "focusSource": "scene", "fitSource": "scene"}
     },
     {
       "key": "okinawa-03",
       "resolved": false,
-      "path": null
+      "path": null,
+      "cropQaRequired": false,
+      "humanCropQaState": "NOT_RUN",
+      "scenePresentation": {"focus": {"x": 50, "y": 50}, "fit": "contain"},
+      "assetHint": null,
+      "effectivePresentation": {"focus": {"x": 50, "y": 50}, "fit": "contain", "focusSource": "scene", "fitSource": "scene"}
     },
     {
       "key": "seoul-01",
       "resolved": false,
-      "path": null
+      "path": null,
+      "cropQaRequired": true,
+      "humanCropQaState": "NOT_RUN",
+      "scenePresentation": {"focus": {"x": 50, "y": 50}, "fit": "cover"},
+      "assetHint": null,
+      "effectivePresentation": {"focus": {"x": 50, "y": 50}, "fit": "cover", "focusSource": "scene", "fitSource": "scene"}
     },
     {
       "key": "seoul-02",
       "resolved": false,
-      "path": null
+      "path": null,
+      "cropQaRequired": true,
+      "humanCropQaState": "NOT_RUN",
+      "scenePresentation": {"focus": {"x": 50, "y": 50}, "fit": "cover"},
+      "assetHint": null,
+      "effectivePresentation": {"focus": {"x": 50, "y": 50}, "fit": "cover", "focusSource": "scene", "fitSource": "scene"}
     },
     {
       "key": "seoul-03",
       "resolved": false,
-      "path": null
+      "path": null,
+      "cropQaRequired": true,
+      "humanCropQaState": "NOT_RUN",
+      "scenePresentation": {"focus": {"x": 50, "y": 50}, "fit": "cover"},
+      "assetHint": null,
+      "effectivePresentation": {"focus": {"x": 50, "y": 50}, "fit": "cover", "focusSource": "scene", "fitSource": "scene"}
     },
     {
       "key": "hawaii-01",
       "resolved": false,
-      "path": null
+      "path": null,
+      "cropQaRequired": true,
+      "humanCropQaState": "NOT_RUN",
+      "scenePresentation": {"focus": {"x": 50, "y": 50}, "fit": "cover"},
+      "assetHint": null,
+      "effectivePresentation": {"focus": {"x": 50, "y": 50}, "fit": "cover", "focusSource": "scene", "fitSource": "scene"}
     },
     {
       "key": "hawaii-02",
       "resolved": false,
-      "path": null
+      "path": null,
+      "cropQaRequired": false,
+      "humanCropQaState": "NOT_RUN",
+      "scenePresentation": {"focus": {"x": 50, "y": 50}, "fit": "contain"},
+      "assetHint": null,
+      "effectivePresentation": {"focus": {"x": 50, "y": 50}, "fit": "contain", "focusSource": "scene", "fitSource": "scene"}
     },
     {
       "key": "hawaii-03",
       "resolved": false,
-      "path": null
+      "path": null,
+      "cropQaRequired": true,
+      "humanCropQaState": "NOT_RUN",
+      "scenePresentation": {"focus": {"x": 50, "y": 50}, "fit": "cover"},
+      "assetHint": null,
+      "effectivePresentation": {"focus": {"x": 50, "y": 50}, "fit": "cover", "focusSource": "scene", "fitSource": "scene"}
     },
     {
       "key": "hero-01",
       "resolved": false,
-      "path": null
+      "path": null,
+      "cropQaRequired": false,
+      "humanCropQaState": "NOT_RUN",
+      "scenePresentation": {"focus": {"x": 50, "y": 50}, "fit": "contain"},
+      "assetHint": null,
+      "effectivePresentation": {"focus": {"x": 50, "y": 50}, "fit": "contain", "focusSource": "scene", "fitSource": "scene"}
     },
     {
       "key": "hero-02",
       "resolved": false,
-      "path": null
+      "path": null,
+      "cropQaRequired": false,
+      "humanCropQaState": "NOT_RUN",
+      "scenePresentation": {"focus": {"x": 50, "y": 50}, "fit": "contain"},
+      "assetHint": null,
+      "effectivePresentation": {"focus": {"x": 50, "y": 50}, "fit": "contain", "focusSource": "scene", "fitSource": "scene"}
     }
   ],
   "bgm": {
@@ -91,34 +159,10 @@ export const openingProductionGate = {
     "ready": false
   },
   "ambience": [
-    {
-      "assetId": "opening-okinawa-sea",
-      "status": "missing",
-      "playable": false,
-      "fileExists": false,
-      "ready": false
-    },
-    {
-      "assetId": "opening-seoul-street",
-      "status": "missing",
-      "playable": false,
-      "fileExists": false,
-      "ready": false
-    },
-    {
-      "assetId": "opening-hawaii-ocean",
-      "status": "missing",
-      "playable": false,
-      "fileExists": false,
-      "ready": false
-    },
-    {
-      "assetId": "opening-arrival-roomtone",
-      "status": "missing",
-      "playable": false,
-      "fileExists": false,
-      "ready": false
-    }
+    {"assetId": "opening-okinawa-sea", "status": "missing", "playable": false, "fileExists": false, "ready": false},
+    {"assetId": "opening-seoul-street", "status": "missing", "playable": false, "fileExists": false, "ready": false},
+    {"assetId": "opening-hawaii-ocean", "status": "missing", "playable": false, "fileExists": false, "ready": false},
+    {"assetId": "opening-arrival-roomtone", "status": "missing", "playable": false, "fileExists": false, "ready": false}
   ],
   "finalBlocked": true,
   "nextAction": "node --no-warnings scripts/intake-production-media.mts --project opening --source \"/ABS/PATH/TO/opening-media\"",
