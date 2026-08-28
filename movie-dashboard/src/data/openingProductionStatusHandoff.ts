@@ -1,3 +1,4 @@
+import {openingDavinciActualBindingAudit} from "./openingDavinciActualBindingAudit.generated";
 import {openingProductionGate} from "./openingProductionGate.generated";
 import {openingProductionStatus} from "./openingProductionStatus.generated";
 import type {MovieProductionBlockerRecoveryAction} from "./movieProductionBlockerRecovery";
@@ -71,6 +72,7 @@ export function buildOpeningProductionStatusHandoff() {
         sourceRevalidation: openingProductionStatus.sourceRevalidation,
         palmierHandoff: openingProductionStatus.handoff.palmier,
         davinciHandoff: openingProductionStatus.handoff.davinci,
+        davinciActualBindingAudit: openingDavinciActualBindingAudit,
         remotionStudioToolingEvidence: buildRemotionStudioActualToolingEvidence(),
         nextGate: buildNextGate(openingCriticalPath),
         nextActions: [...openingProductionStatus.nextActions],
@@ -96,6 +98,7 @@ export function buildOpeningProductionStatusHandoff() {
       "FINAL_RENDER_OR_SOURCE_CHANGED => FINAL_RENDER_RE_REVIEW_REQUIRED",
       "HUMAN_FINAL_RENDER_REVIEW_PASS != DAVINCI_ACTUAL_VERIFIED",
       "DAVINCI_HANDOFF_CURRENT != MAC_DAVINCI_ACTUAL_VERIFIED",
+      "DAVINCI_RECOVERY_OR_ACTUAL_CHANGED => FINAL_APPROVAL_STALE",
       "DAVINCI_ACTUAL_VERIFIED != FINAL_DELIVERY_APPROVED",
       "CI_MUST_NOT_PROMOTE_MAC_GUI_ACTUAL",
       "MEDIA_REQUIREMENT_EXPORTED != MEDIA_RESOLVED",
