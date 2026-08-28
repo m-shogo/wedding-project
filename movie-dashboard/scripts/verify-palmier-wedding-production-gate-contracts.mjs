@@ -25,6 +25,12 @@ requireText(helper, "SHA_BOUND_RECOVERY_EXPORTED != RECOVERY_EXECUTED", "SHA-bou
 requireText(helper, "MAC_DAVINCI_ACTUAL_VERIFIED != FINAL_DELIVERY_APPROVED", "final approval boundary guardrail");
 requireText(helper, "MAC_DAVINCI_ACTUAL_NOT_RUN != MAC_DAVINCI_ACTUAL_VERIFIED", "Mac Actual fail-close guardrail");
 requireText(helper, "nextGate: production.nextGate", "canonical next gate passthrough");
+requireText(helper, "effectiveNextGate: effective.effectiveNextGate", "effective next gate passthrough");
+requireText(helper, "resolvePalmierEffectiveNextGate", "single effective next gate resolver");
+requireText(helper, 'if (nextGate.state !== "PRODUCTION_READY")', "Wedding blocker priority");
+requireText(helper, "if (toolingDependency.blocking)", "explicit tooling blocker branch");
+requireText(helper, 'stage: "remotionStudioToolingDependency"', "effective tooling dependency stage");
+requireText(helper, 'blockerCodes: [`REMOTION_STUDIO_TOOLING:${toolingDependency.state}`]', "stable tooling blocker code");
 requireText(helper, "macDaVinciActualVerified: production.readiness.macDaVinciActualVerified", "Opening Actual readiness normalization");
 requireText(helper, 'macDaVinciActualVerified: String(production.readiness.macDaVinciActual) === "ACTUAL_VERIFIED"', "Profile Actual readiness normalization");
 requireText(helper, "bridge: buildBridge(production.palmierHandoff, production.davinciHandoff, deliveryReadiness, production.nextGate)", "canonical Palmier-DaVinci bridge derivation");
@@ -48,9 +54,16 @@ requireText(helper, "projects.every((project) => project.productionReady)", "cro
 requireText(helper, "remotionStudioToolingDependency: toolingDependency", "project dependency snapshot propagation");
 requireText(helper, "ELEMENT_ADOPTED_AND_STUDIO_ACTUAL_NOT_VERIFIED => WEDDING_PRODUCTION_BLOCKED", "adopted tooling fail-close guardrail");
 requireText(helper, "CANONICAL_NEXT_GATE_READY != EFFECTIVE_PRODUCTION_READY_WHEN_ADOPTED_DEPENDENCY_BLOCKS", "effective-vs-canonical guardrail");
+requireText(helper, "EFFECTIVE_NEXT_GATE_PREFERS_WEDDING_BLOCKER_BEFORE_ADOPTED_TOOLING_BLOCKER", "effective next gate priority guardrail");
+requireText(helper, "EFFECTIVE_NEXT_GATE_READY_REQUIRES_WEDDING_AND_ADOPTED_TOOLING_READY", "effective next gate ready guardrail");
 requireText(helper, "UNADOPTED_ELEMENT_TOOLING_STATE_IS_NON_BLOCKING", "unadopted tooling non-blocking guardrail");
 requireText(helper, "effective-production-state:", "Markdown effective production state export");
 requireText(helper, "blocking-authorities:", "Markdown blocking authority export");
+requireText(helper, "effective-next-authority:", "Markdown effective authority export");
+requireText(helper, "effective-next-stage:", "Markdown effective stage export");
+requireText(helper, "effective-next-blocker-codes:", "Markdown effective blocker export");
+requireText(helper, "effective-next-recovery-actions:", "Markdown effective recovery section");
+requireText(helper, "effectiveNextGate.blockerActions.map(markdownRecoveryAction)", "effective blocker action export");
 requireText(helper, "remotion-studio-project-dependency-state:", "Markdown dependency state export");
 requireText(helper, "remotion-studio-project-dependency-blocking:", "Markdown dependency blocking export");
 requireText(helper, "remotion-studio-project-adopted-candidates:", "Markdown adopted candidate export");
@@ -64,7 +77,7 @@ requireText(helper, "route=${action.route}", "route target preservation");
 requireText(helper, "command=${action.command}", "command target preservation");
 requireText(helper, "human-action-required", "human action preservation");
 requireText(helper, '"recovery-actions:"', "structured recovery Markdown section");
-requireText(helper, "project.nextGate.blockerActions.map(markdownRecoveryAction)", "canonical blocker action export");
+requireText(helper, "project.nextGate.blockerActions.map(normalizeEffectiveRecoveryAction).map(markdownRecoveryAction)", "canonical blocker action export through normalized action contract");
 requireText(helper, "palmier-davinci-bridge:", "Markdown bridge export");
 requireText(helper, "davinci-recovery-authority:", "Markdown recovery authority export");
 requireText(helper, "davinci-recovery-source-sha256:", "Markdown recovery render SHA export");
@@ -131,5 +144,12 @@ requireText(page, "Wedding canonical nextGateがREADYでも、明示採用した
 requireText(page, "Wedding Production Authority / Palmier→DaVinci bridgeとは別authorityです", "three-authority separation copy");
 requireText(page, "Tooling evidenceを表示・exportしてもStudio Actual verifiedにはなりません", "Studio tooling fail-close copy");
 requireText(page, "Element未採用ならWedding productionをBLOCKしません", "Studio tooling non-blocking copy");
+
+const weddingBranch = helper.indexOf('if (nextGate.state !== "PRODUCTION_READY")');
+const toolingBranch = helper.indexOf("if (toolingDependency.blocking)");
+const readyBranch = helper.indexOf('state: "PRODUCTION_READY"', toolingBranch);
+if (!(weddingBranch >= 0 && toolingBranch > weddingBranch && readyBranch > toolingBranch)) {
+  throw new Error("effective next gate priority must remain Wedding blocker -> adopted Remotion blocker -> ready");
+}
 
 console.log("Palmier Wedding production gate contracts: PASS");

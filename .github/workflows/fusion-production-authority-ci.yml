@@ -9,6 +9,7 @@ on:
       - "movie-dashboard/src/data/openingProductionStatusHandoff.ts"
       - "movie-dashboard/src/data/profileProductionStatusHandoff.ts"
       - "movie-dashboard/scripts/verify-fusion-production-authority-contracts.mjs"
+      - "movie-dashboard/scripts/verify-effective-production-next-gate-contracts.mjs"
       - ".github/workflows/fusion-production-authority-ci.yml"
   push:
     branches: [main]
@@ -19,6 +20,7 @@ on:
       - "movie-dashboard/src/data/openingProductionStatusHandoff.ts"
       - "movie-dashboard/src/data/profileProductionStatusHandoff.ts"
       - "movie-dashboard/scripts/verify-fusion-production-authority-contracts.mjs"
+      - "movie-dashboard/scripts/verify-effective-production-next-gate-contracts.mjs"
       - ".github/workflows/fusion-production-authority-ci.yml"
 
 jobs:
@@ -37,6 +39,9 @@ jobs:
       - name: Install dashboard dependencies
         working-directory: movie-dashboard
         run: pnpm install --frozen-lockfile
+      - name: Verify effective Wedding production next gate
+        working-directory: movie-dashboard
+        run: node scripts/verify-effective-production-next-gate-contracts.mjs
       - name: Verify Fusion Wedding production authority
         working-directory: movie-dashboard
         run: node scripts/verify-fusion-production-authority-contracts.mjs
