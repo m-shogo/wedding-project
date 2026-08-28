@@ -1,0 +1,36 @@
+name: Movie Production Handoff Next Gate CI
+
+on:
+  pull_request:
+    paths:
+      - 'movie-dashboard/src/data/openingProductionStatusHandoff.ts'
+      - 'movie-dashboard/src/data/profileProductionStatusHandoff.ts'
+      - 'movie-dashboard/scripts/verify-production-handoff-next-gate-contracts.mjs'
+      - '.github/workflows/movie-production-handoff-next-gate-ci.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'movie-dashboard/src/data/openingProductionStatusHandoff.ts'
+      - 'movie-dashboard/src/data/profileProductionStatusHandoff.ts'
+      - 'movie-dashboard/scripts/verify-production-handoff-next-gate-contracts.mjs'
+      - '.github/workflows/movie-production-handoff-next-gate-ci.yml'
+
+jobs:
+  contracts:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: movie-dashboard
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: movie-dashboard/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - run: node scripts/verify-production-handoff-next-gate-contracts.mjs
+      - run: pnpm build
