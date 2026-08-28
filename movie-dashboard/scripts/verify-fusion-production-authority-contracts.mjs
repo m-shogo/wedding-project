@@ -29,6 +29,10 @@ requireText('project.nextGate.recovery', 'canonical production recovery renderin
 requireText('Human action required · この画面からPASSへ昇格しません', 'human recovery fail-close warning');
 requireText('project.bridge.state === "MAC_DAVINCI_ACTUAL_NOT_VERIFIED"', 'Mac Actual gate condition');
 requireText('project.bridge.actualEvidencePath', 'Actual evidence path at Mac gate');
+requireText('project.bridge.actualCommands.init', 'Actual evidence init command');
+requireText('project.bridge.actualCommands.status', 'Actual evidence status command');
+requireText('project.bridge.actualCommands.strict', 'Actual evidence strict command');
+requireText('コマンド表示・initだけではActual verifiedになりません', 'Actual command fail-close warning');
 requireText('実際にResolve GUIで確認・exportしていない限り、このgateはPASSにしません', 'Actual fail-close warning');
 requireText('to="/palmier-handoff"', 'canonical production handoff navigation');
 
