@@ -1,5 +1,8 @@
 import {buildWeddingDavinciDeliveryReadiness} from "../data/weddingDavinciDeliveryReadiness";
-import {buildWeddingDavinciFinalDeliveryPreflight} from "../data/weddingDavinciFinalDeliveryPreflight";
+import {
+  buildWeddingDavinciFinalDeliveryPreflight,
+  buildWeddingDavinciOperatorPacketJson,
+} from "../data/weddingDavinciFinalDeliveryPreflight";
 
 const shortSha = (value: string | null) => value ? `${value.slice(0, 10)}…` : "—";
 
@@ -10,6 +13,19 @@ const stateClass = (state: string) => {
 };
 
 const nextGateLabel = (nextGate: {stage?: string | null} | null | undefined) => nextGate?.stage ?? "PRODUCTION_READY";
+
+const downloadOperatorPacket = () => {
+  const json = buildWeddingDavinciOperatorPacketJson();
+  const blob = new Blob([`${json}\n`], {type: "application/json;charset=utf-8"});
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement("a");
+  anchor.href = url;
+  anchor.download = "wedding-davinci-operator-packet.json";
+  document.body.appendChild(anchor);
+  anchor.click();
+  anchor.remove();
+  URL.revokeObjectURL(url);
+};
 
 export function WeddingDavinciDeliveryReadinessCard() {
   const manifest = buildWeddingDavinciDeliveryReadiness();
@@ -91,6 +107,19 @@ export function WeddingDavinciDeliveryReadinessCard() {
             </p>
           </div>
         )}
+
+        <div className="mt-4 flex flex-wrap items-center gap-3 border border-violet-200 dark:border-violet-900/60 bg-violet-50/40 dark:bg-violet-950/10 p-3">
+          <button
+            type="button"
+            onClick={downloadOperatorPacket}
+            className="border border-violet-500 px-3 py-2 text-[11px] font-semibold text-violet-800 dark:text-violet-200 hover:bg-violet-100 dark:hover:bg-violet-950/40"
+          >
+            DaVinci Operator Packet JSONを保存
+          </button>
+          <p className="min-w-[220px] flex-1 text-[10px] leading-4 text-violet-800 dark:text-violet-300">
+            Opening/Profileのnext gate・SHA binding・blocker・実行順を1ファイルで持ち出します。これは作業指示/indexであり、保存してもMac/Studio/DaVinci ActualやHuman approvalはPASSになりません。
+          </p>
+        </div>
 
         <ol className="mt-4 space-y-3">
           {preflight.commands.map((item) => (
