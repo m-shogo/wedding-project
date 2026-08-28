@@ -11,16 +11,21 @@ on:
       - "motion-studio/scripts/profile-v1-real-media-review.mts"
       - "motion-studio/scripts/profile-v1-palmier-handoff-contract.mts"
       - "motion-studio/scripts/profile-v1-davinci-handoff-contract.mts"
+      - "motion-studio/scripts/profile-v1-davinci-actual-binding-audit.mts"
       - "motion-studio/scripts/profile-v1-generated-accent-manifest.mts"
       - "motion-studio/src/data/profileV1GeneratedAccentRegistry.ts"
       - "motion-studio/src/data/profileV1ProductionPlan.ts"
       - "movie-dashboard/scripts/sync-profile-production-status.mjs"
+      - "movie-dashboard/scripts/sync-profile-davinci-actual-binding-audit.mjs"
       - "movie-dashboard/scripts/sync-profile-generated-accents.mjs"
       - "movie-dashboard/scripts/verify-profile-production-status-handoff.mjs"
+      - "movie-dashboard/scripts/verify-profile-davinci-actual-binding-audit.mjs"
       - "movie-dashboard/src/data/profileProductionStatus.generated.ts"
+      - "movie-dashboard/src/data/profileDavinciActualBindingAudit.generated.ts"
       - "movie-dashboard/src/data/profileGeneratedAccents.generated.ts"
       - "movie-dashboard/src/data/profileProductionStatusHandoff.ts"
       - "movie-dashboard/src/components/ProfileProductionStatusHandoffCard.tsx"
+      - "movie-dashboard/src/components/ProfileDavinciActualBindingAuditCard.tsx"
       - "movie-dashboard/src/components/MaskRevealSceneHandoffCard.tsx"
       - ".github/workflows/profile-v1-production-status-dashboard-ci.yml"
   push:
@@ -34,16 +39,21 @@ on:
       - "motion-studio/scripts/profile-v1-real-media-review.mts"
       - "motion-studio/scripts/profile-v1-palmier-handoff-contract.mts"
       - "motion-studio/scripts/profile-v1-davinci-handoff-contract.mts"
+      - "motion-studio/scripts/profile-v1-davinci-actual-binding-audit.mts"
       - "motion-studio/scripts/profile-v1-generated-accent-manifest.mts"
       - "motion-studio/src/data/profileV1GeneratedAccentRegistry.ts"
       - "motion-studio/src/data/profileV1ProductionPlan.ts"
       - "movie-dashboard/scripts/sync-profile-production-status.mjs"
+      - "movie-dashboard/scripts/sync-profile-davinci-actual-binding-audit.mjs"
       - "movie-dashboard/scripts/sync-profile-generated-accents.mjs"
       - "movie-dashboard/scripts/verify-profile-production-status-handoff.mjs"
+      - "movie-dashboard/scripts/verify-profile-davinci-actual-binding-audit.mjs"
       - "movie-dashboard/src/data/profileProductionStatus.generated.ts"
+      - "movie-dashboard/src/data/profileDavinciActualBindingAudit.generated.ts"
       - "movie-dashboard/src/data/profileGeneratedAccents.generated.ts"
       - "movie-dashboard/src/data/profileProductionStatusHandoff.ts"
       - "movie-dashboard/src/components/ProfileProductionStatusHandoffCard.tsx"
+      - "movie-dashboard/src/components/ProfileDavinciActualBindingAuditCard.tsx"
       - "movie-dashboard/src/components/MaskRevealSceneHandoffCard.tsx"
       - ".github/workflows/profile-v1-production-status-dashboard-ci.yml"
 
@@ -71,9 +81,13 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - name: Generated Profile full production status is current
         run: node scripts/sync-profile-production-status.mjs --check
+      - name: Generated Profile DaVinci Actual binding audit is current
+        run: node scripts/sync-profile-davinci-actual-binding-audit.mjs --check
       - name: Generated Profile accent implementation routes are current
         run: node scripts/sync-profile-generated-accents.mjs --check
       - name: Profile production-status export and UI contracts
         run: node scripts/verify-profile-production-status-handoff.mjs
+      - name: Profile DaVinci Actual binding audit contracts
+        run: node scripts/verify-profile-davinci-actual-binding-audit.mjs
       - name: Typecheck and build Movie Dashboard
         run: pnpm build
