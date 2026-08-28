@@ -15,9 +15,21 @@ const requireText = (source, text, label) => {
 requireText(helper, "buildOpeningProductionStatusHandoff", "Opening canonical handoff dependency");
 requireText(helper, "buildProfileProductionStatusHandoff", "Profile canonical handoff dependency");
 requireText(helper, "AI_EDIT_FIX_READY != WEDDING_PRODUCTION_READY", "separate readiness authority guardrail");
+requireText(helper, "PALMIER_CURRENT != DAVINCI_HANDOFF_CURRENT", "Palmier to DaVinci boundary guardrail");
+requireText(helper, "DAVINCI_HANDOFF_CURRENT != MAC_DAVINCI_ACTUAL_VERIFIED", "DaVinci Actual boundary guardrail");
+requireText(helper, "MAC_DAVINCI_ACTUAL_VERIFIED != FINAL_DELIVERY_APPROVED", "final approval boundary guardrail");
 requireText(helper, "MAC_DAVINCI_ACTUAL_NOT_RUN != MAC_DAVINCI_ACTUAL_VERIFIED", "Mac Actual fail-close guardrail");
 requireText(helper, "nextGate: production.nextGate", "canonical next gate passthrough");
+requireText(helper, "bridge: buildBridge(production.palmierHandoff, production.davinciHandoff, production.readiness)", "canonical Palmier-DaVinci bridge derivation");
+requireText(helper, '"PALMIER_NOT_CURRENT"', "Palmier stale bridge state");
+requireText(helper, '"DAVINCI_HANDOFF_NOT_CURRENT"', "DaVinci handoff stale bridge state");
+requireText(helper, '"MAC_DAVINCI_ACTUAL_NOT_VERIFIED"', "Mac Actual bridge state");
+requireText(helper, '"FINAL_DELIVERY_APPROVAL_REQUIRED"', "final approval bridge state");
+requireText(helper, "actualEvidencePath: davinci.actualEvidence.path", "DaVinci Actual evidence path propagation");
+requireText(helper, "actualCommands: {...davinci.actualEvidence.commands}", "DaVinci Actual commands propagation");
 requireText(helper, "projects.every((project) => project.productionReady)", "cross-project readiness aggregation");
+requireText(helper, "palmier-davinci-bridge:", "Markdown bridge export");
+requireText(helper, "mac-davinci-actual-verified:", "Markdown Actual state export");
 
 requireText(page, "buildPalmierWeddingProductionGate", "Palmier production gate integration");
 requireText(page, "productionHandoffReady = editFixReady && weddingProductionGate.productionReady", "combined Palmier + production readiness");
