@@ -21,6 +21,48 @@ export type RemotionStudioToolingDependencyState =
   | "DEPENDENCY_PROMOTION_REQUIRED"
   | "READY";
 
+export type RemotionStudioToolingDependencyRecoveryAction = {
+  kind: "COMMAND" | "HUMAN";
+  label: string;
+  purpose: string;
+  command?: string;
+};
+
+function buildRecoveryActions(
+  state: RemotionStudioToolingDependencyState,
+  tooling: ReturnType<typeof buildRemotionStudioActualToolingEvidence>,
+): RemotionStudioToolingDependencyRecoveryAction[] {
+  if (state === "NOT_ADOPTED" || state === "READY") return [];
+  if (state === "STUDIO_ACTUAL_REQUIRED") {
+    return [
+      {
+        kind: "COMMAND",
+        label: "Studio Actual status",
+        purpose: "SHA-bound Remotion Studio Actual evidenceのcurrent stateを確認する",
+        command: tooling.statusCommand,
+      },
+      {
+        kind: "COMMAND",
+        label: "Studio Actual strict",
+        purpose: "Mac Remotion Studio GUI Actualの全checkとHuman reviewが揃ったことをfail-closeで検証する",
+        command: tooling.strictCommand,
+      },
+    ];
+  }
+  if (state === "HUMAN_REVIEW_REQUIRED") {
+    return [{
+      kind: "HUMAN",
+      label: "Human Studio review",
+      purpose: "current Mac Remotion Studio Actual evidenceを人間が確認し、candidateごとのcheckをreviewする",
+    }];
+  }
+  return [{
+    kind: "HUMAN",
+    label: "Promote production dependency",
+    purpose: "Human review済みのcurrent Studio Actual evidenceを確認し、production dependency promotionを明示的に記録する",
+  }];
+}
+
 export function buildRemotionStudioToolingProductionDependency(movieId: WeddingMovieId) {
   const tooling = buildRemotionStudioActualToolingEvidence();
   const adoptedCandidateIds = [...remotionStudioToolingProductionAdoption[movieId]];
@@ -47,12 +89,14 @@ export function buildRemotionStudioToolingProductionDependency(movieId: WeddingM
           : "READY";
 
   const blocking = adopted && state !== "READY";
+  const recoveryActions = buildRecoveryActions(state, tooling);
 
   return {
     authority: "EXPLICIT_WEDDING_REMOTION_STUDIO_TOOLING_DEPENDENCY" as const,
     movieId,
     adopted,
     adoptedCandidateIds,
+    adoptedCandidateCount: adoptedCandidateIds.length,
     state,
     blocking,
     studioActualVerified,
@@ -62,17 +106,15 @@ export function buildRemotionStudioToolingProductionDependency(movieId: WeddingM
     evidencePath: tooling.evidencePath,
     statusCommand: tooling.statusCommand,
     strictCommand: tooling.strictCommand,
-    recovery: !blocking
-      ? []
-      : state === "DEPENDENCY_PROMOTION_REQUIRED"
-        ? ["Human review済みのcurrent Studio Actual evidenceを確認し、production dependency promotionを明示的に記録する"]
-        : [tooling.statusCommand, tooling.strictCommand],
+    recoveryActions,
+    recovery: recoveryActions.map((action) => action.command ?? action.purpose),
     guardrails: [
       "ELEMENT_CANDIDATE_EXISTS != WEDDING_PROJECT_ADOPTED",
       "ELEMENT_ADOPTED => STUDIO_ACTUAL_MUST_BE_CURRENT",
       "STUDIO_ACTUAL_VERIFIED != HUMAN_REVIEWED",
       "HUMAN_REVIEWED != PRODUCTION_DEPENDENCY_PROMOTED",
       "UNADOPTED_ELEMENT_TOOLING_STATE_IS_NON_BLOCKING",
+      "RECOVERY_ACTION_EXPORTED != RECOVERY_EXECUTED",
       "CI_MUST_NOT_PROMOTE_STUDIO_GUI_ACTUAL",
     ],
   };
