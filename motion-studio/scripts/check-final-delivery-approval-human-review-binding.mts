@@ -36,6 +36,20 @@ if (!opening.includes('finalReview.finalRender.path !== bundle.finalRender.path'
 if (!profile.includes('finalReview.finalRender.path!==bundle.finalRender.path') || !profile.includes('finalReview.finalRender.sha256!==bundle.finalRender.sha256')) errors.push('profile must bind Human final review to bundle final render');
 
 for (const token of [
+  "const recoveryPath = join(studioRoot, 'out/handoff/opening-v1/opening-v1-davinci-production-recovery.json');",
+  "type RecoveryBinding = {path: string; sha256: string; sourceRenderSha256: string; cropReviewEvidenceSha256: string; cropReviewBindingFingerprintSha256: string};",
+  'productionRecovery: RecoveryBinding;',
+  'davinci.productionRecovery?.sha256 !== recoverySha256',
+  'davinci.productionRecovery?.cropReviewBindingFingerprintSha256 !== recovery.sourceBundle.cropReviewBindingFingerprintSha256',
+  'productionRecovery: {path: rel(recoveryPath), sha256: current.recoverySha256',
+  'FINAL_DELIVERY_APPROVAL_RECOVERY_PATH',
+  'STALE_FINAL_DELIVERY_RECOVERY_SIDECAR',
+  'STALE_FINAL_DELIVERY_RECOVERY_RENDER_SHA',
+  'STALE_FINAL_DELIVERY_RECOVERY_CROP_REVIEW_SHA',
+  'STALE_FINAL_DELIVERY_RECOVERY_CROP_REVIEW_FINGERPRINT',
+]) requireToken(opening, token, 'opening recovery-bound final approval');
+
+for (const token of [
   "const recoveryPath=join(root,'out/handoff/profile-v1/profile-v1-davinci-production-recovery.json');",
   "type RecoveryBinding={path:string;sha256:string;sourceRenderSha256:string;realMediaHumanQaEvidenceSha256:string;realMediaHumanQaBindingFingerprintSha256:string};",
   "productionRecovery:RecoveryBinding",
@@ -54,4 +68,4 @@ if (errors.length) {
   for (const error of errors) console.error(`- ${error}`);
   process.exit(1);
 }
-console.log('Final delivery approval Human-review binding contracts OK: Opening/Profile approvals bind current Human final-MP4 review directly; Profile additionally binds the current DaVinci recovery SHA/render/Human-QA fingerprint chain and invalidates approval on drift.');
+console.log('Final delivery approval Human-review binding contracts OK: Opening/Profile approvals bind current Human final-MP4 review and current DaVinci recovery SHA/render/Human-QA chain directly, then invalidate final approval on recovery drift without fabricating Mac Actual or Human approval.');
