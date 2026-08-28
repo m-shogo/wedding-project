@@ -123,6 +123,7 @@ export function buildPalmierWeddingProductionGate(selectedMovieId: string): Palm
       "AI_EDIT_FIX_READY != WEDDING_PRODUCTION_READY",
       "PALMIER_HANDOFF_EXPORTED != PRODUCTION_GATE_COMPLETED",
       "PRODUCTION_NEXT_GATE_EXPORTED != RECOVERY_EXECUTED",
+      "BLOCKER_ACTION_EXPORTED != RECOVERY_EXECUTED",
       "PALMIER_CURRENT != DAVINCI_HANDOFF_CURRENT",
       "DAVINCI_HANDOFF_CURRENT != MAC_DAVINCI_ACTUAL_VERIFIED",
       "DAVINCI_ACTUAL_COMMAND_EXPORTED != MAC_DAVINCI_ACTUAL_VERIFIED",
@@ -131,6 +132,15 @@ export function buildPalmierWeddingProductionGate(selectedMovieId: string): Palm
       "MAC_DAVINCI_ACTUAL_NOT_RUN != MAC_DAVINCI_ACTUAL_VERIFIED",
     ],
   };
+}
+
+function markdownRecoveryAction(action: PalmierWeddingProductionProject["nextGate"]["blockerActions"][number]) {
+  const target = action.kind === "ROUTE" && action.route
+    ? `route=${action.route}`
+    : action.kind === "COMMAND" && action.command
+      ? `command=${action.command}`
+      : "human-action-required";
+  return `- [${action.kind}] ${action.label} | ${target} | ${action.purpose}`;
 }
 
 export function buildPalmierWeddingProductionMarkdown(gate: PalmierWeddingProductionGate) {
@@ -150,6 +160,8 @@ export function buildPalmierWeddingProductionMarkdown(gate: PalmierWeddingProduc
       `next-stage: ${project.nextGate.stage ?? "PRODUCTION_READY"}`,
       `artifact: ${project.nextGate.artifactPath ?? "—"}`,
       `blocker-codes: ${project.nextGate.blockerCodes.length > 0 ? project.nextGate.blockerCodes.join(", ") : "none"}`,
+      "recovery-actions:",
+      ...(project.nextGate.blockerActions.length > 0 ? project.nextGate.blockerActions.map(markdownRecoveryAction) : ["- none"]),
       `palmier-davinci-bridge: ${project.bridge.state}`,
       `palmier-current: ${project.bridge.palmierCurrent ? "yes" : "no"} (${project.bridge.palmierContractVersion})`,
       `davinci-handoff-current: ${project.bridge.davinciHandoffCurrent ? "yes" : "no"} (${project.bridge.davinciContractVersion})`,
