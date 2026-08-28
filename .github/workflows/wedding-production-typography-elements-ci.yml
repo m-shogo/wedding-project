@@ -7,7 +7,11 @@ on:
       - "motion-studio/src/data/weddingProductionTypographyHandoff.ts"
       - "motion-studio/scripts/check-wedding-production-typography-elements.mts"
       - "motion-studio/scripts/check-wedding-production-typography-handoff.mts"
+      - "motion-studio/scripts/check-wedding-typography-production-role-guide.mts"
       - "motion-studio/scripts/export-wedding-production-typography-handoff.mts"
+      - "movie-dashboard/src/data/weddingTypographyProductionRoleGuide.generated.ts"
+      - "movie-dashboard/src/components/TypographyProductionRoleGuide.tsx"
+      - "movie-dashboard/src/components/MaskRevealSceneHandoffCard.tsx"
       - ".github/workflows/wedding-production-typography-elements-ci.yml"
   push:
     branches:
@@ -17,7 +21,11 @@ on:
       - "motion-studio/src/data/weddingProductionTypographyHandoff.ts"
       - "motion-studio/scripts/check-wedding-production-typography-elements.mts"
       - "motion-studio/scripts/check-wedding-production-typography-handoff.mts"
+      - "motion-studio/scripts/check-wedding-typography-production-role-guide.mts"
       - "motion-studio/scripts/export-wedding-production-typography-handoff.mts"
+      - "movie-dashboard/src/data/weddingTypographyProductionRoleGuide.generated.ts"
+      - "movie-dashboard/src/components/TypographyProductionRoleGuide.tsx"
+      - "movie-dashboard/src/components/MaskRevealSceneHandoffCard.tsx"
       - ".github/workflows/wedding-production-typography-elements-ci.yml"
 
 permissions:
@@ -42,6 +50,7 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: node --no-warnings scripts/check-wedding-production-typography-elements.mts
       - run: node --no-warnings scripts/check-wedding-production-typography-handoff.mts
+      - run: node --no-warnings scripts/check-wedding-typography-production-role-guide.mts
       - run: node --no-warnings scripts/export-wedding-production-typography-handoff.mts --movie opening --format json > /tmp/opening-typography-handoff.json
       - run: node --no-warnings scripts/export-wedding-production-typography-handoff.mts --movie profile --format markdown > /tmp/profile-typography-handoff.md
       - run: node -e "JSON.parse(require('fs').readFileSync('/tmp/opening-typography-handoff.json','utf8'));"

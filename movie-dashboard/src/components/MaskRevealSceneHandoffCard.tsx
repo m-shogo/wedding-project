@@ -12,6 +12,7 @@ import { downloadText } from "../lib/exporters";
 import { ProfileProductionStatusHandoffCard } from "./ProfileProductionStatusHandoffCard";
 import { WeddingMovieProductionCriticalPathCard } from "./WeddingMovieProductionCriticalPathCard";
 import { TypographyDaVinciProductionReleaseGateForScene } from "./TypographyDaVinciProductionReleaseGateForScene";
+import { TypographyProductionRoleGuide } from "./TypographyProductionRoleGuide";
 import { TypographyProductionRouteSelector } from "./TypographyProductionRouteSelector";
 import { TypographyProductionRoutingMatrix } from "./TypographyProductionRoutingMatrix";
 import { TypographyProjectDeliveryBatchCard } from "./TypographyProjectDeliveryBatchCard";
@@ -71,6 +72,7 @@ export function MaskRevealSceneHandoffCard({ scene }: { scene: MaskRevealSceneIn
         Human MasterはSceneの人間が理解できる値です。JSON / XML自体はHuman Masterではありません。Sceneを編集するとupdatedAtが変わり、このexportも現在のSceneInstanceから再生成されます。NLE XML自体はPalmier実timelineからexportします。
       </p>
 
+      <TypographyProductionRoleGuide projectId={scene.projectId} />
       <TypographyProductionRouteSelector scene={scene} />
       <TypographySceneDeliveryPackageCard scene={scene} />
       <TypographyProjectDeliveryBatchCard projectId={scene.projectId} />
