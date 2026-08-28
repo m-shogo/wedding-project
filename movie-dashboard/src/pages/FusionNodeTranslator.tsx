@@ -118,6 +118,21 @@ export function FusionNodeTranslator() {
                 <div className="mt-3 rounded bg-amber-100/70 dark:bg-amber-900/20 p-2">
                   <p className="text-[10px] font-semibold text-amber-800 dark:text-amber-200">MAC ACTUAL GATE</p>
                   <p className="mt-1 text-[10px] text-amber-700 dark:text-amber-300 break-all">Evidence: {project.bridge.actualEvidencePath}</p>
+                  <div className="mt-2 grid gap-1.5">
+                    <div>
+                      <p className="text-[9px] font-semibold text-amber-800 dark:text-amber-200">01 INIT EVIDENCE</p>
+                      <code className="mt-0.5 block break-all rounded bg-white/70 px-2 py-1 text-[9px] text-amber-800 dark:bg-navy-950/30 dark:text-amber-200">{project.bridge.actualCommands.init}</code>
+                    </div>
+                    <div>
+                      <p className="text-[9px] font-semibold text-amber-800 dark:text-amber-200">02 CHECK STATUS</p>
+                      <code className="mt-0.5 block break-all rounded bg-white/70 px-2 py-1 text-[9px] text-amber-800 dark:bg-navy-950/30 dark:text-amber-200">{project.bridge.actualCommands.status}</code>
+                    </div>
+                    <div>
+                      <p className="text-[9px] font-semibold text-amber-800 dark:text-amber-200">03 STRICT VERIFY</p>
+                      <code className="mt-0.5 block break-all rounded bg-white/70 px-2 py-1 text-[9px] text-amber-800 dark:bg-navy-950/30 dark:text-amber-200">{project.bridge.actualCommands.strict}</code>
+                    </div>
+                  </div>
+                  <p className="mt-2 text-[10px] text-amber-700 dark:text-amber-300">コマンド表示・initだけではActual verifiedになりません。Resolve GUIで実確認・exportし、current evidenceを記録してstrictを通した場合だけ次へ進みます。</p>
                   <p className="mt-1 text-[10px] text-amber-700 dark:text-amber-300">実際にResolve GUIで確認・exportしていない限り、このgateはPASSにしません。</p>
                 </div>
               )}
