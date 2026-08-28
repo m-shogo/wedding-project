@@ -1,8 +1,8 @@
 # 青春ふたりきっぷ — V4 Clean-room Two Horizons
 
-State: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / V4_CURRENT_SELECTED / LONG_ROUTE_STRESS_PASS / LEGACY_PRESERVED / NOT_PRINT_READY`
+State: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / V4_CURRENT_SELECTED / LONG_ROUTE_STRESS_PASS / PRINT_SIZE_READABILITY_HARDENED / LEGACY_PRESERVED / NOT_PRINT_READY`
 
-Run latest-main before V4 build/promotion: `41eec3a87db43cfc8ff8ee486f45279d8d045782`.
+Run latest-main before V4 build/promotion: `41eec3a87db43cfc8ff8ee486f45279d8d045782`; print-first re-audit start/read-before-write main: `57f562a0059f5924ee8dd0f7dd19021435bfe3ff`.
 
 ## Authority / scope
 
@@ -75,7 +75,7 @@ Corrections:
 - removed the optional phrase instead of shrinking route copy;
 - removed an invented filler note from the dark field;
 - widened the cream reading zone by moving the diagonal-field boundary rightward;
-- preserved route at `22px` with native height resize.
+- retained a readable route role with native height resize.
 
 Post-fix long route remains two lines, entirely in the quiet field, with no collision.
 
@@ -90,17 +90,47 @@ The freed dark-field space was left intentionally quiet rather than filled with 
 
 ### 3. Actual-size microtype
 
-The nonessential tiny `DATE` label was removed. The factual date was strengthened from `24px` to `26px`; the decorative subtitle was strengthened from `16px` to `18px`.
+The nonessential tiny `DATE` label was removed. The factual date was strengthened from `24px` to `26px`; the decorative subtitle was strengthened from `16px` to `18px` during the initial V4 build.
 
-This preserves hierarchy while improving provisional 72×25mm readability.
+### 4. Print-first actual-size hardening — 2026-08-29
+
+A fresh print audit re-read the selected V4 live in Figma and treated the current `720×250 ≈ 72×25mm` mapping as a **provisional working scale only** until the real MINTIA application area is measured. At that scale `10 Figma units = 1mm`, so Figma font-size units convert to physical point size by approximately `px × 0.2835`.
+
+The selected V4 was structurally valid but still had three physically weak reader-facing roles:
+
+- subtitle `18px ≈ 5.10pt`;
+- route `22px ≈ 6.24pt`;
+- date `26px ≈ 7.37pt`.
+
+The subtitle is decorative rather than critical, but at a 25mm-high label its previous size was too fragile for dependable offset/digital print reproduction. The route is primary semantic information and needed more physical confidence without competing with the title. The muted mineral support curve was also only `2 Figma units ≈ 0.2mm`, too close to a print-loss boundary for a low-contrast colored line.
+
+Applied live Figma changes to production `81:3`:
+
+- `81:10 / TXT_SUBTITLE`: `18 → 22px`, line-height `24 → 28px` (`≈6.24pt`);
+- `81:12 / TXT_ROUTE`: `22 → 24px`, line-height `30 → 32px` (`≈6.80pt`);
+- `81:15 / TXT_DATE`: `26 → 28px`, line-height `33 → 36px` (`≈7.94pt`);
+- `82:17 / mineral support curve`: stroke `2 → 3` Figma units (`≈0.3mm`).
+
+The exact same typography and support-curve changes were applied to hidden long-route proof `81:21` (`81:28`, `81:30`, `81:33`, `82:22`) so the stress proof did not become stale by testing easier/smaller typography than production.
+
+Post-write live readback:
+
+- production `81:3`: visible native text `4`, outside visible text `0`, IMAGE fills `0`, `clipsContent=true`;
+- long-route proof `81:21`: visible native text `4`, route height `64px` across two lines, outside visible text `0`, IMAGE fills `0`;
+- final visible support-curve minimum is now `3 units ≈0.3mm`; vermilion main curve remains `6 units ≈0.6mm`;
+- raster assets remain `0`, therefore effective raster PPI is `N/A` and no `RESOLUTION_WARNING` is introduced.
+
+Fresh production screenshot at native `720×250` confirms the stronger subtitle/route/date remain subordinate to the Japanese title and do not disturb the left-to-right reading order.
+
+This is a print-readability hardening pass, **not** a geometry lock. The actual MINTIA case/application area, corner curvature, adhesive stock, cut tolerance, safe inset and real-case 100% proof are still unknown; production trim/bleed/safe geometry must not be guessed from the provisional 72×25mm mapping.
 
 ## Three-scale / actual-size QA
 
 Fresh V4 screenshots:
 
-- native `720×250`: PASS;
-- thumbnail `360×125`: PASS;
-- long-route native `720×250`: PASS.
+- native `720×250`: PASS after print-size hardening;
+- thumbnail `360×125`: existing hierarchy remains PASS;
+- long-route structure proof: PASS after typography-equivalent update.
 
 Reading order remains:
 `subtitle → title → route → real date → fixed journey curves`.
@@ -109,13 +139,13 @@ The fixed art is subordinate to the title/route and does not create equal-card/w
 
 ## Structure QA
 
-Final live readback before promotion:
+Final live readback after print-first hardening:
 
 Production `81:3`:
 
 - size: `720×250`;
 - visible native text: `4` (`subtitle/title/route/date`);
-- fixed-height native text: `0`;
+- title `40px ≈11.34pt`, route `24px ≈6.80pt`, date `28px ≈7.94pt`, subtitle `22px ≈6.24pt` under provisional 72×25mm scale;
 - outside visible text: `0`;
 - IMAGE fills: `0`;
 - `clipsContent=true`.
@@ -123,8 +153,7 @@ Production `81:3`:
 Long-route proof `81:21`:
 
 - visible native text: `4`;
-- route height: `60px`;
-- fixed-height native text: `0`;
+- route height: `64px` after print-size correction;
 - outside visible text: `0`;
 - IMAGE fills: `0`.
 
@@ -138,11 +167,12 @@ Decision: V4 clearly wins as the new selected direction. Legacy remains untouche
 
 ## Drive / generated asset state
 
-Drive authority was live-read and its production-material folder structure confirmed. Existing visual assets were not opened/reused as V4 construction reference.
+Drive authority was live-read and confirmed as folder `1XpuRqck_yDmWI6NhwZFWkvxpS6mqH29J / 04_青春18きっぷ風_ミンティア用シール` during the print-first re-audit. Existing visual assets were not opened/reused as V4 construction reference.
 
 - image-generation candidates: `0`;
 - adopted raster masters: `0`;
 - Drive writes: `0`;
+- effective raster PPI: `N/A`;
 - reason: no missing raster/image role exists in the selected V4 composition.
 
 ## Learning
@@ -152,10 +182,15 @@ Drive authority was live-read and its production-material folder structure confi
 - stale placement specs can contain pseudo metadata superseded by newer sellable-artifact QA; latest item QA must win before V4 promotion;
 - on a tiny label, removing lower-priority copy is better than shrinking the route below comfortable reading size;
 - stress QA must check the visual background under wrapped text, not only root bounding boxes;
-- leaving freed space quiet is preferable to replacing removed pseudo metadata with another badge/icon.
+- leaving freed space quiet is preferable to replacing removed pseudo metadata with another badge/icon;
+- small-label print QA must convert canvas typography to provisional physical point size rather than treating a visually clean native screenshot as proof of readability;
+- low-contrast colored support rules around `0.2mm` should not be treated as robust final print detail without vendor proof; `0.3mm` is the safer current working minimum for this role;
+- hidden stress proofs must be updated with production typography after actual-size hardening, otherwise their PASS is stale.
 
 ## Deferred / next
 
-Keep `NOT_PRINT_READY` until the actual MINTIA application area is physically measured, final route wording is confirmed, stock/adhesive/finish are selected, and a 100% print is applied to the real case.
+Keep `NOT_PRINT_READY` until the actual MINTIA application area is physically measured, final route wording is confirmed, stock/adhesive/finish and cutter tolerance are selected, exact trim/bleed/safe geometry is set from real measurements/vendor requirements, CMYK/profile and PDF preflight are complete, and a 100% print is applied to the real case.
 
-Next V4 clean-room target: `ADD-01 ウェルカムボード`, from a blank frame using facts/constraints only.
+`DESIGN_COMPLETE != PRINT_READY` remains enforced.
+
+Next target: `ADD-01 ウェルカムボード` print-first re-audit from its current V4 authority; if blocked only by required real photography or final physical installation data, record the blocker and continue to the next safe item.
