@@ -128,7 +128,14 @@ if (!fs.existsSync(outputPath)) {
 }
 
 const current = fs.readFileSync(outputPath, "utf8");
-if (current !== output) {
+const generatedMatch = current.match(/export const openingProductionGate = ([\s\S]*?) as const;\s*$/);
+let currentSnapshot = null;
+try {
+  currentSnapshot = generatedMatch ? JSON.parse(generatedMatch[1]) : null;
+} catch {
+  currentSnapshot = null;
+}
+if (JSON.stringify(currentSnapshot) !== JSON.stringify(snapshot)) {
   console.error("Opening production gate is stale. Run: pnpm sync:opening-gate");
   console.error(`Current source state: ${snapshot.resolvedPhotoCount}/${snapshot.expectedPhotoCount} photos, receipt=${snapshot.photos.intakeReceiptCurrent ? "CURRENT" : "MISSING_OR_STALE"}, cropMetadata=${snapshot.photos.cropQa.metadataValid ? "VALID" : "INVALID"}, BGM=${snapshot.bgm.ready ? "READY" : "BLOCKED"}`);
   process.exit(1);
