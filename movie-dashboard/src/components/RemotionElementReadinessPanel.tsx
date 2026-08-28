@@ -1,4 +1,7 @@
-import type { RemotionElementCandidateRecord } from "../data/remotionElementCandidates";
+import {
+  remotionElementStudioActualBatch,
+  type RemotionElementCandidateRecord,
+} from "../data/remotionElementCandidates";
 
 const readinessLabel: Record<RemotionElementCandidateRecord["readiness"], string> = {
   PREVIEW_ONLY: "Previewのみ",
@@ -25,6 +28,8 @@ export function RemotionElementReadinessPanel({
   candidate: RemotionElementCandidateRecord;
 }) {
   const verified = candidate.readiness === "STUDIO_ACTUAL_VERIFIED";
+  const batch = remotionElementStudioActualBatch;
+  const inActualBatch = batch.candidateIds.includes(candidate.patternId);
 
   return (
     <section className="mt-6 border border-violet-200 dark:border-violet-900 bg-violet-50/50 dark:bg-violet-950/20 p-4">
@@ -81,6 +86,37 @@ export function RemotionElementReadinessPanel({
           <dd>{actualLabel(candidate.studioControlReadbackActual)}</dd>
         </div>
       </dl>
+
+      {inActualBatch && !verified && (
+        <div className="mt-4 border border-violet-200 bg-white/70 p-3 dark:border-violet-800 dark:bg-navy-900/20">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <p className="text-[10px] tracking-[0.15em] font-semibold text-violet-700 dark:text-violet-300">STUDIO ACTUAL BATCH HANDOFF</p>
+            <code className="text-[9px] text-violet-600 dark:text-violet-300">Studio {batch.studioVersionTarget}</code>
+          </div>
+          <p className="mt-2 text-[10px] leading-5 text-navy-600 dark:text-navy-300">
+            このElementは9候補のbounded Mac Studio Actual batch対象。CIはbatch artifactの準備と検査までで、confirmation / install / control readback / timeline insertion / post-install renderはすべてNOT_RUNです。
+          </p>
+          <p className="mt-2 break-all text-[9px] text-navy-400">artifact: {batch.artifactRoot}</p>
+          <div className="mt-2 grid gap-1.5">
+            <div>
+              <p className="text-[9px] font-semibold text-violet-700 dark:text-violet-300">01 PREPARE BOUNDED BATCH</p>
+              <code className="mt-0.5 block break-all bg-violet-950/5 px-2 py-1 text-[9px] text-navy-600 dark:bg-white/5 dark:text-navy-200">{batch.prepareCommand}</code>
+            </div>
+            <div>
+              <p className="text-[9px] font-semibold text-violet-700 dark:text-violet-300">02 CHECK PREP ARTIFACT</p>
+              <code className="mt-0.5 block break-all bg-violet-950/5 px-2 py-1 text-[9px] text-navy-600 dark:bg-white/5 dark:text-navy-200">{batch.checkCommand}</code>
+            </div>
+          </div>
+          <div className="mt-2 flex flex-wrap gap-1">
+            {Object.entries(batch.actual).map(([key, state]) => (
+              <code key={key} className="border border-amber-300 px-1.5 py-0.5 text-[8px] text-amber-700 dark:border-amber-700 dark:text-amber-300">{key}={state}</code>
+            ))}
+          </div>
+          <p className="mt-2 border-l-2 border-amber-400 pl-2 text-[9px] leading-4 text-amber-800 dark:text-amber-200">
+            batch handoffの表示・prepare/check成功だけではStudio Actual verifiedになりません。Mac Studioで実際に確認した証拠がない限りNOT_RUNを維持します。
+          </p>
+        </div>
+      )}
 
       {!verified && (
         <p className="mt-4 border-l-2 border-amber-400 pl-3 text-[10px] leading-5 text-amber-800 dark:text-amber-200">
