@@ -13,9 +13,12 @@ const timelinePath=join(root,'out/handoff/profile-v1/profile-v1-palmier-timeline
 const davinciPath=join(root,'out/qa/profile-v1-davinci-finishing-evidence.json');
 const approvalPath=join(root,'out/qa/profile-v1-final-delivery-approval.json');
 const jsonMode=process.argv.includes('--json'); const strict=process.argv.includes('--strict');
-type State='PASS'|'BLOCKED'|'NOT_RUN'|'MISSING'|'STALE'; type Stage={state:State;detail:string;path?:string;blockers?:string[]};
+type State='PASS'|'BLOCKED'|'NOT_RUN'|'MISSING'|'STALE'; type Stage={state:State;detail:string;path?:string;blockers?:string[];blockerCodes?:string[]};
 const rel=(p:string)=>relative(root,p).replaceAll('\\','/'); const sha=(p:string)=>createHash('sha256').update(readFileSync(p)).digest('hex');
 const run=(script:string,args:string[]=[])=>spawnSync(process.execPath,['--no-warnings',script,...args],{cwd:root,encoding:'utf8'}); const lines=(v:string|null|undefined)=>(v??'').split(/\r?\n/).map(x=>x.trim()).filter(Boolean);
+const blockerCodeFrom=(value:string)=>value.match(/(?:^|[\s"'`\[\](),])([A-Z][A-Z0-9_]+(?::[A-Z0-9_.-]+)*)/)?.[1]??null;
+const stableBlockerCodes=(values:readonly string[]|undefined)=>{const raw=values??[];const codes=[...new Set(raw.map(blockerCodeFrom).filter((value):value is string=>Boolean(value)))];return codes.length>0?codes:raw.length>0?['UNCLASSIFIED_STAGE_BLOCKER']:[];};
+const withStableBlockerCodes=(stage:Stage):Stage=>({...stage,blockerCodes:stableBlockerCodes(stage.blockers)});
 const accentSignature=(value:any)=>`${value?.slotId ?? ''}|${value?.chapterId ?? ''}|${value?.implementation ?? ''}|${value?.canonicalReuse ?? ''}`;
 const expectedAccentRoutes=profileV1GeneratedAccentImplementations.map(accentSignature).sort();
 const aliasAction=(action:string)=>({
@@ -49,5 +52,6 @@ else if(approval.state==='MISSING'){overallState='FINAL_DELIVERY_APPROVAL_INIT_R
 else if(approval.state!=='PASS'){overallState='FINAL_DELIVERY_APPROVAL_REQUIRED_OR_STALE';nextActions=['current SHA-bound final approvalを明示APPROVEまたは再初期化','pnpm profile:final-delivery-approval:strict'];}
 else{overallState='PRODUCTION_READY';nextActions=['承認済みDaVinci export SHAを上映用正本として固定'];}
 const productionReady=approval.state==='PASS';
-const report={schemaVersion:'profile-v1-production-status/v1',authority:'DERIVED_PRODUCTION_STATUS',overallState,stages:{assembly,finalRender,finalRenderReview:finalReview,productionBundle:bundle,davinciFinishing:davinci,finalDeliveryApproval:approval},readiness:{assemblyReady:assembly.state==='PASS',finalRenderQaPass:finalRender.state==='PASS',humanFinalRenderReviewPass:finalReview.state==='PASS',bundleCurrent:bundle.state==='PASS',macDaVinciActual:davinci.state==='PASS'?'ACTUAL_VERIFIED':'NOT_RUN',finalDeliveryApproved:approval.state==='PASS',productionReady},nextActions};
-if(jsonMode)console.log(JSON.stringify(report,null,2));else{console.log(`Profile V1 production status: ${overallState}`);for(const [name,stage] of Object.entries(report.stages))console.log(`${name}=${stage.state} / ${stage.detail}`);console.log(`NEXT / ${nextActions.join(' → ')}`);}if(strict&&!productionReady)process.exit(1);
+const stages={assembly:withStableBlockerCodes(assembly),finalRender:withStableBlockerCodes(finalRender),finalRenderReview:withStableBlockerCodes(finalReview),productionBundle:withStableBlockerCodes(bundle),davinciFinishing:withStableBlockerCodes(davinci),finalDeliveryApproval:withStableBlockerCodes(approval)};
+const report={schemaVersion:'profile-v1-production-status/v1',authority:'DERIVED_PRODUCTION_STATUS',overallState,stages,readiness:{assemblyReady:assembly.state==='PASS',finalRenderQaPass:finalRender.state==='PASS',humanFinalRenderReviewPass:finalReview.state==='PASS',bundleCurrent:bundle.state==='PASS',macDaVinciActual:davinci.state==='PASS'?'ACTUAL_VERIFIED':'NOT_RUN',finalDeliveryApproved:approval.state==='PASS',productionReady},nextActions,guardrails:['RAW_BLOCKER_DETAIL != STABLE_BLOCKER_CODE','ABSOLUTE_PATH_OR_LOG_DETAIL_MUST_NOT_ENTER_BLOCKER_CODES']};
+if(jsonMode)console.log(JSON.stringify(report,null,2));else{console.log(`Profile V1 production status: ${overallState}`);for(const [name,stage] of Object.entries(report.stages)){console.log(`${name}=${stage.state} / ${stage.detail}`);for(const code of stage.blockerCodes??[])console.log(`  BLOCK_CODE / ${code}`);}console.log(`NEXT / ${nextActions.join(' → ')}`);}if(strict&&!productionReady)process.exit(1);
