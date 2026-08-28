@@ -4,8 +4,28 @@ import {buildWeddingMovieProductionCriticalPath} from "./weddingMovieProductionC
 
 export const OPENING_PRODUCTION_STATUS_HANDOFF_SCHEMA = "wedding-opening-production-status-handoff/v1" as const;
 
+const buildNextGate = (project: ReturnType<typeof buildWeddingMovieProductionCriticalPath>["projects"]["opening"]) => {
+  const current = project.currentCriticalStage;
+  return current
+    ? {
+        state: "BLOCKED" as const,
+        stage: current.name,
+        artifactPath: current.path ?? null,
+        blockerCodes: [...current.blockerCodes],
+        recovery: [...current.recovery],
+      }
+    : {
+        state: "PRODUCTION_READY" as const,
+        stage: null,
+        artifactPath: null,
+        blockerCodes: [] as string[],
+        recovery: [] as string[],
+      };
+};
+
 export function buildOpeningProductionStatusHandoff() {
   const criticalPath = buildWeddingMovieProductionCriticalPath();
+  const openingCriticalPath = criticalPath.projects.opening;
   return {
     schemaVersion: OPENING_PRODUCTION_STATUS_HANDOFF_SCHEMA,
     authority: "MOTION_STUDIO_DERIVED_OPENING_STATUS_HANDOFF" as const,
@@ -32,13 +52,14 @@ export function buildOpeningProductionStatusHandoff() {
         sourceRevalidation: openingProductionStatus.sourceRevalidation,
         palmierHandoff: openingProductionStatus.handoff.palmier,
         davinciHandoff: openingProductionStatus.handoff.davinci,
+        nextGate: buildNextGate(openingCriticalPath),
         nextActions: [...openingProductionStatus.nextActions],
       },
-      criticalPath: criticalPath.projects.opening,
+      criticalPath: openingCriticalPath,
     },
     crossProjectCriticalPath: {
       productionReady: criticalPath.productionReady,
-      opening: criticalPath.projects.opening,
+      opening: openingCriticalPath,
       profile: criticalPath.projects.profile,
       guardrails: [...criticalPath.guardrails],
     },
@@ -58,6 +79,8 @@ export function buildOpeningProductionStatusHandoff() {
       "MEDIA_REQUIREMENT_EXPORTED != MEDIA_RESOLVED",
       "HANDOFF_METADATA_EXPORTED != HANDOFF_ARTIFACTS_CURRENT",
       "NEXT_ACTION_EXPORTED != ACTION_COMPLETED",
+      "NEXT_GATE_EXPORTED != NEXT_GATE_COMPLETED",
+      "STABLE_BLOCKER_CODE != RAW_BLOCKER_DETAIL",
       "CRITICAL_PATH_EXPORTED != RECOVERY_EXECUTED",
     ],
   };
