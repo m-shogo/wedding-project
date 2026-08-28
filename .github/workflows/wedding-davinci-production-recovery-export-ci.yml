@@ -6,6 +6,7 @@ on:
       - "motion-studio/src/data/resolveHandoff.schema.ts"
       - "motion-studio/src/data/weddingDavinciProductionRecovery.ts"
       - "motion-studio/scripts/export-wedding-davinci-production-recovery.mts"
+      - "motion-studio/scripts/export-wedding-production-handoff.mts"
       - "motion-studio/scripts/check-wedding-davinci-production-recovery-export.mts"
       - ".github/workflows/wedding-davinci-production-recovery-export-ci.yml"
   push:
@@ -14,6 +15,7 @@ on:
       - "motion-studio/src/data/resolveHandoff.schema.ts"
       - "motion-studio/src/data/weddingDavinciProductionRecovery.ts"
       - "motion-studio/scripts/export-wedding-davinci-production-recovery.mts"
+      - "motion-studio/scripts/export-wedding-production-handoff.mts"
       - "motion-studio/scripts/check-wedding-davinci-production-recovery-export.mts"
       - ".github/workflows/wedding-davinci-production-recovery-export-ci.yml"
 
