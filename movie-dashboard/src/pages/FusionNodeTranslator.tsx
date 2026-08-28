@@ -71,6 +71,47 @@ export function FusionNodeTranslator() {
                 <div className="mt-3 border-t border-current/10 pt-2">
                   <p className="text-[11px] text-navy-500 dark:text-navy-300"><strong>NOW:</strong> {project.nextGate.stage ?? project.overallState}</p>
                   <p className="mt-1 text-[10px] text-navy-400 break-all">{project.nextGate.artifactPath ?? "production artifact未確定"}</p>
+
+                  <div className="mt-3">
+                    <p className="text-[10px] font-semibold tracking-widest text-navy-500 dark:text-navy-300">STABLE BLOCKERS</p>
+                    <div className="mt-1 flex flex-wrap gap-1">
+                      {project.nextGate.blockerCodes.length > 0 ? project.nextGate.blockerCodes.map((code) => (
+                        <code key={code} className="rounded bg-amber-100 px-1.5 py-0.5 text-[9px] text-amber-800 dark:bg-amber-900/30 dark:text-amber-200">{code}</code>
+                      )) : <span className="text-[10px] text-navy-400">none</span>}
+                    </div>
+                  </div>
+
+                  <div className="mt-3">
+                    <p className="text-[10px] font-semibold tracking-widest text-navy-500 dark:text-navy-300">RECOVERY ACTIONS</p>
+                    <div className="mt-1 grid gap-2">
+                      {project.nextGate.blockerActions.length > 0 ? project.nextGate.blockerActions.map((action) => (
+                        <div key={action.id} className="rounded border border-current/10 bg-white/70 p-2 dark:bg-navy-900/20">
+                          <div className="flex flex-wrap items-center gap-2">
+                            <code className="text-[9px] text-navy-400">{action.kind}</code>
+                            {action.kind === "ROUTE" && action.route ? (
+                              <Link to={action.route} className="text-[11px] font-semibold text-navy-700 underline decoration-navy-300 underline-offset-2 dark:text-sand-100">{action.label} →</Link>
+                            ) : (
+                              <span className="text-[11px] font-semibold text-navy-700 dark:text-sand-100">{action.label}</span>
+                            )}
+                          </div>
+                          <p className="mt-1 text-[10px] leading-4 text-navy-500 dark:text-navy-300">{action.purpose}</p>
+                          {action.kind === "COMMAND" && action.command && (
+                            <code className="mt-1 block break-all rounded bg-navy-950/5 px-2 py-1 text-[9px] text-navy-600 dark:bg-white/5 dark:text-navy-200">{action.command}</code>
+                          )}
+                          {action.kind === "HUMAN" && (
+                            <p className="mt-1 text-[9px] font-semibold text-amber-700 dark:text-amber-300">Human action required · この画面からPASSへ昇格しません</p>
+                          )}
+                        </div>
+                      )) : <p className="text-[10px] text-navy-400">structured recovery actionなし</p>}
+                    </div>
+                  </div>
+
+                  <div className="mt-3">
+                    <p className="text-[10px] font-semibold tracking-widest text-navy-500 dark:text-navy-300">CANONICAL RECOVERY</p>
+                    <ul className="mt-1 grid gap-1 text-[10px] leading-4 text-navy-500 dark:text-navy-300">
+                      {project.nextGate.recovery.length > 0 ? project.nextGate.recovery.map((item) => <li key={item}>• {item}</li>) : <li>• recoveryなし</li>}
+                    </ul>
+                  </div>
                 </div>
               )}
               {project.bridge.state === "MAC_DAVINCI_ACTUAL_NOT_VERIFIED" && (
