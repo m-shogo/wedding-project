@@ -29,6 +29,8 @@ const runJson = (script: string) => {
 
 const stableCodes = (stage: Record<string, unknown> | null | undefined) =>
   Array.isArray(stage?.blockerCodes) ? stage.blockerCodes.map(String) : [];
+const recoverySteps = (stage: Record<string, unknown> | null | undefined) =>
+  Array.isArray(stage?.recovery) ? stage.recovery.map(String) : [];
 
 const summarize = (projectId: keyof typeof projects) => {
   const config = projects[projectId];
@@ -43,6 +45,7 @@ const summarize = (projectId: keyof typeof projects) => {
   const downstream = currentIndex >= 0 ? stages.slice(currentIndex + 1) : [];
   const blockers = Array.isArray(current?.blockers) ? current.blockers.map(String) : [];
   const blockerCodes = stableCodes(current);
+  const recovery = recoverySteps(current);
   const nextActions = Array.isArray(report.nextActions) ? report.nextActions.map(String) : [];
 
   return {
@@ -56,6 +59,7 @@ const summarize = (projectId: keyof typeof projects) => {
       ...(current.path ? {path: String(current.path)} : {}),
       blockers,
       blockerCodes,
+      recovery,
     } : null,
     downstreamBlockedStages: downstream.map((stage) => ({
       name: stage.name,
@@ -63,6 +67,7 @@ const summarize = (projectId: keyof typeof projects) => {
       detail: String(stage.detail ?? 'No detail reported.'),
       ...(stage.path ? {path: String(stage.path)} : {}),
       blockerCodes: stableCodes(stage),
+      recovery: recoverySteps(stage),
     })),
     nextActions,
     readiness: report.readiness ?? {},
@@ -97,6 +102,7 @@ if (jsonMode) {
       if (current.path) console.log(`  PATH    / ${current.path}`);
       for (const code of current.blockerCodes) console.log(`  CODE    / ${code}`);
       for (const blocker of current.blockers) console.log(`  BLOCK   / ${blocker}`);
+      for (const step of current.recovery) console.log(`  RECOVER / ${step}`);
       console.log(`  WAITING / ${project.downstreamBlockedStages.map((stage) => stage.name).join(' -> ') || 'none'}`);
       for (const action of project.nextActions) console.log(`  NEXT    / ${action}`);
     } else {
