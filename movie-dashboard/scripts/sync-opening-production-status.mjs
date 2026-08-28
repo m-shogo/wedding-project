@@ -15,6 +15,7 @@ if(report.schemaVersion!=="opening-v1-production-status/v1"||report.authority!==
 if(report.stages?.finalRenderReview==null||report.readiness?.humanFinalRenderApproved==null)throw new Error("Opening production status must own canonical final-render Human review state");
 if(report.handoff?.palmier?.contractVersion!=="opening-v1-palmier-handoff/v2")throw new Error(`Unexpected Opening Palmier handoff contract: ${report.handoff?.palmier?.contractVersion??"missing"}`);
 if(davinci.schemaVersion!=="opening-v1-davinci-handoff/v1"||davinci.authority!=="MOTION_STUDIO_OPENING_DAVINCI_HANDOFF")throw new Error(`Unexpected Opening DaVinci handoff contract: ${davinci.schemaVersion}/${davinci.authority}`);
+if(davinci.productionRecovery?.schemaVersion!=="wedding-davinci-production-recovery-export/v1"||davinci.productionRecovery?.requiredCurrent!==true)throw new Error("Opening DaVinci handoff must expose required production recovery sidecar contract");
 
 const stageNames=["media","previewRender","previewSourceBinding","previewReview","finalRender","finalRenderReview","productionBundle","davinciFinishing","finalDeliveryApproval"];
 const stageRecovery={
@@ -112,6 +113,7 @@ const snapshot={
       sourceAuthorities:davinciSourceAuthorities,
       upstreamPalmier:davinci.upstreamPalmier,
       handoffAsset:davinci.handoffAsset,
+      productionRecovery:{...davinci.productionRecovery},
       actualEvidence:{...davinci.actualEvidence,requiredChecks:[...davinci.actualEvidence.requiredChecks]},
       productionReady:false,
     },
