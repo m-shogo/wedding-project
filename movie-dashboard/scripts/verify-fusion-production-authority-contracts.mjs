@@ -6,6 +6,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const source = fs.readFileSync(path.join(root, "src/pages/FusionNodeTranslator.tsx"), "utf8");
 const recoverySource = fs.readFileSync(path.join(root, "src/lib/davinciWeddingProductionRecovery.ts"), "utf8");
 const gateSource = fs.readFileSync(path.join(root, "src/lib/palmierWeddingProductionGate.ts"), "utf8");
+const studioEvidenceSource = fs.readFileSync(path.join(root, "src/data/remotionStudioActualToolingEvidence.ts"), "utf8");
 
 const requireText = (haystack, text, label) => {
   if (!haystack.includes(text)) throw new Error(`missing ${label}: ${text}`);
@@ -42,8 +43,13 @@ requireText(gateSource, 'SHA_BOUND_FINAL_RENDER', 'SHA-bound recovery authority'
 requireText(gateSource, 'CRITICAL_PATH_PRE_BUNDLE', 'pre-bundle recovery authority');
 requireText(gateSource, 'sourceRenderSha256', 'recovery render SHA provenance');
 requireText(gateSource, 'normalizeRecoverySnapshot', 'recovery authority normalization');
+requireText(gateSource, 'remotionStudioToolingEvidence', 'Remotion Studio tooling evidence carrier');
 requireText(gateSource, 'PRE_BUNDLE_RECOVERY_IS_NOT_FINAL_RENDER_SHA_BOUND', 'pre-bundle honesty guardrail');
 requireText(gateSource, 'SHA_BOUND_RECOVERY_EXPORTED != RECOVERY_EXECUTED', 'SHA-bound execution guardrail');
+
+requireText(studioEvidenceSource, 'MOTION_ZUKAN_REMOTION_STUDIO_ACTUAL_TOOLING_REFERENCE', 'Studio tooling reference authority');
+requireText(studioEvidenceSource, 'TOOLING_EVIDENCE_REFERENCED != STUDIO_ACTUAL_VERIFIED', 'Studio tooling fail-close guardrail');
+requireText(studioEvidenceSource, 'ELEMENT_NOT_ADOPTED_BY_PROJECT => TOOLING_ACTUAL_IS_NON_BLOCKING', 'non-adopted tooling non-blocking guardrail');
 
 requireText(recoverySource, 'wedding-davinci-production-recovery/v1', 'DaVinci recovery schema');
 requireText(recoverySource, 'MOTION_STUDIO_DAVINCI_PRODUCTION_RECOVERY', 'DaVinci recovery authority');
@@ -58,6 +64,22 @@ requireText(recoverySource, 'palmierContractVersion: project.bridge.palmierContr
 requireText(recoverySource, 'davinciContractVersion: project.bridge.davinciContractVersion', 'DaVinci contract provenance');
 requireText(recoverySource, 'evidencePath: project.bridge.actualEvidencePath', 'DaVinci Actual evidence path propagation');
 requireText(recoverySource, 'commands: {...project.bridge.actualCommands}', 'DaVinci Actual command propagation');
+requireText(recoverySource, 'const studio = project.remotionStudioToolingEvidence', 'Studio tooling evidence source');
+requireText(recoverySource, 'authority: studio.authority', 'Studio tooling authority propagation');
+requireText(recoverySource, 'summaryPath: studio.summaryPath', 'Studio tooling summary path propagation');
+requireText(recoverySource, 'summarySchemaVersion: studio.summarySchemaVersion', 'Studio tooling summary schema propagation');
+requireText(recoverySource, 'summaryAuthority: studio.summaryAuthority', 'Studio tooling summary authority propagation');
+requireText(recoverySource, 'evidencePath: studio.evidencePath', 'Studio tooling evidence path propagation');
+requireText(recoverySource, 'statusCommand: studio.statusCommand', 'Studio tooling status command propagation');
+requireText(recoverySource, 'strictCommand: studio.strictCommand', 'Studio tooling strict command propagation');
+requireText(recoverySource, 'candidateCount: studio.candidateCount', 'Studio tooling candidate count propagation');
+requireText(recoverySource, 'checkAxesPerCandidate: studio.checkAxesPerCandidate', 'Studio tooling check axis count propagation');
+requireText(recoverySource, 'currentRepoState: studio.currentRepoState', 'Studio tooling repo state propagation');
+requireText(recoverySource, 'humanReviewed: studio.humanReviewed', 'Studio tooling Human review propagation');
+requireText(recoverySource, 'productionDependencyPromoted: studio.productionDependencyPromoted', 'Studio tooling dependency promotion propagation');
+requireText(recoverySource, 'guardrails: [...studio.guardrails]', 'Studio tooling guardrail propagation');
+requireText(recoverySource, 'REMOTION_STUDIO_TOOLING_REFERENCE_EXPORTED != STUDIO_ACTUAL_VERIFIED', 'DaVinci Studio tooling export fail-close guardrail');
+requireText(recoverySource, 'REMOTION_STUDIO_TOOLING_NOT_ADOPTED => NON_BLOCKING_FOR_DAVINCI_RECOVERY', 'DaVinci non-adopted tooling non-blocking guardrail');
 requireText(recoverySource, 'DAVINCI_RECOVERY_EXPORTED != RECOVERY_EXECUTED', 'recovery export fail-close guardrail');
 requireText(recoverySource, 'DAVINCI_RECOVERY_ACTION_EXPORTED != DAVINCI_TIMELINE_MUTATED', 'timeline mutation fail-close guardrail');
 requireText(recoverySource, 'SHA_BOUND_RECOVERY_EXPORTED != MAC_DAVINCI_ACTUAL_VERIFIED', 'SHA-bound recovery is not Actual verification');
