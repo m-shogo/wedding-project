@@ -30,7 +30,7 @@ type InputLane = {
   blockerCodes?: readonly string[];
 };
 
-type BlockerProvenance = "RAW_STAGE_STATUS" | "INPUT_GATE" | "SOURCE_REVALIDATION" | "NORMALIZED_STAGE_STATE" | "NONE";
+type BlockerProvenance = "RAW_STAGE_STATUS" | "INPUT_GATE" | "SOURCE_REVALIDATION" | "HANDOFF_CONTRACT" | "NORMALIZED_STAGE_STATE" | "NONE";
 
 const openingOrder = ["media", "previewRender", "previewSourceBinding", "previewReview", "finalRender", "finalRenderReview", "productionBundle", "davinciFinishing", "finalDeliveryApproval"] as const;
 const profileOrder = ["assembly", "finalRender", "finalRenderReview", "productionBundle", "davinciFinishing", "finalDeliveryApproval"] as const;
@@ -124,12 +124,22 @@ function rawStageBlockerCodesFor(projectId: "opening" | "profile", stageName: st
   return [...(stages[stageName] ?? [])];
 }
 
+function handoffBlockerCodesFor(projectId: "opening" | "profile", stageName: string): string[] {
+  if (stageName !== "davinciFinishing") return [];
+  return projectId === "opening"
+    ? [...openingProductionStatus.handoff.davinci.blockerCodes]
+    : [...profileProductionStatus.handoff.davinci.blockerCodes];
+}
+
 function stageBlockerInfoFor(projectId: "opening" | "profile", stageName: string, inputLanes: readonly InputLane[]): {codes: string[]; provenance: BlockerProvenance} {
   const rawStageCodes = rawStageBlockerCodesFor(projectId, stageName);
   if (rawStageCodes.length > 0) return {codes: rawStageCodes, provenance: "RAW_STAGE_STATUS"};
 
   const laneCodes = inputLanes.flatMap((lane) => lane.blockerCodes ?? []);
   if (laneCodes.length > 0) return {codes: [...new Set(laneCodes)], provenance: "INPUT_GATE"};
+
+  const handoffCodes = handoffBlockerCodesFor(projectId, stageName);
+  if (handoffCodes.length > 0) return {codes: [...new Set(handoffCodes)], provenance: "HANDOFF_CONTRACT"};
 
   if (projectId === "opening") {
     if (stageName === "previewSourceBinding" || stageName === "previewReview") {
@@ -257,6 +267,7 @@ export function buildWeddingMovieProductionCriticalPath() {
       "BLOCKER_PROVENANCE_RAW_STAGE_STATUS != RAW_LOG_OR_ABSOLUTE_PATH",
       "BLOCKER_PROVENANCE_INPUT_GATE != RAW_STAGE_BLOCKERS",
       "BLOCKER_PROVENANCE_SOURCE_REVALIDATION != FULL_STAGE_EVIDENCE",
+      "BLOCKER_PROVENANCE_HANDOFF_CONTRACT != HANDOFF_CURRENT",
       "INPUT_LANE_READY != PROJECT_PRODUCTION_READY",
       "RECOVERY_COMMAND_VISIBLE != RECOVERY_EXECUTED",
       "ACTION_TARGET_VISIBLE != ACTION_COMPLETED",
