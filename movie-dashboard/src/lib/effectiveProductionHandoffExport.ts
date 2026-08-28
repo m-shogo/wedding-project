@@ -45,7 +45,6 @@ function buildOverlay(movieId: PalmierWeddingProductionMovieId): EffectiveProduc
     remotionStudioToolingDependency: {
       ...project.remotionStudioToolingDependency,
       adoptedCandidateIds: [...project.remotionStudioToolingDependency.adoptedCandidateIds],
-      unknownCandidateIds: [...project.remotionStudioToolingDependency.unknownCandidateIds],
       recoveryActions: project.remotionStudioToolingDependency.recoveryActions.map((action) => ({...action})),
       recovery: [...project.remotionStudioToolingDependency.recovery],
       guardrails: [...project.remotionStudioToolingDependency.guardrails],
@@ -54,6 +53,7 @@ function buildOverlay(movieId: PalmierWeddingProductionMovieId): EffectiveProduc
       "CANONICAL_HANDOFF_REMAINS_SOURCE_OF_WEDDING_MEDIA_AND_STAGE_EVIDENCE",
       "EFFECTIVE_OVERLAY_EXPORTED != EFFECTIVE_GATE_COMPLETED",
       "REMOTION_DEPENDENCY_OVERLAY_EXPORTED != STUDIO_ACTUAL_VERIFIED",
+      "UNKNOWN_REMOTION_ADOPTION_FAILS_BEFORE_OVERLAY_EXPORT",
       "HUMAN_QA_NOT_RUN != HUMAN_QA_PASS",
       "MAC_DAVINCI_ACTUAL_NOT_RUN != MAC_DAVINCI_ACTUAL_VERIFIED",
     ],
