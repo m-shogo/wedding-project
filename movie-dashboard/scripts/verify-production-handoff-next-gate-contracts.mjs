@@ -26,10 +26,13 @@ for (const [label, source, project] of [
     "artifactPath: current.path ?? null",
     "blockerCodes: [...current.blockerCodes]",
     "recovery: [...current.recovery]",
+    "actionTargets: current.actionTargets.map",
     'state: "PRODUCTION_READY" as const',
+    "actionTargets: [] as Array<{label: string; route: string; purpose: string}>",
     `nextGate: buildNextGate(${project}CriticalPath)`,
     `criticalPath: criticalPath.projects.${project}`,
     '"NEXT_GATE_EXPORTED != NEXT_GATE_COMPLETED"',
+    '"ACTION_TARGET_EXPORTED != ACTION_COMPLETED"',
     '"STABLE_BLOCKER_CODE != RAW_BLOCKER_DETAIL"',
   ]) need(source, token, label);
 
@@ -55,14 +58,19 @@ for (const [label, source, project, builder] of [
     "artifactPath={nextGate.artifactPath}",
     "blockerCodes={nextGate.blockerCodes}",
     "recovery={nextGate.recovery}",
+    "actionTargets={nextGate.actionTargets}",
   ]) need(source, token, label);
 }
 
 for (const token of [
+  'import {Link} from "react-router-dom"',
   'state: "BLOCKED" | "PRODUCTION_READY"',
+  "actionTargets: readonly ActionTarget[]",
   "NEXT GATE",
   "ARTIFACT:",
   "blockerCodes.map",
+  "actionTargets.map",
+  "to={target.route}",
   "CANONICAL RECOVERY",
   "recovery.map",
 ]) need(nextGateUi, token, "Next-gate UI");
@@ -77,4 +85,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log("Production handoff next-gate contracts OK: Opening/Profile exports and handoff cards expose the canonical current stage, stable blocker codes, artifact path and recovery without promoting Human QA or Mac DaVinci Actual.");
+console.log("Production handoff next-gate contracts OK: Opening/Profile exports and handoff cards expose the canonical current stage, stable blocker codes, artifact path, recovery and direct action targets without promoting Human QA or Mac DaVinci Actual.");
