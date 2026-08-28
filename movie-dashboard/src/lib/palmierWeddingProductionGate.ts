@@ -94,7 +94,7 @@ function profileProject(): PalmierWeddingProductionProject {
   const handoff = buildProfileProductionStatusHandoff();
   const production = handoff.profile.production;
   const deliveryReadiness: NormalizedDeliveryReadiness = {
-    macDaVinciActualVerified: production.readiness.macDaVinciActual === "ACTUAL_VERIFIED",
+    macDaVinciActualVerified: String(production.readiness.macDaVinciActual) === "ACTUAL_VERIFIED",
     finalDeliveryApproved: production.readiness.finalDeliveryApproved,
   };
   return {
