@@ -31,7 +31,10 @@ const buildNextGate = (project: ReturnType<typeof buildWeddingMovieProductionCri
       };
 };
 
-/** Motion Zukan / DashboardからProfile制作を外へ渡す際のcompact production-status envelope。 */
+/**
+ * Motion Zukan / DashboardからProfile制作を外へ渡す際のcompact production-status envelope。
+ * assembly manifestをproduction-readyへ意味変更せず、Motion Studioの後段statusとPalmier/DaVinci handoff contractを追加で運ぶ。
+ */
 export function buildProfileProductionStatusHandoff() {
   const criticalPath = buildWeddingMovieProductionCriticalPath();
   const profileCriticalPath = criticalPath.projects.profile;
@@ -40,16 +43,27 @@ export function buildProfileProductionStatusHandoff() {
     authority: "MOTION_STUDIO_DERIVED_PROFILE_STATUS_HANDOFF" as const,
     profile: {
       chapters: profileProductionGate.chapters.map((chapter) => ({
-        chapterId: chapter.chapterId, order: chapter.order, title: chapter.title, role: chapter.role,
-        editIntent: [...chapter.editIntent], requiredCount: chapter.requiredCount, readyCount: chapter.readyCount, ready: chapter.ready,
+        chapterId: chapter.chapterId,
+        order: chapter.order,
+        title: chapter.title,
+        role: chapter.role,
+        editIntent: [...chapter.editIntent],
+        requiredCount: chapter.requiredCount,
+        readyCount: chapter.readyCount,
+        ready: chapter.ready,
       })),
       media: {
         expected: profileProductionGate.expectedMediaCount,
         resolved: profileProductionGate.resolvedMediaCount,
         missing: profileProductionGate.mediaMissingCount,
         slots: profileProductionGate.mediaSlots.map((slot) => ({
-          id: slot.id, chapterId: slot.chapterId, label: slot.label, kind: slot.kind,
-          canonicalStem: slot.canonicalStem, file: slot.file, ready: slot.ready,
+          id: slot.id,
+          chapterId: slot.chapterId,
+          label: slot.label,
+          kind: slot.kind,
+          canonicalStem: slot.canonicalStem,
+          file: slot.file,
+          ready: slot.ready,
           intakeDirectory: "motion-studio/public/profile/",
         })),
       },
@@ -57,9 +71,13 @@ export function buildProfileProductionStatusHandoff() {
         count: profileGeneratedAccents.count,
         authority: profileGeneratedAccents.authority,
         accents: profileGeneratedAccents.accents.map((accent) => ({
-          slotId: accent.slotId, chapterId: accent.chapterId, label: accent.label,
-          implementation: accent.implementation, canonicalReuse: accent.canonicalReuse,
-          source: accent.source, realMediaRequired: accent.realMediaRequired,
+          slotId: accent.slotId,
+          chapterId: accent.chapterId,
+          label: accent.label,
+          implementation: accent.implementation,
+          canonicalReuse: accent.canonicalReuse,
+          source: accent.source,
+          realMediaRequired: accent.realMediaRequired,
         })),
         evidence: profileGeneratedAccents.productionEvidence,
       },
