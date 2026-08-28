@@ -237,3 +237,31 @@ reused already-QA'd Drive assets, no new generation, no per-page saturation:
 
 Deliberately did not add decoration to every remaining empty area — the goal was a
 consistent *rhythm* of one accent per quiet page, not maximum density everywhere.
+
+## Asset density pass — "use a lot more material" per explicit user request
+
+User asked to push magazine/Rurubu density further using more real assets, and to
+measure the actual gap against the reference image and V10. Added:
+
+- P06: added a second real photo (`PHOTO_CUTOUT_GLOBAL_HAWAII_RESORT_POOL_DIAMOND_HEAD_01`,
+  verified people-free at a glance — only tiny distant background swimmers, same
+  convention as ordinary resort photography) as a "MEMORY SPOT 02" satellite, turning
+  the page into an actual HERO+SATELLITE structure instead of hero-only. Hero band
+  shrunk from 690→480px to make room.
+- P07: added a second real photo (`GENERATED_PHOTO_CAFE_HAWAII_CAKE_COFFEE_DIAMOND_HEAD_WIDE`)
+  pinned as a small rotated polaroid inside the hero band.
+
+Caught and fixed two of this pass's own bugs before calling it done:
+- First placement of P07's second photo landed below the schedule and overflowed
+  ~40px past the trim edge — moved inside the hero band instead of recalculating
+  the schedule's vertical budget a second time.
+- The re-positioned photo rendered as a flat placeholder color even after
+  "successful" repositioning — turned out `upload_assets` had never actually been
+  called for that node in the first place (it was created with a placeholder solid
+  fill, then repositioning scripts ran without an upload step in between). Caught
+  by checking `photo.fills` directly (still `SOLID`, not `IMAGE`) rather than
+  trusting the screenshot alone, then uploaded and re-verified.
+
+Final full-file audit (Inter-leftover + trim-overflow, all 8 pages): 0 Inter nodes,
+3 overflow entries — all three are the intentional small corner-bleed on the floral
+decorations (P01, P03, P08), not bugs.
