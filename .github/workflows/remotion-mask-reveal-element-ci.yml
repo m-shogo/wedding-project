@@ -12,6 +12,7 @@ on:
       - "motion-studio/scripts/lib/check-typography-element.mts"
       - "motion-studio/scripts/prepare-typography-elements-studio-actual-batch.mts"
       - "motion-studio/scripts/check-typography-elements-studio-actual-batch.mts"
+      - "motion-studio/scripts/typography-elements-studio-actual-evidence.mts"
       - "movie-dashboard/src/data/remotionElementCandidates.ts"
       - "movie-dashboard/src/components/RemotionElementReadinessPanel.tsx"
       - "movie-dashboard/src/pages/VisualMotionLibrary.tsx"
@@ -31,6 +32,7 @@ on:
       - "motion-studio/scripts/lib/check-typography-element.mts"
       - "motion-studio/scripts/prepare-typography-elements-studio-actual-batch.mts"
       - "motion-studio/scripts/check-typography-elements-studio-actual-batch.mts"
+      - "motion-studio/scripts/typography-elements-studio-actual-evidence.mts"
       - "movie-dashboard/src/data/remotionElementCandidates.ts"
       - "movie-dashboard/src/components/RemotionElementReadinessPanel.tsx"
       - "movie-dashboard/src/pages/VisualMotionLibrary.tsx"
@@ -149,6 +151,21 @@ jobs:
           node --no-warnings scripts/prepare-typography-elements-studio-actual-batch.mts
           node --no-warnings scripts/check-typography-elements-studio-actual-batch.mts
 
+      - name: Studio Actual evidence starts NOT_RUN and strict fails closed
+        working-directory: motion-studio
+        run: |
+          rm -f ../movie-dashboard/out/remotion-element-actual-batch/studio-actual-evidence.json
+          node --no-warnings scripts/typography-elements-studio-actual-evidence.mts
+          node --no-warnings scripts/typography-elements-studio-actual-evidence.mts --init
+          node --no-warnings scripts/typography-elements-studio-actual-evidence.mts
+          if node --no-warnings scripts/typography-elements-studio-actual-evidence.mts --strict; then
+            echo 'Fresh CI evidence must not pass Studio Actual strict verification.'
+            exit 1
+          fi
+          grep -q '"overall": "NOT_RUN"' ../movie-dashboard/out/remotion-element-actual-batch/studio-actual-evidence.json
+          grep -q '"productionDependencyPromoted": false' ../movie-dashboard/out/remotion-element-actual-batch/studio-actual-evidence.json
+          echo 'studioActualEvidence=NOT_RUN_FAIL_CLOSED'
+
       - name: Compile and render generated Element sources
         working-directory: motion-studio
         run: |
@@ -208,6 +225,7 @@ jobs:
           echo 'interactiveSchemaStaticContract=PASS_CANDIDATE_ONLY'
           echo 'motionZukanRegistry=ELEMENT_CANDIDATE_ONLY'
           echo 'studioActualBatchPrepared=PASS_PREP_ONLY'
+          echo 'studioActualEvidence=NOT_RUN_FAIL_CLOSED'
           echo 'studioControlReadback=NOT_RUN'
           echo 'studioInstallActual=NOT_RUN'
           echo 'productionDependencyUpgradePerformed=NO'
