@@ -12,5 +12,25 @@ export const profileRealMediaReviewGate = {
   "mediaReviewed": 0,
   "bgmReviewed": false,
   "macDaVinciActual": "NOT_RUN",
-  "productionReady": false
+  "productionReady": false,
+  "audit": {
+    "evidencePath": "motion-studio/out/qa/profile-v1-real-media-review.json",
+    "evidenceExists": false,
+    "evidenceSha256": null,
+    "parseState": "MISSING",
+    "boundAt": null,
+    "preview": null,
+    "previewSourceFingerprintSha256": null,
+    "previewSources": [],
+    "runtimeManifestSha256": null,
+    "productionPlanSha256": null,
+    "previewComponentSha256": null,
+    "canonicalPlanFingerprint": null,
+    "media": [],
+    "chapters": [],
+    "review": {
+      "overall": "NOT_RUN",
+      "reviewedAt": null
+    }
+  }
 } as const;
