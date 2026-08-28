@@ -161,6 +161,10 @@ export const openingProductionStatus = {
     "davinci": {
       "contractVersion": "opening-v1-davinci-handoff/v1",
       "current": false,
+      "blockerCodes": [
+        "OPENING_DAVINCI_BUNDLE_MISSING",
+        "OPENING_DAVINCI_RECOVERY_SIDECAR_MISSING"
+      ],
       "sourceAuthorities": [
         "scripts/export-opening-v1-production-bundle.mts#bundle.davinci",
         "scripts/export-wedding-davinci-production-recovery.mts",
