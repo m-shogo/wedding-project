@@ -218,3 +218,22 @@ Ran three systematic checks via `use_figma` (not eyeballing screenshots alone):
 
 All 8 pages are now overflow-clean and safe-area-clean (except the one intentional
 decorative bleed), on top of the earlier font migration and hierarchy work.
+
+## Density pass — the four quiet pages felt too calm for "るるぶ感"
+
+User asked directly whether the pages actually read as Rurubu yet. Honest answer given:
+partially — color/typography closed the gap, but P03/P05/P07/P08 had almost no
+decorative touches while P01/P02 had several, an inconsistent density rhythm.
+Also flagged as still-open: P05 Okinawa/Seoul photos, P03/P08 empty answer/message
+areas, no side-by-side comparison vs the reference or V10, no Missing Asset List,
+no PR yet.
+
+Added one small, purposeful decorative accent to each of the four quiet pages —
+reused already-QA'd Drive assets, no new generation, no per-page saturation:
+- P03: floral corner bottom-right (balances the photo pinned top-right)
+- P05: route/plane icon near the title (reinforces the travel-memory theme)
+- P07: sparkle accent beside the schedule title
+- P08: floral corner top-right, echoing P01's cover treatment as a bookend
+
+Deliberately did not add decoration to every remaining empty area — the goal was a
+consistent *rhythm* of one accent per quiet page, not maximum density everywhere.
