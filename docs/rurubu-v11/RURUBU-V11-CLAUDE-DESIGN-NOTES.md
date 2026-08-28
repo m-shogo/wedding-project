@@ -265,3 +265,37 @@ Caught and fixed two of this pass's own bugs before calling it done:
 Final full-file audit (Inter-leftover + trim-overflow, all 8 pages): 0 Inter nodes,
 3 overflow entries — all three are the intentional small corner-bleed on the floral
 decorations (P01, P03, P08), not bugs.
+
+## Title-lockup pass — replaced native titles with branded graphic lockups
+
+User asked to lean further into magazine/Rurubu density using frames, titles, and
+icons, not just more photos. Downloaded and verified 7 pre-made `TITLE_*` lockup
+graphics from Drive (all "FINAL GRAPHIC TARGET / PENDING TRANSPORT" in V10's own
+notes — i.e. V10 had planned to use these too but never actually placed them).
+
+Visually inspected each before placing:
+- **Skipped** `TITLE_PROFILE_QA_POP_A.png` — it has a corgi mascot baked in. Per
+  this project's standing rule against AI-generated/altered dog imagery, kept
+  P03's native Zen Maru Gothic title instead of using this asset.
+- Placed the other 6 (`TITLE_PROFILE_PROFILE_TROPICAL_B`, `TITLE_STORY_FUTARI_NO_KOTO_TROPICAL_B`,
+  `TITLE_STORY_TIMELINE_PINK_A`, `TITLE_MEMORY_MEMORY_SPOT_TROPICAL_B`,
+  `TITLE_1DAY_1DAY_PLAN_TROPICAL_B`, `TITLE_BACK_WEDDING_GUIDE_POP_B`) on
+  P02/P04/P05/P06/P07/P08, replacing the native title+kicker text on each.
+  None had a baked date/name, so none conflict with the native-editable-date rule
+  that got a different logo variant rejected in V10's own history.
+
+Noted a real style tension and said so plainly rather than silently proceeding:
+these are glossy "bubble-letter" 3D lockups, a different register from the
+Zen Maru Gothic titles built earlier this session. However P01's cover logo
+(`LOGO_COVER_RURUBU_WEDDING_EDITORIAL_B`) already uses this same bubble-lockup
+style, so extending it page-to-page actually **increases** cross-page consistency
+rather than introducing a competing style — the native-Zen-Maru-Gothic titles were
+the odd one out, not these.
+
+Found and fixed one real collision: P07's new title image's bottom edge (y≈371)
+overlapped the venue note text (originally at y=340). Fixed by measuring the
+title's actual rendered bottom and re-flowing the venue note + entire schedule
+block below it by the same offset, so relative spacing was preserved exactly.
+
+Final full-file re-audit: 0 Inter nodes, 3 overflow entries (all the same
+intentional corner-decoration bleeds as the previous audit, no new bugs).
