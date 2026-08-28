@@ -55,11 +55,11 @@ export function buildOpeningProductionStatusHandoff() {
         nextGate: buildNextGate(openingCriticalPath),
         nextActions: [...openingProductionStatus.nextActions],
       },
-      criticalPath: openingCriticalPath,
+      criticalPath: criticalPath.projects.opening,
     },
     crossProjectCriticalPath: {
       productionReady: criticalPath.productionReady,
-      opening: openingCriticalPath,
+      opening: criticalPath.projects.opening,
       profile: criticalPath.projects.profile,
       guardrails: [...criticalPath.guardrails],
     },
