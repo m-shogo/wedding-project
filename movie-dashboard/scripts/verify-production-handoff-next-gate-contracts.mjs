@@ -25,14 +25,17 @@ for (const [label, source, project] of [
     'state: "BLOCKED" as const',
     "artifactPath: current.path ?? null",
     "blockerCodes: [...current.blockerCodes]",
+    "blockerActions: current.blockerActions.map",
     "recovery: [...current.recovery]",
     "actionTargets: current.actionTargets.map",
     'state: "PRODUCTION_READY" as const',
+    "blockerActions: [] as MovieProductionBlockerRecoveryAction[]",
     "actionTargets: [] as Array<{label: string; route: string; purpose: string}>",
     `nextGate: buildNextGate(${project}CriticalPath)`,
     `criticalPath: criticalPath.projects.${project}`,
     '"NEXT_GATE_EXPORTED != NEXT_GATE_COMPLETED"',
     '"ACTION_TARGET_EXPORTED != ACTION_COMPLETED"',
+    '"BLOCKER_ACTION_EXPORTED != RECOVERY_EXECUTED"',
     '"STABLE_BLOCKER_CODE != RAW_BLOCKER_DETAIL"',
   ]) need(source, token, label);
 
@@ -57,6 +60,7 @@ for (const [label, source, project, builder] of [
     "stage={nextGate.stage}",
     "artifactPath={nextGate.artifactPath}",
     "blockerCodes={nextGate.blockerCodes}",
+    "blockerActions={nextGate.blockerActions}",
     "recovery={nextGate.recovery}",
     "actionTargets={nextGate.actionTargets}",
   ]) need(source, token, label);
@@ -64,11 +68,17 @@ for (const [label, source, project, builder] of [
 
 for (const token of [
   'import {Link} from "react-router-dom"',
+  "MovieProductionBlockerRecoveryAction",
   'state: "BLOCKED" | "PRODUCTION_READY"',
+  "blockerActions: readonly MovieProductionBlockerRecoveryAction[]",
   "actionTargets: readonly ActionTarget[]",
   "NEXT GATE",
   "ARTIFACT:",
   "blockerCodes.map",
+  "BLOCKER RECOVERY",
+  "blockerActions.map",
+  'action.kind === "ROUTE"',
+  'action.kind === "COMMAND"',
   "actionTargets.map",
   "to={target.route}",
   "CANONICAL RECOVERY",
@@ -85,4 +95,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log("Production handoff next-gate contracts OK: Opening/Profile exports and handoff cards expose the canonical current stage, stable blocker codes, artifact path, recovery and direct action targets without promoting Human QA or Mac DaVinci Actual.");
+console.log("Production handoff next-gate contracts OK: Opening/Profile exports and handoff cards expose canonical stage/blocker evidence plus structured ROUTE/COMMAND/HUMAN recovery without promoting Human QA or Mac DaVinci Actual.");
