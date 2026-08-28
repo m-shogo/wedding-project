@@ -26,7 +26,6 @@ for (const projectId of ['opening', 'profile']) {
   need(Array.isArray(project.nextActions), `${projectId}: nextActions missing`);
   for (const stage of project.downstreamBlockedStages ?? []) {
     need(Array.isArray(stage.blockerCodes), `${projectId}:${stage.name}: downstream blockerCodes missing`);
-    need(Array.isArray(stage.recovery), `${projectId}:${stage.name}: downstream recovery missing`);
   }
   if (!project.productionReady) {
     need(project.currentCriticalStage !== null, `${projectId}: not ready but no current critical stage`);
@@ -36,6 +35,7 @@ for (const projectId of ['opening', 'profile']) {
     need(Array.isArray(project.currentCriticalStage?.recovery), `${projectId}: canonical recovery missing`);
     need(project.currentCriticalStage.blockerCodes.length > 0, `${projectId}: blocked critical stage must expose at least one stable blocker code`);
     need(project.currentCriticalStage.recovery.length > 0, `${projectId}: blocked critical stage must expose at least one canonical recovery step`);
+    need(JSON.stringify(project.currentCriticalStage.recovery) === JSON.stringify(project.nextActions), `${projectId}: current stage recovery must equal canonical project nextActions`);
     for (const code of project.currentCriticalStage.blockerCodes) {
       need(!code.startsWith('/'), `${projectId}: blocker code must not be an absolute path: ${code}`);
       need(!code.includes(process.cwd()), `${projectId}: blocker code leaked cwd: ${code}`);
@@ -50,6 +50,7 @@ for (const guardrail of [
   'CI_STATUS != MAC_DAVINCI_ACTUAL',
   'DOWNSTREAM_BLOCKED != DOWNSTREAM_FAILED',
   'STABLE_BLOCKER_CODE != RAW_BLOCKER_DETAIL',
+  'CURRENT_STAGE_RECOVERY == CANONICAL_PROJECT_NEXT_ACTIONS',
 ]) need(report.guardrails.includes(guardrail), `guardrail missing: ${guardrail}`);
 
 const textRun = spawnSync(process.execPath, ['--no-warnings', 'scripts/wedding-movie-production-critical-path.mts'], {cwd: root, encoding: 'utf8'});
@@ -67,4 +68,4 @@ if (errors.length) {
   for (const error of errors) console.error(`- ${error}`);
   process.exit(1);
 }
-console.log(`Wedding Movie production critical path contracts OK: opening=${report.projects.opening.overallState}, profile=${report.projects.profile.overallState}, productionReady=${report.productionReady}, stable blocker codes + recovery exposed`);
+console.log(`Wedding Movie production critical path contracts OK: opening=${report.projects.opening.overallState}, profile=${report.projects.profile.overallState}, productionReady=${report.productionReady}, stable blocker codes + canonical recovery exposed`);
