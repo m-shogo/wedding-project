@@ -107,6 +107,7 @@ export interface ProfileV1ProductionMediaGateV1 {
     blockers: readonly string[];
     mediaExpected: number;
     mediaReviewed: number;
+    audit: typeof profileRealMediaReviewGate.audit;
   };
   qa: {
     structurePreview: "NOT_RUN" | "BLOCKED" | "PASS";
@@ -226,6 +227,7 @@ function buildProfileV1ProductionMediaGate(projectId: SceneProjectId): ProfileV1
       blockers: [...profileRealMediaReviewGate.blockers],
       mediaExpected: profileRealMediaReviewGate.mediaExpected,
       mediaReviewed: profileRealMediaReviewGate.mediaReviewed,
+      audit: profileRealMediaReviewGate.audit,
     },
     qa: {
       ...profileProductionGate.qa,
@@ -345,7 +347,7 @@ export function buildProjectProductionHandoffManifest(
       productionReady: false,
       blockers,
       warnings,
-      rule: "Assembly-readyは全Sceneのcurrent Typography package + Production Workspace final checksに加え、OpeningではMotion Studio正本の11写真/BGM gate、Profileでは5章17実素材 + BGM権利 + SHA-bound structure review + SHA-bound real-media Human QAが揃った状態だけを示す。Profileの章role/editIntentと各Human review状態はhandoffへ保持する。BGM audio QA / Mac DaVinci Actual / Human promotion / Scene-bound Release Gateは別証拠で、productionReadyへ自動昇格しない。",
+      rule: "Assembly-readyは全Sceneのcurrent Typography package + Production Workspace final checksに加え、OpeningではMotion Studio正本の11写真/BGM gate、Profileでは5章17実素材 + BGM権利 + SHA-bound structure review + SHA-bound real-media Human QAが揃った状態だけを示す。Profileの章role/editIntentと各Human review状態・real-media evidence SHA/fingerprint/各QA bindingはhandoffへ保持する。BGM audio QA / Mac DaVinci Actual / Human promotion / Scene-bound Release Gateは別証拠で、productionReadyへ自動昇格しない。",
     },
   };
 }

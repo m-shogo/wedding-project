@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { Header } from "../components/Header";
 import { MaskRevealEditableWorkspace } from "../components/MaskRevealEditableWorkspace";
 import { MotionZukanProductionWorkspace } from "../components/MotionZukanProductionWorkspace";
+import { ProfileRealMediaQaAuditCard } from "../components/ProfileRealMediaQaAuditCard";
 import { RemotionElementReadinessPanel } from "../components/RemotionElementReadinessPanel";
 import { getMotionLearningBundle } from "../data/motionLearningLinks";
 import { getLatestPreviewEvidence } from "../data/motionPreviewEvidence";
@@ -33,6 +34,9 @@ export function VisualMotionLibrary() {
       </section>
 
       <MotionZukanProductionWorkspace />
+      <div className="mb-10">
+        <ProfileRealMediaQaAuditCard />
+      </div>
 
       <label className="block mb-7">
         <span className="text-[10px] tracking-[0.2em] font-semibold text-navy-400">何をしたい？</span>
