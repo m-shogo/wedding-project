@@ -6,6 +6,7 @@ import {
 import type {SceneProjectId} from "../data/visualSceneComposer";
 import {downloadText} from "../lib/exporters";
 import {OpeningProductionStatusHandoffCard} from "./OpeningProductionStatusHandoffCard";
+import {ProfileDavinciActualBindingAuditCard} from "./ProfileDavinciActualBindingAuditCard";
 
 const stageLabel: Record<string, string> = {
   assembly: "Assembly",
@@ -137,6 +138,8 @@ export function ProfileProductionStatusHandoffCard({projectId}: {projectId: Scen
           PROFILE_REAL_MEDIA_HUMAN_QA_CHANGED =&gt; DAVINCI_RECOVERY_SIDECAR_STALE / PROFILE_REAL_MEDIA_HUMAN_QA_BINDING_EXPORTED != MAC_DAVINCI_ACTUAL_VERIFIED
         </p>
       </div>
+
+      <ProfileDavinciActualBindingAuditCard />
 
       <div className="mt-2 border border-fuchsia-100 dark:border-fuchsia-900 p-2">
         <p className="text-[8px] font-semibold text-fuchsia-700 dark:text-fuchsia-300">GENERATED ACCENTS / CANONICAL ROUTES</p>
