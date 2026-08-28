@@ -6,6 +6,9 @@ on:
       - "motion-studio/scripts/opening-v1-production-status.mts"
       - "motion-studio/scripts/profile-v1-production-status.mts"
       - "motion-studio/scripts/check-production-status-blocker-codes.mts"
+      - "movie-dashboard/scripts/sync-production-stage-blocker-codes.mjs"
+      - "movie-dashboard/src/data/movieProductionStageBlockerCodes.generated.ts"
+      - "movie-dashboard/src/data/weddingMovieProductionCriticalPath.ts"
       - ".github/workflows/movie-production-blocker-codes-ci.yml"
   push:
     branches: [main]
@@ -13,6 +16,9 @@ on:
       - "motion-studio/scripts/opening-v1-production-status.mts"
       - "motion-studio/scripts/profile-v1-production-status.mts"
       - "motion-studio/scripts/check-production-status-blocker-codes.mts"
+      - "movie-dashboard/scripts/sync-production-stage-blocker-codes.mjs"
+      - "movie-dashboard/src/data/movieProductionStageBlockerCodes.generated.ts"
+      - "movie-dashboard/src/data/weddingMovieProductionCriticalPath.ts"
       - ".github/workflows/movie-production-blocker-codes-ci.yml"
 
 permissions:
@@ -37,5 +43,7 @@ jobs:
           cache: pnpm
           cache-dependency-path: motion-studio/pnpm-lock.yaml
       - run: pnpm install --frozen-lockfile
-      - name: Verify stable blocker code contract
+      - name: Verify Motion Studio stable blocker code contract
         run: node --no-warnings scripts/check-production-status-blocker-codes.mts
+      - name: Verify Dashboard stable blocker code snapshot
+        run: node --no-warnings ../movie-dashboard/scripts/sync-production-stage-blocker-codes.mjs
