@@ -18,6 +18,7 @@ requireText(helper, "AI_EDIT_FIX_READY != WEDDING_PRODUCTION_READY", "separate r
 requireText(helper, "PALMIER_CURRENT != DAVINCI_HANDOFF_CURRENT", "Palmier to DaVinci boundary guardrail");
 requireText(helper, "DAVINCI_HANDOFF_CURRENT != MAC_DAVINCI_ACTUAL_VERIFIED", "DaVinci Actual boundary guardrail");
 requireText(helper, "DAVINCI_ACTUAL_COMMAND_EXPORTED != MAC_DAVINCI_ACTUAL_VERIFIED", "Actual command export fail-close guardrail");
+requireText(helper, "BLOCKER_ACTION_EXPORTED != RECOVERY_EXECUTED", "structured recovery export fail-close guardrail");
 requireText(helper, "MAC_DAVINCI_ACTUAL_VERIFIED != FINAL_DELIVERY_APPROVED", "final approval boundary guardrail");
 requireText(helper, "MAC_DAVINCI_ACTUAL_NOT_RUN != MAC_DAVINCI_ACTUAL_VERIFIED", "Mac Actual fail-close guardrail");
 requireText(helper, "nextGate: production.nextGate", "canonical next gate passthrough");
@@ -31,6 +32,14 @@ requireText(helper, '"FINAL_DELIVERY_APPROVAL_REQUIRED"', "final approval bridge
 requireText(helper, "actualEvidencePath: davinci.actualEvidence.path", "DaVinci Actual evidence path propagation");
 requireText(helper, "actualCommands: {...davinci.actualEvidence.commands}", "DaVinci Actual commands propagation");
 requireText(helper, "projects.every((project) => project.productionReady)", "cross-project readiness aggregation");
+requireText(helper, "function markdownRecoveryAction", "structured recovery Markdown formatter");
+requireText(helper, 'action.kind === "ROUTE"', "route recovery serialization");
+requireText(helper, 'action.kind === "COMMAND"', "command recovery serialization");
+requireText(helper, "route=${action.route}", "route target preservation");
+requireText(helper, "command=${action.command}", "command target preservation");
+requireText(helper, "human-action-required", "human action preservation");
+requireText(helper, '"recovery-actions:"', "structured recovery Markdown section");
+requireText(helper, "project.nextGate.blockerActions.map(markdownRecoveryAction)", "canonical blocker action export");
 requireText(helper, "palmier-davinci-bridge:", "Markdown bridge export");
 requireText(helper, "mac-davinci-actual-verified:", "Markdown Actual state export");
 requireText(helper, "davinci-actual-evidence:", "Markdown Actual evidence export");
