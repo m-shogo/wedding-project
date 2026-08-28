@@ -25,6 +25,7 @@ const blockerProvenanceLabels: Record<string, string> = {
   RAW_STAGE_STATUS: "Motion Studio stable stage evidence",
   INPUT_GATE: "input gate evidence",
   SOURCE_REVALIDATION: "source revalidation evidence",
+  HANDOFF_CONTRACT: "DaVinci handoff contract evidence",
   NORMALIZED_STAGE_STATE: "derived waiting-state code",
   NONE: "no blocker evidence",
 };
