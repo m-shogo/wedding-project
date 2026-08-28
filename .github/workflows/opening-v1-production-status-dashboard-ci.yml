@@ -6,12 +6,16 @@ on:
       - "motion-studio/scripts/opening-v1-production-status.mts"
       - "motion-studio/scripts/opening-v1-preview-source-fingerprint.mts"
       - "motion-studio/scripts/opening-v1-davinci-handoff-contract.mts"
+      - "motion-studio/scripts/opening-v1-davinci-actual-binding-audit.mts"
       - "movie-dashboard/scripts/sync-opening-production-status.mjs"
+      - "movie-dashboard/scripts/sync-opening-davinci-actual-binding-audit.mjs"
       - "movie-dashboard/scripts/verify-opening-production-status-handoff.mjs"
       - "movie-dashboard/src/data/openingProductionGate.generated.ts"
       - "movie-dashboard/src/data/openingProductionStatus.generated.ts"
+      - "movie-dashboard/src/data/openingDavinciActualBindingAudit.generated.ts"
       - "movie-dashboard/src/data/openingProductionStatusHandoff.ts"
       - "movie-dashboard/src/components/OpeningProductionStatusHandoffCard.tsx"
+      - "movie-dashboard/src/components/OpeningDavinciActualBindingAuditCard.tsx"
       - "movie-dashboard/src/components/ProfileProductionStatusHandoffCard.tsx"
       - ".github/workflows/opening-v1-production-status-dashboard-ci.yml"
   push:
@@ -20,12 +24,16 @@ on:
       - "motion-studio/scripts/opening-v1-production-status.mts"
       - "motion-studio/scripts/opening-v1-preview-source-fingerprint.mts"
       - "motion-studio/scripts/opening-v1-davinci-handoff-contract.mts"
+      - "motion-studio/scripts/opening-v1-davinci-actual-binding-audit.mts"
       - "movie-dashboard/scripts/sync-opening-production-status.mjs"
+      - "movie-dashboard/scripts/sync-opening-davinci-actual-binding-audit.mjs"
       - "movie-dashboard/scripts/verify-opening-production-status-handoff.mjs"
       - "movie-dashboard/src/data/openingProductionGate.generated.ts"
       - "movie-dashboard/src/data/openingProductionStatus.generated.ts"
+      - "movie-dashboard/src/data/openingDavinciActualBindingAudit.generated.ts"
       - "movie-dashboard/src/data/openingProductionStatusHandoff.ts"
       - "movie-dashboard/src/components/OpeningProductionStatusHandoffCard.tsx"
+      - "movie-dashboard/src/components/OpeningDavinciActualBindingAuditCard.tsx"
       - "movie-dashboard/src/components/ProfileProductionStatusHandoffCard.tsx"
       - ".github/workflows/opening-v1-production-status-dashboard-ci.yml"
 
@@ -53,6 +61,8 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - name: Generated Opening full production status is current
         run: node scripts/sync-opening-production-status.mjs --check
+      - name: Generated Opening DaVinci Actual binding audit is current
+        run: node scripts/sync-opening-davinci-actual-binding-audit.mjs --check
       - name: Opening production-status export and UI contracts
         run: node scripts/verify-opening-production-status-handoff.mjs
       - name: Typecheck and build Movie Dashboard
