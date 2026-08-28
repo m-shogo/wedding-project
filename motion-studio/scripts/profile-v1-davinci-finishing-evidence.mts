@@ -1,12 +1,14 @@
 import {createHash} from 'node:crypto';
 import {existsSync, mkdirSync, readFileSync, writeFileSync} from 'node:fs';
 import {dirname, join, relative} from 'node:path';
+import {spawnSync} from 'node:child_process';
 import {fileURLToPath} from 'node:url';
 import {profileV1GeneratedAccentImplementations} from '../src/data/profileV1GeneratedAccentRegistry.ts';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const bundlePath = join(root, 'out/handoff/profile-v1/profile-v1-production-bundle.json');
 const timelinePath = join(root, 'out/handoff/profile-v1/profile-v1-palmier-timeline.csv');
+const realMediaReviewPath = join(root, 'out/qa/profile-v1-real-media-review.json');
 const finalReviewPath = join(root, 'out/qa/profile-v1-final-render-review.json');
 const evidencePath = join(root, 'out/qa/profile-v1-davinci-finishing-evidence.json');
 const mode = process.argv.includes('--init') ? 'init' : process.argv.includes('--strict') ? 'strict' : 'status';
@@ -17,6 +19,7 @@ type Bundle = {
   authority:'FINAL_RENDER_BOUND_HANDOFF';
   finalRender:{path:string;sha256:string};
   humanFinalRenderReview:{evidencePath:string;evidenceSha256:string};
+  upstreamHumanEvidence:{realMediaReviewSha256:string;structureReviewSha256:string;bgmRightsApprovalSha256:string};
   generatedAccents:GeneratedAccentRoute[];
   palmier:{timelineCsv:string;timelineCsvSha256:string;generatedAccentAuthority:string};
   davinci:{expectedSha256:string;generatedAccentRoutes:GeneratedAccentRoute[];productionReady:false};
@@ -34,11 +37,21 @@ const rel=(p:string)=>relative(root,p).replaceAll('\\','/');
 const accentSignature=(value:GeneratedAccentRoute)=>`${value.slotId}|${value.chapterId}|${value.implementation}|${value.canonicalReuse}`;
 const expectedAccentRoutes=profileV1GeneratedAccentImplementations.map(accentSignature).sort();
 const sameAccentRoutes=(routes:GeneratedAccentRoute[]|undefined)=>Array.isArray(routes)&&JSON.stringify(routes.map(accentSignature).sort())===JSON.stringify(expectedAccentRoutes);
+const runRealMediaReviewStrict=()=>spawnSync(process.execPath,['--no-warnings','scripts/profile-v1-real-media-review.mts','--strict'],{cwd:root,encoding:'utf8'});
 function loadBundle(){
   if(!existsSync(bundlePath)) throw new Error('PROFILE_DAVINCI_BUNDLE_MISSING');
   const bundle=JSON.parse(readFileSync(bundlePath,'utf8')) as Bundle;
   if(bundle.schemaVersion!=='profile-v1-production-bundle/v1'||bundle.authority!=='FINAL_RENDER_BOUND_HANDOFF') throw new Error('PROFILE_DAVINCI_BUNDLE_CONTRACT');
   if(bundle.davinci.productionReady!==false||bundle.finalRender.sha256!==bundle.davinci.expectedSha256) throw new Error('PROFILE_DAVINCI_BUNDLE_SHA_CONTRACT');
+
+  if(!existsSync(realMediaReviewPath)) throw new Error('PROFILE_DAVINCI_REAL_MEDIA_REVIEW_MISSING');
+  if(bundle.upstreamHumanEvidence?.realMediaReviewSha256!==sha(realMediaReviewPath)) throw new Error('PROFILE_DAVINCI_REAL_MEDIA_REVIEW_SHA_MISMATCH');
+  let realMediaReview:any;
+  try{realMediaReview=JSON.parse(readFileSync(realMediaReviewPath,'utf8'));}catch{throw new Error('PROFILE_DAVINCI_REAL_MEDIA_REVIEW_INVALID_JSON');}
+  if(realMediaReview.schemaVersion!=='profile-v1-real-media-review/v1'||realMediaReview.authority!=='HUMAN_REAL_MEDIA_PREVIEW_REVIEW') throw new Error('PROFILE_DAVINCI_REAL_MEDIA_REVIEW_CONTRACT');
+  if(realMediaReview.macDaVinciActual!=='NOT_RUN'||realMediaReview.productionReady!==false) throw new Error('PROFILE_DAVINCI_REAL_MEDIA_REVIEW_BOUNDARY_INVALID');
+  const realMediaStrict=runRealMediaReviewStrict();
+  if(realMediaStrict.status!==0) throw new Error('PROFILE_DAVINCI_REAL_MEDIA_REVIEW_NOT_CURRENT_PASS');
 
   if(!existsSync(finalReviewPath)) throw new Error('PROFILE_DAVINCI_FINAL_RENDER_REVIEW_MISSING');
   if(bundle.humanFinalRenderReview?.evidencePath!==rel(finalReviewPath)) throw new Error('PROFILE_DAVINCI_FINAL_RENDER_REVIEW_PATH_MISMATCH');
@@ -64,7 +77,7 @@ function init(){
   const {bundle,bundleSha256}=loadBundle();
   const evidence:Evidence={schemaVersion:'profile-v1-davinci-finishing-evidence/v1',authority:'MAC_DAVINCI_ACTUAL_EVIDENCE',boundAt:new Date().toISOString(),bundle:{path:rel(bundlePath),sha256:bundleSha256},sourceRender:{path:bundle.finalRender.path,expectedSha256:bundle.finalRender.sha256,readbackSha256:null,shaMatch:'NOT_RUN'},resolve:{version:null,projectName:null,timelineName:null,timelineInsertion:'NOT_RUN',durationAndFps:'NOT_RUN'},finishing:{color:'NOT_RUN',audio:'NOT_RUN',titleSafeAndFraming:'NOT_RUN',playback1x:'NOT_RUN',playbackHalfSpeed:'NOT_RUN'},export:{path:null,sha256:null,duration:'NOT_RUN',dimensions:'NOT_RUN',fps:'NOT_RUN',audioPresent:'NOT_RUN',watchedWithSound:'NOT_RUN'},review:{overall:'NOT_RUN',reviewer:null,reviewedAt:null,notes:''},productionReady:false};
   mkdirSync(dirname(evidencePath),{recursive:true}); writeFileSync(evidencePath,`${JSON.stringify(evidence,null,2)}\n`);
-  console.log(`Profile DaVinci finishing evidence initialized: ${rel(evidencePath)}`); console.log('All Mac GUI Actual verdicts remain NOT_RUN.');
+  console.log(`Profile DaVinci finishing evidence initialized: ${rel(evidencePath)}`); console.log('All Mac GUI Actual verdicts remain NOT_RUN. Current Human real-media QA was required before this template could be created.');
 }
 function verify(strict:boolean){
   if(!existsSync(evidencePath)){console.log('Profile DaVinci finishing evidence: NOT_RUN'); if(strict)process.exit(1); return;}
@@ -96,6 +109,6 @@ function verify(strict:boolean){
   if(ev.review.overall!=='PASS'||!ev.review.reviewer?.trim()||!ev.review.reviewedAt||Number.isNaN(reviewedAtMs))errors.push('PROFILE_DAVINCI_HUMAN_REVIEW_NOT_PASS');
   else if(!Number.isNaN(boundAtMs)&&reviewedAtMs<boundAtMs)errors.push('PROFILE_DAVINCI_REVIEWED_BEFORE_BINDING');
   if(errors.length){console.log(`Profile DaVinci finishing evidence: BLOCKED (${errors.length})`); for(const e of errors)console.log(`BLOCK / ${e}`); if(strict)process.exit(1); return;}
-  console.log('Profile DaVinci finishing evidence: ACTUAL_VERIFIED — current Human final-render review, canonical Motion Zukan accent routes, bundle/source, Palmier timeline and exported movie bytes match real Mac Resolve evidence.');
+  console.log('Profile DaVinci finishing evidence: ACTUAL_VERIFIED — current Human real-media QA, Human final-render review, canonical Motion Zukan accent routes, bundle/source, Palmier timeline and exported movie bytes match real Mac Resolve evidence.');
 }
 if(mode==='init')init();else verify(mode==='strict');
