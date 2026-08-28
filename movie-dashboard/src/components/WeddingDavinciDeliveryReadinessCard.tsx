@@ -9,7 +9,7 @@ const stateClass = (state: string) => {
   return "text-amber-700 dark:text-amber-300";
 };
 
-const nextGateLabel = (nextGate: {stage?: string} | null | undefined) => nextGate?.stage ?? "PRODUCTION_READY";
+const nextGateLabel = (nextGate: {stage?: string | null} | null | undefined) => nextGate?.stage ?? "PRODUCTION_READY";
 
 export function WeddingDavinciDeliveryReadinessCard() {
   const manifest = buildWeddingDavinciDeliveryReadiness();
