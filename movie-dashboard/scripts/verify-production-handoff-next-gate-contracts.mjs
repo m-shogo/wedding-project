@@ -25,6 +25,7 @@ for (const [label, source, project] of [
     "recovery: [...current.recovery]",
     'state: "PRODUCTION_READY" as const',
     `nextGate: buildNextGate(${project}CriticalPath)`,
+    `criticalPath: criticalPath.projects.${project}`,
     '"NEXT_GATE_EXPORTED != NEXT_GATE_COMPLETED"',
     '"STABLE_BLOCKER_CODE != RAW_BLOCKER_DETAIL"',
   ]) need(source, token, label);
@@ -35,9 +36,7 @@ for (const [label, source, project] of [
 }
 
 need(opening, "const openingCriticalPath = criticalPath.projects.opening", "Opening");
-need(opening, "criticalPath: openingCriticalPath", "Opening");
 need(profile, "const profileCriticalPath = criticalPath.projects.profile", "Profile");
-need(profile, "criticalPath: profileCriticalPath", "Profile");
 
 if (errors.length) {
   console.error(`Production handoff next-gate contracts FAILED (${errors.length})`);
