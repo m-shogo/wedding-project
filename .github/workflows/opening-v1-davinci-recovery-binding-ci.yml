@@ -1,0 +1,49 @@
+name: Opening V1 DaVinci Recovery Binding CI
+
+on:
+  pull_request:
+    paths:
+      - "motion-studio/scripts/opening-v1-davinci-finishing-evidence.mts"
+      - "motion-studio/scripts/check-opening-v1-davinci-recovery-binding.mts"
+      - ".github/workflows/opening-v1-davinci-recovery-binding-ci.yml"
+  push:
+    branches: [main]
+    paths:
+      - "motion-studio/scripts/opening-v1-davinci-finishing-evidence.mts"
+      - "motion-studio/scripts/check-opening-v1-davinci-recovery-binding.mts"
+      - ".github/workflows/opening-v1-davinci-recovery-binding-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: motion-studio
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+          run_install: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: motion-studio/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - name: TypeScript
+        run: pnpm typecheck
+      - name: Opening DaVinci recovery binding contracts
+        run: node --no-warnings scripts/check-opening-v1-davinci-recovery-binding.mts
+      - name: Fresh clone remains NOT_RUN / fail-closed
+        run: |
+          node --no-warnings scripts/opening-v1-davinci-finishing-evidence.mts
+          if node --no-warnings scripts/opening-v1-davinci-finishing-evidence.mts --strict; then
+            echo "Opening DaVinci Actual unexpectedly verified without bundle/recovery/GUI evidence"
+            exit 1
+          fi
+          test ! -f out/qa/opening-v1-davinci-finishing-evidence.json
