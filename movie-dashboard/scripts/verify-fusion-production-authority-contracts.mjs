@@ -17,6 +17,22 @@ requireText(source, 'buildPalmierWeddingProductionGate', 'canonical Wedding prod
 requireText(source, 'showMovieSelector', 'movie-specific production authority selector');
 requireText(source, 'WEDDING PRODUCTION AUTHORITY', 'visible production authority section');
 requireText(source, 'Fusion練習と本番DaVinci Actualを分離する', 'learning versus Actual boundary');
+requireText(source, 'const dependency = project.remotionStudioToolingDependency', 'project Remotion dependency UI source');
+requireText(source, 'EFFECTIVE PRODUCTION STATE', 'effective production state UI section');
+requireText(source, 'project.effectiveProductionState', 'effective production state rendering');
+requireText(source, 'project.blockingAuthorities', 'blocking authority rendering');
+requireText(source, 'Fusion独自判定ではなくPalmierと同じ中央resolverを使用します', 'single resolver UI honesty note');
+requireText(source, 'REMOTION PROJECT DEPENDENCY', 'project dependency UI section');
+requireText(source, 'dependency.state', 'project dependency state rendering');
+requireText(source, 'dependency.adoptedCandidateIds', 'adopted candidate rendering');
+requireText(source, 'dependency.studioActualVerified', 'dependency Studio Actual rendering');
+requireText(source, 'dependency.humanReviewed', 'dependency Human review rendering');
+requireText(source, 'dependency.dependencyPromoted', 'dependency promotion rendering');
+requireText(source, 'dependency.recoveryActions', 'dependency recovery rendering');
+requireText(source, 'action.kind === "COMMAND"', 'dependency command recovery rendering');
+requireText(source, 'action.kind === "HUMAN"', 'dependency human recovery rendering');
+requireText(source, 'Fusion画面から自動昇格しません', 'dependency Human fail-close warning');
+requireText(source, 'Wedding projectへ明示採用した場合だけ', 'explicit adoption fail-close copy');
 requireText(source, 'project.bridge.palmierCurrent', 'Palmier current checkpoint');
 requireText(source, 'project.bridge.davinciHandoffCurrent', 'DaVinci handoff checkpoint');
 requireText(source, 'project.bridge.macDaVinciActualVerified', 'Mac Actual checkpoint');
@@ -40,8 +56,6 @@ requireText(source, 'project.nextGate.artifactPath', 'current production artifac
 requireText(source, 'project.nextGate.blockerCodes', 'stable production blocker codes');
 requireText(source, 'project.nextGate.blockerActions', 'structured production blocker actions');
 requireText(source, 'action.kind === "ROUTE"', 'route recovery action rendering');
-requireText(source, 'action.kind === "COMMAND"', 'command recovery action rendering');
-requireText(source, 'action.kind === "HUMAN"', 'human recovery action fail-close rendering');
 requireText(source, 'project.nextGate.recovery', 'canonical production recovery rendering');
 requireText(source, 'Human action required · この画面からPASSへ昇格しません', 'human recovery fail-close warning');
 requireText(source, 'project.bridge.state === "MAC_DAVINCI_ACTUAL_NOT_VERIFIED"', 'Mac Actual gate condition');
@@ -69,7 +83,7 @@ requireText(studioEvidenceSource, 'MOTION_ZUKAN_REMOTION_STUDIO_ACTUAL_TOOLING_R
 requireText(studioEvidenceSource, 'TOOLING_EVIDENCE_REFERENCED != STUDIO_ACTUAL_VERIFIED', 'Studio tooling fail-close guardrail');
 requireText(studioEvidenceSource, 'ELEMENT_NOT_ADOPTED_BY_PROJECT => TOOLING_ACTUAL_IS_NON_BLOCKING', 'non-adopted tooling non-blocking guardrail');
 
-requireText(recoverySource, 'wedding-davinci-production-recovery/v1', 'DaVinci recovery schema');
+requireText(recoverySource, 'wedding-davinci-production-recovery/v2', 'DaVinci recovery schema');
 requireText(recoverySource, 'MOTION_STUDIO_DAVINCI_PRODUCTION_RECOVERY', 'DaVinci recovery authority');
 requireText(recoverySource, 'effectiveProductionState: project.effectiveProductionState', 'effective production state propagation');
 requireText(recoverySource, 'blockingAuthorities: [...project.blockingAuthorities]', 'blocking authority propagation');
