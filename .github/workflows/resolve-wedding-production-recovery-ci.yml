@@ -1,0 +1,41 @@
+name: Resolve Wedding Production Recovery CI
+
+on:
+  pull_request:
+    paths:
+      - "motion-studio/src/data/resolveHandoff.schema.ts"
+      - "motion-studio/src/data/resolveWeddingProductionRecoveryPolicy.ts"
+      - "motion-studio/src/data/resolveHandoffPolicy.ts"
+      - "motion-studio/scripts/check-resolve-wedding-production-recovery.mts"
+      - ".github/workflows/resolve-wedding-production-recovery-ci.yml"
+  push:
+    branches: [main]
+    paths:
+      - "motion-studio/src/data/resolveHandoff.schema.ts"
+      - "motion-studio/src/data/resolveWeddingProductionRecoveryPolicy.ts"
+      - "motion-studio/src/data/resolveHandoffPolicy.ts"
+      - "motion-studio/scripts/check-resolve-wedding-production-recovery.mts"
+      - ".github/workflows/resolve-wedding-production-recovery-ci.yml"
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: motion-studio/pnpm-lock.yaml
+      - name: Install Motion Studio dependencies
+        working-directory: motion-studio
+        run: pnpm install --frozen-lockfile
+      - name: Verify Resolve Wedding production recovery sidecar
+        working-directory: motion-studio
+        run: node --no-warnings scripts/check-resolve-wedding-production-recovery.mts
+      - name: Typecheck Motion Studio
+        working-directory: motion-studio
+        run: pnpm typecheck
