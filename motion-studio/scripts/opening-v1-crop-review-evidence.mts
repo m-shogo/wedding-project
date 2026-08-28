@@ -29,14 +29,15 @@ const mode = process.argv.includes('--init')
 
 type ReviewState = 'NOT_RUN' | 'PASS' | 'FAIL';
 type DerivedState = 'NOT_RUN' | 'PASS' | 'BLOCKED' | 'STALE';
+type PresentationSource = 'scene' | 'asset' | 'default';
 type SlotBinding = {
   key: OpeningV1PhotoKey;
   file: string;
   mediaSha256: string;
   focus: OpeningV1PhotoFocus | null;
   fit: OpeningV1PhotoFit;
-  focusSource: 'SCENE' | 'ASSET' | 'DEFAULT';
-  fitSource: 'SCENE' | 'ASSET' | 'DEFAULT';
+  focusSource: PresentationSource;
+  fitSource: PresentationSource;
   cropQaRequired: boolean;
   presentationRevision: string;
 };
@@ -231,8 +232,8 @@ function selfTest() {
     mediaSha256: 'a'.repeat(64),
     focus: {x: 50, y: 50},
     fit: 'cover' as OpeningV1PhotoFit,
-    focusSource: 'SCENE' as const,
-    fitSource: 'SCENE' as const,
+    focusSource: 'scene' as const,
+    fitSource: 'scene' as const,
     cropQaRequired: true,
   };
   const revision = bindingRevision(base);
