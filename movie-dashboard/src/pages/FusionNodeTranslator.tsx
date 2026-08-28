@@ -189,7 +189,7 @@ export function FusionNodeTranslator() {
         <div className="grid grid-cols-1 xl:grid-cols-[0.8fr_1.4fr] gap-7">
           <div className="divide-y divide-sand-100 dark:divide-navy-700 border-y border-sand-200 dark:border-navy-600">
             {fusionNodeLessons.map((node) => {
-              const active = selectedNode.nodeId === nodeId;
+              const active = selectedNode.nodeId === node.nodeId;
               return (
                 <button
                   key={node.nodeId}
