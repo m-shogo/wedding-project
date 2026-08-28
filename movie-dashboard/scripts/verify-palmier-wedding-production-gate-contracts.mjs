@@ -94,6 +94,9 @@ requireText(page, "buildPalmierWeddingProductionGate", "Palmier production gate 
 requireText(page, "productionHandoffReady = editFixReady && weddingProductionGate.productionReady", "combined Palmier + production readiness");
 requireText(page, "productionAuthority: weddingProductionGate", "JSON production authority export");
 requireText(page, "Wedding Production Authority", "visible production authority card");
+requireText(page, "project.effectiveProductionState", "visible effective production state");
+requireText(page, "project.blockingAuthorities", "visible blocking authorities");
+requireText(page, "Wedding NOW:", "canonical Wedding next gate label");
 requireText(page, "project.nextGate.blockerCodes", "stable blocker code rendering");
 requireText(page, "project.nextGate.recovery", "canonical recovery rendering");
 requireText(page, "project.nextGate.actionTargets", "canonical action target routing");
@@ -117,6 +120,14 @@ requireText(page, "project.remotionStudioToolingEvidence.summaryPath", "visible 
 requireText(page, "project.remotionStudioToolingEvidence.evidencePath", "visible Studio tooling evidence path");
 requireText(page, "project.remotionStudioToolingEvidence.statusCommand", "visible Studio tooling status command");
 requireText(page, "project.remotionStudioToolingEvidence.strictCommand", "visible Studio tooling strict command");
+requireText(page, "Wedding Element dependency", "visible Wedding Element dependency sub-card");
+requireText(page, "project.remotionStudioToolingDependency.state", "visible dependency state");
+requireText(page, "project.remotionStudioToolingDependency.adoptedCandidateCount", "visible adopted candidate count");
+requireText(page, "project.remotionStudioToolingDependency.adoptedCandidateIds", "visible adopted candidate ids");
+requireText(page, "project.remotionStudioToolingDependency.blocking", "visible dependency blocking state");
+requireText(page, "project.remotionStudioToolingDependency.recoveryActions", "visible structured dependency recovery");
+requireText(page, "action.command", "visible dependency command target");
+requireText(page, "Wedding canonical nextGateがREADYでも、明示採用したRemotion dependencyが未完了ならeffective stateはBLOCKEDになります", "visible effective-state explanation");
 requireText(page, "Wedding Production Authority / Palmier→DaVinci bridgeとは別authorityです", "three-authority separation copy");
 requireText(page, "Tooling evidenceを表示・exportしてもStudio Actual verifiedにはなりません", "Studio tooling fail-close copy");
 requireText(page, "Element未採用ならWedding productionをBLOCKしません", "Studio tooling non-blocking copy");
