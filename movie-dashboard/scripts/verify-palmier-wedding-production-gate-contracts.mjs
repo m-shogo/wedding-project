@@ -6,6 +6,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const read = (rel) => fs.readFileSync(path.join(root, rel), "utf8");
 
 const helper = read("src/lib/palmierWeddingProductionGate.ts");
+const dependency = read("src/data/remotionStudioToolingProductionDependency.ts");
 const page = read("src/pages/PalmierHandoff.tsx");
 
 const requireText = (source, text, label) => {
@@ -14,6 +15,7 @@ const requireText = (source, text, label) => {
 
 requireText(helper, "buildOpeningProductionStatusHandoff", "Opening canonical handoff dependency");
 requireText(helper, "buildProfileProductionStatusHandoff", "Profile canonical handoff dependency");
+requireText(helper, "buildRemotionStudioToolingProductionDependency", "explicit Remotion tooling dependency integration");
 requireText(helper, "AI_EDIT_FIX_READY != WEDDING_PRODUCTION_READY", "separate readiness authority guardrail");
 requireText(helper, "PALMIER_CURRENT != DAVINCI_HANDOFF_CURRENT", "Palmier to DaVinci boundary guardrail");
 requireText(helper, "DAVINCI_HANDOFF_CURRENT != MAC_DAVINCI_ACTUAL_VERIFIED", "DaVinci Actual boundary guardrail");
@@ -38,6 +40,14 @@ requireText(helper, 'authority: "CRITICAL_PATH_PRE_BUNDLE"', "pre-bundle recover
 requireText(helper, "sourceRenderSha256", "final render SHA recovery provenance");
 requireText(helper, "PRE_BUNDLE_RECOVERY_IS_NOT_FINAL_RENDER_SHA_BOUND", "pre-bundle honesty guardrail");
 requireText(helper, "projects.every((project) => project.productionReady)", "cross-project readiness aggregation");
+requireText(helper, "production.nextGate.state === \"PRODUCTION_READY\" && !toolingDependency.blocking", "adopted tooling dependency fail-close readiness");
+requireText(helper, "remotionStudioToolingDependency: toolingDependency", "project dependency snapshot propagation");
+requireText(helper, "ELEMENT_ADOPTED_AND_STUDIO_ACTUAL_NOT_VERIFIED => WEDDING_PRODUCTION_BLOCKED", "adopted tooling fail-close guardrail");
+requireText(helper, "UNADOPTED_ELEMENT_TOOLING_STATE_IS_NON_BLOCKING", "unadopted tooling non-blocking guardrail");
+requireText(helper, "remotion-studio-project-dependency-state:", "Markdown dependency state export");
+requireText(helper, "remotion-studio-project-dependency-blocking:", "Markdown dependency blocking export");
+requireText(helper, "remotion-studio-project-adopted-candidates:", "Markdown adopted candidate export");
+requireText(helper, "remotion-studio-dependency-recovery:", "Markdown dependency recovery export");
 requireText(helper, "function markdownRecoveryAction", "structured recovery Markdown formatter");
 requireText(helper, 'action.kind === "ROUTE"', "route recovery serialization");
 requireText(helper, 'action.kind === "COMMAND"', "command recovery serialization");
@@ -55,6 +65,17 @@ requireText(helper, "davinci-actual-init:", "Markdown Actual init command export
 requireText(helper, "davinci-actual-status:", "Markdown Actual status command export");
 requireText(helper, "davinci-actual-strict:", "Markdown Actual strict command export");
 requireText(helper, "exported commands are instructions only; Resolve GUI Actual remains NOT_RUN", "Markdown Actual command fail-close note");
+
+requireText(dependency, "opening: []", "Opening starts with no adopted Remotion dependency");
+requireText(dependency, "profile: []", "Profile starts with no adopted Remotion dependency");
+requireText(dependency, "unknownCandidateIds", "unknown adopted candidate validation");
+requireText(dependency, 'tooling.currentRepoState === "VERIFIED"', "Studio Actual verification authority");
+requireText(dependency, '"STUDIO_ACTUAL_REQUIRED"', "Studio Actual required dependency state");
+requireText(dependency, '"HUMAN_REVIEW_REQUIRED"', "Human review required dependency state");
+requireText(dependency, '"DEPENDENCY_PROMOTION_REQUIRED"', "promotion required dependency state");
+requireText(dependency, "const blocking = adopted && state !== \"READY\"", "adopted dependency fail-close rule");
+requireText(dependency, "ELEMENT_CANDIDATE_EXISTS != WEDDING_PROJECT_ADOPTED", "candidate is not adoption guardrail");
+requireText(dependency, "CI_MUST_NOT_PROMOTE_STUDIO_GUI_ACTUAL", "CI Actual honesty guardrail");
 
 requireText(page, "buildPalmierWeddingProductionGate", "Palmier production gate integration");
 requireText(page, "productionHandoffReady = editFixReady && weddingProductionGate.productionReady", "combined Palmier + production readiness");

@@ -1,5 +1,6 @@
 import {buildOpeningProductionStatusHandoff} from "../data/openingProductionStatusHandoff";
 import {buildProfileProductionStatusHandoff} from "../data/profileProductionStatusHandoff";
+import {buildRemotionStudioToolingProductionDependency} from "../data/remotionStudioToolingProductionDependency";
 
 export type PalmierWeddingProductionMovieId = "opening" | "profile";
 
@@ -7,6 +8,7 @@ type OpeningProduction = ReturnType<typeof buildOpeningProductionStatusHandoff>[
 type ProductionNextGate = OpeningProduction["nextGate"];
 type ProductionRecoveryAction = ProductionNextGate["blockerActions"][number];
 type RemotionStudioToolingEvidence = OpeningProduction["remotionStudioToolingEvidence"];
+type RemotionStudioToolingProductionDependency = ReturnType<typeof buildRemotionStudioToolingProductionDependency>;
 
 export type PalmierDavinciRecoverySnapshot = {
   authority: "SHA_BOUND_FINAL_RENDER" | "CRITICAL_PATH_PRE_BUNDLE";
@@ -41,6 +43,7 @@ export type PalmierWeddingProductionProject = {
   productionReady: boolean;
   nextGate: ProductionNextGate;
   remotionStudioToolingEvidence: RemotionStudioToolingEvidence;
+  remotionStudioToolingDependency: RemotionStudioToolingProductionDependency;
   bridge: PalmierDavinciProductionBridge;
 };
 
@@ -150,6 +153,7 @@ function buildBridge(
 function openingProject(): PalmierWeddingProductionProject {
   const handoff = buildOpeningProductionStatusHandoff();
   const production = handoff.opening.production;
+  const toolingDependency = buildRemotionStudioToolingProductionDependency("opening");
   const deliveryReadiness: NormalizedDeliveryReadiness = {
     macDaVinciActualVerified: production.readiness.macDaVinciActualVerified,
     finalDeliveryApproved: production.readiness.finalDeliveryApproved,
@@ -158,9 +162,10 @@ function openingProject(): PalmierWeddingProductionProject {
     movieId: "opening",
     title: "Opening Movie",
     overallState: production.overallState,
-    productionReady: production.nextGate.state === "PRODUCTION_READY",
+    productionReady: production.nextGate.state === "PRODUCTION_READY" && !toolingDependency.blocking,
     nextGate: production.nextGate,
     remotionStudioToolingEvidence: production.remotionStudioToolingEvidence,
+    remotionStudioToolingDependency: toolingDependency,
     bridge: buildBridge(production.palmierHandoff, production.davinciHandoff, deliveryReadiness, production.nextGate),
   };
 }
@@ -168,6 +173,7 @@ function openingProject(): PalmierWeddingProductionProject {
 function profileProject(): PalmierWeddingProductionProject {
   const handoff = buildProfileProductionStatusHandoff();
   const production = handoff.profile.production;
+  const toolingDependency = buildRemotionStudioToolingProductionDependency("profile");
   const deliveryReadiness: NormalizedDeliveryReadiness = {
     macDaVinciActualVerified: String(production.readiness.macDaVinciActual) === "ACTUAL_VERIFIED",
     finalDeliveryApproved: production.readiness.finalDeliveryApproved,
@@ -176,9 +182,10 @@ function profileProject(): PalmierWeddingProductionProject {
     movieId: "profile",
     title: "Profile Movie",
     overallState: production.overallState,
-    productionReady: production.nextGate.state === "PRODUCTION_READY",
+    productionReady: production.nextGate.state === "PRODUCTION_READY" && !toolingDependency.blocking,
     nextGate: production.nextGate,
     remotionStudioToolingEvidence: production.remotionStudioToolingEvidence,
+    remotionStudioToolingDependency: toolingDependency,
     bridge: buildBridge(production.palmierHandoff, production.davinciHandoff, deliveryReadiness, production.nextGate),
   };
 }
@@ -206,7 +213,9 @@ export function buildPalmierWeddingProductionGate(selectedMovieId: string): Palm
       "SHA_BOUND_RECOVERY_EXPORTED != RECOVERY_EXECUTED",
       "MAC_DAVINCI_ACTUAL_VERIFIED != FINAL_DELIVERY_APPROVED",
       "REMOTION_STUDIO_TOOLING_EVIDENCE_EXPORTED != STUDIO_ACTUAL_VERIFIED",
-      "REMOTION_STUDIO_TOOLING_EVIDENCE != WEDDING_PRODUCTION_GATE",
+      "ELEMENT_CANDIDATE_EXISTS != WEDDING_PROJECT_ADOPTED",
+      "ELEMENT_ADOPTED_AND_STUDIO_ACTUAL_NOT_VERIFIED => WEDDING_PRODUCTION_BLOCKED",
+      "UNADOPTED_ELEMENT_TOOLING_STATE_IS_NON_BLOCKING",
       "HUMAN_QA_NOT_RUN != HUMAN_QA_PASS",
       "MAC_DAVINCI_ACTUAL_NOT_RUN != MAC_DAVINCI_ACTUAL_VERIFIED",
     ],
@@ -232,6 +241,7 @@ export function buildPalmierWeddingProductionMarkdown(gate: PalmierWeddingProduc
 
   for (const project of gate.projects) {
     const studio = project.remotionStudioToolingEvidence;
+    const dependency = project.remotionStudioToolingDependency;
     lines.push(
       "",
       `## ${project.title}`,
@@ -250,7 +260,11 @@ export function buildPalmierWeddingProductionMarkdown(gate: PalmierWeddingProduc
       `remotion-studio-strict: ${studio.strictCommand}`,
       `remotion-studio-human-reviewed: ${studio.humanReviewed ? "yes" : "no"}`,
       `remotion-studio-production-dependency-promoted: ${studio.productionDependencyPromoted ? "yes" : "no"}`,
-      "remotion-studio-note: tooling evidence is non-blocking unless a project explicitly adopts an Element dependency; exported summary is not Studio Actual verification",
+      `remotion-studio-project-adopted: ${dependency.adopted ? "yes" : "no"}`,
+      `remotion-studio-project-dependency-state: ${dependency.state}`,
+      `remotion-studio-project-dependency-blocking: ${dependency.blocking ? "yes" : "no"}`,
+      `remotion-studio-project-adopted-candidates: ${dependency.adoptedCandidateIds.length > 0 ? dependency.adoptedCandidateIds.join(", ") : "none"}`,
+      "remotion-studio-note: tooling evidence is non-blocking unless a project explicitly adopts an Element dependency; an adopted dependency fails closed until current Studio Actual + Human review + promotion are complete",
       `palmier-davinci-bridge: ${project.bridge.state}`,
       `palmier-current: ${project.bridge.palmierCurrent ? "yes" : "no"} (${project.bridge.palmierContractVersion})`,
       `davinci-handoff-current: ${project.bridge.davinciHandoffCurrent ? "yes" : "no"} (${project.bridge.davinciContractVersion})`,
@@ -265,6 +279,7 @@ export function buildPalmierWeddingProductionMarkdown(gate: PalmierWeddingProduc
       "davinci-actual-note: exported commands are instructions only; Resolve GUI Actual remains NOT_RUN until current evidence is produced and strict verification passes",
       "recovery:",
       ...(project.nextGate.recovery.length > 0 ? project.nextGate.recovery.map((item) => `- ${item}`) : ["- none"]),
+      ...(dependency.recovery.length > 0 ? ["remotion-studio-dependency-recovery:", ...dependency.recovery.map((item) => `- ${item}`)] : []),
     );
   }
 
