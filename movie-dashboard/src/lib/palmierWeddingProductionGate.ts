@@ -41,6 +41,25 @@ export type PalmierEffectiveProductionState =
   | "REMOTION_STUDIO_TOOLING_BLOCKED"
   | "PRODUCTION_READY";
 
+export type PalmierEffectiveRecoveryAction = {
+  kind: "ROUTE" | "COMMAND" | "HUMAN";
+  label: string;
+  purpose: string;
+  route?: string;
+  command?: string;
+};
+
+export type PalmierEffectiveNextGate = {
+  authority: "MOTION_STUDIO_WEDDING_PRODUCTION_GATE" | RemotionStudioToolingProductionDependency["authority"] | null;
+  state: PalmierEffectiveProductionState;
+  stage: string | null;
+  artifactPath: string | null;
+  blockerCodes: string[];
+  blockerActions: PalmierEffectiveRecoveryAction[];
+  recovery: string[];
+  adoptedCandidateIds: string[];
+};
+
 export type PalmierWeddingProductionProject = {
   movieId: PalmierWeddingProductionMovieId;
   title: string;
@@ -49,6 +68,7 @@ export type PalmierWeddingProductionProject = {
   effectiveProductionState: PalmierEffectiveProductionState;
   blockingAuthorities: string[];
   nextGate: ProductionNextGate;
+  effectiveNextGate: PalmierEffectiveNextGate;
   remotionStudioToolingEvidence: RemotionStudioToolingEvidence;
   remotionStudioToolingDependency: RemotionStudioToolingProductionDependency;
   bridge: PalmierDavinciProductionBridge;
@@ -79,6 +99,18 @@ type DavinciRecoveryCarrier = {
 
 function cloneRecoveryAction(action: ProductionRecoveryAction): ProductionRecoveryAction {
   return {...action};
+}
+
+function normalizeEffectiveRecoveryAction(
+  action: ProductionRecoveryAction | RemotionStudioToolingProductionDependency["recoveryActions"][number],
+): PalmierEffectiveRecoveryAction {
+  return {
+    kind: action.kind,
+    label: action.label,
+    purpose: action.purpose,
+    ...("route" in action && action.route ? {route: action.route} : {}),
+    ...("command" in action && action.command ? {command: action.command} : {}),
+  };
 }
 
 function normalizeRecoverySnapshot(davinci: DavinciRecoveryCarrier, nextGate: ProductionNextGate): PalmierDavinciRecoverySnapshot {
@@ -157,22 +189,64 @@ function buildBridge(
   };
 }
 
+export function resolvePalmierEffectiveNextGate(
+  nextGate: ProductionNextGate,
+  toolingDependency: RemotionStudioToolingProductionDependency,
+): PalmierEffectiveNextGate {
+  if (nextGate.state !== "PRODUCTION_READY") {
+    return {
+      authority: "MOTION_STUDIO_WEDDING_PRODUCTION_GATE",
+      state: "WEDDING_PRODUCTION_BLOCKED",
+      stage: nextGate.stage,
+      artifactPath: nextGate.artifactPath,
+      blockerCodes: [...nextGate.blockerCodes],
+      blockerActions: nextGate.blockerActions.map(normalizeEffectiveRecoveryAction),
+      recovery: [...nextGate.recovery],
+      adoptedCandidateIds: [...toolingDependency.adoptedCandidateIds],
+    };
+  }
+
+  if (toolingDependency.blocking) {
+    return {
+      authority: toolingDependency.authority,
+      state: "REMOTION_STUDIO_TOOLING_BLOCKED",
+      stage: "remotionStudioToolingDependency",
+      artifactPath: toolingDependency.evidencePath,
+      blockerCodes: [`REMOTION_STUDIO_TOOLING:${toolingDependency.state}`],
+      blockerActions: toolingDependency.recoveryActions.map(normalizeEffectiveRecoveryAction),
+      recovery: [...toolingDependency.recovery],
+      adoptedCandidateIds: [...toolingDependency.adoptedCandidateIds],
+    };
+  }
+
+  return {
+    authority: null,
+    state: "PRODUCTION_READY",
+    stage: null,
+    artifactPath: null,
+    blockerCodes: [],
+    blockerActions: [],
+    recovery: [],
+    adoptedCandidateIds: [...toolingDependency.adoptedCandidateIds],
+  };
+}
+
 function deriveEffectiveProductionState(
   nextGate: ProductionNextGate,
   toolingDependency: RemotionStudioToolingProductionDependency,
 ) {
+  const effectiveNextGate = resolvePalmierEffectiveNextGate(nextGate, toolingDependency);
   const weddingBlocked = nextGate.state !== "PRODUCTION_READY";
   const toolingBlocked = toolingDependency.blocking;
-  const effectiveProductionState: PalmierEffectiveProductionState = weddingBlocked
-    ? "WEDDING_PRODUCTION_BLOCKED"
-    : toolingBlocked
-      ? "REMOTION_STUDIO_TOOLING_BLOCKED"
-      : "PRODUCTION_READY";
   const blockingAuthorities = [
     ...(weddingBlocked ? ["MOTION_STUDIO_WEDDING_PRODUCTION_GATE"] : []),
     ...(toolingBlocked ? [toolingDependency.authority] : []),
   ];
-  return {effectiveProductionState, blockingAuthorities};
+  return {
+    effectiveProductionState: effectiveNextGate.state,
+    blockingAuthorities,
+    effectiveNextGate,
+  };
 }
 
 function openingProject(): PalmierWeddingProductionProject {
@@ -192,6 +266,7 @@ function openingProject(): PalmierWeddingProductionProject {
     effectiveProductionState: effective.effectiveProductionState,
     blockingAuthorities: effective.blockingAuthorities,
     nextGate: production.nextGate,
+    effectiveNextGate: effective.effectiveNextGate,
     remotionStudioToolingEvidence: production.remotionStudioToolingEvidence,
     remotionStudioToolingDependency: toolingDependency,
     bridge: buildBridge(production.palmierHandoff, production.davinciHandoff, deliveryReadiness, production.nextGate),
@@ -215,6 +290,7 @@ function profileProject(): PalmierWeddingProductionProject {
     effectiveProductionState: effective.effectiveProductionState,
     blockingAuthorities: effective.blockingAuthorities,
     nextGate: production.nextGate,
+    effectiveNextGate: effective.effectiveNextGate,
     remotionStudioToolingEvidence: production.remotionStudioToolingEvidence,
     remotionStudioToolingDependency: toolingDependency,
     bridge: buildBridge(production.palmierHandoff, production.davinciHandoff, deliveryReadiness, production.nextGate),
@@ -247,6 +323,8 @@ export function buildPalmierWeddingProductionGate(selectedMovieId: string): Palm
       "ELEMENT_CANDIDATE_EXISTS != WEDDING_PROJECT_ADOPTED",
       "ELEMENT_ADOPTED_AND_STUDIO_ACTUAL_NOT_VERIFIED => WEDDING_PRODUCTION_BLOCKED",
       "CANONICAL_NEXT_GATE_READY != EFFECTIVE_PRODUCTION_READY_WHEN_ADOPTED_DEPENDENCY_BLOCKS",
+      "EFFECTIVE_NEXT_GATE_PREFERS_WEDDING_BLOCKER_BEFORE_ADOPTED_TOOLING_BLOCKER",
+      "EFFECTIVE_NEXT_GATE_READY_REQUIRES_WEDDING_AND_ADOPTED_TOOLING_READY",
       "UNADOPTED_ELEMENT_TOOLING_STATE_IS_NON_BLOCKING",
       "HUMAN_QA_NOT_RUN != HUMAN_QA_PASS",
       "MAC_DAVINCI_ACTUAL_NOT_RUN != MAC_DAVINCI_ACTUAL_VERIFIED",
@@ -254,7 +332,7 @@ export function buildPalmierWeddingProductionGate(selectedMovieId: string): Palm
   };
 }
 
-function markdownRecoveryAction(action: ProductionRecoveryAction) {
+function markdownRecoveryAction(action: PalmierEffectiveRecoveryAction) {
   const target = action.kind === "ROUTE" && action.route
     ? `route=${action.route}`
     : action.kind === "COMMAND" && action.command
@@ -281,6 +359,7 @@ export function buildPalmierWeddingProductionMarkdown(gate: PalmierWeddingProduc
   for (const project of gate.projects) {
     const studio = project.remotionStudioToolingEvidence;
     const dependency = project.remotionStudioToolingDependency;
+    const effectiveNextGate = project.effectiveNextGate;
     lines.push(
       "",
       `## ${project.title}`,
@@ -288,11 +367,17 @@ export function buildPalmierWeddingProductionMarkdown(gate: PalmierWeddingProduc
       `production-ready: ${project.productionReady ? "yes" : "no"}`,
       `effective-production-state: ${project.effectiveProductionState}`,
       `blocking-authorities: ${project.blockingAuthorities.length > 0 ? project.blockingAuthorities.join(", ") : "none"}`,
+      `effective-next-authority: ${effectiveNextGate.authority ?? "none"}`,
+      `effective-next-stage: ${effectiveNextGate.stage ?? "PRODUCTION_READY"}`,
+      `effective-next-artifact: ${effectiveNextGate.artifactPath ?? "—"}`,
+      `effective-next-blocker-codes: ${effectiveNextGate.blockerCodes.length > 0 ? effectiveNextGate.blockerCodes.join(", ") : "none"}`,
+      "effective-next-recovery-actions:",
+      ...(effectiveNextGate.blockerActions.length > 0 ? effectiveNextGate.blockerActions.map(markdownRecoveryAction) : ["- none"]),
       `next-stage: ${project.nextGate.stage ?? "PRODUCTION_READY"}`,
       `artifact: ${project.nextGate.artifactPath ?? "—"}`,
       `blocker-codes: ${project.nextGate.blockerCodes.length > 0 ? project.nextGate.blockerCodes.join(", ") : "none"}`,
       "recovery-actions:",
-      ...(project.nextGate.blockerActions.length > 0 ? project.nextGate.blockerActions.map(markdownRecoveryAction) : ["- none"]),
+      ...(project.nextGate.blockerActions.length > 0 ? project.nextGate.blockerActions.map(normalizeEffectiveRecoveryAction).map(markdownRecoveryAction) : ["- none"]),
       `remotion-studio-tooling-state: ${studio.currentRepoState}`,
       `remotion-studio-summary: ${studio.summaryPath}`,
       `remotion-studio-summary-schema: ${studio.summarySchemaVersion}`,
@@ -321,6 +406,8 @@ export function buildPalmierWeddingProductionMarkdown(gate: PalmierWeddingProduc
       `davinci-actual-status: ${project.bridge.actualCommands.status}`,
       `davinci-actual-strict: ${project.bridge.actualCommands.strict}`,
       "davinci-actual-note: exported commands are instructions only; Resolve GUI Actual remains NOT_RUN until current evidence is produced and strict verification passes",
+      "effective-recovery:",
+      ...(effectiveNextGate.recovery.length > 0 ? effectiveNextGate.recovery.map((item) => `- ${item}`) : ["- none"]),
       "recovery:",
       ...(project.nextGate.recovery.length > 0 ? project.nextGate.recovery.map((item) => `- ${item}`) : ["- none"]),
       ...(dependency.recovery.length > 0 ? ["remotion-studio-dependency-recovery:", ...dependency.recovery.map((item) => `- ${item}`)] : []),
