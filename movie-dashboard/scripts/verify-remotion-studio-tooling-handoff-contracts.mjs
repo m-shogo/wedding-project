@@ -9,6 +9,7 @@ const dependency = read("src/data/remotionStudioToolingProductionDependency.ts")
 const opening = read("src/data/openingProductionStatusHandoff.ts");
 const profile = read("src/data/profileProductionStatusHandoff.ts");
 const palmier = read("src/lib/palmierWeddingProductionGate.ts");
+const app = read("src/App.tsx");
 const errors = [];
 const need = (source, token, label) => { if (!source.includes(token)) errors.push(`${label} missing ${token}`); };
 
@@ -47,16 +48,24 @@ for (const token of [
   'expected: "READY"',
   'const blocking = adopted && state !== "READY"',
   "buildRecoveryActions",
+  'kind: "ROUTE"',
   'kind: "COMMAND"',
   'kind: "HUMAN"',
+  'const MOTION_LIBRARY_RECOVERY_ROUTE = "/movie-coach/motion-library"',
+  "motionLibraryRecoveryAction(state)",
+  'route: MOTION_LIBRARY_RECOVERY_ROUTE',
+  "action.route ?? action.command ?? action.purpose",
   "recoveryActions",
   "adoptedCandidateCount",
   '"ELEMENT_CANDIDATE_EXISTS != WEDDING_PROJECT_ADOPTED"',
   '"UNADOPTED_ELEMENT_TOOLING_STATE_IS_NON_BLOCKING"',
   '"DEPENDENCY_STATE_RESOLVER_IS_SINGLE_AUTHORITY"',
+  '"RECOVERY_ROUTE_EXPORTED != RECOVERY_EXECUTED"',
   '"RECOVERY_ACTION_EXPORTED != RECOVERY_EXECUTED"',
   '"CI_MUST_NOT_PROMOTE_STUDIO_GUI_ACTUAL"',
 ]) need(dependency, token, "explicit adoption dependency");
+
+need(app, '<Route path="movie-coach/motion-library" element={<VisualMotionLibrary />} />', "Motion Library recovery route target");
 
 for (const [label, source] of [["Opening", opening], ["Profile", profile]]) {
   need(source, "buildRemotionStudioActualToolingEvidence", label);
@@ -76,12 +85,16 @@ for (const token of [
   'buildRemotionStudioToolingProductionDependency("opening")',
   'buildRemotionStudioToolingProductionDependency("profile")',
   "deriveEffectiveProductionState",
+  "resolvePalmierEffectiveNextGate",
   '"WEDDING_PRODUCTION_BLOCKED"',
   '"REMOTION_STUDIO_TOOLING_BLOCKED"',
   'effective.effectiveProductionState === "PRODUCTION_READY"',
   "blockingAuthorities",
+  "effectiveNextGate",
   "effective-production-state:",
   "blocking-authorities:",
+  "effective-next-authority:",
+  "effective-next-recovery-actions:",
   "remotion-studio-tooling-state:",
   "remotion-studio-summary:",
   "remotion-studio-summary-schema:",
@@ -108,4 +121,4 @@ if (errors.length) {
   for (const error of errors) console.error(`- ${error}`);
   process.exit(1);
 }
-console.log("Remotion Studio tooling handoff contracts PASS: one state resolver owns NOT_ADOPTED -> STUDIO_ACTUAL_REQUIRED -> HUMAN_REVIEW_REQUIRED -> DEPENDENCY_PROMOTION_REQUIRED -> READY; current empty adoption stays non-blocking and GUI Actual is not fabricated.");
+console.log("Remotion Studio tooling handoff contracts PASS: one state resolver owns NOT_ADOPTED -> STUDIO_ACTUAL_REQUIRED -> HUMAN_REVIEW_REQUIRED -> DEPENDENCY_PROMOTION_REQUIRED -> READY; each blocking state routes back to Motion Library, current empty adoption stays non-blocking, and GUI Actual is not fabricated.");
