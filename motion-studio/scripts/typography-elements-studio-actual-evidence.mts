@@ -40,7 +40,7 @@ const shaFile = (path: string) => createHash('sha256').update(readFileSync(path)
 const rel = (path: string) => path.replace(`${repoRoot}/`, '').replaceAll('\\', '/');
 
 function loadManifest() {
-  if (!existsSync(manifestPath)) throw new Error('STUDIO_ACTUAL_BATCH_MANIFEST_MISSING:run pnpm remotion-elements:studio-actual:prepare first');
+  if (!existsSync(manifestPath)) throw new Error('STUDIO_ACTUAL_BATCH_MANIFEST_MISSING:run node --no-warnings scripts/prepare-typography-elements-studio-actual-batch.mts first');
   const manifest = JSON.parse(readFileSync(manifestPath, 'utf8')) as any;
   if (manifest.purpose !== 'BOUNDED_MAC_STUDIO_ACTUAL_BATCH') throw new Error('STUDIO_ACTUAL_BATCH_PURPOSE_MISMATCH');
   if (manifest.studioVersionTarget !== '4.0.517') throw new Error('STUDIO_ACTUAL_VERSION_TARGET_MISMATCH');
