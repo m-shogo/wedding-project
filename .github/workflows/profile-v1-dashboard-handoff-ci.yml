@@ -12,6 +12,7 @@ on:
       - "movie-dashboard/scripts/sync-profile-production-gate.mjs"
       - "movie-dashboard/scripts/sync-profile-real-media-review-gate.mjs"
       - "movie-dashboard/scripts/verify-profile-v1-dashboard-handoff-contracts.mjs"
+      - "movie-dashboard/scripts/verify-profile-real-media-qa-audit-surface.mjs"
       - "movie-dashboard/src/data/profileProductionGate.generated.ts"
       - "movie-dashboard/src/data/profileRealMediaReviewGate.generated.ts"
       - "movie-dashboard/src/data/profileRealMediaQaAudit.ts"
@@ -36,6 +37,7 @@ on:
       - "movie-dashboard/scripts/sync-profile-production-gate.mjs"
       - "movie-dashboard/scripts/sync-profile-real-media-review-gate.mjs"
       - "movie-dashboard/scripts/verify-profile-v1-dashboard-handoff-contracts.mjs"
+      - "movie-dashboard/scripts/verify-profile-real-media-qa-audit-surface.mjs"
       - "movie-dashboard/src/data/profileProductionGate.generated.ts"
       - "movie-dashboard/src/data/profileRealMediaReviewGate.generated.ts"
       - "movie-dashboard/src/data/profileRealMediaQaAudit.ts"
@@ -87,6 +89,9 @@ jobs:
 
       - name: Profile Dashboard handoff honesty contracts
         run: node scripts/verify-profile-v1-dashboard-handoff-contracts.mjs
+
+      - name: Profile real-media QA audit surface contracts
+        run: node scripts/verify-profile-real-media-qa-audit-surface.mjs
 
       - name: Existing project production handoff contracts
         run: node scripts/verify-project-production-handoff-manifest-contracts.mjs
