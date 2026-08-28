@@ -9,22 +9,29 @@ const workflowPath = path.join(repoRoot, ".github/workflows/movie-production-blo
 const workflow = fs.readFileSync(workflowPath, "utf8");
 
 const fail = (message) => {
-  console.error(`Production blocker snapshot invalidation contract failed: ${message}`);
+  console.error(`Production state invalidation contract failed: ${message}`);
   process.exit(1);
 };
 
 const scripts = packageJson.scripts ?? {};
-if (scripts["sync:production-blocker-codes"] !== "node scripts/sync-production-stage-blocker-codes.mjs --write") {
-  fail("sync:production-blocker-codes must regenerate the canonical Dashboard snapshot");
+const expectedScripts = {
+  "sync:opening-gate": "node scripts/sync-opening-production-gate.mjs --write",
+  "check:opening-gate": "node scripts/sync-opening-production-gate.mjs --check",
+  "sync:profile-gate": "node scripts/sync-profile-production-gate.mjs --write",
+  "check:profile-gate": "node scripts/sync-profile-production-gate.mjs",
+  "sync:production-blocker-codes": "node scripts/sync-production-stage-blocker-codes.mjs --write",
+  "check:production-blocker-codes": "node scripts/sync-production-stage-blocker-codes.mjs",
+  "sync:production-state": "pnpm sync:opening-gate && pnpm sync:profile-gate && pnpm sync:production-blocker-codes",
+  "check:production-state": "pnpm check:opening-gate && pnpm check:profile-gate && pnpm check:production-blocker-codes",
+};
+for (const [name, expected] of Object.entries(expectedScripts)) {
+  if (scripts[name] !== expected) fail(`${name} must equal ${expected}`);
 }
-if (scripts["check:production-blocker-codes"] !== "node scripts/sync-production-stage-blocker-codes.mjs") {
-  fail("check:production-blocker-codes must verify without mutating tracked evidence");
+if (!String(scripts.dev ?? "").startsWith("pnpm sync:production-state && ")) {
+  fail("Dashboard dev must refresh Opening/Profile gates and blocker codes together before Vite starts");
 }
-if (!String(scripts.dev ?? "").startsWith("pnpm sync:production-blocker-codes && ")) {
-  fail("Dashboard dev must refresh blocker codes from current local production inputs before Vite starts");
-}
-if (!String(scripts.build ?? "").startsWith("pnpm check:production-blocker-codes && ")) {
-  fail("Dashboard build must fail closed when the committed blocker snapshot is stale");
+if (!String(scripts.build ?? "").startsWith("pnpm check:production-state && ")) {
+  fail("Dashboard build must fail closed when any committed production-state snapshot is stale");
 }
 
 const requiredWorkflowPaths = [
@@ -36,16 +43,23 @@ const requiredWorkflowPaths = [
   '"motion-studio/public/audio/**"',
   '"motion-studio/package.json"',
   '"movie-dashboard/package.json"',
+  '"movie-dashboard/scripts/sync-opening-production-gate.mjs"',
+  '"movie-dashboard/scripts/sync-profile-production-gate.mjs"',
   '"movie-dashboard/scripts/sync-production-stage-blocker-codes.mjs"',
   '"movie-dashboard/scripts/verify-production-blocker-snapshot-invalidation.mjs"',
+  '"movie-dashboard/src/data/openingProductionGate.generated.ts"',
+  '"movie-dashboard/src/data/profileProductionGate.generated.ts"',
   '"movie-dashboard/src/data/movieProductionStageBlockerCodes.generated.ts"',
 ];
 for (const expected of requiredWorkflowPaths) {
   const occurrences = workflow.split(expected).length - 1;
   if (occurrences < 2) fail(`workflow must watch ${expected} on pull_request and main push`);
 }
-if (!workflow.includes("Verify blocker snapshot invalidation wiring")) {
-  fail("workflow must execute this invalidation contract verifier");
+if (!workflow.includes("Verify production state invalidation wiring")) {
+  fail("workflow must execute this production-state invalidation contract verifier");
+}
+if (!workflow.includes("Verify Dashboard production state snapshots")) {
+  fail("workflow must verify Opening/Profile gates and blocker-code snapshots as one state unit");
 }
 
-console.log("Production blocker snapshot invalidation contract PASS: local dev refreshes current real-media/BGM state, build/CI fail closed, and Motion Studio production surfaces trigger revalidation.");
+console.log("Production state invalidation contract PASS: local dev refreshes Opening/Profile gates + blocker codes together; build/CI fail closed; production inputs trigger whole-state revalidation.");

@@ -11,8 +11,12 @@ on:
       - "motion-studio/public/audio/**"
       - "motion-studio/package.json"
       - "movie-dashboard/package.json"
+      - "movie-dashboard/scripts/sync-opening-production-gate.mjs"
+      - "movie-dashboard/scripts/sync-profile-production-gate.mjs"
       - "movie-dashboard/scripts/sync-production-stage-blocker-codes.mjs"
       - "movie-dashboard/scripts/verify-production-blocker-snapshot-invalidation.mjs"
+      - "movie-dashboard/src/data/openingProductionGate.generated.ts"
+      - "movie-dashboard/src/data/profileProductionGate.generated.ts"
       - "movie-dashboard/src/data/movieProductionStageBlockerCodes.generated.ts"
       - "movie-dashboard/src/data/weddingMovieProductionCriticalPath.ts"
       - ".github/workflows/movie-production-blocker-codes-ci.yml"
@@ -27,8 +31,12 @@ on:
       - "motion-studio/public/audio/**"
       - "motion-studio/package.json"
       - "movie-dashboard/package.json"
+      - "movie-dashboard/scripts/sync-opening-production-gate.mjs"
+      - "movie-dashboard/scripts/sync-profile-production-gate.mjs"
       - "movie-dashboard/scripts/sync-production-stage-blocker-codes.mjs"
       - "movie-dashboard/scripts/verify-production-blocker-snapshot-invalidation.mjs"
+      - "movie-dashboard/src/data/openingProductionGate.generated.ts"
+      - "movie-dashboard/src/data/profileProductionGate.generated.ts"
       - "movie-dashboard/src/data/movieProductionStageBlockerCodes.generated.ts"
       - "movie-dashboard/src/data/weddingMovieProductionCriticalPath.ts"
       - ".github/workflows/movie-production-blocker-codes-ci.yml"
@@ -55,9 +63,9 @@ jobs:
           cache: pnpm
           cache-dependency-path: motion-studio/pnpm-lock.yaml
       - run: pnpm install --frozen-lockfile
-      - name: Verify blocker snapshot invalidation wiring
+      - name: Verify production state invalidation wiring
         run: node --no-warnings ../movie-dashboard/scripts/verify-production-blocker-snapshot-invalidation.mjs
       - name: Verify Motion Studio stable blocker code contract
         run: node --no-warnings scripts/check-production-status-blocker-codes.mts
-      - name: Verify Dashboard stable blocker code snapshot
-        run: node --no-warnings ../movie-dashboard/scripts/sync-production-stage-blocker-codes.mjs
+      - name: Verify Dashboard production state snapshots
+        run: cd ../movie-dashboard && pnpm check:production-state
