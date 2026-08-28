@@ -12,6 +12,6 @@ export function OpeningProductionHandoffExportButton({compact = false}: {compact
       <span className="mt-1 block text-sm font-bold text-navy-900 dark:text-sand-100">{compact ? "Production Handoff JSONを書き出す" : "11写真・BGM/ambience・critical path・Palmier / DaVinci状態を1 JSONへ"}</span>
       {!compact ? <span className="mt-1 block text-xs leading-5 text-navy-500 dark:text-navy-300">未準備でもBLOCKED / NOT_RUNを保持したまま書き出します。export自体はproductionReadyへの昇格ではありません。</span> : null}
     </button>
-    {!compact ? <ProductionNextGateSummary projectLabel="Opening" state={nextGate.state} stage={nextGate.stage} artifactPath={nextGate.artifactPath} blockerCodes={nextGate.blockerCodes} recovery={nextGate.recovery} actionTargets={nextGate.actionTargets} /> : null}
+    {!compact ? <ProductionNextGateSummary projectLabel="Opening" state={nextGate.state} stage={nextGate.stage} artifactPath={nextGate.artifactPath} blockerCodes={nextGate.blockerCodes} blockerActions={nextGate.blockerActions} recovery={nextGate.recovery} actionTargets={nextGate.actionTargets} /> : null}
   </div>;
 }
