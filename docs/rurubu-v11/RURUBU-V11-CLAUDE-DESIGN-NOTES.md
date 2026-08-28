@@ -377,3 +377,34 @@ constant blindly.
 Final full-file audit after the redesign: 0 Inter nodes, 0 unintentional unfilled
 image placeholders, 3 overflow entries — the same three intentional corner-bleed
 decorations noted throughout this document.
+
+## "全然ダメ もっと振り切って" — committing fully, no more half-measures
+
+User rejected the previous pass as still too soft/cute. Direction: commit fully
+to the orange/red-led real-magazine identity, stop hedging with pastel/rainbow
+elements left over from the earlier sticker-collage phase.
+
+Executed:
+- **P01 coverline pills rebuilt** from 6 rainbow rounded pills into bold
+  rectangular magazine coverline tags: orange/red solid fills alternating with
+  white-with-colored-border, each with a small diamond "flag" notch — sized to
+  their own measured text width rather than a fixed guess.
+- **Pink swept out of every structural/brand role** across all 8 pages (cover
+  badge, P02 bride label, P04 first flow dot, P05/P06 spot badge #1, P08 recap
+  rule + names) and replaced with orange or red. Pink/cobalt/teal/coral/cyan
+  remain only as legitimate *secondary* rotation accents (e.g. distinguishing
+  6 different Q&A numbers), never as the page's dominant brand color anymore.
+- **Masthead accent bars thickened** from 6px hairlines to 14px solid blocks on
+  P02/P03/P04/P05/P07/P08 — a real color presence, not a thin line.
+- **Folio tabs enlarged** (96×22 → 112×28) for more authority.
+- **P01 gained a top-right "MEMORIAL ISSUE" corner badge** — a real magazine
+  "special edition" device. First attempt used a 45°-rotated ribbon; the text
+  positioning math for the diagonal was wrong and it visually collided with the
+  existing floral corner spray, both partially unreadable. Replaced with a
+  plain non-rotated rectangular corner badge instead of chasing the diagonal
+  math further, and removed the floral corner spray entirely since the badge
+  now owns that corner — one clear device beats two competing ones.
+
+Final audit after this pass: 0 Inter nodes, overflow count down to 2 (the
+remaining two are the same known intentional corner-decoration bleeds on P03/P08;
+P01's is gone now that its floral corner was removed).
