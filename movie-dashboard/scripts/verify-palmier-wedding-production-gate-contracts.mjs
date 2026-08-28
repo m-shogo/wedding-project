@@ -73,5 +73,18 @@ requireText(page, "project.bridge.actualEvidencePath", "visible Actual evidence 
 requireText(page, "Object.entries(project.bridge.actualCommands)", "visible canonical Actual commands");
 requireText(page, "Mac / Resolve GUI Actualを実行していない限りverifiedへ昇格しません", "visible Actual fail-close warning");
 requireText(page, "exportは状態を運ぶだけで、Human QAやMac DaVinci Actualを自動昇格しません", "visible fail-close explanation");
+requireText(page, "REMOTION STUDIO TOOLING AUTHORITY", "visible Studio tooling authority card");
+requireText(page, "project.remotionStudioToolingEvidence.currentRepoState", "visible Studio tooling current repo state");
+requireText(page, "project.remotionStudioToolingEvidence.candidateCount", "visible Studio tooling candidate count");
+requireText(page, "project.remotionStudioToolingEvidence.checkAxesPerCandidate", "visible Studio tooling check count");
+requireText(page, "project.remotionStudioToolingEvidence.humanReviewed", "visible Studio tooling Human review state");
+requireText(page, "project.remotionStudioToolingEvidence.productionDependencyPromoted", "visible Studio tooling dependency promotion state");
+requireText(page, "project.remotionStudioToolingEvidence.summaryPath", "visible Studio tooling summary path");
+requireText(page, "project.remotionStudioToolingEvidence.evidencePath", "visible Studio tooling evidence path");
+requireText(page, "project.remotionStudioToolingEvidence.statusCommand", "visible Studio tooling status command");
+requireText(page, "project.remotionStudioToolingEvidence.strictCommand", "visible Studio tooling strict command");
+requireText(page, "Wedding Production Authority / Palmier→DaVinci bridgeとは別authorityです", "three-authority separation copy");
+requireText(page, "Tooling evidenceを表示・exportしてもStudio Actual verifiedにはなりません", "Studio tooling fail-close copy");
+requireText(page, "Element未採用ならWedding productionをBLOCKしません", "Studio tooling non-blocking copy");
 
 console.log("Palmier Wedding production gate contracts: PASS");
