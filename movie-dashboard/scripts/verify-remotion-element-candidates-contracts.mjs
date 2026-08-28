@@ -9,6 +9,7 @@ const motionLibrary = fs.readFileSync(path.join(root, 'src/data/visualMotionLibr
 const motionLibraryPage = fs.readFileSync(path.join(root, 'src/pages/VisualMotionLibrary.tsx'), 'utf8');
 const readinessPanel = fs.readFileSync(path.join(root, 'src/components/RemotionElementReadinessPanel.tsx'), 'utf8');
 const workflow = fs.readFileSync(path.join(repoRoot, '.github/workflows/remotion-mask-reveal-element-ci.yml'), 'utf8');
+const evidenceScript = fs.readFileSync(path.join(repoRoot, 'motion-studio/scripts/typography-elements-studio-actual-evidence.mts'), 'utf8');
 const errors = [];
 
 const expected = [
@@ -73,18 +74,25 @@ for (const token of [
   'artifact: {batch.artifactRoot}',
   '{batch.prepareCommand}',
   '{batch.checkCommand}',
+  '{evidence.initCommand}',
+  '{evidence.statusCommand}',
+  '{evidence.strictCommand}',
+  'CURRENT REPO ACTUAL',
+  'MACHINE SUMMARY CONTRACT',
+  'Machine summary: {evidence.summaryPath}',
+  'summary authority: {evidence.summaryAuthority}',
   'Object.entries(batch.actual)',
   'confirmation / install / control readback / timeline insertion / post-install renderはすべてNOT_RUN',
-  'batch handoffの表示・prepare/check成功だけではStudio Actual verifiedになりません',
+  'SUMMARY_EXPORTED != STUDIO_ACTUAL_VERIFIED',
 ]) {
-  if (!readinessPanel.includes(token)) errors.push(`Element readiness panel missing honesty/batch surface: ${token}`);
+  if (!readinessPanel.includes(token)) errors.push(`Element readiness panel missing honesty/batch/summary surface: ${token}`);
 }
 if (registry.includes('studioInstallActual: \"PASS\"') || registry.includes('studioControlReadbackActual: \"PASS\"')) errors.push('Registry must not claim Studio Actual PASS before Mac GUI evidence exists');
 if (registry.includes('readiness: \"STUDIO_ACTUAL_VERIFIED\"')) errors.push('No Element may be STUDIO_ACTUAL_VERIFIED before the Mac Actual is performed');
 
-for (const relative of ['motion-studio/scripts/prepare-typography-elements-studio-actual-batch.mts','motion-studio/scripts/check-typography-elements-studio-actual-batch.mts']) {
-  if (!fs.existsSync(path.join(repoRoot, relative))) errors.push(`Studio Actual batch file missing: ${relative}`);
-  if (!workflow.includes(path.basename(relative))) errors.push(`Studio Actual batch file missing from CI: ${relative}`);
+for (const relative of ['motion-studio/scripts/prepare-typography-elements-studio-actual-batch.mts','motion-studio/scripts/check-typography-elements-studio-actual-batch.mts','motion-studio/scripts/typography-elements-studio-actual-evidence.mts']) {
+  if (!fs.existsSync(path.join(repoRoot, relative))) errors.push(`Studio Actual batch/evidence file missing: ${relative}`);
+  if (!workflow.includes(path.basename(relative))) errors.push(`Studio Actual batch/evidence file missing from CI: ${relative}`);
 }
 if (!workflow.includes("echo 'typographyElementCount=9'")) errors.push('CI must assert nine Typography Element candidates');
 if (!workflow.includes("echo 'studioActualBatchPrepared=PASS_PREP_ONLY'")) errors.push('CI must distinguish Actual batch prep from Actual execution');
@@ -98,6 +106,13 @@ for (const token of [
   'artifactRoot: \"movie-dashboard/out/remotion-element-actual-batch\"',
   'scripts/prepare-typography-elements-studio-actual-batch.mts',
   'scripts/check-typography-elements-studio-actual-batch.mts',
+  'summaryPath: \"movie-dashboard/out/remotion-element-actual-batch/studio-actual-summary.json\"',
+  'summarySchemaVersion: \"remotion-element-studio-actual-summary/v1\"',
+  'summaryAuthority: \"MAC_REMOTION_STUDIO_ACTUAL_STATUS_SUMMARY\"',
+  'checkAxesPerCandidate: 11',
+  'candidateCount: 9',
+  'currentRepoState: \"NOT_RUN\" as StudioActualState',
+  'humanReviewed: false',
   'candidateIds: remotionElementCandidates.map((candidate) => candidate.patternId)',
   'requestTransport: \"NOT_RUN\"',
   'confirmationDialog: \"NOT_RUN\"',
@@ -105,10 +120,25 @@ for (const token of [
   'controlReadback: \"NOT_RUN\"',
   'timelineInsertion: \"NOT_RUN\"',
   'postInstallRender: \"NOT_RUN\"',
+  'SUMMARY_EXPORTED != STUDIO_ACTUAL_VERIFIED',
   'STUDIO_ACTUAL_BATCH_HANDOFF_EXPORTED != STUDIO_ACTUAL_VERIFIED',
   'STUDIO_ACTUAL_VERIFIED != PRODUCTION_DEPENDENCY_PROMOTED',
 ]) {
-  if (!registry.includes(token)) errors.push(`Studio Actual batch handoff contract missing: ${token}`);
+  if (!registry.includes(token)) errors.push(`Studio Actual batch/summary handoff contract missing: ${token}`);
+}
+
+for (const token of [
+  "schemaVersion: 'remotion-element-studio-actual-summary/v1'",
+  "authority: 'MAC_REMOTION_STUDIO_ACTUAL_STATUS_SUMMARY'",
+  "const summaryPath = join(batchRoot, 'studio-actual-summary.json')",
+  'manifestCurrent: boolean',
+  'humanReviewed: boolean',
+  'blockerCodes: string[]',
+  'completedCandidates: number',
+  "guardrails: ['SUMMARY_EXPORTED != STUDIO_ACTUAL_VERIFIED', 'STUDIO_ACTUAL_VERIFIED != PRODUCTION_DEPENDENCY_PROMOTED']",
+  'writeSummary({manifestSha, manifestCurrent, evidence, evidenceValid, blockerCodes: errors})',
+]) {
+  if (!evidenceScript.includes(token)) errors.push(`Studio Actual machine summary script missing: ${token}`);
 }
 
 const expectedIdIndexes = expected.map((item) => registry.indexOf(`patternId: \"${item.id}\"`));
@@ -120,4 +150,4 @@ if (errors.length) {
   for (const error of errors) console.error(`- ${error}`);
   process.exit(1);
 }
-console.log('Remotion Element candidate contracts OK: 9 Motion Zukan cards surface CI-rendered Element readiness plus the bounded Studio Actual batch handoff, and GUI Actual remains NOT_RUN.');
+console.log('Remotion Element candidate contracts OK: 9 Motion Zukan cards surface CI-rendered Element readiness, bounded Studio Actual handoff, machine-readable status summary metadata, and GUI Actual remains NOT_RUN.');
