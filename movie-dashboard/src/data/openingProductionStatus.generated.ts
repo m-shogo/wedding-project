@@ -4,6 +4,7 @@
 export const openingProductionStatus = {
   "source": {
     "status": "motion-studio/scripts/opening-v1-production-status.mts",
+    "cropReview": "motion-studio/scripts/opening-v1-crop-review-evidence.mts",
     "previewSourceBinding": "motion-studio/scripts/opening-v1-preview-source-fingerprint.mts",
     "finalRenderReview": "motion-studio/scripts/opening-v1-production-status.mts#stages.finalRenderReview",
     "davinciHandoff": "motion-studio/scripts/opening-v1-davinci-handoff-contract.mts"
@@ -23,9 +24,18 @@ export const openingProductionStatus = {
         "node --no-warnings scripts/verify-production-bgm-intake-receipt.mts --project opening"
       ]
     },
+    "cropReview": {
+      "state": "NOT_RUN",
+      "detail": "Blocked upstream until real media/BGM assembly gate passes.",
+      "path": "out/qa/opening-v1-crop-review-evidence.json",
+      "recovery": [
+        "node --no-warnings scripts/opening-v1-crop-review-evidence.mts --init",
+        "node --no-warnings scripts/opening-v1-crop-review-evidence.mts --strict"
+      ]
+    },
     "previewRender": {
       "state": "NOT_RUN",
-      "detail": "Blocked upstream by real-media gate.",
+      "detail": "Blocked upstream until current Human crop review passes.",
       "path": "out/preview/opening_v1_preview.mp4",
       "recovery": [
         "pnpm render:opening-v1:preview"
@@ -96,6 +106,7 @@ export const openingProductionStatus = {
   "readiness": {
     "finalRenderEligible": false,
     "mixReady": false,
+    "humanCropReviewApproved": false,
     "previewSourceBound": false,
     "humanPreviewApproved": false,
     "finalRenderQaPass": false,
@@ -107,6 +118,14 @@ export const openingProductionStatus = {
     "productionReady": false
   },
   "sourceRevalidation": {
+    "cropReview": {
+      "state": "NOT_RUN",
+      "blockers": [],
+      "recovery": [
+        "node --no-warnings scripts/opening-v1-crop-review-evidence.mts --init",
+        "node --no-warnings scripts/opening-v1-crop-review-evidence.mts --strict"
+      ]
+    },
     "realMediaPreview": {
       "state": "NOT_RUN",
       "blockers": [],
@@ -118,6 +137,7 @@ export const openingProductionStatus = {
       "recovery": []
     },
     "guardrails": [
+      "PHOTO_OR_EFFECTIVE_CROP_CHANGED => CROP_REVIEW_REVIEW_REQUIRED",
       "SOURCE_CHANGED => RE_RENDER_REQUIRED",
       "RE_RENDER_REQUIRED => RE_REVIEW_REQUIRED",
       "OLD_HUMAN_REVIEW != CURRENT_RENDER_IMPLEMENTATION",
@@ -127,9 +147,10 @@ export const openingProductionStatus = {
   },
   "handoff": {
     "palmier": {
-      "contractVersion": "opening-v1-palmier-handoff/v2",
+      "contractVersion": "opening-v1-palmier-handoff/v3",
       "current": false,
       "sourceAuthorities": [
+        "out/qa/opening-v1-crop-review-evidence.json",
         "src/data/openingV1.ts#openingV1Scenes",
         "src/data/openingV1Sound.ts#openingV1SoundCues",
         "out/qa/opening-v1-final-render-review.json"
@@ -141,7 +162,8 @@ export const openingProductionStatus = {
           "carries": [
             "scene_boundary",
             "replacement_policy",
-            "final_render_sha256"
+            "final_render_sha256",
+            "crop_review_binding"
           ]
         },
         "soundCues": {
@@ -162,13 +184,23 @@ export const openingProductionStatus = {
       "contractVersion": "opening-v1-davinci-handoff/v1",
       "current": false,
       "sourceAuthorities": [
+        "out/qa/opening-v1-crop-review-evidence.json",
         "scripts/export-opening-v1-production-bundle.mts#bundle.davinci",
         "scripts/export-wedding-davinci-production-recovery.mts",
         "scripts/opening-v1-davinci-finishing-evidence.mts",
         "out/qa/opening-v1-final-render-review.json"
       ],
+      "requiredHumanCropReview": {
+        "path": "out/qa/opening-v1-crop-review-evidence.json",
+        "schemaVersion": "opening-v1-crop-review-evidence/v1",
+        "authority": "HUMAN_OPENING_CROP_REVIEW",
+        "evidenceSha256": null,
+        "bindingFingerprintSha256": null,
+        "mustPassBeforeDaVinciActual": true
+      },
       "upstreamPalmier": {
-        "requiredContractVersion": "opening-v1-palmier-handoff/v2",
+        "requiredContractVersion": "opening-v1-palmier-handoff/v3",
+        "cropReviewBindingRequired": true,
         "timelinePath": "out/handoff/opening-v1/opening-v1-palmier-timeline.csv",
         "soundCuePath": "out/handoff/opening-v1/opening-v1-palmier-sound-cues.csv"
       },
@@ -197,6 +229,7 @@ export const openingProductionStatus = {
         },
         "requiredChecks": [
           "source_render_sha_readback",
+          "crop_review_evidence_sha_and_fingerprint",
           "resolve_version_project_timeline",
           "timeline_insertion",
           "duration_and_fps",

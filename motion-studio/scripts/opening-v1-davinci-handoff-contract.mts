@@ -6,6 +6,7 @@ import {fileURLToPath} from 'node:url';
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const bundlePath = join(root, 'out/handoff/opening-v1/opening-v1-production-bundle.json');
 const recoveryPath = join(root, 'out/handoff/opening-v1/opening-v1-davinci-production-recovery.json');
+const cropReviewPath = join(root, 'out/qa/opening-v1-crop-review-evidence.json');
 const timelinePath = join(root, 'out/handoff/opening-v1/opening-v1-palmier-timeline.csv');
 const soundCuePath = join(root, 'out/handoff/opening-v1/opening-v1-palmier-sound-cues.csv');
 const finalReviewPath = join(root, 'out/qa/opening-v1-final-render-review.json');
@@ -36,6 +37,21 @@ if (bundle) {
   if (bundle.finalRender?.path !== bundle.davinci?.handoffAsset) blockers.push('OPENING_DAVINCI_HANDOFF_ASSET_PATH_MISMATCH');
   if (bundle.finalRender?.sha256 !== bundle.davinci?.expectedSha256) blockers.push('OPENING_DAVINCI_EXPECTED_SHA_MISMATCH');
 
+  if (!existsSync(cropReviewPath)) blockers.push('OPENING_DAVINCI_CROP_REVIEW_MISSING');
+  else {
+    const cropSha = sha(cropReviewPath);
+    let crop: any = null;
+    try { crop = JSON.parse(readFileSync(cropReviewPath, 'utf8')); }
+    catch { blockers.push('OPENING_DAVINCI_CROP_REVIEW_INVALID_JSON'); }
+    if (bundle.humanCropReview?.evidencePath !== rel(cropReviewPath)) blockers.push('OPENING_DAVINCI_CROP_REVIEW_PATH_STALE');
+    if (bundle.humanCropReview?.evidenceSha256 !== cropSha) blockers.push('OPENING_DAVINCI_CROP_REVIEW_SHA_STALE');
+    if (bundle.davinci?.expectedCropReviewEvidenceSha256 !== cropSha) blockers.push('OPENING_DAVINCI_EXPECTED_CROP_REVIEW_SHA_STALE');
+    if (crop?.overall !== 'PASS') blockers.push('OPENING_DAVINCI_CROP_REVIEW_NOT_PASS');
+    if (crop?.bindingFingerprintSha256 && bundle.humanCropReview?.bindingFingerprintSha256 !== crop.bindingFingerprintSha256) blockers.push('OPENING_DAVINCI_CROP_REVIEW_FINGERPRINT_STALE');
+    if (crop?.bindingFingerprintSha256 && bundle.palmier?.cropReviewBindingFingerprintSha256 !== crop.bindingFingerprintSha256) blockers.push('OPENING_DAVINCI_PALMIER_CROP_REVIEW_FINGERPRINT_STALE');
+    if (crop?.bindingFingerprintSha256 && bundle.davinci?.expectedCropReviewBindingFingerprintSha256 !== crop.bindingFingerprintSha256) blockers.push('OPENING_DAVINCI_EXPECTED_CROP_REVIEW_FINGERPRINT_STALE');
+  }
+
   if (!existsSync(finalReviewPath)) blockers.push('OPENING_DAVINCI_FINAL_RENDER_REVIEW_MISSING');
   else {
     const finalReviewSha = sha(finalReviewPath);
@@ -47,7 +63,7 @@ if (bundle) {
     if (!bundle.humanFinalRenderReview?.reviewer) blockers.push('OPENING_DAVINCI_FINAL_RENDER_REVIEWER_MISSING');
   }
 
-  if (bundle.palmier?.handoffContractVersion !== 'opening-v1-palmier-handoff/v2') blockers.push('OPENING_DAVINCI_PALMIER_CONTRACT_STALE');
+  if (bundle.palmier?.handoffContractVersion !== 'opening-v1-palmier-handoff/v3') blockers.push('OPENING_DAVINCI_PALMIER_CONTRACT_STALE');
   if (bundle.palmier?.timelineCsv !== rel(timelinePath)) blockers.push('OPENING_DAVINCI_PALMIER_TIMELINE_PATH_MISMATCH');
   if (!existsSync(timelinePath)) blockers.push('OPENING_DAVINCI_PALMIER_TIMELINE_MISSING');
   else if (bundle.palmier?.timelineCsvSha256 !== sha(timelinePath)) blockers.push('OPENING_DAVINCI_PALMIER_TIMELINE_SHA_STALE');
@@ -85,10 +101,19 @@ const report = {
   authority: 'MOTION_STUDIO_OPENING_DAVINCI_HANDOFF',
   current: blockers.length === 0,
   sourceAuthorities: [
+    'out/qa/opening-v1-crop-review-evidence.json',
     'scripts/export-opening-v1-production-bundle.mts#bundle.davinci',
     'scripts/export-wedding-davinci-production-recovery.mts',
     'scripts/opening-v1-davinci-finishing-evidence.mts',
   ],
+  requiredHumanCropReview: {
+    path: rel(cropReviewPath),
+    schemaVersion: 'opening-v1-crop-review-evidence/v1',
+    authority: 'HUMAN_OPENING_CROP_REVIEW',
+    evidenceSha256: bundle?.davinci?.expectedCropReviewEvidenceSha256 ?? null,
+    bindingFingerprintSha256: bundle?.davinci?.expectedCropReviewBindingFingerprintSha256 ?? null,
+    mustPassBeforeDaVinciActual: true,
+  },
   requiredHumanFinalRenderReview: {
     path: rel(finalReviewPath),
     schemaVersion: 'opening-v1-final-render-review/v1',
@@ -97,7 +122,8 @@ const report = {
     mustPassBeforeDaVinciActual: true,
   },
   upstreamPalmier: {
-    requiredContractVersion: 'opening-v1-palmier-handoff/v2',
+    requiredContractVersion: 'opening-v1-palmier-handoff/v3',
+    cropReviewBindingRequired: true,
     timelinePath: rel(timelinePath),
     soundCuePath: rel(soundCuePath),
   },
@@ -132,6 +158,7 @@ const report = {
     },
     requiredChecks: [
       'source_render_sha_readback',
+      'crop_review_evidence_sha_and_fingerprint',
       'resolve_version_project_timeline',
       'timeline_insertion',
       'duration_and_fps',
@@ -148,6 +175,8 @@ const report = {
   productionReady: false,
   blockers,
   guardrails: [
+    'PHOTO_SHA_OR_EFFECTIVE_FOCUS_OR_FIT_CHANGED => CROP_REVIEW_STALE',
+    'CROP_REVIEW_STALE => DAVINCI_HANDOFF_NOT_CURRENT',
     'PREVIEW_REVIEW_PASS != FINAL_RENDER_REVIEW_PASS',
     'HUMAN_FINAL_RENDER_REVIEW_PASS != DAVINCI_ACTUAL_VERIFIED',
     'DAVINCI_RECOVERY_SIDECAR_CURRENT != MAC_DAVINCI_ACTUAL_VERIFIED',

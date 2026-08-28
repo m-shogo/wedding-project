@@ -5,6 +5,7 @@ import {fileURLToPath} from 'node:url';
 
 const studioRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const bundlePath = join(studioRoot, 'out/handoff/opening-v1/opening-v1-production-bundle.json');
+const cropReviewPath = join(studioRoot, 'out/qa/opening-v1-crop-review-evidence.json');
 const timelineCsvPath = join(studioRoot, 'out/handoff/opening-v1/opening-v1-palmier-timeline.csv');
 const soundCueCsvPath = join(studioRoot, 'out/handoff/opening-v1/opening-v1-palmier-sound-cues.csv');
 const finalReviewPath = join(studioRoot, 'out/qa/opening-v1-final-render-review.json');
@@ -17,6 +18,13 @@ type ProductionBundle = {
   schemaVersion: 'opening-v1-production-bundle/v1';
   authority: 'FINAL_RENDER_BOUND_HANDOFF';
   finalRender: {path: string; sha256: string};
+  humanCropReview: {
+    evidencePath: string;
+    evidenceSha256: string;
+    bindingFingerprintSha256: string;
+    boundAt: string;
+    overall: string;
+  };
   humanPreviewReview: {evidenceSha256: string; reviewer: string | null; reviewedAt: string | null; overall: string};
   humanFinalRenderReview: {
     evidencePath: string;
@@ -32,12 +40,28 @@ type ProductionBundle = {
   };
   palmier: {
     handoffContractVersion: string;
+    cropReviewBindingFingerprintSha256: string;
     timelineCsv: string;
     timelineCsvSha256: string;
     soundCueCsv: string;
     soundCueCsvSha256: string;
   };
-  davinci: {expectedSha256: string; productionReady: false};
+  davinci: {
+    expectedSha256: string;
+    expectedCropReviewEvidenceSha256: string;
+    expectedCropReviewBindingFingerprintSha256: string;
+    productionReady: false;
+  };
+};
+
+type CropReviewEvidence = {
+  schemaVersion: 'opening-v1-crop-review-evidence/v1';
+  authority: 'HUMAN_OPENING_CROP_REVIEW';
+  bindingFingerprintSha256: string;
+  overall: string;
+  macStudioActual: 'NOT_RUN';
+  macDaVinciActual: 'NOT_RUN';
+  productionReady: false;
 };
 
 type FinishingEvidence = {
@@ -89,6 +113,16 @@ function loadBundle(): {bundle: ProductionBundle; bundleSha256: string} {
   if (bundle.davinci.productionReady !== false) throw new Error('DAVINCI_FINISHING_UPSTREAM_BUNDLE_MUST_FAIL_CLOSED');
   if (bundle.finalRender.sha256 !== bundle.davinci.expectedSha256) throw new Error('DAVINCI_FINISHING_UPSTREAM_SHA_CONTRACT_MISMATCH');
 
+  if (!existsSync(cropReviewPath)) throw new Error('DAVINCI_FINISHING_CROP_REVIEW_MISSING');
+  const crop = JSON.parse(readFileSync(cropReviewPath, 'utf8')) as CropReviewEvidence;
+  if (crop.schemaVersion !== 'opening-v1-crop-review-evidence/v1' || crop.authority !== 'HUMAN_OPENING_CROP_REVIEW') throw new Error('DAVINCI_FINISHING_CROP_REVIEW_CONTRACT_INVALID');
+  if (crop.overall !== 'PASS') throw new Error('DAVINCI_FINISHING_CROP_REVIEW_NOT_PASS');
+  if (crop.macStudioActual !== 'NOT_RUN' || crop.macDaVinciActual !== 'NOT_RUN' || crop.productionReady !== false) throw new Error('DAVINCI_FINISHING_CROP_REVIEW_AUTHORITY_BOUNDARY_INVALID');
+  const cropSha = shaFile(cropReviewPath);
+  if (bundle.humanCropReview?.evidencePath !== rel(cropReviewPath)) throw new Error('DAVINCI_FINISHING_CROP_REVIEW_PATH_MISMATCH');
+  if (bundle.humanCropReview?.evidenceSha256 !== cropSha || bundle.davinci?.expectedCropReviewEvidenceSha256 !== cropSha) throw new Error('DAVINCI_FINISHING_CROP_REVIEW_SHA_MISMATCH');
+  if (bundle.humanCropReview?.bindingFingerprintSha256 !== crop.bindingFingerprintSha256 || bundle.palmier?.cropReviewBindingFingerprintSha256 !== crop.bindingFingerprintSha256 || bundle.davinci?.expectedCropReviewBindingFingerprintSha256 !== crop.bindingFingerprintSha256) throw new Error('DAVINCI_FINISHING_CROP_REVIEW_FINGERPRINT_MISMATCH');
+
   if (!existsSync(finalReviewPath)) throw new Error('DAVINCI_FINISHING_FINAL_RENDER_REVIEW_MISSING');
   if (bundle.humanFinalRenderReview?.evidencePath !== rel(finalReviewPath)) throw new Error('DAVINCI_FINISHING_FINAL_RENDER_REVIEW_PATH_MISMATCH');
   if (bundle.humanFinalRenderReview?.evidenceSha256 !== shaFile(finalReviewPath)) throw new Error('DAVINCI_FINISHING_FINAL_RENDER_REVIEW_SHA_MISMATCH');
@@ -97,7 +131,7 @@ function loadBundle(): {bundle: ProductionBundle; bundleSha256: string} {
   if (bundle.humanFinalRenderReview?.finalRenderPath !== bundle.finalRender.path) throw new Error('DAVINCI_FINISHING_FINAL_REVIEW_RENDER_PATH_MISMATCH');
   if (bundle.humanFinalRenderReview?.finalRenderSha256 !== bundle.finalRender.sha256) throw new Error('DAVINCI_FINISHING_FINAL_REVIEW_RENDER_SHA_MISMATCH');
 
-  if (bundle.palmier?.handoffContractVersion !== 'opening-v1-palmier-handoff/v2') throw new Error('DAVINCI_FINISHING_PALMIER_HANDOFF_CONTRACT_STALE');
+  if (bundle.palmier?.handoffContractVersion !== 'opening-v1-palmier-handoff/v3') throw new Error('DAVINCI_FINISHING_PALMIER_HANDOFF_CONTRACT_STALE');
   if (bundle.palmier?.timelineCsv !== rel(timelineCsvPath)) throw new Error('DAVINCI_FINISHING_PALMIER_TIMELINE_PATH_MISMATCH');
   if (!existsSync(timelineCsvPath)) throw new Error('DAVINCI_FINISHING_PALMIER_TIMELINE_MISSING');
   if (bundle.palmier?.timelineCsvSha256 !== shaFile(timelineCsvPath)) throw new Error('DAVINCI_FINISHING_PALMIER_TIMELINE_SHA_MISMATCH');
@@ -249,7 +283,7 @@ function verifyEvidence(strict: boolean) {
     return;
   }
 
-  console.log('Opening V1 DaVinci finishing evidence: ACTUAL_VERIFIED — current production bundle, Human final-render review, versioned Palmier scene/sound handoff, source render and exported movie bytes match the recorded Mac Resolve evidence.');
+  console.log('Opening V1 DaVinci finishing evidence: ACTUAL_VERIFIED — current crop-bound production bundle, Human final-render review, versioned Palmier scene/sound handoff, source render and exported movie bytes match the recorded Mac Resolve evidence.');
   console.log('productionReady remains false here; final delivery approval is a separate human decision.');
 }
 

@@ -8,6 +8,7 @@ import {openingV1SoundCues} from '../src/data/openingV1Sound.ts';
 
 const studioRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const finalRenderPath = join(studioRoot, 'out/opening/opening_v1.mp4');
+const cropReviewPath = join(studioRoot, 'out/qa/opening-v1-crop-review-evidence.json');
 const previewReviewPath = join(studioRoot, 'out/qa/opening-v1-preview-review.json');
 const finalRenderReviewPath = join(studioRoot, 'out/qa/opening-v1-final-render-review.json');
 const outDir = join(studioRoot, 'out/handoff/opening-v1');
@@ -31,6 +32,17 @@ catch { console.error('Opening V1 assembly preflight did not return valid JSON')
 if (assemblyReport.readiness?.finalRenderEligible !== true) {
   console.error('Opening V1 production bundle blocked: assembly preflight is not final-render eligible.');
   for (const blocker of assemblyReport.readiness?.blockers ?? []) console.error(`BLOCK / ${blocker}`);
+  process.exit(1);
+}
+
+const cropReview = run(['scripts/opening-v1-crop-review-evidence.mts', '--strict']);
+if (cropReview.status !== 0) {
+  console.error('Opening V1 production bundle blocked: current photos/focus/fit have no valid Human crop review.');
+  console.error(cropReview.stdout || cropReview.stderr || 'crop review strict failed');
+  process.exit(1);
+}
+if (!existsSync(cropReviewPath)) {
+  console.error('Opening V1 production bundle blocked: crop review evidence file missing.');
   process.exit(1);
 }
 
@@ -69,6 +81,25 @@ if (finalReview.status !== 0) {
 if (!existsSync(finalRenderReviewPath)) {
   console.error('Opening V1 production bundle blocked: final-render Human review evidence file missing.');
   process.exit(1);
+}
+
+const cropEvidence = JSON.parse(readFileSync(cropReviewPath, 'utf8')) as {
+  schemaVersion: string;
+  authority: string;
+  boundAt: string;
+  bindingFingerprintSha256: string;
+  slots: Array<{key: string; file: string; mediaSha256: string; presentationRevision: string; review: string; reviewer: string | null; reviewedAt: string | null}>;
+  overall: string;
+  macStudioActual: string;
+  macDaVinciActual: string;
+  productionReady: boolean;
+};
+if (cropEvidence.schemaVersion !== 'opening-v1-crop-review-evidence/v1' || cropEvidence.authority !== 'HUMAN_OPENING_CROP_REVIEW') {
+  throw new Error('OPENING_CROP_REVIEW_EVIDENCE_CONTRACT_INVALID_AT_EXPORT');
+}
+if (cropEvidence.overall !== 'PASS') throw new Error('OPENING_CROP_REVIEW_NOT_PASS_AT_EXPORT');
+if (cropEvidence.macStudioActual !== 'NOT_RUN' || cropEvidence.macDaVinciActual !== 'NOT_RUN' || cropEvidence.productionReady !== false) {
+  throw new Error('OPENING_CROP_REVIEW_EVIDENCE_AUTHORITY_BOUNDARY_INVALID');
 }
 
 const evidence = JSON.parse(readFileSync(previewReviewPath, 'utf8')) as {
@@ -121,6 +152,21 @@ const bundle = {
   generatedAt: new Date().toISOString(),
   composition: {id: 'OpeningV1', width: 1920, height: 1080, fps: 30, durationSeconds: 60},
   finalRender: {path: rel(finalRenderPath), sha256: finalRenderSha256, qaContract: 'check-opening-render.mts=PASS_AT_EXPORT'},
+  humanCropReview: {
+    evidencePath: rel(cropReviewPath),
+    evidenceSha256: shaFile(cropReviewPath),
+    bindingFingerprintSha256: cropEvidence.bindingFingerprintSha256,
+    boundAt: cropEvidence.boundAt,
+    overall: cropEvidence.overall,
+    reviewedSlots: cropEvidence.slots.filter((slot) => slot.review === 'PASS').map((slot) => ({
+      key: slot.key,
+      file: slot.file,
+      mediaSha256: slot.mediaSha256,
+      presentationRevision: slot.presentationRevision,
+      reviewer: slot.reviewer,
+      reviewedAt: slot.reviewedAt,
+    })),
+  },
   humanPreviewReview: {
     evidencePath: rel(previewReviewPath), evidenceSha256: shaFile(previewReviewPath), previewPath: evidence.preview.path, previewSha256: evidence.preview.sha256,
     reviewer: evidence.review.reviewer, reviewedAt: evidence.review.reviewedAt, overall: evidence.review.overall, notes: evidence.review.notes,
@@ -135,18 +181,26 @@ const bundle = {
   timeline: sceneTimeline,
   soundCues: openingV1SoundCues.map((cue) => ({...cue})),
   palmier: {
-    handoffContractVersion: 'opening-v1-palmier-handoff/v2', handoffMode: 'REFERENCE_TIMELINE_AND_FINAL_RENDER',
+    handoffContractVersion: 'opening-v1-palmier-handoff/v3', handoffMode: 'REFERENCE_TIMELINE_AND_FINAL_RENDER',
+    cropReviewBindingFingerprintSha256: cropEvidence.bindingFingerprintSha256,
     timelineCsv: rel(timelineCsvPath), timelineCsvSha256, soundCueCsv: rel(soundCueCsvPath), soundCueCsvSha256,
-    instruction: '60秒のscene boundary・replacement policy・J-cut/BGM cue timing・final render SHAを正本として扱う。編集時に別renderや独自cueへ差し替えず、必要な再編集はMotion Studio正本へ戻してpreview/final render Human reviewを再実行する。',
+    instruction: '60秒のscene boundary・replacement policy・J-cut/BGM cue timing・final render SHAとHuman crop review bindingを正本として扱う。写真またはfocus/fitを変えた場合はcrop reviewから再実行し、古いhandoffを使わない。',
   },
   davinci: {
-    handoffAsset: rel(finalRenderPath), expectedSha256: finalRenderSha256, intendedUse: 'FINISHING_AND_OUTPUT_QA',
+    handoffAsset: rel(finalRenderPath), expectedSha256: finalRenderSha256,
+    expectedCropReviewEvidenceSha256: shaFile(cropReviewPath),
+    expectedCropReviewBindingFingerprintSha256: cropEvidence.bindingFingerprintSha256,
+    intendedUse: 'FINISHING_AND_OUTPUT_QA',
     macActualState: 'NOT_RUN', timelineInsertionState: 'NOT_RUN', colorFinishState: 'NOT_RUN', audioFinishState: 'NOT_RUN', exportValidationState: 'NOT_RUN', productionReady: false,
   },
   guardrails: [
     'FINAL_RENDER_EXISTS != DAVINCI_ACTUAL_VERIFIED',
+    'HUMAN_CROP_REVIEW_PASS != HUMAN_PREVIEW_REVIEW_PASS',
     'HUMAN_PREVIEW_REVIEW_PASS != HUMAN_FINAL_RENDER_REVIEW_PASS',
     'HUMAN_FINAL_RENDER_REVIEW_PASS != FINAL_DELIVERY_APPROVED',
+    'PHOTO_SHA_OR_EFFECTIVE_FOCUS_OR_FIT_CHANGED => CROP_REVIEW_STALE',
+    'CROP_REVIEW_EVIDENCE_SHA_MISMATCH => STOP_AND_REGENERATE_HANDOFF',
+    'CROP_REVIEW_BINDING_FINGERPRINT_MISMATCH => STOP_AND_REGENERATE_HANDOFF',
     'FINAL_RENDER_OR_RENDER_SOURCE_CHANGED => RE_RENDER_AND_RE_REVIEW',
     'BUNDLE_EXPORTED != PRODUCTION_READY',
     'RENDER_SHA_MISMATCH => STOP_AND_REGENERATE_HANDOFF',
@@ -155,8 +209,8 @@ const bundle = {
     'PALMIER_SOUND_CUE_SHA_MISMATCH => STOP_AND_REGENERATE_HANDOFF',
   ],
   nextActions: [
-    'Palmierでscene boundary・replacement policy・sound cue timingを確認し、正本renderを置換しない',
-    'DaVinciへHuman final-render review済みfinal renderを挿入しSHA一致対象であることを確認',
+    'Palmierでscene boundary・replacement policy・sound cue timing・crop review bindingを確認し、正本renderや承認済みcropを無断変更しない',
+    'DaVinciへHuman final-render review済みfinal renderを挿入し、final render SHAとcrop review evidence SHA/fingerprintが一致することを確認',
     '実機でcolor/audio/output QAを行い各Actual evidenceを別途記録',
     'Mac Actual未実施のままproductionReadyへ昇格しない',
   ],
@@ -170,6 +224,8 @@ console.log(`Opening V1 production bundle exported: ${rel(bundlePath)}`);
 console.log(`Palmier timeline exported: ${rel(timelineCsvPath)}`);
 console.log(`Palmier sound cues exported: ${rel(soundCueCsvPath)}`);
 console.log(`finalRenderSha256=${finalRenderSha256}`);
+console.log(`cropReviewEvidenceSha256=${shaFile(cropReviewPath)}`);
+console.log(`cropReviewBindingFingerprintSha256=${cropEvidence.bindingFingerprintSha256}`);
 console.log(`finalRenderReviewEvidenceSha256=${shaFile(finalRenderReviewPath)}`);
 console.log(`timelineCsvSha256=${timelineCsvSha256}`);
 console.log(`soundCueCsvSha256=${soundCueCsvSha256}`);
