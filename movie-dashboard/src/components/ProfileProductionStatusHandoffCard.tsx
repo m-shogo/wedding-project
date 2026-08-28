@@ -17,6 +17,7 @@ const stageLabel: Record<string, string> = {
 };
 
 const incompleteStageStates = new Set(["NOT_RUN", "BLOCKED", "MISSING", "STALE"]);
+const shortSha = (value: string | null | undefined) => value ? `${value.slice(0, 12)}…` : "PENDING";
 
 export function ProfileProductionStatusHandoffCard({projectId}: {projectId: SceneProjectId}) {
   const status = useMemo(() => buildProfileProductionStatusHandoff(), []);
@@ -27,9 +28,11 @@ export function ProfileProductionStatusHandoffCard({projectId}: {projectId: Scen
 
   const production = status.profile.production;
   const generatedAccents = status.profile.generatedAccents;
+  const realMediaHumanQa = status.profile.realMediaHumanQa;
   const sourceRevalidation = production.sourceRevalidation;
   const palmier = production.palmierHandoff;
   const davinci = production.davinciHandoff;
+  const recovery = davinci.productionRecovery;
   const productionReady = production.readiness.productionReady;
 
   return (
@@ -89,6 +92,7 @@ export function ProfileProductionStatusHandoffCard({projectId}: {projectId: Scen
         <div className="mt-1 text-[8px] leading-4 text-navy-500 dark:text-navy-300">
           <div>scene timeline: <code>{palmier.artifacts.sceneTimeline.path}</code></div>
           <div>carries: {palmier.artifacts.sceneTimeline.carries.join(" / ")}</div>
+          <div>Profile QA binding: <code>{shortSha(davinci.upstreamPalmier.realMediaHumanQaBindingFingerprintSha256)}</code></div>
         </div>
       </div>
 
@@ -106,6 +110,32 @@ export function ProfileProductionStatusHandoffCard({projectId}: {projectId: Scen
           <div>canonical accent routes: {davinci.generatedAccentRoutes.length}</div>
         </div>
         <p className="mt-1 text-[8px] text-navy-400">DAVINCI_HANDOFF_CURRENT != MAC_DAVINCI_ACTUAL_VERIFIED / GENERATED_ACCENT_ROUTE_EXPORTED != MAC_DAVINCI_ACTUAL_VERIFIED</p>
+      </div>
+
+      <div className="mt-2 border border-violet-200 dark:border-violet-800 p-2">
+        <div className="flex flex-wrap items-center justify-between gap-1">
+          <p className="text-[8px] font-semibold text-violet-700 dark:text-violet-300">PROFILE HUMAN QA → DAVINCI RECOVERY BINDING</p>
+          <span className="text-[8px] text-violet-600 dark:text-violet-300">Human QA={realMediaHumanQa.state} / Actual={recovery.actualState}</span>
+        </div>
+        <div className="mt-1 grid gap-1 sm:grid-cols-2 text-[8px] leading-4 text-navy-500 dark:text-navy-300">
+          <div className="border border-violet-100 dark:border-violet-900 px-2 py-1.5">
+            <div className="font-semibold">Current Human QA authority</div>
+            <div>evidence: <code className="break-all">{realMediaHumanQa.audit.evidencePath}</code></div>
+            <div>evidence SHA: <code>{shortSha(realMediaHumanQa.audit.evidenceSha256)}</code></div>
+            <div>preview source: <code>{shortSha(realMediaHumanQa.audit.previewSourceFingerprintSha256)}</code></div>
+            <div>reviewed: {realMediaHumanQa.mediaReviewed}/{realMediaHumanQa.mediaExpected}</div>
+          </div>
+          <div className="border border-violet-100 dark:border-violet-900 px-2 py-1.5">
+            <div className="font-semibold">Exported recovery sidecar binding</div>
+            <div>sidecar: <code className="break-all">{recovery.path}</code></div>
+            <div>render SHA: <code>{shortSha(recovery.sourceRenderSha256)}</code></div>
+            <div>QA evidence SHA: <code>{shortSha(recovery.realMediaHumanQaEvidenceSha256)}</code></div>
+            <div>QA fingerprint: <code>{shortSha(recovery.realMediaHumanQaBindingFingerprintSha256)}</code></div>
+          </div>
+        </div>
+        <p className="mt-1 text-[8px] text-navy-400">
+          PROFILE_REAL_MEDIA_HUMAN_QA_CHANGED =&gt; DAVINCI_RECOVERY_SIDECAR_STALE / PROFILE_REAL_MEDIA_HUMAN_QA_BINDING_EXPORTED != MAC_DAVINCI_ACTUAL_VERIFIED
+        </p>
       </div>
 
       <div className="mt-2 border border-fuchsia-100 dark:border-fuchsia-900 p-2">
