@@ -1,3 +1,4 @@
+import {movieProductionStageBlockerCodes} from "./movieProductionStageBlockerCodes.generated";
 import {openingProductionGate} from "./openingProductionGate.generated";
 import {openingProductionStatus} from "./openingProductionStatus.generated";
 import {profileProductionGate} from "./profileProductionGate.generated";
@@ -28,7 +29,7 @@ type InputLane = {
   blockerCodes?: readonly string[];
 };
 
-type BlockerProvenance = "INPUT_GATE" | "SOURCE_REVALIDATION" | "NORMALIZED_STAGE_STATE" | "NONE";
+type BlockerProvenance = "RAW_STAGE_STATUS" | "INPUT_GATE" | "SOURCE_REVALIDATION" | "NORMALIZED_STAGE_STATE" | "NONE";
 
 const openingOrder = ["media", "previewRender", "previewSourceBinding", "previewReview", "finalRender", "finalRenderReview", "productionBundle", "davinciFinishing", "finalDeliveryApproval"] as const;
 const profileOrder = ["assembly", "finalRender", "finalRenderReview", "productionBundle", "davinciFinishing", "finalDeliveryApproval"] as const;
@@ -123,7 +124,15 @@ function inputLanesFor(projectId: "opening" | "profile", stageName: string): Inp
   return [];
 }
 
+function rawStageBlockerCodesFor(projectId: "opening" | "profile", stageName: string): string[] {
+  const stages = movieProductionStageBlockerCodes.projects[projectId].stages as unknown as Record<string, readonly string[]>;
+  return [...(stages[stageName] ?? [])];
+}
+
 function stageBlockerInfoFor(projectId: "opening" | "profile", stageName: string, inputLanes: readonly InputLane[]): {codes: string[]; provenance: BlockerProvenance} {
+  const rawStageCodes = rawStageBlockerCodesFor(projectId, stageName);
+  if (rawStageCodes.length > 0) return {codes: rawStageCodes, provenance: "RAW_STAGE_STATUS"};
+
   const laneCodes = inputLanes.flatMap((lane) => lane.blockerCodes ?? []);
   if (laneCodes.length > 0) return {codes: [...new Set(laneCodes)], provenance: "INPUT_GATE"};
 
@@ -244,7 +253,9 @@ export function buildWeddingMovieProductionCriticalPath() {
     guardrails: [
       "CRITICAL_PATH_VISIBLE != PRODUCTION_APPROVED",
       "BLOCKER_CODE_VISIBLE != BLOCKER_RESOLVED",
+      "RAW_STAGE_STATUS_BLOCKER_CODE != RAW_BLOCKER_DETAIL",
       "NORMALIZED_BLOCKER_CODE != RAW_MOTION_STUDIO_EVIDENCE",
+      "BLOCKER_PROVENANCE_RAW_STAGE_STATUS != RAW_LOG_OR_ABSOLUTE_PATH",
       "BLOCKER_PROVENANCE_INPUT_GATE != RAW_STAGE_BLOCKERS",
       "BLOCKER_PROVENANCE_SOURCE_REVALIDATION != FULL_STAGE_EVIDENCE",
       "INPUT_LANE_READY != PROJECT_PRODUCTION_READY",
