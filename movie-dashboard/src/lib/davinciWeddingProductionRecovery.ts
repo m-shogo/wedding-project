@@ -39,6 +39,21 @@ export type DaVinciWeddingProductionRecoveryProject = {
       strict: string;
     };
   };
+  remotionStudioTooling: {
+    authority: PalmierWeddingProductionProject["remotionStudioToolingEvidence"]["authority"];
+    summaryPath: string;
+    summarySchemaVersion: string;
+    summaryAuthority: string;
+    evidencePath: string;
+    statusCommand: string;
+    strictCommand: string;
+    candidateCount: number;
+    checkAxesPerCandidate: number;
+    currentRepoState: PalmierWeddingProductionProject["remotionStudioToolingEvidence"]["currentRepoState"];
+    humanReviewed: boolean;
+    productionDependencyPromoted: boolean;
+    guardrails: string[];
+  };
 };
 
 export type DaVinciWeddingProductionRecoveryBundle = {
@@ -56,6 +71,7 @@ function cloneAction(action: DaVinciWeddingProductionRecoveryAction): DaVinciWed
 
 function projectRecovery(project: PalmierWeddingProductionProject): DaVinciWeddingProductionRecoveryProject {
   const recovery = project.bridge.recovery;
+  const studio = project.remotionStudioToolingEvidence;
   return {
     movieId: project.movieId,
     title: project.title,
@@ -81,6 +97,21 @@ function projectRecovery(project: PalmierWeddingProductionProject): DaVinciWeddi
       evidencePath: project.bridge.actualEvidencePath,
       commands: {...project.bridge.actualCommands},
     },
+    remotionStudioTooling: {
+      authority: studio.authority,
+      summaryPath: studio.summaryPath,
+      summarySchemaVersion: studio.summarySchemaVersion,
+      summaryAuthority: studio.summaryAuthority,
+      evidencePath: studio.evidencePath,
+      statusCommand: studio.statusCommand,
+      strictCommand: studio.strictCommand,
+      candidateCount: studio.candidateCount,
+      checkAxesPerCandidate: studio.checkAxesPerCandidate,
+      currentRepoState: studio.currentRepoState,
+      humanReviewed: studio.humanReviewed,
+      productionDependencyPromoted: studio.productionDependencyPromoted,
+      guardrails: [...studio.guardrails],
+    },
   };
 }
 
@@ -99,6 +130,8 @@ export function buildDaVinciWeddingProductionRecoveryBundleFromGate(
       "DAVINCI_RECOVERY_ACTION_EXPORTED != DAVINCI_TIMELINE_MUTATED",
       "SHA_BOUND_RECOVERY_EXPORTED != MAC_DAVINCI_ACTUAL_VERIFIED",
       "DAVINCI_ACTUAL_COMMAND_EXPORTED != MAC_DAVINCI_ACTUAL_VERIFIED",
+      "REMOTION_STUDIO_TOOLING_REFERENCE_EXPORTED != STUDIO_ACTUAL_VERIFIED",
+      "REMOTION_STUDIO_TOOLING_NOT_ADOPTED => NON_BLOCKING_FOR_DAVINCI_RECOVERY",
       "MAC_DAVINCI_ACTUAL_REMAINS_NOT_RUN_UNTIL_GUI_EVIDENCE_IS_CURRENT",
     ],
   };
