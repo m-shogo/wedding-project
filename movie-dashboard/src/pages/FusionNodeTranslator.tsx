@@ -1,6 +1,8 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { Header } from "../components/Header";
+import { useProduction } from "../store/productionStore";
+import { buildPalmierWeddingProductionGate } from "../lib/palmierWeddingProductionGate";
 import {
   fusionDecisionRules,
   fusionLearningRecipes,
@@ -21,6 +23,7 @@ function NodeBadge({ nodeId }: { nodeId: FusionNodeId }) {
 }
 
 export function FusionNodeTranslator() {
+  const { selectedMovieId } = useProduction();
   const [selectedRecipeId, setSelectedRecipeId] = useState(fusionLearningRecipes[0]?.recipeId ?? "");
   const [selectedNodeId, setSelectedNodeId] = useState<FusionNodeId>("merge");
 
@@ -29,13 +32,58 @@ export function FusionNodeTranslator() {
     [selectedRecipeId],
   );
   const selectedNode = fusionNodeLessons.find((node) => node.nodeId === selectedNodeId) ?? fusionNodeLessons[0];
+  const productionGate = useMemo(
+    () => buildPalmierWeddingProductionGate(selectedMovieId),
+    [selectedMovieId],
+  );
 
   return (
     <div>
       <Header
         title="FUSION NODE TRANSLATOR"
         description="Node名を暗記せず、映像がどこから入り・何をされ・どこへ出るかでFusionを理解する"
+        showMovieSelector
       />
+
+      <section className={`mb-9 border p-4 ${productionGate.productionReady ? "border-emerald-200 bg-emerald-50 dark:border-emerald-800 dark:bg-emerald-900/20" : "border-amber-200 bg-amber-50 dark:border-amber-800 dark:bg-amber-900/20"}`}>
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <p className="text-[10px] tracking-[0.2em] font-semibold text-navy-400">WEDDING PRODUCTION AUTHORITY</p>
+            <h2 className="mt-1 text-lg font-bold text-navy-900 dark:text-sand-100">Fusion練習と本番DaVinci Actualを分離する</h2>
+            <p className="mt-1 text-xs leading-5 text-navy-600 dark:text-navy-200">この画面のNode練習・recipe理解はMac DaVinci Actualの証拠ではありません。Palmier→DaVinci production bridgeのcurrent状態を読み、本番作業へ進める位置だけを表示します。</p>
+          </div>
+          <Link to="/palmier-handoff" className="shrink-0 px-3 py-2 rounded-lg bg-navy-700 text-white text-xs hover:bg-navy-800">Production Handoffを見る →</Link>
+        </div>
+        <div className="mt-4 grid gap-3 lg:grid-cols-2">
+          {productionGate.projects.map((project) => (
+            <div key={project.movieId} className="rounded-lg border border-current/15 bg-white/70 dark:bg-navy-800/50 p-3">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <p className="text-sm font-bold text-navy-800 dark:text-sand-100">{project.title}</p>
+                <code className={`text-[10px] ${project.bridge.state === "READY" ? "text-emerald-700 dark:text-emerald-300" : "text-amber-700 dark:text-amber-300"}`}>{project.bridge.state}</code>
+              </div>
+              <div className="mt-2 grid gap-1 text-[11px] text-navy-600 dark:text-navy-200">
+                <p>{project.bridge.palmierCurrent ? "✓" : "○"} Palmier current · {project.bridge.palmierContractVersion}</p>
+                <p>{project.bridge.davinciHandoffCurrent ? "✓" : "○"} DaVinci handoff current · {project.bridge.davinciContractVersion}</p>
+                <p>{project.bridge.macDaVinciActualVerified ? "✓" : "○"} Mac DaVinci Actual verified</p>
+                <p>{project.bridge.finalDeliveryApproved ? "✓" : "○"} Final delivery approved</p>
+              </div>
+              {!project.productionReady && (
+                <div className="mt-3 border-t border-current/10 pt-2">
+                  <p className="text-[11px] text-navy-500 dark:text-navy-300"><strong>NOW:</strong> {project.nextGate.stage ?? project.overallState}</p>
+                  <p className="mt-1 text-[10px] text-navy-400 break-all">{project.nextGate.artifactPath ?? "production artifact未確定"}</p>
+                </div>
+              )}
+              {project.bridge.state === "MAC_DAVINCI_ACTUAL_NOT_VERIFIED" && (
+                <div className="mt-3 rounded bg-amber-100/70 dark:bg-amber-900/20 p-2">
+                  <p className="text-[10px] font-semibold text-amber-800 dark:text-amber-200">MAC ACTUAL GATE</p>
+                  <p className="mt-1 text-[10px] text-amber-700 dark:text-amber-300 break-all">Evidence: {project.bridge.actualEvidencePath}</p>
+                  <p className="mt-1 text-[10px] text-amber-700 dark:text-amber-300">実際にResolve GUIで確認・exportしていない限り、このgateはPASSにしません。</p>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </section>
 
       <section className="mb-9 border-y border-sand-200 dark:border-navy-600 py-5">
         <p className="text-[10px] tracking-[0.2em] font-semibold text-navy-400">FUSION GATE</p>
