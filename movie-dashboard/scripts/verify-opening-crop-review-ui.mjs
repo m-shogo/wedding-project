@@ -15,7 +15,6 @@ for (const token of [
   'humanCropQaReviewedCount',
   'humanCropQaRequiredCount',
   'humanCropQaBlockerCodes',
-  'humanCropQaBlockerCodes],',
   'evidencePath: openingProductionGate.photos.cropQa.evidencePath',
   'macStudioActualState: openingProductionGate.photos.cropQa.macStudioActualState',
   'macDaVinciActualState: openingProductionGate.photos.cropQa.macDaVinciActualState',
