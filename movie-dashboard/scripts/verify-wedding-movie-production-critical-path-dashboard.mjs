@@ -6,6 +6,8 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const read = (relative) => fs.readFileSync(path.join(root, relative), "utf8");
 
 const model = read("src/data/weddingMovieProductionCriticalPath.ts");
+const blockerSnapshot = read("src/data/movieProductionStageBlockerCodes.generated.ts");
+const blockerSync = read("scripts/sync-production-stage-blocker-codes.mjs");
 const card = read("src/components/WeddingMovieProductionCriticalPathCard.tsx");
 const profileIntake = read("src/pages/ProfileMediaIntake.tsx");
 const profileBgmIntake = read("src/pages/ProfileBgmIntake.tsx");
@@ -21,6 +23,7 @@ const need = (source, token, message) => { if (!source.includes(token)) errors.p
 for (const token of [
   'wedding-movie-production-critical-path-dashboard/v2',
   'DERIVED_FROM_MOTION_STUDIO_PRODUCTION_STATUS_AND_INPUT_GATES',
+  'movieProductionStageBlockerCodes',
   'openingProductionGate',
   'profileProductionGate',
   'openingProductionStatus.stages',
@@ -28,7 +31,9 @@ for (const token of [
   'currentCriticalStage',
   'downstreamBlockedStages',
   'inputLanesFor(projectId, current.name)',
-  'type BlockerProvenance = "INPUT_GATE" | "SOURCE_REVALIDATION" | "NORMALIZED_STAGE_STATE" | "NONE"',
+  'type BlockerProvenance = "RAW_STAGE_STATUS" | "INPUT_GATE" | "SOURCE_REVALIDATION" | "NORMALIZED_STAGE_STATE" | "NONE"',
+  'rawStageBlockerCodesFor',
+  'provenance: "RAW_STAGE_STATUS"',
   'stageBlockerInfoFor',
   'provenance: "INPUT_GATE"',
   'provenance: "SOURCE_REVALIDATION"',
@@ -67,6 +72,8 @@ for (const token of [
   'route: "/profile-planner"',
   'BGM実ファイル・intake receipt・上映権利確認をcurrent SHAへ固定する',
   'BLOCKER_CODE_VISIBLE != BLOCKER_RESOLVED',
+  'RAW_STAGE_STATUS_BLOCKER_CODE != RAW_BLOCKER_DETAIL',
+  'BLOCKER_PROVENANCE_RAW_STAGE_STATUS != RAW_LOG_OR_ABSOLUTE_PATH',
   'NORMALIZED_BLOCKER_CODE != RAW_MOTION_STUDIO_EVIDENCE',
   'BLOCKER_PROVENANCE_INPUT_GATE != RAW_STAGE_BLOCKERS',
   'BLOCKER_PROVENANCE_SOURCE_REVALIDATION != FULL_STAGE_EVIDENCE',
@@ -75,6 +82,22 @@ for (const token of [
   'productionReady: opening.productionReady && profile.productionReady',
   'CI_STATUS != MAC_DAVINCI_ACTUAL',
 ]) need(model, token, `critical-path model missing ${token}`);
+
+for (const token of [
+  'wedding-movie-production-stage-blocker-codes/v1',
+  'MOTION_STUDIO_STABLE_STAGE_BLOCKER_CODES',
+  'PHOTO_MISSING',
+  'MEDIA_MISSING',
+  'RAW_BLOCKER_DETAIL != GENERATED_BLOCKER_CODE',
+  'ABSOLUTE_PATH_MUST_NOT_ENTER_GENERATED_BLOCKER_CODES',
+]) need(blockerSnapshot, token, `stable blocker snapshot missing ${token}`);
+
+for (const token of [
+  'stage?.blockerCodes',
+  'allowedCode',
+  'code.includes("/")',
+  'ABSOLUTE_PATH_MUST_NOT_ENTER_GENERATED_BLOCKER_CODES',
+]) need(blockerSync, token, `stable blocker sync missing ${token}`);
 
 for (const token of [
   'report.audio.intakeReceiptCurrent',
@@ -165,7 +188,7 @@ for (const [name, source, projectKey] of [
   need(source, 'CRITICAL_PATH_EXPORTED != RECOVERY_EXECUTED', `${name} handoff missing recovery guardrail`);
 }
 
-for (const source of [model, card, profileIntake, profileBgmIntake, openingHandoff, profileHandoff]) {
+for (const source of [model, blockerSnapshot, card, profileIntake, profileBgmIntake, openingHandoff, profileHandoff]) {
   if (source.includes('macDaVinciActualVerified: true') || source.includes('productionReady: true')) {
     errors.push('Critical-path dashboard hardcodes Actual or production readiness');
   }
@@ -177,4 +200,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log('Wedding Movie production critical-path dashboard OK: blocker provenance distinguishes input-gate/source-revalidation evidence from normalized waiting-state codes while current/downstream artifact, recovery and action routing remain exportable without promoting Human QA or Mac Actual.');
+console.log('Wedding Movie production critical-path dashboard OK: stable Motion Studio RAW_STAGE_STATUS blocker codes are exported without raw paths/logs, while input/source/normalized fallbacks, artifact recovery and action routing remain available without promoting Human QA or Mac Actual.');
