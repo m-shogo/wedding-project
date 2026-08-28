@@ -1,11 +1,12 @@
 import {
   buildPalmierWeddingProductionGate,
+  type PalmierEffectiveRecoveryAction,
   type PalmierWeddingProductionGate,
   type PalmierWeddingProductionMovieId,
   type PalmierWeddingProductionProject,
 } from "./palmierWeddingProductionGate";
 
-export const DAVINCI_WEDDING_PRODUCTION_RECOVERY_SCHEMA = "wedding-davinci-production-recovery/v2" as const;
+export const DAVINCI_WEDDING_PRODUCTION_RECOVERY_SCHEMA = "wedding-davinci-production-recovery/v3" as const;
 
 export type DaVinciWeddingProductionRecoveryAction =
   PalmierWeddingProductionProject["nextGate"]["blockerActions"][number];
@@ -18,6 +19,7 @@ export type DaVinciWeddingProductionRecoveryProject = {
   productionReady: boolean;
   effectiveProductionState: PalmierWeddingProductionProject["effectiveProductionState"];
   blockingAuthorities: string[];
+  effectiveNextGate: PalmierWeddingProductionProject["effectiveNextGate"];
   stage: string | null;
   artifactPath: string | null;
   recoveryAuthority: PalmierWeddingProductionProject["bridge"]["recovery"]["authority"];
@@ -87,6 +89,10 @@ function cloneAction(action: DaVinciWeddingProductionRecoveryAction): DaVinciWed
   return {...action};
 }
 
+function cloneEffectiveAction(action: PalmierEffectiveRecoveryAction): PalmierEffectiveRecoveryAction {
+  return {...action};
+}
+
 function cloneDependencyAction(
   action: DaVinciRemotionStudioDependencyRecoveryAction,
 ): DaVinciRemotionStudioDependencyRecoveryAction {
@@ -97,12 +103,23 @@ function projectRecovery(project: PalmierWeddingProductionProject): DaVinciWeddi
   const recovery = project.bridge.recovery;
   const studio = project.remotionStudioToolingEvidence;
   const dependency = project.remotionStudioToolingDependency;
+  const effectiveNextGate = project.effectiveNextGate;
   return {
     movieId: project.movieId,
     title: project.title,
     productionReady: project.productionReady,
     effectiveProductionState: project.effectiveProductionState,
     blockingAuthorities: [...project.blockingAuthorities],
+    effectiveNextGate: {
+      authority: effectiveNextGate.authority,
+      state: effectiveNextGate.state,
+      stage: effectiveNextGate.stage,
+      artifactPath: effectiveNextGate.artifactPath,
+      blockerCodes: [...effectiveNextGate.blockerCodes],
+      blockerActions: effectiveNextGate.blockerActions.map(cloneEffectiveAction),
+      recovery: [...effectiveNextGate.recovery],
+      adoptedCandidateIds: [...effectiveNextGate.adoptedCandidateIds],
+    },
     stage: project.nextGate.stage,
     artifactPath: project.nextGate.artifactPath,
     recoveryAuthority: recovery.authority,
@@ -169,6 +186,8 @@ export function buildDaVinciWeddingProductionRecoveryBundleFromGate(
       ...gate.guardrails,
       "DAVINCI_RECOVERY_EXPORTED != RECOVERY_EXECUTED",
       "DAVINCI_RECOVERY_ACTION_EXPORTED != DAVINCI_TIMELINE_MUTATED",
+      "EFFECTIVE_NEXT_GATE_EXPORTED != EFFECTIVE_GATE_COMPLETED",
+      "EFFECTIVE_NEXT_GATE_PREFERS_WEDDING_BLOCKER_BEFORE_REMOTION_DEPENDENCY",
       "SHA_BOUND_RECOVERY_EXPORTED != MAC_DAVINCI_ACTUAL_VERIFIED",
       "DAVINCI_ACTUAL_COMMAND_EXPORTED != MAC_DAVINCI_ACTUAL_VERIFIED",
       "REMOTION_STUDIO_TOOLING_REFERENCE_EXPORTED != STUDIO_ACTUAL_VERIFIED",
@@ -186,7 +205,7 @@ export function buildDaVinciWeddingProductionRecoveryBundle(selectedMovieId: str
   );
 }
 
-function markdownRecoveryAction(action: DaVinciWeddingProductionRecoveryAction) {
+function markdownRecoveryAction(action: DaVinciWeddingProductionRecoveryAction | PalmierEffectiveRecoveryAction) {
   const target = action.kind === "ROUTE" && action.route
     ? `route=${action.route}`
     : action.kind === "COMMAND" && action.command
@@ -215,12 +234,27 @@ export function buildDaVinciWeddingProductionRecoveryMarkdown(selectedMovieId: s
   for (const project of bundle.projects) {
     const studio = project.remotionStudioTooling;
     const dependency = project.remotionStudioDependency;
+    const effectiveNextGate = project.effectiveNextGate;
     lines.push(
       "",
       `## ${project.title}`,
       `production-ready: ${project.productionReady ? "yes" : "no"}`,
       `effective-production-state: ${project.effectiveProductionState}`,
       `blocking-authorities: ${project.blockingAuthorities.length > 0 ? project.blockingAuthorities.join(", ") : "none"}`,
+      "",
+      "### Effective next gate",
+      `effective-next-authority: ${effectiveNextGate.authority ?? "none"}`,
+      `effective-next-state: ${effectiveNextGate.state}`,
+      `effective-next-stage: ${effectiveNextGate.stage ?? "PRODUCTION_READY"}`,
+      `effective-next-artifact: ${effectiveNextGate.artifactPath ?? "—"}`,
+      `effective-next-blocker-codes: ${effectiveNextGate.blockerCodes.length > 0 ? effectiveNextGate.blockerCodes.join(", ") : "none"}`,
+      `effective-next-adopted-candidates: ${effectiveNextGate.adoptedCandidateIds.length > 0 ? effectiveNextGate.adoptedCandidateIds.join(", ") : "none"}`,
+      "effective-next-recovery-actions:",
+      ...(effectiveNextGate.blockerActions.length > 0 ? effectiveNextGate.blockerActions.map(markdownRecoveryAction) : ["- none"]),
+      "effective-next-recovery:",
+      ...(effectiveNextGate.recovery.length > 0 ? effectiveNextGate.recovery.map((item) => `- ${item}`) : ["- none"]),
+      "",
+      "### Canonical Wedding recovery",
       `stage: ${project.stage ?? "PRODUCTION_READY"}`,
       `artifact: ${project.artifactPath ?? "—"}`,
       `recovery-authority: ${project.recoveryAuthority}`,
