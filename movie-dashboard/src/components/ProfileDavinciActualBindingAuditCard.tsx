@@ -14,11 +14,11 @@ export function ProfileDavinciActualBindingAuditCard() {
   return (
     <div className={`mt-2 border ${currentTone} p-2`}>
       <div className="flex flex-wrap items-center justify-between gap-1">
-        <p className="text-[8px] font-semibold text-indigo-700 dark:text-indigo-300">DAVINCI ACTUAL / RECOVERY BINDING AUDIT</p>
+        <p className="text-[8px] font-semibold text-indigo-700 dark:text-indigo-300">PROFILE DAVINCI ACTUAL / RECOVERY / FINAL APPROVAL AUDIT</p>
         <span className="text-[8px] text-navy-500 dark:text-navy-300">{auditState} / current={auditCurrent ? "YES" : "NO"}</span>
       </div>
 
-      <div className="mt-1 grid gap-1 sm:grid-cols-2 text-[8px] leading-4 text-navy-500 dark:text-navy-300">
+      <div className="mt-1 grid gap-1 lg:grid-cols-3 text-[8px] leading-4 text-navy-500 dark:text-navy-300">
         <div className="border border-slate-100 dark:border-slate-800 px-2 py-1.5">
           <div className="font-semibold">Current recovery authority</div>
           <div>sidecar: <code className="break-all">{audit.recovery.path}</code></div>
@@ -39,6 +39,18 @@ export function ProfileDavinciActualBindingAuditCard() {
           <div>bound Human QA SHA: <code>{shortSha(audit.actualEvidence.boundRealMediaHumanQaEvidenceSha256)}</code></div>
           <div>bound Human QA fingerprint: <code>{shortSha(audit.actualEvidence.boundRealMediaHumanQaBindingFingerprintSha256)}</code></div>
           <div>review: {audit.actualEvidence.reviewOverall} / all checks PASS={audit.actualEvidence.allChecksPass ? "YES" : "NO"}</div>
+        </div>
+
+        <div className="border border-slate-100 dark:border-slate-800 px-2 py-1.5">
+          <div className="font-semibold">Human final approval binding</div>
+          <div>approval: <code className="break-all">{audit.finalApproval.path}</code></div>
+          <div>exists: {audit.finalApproval.exists ? "YES" : "NO"}</div>
+          <div>approval SHA: <code>{shortSha(audit.finalApproval.sha256)}</code></div>
+          <div>decision: {audit.finalApproval.decision}</div>
+          <div>current: {audit.finalApproval.current ? "YES" : "NO"}</div>
+          <div>bound recovery SHA: <code>{shortSha(audit.finalApproval.boundRecoverySha256)}</code></div>
+          <div>bound Actual evidence SHA: <code>{shortSha(audit.finalApproval.boundDavinciEvidenceSha256)}</code></div>
+          <div>productionReady: {audit.finalApproval.productionReady ? "YES" : "NO"}</div>
         </div>
       </div>
 
