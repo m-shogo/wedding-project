@@ -22,13 +22,6 @@ const actualLabel = (state: RemotionElementCandidateRecord["studioInstallActual"
   }
 };
 
-const studioActualEvidence = {
-  path: "movie-dashboard/out/remotion-element-actual-batch/studio-actual-evidence.json",
-  init: "cd motion-studio && node --no-warnings scripts/typography-elements-studio-actual-evidence.mts --init",
-  status: "cd motion-studio && node --no-warnings scripts/typography-elements-studio-actual-evidence.mts",
-  strict: "cd motion-studio && node --no-warnings scripts/typography-elements-studio-actual-evidence.mts --strict",
-} as const;
-
 export function RemotionElementReadinessPanel({
   candidate,
 }: {
@@ -36,6 +29,7 @@ export function RemotionElementReadinessPanel({
 }) {
   const verified = candidate.readiness === "STUDIO_ACTUAL_VERIFIED";
   const batch = remotionElementStudioActualBatch;
+  const evidence = batch.evidence;
   const inActualBatch = batch.candidateIds.includes(candidate.patternId);
 
   return (
@@ -81,18 +75,31 @@ export function RemotionElementReadinessPanel({
             このElementは9候補のbounded Mac Studio Actual batch対象。CIはbatch artifactの準備と検査までで、confirmation / install / control readback / timeline insertion / post-install renderはすべてNOT_RUNです。
           </p>
           <p className="mt-2 break-all text-[9px] text-navy-400">artifact: {batch.artifactRoot}</p>
+          <div className="mt-3 grid grid-cols-2 gap-2 text-[9px]">
+            <div className="border border-amber-200 p-2 dark:border-amber-800">
+              <p className="font-semibold text-amber-800 dark:text-amber-200">CURRENT REPO ACTUAL</p>
+              <p className="mt-1 font-mono text-amber-700 dark:text-amber-300">{evidence.currentRepoState}</p>
+            </div>
+            <div className="border border-violet-200 p-2 dark:border-violet-800">
+              <p className="font-semibold text-violet-800 dark:text-violet-200">MACHINE SUMMARY CONTRACT</p>
+              <p className="mt-1 font-mono text-violet-700 dark:text-violet-300">{evidence.candidateCount} candidates × {evidence.checkAxesPerCandidate} checks</p>
+            </div>
+          </div>
           <div className="mt-2 grid gap-1.5">
             <div><p className="text-[9px] font-semibold text-violet-700 dark:text-violet-300">01 PREPARE BOUNDED BATCH</p><code className="mt-0.5 block break-all bg-violet-950/5 px-2 py-1 text-[9px] text-navy-600 dark:bg-white/5 dark:text-navy-200">{batch.prepareCommand}</code></div>
             <div><p className="text-[9px] font-semibold text-violet-700 dark:text-violet-300">02 CHECK PREP ARTIFACT</p><code className="mt-0.5 block break-all bg-violet-950/5 px-2 py-1 text-[9px] text-navy-600 dark:bg-white/5 dark:text-navy-200">{batch.checkCommand}</code></div>
-            <div><p className="text-[9px] font-semibold text-violet-700 dark:text-violet-300">03 INIT ACTUAL EVIDENCE</p><code className="mt-0.5 block break-all bg-violet-950/5 px-2 py-1 text-[9px] text-navy-600 dark:bg-white/5 dark:text-navy-200">{studioActualEvidence.init}</code></div>
-            <div><p className="text-[9px] font-semibold text-violet-700 dark:text-violet-300">04 STATUS / STRICT</p><code className="mt-0.5 block break-all bg-violet-950/5 px-2 py-1 text-[9px] text-navy-600 dark:bg-white/5 dark:text-navy-200">{studioActualEvidence.status}</code><code className="mt-1 block break-all bg-violet-950/5 px-2 py-1 text-[9px] text-navy-600 dark:bg-white/5 dark:text-navy-200">{studioActualEvidence.strict}</code></div>
+            <div><p className="text-[9px] font-semibold text-violet-700 dark:text-violet-300">03 INIT ACTUAL EVIDENCE</p><code className="mt-0.5 block break-all bg-violet-950/5 px-2 py-1 text-[9px] text-navy-600 dark:bg-white/5 dark:text-navy-200">{evidence.initCommand}</code></div>
+            <div><p className="text-[9px] font-semibold text-violet-700 dark:text-violet-300">04 STATUS / SUMMARY</p><code className="mt-0.5 block break-all bg-violet-950/5 px-2 py-1 text-[9px] text-navy-600 dark:bg-white/5 dark:text-navy-200">{evidence.statusCommand}</code></div>
+            <div><p className="text-[9px] font-semibold text-violet-700 dark:text-violet-300">05 STRICT VERIFY</p><code className="mt-0.5 block break-all bg-violet-950/5 px-2 py-1 text-[9px] text-navy-600 dark:bg-white/5 dark:text-navy-200">{evidence.strictCommand}</code></div>
           </div>
-          <p className="mt-2 break-all text-[9px] text-navy-400">Actual evidence: {studioActualEvidence.path}</p>
+          <p className="mt-2 break-all text-[9px] text-navy-400">Actual evidence: {evidence.path}</p>
+          <p className="mt-1 break-all text-[9px] text-navy-400">Machine summary: {evidence.summaryPath}</p>
+          <p className="mt-1 text-[9px] text-navy-400">summary authority: {evidence.summaryAuthority}</p>
           <div className="mt-2 flex flex-wrap gap-1">
             {Object.entries(batch.actual).map(([key, state]) => <code key={key} className="border border-amber-300 px-1.5 py-0.5 text-[8px] text-amber-700 dark:border-amber-700 dark:text-amber-300">{key}={state}</code>)}
           </div>
           <p className="mt-2 border-l-2 border-amber-400 pl-2 text-[9px] leading-4 text-amber-800 dark:text-amber-200">
-            initは9候補×11項目をNOT_RUNで作るだけです。strictは全項目PASS・reviewer・reviewedAt・current batch manifest SHAが揃うまで失敗します。batch handoffの表示・prepare/check成功だけではStudio Actual verifiedになりません。evidence template生成も同様にActual実行ではありません。
+            statusはevidence有無に関係なくmachine summaryを更新し、候補別PASS/FAIL/BLOCKED/NOT_RUN数・manifest currentness・Human review有無・stable blockerCodesを出します。initは9候補×11項目をNOT_RUNで作るだけです。strictは全項目PASS・reviewer・reviewedAt・current batch manifest SHAが揃うまで失敗します。SUMMARY_EXPORTED != STUDIO_ACTUAL_VERIFIED。
           </p>
         </div>
       )}
