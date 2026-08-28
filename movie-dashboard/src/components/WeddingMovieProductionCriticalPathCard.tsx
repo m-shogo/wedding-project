@@ -21,6 +21,7 @@ const stageLabels: Record<string, string> = {
 };
 
 const blockerProvenanceLabels: Record<string, string> = {
+  RAW_STAGE_STATUS: "Motion Studio stable stage evidence",
   INPUT_GATE: "input gate evidence",
   SOURCE_REVALIDATION: "source revalidation evidence",
   NORMALIZED_STAGE_STATE: "derived waiting-state code",
