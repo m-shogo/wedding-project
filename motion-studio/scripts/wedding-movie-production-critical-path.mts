@@ -27,6 +27,9 @@ const runJson = (script: string) => {
   return JSON.parse(result.stdout);
 };
 
+const stableCodes = (stage: Record<string, unknown> | null | undefined) =>
+  Array.isArray(stage?.blockerCodes) ? stage.blockerCodes.map(String) : [];
+
 const summarize = (projectId: keyof typeof projects) => {
   const config = projects[projectId];
   const report = runJson(config.script);
@@ -39,6 +42,7 @@ const summarize = (projectId: keyof typeof projects) => {
   const current = currentIndex >= 0 ? stages[currentIndex] : null;
   const downstream = currentIndex >= 0 ? stages.slice(currentIndex + 1) : [];
   const blockers = Array.isArray(current?.blockers) ? current.blockers.map(String) : [];
+  const blockerCodes = stableCodes(current);
   const nextActions = Array.isArray(report.nextActions) ? report.nextActions.map(String) : [];
 
   return {
@@ -51,12 +55,14 @@ const summarize = (projectId: keyof typeof projects) => {
       detail: String(current.detail ?? 'No detail reported.'),
       ...(current.path ? {path: String(current.path)} : {}),
       blockers,
+      blockerCodes,
     } : null,
     downstreamBlockedStages: downstream.map((stage) => ({
       name: stage.name,
       state: String(stage.state ?? 'UNKNOWN'),
       detail: String(stage.detail ?? 'No detail reported.'),
       ...(stage.path ? {path: String(stage.path)} : {}),
+      blockerCodes: stableCodes(stage),
     })),
     nextActions,
     readiness: report.readiness ?? {},
@@ -76,6 +82,7 @@ const report = {
     'RECOVERY_COMMAND_LISTED != RECOVERY_EXECUTED',
     'CI_STATUS != MAC_DAVINCI_ACTUAL',
     'DOWNSTREAM_BLOCKED != DOWNSTREAM_FAILED',
+    'STABLE_BLOCKER_CODE != RAW_BLOCKER_DETAIL',
   ],
 };
 
@@ -88,6 +95,7 @@ if (jsonMode) {
     if (current) {
       console.log(`  CURRENT / ${current.name}:${current.state} / ${current.detail}`);
       if (current.path) console.log(`  PATH    / ${current.path}`);
+      for (const code of current.blockerCodes) console.log(`  CODE    / ${code}`);
       for (const blocker of current.blockers) console.log(`  BLOCK   / ${blocker}`);
       console.log(`  WAITING / ${project.downstreamBlockedStages.map((stage) => stage.name).join(' -> ') || 'none'}`);
       for (const action of project.nextActions) console.log(`  NEXT    / ${action}`);
