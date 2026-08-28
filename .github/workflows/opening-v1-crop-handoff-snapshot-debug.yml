@@ -24,10 +24,10 @@ jobs:
           cache-dependency-path: movie-dashboard/pnpm-lock.yaml
       - run: pnpm install --frozen-lockfile
         working-directory: movie-dashboard
-      - name: Generate canonical snapshot for diagnosis
+      - name: Generate canonical snapshot diff for diagnosis
         working-directory: movie-dashboard
         run: |
           node scripts/sync-opening-production-status.mjs --write
-          echo '---BEGIN GENERATED SNAPSHOT---'
-          cat src/data/openingProductionStatus.generated.ts
-          echo '---END GENERATED SNAPSHOT---'
+          echo '---BEGIN GENERATED DIFF---'
+          git diff -- src/data/openingProductionStatus.generated.ts
+          echo '---END GENERATED DIFF---'
