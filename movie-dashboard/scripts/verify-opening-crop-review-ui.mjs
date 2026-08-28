@@ -28,6 +28,7 @@ for (const token of [
 for (const token of [
   'cropReview: "Human crop QA"',
   'const cropReview = media.cropReview',
+  'const recovery = davinci.productionRecovery',
   'crop={cropReview.state}',
   'Human crop: {production.readiness.humanCropReviewApproved ? "PASS" : cropReview.state}',
   'HUMAN CROP REVIEW / SCENE &gt; ASSET &gt; DEFAULT',
@@ -39,13 +40,24 @@ for (const token of [
   '{davinci.requiredHumanCropReview.path}',
   '{davinci.requiredHumanCropReview.evidenceSha256 ?? "PENDING_CROP_REVIEW"}',
   '{davinci.requiredHumanCropReview.bindingFingerprintSha256 ?? "PENDING_CROP_REVIEW"}',
+  'DaVinci recovery sidecar',
+  '{recovery.path}',
+  '{recovery.actualState}',
+  '{recovery.sourceRenderSha256 ?? "PENDING_RECOVERY_EXPORT"}',
+  '{recovery.cropReviewEvidenceSha256 ?? "PENDING_RECOVERY_EXPORT"}',
+  '{recovery.cropReviewBindingFingerprintSha256 ?? "PENDING_RECOVERY_EXPORT"}',
+  'CROP_REVIEW_CHANGED =&gt; DAVINCI_RECOVERY_SIDECAR_STALE',
+  'DAVINCI_RECOVERY_SIDECAR_CURRENT != MAC_DAVINCI_ACTUAL_VERIFIED',
   'HUMAN_CROP_REVIEW_PASS != HUMAN_PREVIEW_REVIEW_PASS',
-]) need(card, token, `Opening Motion Zukan crop-review surface missing: ${token}`);
+]) need(card, token, `Opening Motion Zukan crop/recovery surface missing: ${token}`);
 
 if (card.includes('crop evidence productionReady: YES') || handoff.includes('productionReady: true')) {
   errors.push('Crop-review surface must not fabricate production readiness');
 }
-if (!card.includes('NOT_RUN')) errors.push('Opening crop-review surface must preserve explicit NOT_RUN vocabulary');
+if (!card.includes('NOT_RUN')) errors.push('Opening crop/recovery surface must preserve explicit NOT_RUN vocabulary');
+if (card.includes('DaVinci recovery sidecar: PASS') || card.includes('recovery.actualState === "PASS"')) {
+  errors.push('Recovery metadata must not be promoted to DaVinci Actual evidence');
+}
 
 if (errors.length > 0) {
   console.error(`Opening crop review UI contract FAILED (${errors.length})`);
@@ -53,4 +65,4 @@ if (errors.length > 0) {
   process.exit(1);
 }
 
-console.log('Opening crop review UI contract OK: Motion Zukan exposes Human crop state/counts/evidence and DaVinci binding while Actual and production readiness remain separate.');
+console.log('Opening crop review UI contract OK: Motion Zukan exposes Human crop authority plus crop-bound DaVinci recovery SHA/fingerprint while Actual and production readiness remain separate.');
