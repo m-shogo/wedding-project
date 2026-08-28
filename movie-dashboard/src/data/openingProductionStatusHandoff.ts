@@ -13,6 +13,7 @@ const buildNextGate = (project: ReturnType<typeof buildWeddingMovieProductionCri
         artifactPath: current.path ?? null,
         blockerCodes: [...current.blockerCodes],
         recovery: [...current.recovery],
+        actionTargets: current.actionTargets.map((target) => ({...target})),
       }
     : {
         state: "PRODUCTION_READY" as const,
@@ -20,6 +21,7 @@ const buildNextGate = (project: ReturnType<typeof buildWeddingMovieProductionCri
         artifactPath: null,
         blockerCodes: [] as string[],
         recovery: [] as string[],
+        actionTargets: [] as Array<{label: string; route: string; purpose: string}>,
       };
 };
 
@@ -80,6 +82,7 @@ export function buildOpeningProductionStatusHandoff() {
       "HANDOFF_METADATA_EXPORTED != HANDOFF_ARTIFACTS_CURRENT",
       "NEXT_ACTION_EXPORTED != ACTION_COMPLETED",
       "NEXT_GATE_EXPORTED != NEXT_GATE_COMPLETED",
+      "ACTION_TARGET_EXPORTED != ACTION_COMPLETED",
       "STABLE_BLOCKER_CODE != RAW_BLOCKER_DETAIL",
       "CRITICAL_PATH_EXPORTED != RECOVERY_EXECUTED",
     ],
