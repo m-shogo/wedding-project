@@ -16,9 +16,12 @@ export type DaVinciWeddingProductionRecoveryProject = {
   productionReady: boolean;
   stage: string | null;
   artifactPath: string | null;
+  recoveryAuthority: PalmierWeddingProductionProject["bridge"]["recovery"]["authority"];
+  sourceRenderSha256: string | null;
   blockerCodes: string[];
   blockerActions: DaVinciWeddingProductionRecoveryAction[];
   canonicalRecovery: string[];
+  recoveryGuardrails: string[];
   bridge: {
     state: PalmierWeddingProductionProject["bridge"]["state"];
     palmierCurrent: boolean;
@@ -52,15 +55,19 @@ function cloneAction(action: DaVinciWeddingProductionRecoveryAction): DaVinciWed
 }
 
 function projectRecovery(project: PalmierWeddingProductionProject): DaVinciWeddingProductionRecoveryProject {
+  const recovery = project.bridge.recovery;
   return {
     movieId: project.movieId,
     title: project.title,
     productionReady: project.productionReady,
     stage: project.nextGate.stage,
     artifactPath: project.nextGate.artifactPath,
-    blockerCodes: [...project.nextGate.blockerCodes],
-    blockerActions: project.nextGate.blockerActions.map(cloneAction),
-    canonicalRecovery: [...project.nextGate.recovery],
+    recoveryAuthority: recovery.authority,
+    sourceRenderSha256: recovery.sourceRenderSha256,
+    blockerCodes: [...recovery.blockerCodes],
+    blockerActions: recovery.blockerActions.map(cloneAction),
+    canonicalRecovery: [...recovery.canonicalRecovery],
+    recoveryGuardrails: [...recovery.guardrails],
     bridge: {
       state: project.bridge.state,
       palmierCurrent: project.bridge.palmierCurrent,
@@ -90,6 +97,7 @@ export function buildDaVinciWeddingProductionRecoveryBundleFromGate(
       ...gate.guardrails,
       "DAVINCI_RECOVERY_EXPORTED != RECOVERY_EXECUTED",
       "DAVINCI_RECOVERY_ACTION_EXPORTED != DAVINCI_TIMELINE_MUTATED",
+      "SHA_BOUND_RECOVERY_EXPORTED != MAC_DAVINCI_ACTUAL_VERIFIED",
       "DAVINCI_ACTUAL_COMMAND_EXPORTED != MAC_DAVINCI_ACTUAL_VERIFIED",
       "MAC_DAVINCI_ACTUAL_REMAINS_NOT_RUN_UNTIL_GUI_EVIDENCE_IS_CURRENT",
     ],

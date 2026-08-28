@@ -3,6 +3,18 @@ import {buildProfileProductionStatusHandoff} from "../data/profileProductionStat
 
 export type PalmierWeddingProductionMovieId = "opening" | "profile";
 
+type ProductionNextGate = ReturnType<typeof buildOpeningProductionStatusHandoff>["opening"]["production"]["nextGate"];
+type ProductionRecoveryAction = ProductionNextGate["blockerActions"][number];
+
+export type PalmierDavinciRecoverySnapshot = {
+  authority: "SHA_BOUND_FINAL_RENDER" | "CRITICAL_PATH_PRE_BUNDLE";
+  sourceRenderSha256: string | null;
+  blockerCodes: string[];
+  blockerActions: ProductionRecoveryAction[];
+  canonicalRecovery: string[];
+  guardrails: string[];
+};
+
 export type PalmierDavinciProductionBridge = {
   state: "PALMIER_NOT_CURRENT" | "DAVINCI_HANDOFF_NOT_CURRENT" | "MAC_DAVINCI_ACTUAL_NOT_VERIFIED" | "FINAL_DELIVERY_APPROVAL_REQUIRED" | "READY";
   palmierCurrent: boolean;
@@ -17,6 +29,7 @@ export type PalmierDavinciProductionBridge = {
     status: string;
     strict: string;
   };
+  recovery: PalmierDavinciRecoverySnapshot;
 };
 
 export type PalmierWeddingProductionProject = {
@@ -24,7 +37,7 @@ export type PalmierWeddingProductionProject = {
   title: string;
   overallState: string;
   productionReady: boolean;
-  nextGate: ReturnType<typeof buildOpeningProductionStatusHandoff>["opening"]["production"]["nextGate"];
+  nextGate: ProductionNextGate;
   bridge: PalmierDavinciProductionBridge;
 };
 
@@ -41,14 +54,71 @@ type NormalizedDeliveryReadiness = {
   finalDeliveryApproved: boolean;
 };
 
+type DavinciRecoveryCarrier = {
+  productionRecovery?: {
+    sourceRenderSha256?: unknown;
+    blockerCodes?: unknown;
+    blockerActions?: unknown;
+    canonicalRecovery?: unknown;
+    guardrails?: unknown;
+  };
+};
+
+function cloneRecoveryAction(action: ProductionRecoveryAction): ProductionRecoveryAction {
+  return {...action};
+}
+
+function normalizeRecoverySnapshot(davinci: DavinciRecoveryCarrier, nextGate: ProductionNextGate): PalmierDavinciRecoverySnapshot {
+  const recovery = davinci.productionRecovery;
+  const sourceRenderSha256 = typeof recovery?.sourceRenderSha256 === "string" && recovery.sourceRenderSha256.length > 0
+    ? recovery.sourceRenderSha256
+    : null;
+  const blockerCodes = Array.isArray(recovery?.blockerCodes) && recovery.blockerCodes.every((item) => typeof item === "string")
+    ? recovery.blockerCodes as string[]
+    : null;
+  const blockerActions = Array.isArray(recovery?.blockerActions)
+    ? recovery.blockerActions as ProductionRecoveryAction[]
+    : null;
+  const canonicalRecovery = Array.isArray(recovery?.canonicalRecovery) && recovery.canonicalRecovery.every((item) => typeof item === "string")
+    ? recovery.canonicalRecovery as string[]
+    : null;
+  const guardrails = Array.isArray(recovery?.guardrails) && recovery.guardrails.every((item) => typeof item === "string")
+    ? recovery.guardrails as string[]
+    : [];
+
+  if (sourceRenderSha256 && blockerCodes && blockerActions && canonicalRecovery) {
+    return {
+      authority: "SHA_BOUND_FINAL_RENDER",
+      sourceRenderSha256,
+      blockerCodes: [...blockerCodes],
+      blockerActions: blockerActions.map(cloneRecoveryAction),
+      canonicalRecovery: [...canonicalRecovery],
+      guardrails: [...guardrails],
+    };
+  }
+
+  return {
+    authority: "CRITICAL_PATH_PRE_BUNDLE",
+    sourceRenderSha256: null,
+    blockerCodes: [...nextGate.blockerCodes],
+    blockerActions: nextGate.blockerActions.map(cloneRecoveryAction),
+    canonicalRecovery: [...nextGate.recovery],
+    guardrails: [
+      "PRE_BUNDLE_RECOVERY_IS_NOT_FINAL_RENDER_SHA_BOUND",
+      "CRITICAL_PATH_RECOVERY != DAVINCI_ACTUAL_EVIDENCE",
+    ],
+  };
+}
+
 function buildBridge(
   palmier: {current: boolean; contractVersion: string},
   davinci: {
     current: boolean;
     contractVersion: string;
     actualEvidence: {path: string; commands: {init: string; status: string; strict: string}};
-  },
+  } & DavinciRecoveryCarrier,
   readiness: NormalizedDeliveryReadiness,
+  nextGate: ProductionNextGate,
 ): PalmierDavinciProductionBridge {
   const state = !palmier.current
     ? "PALMIER_NOT_CURRENT"
@@ -70,6 +140,7 @@ function buildBridge(
     davinciContractVersion: davinci.contractVersion,
     actualEvidencePath: davinci.actualEvidence.path,
     actualCommands: {...davinci.actualEvidence.commands},
+    recovery: normalizeRecoverySnapshot(davinci, nextGate),
   };
 }
 
@@ -86,7 +157,7 @@ function openingProject(): PalmierWeddingProductionProject {
     overallState: production.overallState,
     productionReady: production.nextGate.state === "PRODUCTION_READY",
     nextGate: production.nextGate,
-    bridge: buildBridge(production.palmierHandoff, production.davinciHandoff, deliveryReadiness),
+    bridge: buildBridge(production.palmierHandoff, production.davinciHandoff, deliveryReadiness, production.nextGate),
   };
 }
 
@@ -103,7 +174,7 @@ function profileProject(): PalmierWeddingProductionProject {
     overallState: production.overallState,
     productionReady: production.nextGate.state === "PRODUCTION_READY",
     nextGate: production.nextGate,
-    bridge: buildBridge(production.palmierHandoff, production.davinciHandoff, deliveryReadiness),
+    bridge: buildBridge(production.palmierHandoff, production.davinciHandoff, deliveryReadiness, production.nextGate),
   };
 }
 
@@ -127,6 +198,7 @@ export function buildPalmierWeddingProductionGate(selectedMovieId: string): Palm
       "PALMIER_CURRENT != DAVINCI_HANDOFF_CURRENT",
       "DAVINCI_HANDOFF_CURRENT != MAC_DAVINCI_ACTUAL_VERIFIED",
       "DAVINCI_ACTUAL_COMMAND_EXPORTED != MAC_DAVINCI_ACTUAL_VERIFIED",
+      "SHA_BOUND_RECOVERY_EXPORTED != RECOVERY_EXECUTED",
       "MAC_DAVINCI_ACTUAL_VERIFIED != FINAL_DELIVERY_APPROVED",
       "HUMAN_QA_NOT_RUN != HUMAN_QA_PASS",
       "MAC_DAVINCI_ACTUAL_NOT_RUN != MAC_DAVINCI_ACTUAL_VERIFIED",
@@ -134,7 +206,7 @@ export function buildPalmierWeddingProductionGate(selectedMovieId: string): Palm
   };
 }
 
-function markdownRecoveryAction(action: PalmierWeddingProductionProject["nextGate"]["blockerActions"][number]) {
+function markdownRecoveryAction(action: ProductionRecoveryAction) {
   const target = action.kind === "ROUTE" && action.route
     ? `route=${action.route}`
     : action.kind === "COMMAND" && action.command
@@ -165,6 +237,8 @@ export function buildPalmierWeddingProductionMarkdown(gate: PalmierWeddingProduc
       `palmier-davinci-bridge: ${project.bridge.state}`,
       `palmier-current: ${project.bridge.palmierCurrent ? "yes" : "no"} (${project.bridge.palmierContractVersion})`,
       `davinci-handoff-current: ${project.bridge.davinciHandoffCurrent ? "yes" : "no"} (${project.bridge.davinciContractVersion})`,
+      `davinci-recovery-authority: ${project.bridge.recovery.authority}`,
+      `davinci-recovery-source-sha256: ${project.bridge.recovery.sourceRenderSha256 ?? "not-sha-bound-yet"}`,
       `mac-davinci-actual-verified: ${project.bridge.macDaVinciActualVerified ? "yes" : "no"}`,
       `final-delivery-approved: ${project.bridge.finalDeliveryApproved ? "yes" : "no"}`,
       `davinci-actual-evidence: ${project.bridge.actualEvidencePath}`,
