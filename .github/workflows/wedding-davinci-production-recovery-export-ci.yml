@@ -5,6 +5,7 @@ on:
     paths:
       - "motion-studio/package.json"
       - "motion-studio/src/data/resolveHandoff.schema.ts"
+      - "motion-studio/src/data/productionRecoveryActionContract.ts"
       - "motion-studio/src/data/weddingDavinciProductionRecovery.ts"
       - "motion-studio/scripts/export-wedding-davinci-production-recovery.mts"
       - "motion-studio/scripts/export-wedding-production-handoff.mts"
@@ -19,6 +20,7 @@ on:
     paths:
       - "motion-studio/package.json"
       - "motion-studio/src/data/resolveHandoff.schema.ts"
+      - "motion-studio/src/data/productionRecoveryActionContract.ts"
       - "motion-studio/src/data/weddingDavinciProductionRecovery.ts"
       - "motion-studio/scripts/export-wedding-davinci-production-recovery.mts"
       - "motion-studio/scripts/export-wedding-production-handoff.mts"
