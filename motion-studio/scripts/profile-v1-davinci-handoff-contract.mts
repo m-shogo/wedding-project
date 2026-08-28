@@ -124,10 +124,12 @@ const report = {
     authority: 'FINAL_RENDER_BOUND_DAVINCI_RECOVERY',
     sourceRenderSha256: recoverySidecar?.sourceBundle?.finalRenderSha256 ?? null,
     actualState: recoverySidecar?.recovery?.actual?.state ?? 'NOT_RUN',
-    blockerCodes: Array.isArray(recoverySidecar?.recovery?.blockerCodes) ? [...recoverySidecar.recovery.blockerCodes] : [],
-    blockerActions: Array.isArray(recoverySidecar?.recovery?.blockerActions) ? recoverySidecar.recovery.blockerActions.map((action: any) => ({...action})) : [],
-    canonicalRecovery: Array.isArray(recoverySidecar?.recovery?.canonicalRecovery) ? [...recoverySidecar.recovery.canonicalRecovery] : [],
-    guardrails: Array.isArray(recoverySidecar?.recovery?.guardrails) ? [...recoverySidecar.recovery.guardrails] : [],
+    ...(recoverySidecar ? {
+      blockerCodes: Array.isArray(recoverySidecar.recovery?.blockerCodes) ? [...recoverySidecar.recovery.blockerCodes] : [],
+      blockerActions: Array.isArray(recoverySidecar.recovery?.blockerActions) ? recoverySidecar.recovery.blockerActions.map((action: any) => ({...action})) : [],
+      canonicalRecovery: Array.isArray(recoverySidecar.recovery?.canonicalRecovery) ? [...recoverySidecar.recovery.canonicalRecovery] : [],
+      guardrails: Array.isArray(recoverySidecar.recovery?.guardrails) ? [...recoverySidecar.recovery.guardrails] : [],
+    } : {}),
     requiredCurrent: true,
   },
   actualEvidence: {
