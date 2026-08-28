@@ -10,6 +10,7 @@ on:
       - "movie-dashboard/scripts/sync-opening-production-status.mjs"
       - "movie-dashboard/scripts/sync-opening-davinci-actual-binding-audit.mjs"
       - "movie-dashboard/scripts/verify-opening-production-status-handoff.mjs"
+      - "movie-dashboard/scripts/verify-opening-davinci-actual-binding-audit.mjs"
       - "movie-dashboard/src/data/openingProductionGate.generated.ts"
       - "movie-dashboard/src/data/openingProductionStatus.generated.ts"
       - "movie-dashboard/src/data/openingDavinciActualBindingAudit.generated.ts"
@@ -28,6 +29,7 @@ on:
       - "movie-dashboard/scripts/sync-opening-production-status.mjs"
       - "movie-dashboard/scripts/sync-opening-davinci-actual-binding-audit.mjs"
       - "movie-dashboard/scripts/verify-opening-production-status-handoff.mjs"
+      - "movie-dashboard/scripts/verify-opening-davinci-actual-binding-audit.mjs"
       - "movie-dashboard/src/data/openingProductionGate.generated.ts"
       - "movie-dashboard/src/data/openingProductionStatus.generated.ts"
       - "movie-dashboard/src/data/openingDavinciActualBindingAudit.generated.ts"
@@ -65,5 +67,7 @@ jobs:
         run: node scripts/sync-opening-davinci-actual-binding-audit.mjs --check
       - name: Opening production-status export and UI contracts
         run: node scripts/verify-opening-production-status-handoff.mjs
+      - name: Opening DaVinci Actual binding audit contracts
+        run: node scripts/verify-opening-davinci-actual-binding-audit.mjs
       - name: Typecheck and build Movie Dashboard
         run: pnpm build
