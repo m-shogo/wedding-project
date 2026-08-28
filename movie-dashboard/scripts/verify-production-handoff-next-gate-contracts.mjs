@@ -9,6 +9,7 @@ const profile = read("src/data/profileProductionStatusHandoff.ts");
 const openingUi = read("src/components/OpeningProductionHandoffExportButton.tsx");
 const profileUi = read("src/components/ProfileProductionHandoffExportButton.tsx");
 const nextGateUi = read("src/components/ProductionNextGateSummary.tsx");
+const effectiveNextGateUi = read("src/components/EffectiveProductionNextGateSummary.tsx");
 const errors = [];
 
 const need = (source, token, label) => {
@@ -47,22 +48,18 @@ for (const [label, source, project] of [
 need(opening, "const openingCriticalPath = criticalPath.projects.opening", "Opening");
 need(profile, "const profileCriticalPath = criticalPath.projects.profile", "Profile");
 
-for (const [label, source, project, builder] of [
-  ["Opening UI", openingUi, "Opening", "buildOpeningProductionStatusHandoff"],
-  ["Profile UI", profileUi, "Profile", "buildProfileProductionStatusHandoff"],
+for (const [label, source, project, movieId, builder] of [
+  ["Opening UI", openingUi, "Opening", "opening", "buildOpeningProductionStatusHandoffJson"],
+  ["Profile UI", profileUi, "Profile", "profile", "buildProfileProductionStatusHandoffJson"],
 ]) {
   for (const token of [
     builder,
-    "production.nextGate",
-    "ProductionNextGateSummary",
+    "buildPalmierWeddingProductionGate",
+    `buildPalmierWeddingProductionGate(\"${movieId}\")`,
+    "effectiveNextGate",
+    "EffectiveProductionNextGateSummary",
     `projectLabel=\"${project}\"`,
-    "state={nextGate.state}",
-    "stage={nextGate.stage}",
-    "artifactPath={nextGate.artifactPath}",
-    "blockerCodes={nextGate.blockerCodes}",
-    "blockerActions={nextGate.blockerActions}",
-    "recovery={nextGate.recovery}",
-    "actionTargets={nextGate.actionTargets}",
+    "gate={effectiveProject.effectiveNextGate}",
   ]) need(source, token, label);
 }
 
@@ -83,10 +80,34 @@ for (const token of [
   "to={target.route}",
   "CANONICAL RECOVERY",
   "recovery.map",
-]) need(nextGateUi, token, "Next-gate UI");
+]) need(nextGateUi, token, "Canonical next-gate UI");
+
+for (const token of [
+  'import {Link} from "react-router-dom"',
+  "PalmierEffectiveNextGate",
+  "PalmierEffectiveRecoveryAction",
+  "EFFECTIVE NEXT GATE",
+  'gate.state !== "PRODUCTION_READY"',
+  "gate.authority",
+  "gate.stage",
+  "gate.artifactPath",
+  "gate.adoptedCandidateIds",
+  "gate.blockerCodes",
+  "ACTUAL NEXT ACTION",
+  "gate.blockerActions",
+  'action.kind === "ROUTE"',
+  'action.kind === "COMMAND"',
+  "EFFECTIVE RECOVERY",
+  "gate.recovery",
+  "Wedding canonical blockerを先に解消し",
+  "表示・exportだけではHuman QA / Studio Actual / DaVinci ActualをPASSへ昇格しません",
+]) need(effectiveNextGateUi, token, "Effective next-gate UI");
 
 if (nextGateUi.includes("NOT_RUN = PASS") || nextGateUi.includes("productionReady = true")) {
-  errors.push("Next-gate UI must remain display-only and must not promote production state");
+  errors.push("Canonical next-gate UI must remain display-only and must not promote production state");
+}
+if (effectiveNextGateUi.includes("NOT_RUN = PASS") || effectiveNextGateUi.includes("productionReady = true")) {
+  errors.push("Effective next-gate UI must remain display-only and must not promote production state");
 }
 
 if (errors.length) {
@@ -95,4 +116,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log("Production handoff next-gate contracts OK: Opening/Profile exports and handoff cards expose canonical stage/blocker evidence plus structured ROUTE/COMMAND/HUMAN recovery without promoting Human QA or Mac DaVinci Actual.");
+console.log("Production handoff next-gate contracts OK: canonical Opening/Profile handoff data remains fail-closed while handoff cards surface the centralized effective next gate across Wedding blockers and explicitly adopted Remotion dependencies.");
