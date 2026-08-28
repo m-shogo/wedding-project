@@ -32,9 +32,19 @@ for (const token of [
   "profile: []",
   "unknownCandidateIds",
   'tooling.currentRepoState === "VERIFIED"',
-  '"STUDIO_ACTUAL_REQUIRED"',
-  '"HUMAN_REVIEW_REQUIRED"',
-  '"DEPENDENCY_PROMOTION_REQUIRED"',
+  "resolveRemotionStudioToolingDependencyState",
+  "RemotionStudioToolingDependencyStateInput",
+  "remotionStudioToolingDependencyStateScenarios",
+  'label: "unadopted"',
+  'expected: "NOT_ADOPTED"',
+  'label: "adopted-before-studio-actual"',
+  'expected: "STUDIO_ACTUAL_REQUIRED"',
+  'label: "studio-actual-before-human-review"',
+  'expected: "HUMAN_REVIEW_REQUIRED"',
+  'label: "human-review-before-promotion"',
+  'expected: "DEPENDENCY_PROMOTION_REQUIRED"',
+  'label: "fully-promoted"',
+  'expected: "READY"',
   'const blocking = adopted && state !== "READY"',
   "buildRecoveryActions",
   'kind: "COMMAND"',
@@ -43,6 +53,7 @@ for (const token of [
   "adoptedCandidateCount",
   '"ELEMENT_CANDIDATE_EXISTS != WEDDING_PROJECT_ADOPTED"',
   '"UNADOPTED_ELEMENT_TOOLING_STATE_IS_NON_BLOCKING"',
+  '"DEPENDENCY_STATE_RESOLVER_IS_SINGLE_AUTHORITY"',
   '"RECOVERY_ACTION_EXPORTED != RECOVERY_EXECUTED"',
   '"CI_MUST_NOT_PROMOTE_STUDIO_GUI_ACTUAL"',
 ]) need(dependency, token, "explicit adoption dependency");
@@ -97,4 +108,4 @@ if (errors.length) {
   for (const error of errors) console.error(`- ${error}`);
   process.exit(1);
 }
-console.log("Remotion Studio tooling handoff contracts PASS: effective production state distinguishes the canonical Wedding next gate from an explicitly adopted Remotion Studio dependency, with structured fail-closed recovery and no fabricated GUI Actual.");
+console.log("Remotion Studio tooling handoff contracts PASS: one state resolver owns NOT_ADOPTED -> STUDIO_ACTUAL_REQUIRED -> HUMAN_REVIEW_REQUIRED -> DEPENDENCY_PROMOTION_REQUIRED -> READY; current empty adoption stays non-blocking and GUI Actual is not fabricated.");
