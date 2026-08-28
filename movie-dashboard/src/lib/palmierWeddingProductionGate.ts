@@ -36,6 +36,11 @@ export type PalmierWeddingProductionGate = {
   guardrails: readonly string[];
 };
 
+type NormalizedDeliveryReadiness = {
+  macDaVinciActualVerified: boolean;
+  finalDeliveryApproved: boolean;
+};
+
 function buildBridge(
   palmier: {current: boolean; contractVersion: string},
   davinci: {
@@ -43,7 +48,7 @@ function buildBridge(
     contractVersion: string;
     actualEvidence: {path: string; commands: {init: string; status: string; strict: string}};
   },
-  readiness: {macDaVinciActualVerified: boolean; finalDeliveryApproved: boolean},
+  readiness: NormalizedDeliveryReadiness,
 ): PalmierDavinciProductionBridge {
   const state = !palmier.current
     ? "PALMIER_NOT_CURRENT"
@@ -71,26 +76,34 @@ function buildBridge(
 function openingProject(): PalmierWeddingProductionProject {
   const handoff = buildOpeningProductionStatusHandoff();
   const production = handoff.opening.production;
+  const deliveryReadiness: NormalizedDeliveryReadiness = {
+    macDaVinciActualVerified: production.readiness.macDaVinciActualVerified,
+    finalDeliveryApproved: production.readiness.finalDeliveryApproved,
+  };
   return {
     movieId: "opening",
     title: "Opening Movie",
     overallState: production.overallState,
     productionReady: production.nextGate.state === "PRODUCTION_READY",
     nextGate: production.nextGate,
-    bridge: buildBridge(production.palmierHandoff, production.davinciHandoff, production.readiness),
+    bridge: buildBridge(production.palmierHandoff, production.davinciHandoff, deliveryReadiness),
   };
 }
 
 function profileProject(): PalmierWeddingProductionProject {
   const handoff = buildProfileProductionStatusHandoff();
   const production = handoff.profile.production;
+  const deliveryReadiness: NormalizedDeliveryReadiness = {
+    macDaVinciActualVerified: production.readiness.macDaVinciActual === "ACTUAL_VERIFIED",
+    finalDeliveryApproved: production.readiness.finalDeliveryApproved,
+  };
   return {
     movieId: "profile",
     title: "Profile Movie",
     overallState: production.overallState,
     productionReady: production.nextGate.state === "PRODUCTION_READY",
     nextGate: production.nextGate,
-    bridge: buildBridge(production.palmierHandoff, production.davinciHandoff, production.readiness),
+    bridge: buildBridge(production.palmierHandoff, production.davinciHandoff, deliveryReadiness),
   };
 }
 
