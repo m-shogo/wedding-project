@@ -5,6 +5,7 @@ import {fileURLToPath} from 'node:url';
 
 const studioRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const bundlePath = join(studioRoot, 'out/handoff/opening-v1/opening-v1-production-bundle.json');
+const recoveryPath = join(studioRoot, 'out/handoff/opening-v1/opening-v1-davinci-production-recovery.json');
 const cropReviewPath = join(studioRoot, 'out/qa/opening-v1-crop-review-evidence.json');
 const timelineCsvPath = join(studioRoot, 'out/handoff/opening-v1/opening-v1-palmier-timeline.csv');
 const soundCueCsvPath = join(studioRoot, 'out/handoff/opening-v1/opening-v1-palmier-sound-cues.csv');
@@ -64,11 +65,42 @@ type CropReviewEvidence = {
   productionReady: false;
 };
 
+type RecoverySidecar = {
+  schemaVersion: 'wedding-davinci-production-recovery-export/v1';
+  authority: 'FINAL_RENDER_BOUND_DAVINCI_RECOVERY';
+  sourceBundle: {
+    path: string;
+    schemaVersion: string;
+    finalRenderPath: string;
+    finalRenderSha256: string;
+    cropReviewEvidencePath: string;
+    cropReviewEvidenceSha256: string;
+    cropReviewBindingFingerprintSha256: string;
+  };
+  recovery: {
+    movieId: string;
+    stage: string;
+    artifactPath: string;
+    productionReady: false;
+    actual: {state: string; evidencePath: string};
+    bridge: {macDaVinciActualVerified: boolean; finalDeliveryApproved: boolean};
+  };
+};
+
+type RecoveryBinding = {
+  path: string;
+  sha256: string;
+  sourceRenderSha256: string;
+  cropReviewEvidenceSha256: string;
+  cropReviewBindingFingerprintSha256: string;
+};
+
 type FinishingEvidence = {
   schemaVersion: 'opening-v1-davinci-finishing-evidence/v1';
   authority: 'MAC_DAVINCI_ACTUAL_EVIDENCE';
   boundAt: string;
   bundle: {path: string; sha256: string};
+  productionRecovery: RecoveryBinding;
   sourceRender: {path: string; expectedSha256: string; readbackSha256: string | null; shaMatch: QaState};
   resolve: {
     version: string | null;
@@ -105,7 +137,7 @@ type FinishingEvidence = {
 const shaFile = (path: string) => createHash('sha256').update(readFileSync(path)).digest('hex');
 const rel = (path: string) => relative(studioRoot, path).replaceAll('\\', '/');
 
-function loadBundle(): {bundle: ProductionBundle; bundleSha256: string} {
+function loadBundle(): {bundle: ProductionBundle; bundleSha256: string; recovery: RecoverySidecar; recoverySha256: string} {
   if (!existsSync(bundlePath)) throw new Error('DAVINCI_FINISHING_BUNDLE_MISSING:run pnpm export:opening-v1-production-bundle after approved final render');
   const bundle = JSON.parse(readFileSync(bundlePath, 'utf8')) as ProductionBundle;
   if (bundle.schemaVersion !== 'opening-v1-production-bundle/v1') throw new Error('DAVINCI_FINISHING_BUNDLE_SCHEMA_MISMATCH');
@@ -138,11 +170,24 @@ function loadBundle(): {bundle: ProductionBundle; bundleSha256: string} {
   if (bundle.palmier?.soundCueCsv !== rel(soundCueCsvPath)) throw new Error('DAVINCI_FINISHING_PALMIER_SOUND_CUE_PATH_MISMATCH');
   if (!existsSync(soundCueCsvPath)) throw new Error('DAVINCI_FINISHING_PALMIER_SOUND_CUE_MISSING');
   if (bundle.palmier?.soundCueCsvSha256 !== shaFile(soundCueCsvPath)) throw new Error('DAVINCI_FINISHING_PALMIER_SOUND_CUE_SHA_MISMATCH');
-  return {bundle, bundleSha256: shaFile(bundlePath)};
+
+  if (!existsSync(recoveryPath)) throw new Error('DAVINCI_FINISHING_RECOVERY_SIDECAR_MISSING');
+  let recovery: RecoverySidecar;
+  try { recovery = JSON.parse(readFileSync(recoveryPath, 'utf8')) as RecoverySidecar; }
+  catch { throw new Error('DAVINCI_FINISHING_RECOVERY_SIDECAR_INVALID_JSON'); }
+  if (recovery.schemaVersion !== 'wedding-davinci-production-recovery-export/v1' || recovery.authority !== 'FINAL_RENDER_BOUND_DAVINCI_RECOVERY') throw new Error('DAVINCI_FINISHING_RECOVERY_SIDECAR_CONTRACT');
+  if (recovery.sourceBundle?.path !== rel(bundlePath) || recovery.sourceBundle?.schemaVersion !== bundle.schemaVersion) throw new Error('DAVINCI_FINISHING_RECOVERY_BUNDLE_STALE');
+  if (recovery.sourceBundle?.finalRenderPath !== bundle.finalRender.path || recovery.sourceBundle?.finalRenderSha256 !== bundle.finalRender.sha256) throw new Error('DAVINCI_FINISHING_RECOVERY_RENDER_STALE');
+  if (recovery.sourceBundle?.cropReviewEvidencePath !== bundle.humanCropReview.evidencePath || recovery.sourceBundle?.cropReviewEvidenceSha256 !== bundle.humanCropReview.evidenceSha256) throw new Error('DAVINCI_FINISHING_RECOVERY_CROP_REVIEW_SHA_STALE');
+  if (recovery.sourceBundle?.cropReviewBindingFingerprintSha256 !== bundle.humanCropReview.bindingFingerprintSha256) throw new Error('DAVINCI_FINISHING_RECOVERY_CROP_REVIEW_FINGERPRINT_STALE');
+  if (recovery.recovery?.movieId !== 'opening' || recovery.recovery?.stage !== 'davinciFinishing' || recovery.recovery?.artifactPath !== bundle.finalRender.path) throw new Error('DAVINCI_FINISHING_RECOVERY_TARGET_STALE');
+  if (recovery.recovery?.productionReady !== false || recovery.recovery?.actual?.state !== 'NOT_RUN' || recovery.recovery?.bridge?.macDaVinciActualVerified !== false || recovery.recovery?.bridge?.finalDeliveryApproved !== false) throw new Error('DAVINCI_FINISHING_RECOVERY_MUST_PRECEDE_ACTUAL');
+  if (recovery.recovery?.actual?.evidencePath !== rel(evidencePath)) throw new Error('DAVINCI_FINISHING_RECOVERY_EVIDENCE_PATH_STALE');
+  return {bundle, bundleSha256: shaFile(bundlePath), recovery, recoverySha256: shaFile(recoveryPath)};
 }
 
 function initializeEvidence() {
-  const {bundle, bundleSha256} = loadBundle();
+  const {bundle, bundleSha256, recovery, recoverySha256} = loadBundle();
   const sourcePath = join(studioRoot, bundle.finalRender.path);
   if (!existsSync(sourcePath)) throw new Error(`DAVINCI_FINISHING_SOURCE_RENDER_MISSING:${bundle.finalRender.path}`);
   const sourceSha = shaFile(sourcePath);
@@ -153,6 +198,13 @@ function initializeEvidence() {
     authority: 'MAC_DAVINCI_ACTUAL_EVIDENCE',
     boundAt: new Date().toISOString(),
     bundle: {path: rel(bundlePath), sha256: bundleSha256},
+    productionRecovery: {
+      path: rel(recoveryPath),
+      sha256: recoverySha256,
+      sourceRenderSha256: recovery.sourceBundle.finalRenderSha256,
+      cropReviewEvidenceSha256: recovery.sourceBundle.cropReviewEvidenceSha256,
+      cropReviewBindingFingerprintSha256: recovery.sourceBundle.cropReviewBindingFingerprintSha256,
+    },
     sourceRender: {
       path: bundle.finalRender.path,
       expectedSha256: bundle.finalRender.sha256,
@@ -189,7 +241,7 @@ function initializeEvidence() {
   mkdirSync(dirname(evidencePath), {recursive: true});
   writeFileSync(evidencePath, `${JSON.stringify(evidence, null, 2)}\n`);
   console.log(`Opening V1 DaVinci finishing evidence initialized: ${rel(evidencePath)}`);
-  console.log('All Mac GUI Actual verdicts remain NOT_RUN. Fill them only after real Resolve operations.');
+  console.log('All Mac GUI Actual verdicts remain NOT_RUN. Current crop QA + current DaVinci recovery sidecar were required before this template could be created.');
 }
 
 function verifyEvidence(strict: boolean) {
@@ -201,15 +253,8 @@ function verifyEvidence(strict: boolean) {
 
   const errors: string[] = [];
   const fail = (message: string) => errors.push(message);
-  let bundle: ProductionBundle | null = null;
-  let bundleSha256: string | null = null;
-  try {
-    const loaded = loadBundle();
-    bundle = loaded.bundle;
-    bundleSha256 = loaded.bundleSha256;
-  } catch (error) {
-    fail(error instanceof Error ? error.message : String(error));
-  }
+  let loaded: ReturnType<typeof loadBundle> | null = null;
+  try { loaded = loadBundle(); } catch (error) { fail(error instanceof Error ? error.message : String(error)); }
 
   let evidence: FinishingEvidence | null = null;
   try {
@@ -231,9 +276,15 @@ function verifyEvidence(strict: boolean) {
   const boundAtMs = Date.parse(evidence.boundAt);
   if (!evidence.boundAt || Number.isNaN(boundAtMs)) fail('DAVINCI_FINISHING_BOUND_AT_INVALID');
 
-  if (bundle && bundleSha256) {
+  if (loaded) {
+    const {bundle, bundleSha256, recovery, recoverySha256} = loaded;
     if (evidence.bundle.path !== rel(bundlePath)) fail('STALE_DAVINCI_FINISHING_BUNDLE_PATH');
     if (evidence.bundle.sha256 !== bundleSha256) fail('STALE_DAVINCI_FINISHING_BUNDLE_SHA');
+    if (evidence.productionRecovery?.path !== rel(recoveryPath)) fail('STALE_DAVINCI_FINISHING_RECOVERY_PATH');
+    if (evidence.productionRecovery?.sha256 !== recoverySha256) fail('STALE_DAVINCI_FINISHING_RECOVERY_SIDECAR');
+    if (evidence.productionRecovery?.sourceRenderSha256 !== recovery.sourceBundle.finalRenderSha256) fail('STALE_DAVINCI_FINISHING_RECOVERY_RENDER_SHA');
+    if (evidence.productionRecovery?.cropReviewEvidenceSha256 !== recovery.sourceBundle.cropReviewEvidenceSha256) fail('STALE_DAVINCI_FINISHING_RECOVERY_CROP_REVIEW_SHA');
+    if (evidence.productionRecovery?.cropReviewBindingFingerprintSha256 !== recovery.sourceBundle.cropReviewBindingFingerprintSha256) fail('STALE_DAVINCI_FINISHING_RECOVERY_CROP_REVIEW_FINGERPRINT');
     if (evidence.sourceRender.path !== bundle.finalRender.path) fail('STALE_DAVINCI_SOURCE_RENDER_PATH');
     if (evidence.sourceRender.expectedSha256 !== bundle.finalRender.sha256) fail('STALE_DAVINCI_SOURCE_EXPECTED_SHA');
     const sourcePath = join(studioRoot, bundle.finalRender.path);
@@ -283,7 +334,7 @@ function verifyEvidence(strict: boolean) {
     return;
   }
 
-  console.log('Opening V1 DaVinci finishing evidence: ACTUAL_VERIFIED — current crop-bound production bundle, Human final-render review, versioned Palmier scene/sound handoff, source render and exported movie bytes match the recorded Mac Resolve evidence.');
+  console.log('Opening V1 DaVinci finishing evidence: ACTUAL_VERIFIED — current crop-bound production bundle, current DaVinci recovery sidecar, Human final-render review, versioned Palmier scene/sound handoff, source render and exported movie bytes match the recorded Mac Resolve evidence.');
   console.log('productionReady remains false here; final delivery approval is a separate human decision.');
 }
 
