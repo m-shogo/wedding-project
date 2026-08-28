@@ -58,6 +58,7 @@ export function FusionNodeTranslator() {
           {productionGate.projects.map((project) => {
             const studio = project.remotionStudioToolingEvidence;
             const dependency = project.remotionStudioToolingDependency;
+            const effectiveNextGate = project.effectiveNextGate;
             return (
             <div key={project.movieId} className="rounded-lg border border-current/15 bg-white/70 dark:bg-navy-800/50 p-3">
               <div className="flex flex-wrap items-center justify-between gap-2">
@@ -67,13 +68,26 @@ export function FusionNodeTranslator() {
 
               <div className="mt-3 rounded border border-violet-200 bg-violet-50/70 p-2 dark:border-violet-800 dark:bg-violet-900/15">
                 <div className="flex flex-wrap items-center justify-between gap-2">
-                  <p className="text-[10px] font-semibold tracking-widest text-violet-800 dark:text-violet-200">EFFECTIVE PRODUCTION STATE</p>
-                  <code className={`text-[9px] ${project.productionReady ? "text-emerald-700 dark:text-emerald-300" : "text-violet-700 dark:text-violet-300"}`}>{project.effectiveProductionState}</code>
+                  <p className="text-[10px] font-semibold tracking-widest text-violet-800 dark:text-violet-200">EFFECTIVE NEXT GATE</p>
+                  <code className={`text-[9px] ${project.productionReady ? "text-emerald-700 dark:text-emerald-300" : "text-violet-700 dark:text-violet-300"}`}>{effectiveNextGate.state}</code>
                 </div>
-                <p className="mt-1 text-[10px] leading-4 text-violet-800 dark:text-violet-200">Wedding canonical nextGateと、明示採用されたRemotion Studio dependencyを統合した実効stateです。Fusion独自判定ではなくPalmierと同じ中央resolverを使用します。</p>
-                <p className="mt-2 text-[10px] text-navy-600 dark:text-navy-200"><strong>Blocking authorities:</strong> {project.blockingAuthorities.length > 0 ? project.blockingAuthorities.join(", ") : "none"}</p>
+                <p className="mt-1 text-[10px] leading-4 text-violet-800 dark:text-violet-200">Wedding canonical nextGateと、明示採用されたRemotion Studio dependencyを統合した実効gateです。Fusion独自判定ではなくPalmierと同じ中央resolverを使用します。</p>
+                <p className="mt-2 text-[10px] text-navy-600 dark:text-navy-200"><strong>Authority:</strong> {effectiveNextGate.authority ?? "none"}</p>
+                <p className="mt-1 text-[10px] text-navy-600 dark:text-navy-200"><strong>NOW:</strong> {effectiveNextGate.stage ?? "PRODUCTION_READY"}</p>
+                <p className="mt-1 break-all text-[9px] text-navy-400"><strong>Artifact:</strong> {effectiveNextGate.artifactPath ?? "—"}</p>
+                <p className="mt-1 text-[10px] text-navy-600 dark:text-navy-200"><strong>Blocking authorities:</strong> {project.blockingAuthorities.length > 0 ? project.blockingAuthorities.join(", ") : "none"}</p>
+                <div className="mt-2 flex flex-wrap gap-1">
+                  {effectiveNextGate.blockerCodes.length > 0 ? effectiveNextGate.blockerCodes.map((code) => (
+                    <code key={code} className="rounded bg-violet-100 px-1.5 py-0.5 text-[9px] text-violet-800 dark:bg-violet-900/30 dark:text-violet-200">{code}</code>
+                  )) : <span className="text-[10px] text-emerald-700">effective blockerなし</span>}
+                </div>
+              </div>
+
+              <div className="mt-3 rounded border border-sand-200 bg-sand-50/70 p-2 dark:border-navy-700 dark:bg-navy-900/20">
+                <p className="text-[10px] font-semibold tracking-widest text-navy-500 dark:text-navy-300">CANONICAL WEDDING GATE</p>
                 <p className="mt-1 text-[10px] text-navy-600 dark:text-navy-200"><strong>Wedding NOW:</strong> {project.nextGate.stage ?? "PRODUCTION_READY"}</p>
                 <p className="mt-1 break-all text-[9px] text-navy-400"><strong>Artifact:</strong> {project.nextGate.artifactPath ?? "—"}</p>
+                <p className="mt-1 text-[9px] text-navy-400">effective gateとは別に、Motion Studio Wedding canonical nextGateを監査用として保持します。</p>
               </div>
 
               <div className="mt-3 grid gap-1 text-[11px] text-navy-600 dark:text-navy-200">
@@ -124,7 +138,11 @@ export function FusionNodeTranslator() {
                       <div key={`${action.kind}-${action.label}`} className="rounded border border-current/10 bg-white/70 p-2 dark:bg-navy-900/20">
                         <div className="flex flex-wrap items-center gap-2">
                           <code className="text-[9px] text-navy-400">{action.kind}</code>
-                          <span className="text-[11px] font-semibold text-navy-700 dark:text-sand-100">{action.label}</span>
+                          {action.kind === "ROUTE" && action.route ? (
+                            <Link to={action.route} className="text-[11px] font-semibold text-navy-700 underline decoration-navy-300 underline-offset-2 dark:text-sand-100">{action.label} →</Link>
+                          ) : (
+                            <span className="text-[11px] font-semibold text-navy-700 dark:text-sand-100">{action.label}</span>
+                          )}
                         </div>
                         <p className="mt-1 text-[10px] leading-4 text-navy-500 dark:text-navy-300">{action.purpose}</p>
                         {action.kind === "COMMAND" && action.command && (
@@ -142,23 +160,23 @@ export function FusionNodeTranslator() {
 
               {!project.productionReady && (
                 <div className="mt-3 border-t border-current/10 pt-2">
-                  <p className="text-[11px] text-navy-500 dark:text-navy-300"><strong>NOW:</strong> {project.nextGate.stage ?? project.overallState}</p>
-                  <p className="mt-1 text-[10px] text-navy-400 break-all">{project.nextGate.artifactPath ?? "production artifact未確定"}</p>
+                  <p className="text-[11px] text-navy-500 dark:text-navy-300"><strong>EFFECTIVE NOW:</strong> {effectiveNextGate.stage ?? project.overallState}</p>
+                  <p className="mt-1 text-[10px] text-navy-400 break-all">{effectiveNextGate.artifactPath ?? "production artifact未確定"}</p>
 
                   <div className="mt-3">
-                    <p className="text-[10px] font-semibold tracking-widest text-navy-500 dark:text-navy-300">STABLE BLOCKERS</p>
+                    <p className="text-[10px] font-semibold tracking-widest text-navy-500 dark:text-navy-300">EFFECTIVE STABLE BLOCKERS</p>
                     <div className="mt-1 flex flex-wrap gap-1">
-                      {project.nextGate.blockerCodes.length > 0 ? project.nextGate.blockerCodes.map((code) => (
+                      {effectiveNextGate.blockerCodes.length > 0 ? effectiveNextGate.blockerCodes.map((code) => (
                         <code key={code} className="rounded bg-amber-100 px-1.5 py-0.5 text-[9px] text-amber-800 dark:bg-amber-900/30 dark:text-amber-200">{code}</code>
                       )) : <span className="text-[10px] text-navy-400">none</span>}
                     </div>
                   </div>
 
                   <div className="mt-3">
-                    <p className="text-[10px] font-semibold tracking-widest text-navy-500 dark:text-navy-300">RECOVERY ACTIONS</p>
+                    <p className="text-[10px] font-semibold tracking-widest text-navy-500 dark:text-navy-300">EFFECTIVE RECOVERY ACTIONS</p>
                     <div className="mt-1 grid gap-2">
-                      {project.nextGate.blockerActions.length > 0 ? project.nextGate.blockerActions.map((action) => (
-                        <div key={action.id} className="rounded border border-current/10 bg-white/70 p-2 dark:bg-navy-900/20">
+                      {effectiveNextGate.blockerActions.length > 0 ? effectiveNextGate.blockerActions.map((action) => (
+                        <div key={`${action.kind}-${action.label}`} className="rounded border border-current/10 bg-white/70 p-2 dark:bg-navy-900/20">
                           <div className="flex flex-wrap items-center gap-2">
                             <code className="text-[9px] text-navy-400">{action.kind}</code>
                             {action.kind === "ROUTE" && action.route ? (
@@ -180,9 +198,9 @@ export function FusionNodeTranslator() {
                   </div>
 
                   <div className="mt-3">
-                    <p className="text-[10px] font-semibold tracking-widest text-navy-500 dark:text-navy-300">CANONICAL RECOVERY</p>
+                    <p className="text-[10px] font-semibold tracking-widest text-navy-500 dark:text-navy-300">EFFECTIVE RECOVERY</p>
                     <ul className="mt-1 grid gap-1 text-[10px] leading-4 text-navy-500 dark:text-navy-300">
-                      {project.nextGate.recovery.length > 0 ? project.nextGate.recovery.map((item) => <li key={item}>• {item}</li>) : <li>• recoveryなし</li>}
+                      {effectiveNextGate.recovery.length > 0 ? effectiveNextGate.recovery.map((item) => <li key={item}>• {item}</li>) : <li>• recoveryなし</li>}
                     </ul>
                   </div>
                 </div>
