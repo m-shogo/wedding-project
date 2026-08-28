@@ -32,6 +32,8 @@ const requiredWorkflowPaths = [
   '"motion-studio/src/**"',
   '"motion-studio/public/opening/**"',
   '"motion-studio/public/profile/**"',
+  '"motion-studio/public/photos/**"',
+  '"motion-studio/public/audio/**"',
   '"motion-studio/package.json"',
   '"movie-dashboard/package.json"',
   '"movie-dashboard/scripts/sync-production-stage-blocker-codes.mjs"',
@@ -46,4 +48,4 @@ if (!workflow.includes("Verify blocker snapshot invalidation wiring")) {
   fail("workflow must execute this invalidation contract verifier");
 }
 
-console.log("Production blocker snapshot invalidation contract PASS: local dev refreshes, build/CI fail closed, and Motion Studio production surfaces trigger revalidation.");
+console.log("Production blocker snapshot invalidation contract PASS: local dev refreshes current real-media/BGM state, build/CI fail closed, and Motion Studio production surfaces trigger revalidation.");
