@@ -3,7 +3,7 @@ import {
   type TypographyProductionUse,
   type WeddingMovieId,
   type WeddingTypographyElementId,
-} from './weddingProductionTypographyElements';
+} from './weddingProductionTypographyElements.ts';
 
 export const weddingTypographyHandoffContractVersion = 1 as const;
 
