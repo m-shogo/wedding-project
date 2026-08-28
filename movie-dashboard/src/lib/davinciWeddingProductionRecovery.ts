@@ -6,7 +6,7 @@ import {
   type PalmierWeddingProductionProject,
 } from "./palmierWeddingProductionGate";
 
-export const DAVINCI_WEDDING_PRODUCTION_RECOVERY_SCHEMA = "wedding-davinci-production-recovery/v2" as const;
+export const DAVINCI_WEDDING_PRODUCTION_RECOVERY_SCHEMA = "wedding-davinci-production-recovery/v3" as const;
 
 export type DaVinciWeddingProductionRecoveryAction =
   PalmierWeddingProductionProject["nextGate"]["blockerActions"][number];
@@ -192,6 +192,7 @@ export function buildDaVinciWeddingProductionRecoveryBundleFromGate(
       "DAVINCI_ACTUAL_COMMAND_EXPORTED != MAC_DAVINCI_ACTUAL_VERIFIED",
       "REMOTION_STUDIO_TOOLING_REFERENCE_EXPORTED != STUDIO_ACTUAL_VERIFIED",
       "REMOTION_STUDIO_DEPENDENCY_EXPORTED != DEPENDENCY_RECOVERY_EXECUTED",
+      "REMOTION_STUDIO_DEPENDENCY_ROUTE_EXPORTED != RECOVERY_EXECUTED",
       "REMOTION_STUDIO_TOOLING_NOT_ADOPTED => NON_BLOCKING_FOR_DAVINCI_RECOVERY",
       "ADOPTED_REMOTION_STUDIO_DEPENDENCY_BLOCKS_DAVINCI_PRODUCTION_UNTIL_READY",
       "MAC_DAVINCI_ACTUAL_REMAINS_NOT_RUN_UNTIL_GUI_EVIDENCE_IS_CURRENT",
@@ -215,9 +216,11 @@ function markdownRecoveryAction(action: DaVinciWeddingProductionRecoveryAction |
 }
 
 function markdownDependencyAction(action: DaVinciRemotionStudioDependencyRecoveryAction) {
-  const target = action.kind === "COMMAND" && action.command
-    ? `command=${action.command}`
-    : "human-action-required";
+  const target = action.kind === "ROUTE" && action.route
+    ? `route=${action.route}`
+    : action.kind === "COMMAND" && action.command
+      ? `command=${action.command}`
+      : "human-action-required";
   return `- [${action.kind}] ${action.label} | ${target} | ${action.purpose}`;
 }
 
