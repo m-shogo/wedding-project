@@ -5,24 +5,28 @@ on:
     paths:
       - "movie-dashboard/src/data/openingProductionGate.generated.ts"
       - "movie-dashboard/src/data/profileProductionGate.generated.ts"
+      - "movie-dashboard/src/data/movieProductionBlockerRecovery.ts"
       - "movie-dashboard/src/data/weddingMovieProductionCriticalPath.ts"
       - "movie-dashboard/src/components/WeddingMovieProductionCriticalPathCard.tsx"
       - "movie-dashboard/src/components/MaskRevealSceneHandoffCard.tsx"
       - "movie-dashboard/src/data/openingProductionStatusHandoff.ts"
       - "movie-dashboard/src/data/profileProductionStatusHandoff.ts"
       - "movie-dashboard/scripts/verify-wedding-movie-production-critical-path-dashboard.mjs"
+      - "movie-dashboard/scripts/verify-movie-production-blocker-recovery.mjs"
       - ".github/workflows/wedding-movie-production-critical-path-dashboard-ci.yml"
   push:
     branches: [main]
     paths:
       - "movie-dashboard/src/data/openingProductionGate.generated.ts"
       - "movie-dashboard/src/data/profileProductionGate.generated.ts"
+      - "movie-dashboard/src/data/movieProductionBlockerRecovery.ts"
       - "movie-dashboard/src/data/weddingMovieProductionCriticalPath.ts"
       - "movie-dashboard/src/components/WeddingMovieProductionCriticalPathCard.tsx"
       - "movie-dashboard/src/components/MaskRevealSceneHandoffCard.tsx"
       - "movie-dashboard/src/data/openingProductionStatusHandoff.ts"
       - "movie-dashboard/src/data/profileProductionStatusHandoff.ts"
       - "movie-dashboard/scripts/verify-wedding-movie-production-critical-path-dashboard.mjs"
+      - "movie-dashboard/scripts/verify-movie-production-blocker-recovery.mjs"
       - ".github/workflows/wedding-movie-production-critical-path-dashboard-ci.yml"
 
 permissions:
@@ -49,5 +53,7 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - name: Verify production critical-path dashboard contracts
         run: node scripts/verify-wedding-movie-production-critical-path-dashboard.mjs
+      - name: Verify blocker-specific recovery routing
+        run: node scripts/verify-movie-production-blocker-recovery.mjs
       - name: Typecheck and build Movie Dashboard
         run: pnpm build
