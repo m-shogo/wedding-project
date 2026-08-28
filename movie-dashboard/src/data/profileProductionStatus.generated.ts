@@ -121,6 +121,10 @@ export const profileProductionStatus = {
     "davinci": {
       "contractVersion": "profile-v1-davinci-handoff/v1",
       "current": false,
+      "blockerCodes": [
+        "PROFILE_DAVINCI_BUNDLE_MISSING",
+        "PROFILE_DAVINCI_RECOVERY_SIDECAR_MISSING"
+      ],
       "sourceAuthorities": [
         "scripts/export-profile-v1-production-bundle.mts#bundle.davinci",
         "scripts/export-wedding-davinci-production-recovery.mts",
