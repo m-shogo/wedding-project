@@ -6,7 +6,7 @@ import {
   type PalmierWeddingProductionProject,
 } from "./palmierWeddingProductionGate";
 
-export const DAVINCI_WEDDING_PRODUCTION_RECOVERY_SCHEMA = "wedding-davinci-production-recovery/v3" as const;
+export const DAVINCI_WEDDING_PRODUCTION_RECOVERY_SCHEMA = "wedding-davinci-production-recovery/v2" as const;
 
 export type DaVinciWeddingProductionRecoveryAction =
   PalmierWeddingProductionProject["nextGate"]["blockerActions"][number];
