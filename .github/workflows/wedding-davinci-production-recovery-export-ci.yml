@@ -1,0 +1,59 @@
+name: Wedding DaVinci Production Recovery Export CI
+
+on:
+  pull_request:
+    paths:
+      - "motion-studio/package.json"
+      - "motion-studio/src/data/resolveHandoff.schema.ts"
+      - "motion-studio/src/data/weddingDavinciProductionRecovery.ts"
+      - "motion-studio/scripts/export-wedding-davinci-production-recovery.mts"
+      - "motion-studio/scripts/export-wedding-production-handoff.mts"
+      - "motion-studio/scripts/opening-v1-davinci-handoff-contract.mts"
+      - "motion-studio/scripts/profile-v1-davinci-handoff-contract.mts"
+      - "motion-studio/scripts/check-opening-v1-production-command-surface.mts"
+      - "motion-studio/scripts/check-profile-v1-production-command-surface.mts"
+      - "motion-studio/scripts/check-wedding-davinci-production-recovery-export.mts"
+      - ".github/workflows/wedding-davinci-production-recovery-export-ci.yml"
+  push:
+    branches: [main]
+    paths:
+      - "motion-studio/package.json"
+      - "motion-studio/src/data/resolveHandoff.schema.ts"
+      - "motion-studio/src/data/weddingDavinciProductionRecovery.ts"
+      - "motion-studio/scripts/export-wedding-davinci-production-recovery.mts"
+      - "motion-studio/scripts/export-wedding-production-handoff.mts"
+      - "motion-studio/scripts/opening-v1-davinci-handoff-contract.mts"
+      - "motion-studio/scripts/profile-v1-davinci-handoff-contract.mts"
+      - "motion-studio/scripts/check-opening-v1-production-command-surface.mts"
+      - "motion-studio/scripts/check-profile-v1-production-command-surface.mts"
+      - "motion-studio/scripts/check-wedding-davinci-production-recovery-export.mts"
+      - ".github/workflows/wedding-davinci-production-recovery-export-ci.yml"
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: motion-studio/pnpm-lock.yaml
+      - name: Install Motion Studio dependencies
+        working-directory: motion-studio
+        run: pnpm install --frozen-lockfile
+      - name: Verify Wedding DaVinci recovery export contracts
+        working-directory: motion-studio
+        run: node --no-warnings scripts/check-wedding-davinci-production-recovery-export.mts
+      - name: Verify Opening production command surface
+        working-directory: motion-studio
+        run: node --no-warnings scripts/check-opening-v1-production-command-surface.mts
+      - name: Verify Profile production command surface
+        working-directory: motion-studio
+        run: node --no-warnings scripts/check-profile-v1-production-command-surface.mts
+      - name: Typecheck Motion Studio
+        working-directory: motion-studio
+        run: pnpm typecheck

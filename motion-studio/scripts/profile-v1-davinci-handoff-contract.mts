@@ -6,6 +6,7 @@ import {profileV1GeneratedAccentImplementations} from '../src/data/profileV1Gene
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const bundlePath = join(root, 'out/handoff/profile-v1/profile-v1-production-bundle.json');
+const recoveryPath = join(root, 'out/handoff/profile-v1/profile-v1-davinci-production-recovery.json');
 const timelinePath = join(root, 'out/handoff/profile-v1/profile-v1-palmier-timeline.csv');
 const finalReviewPath = join(root, 'out/qa/profile-v1-final-render-review.json');
 const evidencePath = join(root, 'out/qa/profile-v1-davinci-finishing-evidence.json');
@@ -18,10 +19,16 @@ const sameRoutes = (routes: any) => Array.isArray(routes) && JSON.stringify(rout
 
 const blockers: string[] = [];
 let bundle: any = null;
+let recoverySidecar: any = null;
 if (!existsSync(bundlePath)) blockers.push('PROFILE_DAVINCI_BUNDLE_MISSING');
 else {
   try { bundle = JSON.parse(readFileSync(bundlePath, 'utf8')); }
   catch { blockers.push('PROFILE_DAVINCI_BUNDLE_INVALID_JSON'); }
+}
+if (!existsSync(recoveryPath)) blockers.push('PROFILE_DAVINCI_RECOVERY_SIDECAR_MISSING');
+else {
+  try { recoverySidecar = JSON.parse(readFileSync(recoveryPath, 'utf8')); }
+  catch { blockers.push('PROFILE_DAVINCI_RECOVERY_SIDECAR_INVALID_JSON'); }
 }
 
 if (bundle) {
@@ -62,12 +69,31 @@ if (bundle) {
   else if (bundle.finalRender?.sha256 !== sha(renderPath)) blockers.push('PROFILE_DAVINCI_SOURCE_RENDER_SHA_STALE');
 }
 
+if (recoverySidecar) {
+  if (recoverySidecar.schemaVersion !== 'wedding-davinci-production-recovery-export/v1') blockers.push('PROFILE_DAVINCI_RECOVERY_SCHEMA_MISMATCH');
+  if (recoverySidecar.authority !== 'FINAL_RENDER_BOUND_DAVINCI_RECOVERY') blockers.push('PROFILE_DAVINCI_RECOVERY_AUTHORITY_MISMATCH');
+  if (recoverySidecar.sourceBundle?.path !== rel(bundlePath)) blockers.push('PROFILE_DAVINCI_RECOVERY_BUNDLE_PATH_STALE');
+  if (recoverySidecar.sourceBundle?.schemaVersion !== bundle?.schemaVersion) blockers.push('PROFILE_DAVINCI_RECOVERY_BUNDLE_SCHEMA_STALE');
+  if (recoverySidecar.sourceBundle?.finalRenderPath !== bundle?.finalRender?.path) blockers.push('PROFILE_DAVINCI_RECOVERY_RENDER_PATH_STALE');
+  if (recoverySidecar.sourceBundle?.finalRenderSha256 !== bundle?.finalRender?.sha256) blockers.push('PROFILE_DAVINCI_RECOVERY_RENDER_SHA_STALE');
+  if (recoverySidecar.recovery?.authority !== 'MOTION_STUDIO_DAVINCI_PRODUCTION_RECOVERY') blockers.push('PROFILE_DAVINCI_RECOVERY_INNER_AUTHORITY_MISMATCH');
+  if (recoverySidecar.recovery?.movieId !== 'profile') blockers.push('PROFILE_DAVINCI_RECOVERY_MOVIE_MISMATCH');
+  if (recoverySidecar.recovery?.stage !== 'davinciFinishing') blockers.push('PROFILE_DAVINCI_RECOVERY_STAGE_MISMATCH');
+  if (recoverySidecar.recovery?.artifactPath !== bundle?.davinci?.handoffAsset) blockers.push('PROFILE_DAVINCI_RECOVERY_ARTIFACT_STALE');
+  if (recoverySidecar.recovery?.productionReady !== false) blockers.push('PROFILE_DAVINCI_RECOVERY_MUST_FAIL_CLOSED');
+  if (recoverySidecar.recovery?.actual?.state !== 'NOT_RUN') blockers.push('PROFILE_DAVINCI_RECOVERY_ACTUAL_MUST_BE_NOT_RUN');
+  if (recoverySidecar.recovery?.actual?.evidencePath !== rel(evidencePath)) blockers.push('PROFILE_DAVINCI_RECOVERY_EVIDENCE_PATH_STALE');
+  if (recoverySidecar.recovery?.bridge?.macDaVinciActualVerified !== false) blockers.push('PROFILE_DAVINCI_RECOVERY_MUST_NOT_VERIFY_ACTUAL');
+  if (recoverySidecar.recovery?.actual?.commands?.strict !== 'pnpm profile:davinci-finishing:strict') blockers.push('PROFILE_DAVINCI_RECOVERY_STRICT_COMMAND_STALE');
+}
+
 const report = {
   schemaVersion: 'profile-v1-davinci-handoff/v1',
   authority: 'MOTION_STUDIO_PROFILE_DAVINCI_HANDOFF',
   current: blockers.length === 0,
   sourceAuthorities: [
     'scripts/export-profile-v1-production-bundle.mts#bundle.davinci',
+    'scripts/export-wedding-davinci-production-recovery.mts',
     'src/data/profileV1GeneratedAccentRegistry.ts#profileV1GeneratedAccentImplementations',
     'scripts/profile-v1-davinci-finishing-evidence.mts',
   ],
@@ -89,6 +115,14 @@ const report = {
     intendedUse: 'FINISHING_AND_OUTPUT_QA',
   },
   generatedAccentRoutes: profileV1GeneratedAccentImplementations.map((route) => ({...route})),
+  productionRecovery: {
+    path: rel(recoveryPath),
+    schemaVersion: 'wedding-davinci-production-recovery-export/v1',
+    authority: 'FINAL_RENDER_BOUND_DAVINCI_RECOVERY',
+    sourceRenderSha256: recoverySidecar?.sourceBundle?.finalRenderSha256 ?? null,
+    actualState: recoverySidecar?.recovery?.actual?.state ?? 'NOT_RUN',
+    requiredCurrent: true,
+  },
   actualEvidence: {
     path: rel(evidencePath),
     schemaVersion: 'profile-v1-davinci-finishing-evidence/v1',
@@ -117,6 +151,7 @@ const report = {
   blockers,
   guardrails: [
     'FINAL_RENDER_REVIEW_PASS != DAVINCI_ACTUAL_VERIFIED',
+    'DAVINCI_RECOVERY_SIDECAR_CURRENT != MAC_DAVINCI_ACTUAL_VERIFIED',
     'DAVINCI_HANDOFF_CURRENT != MAC_DAVINCI_ACTUAL_VERIFIED',
     'GENERATED_ACCENT_ROUTE_EXPORTED != MAC_DAVINCI_ACTUAL_VERIFIED',
     'DAVINCI_EVIDENCE_TEMPLATE != ACTUAL_EVIDENCE_PASS',

@@ -163,6 +163,7 @@ export const openingProductionStatus = {
       "current": false,
       "sourceAuthorities": [
         "scripts/export-opening-v1-production-bundle.mts#bundle.davinci",
+        "scripts/export-wedding-davinci-production-recovery.mts",
         "scripts/opening-v1-davinci-finishing-evidence.mts",
         "out/qa/opening-v1-final-render-review.json"
       ],
@@ -176,6 +177,14 @@ export const openingProductionStatus = {
         "expectedSha256": null,
         "shaBound": true,
         "intendedUse": "FINISHING_AND_OUTPUT_QA"
+      },
+      "productionRecovery": {
+        "path": "out/handoff/opening-v1/opening-v1-davinci-production-recovery.json",
+        "schemaVersion": "wedding-davinci-production-recovery-export/v1",
+        "authority": "FINAL_RENDER_BOUND_DAVINCI_RECOVERY",
+        "sourceRenderSha256": null,
+        "actualState": "NOT_RUN",
+        "requiredCurrent": true
       },
       "actualEvidence": {
         "path": "out/qa/opening-v1-davinci-finishing-evidence.json",

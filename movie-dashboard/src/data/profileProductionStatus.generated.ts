@@ -123,6 +123,7 @@ export const profileProductionStatus = {
       "current": false,
       "sourceAuthorities": [
         "scripts/export-profile-v1-production-bundle.mts#bundle.davinci",
+        "scripts/export-wedding-davinci-production-recovery.mts",
         "src/data/profileV1GeneratedAccentRegistry.ts#profileV1GeneratedAccentImplementations",
         "scripts/profile-v1-davinci-finishing-evidence.mts"
       ],
@@ -156,6 +157,14 @@ export const profileProductionStatus = {
           "canonicalReuse": "DoorLight"
         }
       ],
+      "productionRecovery": {
+        "path": "out/handoff/profile-v1/profile-v1-davinci-production-recovery.json",
+        "schemaVersion": "wedding-davinci-production-recovery-export/v1",
+        "authority": "FINAL_RENDER_BOUND_DAVINCI_RECOVERY",
+        "sourceRenderSha256": null,
+        "actualState": "NOT_RUN",
+        "requiredCurrent": true
+      },
       "actualEvidence": {
         "path": "out/qa/profile-v1-davinci-finishing-evidence.json",
         "schemaVersion": "profile-v1-davinci-finishing-evidence/v1",

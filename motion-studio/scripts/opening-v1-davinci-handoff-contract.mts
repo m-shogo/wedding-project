@@ -5,6 +5,7 @@ import {fileURLToPath} from 'node:url';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const bundlePath = join(root, 'out/handoff/opening-v1/opening-v1-production-bundle.json');
+const recoveryPath = join(root, 'out/handoff/opening-v1/opening-v1-davinci-production-recovery.json');
 const timelinePath = join(root, 'out/handoff/opening-v1/opening-v1-palmier-timeline.csv');
 const soundCuePath = join(root, 'out/handoff/opening-v1/opening-v1-palmier-sound-cues.csv');
 const finalReviewPath = join(root, 'out/qa/opening-v1-final-render-review.json');
@@ -15,10 +16,16 @@ const sha = (path: string) => createHash('sha256').update(readFileSync(path)).di
 
 const blockers: string[] = [];
 let bundle: any = null;
+let recoverySidecar: any = null;
 if (!existsSync(bundlePath)) blockers.push('OPENING_DAVINCI_BUNDLE_MISSING');
 else {
   try { bundle = JSON.parse(readFileSync(bundlePath, 'utf8')); }
   catch { blockers.push('OPENING_DAVINCI_BUNDLE_INVALID_JSON'); }
+}
+if (!existsSync(recoveryPath)) blockers.push('OPENING_DAVINCI_RECOVERY_SIDECAR_MISSING');
+else {
+  try { recoverySidecar = JSON.parse(readFileSync(recoveryPath, 'utf8')); }
+  catch { blockers.push('OPENING_DAVINCI_RECOVERY_SIDECAR_INVALID_JSON'); }
 }
 
 if (bundle) {
@@ -52,12 +59,31 @@ if (bundle) {
   else if (bundle.finalRender?.sha256 !== sha(renderPath)) blockers.push('OPENING_DAVINCI_SOURCE_RENDER_SHA_STALE');
 }
 
+if (recoverySidecar) {
+  if (recoverySidecar.schemaVersion !== 'wedding-davinci-production-recovery-export/v1') blockers.push('OPENING_DAVINCI_RECOVERY_SCHEMA_MISMATCH');
+  if (recoverySidecar.authority !== 'FINAL_RENDER_BOUND_DAVINCI_RECOVERY') blockers.push('OPENING_DAVINCI_RECOVERY_AUTHORITY_MISMATCH');
+  if (recoverySidecar.sourceBundle?.path !== rel(bundlePath)) blockers.push('OPENING_DAVINCI_RECOVERY_BUNDLE_PATH_STALE');
+  if (recoverySidecar.sourceBundle?.schemaVersion !== bundle?.schemaVersion) blockers.push('OPENING_DAVINCI_RECOVERY_BUNDLE_SCHEMA_STALE');
+  if (recoverySidecar.sourceBundle?.finalRenderPath !== bundle?.finalRender?.path) blockers.push('OPENING_DAVINCI_RECOVERY_RENDER_PATH_STALE');
+  if (recoverySidecar.sourceBundle?.finalRenderSha256 !== bundle?.finalRender?.sha256) blockers.push('OPENING_DAVINCI_RECOVERY_RENDER_SHA_STALE');
+  if (recoverySidecar.recovery?.authority !== 'MOTION_STUDIO_DAVINCI_PRODUCTION_RECOVERY') blockers.push('OPENING_DAVINCI_RECOVERY_INNER_AUTHORITY_MISMATCH');
+  if (recoverySidecar.recovery?.movieId !== 'opening') blockers.push('OPENING_DAVINCI_RECOVERY_MOVIE_MISMATCH');
+  if (recoverySidecar.recovery?.stage !== 'davinciFinishing') blockers.push('OPENING_DAVINCI_RECOVERY_STAGE_MISMATCH');
+  if (recoverySidecar.recovery?.artifactPath !== bundle?.davinci?.handoffAsset) blockers.push('OPENING_DAVINCI_RECOVERY_ARTIFACT_STALE');
+  if (recoverySidecar.recovery?.productionReady !== false) blockers.push('OPENING_DAVINCI_RECOVERY_MUST_FAIL_CLOSED');
+  if (recoverySidecar.recovery?.actual?.state !== 'NOT_RUN') blockers.push('OPENING_DAVINCI_RECOVERY_ACTUAL_MUST_BE_NOT_RUN');
+  if (recoverySidecar.recovery?.actual?.evidencePath !== rel(evidencePath)) blockers.push('OPENING_DAVINCI_RECOVERY_EVIDENCE_PATH_STALE');
+  if (recoverySidecar.recovery?.bridge?.macDaVinciActualVerified !== false) blockers.push('OPENING_DAVINCI_RECOVERY_MUST_NOT_VERIFY_ACTUAL');
+  if (recoverySidecar.recovery?.actual?.commands?.strict !== 'pnpm opening:davinci-finishing:strict') blockers.push('OPENING_DAVINCI_RECOVERY_STRICT_COMMAND_STALE');
+}
+
 const report = {
   schemaVersion: 'opening-v1-davinci-handoff/v1',
   authority: 'MOTION_STUDIO_OPENING_DAVINCI_HANDOFF',
   current: blockers.length === 0,
   sourceAuthorities: [
     'scripts/export-opening-v1-production-bundle.mts#bundle.davinci',
+    'scripts/export-wedding-davinci-production-recovery.mts',
     'scripts/opening-v1-davinci-finishing-evidence.mts',
   ],
   requiredHumanFinalRenderReview: {
@@ -77,6 +103,14 @@ const report = {
     expectedSha256: bundle?.davinci?.expectedSha256 ?? null,
     shaBound: true,
     intendedUse: 'FINISHING_AND_OUTPUT_QA',
+  },
+  productionRecovery: {
+    path: rel(recoveryPath),
+    schemaVersion: 'wedding-davinci-production-recovery-export/v1',
+    authority: 'FINAL_RENDER_BOUND_DAVINCI_RECOVERY',
+    sourceRenderSha256: recoverySidecar?.sourceBundle?.finalRenderSha256 ?? null,
+    actualState: recoverySidecar?.recovery?.actual?.state ?? 'NOT_RUN',
+    requiredCurrent: true,
   },
   actualEvidence: {
     path: rel(evidencePath),
@@ -107,6 +141,7 @@ const report = {
   guardrails: [
     'PREVIEW_REVIEW_PASS != FINAL_RENDER_REVIEW_PASS',
     'HUMAN_FINAL_RENDER_REVIEW_PASS != DAVINCI_ACTUAL_VERIFIED',
+    'DAVINCI_RECOVERY_SIDECAR_CURRENT != MAC_DAVINCI_ACTUAL_VERIFIED',
     'DAVINCI_HANDOFF_CURRENT != MAC_DAVINCI_ACTUAL_VERIFIED',
     'DAVINCI_EVIDENCE_TEMPLATE != ACTUAL_EVIDENCE_PASS',
     'MAC_DAVINCI_ACTUAL_VERIFIED != FINAL_DELIVERY_APPROVED',

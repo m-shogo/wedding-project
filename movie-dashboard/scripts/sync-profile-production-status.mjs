@@ -16,6 +16,7 @@ const davinci=JSON.parse(execFileSync(process.execPath,["--no-warnings",davinciP
 if(report.schemaVersion!=="profile-v1-production-status/v1"||report.authority!=="DERIVED_PRODUCTION_STATUS")throw new Error(`Unexpected Profile production status contract: ${report.schemaVersion}/${report.authority}`);
 if(palmier.schemaVersion!=="profile-v1-palmier-handoff/v1"||palmier.authority!=="MOTION_STUDIO_PROFILE_PALMIER_HANDOFF")throw new Error(`Unexpected Profile Palmier handoff contract: ${palmier.schemaVersion}/${palmier.authority}`);
 if(davinci.schemaVersion!=="profile-v1-davinci-handoff/v1"||davinci.authority!=="MOTION_STUDIO_PROFILE_DAVINCI_HANDOFF")throw new Error(`Unexpected Profile DaVinci handoff contract: ${davinci.schemaVersion}/${davinci.authority}`);
+if(davinci.productionRecovery?.schemaVersion!=="wedding-davinci-production-recovery-export/v1"||davinci.productionRecovery?.requiredCurrent!==true)throw new Error("Profile DaVinci handoff must expose required production recovery sidecar contract");
 const stageNames=["assembly","finalRender","finalRenderReview","productionBundle","davinciFinishing","finalDeliveryApproval"];
 const stageRecovery={
   assembly:[...report.nextActions],
@@ -118,6 +119,7 @@ const snapshot={
       upstreamPalmier:davinci.upstreamPalmier,
       handoffAsset:davinci.handoffAsset,
       generatedAccentRoutes:davinci.generatedAccentRoutes,
+      productionRecovery:{...davinci.productionRecovery},
       actualEvidence:{...davinci.actualEvidence,requiredChecks:[...davinci.actualEvidence.requiredChecks]},
       productionReady:false,
     },

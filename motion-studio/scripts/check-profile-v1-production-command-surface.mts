@@ -30,7 +30,7 @@ const expected: Record<string, string> = {
   'check:profile-render': 'node --no-warnings scripts/check-profile-render.mts out/profile/profile_v1.mp4',
   'profile:final-render-review:init': 'node --no-warnings scripts/init-profile-v1-final-render-review.mts',
   'profile:final-render-review:strict': 'node --no-warnings scripts/profile-v1-final-render-review.mts --strict',
-  'export:profile-v1-production-bundle': 'node --no-warnings scripts/export-profile-v1-production-bundle.mts',
+  'export:profile-v1-production-bundle': 'node --no-warnings scripts/export-wedding-production-handoff.mts --movie=profile',
   'profile:davinci-finishing:init': 'node --no-warnings scripts/profile-v1-davinci-finishing-evidence.mts --init',
   'profile:davinci-finishing:strict': 'node --no-warnings scripts/profile-v1-davinci-finishing-evidence.mts --strict',
   'profile:final-delivery-approval:init': 'node --no-warnings scripts/profile-v1-final-delivery-approval.mts --init',
@@ -128,10 +128,15 @@ for (const scriptName of ['render-profile-v1-real-media-preview.mts', 'render-pr
   }
 }
 
+const bundleExport = scripts['export:profile-v1-production-bundle'] ?? '';
+if (!bundleExport.includes('export-wedding-production-handoff.mts --movie=profile')) {
+  errors.push('Profile production bundle command must export the SHA-bound DaVinci recovery sidecar through the canonical handoff orchestrator');
+}
+
 if (errors.length) {
   console.error(`Profile V1 production command surface FAILED (${errors.length})`);
   for (const error of errors) console.error(`- ${error}`);
   process.exit(1);
 }
 
-console.log(`Profile V1 production command surface OK: ${Object.keys(expected).length} guarded commands validate Motion Zukan generated accents, refresh runtime media, require all 17 canonical media slots to match a current SHA-bound production intake receipt plus current cleared BGM before real-media preview/production QA stills, isolate missing-media smoke behind explicit CI-only flags that package production commands cannot expose, and bind Human preview/final review initialization to freshly rendered current artifacts without bypassing production gates.`);
+console.log(`Profile V1 production command surface OK: ${Object.keys(expected).length} guarded commands validate Motion Zukan generated accents, refresh runtime media, require all 17 canonical media slots to match a current SHA-bound production intake receipt plus current cleared BGM before real-media preview/production QA stills, isolate missing-media smoke behind explicit CI-only flags, bind Human preview/final review initialization to freshly rendered current artifacts, and export the production bundle together with a SHA-bound DaVinci recovery sidecar without promoting Mac Actual.`);

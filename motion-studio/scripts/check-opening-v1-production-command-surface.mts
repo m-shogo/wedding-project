@@ -21,7 +21,7 @@ const expected: Record<string, string> = {
   'opening:final-render-review': 'node --no-warnings scripts/opening-v1-final-render-review.mts',
   'opening:final-render-review:strict': 'node --no-warnings scripts/opening-v1-final-render-review.mts --strict',
   'opening:production-bundle:finalize': 'pnpm opening:final-render-review:strict && pnpm export:opening-v1-production-bundle',
-  'export:opening-v1-production-bundle': 'node --no-warnings scripts/export-opening-v1-production-bundle.mts',
+  'export:opening-v1-production-bundle': 'node --no-warnings scripts/export-wedding-production-handoff.mts --movie=opening',
   'opening:davinci-finishing:init': 'node --no-warnings scripts/opening-v1-davinci-finishing-evidence.mts --init',
   'opening:davinci-finishing:strict': 'node --no-warnings scripts/opening-v1-davinci-finishing-evidence.mts --strict',
   'opening:final-delivery-approval:init': 'node --no-warnings scripts/opening-v1-final-delivery-approval.mts --init',
@@ -89,10 +89,14 @@ if (!render.includes('init-opening-v1-final-render-review.mts')) errors.push('re
 const finalize = scripts['opening:production-bundle:finalize'] ?? '';
 if (!finalize.startsWith('pnpm opening:final-render-review:strict && ')) errors.push('production bundle finalize must require current Human final-MP4 review before export');
 if (!finalize.endsWith('pnpm export:opening-v1-production-bundle')) errors.push('production bundle finalize must export only after final-review strict passes');
+const bundleExport = scripts['export:opening-v1-production-bundle'] ?? '';
+if (!bundleExport.includes('export-wedding-production-handoff.mts --movie=opening')) {
+  errors.push('Opening production bundle command must export the SHA-bound DaVinci recovery sidecar through the canonical handoff orchestrator');
+}
 
 if (errors.length) {
   console.error(`Opening V1 production command surface FAILED (${errors.length})`);
   for (const error of errors) console.error(`- ${error}`);
   process.exit(1);
 }
-console.log(`Opening V1 production command surface OK: ${Object.keys(expected).length} guarded commands require SHA-current canonical photo intake + BGM assembly before preview and production QA stills, isolate placeholder smoke behind an explicit CI-only flag, then fresh render -> Human final MP4 review -> production bundle finalize -> DaVinci Actual -> final approval without premature export.`);
+console.log(`Opening V1 production command surface OK: ${Object.keys(expected).length} guarded commands require SHA-current canonical photo intake + BGM assembly before preview and production QA stills, isolate placeholder smoke behind an explicit CI-only flag, then fresh render -> Human final MP4 review -> production bundle + SHA-bound DaVinci recovery sidecar -> DaVinci Actual -> final approval without premature promotion.`);
