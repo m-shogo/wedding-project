@@ -6,12 +6,32 @@ import {buildWeddingMovieProductionCriticalPath} from "./weddingMovieProductionC
 
 export const PROFILE_PRODUCTION_STATUS_HANDOFF_SCHEMA = "wedding-profile-production-status-handoff/v1" as const;
 
+const buildNextGate = (project: ReturnType<typeof buildWeddingMovieProductionCriticalPath>["projects"]["profile"]) => {
+  const current = project.currentCriticalStage;
+  return current
+    ? {
+        state: "BLOCKED" as const,
+        stage: current.name,
+        artifactPath: current.path ?? null,
+        blockerCodes: [...current.blockerCodes],
+        recovery: [...current.recovery],
+      }
+    : {
+        state: "PRODUCTION_READY" as const,
+        stage: null,
+        artifactPath: null,
+        blockerCodes: [] as string[],
+        recovery: [] as string[],
+      };
+};
+
 /**
  * Motion Zukan / DashboardからProfile制作を外へ渡す際のcompact production-status envelope。
  * assembly manifestをproduction-readyへ意味変更せず、Motion Studioの後段statusとPalmier/DaVinci handoff contractを追加で運ぶ。
  */
 export function buildProfileProductionStatusHandoff() {
   const criticalPath = buildWeddingMovieProductionCriticalPath();
+  const profileCriticalPath = criticalPath.projects.profile;
   return {
     schemaVersion: PROFILE_PRODUCTION_STATUS_HANDOFF_SCHEMA,
     authority: "MOTION_STUDIO_DERIVED_PROFILE_STATUS_HANDOFF" as const,
@@ -71,6 +91,7 @@ export function buildProfileProductionStatusHandoff() {
         sourceRevalidation: profileProductionStatus.sourceRevalidation,
         palmierHandoff: profileProductionStatus.handoff.palmier,
         davinciHandoff: profileProductionStatus.handoff.davinci,
+        nextGate: buildNextGate(profileCriticalPath),
         nextActions: [...profileProductionStatus.nextActions],
       },
       criticalPath: criticalPath.projects.profile,
@@ -90,6 +111,8 @@ export function buildProfileProductionStatusHandoff() {
       "MEDIA_REQUIREMENT_EXPORTED != MEDIA_RESOLVED",
       "HANDOFF_METADATA_EXPORTED != HANDOFF_ARTIFACTS_CURRENT",
       "NEXT_ACTION_EXPORTED != ACTION_COMPLETED",
+      "NEXT_GATE_EXPORTED != NEXT_GATE_COMPLETED",
+      "STABLE_BLOCKER_CODE != RAW_BLOCKER_DETAIL",
       "GENERATED_ACCENT_IMPLEMENTED != HUMAN_REAL_MEDIA_QA_PASS",
       "OPTIONAL_GENERATED_ROLE != REQUIRED_REAL_MEDIA_SLOT",
       "SOURCE_CHANGED => RE_RENDER_REQUIRED",
