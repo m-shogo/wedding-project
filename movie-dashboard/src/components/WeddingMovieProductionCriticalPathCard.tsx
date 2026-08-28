@@ -4,6 +4,7 @@ import {
   buildWeddingMovieProductionCriticalPath,
   buildWeddingMovieProductionCriticalPathJson,
 } from "../data/weddingMovieProductionCriticalPath";
+import type {MovieProductionBlockerRecoveryAction} from "../data/movieProductionBlockerRecovery";
 import type {SceneProjectId} from "../data/visualSceneComposer";
 import {downloadText} from "../lib/exporters";
 
@@ -28,6 +29,20 @@ const blockerProvenanceLabels: Record<string, string> = {
   NONE: "no blocker evidence",
 };
 
+function BlockerRecoveryAction({action}: {action: MovieProductionBlockerRecoveryAction}) {
+  if (action.kind === "ROUTE" && action.route) {
+    return (
+      <Link to={action.route} title={action.purpose} className="border border-red-200 dark:border-red-900 px-1.5 py-0.5 font-semibold text-red-700 dark:text-red-300">
+        {action.label} →
+      </Link>
+    );
+  }
+  if (action.kind === "COMMAND" && action.command) {
+    return <code title={action.purpose} className="border border-red-200 dark:border-red-900 px-1.5 py-0.5 text-red-700 dark:text-red-300">{action.command}</code>;
+  }
+  return <span title={action.purpose} className="border border-red-200 dark:border-red-900 px-1.5 py-0.5 text-red-700 dark:text-red-300">{action.label}</span>;
+}
+
 export function WeddingMovieProductionCriticalPathCard({projectId}: {projectId: SceneProjectId}) {
   const report = useMemo(() => buildWeddingMovieProductionCriticalPath(), []);
   const json = useMemo(() => buildWeddingMovieProductionCriticalPathJson(), []);
@@ -51,11 +66,14 @@ export function WeddingMovieProductionCriticalPathCard({projectId}: {projectId: 
               <div className="mb-1 text-[8px] text-navy-400">evidence: {blockerProvenanceLabels[current.blockerProvenance] ?? current.blockerProvenance}</div>
               <div className="flex flex-wrap gap-1">
                 {current.blockerCodes.map((code) => (
-                  <code key={code} className="border border-red-200 dark:border-red-900 px-1.5 py-0.5 text-[8px] text-red-700 dark:text-red-300">
-                    {code}
-                  </code>
+                  <code key={code} className="border border-red-200 dark:border-red-900 px-1.5 py-0.5 text-[8px] text-red-700 dark:text-red-300">{code}</code>
                 ))}
               </div>
+              {current.blockerActions.length > 0 ? (
+                <div className="mt-1.5 flex flex-wrap gap-1 text-[8px]">
+                  {current.blockerActions.map((action) => <BlockerRecoveryAction key={action.id} action={action} />)}
+                </div>
+              ) : null}
             </div>
           ) : null}
         </div>
@@ -88,12 +106,7 @@ export function WeddingMovieProductionCriticalPathCard({projectId}: {projectId: 
             {current.actionTargets.length > 0 ? (
               <div className="mt-2 flex flex-wrap gap-1.5">
                 {current.actionTargets.map((target) => (
-                  <Link
-                    key={`${target.route}-${target.label}`}
-                    to={target.route}
-                    title={target.purpose}
-                    className="border border-amber-300 dark:border-amber-700 px-2 py-1 font-semibold text-amber-700 dark:text-amber-300"
-                  >
+                  <Link key={`${target.route}-${target.label}`} to={target.route} title={target.purpose} className="border border-amber-300 dark:border-amber-700 px-2 py-1 font-semibold text-amber-700 dark:text-amber-300">
                     {target.label} →
                   </Link>
                 ))}
@@ -109,6 +122,7 @@ export function WeddingMovieProductionCriticalPathCard({projectId}: {projectId: 
                   <div>{stage.detail}</div>
                   {stage.path ? <code className="block break-all text-navy-400">{stage.path}</code> : null}
                   {stage.blockerCodes.length > 0 ? <div>BLOCK [{blockerProvenanceLabels[stage.blockerProvenance] ?? stage.blockerProvenance}]: {stage.blockerCodes.join(" / ")}</div> : null}
+                  {stage.blockerActions.length > 0 ? <div className="mt-1 flex flex-wrap gap-1">{stage.blockerActions.map((action) => <BlockerRecoveryAction key={`${stage.name}-${action.id}`} action={action} />)}</div> : null}
                   {stage.recovery.length > 0 ? <div>recovery: {stage.recovery.join(" → ")}</div> : null}
                   {stage.actionTargets.length > 0 ? (
                     <div className="mt-1 flex flex-wrap gap-1">
