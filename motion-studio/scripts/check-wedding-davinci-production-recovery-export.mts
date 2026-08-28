@@ -69,6 +69,17 @@ for (const required of [
   "bundle.davinci?.macActualState !== 'NOT_RUN'",
   "recovery.artifactPath !== bundle.finalRender?.path",
   "bundle.finalRender.sha256 !== bundle.davinci?.expectedSha256",
+  "cropReview: 'out/qa/opening-v1-crop-review-evidence.json'",
+  "cropReview.schemaVersion !== 'opening-v1-crop-review-evidence/v1'",
+  "cropReview.authority !== 'HUMAN_OPENING_CROP_REVIEW'",
+  "cropReview.overall !== 'PASS'",
+  "bundle.humanCropReview?.evidenceSha256 !== currentCropSha",
+  "bundle.humanCropReview?.bindingFingerprintSha256 !== cropReview.bindingFingerprintSha256",
+  "bundle.davinci?.expectedCropReviewEvidenceSha256 !== currentCropSha",
+  "bundle.davinci?.expectedCropReviewBindingFingerprintSha256 !== cropReview.bindingFingerprintSha256",
+  'cropReviewEvidencePath: openingCropBinding.path',
+  'cropReviewEvidenceSha256: openingCropBinding.evidenceSha256',
+  'cropReviewBindingFingerprintSha256: openingCropBinding.bindingFingerprintSha256',
   "FINAL_RENDER_BOUND_DAVINCI_RECOVERY",
   "Mac DaVinci Actual remains NOT_RUN; recovery export is not execution evidence.",
 ]) {
@@ -109,4 +120,21 @@ for (const [movieId, handoff] of [['opening', openingHandoff], ['profile', profi
   }
 }
 
-console.log('Wedding DaVinci production recovery export + target-safe handoff contracts: PASS');
+for (const required of [
+  "recoverySidecar.sourceBundle?.cropReviewEvidencePath !== rel(cropReviewPath)",
+  "OPENING_DAVINCI_RECOVERY_CROP_REVIEW_PATH_STALE",
+  "recoverySidecar.sourceBundle?.cropReviewEvidenceSha256 !== bundle?.humanCropReview?.evidenceSha256",
+  "OPENING_DAVINCI_RECOVERY_CROP_REVIEW_SHA_STALE",
+  "recoverySidecar.sourceBundle?.cropReviewBindingFingerprintSha256 !== bundle?.humanCropReview?.bindingFingerprintSha256",
+  "OPENING_DAVINCI_RECOVERY_CROP_REVIEW_FINGERPRINT_STALE",
+  'cropReviewEvidenceSha256: recoverySidecar?.sourceBundle?.cropReviewEvidenceSha256 ?? null',
+  'cropReviewBindingFingerprintSha256: recoverySidecar?.sourceBundle?.cropReviewBindingFingerprintSha256 ?? null',
+  'CROP_REVIEW_CHANGED => DAVINCI_RECOVERY_SIDECAR_STALE',
+]) {
+  if (!openingHandoff.includes(required)) throw new Error(`opening: crop-bound recovery revalidation missing: ${required}`);
+}
+if (profileHandoff.includes('OPENING_DAVINCI_RECOVERY_CROP_REVIEW_SHA_STALE')) {
+  throw new Error('profile: Opening-specific crop recovery contract leaked into Profile handoff');
+}
+
+console.log('Wedding DaVinci production recovery export + target-safe handoff contracts: PASS (Opening recovery is crop-evidence SHA/fingerprint bound).');
