@@ -5,6 +5,7 @@ import {
 } from "../data/openingProductionStatusHandoff";
 import type {SceneProjectId} from "../data/visualSceneComposer";
 import {downloadText} from "../lib/exporters";
+import {OpeningDavinciActualBindingAuditCard} from "./OpeningDavinciActualBindingAuditCard";
 
 const stageLabel: Record<string, string> = {
   media: "Real media",
@@ -159,6 +160,8 @@ export function OpeningProductionStatusHandoffCard({projectId}: {projectId: Scen
         </div>
         <p className="mt-1 text-[8px] text-navy-400">CROP_REVIEW_CHANGED =&gt; DAVINCI_RECOVERY_SIDECAR_STALE / HUMAN_CROP_REVIEW_PASS != HUMAN_PREVIEW_REVIEW_PASS / HUMAN_FINAL_RENDER_REVIEW_PASS != DAVINCI_ACTUAL_VERIFIED / DAVINCI_RECOVERY_SIDECAR_CURRENT != MAC_DAVINCI_ACTUAL_VERIFIED</p>
       </div>
+
+      <OpeningDavinciActualBindingAuditCard />
 
       <div className="mt-2 border border-sky-100 dark:border-sky-900 p-2">
         <p className="text-[8px] font-semibold text-sky-700 dark:text-sky-300">NEXT ACTIONS</p>
