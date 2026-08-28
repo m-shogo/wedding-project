@@ -3,9 +3,11 @@ import {profileDavinciActualBindingAudit as audit} from "../data/profileDavinciA
 const shortSha = (value: string | null | undefined) => value ? `${value.slice(0, 12)}…` : "PENDING";
 
 export function ProfileDavinciActualBindingAuditCard() {
-  const currentTone = audit.current
+  const auditState = String(audit.state);
+  const auditCurrent = Boolean(audit.current);
+  const currentTone = auditCurrent
     ? "border-emerald-200 dark:border-emerald-800"
-    : audit.state === "STALE" || audit.state === "INVALID"
+    : auditState === "STALE" || auditState === "INVALID"
       ? "border-rose-200 dark:border-rose-800"
       : "border-slate-200 dark:border-slate-700";
 
@@ -13,7 +15,7 @@ export function ProfileDavinciActualBindingAuditCard() {
     <div className={`mt-2 border ${currentTone} p-2`}>
       <div className="flex flex-wrap items-center justify-between gap-1">
         <p className="text-[8px] font-semibold text-indigo-700 dark:text-indigo-300">DAVINCI ACTUAL / RECOVERY BINDING AUDIT</p>
-        <span className="text-[8px] text-navy-500 dark:text-navy-300">{audit.state} / current={audit.current ? "YES" : "NO"}</span>
+        <span className="text-[8px] text-navy-500 dark:text-navy-300">{auditState} / current={auditCurrent ? "YES" : "NO"}</span>
       </div>
 
       <div className="mt-1 grid gap-1 sm:grid-cols-2 text-[8px] leading-4 text-navy-500 dark:text-navy-300">
