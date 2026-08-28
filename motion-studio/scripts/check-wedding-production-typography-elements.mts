@@ -3,9 +3,17 @@ import {
   weddingProductionTypographyUses,
   weddingTypographyElementIds,
 } from '../src/data/weddingProductionTypographyElements.ts';
+import {remotionElementCandidates} from '../../movie-dashboard/src/data/remotionElementCandidates.ts';
 
 const allowed = new Set(weddingTypographyElementIds);
+const motionZukanIds = new Set(remotionElementCandidates.map((candidate) => candidate.patternId));
 const seenPairs = new Set<string>();
+
+for (const id of weddingTypographyElementIds) {
+  if (!motionZukanIds.has(id)) {
+    throw new Error(`production typography id is not a Motion Zukan canonical candidate: ${id}`);
+  }
+}
 
 for (const use of weddingProductionTypographyUses) {
   const pair = `${use.movieId}:${use.role}`;
@@ -35,4 +43,4 @@ const covered = new Set(
 const uncovered = weddingTypographyElementIds.filter((id) => !covered.has(id));
 if (uncovered.length > 0) throw new Error(`typography Element candidates are not represented in production mapping: ${uncovered.join(', ')}`);
 
-console.log(`Wedding production typography Element mapping: PASS (${weddingProductionTypographyUses.length} roles, ${covered.size} candidates covered)`);
+console.log(`Wedding production typography Element mapping: PASS (${weddingProductionTypographyUses.length} roles, ${covered.size} candidates covered, Motion Zukan IDs aligned)`);

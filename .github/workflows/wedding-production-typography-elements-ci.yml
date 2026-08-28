@@ -4,14 +4,20 @@ on:
   pull_request:
     paths:
       - "motion-studio/src/data/weddingProductionTypographyElements.ts"
+      - "motion-studio/src/data/weddingProductionTypographyHandoff.ts"
       - "motion-studio/scripts/check-wedding-production-typography-elements.mts"
+      - "motion-studio/scripts/check-wedding-production-typography-handoff.mts"
+      - "motion-studio/scripts/export-wedding-production-typography-handoff.mts"
       - ".github/workflows/wedding-production-typography-elements-ci.yml"
   push:
     branches:
       - main
     paths:
       - "motion-studio/src/data/weddingProductionTypographyElements.ts"
+      - "motion-studio/src/data/weddingProductionTypographyHandoff.ts"
       - "motion-studio/scripts/check-wedding-production-typography-elements.mts"
+      - "motion-studio/scripts/check-wedding-production-typography-handoff.mts"
+      - "motion-studio/scripts/export-wedding-production-typography-handoff.mts"
       - ".github/workflows/wedding-production-typography-elements-ci.yml"
 
 permissions:
@@ -35,4 +41,9 @@ jobs:
           cache-dependency-path: motion-studio/pnpm-lock.yaml
       - run: pnpm install --frozen-lockfile
       - run: node --no-warnings scripts/check-wedding-production-typography-elements.mts
+      - run: node --no-warnings scripts/check-wedding-production-typography-handoff.mts
+      - run: node --no-warnings scripts/export-wedding-production-typography-handoff.mts --movie opening --format json > /tmp/opening-typography-handoff.json
+      - run: node --no-warnings scripts/export-wedding-production-typography-handoff.mts --movie profile --format markdown > /tmp/profile-typography-handoff.md
+      - run: node -e "JSON.parse(require('fs').readFileSync('/tmp/opening-typography-handoff.json','utf8'));"
+      - run: grep -q "PROFILE Typography Production Handoff" /tmp/profile-typography-handoff.md
       - run: pnpm typecheck

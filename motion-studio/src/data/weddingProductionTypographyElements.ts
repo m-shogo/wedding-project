@@ -1,7 +1,7 @@
 export const weddingTypographyElementIds = [
   'type-mask-reveal',
-  'type-character-stagger',
-  'type-on-rhythm',
+  'type-char-stagger',
+  'type-type-on-rhythm',
   'type-word-punch',
   'type-tracking-burst',
   'type-vertical-wipe',
@@ -43,7 +43,7 @@ export const weddingProductionTypographyUses: readonly TypographyProductionUse[]
   {
     movieId: 'opening',
     role: 'BEAT_ACCENT',
-    primary: 'type-on-rhythm',
+    primary: 'type-type-on-rhythm',
     fallbacks: ['type-word-punch', 'type-baseline-hop'],
     reason: 'Beat-led accents should follow music timing without introducing a second animation engine.',
     studioActual: 'NOT_RUN',
@@ -61,7 +61,7 @@ export const weddingProductionTypographyUses: readonly TypographyProductionUse[]
   {
     movieId: 'profile',
     role: 'NAME_REVEAL',
-    primary: 'type-character-stagger',
+    primary: 'type-char-stagger',
     fallbacks: ['type-mask-reveal', 'type-outline-fill'],
     reason: 'Name cards need readable character-level entrance with restrained production energy.',
     studioActual: 'NOT_RUN',
