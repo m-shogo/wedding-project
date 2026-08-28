@@ -54,11 +54,23 @@ export const remotionStudioToolingDependencyStateScenarios = [
 }[];
 
 export type RemotionStudioToolingDependencyRecoveryAction = {
-  kind: "COMMAND" | "HUMAN";
+  kind: "ROUTE" | "COMMAND" | "HUMAN";
   label: string;
   purpose: string;
+  route?: string;
   command?: string;
 };
+
+const MOTION_LIBRARY_RECOVERY_ROUTE = "/movie-coach/motion-library" as const;
+
+function motionLibraryRecoveryAction(state: RemotionStudioToolingDependencyState): RemotionStudioToolingDependencyRecoveryAction {
+  return {
+    kind: "ROUTE",
+    label: "Open Motion Library",
+    purpose: `Motion図鑑で採用Elementと${state}のrecovery evidenceを確認する`,
+    route: MOTION_LIBRARY_RECOVERY_ROUTE,
+  };
+}
 
 function buildRecoveryActions(
   state: RemotionStudioToolingDependencyState,
@@ -67,6 +79,7 @@ function buildRecoveryActions(
   if (state === "NOT_ADOPTED" || state === "READY") return [];
   if (state === "STUDIO_ACTUAL_REQUIRED") {
     return [
+      motionLibraryRecoveryAction(state),
       {
         kind: "COMMAND",
         label: "Studio Actual status",
@@ -82,17 +95,23 @@ function buildRecoveryActions(
     ];
   }
   if (state === "HUMAN_REVIEW_REQUIRED") {
-    return [{
-      kind: "HUMAN",
-      label: "Human Studio review",
-      purpose: "current Mac Remotion Studio Actual evidenceを人間が確認し、candidateごとのcheckをreviewする",
-    }];
+    return [
+      motionLibraryRecoveryAction(state),
+      {
+        kind: "HUMAN",
+        label: "Human Studio review",
+        purpose: "current Mac Remotion Studio Actual evidenceを人間が確認し、candidateごとのcheckをreviewする",
+      },
+    ];
   }
-  return [{
-    kind: "HUMAN",
-    label: "Promote production dependency",
-    purpose: "Human review済みのcurrent Studio Actual evidenceを確認し、production dependency promotionを明示的に記録する",
-  }];
+  return [
+    motionLibraryRecoveryAction(state),
+    {
+      kind: "HUMAN",
+      label: "Promote production dependency",
+      purpose: "Human review済みのcurrent Studio Actual evidenceを確認し、production dependency promotionを明示的に記録する",
+    },
+  ];
 }
 
 export function buildRemotionStudioToolingProductionDependency(movieId: WeddingMovieId) {
@@ -135,7 +154,7 @@ export function buildRemotionStudioToolingProductionDependency(movieId: WeddingM
     statusCommand: tooling.statusCommand,
     strictCommand: tooling.strictCommand,
     recoveryActions,
-    recovery: recoveryActions.map((action) => action.command ?? action.purpose),
+    recovery: recoveryActions.map((action) => action.route ?? action.command ?? action.purpose),
     guardrails: [
       "ELEMENT_CANDIDATE_EXISTS != WEDDING_PROJECT_ADOPTED",
       "ELEMENT_ADOPTED => STUDIO_ACTUAL_MUST_BE_CURRENT",
@@ -143,6 +162,7 @@ export function buildRemotionStudioToolingProductionDependency(movieId: WeddingM
       "HUMAN_REVIEWED != PRODUCTION_DEPENDENCY_PROMOTED",
       "UNADOPTED_ELEMENT_TOOLING_STATE_IS_NON_BLOCKING",
       "DEPENDENCY_STATE_RESOLVER_IS_SINGLE_AUTHORITY",
+      "RECOVERY_ROUTE_EXPORTED != RECOVERY_EXECUTED",
       "RECOVERY_ACTION_EXPORTED != RECOVERY_EXECUTED",
       "CI_MUST_NOT_PROMOTE_STUDIO_GUI_ACTUAL",
     ],
