@@ -143,6 +143,74 @@ export function buildDaVinciWeddingProductionRecoveryBundle(selectedMovieId: str
   );
 }
 
+function markdownRecoveryAction(action: DaVinciWeddingProductionRecoveryAction) {
+  const target = action.kind === "ROUTE" && action.route
+    ? `route=${action.route}`
+    : action.kind === "COMMAND" && action.command
+      ? `command=${action.command}`
+      : "human-action-required";
+  return `- [${action.kind}] ${action.label} | ${target} | ${action.purpose}`;
+}
+
+export function buildDaVinciWeddingProductionRecoveryMarkdown(selectedMovieId: string) {
+  const bundle = buildDaVinciWeddingProductionRecoveryBundle(selectedMovieId);
+  const lines = [
+    "# DaVinci Wedding Production Recovery",
+    "",
+    `schema: ${bundle.schemaVersion}`,
+    `authority: ${bundle.authority}`,
+    `production-ready: ${bundle.productionReady ? "yes" : "no"}`,
+  ];
+
+  for (const project of bundle.projects) {
+    const studio = project.remotionStudioTooling;
+    lines.push(
+      "",
+      `## ${project.title}`,
+      `production-ready: ${project.productionReady ? "yes" : "no"}`,
+      `stage: ${project.stage ?? "PRODUCTION_READY"}`,
+      `artifact: ${project.artifactPath ?? "—"}`,
+      `recovery-authority: ${project.recoveryAuthority}`,
+      `source-render-sha256: ${project.sourceRenderSha256 ?? "not-sha-bound-yet"}`,
+      `blocker-codes: ${project.blockerCodes.length > 0 ? project.blockerCodes.join(", ") : "none"}`,
+      "recovery-actions:",
+      ...(project.blockerActions.length > 0 ? project.blockerActions.map(markdownRecoveryAction) : ["- none"]),
+      "canonical-recovery:",
+      ...(project.canonicalRecovery.length > 0 ? project.canonicalRecovery.map((item) => `- ${item}`) : ["- none"]),
+      "",
+      "### Palmier → DaVinci bridge",
+      `bridge-state: ${project.bridge.state}`,
+      `palmier-current: ${project.bridge.palmierCurrent ? "yes" : "no"} (${project.bridge.palmierContractVersion})`,
+      `davinci-handoff-current: ${project.bridge.davinciHandoffCurrent ? "yes" : "no"} (${project.bridge.davinciContractVersion})`,
+      `mac-davinci-actual-verified: ${project.bridge.macDaVinciActualVerified ? "yes" : "no"}`,
+      `final-delivery-approved: ${project.bridge.finalDeliveryApproved ? "yes" : "no"}`,
+      `davinci-actual-evidence: ${project.actual.evidencePath}`,
+      `davinci-actual-init: ${project.actual.commands.init}`,
+      `davinci-actual-status: ${project.actual.commands.status}`,
+      `davinci-actual-strict: ${project.actual.commands.strict}`,
+      "davinci-actual-note: command export or evidence init is not Mac DaVinci Actual verification; Resolve GUI evidence must be current before strict can pass",
+      "",
+      "### Remotion Studio tooling reference",
+      `tooling-authority: ${studio.authority}`,
+      `tooling-state: ${studio.currentRepoState}`,
+      `tooling-summary: ${studio.summaryPath}`,
+      `tooling-summary-schema: ${studio.summarySchemaVersion}`,
+      `tooling-summary-authority: ${studio.summaryAuthority}`,
+      `tooling-evidence: ${studio.evidencePath}`,
+      `tooling-candidates: ${studio.candidateCount}`,
+      `tooling-check-axes-per-candidate: ${studio.checkAxesPerCandidate}`,
+      `tooling-human-reviewed: ${studio.humanReviewed ? "yes" : "no"}`,
+      `tooling-production-dependency-promoted: ${studio.productionDependencyPromoted ? "yes" : "no"}`,
+      `tooling-status: ${studio.statusCommand}`,
+      `tooling-strict: ${studio.strictCommand}`,
+      "tooling-note: reference export is not Studio Actual verification and remains non-blocking unless this Wedding project explicitly adopts an Element dependency",
+    );
+  }
+
+  lines.push("", "## Guardrails", ...bundle.guardrails.map((guardrail) => `- ${guardrail}`), "");
+  return lines.join("\n");
+}
+
 export function buildDaVinciWeddingProductionRecoveryJson(selectedMovieId: string) {
   return JSON.stringify(buildDaVinciWeddingProductionRecoveryBundle(selectedMovieId), null, 2);
 }
