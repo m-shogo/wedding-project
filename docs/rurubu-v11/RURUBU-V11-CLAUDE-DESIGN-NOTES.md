@@ -187,3 +187,34 @@ Honesty notes for this pass:
 
 Next: user-requested final polish pass across all 8 pages (typography/hierarchy
 consistency check, P06 satellite resolution once real Okinawa/Seoul photos exist).
+
+## Final QA pass — programmatic overflow/safe-area audit across all 8 pages
+
+Ran three systematic checks via `use_figma` (not eyeballing screenshots alone):
+
+1. **Inter leftover check** — queried every TEXT node's `getRangeAllFontNames()`
+   across all 8 pages. Result: 0 nodes still using Inter.
+2. **Trim overflow check** — every node's bounding box vs its page's trim edges.
+   Found 3: one intentional 8px top-bleed on P01's floral corner (left as-is, it's
+   a deliberate corner ornament), and two real bugs on P04 — a pinned photo accent
+   whose frame extended ~36px past the trim's bottom edge (would have been hard-
+   clipped by `clipsContent`, an unintentional crop). Root cause: the milestone
+   flow row and the photo accent were positioned independently without checking
+   total vertical budget against the trim height. Fixed by rebuilding P04's lower
+   section with computed layout (`availableH = SAFE_BOTTOM - milestoneRowBottom`,
+   photo sized to fit exactly) instead of guessed fixed coordinates. Re-verified:
+   all 5 flow milestones now visible with no overlap, photo fits inside the safe
+   area, re-uploaded and re-screenshotted.
+3. **Safe-area (6mm) check** — while building this check, found a bug in this
+   run's own safe-area guide: `safeGuide.x/y` had been set to
+   `SAFE_INSET - TRIM_INSET` (11.34px) instead of `SAFE_INSET` (22.68px), because
+   the live V10 XML's guide-rect coordinate was misread as bleed-frame-relative
+   when it is actually trim-frame-relative. The guide is non-printing so no real
+   content was affected, but it made the first audit pass produce false positives.
+   Fixed the guide position on all 8 pages, then re-ran the check: 1 genuine
+   violation found (P02's kicker text 13px past the safe right edge and touching
+   the safe top edge) — nudged both the kicker and title left-aligned to a shared
+   margin that clears the safe area, re-verified by screenshot.
+
+All 8 pages are now overflow-clean and safe-area-clean (except the one intentional
+decorative bleed), on top of the earlier font migration and hierarchy work.
