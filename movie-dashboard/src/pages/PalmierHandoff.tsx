@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 import { Header } from "../components/Header";
 import { useProduction } from "../store/productionStore";
 import { useToast } from "../store/toastStore";
@@ -11,6 +12,10 @@ import {
   buildVideoContinuitySignoffLine,
   latestVideoContinuitySignoff,
 } from "../lib/videoContinuitySignoff";
+import {
+  buildPalmierWeddingProductionGate,
+  buildPalmierWeddingProductionMarkdown,
+} from "../lib/palmierWeddingProductionGate";
 
 function downloadText(filename: string, content: string, type: string) {
   const blob = new Blob([content], { type });
@@ -97,6 +102,15 @@ export function PalmierHandoff() {
   const pipelineSettled = unfinishedCount === 0 && adoptedAuthorityIssueCount === 0;
   const decisionWarnings = decisions.records.reduce((sum, record) => sum + record.warnings.length, 0);
   const editFixReady = videoPrompts.length > 0 && pipelineSettled && decisionWarnings === 0 && continuityCurrent;
+  const weddingProductionGate = useMemo(
+    () => buildPalmierWeddingProductionGate(selectedMovieId),
+    [selectedMovieId],
+  );
+  const productionHandoffReady = editFixReady && weddingProductionGate.productionReady;
+  const weddingProductionMarkdown = useMemo(
+    () => buildPalmierWeddingProductionMarkdown(weddingProductionGate),
+    [weddingProductionGate],
+  );
 
   const continuityAuthorityMarkdown = useMemo(() => [
     "# Continuity Authority",
@@ -110,17 +124,20 @@ export function PalmierHandoff() {
     `adopted-authority-issues: ${adoptedAuthorityIssueCount}`,
     `rejected-history-retained: ${rejectedHistoryCount}`,
     `edit-fix-ready: ${editFixReady ? "yes" : "no"}`,
+    `wedding-production-ready: ${weddingProductionGate.productionReady ? "yes" : "no"}`,
+    `production-handoff-ready: ${productionHandoffReady ? "yes" : "no"}`,
     "",
     continuityRequired
       ? "A continuity PASS is authoritative only for this fingerprint. Changing selected AI variants, scene duration, adjacent real media, model/preset, actual media metadata or detected continuity issues invalidates the previous PASS."
       : "No AI-related adjacent transition currently requires a separate continuity sign-off.",
     "Rejected prompts are retained as learning history and do not block FIX-ready by themselves. Draft/testing prompts and broken adopted-result authority do block FIX-ready.",
+    "AI edit FIX readiness and Wedding production readiness are separate authorities. Palmier handoff export never promotes Human QA or Mac DaVinci Actual evidence.",
     "",
-  ].join("\n"), [movieTitle, continuityFingerprint, continuityRequired, continuityCurrent, continuityStale, continuitySignoff, pipelineSettled, unfinishedCount, adoptedAuthorityIssueCount, rejectedHistoryCount, editFixReady]);
+  ].join("\n"), [movieTitle, continuityFingerprint, continuityRequired, continuityCurrent, continuityStale, continuitySignoff, pipelineSettled, unfinishedCount, adoptedAuthorityIssueCount, rejectedHistoryCount, editFixReady, weddingProductionGate.productionReady, productionHandoffReady]);
 
   const combinedHandoffMarkdown = useMemo(
-    () => `${handoff.markdown}\n\n${continuity.markdown}\n\n${continuityAuthorityMarkdown}`,
-    [handoff.markdown, continuity.markdown, continuityAuthorityMarkdown],
+    () => `${handoff.markdown}\n\n${continuity.markdown}\n\n${continuityAuthorityMarkdown}\n\n${weddingProductionMarkdown}`,
+    [handoff.markdown, continuity.markdown, continuityAuthorityMarkdown, weddingProductionMarkdown],
   );
 
   function recordContinuityPass() {
@@ -152,7 +169,7 @@ export function PalmierHandoff() {
     await navigator.clipboard.writeText(combinedHandoffMarkdown);
     setCopied(true);
     window.setTimeout(() => setCopied(false), 1600);
-    addToast("Palmier Agent Handoff + Continuity Gateをコピーしました", "success");
+    addToast("Palmier Agent Handoff + Continuity + Wedding Production Gateをコピーしました", "success");
   }
 
   async function copyDecisionRecords() {
@@ -171,13 +188,16 @@ export function PalmierHandoff() {
 
   function exportMarkdown() {
     downloadText("palmier-agent-handoff.md", combinedHandoffMarkdown, "text/markdown;charset=utf-8");
-    addToast("Palmier Handoff + Continuity Markdownを書き出しました", "success");
+    addToast("Palmier Handoff + Continuity + Wedding Production Markdownを書き出しました", "success");
   }
 
   function exportJson() {
     downloadText("palmier-agent-handoff.json", JSON.stringify({
       movieTitle,
       editFixReady,
+      weddingProductionReady: weddingProductionGate.productionReady,
+      productionHandoffReady,
+      productionAuthority: weddingProductionGate,
       pipeline: { settled: pipelineSettled, unfinishedCount, adoptedAuthorityIssueCount, rejectedHistoryCount },
       prompts: handoff.rows,
       continuity: {
@@ -193,7 +213,7 @@ export function PalmierHandoff() {
         checklist: CONTINUITY_REVIEW_CHECKLIST,
       },
     }, null, 2), "application/json;charset=utf-8");
-    addToast("Palmier Handoff JSONを書き出しました", "success");
+    addToast("Palmier Handoff JSON + Wedding Production Gateを書き出しました", "success");
   }
 
   function exportDecisionMarkdown() {
@@ -208,20 +228,32 @@ export function PalmierHandoff() {
 
   return (
     <div>
-      <Header title="Palmier 実行Handoff" description="採用正本・判断根拠・前後ショットの連続性まで、Palmier/Claude Codeへ非破壊で引き渡します" showMovieSelector />
+      <Header title="Palmier 実行Handoff" description="採用正本・判断根拠・前後ショットの連続性・Wedding production gateまで、Palmier/Claude Codeへ非破壊で引き渡します" showMovieSelector />
 
-      <div className="grid grid-cols-2 lg:grid-cols-6 gap-3 mb-6">
+      <div className="grid grid-cols-2 lg:grid-cols-7 gap-3 mb-6">
         <div className="rounded-xl border border-sand-200 dark:border-navy-600 bg-white dark:bg-navy-800 p-4"><p className="text-xs text-navy-400">Palmier first/last</p><p className="text-2xl font-bold text-navy-800 dark:text-sand-100">{routeCounts.palmier}</p></div>
         <div className="rounded-xl border border-sand-200 dark:border-navy-600 bg-white dark:bg-navy-800 p-4"><p className="text-xs text-navy-400">外部生成/結果待ち</p><p className="text-2xl font-bold text-navy-800 dark:text-sand-100">{routeCounts.external}</p></div>
         <div className="rounded-xl border border-sand-200 dark:border-navy-600 bg-white dark:bg-navy-800 p-4"><p className="text-xs text-navy-400">結果レビュー</p><p className="text-2xl font-bold text-navy-800 dark:text-sand-100">{routeCounts.review}</p></div>
         <div className="rounded-xl border border-sand-200 dark:border-navy-600 bg-white dark:bg-navy-800 p-4"><p className="text-xs text-navy-400">編集へ</p><p className="text-2xl font-bold text-emerald-700 dark:text-emerald-300">{routeCounts.edit}</p></div>
         <div className="rounded-xl border border-sand-200 dark:border-navy-600 bg-white dark:bg-navy-800 p-4"><p className="text-xs text-navy-400">不採用履歴</p><p className="text-2xl font-bold text-navy-800 dark:text-sand-100">{rejectedHistoryCount}</p><p className="text-[11px] text-navy-400">学習用・FIX非ブロッキング</p></div>
-        <div className={`rounded-xl border p-4 ${editFixReady ? "border-emerald-300 bg-emerald-50 dark:border-emerald-800 dark:bg-emerald-900/20" : "border-amber-200 bg-amber-50 dark:border-amber-800 dark:bg-amber-900/20"}`}><p className={editFixReady ? "text-xs text-emerald-700" : "text-xs text-amber-700"}>編集FIX Ready</p><p className={`text-xl font-bold mt-1 ${editFixReady ? "text-emerald-800 dark:text-emerald-300" : "text-amber-800 dark:text-amber-300"}`}>{editFixReady ? "PASS" : "PENDING"}</p></div>
+        <div className={`rounded-xl border p-4 ${editFixReady ? "border-emerald-300 bg-emerald-50 dark:border-emerald-800 dark:bg-emerald-900/20" : "border-amber-200 bg-amber-50 dark:border-amber-800 dark:bg-amber-900/20"}`}><p className={editFixReady ? "text-xs text-emerald-700" : "text-xs text-amber-700"}>AI編集FIX Ready</p><p className={`text-xl font-bold mt-1 ${editFixReady ? "text-emerald-800 dark:text-emerald-300" : "text-amber-800 dark:text-amber-300"}`}>{editFixReady ? "PASS" : "PENDING"}</p></div>
+        <div className={`rounded-xl border p-4 ${productionHandoffReady ? "border-emerald-300 bg-emerald-50 dark:border-emerald-800 dark:bg-emerald-900/20" : "border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-900/20"}`}><p className={productionHandoffReady ? "text-xs text-emerald-700" : "text-xs text-red-700"}>Production Handoff</p><p className={`text-xl font-bold mt-1 ${productionHandoffReady ? "text-emerald-800 dark:text-emerald-300" : "text-red-800 dark:text-red-300"}`}>{productionHandoffReady ? "READY" : "BLOCKED"}</p></div>
+      </div>
+
+      <div className={`rounded-xl border p-4 mb-6 ${weddingProductionGate.productionReady ? "border-emerald-200 bg-emerald-50 dark:border-emerald-800 dark:bg-emerald-900/20" : "border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-900/20"}`}>
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div><h2 className={`font-bold ${weddingProductionGate.productionReady ? "text-emerald-900 dark:text-emerald-200" : "text-red-900 dark:text-red-200"}`}>Wedding Production Authority — {weddingProductionGate.productionReady ? "READY" : "BLOCKED"}</h2><p className="text-xs mt-1 text-navy-600 dark:text-navy-200">AI編集FIXとは別の正本です。実素材・Human QA・production bundle・DaVinci Actual・Final approvalのcurrent状態をMotion Studioから読みます。</p></div>
+          <span className="text-[11px] font-mono text-navy-400">{weddingProductionGate.authority}</span>
+        </div>
+        <div className="mt-4 grid gap-3 lg:grid-cols-2">
+          {weddingProductionGate.projects.map((project) => <div key={project.movieId} className="rounded-lg border border-current/15 bg-white/60 dark:bg-navy-800/40 p-3"><div className="flex flex-wrap items-center justify-between gap-2"><p className="font-bold text-navy-800 dark:text-sand-100">{project.title}</p><span className={`px-2 py-1 rounded text-[11px] font-medium ${project.productionReady ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300" : "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300"}`}>{project.productionReady ? "PRODUCTION_READY" : project.overallState}</span></div><p className="mt-2 text-xs text-navy-600 dark:text-navy-200"><strong>NOW:</strong> {project.nextGate.stage ?? "PRODUCTION_READY"}</p><p className="mt-1 text-xs text-navy-500 dark:text-navy-300 break-all"><strong>Artifact:</strong> {project.nextGate.artifactPath ?? "—"}</p><div className="mt-2 flex flex-wrap gap-1">{project.nextGate.blockerCodes.length > 0 ? project.nextGate.blockerCodes.map((code) => <code key={code} className="px-2 py-1 rounded bg-red-100/70 dark:bg-red-900/20 text-[11px] text-red-800 dark:text-red-200">{code}</code>) : <span className="text-xs text-emerald-700">stable blockerなし</span>}</div>{project.nextGate.recovery.length > 0 && <ul className="mt-3 space-y-1 text-xs text-navy-700 dark:text-navy-100">{project.nextGate.recovery.map((item) => <li key={item}>→ {item}</li>)}</ul>}{project.nextGate.actionTargets.length > 0 && <div className="mt-3 flex flex-wrap gap-2">{project.nextGate.actionTargets.map((target) => <Link key={`${target.route}:${target.label}`} to={target.route} className="px-3 py-2 rounded-lg bg-navy-700 text-white text-xs hover:bg-navy-800" title={target.purpose}>{target.label}</Link>)}</div>}</div>)}
+        </div>
+        {!weddingProductionGate.productionReady && <p className="mt-3 text-xs text-red-800 dark:text-red-300">Palmier AI編集がPASSでも、このProduction AuthorityがBLOCKEDならWedding本番handoffは未完了です。exportは状態を運ぶだけで、Human QAやMac DaVinci Actualを自動昇格しません。</p>}
       </div>
 
       <div className="rounded-xl border border-amber-200 dark:border-amber-700 bg-amber-50 dark:bg-amber-900/20 p-4 mb-6"><h2 className="font-bold text-amber-900 dark:text-amber-200 mb-1">有料生成の境界</h2><p className="text-sm text-amber-800 dark:text-amber-300">このhandoffは配置・placeholder・参照準備までは自動化対象にしますが、Palmierや外部モデルのgeneration credits消費は明示指示まで発火させません。</p></div>
 
-      <div className="flex flex-wrap gap-2 mb-6"><button onClick={() => void copyHandoff()} disabled={videoPrompts.length === 0} className="px-4 py-2.5 text-sm rounded-lg bg-navy-700 text-white hover:bg-navy-800 disabled:opacity-40">{copied ? "✓ コピー済み" : "Palmier用Handoff + Continuityをコピー"}</button><button onClick={exportMarkdown} disabled={videoPrompts.length === 0} className="px-4 py-2.5 text-sm rounded-lg border border-sand-200 dark:border-navy-600 text-navy-600 dark:text-navy-200 disabled:opacity-40">Markdown</button><button onClick={exportJson} disabled={videoPrompts.length === 0} className="px-4 py-2.5 text-sm rounded-lg border border-sand-200 dark:border-navy-600 text-navy-600 dark:text-navy-200 disabled:opacity-40">JSON</button></div>
+      <div className="flex flex-wrap gap-2 mb-6"><button onClick={() => void copyHandoff()} disabled={videoPrompts.length === 0} className="px-4 py-2.5 text-sm rounded-lg bg-navy-700 text-white hover:bg-navy-800 disabled:opacity-40">{copied ? "✓ コピー済み" : "Palmier用Handoff + Production Gateをコピー"}</button><button onClick={exportMarkdown} disabled={videoPrompts.length === 0} className="px-4 py-2.5 text-sm rounded-lg border border-sand-200 dark:border-navy-600 text-navy-600 dark:text-navy-200 disabled:opacity-40">Markdown</button><button onClick={exportJson} disabled={videoPrompts.length === 0} className="px-4 py-2.5 text-sm rounded-lg border border-sand-200 dark:border-navy-600 text-navy-600 dark:text-navy-200 disabled:opacity-40">JSON</button></div>
 
       <div className={`rounded-xl border p-4 mb-6 ${decisionWarnings > 0 ? "border-amber-200 bg-amber-50 dark:border-amber-800 dark:bg-amber-900/20" : "border-emerald-200 bg-emerald-50 dark:border-emerald-800 dark:bg-emerald-900/20"}`}><div className="flex flex-wrap items-center gap-3"><div className="min-w-0 flex-1"><h2 className={`font-bold ${decisionWarnings > 0 ? "text-amber-900 dark:text-amber-200" : "text-emerald-900 dark:text-emerald-200"}`}>採用Decision Record — {decisions.records.length}件</h2><p className={`text-xs mt-1 ${decisionWarnings > 0 ? "text-amber-800 dark:text-amber-300" : "text-emerald-800 dark:text-emerald-300"}`}>採用正本 / model / preset / routing / QA日時 / project実績 / 実メディア仕様 / 代替variantを保存。warning {decisionWarnings}件。</p></div><div className="flex flex-wrap gap-2"><button onClick={() => void copyDecisionRecords()} disabled={decisions.records.length === 0} className="px-3 py-2 text-xs rounded-lg bg-white/70 dark:bg-navy-800/60 border border-current/20 disabled:opacity-40">{copiedDecision ? "✓ コピー済み" : "Decision Recordをコピー"}</button><button onClick={exportDecisionMarkdown} disabled={decisions.records.length === 0} className="px-3 py-2 text-xs rounded-lg bg-white/70 dark:bg-navy-800/60 border border-current/20 disabled:opacity-40">MD</button><button onClick={exportDecisionJson} disabled={decisions.records.length === 0} className="px-3 py-2 text-xs rounded-lg bg-white/70 dark:bg-navy-800/60 border border-current/20 disabled:opacity-40">JSON</button></div></div></div>
 
@@ -231,7 +263,7 @@ export function PalmierHandoff() {
         <details className="mt-4 rounded-lg border border-current/15 bg-white/50 dark:bg-navy-800/30 p-3"><summary className="cursor-pointer text-sm font-medium text-navy-700 dark:text-navy-200">PASS前に見るContinuity Checklist</summary><ul className="mt-3 space-y-2 text-xs text-navy-600 dark:text-navy-200">{CONTINUITY_REVIEW_CHECKLIST.map((item) => <li key={item}>☐ {item}</li>)}</ul><p className="mt-3 text-[11px] text-navy-400">上記をPalmier/CapCutの実タイムラインで確認した後にPASSを記録します。警告がある場合は修正または意図的に許容した上で記録してください。</p></details>
       </div>
 
-      {!editFixReady && videoPrompts.length > 0 && <div className="rounded-xl border border-sand-200 dark:border-navy-600 bg-white dark:bg-navy-800 p-4 mb-6"><p className="font-bold text-navy-800 dark:text-sand-100">編集FIX Readyまで</p><ul className="mt-2 space-y-1 text-sm text-navy-600 dark:text-navy-200"><li>{pipelineSettled ? "✓" : "○"} draft/testing 0・採用正本authority正常 {pipelineSettled ? "" : `(未完了${unfinishedCount} / authority問題${adoptedAuthorityIssueCount})`}</li><li>{decisionWarnings === 0 ? "✓" : "○"} Decision Record warning 0</li><li>{continuityCurrent ? "✓" : "○"} 現在のfingerprintでContinuity QA PASS</li><li>ℹ️ 不採用Prompt {rejectedHistoryCount}件は学習履歴として保持し、FIXをブロックしない</li></ul></div>}
+      {!editFixReady && videoPrompts.length > 0 && <div className="rounded-xl border border-sand-200 dark:border-navy-600 bg-white dark:bg-navy-800 p-4 mb-6"><p className="font-bold text-navy-800 dark:text-sand-100">AI編集FIX Readyまで</p><ul className="mt-2 space-y-1 text-sm text-navy-600 dark:text-navy-200"><li>{pipelineSettled ? "✓" : "○"} draft/testing 0・採用正本authority正常 {pipelineSettled ? "" : `(未完了${unfinishedCount} / authority問題${adoptedAuthorityIssueCount})`}</li><li>{decisionWarnings === 0 ? "✓" : "○"} Decision Record warning 0</li><li>{continuityCurrent ? "✓" : "○"} 現在のfingerprintでContinuity QA PASS</li><li>ℹ️ 不採用Prompt {rejectedHistoryCount}件は学習履歴として保持し、FIXをブロックしない</li></ul></div>}
 
       {videoPrompts.length === 0 ? <div className="rounded-xl border border-dashed border-sand-300 dark:border-navy-600 p-10 text-center text-sm text-navy-400">動画Promptがありません。動画プロンプト画面から作成してください。</div> : <div className="space-y-4">{videoPrompts.map((prompt) => {
         const resultAssets = data.assets.filter((asset) => prompt.resultAssetIds.includes(asset.assetId));
