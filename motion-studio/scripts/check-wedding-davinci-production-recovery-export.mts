@@ -60,10 +60,10 @@ if (bundleIndex < 0 || recoveryIndex < 0 || bundleIndex >= recoveryIndex) {
 
 for (const [movieId, handoff] of [['opening', openingHandoff], ['profile', profileHandoff]] as const) {
   for (const required of [
-    "blockerCodes: Array.isArray(recoverySidecar?.recovery?.blockerCodes)",
-    "blockerActions: Array.isArray(recoverySidecar?.recovery?.blockerActions)",
-    "canonicalRecovery: Array.isArray(recoverySidecar?.recovery?.canonicalRecovery)",
-    "guardrails: Array.isArray(recoverySidecar?.recovery?.guardrails)",
+    "blockerCodes: Array.isArray(recoverySidecar.recovery?.blockerCodes)",
+    "blockerActions: Array.isArray(recoverySidecar.recovery?.blockerActions)",
+    "canonicalRecovery: Array.isArray(recoverySidecar.recovery?.canonicalRecovery)",
+    "guardrails: Array.isArray(recoverySidecar.recovery?.guardrails)",
     'DAVINCI_RECOVERY_ACTION_EXPORTED != RECOVERY_EXECUTED',
   ]) {
     if (!handoff.includes(required)) throw new Error(`${movieId}: DaVinci handoff recovery surface missing: ${required}`);
