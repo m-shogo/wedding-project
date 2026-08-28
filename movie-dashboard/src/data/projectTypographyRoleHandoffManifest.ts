@@ -68,3 +68,54 @@ export function buildProjectTypographyRoleHandoffManifestJson(
 ) {
   return JSON.stringify(buildProjectTypographyRoleHandoffManifest(projectId, composer, workspace, selections, roleContexts), null, 2);
 }
+
+function canonicalize(value: unknown): unknown {
+  if (Array.isArray(value)) return value.map(canonicalize);
+  if (value && typeof value === "object") {
+    return Object.fromEntries(
+      Object.entries(value as Record<string, unknown>)
+        .sort(([a], [b]) => a.localeCompare(b))
+        .map(([key, child]) => [key, canonicalize(child)]),
+    );
+  }
+  return value;
+}
+
+function canonicalJson(value: unknown) {
+  return JSON.stringify(canonicalize(value));
+}
+
+export function parseAndValidateProjectTypographyRoleHandoffManifest(
+  raw: string,
+  projectId: SceneProjectId,
+  composer: MotionZukanComposerState,
+  workspace: MotionZukanProductionWorkspaceState,
+  selections: TypographyProductionSelectionV1[],
+  roleContexts: TypographyProductionRoleContextV1[],
+): ProjectTypographyRoleHandoffManifestV1 {
+  const parsed = JSON.parse(raw) as Partial<ProjectTypographyRoleHandoffManifestV1>;
+  if (parsed.schemaVersion !== "wedding-movie-project-role-handoff/v1") {
+    throw new Error("PROJECT_ROLE_HANDOFF_ENVELOPE_MISMATCH");
+  }
+  if (parsed.authority !== "DERIVED_FROM_PROJECT_HANDOFF_AND_PERSISTED_HUMAN_ROLE_CONTEXT") {
+    throw new Error("PROJECT_ROLE_HANDOFF_AUTHORITY_MISMATCH");
+  }
+  if (parsed.projectId !== projectId || parsed.base?.projectId !== projectId || parsed.typography?.projectId !== projectId) {
+    throw new Error("PROJECT_ROLE_HANDOFF_PROJECT_MISMATCH");
+  }
+  if (
+    parsed.roleHandoff?.studioGuiActual !== "NOT_RUN" ||
+    parsed.roleHandoff?.davinciGuiActual !== "NOT_RUN" ||
+    parsed.roleHandoff?.productionReady !== false ||
+    parsed.base?.handoff?.productionReady !== false ||
+    parsed.typography?.summary?.productionReady !== false
+  ) {
+    throw new Error("PROJECT_ROLE_HANDOFF_MUST_NOT_CLAIM_ACTUAL_OR_PRODUCTION_READY");
+  }
+
+  const expected = buildProjectTypographyRoleHandoffManifest(projectId, composer, workspace, selections, roleContexts);
+  if (canonicalJson(parsed) !== canonicalJson(expected)) {
+    throw new Error("STALE_OR_DRIFTED_PROJECT_ROLE_HANDOFF_MANIFEST");
+  }
+  return parsed as ProjectTypographyRoleHandoffManifestV1;
+}

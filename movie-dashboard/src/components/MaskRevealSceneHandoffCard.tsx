@@ -10,6 +10,7 @@ import { getResolveHumanAdjustability } from "../data/resolveHumanAdjustability"
 import type { MaskRevealSceneInstance } from "../data/visualSceneComposer";
 import { downloadText } from "../lib/exporters";
 import { ProfileProductionStatusHandoffCard } from "./ProfileProductionStatusHandoffCard";
+import { ProjectTypographyRoleHandoffRevalidationCard } from "./ProjectTypographyRoleHandoffRevalidationCard";
 import { WeddingMovieProductionCriticalPathCard } from "./WeddingMovieProductionCriticalPathCard";
 import { TypographyDaVinciProductionReleaseGateForScene } from "./TypographyDaVinciProductionReleaseGateForScene";
 import { TypographyProductionRoleGuide } from "./TypographyProductionRoleGuide";
@@ -76,6 +77,7 @@ export function MaskRevealSceneHandoffCard({ scene }: { scene: MaskRevealSceneIn
       <TypographyProductionRouteSelector scene={scene} />
       <TypographySceneDeliveryPackageCard scene={scene} />
       <TypographyProjectDeliveryBatchCard projectId={scene.projectId} />
+      <ProjectTypographyRoleHandoffRevalidationCard projectId={scene.projectId} />
       <WeddingMovieProductionCriticalPathCard projectId={scene.projectId} />
       <ProfileProductionStatusHandoffCard projectId={scene.projectId} />
       <TypographyDaVinciProductionReleaseGateForScene scene={scene} />
