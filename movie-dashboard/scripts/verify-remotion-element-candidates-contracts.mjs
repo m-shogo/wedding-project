@@ -136,7 +136,7 @@ for (const token of [
   'blockerCodes: string[]',
   'completedCandidates: number',
   "guardrails: ['SUMMARY_EXPORTED != STUDIO_ACTUAL_VERIFIED', 'STUDIO_ACTUAL_VERIFIED != PRODUCTION_DEPENDENCY_PROMOTED']",
-  'writeSummary({manifestSha, manifestCurrent, evidence, evidenceValid, blockerCodes: errors})',
+  'writeSummary({manifestSha, manifestCurrent, evidence, evidenceValid: true, blockerCodes: errors})',
 ]) {
   if (!evidenceScript.includes(token)) errors.push(`Studio Actual machine summary script missing: ${token}`);
 }
