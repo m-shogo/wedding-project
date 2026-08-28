@@ -3,153 +3,121 @@ import path from "node:path";
 import {fileURLToPath} from "node:url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const source = fs.readFileSync(path.join(root, "src/pages/FusionNodeTranslator.tsx"), "utf8");
-const recoverySource = fs.readFileSync(path.join(root, "src/lib/davinciWeddingProductionRecovery.ts"), "utf8");
-const gateSource = fs.readFileSync(path.join(root, "src/lib/palmierWeddingProductionGate.ts"), "utf8");
-const studioEvidenceSource = fs.readFileSync(path.join(root, "src/data/remotionStudioActualToolingEvidence.ts"), "utf8");
+const read = (rel) => fs.readFileSync(path.join(root, rel), "utf8");
+const source = read("src/pages/FusionNodeTranslator.tsx");
+const recoverySource = read("src/lib/davinciWeddingProductionRecovery.ts");
+const gateSource = read("src/lib/palmierWeddingProductionGate.ts");
+const studioEvidenceSource = read("src/data/remotionStudioActualToolingEvidence.ts");
 
 const requireText = (haystack, text, label) => {
   if (!haystack.includes(text)) throw new Error(`missing ${label}: ${text}`);
 };
 
-requireText(source, 'useProduction', 'selected movie production context');
-requireText(source, 'buildPalmierWeddingProductionGate', 'canonical Wedding production authority');
-requireText(source, 'showMovieSelector', 'movie-specific production authority selector');
-requireText(source, 'WEDDING PRODUCTION AUTHORITY', 'visible production authority section');
-requireText(source, 'Fusion練習と本番DaVinci Actualを分離する', 'learning versus Actual boundary');
-requireText(source, 'const dependency = project.remotionStudioToolingDependency', 'project Remotion dependency UI source');
-requireText(source, 'EFFECTIVE PRODUCTION STATE', 'effective production state UI section');
-requireText(source, 'project.effectiveProductionState', 'effective production state rendering');
-requireText(source, 'project.blockingAuthorities', 'blocking authority rendering');
-requireText(source, 'Fusion独自判定ではなくPalmierと同じ中央resolverを使用します', 'single resolver UI honesty note');
-requireText(source, 'REMOTION PROJECT DEPENDENCY', 'project dependency UI section');
-requireText(source, 'dependency.state', 'project dependency state rendering');
-requireText(source, 'dependency.adoptedCandidateIds', 'adopted candidate rendering');
-requireText(source, 'dependency.studioActualVerified', 'dependency Studio Actual rendering');
-requireText(source, 'dependency.humanReviewed', 'dependency Human review rendering');
-requireText(source, 'dependency.dependencyPromoted', 'dependency promotion rendering');
-requireText(source, 'dependency.recoveryActions', 'dependency recovery rendering');
-requireText(source, 'action.kind === "COMMAND"', 'dependency command recovery rendering');
-requireText(source, 'action.kind === "HUMAN"', 'dependency human recovery rendering');
-requireText(source, 'Fusion画面から自動昇格しません', 'dependency Human fail-close warning');
-requireText(source, 'Wedding projectへ明示採用した場合だけ', 'explicit adoption fail-close copy');
-requireText(source, 'project.bridge.palmierCurrent', 'Palmier current checkpoint');
-requireText(source, 'project.bridge.davinciHandoffCurrent', 'DaVinci handoff checkpoint');
-requireText(source, 'project.bridge.macDaVinciActualVerified', 'Mac Actual checkpoint');
-requireText(source, 'project.bridge.finalDeliveryApproved', 'Final delivery checkpoint');
-requireText(source, 'const studio = project.remotionStudioToolingEvidence', 'Studio tooling UI authority source');
-requireText(source, 'REMOTION STUDIO TOOLING AUTHORITY', 'visible Studio tooling authority section');
-requireText(source, 'studio.currentRepoState', 'Studio tooling current repository state');
-requireText(source, 'studio.candidateCount', 'Studio tooling candidate count');
-requireText(source, 'studio.checkAxesPerCandidate', 'Studio tooling check axes');
-requireText(source, 'studio.humanReviewed', 'Studio tooling Human review state');
-requireText(source, 'studio.productionDependencyPromoted', 'Studio tooling production dependency state');
-requireText(source, 'studio.summaryPath', 'Studio tooling summary path');
-requireText(source, 'studio.evidencePath', 'Studio tooling evidence path');
-requireText(source, 'studio.statusCommand', 'Studio tooling status command');
-requireText(source, 'studio.strictCommand', 'Studio tooling strict command');
-requireText(source, 'Wedding production gate / Mac DaVinci Actualとは別authorityです', 'three-authority separation copy');
-requireText(source, 'Tooling evidenceを表示・exportしてもStudio Actual verifiedにはなりません', 'Studio tooling UI fail-close copy');
-requireText(source, 'Element未採用ならWedding productionをBLOCKしません', 'Studio tooling non-blocking copy');
-requireText(source, 'project.nextGate.stage', 'current production stage');
-requireText(source, 'project.nextGate.artifactPath', 'current production artifact');
-requireText(source, 'project.nextGate.blockerCodes', 'stable production blocker codes');
-requireText(source, 'project.nextGate.blockerActions', 'structured production blocker actions');
-requireText(source, 'action.kind === "ROUTE"', 'route recovery action rendering');
-requireText(source, 'project.nextGate.recovery', 'canonical production recovery rendering');
-requireText(source, 'Human action required · この画面からPASSへ昇格しません', 'human recovery fail-close warning');
-requireText(source, 'project.bridge.state === "MAC_DAVINCI_ACTUAL_NOT_VERIFIED"', 'Mac Actual gate condition');
-requireText(source, 'project.bridge.actualEvidencePath', 'Actual evidence path at Mac gate');
-requireText(source, 'project.bridge.actualCommands.init', 'Actual evidence init command');
-requireText(source, 'project.bridge.actualCommands.status', 'Actual evidence status command');
-requireText(source, 'project.bridge.actualCommands.strict', 'Actual evidence strict command');
-requireText(source, 'コマンド表示・initだけではActual verifiedになりません', 'Actual command fail-close warning');
-requireText(source, '実際にResolve GUIで確認・exportしていない限り、このgateはPASSにしません', 'Actual fail-close warning');
-requireText(source, 'to="/palmier-handoff"', 'canonical production handoff navigation');
+for (const [text, label] of [
+  ["useProduction", "selected movie production context"],
+  ["buildPalmierWeddingProductionGate", "canonical production authority"],
+  ["showMovieSelector", "movie selector"],
+  ["WEDDING PRODUCTION AUTHORITY", "production authority section"],
+  ["Fusion練習と本番DaVinci Actualを分離する", "learning versus Actual boundary"],
+  ["const effectiveNextGate = project.effectiveNextGate", "effective next gate source"],
+  ["EFFECTIVE NEXT GATE", "effective next gate section"],
+  ["effectiveNextGate.state", "effective state rendering"],
+  ["effectiveNextGate.authority", "effective authority rendering"],
+  ["effectiveNextGate.stage", "effective stage rendering"],
+  ["effectiveNextGate.artifactPath", "effective artifact rendering"],
+  ["effectiveNextGate.blockerCodes", "effective blocker rendering"],
+  ["effectiveNextGate.blockerActions", "effective structured recovery rendering"],
+  ["effectiveNextGate.recovery", "effective canonical recovery rendering"],
+  ["CANONICAL WEDDING GATE", "canonical Wedding audit section"],
+  ["project.nextGate.stage", "canonical Wedding stage audit"],
+  ["project.nextGate.artifactPath", "canonical Wedding artifact audit"],
+  ["project.blockingAuthorities", "blocking authority rendering"],
+  ["Fusion独自判定ではなくPalmierと同じ中央resolverを使用します", "single resolver honesty note"],
+  ["const dependency = project.remotionStudioToolingDependency", "Remotion dependency source"],
+  ["REMOTION PROJECT DEPENDENCY", "Remotion dependency section"],
+  ["dependency.state", "dependency state"],
+  ["dependency.adoptedCandidateIds", "adopted candidate ids"],
+  ["dependency.studioActualVerified", "Studio Actual state"],
+  ["dependency.humanReviewed", "Human review state"],
+  ["dependency.dependencyPromoted", "dependency promotion state"],
+  ["dependency.recoveryActions", "dependency recovery actions"],
+  ['action.kind === "ROUTE"', "route recovery UI"],
+  ["action.route", "route target UI"],
+  ['action.kind === "COMMAND"', "command recovery UI"],
+  ['action.kind === "HUMAN"', "human recovery UI"],
+  ["Fusion画面から自動昇格しません", "Human fail-close warning"],
+  ["Wedding projectへ明示採用した場合だけ", "explicit adoption copy"],
+  ["const studio = project.remotionStudioToolingEvidence", "tooling evidence source"],
+  ["REMOTION STUDIO TOOLING AUTHORITY", "tooling authority section"],
+  ["studio.currentRepoState", "tooling current state"],
+  ["studio.candidateCount", "candidate count"],
+  ["studio.checkAxesPerCandidate", "check count"],
+  ["studio.humanReviewed", "tooling Human review"],
+  ["studio.productionDependencyPromoted", "tooling promotion"],
+  ["studio.summaryPath", "tooling summary path"],
+  ["studio.evidencePath", "tooling evidence path"],
+  ["studio.statusCommand", "tooling status command"],
+  ["studio.strictCommand", "tooling strict command"],
+  ["Tooling evidenceを表示・exportしてもStudio Actual verifiedにはなりません", "tooling fail-close copy"],
+  ["Element未採用ならWedding productionをBLOCKしません", "tooling non-blocking copy"],
+  ["project.bridge.palmierCurrent", "Palmier current checkpoint"],
+  ["project.bridge.davinciHandoffCurrent", "DaVinci current checkpoint"],
+  ["project.bridge.macDaVinciActualVerified", "Mac Actual checkpoint"],
+  ["project.bridge.finalDeliveryApproved", "final approval checkpoint"],
+  ['project.bridge.state === "MAC_DAVINCI_ACTUAL_NOT_VERIFIED"', "Mac Actual gate condition"],
+  ["project.bridge.actualEvidencePath", "Actual evidence path"],
+  ["project.bridge.actualCommands.init", "Actual init command"],
+  ["project.bridge.actualCommands.status", "Actual status command"],
+  ["project.bridge.actualCommands.strict", "Actual strict command"],
+  ["コマンド表示・initだけではActual verifiedになりません", "Actual command fail-close warning"],
+  ["実際にResolve GUIで確認・exportしていない限り、このgateはPASSにしません", "Actual GUI fail-close warning"],
+  ['to="/palmier-handoff"', "production handoff navigation"],
+]) requireText(source, text, label);
 
-requireText(gateSource, 'SHA_BOUND_FINAL_RENDER', 'SHA-bound recovery authority');
-requireText(gateSource, 'CRITICAL_PATH_PRE_BUNDLE', 'pre-bundle recovery authority');
-requireText(gateSource, 'sourceRenderSha256', 'recovery render SHA provenance');
-requireText(gateSource, 'normalizeRecoverySnapshot', 'recovery authority normalization');
-requireText(gateSource, 'remotionStudioToolingEvidence', 'Remotion Studio tooling evidence carrier');
-requireText(gateSource, 'remotionStudioToolingDependency', 'Remotion Studio dependency carrier');
-requireText(gateSource, 'effectiveProductionState', 'effective production state carrier');
-requireText(gateSource, 'blockingAuthorities', 'effective blocking authority carrier');
-requireText(gateSource, 'CANONICAL_NEXT_GATE_READY != EFFECTIVE_PRODUCTION_READY_WHEN_ADOPTED_DEPENDENCY_BLOCKS', 'effective state honesty guardrail');
-requireText(gateSource, 'PRE_BUNDLE_RECOVERY_IS_NOT_FINAL_RENDER_SHA_BOUND', 'pre-bundle honesty guardrail');
-requireText(gateSource, 'SHA_BOUND_RECOVERY_EXPORTED != RECOVERY_EXECUTED', 'SHA-bound execution guardrail');
+for (const [text, label] of [
+  ["resolvePalmierEffectiveNextGate", "effective next gate resolver"],
+  ["effectiveNextGate", "effective next gate carrier"],
+  ["SHA_BOUND_FINAL_RENDER", "SHA-bound recovery authority"],
+  ["CRITICAL_PATH_PRE_BUNDLE", "pre-bundle recovery authority"],
+  ["normalizeRecoverySnapshot", "recovery normalization"],
+  ["remotionStudioToolingEvidence", "tooling evidence carrier"],
+  ["remotionStudioToolingDependency", "tooling dependency carrier"],
+  ["CANONICAL_NEXT_GATE_READY != EFFECTIVE_PRODUCTION_READY_WHEN_ADOPTED_DEPENDENCY_BLOCKS", "canonical/effective guardrail"],
+  ["EFFECTIVE_NEXT_GATE_PREFERS_WEDDING_BLOCKER_BEFORE_ADOPTED_TOOLING_BLOCKER", "Wedding-first effective gate guardrail"],
+  ["EFFECTIVE_NEXT_GATE_READY_REQUIRES_WEDDING_AND_ADOPTED_TOOLING_READY", "combined-ready guardrail"],
+  ["PRE_BUNDLE_RECOVERY_IS_NOT_FINAL_RENDER_SHA_BOUND", "pre-bundle honesty guardrail"],
+  ["SHA_BOUND_RECOVERY_EXPORTED != RECOVERY_EXECUTED", "recovery execution guardrail"],
+]) requireText(gateSource, text, label);
 
-requireText(studioEvidenceSource, 'MOTION_ZUKAN_REMOTION_STUDIO_ACTUAL_TOOLING_REFERENCE', 'Studio tooling reference authority');
-requireText(studioEvidenceSource, 'TOOLING_EVIDENCE_REFERENCED != STUDIO_ACTUAL_VERIFIED', 'Studio tooling fail-close guardrail');
-requireText(studioEvidenceSource, 'ELEMENT_NOT_ADOPTED_BY_PROJECT => TOOLING_ACTUAL_IS_NON_BLOCKING', 'non-adopted tooling non-blocking guardrail');
+for (const [text, label] of [
+  ["MOTION_ZUKAN_REMOTION_STUDIO_ACTUAL_TOOLING_REFERENCE", "tooling reference authority"],
+  ["TOOLING_EVIDENCE_REFERENCED != STUDIO_ACTUAL_VERIFIED", "tooling evidence fail-close"],
+  ["ELEMENT_NOT_ADOPTED_BY_PROJECT => TOOLING_ACTUAL_IS_NON_BLOCKING", "unadopted non-blocking guardrail"],
+]) requireText(studioEvidenceSource, text, label);
 
-requireText(recoverySource, 'wedding-davinci-production-recovery/v2', 'DaVinci recovery schema');
-requireText(recoverySource, 'MOTION_STUDIO_DAVINCI_PRODUCTION_RECOVERY', 'DaVinci recovery authority');
-requireText(recoverySource, 'effectiveProductionState: project.effectiveProductionState', 'effective production state propagation');
-requireText(recoverySource, 'blockingAuthorities: [...project.blockingAuthorities]', 'blocking authority propagation');
-requireText(recoverySource, 'artifactPath: project.nextGate.artifactPath', 'artifact path propagation');
-requireText(recoverySource, 'recoveryAuthority: recovery.authority', 'selected recovery authority propagation');
-requireText(recoverySource, 'sourceRenderSha256: recovery.sourceRenderSha256', 'render SHA provenance propagation');
-requireText(recoverySource, 'blockerCodes: [...recovery.blockerCodes]', 'authority-aware stable blocker propagation');
-requireText(recoverySource, 'blockerActions: recovery.blockerActions.map(cloneAction)', 'authority-aware structured action propagation');
-requireText(recoverySource, 'canonicalRecovery: [...recovery.canonicalRecovery]', 'authority-aware canonical recovery propagation');
-requireText(recoverySource, 'recoveryGuardrails: [...recovery.guardrails]', 'recovery-specific guardrail propagation');
-requireText(recoverySource, 'palmierContractVersion: project.bridge.palmierContractVersion', 'Palmier contract provenance');
-requireText(recoverySource, 'davinciContractVersion: project.bridge.davinciContractVersion', 'DaVinci contract provenance');
-requireText(recoverySource, 'evidencePath: project.bridge.actualEvidencePath', 'DaVinci Actual evidence path propagation');
-requireText(recoverySource, 'commands: {...project.bridge.actualCommands}', 'DaVinci Actual command propagation');
-requireText(recoverySource, 'const studio = project.remotionStudioToolingEvidence', 'Studio tooling evidence source');
-requireText(recoverySource, 'const dependency = project.remotionStudioToolingDependency', 'Studio project dependency source');
-requireText(recoverySource, 'authority: studio.authority', 'Studio tooling authority propagation');
-requireText(recoverySource, 'summaryPath: studio.summaryPath', 'Studio tooling summary path propagation');
-requireText(recoverySource, 'summarySchemaVersion: studio.summarySchemaVersion', 'Studio tooling summary schema propagation');
-requireText(recoverySource, 'summaryAuthority: studio.summaryAuthority', 'Studio tooling summary authority propagation');
-requireText(recoverySource, 'evidencePath: studio.evidencePath', 'Studio tooling evidence path propagation');
-requireText(recoverySource, 'statusCommand: studio.statusCommand', 'Studio tooling status command propagation');
-requireText(recoverySource, 'strictCommand: studio.strictCommand', 'Studio tooling strict command propagation');
-requireText(recoverySource, 'candidateCount: studio.candidateCount', 'Studio tooling candidate count propagation');
-requireText(recoverySource, 'checkAxesPerCandidate: studio.checkAxesPerCandidate', 'Studio tooling check axis count propagation');
-requireText(recoverySource, 'currentRepoState: studio.currentRepoState', 'Studio tooling repo state propagation');
-requireText(recoverySource, 'humanReviewed: studio.humanReviewed', 'Studio tooling Human review propagation');
-requireText(recoverySource, 'productionDependencyPromoted: studio.productionDependencyPromoted', 'Studio tooling dependency promotion propagation');
-requireText(recoverySource, 'guardrails: [...studio.guardrails]', 'Studio tooling guardrail propagation');
-requireText(recoverySource, 'authority: dependency.authority', 'project dependency authority propagation');
-requireText(recoverySource, 'adoptedCandidateIds: [...dependency.adoptedCandidateIds]', 'adopted candidate propagation');
-requireText(recoverySource, 'state: dependency.state', 'project dependency state propagation');
-requireText(recoverySource, 'blocking: dependency.blocking', 'project dependency blocking propagation');
-requireText(recoverySource, 'studioActualVerified: dependency.studioActualVerified', 'dependency Studio Actual propagation');
-requireText(recoverySource, 'humanReviewed: dependency.humanReviewed', 'dependency Human review propagation');
-requireText(recoverySource, 'dependencyPromoted: dependency.dependencyPromoted', 'dependency promotion propagation');
-requireText(recoverySource, 'recoveryActions: dependency.recoveryActions.map(cloneDependencyAction)', 'dependency structured recovery propagation');
-requireText(recoverySource, 'recovery: [...dependency.recovery]', 'dependency canonical recovery propagation');
-requireText(recoverySource, 'guardrails: [...dependency.guardrails]', 'dependency guardrail propagation');
-requireText(recoverySource, 'REMOTION_STUDIO_TOOLING_REFERENCE_EXPORTED != STUDIO_ACTUAL_VERIFIED', 'DaVinci Studio tooling export fail-close guardrail');
-requireText(recoverySource, 'REMOTION_STUDIO_DEPENDENCY_EXPORTED != DEPENDENCY_RECOVERY_EXECUTED', 'DaVinci dependency export fail-close guardrail');
-requireText(recoverySource, 'REMOTION_STUDIO_TOOLING_NOT_ADOPTED => NON_BLOCKING_FOR_DAVINCI_RECOVERY', 'DaVinci non-adopted tooling non-blocking guardrail');
-requireText(recoverySource, 'ADOPTED_REMOTION_STUDIO_DEPENDENCY_BLOCKS_DAVINCI_PRODUCTION_UNTIL_READY', 'adopted dependency fail-close guardrail');
-requireText(recoverySource, 'DAVINCI_RECOVERY_EXPORTED != RECOVERY_EXECUTED', 'recovery export fail-close guardrail');
-requireText(recoverySource, 'DAVINCI_RECOVERY_ACTION_EXPORTED != DAVINCI_TIMELINE_MUTATED', 'timeline mutation fail-close guardrail');
-requireText(recoverySource, 'SHA_BOUND_RECOVERY_EXPORTED != MAC_DAVINCI_ACTUAL_VERIFIED', 'SHA-bound recovery is not Actual verification');
-requireText(recoverySource, 'MAC_DAVINCI_ACTUAL_REMAINS_NOT_RUN_UNTIL_GUI_EVIDENCE_IS_CURRENT', 'Mac Actual NOT_RUN guardrail');
-requireText(recoverySource, 'buildDaVinciWeddingProductionRecoveryJson', 'machine-readable DaVinci recovery export');
-requireText(recoverySource, 'buildDaVinciWeddingProductionRecoveryMarkdown', 'human-readable DaVinci recovery export');
-requireText(recoverySource, '# DaVinci Wedding Production Recovery', 'DaVinci recovery Markdown heading');
-requireText(recoverySource, 'effective-production-state:', 'effective production state in Markdown');
-requireText(recoverySource, 'blocking-authorities:', 'blocking authorities in Markdown');
-requireText(recoverySource, '### Palmier → DaVinci bridge', 'bridge Markdown section');
-requireText(recoverySource, '### Remotion Studio tooling reference', 'Studio tooling Markdown section');
-requireText(recoverySource, '### Remotion Studio project dependency', 'Studio project dependency Markdown section');
-requireText(recoverySource, 'dependency-adopted-candidates:', 'adopted candidates in Markdown');
-requireText(recoverySource, 'dependency-state:', 'dependency state in Markdown');
-requireText(recoverySource, 'dependency-blocking:', 'dependency blocking state in Markdown');
-requireText(recoverySource, 'dependency-recovery-actions:', 'dependency recovery actions in Markdown');
-requireText(recoverySource, 'candidate existence alone is non-blocking', 'dependency fail-close Markdown note');
-requireText(recoverySource, 'tooling-summary-schema:', 'Studio tooling summary schema in Markdown');
-requireText(recoverySource, 'tooling-human-reviewed:', 'Studio Human review state in Markdown');
-requireText(recoverySource, 'tooling-production-dependency-promoted:', 'Studio dependency promotion state in Markdown');
-requireText(recoverySource, 'tooling-status:', 'Studio status command in Markdown');
-requireText(recoverySource, 'tooling-strict:', 'Studio strict command in Markdown');
-requireText(recoverySource, 'reference export is not Studio Actual verification', 'Studio tooling Markdown honesty note');
-requireText(recoverySource, 'command export or evidence init is not Mac DaVinci Actual verification', 'DaVinci Actual Markdown honesty note');
+for (const [text, label] of [
+  ["wedding-davinci-production-recovery/v2", "DaVinci recovery schema"],
+  ["MOTION_STUDIO_DAVINCI_PRODUCTION_RECOVERY", "DaVinci recovery authority"],
+  ['effectiveNextGate: PalmierWeddingProductionProject["effectiveNextGate"]', "effective next gate type propagation"],
+  ["const effectiveNextGate = project.effectiveNextGate", "effective gate recovery source"],
+  ["authority: effectiveNextGate.authority", "effective authority propagation"],
+  ["state: effectiveNextGate.state", "effective state propagation"],
+  ["stage: effectiveNextGate.stage", "effective stage propagation"],
+  ["artifactPath: effectiveNextGate.artifactPath", "effective artifact propagation"],
+  ["blockerCodes: [...effectiveNextGate.blockerCodes]", "effective blocker propagation"],
+  ["blockerActions: effectiveNextGate.blockerActions.map(cloneEffectiveAction)", "effective action propagation"],
+  ["recovery: [...effectiveNextGate.recovery]", "effective recovery propagation"],
+  ["adoptedCandidateIds: [...effectiveNextGate.adoptedCandidateIds]", "adopted candidate propagation"],
+  ["EFFECTIVE_NEXT_GATE_EXPORTED != EFFECTIVE_GATE_COMPLETED", "effective gate export guardrail"],
+  ["EFFECTIVE_NEXT_GATE_PREFERS_WEDDING_BLOCKER_BEFORE_REMOTION_DEPENDENCY", "DaVinci Wedding-first guardrail"],
+  ["### Effective next gate", "effective gate Markdown"],
+  ["### Canonical Wedding recovery", "canonical recovery audit Markdown"],
+  ["REMOTION_STUDIO_TOOLING_REFERENCE_EXPORTED != STUDIO_ACTUAL_VERIFIED", "Studio tooling export guardrail"],
+  ["REMOTION_STUDIO_DEPENDENCY_EXPORTED != DEPENDENCY_RECOVERY_EXECUTED", "dependency export guardrail"],
+  ["ADOPTED_REMOTION_STUDIO_DEPENDENCY_BLOCKS_DAVINCI_PRODUCTION_UNTIL_READY", "adopted dependency fail-close"],
+  ["MAC_DAVINCI_ACTUAL_REMAINS_NOT_RUN_UNTIL_GUI_EVIDENCE_IS_CURRENT", "Mac Actual NOT_RUN guardrail"],
+  ["buildDaVinciWeddingProductionRecoveryJson", "machine-readable recovery export"],
+  ["buildDaVinciWeddingProductionRecoveryMarkdown", "human-readable recovery export"],
+]) requireText(recoverySource, text, label);
 
-console.log('Fusion Wedding production authority contracts: PASS');
+console.log("Fusion Wedding production authority contracts: PASS");
