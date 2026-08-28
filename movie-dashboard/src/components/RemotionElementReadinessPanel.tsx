@@ -92,7 +92,7 @@ export function RemotionElementReadinessPanel({
             {Object.entries(batch.actual).map(([key, state]) => <code key={key} className="border border-amber-300 px-1.5 py-0.5 text-[8px] text-amber-700 dark:border-amber-700 dark:text-amber-300">{key}={state}</code>)}
           </div>
           <p className="mt-2 border-l-2 border-amber-400 pl-2 text-[9px] leading-4 text-amber-800 dark:text-amber-200">
-            initは9候補×11項目をNOT_RUNで作るだけです。strictは全項目PASS・reviewer・reviewedAt・current batch manifest SHAが揃うまで失敗します。batch handoffやevidence templateの生成だけではStudio Actual verifiedになりません。
+            initは9候補×11項目をNOT_RUNで作るだけです。strictは全項目PASS・reviewer・reviewedAt・current batch manifest SHAが揃うまで失敗します。batch handoffの表示・prepare/check成功だけではStudio Actual verifiedになりません。evidence template生成も同様にActual実行ではありません。
           </p>
         </div>
       )}
