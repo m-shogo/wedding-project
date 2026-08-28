@@ -89,6 +89,7 @@ export function buildProfileProductionStatusHandoff() {
         mediaExpected: profileRealMediaReviewGate.mediaExpected,
         mediaReviewed: profileRealMediaReviewGate.mediaReviewed,
         blockers: [...profileRealMediaReviewGate.blockers],
+        audit: profileRealMediaReviewGate.audit,
       },
       production: {
         overallState: profileProductionStatus.overallState,
@@ -130,6 +131,8 @@ export function buildProfileProductionStatusHandoff() {
       "REMOTION_STUDIO_TOOLING_EVIDENCE_EXPORTED != STUDIO_ACTUAL_VERIFIED",
       "REMOTION_STUDIO_TOOLING_EVIDENCE != WEDDING_PRODUCTION_GATE",
       "CRITICAL_PATH_EXPORTED != RECOVERY_EXECUTED",
+      "PROFILE_REAL_MEDIA_QA_AUDIT_EXPORTED != HUMAN_REVIEW_PASS",
+      "PROFILE_REAL_MEDIA_QA_AUDIT_EXPORTED != MAC_DAVINCI_ACTUAL_VERIFIED",
     ],
   };
 }
