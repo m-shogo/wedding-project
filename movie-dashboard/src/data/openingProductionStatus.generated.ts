@@ -215,6 +215,8 @@ export const openingProductionStatus = {
         "schemaVersion": "wedding-davinci-production-recovery-export/v1",
         "authority": "FINAL_RENDER_BOUND_DAVINCI_RECOVERY",
         "sourceRenderSha256": null,
+        "cropReviewEvidenceSha256": null,
+        "cropReviewBindingFingerprintSha256": null,
         "actualState": "NOT_RUN",
         "requiredCurrent": true
       },
