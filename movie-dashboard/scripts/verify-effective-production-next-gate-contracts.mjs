@@ -33,7 +33,7 @@ for (const [text, label] of [
 ]) requireText(gateSource, text, label);
 
 for (const [text, label] of [
-  ['wedding-davinci-production-recovery/v2', "additive DaVinci recovery schema"],
+  ['wedding-davinci-production-recovery/v3', "DaVinci recovery v3 schema"],
   ['effectiveNextGate: PalmierWeddingProductionProject["effectiveNextGate"]', "DaVinci effective next gate type"],
   ["const effectiveNextGate = project.effectiveNextGate", "DaVinci effective next gate source"],
   ["authority: effectiveNextGate.authority", "effective authority propagation"],
@@ -46,6 +46,7 @@ for (const [text, label] of [
   ["adoptedCandidateIds: [...effectiveNextGate.adoptedCandidateIds]", "adopted candidate propagation"],
   ["EFFECTIVE_NEXT_GATE_EXPORTED != EFFECTIVE_GATE_COMPLETED", "effective gate export guardrail"],
   ["EFFECTIVE_NEXT_GATE_PREFERS_WEDDING_BLOCKER_BEFORE_REMOTION_DEPENDENCY", "DaVinci Wedding-first guardrail"],
+  ["REMOTION_STUDIO_DEPENDENCY_ROUTE_EXPORTED != RECOVERY_EXECUTED", "DaVinci dependency route guardrail"],
   ["### Effective next gate", "DaVinci Markdown effective gate section"],
   ["effective-next-authority:", "DaVinci Markdown authority"],
   ["effective-next-state:", "DaVinci Markdown state"],
@@ -61,4 +62,4 @@ if (!(weddingBranch >= 0 && toolingBranch > weddingBranch && readyBranch > tooli
   throw new Error("effective next gate priority must be Wedding blocker -> adopted Remotion blocker -> ready");
 }
 
-console.log("Effective Wedding production next gate contracts: PASS");
+console.log("Effective Wedding production next gate contracts: PASS (DaVinci recovery v3)");
