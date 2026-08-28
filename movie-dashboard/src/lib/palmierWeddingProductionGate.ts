@@ -125,6 +125,7 @@ export function buildPalmierWeddingProductionGate(selectedMovieId: string): Palm
       "PRODUCTION_NEXT_GATE_EXPORTED != RECOVERY_EXECUTED",
       "PALMIER_CURRENT != DAVINCI_HANDOFF_CURRENT",
       "DAVINCI_HANDOFF_CURRENT != MAC_DAVINCI_ACTUAL_VERIFIED",
+      "DAVINCI_ACTUAL_COMMAND_EXPORTED != MAC_DAVINCI_ACTUAL_VERIFIED",
       "MAC_DAVINCI_ACTUAL_VERIFIED != FINAL_DELIVERY_APPROVED",
       "HUMAN_QA_NOT_RUN != HUMAN_QA_PASS",
       "MAC_DAVINCI_ACTUAL_NOT_RUN != MAC_DAVINCI_ACTUAL_VERIFIED",
@@ -155,6 +156,10 @@ export function buildPalmierWeddingProductionMarkdown(gate: PalmierWeddingProduc
       `mac-davinci-actual-verified: ${project.bridge.macDaVinciActualVerified ? "yes" : "no"}`,
       `final-delivery-approved: ${project.bridge.finalDeliveryApproved ? "yes" : "no"}`,
       `davinci-actual-evidence: ${project.bridge.actualEvidencePath}`,
+      `davinci-actual-init: ${project.bridge.actualCommands.init}`,
+      `davinci-actual-status: ${project.bridge.actualCommands.status}`,
+      `davinci-actual-strict: ${project.bridge.actualCommands.strict}`,
+      "davinci-actual-note: exported commands are instructions only; Resolve GUI Actual remains NOT_RUN until current evidence is produced and strict verification passes",
       "recovery:",
       ...(project.nextGate.recovery.length > 0 ? project.nextGate.recovery.map((item) => `- ${item}`) : ["- none"]),
     );

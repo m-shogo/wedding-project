@@ -17,6 +17,7 @@ requireText(helper, "buildProfileProductionStatusHandoff", "Profile canonical ha
 requireText(helper, "AI_EDIT_FIX_READY != WEDDING_PRODUCTION_READY", "separate readiness authority guardrail");
 requireText(helper, "PALMIER_CURRENT != DAVINCI_HANDOFF_CURRENT", "Palmier to DaVinci boundary guardrail");
 requireText(helper, "DAVINCI_HANDOFF_CURRENT != MAC_DAVINCI_ACTUAL_VERIFIED", "DaVinci Actual boundary guardrail");
+requireText(helper, "DAVINCI_ACTUAL_COMMAND_EXPORTED != MAC_DAVINCI_ACTUAL_VERIFIED", "Actual command export fail-close guardrail");
 requireText(helper, "MAC_DAVINCI_ACTUAL_VERIFIED != FINAL_DELIVERY_APPROVED", "final approval boundary guardrail");
 requireText(helper, "MAC_DAVINCI_ACTUAL_NOT_RUN != MAC_DAVINCI_ACTUAL_VERIFIED", "Mac Actual fail-close guardrail");
 requireText(helper, "nextGate: production.nextGate", "canonical next gate passthrough");
@@ -32,6 +33,11 @@ requireText(helper, "actualCommands: {...davinci.actualEvidence.commands}", "DaV
 requireText(helper, "projects.every((project) => project.productionReady)", "cross-project readiness aggregation");
 requireText(helper, "palmier-davinci-bridge:", "Markdown bridge export");
 requireText(helper, "mac-davinci-actual-verified:", "Markdown Actual state export");
+requireText(helper, "davinci-actual-evidence:", "Markdown Actual evidence export");
+requireText(helper, "davinci-actual-init:", "Markdown Actual init command export");
+requireText(helper, "davinci-actual-status:", "Markdown Actual status command export");
+requireText(helper, "davinci-actual-strict:", "Markdown Actual strict command export");
+requireText(helper, "exported commands are instructions only; Resolve GUI Actual remains NOT_RUN", "Markdown Actual command fail-close note");
 
 requireText(page, "buildPalmierWeddingProductionGate", "Palmier production gate integration");
 requireText(page, "productionHandoffReady = editFixReady && weddingProductionGate.productionReady", "combined Palmier + production readiness");
