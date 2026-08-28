@@ -43,12 +43,43 @@ for (const token of [
   if (!dataSource.includes(token)) fail(`Dashboard readiness data missing ${token}`);
 }
 
+const preflightSource = readFileSync(resolve(dashboardRoot, 'src/data/weddingDavinciFinalDeliveryPreflight.ts'), 'utf8');
+for (const token of [
+  'WEDDING_DAVINCI_SNAPSHOT_REQUIRED',
+  'WEDDING_DAVINCI_SNAPSHOT_INVALID',
+  'WEDDING_DAVINCI_SNAPSHOT_STALE',
+  'OPENING_DAVINCI_DELIVERY_NOT_READY',
+  'PROFILE_DAVINCI_DELIVERY_NOT_READY',
+  'SNAPSHOT_CURRENT != FINAL_DELIVERY_READY',
+  'FINAL_DELIVERY_READY_REQUIRES_CURRENT_SNAPSHOT_AND_BOTH_MOVIES_READY',
+  'wedding-davinci-delivery-readiness.mts --write',
+  'wedding-davinci-delivery-readiness-snapshot.mts --strict-current',
+  'wedding-davinci-final-delivery-preflight.mts --strict',
+]) {
+  if (!preflightSource.includes(token)) fail(`Dashboard final preflight model missing ${token}`);
+}
+if (!preflightSource.includes('state: "NOT_RUN"')) fail('Dashboard snapshot authority must fail closed as NOT_RUN until transported evidence is explicitly supplied');
+if (!preflightSource.includes('snapshot.current && live.strictDeliveryEligible && blockerCodes.length === 0')) {
+  fail('Dashboard final delivery eligibility must require current snapshot + live Wedding eligibility + zero blockers');
+}
+
 const componentSource = readFileSync(resolve(dashboardRoot, 'src/components/WeddingDavinciDeliveryReadinessCard.tsx'), 'utf8');
-for (const token of ['Recovery SHA', 'Actual SHA', 'Approval SHA', 'Next gate', 'strict delivery']) {
+for (const token of [
+  'Recovery SHA',
+  'Actual SHA',
+  'Approval SHA',
+  'Next gate',
+  'strict delivery',
+  'FINAL DELIVERY PREFLIGHT / COMMAND SURFACE',
+  'CURRENT BLOCKERS',
+  'Manifest生成',
+  'Snapshot再検証',
+  'Final Delivery strict',
+]) {
   if (!componentSource.includes(token)) fail(`Wedding readiness card missing ${token}`);
 }
 
 const zukanSource = readFileSync(resolve(dashboardRoot, 'src/pages/VisualMotionLibrary.tsx'), 'utf8');
 if (!zukanSource.includes('WeddingDavinciDeliveryReadinessCard')) fail('Motion Zukan must surface wedding-wide readiness');
 
-console.log(`Wedding DaVinci readiness contract OK: state=${report.state} opening=${report.opening.nextGate} profile=${report.profile.nextGate}`);
+console.log(`Wedding DaVinci readiness + final delivery command surface OK: state=${report.state} opening=${report.opening.nextGate} profile=${report.profile.nextGate}`);
