@@ -75,6 +75,9 @@ if (recoverySidecar) {
   if (recoverySidecar.recovery?.actual?.evidencePath !== rel(evidencePath)) blockers.push('OPENING_DAVINCI_RECOVERY_EVIDENCE_PATH_STALE');
   if (recoverySidecar.recovery?.bridge?.macDaVinciActualVerified !== false) blockers.push('OPENING_DAVINCI_RECOVERY_MUST_NOT_VERIFY_ACTUAL');
   if (recoverySidecar.recovery?.actual?.commands?.strict !== 'pnpm opening:davinci-finishing:strict') blockers.push('OPENING_DAVINCI_RECOVERY_STRICT_COMMAND_STALE');
+  if (!Array.isArray(recoverySidecar.recovery?.blockerCodes) || !recoverySidecar.recovery.blockerCodes.includes('MAC_DAVINCI_ACTUAL_NOT_VERIFIED')) blockers.push('OPENING_DAVINCI_RECOVERY_BLOCKER_CODES_STALE');
+  if (!Array.isArray(recoverySidecar.recovery?.blockerActions) || !recoverySidecar.recovery.blockerActions.some((action: any) => action?.kind === 'HUMAN')) blockers.push('OPENING_DAVINCI_RECOVERY_HUMAN_ACTION_MISSING');
+  if (!Array.isArray(recoverySidecar.recovery?.canonicalRecovery) || recoverySidecar.recovery.canonicalRecovery.length === 0) blockers.push('OPENING_DAVINCI_RECOVERY_CANONICAL_RECOVERY_MISSING');
 }
 
 const report = {
@@ -110,6 +113,10 @@ const report = {
     authority: 'FINAL_RENDER_BOUND_DAVINCI_RECOVERY',
     sourceRenderSha256: recoverySidecar?.sourceBundle?.finalRenderSha256 ?? null,
     actualState: recoverySidecar?.recovery?.actual?.state ?? 'NOT_RUN',
+    blockerCodes: Array.isArray(recoverySidecar?.recovery?.blockerCodes) ? [...recoverySidecar.recovery.blockerCodes] : [],
+    blockerActions: Array.isArray(recoverySidecar?.recovery?.blockerActions) ? recoverySidecar.recovery.blockerActions.map((action: any) => ({...action})) : [],
+    canonicalRecovery: Array.isArray(recoverySidecar?.recovery?.canonicalRecovery) ? [...recoverySidecar.recovery.canonicalRecovery] : [],
+    guardrails: Array.isArray(recoverySidecar?.recovery?.guardrails) ? [...recoverySidecar.recovery.guardrails] : [],
     requiredCurrent: true,
   },
   actualEvidence: {
@@ -142,6 +149,7 @@ const report = {
     'PREVIEW_REVIEW_PASS != FINAL_RENDER_REVIEW_PASS',
     'HUMAN_FINAL_RENDER_REVIEW_PASS != DAVINCI_ACTUAL_VERIFIED',
     'DAVINCI_RECOVERY_SIDECAR_CURRENT != MAC_DAVINCI_ACTUAL_VERIFIED',
+    'DAVINCI_RECOVERY_ACTION_EXPORTED != RECOVERY_EXECUTED',
     'DAVINCI_HANDOFF_CURRENT != MAC_DAVINCI_ACTUAL_VERIFIED',
     'DAVINCI_EVIDENCE_TEMPLATE != ACTUAL_EVIDENCE_PASS',
     'MAC_DAVINCI_ACTUAL_VERIFIED != FINAL_DELIVERY_APPROVED',
