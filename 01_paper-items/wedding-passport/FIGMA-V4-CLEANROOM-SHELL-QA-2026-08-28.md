@@ -1,8 +1,8 @@
 # WEDDING PASSPORT — Figma V4 clean-room shell QA
 
 Date: 2026-08-28
-State: `V4_STRUCTURAL_SHELL_CREATED / REFERENCE_LED / SEATING_PRINT_READABILITY_IMPROVED / THREE_SCALE_QA_PARTIAL_PASS / FIXED_IDENTITY_ASSET_MISSING / NOT_PRINT_READY`
-Start/latest main before this write: `b3d085e330fd3e91e2cb2a3938d9b199404c331a`
+State: `V4_STRUCTURAL_SHELL_CREATED / REFERENCE_LED / SEATING_PRINT_READABILITY_IMPROVED / SYNTHETIC_LONG_NAME_STRESS_PASS / THREE_SCALE_QA_PARTIAL_PASS / FIXED_IDENTITY_ASSET_MISSING / NOT_PRINT_READY`
+Start/latest main before this write: `1e93d50b256cb065db9faedae5103f4b79805dd5`
 Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
 Figma authority: `UbK8KmuWJcDeGScsN49Uor`
 Drive authority: `1LnGb9tq_Vswe-GKO6UxfvKMAZuShEaaw`
@@ -62,7 +62,17 @@ The V4 seating root `226:71` was therefore changed without touching old producti
 - final left table 06 guest-list bottom is `2027 < 2100`;
 - footer remains in-bounds and the right-side table 11 ends substantially earlier.
 
-At the provisional working scale, 25 px is about 2.5 mm or roughly 7.1 pt nominal. This is a meaningful print-legibility improvement without reducing required guest capacity. Real-name long-copy and physical/100% print proof remain required before promotion.
+At the provisional working scale, 25 px is about 2.5 mm or roughly 7.1 pt nominal. This is a meaningful print-legibility improvement without reducing required guest capacity.
+
+### Synthetic long-name width stress — 2026-08-28
+
+A non-persistent Figma text measurement was run against the updated `560 px / 25 px` guest-name measure. Three deliberately long synthetic strings were tested without writing factual guest data into production:
+
+- Japanese-wide sample `長いお名前確認用文字列一二三`: measured `350 px`;
+- mixed Japanese/Katakana sample `髙橋ヴァレンティーナ確認用`: measured `324 px`;
+- Latin sample `ALEXANDER CHRISTOPHER TEST`: measured `378 px`.
+
+All three fit within the 560 px single-line measure. This closes the synthetic long-name width risk at the current font size. Real authoritative guest names and 100%/physical proof are still required before final promotion.
 
 ## Reference-led visual result
 
@@ -119,7 +129,7 @@ Still deferred:
 - final imposition;
 - CMYK/profile conversion and dark-navy/muted-gold proof;
 - final menu/drink copy and realistic long-copy stress;
-- real guest names / long-name seating stress;
+- real authoritative guest names and actual-data verification;
 - PDF export/preflight;
 - effective-PPI QA after any raster is placed;
 - 100% or physical proof.
@@ -129,8 +139,7 @@ The historically documented 3 mm bleed and 5 mm safe inset remain provisional la
 ## Next exact task
 
 1. Preserve all four V4 roots and old production unchanged.
-2. Run long-name stress against the new 560 px / 25 px seating measure; do not solve overflow by shrinking below the current print floor.
-3. Produce/select materially different V4-specific candidates for the front fixed identity role when a generation path is available; do not reuse the old emblem, generate fake text, official crests, generic airplanes, or passport credentials.
-4. Save only serious/adopted raster masters to the exact Passport Drive authority and read back file IDs/metadata.
-5. Place the adopted asset below native title/date, then rerun thumbnail / reading / actual-size / effective-PPI QA.
-6. Only after V4 is independently mature, compare it with retained production and decide whether it earns `SELLABLE_VISUAL_QA_PASS`.
+2. Produce/select materially different V4-specific candidates for the front fixed identity role when a generation path is available; do not reuse the old emblem, generate fake text, official crests, generic airplanes, or passport credentials.
+3. Save only serious/adopted raster masters to the exact Passport Drive authority and read back file IDs/metadata.
+4. Place the adopted asset below native title/date, then rerun thumbnail / reading / actual-size / effective-PPI QA.
+5. Only after V4 is independently mature, compare it with retained production and decide whether it earns `SELLABLE_VISUAL_QA_PASS`.
