@@ -66,8 +66,18 @@ for (const token of [
   'ELEMENT_CANDIDATE: \"Element候補 / CI検証済み\"',
   'STUDIO_ACTUAL_VERIFIED: \"Studio Actual検証済み\"',
   'Studio Install Actual', 'Control Readback Actual', 'Mac Studioの確認ダイアログ',
+  'remotionElementStudioActualBatch',
+  'batch.candidateIds.includes(candidate.patternId)',
+  'STUDIO ACTUAL BATCH HANDOFF',
+  'Studio {batch.studioVersionTarget}',
+  'artifact: {batch.artifactRoot}',
+  '{batch.prepareCommand}',
+  '{batch.checkCommand}',
+  'Object.entries(batch.actual)',
+  'confirmation / install / control readback / timeline insertion / post-install renderはすべてNOT_RUN',
+  'batch handoffの表示・prepare/check成功だけではStudio Actual verifiedになりません',
 ]) {
-  if (!readinessPanel.includes(token)) errors.push(`Element readiness panel missing honesty surface: ${token}`);
+  if (!readinessPanel.includes(token)) errors.push(`Element readiness panel missing honesty/batch surface: ${token}`);
 }
 if (registry.includes('studioInstallActual: \"PASS\"') || registry.includes('studioControlReadbackActual: \"PASS\"')) errors.push('Registry must not claim Studio Actual PASS before Mac GUI evidence exists');
 if (registry.includes('readiness: \"STUDIO_ACTUAL_VERIFIED\"')) errors.push('No Element may be STUDIO_ACTUAL_VERIFIED before the Mac Actual is performed');
@@ -110,4 +120,4 @@ if (errors.length) {
   for (const error of errors) console.error(`- ${error}`);
   process.exit(1);
 }
-console.log('Remotion Element candidate contracts OK: 9 Motion Zukan cards surface CI-rendered Element readiness, machine-readable Studio Actual batch handoff is available, and GUI Actual remains NOT_RUN.');
+console.log('Remotion Element candidate contracts OK: 9 Motion Zukan cards surface CI-rendered Element readiness plus the bounded Studio Actual batch handoff, and GUI Actual remains NOT_RUN.');
