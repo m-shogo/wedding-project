@@ -55,6 +55,9 @@ for (const token of [
   'wedding-davinci-delivery-readiness.mts --write',
   'wedding-davinci-delivery-readiness-snapshot.mts --strict-current',
   'wedding-davinci-final-delivery-preflight.mts --strict',
+  'Manifest生成',
+  'Snapshot再検証',
+  'Final Delivery strict',
 ]) {
   if (!preflightSource.includes(token)) fail(`Dashboard final preflight model missing ${token}`);
 }
@@ -72,9 +75,7 @@ for (const token of [
   'strict delivery',
   'FINAL DELIVERY PREFLIGHT / COMMAND SURFACE',
   'CURRENT BLOCKERS',
-  'Manifest生成',
-  'Snapshot再検証',
-  'Final Delivery strict',
+  'preflight.commands.map',
 ]) {
   if (!componentSource.includes(token)) fail(`Wedding readiness card missing ${token}`);
 }
