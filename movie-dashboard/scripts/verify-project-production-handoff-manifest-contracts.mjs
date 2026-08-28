@@ -5,6 +5,7 @@ import {fileURLToPath} from "node:url";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const read = (relative) => fs.readFileSync(path.join(root, relative), "utf8");
 const manifest = read("src/data/projectProductionHandoffManifest.ts");
+const roleManifest = read("src/data/projectTypographyRoleHandoffManifest.ts");
 const batchCard = read("src/components/TypographyProjectDeliveryBatchCard.tsx");
 const workspace = read("src/data/motionZukanProductionWorkspace.ts");
 const projectBatch = read("src/data/typographyProjectDeliveryBatch.ts");
@@ -57,13 +58,21 @@ for (const token of [
   'profileV1MediaBlockingGatePass',
   'productionReady: false',
   'BGM audio QA / Mac DaVinci Actual / Human promotion / Scene-bound Release Gate',
-]) {
-  requireText(manifest, token, `production handoff manifest missing: ${token}`);
-}
+]) requireText(manifest, token, `production handoff manifest missing: ${token}`);
+
+for (const token of [
+  'schemaVersion: "wedding-movie-project-role-handoff/v1"',
+  'buildProjectProductionHandoffManifest(projectId, composer, workspace, selections)',
+  'buildTypographyProjectDeliveryBatch(projectId, composer.scenes, timeline, selections, roleContexts)',
+  'studioGuiActual: "NOT_RUN"',
+  'davinciGuiActual: "NOT_RUN"',
+  'productionReady: false',
+]) requireText(roleManifest, token, `role-aware production handoff wrapper missing: ${token}`);
 
 for (const token of [
   'MOTION_ZUKAN_PRODUCTION_WORKSPACE_CHANGED_EVENT',
-  'buildProjectProductionHandoffManifest(',
+  'buildProjectTypographyRoleHandoffManifest(',
+  'buildProjectTypographyRoleHandoffManifestJson(',
   '実制作handoff manifest',
   'disabled={!assemblyReady}',
   'workspace checks',
@@ -80,10 +89,11 @@ for (const token of [
   'profileMedia.mediaSlots.map',
   'manifest.handoff.warnings',
   'manifest.productionWorkspace.finalChecks.map',
+  'roleManifest.roleHandoff.ready',
+  'roleManifest.roleHandoff.studioGuiActual',
+  'roleManifest.roleHandoff.davinciGuiActual',
   'productionReady=NO',
-]) {
-  requireText(batchCard, token, `production handoff UI missing: ${token}`);
-}
+]) requireText(batchCard, token, `production handoff UI missing: ${token}`);
 
 for (const finalCheck of [
   'id: "scenes-exist"',
@@ -91,9 +101,7 @@ for (const finalCheck of [
   'id: "no-placeholder"',
   'id: "all-scenes-done"',
   'id: "duplicate-usage-reviewed"',
-]) {
-  requireText(workspace, finalCheck, `Production Workspace final check missing: ${finalCheck}`);
-}
+]) requireText(workspace, finalCheck, `Production Workspace final check missing: ${finalCheck}`);
 
 for (const token of [
   '"expectedPhotoCount": 11',
@@ -101,16 +109,9 @@ for (const token of [
   '"assetId": "opening-bgm-main"',
   '"ambience": [',
   '"finalBlocked": true',
-]) {
-  requireText(openingGate, token, `Opening generated production gate contract missing: ${token}`);
-}
+]) requireText(openingGate, token, `Opening generated production gate contract missing: ${token}`);
 
-for (const slot of [
-  "okinawa-01", "okinawa-02", "okinawa-03",
-  "seoul-01", "seoul-02", "seoul-03",
-  "hawaii-01", "hawaii-02", "hawaii-03",
-  "hero-01", "hero-02",
-]) {
+for (const slot of ["okinawa-01", "okinawa-02", "okinawa-03", "seoul-01", "seoul-02", "seoul-03", "hawaii-01", "hawaii-02", "hawaii-03", "hero-01", "hero-02"]) {
   requireText(openingPhotoPlan, `slotKey: "${slot}"`, `Opening photo production plan missing slot: ${slot}`);
 }
 for (const token of [
@@ -121,9 +122,7 @@ for (const token of [
   'focus: "NOT_RUN"',
   'color: "NOT_RUN"',
   'motion: "NOT_RUN"',
-]) {
-  requireText(openingPhotoPlan, token, `Opening photo production plan contract missing: ${token}`);
-}
+]) requireText(openingPhotoPlan, token, `Opening photo production plan contract missing: ${token}`);
 
 for (const token of [
   '"chapterCount": 5',
@@ -134,9 +133,7 @@ for (const token of [
   '"blockingGatePass": false',
   '"macDaVinciActual": "NOT_RUN"',
   '"productionReady": false',
-]) {
-  requireText(profileGate, token, `Profile generated production gate contract missing: ${token}`);
-}
+]) requireText(profileGate, token, `Profile generated production gate contract missing: ${token}`);
 for (const token of [
   '"state": "NOT_RUN"',
   '"humanReviewComplete": false',
@@ -145,17 +142,16 @@ for (const token of [
   '"REAL_MEDIA_REVIEW_EVIDENCE_MISSING"',
   '"macDaVinciActual": "NOT_RUN"',
   '"productionReady": false',
-]) {
-  requireText(profileRealMediaGate, token, `Profile generated Human real-media gate contract missing: ${token}`);
-}
+]) requireText(profileRealMediaGate, token, `Profile generated Human real-media gate contract missing: ${token}`);
 
 requireText(projectBatch, 'productionReady: false', "Typography project batch no longer fails closed");
 
-for (const forbidden of [
-  'productionReady: true',
-  'readyForPalmierDaVinciAssembly: true',
-]) {
+for (const forbidden of ['productionReady: true', 'readyForPalmierDaVinciAssembly: true']) {
   if (manifest.includes(forbidden)) errors.push(`manifest hardcodes unsafe readiness: ${forbidden}`);
+}
+for (const forbidden of ['studioGuiActual: "PASS"', 'davinciGuiActual: "PASS"', 'productionReady: true']) {
+  if (roleManifest.includes(forbidden)) errors.push(`role-aware manifest fabricates production evidence: ${forbidden}`);
+  if (batchCard.includes(forbidden)) errors.push(`project handoff UI fabricates production evidence: ${forbidden}`);
 }
 if (profileRealMediaGate.includes('"state": "PASS"')) errors.push("Profile real-media Human QA must not be pre-approved");
 if (profileRealMediaGate.includes('"humanReviewComplete": true')) errors.push("Profile real-media Human QA completion must not be fabricated");
@@ -166,4 +162,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log("Project Production Handoff Manifest contracts OK: current Typography/workspace state is joined with Opening gates and Profile 5-chapter/17-media/BGM/structure/Human real-media gates; Mac Actual and release remain separate and fail-closed.");
+console.log("Project Production Handoff Manifest contracts OK: base production/media gates remain intact while the UI exports the role-aware wrapper; current Human typography roles are preserved and Mac Actual/release remain separate and fail-closed.");
