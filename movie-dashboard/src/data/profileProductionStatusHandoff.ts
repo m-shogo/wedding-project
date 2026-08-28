@@ -3,6 +3,7 @@ import {profileProductionGate} from "./profileProductionGate.generated";
 import {profileProductionStatus} from "./profileProductionStatus.generated";
 import {profileRealMediaReviewGate} from "./profileRealMediaReviewGate.generated";
 import type {MovieProductionBlockerRecoveryAction} from "./movieProductionBlockerRecovery";
+import {buildRemotionStudioActualToolingEvidence} from "./remotionStudioActualToolingEvidence";
 import {buildWeddingMovieProductionCriticalPath} from "./weddingMovieProductionCriticalPath";
 
 export const PROFILE_PRODUCTION_STATUS_HANDOFF_SCHEMA = "wedding-profile-production-status-handoff/v1" as const;
@@ -30,10 +31,7 @@ const buildNextGate = (project: ReturnType<typeof buildWeddingMovieProductionCri
       };
 };
 
-/**
- * Motion Zukan / DashboardからProfile制作を外へ渡す際のcompact production-status envelope。
- * assembly manifestをproduction-readyへ意味変更せず、Motion Studioの後段statusとPalmier/DaVinci handoff contractを追加で運ぶ。
- */
+/** Motion Zukan / DashboardからProfile制作を外へ渡す際のcompact production-status envelope。 */
 export function buildProfileProductionStatusHandoff() {
   const criticalPath = buildWeddingMovieProductionCriticalPath();
   const profileCriticalPath = criticalPath.projects.profile;
@@ -42,27 +40,16 @@ export function buildProfileProductionStatusHandoff() {
     authority: "MOTION_STUDIO_DERIVED_PROFILE_STATUS_HANDOFF" as const,
     profile: {
       chapters: profileProductionGate.chapters.map((chapter) => ({
-        chapterId: chapter.chapterId,
-        order: chapter.order,
-        title: chapter.title,
-        role: chapter.role,
-        editIntent: [...chapter.editIntent],
-        requiredCount: chapter.requiredCount,
-        readyCount: chapter.readyCount,
-        ready: chapter.ready,
+        chapterId: chapter.chapterId, order: chapter.order, title: chapter.title, role: chapter.role,
+        editIntent: [...chapter.editIntent], requiredCount: chapter.requiredCount, readyCount: chapter.readyCount, ready: chapter.ready,
       })),
       media: {
         expected: profileProductionGate.expectedMediaCount,
         resolved: profileProductionGate.resolvedMediaCount,
         missing: profileProductionGate.mediaMissingCount,
         slots: profileProductionGate.mediaSlots.map((slot) => ({
-          id: slot.id,
-          chapterId: slot.chapterId,
-          label: slot.label,
-          kind: slot.kind,
-          canonicalStem: slot.canonicalStem,
-          file: slot.file,
-          ready: slot.ready,
+          id: slot.id, chapterId: slot.chapterId, label: slot.label, kind: slot.kind,
+          canonicalStem: slot.canonicalStem, file: slot.file, ready: slot.ready,
           intakeDirectory: "motion-studio/public/profile/",
         })),
       },
@@ -70,13 +57,9 @@ export function buildProfileProductionStatusHandoff() {
         count: profileGeneratedAccents.count,
         authority: profileGeneratedAccents.authority,
         accents: profileGeneratedAccents.accents.map((accent) => ({
-          slotId: accent.slotId,
-          chapterId: accent.chapterId,
-          label: accent.label,
-          implementation: accent.implementation,
-          canonicalReuse: accent.canonicalReuse,
-          source: accent.source,
-          realMediaRequired: accent.realMediaRequired,
+          slotId: accent.slotId, chapterId: accent.chapterId, label: accent.label,
+          implementation: accent.implementation, canonicalReuse: accent.canonicalReuse,
+          source: accent.source, realMediaRequired: accent.realMediaRequired,
         })),
         evidence: profileGeneratedAccents.productionEvidence,
       },
@@ -96,6 +79,7 @@ export function buildProfileProductionStatusHandoff() {
         sourceRevalidation: profileProductionStatus.sourceRevalidation,
         palmierHandoff: profileProductionStatus.handoff.palmier,
         davinciHandoff: profileProductionStatus.handoff.davinci,
+        remotionStudioToolingEvidence: buildRemotionStudioActualToolingEvidence(),
         nextGate: buildNextGate(profileCriticalPath),
         nextActions: [...profileProductionStatus.nextActions],
       },
@@ -125,6 +109,8 @@ export function buildProfileProductionStatusHandoff() {
       "SOURCE_CHANGED => RE_RENDER_REQUIRED",
       "RE_RENDER_REQUIRED => RE_REVIEW_REQUIRED",
       "OLD_HUMAN_REVIEW != CURRENT_RENDER_IMPLEMENTATION",
+      "REMOTION_STUDIO_TOOLING_EVIDENCE_EXPORTED != STUDIO_ACTUAL_VERIFIED",
+      "REMOTION_STUDIO_TOOLING_EVIDENCE != WEDDING_PRODUCTION_GATE",
       "CRITICAL_PATH_EXPORTED != RECOVERY_EXECUTED",
     ],
   };
