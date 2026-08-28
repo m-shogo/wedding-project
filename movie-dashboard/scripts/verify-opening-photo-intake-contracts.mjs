@@ -8,6 +8,7 @@ const app = fs.readFileSync(path.join(root, "src/App.tsx"), "utf8");
 const gatePanel = fs.readFileSync(path.join(root, "src/components/OpeningProductionGatePanel.tsx"), "utf8");
 const handoffButton = fs.readFileSync(path.join(root, "src/components/OpeningProductionHandoffExportButton.tsx"), "utf8");
 const handoff = fs.readFileSync(path.join(root, "src/data/openingProductionStatusHandoff.ts"), "utf8");
+const effectiveExport = fs.readFileSync(path.join(root, "src/lib/effectiveProductionHandoffExport.ts"), "utf8");
 const localMediaValidator = fs.readFileSync(path.join(root, "src/components/LocalMediaIntakeValidator.tsx"), "utf8");
 const errors = [];
 
@@ -68,15 +69,27 @@ for (const token of [
 }
 
 for (const token of [
-  "buildOpeningProductionStatusHandoffJson",
+  "buildOpeningEffectiveProductionHandoffJson",
   "downloadText",
   "opening-v1-production-handoff.json",
   "OPENING PRODUCTION HANDOFF",
-  "11写真・BGM/ambience・critical path・Palmier / DaVinci状態を1 JSONへ",
+  "11写真・BGM/ambience・critical path・effective next gate・Palmier / DaVinci状態を1 JSONへ",
   "BLOCKED / NOT_RUN",
+  "effective authority",
   "export自体はproductionReadyへの昇格ではありません",
 ]) {
   if (!handoffButton.includes(token)) errors.push(`Opening production handoff export control missing: ${token}`);
+}
+
+for (const token of [
+  "buildOpeningProductionStatusHandoff",
+  'effectiveProduction: buildOverlay("opening")',
+  'authority: "MOTION_STUDIO_EFFECTIVE_WEDDING_PRODUCTION_GATE"',
+  "effectiveNextGate:",
+  "remotionStudioToolingDependency:",
+  "EFFECTIVE_OVERLAY_EXPORTED != EFFECTIVE_GATE_COMPLETED",
+]) {
+  if (!effectiveExport.includes(token)) errors.push(`Opening effective production export missing: ${token}`);
 }
 
 for (const token of [
@@ -103,7 +116,7 @@ if (!app.includes('path="opening-photo-intake"')) {
 if (!gatePanel.includes('to="/opening-photo-intake"')) {
   errors.push("Production Gate must deep-link to Opening Photo Intake");
 }
-if (handoffButton.includes("productionReady: true")) {
+if (handoffButton.includes("productionReady: true") || effectiveExport.includes("productionReady: true")) {
   errors.push("Opening handoff export must not fabricate production readiness");
 }
 if (localMediaValidator.includes("upload(")) {
@@ -116,4 +129,4 @@ if (errors.length > 0) {
   process.exit(1);
 }
 
-console.log(`Opening Photo Intake contracts OK: ${canonicalSlots.length} canonical slots / local no-upload filename precheck / full sync-preview handoff / production-status JSON export.`);
+console.log(`Opening Photo Intake contracts OK: ${canonicalSlots.length} canonical slots / local no-upload filename precheck / canonical production-status data + effective next-gate overlay export / full sync-preview handoff.`);

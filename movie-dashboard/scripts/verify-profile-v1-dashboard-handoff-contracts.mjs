@@ -9,6 +9,7 @@ const batchCard = read("src/components/TypographyProjectDeliveryBatchCard.tsx");
 const profileGate = read("src/data/profileProductionGate.generated.ts");
 const realMediaGate = read("src/data/profileRealMediaReviewGate.generated.ts");
 const profileStatusHandoff = read("src/data/profileProductionStatusHandoff.ts");
+const effectiveExport = read("src/lib/effectiveProductionHandoffExport.ts");
 const profileHandoffExport = read("src/components/ProfileProductionHandoffExportButton.tsx");
 const localMediaValidator = read("src/components/LocalMediaIntakeValidator.tsx");
 const profileMediaIntake = read("src/pages/ProfileMediaIntake.tsx");
@@ -108,15 +109,27 @@ for (const token of [
 }
 
 for (const token of [
-  'buildProfileProductionStatusHandoffJson',
+  'buildProfileEffectiveProductionHandoffJson',
   'downloadText',
   'profile-v1-production-handoff.json',
   'PROFILE PRODUCTION HANDOFF',
-  '17素材・BGM・critical path・Palmier / DaVinci状態を1 JSONへ',
+  '17素材・BGM・critical path・effective next gate・Palmier / DaVinci状態を1 JSONへ',
   'BLOCKED / NOT_RUN',
+  'effective authority',
   'export自体はproductionReadyへの昇格ではありません',
 ]) {
   requireText(profileHandoffExport, token, `Profile handoff export control missing: ${token}`);
+}
+
+for (const token of [
+  'buildProfileProductionStatusHandoff',
+  'effectiveProduction: buildOverlay("profile")',
+  'authority: "MOTION_STUDIO_EFFECTIVE_WEDDING_PRODUCTION_GATE"',
+  'effectiveNextGate:',
+  'remotionStudioToolingDependency:',
+  'EFFECTIVE_OVERLAY_EXPORTED != EFFECTIVE_GATE_COMPLETED',
+]) {
+  requireText(effectiveExport, token, `Profile effective production export missing: ${token}`);
 }
 
 for (const token of [
@@ -249,7 +262,7 @@ if (realMediaGate.includes('"state": "PASS"')) errors.push("generated Profile re
 if (realMediaGate.includes('"humanReviewComplete": true')) errors.push("generated Profile real-media Human QA must not be fabricated");
 if (realMediaGate.includes('"productionReady": true')) errors.push("real-media review cannot promote production readiness");
 if (profileBgmIntake.includes('rightsCleared = true') || profileBgmIntake.includes('productionReady: true')) errors.push("Profile BGM intake must not fabricate rights or production readiness");
-if (profileHandoffExport.includes('productionReady: true')) errors.push("Profile handoff export must not fabricate production readiness");
+if (profileHandoffExport.includes('productionReady: true') || effectiveExport.includes('productionReady: true')) errors.push("Profile handoff export must not fabricate production readiness");
 
 if (errors.length) {
   console.error(`Profile V1 Dashboard Handoff contracts FAILED (${errors.length})`);
@@ -257,4 +270,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log("Profile V1 Dashboard Handoff contracts OK: canonical chapter role/editIntent, local no-upload 17-media filename precheck, receipt-bound BGM intake, compact production handoff JSON export, SHA-bound Human rights/structure/real-media QA, critical path and Palmier/DaVinci status stay connected while Mac Actual/production release remain separate and fail-closed.");
+console.log("Profile V1 Dashboard Handoff contracts OK: canonical chapter role/editIntent, local no-upload 17-media filename precheck, receipt-bound BGM intake, compact production handoff JSON with effective next-gate overlay, SHA-bound Human rights/structure/real-media QA, critical path and Palmier/DaVinci status stay connected while Mac Actual/production release remain separate and fail-closed.");
