@@ -1,5 +1,7 @@
 import {loadFont} from '@remotion/google-fonts/NotoSansJP';
 import {AbsoluteFill, Easing, Img, OffthreadVideo, interpolate, staticFile, useCurrentFrame, useVideoConfig} from 'remotion';
+import {resolveMediaPresentation} from '../../components/common/mediaPresentation';
+import {getProfileV1ApprovedFraming} from '../../data/profileV1FramingVerdicts.generated';
 import {profileV1Chapters} from '../../data/profileV1ProductionPlan';
 import {profileV1RuntimeMedia} from '../../data/profileV1RuntimeMedia.generated';
 
@@ -38,17 +40,31 @@ const MediaSurface = ({slot}: {slot: (typeof profileV1RuntimeMedia.slots)[number
   }
 
   const src = staticFile(slot.staticFilePath);
+  const approved = getProfileV1ApprovedFraming(slot.id);
+  const presentation = resolveMediaPresentation({
+    shotFit: approved?.fit,
+    shotObjectPosition: approved?.objectPosition,
+  });
+  const style = {
+    width: '100%',
+    height: '100%',
+    objectFit: presentation.fit,
+    objectPosition: presentation.objectPosition,
+    background: '#09111a',
+  } as const;
+
   if (videoExtensions.has(slot.extension)) {
-    return <OffthreadVideo src={src} muted style={{width: '100%', height: '100%', objectFit: 'cover'}} />;
+    return <OffthreadVideo src={src} muted style={style} />;
   }
 
-  return <Img src={src} style={{width: '100%', height: '100%', objectFit: 'cover'}} />;
+  return <Img src={src} style={style} />;
 };
 
 /**
  * Profile V1のreal-media review input。
  * generated runtime manifestだけを参照し、unrelated mediaへのfallbackは行わない。
- * crop/focus/color/emotional-fit/content/audio/Mac ActualのHuman verdictはこのcomposition自身では宣言しない。
+ * Human crop/focus PASSに束縛されたgenerated framingだけを反映する。
+ * color/emotional-fit/content/audio/Mac ActualのHuman verdictはこのcomposition自身では宣言しない。
  */
 export const ProfileV1RealMediaPreview = () => {
   const frame = useCurrentFrame();
@@ -110,6 +126,7 @@ export const ProfileV1RealMediaPreview = () => {
               });
               const slotActive = seconds >= slotStartSec && seconds < slotEndSec;
               const slotOpacity = slotActive ? Math.min(slotEnter, slotLeave) : 0;
+              const approvedFraming = getProfileV1ApprovedFraming(slot.id);
 
               return (
                 <AbsoluteFill key={slot.id} style={{opacity: slotOpacity}}>
@@ -142,9 +159,11 @@ export const ProfileV1RealMediaPreview = () => {
                     }}
                   >
                     {slot.resolved ? 'RUNTIME MEDIA RESOLVED' : 'RUNTIME MEDIA MISSING'}
+                    <br />FRAMING: {approvedFraming ? 'HUMAN APPROVED' : 'DEFAULT / UNAPPROVED'}
                   </div>
                   <div style={{position: 'absolute', left: 72, bottom: 72, fontSize: 14, lineHeight: 1.65, opacity: 0.62}}>
-                    crop/focus/color/emotional-fit/content QA: NOT_RUN<br />
+                    crop/focus framing: {approvedFraming ? `${approvedFraming.fit.toUpperCase()} · HUMAN PASS` : 'UNAPPROVED'}<br />
+                    color/emotional-fit/content QA: separate Human gate<br />
                     BGM rights/audio QA: separate gate · Mac DaVinci Actual: NOT_RUN
                   </div>
                 </AbsoluteFill>
