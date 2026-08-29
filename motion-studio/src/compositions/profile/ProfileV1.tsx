@@ -1,5 +1,7 @@
 import {loadFont} from '@remotion/google-fonts/NotoSansJP';
 import {AbsoluteFill, Audio, Easing, Img, OffthreadVideo, Sequence, interpolate, staticFile, useCurrentFrame, useVideoConfig} from 'remotion';
+import {resolveMediaPresentation} from '../../components/common/mediaPresentation';
+import {getProfileV1ApprovedFraming} from '../../data/profileV1FramingVerdicts.generated';
 import {profileV1Chapters} from '../../data/profileV1ProductionPlan';
 import {profileV1RuntimeMedia} from '../../data/profileV1RuntimeMedia.generated';
 import {ProfileV1GeneratedAccents} from './ProfileV1GeneratedAccents';
@@ -17,9 +19,20 @@ const Media = ({slot, duration}: {slot: (typeof profileV1RuntimeMedia.slots)[num
     return <AbsoluteFill style={{alignItems: 'center', justifyContent: 'center', background: '#07131f'}}><div>PROFILE MEDIA REQUIRED / {slot.canonicalStem}</div></AbsoluteFill>;
   }
   const src = staticFile(slot.staticFilePath);
+  const approved = getProfileV1ApprovedFraming(slot.id);
+  const presentation = resolveMediaPresentation({
+    shotFit: approved?.fit,
+    shotObjectPosition: approved?.objectPosition,
+  });
+  const style = {
+    width: '100%',
+    height: '100%',
+    objectFit: presentation.fit,
+    objectPosition: presentation.objectPosition,
+  } as const;
   return <AbsoluteFill style={{transform: `scale(${scale})`}}>{videoExtensions.has(slot.extension)
-    ? <OffthreadVideo src={src} muted style={{width: '100%', height: '100%', objectFit: 'cover'}} />
-    : <Img src={src} style={{width: '100%', height: '100%', objectFit: 'cover'}} />}</AbsoluteFill>;
+    ? <OffthreadVideo src={src} muted style={style} />
+    : <Img src={src} style={style} />}</AbsoluteFill>;
 };
 
 const Slot = ({slot, title, chapterIndex, duration}: {

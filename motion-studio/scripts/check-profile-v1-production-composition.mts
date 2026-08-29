@@ -15,9 +15,19 @@ const requireText = (source: string, token: string, message: string) => {
 for (const token of [
   'profileV1RuntimeMedia',
   'profileV1Chapters',
+  'getProfileV1ApprovedFraming',
+  'resolveMediaPresentation',
+  'shotFit: approved?.fit',
+  'shotObjectPosition: approved?.objectPosition',
+  'objectFit: presentation.fit',
+  'objectPosition: presentation.objectPosition',
   "staticFile('audio/profile/bgm-main.mp3')",
-  '<Audio', '<Sequence', '<OffthreadVideo', 'muted', "objectFit: 'cover'", 'PROFILE MEDIA REQUIRED',
+  '<Audio', '<Sequence', '<OffthreadVideo', 'muted', 'PROFILE MEDIA REQUIRED',
 ]) requireText(composition, token, `production composition missing: ${token}`);
+
+if (composition.includes("objectFit: 'cover'")) {
+  errors.push('production composition bypasses Human-approved framing with hard-coded cover fit');
+}
 
 for (const forbidden of [
   'REAL-MEDIA PREVIEW INPUT', 'RUNTIME MEDIA RESOLVED', 'crop/focus/color/emotional-fit/content QA: NOT_RUN',
@@ -48,4 +58,4 @@ if (errors.length) {
   for (const error of errors) console.error(`- ${error}`);
   process.exit(1);
 }
-console.log('Profile V1 production composition contracts OK: generated-accent contracts + strict assembly gate → clean runtime-media+BGM render → technical media QA, without review chrome or fabricated Mac/production state.');
+console.log('Profile V1 production composition contracts OK: Human-approved framing + generated-accent contracts + strict assembly gate → clean runtime-media+BGM render → technical media QA, without review chrome or fabricated Mac/production state.');
