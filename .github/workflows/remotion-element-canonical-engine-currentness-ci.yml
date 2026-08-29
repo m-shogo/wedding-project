@@ -1,0 +1,99 @@
+name: Remotion Element Canonical Engine Currentness CI
+
+on:
+  pull_request:
+    paths:
+      - 'motion-studio/src/motion-kit/engines.tsx'
+      - 'motion-studio/scripts/lib/typography-element-kit.mts'
+      - 'motion-studio/scripts/build-*-element-payload.mts'
+      - 'motion-studio/scripts/check-*-element-payload.mts'
+      - 'motion-studio/scripts/prepare-typography-elements-studio-actual-batch.mts'
+      - 'motion-studio/scripts/check-typography-element-canonical-engine-currentness.mts'
+      - '.github/workflows/remotion-element-canonical-engine-currentness-ci.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  canonical-engine-currentness:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: motion-studio/pnpm-lock.yaml
+      - name: Install locked baseline
+        working-directory: motion-studio
+        run: pnpm install --frozen-lockfile
+      - name: Install coherent Remotion Element candidate toolchain
+        working-directory: motion-studio
+        run: |
+          pnpm add --save-exact \
+            remotion@4.0.517 \
+            @remotion/cli@4.0.517 \
+            @remotion/google-fonts@4.0.517 \
+            @remotion/paths@4.0.517 \
+            @remotion/zod-types@4.0.517 \
+            @remotion/studio-protocol@4.0.517 \
+            zod@4.4.3
+      - name: Prepare canonical-derived Element batch
+        working-directory: motion-studio
+        run: |
+          node --no-warnings scripts/prepare-typography-elements-studio-actual-batch.mts
+          node --no-warnings scripts/check-typography-elements-studio-actual-batch.mts
+          node --no-warnings scripts/check-typography-element-canonical-engine-currentness.mts | tee /tmp/canonical-current.log
+          grep -q 'canonicalTypographyEngine=CURRENT_SHA_BOUND' /tmp/canonical-current.log
+          grep -q 'batchCurrent=CURRENT_SHA_BOUND' /tmp/canonical-current.log
+          grep -q 'studioActualEffectiveCurrent=NO' /tmp/canonical-current.log
+          grep -q 'macStudioGuiActualPerformedByThisCheck=NO' /tmp/canonical-current.log
+      - name: Initialize honest NOT_RUN Studio Actual evidence
+        working-directory: motion-studio
+        run: |
+          node --no-warnings scripts/typography-elements-studio-actual-evidence.mts --init
+          node --no-warnings scripts/check-typography-element-canonical-engine-currentness.mts | tee /tmp/not-run-current.log
+          grep -q 'studioActualReported=NOT_RUN' /tmp/not-run-current.log
+          grep -q 'studioActualEffectiveCurrent=NO' /tmp/not-run-current.log
+      - name: Canonical TypographyRevealEngine mutation invalidates prepared batch
+        working-directory: motion-studio
+        run: |
+          cp src/motion-kit/engines.tsx /tmp/engines.tsx
+          python - <<'PY'
+          from pathlib import Path
+          path = Path('src/motion-kit/engines.tsx')
+          text = path.read_text()
+          needle = "export function TypographyRevealEngine({"
+          if needle not in text:
+              raise SystemExit('canonical TypographyRevealEngine marker missing')
+          path.write_text(text.replace(needle, "// ephemeral canonical currentness mutation\n" + needle, 1))
+          PY
+          if node --no-warnings scripts/check-typography-element-canonical-engine-currentness.mts > /tmp/canonical-stale.log 2>&1; then
+            echo 'Canonical engine mutation must make the prepared Element batch stale.'
+            exit 1
+          fi
+          grep -q 'CANONICAL_BLOCK_SHA_STALE' /tmp/canonical-stale.log
+          grep -q 'canonicalTypographyEngine=STALE_OR_UNPREPARED' /tmp/canonical-stale.log
+          grep -q 'batchCurrent=STALE_OR_UNPREPARED' /tmp/canonical-stale.log
+          grep -q 'studioActualEffectiveCurrent=NO' /tmp/canonical-stale.log
+          mv /tmp/engines.tsx src/motion-kit/engines.tsx
+      - name: Reprepare restores currentness without inventing Actual evidence
+        working-directory: motion-studio
+        run: |
+          node --no-warnings scripts/prepare-typography-elements-studio-actual-batch.mts
+          node --no-warnings scripts/check-typography-element-canonical-engine-currentness.mts | tee /tmp/reprepared-current.log
+          grep -q 'canonicalTypographyEngine=CURRENT_SHA_BOUND' /tmp/reprepared-current.log
+          grep -q 'batchCurrent=CURRENT_SHA_BOUND' /tmp/reprepared-current.log
+          grep -q 'studioActualReported=NOT_RUN' /tmp/reprepared-current.log
+          grep -q 'studioActualEffectiveCurrent=NO' /tmp/reprepared-current.log
+      - name: Repo-facing Actual stays NOT_RUN
+        run: |
+          echo 'studioInstallActual=NOT_RUN'
+          echo 'studioControlReadbackActual=NOT_RUN'
+          echo 'macDaVinciActual=NOT_RUN'
+          echo 'productionDependencyPromoted=NO'
