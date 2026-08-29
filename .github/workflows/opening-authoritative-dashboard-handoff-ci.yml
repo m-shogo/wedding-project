@@ -34,10 +34,12 @@ jobs:
           const overlay = fs.readFileSync('src/data/openingAuthoritativeHandoffOverlay.ts', 'utf8');
           const handoff = fs.readFileSync('src/lib/effectiveProductionHandoffExport.ts', 'utf8');
           for (const needle of [
-            'openingAudioListeningStatus.humanAudioQaComplete === true',
-            'openingProductionStatus.readiness.productionBundleCurrent === true && audioCurrent',
-            'openingProductionStatus.handoff.palmier.current === true && productionBundleCurrent',
-            'davinciReportedCurrent && productionBundleCurrent && audioCurrent',
+            'asState(openingProductionStatus.stages.audioListeningReview.state) === "PASS"',
+            'asState(openingAudioListeningStatus.state) === "PASS"',
+            'asBool(openingAudioListeningStatus.humanAudioQaComplete)',
+            'const productionBundleCurrent = reportedBundleCurrent && audioCurrent;',
+            'const palmierHandoffCurrent = reportedPalmierCurrent && productionBundleCurrent;',
+            'const davinciHandoffCurrent = davinciReportedCurrent && productionBundleCurrent && audioCurrent;',
             'productionReady: false',
             'AUDIO_CURRENTNESS_STALE => DASHBOARD_HANDOFF_CURRENT_FALSE',
             'CI_MUST_NOT_PROMOTE_MAC_GUI_ACTUAL',
