@@ -5,6 +5,7 @@ on:
     paths:
       - "movie-dashboard/src/components/ProductionMediaIntakeCliGuide.tsx"
       - "movie-dashboard/src/components/OpeningProductionGatePanel.tsx"
+      - "movie-dashboard/src/pages/OpeningPhotoIntake.tsx"
       - "movie-dashboard/src/pages/ProfileMediaIntake.tsx"
       - "movie-dashboard/scripts/verify-production-media-intake-dashboard-guide.mjs"
       - ".github/workflows/production-media-intake-dashboard-ci.yml"
@@ -13,6 +14,7 @@ on:
     paths:
       - "movie-dashboard/src/components/ProductionMediaIntakeCliGuide.tsx"
       - "movie-dashboard/src/components/OpeningProductionGatePanel.tsx"
+      - "movie-dashboard/src/pages/OpeningPhotoIntake.tsx"
       - "movie-dashboard/src/pages/ProfileMediaIntake.tsx"
       - "movie-dashboard/scripts/verify-production-media-intake-dashboard-guide.mjs"
       - ".github/workflows/production-media-intake-dashboard-ci.yml"
