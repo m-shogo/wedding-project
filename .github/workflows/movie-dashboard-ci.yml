@@ -58,6 +58,9 @@ jobs:
       - name: Movie Coach registry contracts
         run: pnpm check:media-qa-policy && pnpm check:motion-zukan-media && pnpm check:movie-coach
 
+      - name: Wedding real-media preview review contracts
+        run: node scripts/verify-wedding-real-media-preview-review-contracts.mjs
+
       - name: Typography DaVinci Actual run plan contracts
         run: node scripts/verify-typography-davinci-actual-run-plan-contracts.mjs
 
