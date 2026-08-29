@@ -111,6 +111,30 @@ jobs:
           git diff --exit-code -- src/data/profileV1FramingVerdicts.generated.ts
           echo "Only Human crop+focus PASS with valid framing can reach generated Profile composition framing"
 
+      - name: Production preview rejects stale Human framing before media gate
+        run: |
+          mkdir -p out/qa
+          node --input-type=module <<'NODE'
+          import {writeFileSync} from 'node:fs';
+          writeFileSync('out/qa/profile-v1-real-media-review.json', JSON.stringify({
+            media: [{
+              slot: 'departure-airport',
+              qa: {crop: 'PASS', focus: 'PASS'},
+              framing: {fit: 'contain', focusX: 44, focusY: 56}
+            }]
+          }, null, 2));
+          NODE
+          if output=$(node --no-warnings scripts/render-profile-v1-real-media-preview.mts 2>&1); then
+            echo "production preview unexpectedly accepted stale Human framing"
+            exit 1
+          fi
+          echo "$output"
+          echo "$output" | grep -F "PROFILE_FRAMING_VERDICTS_STALE"
+          echo "$output" | grep -F "PROFILE_REAL_MEDIA_PREVIEW_BLOCKED"
+          rm out/qa/profile-v1-real-media-review.json
+          node --no-warnings scripts/sync-profile-v1-framing-verdicts.mts
+          echo "Production preview fails before media rendering when Human framing evidence and generated snapshot diverge"
+
       - name: Production preview/stills fail closed without real inputs
         run: |
           if node --no-warnings scripts/profile-v1-media-input-gate.mts; then
