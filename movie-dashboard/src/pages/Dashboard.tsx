@@ -6,6 +6,7 @@ import { SectionCard } from "../components/SectionCard";
 import { Badge } from "../components/Badge";
 import { Modal } from "../components/Modal";
 import { ConfirmDialog } from "../components/ConfirmDialog";
+import { OpeningAuthoritativeHandoffCard } from "../components/OpeningAuthoritativeHandoffCard";
 import { MovieForm } from "../components/forms/MovieForm";
 import { computeStats } from "../lib/dashboard";
 import { runVideoPreflight } from "../lib/videoPreflight";
@@ -110,6 +111,8 @@ export function Dashboard() {
         <p className="text-xs text-navy-500 dark:text-navy-300">💡 素材本体はGitに入れません。写真・動画・音源は推奨フォルダに保存し、Asset Libraryにはパスだけ登録します。</p>
         <Link to="/asset-placement-guide" className="text-xs text-navy-600 dark:text-navy-200 hover:underline shrink-0 ml-3">素材置き場ガイドを見る →</Link>
       </div>
+
+      <OpeningAuthoritativeHandoffCard />
 
       <SectionCard title="AI動画パイプライン" className="mb-8">
         <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3 mb-4">
