@@ -186,7 +186,7 @@ const escapeAttr = (s: string) => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;
 // サーバサイド計算はここで完結させ、ブラウザ側はtrue/falseの読み取りだけにする
 // (フィルタロジックの二重実装を避ける)。
 const rowDataAttrs = (e: ClipEntry): string =>
-  `data-cueid="${escapeAttr(e.cueId)}" data-critical="${e.isCritical}" data-post60="${e.is60sPlus}" data-lowconf="${e.isLowConfidence}" data-unverified="${e.isUnverified}" data-golden="${e.isGoldenAnchorCandidate}" data-designoffset="${e.cueOffsetInClipSec}"`;
+  `data-cueid="${escapeAttr(e.cueId)}" data-critical="${e.isCritical}" data-post60="${e.is60sPlus}" data-lowconf="${e.isLowConfidence}" data-unverified="${e.isUnverified}" data-golden="${e.isGoldenAnchorCandidate}" data-designoffset="${e.cueOffsetInClipSec}" data-text="${escapeAttr(e.text)}" data-designedsec="${(e.designedSourceMs / 1000).toFixed(3)}"`;
 const rows = entries
   .map(
     (e) => `
@@ -217,6 +217,9 @@ const rows = entries
         <button type="button" class="btn btn-reject" data-action="reject">🤔 わからない</button>
       </div>
       ${e.isGoldenAnchorCandidate ? '<div class="judge-row"><label class="golden-toggle"><input type="checkbox" data-role="golden" /> ⭐ 基準点として確定する</label></div>' : ''}
+      <div class="judge-row">
+        <textarea class="note-input" data-role="note" rows="2" placeholder="気になった点があれば自由にメモ(任意。細かく書いてOK)"></textarea>
+      </div>
       <div class="judge-status" data-role="status">未確認</div>
     </td>
   </tr>`,
@@ -281,6 +284,17 @@ writeFileSync(
   .judge-status.is-ok { color: #7CF29A; }
   .judge-status.is-adjust { color: #F4C95D; }
   .judge-status.is-reject { color: #f2a53f; }
+  .note-input { width: 100%; box-sizing: border-box; background: #0d0d0e; border: 1px solid #444; color: #eee; border-radius: 4px; padding: 5px 7px; font-size: 12px; font-family: inherit; resize: vertical; margin-top: 4px; }
+  .note-input:focus { border-color: #F4C95D; outline: none; }
+
+  .summary-box { background: #14201a; border: 1px solid #2f4a3a; border-radius: 8px; padding: 12px 14px; margin-bottom: 14px; }
+  .summary-box h2 { font-size: 14px; margin: 0 0 6px; color: #9CF2B0; }
+  .summary-box p { font-size: 12px; color: #9ab; margin: 0 0 8px; }
+  .summary-box textarea { width: 100%; box-sizing: border-box; min-height: 140px; background: #0d0d0e; border: 1px solid #2f4a3a; color: #dcefe0; border-radius: 6px; padding: 8px 10px; font-size: 12px; font-family: ui-monospace, monospace; line-height: 1.6; }
+  .summary-box .summary-actions { margin-top: 8px; display: flex; align-items: center; gap: 10px; }
+  .summary-box .copy-btn { background: #2f7a4a; color: #fff; border: none; border-radius: 5px; padding: 6px 12px; font-size: 12px; cursor: pointer; }
+  .summary-box .copy-btn:hover { background: #38915a; }
+  .summary-box #copyHint { font-size: 12px; color: #7CF29A; }
 </style>
 </head>
 <body>
@@ -321,6 +335,16 @@ writeFileSync(
   <button type="button" class="save-btn" id="saveBtn">💾 保存する(ダウンロード)</button>
   <span id="progressCount"></span>
   <span id="saveHint"></span>
+</div>
+
+<div class="summary-box">
+  <h2>📝 修正まとめ(自動作成・コピーしてClaudeに貼れます)</h2>
+  <p>ボタンを押したりメモを書いたりするたびに、下の内容が自動的に更新されます。これをそのままコピーしてClaudeに貼れば、まとめて直せます。</p>
+  <textarea id="summaryPromptArea" readonly></textarea>
+  <div class="summary-actions">
+    <button type="button" class="copy-btn" id="copySummaryBtn">📋 全部コピーする</button>
+    <span id="copyHint"></span>
+  </div>
 </div>
 
 <div class="filters">
@@ -437,11 +461,51 @@ ${rows}
       // localStorageが使えない環境でも判定操作自体は継続できるようにする(保存だけ効かない)
     }
     updateProgress();
+    updateSummary();
   }
 
   function getEntry(cueId) {
-    if (!state[cueId]) state[cueId] = {status: null, deltaMs: 0, golden: false};
+    if (!state[cueId]) state[cueId] = {status: null, deltaMs: 0, golden: false, note: ''};
+    if (state[cueId].note == null) state[cueId].note = '';
     return state[cueId];
+  }
+
+  // 判定・±ms補正・メモをまとめて1つの文章にする。ここでは判定ロジックを
+  // 何も変えず、既にstateにある情報を読みやすい文章へ変換するだけ。
+  // このテキストをそのままClaudeに貼れば、cueIdごとの数字を人間が
+  // 書き起こす必要なく、まとめて修正依頼できるようにするためのもの。
+  function buildSummaryPrompt() {
+    var lines = [];
+    rowsAll.forEach(function (tr) {
+      var cueId = tr.getAttribute('data-cueid');
+      var entry = state[cueId];
+      if (!entry || !entry.status) return;
+      var text = tr.getAttribute('data-text');
+      var sec = tr.getAttribute('data-designedsec');
+      var note = (entry.note || '').trim();
+      if (entry.status === 'reject') {
+        lines.push('[わからない] ' + cueId + ' 「' + text + '」 (' + sec + '秒付近)' + (note ? ' / メモ: ' + note : ''));
+      } else if (entry.status === 'ok' && entry.deltaMs !== 0) {
+        lines.push(
+          '[要調整] ' + cueId + ' 「' + text + '」 (' + sec + '秒付近) — ' +
+            Math.abs(entry.deltaMs) + 'ms ' + (entry.deltaMs < 0 ? '早く' : '遅く') +
+            (entry.golden ? ' ⭐基準点として確定' : '') +
+            (note ? ' / メモ: ' + note : ''),
+        );
+      } else if (note) {
+        lines.push('[OK・メモあり] ' + cueId + ' 「' + text + '」 (' + sec + '秒付近)' + (entry.golden ? ' ⭐基準点として確定' : '') + ' / メモ: ' + note);
+      }
+    });
+    var header = 'StaRt Wedding Edit — 聴取確認まとめ(要調整・わからない・メモありのみ ' + lines.length + '件)\\n' + '作成: ' + new Date().toLocaleString('ja-JP') + '\\n\\n';
+    if (lines.length === 0) {
+      return header + '(まだ「要調整」「わからない」「メモあり」の行はありません。ボタンを押すかメモを書くとここに反映されます。)';
+    }
+    return header + lines.join('\\n');
+  }
+
+  function updateSummary() {
+    var area = document.getElementById('summaryPromptArea');
+    if (area) area.value = buildSummaryPrompt();
   }
 
   function renderRow(tr) {
@@ -457,6 +521,8 @@ ${rows}
     rejectBtn.classList.toggle('active', entry.status === 'reject');
     currentEl.textContent = entry.deltaMs === 0 ? 'ズレなし' : Math.abs(entry.deltaMs) + 'ms ' + (entry.deltaMs < 0 ? '早く' : '遅く');
     if (goldenInput) goldenInput.checked = !!entry.golden;
+    var noteInput = tr.querySelector('[data-role=note]');
+    if (noteInput && document.activeElement !== noteInput) noteInput.value = entry.note || '';
 
     if (entry.status === 'ok' && entry.deltaMs !== 0) {
       statusEl.textContent = '判定: 合ってる(' + Math.abs(entry.deltaMs) + 'ms ' + (entry.deltaMs < 0 ? '早く' : '遅く') + '補正)' + (entry.golden ? ' ⭐基準点' : '');
@@ -531,9 +597,45 @@ ${rows}
         saveState();
       });
     }
+    var noteInput = tr.querySelector('[data-role=note]');
+    if (noteInput) {
+      noteInput.addEventListener('input', function () {
+        var entry = getEntry(cueId);
+        entry.note = noteInput.value;
+        saveState(); // renderRowは呼ばない(呼ぶと入力中のtextarea.valueがリセットされカーソルが飛ぶため)
+      });
+    }
     renderRow(tr);
   });
   updateProgress();
+  updateSummary();
+
+  document.getElementById('copySummaryBtn').addEventListener('click', function () {
+    var text = document.getElementById('summaryPromptArea').value;
+    var hint = document.getElementById('copyHint');
+    function showCopied() {
+      hint.textContent = '✅ コピーしました。Claudeに貼り付けてください。';
+      setTimeout(function () { hint.textContent = ''; }, 3000);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(showCopied).catch(function () { legacyCopy(text, showCopied); });
+    } else {
+      legacyCopy(text, showCopied);
+    }
+  });
+
+  // navigator.clipboardが使えない環境(file://で開いた場合等)向けの代替コピー手段。
+  function legacyCopy(text, onDone) {
+    var ta = document.getElementById('summaryPromptArea');
+    ta.focus();
+    ta.select();
+    try {
+      document.execCommand('copy');
+      onDone();
+    } catch (e) {
+      document.getElementById('copyHint').textContent = 'コピーに失敗しました。テキストを選択して手動でコピーしてください。';
+    }
+  }
 
   var nameInput = document.getElementById('verifiedByInput');
   try {
@@ -555,13 +657,17 @@ ${rows}
     var decisions = [];
     Object.keys(state).forEach(function (cueId) {
       var e = state[cueId];
+      var note = (e.note || '').trim();
       if (e.status === 'ok') {
         var d = {cueId: cueId, status: e.deltaMs !== 0 ? 'adjust' : 'ok'};
         if (e.deltaMs !== 0) d.deltaMs = e.deltaMs;
         if (e.golden) d.goldenAnchor = true;
+        if (note) d.note = note;
         decisions.push(d);
       } else if (e.status === 'reject') {
-        decisions.push({cueId: cueId, status: 'reject'});
+        var rd = {cueId: cueId, status: 'reject'};
+        if (note) rd.note = note;
+        decisions.push(rd);
       }
     });
     if (decisions.length === 0) {
