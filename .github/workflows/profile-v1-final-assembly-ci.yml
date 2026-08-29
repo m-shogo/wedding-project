@@ -8,6 +8,8 @@ on:
       - "motion-studio/scripts/render-profile-v1-production.mts"
       - "motion-studio/scripts/check-profile-render.mts"
       - "motion-studio/scripts/check-profile-v1-production-composition.mts"
+      - "motion-studio/scripts/check-profile-v1-production-framing-gate.mts"
+      - "motion-studio/scripts/profile-v1-production-preflight.mts"
       - "motion-studio/scripts/profile-v1-assembly-preflight.mts"
       - ".github/workflows/profile-v1-final-assembly-ci.yml"
   push:
@@ -18,6 +20,8 @@ on:
       - "motion-studio/scripts/render-profile-v1-production.mts"
       - "motion-studio/scripts/check-profile-render.mts"
       - "motion-studio/scripts/check-profile-v1-production-composition.mts"
+      - "motion-studio/scripts/check-profile-v1-production-framing-gate.mts"
+      - "motion-studio/scripts/profile-v1-production-preflight.mts"
       - "motion-studio/scripts/profile-v1-assembly-preflight.mts"
       - ".github/workflows/profile-v1-final-assembly-ci.yml"
 
@@ -47,6 +51,8 @@ jobs:
         run: pnpm typecheck
       - name: Profile V1 production composition contract
         run: node --no-warnings scripts/check-profile-v1-production-composition.mts
+      - name: Stale Profile framing blocks final production preflight
+        run: node --no-warnings scripts/check-profile-v1-production-framing-gate.mts
       - name: Production composition is registered
         run: pnpm exec remotion compositions src/index-profile-v1.ts
       - name: Fresh clone cannot render production candidate
