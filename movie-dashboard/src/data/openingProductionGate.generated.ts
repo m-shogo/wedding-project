@@ -5,72 +5,77 @@ export const openingProductionGate = {
   "source": {
     "photos": "motion-studio/src/data/photoLibrary.generated.ts",
     "photoResolver": "motion-studio/src/data/openingV1Media.ts",
-    "audio": "motion-studio/src/data/assets.ts"
+    "audio": "motion-studio/src/data/assets.ts",
+    "authority": "motion-studio/src/data/openingV1Authority.ts"
+  },
+  "authority": {
+    "mode": "DUMMY_PRODUCTION_SIMULATION",
+    "publicationApproved": false
   },
   "expectedPhotoCount": 11,
-  "resolvedPhotoCount": 0,
-  "photoMissingCount": 11,
+  "resolvedPhotoCount": 11,
+  "photoMissingCount": 0,
   "photoSlots": [
     {
       "key": "okinawa-01",
-      "resolved": false,
-      "path": null
+      "resolved": true,
+      "path": "opening/okinawa-01.jpg"
     },
     {
       "key": "okinawa-02",
-      "resolved": false,
-      "path": null
+      "resolved": true,
+      "path": "opening/okinawa-02.jpg"
     },
     {
       "key": "okinawa-03",
-      "resolved": false,
-      "path": null
+      "resolved": true,
+      "path": "opening/okinawa-03.jpg"
     },
     {
       "key": "seoul-01",
-      "resolved": false,
-      "path": null
+      "resolved": true,
+      "path": "opening/seoul-01.jpg"
     },
     {
       "key": "seoul-02",
-      "resolved": false,
-      "path": null
+      "resolved": true,
+      "path": "opening/seoul-02.jpg"
     },
     {
       "key": "seoul-03",
-      "resolved": false,
-      "path": null
+      "resolved": true,
+      "path": "opening/seoul-03.jpg"
     },
     {
       "key": "hawaii-01",
-      "resolved": false,
-      "path": null
+      "resolved": true,
+      "path": "opening/hawaii-01.jpg"
     },
     {
       "key": "hawaii-02",
-      "resolved": false,
-      "path": null
+      "resolved": true,
+      "path": "opening/hawaii-02.jpg"
     },
     {
       "key": "hawaii-03",
-      "resolved": false,
-      "path": null
+      "resolved": true,
+      "path": "opening/hawaii-03.jpg"
     },
     {
       "key": "hero-01",
-      "resolved": false,
-      "path": null
+      "resolved": true,
+      "path": "opening/hero-01.jpg"
     },
     {
       "key": "hero-02",
-      "resolved": false,
-      "path": null
+      "resolved": true,
+      "path": "opening/hero-02.jpg"
     }
   ],
   "bgm": {
     "assetId": "opening-bgm-main",
-    "status": "missing",
-    "playable": false
+    "status": "candidate",
+    "playable": true
   },
   "ambience": [
     {
@@ -94,6 +99,6 @@ export const openingProductionGate = {
       "playable": false
     }
   ],
-  "finalBlocked": true,
-  "nextAction": "実写真11枚を motion-studio/public/photos/opening/ へ入れ、pnpm sync:photos を実行する"
+  "finalBlocked": false,
+  "nextAction": "60秒ダミー本番版をrenderし、crop / motion / color / audio QAへ進む"
 } as const;

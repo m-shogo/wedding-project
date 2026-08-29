@@ -1,0 +1,38 @@
+{
+  "schemaVersion": "opening-v1-dummy-render-manifest/v1",
+  "authority": "DUMMY_PRODUCTION_SIMULATION",
+  "publicationApproved": false,
+  "generatedAt": "2026-08-29T16:45:50.752Z",
+  "artifact": {
+    "file": "opening-v1-dummy-production.mp4",
+    "sha256": "f09e147ff978aadceb2e3a9a9045b446a0b3a3499b27e5d35eaa7182cda6ff2c",
+    "byteSize": 17778139
+  },
+  "video": {
+    "codec": "h264",
+    "width": 1920,
+    "height": 1080,
+    "fps": "30/1",
+    "frames": "1800",
+    "durationSeconds": 60.053333
+  },
+  "audio": {
+    "codec": "aac",
+    "sampleRate": "48000",
+    "channels": 2
+  },
+  "qa": {
+    "status": "PASSED",
+    "command": "pnpm check:opening-render",
+    "checks": [
+      "resolution",
+      "fps",
+      "duration",
+      "audio-format",
+      "near-black",
+      "mean-volume",
+      "peak-volume",
+      "silence"
+    ]
+  }
+}

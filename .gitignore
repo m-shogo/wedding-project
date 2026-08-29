@@ -56,3 +56,18 @@ motion-studio/src/data/startWeddingEdit/
 
 # Stock demo photos pulled for local preview only (not canonical wedding photos).
 motion-studio/public/demo/
+
+# Local/generated Motion Zukan media. Keep reproducible source, metadata, manifests,
+# and NLE handoff files in Git; keep binary previews and licensed media local.
+motion-studio/public/audio/
+motion-studio/public/demo-assets/**/*.mp3
+motion-studio/public/demo-assets/**/*.jpg
+motion-studio/public/demo-assets/**/*.jpeg
+motion-studio/public/demo-assets/**/*.png
+movie-dashboard/public/**/*.mp3
+movie-dashboard/public/**/*.mp4
+movie-dashboard/public/**/*.mov
+movie-dashboard/public/**/*.webm
+movie-dashboard/public/**/*.jpg
+movie-dashboard/public/**/*.jpeg
+movie-dashboard/public/**/*.png

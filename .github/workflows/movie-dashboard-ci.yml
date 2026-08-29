@@ -56,7 +56,7 @@ jobs:
         run: pnpm check:video-prompt-quality
 
       - name: Movie Coach registry contracts
-        run: pnpm check:movie-coach
+        run: pnpm check:media-qa-policy && pnpm check:movie-coach
 
       - name: TypeScript and Vite build
         run: pnpm build

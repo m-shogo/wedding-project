@@ -106,4 +106,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log("Mask Reveal Scene Production Bundle contracts OK: adopted HUMAN_MASTER SceneInstance is the handoff authority; Tool Learning policy is referenced rather than duplicated; Scene-specific markers avoid collisions; Palmier XML remains external truth; stale bundles fail by revision rule; Actual DaVinci evidence remains pending until real verification.");
+console.log("Mask Reveal Scene Production Bundle contracts OK: adopted HUMAN_MASTER SceneInstance is the handoff authority; Tool Learning policy is referenced rather than duplicated; Scene-specific markers avoid collisions; Palmier XML remains external truth; stale bundles fail by revision rule; each newly generated bundle template remains fail-closed until matched against registered Actual evidence.");

@@ -38,6 +38,7 @@ for (const value of ["VERIFIED_WRITE", "GENERATED_ARTIFACT", "ASSISTED_MANUAL", 
 }
 requireText(registrySource, 'export type EvidenceState =', "EvidenceState union missing");
 requireText(registrySource, '"PENDING_RUNTIME"', "EvidenceState missing PENDING_RUNTIME");
+requireText(registrySource, '"RUNTIME_FAILED"', "EvidenceState missing RUNTIME_FAILED");
 requireText(registrySource, '"RUNTIME_VERIFIED"', "EvidenceState missing RUNTIME_VERIFIED");
 
 const idMatches = [...registrySource.matchAll(/^\s{2}\{\s*\n\s*id: "([^"]+)",/gm)];
@@ -67,8 +68,8 @@ for (const audioId of ["audio-volume-keyframes", "audio-fade"]) {
 }
 
 for (const [id, body] of recordBodies) {
-  if (!/sourceCitations: \[[^\]]*RUN0[12][^\]]*\]/.test(body)) {
-    errors.push(`${id}: sourceCitations must reference RUN01/RUN02`);
+  if (!/sourceCitations: \[[^\]]*RUN(?:0[12]|32)[^\]]*\]/.test(body)) {
+    errors.push(`${id}: sourceCitations must reference RUN01/RUN02/RUN32`);
   }
   if (body.includes('capabilityTrust: "VERIFIED_WRITE"')) {
     errors.push(`${id}: capabilityTrust VERIFIED_WRITE requires an actual Canary; none has been recorded yet in this repo`);
@@ -76,6 +77,15 @@ for (const [id, body] of recordBodies) {
   if (body.includes('evidenceState: "RUNTIME_VERIFIED"')) {
     errors.push(`${id}: evidenceState RUNTIME_VERIFIED requires an actual Canary; none has been recorded yet in this repo`);
   }
+}
+
+const cropBody = recordBodies.get("crop-static");
+if (!cropBody) {
+  errors.push("Expected crop-static property record missing");
+} else {
+  requireText(cropBody, 'transportClass: "REBUILD_VALUES"', "crop-static must stay REBUILD_VALUES after the live omission");
+  requireText(cropBody, 'evidenceState: "RUNTIME_FAILED"', "crop-static must preserve the live RUNTIME_FAILED result");
+  requireText(cropBody, 'capabilityTrust: "ASSISTED_MANUAL"', "crop-static must not claim an unverified automated write route");
 }
 
 requireText(registrySource, "export function buildCodexRebuildInstruction", "Codex instruction builder missing");

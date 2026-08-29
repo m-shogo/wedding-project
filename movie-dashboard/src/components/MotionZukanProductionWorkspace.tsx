@@ -1,16 +1,21 @@
-import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
+import { useEffect, useMemo, useRef, useState, type ChangeEvent, type FormEvent } from "react";
 import { DndContext, closestCenter, type DragEndEvent } from "@dnd-kit/core";
 import { SortableContext, arrayMove, horizontalListSortingStrategy, useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { resolveMaskRevealEditableIntent } from "../data/humanEditableMotionIntent";
 import {
   addMediaAsset,
+  applyDemoStockMediaPack,
+  assignDemoAssetsToEmptyScenes,
+  buildMotionZukanProductionHandoff,
   addMusicMarker,
   getAssetUsage,
   getDuplicateAssetUsage,
   getFinalChecks,
   loadMotionZukanProductionWorkspaceState,
+  parseMotionZukanProductionHandoff,
   removeMediaAsset,
+  removeDemoStockMediaPack,
   removeMusicMarker,
   restoreWorkspaceFromVersion,
   saveMotionZukanProductionWorkspaceState,
@@ -26,6 +31,10 @@ import {
   type MusicMarkerKind,
   type SceneWorkflowStatus,
 } from "../data/motionZukanProductionWorkspace";
+import {
+  MOTION_ZUKAN_DEMO_STOCK_PACK_APPLY_EVENT,
+  type DemoStockMediaPack,
+} from "../data/demoStockMediaCatalog";
 import {
   duplicateSceneInstance,
   loadMotionZukanComposerState,
@@ -79,12 +88,16 @@ function SortableSceneCard({
   selected,
   status,
   assetCount,
+  previewSrc,
+  previewIsPlaceholder,
   onSelect,
 }: {
   scene: MaskRevealSceneInstance;
   selected: boolean;
   status: SceneWorkflowStatus;
   assetCount: number;
+  previewSrc: string | null;
+  previewIsPlaceholder: boolean;
   onSelect: () => void;
 }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: scene.sceneId });
@@ -94,6 +107,14 @@ function SortableSceneCard({
       style={{ transform: CSS.Transform.toString(transform), transition }}
       className={`min-w-[180px] border p-3 bg-white dark:bg-navy-900 ${selected ? "border-sky-500 ring-1 ring-sky-300" : "border-sand-300 dark:border-navy-600"} ${isDragging ? "opacity-60" : ""}`}
     >
+      {previewSrc ? (
+        <div className="relative mb-2 overflow-hidden border border-sand-200 bg-sand-100 dark:border-navy-600 dark:bg-navy-800">
+          <img src={previewSrc} alt="" className="aspect-video w-full object-cover" />
+          {previewIsPlaceholder && <span className="absolute left-1 top-1 bg-amber-100/95 px-1.5 py-0.5 text-[8px] font-semibold text-amber-800">仮素材</span>}
+        </div>
+      ) : (
+        <div className="mb-2 flex aspect-video items-center justify-center border border-dashed border-sand-300 bg-sand-50 text-[9px] text-navy-400 dark:border-navy-600 dark:bg-navy-800">素材未設定</div>
+      )}
       <div className="flex items-center justify-between gap-2">
         <button type="button" onClick={onSelect} className="min-w-0 flex-1 text-left">
           <p className="truncate text-xs font-semibold text-navy-900 dark:text-sand-100">{sceneName(scene)}</p>
@@ -128,6 +149,7 @@ export function MotionZukanProductionWorkspace() {
   const [markerKind, setMarkerKind] = useState<MusicMarkerKind>("CUSTOM");
   const [versionLabel, setVersionLabel] = useState("");
   const [historyRevision, setHistoryRevision] = useState(0);
+  const [handoffFeedback, setHandoffFeedback] = useState("");
 
   const composerRef = useRef(composer);
   const workspaceRef = useRef(workspace);
@@ -157,6 +179,18 @@ export function MotionZukanProductionWorkspace() {
     return () => window.removeEventListener(MOTION_ZUKAN_COMPOSER_CHANGED_EVENT, onComposerChanged);
   }, []);
 
+  useEffect(() => {
+    function onDemoStockPackApply(event: Event) {
+      const pack = (event as CustomEvent<DemoStockMediaPack>).detail;
+      if (!pack) return;
+      const next = applyDemoStockMediaPack(workspaceRef.current, pack);
+      commitWorkspace(next);
+      setAssetFilter("ALL");
+    }
+    window.addEventListener(MOTION_ZUKAN_DEMO_STOCK_PACK_APPLY_EVENT, onDemoStockPackApply);
+    return () => window.removeEventListener(MOTION_ZUKAN_DEMO_STOCK_PACK_APPLY_EVENT, onDemoStockPackApply);
+  }, []);
+
   const projectScenes = useMemo(() => {
     const timeline = composer.timelines.find((item) => item.projectId === projectId);
     const ids = timeline?.sceneIds ?? [];
@@ -184,6 +218,10 @@ export function MotionZukanProductionWorkspace() {
   const projectDesign = workspace.designSettings.find((item) => item.projectId === projectId);
   const projectVersions = workspace.versions.filter((version) => version.projectId === projectId);
   const finalChecks = getFinalChecks(composer, workspace, projectId);
+  const demoAssets = workspace.assets.filter(
+    (asset) => asset.placeholder && asset.assetId.startsWith("mz-demo-") && asset.sourceRef.startsWith("/demo-assets/stock-photos/"),
+  );
+  const emptyProjectScenes = projectScenes.filter((scene) => sceneMetaFor(workspace, scene.sceneId).assetIds.length === 0);
 
   const filteredAssets = workspace.assets.filter((asset) => {
     const count = usageMap.get(asset.assetId)?.count ?? 0;
@@ -314,11 +352,53 @@ export function MotionZukanProductionWorkspace() {
     commit(structuredClone(version.composerState), nextWorkspace);
   }
 
+  function assignDemoAssets() {
+    const next = assignDemoAssetsToEmptyScenes(workspace, projectScenes.map((scene) => scene.sceneId), projectSuitability);
+    if (next !== workspace) commitWorkspace(next);
+  }
+
+  function removeDemoAssets() {
+    if (!window.confirm("デモ写真とデモBGM候補だけを素材BOXから外します。本人素材とScene本体は残します。")) return;
+    const next = removeDemoStockMediaPack(workspace);
+    if (next !== workspace) commitWorkspace(next);
+  }
+
+  function downloadProductionHandoff() {
+    const handoff = buildMotionZukanProductionHandoff(composer, workspace, projectId);
+    const blob = new Blob([JSON.stringify(handoff, null, 2)], { type: "application/json" });
+    const href = URL.createObjectURL(blob);
+    const anchor = document.createElement("a");
+    anchor.href = href;
+    anchor.download = `motion-zukan-${projectId}-handoff.json`;
+    anchor.click();
+    URL.revokeObjectURL(href);
+    setHandoffFeedback("制作状態JSONを書き出しました");
+  }
+
+  async function importProductionHandoff(event: ChangeEvent<HTMLInputElement>) {
+    const input = event.currentTarget;
+    const file = input.files?.[0];
+    if (!file) return;
+    const parsed = parseMotionZukanProductionHandoff(await file.text());
+    input.value = "";
+    if (!parsed.ok) {
+      setHandoffFeedback(`読込拒否: ${parsed.error}`);
+      return;
+    }
+    if (!window.confirm(`${parsed.handoff.projectId === "opening" ? "Opening" : "Profile"}の制作状態を読み込み、現在状態を置き換えます。Undoで戻せます。`)) {
+      setHandoffFeedback("読込をキャンセルしました");
+      return;
+    }
+    commit(parsed.handoff.composer, parsed.handoff.workspace);
+    setProjectId(parsed.handoff.projectId);
+    setHandoffFeedback("制作状態JSONを読み込みました。必要ならUndoで戻せます。");
+  }
+
   const canUndo = historyRevision >= 0 && undoRef.current.length > 0;
   const canRedo = historyRevision >= 0 && redoRef.current.length > 0;
 
   return (
-    <section className="mb-10 border border-sand-300 dark:border-navy-600 bg-sand-50/60 dark:bg-navy-900/40">
+    <section id="motion-zukan-production-workspace" className="mb-10 scroll-mt-4 border border-sand-300 dark:border-navy-600 bg-sand-50/60 dark:bg-navy-900/40">
       <div className="p-5 border-b border-sand-200 dark:border-navy-600 flex flex-wrap items-center justify-between gap-4">
         <div>
           <p className="text-[10px] tracking-[0.2em] font-semibold text-emerald-700 dark:text-emerald-300">PRODUCTION WORKSPACE / HUMAN CONTROL</p>
@@ -350,6 +430,7 @@ export function MotionZukanProductionWorkspace() {
                 <div className="flex gap-3 overflow-x-auto pb-2">
                   {projectScenes.map((scene) => {
                     const meta = sceneMetaFor(workspace, scene.sceneId);
+                    const previewAsset = workspace.assets.find((asset) => meta.assetIds.includes(asset.assetId));
                     return (
                       <SortableSceneCard
                         key={scene.sceneId}
@@ -357,6 +438,8 @@ export function MotionZukanProductionWorkspace() {
                         selected={scene.sceneId === selectedSceneId}
                         status={meta.status}
                         assetCount={meta.assetIds.length}
+                        previewSrc={previewAsset?.sourceRef.startsWith("/") ? previewAsset.sourceRef : null}
+                        previewIsPlaceholder={previewAsset?.placeholder ?? false}
                         onSelect={() => setSelectedSceneId(scene.sceneId)}
                       />
                     );
@@ -410,6 +493,12 @@ export function MotionZukanProductionWorkspace() {
               <h3 className="mt-1 text-base font-bold text-navy-900 dark:text-sand-100">素材本体ではなく参照先と使用状態を管理</h3>
             </div>
             <div className="flex flex-wrap gap-1">
+              {demoAssets.length > 0 && (
+                <>
+                  <button type="button" disabled={emptyProjectScenes.length === 0} onClick={assignDemoAssets} className="px-2 py-1 text-[10px] border border-emerald-500 text-emerald-700 dark:text-emerald-300 disabled:opacity-30">空Sceneへ仮配置</button>
+                  <button type="button" onClick={removeDemoAssets} className="px-2 py-1 text-[10px] border border-red-200 text-red-600">デモ素材を外す</button>
+                </>
+              )}
               {(["ALL", "UNUSED", "USED", "FAVORITE", "OPENING", "PROFILE"] as AssetFilter[]).map((filter) => (
                 <button key={filter} type="button" onClick={() => setAssetFilter(filter)} className={`px-2 py-1 text-[10px] border ${assetFilter === filter ? "border-sky-500 text-sky-700 dark:text-sky-300" : "border-sand-300 dark:border-navy-600"}`}>{filter}</button>
               ))}
@@ -435,11 +524,16 @@ export function MotionZukanProductionWorkspace() {
               return (
                 <article key={asset.assetId} className={`border p-3 bg-white dark:bg-navy-800 ${asset.placeholder ? "border-amber-400" : "border-sand-200 dark:border-navy-600"}`}>
                   <div className="flex items-start justify-between gap-3">
-                    <div className="min-w-0">
+                    <div className="flex min-w-0 gap-3">
+                      {asset.sourceRef.startsWith("/demo-assets/stock-photos/") && (
+                        <img src={asset.sourceRef} alt="" className="h-16 w-28 shrink-0 border border-sand-200 object-cover dark:border-navy-600" />
+                      )}
+                      <div className="min-w-0">
                       <p className="text-xs font-bold text-navy-900 dark:text-sand-100">{asset.favorite ? "★ " : ""}{asset.label}</p>
                       <p className="mt-1 text-[10px] font-mono text-navy-400 break-all">{asset.sourceRef || "参照先未設定"}</p>
                       <p className="mt-2 text-[10px] text-navy-500">{asset.kind === "IMAGE" ? "写真" : "動画"} · {asset.placeholder ? "仮素材" : "本素材"} · 使用 {assetUsage?.count ?? 0} Scene</p>
                       {(assetUsage?.count ?? 0) > 0 && <p className="mt-1 text-[10px] text-navy-400 break-all">使用先: {assetUsage?.sceneIds.join(" / ")}</p>}
+                      </div>
                     </div>
                     <div className="flex flex-col gap-1 shrink-0">
                       <button type="button" onClick={() => commitWorkspace(updateMediaAsset(workspace, asset.assetId, { favorite: !asset.favorite }))} className="px-2 py-1 text-xs border border-sand-300 dark:border-navy-600">{asset.favorite ? "★" : "☆"}</button>
@@ -467,6 +561,14 @@ export function MotionZukanProductionWorkspace() {
           <div>
             <p className="text-[10px] tracking-[0.2em] font-semibold text-navy-400">曲の構成ガイド</p>
             <h3 className="mt-1 text-base font-bold text-navy-900 dark:text-sand-100">曲の地図だけ置く。自動編集はしない</h3>
+            {workspace.demoBgmSelection && (
+              <div className="mt-3 border border-amber-300 bg-amber-50/70 dark:border-amber-800 dark:bg-amber-950/20 p-3">
+                <p className="text-[10px] font-semibold tracking-[0.16em] text-amber-700 dark:text-amber-300">DEMO BGM CANDIDATE · {workspace.demoBgmSelection.genre}</p>
+                <p className="mt-1 text-xs font-bold text-navy-900 dark:text-sand-100">{workspace.demoBgmSelection.title}</p>
+                <audio controls preload="none" src={workspace.demoBgmSelection.sourceRef} className="mt-2 h-9 w-full" />
+                <p className="mt-2 text-[9px] leading-4 text-amber-700 dark:text-amber-300">Content ID登録済み／最終公開は未承認。納品前に権利確認または差し替えが必要です。</p>
+              </div>
+            )}
             <div className="mt-3 relative h-14 border border-sand-300 dark:border-navy-600 bg-white dark:bg-navy-800 overflow-hidden">
               {projectMarkers.map((marker) => (
                 <button
@@ -512,6 +614,13 @@ export function MotionZukanProductionWorkspace() {
               <input value={versionLabel} onChange={(event) => setVersionLabel(event.target.value)} placeholder="例: Opening テンポ速め前" className="min-w-0 flex-1 border border-sand-300 dark:border-navy-600 bg-white dark:bg-navy-800 px-3 py-2 text-xs" />
               <button type="submit" className="px-3 py-2 text-xs border border-sand-300 dark:border-navy-600">Version保存</button>
             </form>
+            <button type="button" onClick={downloadProductionHandoff} className="mt-2 w-full border border-sky-400 px-3 py-2 text-xs font-semibold text-sky-700 dark:text-sky-300">制作状態JSONを書き出す</button>
+            <label className="mt-2 block cursor-pointer border border-sand-300 px-3 py-2 text-center text-xs font-semibold text-navy-600 dark:border-navy-600 dark:text-navy-300">
+              制作状態JSONを読み込む
+              <input type="file" accept="application/json,.json" onChange={importProductionHandoff} className="sr-only" />
+            </label>
+            <p className="mt-1 text-[9px] leading-4 text-navy-400">Scene・素材割当・曲候補・未完了チェックを保存します。外部Production Gateの合格やデモ素材の本番承認は含みません。</p>
+            {handoffFeedback && <p role="status" className={`mt-2 text-[10px] font-semibold ${handoffFeedback.startsWith("読込拒否") ? "text-red-600" : "text-emerald-700 dark:text-emerald-300"}`}>{handoffFeedback}</p>}
             <div className="mt-2 space-y-2 max-h-48 overflow-auto">
               {projectVersions.map((version) => (
                 <div key={version.versionId} className="flex items-center justify-between gap-3 border border-sand-200 dark:border-navy-600 bg-white dark:bg-navy-800 p-2">

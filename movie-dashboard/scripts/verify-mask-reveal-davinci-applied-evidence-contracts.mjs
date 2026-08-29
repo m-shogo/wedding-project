@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const evidence = fs.readFileSync(path.join(root, "src/data/maskRevealDaVinciAppliedEvidence.ts"), "utf8");
+const actual = fs.readFileSync(path.join(root, "src/data/maskRevealDaVinciActualEvidence.ts"), "utf8");
 const bundle = fs.readFileSync(path.join(root, "src/data/maskRevealSceneProductionBundle.ts"), "utf8");
 const runbook = fs.readFileSync(path.join(root, "../docs/runbooks/2026-08-25-mask-reveal-davinci-applied-evidence-gate.md"), "utf8");
 const propertyDecision = fs.readFileSync(path.join(root, "../docs/decisions/2026-08-26-motion-zukan-property-stack-customization.md"), "utf8");
@@ -34,6 +35,34 @@ for (const token of [
   'visualQaHalfSpeed: false',
   'never write readback values back into HUMAN_SELECTED/LOCKED automatically',
 ]) requireText(evidence, token, `Applied evidence contract missing: ${token}`);
+
+for (const token of [
+  'schemaVersion: "mask-reveal-davinci-actual/v1"',
+  'authority: "IMPLEMENTATION_EVIDENCE_ONLY"',
+  'sceneId: "mz-scene-1f5568a2-e89a-4c63-95e7-bce4862e30c7"',
+  'sourceRevision: "2026-08-26T08:56:54.064Z"',
+  'version: "21.0.4.5"',
+  'transport: "PALMIER_FCPXML_TO_RESOLVE_INTERNAL_UTILITY_SCRIPT"',
+  'maskConnected: true',
+  'layerDelayFrames: 18',
+  'enterDurationFrames: 18',
+  'holdDurationFrames: 84',
+  'direction: "UP"',
+  'distanceNormalized: 0.12',
+  'sha256: "32d5e1b39b2b8d381ae7521f4c6c3bcc30fe72b1dacb0fc7153b87e8bcf23592"',
+  'frames: 120',
+  'measuredDurationSeconds: 4',
+  'renderTested: true',
+  'visualQa1x: true',
+  'visualQaHalfSpeed: true',
+  'conceptPreviewKeptSeparate: true',
+  'palmierMarkerMatchedInScratchImport: true',
+  'markerMatched: true',
+  'importedTimelineDurationFrames: 120',
+  'independentRenderedPixelOracle: true',
+  'productionReady: true',
+  'remainingGate: null',
+]) requireText(actual, token, `Actual evidence record missing: ${token}`);
 
 for (const token of [
   'createMaskRevealDaVinciAppliedEvidenceTemplate',

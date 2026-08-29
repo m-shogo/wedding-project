@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { buildMaskRevealHandoffFidelityReport } from "../data/maskRevealHandoffFidelity";
+import { maskRevealDaVinciActualEvidence } from "../data/maskRevealDaVinciActualEvidence";
 import {
   buildMaskRevealSceneProductionBundle,
   buildMaskRevealSceneProductionBundleJson,
@@ -26,6 +27,8 @@ export function MaskRevealSceneHandoffCard({ scene }: { scene: MaskRevealSceneIn
   const json = useMemo(() => buildMaskRevealSceneProductionBundleJson(scene), [scene]);
   const fidelity = useMemo(() => buildMaskRevealHandoffFidelityReport(), []);
   const resolveEditionGuardrail = useMemo(() => resolveCodexAutomationGuardrail("UNKNOWN"), []);
+  const actualMatchesCurrentScene = scene.sceneId === maskRevealDaVinciActualEvidence.sceneId
+    && scene.updatedAt === maskRevealDaVinciActualEvidence.sourceRevision;
 
   async function copyJson() {
     await navigator.clipboard.writeText(json);
@@ -47,7 +50,9 @@ export function MaskRevealSceneHandoffCard({ scene }: { scene: MaskRevealSceneIn
             <span>Scene revision: {bundle.sourceRevision}</span>
             <span>Palmier Timeline: {bundle.timeline.projectTimelineXmlFileName}</span>
             <span>Sidecar JSON: {bundle.timeline.sidecarFileName}</span>
-            <span>DaVinci Actual: {bundle.preview.productionReady ? "VERIFIED" : "PENDING"}</span>
+            <span>DaVinci Actual sample: {actualMatchesCurrentScene ? "VERIFIED" : "PENDING / STALE"}</span>
+            <span>Palmier marker chain: {maskRevealDaVinciActualEvidence.checks.palmierMarkerMatchedInScratchImport ? "VERIFIED" : "PENDING"}</span>
+            <span>Rendered-pixel oracle: {maskRevealDaVinciActualEvidence.checks.independentRenderedPixelOracle ? "VERIFIED" : "PENDING"}</span>
           </div>
         </div>
         <div className="flex flex-wrap gap-2 shrink-0">
@@ -63,6 +68,11 @@ export function MaskRevealSceneHandoffCard({ scene }: { scene: MaskRevealSceneIn
       <p className="mt-2 text-[10px] leading-4 text-navy-400">
         Human MasterはSceneの人間が理解できる値です。JSON / XML自体はHuman Masterではありません。Sceneを編集するとupdatedAtが変わり、このexportも現在のSceneInstanceから再生成されます。NLE XML自体はPalmier実timelineからexportします。
       </p>
+      {actualMatchesCurrentScene && (
+        <p className="mt-2 border border-emerald-200 dark:border-emerald-800 p-2 text-[10px] leading-4 text-emerald-800 dark:text-emerald-200">
+          このScene revisionと一致するDaVinci Actual sampleはRender/1x/0.5x QA済みです。Palmier marker付きFCPXMLのscratch Resolve import・marker/title/120frames照合と、独立ffmpeg rendered-pixel oracleも完了しています。
+        </p>
+      )}
 
       <details className="mt-2">
         <summary className="cursor-pointer text-[10px] text-sky-700 dark:text-sky-300">Export詳細を見る</summary>

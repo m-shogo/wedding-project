@@ -109,20 +109,19 @@ QAで見つかった**既知の実装限界**(隠さず記録):
 これらはengine拡張(新規機能追加)が必要で、今回のカタログ化のスコープ外として
 `motionPreviewEvidence.ts`のnotesへ明記した。実装したふりをしていない。
 
-残り3件(`cut-match-shape` / `whip-source-matched` / `type-quiet-caption`)は、
-`engine`がそれぞれ`palmier-native` / `davinci-edit` / `davinci-edit`であり、
-そもそもRemotionでのrender対象外(既存engineのmode/directionを流用するだけでは
-正直に表現できず、Palmier native機能またはDaVinci Fusion/Edit自体の実装が必要)。
-これはengine実装が「未着手」なのではなく、モーション図鑑v1のスコープが
-「`engine: 'remotion'`のMotion Kit presetをRemotionでrenderable化する」ことに
-限定されているための構造的な区別であり、無理にRemotionへ寄せていない。
+2026-08-28更新: 当初未検証だった3件のうち`type-quiet-caption`はDaVinci Resolve
+Free 21.0.4.5のnative Fusion Text+ / Merge / SaverでActual化し、
+`cut-hard-accent`もPalmier Pro native timeline + FCPXML + beat-aligned BGMでActual化した。
+同日追補: `cut-match-shape`はPexels夕景2本の太陽中心を16.3px以内へ合わせたnative cut、
+`whip-source-matched`は異なる列車窓2本の背景水平shiftが同符号になる区間同士のnative cutを
+source-media Actualとしてrenderした。両方とも独立pixel oracleと通常速度目視QAを通し、
+ImplementationをTESTEDへ昇格した。ただしnative-app操作や本人素材のProduction Authorityではない。
 
 **「36件がカタログとして存在する」ことと「36件が実際に見て選べる」ことは別**。
-`engine: 'remotion'`の35件は全てRemotionで見て選べる段階まで進んだが、
-残り3件(palmier-native / davinci-edit)は引き続き文章ベースのカタログ
-(`CONCEPT_ONLY`)のままである。これらをPalmier実機やDaVinci実機で検証する
-ことは、今回のスコープではなく別途のVertical Slice(`docs/handoff/
-MASK-REVEAL-VERTICAL-SLICE.md`のようなPalmier/DaVinci実機確認)が必要。
+現在は31件がRemotion TESTED、2件がsource-media Actual TESTED、
+3件がNative App Actual PRODUCTION_READY(Mask Revealを含む)で、未検証は0件である。
+Concept previewの存在とImplementation Actualの成立は
+引き続き別軸で判定する。
 
 ## Director Recipe Catalog(97件)との関係
 
@@ -152,15 +151,12 @@ Property単位で修正できる構造)を持つのは引き続き`type-mask-rev
 
 ## 次にやるべきこと(優先順位)
 
-1. 残り3件(`cut-match-shape` / `whip-source-matched` / `type-quiet-caption`)は
-   Remotionでのrenderable化そのものが目的とずれる(palmier-native /
-   davinci-edit)ため、無理にRemotionへ寄せない。Palmier実機・DaVinci実機が
-   利用可能になった時に、それぞれのツールで直接検証する。
+1. source-media ActualでTESTEDになった`cut-match-shape` / `whip-source-matched`は、
+   本人動画へ採用する際に同じoracleを再実行する。stock検証を本番素材承認へ読み替えない。
 2. 実写真投入後、`sample-generic-hero-photo-v1` / `sample-generic-multi-photo-v1`
    の`visualBase.assetPath`を実素材へ差し替える。
-3. DaVinci Resolveが利用可能な環境が用意されたら、Mask Reveal Vertical Slice
-   (`docs/handoff/MASK-REVEAL-VERTICAL-SLICE.md`)を先に完了させ、
-   そこで確立したActual Evidence gateの型を他Motionへ展開する。
+3. Opening本番用の写真11枚と権利確認済みBGMを投入し、デモstockと本番素材を分離したまま
+   production gateを完了する。
 4. 件数を20〜30へ絞り込む(Phase 3の目標)より先に、実際にOpening/Profile制作で
    使われた実績(`usageStage`が`ROUGH`/`FINAL`になる)を積むことを優先する。
    使われなかったMotionを後から`humanDecision: "REJECT"`で落とす方が、

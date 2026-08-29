@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const card = fs.readFileSync(path.join(root, "src/components/MaskRevealSceneHandoffCard.tsx"), "utf8");
+const actual = fs.readFileSync(path.join(root, "src/data/maskRevealDaVinciActualEvidence.ts"), "utf8");
 const workspace = fs.readFileSync(path.join(root, "src/components/MaskRevealEditableWorkspace.tsx"), "utf8");
 const bundle = fs.readFileSync(path.join(root, "src/data/maskRevealSceneProductionBundle.ts"), "utf8");
 const adjustability = fs.readFileSync(path.join(root, "src/data/resolveHumanAdjustability.ts"), "utf8");
@@ -26,8 +27,15 @@ for (const token of [
   'bundle.timeline.projectTimelineXmlFileName',
   'Sidecar JSON:',
   'bundle.timeline.sidecarFileName',
-  'DaVinci Actual:',
-  '"PENDING"',
+  'DaVinci Actual sample:',
+  'Palmier marker chain:',
+  'Rendered-pixel oracle:',
+  'actualMatchesCurrentScene',
+  'scene.sceneId === maskRevealDaVinciActualEvidence.sceneId',
+  'scene.updatedAt === maskRevealDaVinciActualEvidence.sourceRevision',
+  'このScene revisionと一致するDaVinci Actual sampleはRender/1x/0.5x QA済みです。',
+  'Palmier marker付きFCPXMLのscratch Resolve import・marker/title/120frames照合と、',
+  '独立ffmpeg rendered-pixel oracleも完了しています。',
   'Sidecar JSONをコピー',
   'Sidecar JSONを書き出す',
   'Export詳細を見る',
@@ -104,8 +112,11 @@ if (card.includes('HUMAN MASTER HANDOFF')) {
 if (/\.xml[`"']\s*,?\s*JSON\.stringify/.test(card) || /downloadText\([^\n]*\.xml/.test(card)) {
   errors.push("Scene Handoff UI must not generate or download fake Palmier NLE XML");
 }
-if (!card.includes('bundle.preview.productionReady ? "VERIFIED" : "PENDING"')) {
-  errors.push("Scene Handoff UI must visibly fail-close DaVinci Actual as PENDING until verified");
+if (!card.includes('maskRevealDaVinciActualEvidence.checks.palmierMarkerMatchedInScratchImport ? "VERIFIED" : "PENDING"')) {
+  errors.push("Scene Handoff UI must derive the Palmier marker-chain status from Actual evidence");
+}
+if (!actual.includes('palmierMarkerMatchedInScratchImport: true') || !actual.includes('independentRenderedPixelOracle: true') || !actual.includes('productionReady: true')) {
+  errors.push("Actual evidence must require both the Palmier marker chain and independent rendered-pixel oracle before productionReady");
 }
 
 if (errors.length) {
@@ -114,4 +125,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log("Mask Reveal Scene Handoff UI contracts OK: Human-readable Scene values remain Human Master; live SceneInstance drives target-specific sidecar export; JSON/XML are serialization only; Palmier XML remains external; DaVinci Actual visibly stays PENDING until real evidence exists; Human Adjustability and platform scope remain separate from internal Editability.");
+console.log("Mask Reveal Scene Handoff UI contracts OK: the matching DaVinci Actual, Palmier marker chain, and independent pixel oracle are visibly verified; Human-readable Scene values remain Human Master and JSON/XML stay serialization only.");

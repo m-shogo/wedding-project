@@ -4,6 +4,8 @@
 
 シーン、素材、プロンプト、タスクをブラウザ上で編集・管理できる。データはlocalStorageに保存され、JSON形式でエクスポート・インポート可能。
 
+Motion ZukanのMP4・MP3・JPG・PNGはライセンス素材／生成物のためローカル管理する。Gitには再生成用ソース、権限メタデータ、QA manifest、FCPXMLだけを残す。検証は媒体が全部ある場合はハッシュ・ffprobe・ピクセルまで確認し、全部ないCIではコード契約を確認し、一部だけある状態は失敗する。
+
 詳しい使い方、運用ガイド、Tipsはアプリ内の **📖 使い方** ページに集約する。
 
 ## 起動方法
@@ -127,7 +129,7 @@ provider-aware prompt
 | 素材ライブラリ | 素材CRUD、フィルタ、パス、一括操作、CSV、サムネイル |
 | クリップ素材集 | 切り出し済みクリップと演出レシピを章・動き(motion)・採否で絞り込む（読み取り専用） |
 | Director Recipe Catalog | 97件をcategory/energy/source/section/intensity/status/visual fidelityで絞り込み、人間のFavorite/Maybe/RejectをlocalStorageへ記録するExtended制作レビュー |
-| モーション図鑑(Visual Motion Library) | 既存36 Motion Kit presetを日本語ファースト検索・Preview First Card一覧で発見できるカタログ。Human Master編集(Duration/Delay/Hold等)を持つのはtype-mask-revealのみで、他35件はカタログ段階(実Render/DaVinci実機検証は未実施)。詳細は`docs/decisions/2026-08-26-motion-zukan-catalog-v1.md` |
+| モーション図鑑(Visual Motion Library) | 既存36 Motion Kit presetを日本語ファースト検索・Preview First Card一覧で発見できるカタログ。31件はRemotion TESTED、`cut-match-shape` / `whip-source-matched`はPexels実動画2本ずつのsource-media ActualでTESTED、Mask Reveal / Hard Cut / Quiet CaptionはNative App Actual。未検証0件。Human Master編集(Duration/Delay/Hold等)を持つのは`type-mask-reveal`。11枚のPexels写真と4ジャンルのPixabay BGM候補、各BGMを使った音声入り20秒完成デモ4本、canonical写真11枠とBGM候補で厳格GateからフルHD出力まで完走した60秒ダミー本番版を画面内で再生できる。ダミー成果物は常時Simulation表記を持ち、本人素材や実公開承認には昇格しない。仮素材デモパックは空Sceneだけへの一括配置、Scene写真プレビュー、デモ素材限定リセット、権限ガード付き制作状態JSONの書出・読込にも対応する。詳細は`docs/decisions/2026-08-26-motion-zukan-catalog-v1.md` |
 | 動画プロンプト | シーン＋プリセット＋shot intentからモデル別Promptを作成 |
 | 動画生成キュー | 生成待ちPromptをモデル別にまとめ、コピー・testing移行・結果登録・Export |
 | AI動画 結果レビュー | 結果Asset、共通/固有QA、採否、失敗理由、retry lineage |

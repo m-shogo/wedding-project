@@ -1,5 +1,5 @@
 import type {ReactNode} from 'react';
-import {AbsoluteFill, Easing, interpolate, useCurrentFrame, useVideoConfig} from 'remotion';
+import {AbsoluteFill, Easing, Img, interpolate, useCurrentFrame, useVideoConfig} from 'remotion';
 import {buildCubicBezierArcLengthLut, cubicBezierPointAtArcProgress, ROUTE_LINE_VIEWBOX, routeControlPoints, routePathD} from './routeLineMath';
 
 export type MotionIntensity = 'S' | 'M' | 'L';
@@ -521,11 +521,13 @@ export function PhotoLayoutEngine({
   count = 4,
   intensity = 'M',
   transparent = false,
+  mediaSources,
 }: {
   variant?: 'contact-sheet' | 'split-panel' | 'panel-grid';
   count?: number;
   intensity?: MotionIntensity;
   transparent?: boolean;
+  mediaSources?: string[];
 }) {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
@@ -565,8 +567,16 @@ export function PhotoLayoutEngine({
                 background: 'rgba(255,255,255,0.06)',
                 opacity: reveal,
                 transform: `scale(${0.92 + reveal * 0.08 * strength})`,
+                overflow: 'hidden',
               }}
-            />
+            >
+              {mediaSources?.length ? (
+                <Img
+                  src={mediaSources[index % mediaSources.length]}
+                  style={{width: '100%', height: '100%', objectFit: 'cover'}}
+                />
+              ) : null}
+            </div>
           );
         })}
       </div>

@@ -12,13 +12,14 @@ export function OpeningProductionGatePanel({ compact = false }: { compact?: bool
   const photosReady = Number(gate.photoMissingCount) === 0;
   const bgmReady = Boolean(gate.bgm.playable);
   const previewReady = photosReady && bgmReady;
+  const isDummySimulation = gate.authority.mode === "DUMMY_PRODUCTION_SIMULATION";
 
   const phases = [
     {
       step: "01",
-      label: "REAL PHOTOS",
+      label: isDummySimulation ? "DUMMY PHOTOS" : "REAL PHOTOS",
       value: `${gate.resolvedPhotoCount}/${gate.expectedPhotoCount}`,
-      detail: photosReady ? "11枠すべて解決済み" : `${gate.photoMissingCount}枚不足`,
+      detail: photosReady ? (isDummySimulation ? "11枠すべてダミー解決済み" : "11枠すべて解決済み") : `${gate.photoMissingCount}枚不足`,
       tone: photosReady ? "ready" : "blocked",
     },
     {
@@ -49,17 +50,23 @@ export function OpeningProductionGatePanel({ compact = false }: { compact?: bool
       <div className="p-4 md:p-5 border-b border-sand-200 dark:border-navy-600 flex flex-wrap items-start justify-between gap-4">
         <div>
           <p className={`text-[10px] tracking-[0.2em] font-semibold ${gate.finalBlocked ? "text-red-500" : "text-emerald-600"}`}>
-            OPENING V1 / PRODUCTION GATE
+            OPENING V1 / {isDummySimulation ? "DUMMY PRODUCTION GATE" : "PRODUCTION GATE"}
           </p>
           <h2 className="mt-1 text-xl font-bold text-navy-900 dark:text-sand-100">
-            {gate.finalBlocked ? "学習より先に、本番素材を入れる" : "本番素材Gateクリア — 60秒previewへ"}
+            {gate.finalBlocked ? "素材を揃えて60秒版を解放する" : isDummySimulation ? "ダミー本番Gateクリア — 60秒renderへ" : "本番素材Gateクリア — 60秒previewへ"}
           </h2>
           <p className="mt-2 text-sm text-navy-600 dark:text-navy-300">{gate.nextAction}</p>
         </div>
         <span className={`px-2.5 py-1 text-[10px] font-mono font-bold tracking-wider ${gate.finalBlocked ? "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300" : "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300"}`}>
-          {gate.finalBlocked ? "FINAL BLOCKED" : "READY FOR PREVIEW"}
+          {gate.finalBlocked ? "FINAL BLOCKED" : isDummySimulation ? "DUMMY READY" : "READY FOR PREVIEW"}
         </span>
       </div>
+
+      {isDummySimulation && (
+        <p className="px-4 py-2 text-[10px] font-semibold tracking-wide border-b border-amber-300 bg-amber-50 text-amber-800 dark:border-amber-800 dark:bg-amber-950/20 dark:text-amber-200">
+          DUMMY PRODUCTION SIMULATION — 制作・レンダー検証用。本人写真および実公開承認を示すものではありません。
+        </p>
+      )}
 
       <div className={`grid grid-cols-2 ${compact ? "lg:grid-cols-4" : "xl:grid-cols-4"} gap-px bg-sand-200 dark:bg-navy-600`}>
         {phases.map((phase) => (

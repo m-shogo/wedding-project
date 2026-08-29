@@ -1,7 +1,9 @@
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { Header } from "../components/Header";
+import { DemoStockMediaShelf } from "../components/DemoStockMediaShelf";
 import { MaskRevealEditableWorkspace } from "../components/MaskRevealEditableWorkspace";
 import { MotionZukanProductionWorkspace } from "../components/MotionZukanProductionWorkspace";
+import { MotionActualVerificationWorkspace } from "../components/MotionActualVerificationWorkspace";
 import { getMotionLearningBundle } from "../data/motionLearningLinks";
 import { getLatestPreviewEvidence } from "../data/motionPreviewEvidence";
 import {
@@ -10,9 +12,38 @@ import {
   searchMotionPatterns,
 } from "../data/visualMotionLibrary";
 
+function actualRenderLabel(sourceType: string) {
+  if (sourceType === "ACTUAL_PALMIER_RENDER") return "PALMIER";
+  if (sourceType === "ACTUAL_DAVINCI_RENDER") return "DAVINCI";
+  return "SOURCE MEDIA";
+}
+
 export function VisualMotionLibrary() {
   const [query, setQuery] = useState("");
-  const patterns = useMemo(() => searchMotionPatterns(query), [query]);
+  const [statusFilter, setStatusFilter] = useState<"ALL" | "PRODUCTION_READY" | "TESTED" | "EXTERNAL_GATE">("ALL");
+  const searchRef = useRef<HTMLInputElement>(null);
+  const patterns = useMemo(() => searchMotionPatterns(query).filter((pattern) => {
+    if (statusFilter === "ALL") return true;
+    const status = getPatternImplementation(pattern)?.status;
+    if (statusFilter === "EXTERNAL_GATE") return status !== "PRODUCTION_READY" && status !== "TESTED";
+    return status === statusFilter;
+  }), [query, statusFilter]);
+  const completion = useMemo(() => {
+    const all = searchMotionPatterns("");
+    const implementations = all.map((pattern) => ({ pattern, implementation: getPatternImplementation(pattern) }));
+    return {
+      total: all.length,
+      productionReady: implementations.filter(({ implementation }) => implementation?.status === "PRODUCTION_READY").length,
+      tested: implementations.filter(({ implementation }) => implementation?.status === "TESTED").length,
+      remaining: implementations.filter(({ implementation }) => implementation?.status !== "PRODUCTION_READY" && implementation?.status !== "TESTED").map(({ pattern }) => pattern.id),
+    };
+  }, []);
+
+  function showPattern(patternId: string) {
+    setQuery(patternId);
+    setStatusFilter("EXTERNAL_GATE");
+    requestAnimationFrame(() => searchRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }));
+  }
 
   return (
     <div>
@@ -23,24 +54,68 @@ export function VisualMotionLibrary() {
 
       <section className="mb-8 border-l-2 border-emerald-600 pl-5">
         <p className="text-[10px] tracking-[0.2em] font-semibold text-emerald-700 dark:text-emerald-300">VERTICAL SLICE / HUMAN MASTER</p>
-        <h2 className="mt-1 text-xl font-bold text-navy-900 dark:text-sand-100">Mask Reveal 1件を、Actual Renderだけでなく「後から直せる構造」まで通す</h2>
+        <h2 className="mt-1 text-xl font-bold text-navy-900 dark:text-sand-100">Native App Actual 3件を、検証根拠と一緒に公開する</h2>
         <p className="mt-2 text-sm leading-6 text-navy-600 dark:text-navy-300">
           人間が理解できるScene Duration / Delay / Hold / Position / Direction等を正本として編集できるのはMask Revealのみ。
-          他のMotion Kit presetはブラウズ・検索・用途確認ができるカタログ段階までで、実Render・DaVinci実機検証はまだ行っていない。
+          他のMotion Kit presetは、31件の永続Remotion TESTEDと2件のsource-media Actual TESTEDを証拠種別ごとに分けている。Mask RevealとQuiet CaptionはDaVinci Actual、Hard Cut AccentはPalmier Actualまで到達済み。
         </p>
       </section>
 
+      <section className="mb-8 border border-sand-300 dark:border-navy-600 bg-white dark:bg-navy-800 p-5" aria-label="モーション図鑑の完成度">
+        <p className="text-[10px] tracking-[0.2em] font-semibold text-navy-400">COMPLETION / HONEST GATES</p>
+        <div className="mt-3 grid grid-cols-2 gap-3 md:grid-cols-4">
+          <div className="border border-emerald-200 dark:border-emerald-900 p-3"><p className="text-2xl font-bold text-emerald-700 dark:text-emerald-300">{completion.productionReady}</p><p className="text-[11px] text-navy-500 dark:text-navy-300">Native App Actual</p></div>
+          <div className="border border-sky-200 dark:border-sky-900 p-3"><p className="text-2xl font-bold text-sky-700 dark:text-sky-300">{completion.tested}</p><p className="text-[11px] text-navy-500 dark:text-navy-300">Implementation TESTED</p></div>
+          <div className="border border-amber-200 dark:border-amber-900 p-3"><p className="text-2xl font-bold text-amber-700 dark:text-amber-300">{completion.remaining.length}</p><p className="text-[11px] text-navy-500 dark:text-navy-300">外部確認待ち</p></div>
+          <div className="border border-sand-200 dark:border-navy-600 p-3"><p className="text-2xl font-bold text-navy-800 dark:text-sand-100">{completion.total}</p><p className="text-[11px] text-navy-500 dark:text-navy-300">全パターン</p></div>
+        </div>
+        <div className="mt-4 grid gap-2 text-xs md:grid-cols-2">
+          <p className="border-l-2 border-emerald-500 pl-3"><span className="font-mono">type-quiet-caption</span> — DaVinci Fusionで静かなopacity fadeを実機確認済み</p>
+          <p className="border-l-2 border-emerald-500 pl-3"><span className="font-mono">cut-hard-accent</span> — Palmier native hard cutをframe 63 / BGM downbeatで確認済み</p>
+          <p className="border-l-2 border-emerald-500 pl-3"><span className="font-mono">cut-match-shape</span> — Pexels実動画2本の太陽中心を合わせてTESTED</p>
+          <p className="border-l-2 border-emerald-500 pl-3"><span className="font-mono">whip-source-matched</span> — Pexels列車窓2本の同方向camera motionでTESTED</p>
+        </div>
+        <p className="mt-3 text-[11px] text-navy-500 dark:text-navy-300">未検証ID: {completion.remaining.length ? completion.remaining.join(" / ") : "なし"}</p>
+      </section>
+
+      <MotionActualVerificationWorkspace onShowPattern={showPattern} />
+
       <MotionZukanProductionWorkspace />
+
+      <DemoStockMediaShelf />
 
       <label className="block mb-7">
         <span className="text-[10px] tracking-[0.2em] font-semibold text-navy-400">何をしたい？</span>
         <input
+          ref={searchRef}
           value={query}
           onChange={(event) => setQuery(event.target.value)}
           placeholder="例: 文字 下からシュッ / 映画っぽい タイトル / 文字を静かに出す"
           className="mt-2 w-full border border-sand-300 dark:border-navy-600 bg-white dark:bg-navy-800 px-4 py-3 text-sm text-navy-900 dark:text-sand-100"
         />
       </label>
+
+      <section className="mb-7" aria-label="実装状態で絞り込み">
+        <div className="flex flex-wrap gap-2">
+          {([
+            ["ALL", `すべて ${completion.total}`],
+            ["PRODUCTION_READY", `Native App Actual ${completion.productionReady}`],
+            ["TESTED", `Implementation TESTED ${completion.tested}`],
+            ["EXTERNAL_GATE", `外部確認待ち ${completion.remaining.length}`],
+          ] as const).map(([value, label]) => (
+            <button
+              key={value}
+              type="button"
+              aria-pressed={statusFilter === value}
+              onClick={() => setStatusFilter(value)}
+              className={`border px-3 py-2 text-xs font-semibold ${statusFilter === value ? "border-navy-900 bg-navy-900 text-white dark:border-sand-100 dark:bg-sand-100 dark:text-navy-900" : "border-sand-300 text-navy-600 dark:border-navy-600 dark:text-navy-300"}`}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+        <p className="mt-2 text-[11px] text-navy-500 dark:text-navy-300">表示中 {patterns.length}件 · Previewの検証とImplementationの検証は別判定</p>
+      </section>
 
       <section className="space-y-6">
         {patterns.map((pattern) => {
@@ -54,7 +129,7 @@ export function VisualMotionLibrary() {
               <div className="grid grid-cols-1 xl:grid-cols-[1.15fr_1fr]">
                 <div className="min-h-[260px] bg-navy-950 text-white flex items-center justify-center p-8 relative overflow-hidden">
                   {preview?.assetPath ? (
-                    <video src={preview.assetPath} controls loop muted playsInline className="w-full max-h-[420px] object-contain" />
+                    <video src={preview.assetPath} poster={preview.posterPath ?? undefined} controls loop muted playsInline className="w-full max-h-[420px] object-contain" />
                   ) : (
                     <div className="text-center max-w-lg">
                       <p className="text-[10px] tracking-[0.22em] text-amber-300 font-semibold">CONCEPT PREVIEW / 実装確認前</p>
@@ -72,7 +147,11 @@ export function VisualMotionLibrary() {
                   </span>
                   {previewEvidence && (
                     <div className="absolute bottom-3 left-3 right-3 border border-emerald-300/30 bg-black/55 px-3 py-2 text-left">
-                      <p className="text-[10px] font-semibold text-emerald-300">CONCEPT RENDER QA ✓ / NOT DAVINCI ACTUAL</p>
+                      <p className="text-[10px] font-semibold text-emerald-300">
+                        {previewEvidence.classification === "ACTUAL"
+                          ? `ACTUAL ${actualRenderLabel(previewEvidence.sourceType)} RENDER QA ✓ / IMPLEMENTATION EVIDENCE`
+                          : "CONCEPT RENDER QA ✓ / NOT DAVINCI ACTUAL"}
+                      </p>
                       <p className="mt-1 text-[9px] leading-4 text-navy-200">
                         {previewEvidence.renderSpec.width}×{previewEvidence.renderSpec.height} / {previewEvidence.renderSpec.fps}fps / {previewEvidence.renderSpec.frames}frames · Human Visual QA {previewEvidence.humanVisualQa.result}
                       </p>
@@ -81,6 +160,15 @@ export function VisualMotionLibrary() {
                       )}
                       {!previewEvidence.persistentAssetPath && !previewEvidence.workflowRunId && (
                         <p className="mt-1 text-[9px] leading-4 text-amber-200">ローカルRenderで検証済み(out/配下・Git外の一時ファイル)。永続MP4がないため、この画面では静止placeholderのまま。</p>
+                      )}
+                      {previewEvidence.persistentAssetPath && (
+                        <p className="mt-1 text-[9px] leading-4 text-emerald-200">
+                          {previewEvidence.classification === "ACTUAL"
+                            ? `永続${actualRenderLabel(previewEvidence.sourceType)} Actual assetを表示中。Human Master Scene値とは分離した実装証拠です。`
+                            : implementation?.verified
+                              ? "永続Remotion previewを表示中。DaVinci Actualではなく、図鑑用の実装検証証拠です。"
+                              : "永続representative previewを表示中。見た目の説明用で、Implementation検証証拠ではありません。"}
+                        </p>
                       )}
                     </div>
                   )}
