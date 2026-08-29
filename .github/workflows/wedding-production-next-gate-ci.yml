@@ -1,0 +1,53 @@
+name: Wedding Production Next Gate CI
+
+on:
+  pull_request:
+    paths:
+      - 'motion-studio/scripts/wedding-production-next-gate.mts'
+      - 'motion-studio/scripts/check-wedding-production-next-gate.mts'
+      - 'motion-studio/scripts/opening-v1-production-status.mts'
+      - 'motion-studio/scripts/profile-v1-production-status.mts'
+      - '.github/workflows/wedding-production-next-gate-ci.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  next-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: motion-studio/pnpm-lock.yaml
+      - name: Install dependencies
+        working-directory: motion-studio
+        run: pnpm install --frozen-lockfile
+      - name: Verify synthetic next-gate contracts
+        working-directory: motion-studio
+        run: node --no-warnings scripts/check-wedding-production-next-gate.mts
+      - name: Fresh checkout derives actionable status without fabricating Actual evidence
+        working-directory: motion-studio
+        run: |
+          node --no-warnings scripts/wedding-production-next-gate.mts --json | tee /tmp/next-gate.json
+          node - <<'NODE'
+          const fs = require('fs');
+          const report = JSON.parse(fs.readFileSync('/tmp/next-gate.json', 'utf8'));
+          if (report.schemaVersion !== 'wedding-production-next-gate/v1') throw new Error('schema mismatch');
+          if (report.authority !== 'DERIVED_WEDDING_PRODUCTION_NEXT_GATE') throw new Error('authority mismatch');
+          if (!Array.isArray(report.projects) || report.projects.length !== 2) throw new Error('Opening/Profile report missing');
+          if (report.projects.some((p) => p.evidenceBoundary.macRemotionStudioGuiActual !== 'NOT_RUN')) throw new Error('Studio Actual fabricated');
+          if (report.projects.some((p) => p.evidenceBoundary.macDaVinciGuiActual !== 'NOT_RUN')) throw new Error('DaVinci Actual fabricated');
+          if (report.projects.some((p) => p.evidenceBoundary.finalDeliveryApprovedByThisReport !== false)) throw new Error('final delivery fabricated');
+          if (report.productionReady) throw new Error('fresh checkout must not claim production ready');
+          NODE
+      - name: TypeScript
+        working-directory: motion-studio
+        run: pnpm typecheck
