@@ -15,9 +15,12 @@ for (const token of [
   'profile-v1-production-preflight/v1',
   'MOTION_STUDIO_DERIVED_PRODUCTION_PREFLIGHT',
   'scripts/check-profile-v1-generated-accents.mts',
+  'scripts/sync-profile-v1-framing-verdicts.mts',
+  "framing.state === 'CURRENT'",
   "scripts/profile-v1-assembly-preflight.mts', ['--json']",
-  "generatedAccents.state === 'PASS' && assemblyReady",
+  "generatedAccents.state === 'PASS' && framing.state === 'CURRENT' && assemblyReady",
   'GENERATED_ACCENT_CONTRACT_PASS != HUMAN_REAL_MEDIA_QA_PASS',
+  'FRAMING_SNAPSHOT_CURRENT != HUMAN_REAL_MEDIA_QA_PASS',
   'PRODUCTION_PREFLIGHT_READY != MAC_DAVINCI_ACTUAL_VERIFIED',
   'PRODUCTION_PREFLIGHT_READY != PRODUCTION_READY',
   "macDaVinciActual: 'NOT_RUN'",
@@ -45,10 +48,10 @@ for (const token of [
 }
 
 if (render.includes("scripts/profile-v1-assembly-preflight.mts', '--strict'")) {
-  errors.push('production render bypasses generated-accent preflight by calling assembly strict directly');
+  errors.push('production render bypasses full production preflight by calling assembly strict directly');
 }
 if (status.includes("run('scripts/profile-v1-assembly-preflight.mts',['--json'])")) {
-  errors.push('production status bypasses generated-accent preflight by reading assembly directly');
+  errors.push('production status bypasses full production preflight by reading assembly directly');
 }
 if (preflight.includes("productionReady: true") || preflight.includes("macDaVinciActual: 'ACTUAL_VERIFIED'")) {
   errors.push('production preflight fabricates downstream production evidence');
@@ -60,4 +63,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log('Profile V1 production preflight contracts OK: generated Motion Zukan accents and assembly readiness are required consistently by final render and production status, without fabricating Human QA, Mac Actual, or production readiness.');
+console.log('Profile V1 production preflight contracts OK: generated Motion Zukan accents, current Human framing snapshot, and assembly readiness are required consistently by final render and production status, without fabricating Human QA, Mac Actual, or production readiness.');

@@ -43,11 +43,13 @@ for (const token of [
 ]) requireText(renderScript, token, `production render script missing: ${token}`);
 for (const token of [
   'scripts/check-profile-v1-generated-accents.mts',
+  "scripts/sync-profile-v1-framing-verdicts.mts",
+  "framing.state === 'CURRENT'",
   "scripts/profile-v1-assembly-preflight.mts', ['--json']",
-  "generatedAccents.state === 'PASS' && assemblyReady",
+  "generatedAccents.state === 'PASS' && framing.state === 'CURRENT' && assemblyReady",
 ]) requireText(productionPreflight, token, `full production preflight missing: ${token}`);
 if (renderScript.includes("'scripts/profile-v1-assembly-preflight.mts', '--strict'")) {
-  errors.push('production render bypasses generated-accent contracts by calling assembly preflight directly');
+  errors.push('production render bypasses full production preflight by calling assembly preflight directly');
 }
 for (const token of ['audio stream missing', 'duration: 30', 'width: 1920', 'height: 1080', 'fps: 30']) {
   requireText(renderQa, token, `Profile final render QA missing: ${token}`);
@@ -58,4 +60,4 @@ if (errors.length) {
   for (const error of errors) console.error(`- ${error}`);
   process.exit(1);
 }
-console.log('Profile V1 production composition contracts OK: Human-approved framing + generated-accent contracts + strict assembly gate → clean runtime-media+BGM render → technical media QA, without review chrome or fabricated Mac/production state.');
+console.log('Profile V1 production composition contracts OK: Human-approved framing + current framing snapshot + generated-accent contracts + strict assembly gate → clean runtime-media+BGM render → technical media QA, without review chrome or fabricated Mac/production state.');
