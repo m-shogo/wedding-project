@@ -201,24 +201,20 @@ const rows = entries
       <audio controls preload="none" src="listening-clips/${e.clipFile}"></audio>
       <span style="color:#888;font-size:12px">(クリップ内 ${e.cueOffsetInClipSec.toFixed(2)}s地点が設計時刻)</span>
       <br/>
-      <button type="button" class="btn btn-check" data-action="check">🔔 ズレ確認(補正込み)</button>
+      <button type="button" class="btn btn-check" data-action="check">🔔 今の位置で確認</button>
     </td>
     <td class="judge-cell">
-      <div class="judge-row">
-        <button type="button" class="btn btn-ok" data-action="ok">👍 合ってる</button>
-        <button type="button" class="btn btn-reject" data-action="reject">🤔 わからない</button>
-      </div>
-      <div class="judge-row">
-        <span class="nudge-label">ズレてる場合、この行だけ↓を押す(押した分だけ足し引きされる)</span>
-      </div>
       <div class="judge-row nudge-row">
-        <button type="button" class="btn btn-nudge" data-delta="-50">-50</button>
-        <button type="button" class="btn btn-nudge" data-delta="-25">-25</button>
-        <button type="button" class="btn btn-nudge" data-delta="-10">-10</button>
-        <span class="nudge-current" data-role="current">0ms</span>
-        <button type="button" class="btn btn-nudge" data-delta="10">+10</button>
-        <button type="button" class="btn btn-nudge" data-delta="25">+25</button>
-        <button type="button" class="btn btn-nudge" data-delta="50">+50</button>
+        <button type="button" class="btn btn-nudge btn-nudge-big" data-delta="-300">⏪⏪ うんと早く</button>
+        <button type="button" class="btn btn-nudge" data-delta="-50">⏪ 少し早く</button>
+        <span class="nudge-current" data-role="current">ズレなし</span>
+        <button type="button" class="btn btn-nudge" data-delta="50">少し遅く ⏩</button>
+        <button type="button" class="btn btn-nudge btn-nudge-big" data-delta="300">うんと遅く ⏩⏩</button>
+      </div>
+      <div class="judge-row">
+        <button type="button" class="btn btn-reset" data-action="reset">↺ ズレをやり直す</button>
+        <button type="button" class="btn btn-ok" data-action="ok">👍 これで合ってる</button>
+        <button type="button" class="btn btn-reject" data-action="reject">🤔 わからない</button>
       </div>
       ${e.isGoldenAnchorCandidate ? '<div class="judge-row"><label class="golden-toggle"><input type="checkbox" data-role="golden" /> ⭐ 基準点として確定する</label></div>' : ''}
       <div class="judge-status" data-role="status">未確認</div>
@@ -270,8 +266,12 @@ writeFileSync(
   .btn-ok.active { background: #2f7a3f; border-color: #2f7a3f; color: #fff; }
   .btn-reject { border-color: #7a3a3a; }
   .btn-reject.active { background: #7a3232; border-color: #7a3232; color: #fff; }
+  .btn-nudge { font-size: 12px; padding: 6px 10px; }
   .btn-nudge.active { background: #7a5a1f; border-color: #7a5a1f; color: #fff; }
-  .btn-check { border-color: #3a5a7a; margin-top: 4px; font-size: 11px; }
+  .btn-nudge-big { font-weight: 700; border-color: #8a4a2f; }
+  .btn-nudge-big.active { background: #8a4a2f; border-color: #8a4a2f; }
+  .btn-reset { border-color: #555; font-size: 11px; color: #aaa; }
+  .btn-check { border-color: #3a5a7a; margin-top: 4px; font-size: 12px; font-weight: 700; }
   .btn-check:hover { background: #24384a; }
   .nudge-label { font-size: 11px; color: #888; }
   .nudge-row { display: flex; align-items: center; gap: 4px; }
@@ -288,24 +288,29 @@ writeFileSync(
 <p class="note">これはローカル専用の確認用HTML(Git管理外・著作権音源から切り出したクリップを含む)。</p>
 
 <div class="howto">
-  <h2>使い方(4ステップ)</h2>
+  <h2>使い方(むずかしいことは考えなくてOK)</h2>
   <ol>
-    <li>各行の▶を押してまず普通に聴く。クリップの<b>${WINDOW_BEFORE_SEC}秒後</b>あたりが「設計時刻」(歌詞・アクセントが来るはずの瞬間)。</li>
+    <li><b>▶</b>(再生ボタン)を押して聴く。</li>
     <li>
-      ズレてると感じたら、感じた分だけ <b>-50/-25/-10/+10/+25/+50</b> のボタンを押す(複数回押すと積み重なる。マイナス=もっと早く鳴ってほしい、プラス=もっと遅く鳴ってほしい)。<br/>
-      押したら <b>🔔 ズレ確認(補正込み)</b> を押す。すると、今押した分だけズラした位置で「ピッ」という短い音が鳴るので、<b>歌詞の頭とピッ音が揃うまで、±ボタン→🔔で確認、を繰り返す</b>(数字を覚えたり報告したりする必要はない)。
+      歌詞が音より<b>早く</b>聞こえたら <b>⏪ 少し早く</b> を押す。<b>遅れて</b>聞こえたら <b>少し遅く ⏩</b> を押す。<br/>
+      ズレがかなり大きい(「めっちゃズレてる」)と感じたら、まず <b>⏪⏪ うんと早く</b> か <b>うんと遅く ⏩⏩</b> を1〜2回押してから、足りない分を小さいボタンで微調整する。<br/>
+      何回押してもOK。押しすぎたら <b>↺ ズレをやり直す</b> で0に戻せる。
     </li>
     <li>
-      ピッタリ揃ったら(または最初から合っていたら) <b>👍 合ってる</b>(±ボタンを押した行は自動的に緑になっているのでそのままでOK)。<br/>
-      判断できない/違う音を指している場合は <b>🤔 わからない</b>。
+      押したら <b>🔔 今の位置で確認</b> を押す。今押した分だけズラした位置で「ピッ」という音が鳴るので、<b>歌詞の頭と「ピッ」がピッタリ揃うまで、②→🔔確認、を何回でも繰り返す</b>。数字(ms)は見なくて良い。音だけで判断すればOK。
     </li>
-    <li>一通り終わったら、上の<b>「名前」欄に自分の名前</b>を入れて<b>「💾 保存する」</b>を押す。ファイルが1つダウンロードされるので、
+    <li>
+      揃ったら特に何も押さなくてOK(ボタンを押した時点で自動的に「合ってる」として記録されている)。<br/>
+      最初から動かさずに合っていた行だけ <b>👍 これで合ってる</b> を押す。<br/>
+      何を確認すればいいか分からない/どこがズレてるか判断できない場合は <b>🤔 わからない</b> を押して次の行へ進んでよい(無理に判断しなくていい)。
+    </li>
+    <li>全部(または途中まで)終わったら、上の<b>「名前」欄に自分の名前</b>を入れて<b>「💾 保存する」</b>を押す。ファイルが1つダウンロードされるので、
       <code>local/analysis/start-wedding/listening-decisions.local.json</code> という名前でそのフォルダに保存する
       (ダウンロードダイアログで保存先を選べる場合はそこで直接指定、選べない場合はダウンロードフォルダから移動する)。</li>
   </ol>
   <p style="font-size:12px;color:#888;margin:10px 0 0;">
     ⭐印(黄色背景)の10行は曲全体を代表する最優先箇所。時間が無い場合は⭐だけでもOK。
-    ⭐の行を「👍 合ってる」にした場合だけ、行の中の「⭐ 基準点として確定する」にもチェックすると、
+    ⭐の行を「👍」にした場合だけ、行の中の「⭐ 基準点として確定する」にもチェックすると、
     以後AIが上書きしない基準点(Golden Anchor)として確定する。<br/>
     全部を1回で終わらせる必要はない。保存を何度でも繰り返せる(前回チェックした分は自動的に覚えている)。
   </p>
@@ -450,11 +455,11 @@ ${rows}
 
     okBtn.classList.toggle('active', entry.status === 'ok');
     rejectBtn.classList.toggle('active', entry.status === 'reject');
-    currentEl.textContent = (entry.deltaMs > 0 ? '+' : '') + entry.deltaMs + 'ms';
+    currentEl.textContent = entry.deltaMs === 0 ? 'ズレなし' : Math.abs(entry.deltaMs) + 'ms ' + (entry.deltaMs < 0 ? '早く' : '遅く');
     if (goldenInput) goldenInput.checked = !!entry.golden;
 
     if (entry.status === 'ok' && entry.deltaMs !== 0) {
-      statusEl.textContent = '判定: 合ってる(' + (entry.deltaMs > 0 ? '+' : '') + entry.deltaMs + 'ms補正)' + (entry.golden ? ' ⭐基準点' : '');
+      statusEl.textContent = '判定: 合ってる(' + Math.abs(entry.deltaMs) + 'ms ' + (entry.deltaMs < 0 ? '早く' : '遅く') + '補正)' + (entry.golden ? ' ⭐基準点' : '');
       statusEl.className = 'judge-status is-adjust';
     } else if (entry.status === 'ok') {
       statusEl.textContent = '判定: 合ってる' + (entry.golden ? ' ⭐基準点' : '');
@@ -499,6 +504,12 @@ ${rows}
         renderRow(tr);
         saveState();
       });
+    });
+    tr.querySelector('.btn-reset').addEventListener('click', function () {
+      var entry = getEntry(cueId);
+      entry.deltaMs = 0;
+      renderRow(tr);
+      saveState();
     });
     var checkBtn = tr.querySelector('.btn-check');
     if (checkBtn) {
