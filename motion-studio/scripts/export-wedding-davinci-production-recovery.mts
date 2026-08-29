@@ -17,6 +17,7 @@ const config = movieId === 'opening'
       sidecar: 'out/handoff/opening-v1/opening-v1-davinci-production-recovery.json',
       schemaVersion: 'opening-v1-production-bundle/v1',
       cropReview: 'out/qa/opening-v1-crop-review-evidence.json',
+      audioReview: 'out/qa/opening-v1-audio-listening-review.json',
       realMediaReview: null,
     }
   : {
@@ -24,6 +25,7 @@ const config = movieId === 'opening'
       sidecar: 'out/handoff/profile-v1/profile-v1-davinci-production-recovery.json',
       schemaVersion: 'profile-v1-production-bundle/v1',
       cropReview: null,
+      audioReview: null,
       realMediaReview: 'out/qa/profile-v1-real-media-review.json',
     };
 
@@ -54,6 +56,7 @@ if (bundle.davinci?.productionReady !== false || bundle.davinci?.macActualState 
 }
 
 let openingCropBinding: null | {path: string; evidenceSha256: string; bindingFingerprintSha256: string} = null;
+let openingAudioBinding: null | {path: string; evidenceSha256: string; previewSha256: string; bgmSha256: string} = null;
 if (movieId === 'opening') {
   const cropReviewPath = join(root, config.cropReview!);
   if (!existsSync(cropReviewPath)) {
@@ -84,6 +87,59 @@ if (movieId === 'opening') {
     path: config.cropReview,
     evidenceSha256: currentCropSha,
     bindingFingerprintSha256: cropReview.bindingFingerprintSha256,
+  };
+
+  const audioReviewPath = join(root, config.audioReview!);
+  if (!existsSync(audioReviewPath)) {
+    console.error('DaVinci production recovery export blocked: Opening audio listening Human QA evidence missing');
+    process.exit(1);
+  }
+  let audioReview: any;
+  try {
+    audioReview = JSON.parse(readFileSync(audioReviewPath, 'utf8'));
+  } catch {
+    console.error('DaVinci production recovery export blocked: Opening audio listening Human QA evidence invalid JSON');
+    process.exit(1);
+  }
+  const currentAudioSha = shaFile(audioReviewPath);
+  if (
+    audioReview.schemaVersion !== 'opening-v1-audio-listening-review/v1' ||
+    audioReview.authority !== 'HUMAN_OPENING_AUDIO_LISTENING_REVIEW' ||
+    audioReview.review?.overall !== 'PASS' ||
+    !audioReview.review?.reviewer?.trim() ||
+    audioReview.remotionStudioActual !== 'NOT_RUN' ||
+    audioReview.macDaVinciActual !== 'NOT_RUN' ||
+    audioReview.productionReady !== false
+  ) {
+    console.error('DaVinci production recovery export blocked: Opening audio listening Human QA contract is not current PASS evidence');
+    process.exit(1);
+  }
+  if (
+    bundle.humanAudioListeningReview?.evidencePath !== config.audioReview ||
+    bundle.humanAudioListeningReview?.evidenceSha256 !== currentAudioSha ||
+    bundle.humanAudioListeningReview?.previewSha256 !== audioReview.preview?.sha256 ||
+    bundle.humanAudioListeningReview?.bgmSha256 !== audioReview.bgm?.sha256 ||
+    bundle.humanAudioListeningReview?.overall !== 'PASS'
+  ) {
+    console.error('DaVinci production recovery export blocked: Opening audio listening bundle binding is stale');
+    process.exit(1);
+  }
+  if (
+    bundle.palmier?.audioListeningReviewEvidenceSha256 !== currentAudioSha ||
+    bundle.palmier?.audioListeningPreviewSha256 !== audioReview.preview?.sha256 ||
+    bundle.palmier?.audioListeningBgmSha256 !== audioReview.bgm?.sha256 ||
+    bundle.davinci?.expectedAudioListeningReviewEvidenceSha256 !== currentAudioSha ||
+    bundle.davinci?.expectedAudioListeningPreviewSha256 !== audioReview.preview?.sha256 ||
+    bundle.davinci?.expectedAudioListeningBgmSha256 !== audioReview.bgm?.sha256
+  ) {
+    console.error('DaVinci production recovery export blocked: Opening Palmier/DaVinci audio listening binding is stale');
+    process.exit(1);
+  }
+  openingAudioBinding = {
+    path: config.audioReview,
+    evidenceSha256: currentAudioSha,
+    previewSha256: audioReview.preview.sha256,
+    bgmSha256: audioReview.bgm.sha256,
   };
 }
 
@@ -174,6 +230,12 @@ const payload = {
       cropReviewEvidenceSha256: openingCropBinding.evidenceSha256,
       cropReviewBindingFingerprintSha256: openingCropBinding.bindingFingerprintSha256,
     } : {}),
+    ...(openingAudioBinding ? {
+      audioListeningReviewEvidencePath: openingAudioBinding.path,
+      audioListeningReviewEvidenceSha256: openingAudioBinding.evidenceSha256,
+      audioListeningPreviewSha256: openingAudioBinding.previewSha256,
+      audioListeningBgmSha256: openingAudioBinding.bgmSha256,
+    } : {}),
     ...(profileRealMediaQaBinding ? {
       realMediaHumanQaEvidencePath: profileRealMediaQaBinding.path,
       realMediaHumanQaEvidenceSha256: profileRealMediaQaBinding.evidenceSha256,
@@ -193,6 +255,11 @@ console.log(`finalRenderSha256=${bundle.finalRender.sha256}`);
 if (openingCropBinding) {
   console.log(`cropReviewEvidenceSha256=${openingCropBinding.evidenceSha256}`);
   console.log(`cropReviewBindingFingerprintSha256=${openingCropBinding.bindingFingerprintSha256}`);
+}
+if (openingAudioBinding) {
+  console.log(`audioListeningReviewEvidenceSha256=${openingAudioBinding.evidenceSha256}`);
+  console.log(`audioListeningPreviewSha256=${openingAudioBinding.previewSha256}`);
+  console.log(`audioListeningBgmSha256=${openingAudioBinding.bgmSha256}`);
 }
 if (profileRealMediaQaBinding) {
   console.log(`realMediaHumanQaEvidenceSha256=${profileRealMediaQaBinding.evidenceSha256}`);
