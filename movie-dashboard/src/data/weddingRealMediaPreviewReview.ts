@@ -29,20 +29,20 @@ const openingReview = openingProductionStatus.stages.previewReview;
 const profilePreview = profileProductionStatus.sourceRevalidation.realMediaPreview;
 
 export function getWeddingRealMediaPreviewReview(): WeddingPreviewReviewProject[] {
-  const openingMediaReady = openingProductionStatus.stages.media.state === "PASS";
-  const openingCropReady = openingProductionStatus.stages.cropReview.state === "PASS";
-  const openingPreviewReady = openingPreview.state === "PASS";
+  const openingMediaReady = String(openingProductionStatus.stages.media.state) === "PASS";
+  const openingCropReady = String(openingProductionStatus.stages.cropReview.state) === "PASS";
+  const openingPreviewReady = String(openingPreview.state) === "PASS";
 
-  const profileAssemblyReady = profileProductionStatus.readiness.assemblyReady === true;
-  const profilePreviewReady = profilePreview.state === "PASS";
+  const profileAssemblyReady = Boolean(profileProductionStatus.readiness.assemblyReady);
+  const profilePreviewReady = String(profilePreview.state) === "PASS";
 
   return [
     {
       projectId: "opening",
-      overallState: openingProductionStatus.overallState,
-      upstreamState: openingProductionStatus.stages.cropReview.state,
-      previewState: openingPreview.state,
-      reviewState: openingReview.state,
+      overallState: String(openingProductionStatus.overallState),
+      upstreamState: String(openingProductionStatus.stages.cropReview.state),
+      previewState: String(openingPreview.state),
+      reviewState: String(openingReview.state),
       previewPath: openingPreview.path,
       reviewEvidencePath: openingReview.path,
       renderCommand: openingPreview.recovery[0] ?? "pnpm render:opening-v1:preview",
@@ -58,10 +58,10 @@ export function getWeddingRealMediaPreviewReview(): WeddingPreviewReviewProject[
     },
     {
       projectId: "profile",
-      overallState: profileProductionStatus.overallState,
-      upstreamState: profileProductionStatus.stages.assembly.state,
-      previewState: profilePreview.state,
-      reviewState: profileRealMediaReviewGate.state,
+      overallState: String(profileProductionStatus.overallState),
+      upstreamState: String(profileProductionStatus.stages.assembly.state),
+      previewState: String(profilePreview.state),
+      reviewState: String(profileRealMediaReviewGate.state),
       previewPath: "out/preview/profile_v1_real_media_preview.mp4",
       reviewEvidencePath: profileRealMediaReviewGate.audit.evidencePath,
       renderCommand: profilePreview.recovery[0] ?? "pnpm render:profile-v1:real-media-preview",
@@ -70,9 +70,9 @@ export function getWeddingRealMediaPreviewReview(): WeddingPreviewReviewProject[
       humanReviewRequired: true,
       canRenderPreview: profileAssemblyReady,
       canStartHumanReview: profilePreviewReady,
-      reviewedCount: profileRealMediaReviewGate.mediaReviewed,
-      expectedCount: profileRealMediaReviewGate.mediaExpected,
-      bgmReviewed: profileRealMediaReviewGate.bgmReviewed,
+      reviewedCount: Number(profileRealMediaReviewGate.mediaReviewed),
+      expectedCount: Number(profileRealMediaReviewGate.mediaExpected),
+      bgmReviewed: Boolean(profileRealMediaReviewGate.bgmReviewed),
       blockers: profilePreview.blockers,
     },
   ];
