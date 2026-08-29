@@ -24,7 +24,6 @@ export function buildWeddingProductionInputPlan(options: WeddingProductionInputP
     `node --no-warnings scripts/intake-production-media.mts --project ${project} --source "${mediaSource}"`,
     `node --no-warnings scripts/intake-production-media.mts --project ${project} --source "${mediaSource}" --apply --receipt "${receipt}"`,
     `node --no-warnings scripts/verify-production-media-intake-receipt.mts --project ${project}`,
-    `pnpm prepare:${project}-v1`,
   ];
   if (bgmSource) {
     commands.push(
@@ -33,6 +32,8 @@ export function buildWeddingProductionInputPlan(options: WeddingProductionInputP
       `node --no-warnings scripts/verify-production-bgm-intake-receipt.mts --project ${project}`,
     );
   }
+  commands.push(`pnpm prepare:${project}-v1`);
+
   return {
     schemaVersion: 'wedding-production-input-plan/v1' as const,
     authority: 'USER_PATH_BOUND_COMMAND_PLAN' as const,
@@ -50,6 +51,7 @@ export function buildWeddingProductionInputPlan(options: WeddingProductionInputP
       'INPUT_PLAN != COMMAND_EXECUTED',
       'ABSOLUTE_REAL_PATH_REQUIRED',
       'PLACEHOLDER_PATH_REJECTED',
+      'ALL_REQUESTED_INPUT_RECEIPTS_VERIFIED_BEFORE_FINAL_PREPARE',
       'SOURCE_MEDIA_REMAINS_UNMODIFIED_BY_PLAN_GENERATION',
       'GUI_ACTUAL_REMAINS_NOT_RUN_UNTIL_TRUE_GUI_EVIDENCE',
     ],
