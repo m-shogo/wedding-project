@@ -4,19 +4,21 @@ import {openingProductionStatus} from "./openingProductionStatus.generated";
 
 export const OPENING_AUTHORITATIVE_HANDOFF_OVERLAY_SCHEMA = "opening-authoritative-handoff-overlay/v1" as const;
 
+const asBool = (value: unknown): boolean => value === true;
+const asState = (value: unknown): string => String(value ?? "");
+
 export function buildOpeningAuthoritativeHandoffOverlay() {
   const audioCurrent =
-    openingProductionStatus.stages.audioListeningReview.state === "PASS" &&
-    openingAudioListeningStatus.state === "PASS" &&
-    openingAudioListeningStatus.humanAudioQaComplete === true;
+    asState(openingProductionStatus.stages.audioListeningReview.state) === "PASS" &&
+    asState(openingAudioListeningStatus.state) === "PASS" &&
+    asBool(openingAudioListeningStatus.humanAudioQaComplete);
 
-  const productionBundleCurrent =
-    openingProductionStatus.readiness.productionBundleCurrent === true && audioCurrent;
+  const reportedBundleCurrent = asBool(openingProductionStatus.readiness.productionBundleCurrent);
+  const reportedPalmierCurrent = asBool(openingProductionStatus.handoff.palmier.current);
+  const davinciReportedCurrent = asBool(openingProductionStatus.handoff.davinci.current);
 
-  const palmierHandoffCurrent =
-    openingProductionStatus.handoff.palmier.current === true && productionBundleCurrent;
-
-  const davinciReportedCurrent = openingProductionStatus.handoff.davinci.current === true;
+  const productionBundleCurrent = reportedBundleCurrent && audioCurrent;
+  const palmierHandoffCurrent = reportedPalmierCurrent && productionBundleCurrent;
   const davinciHandoffCurrent = davinciReportedCurrent && productionBundleCurrent && audioCurrent;
 
   return {
@@ -28,20 +30,20 @@ export function buildOpeningAuthoritativeHandoffOverlay() {
       productionBundleCurrent,
       palmierHandoffCurrent,
       davinciHandoffCurrent,
-      macDaVinciActualVerified: openingDavinciActualBindingAudit.current === true,
+      macDaVinciActualVerified: asBool(openingDavinciActualBindingAudit.current),
       productionReady: false,
     },
     reported: {
-      productionBundleCurrent: openingProductionStatus.readiness.productionBundleCurrent === true,
-      palmierHandoffCurrent: openingProductionStatus.handoff.palmier.current === true,
+      productionBundleCurrent: reportedBundleCurrent,
+      palmierHandoffCurrent: reportedPalmierCurrent,
       davinciHandoffCurrent: davinciReportedCurrent,
     },
     blockerCodes: [
       ...(!audioCurrent ? ["OPENING_AUTHORITATIVE_AUDIO_CURRENTNESS_REQUIRED"] : []),
-      ...(openingProductionStatus.readiness.productionBundleCurrent === true && !productionBundleCurrent
+      ...(reportedBundleCurrent && !productionBundleCurrent
         ? ["OPENING_AUTHORITATIVE_BUNDLE_BLOCKED_BY_AUDIO_CURRENTNESS"]
         : []),
-      ...(openingProductionStatus.handoff.palmier.current === true && !palmierHandoffCurrent
+      ...(reportedPalmierCurrent && !palmierHandoffCurrent
         ? ["OPENING_AUTHORITATIVE_PALMIER_BLOCKED_BY_AUDIO_CURRENTNESS"]
         : []),
       ...(davinciReportedCurrent && !davinciHandoffCurrent
