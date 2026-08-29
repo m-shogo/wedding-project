@@ -1,6 +1,7 @@
 import {buildOpeningAuthoritativeHandoffOverlay} from "../data/openingAuthoritativeHandoffOverlay";
 import {buildOpeningProductionStatusHandoff} from "../data/openingProductionStatusHandoff";
 import {buildProfileProductionStatusHandoff} from "../data/profileProductionStatusHandoff";
+import {buildRemotionElementHandoffIdentityReference} from "../data/remotionElementHandoffIdentityReference";
 import {
   buildPalmierWeddingProductionGate,
   type PalmierWeddingProductionMovieId,
@@ -65,6 +66,7 @@ export function buildOpeningEffectiveProductionHandoff() {
   return {
     ...buildOpeningProductionStatusHandoff(),
     authoritativeHandoff: buildOpeningAuthoritativeHandoffOverlay(),
+    remotionElementIdentity: buildRemotionElementHandoffIdentityReference("opening"),
     effectiveProduction: buildOverlay("opening"),
   };
 }
@@ -72,6 +74,7 @@ export function buildOpeningEffectiveProductionHandoff() {
 export function buildProfileEffectiveProductionHandoff() {
   return {
     ...buildProfileProductionStatusHandoff(),
+    remotionElementIdentity: buildRemotionElementHandoffIdentityReference("profile"),
     effectiveProduction: buildOverlay("profile"),
   };
 }
