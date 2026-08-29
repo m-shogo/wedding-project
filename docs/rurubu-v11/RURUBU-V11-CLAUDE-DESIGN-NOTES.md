@@ -481,3 +481,37 @@ now reads unmistakably as the primary subject.
 Audit note: switched this page's overflow check to only inspect *direct*
 trim children (not the recursive `findAll`) to avoid the nested-clip-frame
 false-positive class documented above. 0 real overflow issues.
+
+## Missing Okinawa/Seoul assets — generated via Codex CLI, not Claude/AI-people
+
+User explicitly asked to use Codex CLI for missing assets. Scoped this
+narrowly and deliberately: **generated destination scenery only, never people**.
+The couple's own likeness must never be fabricated — this generates the same
+category of asset already used throughout the project (`GENERATED_PHOTO_MEMORY_*`
+Hawaii scenery), just for the two destinations that had no real photo yet.
+
+Process:
+1. Confirmed `codex` CLI was installed and authenticated (ChatGPT auth, no
+   separate API key needed) via `codex doctor`.
+2. Ran `codex exec` from an isolated scratch directory (`-C` flag), not the
+   git repo or either worktree, with `--skip-git-repo-check` — kept Codex's
+   file writes fully separate from any tracked working tree.
+3. First call was investigation-only ("do you have image generation, don't
+   generate anything yet") to confirm the built-in `image_gen` tool existed
+   before spending a real generation call.
+4. Second call generated exactly two images with fully-specified prompts
+   (real Okinawa beach coastline / Bukchon Hanok Village Seoul street,
+   explicit `no people, no animals, no text, no logos, no watermark, no
+   signage`, photographic-realism framing) — the same negative-constraint
+   discipline this project already uses for AI video B-roll.
+5. **Visually inspected both outputs before use** (not just trusted the file
+   existed) — confirmed no people, no readable text/logos, no fantasy-generic
+   look that got the earlier `TROPICAL_RESORT_STREET` asset rejected.
+6. Placed both, removed the "coming soon" dressing since real content now
+   exists, named them `PHOTO / MEMORY_OKINAWA_GENERATED_VERIFIED` and
+   `PHOTO / MEMORY_SEOUL_GENERATED_VERIFIED / codex-image_gen / <slug>` so the
+   provenance (Codex-generated, not a real trip photo, not Claude-generated)
+   stays traceable in the file itself.
+
+Final audit: 0 overflow, 0 unfilled image placeholders on P05. All three
+Memory Spot destinations (Okinawa/Seoul/Hawaii) now have real imagery.
