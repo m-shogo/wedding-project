@@ -186,7 +186,7 @@ const escapeAttr = (s: string) => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;
 // サーバサイド計算はここで完結させ、ブラウザ側はtrue/falseの読み取りだけにする
 // (フィルタロジックの二重実装を避ける)。
 const rowDataAttrs = (e: ClipEntry): string =>
-  `data-cueid="${escapeAttr(e.cueId)}" data-critical="${e.isCritical}" data-post60="${e.is60sPlus}" data-lowconf="${e.isLowConfidence}" data-unverified="${e.isUnverified}" data-golden="${e.isGoldenAnchorCandidate}"`;
+  `data-cueid="${escapeAttr(e.cueId)}" data-critical="${e.isCritical}" data-post60="${e.is60sPlus}" data-lowconf="${e.isLowConfidence}" data-unverified="${e.isUnverified}" data-golden="${e.isGoldenAnchorCandidate}" data-designoffset="${e.cueOffsetInClipSec}"`;
 const rows = entries
   .map(
     (e) => `
@@ -200,6 +200,8 @@ const rows = entries
     <td>
       <audio controls preload="none" src="listening-clips/${e.clipFile}"></audio>
       <span style="color:#888;font-size:12px">(クリップ内 ${e.cueOffsetInClipSec.toFixed(2)}s地点が設計時刻)</span>
+      <br/>
+      <button type="button" class="btn btn-check" data-action="check">🔔 ズレ確認(補正込み)</button>
     </td>
     <td class="judge-cell">
       <div class="judge-row">
@@ -269,6 +271,8 @@ writeFileSync(
   .btn-reject { border-color: #7a3a3a; }
   .btn-reject.active { background: #7a3232; border-color: #7a3232; color: #fff; }
   .btn-nudge.active { background: #7a5a1f; border-color: #7a5a1f; color: #fff; }
+  .btn-check { border-color: #3a5a7a; margin-top: 4px; font-size: 11px; }
+  .btn-check:hover { background: #24384a; }
   .nudge-label { font-size: 11px; color: #888; }
   .nudge-row { display: flex; align-items: center; gap: 4px; }
   .nudge-current { display: inline-block; min-width: 44px; text-align: center; font-size: 12px; color: #F4C95D; font-weight: 700; }
@@ -284,13 +288,16 @@ writeFileSync(
 <p class="note">これはローカル専用の確認用HTML(Git管理外・著作権音源から切り出したクリップを含む)。</p>
 
 <div class="howto">
-  <h2>使い方(3ステップ)</h2>
+  <h2>使い方(4ステップ)</h2>
   <ol>
-    <li>各行の▶を押して聴く。クリップの<b>${WINDOW_BEFORE_SEC}秒後</b>あたりが「設計時刻」(歌詞・アクセントが来るはずの瞬間)。</li>
+    <li>各行の▶を押してまず普通に聴く。クリップの<b>${WINDOW_BEFORE_SEC}秒後</b>あたりが「設計時刻」(歌詞・アクセントが来るはずの瞬間)。</li>
     <li>
-      合っていたら <b>👍 合ってる</b>。<br/>
-      ズレていたら、感じた分だけ <b>-50/-25/-10/+10/+25/+50</b> のボタンを押す(複数回押すと積み重なる。マイナス=もっと早く鳴ってほしい、プラス=もっと遅く鳴ってほしい)。<br/>
-      よく分からない/違う音を指している場合は <b>🤔 わからない</b>。
+      ズレてると感じたら、感じた分だけ <b>-50/-25/-10/+10/+25/+50</b> のボタンを押す(複数回押すと積み重なる。マイナス=もっと早く鳴ってほしい、プラス=もっと遅く鳴ってほしい)。<br/>
+      押したら <b>🔔 ズレ確認(補正込み)</b> を押す。すると、今押した分だけズラした位置で「ピッ」という短い音が鳴るので、<b>歌詞の頭とピッ音が揃うまで、±ボタン→🔔で確認、を繰り返す</b>(数字を覚えたり報告したりする必要はない)。
+    </li>
+    <li>
+      ピッタリ揃ったら(または最初から合っていたら) <b>👍 合ってる</b>(±ボタンを押した行は自動的に緑になっているのでそのままでOK)。<br/>
+      判断できない/違う音を指している場合は <b>🤔 わからない</b>。
     </li>
     <li>一通り終わったら、上の<b>「名前」欄に自分の名前</b>を入れて<b>「💾 保存する」</b>を押す。ファイルが1つダウンロードされるので、
       <code>local/analysis/start-wedding/listening-decisions.local.json</code> という名前でそのフォルダに保存する
@@ -368,6 +375,56 @@ ${rows}
   }
   var state = loadState(); // cueId -> {status: 'ok'|'reject', deltaMs: number, golden: boolean}
 
+  // 「🔔 ズレ確認」: 現在の±ms補正込みの位置で短いクリック音を鳴らし、
+  // 歌詞の頭と音が揃うかどうかを、数字ではなく耳で確認できるようにする。
+  // (数字をやり取りする往復を無くすための機能。判定ロジックには影響しない。)
+  var audioCtx = null;
+  var bufferCache = {};
+  function getAudioCtx() {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    return audioCtx;
+  }
+  function loadBuffer(cueId, src) {
+    if (bufferCache[cueId]) return Promise.resolve(bufferCache[cueId]);
+    return fetch(src)
+      .then(function (r) { return r.arrayBuffer(); })
+      .then(function (ab) { return getAudioCtx().decodeAudioData(ab); })
+      .then(function (buf) { bufferCache[cueId] = buf; return buf; });
+  }
+  function playWithClick(cueId, src, clickAtSec, btn) {
+    var originalLabel = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = '⏳ 読み込み中...';
+    loadBuffer(cueId, src)
+      .then(function (buffer) {
+        btn.disabled = false;
+        btn.textContent = originalLabel;
+        var ctx = getAudioCtx();
+        if (ctx.state === 'suspended') ctx.resume();
+        var startAt = ctx.currentTime + 0.05;
+        var source = ctx.createBufferSource();
+        source.buffer = buffer;
+        source.connect(ctx.destination);
+        source.start(startAt);
+        if (clickAtSec >= 0 && clickAtSec <= buffer.duration) {
+          var osc = ctx.createOscillator();
+          var gain = ctx.createGain();
+          osc.type = 'square';
+          osc.frequency.value = 1800;
+          gain.gain.setValueAtTime(0.35, startAt + clickAtSec);
+          gain.gain.exponentialRampToValueAtTime(0.001, startAt + clickAtSec + 0.05);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(startAt + clickAtSec);
+          osc.stop(startAt + clickAtSec + 0.06);
+        }
+      })
+      .catch(function () {
+        btn.disabled = false;
+        btn.textContent = '🔔 読み込み失敗(再試行)';
+      });
+  }
+
   function saveState() {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
@@ -443,6 +500,17 @@ ${rows}
         saveState();
       });
     });
+    var checkBtn = tr.querySelector('.btn-check');
+    if (checkBtn) {
+      checkBtn.addEventListener('click', function () {
+        var entry = getEntry(cueId);
+        var audioEl = tr.querySelector('audio');
+        var src = audioEl.getAttribute('src');
+        var designOffset = parseFloat(tr.getAttribute('data-designoffset'));
+        var clickAtSec = designOffset + entry.deltaMs / 1000;
+        playWithClick(cueId, src, clickAtSec, checkBtn);
+      });
+    }
     var goldenInput = tr.querySelector('[data-role=golden]');
     if (goldenInput) {
       goldenInput.addEventListener('change', function () {
