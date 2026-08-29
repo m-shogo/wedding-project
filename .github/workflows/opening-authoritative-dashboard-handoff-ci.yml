@@ -1,0 +1,51 @@
+name: Opening Authoritative Dashboard Handoff CI
+
+on:
+  pull_request:
+    paths:
+      - 'movie-dashboard/src/data/openingAuthoritativeHandoffOverlay.ts'
+      - 'movie-dashboard/src/lib/effectiveProductionHandoffExport.ts'
+      - '.github/workflows/opening-authoritative-dashboard-handoff-ci.yml'
+  workflow_dispatch:
+
+jobs:
+  dashboard-authoritative-handoff:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: movie-dashboard
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: movie-dashboard/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - name: Type-check dashboard authoritative handoff
+        run: pnpm exec tsc -b --pretty false
+      - name: Verify fail-closed source contract
+        run: |
+          node - <<'NODE'
+          const fs = require('node:fs');
+          const overlay = fs.readFileSync('src/data/openingAuthoritativeHandoffOverlay.ts', 'utf8');
+          const handoff = fs.readFileSync('src/lib/effectiveProductionHandoffExport.ts', 'utf8');
+          for (const needle of [
+            'openingAudioListeningStatus.humanAudioQaComplete === true',
+            'openingProductionStatus.readiness.productionBundleCurrent === true && audioCurrent',
+            'openingProductionStatus.handoff.palmier.current === true && productionBundleCurrent',
+            'davinciReportedCurrent && productionBundleCurrent && audioCurrent',
+            'productionReady: false',
+            'AUDIO_CURRENTNESS_STALE => DASHBOARD_HANDOFF_CURRENT_FALSE',
+            'CI_MUST_NOT_PROMOTE_MAC_GUI_ACTUAL',
+          ]) {
+            if (!overlay.includes(needle)) throw new Error(`missing overlay contract: ${needle}`);
+          }
+          if (!handoff.includes('authoritativeHandoff: buildOpeningAuthoritativeHandoffOverlay()')) {
+            throw new Error('Opening effective handoff must expose authoritativeHandoff');
+          }
+          if (overlay.includes('productionReady: true')) throw new Error('dashboard overlay must fail closed');
+          NODE
