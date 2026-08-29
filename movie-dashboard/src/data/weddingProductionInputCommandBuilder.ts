@@ -25,7 +25,7 @@ function validateMacAbsolutePath(label: string, rawValue: string, required: bool
 }
 
 function shellQuote(value: string) {
-  return `'${value.replaceAll("'", `'\\''`)}'`;
+  return `'${value.split("'").join(`'\\''`)}'`;
 }
 
 export function buildWeddingProductionInputGeneratorCommand(
