@@ -3,6 +3,7 @@ import {ProfileV1} from './compositions/profile/ProfileV1';
 import {ProfileV1DeparturePreview} from './compositions/profile/ProfileV1DeparturePreview';
 import {ProfileV1FullStructurePreview} from './compositions/profile/ProfileV1FullStructurePreview';
 import {ProfileV1GeneratedAccentsPreview} from './compositions/profile/ProfileV1GeneratedAccentsPreview';
+import {ProfileV1RealMediaCropReview} from './compositions/profile/ProfileV1RealMediaCropReview';
 import {ProfileV1RealMediaPreview} from './compositions/profile/ProfileV1RealMediaPreview';
 import {video} from './data/theme';
 
@@ -36,6 +37,14 @@ export const ProfileV1Root = () => (
       id="ProfileV1RealMediaPreview"
       component={ProfileV1RealMediaPreview}
       durationInFrames={30 * video.fps}
+      fps={video.fps}
+      width={video.width}
+      height={video.height}
+    />
+    <Composition
+      id="ProfileV1RealMediaCropReview"
+      component={ProfileV1RealMediaCropReview}
+      durationInFrames={34 * video.fps}
       fps={video.fps}
       width={video.width}
       height={video.height}
