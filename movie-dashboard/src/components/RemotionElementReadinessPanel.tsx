@@ -85,9 +85,18 @@ export function RemotionElementReadinessPanel({
               <p className="mt-1 font-mono text-violet-700 dark:text-violet-300">{evidence.candidateCount} candidates × {evidence.checkAxesPerCandidate} checks</p>
             </div>
           </div>
+          <div className="mt-3 border border-sky-200 bg-sky-50/70 p-2.5 dark:border-sky-900 dark:bg-sky-950/20">
+            <p className="text-[9px] font-semibold tracking-[0.12em] text-sky-800 dark:text-sky-200">BATCH SOURCE CURRENTNESS · SHA-BOUND</p>
+            <p className="mt-1 text-[9px] leading-4 text-sky-800 dark:text-sky-200">
+              prepared payload / builder / checker / shared typography kit はSHA-256でbatch manifestに束縛。どれかが変わるとbatch checkと既存Studio Actual evidenceはSTALEになり、再prepare・再Actualが必要です。
+            </p>
+            <p className="mt-1 text-[9px] leading-4 text-sky-700 dark:text-sky-300">
+              SOURCE_CHANGED ⇒ BATCH_STALE ⇒ OLD_STUDIO_ACTUAL_EVIDENCE_NOT_CURRENT
+            </p>
+          </div>
           <div className="mt-2 grid gap-1.5">
             <div><p className="text-[9px] font-semibold text-violet-700 dark:text-violet-300">01 PREPARE BOUNDED BATCH</p><code className="mt-0.5 block break-all bg-violet-950/5 px-2 py-1 text-[9px] text-navy-600 dark:bg-white/5 dark:text-navy-200">{batch.prepareCommand}</code></div>
-            <div><p className="text-[9px] font-semibold text-violet-700 dark:text-violet-300">02 CHECK PREP ARTIFACT</p><code className="mt-0.5 block break-all bg-violet-950/5 px-2 py-1 text-[9px] text-navy-600 dark:bg-white/5 dark:text-navy-200">{batch.checkCommand}</code></div>
+            <div><p className="text-[9px] font-semibold text-violet-700 dark:text-violet-300">02 CHECK PREP ARTIFACT + SOURCE SHAs</p><code className="mt-0.5 block break-all bg-violet-950/5 px-2 py-1 text-[9px] text-navy-600 dark:bg-white/5 dark:text-navy-200">{batch.checkCommand}</code></div>
             <div><p className="text-[9px] font-semibold text-violet-700 dark:text-violet-300">03 INIT ACTUAL EVIDENCE</p><code className="mt-0.5 block break-all bg-violet-950/5 px-2 py-1 text-[9px] text-navy-600 dark:bg-white/5 dark:text-navy-200">{evidence.initCommand}</code></div>
             <div><p className="text-[9px] font-semibold text-violet-700 dark:text-violet-300">04 STATUS / SUMMARY</p><code className="mt-0.5 block break-all bg-violet-950/5 px-2 py-1 text-[9px] text-navy-600 dark:bg-white/5 dark:text-navy-200">{evidence.statusCommand}</code></div>
             <div><p className="text-[9px] font-semibold text-violet-700 dark:text-violet-300">05 STRICT VERIFY</p><code className="mt-0.5 block break-all bg-violet-950/5 px-2 py-1 text-[9px] text-navy-600 dark:bg-white/5 dark:text-navy-200">{evidence.strictCommand}</code></div>
@@ -99,7 +108,7 @@ export function RemotionElementReadinessPanel({
             {Object.entries(batch.actual).map(([key, state]) => <code key={key} className="border border-amber-300 px-1.5 py-0.5 text-[8px] text-amber-700 dark:border-amber-700 dark:text-amber-300">{key}={state}</code>)}
           </div>
           <p className="mt-2 border-l-2 border-amber-400 pl-2 text-[9px] leading-4 text-amber-800 dark:text-amber-200">
-            statusはevidence有無に関係なくmachine summaryを更新し、候補別PASS/FAIL/BLOCKED/NOT_RUN数・manifest currentness・Human review有無・stable blockerCodesを出します。initは9候補×11項目をNOT_RUNで作るだけです。strictは全項目PASS・reviewer・reviewedAt・current batch manifest SHAが揃うまで失敗します。SUMMARY_EXPORTED != STUDIO_ACTUAL_VERIFIED。
+            statusはevidence有無に関係なくmachine summaryを更新し、候補別PASS/FAIL/BLOCKED/NOT_RUN数・manifest currentness・Human review有無・stable blockerCodesを出します。initは9候補×11項目をNOT_RUNで作るだけです。strictは全項目PASS・reviewer・reviewedAt・current SHA-bound batch manifestが揃うまで失敗します。SUMMARY_EXPORTED != STUDIO_ACTUAL_VERIFIED。
           </p>
         </div>
       )}

@@ -1,0 +1,51 @@
+name: Remotion Element Currentness UI CI
+
+on:
+  pull_request:
+    paths:
+      - 'movie-dashboard/src/components/RemotionElementReadinessPanel.tsx'
+      - '.github/workflows/remotion-element-currentness-ui-ci.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  currentness-ui:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: movie-dashboard/pnpm-lock.yaml
+      - name: Install dashboard dependencies
+        working-directory: movie-dashboard
+        run: pnpm install --frozen-lockfile
+      - name: Build dashboard
+        working-directory: movie-dashboard
+        run: pnpm build
+      - name: Verify SHA-bound currentness surface
+        run: |
+          node - <<'NODE'
+          const fs = require('node:fs');
+          const panel = fs.readFileSync('movie-dashboard/src/components/RemotionElementReadinessPanel.tsx', 'utf8');
+          for (const token of [
+            'BATCH SOURCE CURRENTNESS · SHA-BOUND',
+            'prepared payload / builder / checker / shared typography kit',
+            'SOURCE_CHANGED ⇒ BATCH_STALE ⇒ OLD_STUDIO_ACTUAL_EVIDENCE_NOT_CURRENT',
+            '02 CHECK PREP ARTIFACT + SOURCE SHAs',
+            'current SHA-bound batch manifest',
+            'confirmation / install / control readback / timeline insertion / post-install renderはすべてNOT_RUN',
+          ]) {
+            if (!panel.includes(token)) throw new Error(`missing currentness UI contract: ${token}`);
+          }
+          if (panel.includes('STUDIO_ACTUAL_VERIFIED !=') && panel.includes('productionDependencyPromoted ? "PROMOTED"')) {
+            // informational only; promotion remains data-driven and unchanged.
+          }
+          NODE
