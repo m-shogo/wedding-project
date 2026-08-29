@@ -1,0 +1,57 @@
+name: Opening V1 Authoritative Handoff Readiness CI
+
+on:
+  pull_request:
+    paths:
+      - 'motion-studio/scripts/opening-v1-authoritative-handoff-readiness.mts'
+      - 'motion-studio/scripts/opening-v1-canonical-audio-currentness.mts'
+      - 'motion-studio/scripts/opening-v1-production-status.mts'
+      - 'motion-studio/scripts/opening-v1-davinci-handoff-contract.mts'
+      - 'motion-studio/scripts/opening-v1-audio-handoff-binding.mts'
+      - 'motion-studio/scripts/opening-v1-davinci-recovery-audio-binding.mts'
+      - '.github/workflows/opening-v1-authoritative-handoff-readiness-ci.yml'
+  workflow_dispatch:
+
+jobs:
+  authoritative-handoff-readiness:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: motion-studio
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: motion-studio/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - name: Verify fail-closed authoritative handoff surface on fresh checkout
+        run: |
+          set +e
+          node --no-warnings scripts/opening-v1-authoritative-handoff-readiness.mts --strict > /tmp/opening-authoritative.log 2>&1
+          status=$?
+          set -e
+          cat /tmp/opening-authoritative.log
+          test "$status" -ne 0
+          node --no-warnings scripts/opening-v1-authoritative-handoff-readiness.mts --json > /tmp/opening-authoritative.json
+          node - <<'NODE'
+          const fs = require('node:fs');
+          const report = JSON.parse(fs.readFileSync('/tmp/opening-authoritative.json', 'utf8'));
+          if (report.schemaVersion !== 'opening-v1-authoritative-handoff-readiness/v1') throw new Error('schema mismatch');
+          if (report.authority !== 'OPENING_AUTHORITATIVE_HANDOFF_READINESS') throw new Error('authority mismatch');
+          if (report.current !== false) throw new Error('fresh checkout must fail closed');
+          if (report.effective?.productionReady !== false) throw new Error('CI must not promote productionReady');
+          if (report.effective?.macDaVinciActualVerified !== false) throw new Error('CI must not promote Mac DaVinci Actual');
+          const guardrails = new Set(report.guardrails ?? []);
+          for (const required of [
+            'AUDIO_EVIDENCE_OR_PREVIEW_OR_BGM_SHA_CHANGED => AUTHORITATIVE_HANDOFF_CURRENT_FALSE',
+            'AUTHORITATIVE_HANDOFF_CURRENT != MAC_DAVINCI_ACTUAL_VERIFIED',
+            'CI_MUST_NOT_PROMOTE_MAC_GUI_ACTUAL',
+          ]) {
+            if (!guardrails.has(required)) throw new Error(`missing guardrail: ${required}`);
+          }
+          NODE
