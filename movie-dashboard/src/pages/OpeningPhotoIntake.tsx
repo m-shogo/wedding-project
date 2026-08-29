@@ -37,6 +37,17 @@ const globalChecks = [
   "AIで人物を作り直さない。実写真のcrop / color / motionだけで仕上げる",
 ];
 
+const postIntakeCommands = [
+  "cd motion-studio",
+  "pnpm sync:photos",
+  "pnpm check:opening-photos:strict",
+  "pnpm opening:preflight",
+  "pnpm prepare:opening-v1",
+  "pnpm render:opening-v1:preview",
+  "cd ../movie-dashboard",
+  "pnpm sync:opening-gate",
+];
+
 export function OpeningPhotoIntake() {
   const [copied, setCopied] = useState<string | null>(null);
   const gate = openingProductionGate;
@@ -75,16 +86,11 @@ export function OpeningPhotoIntake() {
         <div className="p-4 md:p-5 border-b border-sand-200 dark:border-navy-600 flex flex-wrap items-start justify-between gap-4">
           <div>
             <p className="text-[10px] tracking-[0.18em] font-semibold text-navy-400">OPENING V1 / REAL MEDIA PHASE 1</p>
-            <h2 className="mt-1 text-xl font-bold text-navy-900 dark:text-sand-100">
-              {previewReady ? "実素材Gateクリア — 60秒previewへ" : "11写真 + SHA receipt + BGMを揃える"}
-            </h2>
-            <p className="mt-2 text-sm text-navy-600 dark:text-navy-300">
-              photos {resolved}/{total} / receipt {receiptCurrent ? "CURRENT" : "MISSING / STALE"} / BGM file {gate.bgm.fileExists ? "FOUND" : "MISSING"} / BGM receipt {gate.bgm.intakeReceiptCurrent ? "CURRENT" : "MISSING / STALE"}
-            </p>
+            <h2 className="mt-1 text-xl font-bold text-navy-900 dark:text-sand-100">{previewReady ? "実素材Gateクリア — 60秒previewへ" : "11写真 + SHA receipt + BGMを揃える"}</h2>
+            <p className="mt-2 text-sm text-navy-600 dark:text-navy-300">photos {resolved}/{total} / receipt {receiptCurrent ? "CURRENT" : "MISSING / STALE"} / BGM file {gate.bgm.fileExists ? "FOUND" : "MISSING"} / BGM receipt {gate.bgm.intakeReceiptCurrent ? "CURRENT" : "MISSING / STALE"}</p>
+            <p className="mt-2 text-xs text-navy-500 dark:text-navy-300">RESOLVED/MISSINGは自己申告ではなく、Motion Studioの実ファイル正本とSHA receiptから判定します。</p>
           </div>
-          <span className={`px-2.5 py-1 text-[10px] font-mono font-bold ${previewReady ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300" : "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300"}`}>
-            {previewReady ? "PREVIEW READY" : "PREVIEW BLOCKED"}
-          </span>
+          <span className={`px-2.5 py-1 text-[10px] font-mono font-bold ${previewReady ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300" : "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300"}`}>{previewReady ? "PREVIEW READY" : "PREVIEW BLOCKED"}</span>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-px bg-sand-200 dark:bg-navy-600">
@@ -114,26 +120,18 @@ export function OpeningPhotoIntake() {
       </section>
 
       <LocalMediaIntakeValidator slots={localValidationSlots} title="11写真をコピーする前にcanonical名を一括検査" />
-
       <ProductionMediaIntakeCliGuide project="opening" />
 
-      <section className="mb-8 border-t-2 border-violet-400 dark:border-violet-700 pt-4">
-        <OpeningProductionHandoffExportButton />
-      </section>
+      <section className="mb-8 border-t-2 border-violet-400 dark:border-violet-700 pt-4"><OpeningProductionHandoffExportButton /></section>
 
       <section className="mb-8 border-t-2 border-navy-900 dark:border-sand-100 pt-4">
         <p className="text-[10px] tracking-[0.2em] font-semibold text-navy-400">PHOTO SELECTION RULES</p>
-        <div className="mt-3 grid grid-cols-1 lg:grid-cols-2 gap-x-6 gap-y-2">
-          {globalChecks.map((item) => <p key={item} className="text-xs leading-5 text-navy-600 dark:text-navy-300">✓ {item}</p>)}
-        </div>
+        <div className="mt-3 grid grid-cols-1 lg:grid-cols-2 gap-x-6 gap-y-2">{globalChecks.map((item) => <p key={item} className="text-xs leading-5 text-navy-600 dark:text-navy-300">✓ {item}</p>)}</div>
       </section>
 
       <section className="mb-10">
         <div className="border-b-2 border-navy-900 dark:border-sand-100 pb-3 mb-4 flex items-end justify-between gap-4">
-          <div>
-            <p className="text-[10px] tracking-[0.2em] font-semibold text-navy-400">11 CANONICAL SLOTS</p>
-            <h2 className="mt-1 text-xl font-bold text-navy-900 dark:text-sand-100">写真の意味 → 選定 → canonical filename</h2>
-          </div>
+          <div><p className="text-[10px] tracking-[0.2em] font-semibold text-navy-400">11 CANONICAL SLOTS</p><h2 className="mt-1 text-xl font-bold text-navy-900 dark:text-sand-100">写真の意味 → 選定 → canonical filename</h2></div>
           <span className="text-xs font-mono text-navy-400">JPEG / PNG / WEBP</span>
         </div>
         <div className="divide-y divide-sand-200 dark:divide-navy-600">
@@ -142,30 +140,21 @@ export function OpeningPhotoIntake() {
             const filename = `${slot.key}.jpg`;
             return (
               <article key={slot.key} className="py-5 grid grid-cols-1 xl:grid-cols-[0.55fr_1fr_1.4fr_0.8fr] gap-5 items-start">
-                <div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-[10px] font-mono text-navy-400">{String(index + 1).padStart(2, "0")}</span>
-                    <span className={`text-[10px] font-semibold ${slot.resolved ? "text-emerald-700 dark:text-emerald-300" : "text-red-700 dark:text-red-300"}`}>{slot.resolved ? "RESOLVED" : "MISSING"}</span>
-                  </div>
-                  <p className="mt-2 text-sm font-bold text-navy-900 dark:text-sand-100">{brief.chapter}</p>
-                  <p className="mt-1 text-xs font-mono text-navy-400">{brief.timing}</p>
-                </div>
-                <div>
-                  <p className="text-[10px] tracking-widest font-semibold text-navy-400">ROLE</p>
-                  <p className="mt-1 text-sm leading-6 text-navy-700 dark:text-navy-200">{brief.role}</p>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div><p className="text-[10px] tracking-widest font-semibold text-emerald-600">CHOOSE</p><p className="mt-1 text-xs leading-5 text-navy-600 dark:text-navy-300">{brief.choose}</p></div>
-                  <div><p className="text-[10px] tracking-widest font-semibold text-red-500">AVOID</p><p className="mt-1 text-xs leading-5 text-navy-600 dark:text-navy-300">{brief.avoid}</p></div>
-                </div>
-                <div>
-                  <p className="text-[10px] tracking-widest font-semibold text-navy-400">FILENAME</p>
-                  <button type="button" onClick={() => copy(filename)} className="mt-1 w-full text-left px-3 py-2 border border-sand-200 dark:border-navy-600 bg-sand-50 dark:bg-navy-900 text-xs font-mono text-navy-700 dark:text-navy-200">{copied === filename ? "✓ copied" : filename}</button>
-                  {slot.path && <p className="mt-2 text-[10px] break-all text-emerald-700 dark:text-emerald-300">{slot.path}</p>}
-                </div>
+                <div><div className="flex items-center gap-2"><span className="text-[10px] font-mono text-navy-400">{String(index + 1).padStart(2, "0")}</span><span className={`text-[10px] font-semibold ${slot.resolved ? "text-emerald-700 dark:text-emerald-300" : "text-red-700 dark:text-red-300"}`}>{slot.resolved ? "RESOLVED" : "MISSING"}</span></div><p className="mt-2 text-sm font-bold text-navy-900 dark:text-sand-100">{brief.chapter}</p><p className="mt-1 text-xs font-mono text-navy-400">{brief.timing}</p></div>
+                <div><p className="text-[10px] tracking-widest font-semibold text-navy-400">ROLE</p><p className="mt-1 text-sm leading-6 text-navy-700 dark:text-navy-200">{brief.role}</p></div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4"><div><p className="text-[10px] tracking-widest font-semibold text-emerald-600">CHOOSE</p><p className="mt-1 text-xs leading-5 text-navy-600 dark:text-navy-300">{brief.choose}</p></div><div><p className="text-[10px] tracking-widest font-semibold text-red-500">AVOID</p><p className="mt-1 text-xs leading-5 text-navy-600 dark:text-navy-300">{brief.avoid}</p></div></div>
+                <div><p className="text-[10px] tracking-widest font-semibold text-navy-400">FILENAME</p><button type="button" onClick={() => copy(filename)} className="mt-1 w-full text-left px-3 py-2 border border-sand-200 dark:border-navy-600 bg-sand-50 dark:bg-navy-900 text-xs font-mono text-navy-700 dark:text-navy-200">{copied === filename ? "✓ copied" : filename}</button>{slot.path && <p className="mt-2 text-[10px] break-all text-emerald-700 dark:text-emerald-300">{slot.path}</p>}</div>
               </article>
             );
           })}
+        </div>
+      </section>
+
+      <section className="mb-8 border-t-2 border-navy-900 dark:border-sand-100 pt-4">
+        <p className="text-[10px] tracking-[0.18em] font-semibold text-navy-400">CANONICAL TARGET / POST-INTAKE SYNC</p>
+        <code className="mt-2 block text-xs text-navy-600 dark:text-navy-300">motion-studio/public/photos/opening/</code>
+        <div className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-2">
+          {postIntakeCommands.map((command) => <button key={command} type="button" onClick={() => copy(command)} className="px-3 py-2 border border-sand-200 dark:border-navy-600 bg-white dark:bg-navy-800 text-left text-xs font-mono text-navy-700 dark:text-navy-200">{copied === command ? "✓ copied" : command}</button>)}
         </div>
       </section>
 
@@ -176,18 +165,12 @@ export function OpeningPhotoIntake() {
           <li><span className="font-mono text-navy-400 mr-2">2</span>CANONICAL INTAKE CLIをDRY RUNし、PASS後だけ <code className="text-xs">--apply</code> でsource非破壊copy + SHA receipt保存</li>
           <li><span className="font-mono text-navy-400 mr-2">3</span><code className="text-xs">verify-production-media-intake-receipt.mts --project opening</code> で11 targetのbytes/SHAがCURRENTか確認</li>
           <li><span className="font-mono text-navy-400 mr-2">4</span><Link to="/opening-bgm-intake" className="border-b border-navy-300">Opening BGM Gate</Link> でBGM file + receiptをCURRENTにする</li>
-          <li><span className="font-mono text-navy-400 mr-2">5</span><code className="text-xs">pnpm prepare:opening-v1</code> → <code className="text-xs">pnpm render:opening-v1:preview</code> → Human crop/focus QAへ</li>
+          <li><span className="font-mono text-navy-400 mr-2">5</span>上のpost-intake syncを実行し、<code className="text-xs">pnpm render:opening-v1:preview</code> → Human crop/focus QAへ</li>
         </ol>
-        <div className="mt-4 flex flex-wrap gap-3 text-xs">
-          <Link to="/opening-bgm-intake" className="px-3 py-2 bg-navy-800 text-white dark:bg-sand-100 dark:text-navy-900">BGM Gateを開く →</Link>
-          <OpeningProductionHandoffExportButton compact />
-          <Link to="/movie-coach/compare" className="border-b border-navy-300 text-navy-600 dark:text-navy-300 self-center">Preview後のHuman QA →</Link>
-        </div>
+        <div className="mt-4 flex flex-wrap gap-3 text-xs"><Link to="/opening-bgm-intake" className="px-3 py-2 bg-navy-800 text-white dark:bg-sand-100 dark:text-navy-900">BGM Gateを開く →</Link><OpeningProductionHandoffExportButton compact /><Link to="/movie-coach/compare" className="border-b border-navy-300 text-navy-600 dark:text-navy-300 self-center">Preview後のHuman QA →</Link></div>
       </section>
 
-      <p className="mt-5 text-[10px] text-navy-400">
-        11/11 FILE FOUND != PHOTOS READY。photo SHA receiptとBGM file/receiptがcurrentで初めて60秒preview input readyです。Human crop QA / Mac Remotion Studio Actual / DaVinci Actual / final approval は自動PASSしません。
-      </p>
+      <p className="mt-5 text-[10px] text-navy-400">11/11 FILE FOUND != PHOTOS READY。photo SHA receiptとBGM file/receiptがcurrentで初めて60秒preview input readyです。Human crop QA / Mac Remotion Studio Actual / DaVinci Actual / final approval は自動PASSしません。</p>
     </div>
   );
 }
