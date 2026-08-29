@@ -5,6 +5,7 @@ const root = process.cwd();
 const preview = readFileSync(join(root, 'src/compositions/profile/ProfileV1RealMediaPreview.tsx'), 'utf8');
 const rootFile = readFileSync(join(root, 'src/ProfileV1Root.tsx'), 'utf8');
 const runtime = readFileSync(join(root, 'src/data/profileV1RuntimeMedia.generated.ts'), 'utf8');
+const framing = readFileSync(join(root, 'src/data/profileV1FramingVerdicts.generated.ts'), 'utf8');
 const errors: string[] = [];
 const requireText = (source: string, token: string, message: string) => {
   if (!source.includes(token)) errors.push(message);
@@ -16,6 +17,8 @@ for (const token of [
   "ignoreTooManyRequestsWarning: true",
   "profileV1RuntimeMedia",
   "profileV1Chapters",
+  "getProfileV1ApprovedFraming",
+  "resolveMediaPresentation",
   "staticFile(slot.staticFilePath)",
   "<Img src={src}",
   "<OffthreadVideo src={src} muted",
@@ -23,7 +26,9 @@ for (const token of [
   "slot.resolved",
   "REAL MEDIA MISSING",
   "RUNTIME MEDIA RESOLVED",
-  "crop/focus/color/emotional-fit/content QA: NOT_RUN",
+  "FRAMING: {approvedFraming ? 'HUMAN APPROVED' : 'DEFAULT / UNAPPROVED'}",
+  "crop/focus framing: {approvedFraming ?",
+  "color/emotional-fit/content QA: separate Human gate",
   "Mac DaVinci Actual: NOT_RUN",
 ]) {
   requireText(preview, token, `Real-media preview missing contract token: ${token}`);
@@ -38,6 +43,15 @@ for (const forbidden of [
   'REAL MEDIA QA: PASS',
 ]) {
   if (preview.includes(forbidden)) errors.push(`Real-media preview contains unsafe fallback/promotion token: ${forbidden}`);
+}
+
+for (const token of [
+  "schemaVersion: 'profile-v1-framing-verdicts/v1'",
+  "authority: 'GENERATED_FROM_HUMAN_REAL_MEDIA_REVIEW'",
+  'sourceEvidence: null',
+  'approvedCount: 0',
+]) {
+  requireText(framing, token, `Generated framing authority missing fail-closed token: ${token}`);
 }
 
 for (const token of [
@@ -57,4 +71,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log('Profile V1 real-media preview contracts OK: canonical runtime media is rendered when resolved, Japanese glyphs use an explicit Remotion font, missing slots stay explicit, and Human/Mac QA remains NOT_RUN.');
+console.log('Profile V1 real-media preview contracts OK: canonical runtime media is rendered when resolved, Human-approved framing is the only generated crop/focus override, missing/unapproved framing stays fail-closed, and Mac QA remains NOT_RUN.');
