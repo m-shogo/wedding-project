@@ -29,6 +29,17 @@ jobs:
       - name: Install locked baseline
         working-directory: motion-studio
         run: pnpm install --frozen-lockfile
+      - name: Install coherent Remotion Element candidate toolchain
+        working-directory: motion-studio
+        run: |
+          pnpm add --save-exact \
+            remotion@4.0.517 \
+            @remotion/cli@4.0.517 \
+            @remotion/google-fonts@4.0.517 \
+            @remotion/paths@4.0.517 \
+            @remotion/zod-types@4.0.517 \
+            @remotion/studio-protocol@4.0.517 \
+            zod@4.4.3
       - name: Prepare and verify SHA-bound batch
         working-directory: motion-studio
         run: |
