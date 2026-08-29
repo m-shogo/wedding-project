@@ -57,6 +57,15 @@ export function buildProfileProductionStatusHandoff() {
         expected: profileProductionGate.expectedMediaCount,
         resolved: profileProductionGate.resolvedMediaCount,
         missing: profileProductionGate.mediaMissingCount,
+        filesReady: profileProductionGate.media.fileReady,
+        ready: profileProductionGate.media.ready,
+        intakeReceipt: {
+          current: profileProductionGate.media.intakeReceiptCurrent,
+          path: profileProductionGate.media.intakeReceiptPath,
+          verifiedCount: profileProductionGate.media.intakeReceiptVerifiedCount,
+          expectedCount: profileProductionGate.media.intakeReceiptExpectedCount,
+          blockerCodes: [...profileProductionGate.media.intakeReceiptBlockerCodes],
+        },
         slots: profileProductionGate.mediaSlots.map((slot) => ({
           id: slot.id,
           chapterId: slot.chapterId,
@@ -114,6 +123,8 @@ export function buildProfileProductionStatusHandoff() {
     },
     guardrails: [
       "ASSEMBLY_READY != PRODUCTION_READY",
+      "MEDIA_FILES_PRESENT != MEDIA_INTAKE_RECEIPT_CURRENT",
+      "MEDIA_INTAKE_RECEIPT_CURRENT != HUMAN_REAL_MEDIA_QA_PASS",
       "HUMAN_REAL_MEDIA_QA_PASS != FINAL_RENDER_REVIEW_PASS",
       "PRODUCTION_BUNDLE_CURRENT != MAC_DAVINCI_ACTUAL_VERIFIED",
       "DAVINCI_HANDOFF_CURRENT != MAC_DAVINCI_ACTUAL_VERIFIED",
