@@ -1,3 +1,4 @@
+import {buildOpeningAuthoritativeHandoffOverlay} from "../data/openingAuthoritativeHandoffOverlay";
 import {buildOpeningProductionStatusHandoff} from "../data/openingProductionStatusHandoff";
 import {buildProfileProductionStatusHandoff} from "../data/profileProductionStatusHandoff";
 import {
@@ -63,6 +64,7 @@ function buildOverlay(movieId: PalmierWeddingProductionMovieId): EffectiveProduc
 export function buildOpeningEffectiveProductionHandoff() {
   return {
     ...buildOpeningProductionStatusHandoff(),
+    authoritativeHandoff: buildOpeningAuthoritativeHandoffOverlay(),
     effectiveProduction: buildOverlay("opening"),
   };
 }
