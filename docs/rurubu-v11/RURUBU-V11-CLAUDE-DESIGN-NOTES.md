@@ -462,3 +462,22 @@ frame, not the trim). Confirmed false-positive by re-screenshotting rather
 than trusting the script blindly; the audit script itself was not fixed
 (known limitation, noted here for future reference) since the actual render
 was already verified correct.
+
+## P02 photo scale contrast strengthened
+
+Bride/groom portraits were both "medium" sized with only a mild size
+difference — reworked into a true dominant/secondary pair: bride resized to
+310×480 (was 240×366) as the clear hero, groom reduced to 180×260 (was
+197×282) as a clearly smaller accent overlapping the bride's lower-right
+corner for a more dynamic, less side-by-side composition.
+
+This broke the vertical budget below the photos (facts title/body collided
+with the folio tab) — fixed by shifting the whole photo block up 40px and
+recomputing the facts section's position and a capped height from the actual
+remaining space above the folio tab (`folioTab.y - 14`), rather than reusing
+old fixed coordinates. Re-verified by screenshot: clean, no overlap, bride
+now reads unmistakably as the primary subject.
+
+Audit note: switched this page's overflow check to only inspect *direct*
+trim children (not the recursive `findAll`) to avoid the nested-clip-frame
+false-positive class documented above. 0 real overflow issues.
