@@ -51,9 +51,68 @@ The Figma single-use upload URL was issued successfully, but the raw-byte POST a
 
 Per the project failure-fingerprint rule, do not cosmetically repeat this same transport path again without a material capability/environment change.
 
+## P07 route / map density correction
+
+A later live comparison of P07 `2787:42` against closest reference `2771:3` found the largest current structural distance was not missing decoration but excess dead space between the title and the route/map information mass. The route sequence and course map were visually sinking toward the middle of the page, weakening the intended `ROUTE + TIME + FOOD` reading behavior.
+
+No new/fake times, places, captions, or travel facts were invented. Existing semantic content was retained and the existing route/map cluster was compacted upward by 36 Figma units:
+
+- route-lane support field `2844:15`;
+- stop-support photo `2787:45` and its airmail frame `3036:2`;
+- course-map support photo `2787:47`;
+- route movement asset `2810:5`;
+- route spine `2816:48`;
+- stop dots/numbers/labels `2816:49`–`2816:60`;
+- functional route connectors `2996:8`–`2996:11`;
+- course-map header field/text `2996:12` / `2996:13`;
+- functional map pin `3008:2`.
+
+The lower food field and food hero were deliberately not moved with the cluster so that food remains the lower-page editorial interruption rather than merging into the map block.
+
+Post-write screenshot review now reads as:
+
+`1 1DAY title → 2 route start/sequence → 3 course map → 4 food interruption → 5 lower micro discovery`.
+
+Canonical live linter after the correction reports:
+
+- `PRODUCTION_CANDIDATE`: 8/8;
+- fatal AI tells: 0/8;
+- strong warnings: 0/8;
+- P07 dominance: ~1.716;
+- P07 edge-shape count: 3;
+- P07 controlled rotated shapes: 8;
+- highest similarity remains P02↔P06 `66%` (`INFORMATIONAL`);
+- P05↔P07 is `59%` (`INFORMATIONAL`);
+- no pair reaches `REVIEW` or `HIGH_RISK`.
+
+P07 targeted A5 preflight after the write reports:
+
+- trim overflow: `0`;
+- 6 mm working-safe text violation: `0`;
+- missing fonts: `0`;
+- visible P07 replaceable masks: 4, all `clipsContent=true`;
+- visible REFERENCE/DUMMY production image leakage: `0`.
+
+The full eight-page preflight after this batch reports text trim overflow `0/8`, missing fonts `0/8`, unclipped visible photo masks `0`, and REFERENCE/DUMMY production leakage `0`. The only working-safe exception is the already-known P01 non-critical fallback title-edge layer `2855:2`; readable foreground title copy remains safe.
+
+## P07 food-source resolution / transport status
+
+Before trying a new generation, Drive was live-read first. The existing selected final candidate remains sufficient:
+
+- semantic source: `GENERATED_FOOD_CAFE_HAWAII_FOOD_COLLAGE_TROPICAL_01.png`
+- Drive ID: `1_MJmJGiIlGd13PCUfDBUv_cvZ5xDfpca`
+- actual source inspected this run: `1254×1254 RGBA`
+- no authoritative/fake text is baked into the asset
+- P07 food-hero mask `2787:46` currently still uses a `180×180` layout derivative and is explicitly non-final
+- P07 cafe-micro mask `2787:48` remains `LOW_RES_LAYOUT_PROXY_ONLY`
+
+A single fresh Figma asset-upload attempt was made for the existing 1254×1254 source. Figma successfully issued a single-use upload URL for target `2787:46`, but the byte POST again failed with `Could not resolve host: mcp.figma.com`.
+
+This is the same transport/DNS failure fingerprint already documented. The source is not missing and a replacement generation is not justified. Do not repeat the same upload method again until there is material environment/capability change.
+
 ## Remaining completion boundary
 
 - `ASSET_FIRST_80`: 8/8 remains satisfied.
 - `CONTENT_COMPLETE`: NO — P02 authoritative profile values and P03 authoritative answers remain unresolved and must not be fabricated.
 - `DESIGN_COMPLETE`: NO — selected fixed title/frame graphics are still pending transport/promotion where they materially improve the page.
-- `PRINT_READY`: NO — final people/scenery replacement and intrinsic-resolution/crop/provenance QA, full actual-size Japanese review, bleed/trim/safe proof, export/profile preflight, and physical/vendor proof remain required.
+- `PRINT_READY`: NO — final people/scenery replacement and intrinsic-resolution/crop/provenance QA, P07 full-resolution food promotion, full actual-size Japanese review, bleed/trim/safe proof, export/profile preflight, and physical/vendor proof remain required.
