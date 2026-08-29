@@ -1,0 +1,46 @@
+name: Wedding DaVinci GUI Actual Start Gate Dashboard CI
+
+on:
+  pull_request:
+    paths:
+      - "movie-dashboard/src/data/weddingDavinciGuiActualStartGateAudit.ts"
+      - "movie-dashboard/src/components/WeddingDavinciGuiActualStartGateCard.tsx"
+      - "movie-dashboard/src/pages/VisualMotionLibrary.tsx"
+      - "movie-dashboard/scripts/verify-wedding-davinci-gui-actual-start-gate.mjs"
+      - ".github/workflows/wedding-davinci-gui-actual-start-gate-dashboard-ci.yml"
+  push:
+    branches: [main]
+    paths:
+      - "movie-dashboard/src/data/weddingDavinciGuiActualStartGateAudit.ts"
+      - "movie-dashboard/src/components/WeddingDavinciGuiActualStartGateCard.tsx"
+      - "movie-dashboard/src/pages/VisualMotionLibrary.tsx"
+      - "movie-dashboard/scripts/verify-wedding-davinci-gui-actual-start-gate.mjs"
+      - ".github/workflows/wedding-davinci-gui-actual-start-gate-dashboard-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: movie-dashboard
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+          run_install: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: movie-dashboard/pnpm-lock.yaml
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Verify Motion Zukan GUI Actual start-gate boundary
+        run: node scripts/verify-wedding-davinci-gui-actual-start-gate.mjs
+      - name: Build Motion Zukan
+        run: pnpm build
