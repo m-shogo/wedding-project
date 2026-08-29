@@ -1,0 +1,36 @@
+name: Wedding Production Input Plan Builder CI
+
+on:
+  pull_request:
+    paths:
+      - "movie-dashboard/src/data/weddingProductionInputCommandBuilder.ts"
+      - "movie-dashboard/src/components/WeddingProductionInputPlanBuilder.tsx"
+      - "movie-dashboard/src/pages/MotionZukanWorkspaceHandoff.tsx"
+      - "movie-dashboard/scripts/verify-wedding-production-input-plan-builder-contracts.mjs"
+      - "motion-studio/scripts/wedding-production-input-plan.mts"
+      - ".github/workflows/wedding-production-input-plan-builder-ci.yml"
+  workflow_dispatch:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: movie-dashboard/pnpm-lock.yaml
+      - name: Install dashboard dependencies
+        working-directory: movie-dashboard
+        run: pnpm install --frozen-lockfile
+      - name: Verify plan builder contracts
+        working-directory: movie-dashboard
+        run: node scripts/verify-wedding-production-input-plan-builder-contracts.mjs
+      - name: Typecheck and build dashboard
+        working-directory: movie-dashboard
+        run: pnpm build
