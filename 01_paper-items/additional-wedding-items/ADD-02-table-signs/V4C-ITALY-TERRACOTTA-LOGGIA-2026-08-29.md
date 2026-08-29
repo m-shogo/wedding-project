@@ -1,9 +1,9 @@
 # ADD-02 Italy — V4C Terracotta Loggia clean-room study
 
 Date: 2026-08-29
-Start/main authority immediately before Git write: `3e4d67c4bb60277d30c2059bf969cca7ca8c771e`
+Start/main authority immediately before Git write: `a42576caa46942cc440a78d25e176f944c05041c`
 Current authority: `docs/automation/non-rurubu-figma-quality-current.md` = `ACTIVE / HOURLY / FIGMA_EDIT_ALLOWED / VISUAL_REOPENED`
-State: `V4C_CLEANROOM_CANDIDATE_CREATED / SCREENSHOT_DEFECT_FOUND_AND_FIXED / STRUCTURE_IN_PROGRESS / NOT_PROMOTED / NOT_PRINT_READY`
+State: `V4C_CLEANROOM_CANDIDATE_CREATED / NATIVE_TEXT_DEFECT_REPAIRED / LONG_COPY_QA_PASS / STRUCTURE_ADVANCED / NOT_PROMOTED / NOT_PRINT_READY`
 
 ## Live authority
 
@@ -12,6 +12,7 @@ State: `V4C_CLEANROOM_CANDIDATE_CREATED / SCREENSHOT_DEFECT_FOUND_AND_FIXED / ST
 - retained V4B Italy comparison: `201:4 / V4B / ADD-02 / TABLE 02 / ITALY / EDITORIAL PRINT`
 - new V4C Italy root: `229:2 / V4C / ADD-02 / TABLE 02 / ITALY / TERRACOTTA LOGGIA / CLEANROOM`
 - editorial native auto-layout stack: `229:26`
+- hidden long-copy QA proof: `230:2 / QA / V4C / ADD-02 / ITALY / LONG-COPY PROOF`
 - exact Drive authority live-confirmed: `1KmbIncy5Wl6aEqqjBQmssCsw_KZjM62r / ADD-02_11卓の国別テーブルサイン`
 - Drive write: `0`
 - Rurubu item-specific scope: not read or modified
@@ -28,9 +29,35 @@ A new blank `1000×1480` frame was therefore authored without cloning old produc
 
 All variable/factual text is native Figma text. Fixed art is editable composed SVG/vector geometry. Raster IMAGE fills: `0`; effective raster PPI: `N/A`; `RESOLUTION_WARNING`: none.
 
-## Screenshot defect and repair
+## Native-text defect found and repaired — 2026-08-29 follow-up
 
-The first rendered candidate exposed a real implementation defect: the editorial Auto Layout stack was created with a fixed 10px container height, clipping the native JP/theme/description roles. The stack was repaired to `primaryAxisSizingMode=AUTO`, resulting height `136px`. A second screenshot then exposed the default white frame fill on that stack; it was removed. Final screenshot shows the native copy cleanly on the warm paper field with no card/container read.
+A live structural readback found three remaining native text boxes that were visually risky even after the earlier editorial-stack repair:
+
+- `229:24 / TEXT / TABLE NUMBER`: `24px` text in a fixed `10px` box;
+- `229:25 / TEXT / DESTINATION EN`: `96px` text in a fixed `10px` box;
+- `229:30 / TEXT / DATE`: `27px` text in a fixed `10px` box.
+
+These were not acceptable as production-native text because clipping could vary by renderer/export and future edits. Their current fonts were loaded and each node was changed to `textAutoResize=HEIGHT` without changing guest-facing copy or visual construction. Readback after the repair:
+
+- TABLE NUMBER height `32px`, line-height `32px`;
+- ITALY height `108px`, line-height `108px`;
+- DATE height `36px`, line-height `36px`.
+
+A fresh screenshot of `229:2` was captured after the repair.
+
+## Long-copy / long-theme proof
+
+A non-production QA clone of the current V4C candidate was created only to stress the native semantic copy, then hidden after screenshot capture:
+
+- proof root: `230:2`;
+- long theme: `230:28`, AUTO height `72px`;
+- long description: `230:29`, AUTO height `190px`;
+- text outside root: `0`;
+- text-to-text overlap: `0`.
+
+The stress copy intentionally expanded the theme and description to multi-line Japanese QA text. Auto Layout reflowed the editorial stack correctly without collision with destination, date, table number, or the frame boundary. This proof is QA evidence only and is hidden from guest-facing production.
+
+Result for this candidate: `LONG_COPY_QA_PASS`.
 
 ## Print-first working state
 
@@ -51,4 +78,4 @@ No bleed/trim/safe geometry was guessed. Final printer template, stand/easel occ
 
 ## Next
 
-Italy V4C is a serious comparison candidate, not a production promotion. Continue ADD-02 full-family three-scale review and long-copy proof before any family promotion decision; legacy comparison remains completion-only.
+Italy V4C is now structurally stronger and has explicit long-copy evidence, but remains a serious comparison candidate rather than a production promotion. Continue ADD-02 full-family three-scale review before any family-level `SELLABLE_VISUAL_QA_PASS` promotion decision; retained legacy/V4B comparisons remain completion-only.
