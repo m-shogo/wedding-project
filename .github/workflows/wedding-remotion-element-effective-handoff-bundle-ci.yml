@@ -1,0 +1,110 @@
+name: Wedding Remotion Element Effective Handoff Bundle CI
+
+on:
+  pull_request:
+    paths:
+      - 'motion-studio/scripts/export-wedding-remotion-element-handoff-identities.mts'
+      - 'motion-studio/scripts/check-wedding-remotion-element-handoff-identities.mts'
+      - 'motion-studio/scripts/check-wedding-remotion-element-production-gate.mts'
+      - 'motion-studio/scripts/export-wedding-remotion-element-production-gate-artifact.mts'
+      - 'motion-studio/scripts/check-wedding-remotion-element-production-gate-artifact.mts'
+      - 'motion-studio/scripts/export-wedding-remotion-element-effective-handoff-bundle.mts'
+      - 'motion-studio/scripts/check-wedding-remotion-element-effective-handoff-bundle.mts'
+      - 'movie-dashboard/src/data/remotionStudioToolingProductionDependency.ts'
+      - '.github/workflows/wedding-remotion-element-effective-handoff-bundle-ci.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  bundle-currentness:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Unadopted bundle is current and non-blocking
+        working-directory: motion-studio
+        run: |
+          rm -rf ../movie-dashboard/out/remotion-element-handoff
+          node --no-warnings scripts/export-wedding-remotion-element-production-gate-artifact.mts
+          node --no-warnings scripts/check-wedding-remotion-element-production-gate-artifact.mts
+          node --no-warnings scripts/export-wedding-remotion-element-effective-handoff-bundle.mts
+          node --no-warnings scripts/check-wedding-remotion-element-effective-handoff-bundle.mts | tee /tmp/unadopted.log
+          grep -q 'effectiveHandoffBundleCurrent=YES' /tmp/unadopted.log
+          grep -q 'effectivePalmierCurrentAllowed=YES' /tmp/unadopted.log
+          grep -q 'effectiveDavinciHandoffCurrentAllowed=YES' /tmp/unadopted.log
+          grep -q 'effectiveDavinciRecoveryCurrentAllowed=YES' /tmp/unadopted.log
+
+      - name: Adopted Element bundle carries one gate SHA across Palmier DaVinci and recovery
+        run: |
+          cp movie-dashboard/src/data/remotionStudioToolingProductionDependency.ts /tmp/dependency.ts
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('movie-dashboard/src/data/remotionStudioToolingProductionDependency.ts')
+          text = p.read_text()
+          needle = '  opening: [],'
+          if needle not in text:
+              raise SystemExit('opening adoption marker missing')
+          p.write_text(text.replace(needle, '  opening: ["type-mask-reveal"],', 1))
+          PY
+          rm -rf movie-dashboard/out/remotion-element-handoff
+          cd motion-studio
+          node --no-warnings scripts/export-wedding-remotion-element-handoff-identities.mts
+          node --no-warnings scripts/check-wedding-remotion-element-handoff-identities.mts
+          node --no-warnings scripts/check-wedding-remotion-element-production-gate.mts
+          node --no-warnings scripts/export-wedding-remotion-element-production-gate-artifact.mts
+          node --no-warnings scripts/check-wedding-remotion-element-production-gate-artifact.mts
+          node --no-warnings scripts/export-wedding-remotion-element-effective-handoff-bundle.mts
+          node --no-warnings scripts/check-wedding-remotion-element-effective-handoff-bundle.mts | tee /tmp/current.log
+          node - <<'NODE'
+          const fs = require('fs');
+          const p = '../movie-dashboard/out/remotion-element-handoff/wedding-remotion-element-effective-handoff-bundle.json';
+          const b = JSON.parse(fs.readFileSync(p, 'utf8'));
+          const opening = b.projects.find((x) => x.movieId === 'opening');
+          if (!opening) throw new Error('opening bundle missing');
+          if (opening.gateState !== 'CURRENT') throw new Error('opening gate must be CURRENT');
+          if (opening.palmier.gateArtifactSha256 !== b.sourceGateArtifactSha256) throw new Error('Palmier gate SHA mismatch');
+          if (opening.davinci.gateArtifactSha256 !== b.sourceGateArtifactSha256) throw new Error('DaVinci gate SHA mismatch');
+          if (!opening.davinci.recoveryCurrentAllowed) throw new Error('DaVinci recovery should be current for current fixture');
+          if (b.macRemotionStudioGuiActual !== 'NOT_RUN' || b.macDaVinciGuiActual !== 'NOT_RUN') throw new Error('GUI Actual must stay NOT_RUN');
+          NODE
+          cp ../movie-dashboard/out/remotion-element-handoff/wedding-remotion-element-effective-handoff-bundle.json /tmp/current-bundle.json
+
+      - name: Re-exporting gate after canonical mutation makes old handoff bundle stale
+        working-directory: motion-studio
+        run: |
+          cp src/motion-kit/engines.tsx /tmp/engines.tsx
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('src/motion-kit/engines.tsx')
+          text = p.read_text()
+          needle = 'export function TypographyRevealEngine({' 
+          if needle not in text:
+              raise SystemExit('TypographyRevealEngine marker missing')
+          p.write_text(text.replace(needle, '// ephemeral effective-handoff stale proof\n' + needle, 1))
+          PY
+          node --no-warnings scripts/export-wedding-remotion-element-handoff-identities.mts
+          node --no-warnings scripts/export-wedding-remotion-element-production-gate-artifact.mts
+          if node --no-warnings scripts/check-wedding-remotion-element-effective-handoff-bundle.mts > /tmp/stale.log 2>&1; then
+            echo 'Old effective handoff bundle must fail closed after source gate changes.'
+            exit 1
+          fi
+          grep -q 'effectiveHandoffBundleCurrent=NO' /tmp/stale.log
+          grep -q 'effectivePalmierCurrentAllowed=NO' /tmp/stale.log
+          grep -q 'effectiveDavinciHandoffCurrentAllowed=NO' /tmp/stale.log
+          grep -q 'effectiveDavinciRecoveryCurrentAllowed=NO' /tmp/stale.log
+          grep -Eq 'REMOTION_ELEMENT_EFFECTIVE_HANDOFF_SOURCE_GATE_SHA_STALE|REMOTION_ELEMENT_EFFECTIVE_HANDOFF_SOURCE_GATE_FILE_SHA_STALE' /tmp/stale.log
+          mv /tmp/engines.tsx src/motion-kit/engines.tsx
+
+      - name: Restore fixture without fabricating GUI Actual evidence
+        run: |
+          mv /tmp/dependency.ts movie-dashboard/src/data/remotionStudioToolingProductionDependency.ts
+          rm -rf movie-dashboard/out/remotion-element-handoff
+          echo 'remotionStudioGuiActual=NOT_RUN'
+          echo 'macDaVinciActual=NOT_RUN'
+          echo 'productionDependencyPromoted=NO'
