@@ -1,6 +1,7 @@
 import {buildOpeningAuthoritativeHandoffOverlay} from "../data/openingAuthoritativeHandoffOverlay";
 import {buildOpeningProductionStatusHandoff} from "../data/openingProductionStatusHandoff";
 import {buildProfileProductionStatusHandoff} from "../data/profileProductionStatusHandoff";
+import {buildRemotionElementGateArtifactRecoveryReference} from "../data/remotionElementGateArtifactRecoveryReference";
 import {buildRemotionElementHandoffIdentityReference} from "../data/remotionElementHandoffIdentityReference";
 import {buildRemotionElementIdentityProductionGateReference} from "../data/remotionElementIdentityProductionGateReference";
 import {
@@ -57,6 +58,7 @@ function buildOverlay(movieId: PalmierWeddingProductionMovieId): EffectiveProduc
       "EFFECTIVE_OVERLAY_EXPORTED != EFFECTIVE_GATE_COMPLETED",
       "REMOTION_DEPENDENCY_OVERLAY_EXPORTED != STUDIO_ACTUAL_VERIFIED",
       "ADOPTED_REMOTION_ELEMENT_REQUIRES_SHA_BOUND_IDENTITY_GATE_BEFORE_EFFECTIVE_HANDOFF_CURRENT",
+      "ADOPTED_REMOTION_ELEMENT_REQUIRES_CURRENT_GATE_ARTIFACT_BEFORE_DAVINCI_RECOVERY_CURRENT",
       "UNKNOWN_REMOTION_ADOPTION_FAILS_BEFORE_OVERLAY_EXPORT",
       "HUMAN_QA_NOT_RUN != HUMAN_QA_PASS",
       "MAC_DAVINCI_ACTUAL_NOT_RUN != MAC_DAVINCI_ACTUAL_VERIFIED",
@@ -70,6 +72,7 @@ export function buildOpeningEffectiveProductionHandoff() {
     authoritativeHandoff: buildOpeningAuthoritativeHandoffOverlay(),
     remotionElementIdentity: buildRemotionElementHandoffIdentityReference("opening"),
     remotionElementIdentityProductionGate: buildRemotionElementIdentityProductionGateReference("opening"),
+    remotionElementGateArtifactRecovery: buildRemotionElementGateArtifactRecoveryReference("opening"),
     effectiveProduction: buildOverlay("opening"),
   };
 }
@@ -79,6 +82,7 @@ export function buildProfileEffectiveProductionHandoff() {
     ...buildProfileProductionStatusHandoff(),
     remotionElementIdentity: buildRemotionElementHandoffIdentityReference("profile"),
     remotionElementIdentityProductionGate: buildRemotionElementIdentityProductionGateReference("profile"),
+    remotionElementGateArtifactRecovery: buildRemotionElementGateArtifactRecoveryReference("profile"),
     effectiveProduction: buildOverlay("profile"),
   };
 }
