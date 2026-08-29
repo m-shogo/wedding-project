@@ -1,0 +1,34 @@
+name: Wedding DaVinci GUI Actual Start Gate CI
+
+on:
+  pull_request:
+    paths:
+      - "motion-studio/scripts/wedding-davinci-gui-actual-start-gate.mts"
+      - "motion-studio/scripts/check-wedding-davinci-gui-actual-start-gate.mts"
+      - "motion-studio/scripts/wedding-davinci-actual-session-plan.mts"
+      - "motion-studio/scripts/wedding-davinci-actual-session-plan-snapshot.mts"
+      - ".github/workflows/wedding-davinci-gui-actual-start-gate-ci.yml"
+  push:
+    branches: [main]
+    paths:
+      - "motion-studio/scripts/wedding-davinci-gui-actual-start-gate.mts"
+      - "motion-studio/scripts/check-wedding-davinci-gui-actual-start-gate.mts"
+      - "motion-studio/scripts/wedding-davinci-actual-session-plan.mts"
+      - "motion-studio/scripts/wedding-davinci-actual-session-plan-snapshot.mts"
+      - ".github/workflows/wedding-davinci-gui-actual-start-gate-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Verify Mac DaVinci GUI Actual start gate
+        working-directory: motion-studio
+        run: node --no-warnings scripts/check-wedding-davinci-gui-actual-start-gate.mts
