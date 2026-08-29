@@ -24,14 +24,23 @@ jobs:
   validate:
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: movie-dashboard
     steps:
       - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+          run_install: false
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+          cache: pnpm
+          cache-dependency-path: movie-dashboard/pnpm-lock.yaml
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
       - name: Verify Motion Zukan GUI Actual start-gate boundary
-        working-directory: movie-dashboard
         run: node scripts/verify-wedding-davinci-gui-actual-start-gate.mjs
       - name: Build Motion Zukan
-        working-directory: movie-dashboard
-        run: npm ci && npm run build
+        run: pnpm build
