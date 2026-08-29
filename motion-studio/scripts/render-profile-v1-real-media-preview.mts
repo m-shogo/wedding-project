@@ -8,6 +8,19 @@ const studioRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const output = join(studioRoot, 'out/preview/profile_v1_real_media_preview.mp4');
 const allowMissingMediaSmoke = process.argv.includes('--allow-missing-media-smoke');
 
+const framingCheck = spawnSync(
+  process.execPath,
+  ['--no-warnings', 'scripts/sync-profile-v1-framing-verdicts.mts'],
+  {cwd: studioRoot, encoding: 'utf8'},
+);
+if (framingCheck.status !== 0) {
+  if (framingCheck.stdout) process.stdout.write(framingCheck.stdout);
+  if (framingCheck.stderr) process.stderr.write(framingCheck.stderr);
+  console.error('PROFILE_REAL_MEDIA_PREVIEW_BLOCKED: Human crop/focus evidence changed without a current generated framing snapshot.');
+  console.error('Run: node --no-warnings scripts/sync-profile-v1-framing-verdicts.mts --write');
+  process.exit(framingCheck.status ?? 1);
+}
+
 if (!allowMissingMediaSmoke) {
   try {
     assertProfileV1MediaInputsReady(studioRoot);
