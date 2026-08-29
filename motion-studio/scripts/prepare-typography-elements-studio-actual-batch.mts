@@ -79,7 +79,7 @@ for (const candidate of candidates) {
 }
 
 const manifest = {
-  schemaVersion: 'remotion-element-studio-actual-batch/v2',
+  schemaVersion: 'remotion-element-studio-actual-batch/v1',
   generatedAt: new Date().toISOString(),
   purpose: 'BOUNDED_MAC_STUDIO_ACTUAL_BATCH',
   studioVersionTarget: '4.0.517',
@@ -116,5 +116,5 @@ writeFileSync(join(outputRoot, 'main.ts'), `import {installInStudio, type Studio
 console.log('✅ Typography Element Studio Actual batch prepared.');
 console.log(`output=${outputRoot}`);
 console.log(`candidateCount=${candidates.length}`);
-console.log('batchSchema=remotion-element-studio-actual-batch/v2');
+console.log('batchSchema=remotion-element-studio-actual-batch/v1');
 console.log('studioActual=NOT_RUN');
