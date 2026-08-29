@@ -2,11 +2,11 @@ import {createHash} from 'node:crypto';
 import {mkdirSync, readFileSync, writeFileSync} from 'node:fs';
 import {dirname, join, resolve} from 'node:path';
 import {remotionElementCandidates} from '../../movie-dashboard/src/data/remotionElementCandidates.ts';
-import {remotionStudioToolingProductionAdoption} from '../../movie-dashboard/src/data/remotionStudioToolingProductionDependency.ts';
 
 const motionStudioRoot = process.cwd();
 const repoRoot = resolve(motionStudioRoot, '..');
 const canonicalEnginePath = join(motionStudioRoot, 'src/motion-kit/engines.tsx');
+const adoptionRegistryPath = join(repoRoot, 'movie-dashboard/src/data/remotionStudioToolingProductionDependency.ts');
 const outputPath = join(repoRoot, 'movie-dashboard/out/remotion-element-handoff/wedding-remotion-element-identities.json');
 
 const sha256 = (value: string) => createHash('sha256').update(value).digest('hex');
@@ -18,21 +18,23 @@ function canonicalTypographyBlock() {
   const start = source.indexOf(startMarker);
   const end = source.indexOf(endMarker);
   if (start < 0 || end < 0 || end <= start) throw new Error('CANONICAL_TYPOGRAPHY_ENGINE_BLOCK_NOT_ISOLATABLE');
-  if (source.indexOf(startMarker, start + startMarker.length) >= 0) throw new Error('CANONICAL_TYPOGRAPHY_START_MARKER_NOT_UNIQUE');
-  if (source.indexOf(endMarker, end + endMarker.length) >= 0) throw new Error('CANONICAL_TYPOGRAPHY_END_MARKER_NOT_UNIQUE');
   return source.slice(start, end).trim();
+}
+
+function adoptedIds(movieId: 'opening' | 'profile') {
+  const source = readFileSync(adoptionRegistryPath, 'utf8');
+  const match = source.match(new RegExp(`\\b${movieId}:\\s*\\[([^\\]]*)\\]`));
+  if (!match) throw new Error(`ADOPTION_REGISTRY_NOT_PARSEABLE:${movieId}`);
+  return [...match[1].matchAll(/["']([^"']+)["']/g)].map((item) => item[1]);
 }
 
 const canonicalBlockSha256 = sha256(canonicalTypographyBlock());
 const candidateById = new Map(remotionElementCandidates.map((candidate) => [candidate.patternId, candidate]));
 
 function movieIdentity(movieId: 'opening' | 'profile') {
-  const adoptedCandidateIds = [...remotionStudioToolingProductionAdoption[movieId]];
+  const adoptedCandidateIds = adoptedIds(movieId);
   const unknownCandidateIds = adoptedCandidateIds.filter((id) => !candidateById.has(id));
-  if (unknownCandidateIds.length > 0) {
-    throw new Error(`UNKNOWN_REMOTION_HANDOFF_IDENTITY:${movieId}:${unknownCandidateIds.join(',')}`);
-  }
-
+  if (unknownCandidateIds.length > 0) throw new Error(`UNKNOWN_REMOTION_HANDOFF_IDENTITY:${movieId}:${unknownCandidateIds.join(',')}`);
   return {
     movieId,
     adopted: adoptedCandidateIds.length > 0,
@@ -59,10 +61,7 @@ const artifact = {
   schemaVersion: 'wedding-remotion-element-handoff-identities/v1',
   authority: 'SHA_BOUND_WEDDING_REMOTION_ELEMENT_HANDOFF_IDENTITY',
   generatedAt: new Date().toISOString(),
-  canonicalSource: {
-    path: 'motion-studio/src/motion-kit/engines.tsx#TypographyRevealEngine',
-    blockSha256: canonicalBlockSha256,
-  },
+  canonicalSource: {path: 'motion-studio/src/motion-kit/engines.tsx#TypographyRevealEngine', blockSha256: canonicalBlockSha256},
   projects: [movieIdentity('opening'), movieIdentity('profile')],
   macRemotionStudioGuiActualPerformedByThisExport: false,
   macDaVinciGuiActualPerformedByThisExport: false,
