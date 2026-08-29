@@ -1,0 +1,28 @@
+name: Opening V1 Audio Production Status CI
+
+on:
+  pull_request:
+    paths:
+      - 'motion-studio/scripts/opening-v1-production-status.mts'
+      - 'motion-studio/scripts/opening-v1-audio-listening-review.mts'
+      - 'motion-studio/scripts/check-opening-v1-audio-production-status.mts'
+      - '.github/workflows/opening-v1-audio-production-status-ci.yml'
+  workflow_dispatch:
+
+jobs:
+  audio-production-status:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: motion-studio
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Canonical audio stage contract
+        run: node --no-warnings scripts/check-opening-v1-audio-production-status.mts
+      - name: Fresh checkout remains fail-closed
+        run: |
+          node --no-warnings scripts/opening-v1-production-status.mts --json > /tmp/opening-status.json
+          node -e "const s=require('/tmp/opening-status.json'); if(s.stages.audioListeningReview.state!=='NOT_RUN') process.exit(1); if(s.readiness.humanAudioListeningApproved!==false) process.exit(1); if(s.readiness.macDaVinciActualVerified!==false||s.readiness.productionReady!==false) process.exit(1);"

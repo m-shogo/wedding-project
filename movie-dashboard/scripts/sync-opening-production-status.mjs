@@ -13,19 +13,21 @@ const report=JSON.parse(execFileSync(process.execPath,["--no-warnings",statusPat
 const davinci=JSON.parse(execFileSync(process.execPath,["--no-warnings",davinciPath,"--json"],{cwd:motionStudioRoot,encoding:"utf8"}));
 if(report.schemaVersion!=="opening-v1-production-status/v1"||report.authority!=="DERIVED_PRODUCTION_STATUS")throw new Error(`Unexpected Opening production status contract: ${report.schemaVersion}/${report.authority}`);
 if(report.stages?.cropReview==null||report.readiness?.humanCropReviewApproved==null)throw new Error("Opening production status must own canonical Human crop review state");
+if(report.stages?.audioListeningReview==null||report.readiness?.humanAudioListeningApproved==null)throw new Error("Opening production status must own canonical Human audio listening state");
 if(report.stages?.finalRenderReview==null||report.readiness?.humanFinalRenderApproved==null)throw new Error("Opening production status must own canonical final-render Human review state");
 if(report.handoff?.palmier?.contractVersion!=="opening-v1-palmier-handoff/v3")throw new Error(`Unexpected Opening Palmier handoff contract: ${report.handoff?.palmier?.contractVersion??"missing"}`);
 if(davinci.schemaVersion!=="opening-v1-davinci-handoff/v1"||davinci.authority!=="MOTION_STUDIO_OPENING_DAVINCI_HANDOFF")throw new Error(`Unexpected Opening DaVinci handoff contract: ${davinci.schemaVersion}/${davinci.authority}`);
 if(davinci.upstreamPalmier?.requiredContractVersion!=="opening-v1-palmier-handoff/v3"||davinci.upstreamPalmier?.cropReviewBindingRequired!==true)throw new Error("Opening DaVinci handoff must require crop-bound Palmier v3");
 if(davinci.productionRecovery?.schemaVersion!=="wedding-davinci-production-recovery-export/v1"||davinci.productionRecovery?.requiredCurrent!==true)throw new Error("Opening DaVinci handoff must expose required production recovery sidecar contract");
 
-const stageNames=["media","cropReview","previewRender","previewSourceBinding","previewReview","finalRender","finalRenderReview","productionBundle","davinciFinishing","finalDeliveryApproval"];
+const stageNames=["media","cropReview","previewRender","previewSourceBinding","previewReview","audioListeningReview","finalRender","finalRenderReview","productionBundle","davinciFinishing","finalDeliveryApproval"];
 const stageRecovery={
   media:[...report.nextActions],
   cropReview:["node --no-warnings scripts/opening-v1-crop-review-evidence.mts --init","node --no-warnings scripts/opening-v1-crop-review-evidence.mts --strict"],
   previewRender:["pnpm render:opening-v1:preview"],
   previewSourceBinding:["pnpm opening:preview-review:init","pnpm opening:preview-review:strict"],
   previewReview:["pnpm opening:preview-review:init","pnpm opening:preview-review:strict"],
+  audioListeningReview:["node --no-warnings scripts/opening-v1-audio-listening-review.mts --init","rights-cleared previewをHuman listening QA","node --no-warnings scripts/opening-v1-audio-listening-review.mts --strict"],
   finalRender:["pnpm render:opening-v1"],
   finalRenderReview:["pnpm opening:final-render-review:init","pnpm opening:final-render-review:strict"],
   productionBundle:["pnpm opening:production-bundle:finalize"],
@@ -88,19 +90,24 @@ const sourceRevalidation={
     "SOURCE_CHANGED => RE_RENDER_REQUIRED",
     "RE_RENDER_REQUIRED => RE_REVIEW_REQUIRED",
     "OLD_HUMAN_REVIEW != CURRENT_RENDER_IMPLEMENTATION",
+    "PREVIEW_REVIEW_PASS != HUMAN_AUDIO_LISTENING_PASS",
+    "PREVIEW_OR_BGM_SHA_CHANGED => HUMAN_AUDIO_LISTENING_REVIEW_STALE",
+    "HUMAN_AUDIO_LISTENING_PASS != FINAL_RENDER_REVIEW_PASS",
     "PREVIEW_REVIEW_PASS != FINAL_RENDER_REVIEW_PASS",
     "FINAL_RENDER_OR_SOURCE_CHANGED => FINAL_RENDER_RE_REVIEW_REQUIRED",
   ],
 };
 const cropReviewAuthority="out/qa/opening-v1-crop-review-evidence.json";
+const audioReviewAuthority="out/qa/opening-v1-audio-listening-review.json";
 const finalReviewAuthority="out/qa/opening-v1-final-render-review.json";
-const palmierSourceAuthorities=[...new Set([...report.handoff.palmier.sourceAuthorities,cropReviewAuthority,finalReviewAuthority])];
+const palmierSourceAuthorities=[...new Set([...report.handoff.palmier.sourceAuthorities,cropReviewAuthority,audioReviewAuthority,finalReviewAuthority])];
 const davinciSourceAuthorities=[...new Set([...davinci.sourceAuthorities,cropReviewAuthority,finalReviewAuthority])];
 const snapshot={
   source:{
     status:"motion-studio/scripts/opening-v1-production-status.mts",
     cropReview:"motion-studio/scripts/opening-v1-crop-review-evidence.mts",
     previewSourceBinding:"motion-studio/scripts/opening-v1-preview-source-fingerprint.mts",
+    audioListeningReview:"motion-studio/scripts/opening-v1-audio-listening-review.mts",
     finalRenderReview:"motion-studio/scripts/opening-v1-production-status.mts#stages.finalRenderReview",
     davinciHandoff:"motion-studio/scripts/opening-v1-davinci-handoff-contract.mts",
   },
@@ -133,7 +140,7 @@ const snapshot={
   nextActions:[...report.nextActions],
 };
 const output=`// AUTO-GENERATED by scripts/sync-opening-production-status.mjs\n// Motion Studio production status is the authority. Do not edit by hand.\n\nexport const openingProductionStatus = ${JSON.stringify(snapshot,null,2)} as const;\n`;
-if(process.argv.includes("--write")){fs.writeFileSync(outputPath,output,"utf8");console.log(`Opening production status synced: ${snapshot.overallState}, cropReview=${snapshot.sourceRevalidation.cropReview.state}, previewSource=${snapshot.sourceRevalidation.realMediaPreview.state}, finalReview=${snapshot.sourceRevalidation.finalRender.state}, davinci=${snapshot.handoff.davinci.contractVersion}`);process.exit(0)}
+if(process.argv.includes("--write")){fs.writeFileSync(outputPath,output,"utf8");console.log(`Opening production status synced: ${snapshot.overallState}, cropReview=${snapshot.sourceRevalidation.cropReview.state}, previewSource=${snapshot.sourceRevalidation.realMediaPreview.state}, audio=${snapshot.stages.audioListeningReview.state}, finalReview=${snapshot.sourceRevalidation.finalRender.state}, davinci=${snapshot.handoff.davinci.contractVersion}`);process.exit(0)}
 if(!fs.existsSync(outputPath)){console.error("Opening production status generated file is missing. Run: node scripts/sync-opening-production-status.mjs --write");process.exit(1)}
 if(fs.readFileSync(outputPath,"utf8")!==output){console.error("Opening production status generated snapshot is stale. Run: node scripts/sync-opening-production-status.mjs --write");process.exit(1)}
-console.log(`Opening production status current: ${snapshot.overallState}, cropReview=${snapshot.sourceRevalidation.cropReview.state}, previewSource=${snapshot.sourceRevalidation.realMediaPreview.state}, finalReview=${snapshot.sourceRevalidation.finalRender.state}, palmier=${snapshot.handoff.palmier.contractVersion}, davinci=${snapshot.handoff.davinci.contractVersion}, productionReady=${snapshot.readiness.productionReady}`);
+console.log(`Opening production status current: ${snapshot.overallState}, cropReview=${snapshot.sourceRevalidation.cropReview.state}, previewSource=${snapshot.sourceRevalidation.realMediaPreview.state}, audio=${snapshot.stages.audioListeningReview.state}, finalReview=${snapshot.sourceRevalidation.finalRender.state}, palmier=${snapshot.handoff.palmier.contractVersion}, davinci=${snapshot.handoff.davinci.contractVersion}, productionReady=${snapshot.readiness.productionReady}`);

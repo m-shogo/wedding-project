@@ -9,6 +9,7 @@ const cropReviewPath = join(root, 'out/qa/opening-v1-crop-review-evidence.json')
 const previewPath = join(root, 'out/preview/opening_v1_preview.mp4');
 const previewSourcePath = join(root, 'out/qa/opening-v1-preview-source-fingerprint.json');
 const previewReviewPath = join(root, 'out/qa/opening-v1-preview-review.json');
+const audioReviewPath = join(root, 'out/qa/opening-v1-audio-listening-review.json');
 const finalPath = join(root, 'out/opening/opening_v1.mp4');
 const finalReviewPath = join(root, 'out/qa/opening-v1-final-render-review.json');
 const bundlePath = join(root, 'out/handoff/opening-v1/opening-v1-production-bundle.json');
@@ -112,11 +113,25 @@ const previewReview: Stage = previewSourceBinding.state !== 'PASS'
           ? {state: 'PASS', detail: 'Human preview review is current and fully PASS.', path: rel(previewReviewPath)}
           : {state: 'BLOCKED', detail: 'Human preview review is incomplete, failed, or stale against current media/config.', path: rel(previewReviewPath), blockers: [...lines(result.stdout), ...lines(result.stderr)]};
       })();
+const previewReviewReady = previewReview.state === 'PASS';
 
-const finalRender: Stage = previewReview.state !== 'PASS'
-  ? {state: 'NOT_RUN', detail: 'Blocked upstream until current human preview review passes.', path: rel(finalPath)}
+const audioListeningReview: Stage = !previewReviewReady
+  ? {state: 'NOT_RUN', detail: 'Blocked upstream until the current source-bound Human preview review passes.', path: rel(audioReviewPath)}
+  : !existsSync(audioReviewPath)
+    ? {state: 'MISSING', detail: 'Initialize Human audio listening review for the current preview SHA and rights-cleared BGM SHA.', path: rel(audioReviewPath)}
+    : (() => {
+        const result = run('scripts/opening-v1-audio-listening-review.mts', ['--strict']);
+        const blockers = [...lines(result.stdout), ...lines(result.stderr)];
+        if (result.status === 0) return {state: 'PASS', detail: 'Human audio listening review is current and fully PASS for preview + BGM SHA.', path: rel(audioReviewPath)};
+        const stale = blockers.some((line) => line.includes('STALE_OPENING_AUDIO_REVIEW_'));
+        return {state: stale ? 'STALE' : 'BLOCKED', detail: 'Human audio listening review is incomplete, failed, or stale against the current preview/BGM SHA.', path: rel(audioReviewPath), blockers};
+      })();
+const audioListeningReady = audioListeningReview.state === 'PASS';
+
+const finalRender: Stage = !audioListeningReady
+  ? {state: 'NOT_RUN', detail: 'Blocked upstream until current Human audio listening QA passes.', path: rel(finalPath)}
   : !existsSync(finalPath)
-    ? {state: 'MISSING', detail: 'Approved preview can now be rendered as the final Motion Studio MP4.', path: rel(finalPath)}
+    ? {state: 'MISSING', detail: 'Visual preview QA and Human audio listening QA passed; final Motion Studio MP4 can now be rendered.', path: rel(finalPath)}
     : (() => {
         const result = run('scripts/check-opening-render.mts', ['out/opening/opening_v1.mp4']);
         return result.status === 0
@@ -211,7 +226,6 @@ const finalDeliveryApproval: Stage = davinciFinishing.state !== 'PASS'
 
 const previewReady = previewRender.state === 'PASS';
 const previewSourceReady = previewSourceBinding.state === 'PASS';
-const previewReviewReady = previewReview.state === 'PASS';
 const finalReady = finalRender.state === 'PASS';
 const finalReviewReady = finalRenderReview.state === 'PASS';
 const bundleReady = productionBundle.state === 'PASS';
@@ -227,6 +241,8 @@ else if (!previewReady) {overallState = 'PREVIEW_RENDER_REQUIRED'; nextActions =
 else if (!previewSourceReady) {overallState = 'PREVIEW_SOURCE_BINDING_REQUIRED_OR_STALE'; nextActions = ['pnpm opening:preview-review:init', 'pnpm opening:preview-review:strict'];}
 else if (previewReview.state === 'MISSING') {overallState = 'PREVIEW_REVIEW_INIT_REQUIRED'; nextActions = ['pnpm opening:preview-review:init', '実preview/stillsを人間が確認してevidenceを記録', 'pnpm opening:preview-review:strict'];}
 else if (!previewReviewReady) {overallState = 'HUMAN_PREVIEW_REVIEW_REQUIRED_OR_STALE'; nextActions = ['現在のsource-bound preview/media/configに対してHuman QAを完了または再初期化', 'pnpm opening:preview-review:strict'];}
+else if (audioListeningReview.state === 'MISSING') {overallState = 'AUDIO_LISTENING_REVIEW_INIT_REQUIRED'; nextActions = ['rights-cleared BGM入りcurrent previewを最後まで人間が再生', 'node --no-warnings scripts/opening-v1-audio-listening-review.mts --init', 'audibility/balance/startIntegrity/endIntegrity/pictureSyncをHuman QA', 'node --no-warnings scripts/opening-v1-audio-listening-review.mts --strict'];}
+else if (!audioListeningReady) {overallState = 'HUMAN_AUDIO_LISTENING_REVIEW_REQUIRED_OR_STALE'; nextActions = ['current preview SHA + rights-cleared BGM SHAに対するHuman Audio QAを完了または再初期化', 'node --no-warnings scripts/opening-v1-audio-listening-review.mts --strict'];}
 else if (finalRender.state === 'MISSING') {overallState = 'FINAL_RENDER_REQUIRED'; nextActions = ['pnpm render:opening-v1', 'pnpm opening:production-status'];}
 else if (!finalReady) {overallState = 'FINAL_RENDER_QA_FAILED'; nextActions = ['final render QA failureを修正', 'pnpm check:opening-render'];}
 else if (finalRenderReview.state === 'MISSING') {overallState = 'FINAL_RENDER_REVIEW_INIT_REQUIRED'; nextActions = ['pnpm opening:final-render-review:init', 'final MP4を音声付きで人間確認', 'pnpm opening:final-render-review:strict'];}
@@ -245,6 +261,7 @@ const stages = {
   previewRender: withStableBlockerCodes(previewRender),
   previewSourceBinding: withStableBlockerCodes(previewSourceBinding),
   previewReview: withStableBlockerCodes(previewReview),
+  audioListeningReview: withStableBlockerCodes(audioListeningReview),
   finalRender: withStableBlockerCodes(finalRender),
   finalRenderReview: withStableBlockerCodes(finalRenderReview),
   productionBundle: withStableBlockerCodes(productionBundle),
@@ -263,6 +280,7 @@ const report = {
     humanCropReviewApproved: cropReviewReady,
     previewSourceBound: previewSourceReady,
     humanPreviewApproved: previewReviewReady,
+    humanAudioListeningApproved: audioListeningReady,
     finalRenderQaPass: finalReady,
     humanFinalRenderApproved: finalReviewReady,
     productionBundleCurrent: bundleReady,
@@ -275,7 +293,7 @@ const report = {
     palmier: {
       contractVersion: 'opening-v1-palmier-handoff/v3' as const,
       current: bundleReady,
-      sourceAuthorities: ['out/qa/opening-v1-crop-review-evidence.json', 'src/data/openingV1.ts#openingV1Scenes', 'src/data/openingV1Sound.ts#openingV1SoundCues', 'out/qa/opening-v1-final-render-review.json'],
+      sourceAuthorities: ['out/qa/opening-v1-crop-review-evidence.json', 'out/qa/opening-v1-audio-listening-review.json', 'src/data/openingV1.ts#openingV1Scenes', 'src/data/openingV1Sound.ts#openingV1SoundCues', 'out/qa/opening-v1-final-render-review.json'],
       artifacts: {
         sceneTimeline: {path: rel(timelinePath), shaBound: true, carries: ['scene_boundary', 'replacement_policy', 'final_render_sha256', 'crop_review_binding']},
         soundCues: {path: rel(soundCuePath), shaBound: true, carries: ['bgm', 'ambience_j_cut', 'start_end', 'volume', 'note', 'final_render_sha256']},
@@ -288,6 +306,11 @@ const report = {
     'ABSOLUTE_PATH_OR_LOG_DETAIL_MUST_NOT_ENTER_BLOCKER_CODES',
     'PHOTO_SHA_OR_EFFECTIVE_FOCUS_OR_FIT_CHANGED => HUMAN_CROP_REVIEW_STALE',
     'HUMAN_CROP_REVIEW_PASS != HUMAN_PREVIEW_REVIEW_PASS',
+    'BGM_RIGHTS_CLEARED != HUMAN_AUDIO_LISTENING_PASS',
+    'HUMAN_PREVIEW_REVIEW_PASS != HUMAN_AUDIO_LISTENING_PASS',
+    'PREVIEW_OR_BGM_SHA_CHANGED => HUMAN_AUDIO_LISTENING_REVIEW_STALE',
+    'HUMAN_AUDIO_LISTENING_PASS != FINAL_RENDER_QA_PASS',
+    'HUMAN_AUDIO_LISTENING_PASS != MAC_DAVINCI_ACTUAL_VERIFIED',
     'CROP_REVIEW_EVIDENCE_SHA_MISMATCH => PRODUCTION_BUNDLE_STALE',
     'CROP_REVIEW_BINDING_FINGERPRINT_MISMATCH => PRODUCTION_BUNDLE_STALE',
     'PREVIEW_SOURCE_FINGERPRINT_STALE => HUMAN_PREVIEW_REVIEW_NOT_TRUSTED',
@@ -314,7 +337,7 @@ else {
     for (const code of stage.blockerCodes ?? []) console.log(`  BLOCK_CODE / ${code}`);
   }
   console.log(`Palmier handoff=${report.handoff.palmier.contractVersion} current=${report.handoff.palmier.current ? 'YES' : 'NO'} timeline=${report.handoff.palmier.artifacts.sceneTimeline.path} sound=${report.handoff.palmier.artifacts.soundCues.path}`);
-  console.log(`humanCropReviewApproved=${report.readiness.humanCropReviewApproved ? 'YES' : 'NO'} previewSourceBound=${report.readiness.previewSourceBound ? 'YES' : 'NO'} humanFinalRenderApproved=${report.readiness.humanFinalRenderApproved ? 'YES' : 'NO'} readyForFinalDeliveryApproval=${report.readiness.readyForFinalDeliveryApproval ? 'YES' : 'NO'} finalDeliveryApproved=${approved ? 'YES' : 'NO'} productionReady=${approved ? 'YES' : 'NO'}`);
+  console.log(`humanCropReviewApproved=${report.readiness.humanCropReviewApproved ? 'YES' : 'NO'} previewSourceBound=${report.readiness.previewSourceBound ? 'YES' : 'NO'} humanAudioListeningApproved=${report.readiness.humanAudioListeningApproved ? 'YES' : 'NO'} humanFinalRenderApproved=${report.readiness.humanFinalRenderApproved ? 'YES' : 'NO'} readyForFinalDeliveryApproval=${report.readiness.readyForFinalDeliveryApproval ? 'YES' : 'NO'} finalDeliveryApproved=${approved ? 'YES' : 'NO'} productionReady=${approved ? 'YES' : 'NO'}`);
   console.log(`NEXT / ${nextActions.join(' → ')}`);
   console.log('JSON / pnpm opening:production-status -- --json');
 }
