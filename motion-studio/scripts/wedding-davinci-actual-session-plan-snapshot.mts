@@ -1,4 +1,5 @@
 import {spawnSync} from 'node:child_process';
+import {createHash} from 'node:crypto';
 import {existsSync, readFileSync} from 'node:fs';
 import {dirname, isAbsolute, join, resolve} from 'node:path';
 import {fileURLToPath} from 'node:url';
@@ -27,6 +28,11 @@ const mismatches: string[] = [];
 let state: SnapshotState = 'NOT_RUN';
 let transported: any = null;
 
+const computeTransportIdentity = (plan: Record<string, any>) => {
+  const {transportIdentitySha256: _ignored, ...body} = plan;
+  return createHash('sha256').update(JSON.stringify(body)).digest('hex');
+};
+
 if (existsSync(snapshotPath)) {
   try {
     transported = JSON.parse(readFileSync(snapshotPath, 'utf8'));
@@ -36,7 +42,16 @@ if (existsSync(snapshotPath)) {
     } else if (transported.evidenceBoundary?.productionReady !== false) {
       state = 'INVALID';
       mismatches.push('SESSION_PLAN_EVIDENCE_BOUNDARY_INVALID');
+    } else if (typeof transported.transportIdentitySha256 !== 'string') {
+      state = 'INVALID';
+      mismatches.push('SESSION_PLAN_TRANSPORT_IDENTITY_MISSING');
+    } else if (computeTransportIdentity(transported) !== transported.transportIdentitySha256) {
+      state = 'INVALID';
+      mismatches.push('SESSION_PLAN_TRANSPORT_IDENTITY_INVALID');
     } else {
+      if (transported.transportIdentitySha256 !== live.transportIdentitySha256) {
+        mismatches.push('SESSION_PLAN_TRANSPORT_IDENTITY_STALE');
+      }
       for (const movieId of ['opening', 'profile'] as const) {
         const oldProject = transported.projects?.[movieId];
         const currentProject = live.projects?.[movieId];
@@ -71,6 +86,8 @@ const audit = {
   state,
   current: state === 'CURRENT',
   snapshotPath: snapshotPath.startsWith(root) ? snapshotPath.slice(root.length + 1) : snapshotPath,
+  transportedIdentitySha256: transported?.transportIdentitySha256 ?? null,
+  liveIdentitySha256: live.transportIdentitySha256 ?? null,
   mismatches,
   evidenceBoundary: {
     macDavinciResolveGuiActual: 'NOT_PROMOTED_BY_SNAPSHOT_AUDIT',
