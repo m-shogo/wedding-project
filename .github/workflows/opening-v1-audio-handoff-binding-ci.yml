@@ -1,0 +1,63 @@
+name: Opening V1 Audio Handoff Binding CI
+
+on:
+  pull_request:
+    paths:
+      - 'motion-studio/scripts/export-opening-v1-production-bundle.mts'
+      - 'motion-studio/scripts/opening-v1-audio-listening-review.mts'
+      - 'motion-studio/scripts/opening-v1-audio-handoff-binding.mts'
+      - '.github/workflows/opening-v1-audio-handoff-binding-ci.yml'
+  workflow_dispatch:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: motion-studio
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: motion-studio/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - name: Fresh checkout must fail closed without Human evidence or exported bundle
+        run: |
+          node --no-warnings scripts/opening-v1-audio-handoff-binding.mts --json > /tmp/opening-audio-handoff.json
+          node - <<'NODE'
+          const fs = require('fs');
+          const report = JSON.parse(fs.readFileSync('/tmp/opening-audio-handoff.json', 'utf8'));
+          if (report.state !== 'NOT_EXPORTED_OR_STALE') throw new Error(`expected NOT_EXPORTED_OR_STALE, got ${report.state}`);
+          if (report.current !== false) throw new Error('fresh checkout must not report current handoff');
+          if (!report.blockers.includes('OPENING_AUDIO_HANDOFF_EVIDENCE_MISSING')) throw new Error('missing evidence blocker');
+          if (!report.blockers.includes('OPENING_AUDIO_HANDOFF_BUNDLE_MISSING')) throw new Error('missing bundle blocker');
+          if (report.davinci.macActualState !== 'NOT_RUN') throw new Error('Mac DaVinci Actual must remain NOT_RUN');
+          if (report.davinci.productionReady !== false) throw new Error('productionReady must remain false');
+          NODE
+          if node --no-warnings scripts/opening-v1-audio-handoff-binding.mts --strict; then
+            echo 'strict unexpectedly passed without Human evidence and exported bundle' >&2
+            exit 1
+          fi
+      - name: Exporter must enforce Human audio listening strict gate and downstream SHA binding
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const src = fs.readFileSync('scripts/export-opening-v1-production-bundle.mts', 'utf8');
+          const required = [
+            "opening-v1-audio-listening-review.mts', '--strict'",
+            'humanAudioListeningReview:',
+            'audioListeningReviewEvidenceSha256',
+            'expectedAudioListeningReviewEvidenceSha256',
+            'expectedAudioListeningPreviewSha256',
+            'expectedAudioListeningBgmSha256',
+            'PREVIEW_SHA_OR_BGM_SHA_CHANGED => AUDIO_LISTENING_REVIEW_STALE',
+          ];
+          for (const token of required) if (!src.includes(token)) throw new Error(`missing exporter contract token: ${token}`);
+          NODE
+      - name: TypeScript check
+        run: pnpm typecheck
