@@ -28,13 +28,21 @@ const openingPreview = openingProductionStatus.stages.previewRender;
 const openingReview = openingProductionStatus.stages.previewReview;
 const profilePreview = profileProductionStatus.sourceRevalidation.realMediaPreview;
 
+const profilePreviewRenderStates = new Set(["PREVIEW_AND_REVIEW_REQUIRED", "RE_RENDER_AND_REVIEW_REQUIRED"]);
+const profileHumanReviewStates = new Set([
+  "PREVIEW_AND_REVIEW_REQUIRED",
+  "RE_RENDER_AND_REVIEW_REQUIRED",
+  "CURRENT_SOURCE_REVIEW_REQUIRED",
+]);
+
 export function getWeddingRealMediaPreviewReview(): WeddingPreviewReviewProject[] {
   const openingMediaReady = String(openingProductionStatus.stages.media.state) === "PASS";
   const openingCropReady = String(openingProductionStatus.stages.cropReview.state) === "PASS";
   const openingPreviewReady = String(openingPreview.state) === "PASS";
 
-  const profileAssemblyReady = Boolean(profileProductionStatus.readiness.assemblyReady);
-  const profilePreviewReady = String(profilePreview.state) === "PASS";
+  const profilePreviewState = String(profilePreview.state);
+  const profilePreviewCanRender = profilePreviewRenderStates.has(profilePreviewState);
+  const profilePreviewCanStartHumanReview = profileHumanReviewStates.has(profilePreviewState);
 
   return [
     {
@@ -59,8 +67,8 @@ export function getWeddingRealMediaPreviewReview(): WeddingPreviewReviewProject[
     {
       projectId: "profile",
       overallState: String(profileProductionStatus.overallState),
-      upstreamState: String(profileProductionStatus.stages.assembly.state),
-      previewState: String(profilePreview.state),
+      upstreamState: profilePreviewState,
+      previewState: profilePreviewState,
       reviewState: String(profileRealMediaReviewGate.state),
       previewPath: "out/preview/profile_v1_real_media_preview.mp4",
       reviewEvidencePath: profileRealMediaReviewGate.audit.evidencePath,
@@ -68,8 +76,8 @@ export function getWeddingRealMediaPreviewReview(): WeddingPreviewReviewProject[
       reviewInitCommand: profilePreview.recovery[1] ?? "pnpm profile:real-media-review:init",
       reviewStrictCommand: "pnpm profile:real-media-review:strict",
       humanReviewRequired: true,
-      canRenderPreview: profileAssemblyReady,
-      canStartHumanReview: profilePreviewReady,
+      canRenderPreview: profilePreviewCanRender,
+      canStartHumanReview: profilePreviewCanStartHumanReview,
       reviewedCount: Number(profileRealMediaReviewGate.mediaReviewed),
       expectedCount: Number(profileRealMediaReviewGate.mediaExpected),
       bgmReviewed: Boolean(profileRealMediaReviewGate.bgmReviewed),
