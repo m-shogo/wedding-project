@@ -29,10 +29,11 @@ if (!allowMissingMediaSmoke) {
     process.exit(1);
   }
 } else {
-  console.log('SMOKE ONLY / explicit missing-media preview allowed; this is not production review evidence.');
+  console.log('SMOKE ONLY / explicit missing-media preview allowed; audio is intentionally omitted and this is not production review evidence.');
 }
 
 mkdirSync(dirname(output), {recursive: true});
+const composition = allowMissingMediaSmoke ? 'ProfileV1RealMediaPreview' : 'ProfileV1RealMediaAudioPreview';
 
 const result = spawnSync(
   'pnpm',
@@ -41,7 +42,7 @@ const result = spawnSync(
     'remotion',
     'render',
     'src/index-profile-v1.ts',
-    'ProfileV1RealMediaPreview',
+    composition,
     output,
     '--scale=0.5',
     '--crf=24',
@@ -50,4 +51,4 @@ const result = spawnSync(
 );
 
 if (result.status !== 0) process.exit(result.status ?? 1);
-console.log(`✅ Profile V1 real-media preview: ${output}${allowMissingMediaSmoke ? ' (SMOKE ONLY)' : ''}`);
+console.log(`✅ Profile V1 real-media preview: ${output}${allowMissingMediaSmoke ? ' (SMOKE ONLY / SILENT)' : ' (RIGHTS-CLEARED BGM INCLUDED)'}`);
