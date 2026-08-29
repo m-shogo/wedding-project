@@ -181,11 +181,12 @@ entries.sort((a, b) => {
 writeFileSync(manifestPath, JSON.stringify({masterId: master.masterId, masterRevision: master.revision, entries}, null, 2) + '\n');
 
 const escapeHtml = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+const escapeAttr = (s: string) => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;');
 // data-*属性はfilterチェックボックス(client-side JS)から参照する。
 // サーバサイド計算はここで完結させ、ブラウザ側はtrue/falseの読み取りだけにする
 // (フィルタロジックの二重実装を避ける)。
 const rowDataAttrs = (e: ClipEntry): string =>
-  `data-critical="${e.isCritical}" data-post60="${e.is60sPlus}" data-lowconf="${e.isLowConfidence}" data-unverified="${e.isUnverified}" data-golden="${e.isGoldenAnchorCandidate}"`;
+  `data-cueid="${escapeAttr(e.cueId)}" data-critical="${e.isCritical}" data-post60="${e.is60sPlus}" data-lowconf="${e.isLowConfidence}" data-unverified="${e.isUnverified}" data-golden="${e.isGoldenAnchorCandidate}"`;
 const rows = entries
   .map(
     (e) => `
@@ -200,9 +201,31 @@ const rows = entries
       <audio controls preload="none" src="listening-clips/${e.clipFile}"></audio>
       <span style="color:#888;font-size:12px">(クリップ内 ${e.cueOffsetInClipSec.toFixed(2)}s地点が設計時刻)</span>
     </td>
+    <td class="judge-cell">
+      <div class="judge-row">
+        <button type="button" class="btn btn-ok" data-action="ok">👍 合ってる</button>
+        <button type="button" class="btn btn-reject" data-action="reject">🤔 わからない</button>
+      </div>
+      <div class="judge-row">
+        <span class="nudge-label">ズレてる場合、この行だけ↓を押す(押した分だけ足し引きされる)</span>
+      </div>
+      <div class="judge-row nudge-row">
+        <button type="button" class="btn btn-nudge" data-delta="-50">-50</button>
+        <button type="button" class="btn btn-nudge" data-delta="-25">-25</button>
+        <button type="button" class="btn btn-nudge" data-delta="-10">-10</button>
+        <span class="nudge-current" data-role="current">0ms</span>
+        <button type="button" class="btn btn-nudge" data-delta="10">+10</button>
+        <button type="button" class="btn btn-nudge" data-delta="25">+25</button>
+        <button type="button" class="btn btn-nudge" data-delta="50">+50</button>
+      </div>
+      ${e.isGoldenAnchorCandidate ? '<div class="judge-row"><label class="golden-toggle"><input type="checkbox" data-role="golden" /> ⭐ 基準点として確定する</label></div>' : ''}
+      <div class="judge-status" data-role="status">未確認</div>
+    </td>
   </tr>`,
   )
   .join('\n');
+
+const storageKey = `startWeddingListeningDecisions_${master.masterId}_r${master.revision}`;
 
 writeFileSync(
   htmlPath,
@@ -215,7 +238,7 @@ writeFileSync(
   body { font-family: -apple-system, sans-serif; margin: 24px; background: #111; color: #eee; }
   table { border-collapse: collapse; width: 100%; }
   td, th { border-bottom: 1px solid #333; padding: 6px 10px; text-align: left; vertical-align: middle; font-size: 13px; }
-  th { position: sticky; top: 0; background: #111; }
+  th { position: sticky; top: 0; background: #111; z-index: 2; }
   audio { height: 30px; vertical-align: middle; }
   h1 { font-size: 18px; }
   p.note { color: #f2a53f; }
@@ -224,18 +247,70 @@ writeFileSync(
   .filters input { margin-right: 4px; }
   #filterCount { color: #888; font-size: 12px; margin-left: 8px; }
   tr.hidden-by-filter { display: none; }
+
+  .howto { background: #1a1a1c; border: 1px solid #333; border-radius: 8px; padding: 16px 20px; margin: 16px 0 20px; }
+  .howto h2 { font-size: 15px; margin: 0 0 8px; color: #fff; }
+  .howto ol { margin: 0; padding-left: 20px; font-size: 13px; line-height: 1.9; }
+  .howto b { color: #F4C95D; }
+
+  .toolbar { position: sticky; top: 0; z-index: 3; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; background: #191512; border: 1px solid #3a2f1f; border-radius: 8px; padding: 10px 14px; margin-bottom: 12px; }
+  .toolbar input[type=text] { background: #0d0d0e; border: 1px solid #444; color: #eee; border-radius: 4px; padding: 5px 8px; font-size: 13px; }
+  .toolbar .save-btn { background: #F4C95D; color: #1a1508; font-weight: 700; border: none; border-radius: 6px; padding: 8px 16px; font-size: 13px; cursor: pointer; }
+  .toolbar .save-btn:hover { background: #ffd873; }
+  #progressCount { font-size: 13px; color: #ccc; }
+  #saveHint { font-size: 12px; color: #888; width: 100%; }
+
+  .judge-cell { min-width: 260px; }
+  .judge-row { margin-bottom: 4px; }
+  .btn { border: 1px solid #444; background: #232323; color: #eee; border-radius: 5px; padding: 4px 9px; font-size: 12px; cursor: pointer; }
+  .btn:hover { background: #333; }
+  .btn-ok { border-color: #3a7a4a; }
+  .btn-ok.active { background: #2f7a3f; border-color: #2f7a3f; color: #fff; }
+  .btn-reject { border-color: #7a3a3a; }
+  .btn-reject.active { background: #7a3232; border-color: #7a3232; color: #fff; }
+  .btn-nudge.active { background: #7a5a1f; border-color: #7a5a1f; color: #fff; }
+  .nudge-label { font-size: 11px; color: #888; }
+  .nudge-row { display: flex; align-items: center; gap: 4px; }
+  .nudge-current { display: inline-block; min-width: 44px; text-align: center; font-size: 12px; color: #F4C95D; font-weight: 700; }
+  .golden-toggle { font-size: 12px; color: #F4C95D; cursor: pointer; }
+  .judge-status { font-size: 12px; color: #888; margin-top: 4px; }
+  .judge-status.is-ok { color: #7CF29A; }
+  .judge-status.is-adjust { color: #F4C95D; }
+  .judge-status.is-reject { color: #f2a53f; }
 </style>
 </head>
 <body>
 <h1>StaRt Wedding Edit — Cue聴取確認(masterId=${escapeHtml(master.masterId)} revision=${master.revision})</h1>
-<p class="note">これはローカル専用の確認用HTML(Git管理外・著作権音源から切り出したクリップを含む)。
-各行の音声を実際に聴いて、「設計時刻(クリップ内の再生位置)」がボーカル/アクセントと合っているか確認する。
-ズレている場合は、cueIdと感じたズレ(ms、+は遅らせる/-は早める)を控えておき、
-apply-listening-verification.mtsで反映する。<b>⭐印(黄色背景)の10行はGolden Anchor候補
-(曲全体に分散した代表箇所)で最優先。それ以外はconfidenceScoreが低い行(オレンジ文字、
-0.5未満)ほど根拠が弱いため上に並べている。時間が無い場合は⭐→オレンジの順で確認する。
-⭐の行を確認してOKだった場合は、apply-listening-verification.mtsのdecisionへ
-"goldenAnchor": trueを追加するとGolden Anchor(以後上書きされない基準点)として確定する。</b></p>
+<p class="note">これはローカル専用の確認用HTML(Git管理外・著作権音源から切り出したクリップを含む)。</p>
+
+<div class="howto">
+  <h2>使い方(3ステップ)</h2>
+  <ol>
+    <li>各行の▶を押して聴く。クリップの<b>${WINDOW_BEFORE_SEC}秒後</b>あたりが「設計時刻」(歌詞・アクセントが来るはずの瞬間)。</li>
+    <li>
+      合っていたら <b>👍 合ってる</b>。<br/>
+      ズレていたら、感じた分だけ <b>-50/-25/-10/+10/+25/+50</b> のボタンを押す(複数回押すと積み重なる。マイナス=もっと早く鳴ってほしい、プラス=もっと遅く鳴ってほしい)。<br/>
+      よく分からない/違う音を指している場合は <b>🤔 わからない</b>。
+    </li>
+    <li>一通り終わったら、上の<b>「名前」欄に自分の名前</b>を入れて<b>「💾 保存する」</b>を押す。ファイルが1つダウンロードされるので、
+      <code>local/analysis/start-wedding/listening-decisions.local.json</code> という名前でそのフォルダに保存する
+      (ダウンロードダイアログで保存先を選べる場合はそこで直接指定、選べない場合はダウンロードフォルダから移動する)。</li>
+  </ol>
+  <p style="font-size:12px;color:#888;margin:10px 0 0;">
+    ⭐印(黄色背景)の10行は曲全体を代表する最優先箇所。時間が無い場合は⭐だけでもOK。
+    ⭐の行を「👍 合ってる」にした場合だけ、行の中の「⭐ 基準点として確定する」にもチェックすると、
+    以後AIが上書きしない基準点(Golden Anchor)として確定する。<br/>
+    全部を1回で終わらせる必要はない。保存を何度でも繰り返せる(前回チェックした分は自動的に覚えている)。
+  </p>
+</div>
+
+<div class="toolbar">
+  <label style="font-size:13px;">名前: <input type="text" id="verifiedByInput" placeholder="例: しょうご" /></label>
+  <button type="button" class="save-btn" id="saveBtn">💾 保存する(ダウンロード)</button>
+  <span id="progressCount"></span>
+  <span id="saveHint"></span>
+</div>
+
 <div class="filters">
   <label><input type="checkbox" data-filter="critical" /> Critical(3-hit/letterCue/低confidence onset)</label>
   <label><input type="checkbox" data-filter="post60" /> 60s+</label>
@@ -245,7 +320,7 @@ apply-listening-verification.mtsで反映する。<b>⭐印(黄色背景)の10�
   <span id="filterCount"></span>
 </div>
 <table>
-<thead><tr><th>cueId</th><th>設計秒</th><th>種別</th><th>text</th><th>timingSource</th><th>confidenceScore</th><th>再生</th></tr></thead>
+<thead><tr><th>cueId</th><th>設計秒</th><th>種別</th><th>text</th><th>timingSource</th><th>confidenceScore</th><th>再生</th><th>判定</th></tr></thead>
 <tbody id="cueRows">
 ${rows}
 </tbody>
@@ -272,6 +347,163 @@ ${rows}
   checkboxes.forEach(function (cb) { cb.addEventListener('change', apply); });
   apply();
 })();
+
+// 判定(OK/わからない/ズレ量/Golden Anchor)の記録。
+// - localStorageへ常時保存するので、ページを閉じてもここまでの入力は消えない。
+// - 「保存する」を押した時だけ、apply-listening-verification.mtsが読める
+//   decisions.local.json形式のファイルをダウンロードする。
+// - 何も押していない行は一切ファイルに含めない
+//   (apply script側の「列挙されていないcueは変更しない」という安全設計と対応させる)。
+(function () {
+  var STORAGE_KEY = ${JSON.stringify(storageKey)};
+  var NAME_KEY = 'startWeddingListeningVerifiedByName';
+
+  function loadState() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      return raw ? JSON.parse(raw) : {};
+    } catch (e) {
+      return {};
+    }
+  }
+  var state = loadState(); // cueId -> {status: 'ok'|'reject', deltaMs: number, golden: boolean}
+
+  function saveState() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch (e) {
+      // localStorageが使えない環境でも判定操作自体は継続できるようにする(保存だけ効かない)
+    }
+    updateProgress();
+  }
+
+  function getEntry(cueId) {
+    if (!state[cueId]) state[cueId] = {status: null, deltaMs: 0, golden: false};
+    return state[cueId];
+  }
+
+  function renderRow(tr) {
+    var cueId = tr.getAttribute('data-cueid');
+    var entry = getEntry(cueId);
+    var okBtn = tr.querySelector('.btn-ok');
+    var rejectBtn = tr.querySelector('.btn-reject');
+    var currentEl = tr.querySelector('[data-role=current]');
+    var statusEl = tr.querySelector('[data-role=status]');
+    var goldenInput = tr.querySelector('[data-role=golden]');
+
+    okBtn.classList.toggle('active', entry.status === 'ok');
+    rejectBtn.classList.toggle('active', entry.status === 'reject');
+    currentEl.textContent = (entry.deltaMs > 0 ? '+' : '') + entry.deltaMs + 'ms';
+    if (goldenInput) goldenInput.checked = !!entry.golden;
+
+    if (entry.status === 'ok' && entry.deltaMs !== 0) {
+      statusEl.textContent = '判定: 合ってる(' + (entry.deltaMs > 0 ? '+' : '') + entry.deltaMs + 'ms補正)' + (entry.golden ? ' ⭐基準点' : '');
+      statusEl.className = 'judge-status is-adjust';
+    } else if (entry.status === 'ok') {
+      statusEl.textContent = '判定: 合ってる' + (entry.golden ? ' ⭐基準点' : '');
+      statusEl.className = 'judge-status is-ok';
+    } else if (entry.status === 'reject') {
+      statusEl.textContent = '判定: わからない/違う';
+      statusEl.className = 'judge-status is-reject';
+    } else {
+      statusEl.textContent = '未確認';
+      statusEl.className = 'judge-status';
+    }
+  }
+
+  function updateProgress() {
+    var done = Object.keys(state).filter(function (k) { return state[k].status === 'ok' || state[k].status === 'reject'; }).length;
+    document.getElementById('progressCount').textContent = '判定済み: ' + done + ' / ' + rowsAll.length + '件(自動的に保存されています)';
+  }
+
+  var rowsAll = Array.prototype.slice.call(document.querySelectorAll('#cueRows tr'));
+  rowsAll.forEach(function (tr) {
+    var cueId = tr.getAttribute('data-cueid');
+
+    tr.querySelector('.btn-ok').addEventListener('click', function () {
+      var entry = getEntry(cueId);
+      entry.status = entry.status === 'ok' ? null : 'ok';
+      renderRow(tr);
+      saveState();
+    });
+    tr.querySelector('.btn-reject').addEventListener('click', function () {
+      var entry = getEntry(cueId);
+      entry.status = entry.status === 'reject' ? null : 'reject';
+      renderRow(tr);
+      saveState();
+    });
+    Array.prototype.slice.call(tr.querySelectorAll('.btn-nudge')).forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var entry = getEntry(cueId);
+        entry.deltaMs += parseInt(btn.getAttribute('data-delta'), 10);
+        // ズレ補正ボタンを押した時点で「合ってる(補正込み)」扱いへ自動的に進める
+        // (別途OKを押す手間を無くす)。わからない状態からでも補正すれば判定済みになる。
+        if (entry.status !== 'reject') entry.status = 'ok';
+        renderRow(tr);
+        saveState();
+      });
+    });
+    var goldenInput = tr.querySelector('[data-role=golden]');
+    if (goldenInput) {
+      goldenInput.addEventListener('change', function () {
+        var entry = getEntry(cueId);
+        entry.golden = goldenInput.checked;
+        renderRow(tr);
+        saveState();
+      });
+    }
+    renderRow(tr);
+  });
+  updateProgress();
+
+  var nameInput = document.getElementById('verifiedByInput');
+  try {
+    nameInput.value = localStorage.getItem(NAME_KEY) || '';
+  } catch (e) {}
+  nameInput.addEventListener('input', function () {
+    try { localStorage.setItem(NAME_KEY, nameInput.value); } catch (e) {}
+  });
+
+  document.getElementById('saveBtn').addEventListener('click', function () {
+    var verifiedBy = nameInput.value.trim();
+    var hintEl = document.getElementById('saveHint');
+    if (!verifiedBy) {
+      hintEl.textContent = '⚠️ 「名前」を入力してから保存してください。';
+      hintEl.style.color = '#f2a53f';
+      nameInput.focus();
+      return;
+    }
+    var decisions = [];
+    Object.keys(state).forEach(function (cueId) {
+      var e = state[cueId];
+      if (e.status === 'ok') {
+        var d = {cueId: cueId, status: e.deltaMs !== 0 ? 'adjust' : 'ok'};
+        if (e.deltaMs !== 0) d.deltaMs = e.deltaMs;
+        if (e.golden) d.goldenAnchor = true;
+        decisions.push(d);
+      } else if (e.status === 'reject') {
+        decisions.push({cueId: cueId, status: 'reject'});
+      }
+    });
+    if (decisions.length === 0) {
+      hintEl.textContent = '⚠️ まだ判定した行が0件です。行の👍か🤔を押してから保存してください。';
+      hintEl.style.color = '#f2a53f';
+      return;
+    }
+    var payload = {verifiedBy: verifiedBy, decisions: decisions};
+    var blob = new Blob([JSON.stringify(payload, null, 2) + '\\n'], {type: 'application/json'});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = 'listening-decisions.local.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+    hintEl.style.color = '#7CF29A';
+    hintEl.textContent = '✅ ' + decisions.length + '件を書き出しました。ダウンロードされたファイルを local/analysis/start-wedding/listening-decisions.local.json として保存してください。その後ターミナルで pnpm apply:listening-verification → pnpm sync:timing-master を実行すると反映されます。';
+  });
+})();
 </script>
 </body>
 </html>
@@ -280,5 +512,6 @@ ${rows}
 
 console.log(`[render-cue-listening-clips] クリップ${entries.length}件を ${outDir} に生成。`);
 console.log(`[render-cue-listening-clips] ブラウザで開いて聴取確認: ${htmlPath}`);
-console.log('[render-cue-listening-clips] 聴取結果はcueId毎にlocal/analysis/start-wedding/listening-decisions.local.jsonへ記録し、');
-console.log('  node --no-warnings scripts/apply-listening-verification.mts で反映する(未記載cueは一切変更しない)。');
+console.log('[render-cue-listening-clips] ページ内の👍/🤔/±msボタンで判定 → 「保存する」でJSONをダウンロード。');
+console.log('[render-cue-listening-clips] ダウンロードしたファイルを local/analysis/start-wedding/listening-decisions.local.json として保存後、');
+console.log('  pnpm apply:listening-verification → pnpm sync:timing-master の順で反映する。');
