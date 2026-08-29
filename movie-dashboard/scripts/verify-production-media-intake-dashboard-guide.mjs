@@ -6,6 +6,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const read = (relative) => fs.readFileSync(path.join(root, relative), "utf8");
 const guide = read("src/components/ProductionMediaIntakeCliGuide.tsx");
 const profile = read("src/pages/ProfileMediaIntake.tsx");
+const openingPhoto = read("src/pages/OpeningPhotoIntake.tsx");
 const openingGate = read("src/components/OpeningProductionGatePanel.tsx");
 const errors = [];
 
@@ -48,6 +49,22 @@ for (const token of [
 for (const token of [
   'ProductionMediaIntakeCliGuide',
   '<ProductionMediaIntakeCliGuide project="opening" />',
+  'gate.photos.intakeReceiptCurrent',
+  'gate.photos.intakeReceiptVerifiedCount',
+  'gate.photos.intakeReceiptExpectedCount',
+  'CANONICAL INTAKE CLIをDRY RUNし',
+  '--apply',
+  'source非破壊copy',
+  'verify-production-media-intake-receipt.mts --project opening',
+  '11/11 FILE FOUND != PHOTOS READY',
+  'Human crop QA / Mac Remotion Studio Actual / DaVinci Actual / final approval は自動PASSしません',
+]) {
+  requireText(openingPhoto, token, `Opening photo intake receipt wiring missing: ${token}`);
+}
+
+for (const token of [
+  'ProductionMediaIntakeCliGuide',
+  '<ProductionMediaIntakeCliGuide project="opening" />',
   '!photosReady',
   'CANONICAL INTAKE CLIをDRY RUNし',
   '--apply',
@@ -57,7 +74,12 @@ for (const token of [
   requireText(openingGate, token, `Opening production gate CLI wiring missing: ${token}`);
 }
 
-if (guide.includes('productionReady: true') || profile.includes('productionReady: true') || openingGate.includes('productionReady: true')) {
+if (
+  guide.includes('productionReady: true') ||
+  profile.includes('productionReady: true') ||
+  openingPhoto.includes('productionReady: true') ||
+  openingGate.includes('productionReady: true')
+) {
   errors.push("media intake dashboard guide must not fabricate production readiness");
 }
 
@@ -67,4 +89,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log("Production Media Intake Dashboard Guide contracts OK: Opening and Profile expose canonical dry-run -> SHA-verified apply + local receipt -> prepare commands, while source preservation and Human/Mac production gates remain explicit.");
+console.log("Production Media Intake Dashboard Guide contracts OK: Opening and Profile expose canonical dry-run -> SHA-verified apply + local receipt -> prepare commands on their production intake surfaces, while source preservation and Human/Mac production gates remain explicit.");
