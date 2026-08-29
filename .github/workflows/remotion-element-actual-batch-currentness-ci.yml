@@ -1,0 +1,68 @@
+name: Remotion Element Actual Batch Currentness CI
+
+on:
+  pull_request:
+    paths:
+      - 'motion-studio/scripts/prepare-typography-elements-studio-actual-batch.mts'
+      - 'motion-studio/scripts/check-typography-elements-studio-actual-batch.mts'
+      - 'motion-studio/scripts/typography-elements-studio-actual-evidence.mts'
+      - '.github/workflows/remotion-element-actual-batch-currentness-ci.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  sha-bound-currentness:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: motion-studio/pnpm-lock.yaml
+      - name: Install locked baseline
+        working-directory: motion-studio
+        run: pnpm install --frozen-lockfile
+      - name: Prepare and verify SHA-bound batch
+        working-directory: motion-studio
+        run: |
+          node --no-warnings scripts/prepare-typography-elements-studio-actual-batch.mts
+          node --no-warnings scripts/check-typography-elements-studio-actual-batch.mts | tee /tmp/batch-current.log
+          grep -q 'batchCurrent=CURRENT_SHA_BOUND' /tmp/batch-current.log
+          grep -q 'studioActual=NOT_RUN' /tmp/batch-current.log
+      - name: Payload mutation makes prepared batch stale
+        working-directory: motion-studio
+        run: |
+          printf '\n' >> ../movie-dashboard/out/remotion-element-actual-batch/payloads/type-mask-reveal.json
+          if node --no-warnings scripts/check-typography-elements-studio-actual-batch.mts > /tmp/payload-stale.log 2>&1; then
+            echo 'Tampered payload must not remain CURRENT.'
+            exit 1
+          fi
+          grep -q 'prepared payload SHA is STALE' /tmp/payload-stale.log
+      - name: Reprepare and bind NOT_RUN evidence
+        working-directory: motion-studio
+        run: |
+          node --no-warnings scripts/prepare-typography-elements-studio-actual-batch.mts
+          node --no-warnings scripts/check-typography-elements-studio-actual-batch.mts
+          node --no-warnings scripts/typography-elements-studio-actual-evidence.mts --init
+          grep -q '"overall": "NOT_RUN"' ../movie-dashboard/out/remotion-element-actual-batch/studio-actual-evidence.json
+      - name: Builder mutation invalidates previously bound Actual evidence
+        working-directory: motion-studio
+        run: |
+          cp scripts/build-mask-reveal-element-payload.mts /tmp/build-mask-reveal-element-payload.mts
+          printf '\n// ephemeral currentness mutation\n' >> scripts/build-mask-reveal-element-payload.mts
+          node --no-warnings scripts/typography-elements-studio-actual-evidence.mts > /tmp/evidence-stale.log 2>&1 || true
+          grep -q 'STUDIO_ACTUAL_BATCH_SOURCE_STALE' /tmp/evidence-stale.log
+          grep -q '"current": false' ../movie-dashboard/out/remotion-element-actual-batch/studio-actual-summary.json
+          mv /tmp/build-mask-reveal-element-payload.mts scripts/build-mask-reveal-element-payload.mts
+      - name: Repo-facing Actual stays NOT_RUN
+        run: |
+          echo 'studioInstallActual=NOT_RUN'
+          echo 'studioControlReadbackActual=NOT_RUN'
+          echo 'productionDependencyPromoted=NO'
