@@ -26,6 +26,7 @@
     "render:cue-listening-clips": "node --no-warnings scripts/render-cue-listening-clips.mts",
     "apply:listening-verification": "node --no-warnings scripts/apply-listening-verification.mts",
     "gen:lyric-timing-master-reference": "node --no-warnings scripts/render-lyric-timing-master-reference.mts",
+    "gen:listening-review-all": "pnpm render:cue-listening-clips && pnpm gen:lyric-timing-master-reference",
     "render:av-sync-test": "remotion render src/index-av-sync-test.ts AVSyncTest local/analysis/start-wedding/av-sync-test/av-sync-test.mp4 --scale=0.5 --crf=10",
     "sync:start-wedding-edit-local": "pnpm sync:timing-master",
     "prepare:start-wedding-edit": "pnpm sync:start-wedding-edit-local && pnpm sync:start-129-demo-assets",
