@@ -1,0 +1,41 @@
+name: Wedding Remotion Element Gate Recovery CI
+
+on:
+  pull_request:
+    paths:
+      - 'movie-dashboard/src/data/remotionElementGateArtifactRecoveryReference.ts'
+      - 'movie-dashboard/src/data/remotionElementIdentityProductionGateReference.ts'
+      - 'movie-dashboard/src/lib/effectiveProductionHandoffExport.ts'
+      - '.github/workflows/wedding-remotion-element-gate-recovery-ci.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  recovery-reference:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: movie-dashboard/pnpm-lock.yaml
+      - name: Install dashboard dependencies
+        working-directory: movie-dashboard
+        run: pnpm install --frozen-lockfile
+      - name: TypeScript and Vite build
+        working-directory: movie-dashboard
+        run: pnpm build
+      - name: Recovery contract is explicit and evidence-honest
+        run: |
+          grep -q 'staleGateArtifactForcesDavinciRecoveryNotCurrent: true' movie-dashboard/src/data/remotionElementGateArtifactRecoveryReference.ts
+          grep -q 'macRemotionStudioGuiActual: "NOT_RUN"' movie-dashboard/src/data/remotionElementGateArtifactRecoveryReference.ts
+          grep -q 'macDaVinciGuiActual: "NOT_RUN"' movie-dashboard/src/data/remotionElementGateArtifactRecoveryReference.ts
+          grep -q 'remotionElementGateArtifactRecovery' movie-dashboard/src/lib/effectiveProductionHandoffExport.ts
+          grep -q 'ADOPTED_REMOTION_ELEMENT_REQUIRES_CURRENT_GATE_ARTIFACT_BEFORE_DAVINCI_RECOVERY_CURRENT' movie-dashboard/src/lib/effectiveProductionHandoffExport.ts
