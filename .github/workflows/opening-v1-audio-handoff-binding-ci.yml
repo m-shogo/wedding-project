@@ -1,0 +1,82 @@
+name: Opening V1 Audio Handoff Binding CI
+
+on:
+  pull_request:
+    paths:
+      - 'motion-studio/scripts/export-opening-v1-production-bundle.mts'
+      - 'motion-studio/scripts/export-wedding-davinci-production-recovery.mts'
+      - 'motion-studio/scripts/opening-v1-audio-listening-review.mts'
+      - 'motion-studio/scripts/opening-v1-audio-handoff-binding.mts'
+      - 'motion-studio/scripts/opening-v1-davinci-recovery-audio-binding.mts'
+      - '.github/workflows/opening-v1-audio-handoff-binding-ci.yml'
+  workflow_dispatch:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: motion-studio
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: motion-studio/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - name: Fresh checkout handoff validators must fail closed
+        run: |
+          node --no-warnings scripts/opening-v1-audio-handoff-binding.mts --json > /tmp/opening-audio-handoff.json
+          node --no-warnings scripts/opening-v1-davinci-recovery-audio-binding.mts --json > /tmp/opening-davinci-recovery-audio.json
+          node - <<'NODE'
+          const fs = require('fs');
+          const handoff = JSON.parse(fs.readFileSync('/tmp/opening-audio-handoff.json', 'utf8'));
+          const recovery = JSON.parse(fs.readFileSync('/tmp/opening-davinci-recovery-audio.json', 'utf8'));
+          if (handoff.state !== 'NOT_EXPORTED_OR_STALE' || handoff.current !== false) throw new Error('fresh handoff must fail closed');
+          if (!handoff.blockers.includes('OPENING_AUDIO_HANDOFF_EVIDENCE_MISSING')) throw new Error('missing handoff evidence blocker');
+          if (!handoff.blockers.includes('OPENING_AUDIO_HANDOFF_BUNDLE_MISSING')) throw new Error('missing handoff bundle blocker');
+          if (handoff.davinci.macActualState !== 'NOT_RUN' || handoff.davinci.productionReady !== false) throw new Error('handoff Actual boundary drifted');
+          if (recovery.state !== 'NOT_EXPORTED_OR_STALE' || recovery.current !== false) throw new Error('fresh recovery must fail closed');
+          if (!recovery.blockers.includes('OPENING_DAVINCI_RECOVERY_AUDIO_EVIDENCE_MISSING')) throw new Error('missing recovery audio evidence blocker');
+          if (!recovery.blockers.includes('OPENING_DAVINCI_RECOVERY_SIDECAR_MISSING')) throw new Error('missing recovery sidecar blocker');
+          if (recovery.macDaVinciActual !== 'NOT_RUN' || recovery.productionReady !== false) throw new Error('recovery Actual boundary drifted');
+          NODE
+          if node --no-warnings scripts/opening-v1-audio-handoff-binding.mts --strict; then exit 1; fi
+          if node --no-warnings scripts/opening-v1-davinci-recovery-audio-binding.mts --strict; then exit 1; fi
+      - name: Production bundle exporter must enforce Human audio listening binding
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const src = fs.readFileSync('scripts/export-opening-v1-production-bundle.mts', 'utf8');
+          const required = [
+            "opening-v1-audio-listening-review.mts', '--strict'",
+            'humanAudioListeningReview:',
+            'audioListeningReviewEvidenceSha256',
+            'expectedAudioListeningReviewEvidenceSha256',
+            'expectedAudioListeningPreviewSha256',
+            'expectedAudioListeningBgmSha256',
+            'PREVIEW_SHA_OR_BGM_SHA_CHANGED => AUDIO_LISTENING_REVIEW_STALE',
+          ];
+          for (const token of required) if (!src.includes(token)) throw new Error(`missing exporter contract token: ${token}`);
+          NODE
+      - name: DaVinci recovery exporter must carry the same Human audio binding
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const src = fs.readFileSync('scripts/export-wedding-davinci-production-recovery.mts', 'utf8');
+          const required = [
+            "audioReview: 'out/qa/opening-v1-audio-listening-review.json'",
+            'openingAudioBinding',
+            'audioListeningReviewEvidenceSha256',
+            'audioListeningPreviewSha256',
+            'audioListeningBgmSha256',
+            'Opening Palmier/DaVinci audio listening binding is stale',
+          ];
+          for (const token of required) if (!src.includes(token)) throw new Error(`missing recovery contract token: ${token}`);
+          NODE
+      - name: TypeScript check
+        run: pnpm typecheck
