@@ -4,6 +4,7 @@ import {fileURLToPath} from 'node:url';
 import {assets} from '../src/data/assets.ts';
 import {openingV1Presentation} from '../src/data/openingV1Presentation.ts';
 import {openingV1SoundCues} from '../src/data/openingV1Sound.ts';
+import {evaluateOpeningV1BgmRights} from './opening-v1-bgm-rights-approval.mts';
 import {verifyBgmIntakeReceipt} from './verify-production-bgm-intake-receipt.mts';
 import {verifyIntakeReceipt} from './verify-production-media-intake-receipt.mts';
 
@@ -16,17 +17,10 @@ const strict = process.argv.includes('--strict');
 const mixStrict = process.argv.includes('--mix-strict');
 
 const expectedPhotoSlots = [
-  'okinawa-01',
-  'okinawa-02',
-  'okinawa-03',
-  'seoul-01',
-  'seoul-02',
-  'seoul-03',
-  'hawaii-01',
-  'hawaii-02',
-  'hawaii-03',
-  'hero-01',
-  'hero-02',
+  'okinawa-01', 'okinawa-02', 'okinawa-03',
+  'seoul-01', 'seoul-02', 'seoul-03',
+  'hawaii-01', 'hawaii-02', 'hawaii-03',
+  'hero-01', 'hero-02',
 ] as const;
 
 const normalizeStem = (file: string) => {
@@ -76,14 +70,7 @@ const audioFileState = (assetId: string) => {
   const localPublicPath = asset.path.startsWith('public/audio/');
   const absolutePath = localPublicPath ? join(studioRoot, asset.path) : null;
   const fileExists = absolutePath ? existsSync(absolutePath) : false;
-  return {
-    assetId,
-    status: asset.status,
-    path: asset.path,
-    playable,
-    fileExists,
-    ready: playable && localPublicPath && fileExists,
-  };
+  return {assetId, status: asset.status, path: asset.path, playable, fileExists, ready: playable && localPublicPath && fileExists};
 };
 
 const soundPlan = openingV1SoundCues.map((cue) => ({
@@ -104,11 +91,18 @@ const photoReceipt = verifyIntakeReceipt({project: 'opening', targetDirectory: o
 const photoReceiptCurrent = photoReceipt.current;
 const photosReady = photoFilesReady && photoReceiptCurrent;
 const bgmAssetReady = bgmRows.length === 1 && bgmRows.every((row) => row.ready);
-const bgmReceipt = bgmRows.length === 1 && bgmRows[0]?.path.startsWith('public/audio/')
-  ? verifyBgmIntakeReceipt({project: 'opening', targetPath: join(studioRoot, bgmRows[0].path)})
+const bgmTargetPath = bgmRows.length === 1 && bgmRows[0]?.path.startsWith('public/audio/')
+  ? join(studioRoot, bgmRows[0].path)
+  : null;
+const bgmReceipt = bgmTargetPath
+  ? verifyBgmIntakeReceipt({project: 'opening', targetPath: bgmTargetPath})
   : null;
 const bgmReceiptCurrent = bgmReceipt?.current === true;
-const bgmReady = bgmAssetReady && bgmReceiptCurrent;
+const bgmRights = bgmTargetPath && bgmReceiptCurrent
+  ? evaluateOpeningV1BgmRights({bgmPath: bgmTargetPath})
+  : null;
+const bgmRightsCleared = bgmRights?.rightsCleared === true;
+const bgmReady = bgmAssetReady && bgmReceiptCurrent && bgmRightsCleared;
 const ambienceReadyCount = ambienceRows.filter((row) => row.ready).length;
 const ambienceReady = ambienceReadyCount === ambienceRows.length;
 const finalRenderEligible = photosReady && bgmReady;
@@ -117,23 +111,18 @@ const mixReady = finalRenderEligible && ambienceReady;
 const blockers = [
   ...photoPlan.filter((row) => !row.ready).map((row) => `PHOTO_MISSING:${row.slot}`),
   ...(photoFilesReady && !photoReceiptCurrent
-    ? [
-        'PHOTO_INTAKE_RECEIPT_STALE',
-        ...photoReceipt.errors.map((error) => `PHOTO_INTAKE:${error}`),
-      ]
+    ? ['PHOTO_INTAKE_RECEIPT_STALE', ...photoReceipt.errors.map((error) => `PHOTO_INTAKE:${error}`)]
     : []),
   ...bgmRows.filter((row) => !row.ready).map((row) => `BGM_NOT_READY:${row.assetId}:${row.status}`),
   ...(bgmRows.length !== 1 ? [`BGM_CUE_COUNT:${bgmRows.length}`] : []),
   ...(bgmRows.length === 1 && !bgmReceiptCurrent
-    ? [
-        'BGM_INTAKE_RECEIPT_STALE',
-        ...(bgmReceipt?.blockers ?? ['BGM_RECEIPT_UNAVAILABLE']).map((blocker) => `BGM_INTAKE:${blocker}`),
-      ]
+    ? ['BGM_INTAKE_RECEIPT_STALE', ...(bgmReceipt?.blockers ?? ['BGM_RECEIPT_UNAVAILABLE']).map((blocker) => `BGM_INTAKE:${blocker}`)]
+    : []),
+  ...(bgmReceiptCurrent && !bgmRightsCleared
+    ? ['BGM_RIGHTS_NOT_CLEARED', ...(bgmRights?.blockers ?? ['OPENING_BGM_RIGHTS_APPROVAL_NOT_RUN']).map((blocker) => `BGM_RIGHTS:${blocker}`)]
     : []),
 ];
-const mixWarnings = ambienceRows
-  .filter((row) => !row.ready)
-  .map((row) => `AMBIENCE_NOT_READY:${row.assetId}:${row.status}`);
+const mixWarnings = ambienceRows.filter((row) => !row.ready).map((row) => `AMBIENCE_NOT_READY:${row.assetId}:${row.status}`);
 
 const canonicalPhotoIntakeActions = [
   'node --no-warnings scripts/intake-production-media.mts --project opening --source "/ABS/PATH/TO/opening-media"',
@@ -146,9 +135,15 @@ const canonicalBgmIntakeActions = [
   'node --no-warnings scripts/intake-production-bgm.mts --project opening --source "/ABS/PATH/TO/opening-bgm.mp3" --apply --receipt out/intake/opening-bgm-intake.json',
   'node --no-warnings scripts/verify-production-bgm-intake-receipt.mts --project opening',
 ];
+const canonicalBgmRightsActions = [
+  'node --no-warnings scripts/opening-v1-bgm-rights-approval.mts --init',
+  'Human: out/qa/opening-v1-bgm-rights-approval.json にAPPROVE / approver / decidedAt / evidenceNote / rightsCleared=trueを記録',
+  'node --no-warnings scripts/opening-v1-bgm-rights-approval.mts --strict',
+];
 const photosNeedIntake = !photoFilesReady || !photoReceiptCurrent;
 const bgmNeedsIntake = !bgmRows[0]?.fileExists || !bgmReceiptCurrent;
-const bgmNeedsApproval = !bgmNeedsIntake && !bgmAssetReady;
+const bgmNeedsRights = !bgmNeedsIntake && !bgmRightsCleared;
+const bgmNeedsPromotion = !bgmNeedsIntake && bgmRightsCleared && !bgmAssetReady;
 const inputRecovery = {
   photos: {
     state: photosReady ? 'READY' as const : 'BLOCKED' as const,
@@ -160,17 +155,19 @@ const inputRecovery = {
   },
   bgm: {
     state: bgmReady ? 'READY' as const : 'BLOCKED' as const,
+    intakeReceiptCurrent: bgmReceiptCurrent,
+    rightsState: bgmRights?.state ?? 'NOT_RUN',
+    rightsCleared: bgmRightsCleared,
     actions: bgmNeedsIntake
       ? canonicalBgmIntakeActions
-      : bgmNeedsApproval
-        ? ['BGMの会場上映条件/Evidenceを人間確認', 'assets.tsのopening-bgm-mainをcandidate以上へ明示昇格', 'pnpm check:opening-sound:strict']
-        : [],
+      : bgmNeedsRights
+        ? canonicalBgmRightsActions
+        : bgmNeedsPromotion
+          ? ['assets.tsのopening-bgm-mainをcandidate以上へ明示昇格', 'pnpm check:opening-sound:strict']
+          : [],
   },
 };
-const parallelInputActions = [
-  ...inputRecovery.photos.actions,
-  ...inputRecovery.bgm.actions,
-];
+const parallelInputActions = [...inputRecovery.photos.actions, ...inputRecovery.bgm.actions];
 
 const report = {
   schemaVersion: 'opening-v1-assembly-preflight/v1' as const,
@@ -190,8 +187,11 @@ const report = {
     bgmReady,
     bgmAssetReady,
     bgmIntakeReceiptCurrent: bgmReceiptCurrent,
-    bgmIntakeReceiptPath: bgmReceipt?.receiptPath ? `out/intake/opening-bgm-intake.json` : null,
+    bgmIntakeReceiptPath: bgmReceipt?.receiptPath ? 'out/intake/opening-bgm-intake.json' : null,
     bgmIntakeReceiptBlockers: bgmReceipt?.blockers ?? ['BGM_RECEIPT_UNAVAILABLE'],
+    bgmRightsState: bgmRights?.state ?? 'NOT_RUN',
+    bgmRightsCleared,
+    bgmRightsBlockers: bgmRights?.blockers ?? ['OPENING_BGM_RIGHTS_APPROVAL_NOT_RUN'],
     bgm: bgmRows,
     ambienceReady,
     ambienceReadyCount,
@@ -217,7 +217,7 @@ const report = {
 if (jsonMode) {
   console.log(JSON.stringify(report, null, 2));
 } else {
-  console.log(`Opening V1 assembly preflight: photos=${photosReadyCount}/${photoPlan.length} files=${photoFilesReady ? 'READY' : 'BLOCKED'} receipt=${photoReceiptCurrent ? 'CURRENT' : 'MISSING_OR_STALE'} BGM=${bgmReady ? 'READY' : 'BLOCKED'} bgmReceipt=${bgmReceiptCurrent ? 'CURRENT' : 'MISSING_OR_STALE'} ambience=${ambienceReadyCount}/${ambienceRows.length}`);
+  console.log(`Opening V1 assembly preflight: photos=${photosReadyCount}/${photoPlan.length} files=${photoFilesReady ? 'READY' : 'BLOCKED'} receipt=${photoReceiptCurrent ? 'CURRENT' : 'MISSING_OR_STALE'} BGM=${bgmReady ? 'READY' : 'BLOCKED'} bgmReceipt=${bgmReceiptCurrent ? 'CURRENT' : 'MISSING_OR_STALE'} bgmRights=${bgmRightsCleared ? 'CLEARED' : 'BLOCKED'} ambience=${ambienceReadyCount}/${ambienceRows.length}`);
   console.log(`finalRenderEligible=${finalRenderEligible ? 'YES' : 'NO'} mixReady=${mixReady ? 'YES' : 'NO'} renderQa=NOT_RUN MacDaVinciActual=NOT_RUN`);
   for (const blocker of blockers) console.log(`BLOCK / ${blocker}`);
   for (const warning of mixWarnings) console.log(`WARN  / ${warning}`);
@@ -226,6 +226,4 @@ if (jsonMode) {
   console.log('JSON / pnpm opening:assembly-preflight -- --json');
 }
 
-if ((strict && !finalRenderEligible) || (mixStrict && !mixReady)) {
-  process.exit(1);
-}
+if ((strict && !finalRenderEligible) || (mixStrict && !mixReady)) process.exit(1);
