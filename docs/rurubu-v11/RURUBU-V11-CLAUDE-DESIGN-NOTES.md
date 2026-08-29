@@ -427,3 +427,38 @@ screenshot:
 Final full-file audit: 0 Inter nodes, 0 unfilled image placeholders, overflow
 count 2 (still only the two known intentional corner-decoration bleeds on
 P03/P08).
+
+## P05 placeholder redesign — "coming soon" instead of looking broken
+
+The Okinawa/Seoul gray boxes read as unfinished/buggy rather than intentional.
+Redesigned as a proper "coming soon" tile: dashed orange border, diagonal
+stripe pattern, and a solid-orange rounded "COMING SOON" tag with its own
+drop shadow — still 100% honest that no real photo exists yet, just designed
+on purpose instead of looking abandoned.
+
+Caught a real bug on the first attempt: the diagonal stripes were created as
+loose sibling rectangles sized larger than their placeholder box (to guarantee
+full diagonal coverage), which meant they bled across the entire page instead
+of staying inside their box — confirmed by screenshot, not assumed. Fixed by
+wrapping each placeholder's stripes in a `clipsContent = true` frame sized
+exactly to the placeholder, so the same oversized/rotated stripes now render
+correctly clipped.
+
+Also double-checked a screenshot artifact that looked like corrupted text
+("ハワイ" appeared to render as "ハフイ" at the screenshot's resolution) by
+reading the actual node's `.characters` and Unicode code points directly —
+confirmed the underlying text was correct (`30cf 30ef 30a4` = ハワイ) and it
+was a rendering/rasterization artifact, not a data bug. Recorded here since
+"looks wrong in a screenshot" and "is wrong" are different claims and this
+project's rules require checking before reporting either way.
+
+Note on this session's own overflow-audit script: after the clip-frame fix,
+the script flagged 12 new "overflow" entries, all the diagonal stripe
+rectangles. These are false positives — the audit compares each node's
+*local* x/y/width/height against the trim frame's absolute size, which is
+correct for direct trim children but wrong once a node is nested inside an
+intermediate frame (the stripes' coordinates are relative to their clip
+frame, not the trim). Confirmed false-positive by re-screenshotting rather
+than trusting the script blindly; the audit script itself was not fixed
+(known limitation, noted here for future reference) since the actual render
+was already verified correct.
