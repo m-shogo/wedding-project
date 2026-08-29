@@ -15,6 +15,7 @@ export type MotionPatternCategory =
 export type PreviewSourceType =
   | "ACTUAL_DAVINCI_RENDER"
   | "ACTUAL_PALMIER_RENDER"
+  | "ACTUAL_SOURCE_MEDIA_RENDER"
   | "REPO_GENERATED"
   | "OFFICIAL_EXTERNAL_REFERENCE"
   | "CONCEPT_ONLY"
@@ -127,7 +128,7 @@ export interface MotionImplementationRecord {
   kind: DavinciImplementationKind;
   status: ImplementationStatus;
   method: string;
-  artifactType: "NONE" | "DRFX" | "SETTING" | "TEMPLATE";
+  artifactType: "NONE" | "DRFX" | "SETTING" | "TEMPLATE" | "FCPXML";
   artifactPath: string | null;
   installed: boolean;
   tested: boolean;
@@ -236,7 +237,7 @@ export const motionPatterns: MotionPatternRecord[] = [
     ],
     relatedVocabularyIds: ["mask", "keyframe", "easing", "text-plus"],
     implementationIds: ["impl-type-mask-reveal-davinci-text-plus"],
-    previewIds: ["preview-type-mask-reveal-repo-concept"],
+    previewIds: ["preview-type-mask-reveal-davinci-actual", "preview-type-mask-reveal-repo-concept"],
     reuseEvidence: {
       searchedExistingPatterns: true,
       searchedDaVinciBuiltins: true,
@@ -254,20 +255,36 @@ export const motionImplementations: MotionImplementationRecord[] = [
     id: "impl-type-mask-reveal-davinci-text-plus",
     patternId: "type-mask-reveal",
     kind: "DAVINCI_TEXT_PLUS",
-    status: "AVAILABLE",
+    status: "PRODUCTION_READY",
     method: "DaVinci Resolve Text+をFusionで使用し、文字レイヤーを矩形Maskの境界からrevealする。MaskまたはText+側の位置/clip境界をkeyframeし、Easeで加減速を整える。",
     artifactType: "NONE",
     artifactPath: null,
-    installed: false,
-    tested: false,
-    resolveVersion: null,
-    studioRequired: null,
-    verified: false,
-    notes: "公式Fusion/Text+ capabilityをReuseする。ローカルResolveでopened/render-tested/visual-QAが終わるまでPRODUCTION_READYへ上げない。",
+    installed: true,
+    tested: true,
+    resolveVersion: "21.0.4.5",
+    studioRequired: false,
+    verified: true,
+    notes: "Palmier marker付きFCPXMLをscratch Resolveへimportしてmarker/title/120framesを照合後、DaVinci Resolve Free 21.0.4.5のFusion Compositionで1280x720・30fps・120framesを実Render。目視QAと独立ffmpeg pixel oracleの両方を通過済み。",
   },
 ];
 
 export const motionPreviews: MotionPreviewRecord[] = [
+  {
+    id: "preview-type-mask-reveal-davinci-actual",
+    patternId: "type-mask-reveal",
+    sourceType: "ACTUAL_DAVINCI_RENDER",
+    status: "VERIFIED",
+    freshness: "CURRENT",
+    assetPath: "/motion-previews/type-mask-reveal/davinci-actual-v1.mp4",
+    posterPath: "/motion-previews/type-mask-reveal/davinci-actual-v1-poster.png",
+    generatedBy: "Palmier FCPXML → DaVinci Resolve Free 21.0.4.5 / internal Utility script / native Fusion Composition",
+    generatedAt: "2026-08-27T03:01:32Z",
+    implementationId: "impl-type-mask-reveal-davinci-text-plus",
+    sampleAssetSetId: "sample-typography-welcome-v1",
+    resolveVersion: "21.0.4.5",
+    verified: true,
+    notes: "実DaVinci MP4は実装証拠。Human Master Scene値の正本ではない。Palmier marker付きscratch handoff、Resolve readback、目視QA、独立ffmpeg pixel oracleを完走済み。",
+  },
   {
     id: "preview-type-mask-reveal-repo-concept",
     patternId: "type-mask-reveal",
@@ -370,6 +387,12 @@ const KIT_JAPANESE_ALIASES: Record<string, string[]> = {
   "accent-panel-grid": ["コマ割り", "漫画風グリッド", "パネル組み替え"],
   "accent-cel-shadow-sweep": ["セル画風の影", "アニメ風シャドウ", "影が横切る"],
   "accent-micro-rgb-split": ["RGBずれ", "色収差風エフェクト", "グリッチ風ズレ"],
+};
+
+// 監査・旧promptで使われた名前は新Patternを複製せずcanonical IDへ吸収する。
+const KIT_LEGACY_PATTERN_IDS: Record<string, string[]> = {
+  "photo-static-hero": ["photo-hero-still"],
+  "photo-small-push": ["camera-gentle-push"],
 };
 
 const KIT_USE_CASE_JA: Record<string, string> = {
@@ -544,6 +567,8 @@ function sectionsForPreset(preset: StartMotionPreset) {
 
 function sampleAssetSetIdForPreset(preset: StartMotionPreset): string {
   if (preset.category === "TYPO") return "sample-generic-typography-v1";
+  if (preset.id === "cut-match-shape") return "sample-match-shape-source-v1";
+  if (preset.id === "whip-source-matched") return "sample-whip-source-v1";
   if (preset.id === "photo-contact-sheet-snap" || preset.id === "photo-split-panel" || preset.id === "accent-panel-grid") {
     return "sample-generic-multi-photo-v1";
   }
@@ -555,7 +580,7 @@ function kitPresetToPattern(preset: StartMotionPreset): MotionPatternRecord {
   const { openingSections, profileSections } = sectionsForPreset(preset);
   return {
     id: preset.id,
-    legacyPresetIds: [],
+    legacyPresetIds: KIT_LEGACY_PATTERN_IDS[preset.id] ?? [],
     japaneseName: KIT_JAPANESE_NAME[preset.id] ?? preset.label,
     commonName: preset.label,
     aliases: [...(KIT_JAPANESE_ALIASES[preset.id] ?? []), preset.label],
@@ -573,7 +598,15 @@ function kitPresetToPattern(preset: StartMotionPreset): MotionPatternRecord {
     inputSlots: inputSlotsForPreset(preset),
     relatedVocabularyIds: preset.skillIds,
     implementationIds: [`impl-${preset.id}`],
-    previewIds: [`preview-${preset.id}-concept`],
+    previewIds: preset.id === "cut-hard-accent"
+      ? ["preview-cut-hard-accent-palmier-actual", "preview-cut-hard-accent-concept"]
+      : preset.id === "type-quiet-caption"
+        ? ["preview-type-quiet-caption-davinci-actual", "preview-type-quiet-caption-concept"]
+        : preset.id === "cut-match-shape"
+          ? ["preview-cut-match-shape-source-actual", "preview-cut-match-shape-concept"]
+          : preset.id === "whip-source-matched"
+            ? ["preview-whip-source-matched-source-actual", "preview-whip-source-matched-concept"]
+        : [`preview-${preset.id}-concept`],
     reuseEvidence: {
       searchedExistingPatterns: true,
       searchedDaVinciBuiltins: true,
@@ -586,25 +619,146 @@ function kitPresetToPattern(preset: StartMotionPreset): MotionPatternRecord {
   };
 }
 
+const STOCK_PHOTO_PREVIEW_BASES: Record<string, string> = {
+  "photo-static-hero": "/motion-previews/photo-static-hero/repo-stock-v1",
+  "photo-small-push": "/motion-previews/photo-small-push/repo-stock-v1",
+  "photo-directional-pan": "/motion-previews/photo-directional-pan/repo-stock-v1",
+  "photo-slow-pull": "/motion-previews/photo-slow-pull/repo-stock-v1",
+  "photo-2p5d-parallax": "/motion-previews/photo-2p5d-parallax/repo-stock-v1",
+  "photo-freeze-cutout": "/motion-previews/photo-freeze-cutout/repo-stock-v1",
+  "photo-contact-sheet-snap": "/motion-previews/photo-contact-sheet-snap/repo-stock-v1",
+  "photo-split-panel": "/motion-previews/photo-split-panel/repo-stock-v1",
+  "accent-panel-grid": "/motion-previews/accent-panel-grid/repo-stock-v1",
+};
+const VERIFIED_TYPOGRAPHY_PREVIEW_BASES: Record<string, string> = {
+  "type-word-punch": "/motion-previews/type-word-punch/repo-v1",
+  "type-char-stagger": "/motion-previews/type-char-stagger/repo-v1",
+  "type-tracking-burst": "/motion-previews/type-tracking-burst/repo-v1",
+  "type-quiet-caption": "/motion-previews/type-quiet-caption/repo-v1",
+  "type-baseline-hop": "/motion-previews/type-baseline-hop/repo-v1",
+  "type-outline-fill": "/motion-previews/type-outline-fill/repo-v1",
+  "type-vertical-wipe": "/motion-previews/type-vertical-wipe/repo-v1",
+  "type-type-on-rhythm": "/motion-previews/type-type-on-rhythm/repo-v1",
+  "type-frame-lock": "/motion-previews/type-frame-lock/repo-v1",
+  "type-triplet": "/motion-previews/type-triplet/repo-v1",
+  "type-counter-scroll": "/motion-previews/type-counter-scroll/repo-v1",
+};
+const VERIFIED_TRANSITION_PREVIEW_BASES: Record<string, string> = {
+  "wipe-route-line": "/motion-previews/wipe-route-line/repo-v1",
+  "flash-one-frame-soft": "/motion-previews/flash-one-frame-soft/repo-v1",
+  "wipe-directional-shape": "/motion-previews/wipe-directional-shape/repo-v1",
+  "wipe-paper-edge": "/motion-previews/wipe-paper-edge/repo-v1",
+  "color-field-release": "/motion-previews/color-field-release/repo-v1",
+};
+const VERIFIED_GRAPHIC_PREVIEW_BASES: Record<string, string> = {
+  "accent-speed-lines": "/motion-previews/accent-speed-lines/repo-v1",
+  "accent-stamp-triplet": "/motion-previews/accent-stamp-triplet/repo-v1",
+  "accent-halftone-burst": "/motion-previews/accent-halftone-burst/repo-v1",
+  "accent-scribble-underline": "/motion-previews/accent-scribble-underline/repo-v1",
+  "accent-impact-frame": "/motion-previews/accent-impact-frame/repo-v1",
+  "accent-cel-shadow-sweep": "/motion-previews/accent-cel-shadow-sweep/repo-v1",
+  "accent-micro-rgb-split": "/motion-previews/accent-micro-rgb-split/repo-v1",
+};
+const VERIFIED_REPRESENTATIVE_CUT_PREVIEW_BASES: Record<string, string> = {
+  "cut-hard-accent": "/motion-previews/cut-hard-accent/repo-representative-v1",
+  "cut-match-shape": "/motion-previews/cut-match-shape/repo-representative-v1",
+  "whip-source-matched": "/motion-previews/whip-source-matched/repo-representative-v1",
+};
+const VERIFIED_REPO_PREVIEW_BASES = {...STOCK_PHOTO_PREVIEW_BASES, ...VERIFIED_TYPOGRAPHY_PREVIEW_BASES, ...VERIFIED_TRANSITION_PREVIEW_BASES, ...VERIFIED_GRAPHIC_PREVIEW_BASES, ...VERIFIED_REPRESENTATIVE_CUT_PREVIEW_BASES};
+const TESTED_REMOTION_IMPLEMENTATIONS = new Set([
+  ...Object.keys(STOCK_PHOTO_PREVIEW_BASES),
+  "type-word-punch",
+  "type-char-stagger",
+  "type-tracking-burst",
+  "type-baseline-hop",
+  "type-outline-fill",
+  "type-vertical-wipe",
+  "type-type-on-rhythm",
+  "type-frame-lock",
+  "type-triplet",
+  "type-counter-scroll",
+  ...Object.keys(VERIFIED_TRANSITION_PREVIEW_BASES),
+  ...Object.keys(VERIFIED_GRAPHIC_PREVIEW_BASES),
+]);
+
 function kitPresetToImplementation(preset: StartMotionPreset): MotionImplementationRecord {
   const kind = implementationKindForEngine(preset.engine);
   const isRemotion = preset.engine === "remotion";
+  if (preset.id === "cut-hard-accent") {
+    return {
+      id: "impl-cut-hard-accent",
+      patternId: "cut-hard-accent",
+      kind: "PALMIER_NATIVE_EDIT",
+      status: "PRODUCTION_READY",
+      method: `Palmier Pro native timelineのハードカット。${preset.purpose}`,
+      artifactType: "FCPXML",
+      artifactPath: "/motion-previews/cut-hard-accent/palmier-actual-v1.fcpxml",
+      installed: true,
+      tested: true,
+      resolveVersion: null,
+      studioRequired: false,
+      verified: true,
+      notes: "Palmier Pro 0.7.6の実timelineで2本の動画をframe 63に直結し、素材音声をmute。115.4 BPMのUpbeat BGMをsource 0.02sから配置して第2 downbeat 2.12sをtimeline frame 63へ合わせた。1280x720 / 30fps / 120framesのH.264とFCPXMLを書き出し、ffprobe・FCPXML構造・cut前後pixel差分・目視QAを通過。デモstock素材のため本人素材での最終採用判断は別ゲート。",
+    };
+  }
+  if (preset.id === "type-quiet-caption") {
+    return {
+      id: "impl-type-quiet-caption",
+      patternId: "type-quiet-caption",
+      kind: "DAVINCI_TEXT_PLUS",
+      status: "PRODUCTION_READY",
+      method: "DaVinci Resolve Text+を写真へMergeし、Blendだけをframe 0→11で0→1へ線形fade。位置・scale・trackingは静止保持する。",
+      artifactType: "NONE",
+      artifactPath: null,
+      installed: true,
+      tested: true,
+      resolveVersion: "21.0.4.5",
+      studioRequired: false,
+      verified: true,
+      notes: "専用Resolve projectで1280x720 / 24fps / 95framesを構築。Text+単体ではなくFusion Merge後のEXR 118framesをResolve Saverで実Renderし、その先頭95framesをH.264へ収録。ffprobe・SHA-256・frame 0/5/11/50/94 pixel oracle・通常速度目視QAを通過。位置/scale motionはなくBlendだけが0→1へ変化する。",
+    };
+  }
+  if (preset.id === "cut-match-shape" || preset.id === "whip-source-matched") {
+    const isMatchShape = preset.id === "cut-match-shape";
+    return {
+      id: `impl-${preset.id}`,
+      patternId: preset.id,
+      kind,
+      status: "TESTED",
+      method: isMatchShape
+        ? "Pexels実動画2本の太陽中心が最も近づくフレームをnative cutで直結する。"
+        : "Pexels実動画2本から、背景が同じ左方向へ流れる列車窓camera motion区間をnative cutで直結する。",
+      artifactType: "NONE",
+      artifactPath: null,
+      installed: true,
+      tested: true,
+      resolveVersion: null,
+      studioRequired: false,
+      verified: true,
+      notes: isMatchShape
+        ? "1280x720 / 30fps / 90framesのsource-media Actual renderでframe 44→45を検証。太陽中心は(646,284)→(643,300)、cut差分49.91、同一shot内差分2.10/2.80で、crossfadeなしのshape matchを確認した。"
+        : "1280x720 / 30fps / 24framesのsource-media Actual renderで、cut前後の水平shiftを-164px / -112pxと測定。両shotとも背景が左へ流れ、frame 11→12は補間なしで切り替わる。アプリ固有操作ではなく素材適合性のTESTED証拠。",
+    };
+  }
+  const implementationTested = TESTED_REMOTION_IMPLEMENTATIONS.has(preset.id);
   return {
     id: `impl-${preset.id}`,
     patternId: preset.id,
     kind,
-    status: preset.engine === "mixed" ? "DISCOVERED" : "AVAILABLE",
+    status: implementationTested ? "TESTED" : preset.engine === "mixed" ? "DISCOVERED" : "AVAILABLE",
     method: isRemotion
       ? `motion-studio Motion Kit preset "${preset.id}"(共有engine: ${preset.sharedEngine})として実装済み。${preset.purpose}`
       : `${preset.engine}上の標準的な技法(共有engine: ${preset.sharedEngine})。${preset.purpose}`,
     artifactType: "NONE",
     artifactPath: null,
     installed: isRemotion,
-    tested: false,
+    tested: implementationTested,
     resolveVersion: null,
     studioRequired: isRemotion ? false : true,
-    verified: false,
-    notes: "この図鑑カタログ化ではローカルRender/DaVinci実機検証を行っていない。TESTED/PRODUCTION_READYへは実機確認後にのみ昇格する。",
+    verified: implementationTested,
+    notes: implementationTested
+      ? "1280x720 / 30fps / 120framesの永続Remotion renderを作成し、ffprobe・SHA-256・独立pixel oracleを通過。DaVinci実機検証および本人素材が必要な演出のcrop確認は別ゲート。"
+      : "この図鑑カタログ化ではローカルRender/DaVinci実機検証を行っていない。TESTED/PRODUCTION_READYへは実機確認後にのみ昇格する。",
   };
 }
 
@@ -650,25 +804,35 @@ const LOCAL_RENDER_VERIFIED_2026_08_26 = new Set([
 function kitPresetToPreview(preset: StartMotionPreset): MotionPreviewRecord {
   const isRemotion = preset.engine === "remotion";
   const locallyRendered = LOCAL_RENDER_VERIFIED_2026_08_26.has(preset.id);
+  const repoPreviewVerified = preset.id in VERIFIED_REPO_PREVIEW_BASES;
+  const repoPreviewBase = VERIFIED_REPO_PREVIEW_BASES[preset.id] ?? "";
   return {
     id: `preview-${preset.id}-concept`,
     patternId: preset.id,
-    sourceType: isRemotion ? "REPO_GENERATED" : "CONCEPT_ONLY",
-    status: "CONCEPT",
+    sourceType: repoPreviewVerified ? "REPO_GENERATED" : isRemotion ? "REPO_GENERATED" : "CONCEPT_ONLY",
+    status: repoPreviewVerified ? "VERIFIED" : "CONCEPT",
     freshness: locallyRendered ? "CURRENT" : "NEEDS_RECHECK",
-    assetPath: null,
-    posterPath: null,
-    generatedBy: locallyRendered
+    assetPath: repoPreviewVerified ? `${repoPreviewBase}.mp4` : null,
+    posterPath: repoPreviewVerified ? `${repoPreviewBase}-poster.png` : null,
+    generatedBy: repoPreviewVerified
+      ? `motion-studio ${preset.id} dedicated composition。永続Remotion render。`
+      : locallyRendered
       ? `motion-studio renderable preset: ${preset.id} / StaRtMotionReelV1 (${preset.sharedEngine} engine)。2026-08-26にローカルRemotion renderで目視確認済み(evidenceはmotionPreviewEvidence.ts参照)。`
       : isRemotion
         ? `motion-studio Motion Kit preset: ${preset.id} (${preset.sharedEngine} engine)。この図鑑追加ではまだ動画を書き出していない。`
         : `${preset.engine}上の技法説明のみ。まだ動画assetは存在しない。`,
-    generatedAt: locallyRendered ? "2026-08-26T01:36:19Z" : null,
+    generatedAt: repoPreviewVerified ? "2026-08-27T05:25:12Z" : locallyRendered ? "2026-08-26T01:36:19Z" : null,
     implementationId: `impl-${preset.id}`,
     sampleAssetSetId: sampleAssetSetIdForPreset(preset),
     resolveVersion: null,
-    verified: false,
-    notes: locallyRendered
+    verified: repoPreviewVerified,
+    notes: repoPreviewVerified
+      ? preset.id === "type-quiet-caption"
+        ? "quiet modeの永続Remotion代表previewとpixel oracleは検証済み。ただしcanonical実装はDaVinci EditのためImplementationは未検証のまま。"
+        : preset.id in VERIFIED_REPRESENTATIVE_CUT_PREVIEW_BASES
+          ? "永続Remotion代表previewと独立pixel oracleは検証済み。ただし実素材・Palmier timelineのActual確認ではないためImplementationは未検証のまま。"
+        : "永続Remotion renderと独立pixel oracleで検証済み。本人写真・最終crop・DaVinci ActualのProduction Authorityではない。"
+      : locallyRendered
       ? "ローカルRemotion renderで見た目を確認済みだが、実写真は未投入(DemoBackdrop placeholder)かつDaVinci Actualではないため、verified/statusはCONCEPTのまま据え置く。"
       : "Reuse Before Buildに基づき既存実装をカタログ化した段階。Actual Renderで見た目を確認するまでCONCEPT扱いを維持する。",
   };
@@ -678,6 +842,70 @@ const kitPatternsExcludingMaskSlide = startMotionPresets.filter((preset) => pres
 
 motionPatterns.push(...kitPatternsExcludingMaskSlide.map(kitPresetToPattern));
 motionImplementations.push(...kitPatternsExcludingMaskSlide.map(kitPresetToImplementation));
+motionPreviews.push({
+  id: "preview-cut-hard-accent-palmier-actual",
+  patternId: "cut-hard-accent",
+  sourceType: "ACTUAL_PALMIER_RENDER",
+  status: "VERIFIED",
+  freshness: "CURRENT",
+  assetPath: "/motion-previews/cut-hard-accent/palmier-actual-v1.mp4",
+  posterPath: "/motion-previews/cut-hard-accent/palmier-actual-v1-poster.png",
+  generatedBy: "Palmier Pro 0.7.6 native timeline / local MCP / H.264 export",
+  generatedAt: "2026-08-28T11:12:00+09:00",
+  implementationId: "impl-cut-hard-accent",
+  sampleAssetSetId: "sample-generic-hero-photo-v1",
+  resolveVersion: null,
+  verified: true,
+  notes: "実Palmier timelineのframe 63 native hard cut。115.4 BPMのUpbeat BGM第2 downbeatへ合わせ、素材音声はmute。デモstock素材でのImplementation Evidenceであり、本人素材の採用判断とは分離する。",
+});
+motionPreviews.push({
+  id: "preview-type-quiet-caption-davinci-actual",
+  patternId: "type-quiet-caption",
+  sourceType: "ACTUAL_DAVINCI_RENDER",
+  status: "VERIFIED",
+  freshness: "CURRENT",
+  assetPath: "/motion-previews/type-quiet-caption/davinci-actual-v1.mp4",
+  posterPath: "/motion-previews/type-quiet-caption/davinci-actual-v1-poster.png",
+  generatedBy: "DaVinci Resolve Free 21.0.4.5 / native Fusion Text+ + Merge / Saver EXR render",
+  generatedAt: "2026-08-28T12:58:00+09:00",
+  implementationId: "impl-type-quiet-caption",
+  sampleAssetSetId: "sample-generic-typography-v1",
+  resolveVersion: "21.0.4.5",
+  verified: true,
+  notes: "静止Text+を下寄せ(x=0.50 / Fusion bottom-origin y=0.22)し、Merge Blendだけをframe 0→11でfade。Resolve Fusion Saver出力を独立pixel oracleで開始非表示・途中opacity・着地・静止holdまで検証済み。",
+});
+motionPreviews.push({
+  id: "preview-cut-match-shape-source-actual",
+  patternId: "cut-match-shape",
+  sourceType: "ACTUAL_SOURCE_MEDIA_RENDER",
+  status: "VERIFIED",
+  freshness: "CURRENT",
+  assetPath: "/motion-previews/cut-match-shape/source-actual-v1.mp4",
+  posterPath: "/motion-previews/cut-match-shape/source-actual-v1-poster.png",
+  generatedBy: "ffmpeg deterministic source-media validation render / Pexels 31288104 + 4057958",
+  generatedAt: "2026-08-28T23:40:00+09:00",
+  implementationId: "impl-cut-match-shape",
+  sampleAssetSetId: "sample-match-shape-source-v1",
+  resolveVersion: null,
+  verified: true,
+  notes: "別々のPexels夕景動画をframe 45でnative cut。太陽中心の差を16.3px以内に保ち、前後shotの画は明確に異なる。本人素材の採用承認やProduction Authorityではない。",
+});
+motionPreviews.push({
+  id: "preview-whip-source-matched-source-actual",
+  patternId: "whip-source-matched",
+  sourceType: "ACTUAL_SOURCE_MEDIA_RENDER",
+  status: "VERIFIED",
+  freshness: "CURRENT",
+  assetPath: "/motion-previews/whip-source-matched/source-actual-v1.mp4",
+  posterPath: "/motion-previews/whip-source-matched/source-actual-v1-poster.png",
+  generatedBy: "ffmpeg deterministic source-media validation render / Pexels 19188177 + 6556837",
+  generatedAt: "2026-08-28T23:40:00+09:00",
+  implementationId: "impl-whip-source-matched",
+  sampleAssetSetId: "sample-whip-source-v1",
+  resolveVersion: null,
+  verified: true,
+  notes: "異なる列車窓動画の実camera motion区間をframe 12でnative cut。前後とも背景が左へ流れることをpixel shiftで確認した。本人素材の採用承認やProduction Authorityではない。",
+});
 motionPreviews.push(...kitPatternsExcludingMaskSlide.map(kitPresetToPreview));
 
 export function searchMotionPatterns(query: string) {
@@ -685,6 +913,8 @@ export function searchMotionPatterns(query: string) {
   if (!normalized) return motionPatterns;
   return motionPatterns.filter((pattern) => {
     const haystack = [
+      pattern.id,
+      ...pattern.legacyPresetIds,
       pattern.japaneseName,
       pattern.commonName,
       pattern.naturalDescription,
@@ -695,6 +925,14 @@ export function searchMotionPatterns(query: string) {
     ].join(" ").toLowerCase();
     return haystack.includes(normalized);
   });
+}
+
+export function resolveMotionPatternId(id: string): string | null {
+  const normalized = id.trim().toLowerCase();
+  const pattern = motionPatterns.find((candidate) =>
+    candidate.id.toLowerCase() === normalized
+    || candidate.legacyPresetIds.some((legacyId) => legacyId.toLowerCase() === normalized));
+  return pattern?.id ?? null;
 }
 
 function clampMaskRevealInput(input: MaskRevealPromptInput): MaskRevealPromptInput {

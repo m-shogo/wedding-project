@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fcpxml>
+<fcpxml version="1.10">
+  <resources>
+    <format id="r1" name="FFVideoFormat720p30" frameDuration="1/30s" width="1280" height="720" colorSpace="1-1-1 (Rec. 709)"/>
+    <format id="r2" name="FFVideoFormat720p30" frameDuration="1/30s" width="1280" height="720" colorSpace="1-1-1 (Rec. 709)"/>
+    <format id="r3" name="FFVideoFormat720p30" frameDuration="1/30s" width="1280" height="720" colorSpace="1-1-1 (Rec. 709)"/>
+    <asset id="asset1" name="repo-stock-v1.mp4" start="0s" duration="41/10s" hasVideo="1" videoSources="1" format="r2" hasAudio="1" audioSources="1" audioChannels="2" audioRate="48000">
+      <media-rep kind="original-media" src="file:///Users/m-shogo/Developer/personal/wedding-project/movie-dashboard/public/motion-previews/photo-static-hero/repo-stock-v1.mp4"/>
+    </asset>
+    <asset id="asset2" name="repo-stock-v1.mp4" start="0s" duration="4s" hasVideo="1" videoSources="1" format="r3" hasAudio="1" audioSources="1" audioChannels="2" audioRate="48000">
+      <media-rep kind="original-media" src="file:///Users/m-shogo/Developer/personal/wedding-project/movie-dashboard/public/motion-previews/photo-small-push/repo-stock-v1.mp4"/>
+    </asset>
+    <asset id="asset3" name="pixabay-simple-upbeat-158080.mp3" start="0s" duration="213/2s" hasAudio="1" audioSources="1" audioChannels="2" audioRate="48000">
+      <media-rep kind="original-media" src="file:///Users/m-shogo/Developer/personal/wedding-project/movie-dashboard/public/demo-assets/bgm-candidates/pixabay-simple-upbeat-158080.mp3"/>
+    </asset>
+    <media id="media1" name="repo-stock-v1.mp4">
+      <sequence format="r2" duration="41/10s" tcStart="0s" tcFormat="NDF">
+        <spine>
+          <asset-clip ref="asset1" name="repo-stock-v1.mp4" duration="41/10s" start="0s" offset="0s" format="r2"/>
+        </spine>
+      </sequence>
+    </media>
+    <media id="media2" name="repo-stock-v1.mp4">
+      <sequence format="r3" duration="4s" tcStart="0s" tcFormat="NDF">
+        <spine>
+          <asset-clip ref="asset2" name="repo-stock-v1.mp4" duration="4s" start="0s" offset="0s" format="r3"/>
+        </spine>
+      </sequence>
+    </media>
+  </resources>
+  <library>
+    <event name="Palmier Export">
+      <project name="Timeline 1">
+        <sequence format="r1" duration="4s" tcStart="0s" tcFormat="NDF" audioLayout="stereo" audioRate="48k">
+          <spine>
+            <gap name="Timeline" offset="0s" start="0s" duration="4s">
+              <asset-clip ref="asset3" name="pixabay-simple-upbeat-158080.mp3" lane="-2" offset="0s" start="0s" duration="4s" enabled="1"/>
+              <ref-clip ref="media1" name="repo-stock-v1.mp4" lane="-1" offset="0s" start="0s" duration="21/10s" enabled="0" srcEnable="audio"/>
+              <ref-clip ref="media1" name="repo-stock-v1.mp4" lane="1" offset="0s" start="0s" duration="21/10s" enabled="1" srcEnable="video">
+                <adjust-conform type="fit"/>
+              </ref-clip>
+              <ref-clip ref="media2" name="repo-stock-v1.mp4" lane="-1" offset="21/10s" start="0s" duration="19/10s" enabled="0" srcEnable="audio"/>
+              <ref-clip ref="media2" name="repo-stock-v1.mp4" lane="1" offset="21/10s" start="0s" duration="19/10s" enabled="1" srcEnable="video">
+                <adjust-conform type="fit"/>
+              </ref-clip>
+            </gap>
+          </spine>
+        </sequence>
+      </project>
+    </event>
+  </library>
+</fcpxml>

@@ -18,6 +18,10 @@ const expectedFps = Number(valueArg('fps', '30'));
 const expectedDuration = Number(valueArg('duration', '60'));
 const durationTolerance = Number(valueArg('duration-tolerance', '0.15'));
 const blackMinDuration = Number(valueArg('black-duration', '0.08'));
+const silenceMinDuration = Number(valueArg('silence-duration', '1.0'));
+const minMeanVolumeDb = Number(valueArg('min-mean-volume-db', '-30'));
+const maxMeanVolumeDb = Number(valueArg('max-mean-volume-db', '-12'));
+const maxPeakVolumeDb = Number(valueArg('max-peak-volume-db', '-0.1'));
 
 let errors = 0;
 const fail = (message: string) => {
@@ -134,6 +138,29 @@ if (!Number.isFinite(duration)) {
   ok(`duration ${duration.toFixed(3)}s`);
 }
 
+const audioProbe = spawnSync(
+  'ffprobe',
+  ['-v', 'error', '-select_streams', 'a:0', '-show_entries', 'stream=codec_name,sample_rate,channels', '-of', 'json', target],
+  {encoding: 'utf-8'},
+);
+
+if (audioProbe.status !== 0) {
+  fail(`audio ffprobe failed:\n${(audioProbe.stderr || audioProbe.stdout).trim()}`);
+} else {
+  try {
+    const audio = (JSON.parse(audioProbe.stdout) as {streams?: Array<{codec_name?: string; sample_rate?: string; channels?: number}>}).streams?.[0];
+    if (!audio) {
+      fail('audio stream not found');
+    } else if (audio.codec_name !== 'aac' || audio.sample_rate !== '48000' || audio.channels !== 2) {
+      fail(`audio format mismatch: codec=${audio.codec_name ?? '?'} rate=${audio.sample_rate ?? '?'} channels=${audio.channels ?? '?'}`);
+    } else {
+      ok('audio AAC / 48kHz / stereo');
+    }
+  } catch (error) {
+    fail(`audio ffprobe JSON parse failed: ${String(error)}`);
+  }
+}
+
 // Detect only near-pure-black frames. pix_th=0.02 is intentionally stricter than
 // ffmpeg's default so the Opening's intentional navy backgrounds do not count as black.
 const black = spawnSync(
@@ -165,6 +192,47 @@ if (black.status !== 0) {
     }
   } else {
     ok(`near-black segments: 0 (min ${blackMinDuration}s)`);
+  }
+}
+
+
+const volume = spawnSync(
+  'ffmpeg',
+  ['-hide_banner', '-nostats', '-i', target, '-vn', '-af', 'volumedetect', '-f', 'null', '-'],
+  {encoding: 'utf-8'},
+);
+if (volume.status !== 0) {
+  fail(`volumedetect failed:\n${(volume.stderr || volume.stdout).trim().split('\n').slice(-8).join('\n')}`);
+} else {
+  const output = `${volume.stdout}\n${volume.stderr}`;
+  const meanVolume = Number(output.match(/mean_volume:\s*(-?[0-9.]+) dB/)?.[1]);
+  const peakVolume = Number(output.match(/max_volume:\s*(-?[0-9.]+) dB/)?.[1]);
+  if (!Number.isFinite(meanVolume) || meanVolume < minMeanVolumeDb || meanVolume > maxMeanVolumeDb) {
+    fail(`mean audio volume out of range: ${Number.isFinite(meanVolume) ? meanVolume : 'unknown'} dB (expected ${minMeanVolumeDb}..${maxMeanVolumeDb} dB)`);
+  } else {
+    ok(`mean audio volume ${meanVolume.toFixed(1)} dB`);
+  }
+  if (!Number.isFinite(peakVolume) || peakVolume > maxPeakVolumeDb) {
+    fail(`audio peak clips or is unreadable: ${Number.isFinite(peakVolume) ? peakVolume : 'unknown'} dB (must be <= ${maxPeakVolumeDb} dB)`);
+  } else {
+    ok(`peak audio volume ${peakVolume.toFixed(1)} dB`);
+  }
+}
+
+const silence = spawnSync(
+  'ffmpeg',
+  ['-hide_banner', '-nostats', '-i', target, '-vn', '-af', `silencedetect=noise=-50dB:d=${silenceMinDuration}`, '-f', 'null', '-'],
+  {encoding: 'utf-8'},
+);
+if (silence.status !== 0) {
+  fail(`silencedetect failed:\n${(silence.stderr || silence.stdout).trim().split('\n').slice(-8).join('\n')}`);
+} else {
+  const output = `${silence.stdout}\n${silence.stderr}`;
+  const silenceEvents = [...output.matchAll(/silence_start:\s*([0-9.]+)/g)];
+  if (silenceEvents.length > 0) {
+    for (const event of silenceEvents) fail(`audio silence >= ${silenceMinDuration}s starts at ${event[1]}s`);
+  } else {
+    ok(`audio silence >= ${silenceMinDuration}s: 0`);
   }
 }
 

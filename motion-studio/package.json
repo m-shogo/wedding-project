@@ -50,6 +50,8 @@
     "render:start-extended-rough": "remotion render src/index-director-recipes.ts StartExtendedOpeningRoughV1 out/start-extended/start_extended_opening_rough_v1.mp4 --scale=0.25 --crf=30",
     "director-recipes:list": "remotion compositions src/index-director-recipes.ts",
     "render:opening-v1": "node --no-warnings scripts/init-opening-v1-final-render-review.mts",
+    "publish:opening-v1:dummy-production": "node --no-warnings scripts/publish-opening-dummy-render.mts",
+    "render:opening-v1:dummy-production": "remotion render src/index-start-motion-kit.ts OpeningV1DummyProduction out/opening/opening_v1.mp4 && pnpm publish:opening-v1:dummy-production",
     "render:opening-v1:preview": "pnpm prepare:opening-v1 && pnpm opening:assembly-preflight:strict && remotion render src/index-opening-v1.ts OpeningV1 out/preview/opening_v1_preview.mp4 --scale=0.5 --crf=24",
     "qa:opening-stills": "pnpm prepare:opening-v1 && node --no-warnings scripts/render-opening-v1-qa-stills.mts",
     "opening:preflight": "node --no-warnings scripts/opening-photo-preflight.mts",

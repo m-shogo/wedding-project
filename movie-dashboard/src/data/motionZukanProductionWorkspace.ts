@@ -1,4 +1,5 @@
 import type { MotionZukanComposerState, SceneProjectId } from "./visualSceneComposer";
+import type { DemoStockMediaPack } from "./demoStockMediaCatalog";
 
 export type AssetKind = "IMAGE" | "VIDEO";
 export type AssetSuitability = "OPENING" | "PROFILE";
@@ -47,6 +48,19 @@ export interface WorkspaceSnapshotData {
   sceneMeta: SceneProductionMeta[];
   musicMarkers: MusicStructureMarker[];
   designSettings: ProjectDesignSettings[];
+  demoBgmSelection: DemoBgmWorkspaceSelection | null;
+}
+
+export interface DemoBgmWorkspaceSelection {
+  authority: "BGM_CANDIDATE";
+  candidateId: string;
+  genre: string;
+  title: string;
+  sourceRef: string;
+  sourcePageUrl: string;
+  contentIdRegistered: true;
+  finalPublicationApproved: false;
+  selectedAt: string;
 }
 
 export interface ProjectVersionSnapshot {
@@ -75,6 +89,26 @@ export interface FinalCheckItem {
   ok: boolean;
   detail: string;
 }
+
+export interface MotionZukanProductionHandoff {
+  schemaVersion: "motion-zukan-production-handoff/v1";
+  authority: "HUMAN_MASTER_WORKSPACE";
+  projectId: SceneProjectId;
+  exportedAt: string;
+  workspaceChecksPassed: boolean;
+  workspaceBlockers: FinalCheckItem[];
+  guards: {
+    externalProductionGateEvaluated: false;
+    demoAssetsAreProduction: false;
+    bgmCandidateApproved: false;
+  };
+  composer: MotionZukanComposerState;
+  workspace: MotionZukanProductionWorkspaceState;
+}
+
+export type MotionZukanProductionHandoffParseResult =
+  | { ok: true; handoff: MotionZukanProductionHandoff }
+  | { ok: false; error: string };
 
 export const MOTION_ZUKAN_PRODUCTION_WORKSPACE_STORAGE_KEY = "motion-zukan-production-workspace-v1";
 export const MOTION_ZUKAN_PRODUCTION_WORKSPACE_CHANGED_EVENT = "motion-zukan-production-workspace-changed";
@@ -105,6 +139,7 @@ export function emptyMotionZukanProductionWorkspaceState(): MotionZukanProductio
     sceneMeta: [],
     musicMarkers: [],
     designSettings: [defaultDesign("opening"), defaultDesign("profile")],
+    demoBgmSelection: null,
     versions: [],
   };
 }
@@ -129,7 +164,7 @@ export function loadMotionZukanProductionWorkspaceState(): MotionZukanProduction
       const existing = parsed.designSettings.find((item) => item.projectId === projectId);
       return existing ?? defaultDesign(projectId as SceneProjectId);
     });
-    return { ...parsed, designSettings };
+    return { ...parsed, designSettings, demoBgmSelection: parsed.demoBgmSelection ?? null };
   } catch {
     return emptyMotionZukanProductionWorkspaceState();
   }
@@ -167,6 +202,100 @@ export function addMediaAsset(
     updatedAt: createdAt,
   };
   return { ...state, assets: [asset, ...state.assets] };
+}
+
+export function applyDemoStockMediaPack(
+  state: MotionZukanProductionWorkspaceState,
+  pack: DemoStockMediaPack,
+): MotionZukanProductionWorkspaceState {
+  if (
+    pack.schemaVersion !== "motion-zukan-demo-stock-pack/v1" ||
+    pack.authority !== "DEMO_ONLY_NOT_PRODUCTION" ||
+    pack.guards.userMediaApproved !== false ||
+    pack.guards.finalPublicationApproved !== false
+  ) {
+    return state;
+  }
+
+  const selectedAt = nowIso();
+  const existingSourceRefs = new Set(state.assets.map((asset) => asset.sourceRef));
+  const importedAssets: MotionZukanMediaAsset[] = pack.photos
+    .filter((photo) => photo.authority === "DEMO_ONLY_NOT_USER_MEDIA" && !existingSourceRefs.has(photo.localPath))
+    .map((photo) => ({
+      assetId: `mz-demo-${photo.id}`,
+      label: `[DEMO] ${photo.title}`,
+      kind: "IMAGE",
+      sourceRef: photo.localPath,
+      favorite: false,
+      placeholder: true,
+      suitability: ["OPENING", "PROFILE"],
+      createdAt: selectedAt,
+      updatedAt: selectedAt,
+    }));
+
+  return {
+    ...state,
+    assets: [...importedAssets, ...state.assets],
+    demoBgmSelection: {
+      authority: "BGM_CANDIDATE",
+      candidateId: pack.bgmCandidate.id,
+      genre: pack.bgmCandidate.genre,
+      title: pack.bgmCandidate.title,
+      sourceRef: pack.bgmCandidate.localPath,
+      sourcePageUrl: pack.bgmCandidate.source.pageUrl,
+      contentIdRegistered: true,
+      finalPublicationApproved: false,
+      selectedAt,
+    },
+  };
+}
+
+export function assignDemoAssetsToEmptyScenes(
+  state: MotionZukanProductionWorkspaceState,
+  sceneIds: string[],
+  suitability: AssetSuitability,
+): MotionZukanProductionWorkspaceState {
+  const assignedAssetIds = new Set(state.sceneMeta.flatMap((meta) => meta.assetIds));
+  const availableDemoAssets = state.assets.filter(
+    (asset) =>
+      asset.placeholder &&
+      asset.assetId.startsWith("mz-demo-") &&
+      asset.sourceRef.startsWith("/demo-assets/stock-photos/") &&
+      asset.suitability.includes(suitability) &&
+      !assignedAssetIds.has(asset.assetId),
+  );
+  const emptySceneIds = sceneIds.filter((sceneId) => sceneMetaFor(state, sceneId).assetIds.length === 0);
+  if (availableDemoAssets.length === 0 || emptySceneIds.length === 0) return state;
+
+  return emptySceneIds.slice(0, availableDemoAssets.length).reduce(
+    (next, sceneId, index) => updateSceneProductionMeta(next, sceneId, { assetIds: [availableDemoAssets[index].assetId] }),
+    state,
+  );
+}
+
+export function removeDemoStockMediaPack(state: MotionZukanProductionWorkspaceState): MotionZukanProductionWorkspaceState {
+  const demoAssetIds = new Set(
+    state.assets
+      .filter(
+        (asset) =>
+          asset.placeholder &&
+          asset.assetId.startsWith("mz-demo-") &&
+          asset.sourceRef.startsWith("/demo-assets/stock-photos/"),
+      )
+      .map((asset) => asset.assetId),
+  );
+  if (demoAssetIds.size === 0 && !state.demoBgmSelection) return state;
+  const removedAt = nowIso();
+
+  return {
+    ...state,
+    assets: state.assets.filter((asset) => !demoAssetIds.has(asset.assetId)),
+    sceneMeta: state.sceneMeta.map((meta) => {
+      const assetIds = meta.assetIds.filter((assetId) => !demoAssetIds.has(assetId));
+      return assetIds.length === meta.assetIds.length ? meta : { ...meta, assetIds, updatedAt: removedAt };
+    }),
+    demoBgmSelection: null,
+  };
 }
 
 export function updateMediaAsset(
@@ -283,6 +412,7 @@ function snapshotWorkspace(state: MotionZukanProductionWorkspaceState): Workspac
     sceneMeta: structuredClone(state.sceneMeta),
     musicMarkers: structuredClone(state.musicMarkers),
     designSettings: structuredClone(state.designSettings),
+    demoBgmSelection: structuredClone(state.demoBgmSelection),
   };
 }
 
@@ -315,6 +445,7 @@ export function restoreWorkspaceFromVersion(
     sceneMeta: structuredClone(version.workspace.sceneMeta),
     musicMarkers: structuredClone(version.workspace.musicMarkers),
     designSettings: structuredClone(version.workspace.designSettings),
+    demoBgmSelection: structuredClone(version.workspace.demoBgmSelection ?? null),
   };
 }
 
@@ -366,4 +497,80 @@ export function getFinalChecks(
       detail: duplicateUsage.length === 0 ? "重複なし" : `${duplicateUsage.length}素材が複数Sceneで使用中`,
     },
   ];
+}
+
+export function buildMotionZukanProductionHandoff(
+  composerState: MotionZukanComposerState,
+  workspaceState: MotionZukanProductionWorkspaceState,
+  projectId: SceneProjectId,
+): MotionZukanProductionHandoff {
+  const checks = getFinalChecks(composerState, workspaceState, projectId);
+  return {
+    schemaVersion: "motion-zukan-production-handoff/v1",
+    authority: "HUMAN_MASTER_WORKSPACE",
+    projectId,
+    exportedAt: nowIso(),
+    workspaceChecksPassed: checks.every((check) => check.ok),
+    workspaceBlockers: checks.filter((check) => !check.ok),
+    guards: {
+      externalProductionGateEvaluated: false,
+      demoAssetsAreProduction: false,
+      bgmCandidateApproved: false,
+    },
+    composer: structuredClone(composerState),
+    workspace: structuredClone(workspaceState),
+  };
+}
+
+export function parseMotionZukanProductionHandoff(raw: string): MotionZukanProductionHandoffParseResult {
+  let candidate: unknown;
+  try {
+    candidate = JSON.parse(raw);
+  } catch {
+    return { ok: false, error: "JSONとして読み取れません" };
+  }
+  if (!candidate || typeof candidate !== "object") return { ok: false, error: "handoff objectがありません" };
+
+  const handoff = candidate as Partial<MotionZukanProductionHandoff>;
+  if (handoff.schemaVersion !== "motion-zukan-production-handoff/v1" || handoff.authority !== "HUMAN_MASTER_WORKSPACE") {
+    return { ok: false, error: "対応していないhandoff schemaまたはauthorityです" };
+  }
+  if (handoff.projectId !== "opening" && handoff.projectId !== "profile") {
+    return { ok: false, error: "projectIdが不正です" };
+  }
+  if (
+    !handoff.guards ||
+    handoff.guards.externalProductionGateEvaluated !== false ||
+    handoff.guards.demoAssetsAreProduction !== false ||
+    handoff.guards.bgmCandidateApproved !== false
+  ) {
+    return { ok: false, error: "Production権限ガードが不正です" };
+  }
+  if (
+    !handoff.composer ||
+    handoff.composer.schemaVersion !== "motion-zukan-composer-state/v1" ||
+    !Array.isArray(handoff.composer.scenes) ||
+    !Array.isArray(handoff.composer.timelines)
+  ) {
+    return { ok: false, error: "composer stateが不正です" };
+  }
+  if (
+    !handoff.workspace ||
+    handoff.workspace.schemaVersion !== "motion-zukan-production-workspace/v1" ||
+    !Array.isArray(handoff.workspace.assets) ||
+    !Array.isArray(handoff.workspace.sceneMeta) ||
+    !Array.isArray(handoff.workspace.musicMarkers) ||
+    !Array.isArray(handoff.workspace.designSettings) ||
+    !Array.isArray(handoff.workspace.versions)
+  ) {
+    return { ok: false, error: "production workspace stateが不正です" };
+  }
+
+  return {
+    ok: true,
+    handoff: structuredClone({
+      ...handoff,
+      workspace: { ...handoff.workspace, demoBgmSelection: handoff.workspace.demoBgmSelection ?? null },
+    } as MotionZukanProductionHandoff),
+  };
 }

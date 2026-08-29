@@ -56,7 +56,7 @@ jobs:
         run: pnpm check:video-prompt-quality
 
       - name: Movie Coach registry contracts
-        run: pnpm check:movie-coach
+        run: pnpm check:media-qa-policy && pnpm check:motion-zukan-media && pnpm check:movie-coach
 
       - name: Typography DaVinci Actual run plan contracts
         run: node scripts/verify-typography-davinci-actual-run-plan-contracts.mjs

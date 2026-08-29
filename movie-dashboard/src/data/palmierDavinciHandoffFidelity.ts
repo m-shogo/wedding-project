@@ -58,6 +58,8 @@ export type CapabilityTrust =
 export type EvidenceState =
   /** Backed only by Palmier source comments/tests or official Resolve docs/release notes — not yet exercised against a real project (GL-05). */
   | "PENDING_RUNTIME"
+  /** A live Resolve Canary reached the property and measured a mismatch or omission. This is terminal negative evidence for the tested route, not a pending assumption. */
+  | "RUNTIME_FAILED"
   /** An actual Resolve import/mutation/render Canary has reproduced this at least twice (docs/research run-01 promotion rule: one clip is not enough). */
   | "RUNTIME_VERIFIED";
 
@@ -80,6 +82,7 @@ export interface HandoffPropertyRecord {
 
 const RUN01 = "docs/research/2026-08-26-movie-tool-learning-run-01.md";
 const RUN02 = "docs/research/2026-08-26-movie-tool-learning-run-02.md";
+const RUN32 = "docs/research/2026-08-26-movie-tool-learning-run-32-palmier-resolve-actual.md";
 
 export const palmierDavinciHandoffProperties: HandoffPropertyRecord[] = [
   {
@@ -115,14 +118,14 @@ export const palmierDavinciHandoffProperties: HandoffPropertyRecord[] = [
     japaneseName: "クロップ(静的)",
     englishName: "Crop (static)",
     category: "CROP_MASK",
-    transportClass: "APPROX",
-    automationClass: "AUTO_REBUILD",
-    capabilityTrust: "GENERATED_ARTIFACT",
-    evidenceState: "PENDING_RUNTIME",
+    transportClass: "REBUILD_VALUES",
+    automationClass: "ASSISTED_REBUILD",
+    capabilityTrust: "ASSISTED_MANUAL",
+    evidenceState: "RUNTIME_FAILED",
     nativeRoute: "EDIT",
-    recoveryInstructionJa: "importされた静的cropをEdit pageで確認する。Resolve独自crop符号化のため、極端なcrop値は別途確認する。",
-    sourceCitations: [RUN01],
-    notes: "Resolve-specific crop encodingがexporterソースコメントに明記。",
+    recoveryInstructionJa: "Palmier FCPXMLのcropを転送済みとみなさない。Human Masterのleft/right/top/bottom値を読み、Resolve Edit pageのCropへ再入力してreadbackする。今回の0.02四辺cropはPalmier実exportから欠落し、Resolve読戻しも全辺0だった。",
+    sourceCitations: [RUN01, RUN32],
+    notes: "Resolve Free 21.0.4.5 Actual Canaryで、Palmier内部timelineには四辺0.02のcropがある一方、実FCPXMLにcrop要素がなく、import後GetProperty()もCropLeft/Right/Top/Bottom=0と測定。静的cropはAPPROX transportではなく値再構築へ降格。",
   },
   {
     id: "text-properties",

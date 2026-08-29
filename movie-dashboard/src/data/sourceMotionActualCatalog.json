@@ -1,0 +1,41 @@
+{
+  "schemaVersion": "source-motion-actual/v1",
+  "sources": [
+    {
+      "id": "matchA",
+      "pexelsId": "31288104",
+      "sourceUrl": "https://www.pexels.com/video/tranquil-sunrise-over-serene-coastal-landscape-31288104/",
+      "licenseUrl": "https://www.pexels.com/license/",
+      "localPath": "10_references/media/pool/pexels_31288104_tranquil_sunrise_over_serene_coastal_lan.mp4",
+      "sha256": "27ca0d54c43b39ec1fbc10e0abee82b52b5b55752f9362c4aee6e42f82b222a6",
+      "usage": "cut-match-shape before"
+    },
+    {
+      "id": "matchB",
+      "pexelsId": "4057958",
+      "sourceUrl": "https://www.pexels.com/video/drone-flying-towards-the-sunset-over-the-sea-4057958/",
+      "licenseUrl": "https://www.pexels.com/license/",
+      "localPath": "10_references/media/pool/pexels_4057958_drone_flying_towards_the_sunset_over_the.mp4",
+      "sha256": "4addf87d74bc11830ffdfa2951308935e6c9269a7da797eb8c39ce41f40179dd",
+      "usage": "cut-match-shape after"
+    },
+    {
+      "id": "whipA",
+      "pexelsId": "19188177",
+      "sourceUrl": "https://www.pexels.com/video/valparaiso-chile-19188177/",
+      "licenseUrl": "https://www.pexels.com/license/",
+      "localPath": "motion-studio/public/demo/start-129/MOVEMENT_LEFT_TO_RIGHT/pexels-19188177.mp4",
+      "sha256": "5a5d3441277f0f4d52c8317e27ec993832c421212691c2aaa9cdb33cbf626f73",
+      "usage": "whip-source-matched before"
+    },
+    {
+      "id": "whipB",
+      "pexelsId": "6556837",
+      "sourceUrl": "https://www.pexels.com/video/view-from-window-of-a-moving-train-6556837/",
+      "licenseUrl": "https://www.pexels.com/license/",
+      "localPath": "motion-studio/public/demo/start-129/MOVEMENT_LEFT_TO_RIGHT/pexels-6556837.mp4",
+      "sha256": "61a4fd8a5747f43426ba0b6a6d17f36681dff7fc2ee475545853f9275bc504b1",
+      "usage": "whip-source-matched after"
+    }
+  ]
+}

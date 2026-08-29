@@ -4,6 +4,7 @@ import {fileURLToPath} from "node:url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const card = fs.readFileSync(path.join(root, "src/components/MaskRevealSceneHandoffCard.tsx"), "utf8");
+const actual = fs.readFileSync(path.join(root, "src/data/maskRevealDaVinciActualEvidence.ts"), "utf8");
 const routingMatrix = fs.readFileSync(path.join(root, "src/components/TypographyProductionRoutingMatrix.tsx"), "utf8");
 const routing = fs.readFileSync(path.join(root, "src/data/typographySceneProductionRouting.ts"), "utf8");
 const workspace = fs.readFileSync(path.join(root, "src/components/MaskRevealEditableWorkspace.tsx"), "utf8");
@@ -20,7 +21,9 @@ function requireText(source, token, message) {
 for (const token of [
   'buildMaskRevealSceneProductionBundle(scene)', 'buildMaskRevealSceneProductionBundleJson(scene)', 'EXPORT / ADAPTER',
   'bundle.sceneMarkerId', 'Scene revision:', 'bundle.sourceRevision', 'Palmier Timeline:', 'bundle.timeline.projectTimelineXmlFileName',
-  'Sidecar JSON:', 'bundle.timeline.sidecarFileName', 'DaVinci Actual:', '"PENDING"', 'Sidecar JSONをコピー', 'Sidecar JSONを書き出す',
+  'Sidecar JSON:', 'bundle.timeline.sidecarFileName', 'DaVinci Actual sample:', 'actualMatchesCurrentScene',
+  'scene.sceneId === maskRevealDaVinciActualEvidence.sceneId', 'scene.updatedAt === maskRevealDaVinciActualEvidence.sourceRevision',
+  'Palmier marker chain:', 'Rendered-pixel oracle:', 'Sidecar JSONをコピー', 'Sidecar JSONを書き出す',
   'Export詳細を見る', 'navigator.clipboard.writeText(json)', 'downloadText(json, bundle.timeline.sidecarFileName)',
   'Human MasterはSceneの人間が理解できる値です。', 'JSON / XML自体はHuman Masterではありません。',
   'Sceneを編集するとupdatedAtが変わり、このexportも現在のSceneInstanceから再生成されます。',
@@ -64,7 +67,8 @@ for (const token of ['Preset First → Accordion Detail → DaVinci Final Precis
 
 if (card.includes('HUMAN MASTER HANDOFF')) errors.push('Scene export UI must not label JSON/XML serialization itself as HUMAN MASTER HANDOFF');
 if (/\.xml[`"']\s*,?\s*JSON\.stringify/.test(card) || /downloadText\([^\n]*\.xml/.test(card)) errors.push("Scene Handoff UI must not generate or download fake Palmier NLE XML");
-if (!card.includes('bundle.preview.productionReady ? "VERIFIED" : "PENDING"')) errors.push("Scene Handoff UI must visibly fail-close DaVinci Actual as PENDING until verified");
+if (!card.includes('maskRevealDaVinciActualEvidence.checks.palmierMarkerMatchedInScratchImport ? "VERIFIED" : "PENDING"')) errors.push("Scene Handoff UI must derive the Palmier marker-chain status from Actual evidence");
+if (!actual.includes('palmierMarkerMatchedInScratchImport: true') || !actual.includes('independentRenderedPixelOracle: true') || !actual.includes('productionReady: true')) errors.push("Mask Reveal Actual evidence must require both the Palmier marker chain and independent rendered-pixel oracle before productionReady");
 if (/DaVinci Actual:\s*PASS/.test(routingMatrix)) errors.push("Typography routing matrix must not fabricate DaVinci Actual PASS");
 if (!routingMatrix.includes('route.actualVerified ? "PASS" : "NOT_RUN"')) errors.push("Typography routing matrix must derive DaVinci Actual display from staged route truth");
 
@@ -73,4 +77,4 @@ if (errors.length) {
   for (const error of errors) console.error(`- ${error}`);
   process.exit(1);
 }
-console.log("Mask Reveal Scene Handoff UI contracts OK: Human-readable Scene values remain Human Master; Typography routing now exposes eight Actual-candidate promotion requirements without inventing applied evidence; Palmier XML remains external; DaVinci Actual stays PENDING/NOT_RUN until real Mac verification.");
+console.log("Mask Reveal Scene Handoff UI contracts OK: the revision-matched Mask Reveal Actual keeps its marker/pixel evidence, while eight additional Typography candidates remain fail-closed until staged Actual and Human review; Human Master and external Palmier XML authority remain intact.");
