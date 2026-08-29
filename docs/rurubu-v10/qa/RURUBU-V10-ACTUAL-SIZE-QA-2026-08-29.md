@@ -110,6 +110,51 @@ A single fresh Figma asset-upload attempt was made for the existing 1254×1254 s
 
 This is the same transport/DNS failure fingerprint already documented. The source is not missing and a replacement generation is not justified. Do not repeat the same upload method again until there is material environment/capability change.
 
+## P04 STORY flow-to-photo integration correction
+
+A fresh live comparison of P04 `2787:22` against closest reference `2771:3` found the largest current distance was structural: the emotional hero was strong, but the lower `01 → 02 → 03` flow still read too much like a separate process line appended after the photo. The reference behavior is a denser editorial cluster in which imagery, labels, and flow overlap into one reading mass.
+
+No new copy, decorations, factual milestones, or raster assets were added. Existing P04 support photography and milestone flow were moved upward so the sequence now emerges directly from the hero edge:
+
+- support memory 01 `2787:26`: `y 548 → 528`;
+- milestone 01 field/dot/no/label and first connector: `-18` Figma units;
+- milestone 02 field/dot/no/label: `-14` units;
+- connector 02→03 `3090:3`: `-12` units;
+- closing photo `2787:27`, fixed floral frame `3091:2`, and milestone 03 field/dot/no/label: `-10` units.
+
+The replaceable-photo boundary remains intact: photos stay independent clipped `PHOTO MASK` frames and the floral frame remains a fixed graphic above the closing photo.
+
+Post-write screenshot reading path is now:
+
+`1 ふたりのこと → 2 出会いから今日まで、ふたりの物語。 → 3 emotional hero → 4 support photo + 01→02→03 flow → 5 closing polaroid / 今日へ`.
+
+Canonical live linter after the correction reports:
+
+- `PRODUCTION_CANDIDATE`: 8/8;
+- fatal AI tells: `0/8`;
+- strong warnings: `0/8`;
+- P04 shape count: `12`;
+- P04 dominance: `~1.405`;
+- P04 edge-shape count: `4`;
+- P04 controlled rotated shapes: `12`;
+- highest page-signature similarity remains P02↔P06 `66%` (`INFORMATIONAL`);
+- P01↔P05 `59%`, P05↔P07 `59%`, P01↔P02 `56%`, P06↔P08 `56%`;
+- no pair reaches `REVIEW` or `HIGH_RISK`.
+
+P04 targeted A5 preflight after the write reports:
+
+- visible text nodes: `9`;
+- trim overflow: `0`;
+- 6 mm working-safe text violations: `0`;
+- missing fonts: `0`;
+- visible text below 12 px: `0`;
+- visible replaceable P04 photo masks: `3`, all `clipsContent=true`;
+- visible REFERENCE/DUMMY production image leakage: `0`.
+
+The current P04 fixed frame remains the already-verified `FRAME_GLOBAL_PHOTO_POLAROID_FLORAL_WHITE_01.png` (Drive `1-EgrkJMu5b0hvnPcUwgXG1UaN0V-YciS`, source 1122×1402, current display ~39.9×49.7 mm, ~318 effective PPI for the fixed artwork). The three people/scenery photos remain explicit layout proxies with `FINAL_PHOTO_QA_DEFERRED`; they are not promoted as final print photography by this QA pass.
+
+Manual reference-match review after the structural correction is approximately `84/100 (CREDIBLE / REFINE)`. The largest remaining distance is now authoritative story/milestone micro-density plus pending final title/ribbon transport, not the basic `FLOW + MILESTONE + PHOTO` composition.
+
 ## Remaining completion boundary
 
 - `ASSET_FIRST_80`: 8/8 remains satisfied.
