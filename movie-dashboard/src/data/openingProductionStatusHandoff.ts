@@ -1,3 +1,4 @@
+import {openingAudioListeningStatus} from "./openingAudioListeningStatus.generated";
 import {openingDavinciActualBindingAudit} from "./openingDavinciActualBindingAudit.generated";
 import {openingProductionGate} from "./openingProductionGate.generated";
 import {openingProductionStatus} from "./openingProductionStatus.generated";
@@ -69,6 +70,17 @@ export function buildOpeningProductionStatusHandoff() {
         overallState: openingProductionStatus.overallState,
         stages: openingProductionStatus.stages,
         readiness: openingProductionStatus.readiness,
+        audioListening: {
+          state: openingAudioListeningStatus.state,
+          evidencePath: openingAudioListeningStatus.evidencePath,
+          blockerCodes: [...openingAudioListeningStatus.blockers],
+          humanAudioQaComplete: openingAudioListeningStatus.humanAudioQaComplete,
+          remotionStudioActual: openingAudioListeningStatus.remotionStudioActual,
+          macDaVinciActual: openingAudioListeningStatus.macDaVinciActual,
+          productionReady: openingAudioListeningStatus.productionReady,
+          recovery: [...openingAudioListeningStatus.recovery],
+          guardrails: [...openingAudioListeningStatus.guardrails],
+        },
         sourceRevalidation: openingProductionStatus.sourceRevalidation,
         palmierHandoff: openingProductionStatus.handoff.palmier,
         davinciHandoff: openingProductionStatus.handoff.davinci,
@@ -90,6 +102,11 @@ export function buildOpeningProductionStatusHandoff() {
       "FINAL_RENDER_ELIGIBLE != PRODUCTION_READY",
       "PHOTO_SHA_OR_EFFECTIVE_FOCUS_OR_FIT_CHANGED => HUMAN_CROP_REVIEW_STALE",
       "HUMAN_CROP_REVIEW_PASS != HUMAN_PREVIEW_REVIEW_PASS",
+      "BGM_RIGHTS_CLEARED != HUMAN_AUDIO_LISTENING_PASS",
+      "PREVIEW_OR_BGM_SHA_CHANGED => HUMAN_AUDIO_LISTENING_REVIEW_STALE",
+      "HUMAN_AUDIO_LISTENING_PASS != REMOTION_STUDIO_ACTUAL_VERIFIED",
+      "HUMAN_AUDIO_LISTENING_PASS != MAC_DAVINCI_ACTUAL_VERIFIED",
+      "HUMAN_AUDIO_LISTENING_PASS != PRODUCTION_READY",
       "PREVIEW_SOURCE_FINGERPRINT_STALE => HUMAN_PREVIEW_REVIEW_NOT_TRUSTED",
       "SOURCE_CHANGED => RE_RENDER_REQUIRED",
       "RE_RENDER_REQUIRED => RE_REVIEW_REQUIRED",
