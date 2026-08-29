@@ -39,10 +39,62 @@ const projectGateStage = (value: unknown) => {
   return null;
 };
 
-const sha256 = async (text: string) => {
-  const bytes = new TextEncoder().encode(text);
-  const digest = await crypto.subtle.digest("SHA-256", bytes);
-  return [...new Uint8Array(digest)].map((byte) => byte.toString(16).padStart(2, "0")).join("");
+// Small dependency-free SHA-256 implementation for browser-side integrity preflight.
+// Canonical CURRENT authority remains the Motion Studio Node verifier.
+const sha256 = (input: string) => {
+  const rightRotate = (value: number, amount: number) => (value >>> amount) | (value << (32 - amount));
+  const maxWord = 2 ** 32;
+  const words: number[] = [];
+  const ascii = unescape(encodeURIComponent(input));
+  const bitLength = ascii.length * 8;
+  const hash: number[] = [];
+  const constants: number[] = [];
+  let primeCounter = 0;
+  const isComposite: Record<number, boolean> = {};
+
+  for (let candidate = 2; primeCounter < 64; candidate += 1) {
+    if (isComposite[candidate]) continue;
+    for (let multiple = candidate * candidate; multiple < 313; multiple += candidate) isComposite[multiple] = true;
+    hash[primeCounter] = (Math.sqrt(candidate) * maxWord) | 0;
+    constants[primeCounter] = (Math.cbrt(candidate) * maxWord) | 0;
+    primeCounter += 1;
+  }
+
+  let padded = `${ascii}\x80`;
+  while ((padded.length % 64) !== 56) padded += "\x00";
+  for (let index = 0; index < padded.length; index += 1) {
+    const code = padded.charCodeAt(index);
+    words[index >> 2] = (words[index >> 2] || 0) | (code << ((3 - index) % 4) * 8);
+  }
+  words.push(Math.floor(bitLength / maxWord), bitLength);
+
+  for (let block = 0; block < words.length; block += 16) {
+    const oldHash = hash.slice(0);
+    const schedule = words.slice(block, block + 16);
+    for (let index = 16; index < 64; index += 1) {
+      const w15 = schedule[index - 15];
+      const w2 = schedule[index - 2];
+      const s0 = rightRotate(w15, 7) ^ rightRotate(w15, 18) ^ (w15 >>> 3);
+      const s1 = rightRotate(w2, 17) ^ rightRotate(w2, 19) ^ (w2 >>> 10);
+      schedule[index] = (schedule[index - 16] + s0 + schedule[index - 7] + s1) | 0;
+    }
+    for (let index = 0; index < 64; index += 1) {
+      const e = hash[4];
+      const a = hash[0];
+      const sigma1 = rightRotate(e, 6) ^ rightRotate(e, 11) ^ rightRotate(e, 25);
+      const choice = (e & hash[5]) ^ (~e & hash[6]);
+      const temp1 = (hash[7] + sigma1 + choice + constants[index] + schedule[index]) | 0;
+      const sigma0 = rightRotate(a, 2) ^ rightRotate(a, 13) ^ rightRotate(a, 22);
+      const majority = (a & hash[1]) ^ (a & hash[2]) ^ (hash[1] & hash[2]);
+      const temp2 = (sigma0 + majority) | 0;
+      hash.pop();
+      hash.unshift((temp1 + temp2) | 0);
+      hash[4] = (hash[4] + temp1) | 0;
+    }
+    for (let index = 0; index < 8; index += 1) hash[index] = (hash[index] + oldHash[index]) | 0;
+  }
+
+  return hash.map((value) => (value >>> 0).toString(16).padStart(8, "0")).join("");
 };
 
 const result = (
@@ -70,9 +122,9 @@ const result = (
   },
 });
 
-export async function auditTransportedWeddingDavinciActualSessionPlan(
+export function auditTransportedWeddingDavinciActualSessionPlan(
   input: unknown,
-): Promise<WeddingDavinciActualSessionPlanTransportAudit> {
+): WeddingDavinciActualSessionPlanTransportAudit {
   const mismatches: string[] = [];
   const live = buildWeddingDavinciActualSessionPlan();
 
@@ -89,7 +141,7 @@ export async function auditTransportedWeddingDavinciActualSessionPlan(
     ? transported.transportIdentitySha256
     : null;
   const {transportIdentitySha256: _ignored, ...transportBody} = transported;
-  const recomputedIdentity = await sha256(JSON.stringify(transportBody));
+  const recomputedIdentity = sha256(JSON.stringify(transportBody));
   const identityVerified = declaredIdentity !== null && declaredIdentity === recomputedIdentity;
 
   if (transported.schemaVersion !== canonicalSchema || transported.authority !== canonicalAuthority) {
