@@ -9,10 +9,13 @@ on:
       - "motion-studio/src/data/theme.ts"
       - "motion-studio/src/data/profileV1RuntimeMedia.generated.ts"
       - "motion-studio/src/data/profileV1ProductionPlan.ts"
+      - "motion-studio/src/data/profileV1FramingVerdicts.generated.ts"
       - "motion-studio/src/compositions/profile/ProfileV1RealMediaPreview.tsx"
       - "motion-studio/scripts/profile-v1-media-input-gate.mts"
       - "motion-studio/scripts/render-profile-v1-real-media-preview.mts"
       - "motion-studio/scripts/profile-v1-real-media-review.mts"
+      - "motion-studio/scripts/profile-v1-record-framing-verdict.mts"
+      - "motion-studio/scripts/sync-profile-v1-framing-verdicts.mts"
       - "motion-studio/scripts/check-profile-v1-real-media-review.mts"
       - ".github/workflows/profile-v1-real-media-review-ci.yml"
   push:
@@ -24,10 +27,13 @@ on:
       - "motion-studio/src/data/theme.ts"
       - "motion-studio/src/data/profileV1RuntimeMedia.generated.ts"
       - "motion-studio/src/data/profileV1ProductionPlan.ts"
+      - "motion-studio/src/data/profileV1FramingVerdicts.generated.ts"
       - "motion-studio/src/compositions/profile/ProfileV1RealMediaPreview.tsx"
       - "motion-studio/scripts/profile-v1-media-input-gate.mts"
       - "motion-studio/scripts/render-profile-v1-real-media-preview.mts"
       - "motion-studio/scripts/profile-v1-real-media-review.mts"
+      - "motion-studio/scripts/profile-v1-record-framing-verdict.mts"
+      - "motion-studio/scripts/sync-profile-v1-framing-verdicts.mts"
       - "motion-studio/scripts/check-profile-v1-real-media-review.mts"
       - ".github/workflows/profile-v1-real-media-review-ci.yml"
 
@@ -84,6 +90,34 @@ jobs:
             exit 1
           fi
           echo "CI smoke may render the explicit missing-state UI, but production preview/review cannot initialize or pass until all 17 real media files and current cleared BGM exist"
+
+      - name: Framing verdict command only writes canonical Human crop focus fields
+        run: |
+          node --input-type=module <<'NODE'
+          import {mkdirSync, writeFileSync} from 'node:fs';
+          import {profileV1RuntimeMedia} from './src/data/profileV1RuntimeMedia.generated.ts';
+          mkdirSync('out/qa', {recursive: true});
+          const qa = {crop:'NOT_RUN',focus:'NOT_RUN',color:'NOT_RUN',emotionalFit:'NOT_RUN',contentAccuracy:'NOT_RUN'};
+          const evidence = {
+            schemaVersion:'profile-v1-real-media-review/v1',
+            authority:'HUMAN_REAL_MEDIA_PREVIEW_REVIEW',
+            media: profileV1RuntimeMedia.slots.map((slot) => ({slot:slot.id,qa:{...qa}})),
+            review:{overall:'NOT_RUN',reviewer:null,reviewedAt:null,notes:''},
+            bgmReviewed:false,
+            macDaVinciActual:'NOT_RUN',
+            productionReady:false
+          };
+          writeFileSync('out/qa/profile-v1-real-media-review.json', JSON.stringify(evidence,null,2));
+          NODE
+          node --no-warnings scripts/profile-v1-record-framing-verdict.mts --slot=departure-airport --crop=PASS --focus=PASS --fit=contain --focus-x=42 --focus-y=58 --notes=human-checked
+          node -e "const fs=require('fs'); const e=JSON.parse(fs.readFileSync('out/qa/profile-v1-real-media-review.json','utf8')); const m=e.media.find(x=>x.slot==='departure-airport'); if(m.qa.crop!=='PASS'||m.qa.focus!=='PASS'||m.qa.color!=='NOT_RUN'||m.framing.fit!=='contain'||m.framing.focusX!==42||m.framing.focusY!==58) process.exit(1); if(e.review.overall!=='NOT_RUN'||e.bgmReviewed!==false||e.macDaVinciActual!=='NOT_RUN'||e.productionReady!==false) process.exit(1);"
+          grep -F "approvedCount: 1" src/data/profileV1FramingVerdicts.generated.ts
+          node --no-warnings scripts/profile-v1-record-framing-verdict.mts --slot=departure-airport --crop=FAIL --focus=FAIL
+          node -e "const fs=require('fs'); const e=JSON.parse(fs.readFileSync('out/qa/profile-v1-real-media-review.json','utf8')); const m=e.media.find(x=>x.slot==='departure-airport'); if(m.qa.crop!=='FAIL'||m.qa.focus!=='FAIL'||m.framing!==undefined) process.exit(1); if(e.macDaVinciActual!=='NOT_RUN'||e.productionReady!==false) process.exit(1);"
+          grep -F "approvedCount: 0" src/data/profileV1FramingVerdicts.generated.ts
+          rm out/qa/profile-v1-real-media-review.json
+          node --no-warnings scripts/sync-profile-v1-framing-verdicts.mts --write
+          git diff --exit-code -- src/data/profileV1FramingVerdicts.generated.ts
 
       - name: Upload smoke input and status
         uses: actions/upload-artifact@v4
