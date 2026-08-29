@@ -2,6 +2,7 @@ import {useState} from "react";
 import {
   auditWeddingDavinciGuiActualStartGate,
   defaultWeddingDavinciGuiActualStartGateAudits,
+  type WeddingDavinciGuiActualStartGateAudit,
   type WeddingMovieId,
 } from "../data/weddingDavinciGuiActualStartGateAudit";
 
@@ -13,8 +14,13 @@ const stateClass = (state: string) => {
   return "text-amber-700 dark:text-amber-300";
 };
 
+type GateAudits = Record<WeddingMovieId, WeddingDavinciGuiActualStartGateAudit>;
+
 export function WeddingDavinciGuiActualStartGateCard() {
-  const [audits, setAudits] = useState(defaultWeddingDavinciGuiActualStartGateAudits);
+  const [audits, setAudits] = useState<GateAudits>({
+    opening: defaultWeddingDavinciGuiActualStartGateAudits.opening,
+    profile: defaultWeddingDavinciGuiActualStartGateAudits.profile,
+  });
 
   const inspect = async (movieId: WeddingMovieId, file: File | undefined) => {
     if (!file) return;
@@ -85,7 +91,7 @@ export function WeddingDavinciGuiActualStartGateCard() {
 
               {(audit.mismatches.length > 0 || audit.transport.mismatches.length > 0) && (
                 <ul className="mt-3 space-y-1 text-[9px] leading-4 text-rose-700 dark:text-rose-300">
-                  {[...audit.mismatches, ...audit.transport.mismatches].map((reason) => <li key={reason}>• {reason}</li>)}
+                  {[...audit.mismatches, ...audit.transport.mismatches].map((reason, index) => <li key={`${reason}-${index}`}>• {reason}</li>)}
                 </ul>
               )}
 
