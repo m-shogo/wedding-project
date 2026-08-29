@@ -515,3 +515,50 @@ Process:
 
 Final audit: 0 overflow, 0 unfilled image placeholders on P05. All three
 Memory Spot destinations (Okinawa/Seoul/Hawaii) now have real imagery.
+
+## Research-grounded pivot — real Rurubu is brush-calligraphy + starburst, not clean editorial
+
+User said to study the actual real Rurubu design language before continuing
+("わかってないなら...実際のるるぶを考察認識理解して"). Generated a labeled
+research-reference mockup via Codex `image_gen` (explicitly requested as a
+generic "Japanese travel guidebook cover design study", not a reproduction of
+the real trademarked logo) to analyze structurally. Findings that directly
+contradicted this session's prior "restrained magazine masthead" direction:
+
+- Headlines are **hand-drawn brush calligraphy** (thick red-to-orange gradient
+  strokes, white glow outline), never a clean geometric font like Zen Maru
+  Gothic — my "masthead accent bar + Zen Maru Gothic Black" pass from earlier
+  was still too Western-editorial/restrained.
+- Headlines sit in front of a **white paint-splash starburst** shape for pop.
+- Multiple numbered category badges, corner ribbons/seals, and scattered
+  sparkle accents layer on top of each other with almost zero calm negative
+  space — far denser than anything built so far.
+
+Action taken: replaced the native Zen Maru Gothic masthead titles on **all 8
+pages** with Codex-generated brush-calligraphy + starburst title graphics
+(transparent PNG, red-to-orange gradient, white outline/glow, sparkle
+accents), each verified visually before placing:
+- P01: `るるぶ WEDDING` (replaces the earlier clean wordmark)
+- P02: `プロフィール`, P03: `6つの質問` (replaces the native masthead that had
+  itself replaced the corgi bubble title earlier this session — corgi is now
+  fully retired, not present anywhere on P03), P04: `ストーリー`,
+  P05: `旅した記憶`, P06: `思い出のスポット` (on-photo tab variant),
+  P07: `1DAYスケジュール`, P08: `ゲストへのメッセージ`.
+
+Bugs found and fixed along the way:
+- P05: the new, taller brush title collided with the lead paragraph below it.
+  First fix attempt (shift everything down by the title's extra height) then
+  pushed the 3rd destination photo (Hawaii) past the safe-area bottom — fixed
+  properly by recomputing all 3 destination blocks' height from the actual
+  remaining vertical budget (`(safeBottom - startY) / 3`) instead of applying
+  a uniform shift.
+- One generated title (`title_message_brush.png`) appeared to have a white
+  background in this session's own image viewer, unlike the other five which
+  correctly appeared black/transparent. Did not assume the viewer was right —
+  checked the actual alpha channel via `PIL`/`sips` directly (corner alpha
+  values `[0,0,0,0]`), confirmed it was genuinely transparent, and used it
+  as-is. Recorded as a viewer-rendering quirk, not a real data problem.
+
+Final full-file audit after this pass: 0 Inter nodes, 0 unfilled image
+placeholders, overflow count 2 (only the same two known intentional
+corner-decoration bleeds noted throughout this document).
