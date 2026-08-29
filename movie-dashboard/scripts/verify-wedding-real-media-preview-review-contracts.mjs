@@ -12,7 +12,9 @@ function requireContract(condition, message) {
 }
 
 requireContract(data.includes('String(openingProductionStatus.stages.cropReview.state) === "PASS"'), "Opening preview must require current Human crop review before rendering");
-requireContract(data.includes('Boolean(profileProductionStatus.readiness.assemblyReady)'), "Profile preview must require production assembly readiness");
+requireContract(!data.includes('Boolean(profileProductionStatus.readiness.assemblyReady)'), "Profile preview must not wait for assemblyReady because assemblyReady already requires real-media Human QA");
+requireContract(data.includes('"PREVIEW_AND_REVIEW_REQUIRED", "RE_RENDER_AND_REVIEW_REQUIRED"'), "Profile preview render must follow canonical source-revalidation states");
+requireContract(data.includes('"CURRENT_SOURCE_REVIEW_REQUIRED"'), "Profile Human review must be launchable when preview source is current but review remains required");
 requireContract(data.includes('profileRealMediaReviewGate'), "Profile Human review state must come from canonical generated gate");
 requireContract(data.includes('humanReviewRequired: true'), "Preview review must remain explicitly Human");
 requireContract(data.includes('expectedCount: 11'), "Opening surface must preserve the 11-photo production expectation");
@@ -24,7 +26,7 @@ requireContract(component.includes("HUMAN_REVIEW_PASS != GUI_ACTUAL_PASS"), "UI 
 requireContract(component.includes("Remotion Studio GUI Actual: <strong>NOT_RUN</strong>"), "Studio GUI Actual must remain NOT_RUN");
 requireContract(component.includes("Mac DaVinci GUI Actual: <strong>NOT_RUN</strong>"), "DaVinci GUI Actual must remain NOT_RUN");
 requireContract(component.includes("disabled={!project.canRenderPreview}"), "preview render command must be disabled until upstream gate passes");
-requireContract(component.includes("disabled={!project.canStartHumanReview}"), "Human review commands must be disabled until preview exists/current");
+requireContract(component.includes("disabled={!project.canStartHumanReview}"), "Human review commands must remain fail-closed outside canonical review-required states");
 requireContract(page.includes("<WeddingRealMediaPreviewReviewPanel />"), "Motion Zukan workspace must expose preview review launch surface");
 
-console.log("Wedding real-media preview review contracts: PASS");
+console.log("Wedding real-media preview review contracts: PASS — Profile preview launch is source-revalidation-driven and does not depend on post-QA assemblyReady.");
