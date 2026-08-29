@@ -237,7 +237,7 @@ writeFileSync(
 <meta charset="utf-8" />
 <title>StaRt Wedding Edit — Cue聴取確認(local専用)</title>
 <style>
-  body { font-family: -apple-system, sans-serif; margin: 24px; background: #111; color: #eee; }
+  body { font-family: -apple-system, sans-serif; margin: 24px; padding-bottom: 64px; background: #111; color: #eee; }
   table { border-collapse: collapse; width: 100%; }
   td, th { border-bottom: 1px solid #333; padding: 6px 10px; text-align: left; vertical-align: middle; font-size: 13px; }
   th { position: sticky; top: 0; background: #111; z-index: 2; }
@@ -298,6 +298,17 @@ writeFileSync(
   .summary-box .copy-btn { background: #2f7a4a; color: #fff; border: none; border-radius: 5px; padding: 6px 12px; font-size: 12px; cursor: pointer; }
   .summary-box .copy-btn:hover { background: #38915a; }
   .summary-box #copyHint { font-size: 12px; color: #7CF29A; }
+
+  /* スクロール位置に関わらず常に見える、下固定の保存/コピーバー。
+     上のtoolbar(sticky top:0)と対になり、78行を下まで見た後も
+     上まで戻らず保存・コピーできるようにする。 */
+  .floating-bar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 10; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; background: #191512; border-top: 1px solid #3a2f1f; padding: 10px 20px; box-shadow: 0 -4px 12px rgba(0,0,0,0.4); }
+  .floating-bar .save-btn { background: #F4C95D; color: #1a1508; font-weight: 700; border: none; border-radius: 6px; padding: 8px 16px; font-size: 13px; cursor: pointer; }
+  .floating-bar .save-btn:hover { background: #ffd873; }
+  .floating-bar .copy-btn { background: #2f7a4a; color: #fff; border: none; border-radius: 5px; padding: 8px 14px; font-size: 13px; cursor: pointer; }
+  .floating-bar .copy-btn:hover { background: #38915a; }
+  .floating-bar span { font-size: 12px; color: #ccc; }
+  #saveHintFloating { color: #7CF29A; }
 </style>
 </head>
 <body>
@@ -366,6 +377,17 @@ writeFileSync(
 ${rows}
 </tbody>
 </table>
+
+<!-- スクロールしても常に押せる、下固定の保存/コピーバー(TASK: 上にしか保存が無く
+     78行スクロールした後に上まで戻る必要があった、というフィードバックへの対応)。
+     ロジックは上のsaveBtn/copySummaryBtnへ委譲し、同じ処理を二重実装しない。 -->
+<div class="floating-bar" id="floatingBar">
+  <span id="progressCountFloating"></span>
+  <button type="button" class="save-btn" id="saveBtnFloating">💾 保存する</button>
+  <button type="button" class="copy-btn" id="copySummaryBtnFloating">📋 まとめをコピー</button>
+  <span id="saveHintFloating"></span>
+</div>
+
 <script>
 // フィルタは「チェックが1つも無ければ全行表示、1つ以上チェックされたら
 // OR条件で該当行だけ表示」という単純な仕組み(複雑なquery builderは作らない)。
@@ -557,7 +579,9 @@ ${rows}
 
   function updateProgress() {
     var done = Object.keys(state).filter(function (k) { return state[k].status === 'ok' || state[k].status === 'adjust' || state[k].status === 'reject'; }).length;
-    document.getElementById('progressCount').textContent = '判定済み: ' + done + ' / ' + rowsAll.length + '件(自動的に保存されています)';
+    var text = '判定済み: ' + done + ' / ' + rowsAll.length + '件(自動的に保存されています)';
+    document.getElementById('progressCount').textContent = text;
+    document.getElementById('progressCountFloating').textContent = text;
   }
 
   var rowsAll = Array.prototype.slice.call(document.querySelectorAll('#cueRows tr'));
@@ -635,18 +659,34 @@ ${rows}
   updateProgress();
   updateSummary();
 
+  // 保存/コピーの結果メッセージを、上のhintと下固定バーのhint両方へ同時に出す。
+  // ロジックを二重実装せず、下固定バーのボタンは常にこのハンドラを共有する。
+  function setHint(topId, floatingId, text, isError) {
+    [topId, floatingId].forEach(function (id) {
+      var el = document.getElementById(id);
+      if (!el) return;
+      el.textContent = text;
+      el.style.color = isError ? '#f2a53f' : '#7CF29A';
+    });
+  }
+
   document.getElementById('copySummaryBtn').addEventListener('click', function () {
     var text = document.getElementById('summaryPromptArea').value;
-    var hint = document.getElementById('copyHint');
     function showCopied() {
-      hint.textContent = '✅ コピーしました。Claudeに貼り付けてください。';
-      setTimeout(function () { hint.textContent = ''; }, 3000);
+      setHint('copyHint', 'saveHintFloating', '✅ コピーしました。Claudeに貼り付けてください。', false);
+      setTimeout(function () {
+        document.getElementById('copyHint').textContent = '';
+        document.getElementById('saveHintFloating').textContent = '';
+      }, 3000);
     }
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(text).then(showCopied).catch(function () { legacyCopy(text, showCopied); });
     } else {
       legacyCopy(text, showCopied);
     }
+  });
+  document.getElementById('copySummaryBtnFloating').addEventListener('click', function () {
+    document.getElementById('copySummaryBtn').click();
   });
 
   // navigator.clipboardが使えない環境(file://で開いた場合等)向けの代替コピー手段。
@@ -670,12 +710,14 @@ ${rows}
     try { localStorage.setItem(NAME_KEY, nameInput.value); } catch (e) {}
   });
 
+  document.getElementById('saveBtnFloating').addEventListener('click', function () {
+    document.getElementById('saveBtn').click();
+  });
+
   document.getElementById('saveBtn').addEventListener('click', function () {
     var verifiedBy = nameInput.value.trim();
-    var hintEl = document.getElementById('saveHint');
     if (!verifiedBy) {
-      hintEl.textContent = '⚠️ 「名前」を入力してから保存してください。';
-      hintEl.style.color = '#f2a53f';
+      setHint('saveHint', 'saveHintFloating', '⚠️ 「名前」を入力してから保存してください。', true);
       nameInput.focus();
       return;
     }
@@ -706,8 +748,7 @@ ${rows}
       }
     });
     if (decisions.length === 0) {
-      hintEl.textContent = '⚠️ まだ判定した行が0件です。行の👍/❌/🤔のどれかを押してから保存してください。';
-      hintEl.style.color = '#f2a53f';
+      setHint('saveHint', 'saveHintFloating', '⚠️ まだ判定した行が0件です。行の👍/❌/🤔のどれかを押してから保存してください。', true);
       return;
     }
     var payload = {verifiedBy: verifiedBy, decisions: decisions};
@@ -720,8 +761,12 @@ ${rows}
     a.click();
     document.body.removeChild(a);
     setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
-    hintEl.style.color = '#7CF29A';
-    hintEl.textContent = '✅ ' + decisions.length + '件を書き出しました。ダウンロードされたファイルを local/analysis/start-wedding/listening-decisions.local.json として保存してください。その後ターミナルで pnpm apply:listening-verification → pnpm sync:timing-master を実行すると反映されます。';
+    setHint(
+      'saveHint',
+      'saveHintFloating',
+      '✅ ' + decisions.length + '件を書き出しました。ダウンロードされたファイルを local/analysis/start-wedding/listening-decisions.local.json として保存してください。その後ターミナルで pnpm apply:listening-verification → pnpm sync:timing-master を実行すると反映されます。',
+      false,
+    );
   });
 })();
 </script>
