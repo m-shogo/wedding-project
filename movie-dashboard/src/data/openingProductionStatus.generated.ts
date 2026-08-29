@@ -6,6 +6,7 @@ export const openingProductionStatus = {
     "status": "motion-studio/scripts/opening-v1-production-status.mts",
     "cropReview": "motion-studio/scripts/opening-v1-crop-review-evidence.mts",
     "previewSourceBinding": "motion-studio/scripts/opening-v1-preview-source-fingerprint.mts",
+    "audioListeningReview": "motion-studio/scripts/opening-v1-audio-listening-review.mts",
     "finalRenderReview": "motion-studio/scripts/opening-v1-production-status.mts#stages.finalRenderReview",
     "davinciHandoff": "motion-studio/scripts/opening-v1-davinci-handoff-contract.mts"
   },
@@ -59,9 +60,19 @@ export const openingProductionStatus = {
         "pnpm opening:preview-review:strict"
       ]
     },
+    "audioListeningReview": {
+      "state": "NOT_RUN",
+      "detail": "Blocked upstream until the current source-bound Human preview review passes.",
+      "path": "out/qa/opening-v1-audio-listening-review.json",
+      "recovery": [
+        "node --no-warnings scripts/opening-v1-audio-listening-review.mts --init",
+        "rights-cleared previewをHuman listening QA",
+        "node --no-warnings scripts/opening-v1-audio-listening-review.mts --strict"
+      ]
+    },
     "finalRender": {
       "state": "NOT_RUN",
-      "detail": "Blocked upstream until current human preview review passes.",
+      "detail": "Blocked upstream until current Human audio listening QA passes.",
       "path": "out/opening/opening_v1.mp4",
       "recovery": [
         "pnpm render:opening-v1"
@@ -109,6 +120,7 @@ export const openingProductionStatus = {
     "humanCropReviewApproved": false,
     "previewSourceBound": false,
     "humanPreviewApproved": false,
+    "humanAudioListeningApproved": false,
     "finalRenderQaPass": false,
     "humanFinalRenderApproved": false,
     "productionBundleCurrent": false,
@@ -141,6 +153,9 @@ export const openingProductionStatus = {
       "SOURCE_CHANGED => RE_RENDER_REQUIRED",
       "RE_RENDER_REQUIRED => RE_REVIEW_REQUIRED",
       "OLD_HUMAN_REVIEW != CURRENT_RENDER_IMPLEMENTATION",
+      "PREVIEW_REVIEW_PASS != HUMAN_AUDIO_LISTENING_PASS",
+      "PREVIEW_OR_BGM_SHA_CHANGED => HUMAN_AUDIO_LISTENING_REVIEW_STALE",
+      "HUMAN_AUDIO_LISTENING_PASS != FINAL_RENDER_REVIEW_PASS",
       "PREVIEW_REVIEW_PASS != FINAL_RENDER_REVIEW_PASS",
       "FINAL_RENDER_OR_SOURCE_CHANGED => FINAL_RENDER_RE_REVIEW_REQUIRED"
     ]
@@ -151,6 +166,7 @@ export const openingProductionStatus = {
       "current": false,
       "sourceAuthorities": [
         "out/qa/opening-v1-crop-review-evidence.json",
+        "out/qa/opening-v1-audio-listening-review.json",
         "src/data/openingV1.ts#openingV1Scenes",
         "src/data/openingV1Sound.ts#openingV1SoundCues",
         "out/qa/opening-v1-final-render-review.json"
