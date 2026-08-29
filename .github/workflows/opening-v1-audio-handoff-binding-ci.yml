@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - 'motion-studio/scripts/export-opening-v1-production-bundle.mts'
+      - 'motion-studio/scripts/export-wedding-davinci-production-recovery.mts'
       - 'motion-studio/scripts/opening-v1-audio-listening-review.mts'
       - 'motion-studio/scripts/opening-v1-audio-handoff-binding.mts'
       - '.github/workflows/opening-v1-audio-handoff-binding-ci.yml'
@@ -43,7 +44,7 @@ jobs:
             echo 'strict unexpectedly passed without Human evidence and exported bundle' >&2
             exit 1
           fi
-      - name: Exporter must enforce Human audio listening strict gate and downstream SHA binding
+      - name: Production bundle exporter must enforce Human audio listening binding
         run: |
           node - <<'NODE'
           const fs = require('fs');
@@ -58,6 +59,21 @@ jobs:
             'PREVIEW_SHA_OR_BGM_SHA_CHANGED => AUDIO_LISTENING_REVIEW_STALE',
           ];
           for (const token of required) if (!src.includes(token)) throw new Error(`missing exporter contract token: ${token}`);
+          NODE
+      - name: DaVinci recovery exporter must carry the same Human audio binding
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const src = fs.readFileSync('scripts/export-wedding-davinci-production-recovery.mts', 'utf8');
+          const required = [
+            "audioReview: 'out/qa/opening-v1-audio-listening-review.json'",
+            'openingAudioBinding',
+            'audioListeningReviewEvidenceSha256',
+            'audioListeningPreviewSha256',
+            'audioListeningBgmSha256',
+            'Opening Palmier/DaVinci audio listening binding is stale',
+          ];
+          for (const token of required) if (!src.includes(token)) throw new Error(`missing recovery contract token: ${token}`);
           NODE
       - name: TypeScript check
         run: pnpm typecheck
