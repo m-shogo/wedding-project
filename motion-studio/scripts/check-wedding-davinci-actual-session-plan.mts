@@ -19,6 +19,7 @@ const assert = (condition: unknown, message: string) => {
 
 assert(plan.schemaVersion === 'wedding-davinci-actual-session-plan/v1', 'schema mismatch');
 assert(plan.authority === 'DERIVED_MAC_DAVINCI_ACTUAL_SESSION_PLAN', 'authority mismatch');
+assert(/^[a-f0-9]{64}$/.test(plan.transportIdentitySha256), 'transport identity SHA-256 missing or invalid');
 assert(plan.evidenceBoundary?.macDavinciResolveGuiActual === 'NOT_RUN_UNLESS_HUMAN_EXECUTED', 'DaVinci Actual boundary mismatch');
 assert(plan.evidenceBoundary?.macRemotionStudioGuiActual === 'NOT_RUN_UNLESS_HUMAN_EXECUTED', 'Studio Actual boundary mismatch');
 assert(plan.evidenceBoundary?.humanFinalApproval === 'SEPARATE_AFTER_ACTUAL_STRICT_PASS', 'Human approval boundary mismatch');
@@ -45,10 +46,12 @@ assert(plan.guardrails?.includes('EVIDENCE_TEMPLATE_EXISTS != GUI_ACTUAL_PASS'),
 assert(plan.guardrails?.includes('CI_MUST_NOT_PROMOTE_MAC_GUI_ACTUAL'), 'missing CI Actual guardrail');
 assert(plan.weddingFinalization?.length === 3, 'Wedding finalization command count mismatch');
 assert(plan.weddingFinalization[2]?.includes('--strict'), 'Wedding finalization must end in strict preflight');
+assert(source.includes("createHash('sha256').update(JSON.stringify(planBody)).digest('hex')"), 'transport identity must bind the full canonical plan body');
 assert(!source.includes("macDavinciResolveGuiActual: 'PASS'"), 'source must not synthesize DaVinci PASS');
 assert(!source.includes("productionReady: true"), 'source must not synthesize productionReady');
 
 console.log('Wedding DaVinci Actual session plan contract: PASS');
+console.log(`transportIdentitySha256=${plan.transportIdentitySha256}`);
 console.log(`opening=${plan.projects.opening.sessionState}`);
 console.log(`profile=${plan.projects.profile.sessionState}`);
 console.log('Mac/Studio GUI Actual promotion by CI: FORBIDDEN');
