@@ -7,12 +7,14 @@ on:
       - "motion-studio/src/data/profileV1RuntimeMedia.generated.ts"
       - "motion-studio/src/data/profileV1ProductionPlan.ts"
       - "motion-studio/src/compositions/profile/ProfileV1RealMediaPreview.tsx"
+      - "motion-studio/src/compositions/profile/ProfileV1RealMediaCropReview.tsx"
       - "motion-studio/src/ProfileV1Root.tsx"
       - "motion-studio/src/index-profile-v1.ts"
       - "motion-studio/scripts/check-profile-v1-real-media-preview.mts"
       - "motion-studio/scripts/profile-v1-media-input-gate.mts"
       - "motion-studio/scripts/render-profile-v1-real-media-preview.mts"
       - "motion-studio/scripts/render-profile-v1-real-media-qa-stills.mts"
+      - "motion-studio/scripts/render-profile-v1-real-media-crop-review-stills.mts"
       - ".github/workflows/profile-v1-real-media-preview-ci.yml"
   push:
     branches: [main]
@@ -21,12 +23,14 @@ on:
       - "motion-studio/src/data/profileV1RuntimeMedia.generated.ts"
       - "motion-studio/src/data/profileV1ProductionPlan.ts"
       - "motion-studio/src/compositions/profile/ProfileV1RealMediaPreview.tsx"
+      - "motion-studio/src/compositions/profile/ProfileV1RealMediaCropReview.tsx"
       - "motion-studio/src/ProfileV1Root.tsx"
       - "motion-studio/src/index-profile-v1.ts"
       - "motion-studio/scripts/check-profile-v1-real-media-preview.mts"
       - "motion-studio/scripts/profile-v1-media-input-gate.mts"
       - "motion-studio/scripts/render-profile-v1-real-media-preview.mts"
       - "motion-studio/scripts/render-profile-v1-real-media-qa-stills.mts"
+      - "motion-studio/scripts/render-profile-v1-real-media-crop-review-stills.mts"
       - ".github/workflows/profile-v1-real-media-preview-ci.yml"
 
 permissions:
@@ -79,18 +83,26 @@ jobs:
             echo "production QA stills unexpectedly rendered without 17 real media slots/current cleared BGM"
             exit 1
           fi
+          if node --no-warnings scripts/render-profile-v1-real-media-crop-review-stills.mts --sample; then
+            echo "crop-review stills unexpectedly rendered without 17 real media slots/current cleared BGM"
+            exit 1
+          fi
           echo "production Profile real-media evidence correctly fails closed without current real inputs"
 
       - name: Fresh clone missing-media visual smoke remains explicit
         run: |
           node --no-warnings scripts/render-profile-v1-real-media-qa-stills.mts --allow-missing-media-smoke
           test "$(find out/qa/profile-v1-real-media -name '*.png' | wc -l | tr -d ' ')" = "5"
-          echo "Fresh clone renders five explicit missing-media smoke frames only under the CI-only bypass flag"
+          node --no-warnings scripts/render-profile-v1-real-media-crop-review-stills.mts --allow-missing-media-smoke --sample
+          test "$(find out/qa/profile-v1-real-media-crop-review -name '*.png' | wc -l | tr -d ' ')" = "3"
+          echo "Fresh clone renders explicit missing-media smoke frames only under CI-only bypass flags"
 
       - name: Upload real-media smoke stills
         uses: actions/upload-artifact@v4
         with:
           name: profile-v1-real-media-preview-smoke
-          path: motion-studio/out/qa/profile-v1-real-media/*.png
+          path: |
+            motion-studio/out/qa/profile-v1-real-media/*.png
+            motion-studio/out/qa/profile-v1-real-media-crop-review/*.png
           if-no-files-found: error
           retention-days: 7
