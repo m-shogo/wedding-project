@@ -1,4 +1,5 @@
 import {spawnSync} from 'node:child_process';
+import {createHash} from 'node:crypto';
 import {existsSync, mkdirSync, readFileSync, writeFileSync} from 'node:fs';
 import {dirname, isAbsolute, join, resolve} from 'node:path';
 import {fileURLToPath} from 'node:url';
@@ -160,7 +161,7 @@ const buildProject = (movieId: MovieId) => {
   };
 };
 
-const plan = {
+const planBody = {
   schemaVersion: 'wedding-davinci-actual-session-plan/v1',
   authority: 'DERIVED_MAC_DAVINCI_ACTUAL_SESSION_PLAN',
   generatedFromOperatorPacketSchema: operatorPacket.schemaVersion,
@@ -189,6 +190,9 @@ const plan = {
   ],
 } as const;
 
+const transportIdentitySha256 = createHash('sha256').update(JSON.stringify(planBody)).digest('hex');
+const plan = {...planBody, transportIdentitySha256} as const;
+
 if (process.argv.includes('--write')) {
   mkdirSync(dirname(outputPath), {recursive: true});
   writeFileSync(outputPath, `${JSON.stringify(plan, null, 2)}\n`);
@@ -197,6 +201,7 @@ if (process.argv.includes('--write')) {
 if (process.argv.includes('--json')) console.log(JSON.stringify(plan, null, 2));
 else {
   console.log(`Wedding DaVinci Actual session plan: opening=${plan.projects.opening.sessionState} / profile=${plan.projects.profile.sessionState}`);
+  console.log(`transportIdentitySha256=${plan.transportIdentitySha256}`);
   console.log('Mac/DaVinci GUI Actual remains NOT_RUN unless a human actually performs and records the GUI checks.');
   console.log(`output=${outputPath}`);
 }
