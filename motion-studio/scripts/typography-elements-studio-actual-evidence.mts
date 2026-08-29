@@ -68,9 +68,38 @@ const rel = (path: string) => path.replace(`${repoRoot}/`, '').replaceAll('\\', 
 function loadManifest() {
   if (!existsSync(manifestPath)) throw new Error('STUDIO_ACTUAL_BATCH_MANIFEST_MISSING:run node --no-warnings scripts/prepare-typography-elements-studio-actual-batch.mts first');
   const manifest = JSON.parse(readFileSync(manifestPath, 'utf8')) as any;
+  if (manifest.schemaVersion !== 'remotion-element-studio-actual-batch/v1') throw new Error('STUDIO_ACTUAL_BATCH_SCHEMA_MISMATCH');
   if (manifest.purpose !== 'BOUNDED_MAC_STUDIO_ACTUAL_BATCH') throw new Error('STUDIO_ACTUAL_BATCH_PURPOSE_MISMATCH');
   if (manifest.studioVersionTarget !== '4.0.517') throw new Error('STUDIO_ACTUAL_VERSION_TARGET_MISMATCH');
   if (!Array.isArray(manifest.candidates) || manifest.candidates.length !== 9) throw new Error('STUDIO_ACTUAL_CANDIDATE_COUNT_MISMATCH');
+
+  const stale: string[] = [];
+  const kitPath = join(motionStudioRoot, 'scripts/lib/typography-element-kit.mts');
+  const kitSha = existsSync(kitPath) ? shaFile(kitPath) : null;
+  for (const candidate of manifest.candidates) {
+    const id = String(candidate.patternId ?? 'UNKNOWN');
+    if (!candidate.payloadPath || !candidate.payloadSha256) stale.push(`${id}:PAYLOAD_SHA_BINDING_MISSING`);
+    else {
+      const path = join(batchRoot, candidate.payloadPath);
+      if (!existsSync(path)) stale.push(`${id}:PAYLOAD_MISSING`);
+      else if (shaFile(path) !== candidate.payloadSha256) stale.push(`${id}:PAYLOAD_SHA_STALE`);
+    }
+    if (!candidate.builderPath || !candidate.builderSha256) stale.push(`${id}:BUILDER_SHA_BINDING_MISSING`);
+    else {
+      const path = join(motionStudioRoot, candidate.builderPath);
+      if (!existsSync(path)) stale.push(`${id}:BUILDER_MISSING`);
+      else if (shaFile(path) !== candidate.builderSha256) stale.push(`${id}:BUILDER_SHA_STALE`);
+    }
+    if (!candidate.checkerPath || !candidate.checkerSha256) stale.push(`${id}:CHECKER_SHA_BINDING_MISSING`);
+    else {
+      const path = join(motionStudioRoot, candidate.checkerPath);
+      if (!existsSync(path)) stale.push(`${id}:CHECKER_MISSING`);
+      else if (shaFile(path) !== candidate.checkerSha256) stale.push(`${id}:CHECKER_SHA_STALE`);
+    }
+    if (!candidate.kitSha256 || !kitSha) stale.push(`${id}:KIT_SHA_BINDING_MISSING`);
+    else if (candidate.kitSha256 !== kitSha) stale.push(`${id}:KIT_SHA_STALE`);
+  }
+  if (stale.length > 0) throw new Error(`STUDIO_ACTUAL_BATCH_SOURCE_STALE:${stale.join(',')}`);
   return {manifest, sha256: shaFile(manifestPath)};
 }
 

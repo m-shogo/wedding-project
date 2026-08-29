@@ -1,4 +1,5 @@
 import {execFileSync} from 'node:child_process';
+import {createHash} from 'node:crypto';
 import {mkdirSync, readFileSync, rmSync, writeFileSync} from 'node:fs';
 import {join, resolve} from 'node:path';
 
@@ -7,6 +8,8 @@ const repoRoot = resolve(motionStudioRoot, '..');
 const outputRoot = join(repoRoot, 'movie-dashboard', 'out', 'remotion-element-actual-batch');
 const payloadDir = join(outputRoot, 'payloads');
 const sandboxDir = join(outputRoot, 'studio-sandbox');
+
+const sha256File = (path: string) => createHash('sha256').update(readFileSync(path)).digest('hex');
 
 const sharedControls = ['text', 'intensity', 'color', 'translate', 'scale', 'rotate', 'opacity'] as const;
 const candidates = [
@@ -37,6 +40,21 @@ rmSync(outputRoot, {recursive: true, force: true});
 mkdirSync(payloadDir, {recursive: true});
 mkdirSync(join(sandboxDir, 'src'), {recursive: true});
 
+const preparedCandidates: Array<{
+  patternId: string;
+  slug: string;
+  payloadPath: string;
+  payloadSha256: string;
+  builderPath: string;
+  builderSha256: string;
+  checkerPath: string;
+  checkerSha256: string;
+  kitSha256: string;
+  expectedControls: string[];
+}> = [];
+const kitPath = join(motionStudioRoot, 'scripts', 'lib', 'typography-element-kit.mts');
+const kitSha256 = sha256File(kitPath);
+
 for (const candidate of candidates) {
   runNode(candidate.builder);
   runNode(candidate.checker);
@@ -44,18 +62,29 @@ for (const candidate of candidates) {
   const payload = JSON.parse(readFileSync(payloadPath, 'utf8')) as {type?: string; version?: number; element?: {slug?: string}};
   if (payload.type !== 'remotion-element' || payload.version !== 1) throw new Error(`${candidate.patternId}: unexpected payload envelope`);
   if (payload.element?.slug !== candidate.slug) throw new Error(`${candidate.patternId}: payload slug mismatch`);
-  writeFileSync(join(payloadDir, `${candidate.patternId}.json`), `${JSON.stringify(payload, null, 2)}\n`);
-}
-
-const manifest = {
-  generatedAt: new Date().toISOString(),
-  purpose: 'BOUNDED_MAC_STUDIO_ACTUAL_BATCH',
-  studioVersionTarget: '4.0.517',
-  candidates: candidates.map((candidate) => ({
+  const copiedPayloadPath = join(payloadDir, `${candidate.patternId}.json`);
+  writeFileSync(copiedPayloadPath, `${JSON.stringify(payload, null, 2)}\n`);
+  preparedCandidates.push({
     patternId: candidate.patternId,
     slug: candidate.slug,
     payloadPath: `payloads/${candidate.patternId}.json`,
+    payloadSha256: sha256File(copiedPayloadPath),
+    builderPath: candidate.builder,
+    builderSha256: sha256File(join(motionStudioRoot, candidate.builder)),
+    checkerPath: candidate.checker,
+    checkerSha256: sha256File(join(motionStudioRoot, candidate.checker)),
+    kitSha256,
     expectedControls: candidate.expectedControls,
+  });
+}
+
+const manifest = {
+  schemaVersion: 'remotion-element-studio-actual-batch/v1',
+  generatedAt: new Date().toISOString(),
+  purpose: 'BOUNDED_MAC_STUDIO_ACTUAL_BATCH',
+  studioVersionTarget: '4.0.517',
+  candidates: preparedCandidates.map((candidate) => ({
+    ...candidate,
     requestTransport: 'NOT_RUN',
     confirmationDialog: 'NOT_RUN',
     elementFileWritten: 'NOT_RUN',
@@ -74,6 +103,7 @@ const manifest = {
     'CONTROL_VISIBLE != CONTROL_MUTATION_PERSISTED',
     'REQUEST_TRANSPORT_PASS != STUDIO_ACTUAL_PASS',
     'BATCH_PREPARED != BATCH_EXECUTED',
+    'PAYLOAD_OR_BUILDER_OR_CHECKER_OR_KIT_SHA_CHANGED => BATCH_STALE',
   ],
 };
 writeFileSync(join(outputRoot, 'batch-manifest.json'), `${JSON.stringify(manifest, null, 2)}\n`);
@@ -86,4 +116,5 @@ writeFileSync(join(outputRoot, 'main.ts'), `import {installInStudio, type Studio
 console.log('✅ Typography Element Studio Actual batch prepared.');
 console.log(`output=${outputRoot}`);
 console.log(`candidateCount=${candidates.length}`);
+console.log('batchSchema=remotion-element-studio-actual-batch/v1');
 console.log('studioActual=NOT_RUN');
