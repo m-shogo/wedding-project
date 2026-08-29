@@ -3,7 +3,10 @@ import {join} from 'node:path';
 
 const root = process.cwd();
 const preview = readFileSync(join(root, 'src/compositions/profile/ProfileV1RealMediaPreview.tsx'), 'utf8');
+const audioPreview = readFileSync(join(root, 'src/compositions/profile/ProfileV1RealMediaAudioPreview.tsx'), 'utf8');
 const rootFile = readFileSync(join(root, 'src/ProfileV1Root.tsx'), 'utf8');
+const renderScript = readFileSync(join(root, 'scripts/render-profile-v1-real-media-preview.mts'), 'utf8');
+const mediaGate = readFileSync(join(root, 'scripts/profile-v1-media-input-gate.mts'), 'utf8');
 const runtime = readFileSync(join(root, 'src/data/profileV1RuntimeMedia.generated.ts'), 'utf8');
 const framing = readFileSync(join(root, 'src/data/profileV1FramingVerdicts.generated.ts'), 'utf8');
 const errors: string[] = [];
@@ -34,6 +37,28 @@ for (const token of [
   requireText(preview, token, `Real-media preview missing contract token: ${token}`);
 }
 
+for (const token of [
+  "<ProfileV1RealMediaPreview />",
+  "<Audio src={staticFile('audio/profile/bgm-main.mp3')} volume={0.64}",
+]) {
+  requireText(audioPreview, token, `Real-media audio preview missing contract token: ${token}`);
+}
+
+for (const token of [
+  'assertProfileV1MediaInputsReady(studioRoot)',
+  "allowMissingMediaSmoke ? 'ProfileV1RealMediaPreview' : 'ProfileV1RealMediaAudioPreview'",
+  'RIGHTS-CLEARED BGM INCLUDED',
+  'SMOKE ONLY / SILENT',
+]) {
+  requireText(renderScript, token, `Real-media render path missing audio/guardrail token: ${token}`);
+}
+for (const token of [
+  'finalRenderEligible',
+  'report.audio?.ready === true',
+]) {
+  requireText(mediaGate, token, `Profile media gate must require canonical BGM readiness before audio preview: ${token}`);
+}
+
 for (const forbidden of [
   "fontFamily: 'Arial, Helvetica, sans-serif'",
   'openingPhotos',
@@ -42,7 +67,7 @@ for (const forbidden of [
   'Mac DaVinci Actual: PASS',
   'REAL MEDIA QA: PASS',
 ]) {
-  if (preview.includes(forbidden)) errors.push(`Real-media preview contains unsafe fallback/promotion token: ${forbidden}`);
+  if (preview.includes(forbidden) || audioPreview.includes(forbidden)) errors.push(`Real-media preview contains unsafe fallback/promotion token: ${forbidden}`);
 }
 
 for (const token of [
@@ -57,6 +82,8 @@ for (const token of [
 for (const token of [
   'id="ProfileV1RealMediaPreview"',
   'component={ProfileV1RealMediaPreview}',
+  'id="ProfileV1RealMediaAudioPreview"',
+  'component={ProfileV1RealMediaAudioPreview}',
   'durationInFrames={30 * video.fps}',
 ]) {
   requireText(rootFile, token, `ProfileV1Root missing real-media composition contract: ${token}`);
@@ -71,4 +98,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log('Profile V1 real-media preview contracts OK: canonical runtime media is rendered when resolved, Human-approved framing is the only generated crop/focus override, missing/unapproved framing stays fail-closed, and Mac QA remains NOT_RUN.');
+console.log('Profile V1 real-media preview contracts OK: canonical media + Human-approved framing feed the review surface, production review video includes BGM only behind the current media/BGM-rights gate, smoke remains silent, and Mac QA remains NOT_RUN.');
