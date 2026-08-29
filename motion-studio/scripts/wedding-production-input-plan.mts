@@ -1,4 +1,4 @@
-import {isAbsolute, resolve} from 'node:path';
+import {isAbsolute, resolve, basename} from 'node:path';
 
 export type WeddingInputMovieId = 'opening' | 'profile';
 export type WeddingProductionInputPlanOptions = {
@@ -81,4 +81,4 @@ function main() {
   }
 }
 
-if (process.argv[1]?.endsWith('wedding-production-input-plan.mts')) main();
+if (basename(process.argv[1] ?? '') === 'wedding-production-input-plan.mts') main();
