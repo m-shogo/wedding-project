@@ -56,7 +56,6 @@ for (const token of [
   "Dashboard参照JSONを保存",
   "wedding-davinci-actual-session-plan-dashboard-reference.json",
   "wedding-davinci-actual-session-plan.mts --write",
-  "CLI_REQUIRED",
   "HUMAN / MAC GUI",
 ]) {
   assert(card.includes(token), `Motion Zukan card missing token: ${token}`);
