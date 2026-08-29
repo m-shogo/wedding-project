@@ -1,0 +1,55 @@
+name: Wedding Production Input Plan CI
+
+on:
+  pull_request:
+    paths:
+      - 'motion-studio/scripts/wedding-production-input-plan.mts'
+      - 'motion-studio/scripts/check-wedding-production-input-plan.mts'
+      - '.github/workflows/wedding-production-input-plan-ci.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  input-plan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: motion-studio/pnpm-lock.yaml
+      - name: Install dependencies
+        working-directory: motion-studio
+        run: pnpm install --frozen-lockfile
+      - name: Verify production input plan contracts
+        working-directory: motion-studio
+        run: node --no-warnings scripts/check-wedding-production-input-plan.mts
+      - name: CLI rejects placeholder path
+        working-directory: motion-studio
+        run: |
+          if node --no-warnings scripts/wedding-production-input-plan.mts --movie=opening --media-source=/ABS/PATH/TO/opening-media --json; then
+            echo 'placeholder input unexpectedly accepted'
+            exit 1
+          fi
+      - name: CLI emits NOT_RUN evidence boundary for real absolute paths
+        working-directory: motion-studio
+        run: |
+          node --no-warnings scripts/wedding-production-input-plan.mts --movie=profile --media-source=/tmp/profile-selected --json > /tmp/plan.json
+          node - <<'NODE'
+          const fs = require('fs');
+          const plan = JSON.parse(fs.readFileSync('/tmp/plan.json', 'utf8'));
+          if (plan.executionState !== 'NOT_RUN') throw new Error('execution state promoted');
+          if (plan.evidenceBoundary.remotionStudioGuiActual !== 'NOT_RUN') throw new Error('Studio Actual promoted');
+          if (plan.evidenceBoundary.macDaVinciGuiActual !== 'NOT_RUN') throw new Error('DaVinci Actual promoted');
+          if (plan.evidenceBoundary.finalDeliveryApproved !== false) throw new Error('Final approval promoted');
+          NODE
+      - name: TypeScript
+        working-directory: motion-studio
+        run: pnpm typecheck
