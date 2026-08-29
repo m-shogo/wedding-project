@@ -1,0 +1,62 @@
+name: Profile V1 Real Media Intake CI
+
+on:
+  pull_request:
+    paths:
+      - "motion-studio/src/data/profileV1ProductionPlan.ts"
+      - "motion-studio/scripts/intake-production-media.mts"
+      - "motion-studio/scripts/verify-production-media-intake-receipt.mts"
+      - "motion-studio/scripts/check-profile-v1-media-intake-contract.mts"
+      - "motion-studio/scripts/profile-v1-assembly-preflight.mts"
+      - ".github/workflows/profile-v1-media-intake-ci.yml"
+  push:
+    paths:
+      - "motion-studio/src/data/profileV1ProductionPlan.ts"
+      - "motion-studio/scripts/intake-production-media.mts"
+      - "motion-studio/scripts/verify-production-media-intake-receipt.mts"
+      - "motion-studio/scripts/check-profile-v1-media-intake-contract.mts"
+      - "motion-studio/scripts/profile-v1-assembly-preflight.mts"
+      - ".github/workflows/profile-v1-media-intake-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  provenance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: motion-studio
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: motion-studio/pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: TypeScript
+        run: pnpm typecheck
+
+      - name: Profile 17-slot media intake provenance contract
+        run: node --no-warnings scripts/check-profile-v1-media-intake-contract.mts
+
+      - name: Fresh clone remains blocked without canonical receipt
+        run: |
+          mkdir -p out/qa
+          node --no-warnings scripts/profile-v1-assembly-preflight.mts --json > out/qa/profile-v1-intake-preflight.json
+          node -e "const fs=require('fs'); const r=JSON.parse(fs.readFileSync('out/qa/profile-v1-intake-preflight.json','utf8')); if(r.media.expectedCount!==17) process.exit(1); if(r.media.intakeReceiptCurrent!==false) process.exit(1); if(r.readiness.finalRenderEligible!==false) process.exit(1); if(r.readiness.assemblyReady!==false) process.exit(1); if(r.readiness.macDaVinciActualState!=='NOT_RUN') process.exit(1); if(r.readiness.productionReady!==false) process.exit(1); if(!r.readiness.blockers.includes('MEDIA_INTAKE_RECEIPT_STALE')) process.exit(1);"
+          echo "Profile fresh clone correctly fails closed: no canonical receipt, no assembly readiness, no Mac Actual, no production readiness."

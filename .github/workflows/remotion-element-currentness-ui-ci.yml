@@ -1,0 +1,59 @@
+name: Remotion Element Currentness UI CI
+
+on:
+  pull_request:
+    paths:
+      - 'movie-dashboard/src/components/RemotionElementReadinessPanel.tsx'
+      - 'movie-dashboard/src/components/RemotionElementCanonicalEngineCurrentnessCard.tsx'
+      - '.github/workflows/remotion-element-currentness-ui-ci.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  currentness-ui:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: movie-dashboard/pnpm-lock.yaml
+      - name: Install dashboard dependencies
+        working-directory: movie-dashboard
+        run: pnpm install --frozen-lockfile
+      - name: Build dashboard
+        working-directory: movie-dashboard
+        run: pnpm build
+      - name: Verify SHA-bound currentness surface
+        run: |
+          node - <<'NODE'
+          const fs = require('node:fs');
+          const panel = fs.readFileSync('movie-dashboard/src/components/RemotionElementReadinessPanel.tsx', 'utf8');
+          const canonicalCard = fs.readFileSync('movie-dashboard/src/components/RemotionElementCanonicalEngineCurrentnessCard.tsx', 'utf8');
+          for (const token of [
+            'BATCH SOURCE CURRENTNESS · SHA-BOUND',
+            'prepared payload / builder / checker / shared typography kit',
+            'SOURCE_CHANGED ⇒ BATCH_STALE ⇒ OLD_STUDIO_ACTUAL_EVIDENCE_NOT_CURRENT',
+            '03 CHECK CANONICAL ENGINE CURRENTNESS',
+            'check-typography-element-canonical-engine-currentness.mts',
+            'current SHA-bound batch manifest',
+            'confirmation / install / control readback / timeline insertion / post-install renderはすべてNOT_RUN',
+          ]) {
+            if (!panel.includes(token)) throw new Error(`missing currentness UI contract: ${token}`);
+          }
+          for (const token of [
+            'CANONICAL ENGINE CURRENTNESS · TypographyRevealEngine',
+            'canonicalBlockSha256',
+            'CANONICAL_ENGINE_CHANGED ⇒ REPREPARE_REQUIRED ⇒ OLD_STUDIO_ACTUAL_EVIDENCE_NOT_CURRENT',
+            'Mac Remotion Studio GUI Actualを実行しません',
+          ]) {
+            if (!canonicalCard.includes(token)) throw new Error(`missing canonical engine currentness UI contract: ${token}`);
+          }
+          NODE

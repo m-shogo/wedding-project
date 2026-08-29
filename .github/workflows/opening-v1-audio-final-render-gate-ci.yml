@@ -1,0 +1,22 @@
+name: Opening V1 Audio Final Render Gate CI
+
+on:
+  pull_request:
+    paths:
+      - 'motion-studio/scripts/init-opening-v1-final-render-review.mts'
+      - 'motion-studio/scripts/check-opening-v1-audio-final-render-gate.mts'
+      - '.github/workflows/opening-v1-audio-final-render-gate-ci.yml'
+  workflow_dispatch:
+
+jobs:
+  audio-final-render-gate:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: motion-studio
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node --no-warnings scripts/check-opening-v1-audio-final-render-gate.mts

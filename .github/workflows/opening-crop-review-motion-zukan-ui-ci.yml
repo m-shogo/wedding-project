@@ -1,0 +1,38 @@
+name: Opening Crop Review Motion Zukan UI CI
+
+on:
+  pull_request:
+    paths:
+      - 'movie-dashboard/src/data/openingProductionStatusHandoff.ts'
+      - 'movie-dashboard/src/components/OpeningProductionStatusHandoffCard.tsx'
+      - 'movie-dashboard/scripts/verify-opening-crop-review-ui.mjs'
+      - '.github/workflows/opening-crop-review-motion-zukan-ui-ci.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'movie-dashboard/src/data/openingProductionStatusHandoff.ts'
+      - 'movie-dashboard/src/components/OpeningProductionStatusHandoffCard.tsx'
+      - 'movie-dashboard/scripts/verify-opening-crop-review-ui.mjs'
+      - '.github/workflows/opening-crop-review-motion-zukan-ui-ci.yml'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: movie-dashboard
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: movie-dashboard/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - name: Verify crop review handoff/UI contract
+        run: node scripts/verify-opening-crop-review-ui.mjs
+      - name: Typecheck and build Movie Dashboard
+        run: pnpm build

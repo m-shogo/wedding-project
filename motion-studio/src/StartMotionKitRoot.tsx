@@ -54,6 +54,8 @@ import {
 } from './compositions/common/VisualMotionSourceCutConcepts';
 import {
   MotionZukanStockDemo,
+  MotionZukanDummyProduction,
+  motionZukanDummyProductionDurationFrames,
   motionZukanStockDemoDurationFrames,
 } from './compositions/common/MotionZukanStockDemo';
 
@@ -165,6 +167,7 @@ export function StartMotionKitRoot() {
       <Composition id="MotionZukanStockDemoAcousticV1" component={MotionZukanStockDemo} defaultProps={{genre: 'ACOUSTIC'}} width={1280} height={720} fps={30} durationInFrames={motionZukanStockDemoDurationFrames} />
       <Composition id="MotionZukanStockDemoUpbeatV1" component={MotionZukanStockDemo} defaultProps={{genre: 'UPBEAT'}} width={1280} height={720} fps={30} durationInFrames={motionZukanStockDemoDurationFrames} />
       <Composition id="MotionZukanStockDemoAmbientV1" component={MotionZukanStockDemo} defaultProps={{genre: 'AMBIENT'}} width={1280} height={720} fps={30} durationInFrames={motionZukanStockDemoDurationFrames} />
+      <Composition id="OpeningV1DummyProduction" component={MotionZukanDummyProduction} width={1920} height={1080} fps={30} durationInFrames={motionZukanDummyProductionDurationFrames} />
     </>
   );
 }

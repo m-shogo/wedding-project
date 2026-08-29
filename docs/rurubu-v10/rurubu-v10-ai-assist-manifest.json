@@ -1,0 +1,181 @@
+{
+  "schemaVersion": "rurubu-v10-ai-assist-manifest-v1",
+  "status": "CANONICAL_V10_AI_ASSIST",
+  "scope": "Rurubu WEDDING V10 only",
+  "authorities": {
+    "designSystem": "docs/rurubu-v10/RURUBU-V10-FIGMA-AI-DESIGN-SYSTEM.md",
+    "pageRecipes": "docs/rurubu-v10/RURUBU-V10-PAGE-RECIPES.md",
+    "assetIndex": "docs/rurubu-v10/RURUBU-V10-ASSET-INDEX.md",
+    "designTokens": "docs/rurubu-v10/rurubu-v10-design-tokens.json",
+    "operatingPrompt": "docs/rurubu-v10/RURUBU-V10-FIGMA-AI-OPERATING-PROMPT.md",
+    "referenceFingerprintAntiAiGate": "docs/rurubu-v10/RURUBU-V10-REFERENCE-FINGERPRINT-ANTI-AI-GATE.md",
+    "referenceFingerprintMachine": "docs/rurubu-v10/rurubu-v10-reference-fingerprint.json",
+    "aiLookLinterVisualDiff": "docs/rurubu-v10/RURUBU-V10-AI-LOOK-LINTER-VISUAL-DIFF.md",
+    "aiLookLinterConfig": "docs/rurubu-v10/rurubu-v10-ai-look-linter-config.json",
+    "aiLookLinterImplementation": "scripts/rurubu-v10/figma-ai-look-linter.js",
+    "liveAiLookBaselineHuman": "docs/rurubu-v10/qa/RURUBU-V10-AI-LOOK-BASELINE-2026-08-27.md",
+    "liveAiLookBaselineMachine": "docs/rurubu-v10/qa/rurubu-v10-ai-look-baseline-2026-08-27.json",
+    "photoProxyQualityBoundary": "docs/rurubu-v10/RURUBU-V10-PHOTO-PROXY-QUALITY-BOUNDARY.md",
+    "projectHybridPolicy": "docs/design-learning/AI-FIGMA-HYBRID-AUTHORING-POLICY.md",
+    "projectDesignCouncil": "docs/design-learning/PROFESSIONAL-DESIGN-COUNCIL-VNEXT-2026-08-20.md"
+  },
+  "figma": {
+    "fileKey": "bfM0d4c9dCeBv5pCkJ3TNM",
+    "productionPage": { "id": "2787:2", "name": "09_RURUBU_V10_A5_8P_PRODUCTION" },
+    "productionFrames": {
+      "P01": { "id": "2787:3", "role": "COVER" },
+      "P02": { "id": "2787:9", "role": "PROFILE" },
+      "P03": { "id": "2787:15", "role": "Q&A" },
+      "P04": { "id": "2787:22", "role": "STORY" },
+      "P05": { "id": "2787:28", "role": "TIMELINE + MEMORY" },
+      "P06": { "id": "2787:35", "role": "MEMORY SPOTS + GALLERY" },
+      "P07": { "id": "2787:42", "role": "1DAY + CAFE TABLE" },
+      "P08": { "id": "2787:49", "role": "BACK COVER" }
+    },
+    "aiAssistGuide": {
+      "pageId": "2797:2",
+      "pageName": "10_RURUBU_V10_AI_ASSIST_GUIDE",
+      "boardId": "2797:3",
+      "boardName": "REFERENCE / RURUBU V10 AI ASSIST / NOT PRODUCTION",
+      "antiAiReferenceBoardId": "2804:2",
+      "antiAiReferenceBoardName": "REFERENCE / RURUBU V10 REFERENCE FINGERPRINT + ANTI-AI GATE / NOT PRODUCTION",
+      "liveAiLookBaselineBoardId": "2808:2",
+      "liveAiLookBaselineBoardName": "REFERENCE / V10 LIVE AI-LOOK LINTER + VISUAL DIFF BASELINE / NOT PRODUCTION",
+      "productionUse": false
+    },
+    "readabilityTokens": {
+      "colorVariableCollection": {
+        "id": "VariableCollectionId:2800:2",
+        "name": "RURUBU V10 / READABILITY COLORS",
+        "mode": "Print / sRGB Working"
+      },
+      "textStylePrefix": "RURUBU V10/Readability/",
+      "textStyles": [
+        "Section Title Fallback",
+        "Subhead",
+        "Body",
+        "Body Emphasis",
+        "Caption",
+        "Micro Meta",
+        "Serif Reading Accent"
+      ],
+      "usage": "Use these as readability/support defaults. Do not force expressive hero/editorial titles into the fallback style when a stronger role-specific title treatment is appropriate."
+    },
+    "referenceNodes": ["2621:111", "2771:2", "2771:3", "2771:4"]
+  },
+  "drive": {
+    "authorityFolderId": "1xJ3HgV6c9ewP5Y2H2Dngsn-0k0C_oiup",
+    "organizedFolders": {
+      "01_LOGO_TITLE": "1zz6V7GQ3U86yZT25brsJZjTmG3jUyKvy",
+      "02_PHOTO": "10vW62EjRT64k_mSGf6Q6Mce9C0GgRkNs",
+      "03_FRAME": "1CltnCxhPGKzwZcQT7nXTweT0-XX3GAiW",
+      "04_DECORATION": "1GnbYkTnQO7HZxpqJCJQrqx8QKJJyum6f",
+      "05_MAP_ROUTE": "1L1kSMX_NaT9YajBTzDIYsWnRihdeexpA",
+      "06_FOOD_CAFE": "1u6zuZepZvbX01zLMJ5Z2yQCST2RjpbEw",
+      "07_BACKGROUND": "1mrdJ7rrw0bVUJ7oS6kjqjn4HbEOkI1vZ",
+      "08_REFERENCE": "1Q9I08Fd-DSY1AMuKmmkptitPgzri1WbB"
+    }
+  },
+  "persona": {
+    "name": "RURUBU SENIOR EDITORIAL ART DIRECTOR / READER-FIRST TRAVEL MAGAZINE DESIGNER",
+    "decisionOrder": [
+      "reader purpose",
+      "page hierarchy",
+      "semantic asset role",
+      "photo crop and focal point",
+      "reading flow",
+      "color and contrast",
+      "Japanese typography",
+      "decoration",
+      "micro spacing",
+      "print QA"
+    ]
+  },
+  "readerPersonas": [
+    "3-SECOND SCANNER",
+    "30–90 SECOND ENGAGED GUEST",
+    "FAMILY / LOWER-CONTRAST READER",
+    "FUTURE FIGMA EDITOR"
+  ],
+  "pageMap": {
+    "P01": "COVER",
+    "P02": "PROFILE",
+    "P03": "Q&A",
+    "P04": "STORY",
+    "P05": "TIMELINE + MEMORY",
+    "P06": "MEMORY SPOTS + GALLERY",
+    "P07": "1DAY + CAFE TABLE",
+    "P08": "BACK COVER"
+  },
+  "referenceMatch": {
+    "scoreAuthority": "docs/rurubu-v10/RURUBU-V10-REFERENCE-FINGERPRINT-ANTI-AI-GATE.md",
+    "machineReadableAuthority": "docs/rurubu-v10/rurubu-v10-reference-fingerprint.json",
+    "figmaGuideBoardId": "2804:2",
+    "passScore": 80,
+    "requiresNoFatalAiTell": true,
+    "reviewScales": ["thumbnail / 3-second scan", "reading scale", "A5 actual size", "grayscale hierarchy"],
+    "compareNodes": ["2771:2", "2771:3", "2771:4"],
+    "scoreOnlyWhen": "PRODUCTION_CANDIDATE with meaningful title/image/copy/editorial clusters",
+    "preScoreGate": "run structural AI-look linter + screenshot reference visual diff"
+  },
+  "liveQa": {
+    "structuralLinter": {
+      "authority": "docs/rurubu-v10/RURUBU-V10-AI-LOOK-LINTER-VISUAL-DIFF.md",
+      "config": "docs/rurubu-v10/rurubu-v10-ai-look-linter-config.json",
+      "implementation": "scripts/rurubu-v10/figma-ai-look-linter.js",
+      "requiredAfterMeaningfulBatch": true
+    },
+    "referenceVisualDiff": {
+      "requiredAfterMeaningfulBatch": true,
+      "fixLargestDistanceBeforeMicroPolish": true,
+      "neverFixWeakHierarchyByAddingStickers": true
+    },
+    "initialBaseline": {
+      "date": "2026-08-27",
+      "mode": "PREPROD_SKELETON",
+      "figmaBoardId": "2808:2",
+      "humanReport": "docs/rurubu-v10/qa/RURUBU-V10-AI-LOOK-BASELINE-2026-08-27.md",
+      "machineReport": "docs/rurubu-v10/qa/rurubu-v10-ai-look-baseline-2026-08-27.json",
+      "productionCandidatePages": 0,
+      "highestSimilarity": {"a":"P03","b":"P07","similarityPct":98}
+    }
+  },
+  "workPasses": [
+    "all 8 pages to 60–80% with existing organized assets",
+    "run structural linter and reference visual diff after meaningful batches; fix largest structural distance first",
+    "editorial and Japanese typography refinement",
+    "reference-distance comparison and anti-AI structural correction",
+    "V10 FINAL MISSING ASSET LIST",
+    "precisely specified final generation batch only if needed",
+    "mask/crop/print QA",
+    "final preflight/delivery"
+  ],
+  "hardRules": [
+    "live Figma page role wins over stale page-number assumptions",
+    "organized Drive library is the first asset-search surface",
+    "inspect actual pixels before final asset selection",
+    "DUMMY is layout-only",
+    "REFERENCE is not production art",
+    "replaceable people and scenery photos may be low-resolution proxies during layout and do not block ASSET_FIRST_80 solely on PPI",
+    "proxy photos remain masked, replaceable, explicitly non-final, and receive final resolution/provenance/crop QA after replacement",
+    "final title/logo/decor/icon/badge/frame/background graphic assets receive strict resolution and visual QA during current production",
+    "REAL_PHOTO promoted to final requires subject and pixel verification",
+    "GENERATED final graphic requires visual and resolution QA",
+    "body and changeable copy stay native editable text",
+    "replaceable images stay independently masked/clipped",
+    "frame artwork stays separate from photo source",
+    "normal-text internal contrast target is at least 4.5:1",
+    "large-display internal contrast target is at least 3:1",
+    "do not communicate meaning by color alone",
+    "preferred effective resolution for final graphics and final photography is 300 ppi or higher",
+    "below 250 effective ppi is not print-ready for final promoted assets",
+    "do not flatten whole pages",
+    "do not make one page 100% while the rest are empty",
+    "reference-match pass requires score 80 or higher and no fatal AI-look tell",
+    "do not assign a flattering reference score to a PREPROD_SKELETON",
+    "after each meaningful page batch run the live structural AI-look linter and screenshot reference visual diff before micro-polish",
+    "if reference match is weak, fix hierarchy/crop-scale/image-weight/composition/editorial-cluster before adding decoration or micro-spacing",
+    "adjacent pages must not repeat the same dominant composition verb, hero position, photo-frame rhythm and dominant color by default",
+    "normalized page-signature similarity >=85% between different PRODUCTION_CANDIDATE page jobs normally requires structural divergence"
+  ]
+}

@@ -1,6 +1,10 @@
 import {Img, staticFile} from 'remotion';
 import {serifFamily} from '../../data/fonts';
 import {colors} from '../../data/theme';
+import {
+  type MediaFit,
+  resolveMediaPresentation,
+} from './mediaPresentation';
 
 type Props = {
   photo: string | null;
@@ -9,6 +13,11 @@ type Props = {
   rotationDeg: number;
   cardRadius: number;
   shadowStrength: number;
+  fit?: MediaFit;
+  objectPosition?: string;
+  assetFit?: MediaFit;
+  assetFocusX?: number;
+  assetFocusY?: number;
 };
 
 // 高級カード風の写真1枚。photoがnullなら上品なプレースホルダーを表示する。
@@ -19,8 +28,21 @@ export const PhotoCard = ({
   rotationDeg,
   cardRadius,
   shadowStrength,
+  fit,
+  objectPosition,
+  assetFit,
+  assetFocusX,
+  assetFocusY,
 }: Props) => {
   const mat = 18;
+  const mediaPresentation = resolveMediaPresentation({
+    shotFit: fit,
+    shotObjectPosition: objectPosition,
+    assetFit,
+    assetFocusX,
+    assetFocusY,
+  });
+
   return (
     <div
       style={{
@@ -48,7 +70,12 @@ export const PhotoCard = ({
         {photo ? (
           <Img
             src={staticFile(`photos/${photo}`)}
-            style={{width: '100%', height: '100%', objectFit: 'cover'}}
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: mediaPresentation.fit,
+              objectPosition: mediaPresentation.objectPosition,
+            }}
           />
         ) : (
           <div

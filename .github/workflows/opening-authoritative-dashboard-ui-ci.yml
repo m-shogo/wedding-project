@@ -1,0 +1,57 @@
+name: Opening Authoritative Dashboard UI CI
+
+on:
+  pull_request:
+    paths:
+      - 'movie-dashboard/src/components/OpeningAuthoritativeHandoffCard.tsx'
+      - 'movie-dashboard/src/pages/Dashboard.tsx'
+      - '.github/workflows/opening-authoritative-dashboard-ui-ci.yml'
+  workflow_dispatch:
+
+jobs:
+  opening-authoritative-dashboard-ui:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: movie-dashboard
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: movie-dashboard/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - name: Type-check dashboard UI
+        run: pnpm exec tsc -b --pretty false
+      - name: Verify authoritative UI source contract
+        run: |
+          node - <<'NODE'
+          const fs = require('node:fs');
+          const card = fs.readFileSync('src/components/OpeningAuthoritativeHandoffCard.tsx', 'utf8');
+          const dashboard = fs.readFileSync('src/pages/Dashboard.tsx', 'utf8');
+          for (const needle of [
+            'buildOpeningAuthoritativeHandoffOverlay()',
+            'Human Audio Listening',
+            'Production Bundle',
+            'Palmier Handoff',
+            'DaVinci Handoff',
+            'Mac DaVinci Actual:',
+            'NOT_RUN',
+            'productionReady:',
+            'status.blockerCodes.map',
+            'REPORTED → EFFECTIVE',
+          ]) {
+            if (!card.includes(needle)) throw new Error(`missing dashboard card contract: ${needle}`);
+          }
+          if (!dashboard.includes('<OpeningAuthoritativeHandoffCard />')) {
+            throw new Error('Dashboard must render authoritative Opening handoff card');
+          }
+          if (card.includes('productionReady: true')) throw new Error('dashboard UI must not promote productionReady');
+          if (card.includes('Mac DaVinci Actual: VERIFIED') && !card.includes('? "VERIFIED" : "NOT_RUN"')) {
+            throw new Error('Mac DaVinci Actual must remain evidence-driven');
+          }
+          NODE

@@ -1,0 +1,80 @@
+{
+  "schemaVersion": "rurubu-v10-design-tokens-v1",
+  "scope": "Rurubu WEDDING V10 A5 8P",
+  "format": {
+    "trimMm": { "width": 148, "height": 210 },
+    "bleedMm": 3,
+    "workingCriticalSafeInsetMm": 6,
+    "notes": "Printer-specific template overrides working safe-area defaults. Prefer extra room near gutter-facing critical copy."
+  },
+  "colors": {
+    "INK": { "hex": "#1F2430", "role": "primary body text and structural rules" },
+    "PAPER": { "hex": "#FFFDF7", "role": "main warm paper field" },
+    "MUTED_INK": { "hex": "#5F6673", "role": "secondary text on stable light fields only" },
+    "PINK_STRONG": { "hex": "#D92E7B", "role": "emotional accent / strong label / title support" },
+    "CORAL": { "hex": "#FF6B5C", "role": "warm celebration accent" },
+    "SUNNY_YELLOW": { "hex": "#FFD23F", "role": "highlight / small burst / marker" },
+    "LAGOON_CYAN": { "hex": "#25BCEB", "role": "travel freshness / route / information accent" },
+    "COBALT": { "hex": "#2864DC", "role": "deep travel blue / strong field" },
+    "MINT": { "hex": "#40C9A2", "role": "secondary freshness / guide support" },
+    "DEEP_TEAL": { "hex": "#0B7F69", "role": "dark green field for reversed type" },
+    "WARM_CREAM": { "hex": "#F7EDE2", "role": "soft information field" },
+    "WHITE": { "hex": "#FFFFFF", "role": "reversed type on sufficiently dark field" }
+  },
+  "approvedTextPairs": [
+    { "text": "INK", "background": "PAPER", "contrastApprox": 15.26, "normalText": true },
+    { "text": "MUTED_INK", "background": "PAPER", "contrastApprox": 5.68, "normalText": true },
+    { "text": "WHITE", "background": "PINK_STRONG", "contrastApprox": 4.54, "normalText": true },
+    { "text": "INK", "background": "CORAL", "contrastApprox": 5.55, "normalText": true },
+    { "text": "INK", "background": "SUNNY_YELLOW", "contrastApprox": 10.75, "normalText": true },
+    { "text": "INK", "background": "LAGOON_CYAN", "contrastApprox": 7.0, "normalText": true },
+    { "text": "WHITE", "background": "COBALT", "contrastApprox": 5.32, "normalText": true },
+    { "text": "INK", "background": "MINT", "contrastApprox": 7.46, "normalText": true },
+    { "text": "WHITE", "background": "DEEP_TEAL", "contrastApprox": 4.94, "normalText": true },
+    { "text": "INK", "background": "WARM_CREAM", "contrastApprox": 13.42, "normalText": true }
+  ],
+  "contrastPolicy": {
+    "normalTextTarget": 4.5,
+    "largeDisplayTextTarget": 3.0,
+    "note": "WCAG-style ratio is used as a conservative internal screen/preflight heuristic, not as a substitute for physical print proof."
+  },
+  "colorRules": [
+    "Body copy defaults to INK on PAPER or WARM_CREAM.",
+    "WHITE text is pre-approved only on PINK_STRONG, COBALT, or DEEP_TEAL unless a new pair is measured.",
+    "Use INK text on CORAL, SUNNY_YELLOW, LAGOON_CYAN, and MINT.",
+    "Do not encode information by hue alone; pair color with explicit text/shape/position.",
+    "Do not put long body copy directly over busy photography.",
+    "Each page uses one dominant, one support, and one surprise accent rather than all colors equally."
+  ],
+  "typography": {
+    "PAGE_TITLE_PT": { "min": 22, "max": 34 },
+    "SECTION_TITLE_PT": { "min": 13, "max": 20 },
+    "SUBHEAD_PT": { "min": 10, "max": 13 },
+    "BODY_PT": { "min": 9, "max": 10.5 },
+    "BODY_LINE_HEIGHT_MULTIPLIER": { "min": 1.45, "max": 1.65 },
+    "CAPTION_PT": { "min": 8, "max": 9 },
+    "MICRO_META_PT_FLOOR": 7.5,
+    "rules": [
+      "Japanese is the primary editorial voice.",
+      "Display and body typography must have different jobs.",
+      "Avoid narrow text boxes that break Japanese into awkward fragments.",
+      "Critical information must never be relegated to microtype.",
+      "Actual font metrics and physical-size QA override nominal point ranges."
+    ]
+  },
+  "imageQuality": {
+    "preferredEffectivePpi": 300,
+    "warningBelowPpi": 300,
+    "productionRejectBelowPpi": 250,
+    "fineRasterPreferredPpiRange": [300, 350]
+  },
+  "semanticPrefixes": {
+    "REAL_PHOTO_": "real-photo candidate; verify subject/role/pixels before final",
+    "DUMMY_": "layout-only; never final real-person imagery",
+    "GENERATED_": "generated candidate requiring visual and print QA",
+    "PHOTO_CUTOUT_": "support/cutout imagery; spill must be intentional",
+    "FRAME_": "frame artwork; keep photo separate and replaceable",
+    "REFERENCE_": "quality/composition reference only; never production placement",
+    "LOWRES_": "not production-ready until replaced or proven adequate"
+  }
+}

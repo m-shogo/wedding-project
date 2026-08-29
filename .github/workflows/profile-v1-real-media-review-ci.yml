@@ -1,0 +1,130 @@
+name: Profile V1 Real Media Review CI
+
+on:
+  pull_request:
+    paths:
+      - "motion-studio/public/profile/**"
+      - "motion-studio/src/index-profile-v1.ts"
+      - "motion-studio/src/ProfileV1Root.tsx"
+      - "motion-studio/src/data/theme.ts"
+      - "motion-studio/src/data/profileV1RuntimeMedia.generated.ts"
+      - "motion-studio/src/data/profileV1ProductionPlan.ts"
+      - "motion-studio/src/data/profileV1FramingVerdicts.generated.ts"
+      - "motion-studio/src/compositions/profile/ProfileV1RealMediaPreview.tsx"
+      - "motion-studio/scripts/profile-v1-media-input-gate.mts"
+      - "motion-studio/scripts/render-profile-v1-real-media-preview.mts"
+      - "motion-studio/scripts/profile-v1-real-media-review.mts"
+      - "motion-studio/scripts/profile-v1-record-framing-verdict.mts"
+      - "motion-studio/scripts/sync-profile-v1-framing-verdicts.mts"
+      - "motion-studio/scripts/check-profile-v1-real-media-review.mts"
+      - ".github/workflows/profile-v1-real-media-review-ci.yml"
+  push:
+    branches: [main]
+    paths:
+      - "motion-studio/public/profile/**"
+      - "motion-studio/src/index-profile-v1.ts"
+      - "motion-studio/src/ProfileV1Root.tsx"
+      - "motion-studio/src/data/theme.ts"
+      - "motion-studio/src/data/profileV1RuntimeMedia.generated.ts"
+      - "motion-studio/src/data/profileV1ProductionPlan.ts"
+      - "motion-studio/src/data/profileV1FramingVerdicts.generated.ts"
+      - "motion-studio/src/compositions/profile/ProfileV1RealMediaPreview.tsx"
+      - "motion-studio/scripts/profile-v1-media-input-gate.mts"
+      - "motion-studio/scripts/render-profile-v1-real-media-preview.mts"
+      - "motion-studio/scripts/profile-v1-real-media-review.mts"
+      - "motion-studio/scripts/profile-v1-record-framing-verdict.mts"
+      - "motion-studio/scripts/sync-profile-v1-framing-verdicts.mts"
+      - "motion-studio/scripts/check-profile-v1-real-media-review.mts"
+      - ".github/workflows/profile-v1-real-media-review-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    defaults:
+      run:
+        working-directory: motion-studio
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: motion-studio/pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: TypeScript
+        run: pnpm typecheck
+
+      - name: Real-media Human QA contracts
+        run: node --no-warnings scripts/check-profile-v1-real-media-review.mts
+
+      - name: Render explicit missing-media smoke input
+        run: node --no-warnings scripts/render-profile-v1-real-media-preview.mts --allow-missing-media-smoke
+
+      - name: Fresh clone cannot manufacture Human review
+        run: |
+          mkdir -p out/qa
+          node --no-warnings scripts/profile-v1-real-media-review.mts --json > out/qa/profile-v1-real-media-review-status.json
+          node -e "const fs=require('fs'); const r=JSON.parse(fs.readFileSync('out/qa/profile-v1-real-media-review-status.json','utf8')); if(r.schemaVersion!=='profile-v1-real-media-review-status/v1') process.exit(1); if(r.authority!=='DERIVED_REAL_MEDIA_REVIEW_STATUS') process.exit(1); if(r.state!=='NOT_RUN') process.exit(1); if(r.humanReviewComplete!==false) process.exit(1); if(r.mediaExpected!==17||r.mediaReviewed!==0) process.exit(1); if(r.bgmReviewed!==false||r.macDaVinciActual!=='NOT_RUN'||r.productionReady!==false) process.exit(1);"
+          if node --no-warnings scripts/profile-v1-real-media-review.mts --init; then
+            echo "Real-media review init unexpectedly succeeded with 0/17 canonical media"
+            exit 1
+          fi
+          if node --no-warnings scripts/profile-v1-real-media-review.mts --strict; then
+            echo "Real-media Human QA unexpectedly passed without evidence"
+            exit 1
+          fi
+          echo "CI smoke may render the explicit missing-state UI, but production preview/review cannot initialize or pass until all 17 real media files and current cleared BGM exist"
+
+      - name: Framing verdict command only writes canonical Human crop focus fields
+        run: |
+          node --input-type=module <<'NODE'
+          import {mkdirSync, writeFileSync} from 'node:fs';
+          import {profileV1RuntimeMedia} from './src/data/profileV1RuntimeMedia.generated.ts';
+          mkdirSync('out/qa', {recursive: true});
+          const qa = {crop:'NOT_RUN',focus:'NOT_RUN',color:'NOT_RUN',emotionalFit:'NOT_RUN',contentAccuracy:'NOT_RUN'};
+          const evidence = {
+            schemaVersion:'profile-v1-real-media-review/v1',
+            authority:'HUMAN_REAL_MEDIA_PREVIEW_REVIEW',
+            media: profileV1RuntimeMedia.slots.map((slot) => ({slot:slot.id,qa:{...qa}})),
+            review:{overall:'NOT_RUN',reviewer:null,reviewedAt:null,notes:''},
+            bgmReviewed:false,
+            macDaVinciActual:'NOT_RUN',
+            productionReady:false
+          };
+          writeFileSync('out/qa/profile-v1-real-media-review.json', JSON.stringify(evidence,null,2));
+          NODE
+          node --no-warnings scripts/profile-v1-record-framing-verdict.mts --slot=departure-airport --crop=PASS --focus=PASS --fit=contain --focus-x=42 --focus-y=58 --notes=human-checked
+          node -e "const fs=require('fs'); const e=JSON.parse(fs.readFileSync('out/qa/profile-v1-real-media-review.json','utf8')); const m=e.media.find(x=>x.slot==='departure-airport'); if(m.qa.crop!=='PASS'||m.qa.focus!=='PASS'||m.qa.color!=='NOT_RUN'||m.framing.fit!=='contain'||m.framing.focusX!==42||m.framing.focusY!==58) process.exit(1); if(e.review.overall!=='NOT_RUN'||e.bgmReviewed!==false||e.macDaVinciActual!=='NOT_RUN'||e.productionReady!==false) process.exit(1);"
+          grep -F "approvedCount: 1" src/data/profileV1FramingVerdicts.generated.ts
+          node --no-warnings scripts/profile-v1-record-framing-verdict.mts --slot=departure-airport --crop=FAIL --focus=FAIL
+          node -e "const fs=require('fs'); const e=JSON.parse(fs.readFileSync('out/qa/profile-v1-real-media-review.json','utf8')); const m=e.media.find(x=>x.slot==='departure-airport'); if(m.qa.crop!=='FAIL'||m.qa.focus!=='FAIL'||m.framing!==undefined) process.exit(1); if(e.macDaVinciActual!=='NOT_RUN'||e.productionReady!==false) process.exit(1);"
+          grep -F "approvedCount: 0" src/data/profileV1FramingVerdicts.generated.ts
+          rm out/qa/profile-v1-real-media-review.json
+          node --no-warnings scripts/sync-profile-v1-framing-verdicts.mts --write
+          git diff --exit-code -- src/data/profileV1FramingVerdicts.generated.ts
+
+      - name: Upload smoke input and status
+        uses: actions/upload-artifact@v4
+        with:
+          name: profile-v1-real-media-human-review-smoke-input
+          path: |
+            motion-studio/out/preview/profile_v1_real_media_preview.mp4
+            motion-studio/out/qa/profile-v1-real-media-review-status.json
+          if-no-files-found: error
+          retention-days: 7

@@ -1,0 +1,133 @@
+import {execFileSync} from "node:child_process";
+import fs from "node:fs";
+import path from "node:path";
+import {fileURLToPath} from "node:url";
+
+const dashboardRoot=path.resolve(path.dirname(fileURLToPath(import.meta.url)),"..");
+const repoRoot=path.resolve(dashboardRoot,"..");
+const motionStudioRoot=path.join(repoRoot,"motion-studio");
+const statusPath=path.join(motionStudioRoot,"scripts/profile-v1-production-status.mts");
+const palmierPath=path.join(motionStudioRoot,"scripts/profile-v1-palmier-handoff-contract.mts");
+const davinciPath=path.join(motionStudioRoot,"scripts/profile-v1-davinci-handoff-contract.mts");
+const outputPath=path.join(dashboardRoot,"src/data/profileProductionStatus.generated.ts");
+const report=JSON.parse(execFileSync(process.execPath,["--no-warnings",statusPath,"--json"],{cwd:motionStudioRoot,encoding:"utf8"}));
+const palmier=JSON.parse(execFileSync(process.execPath,["--no-warnings",palmierPath,"--json"],{cwd:motionStudioRoot,encoding:"utf8"}));
+const davinci=JSON.parse(execFileSync(process.execPath,["--no-warnings",davinciPath,"--json"],{cwd:motionStudioRoot,encoding:"utf8"}));
+if(report.schemaVersion!=="profile-v1-production-status/v1"||report.authority!=="DERIVED_PRODUCTION_STATUS")throw new Error(`Unexpected Profile production status contract: ${report.schemaVersion}/${report.authority}`);
+if(palmier.schemaVersion!=="profile-v1-palmier-handoff/v1"||palmier.authority!=="MOTION_STUDIO_PROFILE_PALMIER_HANDOFF")throw new Error(`Unexpected Profile Palmier handoff contract: ${palmier.schemaVersion}/${palmier.authority}`);
+if(davinci.schemaVersion!=="profile-v1-davinci-handoff/v1"||davinci.authority!=="MOTION_STUDIO_PROFILE_DAVINCI_HANDOFF")throw new Error(`Unexpected Profile DaVinci handoff contract: ${davinci.schemaVersion}/${davinci.authority}`);
+if(davinci.productionRecovery?.schemaVersion!=="wedding-davinci-production-recovery-export/v1"||davinci.productionRecovery?.requiredCurrent!==true)throw new Error("Profile DaVinci handoff must expose required production recovery sidecar contract");
+const stageNames=["assembly","finalRender","finalRenderReview","productionBundle","davinciFinishing","finalDeliveryApproval"];
+const stageRecovery={
+  assembly:[...report.nextActions],
+  finalRender:["pnpm render:profile-v1","pnpm check:profile-render"],
+  finalRenderReview:["pnpm profile:final-render-review:init","pnpm profile:final-render-review:strict"],
+  productionBundle:["pnpm export:profile-v1-production-bundle"],
+  davinciFinishing:["pnpm profile:davinci-finishing:init","pnpm profile:davinci-finishing:strict"],
+  finalDeliveryApproval:["pnpm profile:final-delivery-approval:init","pnpm profile:final-delivery-approval:strict"],
+};
+const stageSnapshot=(name,stage)=>({
+  state:String(stage?.state??"NOT_RUN"),
+  detail:String(stage?.detail??"No stage detail reported."),
+  ...(stage?.path?{path:String(stage.path)}:{}),
+  recovery:[...(stageRecovery[name]??[])],
+});
+const blockersFor=(name)=>Array.isArray(report.stages?.[name]?.blockers)?report.stages[name].blockers.map(String):[];
+const previewSourcePrefixes=[
+  "REAL_MEDIA_REVIEW:STALE_REAL_MEDIA_PREVIEW",
+  "REAL_MEDIA_REVIEW:STALE_REAL_MEDIA_PREVIEW_SOURCE_FINGERPRINT",
+  "REAL_MEDIA_REVIEW:STALE_REAL_MEDIA_PREVIEW_SOURCE:",
+  "REAL_MEDIA_REVIEW:PREVIEW_SOURCE_COUNT:",
+  "REAL_MEDIA_REVIEW:STALE_RUNTIME_MEDIA_MANIFEST",
+  "REAL_MEDIA_REVIEW:STALE_PROFILE_PRODUCTION_PLAN",
+  "REAL_MEDIA_REVIEW:STALE_REAL_MEDIA_PREVIEW_COMPONENT",
+  "REAL_MEDIA_REVIEW:STALE_CANONICAL_PLAN_FINGERPRINT",
+  "REAL_MEDIA_REVIEW:STALE_MEDIA:",
+];
+const finalSourcePrefixes=["STALE_RENDER_SOURCE_FINGERPRINT","STALE_RENDER_SOURCE:","RENDER_SOURCE_COUNT:"];
+const matching=(values,prefixes)=>values.filter((value)=>prefixes.some((prefix)=>value.startsWith(prefix)));
+const assemblyBlockers=blockersFor("assembly");
+const finalReviewBlockers=blockersFor("finalRenderReview");
+const previewSourceBlockers=matching(assemblyBlockers,previewSourcePrefixes);
+const finalSourceBlockers=matching(finalReviewBlockers,finalSourcePrefixes);
+const previewNeedsInit=assemblyBlockers.some((value)=>value.includes("REAL_MEDIA_REVIEW_EVIDENCE_MISSING")||value.includes("PROFILE_REAL_MEDIA_PREVIEW_MISSING"));
+const previewMediaReady=!assemblyBlockers.some((value)=>value.startsWith("MEDIA_MISSING:"));
+const previewState=previewSourceBlockers.length>0
+  ? "RE_RENDER_AND_REVIEW_REQUIRED"
+  : !previewMediaReady
+    ? "NOT_RUN"
+    : previewNeedsInit
+      ? "PREVIEW_AND_REVIEW_REQUIRED"
+      : report.stages.assembly.state==="PASS"
+        ? "CURRENT"
+        : "CURRENT_SOURCE_REVIEW_REQUIRED";
+const finalState=finalSourceBlockers.length>0
+  ? "RE_RENDER_AND_REVIEW_REQUIRED"
+  : report.stages.finalRender.state!=="PASS"
+    ? "NOT_RUN"
+    : report.stages.finalRenderReview.state==="MISSING"
+      ? "REVIEW_REQUIRED"
+      : report.stages.finalRenderReview.state==="PASS"
+        ? "CURRENT"
+        : "CURRENT_SOURCE_REVIEW_REQUIRED";
+const sourceRevalidation={
+  realMediaPreview:{
+    state:previewState,
+    blockers:previewSourceBlockers,
+    recovery:previewSourceBlockers.length>0
+      ? ["pnpm render:profile-v1:real-media-preview","pnpm profile:real-media-review:init","Human crop/focus/color/content QAを再実施","pnpm profile:real-media-review:strict"]
+      : previewNeedsInit
+        ? ["pnpm render:profile-v1:real-media-preview","pnpm profile:real-media-review:init"]
+        : [],
+  },
+  finalRender:{
+    state:finalState,
+    blockers:finalSourceBlockers,
+    recovery:finalSourceBlockers.length>0
+      ? ["pnpm render:profile-v1","pnpm profile:final-render-review:init","Human final-render QAを再実施","pnpm profile:final-render-review:strict"]
+      : report.stages.finalRenderReview.state==="MISSING"
+        ? ["pnpm profile:final-render-review:init"]
+        : [],
+  },
+  guardrails:[
+    "SOURCE_CHANGED => RE_RENDER_REQUIRED",
+    "RE_RENDER_REQUIRED => RE_REVIEW_REQUIRED",
+    "OLD_HUMAN_REVIEW != CURRENT_RENDER_IMPLEMENTATION",
+  ],
+};
+const snapshot={
+  source:{
+    status:"motion-studio/scripts/profile-v1-production-status.mts",
+    palmierHandoff:"motion-studio/scripts/profile-v1-palmier-handoff-contract.mts",
+    davinciHandoff:"motion-studio/scripts/profile-v1-davinci-handoff-contract.mts",
+  },
+  overallState:report.overallState,
+  stages:Object.fromEntries(stageNames.map((name)=>[name,stageSnapshot(name,report.stages[name])])),
+  readiness:{...report.readiness},
+  sourceRevalidation,
+  handoff:{
+    palmier:{
+      contractVersion:palmier.schemaVersion,
+      current:palmier.current,
+      sourceAuthorities:[...palmier.sourceAuthorities],
+      artifacts:palmier.artifacts,
+    },
+    davinci:{
+      contractVersion:davinci.schemaVersion,
+      current:davinci.current,
+      sourceAuthorities:[...davinci.sourceAuthorities],
+      upstreamPalmier:davinci.upstreamPalmier,
+      handoffAsset:davinci.handoffAsset,
+      generatedAccentRoutes:davinci.generatedAccentRoutes,
+      productionRecovery:{...davinci.productionRecovery},
+      actualEvidence:{...davinci.actualEvidence,requiredChecks:[...davinci.actualEvidence.requiredChecks]},
+      productionReady:false,
+    },
+  },
+  nextActions:[...report.nextActions],
+};
+const output=`// AUTO-GENERATED by scripts/sync-profile-production-status.mjs\n// Motion Studio production status is the authority. Do not edit by hand.\n\nexport const profileProductionStatus = ${JSON.stringify(snapshot,null,2)} as const;\n`;
+if(process.argv.includes("--write")){fs.writeFileSync(outputPath,output,"utf8");console.log(`Profile production status synced: ${snapshot.overallState}, previewSource=${snapshot.sourceRevalidation.realMediaPreview.state}, finalSource=${snapshot.sourceRevalidation.finalRender.state}, palmier=${snapshot.handoff.palmier.contractVersion}, davinci=${snapshot.handoff.davinci.contractVersion}, productionReady=${snapshot.readiness.productionReady}`);process.exit(0)}
+if(!fs.existsSync(outputPath)){console.error("Profile production status generated file is missing. Run: node scripts/sync-profile-production-status.mjs --write");process.exit(1)}
+if(fs.readFileSync(outputPath,"utf8")!==output){console.error("Profile production status generated snapshot is stale. Run: node scripts/sync-profile-production-status.mjs --write");process.exit(1)}
+console.log(`Profile production status current: ${snapshot.overallState}, previewSource=${snapshot.sourceRevalidation.realMediaPreview.state}, finalSource=${snapshot.sourceRevalidation.finalRender.state}, palmier=${snapshot.handoff.palmier.contractVersion}, davinci=${snapshot.handoff.davinci.contractVersion}, productionReady=${snapshot.readiness.productionReady}`);

@@ -1,0 +1,45 @@
+name: Wedding DaVinci Operator Packet CI
+
+on:
+  pull_request:
+    paths:
+      - "motion-studio/scripts/wedding-davinci-delivery-readiness.mts"
+      - "motion-studio/scripts/wedding-davinci-delivery-readiness-snapshot.mts"
+      - "motion-studio/scripts/wedding-davinci-final-delivery-preflight.mts"
+      - "motion-studio/scripts/wedding-davinci-operator-packet.mts"
+      - "motion-studio/scripts/check-wedding-davinci-operator-packet.mts"
+      - ".github/workflows/wedding-davinci-operator-packet-ci.yml"
+  push:
+    branches: [main]
+    paths:
+      - "motion-studio/scripts/wedding-davinci-delivery-readiness.mts"
+      - "motion-studio/scripts/wedding-davinci-delivery-readiness-snapshot.mts"
+      - "motion-studio/scripts/wedding-davinci-final-delivery-preflight.mts"
+      - "motion-studio/scripts/wedding-davinci-operator-packet.mts"
+      - "motion-studio/scripts/check-wedding-davinci-operator-packet.mts"
+      - ".github/workflows/wedding-davinci-operator-packet-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Verify operator packet export and evidence boundary
+        working-directory: motion-studio
+        run: node --no-warnings scripts/check-wedding-davinci-operator-packet.mts
+      - name: Verify operator packet strict gate stays fail-closed without GUI Actual
+        working-directory: motion-studio
+        shell: bash
+        run: |
+          node --no-warnings scripts/wedding-davinci-operator-packet.mts --json | grep '"macDavinciResolveGuiActual": "NOT_PROMOTED_BY_PACKET"'
+          if node --no-warnings scripts/wedding-davinci-operator-packet.mts --strict; then
+            echo "operator packet strict gate unexpectedly passed" >&2
+            exit 1
+          fi

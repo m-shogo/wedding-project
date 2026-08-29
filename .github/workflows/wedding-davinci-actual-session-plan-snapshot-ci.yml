@@ -1,0 +1,32 @@
+name: Wedding DaVinci Actual Session Plan Snapshot CI
+
+on:
+  pull_request:
+    paths:
+      - "motion-studio/scripts/wedding-davinci-actual-session-plan.mts"
+      - "motion-studio/scripts/wedding-davinci-actual-session-plan-snapshot.mts"
+      - "motion-studio/scripts/check-wedding-davinci-actual-session-plan-snapshot.mts"
+      - ".github/workflows/wedding-davinci-actual-session-plan-snapshot-ci.yml"
+  push:
+    branches: [main]
+    paths:
+      - "motion-studio/scripts/wedding-davinci-actual-session-plan.mts"
+      - "motion-studio/scripts/wedding-davinci-actual-session-plan-snapshot.mts"
+      - "motion-studio/scripts/check-wedding-davinci-actual-session-plan-snapshot.mts"
+      - ".github/workflows/wedding-davinci-actual-session-plan-snapshot-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Verify transported session plan freshness and fail-close behavior
+        working-directory: motion-studio
+        run: node --no-warnings scripts/check-wedding-davinci-actual-session-plan-snapshot.mts

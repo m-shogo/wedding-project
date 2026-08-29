@@ -1,92 +1,32 @@
 # ADD-03 当日タイムテーブルボード — QA
 
-Status: `CURRENT / DAY_BROADSHEET_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / FAMILY_DIVERSITY_PASS / LONG_COPY_STRESS_PASS / AUTO_HEIGHT_PASS / ROLLBACK_SAFE / LEGACY_PRESERVED / NOT_PRINT_READY`
-Updated: 2026-08-23
+Status: `CURRENT / V4_DAY_STRATA_SELECTED / THREE_SCALE_QA_PASS / LONG_COPY_STRESS_PASS / STRUCTURE_QA_PASS / CLEAR_LEGACY_WIN / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / PRODUCTION_PROMOTED / ROLLBACK_SAFE / LEGACY_PRESERVED / NOT_PRINT_READY`
+Updated: 2026-08-28
 Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
+Primary evidence: `V4-DAY-STRATA-PROMOTION-2026-08-28.md`
 
 ## Current Figma authority
 
 Figma file: `woFUHUqZcvNkih8o42xeH4`.
 
-Current selected family:
+Current retained production roots:
 
-- A2 selected: `14:2 / VNEXT_PRO_ADD03_DAY_BROADSHEET_A2_SELECTED` — `1400×1980`;
-- A3 selected: `15:40 / VNEXT_PRO_ADD03_DAY_BROADSHEET_A3_SELECTED` — `990×1400`;
-- clean-room study page: `42:2 / VNEXT_FAMILY_DIVERSITY_B / ADD-03 / 2026-08-21`;
-- A2 clean-room master: `42:3 / VNEXT_SELECTED_CANDIDATE / ADD-03 A2 / DAY BROADSHEET`;
-- A3 independent reflow: `43:4 / VNEXT_SELECTED_CANDIDATE / ADD-03 A3 / DAY BROADSHEET REFLOW`;
-- A2 long-copy proof: `43:26 / QA / ADD-03 A2 DAY BROADSHEET / LONG COPY STRESS`;
-- A3 long-copy proof: `43:47 / QA / ADD-03 A3 DAY BROADSHEET / LONG COPY STRESS`;
-- pre-family-diversity rollback: `45:2 / 45:22`;
-- pre-2026-08-23 date-tab-subtraction rollbacks: `47:23 / 47:44 / 47:66 / 47:87`;
-- older TIDE DAY and legacy production remain preserved as history/comparison only.
+- A2 Current: `14:2 / VNEXT_PRO_ADD03_DAY_BROADSHEET_A2_SELECTED` — now contains selected V4 DAY STRATA, `1400×1980`;
+- A3 Current: `15:40 / VNEXT_PRO_ADD03_DAY_BROADSHEET_A3_SELECTED` — now contains selected V4 DAY STRATA independent reflow, `990×1400`.
+
+V4 clean-room / QA authority:
+
+- page `51:2 / V4_CLEANROOM_ADD03_TIMETABLE_2026_08_28`;
+- A2 clean-room source `51:3 / V4 / ADD-03 / A2 / DAY STRATA / CLEANROOM`;
+- A3 clean-room source `53:2 / V4 / ADD-03 / A3 / DAY STRATA / INDEPENDENT REFLOW`;
+- failed first A2 stress retained as `51:28 / QA FAILED / ADD-03 V4 A2 / TEXT_SUPPORT_FIT_FAILURE`;
+- passing A2 stress `52:2 / QA / ADD-03 V4 A2 DAY STRATA / LONG COPY STRESS V2`;
+- passing A3 stress `53:25 / QA / ADD-03 V4 A3 DAY STRATA / LONG COPY STRESS`;
+- pre-V4 production rollback `55:2 / ROLLBACK_ADD03_PRE_V4_PROMOTION_2026_08_28`.
+
+Older DAY BROADSHEET / TIDE DAY / V2/V3/VNext studies and historical QA remain preserved as comparison/process history only and are no longer the Current visual source.
 
 Drive authority: `1uVcXv2Xs0H7juheHk977pt7YxLMJez_j / ADD-03_当日タイムテーブルボード`.
-
-Primary current evidence:
-
-- `FIGMA-FAMILY-DIVERSITY-DAY-BROADSHEET-PROMOTION-2026-08-21.md`;
-- `FIGMA-DAY01-TAB-SUBTRACTION-QA-2026-08-23.md`.
-
-## Authority-drift correction — 2026-08-22
-
-The live Figma roots and the later family-diversity promotion already selected `DAY BROADSHEET`, but this canonical `QA.md` still pointed to the superseded `TIDE DAY` family. That stale pointer could cause a later agent to inspect or mutate the wrong visual generation.
-
-Live readback confirmed the stable production roots and exact Drive authority. This QA file was synchronized to current production truth without rolling back the newer family-diversity work.
-
-## DAY 01 tab subtraction — 2026-08-23
-
-Fresh whole-item review found that the top-right yellow `DAY 01 / 10.24` tab duplicated the already-authoritative native `2026.10.24 SAT / YOKOHAMA` line and added a generic English label without a trim, fold, binding, wayfinding, or other physical function.
-
-A rollback-safe A2 comparison `47:2` hid only `DATE_TAB` and `DATE_TAB_TYPE`. The no-tab version improved headline/date hierarchy while preserving chronology and printed-program character. Before production mutation, A2/A3 Current and both long-copy proofs were copied to hidden rollback roots `47:23 / 47:44 / 47:66 / 47:87`.
-
-The tab roles are now hidden in:
-
-- A2 Current `14:2`;
-- A3 Current `15:40`;
-- A2 long-copy proof `43:26`;
-- A3 long-copy proof `43:47`.
-
-No confirmed date/place information was removed. The completed comparison was hidden after verification.
-
-## Current visual direction
-
-`DAY BROADSHEET` treats the day as a printed program/broadsheet rather than an event dashboard or simulated airline system.
-
-Current first-glance hierarchy:
-
-1. Japanese-first `今日を、ひらく。`;
-2. `2026.10.24 SAT / YOKOHAMA`;
-3. large `14:10` + `挙式`;
-4. large `14:40` + unresolved interval guidance;
-5. large `15:00` + `披露宴`;
-6. warm closing copy.
-
-The composition now uses a cobalt binding/spine, warm paper field, simple chronology and thin print rules without the redundant date badge. The dominant grammar is a physical day-program sheet, not the superseded dark saturated field plus large rounded tide/sun/capsule gestures.
-
-## Three-scale visual QA
-
-Rechecked live after the 2026-08-23 subtraction:
-
-- A2 whole / thumbnail: PASS;
-- A2 reading / high-resolution: PASS;
-- A3 native `990×1400`: PASS;
-- A2 realistic long-copy proof after the same subtraction: PASS.
-
-The timetable remains immediately scannable from large time numerals while Japanese hierarchy stays dominant. No card-grid, fake flight/gate/class data, barcode, repeated badge, shadow or gradient is required.
-
-## Structure / long-copy QA
-
-Current production readback after the date-tab subtraction:
-
-- A2 `14:2`: `1400×1980`, visible native text `13`, fixed-height `0`, outside visible text `0`, visible date-tab roles `0`, IMAGE fills `0`;
-- A3 `15:40`: `990×1400`, visible native text `13`, fixed-height `0`, outside visible text `0`, text bounding-box collisions `0`, visible date-tab roles `0`, IMAGE fills `0`.
-
-Dedicated long-copy stress remains at `43:26 / 43:47`. Ceremony, transfer and reception guidance were expanded to realistic multi-line Japanese copy and remain inside their editorial lanes after the same tab subtraction.
-
-A2 geometry reports six text bounding-box intersections between each large time box and its adjacent event/guide boxes. Fresh native screenshot inspection confirms these are pre-existing wide-box overlaps rather than visible glyph collisions and were not introduced by the 2026-08-23 change.
-
-All factual and variable information remains native editable text. No variable copy is baked into SVG or raster.
 
 ## Fact / placeholder contract
 
@@ -95,32 +35,93 @@ Confirmed facts only:
 - date: `2026.10.24 SAT`;
 - location: `YOKOHAMA`;
 - Ceremony: `14:10–14:40`;
-- transfer interval: `14:40–15:00`, activity remains unresolved and must stay native semantic guidance;
+- unresolved interval: `14:40–15:00`; final activity/guidance wording remains native placeholder copy;
 - Reception: `15:00–17:30`.
 
 Do not invent opening time, venue floor, gate, flight number, QR, transport credential or other operational fact.
 
-## Hybrid authoring / Drive
+## Current V4 visual direction
 
-- native text: factual / variable copy;
-- native editable geometry: binding and chronology rules with clear print/editorial function;
-- redundant `DAY 01` date badge: removed from Current visibility after bounded proof;
+`DAY STRATA` is a large-format timetable poster whose visual hierarchy is the chronology itself rather than decorative travel imagery or a repeated dashboard/card system.
+
+Reading order:
+
+1. `本日のタイムテーブル`;
+2. `2026.10.24 SAT · YOKOHAMA`;
+3. large navy `14:10` ceremony time field;
+4. offset mustard `14:40` unresolved-guidance time field;
+5. large rust `15:00` reception time field;
+6. separate `17:30` reception-end marker.
+
+A narrow chronology thread binds the three time fields. Variable event/guidance copy sits on stable warm paper rather than being forced into fixed-height color supports.
+
+## Image-generation / hybrid authoring
+
+`FINAL MISSING ASSET LIST: 0 production raster assets missing`.
+
+Fresh diagnosis found chronology hierarchy, distance readability and text-support resilience—not missing photography/illustration—to be the quality bottleneck.
+
+- native text: all authoritative / variable wording;
+- semantic composed fixed art: one `DECOR / COMPOSED / DAY STRATA ... / NO TEXT` role per size;
+- generated raster candidates: `0`;
 - reusable SVG: `0` required;
-- generated raster: `0`;
 - replaceable IMAGE fills: `0`;
 - Drive write: `0`.
 
-`IMAGE_GENERATION_NOT_REQUIRED`: current screenshot evidence does not show photography or illustration as the quality bottleneck. Large-format chronology, distance readability and printed-program character remain stronger without decorative travel imagery.
+This is a deliberate image-generation-centered zero-generation decision, not a skipped asset workflow.
 
-## Professional visual judgment
+## Long-copy failure and repair
 
-Current Professional Design Council score remains **91 / 100 / PASS / NO VETO** from the family-diversity promotion evidence. The 2026-08-23 change is a bounded editorial subtraction, not a new visual-generation claim.
+The first A2 long-copy proof reproduced `TEXT_SUPPORT_FIT_FAILURE`: variable 14:40 guidance escaped the mustard field and long white reception guidance became unreadable after leaving the rust field.
 
-`DAY BROADSHEET` replaced `TIDE DAY` because it preserved timetable function while removing a suite-level repeated dark-field + rounded-sweep grammar. The current design should not be reopened merely to create activity; reopen only when fresh screenshot evidence, final copy, printing constraints or physical proof exposes a concrete defect.
+The failed proof is preserved at `51:28`.
 
-## Historical QA retained
+Method switch:
 
-Older evidence remains historical/process evidence only, including the prior `TIDE DAY` Professional vNext and earlier V2/V3 cleanup runs. Their PASS states do not override the Current pointers above.
+- do not shrink type;
+- restrict colored strata to fixed time emphasis;
+- keep variable guide copy on stable warm paper lanes in dark ink.
+
+Second A2 proof `52:2` and A3 proof `53:25` both pass with realistic multi-line QA copy.
+
+## Three-scale / structure QA
+
+A2:
+
+- thumbnail ~500px: PASS;
+- reading ~1000px: PASS;
+- native `1400×1980`: PASS;
+- long-copy stress: PASS after method switch.
+
+A3:
+
+- thumbnail ~500px: PASS;
+- reading ~1000px: PASS;
+- native `990×1400`: PASS;
+- long-copy stress: PASS.
+
+Current post-promotion structure:
+
+- A2 `14:2`: visible native text `13`, fixed-height `0`, outside visible text `0`, IMAGE fills `0`;
+- A3 `15:40`: visible native text `13`, fixed-height `0`, outside visible text `0`, IMAGE fills `0`.
+
+No variable copy is baked into fixed art and no page flattening was introduced.
+
+## Legacy comparison / promotion
+
+The retained previous Current was visually opened only after V4 passed its own three-scale, long-copy and structure gates.
+
+The old DAY BROADSHEET remained readable, but its schedule rows were more equal/repeated, the full-height blue spine acted as a stronger template signature, and the time numerals were weaker for the physical board’s distance-reading role.
+
+Decision: `CLEAR_V4_WIN`.
+
+Before production mutation, old Current A2/A3 were preserved at `55:2`. Existing Current root IDs `14:2 / 15:40` were retained and populated from the selected V4 clean-room sources. Fresh post-promotion screenshots and structure readback pass.
+
+## Learning state
+
+`TEXT_SUPPORT_FIT_FAILURE`: `VERIFIED_LOCAL` for ADD-03.
+
+Transferable only as a QA hypothesis: when a variable auto-height copy role depends on a fixed decorative support, realistic long-copy must prove the support boundary/contrast. Do not transfer ADD-03’s exact palette, strata geometry, chronology thread or title treatment to another item.
 
 ## Deferred finalization
 
@@ -132,4 +133,8 @@ Keep `NOT_PRINT_READY` until authoritative final inputs exist:
 - physical A2/A3 proof;
 - venue placement and real viewing-distance check.
 
-These deferred inputs do not block other non-Rurubu design work.
+These deferred inputs do not block continuing the V4 clean-room queue.
+
+## Next target
+
+`ADD-04` V4 clean-room. Start from blank; do not reuse DAY STRATA as a suite template.

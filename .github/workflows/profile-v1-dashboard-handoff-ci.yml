@@ -1,0 +1,100 @@
+name: Profile V1 Dashboard Handoff CI
+
+on:
+  pull_request:
+    paths:
+      - "01_profile-movie/**"
+      - "motion-studio/src/data/profileV1ProductionPlan.ts"
+      - "motion-studio/scripts/profile-v1-assembly-preflight.mts"
+      - "motion-studio/scripts/profile-v1-bgm-rights-approval.mts"
+      - "motion-studio/scripts/profile-v1-full-structure-review.mts"
+      - "motion-studio/scripts/profile-v1-real-media-review.mts"
+      - "movie-dashboard/scripts/sync-profile-production-gate.mjs"
+      - "movie-dashboard/scripts/sync-profile-real-media-review-gate.mjs"
+      - "movie-dashboard/scripts/verify-profile-v1-dashboard-handoff-contracts.mjs"
+      - "movie-dashboard/scripts/verify-profile-real-media-qa-audit-surface.mjs"
+      - "movie-dashboard/src/data/profileProductionGate.generated.ts"
+      - "movie-dashboard/src/data/profileRealMediaReviewGate.generated.ts"
+      - "movie-dashboard/src/data/profileRealMediaQaAudit.ts"
+      - "movie-dashboard/src/data/profileProductionStatusHandoff.ts"
+      - "movie-dashboard/src/data/projectProductionHandoffManifest.ts"
+      - "movie-dashboard/src/components/ProfileRealMediaQaAuditCard.tsx"
+      - "movie-dashboard/src/components/TypographyProjectDeliveryBatchCard.tsx"
+      - "movie-dashboard/src/pages/VisualMotionLibrary.tsx"
+      - "movie-dashboard/src/pages/ProfileMediaIntake.tsx"
+      - "movie-dashboard/src/pages/ProfileBgmIntake.tsx"
+      - "movie-dashboard/src/App.tsx"
+      - ".github/workflows/profile-v1-dashboard-handoff-ci.yml"
+  push:
+    branches: [main]
+    paths:
+      - "01_profile-movie/**"
+      - "motion-studio/src/data/profileV1ProductionPlan.ts"
+      - "motion-studio/scripts/profile-v1-assembly-preflight.mts"
+      - "motion-studio/scripts/profile-v1-bgm-rights-approval.mts"
+      - "motion-studio/scripts/profile-v1-full-structure-review.mts"
+      - "motion-studio/scripts/profile-v1-real-media-review.mts"
+      - "movie-dashboard/scripts/sync-profile-production-gate.mjs"
+      - "movie-dashboard/scripts/sync-profile-real-media-review-gate.mjs"
+      - "movie-dashboard/scripts/verify-profile-v1-dashboard-handoff-contracts.mjs"
+      - "movie-dashboard/scripts/verify-profile-real-media-qa-audit-surface.mjs"
+      - "movie-dashboard/src/data/profileProductionGate.generated.ts"
+      - "movie-dashboard/src/data/profileRealMediaReviewGate.generated.ts"
+      - "movie-dashboard/src/data/profileRealMediaQaAudit.ts"
+      - "movie-dashboard/src/data/profileProductionStatusHandoff.ts"
+      - "movie-dashboard/src/data/projectProductionHandoffManifest.ts"
+      - "movie-dashboard/src/components/ProfileRealMediaQaAuditCard.tsx"
+      - "movie-dashboard/src/components/TypographyProjectDeliveryBatchCard.tsx"
+      - "movie-dashboard/src/pages/VisualMotionLibrary.tsx"
+      - "movie-dashboard/src/pages/ProfileMediaIntake.tsx"
+      - "movie-dashboard/src/pages/ProfileBgmIntake.tsx"
+      - "movie-dashboard/src/App.tsx"
+      - ".github/workflows/profile-v1-dashboard-handoff-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    defaults:
+      run:
+        working-directory: movie-dashboard
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: movie-dashboard/pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Profile production gate generated snapshot is current
+        run: node scripts/sync-profile-production-gate.mjs --check
+
+      - name: Profile real-media Human QA generated snapshot is current
+        run: node scripts/sync-profile-real-media-review-gate.mjs --check
+
+      - name: Profile Dashboard handoff honesty contracts
+        run: node scripts/verify-profile-v1-dashboard-handoff-contracts.mjs
+
+      - name: Profile real-media QA audit surface contracts
+        run: node scripts/verify-profile-real-media-qa-audit-surface.mjs
+
+      - name: Existing project production handoff contracts
+        run: node scripts/verify-project-production-handoff-manifest-contracts.mjs
+
+      - name: Typecheck and build Movie Dashboard
+        run: pnpm build

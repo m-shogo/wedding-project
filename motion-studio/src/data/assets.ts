@@ -125,8 +125,8 @@ export const assets: Record<string, Asset> = {
     type: 'audio',
     aspect: 'audio',
     usage: 'Opening V1本番BGM。Remotion preview/finalへ直接合成する場合の正本',
-    status: 'candidate',
-    note: 'DUMMY PRODUCTION SIMULATION専用のPixabay候補。実公開前は本番曲へ差し替え、利用条件を再確認する。',
+    status: 'missing',
+    note: '権利確認後に候補以上へ昇格する。未確認音源はここへ置いても本番再生しない。',
   },
   'opening-okinawa-sea': {
     id: 'opening-okinawa-sea',

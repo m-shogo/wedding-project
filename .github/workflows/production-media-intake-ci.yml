@@ -1,0 +1,85 @@
+name: Production Media Intake CI
+
+on:
+  pull_request:
+    paths:
+      - "motion-studio/scripts/intake-production-media.mts"
+      - "motion-studio/scripts/verify-production-media-intake-receipt.mts"
+      - "motion-studio/scripts/check-production-media-intake.mts"
+      - "motion-studio/scripts/check-opening-photos.mts"
+      - "motion-studio/scripts/check-profile-v1-runtime-media.mts"
+      - "motion-studio/src/data/openingV1PhotoRoles.ts"
+      - "motion-studio/src/data/openingV1Media.ts"
+      - "motion-studio/src/data/profileV1ProductionPlan.ts"
+      - ".github/workflows/production-media-intake-ci.yml"
+  push:
+    branches: [main]
+    paths:
+      - "motion-studio/scripts/intake-production-media.mts"
+      - "motion-studio/scripts/verify-production-media-intake-receipt.mts"
+      - "motion-studio/scripts/check-production-media-intake.mts"
+      - "motion-studio/scripts/check-opening-photos.mts"
+      - "motion-studio/scripts/check-profile-v1-runtime-media.mts"
+      - "motion-studio/src/data/openingV1PhotoRoles.ts"
+      - "motion-studio/src/data/openingV1Media.ts"
+      - "motion-studio/src/data/profileV1ProductionPlan.ts"
+      - ".github/workflows/production-media-intake-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    defaults:
+      run:
+        working-directory: motion-studio
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Verify canonical production media intake
+        run: node --no-warnings scripts/check-production-media-intake.mts
+
+      - name: Verify CLI stays dry-run by default and source-preserving
+        run: |
+          for token in \
+            "DRY RUN PASS: no files copied" \
+            "--apply" \
+            "copyFileSync" \
+            "TARGET EXISTS" \
+            "BLOCKED: no files copied" \
+            "without modifying source files" \
+            "wedding-production-media-intake-receipt/v1" \
+            "COPY VERIFY FAILED" \
+            "copyBytesVerified: true" \
+            "humanQaState: 'NOT_RUN'" \
+            "macDaVinciActualState: 'NOT_RUN'" \
+            "productionReady: false" \
+            "--receipt"; do
+            grep -q -- "$token" scripts/intake-production-media.mts || { echo "missing intake safety token: $token"; exit 1; }
+          done
+          if grep -Eq "renameSync|unlinkSync|rmSync\(.*source|writeFileSync\(.*source" scripts/intake-production-media.mts; then
+            echo "intake CLI must not rename/delete/rewrite source media"
+            exit 1
+          fi
+          echo "intake CLI safety + SHA receipt contract verified"
+
+      - name: Verify receipt freshness is required once real media is complete
+        run: |
+          for token in \
+            "RECEIPT_MISSING" \
+            "TARGET_BYTES_CHANGED" \
+            "TARGET_SHA_CHANGED" \
+            "RECEIPT CURRENT"; do
+            grep -q -- "$token" scripts/verify-production-media-intake-receipt.mts || { echo "missing receipt verifier token: $token"; exit 1; }
+          done
+          grep -q "verifyIntakeReceipt({project: 'opening'" scripts/check-opening-photos.mts || { echo "Opening 11/11 must verify intake receipt"; exit 1; }
+          grep -q "verifyIntakeReceipt({project: 'profile'" scripts/check-profile-v1-runtime-media.mts || { echo "Profile 17/17 must verify intake receipt"; exit 1; }
+          echo "completed real-media gates require current SHA-bound intake receipt"

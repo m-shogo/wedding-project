@@ -1,0 +1,144 @@
+name: Wedding Remotion Element Production Gate CI
+
+on:
+  pull_request:
+    paths:
+      - 'motion-studio/src/motion-kit/engines.tsx'
+      - 'motion-studio/scripts/export-wedding-remotion-element-handoff-identities.mts'
+      - 'motion-studio/scripts/check-wedding-remotion-element-handoff-identities.mts'
+      - 'motion-studio/scripts/check-wedding-remotion-element-production-gate.mts'
+      - 'motion-studio/scripts/export-wedding-remotion-element-production-gate-artifact.mts'
+      - 'movie-dashboard/src/data/remotionStudioToolingProductionDependency.ts'
+      - 'movie-dashboard/src/data/remotionElementHandoffIdentityReference.ts'
+      - 'movie-dashboard/src/data/remotionElementIdentityProductionGateReference.ts'
+      - 'movie-dashboard/src/lib/effectiveProductionHandoffExport.ts'
+      - '.github/workflows/wedding-remotion-element-production-gate-ci.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  identity-production-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Unadopted Elements remain non-blocking
+        working-directory: motion-studio
+        run: |
+          rm -rf ../movie-dashboard/out/remotion-element-handoff
+          node --no-warnings scripts/check-wedding-remotion-element-production-gate.mts | tee /tmp/unadopted.log
+          node --no-warnings scripts/export-wedding-remotion-element-production-gate-artifact.mts | tee /tmp/unadopted-artifact.log
+          grep -q 'openingIdentityGate=NON_BLOCKING_UNADOPTED' /tmp/unadopted.log
+          grep -q 'profileIdentityGate=NON_BLOCKING_UNADOPTED' /tmp/unadopted.log
+          grep -q 'openingEffectivePalmierCurrentAllowed=YES' /tmp/unadopted.log
+          grep -q 'openingEffectiveDavinciCurrentAllowed=YES' /tmp/unadopted.log
+          grep -q 'productionGateBlocked=NO' /tmp/unadopted-artifact.log
+          grep -q 'macRemotionStudioGuiActual=NOT_RUN' /tmp/unadopted-artifact.log
+          grep -q 'macDaVinciGuiActual=NOT_RUN' /tmp/unadopted-artifact.log
+
+      - name: Adopted Element fails closed without SHA-bound identity
+        run: |
+          cp movie-dashboard/src/data/remotionStudioToolingProductionDependency.ts /tmp/dependency.ts
+          python - <<'PY'
+          from pathlib import Path
+          path = Path('movie-dashboard/src/data/remotionStudioToolingProductionDependency.ts')
+          text = path.read_text()
+          needle = '  opening: [],'
+          if needle not in text:
+              raise SystemExit('opening adoption registry marker missing')
+          path.write_text(text.replace(needle, '  opening: ["type-mask-reveal"],', 1))
+          PY
+          rm -rf movie-dashboard/out/remotion-element-handoff
+          cd motion-studio
+          if node --no-warnings scripts/check-wedding-remotion-element-production-gate.mts > /tmp/missing.log 2>&1; then
+            echo 'Adopted Element must block without a current identity artifact.'
+            exit 1
+          fi
+          node --no-warnings scripts/export-wedding-remotion-element-production-gate-artifact.mts | tee /tmp/missing-artifact.log
+          grep -q 'openingIdentityGate=BLOCKED' /tmp/missing.log
+          grep -q 'openingEffectivePalmierCurrentAllowed=NO' /tmp/missing.log
+          grep -q 'openingEffectiveDavinciCurrentAllowed=NO' /tmp/missing.log
+          grep -q 'REMOTION_ELEMENT_IDENTITY_ARTIFACT_MISSING_OR_INVALID' /tmp/missing.log
+          grep -q 'productionGateBlocked=YES' /tmp/missing-artifact.log
+
+      - name: Exported current identity produces current SHA-bound gate artifact
+        working-directory: motion-studio
+        run: |
+          node --no-warnings scripts/export-wedding-remotion-element-handoff-identities.mts
+          node --no-warnings scripts/check-wedding-remotion-element-handoff-identities.mts
+          node --no-warnings scripts/check-wedding-remotion-element-production-gate.mts | tee /tmp/current.log
+          node --no-warnings scripts/export-wedding-remotion-element-production-gate-artifact.mts | tee /tmp/current-artifact.log
+          grep -q 'openingIdentityGate=CURRENT' /tmp/current.log
+          grep -q 'openingEffectivePalmierCurrentAllowed=YES' /tmp/current.log
+          grep -q 'openingEffectiveDavinciCurrentAllowed=YES' /tmp/current.log
+          grep -q 'productionGateBlocked=NO' /tmp/current-artifact.log
+          grep -q 'artifactSha256=' /tmp/current-artifact.log
+          node - <<'NODE'
+          const fs = require('fs');
+          const p = '../movie-dashboard/out/remotion-element-handoff/wedding-remotion-element-production-gate.json';
+          const artifact = JSON.parse(fs.readFileSync(p, 'utf8'));
+          const opening = artifact.projects.find((x) => x.movieId === 'opening');
+          if (!opening || opening.gateState !== 'CURRENT') throw new Error('opening gate artifact must be CURRENT');
+          if (!opening.effectivePalmierCurrentAllowed || !opening.effectiveDavinciCurrentAllowed || !opening.effectiveDavinciRecoveryCurrentAllowed) throw new Error('current gate artifact must allow all downstream currentness surfaces');
+          if (artifact.macRemotionStudioGuiActual !== 'NOT_RUN' || artifact.macDaVinciGuiActual !== 'NOT_RUN') throw new Error('GUI Actual evidence must remain NOT_RUN');
+          if (!/^[a-f0-9]{64}$/.test(artifact.artifactSha256)) throw new Error('artifact sha missing');
+          NODE
+          cp ../movie-dashboard/out/remotion-element-handoff/wedding-remotion-element-production-gate.json /tmp/current-gate-artifact.json
+
+      - name: Canonical engine mutation makes previously exported gate artifact stale
+        working-directory: motion-studio
+        run: |
+          cp src/motion-kit/engines.tsx /tmp/engines.tsx
+          python - <<'PY'
+          from pathlib import Path
+          path = Path('src/motion-kit/engines.tsx')
+          text = path.read_text()
+          needle = 'export function TypographyRevealEngine({' 
+          if needle not in text:
+              raise SystemExit('TypographyRevealEngine marker missing')
+          path.write_text(text.replace(needle, '// ephemeral production-gate artifact currentness mutation\n' + needle, 1))
+          PY
+          if node --no-warnings scripts/check-wedding-remotion-element-production-gate.mts > /tmp/stale.log 2>&1; then
+            echo 'Canonical source mutation must block adopted identity gate.'
+            exit 1
+          fi
+          grep -q 'openingIdentityGate=BLOCKED' /tmp/stale.log
+          grep -q 'openingEffectivePalmierCurrentAllowed=NO' /tmp/stale.log
+          grep -q 'openingEffectiveDavinciCurrentAllowed=NO' /tmp/stale.log
+          grep -q 'REMOTION_ELEMENT_CANONICAL_SOURCE_SHA_STALE' /tmp/stale.log
+          node - <<'NODE'
+          const fs = require('fs');
+          const crypto = require('crypto');
+          const artifact = JSON.parse(fs.readFileSync('/tmp/current-gate-artifact.json', 'utf8'));
+          const source = fs.readFileSync('src/motion-kit/engines.tsx', 'utf8');
+          const start = source.indexOf('export type MotionIntensity');
+          const end = source.indexOf('export type CameraTransformMode');
+          const currentSha = crypto.createHash('sha256').update(source.slice(start, end).trim()).digest('hex');
+          if (artifact.canonicalBlockSha256 === currentSha) throw new Error('old gate artifact must be stale after canonical source mutation');
+          const opening = artifact.projects.find((x) => x.movieId === 'opening');
+          if (!opening || opening.gateState !== 'CURRENT') throw new Error('fixture must prove an old reported CURRENT artifact can become stale');
+          console.log('OLD_GATE_ARTIFACT_REPORTED_CURRENT_BUT_CANONICAL_SHA_STALE=YES');
+          console.log('EFFECTIVE_PALMIER_CURRENT=NO');
+          console.log('EFFECTIVE_DAVINCI_CURRENT=NO');
+          console.log('DAVINCI_RECOVERY_CURRENT=NO');
+          NODE
+          mv /tmp/engines.tsx src/motion-kit/engines.tsx
+
+      - name: Restore adoption registry and preserve evidence honesty
+        run: |
+          mv /tmp/dependency.ts movie-dashboard/src/data/remotionStudioToolingProductionDependency.ts
+          rm -rf movie-dashboard/out/remotion-element-handoff
+          cd motion-studio
+          node --no-warnings scripts/check-wedding-remotion-element-production-gate.mts | tee /tmp/restored.log
+          node --no-warnings scripts/export-wedding-remotion-element-production-gate-artifact.mts | tee /tmp/restored-artifact.log
+          grep -q 'openingIdentityGate=NON_BLOCKING_UNADOPTED' /tmp/restored.log
+          grep -q 'productionGateBlocked=NO' /tmp/restored-artifact.log
+          echo 'remotionStudioGuiActual=NOT_RUN'
+          echo 'macDaVinciActual=NOT_RUN'
+          echo 'productionDependencyPromoted=NO'

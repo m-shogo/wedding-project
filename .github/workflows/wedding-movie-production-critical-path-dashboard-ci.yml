@@ -1,0 +1,59 @@
+name: Wedding Movie Production Critical Path Dashboard CI
+
+on:
+  pull_request:
+    paths:
+      - "movie-dashboard/src/data/openingProductionGate.generated.ts"
+      - "movie-dashboard/src/data/profileProductionGate.generated.ts"
+      - "movie-dashboard/src/data/movieProductionBlockerRecovery.ts"
+      - "movie-dashboard/src/data/weddingMovieProductionCriticalPath.ts"
+      - "movie-dashboard/src/components/WeddingMovieProductionCriticalPathCard.tsx"
+      - "movie-dashboard/src/components/MaskRevealSceneHandoffCard.tsx"
+      - "movie-dashboard/src/data/openingProductionStatusHandoff.ts"
+      - "movie-dashboard/src/data/profileProductionStatusHandoff.ts"
+      - "movie-dashboard/scripts/verify-wedding-movie-production-critical-path-dashboard.mjs"
+      - "movie-dashboard/scripts/verify-movie-production-blocker-recovery.mjs"
+      - ".github/workflows/wedding-movie-production-critical-path-dashboard-ci.yml"
+  push:
+    branches: [main]
+    paths:
+      - "movie-dashboard/src/data/openingProductionGate.generated.ts"
+      - "movie-dashboard/src/data/profileProductionGate.generated.ts"
+      - "movie-dashboard/src/data/movieProductionBlockerRecovery.ts"
+      - "movie-dashboard/src/data/weddingMovieProductionCriticalPath.ts"
+      - "movie-dashboard/src/components/WeddingMovieProductionCriticalPathCard.tsx"
+      - "movie-dashboard/src/components/MaskRevealSceneHandoffCard.tsx"
+      - "movie-dashboard/src/data/openingProductionStatusHandoff.ts"
+      - "movie-dashboard/src/data/profileProductionStatusHandoff.ts"
+      - "movie-dashboard/scripts/verify-wedding-movie-production-critical-path-dashboard.mjs"
+      - "movie-dashboard/scripts/verify-movie-production-blocker-recovery.mjs"
+      - ".github/workflows/wedding-movie-production-critical-path-dashboard-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: movie-dashboard
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+          run_install: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: movie-dashboard/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - name: Verify production critical-path dashboard contracts
+        run: node scripts/verify-wedding-movie-production-critical-path-dashboard.mjs
+      - name: Verify blocker-specific recovery routing
+        run: node scripts/verify-movie-production-blocker-recovery.mjs
+      - name: Typecheck and build Movie Dashboard
+        run: pnpm build

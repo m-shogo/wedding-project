@@ -1,0 +1,100 @@
+name: Wedding Remotion Element Handoff Identity CI
+
+on:
+  pull_request:
+    paths:
+      - 'motion-studio/src/motion-kit/engines.tsx'
+      - 'motion-studio/scripts/export-wedding-remotion-element-handoff-identities.mts'
+      - 'motion-studio/scripts/check-wedding-remotion-element-handoff-identities.mts'
+      - 'movie-dashboard/src/data/remotionElementCandidates.ts'
+      - 'movie-dashboard/src/data/remotionStudioToolingProductionDependency.ts'
+      - 'movie-dashboard/src/data/remotionElementHandoffIdentityReference.ts'
+      - 'movie-dashboard/src/lib/effectiveProductionHandoffExport.ts'
+      - '.github/workflows/wedding-remotion-element-handoff-identity-ci.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  sha-bound-handoff-identity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Export current unadopted handoff identity
+        working-directory: motion-studio
+        run: |
+          node --no-warnings scripts/export-wedding-remotion-element-handoff-identities.mts | tee /tmp/export.log
+          node --no-warnings scripts/check-wedding-remotion-element-handoff-identities.mts | tee /tmp/check.log
+          grep -q 'openingAdopted=0' /tmp/export.log
+          grep -q 'profileAdopted=0' /tmp/export.log
+          grep -q 'weddingRemotionElementHandoffIdentity=CURRENT_SHA_BOUND' /tmp/check.log
+          grep -q 'macRemotionStudioGuiActualPerformedByThisExport=NO' /tmp/export.log
+          grep -q 'macDaVinciGuiActualPerformedByThisExport=NO' /tmp/export.log
+          grep -q 'productionDependencyPromotedByThisExport=NO' /tmp/export.log
+
+      - name: Simulated Wedding adoption carries canonical engine mode and SHA
+        run: |
+          cp movie-dashboard/src/data/remotionStudioToolingProductionDependency.ts /tmp/dependency.ts
+          python - <<'PY'
+          from pathlib import Path
+          path = Path('movie-dashboard/src/data/remotionStudioToolingProductionDependency.ts')
+          text = path.read_text()
+          needle = '  opening: [],'
+          if needle not in text:
+              raise SystemExit('opening adoption registry marker missing')
+          path.write_text(text.replace(needle, '  opening: ["type-mask-reveal"],', 1))
+          PY
+          cd motion-studio
+          node --no-warnings scripts/export-wedding-remotion-element-handoff-identities.mts | tee /tmp/adopted-export.log
+          node --no-warnings scripts/check-wedding-remotion-element-handoff-identities.mts | tee /tmp/adopted-check.log
+          grep -q 'openingAdopted=1' /tmp/adopted-export.log
+          node - <<'NODE'
+          const fs = require('fs');
+          const artifact = JSON.parse(fs.readFileSync('../movie-dashboard/out/remotion-element-handoff/wedding-remotion-element-identities.json', 'utf8'));
+          const opening = artifact.projects.find((project) => project.movieId === 'opening');
+          const identity = opening.identities[0];
+          if (identity.patternId !== 'type-mask-reveal') throw new Error('pattern identity missing');
+          if (identity.canonicalEngine !== 'TypographyRevealEngine') throw new Error('canonical engine missing');
+          if (identity.canonicalMode !== 'mask') throw new Error('canonical mode missing');
+          if (!/^[a-f0-9]{64}$/.test(identity.canonicalBlockSha256)) throw new Error('canonical SHA missing');
+          if (identity.studioInstallActual !== 'NOT_RUN') throw new Error('Studio Actual must remain NOT_RUN');
+          if (identity.productionDependencyPromoted !== false) throw new Error('dependency must not auto-promote');
+          NODE
+
+      - name: Canonical engine mutation invalidates previously exported handoff identity
+        working-directory: motion-studio
+        run: |
+          cp src/motion-kit/engines.tsx /tmp/engines.tsx
+          python - <<'PY'
+          from pathlib import Path
+          path = Path('src/motion-kit/engines.tsx')
+          text = path.read_text()
+          needle = 'export function TypographyRevealEngine({' 
+          if needle not in text:
+              raise SystemExit('TypographyRevealEngine marker missing')
+          path.write_text(text.replace(needle, '// ephemeral handoff currentness mutation\n' + needle, 1))
+          PY
+          if node --no-warnings scripts/check-wedding-remotion-element-handoff-identities.mts > /tmp/stale.log 2>&1; then
+            echo 'Canonical engine mutation must invalidate the exported handoff identity.'
+            exit 1
+          fi
+          grep -Eq 'CANONICAL_SOURCE_SHA_STALE|type-mask-reveal:CANONICAL_SOURCE_SHA_STALE' /tmp/stale.log
+          mv /tmp/engines.tsx src/motion-kit/engines.tsx
+
+      - name: Restore registry and prove export stays evidence-honest
+        run: |
+          mv /tmp/dependency.ts movie-dashboard/src/data/remotionStudioToolingProductionDependency.ts
+          cd motion-studio
+          node --no-warnings scripts/export-wedding-remotion-element-handoff-identities.mts | tee /tmp/restored-export.log
+          node --no-warnings scripts/check-wedding-remotion-element-handoff-identities.mts | tee /tmp/restored-check.log
+          grep -q 'openingAdopted=0' /tmp/restored-export.log
+          grep -q 'weddingRemotionElementHandoffIdentity=CURRENT_SHA_BOUND' /tmp/restored-check.log
+          echo 'remotionStudioGuiActual=NOT_RUN'
+          echo 'macDaVinciActual=NOT_RUN'
+          echo 'productionDependencyPromoted=NO'

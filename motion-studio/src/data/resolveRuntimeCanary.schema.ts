@@ -16,7 +16,7 @@ export const resolveCanaryPageSchema = z.enum(['MEDIA', 'CUT', 'EDIT', 'FUSION',
 
 export const resolveCanaryInputSchema = z.object({
   id: z.string().min(1),
-  kind: z.enum(['MEDIA', 'FCPXML', 'DRFX', 'SETTING', 'LOTTIE', 'DRT', 'DRA', 'SIDECAR', 'OTHER']),
+  kind: z.enum(['MEDIA', 'FCPXML', 'DRFX', 'SETTING', 'LOTTIE', 'OTIO', 'OTIOZ', 'DRT', 'DRA', 'SIDECAR', 'OTHER']),
   required: z.boolean(),
   sourceRef: z.string().min(1),
   preparationCommand: z.string().optional(),

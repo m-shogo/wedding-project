@@ -1,0 +1,56 @@
+name: Production Media Intake Dashboard CI
+
+on:
+  pull_request:
+    paths:
+      - "movie-dashboard/src/components/ProductionMediaIntakeCliGuide.tsx"
+      - "movie-dashboard/src/components/OpeningProductionGatePanel.tsx"
+      - "movie-dashboard/src/pages/OpeningPhotoIntake.tsx"
+      - "movie-dashboard/src/pages/ProfileMediaIntake.tsx"
+      - "movie-dashboard/scripts/verify-production-media-intake-dashboard-guide.mjs"
+      - ".github/workflows/production-media-intake-dashboard-ci.yml"
+  push:
+    branches: [main]
+    paths:
+      - "movie-dashboard/src/components/ProductionMediaIntakeCliGuide.tsx"
+      - "movie-dashboard/src/components/OpeningProductionGatePanel.tsx"
+      - "movie-dashboard/src/pages/OpeningPhotoIntake.tsx"
+      - "movie-dashboard/src/pages/ProfileMediaIntake.tsx"
+      - "movie-dashboard/scripts/verify-production-media-intake-dashboard-guide.mjs"
+      - ".github/workflows/production-media-intake-dashboard-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    defaults:
+      run:
+        working-directory: movie-dashboard
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: movie-dashboard/pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Verify intake workflow honesty
+        run: node scripts/verify-production-media-intake-dashboard-guide.mjs
+
+      - name: Typecheck and build Movie Dashboard
+        run: pnpm build

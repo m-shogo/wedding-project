@@ -1,0 +1,169 @@
+import {useMemo} from "react";
+import {
+  buildProfileProductionStatusHandoff,
+  buildProfileProductionStatusHandoffJson,
+} from "../data/profileProductionStatusHandoff";
+import type {SceneProjectId} from "../data/visualSceneComposer";
+import {downloadText} from "../lib/exporters";
+import {OpeningProductionStatusHandoffCard} from "./OpeningProductionStatusHandoffCard";
+import {ProfileDavinciActualBindingAuditCard} from "./ProfileDavinciActualBindingAuditCard";
+
+const stageLabel: Record<string, string> = {
+  assembly: "Assembly",
+  finalRender: "Final render",
+  finalRenderReview: "Human render QA",
+  productionBundle: "Production bundle",
+  davinciFinishing: "DaVinci Actual",
+  finalDeliveryApproval: "Final approval",
+};
+
+const incompleteStageStates = new Set(["NOT_RUN", "BLOCKED", "MISSING", "STALE"]);
+const shortSha = (value: string | null | undefined) => value ? `${value.slice(0, 12)}…` : "PENDING";
+
+export function ProfileProductionStatusHandoffCard({projectId}: {projectId: SceneProjectId}) {
+  const status = useMemo(() => buildProfileProductionStatusHandoff(), []);
+  const json = useMemo(() => buildProfileProductionStatusHandoffJson(), []);
+
+  if (projectId === "opening") return <OpeningProductionStatusHandoffCard projectId={projectId} />;
+  if (projectId !== "profile") return null;
+
+  const production = status.profile.production;
+  const generatedAccents = status.profile.generatedAccents;
+  const realMediaHumanQa = status.profile.realMediaHumanQa;
+  const sourceRevalidation = production.sourceRevalidation;
+  const palmier = production.palmierHandoff;
+  const davinci = production.davinciHandoff;
+  const recovery = davinci.productionRecovery;
+  const productionReady = production.readiness.productionReady;
+
+  return (
+    <section className="mt-3 border border-fuchsia-300 dark:border-fuchsia-800 p-3">
+      <div className="flex flex-wrap items-start justify-between gap-2">
+        <div>
+          <p className="text-[9px] tracking-[0.16em] font-semibold text-fuchsia-700 dark:text-fuchsia-300">PROFILE V1 / FINAL PRODUCTION STATUS</p>
+          <p className="mt-1 text-[10px] font-semibold text-navy-800 dark:text-sand-100">{production.overallState}</p>
+          <p className="mt-1 text-[8px] text-navy-400">
+            productionReady={productionReady ? "YES" : "NO"} / Mac DaVinci={production.readiness.macDaVinciActual} / generated accents={generatedAccents.count}
+          </p>
+        </div>
+        <button type="button" onClick={() => downloadText(json, "profile-production-status-handoff.json")} className="border border-fuchsia-300 dark:border-fuchsia-700 px-2.5 py-1.5 text-[9px] font-semibold text-fuchsia-700 dark:text-fuchsia-300">
+          Profile production statusを書き出す
+        </button>
+      </div>
+
+      <div className="mt-2 grid gap-1 sm:grid-cols-2">
+        {Object.entries(production.stages).map(([key, stage]) => {
+          const state = String(stage.state);
+          const complete = !incompleteStageStates.has(state);
+          return (
+            <div key={key} className={`border px-2 py-1.5 text-[8px] leading-4 ${complete ? "border-emerald-200 text-emerald-700 dark:border-emerald-800 dark:text-emerald-300" : "border-amber-200 text-amber-700 dark:border-amber-800 dark:text-amber-300"}`}>
+              <div><span className="font-semibold">{stageLabel[key] ?? key}</span>: {state}</div>
+              <div className="text-navy-500 dark:text-navy-300">{stage.detail}</div>
+              {"path" in stage && stage.path ? <code className="block break-all text-navy-400">{stage.path}</code> : null}
+              {stage.recovery.length > 0 ? <div className="text-navy-400">recovery: {stage.recovery.join(" → ")}</div> : null}
+            </div>
+          );
+        })}
+      </div>
+
+      <div className="mt-2 border border-amber-200 dark:border-amber-800 p-2">
+        <p className="text-[8px] font-semibold text-amber-700 dark:text-amber-300">SOURCE REVALIDATION</p>
+        <div className="mt-1 grid gap-1 sm:grid-cols-2">
+          <div className="border border-amber-100 dark:border-amber-900 px-2 py-1.5 text-[8px] leading-4 text-navy-500 dark:text-navy-300">
+            <div className="font-semibold">Real-media preview source</div>
+            <div>{sourceRevalidation.realMediaPreview.state}</div>
+            {sourceRevalidation.realMediaPreview.blockers.length > 0 ? <div>blockers: {sourceRevalidation.realMediaPreview.blockers.join(" / ")}</div> : null}
+            {sourceRevalidation.realMediaPreview.recovery.length > 0 ? <div>recovery: {sourceRevalidation.realMediaPreview.recovery.join(" → ")}</div> : null}
+          </div>
+          <div className="border border-amber-100 dark:border-amber-900 px-2 py-1.5 text-[8px] leading-4 text-navy-500 dark:text-navy-300">
+            <div className="font-semibold">Final render source</div>
+            <div>{sourceRevalidation.finalRender.state}</div>
+            {sourceRevalidation.finalRender.blockers.length > 0 ? <div>blockers: {sourceRevalidation.finalRender.blockers.join(" / ")}</div> : null}
+            {sourceRevalidation.finalRender.recovery.length > 0 ? <div>recovery: {sourceRevalidation.finalRender.recovery.join(" → ")}</div> : null}
+          </div>
+        </div>
+        <p className="mt-1 text-[8px] text-navy-400">{sourceRevalidation.guardrails.join(" / ")}</p>
+      </div>
+
+      <div className="mt-2 border border-fuchsia-100 dark:border-fuchsia-900 p-2">
+        <div className="flex flex-wrap items-center justify-between gap-1">
+          <p className="text-[8px] font-semibold text-fuchsia-700 dark:text-fuchsia-300">PALMIER HANDOFF / {palmier.contractVersion}</p>
+          <span className="text-[8px] text-navy-400">artifacts={palmier.current ? "CURRENT" : "NOT_EXPORTED_OR_STALE"}</span>
+        </div>
+        <div className="mt-1 text-[8px] leading-4 text-navy-500 dark:text-navy-300">
+          <div>scene timeline: <code>{palmier.artifacts.sceneTimeline.path}</code></div>
+          <div>carries: {palmier.artifacts.sceneTimeline.carries.join(" / ")}</div>
+          <div>Profile QA binding: <code>{shortSha(davinci.upstreamPalmier.realMediaHumanQaBindingFingerprintSha256)}</code></div>
+        </div>
+      </div>
+
+      <div className="mt-2 border border-indigo-200 dark:border-indigo-800 p-2">
+        <div className="flex flex-wrap items-center justify-between gap-1">
+          <p className="text-[8px] font-semibold text-indigo-700 dark:text-indigo-300">DAVINCI HANDOFF / {davinci.contractVersion}</p>
+          <span className="text-[8px] text-indigo-600 dark:text-indigo-300">handoff={davinci.current ? "CURRENT" : "NOT_EXPORTED_OR_STALE"}</span>
+        </div>
+        <div className="mt-1 text-[8px] leading-4 text-navy-500 dark:text-navy-300">
+          <div>source: <code className="break-all">{davinci.handoffAsset.path}</code></div>
+          <div>expected SHA: <code>{davinci.handoffAsset.expectedSha256 ?? "PENDING_BUNDLE_EXPORT"}</code></div>
+          <div>use: {davinci.handoffAsset.intendedUse}</div>
+          <div>Actual evidence: <code className="break-all">{davinci.actualEvidence.path}</code></div>
+          <div>required: {davinci.actualEvidence.requiredChecks.join(" / ")}</div>
+          <div>canonical accent routes: {davinci.generatedAccentRoutes.length}</div>
+        </div>
+        <p className="mt-1 text-[8px] text-navy-400">DAVINCI_HANDOFF_CURRENT != MAC_DAVINCI_ACTUAL_VERIFIED / GENERATED_ACCENT_ROUTE_EXPORTED != MAC_DAVINCI_ACTUAL_VERIFIED</p>
+      </div>
+
+      <div className="mt-2 border border-violet-200 dark:border-violet-800 p-2">
+        <div className="flex flex-wrap items-center justify-between gap-1">
+          <p className="text-[8px] font-semibold text-violet-700 dark:text-violet-300">PROFILE HUMAN QA → DAVINCI RECOVERY BINDING</p>
+          <span className="text-[8px] text-violet-600 dark:text-violet-300">Human QA={realMediaHumanQa.state} / Actual={recovery.actualState}</span>
+        </div>
+        <div className="mt-1 grid gap-1 sm:grid-cols-2 text-[8px] leading-4 text-navy-500 dark:text-navy-300">
+          <div className="border border-violet-100 dark:border-violet-900 px-2 py-1.5">
+            <div className="font-semibold">Current Human QA authority</div>
+            <div>evidence: <code className="break-all">{realMediaHumanQa.audit.evidencePath}</code></div>
+            <div>evidence SHA: <code>{shortSha(realMediaHumanQa.audit.evidenceSha256)}</code></div>
+            <div>preview source: <code>{shortSha(realMediaHumanQa.audit.previewSourceFingerprintSha256)}</code></div>
+            <div>reviewed: {realMediaHumanQa.mediaReviewed}/{realMediaHumanQa.mediaExpected}</div>
+          </div>
+          <div className="border border-violet-100 dark:border-violet-900 px-2 py-1.5">
+            <div className="font-semibold">Exported recovery sidecar binding</div>
+            <div>sidecar: <code className="break-all">{recovery.path}</code></div>
+            <div>render SHA: <code>{shortSha(recovery.sourceRenderSha256)}</code></div>
+            <div>QA evidence SHA: <code>{shortSha(recovery.realMediaHumanQaEvidenceSha256)}</code></div>
+            <div>QA fingerprint: <code>{shortSha(recovery.realMediaHumanQaBindingFingerprintSha256)}</code></div>
+          </div>
+        </div>
+        <p className="mt-1 text-[8px] text-navy-400">
+          PROFILE_REAL_MEDIA_HUMAN_QA_CHANGED =&gt; DAVINCI_RECOVERY_SIDECAR_STALE / PROFILE_REAL_MEDIA_HUMAN_QA_BINDING_EXPORTED != MAC_DAVINCI_ACTUAL_VERIFIED
+        </p>
+      </div>
+
+      <ProfileDavinciActualBindingAuditCard />
+
+      <div className="mt-2 border border-fuchsia-100 dark:border-fuchsia-900 p-2">
+        <p className="text-[8px] font-semibold text-fuchsia-700 dark:text-fuchsia-300">GENERATED ACCENTS / CANONICAL ROUTES</p>
+        <div className="mt-1 grid gap-1 sm:grid-cols-3">
+          {generatedAccents.accents.map((accent) => (
+            <div key={accent.slotId} className="border border-sand-200 dark:border-navy-700 px-2 py-1.5 text-[8px] leading-4 text-navy-500 dark:text-navy-300">
+              <div className="font-semibold">{accent.label}</div><div>{accent.implementation}</div><div className="opacity-70">reuse: {accent.canonicalReuse}</div>
+            </div>
+          ))}
+        </div>
+        <p className="mt-1 text-[8px] text-navy-400">visualSmokeOnly={generatedAccents.evidence.visualSmokeOnly ? "YES" : "NO"} / MacDaVinci={generatedAccents.evidence.macDaVinciActual} / productionReady={generatedAccents.evidence.productionReady ? "YES" : "NO"}</p>
+      </div>
+
+      <div className="mt-2 border border-fuchsia-100 dark:border-fuchsia-900 p-2">
+        <p className="text-[8px] font-semibold text-fuchsia-700 dark:text-fuchsia-300">NEXT ACTIONS</p>
+        <ol className="mt-1 space-y-1 text-[8px] leading-4 text-navy-500 dark:text-navy-300">{production.nextActions.map((action, index) => <li key={`${index}-${action}`}>{index + 1}. <code>{action}</code></li>)}</ol>
+      </div>
+
+      <p className="mt-2 text-[8px] leading-4 text-navy-400">
+        このstatusはBLOCKED / NOT_RUNも含めて現在状態・理由・artifact path・正規recovery commandとPalmier / DaVinci handoff contractを外へ渡すためのenvelopeです。Assembly manifestの可否とは別なので、未完成でも書き出せます。
+        `ASSEMBLY_READY != PRODUCTION_READY` / `HANDOFF_METADATA_EXPORTED != HANDOFF_ARTIFACTS_CURRENT` / `DAVINCI_HANDOFF_CURRENT != MAC_DAVINCI_ACTUAL_VERIFIED` / `MAC_DAVINCI_ACTUAL_VERIFIED != FINAL_DELIVERY_APPROVED`
+      </p>
+
+      <details className="mt-2"><summary className="cursor-pointer text-[8px] text-fuchsia-700 dark:text-fuchsia-300">Profile production status JSON</summary><pre className="mt-2 max-h-72 overflow-auto whitespace-pre-wrap border border-sand-200 dark:border-navy-600 p-2 text-[8px] leading-4 text-navy-500 dark:text-navy-300">{json}</pre></details>
+    </section>
+  );
+}

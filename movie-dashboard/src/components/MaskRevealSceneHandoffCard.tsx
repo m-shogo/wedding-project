@@ -10,6 +10,15 @@ import { getResolveHandoffEditability } from "../data/resolveHandoffEditability"
 import { getResolveHumanAdjustability } from "../data/resolveHumanAdjustability";
 import type { MaskRevealSceneInstance } from "../data/visualSceneComposer";
 import { downloadText } from "../lib/exporters";
+import { ProfileProductionStatusHandoffCard } from "./ProfileProductionStatusHandoffCard";
+import { ProjectTypographyRoleHandoffRevalidationCard } from "./ProjectTypographyRoleHandoffRevalidationCard";
+import { WeddingMovieProductionCriticalPathCard } from "./WeddingMovieProductionCriticalPathCard";
+import { TypographyDaVinciProductionReleaseGateForScene } from "./TypographyDaVinciProductionReleaseGateForScene";
+import { TypographyProductionRoleGuide } from "./TypographyProductionRoleGuide";
+import { TypographyProductionRouteSelector } from "./TypographyProductionRouteSelector";
+import { TypographyProductionRoutingMatrix } from "./TypographyProductionRoutingMatrix";
+import { TypographyProjectDeliveryBatchCard } from "./TypographyProjectDeliveryBatchCard";
+import { TypographySceneDeliveryPackageCard } from "./TypographySceneDeliveryPackageCard";
 
 const TRANSPORT_LABEL_JA: Record<string, string> = {
   EXACT: "そのまま転送",
@@ -73,6 +82,16 @@ export function MaskRevealSceneHandoffCard({ scene }: { scene: MaskRevealSceneIn
           このScene revisionと一致するDaVinci Actual sampleはRender/1x/0.5x QA済みです。Palmier marker付きFCPXMLのscratch Resolve import・marker/title/120frames照合と、独立ffmpeg rendered-pixel oracleも完了しています。
         </p>
       )}
+
+      <TypographyProductionRoleGuide projectId={scene.projectId} />
+      <TypographyProductionRouteSelector scene={scene} />
+      <TypographySceneDeliveryPackageCard scene={scene} />
+      <TypographyProjectDeliveryBatchCard projectId={scene.projectId} />
+      <ProjectTypographyRoleHandoffRevalidationCard projectId={scene.projectId} />
+      <WeddingMovieProductionCriticalPathCard projectId={scene.projectId} />
+      <ProfileProductionStatusHandoffCard projectId={scene.projectId} />
+      <TypographyDaVinciProductionReleaseGateForScene scene={scene} />
+      <TypographyProductionRoutingMatrix />
 
       <details className="mt-2">
         <summary className="cursor-pointer text-[10px] text-sky-700 dark:text-sky-300">Export詳細を見る</summary>

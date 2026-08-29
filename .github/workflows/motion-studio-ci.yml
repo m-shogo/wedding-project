@@ -57,6 +57,139 @@ jobs:
       - name: Opening V1 sound contracts
         run: pnpm check:opening-sound
 
+      - name: Opening V1 assembly preflight report stays honest on fresh clone
+        run: |
+          mkdir -p out/qa
+          node --no-warnings scripts/opening-v1-assembly-preflight.mts --json > out/qa/opening-v1-assembly-preflight.json
+          node -e "const fs=require('fs'); const r=JSON.parse(fs.readFileSync('out/qa/opening-v1-assembly-preflight.json','utf8')); if(r.schemaVersion!=='opening-v1-assembly-preflight/v1') process.exit(1); if(r.photos.expectedCount!==11) process.exit(1); if(r.readiness.finalRenderEligible!==false) process.exit(1); if(r.readiness.renderQaState!=='NOT_RUN') process.exit(1); if(r.readiness.macDaVinciActualState!=='NOT_RUN') process.exit(1);"
+          if pnpm opening:assembly-preflight:strict; then
+            echo "assembly preflight unexpectedly passed without real photos/BGM"
+            exit 1
+          fi
+          if pnpm opening:assembly-preflight:mix-strict; then
+            echo "mix-strict preflight unexpectedly passed without ambience"
+            exit 1
+          fi
+          echo "assembly preflight correctly reports JSON and fails closed on missing real media"
+
+      - name: Opening V1 preview review evidence starts NOT_RUN and fails closed
+        run: |
+          pnpm opening:preview-review
+          if pnpm opening:preview-review:strict; then
+            echo "preview review unexpectedly passed without human evidence"
+            exit 1
+          fi
+          for token in "opening-v1-preview-review/v1" "STALE_PREVIEW_SHA256" "STALE_PHOTO" "STALE_BGM" "crop: 'NOT_RUN'" "focus: 'NOT_RUN'" "color: 'NOT_RUN'" "motion: 'NOT_RUN'"; do
+            grep -q "$token" scripts/opening-v1-preview-review.mts || { echo "missing preview review contract token: $token"; exit 1; }
+          done
+          echo "preview review correctly remains NOT_RUN until a human reviews evidence bound to current media"
+
+      - name: Opening V1 final render Human review remains separate and fail-closed
+        run: |
+          node --no-warnings scripts/opening-v1-final-render-review.mts
+          if node --no-warnings scripts/opening-v1-final-render-review.mts --strict; then
+            echo "final render Human review unexpectedly passed without current final MP4 evidence"
+            exit 1
+          fi
+          for token in \
+            "opening-v1-final-render-review/v1" \
+            "HUMAN_FINAL_RENDER_REVIEW" \
+            "STALE_FINAL_RENDER" \
+            "STALE_RENDER_SOURCE_FINGERPRINT" \
+            "REVIEWED_BEFORE_BINDING" \
+            "finalEncodingPlayback: 'NOT_RUN'" \
+            "macDaVinciActual: 'NOT_RUN'" \
+            "productionReady: false"; do
+            grep -q "$token" scripts/opening-v1-final-render-review.mts || { echo "missing final render Human review contract token: $token"; exit 1; }
+          done
+          grep -q "fresh guarded production render" scripts/init-opening-v1-final-render-review.mts
+          echo "final render Human review correctly stays separate from preview review, technical QA and DaVinci Actual"
+
+      - name: Opening V1 final render production bundle fails closed without approved media
+        run: |
+          if pnpm export:opening-v1-production-bundle; then
+            echo "final render handoff unexpectedly exported without media/review/final render"
+            exit 1
+          fi
+          for token in \
+            "opening-v1-production-bundle/v1" \
+            "FINAL_RENDER_BOUND_HANDOFF" \
+            "humanFinalRenderReview" \
+            "opening-v1-final-render-review.mts" \
+            "HUMAN_PREVIEW_REVIEW_PASS != HUMAN_FINAL_RENDER_REVIEW_PASS" \
+            "FINAL_RENDER_OR_RENDER_SOURCE_CHANGED => RE_RENDER_AND_RE_REVIEW" \
+            "finalRenderSha256" \
+            "macActualState: 'NOT_RUN'" \
+            "productionReady: false" \
+            "RENDER_SHA_MISMATCH" \
+            "opening-v1-production-bundle.json" \
+            "opening-v1-palmier-timeline.csv"; do
+            grep -q "$token" scripts/export-opening-v1-production-bundle.mts || { echo "missing final handoff contract token: $token"; exit 1; }
+          done
+          echo "final render handoff correctly stays blocked until current media, preview review, final MP4 Human review and final render all exist"
+
+      - name: Opening V1 DaVinci finishing evidence starts NOT_RUN and fails closed
+        run: |
+          pnpm opening:davinci-finishing
+          if pnpm opening:davinci-finishing:strict; then
+            echo "DaVinci finishing evidence unexpectedly passed without Mac Actual"
+            exit 1
+          fi
+          for token in \
+            "opening-v1-davinci-finishing-evidence/v1" \
+            "MAC_DAVINCI_ACTUAL_EVIDENCE" \
+            "STALE_DAVINCI_FINISHING_BUNDLE_SHA" \
+            "SOURCE_READBACK_SHA_MISMATCH" \
+            "timelineInsertion: 'NOT_RUN'" \
+            "playback1x: 'NOT_RUN'" \
+            "watchedWithSound: 'NOT_RUN'" \
+            "productionReady: false"; do
+            grep -q "$token" scripts/opening-v1-davinci-finishing-evidence.mts || { echo "missing DaVinci finishing contract token: $token"; exit 1; }
+          done
+          echo "DaVinci finishing correctly remains NOT_RUN until bundle-bound Mac Resolve Actual is recorded"
+
+      - name: Opening V1 final delivery approval remains human-only and fail-closed
+        run: |
+          pnpm opening:final-delivery-approval
+          if pnpm opening:final-delivery-approval:strict; then
+            echo "final delivery approval unexpectedly passed without bundle-bound human approval"
+            exit 1
+          fi
+          for token in \
+            "opening-v1-final-delivery-approval/v1" \
+            "HUMAN_FINAL_DELIVERY_APPROVAL" \
+            "decision: 'HOLD'" \
+            "productionReady: false" \
+            "STALE_FINAL_DELIVERY_BUNDLE_SHA" \
+            "STALE_FINAL_DELIVERY_DAVINCI_EVIDENCE_SHA" \
+            "FINAL_DELIVERY_DECISION_" \
+            "productionReady=true is valid only"; do
+            grep -q "$token" scripts/opening-v1-final-delivery-approval.mts || { echo "missing final approval contract token: $token"; exit 1; }
+          done
+          echo "final delivery approval cannot be manufactured by CI and only becomes production-ready after explicit SHA-bound human approval"
+
+      - name: Opening V1 production status identifies the exact first blocker
+        run: |
+          mkdir -p out/qa
+          node --no-warnings scripts/opening-v1-production-status.mts --json > out/qa/opening-v1-production-status.json
+          node -e "const fs=require('fs'); const r=JSON.parse(fs.readFileSync('out/qa/opening-v1-production-status.json','utf8')); if(r.schemaVersion!=='opening-v1-production-status/v1') process.exit(1); if(r.authority!=='DERIVED_PRODUCTION_STATUS') process.exit(1); if(r.overallState!=='MEDIA_REQUIRED') process.exit(1); if(r.stages.media.state!=='BLOCKED') process.exit(1); if(r.stages.previewRender.state!=='NOT_RUN') process.exit(1); if(r.stages.finalDeliveryApproval.state!=='NOT_RUN') process.exit(1); if(r.readiness.macDaVinciActualVerified!==false) process.exit(1); if(r.readiness.finalDeliveryApproved!==false) process.exit(1); if(r.readiness.productionReady!==false) process.exit(1);"
+          if pnpm opening:production-status:strict; then
+            echo "production status unexpectedly reached human final delivery approval on a fresh clone"
+            exit 1
+          fi
+          for token in \
+            "opening-v1-production-status/v1" \
+            "MEDIA_REQUIRED" \
+            "FINAL_DELIVERY_APPROVAL_INIT_REQUIRED" \
+            "FINAL_DELIVERY_APPROVAL_REQUIRED_OR_STALE" \
+            "PRODUCTION_READY" \
+            "PRODUCTION_BUNDLE_STALE" \
+            "DAVINCI_ACTUAL_REQUIRED_OR_STALE" \
+            "CI_MUST_NOT_APPROVE_FINAL_DELIVERY"; do
+            grep -q "$token" scripts/opening-v1-production-status.mts || { echo "missing production status contract token: $token"; exit 1; }
+          done
+          echo "production status correctly requires the explicit final human approval after DaVinci Actual"
+
       - name: Opening V1 final BGM gate fails closed without cleared media
         run: |
           if pnpm check:opening-sound:strict; then
@@ -84,13 +217,21 @@ jobs:
             out/qa/render-contract.mp4 \
             --width=640 --height=360 --fps=30 --duration=1 --duration-tolerance=0.05
 
-      - name: Opening V1 visual smoke stills
-        run: node --no-warnings scripts/render-opening-v1-qa-stills.mts
+      - name: Opening V1 production QA stills fail closed without real inputs
+        run: |
+          if node --no-warnings scripts/render-opening-v1-qa-stills.mts; then
+            echo "production QA stills unexpectedly rendered without real photos/current cleared BGM"
+            exit 1
+          fi
+          echo "production QA stills correctly require current assembly inputs"
 
-      - name: Upload Opening V1 visual QA
+      - name: Opening V1 placeholder visual smoke stills remain explicit
+        run: node --no-warnings scripts/render-opening-v1-qa-stills.mts --allow-missing-media-smoke
+
+      - name: Upload Opening V1 visual smoke
         uses: actions/upload-artifact@v4
         with:
-          name: opening-v1-qa-stills
+          name: opening-v1-visual-smoke
           path: motion-studio/out/qa/opening-v1/*.png
           if-no-files-found: error
           retention-days: 7

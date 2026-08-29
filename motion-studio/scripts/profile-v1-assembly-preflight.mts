@@ -1,0 +1,249 @@
+import {spawnSync} from 'node:child_process';
+import {existsSync, readdirSync, statSync} from 'node:fs';
+import {dirname, extname, join} from 'node:path';
+import {fileURLToPath} from 'node:url';
+import {
+  profileV1Chapters,
+  profileV1ProductionContract,
+  profileV1RequiredMediaSlots,
+} from '../src/data/profileV1ProductionPlan.ts';
+import {verifyIntakeReceipt} from './verify-production-media-intake-receipt.mts';
+
+const studioRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
+const mediaRoot = join(studioRoot, profileV1ProductionContract.mediaDirectory);
+const audioPath = join(studioRoot, 'public/audio/profile/bgm-main.mp3');
+const mediaExts = new Set(['.jpg', '.jpeg', '.png', '.webp', '.mp4', '.mov', '.m4v', '.webm']);
+const jsonMode = process.argv.includes('--json');
+const strict = process.argv.includes('--strict');
+
+const normalizeStem = (file: string) => {
+  const ext = extname(file);
+  return file.slice(0, file.length - ext.length).toLowerCase().replaceAll('_', '-');
+};
+
+const mediaFiles = existsSync(mediaRoot)
+  ? readdirSync(mediaRoot)
+      .filter((file) => !file.startsWith('.'))
+      .filter((file) => statSync(join(mediaRoot, file)).isFile())
+      .filter((file) => mediaExts.has(extname(file).toLowerCase()))
+      .sort((a, b) => a.localeCompare(b, 'en'))
+  : [];
+const mediaByStem = new Map(mediaFiles.map((file) => [normalizeStem(file), file]));
+
+const mediaSlots = profileV1RequiredMediaSlots.map((slot) => {
+  const file = mediaByStem.get(slot.canonicalStem) ?? null;
+  return {
+    ...slot,
+    file,
+    ready: Boolean(file),
+    cropQaState: 'NOT_RUN' as const,
+    focusQaState: 'NOT_RUN' as const,
+    colorQaState: 'NOT_RUN' as const,
+    emotionalFitQaState: 'NOT_RUN' as const,
+  };
+});
+
+const readyMediaCount = mediaSlots.filter((slot) => slot.ready).length;
+const mediaFilesReady = readyMediaCount === mediaSlots.length;
+const mediaReceipt = verifyIntakeReceipt({project: 'profile', targetDirectory: mediaRoot});
+const mediaReceiptCurrent = mediaReceipt.current;
+const mediaReady = mediaFilesReady && mediaReceiptCurrent;
+const bgmFileExists = existsSync(audioPath);
+
+type RightsStatus = {
+  schemaVersion: 'profile-v1-bgm-rights-status/v1';
+  authority: 'DERIVED_BGM_RIGHTS_STATUS';
+  state: 'NOT_RUN' | 'BLOCKED' | 'CLEARED';
+  bgm: {path: string; sha256: string} | null;
+  intakeReceipt: {current: boolean; receiptPath: string; targetPath: string; blockers: string[]};
+  approvalPath: string;
+  blockers: string[];
+  rightsCleared: boolean;
+};
+
+type StructureReviewStatus = {
+  schemaVersion: 'profile-v1-full-structure-review-status/v1';
+  authority: 'DERIVED_STRUCTURE_REVIEW_STATUS';
+  state: 'NOT_RUN' | 'BLOCKED' | 'PASS';
+  evidencePath: string;
+  boundPreviewSha256: string | null;
+  currentPreviewSha256: string | null;
+  reviewer: string | null;
+  reviewedAt: string | null;
+  blockers: string[];
+  humanReviewComplete: boolean;
+  realMediaReviewed: false;
+  bgmReviewed: false;
+  contentAccuracyReviewed: false;
+  macDaVinciActual: 'NOT_RUN';
+  productionReady: false;
+};
+
+type RealMediaReviewStatus = {
+  schemaVersion: 'profile-v1-real-media-review-status/v1';
+  authority: 'DERIVED_REAL_MEDIA_REVIEW_STATUS';
+  state: 'NOT_RUN' | 'BLOCKED' | 'PASS';
+  humanReviewComplete: boolean;
+  blockers: string[];
+  mediaExpected: 17;
+  mediaReviewed: number;
+  bgmReviewed: false;
+  macDaVinciActual: 'NOT_RUN';
+  productionReady: false;
+};
+
+type AudioListeningReviewStatus = {
+  schemaVersion: 'profile-v1-audio-listening-review-status/v1';
+  authority: 'DERIVED_PROFILE_AUDIO_LISTENING_REVIEW_STATUS';
+  state: 'NOT_RUN' | 'BLOCKED' | 'PASS';
+  evidencePath: string;
+  blockers: string[];
+  humanAudioQaComplete: boolean;
+  macDaVinciActual: 'NOT_RUN';
+  productionReady: false;
+};
+
+const rightsRun = spawnSync(process.execPath, ['--no-warnings', 'scripts/profile-v1-bgm-rights-approval.mts', '--json'], {cwd: studioRoot, encoding: 'utf8'});
+if (rightsRun.status !== 0) throw new Error(`PROFILE_BGM_RIGHTS_STATUS_FAILED:${rightsRun.stderr || rightsRun.stdout}`);
+const rightsStatus = JSON.parse(rightsRun.stdout) as RightsStatus;
+if (rightsStatus.schemaVersion !== 'profile-v1-bgm-rights-status/v1' || rightsStatus.authority !== 'DERIVED_BGM_RIGHTS_STATUS') throw new Error('PROFILE_BGM_RIGHTS_STATUS_CONTRACT');
+
+const structureReviewRun = spawnSync(process.execPath, ['--no-warnings', 'scripts/profile-v1-full-structure-review.mts', '--json'], {cwd: studioRoot, encoding: 'utf8'});
+if (structureReviewRun.status !== 0) throw new Error(`PROFILE_STRUCTURE_REVIEW_STATUS_FAILED:${structureReviewRun.stderr || structureReviewRun.stdout}`);
+const structureReview = JSON.parse(structureReviewRun.stdout) as StructureReviewStatus;
+if (structureReview.schemaVersion !== 'profile-v1-full-structure-review-status/v1' || structureReview.authority !== 'DERIVED_STRUCTURE_REVIEW_STATUS') throw new Error('PROFILE_STRUCTURE_REVIEW_STATUS_CONTRACT');
+
+const realMediaReviewRun = spawnSync(process.execPath, ['--no-warnings', 'scripts/profile-v1-real-media-review.mts', '--json'], {cwd: studioRoot, encoding: 'utf8'});
+if (realMediaReviewRun.status !== 0) throw new Error(`PROFILE_REAL_MEDIA_REVIEW_STATUS_FAILED:${realMediaReviewRun.stderr || realMediaReviewRun.stdout}`);
+const realMediaReview = JSON.parse(realMediaReviewRun.stdout) as RealMediaReviewStatus;
+if (realMediaReview.schemaVersion !== 'profile-v1-real-media-review-status/v1' || realMediaReview.authority !== 'DERIVED_REAL_MEDIA_REVIEW_STATUS') throw new Error('PROFILE_REAL_MEDIA_REVIEW_STATUS_CONTRACT');
+
+const audioReviewRun = spawnSync(process.execPath, ['--no-warnings', 'scripts/profile-v1-audio-listening-review.mts', '--json'], {cwd: studioRoot, encoding: 'utf8'});
+if (audioReviewRun.status !== 0) throw new Error(`PROFILE_AUDIO_LISTENING_REVIEW_STATUS_FAILED:${audioReviewRun.stderr || audioReviewRun.stdout}`);
+const audioReview = JSON.parse(audioReviewRun.stdout) as AudioListeningReviewStatus;
+if (audioReview.schemaVersion !== 'profile-v1-audio-listening-review-status/v1' || audioReview.authority !== 'DERIVED_PROFILE_AUDIO_LISTENING_REVIEW_STATUS') throw new Error('PROFILE_AUDIO_LISTENING_REVIEW_STATUS_CONTRACT');
+
+const bgmRightsState = rightsStatus.state;
+const bgmReceiptCurrent = rightsStatus.intakeReceipt.current;
+const bgmReady = bgmFileExists && bgmReceiptCurrent && rightsStatus.rightsCleared;
+const finalRenderEligible = mediaReady && bgmReady;
+const assemblyReady =
+  finalRenderEligible &&
+  structureReview.state === 'PASS' &&
+  structureReview.humanReviewComplete &&
+  realMediaReview.state === 'PASS' &&
+  realMediaReview.humanReviewComplete &&
+  audioReview.state === 'PASS' &&
+  audioReview.humanAudioQaComplete;
+
+const blockers = [
+  ...mediaSlots.filter((slot) => !slot.ready).map((slot) => `MEDIA_MISSING:${slot.id}`),
+  ...(!mediaReceiptCurrent ? ['MEDIA_INTAKE_RECEIPT_STALE', ...mediaReceipt.errors.map((error) => `MEDIA_INTAKE:${error}`)] : []),
+  ...rightsStatus.blockers.map((blocker) => `BGM_RIGHTS:${blocker}`),
+  ...(structureReview.state === 'PASS' ? [] : structureReview.blockers.length > 0 ? structureReview.blockers.map((blocker) => `STRUCTURE_REVIEW:${blocker}`) : [`STRUCTURE_REVIEW:${structureReview.state}`]),
+  ...(realMediaReview.state === 'PASS' ? [] : realMediaReview.blockers.length > 0 ? realMediaReview.blockers.map((blocker) => `REAL_MEDIA_REVIEW:${blocker}`) : [`REAL_MEDIA_REVIEW:${realMediaReview.state}`]),
+  ...(audioReview.state === 'PASS' ? [] : audioReview.blockers.length > 0 ? audioReview.blockers.map((blocker) => `AUDIO_LISTENING_REVIEW:${blocker}`) : [`AUDIO_LISTENING_REVIEW:${audioReview.state}`]),
+];
+
+const chapterRows = profileV1Chapters.map((chapter) => {
+  const required = mediaSlots.filter((slot) => slot.chapterId === chapter.id);
+  const readyCount = required.filter((slot) => slot.ready).length;
+  return {chapterId: chapter.id, order: chapter.order, title: chapter.title, role: chapter.role, editIntent: chapter.editIntent, requiredCount: required.length, readyCount, ready: readyCount === required.length};
+});
+
+const canonicalMediaIntakeActions = [
+  'node --no-warnings scripts/intake-production-media.mts --project profile --source "/ABS/PATH/TO/profile-media"',
+  'node --no-warnings scripts/intake-production-media.mts --project profile --source "/ABS/PATH/TO/profile-media" --apply --overwrite --receipt out/intake/profile-media-intake.json',
+  'node --no-warnings scripts/verify-production-media-intake-receipt.mts --project profile',
+  'pnpm prepare:profile-v1',
+];
+const canonicalBgmIntakeActions = [
+  'node --no-warnings scripts/intake-production-bgm.mts --project profile --source "/ABS/PATH/TO/profile-bgm.mp3"',
+  'node --no-warnings scripts/intake-production-bgm.mts --project profile --source "/ABS/PATH/TO/profile-bgm.mp3" --apply --receipt out/intake/profile-bgm-intake.json',
+  'node --no-warnings scripts/verify-production-bgm-intake-receipt.mts --project profile',
+];
+const bgmRightsApprovalActions = [
+  'node --no-warnings scripts/profile-v1-bgm-rights-approval.mts --init',
+  '生成されたHOLD artifactを人間が権利証拠に基づいて編集',
+  'node --no-warnings scripts/profile-v1-bgm-rights-approval.mts --strict',
+];
+const inputRecoveryActions = [
+  ...(!mediaReady ? canonicalMediaIntakeActions : []),
+  ...(!bgmFileExists || !bgmReceiptCurrent ? canonicalBgmIntakeActions : !bgmReady ? bgmRightsApprovalActions : []),
+];
+
+const report = {
+  schemaVersion: 'profile-v1-assembly-preflight/v1' as const,
+  authority: 'MOTION_STUDIO_DERIVED_PREFLIGHT' as const,
+  sourceAuthority: profileV1ProductionContract.sourceAuthority,
+  chapters: chapterRows,
+  media: {
+    directory: profileV1ProductionContract.mediaDirectory,
+    ready: mediaReady,
+    fileReady: mediaFilesReady,
+    readyCount: readyMediaCount,
+    expectedCount: mediaSlots.length,
+    intakeReceiptCurrent: mediaReceiptCurrent,
+    intakeReceiptPath: 'out/intake/profile-media-intake.json',
+    intakeReceiptVerifiedCount: mediaReceipt.verifiedCount,
+    intakeReceiptBlockers: mediaReceipt.errors,
+    slots: mediaSlots,
+  },
+  audio: {
+    assetId: profileV1ProductionContract.bgmAssetId,
+    path: 'public/audio/profile/bgm-main.mp3',
+    fileExists: bgmFileExists,
+    intakeReceiptCurrent: bgmReceiptCurrent,
+    intakeReceiptPath: rightsStatus.intakeReceipt.receiptPath,
+    intakeReceiptBlockers: rightsStatus.intakeReceipt.blockers,
+    rightsState: bgmRightsState,
+    rightsApprovalPath: rightsStatus.approvalPath,
+    rightsBoundSha256: rightsStatus.bgm?.sha256 ?? null,
+    ready: bgmReady,
+  },
+  structureReview,
+  realMediaReview,
+  audioReview,
+  readiness: {
+    finalRenderEligible,
+    assemblyReady,
+    blockers,
+    structurePreviewQaState: structureReview.state,
+    previewQaState: realMediaReview.state,
+    humanContentQaState: realMediaReview.state,
+    audioQaState: audioReview.state,
+    macDaVinciActualState: 'NOT_RUN' as const,
+    productionReady: false,
+  },
+  nextActions: inputRecoveryActions.length > 0
+    ? inputRecoveryActions
+    : structureReview.state !== 'PASS'
+      ? ['30秒全5章structure previewを人間確認', 'structure review evidenceをPASSへ更新', '実素材preview QAへ進む']
+      : realMediaReview.state !== 'PASS'
+        ? [
+            'node --no-warnings scripts/render-profile-v1-real-media-preview.mts',
+            'node --no-warnings scripts/profile-v1-real-media-review.mts --init',
+            '17素材のcrop/focus/color/emotional-fit/contentと5章flow/readability/role fitを人間確認',
+            'node --no-warnings scripts/profile-v1-real-media-review.mts --strict',
+          ]
+        : audioReview.state !== 'PASS'
+          ? [
+              'rights-cleared BGM入り30秒real-media previewを最後まで人間が再生',
+              'node --no-warnings scripts/profile-v1-audio-listening-review.mts --init',
+              'audibility/balance/startIntegrity/endIntegrity/pictureSyncを人間確認しPASSへ更新',
+              'node --no-warnings scripts/profile-v1-audio-listening-review.mts --strict',
+            ]
+          : ['Profile assembly input + structure + real-media + Human audio QA ready', 'final render / DaVinci handoffへ進む'],
+};
+
+if (jsonMode) {
+  console.log(JSON.stringify(report, null, 2));
+} else {
+  console.log(`Profile V1 assembly preflight: chapters=${chapterRows.filter((chapter) => chapter.ready).length}/${chapterRows.length} media=${readyMediaCount}/${mediaSlots.length} files=${mediaFilesReady ? 'READY' : 'BLOCKED'} mediaReceipt=${mediaReceiptCurrent ? 'CURRENT' : 'MISSING_OR_STALE'} BGM=${bgmReady ? 'READY' : `BLOCKED/${bgmRightsState}`} bgmReceipt=${bgmReceiptCurrent ? 'CURRENT' : 'MISSING_OR_STALE'} structure=${structureReview.state} realMediaQA=${realMediaReview.state} audioQA=${audioReview.state}`);
+  console.log(`finalRenderEligible=${finalRenderEligible ? 'YES' : 'NO'} assemblyReady=${assemblyReady ? 'YES' : 'NO'} structurePreviewQA=${structureReview.state} realMediaPreviewQA=${realMediaReview.state} HumanContentQA=${realMediaReview.state} HumanAudioQA=${audioReview.state} MacDaVinciActual=NOT_RUN productionReady=NO`);
+  for (const blocker of blockers) console.log(`BLOCK / ${blocker}`);
+  console.log(`NEXT / ${report.nextActions.join(' → ')}`);
+  console.log('JSON / node --no-warnings scripts/profile-v1-assembly-preflight.mts --json');
+}
+
+if (strict && !assemblyReady) process.exit(1);

@@ -1,0 +1,46 @@
+name: Opening V1 Audio Listening Review CI
+
+on:
+  pull_request:
+    paths:
+      - 'motion-studio/scripts/opening-v1-audio-listening-review.mts'
+      - 'motion-studio/scripts/opening-v1-bgm-rights-approval.mts'
+      - '.github/workflows/opening-v1-audio-listening-review-ci.yml'
+  workflow_dispatch:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: motion-studio
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: motion-studio/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - name: Fresh checkout must remain NOT_RUN and fail closed
+        run: |
+          node --no-warnings scripts/opening-v1-audio-listening-review.mts --json > /tmp/opening-audio.json
+          node - <<'NODE'
+          const fs = require('fs');
+          const report = JSON.parse(fs.readFileSync('/tmp/opening-audio.json', 'utf8'));
+          if (report.state !== 'NOT_RUN') throw new Error(`expected NOT_RUN, got ${report.state}`);
+          if (report.humanAudioQaComplete !== false) throw new Error('humanAudioQaComplete must fail closed');
+          if (report.remotionStudioActual !== 'NOT_RUN') throw new Error('Remotion Studio Actual must remain NOT_RUN');
+          if (report.macDaVinciActual !== 'NOT_RUN') throw new Error('Mac DaVinci Actual must remain NOT_RUN');
+          if (report.productionReady !== false) throw new Error('productionReady must remain false');
+          if (!report.blockers.includes('OPENING_AUDIO_LISTENING_REVIEW_NOT_RUN')) throw new Error('missing stable NOT_RUN blocker');
+          NODE
+          if node --no-warnings scripts/opening-v1-audio-listening-review.mts --strict; then
+            echo 'strict unexpectedly passed without Human evidence' >&2
+            exit 1
+          fi
+      - name: TypeScript check
+        run: pnpm typecheck

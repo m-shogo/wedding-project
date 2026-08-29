@@ -23,7 +23,10 @@ export const palmierExportFreshnessSchema = z.object({
 export const palmierCanaryHumanMasterSchema = z.object({
   schemaVersion: z.literal('palmier-resolve-canary-human-master/v1'),
   canaryId: z.literal('DV21-PALMIER-FCPXML-01'),
-  fixtureId: z.literal('palmier-resolve-handoff-synthetic-scene-v1'),
+  fixtureId: z.union([
+    z.literal('palmier-resolve-handoff-synthetic-scene-v1'),
+    z.literal('palmier-resolve-handoff-synthetic-scene-v2'),
+  ]),
   generatedAt: z.string().datetime(),
   generatedFromSceneSpecSha256: z.string().regex(/^[a-f0-9]{64}$/),
   actualExport: z.object({

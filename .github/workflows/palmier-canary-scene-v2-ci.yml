@@ -1,0 +1,145 @@
+name: Palmier Canary Scene v2 CI
+
+on:
+  pull_request:
+    paths:
+      - "motion-studio/src/data/resolveCanaryInputFixtures.ts"
+      - "motion-studio/src/data/palmierRealExportAttachment.schema.ts"
+      - "motion-studio/scripts/validate-palmier-fcpxml-scene-contract.mts"
+      - "motion-studio/scripts/attach-palmier-canary-v2-export.mts"
+      - "docs/runbooks/2026-08-26-palmier-fcpxml-canary-scene-v2.md"
+      - "docs/prompts/2026-08-26-palmier-resolve-fcpxml-export-agent-v3.md"
+      - "docs/research/2026-08-26-movie-tool-learning-run-35-palmier-canary-scene-v2.md"
+      - ".github/workflows/palmier-canary-scene-v2-ci.yml"
+  push:
+    paths:
+      - "motion-studio/src/data/resolveCanaryInputFixtures.ts"
+      - "motion-studio/src/data/palmierRealExportAttachment.schema.ts"
+      - "motion-studio/scripts/validate-palmier-fcpxml-scene-contract.mts"
+      - "motion-studio/scripts/attach-palmier-canary-v2-export.mts"
+      - "docs/runbooks/2026-08-26-palmier-fcpxml-canary-scene-v2.md"
+      - "docs/prompts/2026-08-26-palmier-resolve-fcpxml-export-agent-v3.md"
+      - "docs/research/2026-08-26-movie-tool-learning-run-35-palmier-canary-scene-v2.md"
+      - ".github/workflows/palmier-canary-scene-v2-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: motion-studio/pnpm-lock.yaml
+
+      - name: Install motion-studio dependencies
+        working-directory: motion-studio
+        run: pnpm install --frozen-lockfile
+
+      - name: TypeScript
+        working-directory: motion-studio
+        run: pnpm typecheck
+
+      - name: Prepare Palmier scene v2 without synthesizing FCPXML
+        working-directory: motion-studio
+        run: |
+          node --no-warnings scripts/prepare-resolve-canary-inputs.mts palmier
+          spec=out/canary-inputs/palmier/palmier-fcpxml-synthetic-scene-spec.json
+          manifest=out/canary-inputs/manifests/DV21-PALMIER-FCPXML-01.json
+          grep -Fq '"schemaVersion": "palmier-fcpxml-canary-scene-spec/v2"' "$spec"
+          grep -Fq '"fixtureId": "palmier-resolve-handoff-synthetic-scene-v2"' "$spec"
+          grep -Fq 'PALMIER_CANARY_TEXT_SCALE' "$spec"
+          grep -Fq 'PALMIER_CANARY_TITLE_BOX_TRANSFORM' "$spec"
+          grep -Fq 'PALMIER_CANARY_NEST_L1' "$spec"
+          grep -Fq 'PALMIER_CANARY_NEST_L2' "$spec"
+          grep -Fq '"status": "BLOCKED_REAL_TOOL_EXPORT_REQUIRED"' "$manifest"
+          if find out/canary-inputs/palmier -type f \( -name '*.fcpxml' -o -name '*.xml' \) | grep -q .; then
+            echo "Scene v2 preparation must never synthesize FCPXML"
+            exit 1
+          fi
+
+      - name: Build validator-only conforming FCPXML fixture
+        working-directory: motion-studio
+        run: |
+          cat > /tmp/palmier-canary-v2-contract.fcpxml <<'XML'
+          <?xml version="1.0" encoding="UTF-8"?>
+          <fcpxml version="1.10">
+            <resources>
+              <media id="nest1" name="PALMIER_CANARY_NEST_L1">
+                <sequence><spine><ref-clip ref="nest2" name="PALMIER_CANARY_NEST_L2" lane="1" offset="0s" start="0s" duration="1s" enabled="1"></ref-clip></spine></sequence>
+              </media>
+              <media id="nest2" name="PALMIER_CANARY_NEST_L2">
+                <sequence><spine/></sequence>
+              </media>
+            </resources>
+            <library><event name="CI"><project name="CI"><sequence><spine>
+              <title ref="titleBasic" name="PALMIER_CANARY_TEXT_SCALE" lane="1" offset="0s" start="0s" duration="2s" enabled="1">
+                <adjust-transform scale="1 1" anchor="0 0" position="0 0">
+                  <param name="scale" value="1.5 0.75"><keyframeAnimation><keyframe time="0s" value="1.5 0.75"/><keyframe time="1s" curve="linear" value="3 1.5"/></keyframeAnimation></param>
+                </adjust-transform>
+              </title>
+              <title ref="titleBasic" name="PALMIER_CANARY_TITLE_BOX_TRANSFORM" lane="2" offset="0s" start="0s" duration="2s" enabled="1">
+                <adjust-transform scale="1 1" anchor="0 0" position="10 5"></adjust-transform>
+              </title>
+              <ref-clip ref="nest1" name="PALMIER_CANARY_NEST_L1" lane="3" offset="0s" start="0s" duration="2s" enabled="1"></ref-clip>
+            </spine></sequence></project></event></library>
+          </fcpxml>
+          XML
+
+      - name: Scene v2 validator accepts exact markers without claiming provenance/runtime
+        working-directory: motion-studio
+        run: |
+          node --no-warnings scripts/validate-palmier-fcpxml-scene-contract.mts \
+            --fcpxml /tmp/palmier-canary-v2-contract.fcpxml > /tmp/scene-contract.json
+          grep -Fq '"contractResult": "PASS"' /tmp/scene-contract.json
+          grep -Fq '"provenance": "UNVERIFIED_BY_SCENE_CONTRACT"' /tmp/scene-contract.json
+          grep -Fq '"resolveRuntime": "NOT_RUN"' /tmp/scene-contract.json
+          grep -Fq 'SCENE_CONTRACT_PASS != RESOLVE_IMPORT_VERIFIED' /tmp/scene-contract.json
+
+      - name: Scene v2 validator rejects the wrong timeline
+        working-directory: motion-studio
+        run: |
+          cat > /tmp/wrong-timeline.fcpxml <<'XML'
+          <?xml version="1.0" encoding="UTF-8"?>
+          <fcpxml version="1.10"><library><event><project><sequence><spine/></sequence></project></event></library></fcpxml>
+          XML
+          if node --no-warnings scripts/validate-palmier-fcpxml-scene-contract.mts \
+            --fcpxml /tmp/wrong-timeline.fcpxml > /tmp/wrong.txt 2>&1; then
+            echo "Wrong timeline unexpectedly passed the v2 scene contract"
+            exit 1
+          fi
+          grep -Fq 'Missing title marker: PALMIER_CANARY_TEXT_SCALE' /tmp/wrong.txt
+
+      - name: v2 wrapper preserves generic attachment honesty boundary
+        working-directory: motion-studio
+        run: |
+          node --no-warnings scripts/attach-palmier-canary-v2-export.mts \
+            --fcpxml /tmp/palmier-canary-v2-contract.fcpxml \
+            --inspect-only > /tmp/wrapper-inspect.txt
+          grep -Fq '"contractResult": "PASS"' /tmp/wrapper-inspect.txt
+          grep -Fq '"provenance": "UNVERIFIED_BY_STRUCTURE"' /tmp/wrapper-inspect.txt
+
+          started="$(date -u -d '1 second ago' +'%Y-%m-%dT%H:%M:%S.000Z')"
+          touch /tmp/palmier-canary-v2-contract.fcpxml
+          if node --no-warnings scripts/attach-palmier-canary-v2-export.mts \
+            --fcpxml /tmp/palmier-canary-v2-contract.fcpxml \
+            --export-started-at "$started" > /tmp/no-attestation.txt 2>&1; then
+            echo "v2 wrapper unexpectedly attached without Palmier attestation"
+            exit 1
+          fi
+          grep -Fq 'Full attachment requires --attest-real-palmier-export' /tmp/no-attestation.txt
+          grep -Fq '"status": "BLOCKED_REAL_TOOL_EXPORT_REQUIRED"' out/canary-inputs/manifests/DV21-PALMIER-FCPXML-01.json

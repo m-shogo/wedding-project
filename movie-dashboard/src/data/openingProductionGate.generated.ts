@@ -3,102 +3,183 @@
 
 export const openingProductionGate = {
   "source": {
-    "photos": "motion-studio/src/data/photoLibrary.generated.ts",
+    "preflight": "motion-studio/scripts/opening-v1-assembly-preflight.mts",
+    "cropQaPreflight": "motion-studio/scripts/opening-v1-crop-qa-preflight.mts",
+    "cropReview": "motion-studio/scripts/opening-v1-crop-review-evidence.mts",
     "photoResolver": "motion-studio/src/data/openingV1Media.ts",
-    "audio": "motion-studio/src/data/assets.ts",
-    "authority": "motion-studio/src/data/openingV1Authority.ts"
-  },
-  "authority": {
-    "mode": "DUMMY_PRODUCTION_SIMULATION",
-    "publicationApproved": false
+    "photoPresentation": "motion-studio/src/data/openingV1PhotoPresentation.ts",
+    "audio": "motion-studio/src/data/assets.ts"
   },
   "expectedPhotoCount": 11,
-  "resolvedPhotoCount": 11,
-  "photoMissingCount": 0,
+  "resolvedPhotoCount": 0,
+  "photoMissingCount": 11,
+  "photos": {
+    "ready": false,
+    "fileReady": false,
+    "intakeReceiptCurrent": false,
+    "intakeReceiptPath": "out/intake/opening-media-intake.json",
+    "intakeReceiptVerifiedCount": 0,
+    "intakeReceiptExpectedCount": 11,
+    "intakeReceiptBlockerCodes": [
+      "RECEIPT_MISSING"
+    ],
+    "cropQa": {
+      "precedence": "SCENE > ASSET > DEFAULT",
+      "metadataValid": true,
+      "assetHintCount": 0,
+      "coverCount": 7,
+      "coverPresentCount": 0,
+      "humanCropQaState": "NOT_RUN",
+      "humanCropQaReviewedCount": 0,
+      "humanCropQaRequiredCount": 0,
+      "humanCropQaBlockerCodes": [
+        "OPENING_CROP_REVIEW_EVIDENCE_MISSING"
+      ],
+      "evidencePath": "out/qa/opening-v1-crop-review-evidence.json",
+      "macStudioActualState": "NOT_RUN",
+      "macDaVinciActualState": "NOT_RUN",
+      "productionReady": false
+    }
+  },
   "photoSlots": [
     {
       "key": "okinawa-01",
-      "resolved": true,
-      "path": "opening/okinawa-01.jpg"
+      "resolved": false,
+      "path": null,
+      "cropQaRequired": true,
+      "humanCropQaState": "NOT_RUN",
+      "scenePresentation": {"focus": {"x": 50, "y": 50}, "fit": "cover"},
+      "assetHint": null,
+      "effectivePresentation": {"focus": {"x": 50, "y": 50}, "fit": "cover", "focusSource": "scene", "fitSource": "scene"}
     },
     {
       "key": "okinawa-02",
-      "resolved": true,
-      "path": "opening/okinawa-02.jpg"
+      "resolved": false,
+      "path": null,
+      "cropQaRequired": true,
+      "humanCropQaState": "NOT_RUN",
+      "scenePresentation": {"focus": {"x": 50, "y": 50}, "fit": "cover"},
+      "assetHint": null,
+      "effectivePresentation": {"focus": {"x": 50, "y": 50}, "fit": "cover", "focusSource": "scene", "fitSource": "scene"}
     },
     {
       "key": "okinawa-03",
-      "resolved": true,
-      "path": "opening/okinawa-03.jpg"
+      "resolved": false,
+      "path": null,
+      "cropQaRequired": false,
+      "humanCropQaState": "NOT_RUN",
+      "scenePresentation": {"focus": {"x": 50, "y": 50}, "fit": "contain"},
+      "assetHint": null,
+      "effectivePresentation": {"focus": {"x": 50, "y": 50}, "fit": "contain", "focusSource": "scene", "fitSource": "scene"}
     },
     {
       "key": "seoul-01",
-      "resolved": true,
-      "path": "opening/seoul-01.jpg"
+      "resolved": false,
+      "path": null,
+      "cropQaRequired": true,
+      "humanCropQaState": "NOT_RUN",
+      "scenePresentation": {"focus": {"x": 50, "y": 50}, "fit": "cover"},
+      "assetHint": null,
+      "effectivePresentation": {"focus": {"x": 50, "y": 50}, "fit": "cover", "focusSource": "scene", "fitSource": "scene"}
     },
     {
       "key": "seoul-02",
-      "resolved": true,
-      "path": "opening/seoul-02.jpg"
+      "resolved": false,
+      "path": null,
+      "cropQaRequired": true,
+      "humanCropQaState": "NOT_RUN",
+      "scenePresentation": {"focus": {"x": 50, "y": 50}, "fit": "cover"},
+      "assetHint": null,
+      "effectivePresentation": {"focus": {"x": 50, "y": 50}, "fit": "cover", "focusSource": "scene", "fitSource": "scene"}
     },
     {
       "key": "seoul-03",
-      "resolved": true,
-      "path": "opening/seoul-03.jpg"
+      "resolved": false,
+      "path": null,
+      "cropQaRequired": true,
+      "humanCropQaState": "NOT_RUN",
+      "scenePresentation": {"focus": {"x": 50, "y": 50}, "fit": "cover"},
+      "assetHint": null,
+      "effectivePresentation": {"focus": {"x": 50, "y": 50}, "fit": "cover", "focusSource": "scene", "fitSource": "scene"}
     },
     {
       "key": "hawaii-01",
-      "resolved": true,
-      "path": "opening/hawaii-01.jpg"
+      "resolved": false,
+      "path": null,
+      "cropQaRequired": true,
+      "humanCropQaState": "NOT_RUN",
+      "scenePresentation": {"focus": {"x": 50, "y": 50}, "fit": "cover"},
+      "assetHint": null,
+      "effectivePresentation": {"focus": {"x": 50, "y": 50}, "fit": "cover", "focusSource": "scene", "fitSource": "scene"}
     },
     {
       "key": "hawaii-02",
-      "resolved": true,
-      "path": "opening/hawaii-02.jpg"
+      "resolved": false,
+      "path": null,
+      "cropQaRequired": false,
+      "humanCropQaState": "NOT_RUN",
+      "scenePresentation": {"focus": {"x": 50, "y": 50}, "fit": "contain"},
+      "assetHint": null,
+      "effectivePresentation": {"focus": {"x": 50, "y": 50}, "fit": "contain", "focusSource": "scene", "fitSource": "scene"}
     },
     {
       "key": "hawaii-03",
-      "resolved": true,
-      "path": "opening/hawaii-03.jpg"
+      "resolved": false,
+      "path": null,
+      "cropQaRequired": true,
+      "humanCropQaState": "NOT_RUN",
+      "scenePresentation": {"focus": {"x": 50, "y": 50}, "fit": "cover"},
+      "assetHint": null,
+      "effectivePresentation": {"focus": {"x": 50, "y": 50}, "fit": "cover", "focusSource": "scene", "fitSource": "scene"}
     },
     {
       "key": "hero-01",
-      "resolved": true,
-      "path": "opening/hero-01.jpg"
+      "resolved": false,
+      "path": null,
+      "cropQaRequired": false,
+      "humanCropQaState": "NOT_RUN",
+      "scenePresentation": {"focus": {"x": 50, "y": 50}, "fit": "contain"},
+      "assetHint": null,
+      "effectivePresentation": {"focus": {"x": 50, "y": 50}, "fit": "contain", "focusSource": "scene", "fitSource": "scene"}
     },
     {
       "key": "hero-02",
-      "resolved": true,
-      "path": "opening/hero-02.jpg"
+      "resolved": false,
+      "path": null,
+      "cropQaRequired": false,
+      "humanCropQaState": "NOT_RUN",
+      "scenePresentation": {"focus": {"x": 50, "y": 50}, "fit": "contain"},
+      "assetHint": null,
+      "effectivePresentation": {"focus": {"x": 50, "y": 50}, "fit": "contain", "focusSource": "scene", "fitSource": "scene"}
     }
   ],
   "bgm": {
     "assetId": "opening-bgm-main",
-    "status": "candidate",
-    "playable": true
+    "status": "missing",
+    "playable": false,
+    "fileExists": false,
+    "intakeReceiptCurrent": false,
+    "intakeReceiptPath": "out/intake/opening-bgm-intake.json",
+    "intakeReceiptBlockerCodes": [
+      "BGM_RECEIPT_MISSING"
+    ],
+    "ready": false
   },
   "ambience": [
-    {
-      "assetId": "opening-okinawa-sea",
-      "status": "missing",
-      "playable": false
-    },
-    {
-      "assetId": "opening-seoul-street",
-      "status": "missing",
-      "playable": false
-    },
-    {
-      "assetId": "opening-hawaii-ocean",
-      "status": "missing",
-      "playable": false
-    },
-    {
-      "assetId": "opening-arrival-roomtone",
-      "status": "missing",
-      "playable": false
-    }
+    {"assetId": "opening-okinawa-sea", "status": "missing", "playable": false, "fileExists": false, "ready": false},
+    {"assetId": "opening-seoul-street", "status": "missing", "playable": false, "fileExists": false, "ready": false},
+    {"assetId": "opening-hawaii-ocean", "status": "missing", "playable": false, "fileExists": false, "ready": false},
+    {"assetId": "opening-arrival-roomtone", "status": "missing", "playable": false, "fileExists": false, "ready": false}
   ],
-  "finalBlocked": false,
-  "nextAction": "60秒ダミー本番版をrenderし、crop / motion / color / audio QAへ進む"
+  "finalBlocked": true,
+  "nextAction": "node --no-warnings scripts/intake-production-media.mts --project opening --source \"/ABS/PATH/TO/opening-media\"",
+  "nextActions": [
+    "node --no-warnings scripts/intake-production-media.mts --project opening --source \"/ABS/PATH/TO/opening-media\"",
+    "node --no-warnings scripts/intake-production-media.mts --project opening --source \"/ABS/PATH/TO/opening-media\" --apply --overwrite --receipt out/intake/opening-media-intake.json",
+    "node --no-warnings scripts/verify-production-media-intake-receipt.mts --project opening",
+    "pnpm prepare:opening-v1",
+    "node --no-warnings scripts/intake-production-bgm.mts --project opening --source \"/ABS/PATH/TO/opening-bgm.mp3\"",
+    "node --no-warnings scripts/intake-production-bgm.mts --project opening --source \"/ABS/PATH/TO/opening-bgm.mp3\" --apply --receipt out/intake/opening-bgm-intake.json",
+    "node --no-warnings scripts/verify-production-bgm-intake-receipt.mts --project opening"
+  ]
 } as const;

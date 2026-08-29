@@ -100,16 +100,24 @@ export const StampRushFullRoute = ({
     }),
   );
 
-  // 飛行機は現在進行中(または直近)の区間の上に置く
+  // 飛行機は現在進行中(または直近)の区間の上に置く。
+  // Remotion 5ではpath長を超えるsamplingがnullになるため、異常時だけ
+  // 区間終点とfrom→to方向へfail-softし、章全体の描画は維持する。
   let activeSeg = 0;
   for (let i = 0; i < segs.length; i++) {
     if (frame >= segStarts[i]) {
       activeSeg = i;
     }
   }
+  const activeRoute = segs[activeSeg];
   const local = Math.min(Math.max(segProgress[activeSeg], 0.0001), 1);
-  const planePoint = getPointAtLength(paths[activeSeg], lengths[activeSeg] * local);
-  const planeTangent = getTangentAtLength(paths[activeSeg], lengths[activeSeg] * local);
+  const sampledPoint = getPointAtLength(paths[activeSeg], lengths[activeSeg] * local);
+  const sampledTangent = getTangentAtLength(paths[activeSeg], lengths[activeSeg] * local);
+  const planePoint = sampledPoint ?? activeRoute.to;
+  const planeTangent = sampledTangent ?? {
+    x: activeRoute.to.x - activeRoute.from.x,
+    y: activeRoute.to.y - activeRoute.from.y,
+  };
   const planeAngle = (Math.atan2(planeTangent.y, planeTangent.x) * 180) / Math.PI;
 
   const zoom = interpolate(frame, [0, durationInFrames], [1, zoomTo]);

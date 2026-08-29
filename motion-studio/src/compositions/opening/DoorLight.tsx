@@ -15,24 +15,28 @@ export const doorLightSchema = z.object({
   maxOpenWidth: z.number().min(60).max(700),
   glowStrength: z.number().min(0).max(1),
   particleCount: z.number().int().min(0).max(80),
+  durationInFramesOverride: z.number().int().positive().optional(),
 });
 
 export type DoorLightProps = z.infer<typeof doorLightSchema>;
 
 // 扉が開いて光が差し込む余韻シーン。5-B(入場直前)用。
+// durationInFramesOverrideは短いSequence内で再利用するためのopt-inで、未指定時の既存出力は変えない。
 export const DoorLight = ({
   lightColor,
   openStartFrame,
   maxOpenWidth,
   glowStrength,
   particleCount,
+  durationInFramesOverride,
 }: DoorLightProps) => {
   const frame = useCurrentFrame();
-  const {width, height, durationInFrames} = useVideoConfig();
+  const {width, height, durationInFrames: compositionDurationInFrames} = useVideoConfig();
+  const durationInFrames = durationInFramesOverride ?? compositionDurationInFrames;
 
   const open = interpolate(
     frame,
-    [openStartFrame, durationInFrames - 30],
+    [openStartFrame, Math.max(openStartFrame + 1, durationInFrames - 30)],
     [0, 1],
     {
       easing: Easing.inOut(Easing.cubic),

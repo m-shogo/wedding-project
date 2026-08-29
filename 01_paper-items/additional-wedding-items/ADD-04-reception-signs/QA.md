@@ -1,114 +1,162 @@
 # ADD-04 受付サイン — QA
 
-Status: `CURRENT / PROFESSIONAL_VNEXT_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / PROFESSIONAL_REOPEN_PROMOTED / LONG_COPY_STRESS_PASS / ROLLBACK_SAFE / NOT_PRINT_READY`
-Updated: 2026-08-23
+Status: `CURRENT / V4_OPEN_EDGE_SELECTED / THREE_SCALE_QA_PASS / PAIR_QA_PASS / LONG_COPY_STRESS_PASS / AUTO_LAYOUT_RESILIENCE_PASS / STRUCTURE_QA_PASS / CLEAR_LEGACY_WIN / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / PRODUCTION_PROMOTED / ROLLBACK_SAFE / LEGACY_PRESERVED / NOT_PRINT_READY`
+Updated: 2026-08-28
 Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
+Primary evidence: `V4-OPEN-EDGE-PROMOTION-2026-08-28.md`
 
 ## Current Figma authority
 
-- Figma file: `qWlF9THLR1G76hLcx1zYOx`
-- professional reopen study page: `37:2 / VNEXT_PRO_REOPEN / ADD-04 / THRESHOLD ENERGY / 2026-08-22`
-- groom Current: `33:2 / VNEXT_PRO_ADD04_GROOM_ARRIVAL_FAN_SELECTED`
-- bride Current: `33:15 / VNEXT_PRO_ADD04_BRIDE_ARRIVAL_FAN_SELECTED`
-- fresh selected groom source: `38:2`
-- fresh selected bride source: `38:14`
-- hidden long-copy stress: `38:26 / 38:38`
-- hidden pre-promotion rollback: `39:2 / 39:28`
-- hidden pre-date-lane rollback: `42:26 / 42:38 / 42:50 / 42:62`
-- exact Drive authority: `1vjSYrbjzfZs_vyCIpQAbml9_en5RcH_r / ADD-04_受付サイン`
+Figma file: `qWlF9THLR1G76hLcx1zYOx`.
 
-Current evidence:
+Current retained production roots:
 
-- `FIGMA-ARRIVAL-FAN-PROFESSIONAL-REOPEN-PROMOTION-2026-08-22.md`
-- `FIGMA-FACTUAL-DATE-LANE-QA-2026-08-23.md`
+- groom `33:2 / VNEXT_PRO_ADD04_GROOM_ARRIVAL_FAN_SELECTED` — now contains selected V4 OPEN EDGE, `740×1050`;
+- bride `33:15 / VNEXT_PRO_ADD04_BRIDE_ARRIVAL_FAN_SELECTED` — now contains selected V4 OPEN EDGE, `740×1050`.
 
-Earlier `COUNTER FOLD`, `BREEZE WELCOME`, V4/V3 and legacy work remains preserved as historical/rollback evidence and is no longer the Current visual selection.
+V4 clean-room / QA authority:
 
-## Current direction — ARRIVAL FAN
+- page `43:2 / V4_CLEANROOM_ADD04_RECEPTION_2026_08_28`;
+- groom source `43:3 / V4 / ADD-04 / GROOM / OPEN EDGE / CLEANROOM`;
+- bride source `43:16 / V4 / ADD-04 / BRIDE / OPEN EDGE / CLEANROOM`;
+- pair review `44:2 / QA / ADD-04 V4 OPEN EDGE / PAIR REVIEW`;
+- failed fixed-Y stress history `43:29 / 43:42`;
+- passing Auto Layout stress `43:57 / 43:71`;
+- pre-V4 production rollback `45:2 / ROLLBACK_ADD04_PRE_V4_PROMOTION_2026_08_28`.
 
-The selected pair was rebuilt from blank frames using only verified size, reception-side, date/location and semantic copy constraints.
+Older ARRIVAL FAN / COUNTER FOLD / BREEZE WELCOME / V2/V3/VNext studies remain preserved as historical comparison/rollback evidence only and are no longer the Current visual source.
 
-Art direction:
-
-- Japanese-first `受付` and large `新郎側 / 新婦側`;
-- warm `今日の旅へ、ようこそ。` threshold message;
-- direct native name/guidance hierarchy;
-- angular lower paper-fan fields create celebration without returning to repeated rounded capsule/sun grammar;
-- groom: sky / yellow / coral;
-- bride: mint / yellow / rose;
-- date/location remains native factual copy, now placed on a stable cream factual lane above the angled fan rather than crossing the fan's changing color boundary.
-
-## Three-scale visual QA
-
-- whole-item / ~500 px: PASS;
-- reading / ~700–1000 px: PASS;
-- actual `740×1050`: PASS;
-- groom/bride pair distinction: PASS;
-- post-date-lane screenshot: PASS; `2026.10.24 · YOKOHAMA` is a clearer lower editorial anchor and no longer crosses fixed-art contrast boundaries.
-
-Compared only after clean-room maturity, ARRIVAL FAN is preferred over the prior COUNTER FOLD Current because it raises pickup/threshold energy while preserving immediate reception orientation and family-scale distinction.
-
-Professional Design Council score: `92/100`, no Executive Creative Director, Japanese Editorial Designer or Print Production Director veto.
-
-## Structure / long-copy QA
-
-Final Current readback after the 2026-08-23 factual-date-lane repair:
-
-- groom `33:2`: visible native text `8`, auto-height `8/8`, fixed-height `0`, outside `0`, IMAGE fills `0`;
-- bride `33:15`: visible native text `8`, auto-height `8/8`, fixed-height `0`, outside `0`, IMAGE fills `0`.
-
-Date/location role on Current and stress:
-
-- native string: `2026.10.24 · YOKOHAMA`;
-- Inter Bold `18px`;
-- `x=56 / y=835 / w=360`;
-- ocean navy on the stable cream field;
-- `textAutoResize=HEIGHT`.
-
-Stress roots `38:26 / 38:38` use materially longer name and multi-line reception guidance. Initial stress showed fixed fan art approaching the variable-copy lane. A stress-only decorative adjustment was rejected as insufficient resilience. Final production and stress use the same long-copy-safe lower fan lane, and the new factual-date lane preserves clear reserve after long copy.
-
-Final stress readback:
-
-- native visible text `8` per root;
-- auto-height `8/8` per root;
-- fixed-height `0`;
-- outside `0`;
-- IMAGE fills `0`;
-- screenshot PASS without type shrinking.
-
-## Hybrid authoring / asset decision
-
-- variable/factual copy: native editable Figma text;
-- fixed fan/paper decoration: simple native geometry;
-- editable SVG: not required;
-- generated/composed raster: not required;
-- replaceable image role: not required;
-- Drive write: `0`.
-
-`IMAGE_GENERATION_NOT_REQUIRED`: the verified defect was native factual text interacting with angled fixed art, not missing photography or illustration.
+Drive authority: `1vjSYrbjzfZs_vyCIpQAbml9_en5RcH_r / ADD-04_受付サイン`.
 
 ## Fact / placeholder contract
 
-Confirmed facts/roles:
+Confirmed roles/facts only:
 
-- groom/bride reception distinction;
+- groom reception distinction;
+- bride reception distinction;
 - date `2026.10.24`;
 - location `YOKOHAMA`;
-- optional native name field;
-- optional native direction/guidance field.
+- optional native name role;
+- optional native direction/guidance role.
 
-Do not invent receptionist names, surname use, payment/gift handling, QR, gate/flight/seat information or other operational facts. Unknown name/direction values remain semantic placeholders until authoritative copy exists.
+Do not invent receptionist names, surname use, payment/gift handling, QR, gate/flight/seat data or other operational facts. Unknown fields remain native semantic placeholders.
+
+## Current V4 visual direction
+
+`OPEN EDGE` treats the two signs as complementary reception thresholds rather than nearly identical cards or sparse folios.
+
+Groom:
+
+- deep navy upper/left threshold field;
+- coral angled crossing field;
+- large Japanese-first `受付` and dominant `新郎側`;
+- stable warm paper variable-copy zone;
+- factual date/location at the lower edge.
+
+Bride:
+
+- plum upper/right threshold field;
+- mint angled crossing field;
+- large Japanese-first `受付` and dominant `新婦側` on stable cream;
+- stable warm paper variable-copy zone;
+- factual date/location at the lower edge.
+
+The two signs are visibly related but are not blind mirror/color-swap templates.
+
+## Hybrid authoring / image-generation decision
+
+`FINAL MISSING ASSET LIST: 0 production raster assets missing`.
+
+Fresh diagnosis showed reception-side pickup, pair distinction, typography hierarchy and dynamic-copy resilience—not missing photography/illustration—to be the quality bottleneck.
+
+- native text: all role/side/name/guidance/date/location copy;
+- native semantic flow: one `INFO / AUTO / VARIABLE NAME + GUIDE` stack per sign;
+- composed fixed decoration: one `DECOR / COMPOSED / OPEN EDGE / ... / NO TEXT` role per sign;
+- generated raster candidates: `0`;
+- reusable SVG: `0` required;
+- replaceable IMAGE fills: `0`;
+- Drive write: `0`.
+
+This is an evidence-based zero-generation decision, not a skipped asset workflow.
+
+## Visual repair — bride title contrast
+
+The first bride screenshot showed the large `新婦側` crossing into the dark plum field with weakened contrast. The title was moved onto stable cream without shrinking type. The name/guidance region was moved lower. Low-opacity square marks on both signs were removed because they had no semantic/physical role.
+
+## Dynamic-copy failure and Auto Layout method switch
+
+The first long-name stress reproduced `FIXED_Y_DYNAMIC_COPY_COLLISION`: the optional name expanded to two lines while guidance stayed at a fixed Y coordinate, producing visible overlap even though each text node individually used auto-height.
+
+Failed stress roots are retained at `43:29 / 43:42`.
+
+Method switch:
+
+- group name + guidance in a semantic vertical Auto Layout flow;
+- preserve both as separate native text nodes;
+- do not shrink type;
+- let guidance move down automatically when the name grows.
+
+Passing stress roots: `43:57 / 43:71`.
+
+## Three-scale / pair / structure QA
+
+Groom:
+
+- ~500px whole-item: PASS;
+- ~900px reading: PASS;
+- native `740×1050`: PASS;
+- long-name + long-guidance stress: PASS.
+
+Bride:
+
+- ~500px whole-item: PASS after contrast repair;
+- ~900px reading: PASS;
+- native `740×1050`: PASS;
+- long-name + long-guidance stress: PASS.
+
+Pair board `44:2`: PASS.
+
+Final production/stress readback:
+
+- visible native text `5` per root;
+- fixed-height visible text `0`;
+- outside visible text `0`;
+- IMAGE fills `0`;
+- one Auto Layout name+guide stack per root.
+
+Post-promotion Current readback:
+
+- groom `33:2`: same structural result plus `DECOR / COMPOSED / OPEN EDGE / GROOM / NO TEXT`;
+- bride `33:15`: same structural result plus `DECOR / COMPOSED / OPEN EDGE / BRIDE / NO TEXT`.
+
+## Legacy comparison / promotion
+
+Old Current was revealed only after V4 passed its independent three-scale, pair, stress and structure gates.
+
+The prior ARRIVAL FAN pair remained clean but used materially more inactive cream area, weaker reception-side pickup, and nearly identical groom/bride structure. V4 provides stronger `受付 → 新郎側/新婦側` distance hierarchy, pair distinction and better variable-copy resilience.
+
+Decision: `CLEAR_V4_WIN`.
+
+Before production mutation, old Current was preserved at `45:2`. Current root IDs `33:2 / 33:15` were retained and populated from selected V4 sources. Fresh post-promotion screenshots pass.
+
+## Learning state
+
+`FIXED_Y_DYNAMIC_COPY_COLLISION`: `VERIFIED_LOCAL` for ADD-04.
+
+Transfer only as a QA/capability hypothesis: if one variable auto-height role must always follow another, fixed Y coordinates do not provide dynamic flow. Test a semantic flow container rather than guessing extra reserve. Do not transfer OPEN EDGE geometry, colors, title scale or reception layout to another item.
 
 ## Deferred finalization
 
 Keep `NOT_PRINT_READY` until authoritative final inputs/proofs exist:
 
-- whether the optional name role is used and final wording;
-- actual direction wording;
+- whether optional name is used and its final wording;
+- final direction/guidance copy;
 - tabletop stand/holder overlap and lower-edge occlusion;
-- venue lighting/glare and viewing-distance proof;
-- final printer template, bleed, safe area, stock/profile and physical proof.
+- venue lighting/glare and real viewing-distance proof;
+- printer bleed/safe-area/template/stock/profile and physical proof.
 
-Do not cosmetically churn this Current without a new screenshot-supported defect or authoritative input.
+These deferred items do not block continuing the V4 queue.
 
-Next safe progression target: ADD-05 only if physical proof or a new screenshot-supported defect invalidates its current PASS; otherwise continue forward through the non-Rurubu queue.
+## Next target
+
+`ADD-05` V4 clean-room. Start from blank; do not reuse OPEN EDGE as a suite template.

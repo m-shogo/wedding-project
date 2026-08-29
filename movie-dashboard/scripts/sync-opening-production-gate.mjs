@@ -1,120 +1,157 @@
+import {execFileSync} from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
+import {fileURLToPath} from "node:url";
 
 const dashboardRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const repoRoot = path.resolve(dashboardRoot, "..");
-const mediaPath = path.join(repoRoot, "motion-studio/src/data/openingV1Media.ts");
-const photoLibraryPath = path.join(repoRoot, "motion-studio/src/data/photoLibrary.generated.ts");
-const assetsPath = path.join(repoRoot, "motion-studio/src/data/assets.ts");
-const authorityPath = path.join(repoRoot, "motion-studio/src/data/openingV1Authority.ts");
+const studioRoot = path.join(repoRoot, "motion-studio");
+const preflightPath = path.join(studioRoot, "scripts/opening-v1-assembly-preflight.mts");
+const cropQaPreflightPath = path.join(studioRoot, "scripts/opening-v1-crop-qa-preflight.mts");
+const cropReviewPath = path.join(studioRoot, "scripts/opening-v1-crop-review-evidence.mts");
 const outputPath = path.join(dashboardRoot, "src/data/openingProductionGate.generated.ts");
 
-const mediaSource = fs.readFileSync(mediaPath, "utf8");
-const photoLibrarySource = fs.readFileSync(photoLibraryPath, "utf8");
-const assetsSource = fs.readFileSync(assetsPath, "utf8");
-const authoritySource = fs.readFileSync(authorityPath, "utf8");
-const dummySimulation = authoritySource.includes("mode: 'DUMMY_PRODUCTION_SIMULATION'");
+const report = JSON.parse(
+  execFileSync(process.execPath, ["--no-warnings", preflightPath, "--json"], {
+    cwd: studioRoot,
+    encoding: "utf8",
+  }),
+);
+const cropQa = JSON.parse(
+  execFileSync(process.execPath, ["--no-warnings", cropQaPreflightPath, "--json", "--strict"], {
+    cwd: studioRoot,
+    encoding: "utf8",
+  }),
+);
+const cropReview = JSON.parse(
+  execFileSync(process.execPath, ["--no-warnings", cropReviewPath, "--json"], {
+    cwd: studioRoot,
+    encoding: "utf8",
+  }),
+);
 
-function extractQuotedValues(source) {
-  return [...source.matchAll(/["']([^"']+)["']/g)].map((match) => match[1]);
+if (report.schemaVersion !== "opening-v1-assembly-preflight/v1") {
+  throw new Error(`Unexpected Opening V1 preflight schema: ${report.schemaVersion}`);
+}
+if (cropQa.schemaVersion !== "opening-v1-crop-qa-preflight/v1") {
+  throw new Error(`Unexpected Opening V1 crop QA schema: ${cropQa.schemaVersion}`);
+}
+if (cropReview.schemaVersion !== "opening-v1-crop-review-status/v1") {
+  throw new Error(`Unexpected Opening V1 crop review schema: ${cropReview.schemaVersion}`);
+}
+if (!cropQa.metadataValid) {
+  throw new Error(`Opening V1 crop metadata is invalid: ${cropQa.metadataErrors.join(", ")}`);
+}
+if (cropReview.macStudioActual !== "NOT_RUN" || cropReview.macDaVinciActual !== "NOT_RUN") {
+  throw new Error("Opening crop review must not promote Mac/Studio or DaVinci Actual from dashboard sync");
+}
+if (cropReview.productionReady !== false) {
+  throw new Error("Opening crop review must fail closed for production readiness");
 }
 
-const orderedMatch = mediaSource.match(/const orderedKeys:[^=]+\=\s*\[([\s\S]*?)\];/);
-if (!orderedMatch) throw new Error("openingV1Media.ts: orderedKeys not found");
-const orderedKeys = extractQuotedValues(orderedMatch[1]);
-
-const aliasesMatch = mediaSource.match(/const aliases:[\s\S]*?=\s*\{([\s\S]*?)\n\};\n\nconst openingPhotos/);
-if (!aliasesMatch) throw new Error("openingV1Media.ts: aliases not found");
-const aliases = {};
-for (const match of aliasesMatch[1].matchAll(/'([^']+)'\s*:\s*\[([^\]]*)\]/g)) {
-  aliases[match[1]] = extractQuotedValues(match[2]);
-}
-
-const openingMatch = photoLibrarySource.match(/"opening"\s*:\s*\[([\s\S]*?)\]/);
-if (!openingMatch) throw new Error("photoLibrary.generated.ts: opening array not found");
-const openingPhotos = extractQuotedValues(openingMatch[1]);
-
-function normalizedBasename(filePath) {
-  const file = filePath.split("/").pop() ?? filePath;
-  const dot = file.lastIndexOf(".");
-  return (dot >= 0 ? file.slice(0, dot) : file).toLowerCase().replaceAll("_", "-");
-}
-
-const resolvedSlots = orderedKeys.map((key, index) => {
-  const aliasSet = aliases[key] ?? [key];
-  const semanticMatch = openingPhotos.find((filePath) => {
-    const base = normalizedBasename(filePath);
-    return aliasSet.some((alias) => base.includes(alias));
-  });
-  const resolvedPath = semanticMatch ?? (openingPhotos.length >= orderedKeys.length ? openingPhotos[index] ?? null : null);
-  return { key, resolved: resolvedPath !== null, path: resolvedPath };
-});
-
-function assetStatus(assetId) {
-  const marker = `'${assetId}': {`;
-  const start = assetsSource.indexOf(marker);
-  if (start < 0) throw new Error(`assets.ts: ${assetId} not found`);
-  const end = assetsSource.indexOf("\n  },", start);
-  const block = assetsSource.slice(start, end < 0 ? assetsSource.length : end);
-  const statusMatch = block.match(/status:\s*'([^']+)'/);
-  if (!statusMatch) throw new Error(`assets.ts: ${assetId} status not found`);
-  return statusMatch[1];
-}
-
-const playableStatuses = new Set(["candidate", "approved", "final"]);
-const bgmStatus = assetStatus("opening-bgm-main");
-const ambienceIds = [
-  "opening-okinawa-sea",
-  "opening-seoul-street",
-  "opening-hawaii-ocean",
-  "opening-arrival-roomtone",
-];
-const ambience = ambienceIds.map((assetId) => {
-  const status = assetStatus(assetId);
-  return { assetId, status, playable: playableStatuses.has(status) };
-});
-const resolvedPhotoCount = resolvedSlots.filter((slot) => slot.resolved).length;
-const photoMissingCount = orderedKeys.length - resolvedPhotoCount;
-const bgmPlayable = playableStatuses.has(bgmStatus);
-const finalBlocked = photoMissingCount > 0 || !bgmPlayable;
-
+const blockerCodes = (items = []) => items.map((item) => String(item).split(":", 1)[0]);
+const bgm = report.audio.bgm[0] ?? null;
+const cropQaByKey = new Map(cropQa.slots.map((slot) => [slot.key, slot]));
+const cropReviewPassed = cropReview.state === "PASS";
+const assemblyReady = report.readiness.finalRenderEligible === true;
+const nextActions = !assemblyReady
+  ? report.nextActions
+  : !cropReviewPassed
+    ? [
+        cropReview.state === "NOT_RUN"
+          ? "Opening実写真のcrop review evidenceを初期化し、cover slotを人間確認する"
+          : "現在の写真SHA/focus/fitに対してOpening crop reviewを再確認する",
+        "node --no-warnings motion-studio/scripts/opening-v1-crop-review-evidence.mts --strict",
+      ]
+    : report.nextActions;
 const snapshot = {
   source: {
-    photos: "motion-studio/src/data/photoLibrary.generated.ts",
+    preflight: "motion-studio/scripts/opening-v1-assembly-preflight.mts",
+    cropQaPreflight: "motion-studio/scripts/opening-v1-crop-qa-preflight.mts",
+    cropReview: "motion-studio/scripts/opening-v1-crop-review-evidence.mts",
     photoResolver: "motion-studio/src/data/openingV1Media.ts",
+    photoPresentation: "motion-studio/src/data/openingV1PhotoPresentation.ts",
     audio: "motion-studio/src/data/assets.ts",
-    authority: "motion-studio/src/data/openingV1Authority.ts",
   },
-  authority: {
-    mode: dummySimulation ? "DUMMY_PRODUCTION_SIMULATION" : "REAL_PRODUCTION",
-    publicationApproved: false,
+  expectedPhotoCount: report.photos.expectedCount,
+  resolvedPhotoCount: report.photos.readyCount,
+  photoMissingCount: report.photos.expectedCount - report.photos.readyCount,
+  photos: {
+    ready: report.photos.ready,
+    fileReady: report.photos.fileReady,
+    intakeReceiptCurrent: report.photos.intakeReceiptCurrent,
+    intakeReceiptPath: report.photos.intakeReceiptPath,
+    intakeReceiptVerifiedCount: report.photos.intakeReceiptVerifiedCount,
+    intakeReceiptExpectedCount: report.photos.expectedCount,
+    intakeReceiptBlockerCodes: blockerCodes(report.photos.intakeReceiptBlockers),
+    cropQa: {
+      precedence: cropQa.precedence,
+      metadataValid: cropQa.metadataValid,
+      assetHintCount: cropQa.summary.assetHintCount,
+      coverCount: cropQa.summary.coverCount,
+      coverPresentCount: cropQa.summary.coverPresentCount,
+      humanCropQaState: cropReview.state,
+      humanCropQaReviewedCount: cropReview.reviewedCount,
+      humanCropQaRequiredCount: cropReview.requiredCount,
+      humanCropQaBlockerCodes: blockerCodes(cropReview.blockers),
+      evidencePath: cropReview.evidencePath,
+      macStudioActualState: cropReview.macStudioActual,
+      macDaVinciActualState: cropReview.macDaVinciActual,
+      productionReady: cropReview.productionReady,
+    },
   },
-  expectedPhotoCount: orderedKeys.length,
-  resolvedPhotoCount,
-  photoMissingCount,
-  photoSlots: resolvedSlots,
-  bgm: {
-    assetId: "opening-bgm-main",
-    status: bgmStatus,
-    playable: bgmPlayable,
-  },
-  ambience,
-  finalBlocked,
-  nextAction: photoMissingCount > 0
-    ? `実写真${photoMissingCount}枚を motion-studio/public/photos/opening/ へ入れ、pnpm sync:photos を実行する`
-    : !bgmPlayable
-      ? "権利確認済みBGMを opening-bgm-main へ登録し candidate 以上へ昇格する"
-      : dummySimulation
-        ? "60秒ダミー本番版をrenderし、crop / motion / color / audio QAへ進む"
-        : "60秒Opening previewをrenderし、crop / motion / color / audio QAへ進む",
+  photoSlots: report.photos.slots.map((slot) => {
+    const crop = cropQaByKey.get(slot.slot);
+    if (!crop) throw new Error(`Opening crop QA slot missing: ${slot.slot}`);
+    return {
+      key: slot.slot,
+      resolved: slot.ready,
+      path: slot.file ? `photos/opening/${slot.file}` : null,
+      cropQaRequired: crop.cropQaRequired,
+      humanCropQaState: cropReview.state,
+      scenePresentation: crop.scene,
+      assetHint: crop.assetHint,
+      effectivePresentation: crop.effective,
+    };
+  }),
+  bgm: bgm
+    ? {
+        assetId: bgm.assetId,
+        status: bgm.status,
+        playable: bgm.playable,
+        fileExists: bgm.fileExists,
+        intakeReceiptCurrent: report.audio.bgmIntakeReceiptCurrent,
+        intakeReceiptPath: report.audio.bgmIntakeReceiptPath,
+        intakeReceiptBlockerCodes: blockerCodes(report.audio.bgmIntakeReceiptBlockers),
+        ready: report.audio.bgmReady,
+      }
+    : {
+        assetId: "opening-bgm-main",
+        status: "missing",
+        playable: false,
+        fileExists: false,
+        intakeReceiptCurrent: false,
+        intakeReceiptPath: "out/intake/opening-bgm-intake.json",
+        intakeReceiptBlockerCodes: ["BGM_RECEIPT_UNAVAILABLE"],
+        ready: false,
+      },
+  ambience: report.audio.ambience.map((row) => ({
+    assetId: row.assetId,
+    status: row.status,
+    playable: row.playable,
+    fileExists: row.fileExists,
+    ready: row.ready,
+  })),
+  finalBlocked: !assemblyReady || !cropReviewPassed,
+  nextAction: nextActions[0] ?? "Opening V1 assembly preflightを再確認する",
+  nextActions,
 };
 
 const output = `// AUTO-GENERATED by scripts/sync-opening-production-gate.mjs\n// Source of truth remains in motion-studio. Do not edit by hand.\n\nexport const openingProductionGate = ${JSON.stringify(snapshot, null, 2)} as const;\n`;
 
 if (process.argv.includes("--write")) {
   fs.writeFileSync(outputPath, output, "utf8");
-  console.log(`Opening production gate synced: ${resolvedPhotoCount}/${orderedKeys.length} photos, BGM=${bgmStatus}`);
+  console.log(`Opening production gate synced: ${snapshot.resolvedPhotoCount}/${snapshot.expectedPhotoCount} photos, receipt=${snapshot.photos.intakeReceiptCurrent ? "CURRENT" : "MISSING_OR_STALE"}, cropMetadata=${snapshot.photos.cropQa.metadataValid ? "VALID" : "INVALID"}, cropReview=${snapshot.photos.cropQa.humanCropQaState}, BGM=${snapshot.bgm.ready ? "READY" : "BLOCKED"}`);
   process.exit(0);
 }
 
@@ -124,10 +161,17 @@ if (!fs.existsSync(outputPath)) {
 }
 
 const current = fs.readFileSync(outputPath, "utf8");
-if (current !== output) {
+const generatedMatch = current.match(/export const openingProductionGate = ([\s\S]*?) as const;\s*$/);
+let currentSnapshot = null;
+try {
+  currentSnapshot = generatedMatch ? JSON.parse(generatedMatch[1]) : null;
+} catch {
+  currentSnapshot = null;
+}
+if (JSON.stringify(currentSnapshot) !== JSON.stringify(snapshot)) {
   console.error("Opening production gate is stale. Run: pnpm sync:opening-gate");
-  console.error(`Current source state: ${resolvedPhotoCount}/${orderedKeys.length} photos, BGM=${bgmStatus}`);
+  console.error(`Current source state: ${snapshot.resolvedPhotoCount}/${snapshot.expectedPhotoCount} photos, receipt=${snapshot.photos.intakeReceiptCurrent ? "CURRENT" : "MISSING_OR_STALE"}, cropMetadata=${snapshot.photos.cropQa.metadataValid ? "VALID" : "INVALID"}, cropReview=${snapshot.photos.cropQa.humanCropQaState}, BGM=${snapshot.bgm.ready ? "READY" : "BLOCKED"}`);
   process.exit(1);
 }
 
-console.log(`Opening production gate current: ${resolvedPhotoCount}/${orderedKeys.length} photos, BGM=${bgmStatus}, blocked=${finalBlocked}`);
+console.log(`Opening production gate current: ${snapshot.resolvedPhotoCount}/${snapshot.expectedPhotoCount} photos, receipt=${snapshot.photos.intakeReceiptCurrent ? "CURRENT" : "MISSING_OR_STALE"}, cropMetadata=${snapshot.photos.cropQa.metadataValid ? "VALID" : "INVALID"}, cropReview=${snapshot.photos.cropQa.humanCropQaState}, BGM=${snapshot.bgm.ready ? "READY" : "BLOCKED"}, blocked=${snapshot.finalBlocked}`);

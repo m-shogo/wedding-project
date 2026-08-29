@@ -6,6 +6,10 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const page = fs.readFileSync(path.join(root, "src/pages/OpeningPhotoIntake.tsx"), "utf8");
 const app = fs.readFileSync(path.join(root, "src/App.tsx"), "utf8");
 const gatePanel = fs.readFileSync(path.join(root, "src/components/OpeningProductionGatePanel.tsx"), "utf8");
+const handoffButton = fs.readFileSync(path.join(root, "src/components/OpeningProductionHandoffExportButton.tsx"), "utf8");
+const handoff = fs.readFileSync(path.join(root, "src/data/openingProductionStatusHandoff.ts"), "utf8");
+const effectiveExport = fs.readFileSync(path.join(root, "src/lib/effectiveProductionHandoffExport.ts"), "utf8");
+const localMediaValidator = fs.readFileSync(path.join(root, "src/components/LocalMediaIntakeValidator.tsx"), "utf8");
 const errors = [];
 
 const canonicalSlots = [
@@ -34,8 +38,70 @@ for (const token of [
   "pnpm opening:preflight",
   "pnpm sync:opening-gate",
   "pnpm render:opening-v1:preview",
+  "LocalMediaIntakeValidator",
+  "localValidationSlots",
+  "11写真をコピーする前にcanonical名を一括検査",
 ]) {
   if (!page.includes(token)) errors.push(`photo intake workflow missing: ${token}`);
+}
+
+for (const token of [
+  "LOCAL PRECHECK / NO UPLOAD",
+  "multiple",
+  ".jpg,.jpeg,.png,.webp,.mp4,.mov,.webm",
+  "canonicalStem",
+  "extensionAllowed",
+  "unexpected",
+  "invalidExtension",
+  "duplicates",
+  "NAMES READY",
+  "LOCAL_NAME_CHECK_PASS != FILE_COPIED / FILE_COPIED != PRODUCTION_READY",
+]) {
+  if (!localMediaValidator.includes(token)) errors.push(`local media intake validator missing: ${token}`);
+}
+
+for (const token of [
+  "OpeningProductionHandoffExportButton",
+  "<OpeningProductionHandoffExportButton />",
+  "<OpeningProductionHandoffExportButton compact />",
+]) {
+  if (!gatePanel.includes(token)) errors.push(`Opening production gate handoff export missing: ${token}`);
+}
+
+for (const token of [
+  "buildOpeningEffectiveProductionHandoffJson",
+  "downloadText",
+  "opening-v1-production-handoff.json",
+  "OPENING PRODUCTION HANDOFF",
+  "11写真・BGM/ambience・critical path・effective next gate・Palmier / DaVinci状態を1 JSONへ",
+  "BLOCKED / NOT_RUN",
+  "effective authority",
+  "export自体はproductionReadyへの昇格ではありません",
+]) {
+  if (!handoffButton.includes(token)) errors.push(`Opening production handoff export control missing: ${token}`);
+}
+
+for (const token of [
+  "buildOpeningProductionStatusHandoff",
+  'effectiveProduction: buildOverlay("opening")',
+  'authority: "MOTION_STUDIO_EFFECTIVE_WEDDING_PRODUCTION_GATE"',
+  "effectiveNextGate:",
+  "remotionStudioToolingDependency:",
+  "EFFECTIVE_OVERLAY_EXPORTED != EFFECTIVE_GATE_COMPLETED",
+]) {
+  if (!effectiveExport.includes(token)) errors.push(`Opening effective production export missing: ${token}`);
+}
+
+for (const token of [
+  "photoSlots: openingProductionGate.photoSlots.map",
+  'intakeDirectory: "motion-studio/public/photos/opening/"',
+  "bgm: {...openingProductionGate.bgm}",
+  "ambience: openingProductionGate.ambience.map",
+  "criticalPath: criticalPath.projects.opening",
+  "palmierHandoff: openingProductionStatus.handoff.palmier",
+  "davinciHandoff: openingProductionStatus.handoff.davinci",
+]) {
+  if (!handoff.includes(token)) errors.push(`Opening production handoff payload missing: ${token}`);
 }
 
 if (!page.includes("RESOLVED/MISSINGは自己申告ではなく")) {
@@ -50,6 +116,12 @@ if (!app.includes('path="opening-photo-intake"')) {
 if (!gatePanel.includes('to="/opening-photo-intake"')) {
   errors.push("Production Gate must deep-link to Opening Photo Intake");
 }
+if (handoffButton.includes("productionReady: true") || effectiveExport.includes("productionReady: true")) {
+  errors.push("Opening handoff export must not fabricate production readiness");
+}
+if (localMediaValidator.includes("upload(")) {
+  errors.push("local filename precheck must not upload media");
+}
 
 if (errors.length > 0) {
   console.error(`Opening Photo Intake contracts FAILED (${errors.length})`);
@@ -57,4 +129,4 @@ if (errors.length > 0) {
   process.exit(1);
 }
 
-console.log(`Opening Photo Intake contracts OK: ${canonicalSlots.length} canonical slots / full sync-preview handoff.`);
+console.log(`Opening Photo Intake contracts OK: ${canonicalSlots.length} canonical slots / local no-upload filename precheck / canonical production-status data + effective next-gate overlay export / full sync-preview handoff.`);

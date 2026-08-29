@@ -1,0 +1,47 @@
+name: Palmier Current FCPXML Contract CI
+
+on:
+  pull_request:
+    paths:
+      - "movie-dashboard/src/data/palmierFCPXMLCurrentEvidence.ts"
+      - "movie-dashboard/src/data/palmierDavinciHandoffFidelity.ts"
+      - "movie-dashboard/scripts/verify-palmier-current-fcpxml-contracts.mjs"
+      - "movie-dashboard/scripts/verify-palmier-davinci-handoff-fidelity-contracts.mjs"
+      - "docs/research/2026-08-26-movie-tool-learning-run-34-palmier-current-export-terminal-nested-title-scale.md"
+      - "docs/runbooks/2026-08-26-palmier-real-export-attach.md"
+      - "docs/prompts/2026-08-26-palmier-resolve-fcpxml-export-agent-v2.md"
+      - ".github/workflows/palmier-current-fcpxml-contract-ci.yml"
+  push:
+    paths:
+      - "movie-dashboard/src/data/palmierFCPXMLCurrentEvidence.ts"
+      - "movie-dashboard/src/data/palmierDavinciHandoffFidelity.ts"
+      - "movie-dashboard/scripts/verify-palmier-current-fcpxml-contracts.mjs"
+      - "movie-dashboard/scripts/verify-palmier-davinci-handoff-fidelity-contracts.mjs"
+      - "docs/research/2026-08-26-movie-tool-learning-run-34-palmier-current-export-terminal-nested-title-scale.md"
+      - "docs/runbooks/2026-08-26-palmier-real-export-attach.md"
+      - "docs/prompts/2026-08-26-palmier-resolve-fcpxml-export-agent-v2.md"
+      - ".github/workflows/palmier-current-fcpxml-contract-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Current Palmier FCPXML source contracts
+        working-directory: movie-dashboard
+        run: node scripts/verify-palmier-current-fcpxml-contracts.mjs
+
+      - name: Existing Palmier DaVinci registry contracts stay green
+        working-directory: movie-dashboard
+        run: node scripts/verify-palmier-davinci-handoff-fidelity-contracts.mjs

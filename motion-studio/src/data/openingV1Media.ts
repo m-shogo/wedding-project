@@ -1,49 +1,25 @@
 import {photoLibrary} from './photoLibrary.generated';
+import {aliases, orderedKeys} from './openingV1PhotoRoles';
+import type {OpeningV1PhotoKey} from './openingV1PhotoRoles';
+import {
+  openingV1PhotoMetadata,
+  type OpeningV1PhotoFit,
+  type OpeningV1PhotoFocus,
+} from './openingV1PhotoPresentation';
 
-export type OpeningV1PhotoKey =
-  | 'okinawa-01'
-  | 'okinawa-02'
-  | 'okinawa-03'
-  | 'seoul-01'
-  | 'seoul-02'
-  | 'seoul-03'
-  | 'hawaii-01'
-  | 'hawaii-02'
-  | 'hawaii-03'
-  | 'hero-01'
-  | 'hero-02';
+export {aliases, orderedKeys};
+export type {OpeningV1PhotoKey};
 
-const orderedKeys: OpeningV1PhotoKey[] = [
-  'okinawa-01',
-  'okinawa-02',
-  'okinawa-03',
-  'seoul-01',
-  'seoul-02',
-  'seoul-03',
-  'hawaii-01',
-  'hawaii-02',
-  'hawaii-03',
-  'hero-01',
-  'hero-02',
-];
-
-const aliases: Record<OpeningV1PhotoKey, string[]> = {
-  'okinawa-01': ['okinawa-01', 'okinawa01', 'okinawa-1'],
-  'okinawa-02': ['okinawa-02', 'okinawa02', 'okinawa-2'],
-  'okinawa-03': ['okinawa-03', 'okinawa03', 'okinawa-3'],
-  'seoul-01': ['seoul-01', 'seoul01', 'seoul-1', 'korea-01', 'korea01'],
-  'seoul-02': ['seoul-02', 'seoul02', 'seoul-2', 'korea-02', 'korea02'],
-  'seoul-03': ['seoul-03', 'seoul03', 'seoul-3', 'korea-03', 'korea03'],
-  'hawaii-01': ['hawaii-01', 'hawaii01', 'hawaii-1'],
-  'hawaii-02': ['hawaii-02', 'hawaii02', 'hawaii-2'],
-  'hawaii-03': ['hawaii-03', 'hawaii03', 'hawaii-3'],
-  'hero-01': ['hero-01', 'hero01', 'hero-1', 'couple-01', 'couple01'],
-  'hero-02': ['hero-02', 'hero02', 'hero-2', 'couple-02', 'couple02'],
+export type OpeningV1ResolvedPhoto = {
+  key: OpeningV1PhotoKey;
+  path: string | null;
+  focus?: OpeningV1PhotoFocus;
+  fit?: OpeningV1PhotoFit;
 };
 
 const openingPhotos = photoLibrary.opening ?? [];
 
-const normalizedBasename = (path: string): string => {
+export const normalizedBasename = (path: string): string => {
   const file = path.split('/').pop() ?? path;
   const dot = file.lastIndexOf('.');
   return (dot >= 0 ? file.slice(0, dot) : file).toLowerCase().replaceAll('_', '-');
@@ -51,43 +27,51 @@ const normalizedBasename = (path: string): string => {
 
 export const resolveOpeningV1Photo = (key: OpeningV1PhotoKey): string | null => {
   const aliasSet = aliases[key];
-  const semanticMatch = openingPhotos.find((path) => {
+  const semanticMatches = openingPhotos.filter((path) => {
     const base = normalizedBasename(path);
-    return aliasSet.some((alias) => base.includes(alias));
+    return aliasSet.includes(base);
   });
 
-  if (semanticMatch) {
-    return semanticMatch;
-  }
+  // Production slots are semantic roles, not array positions. Exactly one semantic match
+  // is required. Missing or ambiguous matches stay null so filename order/extensions can
+  // never silently decide which real memory is used.
+  return semanticMatches.length === 1 ? semanticMatches[0] : null;
+};
 
-  // 11枚ちょうど以上を opening/ に入れた場合だけ、並び順での差し替えも許可する。
-  // 少数のsample画像を誤って本番slotへ割り当てないため、11枚未満ではfallbackしない。
-  if (openingPhotos.length >= orderedKeys.length) {
-    return openingPhotos[orderedKeys.indexOf(key)] ?? null;
-  }
+export const resolveOpeningV1PhotoAsset = (key: OpeningV1PhotoKey): OpeningV1ResolvedPhoto => ({
+  key,
+  path: resolveOpeningV1Photo(key),
+  ...openingV1PhotoMetadata[key],
+});
 
-  return null;
+// Rich slots are the production rendering authority. The legacy path-only slots remain
+// exported below for tooling that only needs completeness/path checks.
+export const openingV1ResolvedPhotoSlots = {
+  okinawa: [
+    resolveOpeningV1PhotoAsset('okinawa-01'),
+    resolveOpeningV1PhotoAsset('okinawa-02'),
+    resolveOpeningV1PhotoAsset('okinawa-03'),
+  ] as const,
+  seoul: [
+    resolveOpeningV1PhotoAsset('seoul-01'),
+    resolveOpeningV1PhotoAsset('seoul-02'),
+    resolveOpeningV1PhotoAsset('seoul-03'),
+  ] as const,
+  hawaii: [
+    resolveOpeningV1PhotoAsset('hawaii-01'),
+    resolveOpeningV1PhotoAsset('hawaii-02'),
+    resolveOpeningV1PhotoAsset('hawaii-03'),
+  ] as const,
+  heroes: [resolveOpeningV1PhotoAsset('hero-01'), resolveOpeningV1PhotoAsset('hero-02')] as const,
 };
 
 export const openingV1PhotoSlots = {
-  okinawa: [
-    resolveOpeningV1Photo('okinawa-01'),
-    resolveOpeningV1Photo('okinawa-02'),
-    resolveOpeningV1Photo('okinawa-03'),
-  ] as const,
-  seoul: [
-    resolveOpeningV1Photo('seoul-01'),
-    resolveOpeningV1Photo('seoul-02'),
-    resolveOpeningV1Photo('seoul-03'),
-  ] as const,
-  hawaii: [
-    resolveOpeningV1Photo('hawaii-01'),
-    resolveOpeningV1Photo('hawaii-02'),
-    resolveOpeningV1Photo('hawaii-03'),
-  ] as const,
-  heroes: [resolveOpeningV1Photo('hero-01'), resolveOpeningV1Photo('hero-02')] as const,
+  okinawa: openingV1ResolvedPhotoSlots.okinawa.map((asset) => asset.path) as [string | null, string | null, string | null],
+  seoul: openingV1ResolvedPhotoSlots.seoul.map((asset) => asset.path) as [string | null, string | null, string | null],
+  hawaii: openingV1ResolvedPhotoSlots.hawaii.map((asset) => asset.path) as [string | null, string | null, string | null],
+  heroes: openingV1ResolvedPhotoSlots.heroes.map((asset) => asset.path) as [string | null, string | null],
 };
 
-export const openingV1ResolvedPhotoCount = Object.values(openingV1PhotoSlots)
+export const openingV1ResolvedPhotoCount = Object.values(openingV1ResolvedPhotoSlots)
   .flat()
-  .filter((value): value is string => value !== null).length;
+  .filter((asset) => asset.path !== null).length;

@@ -20,16 +20,22 @@ export type TypographyRevealMode =
   | 'counter-scroll'
   | 'quiet';
 
+export type TypographyRevealExit = 'none' | 'fade';
+
 export function TypographyRevealEngine({
   text,
   intensity = 'M',
   mode = 'mask',
   transparent = true,
+  color = '#fff',
+  exitAnimation = 'none',
 }: {
   text: string;
   intensity?: MotionIntensity;
   mode?: TypographyRevealMode;
   transparent?: boolean;
+  color?: string;
+  exitAnimation?: TypographyRevealExit;
 }) {
   const frame = useCurrentFrame();
   const {fps, durationInFrames} = useVideoConfig();
@@ -38,6 +44,19 @@ export function TypographyRevealEngine({
     extrapolateRight: 'clamp',
     easing: Easing.out(Easing.cubic),
   });
+  // Elementなど「一時的に重ねて使う」文脈ではcanonical側のfade-outを明示的に有効化する。
+  // 既存compositionはexitAnimation='none'が既定なので、従来のrenderを変えない。
+  const exitDurationFrames = Math.max(1, Math.round(fps * 0.35));
+  const exitStartFrame = Math.max(0, durationInFrames - exitDurationFrames);
+  const exitEndFrame = Math.max(exitStartFrame + 1, durationInFrames - 1);
+  const exitOpacity =
+    exitAnimation === 'fade'
+      ? interpolate(frame, [exitStartFrame, exitEndFrame], [1, 0], {
+          extrapolateLeft: 'clamp',
+          extrapolateRight: 'clamp',
+          easing: Easing.inOut(Easing.quad),
+        })
+      : undefined;
   // tripletは3拍(3-hit)で文字を叩き込む表現。GraphicHitEngineのtripletとは別実装
   // (こちらは文字自体をscaleで3回パンチする)。
   const tripletHitFrames = [Math.round(fps * 0.12), Math.round(fps * 0.12) + 6, Math.round(fps * 0.12) + 12];
@@ -67,8 +86,15 @@ export function TypographyRevealEngine({
   const letterSpacing = mode === 'tracking' ? `${interpolate(progress, [0, 1], [0.18 * strength, 0.02])}em` : '0.02em';
   const fontSize = mode === 'lock' ? 200 : 104;
   const opacity = mode === 'outline' ? outlineAppear : mode === 'triplet' ? tripletOpacity : mode === 'vertical-wipe' ? 1 : progress;
-  const color = mode === 'outline' ? `rgba(255,255,255,${outlineFill})` : '#fff';
-  const webkitTextStroke = mode === 'outline' ? `${outlineStrokeWidth}px #fff` : undefined;
+  // default #fffでは従来のrgba表現をそのまま使い、既存outlineのpixel outputを維持する。
+  // custom color時だけCSS color-mixを使い、strokeとfillの両方を同じ色系統で扱う。
+  const renderedColor =
+    mode === 'outline'
+      ? color === '#fff' || color === '#ffffff'
+        ? `rgba(255,255,255,${outlineFill})`
+        : `color-mix(in srgb, ${color} ${outlineFill * 100}%, transparent)`
+      : color;
+  const webkitTextStroke = mode === 'outline' ? `${outlineStrokeWidth}px ${color}` : undefined;
 
   if (mode === 'word-stagger') {
     // type-type-on-rhythmは「文字単位」ではなく「語単位」で音の区切りに合わせて現す
@@ -77,7 +103,7 @@ export function TypographyRevealEngine({
     const perWordDelay = Math.round(fps * 0.22);
     const wordDuration = Math.round(fps * 0.32);
     return (
-      <AbsoluteFill style={{backgroundColor: transparent ? undefined : '#0d2035', alignItems: 'center', justifyContent: 'center'}}>
+      <AbsoluteFill style={{backgroundColor: transparent ? undefined : '#0d2035', alignItems: 'center', justifyContent: 'center', opacity: exitOpacity}}>
         <div style={{display: 'flex', padding: '0.15em 0.25em'}}>
           {words.map((word, index) => {
             const start = index * perWordDelay;
@@ -95,7 +121,7 @@ export function TypographyRevealEngine({
                   transform: `translateY(${(1 - wordProgress) * 30 * strength}px)`,
                   fontSize,
                   fontWeight: 800,
-                  color: '#fff',
+                  color,
                   whiteSpace: 'pre',
                   // flexのgapではなくmarginRightで語間を確保する(空文字ではなく
                   // 実際のスペース幅を確実に取るため)。
@@ -119,8 +145,8 @@ export function TypographyRevealEngine({
       easing: Easing.out(Easing.quad),
     });
     return (
-      <AbsoluteFill style={{backgroundColor: transparent ? undefined : '#0d2035', alignItems: 'center', justifyContent: 'center'}}>
-        <div style={{opacity: quietOpacity, fontSize, fontWeight: 600, color: '#fff', letterSpacing: '0.02em'}}>{text}</div>
+      <AbsoluteFill style={{backgroundColor: transparent ? undefined : '#0d2035', alignItems: 'center', justifyContent: 'center', opacity: exitOpacity}}>
+        <div style={{opacity: quietOpacity, fontSize, fontWeight: 600, color, letterSpacing: '0.02em'}}>{text}</div>
       </AbsoluteFill>
     );
   }
@@ -130,14 +156,14 @@ export function TypographyRevealEngine({
     // maskやstaggerのような「1回reveal」ではなく、clip全体で継続する速度差の表現。
     const scrollX = interpolate(frame, [0, Math.max(1, durationInFrames - 1)], [40 * strength, -140 * strength]);
     return (
-      <AbsoluteFill style={{backgroundColor: transparent ? undefined : '#0d2035', alignItems: 'center', justifyContent: 'center', overflow: 'hidden'}}>
+      <AbsoluteFill style={{backgroundColor: transparent ? undefined : '#0d2035', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', opacity: exitOpacity}}>
         <div
           style={{
             whiteSpace: 'nowrap',
             transform: `translateX(${scrollX}%)`,
             fontSize,
             fontWeight: 800,
-            color: '#fff',
+            color,
             letterSpacing: '0.04em',
           }}
         >
@@ -151,7 +177,7 @@ export function TypographyRevealEngine({
     const perCharDelay = Math.round(fps * 0.06);
     const charDuration = Math.round(fps * 0.28);
     return (
-      <AbsoluteFill style={{backgroundColor: transparent ? undefined : '#0d2035', alignItems: 'center', justifyContent: 'center'}}>
+      <AbsoluteFill style={{backgroundColor: transparent ? undefined : '#0d2035', alignItems: 'center', justifyContent: 'center', opacity: exitOpacity}}>
         <div style={{display: 'flex', padding: '0.15em 0.25em'}}>
           {text.split('').map((char, index) => {
             const start = index * perCharDelay;
@@ -169,7 +195,7 @@ export function TypographyRevealEngine({
                   transform: `translateY(${(1 - charProgress) * 40 * strength}px)`,
                   fontSize,
                   fontWeight: 800,
-                  color: '#fff',
+                  color,
                   whiteSpace: 'pre',
                 }}
               >
@@ -189,6 +215,7 @@ export function TypographyRevealEngine({
         alignItems: 'center',
         justifyContent: mode === 'lock' ? 'flex-start' : 'center',
         overflow: mode === 'lock' ? 'hidden' : undefined,
+        opacity: exitOpacity,
       }}
     >
       <div style={{overflow: 'hidden', padding: '0.15em 0.25em', clipPath: verticalWipeClip}}>
@@ -199,7 +226,7 @@ export function TypographyRevealEngine({
             letterSpacing,
             fontSize,
             fontWeight: 800,
-            color,
+            color: renderedColor,
             WebkitTextStroke: webkitTextStroke,
           }}
         >

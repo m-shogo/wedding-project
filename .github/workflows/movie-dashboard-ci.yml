@@ -56,7 +56,28 @@ jobs:
         run: pnpm check:video-prompt-quality
 
       - name: Movie Coach registry contracts
-        run: pnpm check:media-qa-policy && pnpm check:movie-coach
+        run: pnpm check:media-qa-policy && pnpm check:motion-zukan-media && pnpm check:movie-coach
+
+      - name: Typography DaVinci Actual run plan contracts
+        run: node scripts/verify-typography-davinci-actual-run-plan-contracts.mjs
+
+      - name: Typography DaVinci Actual session contracts
+        run: node scripts/verify-typography-davinci-actual-session-contracts.mjs
+
+      - name: Typography DaVinci Human promotion review contracts
+        run: node scripts/verify-typography-davinci-human-promotion-review-contracts.mjs
+
+      - name: Typography DaVinci Production Release Gate contracts
+        run: node scripts/verify-typography-davinci-production-release-gate-contracts.mjs
+
+      - name: Baseline Hop DaVinci contracts
+        run: node scripts/verify-baseline-hop-davinci-contracts.mjs
+
+      - name: Triplet DaVinci contracts
+        run: node scripts/verify-triplet-davinci-contracts.mjs
+
+      - name: Typography DaVinci Actual workflow registry
+        run: node scripts/verify-typography-davinci-actual-workflow-registry.mjs
 
       - name: TypeScript and Vite build
         run: pnpm build

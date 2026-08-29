@@ -1,0 +1,47 @@
+name: Wedding DaVinci Actual Session Plan CI
+
+on:
+  pull_request:
+    paths:
+      - "motion-studio/scripts/wedding-davinci-actual-session-plan.mts"
+      - "motion-studio/scripts/check-wedding-davinci-actual-session-plan.mts"
+      - "motion-studio/scripts/wedding-davinci-operator-packet.mts"
+      - "motion-studio/scripts/opening-v1-davinci-finishing-evidence.mts"
+      - "motion-studio/scripts/profile-v1-davinci-finishing-evidence.mts"
+      - ".github/workflows/wedding-davinci-actual-session-plan-ci.yml"
+  push:
+    branches: [main]
+    paths:
+      - "motion-studio/scripts/wedding-davinci-actual-session-plan.mts"
+      - "motion-studio/scripts/check-wedding-davinci-actual-session-plan.mts"
+      - "motion-studio/scripts/wedding-davinci-operator-packet.mts"
+      - "motion-studio/scripts/opening-v1-davinci-finishing-evidence.mts"
+      - "motion-studio/scripts/profile-v1-davinci-finishing-evidence.mts"
+      - ".github/workflows/wedding-davinci-actual-session-plan-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Verify session plan ordering and evidence boundaries
+        working-directory: motion-studio
+        run: node --no-warnings scripts/check-wedding-davinci-actual-session-plan.mts
+      - name: Verify generated plan never promotes GUI Actual
+        working-directory: motion-studio
+        shell: bash
+        run: |
+          node --no-warnings scripts/wedding-davinci-actual-session-plan.mts --json > /tmp/wedding-davinci-actual-session-plan.json
+          grep '"macDavinciResolveGuiActual": "NOT_RUN_UNLESS_HUMAN_EXECUTED"' /tmp/wedding-davinci-actual-session-plan.json
+          grep '"macRemotionStudioGuiActual": "NOT_RUN_UNLESS_HUMAN_EXECUTED"' /tmp/wedding-davinci-actual-session-plan.json
+          if grep -q '"productionReady": true' /tmp/wedding-davinci-actual-session-plan.json; then
+            echo "session plan unexpectedly promoted productionReady" >&2
+            exit 1
+          fi

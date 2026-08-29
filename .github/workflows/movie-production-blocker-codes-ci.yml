@@ -1,0 +1,71 @@
+name: Movie Production Blocker Codes CI
+
+on:
+  pull_request:
+    paths:
+      - "motion-studio/scripts/**"
+      - "motion-studio/src/**"
+      - "motion-studio/public/opening/**"
+      - "motion-studio/public/profile/**"
+      - "motion-studio/public/photos/**"
+      - "motion-studio/public/audio/**"
+      - "motion-studio/package.json"
+      - "movie-dashboard/package.json"
+      - "movie-dashboard/scripts/sync-opening-production-gate.mjs"
+      - "movie-dashboard/scripts/sync-profile-production-gate.mjs"
+      - "movie-dashboard/scripts/sync-production-stage-blocker-codes.mjs"
+      - "movie-dashboard/scripts/verify-production-blocker-snapshot-invalidation.mjs"
+      - "movie-dashboard/src/data/openingProductionGate.generated.ts"
+      - "movie-dashboard/src/data/profileProductionGate.generated.ts"
+      - "movie-dashboard/src/data/movieProductionStageBlockerCodes.generated.ts"
+      - "movie-dashboard/src/data/weddingMovieProductionCriticalPath.ts"
+      - ".github/workflows/movie-production-blocker-codes-ci.yml"
+  push:
+    branches: [main]
+    paths:
+      - "motion-studio/scripts/**"
+      - "motion-studio/src/**"
+      - "motion-studio/public/opening/**"
+      - "motion-studio/public/profile/**"
+      - "motion-studio/public/photos/**"
+      - "motion-studio/public/audio/**"
+      - "motion-studio/package.json"
+      - "movie-dashboard/package.json"
+      - "movie-dashboard/scripts/sync-opening-production-gate.mjs"
+      - "movie-dashboard/scripts/sync-profile-production-gate.mjs"
+      - "movie-dashboard/scripts/sync-production-stage-blocker-codes.mjs"
+      - "movie-dashboard/scripts/verify-production-blocker-snapshot-invalidation.mjs"
+      - "movie-dashboard/src/data/openingProductionGate.generated.ts"
+      - "movie-dashboard/src/data/profileProductionGate.generated.ts"
+      - "movie-dashboard/src/data/movieProductionStageBlockerCodes.generated.ts"
+      - "movie-dashboard/src/data/weddingMovieProductionCriticalPath.ts"
+      - ".github/workflows/movie-production-blocker-codes-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  stable-blocker-codes:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    defaults:
+      run:
+        working-directory: motion-studio
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+          run_install: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: motion-studio/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - name: Verify production state invalidation wiring
+        run: node --no-warnings ../movie-dashboard/scripts/verify-production-blocker-snapshot-invalidation.mjs
+      - name: Verify Motion Studio stable blocker code contract
+        run: node --no-warnings scripts/check-production-status-blocker-codes.mts
+      - name: Verify Dashboard production state snapshots
+        run: cd ../movie-dashboard && pnpm check:production-state

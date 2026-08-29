@@ -1,6 +1,8 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { Header } from "../components/Header";
+import { useProduction } from "../store/productionStore";
+import { buildPalmierWeddingProductionGate } from "../lib/palmierWeddingProductionGate";
 import {
   fusionDecisionRules,
   fusionLearningRecipes,
@@ -21,6 +23,7 @@ function NodeBadge({ nodeId }: { nodeId: FusionNodeId }) {
 }
 
 export function FusionNodeTranslator() {
+  const { selectedMovieId } = useProduction();
   const [selectedRecipeId, setSelectedRecipeId] = useState(fusionLearningRecipes[0]?.recipeId ?? "");
   const [selectedNodeId, setSelectedNodeId] = useState<FusionNodeId>("merge");
 
@@ -29,13 +32,206 @@ export function FusionNodeTranslator() {
     [selectedRecipeId],
   );
   const selectedNode = fusionNodeLessons.find((node) => node.nodeId === selectedNodeId) ?? fusionNodeLessons[0];
+  const productionGate = useMemo(
+    () => buildPalmierWeddingProductionGate(selectedMovieId),
+    [selectedMovieId],
+  );
 
   return (
     <div>
       <Header
         title="FUSION NODE TRANSLATOR"
         description="Node名を暗記せず、映像がどこから入り・何をされ・どこへ出るかでFusionを理解する"
+        showMovieSelector
       />
+
+      <section className={`mb-9 border p-4 ${productionGate.productionReady ? "border-emerald-200 bg-emerald-50 dark:border-emerald-800 dark:bg-emerald-900/20" : "border-amber-200 bg-amber-50 dark:border-amber-800 dark:bg-amber-900/20"}`}>
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <p className="text-[10px] tracking-[0.2em] font-semibold text-navy-400">WEDDING PRODUCTION AUTHORITY</p>
+            <h2 className="mt-1 text-lg font-bold text-navy-900 dark:text-sand-100">Fusion練習と本番DaVinci Actualを分離する</h2>
+            <p className="mt-1 text-xs leading-5 text-navy-600 dark:text-navy-200">この画面のNode練習・recipe理解はMac DaVinci Actualの証拠ではありません。Palmier→DaVinci production bridgeのcurrent状態を読み、本番作業へ進める位置だけを表示します。</p>
+          </div>
+          <Link to="/palmier-handoff" className="shrink-0 px-3 py-2 rounded-lg bg-navy-700 text-white text-xs hover:bg-navy-800">Production Handoffを見る →</Link>
+        </div>
+        <div className="mt-4 grid gap-3 lg:grid-cols-2">
+          {productionGate.projects.map((project) => {
+            const studio = project.remotionStudioToolingEvidence;
+            const dependency = project.remotionStudioToolingDependency;
+            const effectiveNextGate = project.effectiveNextGate;
+            return (
+            <div key={project.movieId} className="rounded-lg border border-current/15 bg-white/70 dark:bg-navy-800/50 p-3">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <p className="text-sm font-bold text-navy-800 dark:text-sand-100">{project.title}</p>
+                <code className={`text-[10px] ${project.productionReady ? "text-emerald-700 dark:text-emerald-300" : "text-amber-700 dark:text-amber-300"}`}>{project.effectiveProductionState}</code>
+              </div>
+
+              <div className="mt-3 rounded border border-violet-200 bg-violet-50/70 p-2 dark:border-violet-800 dark:bg-violet-900/15">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <p className="text-[10px] font-semibold tracking-widest text-violet-800 dark:text-violet-200">EFFECTIVE NEXT GATE</p>
+                  <code className={`text-[9px] ${project.productionReady ? "text-emerald-700 dark:text-emerald-300" : "text-violet-700 dark:text-violet-300"}`}>{effectiveNextGate.state}</code>
+                </div>
+                <p className="mt-1 text-[10px] leading-4 text-violet-800 dark:text-violet-200">Wedding canonical nextGateと、明示採用されたRemotion Studio dependencyを統合した実効gateです。Fusion独自判定ではなくPalmierと同じ中央resolverを使用します。</p>
+                <p className="mt-2 text-[10px] text-navy-600 dark:text-navy-200"><strong>Authority:</strong> {effectiveNextGate.authority ?? "none"}</p>
+                <p className="mt-1 text-[10px] text-navy-600 dark:text-navy-200"><strong>NOW:</strong> {effectiveNextGate.stage ?? "PRODUCTION_READY"}</p>
+                <p className="mt-1 break-all text-[9px] text-navy-400"><strong>Artifact:</strong> {effectiveNextGate.artifactPath ?? "—"}</p>
+                <p className="mt-1 text-[10px] text-navy-600 dark:text-navy-200"><strong>Blocking authorities:</strong> {project.blockingAuthorities.length > 0 ? project.blockingAuthorities.join(", ") : "none"}</p>
+                <div className="mt-2 flex flex-wrap gap-1">
+                  {effectiveNextGate.blockerCodes.length > 0 ? effectiveNextGate.blockerCodes.map((code) => (
+                    <code key={code} className="rounded bg-violet-100 px-1.5 py-0.5 text-[9px] text-violet-800 dark:bg-violet-900/30 dark:text-violet-200">{code}</code>
+                  )) : <span className="text-[10px] text-emerald-700">effective blockerなし</span>}
+                </div>
+              </div>
+
+              <div className="mt-3 rounded border border-sand-200 bg-sand-50/70 p-2 dark:border-navy-700 dark:bg-navy-900/20">
+                <p className="text-[10px] font-semibold tracking-widest text-navy-500 dark:text-navy-300">CANONICAL WEDDING GATE</p>
+                <p className="mt-1 text-[10px] text-navy-600 dark:text-navy-200"><strong>Wedding NOW:</strong> {project.nextGate.stage ?? "PRODUCTION_READY"}</p>
+                <p className="mt-1 break-all text-[9px] text-navy-400"><strong>Artifact:</strong> {project.nextGate.artifactPath ?? "—"}</p>
+                <p className="mt-1 text-[9px] text-navy-400">effective gateとは別に、Motion Studio Wedding canonical nextGateを監査用として保持します。</p>
+              </div>
+
+              <div className="mt-3 grid gap-1 text-[11px] text-navy-600 dark:text-navy-200">
+                <p>{project.bridge.palmierCurrent ? "✓" : "○"} Palmier current · {project.bridge.palmierContractVersion}</p>
+                <p>{project.bridge.davinciHandoffCurrent ? "✓" : "○"} DaVinci handoff current · {project.bridge.davinciContractVersion}</p>
+                <p>{project.bridge.macDaVinciActualVerified ? "✓" : "○"} Mac DaVinci Actual verified</p>
+                <p>{project.bridge.finalDeliveryApproved ? "✓" : "○"} Final delivery approved</p>
+              </div>
+
+              <div className="mt-3 rounded border border-sky-200 bg-sky-50/70 p-2 dark:border-sky-800 dark:bg-sky-900/15">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <p className="text-[10px] font-semibold tracking-widest text-sky-800 dark:text-sky-200">REMOTION STUDIO TOOLING AUTHORITY</p>
+                  <code className={`text-[9px] ${studio.currentRepoState === "VERIFIED" ? "text-emerald-700 dark:text-emerald-300" : "text-sky-700 dark:text-sky-300"}`}>{studio.currentRepoState}</code>
+                </div>
+                <p className="mt-1 text-[10px] leading-4 text-sky-800 dark:text-sky-200">Motion図鑑 Typography Element toolingのActual証拠参照です。Wedding production gate / Mac DaVinci Actualとは別authorityです。</p>
+                <div className="mt-2 grid grid-cols-2 gap-2 text-[10px] text-navy-600 dark:text-navy-200">
+                  <p><strong>Candidates:</strong> {studio.candidateCount}</p>
+                  <p><strong>Checks each:</strong> {studio.checkAxesPerCandidate}</p>
+                  <p>{studio.humanReviewed ? "✓" : "○"} Human reviewed</p>
+                  <p>{studio.productionDependencyPromoted ? "✓" : "○"} Production dependency promoted</p>
+                </div>
+                <p className="mt-2 break-all text-[9px] text-navy-400"><strong>Summary:</strong> {studio.summaryPath}</p>
+                <p className="mt-1 break-all text-[9px] text-navy-400"><strong>Evidence:</strong> {studio.evidencePath}</p>
+                <div className="mt-2 grid gap-1">
+                  <code className="block break-all rounded bg-white/80 px-2 py-1 text-[9px] text-sky-800 dark:bg-navy-950/30 dark:text-sky-200">status: {studio.statusCommand}</code>
+                  <code className="block break-all rounded bg-white/80 px-2 py-1 text-[9px] text-sky-800 dark:bg-navy-950/30 dark:text-sky-200">strict: {studio.strictCommand}</code>
+                </div>
+                <p className="mt-2 text-[9px] font-semibold text-sky-800 dark:text-sky-200">Tooling evidenceを表示・exportしてもStudio Actual verifiedにはなりません。Element未採用ならWedding productionをBLOCKしません。</p>
+              </div>
+
+              <div className={`mt-3 rounded border p-2 ${dependency.blocking ? "border-amber-200 bg-amber-50/80 dark:border-amber-800 dark:bg-amber-900/15" : "border-emerald-200 bg-emerald-50/60 dark:border-emerald-800 dark:bg-emerald-900/10"}`}>
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <p className="text-[10px] font-semibold tracking-widest text-navy-600 dark:text-navy-200">REMOTION PROJECT DEPENDENCY</p>
+                  <code className={`text-[9px] ${dependency.blocking ? "text-amber-700 dark:text-amber-300" : "text-emerald-700 dark:text-emerald-300"}`}>{dependency.state}</code>
+                </div>
+                <div className="mt-2 grid grid-cols-2 gap-2 text-[10px] text-navy-600 dark:text-navy-200">
+                  <p>{dependency.adopted ? "✓" : "○"} Project adopted</p>
+                  <p>{dependency.blocking ? "●" : "○"} Blocking</p>
+                  <p>{dependency.studioActualVerified ? "✓" : "○"} Studio Actual</p>
+                  <p>{dependency.humanReviewed ? "✓" : "○"} Human review</p>
+                  <p>{dependency.dependencyPromoted ? "✓" : "○"} Dependency promoted</p>
+                  <p><strong>Adopted:</strong> {dependency.adoptedCandidateCount}</p>
+                </div>
+                <p className="mt-2 break-all text-[9px] text-navy-400"><strong>Candidate IDs:</strong> {dependency.adoptedCandidateIds.length > 0 ? dependency.adoptedCandidateIds.join(", ") : "none"}</p>
+                {dependency.recoveryActions.length > 0 && (
+                  <div className="mt-2 grid gap-2">
+                    {dependency.recoveryActions.map((action) => (
+                      <div key={`${action.kind}-${action.label}`} className="rounded border border-current/10 bg-white/70 p-2 dark:bg-navy-900/20">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <code className="text-[9px] text-navy-400">{action.kind}</code>
+                          {action.kind === "ROUTE" && action.route ? (
+                            <Link to={action.route} className="text-[11px] font-semibold text-navy-700 underline decoration-navy-300 underline-offset-2 dark:text-sand-100">{action.label} →</Link>
+                          ) : (
+                            <span className="text-[11px] font-semibold text-navy-700 dark:text-sand-100">{action.label}</span>
+                          )}
+                        </div>
+                        <p className="mt-1 text-[10px] leading-4 text-navy-500 dark:text-navy-300">{action.purpose}</p>
+                        {action.kind === "COMMAND" && action.command && (
+                          <code className="mt-1 block break-all rounded bg-navy-950/5 px-2 py-1 text-[9px] text-navy-600 dark:bg-white/5 dark:text-navy-200">{action.command}</code>
+                        )}
+                        {action.kind === "HUMAN" && (
+                          <p className="mt-1 text-[9px] font-semibold text-amber-700 dark:text-amber-300">Human action required · Fusion画面から自動昇格しません</p>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+                <p className="mt-2 text-[9px] font-semibold text-navy-500 dark:text-navy-300">Candidateが存在するだけでは非ブロッキング。Wedding projectへ明示採用した場合だけ、Studio Actual → Human review → promotion完了までfail-closeします。</p>
+              </div>
+
+              {!project.productionReady && (
+                <div className="mt-3 border-t border-current/10 pt-2">
+                  <p className="text-[11px] text-navy-500 dark:text-navy-300"><strong>EFFECTIVE NOW:</strong> {effectiveNextGate.stage ?? project.overallState}</p>
+                  <p className="mt-1 text-[10px] text-navy-400 break-all">{effectiveNextGate.artifactPath ?? "production artifact未確定"}</p>
+
+                  <div className="mt-3">
+                    <p className="text-[10px] font-semibold tracking-widest text-navy-500 dark:text-navy-300">EFFECTIVE STABLE BLOCKERS</p>
+                    <div className="mt-1 flex flex-wrap gap-1">
+                      {effectiveNextGate.blockerCodes.length > 0 ? effectiveNextGate.blockerCodes.map((code) => (
+                        <code key={code} className="rounded bg-amber-100 px-1.5 py-0.5 text-[9px] text-amber-800 dark:bg-amber-900/30 dark:text-amber-200">{code}</code>
+                      )) : <span className="text-[10px] text-navy-400">none</span>}
+                    </div>
+                  </div>
+
+                  <div className="mt-3">
+                    <p className="text-[10px] font-semibold tracking-widest text-navy-500 dark:text-navy-300">EFFECTIVE RECOVERY ACTIONS</p>
+                    <div className="mt-1 grid gap-2">
+                      {effectiveNextGate.blockerActions.length > 0 ? effectiveNextGate.blockerActions.map((action) => (
+                        <div key={`${action.kind}-${action.label}`} className="rounded border border-current/10 bg-white/70 p-2 dark:bg-navy-900/20">
+                          <div className="flex flex-wrap items-center gap-2">
+                            <code className="text-[9px] text-navy-400">{action.kind}</code>
+                            {action.kind === "ROUTE" && action.route ? (
+                              <Link to={action.route} className="text-[11px] font-semibold text-navy-700 underline decoration-navy-300 underline-offset-2 dark:text-sand-100">{action.label} →</Link>
+                            ) : (
+                              <span className="text-[11px] font-semibold text-navy-700 dark:text-sand-100">{action.label}</span>
+                            )}
+                          </div>
+                          <p className="mt-1 text-[10px] leading-4 text-navy-500 dark:text-navy-300">{action.purpose}</p>
+                          {action.kind === "COMMAND" && action.command && (
+                            <code className="mt-1 block break-all rounded bg-navy-950/5 px-2 py-1 text-[9px] text-navy-600 dark:bg-white/5 dark:text-navy-200">{action.command}</code>
+                          )}
+                          {action.kind === "HUMAN" && (
+                            <p className="mt-1 text-[9px] font-semibold text-amber-700 dark:text-amber-300">Human action required · この画面からPASSへ昇格しません</p>
+                          )}
+                        </div>
+                      )) : <p className="text-[10px] text-navy-400">structured recovery actionなし</p>}
+                    </div>
+                  </div>
+
+                  <div className="mt-3">
+                    <p className="text-[10px] font-semibold tracking-widest text-navy-500 dark:text-navy-300">EFFECTIVE RECOVERY</p>
+                    <ul className="mt-1 grid gap-1 text-[10px] leading-4 text-navy-500 dark:text-navy-300">
+                      {effectiveNextGate.recovery.length > 0 ? effectiveNextGate.recovery.map((item) => <li key={item}>• {item}</li>) : <li>• recoveryなし</li>}
+                    </ul>
+                  </div>
+                </div>
+              )}
+              {project.bridge.state === "MAC_DAVINCI_ACTUAL_NOT_VERIFIED" && (
+                <div className="mt-3 rounded bg-amber-100/70 dark:bg-amber-900/20 p-2">
+                  <p className="text-[10px] font-semibold text-amber-800 dark:text-amber-200">MAC ACTUAL GATE</p>
+                  <p className="mt-1 text-[10px] text-amber-700 dark:text-amber-300 break-all">Evidence: {project.bridge.actualEvidencePath}</p>
+                  <div className="mt-2 grid gap-1.5">
+                    <div>
+                      <p className="text-[9px] font-semibold text-amber-800 dark:text-amber-200">01 INIT EVIDENCE</p>
+                      <code className="mt-0.5 block break-all rounded bg-white/70 px-2 py-1 text-[9px] text-amber-800 dark:bg-navy-950/30 dark:text-amber-200">{project.bridge.actualCommands.init}</code>
+                    </div>
+                    <div>
+                      <p className="text-[9px] font-semibold text-amber-800 dark:text-amber-200">02 CHECK STATUS</p>
+                      <code className="mt-0.5 block break-all rounded bg-white/70 px-2 py-1 text-[9px] text-amber-800 dark:bg-navy-950/30 dark:text-amber-200">{project.bridge.actualCommands.status}</code>
+                    </div>
+                    <div>
+                      <p className="text-[9px] font-semibold text-amber-800 dark:text-amber-200">03 STRICT VERIFY</p>
+                      <code className="mt-0.5 block break-all rounded bg-white/70 px-2 py-1 text-[9px] text-amber-800 dark:bg-navy-950/30 dark:text-amber-200">{project.bridge.actualCommands.strict}</code>
+                    </div>
+                  </div>
+                  <p className="mt-2 text-[10px] text-amber-700 dark:text-amber-300">コマンド表示・initだけではActual verifiedになりません。Resolve GUIで実確認・exportし、current evidenceを記録してstrictを通した場合だけ次へ進みます。</p>
+                  <p className="mt-1 text-[10px] text-amber-700 dark:text-amber-300">実際にResolve GUIで確認・exportしていない限り、このgateはPASSにしません。</p>
+                </div>
+              )}
+            </div>
+            );
+          })}
+        </div>
+      </section>
 
       <section className="mb-9 border-y border-sand-200 dark:border-navy-600 py-5">
         <p className="text-[10px] tracking-[0.2em] font-semibold text-navy-400">FUSION GATE</p>

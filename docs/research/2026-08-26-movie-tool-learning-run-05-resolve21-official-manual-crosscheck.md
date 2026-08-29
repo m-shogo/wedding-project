@@ -3,30 +3,36 @@
 Date: 2026-08-26
 Scope: Movie Tool Learning only. No Figma/Paper Item changes.
 
+> **Run 33 correction (2026-08-26):** the earlier version of this note incorrectly stated that Blackmagic Design officially listed DaVinci Resolve 21.0.4 on 2026-08-05. A fresh check of the Blackmagic Design Support Center shows DaVinci Resolve 21.0.3, dated 2026-07-22, as the current Resolve 21 update. The 21.0.4 release claim is withdrawn. The Resolve 21 feature findings below remain major-version evidence unless they are explicitly patch-specific.
+
 ## Purpose
 
-Re-check the Palmier / Remotion -> DaVinci handoff against current Blackmagic Design primary sources with **DaVinci Resolve 21 as the major-version baseline**. Patch versions are treated as runtime evidence coordinates, not as a replacement for the product baseline.
+Re-check the Palmier / Remotion -> DaVinci handoff against current Blackmagic Design primary sources with **DaVinci Resolve 21 as the major-version baseline**. Patch versions are treated as planning/runtime evidence coordinates, not as a replacement for the product baseline.
 
-## 1. Version authority policy
+## 1. Version authority policy — corrected by Run 33
 
 Product baseline: **DaVinci Resolve 21**.
 
-As of 2026-08-26, Blackmagic Design's official Support Center lists **DaVinci Resolve 21.0.4**, released 2026-08-05. The Japanese Support search surface can lag another Blackmagic locale, so latest-patch checks must not rely on one localized page only.
+As of the corrected 2026-08-26 check, Blackmagic Design's official Support Center lists **DaVinci Resolve 21.0.3**, released 2026-07-22, as the current Resolve 21 update.
 
 Rules:
 
 - User-facing and architecture docs say `DaVinci Resolve 21` unless a patch-specific behavior is being discussed.
-- Runtime evidence records the exact patch (`21.0.4`, etc.).
+- Planning policy may record `targetPatch = 21.0.3` from the official current release.
+- `testedPatch` stays null/unset until the exact live runtime is captured by an Actual Canary.
 - Before every Resolve Actual canary, re-check official Blackmagic Support for a newer 21.x patch.
 - Patch changes invalidate only patch-dependent claims, not unrelated exporter/manual evidence.
+- Do not convert a localized-page discrepancy, old note, filename, app-bundle guess, or agent statement into a tested runtime version.
 
 Guardrails:
 
 `PRODUCT_BASELINE = RESOLVE_21`
 
+`TARGET_PATCH != TESTED_PATCH`
+
 `PATCH_VERSION = RUNTIME_EVIDENCE_COORDINATE`
 
-`LATEST_PATCH_CHECK = MULTI_LOCALE_OFFICIAL_SUPPORT`
+`DOCUMENTED_CURRENT_RELEASE != LOCAL_RUNTIME_IDENTITY`
 
 ## 2. Resolve 21 Lottie / OGraf is a first-class native route
 
@@ -108,7 +114,7 @@ This is a **reuse-before-build** rule for DaVinci itself: prefer Resolve-native 
 
 ### DV21-LOTTIE-01 — native Lottie lifecycle
 
-On Resolve 21 current patch:
+On the exact Resolve 21 runtime selected for the canary:
 
 - import a synthetic `.lottie` with alpha and a known duration,
 - place over a checker/background clip,
@@ -151,24 +157,29 @@ That suggests a three-tier deliverable for reusable motion:
 
 Each effect should be promoted independently; one failing feature must not force the entire movie into baked video.
 
-## 8. Evidence authority
+## 8. Evidence authority — corrected
 
-Primary sources checked for this run:
+Primary sources retained for this run:
 
-- Blackmagic Design official Support Center — Resolve 21.0.4 release listing (2026-08-05).
+- Blackmagic Design official Support Center — current Resolve 21 patch listing, corrected to 21.0.3 (2026-07-22).
 - Blackmagic Design DaVinci Resolve 21 New Features Guide — OGraf/Lottie native support and `OGrafLoader`.
 - Blackmagic Design DaVinci Resolve 21 New Features Guide — improved Fusion Macro Editor.
 - Blackmagic Design DaVinci Resolve 21 New Features Guide — Fairlight Animator.
+
+Withdrawn claim:
+
+- `DaVinci Resolve 21.0.4 release listing (2026-08-05)` — no current official Support Center evidence found; do not cite as fact.
 
 Secondary/community evidence is allowed only to generate hypotheses/canaries, never to override official capability claims.
 
 ## Trust changes
 
 - Product baseline wording: **DaVinci Resolve 21**.
-- Current patch coordinate: **21.0.4 as of 2026-08-26 official check**.
+- Current planning patch coordinate: **21.0.3 as of the corrected 2026-08-26 official check**.
+- Actually tested local patch: **unset until Actual**.
 - Lottie/OGraf native import + alpha: **officially documented / Wedding Runtime Pending**.
-- Fusion Macro Editor as editable-template architecture: **officially documented / generated Wedding artifact pending**.
+- Fusion Macro Editor as editable-template architecture: **officially documented / generated Wedding artifact available, runtime pending**.
 - Fairlight Animator for audio-reactive visuals: **officially documented / Wedding Runtime Pending**.
 - Audio gain/fade programmatic write: **unchanged; PENDING/ASSISTED**.
 
-`RESEARCH_SATURATED = false` because Resolve 21 runtime canaries and template generation remain high-value open work.
+`RESEARCH_SATURATED = false` because Resolve 21 runtime canaries remain high-value open work.

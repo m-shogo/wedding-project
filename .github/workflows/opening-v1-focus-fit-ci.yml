@@ -1,0 +1,75 @@
+name: Opening V1 Focus Fit CI
+
+on:
+  pull_request:
+    paths:
+      - "motion-studio/src/data/openingV1Media.ts"
+      - "motion-studio/src/data/openingV1PhotoPresentation.ts"
+      - "motion-studio/src/compositions/opening/OpeningV1.tsx"
+      - "motion-studio/src/compositions/opening/OpeningV1PhotoScenes.tsx"
+      - "motion-studio/scripts/check-opening-v1-focus-fit.mts"
+      - ".github/workflows/opening-v1-focus-fit-ci.yml"
+  push:
+    branches: [main]
+    paths:
+      - "motion-studio/src/data/openingV1Media.ts"
+      - "motion-studio/src/data/openingV1PhotoPresentation.ts"
+      - "motion-studio/src/compositions/opening/OpeningV1.tsx"
+      - "motion-studio/src/compositions/opening/OpeningV1PhotoScenes.tsx"
+      - "motion-studio/scripts/check-opening-v1-focus-fit.mts"
+      - ".github/workflows/opening-v1-focus-fit-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  focus-fit-contract-and-render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: motion-studio
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: motion-studio/pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Verify precedence contract
+        run: node --no-warnings scripts/check-opening-v1-focus-fit.mts
+
+      - name: TypeScript
+        run: pnpm typecheck
+
+      - name: Render real-photo Opening surface
+        run: |
+          mkdir -p public/photos/opening out/qa
+          python - <<'PY'
+          import base64
+          # 1x1 opaque PNG. A semantic hero filename forces the rich real-photo resolver path.
+          png = base64.b64decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=')
+          open('public/photos/opening/hero-01.png', 'wb').write(png)
+          PY
+          node --no-warnings scripts/sync-photos.mts
+          pnpm exec remotion still src/index-opening-v1.ts OpeningV1 out/qa/opening-v1-focus-fit-real.png --frame=0 --scale=0.25
+          test -s out/qa/opening-v1-focus-fit-real.png
+          echo "Opening V1 rich real-photo render surface: PASS"
+
+      - name: Evidence boundary remains automated-only
+        run: |
+          grep -q "macDaVinciActualState.*NOT_RUN\|macDaVinciActual: 'NOT_RUN'" scripts/opening-v1-assembly-preflight.mts scripts/opening-v1-final-render-review.mts
+          echo "Mac/Studio/DaVinci Actual evidence was not promoted by this automated render."

@@ -55,16 +55,34 @@ export const audioRecoveryHumanMaster = {
 } as const;
 
 export const palmierFcpxmlSyntheticSceneSpec = {
-  schemaVersion: 'palmier-fcpxml-canary-scene-spec/v1',
+  schemaVersion: 'palmier-fcpxml-canary-scene-spec/v2',
   canaryId: 'DV21-PALMIER-FCPXML-01',
-  fixtureId: 'palmier-resolve-handoff-synthetic-scene-v1',
-  purpose: 'Create this scene inside Palmier, then export using Palmier’s real DaVinci/Resolve FCPXML target. This spec is not FCPXML and must never be renamed or treated as a Palmier export.',
+  fixtureId: 'palmier-resolve-handoff-synthetic-scene-v2',
+  purpose: 'Create this exact neutral scene inside Palmier, then export using Palmier’s real DaVinci/Resolve FCPXML target. This spec is not FCPXML and must never be renamed or treated as a Palmier export.',
+  sourceCoordinate: {
+    palmierRelease: 'v0.7.6',
+    sourceCommit: '8805801fa4df8bc2dbc57cb0a854a1f5108f95c6',
+    checkedAt: '2026-08-26',
+  },
   timeline: {
     fps: 30,
     width: 1920,
     height: 1080,
-    durationSeconds: 8,
+    durationSeconds: 12,
   },
+  markerContract: {
+    independentTextScaleTitle: 'PALMIER_CANARY_TEXT_SCALE',
+    titleBoxTransformProbeTitle: 'PALMIER_CANARY_TITLE_BOX_TRANSFORM',
+    nestedTimelineLevel1Name: 'PALMIER_CANARY_NEST_L1',
+    nestedTimelineLevel2Name: 'PALMIER_CANARY_NEST_L2',
+    minimumNestedTimelineResources: 2,
+  },
+  agentBuildHints: [
+    'Use update_text style.widthScale=1.5 and style.heightScale=0.75 for PALMIER_CANARY_TEXT_SCALE. Palmier current MCP tests expose both fields with range 0.1...10.',
+    'Use set_keyframes with property=scale on PALMIER_CANARY_TEXT_SCALE and two bounded linear keyframes. Read the clip back with get_timeline before export.',
+    'Use create_timeline to create PALMIER_CANARY_NEST_L2 and PALMIER_CANARY_NEST_L1. Add L2 into L1, then L1 into the root via add_clips entries whose mediaRef is the child timeline id.',
+    'After every mutation, read back the affected clip/timeline instead of assuming tool success equals scene correctness.',
+  ],
   requiredElements: [
     {
       id: 'video-a',
@@ -88,11 +106,55 @@ export const palmierFcpxmlSyntheticSceneSpec = {
       requirements: ['position keyframes', 'scale keyframes', 'rotation keyframes'],
     },
     {
-      id: 'title',
+      id: 'title-basic',
       type: 'TEXT',
       startSeconds: 2,
       durationSeconds: 2,
       requirements: ['font', 'size', 'color', 'alignment', 'stroke if available'],
+    },
+    {
+      id: 'title-independent-text-scale',
+      type: 'TEXT',
+      markerText: 'PALMIER_CANARY_TEXT_SCALE',
+      startSeconds: 6,
+      durationSeconds: 2,
+      requirements: [
+        'exact text content PALMIER_CANARY_TEXT_SCALE',
+        'style.widthScale = 1.5',
+        'style.heightScale = 0.75',
+        'scale keyframes with two observable values and linear interpolation',
+      ],
+    },
+    {
+      id: 'title-box-transform-loss-probe',
+      type: 'TEXT',
+      markerText: 'PALMIER_CANARY_TITLE_BOX_TRANSFORM',
+      startSeconds: 8,
+      durationSeconds: 2,
+      requirements: [
+        'exact text content PALMIER_CANARY_TITLE_BOX_TRANSFORM',
+        'non-default title clip transform box size',
+        'title clip rotation = 15 degrees',
+        'keep independent text widthScale/heightScale at unity so this remains distinct from the text-scale probe',
+      ],
+    },
+    {
+      id: 'nested-timeline-level2',
+      type: 'NESTED_TIMELINE',
+      timelineName: 'PALMIER_CANARY_NEST_L2',
+      requirements: ['non-empty child timeline', 'contains at least one visual clip', 'duration at least 1 second'],
+    },
+    {
+      id: 'nested-timeline-level1',
+      type: 'NESTED_TIMELINE',
+      timelineName: 'PALMIER_CANARY_NEST_L1',
+      startSeconds: 9,
+      durationSeconds: 3,
+      requirements: [
+        'non-empty child timeline',
+        'contains PALMIER_CANARY_NEST_L2 as a nested carrier',
+        'PALMIER_CANARY_NEST_L1 is itself added to the root timeline',
+      ],
     },
     {
       id: 'audio-automation-loss-probe',
@@ -107,8 +169,12 @@ export const palmierFcpxmlSyntheticSceneSpec = {
     positionScaleRotationKeyframes: 'TRANSPORT_EXPECTED_WITH_RESOLVE_TARGET_COMPENSATION',
     staticCrop: 'TRANSPORT_EXPECTED_WITH_RESOLVE_TARGET_ENCODING',
     textProperties: 'TRANSPORT_EXPECTED',
+    independentTextWidthHeightScale: 'FCPXML_TITLE_SCALE_PARAM_EXPECTED',
+    independentTextScaleAnimation: 'FCPXML_TITLE_SCALE_KEYFRAMES_EXPECTED',
+    titleBoxTransformScaleRotation: 'KNOWN_OMISSION_EXPECTED',
+    nestedTimelines: 'FCPXML_MEDIA_SEQUENCE_REF_CLIP_EXPECTED_PENDING_RESOLVE_RUNTIME',
     staticVolume: 'TRANSPORT_EXPECTED',
-    audioVolumeKeyframes: 'KNOWN_OMISSION_EXPECTED',
+    audioVolumeKeyframes: 'KNOWN_OMISSION_EXPECTED_COLLAPSE_TO_STATIC',
     audioFade: 'KNOWN_OMISSION_EXPECTED',
   },
   exportRequirement: {
@@ -123,6 +189,9 @@ export const palmierFcpxmlSyntheticSceneSpec = {
     'REAL_PALMIER_EXPORT_REQUIRED',
     'PARSE_SUCCESS != TIMELINE_FIDELITY',
     'STATIC_AUDIO_VOLUME_TRANSPORT != AUDIO_AUTOMATION_TRANSPORT',
+    'TEXT_STYLE_SCALE != TITLE_BOX_TRANSFORM_SCALE',
+    'FCPXML_NEST_STRUCTURE_TESTED != RESOLVE_COMPOUND_IMPORT_VERIFIED',
+    'SCENE_MARKER_MATCH != REAL_PALMIER_PROVENANCE',
   ],
 } as const;
 
@@ -170,7 +239,7 @@ export const resolveCanaryInputPreparationCommands: Record<string, ResolveCanary
   'DV21-PALMIER-FCPXML-01': {
     mode: 'palmier',
     command: 'node --no-warnings scripts/prepare-resolve-canary-inputs.mts palmier',
-    result: 'Writes only the Palmier synthetic scene specification. Status remains blocked until Palmier itself exports real FCPXML.',
+    result: 'Writes Palmier synthetic scene specification v2 with nested-timeline and title-scale probes. Status remains blocked until Palmier itself exports real FCPXML.',
     manifestPath: 'out/canary-inputs/manifests/DV21-PALMIER-FCPXML-01.json',
   },
   'DV21-DRFX-FREE-01': {

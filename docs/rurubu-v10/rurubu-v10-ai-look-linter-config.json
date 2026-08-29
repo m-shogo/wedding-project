@@ -1,0 +1,121 @@
+{
+  "schemaVersion": "rurubu-v10-ai-look-linter-v1",
+  "status": "CANONICAL_V10_AI_ASSIST_QA",
+  "scope": "Rurubu WEDDING V10 only",
+  "figma": {
+    "fileKey": "bfM0d4c9dCeBv5pCkJ3TNM",
+    "productionPageId": "2787:2",
+    "frames": {
+      "P01": {"id": "2787:3", "role": "COVER", "closestReference": ["2771:4"]},
+      "P02": {"id": "2787:9", "role": "PROFILE", "closestReference": ["2771:2"]},
+      "P03": {"id": "2787:15", "role": "Q&A", "closestReference": ["2771:2"]},
+      "P04": {"id": "2787:22", "role": "STORY", "closestReference": ["2771:3", "2771:2"]},
+      "P05": {"id": "2787:28", "role": "TIMELINE + MEMORY", "closestReference": ["2771:3"]},
+      "P06": {"id": "2787:35", "role": "MEMORY SPOTS + GALLERY", "closestReference": ["2771:3"]},
+      "P07": {"id": "2787:42", "role": "1DAY + CAFE TABLE", "closestReference": ["2771:3"]},
+      "P08": {"id": "2787:49", "role": "BACK COVER", "closestReference": ["2771:4"]}
+    }
+  },
+  "modes": {
+    "PREPROD_SKELETON": {
+      "definition": "No meaningful production text/images yet; placeholder geometry may temporarily repeat.",
+      "scoreReferenceMatch": false,
+      "fatalTellsBecome": "required-structural-risk-before-asset-first-80"
+    },
+    "PRODUCTION_CANDIDATE": {
+      "definition": "Meaningful title/image/copy/editorial clusters exist and page is being judged as a design.",
+      "scoreReferenceMatch": true,
+      "fatalTellsBecome": "hard-fail"
+    }
+  },
+  "fatalRules": {
+    "EQUAL_MODULE_GRID": {
+      "enabled": true,
+      "heuristic": "same normalized size group count >= 4",
+      "productionAction": "rebuild hierarchy/composition before micro-polish"
+    },
+    "UNIFORM_CORNER_RADIUS": {
+      "enabled": true,
+      "heuristic": "one radius accounts for >= 60% of meaningful shapes when shape count >= 4",
+      "productionAction": "replace generic card grammar with role-specific editorial surfaces"
+    },
+    "CENTERED_EVERYTHING_TEXT": {
+      "enabled": true,
+      "heuristic": ">= 80% of visible text centered",
+      "productionAction": "restore editorial alignment hierarchy"
+    },
+    "ADJACENT_PAGE_CLONE": {
+      "enabled": true,
+      "heuristic": "normalized shape-signature similarity >= 85% for different page jobs",
+      "productionAction": "change dominant gesture, hero position, title alignment, density peak or image rhythm"
+    },
+    "SAME_PHOTO_SYSTEM_EVERYWHERE": {"enabled": true},
+    "REFERENCE_OR_DUMMY_AS_PRODUCTION": {"enabled": true},
+    "FAKE_GENERATED_TEXT": {"enabled": true}
+  },
+  "warningRules": {
+    "WEAK_DOMINANT_GESTURE": {"largestToSecondAreaRatioBelow": 1.25},
+    "NO_EDGE_TENSION": {"meaningfulShapeMinimum": 5, "edgeThresholdNormalized": 0.03},
+    "ZERO_CONTROLLED_IMPERFECTION": {"meaningfulShapeMinimum": 5, "rotationThresholdDegrees": 0.5},
+    "LOW_IMAGE_WEIGHT_VARIATION": {"enabled": true},
+    "MONOTONE_INFORMATION_WEIGHT": {"enabled": true},
+    "TOO_MUCH_EMPTY_LUXURY_SPACE": {"enabled": true},
+    "DECORATION_WITHOUT_JOB": {"enabled": true},
+    "BODY_COPY_SACRIFICED": {"enabled": true}
+  },
+  "pageSimilarity": {
+    "highRisk": 85,
+    "review": 70,
+    "informational": 55,
+    "note": "In PREPROD_SKELETON mode high similarity is a warning that placeholder geometry must not survive into production; in PRODUCTION_CANDIDATE mode >=85% for different jobs normally fails."
+  },
+  "referenceMatch": {
+    "scoreOnlyInProductionCandidate": true,
+    "pass": 80,
+    "categories": {
+      "hierarchy": 20,
+      "compositionAsymmetry": 20,
+      "imageBehavior": 15,
+      "editorialDensity": 15,
+      "typography": 15,
+      "colorContrast": 10,
+      "textureTactileCharacter": 5
+    },
+    "fatalTellOverridesScore": true
+  },
+  "visualDiffChecks": [
+    "FIRST_READ",
+    "TITLE_SILHOUETTE",
+    "IMAGE_WEIGHT",
+    "COMPOSITION_ASYMMETRY",
+    "EDITORIAL_CLUSTERS",
+    "USEFUL_DENSITY",
+    "EDGE_TENSION",
+    "COLOR_JOBS",
+    "CALM_ZONES",
+    "A5_READABILITY"
+  ],
+  "readingPath": ["FIRST_READ", "SECOND_READ", "IMAGE_OR_STORY", "USEFUL_INFO", "MICRO_DISCOVERY"],
+  "correctionPriority": [
+    "hierarchy",
+    "crop-and-scale",
+    "image-weight",
+    "composition",
+    "editorial-cluster",
+    "title-silhouette",
+    "density-and-calm-zone",
+    "color-job",
+    "decoration",
+    "micro-spacing"
+  ],
+  "pageVerbs": {
+    "P01": "CROP + STACK + BURST",
+    "P02": "PAIR + LABEL + FACT",
+    "P03": "NUMBER + QUESTION + ANSWER",
+    "P04": "FLOW + MILESTONE + PHOTO",
+    "P05": "SEQUENCE + ANCHOR + INTERRUPTION",
+    "P06": "HERO + SATELLITES + DESTINATION",
+    "P07": "ROUTE + TIME + FOOD",
+    "P08": "RESOLVE + UTILITY + MESSAGE"
+  }
+}

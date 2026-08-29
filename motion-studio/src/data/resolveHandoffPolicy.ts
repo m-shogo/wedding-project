@@ -16,7 +16,8 @@ export const resolve21AlphaHandoffPolicy: ResolveHandoffSidecar = resolveHandoff
   },
   resolve: {
     major: 21,
-    testedPatch: '21.0.4',
+    targetPatch: '21.0.3',
+    testedPatch: null,
     edition: 'FREE',
     platform: 'MACOS',
     page: 'EDIT',
@@ -39,14 +40,15 @@ export const resolve21AlphaHandoffPolicy: ResolveHandoffSidecar = resolveHandoff
       'rewrite unrelated timeline items',
     ],
     preconditions: [
-      'Confirm Resolve major/patch/edition/platform before applying the recipe.',
+      'Capture the exact live Resolve major/patch/edition/platform before applying the recipe.',
+      'Treat targetPatch as a planning baseline, not as evidence that the local runtime was tested.',
       'Confirm the intended timeline and target clip/track scope before any mutation.',
       'Confirm the source artifact and dependency sidecar refer to the same composition/render.',
     ],
     abortIf: [
       'timeline or target scope is ambiguous',
       'expected source artifact is missing or stale',
-      'Resolve version/edition/platform does not match the recipe assumptions',
+      'the actual Resolve major/edition/platform is outside the recipe scope, or a different patch has not been explicitly revalidated',
       'the requested edit requires an unsupported capability or changes a high-impact decision',
     ],
     postEditReadback: [
@@ -127,6 +129,8 @@ export const resolve21AlphaHandoffPolicy: ResolveHandoffSidecar = resolveHandoff
     'Do not replace important photos, final copy, scene order, or delete content automatically.',
   ],
   notes: [
+    'Blackmagic Design Support Center lists DaVinci Resolve 21.0.3 (2026-07-22) as the current Resolve 21 update at this research date; this is target planning evidence, not local runtime proof.',
+    'testedPatch intentionally remains null until an actual Resolve runtime execution records the exact live patch.',
     'ProRes 4444 command paths already exist in package.json, but Resolve 21 clean import remains a runtime canary.',
     'Platform is explicit because some Resolve 21 capabilities such as Lottie/OGraf are documented for macOS/Windows rather than universally cross-platform.',
   ],
