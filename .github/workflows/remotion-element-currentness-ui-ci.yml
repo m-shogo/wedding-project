@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - 'movie-dashboard/src/components/RemotionElementReadinessPanel.tsx'
+      - 'movie-dashboard/src/components/RemotionElementCanonicalEngineCurrentnessCard.tsx'
       - '.github/workflows/remotion-element-currentness-ui-ci.yml'
   workflow_dispatch:
 
@@ -35,17 +36,24 @@ jobs:
           node - <<'NODE'
           const fs = require('node:fs');
           const panel = fs.readFileSync('movie-dashboard/src/components/RemotionElementReadinessPanel.tsx', 'utf8');
+          const canonicalCard = fs.readFileSync('movie-dashboard/src/components/RemotionElementCanonicalEngineCurrentnessCard.tsx', 'utf8');
           for (const token of [
             'BATCH SOURCE CURRENTNESS · SHA-BOUND',
             'prepared payload / builder / checker / shared typography kit',
             'SOURCE_CHANGED ⇒ BATCH_STALE ⇒ OLD_STUDIO_ACTUAL_EVIDENCE_NOT_CURRENT',
-            '02 CHECK PREP ARTIFACT + SOURCE SHAs',
+            '03 CHECK CANONICAL ENGINE CURRENTNESS',
+            'check-typography-element-canonical-engine-currentness.mts',
             'current SHA-bound batch manifest',
             'confirmation / install / control readback / timeline insertion / post-install renderはすべてNOT_RUN',
           ]) {
             if (!panel.includes(token)) throw new Error(`missing currentness UI contract: ${token}`);
           }
-          if (panel.includes('STUDIO_ACTUAL_VERIFIED !=') && panel.includes('productionDependencyPromoted ? "PROMOTED"')) {
-            // informational only; promotion remains data-driven and unchanged.
+          for (const token of [
+            'CANONICAL ENGINE CURRENTNESS · TypographyRevealEngine',
+            'canonicalBlockSha256',
+            'CANONICAL_ENGINE_CHANGED ⇒ REPREPARE_REQUIRED ⇒ OLD_STUDIO_ACTUAL_EVIDENCE_NOT_CURRENT',
+            'Mac Remotion Studio GUI Actualを実行しません',
+          ]) {
+            if (!canonicalCard.includes(token)) throw new Error(`missing canonical engine currentness UI contract: ${token}`);
           }
           NODE
