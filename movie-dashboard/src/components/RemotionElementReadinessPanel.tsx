@@ -2,6 +2,7 @@ import {
   remotionElementStudioActualBatch,
   type RemotionElementCandidateRecord,
 } from "../data/remotionElementCandidates";
+import { RemotionElementCanonicalEngineCurrentnessCard } from "./RemotionElementCanonicalEngineCurrentnessCard";
 
 const readinessLabel: Record<RemotionElementCandidateRecord["readiness"], string> = {
   PREVIEW_ONLY: "Previewのみ",
@@ -94,12 +95,14 @@ export function RemotionElementReadinessPanel({
               SOURCE_CHANGED ⇒ BATCH_STALE ⇒ OLD_STUDIO_ACTUAL_EVIDENCE_NOT_CURRENT
             </p>
           </div>
+          <RemotionElementCanonicalEngineCurrentnessCard />
           <div className="mt-2 grid gap-1.5">
             <div><p className="text-[9px] font-semibold text-violet-700 dark:text-violet-300">01 PREPARE BOUNDED BATCH</p><code className="mt-0.5 block break-all bg-violet-950/5 px-2 py-1 text-[9px] text-navy-600 dark:bg-white/5 dark:text-navy-200">{batch.prepareCommand}</code></div>
             <div><p className="text-[9px] font-semibold text-violet-700 dark:text-violet-300">02 CHECK PREP ARTIFACT + SOURCE SHAs</p><code className="mt-0.5 block break-all bg-violet-950/5 px-2 py-1 text-[9px] text-navy-600 dark:bg-white/5 dark:text-navy-200">{batch.checkCommand}</code></div>
-            <div><p className="text-[9px] font-semibold text-violet-700 dark:text-violet-300">03 INIT ACTUAL EVIDENCE</p><code className="mt-0.5 block break-all bg-violet-950/5 px-2 py-1 text-[9px] text-navy-600 dark:bg-white/5 dark:text-navy-200">{evidence.initCommand}</code></div>
-            <div><p className="text-[9px] font-semibold text-violet-700 dark:text-violet-300">04 STATUS / SUMMARY</p><code className="mt-0.5 block break-all bg-violet-950/5 px-2 py-1 text-[9px] text-navy-600 dark:bg-white/5 dark:text-navy-200">{evidence.statusCommand}</code></div>
-            <div><p className="text-[9px] font-semibold text-violet-700 dark:text-violet-300">05 STRICT VERIFY</p><code className="mt-0.5 block break-all bg-violet-950/5 px-2 py-1 text-[9px] text-navy-600 dark:bg-white/5 dark:text-navy-200">{evidence.strictCommand}</code></div>
+            <div><p className="text-[9px] font-semibold text-violet-700 dark:text-violet-300">03 CHECK CANONICAL ENGINE CURRENTNESS</p><code className="mt-0.5 block break-all bg-violet-950/5 px-2 py-1 text-[9px] text-navy-600 dark:bg-white/5 dark:text-navy-200">cd motion-studio && node --no-warnings scripts/check-typography-element-canonical-engine-currentness.mts</code></div>
+            <div><p className="text-[9px] font-semibold text-violet-700 dark:text-violet-300">04 INIT ACTUAL EVIDENCE</p><code className="mt-0.5 block break-all bg-violet-950/5 px-2 py-1 text-[9px] text-navy-600 dark:bg-white/5 dark:text-navy-200">{evidence.initCommand}</code></div>
+            <div><p className="text-[9px] font-semibold text-violet-700 dark:text-violet-300">05 STATUS / SUMMARY</p><code className="mt-0.5 block break-all bg-violet-950/5 px-2 py-1 text-[9px] text-navy-600 dark:bg-white/5 dark:text-navy-200">{evidence.statusCommand}</code></div>
+            <div><p className="text-[9px] font-semibold text-violet-700 dark:text-violet-300">06 STRICT VERIFY</p><code className="mt-0.5 block break-all bg-violet-950/5 px-2 py-1 text-[9px] text-navy-600 dark:bg-white/5 dark:text-navy-200">{evidence.strictCommand}</code></div>
           </div>
           <p className="mt-2 break-all text-[9px] text-navy-400">Actual evidence: {evidence.path}</p>
           <p className="mt-1 break-all text-[9px] text-navy-400">Machine summary: {evidence.summaryPath}</p>
