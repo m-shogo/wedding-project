@@ -7,6 +7,8 @@ on:
       - "motion-studio/scripts/verify-production-bgm-intake-receipt.mts"
       - "motion-studio/scripts/check-production-bgm-intake.mts"
       - "motion-studio/scripts/check-opening-sound.mts"
+      - "motion-studio/scripts/opening-v1-bgm-rights-approval.mts"
+      - "motion-studio/scripts/check-opening-v1-bgm-rights-receipt-binding.mts"
       - "motion-studio/scripts/profile-v1-bgm-rights-approval.mts"
       - "motion-studio/scripts/check-profile-v1-bgm-rights-receipt-binding.mts"
       - ".github/workflows/production-bgm-intake-ci.yml"
@@ -17,6 +19,8 @@ on:
       - "motion-studio/scripts/verify-production-bgm-intake-receipt.mts"
       - "motion-studio/scripts/check-production-bgm-intake.mts"
       - "motion-studio/scripts/check-opening-sound.mts"
+      - "motion-studio/scripts/opening-v1-bgm-rights-approval.mts"
+      - "motion-studio/scripts/check-opening-v1-bgm-rights-receipt-binding.mts"
       - "motion-studio/scripts/profile-v1-bgm-rights-approval.mts"
       - "motion-studio/scripts/check-profile-v1-bgm-rights-receipt-binding.mts"
       - ".github/workflows/production-bgm-intake-ci.yml"
@@ -42,6 +46,9 @@ jobs:
 
       - name: Verify canonical BGM intake behavior
         run: node --no-warnings scripts/check-production-bgm-intake.mts
+
+      - name: Verify Opening rights bind to current intake receipt
+        run: node --no-warnings scripts/check-opening-v1-bgm-rights-receipt-binding.mts
 
       - name: Verify Profile rights bind to current intake receipt
         run: node --no-warnings scripts/check-profile-v1-bgm-rights-receipt-binding.mts
@@ -77,6 +84,9 @@ jobs:
             grep -q -- "$token" scripts/verify-production-bgm-intake-receipt.mts || { echo "missing BGM receipt token: $token"; exit 1; }
           done
           grep -q "verifyBgmIntakeReceipt({project: 'opening'" scripts/check-opening-sound.mts || { echo "Opening strict sound gate must verify current BGM intake receipt"; exit 1; }
+          grep -q "evaluateOpeningV1BgmRights" scripts/check-opening-sound.mts || { echo "Opening strict sound gate must require Human SHA-bound rights approval"; exit 1; }
+          grep -q "OPENING_BGM_INTAKE_RECEIPT_STALE" scripts/opening-v1-bgm-rights-approval.mts || { echo "Opening rights gate must fail closed on stale intake receipt"; exit 1; }
+          grep -q "STALE_OPENING_BGM_RIGHTS_APPROVAL_SHA" scripts/opening-v1-bgm-rights-approval.mts || { echo "Opening rights gate must stale when target SHA changes"; exit 1; }
           grep -q "verifyBgmIntakeReceipt({project: 'profile'" scripts/profile-v1-bgm-rights-approval.mts || { echo "Profile rights gate must verify current BGM intake receipt"; exit 1; }
           grep -q "PROFILE_BGM_INTAKE_RECEIPT_STALE" scripts/profile-v1-bgm-rights-approval.mts || { echo "Profile rights gate must fail closed on stale intake receipt"; exit 1; }
-          echo "Opening playable BGM and Profile Human rights approval are bound to current SHA intake receipts before strict final use"
+          echo "Opening/Profile Human rights approvals are bound to current SHA intake receipts before strict final use"
