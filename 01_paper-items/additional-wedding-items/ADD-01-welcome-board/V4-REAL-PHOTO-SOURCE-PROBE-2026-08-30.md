@@ -66,6 +66,22 @@ The real Drive JPEG can be fetched successfully, but the available Figma raster-
 
 Do not substitute AI-generated bride/groom imagery and do not promote either failed hash.
 
+## 2026-08-30 upload-path retest
+
+A fresh live retest narrowed the blocker further without changing the Figma design:
+
+- latest `main` before the retest: `34a492363b934853943efdf7a3b0e663060d8d46`;
+- Current remained `VISUAL_REOPENED`;
+- Drive authority folder remained `1UT-s_z2KOnzNeq9cluqJ_Uxh-xDzO6Kg`;
+- the real JPEG was fetched as the original `image/jpeg`, `5,266,253` bytes;
+- live Figma readback reconfirmed `24:3` at `852×1200` and replaceable hero `24:9` at `310×930`, still carrying only the explicit solid placeholder fill;
+- the current Figma raster-upload service successfully issued a one-time upload URL targeting `24:9` with `FILL` scale mode;
+- the required POST from the execution container failed before transfer because `mcp.figma.com` could not be resolved by DNS (`curl: (6) Could not resolve host`).
+
+This confirms that the remaining blocker is not missing Drive media, not a missing Figma target, and not the absence of an upload action. It is the execution environment's inability to reach the issued upload endpoint. No failed/partial image placement occurred, so no Figma rollback was necessary.
+
+Do not repeatedly generate new upload URLs while this network condition persists. The next meaningful attempt should only occur when an execution path can POST the local JPEG bytes to the issued Figma upload endpoint.
+
 ## Print-first state
 
 Working Figma canvas remains provisional `852×1200 px`; final physical A2/A3 choice is not authoritative yet, so actual mm, actual-size type conversion and effective photo PPI are `DEFERRED_FINALIZATION` rather than guessed.
