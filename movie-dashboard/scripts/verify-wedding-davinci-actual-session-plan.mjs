@@ -35,10 +35,15 @@ assert(data.indexOf('kind: \"MAC_GUI_ACTUAL\"') < data.indexOf('kind: \"STRICT_V
 assert(data.indexOf('kind: \"STRICT_VERIFY\"') < data.indexOf('kind: \"HUMAN_FINAL_APPROVAL\"'), "strict verification must precede Human approval");
 
 for (const token of [
+  "wedding-davinci-actual-session-plan-transport-audit-dashboard/v2",
   "wedding-davinci-actual-session-plan/v1",
   "DERIVED_MAC_DAVINCI_ACTUAL_SESSION_PLAN",
   "CLI_REQUIRED",
   "SESSION_PLAN_CONTRACT_MISMATCH",
+  "SESSION_PLAN_TRANSPORT_IDENTITY_MISSING",
+  "SESSION_PLAN_TRANSPORT_IDENTITY_INVALID",
+  "transportIdentityVerified",
+  "recomputedIdentitySha256",
   "ACTUAL_RECOVERY_SHA_STALE",
   "EXPECTED_ACTUAL_EVIDENCE_SHA_STALE",
   "NOT_PROMOTED_BY_BROWSER_AUDIT",
@@ -46,6 +51,9 @@ for (const token of [
 ]) {
   assert(transportAudit.includes(token), `transport audit missing token: ${token}`);
 }
+assert(transportAudit.includes('const sha256 ='), "browser audit must recompute transport SHA-256");
+assert(transportAudit.includes('JSON.stringify(transportBody)'), "browser SHA must bind the transported canonical body");
+assert(!transportAudit.includes('crypto.subtle'), "browser identity audit must remain synchronous for file-input flow");
 assert(!transportAudit.includes('state: "CURRENT"'), "browser audit must never claim canonical CURRENT");
 assert(!transportAudit.includes('productionReady: true'), "browser transport audit must never synthesize productionReady=true");
 
@@ -67,6 +75,7 @@ assert(card.includes("Evidence templateやこの画面の存在をActual PASSと
 assert(!card.includes("Actual Session Plan JSONを保存"), "dashboard must not label its reference export as the canonical session plan");
 
 console.log("Wedding DaVinci Actual session plan dashboard contract: PASS");
-console.log("Transported session-plan browser audit: FAIL-CLOSE / CLI REQUIRED");
+console.log("Transported session-plan browser identity preflight: WIRED / FAIL-CLOSE");
+console.log("Browser audit authority: CLI_REQUIRED, never CURRENT");
 console.log("Dashboard reference JSON vs canonical transport JSON: DISTINGUISHED");
 console.log("Mac/Studio GUI Actual synthetic promotion: FORBIDDEN");
