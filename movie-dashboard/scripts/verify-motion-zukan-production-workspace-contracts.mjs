@@ -8,6 +8,8 @@ const ui = fs.readFileSync(path.join(root, "src/components/MotionZukanProduction
 const handoff = fs.readFileSync(path.join(root, "src/data/motionZukanWorkspaceHandoff.ts"), "utf8");
 const handoffUi = fs.readFileSync(path.join(root, "src/components/MotionZukanWorkspaceHandoffPanel.tsx"), "utf8");
 const handoffPage = fs.readFileSync(path.join(root, "src/pages/MotionZukanWorkspaceHandoff.tsx"), "utf8");
+const nextGate = fs.readFileSync(path.join(root, "src/data/weddingProductionNextGate.ts"), "utf8");
+const nextGateUi = fs.readFileSync(path.join(root, "src/components/WeddingProductionNextGatePanel.tsx"), "utf8");
 const composer = fs.readFileSync(path.join(root, "src/data/visualSceneComposer.ts"), "utf8");
 const page = fs.readFileSync(path.join(root, "src/pages/VisualMotionLibrary.tsx"), "utf8");
 const app = fs.readFileSync(path.join(root, "src/App.tsx"), "utf8");
@@ -79,6 +81,28 @@ for (const token of [
 ]) requireText(handoffUi, token, `Workspace handoff UI contract missing: ${token}`);
 
 for (const token of [
+  'openingProductionStatus',
+  'profileProductionStatus',
+  'WeddingNextActionKind = "COMMAND" | "HUMAN" | "INPUT_REQUIRED"',
+  'INPUT_REQUIRED',
+  'DASHBOARD_NEXT_GATE != ACTION_EXECUTED',
+  'REMOTION_STUDIO_GUI_ACTUAL_REMAINS_NOT_RUN_WITHOUT_REAL_GUI_EVIDENCE',
+  'MAC_DAVINCI_GUI_ACTUAL_REMAINS_NOT_RUN_WITHOUT_REAL_GUI_EVIDENCE',
+  'finalDeliveryApprovedByThisSurface: false',
+]) requireText(nextGate, token, `Wedding production next-gate dashboard contract missing: ${token}`);
+
+for (const token of [
+  "PRODUCTION NEXT GATE / MOTION STUDIO AUTHORITY",
+  "EXACT NEXT ACTION",
+  "INPUT_REQUIRED",
+  "ProductionMediaIntakeCliGuide",
+  "Remotion Studio GUI Actual",
+  "Mac DaVinci GUI Actual",
+  "NOT_RUN",
+  "DASHBOARD_NEXT_GATE != ACTION_EXECUTED",
+]) requireText(nextGateUi, token, `Wedding production next-gate UI contract missing: ${token}`);
+
+for (const token of [
   "duplicateSceneInstance",
   "reorderProjectTimelineScenes",
   "MOTION_ZUKAN_COMPOSER_CHANGED_EVENT",
@@ -87,6 +111,7 @@ for (const token of [
 
 requireText(page, "<MotionZukanProductionWorkspace />", "VisualMotionLibrary must mount the production workspace");
 requireText(handoffPage, "<MotionZukanWorkspaceHandoffPanel />", "Workspace handoff page must mount the handoff panel");
+requireText(handoffPage, "<WeddingProductionNextGatePanel />", "Workspace handoff page must mount the production next-gate panel");
 requireText(app, 'path="movie-coach/motion-workspace-handoff"', "App must expose the Motion Zukan workspace handoff route");
 
 if (ui.includes("AI score") || ui.includes("自動修正")) {
@@ -95,6 +120,9 @@ if (ui.includes("AI score") || ui.includes("自動修正")) {
 if (/macDaVinciGuiActual:\s*"(PASS|VERIFIED|CURRENT)"/.test(handoff) || /remotionStudioGuiActual:\s*"(PASS|VERIFIED|CURRENT)"/.test(handoff)) {
   errors.push("Workspace handoff must never fabricate GUI Actual evidence");
 }
+if (/macDaVinciGuiActual:\s*"(PASS|VERIFIED|CURRENT)"/.test(nextGate) || /remotionStudioGuiActual:\s*"(PASS|VERIFIED|CURRENT)"/.test(nextGate)) {
+  errors.push("Production next-gate dashboard must never fabricate GUI Actual evidence");
+}
 
 if (errors.length) {
   console.error(`Motion Zukan Production Workspace contracts FAILED (${errors.length})`);
@@ -102,4 +130,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log("Motion Zukan Production Workspace contracts OK: media references, placeholder tracking, usage history, duplicate warnings, scene notes/status, scene duplicate/reorder, undo/redo, music markers, project defaults, version snapshots and final checks remain Human Master; workspace JSON handoff is schema/authority guarded and cannot promote Remotion Studio or Mac DaVinci GUI Actual.");
+console.log("Motion Zukan Production Workspace contracts OK: Human Master workspace handoff remains evidence-safe; the dashboard production next gate derives from generated Motion Studio status, exposes COMMAND/INPUT_REQUIRED/HUMAN boundaries, and cannot promote Remotion Studio or Mac DaVinci GUI Actual.");
