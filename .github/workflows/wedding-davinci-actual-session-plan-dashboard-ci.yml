@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - "movie-dashboard/src/data/weddingDavinciActualSessionPlan.ts"
+      - "movie-dashboard/src/data/weddingDavinciActualSessionPlanTransportAudit.ts"
       - "movie-dashboard/src/components/WeddingDavinciDeliveryReadinessCard.tsx"
       - "movie-dashboard/scripts/verify-wedding-davinci-actual-session-plan.mjs"
       - ".github/workflows/wedding-davinci-actual-session-plan-dashboard-ci.yml"
@@ -11,6 +12,7 @@ on:
     branches: [main]
     paths:
       - "movie-dashboard/src/data/weddingDavinciActualSessionPlan.ts"
+      - "movie-dashboard/src/data/weddingDavinciActualSessionPlanTransportAudit.ts"
       - "movie-dashboard/src/components/WeddingDavinciDeliveryReadinessCard.tsx"
       - "movie-dashboard/scripts/verify-wedding-davinci-actual-session-plan.mjs"
       - ".github/workflows/wedding-davinci-actual-session-plan-dashboard-ci.yml"
