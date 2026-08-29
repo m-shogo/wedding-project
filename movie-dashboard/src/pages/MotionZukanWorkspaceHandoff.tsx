@@ -4,6 +4,7 @@ import { WeddingProductionNextGatePanel } from "../components/WeddingProductionN
 import { WeddingProductionInputPlanBuilder } from "../components/WeddingProductionInputPlanBuilder";
 import { WeddingRealMediaPreviewReviewPanel } from "../components/WeddingRealMediaPreviewReviewPanel";
 import { ProfileAssemblyReviewReadinessPanel } from "../components/ProfileAssemblyReviewReadinessPanel";
+import { ProfileReviewNextActionPanel } from "../components/ProfileReviewNextActionPanel";
 
 export function MotionZukanWorkspaceHandoff() {
   return (
@@ -16,6 +17,7 @@ export function MotionZukanWorkspaceHandoff() {
       <WeddingProductionInputPlanBuilder />
       <WeddingRealMediaPreviewReviewPanel />
       <ProfileAssemblyReviewReadinessPanel />
+      <ProfileReviewNextActionPanel />
       <MotionZukanWorkspaceHandoffPanel />
     </div>
   );
