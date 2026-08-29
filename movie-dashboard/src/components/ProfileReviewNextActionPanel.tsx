@@ -12,7 +12,7 @@ type NextAction = {
 };
 
 function deriveNextAction(): NextAction {
-  if (!readiness.finalRenderEligible) {
+  if (!Boolean(readiness.finalRenderEligible)) {
     return {
       kind: "INPUT_REQUIRED",
       phase: "PRODUCTION INPUTS",
@@ -21,7 +21,7 @@ function deriveNextAction(): NextAction {
       commands: [],
     };
   }
-  if (readiness.structureReview.state !== "PASS") {
+  if (String(readiness.structureReview.state) !== "PASS") {
     return {
       kind: "COMMAND",
       phase: "STRUCTURE REVIEW",
@@ -34,7 +34,7 @@ function deriveNextAction(): NextAction {
       ],
     };
   }
-  if (readiness.realMediaReview.state !== "PASS") {
+  if (String(readiness.realMediaReview.state) !== "PASS") {
     return {
       kind: "COMMAND",
       phase: "REAL-MEDIA REVIEW",
@@ -47,7 +47,7 @@ function deriveNextAction(): NextAction {
       ],
     };
   }
-  if (readiness.audioReview.state !== "PASS") {
+  if (String(readiness.audioReview.state) !== "PASS") {
     return {
       kind: "HUMAN",
       phase: "AUDIO REVIEW",
