@@ -11,8 +11,8 @@ function requireContract(condition, message) {
   if (!condition) throw new Error(`Wedding real-media preview review contract failed: ${message}`);
 }
 
-requireContract(data.includes('openingProductionStatus.stages.cropReview.state === "PASS"'), "Opening preview must require current Human crop review before rendering");
-requireContract(data.includes('profileProductionStatus.readiness.assemblyReady === true'), "Profile preview must require production assembly readiness");
+requireContract(data.includes('String(openingProductionStatus.stages.cropReview.state) === "PASS"'), "Opening preview must require current Human crop review before rendering");
+requireContract(data.includes('Boolean(profileProductionStatus.readiness.assemblyReady)'), "Profile preview must require production assembly readiness");
 requireContract(data.includes('profileRealMediaReviewGate'), "Profile Human review state must come from canonical generated gate");
 requireContract(data.includes('humanReviewRequired: true'), "Preview review must remain explicitly Human");
 requireContract(data.includes('expectedCount: 11'), "Opening surface must preserve the 11-photo production expectation");
