@@ -55,12 +55,7 @@ type RightsStatus = {
   authority: 'DERIVED_BGM_RIGHTS_STATUS';
   state: 'NOT_RUN' | 'BLOCKED' | 'CLEARED';
   bgm: {path: string; sha256: string} | null;
-  intakeReceipt: {
-    current: boolean;
-    receiptPath: string;
-    targetPath: string;
-    blockers: string[];
-  };
+  intakeReceipt: {current: boolean; receiptPath: string; targetPath: string; blockers: string[]};
   approvalPath: string;
   blockers: string[];
   rightsCleared: boolean;
@@ -97,48 +92,36 @@ type RealMediaReviewStatus = {
   productionReady: false;
 };
 
-const rightsRun = spawnSync(
-  process.execPath,
-  ['--no-warnings', 'scripts/profile-v1-bgm-rights-approval.mts', '--json'],
-  {cwd: studioRoot, encoding: 'utf8'},
-);
+type AudioListeningReviewStatus = {
+  schemaVersion: 'profile-v1-audio-listening-review-status/v1';
+  authority: 'DERIVED_PROFILE_AUDIO_LISTENING_REVIEW_STATUS';
+  state: 'NOT_RUN' | 'BLOCKED' | 'PASS';
+  evidencePath: string;
+  blockers: string[];
+  humanAudioQaComplete: boolean;
+  macDaVinciActual: 'NOT_RUN';
+  productionReady: false;
+};
+
+const rightsRun = spawnSync(process.execPath, ['--no-warnings', 'scripts/profile-v1-bgm-rights-approval.mts', '--json'], {cwd: studioRoot, encoding: 'utf8'});
 if (rightsRun.status !== 0) throw new Error(`PROFILE_BGM_RIGHTS_STATUS_FAILED:${rightsRun.stderr || rightsRun.stdout}`);
 const rightsStatus = JSON.parse(rightsRun.stdout) as RightsStatus;
-if (rightsStatus.schemaVersion !== 'profile-v1-bgm-rights-status/v1' || rightsStatus.authority !== 'DERIVED_BGM_RIGHTS_STATUS') {
-  throw new Error('PROFILE_BGM_RIGHTS_STATUS_CONTRACT');
-}
+if (rightsStatus.schemaVersion !== 'profile-v1-bgm-rights-status/v1' || rightsStatus.authority !== 'DERIVED_BGM_RIGHTS_STATUS') throw new Error('PROFILE_BGM_RIGHTS_STATUS_CONTRACT');
 
-const structureReviewRun = spawnSync(
-  process.execPath,
-  ['--no-warnings', 'scripts/profile-v1-full-structure-review.mts', '--json'],
-  {cwd: studioRoot, encoding: 'utf8'},
-);
-if (structureReviewRun.status !== 0) {
-  throw new Error(`PROFILE_STRUCTURE_REVIEW_STATUS_FAILED:${structureReviewRun.stderr || structureReviewRun.stdout}`);
-}
+const structureReviewRun = spawnSync(process.execPath, ['--no-warnings', 'scripts/profile-v1-full-structure-review.mts', '--json'], {cwd: studioRoot, encoding: 'utf8'});
+if (structureReviewRun.status !== 0) throw new Error(`PROFILE_STRUCTURE_REVIEW_STATUS_FAILED:${structureReviewRun.stderr || structureReviewRun.stdout}`);
 const structureReview = JSON.parse(structureReviewRun.stdout) as StructureReviewStatus;
-if (
-  structureReview.schemaVersion !== 'profile-v1-full-structure-review-status/v1' ||
-  structureReview.authority !== 'DERIVED_STRUCTURE_REVIEW_STATUS'
-) {
-  throw new Error('PROFILE_STRUCTURE_REVIEW_STATUS_CONTRACT');
-}
+if (structureReview.schemaVersion !== 'profile-v1-full-structure-review-status/v1' || structureReview.authority !== 'DERIVED_STRUCTURE_REVIEW_STATUS') throw new Error('PROFILE_STRUCTURE_REVIEW_STATUS_CONTRACT');
 
-const realMediaReviewRun = spawnSync(
-  process.execPath,
-  ['--no-warnings', 'scripts/profile-v1-real-media-review.mts', '--json'],
-  {cwd: studioRoot, encoding: 'utf8'},
-);
-if (realMediaReviewRun.status !== 0) {
-  throw new Error(`PROFILE_REAL_MEDIA_REVIEW_STATUS_FAILED:${realMediaReviewRun.stderr || realMediaReviewRun.stdout}`);
-}
+const realMediaReviewRun = spawnSync(process.execPath, ['--no-warnings', 'scripts/profile-v1-real-media-review.mts', '--json'], {cwd: studioRoot, encoding: 'utf8'});
+if (realMediaReviewRun.status !== 0) throw new Error(`PROFILE_REAL_MEDIA_REVIEW_STATUS_FAILED:${realMediaReviewRun.stderr || realMediaReviewRun.stdout}`);
 const realMediaReview = JSON.parse(realMediaReviewRun.stdout) as RealMediaReviewStatus;
-if (
-  realMediaReview.schemaVersion !== 'profile-v1-real-media-review-status/v1' ||
-  realMediaReview.authority !== 'DERIVED_REAL_MEDIA_REVIEW_STATUS'
-) {
-  throw new Error('PROFILE_REAL_MEDIA_REVIEW_STATUS_CONTRACT');
-}
+if (realMediaReview.schemaVersion !== 'profile-v1-real-media-review-status/v1' || realMediaReview.authority !== 'DERIVED_REAL_MEDIA_REVIEW_STATUS') throw new Error('PROFILE_REAL_MEDIA_REVIEW_STATUS_CONTRACT');
+
+const audioReviewRun = spawnSync(process.execPath, ['--no-warnings', 'scripts/profile-v1-audio-listening-review.mts', '--json'], {cwd: studioRoot, encoding: 'utf8'});
+if (audioReviewRun.status !== 0) throw new Error(`PROFILE_AUDIO_LISTENING_REVIEW_STATUS_FAILED:${audioReviewRun.stderr || audioReviewRun.stdout}`);
+const audioReview = JSON.parse(audioReviewRun.stdout) as AudioListeningReviewStatus;
+if (audioReview.schemaVersion !== 'profile-v1-audio-listening-review-status/v1' || audioReview.authority !== 'DERIVED_PROFILE_AUDIO_LISTENING_REVIEW_STATUS') throw new Error('PROFILE_AUDIO_LISTENING_REVIEW_STATUS_CONTRACT');
 
 const bgmRightsState = rightsStatus.state;
 const bgmReceiptCurrent = rightsStatus.intakeReceipt.current;
@@ -149,42 +132,23 @@ const assemblyReady =
   structureReview.state === 'PASS' &&
   structureReview.humanReviewComplete &&
   realMediaReview.state === 'PASS' &&
-  realMediaReview.humanReviewComplete;
+  realMediaReview.humanReviewComplete &&
+  audioReview.state === 'PASS' &&
+  audioReview.humanAudioQaComplete;
 
 const blockers = [
   ...mediaSlots.filter((slot) => !slot.ready).map((slot) => `MEDIA_MISSING:${slot.id}`),
-  ...(!mediaReceiptCurrent
-    ? [
-        'MEDIA_INTAKE_RECEIPT_STALE',
-        ...mediaReceipt.errors.map((error) => `MEDIA_INTAKE:${error}`),
-      ]
-    : []),
+  ...(!mediaReceiptCurrent ? ['MEDIA_INTAKE_RECEIPT_STALE', ...mediaReceipt.errors.map((error) => `MEDIA_INTAKE:${error}`)] : []),
   ...rightsStatus.blockers.map((blocker) => `BGM_RIGHTS:${blocker}`),
-  ...(structureReview.state === 'PASS'
-    ? []
-    : structureReview.blockers.length > 0
-      ? structureReview.blockers.map((blocker) => `STRUCTURE_REVIEW:${blocker}`)
-      : [`STRUCTURE_REVIEW:${structureReview.state}`]),
-  ...(realMediaReview.state === 'PASS'
-    ? []
-    : realMediaReview.blockers.length > 0
-      ? realMediaReview.blockers.map((blocker) => `REAL_MEDIA_REVIEW:${blocker}`)
-      : [`REAL_MEDIA_REVIEW:${realMediaReview.state}`]),
+  ...(structureReview.state === 'PASS' ? [] : structureReview.blockers.length > 0 ? structureReview.blockers.map((blocker) => `STRUCTURE_REVIEW:${blocker}`) : [`STRUCTURE_REVIEW:${structureReview.state}`]),
+  ...(realMediaReview.state === 'PASS' ? [] : realMediaReview.blockers.length > 0 ? realMediaReview.blockers.map((blocker) => `REAL_MEDIA_REVIEW:${blocker}`) : [`REAL_MEDIA_REVIEW:${realMediaReview.state}`]),
+  ...(audioReview.state === 'PASS' ? [] : audioReview.blockers.length > 0 ? audioReview.blockers.map((blocker) => `AUDIO_LISTENING_REVIEW:${blocker}`) : [`AUDIO_LISTENING_REVIEW:${audioReview.state}`]),
 ];
 
 const chapterRows = profileV1Chapters.map((chapter) => {
   const required = mediaSlots.filter((slot) => slot.chapterId === chapter.id);
   const readyCount = required.filter((slot) => slot.ready).length;
-  return {
-    chapterId: chapter.id,
-    order: chapter.order,
-    title: chapter.title,
-    role: chapter.role,
-    editIntent: chapter.editIntent,
-    requiredCount: required.length,
-    readyCount,
-    ready: readyCount === required.length,
-  };
+  return {chapterId: chapter.id, order: chapter.order, title: chapter.title, role: chapter.role, editIntent: chapter.editIntent, requiredCount: required.length, readyCount, ready: readyCount === required.length};
 });
 
 const canonicalMediaIntakeActions = [
@@ -205,11 +169,7 @@ const bgmRightsApprovalActions = [
 ];
 const inputRecoveryActions = [
   ...(!mediaReady ? canonicalMediaIntakeActions : []),
-  ...(!bgmFileExists || !bgmReceiptCurrent
-    ? canonicalBgmIntakeActions
-    : !bgmReady
-      ? bgmRightsApprovalActions
-      : []),
+  ...(!bgmFileExists || !bgmReceiptCurrent ? canonicalBgmIntakeActions : !bgmReady ? bgmRightsApprovalActions : []),
 ];
 
 const report = {
@@ -243,6 +203,7 @@ const report = {
   },
   structureReview,
   realMediaReview,
+  audioReview,
   readiness: {
     finalRenderEligible,
     assemblyReady,
@@ -250,7 +211,7 @@ const report = {
     structurePreviewQaState: structureReview.state,
     previewQaState: realMediaReview.state,
     humanContentQaState: realMediaReview.state,
-    audioQaState: 'NOT_RUN' as const,
+    audioQaState: audioReview.state,
     macDaVinciActualState: 'NOT_RUN' as const,
     productionReady: false,
   },
@@ -265,16 +226,21 @@ const report = {
             '17素材のcrop/focus/color/emotional-fit/contentと5章flow/readability/role fitを人間確認',
             'node --no-warnings scripts/profile-v1-real-media-review.mts --strict',
           ]
-        : ['Profile assembly input + structure + real-media Human QA ready', 'final render / DaVinci handoffへ進む'],
+        : audioReview.state !== 'PASS'
+          ? [
+              'rights-cleared BGM入り30秒real-media previewを最後まで人間が再生',
+              'node --no-warnings scripts/profile-v1-audio-listening-review.mts --init',
+              'audibility/balance/startIntegrity/endIntegrity/pictureSyncを人間確認しPASSへ更新',
+              'node --no-warnings scripts/profile-v1-audio-listening-review.mts --strict',
+            ]
+          : ['Profile assembly input + structure + real-media + Human audio QA ready', 'final render / DaVinci handoffへ進む'],
 };
 
 if (jsonMode) {
   console.log(JSON.stringify(report, null, 2));
 } else {
-  console.log(
-    `Profile V1 assembly preflight: chapters=${chapterRows.filter((chapter) => chapter.ready).length}/${chapterRows.length} media=${readyMediaCount}/${mediaSlots.length} files=${mediaFilesReady ? 'READY' : 'BLOCKED'} mediaReceipt=${mediaReceiptCurrent ? 'CURRENT' : 'MISSING_OR_STALE'} BGM=${bgmReady ? 'READY' : `BLOCKED/${bgmRightsState}`} bgmReceipt=${bgmReceiptCurrent ? 'CURRENT' : 'MISSING_OR_STALE'} structure=${structureReview.state} realMediaQA=${realMediaReview.state}`,
-  );
-  console.log(`finalRenderEligible=${finalRenderEligible ? 'YES' : 'NO'} assemblyReady=${assemblyReady ? 'YES' : 'NO'} structurePreviewQA=${structureReview.state} realMediaPreviewQA=${realMediaReview.state} HumanContentQA=${realMediaReview.state} MacDaVinciActual=NOT_RUN productionReady=NO`);
+  console.log(`Profile V1 assembly preflight: chapters=${chapterRows.filter((chapter) => chapter.ready).length}/${chapterRows.length} media=${readyMediaCount}/${mediaSlots.length} files=${mediaFilesReady ? 'READY' : 'BLOCKED'} mediaReceipt=${mediaReceiptCurrent ? 'CURRENT' : 'MISSING_OR_STALE'} BGM=${bgmReady ? 'READY' : `BLOCKED/${bgmRightsState}`} bgmReceipt=${bgmReceiptCurrent ? 'CURRENT' : 'MISSING_OR_STALE'} structure=${structureReview.state} realMediaQA=${realMediaReview.state} audioQA=${audioReview.state}`);
+  console.log(`finalRenderEligible=${finalRenderEligible ? 'YES' : 'NO'} assemblyReady=${assemblyReady ? 'YES' : 'NO'} structurePreviewQA=${structureReview.state} realMediaPreviewQA=${realMediaReview.state} HumanContentQA=${realMediaReview.state} HumanAudioQA=${audioReview.state} MacDaVinciActual=NOT_RUN productionReady=NO`);
   for (const blocker of blockers) console.log(`BLOCK / ${blocker}`);
   console.log(`NEXT / ${report.nextActions.join(' → ')}`);
   console.log('JSON / node --no-warnings scripts/profile-v1-assembly-preflight.mts --json');
