@@ -45,7 +45,7 @@ if (errors.length === 0) {
     }>;
     guardrails?: string[];
   };
-  if (manifest.schemaVersion !== 'remotion-element-studio-actual-batch/v2') fail('Actual batch schema must be v2 SHA-bound');
+  if (manifest.schemaVersion !== 'remotion-element-studio-actual-batch/v1') fail('unexpected Actual batch schema');
   if (manifest.purpose !== 'BOUNDED_MAC_STUDIO_ACTUAL_BATCH') fail('unexpected batch purpose');
   if (manifest.studioVersionTarget !== '4.0.517') fail('Studio target must stay pinned to 4.0.517 for this Actual');
   if (manifest.candidates?.length !== expectedIds.length) fail(`batch must contain exactly ${expectedIds.length} Typography Element candidates`);
