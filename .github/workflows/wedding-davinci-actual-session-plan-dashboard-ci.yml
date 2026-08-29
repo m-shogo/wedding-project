@@ -1,0 +1,32 @@
+name: Wedding DaVinci Actual Session Plan Dashboard CI
+
+on:
+  pull_request:
+    paths:
+      - "movie-dashboard/src/data/weddingDavinciActualSessionPlan.ts"
+      - "movie-dashboard/src/components/WeddingDavinciDeliveryReadinessCard.tsx"
+      - "movie-dashboard/scripts/verify-wedding-davinci-actual-session-plan.mjs"
+      - ".github/workflows/wedding-davinci-actual-session-plan-dashboard-ci.yml"
+  push:
+    branches: [main]
+    paths:
+      - "movie-dashboard/src/data/weddingDavinciActualSessionPlan.ts"
+      - "movie-dashboard/src/components/WeddingDavinciDeliveryReadinessCard.tsx"
+      - "movie-dashboard/scripts/verify-wedding-davinci-actual-session-plan.mjs"
+      - ".github/workflows/wedding-davinci-actual-session-plan-dashboard-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Verify Motion Zukan Actual session plan boundary
+        working-directory: movie-dashboard
+        run: node scripts/verify-wedding-davinci-actual-session-plan.mjs
