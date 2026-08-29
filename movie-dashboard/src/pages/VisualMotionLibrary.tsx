@@ -5,6 +5,7 @@ import { MotionZukanProductionWorkspace } from "../components/MotionZukanProduct
 import { ProfileRealMediaQaAuditCard } from "../components/ProfileRealMediaQaAuditCard";
 import { RemotionElementReadinessPanel } from "../components/RemotionElementReadinessPanel";
 import { WeddingDavinciDeliveryReadinessCard } from "../components/WeddingDavinciDeliveryReadinessCard";
+import { WeddingDavinciGuiActualStartGateCard } from "../components/WeddingDavinciGuiActualStartGateCard";
 import { getMotionLearningBundle } from "../data/motionLearningLinks";
 import { getLatestPreviewEvidence } from "../data/motionPreviewEvidence";
 import { getRemotionElementCandidate } from "../data/remotionElementCandidates";
@@ -36,6 +37,7 @@ export function VisualMotionLibrary() {
 
       <MotionZukanProductionWorkspace />
       <WeddingDavinciDeliveryReadinessCard />
+      <WeddingDavinciGuiActualStartGateCard />
       <div className="mb-10">
         <ProfileRealMediaQaAuditCard />
       </div>
