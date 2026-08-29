@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - 'motion-studio/scripts/opening-v1-authoritative-handoff-readiness.mts'
+      - 'motion-studio/scripts/opening-v1-authoritative-handoff-contract.mts'
       - 'motion-studio/scripts/opening-v1-canonical-audio-currentness.mts'
       - 'motion-studio/scripts/opening-v1-production-status.mts'
       - 'motion-studio/scripts/opening-v1-davinci-handoff-contract.mts'
@@ -29,6 +30,8 @@ jobs:
           cache: pnpm
           cache-dependency-path: motion-studio/pnpm-lock.yaml
       - run: pnpm install --frozen-lockfile
+      - name: Verify authoritative source contract
+        run: node --no-warnings scripts/opening-v1-authoritative-handoff-contract.mts
       - name: Verify fail-closed authoritative handoff surface on fresh checkout
         run: |
           set +e
