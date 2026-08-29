@@ -14,11 +14,13 @@ const config = movieArg === 'opening'
       productionExporter: 'scripts/export-opening-v1-production-bundle.mts',
       bundle: 'out/handoff/opening-v1/opening-v1-production-bundle.json',
       recovery: 'out/handoff/opening-v1/opening-v1-davinci-production-recovery.json',
+      recoveryMarkdown: 'out/handoff/opening-v1/opening-v1-davinci-production-recovery.md',
     }
   : {
       productionExporter: 'scripts/export-profile-v1-production-bundle.mts',
       bundle: 'out/handoff/profile-v1/profile-v1-production-bundle.json',
       recovery: 'out/handoff/profile-v1/profile-v1-davinci-production-recovery.json',
+      recoveryMarkdown: 'out/handoff/profile-v1/profile-v1-davinci-production-recovery.md',
     };
 
 const run = (script: string, args: string[] = []) => spawnSync(
@@ -53,7 +55,20 @@ if (!existsSync(join(root, config.recovery))) {
   process.exit(1);
 }
 
+const remotionAttachment = run('scripts/attach-wedding-remotion-element-recovery-sidecar.mts', [`--movie=${movieArg}`]);
+forward(remotionAttachment);
+if (remotionAttachment.status !== 0) {
+  console.error(`Wedding production handoff blocked: ${movieArg} Remotion Element gate sidecar attachment is missing or stale.`);
+  process.exit(remotionAttachment.status ?? 1);
+}
+if (!existsSync(join(root, config.recoveryMarkdown))) {
+  console.error(`Wedding production handoff blocked: ${config.recoveryMarkdown} missing after Remotion Element recovery attachment.`);
+  process.exit(1);
+}
+
 console.log(`Wedding production handoff complete: ${movieArg}`);
 console.log(`bundle=${config.bundle}`);
 console.log(`davinciRecovery=${config.recovery}`);
+console.log(`davinciRecoveryMarkdown=${config.recoveryMarkdown}`);
+console.log('Mac Remotion Studio GUI Actual remains NOT_RUN; sidecar attachment is not GUI evidence.');
 console.log('Mac DaVinci Actual remains NOT_RUN; handoff export does not execute Resolve GUI work.');
