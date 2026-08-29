@@ -54,8 +54,8 @@ function deriveNextAction(): NextAction {
       title: "BGM入りpreviewを最後まで人間が再生",
       detail: "audibility / balance / start integrity / end integrity / picture syncを実耳で確認し、evidenceを更新してstrict checkする。",
       commands: [
-        "pnpm profile:audio-listening-review:init",
-        "pnpm profile:audio-listening-review:strict",
+        "node --no-warnings scripts/profile-v1-audio-listening-review.mts --init",
+        "node --no-warnings scripts/profile-v1-audio-listening-review.mts --strict",
       ],
     };
   }
