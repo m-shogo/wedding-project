@@ -1,0 +1,45 @@
+name: Opening V1 Canonical Audio Currentness CI
+
+on:
+  pull_request:
+    paths:
+      - 'motion-studio/scripts/opening-v1-canonical-audio-currentness.mts'
+      - 'motion-studio/scripts/check-opening-v1-canonical-audio-currentness.mts'
+      - 'motion-studio/scripts/opening-v1-production-status.mts'
+      - 'motion-studio/scripts/opening-v1-audio-handoff-binding.mts'
+      - 'motion-studio/scripts/opening-v1-davinci-recovery-audio-binding.mts'
+      - 'motion-studio/scripts/opening-v1-davinci-handoff-contract.mts'
+      - '.github/workflows/opening-v1-canonical-audio-currentness-ci.yml'
+  workflow_dispatch:
+
+jobs:
+  canonical-audio-currentness:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: motion-studio
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Static guardrail contract
+        run: node --no-warnings scripts/check-opening-v1-canonical-audio-currentness.mts
+      - name: Fresh checkout is fail-closed
+        run: |
+          node --no-warnings scripts/opening-v1-canonical-audio-currentness.mts --json > /tmp/opening-canonical-audio.json
+          node - <<'NODE'
+          const s = require('/tmp/opening-canonical-audio.json');
+          if (s.state !== 'BLOCKED' || s.current !== false) process.exit(1);
+          if (s.effective.productionBundleCurrent !== false) process.exit(1);
+          if (s.effective.palmierHandoffCurrent !== false) process.exit(1);
+          if (s.effective.davinciHandoffCurrent !== false) process.exit(1);
+          if (s.effective.macDaVinciActualVerified !== false) process.exit(1);
+          if (s.effective.productionReady !== false) process.exit(1);
+          NODE
+      - name: Strict mode rejects missing/stale evidence
+        run: |
+          if node --no-warnings scripts/opening-v1-canonical-audio-currentness.mts --strict; then
+            echo 'Expected strict canonical audio currentness to fail on fresh checkout' >&2
+            exit 1
+          fi
