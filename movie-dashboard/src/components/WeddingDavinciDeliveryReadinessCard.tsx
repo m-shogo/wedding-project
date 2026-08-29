@@ -1,3 +1,4 @@
+import {useState} from "react";
 import {buildWeddingDavinciDeliveryReadiness} from "../data/weddingDavinciDeliveryReadiness";
 import {
   buildWeddingDavinciFinalDeliveryPreflight,
@@ -7,6 +8,10 @@ import {
   buildWeddingDavinciActualSessionPlan,
   buildWeddingDavinciActualSessionPlanJson,
 } from "../data/weddingDavinciActualSessionPlan";
+import {
+  auditTransportedWeddingDavinciActualSessionPlan,
+  defaultWeddingDavinciActualSessionPlanTransportAudit,
+} from "../data/weddingDavinciActualSessionPlanTransportAudit";
 
 const shortSha = (value: string | null) => value ? `${value.slice(0, 10)}…` : "—";
 
@@ -35,15 +40,16 @@ const downloadOperatorPacket = () => downloadJson(
   "wedding-davinci-operator-packet.json",
 );
 
-const downloadActualSessionPlan = () => downloadJson(
+const downloadDashboardSessionPlanReference = () => downloadJson(
   buildWeddingDavinciActualSessionPlanJson(),
-  "wedding-davinci-actual-session-plan.json",
+  "wedding-davinci-actual-session-plan-dashboard-reference.json",
 );
 
 export function WeddingDavinciDeliveryReadinessCard() {
   const manifest = buildWeddingDavinciDeliveryReadiness();
   const preflight = buildWeddingDavinciFinalDeliveryPreflight();
   const sessionPlan = buildWeddingDavinciActualSessionPlan();
+  const [transportAudit, setTransportAudit] = useState(defaultWeddingDavinciActualSessionPlanTransportAudit);
   const projects = [
     ["Opening", manifest.opening],
     ["Profile", manifest.profile],
@@ -52,6 +58,16 @@ export function WeddingDavinciDeliveryReadinessCard() {
     ["Opening", sessionPlan.projects.opening],
     ["Profile", sessionPlan.projects.profile],
   ] as const;
+
+  const inspectTransportedSessionPlan = async (file: File | undefined) => {
+    if (!file) return;
+    try {
+      const parsed = JSON.parse(await file.text());
+      setTransportAudit(auditTransportedWeddingDavinciActualSessionPlan(parsed));
+    } catch {
+      setTransportAudit(auditTransportedWeddingDavinciActualSessionPlan(null));
+    }
+  };
 
   return (
     <section className="mb-10 border border-sand-300 dark:border-navy-600 bg-white dark:bg-navy-800 p-5">
@@ -108,11 +124,46 @@ export function WeddingDavinciDeliveryReadinessCard() {
           </div>
           <button
             type="button"
-            onClick={downloadActualSessionPlan}
+            onClick={downloadDashboardSessionPlanReference}
             className="border border-fuchsia-500 px-3 py-2 text-[11px] font-semibold text-fuchsia-800 dark:text-fuchsia-200 hover:bg-fuchsia-100 dark:hover:bg-fuchsia-950/40"
           >
-            Actual Session Plan JSONを保存
+            Dashboard参照JSONを保存
           </button>
+        </div>
+
+        <div className="mt-4 border border-fuchsia-200 dark:border-fuchsia-900/50 bg-fuchsia-50/30 dark:bg-fuchsia-950/10 p-4">
+          <div className="flex flex-wrap items-start justify-between gap-3">
+            <div>
+              <p className="text-[10px] font-semibold tracking-[0.16em] text-fuchsia-800 dark:text-fuchsia-300">TRANSPORTED SESSION PLAN AUDIT</p>
+              <p className="mt-1 text-[11px] leading-5 text-navy-500 dark:text-navy-300">
+                Macへ持ち出した正本JSONを読み込み、Opening/Profileの共通bindingが古くないか確認します。Browser一致だけではCURRENTにせず、必ずcanonical CLI strict-currentを要求します。
+              </p>
+            </div>
+            <span className={`text-xs font-bold ${stateClass(transportAudit.state)}`}>{transportAudit.state}</span>
+          </div>
+          <div className="mt-3 flex flex-wrap items-center gap-3">
+            <label className="cursor-pointer border border-fuchsia-500 px-3 py-2 text-[11px] font-semibold text-fuchsia-800 dark:text-fuchsia-200 hover:bg-fuchsia-100 dark:hover:bg-fuchsia-950/40">
+              正本Session Plan JSONを監査
+              <input
+                type="file"
+                accept="application/json,.json"
+                className="hidden"
+                onChange={(event) => void inspectTransportedSessionPlan(event.target.files?.[0])}
+              />
+            </label>
+            <code className="min-w-[260px] flex-1 overflow-x-auto text-[9px] leading-4 text-navy-500 dark:text-navy-300">{transportAudit.strictCommand}</code>
+          </div>
+          <p className="mt-2 text-[10px] leading-4 text-amber-700 dark:text-amber-300">{transportAudit.note}</p>
+          {transportAudit.mismatches.length > 0 && (
+            <ul className="mt-2 space-y-1 text-[10px] leading-4 text-rose-700 dark:text-rose-300">
+              {transportAudit.mismatches.map((reason) => <li key={reason}>• {reason}</li>)}
+            </ul>
+          )}
+          <div className="mt-3 border-t border-fuchsia-200 dark:border-fuchsia-900/50 pt-3">
+            <p className="text-[10px] font-semibold text-navy-700 dark:text-sand-200">正本Session Planの生成</p>
+            <code className="mt-1 block overflow-x-auto text-[9px] leading-4 text-navy-500 dark:text-navy-300">cd motion-studio && node --no-warnings scripts/wedding-davinci-actual-session-plan.mts --write</code>
+            <p className="mt-1 text-[9px] leading-4 text-navy-400">Dashboard参照JSONはUI表示用であり、transported strictの入力正本には使用しません。</p>
+          </div>
         </div>
 
         <div className="mt-4 grid grid-cols-1 gap-4 xl:grid-cols-2">
