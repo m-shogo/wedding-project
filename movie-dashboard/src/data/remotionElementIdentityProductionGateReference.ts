@@ -18,6 +18,8 @@ export const WEDDING_REMOTION_ELEMENT_IDENTITY_PRODUCTION_GATE_ARTIFACT_SCHEMA =
   "wedding-remotion-element-identity-production-gate-artifact/v1" as const;
 export const WEDDING_REMOTION_ELEMENT_IDENTITY_PRODUCTION_GATE_ARTIFACT_EXPORT_COMMAND =
   "cd motion-studio && node --no-warnings scripts/export-wedding-remotion-element-production-gate-artifact.mts" as const;
+export const WEDDING_REMOTION_ELEMENT_IDENTITY_PRODUCTION_GATE_ARTIFACT_CHECK_COMMAND =
+  "cd motion-studio && node --no-warnings scripts/check-wedding-remotion-element-production-gate-artifact.mts" as const;
 
 export function buildRemotionElementIdentityProductionGateReference(movieId: WeddingMovieId) {
   const adoptedCandidateIds = [...remotionStudioToolingProductionAdoption[movieId]];
@@ -44,6 +46,7 @@ export function buildRemotionElementIdentityProductionGateReference(movieId: Wed
       checkIdentity: WEDDING_REMOTION_ELEMENT_HANDOFF_IDENTITY_CHECK_COMMAND,
       checkProductionGate: WEDDING_REMOTION_ELEMENT_IDENTITY_PRODUCTION_GATE_COMMAND,
       exportProductionGateArtifact: WEDDING_REMOTION_ELEMENT_IDENTITY_PRODUCTION_GATE_ARTIFACT_EXPORT_COMMAND,
+      checkProductionGateArtifact: WEDDING_REMOTION_ELEMENT_IDENTITY_PRODUCTION_GATE_ARTIFACT_CHECK_COMMAND,
     },
     semantics: {
       unadoptedIsNonBlocking: true,
