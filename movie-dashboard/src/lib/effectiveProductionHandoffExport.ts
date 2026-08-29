@@ -2,6 +2,7 @@ import {buildOpeningAuthoritativeHandoffOverlay} from "../data/openingAuthoritat
 import {buildOpeningProductionStatusHandoff} from "../data/openingProductionStatusHandoff";
 import {buildProfileProductionStatusHandoff} from "../data/profileProductionStatusHandoff";
 import {buildRemotionElementHandoffIdentityReference} from "../data/remotionElementHandoffIdentityReference";
+import {buildRemotionElementIdentityProductionGateReference} from "../data/remotionElementIdentityProductionGateReference";
 import {
   buildPalmierWeddingProductionGate,
   type PalmierWeddingProductionMovieId,
@@ -55,6 +56,7 @@ function buildOverlay(movieId: PalmierWeddingProductionMovieId): EffectiveProduc
       "CANONICAL_HANDOFF_REMAINS_SOURCE_OF_WEDDING_MEDIA_AND_STAGE_EVIDENCE",
       "EFFECTIVE_OVERLAY_EXPORTED != EFFECTIVE_GATE_COMPLETED",
       "REMOTION_DEPENDENCY_OVERLAY_EXPORTED != STUDIO_ACTUAL_VERIFIED",
+      "ADOPTED_REMOTION_ELEMENT_REQUIRES_SHA_BOUND_IDENTITY_GATE_BEFORE_EFFECTIVE_HANDOFF_CURRENT",
       "UNKNOWN_REMOTION_ADOPTION_FAILS_BEFORE_OVERLAY_EXPORT",
       "HUMAN_QA_NOT_RUN != HUMAN_QA_PASS",
       "MAC_DAVINCI_ACTUAL_NOT_RUN != MAC_DAVINCI_ACTUAL_VERIFIED",
@@ -67,6 +69,7 @@ export function buildOpeningEffectiveProductionHandoff() {
     ...buildOpeningProductionStatusHandoff(),
     authoritativeHandoff: buildOpeningAuthoritativeHandoffOverlay(),
     remotionElementIdentity: buildRemotionElementHandoffIdentityReference("opening"),
+    remotionElementIdentityProductionGate: buildRemotionElementIdentityProductionGateReference("opening"),
     effectiveProduction: buildOverlay("opening"),
   };
 }
@@ -75,6 +78,7 @@ export function buildProfileEffectiveProductionHandoff() {
   return {
     ...buildProfileProductionStatusHandoff(),
     remotionElementIdentity: buildRemotionElementHandoffIdentityReference("profile"),
+    remotionElementIdentityProductionGate: buildRemotionElementIdentityProductionGateReference("profile"),
     effectiveProduction: buildOverlay("profile"),
   };
 }
