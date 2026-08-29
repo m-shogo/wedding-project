@@ -39,7 +39,7 @@ const projectGateStage = (value: unknown) => {
   return null;
 };
 
-// Small dependency-free SHA-256 implementation for browser-side integrity preflight.
+// Dependency-free SHA-256 for browser-side transport integrity preflight.
 // Canonical CURRENT authority remains the Motion Studio Node verifier.
 const sha256 = (input: string) => {
   const rightRotate = (value: number, amount: number) => (value >>> amount) | (value << (32 - amount));
@@ -55,7 +55,7 @@ const sha256 = (input: string) => {
   for (let candidate = 2; primeCounter < 64; candidate += 1) {
     if (isComposite[candidate]) continue;
     for (let multiple = candidate * candidate; multiple < 313; multiple += candidate) isComposite[multiple] = true;
-    hash[primeCounter] = (Math.sqrt(candidate) * maxWord) | 0;
+    if (primeCounter < 8) hash[primeCounter] = (Math.sqrt(candidate) * maxWord) | 0;
     constants[primeCounter] = (Math.cbrt(candidate) * maxWord) | 0;
     primeCounter += 1;
   }
