@@ -28,7 +28,7 @@ export const profileAssemblyReviewReadiness = {
     "humanReviewComplete": false,
     "evidencePath": "out/qa/profile-v1-audio-listening-review.json",
     "blockers": [
-      "PROFILE_AUDIO_LISTENING_REVIEW_EVIDENCE_MISSING"
+      "PROFILE_AUDIO_LISTENING_REVIEW_NOT_RUN"
     ]
   },
   "guardrails": [
