@@ -212,9 +212,10 @@ const rows = entries
         <button type="button" class="btn btn-nudge btn-nudge-big" data-delta="300">うんと遅く ⏩⏩</button>
       </div>
       <div class="judge-row">
-        <button type="button" class="btn btn-reset" data-action="reset">↺ ズレをやり直す</button>
-        <button type="button" class="btn btn-ok" data-action="ok">👍 これで合ってる</button>
+        <button type="button" class="btn btn-ok" data-action="ok">👍 合ってる</button>
+        <button type="button" class="btn btn-wrong" data-action="wrong">❌ 合ってない</button>
         <button type="button" class="btn btn-reject" data-action="reject">🤔 わからない</button>
+        <button type="button" class="btn btn-reset" data-action="reset">↺ やり直す</button>
       </div>
       ${e.isGoldenAnchorCandidate ? '<div class="judge-row"><label class="golden-toggle"><input type="checkbox" data-role="golden" /> ⭐ 基準点として確定する</label></div>' : ''}
       <div class="judge-row">
@@ -267,6 +268,8 @@ writeFileSync(
   .btn:hover { background: #333; }
   .btn-ok { border-color: #3a7a4a; }
   .btn-ok.active { background: #2f7a3f; border-color: #2f7a3f; color: #fff; }
+  .btn-wrong { border-color: #a33; }
+  .btn-wrong.active { background: #a33; border-color: #a33; color: #fff; }
   .btn-reject { border-color: #7a3a3a; }
   .btn-reject.active { background: #7a3232; border-color: #7a3232; color: #fff; }
   .btn-nudge { font-size: 12px; padding: 6px 10px; }
@@ -306,17 +309,19 @@ writeFileSync(
   <ol>
     <li><b>▶</b>(再生ボタン)を押して聴く。</li>
     <li>
-      歌詞が音より<b>早く</b>聞こえたら <b>⏪ 少し早く</b> を押す。<b>遅れて</b>聞こえたら <b>少し遅く ⏩</b> を押す。<br/>
-      ズレがかなり大きい(「めっちゃズレてる」)と感じたら、まず <b>⏪⏪ うんと早く</b> か <b>うんと遅く ⏩⏩</b> を1〜2回押してから、足りない分を小さいボタンで微調整する。<br/>
-      何回押してもOK。押しすぎたら <b>↺ ズレをやり直す</b> で0に戻せる。
+      まず3つのどれかを押して判定する。<br/>
+      ぴったり合ってたら <b>👍 合ってる</b>。<br/>
+      ズレてる/違うと思ったら <b>❌ 合ってない</b>(押すとオレンジ色になる)。<br/>
+      どっちか判断できなければ <b>🤔 わからない</b>(これでOK。無理に判断しなくていい)。
     </li>
     <li>
-      押したら <b>🔔 今の位置で確認</b> を押す。今押した分だけズラした位置で「ピッ」という音が鳴るので、<b>歌詞の頭と「ピッ」がピッタリ揃うまで、②→🔔確認、を何回でも繰り返す</b>。数字(ms)は見なくて良い。音だけで判断すればOK。
+      <b>❌ 合ってない</b> を押した行は、どれくらいズレてるかを下のボタンで教える。<br/>
+      歌詞が音より<b>早く</b>聞こえたら <b>⏪ 少し早く</b>、<b>遅れて</b>聞こえたら <b>少し遅く ⏩</b> を押す。<br/>
+      ズレがかなり大きい(「めっちゃズレてる」)時は、まず <b>⏪⏪ うんと早く</b> か <b>うんと遅く ⏩⏩</b> を1〜2回押してから、小さいボタンで微調整する。<br/>
+      何回押してもOK。押しすぎたら <b>↺ やり直す</b> で0に戻せる。
     </li>
     <li>
-      揃ったら特に何も押さなくてOK(ボタンを押した時点で自動的に「合ってる」として記録されている)。<br/>
-      最初から動かさずに合っていた行だけ <b>👍 これで合ってる</b> を押す。<br/>
-      何を確認すればいいか分からない/どこがズレてるか判断できない場合は <b>🤔 わからない</b> を押して次の行へ進んでよい(無理に判断しなくていい)。
+      押したら <b>🔔 今の位置で確認</b> を押す。今押した分だけズラした位置で「ピッ」という音が鳴るので、<b>歌詞の頭と「ピッ」がピッタリ揃うまで、③→🔔確認、を何回でも繰り返す</b>。数字(ms)は見なくて良い。音だけで判断すればOK。揃ったらそのままでOK(自動的に記録されている)。
     </li>
     <li>全部(または途中まで)終わったら、上の<b>「名前」欄に自分の名前</b>を入れて<b>「💾 保存する」</b>を押す。ファイルが1つダウンロードされるので、
       <code>local/analysis/start-wedding/listening-decisions.local.json</code> という名前でそのフォルダに保存する
@@ -485,13 +490,15 @@ ${rows}
       var note = (entry.note || '').trim();
       if (entry.status === 'reject') {
         lines.push('[わからない] ' + cueId + ' 「' + text + '」 (' + sec + '秒付近)' + (note ? ' / メモ: ' + note : ''));
-      } else if (entry.status === 'ok' && entry.deltaMs !== 0) {
+      } else if (entry.status === 'adjust' && entry.deltaMs !== 0) {
         lines.push(
           '[要調整] ' + cueId + ' 「' + text + '」 (' + sec + '秒付近) — ' +
             Math.abs(entry.deltaMs) + 'ms ' + (entry.deltaMs < 0 ? '早く' : '遅く') +
             (entry.golden ? ' ⭐基準点として確定' : '') +
             (note ? ' / メモ: ' + note : ''),
         );
+      } else if (entry.status === 'adjust') {
+        lines.push('[合ってない・補正量未入力] ' + cueId + ' 「' + text + '」 (' + sec + '秒付近)' + (note ? ' / メモ: ' + note : ''));
       } else if (note) {
         lines.push('[OK・メモあり] ' + cueId + ' 「' + text + '」 (' + sec + '秒付近)' + (entry.golden ? ' ⭐基準点として確定' : '') + ' / メモ: ' + note);
       }
@@ -512,26 +519,35 @@ ${rows}
     var cueId = tr.getAttribute('data-cueid');
     var entry = getEntry(cueId);
     var okBtn = tr.querySelector('.btn-ok');
+    var wrongBtn = tr.querySelector('.btn-wrong');
     var rejectBtn = tr.querySelector('.btn-reject');
     var currentEl = tr.querySelector('[data-role=current]');
     var statusEl = tr.querySelector('[data-role=status]');
     var goldenInput = tr.querySelector('[data-role=golden]');
 
     okBtn.classList.toggle('active', entry.status === 'ok');
+    wrongBtn.classList.toggle('active', entry.status === 'adjust');
     rejectBtn.classList.toggle('active', entry.status === 'reject');
     currentEl.textContent = entry.deltaMs === 0 ? 'ズレなし' : Math.abs(entry.deltaMs) + 'ms ' + (entry.deltaMs < 0 ? '早く' : '遅く');
     if (goldenInput) goldenInput.checked = !!entry.golden;
     var noteInput = tr.querySelector('[data-role=note]');
     if (noteInput && document.activeElement !== noteInput) noteInput.value = entry.note || '';
 
-    if (entry.status === 'ok' && entry.deltaMs !== 0) {
-      statusEl.textContent = '判定: 合ってる(' + Math.abs(entry.deltaMs) + 'ms ' + (entry.deltaMs < 0 ? '早く' : '遅く') + '補正)' + (entry.golden ? ' ⭐基準点' : '');
+    // status: 'ok'(合ってる) / 'adjust'(合ってない。ズレ量ありなしを問わず)/ 'reject'(わからない) / null(未確認)。
+    // 「合ってない」を押しただけでdeltaMsが0のままの行は、実際の補正量が
+    // 分からないまま保存されないよう、保存時にreject相当として扱う
+    // (この関数はUI表示のみ。保存ロジック側で別途吸収する)。
+    if (entry.status === 'adjust' && entry.deltaMs !== 0) {
+      statusEl.textContent = '判定: 合ってない → ' + Math.abs(entry.deltaMs) + 'ms ' + (entry.deltaMs < 0 ? '早く' : '遅く') + '補正' + (entry.golden ? ' ⭐基準点' : '');
+      statusEl.className = 'judge-status is-adjust';
+    } else if (entry.status === 'adjust') {
+      statusEl.textContent = '判定: 合ってない(⏪/⏩でどれくらいズレてるか合わせてください)';
       statusEl.className = 'judge-status is-adjust';
     } else if (entry.status === 'ok') {
       statusEl.textContent = '判定: 合ってる' + (entry.golden ? ' ⭐基準点' : '');
       statusEl.className = 'judge-status is-ok';
     } else if (entry.status === 'reject') {
-      statusEl.textContent = '判定: わからない/違う';
+      statusEl.textContent = '判定: わからない';
       statusEl.className = 'judge-status is-reject';
     } else {
       statusEl.textContent = '未確認';
@@ -540,7 +556,7 @@ ${rows}
   }
 
   function updateProgress() {
-    var done = Object.keys(state).filter(function (k) { return state[k].status === 'ok' || state[k].status === 'reject'; }).length;
+    var done = Object.keys(state).filter(function (k) { return state[k].status === 'ok' || state[k].status === 'adjust' || state[k].status === 'reject'; }).length;
     document.getElementById('progressCount').textContent = '判定済み: ' + done + ' / ' + rowsAll.length + '件(自動的に保存されています)';
   }
 
@@ -550,7 +566,16 @@ ${rows}
 
     tr.querySelector('.btn-ok').addEventListener('click', function () {
       var entry = getEntry(cueId);
+      // 「合ってる」は無補正の確認。誤って合ってない状態のまま押されないよう、
+      // ズレ量は0へ戻す(既に⏪/⏩でズレを追い込んだ後は不要な操作)。
       entry.status = entry.status === 'ok' ? null : 'ok';
+      if (entry.status === 'ok') entry.deltaMs = 0;
+      renderRow(tr);
+      saveState();
+    });
+    tr.querySelector('.btn-wrong').addEventListener('click', function () {
+      var entry = getEntry(cueId);
+      entry.status = entry.status === 'adjust' ? null : 'adjust';
       renderRow(tr);
       saveState();
     });
@@ -564,9 +589,9 @@ ${rows}
       btn.addEventListener('click', function () {
         var entry = getEntry(cueId);
         entry.deltaMs += parseInt(btn.getAttribute('data-delta'), 10);
-        // ズレ補正ボタンを押した時点で「合ってる(補正込み)」扱いへ自動的に進める
-        // (別途OKを押す手間を無くす)。わからない状態からでも補正すれば判定済みになる。
-        if (entry.status !== 'reject') entry.status = 'ok';
+        // ズレ補正ボタンを押した時点で「合ってない(補正込み)」扱いへ自動的に進める
+        // (別途❌を押す手間を無くす)。わからない状態からでも補正すれば判定済みになる。
+        if (entry.status !== 'reject') entry.status = 'adjust';
         renderRow(tr);
         saveState();
       });
@@ -659,11 +684,21 @@ ${rows}
       var e = state[cueId];
       var note = (e.note || '').trim();
       if (e.status === 'ok') {
-        var d = {cueId: cueId, status: e.deltaMs !== 0 ? 'adjust' : 'ok'};
-        if (e.deltaMs !== 0) d.deltaMs = e.deltaMs;
+        var d = {cueId: cueId, status: 'ok'};
         if (e.golden) d.goldenAnchor = true;
         if (note) d.note = note;
         decisions.push(d);
+      } else if (e.status === 'adjust' && e.deltaMs !== 0) {
+        var ad = {cueId: cueId, status: 'adjust', deltaMs: e.deltaMs};
+        if (e.golden) ad.goldenAnchor = true;
+        if (note) ad.note = note;
+        decisions.push(ad);
+      } else if (e.status === 'adjust') {
+        // 「❌ 合ってない」を押したが⏪/⏩でズレ量を入力していない行は、
+        // 補正値を確定できないため verifiedByListening は上げず reject 相当で保存する。
+        var wd = {cueId: cueId, status: 'reject'};
+        wd.note = (note ? note + ' ' : '') + '(合ってないと判定されたが補正量が未入力)';
+        decisions.push(wd);
       } else if (e.status === 'reject') {
         var rd = {cueId: cueId, status: 'reject'};
         if (note) rd.note = note;
@@ -671,7 +706,7 @@ ${rows}
       }
     });
     if (decisions.length === 0) {
-      hintEl.textContent = '⚠️ まだ判定した行が0件です。行の👍か🤔を押してから保存してください。';
+      hintEl.textContent = '⚠️ まだ判定した行が0件です。行の👍/❌/🤔のどれかを押してから保存してください。';
       hintEl.style.color = '#f2a53f';
       return;
     }
