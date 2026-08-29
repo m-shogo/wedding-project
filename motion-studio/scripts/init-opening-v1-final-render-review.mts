@@ -13,9 +13,10 @@ run('pnpm', ['check:opening-photos:strict']);
 run('pnpm', ['check:opening-sound:strict']);
 run('pnpm', ['opening:assembly-preflight:strict']);
 run('pnpm', ['opening:preview-review:strict']);
+run(process.execPath, ['--no-warnings', 'scripts/opening-v1-audio-listening-review.mts', '--strict']);
 run('pnpm', ['exec', 'remotion', 'render', 'src/index-opening-v1.ts', 'OpeningV1', 'out/opening/opening_v1.mp4']);
 run(process.execPath, ['--no-warnings', 'scripts/check-opening-render.mts', 'out/opening/opening_v1.mp4']);
 run(process.execPath, ['--no-warnings', 'scripts/opening-v1-final-render-review.mts', '--init']);
 
-console.log('Opening V1 final-render Human review evidence was initialized only after a fresh guarded production render.');
+console.log('Opening V1 final-render Human review evidence was initialized only after current visual preview review and SHA-bound Human audio listening QA both passed, followed by a fresh guarded production render.');
 console.log('Production bundle export remains blocked until a human completes this final MP4 review.');
