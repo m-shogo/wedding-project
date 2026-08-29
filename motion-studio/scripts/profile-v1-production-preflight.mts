@@ -29,6 +29,20 @@ const generatedAccents = {
           .filter(Boolean),
 };
 
+const framingCheck = run('scripts/sync-profile-v1-framing-verdicts.mts');
+const framing = {
+  state: framingCheck.status === 0 ? ('CURRENT' as const) : ('STALE' as const),
+  sourceAuthority: 'out/qa/profile-v1-real-media-review.json Human crop/focus verdicts',
+  generatedSnapshot: 'src/data/profileV1FramingVerdicts.generated.ts',
+  blockers:
+    framingCheck.status === 0
+      ? []
+      : `${framingCheck.stdout ?? ''}\n${framingCheck.stderr ?? ''}`
+          .split(/\r?\n/)
+          .map((line) => line.trim())
+          .filter(Boolean),
+};
+
 const assemblyRun = run('scripts/profile-v1-assembly-preflight.mts', ['--json']);
 let assemblyReport: any = null;
 if (assemblyRun.status === 0) {
@@ -39,9 +53,10 @@ if (assemblyRun.status === 0) {
   }
 }
 const assemblyReady = assemblyReport?.readiness?.assemblyReady === true;
-const productionPreflightReady = generatedAccents.state === 'PASS' && assemblyReady;
+const productionPreflightReady = generatedAccents.state === 'PASS' && framing.state === 'CURRENT' && assemblyReady;
 const blockers = [
   ...generatedAccents.blockers.map((blocker) => `GENERATED_ACCENTS:${blocker}`),
+  ...framing.blockers.map((blocker) => `PROFILE_FRAMING:${blocker}`),
   ...(assemblyReport?.readiness?.blockers ?? (assemblyRun.status === 0 ? [] : ['ASSEMBLY_PREFLIGHT_FAILED'])),
 ];
 
@@ -49,6 +64,7 @@ const report = {
   schemaVersion: 'profile-v1-production-preflight/v1' as const,
   authority: 'MOTION_STUDIO_DERIVED_PRODUCTION_PREFLIGHT' as const,
   generatedAccents,
+  framing,
   assembly: {
     state: assemblyReady ? ('PASS' as const) : ('BLOCKED' as const),
     report: assemblyReport,
@@ -61,6 +77,7 @@ const report = {
   },
   guardrails: [
     'GENERATED_ACCENT_CONTRACT_PASS != HUMAN_REAL_MEDIA_QA_PASS',
+    'FRAMING_SNAPSHOT_CURRENT != HUMAN_REAL_MEDIA_QA_PASS',
     'PRODUCTION_PREFLIGHT_READY != MAC_DAVINCI_ACTUAL_VERIFIED',
     'PRODUCTION_PREFLIGHT_READY != PRODUCTION_READY',
   ],
@@ -70,7 +87,7 @@ if (jsonMode) {
   console.log(JSON.stringify(report, null, 2));
 } else {
   console.log(
-    `Profile V1 production preflight: generatedAccents=${generatedAccents.state} assembly=${assemblyReady ? 'PASS' : 'BLOCKED'} ready=${productionPreflightReady ? 'YES' : 'NO'}`,
+    `Profile V1 production preflight: generatedAccents=${generatedAccents.state} framing=${framing.state} assembly=${assemblyReady ? 'PASS' : 'BLOCKED'} ready=${productionPreflightReady ? 'YES' : 'NO'}`,
   );
   for (const blocker of blockers) console.log(`BLOCK / ${blocker}`);
   console.log('MacDaVinciActual=NOT_RUN productionReady=NO');
