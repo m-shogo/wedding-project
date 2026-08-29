@@ -1,0 +1,98 @@
+name: Wedding Remotion Element DaVinci Recovery Sidecar CI
+
+on:
+  pull_request:
+    paths:
+      - 'motion-studio/scripts/export-wedding-remotion-element-production-gate-artifact.mts'
+      - 'motion-studio/scripts/check-wedding-remotion-element-production-gate-artifact.mts'
+      - 'motion-studio/scripts/export-wedding-remotion-element-effective-handoff-bundle.mts'
+      - 'motion-studio/scripts/check-wedding-remotion-element-effective-handoff-bundle.mts'
+      - 'motion-studio/scripts/export-wedding-remotion-element-davinci-recovery-sidecar.mts'
+      - 'motion-studio/scripts/check-wedding-remotion-element-davinci-recovery-sidecar.mts'
+      - 'movie-dashboard/src/data/remotionStudioToolingProductionDependency.ts'
+      - '.github/workflows/wedding-remotion-element-davinci-recovery-sidecar-ci.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  sidecar-currentness:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Build current adopted fixture through effective handoff bundle
+        run: |
+          cp movie-dashboard/src/data/remotionStudioToolingProductionDependency.ts /tmp/dependency.ts
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('movie-dashboard/src/data/remotionStudioToolingProductionDependency.ts')
+          text = p.read_text()
+          needle = '  opening: [],'
+          if needle not in text:
+              raise SystemExit('opening adoption marker missing')
+          p.write_text(text.replace(needle, '  opening: ["type-mask-reveal"],', 1))
+          PY
+          rm -rf movie-dashboard/out/remotion-element-handoff
+          cd motion-studio
+          node --no-warnings scripts/export-wedding-remotion-element-handoff-identities.mts
+          node --no-warnings scripts/check-wedding-remotion-element-handoff-identities.mts
+          node --no-warnings scripts/check-wedding-remotion-element-production-gate.mts
+          node --no-warnings scripts/export-wedding-remotion-element-production-gate-artifact.mts
+          node --no-warnings scripts/check-wedding-remotion-element-production-gate-artifact.mts
+          node --no-warnings scripts/export-wedding-remotion-element-effective-handoff-bundle.mts
+          node --no-warnings scripts/check-wedding-remotion-element-effective-handoff-bundle.mts
+
+      - name: Exported DaVinci recovery sidecar is SHA-bound and evidence-honest
+        working-directory: motion-studio
+        run: |
+          node --no-warnings scripts/export-wedding-remotion-element-davinci-recovery-sidecar.mts
+          node --no-warnings scripts/check-wedding-remotion-element-davinci-recovery-sidecar.mts | tee /tmp/current.log
+          grep -q 'davinciRecoverySidecarCurrent=YES' /tmp/current.log
+          grep -q 'effectiveDavinciRecoveryCurrentAllowed=YES' /tmp/current.log
+          grep -q 'macRemotionStudioGuiActual=NOT_RUN' /tmp/current.log
+          grep -q 'macDaVinciGuiActual=NOT_RUN' /tmp/current.log
+          node - <<'NODE'
+          const fs = require('fs');
+          const p = '../movie-dashboard/out/remotion-element-handoff/wedding-remotion-element-davinci-recovery-sidecar.json';
+          const s = JSON.parse(fs.readFileSync(p, 'utf8'));
+          const opening = s.projects.find((x) => x.movieId === 'opening');
+          if (!opening) throw new Error('opening sidecar project missing');
+          if (opening.sourceEffectiveHandoffBundleSha256 !== s.sourceEffectiveHandoffBundleSha256) throw new Error('bundle SHA not propagated to project');
+          if (opening.sourceGateArtifactSha256 !== s.sourceGateArtifactSha256) throw new Error('gate SHA not propagated to project');
+          if (!opening.recoveryCurrentAllowed) throw new Error('fixture recovery should be current');
+          if (!/^[a-f0-9]{64}$/.test(s.sidecarSha256)) throw new Error('sidecar SHA missing');
+          NODE
+          cp ../movie-dashboard/out/remotion-element-handoff/wedding-remotion-element-davinci-recovery-sidecar.json /tmp/current-sidecar.json
+
+      - name: New effective handoff bundle invalidates old DaVinci recovery sidecar
+        working-directory: motion-studio
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const p = '../movie-dashboard/out/remotion-element-handoff/wedding-remotion-element-production-gate.json';
+          const gate = JSON.parse(fs.readFileSync(p, 'utf8'));
+          gate.ephemeralSidecarProbe = true;
+          fs.writeFileSync(p, JSON.stringify(gate, null, 2));
+          NODE
+          node --no-warnings scripts/export-wedding-remotion-element-effective-handoff-bundle.mts
+          if node --no-warnings scripts/check-wedding-remotion-element-davinci-recovery-sidecar.mts > /tmp/stale.log 2>&1; then
+            echo 'Old DaVinci recovery sidecar must fail closed when effective handoff bundle changes.'
+            exit 1
+          fi
+          grep -q 'davinciRecoverySidecarCurrent=NO' /tmp/stale.log
+          grep -q 'effectiveDavinciRecoveryCurrentAllowed=NO' /tmp/stale.log
+          grep -Eq 'REMOTION_ELEMENT_DAVINCI_RECOVERY_SIDECAR_BUNDLE_SHA_STALE|REMOTION_ELEMENT_DAVINCI_RECOVERY_SIDECAR_BUNDLE_FILE_SHA_STALE|REMOTION_ELEMENT_DAVINCI_RECOVERY_SIDECAR_GATE_SHA_STALE' /tmp/stale.log
+
+      - name: Restore fixture and leave GUI Actual NOT_RUN
+        run: |
+          mv /tmp/dependency.ts movie-dashboard/src/data/remotionStudioToolingProductionDependency.ts
+          rm -rf movie-dashboard/out/remotion-element-handoff
+          echo 'remotionStudioGuiActual=NOT_RUN'
+          echo 'macDaVinciActual=NOT_RUN'
+          echo 'finalDeliveryApproved=NO'
