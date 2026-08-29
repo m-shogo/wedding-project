@@ -3,36 +3,54 @@ import {
   buildWeddingDavinciFinalDeliveryPreflight,
   buildWeddingDavinciOperatorPacketJson,
 } from "../data/weddingDavinciFinalDeliveryPreflight";
+import {
+  buildWeddingDavinciActualSessionPlan,
+  buildWeddingDavinciActualSessionPlanJson,
+} from "../data/weddingDavinciActualSessionPlan";
 
 const shortSha = (value: string | null) => value ? `${value.slice(0, 10)}…` : "—";
 
 const stateClass = (state: string) => {
-  if (state === "READY" || state === "CURRENT") return "text-emerald-700 dark:text-emerald-300";
-  if (state === "INVALID" || state === "STALE") return "text-rose-700 dark:text-rose-300";
+  if (state === "READY" || state === "CURRENT" || state.includes("RECORDED")) return "text-emerald-700 dark:text-emerald-300";
+  if (state === "INVALID" || state === "STALE" || state.includes("BLOCKED")) return "text-rose-700 dark:text-rose-300";
   return "text-amber-700 dark:text-amber-300";
 };
 
 const nextGateLabel = (nextGate: {stage?: string | null} | null | undefined) => nextGate?.stage ?? "PRODUCTION_READY";
 
-const downloadOperatorPacket = () => {
-  const json = buildWeddingDavinciOperatorPacketJson();
+const downloadJson = (json: string, filename: string) => {
   const blob = new Blob([`${json}\n`], {type: "application/json;charset=utf-8"});
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement("a");
   anchor.href = url;
-  anchor.download = "wedding-davinci-operator-packet.json";
+  anchor.download = filename;
   document.body.appendChild(anchor);
   anchor.click();
   anchor.remove();
   URL.revokeObjectURL(url);
 };
 
+const downloadOperatorPacket = () => downloadJson(
+  buildWeddingDavinciOperatorPacketJson(),
+  "wedding-davinci-operator-packet.json",
+);
+
+const downloadActualSessionPlan = () => downloadJson(
+  buildWeddingDavinciActualSessionPlanJson(),
+  "wedding-davinci-actual-session-plan.json",
+);
+
 export function WeddingDavinciDeliveryReadinessCard() {
   const manifest = buildWeddingDavinciDeliveryReadiness();
   const preflight = buildWeddingDavinciFinalDeliveryPreflight();
+  const sessionPlan = buildWeddingDavinciActualSessionPlan();
   const projects = [
     ["Opening", manifest.opening],
     ["Profile", manifest.profile],
+  ] as const;
+  const sessionProjects = [
+    ["Opening", sessionPlan.projects.opening],
+    ["Profile", sessionPlan.projects.profile],
   ] as const;
 
   return (
@@ -78,6 +96,55 @@ export function WeddingDavinciDeliveryReadinessCard() {
           </article>
         ))}
       </div>
+
+      <section className="mt-5 border-t border-sand-200 dark:border-navy-600 pt-5">
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <p className="text-[10px] tracking-[0.2em] font-semibold text-fuchsia-700 dark:text-fuchsia-300">MAC DAVINCI ACTUAL SESSION PLAN</p>
+            <h3 className="mt-1 text-base font-bold text-navy-900 dark:text-sand-100">Recovery → evidence init → 実GUI確認 → strict → Human approval</h3>
+            <p className="mt-2 text-[11px] leading-5 text-navy-500 dark:text-navy-300">
+              MacでDaVinciを開く時の一本道です。Evidence templateやこの画面の存在をActual PASSとして扱うことはありません。
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={downloadActualSessionPlan}
+            className="border border-fuchsia-500 px-3 py-2 text-[11px] font-semibold text-fuchsia-800 dark:text-fuchsia-200 hover:bg-fuchsia-100 dark:hover:bg-fuchsia-950/40"
+          >
+            Actual Session Plan JSONを保存
+          </button>
+        </div>
+
+        <div className="mt-4 grid grid-cols-1 gap-4 xl:grid-cols-2">
+          {sessionProjects.map(([label, project]) => (
+            <article key={label} className="border border-fuchsia-200 dark:border-fuchsia-900/50 p-4">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <h4 className="text-sm font-bold text-navy-900 dark:text-sand-100">{label} Actual Session</h4>
+                <span className={`text-[10px] font-semibold ${stateClass(project.sessionState)}`}>{project.sessionState}</span>
+              </div>
+              <p className="mt-2 text-[10px] text-navy-500 dark:text-navy-300">current next gate: {project.currentNextGate}</p>
+              <ol className="mt-3 space-y-2">
+                {project.orderedActions.map((action) => (
+                  <li key={action.order} className="border-l-2 border-fuchsia-300 dark:border-fuchsia-800 pl-3">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="text-[9px] font-mono text-fuchsia-700 dark:text-fuchsia-300">{action.order}</span>
+                      <span className="text-[10px] font-semibold text-navy-800 dark:text-sand-100">{action.label}</span>
+                      {action.humanOnly && <span className="text-[8px] font-semibold text-amber-700 dark:text-amber-300">HUMAN / MAC GUI</span>}
+                    </div>
+                    {action.command && <code className="mt-1 block overflow-x-auto text-[9px] leading-4 text-navy-500 dark:text-navy-300">{action.command}</code>}
+                    {"note" in action && action.note && <p className="mt-1 text-[9px] leading-4 text-amber-700 dark:text-amber-300">{action.note}</p>}
+                    {"checklist" in action && action.checklist && (
+                      <ul className="mt-2 space-y-1 text-[9px] leading-4 text-navy-500 dark:text-navy-300">
+                        {action.checklist.map((item) => <li key={item}>• {item}</li>)}
+                      </ul>
+                    )}
+                  </li>
+                ))}
+              </ol>
+            </article>
+          ))}
+        </div>
+      </section>
 
       <section className="mt-5 border-t border-sand-200 dark:border-navy-600 pt-5">
         <div className="flex flex-wrap items-start justify-between gap-3">
