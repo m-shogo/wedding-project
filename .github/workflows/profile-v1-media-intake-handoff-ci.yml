@@ -1,0 +1,52 @@
+name: Profile V1 Media Intake Handoff CI
+
+on:
+  pull_request:
+    paths:
+      - "movie-dashboard/src/data/profileProductionGate.generated.ts"
+      - "movie-dashboard/src/data/profileProductionStatusHandoff.ts"
+      - "movie-dashboard/scripts/verify-profile-media-intake-handoff.mjs"
+      - ".github/workflows/profile-v1-media-intake-handoff-ci.yml"
+  push:
+    branches: [main]
+    paths:
+      - "movie-dashboard/src/data/profileProductionGate.generated.ts"
+      - "movie-dashboard/src/data/profileProductionStatusHandoff.ts"
+      - "movie-dashboard/scripts/verify-profile-media-intake-handoff.mjs"
+      - ".github/workflows/profile-v1-media-intake-handoff-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    defaults:
+      run:
+        working-directory: movie-dashboard
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: movie-dashboard/pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Verify Profile media intake handoff contract
+        run: node scripts/verify-profile-media-intake-handoff.mjs
+
+      - name: Typecheck and build Dashboard
+        run: pnpm build
