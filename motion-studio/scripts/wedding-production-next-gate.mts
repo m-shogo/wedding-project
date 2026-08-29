@@ -3,7 +3,7 @@ import {dirname, join} from 'node:path';
 import {fileURLToPath} from 'node:url';
 
 export type MovieId = 'opening' | 'profile';
-export type ActionKind = 'COMMAND' | 'HUMAN';
+export type ActionKind = 'COMMAND' | 'HUMAN' | 'INPUT_REQUIRED';
 export type ProductionStatus = {
   schemaVersion?: string;
   authority?: string;
@@ -21,15 +21,16 @@ const statusScript: Record<MovieId, string> = {
   opening: 'scripts/opening-v1-production-status.mts',
   profile: 'scripts/profile-v1-production-status.mts',
 };
+const commandPrefix = /^(pnpm\s|node\s--no-warnings\s|npm\s|yarn\s)/;
+const unresolvedInput = /(\/ABS\/PATH\/TO\/|<[^>]+>|\$\{?(?:SOURCE|INPUT|MEDIA|BGM|PATH)[A-Z0-9_]*\}?)/i;
 
 export function classifyNextAction(text: string): ActionKind {
-  return /^(pnpm\s|node\s--no-warnings\s|npm\s|yarn\s)/.test(text.trim()) ? 'COMMAND' : 'HUMAN';
+  const value = text.trim();
+  if (!commandPrefix.test(value)) return 'HUMAN';
+  return unresolvedInput.test(value) ? 'INPUT_REQUIRED' : 'COMMAND';
 }
 
-const productionReady = (movieId: MovieId, status: ProductionStatus) => movieId === 'opening'
-  ? status.readiness?.productionReady === true
-  : status.readiness?.productionReady === true;
-
+const productionReady = (_movieId: MovieId, status: ProductionStatus) => status.readiness?.productionReady === true;
 const guiState = (overallState: string) => /DAVINCI|FINAL_DELIVERY_APPROVAL/.test(overallState);
 
 export function deriveProjectNextGate(movieId: MovieId, status: ProductionStatus) {
@@ -39,8 +40,8 @@ export function deriveProjectNextGate(movieId: MovieId, status: ProductionStatus
   const rawActions = Array.isArray(status.nextActions) ? status.nextActions : [];
   const actions = rawActions.map((text, index) => ({index, kind: classifyNextAction(text), text}));
   const firstAction = actions[0] ?? null;
-  const firstHumanIndex = actions.findIndex((action) => action.kind === 'HUMAN');
-  const safeCommandsBeforeHuman = actions.filter((action) => action.kind === 'COMMAND' && (firstHumanIndex < 0 || action.index < firstHumanIndex));
+  const firstBarrierIndex = actions.findIndex((action) => action.kind !== 'COMMAND');
+  const safeCommandPrefix = actions.filter((action) => action.kind === 'COMMAND' && (firstBarrierIndex < 0 || action.index < firstBarrierIndex));
   const blockerCodes = [...new Set(Object.values(status.stages ?? {}).flatMap((stage) => stage.blockerCodes ?? []))].sort();
   const ready = productionReady(movieId, status);
   return {
@@ -51,8 +52,10 @@ export function deriveProjectNextGate(movieId: MovieId, status: ProductionStatus
     blockerCodes,
     firstAction,
     actions,
-    automationSafeCommandsBeforeHuman: safeCommandsBeforeHuman.map((action) => action.text),
-    nextAutomationSafeCommand: safeCommandsBeforeHuman[0]?.text ?? null,
+    automationSafeCommandsBeforeBarrier: safeCommandPrefix.map((action) => action.text),
+    nextAutomationSafeCommand: safeCommandPrefix[0]?.text ?? null,
+    inputRequiredBeforeFurtherAutomation: firstAction?.kind === 'INPUT_REQUIRED',
+    requiredInputCommandTemplate: firstAction?.kind === 'INPUT_REQUIRED' ? firstAction.text : null,
     humanRequiredBeforeFurtherAutomation: firstAction?.kind === 'HUMAN',
     macGuiStage: guiState(status.overallState),
     evidenceBoundary: {
@@ -66,6 +69,7 @@ export function deriveProjectNextGate(movieId: MovieId, status: ProductionStatus
 export function buildWeddingProductionNextGate(statuses: Record<MovieId, ProductionStatus>) {
   const projects = (["opening", "profile"] as const).map((movieId) => deriveProjectNextGate(movieId, statuses[movieId]));
   const automationCandidate = projects.find((project) => project.nextAutomationSafeCommand && !project.productionReady) ?? null;
+  const inputCandidate = projects.find((project) => project.inputRequiredBeforeFurtherAutomation && !project.productionReady) ?? null;
   const humanCandidate = projects.find((project) => project.humanRequiredBeforeFurtherAutomation && !project.productionReady) ?? null;
   return {
     schemaVersion: 'wedding-production-next-gate/v1' as const,
@@ -74,12 +78,16 @@ export function buildWeddingProductionNextGate(statuses: Record<MovieId, Product
     projects,
     selectedNextTarget: automationCandidate
       ? {movieId: automationCandidate.movieId, kind: 'COMMAND' as const, action: automationCandidate.nextAutomationSafeCommand}
-      : humanCandidate
-        ? {movieId: humanCandidate.movieId, kind: 'HUMAN' as const, action: humanCandidate.firstAction?.text ?? null}
-        : null,
+      : inputCandidate
+        ? {movieId: inputCandidate.movieId, kind: 'INPUT_REQUIRED' as const, action: inputCandidate.requiredInputCommandTemplate}
+        : humanCandidate
+          ? {movieId: humanCandidate.movieId, kind: 'HUMAN' as const, action: humanCandidate.firstAction?.text ?? null}
+          : null,
     guardrails: [
       'NEXT_GATE_REPORT != ACTION_EXECUTED',
-      'COMMAND_CLASSIFIED_SAFE_BEFORE_HUMAN != COMMAND_EXECUTED',
+      'COMMAND_CLASSIFIED_SAFE_BEFORE_BARRIER != COMMAND_EXECUTED',
+      'UNRESOLVED_INPUT_PATH != AUTOMATION_SAFE_COMMAND',
+      'INPUT_REQUIRED_BARRIER_STOPS_LATER_COMMANDS_FROM_AUTO_EXECUTION',
       'HUMAN_ACTION_MUST_NOT_BE_AUTOMATED',
       'MAC_REMOTION_STUDIO_GUI_ACTUAL_REMAINS_NOT_RUN_UNTIL_REAL_GUI_EVIDENCE',
       'MAC_DAVINCI_GUI_ACTUAL_REMAINS_NOT_RUN_UNTIL_REAL_GUI_EVIDENCE',
@@ -105,7 +113,17 @@ function main() {
   }
   const report = buildWeddingProductionNextGate({opening: readStatus(root, 'opening'), profile: readStatus(root, 'profile')});
   const filtered = requested && requested !== 'all'
-    ? {...report, projects: report.projects.filter((project) => project.movieId === requested), selectedNextTarget: report.projects.find((project) => project.movieId === requested)?.firstAction ? {movieId: requested, kind: report.projects.find((project) => project.movieId === requested)!.firstAction!.kind, action: report.projects.find((project) => project.movieId === requested)!.firstAction!.text} : null}
+    ? (() => {
+        const project = report.projects.find((item) => item.movieId === requested)!;
+        const target = project.nextAutomationSafeCommand
+          ? {movieId: requested, kind: 'COMMAND' as const, action: project.nextAutomationSafeCommand}
+          : project.inputRequiredBeforeFurtherAutomation
+            ? {movieId: requested, kind: 'INPUT_REQUIRED' as const, action: project.requiredInputCommandTemplate}
+            : project.firstAction
+              ? {movieId: requested, kind: project.firstAction.kind, action: project.firstAction.text}
+              : null;
+        return {...report, projects: [project], selectedNextTarget: target};
+      })()
     : report;
   if (process.argv.includes('--json')) console.log(JSON.stringify(filtered, null, 2));
   else {
@@ -113,7 +131,8 @@ function main() {
     for (const project of filtered.projects) {
       console.log(`${project.movieId}=${project.overallState} ready=${project.productionReady ? 'YES' : 'NO'} next=${project.firstAction?.kind ?? 'NONE'}:${project.firstAction?.text ?? 'none'}`);
       console.log(`  automationSafe=${project.nextAutomationSafeCommand ?? 'NONE'}`);
-      console.log(`  macRemotionStudioGuiActual=NOT_RUN macDaVinciGuiActual=NOT_RUN`);
+      console.log(`  inputRequired=${project.requiredInputCommandTemplate ?? 'NONE'}`);
+      console.log('  macRemotionStudioGuiActual=NOT_RUN macDaVinciGuiActual=NOT_RUN');
     }
     console.log(`SELECTED / ${filtered.selectedNextTarget ? `${filtered.selectedNextTarget.movieId} / ${filtered.selectedNextTarget.kind} / ${filtered.selectedNextTarget.action}` : 'none'}`);
   }
