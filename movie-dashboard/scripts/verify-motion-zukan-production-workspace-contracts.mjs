@@ -7,6 +7,7 @@ const data = fs.readFileSync(path.join(root, "src/data/motionZukanProductionWork
 const ui = fs.readFileSync(path.join(root, "src/components/MotionZukanProductionWorkspace.tsx"), "utf8");
 const handoff = fs.readFileSync(path.join(root, "src/data/motionZukanWorkspaceHandoff.ts"), "utf8");
 const handoffUi = fs.readFileSync(path.join(root, "src/components/MotionZukanWorkspaceHandoffPanel.tsx"), "utf8");
+const assignmentData = fs.readFileSync(path.join(root, "src/data/weddingProjectMotionAssignments.ts"), "utf8");
 const handoffPage = fs.readFileSync(path.join(root, "src/pages/MotionZukanWorkspaceHandoff.tsx"), "utf8");
 const nextGate = fs.readFileSync(path.join(root, "src/data/weddingProductionNextGate.ts"), "utf8");
 const nextGateUi = fs.readFileSync(path.join(root, "src/components/WeddingProductionNextGatePanel.tsx"), "utf8");
@@ -76,6 +77,9 @@ for (const token of [
   'MOTION_ZUKAN_WORKSPACE_HANDOFF_AUTHORITY = "HUMAN_MASTER_WORKSPACE_TRANSFER"',
   "buildMotionZukanWorkspaceHandoff",
   "parseMotionZukanWorkspaceHandoff",
+  "projectMotionAssignments",
+  "validProjectMotionAssignments",
+  'item.assignedBy === "HUMAN_MASTER"',
   'externalProductionGateEvaluated: false',
   'remotionStudioGuiActual: "NOT_RUN"',
   'macDaVinciGuiActual: "NOT_RUN"',
@@ -85,10 +89,18 @@ for (const token of [
 ]) requireText(handoff, token, `Workspace handoff authority contract missing: ${token}`);
 
 for (const token of [
+  'schemaVersion: "wedding-project-motion-assignments/v1"',
+  'assignedBy: "HUMAN_MASTER"',
+  "saveWeddingProjectMotionAssignments",
+]) requireText(assignmentData, token, `Project motion assignment contract missing: ${token}`);
+
+for (const token of [
   "Human workspace JSONを書き出す",
   "Human workspace JSONを読み込む",
   "buildMotionZukanWorkspaceHandoff",
   "parseMotionZukanWorkspaceHandoff",
+  "loadWeddingProjectMotionAssignments",
+  "saveWeddingProjectMotionAssignments",
   "saveMotionZukanComposerState",
   "saveMotionZukanProductionWorkspaceState",
   "window.confirm",
@@ -147,4 +159,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log("Motion Zukan Production Workspace contracts OK: Human Master workspace handoff remains evidence-safe; the dashboard production next gate derives from generated Motion Studio status, exposes COMMAND/INPUT_REQUIRED/HUMAN boundaries, and cannot promote Remotion Studio or Mac DaVinci GUI Actual.");
+console.log("Motion Zukan Production Workspace contracts OK: Human Master workspace handoff preserves project motion assignments while keeping Production/GUI Actual evidence fail-closed; the dashboard next gate remains generated Motion Studio authority.");
