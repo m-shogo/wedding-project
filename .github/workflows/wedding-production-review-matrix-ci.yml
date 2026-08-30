@@ -1,0 +1,57 @@
+name: Wedding Production Review Matrix CI
+
+on:
+  pull_request:
+    paths:
+      - "movie-dashboard/src/data/openingProductionStatus.generated.ts"
+      - "movie-dashboard/src/data/profileAssemblyReviewReadiness.generated.ts"
+      - "movie-dashboard/src/components/WeddingProductionReviewMatrixPanel.tsx"
+      - "movie-dashboard/src/pages/MotionZukanWorkspaceHandoff.tsx"
+      - ".github/workflows/wedding-production-review-matrix-ci.yml"
+  push:
+    branches: [main]
+    paths:
+      - "movie-dashboard/src/data/openingProductionStatus.generated.ts"
+      - "movie-dashboard/src/data/profileAssemblyReviewReadiness.generated.ts"
+      - "movie-dashboard/src/components/WeddingProductionReviewMatrixPanel.tsx"
+      - "movie-dashboard/src/pages/MotionZukanWorkspaceHandoff.tsx"
+      - ".github/workflows/wedding-production-review-matrix-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: movie-dashboard
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+          run_install: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: movie-dashboard/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - name: Source snapshots are current
+        run: |
+          node scripts/sync-opening-production-status.mjs
+          node scripts/sync-profile-assembly-review-readiness.mjs
+      - name: Matrix contract keeps project authorities separate
+        run: |
+          grep -q 'WEDDING PRODUCTION REVIEW MATRIX' src/components/WeddingProductionReviewMatrixPanel.tsx
+          grep -q 'AGGREGATED_VIEW != NEW_AUTHORITY' src/components/WeddingProductionReviewMatrixPanel.tsx
+          grep -q 'INPUT_READY != HUMAN_QA_PASS' src/components/WeddingProductionReviewMatrixPanel.tsx
+          grep -q 'Remotion Studio GUI Actual = NOT_RUN' src/components/WeddingProductionReviewMatrixPanel.tsx
+          grep -q 'Mac DaVinci GUI Actual = NOT_RUN' src/components/WeddingProductionReviewMatrixPanel.tsx
+          grep -q '実11写真 + rights-cleared BGM intake' src/components/WeddingProductionReviewMatrixPanel.tsx
+          grep -q '実17素材 + rights-cleared BGM intake' src/components/WeddingProductionReviewMatrixPanel.tsx
+          grep -q '<WeddingProductionReviewMatrixPanel />' src/pages/MotionZukanWorkspaceHandoff.tsx
+      - name: Typecheck and build Movie Dashboard
+        run: pnpm build
