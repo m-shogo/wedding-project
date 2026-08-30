@@ -1,0 +1,105 @@
+name: Wedding Project Remotion Identity Recovery Markdown CI
+
+on:
+  pull_request:
+    paths:
+      - 'motion-studio/scripts/append-wedding-project-motion-provenance-recovery-markdown.mts'
+      - 'motion-studio/scripts/append-wedding-project-remotion-identity-recovery-markdown.mts'
+      - '.github/workflows/wedding-project-remotion-identity-recovery-markdown-ci.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  recovery-markdown:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Build matching recovery and Resolve identity sidecar fixture
+        working-directory: motion-studio
+        run: |
+          mkdir -p out/handoff/opening-v1
+          printf '# DaVinci Wedding Production Recovery Attachment\n' > out/handoff/opening-v1/opening-v1-davinci-production-recovery.md
+          node --no-warnings --input-type=module <<'NODE'
+          import {createHash} from 'node:crypto';
+          import {writeFileSync, readFileSync} from 'node:fs';
+          const dir = 'out/handoff/opening-v1';
+          const receipt = {
+            authority: 'SHA_BOUND_PROJECT_REMOTION_ELEMENT_IDENTITY_VERIFICATION',
+            projectId: 'opening',
+            path: '../movie-dashboard/out/remotion-element-handoff/opening-project-remotion-identity-verification-receipt.json',
+            sha256: 'a'.repeat(64),
+            state: 'CURRENT',
+            sourceBatchSha256: 'b'.repeat(64),
+            handoffIdentityArtifactSha256: 'c'.repeat(64),
+            canonicalTypographyEngineBlockSha256: 'd'.repeat(64),
+            selectedPatternIds: ['type-mask-reveal', 'type-line-slide'],
+            verifiedSceneBindingCount: 2,
+            remotionStudioGuiActual: 'NOT_RUN',
+            macDaVinciGuiActual: 'NOT_RUN',
+            productionReady: false,
+          };
+          const sidecar = {schemaVersion: '1.0', projectRemotionIdentityReceipt: receipt};
+          const sidecarPath = `${dir}/opening-v1-resolve-remotion-identity-handoff.json`;
+          writeFileSync(sidecarPath, JSON.stringify(sidecar, null, 2) + '\n');
+          const sidecarSha = createHash('sha256').update(readFileSync(sidecarPath)).digest('hex');
+          const recovery = {
+            schemaVersion: 'wedding-davinci-production-recovery-export/v1',
+            authority: 'FINAL_RENDER_BOUND_DAVINCI_RECOVERY',
+            projectRemotionIdentity: {
+              authority: 'RESOLVE_PROJECT_REMOTION_IDENTITY_HANDOFF',
+              movieId: 'opening',
+              state: 'CURRENT',
+              resolveSidecar: {path: 'opening-v1-resolve-remotion-identity-handoff.json', sha256: sidecarSha},
+              receipt,
+              remotionStudioGuiActual: 'NOT_RUN',
+              macDaVinciGuiActual: 'NOT_RUN',
+              productionReady: false,
+            },
+          };
+          writeFileSync(`${dir}/opening-v1-davinci-production-recovery.json`, JSON.stringify(recovery, null, 2) + '\n');
+          NODE
+
+      - name: Surface CURRENT Project Remotion identity in Human recovery Markdown
+        working-directory: motion-studio
+        run: |
+          node --no-warnings scripts/append-wedding-project-motion-provenance-recovery-markdown.mts --movie=opening | tee /tmp/remotion-md.log
+          grep -q 'Project Motion recovery Markdown provenance: NOT_APPLICABLE' /tmp/remotion-md.log
+          grep -q 'Project Remotion identity recovery Markdown: ATTACHED' /tmp/remotion-md.log
+          grep -q 'Mac Remotion Studio GUI Actual remains NOT_RUN' /tmp/remotion-md.log
+          grep -q 'Mac DaVinci Actual remains NOT_RUN' /tmp/remotion-md.log
+          MD=out/handoff/opening-v1/opening-v1-davinci-production-recovery.md
+          grep -q 'project-remotion-identity-state: CURRENT' "$MD"
+          grep -q 'resolve-remotion-identity-sidecar-sha256:' "$MD"
+          grep -q 'project-remotion-identity-receipt-sha256: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa' "$MD"
+          grep -q 'project-remotion-source-batch-sha256: bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb' "$MD"
+          grep -q 'remotion-handoff-identity-artifact-sha256: cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc' "$MD"
+          grep -q 'canonical-typography-engine-block-sha256: dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd' "$MD"
+          grep -q 'selected-remotion-patterns: type-mask-reveal, type-line-slide' "$MD"
+          grep -q 'verified-scene-bindings: 2' "$MD"
+          grep -q 'mac-remotion-studio-gui-actual: NOT_RUN' "$MD"
+          grep -q 'mac-davinci-gui-actual: NOT_RUN' "$MD"
+          grep -q 'production-ready-by-project-remotion-identity: no' "$MD"
+
+      - name: Re-append is idempotent
+        working-directory: motion-studio
+        run: |
+          node --no-warnings scripts/append-wedding-project-motion-provenance-recovery-markdown.mts --movie=opening >/tmp/remotion-md-second.log
+          COUNT=$(grep -c '<!-- PROJECT_REMOTION_IDENTITY_START -->' out/handoff/opening-v1/opening-v1-davinci-production-recovery.md)
+          test "$COUNT" = "1"
+
+      - name: Resolve sidecar drift fails closed
+        working-directory: motion-studio
+        run: |
+          printf '\n' >> out/handoff/opening-v1/opening-v1-resolve-remotion-identity-handoff.json
+          if node --no-warnings scripts/append-wedding-project-motion-provenance-recovery-markdown.mts --movie=opening > /tmp/remotion-md-stale.log 2>&1; then
+            echo 'Stale Resolve identity sidecar must block recovery Markdown authority.'
+            exit 1
+          fi
+          grep -q 'PROJECT_REMOTION_IDENTITY_RESOLVE_SIDECAR_SHA_STALE:opening' /tmp/remotion-md-stale.log

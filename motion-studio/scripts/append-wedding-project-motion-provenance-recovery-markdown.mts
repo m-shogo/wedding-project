@@ -1,6 +1,7 @@
 import {existsSync, readFileSync, writeFileSync} from 'node:fs';
 import {dirname, join, relative} from 'node:path';
 import {fileURLToPath} from 'node:url';
+import {appendProjectRemotionIdentityRecoveryMarkdown} from './append-wedding-project-remotion-identity-recovery-markdown.mts';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const START = '<!-- PROJECT_MOTION_PROVENANCE_START -->';
@@ -124,6 +125,13 @@ function main() {
     console.log(`projectMotionSourceSha256=${result.sourceSha256}`);
     console.log(`palmierProjectMotionBindingArtifactSha256=${result.palmierBindingArtifactSha256}`);
     console.log(`resolveProjectMotionHandoffSidecarSha256=${result.resolveHandoffArtifactSha256}`);
+  }
+
+  const remotionIdentity = appendProjectRemotionIdentityRecoveryMarkdown(movieArg, config.recovery, config.markdown);
+  console.log(`Project Remotion identity recovery Markdown: ${remotionIdentity.attached ? 'ATTACHED' : 'NOT_APPLICABLE'}`);
+  if (remotionIdentity.attached) {
+    console.log(`resolveRemotionIdentitySidecarSha256=${remotionIdentity.resolveSidecarSha256}`);
+    console.log(`projectRemotionIdentityReceiptSha256=${remotionIdentity.receiptSha256}`);
   }
   console.log(`markdown=${relative(root, config.markdown).replaceAll('\\', '/')}`);
   console.log('Mac Remotion Studio GUI Actual remains NOT_RUN.');
