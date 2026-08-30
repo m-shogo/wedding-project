@@ -1,0 +1,51 @@
+name: Wedding Palmier Typography Assembly Plan CI
+
+on:
+  pull_request:
+    paths:
+      - 'motion-studio/scripts/build-wedding-palmier-typography-assembly-plan.mts'
+      - 'motion-studio/scripts/check-wedding-project-remotion-production-stage-status.mts'
+      - 'movie-dashboard/src/data/typographyProjectDeliveryBatch.ts'
+      - 'movie-dashboard/src/data/typographySceneDeliveryPackage.ts'
+      - '.github/workflows/wedding-palmier-typography-assembly-plan-ci.yml'
+  workflow_dispatch:
+
+jobs:
+  assembly-plan-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Pure assembly plan self-test
+        working-directory: motion-studio
+        run: node --no-warnings scripts/build-wedding-palmier-typography-assembly-plan.mts --self-test
+
+      - name: Fresh clone fails closed before canonical stage
+        working-directory: motion-studio
+        run: |
+          if node --no-warnings scripts/build-wedding-palmier-typography-assembly-plan.mts --movie=opening --json >/tmp/assembly.json 2>/tmp/assembly.err; then
+            echo 'assembly plan must not be emitted before canonical staging'
+            exit 1
+          fi
+          grep -Eq 'CANONICAL_PROJECT_REMOTION_STAGE_NOT_CURRENT|PROJECT_REMOTION_STAGE_STATUS_CHECK_FAILED' /tmp/assembly.err
+
+      - name: Plan remains operator-only and evidence-safe
+        run: |
+          grep -q "CANONICAL_STAGED_PROJECT_REMOTION_BATCH" motion-studio/scripts/build-wedding-palmier-typography-assembly-plan.mts
+          grep -q "ASSEMBLY_PLAN_MUST_NOT_SYNTHESIZE_NLE_XML" motion-studio/scripts/build-wedding-palmier-typography-assembly-plan.mts
+          grep -q "palmierTimelineActual: 'NOT_EXECUTED_BY_THIS_PLAN'" motion-studio/scripts/build-wedding-palmier-typography-assembly-plan.mts
+          grep -q "macDavinciResolveGuiActual: 'NOT_RUN_UNLESS_HUMAN_EXECUTED'" motion-studio/scripts/build-wedding-palmier-typography-assembly-plan.mts
+          grep -q "productionReadyPromotedByThisPlan: false" motion-studio/scripts/build-wedding-palmier-typography-assembly-plan.mts
+          ! grep -q "productionReady: true" motion-studio/scripts/build-wedding-palmier-typography-assembly-plan.mts
+          ! grep -q "actualEvidenceState: 'PASS'" motion-studio/scripts/build-wedding-palmier-typography-assembly-plan.mts
+
+      - name: Plan carries scene order and Palmier marker authority
+        run: |
+          grep -q "ASSEMBLE_SCENES_IN_STRUCTURED_TIMELINE_ORDER" motion-studio/scripts/build-wedding-palmier-typography-assembly-plan.mts
+          grep -q "PRESERVE_EACH_SCENE_MARKER_AND_HUMAN_MASTER_VALUES" motion-studio/scripts/build-wedding-palmier-typography-assembly-plan.mts
+          grep -q "sceneMarkerId" motion-studio/scripts/build-wedding-palmier-typography-assembly-plan.mts
+          grep -q "expectedXmlFileName" motion-studio/scripts/build-wedding-palmier-typography-assembly-plan.mts
+          grep -q "projectTimelineXmlFileName" motion-studio/scripts/build-wedding-palmier-typography-assembly-plan.mts
