@@ -2,11 +2,11 @@
   "schemaVersion": "opening-v1-dummy-render-manifest/v1",
   "authority": "DUMMY_PRODUCTION_SIMULATION",
   "publicationApproved": false,
-  "generatedAt": "2026-08-29T16:45:50.752Z",
+  "generatedAt": "2026-08-30T12:34:13.122Z",
   "artifact": {
     "file": "opening-v1-dummy-production.mp4",
-    "sha256": "f09e147ff978aadceb2e3a9a9045b446a0b3a3499b27e5d35eaa7182cda6ff2c",
-    "byteSize": 17778139
+    "sha256": "6fd84f2a6ccb37a2009e44493920c96a2e3196a213f67d700a39c2a45c2b89a2",
+    "byteSize": 41515593
   },
   "video": {
     "codec": "h264",
