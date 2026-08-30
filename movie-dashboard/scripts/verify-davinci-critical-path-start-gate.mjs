@@ -7,6 +7,7 @@ const read = (relative) => fs.readFileSync(path.join(root, relative), "utf8");
 
 const model = read("src/data/weddingMovieProductionCriticalPath.ts");
 const audit = read("src/data/weddingDavinciGuiActualStartGateAudit.ts");
+const liveAuthority = read("src/data/weddingDavinciGuiActualStartGateLiveAuthority.ts");
 const criticalPathCard = read("src/components/WeddingMovieProductionCriticalPathCard.tsx");
 const startGateCard = read("src/components/WeddingDavinciGuiActualStartGateCard.tsx");
 const errors = [];
@@ -35,6 +36,15 @@ need(audit, 'out/handoff/wedding/${movieId}-davinci-gui-actual-start-gate.json',
 need(audit, '--snapshot=out/handoff/wedding/wedding-davinci-actual-session-plan.json --output=${artifactPath} --write', "Start Gate Audit inspect command must save the canonical artifact from the canonical Session Plan");
 need(audit, 'strict ? " --strict-gui-start" : ""', "Start Gate Audit must retain strict GUI-start command derivation from the same command authority");
 
+need(liveAuthority, 'WeddingDavinciGuiActualStartGateAuditMap', "shared Start Gate authority must keep Opening/Profile audits in one typed map");
+need(liveAuthority, 'defaultWeddingDavinciGuiActualStartGateAudits.opening', "shared Start Gate authority must start at canonical NOT_RUN Opening audit");
+need(liveAuthority, 'defaultWeddingDavinciGuiActualStartGateAudits.profile', "shared Start Gate authority must start at canonical NOT_RUN Profile audit");
+need(liveAuthority, 'subscribeWeddingDavinciGuiActualStartGateAudit', "shared Start Gate authority must expose subscription for live Dashboard consumers");
+need(liveAuthority, 'publishWeddingDavinciGuiActualStartGateAudit', "shared Start Gate authority must expose audited state publication");
+if (liveAuthority.includes("localStorage") || liveAuthority.includes("sessionStorage")) {
+  errors.push("shared Start Gate live authority must not persist browser audit state across Dashboard sessions");
+}
+
 need(criticalPathCard, 'type CriticalPathActionTarget', "critical-path card must model optional action commands");
 need(criticalPathCard, 'artifactPath?: string;', "critical-path card must model the canonical Start Gate artifact path");
 need(criticalPathCard, 'strictCommand?: string;', "critical-path card must model the strict GUI-start command separately from inspect/save");
@@ -48,6 +58,16 @@ if (criticalPathCard.includes('cd motion-studio &amp;&amp; {target.command}')) {
 }
 need(criticalPathCard, '<CriticalPathActionTargetView key={`${target.route}-${target.label}`} target={target} />', "current critical stage must render the Start Gate command-aware action target");
 need(criticalPathCard, '<CriticalPathActionTargetView key={`${stage.name}-${target.route}-${target.label}`} target={target} compact />', "downstream DaVinci stage must also expose the Start Gate command before it becomes current");
+need(criticalPathCard, 'useSyncExternalStore(', "critical path must subscribe to the shared live Start Gate authority");
+need(criticalPathCard, 'subscribeWeddingDavinciGuiActualStartGateAudit', "critical path must subscribe to audited Start Gate changes");
+need(criticalPathCard, 'getWeddingDavinciGuiActualStartGateAuditSnapshot', "critical path must read the same Opening/Profile Start Gate audit snapshot");
+need(criticalPathCard, 'LIVE DAVINCI START GATE AUTHORITY', "critical path must visibly surface the loaded Start Gate audit state");
+need(criticalPathCard, 'startGateAudit.state === "STALE" || startGateAudit.state === "INVALID"', "STALE/INVALID Start Gate state must be explicitly prioritized for regeneration");
+need(criticalPathCard, '最優先: canonical Start Gateを再生成して再読込する', "critical path must visibly prioritize Start Gate regeneration for stale/invalid audit");
+need(criticalPathCard, 'startGateAudit.state === "GUI_ACTUAL_ALLOWED" && startGateAudit.guiActualStartAllowed', "Human Mac GUI guidance must require the audited GUI_ACTUAL_ALLOWED state and allowed flag");
+need(criticalPathCard, 'これは実行済み/PASSではありません', "critical path live authority must preserve the GUI Actual evidence boundary");
+need(criticalPathCard, '{startGateAudit.canonicalArtifactPath}', "critical path live authority must render the exact artifact path from the shared audit");
+need(criticalPathCard, '{startGateAudit.inspectCommand}', "critical path live authority must render the exact inspect command from the shared audit");
 
 need(startGateCard, 'WEDDING_DAVINCI_GUI_ACTUAL_START_GATE_ANCHOR = "davinci-gui-actual-start-gate"', "Start Gate card must expose the anchor used by the critical path");
 need(startGateCard, 'id={WEDDING_DAVINCI_GUI_ACTUAL_START_GATE_ANCHOR}', "Start Gate card must bind the anchor to its rendered section");
@@ -55,6 +75,7 @@ need(startGateCard, 'canonical gate JSONを読み込む', "Start Gate must retai
 need(startGateCard, 'Project Motion canonical verifier', "Start Gate must retain Project Motion verifier visibility");
 need(startGateCard, 'GUI開始直前のstrict gate', "Start Gate must retain strict GUI-start verification");
 need(startGateCard, 'Actual evidenceはNOT_RUNのまま', "Start Gate must preserve NOT_RUN evidence semantics when GUI was not performed");
+need(startGateCard, 'publishWeddingDavinciGuiActualStartGateAudit(movieId, audit);', "Start Gate card must publish only the post-audit result to the shared live authority");
 
 if (model.includes('route: "/movie-coach/fusion"')) {
   errors.push("legacy /movie-coach/fusion route must not remain as the davinciFinishing action target");
@@ -66,4 +87,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log("DaVinci critical-path Start Gate contract OK: Critical Path consumes the Start Gate Audit inspect/strict command and artifact-path authority, renders the canonical save→strict sequence, and preserves Session Plan, Project Motion revalidation and NOT_RUN evidence boundaries.");
+console.log("DaVinci critical-path Start Gate contract OK: Critical Path consumes the Start Gate Audit command/artifact authority plus the session-live audited state, prioritizes stale/invalid regeneration, exposes Human Mac GUI only for GUI_ACTUAL_ALLOWED, and preserves NOT_RUN evidence boundaries.");
