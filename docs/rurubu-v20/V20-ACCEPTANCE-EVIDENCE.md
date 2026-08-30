@@ -109,19 +109,21 @@ The post-correction screenshot verifies a stronger cover silhouette:
 - bright yellow clothing in this source is also a useful photo-derived accent candidate for the eventual REAL → GENERATED bridge.
 
 Important transfer boundary:
-- a temporary raster-transfer experiment for `036` did **not** render successfully in Figma and was not retained as a photo placement;
-- the live `3288:8` node is therefore an explicit warm-yellow `TRANSFER PENDING` geometry proxy, not a real 036 image;
-- its name records `036 PLANNED PERSONALITY CROP / DRIVE 183kgq1fGMRNiEQFBkp4KlSkaIdIulaKL / TRANSFER PENDING`;
-- external Figma byte upload is still blocked by a transient DNS resolution failure in this runtime;
-- no successful 036 Figma image placement, crop proof or final resolution proof is claimed.
+- direct new byte upload for `036` remains blocked by transient DNS resolution failure to `mcp.figma.com` from this execution runtime;
+- however, a previously placed Figma real-photo derivative was found whose visible people/outfits/gestures/background visually match the reviewed `036.jpg` source;
+- that existing Figma image resource is now used in Candidate A for composition and protagonist-recognition proof;
+- exact binary/provenance equivalence between that existing Figma resource and Drive `036.jpg` is **not yet claimed**, so final source replacement/provenance proof remains required.
 
 ### P01 Candidate A — first authored cover pass / verified live screenshot
 
 A non-destructive candidate was created beside the canonical greybox rather than overwriting the baseline:
 - candidate frame: `3330:2` / `P01_V20_CANDIDATE_A / REAL-PHOTO EDITORIAL TEST`;
 - the existing verified `035` Figma proxy remains the environmental HERO;
-- `036` remains a transfer-pending printed-photo frame, independently replaceable when upload succeeds;
-- the optional second support-photo block was removed from this candidate so the photo hierarchy stays intentionally unequal;
+- support-photo node `3330:7` now contains the visually matched existing real close-couple Figma source rather than a yellow geometry placeholder;
+- support node name explicitly records `REAL CLOSE-COUPLE FIGMA SOURCE / VISUAL MATCH TO 036 / EXACT BINARY PROVENANCE PENDING`;
+- support photo is intentionally smaller than HERO, crops tightly to faces/gestures, enters from the left and uses a printed-photo edge + hard shadow;
+- native caption `ふたりの素顔、ちらり。` now sits on a dedicated cyan editorial tab `3337:2`, improving A5 contrast instead of relying on tiny dark text over photography;
+- the optional second support-photo block remains removed so photo hierarchy stays intentionally unequal;
 - greybox QA labels/guides are hidden in the candidate, while the canonical greybox remains intact.
 
 Authored cover changes proven by screenshot:
@@ -129,26 +131,25 @@ Authored cover changes proven by screenshot:
 - masthead is a cyan printed slab with white edge and hard coral offset shadow, materially colliding with HERO photography;
 - `SHOGO & SHIORI 特別号`, `2026.10.24`, `YOKOHAMA`, cover hooks and issue metadata are native editable text;
 - the dominant feature hook reads `ふたりの旅と、今日という一日。` over an irregular coral collision field;
-- the support-photo frame uses a strong white printed edge and hard shadow so the future high-key `036` image will not disappear against the bright Hawaii HERO;
-- false placeholder atmosphere was removed after screenshot review: the grey tropical-circle proxy and lower edge fragment were hidden rather than retained as filler decoration;
-- lower feature scraps were tightened upward after screenshot review instead of filling the empty area with more stickers.
+- the real close-couple support photo now materially improves protagonist recognition without replacing the environmental HERO;
+- false placeholder atmosphere remains removed: the grey tropical-circle proxy and lower edge fragment stay hidden rather than being retained as filler decoration.
 
 Current P01 screenshot conclusion:
-- the cover now has a materially stronger 3-second `WEDDING + TRAVEL + HERO PHOTO` read than the greybox;
-- title/photo collision and source-derived cyan/coral/yellow hierarchy are viable;
-- the remaining decisive blocker is still the actual `036` image: the yellow support frame proves geometry, not protagonist recognition;
-- because the runtime still cannot resolve `mcp.figma.com`, the official `upload_assets` flow returned a valid single-use upload URL but the byte POST could not reach the host; this is a transient transport blocker, not a Figma-layout failure.
+- the cover now proves the intended `ENVIRONMENT + PEOPLE + FEATURE` hierarchy with real personal photography in both major photo roles;
+- the 3-second read is materially stronger because the large environmental travel scene is followed immediately by recognizable close-couple faces;
+- the next largest visible quality gap is no longer “missing people”; it is the final production-quality bridge between the real photos and the masthead/feature cluster, plus final-source/provenance replacement of low-resolution/legacy derivatives;
+- the direct upload transport blocker remains transient and does not justify flattening or fake-memory substitution.
 
 Current P01 largest visible quality gap:
-`ACTUAL 036 PERSONALITY IMAGE IN THE VERIFIED COLLISION GEOMETRY`
-→ `PHOTO-DERIVED REAL TROPICAL/PRINT BRIDGE ASSET`
+`PHOTO-DERIVED TROPICAL/PRINT BRIDGE ASSET + FINAL-SOURCE PROVENANCE`
+→ `MASTHEAD / FEATURE CLUSTER REFINEMENT`
 → `READING-SCALE / A5 PROOF`.
 
 Quality boundary:
 - the `035` `300 x 200` proxy is `LAYOUT/CROP QA ONLY`;
-- it is explicitly **not** a final raster, not a resolution proof, and not `PRINT_READY`;
-- the verified `4500 x 3000` master remains the production source;
-- no proxy may silently survive final print promotion.
+- the existing close-couple Figma image is valid for live composition evidence but its exact binary provenance to Drive `036.jpg` remains pending;
+- neither may silently survive final print promotion without production-source proof;
+- `DESIGN_COMPLETE != PRINT_READY` remains in force.
 
 ## Verified live production evidence — P05 / 2026-08-31
 
@@ -158,24 +159,42 @@ A separate non-destructive right-page candidate now exists for the center-spread
 - no Okinawa/Korea geometry was frozen to compensate for missing real sources.
 
 Source/proxy boundary:
-- the already-placed verified `035` image fill was copied into the P05 HERO only as a temporary real-Hawaii `SOURCE-AWARE TEST` proxy;
+- the already-placed verified `035` image fill remains in the P05 HERO only as a temporary real-Hawaii `SOURCE-AWARE TEST` proxy;
 - its candidate node name explicitly records `035 VERIFIED REAL SOURCE PROXY / FINAL SOURCE TBD`;
 - this does **not** select `035` as the final P05 HERO and does not permit repeating it in final P01/P05 production;
-- the final P05 source should still come from the reviewed Hawaii hero pool after reliable image transfer is available.
+- the final P05 HERO still needs a separately selected/provenanced Hawaii source.
+
+Real emotion-photo proof:
+- node `3332:7` now uses the verified real Hawaii couple-kiss source already present in the Figma source library;
+- exact Drive provenance recorded from the source node: `1sIghnrqtfs0WxwBiVdmsZopsQ29tIpiw` / `REAL_PHOTO_PROFILE_HAWAII_COUPLE_KISS_01`;
+- Figma image hash: `e4ce0f0ae0ca2c86b8fe7beb4523c8e34264bc0b`;
+- screenshot QA initially showed an over-tall crop that removed too much of Shiori;
+- geometry was corrected to a wider `236 x 178` printed-photo object so both people and the kiss gesture read clearly;
+- native caption is `HAWAII / ふたりの一枚` and stays independently editable.
 
 Visual behavior proven by screenshot:
-- Hawaii HERO is clearly dominant rather than one of several equal cards;
-- the `HAWAII` title becomes a large native display mass on a cyan/white/coral printed slab that collides with HERO;
-- the emotion-photo region enters from the lower-left as a materially smaller printed-photo object and remains `TRANSFER PENDING` for the preferred `004 / 003 / 018` pool;
+- Hawaii HERO remains clearly dominant rather than one of several equal cards;
+- the `HAWAII` title is a large native display mass on a cyan/white/coral printed slab colliding with HERO;
+- the real emotion photo now enters from the lower-left as a materially smaller but readable printed-photo object;
 - the proposal field is a large quiet cream paper island over the lower-right of the HERO region, preserving the intended `dense travel collage → calm story island` behavior;
-- `YOKOHAMA → 2026.10.24` is a separate green arrival object connected by route movement rather than a footer card;
-- route pieces remain editable and visually cross the page, while fold-critical facts remain away from the gutter.
+- `YOKOHAMA → 2026.10.24` remains a separate green arrival object connected by route movement rather than a footer card;
+- route pieces remain editable and fold-critical facts stay away from the gutter.
 
 Current P05 correction still required:
 - proposal body copy is temporary truth-safe placeholder wording, not final autobiographical copy;
-- proposal text/support geometry needs one more reading-scale pass because the first candidate screenshot shows the body copy too close to the HERO/calm-field boundary;
-- the red route-front stroke is currently too visually blunt and should be replaced by the final route artwork rather than cosmetically embellished;
-- final Hawaii HERO/emotion images require real source transfer before this candidate can be promoted beyond composition evidence.
+- final P05 HERO must differ from P01 and gain exact source provenance before promotion;
+- the route-front stroke is still a temporary geometry cue, not final route artwork;
+- P04 Okinawa/Korea real-photo absence still prevents complete center-spread source proof.
+
+### Fresh missing-source recheck — 2026-08-31
+
+Google Drive image-only searches were repeated after the real-photo Figma corrections:
+- `沖縄` still returns reference/page/generated/editorial assets rather than a promotable autobiographical real-photo pool;
+- `韓国` still returns reference/page assets rather than promotable real trip photographs;
+- `クッキー` returned no image results;
+- `メロン` returned no image results.
+
+Therefore P04 and dog-specific P06 roles remain explicit source gaps. No generated scenery, reference page, or unrelated image is promoted to real-memory evidence.
 
 ## Whole-book acceptance
 
