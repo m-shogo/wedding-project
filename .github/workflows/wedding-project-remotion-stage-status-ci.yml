@@ -4,10 +4,14 @@ on:
   pull_request:
     paths:
       - 'motion-studio/scripts/check-wedding-project-remotion-production-stage-status.mts'
+      - 'motion-studio/scripts/generate-wedding-project-remotion-stage-status-dashboard.mts'
       - 'motion-studio/scripts/prepare-wedding-project-remotion-production-handoff.mts'
       - 'motion-studio/scripts/check-wedding-project-remotion-element-identity-receipt.mts'
       - 'motion-studio/scripts/verify-wedding-project-remotion-identity-handoff.mts'
       - 'motion-studio/scripts/verify-wedding-production-handoff-provenance.mts'
+      - 'movie-dashboard/src/generated/weddingProjectRemotionStageStatus.ts'
+      - 'movie-dashboard/src/components/WeddingProjectRemotionStageStatusCard.tsx'
+      - 'movie-dashboard/src/components/MaskRevealSceneHandoffCard.tsx'
       - '.github/workflows/wedding-project-remotion-stage-status-ci.yml'
   workflow_dispatch:
 
@@ -48,6 +52,18 @@ jobs:
           if (report.evidenceBoundary.macDavinciResolveGuiActual !== 'NOT_RUN_UNLESS_HUMAN_EXECUTED') throw new Error('DaVinci Actual boundary changed');
           if (report.evidenceBoundary.productionReadyPromotedByThisCheck !== false) throw new Error('status checker must not promote productionReady');
           NODE
+
+      - name: Generated Motion Zukan stage status matches canonical checker
+        working-directory: motion-studio
+        run: node --no-warnings scripts/generate-wedding-project-remotion-stage-status-dashboard.mts --check
+
+      - name: Motion Zukan stage-status surface keeps evidence boundary visible
+        run: |
+          grep -q 'WeddingProjectRemotionStageStatusCard' movie-dashboard/src/components/MaskRevealSceneHandoffCard.tsx
+          grep -q 'HANDOFF_CURRENT' movie-dashboard/src/components/WeddingProjectRemotionStageStatusCard.tsx
+          grep -q 'productionReady=NO' movie-dashboard/src/components/WeddingProjectRemotionStageStatusCard.tsx
+          grep -q 'GUI Actual' movie-dashboard/src/components/WeddingProjectRemotionStageStatusCard.tsx
+          ! grep -q 'productionReady=YES' movie-dashboard/src/components/WeddingProjectRemotionStageStatusCard.tsx
 
       - name: Strict mode fails closed when canonical stage is missing
         working-directory: motion-studio
