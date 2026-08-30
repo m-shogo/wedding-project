@@ -5,7 +5,9 @@ on:
     paths:
       - "movie-dashboard/src/data/openingProductionStatus.generated.ts"
       - "movie-dashboard/src/data/profileAssemblyReviewReadiness.generated.ts"
+      - "movie-dashboard/src/lib/weddingProductionActions.ts"
       - "movie-dashboard/src/components/WeddingProductionReviewMatrixPanel.tsx"
+      - "movie-dashboard/src/components/WeddingProductionActionLauncherPanel.tsx"
       - "movie-dashboard/src/pages/MotionZukanWorkspaceHandoff.tsx"
       - ".github/workflows/wedding-production-review-matrix-ci.yml"
   push:
@@ -13,7 +15,9 @@ on:
     paths:
       - "movie-dashboard/src/data/openingProductionStatus.generated.ts"
       - "movie-dashboard/src/data/profileAssemblyReviewReadiness.generated.ts"
+      - "movie-dashboard/src/lib/weddingProductionActions.ts"
       - "movie-dashboard/src/components/WeddingProductionReviewMatrixPanel.tsx"
+      - "movie-dashboard/src/components/WeddingProductionActionLauncherPanel.tsx"
       - "movie-dashboard/src/pages/MotionZukanWorkspaceHandoff.tsx"
       - ".github/workflows/wedding-production-review-matrix-ci.yml"
 
@@ -43,15 +47,23 @@ jobs:
         run: |
           node scripts/sync-opening-production-status.mjs
           node scripts/sync-profile-assembly-review-readiness.mjs
-      - name: Matrix contract keeps project authorities separate
+      - name: Matrix and launcher share one exact-next authority
         run: |
           grep -q 'WEDDING PRODUCTION REVIEW MATRIX' src/components/WeddingProductionReviewMatrixPanel.tsx
+          grep -q 'PRODUCTION ACTION LAUNCHER' src/components/WeddingProductionActionLauncherPanel.tsx
+          grep -q 'weddingProductionActions.Opening.title' src/components/WeddingProductionReviewMatrixPanel.tsx
+          grep -q 'weddingProductionActions.Profile.title' src/components/WeddingProductionReviewMatrixPanel.tsx
+          grep -q '実11写真 + rights-cleared BGM intake' src/lib/weddingProductionActions.ts
+          grep -q '実17素材 + rights-cleared BGM intake' src/lib/weddingProductionActions.ts
+          grep -q 'pnpm render:opening-v1:preview' src/lib/weddingProductionActions.ts
+          grep -q 'pnpm render:profile-v1:real-media-preview' src/lib/weddingProductionActions.ts
+          grep -q 'MATRIX_EXACT_NEXT == LAUNCHER_ACTION' src/components/WeddingProductionActionLauncherPanel.tsx
+          grep -q 'DASHBOARD_EXECUTION = NEVER' src/components/WeddingProductionActionLauncherPanel.tsx
           grep -q 'AGGREGATED_VIEW != NEW_AUTHORITY' src/components/WeddingProductionReviewMatrixPanel.tsx
           grep -q 'INPUT_READY != HUMAN_QA_PASS' src/components/WeddingProductionReviewMatrixPanel.tsx
-          grep -q 'Remotion Studio GUI Actual = NOT_RUN' src/components/WeddingProductionReviewMatrixPanel.tsx
-          grep -q 'Mac DaVinci GUI Actual = NOT_RUN' src/components/WeddingProductionReviewMatrixPanel.tsx
-          grep -q '実11写真 + rights-cleared BGM intake' src/components/WeddingProductionReviewMatrixPanel.tsx
-          grep -q '実17素材 + rights-cleared BGM intake' src/components/WeddingProductionReviewMatrixPanel.tsx
+          grep -q 'Remotion Studio GUI Actual = NOT_RUN' src/components/WeddingProductionActionLauncherPanel.tsx
+          grep -q 'Mac DaVinci GUI Actual = NOT_RUN' src/components/WeddingProductionActionLauncherPanel.tsx
           grep -q '<WeddingProductionReviewMatrixPanel />' src/pages/MotionZukanWorkspaceHandoff.tsx
+          grep -q '<WeddingProductionActionLauncherPanel />' src/pages/MotionZukanWorkspaceHandoff.tsx
       - name: Typecheck and build Movie Dashboard
         run: pnpm build
