@@ -1,0 +1,181 @@
+name: Wedding Project Remotion Identity Final Consistency CI
+
+on:
+  pull_request:
+    paths:
+      - 'motion-studio/scripts/export-wedding-production-handoff.mts'
+      - 'motion-studio/scripts/verify-wedding-production-handoff-provenance.mts'
+      - 'motion-studio/scripts/verify-wedding-project-remotion-identity-production-consistency.mts'
+      - 'motion-studio/scripts/verify-wedding-project-remotion-identity-handoff.mts'
+      - 'motion-studio/scripts/apply-wedding-project-remotion-identity-production-handoff.mts'
+      - 'motion-studio/scripts/append-wedding-project-remotion-identity-recovery-markdown.mts'
+      - 'motion-studio/scripts/append-wedding-project-motion-provenance-recovery-markdown.mts'
+      - 'motion-studio/src/motion-kit/engines.tsx'
+      - '.github/workflows/wedding-project-remotion-identity-final-consistency-ci.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  final-consistency:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+          run_install: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: motion-studio/pnpm-lock.yaml
+      - name: Install Motion Studio dependencies
+        working-directory: motion-studio
+        run: pnpm install --frozen-lockfile
+
+      - name: Canonical exporter uses unified provenance verifier
+        run: |
+          grep -q "verify-wedding-production-handoff-provenance.mts" motion-studio/scripts/export-wedding-production-handoff.mts
+          grep -q "Project Motion / Remotion identity provenance is inconsistent" motion-studio/scripts/export-wedding-production-handoff.mts
+
+      - name: Build Project Remotion identity production fixtures
+        run: |
+          cd motion-studio
+          node --no-warnings scripts/export-wedding-remotion-element-handoff-identities.mts
+          cd ..
+          mkdir -p movie-dashboard/out/typography-project-delivery movie-dashboard/out/project-role-handoff
+          cat > movie-dashboard/out/typography-project-delivery/opening-typography-production-batch.json <<'JSON'
+          {
+            "schemaVersion":"wedding-movie-typography-project-delivery/v1",
+            "authority":"DERIVED_PROJECT_HANDOFF",
+            "projectId":"opening",
+            "scenes":[{"sceneId":"opening-title","sourceRevision":"rev-001","selectedPatternId":"type-mask-reveal"}],
+            "remotionElementIdentityVerification":{
+              "state":"NOT_RUN",
+              "currentnessVerifiedByBatchBuild":false,
+              "selectedPatternIds":["type-mask-reveal"],
+              "sceneBindings":[{
+                "sceneId":"opening-title",
+                "sourceRevision":"rev-001",
+                "patternId":"type-mask-reveal",
+                "adoptedForMovie":false,
+                "canonicalEngine":"TypographyRevealEngine",
+                "canonicalMode":"mask",
+                "canonicalSource":"motion-studio/src/motion-kit/engines.tsx#TypographyRevealEngine"
+              }]
+            },
+            "summary":{"batchReadyForPalmierDaVinciHandoff":true,"productionReady":false}
+          }
+          JSON
+          cat > movie-dashboard/out/project-role-handoff/opening-production-role-handoff-manifest.json <<'JSON'
+          {
+            "schemaVersion":"wedding-movie-project-role-handoff/v1",
+            "authority":"DERIVED_FROM_PROJECT_HANDOFF_AND_PERSISTED_HUMAN_ROLE_CONTEXT",
+            "projectId":"opening",
+            "typography":{
+              "projectId":"opening",
+              "scenes":[{"sceneId":"opening-title","sourceRevision":"rev-001","selectedPatternId":"type-mask-reveal"}],
+              "remotionElementIdentityVerification":{
+                "selectedPatternIds":["type-mask-reveal"],
+                "sceneBindings":[{
+                  "sceneId":"opening-title",
+                  "sourceRevision":"rev-001",
+                  "patternId":"type-mask-reveal",
+                  "adoptedForMovie":false,
+                  "canonicalEngine":"TypographyRevealEngine",
+                  "canonicalMode":"mask",
+                  "canonicalSource":"motion-studio/src/motion-kit/engines.tsx#TypographyRevealEngine"
+                }]
+              }
+            },
+            "roleHandoff":{"ready":true,"productionReady":false,"studioGuiActual":"NOT_RUN","davinciGuiActual":"NOT_RUN"}
+          }
+          JSON
+          cd motion-studio
+          node --no-warnings scripts/verify-wedding-project-remotion-element-identities.mts \
+            --movie=opening \
+            --batch=../movie-dashboard/out/typography-project-delivery/opening-typography-production-batch.json
+
+      - name: Build production bundle recovery sidecar and Markdown
+        working-directory: motion-studio
+        run: |
+          mkdir -p out/handoff/opening-v1 out/ci
+          printf 'ci-final-render' > out/ci/opening-final.mp4
+          SHA=$(sha256sum out/ci/opening-final.mp4 | awk '{print $1}')
+          cat > out/handoff/opening-v1/opening-v1-production-bundle.json <<JSON
+          {
+            "davinci": {
+              "handoffAsset": "out/ci/opening-final.mp4",
+              "expectedSha256": "$SHA",
+              "macActualState": "NOT_RUN",
+              "productionReady": false
+            }
+          }
+          JSON
+          cat > out/handoff/opening-v1/opening-v1-davinci-production-recovery.json <<'JSON'
+          {
+            "schemaVersion":"wedding-davinci-production-recovery-export/v1",
+            "authority":"FINAL_RENDER_BOUND_DAVINCI_RECOVERY",
+            "recovery":{"actual":{"state":"NOT_RUN"},"bridge":{"macDaVinciActualVerified":false}}
+          }
+          JSON
+          printf '# DaVinci Wedding Production Recovery Attachment\n' > out/handoff/opening-v1/opening-v1-davinci-production-recovery.md
+          node --no-warnings scripts/apply-wedding-project-remotion-identity-production-handoff.mts --movie=opening
+          node --no-warnings scripts/append-wedding-project-motion-provenance-recovery-markdown.mts --movie=opening
+
+      - name: Unified final provenance gate accepts CURRENT Project Remotion identity
+        working-directory: motion-studio
+        run: |
+          node --no-warnings scripts/verify-wedding-production-handoff-provenance.mts --movie=opening | tee /tmp/current.log
+          grep -q 'Project Motion production provenance consistency: NOT_APPLICABLE' /tmp/current.log
+          grep -q 'Project Remotion identity production consistency: CURRENT' /tmp/current.log
+          grep -q 'Wedding production handoff provenance consistency: opening=CURRENT_OR_NOT_APPLICABLE' /tmp/current.log
+          grep -q 'Mac Remotion Studio GUI Actual remains NOT_RUN' /tmp/current.log
+          grep -q 'Mac DaVinci Actual remains NOT_RUN' /tmp/current.log
+          grep -q 'productionReady is not promoted by provenance verification' /tmp/current.log
+
+      - name: Post-export source batch drift fails final consistency
+        run: |
+          cp movie-dashboard/out/typography-project-delivery/opening-typography-production-batch.json /tmp/current-batch.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path('movie-dashboard/out/typography-project-delivery/opening-typography-production-batch.json')
+          data = json.loads(p.read_text())
+          data['scenes'][0]['sourceRevision'] = 'rev-999'
+          data['remotionElementIdentityVerification']['sceneBindings'][0]['sourceRevision'] = 'rev-999'
+          p.write_text(json.dumps(data, indent=2) + '\n')
+          PY
+          cd motion-studio
+          if node --no-warnings scripts/verify-wedding-production-handoff-provenance.mts --movie=opening > /tmp/batch-drift.log 2>&1; then
+            echo 'Post-export source batch drift must fail final production provenance consistency.'
+            exit 1
+          fi
+          grep -q 'PROJECT_REMOTION_IDENTITY_CONSISTENCY_CANONICAL_CURRENTNESS_FAILED:opening' /tmp/batch-drift.log
+          grep -q 'Mac Remotion Studio GUI Actual remains NOT_RUN' /tmp/batch-drift.log
+          grep -q 'Mac DaVinci Actual remains NOT_RUN' /tmp/batch-drift.log
+          mv /tmp/current-batch.json ../movie-dashboard/out/typography-project-delivery/opening-typography-production-batch.json
+
+      - name: Human recovery Markdown drift fails final consistency
+        working-directory: motion-studio
+        run: |
+          sed -i 's/project-remotion-identity-state: CURRENT/project-remotion-identity-state: STALE/' out/handoff/opening-v1/opening-v1-davinci-production-recovery.md
+          if node --no-warnings scripts/verify-wedding-production-handoff-provenance.mts --movie=opening > /tmp/markdown-drift.log 2>&1; then
+            echo 'Human recovery Markdown drift must fail final production provenance consistency.'
+            exit 1
+          fi
+          grep -q 'PROJECT_REMOTION_IDENTITY_CONSISTENCY_MARKDOWN_DRIFT:opening:project-remotion-identity-state: CURRENT:0' /tmp/markdown-drift.log
+
+      - name: Resolve sidecar drift fails final consistency
+        working-directory: motion-studio
+        run: |
+          node --no-warnings scripts/append-wedding-project-motion-provenance-recovery-markdown.mts --movie=opening
+          printf '\n' >> out/handoff/opening-v1/opening-v1-resolve-remotion-identity-handoff.json
+          if node --no-warnings scripts/verify-wedding-production-handoff-provenance.mts --movie=opening > /tmp/sidecar-drift.log 2>&1; then
+            echo 'Resolve sidecar drift must fail final production provenance consistency.'
+            exit 1
+          fi
+          grep -q 'PROJECT_REMOTION_IDENTITY_CONSISTENCY_RESOLVE_SIDECAR_SHA_DRIFT:opening' /tmp/sidecar-drift.log

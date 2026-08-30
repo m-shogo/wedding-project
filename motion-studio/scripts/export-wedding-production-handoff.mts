@@ -191,14 +191,14 @@ if (!existsSync(recoveryMarkdownPath)) {
 const provenanceMarkdown = run('scripts/append-wedding-project-motion-provenance-recovery-markdown.mts', [`--movie=${movieArg}`]);
 forward(provenanceMarkdown);
 if (provenanceMarkdown.status !== 0) {
-  console.error(`Wedding production handoff blocked: ${movieArg} Project Motion provenance could not be surfaced in recovery Markdown.`);
+  console.error(`Wedding production handoff blocked: ${movieArg} Project Motion / Remotion identity provenance could not be surfaced in recovery Markdown.`);
   process.exit(provenanceMarkdown.status ?? 1);
 }
 
-const provenanceConsistency = run('scripts/verify-wedding-project-motion-production-provenance.mts', [`--movie=${movieArg}`]);
+const provenanceConsistency = run('scripts/verify-wedding-production-handoff-provenance.mts', [`--movie=${movieArg}`]);
 forward(provenanceConsistency);
 if (provenanceConsistency.status !== 0) {
-  console.error(`Wedding production handoff blocked: ${movieArg} Project Motion provenance is inconsistent across bundle/recovery/Markdown.`);
+  console.error(`Wedding production handoff blocked: ${movieArg} Project Motion / Remotion identity provenance is inconsistent across canonical handoff artifacts.`);
   process.exit(provenanceConsistency.status ?? 1);
 }
 
