@@ -8,6 +8,7 @@ on:
       - 'motion-studio/scripts/check-wedding-remotion-element-handoff-identities.mts'
       - 'motion-studio/scripts/verify-wedding-project-remotion-element-identities.mts'
       - 'motion-studio/scripts/check-wedding-project-remotion-element-identity-receipt.mts'
+      - 'motion-studio/scripts/verify-wedding-project-remotion-identity-handoff.mts'
       - 'motion-studio/scripts/export-wedding-production-handoff.mts'
       - 'motion-studio/scripts/verify-wedding-production-handoff-provenance.mts'
       - 'motion-studio/src/motion-kit/engines.tsx'
@@ -22,6 +23,7 @@ on:
       - 'motion-studio/scripts/check-wedding-remotion-element-handoff-identities.mts'
       - 'motion-studio/scripts/verify-wedding-project-remotion-element-identities.mts'
       - 'motion-studio/scripts/check-wedding-project-remotion-element-identity-receipt.mts'
+      - 'motion-studio/scripts/verify-wedding-project-remotion-identity-handoff.mts'
       - 'motion-studio/scripts/export-wedding-production-handoff.mts'
       - 'motion-studio/scripts/verify-wedding-production-handoff-provenance.mts'
       - 'motion-studio/src/motion-kit/engines.tsx'
@@ -95,11 +97,12 @@ jobs:
           node - <<'NODE'
           const fs = require('fs');
           const report = JSON.parse(fs.readFileSync('/tmp/remotion-production-prep.json', 'utf8'));
-          if (report.schemaVersion !== 'wedding-project-remotion-production-prep/v1') throw new Error('prep schema mismatch');
+          if (report.schemaVersion !== 'wedding-project-remotion-production-prep/v2') throw new Error('prep schema mismatch');
           if (report.state !== 'CURRENT' || report.phase !== 'identity') throw new Error('identity prep must be CURRENT');
           if (report.batchInput.source !== 'CANONICAL_PATH') throw new Error('canonical prep source mismatch');
+          if (report.canonicalStage.state !== 'NOT_RUN' || report.canonicalStage.performedByThisRun !== false) throw new Error('identity prep must not claim staging');
           if (report.steps.length !== 4 || report.steps.some((step) => step.state !== 'PASS')) throw new Error('all identity prep steps must pass');
-          if (report.next.kind !== 'STAGE_ROLE_MANIFEST_AND_RUN_HANDOFF_PHASE') throw new Error('identity prep next action mismatch');
+          if (report.next.kind !== 'STAGE_CANONICAL_INPUTS') throw new Error('identity prep next action mismatch');
           if (report.evidenceBoundary.macRemotionStudioGuiActual !== 'NOT_RUN_UNLESS_HUMAN_EXECUTED') throw new Error('Studio Actual boundary changed');
           if (report.evidenceBoundary.macDavinciResolveGuiActual !== 'NOT_RUN_UNLESS_HUMAN_EXECUTED') throw new Error('DaVinci Actual boundary changed');
           if (report.evidenceBoundary.productionReadyPromotedByThisPrep !== false) throw new Error('prep must not promote productionReady');
@@ -127,7 +130,7 @@ jobs:
           if (report.state !== 'CURRENT') throw new Error('external-path identity prep must be CURRENT');
           if (report.batchInput.source !== 'EXPLICIT_OPERATOR_PATH') throw new Error('external-path source must be explicit');
           if (report.batchInput.absolutePath !== external) throw new Error('external absolute path drift');
-          if (!report.steps.find((step) => step.id === 'GENERATE_PROJECT_IDENTITY_RECEIPT')?.command.includes("'/tmp/Motion Zukan Download/opening typography production batch.json'")) throw new Error('display command must shell-quote path with spaces');
+          if (!report.steps.find((step) => step.id === 'GENERATE_PROJECT_IDENTITY_RECEIPT')?.command.includes("--batch='/tmp/Motion Zukan Download/opening typography production batch.json'")) throw new Error('display command must shell-quote path with spaces');
           const receipt = JSON.parse(fs.readFileSync('../movie-dashboard/out/remotion-element-handoff/opening-project-remotion-identity-verification-receipt.json', 'utf8'));
           if (receipt.sourceBatch.path !== external) throw new Error('receipt must bind the exact external batch path');
           if (receipt.state !== 'CURRENT') throw new Error('external-path receipt must be CURRENT');
@@ -143,6 +146,96 @@ jobs:
             exit 1
           fi
           grep -q 'PROJECT_ROLE_HANDOFF_MANIFEST_MISSING_BEFORE_CANONICAL_HANDOFF' /tmp/missing-role.log
+
+      - name: Stage phase validates external Human inputs before canonical write
+        run: |
+          cat > '/tmp/Motion Zukan Download/opening production role handoff manifest.json' <<'JSON'
+          {
+            "schemaVersion":"wedding-movie-project-role-handoff/v1",
+            "authority":"DERIVED_FROM_PROJECT_HANDOFF_AND_PERSISTED_HUMAN_ROLE_CONTEXT",
+            "projectId":"opening",
+            "typography":{
+              "projectId":"opening",
+              "scenes":[{"sceneId":"opening-title","sourceRevision":"rev-prep-001","selectedPatternId":"type-mask-reveal"}],
+              "remotionElementIdentityVerification":{
+                "selectedPatternIds":["type-mask-reveal"],
+                "sceneBindings":[{
+                  "sceneId":"opening-title",
+                  "sourceRevision":"rev-prep-001",
+                  "patternId":"type-mask-reveal",
+                  "adoptedForMovie":false,
+                  "canonicalEngine":"TypographyRevealEngine",
+                  "canonicalMode":"mask",
+                  "canonicalSource":"motion-studio/src/motion-kit/engines.tsx#TypographyRevealEngine"
+                }]
+              }
+            },
+            "roleHandoff":{"ready":true,"productionReady":false,"studioGuiActual":"NOT_RUN","davinciGuiActual":"NOT_RUN"}
+          }
+          JSON
+          rm -f movie-dashboard/out/typography-project-delivery/opening-typography-production-batch.json
+          rm -f movie-dashboard/out/project-role-handoff/opening-production-role-handoff-manifest.json
+          rm -f movie-dashboard/out/remotion-element-handoff/opening-project-remotion-identity-verification-receipt.json
+          cd motion-studio
+          node --no-warnings scripts/prepare-wedding-project-remotion-production-handoff.mts \
+            --movie=opening \
+            --phase=stage \
+            --batch='/tmp/Motion Zukan Download/opening typography production batch.json' \
+            --role-manifest='/tmp/Motion Zukan Download/opening production role handoff manifest.json' \
+            --json > /tmp/stage-prep.json
+          node - <<'NODE'
+          const fs = require('fs');
+          const path = require('path');
+          const crypto = require('crypto');
+          const report = JSON.parse(fs.readFileSync('/tmp/stage-prep.json', 'utf8'));
+          if (report.state !== 'CURRENT' || report.phase !== 'stage') throw new Error('stage prep must be CURRENT');
+          if (report.canonicalStage.state !== 'CURRENT' || report.canonicalStage.performedByThisRun !== true) throw new Error('canonical stage must be CURRENT');
+          for (const id of ['VERIFY_EXTERNAL_PROJECT_ROLE_HANDOFF','STAGE_VALIDATED_INPUTS_TO_CANONICAL_PATHS','REGENERATE_CANONICAL_PROJECT_IDENTITY_RECEIPT','CHECK_CANONICAL_PROJECT_IDENTITY_RECEIPT','VERIFY_CANONICAL_PROJECT_ROLE_HANDOFF']) {
+            if (!report.steps.some((step) => step.id === id && step.state === 'PASS')) throw new Error(`missing stage proof: ${id}`);
+          }
+          if (report.next.kind !== 'RUN_CANONICAL_HANDOFF_WHEN_UPSTREAM_READY') throw new Error('stage next action mismatch');
+          const batchSource = '/tmp/Motion Zukan Download/opening typography production batch.json';
+          const roleSource = '/tmp/Motion Zukan Download/opening production role handoff manifest.json';
+          const batchCanonical = path.resolve('../movie-dashboard/out/typography-project-delivery/opening-typography-production-batch.json');
+          const roleCanonical = path.resolve('../movie-dashboard/out/project-role-handoff/opening-production-role-handoff-manifest.json');
+          const sha = (file) => crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex');
+          if (sha(batchSource) !== sha(batchCanonical)) throw new Error('staged batch bytes drift');
+          if (sha(roleSource) !== sha(roleCanonical)) throw new Error('staged role manifest bytes drift');
+          const receipt = JSON.parse(fs.readFileSync('../movie-dashboard/out/remotion-element-handoff/opening-project-remotion-identity-verification-receipt.json', 'utf8'));
+          if (receipt.sourceBatch.path !== batchCanonical) throw new Error('post-stage receipt must bind canonical batch path');
+          if (receipt.state !== 'CURRENT') throw new Error('post-stage receipt must be CURRENT');
+          if (report.evidenceBoundary.macRemotionStudioGuiActual !== 'NOT_RUN_UNLESS_HUMAN_EXECUTED') throw new Error('stage must not promote Studio Actual');
+          if (report.evidenceBoundary.macDavinciResolveGuiActual !== 'NOT_RUN_UNLESS_HUMAN_EXECUTED') throw new Error('stage must not promote DaVinci Actual');
+          NODE
+
+      - name: Stage phase rejects a mismatched Human role manifest before canonical write
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path('/tmp/Motion Zukan Download/opening production role handoff manifest.json')
+          data = json.loads(p.read_text())
+          data['typography']['scenes'][0]['selectedPatternId'] = 'type-pop'
+          data['typography']['remotionElementIdentityVerification']['sceneBindings'][0]['patternId'] = 'type-pop'
+          p.write_text(json.dumps(data, indent=2) + '\n')
+          PY
+          BEFORE_BATCH=$(sha256sum movie-dashboard/out/typography-project-delivery/opening-typography-production-batch.json | awk '{print $1}')
+          BEFORE_ROLE=$(sha256sum movie-dashboard/out/project-role-handoff/opening-production-role-handoff-manifest.json | awk '{print $1}')
+          cd motion-studio
+          if node --no-warnings scripts/prepare-wedding-project-remotion-production-handoff.mts \
+            --movie=opening \
+            --phase=stage \
+            --batch='/tmp/Motion Zukan Download/opening typography production batch.json' \
+            --role-manifest='/tmp/Motion Zukan Download/opening production role handoff manifest.json' > /tmp/stage-mismatch.log 2>&1; then
+            echo 'Mismatched Human role manifest must block before canonical staging.'
+            exit 1
+          fi
+          grep -Eq 'STEP_FAILED:VERIFY_EXTERNAL_PROJECT_ROLE_HANDOFF|PROJECT_ROLE_HANDOFF_.*MISMATCH|PROJECT_ROLE_HANDOFF_BINDINGS_DO_NOT_MATCH_RECEIPT' /tmp/stage-mismatch.log
+          cd ..
+          AFTER_BATCH=$(sha256sum movie-dashboard/out/typography-project-delivery/opening-typography-production-batch.json | awk '{print $1}')
+          AFTER_ROLE=$(sha256sum movie-dashboard/out/project-role-handoff/opening-production-role-handoff-manifest.json | awk '{print $1}')
+          test "$BEFORE_BATCH" = "$AFTER_BATCH"
+          test "$BEFORE_ROLE" = "$AFTER_ROLE"
 
       - name: Production prep must never synthesize GUI Actual PASS
         run: |
