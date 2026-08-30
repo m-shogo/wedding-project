@@ -56,8 +56,19 @@ try {
       if (gate.state !== 'PROJECT_REMOTION_IDENTITY_BLOCKED') throw new Error(`${movieId}: INVALID Project Remotion identity must block GUI start`);
       if (gate.nextAction.kind !== 'REVALIDATE_PROJECT_REMOTION_IDENTITY') throw new Error(`${movieId}: INVALID Project Remotion identity must point to canonical verifier`);
     }
+    if (!['CURRENT', 'NOT_APPLICABLE', 'INVALID'].includes(gate.project?.palmierTimelinePreflight?.state)) throw new Error(`${movieId}: Palmier timeline preflight state must be surfaced`);
+    if (typeof gate.project?.palmierTimelinePreflight?.command !== 'string' || !gate.project.palmierTimelinePreflight.command.includes(`--movie=${movieId}`)) throw new Error(`${movieId}: Palmier timeline verifier command must be surfaced`);
+    if (gate.project.palmierTimelinePreflight.state === 'CURRENT') {
+      for (const key of ['receiptSha256', 'assemblyPlanSha256', 'palmierFcpxmlSha256']) {
+        if (!/^[a-f0-9]{64}$/.test(gate.project.palmierTimelinePreflight[key] ?? '')) throw new Error(`${movieId}: CURRENT Palmier timeline ${key} must be SHA-256`);
+      }
+    }
+    if (gate.project.projectMotionPreflight.state !== 'INVALID' && gate.project.projectRemotionIdentityPreflight.state !== 'INVALID' && gate.project.palmierTimelinePreflight.state === 'INVALID') {
+      if (gate.state !== 'PALMIER_TIMELINE_BLOCKED') throw new Error(`${movieId}: INVALID Palmier timeline must block GUI start`);
+      if (gate.nextAction.kind !== 'REVALIDATE_PALMIER_TIMELINE') throw new Error(`${movieId}: INVALID Palmier timeline must point to canonical verifier`);
+    }
     if (gate.evidenceBoundary?.productionReady !== false) throw new Error(`${movieId}: start gate must stay productionReady=false`);
-    if (!['PROJECT_MOTION_BLOCKED', 'PROJECT_REMOTION_IDENTITY_BLOCKED', 'UPSTREAM_BLOCKED', 'EVIDENCE_INIT_REQUIRED', 'GUI_ACTUAL_ALLOWED', 'GUI_ACTUAL_COMPLETE', 'EVIDENCE_BLOCKED'].includes(gate.state)) {
+    if (!['PROJECT_MOTION_BLOCKED', 'PROJECT_REMOTION_IDENTITY_BLOCKED', 'PALMIER_TIMELINE_BLOCKED', 'UPSTREAM_BLOCKED', 'EVIDENCE_INIT_REQUIRED', 'GUI_ACTUAL_ALLOWED', 'GUI_ACTUAL_COMPLETE', 'EVIDENCE_BLOCKED'].includes(gate.state)) {
       throw new Error(`${movieId}: unexpected gate state ${gate.state}`);
     }
     if ((gate.state === 'GUI_ACTUAL_ALLOWED') !== gate.guiActualStartAllowed) throw new Error(`${movieId}: GUI allowed flag/state mismatch`);
@@ -80,8 +91,10 @@ try {
   if (source.includes('productionReady: true')) throw new Error('start gate must not synthesize productionReady');
   if (!source.includes("projectMotionPreflight.state === 'INVALID'")) throw new Error('start gate must fail close on INVALID Project Motion');
   if (!source.includes("projectRemotionIdentityPreflight.state === 'INVALID'")) throw new Error('start gate must fail close on INVALID Project Remotion identity');
+  if (!source.includes("palmierTimelinePreflight.state === 'INVALID'")) throw new Error('start gate must fail close on INVALID Palmier timeline');
   if (!source.includes("'PROJECT_MOTION_INVALID => GUI_ACTUAL_START_BLOCKED'")) throw new Error('Project Motion GUI-start guardrail missing');
   if (!source.includes("'PROJECT_REMOTION_IDENTITY_INVALID => GUI_ACTUAL_START_BLOCKED'")) throw new Error('Project Remotion identity GUI-start guardrail missing');
+  if (!source.includes("'PALMIER_TIMELINE_INVALID => GUI_ACTUAL_START_BLOCKED'")) throw new Error('Palmier timeline GUI-start guardrail missing');
   if (!source.includes("state === 'GUI_ACTUAL_ALLOWED'")) throw new Error('strict GUI start must be tied only to GUI_ACTUAL_ALLOWED');
   if (!source.includes("writeFileSync(outputPath")) throw new Error('canonical Start Gate artifact writer missing');
 
@@ -89,6 +102,7 @@ try {
   console.log('Missing/tampered transported plan: GUI START BLOCKED + diagnostic artifact written');
   console.log('INVALID Project Motion preflight: GUI START BLOCKED');
   console.log('INVALID Project Remotion identity preflight: GUI START BLOCKED');
+  console.log('INVALID Palmier timeline preflight: GUI START BLOCKED');
   console.log('Fresh transported plan: exact per-movie next action + canonical JSON artifact derived');
   console.log('START_GATE_ARTIFACT_EXISTS != GUI_ACTUAL_EXECUTED');
 } finally {
