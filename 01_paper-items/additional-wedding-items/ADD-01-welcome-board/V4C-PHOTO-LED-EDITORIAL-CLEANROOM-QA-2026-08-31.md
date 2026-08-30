@@ -96,7 +96,9 @@ Final normal readback:
 
 A fresh live screenshot of `61:2` was reviewed against the current rejection rule for meaningless badges/stickers/micro-decoration. The remaining `61:18 / ART / LOWER RIGHT BALANCE RULE` had no factual, structural, crop, safe-area or production role; it existed only to fill whitespace. It was removed from V4C instead of being rationalized as premium decoration.
 
-Post-removal screenshot preserves the intended hierarchy (`hero → photo → names → message/date`) and does not introduce new filler. The replaceable photo geometry `61:7` remains exactly `720×440 px`; all five native text roles remain unchanged; no raster or SVG was introduced.
+The replaceable photo frame `61:7` was also inspected directly. It carried a `2 px` deep-ink stroke around the entire `720×440 px` image window. At the scenario print scales this would become roughly `0.70 mm` on A3 or `0.99 mm` on A2: visually heavy enough to turn the hero photograph back into a boxed panel. Because the sand photo foot already provides a physical edge cue, the stroke was removed while preserving the exact frame size, position, clipping and replaceable-image role.
+
+Post-cleanup screenshot preserves the intended hierarchy (`hero → photo → names → message/date`) and makes the hero field read more like editorial photography than a UI card. All five native text roles remain unchanged; no raster or SVG was introduced.
 
 This is a bounded visual-authority cleanup, not a claim of sellable completion. Real-photo rendering is still required before promotion.
 
