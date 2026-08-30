@@ -10,6 +10,7 @@ on:
       - "motion-studio/scripts/opening-v1-audio-listening-review.mts"
       - "movie-dashboard/scripts/sync-opening-production-status.mjs"
       - "movie-dashboard/src/data/openingProductionStatus.generated.ts"
+      - "movie-dashboard/src/lib/weddingProductionActions.ts"
       - "movie-dashboard/src/components/OpeningProductionReviewReadinessPanel.tsx"
       - "movie-dashboard/src/components/OpeningReviewNextActionPanel.tsx"
       - "movie-dashboard/src/pages/MotionZukanWorkspaceHandoff.tsx"
@@ -24,6 +25,7 @@ on:
       - "motion-studio/scripts/opening-v1-audio-listening-review.mts"
       - "movie-dashboard/scripts/sync-opening-production-status.mjs"
       - "movie-dashboard/src/data/openingProductionStatus.generated.ts"
+      - "movie-dashboard/src/lib/weddingProductionActions.ts"
       - "movie-dashboard/src/components/OpeningProductionReviewReadinessPanel.tsx"
       - "movie-dashboard/src/components/OpeningReviewNextActionPanel.tsx"
       - "movie-dashboard/src/pages/MotionZukanWorkspaceHandoff.tsx"
@@ -53,7 +55,7 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - name: Generated Opening production status is current
         run: node scripts/sync-opening-production-status.mjs
-      - name: Contract tokens preserve review ordering and evidence boundaries
+      - name: Contract tokens preserve review ordering and shared action authority
         run: |
           grep -q 'OPENING PRODUCTION REVIEW READINESS / MOTION STUDIO AUTHORITY' src/components/OpeningProductionReviewReadinessPanel.tsx
           grep -q 'MEDIA_READY != HUMAN_CROP_REVIEW_PASS' src/components/OpeningProductionReviewReadinessPanel.tsx
@@ -62,10 +64,12 @@ jobs:
           grep -q 'Remotion Studio GUI Actual = <strong>NOT_RUN</strong>' src/components/OpeningProductionReviewReadinessPanel.tsx
           grep -q 'Mac DaVinci GUI Actual = <strong>NOT_RUN</strong>' src/components/OpeningProductionReviewReadinessPanel.tsx
           grep -q 'OPENING EXACT NEXT HUMAN QA GATE' src/components/OpeningReviewNextActionPanel.tsx
-          grep -q 'opening-v1-crop-review-evidence.mts --strict' src/components/OpeningReviewNextActionPanel.tsx
-          grep -q 'pnpm render:opening-v1:preview' src/components/OpeningReviewNextActionPanel.tsx
-          grep -q 'pnpm opening:preview-review:strict' src/components/OpeningReviewNextActionPanel.tsx
-          grep -q 'opening-v1-audio-listening-review.mts --strict' src/components/OpeningReviewNextActionPanel.tsx
+          grep -q 'deriveOpeningNextAction' src/components/OpeningReviewNextActionPanel.tsx
+          grep -q 'SHARED_ACTION_AUTHORITY = weddingProductionActions' src/components/OpeningReviewNextActionPanel.tsx
+          grep -q 'opening-v1-crop-review-evidence.mts --strict' src/lib/weddingProductionActions.ts
+          grep -q 'pnpm render:opening-v1:preview' src/lib/weddingProductionActions.ts
+          grep -q 'pnpm opening:preview-review:strict' src/lib/weddingProductionActions.ts
+          grep -q 'opening-v1-audio-listening-review.mts --strict' src/lib/weddingProductionActions.ts
           grep -q 'COMMAND_COPIED != COMMAND_EXECUTED' src/components/OpeningReviewNextActionPanel.tsx
           grep -q '<OpeningProductionReviewReadinessPanel />' src/pages/MotionZukanWorkspaceHandoff.tsx
           grep -q '<OpeningReviewNextActionPanel />' src/pages/MotionZukanWorkspaceHandoff.tsx
