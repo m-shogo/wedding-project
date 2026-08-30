@@ -8,13 +8,24 @@ const read = (relative) => fs.readFileSync(path.join(root, relative), "utf8");
 const runtime = read("src/data/weddingMovieProductionCriticalPathRuntimeSnapshot.ts");
 const card = read("src/components/WeddingMovieProductionCriticalPathCard.tsx");
 const liveAuthority = read("src/data/weddingDavinciGuiActualStartGateLiveAuthority.ts");
+const generatedStage = read("src/generated/weddingProjectRemotionStageStatus.ts");
 const errors = [];
 const need = (source, token, message) => { if (!source.includes(token)) errors.push(message); };
 
 for (const token of [
-  'wedding-movie-production-critical-path-runtime-snapshot/v1',
-  'DASHBOARD_RUNTIME_CRITICAL_PATH_WITH_LIVE_DAVINCI_START_GATE_AUDIT',
+  'wedding-movie-production-critical-path-runtime-snapshot/v2',
+  'DASHBOARD_RUNTIME_CRITICAL_PATH_WITH_CANONICAL_REMOTION_STAGE_AND_LIVE_DAVINCI_START_GATE_AUDIT',
   'stableCriticalPath: buildWeddingMovieProductionCriticalPath()',
+  'canonicalProjectRemotionStage',
+  'authority: weddingProjectRemotionStageStatus.authority',
+  'opening: projectRemotionCanonicalStageSnapshot("opening")',
+  'profile: projectRemotionCanonicalStageSnapshot("profile")',
+  'state: status.state',
+  'blocker: status.blocker',
+  'stageVerification: status.checks.stageVerification',
+  'handoffVerification: status.checks.handoffVerification',
+  'canonicalArtifacts: {...status.canonicalArtifacts}',
+  'nextAction: {...status.next}',
   'liveDavinciStartGate',
   'opening: startGateRuntimeSnapshot(audits.opening)',
   'profile: startGateRuntimeSnapshot(audits.profile)',
@@ -29,10 +40,19 @@ for (const token of [
   'liveIdentitySha256',
   'NOT_PROMOTED_BY_RUNTIME_SNAPSHOT',
   'productionReady: false as const',
+  'REMOTION_STAGE_HANDOFF_CURRENT != REMOTION_STUDIO_GUI_ACTUAL_EXECUTED',
+  'REMOTION_STAGE_HANDOFF_CURRENT != MAC_DAVINCI_GUI_ACTUAL_EXECUTED',
   'GUI_ACTUAL_ALLOWED != GUI_ACTUAL_EXECUTED',
   'PROJECT_MOTION_LIVE_MATCH != HUMAN_GUI_REVIEW_PASSED',
   'STRICT_COMMAND_EXPORTED != STRICT_COMMAND_EXECUTED',
 ]) need(runtime, token, `runtime snapshot missing ${token}`);
+
+for (const token of [
+  'wedding-project-remotion-stage-status-dashboard/v1',
+  'GENERATED_FROM_READ_ONLY_CANONICAL_STAGE_STATUS_CHECKER',
+  'CANONICAL_PROJECT_REMOTION_STAGE_MISSING',
+  'productionReadyPromotedBySnapshot',
+]) need(generatedStage, token, `generated Remotion stage snapshot missing ${token}`);
 
 for (const token of [
   'buildWeddingMovieProductionCriticalPathJson',
@@ -69,4 +89,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log('Wedding Movie production critical-path runtime snapshot OK: stable export remains available while runtime JSON binds the current session live DaVinci Start Gate audit without promoting Mac/Studio GUI Actual or production readiness.');
+console.log('Wedding Movie production critical-path runtime snapshot OK: runtime export binds canonical Project Remotion stage status plus the session-live DaVinci Start Gate audit without promoting Mac/Studio GUI Actual or production readiness.');
