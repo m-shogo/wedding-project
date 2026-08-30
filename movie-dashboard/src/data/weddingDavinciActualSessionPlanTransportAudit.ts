@@ -1,7 +1,7 @@
 import {buildWeddingDavinciActualSessionPlan} from "./weddingDavinciActualSessionPlan";
 
 export const WEDDING_DAVINCI_ACTUAL_SESSION_PLAN_TRANSPORT_AUDIT_SCHEMA =
-  "wedding-davinci-actual-session-plan-transport-audit-dashboard/v2" as const;
+  "wedding-davinci-actual-session-plan-transport-audit-dashboard/v3" as const;
 
 export type WeddingDavinciActualSessionPlanTransportAuditState =
   | "NOT_RUN"
@@ -159,20 +159,43 @@ export function auditTransportedWeddingDavinciActualSessionPlan(
   for (const movieId of ["opening", "profile"] as const) {
     const oldProject = transported.projects?.[movieId];
     const currentProject = live.projects[movieId];
+    const prefix = movieId.toUpperCase();
     if (!oldProject) {
-      mismatches.push(`${movieId.toUpperCase()}_PROJECT_MISSING`);
+      mismatches.push(`${prefix}_PROJECT_MISSING`);
       continue;
     }
 
     const oldGate = projectGateStage(oldProject.currentNextGate);
     if (oldGate !== currentProject.currentNextGate) {
-      mismatches.push(`${movieId.toUpperCase()}_CURRENT_NEXT_GATE_STALE`);
+      mismatches.push(`${prefix}_CURRENT_NEXT_GATE_STALE`);
     }
     if ((oldProject.actualEvidence?.recoverySha256 ?? null) !== currentProject.recoverySha256) {
-      mismatches.push(`${movieId.toUpperCase()}_ACTUAL_RECOVERY_SHA_STALE`);
+      mismatches.push(`${prefix}_ACTUAL_RECOVERY_SHA_STALE`);
     }
     if ((oldProject.expectedDavinciActualEvidenceSha256 ?? null) !== currentProject.actualEvidenceSha256) {
-      mismatches.push(`${movieId.toUpperCase()}_EXPECTED_ACTUAL_EVIDENCE_SHA_STALE`);
+      mismatches.push(`${prefix}_EXPECTED_ACTUAL_EVIDENCE_SHA_STALE`);
+    }
+
+    const transportedProjectMotion = oldProject.projectMotionPreflight;
+    const currentProjectMotion = currentProject.projectMotionPreflight;
+    if (!transportedProjectMotion || typeof transportedProjectMotion !== "object") {
+      mismatches.push(`${prefix}_PROJECT_MOTION_PREFLIGHT_MISSING`);
+    } else {
+      if (transportedProjectMotion.state !== currentProjectMotion.state) {
+        mismatches.push(`${prefix}_PROJECT_MOTION_PREFLIGHT_STATE_STALE`);
+      }
+      if (Boolean(transportedProjectMotion.applicable) !== currentProjectMotion.applicable) {
+        mismatches.push(`${prefix}_PROJECT_MOTION_PREFLIGHT_APPLICABILITY_STALE`);
+      }
+      if (Boolean(transportedProjectMotion.current) !== currentProjectMotion.current) {
+        mismatches.push(`${prefix}_PROJECT_MOTION_PREFLIGHT_CURRENTNESS_STALE`);
+      }
+      if ((transportedProjectMotion.command ?? null) !== currentProjectMotion.command) {
+        mismatches.push(`${prefix}_PROJECT_MOTION_PREFLIGHT_COMMAND_STALE`);
+      }
+      if ((transportedProjectMotion.error ?? null) !== currentProjectMotion.error) {
+        mismatches.push(`${prefix}_PROJECT_MOTION_PREFLIGHT_ERROR_STALE`);
+      }
     }
   }
 
@@ -189,7 +212,7 @@ export function auditTransportedWeddingDavinciActualSessionPlan(
     state,
     mismatches,
     state === "CLI_REQUIRED"
-      ? "Browser verified the transport identity and matched the bindings available to Motion Zukan. Run canonical motion-studio strict-current before starting Mac GUI Actual; browser audit still cannot prove the live handoffIdentitySha256 chain."
+      ? "Browser verified the transport identity plus Project Motion preflight state and matched the bindings available to Motion Zukan. Run canonical motion-studio strict-current before starting Mac GUI Actual; browser audit still cannot prove the live handoffIdentitySha256 chain."
       : "Do not start Mac GUI Actual from this transported plan until the mismatch is resolved and canonical strict-current passes.",
     {transported: declaredIdentity, recomputed: recomputedIdentity, verified: identityVerified},
   );
@@ -198,5 +221,5 @@ export function auditTransportedWeddingDavinciActualSessionPlan(
 export const defaultWeddingDavinciActualSessionPlanTransportAudit: WeddingDavinciActualSessionPlanTransportAudit = result(
   "NOT_RUN",
   [],
-  "Load the canonical Motion Studio session-plan JSON to verify its transport identity and inspect transported common bindings. Canonical CLI strict-current remains authoritative.",
+  "Load the canonical Motion Studio session-plan JSON to verify its transport identity, Project Motion preflight state, and transported common bindings. Canonical CLI strict-current remains authoritative.",
 );
