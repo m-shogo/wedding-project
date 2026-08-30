@@ -48,6 +48,7 @@ type CriticalPathActionTarget = {
   route: string;
   purpose: string;
   command?: string;
+  strictCommand?: string;
   artifactPath?: string;
 };
 
@@ -69,9 +70,20 @@ function CriticalPathActionTargetView({target, compact = false}: {target: Critic
         </code>
       ) : null}
       {target.command ? (
-        <code className="mt-1 block max-w-full overflow-x-auto whitespace-nowrap border-l-2 border-amber-300 pl-2 text-[8px] leading-4 text-navy-500 dark:text-navy-300">
-          {target.command}
-        </code>
+        <div className="mt-1">
+          <div className="text-[7px] font-semibold uppercase tracking-wide text-navy-400">1. save / inspect</div>
+          <code className="block max-w-full overflow-x-auto whitespace-nowrap border-l-2 border-amber-300 pl-2 text-[8px] leading-4 text-navy-500 dark:text-navy-300">
+            {target.command}
+          </code>
+        </div>
+      ) : null}
+      {target.strictCommand ? (
+        <div className="mt-1">
+          <div className="text-[7px] font-semibold uppercase tracking-wide text-red-400">2. strict GUI-start gate</div>
+          <code className="block max-w-full overflow-x-auto whitespace-nowrap border-l-2 border-red-300 pl-2 text-[8px] leading-4 text-navy-500 dark:text-navy-300">
+            {target.strictCommand}
+          </code>
+        </div>
       ) : null}
     </div>
   );
