@@ -39,13 +39,15 @@ Read in this order:
 9. `V20-EDITORIAL-BUDGETS-AND-CHANGE-RESILIENCE.md`
 10. `V20-PHOTO-ROLE-SYSTEM.md`
 11. `V20-PHOTO-INVENTORY-FIRST-PASS.md`
-12. `V20-PHOTO-GAP-MATRIX.md`
-13. `V20-PRODUCTION-GEOMETRY.md`
-14. `V20-PARTS-SYSTEM.md`
+12. `V20-HAWAII-RAW-PHOTO-REVIEW.md`
+13. `V20-PHOTO-GAP-MATRIX.md`
+14. `V20-PRODUCTION-GEOMETRY.md`
 15. `V20-PAGE-MANUALS.md`
-16. `V20-QUALITY-GATES.md`
-17. `V20-ACCEPTANCE-EVIDENCE.md`
-18. only then derive page-specific Figma placement instructions.
+16. `V20-GREYBOX-SILHOUETTE-SPEC.md`
+17. `V20-PARTS-SYSTEM.md`
+18. `V20-QUALITY-GATES.md`
+19. `V20-ACCEPTANCE-EVIDENCE.md`
+20. only then derive page-specific Figma placement instructions.
 
 `V20-IDEA-BANK.md` is a controlled idea pool, not a mandatory design authority.
 
@@ -76,6 +78,28 @@ These are the final foundation layers before production Figma work. Do not add m
 5. `PAGE DIFFERENTIATION` — adjacent spreads should materially differ across at least four composition axes.
 6. `ACCEPTANCE EVIDENCE` — prove scan order, A5 readability, editability, change resilience, provenance and anti-template behavior.
 7. `PHOTO GAP MATRIX` — missing real-photo roles remain visible gaps rather than silently becoming generated fake memories or bad placeholder geometry.
+8. `SOURCE-PIXEL REVIEW` — important real photos are visually opened and classified; filenames alone are never evidence of role/crop quality.
+9. `GREYBOX BEFORE PARTS` — silhouette/hierarchy must pass with decoration removed before travel/tropical parts are allowed to influence the page.
+
+## Current photo evidence consequence
+
+The raw `ハワイ写真` folder has been visually reviewed for multiple source roles. Hawaii currently has enough real-photo depth for environmental hero, emotional, profile/personality and closing roles.
+
+This does NOT mean V20 becomes a Hawaii book.
+
+Current unresolved source gaps include:
+- Okinawa real-photo pool;
+- Korea real-photo pool;
+- non-Hawaii everyday/casual pool;
+- actual Cookie/Melon dog photos if used photographically;
+- Shogo solo portrait only if P02 ultimately requires a solo-pair structure.
+
+Because of these gaps:
+- P01 may proceed to source-aware hero silhouette comparison;
+- P02 should first test a non-symmetrical profile grammar;
+- P04 Okinawa/Korea masks stay elastic;
+- P06 must prove MIN/IDEAL/MAX photo-count states;
+- P07 remains information-first and photo-optional.
 
 ## What V20 may recover from older project records
 
@@ -91,7 +115,7 @@ Recovering a fact is NOT permission to inherit the old layout around that fact.
 ## Hard workflow rule
 
 `CONTENT + PAGE MANUAL`
-→ `PHOTO ROLE + GAP INVENTORY`
+→ `PHOTO ROLE + SOURCE PIXEL REVIEW + GAP INVENTORY`
 → `GREYBOX / SILHOUETTE`
 → `PARTS PLACEMENT`
 → `EDITORIAL POLISH`
@@ -104,9 +128,12 @@ Prompts are execution artifacts generated from the page manuals, not the source 
 
 ## Current no-go
 
-Do not start a new V20 production Figma page until:
-- the actual photo inventory has been mapped to P01–P08 roles;
+Do not start decorative V20 production composition until:
+- actual photo inventory has been mapped to P01–P08 roles as far as available;
 - major real-photo gaps are explicitly known;
+- greybox/silhouette rules have been applied;
 - the new V20 Figma skeleton is explicitly created as a new surface, not a modified V10/V11 page.
 
-This is intentional: the goal is to avoid another expensive redesign loop.
+A new V20 greybox surface may be created once the greybox spec is followed. It must not be mistaken for decorated production completion.
+
+This sequencing is intentional: the goal is to avoid another expensive redesign loop.
