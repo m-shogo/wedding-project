@@ -2,21 +2,15 @@
 // Do not hand-edit. Regenerate from motion-studio canonical artifacts.
 
 export const weddingProjectRemotionStageStatus = {
-  "schemaVersion": "wedding-project-remotion-stage-status-dashboard/v3",
+  "schemaVersion": "wedding-project-remotion-stage-status-dashboard/v2",
   "authority": "GENERATED_FROM_READ_ONLY_CANONICAL_STAGE_AND_PALMIER_TIMELINE_RECEIPT_CHECKERS",
   "opening": {
     "movieId": "opening",
     "state": "NOT_STAGED",
     "blocker": "CANONICAL_PROJECT_REMOTION_STAGE_MISSING",
     "detail": "Missing canonical artifacts: batch, roleManifest, identityReceipt",
-    "checks": {
-      "stageVerification": "NOT_RUN",
-      "handoffVerification": "NOT_RUN"
-    },
-    "next": {
-      "kind": "EXPORT_AND_STAGE_MOTION_ZUKAN_INPUTS",
-      "command": "node --no-warnings scripts/prepare-wedding-project-remotion-production-handoff.mts --movie=opening --phase=stage --batch='<downloaded-typography-batch-path>' --role-manifest='<downloaded-role-manifest-path>'"
-    },
+    "checks": {"stageVerification": "NOT_RUN", "handoffVerification": "NOT_RUN"},
+    "next": {"kind": "EXPORT_AND_STAGE_MOTION_ZUKAN_INPUTS", "command": "node --no-warnings scripts/prepare-wedding-project-remotion-production-handoff.mts --movie=opening --phase=stage --batch='<downloaded-typography-batch-path>' --role-manifest='<downloaded-role-manifest-path>'"},
     "canonicalArtifacts": {
       "batch": "movie-dashboard/out/typography-project-delivery/opening-typography-production-batch.json",
       "roleManifest": "movie-dashboard/out/project-role-handoff/opening-production-role-handoff-manifest.json",
@@ -28,16 +22,8 @@ export const weddingProjectRemotionStageStatus = {
       "detail": "PALMIER_TIMELINE_EXPORT_RECEIPT_MISSING",
       "receiptPath": null,
       "receiptSha256": null,
-      "source": {
-        "assemblyPlan": null,
-        "assemblyPlanSha256": null,
-        "palmierFcpxml": null,
-        "palmierFcpxmlSha256": null
-      },
-      "next": {
-        "kind": "VERIFY_REAL_PALMIER_FCPXML",
-        "command": "node --no-warnings scripts/verify-wedding-palmier-typography-timeline-export.mts --movie=opening --xml='<real-palmier-fcpxml-path>' --write"
-      }
+      "source": {"assemblyPlan": null, "assemblyPlanSha256": null, "palmierFcpxml": null, "palmierFcpxmlSha256": null},
+      "next": {"kind": "VERIFY_REAL_PALMIER_FCPXML", "command": "node --no-warnings scripts/verify-wedding-palmier-typography-timeline-export.mts --movie=opening --xml='<real-palmier-fcpxml-path>' --write"}
     }
   },
   "profile": {
@@ -45,14 +31,8 @@ export const weddingProjectRemotionStageStatus = {
     "state": "NOT_STAGED",
     "blocker": "CANONICAL_PROJECT_REMOTION_STAGE_MISSING",
     "detail": "Missing canonical artifacts: batch, roleManifest, identityReceipt",
-    "checks": {
-      "stageVerification": "NOT_RUN",
-      "handoffVerification": "NOT_RUN"
-    },
-    "next": {
-      "kind": "EXPORT_AND_STAGE_MOTION_ZUKAN_INPUTS",
-      "command": "node --no-warnings scripts/prepare-wedding-project-remotion-production-handoff.mts --movie=profile --phase=stage --batch='<downloaded-typography-batch-path>' --role-manifest='<downloaded-role-manifest-path>'"
-    },
+    "checks": {"stageVerification": "NOT_RUN", "handoffVerification": "NOT_RUN"},
+    "next": {"kind": "EXPORT_AND_STAGE_MOTION_ZUKAN_INPUTS", "command": "node --no-warnings scripts/prepare-wedding-project-remotion-production-handoff.mts --movie=profile --phase=stage --batch='<downloaded-typography-batch-path>' --role-manifest='<downloaded-role-manifest-path>'"},
     "canonicalArtifacts": {
       "batch": "movie-dashboard/out/typography-project-delivery/profile-typography-production-batch.json",
       "roleManifest": "movie-dashboard/out/project-role-handoff/profile-production-role-handoff-manifest.json",
@@ -64,16 +44,8 @@ export const weddingProjectRemotionStageStatus = {
       "detail": "PALMIER_TIMELINE_EXPORT_RECEIPT_MISSING",
       "receiptPath": null,
       "receiptSha256": null,
-      "source": {
-        "assemblyPlan": null,
-        "assemblyPlanSha256": null,
-        "palmierFcpxml": null,
-        "palmierFcpxmlSha256": null
-      },
-      "next": {
-        "kind": "VERIFY_REAL_PALMIER_FCPXML",
-        "command": "node --no-warnings scripts/verify-wedding-palmier-typography-timeline-export.mts --movie=profile --xml='<real-palmier-fcpxml-path>' --write"
-      }
+      "source": {"assemblyPlan": null, "assemblyPlanSha256": null, "palmierFcpxml": null, "palmierFcpxmlSha256": null},
+      "next": {"kind": "VERIFY_REAL_PALMIER_FCPXML", "command": "node --no-warnings scripts/verify-wedding-palmier-typography-timeline-export.mts --movie=profile --xml='<real-palmier-fcpxml-path>' --write"}
     }
   },
   "evidenceBoundary": {
