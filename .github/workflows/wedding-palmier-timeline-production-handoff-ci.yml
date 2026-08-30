@@ -1,0 +1,105 @@
+name: Wedding Palmier Timeline Production Handoff CI
+
+on:
+  pull_request:
+    paths:
+      - 'motion-studio/scripts/apply-wedding-palmier-timeline-production-handoff.mts'
+      - 'motion-studio/scripts/verify-wedding-palmier-timeline-production-handoff.mts'
+      - 'motion-studio/scripts/export-wedding-production-handoff.mts'
+      - 'motion-studio/scripts/check-wedding-palmier-typography-timeline-export-receipt.mts'
+      - 'motion-studio/scripts/verify-wedding-palmier-typography-timeline-export.mts'
+      - '.github/workflows/wedding-palmier-timeline-production-handoff-ci.yml'
+  workflow_dispatch:
+
+jobs:
+  recovery-binding:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Build a real-FCPXML receipt fixture and fail-closed recovery shell
+        working-directory: motion-studio
+        run: |
+          mkdir -p /tmp/palmier-binding
+          cat > /tmp/palmier-binding/opening-plan.json <<'JSON'
+          {
+            "schemaVersion":"wedding-palmier-typography-assembly-plan/v1",
+            "authority":"CANONICAL_STAGED_PROJECT_REMOTION_BATCH",
+            "movieId":"opening",
+            "scenes":[
+              {"order":1,"sceneId":"scene-a","sourceRevision":"rev-a","patternId":"type-mask-reveal","palmier":{"markerId":"WEDDING_SCENE:scene-a","expectedXmlFileName":"a.fcpxml","projectTimelineXmlFileName":"opening.fcpxml"}},
+              {"order":2,"sceneId":"scene-b","sourceRevision":"rev-b","patternId":"type-char-stagger","palmier":{"markerId":"WEDDING_SCENE:scene-b","expectedXmlFileName":"b.fcpxml","projectTimelineXmlFileName":"opening.fcpxml"}}
+            ],
+            "summary":{"sceneCount":2,"palmierAssemblyReady":true,"productionReady":false}
+          }
+          JSON
+          cat > /tmp/palmier-binding/opening.fcpxml <<'XML'
+          <fcpxml version="1.11"><library><event><project><sequence><spine><marker value="WEDDING_SCENE:scene-a"/><marker value="WEDDING_SCENE:scene-b"/></spine></sequence></project></event></library></fcpxml>
+          cat > /tmp/palmier-binding/recovery.json <<'JSON'
+          {
+            "schemaVersion":"wedding-davinci-production-recovery-export/v1",
+            "authority":"FINAL_RENDER_BOUND_DAVINCI_RECOVERY",
+            "sourceBundle":{"path":"fixture"},
+            "recovery":{"movieId":"opening"}
+          }
+          JSON
+          node --no-warnings scripts/verify-wedding-palmier-typography-timeline-export.mts \
+            --movie=opening \
+            --plan=/tmp/palmier-binding/opening-plan.json \
+            --xml=/tmp/palmier-binding/opening.fcpxml \
+            --output=/tmp/palmier-binding/receipt.json \
+            --write
+
+      - name: CURRENT receipt is SHA-bound into DaVinci recovery
+        working-directory: motion-studio
+        run: |
+          node --no-warnings scripts/apply-wedding-palmier-timeline-production-handoff.mts \
+            --movie=opening \
+            --recovery=/tmp/palmier-binding/recovery.json \
+            --receipt=/tmp/palmier-binding/receipt.json > /tmp/apply.log
+          grep -q 'palmierTimelineProductionHandoff=CURRENT' /tmp/apply.log
+          node - <<'NODE'
+          const fs = require('fs');
+          const crypto = require('crypto');
+          const recovery = JSON.parse(fs.readFileSync('/tmp/palmier-binding/recovery.json', 'utf8'));
+          const sha = (p) => crypto.createHash('sha256').update(fs.readFileSync(p)).digest('hex');
+          const bound = recovery.palmierTimelineExport;
+          if (bound.authority !== 'SHA_BOUND_PALMIER_TIMELINE_EXPORT_HANDOFF') throw new Error('authority mismatch');
+          if (bound.state !== 'CURRENT' || bound.movieId !== 'opening') throw new Error('binding state mismatch');
+          if (bound.receipt.sha256 !== sha('/tmp/palmier-binding/receipt.json')) throw new Error('receipt SHA mismatch');
+          if (bound.assemblyPlan.sha256 !== sha('/tmp/palmier-binding/opening-plan.json')) throw new Error('assembly-plan SHA mismatch');
+          if (bound.palmierFcpxml.sha256 !== sha('/tmp/palmier-binding/opening.fcpxml')) throw new Error('FCPXML SHA mismatch');
+          if (bound.palmierGuiActual !== 'NOT_RUN' || bound.remotionStudioGuiActual !== 'NOT_RUN' || bound.macDaVinciGuiActual !== 'NOT_RUN') throw new Error('GUI evidence boundary changed');
+          if (bound.productionReady !== false) throw new Error('binding must not promote production readiness');
+          NODE
+          node --no-warnings scripts/verify-wedding-palmier-timeline-production-handoff.mts \
+            --movie=opening \
+            --recovery=/tmp/palmier-binding/recovery.json \
+            --receipt=/tmp/palmier-binding/receipt.json > /tmp/verify.log
+          grep -q 'palmierTimelineProductionHandoff=CURRENT' /tmp/verify.log
+
+      - name: FCPXML drift invalidates both receipt currentness and recovery binding
+        working-directory: motion-studio
+        run: |
+          printf '\n<!-- post-binding drift -->\n' >> /tmp/palmier-binding/opening.fcpxml
+          if node --no-warnings scripts/verify-wedding-palmier-timeline-production-handoff.mts \
+            --movie=opening \
+            --recovery=/tmp/palmier-binding/recovery.json \
+            --receipt=/tmp/palmier-binding/receipt.json > /tmp/drift.log 2>&1; then
+            echo 'FCPXML drift must fail closed.'
+            exit 1
+          fi
+          grep -Eq 'PALMIER_TIMELINE_EXPORT_RECEIPT_NOT_CURRENT|PALMIER_FCPXML_SHA_DRIFT' /tmp/drift.log
+
+      - name: Canonical exporter applies and re-verifies Palmier binding
+        run: |
+          grep -q "apply-wedding-palmier-timeline-production-handoff.mts" motion-studio/scripts/export-wedding-production-handoff.mts
+          grep -q "verify-wedding-palmier-timeline-production-handoff.mts" motion-studio/scripts/export-wedding-production-handoff.mts
+          grep -q "Palmier GUI Actual remains NOT_RUN" motion-studio/scripts/export-wedding-production-handoff.mts
+          grep -q "PALMIER_TIMELINE_EXPORT_CURRENT != PALMIER_GUI_ACTUAL_PASS" motion-studio/scripts/apply-wedding-palmier-timeline-production-handoff.mts
+          ! grep -q "palmierGuiActual: 'PASS'" motion-studio/scripts/apply-wedding-palmier-timeline-production-handoff.mts
+          ! grep -q "macDaVinciGuiActual: 'PASS'" motion-studio/scripts/apply-wedding-palmier-timeline-production-handoff.mts
+          ! grep -q 'productionReady: true' motion-studio/scripts/apply-wedding-palmier-timeline-production-handoff.mts
