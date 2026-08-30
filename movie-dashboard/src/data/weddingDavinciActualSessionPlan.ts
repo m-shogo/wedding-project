@@ -4,6 +4,16 @@ import {weddingProjectRemotionIdentityPreflight} from "./weddingProjectRemotionI
 export const WEDDING_DAVINCI_ACTUAL_SESSION_PLAN_DASHBOARD_SCHEMA = "wedding-davinci-actual-session-plan-dashboard/v1" as const;
 
 type MovieId = "opening" | "profile";
+type ProjectRemotionIdentityPreflight = {
+  state: "CURRENT" | "NOT_APPLICABLE" | "INVALID";
+  current: boolean;
+  applicable: boolean;
+  command: string;
+  resolveSidecarSha256: string | null;
+  receiptSha256: string | null;
+  sourceBatchSha256: string | null;
+  error: string | null;
+};
 
 const manualChecklist = [
   "Source render readback SHA が recovery-bound expected SHA と一致することを確認",
@@ -35,7 +45,7 @@ export function buildWeddingDavinciActualSessionPlan() {
   const buildProject = (movieId: MovieId) => {
     const project = packet.projects[movieId];
     const projectMotionPreflight = packet.projectMotionPreflight[movieId];
-    const projectRemotionIdentityPreflight = weddingProjectRemotionIdentityPreflight[movieId];
+    const projectRemotionIdentityPreflight: ProjectRemotionIdentityPreflight = weddingProjectRemotionIdentityPreflight[movieId];
     const nextStage = project.nextGate?.stage ?? "PRODUCTION_READY";
     const actualRecorded = Boolean(project.actualEvidenceSha256);
     const finalApproved = Boolean(project.finalApprovalSha256);
