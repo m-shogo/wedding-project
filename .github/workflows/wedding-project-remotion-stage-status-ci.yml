@@ -9,6 +9,7 @@ on:
       - 'motion-studio/scripts/check-wedding-project-remotion-element-identity-receipt.mts'
       - 'motion-studio/scripts/verify-wedding-project-remotion-identity-handoff.mts'
       - 'motion-studio/scripts/verify-wedding-production-handoff-provenance.mts'
+      - 'motion-studio/scripts/check-wedding-palmier-typography-timeline-export-receipt.mts'
       - 'movie-dashboard/src/generated/weddingProjectRemotionStageStatus.ts'
       - 'movie-dashboard/src/components/WeddingProjectRemotionStageStatusCard.tsx'
       - 'movie-dashboard/src/components/MaskRevealSceneHandoffCard.tsx'
@@ -42,12 +43,14 @@ jobs:
           node - <<'NODE'
           const fs = require('fs');
           const report = JSON.parse(fs.readFileSync('/tmp/status.json', 'utf8'));
-          if (report.schemaVersion !== 'wedding-project-remotion-production-stage-status/v1') throw new Error('schema mismatch');
+          if (report.schemaVersion !== 'wedding-project-remotion-production-stage-status/v2') throw new Error('schema mismatch');
+          if (report.authority !== 'READ_ONLY_CANONICAL_PROJECT_REMOTION_STATUS_WITH_PALMIER_HANDOFF_ROUTE') throw new Error('authority mismatch');
           if (report.state !== 'NOT_STAGED') throw new Error(`expected NOT_STAGED, got ${report.state}`);
           if (report.blocker !== 'CANONICAL_PROJECT_REMOTION_STAGE_MISSING') throw new Error('missing blocker mismatch');
           if (report.checks.stageVerification !== 'NOT_RUN') throw new Error('fresh clone must not claim stage verification');
           if (report.checks.handoffVerification !== 'NOT_RUN') throw new Error('fresh clone must not claim handoff verification');
           if (report.next.kind !== 'EXPORT_AND_STAGE_MOTION_ZUKAN_INPUTS') throw new Error('fresh clone next action mismatch');
+          if (report.evidenceBoundary.palmierGuiActual !== 'NOT_RUN_UNLESS_HUMAN_EXECUTED') throw new Error('Palmier Actual boundary changed');
           if (report.evidenceBoundary.macRemotionStudioGuiActual !== 'NOT_RUN_UNLESS_HUMAN_EXECUTED') throw new Error('Studio Actual boundary changed');
           if (report.evidenceBoundary.macDavinciResolveGuiActual !== 'NOT_RUN_UNLESS_HUMAN_EXECUTED') throw new Error('DaVinci Actual boundary changed');
           if (report.evidenceBoundary.productionReadyPromotedByThisCheck !== false) throw new Error('status checker must not promote productionReady');
@@ -65,6 +68,13 @@ jobs:
           grep -q 'GUI Actual' movie-dashboard/src/components/WeddingProjectRemotionStageStatusCard.tsx
           ! grep -q 'productionReady=YES' movie-dashboard/src/components/WeddingProjectRemotionStageStatusCard.tsx
 
+      - name: STAGED_CURRENT route requires Palmier assembly and real FCPXML verification before handoff
+        run: |
+          grep -q 'BUILD_AND_VERIFY_REAL_PALMIER_TIMELINE_BEFORE_HANDOFF' motion-studio/scripts/check-wedding-project-remotion-production-stage-status.mts
+          grep -q 'build-wedding-palmier-typography-assembly-plan.mts' motion-studio/scripts/check-wedding-project-remotion-production-stage-status.mts
+          grep -q 'STAGED_CURRENT_REQUIRES_PALMIER_ASSEMBLY_AND_FCPXML_VERIFICATION_BEFORE_HANDOFF' motion-studio/scripts/check-wedding-project-remotion-production-stage-status.mts
+          ! grep -A4 "state === 'STAGED_CURRENT'" motion-studio/scripts/check-wedding-project-remotion-production-stage-status.mts | grep -q -- '--phase=handoff'
+
       - name: Strict mode fails closed when canonical stage is missing
         working-directory: motion-studio
         run: |
@@ -73,6 +83,7 @@ jobs:
             exit 1
           fi
           grep -q 'projectRemotionProductionStageStatus=NOT_STAGED' /tmp/strict.log
+          grep -q 'palmierGuiActual=NOT_RUN_UNLESS_HUMAN_EXECUTED' /tmp/strict.log
           grep -q 'macRemotionStudioGuiActual=NOT_RUN_UNLESS_HUMAN_EXECUTED' /tmp/strict.log
           grep -q 'macDaVinciGuiActual=NOT_RUN_UNLESS_HUMAN_EXECUTED' /tmp/strict.log
 
@@ -98,6 +109,7 @@ jobs:
       - name: Checker source remains read-only and evidence-safe
         run: |
           ! grep -Eq 'copyFileSync|writeFileSync|renameSync|mkdirSync|rmSync|unlinkSync' motion-studio/scripts/check-wedding-project-remotion-production-stage-status.mts
+          ! grep -q "palmierGuiActual: 'PASS'" motion-studio/scripts/check-wedding-project-remotion-production-stage-status.mts
           ! grep -q "macRemotionStudioGuiActual: 'PASS'" motion-studio/scripts/check-wedding-project-remotion-production-stage-status.mts
           ! grep -q "macDavinciResolveGuiActual: 'PASS'" motion-studio/scripts/check-wedding-project-remotion-production-stage-status.mts
           ! grep -q 'productionReadyPromotedByThisCheck: true' motion-studio/scripts/check-wedding-project-remotion-production-stage-status.mts
