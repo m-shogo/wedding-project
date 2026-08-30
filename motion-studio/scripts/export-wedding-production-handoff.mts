@@ -162,9 +162,17 @@ if (remotionAttachment.status !== 0) {
   console.error(`Wedding production handoff blocked: ${movieArg} Remotion Element gate sidecar attachment is missing or stale.`);
   process.exit(remotionAttachment.status ?? 1);
 }
-if (!existsSync(join(root, config.recoveryMarkdown))) {
+const recoveryMarkdownPath = join(root, config.recoveryMarkdown);
+if (!existsSync(recoveryMarkdownPath)) {
   console.error(`Wedding production handoff blocked: ${config.recoveryMarkdown} missing after Remotion Element recovery attachment.`);
   process.exit(1);
+}
+
+const provenanceMarkdown = run('scripts/append-wedding-project-motion-provenance-recovery-markdown.mts', [`--movie=${movieArg}`]);
+forward(provenanceMarkdown);
+if (provenanceMarkdown.status !== 0) {
+  console.error(`Wedding production handoff blocked: ${movieArg} Project Motion provenance could not be surfaced in recovery Markdown.`);
+  process.exit(provenanceMarkdown.status ?? 1);
 }
 
 console.log(`Wedding production handoff complete: ${movieArg}`);
