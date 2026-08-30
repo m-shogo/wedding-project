@@ -8,6 +8,10 @@
     "assetIndex": "docs/rurubu-v10/RURUBU-V10-ASSET-INDEX.md",
     "designTokens": "docs/rurubu-v10/rurubu-v10-design-tokens.json",
     "operatingPrompt": "docs/rurubu-v10/RURUBU-V10-FIGMA-AI-OPERATING-PROMPT.md",
+    "specFirstPlacementPolicy": "docs/rurubu-v10/RURUBU-V10-SPEC-FIRST-PLACEMENT-POLICY.md",
+    "approvedUserReferenceDeconstruction": "docs/rurubu-v10/RURUBU-V10-USER-REFERENCE-DECONSTRUCTION-2026-08-30.md",
+    "detailedPageSpecs": "docs/rurubu-v10/RURUBU-V10-PAGE-SPECS-DETAILED.md",
+    "specFirstExecutionPrompt": "docs/rurubu-v10/RURUBU-V10-SPEC-FIRST-FIGMA-EXECUTION-PROMPT.md",
     "referenceFingerprintAntiAiGate": "docs/rurubu-v10/RURUBU-V10-REFERENCE-FINGERPRINT-ANTI-AI-GATE.md",
     "referenceFingerprintMachine": "docs/rurubu-v10/rurubu-v10-reference-fingerprint.json",
     "aiLookLinterVisualDiff": "docs/rurubu-v10/RURUBU-V10-AI-LOOK-LINTER-VISUAL-DIFF.md",
@@ -141,6 +145,7 @@
     }
   },
   "workPasses": [
+    "compile page specification in language before structural Figma mutation",
     "all 8 pages to 60–80% with existing organized assets",
     "run structural linter and reference visual diff after meaningful batches; fix largest structural distance first",
     "editorial and Japanese typography refinement",
@@ -152,6 +157,10 @@
   ],
   "hardRules": [
     "live Figma page role wins over stale page-number assumptions",
+    "before structural Figma work, resolve page job, reading order, geometry, part roles, overlap/rotation plan, native-vs-raster boundary, replacement contract and page-specific QA in language",
+    "Figma is primarily an editable assembly, placement, replacement and QA surface; do not ask it to invent the entire page grammar from a vague style request",
+    "a whole-page generated image may be reference/previsual/underlay/visual-diff target but must not become the sole production master when the page contains changeable authoritative text or replaceable photos",
+    "if hierarchy is weak, fix geometry/image weight/scale contrast before adding decoration",
     "organized Drive library is the first asset-search surface",
     "inspect actual pixels before final asset selection",
     "DUMMY is layout-only",
