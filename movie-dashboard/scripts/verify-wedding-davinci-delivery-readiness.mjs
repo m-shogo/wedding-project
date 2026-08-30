@@ -27,8 +27,19 @@ for (const [name, project] of Object.entries({opening: report.opening, profile: 
   if (!('davinciActualEvidenceSha256' in project)) fail(`${name} Actual evidence SHA field missing`);
   if (!('finalApprovalSha256' in project)) fail(`${name} final approval SHA field missing`);
   if (!project.nextGate) fail(`${name} next gate missing`);
+  if (!project.projectMotion || !['CURRENT', 'NOT_APPLICABLE', 'INVALID'].includes(project.projectMotion.state)) {
+    fail(`${name} Project Motion provenance preflight state missing`);
+  }
+  if (project.projectMotion.state === 'INVALID') {
+    if (project.ready) fail(`${name} must not be ready with invalid Project Motion provenance`);
+    if (project.nextGate !== 'REVALIDATE_PROJECT_MOTION_PROVENANCE') fail(`${name} must route to Project Motion revalidation`);
+    if (!project.projectMotion.command?.includes(`--movie=${name}`)) fail(`${name} Project Motion recovery command missing exact movie`);
+  }
   if (project.ready && project.auditState !== 'CURRENT_PASS') fail(`${name} ready without CURRENT_PASS audit`);
   if (project.ready && !project.finalApprovalCurrent) fail(`${name} ready without current final approval`);
+}
+if (!report.guardrails.includes('PROJECT_MOTION_PROVENANCE_CURRENT_OR_NOT_APPLICABLE_REQUIRED')) {
+  fail('Wedding readiness must retain Project Motion provenance guardrail');
 }
 
 const dataSource = readFileSync(resolve(dashboardRoot, 'src/data/weddingDavinciDeliveryReadiness.ts'), 'utf8');
@@ -91,4 +102,4 @@ for (const token of [
 const zukanSource = readFileSync(resolve(dashboardRoot, 'src/pages/VisualMotionLibrary.tsx'), 'utf8');
 if (!zukanSource.includes('WeddingDavinciDeliveryReadinessCard')) fail('Motion Zukan must surface wedding-wide readiness');
 
-console.log(`Wedding DaVinci readiness + operator packet download surface OK: state=${report.state} opening=${report.opening.nextGate} profile=${report.profile.nextGate}`);
+console.log(`Wedding DaVinci readiness + Project Motion provenance + operator packet download surface OK: state=${report.state} opening=${report.opening.nextGate} profile=${report.profile.nextGate}`);
