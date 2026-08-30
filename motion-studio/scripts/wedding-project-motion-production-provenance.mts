@@ -32,10 +32,44 @@ export interface WeddingProjectMotionProductionProvenanceV1 {
   guardrails: string[];
 }
 
+export interface WeddingProjectMotionAssemblyBindingV1 {
+  schemaVersion: 'wedding-project-motion-assembly-binding/v1';
+  authority: 'PROJECT_MOTION_PROVENANCE_DERIVED_BINDING';
+  projectId: WeddingMovieId;
+  sourceExportSha256: string;
+  receiptArtifactSha256: string;
+  currentnessArtifactSha256: string;
+  currentnessState: 'CURRENT';
+  palmierCurrent: true;
+  davinciHandoffCurrent: true;
+  remotionStudioGuiActual: 'NOT_RUN';
+  macDaVinciGuiActual: 'NOT_RUN';
+  productionReady: false;
+}
+
 const shaFile = (path: string) => createHash('sha256').update(readFileSync(path)).digest('hex');
 
 function readJson(path: string) {
   return JSON.parse(readFileSync(path, 'utf8')) as any;
+}
+
+export function buildWeddingProjectMotionAssemblyBinding(
+  provenance: WeddingProjectMotionProductionProvenanceV1,
+): WeddingProjectMotionAssemblyBindingV1 {
+  return {
+    schemaVersion: 'wedding-project-motion-assembly-binding/v1',
+    authority: 'PROJECT_MOTION_PROVENANCE_DERIVED_BINDING',
+    projectId: provenance.projectId,
+    sourceExportSha256: provenance.sourceExport.sha256,
+    receiptArtifactSha256: provenance.receiptArtifact.sha256,
+    currentnessArtifactSha256: provenance.currentnessArtifact.sha256,
+    currentnessState: 'CURRENT',
+    palmierCurrent: true,
+    davinciHandoffCurrent: true,
+    remotionStudioGuiActual: 'NOT_RUN',
+    macDaVinciGuiActual: 'NOT_RUN',
+    productionReady: false,
+  };
 }
 
 export function buildWeddingProjectMotionProductionProvenance(
@@ -104,6 +138,8 @@ export function buildWeddingProjectMotionProductionProvenance(
       'PROVENANCE_SOURCE_SHA256_MUST_MATCH_CURRENT_PROJECT_MOTION_EXPORT',
       'PROVENANCE_RECEIPT_SHA256_BINDS_THE_CANONICAL_IMPORT_RECEIPT',
       'PROVENANCE_CURRENTNESS_SHA256_BINDS_THE_CURRENTNESS_ARTIFACT',
+      'PALMIER_PROJECT_MOTION_BINDING_MUST_MATCH_TOP_LEVEL_PROVENANCE',
+      'DAVINCI_EXPECTED_PROJECT_MOTION_BINDING_MUST_MATCH_PALMIER_BINDING',
       'PROJECT_MOTION_PROVENANCE_ATTACHED != PALMIER_APPLICATION_PERFORMED',
       'PROJECT_MOTION_PROVENANCE_ATTACHED != DAVINCI_APPLICATION_PERFORMED',
       'PROJECT_MOTION_PROVENANCE_ATTACHED != REMOTION_STUDIO_GUI_ACTUAL',
@@ -122,9 +158,27 @@ export function attachWeddingProjectMotionProductionProvenance(
   }
   const artifact = readJson(absoluteArtifactPath);
   const provenance = buildWeddingProjectMotionProductionProvenance(movie);
-  writeCanonicalJsonArtifact(absoluteArtifactPath, {
+  const assemblyBinding = buildWeddingProjectMotionAssemblyBinding(provenance);
+
+  const nextArtifact: any = {
     ...artifact,
     projectMotionProvenance: provenance,
-  });
+  };
+
+  // Production bundles own both Palmier and DaVinci handoff surfaces. Bind the
+  // exact same current Project Motion provenance into both so a later DaVinci
+  // transition cannot silently consume a different Motion Zukan/Scene revision.
+  if (artifact?.palmier && artifact?.davinci) {
+    nextArtifact.palmier = {
+      ...artifact.palmier,
+      projectMotionBinding: assemblyBinding,
+    };
+    nextArtifact.davinci = {
+      ...artifact.davinci,
+      expectedProjectMotionBinding: assemblyBinding,
+    };
+  }
+
+  writeCanonicalJsonArtifact(absoluteArtifactPath, nextArtifact);
   return provenance;
 }
