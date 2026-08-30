@@ -1,9 +1,7 @@
 import {useMemo, useSyncExternalStore} from "react";
 import {Link} from "react-router-dom";
-import {
-  buildWeddingMovieProductionCriticalPath,
-  buildWeddingMovieProductionCriticalPathJson,
-} from "../data/weddingMovieProductionCriticalPath";
+import {buildWeddingMovieProductionCriticalPath} from "../data/weddingMovieProductionCriticalPath";
+import {buildWeddingMovieProductionCriticalPathRuntimeSnapshotJson} from "../data/weddingMovieProductionCriticalPathRuntimeSnapshot";
 import {
   getWeddingDavinciGuiActualStartGateAuditSnapshot,
   subscribeWeddingDavinciGuiActualStartGateAudit,
@@ -104,11 +102,14 @@ function CriticalPathActionTargetView({target, compact = false}: {target: Critic
 
 export function WeddingMovieProductionCriticalPathCard({projectId}: {projectId: SceneProjectId}) {
   const report = useMemo(() => buildWeddingMovieProductionCriticalPath(), []);
-  const json = useMemo(() => buildWeddingMovieProductionCriticalPathJson(), []);
   const startGateAudits = useSyncExternalStore(
     subscribeWeddingDavinciGuiActualStartGateAudit,
     getWeddingDavinciGuiActualStartGateAuditSnapshot,
     getWeddingDavinciGuiActualStartGateAuditSnapshot,
+  );
+  const runtimeJson = useMemo(
+    () => buildWeddingMovieProductionCriticalPathRuntimeSnapshotJson(startGateAudits),
+    [startGateAudits],
   );
   if (projectId !== "opening" && projectId !== "profile") return null;
 
@@ -144,8 +145,8 @@ export function WeddingMovieProductionCriticalPathCard({projectId}: {projectId: 
             </div>
           ) : null}
         </div>
-        <button type="button" onClick={() => downloadText(json, "wedding-movie-production-critical-path.json")} className="border border-amber-300 dark:border-amber-700 px-2.5 py-1.5 text-[9px] font-semibold text-amber-700 dark:text-amber-300">
-          Critical pathを書き出す
+        <button type="button" onClick={() => downloadText(runtimeJson, "wedding-movie-production-critical-path-runtime.json")} className="border border-amber-300 dark:border-amber-700 px-2.5 py-1.5 text-[9px] font-semibold text-amber-700 dark:text-amber-300">
+          Runtime snapshotを書き出す
         </button>
       </div>
 
