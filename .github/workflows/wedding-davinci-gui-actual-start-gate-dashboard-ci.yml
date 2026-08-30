@@ -4,17 +4,29 @@ on:
   pull_request:
     paths:
       - "movie-dashboard/src/data/weddingDavinciGuiActualStartGateAudit.ts"
+      - "movie-dashboard/src/data/weddingDavinciActualSessionPlan.ts"
+      - "movie-dashboard/src/data/weddingProjectRemotionIdentityPreflight.generated.ts"
       - "movie-dashboard/src/components/WeddingDavinciGuiActualStartGateCard.tsx"
+      - "movie-dashboard/src/components/WeddingMovieProductionCriticalPathCard.tsx"
       - "movie-dashboard/src/pages/VisualMotionLibrary.tsx"
+      - "movie-dashboard/scripts/sync-wedding-project-remotion-identity-preflight.mjs"
       - "movie-dashboard/scripts/verify-wedding-davinci-gui-actual-start-gate.mjs"
+      - "movie-dashboard/scripts/verify-davinci-critical-path-start-gate.mjs"
+      - "motion-studio/scripts/wedding-davinci-actual-session-plan.mts"
       - ".github/workflows/wedding-davinci-gui-actual-start-gate-dashboard-ci.yml"
   push:
     branches: [main]
     paths:
       - "movie-dashboard/src/data/weddingDavinciGuiActualStartGateAudit.ts"
+      - "movie-dashboard/src/data/weddingDavinciActualSessionPlan.ts"
+      - "movie-dashboard/src/data/weddingProjectRemotionIdentityPreflight.generated.ts"
       - "movie-dashboard/src/components/WeddingDavinciGuiActualStartGateCard.tsx"
+      - "movie-dashboard/src/components/WeddingMovieProductionCriticalPathCard.tsx"
       - "movie-dashboard/src/pages/VisualMotionLibrary.tsx"
+      - "movie-dashboard/scripts/sync-wedding-project-remotion-identity-preflight.mjs"
       - "movie-dashboard/scripts/verify-wedding-davinci-gui-actual-start-gate.mjs"
+      - "movie-dashboard/scripts/verify-davinci-critical-path-start-gate.mjs"
+      - "motion-studio/scripts/wedding-davinci-actual-session-plan.mts"
       - ".github/workflows/wedding-davinci-gui-actual-start-gate-dashboard-ci.yml"
 
 permissions:
@@ -23,10 +35,7 @@ permissions:
 jobs:
   validate:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
-    defaults:
-      run:
-        working-directory: movie-dashboard
+    timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -37,10 +46,24 @@ jobs:
         with:
           node-version: 22
           cache: pnpm
-          cache-dependency-path: movie-dashboard/pnpm-lock.yaml
-      - name: Install dependencies
+          cache-dependency-path: |
+            movie-dashboard/pnpm-lock.yaml
+            motion-studio/pnpm-lock.yaml
+      - name: Install Motion Studio dependencies
+        working-directory: motion-studio
         run: pnpm install --frozen-lockfile
+      - name: Install Motion Zukan dependencies
+        working-directory: movie-dashboard
+        run: pnpm install --frozen-lockfile
+      - name: Verify generated Project Remotion identity preflight currentness
+        working-directory: movie-dashboard
+        run: node scripts/sync-wedding-project-remotion-identity-preflight.mjs
       - name: Verify Motion Zukan GUI Actual start-gate boundary
+        working-directory: movie-dashboard
         run: node scripts/verify-wedding-davinci-gui-actual-start-gate.mjs
+      - name: Verify critical-path Start Gate sharing
+        working-directory: movie-dashboard
+        run: node scripts/verify-davinci-critical-path-start-gate.mjs
       - name: Build Motion Zukan
+        working-directory: movie-dashboard
         run: pnpm build
