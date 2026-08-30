@@ -74,10 +74,23 @@ function validProjectMotionAssignments(value: unknown): value is WeddingProjectM
       Boolean(item) &&
       typeof item.patternId === "string" &&
       validProjectId(item.projectId) &&
+      (item.sceneId === undefined || item.sceneId === null || typeof item.sceneId === "string") &&
       item.assignedBy === "HUMAN_MASTER" &&
-      typeof item.assignedAt === "string",
+      typeof item.assignedAt === "string" &&
+      (item.sceneAssignedAt === undefined || item.sceneAssignedAt === null || typeof item.sceneAssignedAt === "string"),
     )
   );
+}
+
+function normalizeProjectMotionAssignments(state: WeddingProjectMotionAssignmentState): WeddingProjectMotionAssignmentState {
+  return {
+    ...state,
+    assignments: state.assignments.map((item) => ({
+      ...item,
+      sceneId: typeof item.sceneId === "string" && item.sceneId.length > 0 ? item.sceneId : null,
+      sceneAssignedAt: typeof item.sceneAssignedAt === "string" ? item.sceneAssignedAt : null,
+    })),
+  };
 }
 
 function projectStateExists(handoff: Pick<MotionZukanWorkspaceHandoff, "projectId" | "composer">) {
@@ -98,7 +111,7 @@ export function buildMotionZukanWorkspaceHandoff(
     exportedAt,
     composer: structuredClone(composer),
     workspace: structuredClone(workspace),
-    projectMotionAssignments: structuredClone(projectMotionAssignments),
+    projectMotionAssignments: structuredClone(normalizeProjectMotionAssignments(projectMotionAssignments)),
     evidenceBoundary: {
       externalProductionGateEvaluated: false,
       remotionStudioGuiActual: "NOT_RUN",
@@ -141,5 +154,11 @@ export function parseMotionZukanWorkspaceHandoff(raw: string): MotionZukanWorksp
   ) {
     return { ok: false, error: "Production/GUI Actual authority boundaryが不正です" };
   }
-  return { ok: true, handoff: structuredClone(handoff as MotionZukanWorkspaceHandoff) };
+  return {
+    ok: true,
+    handoff: {
+      ...(structuredClone(handoff) as MotionZukanWorkspaceHandoff),
+      projectMotionAssignments: normalizeProjectMotionAssignments(handoff.projectMotionAssignments),
+    },
+  };
 }
