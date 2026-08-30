@@ -10,6 +10,7 @@ on:
       - 'motion-studio/scripts/wedding-project-motion-import-currentness.mts'
       - 'motion-studio/scripts/wedding-project-motion-production-provenance.mts'
       - 'motion-studio/scripts/append-wedding-project-motion-provenance-recovery-markdown.mts'
+      - 'motion-studio/scripts/verify-wedding-project-motion-production-provenance.mts'
       - 'motion-studio/scripts/export-wedding-production-handoff.mts'
       - 'motion-studio/scripts/check-wedding-project-motion-import-bridge.mts'
       - 'motion-studio/scripts/check-wedding-project-motion-recovery-gate.mts'
@@ -18,6 +19,7 @@ on:
       - 'motion-studio/scripts/check-wedding-project-motion-canonical-artifacts.mts'
       - 'motion-studio/scripts/check-wedding-project-motion-production-provenance.mts'
       - 'motion-studio/scripts/check-wedding-project-motion-provenance-recovery-markdown.mts'
+      - 'motion-studio/scripts/check-wedding-project-motion-production-provenance-consistency.mts'
       - 'motion-studio/scripts/check-wedding-production-handoff-project-motion-gate.mts'
       - '.github/workflows/wedding-project-motion-import-bridge-ci.yml'
   workflow_dispatch:
@@ -63,6 +65,9 @@ jobs:
       - name: Verify project Motion recovery Markdown provenance
         working-directory: motion-studio
         run: node --no-warnings scripts/check-wedding-project-motion-provenance-recovery-markdown.mts
+      - name: Verify project Motion provenance consistency
+        working-directory: motion-studio
+        run: node --no-warnings scripts/check-wedding-project-motion-production-provenance-consistency.mts
       - name: Verify production handoff blocks stale or non-actionable Project Motion receipts
         working-directory: motion-studio
         run: node --no-warnings scripts/check-wedding-production-handoff-project-motion-gate.mts
