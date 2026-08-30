@@ -98,6 +98,7 @@ const inspectEvidence = (movieId: MovieId) => {
 
 const manualChecklist = [
   'Confirm the source render readback SHA matches the recovery-bound expected SHA before editing.',
+  'Confirm the Resolve Project Motion handoff sidecar path/SHA shown in recovery Markdown matches the canonical preflight result before editing.',
   'Record DaVinci Resolve version, project name, timeline name, timeline insertion, duration and FPS.',
   'Review color, audio, title-safe/framing, playback at 1x, and playback at half speed in the real Mac GUI.',
   'Export from DaVinci and record path/SHA plus duration, dimensions, FPS, audio presence, and watched-with-sound verdicts.',
@@ -129,30 +130,36 @@ const buildProject = (movieId: MovieId) => {
       {
         order: 1,
         kind: 'SAFE_PREP',
-        command: `node --no-warnings scripts/export-wedding-davinci-production-recovery.mts --movie=${movieId}`,
-        purpose: 'Regenerate the recovery sidecar from the current production bundle and current Human QA evidence. This does not run DaVinci.',
+        command: `node --no-warnings scripts/export-wedding-production-handoff.mts --movie=${movieId}`,
+        purpose: 'Regenerate the canonical production bundle, Project Motion provenance/Resolve sidecar when applicable, recovery JSON, and recovery Markdown. This does not run DaVinci.',
       },
       {
         order: 2,
+        kind: 'PROJECT_MOTION_PREFLIGHT',
+        command: `node --no-warnings scripts/verify-wedding-project-motion-production-provenance.mts --movie=${movieId}`,
+        purpose: 'Fail closed on stale/replaced Resolve Project Motion sidecars or Palmier binding drift before Actual evidence initialization. NOT_APPLICABLE is allowed when no Project Motion provenance is in use.',
+      },
+      {
+        order: 3,
         kind: 'EVIDENCE_INIT',
         command: `node --no-warnings scripts/${prefix}-v1-davinci-finishing-evidence.mts --init`,
         purpose: 'Create an Actual evidence template bound to the current recovery SHA. Every GUI verdict starts at NOT_RUN.',
       },
       {
-        order: 3,
+        order: 4,
         kind: 'MAC_GUI_ACTUAL',
         command: null,
         purpose: 'Open DaVinci Resolve on the Mac and perform the manual checklist. CI/automation must not mark these verdicts PASS.',
         checklist: manualChecklist,
       },
       {
-        order: 4,
+        order: 5,
         kind: 'STRICT_VERIFY',
         command: `node --no-warnings scripts/${prefix}-v1-davinci-finishing-evidence.mts --strict`,
         purpose: 'Fail closed unless the evidence is current, recovery-bound, and every required Actual verdict is PASS.',
       },
       {
-        order: 5,
+        order: 6,
         kind: 'HUMAN_FINAL_APPROVAL',
         command: `node --no-warnings scripts/${prefix}-v1-final-delivery-approval.mts --init`,
         purpose: 'Initialize final Human approval only after strict DaVinci Actual verification succeeds; approval remains a separate Human action.',
@@ -185,6 +192,8 @@ const planBody = {
     'SESSION_PLAN_EXISTS != GUI_ACTUAL_EXECUTED',
     'EVIDENCE_TEMPLATE_EXISTS != GUI_ACTUAL_PASS',
     'RECOVERY_CURRENT != GUI_ACTUAL_PASS',
+    'PROJECT_MOTION_PREFLIGHT_CURRENT != GUI_ACTUAL_PASS',
+    'PROJECT_MOTION_PREFLIGHT_MUST_RUN_BEFORE_EVIDENCE_INIT',
     'CI_MUST_NOT_PROMOTE_MAC_GUI_ACTUAL',
     'FINAL_HUMAN_APPROVAL_REQUIRES_STRICT_CURRENT_ACTUAL_EVIDENCE',
   ],
