@@ -3,6 +3,7 @@ import {
   type WeddingProductionRecovery,
 } from './resolveHandoff.schema.ts';
 import {assertProductionRecoveryActionTargets} from './productionRecoveryActionContract.ts';
+import type {WeddingProjectMotionAssemblyInputV1} from './weddingProjectMotionImport.ts';
 
 export type WeddingMovieId = 'opening' | 'profile';
 
@@ -31,8 +32,55 @@ const config = {
   },
 } as const;
 
-export function buildWeddingDavinciProductionRecovery(movieId: WeddingMovieId): WeddingProductionRecovery {
+export function buildWeddingDavinciProductionRecovery(
+  movieId: WeddingMovieId,
+  projectMotionInput?: WeddingProjectMotionAssemblyInputV1,
+): WeddingProductionRecovery {
   const movie = config[movieId];
+
+  if (projectMotionInput && projectMotionInput.projectId !== movieId) {
+    throw new Error(`PROJECT_MOTION_RECOVERY_PROJECT_MISMATCH:${projectMotionInput.projectId}:${movieId}`);
+  }
+
+  if (projectMotionInput && !projectMotionInput.assemblyReferenceReady) {
+    const recovery = weddingProductionRecoverySchema.parse({
+      authority: 'MOTION_STUDIO_DAVINCI_PRODUCTION_RECOVERY',
+      movieId,
+      productionReady: false,
+      stage: 'projectMotionAssembly',
+      artifactPath: movie.artifactPath,
+      blockerCodes: [...projectMotionInput.blockerCodes],
+      blockerActions: projectMotionInput.blockerActions.map((action) => ({...action})),
+      canonicalRecovery: [
+        'Resolve all Human project Motion assignment, Scene reference, implementation verification, and preview verification blockers in Motion Zukan / Scene Composer.',
+        'Export the current project Motion handoff again and re-validate it through the Motion Studio project Motion import bridge.',
+        'Do not initialize or perform Mac DaVinci Actual while project Motion assembly references remain blocked.',
+      ],
+      bridge: {
+        state: 'PALMIER_NOT_CURRENT',
+        palmierCurrent: false,
+        davinciHandoffCurrent: false,
+        macDaVinciActualVerified: false,
+        finalDeliveryApproved: false,
+        palmierContractVersion: movie.palmierContractVersion,
+        davinciContractVersion: movie.davinciContractVersion,
+      },
+      actual: {
+        state: 'NOT_RUN',
+        evidencePath: movie.evidencePath,
+        commands: {...movie.commands},
+      },
+      guardrails: [
+        ...projectMotionInput.guardrails,
+        'PROJECT_MOTION_ASSEMBLY_BLOCKED => MAC_DAVINCI_ACTUAL_COMMANDS_NOT_ACTIONABLE',
+        'PROJECT_MOTION_IMPORT_BLOCKERS_MUST_CLEAR_BEFORE_PALMIER_DAVINCI_RECOVERY',
+        'MAC_DAVINCI_ACTUAL_REMAINS_NOT_RUN_UNTIL_GUI_EVIDENCE_IS_CURRENT',
+      ],
+    });
+    assertProductionRecoveryActionTargets(recovery.blockerActions, `${movieId} project Motion recovery`);
+    return recovery;
+  }
+
   const recovery = weddingProductionRecoverySchema.parse({
     authority: 'MOTION_STUDIO_DAVINCI_PRODUCTION_RECOVERY',
     movieId,
@@ -90,6 +138,7 @@ export function buildWeddingDavinciProductionRecovery(movieId: WeddingMovieId): 
       commands: {...movie.commands},
     },
     guardrails: [
+      ...(projectMotionInput ? projectMotionInput.guardrails : []),
       'PRODUCTION_BUNDLE_EXPORTED != MAC_DAVINCI_ACTUAL_VERIFIED',
       'DAVINCI_RECOVERY_EXPORTED != RECOVERY_EXECUTED',
       'RECOVERY_ACTION_KIND_REQUIRES_MATCHING_TARGET',
