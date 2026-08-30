@@ -2,7 +2,7 @@ import {buildWeddingDavinciOperatorPacket} from "./weddingDavinciFinalDeliveryPr
 import {weddingProjectRemotionIdentityPreflight} from "./weddingProjectRemotionIdentityPreflight.generated";
 import {weddingProjectRemotionStageStatus} from "../generated/weddingProjectRemotionStageStatus";
 
-export const WEDDING_DAVINCI_ACTUAL_SESSION_PLAN_DASHBOARD_SCHEMA = "wedding-davinci-actual-session-plan-dashboard/v2" as const;
+export const WEDDING_DAVINCI_ACTUAL_SESSION_PLAN_DASHBOARD_SCHEMA = "wedding-davinci-actual-session-plan-dashboard/v1" as const;
 
 type MovieId = "opening" | "profile";
 type ProjectRemotionIdentityPreflight = {
@@ -15,7 +15,12 @@ type ProjectRemotionIdentityPreflight = {
   sourceBatchSha256: string | null;
   error: string | null;
 };
-
+type PalmierTimelineSnapshot = {
+  state: "MISSING" | "CURRENT" | "STALE" | "INVALID";
+  detail: string | null;
+  receiptSha256: string | null;
+  source: {assemblyPlanSha256: string | null; palmierFcpxmlSha256: string | null};
+};
 type PalmierTimelinePreflight = {
   state: "CURRENT" | "NOT_APPLICABLE" | "INVALID";
   current: boolean;
@@ -37,55 +42,22 @@ const manualChecklist = [
   "全GUI Actual verdictがPASSで reviewer / reviewedAt を記録した後だけ review.overall=PASS にする",
 ] as const;
 
-const buildPalmierTimelinePreflight = (
-  movieId: MovieId,
-  projectRemotionApplicable: boolean,
-): PalmierTimelinePreflight => {
-  const timeline = weddingProjectRemotionStageStatus[movieId].palmierTimelineExport;
+const buildPalmierTimelinePreflight = (movieId: MovieId, projectRemotionApplicable: boolean): PalmierTimelinePreflight => {
+  const timeline = weddingProjectRemotionStageStatus[movieId].palmierTimelineExport as PalmierTimelineSnapshot;
   const applicable = projectRemotionApplicable || timeline.state !== "MISSING";
   const command = `node --no-warnings scripts/check-wedding-palmier-typography-timeline-export-receipt.mts --movie=${movieId} --strict`;
-  if (!applicable) {
-    return {
-      state: "NOT_APPLICABLE",
-      current: false,
-      applicable: false,
-      command,
-      receiptSha256: null,
-      assemblyPlanSha256: null,
-      palmierFcpxmlSha256: null,
-      error: null,
-    };
-  }
-  if (timeline.state === "CURRENT") {
-    return {
-      state: "CURRENT",
-      current: true,
-      applicable: true,
-      command,
-      receiptSha256: timeline.receiptSha256,
-      assemblyPlanSha256: timeline.source.assemblyPlanSha256,
-      palmierFcpxmlSha256: timeline.source.palmierFcpxmlSha256,
-      error: null,
-    };
-  }
-  return {
-    state: "INVALID",
-    current: false,
-    applicable: true,
-    command,
-    receiptSha256: null,
-    assemblyPlanSha256: null,
-    palmierFcpxmlSha256: null,
-    error: timeline.detail ?? `PALMIER_TIMELINE_${timeline.state}`,
+  if (!applicable) return {state: "NOT_APPLICABLE", current: false, applicable: false, command, receiptSha256: null, assemblyPlanSha256: null, palmierFcpxmlSha256: null, error: null};
+  if (timeline.state === "CURRENT") return {
+    state: "CURRENT", current: true, applicable: true, command,
+    receiptSha256: timeline.receiptSha256,
+    assemblyPlanSha256: timeline.source.assemblyPlanSha256,
+    palmierFcpxmlSha256: timeline.source.palmierFcpxmlSha256,
+    error: null,
   };
+  return {state: "INVALID", current: false, applicable: true, command, receiptSha256: null, assemblyPlanSha256: null, palmierFcpxmlSha256: null, error: timeline.detail ?? `PALMIER_TIMELINE_${timeline.state}`};
 };
 
-const buildActions = (
-  movieId: MovieId,
-  projectMotionCommand: string,
-  projectRemotionIdentityCommand: string,
-  palmierTimelineCommand: string,
-) => {
+const buildActions = (movieId: MovieId, projectMotionCommand: string, projectRemotionIdentityCommand: string, palmierTimelineCommand: string) => {
   const prefix = movieId === "opening" ? "opening" : "profile";
   return [
     {order: 1, kind: "SAFE_PREP" as const, label: "Recovery sidecarをCURRENT化", command: `cd motion-studio && node --no-warnings scripts/export-wedding-davinci-production-recovery.mts --movie=${movieId}`, humanOnly: false},
@@ -115,36 +87,11 @@ export function buildWeddingDavinciActualSessionPlan() {
         ? "BLOCKED_PROJECT_REMOTION_IDENTITY_PREFLIGHT"
         : palmierTimelinePreflight.state === "INVALID"
           ? "BLOCKED_PALMIER_TIMELINE_PREFLIGHT"
-          : finalApproved
-            ? "FINAL_APPROVAL_RECORDED"
-            : actualRecorded
-              ? "ACTUAL_EVIDENCE_RECORDED"
-              : project.recoverySha256
-                ? "READY_FOR_ACTUAL_WHEN_UPSTREAM_CURRENT"
-                : "BLOCKED_UPSTREAM";
-
+          : finalApproved ? "FINAL_APPROVAL_RECORDED" : actualRecorded ? "ACTUAL_EVIDENCE_RECORDED" : project.recoverySha256 ? "READY_FOR_ACTUAL_WHEN_UPSTREAM_CURRENT" : "BLOCKED_UPSTREAM";
     return {
-      movieId,
-      sessionState,
-      readinessState: project.state,
-      currentNextGate: nextStage,
-      projectMotionPreflight: {
-        state: projectMotionPreflight.state,
-        applicable: projectMotionPreflight.applicable,
-        current: projectMotionPreflight.current,
-        command: projectMotionPreflight.command,
-        error: projectMotionPreflight.error ?? null,
-      },
-      projectRemotionIdentityPreflight: {
-        state: projectRemotionIdentityPreflight.state,
-        applicable: projectRemotionIdentityPreflight.applicable,
-        current: projectRemotionIdentityPreflight.current,
-        command: projectRemotionIdentityPreflight.command,
-        resolveSidecarSha256: projectRemotionIdentityPreflight.resolveSidecarSha256,
-        receiptSha256: projectRemotionIdentityPreflight.receiptSha256,
-        sourceBatchSha256: projectRemotionIdentityPreflight.sourceBatchSha256,
-        error: projectRemotionIdentityPreflight.error ?? null,
-      },
+      movieId, sessionState, readinessState: project.state, currentNextGate: nextStage,
+      projectMotionPreflight: {state: projectMotionPreflight.state, applicable: projectMotionPreflight.applicable, current: projectMotionPreflight.current, command: projectMotionPreflight.command, error: projectMotionPreflight.error ?? null},
+      projectRemotionIdentityPreflight: {...projectRemotionIdentityPreflight, error: projectRemotionIdentityPreflight.error ?? null},
       palmierTimelinePreflight,
       recoverySha256: project.recoverySha256,
       actualEvidenceSha256: project.actualEvidenceSha256,
@@ -152,19 +99,12 @@ export function buildWeddingDavinciActualSessionPlan() {
       orderedActions: buildActions(movieId, projectMotionPreflight.command, projectRemotionIdentityPreflight.command, palmierTimelinePreflight.command),
     } as const;
   };
-
   return {
     schemaVersion: WEDDING_DAVINCI_ACTUAL_SESSION_PLAN_DASHBOARD_SCHEMA,
     authority: "MOTION_ZUKAN_DERIVED_MAC_DAVINCI_ACTUAL_SESSION_PLAN" as const,
     projectRemotionIdentitySnapshot: {schemaVersion: weddingProjectRemotionIdentityPreflight.schemaVersion, authority: weddingProjectRemotionIdentityPreflight.authority},
     palmierTimelineSnapshot: {schemaVersion: weddingProjectRemotionStageStatus.schemaVersion, authority: weddingProjectRemotionStageStatus.authority},
-    evidenceBoundary: {
-      palmierGuiActual: "NOT_PROMOTED_BY_DASHBOARD" as const,
-      macRemotionStudioGuiActual: "NOT_PROMOTED_BY_DASHBOARD" as const,
-      macDavinciResolveGuiActual: "NOT_PROMOTED_BY_DASHBOARD" as const,
-      humanFinalApproval: "NOT_PROMOTED_BY_DASHBOARD" as const,
-      productionReady: false as const,
-    },
+    evidenceBoundary: {palmierGuiActual: "NOT_PROMOTED_BY_DASHBOARD" as const, macRemotionStudioGuiActual: "NOT_PROMOTED_BY_DASHBOARD" as const, macDavinciResolveGuiActual: "NOT_PROMOTED_BY_DASHBOARD" as const, humanFinalApproval: "NOT_PROMOTED_BY_DASHBOARD" as const, productionReady: false as const},
     sessionOrder: ["opening", "profile"] as const,
     projects: {opening: buildProject("opening"), profile: buildProject("profile")},
     weddingFinalization: [
@@ -174,19 +114,10 @@ export function buildWeddingDavinciActualSessionPlan() {
     ],
     guardrails: [
       "DASHBOARD_PLAN_EXISTS != GUI_ACTUAL_EXECUTED",
-      "PROJECT_MOTION_PREFLIGHT_STATE_TRANSPORTED_WITH_SESSION_PLAN",
-      "PROJECT_MOTION_PREFLIGHT_INVALID => SESSION_PLAN_BLOCKED",
-      "PROJECT_MOTION_PREFLIGHT_CURRENT != GUI_ACTUAL_PASS",
-      "PROJECT_REMOTION_IDENTITY_PREFLIGHT_STATE_TRANSPORTED_WITH_SESSION_PLAN",
-      "PROJECT_REMOTION_IDENTITY_PREFLIGHT_INVALID => SESSION_PLAN_BLOCKED",
-      "PROJECT_REMOTION_IDENTITY_CURRENT != GUI_ACTUAL_PASS",
-      "PALMIER_TIMELINE_PREFLIGHT_STATE_TRANSPORTED_WITH_SESSION_PLAN",
-      "PALMIER_TIMELINE_PREFLIGHT_INVALID => SESSION_PLAN_BLOCKED",
-      "PALMIER_TIMELINE_CURRENT != PALMIER_GUI_ACTUAL_PROVEN",
-      "PALMIER_TIMELINE_CURRENT != GUI_ACTUAL_PASS",
-      "EVIDENCE_TEMPLATE_EXISTS != GUI_ACTUAL_PASS",
-      "CI_MUST_NOT_PROMOTE_MAC_GUI_ACTUAL",
-      "FINAL_HUMAN_APPROVAL_REQUIRES_STRICT_CURRENT_ACTUAL_EVIDENCE",
+      "PROJECT_MOTION_PREFLIGHT_STATE_TRANSPORTED_WITH_SESSION_PLAN", "PROJECT_MOTION_PREFLIGHT_INVALID => SESSION_PLAN_BLOCKED", "PROJECT_MOTION_PREFLIGHT_CURRENT != GUI_ACTUAL_PASS",
+      "PROJECT_REMOTION_IDENTITY_PREFLIGHT_STATE_TRANSPORTED_WITH_SESSION_PLAN", "PROJECT_REMOTION_IDENTITY_PREFLIGHT_INVALID => SESSION_PLAN_BLOCKED", "PROJECT_REMOTION_IDENTITY_CURRENT != GUI_ACTUAL_PASS",
+      "PALMIER_TIMELINE_PREFLIGHT_STATE_TRANSPORTED_WITH_SESSION_PLAN", "PALMIER_TIMELINE_PREFLIGHT_INVALID => SESSION_PLAN_BLOCKED", "PALMIER_TIMELINE_CURRENT != PALMIER_GUI_ACTUAL_PROVEN", "PALMIER_TIMELINE_CURRENT != GUI_ACTUAL_PASS",
+      "EVIDENCE_TEMPLATE_EXISTS != GUI_ACTUAL_PASS", "CI_MUST_NOT_PROMOTE_MAC_GUI_ACTUAL", "FINAL_HUMAN_APPROVAL_REQUIRES_STRICT_CURRENT_ACTUAL_EVIDENCE",
     ],
   } as const;
 }
