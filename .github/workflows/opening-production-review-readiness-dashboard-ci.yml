@@ -1,0 +1,73 @@
+name: Opening Production Review Readiness Dashboard CI
+
+on:
+  pull_request:
+    paths:
+      - "motion-studio/scripts/opening-v1-production-status.mts"
+      - "motion-studio/scripts/opening-v1-assembly-preflight.mts"
+      - "motion-studio/scripts/opening-v1-crop-review-evidence.mts"
+      - "motion-studio/scripts/opening-v1-preview-review.mts"
+      - "motion-studio/scripts/opening-v1-audio-listening-review.mts"
+      - "movie-dashboard/scripts/sync-opening-production-status.mjs"
+      - "movie-dashboard/src/data/openingProductionStatus.generated.ts"
+      - "movie-dashboard/src/components/OpeningProductionReviewReadinessPanel.tsx"
+      - "movie-dashboard/src/components/OpeningReviewNextActionPanel.tsx"
+      - "movie-dashboard/src/pages/MotionZukanWorkspaceHandoff.tsx"
+      - ".github/workflows/opening-production-review-readiness-dashboard-ci.yml"
+  push:
+    branches: [main]
+    paths:
+      - "motion-studio/scripts/opening-v1-production-status.mts"
+      - "motion-studio/scripts/opening-v1-assembly-preflight.mts"
+      - "motion-studio/scripts/opening-v1-crop-review-evidence.mts"
+      - "motion-studio/scripts/opening-v1-preview-review.mts"
+      - "motion-studio/scripts/opening-v1-audio-listening-review.mts"
+      - "movie-dashboard/scripts/sync-opening-production-status.mjs"
+      - "movie-dashboard/src/data/openingProductionStatus.generated.ts"
+      - "movie-dashboard/src/components/OpeningProductionReviewReadinessPanel.tsx"
+      - "movie-dashboard/src/components/OpeningReviewNextActionPanel.tsx"
+      - "movie-dashboard/src/pages/MotionZukanWorkspaceHandoff.tsx"
+      - ".github/workflows/opening-production-review-readiness-dashboard-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: movie-dashboard
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+          run_install: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: movie-dashboard/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - name: Generated Opening production status is current
+        run: node scripts/sync-opening-production-status.mjs
+      - name: Contract tokens preserve review ordering and evidence boundaries
+        run: |
+          grep -q 'OPENING PRODUCTION REVIEW READINESS / MOTION STUDIO AUTHORITY' src/components/OpeningProductionReviewReadinessPanel.tsx
+          grep -q 'MEDIA_READY != HUMAN_CROP_REVIEW_PASS' src/components/OpeningProductionReviewReadinessPanel.tsx
+          grep -q 'CROP_PASS != SOURCE_BOUND_PREVIEW_REVIEW_PASS' src/components/OpeningProductionReviewReadinessPanel.tsx
+          grep -q 'PREVIEW_REVIEW_PASS != HUMAN_AUDIO_LISTENING_PASS' src/components/OpeningProductionReviewReadinessPanel.tsx
+          grep -q 'Remotion Studio GUI Actual = <strong>NOT_RUN</strong>' src/components/OpeningProductionReviewReadinessPanel.tsx
+          grep -q 'Mac DaVinci GUI Actual = <strong>NOT_RUN</strong>' src/components/OpeningProductionReviewReadinessPanel.tsx
+          grep -q 'OPENING EXACT NEXT HUMAN QA GATE' src/components/OpeningReviewNextActionPanel.tsx
+          grep -q 'opening-v1-crop-review-evidence.mts --strict' src/components/OpeningReviewNextActionPanel.tsx
+          grep -q 'pnpm render:opening-v1:preview' src/components/OpeningReviewNextActionPanel.tsx
+          grep -q 'pnpm opening:preview-review:strict' src/components/OpeningReviewNextActionPanel.tsx
+          grep -q 'opening-v1-audio-listening-review.mts --strict' src/components/OpeningReviewNextActionPanel.tsx
+          grep -q 'COMMAND_COPIED != COMMAND_EXECUTED' src/components/OpeningReviewNextActionPanel.tsx
+          grep -q '<OpeningProductionReviewReadinessPanel />' src/pages/MotionZukanWorkspaceHandoff.tsx
+          grep -q '<OpeningReviewNextActionPanel />' src/pages/MotionZukanWorkspaceHandoff.tsx
+      - name: Typecheck and build Movie Dashboard
+        run: pnpm build
