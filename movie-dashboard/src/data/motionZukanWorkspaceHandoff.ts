@@ -1,5 +1,6 @@
 import type { MotionZukanProductionWorkspaceState } from "./motionZukanProductionWorkspace";
 import type { MotionZukanComposerState, SceneProjectId } from "./visualSceneComposer";
+import type { WeddingProjectMotionAssignmentState } from "./weddingProjectMotionAssignments";
 
 export const MOTION_ZUKAN_WORKSPACE_HANDOFF_SCHEMA = "motion-zukan-workspace-handoff/v1" as const;
 export const MOTION_ZUKAN_WORKSPACE_HANDOFF_AUTHORITY = "HUMAN_MASTER_WORKSPACE_TRANSFER" as const;
@@ -11,6 +12,7 @@ export interface MotionZukanWorkspaceHandoff {
   exportedAt: string;
   composer: MotionZukanComposerState;
   workspace: MotionZukanProductionWorkspaceState;
+  projectMotionAssignments: WeddingProjectMotionAssignmentState;
   evidenceBoundary: {
     externalProductionGateEvaluated: false;
     remotionStudioGuiActual: "NOT_RUN";
@@ -62,6 +64,22 @@ function validWorkspace(value: unknown): value is MotionZukanProductionWorkspace
   );
 }
 
+function validProjectMotionAssignments(value: unknown): value is WeddingProjectMotionAssignmentState {
+  if (!value || typeof value !== "object") return false;
+  const candidate = value as Partial<WeddingProjectMotionAssignmentState>;
+  return (
+    candidate.schemaVersion === "wedding-project-motion-assignments/v1" &&
+    Array.isArray(candidate.assignments) &&
+    candidate.assignments.every((item) =>
+      Boolean(item) &&
+      typeof item.patternId === "string" &&
+      validProjectId(item.projectId) &&
+      item.assignedBy === "HUMAN_MASTER" &&
+      typeof item.assignedAt === "string",
+    )
+  );
+}
+
 function projectStateExists(handoff: Pick<MotionZukanWorkspaceHandoff, "projectId" | "composer">) {
   return handoff.composer.timelines.some((timeline) => timeline.projectId === handoff.projectId);
 }
@@ -69,6 +87,7 @@ function projectStateExists(handoff: Pick<MotionZukanWorkspaceHandoff, "projectI
 export function buildMotionZukanWorkspaceHandoff(
   composer: MotionZukanComposerState,
   workspace: MotionZukanProductionWorkspaceState,
+  projectMotionAssignments: WeddingProjectMotionAssignmentState,
   projectId: SceneProjectId,
   exportedAt = new Date().toISOString(),
 ): MotionZukanWorkspaceHandoff {
@@ -79,6 +98,7 @@ export function buildMotionZukanWorkspaceHandoff(
     exportedAt,
     composer: structuredClone(composer),
     workspace: structuredClone(workspace),
+    projectMotionAssignments: structuredClone(projectMotionAssignments),
     evidenceBoundary: {
       externalProductionGateEvaluated: false,
       remotionStudioGuiActual: "NOT_RUN",
@@ -106,6 +126,9 @@ export function parseMotionZukanWorkspaceHandoff(raw: string): MotionZukanWorksp
   if (!validProjectId(handoff.projectId)) return { ok: false, error: "projectIdが不正です" };
   if (!validComposer(handoff.composer)) return { ok: false, error: "composer stateが不正です" };
   if (!validWorkspace(handoff.workspace)) return { ok: false, error: "production workspace stateが不正です" };
+  if (!validProjectMotionAssignments(handoff.projectMotionAssignments)) {
+    return { ok: false, error: "project motion assignment stateが不正です" };
+  }
   if (!projectStateExists({ projectId: handoff.projectId, composer: handoff.composer })) {
     return { ok: false, error: "project timelineがhandoff内にありません" };
   }

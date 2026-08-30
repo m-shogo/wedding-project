@@ -12,6 +12,10 @@ import {
   saveMotionZukanComposerState,
   type SceneProjectId,
 } from "../data/visualSceneComposer";
+import {
+  loadWeddingProjectMotionAssignments,
+  saveWeddingProjectMotionAssignments,
+} from "../data/weddingProjectMotionAssignments";
 
 export function MotionZukanWorkspaceHandoffPanel() {
   const [projectId, setProjectId] = useState<SceneProjectId>("opening");
@@ -26,6 +30,7 @@ export function MotionZukanWorkspaceHandoffPanel() {
     const handoff = buildMotionZukanWorkspaceHandoff(
       loadMotionZukanComposerState(),
       loadMotionZukanProductionWorkspaceState(),
+      loadWeddingProjectMotionAssignments(),
       projectId,
     );
     const blob = new Blob([JSON.stringify(handoff, null, 2)], { type: "application/json" });
@@ -36,7 +41,7 @@ export function MotionZukanWorkspaceHandoffPanel() {
     anchor.href = href;
     anchor.download = `motion-zukan-${projectId}-workspace-handoff.json`;
     anchor.click();
-    setFeedback(`${projectId === "opening" ? "Opening" : "Profile"} Human workspaceを書き出しました。GUI ActualやProduction承認は含みません。`);
+    setFeedback(`${projectId === "opening" ? "Opening" : "Profile"} Human workspaceを書き出しました。Motion project assignmentも含みますが、GUI ActualやProduction承認は含みません。`);
   }
 
   async function importWorkspace(event: ChangeEvent<HTMLInputElement>) {
@@ -50,14 +55,15 @@ export function MotionZukanWorkspaceHandoffPanel() {
       return;
     }
     const label = parsed.handoff.projectId === "opening" ? "Opening" : "Profile";
-    if (!window.confirm(`${label}のHuman workspaceを読み込みます。現在のローカル状態は置き換わります。続行しますか？`)) {
+    if (!window.confirm(`${label}のHuman workspaceを読み込みます。現在のローカル状態とMotion project assignmentは置き換わります。続行しますか？`)) {
       setFeedback("読込をキャンセルしました。");
       return;
     }
     saveMotionZukanComposerState(structuredClone(parsed.handoff.composer));
     saveMotionZukanProductionWorkspaceState(structuredClone(parsed.handoff.workspace));
+    saveWeddingProjectMotionAssignments(structuredClone(parsed.handoff.projectMotionAssignments));
     setProjectId(parsed.handoff.projectId);
-    setFeedback(`${label} Human workspaceを読み込みました。Remotion Studio GUI Actual / Mac DaVinci ActualはNOT_RUNのままです。`);
+    setFeedback(`${label} Human workspaceとMotion project assignmentを読み込みました。Remotion Studio GUI Actual / Mac DaVinci ActualはNOT_RUNのままです。`);
   }
 
   return (
@@ -67,7 +73,7 @@ export function MotionZukanWorkspaceHandoffPanel() {
           <p className="text-[10px] font-semibold tracking-[0.2em] text-sky-700 dark:text-sky-300">WORKSPACE HANDOFF / HUMAN MASTER ONLY</p>
           <h2 className="mt-1 text-lg font-bold text-navy-900 dark:text-sand-100">モーション図鑑の制作状態をJSONで退避・引き継ぐ</h2>
           <p className="mt-2 text-xs leading-5 text-navy-500 dark:text-navy-300">
-            Scene・素材参照・曲marker・デザイン設定・Versionをまとめて保存します。これはブラウザ作業状態の移送だけで、Production Gate合格、Remotion Studio GUI Actual、Mac DaVinci Actual、最終納品承認には昇格しません。
+            Scene・素材参照・曲marker・デザイン設定・Version・HumanによるOpening/Profile Motion割当をまとめて保存します。これはブラウザ作業状態の移送だけで、Production Gate合格、Remotion Studio GUI Actual、Mac DaVinci Actual、最終納品承認には昇格しません。
           </p>
         </div>
         <div className="flex gap-2">
