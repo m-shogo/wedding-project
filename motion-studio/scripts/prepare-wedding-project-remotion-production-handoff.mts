@@ -48,6 +48,13 @@ const displayPath = (absolutePath: string) => relative(repoRoot, absolutePath).r
 const shellQuote = (value: string) => /[\s'"$`\\]/.test(value)
   ? `'${value.replaceAll("'", `'\\''`)}'`
   : value;
+const formatCommandArg = (arg: string) => {
+  const separator = arg.indexOf('=');
+  if (separator > 0 && arg.startsWith('--')) {
+    return `${arg.slice(0, separator + 1)}${shellQuote(arg.slice(separator + 1))}`;
+  }
+  return shellQuote(arg);
+};
 const steps: StepResult[] = [];
 
 const fail = (code: string, detail?: string): never => {
@@ -56,7 +63,7 @@ const fail = (code: string, detail?: string): never => {
 };
 
 const run = (id: string, script: string, args: string[] = []) => {
-  const command = `node --no-warnings scripts/${script}${args.length ? ` ${args.map(shellQuote).join(' ')}` : ''}`;
+  const command = `node --no-warnings scripts/${script}${args.length ? ` ${args.map(formatCommandArg).join(' ')}` : ''}`;
   const result = spawnSync(process.execPath, ['--no-warnings', join(motionStudioRoot, 'scripts', script), ...args], {
     cwd: motionStudioRoot,
     encoding: 'utf8',
