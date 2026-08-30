@@ -29,11 +29,19 @@ assert(JSON.stringify(plan.sessionOrder) === JSON.stringify(['opening', 'profile
 for (const movieId of ['opening', 'profile']) {
   const project = plan.projects?.[movieId];
   assert(project?.movieId === movieId, `${movieId}: movie id mismatch`);
+  assert(['CURRENT', 'NOT_APPLICABLE', 'INVALID'].includes(project?.projectMotionPreflight?.state), `${movieId}: Project Motion preflight state missing`);
+  assert(typeof project?.projectMotionPreflight?.command === 'string' && project.projectMotionPreflight.command.includes(`--movie=${movieId}`), `${movieId}: Project Motion verifier command missing`);
+  assert(typeof project?.projectMotionPreflight?.applicable === 'boolean', `${movieId}: Project Motion applicability missing`);
+  assert(typeof project?.projectMotionPreflight?.current === 'boolean', `${movieId}: Project Motion currentness missing`);
+  if (project.projectMotionPreflight.state === 'INVALID') {
+    assert(project.sessionState === 'BLOCKED_PROJECT_MOTION_PREFLIGHT', `${movieId}: INVALID Project Motion must block session plan`);
+  }
   assert(Array.isArray(project?.orderedActions) && project.orderedActions.length === 6, `${movieId}: action count mismatch`);
   assert(project.orderedActions[0]?.kind === 'SAFE_PREP', `${movieId}: canonical production handoff must come first`);
   assert(project.orderedActions[0]?.command === `node --no-warnings scripts/export-wedding-production-handoff.mts --movie=${movieId}`, `${movieId}: SAFE_PREP must use canonical production handoff exporter`);
   assert(project.orderedActions[1]?.kind === 'PROJECT_MOTION_PREFLIGHT', `${movieId}: Project Motion preflight must come second`);
-  assert(project.orderedActions[1]?.command === `node --no-warnings scripts/verify-wedding-project-motion-production-provenance.mts --movie=${movieId}`, `${movieId}: Project Motion preflight must use canonical provenance verifier`);
+  assert(project.orderedActions[1]?.command === project.projectMotionPreflight.command, `${movieId}: action must reuse transported Project Motion verifier command`);
+  assert(project.orderedActions[1]?.purpose?.includes(`state=${project.projectMotionPreflight.state}`), `${movieId}: action must expose transported Project Motion state`);
   assert(project.orderedActions[1]?.purpose?.includes('before Actual evidence initialization'), `${movieId}: Project Motion preflight must explicitly gate evidence init`);
   assert(project.orderedActions[2]?.kind === 'EVIDENCE_INIT', `${movieId}: evidence init must come after Project Motion preflight`);
   assert(project.orderedActions[3]?.kind === 'MAC_GUI_ACTUAL', `${movieId}: manual GUI Actual must come after evidence init`);
@@ -48,18 +56,22 @@ for (const movieId of ['opening', 'profile']) {
 
 assert(plan.guardrails?.includes('SESSION_PLAN_EXISTS != GUI_ACTUAL_EXECUTED'), 'missing session-plan guardrail');
 assert(plan.guardrails?.includes('EVIDENCE_TEMPLATE_EXISTS != GUI_ACTUAL_PASS'), 'missing evidence-template guardrail');
+assert(plan.guardrails?.includes('PROJECT_MOTION_PREFLIGHT_STATE_TRANSPORTED_WITH_SESSION_PLAN'), 'missing Project Motion transport guardrail');
+assert(plan.guardrails?.includes('PROJECT_MOTION_PREFLIGHT_INVALID => SESSION_PLAN_BLOCKED'), 'missing Project Motion invalid blocker guardrail');
 assert(plan.guardrails?.includes('PROJECT_MOTION_PREFLIGHT_CURRENT != GUI_ACTUAL_PASS'), 'missing Project Motion preflight evidence-boundary guardrail');
 assert(plan.guardrails?.includes('PROJECT_MOTION_PREFLIGHT_MUST_RUN_BEFORE_EVIDENCE_INIT'), 'missing Project Motion preflight ordering guardrail');
 assert(plan.guardrails?.includes('CI_MUST_NOT_PROMOTE_MAC_GUI_ACTUAL'), 'missing CI Actual guardrail');
 assert(plan.weddingFinalization?.length === 3, 'Wedding finalization command count mismatch');
 assert(plan.weddingFinalization[2]?.includes('--strict'), 'Wedding finalization must end in strict preflight');
 assert(source.includes("createHash('sha256').update(JSON.stringify(planBody)).digest('hex')"), 'transport identity must bind the full canonical plan body');
+assert(source.includes('projectMotionPreflight: {'), 'transport body must include Project Motion preflight payload');
 assert(!source.includes("macDavinciResolveGuiActual: 'PASS'"), 'source must not synthesize DaVinci PASS');
 assert(!source.includes("productionReady: true"), 'source must not synthesize productionReady');
 
 console.log('Wedding DaVinci Actual session plan contract: PASS');
 console.log(`transportIdentitySha256=${plan.transportIdentitySha256}`);
-console.log(`opening=${plan.projects.opening.sessionState}`);
-console.log(`profile=${plan.projects.profile.sessionState}`);
+console.log(`opening=${plan.projects.opening.sessionState}/${plan.projects.opening.projectMotionPreflight.state}`);
+console.log(`profile=${plan.projects.profile.sessionState}/${plan.projects.profile.projectMotionPreflight.state}`);
+console.log('Project Motion preflight transport binding: REQUIRED');
 console.log('Project Motion preflight before evidence init: REQUIRED');
 console.log('Mac/Studio GUI Actual promotion by CI: FORBIDDEN');
