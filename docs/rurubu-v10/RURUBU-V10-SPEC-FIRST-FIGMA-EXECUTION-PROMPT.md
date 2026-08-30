@@ -24,6 +24,7 @@ In particular, read:
 - docs/rurubu-v10/RURUBU-V10-SPEC-FIRST-PLACEMENT-POLICY.md
 - docs/rurubu-v10/RURUBU-V10-USER-REFERENCE-DECONSTRUCTION-2026-08-30.md
 - docs/rurubu-v10/RURUBU-V10-PAGE-SPECS-DETAILED.md
+- docs/rurubu-v10/RURUBU-V10-PARTS-LIBRARY-SPEC.md
 - docs/rurubu-v10/RURUBU-V10-PAGE-RECIPES.md
 - docs/rurubu-v10/RURUBU-V10-FIGMA-AI-DESIGN-SYSTEM.md
 - docs/rurubu-v10/RURUBU-V10-REFERENCE-FINGERPRINT-ANTI-AI-GATE.md
@@ -81,7 +82,7 @@ GEOMETRY
 - any edge-tension zones
 
 PARTS
-- exact semantic roles to place
+- exact semantic roles to place from `RURUBU-V10-PARTS-LIBRARY-SPEC.md`
 - title/badge/frame/route/map/decor roles
 - do not say `some decoration`
 
@@ -218,6 +219,9 @@ PAGE-SPEC AUTHORITY
 
 Use the exact live-role page from:
 `RURUBU-V10-PAGE-SPECS-DETAILED.md`.
+
+Use semantic part roles from:
+`RURUBU-V10-PARTS-LIBRARY-SPEC.md`.
 
 Do not force one generic layout across pages.
 
