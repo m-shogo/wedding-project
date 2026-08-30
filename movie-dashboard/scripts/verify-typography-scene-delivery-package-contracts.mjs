@@ -83,6 +83,16 @@ for (const token of [
   "delivery.execution.order.join",
   "delivery.files.palmierTimelineXmlFileName",
   "delivery.timeline.sceneMarkerId",
+  "REMOTION ELEMENT IDENTITY / SHA-CURRENTNESS REQUIRED",
+  "project adoption:",
+  "elementIdentity.canonicalIdentity.canonicalEngine",
+  "elementIdentity.canonicalIdentity.canonicalMode",
+  "elementIdentity.macRemotionStudioGuiActual",
+  "elementIdentity.macDaVinciGuiActual",
+  "delivery.files.remotionElementIdentityArtifactPath",
+  "elementIdentity.shaBinding.exportCommand",
+  "delivery.files.remotionElementIdentityCheckCommand",
+  "identity CURRENT ≠ Studio GUI Actual PASS ≠ DaVinci GUI Actual PASS",
 ]) requireText(card, token, `delivery package UI missing: ${token}`);
 
 for (const token of [
@@ -122,4 +132,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log("Typography Scene Delivery Package contracts OK: Human Master + current route + catalog-wide SHA-bound Remotion Element identity + revision-bound Human role context are bundled without fabricating Studio/DaVinci Actual or production release evidence.");
+console.log("Typography Scene Delivery Package contracts OK: Human Master + current route + visible catalog-wide SHA-bound Remotion Element identity + revision-bound Human role context are bundled without fabricating Studio/DaVinci Actual or production release evidence.");
