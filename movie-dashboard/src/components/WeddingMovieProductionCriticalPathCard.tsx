@@ -1,9 +1,13 @@
-import {useMemo} from "react";
+import {useMemo, useSyncExternalStore} from "react";
 import {Link} from "react-router-dom";
 import {
   buildWeddingMovieProductionCriticalPath,
   buildWeddingMovieProductionCriticalPathJson,
 } from "../data/weddingMovieProductionCriticalPath";
+import {
+  getWeddingDavinciGuiActualStartGateAuditSnapshot,
+  subscribeWeddingDavinciGuiActualStartGateAudit,
+} from "../data/weddingDavinciGuiActualStartGateLiveAuthority";
 import type {MovieProductionBlockerRecoveryAction} from "../data/movieProductionBlockerRecovery";
 import type {SceneProjectId} from "../data/visualSceneComposer";
 import {downloadText} from "../lib/exporters";
@@ -27,6 +31,15 @@ const blockerProvenanceLabels: Record<string, string> = {
   SOURCE_REVALIDATION: "source revalidation evidence",
   NORMALIZED_STAGE_STATE: "derived waiting-state code",
   NONE: "no blocker evidence",
+};
+
+const startGateStateClass = (state: string) => {
+  if (state === "GUI_ACTUAL_COMPLETE") return "text-emerald-700 dark:text-emerald-300";
+  if (state === "GUI_ACTUAL_ALLOWED") return "text-amber-700 dark:text-amber-300";
+  if (state === "INVALID" || state === "STALE" || state.includes("BLOCKED") || state === "TRANSPORT_NOT_CURRENT") {
+    return "text-rose-700 dark:text-rose-300";
+  }
+  return "text-navy-500 dark:text-navy-300";
 };
 
 function BlockerRecoveryAction({action}: {action: MovieProductionBlockerRecoveryAction}) {
@@ -92,10 +105,18 @@ function CriticalPathActionTargetView({target, compact = false}: {target: Critic
 export function WeddingMovieProductionCriticalPathCard({projectId}: {projectId: SceneProjectId}) {
   const report = useMemo(() => buildWeddingMovieProductionCriticalPath(), []);
   const json = useMemo(() => buildWeddingMovieProductionCriticalPathJson(), []);
+  const startGateAudits = useSyncExternalStore(
+    subscribeWeddingDavinciGuiActualStartGateAudit,
+    getWeddingDavinciGuiActualStartGateAuditSnapshot,
+    getWeddingDavinciGuiActualStartGateAuditSnapshot,
+  );
   if (projectId !== "opening" && projectId !== "profile") return null;
 
   const project = report.projects[projectId];
   const current = project.currentCriticalStage;
+  const startGateAudit = startGateAudits[projectId];
+  const startGateNeedsRegeneration = startGateAudit.state === "STALE" || startGateAudit.state === "INVALID";
+  const startGateAllowsHumanGui = startGateAudit.state === "GUI_ACTUAL_ALLOWED" && startGateAudit.guiActualStartAllowed;
 
   return (
     <section className="mt-3 border-2 border-amber-300 dark:border-amber-700 p-3">
@@ -126,6 +147,38 @@ export function WeddingMovieProductionCriticalPathCard({projectId}: {projectId: 
         <button type="button" onClick={() => downloadText(json, "wedding-movie-production-critical-path.json")} className="border border-amber-300 dark:border-amber-700 px-2.5 py-1.5 text-[9px] font-semibold text-amber-700 dark:text-amber-300">
           Critical pathを書き出す
         </button>
+      </div>
+
+      <div className="mt-3 border border-violet-200 dark:border-violet-900/60 px-2.5 py-2 text-[8px] leading-4 text-navy-500 dark:text-navy-300">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <p className="font-semibold text-violet-700 dark:text-violet-300">LIVE DAVINCI START GATE AUTHORITY</p>
+          <span className={`font-bold ${startGateStateClass(startGateAudit.state)}`}>{startGateAudit.state}</span>
+        </div>
+        <div className="mt-1 grid gap-x-3 gap-y-0.5 sm:grid-cols-2">
+          <span>canonical loaded={startGateAudit.canonicalGateLoaded ? "YES" : "NO"}</span>
+          <span>live Project Motion match={startGateAudit.liveProjectMotionMatch ? "YES" : "NO"}</span>
+          <span>GUI start={startGateAllowsHumanGui ? "ALLOWED / HUMAN ONLY" : "BLOCKED"}</span>
+          <span>next={startGateAudit.nextAction.kind}</span>
+        </div>
+        <code className="mt-1 block max-w-full overflow-x-auto whitespace-nowrap text-navy-400">artifact: {startGateAudit.canonicalArtifactPath}</code>
+        {startGateNeedsRegeneration ? (
+          <div className="mt-2 border-l-2 border-rose-400 pl-2 text-rose-700 dark:text-rose-300">
+            <p className="font-semibold">最優先: canonical Start Gateを再生成して再読込する</p>
+            <p>{startGateAudit.nextAction.reason}</p>
+            {startGateAudit.nextAction.command ? <code className="mt-1 block max-w-full overflow-x-auto whitespace-nowrap">{startGateAudit.nextAction.command}</code> : null}
+          </div>
+        ) : null}
+        {startGateAllowsHumanGui ? (
+          <p className="mt-2 border-l-2 border-amber-400 pl-2 font-semibold text-amber-800 dark:text-amber-300">
+            HUMAN / MAC GUI — canonical gateが開始を許可しています。これは実行済み/PASSではありません。
+          </p>
+        ) : null}
+        {!startGateAudit.canonicalGateLoaded && !startGateNeedsRegeneration ? (
+          <div className="mt-2 border-l-2 border-violet-300 pl-2">
+            <p>Start Gate artifactを生成・読み込むまで、このlive authorityはNOT_RUNです。</p>
+            <code className="mt-1 block max-w-full overflow-x-auto whitespace-nowrap">{startGateAudit.inspectCommand}</code>
+          </div>
+        ) : null}
       </div>
 
       {current?.inputLanes.length ? (

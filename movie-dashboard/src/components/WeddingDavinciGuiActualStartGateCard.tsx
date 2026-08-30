@@ -5,6 +5,7 @@ import {
   type WeddingDavinciGuiActualStartGateAudit,
   type WeddingMovieId,
 } from "../data/weddingDavinciGuiActualStartGateAudit";
+import {publishWeddingDavinciGuiActualStartGateAudit} from "../data/weddingDavinciGuiActualStartGateLiveAuthority";
 
 export const WEDDING_DAVINCI_GUI_ACTUAL_START_GATE_ANCHOR = "davinci-gui-actual-start-gate" as const;
 
@@ -26,12 +27,15 @@ export function WeddingDavinciGuiActualStartGateCard() {
 
   const inspect = async (movieId: WeddingMovieId, file: File | undefined) => {
     if (!file) return;
+    let audit: WeddingDavinciGuiActualStartGateAudit;
     try {
       const parsed = JSON.parse(await file.text());
-      setAudits((current) => ({...current, [movieId]: auditWeddingDavinciGuiActualStartGate(movieId, parsed)}));
+      audit = auditWeddingDavinciGuiActualStartGate(movieId, parsed);
     } catch {
-      setAudits((current) => ({...current, [movieId]: auditWeddingDavinciGuiActualStartGate(movieId, null)}));
+      audit = auditWeddingDavinciGuiActualStartGate(movieId, null);
     }
+    setAudits((current) => ({...current, [movieId]: audit}));
+    publishWeddingDavinciGuiActualStartGateAudit(movieId, audit);
   };
 
   return (
