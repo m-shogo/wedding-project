@@ -175,6 +175,13 @@ if (provenanceMarkdown.status !== 0) {
   process.exit(provenanceMarkdown.status ?? 1);
 }
 
+const provenanceConsistency = run('scripts/verify-wedding-project-motion-production-provenance.mts', [`--movie=${movieArg}`]);
+forward(provenanceConsistency);
+if (provenanceConsistency.status !== 0) {
+  console.error(`Wedding production handoff blocked: ${movieArg} Project Motion provenance is inconsistent across bundle/recovery/Markdown.`);
+  process.exit(provenanceConsistency.status ?? 1);
+}
+
 console.log(`Wedding production handoff complete: ${movieArg}`);
 console.log(`bundle=${config.bundle}`);
 console.log(`davinciRecovery=${config.recovery}`);
