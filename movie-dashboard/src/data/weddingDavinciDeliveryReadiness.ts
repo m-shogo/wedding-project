@@ -1,5 +1,6 @@
 import {openingDavinciActualBindingAudit} from "./openingDavinciActualBindingAudit.generated";
 import {profileDavinciActualBindingAudit} from "./profileDavinciActualBindingAudit.generated";
+import {weddingProjectMotionProvenancePreflight} from "./weddingProjectMotionProvenancePreflight.generated";
 import {buildOpeningProductionStatusHandoff} from "./openingProductionStatusHandoff";
 import {buildProfileProductionStatusHandoff} from "./profileProductionStatusHandoff";
 
@@ -7,31 +8,52 @@ export const WEDDING_DAVINCI_DELIVERY_READINESS_SCHEMA = "wedding-davinci-delive
 
 type ProjectReadinessState = "READY" | "BLOCKED" | "STALE" | "INVALID";
 type WeddingReadinessState = ProjectReadinessState;
+type ProjectMotionPreflight = {
+  state: "CURRENT" | "NOT_APPLICABLE" | "INVALID";
+  current: boolean;
+  applicable: boolean;
+  command: string;
+  error: string | null;
+};
 
 const classifyProjectState = (
   auditState: string,
   finalApprovalCurrent: boolean,
   productionReady: boolean,
+  projectMotion: ProjectMotionPreflight,
 ): ProjectReadinessState => {
+  if (projectMotion.state === "INVALID") return "INVALID";
   if (auditState === "INVALID") return "INVALID";
   if (auditState === "STALE") return "STALE";
   if (auditState === "CURRENT_PASS" && finalApprovalCurrent && productionReady) return "READY";
   return "BLOCKED";
 };
 
+const projectMotionNextGate = (projectMotion: ProjectMotionPreflight) => projectMotion.state === "INVALID"
+  ? {
+      stage: "REVALIDATE_PROJECT_MOTION_PROVENANCE",
+      command: projectMotion.command,
+      blocker: projectMotion.error,
+    }
+  : null;
+
 export function buildWeddingDavinciDeliveryReadiness() {
   const openingHandoff = buildOpeningProductionStatusHandoff();
   const profileHandoff = buildProfileProductionStatusHandoff();
+  const openingProjectMotion: ProjectMotionPreflight = weddingProjectMotionProvenancePreflight.opening;
+  const profileProjectMotion: ProjectMotionPreflight = weddingProjectMotionProvenancePreflight.profile;
 
   const openingState = classifyProjectState(
     openingDavinciActualBindingAudit.state,
     openingDavinciActualBindingAudit.finalApproval.current,
     openingDavinciActualBindingAudit.finalApproval.productionReady,
+    openingProjectMotion,
   );
   const profileState = classifyProjectState(
     profileDavinciActualBindingAudit.state,
     profileDavinciActualBindingAudit.finalApproval.current,
     profileDavinciActualBindingAudit.finalApproval.productionReady,
+    profileProjectMotion,
   );
 
   const overallState: WeddingReadinessState =
@@ -48,8 +70,13 @@ export function buildWeddingDavinciDeliveryReadiness() {
     authority: "MOTION_STUDIO_DERIVED_WEDDING_DAVINCI_READINESS" as const,
     state: overallState,
     strictDeliveryEligible: overallState === "READY",
+    projectMotionSnapshot: {
+      schemaVersion: weddingProjectMotionProvenancePreflight.schemaVersion,
+      authority: weddingProjectMotionProvenancePreflight.authority,
+    },
     opening: {
       state: openingState,
+      projectMotion: openingProjectMotion,
       handoff: {
         schemaVersion: openingHandoff.schemaVersion,
         davinciContractVersion: openingHandoff.opening.production.davinciHandoff.contractVersion,
@@ -68,10 +95,11 @@ export function buildWeddingDavinciDeliveryReadiness() {
         finalApprovalDecision: openingDavinciActualBindingAudit.finalApproval.decision,
         productionReady: openingDavinciActualBindingAudit.finalApproval.productionReady,
       },
-      nextGate: openingHandoff.opening.production.nextGate,
+      nextGate: projectMotionNextGate(openingProjectMotion) ?? openingHandoff.opening.production.nextGate,
     },
     profile: {
       state: profileState,
+      projectMotion: profileProjectMotion,
       handoff: {
         schemaVersion: profileHandoff.schemaVersion,
         davinciContractVersion: profileHandoff.profile.production.davinciHandoff.contractVersion,
@@ -90,10 +118,13 @@ export function buildWeddingDavinciDeliveryReadiness() {
         finalApprovalDecision: profileDavinciActualBindingAudit.finalApproval.decision,
         productionReady: profileDavinciActualBindingAudit.finalApproval.productionReady,
       },
-      nextGate: profileHandoff.profile.production.nextGate,
+      nextGate: projectMotionNextGate(profileProjectMotion) ?? profileHandoff.profile.production.nextGate,
     },
     guardrails: [
       "WEDDING_READY_REQUIRES_OPENING_AND_PROFILE_READY",
+      "PROJECT_MOTION_INVALID => WEDDING_DELIVERY_INVALID",
+      "PROJECT_MOTION_GENERATED_SNAPSHOT != LIVE_MAC_GUI_ACTUAL",
+      "PROJECT_MOTION_NOT_APPLICABLE != VERIFIED",
       "RECOVERY_SHA_CHANGED => DELIVERY_READINESS_STALE",
       "DAVINCI_ACTUAL_SHA_CHANGED => FINAL_APPROVAL_STALE",
       "FINAL_APPROVAL_CURRENT_REQUIRES_CURRENT_RECOVERY_AND_ACTUAL_EVIDENCE",
