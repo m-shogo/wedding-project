@@ -28,6 +28,34 @@ Do not select the final source solely from filename. Final decision requires act
 
 Working preference: `035 behavior`, because it supports a lively travel-magazine silhouette without forcing a clean centered hero.
 
+### Verified `035.jpg` source evidence — 2026-08-30
+
+The raw file was downloaded and pixel-opened, not judged by filename alone.
+
+Verified source behavior:
+- raw raster: `4500 x 3000 px`;
+- aspect ratio: `3:2` landscape;
+- bright Hawaii waterfront/park environment;
+- couple is small and sits low/near center rather than dominating the frame;
+- large palm leaves enter from top/left/right and already create a natural editorial frame;
+- large blue-sky/bright-water field gives masthead and cover-hook placement room;
+- strong foreground grass band can accept a lower feature vessel without covering faces;
+- right-side palm trunks create useful depth but must not become clutter when a generated tropical cluster is added.
+
+Print consequence:
+- source-pixel capacity is comfortably above the V20 final-raster floor for an A5 cover crop; even using the full 4500 px width across 148 mm would be roughly 772 ppi before crop;
+- resolution is therefore not the current blocker for this source;
+- the real constraint is editorial crop/scale: keep the couple recognizable enough for a wedding cover while preserving the dramatic environment.
+
+REAL → GENERATED bridge consequence:
+- do **not** generate another full symmetrical tropical frame around this photo;
+- any P01 tropical art should extend or counterbalance the real palm geometry, not duplicate it;
+- keep the generated cluster sparse around the couple and masthead quiet zone;
+- use photo-derived green/sky-blue/warm-yellow relationships as input, but avoid mechanically sampling the whole page into one flat palette;
+- generated/editorial parts should introduce print/paper character and hierarchy that the clean photograph itself does not supply.
+
+This evidence strengthens `035` as the first serious P01 composition candidate, but it does not eliminate `031`/`023` comparison once the correct V20 Figma production surface is identified.
+
 ## 3. Cover silhouette
 
 The page must NOT read as:
@@ -120,7 +148,8 @@ Composition brief:
 - designed to be partly hidden by HERO/frame and partly sit above another layer;
 - no text;
 - no centered bouquet;
-- no symmetrical wreath.
+- no symmetrical wreath;
+- when paired with `035.jpg`, extend/counterbalance the real palm geometry instead of repeating palm leaves around every edge.
 
 ### `V20_P01_FEATURE_VESSEL_A`
 Job:
