@@ -1,5 +1,6 @@
 import {buildMaskRevealSceneProductionBundle} from "./maskRevealSceneProductionBundle";
 import type {StudioActualState} from "./remotionElementCandidates";
+import {buildRemotionElementCandidateHandoffIdentityReference} from "./remotionElementHandoffIdentityReference";
 import {
   buildTypographySceneProductionBundle,
   getTypographyProductionRoute,
@@ -51,11 +52,13 @@ export interface TypographySceneDeliveryPackageV1 {
     standaloneRenderCi: boolean;
     studioInstallActual: StudioActualState;
     studioControlReadbackActual: StudioActualState;
+    handoffIdentity: ReturnType<typeof buildRemotionElementCandidateHandoffIdentityReference>;
     rule: string;
   };
   execution: {
     order: readonly [
       "CONFIRM_CURRENT_SCENE_REVISION",
+      "VERIFY_REMOTION_ELEMENT_HANDOFF_IDENTITY",
       "EXPORT_PALMIER_TIMELINE_WITH_MARKER",
       "APPLY_DAVINCI_TRANSLATOR",
       "CAPTURE_MAC_ACTUAL_EVIDENCE",
@@ -71,6 +74,7 @@ export interface TypographySceneDeliveryPackageV1 {
     requiredInputs: readonly [
       "CURRENT_SCENE_REVISION",
       "CURRENT_HUMAN_SELECTED_ROUTE",
+      "CURRENT_REMOTION_ELEMENT_HANDOFF_IDENTITY",
       "MAC_ACTUAL_EVALUATION",
       "HUMAN_PROMOTION_REVIEW",
       "SCENE_BOUND_RELEASE_GATE",
@@ -80,6 +84,8 @@ export interface TypographySceneDeliveryPackageV1 {
   };
   files: {
     deliverySidecarFileName: string;
+    remotionElementIdentityArtifactPath: string;
+    remotionElementIdentityCheckCommand: string;
     palmierTimelineXmlFileName: string;
     davinciActualArtifactHint: string | null;
     davinciEvidenceCaptureHint: string | null;
@@ -113,6 +119,7 @@ export function buildTypographySceneDeliveryPackage(
   const route = getTypographyProductionRoute(selection.patternId);
   if (!route) throw new Error(`Missing Typography production route: ${selection.patternId}`);
   const actualWorkflow = resolveActualWorkflow(selection.patternId);
+  const handoffIdentity = buildRemotionElementCandidateHandoffIdentityReference(scene.projectId, selection.patternId);
   const sceneToken = safeFileToken(scene.sceneId);
   const patternToken = safeFileToken(selection.patternId);
 
@@ -159,11 +166,13 @@ export function buildTypographySceneDeliveryPackage(
       standaloneRenderCi: production.remotion.standaloneRenderCi,
       studioInstallActual: production.remotion.studioInstallActual,
       studioControlReadbackActual: production.remotion.studioControlReadbackActual,
-      rule: "standalone render CIとRemotion Studio GUI Actualは別証拠。未実行・blockedはcanonical StudioActualStateのまま保持する。",
+      handoffIdentity,
+      rule: "standalone render CIとRemotion Studio GUI Actualは別証拠。scene-selected Elementはcatalog-wide SHA-bound handoff identityをcurrent checkしてからhandoffに使う。identity currentnessはGUI Actual PASSを意味しない。",
     },
     execution: {
       order: [
         "CONFIRM_CURRENT_SCENE_REVISION",
+        "VERIFY_REMOTION_ELEMENT_HANDOFF_IDENTITY",
         "EXPORT_PALMIER_TIMELINE_WITH_MARKER",
         "APPLY_DAVINCI_TRANSLATOR",
         "CAPTURE_MAC_ACTUAL_EVIDENCE",
@@ -171,7 +180,7 @@ export function buildTypographySceneDeliveryPackage(
         "EVALUATE_SCENE_BOUND_RELEASE_GATE",
       ],
       currentStopReason: production.gate.blockers[0] ?? "AWAITING_SCENE_BOUND_RELEASE_GATE",
-      rule: "順序を飛ばさない。特にtranslator/CIの存在だけでMac Actual、Human review、Releaseを済ませた扱いにしない。",
+      rule: "順序を飛ばさない。Scene revision確認後にselected Remotion ElementのSHA-bound identity currentnessを確認し、その後Palmier/DaVinciへ進む。identity/translator/CIの存在だけでMac Actual、Human review、Releaseを済ませた扱いにしない。",
     },
     release: {
       productionReady: false,
@@ -179,6 +188,7 @@ export function buildTypographySceneDeliveryPackage(
       requiredInputs: [
         "CURRENT_SCENE_REVISION",
         "CURRENT_HUMAN_SELECTED_ROUTE",
+        "CURRENT_REMOTION_ELEMENT_HANDOFF_IDENTITY",
         "MAC_ACTUAL_EVALUATION",
         "HUMAN_PROMOTION_REVIEW",
         "SCENE_BOUND_RELEASE_GATE",
@@ -188,6 +198,8 @@ export function buildTypographySceneDeliveryPackage(
     },
     files: {
       deliverySidecarFileName: `${sceneToken}-${patternToken}-production-package.json`,
+      remotionElementIdentityArtifactPath: handoffIdentity.shaBinding.artifactPath,
+      remotionElementIdentityCheckCommand: handoffIdentity.shaBinding.checkCommand,
       palmierTimelineXmlFileName: base.timeline.projectTimelineXmlFileName,
       davinciActualArtifactHint: actualWorkflow?.actualArtifactFile ?? null,
       davinciEvidenceCaptureHint: actualWorkflow?.evidenceCaptureFile ?? null,
@@ -238,6 +250,24 @@ export function parseAndValidateTypographySceneDeliveryPackage(
   }
   if (parsed.timeline?.xmlGeneratedExternally !== true || parsed.timeline?.owner !== "Palmier") {
     throw new Error("TYPOGRAPHY_SCENE_DELIVERY_TIMELINE_AUTHORITY_MISMATCH");
+  }
+  const expectedHandoffIdentity = buildRemotionElementCandidateHandoffIdentityReference(scene.projectId, selection.patternId);
+  if (
+    parsed.remotion?.handoffIdentity?.patternId !== expectedHandoffIdentity.patternId ||
+    parsed.remotion?.handoffIdentity?.canonicalIdentity?.canonicalEngine !== expectedHandoffIdentity.canonicalIdentity.canonicalEngine ||
+    parsed.remotion?.handoffIdentity?.canonicalIdentity?.canonicalMode !== expectedHandoffIdentity.canonicalIdentity.canonicalMode ||
+    parsed.remotion?.handoffIdentity?.canonicalIdentity?.canonicalSource !== expectedHandoffIdentity.canonicalIdentity.canonicalSource ||
+    parsed.remotion?.handoffIdentity?.shaBinding?.artifactPath !== expectedHandoffIdentity.shaBinding.artifactPath ||
+    parsed.remotion?.handoffIdentity?.shaBinding?.checkCommand !== expectedHandoffIdentity.shaBinding.checkCommand ||
+    parsed.remotion?.handoffIdentity?.shaBinding?.currentnessMustBeCheckedBeforeSceneHandoffUse !== true
+  ) {
+    throw new Error("TYPOGRAPHY_SCENE_DELIVERY_REMOTION_HANDOFF_IDENTITY_MISMATCH");
+  }
+  if (
+    parsed.remotion?.handoffIdentity?.macRemotionStudioGuiActual !== "NOT_RUN" ||
+    parsed.remotion?.handoffIdentity?.macDaVinciGuiActual !== "NOT_RUN"
+  ) {
+    throw new Error("TYPOGRAPHY_SCENE_DELIVERY_REMOTION_IDENTITY_MUST_NOT_CLAIM_GUI_ACTUAL");
   }
   if (parsed.davinci?.actualEvidenceState !== "NOT_RUN") {
     throw new Error("TYPOGRAPHY_SCENE_DELIVERY_MUST_NOT_EMBED_ACTUAL_PASS");
