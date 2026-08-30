@@ -2,12 +2,10 @@ import {spawnSync} from 'node:child_process';
 import {isAbsolute, join, resolve} from 'node:path';
 import {dirname} from 'node:path';
 import {fileURLToPath} from 'node:url';
+import {runWeddingProjectMotionProvenancePreflight} from './wedding-project-motion-provenance-preflight.mts';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const defaultSnapshot = join(root, 'out/handoff/wedding/wedding-davinci-delivery-readiness.json');
-
-type MovieId = 'opening' | 'profile';
-type ProjectMotionPreflightState = 'CURRENT' | 'NOT_APPLICABLE' | 'INVALID';
 
 const argValue = (name: string) => {
   const exact = process.argv.find((arg) => arg.startsWith(`${name}=`));
@@ -30,37 +28,11 @@ const runJson = (script: string, args: string[] = []) => {
   return JSON.parse(result.stdout);
 };
 
-const runProjectMotionPreflight = (movie: MovieId) => {
-  const command = `node --no-warnings scripts/verify-wedding-project-motion-production-provenance.mts --movie=${movie}`;
-  const result = spawnSync(process.execPath, [
-    '--no-warnings',
-    join(root, 'scripts', 'verify-wedding-project-motion-production-provenance.mts'),
-    `--movie=${movie}`,
-  ], {
-    cwd: root,
-    encoding: 'utf8',
-  });
-  const output = `${result.stdout ?? ''}\n${result.stderr ?? ''}`.trim();
-  let state: ProjectMotionPreflightState = 'INVALID';
-  if (result.status === 0 && output.includes('Project Motion production provenance consistency: CURRENT')) state = 'CURRENT';
-  else if (result.status === 0 && output.includes('Project Motion production provenance consistency: NOT_APPLICABLE')) state = 'NOT_APPLICABLE';
-  const error = state === 'INVALID'
-    ? (output.split('\n').find((line) => line.trim().length > 0) ?? `PROJECT_MOTION_PREFLIGHT_EXIT_${result.status ?? 'UNKNOWN'}`)
-    : null;
-  return {
-    state,
-    current: state === 'CURRENT',
-    applicable: state !== 'NOT_APPLICABLE',
-    command,
-    error,
-  } as const;
-};
-
 const live = runJson('wedding-davinci-delivery-readiness.mts');
 const snapshotAudit = runJson('wedding-davinci-delivery-readiness-snapshot.mts', ['--snapshot', snapshotPath]);
 const projectMotion = {
-  opening: runProjectMotionPreflight('opening'),
-  profile: runProjectMotionPreflight('profile'),
+  opening: runWeddingProjectMotionProvenancePreflight(root, 'opening'),
+  profile: runWeddingProjectMotionProvenancePreflight(root, 'profile'),
 } as const;
 
 const blockerCodes: string[] = [];
