@@ -7,6 +7,8 @@ import {profileProductionStatus} from "./profileProductionStatus.generated";
 
 export const WEDDING_MOVIE_PRODUCTION_CRITICAL_PATH_SCHEMA = "wedding-movie-production-critical-path-dashboard/v2" as const;
 
+export const WEDDING_DAVINCI_GUI_ACTUAL_START_GATE_ROUTE = "/movie-coach/motion-library#davinci-gui-actual-start-gate" as const;
+
 type StageSnapshot = {
   state: string;
   detail: string;
@@ -56,7 +58,11 @@ function actionTargetsFor(projectId: "opening" | "profile", stageName: string): 
     return [{label: "Palmier Handoffを開く", route: "/palmier-handoff", purpose: "current production bundleとtimeline handoffを確認する"}];
   }
   if (stageName === "davinciFinishing") {
-    return [{label: "DaVinci/Fusion導線を開く", route: "/movie-coach/fusion", purpose: "Mac Actual前のnative handoffとverification routeを確認する"}];
+    return [{
+      label: "DaVinci Actual Start Gateを開く",
+      route: WEDDING_DAVINCI_GUI_ACTUAL_START_GATE_ROUTE,
+      purpose: "canonical Session Planを読み込み、live Project Motion再検証とstrict GUI-start gateを通してからHuman Mac DaVinci Actualへ進む",
+    }];
   }
   return [];
 }
@@ -260,6 +266,7 @@ export function buildWeddingMovieProductionCriticalPath() {
       "INPUT_LANE_READY != PROJECT_PRODUCTION_READY",
       "RECOVERY_COMMAND_VISIBLE != RECOVERY_EXECUTED",
       "ACTION_TARGET_VISIBLE != ACTION_COMPLETED",
+      "DAVINCI_START_GATE_LINK_VISIBLE != GUI_ACTUAL_STARTED",
       "DOWNSTREAM_WAITING != DOWNSTREAM_FAILED",
       "CI_STATUS != MAC_DAVINCI_ACTUAL",
       ...movieProductionBlockerRecoveryGuardrails,

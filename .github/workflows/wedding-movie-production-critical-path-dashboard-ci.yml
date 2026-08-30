@@ -8,10 +8,12 @@ on:
       - "movie-dashboard/src/data/movieProductionBlockerRecovery.ts"
       - "movie-dashboard/src/data/weddingMovieProductionCriticalPath.ts"
       - "movie-dashboard/src/components/WeddingMovieProductionCriticalPathCard.tsx"
+      - "movie-dashboard/src/components/WeddingDavinciGuiActualStartGateCard.tsx"
       - "movie-dashboard/src/components/MaskRevealSceneHandoffCard.tsx"
       - "movie-dashboard/src/data/openingProductionStatusHandoff.ts"
       - "movie-dashboard/src/data/profileProductionStatusHandoff.ts"
       - "movie-dashboard/scripts/verify-wedding-movie-production-critical-path-dashboard.mjs"
+      - "movie-dashboard/scripts/verify-davinci-critical-path-start-gate.mjs"
       - "movie-dashboard/scripts/verify-movie-production-blocker-recovery.mjs"
       - ".github/workflows/wedding-movie-production-critical-path-dashboard-ci.yml"
   push:
@@ -22,10 +24,12 @@ on:
       - "movie-dashboard/src/data/movieProductionBlockerRecovery.ts"
       - "movie-dashboard/src/data/weddingMovieProductionCriticalPath.ts"
       - "movie-dashboard/src/components/WeddingMovieProductionCriticalPathCard.tsx"
+      - "movie-dashboard/src/components/WeddingDavinciGuiActualStartGateCard.tsx"
       - "movie-dashboard/src/components/MaskRevealSceneHandoffCard.tsx"
       - "movie-dashboard/src/data/openingProductionStatusHandoff.ts"
       - "movie-dashboard/src/data/profileProductionStatusHandoff.ts"
       - "movie-dashboard/scripts/verify-wedding-movie-production-critical-path-dashboard.mjs"
+      - "movie-dashboard/scripts/verify-davinci-critical-path-start-gate.mjs"
       - "movie-dashboard/scripts/verify-movie-production-blocker-recovery.mjs"
       - ".github/workflows/wedding-movie-production-critical-path-dashboard-ci.yml"
 
@@ -53,6 +57,8 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - name: Verify production critical-path dashboard contracts
         run: node scripts/verify-wedding-movie-production-critical-path-dashboard.mjs
+      - name: Verify DaVinci critical-path Start Gate routing
+        run: node scripts/verify-davinci-critical-path-start-gate.mjs
       - name: Verify blocker-specific recovery routing
         run: node scripts/verify-movie-production-blocker-recovery.mjs
       - name: Typecheck and build Movie Dashboard
