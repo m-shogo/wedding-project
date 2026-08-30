@@ -64,9 +64,10 @@ function evaluate(movieId: 'opening' | 'profile'): ProjectGate {
 
   const blockers: string[] = [];
   if (!artifact) blockers.push('REMOTION_ELEMENT_IDENTITY_ARTIFACT_MISSING_OR_INVALID');
-  if (artifact && artifact.schemaVersion !== 'wedding-remotion-element-handoff-identities/v1') blockers.push('REMOTION_ELEMENT_IDENTITY_SCHEMA_MISMATCH');
+  if (artifact && artifact.schemaVersion !== 'wedding-remotion-element-handoff-identities/v2') blockers.push('REMOTION_ELEMENT_IDENTITY_SCHEMA_MISMATCH');
   if (artifact && artifact.authority !== 'SHA_BOUND_WEDDING_REMOTION_ELEMENT_HANDOFF_IDENTITY') blockers.push('REMOTION_ELEMENT_IDENTITY_AUTHORITY_MISMATCH');
   if (artifact && artifact.canonicalSource?.blockSha256 !== currentCanonicalSha) blockers.push('REMOTION_ELEMENT_CANONICAL_SOURCE_SHA_STALE');
+  if (artifact && (artifact.catalogIdentities?.length ?? 0) === 0) blockers.push('REMOTION_ELEMENT_CATALOG_IDENTITIES_MISSING');
 
   const project = artifact?.projects?.find((item: any) => item.movieId === movieId);
   if (artifact && !project) blockers.push('REMOTION_ELEMENT_IDENTITY_PROJECT_MISSING');
@@ -76,10 +77,13 @@ function evaluate(movieId: 'opening' | 'profile'): ProjectGate {
     if ((project.identities?.length ?? 0) !== adoptedCandidateIds.length) blockers.push('REMOTION_ELEMENT_IDENTITY_CARDINALITY_MISMATCH');
     for (const patternId of adoptedCandidateIds) {
       const identity = project.identities?.find((item: any) => item.patternId === patternId);
+      const catalogIdentity = artifact?.catalogIdentities?.find((item: any) => item.patternId === patternId);
       if (!identity) {
         blockers.push(`REMOTION_ELEMENT_IDENTITY_MISSING:${patternId}`);
         continue;
       }
+      if (!catalogIdentity) blockers.push(`REMOTION_ELEMENT_CATALOG_IDENTITY_MISSING:${patternId}`);
+      if (catalogIdentity && JSON.stringify(identity) !== JSON.stringify(catalogIdentity)) blockers.push(`REMOTION_ELEMENT_ADOPTED_IDENTITY_CATALOG_MISMATCH:${patternId}`);
       if (identity.canonicalBlockSha256 !== currentCanonicalSha) blockers.push(`REMOTION_ELEMENT_CANONICAL_SOURCE_SHA_STALE:${patternId}`);
       if (identity.studioInstallActual !== 'NOT_RUN' && identity.studioInstallActual !== 'PASS') blockers.push(`REMOTION_ELEMENT_STUDIO_ACTUAL_INVALID:${patternId}`);
     }

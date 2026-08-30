@@ -34,12 +34,27 @@ if (!existsSync(artifactPath)) {
 
 const currentCanonicalSha = sha256(canonicalTypographyBlock());
 const artifact = JSON.parse(readFileSync(artifactPath, 'utf8')) as any;
-if (artifact.schemaVersion !== 'wedding-remotion-element-handoff-identities/v1') block('HANDOFF_IDENTITY_SCHEMA_MISMATCH');
+if (artifact.schemaVersion !== 'wedding-remotion-element-handoff-identities/v2') block('HANDOFF_IDENTITY_SCHEMA_MISMATCH');
 if (artifact.authority !== 'SHA_BOUND_WEDDING_REMOTION_ELEMENT_HANDOFF_IDENTITY') block('HANDOFF_IDENTITY_AUTHORITY_MISMATCH');
 if (artifact.canonicalSource?.path !== 'motion-studio/src/motion-kit/engines.tsx#TypographyRevealEngine') block('CANONICAL_SOURCE_IDENTITY_MISMATCH');
 if (artifact.canonicalSource?.blockSha256 !== currentCanonicalSha) block('CANONICAL_SOURCE_SHA_STALE');
 
 const candidateById = new Map(remotionElementCandidates.map((candidate) => [candidate.patternId, candidate]));
+const catalogIdentities = Array.isArray(artifact.catalogIdentities) ? artifact.catalogIdentities : [];
+if (catalogIdentities.length !== remotionElementCandidates.length) block('CATALOG_IDENTITY_CARDINALITY_MISMATCH');
+for (const candidate of remotionElementCandidates) {
+  const identity = catalogIdentities.find((item: any) => item.patternId === candidate.patternId);
+  if (!identity) { block(`catalog:${candidate.patternId}:IDENTITY_MISSING`); continue; }
+  if (identity.canonicalEngine !== candidate.canonicalEngine) block(`catalog:${candidate.patternId}:CANONICAL_ENGINE_MISMATCH`);
+  if (identity.canonicalMode !== candidate.canonicalMode) block(`catalog:${candidate.patternId}:CANONICAL_MODE_MISMATCH`);
+  if (identity.canonicalSource !== 'motion-studio/src/motion-kit/engines.tsx#TypographyRevealEngine') block(`catalog:${candidate.patternId}:CANONICAL_SOURCE_MISMATCH`);
+  if (identity.canonicalBlockSha256 !== currentCanonicalSha) block(`catalog:${candidate.patternId}:CANONICAL_SOURCE_SHA_STALE`);
+  if (identity.payloadSlug !== candidate.payloadSlug) block(`catalog:${candidate.patternId}:PAYLOAD_SLUG_MISMATCH`);
+  if (identity.studioInstallActual !== candidate.studioInstallActual) block(`catalog:${candidate.patternId}:STUDIO_INSTALL_ACTUAL_MISMATCH`);
+  if (identity.studioControlReadbackActual !== candidate.studioControlReadbackActual) block(`catalog:${candidate.patternId}:STUDIO_CONTROL_READBACK_ACTUAL_MISMATCH`);
+  if (identity.productionDependencyPromoted !== candidate.productionDependencyPromoted) block(`catalog:${candidate.patternId}:DEPENDENCY_PROMOTION_MISMATCH`);
+}
+
 for (const movieId of ['opening', 'profile'] as const) {
   const project = artifact.projects?.find((item: any) => item.movieId === movieId);
   const expectedIds = adoptedIds(movieId);
@@ -51,15 +66,11 @@ for (const movieId of ['opening', 'profile'] as const) {
   for (const patternId of expectedIds) {
     const candidate = candidateById.get(patternId);
     const identity = project.identities?.find((item: any) => item.patternId === patternId);
+    const catalogIdentity = catalogIdentities.find((item: any) => item.patternId === patternId);
     if (!candidate) { block(`${movieId}:${patternId}:UNKNOWN_CANDIDATE`); continue; }
     if (!identity) { block(`${movieId}:${patternId}:IDENTITY_MISSING`); continue; }
-    if (identity.canonicalEngine !== candidate.canonicalEngine) block(`${movieId}:${patternId}:CANONICAL_ENGINE_MISMATCH`);
-    if (identity.canonicalMode !== candidate.canonicalMode) block(`${movieId}:${patternId}:CANONICAL_MODE_MISMATCH`);
-    if (identity.canonicalSource !== 'motion-studio/src/motion-kit/engines.tsx#TypographyRevealEngine') block(`${movieId}:${patternId}:CANONICAL_SOURCE_MISMATCH`);
-    if (identity.canonicalBlockSha256 !== currentCanonicalSha) block(`${movieId}:${patternId}:CANONICAL_SOURCE_SHA_STALE`);
-    if (identity.studioInstallActual !== candidate.studioInstallActual) block(`${movieId}:${patternId}:STUDIO_INSTALL_ACTUAL_MISMATCH`);
-    if (identity.studioControlReadbackActual !== candidate.studioControlReadbackActual) block(`${movieId}:${patternId}:STUDIO_CONTROL_READBACK_ACTUAL_MISMATCH`);
-    if (identity.productionDependencyPromoted !== candidate.productionDependencyPromoted) block(`${movieId}:${patternId}:DEPENDENCY_PROMOTION_MISMATCH`);
+    if (!catalogIdentity) { block(`${movieId}:${patternId}:CATALOG_IDENTITY_MISSING`); continue; }
+    if (JSON.stringify(identity) !== JSON.stringify(catalogIdentity)) block(`${movieId}:${patternId}:ADOPTED_IDENTITY_CATALOG_MISMATCH`);
   }
 }
 if (artifact.macRemotionStudioGuiActualPerformedByThisExport !== false) block('EXPORT_MUST_NOT_CLAIM_REMOTION_STUDIO_GUI_ACTUAL');
@@ -69,6 +80,7 @@ for (const code of [...new Set(blockers)].sort()) console.error(`BLOCK / ${code}
 if (blockers.length > 0) process.exit(1);
 console.log('weddingRemotionElementHandoffIdentity=CURRENT_SHA_BOUND');
 console.log(`canonicalBlockSha256=${currentCanonicalSha}`);
+console.log(`catalogIdentityCount=${catalogIdentities.length}`);
 console.log('macRemotionStudioGuiActualPerformedByThisCheck=NO');
 console.log('macDaVinciGuiActualPerformedByThisCheck=NO');
 console.log('productionDependencyPromotedByThisCheck=NO');

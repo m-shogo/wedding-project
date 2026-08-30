@@ -57,9 +57,10 @@ function evaluate(movieId: 'opening' | 'profile') {
 
   const blockers: string[] = [];
   if (!identityArtifact) blockers.push('REMOTION_ELEMENT_IDENTITY_ARTIFACT_MISSING_OR_INVALID');
-  if (identityArtifact && identityArtifact.schemaVersion !== 'wedding-remotion-element-handoff-identities/v1') blockers.push('REMOTION_ELEMENT_IDENTITY_SCHEMA_MISMATCH');
+  if (identityArtifact && identityArtifact.schemaVersion !== 'wedding-remotion-element-handoff-identities/v2') blockers.push('REMOTION_ELEMENT_IDENTITY_SCHEMA_MISMATCH');
   if (identityArtifact && identityArtifact.authority !== 'SHA_BOUND_WEDDING_REMOTION_ELEMENT_HANDOFF_IDENTITY') blockers.push('REMOTION_ELEMENT_IDENTITY_AUTHORITY_MISMATCH');
   if (identityArtifact && identityArtifact.canonicalSource?.blockSha256 !== canonicalBlockSha256) blockers.push('REMOTION_ELEMENT_CANONICAL_SOURCE_SHA_STALE');
+  if (identityArtifact && (identityArtifact.catalogIdentities?.length ?? 0) === 0) blockers.push('REMOTION_ELEMENT_CATALOG_IDENTITIES_MISSING');
 
   const project = identityArtifact?.projects?.find((item: any) => item.movieId === movieId);
   if (identityArtifact && !project) blockers.push('REMOTION_ELEMENT_IDENTITY_PROJECT_MISSING');
@@ -69,8 +70,11 @@ function evaluate(movieId: 'opening' | 'profile') {
     if ((project.identities?.length ?? 0) !== adoptedCandidateIds.length) blockers.push('REMOTION_ELEMENT_IDENTITY_CARDINALITY_MISMATCH');
     for (const patternId of adoptedCandidateIds) {
       const identity = project.identities?.find((item: any) => item.patternId === patternId);
+      const catalogIdentity = identityArtifact?.catalogIdentities?.find((item: any) => item.patternId === patternId);
       if (!identity) blockers.push(`REMOTION_ELEMENT_IDENTITY_MISSING:${patternId}`);
-      else if (identity.canonicalBlockSha256 !== canonicalBlockSha256) blockers.push(`REMOTION_ELEMENT_CANONICAL_SOURCE_SHA_STALE:${patternId}`);
+      if (!catalogIdentity) blockers.push(`REMOTION_ELEMENT_CATALOG_IDENTITY_MISSING:${patternId}`);
+      if (identity && catalogIdentity && JSON.stringify(identity) !== JSON.stringify(catalogIdentity)) blockers.push(`REMOTION_ELEMENT_ADOPTED_IDENTITY_CATALOG_MISMATCH:${patternId}`);
+      if (identity && identity.canonicalBlockSha256 !== canonicalBlockSha256) blockers.push(`REMOTION_ELEMENT_CANONICAL_SOURCE_SHA_STALE:${patternId}`);
     }
   }
 
@@ -96,6 +100,8 @@ const stablePayload = {
   canonicalBlockSha256,
   identityArtifactPath: 'movie-dashboard/out/remotion-element-handoff/wedding-remotion-element-identities.json',
   identityArtifactSha256,
+  identityArtifactSchemaVersion: identityArtifact?.schemaVersion ?? null,
+  catalogIdentityCount: identityArtifact?.catalogIdentities?.length ?? 0,
   projects,
   productionGateBlocked: projects.some((project) => project.identityRequired && !project.identityCurrent),
   macRemotionStudioGuiActual: 'NOT_RUN',
@@ -103,6 +109,7 @@ const stablePayload = {
   productionDependencyPromotedByArtifactExport: false,
   guardrails: [
     'UNADOPTED_REMOTION_ELEMENT_IDENTITY_GATE_ARTIFACT_IS_NON_BLOCKING',
+    'CATALOG_IDENTITY_EXISTS != WEDDING_PROJECT_ADOPTED',
     'ADOPTED_ELEMENT_GATE_ARTIFACT_STALE => EFFECTIVE_PALMIER_CURRENT_FALSE',
     'ADOPTED_ELEMENT_GATE_ARTIFACT_STALE => EFFECTIVE_DAVINCI_CURRENT_FALSE',
     'ADOPTED_ELEMENT_GATE_ARTIFACT_STALE => DAVINCI_RECOVERY_CURRENT_FALSE',
@@ -115,6 +122,8 @@ mkdirSync(dirname(outputPath), {recursive: true});
 writeFileSync(outputPath, `${JSON.stringify(artifact, null, 2)}\n`);
 console.log(`wrote=${outputPath}`);
 console.log(`artifactSha256=${artifact.artifactSha256}`);
+console.log(`identityArtifactSchemaVersion=${artifact.identityArtifactSchemaVersion ?? 'MISSING'}`);
+console.log(`catalogIdentityCount=${artifact.catalogIdentityCount}`);
 console.log(`productionGateBlocked=${artifact.productionGateBlocked ? 'YES' : 'NO'}`);
 console.log('macRemotionStudioGuiActual=NOT_RUN');
 console.log('macDaVinciGuiActual=NOT_RUN');
