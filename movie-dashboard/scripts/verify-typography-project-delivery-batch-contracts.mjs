@@ -39,14 +39,17 @@ for (const token of [
   'sceneBindings: identitySceneBindings',
   'artifactPath: firstIdentity?.shaBinding.artifactPath ?? null',
   'exportCommand: firstIdentity?.shaBinding.exportCommand ?? null',
-  'checkCommand: firstIdentity?.shaBinding.checkCommand ?? null',
+  'buildProjectRemotionIdentityProductionPrepCommand',
+  'prepare-wedding-project-remotion-production-handoff.mts --movie=${projectId} --phase=identity',
+  'checkCommand: projectIdentityProductionPrepCommand',
+  'catalog identity export/currentness + SHA-bound Project receipt生成/再検証を1回で行い',
   'mustRunBeforePalmierDaVinciHandoff: identitySceneBindings.length > 0',
   'identityVerificationState: TypographyProjectRemotionIdentityVerificationState = identitySceneBindings.length > 0 ? "NOT_RUN" : "NOT_APPLICABLE"',
   'remotionIdentityVerificationState: identityVerificationState',
   'batchReadyはproductionReadyもRemotion identity currentnessも意味せず',
   'productionReady: false',
   'stale contextをsilent rebaseしない',
-  'Remotion Studio GUI Actual / Mac DaVinci Actual / Human promotion / Scene-bound Release Gate',
+  'production prep commandのCURRENTもRemotion Studio GUI Actual / Mac DaVinci Actual / Human promotion',
 ]) requireText(batch, token, `project batch contract missing: ${token}`);
 
 for (const token of [
@@ -132,4 +135,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log("Typography Project Delivery Batch contracts OK: UI export requires current route + persisted role context, selected Scene Remotion identities are aggregated into an explicit NOT_RUN pre-handoff verification plan, and Studio/DaVinci Actual plus productionReady remain unclaimed.");
+console.log("Typography Project Delivery Batch contracts OK: UI export requires current route + persisted role context, selected Scene Remotion identities are aggregated into an explicit NOT_RUN pre-handoff verification plan whose visible verify command runs the one-command SHA-bound production prep, and Studio/DaVinci Actual plus productionReady remain unclaimed.");
