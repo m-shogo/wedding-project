@@ -93,7 +93,7 @@ At thumbnail scale, without reading text, the 8 pages should approximately read 
 - P03: `ONE STORY ANCHOR + 2–3 EPISODE CLUSTERS`;
 - P04–P05: `ONE WIDE JOURNEY FEATURE WITH MULTIPLE DESTINATIONS + ONE EMOTIONAL PEAK`;
 - P06: `IRREGULAR HUMAN PHOTO MOSAIC`;
-- P07: `BIG TIMES / CHRONOLOGY`;
+- P07: `DISCOVERY MAP / TODAY DETAILS / LOOK-AROUND CLUSTERS`;
 - P08: `ONE CALM IMAGE + MESSAGE`.
 
 If two adjacent pages have the same silhouette, redesign before decoration.
@@ -242,27 +242,32 @@ When sources exist:
 ### Pass condition
 Page remains intentional in MIN state. If it only looks good with seven fillers, architecture fails.
 
-## 11. P07 WEDDING DAY greybox
+## 11. P07 TODAY'S TRAVEL GUIDE / LOOK AROUND greybox
 
 ### Goal
-Functional time hierarchy first; photos optional.
+Prove a seated-guest discovery page that makes guests look around today's wedding and notice verified details. P07 is not a timetable or pre-arrival logistics page.
 
-### Required factual hierarchy
-- page title/date/location;
-- 14:10 Ceremony — major time field;
-- 14:40 unresolved guidance — visible flexible-copy field;
-- 15:00 Reception — major time field;
-- 17:30 finish marker.
+### Required editorial hierarchy
+- page title / short TODAY context;
+- one dominant `LOOK AROUND` or discovery-map gesture;
+- 3–5 elastic discovery zones for verified wedding details such as table-country themes, décor, flowers, cake, travel motifs, or small hidden details;
+- one optional `TODAY'S DESTINATION` / location marker only when the exact copy is verified;
+- photos are optional and must remain secondary to the discovery structure unless a verified venue/detail photo deserves editorial weight.
 
-### Greybox stress test
-Use a deliberately long multi-line placeholder in the unresolved 14:40 copy field.
-Do not shrink type to make it fit.
+### Greybox stress tests
+- page must still work with zero photos;
+- one discovery item may grow to 3–4 lines without shrinking body type;
+- one or two discovery modules may disappear if the corresponding wedding detail is not verified;
+- a portrait or landscape detail photo can be introduced later without rebuilding the page;
+- no empty space may be filled with invented wedding facts.
 
 ### Pass condition
-- chronology obvious from thumbnail;
-- 14:10 and 15:00 dominate;
-- copy supports can grow vertically;
-- page still works with zero photos.
+- thumbnail reads as active discovery/editorial information rather than schedule chronology;
+- one primary discovery gesture is obvious;
+- supporting discovery modules have intentionally unequal weights rather than equal cards;
+- no dress code/access/RSVP/check-in/timetable-first information consumes premium space;
+- page works with zero photos and remains useful to a guest who is already seated;
+- P06 → P07 creates a clear `REAL LIFE → TODAY` transition.
 
 ## 12. P08 BACK COVER greybox
 
@@ -306,7 +311,7 @@ Greybox fails if any of these break the page:
 - one expected support photo disappears;
 - one photo orientation changes;
 - P06 has only 3 usable photos;
-- P07 unresolved guidance becomes 3–4 lines;
+- one P07 discovery note becomes 3–4 lines or one/two discovery modules are removed because the detail is unverified;
 - P04 Okinawa hero later turns out to be portrait rather than landscape.
 
 The correction is reflow/role adaptation, not smaller type.
@@ -319,7 +324,7 @@ Do not proceed to decorative parts until:
 - P03 story order works without exact dates;
 - P04–P05 works with P04 unresolved photo geometry;
 - P06 passes MIN/IDEAL/MAX photo-count states;
-- P07 passes long-copy stress with zero-photo fallback;
+- P07 passes removable/long-copy discovery stress with a zero-photo fallback and contains no schedule-first logistics structure;
 - P08 closes calmly;
 - adjacent page silhouettes differ materially;
 - all photo masks remain independently replaceable;
