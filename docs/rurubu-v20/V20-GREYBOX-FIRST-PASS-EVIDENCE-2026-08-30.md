@@ -1,6 +1,6 @@
 # V20 Greybox First-Pass Evidence — 2026-08-30
 
-Status: `LIVE_FIGMA_STRUCTURAL_PROOF / NO DECORATIVE POLISH YET`
+Status: `LIVE_FIGMA_STRUCTURAL_PROOF / P07_DISCOVERY_ROLE / P01_SOURCE_AWARE / NO FINAL DECORATIVE POLISH YET`
 
 Purpose: record what has actually been built and visually reviewed in the new clean-slate V20 Figma surface so later work does not regress to pre-proof assumptions.
 
@@ -30,19 +30,19 @@ Each page uses the V20 physical working model:
 - trim guide inset approximately `11.34 px`;
 - safe-copy guide inset approximately `34.02 px`.
 
-No final palette, flower/sticker decoration, final title art or production photo placement is part of this pass.
+No final palette, final title art or final production photo placement is claimed by this evidence.
 
 ## 2. Whole-book silhouette result
 
 The 8-page book-thumbnail review currently shows materially different silhouettes:
 
-- P01: dominant cover hero + masthead + small cover hooks;
+- P01: dominant cover hero + masthead + colliding cover hooks;
 - P02: asymmetric person/profile structure;
 - P03: story anchor + episodes + calm narrative field;
 - P04: multiple destination zones with source-unknown elasticity;
 - P05: one major Hawaii hero + emotional support + proposal calm field;
 - P06: irregular photo-led mosaic;
-- P07: large-time chronology;
+- P07: discovery/map field with destination/theme collisions rather than chronology;
 - P08: one calm closing image + message.
 
 First-pass result: `PASS WITH TARGETED QA STILL REQUIRED`.
@@ -51,10 +51,10 @@ There is no evidence at this stage that all eight pages are one repeated card/te
 
 ## 3. Logical spread previews
 
-Actual-size side-by-side QA previews were created for:
+Actual-size side-by-side QA previews exist for:
 - P02–P03: `WHO → STORY`;
 - P04–P05: `CENTER JOURNEY → PEAK`;
-- P06–P07: `LIFE → TODAY`.
+- P06–P07: `REAL LIFE → TODAY`.
 
 These are QA clones only, not export masters.
 
@@ -73,7 +73,7 @@ Initial result exposed a real structural failure:
 - P05 route originally entered much higher;
 - therefore the journey line did not visually survive the fold.
 
-Correction performed:
+Correction performed earlier:
 - production P05 route-entry node `3289:23` moved to lower fold alignment;
 - QA preview route-entry node `3291:71` matched;
 - P04 unresolved Okinawa/Korea image zones were given visible neutral image weight while retaining dashed `SOURCE UNKNOWN` semantics.
@@ -89,13 +89,25 @@ Important:
 - no fake memory image was inserted.
 
 ### P06–P07
+The old schedule-first P07 evidence is superseded.
+
+Current P07 production frame:
+- `3287:29`;
+- `P07_V20_GREYBOX / TODAY'S TRAVEL GUIDE / FIND THE JOURNEY`.
+
+Current P07 preview clone:
+- `3311:2`.
+
 Current result: `PASS FIRST STRUCTURAL REVIEW`.
 
 Observed:
 - P06 reads photo-led / human / irregular;
-- P07 reads information-led / chronological;
-- adjacent pages are strongly differentiated;
-- P07 does not need photography to communicate its job.
+- P07 reads graphic / discovery / map-and-destination-led;
+- the spread now creates `REAL LIFE → TODAY` rather than `PHOTO MOSAIC → TIMETABLE`;
+- P07 can communicate its job without photography;
+- schedule-first/pre-arrival utility is no longer production authority.
+
+See `V20-P07-SEATED-GUEST-GREYBOX-EVIDENCE-2026-08-30.md` for the dedicated replacement evidence.
 
 ## 4. P01 source-behavior silhouette test
 
@@ -133,20 +145,53 @@ C — DRAMATIC SCALE:
 Current provisional direction:
 `B / TROPICAL FRAME / 035` first, `A / 031` fallback, `C / 023` experimental alternate.
 
-This is NOT final photo selection. Actual-image-in-layout comparison is still required before final cover crop is frozen.
+### New direct `035.jpg` source evidence
 
-### Tooling limitation encountered
+On 2026-08-30 the raw `035.jpg` source was downloaded and pixel-opened.
 
-An attempt was made to upload the raw local `031 / 035 / 023` files directly into the QA hero nodes. The local execution environment could not resolve the Figma upload host, so the upload POST did not execute.
+Verified:
+- source raster `4500 × 3000 px`;
+- 3:2 landscape;
+- bright Hawaii waterfront/park environment;
+- couple is small and low/near center;
+- large real palm geometry already enters from the top and sides;
+- broad sky/water field gives title/copy room;
+- foreground grass can support lower editorial vessels without covering faces.
 
-No Figma corruption occurred.
+Print consequence:
+- full 4500 px width across 148 mm is roughly 772 ppi before crop;
+- resolution is not the current P01 blocker;
+- crop/recognition and title/photo interaction are the actual design constraints.
 
-A read-only search for already-imported matching image fills on `00_RURUBU_START_HERE` returned no matching named image fill.
+REAL → GENERATED bridge consequence:
+- generated tropical art must extend/counterbalance the real palms instead of creating a second symmetrical palm wreath;
+- keep generated density away from the small couple and masthead quiet zones;
+- let the real source drive green/sky/warm accent weighting without flattening the whole cover into one sampled palette.
+
+### Live P01 source-aware update
+
+Production-greybox P01 `3287:5` was re-read live.
+
+The hero slot was updated without claiming an image placement:
+- hero node `3288:6` renamed to `PHOTO / HERO / 035 PROVISIONAL / REAL SOURCE 4500x3000`;
+- hero annotation node `3288:7` changed to `HERO / 035 PROVISIONAL • 4500×3000 • COUPLE LOW-CENTER`;
+- post-write P01 screenshot was captured for verification.
+
+This is a semantic/source-aware production correction only. The actual raster is not yet placed in the Figma hero node.
+
+### Image-transfer limitation
+
+A fresh attempt to use Figma's raster upload slot for the raw local `035.jpg` reached the upload-URL allocation step, but the execution container could not resolve `mcp.figma.com` for the actual byte POST.
+
+Observed error class:
+- DNS resolution failure at upload host;
+- no Figma mutation from the failed upload.
 
 Decision:
-- do not waste time mining old layout pages merely to force the images into this QA now;
-- retain the source-behavior geometry proof;
-- perform actual-image comparison when reliable image transfer is available.
+- do not fake or claim image placement;
+- preserve the verified local source evidence and live semantic hero binding;
+- retry actual raster placement on a later run when the upload host is reachable;
+- do not mine old V10/V11/V12 image fills as a workaround.
 
 ## 5. P06 photo-count resilience test
 
@@ -182,7 +227,7 @@ Observed failure:
 - lower supporting images started forming a quasi-equal horizontal tile row;
 - this reproduced the UI/Instagram-grid behavior V20 explicitly rejects.
 
-Correction performed:
+Correction performed earlier:
 - lower support/detail roles were varied in size and vertical position;
 - one support was raised into controlled overlap territory;
 - micro photo and caption field were separated into unequal roles;
@@ -190,15 +235,17 @@ Correction performed:
 
 Post-correction result: `PASS FIRST STRUCTURAL REVIEW`.
 
-This is important V20 evidence: extra available photos must not automatically create a denser equal-card grid.
+This remains important V20 evidence: extra available photos must not automatically create a denser equal-card grid.
 
-## 6. Page-specific status after first pass
+## 6. Page-specific status after current pass
 
 ### P01
-`STRUCTURE READY FOR SOURCE-AWARE COVER PROOF`
+`STRUCTURE READY / 035 SOURCE VERIFIED / ACTUAL IMAGE TRANSFER PENDING`
 - three source-behavior variants exist;
-- B/035 is provisional first direction;
-- final choice waits for actual-image comparison.
+- B/035 remains provisional first direction;
+- raw 035 dimensions/composition were verified;
+- live hero slot is source-aware;
+- actual-image crop proof still waits for reliable Figma raster transfer.
 
 ### P02
 `STRUCTURE PASS / CONTENT + PHOTO INTAKE STILL OPEN`
@@ -229,11 +276,10 @@ This is important V20 evidence: extra available photos must not automatically cr
 - 7-image equal-tile failure found and repaired.
 
 ### P07
-`STRUCTURE PASS FIRST REVIEW / FINAL COPY NOT FROZEN`
-- chronology hierarchy is visible without photo dependency;
-- 14:10 and 15:00 are major anchors;
-- 14:40–15:00 remains unresolved native-copy territory;
-- current greybox includes a deliberately long multi-line copy support.
+`SEATED-GUEST DISCOVERY STRUCTURE PASS FIRST REVIEW / FINAL DETAILS NOT FROZEN`
+- old timetable structure retired;
+- discovery/map grammar is live in frame `3287:29`;
+- final table/destination wording and 2–4 real wedding details still need verification before native-copy lock.
 
 ### P08
 `STRUCTURE PASS FIRST REVIEW`
@@ -241,28 +287,30 @@ This is important V20 evidence: extra available photos must not automatically cr
 - source behavior based on calm `001.jpg` closing/transition role;
 - final image selection waits for whole-book photo repetition review.
 
-## 7. Remaining high-value blockers before decorative production
+## 7. Remaining high-value blockers before final decorated production
 
-Photo/content gaps remain more important than new governance:
-1. real Okinawa photo pool;
-2. real Korea photo pool;
-3. non-Hawaii casual/everyday photos for P06;
-4. actual Cookie/Melon photos only if photographic dog inclusion is desired;
-5. Shogo solo portrait only if later P02 composition truly needs it;
-6. non-Hawaii/courtship story-image mapping;
-7. final P07 14:40–15:00 wording;
-8. actual-image cover comparison for 031/035/023.
+Current high-value gaps:
+1. actual-image P01 placement/crop proof when raster transfer is reachable;
+2. real Okinawa photo pool;
+3. real Korea photo pool;
+4. non-Hawaii casual/everyday photos for P06;
+5. actual Cookie/Melon photos only if photographic dog inclusion is desired;
+6. Shogo solo portrait only if later P02 composition truly needs it;
+7. non-Hawaii/courtship story-image mapping;
+8. final verified P07 destination/theme wording and wedding-detail discoveries.
 
-## 8. No-decoration gate remains active
+These source/content gaps remain more important than expanding governance.
 
-Do NOT begin final flowers/stickers/stamps/display-art polish merely because this first greybox looks coherent.
+## 8. Decoration / production gate
 
-Next valid work:
-- continue source-photo discovery;
-- source-aware page-manual updates;
-- actual photo-in-mask proof where sources are reliable;
-- P01 provisional selection validation;
-- P07 copy stress / zero-photo confirmation;
-- then greybox freeze review.
+P01/P04–P05 may proceed with page-specific prepared asset work where source behavior is already verified, but decoration must not hide unresolved source gaps.
 
-Only after the greybox freeze passes should V20 Parts System placement become a production priority.
+Valid next work:
+- retry actual 035 image placement when transfer is available;
+- compare real 035 crop against 031/023 only when their pixels can also be inspected/placed reliably;
+- continue real-photo discovery;
+- build only P01/P04–P05 page-specific generated/composed assets grounded in the verified sources;
+- validate each important asset in the live composition before promotion;
+- feed back only durable production lessons.
+
+Do not produce a giant generic sticker library or resurrect a schedule-first P07.
