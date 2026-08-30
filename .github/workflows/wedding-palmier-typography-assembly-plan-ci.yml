@@ -7,6 +7,7 @@ on:
       - 'motion-studio/scripts/check-wedding-project-remotion-production-stage-status.mts'
       - 'movie-dashboard/src/data/typographyProjectDeliveryBatch.ts'
       - 'movie-dashboard/src/data/typographySceneDeliveryPackage.ts'
+      - 'movie-dashboard/src/components/WeddingProjectRemotionStageStatusCard.tsx'
       - '.github/workflows/wedding-palmier-typography-assembly-plan-ci.yml'
   workflow_dispatch:
 
@@ -49,3 +50,12 @@ jobs:
           grep -q "sceneMarkerId" motion-studio/scripts/build-wedding-palmier-typography-assembly-plan.mts
           grep -q "expectedXmlFileName" motion-studio/scripts/build-wedding-palmier-typography-assembly-plan.mts
           grep -q "projectTimelineXmlFileName" motion-studio/scripts/build-wedding-palmier-typography-assembly-plan.mts
+
+      - name: Motion Zukan exposes assembly plan only as an operator step
+        run: |
+          grep -q 'build-wedding-palmier-typography-assembly-plan.mts' movie-dashboard/src/components/WeddingProjectRemotionStageStatusCard.tsx
+          grep -q 'isStagedCurrent' movie-dashboard/src/components/WeddingProjectRemotionStageStatusCard.tsx
+          grep -q 'Palmier Assembly Plan' movie-dashboard/src/components/WeddingProjectRemotionStageStatusCard.tsx
+          grep -q 'plan生成だけではPalmier timeline export済みになりません' movie-dashboard/src/components/WeddingProjectRemotionStageStatusCard.tsx
+          grep -q 'Palmier timeline Actual' movie-dashboard/src/components/WeddingProjectRemotionStageStatusCard.tsx
+          ! grep -q 'Palmier timeline Actual=PASS' movie-dashboard/src/components/WeddingProjectRemotionStageStatusCard.tsx

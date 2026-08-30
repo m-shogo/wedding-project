@@ -10,10 +10,14 @@ const stateClass: Record<StageState, string> = {
   INVALID: "border-rose-300 text-rose-800 dark:border-rose-800 dark:text-rose-200",
 };
 
+const palmierAssemblyPlanCommand = (projectId: SceneProjectId) =>
+  `cd motion-studio && node --no-warnings scripts/build-wedding-palmier-typography-assembly-plan.mts --movie=${projectId} --write`;
+
 export function WeddingProjectRemotionStageStatusCard({projectId}: {projectId: SceneProjectId}) {
   const status = weddingProjectRemotionStageStatus[projectId];
   const state = status.state as StageState;
   const isInvalid = state === "INVALID";
+  const isStagedCurrent = state === "STAGED_CURRENT";
   const isHandoffCurrent = state === "HANDOFF_CURRENT";
 
   return (
@@ -39,16 +43,25 @@ export function WeddingProjectRemotionStageStatusCard({projectId}: {projectId: S
         <code className="overflow-x-auto whitespace-nowrap border px-2 py-1">recovery: {status.canonicalArtifacts.recovery}</code>
       </div>
 
+      {isStagedCurrent ? (
+        <div className="mt-2 border-2 border-cyan-300 dark:border-cyan-800 p-2.5">
+          <p className="text-[7px] font-semibold uppercase tracking-wide text-cyan-700 dark:text-cyan-300">次: Palmier Assembly Plan</p>
+          <p className="mt-1 text-[8px] leading-4">Scene順・Human-selected pattern/Role・Palmier marker/XML・DaVinci translator状態を1つのoperator planへまとめます。</p>
+          <code className="mt-1 block max-w-full overflow-x-auto whitespace-nowrap text-[8px] leading-4">{palmierAssemblyPlanCommand(projectId)}</code>
+          <p className="mt-1 text-[7px] leading-3 opacity-80">plan生成だけではPalmier timeline export済みになりません。実timeline/XMLはPalmier側で人間が作業・exportします。</p>
+        </div>
+      ) : null}
+
       <div className="mt-2 border-l-2 pl-2">
         <p className="text-[7px] font-semibold uppercase tracking-wide">
-          {isInvalid ? "最優先: revalidate / restage" : isHandoffCurrent ? "次: DaVinci Session Plan / Start Gate" : "次の正本操作"}
+          {isInvalid ? "最優先: revalidate / restage" : isHandoffCurrent ? "次: DaVinci Session Plan / Start Gate" : isStagedCurrent ? "canonical stageの次工程" : "次の正本操作"}
         </p>
         <p className="mt-1 text-[8px] font-semibold">{status.next.kind}</p>
         <code className="mt-1 block max-w-full overflow-x-auto whitespace-nowrap text-[8px] leading-4">cd motion-studio && {status.next.command}</code>
       </div>
 
       <p className="mt-2 border-t pt-2 text-[8px] leading-4 opacity-80">
-        この表示はread-only checkerから生成したsnapshotです。STAGED_CURRENT / HANDOFF_CURRENT / CI GREENは、Remotion Studio GUI ActualやMac DaVinci GUI ActualのPASSを意味しません。GUI Actualは人間が実行した場合だけ記録します。
+        この表示はread-only checkerから生成したsnapshotです。STAGED_CURRENT / HANDOFF_CURRENT / Assembly Plan / CI GREENは、Remotion Studio GUI ActualやPalmier timeline Actual、Mac DaVinci GUI ActualのPASSを意味しません。GUI Actualは人間が実行した場合だけ記録します。
       </p>
     </section>
   );
