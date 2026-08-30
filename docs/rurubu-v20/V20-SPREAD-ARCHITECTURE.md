@@ -1,10 +1,12 @@
 # V20 Spread-First Architecture
 
-Status: `PREFERRED_V20_PAGE_MAP`
+Status: `PREFERRED_V20_PAGE_MAP / SEATED_GUEST_CONTEXT`
 
 Format: A5 portrait, 8 pages fixed.
 
 V20 is designed as a physical booklet, not eight unrelated canvases.
+
+Primary reading context: guests are already at the wedding venue and seated. V20 is therefore a table-side editorial booklet, not a pre-arrival guide.
 
 Physical reading units:
 - P01 = front cover;
@@ -24,10 +26,10 @@ Do not impose printer sheets inside the editable design master. Design/export lo
 → `UNDERSTAND THEIR STORY`
 → `TRAVEL THROUGH THEIR MEMORIES`
 → `SEE THEIR REAL LIFE / BEST SHOTS`
-→ `ARRIVE AT TODAY`
+→ `DISCOVER TODAY'S WEDDING WORLD`
 → `CLOSE THE JOURNEY WARMLY`
 
-The guest should feel that the booklet itself is a miniature journey.
+The guest should feel that the booklet itself is a miniature journey and that the final interior page makes the actual venue around them more interesting.
 
 ---
 
@@ -45,7 +47,7 @@ Primary content:
 - 3–5 tiny editorial cover hooks only when grounded.
 
 Composition verb:
-`STACK + CROP + BURST`
+`STACK + CROP + BURST + COLLIDE`
 
 Density:
 very high impact, but not tiny-copy heavy.
@@ -56,6 +58,7 @@ Photos:
 Important:
 - cover is a poster, not an index page;
 - title/photo must remain legible from thumbnail distance;
+- title, photography, vessels and decorative art may overlap strongly when readability support exists;
 - do not copy a commercial magazine logo exactly; V20 should have an original masthead with Japanese travel-magazine energy.
 
 ---
@@ -132,7 +135,7 @@ Primary content:
 - a route/map device that connects real destinations rather than decorating randomly.
 
 Composition verb:
-`ROUTE + HERO + SATELLITES + ARRIVAL`
+`ROUTE + HERO + SATELLITES + ARRIVAL + COLLISION`
 
 Density:
 high, clustered, photo-led.
@@ -146,7 +149,7 @@ Recommended left/right behavior:
 Center-fold rule:
 The fold may carry atmosphere and route continuity, not critical information.
 
-This spread is the strongest place to use mixed postcard/polaroid/cutout/map/photo treatments.
+This spread is the strongest place to use mixed postcard/polaroid/cutout/map/photo treatments and strong layer overlap.
 
 ---
 
@@ -176,30 +179,58 @@ Do not repeat the same travel-photo frame system from the center spread.
 
 ---
 
-# P07 — TODAY'S TRAVEL GUIDE / WEDDING DAY
+# P07 — TODAY'S TRAVEL GUIDE / LOOK AROUND THE WEDDING
 
 Page job:
-Give guests useful, confirmed information and make “today” feel like the final stop of the journey.
+Reward guests who are already seated. Make the physical wedding around them more fun to notice, discuss and remember.
 
-Primary content:
-- 2026.10.24 SAT / YOKOHAMA;
-- Ceremony 14:10–14:40;
-- unresolved 14:40–15:00 area remains native placeholder until confirmed;
-- Reception 15:00–17:30;
-- optional verified venue/food/guide facts only if confirmed;
-- 1–3 supporting venue/detail images when useful.
+This page is NOT a timetable, access page, dress-code page or pre-arrival instruction page.
+
+Primary content candidates:
+- `TODAY'S DESTINATION / YOKOHAMA / 2026.10.24` as the editorial anchor;
+- the wedding's travel concept and destination-themed table/decor idea;
+- 3–6 `LOOK AROUND` discoveries grounded in actual venue/wedding details;
+- 2–4 `EDITOR'S PICK` details that the couple intentionally chose or made;
+- tiny visual references to real travel motifs visible in the room;
+- optional one verified venue/detail photo or illustration when useful.
+
+Potential grounded discovery categories, final wording still subject to confirmation:
+- table destination themes;
+- flower/decor details;
+- travel-signage / ticket / passport motifs used physically at the wedding;
+- cake or other meaningful design detail;
+- one small hidden/easter-egg style observation if actually present.
 
 Composition verb:
-`ROUTE + TIME + STOP + ARRIVAL`
+`DISCOVER + CIRCLE + POINT + COLLIDE`
 
 Density:
-high information hierarchy, moderate decoration.
+medium-high editorial density, low long-copy density.
 
-Key rule:
-Chronology is useful content, not a fake airline/transit UI. Keep times immediately scannable.
+Suggested silhouette:
+- one large `TODAY'S TRAVEL GUIDE` title colliding with a background/photo/illustration;
+- one irregular world/travel cluster spanning roughly 35–50% of page perception;
+- 3–6 unequal discovery callouts placed around/over that cluster;
+- one visually stronger `EDITOR'S PICK` vessel;
+- one calm factual field for any explanatory copy;
+- stamps/arrows/labels may strongly overlap photography and background art when native copy remains readable.
+
+Important:
+- this is not a literal seating map unless a verified map is intentionally supplied;
+- do not tell guests where to sit; they are already seated;
+- do not list all table facts if the result becomes a tiny unreadable directory;
+- choose the most interesting details rather than cataloguing everything;
+- do not duplicate menu/drink/seating/escort information owned by other paper items;
+- no dress code, access directions, parking, check-in, RSVP or arrival guidance;
+- no fake venue facts, table destinations, hidden details or couple intentions.
 
 Spread relationship P06–P07:
-P06 is emotional/photo play; P07 is useful/today. The contrast creates rhythm instead of two busy information pages.
+- P06 = `OUR REAL LIFE / WHO WE ARE` through candid photography;
+- P07 = `LOOK AROUND / WHERE YOU ARE NOW` through wedding discoveries;
+- together they move from the couple's everyday world into the guest's present physical experience.
+
+Photo budget:
+0–2 photos. P07 must work even with zero photos because the strongest content is editorial discovery, not gallery imagery.
 
 ---
 
@@ -234,7 +265,7 @@ The eye should feel a release after P07.
 - P03: 5.5/10
 - P04–P05: 9/10 center-spread peak
 - P06: 7.5/10 image density
-- P07: 7.5/10 information density
+- P07: 7/10 discovery/editorial density
 - P08: 4/10
 
 Do not make all pages equally loud.
@@ -249,10 +280,10 @@ Working target only:
 - P03: 2–4
 - P04–P05: 6–9
 - P06: 5–8
-- P07: 1–3
+- P07: 0–2
 - P08: 1–2
 
-Total planned slots: roughly 21–35, with a preferred unique-photo range around 24–32 after actual selection.
+Total planned slots: roughly 20–34, with a preferred unique-photo range around 23–31 after actual selection.
 
 A photo used as a hero should normally not be reused elsewhere unless the reprise is deliberate.
 
@@ -265,11 +296,12 @@ It does not require:
 - exact relationship dates;
 - a fixed number of profile fields;
 - fabricated Friends/Family copy;
-- a food/cafe page just to fill space.
+- a food/cafe page just to fill space;
+- pre-arrival logistics that are no longer useful when the guest reads the booklet.
 
-If more real content arrives, it can enrich P02/P03/P06 without changing the eight-page spine.
+If more real content arrives, it can enrich P02/P03/P06/P07 without changing the eight-page spine.
 
-If content remains missing, the book still works because the center spread and P06 can be photo-led.
+If content remains missing, the book still works because the center spread and P06 can be photo-led while P07 can be curated around verified wedding details.
 
 ---
 
@@ -279,7 +311,7 @@ Do not change this page map because one Figma layout is difficult.
 
 Change the map only if:
 1. new real content materially changes the editorial story;
-2. a required guest-utility block has no valid home;
+2. a genuinely useful seated-guest editorial block has no valid home;
 3. actual photo inventory proves a page impossible;
 4. print/binding constraints materially require a different structure.
 
