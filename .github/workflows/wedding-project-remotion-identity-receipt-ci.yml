@@ -1,0 +1,155 @@
+name: Wedding Project Remotion Identity Receipt CI
+
+on:
+  pull_request:
+    paths:
+      - 'motion-studio/src/motion-kit/engines.tsx'
+      - 'motion-studio/scripts/export-wedding-remotion-element-handoff-identities.mts'
+      - 'motion-studio/scripts/check-wedding-remotion-element-handoff-identities.mts'
+      - 'motion-studio/scripts/verify-wedding-project-remotion-element-identities.mts'
+      - 'motion-studio/scripts/check-wedding-project-remotion-element-identity-receipt.mts'
+      - 'movie-dashboard/src/data/remotionElementCandidates.ts'
+      - 'movie-dashboard/src/data/remotionElementHandoffIdentityReference.ts'
+      - 'movie-dashboard/src/data/typographyProjectDeliveryBatch.ts'
+      - '.github/workflows/wedding-project-remotion-identity-receipt-ci.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  project-remotion-identity-receipt:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Export and verify current catalog identity
+        working-directory: motion-studio
+        run: |
+          node --no-warnings scripts/export-wedding-remotion-element-handoff-identities.mts
+          node --no-warnings scripts/check-wedding-remotion-element-handoff-identities.mts
+
+      - name: Build a handoff-ready project batch fixture
+        run: |
+          mkdir -p movie-dashboard/out/typography-project-delivery
+          cat > movie-dashboard/out/typography-project-delivery/opening-typography-production-batch.json <<'JSON'
+          {
+            "schemaVersion": "wedding-movie-typography-project-delivery/v1",
+            "authority": "DERIVED_PROJECT_HANDOFF",
+            "projectId": "opening",
+            "scenes": [{"sceneId":"opening-title","sourceRevision":"rev-001"}],
+            "remotionElementIdentityVerification": {
+              "state": "NOT_RUN",
+              "currentnessVerifiedByBatchBuild": false,
+              "selectedPatternIds": ["type-mask-reveal"],
+              "sceneBindings": [{
+                "sceneId": "opening-title",
+                "sourceRevision": "rev-001",
+                "patternId": "type-mask-reveal",
+                "adoptedForMovie": false,
+                "canonicalEngine": "TypographyRevealEngine",
+                "canonicalMode": "mask",
+                "canonicalSource": "motion-studio/src/motion-kit/engines.tsx#TypographyRevealEngine"
+              }]
+            },
+            "summary": {
+              "batchReadyForPalmierDaVinciHandoff": true,
+              "productionReady": false
+            }
+          }
+          JSON
+
+      - name: Generate and re-check SHA-bound project receipt
+        working-directory: motion-studio
+        run: |
+          node --no-warnings scripts/verify-wedding-project-remotion-element-identities.mts \
+            --movie=opening \
+            --batch=../movie-dashboard/out/typography-project-delivery/opening-typography-production-batch.json | tee /tmp/project-verify.log
+          node --no-warnings scripts/check-wedding-project-remotion-element-identity-receipt.mts \
+            --movie=opening | tee /tmp/project-check.log
+          grep -q 'projectRemotionElementIdentityVerification=CURRENT' /tmp/project-verify.log
+          grep -q 'projectRemotionElementIdentityReceipt=CURRENT' /tmp/project-check.log
+          grep -q 'verifiedSceneBindings=1' /tmp/project-check.log
+          grep -q 'macRemotionStudioGuiActual=NOT_RUN' /tmp/project-check.log
+          grep -q 'macDaVinciGuiActual=NOT_RUN' /tmp/project-check.log
+          grep -q 'productionReady=NO' /tmp/project-check.log
+          node - <<'NODE'
+          const fs = require('fs');
+          const receipt = JSON.parse(fs.readFileSync('../movie-dashboard/out/remotion-element-handoff/opening-project-remotion-identity-verification-receipt.json', 'utf8'));
+          if (receipt.state !== 'CURRENT') throw new Error('receipt must be CURRENT');
+          if (!/^[a-f0-9]{64}$/.test(receipt.sourceBatch.sha256)) throw new Error('batch SHA missing');
+          if (!/^[a-f0-9]{64}$/.test(receipt.handoffIdentityArtifact.sha256)) throw new Error('identity artifact SHA missing');
+          if (!/^[a-f0-9]{64}$/.test(receipt.canonicalTypographyEngine.blockSha256)) throw new Error('canonical block SHA missing');
+          if (receipt.macRemotionStudioGuiActualPerformedByThisVerification !== false) throw new Error('Studio Actual must remain false');
+          if (receipt.macDaVinciGuiActualPerformedByThisVerification !== false) throw new Error('DaVinci Actual must remain false');
+          if (receipt.productionReadyPromotedByThisVerification !== false) throw new Error('productionReady must remain false');
+          NODE
+
+      - name: Batch mutation makes the receipt stale
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          path = Path('movie-dashboard/out/typography-project-delivery/opening-typography-production-batch.json')
+          data = json.loads(path.read_text())
+          data['scenes'][0]['sourceRevision'] = 'rev-002'
+          data['remotionElementIdentityVerification']['sceneBindings'][0]['sourceRevision'] = 'rev-002'
+          path.write_text(json.dumps(data, indent=2) + '\n')
+          PY
+          cd motion-studio
+          if node --no-warnings scripts/check-wedding-project-remotion-element-identity-receipt.mts --movie=opening > /tmp/batch-stale.log 2>&1; then
+            echo 'Mutated batch must make the receipt stale.'
+            exit 1
+          fi
+          grep -q 'RECEIPT_SOURCE_BATCH_SHA_STALE' /tmp/batch-stale.log
+
+      - name: Re-verify, then canonical engine mutation makes receipt stale
+        working-directory: motion-studio
+        run: |
+          node --no-warnings scripts/verify-wedding-project-remotion-element-identities.mts \
+            --movie=opening \
+            --batch=../movie-dashboard/out/typography-project-delivery/opening-typography-production-batch.json
+          cp src/motion-kit/engines.tsx /tmp/project-receipt-engines.tsx
+          python - <<'PY'
+          from pathlib import Path
+          path = Path('src/motion-kit/engines.tsx')
+          text = path.read_text()
+          needle = 'export function TypographyRevealEngine({' 
+          if needle not in text:
+              raise SystemExit('TypographyRevealEngine marker missing')
+          path.write_text(text.replace(needle, '// ephemeral project receipt mutation\n' + needle, 1))
+          PY
+          if node --no-warnings scripts/check-wedding-project-remotion-element-identity-receipt.mts --movie=opening > /tmp/engine-stale.log 2>&1; then
+            echo 'Canonical engine mutation must make the project receipt stale.'
+            exit 1
+          fi
+          grep -Eq 'RECEIPT_CANONICAL_ENGINE_SHA_STALE|HANDOFF_IDENTITY_CANONICAL_SOURCE_SHA_STALE' /tmp/engine-stale.log
+          mv /tmp/project-receipt-engines.tsx src/motion-kit/engines.tsx
+
+      - name: Identity artifact mutation makes receipt stale
+        working-directory: motion-studio
+        run: |
+          node --no-warnings scripts/export-wedding-remotion-element-handoff-identities.mts
+          node --no-warnings scripts/verify-wedding-project-remotion-element-identities.mts \
+            --movie=opening \
+            --batch=../movie-dashboard/out/typography-project-delivery/opening-typography-production-batch.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          path = Path('../movie-dashboard/out/remotion-element-handoff/wedding-remotion-element-identities.json')
+          data = json.loads(path.read_text())
+          data['generatedAt'] = '2099-01-01T00:00:00.000Z'
+          path.write_text(json.dumps(data, indent=2) + '\n')
+          PY
+          if node --no-warnings scripts/check-wedding-project-remotion-element-identity-receipt.mts --movie=opening > /tmp/identity-stale.log 2>&1; then
+            echo 'Identity artifact mutation must make the project receipt stale.'
+            exit 1
+          fi
+          grep -q 'RECEIPT_IDENTITY_ARTIFACT_SHA_STALE' /tmp/identity-stale.log
+          echo 'remotionStudioGuiActual=NOT_RUN'
+          echo 'macDaVinciActual=NOT_RUN'
+          echo 'productionReady=NO'
