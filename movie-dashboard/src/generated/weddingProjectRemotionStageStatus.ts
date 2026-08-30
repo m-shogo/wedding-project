@@ -2,7 +2,7 @@
 // Do not hand-edit. Regenerate from motion-studio canonical artifacts.
 
 export const weddingProjectRemotionStageStatus = {
-  "schemaVersion": "wedding-project-remotion-stage-status-dashboard/v2",
+  "schemaVersion": "wedding-project-remotion-stage-status-dashboard/v3",
   "authority": "GENERATED_FROM_READ_ONLY_CANONICAL_STAGE_AND_PALMIER_TIMELINE_RECEIPT_CHECKERS",
   "opening": {
     "movieId": "opening",
@@ -27,9 +27,12 @@ export const weddingProjectRemotionStageStatus = {
       "state": "MISSING",
       "detail": "PALMIER_TIMELINE_EXPORT_RECEIPT_MISSING",
       "receiptPath": null,
+      "receiptSha256": null,
       "source": {
         "assemblyPlan": null,
-        "palmierFcpxml": null
+        "assemblyPlanSha256": null,
+        "palmierFcpxml": null,
+        "palmierFcpxmlSha256": null
       },
       "next": {
         "kind": "VERIFY_REAL_PALMIER_FCPXML",
@@ -60,9 +63,12 @@ export const weddingProjectRemotionStageStatus = {
       "state": "MISSING",
       "detail": "PALMIER_TIMELINE_EXPORT_RECEIPT_MISSING",
       "receiptPath": null,
+      "receiptSha256": null,
       "source": {
         "assemblyPlan": null,
-        "palmierFcpxml": null
+        "assemblyPlanSha256": null,
+        "palmierFcpxml": null,
+        "palmierFcpxmlSha256": null
       },
       "next": {
         "kind": "VERIFY_REAL_PALMIER_FCPXML",
