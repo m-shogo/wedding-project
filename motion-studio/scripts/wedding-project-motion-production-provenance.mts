@@ -95,6 +95,7 @@ export function buildWeddingProjectMotionProductionProvenance(movie: WeddingMovi
       'PROVENANCE_SOURCE_SHA256_MUST_MATCH_CURRENT_PROJECT_MOTION_EXPORT', 'PROVENANCE_RECEIPT_SHA256_BINDS_THE_CANONICAL_IMPORT_RECEIPT',
       'PROVENANCE_CURRENTNESS_SHA256_BINDS_THE_CURRENTNESS_ARTIFACT', 'PALMIER_PROJECT_MOTION_BINDING_MUST_MATCH_TOP_LEVEL_PROVENANCE',
       'PALMIER_PROJECT_MOTION_BINDING_ARTIFACT_SHA256_MUST_MATCH_DAVINCI_EXPECTATION', 'DAVINCI_RECOVERY_MUST_CARRY_PALMIER_BINDING_ARTIFACT_SHA256',
+      'RESOLVE_PROJECT_MOTION_HANDOFF_SIDECAR_SHA256_MUST_MATCH_PRODUCTION_BUNDLE_AND_RECOVERY',
       'DAVINCI_EXPECTED_PROJECT_MOTION_BINDING_MUST_MATCH_PALMIER_BINDING', 'PROJECT_MOTION_PROVENANCE_ATTACHED != PALMIER_APPLICATION_PERFORMED',
       'PROJECT_MOTION_PROVENANCE_ATTACHED != DAVINCI_APPLICATION_PERFORMED', 'PROJECT_MOTION_PROVENANCE_ATTACHED != REMOTION_STUDIO_GUI_ACTUAL',
       'PROJECT_MOTION_PROVENANCE_ATTACHED != MAC_DAVINCI_GUI_ACTUAL',
@@ -109,6 +110,7 @@ export function attachWeddingProjectMotionProductionProvenance(movie: WeddingMov
   const provenance = buildWeddingProjectMotionProductionProvenance(movie);
   const assemblyBinding = buildWeddingProjectMotionAssemblyBinding(provenance);
   const sidecarPath = join(dirname(absoluteArtifactPath), `${movie}-v1-palmier-project-motion-binding.json`);
+  const resolveHandoffPath = join(dirname(absoluteArtifactPath), `${movie}-v1-resolve-project-motion-handoff.json`);
   const nextArtifact: any = {...artifact, projectMotionProvenance: provenance};
 
   if (artifact?.palmier && artifact?.davinci) {
@@ -117,7 +119,21 @@ export function attachWeddingProjectMotionProductionProvenance(movie: WeddingMov
     nextArtifact.palmier = {...artifact.palmier, projectMotionBinding: assemblyBinding, projectMotionBindingArtifact: sidecarRef};
     nextArtifact.davinci = {...artifact.davinci, expectedProjectMotionBinding: assemblyBinding, expectedProjectMotionBindingArtifact: sidecarRef};
   } else if (existsSync(sidecarPath)) {
-    nextArtifact.projectMotionPalmierBindingArtifact = {path: basename(sidecarPath), sha256: shaFile(sidecarPath)};
+    const palmierRef = {path: basename(sidecarPath), sha256: shaFile(sidecarPath)};
+    nextArtifact.projectMotionPalmierBindingArtifact = palmierRef;
+    if (existsSync(resolveHandoffPath)) {
+      const resolveHandoff = readJson(resolveHandoffPath);
+      if (
+        resolveHandoff?.projectMotionBindingArtifact?.authority !== 'PALMIER_PROJECT_MOTION_ASSEMBLY_BINDING' ||
+        resolveHandoff?.projectMotionBindingArtifact?.projectId !== movie ||
+        resolveHandoff?.projectMotionBindingArtifact?.path !== palmierRef.path ||
+        resolveHandoff?.projectMotionBindingArtifact?.sha256 !== palmierRef.sha256 ||
+        resolveHandoff?.projectMotionBindingArtifact?.currentnessState !== 'CURRENT' ||
+        resolveHandoff?.projectMotionBindingArtifact?.macDaVinciGuiActual !== 'NOT_RUN' ||
+        resolveHandoff?.projectMotionBindingArtifact?.productionReady !== false
+      ) throw new Error(`PROJECT_MOTION_RESOLVE_HANDOFF_BINDING_INVALID:${movie}`);
+      nextArtifact.projectMotionResolveHandoffArtifact = {path: basename(resolveHandoffPath), sha256: shaFile(resolveHandoffPath)};
+    }
   }
 
   writeCanonicalJsonArtifact(absoluteArtifactPath, nextArtifact);

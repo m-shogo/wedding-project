@@ -2,6 +2,7 @@ import {createHash} from 'node:crypto';
 import {existsSync, readFileSync} from 'node:fs';
 import {dirname, join, resolve} from 'node:path';
 import {fileURLToPath} from 'node:url';
+import {resolveHandoffSidecarSchema} from '../src/data/resolveHandoff.schema.ts';
 import {
   buildWeddingPalmierProjectMotionBindingArtifact,
   buildWeddingProjectMotionAssemblyBinding,
@@ -83,6 +84,17 @@ export function verifyWeddingProjectMotionProductionProvenanceValues(movieId: Mo
   if (typeof palmierArtifact.path !== 'string' || palmierArtifact.path.length === 0) throw new Error(`PROJECT_MOTION_PROVENANCE_CONSISTENCY_PALMIER_ARTIFACT_PATH_INVALID:${movieId}`);
   assertSha('palmier-binding-artifact', palmierArtifact.sha256);
 
+  const bundleResolveArtifact = bundle?.davinci?.resolveProjectMotionHandoffSidecar;
+  const recoveryResolveArtifact = recovery?.projectMotionResolveHandoffArtifact;
+  if (!bundleResolveArtifact || !recoveryResolveArtifact) throw new Error(`PROJECT_MOTION_PROVENANCE_CONSISTENCY_RESOLVE_SIDECAR_REF_MISSING:${movieId}`);
+  if (JSON.stringify(bundleResolveArtifact) !== JSON.stringify(recoveryResolveArtifact)) {
+    throw new Error(`PROJECT_MOTION_PROVENANCE_CONSISTENCY_RESOLVE_SIDECAR_REF_DRIFT:${movieId}`);
+  }
+  if (typeof bundleResolveArtifact.path !== 'string' || bundleResolveArtifact.path.length === 0) {
+    throw new Error(`PROJECT_MOTION_PROVENANCE_CONSISTENCY_RESOLVE_SIDECAR_PATH_INVALID:${movieId}`);
+  }
+  assertSha('resolve-project-motion-sidecar', bundleResolveArtifact.sha256);
+
   if (currentProvenance && JSON.stringify(bundleShape) !== JSON.stringify(stableProvenanceShape(currentProvenance))) {
     throw new Error(`PROJECT_MOTION_PROVENANCE_CONSISTENCY_CANONICAL_DRIFT:${movieId}`);
   }
@@ -108,7 +120,9 @@ export function verifyWeddingProjectMotionProductionProvenanceValues(movieId: Mo
     state: 'CURRENT' as const, sourceSha256: bundleShape.sourceSha256 as string,
     receiptSha256: bundleShape.receiptSha256 as string, currentnessSha256: bundleShape.currentnessSha256 as string,
     palmierDavinciBindingCurrent: true as const, palmierBindingArtifactSha256: palmierArtifact.sha256 as string,
+    resolveProjectMotionHandoffSidecarSha256: bundleResolveArtifact.sha256 as string,
     recoveryCarriesPalmierBindingArtifact: true as const,
+    recoveryCarriesResolveProjectMotionHandoffSidecar: true as const,
     recoveryMarkdownCarriesPalmierBindingArtifact: true as const,
     macRemotionStudioGuiActual: 'NOT_RUN' as const, macDaVinciGuiActual: 'NOT_RUN' as const, productionReady: false as const,
   };
@@ -130,6 +144,23 @@ export function verifyWeddingProjectMotionProductionProvenanceFiles(movieId: Mov
     const actual = readJson(sidecarPath);
     const expected = buildWeddingPalmierProjectMotionBindingArtifact(bundle.projectMotionProvenance);
     if (JSON.stringify(actual) !== JSON.stringify(expected)) throw new Error(`PROJECT_MOTION_PROVENANCE_CONSISTENCY_PALMIER_ARTIFACT_CONTENT_DRIFT:${movieId}`);
+
+    const resolveRef = bundle.davinci.resolveProjectMotionHandoffSidecar;
+    const resolveSidecarPath = resolve(dirname(bundlePath), resolveRef.path);
+    if (!existsSync(resolveSidecarPath)) throw new Error(`PROJECT_MOTION_PROVENANCE_CONSISTENCY_RESOLVE_SIDECAR_MISSING:${movieId}`);
+    if (shaFile(resolveSidecarPath) !== resolveRef.sha256) throw new Error(`PROJECT_MOTION_PROVENANCE_CONSISTENCY_RESOLVE_SIDECAR_SHA_DRIFT:${movieId}`);
+    const parsedResolveSidecar = resolveHandoffSidecarSchema.safeParse(readJson(resolveSidecarPath));
+    if (!parsedResolveSidecar.success) throw new Error(`PROJECT_MOTION_PROVENANCE_CONSISTENCY_RESOLVE_SIDECAR_CONTRACT_INVALID:${movieId}`);
+    const resolveBinding = parsedResolveSidecar.data.projectMotionBindingArtifact;
+    if (
+      !resolveBinding || resolveBinding.authority !== 'PALMIER_PROJECT_MOTION_ASSEMBLY_BINDING' || resolveBinding.projectId !== movieId ||
+      resolveBinding.path !== ref.path || resolveBinding.sha256 !== ref.sha256 || resolveBinding.currentnessState !== 'CURRENT' ||
+      resolveBinding.palmierCurrent !== true || resolveBinding.davinciHandoffCurrent !== true ||
+      resolveBinding.remotionStudioGuiActual !== 'NOT_RUN' || resolveBinding.macDaVinciGuiActual !== 'NOT_RUN' || resolveBinding.productionReady !== false
+    ) throw new Error(`PROJECT_MOTION_PROVENANCE_CONSISTENCY_RESOLVE_SIDECAR_BINDING_DRIFT:${movieId}`);
+    if (parsedResolveSidecar.data.artifact.kind !== 'MEDIA' || parsedResolveSidecar.data.artifact.path !== bundle.davinci.handoffAsset) {
+      throw new Error(`PROJECT_MOTION_PROVENANCE_CONSISTENCY_RESOLVE_HANDOFF_ASSET_DRIFT:${movieId}`);
+    }
   }
   return result;
 }
@@ -143,7 +174,8 @@ function main() {
   if (result.state === 'CURRENT') {
     console.log(`projectMotionSourceSha256=${result.sourceSha256}`);
     console.log(`palmierProjectMotionBindingArtifactSha256=${result.palmierBindingArtifactSha256}`);
-    console.log('DaVinci recovery + Markdown carry Palmier Project Motion binding artifact: CURRENT');
+    console.log(`resolveProjectMotionHandoffSidecarSha256=${result.resolveProjectMotionHandoffSidecarSha256}`);
+    console.log('DaVinci recovery carries Palmier binding + Resolve Project Motion sidecar: CURRENT');
     console.log('Palmier -> DaVinci Project Motion binding: CURRENT');
   }
   console.log('Mac Remotion Studio GUI Actual remains NOT_RUN.'); console.log('Mac DaVinci Actual remains NOT_RUN.');
