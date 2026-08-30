@@ -9,7 +9,7 @@ import {
 const shortSha = (value: string | null) => value ? `${value.slice(0, 10)}…` : "—";
 
 const stateClass = (state: string) => {
-  if (state === "GUI_ACTUAL_COMPLETE") return "text-emerald-700 dark:text-emerald-300";
+  if (state === "GUI_ACTUAL_COMPLETE" || state === "CURRENT") return "text-emerald-700 dark:text-emerald-300";
   if (state === "INVALID" || state.includes("BLOCKED") || state === "TRANSPORT_NOT_CURRENT") return "text-rose-700 dark:text-rose-300";
   return "text-amber-700 dark:text-amber-300";
 };
@@ -37,9 +37,9 @@ export function WeddingDavinciGuiActualStartGateCard() {
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <p className="text-[10px] tracking-[0.2em] font-semibold text-amber-700 dark:text-amber-300">MAC DAVINCI GUI ACTUAL START GATE</p>
-          <h2 className="mt-1 text-lg font-bold text-navy-900 dark:text-sand-100">Session Plan CURRENT → Evidence init → Human Mac GUI の入口</h2>
+          <h2 className="mt-1 text-lg font-bold text-navy-900 dark:text-sand-100">Session Plan CURRENT → Project Motion CURRENT → Evidence init → Human Mac GUI</h2>
           <p className="mt-2 text-xs leading-5 text-navy-500 dark:text-navy-300">
-            Motion Studioのcanonical start-gate JSONを読み込み、Opening/Profileそれぞれの正確な次アクションを表示します。GUI_ACTUAL_ALLOWEDは「人間が開始してよい」だけで、実行済み/PASSではありません。
+            Motion Studioのcanonical start-gate JSONを読み込み、Opening/ProfileそれぞれのTransport・Project Motion・正確な次アクションを表示します。GUI_ACTUAL_ALLOWEDは「人間が開始してよい」だけで、実行済み/PASSではありません。
           </p>
         </div>
         <p className="text-[10px] leading-4 text-amber-700 dark:text-amber-300">GUI Actual synthetic promotion: FORBIDDEN</p>
@@ -49,6 +49,7 @@ export function WeddingDavinciGuiActualStartGateCard() {
         {(["opening", "profile"] as const).map((movieId) => {
           const audit = audits[movieId];
           const label = movieId === "opening" ? "Opening" : "Profile";
+          const projectMotion = audit.project.projectMotionPreflight;
           return (
             <article key={movieId} className="border border-sand-200 dark:border-navy-600 p-4">
               <div className="flex flex-wrap items-center justify-between gap-2">
@@ -71,6 +72,11 @@ export function WeddingDavinciGuiActualStartGateCard() {
 
               <dl className="mt-4 grid grid-cols-[max-content_1fr] gap-x-3 gap-y-2 text-[10px] leading-4 text-navy-500 dark:text-navy-300">
                 <dt className="font-semibold">Transport</dt><dd>{audit.transport.state} / current={audit.transport.current ? "YES" : "NO"}</dd>
+                <dt className="font-semibold">Project Motion</dt>
+                <dd>
+                  <span className={`font-bold ${stateClass(projectMotion.state ?? "NOT_RUN")}`}>{projectMotion.state ?? "—"}</span>
+                  {projectMotion.state && <> / applicable={projectMotion.applicable ? "YES" : "NO"} / current={projectMotion.current ? "YES" : "NO"}</>}
+                </dd>
                 <dt className="font-semibold">Session</dt><dd>{audit.project.sessionState ?? "—"}</dd>
                 <dt className="font-semibold">Evidence</dt><dd>{audit.project.evidenceState ?? "—"}</dd>
                 <dt className="font-semibold">Handoff SHA</dt><dd className="font-mono">{shortSha(audit.project.handoffIdentitySha256)}</dd>
@@ -78,6 +84,19 @@ export function WeddingDavinciGuiActualStartGateCard() {
                 <dt className="font-semibold">GUI start</dt><dd>{audit.guiActualStartAllowed ? "ALLOWED / HUMAN ONLY" : "BLOCKED"}</dd>
                 <dt className="font-semibold">Next</dt><dd>{audit.nextAction.kind}</dd>
               </dl>
+
+              {projectMotion.error && (
+                <p className="mt-3 border-l-2 border-rose-400 pl-3 text-[10px] leading-4 text-rose-700 dark:text-rose-300">
+                  Project Motion blocker: {projectMotion.error}
+                </p>
+              )}
+              {projectMotion.command && (
+                <div className="mt-3">
+                  <p className="text-[9px] font-semibold text-navy-700 dark:text-sand-200">Project Motion canonical verifier</p>
+                  <code className="mt-1 block overflow-x-auto bg-navy-950 px-3 py-2 text-[9px] leading-4 text-sand-100">cd motion-studio &amp;&amp; {projectMotion.command}</code>
+                  <p className="mt-1 text-[9px] leading-4 text-navy-400">このcommand表示自体はProject Motion CURRENTを証明しません。Mac GUI開始前にcanonical gateで再検証します。</p>
+                </div>
+              )}
 
               <p className="mt-3 text-[10px] leading-4 text-navy-600 dark:text-navy-300">{audit.nextAction.reason}</p>
               {audit.nextAction.command && (
@@ -107,7 +126,7 @@ export function WeddingDavinciGuiActualStartGateCard() {
       </div>
 
       <p className="mt-4 text-[10px] leading-4 text-navy-400">
-        canonical gate JSON・Dashboard・CIの存在はMac/Studio/DaVinci Actual PASSを意味しません。今回GUIを実操作していない場合、Actual evidenceはNOT_RUNのままです。
+        canonical gate JSON・Dashboard・CIの存在、Project Motion verifier commandの表示はMac/Studio/DaVinci Actual PASSを意味しません。今回GUIを実操作していない場合、Actual evidenceはNOT_RUNのままです。
       </p>
     </section>
   );
