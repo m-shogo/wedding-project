@@ -63,6 +63,35 @@ Compare adjacent spreads for:
 
 If fewer than four axes materially differ, review for template repetition.
 
+## Verified live production evidence — P01 / 2026-08-31
+
+A real-source-derived visual proxy of `035.jpg` is now placed in the live P01 HERO slot for composition/crop review.
+
+Evidence:
+- Figma page: `3287:2` / `13_RURUBU_V20_GREYBOX`;
+- P01 frame: `3287:5`;
+- HERO node: `3288:6`;
+- HERO node name now records `035 VISUAL PROXY / REAL SOURCE 4500x3000`;
+- Drive source ID: `1_Tbnct5i8xqEgBwtiY3PsfzUSSWGpBkc`;
+- verified master pixels: `4500 x 3000`;
+- Figma visual proxy pixels: `300 x 200`;
+- proxy image hash observed after placement: `346cd3a141e36eefea0a5c1b9c7bfcc5e16dd059`;
+- placement remains independently replaceable as an image fill; the page is not flattened.
+
+Interpretation from the live screenshot:
+- `035` is strong as a tropical/environmental HERO: palm canopy, sky, water and grass create useful magazine-scale place context;
+- the existing masthead/HERO collision concept remains viable;
+- however, the couple remains visually small at cover-reading scale, so `035` alone does **not yet prove** the required `SHOGO & SHIORI are the protagonists` first-read condition;
+- therefore the next serious P01 composition should test a close real couple/personality support image intruding into the environmental HERO, rather than simply zooming away the environmental value;
+- `036.jpg` is the current strongest reviewed personality-support candidate, but no successful Figma placement is claimed yet.
+
+Quality boundary:
+- this `300 x 200` proxy is `LAYOUT/CROP QA ONLY`;
+- it is explicitly **not** a final raster, not a resolution proof, and not `PRINT_READY`;
+- the verified `4500 x 3000` master remains the production source;
+- normal full-resolution upload is still pending because the external Figma upload host encountered a transient DNS failure in this environment;
+- no proxy may silently survive final print promotion.
+
 ## Whole-book acceptance
 
 A V20 design candidate must show:
