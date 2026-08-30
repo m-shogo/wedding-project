@@ -45,10 +45,11 @@ Read in this order:
 15. `V20-PAGE-MANUALS.md`
 16. `V20-GREYBOX-SILHOUETTE-SPEC.md`
 17. `V20-ASSET-FIRST-ASSEMBLY-CONTRACT.md`
-18. `V20-PARTS-SYSTEM.md`
-19. `V20-QUALITY-GATES.md`
-20. `V20-ACCEPTANCE-EVIDENCE.md`
-21. only then derive page-specific Figma placement instructions.
+18. `V20-LAYER-OVERLAP-SYSTEM.md`
+19. `V20-PARTS-SYSTEM.md`
+20. `V20-QUALITY-GATES.md`
+21. `V20-ACCEPTANCE-EVIDENCE.md`
+22. only then derive page-specific Figma placement instructions.
 
 `V20-IDEA-BANK.md` is a controlled idea pool, not a mandatory design authority.
 
@@ -82,6 +83,7 @@ These are the final foundation layers before production Figma work. Do not add m
 8. `SOURCE-PIXEL REVIEW` — important real photos are visually opened and classified; filenames alone are never evidence of role/crop quality.
 9. `GREYBOX BEFORE PARTS` — silhouette/hierarchy must pass with decoration removed before travel/tropical parts are allowed to influence the page.
 10. `ASSET-FIRST ASSEMBLY` — most visual personality must arrive as approved real photography and prepared editorial artwork; Figma behaves mainly as an editable compositor, not the creative generator.
+11. `CONTROLLED EDITORIAL COLLISION` — backgrounds, photos, paper objects, title art and page-specific clusters may intentionally overlap. Depth must improve hierarchy and continuity without obscuring factual copy or important faces.
 
 ## Asset-first rule
 
@@ -102,6 +104,30 @@ Figma should mainly:
 - manage masks, z-order, trim/safe geometry and final polish.
 
 Do not build the editorial personality from repeated Figma cards, pills, rounded rectangles, gradients, generic icons or Auto Layout.
+
+## Layer / overlap rule
+
+V20 intentionally uses depth and overlap rather than isolating every item.
+
+Default semantic stack:
+`BACKGROUND`
+→ `BACKGROUND ART / LARGE COMPOSITE`
+→ `REAL PHOTOS`
+→ `PHOTO FRAME / PAPER OBJECT`
+→ `DISPLAY TITLE`
+→ `EDITORIAL CLUSTERS / ROUTE / STAMP`
+→ `NATIVE FACT TEXT`
+→ `MICRO ACCENTS`.
+
+Preferred behavior:
+- title may cross a photo edge;
+- secondary photos may overlap one another;
+- stamps/labels may touch photo corners;
+- foliage/travel clusters may enter from bleed;
+- paper objects may sit above/below photos;
+- factual body text, times, names and critical faces remain protected.
+
+Prefer page-specific `editorial cluster assets` over assembling dozens of atomic flowers/icons in Figma.
 
 ## Current photo evidence consequence
 
@@ -140,7 +166,7 @@ Recovering a fact is NOT permission to inherit the old layout around that fact.
 → `PHOTO ROLE + SOURCE PIXEL REVIEW + GAP INVENTORY`
 → `GREYBOX / SILHOUETTE`
 → `PREPARED ASSET PRODUCTION + QA`
-→ `FIGMA ASSEMBLY / PARTS PLACEMENT`
+→ `FIGMA ASSEMBLY / PARTS PLACEMENT + CONTROLLED OVERLAP`
 → `EDITORIAL POLISH`
 → `V20 QA + ACCEPTANCE EVIDENCE`
 → `PRINT PREFLIGHT`
