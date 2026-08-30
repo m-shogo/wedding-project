@@ -30,6 +30,22 @@ function adoptedIds(movieId: 'opening' | 'profile') {
 
 const canonicalBlockSha256 = sha256(canonicalTypographyBlock());
 const candidateById = new Map(remotionElementCandidates.map((candidate) => [candidate.patternId, candidate]));
+const candidateIdentity = (patternId: string) => {
+  const candidate = candidateById.get(patternId);
+  if (!candidate) throw new Error(`UNKNOWN_REMOTION_HANDOFF_IDENTITY:${patternId}`);
+  return {
+    patternId: candidate.patternId,
+    canonicalEngine: candidate.canonicalEngine,
+    canonicalMode: candidate.canonicalMode,
+    canonicalSource: 'motion-studio/src/motion-kit/engines.tsx#TypographyRevealEngine',
+    canonicalBlockSha256,
+    payloadSlug: candidate.payloadSlug,
+    readiness: candidate.readiness,
+    studioInstallActual: candidate.studioInstallActual,
+    studioControlReadbackActual: candidate.studioControlReadbackActual,
+    productionDependencyPromoted: candidate.productionDependencyPromoted,
+  };
+};
 
 function movieIdentity(movieId: 'opening' | 'profile') {
   const adoptedCandidateIds = adoptedIds(movieId);
@@ -39,35 +55,24 @@ function movieIdentity(movieId: 'opening' | 'profile') {
     movieId,
     adopted: adoptedCandidateIds.length > 0,
     adoptedCandidateIds,
-    identities: adoptedCandidateIds.map((patternId) => {
-      const candidate = candidateById.get(patternId)!;
-      return {
-        patternId: candidate.patternId,
-        canonicalEngine: candidate.canonicalEngine,
-        canonicalMode: candidate.canonicalMode,
-        canonicalSource: 'motion-studio/src/motion-kit/engines.tsx#TypographyRevealEngine',
-        canonicalBlockSha256,
-        payloadSlug: candidate.payloadSlug,
-        readiness: candidate.readiness,
-        studioInstallActual: candidate.studioInstallActual,
-        studioControlReadbackActual: candidate.studioControlReadbackActual,
-        productionDependencyPromoted: candidate.productionDependencyPromoted,
-      };
-    }),
+    identities: adoptedCandidateIds.map(candidateIdentity),
   };
 }
 
 const artifact = {
-  schemaVersion: 'wedding-remotion-element-handoff-identities/v1',
+  schemaVersion: 'wedding-remotion-element-handoff-identities/v2',
   authority: 'SHA_BOUND_WEDDING_REMOTION_ELEMENT_HANDOFF_IDENTITY',
   generatedAt: new Date().toISOString(),
   canonicalSource: {path: 'motion-studio/src/motion-kit/engines.tsx#TypographyRevealEngine', blockSha256: canonicalBlockSha256},
+  catalogIdentities: remotionElementCandidates.map((candidate) => candidateIdentity(candidate.patternId)),
   projects: [movieIdentity('opening'), movieIdentity('profile')],
   macRemotionStudioGuiActualPerformedByThisExport: false,
   macDaVinciGuiActualPerformedByThisExport: false,
   productionDependencyPromotedByThisExport: false,
   guardrails: [
+    'CATALOG_IDENTITY_EXISTS != WEDDING_PROJECT_ADOPTED',
     'ELEMENT_CANDIDATE_EXISTS != WEDDING_PROJECT_ADOPTED',
+    'SCENE_SELECTED_ELEMENT_CAN_REFERENCE_CATALOG_IDENTITY_WITHOUT_AUTO_ADOPTION',
     'ADOPTED_ELEMENT_HANDOFF_IDENTITY_MUST_BE_CANONICAL_SOURCE_SHA_BOUND',
     'CANONICAL_ELEMENT_SOURCE_CHANGED => PREVIOUS_HANDOFF_IDENTITY_STALE',
     'HANDOFF_IDENTITY_EXPORTED != REMOTION_STUDIO_GUI_ACTUAL_VERIFIED',
@@ -80,6 +85,7 @@ mkdirSync(dirname(outputPath), {recursive: true});
 writeFileSync(outputPath, `${JSON.stringify(artifact, null, 2)}\n`);
 console.log(`handoffIdentityArtifact=${outputPath.replace(`${repoRoot}/`, '')}`);
 console.log(`canonicalBlockSha256=${canonicalBlockSha256}`);
+console.log(`catalogIdentityCount=${artifact.catalogIdentities.length}`);
 console.log(`openingAdopted=${artifact.projects[0].adoptedCandidateIds.length}`);
 console.log(`profileAdopted=${artifact.projects[1].adoptedCandidateIds.length}`);
 console.log('macRemotionStudioGuiActualPerformedByThisExport=NO');
