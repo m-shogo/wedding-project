@@ -43,9 +43,7 @@ function assertSha(label: string, value: unknown) {
   if (typeof value !== 'string' || !/^[a-f0-9]{64}$/.test(value)) throw new Error(`PROJECT_MOTION_PROVENANCE_CONSISTENCY_SHA_INVALID:${label}`);
 }
 
-export function verifyWeddingProjectMotionProductionProvenanceValues(
-  movieId: MovieId, bundle: any, recovery: any, markdown: string, currentProvenance?: any,
-) {
+export function verifyWeddingProjectMotionProductionProvenanceValues(movieId: MovieId, bundle: any, recovery: any, markdown: string, currentProvenance?: any) {
   const bundleProvenance = bundle?.projectMotionProvenance ?? null;
   const recoveryProvenance = recovery?.projectMotionProvenance ?? null;
   if (!bundleProvenance && !recoveryProvenance) return {state: 'NOT_APPLICABLE' as const};
@@ -55,9 +53,8 @@ export function verifyWeddingProjectMotionProductionProvenanceValues(
   const recoveryShape = stableProvenanceShape(recoveryProvenance);
   if (JSON.stringify(bundleShape) !== JSON.stringify(recoveryShape)) throw new Error(`PROJECT_MOTION_PROVENANCE_CONSISTENCY_BUNDLE_RECOVERY_DRIFT:${movieId}`);
   if (
-    bundleShape?.schemaVersion !== 'wedding-project-motion-production-provenance/v1' ||
-    bundleShape?.authority !== 'SHA_BOUND_CURRENT_PROJECT_MOTION_IMPORT' || bundleShape?.projectId !== movieId ||
-    bundleShape?.currentnessState !== 'CURRENT' || bundleShape?.palmierCurrent !== true || bundleShape?.davinciHandoffCurrent !== true ||
+    bundleShape?.schemaVersion !== 'wedding-project-motion-production-provenance/v1' || bundleShape?.authority !== 'SHA_BOUND_CURRENT_PROJECT_MOTION_IMPORT' ||
+    bundleShape?.projectId !== movieId || bundleShape?.currentnessState !== 'CURRENT' || bundleShape?.palmierCurrent !== true || bundleShape?.davinciHandoffCurrent !== true ||
     bundleShape?.macDaVinciGuiActual !== 'NOT_RUN' || bundleShape?.remotionStudioGuiActual !== 'NOT_RUN' ||
     bundleShape?.evidenceMacDaVinciGuiActual !== 'NOT_RUN' || bundleShape?.productionReady !== false
   ) throw new Error(`PROJECT_MOTION_PROVENANCE_CONSISTENCY_BOUNDARY_INVALID:${movieId}`);
@@ -78,8 +75,11 @@ export function verifyWeddingProjectMotionProductionProvenanceValues(
 
   const palmierArtifact = bundle?.palmier?.projectMotionBindingArtifact;
   const davinciArtifact = bundle?.davinci?.expectedProjectMotionBindingArtifact;
-  if (!palmierArtifact || !davinciArtifact) throw new Error(`PROJECT_MOTION_PROVENANCE_CONSISTENCY_PALMIER_ARTIFACT_REF_MISSING:${movieId}`);
-  if (JSON.stringify(palmierArtifact) !== JSON.stringify(davinciArtifact)) throw new Error(`PROJECT_MOTION_PROVENANCE_CONSISTENCY_PALMIER_ARTIFACT_REF_DRIFT:${movieId}`);
+  const recoveryArtifact = recovery?.projectMotionPalmierBindingArtifact;
+  if (!palmierArtifact || !davinciArtifact || !recoveryArtifact) throw new Error(`PROJECT_MOTION_PROVENANCE_CONSISTENCY_PALMIER_ARTIFACT_REF_MISSING:${movieId}`);
+  if (JSON.stringify(palmierArtifact) !== JSON.stringify(davinciArtifact) || JSON.stringify(palmierArtifact) !== JSON.stringify(recoveryArtifact)) {
+    throw new Error(`PROJECT_MOTION_PROVENANCE_CONSISTENCY_PALMIER_ARTIFACT_REF_DRIFT:${movieId}`);
+  }
   if (typeof palmierArtifact.path !== 'string' || palmierArtifact.path.length === 0) throw new Error(`PROJECT_MOTION_PROVENANCE_CONSISTENCY_PALMIER_ARTIFACT_PATH_INVALID:${movieId}`);
   assertSha('palmier-binding-artifact', palmierArtifact.sha256);
 
@@ -88,11 +88,10 @@ export function verifyWeddingProjectMotionProductionProvenanceValues(
   }
 
   for (const expected of [
-    `project-motion-source-sha256: ${bundleShape.sourceSha256}`,
-    `project-motion-receipt-sha256: ${bundleShape.receiptSha256}`,
-    `project-motion-currentness-sha256: ${bundleShape.currentnessSha256}`,
-    'project-motion-currentness-state: CURRENT', 'palmier-project-motion-current: yes', 'davinci-project-motion-handoff-current: yes',
-    'mac-remotion-studio-gui-actual: NOT_RUN', 'mac-davinci-gui-actual: NOT_RUN', 'production-ready-by-project-motion-provenance: no',
+    `project-motion-source-sha256: ${bundleShape.sourceSha256}`, `project-motion-receipt-sha256: ${bundleShape.receiptSha256}`,
+    `project-motion-currentness-sha256: ${bundleShape.currentnessSha256}`, 'project-motion-currentness-state: CURRENT',
+    'palmier-project-motion-current: yes', 'davinci-project-motion-handoff-current: yes', 'mac-remotion-studio-gui-actual: NOT_RUN',
+    'mac-davinci-gui-actual: NOT_RUN', 'production-ready-by-project-motion-provenance: no',
   ]) {
     const count = markdown.split(expected).length - 1;
     if (count !== 1) throw new Error(`PROJECT_MOTION_PROVENANCE_CONSISTENCY_MARKDOWN_DRIFT:${movieId}:${expected}:${count}`);
@@ -102,6 +101,7 @@ export function verifyWeddingProjectMotionProductionProvenanceValues(
     state: 'CURRENT' as const, sourceSha256: bundleShape.sourceSha256 as string,
     receiptSha256: bundleShape.receiptSha256 as string, currentnessSha256: bundleShape.currentnessSha256 as string,
     palmierDavinciBindingCurrent: true as const, palmierBindingArtifactSha256: palmierArtifact.sha256 as string,
+    recoveryCarriesPalmierBindingArtifact: true as const,
     macRemotionStudioGuiActual: 'NOT_RUN' as const, macDaVinciGuiActual: 'NOT_RUN' as const, productionReady: false as const,
   };
 }
@@ -133,16 +133,15 @@ function main() {
   const result = verifyWeddingProjectMotionProductionProvenanceFiles(movieArg, join(outDir, `${movieArg}-v1-production-bundle.json`), join(outDir, `${movieArg}-v1-davinci-production-recovery.json`), join(outDir, `${movieArg}-v1-davinci-production-recovery.md`));
   console.log(`Project Motion production provenance consistency: ${result.state}`);
   if (result.state === 'CURRENT') {
-    console.log(`projectMotionSourceSha256=${result.sourceSha256}`);
-    console.log(`palmierProjectMotionBindingArtifactSha256=${result.palmierBindingArtifactSha256}`);
-    console.log('Palmier -> DaVinci Project Motion binding: CURRENT');
+    console.log(`projectMotionSourceSha256=${result.sourceSha256}`); console.log(`palmierProjectMotionBindingArtifactSha256=${result.palmierBindingArtifactSha256}`);
+    console.log('DaVinci recovery carries Palmier Project Motion binding artifact: CURRENT'); console.log('Palmier -> DaVinci Project Motion binding: CURRENT');
   }
   console.log('Mac Remotion Studio GUI Actual remains NOT_RUN.'); console.log('Mac DaVinci Actual remains NOT_RUN.');
 }
 
 if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
   try { main(); } catch (error) {
-    console.error(error instanceof Error ? error.message : String(error));
-    console.error('Mac Remotion Studio GUI Actual remains NOT_RUN.'); console.error('Mac DaVinci Actual remains NOT_RUN.'); process.exit(2);
+    console.error(error instanceof Error ? error.message : String(error)); console.error('Mac Remotion Studio GUI Actual remains NOT_RUN.');
+    console.error('Mac DaVinci Actual remains NOT_RUN.'); process.exit(2);
   }
 }
