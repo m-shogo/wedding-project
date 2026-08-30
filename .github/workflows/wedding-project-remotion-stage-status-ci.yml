@@ -1,0 +1,87 @@
+name: Wedding Project Remotion Stage Status CI
+
+on:
+  pull_request:
+    paths:
+      - 'motion-studio/scripts/check-wedding-project-remotion-production-stage-status.mts'
+      - 'motion-studio/scripts/prepare-wedding-project-remotion-production-handoff.mts'
+      - 'motion-studio/scripts/check-wedding-project-remotion-element-identity-receipt.mts'
+      - 'motion-studio/scripts/verify-wedding-project-remotion-identity-handoff.mts'
+      - 'motion-studio/scripts/verify-wedding-production-handoff-provenance.mts'
+      - '.github/workflows/wedding-project-remotion-stage-status-ci.yml'
+  workflow_dispatch:
+
+jobs:
+  status-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: motion-studio/pnpm-lock.yaml
+      - name: Install Motion Studio dependencies
+        working-directory: motion-studio
+        run: pnpm install --frozen-lockfile
+
+      - name: Fresh clone reports NOT_STAGED without writing evidence
+        working-directory: motion-studio
+        run: |
+          rm -f ../movie-dashboard/out/typography-project-delivery/opening-typography-production-batch.json
+          rm -f ../movie-dashboard/out/project-role-handoff/opening-production-role-handoff-manifest.json
+          rm -f ../movie-dashboard/out/remotion-element-handoff/opening-project-remotion-identity-verification-receipt.json
+          node --no-warnings scripts/check-wedding-project-remotion-production-stage-status.mts --movie=opening --json > /tmp/status.json
+          node - <<'NODE'
+          const fs = require('fs');
+          const report = JSON.parse(fs.readFileSync('/tmp/status.json', 'utf8'));
+          if (report.schemaVersion !== 'wedding-project-remotion-production-stage-status/v1') throw new Error('schema mismatch');
+          if (report.state !== 'NOT_STAGED') throw new Error(`expected NOT_STAGED, got ${report.state}`);
+          if (report.blocker !== 'CANONICAL_PROJECT_REMOTION_STAGE_MISSING') throw new Error('missing blocker mismatch');
+          if (report.checks.stageVerification !== 'NOT_RUN') throw new Error('fresh clone must not claim stage verification');
+          if (report.checks.handoffVerification !== 'NOT_RUN') throw new Error('fresh clone must not claim handoff verification');
+          if (report.next.kind !== 'EXPORT_AND_STAGE_MOTION_ZUKAN_INPUTS') throw new Error('fresh clone next action mismatch');
+          if (report.evidenceBoundary.macRemotionStudioGuiActual !== 'NOT_RUN_UNLESS_HUMAN_EXECUTED') throw new Error('Studio Actual boundary changed');
+          if (report.evidenceBoundary.macDavinciResolveGuiActual !== 'NOT_RUN_UNLESS_HUMAN_EXECUTED') throw new Error('DaVinci Actual boundary changed');
+          if (report.evidenceBoundary.productionReadyPromotedByThisCheck !== false) throw new Error('status checker must not promote productionReady');
+          NODE
+
+      - name: Strict mode fails closed when canonical stage is missing
+        working-directory: motion-studio
+        run: |
+          if node --no-warnings scripts/check-wedding-project-remotion-production-stage-status.mts --movie=opening --strict >/tmp/strict.log 2>&1; then
+            echo 'strict status must fail while canonical stage is missing'
+            exit 1
+          fi
+          grep -q 'projectRemotionProductionStageStatus=NOT_STAGED' /tmp/strict.log
+          grep -q 'macRemotionStudioGuiActual=NOT_RUN_UNLESS_HUMAN_EXECUTED' /tmp/strict.log
+          grep -q 'macDaVinciGuiActual=NOT_RUN_UNLESS_HUMAN_EXECUTED' /tmp/strict.log
+
+      - name: Corrupt staged artifacts report INVALID instead of CURRENT
+        working-directory: motion-studio
+        run: |
+          mkdir -p ../movie-dashboard/out/typography-project-delivery
+          mkdir -p ../movie-dashboard/out/project-role-handoff
+          mkdir -p ../movie-dashboard/out/remotion-element-handoff
+          printf '{}\n' > ../movie-dashboard/out/typography-project-delivery/opening-typography-production-batch.json
+          printf '{}\n' > ../movie-dashboard/out/project-role-handoff/opening-production-role-handoff-manifest.json
+          printf '{}\n' > ../movie-dashboard/out/remotion-element-handoff/opening-project-remotion-identity-verification-receipt.json
+          node --no-warnings scripts/check-wedding-project-remotion-production-stage-status.mts --movie=opening --json > /tmp/invalid.json
+          node - <<'NODE'
+          const fs = require('fs');
+          const report = JSON.parse(fs.readFileSync('/tmp/invalid.json', 'utf8'));
+          if (report.state !== 'INVALID') throw new Error(`expected INVALID, got ${report.state}`);
+          if (report.checks.stageVerification !== 'INVALID') throw new Error('corrupt stage must be INVALID');
+          if (report.next.kind !== 'REVALIDATE_OR_RESTAGE_PROJECT_REMOTION_INPUTS') throw new Error('invalid next action mismatch');
+          if (report.evidenceBoundary.productionReadyPromotedByThisCheck !== false) throw new Error('invalid status must not promote readiness');
+          NODE
+
+      - name: Checker source remains read-only and evidence-safe
+        run: |
+          ! grep -Eq 'copyFileSync|writeFileSync|renameSync|mkdirSync|rmSync|unlinkSync' motion-studio/scripts/check-wedding-project-remotion-production-stage-status.mts
+          ! grep -q "macRemotionStudioGuiActual: 'PASS'" motion-studio/scripts/check-wedding-project-remotion-production-stage-status.mts
+          ! grep -q "macDavinciResolveGuiActual: 'PASS'" motion-studio/scripts/check-wedding-project-remotion-production-stage-status.mts
+          ! grep -q 'productionReadyPromotedByThisCheck: true' motion-studio/scripts/check-wedding-project-remotion-production-stage-status.mts
