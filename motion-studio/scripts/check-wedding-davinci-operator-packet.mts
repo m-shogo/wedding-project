@@ -34,9 +34,32 @@ for (const [index, expectedId] of expectedIds.entries()) {
   if (command.order !== index + 1 || command.id !== expectedId) throw new Error(`Operator command order mismatch at ${index + 1}`);
 }
 
-if (!packet.projects?.opening?.nextGate || !packet.projects?.profile?.nextGate) throw new Error('Operator packet requires Opening/Profile exact next gates');
+for (const movie of ['opening', 'profile'] as const) {
+  const project = packet.projects?.[movie];
+  const preflight = packet.projectMotionPreflight?.[movie];
+  if (!project?.nextGate) throw new Error(`${movie} exact next gate missing`);
+  if (!project.projectMotion || !['CURRENT', 'NOT_APPLICABLE', 'INVALID'].includes(project.projectMotion.state)) {
+    throw new Error(`${movie} Project Motion state missing from operator packet`);
+  }
+  if (!preflight || preflight.state !== project.projectMotion.state) {
+    throw new Error(`${movie} Project Motion packet/preflight state drift`);
+  }
+  const exactVerifier = `node --no-warnings scripts/verify-wedding-project-motion-production-provenance.mts --movie=${movie}`;
+  if (project.projectMotion.verifierCommand !== exactVerifier || preflight.command !== exactVerifier) {
+    throw new Error(`${movie} exact Project Motion verifier command missing`);
+  }
+  if (project.projectMotion.state === 'INVALID') {
+    if (project.ready !== false || project.nextGate !== 'REVALIDATE_PROJECT_MOTION_PROVENANCE') {
+      throw new Error(`${movie} invalid Project Motion provenance must fail closed in operator packet`);
+    }
+    if (!packet.recovery.includes(exactVerifier)) throw new Error(`${movie} Project Motion verifier must be in recovery`);
+  }
+}
+
 if (!Array.isArray(packet.blockerCodes)) throw new Error('Operator packet blockerCodes missing');
 if (!packet.guardrails.includes('OPERATOR_PACKET_EXISTS != FINAL_DELIVERY_READY')) throw new Error('Operator packet existence guardrail missing');
+if (!packet.guardrails.includes('PROJECT_MOTION_PROVENANCE_MUST_BE_CURRENT_OR_NOT_APPLICABLE_AT_FINAL_DELIVERY')) throw new Error('Project Motion provenance guardrail missing');
+if (!packet.guardrails.includes('PROJECT_MOTION_VERIFIER_COMMAND_IN_PACKET != PROJECT_MOTION_VERIFIED')) throw new Error('Project Motion verifier evidence guardrail missing');
 if (!packet.guardrails.includes('NOT_RUN != VERIFIED')) throw new Error('NOT_RUN evidence guardrail missing');
 
 if (packet.eligible === false) {
@@ -45,4 +68,4 @@ if (packet.eligible === false) {
 }
 
 rmSync(output, {force: true});
-console.log(`Wedding DaVinci operator packet contract OK: state=${packet.state} opening=${packet.projects.opening.nextGate} profile=${packet.projects.profile.nextGate}`);
+console.log(`Wedding DaVinci operator packet contract OK: state=${packet.state} opening=${packet.projects.opening.nextGate}/${packet.projects.opening.projectMotion.state} profile=${packet.projects.profile.nextGate}/${packet.projects.profile.projectMotion.state}`);
