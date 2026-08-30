@@ -17,9 +17,11 @@
     "layoutBlueprints": "docs/rurubu-v11/rurubu-v11-layout-blueprints.json",
     "partsLibrary": "docs/rurubu-v11/RURUBU-V11-PARTS-LIBRARY.md",
     "assetNeeds": "docs/rurubu-v11/RURUBU-V11-ASSET-NEEDS-MATRIX.md",
+    "generationPrompts": "docs/rurubu-v11/RURUBU-V11-GENERATION-PROMPT-TEMPLATES.md",
     "contentTruth": "docs/rurubu-v11/RURUBU-V11-CONTENT-TRUTH.md",
     "figmaExecutionPrompt": "docs/rurubu-v11/RURUBU-V11-FIGMA-EXECUTION-PROMPT.md",
-    "qaGate": "docs/rurubu-v11/RURUBU-V11-QA-GATE.md"
+    "qaGate": "docs/rurubu-v11/RURUBU-V11-QA-GATE.md",
+    "printSpec": "docs/rurubu-v11/RURUBU-V11-PRINT-SPEC.md"
   },
   "pages": {
     "P01": {"role": "COVER", "spec": "docs/rurubu-v11/page-specs/P01-COVER.md"},
@@ -70,8 +72,10 @@
     "copy overflow is solved structurally before shrinking readable body text",
     "structural hierarchy is fixed before micro-decoration",
     "layout blueprint constrains placement but does not turn the page into a rigid UI grid",
+    "generated parts require semantic/size/transparency/print QA before promotion",
     "V11 QA uses only the V11 reference and V11 QA gate",
     "adjacent pages must vary composition while sharing part vocabulary",
-    "Figma V11 starts on a new clean production page rather than modifying old V10 frames in place"
+    "Figma V11 starts on a new clean production page rather than modifying old V10 frames in place",
+    "PRINT_READY requires final content/photo/resolution/bleed/output preflight independent of structural approval"
   ]
 }
