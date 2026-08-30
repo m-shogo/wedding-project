@@ -4,7 +4,9 @@ on:
   pull_request:
     paths:
       - 'motion-studio/src/data/weddingProjectMotionImport.ts'
+      - 'motion-studio/src/data/weddingDavinciProductionRecovery.ts'
       - 'motion-studio/scripts/check-wedding-project-motion-import-bridge.mts'
+      - 'motion-studio/scripts/check-wedding-project-motion-recovery-gate.mts'
       - '.github/workflows/wedding-project-motion-import-bridge-ci.yml'
   workflow_dispatch:
 
@@ -31,6 +33,9 @@ jobs:
       - name: Verify project Motion import bridge
         working-directory: motion-studio
         run: node --no-warnings scripts/check-wedding-project-motion-import-bridge.mts
+      - name: Verify project Motion recovery gate
+        working-directory: motion-studio
+        run: node --no-warnings scripts/check-wedding-project-motion-recovery-gate.mts
       - name: TypeScript
         working-directory: motion-studio
         run: pnpm typecheck
