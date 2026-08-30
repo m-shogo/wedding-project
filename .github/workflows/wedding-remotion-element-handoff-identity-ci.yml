@@ -9,6 +9,8 @@ on:
       - 'movie-dashboard/src/data/remotionElementCandidates.ts'
       - 'movie-dashboard/src/data/remotionStudioToolingProductionDependency.ts'
       - 'movie-dashboard/src/data/remotionElementHandoffIdentityReference.ts'
+      - 'movie-dashboard/src/data/typographySceneDeliveryPackage.ts'
+      - 'movie-dashboard/scripts/verify-typography-scene-delivery-package-contracts.mjs'
       - 'movie-dashboard/src/lib/effectiveProductionHandoffExport.ts'
       - '.github/workflows/wedding-remotion-element-handoff-identity-ci.yml'
   workflow_dispatch:
@@ -26,19 +28,36 @@ jobs:
         with:
           node-version: 22
 
-      - name: Export current unadopted handoff identity
+      - name: Export current catalog-wide unadopted handoff identity
         working-directory: motion-studio
         run: |
           node --no-warnings scripts/export-wedding-remotion-element-handoff-identities.mts | tee /tmp/export.log
           node --no-warnings scripts/check-wedding-remotion-element-handoff-identities.mts | tee /tmp/check.log
+          grep -q 'catalogIdentityCount=9' /tmp/export.log
+          grep -q 'catalogIdentityCount=9' /tmp/check.log
           grep -q 'openingAdopted=0' /tmp/export.log
           grep -q 'profileAdopted=0' /tmp/export.log
           grep -q 'weddingRemotionElementHandoffIdentity=CURRENT_SHA_BOUND' /tmp/check.log
           grep -q 'macRemotionStudioGuiActualPerformedByThisExport=NO' /tmp/export.log
           grep -q 'macDaVinciGuiActualPerformedByThisExport=NO' /tmp/export.log
           grep -q 'productionDependencyPromotedByThisExport=NO' /tmp/export.log
+          node - <<'NODE'
+          const fs = require('fs');
+          const artifact = JSON.parse(fs.readFileSync('../movie-dashboard/out/remotion-element-handoff/wedding-remotion-element-identities.json', 'utf8'));
+          if (artifact.schemaVersion !== 'wedding-remotion-element-handoff-identities/v2') throw new Error('v2 identity schema missing');
+          if (artifact.catalogIdentities.length !== 9) throw new Error('catalog identities must cover all nine candidates');
+          for (const identity of artifact.catalogIdentities) {
+            if (!/^[a-f0-9]{64}$/.test(identity.canonicalBlockSha256)) throw new Error(`catalog SHA missing: ${identity.patternId}`);
+            if (identity.studioInstallActual !== 'NOT_RUN') throw new Error(`Studio Actual must remain NOT_RUN: ${identity.patternId}`);
+            if (identity.productionDependencyPromoted !== false) throw new Error(`catalog identity must not promote dependency: ${identity.patternId}`);
+          }
+          NODE
 
-      - name: Simulated Wedding adoption carries canonical engine mode and SHA
+      - name: Verify scene delivery references catalog identity without auto-adoption
+        working-directory: movie-dashboard
+        run: node scripts/verify-typography-scene-delivery-package-contracts.mjs
+
+      - name: Simulated Wedding adoption carries catalog-equivalent canonical identity
         run: |
           cp movie-dashboard/src/data/remotionStudioToolingProductionDependency.ts /tmp/dependency.ts
           python - <<'PY'
@@ -59,7 +78,9 @@ jobs:
           const artifact = JSON.parse(fs.readFileSync('../movie-dashboard/out/remotion-element-handoff/wedding-remotion-element-identities.json', 'utf8'));
           const opening = artifact.projects.find((project) => project.movieId === 'opening');
           const identity = opening.identities[0];
+          const catalogIdentity = artifact.catalogIdentities.find((item) => item.patternId === 'type-mask-reveal');
           if (identity.patternId !== 'type-mask-reveal') throw new Error('pattern identity missing');
+          if (JSON.stringify(identity) !== JSON.stringify(catalogIdentity)) throw new Error('adopted identity must equal catalog identity');
           if (identity.canonicalEngine !== 'TypographyRevealEngine') throw new Error('canonical engine missing');
           if (identity.canonicalMode !== 'mask') throw new Error('canonical mode missing');
           if (!/^[a-f0-9]{64}$/.test(identity.canonicalBlockSha256)) throw new Error('canonical SHA missing');
@@ -67,7 +88,7 @@ jobs:
           if (identity.productionDependencyPromoted !== false) throw new Error('dependency must not auto-promote');
           NODE
 
-      - name: Canonical engine mutation invalidates previously exported handoff identity
+      - name: Canonical engine mutation invalidates catalog and adopted handoff identities
         working-directory: motion-studio
         run: |
           cp src/motion-kit/engines.tsx /tmp/engines.tsx
@@ -84,7 +105,7 @@ jobs:
             echo 'Canonical engine mutation must invalidate the exported handoff identity.'
             exit 1
           fi
-          grep -Eq 'CANONICAL_SOURCE_SHA_STALE|type-mask-reveal:CANONICAL_SOURCE_SHA_STALE' /tmp/stale.log
+          grep -Eq 'CANONICAL_SOURCE_SHA_STALE|catalog:type-mask-reveal:CANONICAL_SOURCE_SHA_STALE|type-mask-reveal:CANONICAL_SOURCE_SHA_STALE' /tmp/stale.log
           mv /tmp/engines.tsx src/motion-kit/engines.tsx
 
       - name: Restore registry and prove export stays evidence-honest
@@ -93,6 +114,7 @@ jobs:
           cd motion-studio
           node --no-warnings scripts/export-wedding-remotion-element-handoff-identities.mts | tee /tmp/restored-export.log
           node --no-warnings scripts/check-wedding-remotion-element-handoff-identities.mts | tee /tmp/restored-check.log
+          grep -q 'catalogIdentityCount=9' /tmp/restored-export.log
           grep -q 'openingAdopted=0' /tmp/restored-export.log
           grep -q 'weddingRemotionElementHandoffIdentity=CURRENT_SHA_BOUND' /tmp/restored-check.log
           echo 'remotionStudioGuiActual=NOT_RUN'
