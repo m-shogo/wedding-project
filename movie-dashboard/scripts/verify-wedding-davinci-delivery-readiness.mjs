@@ -85,8 +85,12 @@ for (const token of [
   'WEDDING_DAVINCI_SNAPSHOT_STALE',
   'OPENING_PROJECT_MOTION_PROVENANCE_INVALID',
   'PROFILE_PROJECT_MOTION_PROVENANCE_INVALID',
-  'REVALIDATE_OPENING_PROJECT_MOTION',
-  'REVALIDATE_PROFILE_PROJECT_MOTION',
+  'PROJECT_MOTION_OPENING_STATUS',
+  'PROJECT_MOTION_PROFILE_STATUS',
+  'Opening Project Motion — ${live.opening.projectMotion.state}',
+  'Profile Project Motion — ${live.profile.projectMotion.state}',
+  'PROJECT_MOTION_STATE_ALWAYS_VISIBLE_IN_COMMAND_SURFACE',
+  'PROJECT_MOTION_NOT_APPLICABLE != VERIFIED',
   'projectMotionPreflight',
   'PROJECT_MOTION_VERIFIER_COMMAND_VISIBLE != PROJECT_MOTION_VERIFIED',
   'OPENING_DAVINCI_DELIVERY_NOT_READY',
@@ -131,4 +135,4 @@ for (const token of [
 const zukanSource = readFileSync(resolve(dashboardRoot, 'src/pages/VisualMotionLibrary.tsx'), 'utf8');
 if (!zukanSource.includes('WeddingDavinciDeliveryReadinessCard')) fail('Motion Zukan must surface wedding-wide readiness');
 
-console.log(`Wedding DaVinci readiness + generated Project Motion preflight + operator packet surface OK: state=${report.state} opening=${report.opening.nextGate}/${report.opening.projectMotion.state} profile=${report.profile.nextGate}/${report.profile.projectMotion.state}`);
+console.log(`Wedding DaVinci readiness + always-visible Project Motion preflight + operator packet surface OK: state=${report.state} opening=${report.opening.nextGate}/${report.opening.projectMotion.state} profile=${report.profile.nextGate}/${report.profile.projectMotion.state}`);

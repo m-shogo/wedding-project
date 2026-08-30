@@ -45,25 +45,31 @@ export function buildWeddingDavinciFinalDeliveryPreflight(
           ? "SNAPSHOT_REQUIRED"
           : "UPSTREAM_BLOCKED";
 
-  const projectMotionRecoveryCommands = [
-    ...(live.opening.projectMotion.state === "INVALID" ? [{
-      id: "REVALIDATE_OPENING_PROJECT_MOTION",
-      label: "0a. Opening Project Motion再検証",
+  const projectMotionStatusCommands = [
+    {
+      id: "PROJECT_MOTION_OPENING_STATUS",
+      label: `0a. Opening Project Motion — ${live.opening.projectMotion.state}`,
       command: `cd motion-studio && ${live.opening.projectMotion.command}`,
-      required: true,
-      purpose: live.opening.projectMotion.error ?? "Opening Project Motion provenanceをcanonical verifierで再検証する",
-    }] : []),
-    ...(live.profile.projectMotion.state === "INVALID" ? [{
-      id: "REVALIDATE_PROFILE_PROJECT_MOTION",
-      label: "0b. Profile Project Motion再検証",
+      required: live.opening.projectMotion.state === "INVALID",
+      purpose: live.opening.projectMotion.error
+        ?? (live.opening.projectMotion.state === "CURRENT"
+          ? "CURRENT: canonical Project Motion provenance verifierがPASSしたsnapshot"
+          : "NOT_APPLICABLE: Project Motion provenance未使用。検証済み/PASSを意味しない"),
+    },
+    {
+      id: "PROJECT_MOTION_PROFILE_STATUS",
+      label: `0b. Profile Project Motion — ${live.profile.projectMotion.state}`,
       command: `cd motion-studio && ${live.profile.projectMotion.command}`,
-      required: true,
-      purpose: live.profile.projectMotion.error ?? "Profile Project Motion provenanceをcanonical verifierで再検証する",
-    }] : []),
-  ];
+      required: live.profile.projectMotion.state === "INVALID",
+      purpose: live.profile.projectMotion.error
+        ?? (live.profile.projectMotion.state === "CURRENT"
+          ? "CURRENT: canonical Project Motion provenance verifierがPASSしたsnapshot"
+          : "NOT_APPLICABLE: Project Motion provenance未使用。検証済み/PASSを意味しない"),
+    },
+  ] as const;
 
   const commands = [
-    ...projectMotionRecoveryCommands,
+    ...projectMotionStatusCommands,
     {
       id: "WRITE_MANIFEST",
       label: "1. Manifest生成",
@@ -111,8 +117,10 @@ export function buildWeddingDavinciFinalDeliveryPreflight(
     },
     commands,
     guardrails: [
+      "PROJECT_MOTION_STATE_ALWAYS_VISIBLE_IN_COMMAND_SURFACE",
       "PROJECT_MOTION_INVALID => FINAL_DELIVERY_INVALID",
       "PROJECT_MOTION_VERIFIER_COMMAND_VISIBLE != PROJECT_MOTION_VERIFIED",
+      "PROJECT_MOTION_NOT_APPLICABLE != VERIFIED",
       "SNAPSHOT_CURRENT != FINAL_DELIVERY_READY",
       "FINAL_DELIVERY_READY_REQUIRES_CURRENT_PROJECT_MOTION_SNAPSHOT_AND_BOTH_MOVIES_READY",
       "NOT_RUN != VERIFIED",
