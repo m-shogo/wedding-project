@@ -20,6 +20,18 @@ type CheckerReport = {
   canonicalArtifacts: Record<string, string>;
 };
 
+type PalmierTimelineReport = {
+  movieId: MovieId;
+  state: 'MISSING' | 'CURRENT' | 'STALE' | 'INVALID';
+  detail: string | null;
+  receiptPath?: string;
+  source?: {
+    assemblyPlan?: string | null;
+    palmierFcpxml?: string | null;
+  };
+  next: {kind: string; command: string};
+};
+
 const runChecker = (movieId: MovieId): CheckerReport => {
   const result = spawnSync(
     process.execPath,
@@ -32,8 +44,31 @@ const runChecker = (movieId: MovieId): CheckerReport => {
   return JSON.parse(result.stdout) as CheckerReport;
 };
 
+const runPalmierTimelineChecker = (movieId: MovieId): PalmierTimelineReport => {
+  const result = spawnSync(
+    process.execPath,
+    ['--no-warnings', join(motionStudioRoot, 'scripts/check-wedding-palmier-typography-timeline-export-receipt.mts'), `--movie=${movieId}`, '--json'],
+    {cwd: motionStudioRoot, encoding: 'utf8'},
+  );
+  if (result.status !== 0) {
+    throw new Error(`Palmier timeline receipt checker failed for ${movieId}: ${result.stderr || result.stdout}`);
+  }
+  return JSON.parse(result.stdout) as PalmierTimelineReport;
+};
+
 const normalizePath = (path: string) => relative(repoRoot, path).replaceAll('\\', '/');
-const normalize = (report: CheckerReport) => ({
+const normalizeOptionalPath = (path?: string | null) => path ? normalizePath(path) : null;
+const normalizePalmierTimeline = (report: PalmierTimelineReport) => ({
+  state: report.state,
+  detail: report.detail,
+  receiptPath: normalizeOptionalPath(report.receiptPath),
+  source: {
+    assemblyPlan: normalizeOptionalPath(report.source?.assemblyPlan),
+    palmierFcpxml: normalizeOptionalPath(report.source?.palmierFcpxml),
+  },
+  next: report.next,
+});
+const normalize = (report: CheckerReport, palmierTimeline: PalmierTimelineReport) => ({
   movieId: report.movieId,
   state: report.state,
   blocker: report.blocker,
@@ -41,14 +76,16 @@ const normalize = (report: CheckerReport) => ({
   checks: report.checks,
   next: report.next,
   canonicalArtifacts: Object.fromEntries(Object.entries(report.canonicalArtifacts).map(([key, path]) => [key, normalizePath(path)])),
+  palmierTimelineExport: normalizePalmierTimeline(palmierTimeline),
 });
 
 const snapshot = {
-  schemaVersion: 'wedding-project-remotion-stage-status-dashboard/v1',
-  authority: 'GENERATED_FROM_READ_ONLY_CANONICAL_STAGE_STATUS_CHECKER',
-  opening: normalize(runChecker('opening')),
-  profile: normalize(runChecker('profile')),
+  schemaVersion: 'wedding-project-remotion-stage-status-dashboard/v2',
+  authority: 'GENERATED_FROM_READ_ONLY_CANONICAL_STAGE_AND_PALMIER_TIMELINE_RECEIPT_CHECKERS',
+  opening: normalize(runChecker('opening'), runPalmierTimelineChecker('opening')),
+  profile: normalize(runChecker('profile'), runPalmierTimelineChecker('profile')),
   evidenceBoundary: {
+    palmierGuiActual: 'NOT_RUN_UNLESS_HUMAN_EXECUTED',
     macRemotionStudioGuiActual: 'NOT_RUN_UNLESS_HUMAN_EXECUTED',
     macDavinciResolveGuiActual: 'NOT_RUN_UNLESS_HUMAN_EXECUTED',
     productionReadyPromotedBySnapshot: false,
