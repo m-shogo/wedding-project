@@ -73,7 +73,7 @@ export function WeddingProjectRemotionStageStatusCard({projectId}: {projectId: S
         </p>
         <p className="mt-1 text-[8px] font-semibold">{timeline.next.kind}</p>
         <code className="mt-1 block max-w-full overflow-x-auto whitespace-nowrap text-[8px] leading-4">cd motion-studio && {timeline.next.command}</code>
-        <p className="mt-1 text-[7px] leading-3 opacity-80">CURRENTはAssembly Planと実FCPXMLのSHA/currentnessが一致する意味です。Palmier GUI Actualを実行・PASSした証拠ではありません。</p>
+        <p className="mt-1 text-[7px] leading-3 opacity-80">CURRENTはAssembly Planと実FCPXMLのSHA/currentnessが一致する意味です。Palmier timeline Actual / Palmier GUI Actualを実行・PASSした証拠ではありません。</p>
       </div>
 
       {isStagedCurrent ? (
@@ -94,7 +94,7 @@ export function WeddingProjectRemotionStageStatusCard({projectId}: {projectId: S
       </div>
 
       <p className="mt-2 border-t pt-2 text-[8px] leading-4 opacity-80">
-        この表示はread-only checkerから生成したsnapshotです。STAGED_CURRENT / HANDOFF_CURRENT / Palmier FCPXML CURRENT / Assembly Plan / CI GREENは、Remotion Studio GUI Actual、Palmier GUI Actual、Mac DaVinci GUI ActualのPASSを意味しません。GUI Actualは人間が実行した場合だけ記録します。
+        この表示はread-only checkerから生成したsnapshotです。STAGED_CURRENT / HANDOFF_CURRENT / Palmier FCPXML CURRENT / Assembly Plan / CI GREENは、Remotion Studio GUI Actual、Palmier timeline Actual、Palmier GUI Actual、Mac DaVinci GUI ActualのPASSを意味しません。GUI Actualは人間が実行した場合だけ記録します。
       </p>
     </section>
   );
