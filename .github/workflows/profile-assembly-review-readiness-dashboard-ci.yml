@@ -9,6 +9,7 @@ on:
       - "motion-studio/scripts/profile-v1-audio-listening-review.mts"
       - "movie-dashboard/scripts/sync-profile-assembly-review-readiness.mjs"
       - "movie-dashboard/src/data/profileAssemblyReviewReadiness.generated.ts"
+      - "movie-dashboard/src/lib/weddingProductionActions.ts"
       - "movie-dashboard/src/components/ProfileAssemblyReviewReadinessPanel.tsx"
       - "movie-dashboard/src/components/ProfileReviewNextActionPanel.tsx"
       - "movie-dashboard/src/pages/MotionZukanWorkspaceHandoff.tsx"
@@ -22,6 +23,7 @@ on:
       - "motion-studio/scripts/profile-v1-audio-listening-review.mts"
       - "movie-dashboard/scripts/sync-profile-assembly-review-readiness.mjs"
       - "movie-dashboard/src/data/profileAssemblyReviewReadiness.generated.ts"
+      - "movie-dashboard/src/lib/weddingProductionActions.ts"
       - "movie-dashboard/src/components/ProfileAssemblyReviewReadinessPanel.tsx"
       - "movie-dashboard/src/components/ProfileReviewNextActionPanel.tsx"
       - "movie-dashboard/src/pages/MotionZukanWorkspaceHandoff.tsx"
@@ -51,16 +53,18 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - name: Generated Profile assembly review readiness is current
         run: node scripts/sync-profile-assembly-review-readiness.mjs
-      - name: Contract tokens preserve Human QA and GUI Actual boundaries
+      - name: Contract tokens preserve Human QA and shared action authority
         run: |
           grep -q 'FINAL_RENDER_ELIGIBLE != HUMAN_QA_COMPLETE' src/components/ProfileAssemblyReviewReadinessPanel.tsx
           grep -q 'STRUCTURE_PASS != REAL_MEDIA_PASS' src/components/ProfileAssemblyReviewReadinessPanel.tsx
           grep -q 'Remotion Studio GUI Actual = <strong>NOT_RUN</strong>' src/components/ProfileAssemblyReviewReadinessPanel.tsx
           grep -q 'Mac DaVinci GUI Actual = <strong>NOT_RUN</strong>' src/components/ProfileAssemblyReviewReadinessPanel.tsx
           grep -q 'PROFILE EXACT NEXT HUMAN QA GATE' src/components/ProfileReviewNextActionPanel.tsx
-          grep -q 'pnpm render:profile-v1:structure-preview' src/components/ProfileReviewNextActionPanel.tsx
-          grep -q 'pnpm render:profile-v1:real-media-preview' src/components/ProfileReviewNextActionPanel.tsx
-          grep -q 'profile-v1-audio-listening-review.mts --strict' src/components/ProfileReviewNextActionPanel.tsx
+          grep -q 'deriveProfileNextAction' src/components/ProfileReviewNextActionPanel.tsx
+          grep -q 'SHARED_ACTION_AUTHORITY = weddingProductionActions' src/components/ProfileReviewNextActionPanel.tsx
+          grep -q 'pnpm render:profile-v1:structure-preview' src/lib/weddingProductionActions.ts
+          grep -q 'pnpm render:profile-v1:real-media-preview' src/lib/weddingProductionActions.ts
+          grep -q 'profile-v1-audio-listening-review.mts --strict' src/lib/weddingProductionActions.ts
           grep -q 'COMMAND_COPIED != COMMAND_EXECUTED' src/components/ProfileReviewNextActionPanel.tsx
           grep -q '<ProfileAssemblyReviewReadinessPanel />' src/pages/MotionZukanWorkspaceHandoff.tsx
           grep -q '<ProfileReviewNextActionPanel />' src/pages/MotionZukanWorkspaceHandoff.tsx
