@@ -30,14 +30,24 @@ Read in this order:
 
 1. `V20-NORTH-STAR-IMAGE.md`
 2. `V20-CONTENT-INVENTORY.md`
-3. `V20-CONTENT-ARCHITECTURE-GATE.md`
-4. `V20-SPREAD-ARCHITECTURE.md`
-5. `V20-VISUAL-GRAMMAR.md`
-6. `V20-PRODUCTION-GEOMETRY.md`
-7. `V20-PARTS-SYSTEM.md`
-8. `V20-PAGE-MANUALS.md`
-9. `V20-QUALITY-GATES.md`
-10. only then derive page-specific Figma placement instructions.
+3. `V20-TRUTH-EDITORIAL-BOUNDARY.md`
+4. `V20-CONTENT-ARCHITECTURE-GATE.md`
+5. `V20-SPREAD-ARCHITECTURE.md`
+6. `V20-READING-PATH-SYSTEM.md`
+7. `V20-VISUAL-GRAMMAR.md`
+8. `V20-PAGE-DIFFERENTIATION-MATRIX.md`
+9. `V20-EDITORIAL-BUDGETS-AND-CHANGE-RESILIENCE.md`
+10. `V20-PHOTO-ROLE-SYSTEM.md`
+11. `V20-PHOTO-INVENTORY-FIRST-PASS.md`
+12. `V20-PHOTO-GAP-MATRIX.md`
+13. `V20-PRODUCTION-GEOMETRY.md`
+14. `V20-PARTS-SYSTEM.md`
+15. `V20-PAGE-MANUALS.md`
+16. `V20-QUALITY-GATES.md`
+17. `V20-ACCEPTANCE-EVIDENCE.md`
+18. only then derive page-specific Figma placement instructions.
+
+`V20-IDEA-BANK.md` is a controlled idea pool, not a mandatory design authority.
 
 ## Current preferred 8-page spine
 
@@ -55,6 +65,18 @@ Physical spread thinking:
 - P04–P05 center spread = emotional/visual peak;
 - P06–P07.
 
+## High-leverage foundation set
+
+These are the final foundation layers before production Figma work. Do not add more governance unless a real failure proves a missing rule.
+
+1. `CHANGE RESILIENCE` — copy/photo/aspect changes must not trigger redesign or tiny type.
+2. `PHOTO ROLES` — select HERO/EMOTION/PLACE/ACTION/DETAIL/etc before frame geometry.
+3. `READING PATH` — define 1st/2nd/3rd/useful-info/micro-discovery hierarchy before decoration.
+4. `TRUTH BOUNDARY` — separate FACT / EDITORIAL COPY / DECORATIVE FICTION; never fabricate autobiographical/operational facts.
+5. `PAGE DIFFERENTIATION` — adjacent spreads should materially differ across at least four composition axes.
+6. `ACCEPTANCE EVIDENCE` — prove scan order, A5 readability, editability, change resilience, provenance and anti-template behavior.
+7. `PHOTO GAP MATRIX` — missing real-photo roles remain visible gaps rather than silently becoming generated fake memories or bad placeholder geometry.
+
 ## What V20 may recover from older project records
 
 Only facts/source assets that remain true, for example:
@@ -69,11 +91,11 @@ Recovering a fact is NOT permission to inherit the old layout around that fact.
 ## Hard workflow rule
 
 `CONTENT + PAGE MANUAL`
-→ `PHOTO INVENTORY`
+→ `PHOTO ROLE + GAP INVENTORY`
 → `GREYBOX / SILHOUETTE`
 → `PARTS PLACEMENT`
 → `EDITORIAL POLISH`
-→ `V20 QA`
+→ `V20 QA + ACCEPTANCE EVIDENCE`
 → `PRINT PREFLIGHT`
 
 Figma must not be asked to invent the page with prompts like “make this more Rurubu-like.”
@@ -84,6 +106,7 @@ Prompts are execution artifacts generated from the page manuals, not the source 
 
 Do not start a new V20 production Figma page until:
 - the actual photo inventory has been mapped to P01–P08 roles;
+- major real-photo gaps are explicitly known;
 - the new V20 Figma skeleton is explicitly created as a new surface, not a modified V10/V11 page.
 
 This is intentional: the goal is to avoid another expensive redesign loop.
