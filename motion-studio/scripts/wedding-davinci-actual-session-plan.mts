@@ -49,6 +49,13 @@ type ActualEvidence = {
   productionReady?: boolean;
 };
 
+type PalmierTimelineReceipt = {
+  source?: {
+    assemblyPlan?: {path?: string; sha256?: string};
+    palmierFcpxml?: {path?: string; sha256?: string};
+  };
+};
+
 const runJson = (script: string) => {
   const result = spawnSync(process.execPath, ['--no-warnings', join(root, 'scripts', script), '--json'], {
     cwd: root,
@@ -151,10 +158,67 @@ const inspectProjectRemotionIdentity = (movieId: MovieId) => {
   }
 };
 
+const inspectPalmierTimelineExport = (movieId: MovieId, projectRemotionApplicable: boolean) => {
+  const receiptPath = join(root, `out/handoff/wedding/${movieId}-palmier-typography-timeline-export-receipt.json`);
+  const command = `node --no-warnings scripts/check-wedding-palmier-typography-timeline-export-receipt.mts --movie=${movieId} --strict`;
+  const applicable = projectRemotionApplicable || existsSync(receiptPath);
+  if (!applicable) {
+    return {
+      state: 'NOT_APPLICABLE' as const,
+      applicable: false,
+      current: false,
+      command,
+      receiptSha256: null,
+      assemblyPlanSha256: null,
+      palmierFcpxmlSha256: null,
+      error: null,
+    };
+  }
+  const result = spawnSync(process.execPath, ['--no-warnings', join(root, 'scripts/check-wedding-palmier-typography-timeline-export-receipt.mts'), `--movie=${movieId}`, '--json'], {
+    cwd: root,
+    encoding: 'utf8',
+  });
+  try {
+    if (result.status !== 0 || !result.stdout.trim()) throw new Error(result.stderr || 'PALMIER_TIMELINE_PREFLIGHT_NO_JSON');
+    const report = JSON.parse(result.stdout) as {state?: string; detail?: string | null};
+    if (report.state !== 'CURRENT') throw new Error(report.detail ?? `PALMIER_TIMELINE_${report.state ?? 'INVALID'}`);
+    if (!existsSync(receiptPath)) throw new Error('PALMIER_TIMELINE_RECEIPT_MISSING_AFTER_CURRENT_CHECK');
+    const receiptRaw = readFileSync(receiptPath, 'utf8');
+    const receipt = JSON.parse(receiptRaw) as PalmierTimelineReceipt;
+    const assemblyPlanSha256 = receipt.source?.assemblyPlan?.sha256 ?? null;
+    const palmierFcpxmlSha256 = receipt.source?.palmierFcpxml?.sha256 ?? null;
+    if (!/^[a-f0-9]{64}$/.test(assemblyPlanSha256 ?? '') || !/^[a-f0-9]{64}$/.test(palmierFcpxmlSha256 ?? '')) {
+      throw new Error('PALMIER_TIMELINE_RECEIPT_SHA_BINDING_INVALID');
+    }
+    return {
+      state: 'CURRENT' as const,
+      applicable: true,
+      current: true,
+      command,
+      receiptSha256: createHash('sha256').update(receiptRaw).digest('hex'),
+      assemblyPlanSha256,
+      palmierFcpxmlSha256,
+      error: null,
+    };
+  } catch (error) {
+    return {
+      state: 'INVALID' as const,
+      applicable: true,
+      current: false,
+      command,
+      receiptSha256: null,
+      assemblyPlanSha256: null,
+      palmierFcpxmlSha256: null,
+      error: error instanceof Error ? error.message : String(error),
+    };
+  }
+};
+
 const manualChecklist = [
   'Confirm the source render readback SHA matches the recovery-bound expected SHA before editing.',
   'Confirm the Resolve Project Motion handoff sidecar path/SHA shown in recovery Markdown matches the canonical preflight result before editing.',
   'Confirm the Project Remotion Element identity receipt and Resolve identity sidecar SHA shown in recovery Markdown match the transported session-plan preflight before editing.',
+  'Confirm the Palmier timeline export receipt, Assembly Plan SHA, and real FCPXML SHA match the transported Session Plan before editing.',
   'Record DaVinci Resolve version, project name, timeline name, timeline insertion, duration and FPS.',
   'Review color, audio, title-safe/framing, playback at 1x, and playback at half speed in the real Mac GUI.',
   'Export from DaVinci and record path/SHA plus duration, dimensions, FPS, audio presence, and watched-with-sound verdicts.',
@@ -165,6 +229,7 @@ const buildProject = (movieId: MovieId) => {
   const project = operatorPacket.projects[movieId];
   const projectMotionPreflight = operatorPacket.projectMotionPreflight[movieId];
   const projectRemotionIdentityPreflight = inspectProjectRemotionIdentity(movieId);
+  const palmierTimelinePreflight = inspectPalmierTimelineExport(movieId, projectRemotionIdentityPreflight.applicable);
   const evidence = inspectEvidence(movieId);
   const prefix = movieId === 'opening' ? 'opening' : 'profile';
   return {
@@ -180,6 +245,7 @@ const buildProject = (movieId: MovieId) => {
       error: projectMotionPreflight.error ?? null,
     },
     projectRemotionIdentityPreflight,
+    palmierTimelinePreflight,
     handoffIdentitySha256: project.handoffIdentitySha256,
     expectedDavinciActualEvidenceSha256: project.davinciActualEvidenceSha256,
     actualEvidence: evidence,
@@ -187,55 +253,63 @@ const buildProject = (movieId: MovieId) => {
       ? 'BLOCKED_PROJECT_MOTION_PREFLIGHT'
       : projectRemotionIdentityPreflight.state === 'INVALID'
         ? 'BLOCKED_PROJECT_REMOTION_IDENTITY_PREFLIGHT'
-        : !project.handoffIdentitySha256
-          ? 'BLOCKED_UPSTREAM'
-          : evidence.state === 'NOT_RUN'
-            ? 'READY_TO_INITIALIZE_WHEN_RECOVERY_CURRENT'
-            : evidence.state === 'PASS'
-              ? 'GUI_ACTUAL_RECORDED'
-              : evidence.state === 'IN_PROGRESS'
-                ? 'GUI_ACTUAL_IN_PROGRESS'
-                : 'GUI_ACTUAL_BLOCKED',
+        : palmierTimelinePreflight.state === 'INVALID'
+          ? 'BLOCKED_PALMIER_TIMELINE_PREFLIGHT'
+          : !project.handoffIdentitySha256
+            ? 'BLOCKED_UPSTREAM'
+            : evidence.state === 'NOT_RUN'
+              ? 'READY_TO_INITIALIZE_WHEN_RECOVERY_CURRENT'
+              : evidence.state === 'PASS'
+                ? 'GUI_ACTUAL_RECORDED'
+                : evidence.state === 'IN_PROGRESS'
+                  ? 'GUI_ACTUAL_IN_PROGRESS'
+                  : 'GUI_ACTUAL_BLOCKED',
     orderedActions: [
       {
         order: 1,
         kind: 'SAFE_PREP',
         command: `node --no-warnings scripts/export-wedding-production-handoff.mts --movie=${movieId}`,
-        purpose: 'Regenerate the canonical production bundle, Project Motion provenance/Resolve sidecar when applicable, Project Remotion identity receipt/Resolve sidecar when applicable, recovery JSON, and recovery Markdown. This does not run DaVinci.',
+        purpose: 'Regenerate the canonical production bundle and all applicable provenance/recovery sidecars. This does not run DaVinci.',
       },
       {
         order: 2,
         kind: 'PROJECT_MOTION_PREFLIGHT',
         command: projectMotionPreflight.command,
-        purpose: `Transported Project Motion state=${projectMotionPreflight.state}. Fail closed on stale/replaced Resolve Project Motion sidecars or Palmier binding drift before Actual evidence initialization. NOT_APPLICABLE is allowed when no Project Motion provenance is in use.`,
+        purpose: `Transported Project Motion state=${projectMotionPreflight.state}. Fail closed on provenance drift before Actual evidence initialization.`,
       },
       {
         order: 3,
         kind: 'PROJECT_REMOTION_IDENTITY_PREFLIGHT',
         command: projectRemotionIdentityPreflight.command,
-        purpose: `Transported Project Remotion identity state=${projectRemotionIdentityPreflight.state}. Fail closed on stale Project Typography batch, Project Role manifest, receipt, canonical engine identity, Resolve identity sidecar, recovery JSON, or Human recovery Markdown before Actual evidence initialization. NOT_APPLICABLE is allowed only when no Project Remotion identity production artifacts are in use.`,
+        purpose: `Transported Project Remotion identity state=${projectRemotionIdentityPreflight.state}. Fail closed on identity/recovery drift before Actual evidence initialization.`,
       },
       {
         order: 4,
+        kind: 'PALMIER_TIMELINE_PREFLIGHT',
+        command: palmierTimelinePreflight.command,
+        purpose: `Transported Palmier timeline state=${palmierTimelinePreflight.state}. When Project Remotion typography is in use, require a CURRENT SHA-bound real FCPXML receipt before Actual evidence initialization.`,
+      },
+      {
+        order: 5,
         kind: 'EVIDENCE_INIT',
         command: `node --no-warnings scripts/${prefix}-v1-davinci-finishing-evidence.mts --init`,
         purpose: 'Create an Actual evidence template bound to the current recovery SHA. Every GUI verdict starts at NOT_RUN.',
       },
       {
-        order: 5,
+        order: 6,
         kind: 'MAC_GUI_ACTUAL',
         command: null,
         purpose: 'Open DaVinci Resolve on the Mac and perform the manual checklist. CI/automation must not mark these verdicts PASS.',
         checklist: manualChecklist,
       },
       {
-        order: 6,
+        order: 7,
         kind: 'STRICT_VERIFY',
         command: `node --no-warnings scripts/${prefix}-v1-davinci-finishing-evidence.mts --strict`,
         purpose: 'Fail closed unless the evidence is current, recovery-bound, and every required Actual verdict is PASS.',
       },
       {
-        order: 7,
+        order: 8,
         kind: 'HUMAN_FINAL_APPROVAL',
         command: `node --no-warnings scripts/${prefix}-v1-final-delivery-approval.mts --init`,
         purpose: 'Initialize final Human approval only after strict DaVinci Actual verification succeeds; approval remains a separate Human action.',
@@ -276,6 +350,11 @@ const planBody = {
     'PROJECT_REMOTION_IDENTITY_PREFLIGHT_INVALID => SESSION_PLAN_BLOCKED',
     'PROJECT_REMOTION_IDENTITY_CURRENT != GUI_ACTUAL_PASS',
     'PROJECT_REMOTION_IDENTITY_PREFLIGHT_MUST_RUN_BEFORE_EVIDENCE_INIT',
+    'PALMIER_TIMELINE_PREFLIGHT_STATE_TRANSPORTED_WITH_SESSION_PLAN',
+    'PALMIER_TIMELINE_PREFLIGHT_INVALID => SESSION_PLAN_BLOCKED',
+    'PALMIER_TIMELINE_CURRENT != PALMIER_GUI_ACTUAL_PROVEN',
+    'PALMIER_TIMELINE_CURRENT != GUI_ACTUAL_PASS',
+    'PALMIER_TIMELINE_PREFLIGHT_MUST_RUN_BEFORE_EVIDENCE_INIT',
     'CI_MUST_NOT_PROMOTE_MAC_GUI_ACTUAL',
     'FINAL_HUMAN_APPROVAL_REQUIRES_STRICT_CURRENT_ACTUAL_EVIDENCE',
   ],
