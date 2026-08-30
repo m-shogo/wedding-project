@@ -1,5 +1,7 @@
 import {getWeddingTypographyProductionRoleGuide} from "../data/weddingTypographyProductionRoleGuide.generated";
+import type {TypographyProductionPatternId} from "../data/typographySceneProductionRouting";
 import type {SceneProjectId} from "../data/visualSceneComposer";
+import {TypographyProductionRouteChoiceGuide} from "./TypographyProductionRouteChoiceGuide";
 
 export function TypographyProductionRoleGuide({projectId}: {projectId: SceneProjectId}) {
   const roles = getWeddingTypographyProductionRoleGuide(projectId);
@@ -26,14 +28,15 @@ export function TypographyProductionRoleGuide({projectId}: {projectId: SceneProj
             <p className="mt-1 text-[9px] leading-4 text-navy-500 dark:text-navy-300">
               Primary: <span className="font-mono font-semibold">{item.primaryPatternId}</span>
             </p>
-            <p className="text-[9px] leading-4 text-navy-400">Fallback: {item.fallbackPatternIds.join(" → ")}</p>
+            <TypographyProductionRouteChoiceGuide patternId={item.primaryPatternId as TypographyProductionPatternId} />
+            <p className="mt-2 text-[9px] leading-4 text-navy-400">Fallback: {item.fallbackPatternIds.join(" → ")}</p>
             <p className="mt-1 text-[9px] leading-4 text-navy-400">{item.reason}</p>
           </div>
         ))}
       </div>
 
       <p className="mt-2 text-[9px] leading-4 text-amber-700 dark:text-amber-300">
-        このガイド表示だけではRemotion Studio / DaVinci Resolve Actual、production-ready、Human approvalのいずれも成立しません。
+        用途・強さ・避ける場面は選択補助です。このガイド表示だけではRemotion Studio / DaVinci Resolve Actual、production-ready、Human approvalのいずれも成立しません。
       </p>
     </section>
   );
