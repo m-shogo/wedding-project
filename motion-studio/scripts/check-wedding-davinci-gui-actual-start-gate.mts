@@ -45,8 +45,19 @@ try {
     if (typeof gate.project?.projectMotionPreflight?.command !== 'string' || !gate.project.projectMotionPreflight.command.includes(`--movie=${movieId}`)) throw new Error(`${movieId}: Project Motion verifier command must be surfaced`);
     if (gate.project.projectMotionPreflight.state === 'INVALID' && gate.state !== 'PROJECT_MOTION_BLOCKED') throw new Error(`${movieId}: INVALID Project Motion must block GUI start`);
     if (gate.project.projectMotionPreflight.state === 'INVALID' && gate.nextAction.kind !== 'REVALIDATE_PROJECT_MOTION') throw new Error(`${movieId}: INVALID Project Motion must point to canonical verifier`);
+    if (!['CURRENT', 'NOT_APPLICABLE', 'INVALID'].includes(gate.project?.projectRemotionIdentityPreflight?.state)) throw new Error(`${movieId}: Project Remotion identity preflight state must be surfaced`);
+    if (typeof gate.project?.projectRemotionIdentityPreflight?.command !== 'string' || !gate.project.projectRemotionIdentityPreflight.command.includes(`--movie=${movieId}`)) throw new Error(`${movieId}: Project Remotion identity verifier command must be surfaced`);
+    if (gate.project.projectRemotionIdentityPreflight.state === 'CURRENT') {
+      for (const key of ['resolveSidecarSha256', 'receiptSha256', 'sourceBatchSha256']) {
+        if (!/^[a-f0-9]{64}$/.test(gate.project.projectRemotionIdentityPreflight[key] ?? '')) throw new Error(`${movieId}: CURRENT Project Remotion identity ${key} must be SHA-256`);
+      }
+    }
+    if (gate.project.projectMotionPreflight.state !== 'INVALID' && gate.project.projectRemotionIdentityPreflight.state === 'INVALID') {
+      if (gate.state !== 'PROJECT_REMOTION_IDENTITY_BLOCKED') throw new Error(`${movieId}: INVALID Project Remotion identity must block GUI start`);
+      if (gate.nextAction.kind !== 'REVALIDATE_PROJECT_REMOTION_IDENTITY') throw new Error(`${movieId}: INVALID Project Remotion identity must point to canonical verifier`);
+    }
     if (gate.evidenceBoundary?.productionReady !== false) throw new Error(`${movieId}: start gate must stay productionReady=false`);
-    if (!['PROJECT_MOTION_BLOCKED', 'UPSTREAM_BLOCKED', 'EVIDENCE_INIT_REQUIRED', 'GUI_ACTUAL_ALLOWED', 'GUI_ACTUAL_COMPLETE', 'EVIDENCE_BLOCKED'].includes(gate.state)) {
+    if (!['PROJECT_MOTION_BLOCKED', 'PROJECT_REMOTION_IDENTITY_BLOCKED', 'UPSTREAM_BLOCKED', 'EVIDENCE_INIT_REQUIRED', 'GUI_ACTUAL_ALLOWED', 'GUI_ACTUAL_COMPLETE', 'EVIDENCE_BLOCKED'].includes(gate.state)) {
       throw new Error(`${movieId}: unexpected gate state ${gate.state}`);
     }
     if ((gate.state === 'GUI_ACTUAL_ALLOWED') !== gate.guiActualStartAllowed) throw new Error(`${movieId}: GUI allowed flag/state mismatch`);
@@ -68,13 +79,16 @@ try {
   if (source.includes("macDavinciResolveGuiActual: 'PASS'")) throw new Error('start gate must not synthesize DaVinci PASS');
   if (source.includes('productionReady: true')) throw new Error('start gate must not synthesize productionReady');
   if (!source.includes("projectMotionPreflight.state === 'INVALID'")) throw new Error('start gate must fail close on INVALID Project Motion');
+  if (!source.includes("projectRemotionIdentityPreflight.state === 'INVALID'")) throw new Error('start gate must fail close on INVALID Project Remotion identity');
   if (!source.includes("'PROJECT_MOTION_INVALID => GUI_ACTUAL_START_BLOCKED'")) throw new Error('Project Motion GUI-start guardrail missing');
+  if (!source.includes("'PROJECT_REMOTION_IDENTITY_INVALID => GUI_ACTUAL_START_BLOCKED'")) throw new Error('Project Remotion identity GUI-start guardrail missing');
   if (!source.includes("state === 'GUI_ACTUAL_ALLOWED'")) throw new Error('strict GUI start must be tied only to GUI_ACTUAL_ALLOWED');
   if (!source.includes("writeFileSync(outputPath")) throw new Error('canonical Start Gate artifact writer missing');
 
   console.log('Wedding DaVinci GUI Actual start gate contract: PASS');
   console.log('Missing/tampered transported plan: GUI START BLOCKED + diagnostic artifact written');
   console.log('INVALID Project Motion preflight: GUI START BLOCKED');
+  console.log('INVALID Project Remotion identity preflight: GUI START BLOCKED');
   console.log('Fresh transported plan: exact per-movie next action + canonical JSON artifact derived');
   console.log('START_GATE_ARTIFACT_EXISTS != GUI_ACTUAL_EXECUTED');
 } finally {
