@@ -16,6 +16,7 @@ export function buildProjectMotionProvenanceMarkdownSection(recoveryExport: any,
   const provenance = recoveryExport.projectMotionProvenance;
   if (!provenance) return null;
   const palmierBindingArtifact = recoveryExport.projectMotionPalmierBindingArtifact;
+  const resolveHandoffArtifact = recoveryExport.projectMotionResolveHandoffArtifact;
   if (
     provenance.schemaVersion !== 'wedding-project-motion-production-provenance/v1' ||
     provenance.authority !== 'SHA_BOUND_CURRENT_PROJECT_MOTION_IMPORT' ||
@@ -30,7 +31,10 @@ export function buildProjectMotionProvenanceMarkdownSection(recoveryExport: any,
     provenance.evidenceBoundary?.productionReady !== false ||
     !palmierBindingArtifact ||
     typeof palmierBindingArtifact.path !== 'string' ||
-    palmierBindingArtifact.path.length === 0
+    palmierBindingArtifact.path.length === 0 ||
+    !resolveHandoffArtifact ||
+    typeof resolveHandoffArtifact.path !== 'string' ||
+    resolveHandoffArtifact.path.length === 0
   ) {
     throw new Error(`PROJECT_MOTION_PROVENANCE_MARKDOWN_CONTRACT_INVALID:${movieId}`);
   }
@@ -39,6 +43,7 @@ export function buildProjectMotionProvenanceMarkdownSection(recoveryExport: any,
     ['receipt-sha256', provenance.receiptArtifact?.sha256],
     ['currentness-sha256', provenance.currentnessArtifact?.sha256],
     ['palmier-binding-artifact-sha256', palmierBindingArtifact.sha256],
+    ['resolve-handoff-artifact-sha256', resolveHandoffArtifact.sha256],
   ] as const) {
     if (typeof value !== 'string' || !/^[a-f0-9]{64}$/.test(value)) {
       throw new Error(`PROJECT_MOTION_PROVENANCE_MARKDOWN_SHA_INVALID:${label}`);
@@ -59,6 +64,8 @@ export function buildProjectMotionProvenanceMarkdownSection(recoveryExport: any,
     'project-motion-currentness-state: CURRENT',
     `palmier-project-motion-binding-artifact: ${palmierBindingArtifact.path}`,
     `palmier-project-motion-binding-artifact-sha256: ${palmierBindingArtifact.sha256}`,
+    `resolve-project-motion-handoff-sidecar: ${resolveHandoffArtifact.path}`,
+    `resolve-project-motion-handoff-sidecar-sha256: ${resolveHandoffArtifact.sha256}`,
     'palmier-project-motion-current: yes',
     'davinci-project-motion-handoff-current: yes',
     'mac-remotion-studio-gui-actual: NOT_RUN',
@@ -92,6 +99,7 @@ export function appendProjectMotionProvenanceRecoveryMarkdown(
     attached: true as const,
     sourceSha256: recoveryExport.projectMotionProvenance.sourceExport.sha256,
     palmierBindingArtifactSha256: recoveryExport.projectMotionPalmierBindingArtifact.sha256,
+    resolveHandoffArtifactSha256: recoveryExport.projectMotionResolveHandoffArtifact.sha256,
   };
 }
 
@@ -115,6 +123,7 @@ function main() {
   if (result.attached) {
     console.log(`projectMotionSourceSha256=${result.sourceSha256}`);
     console.log(`palmierProjectMotionBindingArtifactSha256=${result.palmierBindingArtifactSha256}`);
+    console.log(`resolveProjectMotionHandoffSidecarSha256=${result.resolveHandoffArtifactSha256}`);
   }
   console.log(`markdown=${relative(root, config.markdown).replaceAll('\\', '/')}`);
   console.log('Mac Remotion Studio GUI Actual remains NOT_RUN.');
