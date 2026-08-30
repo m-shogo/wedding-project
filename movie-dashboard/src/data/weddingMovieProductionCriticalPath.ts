@@ -9,6 +9,10 @@ export const WEDDING_MOVIE_PRODUCTION_CRITICAL_PATH_SCHEMA = "wedding-movie-prod
 
 export const WEDDING_DAVINCI_GUI_ACTUAL_START_GATE_ROUTE = "/movie-coach/motion-library#davinci-gui-actual-start-gate" as const;
 
+export function weddingDavinciGuiActualStartGateCommand(projectId: "opening" | "profile") {
+  return `node --no-warnings scripts/wedding-davinci-gui-actual-start-gate.mts --movie=${projectId}`;
+}
+
 type StageSnapshot = {
   state: string;
   detail: string;
@@ -20,6 +24,7 @@ type ActionTarget = {
   label: string;
   route: string;
   purpose: string;
+  command?: string;
 };
 
 type InputLane = {
@@ -62,6 +67,7 @@ function actionTargetsFor(projectId: "opening" | "profile", stageName: string): 
       label: "DaVinci Actual Start Gateを開く",
       route: WEDDING_DAVINCI_GUI_ACTUAL_START_GATE_ROUTE,
       purpose: "canonical Session Planを読み込み、live Project Motion再検証とstrict GUI-start gateを通してからHuman Mac DaVinci Actualへ進む",
+      command: weddingDavinciGuiActualStartGateCommand(projectId),
     }];
   }
   return [];
@@ -267,6 +273,7 @@ export function buildWeddingMovieProductionCriticalPath() {
       "RECOVERY_COMMAND_VISIBLE != RECOVERY_EXECUTED",
       "ACTION_TARGET_VISIBLE != ACTION_COMPLETED",
       "DAVINCI_START_GATE_LINK_VISIBLE != GUI_ACTUAL_STARTED",
+      "DAVINCI_START_GATE_COMMAND_VISIBLE != COMMAND_EXECUTED",
       "DOWNSTREAM_WAITING != DOWNSTREAM_FAILED",
       "CI_STATUS != MAC_DAVINCI_ACTUAL",
       ...movieProductionBlockerRecoveryGuardrails,
