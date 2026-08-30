@@ -8,6 +8,9 @@ export const CANONICAL_WEDDING_DAVINCI_GUI_ACTUAL_START_GATE_SCHEMA =
 
 export type WeddingMovieId = "opening" | "profile";
 
+export const canonicalWeddingDavinciGuiActualStartGateArtifactPath = (movieId: WeddingMovieId) =>
+  `out/handoff/wedding/${movieId}-davinci-gui-actual-start-gate.json`;
+
 export type WeddingDavinciGuiActualStartGateAuditState =
   | "NOT_RUN"
   | "TRANSPORT_NOT_CURRENT"
@@ -27,6 +30,7 @@ export type WeddingDavinciGuiActualStartGateAudit = {
   guiActualStartAllowed: boolean;
   canonicalGateLoaded: boolean;
   liveProjectMotionMatch: boolean;
+  canonicalArtifactPath: string;
   transport: {
     state: string;
     current: boolean;
@@ -75,8 +79,10 @@ const allowedStates = new Set<WeddingDavinciGuiActualStartGateAuditState>([
   "EVIDENCE_BLOCKED",
 ]);
 
-const commandFor = (movieId: WeddingMovieId, strict: boolean) =>
-  `cd motion-studio && node --no-warnings scripts/wedding-davinci-gui-actual-start-gate.mts --movie=${movieId} --snapshot=out/handoff/wedding/wedding-davinci-actual-session-plan.json${strict ? " --strict-gui-start" : ""} --json`;
+const commandFor = (movieId: WeddingMovieId, strict: boolean) => {
+  const artifactPath = canonicalWeddingDavinciGuiActualStartGateArtifactPath(movieId);
+  return `cd motion-studio && node --no-warnings scripts/wedding-davinci-gui-actual-start-gate.mts --movie=${movieId} --snapshot=out/handoff/wedding/wedding-davinci-actual-session-plan.json --output=${artifactPath} --write${strict ? " --strict-gui-start" : ""} --json`;
+};
 
 const emptyTransport = () => ({
   state: "NOT_RUN",
@@ -113,18 +119,19 @@ const result = (
   guiActualStartAllowed: false,
   canonicalGateLoaded: false,
   liveProjectMotionMatch: false,
+  canonicalArtifactPath: canonicalWeddingDavinciGuiActualStartGateArtifactPath(movieId),
   transport: emptyTransport(),
   project: emptyProject(),
   nextAction: {
     kind: "RUN_CANONICAL_START_GATE",
     command: commandFor(movieId, false),
     humanOnly: false,
-    reason: "Load the canonical start-gate JSON before relying on a GUI Actual next action.",
+    reason: "Generate and load the canonical start-gate JSON artifact before relying on a GUI Actual next action.",
   },
   mismatches,
   inspectCommand: commandFor(movieId, false),
   strictGuiStartCommand: commandFor(movieId, true),
-  note: "Motion Zukan audits the canonical gate output and rechecks its transported Project Motion state against the current Dashboard authority. GUI_ACTUAL_ALLOWED means a human may start the real Mac GUI review; it never means GUI Actual was executed or passed.",
+  note: "Motion Zukan audits the canonical gate artifact and rechecks its transported Project Motion state against the current Dashboard authority. GUI_ACTUAL_ALLOWED means a human may start the real Mac GUI review; it never means GUI Actual was executed or passed.",
   evidenceBoundary: {
     macDavinciResolveGuiActual: "NOT_PROMOTED_BY_DASHBOARD_GATE_AUDIT",
     productionReady: false,
@@ -208,7 +215,7 @@ export function auditWeddingDavinciGuiActualStartGate(
         kind: "REGENERATE_CANONICAL_START_GATE",
         command: commandFor(movieId, false),
         humanOnly: false,
-        reason: "The loaded canonical start-gate JSON carries an older Project Motion preflight than the current Dashboard authority. Regenerate the gate and rerun strict GUI-start verification before Mac GUI Actual.",
+        reason: "The loaded canonical start-gate JSON carries an older Project Motion preflight than the current Dashboard authority. Regenerate the canonical artifact and rerun strict GUI-start verification before Mac GUI Actual.",
       },
     });
   }
