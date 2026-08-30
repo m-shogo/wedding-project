@@ -1,3 +1,4 @@
+import {weddingProjectRemotionStageStatus} from "../generated/weddingProjectRemotionStageStatus";
 import {buildWeddingMovieProductionCriticalPath} from "./weddingMovieProductionCriticalPath";
 import type {
   WeddingDavinciGuiActualStartGateAudit,
@@ -5,7 +6,7 @@ import type {
 } from "./weddingDavinciGuiActualStartGateAudit";
 
 export const WEDDING_MOVIE_PRODUCTION_CRITICAL_PATH_RUNTIME_SNAPSHOT_SCHEMA =
-  "wedding-movie-production-critical-path-runtime-snapshot/v1" as const;
+  "wedding-movie-production-critical-path-runtime-snapshot/v2" as const;
 
 export type WeddingDavinciGuiActualStartGateRuntimeAuditMap = Record<
   WeddingMovieId,
@@ -45,13 +46,31 @@ function startGateRuntimeSnapshot(audit: WeddingDavinciGuiActualStartGateAudit) 
   };
 }
 
+function projectRemotionCanonicalStageSnapshot(movieId: WeddingMovieId) {
+  const status = weddingProjectRemotionStageStatus[movieId];
+  return {
+    state: status.state,
+    blocker: status.blocker,
+    detail: status.detail,
+    stageVerification: status.checks.stageVerification,
+    handoffVerification: status.checks.handoffVerification,
+    canonicalArtifacts: {...status.canonicalArtifacts},
+    nextAction: {...status.next},
+  };
+}
+
 export function buildWeddingMovieProductionCriticalPathRuntimeSnapshot(
   audits: WeddingDavinciGuiActualStartGateRuntimeAuditMap,
 ) {
   return {
     schemaVersion: WEDDING_MOVIE_PRODUCTION_CRITICAL_PATH_RUNTIME_SNAPSHOT_SCHEMA,
-    authority: "DASHBOARD_RUNTIME_CRITICAL_PATH_WITH_LIVE_DAVINCI_START_GATE_AUDIT" as const,
+    authority: "DASHBOARD_RUNTIME_CRITICAL_PATH_WITH_CANONICAL_REMOTION_STAGE_AND_LIVE_DAVINCI_START_GATE_AUDIT" as const,
     stableCriticalPath: buildWeddingMovieProductionCriticalPath(),
+    canonicalProjectRemotionStage: {
+      authority: weddingProjectRemotionStageStatus.authority,
+      opening: projectRemotionCanonicalStageSnapshot("opening"),
+      profile: projectRemotionCanonicalStageSnapshot("profile"),
+    },
     liveDavinciStartGate: {
       opening: startGateRuntimeSnapshot(audits.opening),
       profile: startGateRuntimeSnapshot(audits.profile),
@@ -60,10 +79,12 @@ export function buildWeddingMovieProductionCriticalPathRuntimeSnapshot(
       macDavinciResolveGuiActual: "NOT_PROMOTED_BY_RUNTIME_SNAPSHOT" as const,
       remotionStudioGuiActual: "NOT_PROMOTED_BY_RUNTIME_SNAPSHOT" as const,
       productionReady: false as const,
-      note: "Runtime Start Gate visibility, GUI_ACTUAL_ALLOWED state, commands, hashes, and export do not prove that a human executed or passed Mac/Studio GUI Actual.",
+      note: "Canonical Remotion stage status, Runtime Start Gate visibility, GUI_ACTUAL_ALLOWED state, commands, hashes, and export do not prove that a human executed or passed Mac/Studio GUI Actual.",
     },
     guardrails: [
       "RUNTIME_SNAPSHOT_EXPORTED != MAC_DAVINCI_GUI_ACTUAL_EXECUTED",
+      "REMOTION_STAGE_HANDOFF_CURRENT != REMOTION_STUDIO_GUI_ACTUAL_EXECUTED",
+      "REMOTION_STAGE_HANDOFF_CURRENT != MAC_DAVINCI_GUI_ACTUAL_EXECUTED",
       "GUI_ACTUAL_ALLOWED != GUI_ACTUAL_EXECUTED",
       "START_GATE_ARTIFACT_LOADED != GUI_ACTUAL_EXECUTED",
       "PROJECT_MOTION_LIVE_MATCH != HUMAN_GUI_REVIEW_PASSED",
