@@ -12,7 +12,7 @@ const manualChecklist = [
   "全GUI Actual verdictがPASSで reviewer / reviewedAt を記録した後だけ review.overall=PASS にする",
 ] as const;
 
-const buildActions = (movieId: MovieId) => {
+const buildActions = (movieId: MovieId, projectMotionCommand: string) => {
   const prefix = movieId === "opening" ? "opening" : "profile";
   return [
     {
@@ -24,6 +24,14 @@ const buildActions = (movieId: MovieId) => {
     },
     {
       order: 2,
+      kind: "PROJECT_MOTION_PREFLIGHT" as const,
+      label: "Project Motion provenanceを再検証",
+      command: `cd motion-studio && ${projectMotionCommand}`,
+      humanOnly: false,
+      note: "CURRENT / NOT_APPLICABLE / INVALID のlive判定をMac Actual開始前に再確認する。browser表示だけでCURRENTとは扱わない。",
+    },
+    {
+      order: 3,
       kind: "EVIDENCE_INIT" as const,
       label: "Actual evidence templateを初期化",
       command: `cd motion-studio && node --no-warnings scripts/${prefix}-v1-davinci-finishing-evidence.mts --init`,
@@ -31,7 +39,7 @@ const buildActions = (movieId: MovieId) => {
       note: "作成時点では全GUI verdictがNOT_RUN。template作成はActual実行ではない。",
     },
     {
-      order: 3,
+      order: 4,
       kind: "MAC_GUI_ACTUAL" as const,
       label: "MacのDaVinci ResolveでActual確認",
       command: null,
@@ -39,14 +47,14 @@ const buildActions = (movieId: MovieId) => {
       checklist: manualChecklist,
     },
     {
-      order: 4,
+      order: 5,
       kind: "STRICT_VERIFY" as const,
       label: "Current Actual evidenceをstrict検証",
       command: `cd motion-studio && node --no-warnings scripts/${prefix}-v1-davinci-finishing-evidence.mts --strict`,
       humanOnly: false,
     },
     {
-      order: 5,
+      order: 6,
       kind: "HUMAN_FINAL_APPROVAL" as const,
       label: "Human final approvalを別証拠として開始",
       command: `cd motion-studio && node --no-warnings scripts/${prefix}-v1-final-delivery-approval.mts --init`,
@@ -60,26 +68,36 @@ export function buildWeddingDavinciActualSessionPlan() {
   const packet = buildWeddingDavinciOperatorPacket();
   const buildProject = (movieId: MovieId) => {
     const project = packet.projects[movieId];
+    const projectMotionPreflight = packet.projectMotionPreflight[movieId];
     const nextStage = project.nextGate?.stage ?? "PRODUCTION_READY";
     const actualRecorded = Boolean(project.actualEvidenceSha256);
     const finalApproved = Boolean(project.finalApprovalSha256);
-    const sessionState = finalApproved
-      ? "FINAL_APPROVAL_RECORDED"
-      : actualRecorded
-        ? "ACTUAL_EVIDENCE_RECORDED"
-        : project.recoverySha256
-          ? "READY_FOR_ACTUAL_WHEN_UPSTREAM_CURRENT"
-          : "BLOCKED_UPSTREAM";
+    const sessionState = projectMotionPreflight.state === "INVALID"
+      ? "BLOCKED_PROJECT_MOTION_PREFLIGHT"
+      : finalApproved
+        ? "FINAL_APPROVAL_RECORDED"
+        : actualRecorded
+          ? "ACTUAL_EVIDENCE_RECORDED"
+          : project.recoverySha256
+            ? "READY_FOR_ACTUAL_WHEN_UPSTREAM_CURRENT"
+            : "BLOCKED_UPSTREAM";
 
     return {
       movieId,
       sessionState,
       readinessState: project.state,
       currentNextGate: nextStage,
+      projectMotionPreflight: {
+        state: projectMotionPreflight.state,
+        applicable: projectMotionPreflight.applicable,
+        current: projectMotionPreflight.current,
+        command: projectMotionPreflight.command,
+        error: projectMotionPreflight.error ?? null,
+      },
       recoverySha256: project.recoverySha256,
       actualEvidenceSha256: project.actualEvidenceSha256,
       finalApprovalSha256: project.finalApprovalSha256,
-      orderedActions: buildActions(movieId),
+      orderedActions: buildActions(movieId, projectMotionPreflight.command),
     } as const;
   };
 
@@ -104,6 +122,9 @@ export function buildWeddingDavinciActualSessionPlan() {
     ],
     guardrails: [
       "DASHBOARD_PLAN_EXISTS != GUI_ACTUAL_EXECUTED",
+      "PROJECT_MOTION_PREFLIGHT_STATE_TRANSPORTED_WITH_SESSION_PLAN",
+      "PROJECT_MOTION_PREFLIGHT_INVALID => SESSION_PLAN_BLOCKED",
+      "PROJECT_MOTION_PREFLIGHT_CURRENT != GUI_ACTUAL_PASS",
       "EVIDENCE_TEMPLATE_EXISTS != GUI_ACTUAL_PASS",
       "CI_MUST_NOT_PROMOTE_MAC_GUI_ACTUAL",
       "FINAL_HUMAN_APPROVAL_REQUIRES_STRICT_CURRENT_ACTUAL_EVIDENCE",
