@@ -2,7 +2,13 @@ import {existsSync} from 'node:fs';
 import {dirname, join} from 'node:path';
 import {spawnSync} from 'node:child_process';
 import {fileURLToPath} from 'node:url';
-import {buildWeddingProjectMotionReceiptCurrentnessFromFiles} from './wedding-project-motion-import-currentness.mts';
+import {
+  buildWeddingProjectMotionReceiptCurrentnessFromCanonicalReceipt,
+  buildWeddingProjectMotionReceiptCurrentnessFromFiles,
+  saveWeddingProjectMotionReceiptCurrentness,
+  type WeddingProjectMotionReceiptCurrentnessV1,
+} from './wedding-project-motion-import-currentness.mts';
+import {getWeddingProjectMotionCanonicalArtifactPaths} from './wedding-project-motion-artifact-store.mts';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const movieArg = process.argv.find((arg) => arg.startsWith('--movie='))?.split('=')[1];
@@ -25,22 +31,44 @@ if (Boolean(projectMotionReceipt) !== Boolean(projectMotionExport)) {
   process.exit(2);
 }
 
-if (projectMotionReceipt && projectMotionExport) {
-  const currentness = buildWeddingProjectMotionReceiptCurrentnessFromFiles(
-    projectMotionReceipt,
-    projectMotionExport,
-    movieArg,
+const canonicalProjectMotion = getWeddingProjectMotionCanonicalArtifactPaths(movieArg, root);
+let projectMotionCurrentness: WeddingProjectMotionReceiptCurrentnessV1 | null = null;
+
+try {
+  if (projectMotionReceipt && projectMotionExport) {
+    projectMotionCurrentness = buildWeddingProjectMotionReceiptCurrentnessFromFiles(
+      projectMotionReceipt,
+      projectMotionExport,
+      movieArg,
+    );
+  } else if (existsSync(canonicalProjectMotion.receipt)) {
+    projectMotionCurrentness = buildWeddingProjectMotionReceiptCurrentnessFromCanonicalReceipt(movieArg);
+  }
+} catch (error) {
+  console.error(
+    `Wedding production handoff blocked: ${movieArg} canonical Project Motion artifact could not be validated: ${
+      error instanceof Error ? error.message : String(error)
+    }`,
   );
-  process.stdout.write(`${JSON.stringify(currentness, null, 2)}\n`);
+  console.error('Re-import the current Project Motion handoff with --save-current before continuing.');
+  console.error('Mac Remotion Studio GUI Actual remains NOT_RUN.');
+  console.error('Mac DaVinci Actual remains NOT_RUN.');
+  process.exit(2);
+}
+
+if (projectMotionCurrentness) {
+  const savedCurrentnessPath = saveWeddingProjectMotionReceiptCurrentness(projectMotionCurrentness);
+  process.stdout.write(`${JSON.stringify(projectMotionCurrentness, null, 2)}\n`);
+  console.log(`Project Motion currentness artifact: ${savedCurrentnessPath}`);
   if (
-    currentness.state !== 'CURRENT' ||
-    !currentness.assemblyGate.palmierCurrent ||
-    !currentness.assemblyGate.davinciHandoffCurrent
+    projectMotionCurrentness.state !== 'CURRENT' ||
+    !projectMotionCurrentness.assemblyGate.palmierCurrent ||
+    !projectMotionCurrentness.assemblyGate.davinciHandoffCurrent
   ) {
     console.error(
       `Wedding production handoff blocked: ${movieArg} Project Motion import receipt is not current and assembly-actionable.`,
     );
-    const recoveryCommand = currentness.recoveryActions.find((action) => action.kind === 'COMMAND')?.command;
+    const recoveryCommand = projectMotionCurrentness.recoveryActions.find((action) => action.kind === 'COMMAND')?.command;
     if (recoveryCommand) console.error(`recovery=${recoveryCommand}`);
     console.error('Mac Remotion Studio GUI Actual remains NOT_RUN.');
     console.error('Mac DaVinci Actual remains NOT_RUN.');
