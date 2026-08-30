@@ -1,0 +1,167 @@
+name: Wedding Project Remotion Identity Handoff Gate CI
+
+on:
+  pull_request:
+    paths:
+      - 'motion-studio/src/motion-kit/engines.tsx'
+      - 'motion-studio/scripts/export-wedding-remotion-element-handoff-identities.mts'
+      - 'motion-studio/scripts/verify-wedding-project-remotion-element-identities.mts'
+      - 'motion-studio/scripts/check-wedding-project-remotion-element-identity-receipt.mts'
+      - 'motion-studio/scripts/verify-wedding-project-remotion-identity-handoff.mts'
+      - 'movie-dashboard/src/data/projectTypographyRoleHandoffManifest.ts'
+      - 'movie-dashboard/src/data/typographyProjectDeliveryBatch.ts'
+      - '.github/workflows/wedding-project-remotion-identity-handoff-gate-ci.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  handoff-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Export current catalog identity and batch fixture
+        run: |
+          cd motion-studio
+          node --no-warnings scripts/export-wedding-remotion-element-handoff-identities.mts
+          cd ..
+          mkdir -p movie-dashboard/out/typography-project-delivery
+          cat > movie-dashboard/out/typography-project-delivery/opening-typography-production-batch.json <<'JSON'
+          {
+            "schemaVersion": "wedding-movie-typography-project-delivery/v1",
+            "authority": "DERIVED_PROJECT_HANDOFF",
+            "projectId": "opening",
+            "scenes": [{
+              "sceneId": "opening-title",
+              "sourceRevision": "rev-001",
+              "selectedPatternId": "type-mask-reveal"
+            }],
+            "remotionElementIdentityVerification": {
+              "state": "NOT_RUN",
+              "currentnessVerifiedByBatchBuild": false,
+              "selectedPatternIds": ["type-mask-reveal"],
+              "sceneBindings": [{
+                "sceneId": "opening-title",
+                "sourceRevision": "rev-001",
+                "patternId": "type-mask-reveal",
+                "adoptedForMovie": false,
+                "canonicalEngine": "TypographyRevealEngine",
+                "canonicalMode": "mask",
+                "canonicalSource": "motion-studio/src/motion-kit/engines.tsx#TypographyRevealEngine"
+              }]
+            },
+            "summary": {
+              "batchReadyForPalmierDaVinciHandoff": true,
+              "productionReady": false
+            }
+          }
+          JSON
+
+      - name: Generate CURRENT project identity receipt
+        working-directory: motion-studio
+        run: |
+          node --no-warnings scripts/verify-wedding-project-remotion-element-identities.mts \
+            --movie=opening \
+            --batch=../movie-dashboard/out/typography-project-delivery/opening-typography-production-batch.json
+          node --no-warnings scripts/check-wedding-project-remotion-element-identity-receipt.mts --movie=opening
+
+      - name: Build matching Project Role handoff fixture
+        run: |
+          mkdir -p movie-dashboard/out/project-role-handoff
+          cat > movie-dashboard/out/project-role-handoff/opening-production-role-handoff-manifest.json <<'JSON'
+          {
+            "schemaVersion": "wedding-movie-project-role-handoff/v1",
+            "authority": "DERIVED_FROM_PROJECT_HANDOFF_AND_PERSISTED_HUMAN_ROLE_CONTEXT",
+            "projectId": "opening",
+            "typography": {
+              "projectId": "opening",
+              "scenes": [{
+                "sceneId": "opening-title",
+                "sourceRevision": "rev-001",
+                "selectedPatternId": "type-mask-reveal"
+              }],
+              "remotionElementIdentityVerification": {
+                "selectedPatternIds": ["type-mask-reveal"],
+                "sceneBindings": [{
+                  "sceneId": "opening-title",
+                  "sourceRevision": "rev-001",
+                  "patternId": "type-mask-reveal",
+                  "adoptedForMovie": false,
+                  "canonicalEngine": "TypographyRevealEngine",
+                  "canonicalMode": "mask",
+                  "canonicalSource": "motion-studio/src/motion-kit/engines.tsx#TypographyRevealEngine"
+                }]
+              }
+            },
+            "roleHandoff": {
+              "ready": true,
+              "productionReady": false,
+              "studioGuiActual": "NOT_RUN",
+              "davinciGuiActual": "NOT_RUN"
+            }
+          }
+          JSON
+
+      - name: CURRENT receipt allows matching Palmier DaVinci handoff
+        working-directory: motion-studio
+        run: |
+          node --no-warnings scripts/verify-wedding-project-remotion-identity-handoff.mts \
+            --movie=opening \
+            --manifest=../movie-dashboard/out/project-role-handoff/opening-production-role-handoff-manifest.json | tee /tmp/handoff-current.log
+          grep -q 'projectRemotionIdentityPalmierDaVinciHandoff=ALLOWED' /tmp/handoff-current.log
+          grep -q 'receiptState=CURRENT' /tmp/handoff-current.log
+          grep -q 'verifiedSceneBindings=1' /tmp/handoff-current.log
+          grep -q 'remotionStudioGuiActual=NOT_RUN' /tmp/handoff-current.log
+          grep -q 'macDaVinciActual=NOT_RUN' /tmp/handoff-current.log
+          grep -q 'productionReady=NO' /tmp/handoff-current.log
+
+      - name: Scene revision drift blocks the handoff
+        run: |
+          cp movie-dashboard/out/project-role-handoff/opening-production-role-handoff-manifest.json /tmp/role-handoff-current.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          path = Path('movie-dashboard/out/project-role-handoff/opening-production-role-handoff-manifest.json')
+          data = json.loads(path.read_text())
+          data['typography']['scenes'][0]['sourceRevision'] = 'rev-002'
+          data['typography']['remotionElementIdentityVerification']['sceneBindings'][0]['sourceRevision'] = 'rev-002'
+          path.write_text(json.dumps(data, indent=2) + '\n')
+          PY
+          cd motion-studio
+          if node --no-warnings scripts/verify-wedding-project-remotion-identity-handoff.mts \
+            --movie=opening \
+            --manifest=../movie-dashboard/out/project-role-handoff/opening-production-role-handoff-manifest.json > /tmp/scene-drift.log 2>&1; then
+            echo 'Scene revision drift must block Palmier/DaVinci handoff.'
+            exit 1
+          fi
+          grep -Eq 'PROJECT_ROLE_HANDOFF_BINDINGS_DO_NOT_MATCH_RECEIPT|PROJECT_ROLE_HANDOFF_SCENE_REVISION_STALE' /tmp/scene-drift.log
+
+      - name: Restore manifest then batch drift blocks the handoff
+        run: |
+          mv /tmp/role-handoff-current.json movie-dashboard/out/project-role-handoff/opening-production-role-handoff-manifest.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          path = Path('movie-dashboard/out/typography-project-delivery/opening-typography-production-batch.json')
+          data = json.loads(path.read_text())
+          data['scenes'][0]['sourceRevision'] = 'rev-003'
+          data['remotionElementIdentityVerification']['sceneBindings'][0]['sourceRevision'] = 'rev-003'
+          path.write_text(json.dumps(data, indent=2) + '\n')
+          PY
+          cd motion-studio
+          if node --no-warnings scripts/verify-wedding-project-remotion-identity-handoff.mts \
+            --movie=opening \
+            --manifest=../movie-dashboard/out/project-role-handoff/opening-production-role-handoff-manifest.json > /tmp/batch-drift.log 2>&1; then
+            echo 'Source batch drift must block Palmier/DaVinci handoff.'
+            exit 1
+          fi
+          grep -q 'RECEIPT_SOURCE_BATCH_SHA_STALE' /tmp/batch-drift.log
+          echo 'remotionStudioGuiActual=NOT_RUN'
+          echo 'macDaVinciActual=NOT_RUN'
+          echo 'productionReady=NO'
