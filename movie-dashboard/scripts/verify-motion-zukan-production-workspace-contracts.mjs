@@ -8,6 +8,7 @@ const ui = fs.readFileSync(path.join(root, "src/components/MotionZukanProduction
 const handoff = fs.readFileSync(path.join(root, "src/data/motionZukanWorkspaceHandoff.ts"), "utf8");
 const handoffUi = fs.readFileSync(path.join(root, "src/components/MotionZukanWorkspaceHandoffPanel.tsx"), "utf8");
 const assignmentData = fs.readFileSync(path.join(root, "src/data/weddingProjectMotionAssignments.ts"), "utf8");
+const projectMotionHandoff = fs.readFileSync(path.join(root, "src/data/weddingProjectMotionProductionHandoff.ts"), "utf8");
 const handoffPage = fs.readFileSync(path.join(root, "src/pages/MotionZukanWorkspaceHandoff.tsx"), "utf8");
 const nextGate = fs.readFileSync(path.join(root, "src/data/weddingProductionNextGate.ts"), "utf8");
 const nextGateUi = fs.readFileSync(path.join(root, "src/components/WeddingProductionNextGatePanel.tsx"), "utf8");
@@ -95,6 +96,15 @@ for (const token of [
 ]) requireText(assignmentData, token, `Project motion assignment contract missing: ${token}`);
 
 for (const token of [
+  'schemaVersion: "wedding-project-motion-production-handoff/v1"',
+  'authority: "DERIVED_FROM_HUMAN_PROJECT_AND_SCENE_ASSIGNMENTS"',
+  'allAssignedMotionsReadyForHandoffReference: blockers.length === 0',
+  'productionReady: false',
+  'remotionStudioGuiActual: "NOT_RUN"',
+  'macDaVinciGuiActual: "NOT_RUN"',
+]) requireText(projectMotionHandoff, token, `Project Motion production handoff contract missing: ${token}`);
+
+for (const token of [
   "Human workspace JSONを書き出す",
   "Human workspace JSONを読み込む",
   "buildMotionZukanWorkspaceHandoff",
@@ -104,9 +114,21 @@ for (const token of [
   "saveMotionZukanComposerState",
   "saveMotionZukanProductionWorkspaceState",
   "window.confirm",
+  "buildWeddingProjectMotionProductionHandoff",
+  "WEDDING_PROJECT_MOTION_ASSIGNMENTS_CHANGED_EVENT",
+  "MOTION_ZUKAN_COMPOSER_CHANGED_EVENT",
+  "PROJECT MOTION → PALMIER / DAVINCI ASSEMBLY REFERENCE",
+  "Project Motion handoff JSON",
+  "motionHandoff.summary.projectAssignmentCount",
+  "motionHandoff.summary.sceneAssignedCount",
+  "motionHandoff.summary.sceneHandoffReadyCount",
+  "motionHandoff.summary.unassignedSceneCount",
+  "motionHandoff.summary.staleSceneReferenceCount",
+  "motionHandoff.summary.unresolvedUsageCount",
+  "motionHandoff.blockers",
+  "ROUGH → Palmier assembly reference / FINAL → DaVinci rebuild",
   "Remotion Studio GUI Actual",
   "Mac DaVinci GUI Actual",
-  "NOT_RUN",
 ]) requireText(handoffUi, token, `Workspace handoff UI contract missing: ${token}`);
 
 for (const token of [
@@ -149,6 +171,9 @@ if (ui.includes("AI score") || ui.includes("自動修正")) {
 if (/macDaVinciGuiActual:\s*"(PASS|VERIFIED|CURRENT)"/.test(handoff) || /remotionStudioGuiActual:\s*"(PASS|VERIFIED|CURRENT)"/.test(handoff)) {
   errors.push("Workspace handoff must never fabricate GUI Actual evidence");
 }
+if (/macDaVinciGuiActual:\s*"(PASS|VERIFIED|CURRENT)"/.test(projectMotionHandoff) || /remotionStudioGuiActual:\s*"(PASS|VERIFIED|CURRENT)"/.test(projectMotionHandoff) || /productionReady:\s*true/.test(projectMotionHandoff)) {
+  errors.push("Project Motion production handoff must never fabricate GUI Actual or productionReady evidence");
+}
 if (/macDaVinciGuiActual:\s*"(PASS|VERIFIED|CURRENT)"/.test(nextGate) || /remotionStudioGuiActual:\s*"(PASS|VERIFIED|CURRENT)"/.test(nextGate)) {
   errors.push("Production next-gate dashboard must never fabricate GUI Actual evidence");
 }
@@ -159,4 +184,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log("Motion Zukan Production Workspace contracts OK: Human Master workspace handoff preserves project motion assignments while keeping Production/GUI Actual evidence fail-closed; the dashboard next gate remains generated Motion Studio authority.");
+console.log("Motion Zukan Production Workspace contracts OK: Human Master workspace now surfaces project-level Scene Motion Palmier→DaVinci references and blockers while Production/GUI Actual evidence stays fail-closed; the dashboard next gate remains generated Motion Studio authority.");
