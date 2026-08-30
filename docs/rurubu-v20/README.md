@@ -1,6 +1,6 @@
 # Rurubu WEDDING V20
 
-Status: `CLEAN_SLATE_CANONICAL / SPEC_FIRST / ASSET_FIRST`
+Status: `CLEAN_SLATE_CANONICAL / SPEC_FIRST / ASSET_FIRST / FULL_EDITORIAL_COLLISION`
 
 V20 is a complete redesign track.
 
@@ -46,10 +46,13 @@ Read in this order:
 16. `V20-GREYBOX-SILHOUETTE-SPEC.md`
 17. `V20-ASSET-FIRST-ASSEMBLY-CONTRACT.md`
 18. `V20-LAYER-OVERLAP-SYSTEM.md`
-19. `V20-PARTS-SYSTEM.md`
-20. `V20-QUALITY-GATES.md`
-21. `V20-ACCEPTANCE-EVIDENCE.md`
-22. only then derive page-specific Figma placement instructions.
+19. `V20-EDITORIAL-CONTAINER-AND-TITLE-GRAMMAR.md`
+20. `V20-PARTS-SYSTEM.md`
+21. `V20-P01-COVER-PRODUCTION-BRIEF.md`
+22. `V20-P45-CENTER-SPREAD-PRODUCTION-BRIEF.md`
+23. `V20-QUALITY-GATES.md`
+24. `V20-ACCEPTANCE-EVIDENCE.md`
+25. only then derive exact asset-generation and Figma placement instructions.
 
 `V20-IDEA-BANK.md` is a controlled idea pool, not a mandatory design authority.
 
@@ -71,7 +74,7 @@ Physical spread thinking:
 
 ## High-leverage foundation set
 
-These are the final foundation layers before production Figma work. Do not add more governance unless a real failure proves a missing rule.
+These are the final foundation layers before production. Do not add more governance unless real production exposes a missing rule.
 
 1. `CHANGE RESILIENCE` — copy/photo/aspect changes must not trigger redesign or tiny type.
 2. `PHOTO ROLES` — select HERO/EMOTION/PLACE/ACTION/DETAIL/etc before frame geometry.
@@ -81,53 +84,90 @@ These are the final foundation layers before production Figma work. Do not add m
 6. `ACCEPTANCE EVIDENCE` — prove scan order, A5 readability, editability, change resilience, provenance and anti-template behavior.
 7. `PHOTO GAP MATRIX` — missing real-photo roles remain visible gaps rather than silently becoming generated fake memories or bad placeholder geometry.
 8. `SOURCE-PIXEL REVIEW` — important real photos are visually opened and classified; filenames alone are never evidence of role/crop quality.
-9. `GREYBOX BEFORE PARTS` — silhouette/hierarchy must pass with decoration removed before travel/tropical parts are allowed to influence the page.
-10. `ASSET-FIRST ASSEMBLY` — most visual personality must arrive as approved real photography and prepared editorial artwork; Figma behaves mainly as an editable compositor, not the creative generator.
-11. `CONTROLLED EDITORIAL COLLISION` — backgrounds, photos, paper objects, title art and page-specific clusters may intentionally overlap. Depth must improve hierarchy and continuity without obscuring factual copy or important faces.
+9. `GREYBOX BEFORE PARTS` — silhouette/hierarchy must pass before decorative assets are allowed to rescue weak layout.
+10. `ASSET-FIRST ASSEMBLY` — most visual personality arrives as approved real photography and prepared editorial artwork; Figma behaves mainly as an editable compositor.
+11. `FULL EDITORIAL COLLISION` — background, photo, frame, title, vessel, route, stamp and decoration may overlap strongly or nearly completely when hierarchy improves.
+12. `TEXT SUPPORT, NOT SEPARATION` — readability is protected by paper fields, slabs, ribbons, keylines, local contrast and other support methods rather than by moving text away from imagery.
+13. `EDITORIAL VESSELS, NOT GENERIC UI` — boxes/bands/cards/rounded shapes are welcome when they are page-aware magazine forms; repeated generic UI containers are not.
+14. `PHOTO-FIRST GEOMETRY` — strongest real source behavior drives mask/frame geometry; frames never dictate important source cropping merely because they already exist.
 
 ## Asset-first rule
 
 V20 should feel authored before the assets reach the final page.
 
-Prepared artwork should carry the difficult visual language:
+Prepared artwork carries the difficult visual language:
 - original masthead art;
-- tropical/flower clusters;
+- page-specific tropical/flower clusters;
 - travel illustrations;
 - paper/tape/stamp/ticket/ribbon treatments;
-- hand-drawn accents;
+- irregular editorial vessels;
+- title support/slab artwork;
+- route front/back composites;
+- handwritten/print accents;
 - page-specific decorative devices.
 
 Figma should mainly:
 - place and overlap these assets;
 - keep real photos independently replaceable;
 - keep authoritative copy native/editable;
-- manage masks, z-order, trim/safe geometry and final polish.
+- manage masks, z-order, trim/safe geometry and final polish;
+- resize text-support geometry when actual copy changes.
 
-Do not build the editorial personality from repeated Figma cards, pills, rounded rectangles, gradients, generic icons or Auto Layout.
+Do not build the editorial personality from repeated Figma cards, pills, rounded rectangles, generic gradients, generic icons or full-page Auto Layout.
 
-## Layer / overlap rule
+## Full layer / overlap rule
 
-V20 intentionally uses depth and overlap rather than isolating every item.
+V20 is NOT based on “small overlaps.”
 
-Default semantic stack:
-`BACKGROUND`
-→ `BACKGROUND ART / LARGE COMPOSITE`
-→ `REAL PHOTOS`
-→ `PHOTO FRAME / PAPER OBJECT`
-→ `DISPLAY TITLE`
-→ `EDITORIAL CLUSTERS / ROUTE / STAMP`
-→ `NATIVE FACT TEXT`
-→ `MICRO ACCENTS`.
+Background, photography, frames, title art, boxes/bands, stamps, routes and decoration may cover one another heavily. There is no global overlap percentage.
 
-Preferred behavior:
-- title may cross a photo edge;
-- secondary photos may overlap one another;
-- stamps/labels may touch photo corners;
-- foliage/travel clusters may enter from bleed;
-- paper objects may sit above/below photos;
-- factual body text, times, names and critical faces remain protected.
+Explicitly valid examples:
+- masthead crosses HERO photo and frame;
+- a feature box covers most of a photo corner;
+- title sits behind a cutout subject while still reading clearly;
+- paper field covers a large photo region to hold native text;
+- support photo obscures HERO photo corner;
+- route runs under one photo and over another through split assets;
+- destination label crosses route + photo + frame;
+- page-edge illustration is mostly cropped and partly hidden;
+- a stamp is intentionally only partly visible.
 
-Prefer page-specific `editorial cluster assets` over assembling dozens of atomic flowers/icons in Figma.
+The rule is: `COLLISION MAY BE STRONG; READABILITY AND HIERARCHY MUST BE STRONGER.`
+
+## Editorial container rule
+
+Do NOT translate anti-UI guidance into “no boxes / no bands / no rounded shapes.”
+
+Use them as editorial forms:
+- paper notes;
+- tickets;
+- ribbons;
+- bursts;
+- irregular slabs;
+- caption tabs;
+- postcard fields;
+- stamp frames;
+- vertical strips;
+- quiet article fields;
+- photo-bound labels;
+- circles/ovals;
+- asymmetric enclosures.
+
+What is rejected is repeating the same generic card silhouette everywhere.
+
+## Page-aware prepared assets
+
+Prefer larger `EDITORIAL CLUSTER` assets over dozens of atomic stickers.
+
+Examples:
+- `V20_P01_TROPICAL_FRAME_CLUSTER_A`;
+- `V20_P01_BOTTOM_EDITORIAL_CLUSTER_A`;
+- `V20_P45_ROUTE_BACK_A` / `V20_P45_ROUTE_FRONT_A`;
+- `V20_P45_LEFT_EDGE_TRAVEL_CLUSTER_A`;
+- `V20_P05_PROPOSAL_HIGHLIGHT_A`;
+- `V20_P08_CLOSING_EDGE_CLUSTER_A`.
+
+A cluster may deliberately contain empty/transparent regions for faces/text/photo interaction.
 
 ## Current photo evidence consequence
 
@@ -143,10 +183,10 @@ Current unresolved source gaps include:
 - Shogo solo portrait only if P02 ultimately requires a solo-pair structure.
 
 Because of these gaps:
-- P01 may proceed to source-aware hero silhouette comparison;
-- P02 should first test a non-symmetrical profile grammar;
+- P01 may proceed to source-aware hero production with alternate source behavior retained;
+- P02 should use a non-symmetrical profile grammar that does not require a matched portrait pair;
 - P04 Okinawa/Korea masks stay elastic;
-- P06 must prove MIN/IDEAL/MAX photo-count states;
+- P06 already tests MIN/IDEAL/MAX photo-count states;
 - P07 remains information-first and photo-optional.
 
 ## What V20 may recover from older project records
@@ -165,26 +205,22 @@ Recovering a fact is NOT permission to inherit the old layout around that fact.
 `CONTENT + PAGE MANUAL`
 → `PHOTO ROLE + SOURCE PIXEL REVIEW + GAP INVENTORY`
 → `GREYBOX / SILHOUETTE`
-→ `PREPARED ASSET PRODUCTION + QA`
-→ `FIGMA ASSEMBLY / PARTS PLACEMENT + CONTROLLED OVERLAP`
+→ `PAGE-SPECIFIC PREPARED ASSET PRODUCTION + QA`
+→ `FIGMA ASSEMBLY / FULL EDITORIAL COLLISION`
+→ `NATIVE TEXT + TEXT SUPPORT ADJUSTMENT`
 → `EDITORIAL POLISH`
 → `V20 QA + ACCEPTANCE EVIDENCE`
 → `PRINT PREFLIGHT`
 
 Figma must not be asked to invent the page with prompts like “make this more Rurubu-like.”
 
-Prompts are execution artifacts generated from the page manuals and asset briefs, not the source of design intelligence.
+Prompts are execution artifacts generated from page manuals and asset briefs, not the source of design intelligence.
 
-## Current no-go
+## Current production priority
 
-Do not start decorative V20 production composition until:
-- actual photo inventory has been mapped to P01–P08 roles as far as available;
-- major real-photo gaps are explicitly known;
-- greybox/silhouette rules have been applied;
-- the new V20 Figma skeleton is explicitly created as a new surface, not a modified V10/V11 page.
+1. P01 Cover prepared assets + first decorated assembly;
+2. P04–P05 center-spread major composites + first decorated assembly;
+3. learn from those two real compositions and feed only proven lessons back into P02/P03/P06/P07/P08;
+4. avoid building a giant generic parts library before page evidence exists.
 
-A new V20 greybox surface may be created once the greybox spec is followed. It must not be mistaken for decorated production completion.
-
-Prepared assets may now be produced when their page role is already proven by the manuals/greybox. They must pass asset QA before final placement.
-
-This sequencing is intentional: the goal is to avoid another expensive redesign loop.
+This sequencing is intentional: the goal is to finish authored magazine pages, not to endlessly improve a design system.
