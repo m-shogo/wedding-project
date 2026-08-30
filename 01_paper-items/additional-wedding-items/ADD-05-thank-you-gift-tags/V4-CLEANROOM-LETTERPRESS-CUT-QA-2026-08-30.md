@@ -1,9 +1,9 @@
 # ADD-05 — V4 clean-room LETTERPRESS CUT QA — 2026-08-30
 
-Status: `V4_CANDIDATE / CLEANROOM_PROVENANCE_VERIFIED / SELLABLE_VISUAL_QA_IN_PROGRESS / STRUCTURE_QA_PASS / NOT_PRINT_READY`
+Status: `V4_SELECTED / CLEANROOM_PROVENANCE_VERIFIED / SELLABLE_VISUAL_QA_PASS / DESIGN_QA_PASS_WITH_PLACEHOLDERS / STRUCTURE_QA_PASS / NOT_PRINT_READY`
 
 Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
-Start/latest-main observed before write: `20b4e81ca40cbfdf656b7ee5de5689427e56f8a1`
+Latest-main observed immediately before promotion write: `8062adf4598d30947e7475e53d738508c86cd5fa`
 
 ## V4 exclusive correction
 
@@ -19,6 +19,7 @@ Reference-led intent: replace the retained vertical-ribbon gift-wrap grammar wit
 - V4 45×70 front: `41:12 / V4 / ADD-05 / FRONT 45X70 / LETTERPRESS CUT REFLOW / CLEANROOM`
 - V4 optional 50×80 back: `41:22 / V4 / ADD-05 / BACK 50X80 / NIGHT LETTER / CLEANROOM`
 - retained V3 comparison: `31:2 / 31:10 / 31:18` (unchanged)
+- hidden rotation/attachment visual QA board: `44:5 / QA ONLY / V4 ADD-05 / ROTATION + ATTACHMENT VISUAL PROOF / 2026-08-30`
 - exact Drive authority: `1_V20y77VU1aGrJtqpl7U5XUpC-bQuTxV / ADD-05_サンキュータグ_プチギフトタグ`
 - Drive write this run: `0` — raster/generated imagery is not required for this small typographic item.
 
@@ -31,15 +32,43 @@ Reference-led intent: replace the retained vertical-ribbon gift-wrap grammar wit
 - generated/composed raster: none required
 - raster IMAGE fills: `0`
 
-## Visual comparison / three-scale progress
+## Final family three-scale comparison
 
-Retained V3 `31:2` was inspected before V4 construction. V4 is materially different: the hero is one horizontal editorial title block rather than the retained stacked gift-wrap ribbon composition; the dominant vertical element is now a narrow ink spine rather than a coral wrapping ribbon; date information is anchored to the coral foot instead of a navy lower field.
+Fresh screenshots were inspected for V4 `41:2 / 41:12 / 41:22` and retained V3 `31:2 / 31:10 / 31:18`.
 
-50×80 V4 thumbnail proof was rendered at 100×160 px. At that scale `THANK / YOU.` remains the first read, the punch remains visually isolated, body copy remains subordinate, and the date remains a distinct footnote. This closes the primary thumbnail/template-feel check for the 50×80 face.
+### Thumbnail / 3-second scan
 
-Reading/native screenshots were inspected for all three roots. The 45×70 face is an independent reflow, not a scale transform; the reverse face is a separate dark composition rather than a mirrored front.
+V4 wins clearly. `THANK / YOU.` reads as one strong editorial hero and survives the tiny-tag silhouette better than the retained split `Thank / you.` stack. The deep-ink spine and coral foot create a recognizable product edge without turning into a ribbon/gift-wrap cliché. Punch space remains visually isolated.
 
-`SELLABLE_VISUAL_QA_PASS` is intentionally not promoted by this file alone: a final family three-scale comparison and actual attachment/rotation proof remain outstanding.
+### Reading scale
+
+V4 has clearer typographic hierarchy and less generic stationery-template character. The 45×70 face is a true reflow rather than a scale transform: the support line wraps intentionally while hero/date hierarchy remains stable. The optional back is a separate dark reverse composition rather than a mirrored front.
+
+### Actual-size / print-detail
+
+The previously hardened confirmed body/date sizes are preserved. No raster/detail dependency was introduced, and the principal rules/fields are simple native geometry. The 45×70 body is 24 px ≈ 6.8 pt; the 50×80 body is 24 px ≈ 6.8 pt. No new microtype was added.
+
+## Rotation / attachment visual proof
+
+A temporary visible QA board was created from V4 front clones only, with 50×80 rotated `+12°` and 45×70 rotated `-12°` over package-sized neutral fields. Screenshot inspection confirmed:
+
+- hero remains first-read under moderate attachment rotation;
+- punch zone remains separated from copy;
+- date foot remains readable and does not become the visual hero;
+- the narrow ink spine remains a stable orientation cue;
+- the 45×70 reflow remains legible after rotation and does not collapse into a dense microtype block.
+
+After capture the QA board `44:5` was hidden. Production V4 roots and retained V3 roots were not mutated for this proof.
+
+This is **visual rotation/attachment QA only**, not a substitute for a real physical package/string/ribbon proof.
+
+## Sellable visual decision
+
+`SELLABLE_VISUAL_QA_PASS`.
+
+Reason: V4 is materially different from the retained V3, clearly stronger at thumbnail and reading scale, remains credible at actual-size text scale, has an item-specific small-format print identity, avoids fake travel credentials/AI filler, and remains fully editable/native. It is selected as the V4 visual authority for ADD-05 while retained V3 remains rollback/reference history.
+
+`DESIGN_QA_PASS_WITH_PLACEHOLDERS` is also granted for the V4 construction: all semantic copy is native text, fixed-height text is zero, outside-root text is zero, text/text overlaps are zero, punch geometry is separated from reader-facing copy, and no rasterized variable content exists. This structural gate is independent from the sellable visual decision.
 
 ## Structure QA
 
@@ -99,17 +128,22 @@ CMYK risk: deep near-black navy/ink, coral red, muted sage, and warm cream may s
 
 Still required before `PRINT_READY`:
 
-- final choice between 50×80 and 45×70
+- final production choice between 50×80 and 45×70
 - real gift/package dimensions
 - attachment/string/ribbon method and width
 - authoritative punch/tool diameter and stock thickness
 - printer trim/bleed/safe template
 - duplex registration if back is adopted
-- 100% physical attachment + rotation proof
+- **100% physical** attachment + rotation proof
 - warm venue-light / rub / ink proof
 - printer CMYK/profile and black construction
 - PDF export, font embedding, transparency, overprint/knockout and preflight
 
-## Next step
+## Progression
 
-Run final family three-scale comparison (`41:2 / 41:12 / 41:22` against retained `31:2 / 31:10 / 31:18`) and only then decide whether V4 earns `SELLABLE_VISUAL_QA_PASS` and becomes the canonical selected authority.
+ADD-05 now satisfies the reopened progression pair:
+
+- `SELLABLE_VISUAL_QA_PASS`
+- `DESIGN_QA_PASS_WITH_PLACEHOLDERS`
+
+Do not spend another hourly visual-polish run on ADD-05 unless new evidence or user feedback reopens it. Continue to the next authority-ordered non-Rurubu item that does not yet have both gates.
