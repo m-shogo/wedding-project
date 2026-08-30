@@ -22,9 +22,17 @@ const bundle = {
 };
 const recovery = {projectMotionProvenance: structuredClone(provenance), projectMotionPalmierBindingArtifact: structuredClone(sidecarRef)};
 const markdown = [
-  '# DaVinci Wedding Production Recovery Attachment', `project-motion-source-sha256: ${sourceSha}`, `project-motion-receipt-sha256: ${receiptSha}`,
-  `project-motion-currentness-sha256: ${currentnessSha}`, 'project-motion-currentness-state: CURRENT', 'palmier-project-motion-current: yes',
-  'davinci-project-motion-handoff-current: yes', 'mac-remotion-studio-gui-actual: NOT_RUN', 'mac-davinci-gui-actual: NOT_RUN',
+  '# DaVinci Wedding Production Recovery Attachment',
+  `project-motion-source-sha256: ${sourceSha}`,
+  `project-motion-receipt-sha256: ${receiptSha}`,
+  `project-motion-currentness-sha256: ${currentnessSha}`,
+  'project-motion-currentness-state: CURRENT',
+  `palmier-project-motion-binding-artifact: ${sidecarRef.path}`,
+  `palmier-project-motion-binding-artifact-sha256: ${sidecarSha}`,
+  'palmier-project-motion-current: yes',
+  'davinci-project-motion-handoff-current: yes',
+  'mac-remotion-studio-gui-actual: NOT_RUN',
+  'mac-davinci-gui-actual: NOT_RUN',
   'production-ready-by-project-motion-provenance: no',
 ].join('\n');
 
@@ -34,6 +42,7 @@ assert.equal(current.sourceSha256, sourceSha);
 assert.equal(current.palmierDavinciBindingCurrent, true);
 assert.equal(current.palmierBindingArtifactSha256, sidecarSha);
 assert.equal(current.recoveryCarriesPalmierBindingArtifact, true);
+assert.equal(current.recoveryMarkdownCarriesPalmierBindingArtifact, true);
 assert.equal(current.macRemotionStudioGuiActual, 'NOT_RUN');
 assert.equal(current.macDaVinciGuiActual, 'NOT_RUN');
 assert.equal(current.productionReady, false);
@@ -71,5 +80,8 @@ assert.throws(() => verifyWeddingProjectMotionProductionProvenanceValues('profil
 const recoverySidecarDrift = structuredClone(recovery);
 recoverySidecarDrift.projectMotionPalmierBindingArtifact.sha256 = '3'.repeat(64);
 assert.throws(() => verifyWeddingProjectMotionProductionProvenanceValues('profile', bundle, recoverySidecarDrift, markdown, provenance), /PROJECT_MOTION_PROVENANCE_CONSISTENCY_PALMIER_ARTIFACT_REF_DRIFT:profile/);
+
+const markdownSidecarDrift = markdown.replace(sidecarSha, '4'.repeat(64));
+assert.throws(() => verifyWeddingProjectMotionProductionProvenanceValues('profile', bundle, recovery, markdownSidecarDrift, provenance), /PROJECT_MOTION_PROVENANCE_CONSISTENCY_MARKDOWN_DRIFT:profile/);
 
 console.log('Wedding Project Motion production provenance consistency contract: PASS');
