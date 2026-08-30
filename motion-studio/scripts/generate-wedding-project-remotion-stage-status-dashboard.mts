@@ -24,10 +24,13 @@ type PalmierTimelineReport = {
   movieId: MovieId;
   state: 'MISSING' | 'CURRENT' | 'STALE' | 'INVALID';
   detail: string | null;
-  receiptPath?: string;
+  receiptPath?: string | null;
+  receiptSha256?: string | null;
   source?: {
     assemblyPlan?: string | null;
+    assemblyPlanSha256?: string | null;
     palmierFcpxml?: string | null;
+    palmierFcpxmlSha256?: string | null;
   };
   next: {kind: string; command: string};
 };
@@ -62,9 +65,12 @@ const normalizePalmierTimeline = (report: PalmierTimelineReport) => ({
   state: report.state,
   detail: report.detail,
   receiptPath: normalizeOptionalPath(report.receiptPath),
+  receiptSha256: report.receiptSha256 ?? null,
   source: {
     assemblyPlan: normalizeOptionalPath(report.source?.assemblyPlan),
+    assemblyPlanSha256: report.source?.assemblyPlanSha256 ?? null,
     palmierFcpxml: normalizeOptionalPath(report.source?.palmierFcpxml),
+    palmierFcpxmlSha256: report.source?.palmierFcpxmlSha256 ?? null,
   },
   next: report.next,
 });
@@ -80,7 +86,7 @@ const normalize = (report: CheckerReport, palmierTimeline: PalmierTimelineReport
 });
 
 const snapshot = {
-  schemaVersion: 'wedding-project-remotion-stage-status-dashboard/v2',
+  schemaVersion: 'wedding-project-remotion-stage-status-dashboard/v3',
   authority: 'GENERATED_FROM_READ_ONLY_CANONICAL_STAGE_AND_PALMIER_TIMELINE_RECEIPT_CHECKERS',
   opening: normalize(runChecker('opening'), runPalmierTimelineChecker('opening')),
   profile: normalize(runChecker('profile'), runPalmierTimelineChecker('profile')),
