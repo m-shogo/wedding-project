@@ -13,6 +13,7 @@ import { downloadText } from "../lib/exporters";
 import { ProfileProductionStatusHandoffCard } from "./ProfileProductionStatusHandoffCard";
 import { ProjectTypographyRoleHandoffRevalidationCard } from "./ProjectTypographyRoleHandoffRevalidationCard";
 import { WeddingMovieProductionCriticalPathCard } from "./WeddingMovieProductionCriticalPathCard";
+import { WeddingProjectRemotionStageStatusCard } from "./WeddingProjectRemotionStageStatusCard";
 import { WeddingSceneMotionProductionHandoffCard } from "./WeddingSceneMotionProductionHandoffCard";
 import { TypographyDaVinciProductionReleaseGateForScene } from "./TypographyDaVinciProductionReleaseGateForScene";
 import { TypographyProductionRoleGuide } from "./TypographyProductionRoleGuide";
@@ -89,6 +90,7 @@ export function MaskRevealSceneHandoffCard({ scene }: { scene: MaskRevealSceneIn
       <TypographyProductionRouteSelector scene={scene} />
       <TypographySceneDeliveryPackageCard scene={scene} />
       <TypographyProjectDeliveryBatchCard projectId={scene.projectId} />
+      <WeddingProjectRemotionStageStatusCard projectId={scene.projectId} />
       <ProjectTypographyRoleHandoffRevalidationCard projectId={scene.projectId} />
       <WeddingMovieProductionCriticalPathCard projectId={scene.projectId} />
       <ProfileProductionStatusHandoffCard projectId={scene.projectId} />
