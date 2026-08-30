@@ -1,0 +1,209 @@
+import { openingProductionStatus } from "../data/openingProductionStatus.generated";
+import { profileAssemblyReviewReadiness } from "../data/profileAssemblyReviewReadiness.generated";
+
+export type WeddingProject = "Opening" | "Profile";
+export type ActionKind = "INPUT_REQUIRED" | "COMMAND" | "HUMAN" | "READY";
+
+export type ProductionAction = {
+  project: WeddingProject;
+  kind: ActionKind;
+  phase: string;
+  title: string;
+  detail: string;
+  commands: string[];
+  recoveryHint: string;
+};
+
+export function deriveOpeningNextAction(): ProductionAction {
+  const status = openingProductionStatus;
+
+  if (!Boolean(status.readiness.finalRenderEligible)) {
+    return {
+      project: "Opening",
+      kind: "INPUT_REQUIRED",
+      phase: "PRODUCTION INPUTS",
+      title: "実11写真 + rights-cleared BGM intake",
+      detail: "Production Input Plan Builderで実パスを指定し、media/BGM receipt verifyとfinal prepareまで完了する。placeholder pathの後続commandは実行対象にしない。",
+      commands: [],
+      recoveryHint: "Production Input Plan Builder → opening intake plan",
+    };
+  }
+
+  if (String(status.stages.cropReview.state) !== "PASS") {
+    return {
+      project: "Opening",
+      kind: "HUMAN",
+      phase: "CROP / FOCUS REVIEW",
+      title: "Human crop / focus review",
+      detail: "11写真のcrop / focus / color / motionをcurrent photo SHAとeffective focus/fitへ束縛してHuman確認する。",
+      commands: [
+        "node --no-warnings scripts/opening-v1-crop-review-evidence.mts --init",
+        "node --no-warnings scripts/opening-v1-crop-review-evidence.mts --strict",
+      ],
+      recoveryHint: "opening-v1 crop review evidenceをcurrent sourceで再init",
+    };
+  }
+
+  if (String(status.stages.previewRender.state) !== "PASS") {
+    return {
+      project: "Opening",
+      kind: "COMMAND",
+      phase: "REAL-MEDIA PREVIEW",
+      title: "real-media preview render",
+      detail: "crop承認済みの実素材previewをrenderする。render完了はHuman preview review PASSではない。",
+      commands: ["pnpm render:opening-v1:preview"],
+      recoveryHint: "current crop evidenceからpreviewを再render",
+    };
+  }
+
+  if (String(status.stages.previewSourceBinding.state) !== "PASS" || String(status.stages.previewReview.state) !== "PASS") {
+    return {
+      project: "Opening",
+      kind: "HUMAN",
+      phase: "SOURCE-BOUND PREVIEW REVIEW",
+      title: "source-bound preview Human review",
+      detail: "current render sourceへpreviewを束縛し、映像をHuman確認してstrict checkする。source変更後の古いpreview/evidenceはCURRENT扱いしない。",
+      commands: ["pnpm opening:preview-review:init", "pnpm opening:preview-review:strict"],
+      recoveryHint: "preview source bindingをcurrent render sourceへ再init",
+    };
+  }
+
+  if (String(status.stages.audioListeningReview.state) !== "PASS") {
+    return {
+      project: "Opening",
+      kind: "HUMAN",
+      phase: "AUDIO LISTENING REVIEW",
+      title: "Human audio listening review",
+      detail: "rights-cleared BGM入りpreviewを最後まで実耳で確認し、preview/BGM SHAへevidenceを束縛する。",
+      commands: [
+        "node --no-warnings scripts/opening-v1-audio-listening-review.mts --init",
+        "node --no-warnings scripts/opening-v1-audio-listening-review.mts --strict",
+      ],
+      recoveryHint: "audio evidenceをcurrent preview/BGM SHAへ再init",
+    };
+  }
+
+  if (String(status.stages.finalRender.state) !== "PASS") {
+    return {
+      project: "Opening",
+      kind: "COMMAND",
+      phase: "FINAL RENDER",
+      title: "final render + technical QA",
+      detail: "Human review済みsourceからfinal renderを作る。technical render成功をHuman final-render reviewやGUI Actualと同一視しない。",
+      commands: ["pnpm render:opening-v1"],
+      recoveryHint: "current reviewed sourceからfinal renderを再生成",
+    };
+  }
+
+  if (String(status.stages.finalRenderReview.state) !== "PASS") {
+    return {
+      project: "Opening",
+      kind: "HUMAN",
+      phase: "FINAL RENDER REVIEW",
+      title: "Human final-render review",
+      detail: "final MP4をHuman確認し、current renderへreview evidenceを束縛する。",
+      commands: ["pnpm opening:final-render-review:init", "pnpm opening:final-render-review:strict"],
+      recoveryHint: "final-render review evidenceをcurrent final MP4へ再init",
+    };
+  }
+
+  return {
+    project: "Opening",
+    kind: "READY",
+    phase: "HANDOFF",
+    title: "Palmier / DaVinci handoff readiness",
+    detail: "Opening production review chainはcurrent。Mac DaVinci Actualは別工程で、ここではPASSへ昇格しない。",
+    commands: [],
+    recoveryHint: "canonical Wedding handoff / recovery bundleへ進む",
+  };
+}
+
+export function deriveProfileNextAction(): ProductionAction {
+  const readiness = profileAssemblyReviewReadiness;
+
+  if (!Boolean(readiness.finalRenderEligible)) {
+    return {
+      project: "Profile",
+      kind: "INPUT_REQUIRED",
+      phase: "PRODUCTION INPUTS",
+      title: "実17素材 + rights-cleared BGM intake",
+      detail: "Production Input Plan Builderで実パスを指定し、receipt verify → final prepareまで完了する。",
+      commands: [],
+      recoveryHint: "Production Input Plan Builder → profile intake plan",
+    };
+  }
+
+  if (String(readiness.structureReview.state) !== "PASS") {
+    return {
+      project: "Profile",
+      kind: "COMMAND",
+      phase: "STRUCTURE REVIEW",
+      title: "5章structure Human review",
+      detail: "chapter order / visual hierarchy / pacing / media roleをstructure previewでHuman確認する。",
+      commands: [
+        "pnpm render:profile-v1:structure-preview",
+        "pnpm profile:structure-review:init",
+        "pnpm profile:structure-review:strict",
+      ],
+      recoveryHint: "structure previewを再renderしcurrent structure evidenceを再init",
+    };
+  }
+
+  if (String(readiness.realMediaReview.state) !== "PASS") {
+    return {
+      project: "Profile",
+      kind: "COMMAND",
+      phase: "REAL-MEDIA REVIEW",
+      title: "real-media preview + Human review",
+      detail: "17素材入りpreviewをrenderし、crop / focus / color / emotional fit / contentと5章flowをHuman確認する。",
+      commands: [
+        "pnpm render:profile-v1:real-media-preview",
+        "pnpm profile:real-media-review:init",
+        "pnpm profile:real-media-review:strict",
+      ],
+      recoveryHint: "current 17素材sourceからreal-media preview/evidenceを再生成",
+    };
+  }
+
+  if (String(readiness.audioReview.state) !== "PASS") {
+    return {
+      project: "Profile",
+      kind: "HUMAN",
+      phase: "AUDIO REVIEW",
+      title: "Human audio listening review",
+      detail: "BGM入りpreviewを最後まで実耳で確認し、current preview/BGMへevidenceを束縛する。",
+      commands: [
+        "node --no-warnings scripts/profile-v1-audio-listening-review.mts --init",
+        "node --no-warnings scripts/profile-v1-audio-listening-review.mts --strict",
+      ],
+      recoveryHint: "audio evidenceをcurrent preview/BGMへ再init",
+    };
+  }
+
+  if (!Boolean(readiness.assemblyReady)) {
+    return {
+      project: "Profile",
+      kind: "COMMAND",
+      phase: "ASSEMBLY PREFLIGHT",
+      title: "assembly preflight再評価",
+      detail: "Human QAは揃っているがassemblyReadyが未成立。canonical preflightを再評価してstale/missing prerequisiteを特定する。",
+      commands: ["node --no-warnings scripts/profile-v1-assembly-preflight.mts"],
+      recoveryHint: "profile-v1 assembly preflightで最初のstale/missing prerequisiteへ戻る",
+    };
+  }
+
+  return {
+    project: "Profile",
+    kind: "READY",
+    phase: "FINAL RENDER",
+    title: "final render + technical / Human review",
+    detail: "Profile assembly input + Human QAはcurrent。final render後もHuman final-render reviewとMac DaVinci Actualは別工程。",
+    commands: ["pnpm render:profile-v1", "pnpm check:profile-render"],
+    recoveryHint: "current assembly sourceからfinal renderを再生成",
+  };
+}
+
+export const weddingProductionActions = {
+  Opening: deriveOpeningNextAction(),
+  Profile: deriveProfileNextAction(),
+} as const;
