@@ -1,29 +1,32 @@
 import {weddingProjectRemotionStageStatus} from "../generated/weddingProjectRemotionStageStatus";
 import type {SceneProjectId} from "../data/visualSceneComposer";
 
-const stateClass = {
+type StageState = "NOT_STAGED" | "STAGED_CURRENT" | "HANDOFF_CURRENT" | "INVALID";
+
+const stateClass: Record<StageState, string> = {
   NOT_STAGED: "border-amber-300 text-amber-800 dark:border-amber-800 dark:text-amber-200",
   STAGED_CURRENT: "border-sky-300 text-sky-800 dark:border-sky-800 dark:text-sky-200",
   HANDOFF_CURRENT: "border-emerald-300 text-emerald-800 dark:border-emerald-800 dark:text-emerald-200",
   INVALID: "border-rose-300 text-rose-800 dark:border-rose-800 dark:text-rose-200",
-} as const;
+};
 
 export function WeddingProjectRemotionStageStatusCard({projectId}: {projectId: SceneProjectId}) {
   const status = weddingProjectRemotionStageStatus[projectId];
-  const isInvalid = status.state === "INVALID";
-  const isHandoffCurrent = status.state === "HANDOFF_CURRENT";
+  const state = status.state as StageState;
+  const isInvalid = state === "INVALID";
+  const isHandoffCurrent = state === "HANDOFF_CURRENT";
 
   return (
-    <section className={`mt-3 border-2 p-3 ${stateClass[status.state]}`} data-project-remotion-stage-status={status.state}>
+    <section className={`mt-3 border-2 p-3 ${stateClass[state]}`} data-project-remotion-stage-status={state}>
       <div className="flex flex-wrap items-start justify-between gap-2">
         <div>
           <p className="text-[8px] tracking-[0.14em] font-semibold">PROJECT REMOTION / CANONICAL STAGE</p>
-          <p className="mt-1 text-[11px] font-semibold">{projectId.toUpperCase()} — {status.state}</p>
+          <p className="mt-1 text-[11px] font-semibold">{projectId.toUpperCase()} — {state}</p>
           <p className="mt-1 text-[8px] leading-4 opacity-80">
             stage={status.checks.stageVerification} / handoff={status.checks.handoffVerification} / productionReady=NO
           </p>
         </div>
-        <span className="border px-2 py-1 font-mono text-[8px]">{status.state}</span>
+        <span className="border px-2 py-1 font-mono text-[8px]">{state}</span>
       </div>
 
       {status.blocker ? <p className="mt-2 text-[8px] font-semibold">blocker: {status.blocker}</p> : null}
