@@ -49,6 +49,7 @@ An existing V10 element may be reused only after it is re-evaluated against the 
 → `V11 COPY CAPACITY`
 → `V11 PHOTO SLOT CONTRACT`
 → `V11 PARTS INVENTORY`
+→ `V11 LAYOUT BLUEPRINT`
 → `V11 FIGMA PLACEMENT PROMPT`
 → `NEW V11 FIGMA PRODUCTION PAGE`
 → `V11 REFERENCE-BASED QA`
@@ -105,6 +106,7 @@ Final production remains hybrid and editable.
 - `RURUBU-V11-COPY-CAPACITY.md`
 - `RURUBU-V11-CONTENT-TRUTH.md`
 - `rurubu-v11-photo-slots.json`
+- `rurubu-v11-layout-blueprints.json`
 
 ## Page manuals
 - `page-specs/P01-COVER.md`
