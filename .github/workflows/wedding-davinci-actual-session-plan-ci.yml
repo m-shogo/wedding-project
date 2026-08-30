@@ -6,6 +6,8 @@ on:
       - "motion-studio/scripts/wedding-davinci-actual-session-plan.mts"
       - "motion-studio/scripts/check-wedding-davinci-actual-session-plan.mts"
       - "motion-studio/scripts/wedding-davinci-operator-packet.mts"
+      - "motion-studio/scripts/export-wedding-production-handoff.mts"
+      - "motion-studio/scripts/verify-wedding-project-motion-production-provenance.mts"
       - "motion-studio/scripts/opening-v1-davinci-finishing-evidence.mts"
       - "motion-studio/scripts/profile-v1-davinci-finishing-evidence.mts"
       - ".github/workflows/wedding-davinci-actual-session-plan-ci.yml"
@@ -15,6 +17,8 @@ on:
       - "motion-studio/scripts/wedding-davinci-actual-session-plan.mts"
       - "motion-studio/scripts/check-wedding-davinci-actual-session-plan.mts"
       - "motion-studio/scripts/wedding-davinci-operator-packet.mts"
+      - "motion-studio/scripts/export-wedding-production-handoff.mts"
+      - "motion-studio/scripts/verify-wedding-project-motion-production-provenance.mts"
       - "motion-studio/scripts/opening-v1-davinci-finishing-evidence.mts"
       - "motion-studio/scripts/profile-v1-davinci-finishing-evidence.mts"
       - ".github/workflows/wedding-davinci-actual-session-plan-ci.yml"
@@ -41,6 +45,9 @@ jobs:
           node --no-warnings scripts/wedding-davinci-actual-session-plan.mts --json > /tmp/wedding-davinci-actual-session-plan.json
           grep '"macDavinciResolveGuiActual": "NOT_RUN_UNLESS_HUMAN_EXECUTED"' /tmp/wedding-davinci-actual-session-plan.json
           grep '"macRemotionStudioGuiActual": "NOT_RUN_UNLESS_HUMAN_EXECUTED"' /tmp/wedding-davinci-actual-session-plan.json
+          grep '"kind": "PROJECT_MOTION_PREFLIGHT"' /tmp/wedding-davinci-actual-session-plan.json
+          grep 'verify-wedding-project-motion-production-provenance.mts --movie=opening' /tmp/wedding-davinci-actual-session-plan.json
+          grep 'verify-wedding-project-motion-production-provenance.mts --movie=profile' /tmp/wedding-davinci-actual-session-plan.json
           if grep -q '"productionReady": true' /tmp/wedding-davinci-actual-session-plan.json; then
             echo "session plan unexpectedly promoted productionReady" >&2
             exit 1
