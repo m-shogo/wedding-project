@@ -1,5 +1,5 @@
 import {spawnSync} from 'node:child_process';
-import {existsSync} from 'node:fs';
+import {existsSync, mkdirSync, writeFileSync} from 'node:fs';
 import {dirname, isAbsolute, join, resolve} from 'node:path';
 import {fileURLToPath} from 'node:url';
 
@@ -21,6 +21,11 @@ const requestedSnapshot = argValue('--snapshot');
 const snapshotPath = requestedSnapshot
   ? (isAbsolute(requestedSnapshot) ? requestedSnapshot : resolve(root, requestedSnapshot))
   : join(root, 'out/handoff/wedding/wedding-davinci-actual-session-plan.json');
+const requestedOutput = argValue('--output');
+const outputPath = requestedOutput
+  ? (isAbsolute(requestedOutput) ? requestedOutput : resolve(root, requestedOutput))
+  : join(root, `out/handoff/wedding/${movieId}-davinci-gui-actual-start-gate.json`);
+const relativeOutputPath = outputPath.startsWith(root) ? outputPath.slice(root.length + 1) : outputPath;
 
 const runJson = (script: string, args: string[] = []) => {
   const result = spawnSync(process.execPath, ['--no-warnings', join(root, 'scripts', script), ...args, '--json'], {
@@ -133,6 +138,11 @@ const gate = {
   movieId,
   state,
   guiActualStartAllowed: state === 'GUI_ACTUAL_ALLOWED',
+  artifact: {
+    path: relativeOutputPath,
+    writeRequested: process.argv.includes('--write'),
+    note: 'This JSON is an operator transport artifact only. Its existence does not mean Mac DaVinci GUI Actual was executed.',
+  },
   transport: {
     state: transport.state,
     current: transport.current === true,
@@ -167,16 +177,23 @@ const gate = {
     'PROJECT_MOTION_CURRENT_OR_NOT_APPLICABLE_REQUIRED_BEFORE_GUI_ACTUAL',
     'PROJECT_MOTION_INVALID => GUI_ACTUAL_START_BLOCKED',
     'EVIDENCE_TEMPLATE_REQUIRED_BEFORE_GUI_ACTUAL',
+    'START_GATE_ARTIFACT_EXISTS != GUI_ACTUAL_EXECUTED',
     'GUI_ACTUAL_ALLOWED != GUI_ACTUAL_EXECUTED',
     'START_GATE_MUST_NOT_SYNTHESIZE_PASS',
     'CI_MUST_NOT_PROMOTE_MAC_GUI_ACTUAL',
   ],
 } as const;
 
+if (process.argv.includes('--write')) {
+  mkdirSync(dirname(outputPath), {recursive: true});
+  writeFileSync(outputPath, `${JSON.stringify(gate, null, 2)}\n`);
+}
+
 if (process.argv.includes('--json')) console.log(JSON.stringify(gate, null, 2));
 else {
   console.log(`Wedding DaVinci GUI Actual start gate: ${movieId}=${gate.state}`);
   console.log(`next=${gate.nextAction.kind}`);
+  console.log(`artifact=${relativeOutputPath}${process.argv.includes('--write') ? ' / WRITTEN' : ' / NOT_WRITTEN'}`);
   for (const mismatch of gate.transport.mismatches) console.log(`BLOCK / ${mismatch}`);
 }
 
