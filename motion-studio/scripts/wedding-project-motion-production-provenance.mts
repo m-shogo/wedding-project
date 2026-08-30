@@ -1,6 +1,6 @@
 import {createHash} from 'node:crypto';
 import {existsSync, readFileSync} from 'node:fs';
-import {resolve} from 'node:path';
+import {basename, dirname, join, resolve} from 'node:path';
 import {
   buildWeddingProjectMotionReceiptCurrentnessFromCanonicalReceipt,
   saveWeddingProjectMotionReceiptCurrentness,
@@ -47,6 +47,19 @@ export interface WeddingProjectMotionAssemblyBindingV1 {
   productionReady: false;
 }
 
+export interface WeddingPalmierProjectMotionBindingArtifactV1 {
+  schemaVersion: 'wedding-palmier-project-motion-binding-artifact/v1';
+  authority: 'PALMIER_PROJECT_MOTION_ASSEMBLY_BINDING';
+  projectId: WeddingMovieId;
+  binding: WeddingProjectMotionAssemblyBindingV1;
+  evidenceBoundary: {
+    palmierApplicationPerformed: false;
+    remotionStudioGuiActual: 'NOT_RUN';
+    macDaVinciGuiActual: 'NOT_RUN';
+    productionReady: false;
+  };
+}
+
 const shaFile = (path: string) => createHash('sha256').update(readFileSync(path)).digest('hex');
 
 function readJson(path: string) {
@@ -69,6 +82,23 @@ export function buildWeddingProjectMotionAssemblyBinding(
     remotionStudioGuiActual: 'NOT_RUN',
     macDaVinciGuiActual: 'NOT_RUN',
     productionReady: false,
+  };
+}
+
+export function buildWeddingPalmierProjectMotionBindingArtifact(
+  provenance: WeddingProjectMotionProductionProvenanceV1,
+): WeddingPalmierProjectMotionBindingArtifactV1 {
+  return {
+    schemaVersion: 'wedding-palmier-project-motion-binding-artifact/v1',
+    authority: 'PALMIER_PROJECT_MOTION_ASSEMBLY_BINDING',
+    projectId: provenance.projectId,
+    binding: buildWeddingProjectMotionAssemblyBinding(provenance),
+    evidenceBoundary: {
+      palmierApplicationPerformed: false,
+      remotionStudioGuiActual: 'NOT_RUN',
+      macDaVinciGuiActual: 'NOT_RUN',
+      productionReady: false,
+    },
   };
 }
 
@@ -110,35 +140,17 @@ export function buildWeddingProjectMotionProductionProvenance(
     schemaVersion: 'wedding-project-motion-production-provenance/v1',
     authority: 'SHA_BOUND_CURRENT_PROJECT_MOTION_IMPORT',
     projectId: movie,
-    sourceExport: {
-      path: currentness.currentExport.path,
-      sha256: currentness.currentExport.sha256,
-    },
-    receiptArtifact: {
-      path: canonical.receipt,
-      sha256: shaFile(canonical.receipt),
-    },
-    currentnessArtifact: {
-      path: savedCurrentness,
-      sha256: shaFile(savedCurrentness),
-      state: 'CURRENT',
-    },
-    assemblyGate: {
-      palmierCurrent: true,
-      davinciHandoffCurrent: true,
-      macDaVinciGuiActual: 'NOT_RUN',
-      productionReady: false,
-    },
-    evidenceBoundary: {
-      remotionStudioGuiActual: 'NOT_RUN',
-      macDaVinciGuiActual: 'NOT_RUN',
-      productionReady: false,
-    },
+    sourceExport: {path: currentness.currentExport.path, sha256: currentness.currentExport.sha256},
+    receiptArtifact: {path: canonical.receipt, sha256: shaFile(canonical.receipt)},
+    currentnessArtifact: {path: savedCurrentness, sha256: shaFile(savedCurrentness), state: 'CURRENT'},
+    assemblyGate: {palmierCurrent: true, davinciHandoffCurrent: true, macDaVinciGuiActual: 'NOT_RUN', productionReady: false},
+    evidenceBoundary: {remotionStudioGuiActual: 'NOT_RUN', macDaVinciGuiActual: 'NOT_RUN', productionReady: false},
     guardrails: [
       'PROVENANCE_SOURCE_SHA256_MUST_MATCH_CURRENT_PROJECT_MOTION_EXPORT',
       'PROVENANCE_RECEIPT_SHA256_BINDS_THE_CANONICAL_IMPORT_RECEIPT',
       'PROVENANCE_CURRENTNESS_SHA256_BINDS_THE_CURRENTNESS_ARTIFACT',
       'PALMIER_PROJECT_MOTION_BINDING_MUST_MATCH_TOP_LEVEL_PROVENANCE',
+      'PALMIER_PROJECT_MOTION_BINDING_ARTIFACT_SHA256_MUST_MATCH_DAVINCI_EXPECTATION',
       'DAVINCI_EXPECTED_PROJECT_MOTION_BINDING_MUST_MATCH_PALMIER_BINDING',
       'PROJECT_MOTION_PROVENANCE_ATTACHED != PALMIER_APPLICATION_PERFORMED',
       'PROJECT_MOTION_PROVENANCE_ATTACHED != DAVINCI_APPLICATION_PERFORMED',
@@ -148,34 +160,27 @@ export function buildWeddingProjectMotionProductionProvenance(
   };
 }
 
-export function attachWeddingProjectMotionProductionProvenance(
-  movie: WeddingMovieId,
-  artifactPath: string,
-) {
+export function attachWeddingProjectMotionProductionProvenance(movie: WeddingMovieId, artifactPath: string) {
   const absoluteArtifactPath = resolve(artifactPath);
-  if (!existsSync(absoluteArtifactPath)) {
-    throw new Error(`PROJECT_MOTION_PROVENANCE_TARGET_MISSING:${absoluteArtifactPath}`);
-  }
+  if (!existsSync(absoluteArtifactPath)) throw new Error(`PROJECT_MOTION_PROVENANCE_TARGET_MISSING:${absoluteArtifactPath}`);
   const artifact = readJson(absoluteArtifactPath);
   const provenance = buildWeddingProjectMotionProductionProvenance(movie);
   const assemblyBinding = buildWeddingProjectMotionAssemblyBinding(provenance);
+  const nextArtifact: any = {...artifact, projectMotionProvenance: provenance};
 
-  const nextArtifact: any = {
-    ...artifact,
-    projectMotionProvenance: provenance,
-  };
-
-  // Production bundles own both Palmier and DaVinci handoff surfaces. Bind the
-  // exact same current Project Motion provenance into both so a later DaVinci
-  // transition cannot silently consume a different Motion Zukan/Scene revision.
   if (artifact?.palmier && artifact?.davinci) {
+    const sidecarPath = join(dirname(absoluteArtifactPath), `${movie}-v1-palmier-project-motion-binding.json`);
+    writeCanonicalJsonArtifact(sidecarPath, buildWeddingPalmierProjectMotionBindingArtifact(provenance));
+    const sidecarRef = {path: basename(sidecarPath), sha256: shaFile(sidecarPath)};
     nextArtifact.palmier = {
       ...artifact.palmier,
       projectMotionBinding: assemblyBinding,
+      projectMotionBindingArtifact: sidecarRef,
     };
     nextArtifact.davinci = {
       ...artifact.davinci,
       expectedProjectMotionBinding: assemblyBinding,
+      expectedProjectMotionBindingArtifact: sidecarRef,
     };
   }
 

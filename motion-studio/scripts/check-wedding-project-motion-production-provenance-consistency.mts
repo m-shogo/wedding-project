@@ -1,12 +1,11 @@
 import assert from 'node:assert/strict';
-import {
-  buildWeddingProjectMotionAssemblyBinding,
-} from './wedding-project-motion-production-provenance.mts';
+import {buildWeddingProjectMotionAssemblyBinding} from './wedding-project-motion-production-provenance.mts';
 import {verifyWeddingProjectMotionProductionProvenanceValues} from './verify-wedding-project-motion-production-provenance.mts';
 
 const sourceSha = 'a'.repeat(64);
 const receiptSha = 'b'.repeat(64);
 const currentnessSha = 'c'.repeat(64);
+const sidecarSha = 'd'.repeat(64);
 const provenance = {
   schemaVersion: 'wedding-project-motion-production-provenance/v1',
   authority: 'SHA_BOUND_CURRENT_PROJECT_MOTION_IMPORT',
@@ -14,24 +13,16 @@ const provenance = {
   sourceExport: {path: '/tmp/profile-project-motion.json', sha256: sourceSha},
   receiptArtifact: {path: '/tmp/project-motion-import-receipt.json', sha256: receiptSha},
   currentnessArtifact: {path: '/tmp/project-motion-import-currentness.json', sha256: currentnessSha, state: 'CURRENT'},
-  assemblyGate: {
-    palmierCurrent: true,
-    davinciHandoffCurrent: true,
-    macDaVinciGuiActual: 'NOT_RUN',
-    productionReady: false,
-  },
-  evidenceBoundary: {
-    remotionStudioGuiActual: 'NOT_RUN',
-    macDaVinciGuiActual: 'NOT_RUN',
-    productionReady: false,
-  },
+  assemblyGate: {palmierCurrent: true, davinciHandoffCurrent: true, macDaVinciGuiActual: 'NOT_RUN', productionReady: false},
+  evidenceBoundary: {remotionStudioGuiActual: 'NOT_RUN', macDaVinciGuiActual: 'NOT_RUN', productionReady: false},
   guardrails: [],
 } as const;
 const assemblyBinding = buildWeddingProjectMotionAssemblyBinding(provenance);
+const sidecarRef = {path: 'profile-v1-palmier-project-motion-binding.json', sha256: sidecarSha};
 const bundle = {
   projectMotionProvenance: structuredClone(provenance),
-  palmier: {projectMotionBinding: structuredClone(assemblyBinding)},
-  davinci: {expectedProjectMotionBinding: structuredClone(assemblyBinding)},
+  palmier: {projectMotionBinding: structuredClone(assemblyBinding), projectMotionBindingArtifact: structuredClone(sidecarRef)},
+  davinci: {expectedProjectMotionBinding: structuredClone(assemblyBinding), expectedProjectMotionBindingArtifact: structuredClone(sidecarRef)},
 };
 const recovery = {projectMotionProvenance: structuredClone(provenance)};
 const markdown = [
@@ -47,84 +38,52 @@ const markdown = [
   'production-ready-by-project-motion-provenance: no',
 ].join('\n');
 
-const current = verifyWeddingProjectMotionProductionProvenanceValues(
-  'profile',
-  bundle,
-  recovery,
-  markdown,
-  structuredClone(provenance),
-);
+const current = verifyWeddingProjectMotionProductionProvenanceValues('profile', bundle, recovery, markdown, structuredClone(provenance));
 assert.equal(current.state, 'CURRENT');
 assert.equal(current.sourceSha256, sourceSha);
 assert.equal(current.palmierDavinciBindingCurrent, true);
+assert.equal(current.palmierBindingArtifactSha256, sidecarSha);
 assert.equal(current.macRemotionStudioGuiActual, 'NOT_RUN');
 assert.equal(current.macDaVinciGuiActual, 'NOT_RUN');
 assert.equal(current.productionReady, false);
 
-assert.equal(
-  verifyWeddingProjectMotionProductionProvenanceValues('profile', {}, {}, '', undefined).state,
-  'NOT_APPLICABLE',
-);
+assert.equal(verifyWeddingProjectMotionProductionProvenanceValues('profile', {}, {}, '', undefined).state, 'NOT_APPLICABLE');
 
 const recoveryDrift = structuredClone(recovery);
-recoveryDrift.projectMotionProvenance.sourceExport.sha256 = 'd'.repeat(64);
-assert.throws(
-  () => verifyWeddingProjectMotionProductionProvenanceValues('profile', bundle, recoveryDrift, markdown, provenance),
-  /PROJECT_MOTION_PROVENANCE_CONSISTENCY_BUNDLE_RECOVERY_DRIFT:profile/,
-);
+recoveryDrift.projectMotionProvenance.sourceExport.sha256 = 'e'.repeat(64);
+assert.throws(() => verifyWeddingProjectMotionProductionProvenanceValues('profile', bundle, recoveryDrift, markdown, provenance), /PROJECT_MOTION_PROVENANCE_CONSISTENCY_BUNDLE_RECOVERY_DRIFT:profile/);
 
 const canonicalDrift = structuredClone(provenance);
-canonicalDrift.receiptArtifact.sha256 = 'e'.repeat(64);
-assert.throws(
-  () => verifyWeddingProjectMotionProductionProvenanceValues('profile', bundle, recovery, markdown, canonicalDrift),
-  /PROJECT_MOTION_PROVENANCE_CONSISTENCY_CANONICAL_DRIFT:profile/,
-);
+canonicalDrift.receiptArtifact.sha256 = 'f'.repeat(64);
+assert.throws(() => verifyWeddingProjectMotionProductionProvenanceValues('profile', bundle, recovery, markdown, canonicalDrift), /PROJECT_MOTION_PROVENANCE_CONSISTENCY_CANONICAL_DRIFT:profile/);
 
-assert.throws(
-  () => verifyWeddingProjectMotionProductionProvenanceValues('profile', bundle, recovery, `${markdown}\nproject-motion-source-sha256: ${sourceSha}`, provenance),
-  /PROJECT_MOTION_PROVENANCE_CONSISTENCY_MARKDOWN_DRIFT:profile/,
-);
+assert.throws(() => verifyWeddingProjectMotionProductionProvenanceValues('profile', bundle, recovery, `${markdown}\nproject-motion-source-sha256: ${sourceSha}`, provenance), /PROJECT_MOTION_PROVENANCE_CONSISTENCY_MARKDOWN_DRIFT:profile/);
 
 const promoted = structuredClone(bundle);
 promoted.projectMotionProvenance.evidenceBoundary.macDaVinciGuiActual = 'PASS' as never;
-assert.throws(
-  () => verifyWeddingProjectMotionProductionProvenanceValues('profile', promoted, recovery, markdown, provenance),
-  /PROJECT_MOTION_PROVENANCE_CONSISTENCY_BUNDLE_RECOVERY_DRIFT:profile|PROJECT_MOTION_PROVENANCE_CONSISTENCY_BOUNDARY_INVALID:profile/,
-);
+assert.throws(() => verifyWeddingProjectMotionProductionProvenanceValues('profile', promoted, recovery, markdown, provenance), /PROJECT_MOTION_PROVENANCE_CONSISTENCY_BUNDLE_RECOVERY_DRIFT:profile|PROJECT_MOTION_PROVENANCE_CONSISTENCY_BOUNDARY_INVALID:profile/);
 
-assert.throws(
-  () => verifyWeddingProjectMotionProductionProvenanceValues('profile', bundle, {}, markdown, provenance),
-  /PROJECT_MOTION_PROVENANCE_CONSISTENCY_PARTIAL_ATTACHMENT:profile/,
-);
+assert.throws(() => verifyWeddingProjectMotionProductionProvenanceValues('profile', bundle, {}, markdown, provenance), /PROJECT_MOTION_PROVENANCE_CONSISTENCY_PARTIAL_ATTACHMENT:profile/);
 
 const missingPalmier = structuredClone(bundle);
 delete (missingPalmier as any).palmier.projectMotionBinding;
-assert.throws(
-  () => verifyWeddingProjectMotionProductionProvenanceValues('profile', missingPalmier, recovery, markdown, provenance),
-  /PROJECT_MOTION_PROVENANCE_CONSISTENCY_ASSEMBLY_BINDING_MISSING:profile/,
-);
+assert.throws(() => verifyWeddingProjectMotionProductionProvenanceValues('profile', missingPalmier, recovery, markdown, provenance), /PROJECT_MOTION_PROVENANCE_CONSISTENCY_ASSEMBLY_BINDING_MISSING:profile/);
 
 const davinciDrift = structuredClone(bundle);
-davinciDrift.davinci.expectedProjectMotionBinding.sourceExportSha256 = 'f'.repeat(64);
-assert.throws(
-  () => verifyWeddingProjectMotionProductionProvenanceValues('profile', davinciDrift, recovery, markdown, provenance),
-  /PROJECT_MOTION_PROVENANCE_CONSISTENCY_PALMIER_DAVINCI_DRIFT:profile/,
-);
+davinciDrift.davinci.expectedProjectMotionBinding.sourceExportSha256 = '1'.repeat(64);
+assert.throws(() => verifyWeddingProjectMotionProductionProvenanceValues('profile', davinciDrift, recovery, markdown, provenance), /PROJECT_MOTION_PROVENANCE_CONSISTENCY_PALMIER_DAVINCI_DRIFT:profile/);
 
 const palmierProvenanceDrift = structuredClone(bundle);
-palmierProvenanceDrift.palmier.projectMotionBinding.receiptArtifactSha256 = '1'.repeat(64);
-palmierProvenanceDrift.davinci.expectedProjectMotionBinding.receiptArtifactSha256 = '1'.repeat(64);
-assert.throws(
-  () => verifyWeddingProjectMotionProductionProvenanceValues('profile', palmierProvenanceDrift, recovery, markdown, provenance),
-  /PROJECT_MOTION_PROVENANCE_CONSISTENCY_ASSEMBLY_BINDING_PROVENANCE_DRIFT:profile/,
-);
+palmierProvenanceDrift.palmier.projectMotionBinding.receiptArtifactSha256 = '2'.repeat(64);
+palmierProvenanceDrift.davinci.expectedProjectMotionBinding.receiptArtifactSha256 = '2'.repeat(64);
+assert.throws(() => verifyWeddingProjectMotionProductionProvenanceValues('profile', palmierProvenanceDrift, recovery, markdown, provenance), /PROJECT_MOTION_PROVENANCE_CONSISTENCY_ASSEMBLY_BINDING_PROVENANCE_DRIFT:profile/);
 
-const promotedBinding = structuredClone(bundle);
-promotedBinding.palmier.projectMotionBinding.macDaVinciGuiActual = 'PASS' as never;
-promotedBinding.davinci.expectedProjectMotionBinding.macDaVinciGuiActual = 'PASS' as never;
-assert.throws(
-  () => verifyWeddingProjectMotionProductionProvenanceValues('profile', promotedBinding, recovery, markdown, provenance),
-  /PROJECT_MOTION_PROVENANCE_CONSISTENCY_ASSEMBLY_BINDING_PROVENANCE_DRIFT:profile|PROJECT_MOTION_PROVENANCE_CONSISTENCY_ASSEMBLY_BINDING_BOUNDARY_INVALID:profile/,
-);
+const missingSidecar = structuredClone(bundle);
+delete (missingSidecar as any).palmier.projectMotionBindingArtifact;
+assert.throws(() => verifyWeddingProjectMotionProductionProvenanceValues('profile', missingSidecar, recovery, markdown, provenance), /PROJECT_MOTION_PROVENANCE_CONSISTENCY_PALMIER_ARTIFACT_REF_MISSING:profile/);
+
+const sidecarRefDrift = structuredClone(bundle);
+sidecarRefDrift.davinci.expectedProjectMotionBindingArtifact.sha256 = '3'.repeat(64);
+assert.throws(() => verifyWeddingProjectMotionProductionProvenanceValues('profile', sidecarRefDrift, recovery, markdown, provenance), /PROJECT_MOTION_PROVENANCE_CONSISTENCY_PALMIER_ARTIFACT_REF_DRIFT:profile/);
 
 console.log('Wedding Project Motion production provenance consistency contract: PASS');
