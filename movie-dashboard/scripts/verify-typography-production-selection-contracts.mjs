@@ -7,6 +7,9 @@ const store = fs.readFileSync(path.join(root, "src/data/typographyProductionSele
 const selector = fs.readFileSync(path.join(root, "src/components/TypographyProductionRouteSelector.tsx"), "utf8");
 const handoff = fs.readFileSync(path.join(root, "src/components/MaskRevealSceneHandoffCard.tsx"), "utf8");
 const routing = fs.readFileSync(path.join(root, "src/data/typographySceneProductionRouting.ts"), "utf8");
+const routeGuide = fs.readFileSync(path.join(root, "src/data/typographyProductionRouteGuide.ts"), "utf8");
+const routeGuideView = fs.readFileSync(path.join(root, "src/components/TypographyProductionRouteChoiceGuide.tsx"), "utf8");
+const roleGuideView = fs.readFileSync(path.join(root, "src/components/TypographyProductionRoleGuide.tsx"), "utf8");
 const errors = [];
 
 const requireText = (source, token, message) => {
@@ -68,6 +71,49 @@ for (const token of [
   requireText(routing, token, `Production routing lost selection/readiness honesty contract: ${token}`);
 }
 
+for (const patternId of [
+  'type-mask-reveal',
+  'type-char-stagger',
+  'type-type-on-rhythm',
+  'type-word-punch',
+  'type-tracking-burst',
+  'type-vertical-wipe',
+  'type-outline-fill',
+  'type-baseline-hop',
+  'type-triplet',
+]) {
+  requireText(routeGuide, `"${patternId}"`, `Human route choice guide missing ${patternId}`);
+}
+
+for (const token of [
+  'motionSignatureJa',
+  'bestForJa',
+  'avoidWhenJa',
+  'energy:',
+  'rhythm:',
+  'getTypographyProductionRouteGuide',
+]) {
+  requireText(routeGuide, token, `Human route choice guide missing decision field: ${token}`);
+}
+
+for (const token of [
+  '強さ {energyLabel[guide.energy]}',
+  '動き {rhythmLabel[guide.rhythm]}',
+  '向く: {guide.bestForJa}',
+  '避ける: {guide.avoidWhenJa}',
+]) {
+  requireText(routeGuideView, token, `Typography route guide UI missing decision aid: ${token}`);
+}
+
+for (const token of [
+  'TypographyProductionRouteChoiceGuide',
+  'patternId={item.primaryPatternId as TypographyProductionPatternId}',
+  '用途・強さ・避ける場面は選択補助です',
+  'Actual NOT_RUN',
+]) {
+  requireText(roleGuideView, token, `Production role guide missing practical route-choice surface: ${token}`);
+}
+
 if (/default.*type-mask-reveal/i.test(selector) || /saveTypographyProductionSelection\(scene,\s*"type-mask-reveal"/.test(selector)) {
   errors.push("Selection UI must not silently persist Mask Reveal as a human choice");
 }
@@ -80,6 +126,9 @@ if (!store.includes('if (selection.sourceRevision !== scene.updatedAt) return nu
 if (!selector.includes('DAVINCI_ROUTE_SUMMARY[route.davinciRouteStatus]')) {
   errors.push("Selection UI must derive the human-readable DaVinci stage from the route truth instead of a two-state shortcut");
 }
+if (/saveTypographyProductionSelection|createTypographyProductionSelection|productionReady:\s*true|Actual PASS/.test(routeGuide)) {
+  errors.push("Human route choice guide must remain advisory and must not select a route or promote production/Actual evidence");
+}
 
 if (errors.length) {
   console.error(`Typography Production Selection contracts FAILED (${errors.length})`);
@@ -87,4 +136,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log("Typography Production Selection contracts OK: a human can explicitly choose one of nine production routes per adopted Scene; the choice is persisted separately from tool evidence, bound to the exact Scene revision, stale choices fail closed/prune, the selector renders four-stage DaVinci readiness instead of a two-state shortcut, and Studio/DaVinci Actual evidence is never fabricated.");
+console.log("Typography Production Selection contracts OK: a human can explicitly choose one of nine production routes per adopted Scene; the choice remains revision-bound and evidence-safe, while the production role guide now explains motion character, suitable usage, avoid-cases, energy and rhythm without auto-selecting a route or fabricating Studio/DaVinci Actual.");
