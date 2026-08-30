@@ -17,6 +17,10 @@ export function weddingDavinciGuiActualStartGateCommand(projectId: "opening" | "
   return defaultWeddingDavinciGuiActualStartGateAudits[projectId].inspectCommand;
 }
 
+export function weddingDavinciGuiActualStrictStartGateCommand(projectId: "opening" | "profile") {
+  return defaultWeddingDavinciGuiActualStartGateAudits[projectId].strictGuiStartCommand;
+}
+
 type StageSnapshot = {
   state: string;
   detail: string;
@@ -29,6 +33,7 @@ type ActionTarget = {
   route: string;
   purpose: string;
   command?: string;
+  strictCommand?: string;
   artifactPath?: string;
 };
 
@@ -73,6 +78,7 @@ function actionTargetsFor(projectId: "opening" | "profile", stageName: string): 
       route: WEDDING_DAVINCI_GUI_ACTUAL_START_GATE_ROUTE,
       purpose: "canonical Session Planを読み込み、live Project Motion再検証とstrict GUI-start gateを通してからHuman Mac DaVinci Actualへ進む",
       command: weddingDavinciGuiActualStartGateCommand(projectId),
+      strictCommand: weddingDavinciGuiActualStrictStartGateCommand(projectId),
       artifactPath: canonicalWeddingDavinciGuiActualStartGateArtifactPath(projectId),
     }];
   }
@@ -280,6 +286,7 @@ export function buildWeddingMovieProductionCriticalPath() {
       "ACTION_TARGET_VISIBLE != ACTION_COMPLETED",
       "DAVINCI_START_GATE_LINK_VISIBLE != GUI_ACTUAL_STARTED",
       "DAVINCI_START_GATE_COMMAND_VISIBLE != COMMAND_EXECUTED",
+      "DAVINCI_STRICT_START_GATE_COMMAND_VISIBLE != GUI_ACTUAL_ALLOWED",
       "DAVINCI_START_GATE_ARTIFACT_PATH_VISIBLE != CANONICAL_GATE_LOADED",
       "DOWNSTREAM_WAITING != DOWNSTREAM_FAILED",
       "CI_STATUS != MAC_DAVINCI_ACTUAL",
