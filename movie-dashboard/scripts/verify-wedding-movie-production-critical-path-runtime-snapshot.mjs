@@ -35,6 +35,10 @@ for (const token of [
 ]) need(runtime, token, `runtime snapshot missing ${token}`);
 
 for (const token of [
+  'buildWeddingMovieProductionCriticalPathJson',
+  'const stableJson = useMemo(() => buildWeddingMovieProductionCriticalPathJson(), [])',
+  'downloadText(stableJson, "wedding-movie-production-critical-path.json")',
+  'Stable pathを書き出す',
   'buildWeddingMovieProductionCriticalPathRuntimeSnapshotJson',
   'const runtimeJson = useMemo(',
   'buildWeddingMovieProductionCriticalPathRuntimeSnapshotJson(startGateAudits)',
@@ -52,9 +56,6 @@ for (const token of [
   'resetWeddingDavinciGuiActualStartGateAuditAuthority',
 ]) need(liveAuthority, token, `live Start Gate authority missing ${token}`);
 
-if (card.includes('buildWeddingMovieProductionCriticalPathJson()')) {
-  errors.push('Critical-path card still exports the build-time-only JSON instead of the live runtime snapshot');
-}
 if (runtime.includes('productionReady: true') || runtime.includes('macDavinciResolveGuiActual: "PASS"')) {
   errors.push('Runtime snapshot must never promote production readiness or Mac DaVinci GUI Actual');
 }
@@ -68,4 +69,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log('Wedding Movie production critical-path runtime snapshot OK: exported JSON binds stable critical-path state to the current session live DaVinci Start Gate audit without promoting Mac/Studio GUI Actual or production readiness.');
+console.log('Wedding Movie production critical-path runtime snapshot OK: stable export remains available while runtime JSON binds the current session live DaVinci Start Gate audit without promoting Mac/Studio GUI Actual or production readiness.');
