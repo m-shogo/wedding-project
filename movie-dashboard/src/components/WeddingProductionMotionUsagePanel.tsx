@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { resolveMaskRevealEditableIntent } from "../data/humanEditableMotionIntent";
 import {
   getWeddingProductionMotionUsage,
   type WeddingMovieProject,
@@ -24,21 +25,17 @@ function stageClass(stage: WeddingProductionMotionUsageRecord["usageStage"]) {
     ? "border-emerald-300 bg-emerald-50 text-emerald-800 dark:border-emerald-800 dark:bg-emerald-950/30 dark:text-emerald-200"
     : "border-amber-300 bg-amber-50 text-amber-800 dark:border-amber-800 dark:bg-amber-950/30 dark:text-amber-200";
 }
-
 function projectFit(record: WeddingProductionMotionUsageRecord, project: WeddingMovieProject) {
   return project === "OPENING" ? record.openingFit : record.profileFit;
 }
-
 function projectSections(record: WeddingProductionMotionUsageRecord, project: WeddingMovieProject) {
   return project === "OPENING" ? record.openingSections : record.profileSections;
 }
-
 function sceneProjectId(project: WeddingMovieProject): SceneProjectId {
   return project === "OPENING" ? "opening" : "profile";
 }
-
 function sceneLabel(scene: MotionZukanComposerState["scenes"][number], index: number) {
-  const text = scene.editableIntent.fields.text.defaultValue.trim();
+  const text = resolveMaskRevealEditableIntent(scene.editableIntent).text.trim();
   return `${index + 1}. ${text || scene.recipeProvenance.label}`;
 }
 
@@ -71,7 +68,6 @@ export function WeddingProductionMotionUsagePanel() {
     saveWeddingProjectMotionAssignments(next);
     setAssignments(next);
   }
-
   function assignScene(patternId: string, sceneId: string | null) {
     const next = setWeddingProjectMotionSceneAssignment(assignments, patternId, currentProjectId, sceneId);
     saveWeddingProjectMotionAssignments(next);
@@ -95,25 +91,15 @@ export function WeddingProductionMotionUsagePanel() {
           <div className="border border-sky-200 p-2 dark:border-sky-900"><p className="text-lg font-bold">{assignedCount}</p><p>{project} ASSIGNED</p></div>
         </div>
       </div>
-
       <div className="mt-5 flex flex-wrap gap-2" aria-label="project filter">
         {(["OPENING", "PROFILE"] as const).map((value) => (
-          <button
-            key={value}
-            type="button"
-            aria-pressed={project === value}
-            onClick={() => setProject(value)}
-            className={`border px-3 py-2 text-xs font-semibold ${project === value ? "border-navy-900 bg-navy-900 text-white dark:border-sand-100 dark:bg-sand-100 dark:text-navy-900" : "border-sand-300 text-navy-600 dark:border-navy-600 dark:text-navy-300"}`}
-          >
+          <button key={value} type="button" aria-pressed={project === value} onClick={() => setProject(value)} className={`border px-3 py-2 text-xs font-semibold ${project === value ? "border-navy-900 bg-navy-900 text-white dark:border-sand-100 dark:bg-sand-100 dark:text-navy-900" : "border-sand-300 text-navy-600 dark:border-navy-600 dark:text-navy-300"}`}>
             {value} compatible {value === "OPENING" ? summary.openingCompatible.length : summary.profileCompatible.length}
           </button>
         ))}
       </div>
-
       {visible.length === 0 ? (
-        <div className="mt-5 border border-dashed border-sand-300 p-4 text-sm text-navy-500 dark:border-navy-600 dark:text-navy-300">
-          {project}に適合するROUGH/FINAL Motionはまだ記録されていません。図鑑の存在やTESTED状態だけではproduction採用扱いにしません。
-        </div>
+        <div className="mt-5 border border-dashed border-sand-300 p-4 text-sm text-navy-500 dark:border-navy-600 dark:text-navy-300">{project}に適合するROUGH/FINAL Motionはまだ記録されていません。図鑑の存在やTESTED状態だけではproduction採用扱いにしません。</div>
       ) : (
         <div className="mt-5 grid gap-3 lg:grid-cols-2">
           {visible.map((record) => {
@@ -125,14 +111,8 @@ export function WeddingProductionMotionUsagePanel() {
                 <div className="flex flex-wrap items-center gap-2">
                   <span className={`border px-2 py-1 text-[10px] font-bold ${stageClass(record.usageStage)}`}>{record.usageStage}</span>
                   <span className="border border-sand-300 px-2 py-1 text-[10px] text-navy-500 dark:border-navy-600 dark:text-navy-300">{project} FIT {projectFit(record, project)}</span>
-                  <span className={`border px-2 py-1 text-[10px] ${assigned ? "border-sky-400 bg-sky-50 text-sky-800 dark:border-sky-700 dark:bg-sky-950/30 dark:text-sky-200" : "border-sand-300 text-navy-500 dark:border-navy-600 dark:text-navy-300"}`}>
-                    {assigned ? `${project} / HUMAN ASSIGNED` : "PROJECT UNASSIGNED"}
-                  </span>
-                  {assignment?.sceneId && (
-                    <span className={`border px-2 py-1 text-[10px] ${assignedSceneExists ? "border-violet-300 text-violet-700 dark:border-violet-800 dark:text-violet-300" : "border-red-300 bg-red-50 text-red-700 dark:border-red-900 dark:bg-red-950/30 dark:text-red-300"}`}>
-                      {assignedSceneExists ? "SCENE ASSIGNED" : "STALE SCENE REF"}
-                    </span>
-                  )}
+                  <span className={`border px-2 py-1 text-[10px] ${assigned ? "border-sky-400 bg-sky-50 text-sky-800 dark:border-sky-700 dark:bg-sky-950/30 dark:text-sky-200" : "border-sand-300 text-navy-500 dark:border-navy-600 dark:text-navy-300"}`}>{assigned ? `${project} / HUMAN ASSIGNED` : "PROJECT UNASSIGNED"}</span>
+                  {assignment?.sceneId && <span className={`border px-2 py-1 text-[10px] ${assignedSceneExists ? "border-violet-300 text-violet-700 dark:border-violet-800 dark:text-violet-300" : "border-red-300 bg-red-50 text-red-700 dark:border-red-900 dark:bg-red-950/30 dark:text-red-300"}`}>{assignedSceneExists ? "SCENE ASSIGNED" : "STALE SCENE REF"}</span>}
                 </div>
                 <h3 className="mt-3 font-bold text-navy-900 dark:text-sand-100">{record.japaneseName}</h3>
                 <p className="mt-1 text-xs font-mono text-navy-400">{record.commonName} · {record.patternId}</p>
@@ -142,21 +122,10 @@ export function WeddingProductionMotionUsagePanel() {
                   <div className="col-span-2"><dt className="font-semibold">{project} sections</dt><dd>{projectSections(record, project).length ? projectSections(record, project).join(" / ") : "—"}</dd></div>
                 </dl>
                 <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-end">
-                  <button
-                    type="button"
-                    onClick={() => toggleAssignment(record.patternId)}
-                    className={`border px-3 py-2 text-xs font-semibold ${assigned ? "border-red-300 text-red-700 dark:border-red-900 dark:text-red-300" : "border-sky-500 text-sky-700 dark:text-sky-300"}`}
-                  >
-                    {assigned ? `${project}割当を解除` : `${project}へHuman割当`}
-                  </button>
+                  <button type="button" onClick={() => toggleAssignment(record.patternId)} className={`border px-3 py-2 text-xs font-semibold ${assigned ? "border-red-300 text-red-700 dark:border-red-900 dark:text-red-300" : "border-sky-500 text-sky-700 dark:text-sky-300"}`}>{assigned ? `${project}割当を解除` : `${project}へHuman割当`}</button>
                   {assigned && (
-                    <label className="min-w-0 flex-1 text-xs font-semibold text-navy-600 dark:text-navy-300">
-                      Scene Composer Scene
-                      <select
-                        value={assignment?.sceneId ?? ""}
-                        onChange={(event) => assignScene(record.patternId, event.target.value || null)}
-                        className="mt-1 w-full border border-sand-300 bg-white px-2 py-2 text-xs text-navy-900 dark:border-navy-600 dark:bg-navy-900 dark:text-sand-100"
-                      >
+                    <label className="min-w-0 flex-1 text-xs font-semibold text-navy-600 dark:text-navy-300">Scene Composer Scene
+                      <select value={assignment?.sceneId ?? ""} onChange={(event) => assignScene(record.patternId, event.target.value || null)} className="mt-1 w-full border border-sand-300 bg-white px-2 py-2 text-xs text-navy-900 dark:border-navy-600 dark:bg-navy-900 dark:text-sand-100">
                         <option value="">Scene未割当</option>
                         {!assignedSceneExists && assignment?.sceneId && <option value={assignment.sceneId}>削除済みScene: {assignment.sceneId}</option>}
                         {projectScenes.map((scene, index) => <option key={scene.sceneId} value={scene.sceneId}>{sceneLabel(scene, index)}</option>)}
@@ -169,10 +138,7 @@ export function WeddingProductionMotionUsagePanel() {
           })}
         </div>
       )}
-
-      <p className="mt-4 border-l-2 border-amber-400 pl-3 text-[11px] leading-5 text-navy-500 dark:text-navy-300">
-        Authority boundary: usageStageはWedding全体のROUGH/FINAL採用、project/Scene assignmentはHuman Masterの明示操作だけを正本にする。Scene削除時は自動再割当せずSTALEとして見せる。割当操作はMotion実装検証・Human QA・Remotion Studio GUI Actual・Mac DaVinci GUI Actualを昇格させない。
-      </p>
+      <p className="mt-4 border-l-2 border-amber-400 pl-3 text-[11px] leading-5 text-navy-500 dark:text-navy-300">Authority boundary: usageStageはWedding全体のROUGH/FINAL採用、project/Scene assignmentはHuman Masterの明示操作だけを正本にする。Scene削除時は自動再割当せずSTALEとして見せる。割当操作はMotion実装検証・Human QA・Remotion Studio GUI Actual・Mac DaVinci GUI Actualを昇格させない。</p>
     </section>
   );
 }
