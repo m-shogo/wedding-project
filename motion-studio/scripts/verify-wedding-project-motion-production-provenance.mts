@@ -1,7 +1,10 @@
 import {existsSync, readFileSync} from 'node:fs';
 import {dirname, join} from 'node:path';
 import {fileURLToPath} from 'node:url';
-import {buildWeddingProjectMotionProductionProvenance} from './wedding-project-motion-production-provenance.mts';
+import {
+  buildWeddingProjectMotionAssemblyBinding,
+  buildWeddingProjectMotionProductionProvenance,
+} from './wedding-project-motion-production-provenance.mts';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -27,6 +30,24 @@ function stableProvenanceShape(value: any) {
     remotionStudioGuiActual: value.evidenceBoundary?.remotionStudioGuiActual,
     evidenceMacDaVinciGuiActual: value.evidenceBoundary?.macDaVinciGuiActual,
     productionReady: value.evidenceBoundary?.productionReady,
+  };
+}
+
+function stableAssemblyBindingShape(value: any) {
+  if (!value) return null;
+  return {
+    schemaVersion: value.schemaVersion,
+    authority: value.authority,
+    projectId: value.projectId,
+    sourceExportSha256: value.sourceExportSha256,
+    receiptArtifactSha256: value.receiptArtifactSha256,
+    currentnessArtifactSha256: value.currentnessArtifactSha256,
+    currentnessState: value.currentnessState,
+    palmierCurrent: value.palmierCurrent,
+    davinciHandoffCurrent: value.davinciHandoffCurrent,
+    remotionStudioGuiActual: value.remotionStudioGuiActual,
+    macDaVinciGuiActual: value.macDaVinciGuiActual,
+    productionReady: value.productionReady,
   };
 }
 
@@ -75,6 +96,35 @@ export function verifyWeddingProjectMotionProductionProvenanceValues(
   assertSha('receipt', bundleShape.receiptSha256);
   assertSha('currentness', bundleShape.currentnessSha256);
 
+  const palmierBinding = stableAssemblyBindingShape(bundle?.palmier?.projectMotionBinding);
+  const davinciBinding = stableAssemblyBindingShape(bundle?.davinci?.expectedProjectMotionBinding);
+  if (!palmierBinding || !davinciBinding) {
+    throw new Error(`PROJECT_MOTION_PROVENANCE_CONSISTENCY_ASSEMBLY_BINDING_MISSING:${movieId}`);
+  }
+  if (JSON.stringify(palmierBinding) !== JSON.stringify(davinciBinding)) {
+    throw new Error(`PROJECT_MOTION_PROVENANCE_CONSISTENCY_PALMIER_DAVINCI_DRIFT:${movieId}`);
+  }
+  const expectedBinding = stableAssemblyBindingShape(buildWeddingProjectMotionAssemblyBinding(bundleProvenance));
+  if (JSON.stringify(palmierBinding) !== JSON.stringify(expectedBinding)) {
+    throw new Error(`PROJECT_MOTION_PROVENANCE_CONSISTENCY_ASSEMBLY_BINDING_PROVENANCE_DRIFT:${movieId}`);
+  }
+  if (
+    palmierBinding.schemaVersion !== 'wedding-project-motion-assembly-binding/v1' ||
+    palmierBinding.authority !== 'PROJECT_MOTION_PROVENANCE_DERIVED_BINDING' ||
+    palmierBinding.projectId !== movieId ||
+    palmierBinding.currentnessState !== 'CURRENT' ||
+    palmierBinding.palmierCurrent !== true ||
+    palmierBinding.davinciHandoffCurrent !== true ||
+    palmierBinding.remotionStudioGuiActual !== 'NOT_RUN' ||
+    palmierBinding.macDaVinciGuiActual !== 'NOT_RUN' ||
+    palmierBinding.productionReady !== false
+  ) {
+    throw new Error(`PROJECT_MOTION_PROVENANCE_CONSISTENCY_ASSEMBLY_BINDING_BOUNDARY_INVALID:${movieId}`);
+  }
+  assertSha('palmier-source', palmierBinding.sourceExportSha256);
+  assertSha('palmier-receipt', palmierBinding.receiptArtifactSha256);
+  assertSha('palmier-currentness', palmierBinding.currentnessArtifactSha256);
+
   if (currentProvenance) {
     const currentShape = stableProvenanceShape(currentProvenance);
     if (JSON.stringify(bundleShape) !== JSON.stringify(currentShape)) {
@@ -104,6 +154,7 @@ export function verifyWeddingProjectMotionProductionProvenanceValues(
     sourceSha256: bundleShape.sourceSha256 as string,
     receiptSha256: bundleShape.receiptSha256 as string,
     currentnessSha256: bundleShape.currentnessSha256 as string,
+    palmierDavinciBindingCurrent: true as const,
     macRemotionStudioGuiActual: 'NOT_RUN' as const,
     macDaVinciGuiActual: 'NOT_RUN' as const,
     productionReady: false as const,
@@ -146,7 +197,10 @@ function main() {
     join(outDir, `${movieArg}-v1-davinci-production-recovery.md`),
   );
   console.log(`Project Motion production provenance consistency: ${result.state}`);
-  if (result.state === 'CURRENT') console.log(`projectMotionSourceSha256=${result.sourceSha256}`);
+  if (result.state === 'CURRENT') {
+    console.log(`projectMotionSourceSha256=${result.sourceSha256}`);
+    console.log('Palmier -> DaVinci Project Motion binding: CURRENT');
+  }
   console.log('Mac Remotion Studio GUI Actual remains NOT_RUN.');
   console.log('Mac DaVinci Actual remains NOT_RUN.');
 }
