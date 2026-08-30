@@ -41,6 +41,7 @@ const runJson = (script: string, args: string[] = []) => {
 type StartGateState =
   | 'TRANSPORT_NOT_CURRENT'
   | 'PROJECT_MOTION_BLOCKED'
+  | 'PROJECT_REMOTION_IDENTITY_BLOCKED'
   | 'UPSTREAM_BLOCKED'
   | 'EVIDENCE_INIT_REQUIRED'
   | 'GUI_ACTUAL_ALLOWED'
@@ -67,6 +68,16 @@ const projectMotionPreflight = project.projectMotionPreflight ?? {
   command: `node --no-warnings scripts/verify-wedding-project-motion-production-provenance.mts --movie=${movieId}`,
   error: 'SESSION_PLAN_PROJECT_MOTION_PREFLIGHT_MISSING',
 };
+const projectRemotionIdentityPreflight = project.projectRemotionIdentityPreflight ?? {
+  state: 'INVALID',
+  applicable: false,
+  current: false,
+  command: `node --no-warnings scripts/verify-wedding-production-handoff-provenance.mts --movie=${movieId}`,
+  resolveSidecarSha256: null,
+  receiptSha256: null,
+  sourceBatchSha256: null,
+  error: 'SESSION_PLAN_PROJECT_REMOTION_IDENTITY_PREFLIGHT_MISSING',
+};
 let state: StartGateState;
 let nextAction: {kind: string; command: string | null; humanOnly: boolean; reason: string};
 
@@ -87,6 +98,16 @@ if (transport.state !== 'CURRENT' || transport.current !== true) {
     reason: projectMotionPreflight.error
       ? `Project Motion preflight is INVALID: ${projectMotionPreflight.error}. Repair/re-export the canonical Project Motion provenance, regenerate the Session Plan, and revalidate transport before Mac GUI Actual.`
       : 'Project Motion preflight is INVALID. Repair/re-export the canonical Project Motion provenance, regenerate the Session Plan, and revalidate transport before Mac GUI Actual.',
+  };
+} else if (projectRemotionIdentityPreflight.state === 'INVALID') {
+  state = 'PROJECT_REMOTION_IDENTITY_BLOCKED';
+  nextAction = {
+    kind: 'REVALIDATE_PROJECT_REMOTION_IDENTITY',
+    command: projectRemotionIdentityPreflight.command,
+    humanOnly: false,
+    reason: projectRemotionIdentityPreflight.error
+      ? `Project Remotion identity preflight is INVALID: ${projectRemotionIdentityPreflight.error}. Regenerate the canonical production handoff, repair the batch/receipt/Resolve identity sidecar/recovery chain, regenerate the Session Plan, and revalidate transport before Mac GUI Actual.`
+      : 'Project Remotion identity preflight is INVALID. Regenerate the canonical production handoff and Session Plan, then revalidate transport before Mac GUI Actual.',
   };
 } else if (!project.handoffIdentitySha256 || project.sessionState === 'BLOCKED_UPSTREAM') {
   state = 'UPSTREAM_BLOCKED';
@@ -111,7 +132,7 @@ if (transport.state !== 'CURRENT' || transport.current !== true) {
     kind: 'MAC_GUI_ACTUAL',
     command: null,
     humanOnly: true,
-    reason: 'Transport is CURRENT, Project Motion is CURRENT/NOT_APPLICABLE, and an Actual evidence template exists in progress. The next step is the real human Mac DaVinci GUI review.',
+    reason: 'Transport is CURRENT, Project Motion and Project Remotion identity are CURRENT/NOT_APPLICABLE, and an Actual evidence template exists in progress. The next step is the real human Mac DaVinci GUI review.',
   };
 } else if (evidenceState === 'PASS') {
   const verify = project.orderedActions.find((action: any) => action.kind === 'STRICT_VERIFY');
@@ -160,6 +181,16 @@ const gate = {
       command: projectMotionPreflight.command,
       error: projectMotionPreflight.error ?? null,
     },
+    projectRemotionIdentityPreflight: {
+      state: projectRemotionIdentityPreflight.state,
+      applicable: projectRemotionIdentityPreflight.applicable === true,
+      current: projectRemotionIdentityPreflight.current === true,
+      command: projectRemotionIdentityPreflight.command,
+      resolveSidecarSha256: projectRemotionIdentityPreflight.resolveSidecarSha256 ?? null,
+      receiptSha256: projectRemotionIdentityPreflight.receiptSha256 ?? null,
+      sourceBatchSha256: projectRemotionIdentityPreflight.sourceBatchSha256 ?? null,
+      error: projectRemotionIdentityPreflight.error ?? null,
+    },
     evidenceState,
     handoffIdentitySha256: project.handoffIdentitySha256 ?? null,
     actualRecoverySha256: project.actualEvidence?.recoverySha256 ?? null,
@@ -176,6 +207,8 @@ const gate = {
     'TRANSPORT_CURRENT_REQUIRED_BEFORE_GUI_ACTUAL',
     'PROJECT_MOTION_CURRENT_OR_NOT_APPLICABLE_REQUIRED_BEFORE_GUI_ACTUAL',
     'PROJECT_MOTION_INVALID => GUI_ACTUAL_START_BLOCKED',
+    'PROJECT_REMOTION_IDENTITY_CURRENT_OR_NOT_APPLICABLE_REQUIRED_BEFORE_GUI_ACTUAL',
+    'PROJECT_REMOTION_IDENTITY_INVALID => GUI_ACTUAL_START_BLOCKED',
     'EVIDENCE_TEMPLATE_REQUIRED_BEFORE_GUI_ACTUAL',
     'START_GATE_ARTIFACT_EXISTS != GUI_ACTUAL_EXECUTED',
     'GUI_ACTUAL_ALLOWED != GUI_ACTUAL_EXECUTED',
