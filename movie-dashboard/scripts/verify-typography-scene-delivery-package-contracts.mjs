@@ -11,6 +11,7 @@ const roleDelivery = read("src/data/typographySceneRoleDeliveryPackage.ts");
 const handoff = read("src/components/MaskRevealSceneHandoffCard.tsx");
 const routing = read("src/data/typographySceneProductionRouting.ts");
 const registry = read("src/data/typographyDaVinciActualWorkflowRegistry.ts");
+const identityReference = read("src/data/remotionElementHandoffIdentityReference.ts");
 
 const errors = [];
 const requireText = (source, token, message) => {
@@ -30,16 +31,25 @@ for (const token of [
   'productionReady: false',
   'releaseDecisionEmbedded: false',
   '"CONFIRM_CURRENT_SCENE_REVISION"',
+  '"VERIFY_REMOTION_ELEMENT_HANDOFF_IDENTITY"',
   '"EXPORT_PALMIER_TIMELINE_WITH_MARKER"',
   '"APPLY_DAVINCI_TRANSLATOR"',
   '"CAPTURE_MAC_ACTUAL_EVIDENCE"',
   '"RUN_HUMAN_PROMOTION_REVIEW"',
   '"EVALUATE_SCENE_BOUND_RELEASE_GATE"',
+  '"CURRENT_REMOTION_ELEMENT_HANDOFF_IDENTITY"',
   '"MAC_ACTUAL_EVALUATION"',
   '"HUMAN_PROMOTION_REVIEW"',
   '"SCENE_BOUND_RELEASE_GATE"',
   'buildTypographySceneProductionBundle(scene, selection)',
   'buildMaskRevealSceneProductionBundle(scene)',
+  'buildRemotionElementCandidateHandoffIdentityReference(scene.projectId, selection.patternId)',
+  'handoffIdentity,',
+  'remotionElementIdentityArtifactPath: handoffIdentity.shaBinding.artifactPath',
+  'remotionElementIdentityCheckCommand: handoffIdentity.shaBinding.checkCommand',
+  'currentnessMustBeCheckedBeforeSceneHandoffUse',
+  'TYPOGRAPHY_SCENE_DELIVERY_REMOTION_HANDOFF_IDENTITY_MISMATCH',
+  'TYPOGRAPHY_SCENE_DELIVERY_REMOTION_IDENTITY_MUST_NOT_CLAIM_GUI_ACTUAL',
   'getTypographyDaVinciActualWorkflow(patternId)',
   'parseAndValidateTypographySceneDeliveryPackage(',
   'STALE_TYPOGRAPHY_SCENE_DELIVERY_PACKAGE',
@@ -47,6 +57,16 @@ for (const token of [
   'TYPOGRAPHY_SCENE_DELIVERY_MUST_NOT_EMBED_ACTUAL_PASS',
   'TYPOGRAPHY_SCENE_DELIVERY_MUST_NOT_EMBED_RELEASE',
 ]) requireText(delivery, token, `delivery package contract missing: ${token}`);
+
+for (const token of [
+  'wedding-remotion-element-handoff-identities/v2',
+  'buildRemotionElementCandidateHandoffIdentityReference',
+  'SHA_BOUND_WEDDING_REMOTION_ELEMENT_CATALOG_IDENTITY_REFERENCE',
+  'CATALOG_IDENTITY_REFERENCE != WEDDING_PROJECT_ADOPTED',
+  'SCENE_SELECTED_ELEMENT_REQUIRES_CURRENT_SHA_BOUND_CATALOG_IDENTITY',
+  'macRemotionStudioGuiActual: "NOT_RUN"',
+  'macDaVinciGuiActual: "NOT_RUN"',
+]) requireText(identityReference, token, `Remotion scene identity reference missing: ${token}`);
 
 for (const token of [
   "Production packageを書き出す",
@@ -102,4 +122,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log("Typography Scene Delivery Package contracts OK: Human Master + current route + revision-bound persisted Human role context are bundled without fabricating Studio/DaVinci Actual or production release evidence.");
+console.log("Typography Scene Delivery Package contracts OK: Human Master + current route + catalog-wide SHA-bound Remotion Element identity + revision-bound Human role context are bundled without fabricating Studio/DaVinci Actual or production release evidence.");
