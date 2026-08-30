@@ -82,6 +82,23 @@ This confirms that the remaining blocker is not missing Drive media, not a missi
 
 Do not repeatedly generate new upload URLs while this network condition persists. The next meaningful attempt should only occur when an execution path can POST the local JPEG bytes to the issued Figma upload endpoint.
 
+## 2026-08-30 in-plugin proxy fallback probe
+
+A second bounded recovery path was tested after the external upload endpoint remained DNS-unreachable.
+
+- latest `main` before this probe: `6afb1f2f19c4c6e481bf1924b6f7345d316030ba`;
+- Current remained `ACTIVE / HOURLY / FIGMA_EDIT_ALLOWED / VISUAL_REOPENED`;
+- the authoritative Drive source was fetched again as the original JPEG: `1QWhFJPWHhwF6tfShyYzWULMGc8YDm55P`, `5,266,253` bytes, `4500×3000 px`;
+- live Figma readback reconfirmed V4 root `24:3` at `852×1200` and hero `24:9` at `310×930`, still in the explicit solid `REAL_PHOTO_REQUIRED` placeholder state;
+- a local `220×147 px` low-resolution JPEG proxy derived from that authoritative photograph was prepared solely to test crop/composition and was explicitly excluded from print-final use;
+- the Figma Plugin API fallback was tested with `figma.createImage` first from decoded proxy bytes and then from the exact direct JPEG byte array;
+- both bounded scripts failed atomically with `Image type is unsupported` before any usable IMAGE fill could be created;
+- because failed `use_figma` scripts are atomic, no QA clone, image fill, partial raster placement, or production mutation survived either attempt.
+
+Conclusion: in this execution environment there is currently neither a reachable external raster-upload POST nor a usable in-plugin `createImage` byte fallback. The supported production route remains `upload_assets` followed by the issued external POST; do not keep minting new one-time URLs until `mcp.figma.com` is reachable.
+
+The `220×147` proxy is not production media and must never be used for final effective-PPI evidence or print approval.
+
 ## Print-first state
 
 Working Figma canvas remains provisional `852×1200 px`; final physical A2/A3 choice is not authoritative yet, so actual mm, actual-size type conversion and effective photo PPI are `DEFERRED_FINALIZATION` rather than guessed.
