@@ -7,6 +7,8 @@ on:
       - "motion-studio/src/data/resolveWeddingProductionRecoveryPolicy.ts"
       - "motion-studio/src/data/resolveHandoffPolicy.ts"
       - "motion-studio/scripts/check-resolve-wedding-production-recovery.mts"
+      - "motion-studio/scripts/wedding-resolve-project-motion-sidecar.mts"
+      - "motion-studio/scripts/export-wedding-resolve-project-motion-sidecar.mts"
       - ".github/workflows/resolve-wedding-production-recovery-ci.yml"
   push:
     branches: [main]
@@ -15,6 +17,8 @@ on:
       - "motion-studio/src/data/resolveWeddingProductionRecoveryPolicy.ts"
       - "motion-studio/src/data/resolveHandoffPolicy.ts"
       - "motion-studio/scripts/check-resolve-wedding-production-recovery.mts"
+      - "motion-studio/scripts/wedding-resolve-project-motion-sidecar.mts"
+      - "motion-studio/scripts/export-wedding-resolve-project-motion-sidecar.mts"
       - ".github/workflows/resolve-wedding-production-recovery-ci.yml"
 
 jobs:
@@ -33,7 +37,7 @@ jobs:
       - name: Install Motion Studio dependencies
         working-directory: motion-studio
         run: pnpm install --frozen-lockfile
-      - name: Verify Resolve Wedding production recovery sidecar
+      - name: Verify Resolve Wedding production recovery and Project Motion generator
         working-directory: motion-studio
         run: node --no-warnings scripts/check-resolve-wedding-production-recovery.mts
       - name: Typecheck Motion Studio

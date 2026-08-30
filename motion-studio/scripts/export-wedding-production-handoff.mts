@@ -82,12 +82,14 @@ const config = movieArg === 'opening'
   ? {
       productionExporter: 'scripts/export-opening-v1-production-bundle.mts',
       bundle: 'out/handoff/opening-v1/opening-v1-production-bundle.json',
+      resolveProjectMotionSidecar: 'out/handoff/opening-v1/opening-v1-resolve-project-motion-handoff.json',
       recovery: 'out/handoff/opening-v1/opening-v1-davinci-production-recovery.json',
       recoveryMarkdown: 'out/handoff/opening-v1/opening-v1-davinci-production-recovery.md',
     }
   : {
       productionExporter: 'scripts/export-profile-v1-production-bundle.mts',
       bundle: 'out/handoff/profile-v1/profile-v1-production-bundle.json',
+      resolveProjectMotionSidecar: 'out/handoff/profile-v1/profile-v1-resolve-project-motion-handoff.json',
       recovery: 'out/handoff/profile-v1/profile-v1-davinci-production-recovery.json',
       recoveryMarkdown: 'out/handoff/profile-v1/profile-v1-davinci-production-recovery.md',
     };
@@ -125,6 +127,17 @@ if (projectMotionCurrentness) {
     );
     console.error('Mac Remotion Studio GUI Actual remains NOT_RUN.');
     console.error('Mac DaVinci Actual remains NOT_RUN.');
+    process.exit(2);
+  }
+
+  const resolveProjectMotionSidecar = run('scripts/export-wedding-resolve-project-motion-sidecar.mts', [`--movie=${movieArg}`]);
+  forward(resolveProjectMotionSidecar);
+  if (resolveProjectMotionSidecar.status !== 0) {
+    console.error(`Wedding production handoff blocked: ${movieArg} Resolve Project Motion sidecar generation failed.`);
+    process.exit(resolveProjectMotionSidecar.status ?? 2);
+  }
+  if (!existsSync(join(root, config.resolveProjectMotionSidecar))) {
+    console.error(`Wedding production handoff blocked: ${config.resolveProjectMotionSidecar} missing after successful Resolve sidecar exporter exit.`);
     process.exit(2);
   }
 }
@@ -184,6 +197,7 @@ if (provenanceConsistency.status !== 0) {
 
 console.log(`Wedding production handoff complete: ${movieArg}`);
 console.log(`bundle=${config.bundle}`);
+if (projectMotionCurrentness) console.log(`resolveProjectMotionSidecar=${config.resolveProjectMotionSidecar}`);
 console.log(`davinciRecovery=${config.recovery}`);
 console.log(`davinciRecoveryMarkdown=${config.recoveryMarkdown}`);
 console.log('Mac Remotion Studio GUI Actual remains NOT_RUN; sidecar attachment is not GUI evidence.');

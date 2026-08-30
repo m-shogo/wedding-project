@@ -4,6 +4,10 @@ import {
 } from '../src/data/resolveHandoff.schema.ts';
 import {resolveWeddingProductionRecoveryPolicy} from '../src/data/resolveWeddingProductionRecoveryPolicy.ts';
 import {resolve21AlphaHandoffPolicy} from '../src/data/resolveHandoffPolicy.ts';
+import {
+  buildResolveProjectMotionBindingArtifact,
+  buildWeddingResolveProjectMotionSidecar,
+} from './wedding-resolve-project-motion-sidecar.mts';
 
 const recoveryParsed = weddingProductionRecoverySchema.safeParse(resolveWeddingProductionRecoveryPolicy);
 if (!recoveryParsed.success) {
@@ -29,18 +33,38 @@ for (const kind of ['ROUTE', 'COMMAND', 'HUMAN'] as const) {
   }
 }
 
-const projectMotionBindingArtifact = {
+const palmierBindingArtifact = {
+  schemaVersion: 'wedding-palmier-project-motion-binding-artifact/v1' as const,
   authority: 'PALMIER_PROJECT_MOTION_ASSEMBLY_BINDING' as const,
   projectId: 'opening' as const,
-  path: 'opening-v1-palmier-project-motion-binding.json',
-  sha256: 'a'.repeat(64),
-  currentnessState: 'CURRENT' as const,
-  palmierCurrent: true as const,
-  davinciHandoffCurrent: true as const,
-  remotionStudioGuiActual: 'NOT_RUN' as const,
-  macDaVinciGuiActual: 'NOT_RUN' as const,
-  productionReady: false as const,
+  binding: {
+    schemaVersion: 'wedding-project-motion-assembly-binding/v1' as const,
+    authority: 'PROJECT_MOTION_PROVENANCE_DERIVED_BINDING' as const,
+    projectId: 'opening' as const,
+    sourceExportSha256: 'b'.repeat(64),
+    receiptArtifactSha256: 'c'.repeat(64),
+    currentnessArtifactSha256: 'd'.repeat(64),
+    currentnessState: 'CURRENT' as const,
+    palmierCurrent: true as const,
+    davinciHandoffCurrent: true as const,
+    remotionStudioGuiActual: 'NOT_RUN' as const,
+    macDaVinciGuiActual: 'NOT_RUN' as const,
+    productionReady: false as const,
+  },
+  evidenceBoundary: {
+    palmierApplicationPerformed: false as const,
+    remotionStudioGuiActual: 'NOT_RUN' as const,
+    macDaVinciGuiActual: 'NOT_RUN' as const,
+    productionReady: false as const,
+  },
 };
+
+const projectMotionBindingArtifact = buildResolveProjectMotionBindingArtifact(
+  'opening',
+  'opening-v1-palmier-project-motion-binding.json',
+  'a'.repeat(64),
+  palmierBindingArtifact,
+);
 
 const sidecarWithRecovery = resolveHandoffSidecarSchema.parse({
   ...resolve21AlphaHandoffPolicy,
@@ -68,6 +92,27 @@ if (sidecarWithRecovery.projectMotionBindingArtifact?.productionReady !== false)
   throw new Error('Project Motion binding must not elevate production readiness');
 }
 
+for (const artifactKind of ['FCPXML', 'DRFX', 'SETTING', 'DRT', 'DRA', 'MEDIA'] as const) {
+  const generated = buildWeddingResolveProjectMotionSidecar({
+    movie: 'opening',
+    baseline: resolve21AlphaHandoffPolicy,
+    artifactId: `opening-project-motion-${artifactKind.toLowerCase()}-canary`,
+    artifact: {kind: artifactKind, path: `out/handoff/opening-v1/canary.${artifactKind.toLowerCase()}`},
+    projectMotionBindingArtifact,
+    generatedAt: '2026-08-30T00:00:00.000Z',
+  });
+  if (generated.artifact.kind !== artifactKind) throw new Error(`Resolve builder changed artifact kind: ${artifactKind}`);
+  if (generated.projectMotionBindingArtifact?.sha256 !== 'a'.repeat(64)) {
+    throw new Error(`Resolve ${artifactKind} sidecar lost Palmier Project Motion SHA binding`);
+  }
+  if (generated.projectMotionBindingArtifact?.currentnessState !== 'CURRENT') {
+    throw new Error(`Resolve ${artifactKind} sidecar must require CURRENT Project Motion binding`);
+  }
+  if (generated.projectMotionBindingArtifact?.macDaVinciGuiActual !== 'NOT_RUN' || generated.projectMotionBindingArtifact?.productionReady !== false) {
+    throw new Error(`Resolve ${artifactKind} sidecar elevated Actual evidence or production readiness`);
+  }
+}
+
 for (const invalidProjectMotionBindingArtifact of [
   {...projectMotionBindingArtifact, sha256: 'not-a-sha256'},
   {...projectMotionBindingArtifact, currentnessState: 'STALE'},
@@ -85,4 +130,24 @@ for (const invalidProjectMotionBindingArtifact of [
   }
 }
 
-console.log('Resolve Wedding production recovery sidecar contracts: PASS');
+for (const invalidPalmierBinding of [
+  {...palmierBindingArtifact, projectId: 'profile' as const},
+  {...palmierBindingArtifact, binding: {...palmierBindingArtifact.binding, currentnessState: 'STALE' as any}},
+  {...palmierBindingArtifact, binding: {...palmierBindingArtifact.binding, palmierCurrent: false as any}},
+  {...palmierBindingArtifact, evidenceBoundary: {...palmierBindingArtifact.evidenceBoundary, palmierApplicationPerformed: true as any}},
+]) {
+  let rejected = false;
+  try {
+    buildResolveProjectMotionBindingArtifact(
+      'opening',
+      'opening-v1-palmier-project-motion-binding.json',
+      'a'.repeat(64),
+      invalidPalmierBinding as any,
+    );
+  } catch {
+    rejected = true;
+  }
+  if (!rejected) throw new Error('Resolve builder accepted stale, mismatched, or evidence-elevating Palmier Project Motion binding');
+}
+
+console.log('Resolve Wedding production recovery + Project Motion generator contracts: PASS');
