@@ -7,10 +7,12 @@ on:
       - 'motion-studio/src/data/weddingDavinciProductionRecovery.ts'
       - 'motion-studio/scripts/wedding-project-motion-import-receipt.mts'
       - 'motion-studio/scripts/wedding-project-motion-import-currentness.mts'
+      - 'motion-studio/scripts/export-wedding-production-handoff.mts'
       - 'motion-studio/scripts/check-wedding-project-motion-import-bridge.mts'
       - 'motion-studio/scripts/check-wedding-project-motion-recovery-gate.mts'
       - 'motion-studio/scripts/check-wedding-project-motion-import-receipt.mts'
       - 'motion-studio/scripts/check-wedding-project-motion-import-currentness.mts'
+      - 'motion-studio/scripts/check-wedding-production-handoff-project-motion-gate.mts'
       - '.github/workflows/wedding-project-motion-import-bridge-ci.yml'
   workflow_dispatch:
 
@@ -46,6 +48,9 @@ jobs:
       - name: Verify project Motion import receipt currentness
         working-directory: motion-studio
         run: node --no-warnings scripts/check-wedding-project-motion-import-currentness.mts
+      - name: Verify production handoff blocks stale or non-actionable Project Motion receipts
+        working-directory: motion-studio
+        run: node --no-warnings scripts/check-wedding-production-handoff-project-motion-gate.mts
       - name: TypeScript
         working-directory: motion-studio
         run: pnpm typecheck

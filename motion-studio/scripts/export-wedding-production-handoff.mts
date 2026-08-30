@@ -2,6 +2,7 @@ import {existsSync} from 'node:fs';
 import {dirname, join} from 'node:path';
 import {spawnSync} from 'node:child_process';
 import {fileURLToPath} from 'node:url';
+import {buildWeddingProjectMotionReceiptCurrentnessFromFiles} from './wedding-project-motion-import-currentness.mts';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const movieArg = process.argv.find((arg) => arg.startsWith('--movie='))?.split('=')[1];
@@ -9,6 +10,45 @@ if (movieArg !== 'opening' && movieArg !== 'profile') {
   console.error('Usage: node --no-warnings scripts/export-wedding-production-handoff.mts --movie=opening|profile');
   process.exit(1);
 }
+
+const projectMotionReceipt = process.argv
+  .find((arg) => arg.startsWith('--project-motion-receipt='))
+  ?.slice('--project-motion-receipt='.length);
+const projectMotionExport = process.argv
+  .find((arg) => arg.startsWith('--project-motion-export='))
+  ?.slice('--project-motion-export='.length);
+
+if (Boolean(projectMotionReceipt) !== Boolean(projectMotionExport)) {
+  console.error(
+    'Wedding production handoff blocked: --project-motion-receipt and --project-motion-export must be supplied together.',
+  );
+  process.exit(2);
+}
+
+if (projectMotionReceipt && projectMotionExport) {
+  const currentness = buildWeddingProjectMotionReceiptCurrentnessFromFiles(
+    projectMotionReceipt,
+    projectMotionExport,
+    movieArg,
+  );
+  process.stdout.write(`${JSON.stringify(currentness, null, 2)}\n`);
+  if (
+    currentness.state !== 'CURRENT' ||
+    !currentness.assemblyGate.palmierCurrent ||
+    !currentness.assemblyGate.davinciHandoffCurrent
+  ) {
+    console.error(
+      `Wedding production handoff blocked: ${movieArg} Project Motion import receipt is not current and assembly-actionable.`,
+    );
+    const recoveryCommand = currentness.recoveryActions.find((action) => action.kind === 'COMMAND')?.command;
+    if (recoveryCommand) console.error(`recovery=${recoveryCommand}`);
+    console.error('Mac Remotion Studio GUI Actual remains NOT_RUN.');
+    console.error('Mac DaVinci Actual remains NOT_RUN.');
+    process.exit(2);
+  }
+  console.log(`Project Motion receipt currentness gate: ${movieArg}=CURRENT`);
+}
+
 const config = movieArg === 'opening'
   ? {
       productionExporter: 'scripts/export-opening-v1-production-bundle.mts',
