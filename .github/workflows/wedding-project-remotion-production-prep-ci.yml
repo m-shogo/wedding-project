@@ -9,6 +9,9 @@ on:
       - 'motion-studio/scripts/verify-wedding-project-remotion-element-identities.mts'
       - 'motion-studio/scripts/check-wedding-project-remotion-element-identity-receipt.mts'
       - 'motion-studio/scripts/verify-wedding-project-remotion-identity-handoff.mts'
+      - 'motion-studio/scripts/check-wedding-palmier-typography-timeline-export-receipt.mts'
+      - 'motion-studio/scripts/build-wedding-palmier-typography-assembly-plan.mts'
+      - 'motion-studio/scripts/verify-wedding-palmier-typography-timeline-export.mts'
       - 'motion-studio/scripts/export-wedding-production-handoff.mts'
       - 'motion-studio/scripts/verify-wedding-production-handoff-provenance.mts'
       - 'motion-studio/src/motion-kit/engines.tsx'
@@ -24,6 +27,9 @@ on:
       - 'motion-studio/scripts/verify-wedding-project-remotion-element-identities.mts'
       - 'motion-studio/scripts/check-wedding-project-remotion-element-identity-receipt.mts'
       - 'motion-studio/scripts/verify-wedding-project-remotion-identity-handoff.mts'
+      - 'motion-studio/scripts/check-wedding-palmier-typography-timeline-export-receipt.mts'
+      - 'motion-studio/scripts/build-wedding-palmier-typography-assembly-plan.mts'
+      - 'motion-studio/scripts/verify-wedding-palmier-typography-timeline-export.mts'
       - 'motion-studio/scripts/export-wedding-production-handoff.mts'
       - 'motion-studio/scripts/verify-wedding-production-handoff-provenance.mts'
       - 'motion-studio/src/motion-kit/engines.tsx'
@@ -97,12 +103,15 @@ jobs:
           node - <<'NODE'
           const fs = require('fs');
           const report = JSON.parse(fs.readFileSync('/tmp/remotion-production-prep.json', 'utf8'));
-          if (report.schemaVersion !== 'wedding-project-remotion-production-prep/v2') throw new Error('prep schema mismatch');
+          if (report.schemaVersion !== 'wedding-project-remotion-production-prep/v3') throw new Error('prep schema mismatch');
+          if (report.authority !== 'DERIVED_PROJECT_REMOTION_PRODUCTION_PREP_WITH_PALMIER_TIMELINE_GATE') throw new Error('prep authority mismatch');
           if (report.state !== 'CURRENT' || report.phase !== 'identity') throw new Error('identity prep must be CURRENT');
           if (report.batchInput.source !== 'CANONICAL_PATH') throw new Error('canonical prep source mismatch');
           if (report.canonicalStage.state !== 'NOT_RUN' || report.canonicalStage.performedByThisRun !== false) throw new Error('identity prep must not claim staging');
+          if (report.palmierTimelineExport.receiptState !== 'NOT_RUN' || report.palmierTimelineExport.checkedByThisRun !== false) throw new Error('identity prep must not claim Palmier receipt verification');
           if (report.steps.length !== 4 || report.steps.some((step) => step.state !== 'PASS')) throw new Error('all identity prep steps must pass');
           if (report.next.kind !== 'STAGE_CANONICAL_INPUTS') throw new Error('identity prep next action mismatch');
+          if (report.evidenceBoundary.palmierGuiActual !== 'NOT_RUN_UNLESS_HUMAN_EXECUTED') throw new Error('Palmier Actual boundary changed');
           if (report.evidenceBoundary.macRemotionStudioGuiActual !== 'NOT_RUN_UNLESS_HUMAN_EXECUTED') throw new Error('Studio Actual boundary changed');
           if (report.evidenceBoundary.macDavinciResolveGuiActual !== 'NOT_RUN_UNLESS_HUMAN_EXECUTED') throw new Error('DaVinci Actual boundary changed');
           if (report.evidenceBoundary.productionReadyPromotedByThisPrep !== false) throw new Error('prep must not promote productionReady');
@@ -190,10 +199,12 @@ jobs:
           const report = JSON.parse(fs.readFileSync('/tmp/stage-prep.json', 'utf8'));
           if (report.state !== 'CURRENT' || report.phase !== 'stage') throw new Error('stage prep must be CURRENT');
           if (report.canonicalStage.state !== 'CURRENT' || report.canonicalStage.performedByThisRun !== true) throw new Error('canonical stage must be CURRENT');
+          if (report.palmierTimelineExport.receiptState !== 'NOT_RUN' || report.palmierTimelineExport.checkedByThisRun !== false) throw new Error('stage must not claim Palmier receipt verification');
           for (const id of ['VERIFY_EXTERNAL_PROJECT_ROLE_HANDOFF','STAGE_VALIDATED_INPUTS_TO_CANONICAL_PATHS','REGENERATE_CANONICAL_PROJECT_IDENTITY_RECEIPT','CHECK_CANONICAL_PROJECT_IDENTITY_RECEIPT','VERIFY_CANONICAL_PROJECT_ROLE_HANDOFF']) {
             if (!report.steps.some((step) => step.id === id && step.state === 'PASS')) throw new Error(`missing stage proof: ${id}`);
           }
-          if (report.next.kind !== 'RUN_CANONICAL_HANDOFF_WHEN_UPSTREAM_READY') throw new Error('stage next action mismatch');
+          if (report.next.kind !== 'BUILD_AND_VERIFY_REAL_PALMIER_TIMELINE_BEFORE_HANDOFF') throw new Error('stage next action must route through Palmier timeline verification');
+          if (!report.next.command.includes('build-wedding-palmier-typography-assembly-plan.mts')) throw new Error('stage next command must build the Palmier Assembly Plan');
           const batchSource = '/tmp/Motion Zukan Download/opening typography production batch.json';
           const roleSource = '/tmp/Motion Zukan Download/opening production role handoff manifest.json';
           const batchCanonical = path.resolve('../movie-dashboard/out/typography-project-delivery/opening-typography-production-batch.json');
@@ -204,9 +215,24 @@ jobs:
           const receipt = JSON.parse(fs.readFileSync('../movie-dashboard/out/remotion-element-handoff/opening-project-remotion-identity-verification-receipt.json', 'utf8'));
           if (receipt.sourceBatch.path !== batchCanonical) throw new Error('post-stage receipt must bind canonical batch path');
           if (receipt.state !== 'CURRENT') throw new Error('post-stage receipt must be CURRENT');
+          if (report.evidenceBoundary.palmierGuiActual !== 'NOT_RUN_UNLESS_HUMAN_EXECUTED') throw new Error('stage must not promote Palmier Actual');
           if (report.evidenceBoundary.macRemotionStudioGuiActual !== 'NOT_RUN_UNLESS_HUMAN_EXECUTED') throw new Error('stage must not promote Studio Actual');
           if (report.evidenceBoundary.macDavinciResolveGuiActual !== 'NOT_RUN_UNLESS_HUMAN_EXECUTED') throw new Error('stage must not promote DaVinci Actual');
           NODE
+
+      - name: Canonical handoff fails closed before production export when Palmier FCPXML receipt is missing
+        working-directory: motion-studio
+        run: |
+          rm -f out/handoff/wedding/opening-palmier-typography-timeline-export-receipt.json
+          if node --no-warnings scripts/prepare-wedding-project-remotion-production-handoff.mts \
+            --movie=opening \
+            --phase=handoff > /tmp/missing-palmier-receipt.log 2>&1; then
+            echo 'Canonical handoff must block without CURRENT Palmier FCPXML receipt.'
+            exit 1
+          fi
+          grep -q 'STEP_FAILED:CHECK_CURRENT_PALMIER_TIMELINE_EXPORT_RECEIPT' /tmp/missing-palmier-receipt.log
+          grep -q 'palmierTimelineExportReceipt=MISSING' /tmp/missing-palmier-receipt.log
+          ! test -e out/handoff/opening-v1/opening-v1-davinci-production-recovery.json
 
       - name: Stage phase rejects a mismatched Human role manifest before canonical write
         run: |
@@ -239,6 +265,9 @@ jobs:
 
       - name: Production prep must never synthesize GUI Actual PASS
         run: |
+          grep -q 'CHECK_CURRENT_PALMIER_TIMELINE_EXPORT_RECEIPT' motion-studio/scripts/prepare-wedding-project-remotion-production-handoff.mts
+          grep -q 'PALMIER_TIMELINE_RECEIPT_IS_RECHECKED_IMMEDIATELY_BEFORE_CANONICAL_PRODUCTION_EXPORT' motion-studio/scripts/prepare-wedding-project-remotion-production-handoff.mts
+          ! grep -q "palmierGuiActual: 'PASS'" motion-studio/scripts/prepare-wedding-project-remotion-production-handoff.mts
           ! grep -q "macRemotionStudioGuiActual: 'PASS'" motion-studio/scripts/prepare-wedding-project-remotion-production-handoff.mts
           ! grep -q "macDavinciResolveGuiActual: 'PASS'" motion-studio/scripts/prepare-wedding-project-remotion-production-handoff.mts
           ! grep -q 'productionReadyPromotedByThisPrep: true' motion-studio/scripts/prepare-wedding-project-remotion-production-handoff.mts
