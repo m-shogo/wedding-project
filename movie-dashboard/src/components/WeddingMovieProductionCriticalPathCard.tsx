@@ -48,6 +48,7 @@ type CriticalPathActionTarget = {
   route: string;
   purpose: string;
   command?: string;
+  artifactPath?: string;
 };
 
 function CriticalPathActionTargetView({target, compact = false}: {target: CriticalPathActionTarget; compact?: boolean}) {
@@ -62,9 +63,14 @@ function CriticalPathActionTargetView({target, compact = false}: {target: Critic
       >
         {target.label} →
       </Link>
+      {target.artifactPath ? (
+        <code className="mt-1 block max-w-full overflow-x-auto whitespace-nowrap text-[8px] leading-4 text-navy-400">
+          artifact: {target.artifactPath}
+        </code>
+      ) : null}
       {target.command ? (
         <code className="mt-1 block max-w-full overflow-x-auto whitespace-nowrap border-l-2 border-amber-300 pl-2 text-[8px] leading-4 text-navy-500 dark:text-navy-300">
-          cd motion-studio &amp;&amp; {target.command}
+          {target.command}
         </code>
       ) : null}
     </div>
