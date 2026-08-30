@@ -176,6 +176,13 @@ if (projectRemotionIdentity.status !== 0) {
   process.exit(projectRemotionIdentity.status ?? 2);
 }
 
+const palmierTimelineBinding = run('scripts/apply-wedding-palmier-timeline-production-handoff.mts', [`--movie=${movieArg}`]);
+forward(palmierTimelineBinding);
+if (palmierTimelineBinding.status !== 0) {
+  console.error(`Wedding production handoff blocked: ${movieArg} Palmier real-FCPXML timeline receipt could not be bound to DaVinci recovery.`);
+  process.exit(palmierTimelineBinding.status ?? 2);
+}
+
 const remotionAttachment = run('scripts/attach-wedding-remotion-element-recovery-sidecar.mts', [`--movie=${movieArg}`]);
 forward(remotionAttachment);
 if (remotionAttachment.status !== 0) {
@@ -202,10 +209,18 @@ if (provenanceConsistency.status !== 0) {
   process.exit(provenanceConsistency.status ?? 1);
 }
 
+const palmierTimelineConsistency = run('scripts/verify-wedding-palmier-timeline-production-handoff.mts', [`--movie=${movieArg}`]);
+forward(palmierTimelineConsistency);
+if (palmierTimelineConsistency.status !== 0) {
+  console.error(`Wedding production handoff blocked: ${movieArg} Palmier FCPXML receipt/recovery SHA binding is no longer current.`);
+  process.exit(palmierTimelineConsistency.status ?? 2);
+}
+
 console.log(`Wedding production handoff complete: ${movieArg}`);
 console.log(`bundle=${config.bundle}`);
 if (projectMotionCurrentness) console.log(`resolveProjectMotionSidecar=${config.resolveProjectMotionSidecar}`);
 console.log(`davinciRecovery=${config.recovery}`);
 console.log(`davinciRecoveryMarkdown=${config.recoveryMarkdown}`);
+console.log('Palmier GUI Actual remains NOT_RUN; FCPXML receipt/recovery binding is not GUI evidence.');
 console.log('Mac Remotion Studio GUI Actual remains NOT_RUN; sidecar attachment is not GUI evidence.');
 console.log('Mac DaVinci Actual remains NOT_RUN; handoff export does not execute Resolve GUI work.');
