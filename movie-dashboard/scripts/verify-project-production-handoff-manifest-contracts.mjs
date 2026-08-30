@@ -5,6 +5,8 @@ import {fileURLToPath} from "node:url";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const read = (relative) => fs.readFileSync(path.join(root, relative), "utf8");
 const manifest = read("src/data/projectProductionHandoffManifest.ts");
+const motionHandoff = read("src/data/weddingProjectMotionProductionHandoff.ts");
+const sceneMotionHandoff = read("src/data/weddingSceneMotionProductionHandoff.ts");
 const roleManifest = read("src/data/projectTypographyRoleHandoffManifest.ts");
 const batchCard = read("src/components/TypographyProjectDeliveryBatchCard.tsx");
 const workspace = read("src/data/motionZukanProductionWorkspace.ts");
@@ -29,6 +31,10 @@ for (const token of [
   'sourceRef: asset.sourceRef',
   'workspace.musicMarkers',
   'workspace.designSettings',
+  'buildWeddingProjectMotionProductionHandoff(projectId, composer, motionAssignments)',
+  'motion: WeddingProjectMotionProductionHandoffV1',
+  'motion.blockers.map((blocker) => `MOTION:${blocker}`)',
+  'motionBlockingGatePass',
   'import {openingProductionGate} from "./openingProductionGate.generated"',
   'openingV1PhotoPlanForSlot',
   'authority: "MOTION_STUDIO_OPENING_V1_MEDIA_GATE"',
@@ -57,8 +63,35 @@ for (const token of [
   'PROFILE_V1_REAL_MEDIA_REVIEW:',
   'profileV1MediaBlockingGatePass',
   'productionReady: false',
-  'BGM audio QA / Mac DaVinci Actual / Human promotion / Scene-bound Release Gate',
+  'Remotion Studio GUI Actual / Mac DaVinci Actual',
 ]) requireText(manifest, token, `production handoff manifest missing: ${token}`);
+
+for (const token of [
+  'schemaVersion: "wedding-project-motion-production-handoff/v1"',
+  'authority: "DERIVED_FROM_HUMAN_PROJECT_AND_SCENE_ASSIGNMENTS"',
+  'buildWeddingSceneMotionProductionHandoff',
+  'assignment.projectId === projectId',
+  'PROJECT_MOTION_SCENE_NOT_ASSIGNED:',
+  'PROJECT_MOTION_STALE_SCENE_REF:',
+  'PROJECT_MOTION_USAGE_NOT_FOUND:',
+  'SCENE:${scene.scene.sceneId}:${blocker}',
+  'allAssignedMotionsReadyForHandoffReference: blockers.length === 0',
+  'productionReady: false',
+  'remotionStudioGuiActual: "NOT_RUN"',
+  'macDaVinciGuiActual: "NOT_RUN"',
+  'Motion未採用projectはblockしない',
+]) requireText(motionHandoff, token, `project motion handoff missing: ${token}`);
+
+for (const token of [
+  'schemaVersion: "wedding-scene-motion-production-handoff/v1"',
+  'authority: "DERIVED_FROM_HUMAN_SCENE_ASSIGNMENTS"',
+  'palmierIntent: "ROUGH_ASSEMBLY_REFERENCE"',
+  'davinciIntent: "FINAL_REBUILD_OR_NATIVE_APPLICATION_REFERENCE"',
+  'handoffReferenceReady: sceneAssignments.length > 0 && blockers.length === 0',
+  'productionReady: false',
+  'remotionStudioGuiActual: "NOT_RUN"',
+  'macDaVinciGuiActual: "NOT_RUN"',
+]) requireText(sceneMotionHandoff, token, `scene motion handoff contract missing: ${token}`);
 
 for (const token of [
   'schemaVersion: "wedding-movie-project-role-handoff/v1"',
@@ -149,6 +182,10 @@ requireText(projectBatch, 'productionReady: false', "Typography project batch no
 for (const forbidden of ['productionReady: true', 'readyForPalmierDaVinciAssembly: true']) {
   if (manifest.includes(forbidden)) errors.push(`manifest hardcodes unsafe readiness: ${forbidden}`);
 }
+for (const forbidden of ['productionReady: true', 'remotionStudioGuiActual: "PASS"', 'macDaVinciGuiActual: "PASS"']) {
+  if (motionHandoff.includes(forbidden)) errors.push(`project motion handoff fabricates production evidence: ${forbidden}`);
+  if (sceneMotionHandoff.includes(forbidden)) errors.push(`scene motion handoff fabricates production evidence: ${forbidden}`);
+}
 for (const forbidden of ['studioGuiActual: "PASS"', 'davinciGuiActual: "PASS"', 'productionReady: true']) {
   if (roleManifest.includes(forbidden)) errors.push(`role-aware manifest fabricates production evidence: ${forbidden}`);
   if (batchCard.includes(forbidden)) errors.push(`project handoff UI fabricates production evidence: ${forbidden}`);
@@ -162,4 +199,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log("Project Production Handoff Manifest contracts OK: base production/media gates remain intact while the UI exports the role-aware wrapper; current Human typography roles are preserved and Mac Actual/release remain separate and fail-closed.");
+console.log("Project Production Handoff Manifest contracts OK: Typography/workspace/media gates now aggregate Human project+Scene Motion assignments into the Palmier→DaVinci assembly reference while GUI Actual/release remain separate and fail-closed.");
