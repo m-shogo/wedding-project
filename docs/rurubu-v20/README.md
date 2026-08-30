@@ -1,6 +1,6 @@
 # Rurubu WEDDING V20
 
-Status: `CLEAN_SLATE_CANONICAL / SPEC_FIRST`
+Status: `CLEAN_SLATE_CANONICAL / SPEC_FIRST / ASSET_FIRST`
 
 V20 is a complete redesign track.
 
@@ -44,10 +44,11 @@ Read in this order:
 14. `V20-PRODUCTION-GEOMETRY.md`
 15. `V20-PAGE-MANUALS.md`
 16. `V20-GREYBOX-SILHOUETTE-SPEC.md`
-17. `V20-PARTS-SYSTEM.md`
-18. `V20-QUALITY-GATES.md`
-19. `V20-ACCEPTANCE-EVIDENCE.md`
-20. only then derive page-specific Figma placement instructions.
+17. `V20-ASSET-FIRST-ASSEMBLY-CONTRACT.md`
+18. `V20-PARTS-SYSTEM.md`
+19. `V20-QUALITY-GATES.md`
+20. `V20-ACCEPTANCE-EVIDENCE.md`
+21. only then derive page-specific Figma placement instructions.
 
 `V20-IDEA-BANK.md` is a controlled idea pool, not a mandatory design authority.
 
@@ -80,6 +81,27 @@ These are the final foundation layers before production Figma work. Do not add m
 7. `PHOTO GAP MATRIX` — missing real-photo roles remain visible gaps rather than silently becoming generated fake memories or bad placeholder geometry.
 8. `SOURCE-PIXEL REVIEW` — important real photos are visually opened and classified; filenames alone are never evidence of role/crop quality.
 9. `GREYBOX BEFORE PARTS` — silhouette/hierarchy must pass with decoration removed before travel/tropical parts are allowed to influence the page.
+10. `ASSET-FIRST ASSEMBLY` — most visual personality must arrive as approved real photography and prepared editorial artwork; Figma behaves mainly as an editable compositor, not the creative generator.
+
+## Asset-first rule
+
+V20 should feel authored before the assets reach the final page.
+
+Prepared artwork should carry the difficult visual language:
+- original masthead art;
+- tropical/flower clusters;
+- travel illustrations;
+- paper/tape/stamp/ticket/ribbon treatments;
+- hand-drawn accents;
+- page-specific decorative devices.
+
+Figma should mainly:
+- place and overlap these assets;
+- keep real photos independently replaceable;
+- keep authoritative copy native/editable;
+- manage masks, z-order, trim/safe geometry and final polish.
+
+Do not build the editorial personality from repeated Figma cards, pills, rounded rectangles, gradients, generic icons or Auto Layout.
 
 ## Current photo evidence consequence
 
@@ -117,14 +139,15 @@ Recovering a fact is NOT permission to inherit the old layout around that fact.
 `CONTENT + PAGE MANUAL`
 → `PHOTO ROLE + SOURCE PIXEL REVIEW + GAP INVENTORY`
 → `GREYBOX / SILHOUETTE`
-→ `PARTS PLACEMENT`
+→ `PREPARED ASSET PRODUCTION + QA`
+→ `FIGMA ASSEMBLY / PARTS PLACEMENT`
 → `EDITORIAL POLISH`
 → `V20 QA + ACCEPTANCE EVIDENCE`
 → `PRINT PREFLIGHT`
 
 Figma must not be asked to invent the page with prompts like “make this more Rurubu-like.”
 
-Prompts are execution artifacts generated from the page manuals, not the source of design intelligence.
+Prompts are execution artifacts generated from the page manuals and asset briefs, not the source of design intelligence.
 
 ## Current no-go
 
@@ -135,5 +158,7 @@ Do not start decorative V20 production composition until:
 - the new V20 Figma skeleton is explicitly created as a new surface, not a modified V10/V11 page.
 
 A new V20 greybox surface may be created once the greybox spec is followed. It must not be mistaken for decorated production completion.
+
+Prepared assets may now be produced when their page role is already proven by the manuals/greybox. They must pass asset QA before final placement.
 
 This sequencing is intentional: the goal is to avoid another expensive redesign loop.
