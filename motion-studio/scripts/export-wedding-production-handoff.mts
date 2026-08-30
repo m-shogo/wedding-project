@@ -9,6 +9,7 @@ import {
   type WeddingProjectMotionReceiptCurrentnessV1,
 } from './wedding-project-motion-import-currentness.mts';
 import {getWeddingProjectMotionCanonicalArtifactPaths} from './wedding-project-motion-artifact-store.mts';
+import {attachWeddingProjectMotionProductionProvenance} from './wedding-project-motion-production-provenance.mts';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const movieArg = process.argv.find((arg) => arg.startsWith('--movie='))?.split('=')[1];
@@ -107,9 +108,25 @@ if (bundle.status !== 0) {
   console.error(`Wedding production handoff blocked: ${movieArg} production bundle export failed; DaVinci recovery was not exported.`);
   process.exit(bundle.status ?? 1);
 }
-if (!existsSync(join(root, config.bundle))) {
+const bundlePath = join(root, config.bundle);
+if (!existsSync(bundlePath)) {
   console.error(`Wedding production handoff blocked: ${config.bundle} missing after successful exporter exit.`);
   process.exit(1);
+}
+if (projectMotionCurrentness) {
+  try {
+    const provenance = attachWeddingProjectMotionProductionProvenance(movieArg, bundlePath);
+    console.log(`Project Motion provenance attached to production bundle: sourceSha256=${provenance.sourceExport.sha256}`);
+  } catch (error) {
+    console.error(
+      `Wedding production handoff blocked: ${movieArg} Project Motion provenance could not be attached to production bundle: ${
+        error instanceof Error ? error.message : String(error)
+      }`,
+    );
+    console.error('Mac Remotion Studio GUI Actual remains NOT_RUN.');
+    console.error('Mac DaVinci Actual remains NOT_RUN.');
+    process.exit(2);
+  }
 }
 
 const recovery = run('scripts/export-wedding-davinci-production-recovery.mts', [`--movie=${movieArg}`]);
@@ -118,9 +135,25 @@ if (recovery.status !== 0) {
   console.error(`Wedding production handoff blocked: ${movieArg} recovery sidecar export failed.`);
   process.exit(recovery.status ?? 1);
 }
-if (!existsSync(join(root, config.recovery))) {
+const recoveryPath = join(root, config.recovery);
+if (!existsSync(recoveryPath)) {
   console.error(`Wedding production handoff blocked: ${config.recovery} missing after successful recovery exporter exit.`);
   process.exit(1);
+}
+if (projectMotionCurrentness) {
+  try {
+    const provenance = attachWeddingProjectMotionProductionProvenance(movieArg, recoveryPath);
+    console.log(`Project Motion provenance attached to DaVinci recovery: sourceSha256=${provenance.sourceExport.sha256}`);
+  } catch (error) {
+    console.error(
+      `Wedding production handoff blocked: ${movieArg} Project Motion provenance could not be attached to DaVinci recovery: ${
+        error instanceof Error ? error.message : String(error)
+      }`,
+    );
+    console.error('Mac Remotion Studio GUI Actual remains NOT_RUN.');
+    console.error('Mac DaVinci Actual remains NOT_RUN.');
+    process.exit(2);
+  }
 }
 
 const remotionAttachment = run('scripts/attach-wedding-remotion-element-recovery-sidecar.mts', [`--movie=${movieArg}`]);
