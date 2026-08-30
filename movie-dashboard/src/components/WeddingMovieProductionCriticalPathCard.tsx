@@ -43,6 +43,34 @@ function BlockerRecoveryAction({action}: {action: MovieProductionBlockerRecovery
   return <span title={action.purpose} className="border border-red-200 dark:border-red-900 px-1.5 py-0.5 text-red-700 dark:text-red-300">{action.label}</span>;
 }
 
+type CriticalPathActionTarget = {
+  label: string;
+  route: string;
+  purpose: string;
+  command?: string;
+};
+
+function CriticalPathActionTargetView({target, compact = false}: {target: CriticalPathActionTarget; compact?: boolean}) {
+  return (
+    <div className="min-w-0">
+      <Link
+        to={target.route}
+        title={target.purpose}
+        className={compact
+          ? "inline-block border border-sand-300 dark:border-navy-600 px-1.5 py-0.5 font-semibold"
+          : "inline-block border border-amber-300 dark:border-amber-700 px-2 py-1 font-semibold text-amber-700 dark:text-amber-300"}
+      >
+        {target.label} →
+      </Link>
+      {target.command ? (
+        <code className="mt-1 block max-w-full overflow-x-auto whitespace-nowrap border-l-2 border-amber-300 pl-2 text-[8px] leading-4 text-navy-500 dark:text-navy-300">
+          cd motion-studio &amp;&amp; {target.command}
+        </code>
+      ) : null}
+    </div>
+  );
+}
+
 export function WeddingMovieProductionCriticalPathCard({projectId}: {projectId: SceneProjectId}) {
   const report = useMemo(() => buildWeddingMovieProductionCriticalPath(), []);
   const json = useMemo(() => buildWeddingMovieProductionCriticalPathJson(), []);
@@ -104,11 +132,9 @@ export function WeddingMovieProductionCriticalPathCard({projectId}: {projectId: 
             <p className="font-semibold text-amber-700 dark:text-amber-300">今やること</p>
             {current.recovery.length > 0 ? current.recovery.map((action, index) => <div key={`${index}-${action}`}>{index + 1}. <code>{action}</code></div>) : project.nextActions.map((action, index) => <div key={`${index}-${action}`}>{index + 1}. <code>{action}</code></div>)}
             {current.actionTargets.length > 0 ? (
-              <div className="mt-2 flex flex-wrap gap-1.5">
+              <div className="mt-2 grid gap-1.5">
                 {current.actionTargets.map((target) => (
-                  <Link key={`${target.route}-${target.label}`} to={target.route} title={target.purpose} className="border border-amber-300 dark:border-amber-700 px-2 py-1 font-semibold text-amber-700 dark:text-amber-300">
-                    {target.label} →
-                  </Link>
+                  <CriticalPathActionTargetView key={`${target.route}-${target.label}`} target={target} />
                 ))}
               </div>
             ) : null}
@@ -125,11 +151,9 @@ export function WeddingMovieProductionCriticalPathCard({projectId}: {projectId: 
                   {stage.blockerActions.length > 0 ? <div className="mt-1 flex flex-wrap gap-1">{stage.blockerActions.map((action) => <BlockerRecoveryAction key={`${stage.name}-${action.id}`} action={action} />)}</div> : null}
                   {stage.recovery.length > 0 ? <div>recovery: {stage.recovery.join(" → ")}</div> : null}
                   {stage.actionTargets.length > 0 ? (
-                    <div className="mt-1 flex flex-wrap gap-1">
+                    <div className="mt-1 grid gap-1">
                       {stage.actionTargets.map((target) => (
-                        <Link key={`${stage.name}-${target.route}-${target.label}`} to={target.route} title={target.purpose} className="border border-sand-300 dark:border-navy-600 px-1.5 py-0.5 font-semibold">
-                          {target.label} →
-                        </Link>
+                        <CriticalPathActionTargetView key={`${stage.name}-${target.route}-${target.label}`} target={target} compact />
                       ))}
                     </div>
                   ) : null}
