@@ -31,7 +31,7 @@ if (Boolean(projectMotionReceipt) !== Boolean(projectMotionExport)) {
   process.exit(2);
 }
 
-const canonicalProjectMotion = getWeddingProjectMotionCanonicalArtifactPaths(movieArg, root);
+const canonicalProjectMotion = getWeddingProjectMotionCanonicalArtifactPaths(movieArg);
 let projectMotionCurrentness: WeddingProjectMotionReceiptCurrentnessV1 | null = null;
 
 try {
