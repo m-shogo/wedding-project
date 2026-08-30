@@ -71,8 +71,14 @@ const sidecar = buildWeddingResolveProjectMotionSidecar({
   projectMotionBindingArtifact: binding,
 });
 writeCanonicalJsonArtifact(config.out, sidecar);
+const resolveSidecarRef = {path: basename(config.out), sha256: sha256File(config.out)};
+writeCanonicalJsonArtifact(config.bundle, {
+  ...bundle,
+  davinci: {...bundle.davinci, resolveProjectMotionHandoffSidecar: resolveSidecarRef},
+});
 
 console.log(`Resolve Project Motion handoff sidecar: ${relative(root, config.out).replaceAll('\\', '/')}`);
+console.log(`Resolve Project Motion sidecar SHA-256: ${resolveSidecarRef.sha256}`);
 console.log(`Project Motion binding SHA-256: ${binding.sha256}`);
 console.log('Mac Remotion Studio GUI Actual remains NOT_RUN; sidecar generation is not GUI evidence.');
 console.log('Mac DaVinci Actual remains NOT_RUN; sidecar generation does not execute Resolve GUI work.');
