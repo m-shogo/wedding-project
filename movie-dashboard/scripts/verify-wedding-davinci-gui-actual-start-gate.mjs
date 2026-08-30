@@ -47,7 +47,12 @@ assert(!data.includes('macDavinciResolveGuiActual: "PASS"'), "Dashboard start-ga
 
 for (const token of [
   "MAC DAVINCI GUI ACTUAL START GATE",
+  "Session Plan CURRENT → Project Motion CURRENT → Evidence init → Human Mac GUI",
   "canonical gate JSONを読み込む",
+  "Project Motion canonical verifier",
+  "Project Motion blocker:",
+  "このcommand表示自体はProject Motion CURRENTを証明しません",
+  "audit.project.projectMotionPreflight",
   "GUI_ACTUAL_ALLOWEDは「人間が開始してよい」だけで、実行済み/PASSではありません",
   "HUMAN / MAC GUI",
   "GUI Actual synthetic promotion: FORBIDDEN",
@@ -56,6 +61,11 @@ for (const token of [
   assert(card.includes(token), `Motion Zukan GUI start-gate card missing token: ${token}`);
 }
 
+assert(card.includes("projectMotion.state"), "UI must expose Project Motion state");
+assert(card.includes("projectMotion.applicable"), "UI must expose Project Motion applicability");
+assert(card.includes("projectMotion.current"), "UI must expose Project Motion currentness");
+assert(card.includes("projectMotion.command"), "UI must expose canonical Project Motion verifier command");
+assert(card.includes("projectMotion.error"), "UI must expose Project Motion blocker error");
 assert(card.includes("audit.inspectCommand"), "UI must expose canonical inspect command");
 assert(card.includes("audit.strictGuiStartCommand"), "UI must expose strict GUI-start command");
 assert(card.includes("audit.nextAction.command"), "UI must expose canonical non-human next command when present");
@@ -63,6 +73,7 @@ assert(page.includes("WeddingDavinciGuiActualStartGateCard"), "Motion Zukan page
 
 console.log("Wedding DaVinci GUI Actual start-gate Dashboard contract: PASS");
 console.log("Canonical gate JSON -> Motion Zukan: WIRED");
+console.log("Project Motion status/error/verifier -> Motion Zukan: VISIBLE");
 console.log("Project Motion INVALID -> GUI START BLOCKED: ENFORCED");
 console.log("GUI_ACTUAL_ALLOWED != GUI_ACTUAL_EXECUTED: ENFORCED");
 console.log("Mac/Studio GUI Actual synthetic promotion: FORBIDDEN");
