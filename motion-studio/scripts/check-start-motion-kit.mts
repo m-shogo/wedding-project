@@ -12,6 +12,7 @@ import {
 } from '../src/motion-kit/routeLineMath.ts';
 import {resolveAllDirectorRecipes} from '../src/motion-kit/directorRecipeAdapter.ts';
 import type {TransitionWipeDirection, TransitionWipeVariant} from '../src/motion-kit/engines.tsx';
+import {motionZukanDummyStory} from '../src/data/motionZukanDummyStory.ts';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const repoRoot = path.resolve(root, '..');
@@ -55,6 +56,14 @@ requireText(reel, 'REAL PHOTO / VIDEO SLOT', 'Motion Reel must remain explicit a
 requireText(rootFile, 'id="StaRtMotionReelV1"', 'Motion Reel composition missing');
 requireText(rootFile, 'id="StaRtMotionOverlayPreview"', 'transparent overlay preview composition missing');
 requireText(index, 'registerRoot(StartMotionKitRoot)', 'StaRt Motion Kit entrypoint missing');
+
+// The 60-second dummy must remain an authored motion piece, not regress to an 11-photo
+// fade slideshow. The data authority is JSX-free so this validates the actual Scene config.
+if (motionZukanDummyStory.length !== 11) errors.push(`dummy production story must contain exactly 11 scenes, found ${motionZukanDummyStory.length}`);
+if (new Set(motionZukanDummyStory.map((scene) => scene.photoIndex)).size !== 11) errors.push('dummy production story must exercise all 11 photo slots exactly once as primary scenes');
+if (new Set(motionZukanDummyStory.map((scene) => scene.layout)).size < 7) errors.push('dummy production story must retain all 7 authored layout families');
+if (new Set(motionZukanDummyStory.map((scene) => scene.motion)).size < 5) errors.push('dummy production story must retain all 5 camera motion families');
+if (new Set(motionZukanDummyStory.map((scene) => scene.transition)).size < 6) errors.push('dummy production story must retain all 6 transition families');
 
 // --- transition-wipe direction/variant wiring regression check ---------------------------
 //
