@@ -1,0 +1,36 @@
+name: Wedding Project Motion Import Bridge CI
+
+on:
+  pull_request:
+    paths:
+      - 'motion-studio/src/data/weddingProjectMotionImport.ts'
+      - 'motion-studio/scripts/check-wedding-project-motion-import-bridge.mts'
+      - '.github/workflows/wedding-project-motion-import-bridge-ci.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  import-bridge:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: motion-studio/pnpm-lock.yaml
+      - name: Install dependencies
+        working-directory: motion-studio
+        run: pnpm install --frozen-lockfile
+      - name: Verify project Motion import bridge
+        working-directory: motion-studio
+        run: node --no-warnings scripts/check-wedding-project-motion-import-bridge.mts
+      - name: TypeScript
+        working-directory: motion-studio
+        run: pnpm typecheck
