@@ -8,6 +8,12 @@ const repoRoot = resolve(dashboardRoot, '..');
 const motionRoot = resolve(repoRoot, 'motion-studio');
 const scriptPath = resolve(motionRoot, 'scripts/wedding-davinci-delivery-readiness.mts');
 
+const sync = spawnSync(process.execPath, ['scripts/sync-wedding-project-motion-provenance-preflight.mjs'], {
+  cwd: dashboardRoot,
+  encoding: 'utf8',
+});
+if (sync.status !== 0) throw new Error(sync.stderr || sync.stdout || 'Project Motion dashboard preflight snapshot stale');
+
 const run = spawnSync(process.execPath, ['--no-warnings', scriptPath, '--json'], {
   cwd: motionRoot,
   encoding: 'utf8',
@@ -42,9 +48,27 @@ if (!report.guardrails.includes('PROJECT_MOTION_PROVENANCE_CURRENT_OR_NOT_APPLIC
   fail('Wedding readiness must retain Project Motion provenance guardrail');
 }
 
+const generatedSource = readFileSync(resolve(dashboardRoot, 'src/data/weddingProjectMotionProvenancePreflight.generated.ts'), 'utf8');
+for (const token of [
+  'wedding-project-motion-dashboard-preflight/v1',
+  'MOTION_STUDIO_DERIVED_PROJECT_MOTION_PROVENANCE_PREFLIGHT',
+  '--movie=opening',
+  '--movie=profile',
+  'NOT_APPLICABLE',
+  'GENERATED_DASHBOARD_SNAPSHOT != LIVE_MAC_GUI_ACTUAL',
+]) {
+  if (!generatedSource.includes(token)) fail(`Generated Project Motion dashboard preflight missing ${token}`);
+}
+
 const dataSource = readFileSync(resolve(dashboardRoot, 'src/data/weddingDavinciDeliveryReadiness.ts'), 'utf8');
 for (const token of [
   'WEDDING_DAVINCI_DELIVERY_READINESS_SCHEMA',
+  'weddingProjectMotionProvenancePreflight',
+  'projectMotionSnapshot',
+  'projectMotion: openingProjectMotion',
+  'projectMotion: profileProjectMotion',
+  'REVALIDATE_PROJECT_MOTION_PROVENANCE',
+  'PROJECT_MOTION_INVALID => WEDDING_DELIVERY_INVALID',
   'finalRenderBoundRecoverySha256',
   'actualEvidenceSha256',
   'finalApprovalSha256',
@@ -59,10 +83,15 @@ for (const token of [
   'WEDDING_DAVINCI_SNAPSHOT_REQUIRED',
   'WEDDING_DAVINCI_SNAPSHOT_INVALID',
   'WEDDING_DAVINCI_SNAPSHOT_STALE',
+  'OPENING_PROJECT_MOTION_PROVENANCE_INVALID',
+  'PROFILE_PROJECT_MOTION_PROVENANCE_INVALID',
+  'REVALIDATE_OPENING_PROJECT_MOTION',
+  'REVALIDATE_PROFILE_PROJECT_MOTION',
+  'projectMotionPreflight',
+  'PROJECT_MOTION_VERIFIER_COMMAND_VISIBLE != PROJECT_MOTION_VERIFIED',
   'OPENING_DAVINCI_DELIVERY_NOT_READY',
   'PROFILE_DAVINCI_DELIVERY_NOT_READY',
   'SNAPSHOT_CURRENT != FINAL_DELIVERY_READY',
-  'FINAL_DELIVERY_READY_REQUIRES_CURRENT_SNAPSHOT_AND_BOTH_MOVIES_READY',
   'wedding-davinci-delivery-readiness.mts --write',
   'wedding-davinci-delivery-readiness-snapshot.mts --strict-current',
   'wedding-davinci-final-delivery-preflight.mts --strict',
@@ -102,4 +131,4 @@ for (const token of [
 const zukanSource = readFileSync(resolve(dashboardRoot, 'src/pages/VisualMotionLibrary.tsx'), 'utf8');
 if (!zukanSource.includes('WeddingDavinciDeliveryReadinessCard')) fail('Motion Zukan must surface wedding-wide readiness');
 
-console.log(`Wedding DaVinci readiness + Project Motion provenance + operator packet download surface OK: state=${report.state} opening=${report.opening.nextGate} profile=${report.profile.nextGate}`);
+console.log(`Wedding DaVinci readiness + generated Project Motion preflight + operator packet surface OK: state=${report.state} opening=${report.opening.nextGate}/${report.opening.projectMotion.state} profile=${report.profile.nextGate}/${report.profile.projectMotion.state}`);
