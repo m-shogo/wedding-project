@@ -88,10 +88,17 @@ export function verifyWeddingProjectMotionProductionProvenanceValues(movieId: Mo
   }
 
   for (const expected of [
-    `project-motion-source-sha256: ${bundleShape.sourceSha256}`, `project-motion-receipt-sha256: ${bundleShape.receiptSha256}`,
-    `project-motion-currentness-sha256: ${bundleShape.currentnessSha256}`, 'project-motion-currentness-state: CURRENT',
-    'palmier-project-motion-current: yes', 'davinci-project-motion-handoff-current: yes', 'mac-remotion-studio-gui-actual: NOT_RUN',
-    'mac-davinci-gui-actual: NOT_RUN', 'production-ready-by-project-motion-provenance: no',
+    `project-motion-source-sha256: ${bundleShape.sourceSha256}`,
+    `project-motion-receipt-sha256: ${bundleShape.receiptSha256}`,
+    `project-motion-currentness-sha256: ${bundleShape.currentnessSha256}`,
+    'project-motion-currentness-state: CURRENT',
+    `palmier-project-motion-binding-artifact: ${palmierArtifact.path}`,
+    `palmier-project-motion-binding-artifact-sha256: ${palmierArtifact.sha256}`,
+    'palmier-project-motion-current: yes',
+    'davinci-project-motion-handoff-current: yes',
+    'mac-remotion-studio-gui-actual: NOT_RUN',
+    'mac-davinci-gui-actual: NOT_RUN',
+    'production-ready-by-project-motion-provenance: no',
   ]) {
     const count = markdown.split(expected).length - 1;
     if (count !== 1) throw new Error(`PROJECT_MOTION_PROVENANCE_CONSISTENCY_MARKDOWN_DRIFT:${movieId}:${expected}:${count}`);
@@ -102,6 +109,7 @@ export function verifyWeddingProjectMotionProductionProvenanceValues(movieId: Mo
     receiptSha256: bundleShape.receiptSha256 as string, currentnessSha256: bundleShape.currentnessSha256 as string,
     palmierDavinciBindingCurrent: true as const, palmierBindingArtifactSha256: palmierArtifact.sha256 as string,
     recoveryCarriesPalmierBindingArtifact: true as const,
+    recoveryMarkdownCarriesPalmierBindingArtifact: true as const,
     macRemotionStudioGuiActual: 'NOT_RUN' as const, macDaVinciGuiActual: 'NOT_RUN' as const, productionReady: false as const,
   };
 }
@@ -133,8 +141,10 @@ function main() {
   const result = verifyWeddingProjectMotionProductionProvenanceFiles(movieArg, join(outDir, `${movieArg}-v1-production-bundle.json`), join(outDir, `${movieArg}-v1-davinci-production-recovery.json`), join(outDir, `${movieArg}-v1-davinci-production-recovery.md`));
   console.log(`Project Motion production provenance consistency: ${result.state}`);
   if (result.state === 'CURRENT') {
-    console.log(`projectMotionSourceSha256=${result.sourceSha256}`); console.log(`palmierProjectMotionBindingArtifactSha256=${result.palmierBindingArtifactSha256}`);
-    console.log('DaVinci recovery carries Palmier Project Motion binding artifact: CURRENT'); console.log('Palmier -> DaVinci Project Motion binding: CURRENT');
+    console.log(`projectMotionSourceSha256=${result.sourceSha256}`);
+    console.log(`palmierProjectMotionBindingArtifactSha256=${result.palmierBindingArtifactSha256}`);
+    console.log('DaVinci recovery + Markdown carry Palmier Project Motion binding artifact: CURRENT');
+    console.log('Palmier -> DaVinci Project Motion binding: CURRENT');
   }
   console.log('Mac Remotion Studio GUI Actual remains NOT_RUN.'); console.log('Mac DaVinci Actual remains NOT_RUN.');
 }
