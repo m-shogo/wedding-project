@@ -77,6 +77,7 @@ export function TypographyProjectDeliveryBatchCard({projectId}: {projectId: Scen
   const assemblyReady = manifest.handoff.readyForPalmierDaVinciAssembly && roleManifest.roleHandoff.ready;
   const openingMedia = manifest.productionWorkspace.openingV1Media;
   const profileMedia = manifest.productionWorkspace.profileV1Media;
+  const identityPlan = batch.remotionElementIdentityVerification;
 
   return (
     <section className="mt-3 border border-emerald-200 dark:border-emerald-800 p-3">
@@ -87,7 +88,7 @@ export function TypographyProjectDeliveryBatchCard({projectId}: {projectId: Scen
             {batch.summary.currentPackages}/{batch.summary.totalScenes} Scene package / {batch.summary.currentRoleContexts}/{batch.summary.totalScenes} Role context ready
           </p>
           <p className="mt-1 text-[9px] text-navy-400">
-            Route未選択 {batch.summary.missingRoutes} / route stale {batch.summary.staleRoutes} / Role未選択 {batch.summary.missingRoleContexts} / role stale {batch.summary.staleRoleContexts} / workspace checks {manifest.productionWorkspace.finalChecksPass ? "PASS" : "BLOCKED"} / productionReady=NO
+            Route未選択 {batch.summary.missingRoutes} / route stale {batch.summary.staleRoutes} / Role未選択 {batch.summary.missingRoleContexts} / role stale {batch.summary.staleRoleContexts} / Remotion identity {batch.summary.remotionIdentityVerificationState} / workspace checks {manifest.productionWorkspace.finalChecksPass ? "PASS" : "BLOCKED"} / productionReady=NO
           </p>
         </div>
         <div className="flex flex-wrap gap-1.5">
@@ -112,6 +113,41 @@ export function TypographyProjectDeliveryBatchCard({projectId}: {projectId: Scen
 
       <div className="mt-2 border border-violet-200 dark:border-violet-800 p-2 text-[8px] leading-4 text-violet-800 dark:text-violet-200">
         Project Role handoff: {roleManifest.roleHandoff.currentRoleContexts}/{roleManifest.roleHandoff.totalScenes} current / Studio GUI Actual={roleManifest.roleHandoff.studioGuiActual} / DaVinci GUI Actual={roleManifest.roleHandoff.davinciGuiActual} / productionReady=NO
+      </div>
+
+      <div className="mt-2 border-2 border-cyan-300 dark:border-cyan-800 p-2.5">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <p className="text-[8px] tracking-[0.14em] font-semibold text-cyan-700 dark:text-cyan-300">PROJECT REMOTION ELEMENT IDENTITY VERIFICATION</p>
+          <span className="font-mono text-[8px] font-semibold text-amber-700 dark:text-amber-300">{identityPlan.state}</span>
+        </div>
+        <p className="mt-1 text-[8px] leading-4 text-navy-500 dark:text-navy-300">
+          selected Element {identityPlan.selectedPatternIds.length}種 / Scene binding {identityPlan.sceneBindings.length}件。batch build自身はSHA currentnessを実行しません。
+        </p>
+        {identityPlan.selectedPatternIds.length > 0 ? <p className="mt-1 text-[8px] font-mono text-navy-500 dark:text-navy-300">Patterns: {identityPlan.selectedPatternIds.join(" / ")}</p> : null}
+        {identityPlan.artifactPath ? <code className="mt-1 block max-w-full overflow-x-auto whitespace-nowrap text-[8px] text-navy-400">artifact: {identityPlan.artifactPath}</code> : null}
+        {identityPlan.exportCommand ? (
+          <div className="mt-2">
+            <p className="text-[7px] font-semibold uppercase tracking-wide text-cyan-600 dark:text-cyan-300">1. export current catalog identity</p>
+            <code className="block max-w-full overflow-x-auto whitespace-nowrap border-l-2 border-cyan-300 pl-2 text-[8px] leading-4 text-navy-500 dark:text-navy-300">{identityPlan.exportCommand}</code>
+          </div>
+        ) : null}
+        {identityPlan.checkCommand ? (
+          <div className="mt-1.5">
+            <p className="text-[7px] font-semibold uppercase tracking-wide text-cyan-600 dark:text-cyan-300">2. verify before Palmier / DaVinci</p>
+            <code className="block max-w-full overflow-x-auto whitespace-nowrap border-l-2 border-cyan-300 pl-2 text-[8px] leading-4 text-navy-500 dark:text-navy-300">{identityPlan.checkCommand}</code>
+          </div>
+        ) : null}
+        <div className="mt-2 grid gap-1 sm:grid-cols-2">
+          {identityPlan.sceneBindings.map((binding) => (
+            <div key={binding.sceneId} className="border border-cyan-100 dark:border-cyan-900 px-2 py-1.5 text-[7px] leading-3 text-navy-500 dark:text-navy-300">
+              <div className="font-mono">{binding.sceneId} → {binding.patternId}</div>
+              <div>{binding.canonicalEngine} / {binding.canonicalMode} / adoption={binding.adoptedForMovie ? "YES" : "NO"}</div>
+            </div>
+          ))}
+        </div>
+        <p className="mt-2 border-l-2 border-amber-300 pl-2 text-[8px] leading-4 text-amber-800 dark:text-amber-200">
+          Project identity verification={identityPlan.state}。batchReady / package export ≠ identity CURRENT ≠ Studio GUI Actual PASS ≠ DaVinci GUI Actual PASS。
+        </p>
       </div>
 
       {openingMedia ? (
@@ -211,11 +247,11 @@ export function TypographyProjectDeliveryBatchCard({projectId}: {projectId: Scen
         </p>
       ) : !assemblyReady ? (
         <p className="mt-2 border border-amber-200 dark:border-amber-800 p-2 text-[8px] leading-4 text-amber-800 dark:text-amber-200">
-          Typography route + role contextは揃っていますが、実制作handoffは停止中です。Workspace final checksに加え、Openingは11写真/BGM、Profileは5章17実素材role/BGM権利のMotion Studio gateを解消してください。
+          Typography route + role contextは揃っていますが、実制作handoffは停止中です。Workspace final checksに加え、Openingは11写真/BGM、Profileは5章17実素材role/BGM権利のMotion Studio gateを解消してください。Remotion Element identity currentnessはPalmier/DaVinci直前の別checkとしてNOT_RUNのままです。
         </p>
       ) : (
         <p className="mt-2 border border-emerald-200 dark:border-emerald-800 p-2 text-[8px] leading-4 text-emerald-800 dark:text-emerald-200">
-          Palmier→DaVinci assembly用のScene/素材/曲マーカー/デザイン/Typography role + pattern + PRIMARY/FALLBACK/CUSTOM情報が揃っています。Profileは章role/editIntentとstructure review状態も同じmanifestへ保持します。ただしMac Actual / Human review / Scene Releaseは別証拠です。
+          Scene/素材/曲マーカー/デザイン/Typography role + pattern情報はassembly用に揃っています。ただしRemotion Element identity currentness checkを実行してからPalmier→DaVinciへ進みます。Mac Actual / Human review / Scene Releaseは別証拠です。
         </p>
       )}
 
