@@ -33,9 +33,20 @@ for (const token of [
   'buildTypographySceneRoleDeliveryPackage(scene, selection, context.productionRole)',
   'currentPackages === items.length',
   'currentRoleContexts === items.length',
+  'remotionElementIdentityVerification',
+  'currentnessVerifiedByBatchBuild: false',
+  'selectedPatternIds',
+  'sceneBindings: identitySceneBindings',
+  'artifactPath: firstIdentity?.shaBinding.artifactPath ?? null',
+  'exportCommand: firstIdentity?.shaBinding.exportCommand ?? null',
+  'checkCommand: firstIdentity?.shaBinding.checkCommand ?? null',
+  'mustRunBeforePalmierDaVinciHandoff: identitySceneBindings.length > 0',
+  'identityVerificationState: TypographyProjectRemotionIdentityVerificationState = identitySceneBindings.length > 0 ? "NOT_RUN" : "NOT_APPLICABLE"',
+  'remotionIdentityVerificationState: identityVerificationState',
+  'batchReadyはproductionReadyもRemotion identity currentnessも意味せず',
   'productionReady: false',
   'stale contextをsilent rebaseしない',
-  'Mac Actual / Human promotion / Scene-bound Release Gate',
+  'Remotion Studio GUI Actual / Mac DaVinci Actual / Human promotion / Scene-bound Release Gate',
 ]) requireText(batch, token, `project batch contract missing: ${token}`);
 
 for (const token of [
@@ -75,6 +86,16 @@ for (const token of [
   'roleManifest.roleHandoff.studioGuiActual',
   'roleManifest.roleHandoff.davinciGuiActual',
   '${projectId}-production-role-handoff-manifest.json',
+  'PROJECT REMOTION ELEMENT IDENTITY VERIFICATION',
+  'const identityPlan = batch.remotionElementIdentityVerification',
+  'Remotion identity {batch.summary.remotionIdentityVerificationState}',
+  'identityPlan.selectedPatternIds',
+  'identityPlan.sceneBindings',
+  'identityPlan.artifactPath',
+  'identityPlan.exportCommand',
+  'identityPlan.checkCommand',
+  'Project identity verification={identityPlan.state}',
+  'batchReady / package export ≠ identity CURRENT ≠ Studio GUI Actual PASS ≠ DaVinci GUI Actual PASS',
 ]) requireText(card, token, `project batch UI missing: ${token}`);
 
 for (const token of [
@@ -96,7 +117,7 @@ requireText(handoff, '<ProjectTypographyRoleHandoffRevalidationCard projectId={s
 requireText(scenePackage, 'actualEvidenceState: "NOT_RUN"', "Scene package no longer preserves NOT_RUN Actual evidence");
 requireText(scenePackage, 'productionReady: false', "Scene package no longer fails closed for production readiness");
 
-for (const forbidden of ['productionReady: true', 'batchReadyForPalmierDaVinciHandoff: true', 'filter((item) => item.status === "CURRENT_PACKAGE_READY").map']) {
+for (const forbidden of ['productionReady: true', 'batchReadyForPalmierDaVinciHandoff: true', 'currentnessVerifiedByBatchBuild: true', 'filter((item) => item.status === "CURRENT_PACKAGE_READY").map']) {
   if (batch.includes(forbidden)) errors.push(`project batch can silently overclaim readiness: ${forbidden}`);
 }
 for (const forbidden of ['studioGuiActual: "PASS"', 'davinciGuiActual: "PASS"', 'productionReady: true']) {
@@ -111,4 +132,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log("Typography Project Delivery Batch contracts OK: UI export requires current route + persisted role context, project handoff files can be fail-close revalidated against current state, and Studio/DaVinci Actual plus productionReady remain unclaimed.");
+console.log("Typography Project Delivery Batch contracts OK: UI export requires current route + persisted role context, selected Scene Remotion identities are aggregated into an explicit NOT_RUN pre-handoff verification plan, and Studio/DaVinci Actual plus productionReady remain unclaimed.");

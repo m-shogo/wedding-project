@@ -9,6 +9,7 @@ import type {MaskRevealSceneInstance, ProjectTimelineV1, SceneProjectId} from ".
 
 export type TypographyProjectDeliverySceneStatus = "CURRENT_PACKAGE_READY" | "MISSING_HUMAN_ROUTE" | "STALE_HUMAN_ROUTE";
 export type TypographyProjectRoleContextStatus = "CURRENT_ROLE_CONTEXT" | "MISSING_ROLE_CONTEXT" | "STALE_ROLE_CONTEXT" | "ROLE_CONTEXT_NOT_REQUIRED";
+export type TypographyProjectRemotionIdentityVerificationState = "NOT_RUN" | "NOT_APPLICABLE";
 
 export interface TypographyProjectDeliverySceneItemV1 {
   sceneId: string;
@@ -31,6 +32,25 @@ export interface TypographyProjectDeliveryBatchV1 {
   projectId: SceneProjectId;
   timeline: {authority: "STRUCTURED_SCENE_TIMELINE"; sceneIds: string[]; placements: ProjectTimelineV1["placements"]; totalComputedDurationSeconds: number};
   scenes: TypographyProjectDeliverySceneItemV1[];
+  remotionElementIdentityVerification: {
+    state: TypographyProjectRemotionIdentityVerificationState;
+    currentnessVerifiedByBatchBuild: false;
+    selectedPatternIds: string[];
+    sceneBindings: Array<{
+      sceneId: string;
+      sourceRevision: string;
+      patternId: string;
+      adoptedForMovie: boolean;
+      canonicalEngine: string;
+      canonicalMode: string;
+      canonicalSource: string;
+    }>;
+    artifactPath: string | null;
+    exportCommand: string | null;
+    checkCommand: string | null;
+    mustRunBeforePalmierDaVinciHandoff: boolean;
+    rule: string;
+  };
   summary: {
     totalScenes: number;
     currentPackages: number;
@@ -40,6 +60,7 @@ export interface TypographyProjectDeliveryBatchV1 {
     currentRoleContexts: number;
     missingRoleContexts: number;
     staleRoleContexts: number;
+    remotionIdentityVerificationState: TypographyProjectRemotionIdentityVerificationState;
     batchReadyForPalmierDaVinciHandoff: boolean;
     productionReady: false;
   };
@@ -99,7 +120,7 @@ export function buildTypographyProjectDeliveryBatch(
       blocker: null,
       roleContextStatus: role.status,
       productionRole: role.rolePackage?.productionUse.productionRole ?? null,
-      selectionClass: role.rolePackage?.productionUse.choiceKind ?? null,
+      selectionClass: role.rolePackage?.handoffSummary.selectionClass ?? null,
       rolePackage: role.rolePackage,
       roleBlocker: role.blocker,
     };
@@ -114,6 +135,21 @@ export function buildTypographyProjectDeliveryBatch(
   const blockers = items.flatMap((item) => [item.blocker, item.roleBlocker].filter((value): value is string => Boolean(value)).map((value) => `${item.sceneId}:${value}`));
   const routeReady = items.length > 0 && currentPackages === items.length;
   const roleReady = !roleContextRequired || currentRoleContexts === items.length;
+  const identitySceneBindings = items.flatMap((item) => {
+    const identity = item.package?.remotion.handoffIdentity;
+    return identity ? [{
+      sceneId: item.sceneId,
+      sourceRevision: item.sourceRevision,
+      patternId: identity.patternId,
+      adoptedForMovie: identity.adoptedForMovie,
+      canonicalEngine: identity.canonicalIdentity.canonicalEngine,
+      canonicalMode: identity.canonicalIdentity.canonicalMode,
+      canonicalSource: identity.canonicalIdentity.canonicalSource,
+    }] : [];
+  });
+  const selectedPatternIds = [...new Set(identitySceneBindings.map((binding) => binding.patternId))];
+  const firstIdentity = items.find((item) => item.package?.remotion.handoffIdentity)?.package?.remotion.handoffIdentity ?? null;
+  const identityVerificationState: TypographyProjectRemotionIdentityVerificationState = identitySceneBindings.length > 0 ? "NOT_RUN" : "NOT_APPLICABLE";
 
   return {
     schemaVersion: "wedding-movie-typography-project-delivery/v1",
@@ -121,10 +157,21 @@ export function buildTypographyProjectDeliveryBatch(
     projectId,
     timeline: {authority: "STRUCTURED_SCENE_TIMELINE", sceneIds: [...timeline.sceneIds], placements: timeline.placements.map((placement) => ({...placement})), totalComputedDurationSeconds: timeline.totalComputedDurationSeconds},
     scenes: items,
-    summary: {totalScenes: items.length, currentPackages, missingRoutes, staleRoutes, roleContextRequired, currentRoleContexts, missingRoleContexts, staleRoleContexts, batchReadyForPalmierDaVinciHandoff: routeReady && roleReady, productionReady: false},
+    remotionElementIdentityVerification: {
+      state: identityVerificationState,
+      currentnessVerifiedByBatchBuild: false,
+      selectedPatternIds,
+      sceneBindings: identitySceneBindings,
+      artifactPath: firstIdentity?.shaBinding.artifactPath ?? null,
+      exportCommand: firstIdentity?.shaBinding.exportCommand ?? null,
+      checkCommand: firstIdentity?.shaBinding.checkCommand ?? null,
+      mustRunBeforePalmierDaVinciHandoff: identitySceneBindings.length > 0,
+      rule: "Project batchはHuman-selected Scene routeから必要なRemotion Element identityだけを集約する。batch build自身はSHA currentnessを実行・証明しない。artifact export + currentness checkをPalmier/DaVinci handoff直前に実行し、catalog identityの存在をproject adoptionやGUI Actualへ読み替えない。",
+    },
+    summary: {totalScenes: items.length, currentPackages, missingRoutes, staleRoutes, roleContextRequired, currentRoleContexts, missingRoleContexts, staleRoleContexts, remotionIdentityVerificationState: identityVerificationState, batchReadyForPalmierDaVinciHandoff: routeReady && roleReady, productionReady: false},
     blockers,
-    executionRule: "UI/production manifest経由では全SceneがCURRENT_PACKAGE_READYかつCURRENT_ROLE_CONTEXTの時だけbatch exportする。既存4引数contract callerはroute-only互換を維持する。Scene/route更新後のstale contextをsilent rebaseしない。",
-    evidenceRule: "role + pattern + PRIMARY/FALLBACK/CUSTOMはHuman-selected role/routeからderivedする。batchReadyはproductionReadyを意味せず、Mac Actual / Human promotion / Scene-bound Release Gateは別証拠のまま維持する。",
+    executionRule: "UI/production manifest経由では全SceneがCURRENT_PACKAGE_READYかつCURRENT_ROLE_CONTEXTの時だけbatch exportする。既存4引数contract callerはroute-only互換を維持する。Scene/route更新後のstale contextをsilent rebaseしない。batchReadyForPalmierDaVinciHandoffはroute/role package readinessであり、Remotion Element SHA currentnessは別の必須pre-handoff checkとしてNOT_RUNのまま保持する。",
+    evidenceRule: "role + pattern + PRIMARY/FALLBACK/CUSTOMはHuman-selected role/routeからderivedする。batchReadyはproductionReadyもRemotion identity currentnessも意味せず、Remotion Studio GUI Actual / Mac DaVinci Actual / Human promotion / Scene-bound Release Gateは別証拠のまま維持する。",
   };
 }
 
