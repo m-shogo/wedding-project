@@ -11,6 +11,7 @@
     "specFirstPlacementPolicy": "docs/rurubu-v10/RURUBU-V10-SPEC-FIRST-PLACEMENT-POLICY.md",
     "approvedUserReferenceDeconstruction": "docs/rurubu-v10/RURUBU-V10-USER-REFERENCE-DECONSTRUCTION-2026-08-30.md",
     "detailedPageSpecs": "docs/rurubu-v10/RURUBU-V10-PAGE-SPECS-DETAILED.md",
+    "partsLibrarySpec": "docs/rurubu-v10/RURUBU-V10-PARTS-LIBRARY-SPEC.md",
     "specFirstExecutionPrompt": "docs/rurubu-v10/RURUBU-V10-SPEC-FIRST-FIGMA-EXECUTION-PROMPT.md",
     "referenceFingerprintAntiAiGate": "docs/rurubu-v10/RURUBU-V10-REFERENCE-FINGERPRINT-ANTI-AI-GATE.md",
     "referenceFingerprintMachine": "docs/rurubu-v10/rurubu-v10-reference-fingerprint.json",
