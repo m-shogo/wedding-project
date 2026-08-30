@@ -27,7 +27,7 @@ need(startGateCard, 'WEDDING_DAVINCI_GUI_ACTUAL_START_GATE_ANCHOR = "davinci-gui
 need(startGateCard, 'id={WEDDING_DAVINCI_GUI_ACTUAL_START_GATE_ANCHOR}', "Start Gate card must bind the anchor to its rendered section");
 need(startGateCard, 'canonical gate JSONを読み込む', "Start Gate must retain canonical Session Plan/gate loading UI");
 need(startGateCard, 'Project Motion canonical verifier', "Start Gate must retain Project Motion verifier visibility");
-need(startGateCard, 'strict GUI-start gate', "Start Gate must retain strict GUI-start verification");
+need(startGateCard, 'GUI開始直前のstrict gate', "Start Gate must retain strict GUI-start verification");
 need(startGateCard, 'Actual evidenceはNOT_RUNのまま', "Start Gate must preserve NOT_RUN evidence semantics when GUI was not performed");
 
 if (errors.length) {
