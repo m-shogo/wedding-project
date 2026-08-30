@@ -41,7 +41,7 @@ export function WeddingDavinciGuiActualStartGateCard() {
           <p className="text-[10px] tracking-[0.2em] font-semibold text-amber-700 dark:text-amber-300">MAC DAVINCI GUI ACTUAL START GATE</p>
           <h2 className="mt-1 text-lg font-bold text-navy-900 dark:text-sand-100">Session Plan CURRENT → Project Motion CURRENT → Evidence init → Human Mac GUI</h2>
           <p className="mt-2 text-xs leading-5 text-navy-500 dark:text-navy-300">
-            Motion Studioのcanonical start-gate JSONを読み込み、Opening/ProfileそれぞれのTransport・Project Motion・正確な次アクションを表示します。GUI_ACTUAL_ALLOWEDは「人間が開始してよい」だけで、実行済み/PASSではありません。
+            Motion Studioのcanonical start-gate JSON artifactを生成・読み込み、Opening/ProfileそれぞれのTransport・Project Motion・正確な次アクションを表示します。GUI_ACTUAL_ALLOWEDは「人間が開始してよい」だけで、実行済み/PASSではありません。
           </p>
         </div>
         <p className="text-[10px] leading-4 text-amber-700 dark:text-amber-300">GUI Actual synthetic promotion: FORBIDDEN</p>
@@ -70,6 +70,12 @@ export function WeddingDavinciGuiActualStartGateCard() {
                   />
                 </label>
                 <span className="text-[10px] text-navy-400">loaded: {audit.canonicalGateLoaded ? "YES" : "NO"}</span>
+              </div>
+
+              <div className="mt-3 border border-amber-100 dark:border-amber-900/50 px-3 py-2 text-[9px] leading-4 text-navy-500 dark:text-navy-300">
+                <p className="font-semibold text-navy-700 dark:text-sand-200">Canonical artifact</p>
+                <code className="mt-1 block overflow-x-auto whitespace-nowrap">motion-studio/{audit.canonicalArtifactPath}</code>
+                <p className="mt-1 text-navy-400">下のinspect commandがこのJSONを保存します。artifactが存在してもGUI Actual実行済みにはなりません。</p>
               </div>
 
               <dl className="mt-4 grid grid-cols-[max-content_1fr] gap-x-3 gap-y-2 text-[10px] leading-4 text-navy-500 dark:text-navy-300">
@@ -117,9 +123,9 @@ export function WeddingDavinciGuiActualStartGateCard() {
               )}
 
               <div className="mt-4 border-t border-sand-200 dark:border-navy-600 pt-3">
-                <p className="text-[9px] font-semibold text-navy-700 dark:text-sand-200">1. inspect / JSON出力</p>
+                <p className="text-[9px] font-semibold text-navy-700 dark:text-sand-200">1. inspect / canonical JSON保存</p>
                 <code className="mt-1 block overflow-x-auto text-[9px] leading-4 text-navy-500 dark:text-navy-300">{audit.inspectCommand}</code>
-                <p className="mt-3 text-[9px] font-semibold text-navy-700 dark:text-sand-200">2. GUI開始直前のstrict gate</p>
+                <p className="mt-3 text-[9px] font-semibold text-navy-700 dark:text-sand-200">2. GUI開始直前のstrict gate + JSON更新</p>
                 <code className="mt-1 block overflow-x-auto text-[9px] leading-4 text-navy-500 dark:text-navy-300">{audit.strictGuiStartCommand}</code>
               </div>
             </article>
