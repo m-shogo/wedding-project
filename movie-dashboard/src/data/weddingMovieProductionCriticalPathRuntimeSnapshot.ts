@@ -12,7 +12,18 @@ function projectRemotionIdentityRuntimeSnapshot(audit: WeddingDavinciGuiActualSt
   return {...audit.project.projectRemotionIdentityPreflight, liveMatch: audit.liveProjectRemotionIdentityMatch};
 }
 function palmierTimelineRuntimeSnapshot(audit: WeddingDavinciGuiActualStartGateAudit) {
-  return {...audit.project.palmierTimelinePreflight, liveMatch: audit.livePalmierTimelineMatch};
+  const palmier = audit.project.palmierTimelinePreflight;
+  return {
+    state: palmier.state,
+    applicable: palmier.applicable,
+    current: palmier.current,
+    command: palmier.command,
+    receiptSha256: palmier.receiptSha256,
+    assemblyPlanSha256: palmier.assemblyPlanSha256,
+    palmierFcpxmlSha256: palmier.palmierFcpxmlSha256,
+    error: palmier.error,
+    liveMatch: audit.livePalmierTimelineMatch,
+  };
 }
 
 function startGateRuntimeSnapshot(audit: WeddingDavinciGuiActualStartGateAudit) {
