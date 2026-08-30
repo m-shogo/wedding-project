@@ -3,8 +3,10 @@ import type { SceneProjectId } from "./visualSceneComposer";
 export interface WeddingProjectMotionAssignment {
   patternId: string;
   projectId: SceneProjectId;
+  sceneId: string | null;
   assignedBy: "HUMAN_MASTER";
   assignedAt: string;
+  sceneAssignedAt: string | null;
 }
 
 export interface WeddingProjectMotionAssignmentState {
@@ -19,6 +21,14 @@ export function emptyWeddingProjectMotionAssignments(): WeddingProjectMotionAssi
   return { schemaVersion: "wedding-project-motion-assignments/v1", assignments: [] };
 }
 
+function normalizeAssignment(item: WeddingProjectMotionAssignment): WeddingProjectMotionAssignment {
+  return {
+    ...item,
+    sceneId: typeof item.sceneId === "string" && item.sceneId.length > 0 ? item.sceneId : null,
+    sceneAssignedAt: typeof item.sceneAssignedAt === "string" ? item.sceneAssignedAt : null,
+  };
+}
+
 export function loadWeddingProjectMotionAssignments(): WeddingProjectMotionAssignmentState {
   if (typeof localStorage === "undefined") return emptyWeddingProjectMotionAssignments();
   try {
@@ -28,12 +38,14 @@ export function loadWeddingProjectMotionAssignments(): WeddingProjectMotionAssig
     if (parsed.schemaVersion !== "wedding-project-motion-assignments/v1" || !Array.isArray(parsed.assignments)) {
       return emptyWeddingProjectMotionAssignments();
     }
-    const assignments = parsed.assignments.filter((item) =>
-      typeof item?.patternId === "string" &&
-      (item.projectId === "opening" || item.projectId === "profile") &&
-      item.assignedBy === "HUMAN_MASTER" &&
-      typeof item.assignedAt === "string",
-    );
+    const assignments = parsed.assignments
+      .filter((item) =>
+        typeof item?.patternId === "string" &&
+        (item.projectId === "opening" || item.projectId === "profile") &&
+        item.assignedBy === "HUMAN_MASTER" &&
+        typeof item.assignedAt === "string",
+      )
+      .map((item) => normalizeAssignment(item));
     return { schemaVersion: "wedding-project-motion-assignments/v1", assignments };
   } catch {
     return emptyWeddingProjectMotionAssignments();
@@ -48,6 +60,14 @@ export function saveWeddingProjectMotionAssignments(state: WeddingProjectMotionA
   }
 }
 
+export function assignmentForPatternProject(
+  state: WeddingProjectMotionAssignmentState,
+  patternId: string,
+  projectId: SceneProjectId,
+) {
+  return state.assignments.find((item) => item.patternId === patternId && item.projectId === projectId) ?? null;
+}
+
 export function setWeddingProjectMotionAssignment(
   state: WeddingProjectMotionAssignmentState,
   patternId: string,
@@ -60,8 +80,38 @@ export function setWeddingProjectMotionAssignment(
     ...state,
     assignments: [
       ...existing,
-      { patternId, projectId, assignedBy: "HUMAN_MASTER", assignedAt: new Date().toISOString() },
+      {
+        patternId,
+        projectId,
+        sceneId: null,
+        assignedBy: "HUMAN_MASTER",
+        assignedAt: new Date().toISOString(),
+        sceneAssignedAt: null,
+      },
     ],
+  };
+}
+
+export function setWeddingProjectMotionSceneAssignment(
+  state: WeddingProjectMotionAssignmentState,
+  patternId: string,
+  projectId: SceneProjectId,
+  sceneId: string | null,
+): WeddingProjectMotionAssignmentState {
+  const current = assignmentForPatternProject(state, patternId, projectId);
+  if (!current) return state;
+  const nextSceneId = sceneId && sceneId.length > 0 ? sceneId : null;
+  return {
+    ...state,
+    assignments: state.assignments.map((item) =>
+      item.patternId === patternId && item.projectId === projectId
+        ? {
+            ...item,
+            sceneId: nextSceneId,
+            sceneAssignedAt: nextSceneId ? new Date().toISOString() : null,
+          }
+        : item,
+    ),
   };
 }
 
