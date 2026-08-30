@@ -1,0 +1,66 @@
+name: Wedding Palmier Timeline Dashboard CI
+
+on:
+  pull_request:
+    paths:
+      - 'motion-studio/scripts/check-wedding-palmier-typography-timeline-export-receipt.mts'
+      - 'motion-studio/scripts/verify-wedding-palmier-typography-timeline-export.mts'
+      - 'motion-studio/scripts/generate-wedding-project-remotion-stage-status-dashboard.mts'
+      - 'movie-dashboard/src/generated/weddingProjectRemotionStageStatus.ts'
+      - 'movie-dashboard/src/components/WeddingProjectRemotionStageStatusCard.tsx'
+      - 'movie-dashboard/src/data/weddingMovieProductionCriticalPathRuntimeSnapshot.ts'
+      - 'movie-dashboard/scripts/verify-wedding-movie-production-critical-path-runtime-snapshot.mjs'
+      - '.github/workflows/wedding-palmier-timeline-dashboard-ci.yml'
+  workflow_dispatch:
+
+jobs:
+  dashboard-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install Motion Studio dependencies
+        working-directory: motion-studio
+        run: pnpm install --frozen-lockfile
+
+      - name: Generated Palmier timeline status matches read-only checker
+        working-directory: motion-studio
+        run: node --no-warnings scripts/generate-wedding-project-remotion-stage-status-dashboard.mts --check
+
+      - name: Fresh clone stays MISSING and evidence-safe
+        working-directory: motion-studio
+        run: |
+          node --no-warnings scripts/check-wedding-palmier-typography-timeline-export-receipt.mts --movie=opening --json > /tmp/palmier.json
+          node - <<'NODE'
+          const fs = require('fs');
+          const report = JSON.parse(fs.readFileSync('/tmp/palmier.json', 'utf8'));
+          if (report.state !== 'MISSING') throw new Error(`expected MISSING, got ${report.state}`);
+          if (report.next.kind !== 'VERIFY_REAL_PALMIER_FCPXML') throw new Error('missing receipt must route to real FCPXML verification');
+          if (report.evidenceBoundary.palmierGuiActualPerformedByThisCheck !== false) throw new Error('checker must not claim Palmier GUI Actual');
+          if (report.evidenceBoundary.productionReadyPromotedByThisCheck !== false) throw new Error('checker must not promote productionReady');
+          NODE
+
+      - name: Motion Zukan exposes Palmier receipt state and recovery command
+        run: |
+          grep -q 'data-palmier-timeline-export-status' movie-dashboard/src/components/WeddingProjectRemotionStageStatusCard.tsx
+          grep -q 'Palmier real timeline / FCPXML receipt' movie-dashboard/src/components/WeddingProjectRemotionStageStatusCard.tsx
+          grep -q 'timeline.next.command' movie-dashboard/src/components/WeddingProjectRemotionStageStatusCard.tsx
+          grep -q 'Palmier GUI Actual' movie-dashboard/src/components/WeddingProjectRemotionStageStatusCard.tsx
+          ! grep -q 'palmierGuiActual=PASS' movie-dashboard/src/components/WeddingProjectRemotionStageStatusCard.tsx
+
+      - name: Runtime Critical Path binds the same Palmier authority
+        working-directory: movie-dashboard
+        run: node scripts/verify-wedding-movie-production-critical-path-runtime-snapshot.mjs
+
+      - name: Build Movie Dashboard
+        working-directory: movie-dashboard
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm build
