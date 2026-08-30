@@ -43,6 +43,8 @@ const startGateStateClass = (state: string) => {
   return "text-navy-500 dark:text-navy-300";
 };
 
+const shortSha = (value: string | null) => value ? `${value.slice(0, 10)}…` : "—";
+
 function BlockerRecoveryAction({action}: {action: MovieProductionBlockerRecoveryAction}) {
   if (action.kind === "ROUTE" && action.route) {
     return (
@@ -79,24 +81,18 @@ function CriticalPathActionTargetView({target, compact = false}: {target: Critic
         {target.label} →
       </Link>
       {target.artifactPath ? (
-        <code className="mt-1 block max-w-full overflow-x-auto whitespace-nowrap text-[8px] leading-4 text-navy-400">
-          artifact: {target.artifactPath}
-        </code>
+        <code className="mt-1 block max-w-full overflow-x-auto whitespace-nowrap text-[8px] leading-4 text-navy-400">artifact: {target.artifactPath}</code>
       ) : null}
       {target.command ? (
         <div className="mt-1">
           <div className="text-[7px] font-semibold uppercase tracking-wide text-navy-400">1. save / inspect</div>
-          <code className="block max-w-full overflow-x-auto whitespace-nowrap border-l-2 border-amber-300 pl-2 text-[8px] leading-4 text-navy-500 dark:text-navy-300">
-            {target.command}
-          </code>
+          <code className="block max-w-full overflow-x-auto whitespace-nowrap border-l-2 border-amber-300 pl-2 text-[8px] leading-4 text-navy-500 dark:text-navy-300">{target.command}</code>
         </div>
       ) : null}
       {target.strictCommand ? (
         <div className="mt-1">
           <div className="text-[7px] font-semibold uppercase tracking-wide text-red-400">2. strict GUI-start gate</div>
-          <code className="block max-w-full overflow-x-auto whitespace-nowrap border-l-2 border-red-300 pl-2 text-[8px] leading-4 text-navy-500 dark:text-navy-300">
-            {target.strictCommand}
-          </code>
+          <code className="block max-w-full overflow-x-auto whitespace-nowrap border-l-2 border-red-300 pl-2 text-[8px] leading-4 text-navy-500 dark:text-navy-300">{target.strictCommand}</code>
         </div>
       ) : null}
     </div>
@@ -111,15 +107,13 @@ export function WeddingMovieProductionCriticalPathCard({projectId}: {projectId: 
     getWeddingDavinciGuiActualStartGateAuditSnapshot,
     getWeddingDavinciGuiActualStartGateAuditSnapshot,
   );
-  const runtimeJson = useMemo(
-    () => buildWeddingMovieProductionCriticalPathRuntimeSnapshotJson(startGateAudits),
-    [startGateAudits],
-  );
+  const runtimeJson = useMemo(() => buildWeddingMovieProductionCriticalPathRuntimeSnapshotJson(startGateAudits), [startGateAudits]);
   if (projectId !== "opening" && projectId !== "profile") return null;
 
   const project = report.projects[projectId];
   const current = project.currentCriticalStage;
   const startGateAudit = startGateAudits[projectId];
+  const projectRemotionIdentity = startGateAudit.project.projectRemotionIdentityPreflight;
   const startGateNeedsRegeneration = startGateAudit.state === "STALE" || startGateAudit.state === "INVALID";
   const startGateAllowsHumanGui = startGateAudit.state === "GUI_ACTUAL_ALLOWED" && startGateAudit.guiActualStartAllowed;
 
@@ -128,34 +122,22 @@ export function WeddingMovieProductionCriticalPathCard({projectId}: {projectId: 
       <div className="flex flex-wrap items-start justify-between gap-2">
         <div>
           <p className="text-[9px] tracking-[0.16em] font-semibold text-amber-700 dark:text-amber-300">NOW / PRODUCTION CRITICAL PATH</p>
-          <p className="mt-1 text-[11px] font-semibold text-navy-800 dark:text-sand-100">
-            {current ? `${stageLabels[current.name] ?? current.name} / ${current.state}` : "All canonical stages PASS"}
-          </p>
+          <p className="mt-1 text-[11px] font-semibold text-navy-800 dark:text-sand-100">{current ? `${stageLabels[current.name] ?? current.name} / ${current.state}` : "All canonical stages PASS"}</p>
           <p className="mt-1 text-[8px] text-navy-500 dark:text-navy-300">{current?.detail ?? "No remaining canonical production blocker."}</p>
           {current?.path ? <code className="mt-1 block break-all text-[8px] text-navy-400">{current.path}</code> : null}
           {current?.blockerCodes.length ? (
             <div className="mt-2">
               <div className="mb-1 text-[8px] text-navy-400">evidence: {blockerProvenanceLabels[current.blockerProvenance] ?? current.blockerProvenance}</div>
               <div className="flex flex-wrap gap-1">
-                {current.blockerCodes.map((code) => (
-                  <code key={code} className="border border-red-200 dark:border-red-900 px-1.5 py-0.5 text-[8px] text-red-700 dark:text-red-300">{code}</code>
-                ))}
+                {current.blockerCodes.map((code) => <code key={code} className="border border-red-200 dark:border-red-900 px-1.5 py-0.5 text-[8px] text-red-700 dark:text-red-300">{code}</code>)}
               </div>
-              {current.blockerActions.length > 0 ? (
-                <div className="mt-1.5 flex flex-wrap gap-1 text-[8px]">
-                  {current.blockerActions.map((action) => <BlockerRecoveryAction key={action.id} action={action} />)}
-                </div>
-              ) : null}
+              {current.blockerActions.length > 0 ? <div className="mt-1.5 flex flex-wrap gap-1 text-[8px]">{current.blockerActions.map((action) => <BlockerRecoveryAction key={action.id} action={action} />)}</div> : null}
             </div>
           ) : null}
         </div>
         <div className="flex flex-wrap gap-1.5">
-          <button type="button" onClick={() => downloadText(stableJson, "wedding-movie-production-critical-path.json")} className="border border-sand-300 dark:border-navy-600 px-2.5 py-1.5 text-[9px] font-semibold text-navy-600 dark:text-sand-200">
-            Stable pathを書き出す
-          </button>
-          <button type="button" onClick={() => downloadText(runtimeJson, "wedding-movie-production-critical-path-runtime.json")} className="border border-amber-300 dark:border-amber-700 px-2.5 py-1.5 text-[9px] font-semibold text-amber-700 dark:text-amber-300">
-            Runtime snapshotを書き出す
-          </button>
+          <button type="button" onClick={() => downloadText(stableJson, "wedding-movie-production-critical-path.json")} className="border border-sand-300 dark:border-navy-600 px-2.5 py-1.5 text-[9px] font-semibold text-navy-600 dark:text-sand-200">Stable pathを書き出す</button>
+          <button type="button" onClick={() => downloadText(runtimeJson, "wedding-movie-production-critical-path-runtime.json")} className="border border-amber-300 dark:border-amber-700 px-2.5 py-1.5 text-[9px] font-semibold text-amber-700 dark:text-amber-300">Runtime snapshotを書き出す</button>
         </div>
       </div>
 
@@ -167,9 +149,17 @@ export function WeddingMovieProductionCriticalPathCard({projectId}: {projectId: 
         <div className="mt-1 grid gap-x-3 gap-y-0.5 sm:grid-cols-2">
           <span>canonical loaded={startGateAudit.canonicalGateLoaded ? "YES" : "NO"}</span>
           <span>live Project Motion match={startGateAudit.liveProjectMotionMatch ? "YES" : "NO"}</span>
+          <span>live Remotion identity match={startGateAudit.liveProjectRemotionIdentityMatch ? "YES" : "NO"}</span>
+          <span>Remotion identity={projectRemotionIdentity.state ?? "—"}</span>
           <span>GUI start={startGateAllowsHumanGui ? "ALLOWED / HUMAN ONLY" : "BLOCKED"}</span>
           <span>next={startGateAudit.nextAction.kind}</span>
         </div>
+        <div className="mt-1 grid gap-x-3 gap-y-0.5 sm:grid-cols-3">
+          <span>receipt={shortSha(projectRemotionIdentity.receiptSha256)}</span>
+          <span>Resolve identity={shortSha(projectRemotionIdentity.resolveSidecarSha256)}</span>
+          <span>source Batch={shortSha(projectRemotionIdentity.sourceBatchSha256)}</span>
+        </div>
+        {projectRemotionIdentity.command ? <code className="mt-1 block max-w-full overflow-x-auto whitespace-nowrap text-violet-600 dark:text-violet-300">Remotion verifier: cd motion-studio &amp;&amp; {projectRemotionIdentity.command}</code> : null}
         <code className="mt-1 block max-w-full overflow-x-auto whitespace-nowrap text-navy-400">artifact: {startGateAudit.canonicalArtifactPath}</code>
         {startGateNeedsRegeneration ? (
           <div className="mt-2 border-l-2 border-rose-400 pl-2 text-rose-700 dark:text-rose-300">
@@ -178,11 +168,7 @@ export function WeddingMovieProductionCriticalPathCard({projectId}: {projectId: 
             {startGateAudit.nextAction.command ? <code className="mt-1 block max-w-full overflow-x-auto whitespace-nowrap">{startGateAudit.nextAction.command}</code> : null}
           </div>
         ) : null}
-        {startGateAllowsHumanGui ? (
-          <p className="mt-2 border-l-2 border-amber-400 pl-2 font-semibold text-amber-800 dark:text-amber-300">
-            HUMAN / MAC GUI — canonical gateが開始を許可しています。これは実行済み/PASSではありません。
-          </p>
-        ) : null}
+        {startGateAllowsHumanGui ? <p className="mt-2 border-l-2 border-amber-400 pl-2 font-semibold text-amber-800 dark:text-amber-300">HUMAN / MAC GUI — canonical gateが開始を許可しています。これは実行済み/PASSではありません。</p> : null}
         {!startGateAudit.canonicalGateLoaded && !startGateNeedsRegeneration ? (
           <div className="mt-2 border-l-2 border-violet-300 pl-2">
             <p>Start Gate artifactを生成・読み込むまで、このlive authorityはNOT_RUNです。</p>
@@ -212,13 +198,7 @@ export function WeddingMovieProductionCriticalPathCard({projectId}: {projectId: 
           <div className="border border-amber-200 dark:border-amber-800 p-2 text-[8px] leading-4 text-navy-500 dark:text-navy-300">
             <p className="font-semibold text-amber-700 dark:text-amber-300">今やること</p>
             {current.recovery.length > 0 ? current.recovery.map((action, index) => <div key={`${index}-${action}`}>{index + 1}. <code>{action}</code></div>) : project.nextActions.map((action, index) => <div key={`${index}-${action}`}>{index + 1}. <code>{action}</code></div>)}
-            {current.actionTargets.length > 0 ? (
-              <div className="mt-2 grid gap-1.5">
-                {current.actionTargets.map((target) => (
-                  <CriticalPathActionTargetView key={`${target.route}-${target.label}`} target={target} />
-                ))}
-              </div>
-            ) : null}
+            {current.actionTargets.length > 0 ? <div className="mt-2 grid gap-1.5">{current.actionTargets.map((target) => <CriticalPathActionTargetView key={`${target.route}-${target.label}`} target={target} />)}</div> : null}
           </div>
           <div className="border border-sand-200 dark:border-navy-700 p-2 text-[8px] leading-4 text-navy-500 dark:text-navy-300">
             <p className="font-semibold">この後に解放される工程</p>
@@ -231,13 +211,7 @@ export function WeddingMovieProductionCriticalPathCard({projectId}: {projectId: 
                   {stage.blockerCodes.length > 0 ? <div>BLOCK [{blockerProvenanceLabels[stage.blockerProvenance] ?? stage.blockerProvenance}]: {stage.blockerCodes.join(" / ")}</div> : null}
                   {stage.blockerActions.length > 0 ? <div className="mt-1 flex flex-wrap gap-1">{stage.blockerActions.map((action) => <BlockerRecoveryAction key={`${stage.name}-${action.id}`} action={action} />)}</div> : null}
                   {stage.recovery.length > 0 ? <div>recovery: {stage.recovery.join(" → ")}</div> : null}
-                  {stage.actionTargets.length > 0 ? (
-                    <div className="mt-1 grid gap-1">
-                      {stage.actionTargets.map((target) => (
-                        <CriticalPathActionTargetView key={`${stage.name}-${target.route}-${target.label}`} target={target} compact />
-                      ))}
-                    </div>
-                  ) : null}
+                  {stage.actionTargets.length > 0 ? <div className="mt-1 grid gap-1">{stage.actionTargets.map((target) => <CriticalPathActionTargetView key={`${stage.name}-${target.route}-${target.label}`} target={target} compact />)}</div> : null}
                 </div>
               )) : <div>none</div>}
             </div>
