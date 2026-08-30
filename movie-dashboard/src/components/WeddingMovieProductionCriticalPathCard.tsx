@@ -48,6 +48,8 @@ type CriticalPathActionTarget = {
   route: string;
   purpose: string;
   command?: string;
+  strictCommand?: string;
+  artifactPath?: string;
 };
 
 function CriticalPathActionTargetView({target, compact = false}: {target: CriticalPathActionTarget; compact?: boolean}) {
@@ -62,10 +64,26 @@ function CriticalPathActionTargetView({target, compact = false}: {target: Critic
       >
         {target.label} →
       </Link>
-      {target.command ? (
-        <code className="mt-1 block max-w-full overflow-x-auto whitespace-nowrap border-l-2 border-amber-300 pl-2 text-[8px] leading-4 text-navy-500 dark:text-navy-300">
-          cd motion-studio &amp;&amp; {target.command}
+      {target.artifactPath ? (
+        <code className="mt-1 block max-w-full overflow-x-auto whitespace-nowrap text-[8px] leading-4 text-navy-400">
+          artifact: {target.artifactPath}
         </code>
+      ) : null}
+      {target.command ? (
+        <div className="mt-1">
+          <div className="text-[7px] font-semibold uppercase tracking-wide text-navy-400">1. save / inspect</div>
+          <code className="block max-w-full overflow-x-auto whitespace-nowrap border-l-2 border-amber-300 pl-2 text-[8px] leading-4 text-navy-500 dark:text-navy-300">
+            {target.command}
+          </code>
+        </div>
+      ) : null}
+      {target.strictCommand ? (
+        <div className="mt-1">
+          <div className="text-[7px] font-semibold uppercase tracking-wide text-red-400">2. strict GUI-start gate</div>
+          <code className="block max-w-full overflow-x-auto whitespace-nowrap border-l-2 border-red-300 pl-2 text-[8px] leading-4 text-navy-500 dark:text-navy-300">
+            {target.strictCommand}
+          </code>
+        </div>
       ) : null}
     </div>
   );
