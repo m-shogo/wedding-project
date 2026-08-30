@@ -6,8 +6,11 @@ on:
       - "movie-dashboard/src/data/openingProductionStatus.generated.ts"
       - "movie-dashboard/src/data/profileAssemblyReviewReadiness.generated.ts"
       - "movie-dashboard/src/lib/weddingProductionActions.ts"
+      - "movie-dashboard/src/lib/weddingProductionRecovery.ts"
+      - "movie-dashboard/src/lib/davinciWeddingProductionRecovery.ts"
       - "movie-dashboard/src/components/WeddingProductionReviewMatrixPanel.tsx"
       - "movie-dashboard/src/components/WeddingProductionActionLauncherPanel.tsx"
+      - "movie-dashboard/scripts/verify-production-action-recovery-authority-contracts.mjs"
       - "movie-dashboard/src/pages/MotionZukanWorkspaceHandoff.tsx"
       - ".github/workflows/wedding-production-review-matrix-ci.yml"
   push:
@@ -16,8 +19,11 @@ on:
       - "movie-dashboard/src/data/openingProductionStatus.generated.ts"
       - "movie-dashboard/src/data/profileAssemblyReviewReadiness.generated.ts"
       - "movie-dashboard/src/lib/weddingProductionActions.ts"
+      - "movie-dashboard/src/lib/weddingProductionRecovery.ts"
+      - "movie-dashboard/src/lib/davinciWeddingProductionRecovery.ts"
       - "movie-dashboard/src/components/WeddingProductionReviewMatrixPanel.tsx"
       - "movie-dashboard/src/components/WeddingProductionActionLauncherPanel.tsx"
+      - "movie-dashboard/scripts/verify-production-action-recovery-authority-contracts.mjs"
       - "movie-dashboard/src/pages/MotionZukanWorkspaceHandoff.tsx"
       - ".github/workflows/wedding-production-review-matrix-ci.yml"
 
@@ -65,5 +71,7 @@ jobs:
           grep -q 'Mac DaVinci GUI Actual = NOT_RUN' src/components/WeddingProductionActionLauncherPanel.tsx
           grep -q '<WeddingProductionReviewMatrixPanel />' src/pages/MotionZukanWorkspaceHandoff.tsx
           grep -q '<WeddingProductionActionLauncherPanel />' src/pages/MotionZukanWorkspaceHandoff.tsx
+      - name: Canonical recovery authority is wired into launcher
+        run: node scripts/verify-production-action-recovery-authority-contracts.mjs
       - name: Typecheck and build Movie Dashboard
         run: pnpm build
