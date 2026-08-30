@@ -1,75 +1,8 @@
 import { useState } from "react";
-import { profileAssemblyReviewReadiness as readiness } from "../data/profileAssemblyReviewReadiness.generated";
-
-type ActionKind = "INPUT_REQUIRED" | "COMMAND" | "HUMAN" | "READY";
-
-type NextAction = {
-  kind: ActionKind;
-  phase: string;
-  title: string;
-  detail: string;
-  commands: string[];
-};
-
-function deriveNextAction(): NextAction {
-  if (!Boolean(readiness.finalRenderEligible)) {
-    return {
-      kind: "INPUT_REQUIRED",
-      phase: "PRODUCTION INPUTS",
-      title: "まず17素材とrights-cleared BGMを投入",
-      detail: "このHuman QA surfaceからplaceholder pathを実行しない。上のProduction Input Plan Builderで実パスを指定し、receipt verify → final prepareまで完了する。",
-      commands: [],
-    };
-  }
-  if (String(readiness.structureReview.state) !== "PASS") {
-    return {
-      kind: "COMMAND",
-      phase: "STRUCTURE REVIEW",
-      title: "5章structure previewを作りHuman review",
-      detail: "chapter order / visual hierarchy / pacing / media roleを確認する。ここではreal media・BGM・content accuracy・GUI Actualを承認しない。",
-      commands: [
-        "pnpm render:profile-v1:structure-preview",
-        "pnpm profile:structure-review:init",
-        "pnpm profile:structure-review:strict",
-      ],
-    };
-  }
-  if (String(readiness.realMediaReview.state) !== "PASS") {
-    return {
-      kind: "COMMAND",
-      phase: "REAL-MEDIA REVIEW",
-      title: "17素材入りpreviewをrenderしてHuman QA",
-      detail: "crop / focus / color / emotional fit / contentと5章flowをHuman確認する。renderしただけではreview PASSにならない。",
-      commands: [
-        "pnpm render:profile-v1:real-media-preview",
-        "pnpm profile:real-media-review:init",
-        "pnpm profile:real-media-review:strict",
-      ],
-    };
-  }
-  if (String(readiness.audioReview.state) !== "PASS") {
-    return {
-      kind: "HUMAN",
-      phase: "AUDIO REVIEW",
-      title: "BGM入りpreviewを最後まで人間が再生",
-      detail: "audibility / balance / start integrity / end integrity / picture syncを実耳で確認し、evidenceを更新してstrict checkする。",
-      commands: [
-        "node --no-warnings scripts/profile-v1-audio-listening-review.mts --init",
-        "node --no-warnings scripts/profile-v1-audio-listening-review.mts --strict",
-      ],
-    };
-  }
-  return {
-    kind: "READY",
-    phase: "ASSEMBLY",
-    title: "Profile assembly input + Human QA ready",
-    detail: "次はfinal render → technical QA → Human final-render review。Mac DaVinci Actualはまだ別工程。",
-    commands: ["pnpm render:profile-v1", "pnpm check:profile-render"],
-  };
-}
+import { deriveProfileNextAction } from "../lib/weddingProductionActions";
 
 export function ProfileReviewNextActionPanel() {
-  const action = deriveNextAction();
+  const action = deriveProfileNextAction();
   const [copied, setCopied] = useState<string | null>(null);
 
   async function copy(command: string) {
@@ -101,7 +34,7 @@ export function ProfileReviewNextActionPanel() {
           <div className="mt-4 border border-amber-300 bg-amber-50/40 p-3 text-xs leading-5 text-amber-800 dark:border-amber-800 dark:bg-amber-950/20 dark:text-amber-200">
             Production Input Plan Builderへ実media path / optional BGM pathを入力してください。入力前の後続Human QA commandは実行対象にしません。
           </div>
-        ) : (
+        ) : action.commands.length > 0 ? (
           <div className="mt-4 grid gap-2 lg:grid-cols-3">
             {action.commands.map((command) => (
               <button key={command} type="button" onClick={() => copy(command)} className="border border-sand-300 px-3 py-3 text-left font-mono text-[10px] leading-5 break-all dark:border-navy-600">
@@ -109,9 +42,13 @@ export function ProfileReviewNextActionPanel() {
               </button>
             ))}
           </div>
+        ) : (
+          <div className="mt-4 border border-emerald-300 bg-emerald-50/40 p-3 text-xs leading-5 text-emerald-800 dark:border-emerald-800 dark:bg-emerald-950/20 dark:text-emerald-200">
+            Profile review chainはcurrentです。次はcanonical final render / handoff authorityへ進みます。
+          </div>
         )}
 
-        <p className="mt-4 text-[10px] leading-5 text-navy-400">COMMAND_COPIED != COMMAND_EXECUTED / HUMAN_QA_REQUIRED != HUMAN_QA_PASS / Remotion Studio GUI Actual = NOT_RUN / Mac DaVinci GUI Actual = NOT_RUN</p>
+        <p className="mt-4 text-[10px] leading-5 text-navy-400">SHARED_ACTION_AUTHORITY = weddingProductionActions / COMMAND_COPIED != COMMAND_EXECUTED / HUMAN_QA_REQUIRED != HUMAN_QA_PASS / Remotion Studio GUI Actual = NOT_RUN / Mac DaVinci GUI Actual = NOT_RUN</p>
       </div>
     </section>
   );

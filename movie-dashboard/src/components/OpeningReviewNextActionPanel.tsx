@@ -1,86 +1,8 @@
 import { useState } from "react";
-import { openingProductionStatus as status } from "../data/openingProductionStatus.generated";
-
-type ActionKind = "INPUT_REQUIRED" | "COMMAND" | "HUMAN" | "READY";
-
-type NextAction = {
-  kind: ActionKind;
-  phase: string;
-  title: string;
-  detail: string;
-  commands: string[];
-};
-
-function deriveNextAction(): NextAction {
-  if (!Boolean(status.readiness.finalRenderEligible)) {
-    return {
-      kind: "INPUT_REQUIRED",
-      phase: "PRODUCTION INPUTS",
-      title: "まず11写真とrights-cleared BGMを投入",
-      detail: "上のProduction Input Plan Builderで実パスを指定し、media/BGM receipt verifyとfinal prepareまで完了する。placeholder pathの後続commandは実行対象にしない。",
-      commands: [],
-    };
-  }
-  if (String(status.stages.cropReview.state) !== "PASS") {
-    return {
-      kind: "HUMAN",
-      phase: "CROP / FOCUS REVIEW",
-      title: "11写真のcrop / focus / color / motionをHuman確認",
-      detail: "current photo SHA + effective focus/fitへevidenceを束縛する。initだけではPASSにならず、Human記録後のstrict checkが必要。",
-      commands: [
-        "node --no-warnings scripts/opening-v1-crop-review-evidence.mts --init",
-        "node --no-warnings scripts/opening-v1-crop-review-evidence.mts --strict",
-      ],
-    };
-  }
-  if (String(status.stages.previewRender.state) !== "PASS") {
-    return {
-      kind: "COMMAND",
-      phase: "REAL-MEDIA PREVIEW",
-      title: "crop承認済みの実素材previewをrender",
-      detail: "preview MP4を作るだけの工程。render完了をHuman preview review PASSやGUI Actualと同一視しない。",
-      commands: ["pnpm render:opening-v1:preview"],
-    };
-  }
-  if (String(status.stages.previewSourceBinding.state) !== "PASS" || String(status.stages.previewReview.state) !== "PASS") {
-    return {
-      kind: "HUMAN",
-      phase: "SOURCE-BOUND PREVIEW REVIEW",
-      title: "current sourceへpreviewを束縛してHuman QA",
-      detail: "source変更後の古いpreview/evidenceはCURRENT扱いしない。initでcurrent render sourceへ束縛し、映像をHuman確認してstrict checkする。",
-      commands: [
-        "pnpm opening:preview-review:init",
-        "pnpm opening:preview-review:strict",
-      ],
-    };
-  }
-  if (String(status.stages.audioListeningReview.state) !== "PASS") {
-    return {
-      kind: "HUMAN",
-      phase: "AUDIO LISTENING REVIEW",
-      title: "rights-cleared BGM入りpreviewを最後まで実耳で確認",
-      detail: "audibility / balance / start integrity / end integrity / picture syncをHuman確認し、preview/BGM SHAへevidenceを束縛する。",
-      commands: [
-        "node --no-warnings scripts/opening-v1-audio-listening-review.mts --init",
-        "node --no-warnings scripts/opening-v1-audio-listening-review.mts --strict",
-      ],
-    };
-  }
-  return {
-    kind: "READY",
-    phase: "FINAL RENDER",
-    title: "Opening final renderへ進める",
-    detail: "media + crop + source-bound preview + audio listeningがcurrent。次はfinal render → technical QA → Human final-render review。Mac DaVinci Actualは別工程。",
-    commands: [
-      "pnpm render:opening-v1",
-      "pnpm opening:final-render-review:init",
-      "pnpm opening:final-render-review:strict",
-    ],
-  };
-}
+import { deriveOpeningNextAction } from "../lib/weddingProductionActions";
 
 export function OpeningReviewNextActionPanel() {
-  const action = deriveNextAction();
+  const action = deriveOpeningNextAction();
   const [copied, setCopied] = useState<string | null>(null);
 
   async function copy(command: string) {
@@ -112,7 +34,7 @@ export function OpeningReviewNextActionPanel() {
           <div className="mt-4 border border-amber-300 bg-amber-50/40 p-3 text-xs leading-5 text-amber-800 dark:border-amber-800 dark:bg-amber-950/20 dark:text-amber-200">
             Production Input Plan Builderへ実media path / optional BGM pathを入力してください。入力前はcrop以降のHuman QAを開始しません。
           </div>
-        ) : (
+        ) : action.commands.length > 0 ? (
           <div className="mt-4 grid gap-2 lg:grid-cols-3">
             {action.commands.map((command) => (
               <button key={command} type="button" onClick={() => copy(command)} className="border border-sand-300 px-3 py-3 text-left font-mono text-[10px] leading-5 break-all dark:border-navy-600">
@@ -120,9 +42,13 @@ export function OpeningReviewNextActionPanel() {
               </button>
             ))}
           </div>
+        ) : (
+          <div className="mt-4 border border-emerald-300 bg-emerald-50/40 p-3 text-xs leading-5 text-emerald-800 dark:border-emerald-800 dark:bg-emerald-950/20 dark:text-emerald-200">
+            Opening review chainはcurrentです。次はcanonical Wedding handoff / recovery authorityへ進みます。
+          </div>
         )}
 
-        <p className="mt-4 text-[10px] leading-5 text-navy-400">COMMAND_COPIED != COMMAND_EXECUTED / HUMAN_QA_REQUIRED != HUMAN_QA_PASS / PREVIEW_RENDERED != PREVIEW_REVIEW_PASS / Remotion Studio GUI Actual = NOT_RUN / Mac DaVinci GUI Actual = NOT_RUN</p>
+        <p className="mt-4 text-[10px] leading-5 text-navy-400">SHARED_ACTION_AUTHORITY = weddingProductionActions / COMMAND_COPIED != COMMAND_EXECUTED / HUMAN_QA_REQUIRED != HUMAN_QA_PASS / PREVIEW_RENDERED != PREVIEW_REVIEW_PASS / Remotion Studio GUI Actual = NOT_RUN / Mac DaVinci GUI Actual = NOT_RUN</p>
       </div>
     </section>
   );
