@@ -7,10 +7,14 @@ on:
       - "movie-dashboard/src/data/weddingProjectMotionAssignments.ts"
       - "movie-dashboard/src/data/motionZukanWorkspaceHandoff.ts"
       - "movie-dashboard/src/data/visualSceneComposer.ts"
+      - "movie-dashboard/src/data/weddingSceneMotionProductionHandoff.ts"
       - "movie-dashboard/src/components/WeddingProductionMotionUsagePanel.tsx"
+      - "movie-dashboard/src/components/WeddingSceneMotionProductionHandoffCard.tsx"
+      - "movie-dashboard/src/components/MaskRevealSceneHandoffCard.tsx"
       - "movie-dashboard/src/pages/MotionZukanWorkspaceHandoff.tsx"
       - "movie-dashboard/src/data/visualMotionLibrary.ts"
       - "movie-dashboard/scripts/verify-production-motion-usage-bridge-contracts.mjs"
+      - "movie-dashboard/scripts/verify-scene-motion-production-handoff-contracts.mjs"
       - ".github/workflows/wedding-production-motion-usage-ci.yml"
   push:
     branches: [main]
@@ -19,10 +23,14 @@ on:
       - "movie-dashboard/src/data/weddingProjectMotionAssignments.ts"
       - "movie-dashboard/src/data/motionZukanWorkspaceHandoff.ts"
       - "movie-dashboard/src/data/visualSceneComposer.ts"
+      - "movie-dashboard/src/data/weddingSceneMotionProductionHandoff.ts"
       - "movie-dashboard/src/components/WeddingProductionMotionUsagePanel.tsx"
+      - "movie-dashboard/src/components/WeddingSceneMotionProductionHandoffCard.tsx"
+      - "movie-dashboard/src/components/MaskRevealSceneHandoffCard.tsx"
       - "movie-dashboard/src/pages/MotionZukanWorkspaceHandoff.tsx"
       - "movie-dashboard/src/data/visualMotionLibrary.ts"
       - "movie-dashboard/scripts/verify-production-motion-usage-bridge-contracts.mjs"
+      - "movie-dashboard/scripts/verify-scene-motion-production-handoff-contracts.mjs"
       - ".github/workflows/wedding-production-motion-usage-ci.yml"
 
 jobs:
@@ -44,5 +52,7 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - name: Verify production usage authority boundaries
         run: node scripts/verify-production-motion-usage-bridge-contracts.mjs
+      - name: Verify scene-bound Palmier DaVinci motion handoff
+        run: node scripts/verify-scene-motion-production-handoff-contracts.mjs
       - name: Typecheck and build dashboard
         run: pnpm build
