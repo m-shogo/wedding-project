@@ -45,7 +45,8 @@ The new page grammar is an editorial poster rather than a UI/card layout:
 - names form the third read directly below the image;
 - message/date occupy a physical sand-colored lower field;
 - deep-ink edge, coral register and a thin sand photo foot create print boundaries without badges, rounded cards, fake travel data or stock airplane/passport decoration;
-- an initially added decorative `01 / YOKOHAMA` side index was judged meaningless/redundant and removed during the same run; only a non-semantic balance rule remains.
+- an initially added decorative `01 / YOKOHAMA` side index was judged meaningless/redundant and removed during the same run;
+- the later non-semantic lower-right balance rule was also removed on 2026-08-31 after fresh screenshot review, leaving only decorative fields with a clear edge/register/compositional function.
 
 Compared with V4B, V4C removes the large inactive lower whitespace and gives photography substantially more visual authority while preserving native variable copy.
 
@@ -68,7 +69,7 @@ Immediately before authoring V4C, the current supported Figma raster-upload rout
 - no partial Figma mutation survived;
 - repeated retries were stopped and the run continued with safe native Figma work.
 
-This remains a transient execution-network blocker, not a missing-photo or missing-node blocker.
+The same exact Drive source was fetched again on 2026-08-31 (`1QWhFJPWHhwF6tfShyYzWULMGc8YDm55P`, `5,266,253 bytes`) and one bounded upload attempt was made directly against V4C `61:7`; URL issuance succeeded but POST again failed at DNS resolution for `mcp.figma.com`. No partial image fill survived. This remains a transient execution-network blocker, not a missing-photo or missing-node blocker.
 
 ## Structural QA and repair
 
@@ -90,6 +91,14 @@ Final normal readback:
 - fixed-height visible text: `0`;
 - visible text outside root: `0`;
 - IMAGE fills: `0`.
+
+### Fresh V4C decoration audit — 2026-08-31
+
+A fresh live screenshot of `61:2` was reviewed against the current rejection rule for meaningless badges/stickers/micro-decoration. The remaining `61:18 / ART / LOWER RIGHT BALANCE RULE` had no factual, structural, crop, safe-area or production role; it existed only to fill whitespace. It was removed from V4C instead of being rationalized as premium decoration.
+
+Post-removal screenshot preserves the intended hierarchy (`hero → photo → names → message/date`) and does not introduce new filler. The replaceable photo geometry `61:7` remains exactly `720×440 px`; all five native text roles remain unchanged; no raster or SVG was introduced.
+
+This is a bounded visual-authority cleanup, not a claim of sellable completion. Real-photo rendering is still required before promotion.
 
 ## Long-name / long-message stress
 
