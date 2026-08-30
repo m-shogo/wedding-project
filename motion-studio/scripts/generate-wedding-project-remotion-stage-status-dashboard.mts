@@ -41,9 +41,7 @@ const runChecker = (movieId: MovieId): CheckerReport => {
     ['--no-warnings', join(motionStudioRoot, 'scripts/check-wedding-project-remotion-production-stage-status.mts'), `--movie=${movieId}`, '--json'],
     {cwd: motionStudioRoot, encoding: 'utf8'},
   );
-  if (result.status !== 0) {
-    throw new Error(`stage status checker failed for ${movieId}: ${result.stderr || result.stdout}`);
-  }
+  if (result.status !== 0) throw new Error(`stage status checker failed for ${movieId}: ${result.stderr || result.stdout}`);
   return JSON.parse(result.stdout) as CheckerReport;
 };
 
@@ -53,9 +51,7 @@ const runPalmierTimelineChecker = (movieId: MovieId): PalmierTimelineReport => {
     ['--no-warnings', join(motionStudioRoot, 'scripts/check-wedding-palmier-typography-timeline-export-receipt.mts'), `--movie=${movieId}`, '--json'],
     {cwd: motionStudioRoot, encoding: 'utf8'},
   );
-  if (result.status !== 0) {
-    throw new Error(`Palmier timeline receipt checker failed for ${movieId}: ${result.stderr || result.stdout}`);
-  }
+  if (result.status !== 0) throw new Error(`Palmier timeline receipt checker failed for ${movieId}: ${result.stderr || result.stdout}`);
   return JSON.parse(result.stdout) as PalmierTimelineReport;
 };
 
@@ -86,7 +82,7 @@ const normalize = (report: CheckerReport, palmierTimeline: PalmierTimelineReport
 });
 
 const snapshot = {
-  schemaVersion: 'wedding-project-remotion-stage-status-dashboard/v3',
+  schemaVersion: 'wedding-project-remotion-stage-status-dashboard/v2',
   authority: 'GENERATED_FROM_READ_ONLY_CANONICAL_STAGE_AND_PALMIER_TIMELINE_RECEIPT_CHECKERS',
   opening: normalize(runChecker('opening'), runPalmierTimelineChecker('opening')),
   profile: normalize(runChecker('profile'), runPalmierTimelineChecker('profile')),
