@@ -1,0 +1,42 @@
+name: Wedding Production Motion Usage CI
+
+on:
+  pull_request:
+    paths:
+      - "movie-dashboard/src/data/weddingProductionMotionUsage.ts"
+      - "movie-dashboard/src/components/WeddingProductionMotionUsagePanel.tsx"
+      - "movie-dashboard/src/pages/MotionZukanWorkspaceHandoff.tsx"
+      - "movie-dashboard/src/data/visualMotionLibrary.ts"
+      - "movie-dashboard/scripts/verify-production-motion-usage-bridge-contracts.mjs"
+      - ".github/workflows/wedding-production-motion-usage-ci.yml"
+  push:
+    branches: [main]
+    paths:
+      - "movie-dashboard/src/data/weddingProductionMotionUsage.ts"
+      - "movie-dashboard/src/components/WeddingProductionMotionUsagePanel.tsx"
+      - "movie-dashboard/src/pages/MotionZukanWorkspaceHandoff.tsx"
+      - "movie-dashboard/src/data/visualMotionLibrary.ts"
+      - "movie-dashboard/scripts/verify-production-motion-usage-bridge-contracts.mjs"
+      - ".github/workflows/wedding-production-motion-usage-ci.yml"
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: movie-dashboard
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: movie-dashboard/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - name: Verify production usage authority boundaries
+        run: node scripts/verify-production-motion-usage-bridge-contracts.mjs
+      - name: Typecheck and build dashboard
+        run: pnpm build
