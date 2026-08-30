@@ -12,6 +12,7 @@ on:
       - 'motion-studio/scripts/verify-wedding-production-handoff-provenance.mts'
       - 'motion-studio/src/motion-kit/engines.tsx'
       - 'movie-dashboard/src/data/remotionElementCandidates.ts'
+      - 'movie-dashboard/src/data/typographyProjectDeliveryBatch.ts'
       - '.github/workflows/wedding-project-remotion-production-prep-ci.yml'
   push:
     branches: [main]
@@ -25,6 +26,7 @@ on:
       - 'motion-studio/scripts/verify-wedding-production-handoff-provenance.mts'
       - 'motion-studio/src/motion-kit/engines.tsx'
       - 'movie-dashboard/src/data/remotionElementCandidates.ts'
+      - 'movie-dashboard/src/data/typographyProjectDeliveryBatch.ts'
       - '.github/workflows/wedding-project-remotion-production-prep-ci.yml'
   workflow_dispatch:
 
@@ -95,6 +97,7 @@ jobs:
           const report = JSON.parse(fs.readFileSync('/tmp/remotion-production-prep.json', 'utf8'));
           if (report.schemaVersion !== 'wedding-project-remotion-production-prep/v1') throw new Error('prep schema mismatch');
           if (report.state !== 'CURRENT' || report.phase !== 'identity') throw new Error('identity prep must be CURRENT');
+          if (report.batchInput.source !== 'CANONICAL_PATH') throw new Error('canonical prep source mismatch');
           if (report.steps.length !== 4 || report.steps.some((step) => step.state !== 'PASS')) throw new Error('all identity prep steps must pass');
           if (report.next.kind !== 'STAGE_ROLE_MANIFEST_AND_RUN_HANDOFF_PHASE') throw new Error('identity prep next action mismatch');
           if (report.evidenceBoundary.macRemotionStudioGuiActual !== 'NOT_RUN_UNLESS_HUMAN_EXECUTED') throw new Error('Studio Actual boundary changed');
@@ -104,6 +107,30 @@ jobs:
           if (receipt.state !== 'CURRENT') throw new Error('identity receipt must be CURRENT');
           if (receipt.macRemotionStudioGuiActualPerformedByThisVerification !== false) throw new Error('receipt must not promote Studio Actual');
           if (receipt.macDaVinciGuiActualPerformedByThisVerification !== false) throw new Error('receipt must not promote DaVinci Actual');
+          NODE
+
+      - name: Download-style absolute batch path with spaces is supported for identity prep
+        run: |
+          mkdir -p '/tmp/Motion Zukan Download'
+          cp movie-dashboard/out/typography-project-delivery/opening-typography-production-batch.json \
+            '/tmp/Motion Zukan Download/opening typography production batch.json'
+          cd motion-studio
+          node --no-warnings scripts/prepare-wedding-project-remotion-production-handoff.mts \
+            --movie=opening \
+            --phase=identity \
+            --batch='/tmp/Motion Zukan Download/opening typography production batch.json' \
+            --json > /tmp/external-batch-prep.json
+          node - <<'NODE'
+          const fs = require('fs');
+          const external = '/tmp/Motion Zukan Download/opening typography production batch.json';
+          const report = JSON.parse(fs.readFileSync('/tmp/external-batch-prep.json', 'utf8'));
+          if (report.state !== 'CURRENT') throw new Error('external-path identity prep must be CURRENT');
+          if (report.batchInput.source !== 'EXPLICIT_OPERATOR_PATH') throw new Error('external-path source must be explicit');
+          if (report.batchInput.absolutePath !== external) throw new Error('external absolute path drift');
+          if (!report.steps.find((step) => step.id === 'GENERATE_PROJECT_IDENTITY_RECEIPT')?.command.includes("'/tmp/Motion Zukan Download/opening typography production batch.json'")) throw new Error('display command must shell-quote path with spaces');
+          const receipt = JSON.parse(fs.readFileSync('../movie-dashboard/out/remotion-element-handoff/opening-project-remotion-identity-verification-receipt.json', 'utf8'));
+          if (receipt.sourceBatch.path !== external) throw new Error('receipt must bind the exact external batch path');
+          if (receipt.state !== 'CURRENT') throw new Error('external-path receipt must be CURRENT');
           NODE
 
       - name: Handoff phase requires the canonical Human-selected Role manifest
@@ -116,7 +143,6 @@ jobs:
             exit 1
           fi
           grep -q 'PROJECT_ROLE_HANDOFF_MANIFEST_MISSING_BEFORE_CANONICAL_HANDOFF' /tmp/missing-role.log
-          grep -q 'productionReadyPromotedByThisPrep=NO' /tmp/remotion-production-prep.json || true
 
       - name: Production prep must never synthesize GUI Actual PASS
         run: |

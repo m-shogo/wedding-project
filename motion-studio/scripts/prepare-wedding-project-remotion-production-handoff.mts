@@ -45,6 +45,16 @@ const batchPath = requestedBatch
   : canonicalBatchPath;
 
 const displayPath = (absolutePath: string) => relative(repoRoot, absolutePath).replaceAll('\\', '/');
+const shellQuote = (value: string) => /[\s'"$`\\]/.test(value)
+  ? `'${value.replaceAll("'", `'\\''`)}'`
+  : value;
+const formatCommandArg = (arg: string) => {
+  const separator = arg.indexOf('=');
+  if (separator > 0 && arg.startsWith('--')) {
+    return `${arg.slice(0, separator + 1)}${shellQuote(arg.slice(separator + 1))}`;
+  }
+  return shellQuote(arg);
+};
 const steps: StepResult[] = [];
 
 const fail = (code: string, detail?: string): never => {
@@ -53,7 +63,7 @@ const fail = (code: string, detail?: string): never => {
 };
 
 const run = (id: string, script: string, args: string[] = []) => {
-  const command = `node --no-warnings scripts/${script}${args.length ? ` ${args.join(' ')}` : ''}`;
+  const command = `node --no-warnings scripts/${script}${args.length ? ` ${args.map(formatCommandArg).join(' ')}` : ''}`;
   const result = spawnSync(process.execPath, ['--no-warnings', join(motionStudioRoot, 'scripts', script), ...args], {
     cwd: motionStudioRoot,
     encoding: 'utf8',
@@ -69,7 +79,7 @@ const run = (id: string, script: string, args: string[] = []) => {
 if (!existsSync(batchPath)) {
   fail(
     'TYPOGRAPHY_PROJECT_BATCH_MISSING_BEFORE_PRODUCTION_PREP',
-    `Export Motion Zukan Typography package and place it at ${displayPath(batchPath)}`,
+    `Export Motion Zukan Typography package and provide it via --batch or place it at ${displayPath(canonicalBatchPath)}`,
   );
 }
 
@@ -77,7 +87,7 @@ run('EXPORT_CURRENT_CATALOG_IDENTITY', 'export-wedding-remotion-element-handoff-
 run('CHECK_CURRENT_CATALOG_IDENTITY', 'check-wedding-remotion-element-handoff-identities.mts');
 run('GENERATE_PROJECT_IDENTITY_RECEIPT', 'verify-wedding-project-remotion-element-identities.mts', [
   `--movie=${movieId}`,
-  `--batch=${displayPath(batchPath).startsWith('motion-studio/') ? displayPath(batchPath).slice('motion-studio/'.length) : `../${displayPath(batchPath)}`}`,
+  `--batch=${batchPath}`,
 ]);
 run('CHECK_PROJECT_IDENTITY_RECEIPT', 'check-wedding-project-remotion-element-identity-receipt.mts', [`--movie=${movieId}`]);
 
@@ -101,6 +111,11 @@ const report = {
   movieId,
   phase,
   state: 'CURRENT',
+  batchInput: {
+    source: requestedBatch ? 'EXPLICIT_OPERATOR_PATH' : 'CANONICAL_PATH',
+    absolutePath: batchPath,
+    repoRelativePath: displayPath(batchPath),
+  },
   artifacts: {
     sourceBatch: displayPath(batchPath),
     canonicalBatch: displayPath(canonicalBatchPath),
@@ -129,6 +144,7 @@ const report = {
     'PRODUCTION_PREP_CURRENT != REMOTION_STUDIO_GUI_ACTUAL_PASS',
     'PRODUCTION_PREP_CURRENT != MAC_DAVINCI_GUI_ACTUAL_PASS',
     'IDENTITY_PHASE_CURRENT != CANONICAL_PRODUCTION_HANDOFF_CURRENT',
+    'EXPLICIT_BATCH_PATH_IS_ALLOWED_FOR_IDENTITY_PHASE_ONLY',
     'HANDOFF_PHASE_REQUIRES_CANONICAL_BATCH_AND_ROLE_MANIFEST',
     'PRODUCTION_PREP_MUST_NOT_SYNTHESIZE_HUMAN_EVIDENCE',
   ],
@@ -139,6 +155,7 @@ else {
   console.log(`projectRemotionProductionPrep=${report.state}`);
   console.log(`movieId=${movieId}`);
   console.log(`phase=${phase}`);
+  console.log(`batchInputSource=${report.batchInput.source}`);
   console.log(`identityReceipt=${report.artifacts.identityReceipt}`);
   console.log(`next=${report.next.kind}`);
   console.log('macRemotionStudioGuiActual=NOT_RUN_UNLESS_HUMAN_EXECUTED');
