@@ -26,6 +26,11 @@ for (const token of [
   "projectMotionPreflight",
   "buildWeddingDavinciActualSessionPlan",
   "liveProjectMotionMatch",
+  "canonicalArtifactPath",
+  "canonicalWeddingDavinciGuiActualStartGateArtifactPath",
+  "-davinci-gui-actual-start-gate.json",
+  "--output=${artifactPath}",
+  "--write",
   "GUI_START_GATE_PROJECT_MOTION_PREFLIGHT_MISSING",
   "GUI_START_GATE_PROJECT_MOTION_INVALID_NOT_BLOCKED",
   "GUI_START_GATE_PROJECT_MOTION_BLOCK_WITHOUT_INVALID_STATE",
@@ -68,6 +73,12 @@ for (const token of [
   "MAC DAVINCI GUI ACTUAL START GATE",
   "Session Plan CURRENT → Project Motion CURRENT → Evidence init → Human Mac GUI",
   "canonical gate JSONを読み込む",
+  "Canonical artifact",
+  "audit.canonicalArtifactPath",
+  "下のinspect commandがこのJSONを保存します",
+  "artifactが存在してもGUI Actual実行済みにはなりません",
+  "inspect / canonical JSON保存",
+  "strict gate + JSON更新",
   "Project Motion canonical verifier",
   "Project Motion blocker:",
   "このcommand表示自体はProject Motion CURRENTを証明しません",
@@ -91,7 +102,8 @@ assert(card.includes("audit.nextAction.command"), "UI must expose canonical non-
 assert(page.includes("WeddingDavinciGuiActualStartGateCard"), "Motion Zukan page must render GUI start-gate card");
 
 console.log("Wedding DaVinci GUI Actual start-gate Dashboard contract: PASS");
-console.log("Canonical gate JSON -> Motion Zukan: WIRED");
+console.log("Canonical gate JSON artifact -> Motion Zukan: WIRED");
+console.log("Canonical inspect/strict commands -> per-movie artifact --write: ENFORCED");
 console.log("Loaded gate Project Motion -> live Dashboard Project Motion: REVALIDATED");
 console.log("Stale Project Motion gate export -> GUI START DISPLAY BLOCKED: ENFORCED");
 console.log("Project Motion status/error/verifier -> Motion Zukan: VISIBLE");
