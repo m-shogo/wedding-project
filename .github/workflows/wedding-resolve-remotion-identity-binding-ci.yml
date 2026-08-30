@@ -1,0 +1,128 @@
+name: Wedding Resolve Remotion Identity Binding CI
+
+on:
+  pull_request:
+    paths:
+      - 'motion-studio/src/data/resolveHandoff.schema.ts'
+      - 'motion-studio/src/data/weddingResolveRemotionIdentityHandoff.schema.ts'
+      - 'motion-studio/src/data/resolveHandoffPolicy.ts'
+      - 'motion-studio/src/motion-kit/engines.tsx'
+      - 'motion-studio/scripts/export-wedding-remotion-element-handoff-identities.mts'
+      - 'motion-studio/scripts/verify-wedding-project-remotion-element-identities.mts'
+      - 'motion-studio/scripts/bind-wedding-project-remotion-identity-to-resolve-sidecar.mts'
+      - '.github/workflows/wedding-resolve-remotion-identity-binding-ci.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  resolve-remotion-identity-binding:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Export current catalog identity and project batch fixture
+        run: |
+          cd motion-studio
+          node --no-warnings scripts/export-wedding-remotion-element-handoff-identities.mts
+          cd ..
+          mkdir -p movie-dashboard/out/typography-project-delivery
+          cat > movie-dashboard/out/typography-project-delivery/opening-typography-production-batch.json <<'JSON'
+          {
+            "schemaVersion":"wedding-movie-typography-project-delivery/v1",
+            "authority":"DERIVED_PROJECT_HANDOFF",
+            "projectId":"opening",
+            "scenes":[{"sceneId":"opening-title","sourceRevision":"rev-001"}],
+            "remotionElementIdentityVerification":{
+              "state":"NOT_RUN",
+              "currentnessVerifiedByBatchBuild":false,
+              "selectedPatternIds":["type-mask-reveal"],
+              "sceneBindings":[{
+                "sceneId":"opening-title",
+                "sourceRevision":"rev-001",
+                "patternId":"type-mask-reveal",
+                "adoptedForMovie":false,
+                "canonicalEngine":"TypographyRevealEngine",
+                "canonicalMode":"mask",
+                "canonicalSource":"motion-studio/src/motion-kit/engines.tsx#TypographyRevealEngine"
+              }]
+            },
+            "summary":{"batchReadyForPalmierDaVinciHandoff":true,"productionReady":false}
+          }
+          JSON
+
+      - name: Generate CURRENT project identity receipt
+        working-directory: motion-studio
+        run: |
+          node --no-warnings scripts/verify-wedding-project-remotion-element-identities.mts \
+            --movie=opening \
+            --batch=../movie-dashboard/out/typography-project-delivery/opening-typography-production-batch.json
+
+      - name: Emit canonical Resolve baseline sidecar fixture
+        working-directory: motion-studio
+        run: |
+          node --no-warnings --input-type=module <<'NODE'
+          import {mkdirSync, writeFileSync} from 'node:fs';
+          import {resolve21AlphaHandoffPolicy} from './src/data/resolveHandoffPolicy.ts';
+          mkdirSync('out/handoff/ci', {recursive: true});
+          writeFileSync('out/handoff/ci/resolve-baseline.json', JSON.stringify({
+            ...resolve21AlphaHandoffPolicy,
+            artifactId: 'opening-ci-resolve-handoff',
+            source: {...resolve21AlphaHandoffPolicy.source, projectRef: 'wedding-opening-v1'},
+          }, null, 2) + '\n');
+          NODE
+
+      - name: Bind CURRENT receipt into Resolve sidecar
+        working-directory: motion-studio
+        run: |
+          node --no-warnings scripts/bind-wedding-project-remotion-identity-to-resolve-sidecar.mts \
+            --movie=opening \
+            --sidecar=out/handoff/ci/resolve-baseline.json \
+            --output=out/handoff/ci/resolve-with-remotion-identity.json | tee /tmp/resolve-bind.log
+          grep -q 'resolveProjectRemotionIdentityBinding=CURRENT' /tmp/resolve-bind.log
+          grep -q 'verifiedSceneBindings=1' /tmp/resolve-bind.log
+          grep -q 'remotionStudioGuiActual=NOT_RUN' /tmp/resolve-bind.log
+          grep -q 'macDaVinciGuiActual=NOT_RUN' /tmp/resolve-bind.log
+          grep -q 'productionReady=NO' /tmp/resolve-bind.log
+          node - <<'NODE'
+          const fs = require('fs');
+          const data = JSON.parse(fs.readFileSync('out/handoff/ci/resolve-with-remotion-identity.json', 'utf8'));
+          const ref = data.projectRemotionIdentityReceipt;
+          if (ref?.authority !== 'SHA_BOUND_PROJECT_REMOTION_ELEMENT_IDENTITY_VERIFICATION') throw new Error('missing receipt authority');
+          if (ref?.state !== 'CURRENT') throw new Error('receipt must be CURRENT');
+          if (!/^[a-f0-9]{64}$/.test(ref?.sha256 ?? '')) throw new Error('receipt SHA missing');
+          if (!/^[a-f0-9]{64}$/.test(ref?.sourceBatchSha256 ?? '')) throw new Error('batch SHA missing');
+          if (!/^[a-f0-9]{64}$/.test(ref?.handoffIdentityArtifactSha256 ?? '')) throw new Error('identity artifact SHA missing');
+          if (!/^[a-f0-9]{64}$/.test(ref?.canonicalTypographyEngineBlockSha256 ?? '')) throw new Error('engine SHA missing');
+          if (ref.remotionStudioGuiActual !== 'NOT_RUN' || ref.macDaVinciGuiActual !== 'NOT_RUN') throw new Error('GUI Actual must remain NOT_RUN');
+          if (ref.productionReady !== false) throw new Error('productionReady must remain false');
+          NODE
+
+      - name: Post-receipt batch drift blocks Resolve binding
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path('movie-dashboard/out/typography-project-delivery/opening-typography-production-batch.json')
+          data = json.loads(p.read_text())
+          data['scenes'][0]['sourceRevision'] = 'rev-002'
+          data['remotionElementIdentityVerification']['sceneBindings'][0]['sourceRevision'] = 'rev-002'
+          p.write_text(json.dumps(data, indent=2) + '\n')
+          PY
+          cd motion-studio
+          if node --no-warnings scripts/bind-wedding-project-remotion-identity-to-resolve-sidecar.mts \
+            --movie=opening \
+            --sidecar=out/handoff/ci/resolve-baseline.json \
+            --output=out/handoff/ci/should-not-exist.json > /tmp/resolve-bind-stale.log 2>&1; then
+            echo 'Stale project receipt must not bind into Resolve sidecar.'
+            exit 1
+          fi
+          grep -q 'RECEIPT_SOURCE_BATCH_SHA_STALE' /tmp/resolve-bind-stale.log
+          echo 'remotionStudioGuiActual=NOT_RUN'
+          echo 'macDaVinciActual=NOT_RUN'
+          echo 'productionReady=NO'
