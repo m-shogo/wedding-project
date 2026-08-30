@@ -12,7 +12,7 @@ const assert = (condition, message) => {
 };
 
 for (const token of [
-  "wedding-davinci-gui-actual-start-gate-audit-dashboard/v2",
+  "wedding-davinci-gui-actual-start-gate-audit-dashboard/v3",
   "wedding-davinci-gui-actual-start-gate/v1",
   "DERIVED_MAC_DAVINCI_GUI_ACTUAL_START_GATE",
   "TRANSPORT_NOT_CURRENT",
@@ -22,12 +22,21 @@ for (const token of [
   "GUI_ACTUAL_ALLOWED",
   "GUI_ACTUAL_COMPLETE",
   "EVIDENCE_BLOCKED",
+  "STALE",
   "projectMotionPreflight",
+  "buildWeddingDavinciActualSessionPlan",
+  "liveProjectMotionMatch",
   "GUI_START_GATE_PROJECT_MOTION_PREFLIGHT_MISSING",
   "GUI_START_GATE_PROJECT_MOTION_INVALID_NOT_BLOCKED",
   "GUI_START_GATE_PROJECT_MOTION_BLOCK_WITHOUT_INVALID_STATE",
   "GUI_START_GATE_PROJECT_MOTION_RECOVERY_ACTION_INVALID",
   "GUI_START_GATE_PROJECT_MOTION_RECOVERY_COMMAND_MISMATCH",
+  "GUI_START_GATE_PROJECT_MOTION_STATE_STALE",
+  "GUI_START_GATE_PROJECT_MOTION_APPLICABILITY_STALE",
+  "GUI_START_GATE_PROJECT_MOTION_CURRENTNESS_STALE",
+  "GUI_START_GATE_PROJECT_MOTION_COMMAND_STALE",
+  "GUI_START_GATE_PROJECT_MOTION_ERROR_STALE",
+  "REGENERATE_CANONICAL_START_GATE",
   "GUI_START_GATE_ALLOWED_FLAG_STATE_MISMATCH",
   "GUI_START_GATE_HUMAN_ACTION_MUST_NOT_HAVE_COMMAND",
   "NOT_PROMOTED_BY_DASHBOARD_GATE_AUDIT",
@@ -36,6 +45,13 @@ for (const token of [
   assert(data.includes(token), `GUI start-gate audit missing token: ${token}`);
 }
 
+assert(data.includes('const liveProjectMotion = buildWeddingDavinciActualSessionPlan().projects[movieId].projectMotionPreflight'), "Dashboard audit must resolve current Project Motion preflight");
+assert(data.includes('projectMotion.state !== liveProjectMotion.state'), "Dashboard audit must compare Project Motion state");
+assert(data.includes('Boolean(projectMotion.applicable) !== liveProjectMotion.applicable'), "Dashboard audit must compare Project Motion applicability");
+assert(data.includes('Boolean(projectMotion.current) !== liveProjectMotion.current'), "Dashboard audit must compare Project Motion currentness");
+assert(data.includes('(projectMotion.command ?? null) !== liveProjectMotion.command'), "Dashboard audit must compare canonical Project Motion command");
+assert(data.includes('(projectMotion.error ?? null) !== liveProjectMotion.error'), "Dashboard audit must compare Project Motion error");
+assert(data.includes('liveMismatchCodes.length > 0'), "live Project Motion mismatch must produce a fail-closed state");
 assert(data.includes('claimedAllowed !== (gate.state === "GUI_ACTUAL_ALLOWED")'), "GUI allowed flag must be tied exactly to canonical state");
 assert(data.includes('projectMotion.state === "INVALID" && gate.state !== "PROJECT_MOTION_BLOCKED"'), "INVALID Project Motion must fail close in Dashboard audit");
 assert(data.includes('gate.state === "PROJECT_MOTION_BLOCKED" && gate.nextAction?.command !== projectMotion.command'), "Project Motion recovery command must stay canonical");
@@ -46,6 +62,9 @@ assert(!data.includes('productionReady: true'), "Dashboard start-gate audit must
 assert(!data.includes('macDavinciResolveGuiActual: "PASS"'), "Dashboard start-gate audit must never synthesize DaVinci PASS");
 
 for (const token of [
+  "WEDDING_DAVINCI_GUI_ACTUAL_START_GATE_ANCHOR",
+  "davinci-gui-actual-start-gate",
+  "scroll-mt-6",
   "MAC DAVINCI GUI ACTUAL START GATE",
   "Session Plan CURRENT → Project Motion CURRENT → Evidence init → Human Mac GUI",
   "canonical gate JSONを読み込む",
@@ -73,6 +92,8 @@ assert(page.includes("WeddingDavinciGuiActualStartGateCard"), "Motion Zukan page
 
 console.log("Wedding DaVinci GUI Actual start-gate Dashboard contract: PASS");
 console.log("Canonical gate JSON -> Motion Zukan: WIRED");
+console.log("Loaded gate Project Motion -> live Dashboard Project Motion: REVALIDATED");
+console.log("Stale Project Motion gate export -> GUI START DISPLAY BLOCKED: ENFORCED");
 console.log("Project Motion status/error/verifier -> Motion Zukan: VISIBLE");
 console.log("Project Motion INVALID -> GUI START BLOCKED: ENFORCED");
 console.log("GUI_ACTUAL_ALLOWED != GUI_ACTUAL_EXECUTED: ENFORCED");

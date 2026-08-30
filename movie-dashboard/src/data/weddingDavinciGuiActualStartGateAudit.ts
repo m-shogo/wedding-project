@@ -1,5 +1,7 @@
+import {buildWeddingDavinciActualSessionPlan} from "./weddingDavinciActualSessionPlan";
+
 export const WEDDING_DAVINCI_GUI_ACTUAL_START_GATE_AUDIT_SCHEMA =
-  "wedding-davinci-gui-actual-start-gate-audit-dashboard/v2" as const;
+  "wedding-davinci-gui-actual-start-gate-audit-dashboard/v3" as const;
 
 export const CANONICAL_WEDDING_DAVINCI_GUI_ACTUAL_START_GATE_SCHEMA =
   "wedding-davinci-gui-actual-start-gate/v1" as const;
@@ -15,6 +17,7 @@ export type WeddingDavinciGuiActualStartGateAuditState =
   | "GUI_ACTUAL_ALLOWED"
   | "GUI_ACTUAL_COMPLETE"
   | "EVIDENCE_BLOCKED"
+  | "STALE"
   | "INVALID";
 
 export type WeddingDavinciGuiActualStartGateAudit = {
@@ -23,6 +26,7 @@ export type WeddingDavinciGuiActualStartGateAudit = {
   state: WeddingDavinciGuiActualStartGateAuditState;
   guiActualStartAllowed: boolean;
   canonicalGateLoaded: boolean;
+  liveProjectMotionMatch: boolean;
   transport: {
     state: string;
     current: boolean;
@@ -108,6 +112,7 @@ const result = (
   state,
   guiActualStartAllowed: false,
   canonicalGateLoaded: false,
+  liveProjectMotionMatch: false,
   transport: emptyTransport(),
   project: emptyProject(),
   nextAction: {
@@ -119,7 +124,7 @@ const result = (
   mismatches,
   inspectCommand: commandFor(movieId, false),
   strictGuiStartCommand: commandFor(movieId, true),
-  note: "Motion Zukan only audits the canonical gate output. GUI_ACTUAL_ALLOWED means a human may start the real Mac GUI review; it never means GUI Actual was executed or passed.",
+  note: "Motion Zukan audits the canonical gate output and rechecks its transported Project Motion state against the current Dashboard authority. GUI_ACTUAL_ALLOWED means a human may start the real Mac GUI review; it never means GUI Actual was executed or passed.",
   evidenceBoundary: {
     macDavinciResolveGuiActual: "NOT_PROMOTED_BY_DASHBOARD_GATE_AUDIT",
     productionReady: false,
@@ -180,11 +185,38 @@ export function auditWeddingDavinciGuiActualStartGate(
     }
   }
 
-  if (mismatches.length > 0) return result(movieId, "INVALID", mismatches);
+  const liveProjectMotion = buildWeddingDavinciActualSessionPlan().projects[movieId].projectMotionPreflight;
+  const liveMismatchCodes: string[] = [];
+  if (projectMotion && typeof projectMotion === "object") {
+    if (projectMotion.state !== liveProjectMotion.state) liveMismatchCodes.push("GUI_START_GATE_PROJECT_MOTION_STATE_STALE");
+    if (Boolean(projectMotion.applicable) !== liveProjectMotion.applicable) liveMismatchCodes.push("GUI_START_GATE_PROJECT_MOTION_APPLICABILITY_STALE");
+    if (Boolean(projectMotion.current) !== liveProjectMotion.current) liveMismatchCodes.push("GUI_START_GATE_PROJECT_MOTION_CURRENTNESS_STALE");
+    if ((projectMotion.command ?? null) !== liveProjectMotion.command) liveMismatchCodes.push("GUI_START_GATE_PROJECT_MOTION_COMMAND_STALE");
+    if ((projectMotion.error ?? null) !== liveProjectMotion.error) liveMismatchCodes.push("GUI_START_GATE_PROJECT_MOTION_ERROR_STALE");
+  }
+  mismatches.push(...liveMismatchCodes);
+
+  const contractInvalid = mismatches.some((code) =>
+    code.includes("MISMATCH") || code.includes("INVALID") || code.includes("MISSING") || code.includes("NOT_BLOCKED") || code.includes("WITHOUT_INVALID_STATE"),
+  );
+  if (contractInvalid) return result(movieId, "INVALID", mismatches);
+  if (liveMismatchCodes.length > 0) {
+    return result(movieId, "STALE", mismatches, {
+      canonicalGateLoaded: true,
+      liveProjectMotionMatch: false,
+      nextAction: {
+        kind: "REGENERATE_CANONICAL_START_GATE",
+        command: commandFor(movieId, false),
+        humanOnly: false,
+        reason: "The loaded canonical start-gate JSON carries an older Project Motion preflight than the current Dashboard authority. Regenerate the gate and rerun strict GUI-start verification before Mac GUI Actual.",
+      },
+    });
+  }
 
   return result(movieId, gate.state, [], {
     guiActualStartAllowed: claimedAllowed,
     canonicalGateLoaded: true,
+    liveProjectMotionMatch: true,
     transport: {
       state: String(gate.transport?.state ?? "UNKNOWN"),
       current: gate.transport?.current === true,

@@ -6,6 +6,8 @@ import {
   type WeddingMovieId,
 } from "../data/weddingDavinciGuiActualStartGateAudit";
 
+export const WEDDING_DAVINCI_GUI_ACTUAL_START_GATE_ANCHOR = "davinci-gui-actual-start-gate" as const;
+
 const shortSha = (value: string | null) => value ? `${value.slice(0, 10)}…` : "—";
 
 const stateClass = (state: string) => {
@@ -33,7 +35,7 @@ export function WeddingDavinciGuiActualStartGateCard() {
   };
 
   return (
-    <section className="mb-10 border border-amber-300 dark:border-amber-900/60 bg-white dark:bg-navy-800 p-5">
+    <section id={WEDDING_DAVINCI_GUI_ACTUAL_START_GATE_ANCHOR} className="mb-10 scroll-mt-6 border border-amber-300 dark:border-amber-900/60 bg-white dark:bg-navy-800 p-5">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <p className="text-[10px] tracking-[0.2em] font-semibold text-amber-700 dark:text-amber-300">MAC DAVINCI GUI ACTUAL START GATE</p>
