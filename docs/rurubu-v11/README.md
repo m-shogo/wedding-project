@@ -50,10 +50,11 @@ An existing V10 element may be reused only after it is re-evaluated against the 
 → `V11 PHOTO SLOT CONTRACT`
 → `V11 PARTS INVENTORY`
 → `V11 LAYOUT BLUEPRINT`
+→ `V11 GENERATION PROMPTS WHEN NEEDED`
 → `V11 FIGMA PLACEMENT PROMPT`
 → `NEW V11 FIGMA PRODUCTION PAGE`
 → `V11 REFERENCE-BASED QA`
-→ `PRINT QA`
+→ `V11 PRINT QA`
 
 The prompt is downstream of the design specification.
 
@@ -118,10 +119,12 @@ Final production remains hybrid and editable.
 - `page-specs/P07-QA.md`
 - `page-specs/P08-MESSAGE-BACK.md`
 
-## Assembly / assets / QA
+## Assembly / assets / generation / QA
 - `RURUBU-V11-PARTS-LIBRARY.md`
 - `RURUBU-V11-ASSET-NEEDS-MATRIX.md`
+- `RURUBU-V11-GENERATION-PROMPT-TEMPLATES.md`
 - `RURUBU-V11-FIGMA-EXECUTION-PROMPT.md`
 - `RURUBU-V11-QA-GATE.md`
+- `RURUBU-V11-PRINT-SPEC.md`
 
 If an authority conflicts with this clean-slate boundary, this README wins until explicitly superseded by a later dated V11 authority.
