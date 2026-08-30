@@ -20,13 +20,14 @@ The cover may be visually dense and heavily layered.
 
 Current Hawaii source review produced three useful behavior models:
 
-- `035.jpg` behavior — preferred starting behavior: tropical environment naturally frames the couple; useful for masthead/photo collision and edge intrusion;
+- `035.jpg` behavior — preferred environmental HERO: tropical environment naturally frames the couple; useful for masthead/photo collision and edge intrusion;
+- `036.jpg` behavior — preferred close-couple personality support: faces/gesture are large, immediate and joyful; useful for fixing the protagonist-recognition weakness of `035` without sacrificing its environmental travel scale;
 - `031.jpg` behavior — open sky/sea/environment; useful when the title needs large photo-negative-space;
 - `023.jpg` behavior — dramatic scale / small people in large landscape; useful for a more editorial travel-book feel.
 
 Do not select the final source solely from filename. Final decision requires actual-photo-in-layout comparison when the image can be placed reliably in Figma.
 
-Working preference: `035 behavior`, because it supports a lively travel-magazine silhouette without forcing a clean centered hero.
+Working preference: `035 environmental HERO + 036 close personality support`, because the pair creates deliberate photo-weight inequality: destination scale first, recognizable couple immediately after.
 
 ### Verified `035.jpg` source evidence — 2026-08-30
 
@@ -54,7 +55,40 @@ REAL → GENERATED bridge consequence:
 - use photo-derived green/sky-blue/warm-yellow relationships as input, but avoid mechanically sampling the whole page into one flat palette;
 - generated/editorial parts should introduce print/paper character and hierarchy that the clean photograph itself does not supply.
 
-This evidence strengthens `035` as the first serious P01 composition candidate, but it does not eliminate `031`/`023` comparison once the correct V20 Figma production surface is identified.
+### Verified `036.jpg` source evidence — 2026-08-31
+
+The original Drive file `183kgq1fGMRNiEQFBkp4KlSkaIdIulaKL` was downloaded and pixel-opened at source level rather than inferred from an old derivative filename.
+
+Verified source behavior:
+- source raster: `4500 x 3000 px`, JPEG, approximately 4.22 MB;
+- close waist-up couple portrait with both faces large and unobstructed;
+- Shogo is on image-left, Shiori on image-center/right;
+- both subjects are smiling and making playful hand gestures, so the image communicates personality faster than `035`;
+- Shiori's yellow dress creates a strong warm editorial color anchor; Shogo's dark brown suit provides useful contrast;
+- bright water/sky background and distant mountain are soft and low-detail, giving generous crop tolerance around the couple;
+- there is a large bright negative-space field on image-right;
+- the photograph is high-key and should not be surrounded by equally pale support art without a keyline/shadow/printed-paper edge.
+
+P01 role consequence:
+- `036` should **not** replace `035` as another full-page environmental HERO by default;
+- use it as a materially smaller but still forceful `PERSONALITY / RECOGNITION` support image that intrudes into the environmental HERO;
+- crop should keep both faces, Shogo's shaka gesture and enough of Shiori's gesture/dress to preserve the playful reading;
+- avoid a tiny thumbnail: the purpose is immediate protagonist recognition;
+- a postcard / thick-bottom snapshot / irregular printed-photo treatment is preferable to a generic rounded card;
+- place it where it does not cover the small couple inside `035`; the two images should read as `place + people`, not duplicate portraits competing with each other;
+- because the right side of `036` is mostly bright negative space, crop aggressively toward the couple before allocating cover area; do not waste P01 area on empty water merely because the source is landscape.
+
+Color consequence:
+- the yellow dress is now a credible source for a warm feature accent or paper-vessel relationship;
+- brown suit / warm yellow / Hawaii sky-blue / tropical green can create a more authored cover palette than generic evenly distributed pastels;
+- keep skin natural and avoid pushing the already bright highlights further toward clipping in print-oriented grading.
+
+Transfer state:
+- the source is verified and suitable for P01 support testing;
+- direct Figma byte upload was retried on 2026-08-31 but the external `mcp.figma.com` upload host again failed DNS resolution from the execution environment;
+- therefore `036` is **NOT YET PLACED** in Figma and must not be reported as placed/approved-in-layout until a real Figma screenshot proves it.
+
+The evidence strengthens the two-photo strategy: `035 = environmental travel scale`, `036 = human recognition/personality`.
 
 ## 3. Cover silhouette
 
@@ -65,7 +99,7 @@ Preferred silhouette:
 - masthead occupies a large irregular upper zone and enters photography;
 - HERO photography controls the center and extends toward at least one edge;
 - one strong editorial feature vessel collides with the lower/side hero area;
-- one support photo/paper object intrudes into the HERO rather than sitting in its own card;
+- one close personality support photo/paper object intrudes into the HERO rather than sitting in its own card;
 - edge decoration enters from outside trim/bleed;
 - small metadata/date/name elements use attached supports rather than a clean footer row.
 
@@ -81,7 +115,7 @@ Suggested interaction:
 - does NOT need to remain visible everywhere.
 
 ### B. HERO PHOTO
-- real couple image;
+- `035`-behavior real environmental couple image;
 - large, replaceable;
 - may extend into bleed;
 - may be partially covered by masthead, feature slab, support photo and tropical art.
@@ -104,9 +138,12 @@ Suggested interaction:
 - variable wording remains native.
 
 ### F. SUPPORT PHOTO / PAPER OBJECT
-- one support photo or postcard treatment, not a row of equal thumbnails;
-- rotate/crop based on actual source;
-- may obscure HERO corner.
+- preferred current source: verified `036.jpg`;
+- one close personality support photo, not a row of equal thumbnails;
+- crop toward faces/gestures; do not preserve unused bright right-side source area merely to honor original aspect ratio;
+- postcard / printed snapshot / irregular paper treatment is preferred over a generic app card;
+- must intrude into `035` HERO territory while keeping the small `035` couple legible;
+- should be large enough to solve protagonist recognition at cover scan speed.
 
 ### G. TEXT SUPPORT + NATIVE TEXT
 - names/date/location/feature hooks;
@@ -149,15 +186,16 @@ Composition brief:
 - no text;
 - no centered bouquet;
 - no symmetrical wreath;
-- when paired with `035.jpg`, extend/counterbalance the real palm geometry instead of repeating palm leaves around every edge.
+- when paired with `035.jpg`, extend/counterbalance the real palm geometry instead of repeating palm leaves around every edge;
+- do not repeat `036` yellow uniformly; use it as one intentional warm accent relationship.
 
 ### `V20_P01_FEATURE_VESSEL_A`
 Job:
 - support one major cover hook directly over photography.
 
 Possible silhouette:
-- irregular yellow or cream printed slab;
-- attached small pink/blue tab;
+- irregular warm-yellow or cream printed slab informed by the real `036` dress, balanced against sky-blue/green from the environment;
+- attached small contrasting tab;
 - may cover 50%+ of the photo area it intersects;
 - no generic rounded-app-card appearance;
 - no text baked in.
@@ -173,12 +211,13 @@ Possible form:
 
 ### `V20_P01_SUPPORT_FRAME_A`
 Job:
-- one secondary real-photo treatment.
+- carry the verified `036` close-couple personality image.
 
-Possible form:
+Preferred form:
 - postcard / printed snapshot / thick-bottom photo edge;
-- transparent photo opening;
-- optional small tape detail;
+- opening/crop optimized for both faces and gestures rather than the original 3:2 frame;
+- optional small tape/print detail;
+- sufficiently strong edge/keyline/shadow to separate the high-key photo from the high-key `035` environment;
 - no baked caption.
 
 ### `V20_P01_BOTTOM_EDITORIAL_CLUSTER_A`
@@ -210,7 +249,7 @@ At production review, target at least these relationships:
 - masthead materially overlaps HERO photography;
 - HERO materially overlaps/occludes part of one background composite or vice versa;
 - one feature vessel covers a meaningful section of photo, not just touches its edge;
-- one support photo/paper object intrudes into HERO territory;
+- the `036` close personality photo/paper object intrudes into `035` HERO territory;
 - one edge composite is cropped by bleed;
 - one small stamp/label overlaps two different layer types.
 
@@ -247,27 +286,29 @@ Reject the cover if:
 - masthead could be swapped for any generic wedding logo without changing composition;
 - small stickers are compensating for weak HERO/title structure;
 - the page uses one evenly distributed pastel palette with no strong hierarchy;
-- the page looks like a social-media template rather than a printed travel magazine.
+- the page looks like a social-media template rather than a printed travel magazine;
+- `035` and `036` are shown at near-equal size as two polite photo cards instead of `environment + personality` with deliberate inequality.
 
 ## 10. Cover QA sequence
 
-1. grayscale thumbnail: masthead + HERO + main feature vessel must read immediately;
-2. hide micro accents: composition should remain strong;
-3. inspect A5 actual size: coverlines/date/names readable;
-4. check face/gesture: intentional occlusion only;
-5. replace HERO with alternate aspect behavior: layout should be adjustable without complete rebuild;
-6. compare with North Star for density/energy/overlap, NOT coordinates or copied branding;
-7. verify all authoritative text remains native;
-8. verify every raster composite has enough source pixels for physical size.
+1. grayscale thumbnail: masthead + environmental HERO + main feature vessel must read immediately;
+2. second scan: close personality support must make the couple immediately recognizable without becoming a second equal HERO;
+3. hide micro accents: composition should remain strong;
+4. inspect A5 actual size: coverlines/date/names readable;
+5. check both source photos for face/gesture: intentional occlusion only;
+6. replace HERO/support with alternate aspect behavior: layout should be adjustable without complete rebuild;
+7. compare with North Star for density/energy/overlap, NOT coordinates or copied branding;
+8. verify all authoritative text remains native;
+9. verify every raster composite has enough source pixels for physical size.
 
 ## 11. Production order
 
-1. final/temporary HERO source behavior comparison;
+1. `035` environmental HERO + `036` personality-support placement proof;
 2. masthead A production;
-3. tropical frame cluster production;
+3. tropical frame cluster production from the actual two-photo color/negative-space relationship;
 4. feature vessel production;
 5. date/location support production;
-6. one support-frame treatment;
+6. support-frame refinement around the actual `036` crop;
 7. assemble first decorated P01 in Figma;
 8. judge actual gaps before creating bottom/micro cluster;
 9. only then make missing micro assets.
