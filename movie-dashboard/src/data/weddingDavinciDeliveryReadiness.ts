@@ -8,7 +8,13 @@ export const WEDDING_DAVINCI_DELIVERY_READINESS_SCHEMA = "wedding-davinci-delive
 
 type ProjectReadinessState = "READY" | "BLOCKED" | "STALE" | "INVALID";
 type WeddingReadinessState = ProjectReadinessState;
-type ProjectMotionPreflight = typeof weddingProjectMotionProvenancePreflight.opening | typeof weddingProjectMotionProvenancePreflight.profile;
+type ProjectMotionPreflight = {
+  state: "CURRENT" | "NOT_APPLICABLE" | "INVALID";
+  current: boolean;
+  applicable: boolean;
+  command: string;
+  error: string | null;
+};
 
 const classifyProjectState = (
   auditState: string,
@@ -34,8 +40,8 @@ const projectMotionNextGate = (projectMotion: ProjectMotionPreflight) => project
 export function buildWeddingDavinciDeliveryReadiness() {
   const openingHandoff = buildOpeningProductionStatusHandoff();
   const profileHandoff = buildProfileProductionStatusHandoff();
-  const openingProjectMotion = weddingProjectMotionProvenancePreflight.opening;
-  const profileProjectMotion = weddingProjectMotionProvenancePreflight.profile;
+  const openingProjectMotion: ProjectMotionPreflight = weddingProjectMotionProvenancePreflight.opening;
+  const profileProjectMotion: ProjectMotionPreflight = weddingProjectMotionProvenancePreflight.profile;
 
   const openingState = classifyProjectState(
     openingDavinciActualBindingAudit.state,
