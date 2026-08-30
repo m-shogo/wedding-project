@@ -155,6 +155,24 @@ export const weddingProductionRecoverySchema = z.object({
   guardrails: z.array(z.string().min(1)).min(1),
 });
 
+export const sha256Schema = z.string().regex(/^[a-f0-9]{64}$/);
+
+// Official Resolve-side reference to the SHA-bound Palmier Project Motion binding artifact.
+// This field proves which Human Scene Motion export Resolve is expected to consume; it does not
+// prove Palmier application, Resolve GUI execution, or production readiness.
+export const resolveProjectMotionBindingArtifactSchema = z.object({
+  authority: z.literal('PALMIER_PROJECT_MOTION_ASSEMBLY_BINDING'),
+  projectId: z.enum(['opening', 'profile']),
+  path: z.string().min(1),
+  sha256: sha256Schema,
+  currentnessState: z.literal('CURRENT'),
+  palmierCurrent: z.literal(true),
+  davinciHandoffCurrent: z.literal(true),
+  remotionStudioGuiActual: z.literal('NOT_RUN'),
+  macDaVinciGuiActual: z.literal('NOT_RUN'),
+  productionReady: z.literal(false),
+});
+
 const resolvePatchSchema = z.string().regex(/^21\.\d+\.\d+(?:\.\d+)?$/);
 
 export const resolveHandoffSidecarSchema = z.object({
@@ -194,6 +212,7 @@ export const resolveHandoffSidecarSchema = z.object({
   humanMaster: z.array(humanMasterValueSchema).default([]),
   dependencies: z.array(dependencySchema).default([]),
   capabilities: z.array(capabilityHandoffSchema).min(1),
+  projectMotionBindingArtifact: resolveProjectMotionBindingArtifactSchema.optional(),
   productionRecovery: weddingProductionRecoverySchema.optional(),
   highImpactDecisions: z.array(z.string()).default([]),
   notes: z.array(z.string()).default([]),
@@ -203,3 +222,4 @@ export type ResolveHandoffSidecar = z.infer<typeof resolveHandoffSidecarSchema>;
 export type CapabilityHandoff = z.infer<typeof capabilityHandoffSchema>;
 export type ProductionRecoveryAction = z.infer<typeof productionRecoveryActionSchema>;
 export type WeddingProductionRecovery = z.infer<typeof weddingProductionRecoverySchema>;
+export type ResolveProjectMotionBindingArtifact = z.infer<typeof resolveProjectMotionBindingArtifactSchema>;
