@@ -18,12 +18,16 @@ Read:
 2. docs/rurubu-v11/RURUBU-V11-REFERENCE-BIBLE.md
 3. docs/rurubu-v11/RURUBU-V11-BOOK-ARCHITECTURE.md
 4. the exact docs/rurubu-v11/page-specs/P0X-*.md for the page being built
-5. docs/rurubu-v11/RURUBU-V11-PARTS-LIBRARY.md
-6. docs/rurubu-v11/RURUBU-V11-ASSET-NEEDS-MATRIX.md
-7. docs/rurubu-v11/RURUBU-V11-CONTENT-TRUTH.md
-8. docs/rurubu-v11/RURUBU-V11-QA-GATE.md
-9. docs/rurubu-v11/rurubu-v11-manifest.json
-10. live V11 Figma page after it exists
+5. docs/rurubu-v11/RURUBU-V11-DESIGN-TOKENS.md
+6. docs/rurubu-v11/RURUBU-V11-COPY-CAPACITY.md
+7. docs/rurubu-v11/rurubu-v11-photo-slots.json
+8. docs/rurubu-v11/rurubu-v11-layout-blueprints.json
+9. docs/rurubu-v11/RURUBU-V11-PARTS-LIBRARY.md
+10. docs/rurubu-v11/RURUBU-V11-ASSET-NEEDS-MATRIX.md
+11. docs/rurubu-v11/RURUBU-V11-CONTENT-TRUTH.md
+12. docs/rurubu-v11/RURUBU-V11-QA-GATE.md
+13. docs/rurubu-v11/rurubu-v11-manifest.json
+14. live V11 Figma page after it exists
 
 Primary visual reference:
 Google Drive file ID `12ppT-SV-8OmOgz_a0MuhrkT3gNOOKsY3`.
@@ -36,18 +40,19 @@ THINK AND DECIDE IN LANGUAGE.
 ASSEMBLE AND KEEP EDITABLE IN FIGMA.
 
 Figma does not invent a magazine page from vague style requests.
-The page manual already defines the page job, reading path, zone map, photo roles, title behavior, parts, overlap, density, edge behavior, editability and QA.
+The page manual and layout blueprint define the page job, reading path, visual territories, photo roles, title behavior, parts, overlap, density, edge behavior, editability and QA.
 
-Your job is to execute that manual faithfully and intelligently.
+The blueprint constrains placement but is not a rigid UI grid. Preserve hierarchy/scale contrast when small adjustments are needed for real content.
 
 ==================================================
 BEFORE ANY PAGE MUTATION
 ==================================================
 
-Output/resolve internally:
+Resolve:
 - PAGE + role;
 - PAGE JOB;
 - FIRST / SECOND / THIRD READ;
+- blueprint zones;
 - hero visual role;
 - support photo roles/count;
 - density peak;
@@ -57,7 +62,8 @@ Output/resolve internally:
 - planned rotations;
 - edge/bleed behavior;
 - native editable text list;
-- replaceable image slots;
+- semantic replaceable image slots;
+- expected copy capacity;
 - TBD factual content;
 - page-specific forbidden patterns.
 
@@ -94,6 +100,7 @@ PASS 0 — BLANK-SLATE SETUP
 - no old composition copied.
 
 PASS 1 — STRUCTURAL SKELETON
+- use layout blueprint territories;
 - page title zone;
 - hero photo/map/message/route region;
 - major support regions;
@@ -101,9 +108,10 @@ PASS 1 — STRUCTURAL SKELETON
 - no microdecor yet.
 
 PASS 2 — PHOTO + INFORMATION HIERARCHY
-- create semantic replaceable masks;
+- create semantic masks from photo-slot manifest;
 - place proxy/real photos by role;
 - place native facts/TBD copy;
+- respect copy-capacity guardrails;
 - establish title/hero/support scale contrast.
 
 PASS 3 — EDITORIAL PARTS
@@ -129,7 +137,8 @@ PASS 5 — QA
 - reading-scale screenshot;
 - A5 actual-size review;
 - clean-slate scorecard;
-- editability test;
+- editability/photo-replacement test;
+- content-truth/TBD review;
 - cross-page rhythm review.
 
 ==================================================
@@ -157,6 +166,19 @@ Independently masked/replacable:
 Frame art stays separate from image source.
 
 Whole-page flattening is prohibited.
+
+==================================================
+COPY OVERFLOW RULE
+==================================================
+
+If copy does not fit, correct in this order:
+1. reduce non-essential decoration;
+2. expand/reconfigure calm text zone;
+3. reduce/change support-photo geometry;
+4. editorially shorten copy only with approval;
+5. small type-size adjustment within readability limits.
+
+Do not jump directly to tiny body text.
 
 ==================================================
 AUTO LAYOUT RULE
@@ -214,6 +236,7 @@ STOP AND REBUILD STRUCTURE IF
 - page resembles an adjacent page too closely;
 - body text is shrinking to preserve decoration;
 - one photo replacement would break surrounding text/frame art;
+- blueprint has been interpreted as rigid equal boxes;
 - layout only looks good because an old V10 frame was reused.
 
 ==================================================
@@ -239,9 +262,11 @@ Report live-observable facts only:
 - QA state;
 - first/second/third read;
 - major semantic nodes placed/resized/moved;
+- blueprint deviations and why;
 - photo slots/masks created;
 - native facts/TBD preserved;
 - purposeful overlaps/tilts/edge uses;
+- copy overflow warnings;
 - score/hard fails if eligible;
 - largest remaining structural issue;
 - exact next task.
