@@ -107,6 +107,7 @@ const manualChecklist = [
 
 const buildProject = (movieId: MovieId) => {
   const project = operatorPacket.projects[movieId];
+  const projectMotionPreflight = operatorPacket.projectMotionPreflight[movieId];
   const evidence = inspectEvidence(movieId);
   const prefix = movieId === 'opening' ? 'opening' : 'profile';
   return {
@@ -114,18 +115,27 @@ const buildProject = (movieId: MovieId) => {
     upstreamReady: project.ready,
     auditState: project.auditState,
     currentNextGate: project.nextGate,
+    projectMotionPreflight: {
+      state: projectMotionPreflight.state,
+      applicable: projectMotionPreflight.applicable,
+      current: projectMotionPreflight.current,
+      command: projectMotionPreflight.command,
+      error: projectMotionPreflight.error ?? null,
+    },
     handoffIdentitySha256: project.handoffIdentitySha256,
     expectedDavinciActualEvidenceSha256: project.davinciActualEvidenceSha256,
     actualEvidence: evidence,
-    sessionState: !project.handoffIdentitySha256
-      ? 'BLOCKED_UPSTREAM'
-      : evidence.state === 'NOT_RUN'
-        ? 'READY_TO_INITIALIZE_WHEN_RECOVERY_CURRENT'
-        : evidence.state === 'PASS'
-          ? 'GUI_ACTUAL_RECORDED'
-          : evidence.state === 'IN_PROGRESS'
-            ? 'GUI_ACTUAL_IN_PROGRESS'
-            : 'GUI_ACTUAL_BLOCKED',
+    sessionState: projectMotionPreflight.state === 'INVALID'
+      ? 'BLOCKED_PROJECT_MOTION_PREFLIGHT'
+      : !project.handoffIdentitySha256
+        ? 'BLOCKED_UPSTREAM'
+        : evidence.state === 'NOT_RUN'
+          ? 'READY_TO_INITIALIZE_WHEN_RECOVERY_CURRENT'
+          : evidence.state === 'PASS'
+            ? 'GUI_ACTUAL_RECORDED'
+            : evidence.state === 'IN_PROGRESS'
+              ? 'GUI_ACTUAL_IN_PROGRESS'
+              : 'GUI_ACTUAL_BLOCKED',
     orderedActions: [
       {
         order: 1,
@@ -136,8 +146,8 @@ const buildProject = (movieId: MovieId) => {
       {
         order: 2,
         kind: 'PROJECT_MOTION_PREFLIGHT',
-        command: `node --no-warnings scripts/verify-wedding-project-motion-production-provenance.mts --movie=${movieId}`,
-        purpose: 'Fail closed on stale/replaced Resolve Project Motion sidecars or Palmier binding drift before Actual evidence initialization. NOT_APPLICABLE is allowed when no Project Motion provenance is in use.',
+        command: projectMotionPreflight.command,
+        purpose: `Transported Project Motion state=${projectMotionPreflight.state}. Fail closed on stale/replaced Resolve Project Motion sidecars or Palmier binding drift before Actual evidence initialization. NOT_APPLICABLE is allowed when no Project Motion provenance is in use.`,
       },
       {
         order: 3,
@@ -192,6 +202,8 @@ const planBody = {
     'SESSION_PLAN_EXISTS != GUI_ACTUAL_EXECUTED',
     'EVIDENCE_TEMPLATE_EXISTS != GUI_ACTUAL_PASS',
     'RECOVERY_CURRENT != GUI_ACTUAL_PASS',
+    'PROJECT_MOTION_PREFLIGHT_STATE_TRANSPORTED_WITH_SESSION_PLAN',
+    'PROJECT_MOTION_PREFLIGHT_INVALID => SESSION_PLAN_BLOCKED',
     'PROJECT_MOTION_PREFLIGHT_CURRENT != GUI_ACTUAL_PASS',
     'PROJECT_MOTION_PREFLIGHT_MUST_RUN_BEFORE_EVIDENCE_INIT',
     'CI_MUST_NOT_PROMOTE_MAC_GUI_ACTUAL',
