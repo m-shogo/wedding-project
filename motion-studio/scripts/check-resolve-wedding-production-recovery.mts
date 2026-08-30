@@ -29,9 +29,23 @@ for (const kind of ['ROUTE', 'COMMAND', 'HUMAN'] as const) {
   }
 }
 
+const projectMotionBindingArtifact = {
+  authority: 'PALMIER_PROJECT_MOTION_ASSEMBLY_BINDING' as const,
+  projectId: 'opening' as const,
+  path: 'opening-v1-palmier-project-motion-binding.json',
+  sha256: 'a'.repeat(64),
+  currentnessState: 'CURRENT' as const,
+  palmierCurrent: true as const,
+  davinciHandoffCurrent: true as const,
+  remotionStudioGuiActual: 'NOT_RUN' as const,
+  macDaVinciGuiActual: 'NOT_RUN' as const,
+  productionReady: false as const,
+};
+
 const sidecarWithRecovery = resolveHandoffSidecarSchema.parse({
   ...resolve21AlphaHandoffPolicy,
   artifactId: 'remotion-alpha-to-resolve21-wedding-recovery-canary',
+  projectMotionBindingArtifact,
   productionRecovery: resolveWeddingProductionRecoveryPolicy,
 });
 
@@ -43,6 +57,32 @@ if (!sidecarWithRecovery.productionRecovery?.blockerCodes.includes('PHOTO_MISSIN
 }
 if (sidecarWithRecovery.productionRecovery?.actual.commands.strict !== 'pnpm opening:davinci-actual:strict') {
   throw new Error('Resolve handoff sidecar dropped strict Actual verification command');
+}
+if (sidecarWithRecovery.projectMotionBindingArtifact?.sha256 !== projectMotionBindingArtifact.sha256) {
+  throw new Error('Resolve handoff sidecar dropped the Palmier Project Motion binding artifact SHA');
+}
+if (sidecarWithRecovery.projectMotionBindingArtifact?.macDaVinciGuiActual !== 'NOT_RUN') {
+  throw new Error('Project Motion binding must not elevate Mac DaVinci GUI Actual');
+}
+if (sidecarWithRecovery.projectMotionBindingArtifact?.productionReady !== false) {
+  throw new Error('Project Motion binding must not elevate production readiness');
+}
+
+for (const invalidProjectMotionBindingArtifact of [
+  {...projectMotionBindingArtifact, sha256: 'not-a-sha256'},
+  {...projectMotionBindingArtifact, currentnessState: 'STALE'},
+  {...projectMotionBindingArtifact, macDaVinciGuiActual: 'ACTUAL_VERIFIED'},
+  {...projectMotionBindingArtifact, productionReady: true},
+]) {
+  const parsed = resolveHandoffSidecarSchema.safeParse({
+    ...resolve21AlphaHandoffPolicy,
+    artifactId: 'remotion-alpha-to-resolve21-invalid-project-motion-binding-canary',
+    projectMotionBindingArtifact: invalidProjectMotionBindingArtifact,
+    productionRecovery: resolveWeddingProductionRecoveryPolicy,
+  });
+  if (parsed.success) {
+    throw new Error('Resolve handoff sidecar accepted an invalid or evidence-elevating Project Motion binding artifact');
+  }
 }
 
 console.log('Resolve Wedding production recovery sidecar contracts: PASS');
