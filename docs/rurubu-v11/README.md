@@ -45,6 +45,9 @@ An existing V10 element may be reused only after it is re-evaluated against the 
 `USER-APPROVED REFERENCE`
 → `V11 BOOK ARCHITECTURE`
 → `V11 PAGE MANUAL`
+→ `V11 DESIGN TOKENS`
+→ `V11 COPY CAPACITY`
+→ `V11 PHOTO SLOT CONTRACT`
 → `V11 PARTS INVENTORY`
 → `V11 FIGMA PLACEMENT PROMPT`
 → `NEW V11 FIGMA PRODUCTION PAGE`
@@ -94,9 +97,16 @@ Final production remains hybrid and editable.
 
 # Canonical files
 
+## Core
 - `rurubu-v11-manifest.json`
 - `RURUBU-V11-REFERENCE-BIBLE.md`
 - `RURUBU-V11-BOOK-ARCHITECTURE.md`
+- `RURUBU-V11-DESIGN-TOKENS.md`
+- `RURUBU-V11-COPY-CAPACITY.md`
+- `RURUBU-V11-CONTENT-TRUTH.md`
+- `rurubu-v11-photo-slots.json`
+
+## Page manuals
 - `page-specs/P01-COVER.md`
 - `page-specs/P02-WEDDING-JOURNEY.md`
 - `page-specs/P03-PROFILE.md`
@@ -105,6 +115,8 @@ Final production remains hybrid and editable.
 - `page-specs/P06-1DAY.md`
 - `page-specs/P07-QA.md`
 - `page-specs/P08-MESSAGE-BACK.md`
+
+## Assembly / assets / QA
 - `RURUBU-V11-PARTS-LIBRARY.md`
 - `RURUBU-V11-ASSET-NEEDS-MATRIX.md`
 - `RURUBU-V11-FIGMA-EXECUTION-PROMPT.md`
