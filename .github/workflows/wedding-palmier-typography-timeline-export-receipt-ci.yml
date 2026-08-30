@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - 'motion-studio/scripts/verify-wedding-palmier-typography-timeline-export.mts'
+      - 'motion-studio/scripts/check-wedding-palmier-typography-timeline-export-receipt.mts'
       - 'motion-studio/scripts/build-wedding-palmier-typography-assembly-plan.mts'
       - '.github/workflows/wedding-palmier-typography-timeline-export-receipt-ci.yml'
   workflow_dispatch:
@@ -21,6 +22,10 @@ jobs:
         working-directory: motion-studio
         run: node --no-warnings scripts/verify-wedding-palmier-typography-timeline-export.mts --self-test
 
+      - name: Receipt currentness self-test catches source drift
+        working-directory: motion-studio
+        run: node --no-warnings scripts/check-wedding-palmier-typography-timeline-export-receipt.mts --self-test
+
       - name: Production invocation requires explicit real FCPXML path
         working-directory: motion-studio
         run: |
@@ -29,6 +34,23 @@ jobs:
             exit 1
           fi
           grep -q 'PALMIER_TIMELINE_XML_PATH_REQUIRED' /tmp/receipt.err
+
+      - name: Fresh clone currentness remains MISSING and strict fails closed
+        working-directory: motion-studio
+        run: |
+          node --no-warnings scripts/check-wedding-palmier-typography-timeline-export-receipt.mts --movie=opening --json > /tmp/currentness.json
+          node - <<'NODE'
+          const fs = require('fs');
+          const report = JSON.parse(fs.readFileSync('/tmp/currentness.json', 'utf8'));
+          if (report.state !== 'MISSING') throw new Error(`expected MISSING, got ${report.state}`);
+          if (report.evidenceBoundary.palmierGuiActualPerformedByThisCheck !== false) throw new Error('currentness checker must not claim Palmier GUI Actual');
+          if (report.evidenceBoundary.productionReadyPromotedByThisCheck !== false) throw new Error('currentness checker must not promote productionReady');
+          NODE
+          if node --no-warnings scripts/check-wedding-palmier-typography-timeline-export-receipt.mts --movie=opening --strict >/tmp/currentness-strict.log 2>&1; then
+            echo 'strict currentness must fail without a receipt'
+            exit 1
+          fi
+          grep -q 'palmierTimelineExportReceipt=MISSING' /tmp/currentness-strict.log
 
       - name: Receipt is SHA-bound and does not fabricate GUI evidence
         run: |
@@ -42,3 +64,13 @@ jobs:
           grep -q "productionReadyPromotedByThisVerifier: false" motion-studio/scripts/verify-wedding-palmier-typography-timeline-export.mts
           ! grep -q "productionReady: true" motion-studio/scripts/verify-wedding-palmier-typography-timeline-export.mts
           ! grep -q "macDavinciResolveGuiActual: 'PASS'" motion-studio/scripts/verify-wedding-palmier-typography-timeline-export.mts
+
+      - name: Currentness checker is read-only and evidence-safe
+        run: |
+          grep -q "ASSEMBLY_PLAN_SHA_DRIFT" motion-studio/scripts/check-wedding-palmier-typography-timeline-export-receipt.mts
+          grep -q "PALMIER_FCPXML_SHA_DRIFT" motion-studio/scripts/check-wedding-palmier-typography-timeline-export-receipt.mts
+          grep -q "READ_ONLY_PALMIER_TIMELINE_EXPORT_RECEIPT_CURRENTNESS" motion-studio/scripts/check-wedding-palmier-typography-timeline-export-receipt.mts
+          grep -q "palmierGuiActualPerformedByThisCheck: false" motion-studio/scripts/check-wedding-palmier-typography-timeline-export-receipt.mts
+          grep -q "productionReadyPromotedByThisCheck: false" motion-studio/scripts/check-wedding-palmier-typography-timeline-export-receipt.mts
+          ! grep -Eq 'writeFileSync|renameSync|copyFileSync|mkdirSync' motion-studio/scripts/check-wedding-palmier-typography-timeline-export-receipt.mts
+          ! grep -q "macDavinciResolveGuiActual: 'PASS'" motion-studio/scripts/check-wedding-palmier-typography-timeline-export-receipt.mts
