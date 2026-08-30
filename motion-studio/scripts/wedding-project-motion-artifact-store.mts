@@ -12,9 +12,15 @@ export interface WeddingProjectMotionCanonicalArtifactPaths {
   currentness: string;
 }
 
+function defaultArtifactRoot() {
+  return process.env.WEDDING_PROJECT_MOTION_ARTIFACT_ROOT
+    ? resolve(process.env.WEDDING_PROJECT_MOTION_ARTIFACT_ROOT)
+    : motionStudioRoot;
+}
+
 export function getWeddingProjectMotionCanonicalArtifactPaths(
   movie: WeddingMovieId,
-  root = motionStudioRoot,
+  root = defaultArtifactRoot(),
 ): WeddingProjectMotionCanonicalArtifactPaths {
   const directory = join(root, 'out', 'handoff', `${movie}-v1`, 'project-motion');
   return {
