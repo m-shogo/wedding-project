@@ -32,7 +32,9 @@ Test representative stress cases before final polish:
 - body copy +30–40%;
 - one support photo removed;
 - one replacement photo has a different aspect ratio;
-- one caption becomes two lines longer.
+- one caption becomes two lines longer;
+- one P07 discovery item is removed because the wedding detail is not verified;
+- one P07 discovery note expands to 3–4 lines without shrinking body type.
 
 Do not solve stress failures by silently shrinking important type below the working readability floor.
 
@@ -67,7 +69,8 @@ A V20 design candidate must show:
 - distinct cover silhouette;
 - coherent P02–P03 spread;
 - unmistakable P04–P05 center-spread peak;
-- P06–P07 contrast between real-life playfulness and useful day guidance;
+- P06–P07 contrast and transition from `REAL LIFE` playfulness to `TODAY` wedding discovery;
+- P07 remains useful to a guest already seated, with verified look-around details and no schedule-first/pre-arrival logistics takeover;
 - calmer P08 ending;
 - no page that exists only because an older version had it;
 - no unresolved low-res/proxy/fact issue silently treated as final.
