@@ -103,8 +103,8 @@ const next = state === 'NOT_STAGED'
     }
   : state === 'STAGED_CURRENT'
     ? {
-        kind: 'RUN_CANONICAL_HANDOFF_WHEN_UPSTREAM_READY',
-        command: `node --no-warnings scripts/prepare-wedding-project-remotion-production-handoff.mts --movie=${movieId} --phase=handoff`,
+        kind: 'BUILD_AND_VERIFY_REAL_PALMIER_TIMELINE_BEFORE_HANDOFF',
+        command: `node --no-warnings scripts/build-wedding-palmier-typography-assembly-plan.mts --movie=${movieId} --write`,
       }
     : state === 'HANDOFF_CURRENT'
       ? {
@@ -117,8 +117,8 @@ const next = state === 'NOT_STAGED'
         };
 
 const report = {
-  schemaVersion: 'wedding-project-remotion-production-stage-status/v1',
-  authority: 'READ_ONLY_CANONICAL_PROJECT_REMOTION_STATUS',
+  schemaVersion: 'wedding-project-remotion-production-stage-status/v2',
+  authority: 'READ_ONLY_CANONICAL_PROJECT_REMOTION_STATUS_WITH_PALMIER_HANDOFF_ROUTE',
   movieId,
   state,
   blocker,
@@ -130,13 +130,16 @@ const report = {
   },
   next,
   evidenceBoundary: {
+    palmierGuiActual: 'NOT_RUN_UNLESS_HUMAN_EXECUTED',
     macRemotionStudioGuiActual: 'NOT_RUN_UNLESS_HUMAN_EXECUTED',
     macDavinciResolveGuiActual: 'NOT_RUN_UNLESS_HUMAN_EXECUTED',
     productionReadyPromotedByThisCheck: false,
   },
   guardrails: [
     'STATUS_CHECK_IS_READ_ONLY',
+    'STAGED_CURRENT_REQUIRES_PALMIER_ASSEMBLY_AND_FCPXML_VERIFICATION_BEFORE_HANDOFF',
     'STAGED_CURRENT != CANONICAL_PRODUCTION_HANDOFF_CURRENT',
+    'HANDOFF_CURRENT != PALMIER_GUI_ACTUAL_PASS',
     'HANDOFF_CURRENT != REMOTION_STUDIO_GUI_ACTUAL_PASS',
     'HANDOFF_CURRENT != MAC_DAVINCI_GUI_ACTUAL_PASS',
     'STATUS_CHECK_MUST_NOT_SYNTHESIZE_HUMAN_EVIDENCE',
@@ -153,6 +156,7 @@ else {
   if (detail) console.log(`detail=${detail}`);
   console.log(`next=${next.kind}`);
   console.log(`nextCommand=${next.command}`);
+  console.log('palmierGuiActual=NOT_RUN_UNLESS_HUMAN_EXECUTED');
   console.log('macRemotionStudioGuiActual=NOT_RUN_UNLESS_HUMAN_EXECUTED');
   console.log('macDaVinciGuiActual=NOT_RUN_UNLESS_HUMAN_EXECUTED');
   console.log('productionReadyPromotedByThisCheck=NO');
