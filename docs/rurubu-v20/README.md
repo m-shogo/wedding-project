@@ -26,7 +26,14 @@ Therefore V20 does NOT spend premium page space on dress code, access, transit, 
 
 If another paper item owns menu/drink/seating/escort utility, V20 does not duplicate that content merely to fill space.
 
-See `V20-SEATED-GUEST-CONTENT-CONTRACT.md`.
+The editorial filter is:
+
+`WHO ARE THESE TWO?`
+→ `WHAT IS THEIR STORY?`
+→ `WHAT DID THEY EXPERIENCE TOGETHER?`
+→ `WHAT FEELS LIKE THEM IN REAL LIFE?`
+→ `WHAT IS FUN TO NOTICE AROUND TODAY'S WEDDING?`
+→ `WHAT DO WE WANT GUESTS TO REMEMBER?`
 
 ## North Star
 
@@ -42,32 +49,35 @@ Read in this order:
 
 1. `V20-NORTH-STAR-IMAGE.md`
 2. `V20-SEATED-GUEST-CONTENT-CONTRACT.md`
-3. `V20-CONTENT-INVENTORY.md`
-4. `V20-TRUTH-EDITORIAL-BOUNDARY.md`
-5. `V20-CONTENT-ARCHITECTURE-GATE.md`
-6. `V20-SPREAD-ARCHITECTURE.md`
-7. `V20-READING-PATH-SYSTEM.md`
-8. `V20-VISUAL-GRAMMAR.md`
-9. `V20-PAGE-DIFFERENTIATION-MATRIX.md`
-10. `V20-EDITORIAL-BUDGETS-AND-CHANGE-RESILIENCE.md`
-11. `V20-PHOTO-ROLE-SYSTEM.md`
-12. `V20-PHOTO-INVENTORY-FIRST-PASS.md`
-13. `V20-HAWAII-RAW-PHOTO-REVIEW.md`
-14. `V20-PHOTO-GAP-MATRIX.md`
-15. `V20-PRODUCTION-GEOMETRY.md`
-16. `V20-PAGE-MANUALS.md`
-17. page-role overrides/addenda such as `V20-P07-SEATED-GUEST-PRODUCTION-BRIEF.md` when present;
-18. `V20-GREYBOX-SILHOUETTE-SPEC.md`
-19. `V20-ASSET-FIRST-ASSEMBLY-CONTRACT.md`
-20. `V20-LAYER-OVERLAP-SYSTEM.md`
-21. `V20-EDITORIAL-CONTAINER-AND-TITLE-GRAMMAR.md`
-22. `V20-PARTS-SYSTEM.md`
-23. `V20-P01-COVER-PRODUCTION-BRIEF.md`
-24. `V20-P45-CENTER-SPREAD-PRODUCTION-BRIEF.md`
-25. `V20-ASSET-PRODUCTION-QUEUE.md`
-26. `V20-QUALITY-GATES.md`
-27. `V20-ACCEPTANCE-EVIDENCE.md`
-28. only then derive exact asset-generation and Figma placement instructions.
+3. `V20-SEATED-GUEST-CONTENT-AUDIT.md`
+4. `V20-PAGE-CONTENT-SCORECARD.md`
+5. `V20-CONTENT-INVENTORY.md`
+6. `V20-TRUTH-EDITORIAL-BOUNDARY.md`
+7. `V20-CONTENT-ARCHITECTURE-GATE.md`
+8. `V20-SPREAD-ARCHITECTURE.md`
+9. `V20-READING-PATH-SYSTEM.md`
+10. `V20-VISUAL-GRAMMAR.md`
+11. `V20-PAGE-DIFFERENTIATION-MATRIX.md`
+12. `V20-EDITORIAL-BUDGETS-AND-CHANGE-RESILIENCE.md`
+13. `V20-PHOTO-ROLE-SYSTEM.md`
+14. `V20-PHOTO-INVENTORY-FIRST-PASS.md`
+15. `V20-HAWAII-RAW-PHOTO-REVIEW.md`
+16. `V20-PHOTO-GAP-MATRIX.md`
+17. `V20-PRODUCTION-GEOMETRY.md`
+18. `V20-PAGE-MANUALS.md`
+19. `V20-P07-SEATED-GUEST-MANUAL.md` — canonical override of the old schedule-first P07 section;
+20. page-role production briefs/addenda when present;
+21. `V20-GREYBOX-SILHOUETTE-SPEC.md`
+22. `V20-ASSET-FIRST-ASSEMBLY-CONTRACT.md`
+23. `V20-LAYER-OVERLAP-SYSTEM.md`
+24. `V20-EDITORIAL-CONTAINER-AND-TITLE-GRAMMAR.md`
+25. `V20-PARTS-SYSTEM.md`
+26. `V20-P01-COVER-PRODUCTION-BRIEF.md`
+27. `V20-P45-CENTER-SPREAD-PRODUCTION-BRIEF.md`
+28. `V20-ASSET-PRODUCTION-QUEUE.md`
+29. `V20-QUALITY-GATES.md`
+30. `V20-ACCEPTANCE-EVIDENCE.md`
+31. only then derive exact asset-generation and Figma placement instructions.
 
 `V20-IDEA-BANK.md` is a controlled idea pool, not a mandatory design authority.
 
@@ -79,7 +89,7 @@ Read in this order:
 - P04 CENTER SPREAD LEFT / JOURNEY DEPARTURE
 - P05 CENTER SPREAD RIGHT / HAWAII PEAK + ARRIVAL
 - P06 OFF THE MAP / BEST SHOTS + REAL LIFE
-- P07 TODAY'S TRAVEL GUIDE / FIND THE JOURNEY AROUND YOU
+- P07 TODAY'S TRAVEL GUIDE / LOOK AROUND THE WEDDING
 - P08 BACK COVER / CONTINUE THE JOURNEY
 
 Physical spread thinking:
@@ -106,6 +116,7 @@ These are the final foundation layers before production. Do not add more governa
 13. `TEXT SUPPORT, NOT SEPARATION` — readability is protected by paper fields, slabs, ribbons, keylines, local contrast and other support methods rather than by moving text away from imagery.
 14. `EDITORIAL VESSELS, NOT GENERIC UI` — boxes/bands/cards/rounded shapes are welcome when they are page-aware magazine forms; repeated generic UI containers are not.
 15. `PHOTO-FIRST GEOMETRY` — strongest real source behavior drives mask/frame geometry; frames never dictate important source cropping merely because they already exist.
+16. `NO FUNCTIONAL DUPLICATION` — menu/drink/seating/escort/access content stays in the artifact that owns that function; V20 uses its pages for story, personality, discovery and keepsake value.
 
 ## Asset-first rule
 
@@ -171,19 +182,25 @@ Use them as editorial forms:
 
 What is rejected is repeating the same generic card silhouette everywhere.
 
-## Page-aware prepared assets
+## Current content consequence
 
-Prefer larger `EDITORIAL CLUSTER` assets over dozens of atomic stickers.
+The seated-guest audit currently says:
 
-Examples:
-- `V20_P01_TROPICAL_FRAME_CLUSTER_A`;
-- `V20_P01_BOTTOM_EDITORIAL_CLUSTER_A`;
-- `V20_P45_ROUTE_BACK_A` / `V20_P45_ROUTE_FRONT_A`;
-- `V20_P45_LEFT_EDGE_TRAVEL_CLUSTER_A`;
-- `V20_P05_PROPOSAL_HIGHLIGHT_A`;
-- `V20_P08_CLOSING_EDGE_CLUSTER_A`.
+- P01 cover = very high value;
+- P02 profile = high only when facts are personal rather than form fields;
+- P03 story = high value, but final episode wording still needs curation;
+- P04–P05 travel = very high value, pending real Okinawa/Korea source-photo review;
+- P06 real life = very high when candid/daily-life/dog photos are found;
+- P07 = wedding-discovery page, not timetable/logistics;
+- P08 = keep the thank-you short, personal and non-template.
 
-A cluster may deliberately contain empty/transparent regions for faces/text/photo interaction.
+Highest-value unresolved content inputs are:
+- interesting individual profile facts;
+- concise relationship episode copy;
+- Okinawa/Korea real photo pools + one real memory/detail each;
+- candid/daily-life/dog photo pool;
+- final visible wedding details for P07;
+- final personal thank-you copy.
 
 ## Current photo evidence consequence
 
@@ -236,10 +253,11 @@ Prompts are execution artifacts generated from page manuals and asset briefs, no
 
 ## Current production priority
 
-1. P01 Cover prepared assets + first decorated assembly;
-2. P04–P05 center-spread major composites + first decorated assembly;
-3. replace old P07 schedule greybox with seated-guest discovery concept;
-4. learn from those real compositions and feed only proven lessons back into P02/P03/P06/P08;
-5. avoid building a giant generic parts library before page evidence exists.
+1. continue P01 prepared assets + first decorated cover assembly;
+2. continue P04–P05 major composites + first decorated center-spread assembly;
+3. collect/verify the physical wedding details that will populate P07 while keeping its new discovery layout flexible;
+4. continue real-photo recovery for P02/P04/P06 gaps;
+5. feed only proven production lessons back into P02/P03/P06/P08;
+6. avoid building a giant generic parts library before page evidence exists.
 
 This sequencing is intentional: the goal is to finish authored magazine pages, not to endlessly improve a design system.
