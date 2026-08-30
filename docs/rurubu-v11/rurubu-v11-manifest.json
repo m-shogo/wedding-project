@@ -14,6 +14,7 @@
     "designTokens": "docs/rurubu-v11/RURUBU-V11-DESIGN-TOKENS.md",
     "copyCapacity": "docs/rurubu-v11/RURUBU-V11-COPY-CAPACITY.md",
     "photoSlots": "docs/rurubu-v11/rurubu-v11-photo-slots.json",
+    "layoutBlueprints": "docs/rurubu-v11/rurubu-v11-layout-blueprints.json",
     "partsLibrary": "docs/rurubu-v11/RURUBU-V11-PARTS-LIBRARY.md",
     "assetNeeds": "docs/rurubu-v11/RURUBU-V11-ASSET-NEEDS-MATRIX.md",
     "contentTruth": "docs/rurubu-v11/RURUBU-V11-CONTENT-TRUTH.md",
@@ -68,6 +69,7 @@
     "unknown personal facts remain explicit TBD and are never invented",
     "copy overflow is solved structurally before shrinking readable body text",
     "structural hierarchy is fixed before micro-decoration",
+    "layout blueprint constrains placement but does not turn the page into a rigid UI grid",
     "V11 QA uses only the V11 reference and V11 QA gate",
     "adjacent pages must vary composition while sharing part vocabulary",
     "Figma V11 starts on a new clean production page rather than modifying old V10 frames in place"
