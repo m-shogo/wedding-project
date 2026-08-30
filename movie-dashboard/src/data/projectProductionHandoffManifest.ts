@@ -13,6 +13,14 @@ import {
   type TypographyProjectDeliveryBatchV1,
 } from "./typographyProjectDeliveryBatch";
 import type {TypographyProductionSelectionV1} from "./typographySceneProductionRouting";
+import {
+  buildWeddingProjectMotionProductionHandoff,
+  type WeddingProjectMotionProductionHandoffV1,
+} from "./weddingProjectMotionProductionHandoff";
+import {
+  loadWeddingProjectMotionAssignments,
+  type WeddingProjectMotionAssignmentState,
+} from "./weddingProjectMotionAssignments";
 import type {
   MaskRevealSceneInstance,
   MotionZukanComposerState,
@@ -155,6 +163,7 @@ export interface ProjectProductionHandoffManifestV1 {
       safeAreaPercent: number;
       updatedAt: string;
     } | null;
+    motion: WeddingProjectMotionProductionHandoffV1;
     openingV1Media: OpeningV1ProductionMediaGateV1 | null;
     profileV1Media: ProfileV1ProductionMediaGateV1 | null;
   };
@@ -245,6 +254,7 @@ export function buildProjectProductionHandoffManifest(
   composer: MotionZukanComposerState,
   workspace: MotionZukanProductionWorkspaceState,
   selections: TypographyProductionSelectionV1[],
+  motionAssignments: WeddingProjectMotionAssignmentState = loadWeddingProjectMotionAssignments(),
 ): ProjectProductionHandoffManifestV1 {
   const timeline = composer.timelines.find((item) => item.projectId === projectId);
   if (!timeline) throw new Error("PROJECT_PRODUCTION_HANDOFF_TIMELINE_MISSING");
@@ -286,13 +296,16 @@ export function buildProjectProductionHandoffManifest(
       timeSeconds: marker.timeSeconds,
     }));
   const design = workspace.designSettings.find((item) => item.projectId === projectId) ?? null;
+  const motion = buildWeddingProjectMotionProductionHandoff(projectId, composer, motionAssignments);
   const openingV1Media = buildOpeningV1ProductionMediaGate(projectId);
   const profileV1Media = buildProfileV1ProductionMediaGate(projectId);
+  const motionBlockingGatePass = motion.blockers.length === 0;
   const openingV1MediaBlockingGatePass = openingV1Media?.blockingGatePass ?? true;
   const profileV1MediaBlockingGatePass = profileV1Media?.blockingGatePass ?? true;
   const blockers = [
     ...typography.blockers,
     ...finalChecks.filter((check) => !check.ok).map((check) => `FINAL_CHECK:${check.id}:${check.detail}`),
+    ...motion.blockers.map((blocker) => `MOTION:${blocker}`),
     ...(openingV1Media && openingV1Media.photoMissingCount > 0
       ? [`OPENING_V1_PHOTOS:${openingV1Media.resolvedPhotoCount}/${openingV1Media.expectedPhotoCount}:MISSING_${openingV1Media.photoMissingCount}`]
       : []),
@@ -320,6 +333,7 @@ export function buildProjectProductionHandoffManifest(
   const readyForAssembly =
     typography.summary.batchReadyForPalmierDaVinciHandoff &&
     finalChecksPass &&
+    motionBlockingGatePass &&
     openingV1MediaBlockingGatePass &&
     profileV1MediaBlockingGatePass;
 
@@ -339,6 +353,7 @@ export function buildProjectProductionHandoffManifest(
         safeAreaPercent: design.safeAreaPercent,
         updatedAt: design.updatedAt,
       } : null,
+      motion,
       openingV1Media,
       profileV1Media,
     },
@@ -347,7 +362,7 @@ export function buildProjectProductionHandoffManifest(
       productionReady: false,
       blockers,
       warnings,
-      rule: "Assembly-readyは全Sceneのcurrent Typography package + Production Workspace final checksに加え、OpeningではMotion Studio正本の11写真/BGM gate、Profileでは5章17実素材 + BGM権利 + SHA-bound structure review + SHA-bound real-media Human QAが揃った状態だけを示す。Profileの章role/editIntentと各Human review状態・real-media evidence SHA/fingerprint/各QA bindingはhandoffへ保持する。BGM audio QA / Mac DaVinci Actual / Human promotion / Scene-bound Release Gateは別証拠で、productionReadyへ自動昇格しない。",
+      rule: "Assembly-readyは全Sceneのcurrent Typography package + Production Workspace final checksに加え、Human採用済みMotionがある場合はexact Scene assignment + Scene-bound implementation/preview verification、OpeningではMotion Studio正本の11写真/BGM gate、Profileでは5章17実素材 + BGM権利 + SHA-bound structure review + SHA-bound real-media Human QAが揃った状態だけを示す。Motion未採用projectはMotionだけを理由にblockしない。Profileの章role/editIntentと各Human review状態・real-media evidence SHA/fingerprint/各QA bindingはhandoffへ保持する。BGM audio QA / Remotion Studio GUI Actual / Mac DaVinci Actual / Human promotion / Scene-bound Release Gateは別証拠で、productionReadyへ自動昇格しない。",
     },
   };
 }
@@ -357,6 +372,7 @@ export function buildProjectProductionHandoffManifestJson(
   composer: MotionZukanComposerState,
   workspace: MotionZukanProductionWorkspaceState,
   selections: TypographyProductionSelectionV1[],
+  motionAssignments: WeddingProjectMotionAssignmentState = loadWeddingProjectMotionAssignments(),
 ) {
-  return JSON.stringify(buildProjectProductionHandoffManifest(projectId, composer, workspace, selections), null, 2);
+  return JSON.stringify(buildProjectProductionHandoffManifest(projectId, composer, workspace, selections, motionAssignments), null, 2);
 }
