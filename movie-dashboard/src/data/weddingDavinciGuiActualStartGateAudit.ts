@@ -1,5 +1,5 @@
 export const WEDDING_DAVINCI_GUI_ACTUAL_START_GATE_AUDIT_SCHEMA =
-  "wedding-davinci-gui-actual-start-gate-audit-dashboard/v1" as const;
+  "wedding-davinci-gui-actual-start-gate-audit-dashboard/v2" as const;
 
 export const CANONICAL_WEDDING_DAVINCI_GUI_ACTUAL_START_GATE_SCHEMA =
   "wedding-davinci-gui-actual-start-gate/v1" as const;
@@ -9,6 +9,7 @@ export type WeddingMovieId = "opening" | "profile";
 export type WeddingDavinciGuiActualStartGateAuditState =
   | "NOT_RUN"
   | "TRANSPORT_NOT_CURRENT"
+  | "PROJECT_MOTION_BLOCKED"
   | "UPSTREAM_BLOCKED"
   | "EVIDENCE_INIT_REQUIRED"
   | "GUI_ACTUAL_ALLOWED"
@@ -31,6 +32,13 @@ export type WeddingDavinciGuiActualStartGateAudit = {
   };
   project: {
     sessionState: string | null;
+    projectMotionPreflight: {
+      state: string | null;
+      applicable: boolean;
+      current: boolean;
+      command: string | null;
+      error: string | null;
+    };
     evidenceState: string | null;
     handoffIdentitySha256: string | null;
     actualRecoverySha256: string | null;
@@ -55,6 +63,7 @@ export type WeddingDavinciGuiActualStartGateAudit = {
 const canonicalAuthority = "DERIVED_MAC_DAVINCI_GUI_ACTUAL_START_GATE";
 const allowedStates = new Set<WeddingDavinciGuiActualStartGateAuditState>([
   "TRANSPORT_NOT_CURRENT",
+  "PROJECT_MOTION_BLOCKED",
   "UPSTREAM_BLOCKED",
   "EVIDENCE_INIT_REQUIRED",
   "GUI_ACTUAL_ALLOWED",
@@ -75,6 +84,13 @@ const emptyTransport = () => ({
 
 const emptyProject = () => ({
   sessionState: null,
+  projectMotionPreflight: {
+    state: null,
+    applicable: false,
+    current: false,
+    command: null,
+    error: null,
+  },
   evidenceState: null,
   handoffIdentitySha256: null,
   actualRecoverySha256: null,
@@ -140,6 +156,30 @@ export function auditWeddingDavinciGuiActualStartGate(
     mismatches.push("GUI_START_GATE_HUMAN_ACTION_MUST_NOT_HAVE_COMMAND");
   }
 
+  const projectMotion = gate.project?.projectMotionPreflight;
+  if (!projectMotion || typeof projectMotion !== "object") {
+    mismatches.push("GUI_START_GATE_PROJECT_MOTION_PREFLIGHT_MISSING");
+  } else {
+    if (!["CURRENT", "NOT_APPLICABLE", "INVALID"].includes(projectMotion.state)) {
+      mismatches.push("GUI_START_GATE_PROJECT_MOTION_PREFLIGHT_STATE_INVALID");
+    }
+    if (typeof projectMotion.command !== "string") {
+      mismatches.push("GUI_START_GATE_PROJECT_MOTION_PREFLIGHT_COMMAND_MISSING");
+    }
+    if (projectMotion.state === "INVALID" && gate.state !== "PROJECT_MOTION_BLOCKED") {
+      mismatches.push("GUI_START_GATE_PROJECT_MOTION_INVALID_NOT_BLOCKED");
+    }
+    if (gate.state === "PROJECT_MOTION_BLOCKED" && projectMotion.state !== "INVALID") {
+      mismatches.push("GUI_START_GATE_PROJECT_MOTION_BLOCK_WITHOUT_INVALID_STATE");
+    }
+    if (gate.state === "PROJECT_MOTION_BLOCKED" && gate.nextAction?.kind !== "REVALIDATE_PROJECT_MOTION") {
+      mismatches.push("GUI_START_GATE_PROJECT_MOTION_RECOVERY_ACTION_INVALID");
+    }
+    if (gate.state === "PROJECT_MOTION_BLOCKED" && gate.nextAction?.command !== projectMotion.command) {
+      mismatches.push("GUI_START_GATE_PROJECT_MOTION_RECOVERY_COMMAND_MISMATCH");
+    }
+  }
+
   if (mismatches.length > 0) return result(movieId, "INVALID", mismatches);
 
   return result(movieId, gate.state, [], {
@@ -154,6 +194,13 @@ export function auditWeddingDavinciGuiActualStartGate(
     },
     project: {
       sessionState: typeof gate.project?.sessionState === "string" ? gate.project.sessionState : null,
+      projectMotionPreflight: {
+        state: typeof projectMotion.state === "string" ? projectMotion.state : null,
+        applicable: projectMotion.applicable === true,
+        current: projectMotion.current === true,
+        command: typeof projectMotion.command === "string" ? projectMotion.command : null,
+        error: typeof projectMotion.error === "string" ? projectMotion.error : null,
+      },
       evidenceState: typeof gate.project?.evidenceState === "string" ? gate.project.evidenceState : null,
       handoffIdentitySha256: typeof gate.project?.handoffIdentitySha256 === "string" ? gate.project.handoffIdentitySha256 : null,
       actualRecoverySha256: typeof gate.project?.actualRecoverySha256 === "string" ? gate.project.actualRecoverySha256 : null,
