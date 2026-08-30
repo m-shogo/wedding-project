@@ -1,12 +1,12 @@
 import {spawnSync} from 'node:child_process';
-import {existsSync} from 'node:fs';
-import {isAbsolute, join, relative, resolve} from 'node:path';
+import {copyFileSync, existsSync, mkdirSync, renameSync} from 'node:fs';
+import {dirname, isAbsolute, join, relative, resolve} from 'node:path';
 
 const motionStudioRoot = process.cwd();
 const repoRoot = resolve(motionStudioRoot, '..');
 
 type MovieId = 'opening' | 'profile';
-type Phase = 'identity' | 'handoff';
+type Phase = 'identity' | 'stage' | 'handoff';
 
 type StepResult = {
   id: string;
@@ -29,8 +29,8 @@ if (movieArg !== 'opening' && movieArg !== 'profile') {
 const movieId: MovieId = movieArg;
 
 const phaseArg = argValue('--phase') ?? 'identity';
-if (phaseArg !== 'identity' && phaseArg !== 'handoff') {
-  console.error('BLOCK / PHASE_MUST_BE_IDENTITY_OR_HANDOFF');
+if (phaseArg !== 'identity' && phaseArg !== 'stage' && phaseArg !== 'handoff') {
+  console.error('BLOCK / PHASE_MUST_BE_IDENTITY_STAGE_OR_HANDOFF');
   process.exit(2);
 }
 const phase: Phase = phaseArg;
@@ -40,9 +40,13 @@ const canonicalRoleManifestPath = join(repoRoot, `movie-dashboard/out/project-ro
 const canonicalReceiptPath = join(repoRoot, `movie-dashboard/out/remotion-element-handoff/${movieId}-project-remotion-identity-verification-receipt.json`);
 const canonicalCatalogIdentityPath = join(repoRoot, 'movie-dashboard/out/remotion-element-handoff/wedding-remotion-element-identities.json');
 const requestedBatch = argValue('--batch');
+const requestedRoleManifest = argValue('--role-manifest');
 const batchPath = requestedBatch
   ? (isAbsolute(requestedBatch) ? requestedBatch : resolve(motionStudioRoot, requestedBatch))
   : canonicalBatchPath;
+const roleManifestPath = requestedRoleManifest
+  ? (isAbsolute(requestedRoleManifest) ? requestedRoleManifest : resolve(motionStudioRoot, requestedRoleManifest))
+  : canonicalRoleManifestPath;
 
 const displayPath = (absolutePath: string) => relative(repoRoot, absolutePath).replaceAll('\\', '/');
 const shellQuote = (value: string) => /[\s'"$`\\]/.test(value)
@@ -76,11 +80,29 @@ const run = (id: string, script: string, args: string[] = []) => {
   return result.stdout.trim();
 };
 
+const atomicStage = (sourcePath: string, destinationPath: string) => {
+  mkdirSync(dirname(destinationPath), {recursive: true});
+  const stagingPath = `${destinationPath}.stage-${process.pid}-${Date.now()}`;
+  copyFileSync(sourcePath, stagingPath);
+  renameSync(stagingPath, destinationPath);
+};
+
 if (!existsSync(batchPath)) {
   fail(
     'TYPOGRAPHY_PROJECT_BATCH_MISSING_BEFORE_PRODUCTION_PREP',
     `Export Motion Zukan Typography package and provide it via --batch or place it at ${displayPath(canonicalBatchPath)}`,
   );
+}
+
+if (phase === 'stage') {
+  if (!requestedBatch) fail('STAGE_PHASE_REQUIRES_EXPLICIT_BATCH_PATH');
+  if (!requestedRoleManifest) fail('STAGE_PHASE_REQUIRES_EXPLICIT_ROLE_MANIFEST_PATH');
+  if (!existsSync(roleManifestPath)) {
+    fail('PROJECT_ROLE_HANDOFF_MANIFEST_MISSING_BEFORE_STAGE', `Expected operator-selected manifest at ${roleManifestPath}`);
+  }
+  if (batchPath === canonicalBatchPath || roleManifestPath === canonicalRoleManifestPath) {
+    fail('STAGE_PHASE_REQUIRES_NON_CANONICAL_SOURCE_PATHS');
+  }
 }
 
 run('EXPORT_CURRENT_CATALOG_IDENTITY', 'export-wedding-remotion-element-handoff-identities.mts');
@@ -91,6 +113,33 @@ run('GENERATE_PROJECT_IDENTITY_RECEIPT', 'verify-wedding-project-remotion-elemen
 ]);
 run('CHECK_PROJECT_IDENTITY_RECEIPT', 'check-wedding-project-remotion-element-identity-receipt.mts', [`--movie=${movieId}`]);
 
+let canonicalStageState: 'NOT_RUN' | 'CURRENT' = 'NOT_RUN';
+if (phase === 'stage') {
+  run('VERIFY_EXTERNAL_PROJECT_ROLE_HANDOFF', 'verify-wedding-project-remotion-identity-handoff.mts', [
+    `--movie=${movieId}`,
+    `--manifest=${roleManifestPath}`,
+  ]);
+
+  atomicStage(batchPath, canonicalBatchPath);
+  atomicStage(roleManifestPath, canonicalRoleManifestPath);
+  steps.push({
+    id: 'STAGE_VALIDATED_INPUTS_TO_CANONICAL_PATHS',
+    command: `atomic-stage ${shellQuote(batchPath)} -> ${displayPath(canonicalBatchPath)} ; ${shellQuote(roleManifestPath)} -> ${displayPath(canonicalRoleManifestPath)}`,
+    state: 'PASS',
+  });
+
+  run('REGENERATE_CANONICAL_PROJECT_IDENTITY_RECEIPT', 'verify-wedding-project-remotion-element-identities.mts', [
+    `--movie=${movieId}`,
+    `--batch=${canonicalBatchPath}`,
+  ]);
+  run('CHECK_CANONICAL_PROJECT_IDENTITY_RECEIPT', 'check-wedding-project-remotion-element-identity-receipt.mts', [`--movie=${movieId}`]);
+  run('VERIFY_CANONICAL_PROJECT_ROLE_HANDOFF', 'verify-wedding-project-remotion-identity-handoff.mts', [
+    `--movie=${movieId}`,
+    `--manifest=${canonicalRoleManifestPath}`,
+  ]);
+  canonicalStageState = 'CURRENT';
+}
+
 if (phase === 'handoff') {
   if (batchPath !== canonicalBatchPath) {
     fail('CANONICAL_BATCH_REQUIRED_FOR_HANDOFF_PHASE', `Expected ${displayPath(canonicalBatchPath)}`);
@@ -98,15 +147,37 @@ if (phase === 'handoff') {
   if (!existsSync(canonicalRoleManifestPath)) {
     fail(
       'PROJECT_ROLE_HANDOFF_MANIFEST_MISSING_BEFORE_CANONICAL_HANDOFF',
-      `Export Motion Zukan role handoff manifest and place it at ${displayPath(canonicalRoleManifestPath)}`,
+      `Run --phase=stage with the downloaded batch + role manifest, or place the validated manifest at ${displayPath(canonicalRoleManifestPath)}`,
     );
   }
+  run('VERIFY_CANONICAL_PROJECT_ROLE_HANDOFF', 'verify-wedding-project-remotion-identity-handoff.mts', [
+    `--movie=${movieId}`,
+    `--manifest=${canonicalRoleManifestPath}`,
+  ]);
   run('EXPORT_CANONICAL_PRODUCTION_HANDOFF', 'export-wedding-production-handoff.mts', [`--movie=${movieId}`]);
   run('VERIFY_CANONICAL_PRODUCTION_HANDOFF', 'verify-wedding-production-handoff-provenance.mts', [`--movie=${movieId}`]);
 }
 
+const next = phase === 'identity'
+  ? {
+      kind: 'STAGE_CANONICAL_INPUTS',
+      command: `node --no-warnings scripts/prepare-wedding-project-remotion-production-handoff.mts --movie=${movieId} --phase=stage --batch='<downloaded-typography-batch-path>' --role-manifest='<downloaded-role-manifest-path>'`,
+      note: 'Stage only the Human-exported batch + role manifest that pass the current SHA-bound identity/handoff verification. Stage is explicit and never runs automatically.',
+    }
+  : phase === 'stage'
+    ? {
+        kind: 'RUN_CANONICAL_HANDOFF_WHEN_UPSTREAM_READY',
+        command: `node --no-warnings scripts/prepare-wedding-project-remotion-production-handoff.mts --movie=${movieId} --phase=handoff`,
+        note: 'Canonical inputs and receipt are current. Run the final handoff phase only when real-media/final-render upstream production requirements are ready.',
+      }
+    : {
+        kind: 'DAVINCI_SESSION_PLAN_AND_START_GATE',
+        command: `node --no-warnings scripts/wedding-davinci-actual-session-plan.mts --write`,
+        note: 'Canonical production handoff provenance is current. Continue through the transported Session Plan and strict GUI Actual Start Gate; do not synthesize GUI PASS.',
+      };
+
 const report = {
-  schemaVersion: 'wedding-project-remotion-production-prep/v1',
+  schemaVersion: 'wedding-project-remotion-production-prep/v2',
   authority: 'DERIVED_PROJECT_REMOTION_PRODUCTION_PREP',
   movieId,
   phase,
@@ -116,6 +187,18 @@ const report = {
     absolutePath: batchPath,
     repoRelativePath: displayPath(batchPath),
   },
+  roleManifestInput: {
+    source: requestedRoleManifest ? 'EXPLICIT_OPERATOR_PATH' : 'CANONICAL_PATH',
+    absolutePath: roleManifestPath,
+    repoRelativePath: displayPath(roleManifestPath),
+  },
+  canonicalStage: {
+    state: canonicalStageState,
+    performedByThisRun: phase === 'stage',
+    batchPath: displayPath(canonicalBatchPath),
+    roleManifestPath: displayPath(canonicalRoleManifestPath),
+    receiptPath: displayPath(canonicalReceiptPath),
+  },
   artifacts: {
     sourceBatch: displayPath(batchPath),
     canonicalBatch: displayPath(canonicalBatchPath),
@@ -124,17 +207,7 @@ const report = {
     identityReceipt: displayPath(canonicalReceiptPath),
   },
   steps,
-  next: phase === 'identity'
-    ? {
-        kind: 'STAGE_ROLE_MANIFEST_AND_RUN_HANDOFF_PHASE',
-        command: `node --no-warnings scripts/prepare-wedding-project-remotion-production-handoff.mts --movie=${movieId} --phase=handoff`,
-        note: 'Run only after the canonical Typography batch and Project Role handoff manifest are staged at the paths above and upstream production requirements are ready.',
-      }
-    : {
-        kind: 'DAVINCI_SESSION_PLAN_AND_START_GATE',
-        command: `node --no-warnings scripts/wedding-davinci-actual-session-plan.mts --write`,
-        note: 'Canonical production handoff provenance is current. Continue through the transported Session Plan and strict GUI Actual Start Gate; do not synthesize GUI PASS.',
-      },
+  next,
   evidenceBoundary: {
     macRemotionStudioGuiActual: 'NOT_RUN_UNLESS_HUMAN_EXECUTED',
     macDavinciResolveGuiActual: 'NOT_RUN_UNLESS_HUMAN_EXECUTED',
@@ -144,7 +217,9 @@ const report = {
     'PRODUCTION_PREP_CURRENT != REMOTION_STUDIO_GUI_ACTUAL_PASS',
     'PRODUCTION_PREP_CURRENT != MAC_DAVINCI_GUI_ACTUAL_PASS',
     'IDENTITY_PHASE_CURRENT != CANONICAL_PRODUCTION_HANDOFF_CURRENT',
-    'EXPLICIT_BATCH_PATH_IS_ALLOWED_FOR_IDENTITY_PHASE_ONLY',
+    'STAGE_PHASE_REQUIRES_EXPLICIT_HUMAN_EXPORTED_INPUT_PATHS',
+    'STAGE_PHASE_VERIFIES_EXTERNAL_BATCH_ROLE_BINDINGS_BEFORE_CANONICAL_WRITE',
+    'STAGE_PHASE_REGENERATES_RECEIPT_AGAINST_CANONICAL_BATCH_AFTER_WRITE',
     'HANDOFF_PHASE_REQUIRES_CANONICAL_BATCH_AND_ROLE_MANIFEST',
     'PRODUCTION_PREP_MUST_NOT_SYNTHESIZE_HUMAN_EVIDENCE',
   ],
@@ -156,6 +231,8 @@ else {
   console.log(`movieId=${movieId}`);
   console.log(`phase=${phase}`);
   console.log(`batchInputSource=${report.batchInput.source}`);
+  console.log(`roleManifestInputSource=${report.roleManifestInput.source}`);
+  console.log(`canonicalStage=${report.canonicalStage.state}`);
   console.log(`identityReceipt=${report.artifacts.identityReceipt}`);
   console.log(`next=${report.next.kind}`);
   console.log('macRemotionStudioGuiActual=NOT_RUN_UNLESS_HUMAN_EXECUTED');
