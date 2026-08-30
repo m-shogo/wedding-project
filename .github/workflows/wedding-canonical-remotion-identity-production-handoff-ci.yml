@@ -1,0 +1,186 @@
+name: Wedding Canonical Remotion Identity Production Handoff CI
+
+on:
+  pull_request:
+    paths:
+      - 'motion-studio/scripts/export-wedding-production-handoff.mts'
+      - 'motion-studio/scripts/apply-wedding-project-remotion-identity-production-handoff.mts'
+      - 'motion-studio/scripts/verify-wedding-project-remotion-identity-handoff.mts'
+      - 'motion-studio/scripts/bind-wedding-project-remotion-identity-to-resolve-sidecar.mts'
+      - 'motion-studio/src/data/resolveHandoff.schema.ts'
+      - 'motion-studio/src/data/weddingResolveRemotionIdentityHandoff.schema.ts'
+      - 'motion-studio/src/data/resolveHandoffPolicy.ts'
+      - 'motion-studio/src/motion-kit/engines.tsx'
+      - '.github/workflows/wedding-canonical-remotion-identity-production-handoff-ci.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  canonical-remotion-identity-production-handoff:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+          run_install: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: motion-studio/pnpm-lock.yaml
+      - name: Install Motion Studio dependencies
+        working-directory: motion-studio
+        run: pnpm install --frozen-lockfile
+
+      - name: Canonical exporter must invoke Project Remotion identity production gate
+        run: |
+          grep -q "apply-wedding-project-remotion-identity-production-handoff.mts" motion-studio/scripts/export-wedding-production-handoff.mts
+          grep -q "Project Remotion identity receipt is missing, stale, or inconsistent" motion-studio/scripts/export-wedding-production-handoff.mts
+
+      - name: Fresh clone with no Project Typography artifacts is NOT_APPLICABLE
+        working-directory: motion-studio
+        run: |
+          node --no-warnings scripts/apply-wedding-project-remotion-identity-production-handoff.mts --movie=opening | tee /tmp/not-applicable.log
+          grep -q 'projectRemotionIdentityProductionHandoff=NOT_APPLICABLE' /tmp/not-applicable.log
+          grep -q 'remotionStudioGuiActual=NOT_RUN' /tmp/not-applicable.log
+          grep -q 'macDaVinciActual=NOT_RUN' /tmp/not-applicable.log
+          grep -q 'productionReady=NO' /tmp/not-applicable.log
+
+      - name: Export catalog identity and create production Project Typography fixtures
+        run: |
+          cd motion-studio
+          node --no-warnings scripts/export-wedding-remotion-element-handoff-identities.mts
+          cd ..
+          mkdir -p movie-dashboard/out/typography-project-delivery movie-dashboard/out/project-role-handoff
+          cat > movie-dashboard/out/typography-project-delivery/opening-typography-production-batch.json <<'JSON'
+          {
+            "schemaVersion":"wedding-movie-typography-project-delivery/v1",
+            "authority":"DERIVED_PROJECT_HANDOFF",
+            "projectId":"opening",
+            "scenes":[{"sceneId":"opening-title","sourceRevision":"rev-001","selectedPatternId":"type-mask-reveal"}],
+            "remotionElementIdentityVerification":{
+              "state":"NOT_RUN",
+              "currentnessVerifiedByBatchBuild":false,
+              "selectedPatternIds":["type-mask-reveal"],
+              "sceneBindings":[{
+                "sceneId":"opening-title",
+                "sourceRevision":"rev-001",
+                "patternId":"type-mask-reveal",
+                "adoptedForMovie":false,
+                "canonicalEngine":"TypographyRevealEngine",
+                "canonicalMode":"mask",
+                "canonicalSource":"motion-studio/src/motion-kit/engines.tsx#TypographyRevealEngine"
+              }]
+            },
+            "summary":{"batchReadyForPalmierDaVinciHandoff":true,"productionReady":false}
+          }
+          JSON
+          cat > movie-dashboard/out/project-role-handoff/opening-production-role-handoff-manifest.json <<'JSON'
+          {
+            "schemaVersion":"wedding-movie-project-role-handoff/v1",
+            "authority":"DERIVED_FROM_PROJECT_HANDOFF_AND_PERSISTED_HUMAN_ROLE_CONTEXT",
+            "projectId":"opening",
+            "typography":{
+              "projectId":"opening",
+              "scenes":[{"sceneId":"opening-title","sourceRevision":"rev-001","selectedPatternId":"type-mask-reveal"}],
+              "remotionElementIdentityVerification":{
+                "selectedPatternIds":["type-mask-reveal"],
+                "sceneBindings":[{
+                  "sceneId":"opening-title",
+                  "sourceRevision":"rev-001",
+                  "patternId":"type-mask-reveal",
+                  "adoptedForMovie":false,
+                  "canonicalEngine":"TypographyRevealEngine",
+                  "canonicalMode":"mask",
+                  "canonicalSource":"motion-studio/src/motion-kit/engines.tsx#TypographyRevealEngine"
+                }]
+              }
+            },
+            "roleHandoff":{"ready":true,"productionReady":false,"studioGuiActual":"NOT_RUN","davinciGuiActual":"NOT_RUN"}
+          }
+          JSON
+
+      - name: Generate CURRENT receipt
+        working-directory: motion-studio
+        run: |
+          node --no-warnings scripts/verify-wedding-project-remotion-element-identities.mts \
+            --movie=opening \
+            --batch=../movie-dashboard/out/typography-project-delivery/opening-typography-production-batch.json
+          node --no-warnings scripts/check-wedding-project-remotion-element-identity-receipt.mts --movie=opening
+
+      - name: Create canonical production bundle and recovery fixtures
+        working-directory: motion-studio
+        run: |
+          mkdir -p out/handoff/opening-v1 out/ci
+          printf 'ci-final-render' > out/ci/opening-final.mp4
+          SHA=$(sha256sum out/ci/opening-final.mp4 | awk '{print $1}')
+          cat > out/handoff/opening-v1/opening-v1-production-bundle.json <<JSON
+          {
+            "davinci": {
+              "handoffAsset": "out/ci/opening-final.mp4",
+              "expectedSha256": "$SHA",
+              "macActualState": "NOT_RUN",
+              "productionReady": false
+            }
+          }
+          JSON
+          cat > out/handoff/opening-v1/opening-v1-davinci-production-recovery.json <<'JSON'
+          {
+            "schemaVersion":"wedding-davinci-production-recovery-export/v1",
+            "authority":"FINAL_RENDER_BOUND_DAVINCI_RECOVERY",
+            "recovery":{"actual":{"state":"NOT_RUN"},"bridge":{"macDaVinciActualVerified":false}}
+          }
+          JSON
+
+      - name: CURRENT receipt is bound into Resolve sidecar and DaVinci recovery
+        working-directory: motion-studio
+        run: |
+          node --no-warnings scripts/apply-wedding-project-remotion-identity-production-handoff.mts --movie=opening | tee /tmp/current.log
+          grep -q 'projectRemotionIdentityProductionHandoff=CURRENT' /tmp/current.log
+          grep -q 'verifiedSceneBindings=1' /tmp/current.log
+          grep -q 'remotionStudioGuiActual=NOT_RUN' /tmp/current.log
+          grep -q 'macDaVinciActual=NOT_RUN' /tmp/current.log
+          grep -q 'productionReady=NO' /tmp/current.log
+          node - <<'NODE'
+          const fs = require('fs');
+          const crypto = require('crypto');
+          const sidecarPath = 'out/handoff/opening-v1/opening-v1-resolve-remotion-identity-handoff.json';
+          const recoveryPath = 'out/handoff/opening-v1/opening-v1-davinci-production-recovery.json';
+          const sidecarBytes = fs.readFileSync(sidecarPath);
+          const sidecar = JSON.parse(sidecarBytes);
+          const recovery = JSON.parse(fs.readFileSync(recoveryPath, 'utf8'));
+          const binding = sidecar.projectRemotionIdentityReceipt;
+          if (binding?.state !== 'CURRENT') throw new Error('Resolve identity receipt must be CURRENT');
+          if (binding?.remotionStudioGuiActual !== 'NOT_RUN' || binding?.macDaVinciGuiActual !== 'NOT_RUN') throw new Error('GUI Actual must remain NOT_RUN');
+          if (binding?.productionReady !== false) throw new Error('identity binding must not promote productionReady');
+          if (recovery?.projectRemotionIdentity?.state !== 'CURRENT') throw new Error('DaVinci recovery identity must be CURRENT');
+          const sidecarSha = crypto.createHash('sha256').update(sidecarBytes).digest('hex');
+          if (recovery.projectRemotionIdentity.resolveSidecar.sha256 !== sidecarSha) throw new Error('Recovery sidecar SHA drift');
+          if (recovery.projectRemotionIdentity.receipt.sha256 !== binding.sha256) throw new Error('Recovery receipt authority drift');
+          if (recovery.projectRemotionIdentity.macDaVinciGuiActual !== 'NOT_RUN') throw new Error('Recovery must not claim Mac DaVinci Actual');
+          if (recovery.projectRemotionIdentity.productionReady !== false) throw new Error('Recovery must not promote productionReady');
+          NODE
+
+      - name: Post-receipt batch drift fails closed before Resolve handoff
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path('movie-dashboard/out/typography-project-delivery/opening-typography-production-batch.json')
+          data = json.loads(p.read_text())
+          data['scenes'][0]['sourceRevision'] = 'rev-002'
+          data['remotionElementIdentityVerification']['sceneBindings'][0]['sourceRevision'] = 'rev-002'
+          p.write_text(json.dumps(data, indent=2) + '\n')
+          PY
+          cd motion-studio
+          if node --no-warnings scripts/apply-wedding-project-remotion-identity-production-handoff.mts --movie=opening > /tmp/stale.log 2>&1; then
+            echo 'Stale Project Remotion identity receipt must block production handoff.'
+            exit 1
+          fi
+          grep -Eq 'RECEIPT_SOURCE_BATCH_SHA_STALE|PROJECT_REMOTION_IDENTITY_PRE_HANDOFF_VERIFICATION_FAILED' /tmp/stale.log
+          grep -q 'Mac Remotion Studio GUI Actual remains NOT_RUN' /tmp/stale.log
+          grep -q 'Mac DaVinci Actual remains NOT_RUN' /tmp/stale.log

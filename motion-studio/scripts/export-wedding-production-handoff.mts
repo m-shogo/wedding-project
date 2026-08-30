@@ -169,6 +169,13 @@ if (projectMotionCurrentness) {
   }
 }
 
+const projectRemotionIdentity = run('scripts/apply-wedding-project-remotion-identity-production-handoff.mts', [`--movie=${movieArg}`]);
+forward(projectRemotionIdentity);
+if (projectRemotionIdentity.status !== 0) {
+  console.error(`Wedding production handoff blocked: ${movieArg} Project Remotion identity receipt is missing, stale, or inconsistent with the Palmier/DaVinci handoff.`);
+  process.exit(projectRemotionIdentity.status ?? 2);
+}
+
 const remotionAttachment = run('scripts/attach-wedding-remotion-element-recovery-sidecar.mts', [`--movie=${movieArg}`]);
 forward(remotionAttachment);
 if (remotionAttachment.status !== 0) {
