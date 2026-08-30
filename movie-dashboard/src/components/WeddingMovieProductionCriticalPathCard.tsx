@@ -1,6 +1,9 @@
 import {useMemo, useSyncExternalStore} from "react";
 import {Link} from "react-router-dom";
-import {buildWeddingMovieProductionCriticalPath} from "../data/weddingMovieProductionCriticalPath";
+import {
+  buildWeddingMovieProductionCriticalPath,
+  buildWeddingMovieProductionCriticalPathJson,
+} from "../data/weddingMovieProductionCriticalPath";
 import {buildWeddingMovieProductionCriticalPathRuntimeSnapshotJson} from "../data/weddingMovieProductionCriticalPathRuntimeSnapshot";
 import {
   getWeddingDavinciGuiActualStartGateAuditSnapshot,
@@ -102,6 +105,7 @@ function CriticalPathActionTargetView({target, compact = false}: {target: Critic
 
 export function WeddingMovieProductionCriticalPathCard({projectId}: {projectId: SceneProjectId}) {
   const report = useMemo(() => buildWeddingMovieProductionCriticalPath(), []);
+  const stableJson = useMemo(() => buildWeddingMovieProductionCriticalPathJson(), []);
   const startGateAudits = useSyncExternalStore(
     subscribeWeddingDavinciGuiActualStartGateAudit,
     getWeddingDavinciGuiActualStartGateAuditSnapshot,
@@ -145,9 +149,14 @@ export function WeddingMovieProductionCriticalPathCard({projectId}: {projectId: 
             </div>
           ) : null}
         </div>
-        <button type="button" onClick={() => downloadText(runtimeJson, "wedding-movie-production-critical-path-runtime.json")} className="border border-amber-300 dark:border-amber-700 px-2.5 py-1.5 text-[9px] font-semibold text-amber-700 dark:text-amber-300">
-          Runtime snapshotを書き出す
-        </button>
+        <div className="flex flex-wrap gap-1.5">
+          <button type="button" onClick={() => downloadText(stableJson, "wedding-movie-production-critical-path.json")} className="border border-sand-300 dark:border-navy-600 px-2.5 py-1.5 text-[9px] font-semibold text-navy-600 dark:text-sand-200">
+            Stable pathを書き出す
+          </button>
+          <button type="button" onClick={() => downloadText(runtimeJson, "wedding-movie-production-critical-path-runtime.json")} className="border border-amber-300 dark:border-amber-700 px-2.5 py-1.5 text-[9px] font-semibold text-amber-700 dark:text-amber-300">
+            Runtime snapshotを書き出す
+          </button>
+        </div>
       </div>
 
       <div className="mt-3 border border-violet-200 dark:border-violet-900/60 px-2.5 py-2 text-[8px] leading-4 text-navy-500 dark:text-navy-300">
