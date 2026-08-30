@@ -39,6 +39,8 @@ const canonicalBatchPath = join(repoRoot, `movie-dashboard/out/typography-projec
 const canonicalRoleManifestPath = join(repoRoot, `movie-dashboard/out/project-role-handoff/${movieId}-production-role-handoff-manifest.json`);
 const canonicalReceiptPath = join(repoRoot, `movie-dashboard/out/remotion-element-handoff/${movieId}-project-remotion-identity-verification-receipt.json`);
 const canonicalCatalogIdentityPath = join(repoRoot, 'movie-dashboard/out/remotion-element-handoff/wedding-remotion-element-identities.json');
+const canonicalPalmierTimelineReceiptPath = join(motionStudioRoot, `out/handoff/wedding/${movieId}-palmier-typography-timeline-export-receipt.json`);
+const canonicalPalmierAssemblyPlanPath = join(motionStudioRoot, `out/handoff/wedding/${movieId}-palmier-typography-assembly-plan.json`);
 const requestedBatch = argValue('--batch');
 const requestedRoleManifest = argValue('--role-manifest');
 const batchPath = requestedBatch
@@ -114,6 +116,7 @@ run('GENERATE_PROJECT_IDENTITY_RECEIPT', 'verify-wedding-project-remotion-elemen
 run('CHECK_PROJECT_IDENTITY_RECEIPT', 'check-wedding-project-remotion-element-identity-receipt.mts', [`--movie=${movieId}`]);
 
 let canonicalStageState: 'NOT_RUN' | 'CURRENT' = 'NOT_RUN';
+let palmierTimelineReceiptState: 'NOT_RUN' | 'CURRENT' = 'NOT_RUN';
 if (phase === 'stage') {
   run('VERIFY_EXTERNAL_PROJECT_ROLE_HANDOFF', 'verify-wedding-project-remotion-identity-handoff.mts', [
     `--movie=${movieId}`,
@@ -154,6 +157,11 @@ if (phase === 'handoff') {
     `--movie=${movieId}`,
     `--manifest=${canonicalRoleManifestPath}`,
   ]);
+  run('CHECK_CURRENT_PALMIER_TIMELINE_EXPORT_RECEIPT', 'check-wedding-palmier-typography-timeline-export-receipt.mts', [
+    `--movie=${movieId}`,
+    '--strict',
+  ]);
+  palmierTimelineReceiptState = 'CURRENT';
   run('EXPORT_CANONICAL_PRODUCTION_HANDOFF', 'export-wedding-production-handoff.mts', [`--movie=${movieId}`]);
   run('VERIFY_CANONICAL_PRODUCTION_HANDOFF', 'verify-wedding-production-handoff-provenance.mts', [`--movie=${movieId}`]);
 }
@@ -166,19 +174,19 @@ const next = phase === 'identity'
     }
   : phase === 'stage'
     ? {
-        kind: 'RUN_CANONICAL_HANDOFF_WHEN_UPSTREAM_READY',
-        command: `node --no-warnings scripts/prepare-wedding-project-remotion-production-handoff.mts --movie=${movieId} --phase=handoff`,
-        note: 'Canonical inputs and receipt are current. Run the final handoff phase only when real-media/final-render upstream production requirements are ready.',
+        kind: 'BUILD_AND_VERIFY_REAL_PALMIER_TIMELINE_BEFORE_HANDOFF',
+        command: `node --no-warnings scripts/build-wedding-palmier-typography-assembly-plan.mts --movie=${movieId} --write`,
+        note: 'Canonical inputs are staged. Build the operator Assembly Plan, assemble/export the real Palmier timeline as FCPXML, then create a CURRENT SHA-bound timeline receipt. Canonical production handoff fails closed until that receipt is CURRENT.',
       }
     : {
         kind: 'DAVINCI_SESSION_PLAN_AND_START_GATE',
         command: `node --no-warnings scripts/wedding-davinci-actual-session-plan.mts --write`,
-        note: 'Canonical production handoff provenance is current. Continue through the transported Session Plan and strict GUI Actual Start Gate; do not synthesize GUI PASS.',
+        note: 'Canonical production handoff provenance is current and the real Palmier FCPXML receipt was CURRENT at handoff time. Continue through the transported Session Plan and strict GUI Actual Start Gate; do not synthesize GUI PASS.',
       };
 
 const report = {
-  schemaVersion: 'wedding-project-remotion-production-prep/v2',
-  authority: 'DERIVED_PROJECT_REMOTION_PRODUCTION_PREP',
+  schemaVersion: 'wedding-project-remotion-production-prep/v3',
+  authority: 'DERIVED_PROJECT_REMOTION_PRODUCTION_PREP_WITH_PALMIER_TIMELINE_GATE',
   movieId,
   phase,
   state: 'CURRENT',
@@ -199,28 +207,40 @@ const report = {
     roleManifestPath: displayPath(canonicalRoleManifestPath),
     receiptPath: displayPath(canonicalReceiptPath),
   },
+  palmierTimelineExport: {
+    receiptState: palmierTimelineReceiptState,
+    checkedByThisRun: phase === 'handoff',
+    assemblyPlanPath: displayPath(canonicalPalmierAssemblyPlanPath),
+    receiptPath: displayPath(canonicalPalmierTimelineReceiptPath),
+  },
   artifacts: {
     sourceBatch: displayPath(batchPath),
     canonicalBatch: displayPath(canonicalBatchPath),
     projectRoleManifest: displayPath(canonicalRoleManifestPath),
     catalogIdentity: displayPath(canonicalCatalogIdentityPath),
     identityReceipt: displayPath(canonicalReceiptPath),
+    palmierAssemblyPlan: displayPath(canonicalPalmierAssemblyPlanPath),
+    palmierTimelineReceipt: displayPath(canonicalPalmierTimelineReceiptPath),
   },
   steps,
   next,
   evidenceBoundary: {
+    palmierGuiActual: 'NOT_RUN_UNLESS_HUMAN_EXECUTED',
     macRemotionStudioGuiActual: 'NOT_RUN_UNLESS_HUMAN_EXECUTED',
     macDavinciResolveGuiActual: 'NOT_RUN_UNLESS_HUMAN_EXECUTED',
     productionReadyPromotedByThisPrep: false,
   },
   guardrails: [
     'PRODUCTION_PREP_CURRENT != REMOTION_STUDIO_GUI_ACTUAL_PASS',
+    'PRODUCTION_PREP_CURRENT != PALMIER_GUI_ACTUAL_PASS',
     'PRODUCTION_PREP_CURRENT != MAC_DAVINCI_GUI_ACTUAL_PASS',
+    'PALMIER_TIMELINE_RECEIPT_CURRENT != PALMIER_GUI_ACTUAL_PASS',
     'IDENTITY_PHASE_CURRENT != CANONICAL_PRODUCTION_HANDOFF_CURRENT',
     'STAGE_PHASE_REQUIRES_EXPLICIT_HUMAN_EXPORTED_INPUT_PATHS',
     'STAGE_PHASE_VERIFIES_EXTERNAL_BATCH_ROLE_BINDINGS_BEFORE_CANONICAL_WRITE',
     'STAGE_PHASE_REGENERATES_RECEIPT_AGAINST_CANONICAL_BATCH_AFTER_WRITE',
-    'HANDOFF_PHASE_REQUIRES_CANONICAL_BATCH_AND_ROLE_MANIFEST',
+    'HANDOFF_PHASE_REQUIRES_CANONICAL_BATCH_ROLE_MANIFEST_AND_CURRENT_PALMIER_TIMELINE_RECEIPT',
+    'PALMIER_TIMELINE_RECEIPT_IS_RECHECKED_IMMEDIATELY_BEFORE_CANONICAL_PRODUCTION_EXPORT',
     'PRODUCTION_PREP_MUST_NOT_SYNTHESIZE_HUMAN_EVIDENCE',
   ],
 } as const;
@@ -234,7 +254,9 @@ else {
   console.log(`roleManifestInputSource=${report.roleManifestInput.source}`);
   console.log(`canonicalStage=${report.canonicalStage.state}`);
   console.log(`identityReceipt=${report.artifacts.identityReceipt}`);
+  console.log(`palmierTimelineReceipt=${report.palmierTimelineExport.receiptState}`);
   console.log(`next=${report.next.kind}`);
+  console.log('palmierGuiActual=NOT_RUN_UNLESS_HUMAN_EXECUTED');
   console.log('macRemotionStudioGuiActual=NOT_RUN_UNLESS_HUMAN_EXECUTED');
   console.log('macDaVinciGuiActual=NOT_RUN_UNLESS_HUMAN_EXECUTED');
   console.log('productionReadyPromotedByThisPrep=NO');
