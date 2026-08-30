@@ -4,6 +4,7 @@ import { WeddingProductionNextGatePanel } from "../components/WeddingProductionN
 import { WeddingProductionInputPlanBuilder } from "../components/WeddingProductionInputPlanBuilder";
 import { WeddingRealMediaPreviewReviewPanel } from "../components/WeddingRealMediaPreviewReviewPanel";
 import { WeddingProductionReviewMatrixPanel } from "../components/WeddingProductionReviewMatrixPanel";
+import { WeddingProductionActionLauncherPanel } from "../components/WeddingProductionActionLauncherPanel";
 import { OpeningProductionReviewReadinessPanel } from "../components/OpeningProductionReviewReadinessPanel";
 import { OpeningReviewNextActionPanel } from "../components/OpeningReviewNextActionPanel";
 import { ProfileAssemblyReviewReadinessPanel } from "../components/ProfileAssemblyReviewReadinessPanel";
@@ -14,12 +15,13 @@ export function MotionZukanWorkspaceHandoff() {
     <div>
       <Header
         title="Motion Zukan Workspace Handoff"
-        description="Opening / ProfileのHuman Master作業状態をJSONで退避・復元し、Motion Studio正本から次のProduction工程も確認する。実素材パスからcanonical intake planを作り、素材投入後はreal-media preview → Human QAまで同じ画面で開始できる。Production承認やGUI Actualとは分離する。"
+        description="Opening / ProfileのHuman Master作業状態をJSONで退避・復元し、Motion Studio正本から次のProduction工程も確認する。実素材パスからcanonical intake planを作り、素材投入後はreal-media preview → Human QA → canonical action copyまで同じ画面で進める。Production承認やGUI Actualとは分離する。"
       />
       <WeddingProductionNextGatePanel />
       <WeddingProductionInputPlanBuilder />
       <WeddingRealMediaPreviewReviewPanel />
       <WeddingProductionReviewMatrixPanel />
+      <WeddingProductionActionLauncherPanel />
       <OpeningProductionReviewReadinessPanel />
       <OpeningReviewNextActionPanel />
       <ProfileAssemblyReviewReadinessPanel />
