@@ -91,6 +91,9 @@ function classifyRoleContext(
   }
 }
 
+const buildProjectRemotionIdentityProductionPrepCommand = (projectId: SceneProjectId) =>
+  `cd motion-studio && node --no-warnings scripts/prepare-wedding-project-remotion-production-handoff.mts --movie=${projectId} --phase=identity`;
+
 export function buildTypographyProjectDeliveryBatch(
   projectId: SceneProjectId,
   scenes: MaskRevealSceneInstance[],
@@ -150,6 +153,9 @@ export function buildTypographyProjectDeliveryBatch(
   const selectedPatternIds = [...new Set(identitySceneBindings.map((binding) => binding.patternId))];
   const firstIdentity = items.find((item) => item.package?.remotion.handoffIdentity)?.package?.remotion.handoffIdentity ?? null;
   const identityVerificationState: TypographyProjectRemotionIdentityVerificationState = identitySceneBindings.length > 0 ? "NOT_RUN" : "NOT_APPLICABLE";
+  const projectIdentityProductionPrepCommand = identitySceneBindings.length > 0
+    ? buildProjectRemotionIdentityProductionPrepCommand(projectId)
+    : null;
 
   return {
     schemaVersion: "wedding-movie-typography-project-delivery/v1",
@@ -164,14 +170,14 @@ export function buildTypographyProjectDeliveryBatch(
       sceneBindings: identitySceneBindings,
       artifactPath: firstIdentity?.shaBinding.artifactPath ?? null,
       exportCommand: firstIdentity?.shaBinding.exportCommand ?? null,
-      checkCommand: firstIdentity?.shaBinding.checkCommand ?? null,
+      checkCommand: projectIdentityProductionPrepCommand,
       mustRunBeforePalmierDaVinciHandoff: identitySceneBindings.length > 0,
-      rule: "Project batchはHuman-selected Scene routeから必要なRemotion Element identityだけを集約する。batch build自身はSHA currentnessを実行・証明しない。artifact export + currentness checkをPalmier/DaVinci handoff直前に実行し、catalog identityの存在をproject adoptionやGUI Actualへ読み替えない。",
+      rule: "Project batchはHuman-selected Scene routeから必要なRemotion Element identityだけを集約する。batch build自身はSHA currentnessを実行・証明しない。Typography batchをcanonical pathへ配置後、production prep commandでcatalog identity export/currentness + SHA-bound Project receipt生成/再検証を1回で行い、Palmier/DaVinci handoff前にCURRENTを得る。catalog identityの存在をproject adoptionやGUI Actualへ読み替えない。",
     },
     summary: {totalScenes: items.length, currentPackages, missingRoutes, staleRoutes, roleContextRequired, currentRoleContexts, missingRoleContexts, staleRoleContexts, remotionIdentityVerificationState: identityVerificationState, batchReadyForPalmierDaVinciHandoff: routeReady && roleReady, productionReady: false},
     blockers,
     executionRule: "UI/production manifest経由では全SceneがCURRENT_PACKAGE_READYかつCURRENT_ROLE_CONTEXTの時だけbatch exportする。既存4引数contract callerはroute-only互換を維持する。Scene/route更新後のstale contextをsilent rebaseしない。batchReadyForPalmierDaVinciHandoffはroute/role package readinessであり、Remotion Element SHA currentnessは別の必須pre-handoff checkとしてNOT_RUNのまま保持する。",
-    evidenceRule: "role + pattern + PRIMARY/FALLBACK/CUSTOMはHuman-selected role/routeからderivedする。batchReadyはproductionReadyもRemotion identity currentnessも意味せず、Remotion Studio GUI Actual / Mac DaVinci Actual / Human promotion / Scene-bound Release Gateは別証拠のまま維持する。",
+    evidenceRule: "role + pattern + PRIMARY/FALLBACK/CUSTOMはHuman-selected role/routeからderivedする。batchReadyはproductionReadyもRemotion identity currentnessも意味せず、production prep commandのCURRENTもRemotion Studio GUI Actual / Mac DaVinci Actual / Human promotion / Scene-bound Release Gateへ昇格させない。",
   };
 }
 
