@@ -35,6 +35,7 @@ const runJson = (script: string, args: string[] = []) => {
 
 type StartGateState =
   | 'TRANSPORT_NOT_CURRENT'
+  | 'PROJECT_MOTION_BLOCKED'
   | 'UPSTREAM_BLOCKED'
   | 'EVIDENCE_INIT_REQUIRED'
   | 'GUI_ACTUAL_ALLOWED'
@@ -54,6 +55,13 @@ const transport = existsSync(snapshotPath)
     };
 
 const evidenceState = project.actualEvidence?.state ?? 'INVALID';
+const projectMotionPreflight = project.projectMotionPreflight ?? {
+  state: 'INVALID',
+  applicable: false,
+  current: false,
+  command: `node --no-warnings scripts/verify-wedding-project-motion-production-provenance.mts --movie=${movieId}`,
+  error: 'SESSION_PLAN_PROJECT_MOTION_PREFLIGHT_MISSING',
+};
 let state: StartGateState;
 let nextAction: {kind: string; command: string | null; humanOnly: boolean; reason: string};
 
@@ -64,6 +72,16 @@ if (transport.state !== 'CURRENT' || transport.current !== true) {
     command: `node --no-warnings scripts/wedding-davinci-actual-session-plan-snapshot.mts --snapshot=${snapshotPath} --strict-current`,
     humanOnly: false,
     reason: 'Mac GUI Actual must not start from a missing, stale, invalid, or otherwise non-CURRENT transported Session Plan.',
+  };
+} else if (projectMotionPreflight.state === 'INVALID') {
+  state = 'PROJECT_MOTION_BLOCKED';
+  nextAction = {
+    kind: 'REVALIDATE_PROJECT_MOTION',
+    command: projectMotionPreflight.command,
+    humanOnly: false,
+    reason: projectMotionPreflight.error
+      ? `Project Motion preflight is INVALID: ${projectMotionPreflight.error}. Repair/re-export the canonical Project Motion provenance, regenerate the Session Plan, and revalidate transport before Mac GUI Actual.`
+      : 'Project Motion preflight is INVALID. Repair/re-export the canonical Project Motion provenance, regenerate the Session Plan, and revalidate transport before Mac GUI Actual.',
   };
 } else if (!project.handoffIdentitySha256 || project.sessionState === 'BLOCKED_UPSTREAM') {
   state = 'UPSTREAM_BLOCKED';
@@ -88,7 +106,7 @@ if (transport.state !== 'CURRENT' || transport.current !== true) {
     kind: 'MAC_GUI_ACTUAL',
     command: null,
     humanOnly: true,
-    reason: 'Transport is CURRENT and an Actual evidence template exists in progress. The next step is the real human Mac DaVinci GUI review.',
+    reason: 'Transport is CURRENT, Project Motion is CURRENT/NOT_APPLICABLE, and an Actual evidence template exists in progress. The next step is the real human Mac DaVinci GUI review.',
   };
 } else if (evidenceState === 'PASS') {
   const verify = project.orderedActions.find((action: any) => action.kind === 'STRICT_VERIFY');
@@ -125,6 +143,13 @@ const gate = {
   },
   project: {
     sessionState: project.sessionState,
+    projectMotionPreflight: {
+      state: projectMotionPreflight.state,
+      applicable: projectMotionPreflight.applicable === true,
+      current: projectMotionPreflight.current === true,
+      command: projectMotionPreflight.command,
+      error: projectMotionPreflight.error ?? null,
+    },
     evidenceState,
     handoffIdentitySha256: project.handoffIdentitySha256 ?? null,
     actualRecoverySha256: project.actualEvidence?.recoverySha256 ?? null,
@@ -139,6 +164,8 @@ const gate = {
   },
   guardrails: [
     'TRANSPORT_CURRENT_REQUIRED_BEFORE_GUI_ACTUAL',
+    'PROJECT_MOTION_CURRENT_OR_NOT_APPLICABLE_REQUIRED_BEFORE_GUI_ACTUAL',
+    'PROJECT_MOTION_INVALID => GUI_ACTUAL_START_BLOCKED',
     'EVIDENCE_TEMPLATE_REQUIRED_BEFORE_GUI_ACTUAL',
     'GUI_ACTUAL_ALLOWED != GUI_ACTUAL_EXECUTED',
     'START_GATE_MUST_NOT_SYNTHESIZE_PASS',
