@@ -38,6 +38,7 @@ jobs:
           JSON
           cat > /tmp/palmier-binding/opening.fcpxml <<'XML'
           <fcpxml version="1.11"><library><event><project><sequence><spine><marker value="WEDDING_SCENE:scene-a"/><marker value="WEDDING_SCENE:scene-b"/></spine></sequence></project></event></library></fcpxml>
+          XML
           cat > /tmp/palmier-binding/recovery.json <<'JSON'
           {
             "schemaVersion":"wedding-davinci-production-recovery-export/v1",
