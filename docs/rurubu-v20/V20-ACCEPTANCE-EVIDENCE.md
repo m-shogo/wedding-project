@@ -115,10 +115,33 @@ Important transfer boundary:
 - external Figma byte upload is still blocked by a transient DNS resolution failure in this runtime;
 - no successful 036 Figma image placement, crop proof or final resolution proof is claimed.
 
+### P01 Candidate A — first authored cover pass / verified live screenshot
+
+A non-destructive candidate was created beside the canonical greybox rather than overwriting the baseline:
+- candidate frame: `3330:2` / `P01_V20_CANDIDATE_A / REAL-PHOTO EDITORIAL TEST`;
+- the existing verified `035` Figma proxy remains the environmental HERO;
+- `036` remains a transfer-pending printed-photo frame, independently replaceable when upload succeeds;
+- the optional second support-photo block was removed from this candidate so the photo hierarchy stays intentionally unequal;
+- greybox QA labels/guides are hidden in the candidate, while the canonical greybox remains intact.
+
+Authored cover changes proven by screenshot:
+- large native editable masthead text `るるぶ WEDDING` uses original V20 typesetting rather than a traced commercial logo;
+- masthead is a cyan printed slab with white edge and hard coral offset shadow, materially colliding with HERO photography;
+- `SHOGO & SHIORI 特別号`, `2026.10.24`, `YOKOHAMA`, cover hooks and issue metadata are native editable text;
+- the dominant feature hook reads `ふたりの旅と、今日という一日。` over an irregular coral collision field;
+- the support-photo frame uses a strong white printed edge and hard shadow so the future high-key `036` image will not disappear against the bright Hawaii HERO;
+- false placeholder atmosphere was removed after screenshot review: the grey tropical-circle proxy and lower edge fragment were hidden rather than retained as filler decoration;
+- lower feature scraps were tightened upward after screenshot review instead of filling the empty area with more stickers.
+
+Current P01 screenshot conclusion:
+- the cover now has a materially stronger 3-second `WEDDING + TRAVEL + HERO PHOTO` read than the greybox;
+- title/photo collision and source-derived cyan/coral/yellow hierarchy are viable;
+- the remaining decisive blocker is still the actual `036` image: the yellow support frame proves geometry, not protagonist recognition;
+- because the runtime still cannot resolve `mcp.figma.com`, the official `upload_assets` flow returned a valid single-use upload URL but the byte POST could not reach the host; this is a transient transport blocker, not a Figma-layout failure.
+
 Current P01 largest visible quality gap:
 `ACTUAL 036 PERSONALITY IMAGE IN THE VERIFIED COLLISION GEOMETRY`
-→ `ORIGINAL MASTHEAD ART / NATIVE TITLE TREATMENT`
-→ `PHOTO-DERIVED FEATURE VESSEL + TROPICAL BRIDGE ASSETS`
+→ `PHOTO-DERIVED REAL TROPICAL/PRINT BRIDGE ASSET`
 → `READING-SCALE / A5 PROOF`.
 
 Quality boundary:
@@ -126,6 +149,33 @@ Quality boundary:
 - it is explicitly **not** a final raster, not a resolution proof, and not `PRINT_READY`;
 - the verified `4500 x 3000` master remains the production source;
 - no proxy may silently survive final print promotion.
+
+## Verified live production evidence — P05 / 2026-08-31
+
+A separate non-destructive right-page candidate now exists for the center-spread emotional peak:
+- candidate frame: `3332:2` / `P05_V20_CANDIDATE_A / HAWAII PEAK / SOURCE-AWARE TEST`;
+- canonical P05 greybox `3287:21` remains intact;
+- no Okinawa/Korea geometry was frozen to compensate for missing real sources.
+
+Source/proxy boundary:
+- the already-placed verified `035` image fill was copied into the P05 HERO only as a temporary real-Hawaii `SOURCE-AWARE TEST` proxy;
+- its candidate node name explicitly records `035 VERIFIED REAL SOURCE PROXY / FINAL SOURCE TBD`;
+- this does **not** select `035` as the final P05 HERO and does not permit repeating it in final P01/P05 production;
+- the final P05 source should still come from the reviewed Hawaii hero pool after reliable image transfer is available.
+
+Visual behavior proven by screenshot:
+- Hawaii HERO is clearly dominant rather than one of several equal cards;
+- the `HAWAII` title becomes a large native display mass on a cyan/white/coral printed slab that collides with HERO;
+- the emotion-photo region enters from the lower-left as a materially smaller printed-photo object and remains `TRANSFER PENDING` for the preferred `004 / 003 / 018` pool;
+- the proposal field is a large quiet cream paper island over the lower-right of the HERO region, preserving the intended `dense travel collage → calm story island` behavior;
+- `YOKOHAMA → 2026.10.24` is a separate green arrival object connected by route movement rather than a footer card;
+- route pieces remain editable and visually cross the page, while fold-critical facts remain away from the gutter.
+
+Current P05 correction still required:
+- proposal body copy is temporary truth-safe placeholder wording, not final autobiographical copy;
+- proposal text/support geometry needs one more reading-scale pass because the first candidate screenshot shows the body copy too close to the HERO/calm-field boundary;
+- the red route-front stroke is currently too visually blunt and should be replaced by the final route artwork rather than cosmetically embellished;
+- final Hawaii HERO/emotion images require real source transfer before this candidate can be promoted beyond composition evidence.
 
 ## Whole-book acceptance
 
