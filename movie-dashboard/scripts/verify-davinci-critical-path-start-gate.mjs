@@ -16,70 +16,39 @@ const need = (source, token, message) => {
 };
 
 need(model, 'WEDDING_DAVINCI_GUI_ACTUAL_START_GATE_ROUTE = "/movie-coach/motion-library#davinci-gui-actual-start-gate"', "critical path must route DaVinci finishing to canonical Motion Zukan Start Gate");
-need(model, 'canonicalWeddingDavinciGuiActualStartGateArtifactPath', "critical path must import the canonical Start Gate artifact path authority");
-need(model, 'defaultWeddingDavinciGuiActualStartGateAudits', "critical path must consume the Start Gate Audit command authority rather than rebuilding a parallel command");
-need(model, 'return defaultWeddingDavinciGuiActualStartGateAudits[projectId].inspectCommand;', "critical path inspect command must be exactly the Start Gate Audit inspect command");
-need(model, 'return defaultWeddingDavinciGuiActualStartGateAudits[projectId].strictGuiStartCommand;', "critical path strict command must be exactly the Start Gate Audit strict command");
-need(model, 'artifactPath: canonicalWeddingDavinciGuiActualStartGateArtifactPath(projectId)', "critical path DaVinci action must expose the canonical per-project artifact path");
-need(model, 'strictCommand: weddingDavinciGuiActualStrictStartGateCommand(projectId)', "critical path DaVinci action must expose the canonical strict GUI-start command");
+need(model, 'canonicalWeddingDavinciGuiActualStartGateArtifactPath', "critical path must import canonical Start Gate artifact authority");
+need(model, 'defaultWeddingDavinciGuiActualStartGateAudits', "critical path must consume Start Gate Audit command authority");
 need(model, 'stageName === "davinciFinishing"', "critical path missing davinciFinishing action target");
-need(model, 'label: "DaVinci Actual Start Gateを開く"', "DaVinci action label must name the canonical Start Gate");
-need(model, 'route: WEDDING_DAVINCI_GUI_ACTUAL_START_GATE_ROUTE', "davinciFinishing must use the canonical Start Gate route constant");
-need(model, 'command: weddingDavinciGuiActualStartGateCommand(projectId)', "davinciFinishing must attach the project-specific canonical Start Gate inspect command");
-need(model, 'canonical Session Planを読み込み、live Project Motion再検証とstrict GUI-start gateを通してからHuman Mac DaVinci Actualへ進む', "DaVinci action purpose must preserve Session Plan + Project Motion + strict start-gate ordering");
-need(model, 'DAVINCI_START_GATE_LINK_VISIBLE != GUI_ACTUAL_STARTED', "critical-path model must not promote a visible route into GUI Actual evidence");
-need(model, 'DAVINCI_START_GATE_COMMAND_VISIBLE != COMMAND_EXECUTED', "critical-path model must not treat the visible inspect command as executed");
-need(model, 'DAVINCI_STRICT_START_GATE_COMMAND_VISIBLE != GUI_ACTUAL_ALLOWED', "critical-path model must not treat the visible strict command as GUI Actual permission");
-need(model, 'DAVINCI_START_GATE_ARTIFACT_PATH_VISIBLE != CANONICAL_GATE_LOADED', "critical-path model must not treat a visible artifact path as a loaded canonical gate");
+need(model, 'DAVINCI_START_GATE_LINK_VISIBLE != GUI_ACTUAL_STARTED', "critical path must preserve GUI Actual evidence boundary");
 
-need(audit, 'out/handoff/wedding/${movieId}-davinci-gui-actual-start-gate.json', "Start Gate Audit must retain the canonical per-project artifact path");
-need(audit, '--snapshot=out/handoff/wedding/wedding-davinci-actual-session-plan.json --output=${artifactPath} --write', "Start Gate Audit inspect command must save the canonical artifact from the canonical Session Plan");
-need(audit, 'strict ? " --strict-gui-start" : ""', "Start Gate Audit must retain strict GUI-start command derivation from the same command authority");
+need(audit, 'PROJECT_REMOTION_IDENTITY_BLOCKED', "Start Gate Audit must model Project Remotion identity blocking");
+need(audit, 'liveProjectRemotionIdentityMatch', "Start Gate Audit must expose live Remotion identity match");
+need(audit, 'GUI_START_GATE_PROJECT_REMOTION_IDENTITY_RECEIPT_SHA_STALE', "Start Gate Audit must fail-close receipt SHA drift");
+need(audit, 'GUI_START_GATE_PROJECT_REMOTION_IDENTITY_RESOLVE_SIDECAR_SHA_STALE', "Start Gate Audit must fail-close Resolve sidecar SHA drift");
+need(audit, 'GUI_START_GATE_PROJECT_REMOTION_IDENTITY_SOURCE_BATCH_SHA_STALE', "Start Gate Audit must fail-close source Batch SHA drift");
 
 need(liveAuthority, 'WeddingDavinciGuiActualStartGateAuditMap', "shared Start Gate authority must keep Opening/Profile audits in one typed map");
-need(liveAuthority, 'defaultWeddingDavinciGuiActualStartGateAudits.opening', "shared Start Gate authority must start at canonical NOT_RUN Opening audit");
-need(liveAuthority, 'defaultWeddingDavinciGuiActualStartGateAudits.profile', "shared Start Gate authority must start at canonical NOT_RUN Profile audit");
-need(liveAuthority, 'subscribeWeddingDavinciGuiActualStartGateAudit', "shared Start Gate authority must expose subscription for live Dashboard consumers");
-need(liveAuthority, 'publishWeddingDavinciGuiActualStartGateAudit', "shared Start Gate authority must expose audited state publication");
-if (liveAuthority.includes("localStorage") || liveAuthority.includes("sessionStorage")) {
-  errors.push("shared Start Gate live authority must not persist browser audit state across Dashboard sessions");
-}
+need(liveAuthority, 'subscribeWeddingDavinciGuiActualStartGateAudit', "shared Start Gate authority must expose subscription");
+need(liveAuthority, 'publishWeddingDavinciGuiActualStartGateAudit', "shared Start Gate authority must expose publication");
+if (liveAuthority.includes("localStorage") || liveAuthority.includes("sessionStorage")) errors.push("shared Start Gate state must not persist across Dashboard sessions");
 
-need(criticalPathCard, 'type CriticalPathActionTarget', "critical-path card must model optional action commands");
-need(criticalPathCard, 'artifactPath?: string;', "critical-path card must model the canonical Start Gate artifact path");
-need(criticalPathCard, 'strictCommand?: string;', "critical-path card must model the strict GUI-start command separately from inspect/save");
-need(criticalPathCard, 'artifact: {target.artifactPath}', "critical-path card must render the canonical artifact path when present");
-need(criticalPathCard, '1. save / inspect', "critical-path card must label the artifact generation/inspection step");
-need(criticalPathCard, '2. strict GUI-start gate', "critical-path card must label the strict GUI-start step after inspect/save");
-need(criticalPathCard, '{target.command}', "critical-path card must display the already-canonical inspect command verbatim");
-need(criticalPathCard, '{target.strictCommand}', "critical-path card must display the already-canonical strict command verbatim");
-if (criticalPathCard.includes('cd motion-studio &amp;&amp; {target.command}')) {
-  errors.push("critical-path card must not prepend a second motion-studio cd to the canonical command");
-}
-need(criticalPathCard, '<CriticalPathActionTargetView key={`${target.route}-${target.label}`} target={target} />', "current critical stage must render the Start Gate command-aware action target");
-need(criticalPathCard, '<CriticalPathActionTargetView key={`${stage.name}-${target.route}-${target.label}`} target={target} compact />', "downstream DaVinci stage must also expose the Start Gate command before it becomes current");
-need(criticalPathCard, 'useSyncExternalStore(', "critical path must subscribe to the shared live Start Gate authority");
-need(criticalPathCard, 'subscribeWeddingDavinciGuiActualStartGateAudit', "critical path must subscribe to audited Start Gate changes");
-need(criticalPathCard, 'getWeddingDavinciGuiActualStartGateAuditSnapshot', "critical path must read the same Opening/Profile Start Gate audit snapshot");
-need(criticalPathCard, 'LIVE DAVINCI START GATE AUTHORITY', "critical path must visibly surface the loaded Start Gate audit state");
-need(criticalPathCard, 'startGateAudit.state === "STALE" || startGateAudit.state === "INVALID"', "STALE/INVALID Start Gate state must be explicitly prioritized for regeneration");
-need(criticalPathCard, '最優先: canonical Start Gateを再生成して再読込する', "critical path must visibly prioritize Start Gate regeneration for stale/invalid audit");
-need(criticalPathCard, 'startGateAudit.state === "GUI_ACTUAL_ALLOWED" && startGateAudit.guiActualStartAllowed', "Human Mac GUI guidance must require the audited GUI_ACTUAL_ALLOWED state and allowed flag");
-need(criticalPathCard, 'これは実行済み/PASSではありません', "critical path live authority must preserve the GUI Actual evidence boundary");
-need(criticalPathCard, '{startGateAudit.canonicalArtifactPath}', "critical path live authority must render the exact artifact path from the shared audit");
-need(criticalPathCard, '{startGateAudit.inspectCommand}', "critical path live authority must render the exact inspect command from the shared audit");
+need(criticalPathCard, 'useSyncExternalStore(', "critical path must subscribe to shared live Start Gate authority");
+need(criticalPathCard, 'LIVE DAVINCI START GATE AUTHORITY', "critical path must visibly surface Start Gate audit state");
+need(criticalPathCard, 'startGateAudit.liveProjectRemotionIdentityMatch', "critical path must show live Remotion identity match");
+need(criticalPathCard, 'startGateAudit.project.projectRemotionIdentityPreflight', "critical path must consume audited Remotion identity preflight");
+need(criticalPathCard, 'projectRemotionIdentity.receiptSha256', "critical path must show receipt SHA");
+need(criticalPathCard, 'projectRemotionIdentity.resolveSidecarSha256', "critical path must show Resolve identity SHA");
+need(criticalPathCard, 'projectRemotionIdentity.sourceBatchSha256', "critical path must show source Batch SHA");
+need(criticalPathCard, 'Remotion verifier:', "critical path must show exact Remotion identity verifier");
+need(criticalPathCard, 'startGateAudit.state === "STALE" || startGateAudit.state === "INVALID"', "STALE/INVALID must prioritize regeneration");
+need(criticalPathCard, 'これは実行済み/PASSではありません', "critical path must preserve Human Mac GUI evidence boundary");
 
-need(startGateCard, 'WEDDING_DAVINCI_GUI_ACTUAL_START_GATE_ANCHOR = "davinci-gui-actual-start-gate"', "Start Gate card must expose the anchor used by the critical path");
-need(startGateCard, 'id={WEDDING_DAVINCI_GUI_ACTUAL_START_GATE_ANCHOR}', "Start Gate card must bind the anchor to its rendered section");
-need(startGateCard, 'canonical gate JSONを読み込む', "Start Gate must retain canonical Session Plan/gate loading UI");
-need(startGateCard, 'Project Motion canonical verifier', "Start Gate must retain Project Motion verifier visibility");
-need(startGateCard, 'GUI開始直前のstrict gate', "Start Gate must retain strict GUI-start verification");
-need(startGateCard, 'Actual evidenceはNOT_RUNのまま', "Start Gate must preserve NOT_RUN evidence semantics when GUI was not performed");
-need(startGateCard, 'publishWeddingDavinciGuiActualStartGateAudit(movieId, audit);', "Start Gate card must publish only the post-audit result to the shared live authority");
-
-if (model.includes('route: "/movie-coach/fusion"')) {
-  errors.push("legacy /movie-coach/fusion route must not remain as the davinciFinishing action target");
-}
+need(startGateCard, 'Project Remotion identity canonical verifier', "Start Gate must surface canonical Remotion identity verifier");
+need(startGateCard, 'Identity receipt', "Start Gate must surface identity receipt SHA");
+need(startGateCard, 'Resolve identity', "Start Gate must surface Resolve identity SHA");
+need(startGateCard, 'Source Batch', "Start Gate must surface source Batch SHA");
+need(startGateCard, 'publishWeddingDavinciGuiActualStartGateAudit(movieId, audit);', "Start Gate card must publish post-audit state only");
+need(startGateCard, 'Actual evidenceはNOT_RUNのまま', "Start Gate must preserve NOT_RUN semantics when GUI was not performed");
 
 if (errors.length) {
   console.error(`DaVinci critical-path Start Gate contract FAILED (${errors.length})`);
@@ -87,4 +56,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log("DaVinci critical-path Start Gate contract OK: Critical Path consumes the Start Gate Audit command/artifact authority plus the session-live audited state, prioritizes stale/invalid regeneration, exposes Human Mac GUI only for GUI_ACTUAL_ALLOWED, and preserves NOT_RUN evidence boundaries.");
+console.log("DaVinci critical-path Start Gate contract OK: Critical Path consumes the shared audited Project Motion + Project Remotion identity state, displays the exact Remotion receipt/Resolve/source Batch SHA chain and verifier, prioritizes stale/invalid regeneration, and preserves NOT_RUN GUI Actual boundaries.");

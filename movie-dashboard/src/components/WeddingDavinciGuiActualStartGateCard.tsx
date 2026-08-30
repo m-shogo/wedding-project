@@ -43,9 +43,9 @@ export function WeddingDavinciGuiActualStartGateCard() {
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <p className="text-[10px] tracking-[0.2em] font-semibold text-amber-700 dark:text-amber-300">MAC DAVINCI GUI ACTUAL START GATE</p>
-          <h2 className="mt-1 text-lg font-bold text-navy-900 dark:text-sand-100">Session Plan CURRENT → Project Motion CURRENT → Evidence init → Human Mac GUI</h2>
+          <h2 className="mt-1 text-lg font-bold text-navy-900 dark:text-sand-100">Session Plan CURRENT → Project Motion + Remotion identity CURRENT → Evidence init → Human Mac GUI</h2>
           <p className="mt-2 text-xs leading-5 text-navy-500 dark:text-navy-300">
-            Motion Studioのcanonical start-gate JSON artifactを生成・読み込み、Opening/ProfileそれぞれのTransport・Project Motion・正確な次アクションを表示します。GUI_ACTUAL_ALLOWEDは「人間が開始してよい」だけで、実行済み/PASSではありません。
+            Motion Studioのcanonical start-gate JSON artifactを生成・読み込み、Opening/ProfileそれぞれのTransport・Project Motion・Project Remotion identity・正確な次アクションを表示します。GUI_ACTUAL_ALLOWEDは「人間が開始してよい」だけで、実行済み/PASSではありません。
           </p>
         </div>
         <p className="text-[10px] leading-4 text-amber-700 dark:text-amber-300">GUI Actual synthetic promotion: FORBIDDEN</p>
@@ -56,6 +56,7 @@ export function WeddingDavinciGuiActualStartGateCard() {
           const audit = audits[movieId];
           const label = movieId === "opening" ? "Opening" : "Profile";
           const projectMotion = audit.project.projectMotionPreflight;
+          const projectRemotionIdentity = audit.project.projectRemotionIdentityPreflight;
           return (
             <article key={movieId} className="border border-sand-200 dark:border-navy-600 p-4">
               <div className="flex flex-wrap items-center justify-between gap-2">
@@ -89,6 +90,14 @@ export function WeddingDavinciGuiActualStartGateCard() {
                   <span className={`font-bold ${stateClass(projectMotion.state ?? "NOT_RUN")}`}>{projectMotion.state ?? "—"}</span>
                   {projectMotion.state && <> / applicable={projectMotion.applicable ? "YES" : "NO"} / current={projectMotion.current ? "YES" : "NO"}</>}
                 </dd>
+                <dt className="font-semibold">Remotion identity</dt>
+                <dd>
+                  <span className={`font-bold ${stateClass(projectRemotionIdentity.state ?? "NOT_RUN")}`}>{projectRemotionIdentity.state ?? "—"}</span>
+                  {projectRemotionIdentity.state && <> / applicable={projectRemotionIdentity.applicable ? "YES" : "NO"} / current={projectRemotionIdentity.current ? "YES" : "NO"}</>}
+                </dd>
+                <dt className="font-semibold">Identity receipt</dt><dd className="font-mono">{shortSha(projectRemotionIdentity.receiptSha256)}</dd>
+                <dt className="font-semibold">Resolve identity</dt><dd className="font-mono">{shortSha(projectRemotionIdentity.resolveSidecarSha256)}</dd>
+                <dt className="font-semibold">Source Batch</dt><dd className="font-mono">{shortSha(projectRemotionIdentity.sourceBatchSha256)}</dd>
                 <dt className="font-semibold">Session</dt><dd>{audit.project.sessionState ?? "—"}</dd>
                 <dt className="font-semibold">Evidence</dt><dd>{audit.project.evidenceState ?? "—"}</dd>
                 <dt className="font-semibold">Handoff SHA</dt><dd className="font-mono">{shortSha(audit.project.handoffIdentitySha256)}</dd>
@@ -106,7 +115,19 @@ export function WeddingDavinciGuiActualStartGateCard() {
                 <div className="mt-3">
                   <p className="text-[9px] font-semibold text-navy-700 dark:text-sand-200">Project Motion canonical verifier</p>
                   <code className="mt-1 block overflow-x-auto bg-navy-950 px-3 py-2 text-[9px] leading-4 text-sand-100">cd motion-studio &amp;&amp; {projectMotion.command}</code>
-                  <p className="mt-1 text-[9px] leading-4 text-navy-400">このcommand表示自体はProject Motion CURRENTを証明しません。Mac GUI開始前にcanonical gateで再検証します。</p>
+                </div>
+              )}
+
+              {projectRemotionIdentity.error && (
+                <p className="mt-3 border-l-2 border-rose-400 pl-3 text-[10px] leading-4 text-rose-700 dark:text-rose-300">
+                  Project Remotion identity blocker: {projectRemotionIdentity.error}
+                </p>
+              )}
+              {projectRemotionIdentity.command && (
+                <div className="mt-3">
+                  <p className="text-[9px] font-semibold text-navy-700 dark:text-sand-200">Project Remotion identity canonical verifier</p>
+                  <code className="mt-1 block overflow-x-auto bg-navy-950 px-3 py-2 text-[9px] leading-4 text-sand-100">cd motion-studio &amp;&amp; {projectRemotionIdentity.command}</code>
+                  <p className="mt-1 text-[9px] leading-4 text-navy-400">receipt / Resolve sidecar / source Batch SHAの表示自体はCURRENTを証明しません。canonical gateでlive authorityと再照合します。</p>
                 </div>
               )}
 
@@ -138,7 +159,7 @@ export function WeddingDavinciGuiActualStartGateCard() {
       </div>
 
       <p className="mt-4 text-[10px] leading-4 text-navy-400">
-        canonical gate JSON・Dashboard・CIの存在、Project Motion verifier commandの表示はMac/Studio/DaVinci Actual PASSを意味しません。今回GUIを実操作していない場合、Actual evidenceはNOT_RUNのままです。
+        canonical gate JSON・Dashboard・CIの存在、Project Motion / Project Remotion identity verifier commandやSHAの表示はMac/Studio/DaVinci Actual PASSを意味しません。今回GUIを実操作していない場合、Actual evidenceはNOT_RUNのままです。
       </p>
     </section>
   );

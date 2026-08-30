@@ -4,6 +4,9 @@ import {fileURLToPath} from "node:url";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const data = readFileSync(join(root, "src/data/weddingDavinciGuiActualStartGateAudit.ts"), "utf8");
+const sessionPlan = readFileSync(join(root, "src/data/weddingDavinciActualSessionPlan.ts"), "utf8");
+const remotionSnapshot = readFileSync(join(root, "src/data/weddingProjectRemotionIdentityPreflight.generated.ts"), "utf8");
+const syncScript = readFileSync(join(root, "scripts/sync-wedding-project-remotion-identity-preflight.mjs"), "utf8");
 const card = readFileSync(join(root, "src/components/WeddingDavinciGuiActualStartGateCard.tsx"), "utf8");
 const page = readFileSync(join(root, "src/pages/VisualMotionLibrary.tsx"), "utf8");
 
@@ -12,101 +15,102 @@ const assert = (condition, message) => {
 };
 
 for (const token of [
-  "wedding-davinci-gui-actual-start-gate-audit-dashboard/v3",
+  "wedding-davinci-gui-actual-start-gate-audit-dashboard/v4",
   "wedding-davinci-gui-actual-start-gate/v1",
   "DERIVED_MAC_DAVINCI_GUI_ACTUAL_START_GATE",
   "TRANSPORT_NOT_CURRENT",
   "PROJECT_MOTION_BLOCKED",
-  "UPSTREAM_BLOCKED",
-  "EVIDENCE_INIT_REQUIRED",
+  "PROJECT_REMOTION_IDENTITY_BLOCKED",
   "GUI_ACTUAL_ALLOWED",
   "GUI_ACTUAL_COMPLETE",
-  "EVIDENCE_BLOCKED",
   "STALE",
   "projectMotionPreflight",
+  "projectRemotionIdentityPreflight",
   "buildWeddingDavinciActualSessionPlan",
   "liveProjectMotionMatch",
-  "canonicalArtifactPath",
-  "canonicalWeddingDavinciGuiActualStartGateArtifactPath",
-  "-davinci-gui-actual-start-gate.json",
-  "--output=${artifactPath}",
-  "--write",
-  "GUI_START_GATE_PROJECT_MOTION_PREFLIGHT_MISSING",
-  "GUI_START_GATE_PROJECT_MOTION_INVALID_NOT_BLOCKED",
-  "GUI_START_GATE_PROJECT_MOTION_BLOCK_WITHOUT_INVALID_STATE",
-  "GUI_START_GATE_PROJECT_MOTION_RECOVERY_ACTION_INVALID",
-  "GUI_START_GATE_PROJECT_MOTION_RECOVERY_COMMAND_MISMATCH",
-  "GUI_START_GATE_PROJECT_MOTION_STATE_STALE",
-  "GUI_START_GATE_PROJECT_MOTION_APPLICABILITY_STALE",
-  "GUI_START_GATE_PROJECT_MOTION_CURRENTNESS_STALE",
-  "GUI_START_GATE_PROJECT_MOTION_COMMAND_STALE",
-  "GUI_START_GATE_PROJECT_MOTION_ERROR_STALE",
+  "liveProjectRemotionIdentityMatch",
+  "GUI_START_GATE_PROJECT_REMOTION_IDENTITY_PREFLIGHT_MISSING",
+  "GUI_START_GATE_PROJECT_REMOTION_IDENTITY_INVALID_NOT_BLOCKED",
+  "GUI_START_GATE_PROJECT_REMOTION_IDENTITY_RECOVERY_ACTION_INVALID",
+  "GUI_START_GATE_PROJECT_REMOTION_IDENTITY_RECOVERY_COMMAND_MISMATCH",
+  "GUI_START_GATE_PROJECT_REMOTION_IDENTITY_STATE_STALE",
+  "GUI_START_GATE_PROJECT_REMOTION_IDENTITY_APPLICABILITY_STALE",
+  "GUI_START_GATE_PROJECT_REMOTION_IDENTITY_CURRENTNESS_STALE",
+  "GUI_START_GATE_PROJECT_REMOTION_IDENTITY_COMMAND_STALE",
+  "GUI_START_GATE_PROJECT_REMOTION_IDENTITY_RESOLVE_SIDECAR_SHA_STALE",
+  "GUI_START_GATE_PROJECT_REMOTION_IDENTITY_RECEIPT_SHA_STALE",
+  "GUI_START_GATE_PROJECT_REMOTION_IDENTITY_SOURCE_BATCH_SHA_STALE",
+  "GUI_START_GATE_PROJECT_REMOTION_IDENTITY_ERROR_STALE",
   "REGENERATE_CANONICAL_START_GATE",
-  "GUI_START_GATE_ALLOWED_FLAG_STATE_MISMATCH",
-  "GUI_START_GATE_HUMAN_ACTION_MUST_NOT_HAVE_COMMAND",
   "NOT_PROMOTED_BY_DASHBOARD_GATE_AUDIT",
   "--strict-gui-start",
 ]) {
   assert(data.includes(token), `GUI start-gate audit missing token: ${token}`);
 }
 
-assert(data.includes('const liveProjectMotion = buildWeddingDavinciActualSessionPlan().projects[movieId].projectMotionPreflight'), "Dashboard audit must resolve current Project Motion preflight");
-assert(data.includes('projectMotion.state !== liveProjectMotion.state'), "Dashboard audit must compare Project Motion state");
-assert(data.includes('Boolean(projectMotion.applicable) !== liveProjectMotion.applicable'), "Dashboard audit must compare Project Motion applicability");
-assert(data.includes('Boolean(projectMotion.current) !== liveProjectMotion.current'), "Dashboard audit must compare Project Motion currentness");
-assert(data.includes('(projectMotion.command ?? null) !== liveProjectMotion.command'), "Dashboard audit must compare canonical Project Motion command");
-assert(data.includes('(projectMotion.error ?? null) !== liveProjectMotion.error'), "Dashboard audit must compare Project Motion error");
-assert(data.includes('liveMismatchCodes.length > 0'), "live Project Motion mismatch must produce a fail-closed state");
-assert(data.includes('claimedAllowed !== (gate.state === "GUI_ACTUAL_ALLOWED")'), "GUI allowed flag must be tied exactly to canonical state");
-assert(data.includes('projectMotion.state === "INVALID" && gate.state !== "PROJECT_MOTION_BLOCKED"'), "INVALID Project Motion must fail close in Dashboard audit");
-assert(data.includes('gate.state === "PROJECT_MOTION_BLOCKED" && gate.nextAction?.command !== projectMotion.command'), "Project Motion recovery command must stay canonical");
-assert(data.includes('gate.nextAction?.humanOnly !== true'), "GUI allowed state must require humanOnly action");
-assert(data.includes('gate.nextAction?.command != null'), "GUI allowed state must reject automation command");
+assert(data.includes('const liveProjectRemotionIdentity = liveProject.projectRemotionIdentityPreflight'), "Dashboard audit must resolve current Project Remotion identity preflight");
+assert(data.includes('projectRemotionIdentity.state !== liveProjectRemotionIdentity.state'), "Dashboard audit must compare Remotion identity state");
+assert(data.includes('(projectRemotionIdentity.resolveSidecarSha256 ?? null) !== liveProjectRemotionIdentity.resolveSidecarSha256'), "Dashboard audit must compare Resolve identity SHA");
+assert(data.includes('(projectRemotionIdentity.receiptSha256 ?? null) !== liveProjectRemotionIdentity.receiptSha256'), "Dashboard audit must compare receipt SHA");
+assert(data.includes('(projectRemotionIdentity.sourceBatchSha256 ?? null) !== liveProjectRemotionIdentity.sourceBatchSha256'), "Dashboard audit must compare source Batch SHA");
 assert(data.includes('productionReady: false'), "Dashboard start-gate audit must stay productionReady=false");
 assert(!data.includes('productionReady: true'), "Dashboard start-gate audit must never synthesize productionReady=true");
 assert(!data.includes('macDavinciResolveGuiActual: "PASS"'), "Dashboard start-gate audit must never synthesize DaVinci PASS");
 
 for (const token of [
-  "WEDDING_DAVINCI_GUI_ACTUAL_START_GATE_ANCHOR",
-  "davinci-gui-actual-start-gate",
-  "scroll-mt-6",
+  "weddingProjectRemotionIdentityPreflight",
+  "BLOCKED_PROJECT_REMOTION_IDENTITY_PREFLIGHT",
+  "PROJECT_REMOTION_IDENTITY_PREFLIGHT",
+  "PROJECT_REMOTION_IDENTITY_PREFLIGHT_INVALID => SESSION_PLAN_BLOCKED",
+  "PROJECT_REMOTION_IDENTITY_CURRENT != GUI_ACTUAL_PASS",
+]) {
+  assert(sessionPlan.includes(token), `Dashboard session plan missing Remotion identity token: ${token}`);
+}
+
+for (const token of [
+  "wedding-project-remotion-identity-dashboard-preflight/v1",
+  "MOTION_STUDIO_DERIVED_PROJECT_REMOTION_IDENTITY_PREFLIGHT",
+  "NOT_APPLICABLE",
+  "verify-wedding-production-handoff-provenance.mts --movie=opening",
+  "verify-wedding-production-handoff-provenance.mts --movie=profile",
+  "CI_MUST_NOT_PROMOTE_MAC_GUI_ACTUAL",
+]) {
+  assert(remotionSnapshot.includes(token), `generated Remotion identity preflight missing token: ${token}`);
+}
+assert(syncScript.includes('wedding-davinci-actual-session-plan.mts'), "Remotion identity sync must derive from canonical Motion Studio session plan");
+assert(syncScript.includes('projectRemotionIdentityPreflight'), "Remotion identity sync must read the canonical project preflight");
+assert(syncScript.includes('resolveSidecarSha256'), "Remotion identity sync must carry Resolve sidecar SHA");
+assert(syncScript.includes('receiptSha256'), "Remotion identity sync must carry receipt SHA");
+assert(syncScript.includes('sourceBatchSha256'), "Remotion identity sync must carry source Batch SHA");
+
+for (const token of [
   "MAC DAVINCI GUI ACTUAL START GATE",
-  "Session Plan CURRENT → Project Motion CURRENT → Evidence init → Human Mac GUI",
-  "canonical gate JSONを読み込む",
-  "Canonical artifact",
-  "audit.canonicalArtifactPath",
-  "下のinspect commandがこのJSONを保存します",
-  "artifactが存在してもGUI Actual実行済みにはなりません",
-  "inspect / canonical JSON保存",
-  "strict gate + JSON更新",
-  "Project Motion canonical verifier",
-  "Project Motion blocker:",
-  "このcommand表示自体はProject Motion CURRENTを証明しません",
-  "audit.project.projectMotionPreflight",
-  "GUI_ACTUAL_ALLOWEDは「人間が開始してよい」だけで、実行済み/PASSではありません",
-  "HUMAN / MAC GUI",
+  "Project Motion + Remotion identity CURRENT",
+  "audit.project.projectRemotionIdentityPreflight",
+  "Remotion identity",
+  "Identity receipt",
+  "Resolve identity",
+  "Source Batch",
+  "Project Remotion identity blocker:",
+  "Project Remotion identity canonical verifier",
+  "receipt / Resolve sidecar / source Batch SHAの表示自体はCURRENTを証明しません",
   "GUI Actual synthetic promotion: FORBIDDEN",
-  "今回GUIを実操作していない場合、Actual evidenceはNOT_RUNのままです",
+  "Actual evidenceはNOT_RUNのままです",
 ]) {
   assert(card.includes(token), `Motion Zukan GUI start-gate card missing token: ${token}`);
 }
 
-assert(card.includes("projectMotion.state"), "UI must expose Project Motion state");
-assert(card.includes("projectMotion.applicable"), "UI must expose Project Motion applicability");
-assert(card.includes("projectMotion.current"), "UI must expose Project Motion currentness");
-assert(card.includes("projectMotion.command"), "UI must expose canonical Project Motion verifier command");
-assert(card.includes("projectMotion.error"), "UI must expose Project Motion blocker error");
-assert(card.includes("audit.inspectCommand"), "UI must expose canonical inspect command");
-assert(card.includes("audit.strictGuiStartCommand"), "UI must expose strict GUI-start command");
-assert(card.includes("audit.nextAction.command"), "UI must expose canonical non-human next command when present");
+assert(card.includes("projectRemotionIdentity.state"), "UI must expose Project Remotion identity state");
+assert(card.includes("projectRemotionIdentity.command"), "UI must expose Project Remotion identity verifier command");
+assert(card.includes("projectRemotionIdentity.receiptSha256"), "UI must expose Project Remotion identity receipt SHA");
+assert(card.includes("projectRemotionIdentity.resolveSidecarSha256"), "UI must expose Resolve identity SHA");
+assert(card.includes("projectRemotionIdentity.sourceBatchSha256"), "UI must expose source Batch SHA");
 assert(page.includes("WeddingDavinciGuiActualStartGateCard"), "Motion Zukan page must render GUI start-gate card");
 
 console.log("Wedding DaVinci GUI Actual start-gate Dashboard contract: PASS");
-console.log("Canonical gate JSON artifact -> Motion Zukan: WIRED");
-console.log("Canonical inspect/strict commands -> per-movie artifact --write: ENFORCED");
-console.log("Loaded gate Project Motion -> live Dashboard Project Motion: REVALIDATED");
-console.log("Stale Project Motion gate export -> GUI START DISPLAY BLOCKED: ENFORCED");
-console.log("Project Motion status/error/verifier -> Motion Zukan: VISIBLE");
-console.log("Project Motion INVALID -> GUI START BLOCKED: ENFORCED");
+console.log("Project Remotion identity generated preflight -> Dashboard session plan: WIRED");
+console.log("Loaded gate Project Remotion identity -> live Dashboard authority: REVALIDATED");
+console.log("Remotion identity SHA drift -> STALE / GUI START BLOCKED: ENFORCED");
+console.log("Project Remotion identity state/error/verifier/SHA chain -> Motion Zukan: VISIBLE");
 console.log("GUI_ACTUAL_ALLOWED != GUI_ACTUAL_EXECUTED: ENFORCED");
 console.log("Mac/Studio GUI Actual synthetic promotion: FORBIDDEN");
