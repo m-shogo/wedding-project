@@ -7,6 +7,10 @@ import {
   buildWeddingProjectMotionAssemblyInput,
   type WeddingProjectMotionAssemblyInputV1,
 } from '../src/data/weddingProjectMotionImport.ts';
+import {
+  getWeddingProjectMotionCanonicalArtifactPaths,
+  writeCanonicalJsonArtifact,
+} from './wedding-project-motion-artifact-store.mts';
 
 export interface WeddingProjectMotionImportReceiptV1 {
   schemaVersion: 'motion-studio-project-motion-import-receipt/v1';
@@ -72,6 +76,12 @@ export function buildWeddingProjectMotionImportReceiptFromFile(
   return buildWeddingProjectMotionImportReceiptFromText(sourceText, absolutePath, expectedProjectId);
 }
 
+export function saveWeddingProjectMotionImportReceipt(receipt: WeddingProjectMotionImportReceiptV1) {
+  const path = getWeddingProjectMotionCanonicalArtifactPaths(receipt.projectId).receipt;
+  writeCanonicalJsonArtifact(path, receipt);
+  return path;
+}
+
 function parseProjectId(argv: string[]) {
   const value = argv.find((arg) => arg.startsWith('--movie='))?.slice('--movie='.length);
   if (value === undefined) return undefined;
@@ -80,9 +90,14 @@ function parseProjectId(argv: string[]) {
 }
 
 function main() {
-  const inputPath = process.argv.find((arg) => arg.startsWith('--input='))?.slice('--input='.length);
+  const argv = process.argv.slice(2);
+  const inputPath = argv.find((arg) => arg.startsWith('--input='))?.slice('--input='.length);
   if (!inputPath) throw new Error('PROJECT_MOTION_IMPORT_INPUT_REQUIRED: use --input=/absolute/or/relative/export.json');
-  const receipt = buildWeddingProjectMotionImportReceiptFromFile(inputPath, parseProjectId(process.argv.slice(2)));
+  const receipt = buildWeddingProjectMotionImportReceiptFromFile(inputPath, parseProjectId(argv));
+  if (argv.includes('--save-current')) {
+    const savedPath = saveWeddingProjectMotionImportReceipt(receipt);
+    process.stderr.write(`canonicalProjectMotionReceipt=${savedPath}\n`);
+  }
   process.stdout.write(`${JSON.stringify(receipt, null, 2)}\n`);
   if (!receipt.assemblyInput.assemblyReferenceReady) process.exitCode = 2;
 }

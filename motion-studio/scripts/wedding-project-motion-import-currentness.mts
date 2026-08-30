@@ -3,6 +3,10 @@ import {readFileSync} from 'node:fs';
 import {resolve} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import type {WeddingProjectMotionImportReceiptV1} from './wedding-project-motion-import-receipt.mts';
+import {
+  getWeddingProjectMotionCanonicalArtifactPaths,
+  writeCanonicalJsonArtifact,
+} from './wedding-project-motion-artifact-store.mts';
 
 export type WeddingProjectMotionReceiptCurrentnessState = 'CURRENT' | 'STALE';
 
@@ -49,6 +53,9 @@ function assertReceipt(value: unknown): asserts value is WeddingProjectMotionImp
   if (!receipt.source || typeof receipt.source.sha256 !== 'string' || receipt.source.sha256.length !== 64) {
     throw new Error('PROJECT_MOTION_IMPORT_RECEIPT_INVALID:source-sha256');
   }
+  if (typeof receipt.source.path !== 'string' || receipt.source.path.length === 0) {
+    throw new Error('PROJECT_MOTION_IMPORT_RECEIPT_INVALID:source-path');
+  }
 }
 
 function quoteShell(value: string) {
@@ -73,7 +80,7 @@ export function buildWeddingProjectMotionReceiptCurrentnessFromText(
     currentSha256 === parsedReceipt.source.sha256 ? 'CURRENT' : 'STALE';
   const reimportCommand = `node --no-warnings scripts/wedding-project-motion-import-receipt.mts --input=${quoteShell(
     currentExportPath,
-  )} --movie=${parsedReceipt.projectId}`;
+  )} --movie=${parsedReceipt.projectId} --save-current`;
 
   return {
     schemaVersion: 'motion-studio-project-motion-import-currentness/v1',
@@ -101,7 +108,7 @@ export function buildWeddingProjectMotionReceiptCurrentnessFromText(
         : [
             {
               kind: 'COMMAND',
-              label: 'Re-import the current Project Motion handoff and create a new SHA-bound receipt',
+              label: 'Re-import the current Project Motion handoff and create a new SHA-bound canonical receipt',
               command: reimportCommand,
             },
             {
@@ -137,6 +144,29 @@ export function buildWeddingProjectMotionReceiptCurrentnessFromFiles(
   );
 }
 
+export function buildWeddingProjectMotionReceiptCurrentnessFromCanonicalReceipt(movie: 'opening' | 'profile') {
+  const receiptPath = getWeddingProjectMotionCanonicalArtifactPaths(movie).receipt;
+  const receiptText = readFileSync(receiptPath, 'utf8');
+  const parsedReceipt = JSON.parse(receiptText) as unknown;
+  assertReceipt(parsedReceipt);
+  if (parsedReceipt.projectId !== movie) {
+    throw new Error(`PROJECT_MOTION_CURRENTNESS_PROJECT_MISMATCH:${parsedReceipt.projectId}:${movie}`);
+  }
+  return buildWeddingProjectMotionReceiptCurrentnessFromText(
+    receiptText,
+    readFileSync(parsedReceipt.source.path, 'utf8'),
+    receiptPath,
+    parsedReceipt.source.path,
+    movie,
+  );
+}
+
+export function saveWeddingProjectMotionReceiptCurrentness(result: WeddingProjectMotionReceiptCurrentnessV1) {
+  const path = getWeddingProjectMotionCanonicalArtifactPaths(result.projectId).currentness;
+  writeCanonicalJsonArtifact(path, result);
+  return path;
+}
+
 function parseProjectId(argv: string[]) {
   const value = argv.find((arg) => arg.startsWith('--movie='))?.slice('--movie='.length);
   if (value === undefined) return undefined;
@@ -146,17 +176,27 @@ function parseProjectId(argv: string[]) {
 
 function main() {
   const argv = process.argv.slice(2);
+  const movie = parseProjectId(argv);
+  const useCurrent = argv.includes('--use-current');
   const receiptPath = argv.find((arg) => arg.startsWith('--receipt='))?.slice('--receipt='.length);
   const currentExportPath = argv.find((arg) => arg.startsWith('--current-export='))?.slice('--current-export='.length);
-  if (!receiptPath) throw new Error('PROJECT_MOTION_CURRENTNESS_RECEIPT_REQUIRED: use --receipt=<receipt.json>');
-  if (!currentExportPath) {
-    throw new Error('PROJECT_MOTION_CURRENTNESS_EXPORT_REQUIRED: use --current-export=<project-motion-handoff.json>');
+
+  let result: WeddingProjectMotionReceiptCurrentnessV1;
+  if (useCurrent) {
+    if (!movie) throw new Error('PROJECT_MOTION_CURRENTNESS_MOVIE_REQUIRED: --use-current requires --movie=opening|profile');
+    result = buildWeddingProjectMotionReceiptCurrentnessFromCanonicalReceipt(movie);
+  } else {
+    if (!receiptPath) throw new Error('PROJECT_MOTION_CURRENTNESS_RECEIPT_REQUIRED: use --receipt=<receipt.json>');
+    if (!currentExportPath) {
+      throw new Error('PROJECT_MOTION_CURRENTNESS_EXPORT_REQUIRED: use --current-export=<project-motion-handoff.json>');
+    }
+    result = buildWeddingProjectMotionReceiptCurrentnessFromFiles(receiptPath, currentExportPath, movie);
   }
-  const result = buildWeddingProjectMotionReceiptCurrentnessFromFiles(
-    receiptPath,
-    currentExportPath,
-    parseProjectId(argv),
-  );
+
+  if (argv.includes('--save-current') || useCurrent) {
+    const savedPath = saveWeddingProjectMotionReceiptCurrentness(result);
+    process.stderr.write(`canonicalProjectMotionCurrentness=${savedPath}\n`);
+  }
   process.stdout.write(`${JSON.stringify(result, null, 2)}\n`);
   if (result.state !== 'CURRENT' || !result.assemblyGate.palmierCurrent || !result.assemblyGate.davinciHandoffCurrent) {
     process.exitCode = 2;
