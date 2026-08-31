@@ -1,182 +1,151 @@
 # ADD-06 フォトブースサイン — QA
 
-Status: `CURRENT / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / CLEANROOM_V3_PROMOTED / CONTINUOUS_STRIP_ARTIFACT_PASS / TOP_CROP_SUBTRACTION_PASS / LONG_COPY_STRESS_PASS / SVG_EDITABILITY_PASS / DRIVE_MASTER_VERIFIED / ROLLBACK_SAFE / NOT_PRINT_READY`
-Updated: 2026-08-27
+Status: `CURRENT / V4_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / THREE_SCALE_QA_PASS / ACTUAL_SIZE_QA_PASS / LONG_COPY_STRESS_PASS / STRUCTURE_QA_PASS / CLEANROOM_PROVENANCE_PASS / ROLLBACK_SAFE / NOT_PRINT_READY`
+Updated: 2026-08-31
 Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
 
-## Current Figma authority
+## Current Figma authority — V4
 
 - Figma file: `SVMALDUyhc2chxHa4fvdjx`
-- Current page: `56:105 / CURRENT_SELECTED / ADD-06 / STRIP IN THE LIGHT / 2026-08-25`
-- Current root: `56:106 / CURRENT / ADD-06 / STRIP IN THE LIGHT / CONTINUOUS DEVELOPED PRINTS`
-- Current top crop: `56:107 / DECOR / CORAL TOP CROP` — **hidden after 2026-08-27 bounded subtraction QA**
-- hidden Current long-copy proof: `56:157 / QA / LONG COPY / STRIP IN THE LIGHT`
-- long-copy top crop: `56:158` — **hidden after the same QA**
-- no-top-crop comparison: `57:2` — hidden after verification
-- no-top-crop long-copy comparison: `57:53` — hidden after verification
-- pre-change rollback Current: `57:104`
-- pre-change rollback long-copy: `57:155`
-- clean-room study page: `55:2 / CLEANROOM STUDY / ADD-06 / CONTINUOUS STRIP / 2026-08-25`
-- V3-A study winner: `55:3 / STRIP IN THE LIGHT`
-- V3-B rejected study: `55:54 / AFTERGLOW CONTACT SHEET`
-- retained pre-promotion Current: `45:2 / PHOTO STRIP DOORWAY`
+- Current V4 page: `59:2 / V4 / ADD-06 / LIGHT WINDOW / 2026-08-31`
+- Current V4 root: `59:3 / V4 / ADD-06 / LIGHT WINDOW / A3 BLEED 303x426mm`
+- hidden V4 long-copy proof: `60:2 / QA / HIDDEN / V4 LONG COPY / LIGHT WINDOW`
+- hidden trim guide: `59:4`
+- hidden 12mm safe guide: `59:5`
+- editable flash SVG: `59:10`
+- retained previous V3 Current: `56:106 / STRIP IN THE LIGHT` — comparison / rollback only
 
 Exact Drive authority:
 
 - folder: `1Ehk_oQ8vhAGo3DYBbgyOGfA03u0pu5wb / ADD-06_フォトブースサイン`
-- adopted SVG master: `1FYhUCWx5yLIY5mo2DXm-aZaVh7Dpidr1 / photo-strip-continuous-developed-prints-v2.svg`
+- prior V3 SVG master: `1FYhUCWx5yLIY5mo2DXm-aZaVh7Dpidr1 / photo-strip-continuous-developed-prints-v2.svg` — retained history only, **not used by V4**
 
-Current evidence:
+Current V4 evidence:
+
+- `V4-LIGHT-WINDOW-QA-2026-08-31.md`
+
+Retained V3 evidence remains historical comparison/rollback only:
 
 - `CLEANROOM-V3-STRIP-IN-THE-LIGHT-PROMOTION-QA-2026-08-25.md`
 - `CONTINUOUS-PHOTO-STRIP-V2-REFINEMENT-QA-2026-08-25.md`
 - `OBSERVED-TOP-CORAL-CROP-WEB-HEADER-RISK-2026-08-27.md`
 - `FIGMA-TOP-CORAL-CROP-SUBTRACTION-QA-2026-08-27.md`
-- previous 2026-08-23/24 bounded-polish evidence remains retained history.
 
-## Current direction — STRIP IN THE LIGHT
+## V4 exclusive clean-room result
 
-The 2026-08-25 V3 was built from blank Figma frames using only verified size and semantic content requirements. It did not duplicate the prior production layout, old three-card photo geometry, old decorative vectors, crops, or background composition.
+V4 was created on a new blank page/frame. No old production/V2/V3 frame, continuous photo strip, old lower dark field, old vectors, old crop or ornament was duplicated into V4. Verified semantic copy and physical requirements were manually re-authored.
 
-The dominant artifact is one continuous physical photo-booth strip with four non-person abstract exposures:
+V4 direction: **LIGHT WINDOW**.
 
-1. coastal dawn / horizon;
-2. flash bloom;
-3. reception light trails / movement;
-4. night water / afterglow.
-
-The strip is editable SVG fixed art. It contains no authoritative copy, fake camera UI, barcode, reticle, or generated guest/couple identity.
+- warm paper field;
+- deep-blue asymmetric right light field;
+- mint + silver aperture/light window;
+- one editable SVG flash glyph;
+- Japanese-first hero typography;
+- native lower date/location stack;
+- no generated raster, fake people, fake camera UI, badge grid, or web-card layout.
 
 Reading hierarchy:
 
-1. native `写真撮影はこちら`;
-2. native `フォトブース`;
-3. native guidance;
-4. date `2026.10.24` and unresolved `[会場内設置場所]`;
-5. native closing copy.
+1. `写真撮影はこちら`;
+2. `フォトブース` / guidance;
+3. light-window fixed art;
+4. `写真を撮って、今日を持って帰ろう。`;
+5. date + `[会場内設置場所]`.
 
-The composition uses an open warm-cream editorial field, a slightly rotated continuous strip on the left, and a lower dark physical information field. The former full-width coral top crop is no longer visible because bounded QA proved it behaved as a web/app header rather than a physical print role.
+## Three-scale / visual comparison
 
-## 2026-08-27 top-crop subtraction — VERIFIED_LOCAL
+Live final V4 screenshots:
 
-### Visible defect
+- thumbnail `356×500`: **PASS** — hero first-read is immediate at sign distance;
+- reading `712×1000`: **PASS** — Japanese hierarchy and asymmetric aperture remain coherent;
+- actual/native `1010×1420`: **PASS** — type, rules and fixed art hold at production detail scale.
 
-`56:107 / DECOR / CORAL TOP CROP` was a full-width `990×28` coral bar at the canvas top edge. Fresh ≈500px and ≈1000px review showed it reading before the photo-strip artifact and visually detached from native copy, the lower information field, trim/fold/binding semantics, or any reader-facing function.
+Retained V3 `56:106` was separately re-rendered at 500px for comparison. V4 is materially different from V3's tilted continuous photo-strip + lower dark field and is selected as the valid V4-exclusive authority.
 
-Normalized fingerprint:
+`SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS` is restored on **V4**, not inherited from the old V3 label.
 
-`FULL_WIDTH_DECORATIVE_EDGE_READS_AS_WEB_HEADER`
+## Print-first authority
 
-### Bounded test
+Item `SPEC.md` confirms:
 
-Only the crop role was changed.
+- primary trim: **A3 portrait 297 × 420 mm**;
+- bleed: **3 mm each side**;
+- V4 bleed canvas: **303 × 426 mm / 1010 × 1420 px**;
+- safe: **12 mm inside trim**;
+- viewing distance: about **1.5–3 m**;
+- working scale: 3.333 px/mm.
 
-- normal comparison: `57:2`
-- long-copy comparison: `57:53`
+Actual-size typography:
 
-Both candidates hid only their copied `DECOR / CORAL TOP CROP`. Typography, SVG, lower field, copy, date/location/closing geometry, asset provenance and image roles did not change.
+- hero ≈ **83.3 pt**;
+- `フォトブース` ≈ **37.4 pt**;
+- guidance ≈ **25.5 pt**;
+- closing ≈ **27.2 pt**;
+- date ≈ **27.2 pt**;
+- location ≈ **26.4 pt**;
+- English item label ≈ **18.7 pt**.
 
-### Three-scale result
+No microtype is used. Fixed rules are also physically credible at current scale: 0.6mm silver note rule, 2.4mm mint anchor, 3.0mm aperture ring.
 
-- whole-item / 500px: **PASS and stronger than Current-with-crop**; the continuous strip + Japanese hero become the immediate first read;
-- reading / 1000px: **PASS**; the page loses the web-header frame without becoming sparse;
-- native `990×1400`: **PASS**; no lost trim/binding or artifact role appears;
-- realistic long-copy / native `990×1400`: **PASS**.
+No fold, punch, perforation, QR, handwriting field, sticker application or binding applies to the primary A3 sign. Stand/board/mounting and venue sightline remain deferred.
 
-### Rollback and promotion
+## Structure / long-copy QA
 
-Before Current mutation:
+Initial screenshot QA found a real V4 first-draft fault: the lower native Auto Layout clipped date/location. It was corrected before pass.
 
-- rollback Current: `57:104`
-- rollback long-copy: `57:155`
+Final:
 
-Promoted bounded change:
+- visible native text roles: 7;
+- fixed-height visible text: 0;
+- all visible production text inside confirmed 12mm safe: **PASS**;
+- lower native info Auto Layout: `59:22`;
+- raster IMAGE fills: 0;
+- generated raster: 0;
+- hidden stress proof remains hidden.
 
-- `56:107` → hidden
-- `56:158` → hidden
+Stress includes long guidance, `[メインダイニング前・フォトブース特設スペース]`, and longer closing copy. All remain native auto-height, safe, and collision-free.
 
-Comparison frames were hidden after verification.
+## Raster / CMYK
 
-This restores the sellable visual gate. Coral itself remains valid inside the four-exposure SVG; only the unbound full-width canvas-edge bar was removed.
+V4 contains no raster IMAGE fills.
 
-## Sellable visual gate
+- effective PPI: `N/A`;
+- `RESOLUTION_WARNING`: `NONE`.
 
-Professional Design Council remains **94/100 / NO VETO** from the clean-room V3 promotion, with the residual top-crop defect now closed.
+CMYK/print risks still requiring proof:
 
-Current again qualifies for:
+- deep blue may darken;
+- mint may gray out;
+- silver-gray may lose contrast against warm paper;
+- cream may shift yellow depending on stock/profile;
+- final black construction must follow printer specification rather than assuming rich black/100K.
 
-`SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS`
+Grayscale hierarchy is structurally retained, but actual grayscale/profile proof is still required.
 
-The retained V3 direction remains stronger than old `45:2` because it reads as one real photo-booth strip rather than three independent icon/card modules, preserves Japanese-first hierarchy, and carries wedding warmth through successive exposure moments rather than UI chrome.
+## Drive / generation
 
-## Long-copy / Japanese typography QA
+Drive folder was live-confirmed on 2026-08-31. No Drive write was required.
 
-Hidden proof: `56:157`.
-
-Verified stress includes:
-
-- `撮影の順番を確認しながら、空いている撮影スペースへゆっくりお進みください。`
-- `[メインダイニング前・フォトブース特設スペース]`
-- `写真を撮って、今日の楽しい思い出をそれぞれのおうちまで持って帰ろう。`
-
-Result remains **PASS** after top-crop subtraction. The long location remains inside the lower dark field; closing copy remains separated beneath it.
-
-## Structure / hybrid QA
-
-Current `56:106` after promotion:
-
-- native text roles: `7`;
-- fixed-height visible text: `0` from prior verified structure evidence;
-- IMAGE fills: `0`;
-- generated raster: `0`;
-- semantic/factual copy baked into SVG: `0`;
-- top crop visible: `false`;
-- editable SVG root remains `56:108`.
-
-Long-copy `56:157` retains the same hybrid structure with its crop hidden and remains hidden after QA.
-
-Responsibility split:
-
-- variable/factual/emotional copy: native Figma text;
-- photo-strip fixed art: editable SVG;
-- unresolved final location: native semantic placeholder;
-- no fake guests/couple/children/dog imagery.
-
-## Drive asset lifecycle
-
-Drive folder was live-confirmed before the 2026-08-27 change:
-
-- folder: `1Ehk_oQ8vhAGo3DYBbgyOGfA03u0pu5wb`;
-- adopted SVG: `1FYhUCWx5yLIY5mo2DXm-aZaVh7Dpidr1`;
-- no new Drive write required.
-
-`IMAGE_GENERATION_NOT_REQUIRED`: the verified defect was purposeless fixed geometry, not missing photography, illustration, texture, background, or hero art.
-
-## Learning state
-
-Top-crop result: `VERIFIED_LOCAL`.
-
-Transfer only this narrow QA hypothesis:
-
-> A full-width decorative edge with no trim, fold, binding, physical-artifact, hierarchy, or reader-facing job can make a print composition read like a web/app header. Test bounded subtraction at whole/read/actual scales before retaining it.
-
-Do not transfer the exact coral treatment, coordinates, photo-booth composition, or a blanket `remove top edges` rule. A top color field may still be correct when another item independently proves a real emotional or binding function.
-
-No new project-wide rule is promoted from ADD-06 alone.
+`IMAGE_GENERATION_NOT_REQUIRED`: V4 gains its identity through typography, physical sign geometry and editable light/aperture vector art; adding raster imagery would not solve a missing production role.
 
 ## Deferred finalization
 
-Keep `NOT_PRINT_READY` until:
+`DESIGN_COMPLETE != PRINT_READY`.
+
+Keep `NOT_PRINT_READY` until all applicable final inputs/proofs exist:
 
 - final booth wording and exact installation location;
 - actual stand/board/mounting method and venue sightline;
-- printer template/profile and final bleed/safe area;
-- physical print, contrast and venue-lighting proof.
-
-These do not block visual progression to the next item.
+- printer template/profile;
+- CMYK + grayscale proof and final black construction;
+- PDF export / font embedding;
+- transparency / overprint / knockout check;
+- preflight;
+- 100% proof or physical print/venue-lighting proof.
 
 ## Decision / next
 
-`CURRENT_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / TOP_CROP_SUBTRACTION_PASS / LONG_COPY_STRESS_PASS / SVG_EDITABILITY_PASS / DRIVE_MASTER_VERIFIED / ROLLBACK_SAFE / NOT_PRINT_READY`.
+`V4_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / THREE_SCALE_QA_PASS / ACTUAL_SIZE_QA_PASS / LONG_COPY_STRESS_PASS / STRUCTURE_QA_PASS / CLEANROOM_PROVENANCE_PASS / ROLLBACK_SAFE / NOT_PRINT_READY`.
 
-Continue progression order with ADD-07 and later items, redesigning only when a fresh screenshot-supported defect or family-level repetition is actually visible.
+Continue progression order with ADD-07, while ADD-01 remains separately blocked only on real-photo Figma import and ADD-15 remains separately blocked on its explicit deployment decision.
