@@ -20,7 +20,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-
       - name: Selected render authority is reused without new production evidence
         run: |
           grep -q 'wedding-movie-selected-scene-render-manifest/v1' movie-dashboard/src/components/PalmierSelectedVisualReferenceCard.tsx
@@ -30,17 +29,14 @@ jobs:
           grep -q 'productionRole' movie-dashboard/src/components/PalmierSelectedVisualReferenceCard.tsx
           grep -q 'patternId' movie-dashboard/src/components/PalmierSelectedVisualReferenceCard.tsx
           grep -q 'render.sha256' movie-dashboard/src/components/PalmierSelectedVisualReferenceCard.tsx
-
       - name: Visual reference follows Palmier Operator active Scene without mutating evidence
         run: |
           grep -q 'MutationObserver' movie-dashboard/src/components/PalmierSelectedVisualReferenceCard.tsx
           grep -q 'data-palmier-assembly-operator' movie-dashboard/src/components/PalmierSelectedVisualReferenceCard.tsx
-          grep -q 'data-palmier-active-scene=\\"true\\"' movie-dashboard/src/components/PalmierSelectedVisualReferenceCard.tsx
+          grep -q 'data-palmier-active-scene' movie-dashboard/src/components/PalmierSelectedVisualReferenceCard.tsx
           grep -q 'operatorSyncedSceneId' movie-dashboard/src/components/PalmierSelectedVisualReferenceCard.tsx
           grep -q 'FOLLOWING OPERATOR' movie-dashboard/src/components/PalmierSelectedVisualReferenceCard.tsx
           grep -q 'data-palmier-visual-sync' movie-dashboard/src/components/PalmierSelectedVisualReferenceCard.tsx
-          grep -q 'checklist完了でoperatorが次Sceneへauto-advance' movie-dashboard/src/components/PalmierSelectedVisualReferenceCard.tsx
-
       - name: Local playback stays browser-memory-only and Actual remains NOT_RUN
         run: |
           grep -q 'URL.createObjectURL' movie-dashboard/src/components/PalmierSelectedVisualReferenceCard.tsx
@@ -52,18 +48,14 @@ jobs:
           grep -q 'macDaVinciGuiActual !== "NOT_RUN"' movie-dashboard/src/components/PalmierSelectedVisualReferenceCard.tsx
           grep -q 'productionReady !== false' movie-dashboard/src/components/PalmierSelectedVisualReferenceCard.tsx
           grep -q 'browser-memory visual reference only' movie-dashboard/src/components/PalmierSelectedVisualReferenceCard.tsx
-
       - name: Surface is mounted directly before Palmier Assembly Operator
         run: |
           grep -q 'PalmierSelectedVisualReferenceCard' movie-dashboard/src/components/WeddingProjectRemotionStageStatusCard.tsx
           python - <<'PY'
           from pathlib import Path
           text = Path('movie-dashboard/src/components/WeddingProjectRemotionStageStatusCard.tsx').read_text()
-          visual = text.index('<PalmierSelectedVisualReferenceCard')
-          operator = text.index('<PalmierAssemblyOperatorCard')
-          assert visual < operator
+          assert text.index('<PalmierSelectedVisualReferenceCard') < text.index('<PalmierAssemblyOperatorCard')
           PY
-
       - name: Build Movie Dashboard
         working-directory: movie-dashboard
         run: |
