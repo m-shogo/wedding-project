@@ -2,6 +2,7 @@ import {weddingProjectRemotionStageStatus} from "../generated/weddingProjectRemo
 import type {SceneProjectId} from "../data/visualSceneComposer";
 import {PalmierAssemblyOperatorCard} from "./PalmierAssemblyOperatorCard";
 import {PalmierMarkerSequenceCard} from "./PalmierMarkerSequenceCard";
+import {PalmierSelectedVisualReferenceCard} from "./PalmierSelectedVisualReferenceCard";
 
 type StageState = "NOT_STAGED" | "STAGED_CURRENT" | "HANDOFF_CURRENT" | "INVALID";
 type PalmierTimelineState = "MISSING" | "CURRENT" | "STALE" | "INVALID";
@@ -100,6 +101,7 @@ export function WeddingProjectRemotionStageStatusCard({projectId}: {projectId: S
           この表示はread-only checkerから生成したsnapshotです。STAGED_CURRENT / HANDOFF_CURRENT / Palmier FCPXML CURRENT / Assembly Plan / CI GREENは、Remotion Studio GUI Actual、Palmier timeline Actual、Palmier GUI Actual、Mac DaVinci GUI ActualのPASSを意味しません。GUI Actualは人間が実行した場合だけ記録します。
         </p>
       </section>
+      <PalmierSelectedVisualReferenceCard projectId={projectId} />
       <PalmierAssemblyOperatorCard projectId={projectId} />
       <PalmierMarkerSequenceCard projectId={projectId} />
     </>
