@@ -1,6 +1,7 @@
 import {openingDavinciActualBindingAudit} from "./openingDavinciActualBindingAudit.generated";
 import {profileDavinciActualBindingAudit} from "./profileDavinciActualBindingAudit.generated";
 import {weddingDavinciTransitionActualReadiness} from "./weddingDavinciTransitionActualReadiness.generated";
+import {weddingDavinciActualCompletionReadiness} from "./weddingDavinciActualCompletionReadiness.generated";
 import {weddingProjectMotionProvenancePreflight} from "./weddingProjectMotionProvenancePreflight.generated";
 import {buildOpeningProductionStatusHandoff} from "./openingProductionStatusHandoff";
 import {buildProfileProductionStatusHandoff} from "./profileProductionStatusHandoff";
@@ -17,6 +18,7 @@ type ProjectMotionPreflight = {
   error: string | null;
 };
 type TransitionActualReadiness = typeof weddingDavinciTransitionActualReadiness.opening | typeof weddingDavinciTransitionActualReadiness.profile;
+type ActualCompletionReadiness = typeof weddingDavinciActualCompletionReadiness.opening | typeof weddingDavinciActualCompletionReadiness.profile;
 
 const classifyProjectState = (
   auditState: string,
@@ -24,11 +26,12 @@ const classifyProjectState = (
   productionReady: boolean,
   projectMotion: ProjectMotionPreflight,
   transitionActual: TransitionActualReadiness,
+  actualCompletion: ActualCompletionReadiness,
 ): ProjectReadinessState => {
   if (projectMotion.state === "INVALID") return "INVALID";
   if (auditState === "INVALID") return "INVALID";
   if (auditState === "STALE") return "STALE";
-  if (auditState === "CURRENT_PASS" && transitionActual.current && finalApprovalCurrent && productionReady) return "READY";
+  if (auditState === "CURRENT_PASS" && transitionActual.current && actualCompletion.current && finalApprovalCurrent && productionReady) return "READY";
   return "BLOCKED";
 };
 
@@ -51,6 +54,19 @@ const transitionNextGate = (auditState: string, transitionActual: TransitionActu
       }
     : null;
 
+const actualCompletionNextGate = (
+  auditState: string,
+  transitionActual: TransitionActualReadiness,
+  actualCompletion: ActualCompletionReadiness,
+) => auditState === "CURRENT_PASS" && transitionActual.current && !actualCompletion.current
+  ? {
+      stage: "BUILD_DAVINCI_ACTUAL_COMPLETION_RECEIPT",
+      command: actualCompletion.writeCommand,
+      strictCommand: actualCompletion.strictCommand,
+      blocker: "DaVinci finishing Actualとtransition Actualが同じcurrent recovery SHAへHuman PASSでbindingされていることをderived receiptとして固定する",
+    }
+  : null;
+
 export function buildWeddingDavinciDeliveryReadiness() {
   const openingHandoff = buildOpeningProductionStatusHandoff();
   const profileHandoff = buildProfileProductionStatusHandoff();
@@ -58,6 +74,8 @@ export function buildWeddingDavinciDeliveryReadiness() {
   const profileProjectMotion: ProjectMotionPreflight = weddingProjectMotionProvenancePreflight.profile;
   const openingTransitionActual = weddingDavinciTransitionActualReadiness.opening;
   const profileTransitionActual = weddingDavinciTransitionActualReadiness.profile;
+  const openingActualCompletion = weddingDavinciActualCompletionReadiness.opening;
+  const profileActualCompletion = weddingDavinciActualCompletionReadiness.profile;
 
   const openingState = classifyProjectState(
     openingDavinciActualBindingAudit.state,
@@ -65,6 +83,7 @@ export function buildWeddingDavinciDeliveryReadiness() {
     openingDavinciActualBindingAudit.finalApproval.productionReady,
     openingProjectMotion,
     openingTransitionActual,
+    openingActualCompletion,
   );
   const profileState = classifyProjectState(
     profileDavinciActualBindingAudit.state,
@@ -72,6 +91,7 @@ export function buildWeddingDavinciDeliveryReadiness() {
     profileDavinciActualBindingAudit.finalApproval.productionReady,
     profileProjectMotion,
     profileTransitionActual,
+    profileActualCompletion,
   );
 
   const overallState: WeddingReadinessState =
@@ -97,10 +117,16 @@ export function buildWeddingDavinciDeliveryReadiness() {
       authority: weddingDavinciTransitionActualReadiness.authority,
       guardrails: [...weddingDavinciTransitionActualReadiness.guardrails],
     },
+    actualCompletionSnapshot: {
+      schemaVersion: weddingDavinciActualCompletionReadiness.schemaVersion,
+      authority: weddingDavinciActualCompletionReadiness.authority,
+      guardrails: [...weddingDavinciActualCompletionReadiness.guardrails],
+    },
     opening: {
       state: openingState,
       projectMotion: openingProjectMotion,
       transitionActual: openingTransitionActual,
+      actualCompletion: openingActualCompletion,
       handoff: {
         schemaVersion: openingHandoff.schemaVersion,
         davinciContractVersion: openingHandoff.opening.production.davinciHandoff.contractVersion,
@@ -121,12 +147,14 @@ export function buildWeddingDavinciDeliveryReadiness() {
       },
       nextGate: projectMotionNextGate(openingProjectMotion)
         ?? transitionNextGate(openingDavinciActualBindingAudit.state, openingTransitionActual)
+        ?? actualCompletionNextGate(openingDavinciActualBindingAudit.state, openingTransitionActual, openingActualCompletion)
         ?? openingHandoff.opening.production.nextGate,
     },
     profile: {
       state: profileState,
       projectMotion: profileProjectMotion,
       transitionActual: profileTransitionActual,
+      actualCompletion: profileActualCompletion,
       handoff: {
         schemaVersion: profileHandoff.schemaVersion,
         davinciContractVersion: profileHandoff.profile.production.davinciHandoff.contractVersion,
@@ -147,6 +175,7 @@ export function buildWeddingDavinciDeliveryReadiness() {
       },
       nextGate: projectMotionNextGate(profileProjectMotion)
         ?? transitionNextGate(profileDavinciActualBindingAudit.state, profileTransitionActual)
+        ?? actualCompletionNextGate(profileDavinciActualBindingAudit.state, profileTransitionActual, profileActualCompletion)
         ?? profileHandoff.profile.production.nextGate,
     },
     guardrails: [
@@ -159,6 +188,9 @@ export function buildWeddingDavinciDeliveryReadiness() {
       "TRANSITION_ACTUAL_CURRENT_REQUIRED_BEFORE_FINAL_DELIVERY_READY",
       "TRANSITION_ACTUAL_GENERATED_SNAPSHOT != LIVE_MAC_DAVINCI_GUI_ACTUAL",
       "TRANSITION_PROOF_SHA_CHANGED => REVALIDATE_TRANSITION_ACTUAL",
+      "DAVINCI_ACTUAL_COMPLETION_RECEIPT_CURRENT_REQUIRED_BEFORE_FINAL_DELIVERY_READY",
+      "DAVINCI_ACTUAL_COMPLETION_RECEIPT_DERIVED_ONLY != LIVE_MAC_DAVINCI_GUI_ACTUAL",
+      "FINISHING_OR_TRANSITION_EVIDENCE_SHA_CHANGED => REBUILD_DAVINCI_ACTUAL_COMPLETION_RECEIPT",
       "CROSS_DISSOLVE_DURATION_REQUIRES_HUMAN_PASS",
       "FINAL_APPROVAL_CURRENT_REQUIRES_CURRENT_RECOVERY_AND_ACTUAL_EVIDENCE",
       "NOT_RUN != VERIFIED",
