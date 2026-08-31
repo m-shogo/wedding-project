@@ -1,0 +1,57 @@
+name: Wedding Production Next Action Dashboard CI
+
+on:
+  pull_request:
+    paths:
+      - 'movie-dashboard/src/data/weddingProductionNextAction.ts'
+      - 'movie-dashboard/src/components/WeddingProductionNextActionCard.tsx'
+      - 'movie-dashboard/src/components/MaskRevealSceneHandoffCard.tsx'
+      - 'movie-dashboard/src/data/openingProductionStatus.generated.ts'
+      - 'movie-dashboard/src/data/profileProductionStatus.generated.ts'
+      - '.github/workflows/wedding-production-next-action-dashboard-ci.yml'
+  workflow_dispatch:
+
+jobs:
+  next-action-surface:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Surface reuses generated production status authority
+        run: |
+          grep -q 'openingProductionStatus' movie-dashboard/src/data/weddingProductionNextAction.ts
+          grep -q 'profileProductionStatus' movie-dashboard/src/data/weddingProductionNextAction.ts
+          grep -q 'INPUT_REQUIRED' movie-dashboard/src/data/weddingProductionNextAction.ts
+          grep -q 'HUMAN' movie-dashboard/src/data/weddingProductionNextAction.ts
+          grep -q 'COMMAND' movie-dashboard/src/data/weddingProductionNextAction.ts
+          grep -q 'UNRESOLVED_INPUT' movie-dashboard/src/data/weddingProductionNextAction.ts
+
+      - name: Motion Zukan exposes actionable copy-only next step
+        run: |
+          grep -q 'PRODUCTION NEXT ACTION' movie-dashboard/src/components/WeddingProductionNextActionCard.tsx
+          grep -q '素材パスを指定して開始' movie-dashboard/src/components/WeddingProductionNextActionCard.tsx
+          grep -q 'navigator.clipboard.writeText' movie-dashboard/src/components/WeddingProductionNextActionCard.tsx
+          grep -q 'WeddingProductionNextActionCard' movie-dashboard/src/components/MaskRevealSceneHandoffCard.tsx
+          grep -q 'action executed' movie-dashboard/src/components/WeddingProductionNextActionCard.tsx
+
+      - name: Surface does not fabricate execution or GUI Actual
+        run: |
+          grep -q 'macRemotionStudioGuiActual: "NOT_RUN"' movie-dashboard/src/data/weddingProductionNextAction.ts
+          grep -q 'macDaVinciGuiActual: "NOT_RUN"' movie-dashboard/src/data/weddingProductionNextAction.ts
+          grep -q 'actionExecutedByThisSurface: false' movie-dashboard/src/data/weddingProductionNextAction.ts
+          grep -q 'productionReadyPromotedByThisSurface: false' movie-dashboard/src/data/weddingProductionNextAction.ts
+          ! grep -q 'exec(' movie-dashboard/src/components/WeddingProductionNextActionCard.tsx
+          ! grep -q 'spawn' movie-dashboard/src/components/WeddingProductionNextActionCard.tsx
+
+      - name: Build Movie Dashboard
+        working-directory: movie-dashboard
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm build
