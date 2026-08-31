@@ -25,6 +25,18 @@ const evidencePaths = {
 
 type MovieId = keyof typeof evidencePaths;
 type EvidenceState = 'NOT_RUN' | 'IN_PROGRESS' | 'PASS' | 'FAIL' | 'INVALID';
+type TransitionKind = 'HARD_CUT' | 'CROSS_DISSOLVE';
+type TransitionCheck = {
+  order?: number;
+  edgeId?: string;
+  fromSceneId?: string;
+  toSceneId?: string;
+  expectedTransition?: TransitionKind;
+  expectedDurationFrames?: number;
+  transitionOccurrenceCountBetweenMarkers?: number;
+  matchedDurationFrames?: number;
+  state?: string;
+};
 
 type ActualEvidence = {
   authority?: string;
@@ -54,7 +66,51 @@ type PalmierTimelineReceipt = {
     assemblyPlan?: {path?: string; sha256?: string};
     palmierFcpxml?: {path?: string; sha256?: string};
   };
+  verification?: {
+    sceneCount?: number;
+    transitionEdgeCount?: number;
+    transitionIntentMatchesAssemblyPlan?: boolean;
+    transitionDurationMatchesAssemblyPlan?: boolean;
+    noUnboundTransitions?: boolean;
+    transitionChecks?: TransitionCheck[];
+  };
+  evidenceBoundary?: {
+    palmierTransitionIntentVerifiedFromFcpxml?: boolean;
+    transitionAppliedGuiActualPerformedByThisVerifier?: boolean;
+  };
 };
+
+type RecoveryPalmierTimelineExport = {
+  authority?: string;
+  state?: string;
+  receipt?: {sha256?: string};
+  assemblyPlan?: {sha256?: string};
+  palmierFcpxml?: {sha256?: string};
+  verification?: {
+    sceneCount?: number;
+    transitionEdgeCount?: number;
+    crossDissolveCount?: number;
+    transitionIntentMatchesAssemblyPlan?: boolean;
+    transitionDurationMatchesAssemblyPlan?: boolean;
+    noUnboundTransitions?: boolean;
+    transitionChecks?: Array<{
+      order?: number | null;
+      edgeId?: string;
+      fromSceneId?: string;
+      toSceneId?: string;
+      transition?: TransitionKind;
+      durationFrames?: number;
+      transitionOccurrenceCountBetweenMarkers?: number;
+      matchedDurationFrames?: number;
+      state?: string;
+    }>;
+  };
+  transitionAppliedGuiActual?: string;
+  macDaVinciGuiActual?: string;
+  productionReady?: boolean;
+};
+
+const sha256Json = (value: unknown) => createHash('sha256').update(JSON.stringify(value)).digest('hex');
 
 const runJson = (script: string) => {
   const result = spawnSync(process.execPath, ['--no-warnings', join(root, 'scripts', script), '--json'], {
@@ -160,8 +216,16 @@ const inspectProjectRemotionIdentity = (movieId: MovieId) => {
 
 const inspectPalmierTimelineExport = (movieId: MovieId, projectRemotionApplicable: boolean) => {
   const receiptPath = join(root, `out/handoff/wedding/${movieId}-palmier-typography-timeline-export-receipt.json`);
+  const recoveryPath = join(root, `out/handoff/${movieId}-v1/${movieId}-v1-davinci-production-recovery.json`);
   const command = `node --no-warnings scripts/check-wedding-palmier-typography-timeline-export-receipt.mts --movie=${movieId} --strict`;
   const applicable = projectRemotionApplicable || existsSync(receiptPath);
+  const empty = {
+    transitionEdgeCount: null,
+    crossDissolveCount: null,
+    transitionProofSha256: null,
+    transitionProof: [] as Array<Record<string, unknown>>,
+    recoveryTransitionProofSha256: null,
+  };
   if (!applicable) {
     return {
       state: 'NOT_APPLICABLE' as const,
@@ -171,6 +235,7 @@ const inspectPalmierTimelineExport = (movieId: MovieId, projectRemotionApplicabl
       receiptSha256: null,
       assemblyPlanSha256: null,
       palmierFcpxmlSha256: null,
+      ...empty,
       error: null,
     };
   }
@@ -183,21 +248,73 @@ const inspectPalmierTimelineExport = (movieId: MovieId, projectRemotionApplicabl
     const report = JSON.parse(result.stdout) as {state?: string; detail?: string | null};
     if (report.state !== 'CURRENT') throw new Error(report.detail ?? `PALMIER_TIMELINE_${report.state ?? 'INVALID'}`);
     if (!existsSync(receiptPath)) throw new Error('PALMIER_TIMELINE_RECEIPT_MISSING_AFTER_CURRENT_CHECK');
+    if (!existsSync(recoveryPath)) throw new Error('PALMIER_TIMELINE_RECOVERY_MISSING_AFTER_CURRENT_CHECK');
     const receiptRaw = readFileSync(receiptPath, 'utf8');
     const receipt = JSON.parse(receiptRaw) as PalmierTimelineReceipt;
+    const recovery = JSON.parse(readFileSync(recoveryPath, 'utf8')) as {palmierTimelineExport?: RecoveryPalmierTimelineExport};
     const assemblyPlanSha256 = receipt.source?.assemblyPlan?.sha256 ?? null;
     const palmierFcpxmlSha256 = receipt.source?.palmierFcpxml?.sha256 ?? null;
+    const receiptSha256 = createHash('sha256').update(receiptRaw).digest('hex');
     if (!/^[a-f0-9]{64}$/.test(assemblyPlanSha256 ?? '') || !/^[a-f0-9]{64}$/.test(palmierFcpxmlSha256 ?? '')) {
       throw new Error('PALMIER_TIMELINE_RECEIPT_SHA_BINDING_INVALID');
     }
+    const checks = receipt.verification?.transitionChecks ?? [];
+    const expectedEdges = Math.max(0, Number(receipt.verification?.sceneCount ?? 0) - 1);
+    if (
+      receipt.verification?.transitionIntentMatchesAssemblyPlan !== true ||
+      receipt.verification?.transitionDurationMatchesAssemblyPlan !== true ||
+      receipt.verification?.noUnboundTransitions !== true ||
+      receipt.evidenceBoundary?.palmierTransitionIntentVerifiedFromFcpxml !== true ||
+      receipt.evidenceBoundary?.transitionAppliedGuiActualPerformedByThisVerifier !== false ||
+      checks.length !== expectedEdges ||
+      checks.length !== receipt.verification?.transitionEdgeCount ||
+      checks.some((check) => check.state !== 'CURRENT' || !check.edgeId || !check.fromSceneId || !check.toSceneId || (check.expectedTransition !== 'HARD_CUT' && check.expectedTransition !== 'CROSS_DISSOLVE'))
+    ) throw new Error('PALMIER_TIMELINE_TRANSITION_PROOF_INVALID');
+    const transitionProof = checks.map((check) => ({
+      order: check.order ?? null,
+      edgeId: check.edgeId!,
+      fromSceneId: check.fromSceneId!,
+      toSceneId: check.toSceneId!,
+      transition: check.expectedTransition!,
+      durationFrames: check.expectedDurationFrames ?? 0,
+      transitionOccurrenceCountBetweenMarkers: check.transitionOccurrenceCountBetweenMarkers ?? 0,
+      matchedDurationFrames: check.matchedDurationFrames ?? 0,
+      state: 'CURRENT',
+    }));
+    const transitionProofSha256 = sha256Json(transitionProof);
+    const recoveryTimeline = recovery.palmierTimelineExport;
+    const recoveryProof = recoveryTimeline?.verification?.transitionChecks ?? [];
+    const recoveryTransitionProofSha256 = sha256Json(recoveryProof);
+    const crossDissolveCount = transitionProof.filter((edge) => edge.transition === 'CROSS_DISSOLVE').length;
+    if (
+      recoveryTimeline?.authority !== 'SHA_BOUND_PALMIER_TIMELINE_EXPORT_HANDOFF' ||
+      recoveryTimeline?.state !== 'CURRENT' ||
+      recoveryTimeline.receipt?.sha256 !== receiptSha256 ||
+      recoveryTimeline.assemblyPlan?.sha256 !== assemblyPlanSha256 ||
+      recoveryTimeline.palmierFcpxml?.sha256 !== palmierFcpxmlSha256 ||
+      recoveryTimeline.verification?.transitionEdgeCount !== transitionProof.length ||
+      recoveryTimeline.verification?.crossDissolveCount !== crossDissolveCount ||
+      recoveryTimeline.verification?.transitionIntentMatchesAssemblyPlan !== true ||
+      recoveryTimeline.verification?.transitionDurationMatchesAssemblyPlan !== true ||
+      recoveryTimeline.verification?.noUnboundTransitions !== true ||
+      recoveryTimeline.transitionAppliedGuiActual !== 'NOT_RUN' ||
+      recoveryTimeline.macDaVinciGuiActual !== 'NOT_RUN' ||
+      recoveryTimeline.productionReady !== false ||
+      recoveryTransitionProofSha256 !== transitionProofSha256
+    ) throw new Error('PALMIER_TIMELINE_RECOVERY_TRANSITION_PROOF_DRIFT');
     return {
       state: 'CURRENT' as const,
       applicable: true,
       current: true,
       command,
-      receiptSha256: createHash('sha256').update(receiptRaw).digest('hex'),
+      receiptSha256,
       assemblyPlanSha256,
       palmierFcpxmlSha256,
+      transitionEdgeCount: transitionProof.length,
+      crossDissolveCount,
+      transitionProofSha256,
+      transitionProof,
+      recoveryTransitionProofSha256,
       error: null,
     };
   } catch (error) {
@@ -209,6 +326,7 @@ const inspectPalmierTimelineExport = (movieId: MovieId, projectRemotionApplicabl
       receiptSha256: null,
       assemblyPlanSha256: null,
       palmierFcpxmlSha256: null,
+      ...empty,
       error: error instanceof Error ? error.message : String(error),
     };
   }
@@ -218,7 +336,8 @@ const manualChecklist = [
   'Confirm the source render readback SHA matches the recovery-bound expected SHA before editing.',
   'Confirm the Resolve Project Motion handoff sidecar path/SHA shown in recovery Markdown matches the canonical preflight result before editing.',
   'Confirm the Project Remotion Element identity receipt and Resolve identity sidecar SHA shown in recovery Markdown match the transported session-plan preflight before editing.',
-  'Confirm the Palmier timeline export receipt, Assembly Plan SHA, and real FCPXML SHA match the transported Session Plan before editing.',
+  'Confirm the Palmier timeline export receipt, Assembly Plan SHA, real FCPXML SHA, and transported transition-proof SHA/counts match the Session Plan before editing.',
+  'Confirm the Session Plan reports every Palmier transition edge CURRENT and the Cross Dissolve count expected for this movie before editing.',
   'Record DaVinci Resolve version, project name, timeline name, timeline insertion, duration and FPS.',
   'Review color, audio, title-safe/framing, playback at 1x, and playback at half speed in the real Mac GUI.',
   'Export from DaVinci and record path/SHA plus duration, dimensions, FPS, audio presence, and watched-with-sound verdicts.',
@@ -287,7 +406,7 @@ const buildProject = (movieId: MovieId) => {
         order: 4,
         kind: 'PALMIER_TIMELINE_PREFLIGHT',
         command: palmierTimelinePreflight.command,
-        purpose: `Transported Palmier timeline state=${palmierTimelinePreflight.state}. When Project Remotion typography is in use, require a CURRENT SHA-bound real FCPXML receipt before Actual evidence initialization.`,
+        purpose: `Transported Palmier timeline state=${palmierTimelinePreflight.state}, transitions=${palmierTimelinePreflight.transitionEdgeCount ?? 'N/A'}, crossDissolves=${palmierTimelinePreflight.crossDissolveCount ?? 'N/A'}, proofSha=${palmierTimelinePreflight.transitionProofSha256 ?? 'N/A'}. When Project Remotion typography is in use, require a CURRENT SHA-bound real FCPXML receipt and recovery-bound transition proof before Actual evidence initialization.`,
       },
       {
         order: 5,
@@ -324,6 +443,7 @@ const planBody = {
   generatedFromOperatorPacketSchema: operatorPacket.schemaVersion,
   evidenceBoundary: {
     macRemotionStudioGuiActual: 'NOT_RUN_UNLESS_HUMAN_EXECUTED',
+    palmierTransitionAppliedGuiActual: 'NOT_RUN_UNLESS_HUMAN_EXECUTED',
     macDavinciResolveGuiActual: 'NOT_RUN_UNLESS_HUMAN_EXECUTED',
     humanFinalApproval: 'SEPARATE_AFTER_ACTUAL_STRICT_PASS',
     productionReady: false,
@@ -352,7 +472,10 @@ const planBody = {
     'PROJECT_REMOTION_IDENTITY_PREFLIGHT_MUST_RUN_BEFORE_EVIDENCE_INIT',
     'PALMIER_TIMELINE_PREFLIGHT_STATE_TRANSPORTED_WITH_SESSION_PLAN',
     'PALMIER_TIMELINE_PREFLIGHT_INVALID => SESSION_PLAN_BLOCKED',
+    'PALMIER_TRANSITION_PROOF_TRANSPORTED_WITH_SESSION_PLAN',
+    'PALMIER_TRANSITION_PROOF_RECOVERY_DRIFT => SESSION_PLAN_BLOCKED',
     'PALMIER_TIMELINE_CURRENT != PALMIER_GUI_ACTUAL_PROVEN',
+    'PALMIER_TRANSITION_PROOF_CURRENT != TRANSITION_GUI_ACTUAL_PASS',
     'PALMIER_TIMELINE_CURRENT != GUI_ACTUAL_PASS',
     'PALMIER_TIMELINE_PREFLIGHT_MUST_RUN_BEFORE_EVIDENCE_INIT',
     'CI_MUST_NOT_PROMOTE_MAC_GUI_ACTUAL',
