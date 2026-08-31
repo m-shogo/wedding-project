@@ -24,6 +24,7 @@ import {
   VisualMotionWordPunchV1,
   WeddingSceneTypographyCandidateV1,
 } from './compositions/common/VisualMotionTypographyConcepts';
+import {WeddingProjectTypographyPreviewReel} from './compositions/common/WeddingProjectTypographyPreviewReel';
 import {
   VisualMotionDirectionalPanStockV1,
   VisualMotionFreezeCutoutStockV1,
@@ -99,6 +100,15 @@ export function StartMotionKitRoot() {
         height={720}
         fps={30}
         durationInFrames={900}
+      />
+      <Composition
+        id="WeddingProjectTypographyPreviewReelV1"
+        component={WeddingProjectTypographyPreviewReel}
+        defaultProps={{projectId: 'opening', scenes: []}}
+        width={1280}
+        height={720}
+        fps={30}
+        durationInFrames={108000}
       />
       <Composition
         id="VisualMotionStaticHeroStockV1"
