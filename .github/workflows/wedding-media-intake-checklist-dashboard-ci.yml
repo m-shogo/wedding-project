@@ -1,0 +1,48 @@
+name: Wedding Media Intake Checklist Dashboard CI
+
+on:
+  pull_request:
+    paths:
+      - 'movie-dashboard/src/components/WeddingMediaIntakeChecklistCard.tsx'
+      - 'movie-dashboard/src/components/MaskRevealSceneHandoffCard.tsx'
+      - 'movie-dashboard/src/data/openingProductionGate.generated.ts'
+      - 'movie-dashboard/src/data/profileProductionGate.generated.ts'
+      - '.github/workflows/wedding-media-intake-checklist-dashboard-ci.yml'
+  workflow_dispatch:
+
+jobs:
+  checklist:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Checklist reuses current production gate authorities
+        run: |
+          grep -q 'openingProductionGate' movie-dashboard/src/components/WeddingMediaIntakeChecklistCard.tsx
+          grep -q 'profileProductionGate' movie-dashboard/src/components/WeddingMediaIntakeChecklistCard.tsx
+          grep -q 'photoSlots.map' movie-dashboard/src/components/WeddingMediaIntakeChecklistCard.tsx
+          grep -q 'mediaSlots.map' movie-dashboard/src/components/WeddingMediaIntakeChecklistCard.tsx
+          grep -q 'canonicalStem' movie-dashboard/src/components/WeddingMediaIntakeChecklistCard.tsx
+          grep -q 'intake-production-media.mts' movie-dashboard/src/components/WeddingMediaIntakeChecklistCard.tsx
+          grep -q 'verify-production-media-intake-receipt.mts' movie-dashboard/src/components/WeddingMediaIntakeChecklistCard.tsx
+
+      - name: Checklist is mounted and evidence-safe
+        run: |
+          grep -q 'WeddingMediaIntakeChecklistCard' movie-dashboard/src/components/MaskRevealSceneHandoffCard.tsx
+          grep -q 'Human visual QA PASS' movie-dashboard/src/components/WeddingMediaIntakeChecklistCard.tsx
+          grep -q 'Remotion Studio GUI Actual PASS' movie-dashboard/src/components/WeddingMediaIntakeChecklistCard.tsx
+          grep -q 'Mac DaVinci GUI Actual PASS' movie-dashboard/src/components/WeddingMediaIntakeChecklistCard.tsx
+          grep -q 'productionReady' movie-dashboard/src/components/WeddingMediaIntakeChecklistCard.tsx
+
+      - name: Build Movie Dashboard
+        working-directory: movie-dashboard
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm build

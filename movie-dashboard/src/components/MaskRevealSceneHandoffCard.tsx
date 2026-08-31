@@ -12,6 +12,7 @@ import type { MaskRevealSceneInstance } from "../data/visualSceneComposer";
 import { downloadText } from "../lib/exporters";
 import { ProfileProductionStatusHandoffCard } from "./ProfileProductionStatusHandoffCard";
 import { ProjectTypographyRoleHandoffRevalidationCard } from "./ProjectTypographyRoleHandoffRevalidationCard";
+import { WeddingMediaIntakeChecklistCard } from "./WeddingMediaIntakeChecklistCard";
 import { WeddingMovieProductionCriticalPathCard } from "./WeddingMovieProductionCriticalPathCard";
 import { WeddingProductionNextActionCard } from "./WeddingProductionNextActionCard";
 import { WeddingProjectRemotionStageStatusCard } from "./WeddingProjectRemotionStageStatusCard";
@@ -87,6 +88,7 @@ export function MaskRevealSceneHandoffCard({ scene }: { scene: MaskRevealSceneIn
       )}
 
       <WeddingProductionNextActionCard projectId={scene.projectId} />
+      <WeddingMediaIntakeChecklistCard projectId={scene.projectId} />
       <WeddingSceneMotionProductionHandoffCard scene={scene} />
       <TypographyProductionRoleGuide projectId={scene.projectId} />
       <TypographyProductionRouteSelector scene={scene} />
