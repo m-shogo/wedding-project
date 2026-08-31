@@ -4,6 +4,8 @@ on:
   pull_request:
     paths:
       - 'movie-dashboard/src/components/TypographyProductionRouteSelector.tsx'
+      - 'movie-dashboard/src/components/TypographyProductionRoleGuide.tsx'
+      - 'movie-dashboard/src/components/TypographyElementVisualComparison.tsx'
       - 'movie-dashboard/src/data/typographyProductionSelectionStore.ts'
       - 'movie-dashboard/src/data/typographyProductionRoleContextStore.ts'
       - 'movie-dashboard/src/data/weddingTypographyProductionRoleGuide.generated.ts'
@@ -34,12 +36,28 @@ jobs:
           grep -q 'PRIMARY' movie-dashboard/src/components/TypographyProductionRouteSelector.tsx
           grep -q 'FALLBACK' movie-dashboard/src/components/TypographyProductionRouteSelector.tsx
 
+      - name: Role guide exposes production-fit visual comparison
+        run: |
+          grep -q 'TypographyElementVisualComparison projectId={projectId}' movie-dashboard/src/components/TypographyProductionRoleGuide.tsx
+          grep -q 'ROLE-SCOPED ELEMENT VISUAL COMPARISON' movie-dashboard/src/components/TypographyElementVisualComparison.tsx
+          grep -q 'getWeddingTypographyProductionRoleGuide' movie-dashboard/src/components/TypographyElementVisualComparison.tsx
+          grep -q 'data-remotion-role-visual-comparison' movie-dashboard/src/components/TypographyElementVisualComparison.tsx
+          grep -q 'data-role-candidate' movie-dashboard/src/components/TypographyElementVisualComparison.tsx
+          grep -q 'openingFit' movie-dashboard/src/components/TypographyElementVisualComparison.tsx
+          grep -q 'profileFit' movie-dashboard/src/components/TypographyElementVisualComparison.tsx
+          grep -q 'palmierCapability' movie-dashboard/src/components/TypographyElementVisualComparison.tsx
+          grep -q 'goodFor.slice' movie-dashboard/src/components/TypographyElementVisualComparison.tsx
+          grep -q 'avoidFor.slice' movie-dashboard/src/components/TypographyElementVisualComparison.tsx
+          grep -q 'AUTO SELECT = OFF' movie-dashboard/src/components/TypographyElementVisualComparison.tsx
+
       - name: Presets preserve evidence boundary
         run: |
           grep -q 'Remotion Studio GUI Actual' movie-dashboard/src/components/TypographyProductionRouteSelector.tsx
           grep -q 'DaVinci GUI Actual' movie-dashboard/src/components/TypographyProductionRouteSelector.tsx
           grep -q 'productionReadyを自動昇格しません' movie-dashboard/src/components/TypographyProductionRouteSelector.tsx
+          grep -q 'Preview VERIFIED ≠ Remotion Studio GUI Actual PASS' movie-dashboard/src/components/TypographyElementVisualComparison.tsx
           ! grep -q 'productionReady=YES' movie-dashboard/src/components/TypographyProductionRouteSelector.tsx
+          ! grep -q 'productionReady=YES' movie-dashboard/src/components/TypographyElementVisualComparison.tsx
 
       - name: Build Movie Dashboard
         working-directory: movie-dashboard
