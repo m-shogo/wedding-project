@@ -56,7 +56,7 @@ jobs:
           NODE
       - name: Initialize fail-closed Human review
         run: node --no-warnings motion-studio/scripts/wedding-project-real-media-preview-visual-review.mts --stills-manifest=/tmp/visual-review/stills-manifest.json --init --output=/tmp/visual-review/review.json
-      - name: Verify NOT_RUN initialization
+      - name: Verify NOT_RUN initialization and transition revision binding
         run: |
           node --input-type=module <<'NODE'
           import {readFileSync} from 'node:fs';
@@ -64,6 +64,7 @@ jobs:
           if(r.finalVerdict!=='NOT_RUN'||r.evidenceBoundary.humanVisualReviewPerformed!==false) throw new Error('review auto-promoted');
           for(const s of r.scenes) for(const x of Object.values(s.checks)) if(x.verdict!=='NOT_RUN') throw new Error('scene auto-promoted');
           for(const t of r.transitions) for(const x of Object.values(t.checks)) if(x.verdict!=='NOT_RUN') throw new Error('transition auto-promoted');
+          if(r.transitions[0].fromSourceRevision!=='rev-a'||r.transitions[0].toSourceRevision!=='rev-b') throw new Error('transition revision binding missing');
           NODE
       - name: Record explicit Human fixture failures and finalize
         run: |
@@ -79,7 +80,7 @@ jobs:
           writeFileSync(p,JSON.stringify(r,null,2)+'\n');
           NODE
           node --no-warnings motion-studio/scripts/wedding-project-real-media-preview-visual-review.mts --stills-manifest=/tmp/visual-review/stills-manifest.json --review=/tmp/visual-review/review.json --output=/tmp/visual-review/queue.json
-      - name: Verify correction routing and evidence boundary
+      - name: Verify correction routing, transition revisions, and evidence boundary
         run: |
           node --input-type=module <<'NODE'
           import {readFileSync} from 'node:fs';
@@ -87,8 +88,24 @@ jobs:
           if(q.summary.failedChecks!==3||q.summary.notRunChecks!==0||q.summary.correctionRequired!==true||q.summary.productionReady!==false) throw new Error('summary');
           const routes=new Set(q.failures.map((x)=>x.returnTo));
           for(const expected of ['REAL_MEDIA_CROP','SCENE_BOUND_A_B_COMPARE','SCENE_EDGE_TRANSITION']) if(!routes.has(expected)) throw new Error(`missing route ${expected}`);
+          const transition=q.failures.find((x)=>x.kind==='TRANSITION');
+          if(!transition||transition.fromSourceRevision!=='rev-a'||transition.toSourceRevision!=='rev-b') throw new Error('transition queue revision binding');
           if(q.evidenceBoundary.remotionStudioGuiActual!=='NOT_RUN'||q.evidenceBoundary.palmierGuiActual!=='NOT_RUN'||q.evidenceBoundary.macDaVinciGuiActual!=='NOT_RUN') throw new Error('GUI Actual promoted');
           NODE
+      - name: Tampered Human transition revision fails closed
+        run: |
+          cp /tmp/visual-review/review.json /tmp/visual-review/review-stale-transition.json
+          node --input-type=module <<'NODE'
+          import {readFileSync,writeFileSync} from 'node:fs';
+          const p='/tmp/visual-review/review-stale-transition.json'; const r=JSON.parse(readFileSync(p,'utf8'));
+          r.transitions[0].fromSourceRevision='rev-stale';
+          writeFileSync(p,JSON.stringify(r,null,2)+'\n');
+          NODE
+          if node --no-warnings motion-studio/scripts/wedding-project-real-media-preview-visual-review.mts --stills-manifest=/tmp/visual-review/stills-manifest.json --review=/tmp/visual-review/review-stale-transition.json --output=/tmp/visual-review/stale-transition.json 2>/tmp/visual-review/stale-transition.err; then
+            echo 'expected transition revision mismatch to block' >&2
+            exit 1
+          fi
+          grep -q 'REAL_PREVIEW_VISUAL_REVIEW_HUMAN_SOURCE_STALE\|REAL_PREVIEW_VISUAL_REVIEW_TRANSITION_IDENTITY_MISMATCH' /tmp/visual-review/stale-transition.err
       - name: Post-review still tamper fails closed
         shell: bash
         run: |

@@ -25,8 +25,13 @@ const previewPath=resolve(stills.source?.previewPath??"");
 if(!existsSync(previewManifestPath)||sha256(previewManifestPath)!==stills.source?.previewManifestSha256)fail("REAL_PREVIEW_VISUAL_REVIEW_PREVIEW_MANIFEST_STALE");
 if(!existsSync(previewPath)||sha256(previewPath)!==stills.source?.previewSha256)fail("REAL_PREVIEW_VISUAL_REVIEW_PREVIEW_VIDEO_STALE");
 for(const item of [...(stills.stills??[]),...(stills.transitionStills??[])]){const p=resolve(item.path??"");if(!existsSync(p)||sha256(p)!==item.sha256)fail("REAL_PREVIEW_VISUAL_REVIEW_STILL_STALE",String(item.path));}
-const scenes=[...new Map((stills.stills??[]).map((s:any)=>[s.sceneId,{sceneId:s.sceneId,sourceRevision:s.sourceRevision,patternId:s.patternId,productionRole:s.productionRole}])).values()];
-const transitions=(stills.transitionStills??[]).map((t:any)=>({fromSceneId:t.fromSceneId,toSceneId:t.toSceneId,durationFrames:t.durationFrames,frame:t.frame,stillSha256:t.sha256}));
+const scenes=[...new Map((stills.stills??[]).map((s:any)=>[s.sceneId,{sceneId:s.sceneId,sourceRevision:s.sourceRevision,patternId:s.patternId,productionRole:s.productionRole}])).values()] as any[];
+const sceneById=new Map(scenes.map((scene:any)=>[scene.sceneId,scene]));
+const transitions=(stills.transitionStills??[]).map((t:any)=>{
+ const from=sceneById.get(t.fromSceneId); const to=sceneById.get(t.toSceneId);
+ if(!from||!to)fail("REAL_PREVIEW_VISUAL_REVIEW_TRANSITION_SCENE_MISSING",`${t.fromSceneId}->${t.toSceneId}`);
+ return {fromSceneId:t.fromSceneId,toSceneId:t.toSceneId,fromSourceRevision:from.sourceRevision,toSourceRevision:to.sourceRevision,durationFrames:t.durationFrames,frame:t.frame,stillSha256:t.sha256};
+});
 const identity={projectId:stills.projectId,stillsManifestSha256:sha256(stillsPath),previewManifestSha256:stills.source.previewManifestSha256,previewSha256:stills.source.previewSha256,scenes,transitions};
 const identityFingerprint=fingerprint(identity);
 const output=resolve(arg("output")??`out/qa/project-real-media-preview/${stills.projectId}/${stills.projectId}-real-media-human-visual-review.json`);
@@ -46,7 +51,7 @@ function checkVerdict(v:any,label:string){if(!["NOT_RUN","PASS","FAIL"].includes
 if(!Array.isArray(review.scenes)||review.scenes.length!==scenes.length)fail("REAL_PREVIEW_VISUAL_REVIEW_SCENE_COUNT_MISMATCH");
 review.scenes.forEach((scene:any,i:number)=>{const expected:any=scenes[i];for(const k of ["sceneId","sourceRevision","patternId","productionRole"]){if(scene[k]!==expected[k])fail("REAL_PREVIEW_VISUAL_REVIEW_SCENE_IDENTITY_MISMATCH",`${expected.sceneId}:${k}`);}for(const c of SCENE_CHECKS){const v=checkVerdict(scene.checks?.[c]?.verdict,`${scene.sceneId}:${c}`);if(v==="FAIL")failures.push({kind:"SCENE",sceneId:scene.sceneId,sourceRevision:scene.sourceRevision,patternId:scene.patternId,productionRole:scene.productionRole,check:c,notes:String(scene.checks?.[c]?.notes??""),returnTo:c==="CROP_SUBJECT_SAFE"?"REAL_MEDIA_CROP":c==="VISUAL_TEMPO_FEELS_INTENTIONAL"?"SCENE_TIMING_AND_RHYTHM":"SCENE_BOUND_A_B_COMPARE"});}});
 if(!Array.isArray(review.transitions)||review.transitions.length!==transitions.length)fail("REAL_PREVIEW_VISUAL_REVIEW_TRANSITION_COUNT_MISMATCH");
-review.transitions.forEach((tr:any,i:number)=>{const e:any=transitions[i];for(const k of ["fromSceneId","toSceneId","durationFrames","frame","stillSha256"]){if(tr[k]!==e[k])fail("REAL_PREVIEW_VISUAL_REVIEW_TRANSITION_IDENTITY_MISMATCH",`${e.fromSceneId}->${e.toSceneId}:${k}`);}for(const c of TRANSITION_CHECKS){const v=checkVerdict(tr.checks?.[c]?.verdict,`${tr.fromSceneId}->${tr.toSceneId}:${c}`);if(v==="FAIL")failures.push({kind:"TRANSITION",fromSceneId:tr.fromSceneId,toSceneId:tr.toSceneId,durationFrames:tr.durationFrames,check:c,notes:String(tr.checks?.[c]?.notes??""),returnTo:"SCENE_EDGE_TRANSITION"});}});
+review.transitions.forEach((tr:any,i:number)=>{const e:any=transitions[i];for(const k of ["fromSceneId","toSceneId","fromSourceRevision","toSourceRevision","durationFrames","frame","stillSha256"]){if(tr[k]!==e[k])fail("REAL_PREVIEW_VISUAL_REVIEW_TRANSITION_IDENTITY_MISMATCH",`${e.fromSceneId}->${e.toSceneId}:${k}`);}for(const c of TRANSITION_CHECKS){const v=checkVerdict(tr.checks?.[c]?.verdict,`${tr.fromSceneId}->${tr.toSceneId}:${c}`);if(v==="FAIL")failures.push({kind:"TRANSITION",fromSceneId:tr.fromSceneId,toSceneId:tr.toSceneId,fromSourceRevision:tr.fromSourceRevision,toSourceRevision:tr.toSourceRevision,durationFrames:tr.durationFrames,check:c,notes:String(tr.checks?.[c]?.notes??""),returnTo:"SCENE_EDGE_TRANSITION"});}});
 const finalVerdict=checkVerdict(review.finalVerdict,"finalVerdict");
 if((failures.length>0||finalVerdict!=="NOT_RUN")&&review.evidenceBoundary?.humanVisualReviewPerformed!==true)fail("REAL_PREVIEW_VISUAL_REVIEW_HUMAN_REVIEW_NOT_CONFIRMED");
 if(finalVerdict==="PASS"&&(failures.length>0||notRun>0))fail("REAL_PREVIEW_VISUAL_REVIEW_PASS_INCOMPLETE");

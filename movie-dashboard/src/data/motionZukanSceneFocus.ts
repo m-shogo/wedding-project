@@ -3,8 +3,17 @@ import type {SceneProjectId} from "./visualSceneComposer";
 export const MOTION_ZUKAN_SCENE_FOCUS_REQUEST_EVENT = "motion-zukan:scene-focus-request";
 export const MOTION_ZUKAN_SCENE_FOCUS_RESOLVED_EVENT = "motion-zukan:scene-focus-resolved";
 
-export type MotionZukanSceneFocusAxis = "PATTERN_SWITCH" | "DURATION" | "PACING" | "TRANSITION";
+export type MotionZukanSceneFocusAxis =
+  | "PATTERN_SWITCH"
+  | "DURATION"
+  | "PACING"
+  | "TRANSITION"
+  | "CROP_SUBJECT_SAFE"
+  | "TITLE_READABLE"
+  | "TEXT_MEDIA_CONTRAST"
+  | "NO_UNINTENDED_EDGE_CLIP";
 export type MotionZukanSceneFocusSurface = "SCENE_BOUND_A_B_COMPARE" | "SCENE_TIMING_AND_A_B_COMPARE";
+export type MotionZukanSceneFocusRequester = "PROJECT_RHYTHM_CORRECTION_QUEUE" | "REAL_MEDIA_VISUAL_CORRECTION_QUEUE";
 
 export type MotionZukanSceneFocusRequest = {
   projectId: SceneProjectId;
@@ -12,8 +21,21 @@ export type MotionZukanSceneFocusRequest = {
   sourceRevision: string;
   axis: MotionZukanSceneFocusAxis;
   surface: MotionZukanSceneFocusSurface;
-  requestedBy: "PROJECT_RHYTHM_CORRECTION_QUEUE";
+  requestedBy: MotionZukanSceneFocusRequester;
 };
+
+const AXES = new Set<MotionZukanSceneFocusAxis>([
+  "PATTERN_SWITCH",
+  "DURATION",
+  "PACING",
+  "TRANSITION",
+  "CROP_SUBJECT_SAFE",
+  "TITLE_READABLE",
+  "TEXT_MEDIA_CONTRAST",
+  "NO_UNINTENDED_EDGE_CLIP",
+]);
+const SURFACES = new Set<MotionZukanSceneFocusSurface>(["SCENE_BOUND_A_B_COMPARE", "SCENE_TIMING_AND_A_B_COMPARE"]);
+const REQUESTERS = new Set<MotionZukanSceneFocusRequester>(["PROJECT_RHYTHM_CORRECTION_QUEUE", "REAL_MEDIA_VISUAL_CORRECTION_QUEUE"]);
 
 export function isMotionZukanSceneFocusRequest(value: unknown): value is MotionZukanSceneFocusRequest {
   if (!value || typeof value !== "object") return false;
@@ -23,9 +45,9 @@ export function isMotionZukanSceneFocusRequest(value: unknown): value is MotionZ
     && request.sceneId.length > 0
     && typeof request.sourceRevision === "string"
     && request.sourceRevision.length > 0
-    && (request.axis === "PATTERN_SWITCH" || request.axis === "DURATION" || request.axis === "PACING" || request.axis === "TRANSITION")
-    && (request.surface === "SCENE_BOUND_A_B_COMPARE" || request.surface === "SCENE_TIMING_AND_A_B_COMPARE")
-    && request.requestedBy === "PROJECT_RHYTHM_CORRECTION_QUEUE";
+    && AXES.has(request.axis as MotionZukanSceneFocusAxis)
+    && SURFACES.has(request.surface as MotionZukanSceneFocusSurface)
+    && REQUESTERS.has(request.requestedBy as MotionZukanSceneFocusRequester);
 }
 
 export function requestMotionZukanSceneFocus(request: MotionZukanSceneFocusRequest) {
