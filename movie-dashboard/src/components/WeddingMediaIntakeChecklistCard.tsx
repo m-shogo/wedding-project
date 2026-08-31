@@ -3,6 +3,7 @@ import {profileProductionGate} from "../data/profileProductionGate.generated";
 import type {SceneProjectId} from "../data/visualSceneComposer";
 import {OpeningCropReviewOperatorCard} from "./OpeningCropReviewOperatorCard";
 import {ProfileRealMediaReviewOperatorCard} from "./ProfileRealMediaReviewOperatorCard";
+import {WeddingMovieProductionReadinessOperatorCard} from "./WeddingMovieProductionReadinessOperatorCard";
 import {WeddingReviewEvidenceInstallCard} from "./WeddingReviewEvidenceInstallCard";
 import {WeddingVisualQaCorrectionQueueCard} from "./WeddingVisualQaCorrectionQueueCard";
 
@@ -72,6 +73,7 @@ export function WeddingMediaIntakeChecklistCard({projectId}: {projectId: ScenePr
 
         <p className="mt-2 border-l-2 border-amber-300 pl-2 text-[7px] leading-3 text-amber-800 dark:text-amber-200">このchecklistは準備用表示です。素材名が揃ったこと ≠ Human visual QA PASS ≠ Remotion Studio GUI Actual PASS ≠ Mac DaVinci GUI Actual PASS ≠ productionReady。</p>
       </section>
+      <WeddingMovieProductionReadinessOperatorCard projectId={projectId} />
       {isOpening ? <OpeningCropReviewOperatorCard /> : <ProfileRealMediaReviewOperatorCard />}
       <WeddingReviewEvidenceInstallCard projectId={projectId} />
       <WeddingVisualQaCorrectionQueueCard projectId={projectId} />
