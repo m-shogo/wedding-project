@@ -8,6 +8,7 @@ import {
   listProjectSceneTransitionSelections,
   MAX_CROSS_DISSOLVE_FRAMES,
   MIN_CROSS_DISSOLVE_FRAMES,
+  PROJECT_SCENE_TRANSITION_SELECTION_CHANGED_EVENT,
   resolveProjectSceneTransitions,
   saveProjectSceneTransitionSelection,
   type ProjectSceneTransitionKind,
@@ -19,6 +20,7 @@ export function RhythmSceneTransitionCorrectionCard({scene}: {scene: MaskRevealS
   const [durationFrames, setDurationFrames] = useState(12);
   const [feedback, setFeedback] = useState<string | null>(null);
   const [focused, setFocused] = useState(false);
+  const [transitionRevision, setTransitionRevision] = useState(0);
   const snapshot = useMemo(() => {
     const composer = loadMotionZukanComposerState();
     const timeline = composer.timelines.find((item) => item.projectId === scene.projectId);
@@ -34,7 +36,13 @@ export function RhythmSceneTransitionCorrectionCard({scene}: {scene: MaskRevealS
     const resolved = resolveProjectSceneTransitions(scene.projectId, composer.scenes, timeline, listProjectSceneTransitionSelections(scene.projectId))
       .find((item) => item.fromSceneId === fromSceneId && item.toSceneId === toSceneId) ?? null;
     return {composer, timeline, fromScene, toScene, resolved};
-  }, [scene.projectId, scene.sceneId, scene.updatedAt]);
+  }, [scene.projectId, scene.sceneId, scene.updatedAt, transitionRevision]);
+
+  useEffect(() => {
+    const refresh = () => setTransitionRevision((value) => value + 1);
+    window.addEventListener(PROJECT_SCENE_TRANSITION_SELECTION_CHANGED_EVENT, refresh);
+    return () => window.removeEventListener(PROJECT_SCENE_TRANSITION_SELECTION_CHANGED_EVENT, refresh);
+  }, []);
 
   useEffect(() => {
     if (!snapshot?.resolved) return;
@@ -56,14 +64,15 @@ export function RhythmSceneTransitionCorrectionCard({scene}: {scene: MaskRevealS
   }, [scene.projectId, scene.sceneId]);
 
   if (!snapshot) return null;
-  const current = snapshot.resolved;
+  const activeSnapshot = snapshot;
+  const current = activeSnapshot.resolved;
   const stale = current?.status === "STALE_HUMAN_SELECTION";
 
   function applyTransition() {
     setFeedback(null);
     const composer = loadMotionZukanComposerState();
-    const currentFrom = composer.scenes.find((item) => item.sceneId === snapshot.fromScene.sceneId && item.projectId === scene.projectId);
-    const currentTo = composer.scenes.find((item) => item.sceneId === snapshot.toScene.sceneId && item.projectId === scene.projectId);
+    const currentFrom = composer.scenes.find((item) => item.sceneId === activeSnapshot.fromScene.sceneId && item.projectId === scene.projectId);
+    const currentTo = composer.scenes.find((item) => item.sceneId === activeSnapshot.toScene.sceneId && item.projectId === scene.projectId);
     const timeline = composer.timelines.find((item) => item.projectId === scene.projectId);
     if (!currentFrom || !currentTo || !timeline) {
       setFeedback("現在のScene edgeを再解決できないため更新を拒否しました");
@@ -74,7 +83,7 @@ export function RhythmSceneTransitionCorrectionCard({scene}: {scene: MaskRevealS
       setFeedback("Scene順が更新済みです。古い境界からのtransition変更を拒否しました");
       return;
     }
-    if (currentFrom.updatedAt !== snapshot.fromScene.updatedAt || currentTo.updatedAt !== snapshot.toScene.updatedAt) {
+    if (currentFrom.updatedAt !== activeSnapshot.fromScene.updatedAt || currentTo.updatedAt !== activeSnapshot.toScene.updatedAt) {
       setFeedback("Scene revisionが更新済みです。古い境界からのtransition変更を拒否しました");
       return;
     }
@@ -103,7 +112,7 @@ export function RhythmSceneTransitionCorrectionCard({scene}: {scene: MaskRevealS
       </div>
 
       <div className="mt-2 grid gap-1 sm:grid-cols-3 text-[8px]">
-        <div className="border border-sand-200 p-2 dark:border-navy-700"><span className="text-navy-400">Edge</span><strong className="ml-2 font-mono">{snapshot.fromScene.sceneId} → {snapshot.toScene.sceneId}</strong></div>
+        <div className="border border-sand-200 p-2 dark:border-navy-700"><span className="text-navy-400">Edge</span><strong className="ml-2 font-mono">{activeSnapshot.fromScene.sceneId} → {activeSnapshot.toScene.sceneId}</strong></div>
         <div className="border border-sand-200 p-2 dark:border-navy-700"><span className="text-navy-400">Current</span><strong className="ml-2 font-mono">{current?.transition ?? "HARD_CUT"} / {current?.durationFrames ?? 0}f</strong></div>
         <div className={`border p-2 ${stale ? "border-amber-300 text-amber-800 dark:border-amber-800 dark:text-amber-200" : "border-emerald-200 text-emerald-700 dark:border-emerald-800 dark:text-emerald-300"}`}><span>Status</span><strong className="ml-2 font-mono">{current?.status ?? "DEFAULT_HARD_CUT"}</strong></div>
       </div>
