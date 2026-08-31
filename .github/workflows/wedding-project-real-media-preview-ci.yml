@@ -71,13 +71,19 @@ jobs:
           JSON
       - name: Render 2-scene real-media preview smoke
         run: node --no-warnings motion-studio/scripts/render-wedding-project-real-media-preview.mts --selected-manifest=/tmp/real-preview/selected.json --readiness-audit=/tmp/real-preview/audit.json --output=/tmp/real-preview/preview.mp4 --manifest=/tmp/real-preview/manifest.json --render --smoke
-      - name: Verify rendered media/BGM bindings and frame overlap
+      - name: Verify rendered MP4 stream
+        shell: bash
         run: |
+          set -euo pipefail
           test -s /tmp/real-preview/preview.mp4
-          ffprobe -v error -show_entries stream=codec_type -of csv=p=0 /tmp/real-preview/preview.mp4 | grep -q '^video$'
+          ffprobe -v error -show_entries stream=codec_type -of default=noprint_wrappers=1:nokey=1 /tmp/real-preview/preview.mp4 | tee /tmp/real-preview/streams.txt
+          grep -Fxq 'video' /tmp/real-preview/streams.txt
+      - name: Verify real-media manifest bindings
+        run: |
           node --input-type=module <<'NODE'
           import {readFileSync} from 'node:fs';
           const m=JSON.parse(readFileSync('/tmp/real-preview/manifest.json','utf8'));
+          console.log(JSON.stringify({schemaVersion:m.schemaVersion,render:m.render,mediaKinds:m.scenes?.map((s)=>s.mediaKind),timeline:m.timeline,transitions:m.transitions,summary:m.summary,evidenceBoundary:m.evidenceBoundary},null,2));
           if(m.schemaVersion!=='wedding-movie-project-real-media-preview/v1') throw new Error('schema');
           if(m.render.state!=='RENDERED'||!m.render.sha256) throw new Error('render');
           if(m.scenes.length!==2||m.scenes[0].mediaKind!=='IMAGE'||m.scenes[1].mediaKind!=='VIDEO') throw new Error('media binding');
