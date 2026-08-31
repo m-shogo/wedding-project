@@ -22,6 +22,8 @@ pnpm render:japanese-friends-opening-start-sync
 
 本番レンダーは `motion-studio/out/opening/japanese_friends_opening_start_sync_v1.mp4` に生成され、ローカルのモーション図鑑へコピーされます。publisherは解像度・fps・尺・音声形式・黒画面・1秒以上の無音を検査し、追跡可能なmanifestだけをGit管理します。
 
+映像は187.5 BPMを基準に、4拍ごとの全画面・分割・斜めカード・3連ストリップ切替、拍頭アクセント、4分割サビ、文字分解・タイル打ち込み・伸長・3連打の歌詞モーションを使用する。冒頭12.5秒には架空の新郎HARUTO、新婦AOI、二人の合流、3カウントを配置している。
+
 ## 権利とタイミング
 
 音源・歌詞の上映／複製／配信権は未確認です。成果物は私的確認専用で、公開・納品・会場上映の承認を示しません。
