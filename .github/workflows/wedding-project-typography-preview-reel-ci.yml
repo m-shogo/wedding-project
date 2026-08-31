@@ -5,7 +5,11 @@ on:
     paths:
       - 'motion-studio/src/compositions/common/WeddingProjectTypographyPreviewReel.tsx'
       - 'motion-studio/src/StartMotionKitRoot.tsx'
+      - 'motion-studio/scripts/render-selected-wedding-typography-scenes.mts'
       - 'motion-studio/scripts/render-wedding-project-typography-preview-reel.mts'
+      - 'movie-dashboard/src/data/projectSceneTransitionSelectionStore.ts'
+      - 'movie-dashboard/src/data/typographyProjectDeliveryBatch.ts'
+      - 'movie-dashboard/src/components/RhythmSceneTransitionCorrectionCard.tsx'
       - 'movie-dashboard/src/components/SelectedSceneRenderProjectCard.tsx'
       - '.github/workflows/wedding-project-typography-preview-reel-ci.yml'
   workflow_dispatch:
@@ -27,7 +31,7 @@ jobs:
         working-directory: motion-studio
         run: pnpm install --frozen-lockfile
 
-      - name: Build CURRENT two-Scene project batch fixture
+      - name: Build CURRENT two-Scene project batch fixture with Human cross dissolve
         run: |
           cat > /tmp/opening-typography-production-batch.json <<'JSON'
           {
@@ -39,6 +43,9 @@ jobs:
               "placements": [
                 {"sceneId":"ci-opening-hero","startSeconds":0,"endSeconds":1,"durationSeconds":1},
                 {"sceneId":"ci-opening-date","startSeconds":1,"endSeconds":2,"durationSeconds":1}
+              ],
+              "transitions": [
+                {"fromSceneId":"ci-opening-hero","toSceneId":"ci-opening-date","transition":"CROSS_DISSOLVE","durationFrames":12,"status":"CURRENT_HUMAN_SELECTION","selectedAt":"2026-08-31T00:00:02.000Z"}
               ],
               "totalComputedDurationSeconds": 2
             },
@@ -81,8 +88,15 @@ jobs:
           node --no-warnings motion-studio/scripts/render-selected-wedding-typography-scenes.mts \
             --batch=/tmp/opening-typography-production-batch.json \
             --manifest=/tmp/opening-selected-scene-render-manifest.json
+          node - <<'NODE'
+          const fs = require('fs');
+          const m = JSON.parse(fs.readFileSync('/tmp/opening-selected-scene-render-manifest.json', 'utf8'));
+          if (m.transitions.length !== 1) process.exit(1);
+          if (m.transitions[0].transition !== 'CROSS_DISSOLVE' || m.transitions[0].durationFrames !== 12) process.exit(1);
+          if (m.summary.crossDissolveEdges !== 1 || m.summary.productionReady !== false) process.exit(1);
+          NODE
 
-      - name: Plan continuous preview and verify exact boundaries
+      - name: Plan continuous preview and verify cross-dissolve frame overlap
         run: |
           node --no-warnings motion-studio/scripts/render-wedding-project-typography-preview-reel.mts \
             --selected-manifest=/tmp/opening-selected-scene-render-manifest.json \
@@ -92,18 +106,20 @@ jobs:
           const fs = require('fs');
           const m = JSON.parse(fs.readFileSync('/tmp/opening-preview-reel-plan.json', 'utf8'));
           if (m.schemaVersion !== 'wedding-movie-project-typography-preview-reel/v1') process.exit(1);
-          if (m.timeline.totalFrames !== 60 || m.timeline.durationSeconds !== 2) process.exit(1);
+          if (m.timeline.totalFrames !== 48 || m.timeline.durationSeconds !== 1.6) process.exit(1);
           if (m.timeline.boundaries.length !== 2) process.exit(1);
           if (m.timeline.boundaries[0].startFrame !== 0 || m.timeline.boundaries[0].endFrameExclusive !== 30) process.exit(1);
-          if (m.timeline.boundaries[1].startFrame !== 30 || m.timeline.boundaries[1].endFrameExclusive !== 60) process.exit(1);
-          if (m.timeline.boundaries[1].gapFromPreviousFrames !== 0) process.exit(1);
-          if (m.summary.frameBoundariesVerified !== true || m.summary.productionReady !== false) process.exit(1);
+          if (m.timeline.boundaries[1].startFrame !== 18 || m.timeline.boundaries[1].endFrameExclusive !== 48) process.exit(1);
+          if (m.timeline.boundaries[0].transitionOutFrames !== 12 || m.timeline.boundaries[1].transitionInFrames !== 12) process.exit(1);
+          if (m.timeline.boundaries[1].gapFromPreviousFrames !== -12) process.exit(1);
+          if (m.timeline.transitions[0].transition !== 'CROSS_DISSOLVE' || m.timeline.transitions[0].durationFrames !== 12) process.exit(1);
+          if (m.summary.crossDissolveEdges !== 1 || m.summary.frameBoundariesVerified !== true || m.summary.productionReady !== false) process.exit(1);
           if (m.evidenceBoundary.remotionStudioGuiActual !== 'NOT_RUN') process.exit(1);
           if (m.evidenceBoundary.palmierGuiActual !== 'NOT_RUN') process.exit(1);
           if (m.evidenceBoundary.macDaVinciGuiActual !== 'NOT_RUN') process.exit(1);
           NODE
 
-      - name: Render real continuous two-Scene Remotion smoke
+      - name: Render real continuous two-Scene Remotion smoke with cross dissolve
         run: |
           node --no-warnings motion-studio/scripts/render-wedding-project-typography-preview-reel.mts \
             --selected-manifest=/tmp/opening-selected-scene-render-manifest.json \
@@ -117,6 +133,21 @@ jobs:
           if (!/^[a-f0-9]{64}$/.test(m.render.sha256)) process.exit(1);
           if (!(m.render.bytes > 0) || !fs.existsSync(m.output)) process.exit(1);
           NODE
+
+      - name: Fail closed for stale Human transition binding
+        run: |
+          cp /tmp/opening-typography-production-batch.json /tmp/stale-transition-batch.json
+          node - <<'NODE'
+          const fs = require('fs');
+          const p = '/tmp/stale-transition-batch.json';
+          const x = JSON.parse(fs.readFileSync(p, 'utf8'));
+          x.timeline.transitions[0].status = 'STALE_HUMAN_SELECTION';
+          fs.writeFileSync(p, JSON.stringify(x));
+          NODE
+          if node --no-warnings motion-studio/scripts/render-selected-wedding-typography-scenes.mts --batch=/tmp/stale-transition-batch.json --manifest=/tmp/stale-transition-selected.json; then
+            echo 'expected stale Human transition to fail closed' >&2
+            exit 1
+          fi
 
       - name: Fail closed when source Project Batch changes after selected manifest
         run: |
@@ -134,10 +165,11 @@ jobs:
 
       - name: Guard UI and evidence boundary
         run: |
-          grep -q 'CONTINUOUS PROJECT PREVIEW REEL' movie-dashboard/src/components/SelectedSceneRenderProjectCard.tsx
-          grep -q 'data-preview-reel-scene' movie-dashboard/src/components/SelectedSceneRenderProjectCard.tsx
-          grep -q 'PROJECT_PREVIEW_SOURCE_BATCH_STALE' motion-studio/scripts/render-wedding-project-typography-preview-reel.mts
-          grep -q 'frameBoundariesVerified: true' motion-studio/scripts/render-wedding-project-typography-preview-reel.mts
+          grep -q 'HUMAN SCENE EDGE TRANSITION' movie-dashboard/src/components/RhythmSceneTransitionCorrectionCard.tsx
+          grep -q 'CROSS_DISSOLVE' movie-dashboard/src/data/projectSceneTransitionSelectionStore.ts
+          grep -q 'STALE_HUMAN_SELECTED_TRANSITION' movie-dashboard/src/data/typographyProjectDeliveryBatch.ts
+          grep -q 'PROJECT_PREVIEW_TRANSITION_STALE' motion-studio/scripts/render-wedding-project-typography-preview-reel.mts
+          grep -q 'data-transition-in-frames' motion-studio/src/compositions/common/WeddingProjectTypographyPreviewReel.tsx
           grep -q 'remotionStudioGuiActual: "NOT_RUN"' motion-studio/scripts/render-wedding-project-typography-preview-reel.mts
           grep -q 'palmierGuiActual: "NOT_RUN"' motion-studio/scripts/render-wedding-project-typography-preview-reel.mts
           grep -q 'macDaVinciGuiActual: "NOT_RUN"' motion-studio/scripts/render-wedding-project-typography-preview-reel.mts
