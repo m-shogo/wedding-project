@@ -31,6 +31,10 @@ if (!report.ready && report.state !== 'BLOCKED') fail('ready=false must map to B
 for (const [name, project] of Object.entries({opening: report.opening, profile: report.profile})) {
   if (!('handoffIdentitySha256' in project)) fail(`${name} handoff identity SHA field missing`);
   if (!('davinciActualEvidenceSha256' in project)) fail(`${name} Actual evidence SHA field missing`);
+  if (!('transitionActualEvidenceSha256' in project)) fail(`${name} transition Actual evidence SHA field missing`);
+  if (!('transitionProofSha256' in project)) fail(`${name} transition proof SHA field missing`);
+  if (!project.transitionGate || !['CURRENT', 'BLOCKED'].includes(project.transitionGate.state)) fail(`${name} transition gate state missing`);
+  if (project.transitionGate.current !== (project.transitionGate.state === 'CURRENT')) fail(`${name} transition gate current/state mismatch`);
   if (!('finalApprovalSha256' in project)) fail(`${name} final approval SHA field missing`);
   if (!project.nextGate) fail(`${name} next gate missing`);
   if (!project.projectMotion || !['CURRENT', 'NOT_APPLICABLE', 'INVALID'].includes(project.projectMotion.state)) {
@@ -42,10 +46,31 @@ for (const [name, project] of Object.entries({opening: report.opening, profile: 
     if (!project.projectMotion.command?.includes(`--movie=${name}`)) fail(`${name} Project Motion recovery command missing exact movie`);
   }
   if (project.ready && project.auditState !== 'CURRENT_PASS') fail(`${name} ready without CURRENT_PASS audit`);
+  if (project.ready && !project.transitionGate.current) fail(`${name} ready without CURRENT transition Actual gate`);
   if (project.ready && !project.finalApprovalCurrent) fail(`${name} ready without current final approval`);
+  if (project.auditState === 'CURRENT_PASS' && !project.transitionGate.current && project.projectMotion.state !== 'INVALID' && project.nextGate !== 'RUN_DAVINCI_TRANSITION_ACTUAL') {
+    fail(`${name} CURRENT_PASS without transition Actual must route to RUN_DAVINCI_TRANSITION_ACTUAL before final approval`);
+  }
 }
 if (!report.guardrails.includes('PROJECT_MOTION_PROVENANCE_CURRENT_OR_NOT_APPLICABLE_REQUIRED')) {
   fail('Wedding readiness must retain Project Motion provenance guardrail');
+}
+if (!report.guardrails.includes('TRANSITION_ACTUAL_EVIDENCE_MUST_BIND_TO_SAME_CURRENT_RECOVERY_AS_DAVINCI_FINISHING_EVIDENCE')) {
+  fail('Wedding readiness must require transition Actual evidence on the same current recovery');
+}
+if (!report.guardrails.includes('CROSS_DISSOLVE_REQUIRES_HUMAN_DURATION_PRESERVATION_PASS')) {
+  fail('Wedding readiness must require Human Cross Dissolve duration preservation PASS');
+}
+
+const snapshotSource = readFileSync(resolve(motionRoot, 'scripts/wedding-davinci-delivery-readiness-snapshot.mts'), 'utf8');
+for (const token of [
+  'transitionActualEvidenceSha256',
+  'transitionProofSha256',
+  'TRANSITION_GATE_STATE_STALE',
+  'TRANSITION_ACTUAL_EVIDENCE_CHANGED => SNAPSHOT_STALE',
+  'TRANSITION_PROOF_CHANGED => SNAPSHOT_STALE',
+]) {
+  if (!snapshotSource.includes(token)) fail(`Readiness snapshot transition binding missing ${token}`);
 }
 
 const generatedSource = readFileSync(resolve(dashboardRoot, 'src/data/weddingProjectMotionProvenancePreflight.generated.ts'), 'utf8');
@@ -135,4 +160,4 @@ for (const token of [
 const zukanSource = readFileSync(resolve(dashboardRoot, 'src/pages/VisualMotionLibrary.tsx'), 'utf8');
 if (!zukanSource.includes('WeddingDavinciDeliveryReadinessCard')) fail('Motion Zukan must surface wedding-wide readiness');
 
-console.log(`Wedding DaVinci readiness + always-visible Project Motion preflight + operator packet surface OK: state=${report.state} opening=${report.opening.nextGate}/${report.opening.projectMotion.state} profile=${report.profile.nextGate}/${report.profile.projectMotion.state}`);
+console.log(`Wedding DaVinci readiness + transition Actual gate + Project Motion preflight + operator packet surface OK: state=${report.state} opening=${report.opening.nextGate}/${report.opening.transitionGate.state} profile=${report.profile.nextGate}/${report.profile.transitionGate.state}`);
