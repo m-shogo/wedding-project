@@ -2,23 +2,18 @@ import {openingDavinciActualBindingAudit} from "./openingDavinciActualBindingAud
 import {profileDavinciActualBindingAudit} from "./profileDavinciActualBindingAudit.generated";
 import {weddingDavinciTransitionActualReadiness} from "./weddingDavinciTransitionActualReadiness.generated";
 import {weddingDavinciActualCompletionReadiness} from "./weddingDavinciActualCompletionReadiness.generated";
+import {weddingFinalApprovalCompletionReadiness} from "./weddingFinalApprovalCompletionReadiness.generated";
 import {weddingProjectMotionProvenancePreflight} from "./weddingProjectMotionProvenancePreflight.generated";
 import {buildOpeningProductionStatusHandoff} from "./openingProductionStatusHandoff";
 import {buildProfileProductionStatusHandoff} from "./profileProductionStatusHandoff";
 
 export const WEDDING_DAVINCI_DELIVERY_READINESS_SCHEMA = "wedding-davinci-delivery-readiness/v1" as const;
-
 type ProjectReadinessState = "READY" | "BLOCKED" | "STALE" | "INVALID";
 type WeddingReadinessState = ProjectReadinessState;
-type ProjectMotionPreflight = {
-  state: "CURRENT" | "NOT_APPLICABLE" | "INVALID";
-  current: boolean;
-  applicable: boolean;
-  command: string;
-  error: string | null;
-};
+type ProjectMotionPreflight = {state: "CURRENT" | "NOT_APPLICABLE" | "INVALID"; current: boolean; applicable: boolean; command: string; error: string | null};
 type TransitionActualReadiness = typeof weddingDavinciTransitionActualReadiness.opening | typeof weddingDavinciTransitionActualReadiness.profile;
 type ActualCompletionReadiness = typeof weddingDavinciActualCompletionReadiness.opening | typeof weddingDavinciActualCompletionReadiness.profile;
+type FinalApprovalCompletionReadiness = typeof weddingFinalApprovalCompletionReadiness.opening | typeof weddingFinalApprovalCompletionReadiness.profile;
 
 const classifyProjectState = (
   auditState: string,
@@ -27,45 +22,34 @@ const classifyProjectState = (
   projectMotion: ProjectMotionPreflight,
   transitionActual: TransitionActualReadiness,
   actualCompletion: ActualCompletionReadiness,
+  finalApprovalCompletion: FinalApprovalCompletionReadiness,
 ): ProjectReadinessState => {
   if (projectMotion.state === "INVALID") return "INVALID";
   if (auditState === "INVALID") return "INVALID";
   if (auditState === "STALE") return "STALE";
-  if (auditState === "CURRENT_PASS" && transitionActual.current && actualCompletion.current && finalApprovalCurrent && productionReady) return "READY";
+  if (auditState === "CURRENT_PASS" && transitionActual.current && actualCompletion.current && finalApprovalCurrent && productionReady && finalApprovalCompletion.current) return "READY";
   return "BLOCKED";
 };
 
-const projectMotionNextGate = (projectMotion: ProjectMotionPreflight) => projectMotion.state === "INVALID"
-  ? {
-      stage: "REVALIDATE_PROJECT_MOTION_PROVENANCE",
-      command: projectMotion.command,
-      blocker: projectMotion.error,
-    }
-  : null;
-
-const transitionNextGate = (auditState: string, transitionActual: TransitionActualReadiness) =>
-  auditState === "CURRENT_PASS" && !transitionActual.current
-    ? {
-        stage: "RUN_DAVINCI_TRANSITION_ACTUAL",
-        command: transitionActual.initCommand,
-        strictCommand: transitionActual.strictCommand,
-        finalGateCommand: transitionActual.finalGateCommand,
-        blocker: "Mac DaVinci上で各transition edgeの保持とCROSS_DISSOLVE尺をHuman確認し、current recoveryへSHA bindingされたevidenceをstrict検証する",
-      }
-    : null;
-
-const actualCompletionNextGate = (
+const projectMotionNextGate = (projectMotion: ProjectMotionPreflight) => projectMotion.state === "INVALID" ? {stage: "REVALIDATE_PROJECT_MOTION_PROVENANCE", command: projectMotion.command, blocker: projectMotion.error} : null;
+const transitionNextGate = (auditState: string, transitionActual: TransitionActualReadiness) => auditState === "CURRENT_PASS" && !transitionActual.current ? {
+  stage: "RUN_DAVINCI_TRANSITION_ACTUAL", command: transitionActual.initCommand, strictCommand: transitionActual.strictCommand, finalGateCommand: transitionActual.finalGateCommand,
+  blocker: "Mac DaVinci上で各transition edgeの保持とCROSS_DISSOLVE尺をHuman確認し、current recoveryへSHA bindingされたevidenceをstrict検証する",
+} : null;
+const actualCompletionNextGate = (auditState: string, transitionActual: TransitionActualReadiness, actualCompletion: ActualCompletionReadiness) => auditState === "CURRENT_PASS" && transitionActual.current && !actualCompletion.current ? {
+  stage: "BUILD_DAVINCI_ACTUAL_COMPLETION_RECEIPT", command: actualCompletion.writeCommand, strictCommand: actualCompletion.strictCommand,
+  blocker: "DaVinci finishing Actualとtransition Actualが同じcurrent recovery SHAへHuman PASSでbindingされていることをderived receiptとして固定する",
+} : null;
+const finalApprovalCompletionNextGate = (
   auditState: string,
-  transitionActual: TransitionActualReadiness,
+  finalApprovalCurrent: boolean,
+  productionReady: boolean,
   actualCompletion: ActualCompletionReadiness,
-) => auditState === "CURRENT_PASS" && transitionActual.current && !actualCompletion.current
-  ? {
-      stage: "BUILD_DAVINCI_ACTUAL_COMPLETION_RECEIPT",
-      command: actualCompletion.writeCommand,
-      strictCommand: actualCompletion.strictCommand,
-      blocker: "DaVinci finishing Actualとtransition Actualが同じcurrent recovery SHAへHuman PASSでbindingされていることをderived receiptとして固定する",
-    }
-  : null;
+  binding: FinalApprovalCompletionReadiness,
+) => auditState === "CURRENT_PASS" && actualCompletion.current && finalApprovalCurrent && productionReady && !binding.current ? {
+  stage: "BIND_FINAL_APPROVAL_TO_ACTUAL_COMPLETION", command: binding.writeCommand, strictCommand: binding.strictCommand,
+  blocker: "Human final approvalとcurrent Actual completion receiptを同じRecovery / finishing evidence / transition proofへderived bindingし、approval後の証拠差し替えをfail-closeする",
+} : null;
 
 export function buildWeddingDavinciDeliveryReadiness() {
   const openingHandoff = buildOpeningProductionStatusHandoff();
@@ -76,129 +60,45 @@ export function buildWeddingDavinciDeliveryReadiness() {
   const profileTransitionActual = weddingDavinciTransitionActualReadiness.profile;
   const openingActualCompletion = weddingDavinciActualCompletionReadiness.opening;
   const profileActualCompletion = weddingDavinciActualCompletionReadiness.profile;
+  const openingFinalApprovalCompletion = weddingFinalApprovalCompletionReadiness.opening;
+  const profileFinalApprovalCompletion = weddingFinalApprovalCompletionReadiness.profile;
 
-  const openingState = classifyProjectState(
-    openingDavinciActualBindingAudit.state,
-    openingDavinciActualBindingAudit.finalApproval.current,
-    openingDavinciActualBindingAudit.finalApproval.productionReady,
-    openingProjectMotion,
-    openingTransitionActual,
-    openingActualCompletion,
-  );
-  const profileState = classifyProjectState(
-    profileDavinciActualBindingAudit.state,
-    profileDavinciActualBindingAudit.finalApproval.current,
-    profileDavinciActualBindingAudit.finalApproval.productionReady,
-    profileProjectMotion,
-    profileTransitionActual,
-    profileActualCompletion,
-  );
-
-  const overallState: WeddingReadinessState =
-    openingState === "INVALID" || profileState === "INVALID"
-      ? "INVALID"
-      : openingState === "STALE" || profileState === "STALE"
-        ? "STALE"
-        : openingState === "READY" && profileState === "READY"
-          ? "READY"
-          : "BLOCKED";
+  const openingState = classifyProjectState(openingDavinciActualBindingAudit.state, openingDavinciActualBindingAudit.finalApproval.current, openingDavinciActualBindingAudit.finalApproval.productionReady, openingProjectMotion, openingTransitionActual, openingActualCompletion, openingFinalApprovalCompletion);
+  const profileState = classifyProjectState(profileDavinciActualBindingAudit.state, profileDavinciActualBindingAudit.finalApproval.current, profileDavinciActualBindingAudit.finalApproval.productionReady, profileProjectMotion, profileTransitionActual, profileActualCompletion, profileFinalApprovalCompletion);
+  const overallState: WeddingReadinessState = openingState === "INVALID" || profileState === "INVALID" ? "INVALID" : openingState === "STALE" || profileState === "STALE" ? "STALE" : openingState === "READY" && profileState === "READY" ? "READY" : "BLOCKED";
 
   return {
     schemaVersion: WEDDING_DAVINCI_DELIVERY_READINESS_SCHEMA,
     authority: "MOTION_STUDIO_DERIVED_WEDDING_DAVINCI_READINESS" as const,
     state: overallState,
     strictDeliveryEligible: overallState === "READY",
-    projectMotionSnapshot: {
-      schemaVersion: weddingProjectMotionProvenancePreflight.schemaVersion,
-      authority: weddingProjectMotionProvenancePreflight.authority,
-    },
-    transitionActualSnapshot: {
-      schemaVersion: weddingDavinciTransitionActualReadiness.schemaVersion,
-      authority: weddingDavinciTransitionActualReadiness.authority,
-      guardrails: [...weddingDavinciTransitionActualReadiness.guardrails],
-    },
-    actualCompletionSnapshot: {
-      schemaVersion: weddingDavinciActualCompletionReadiness.schemaVersion,
-      authority: weddingDavinciActualCompletionReadiness.authority,
-      guardrails: [...weddingDavinciActualCompletionReadiness.guardrails],
-    },
+    projectMotionSnapshot: {schemaVersion: weddingProjectMotionProvenancePreflight.schemaVersion, authority: weddingProjectMotionProvenancePreflight.authority},
+    transitionActualSnapshot: {schemaVersion: weddingDavinciTransitionActualReadiness.schemaVersion, authority: weddingDavinciTransitionActualReadiness.authority, guardrails: [...weddingDavinciTransitionActualReadiness.guardrails]},
+    actualCompletionSnapshot: {schemaVersion: weddingDavinciActualCompletionReadiness.schemaVersion, authority: weddingDavinciActualCompletionReadiness.authority, guardrails: [...weddingDavinciActualCompletionReadiness.guardrails]},
+    finalApprovalCompletionSnapshot: {schemaVersion: weddingFinalApprovalCompletionReadiness.schemaVersion, authority: weddingFinalApprovalCompletionReadiness.authority, guardrails: [...weddingFinalApprovalCompletionReadiness.guardrails]},
     opening: {
-      state: openingState,
-      projectMotion: openingProjectMotion,
-      transitionActual: openingTransitionActual,
-      actualCompletion: openingActualCompletion,
-      handoff: {
-        schemaVersion: openingHandoff.schemaVersion,
-        davinciContractVersion: openingHandoff.opening.production.davinciHandoff.contractVersion,
-        current: openingHandoff.opening.production.davinciHandoff.current,
-        finalRenderBoundRecoverySha256: openingDavinciActualBindingAudit.recovery.sha256,
-        sourceRenderSha256: openingDavinciActualBindingAudit.recovery.sourceRenderSha256,
-      },
-      audit: {
-        state: openingDavinciActualBindingAudit.state,
-        current: openingDavinciActualBindingAudit.current,
-        mismatches: [...openingDavinciActualBindingAudit.mismatches],
-        recoverySha256: openingDavinciActualBindingAudit.recovery.sha256,
-        actualEvidenceSha256: openingDavinciActualBindingAudit.actualEvidence.sha256,
-        finalApprovalSha256: openingDavinciActualBindingAudit.finalApproval.sha256,
-        finalApprovalCurrent: openingDavinciActualBindingAudit.finalApproval.current,
-        finalApprovalDecision: openingDavinciActualBindingAudit.finalApproval.decision,
-        productionReady: openingDavinciActualBindingAudit.finalApproval.productionReady,
-      },
+      state: openingState, projectMotion: openingProjectMotion, transitionActual: openingTransitionActual, actualCompletion: openingActualCompletion, finalApprovalCompletion: openingFinalApprovalCompletion,
+      handoff: {schemaVersion: openingHandoff.schemaVersion, davinciContractVersion: openingHandoff.opening.production.davinciHandoff.contractVersion, current: openingHandoff.opening.production.davinciHandoff.current, finalRenderBoundRecoverySha256: openingDavinciActualBindingAudit.recovery.sha256, sourceRenderSha256: openingDavinciActualBindingAudit.recovery.sourceRenderSha256},
+      audit: {state: openingDavinciActualBindingAudit.state, current: openingDavinciActualBindingAudit.current, mismatches: [...openingDavinciActualBindingAudit.mismatches], recoverySha256: openingDavinciActualBindingAudit.recovery.sha256, actualEvidenceSha256: openingDavinciActualBindingAudit.actualEvidence.sha256, finalApprovalSha256: openingDavinciActualBindingAudit.finalApproval.sha256, finalApprovalCurrent: openingDavinciActualBindingAudit.finalApproval.current, finalApprovalDecision: openingDavinciActualBindingAudit.finalApproval.decision, productionReady: openingDavinciActualBindingAudit.finalApproval.productionReady},
       nextGate: projectMotionNextGate(openingProjectMotion)
         ?? transitionNextGate(openingDavinciActualBindingAudit.state, openingTransitionActual)
         ?? actualCompletionNextGate(openingDavinciActualBindingAudit.state, openingTransitionActual, openingActualCompletion)
+        ?? finalApprovalCompletionNextGate(openingDavinciActualBindingAudit.state, openingDavinciActualBindingAudit.finalApproval.current, openingDavinciActualBindingAudit.finalApproval.productionReady, openingActualCompletion, openingFinalApprovalCompletion)
         ?? openingHandoff.opening.production.nextGate,
     },
     profile: {
-      state: profileState,
-      projectMotion: profileProjectMotion,
-      transitionActual: profileTransitionActual,
-      actualCompletion: profileActualCompletion,
-      handoff: {
-        schemaVersion: profileHandoff.schemaVersion,
-        davinciContractVersion: profileHandoff.profile.production.davinciHandoff.contractVersion,
-        current: profileHandoff.profile.production.davinciHandoff.current,
-        finalRenderBoundRecoverySha256: profileDavinciActualBindingAudit.recovery.sha256,
-        sourceRenderSha256: profileDavinciActualBindingAudit.recovery.sourceRenderSha256,
-      },
-      audit: {
-        state: profileDavinciActualBindingAudit.state,
-        current: profileDavinciActualBindingAudit.current,
-        mismatches: [...profileDavinciActualBindingAudit.mismatches],
-        recoverySha256: profileDavinciActualBindingAudit.recovery.sha256,
-        actualEvidenceSha256: profileDavinciActualBindingAudit.actualEvidence.sha256,
-        finalApprovalSha256: profileDavinciActualBindingAudit.finalApproval.sha256,
-        finalApprovalCurrent: profileDavinciActualBindingAudit.finalApproval.current,
-        finalApprovalDecision: profileDavinciActualBindingAudit.finalApproval.decision,
-        productionReady: profileDavinciActualBindingAudit.finalApproval.productionReady,
-      },
+      state: profileState, projectMotion: profileProjectMotion, transitionActual: profileTransitionActual, actualCompletion: profileActualCompletion, finalApprovalCompletion: profileFinalApprovalCompletion,
+      handoff: {schemaVersion: profileHandoff.schemaVersion, davinciContractVersion: profileHandoff.profile.production.davinciHandoff.contractVersion, current: profileHandoff.profile.production.davinciHandoff.current, finalRenderBoundRecoverySha256: profileDavinciActualBindingAudit.recovery.sha256, sourceRenderSha256: profileDavinciActualBindingAudit.recovery.sourceRenderSha256},
+      audit: {state: profileDavinciActualBindingAudit.state, current: profileDavinciActualBindingAudit.current, mismatches: [...profileDavinciActualBindingAudit.mismatches], recoverySha256: profileDavinciActualBindingAudit.recovery.sha256, actualEvidenceSha256: profileDavinciActualBindingAudit.actualEvidence.sha256, finalApprovalSha256: profileDavinciActualBindingAudit.finalApproval.sha256, finalApprovalCurrent: profileDavinciActualBindingAudit.finalApproval.current, finalApprovalDecision: profileDavinciActualBindingAudit.finalApproval.decision, productionReady: profileDavinciActualBindingAudit.finalApproval.productionReady},
       nextGate: projectMotionNextGate(profileProjectMotion)
         ?? transitionNextGate(profileDavinciActualBindingAudit.state, profileTransitionActual)
         ?? actualCompletionNextGate(profileDavinciActualBindingAudit.state, profileTransitionActual, profileActualCompletion)
+        ?? finalApprovalCompletionNextGate(profileDavinciActualBindingAudit.state, profileDavinciActualBindingAudit.finalApproval.current, profileDavinciActualBindingAudit.finalApproval.productionReady, profileActualCompletion, profileFinalApprovalCompletion)
         ?? profileHandoff.profile.production.nextGate,
     },
     guardrails: [
-      "WEDDING_READY_REQUIRES_OPENING_AND_PROFILE_READY",
-      "PROJECT_MOTION_INVALID => WEDDING_DELIVERY_INVALID",
-      "PROJECT_MOTION_GENERATED_SNAPSHOT != LIVE_MAC_GUI_ACTUAL",
-      "PROJECT_MOTION_NOT_APPLICABLE != VERIFIED",
-      "RECOVERY_SHA_CHANGED => DELIVERY_READINESS_STALE",
-      "DAVINCI_ACTUAL_SHA_CHANGED => FINAL_APPROVAL_STALE",
-      "TRANSITION_ACTUAL_CURRENT_REQUIRED_BEFORE_FINAL_DELIVERY_READY",
-      "TRANSITION_ACTUAL_GENERATED_SNAPSHOT != LIVE_MAC_DAVINCI_GUI_ACTUAL",
-      "TRANSITION_PROOF_SHA_CHANGED => REVALIDATE_TRANSITION_ACTUAL",
-      "DAVINCI_ACTUAL_COMPLETION_RECEIPT_CURRENT_REQUIRED_BEFORE_FINAL_DELIVERY_READY",
-      "DAVINCI_ACTUAL_COMPLETION_RECEIPT_DERIVED_ONLY != LIVE_MAC_DAVINCI_GUI_ACTUAL",
-      "FINISHING_OR_TRANSITION_EVIDENCE_SHA_CHANGED => REBUILD_DAVINCI_ACTUAL_COMPLETION_RECEIPT",
-      "CROSS_DISSOLVE_DURATION_REQUIRES_HUMAN_PASS",
-      "FINAL_APPROVAL_CURRENT_REQUIRES_CURRENT_RECOVERY_AND_ACTUAL_EVIDENCE",
-      "NOT_RUN != VERIFIED",
-      "CI_MUST_NOT_PROMOTE_MAC_GUI_ACTUAL",
+      "WEDDING_READY_REQUIRES_OPENING_AND_PROFILE_READY","PROJECT_MOTION_INVALID => WEDDING_DELIVERY_INVALID","PROJECT_MOTION_GENERATED_SNAPSHOT != LIVE_MAC_GUI_ACTUAL","PROJECT_MOTION_NOT_APPLICABLE != VERIFIED","RECOVERY_SHA_CHANGED => DELIVERY_READINESS_STALE","DAVINCI_ACTUAL_SHA_CHANGED => FINAL_APPROVAL_STALE","TRANSITION_ACTUAL_CURRENT_REQUIRED_BEFORE_FINAL_DELIVERY_READY","TRANSITION_ACTUAL_GENERATED_SNAPSHOT != LIVE_MAC_DAVINCI_GUI_ACTUAL","TRANSITION_PROOF_SHA_CHANGED => REVALIDATE_TRANSITION_ACTUAL","DAVINCI_ACTUAL_COMPLETION_RECEIPT_CURRENT_REQUIRED_BEFORE_FINAL_DELIVERY_READY","DAVINCI_ACTUAL_COMPLETION_RECEIPT_DERIVED_ONLY != LIVE_MAC_DAVINCI_GUI_ACTUAL","FINISHING_OR_TRANSITION_EVIDENCE_SHA_CHANGED => REBUILD_DAVINCI_ACTUAL_COMPLETION_RECEIPT","FINAL_APPROVAL_COMPLETION_BINDING_CURRENT_REQUIRED_BEFORE_FINAL_DELIVERY_READY","FINAL_APPROVAL_COMPLETION_BINDING_DERIVED_ONLY != HUMAN_FINAL_APPROVAL","FINAL_APPROVAL_OR_COMPLETION_RECEIPT_SHA_CHANGED => REBUILD_FINAL_APPROVAL_COMPLETION_BINDING","CROSS_DISSOLVE_DURATION_REQUIRES_HUMAN_PASS","FINAL_APPROVAL_CURRENT_REQUIRES_CURRENT_RECOVERY_AND_ACTUAL_EVIDENCE","NOT_RUN != VERIFIED","CI_MUST_NOT_PROMOTE_MAC_GUI_ACTUAL",
     ],
   };
 }
-
-export function buildWeddingDavinciDeliveryReadinessJson() {
-  return JSON.stringify(buildWeddingDavinciDeliveryReadiness(), null, 2);
-}
+export function buildWeddingDavinciDeliveryReadinessJson() { return JSON.stringify(buildWeddingDavinciDeliveryReadiness(), null, 2); }
