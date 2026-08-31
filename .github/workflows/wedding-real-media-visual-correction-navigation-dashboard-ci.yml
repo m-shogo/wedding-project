@@ -5,6 +5,7 @@ on:
     paths:
       - 'movie-dashboard/src/data/motionZukanSceneFocus.ts'
       - 'movie-dashboard/src/components/WeddingRealMediaVisualReviewOperatorCard.tsx'
+      - 'movie-dashboard/src/components/WeddingRealMediaFramingOperatorCard.tsx'
       - 'movie-dashboard/src/components/OpeningCropReviewOperatorCard.tsx'
       - 'movie-dashboard/src/components/ProfileRealMediaReviewOperatorCard.tsx'
       - 'movie-dashboard/src/components/RhythmSceneTimingCorrectionCard.tsx'
