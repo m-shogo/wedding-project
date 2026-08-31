@@ -61,7 +61,7 @@ jobs:
           grep -q 'weddingProductionActions.Profile.title' src/components/WeddingProductionReviewMatrixPanel.tsx
           grep -q '実11写真 + rights-cleared BGM intake' src/lib/weddingProductionActions.ts
           grep -q '実17素材 + rights-cleared BGM intake' src/lib/weddingProductionActions.ts
-          grep -q 'pnpm render:opening-v1:preview' src/lib/weddingProductionActions.ts
+          grep -q 'status.stages.previewRender.recovery' src/lib/weddingProductionActions.ts
           grep -q 'pnpm render:profile-v1:real-media-preview' src/lib/weddingProductionActions.ts
           grep -q 'MATRIX_EXACT_NEXT == LAUNCHER_ACTION' src/components/WeddingProductionActionLauncherPanel.tsx
           grep -q 'DASHBOARD_EXECUTION = NEVER' src/components/WeddingProductionActionLauncherPanel.tsx
