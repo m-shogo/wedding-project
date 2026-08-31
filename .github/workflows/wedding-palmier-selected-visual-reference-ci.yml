@@ -31,6 +31,16 @@ jobs:
           grep -q 'patternId' movie-dashboard/src/components/PalmierSelectedVisualReferenceCard.tsx
           grep -q 'render.sha256' movie-dashboard/src/components/PalmierSelectedVisualReferenceCard.tsx
 
+      - name: Visual reference follows Palmier Operator active Scene without mutating evidence
+        run: |
+          grep -q 'MutationObserver' movie-dashboard/src/components/PalmierSelectedVisualReferenceCard.tsx
+          grep -q 'data-palmier-assembly-operator' movie-dashboard/src/components/PalmierSelectedVisualReferenceCard.tsx
+          grep -q 'data-palmier-active-scene=\\"true\\"' movie-dashboard/src/components/PalmierSelectedVisualReferenceCard.tsx
+          grep -q 'operatorSyncedSceneId' movie-dashboard/src/components/PalmierSelectedVisualReferenceCard.tsx
+          grep -q 'FOLLOWING OPERATOR' movie-dashboard/src/components/PalmierSelectedVisualReferenceCard.tsx
+          grep -q 'data-palmier-visual-sync' movie-dashboard/src/components/PalmierSelectedVisualReferenceCard.tsx
+          grep -q 'checklist完了でoperatorが次Sceneへauto-advance' movie-dashboard/src/components/PalmierSelectedVisualReferenceCard.tsx
+
       - name: Local playback stays browser-memory-only and Actual remains NOT_RUN
         run: |
           grep -q 'URL.createObjectURL' movie-dashboard/src/components/PalmierSelectedVisualReferenceCard.tsx
