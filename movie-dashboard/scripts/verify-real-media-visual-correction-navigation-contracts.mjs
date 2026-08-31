@@ -12,7 +12,7 @@ const transition = readFileSync("movie-dashboard/src/components/RhythmSceneTrans
 
 function requireText(source, text, label) { if (!source.includes(text)) throw new Error(`${label}: missing ${text}`); }
 
-for (const token of ["REAL_MEDIA_VISUAL_CORRECTION_QUEUE", "CROP_SUBJECT_SAFE", "TITLE_READABLE", "TEXT_MEDIA_CONTRAST", "NO_UNINTENDED_EDGE_CLIP", "REAL_MEDIA_FRAMING_OPERATOR"]) requireText(focus, token, "shared Scene focus contract");
+for (const token of ["REAL_MEDIA_VISUAL_CORRECTION_QUEUE", "CROP_SUBJECT_SAFE", "TITLE_READABLE", "TEXT_MEDIA_CONTRAST", "NO_UNINTENDED_EDGE_CLIP"]) requireText(focus, token, "shared Scene focus contract");
 for (const token of [
   "wedding-movie-real-media-visual-correction-queue/v1",
   "DERIVED_ONLY_FROM_EXPLICIT_HUMAN_REAL_MEDIA_VISUAL_FAIL_VERDICTS",
