@@ -16,6 +16,7 @@ export type ProductionAction = {
 };
 
 const isCurrentStage = (state: string) => state === "PASS" || state === "CURRENT";
+const executableRecoveryCommands = (items: readonly string[]) => items.filter((item) => item.startsWith("pnpm ") || item.startsWith("node "));
 
 export function deriveOpeningNextAction(): ProductionAction {
   const status = openingProductionStatus;
@@ -39,7 +40,7 @@ export function deriveOpeningNextAction(): ProductionAction {
       phase: "CROP / FOCUS REVIEW",
       title: "Human crop / focus review",
       detail: "11写真のcrop / focus / color / motionをcurrent photo SHAとeffective focus/fitへ束縛してHuman確認する。",
-      commands: [...status.stages.cropReview.recovery],
+      commands: executableRecoveryCommands(status.stages.cropReview.recovery),
       recoveryHint: "opening-v1 crop review evidenceをcurrent sourceで再init",
     };
   }
@@ -51,7 +52,7 @@ export function deriveOpeningNextAction(): ProductionAction {
       phase: "REAL-MEDIA PREVIEW",
       title: "real-media preview render",
       detail: "crop承認済みの実素材previewをrenderする。render完了はHuman preview review PASSではない。",
-      commands: [...status.stages.previewRender.recovery],
+      commands: executableRecoveryCommands(status.stages.previewRender.recovery),
       recoveryHint: "current crop evidenceからpreviewを再render",
     };
   }
@@ -63,7 +64,7 @@ export function deriveOpeningNextAction(): ProductionAction {
       phase: "SOURCE-BOUND PREVIEW REVIEW",
       title: "source-bound preview Human review",
       detail: "current render sourceへpreviewを束縛し、映像をHuman確認してstrict checkする。source変更後の古いpreview/evidenceはCURRENT扱いしない。",
-      commands: [...status.stages.previewReview.recovery],
+      commands: executableRecoveryCommands(status.stages.previewReview.recovery),
       recoveryHint: "preview source bindingをcurrent render sourceへ再init",
     };
   }
@@ -74,8 +75,8 @@ export function deriveOpeningNextAction(): ProductionAction {
       kind: "HUMAN",
       phase: "AUDIO LISTENING REVIEW",
       title: "Human audio listening review",
-      detail: "rights-cleared BGM入りpreviewを最後まで実耳で確認し、preview/BGM SHAへevidenceを束縛する。",
-      commands: [...status.stages.audioListeningReview.recovery],
+      detail: "rights-cleared BGM入りpreviewを最後まで実耳で確認し、preview/BGM SHAへevidenceを束縛する。Human listening instructionは説明として扱い、launcherには実行可能commandだけを出す。",
+      commands: executableRecoveryCommands(status.stages.audioListeningReview.recovery),
       recoveryHint: "audio evidenceをcurrent preview/BGM SHAへ再init",
     };
   }
@@ -87,7 +88,7 @@ export function deriveOpeningNextAction(): ProductionAction {
       phase: "FINAL RENDER",
       title: "final render + technical QA",
       detail: "Human review済みsourceからfinal renderを作る。technical render成功をHuman final-render reviewやGUI Actualと同一視しない。",
-      commands: [...status.stages.finalRender.recovery],
+      commands: executableRecoveryCommands(status.stages.finalRender.recovery),
       recoveryHint: "current reviewed sourceからfinal renderを再生成",
     };
   }
@@ -99,7 +100,7 @@ export function deriveOpeningNextAction(): ProductionAction {
       phase: "FINAL RENDER REVIEW",
       title: "Human final-render review",
       detail: "final MP4をHuman確認し、current renderへreview evidenceを束縛する。technical QA PASSだけでは完了扱いにしない。",
-      commands: [...status.stages.finalRenderReview.recovery],
+      commands: executableRecoveryCommands(status.stages.finalRenderReview.recovery),
       recoveryHint: "final-render review evidenceをcurrent final MP4へ再init",
     };
   }
@@ -111,7 +112,7 @@ export function deriveOpeningNextAction(): ProductionAction {
       phase: "PRODUCTION BUNDLE",
       title: "SHA-bound production bundle finalize",
       detail: "Human-reviewed final renderからPalmier / DaVinciへ渡すcanonical production bundleを生成する。bundle生成はMac DaVinci Actualではない。",
-      commands: [...status.stages.productionBundle.recovery],
+      commands: executableRecoveryCommands(status.stages.productionBundle.recovery),
       recoveryHint: "current Human final-render reviewからOpening production bundleを再finalize",
     };
   }
@@ -123,7 +124,7 @@ export function deriveOpeningNextAction(): ProductionAction {
       phase: "MAC DAVINCI ACTUAL",
       title: "Opening DaVinci finishing Actual evidence",
       detail: "production bundleをMac DaVinci Resolveへ持ち込み、timeline insertion / crop binding / color / audio / title-safe / 1x・half-speed / exportをHumanが実機確認する。",
-      commands: [...status.stages.davinciFinishing.recovery],
+      commands: executableRecoveryCommands(status.stages.davinciFinishing.recovery),
       recoveryHint: "Opening DaVinci finishing evidenceをcurrent production bundleへ再initしHuman Actualを実施",
     };
   }
@@ -135,7 +136,7 @@ export function deriveOpeningNextAction(): ProductionAction {
       phase: "FINAL DELIVERY APPROVAL",
       title: "Opening Human final delivery approval",
       detail: "current Mac DaVinci Actual evidenceへ最終承認を束縛する。ここで初めてOpening delivery approvalをHuman判断する。",
-      commands: [...status.stages.finalDeliveryApproval.recovery],
+      commands: executableRecoveryCommands(status.stages.finalDeliveryApproval.recovery),
       recoveryHint: "Opening final delivery approval evidenceをcurrent DaVinci Actualへ再init",
     };
   }
