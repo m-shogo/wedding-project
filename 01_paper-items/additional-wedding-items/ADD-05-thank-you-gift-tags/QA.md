@@ -1,24 +1,98 @@
 # ADD-05 サンキュータグ / プチギフトタグ — QA
 
-Status: `CURRENT / PROFESSIONAL_VNEXT_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / FAMILY_SCALE_TEMPLATE_REPETITION_CLOSED_FOR_ADD05 / CONFIRMED_COPY_ONLY / PHYSICAL_CLEARANCE_PASS / ACTUAL_SIZE_CONFIRMED_COPY_LEGIBILITY_PASS / 45X70_INDEPENDENT_REFLOW_PASS / NO_YELLOW_FOLD_PROMOTION_PASS / ROLLBACK_SAFE / NOT_PRINT_READY`
-Updated: 2026-08-27
+Status: `CURRENT / V4_QUIET_ROUTE_TAG_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / ACTUAL_SIZE_QA_PASS / 45X70_INDEPENDENT_REFLOW_PASS / CLEANROOM_PROVENANCE_PASS / PRE_V4_HISTORY_PRESERVED / NOT_PRINT_READY`
+Updated: 2026-08-31
 Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
+Primary V4 evidence: `V4-QUIET-ROUTE-TAG-QA-2026-08-31.md`
 
-## Current Figma authority
+## Current Figma authority — V4
 
 - Figma file: `kAdkOMuAMcFQtTSP8NtWil`
-- selected 50×80 front: `31:2 / CURRENT_SELECTED / FAMILY-DIVERSE VNEXT V3 / ADD-05 / FRONT 50X80 / RIBBON FOLD GIFT TAG`
-- selected 45×70 front: `31:10 / CURRENT_SELECTED / FAMILY-DIVERSE VNEXT V3 / ADD-05 / FRONT 45X70 / RIBBON FOLD GIFT TAG REFLOW`
-- selected optional 50×80 back: `31:18 / CURRENT_SELECTED / FAMILY-DIVERSE VNEXT V3 / ADD-05 / BACK 50X80 / RETURN RIBBON NOTE`
-- pre-no-yellow-fold rollback: `39:2 / 39:10 / 39:18`
-- no-yellow-fold comparison roots: `38:2 / 38:10 / 38:18`, hidden after verification
-- actual-size microtype rollback: `34:2 / 34:10 / 34:18`
-- previous selected `WAVE SOUVENIR`: `25:2 / 25:10 / 25:18`, preserved as hidden history
-- rejected family-diversity V2 `FOLDED GIFT NOTE`: `28:2 / 28:10 / 28:18`, preserved as hidden history
-- V3 direction studies: `30:2 / 30:10 / 30:23`, preserved as hidden history
+- blank V4 page: `45:2 / V4 / ADD-05 / QUIET ROUTE TAG / 2026-08-31`
+- selected 50×80 front: `45:3 / V4 / ADD-05 / FRONT / 50X80 / QUIET ROUTE TAG`
+- selected optional 50×80 back: `45:13 / V4 / ADD-05 / BACK OPTIONAL / 50X80 / HOME LINE`
+- selected 45×70 independent reflow: `45:21 / V4 / ADD-05 / FRONT / 45X70 / INDEPENDENT REFLOW`
 - exact Drive authority: `1_V20y77VU1aGrJtqpl7U5XUpC-bQuTxV / ADD-05_サンキュータグ_プチギフトタグ`
+- raster IMAGE fills: `0`
+- generated raster: `0`
+- effective PPI: `N/A`
+- `RESOLUTION_WARNING=NONE`
 
-Current evidence:
+V4 was created from blank frames. No V2/V3/legacy node was duplicated, restyled or used as layout geometry. Pre-V4 production remains rollback/comparison history only.
+
+## V4 visual decision
+
+Selected direction: `QUIET ROUTE TAG`.
+
+The V4 front uses warm ivory, a restrained deep-navy trim edge, a Cormorant Garamond `Thank you` hero, one silver journey line and one mint endpoint. The optional back uses pale mineral-blue and a separate horizontal home-route composition. The physical punch/string void is part of the composition rather than a decorative badge.
+
+The selected V4 intentionally removes the pre-V4 coral wrapping-ribbon / dark-lower-block grammar. It does not use faux passport stamps, miniature boarding-pass data, barcode, repeated stickers, country flags, QR, generated people or raster texture.
+
+Fresh thumbnail / reading / native inspection passed. First read is `Thank you` → route endpoint → date; support copy stays subordinate and the tag does not read as a web card or AI-template grid.
+
+## Confirmed copy
+
+Only SPEC-confirmed copy is present:
+
+- front: `Thank you` + `for traveling with us.`
+- optional back: `Have a safe trip home.`
+- date: `2026.10.24`
+
+Couple names, venue, gift name, SNS and QR remain absent until approved.
+
+## Structure / actual-size QA
+
+Fresh V4 construction QA caught and repaired the following before promotion:
+
+1. the initial 45×70 draft had proportionally scaled the punch and safe inset; this was corrected to independent physical geometry;
+2. the 45×70 hero exceeded the working 5 mm safe boundary by 6 px; it was moved inside;
+3. the 50×80 native text nodes initially retained fixed 10 px boxes due Figma resize ordering; they were repaired to natural Auto Height;
+4. optional-back date was raised from ~6.8 pt to ~7.1 pt to meet the SPEC date target.
+
+Final metadata/readback:
+
+- 50×80 front: `500×800 px`; visible native text `3`; outside text `0`; raster IMAGE fills `0`;
+- 50×80 optional back: `500×800 px`; visible native text `2`; outside text `0`; raster IMAGE fills `0`;
+- 45×70 front: `450×700 px`; visible native text `3`; outside text `0`; raster IMAGE fills `0`;
+- current text is inside the working 5 mm safe guide and outside the provisional punch-clearance zone;
+- no visible text/text collision remains.
+
+At `10 px = 1 mm`:
+
+### 50×80 mm primary
+
+- hero `70 px` ≈ **19.8 pt**;
+- secondary `30 px` ≈ **8.5 pt**;
+- front date `25 px` ≈ **7.1 pt**;
+- optional-back hero `57 px` ≈ **16.2 pt**;
+- optional-back date `25 px` ≈ **7.1 pt**;
+- journey rule `4 px` = **0.4 mm**.
+
+### 45×70 mm comparison
+
+- hero `64 px` ≈ **18.1 pt**;
+- secondary `27 px` ≈ **7.7 pt**;
+- date `25 px` ≈ **7.1 pt**;
+- journey rule `4 px` = **0.4 mm**;
+- punch remains physical `5 mm`, center `8 mm` from top trim; it is not proportionally shrunk.
+
+The 45×70 face is an independent reflow, not a scaled clone.
+
+## Pre-V4 rollback / historical evidence
+
+The former Current V3 family remains preserved for comparison/rollback only:
+
+- former 50×80 front: `31:2`
+- former 45×70 front: `31:10`
+- former optional back: `31:18`
+- pre-no-yellow-fold rollback: `39:2 / 39:10 / 39:18`
+- no-yellow-fold comparison roots: `38:2 / 38:10 / 38:18`
+- actual-size microtype rollback: `34:2 / 34:10 / 34:18`
+- previous `WAVE SOUVENIR`: `25:2 / 25:10 / 25:18`
+- rejected V2 `FOLDED GIFT NOTE`: `28:2 / 28:10 / 28:18`
+- V3 direction studies: `30:2 / 30:10 / 30:23`
+
+Historical evidence remains available in:
 
 - `FAMILY-DIVERSITY-RIBBON-FOLD-V3-PROMOTION-QA-2026-08-21.md`
 - `FIGMA-ACTUAL-SIZE-CONFIRMED-COPY-LEGIBILITY-QA-2026-08-22.md`
@@ -26,172 +100,32 @@ Current evidence:
 - `PRE-FIGMA-CONNECTED-FOLD-REJECTION-2026-08-26.md`
 - `FIGMA-NO-YELLOW-FOLD-PROMOTION-QA-2026-08-27.md`
 
-## Current direction — RIBBON FOLD, simplified physical cue
+Those documents may support structure/rollback history but are not the V4 sellable-visual authority.
 
-The Current family was originally rebuilt from blank frames after the previous `WAVE SOUVENIR` repeated the suite-level oversized rounded-wave/orb grammar. It carries forward only confirmed copy and verified provisional punch geometry.
+## Print gate / deferred finalization
 
-Three materially different V3 directions were created from blank frames:
+`DESIGN_COMPLETE != PRINT_READY`.
 
-1. `GIFT WRAP BAND`
-2. `CLIPPED LUGGAGE LABEL`
-3. `RIBBON FOLD`
+SPEC currently marks 5 mm punch, 8 mm top-center, 5 mm safe and 3 mm bleed as provisional. Therefore V4 uses the punch/safe values as working QA geometry but does **not** assert printer-final bleed or production geometry.
 
-`RIBBON FOLD` remained the strongest art direction because it reads as a warm paper gift tag with a strong coral wrapping ribbon and deep-ocean return field, without fake airline credentials or generic tropical decoration.
+Still required:
 
-A later actual-size audit found that the mango/yellow horizontal `fold` did not read as a connected ribbon turn. Across the 50×80 front, 45×70 front and optional back, it read more like a detached button/status bar, with the defect strongest at 45×70.
+- final choice between 50×80 and 45×70;
+- authoritative printer template / bleed / trim / safe;
+- actual gift/package dimensions;
+- stock thickness and final punch/tool diameter/position;
+- actual string/ribbon/twist-tie width, knot clearance and attachment method;
+- rotation/flip/occlusion proof on the real gift;
+- duplex registration if the optional back is adopted;
+- corner-radius/cutting method if used;
+- CMYK/profile proof for deep navy, mint, silver-gray, pale mineral-blue and warm ivory;
+- grayscale hierarchy proof;
+- printer-approved black construction;
+- PDF export, font embedding, transparency, overprint/knockout and preflight;
+- 100% print and physical attachment proof.
 
-The connected-fold SVG alternative was then rejected pre-Figma because the silhouette became arrow/tab/origami-like at the smallest format. Per the failure stop condition, that method remains terminal `REJECTED_PRE_FIGMA`.
-
-On 2026-08-27, the only remaining bounded comparison was executed: `CURRENT` vs `NO_YELLOW_FOLD`. Hiding only the mango/yellow rectangle improved all three materially different faces while preserving the gift-tag / wrapping identity through the coral ribbon, punch, paper field and typography. The subtraction was promoted to Current.
-
-Current mango roles are therefore intentionally hidden:
-
-- 50×80 front: `31:5 / RIBBON FOLD / MANGO`
-- 45×70 front: `31:13 / RIBBON FOLD / MANGO`
-- optional back: `31:21 / RIBBON FOLD / MANGO`
-
-Do not reintroduce a connected-fold pictogram or create another fold treatment without a materially different requirement.
-
-## Confirmed copy / physical facts
-
-Visible authoritative copy only:
-
-- front: `Thank you.` + `for traveling with us.`
-- optional back: `Have a safe trip home.`
-- date: `2026.10.24`
-
-Verified provisional punch role:
-
-- 50×80: `50×50`, center `(250,80)`
-- 45×70: `50×50`, center `(225,80)`
-
-Do not invent guest/product/venue/QR/SNS data, Japanese concept copy, airline class, gate, barcode, destination credential, or another fake transport authority.
-
-## 2026-08-27 NO_YELLOW_FOLD visual QA
-
-### 50×80 front `31:2`
-
-- native canvas `500×800`: PASS
-- whole-item/thumbnail: PASS
-- reading scale: PASS
-- actual-size: PASS
-- `Thank you.` remains first read
-- punch remains visually clear and separate from copy
-- coral ribbon remains sufficient as the wrapping gesture
-- detached mango/status-bar cue removed
-
-### 45×70 front `31:10`
-
-- native canvas `450×700`: PASS
-- independent reflow remains intact
-- hierarchy remains `Thank you. → body → date`
-- punch remains physically legible
-- this smaller format shows the clearest improvement after removing the detached mango crossbar
-
-### Optional back `31:18`
-
-- native canvas `500×800`: PASS
-- `Have a safe trip home.` remains first read
-- front/back retain family relation without mirrored-template sameness
-- reverse composition is cleaner without the detached mango crossbar
-
-The prior Professional Design Council score `90/100` remains historical whole-item evidence; the newly executed three-face actual-size comparison now closes the specific visual defect that had reopened the sellable gate.
-
-## Rollback / comparison evidence
-
-Fresh rollback-safe comparisons created for the final audit:
-
-- `38:2` — NO_YELLOW_FOLD 50×80 front
-- `38:10` — NO_YELLOW_FOLD 45×70 front
-- `38:18` — NO_YELLOW_FOLD back
-
-Complete rollback clones created before Current mutation:
-
-- `39:2` — PRE-NO-YELLOW-FOLD 50×80 front
-- `39:10` — PRE-NO-YELLOW_FOLD 45×70 front
-- `39:18` — PRE-NO-YELLOW-FOLD back
-
-After promotion, comparison roots were hidden and rollback roots remain hidden history.
-
-## Actual-size confirmed-copy legibility
-
-The tag canvases use `10 px = 1 mm`. A prior audit corrected confirmed body/date roles that were too small at physical size:
-
-- 50×80 body `20 → 24 px`
-- 50×80 date `22 → 26 px`
-- 45×70 body `18 → 22 px`
-- 45×70 date `20 → 24 px`
-- optional back date `22 → 26 px`
-
-Hidden pre-microtype rollbacks: `34:2 / 34:10 / 34:18`.
-
-The 2026-08-27 no-yellow-fold repair changed none of these text sizes or positions.
-
-## Structure / hybrid authoring readback — 2026-08-27
-
-### 50×80 front `31:2`
-- visible native text `3`
-- fixed-height text `0`
-- outside-root text `0`
-- IMAGE fills `0`
-- mango fold hidden
-- punch `31:6`, `50×50`, visible
-
-### 45×70 front `31:10`
-- visible native text `3`
-- fixed-height text `0`
-- outside-root text `0`
-- IMAGE fills `0`
-- mango fold hidden
-- punch `31:14`, `50×50`, visible
-
-### Optional back `31:18`
-- visible native text `2`
-- fixed-height text `0`
-- outside-root text `0`
-- IMAGE fills `0`
-- mango fold hidden
-- punch `31:22`, `50×50`, visible
-
-Hybrid split:
-
-- confirmed text/date: native editable Figma text
-- coral ribbon / paper fields: simple native geometry
-- punch: native physical ellipse role
-- connected-fold comparison asset: terminal `REJECTED_PRE_FIGMA`
-- generated/composed raster: not required
-- replaceable image role: not required
-- image generation in final repair: `0`
-- Drive writes in final repair: `0`
-
-`IMAGE_GENERATION_NOT_REQUIRED`: the diagnosed defect was fixed-geometry semantics, not missing photography or illustration. At 45×70 / 50×80 physical size, generated imagery would reduce legibility and increase stock/AI-template risk without addressing the defect.
-
-## Authority reconciliation
-
-Current chain:
-
-`live selected Figma 31:* with mango folds hidden → current promotion + actual-size legibility + physical-cue + connected-fold rejection + no-yellow-fold promotion evidence → this canonical QA.md → exact Drive authority 1_V20y77VU1aGrJtqpl7U5XUpC-bQuTxV`
-
-Old visual states remain preserved as rollback/history and are not deleted.
-
-## Deferred finalization / print gate
-
-Keep `NOT_PRINT_READY` until authoritative physical inputs/proofs exist:
-
-- final choice between 50×80 and 45×70
-- actual gift/package dimensions
-- attachment/string/ribbon width and method
-- final punch/tool diameter and stock thickness beyond current provisional geometry
-- printer bleed/safe template
-- duplex registration if optional back is used
-- 100% physical attachment/rotation proof
-- warm venue-light and rub/ink proof
-- optional back adoption under the real attachment method
-
-These unresolved physical checks do not invalidate the current sellable visual/structural evidence.
+QR, fold, perforation and handwriting are not applicable to the selected V4 tag.
 
 ## Decision
 
-`CURRENT_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / ACTUAL_SIZE_CONFIRMED_COPY_LEGIBILITY_PASS / NO_YELLOW_FOLD_PROMOTION_PASS / CONNECTED_FOLD_REJECTED_PRE_FIGMA / CURRENT_POINTER_RECONCILED / ROLLBACK_SAFE / NOT_PRINT_READY`.
-
-ADD-05's local ribbon-fold visual audit is closed. Do not create another decorative fold direction unless a new physical requirement or screenshot-visible defect appears.
+`V4_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / ACTUAL_SIZE_QA_PASS / 45X70_INDEPENDENT_REFLOW_PASS / PHYSICAL_INPUTS_DEFERRED / PRE_V4_HISTORY_PRESERVED / NOT_PRINT_READY`.
