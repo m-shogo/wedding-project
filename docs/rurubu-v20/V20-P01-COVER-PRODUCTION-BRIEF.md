@@ -316,3 +316,28 @@ Reject the cover if:
 9. only then make missing micro assets.
 
 Do not produce a giant generic sticker library before the first decorated cover exists.
+
+## 12. Final production-pass decision — 2026-08-31
+
+Live comparison states:
+- no bridge: Candidate H `3355:2`;
+- real-foliage extension test: Candidate I `3371:2`;
+- real-photo + native-print collision test: Candidate J `3371:38`.
+
+All photo-derived test fragments reused the verified `035` Figma image hash. No generated foliage, invented species, fake memory object or broken-alpha raster was introduced.
+
+Decision:
+- Candidate I adds an isolated duplicate palm mass at the left edge and interrupts the path from masthead to the close-couple support;
+- Candidate J adds a cyan print strip and photo crop but makes the masthead/date quiet zone busier without increasing recognition or editorial meaning;
+- Candidate H without bridge remains strongest at thumbnail, reading and A5 provisional scales;
+- the final current decision is therefore `P01 VISUAL LOCK CANDIDATE / NO BRIDGE`.
+
+Lock evidence:
+- frame `3355:2`;
+- `035` HERO `3355:7`, verified `4500 x 3000`;
+- `036` personality support `3355:8`, verified `4500 x 3000`;
+- current effective resolution remains approximately `361 ppi` and `1143 ppi` respectively;
+- authoritative text remains native;
+- no proxy image, fake content, generated decoration or broken alpha is visible.
+
+This is not `PRINT_READY`. Printer template, CMYK/profile conversion and a physical A5 proof remain separate gates.

@@ -263,6 +263,64 @@ Current single largest P01 visible gap:
 Current single largest P04–P05 spread gap:
 `P04 OKINAWA/KOREA REAL-PHOTO SOURCES + COMPLETE TWO-PAGE SPREAD QA`.
 
+## P01 visual lock + P04–P05 substantive center-spread production — 2026-08-31
+
+### P01 final bridge decision
+
+Live Figma comparison:
+- Candidate H / no bridge `3355:2`;
+- Candidate I / real-foliage extension `3371:2`;
+- Candidate J / real-photo + native-print collision `3371:38`.
+
+Candidate I and J reused only the verified `035` image hash. Screenshot QA rejected both: I introduces a duplicated left-edge palm mass that scatters the support-photo path; J breaks the masthead/date quiet zone with a small decorative crop. Candidate H remains the fastest and cleanest `旅する WEDDING → SHOGO & SHIORI → real couple → today` read.
+
+The accepted state is named:
+`P01_V20_CANDIDATE_H / P01 VISUAL LOCK CANDIDATE / NO BRIDGE / FULL-RES VERIFIED / A5 PROVISIONAL PASS`.
+
+The lock retains:
+- HERO `3355:7`, Drive `1_Tbnct5i8xqEgBwtiY3PsfzUSSWGpBkc`, image hash `743b9dadda4774b8dc0f323db2a1fa4485744349`, `4500 x 3000`, approximately `361 ppi`;
+- support `3355:8`, Drive `183kgq1fGMRNiEQFBkp4KlSkaIdIulaKL`, image hash `fff2e955f6806513de82afd22bc93869e2e14ddb`, `4500 x 3000`, approximately `1143 ppi`;
+- native masthead, names, date/location and cover copy;
+- no proxy, fake content, AI decoration or broken alpha.
+
+P01 passes thumbnail, reading-scale and provisional A5 inspection. It remains explicitly below `PRINT_READY` until printer-template, CMYK/profile and physical proof gates pass.
+
+### P04–P05 physical center spread
+
+Current preferred wrapper:
+- `3373:2` / `P04-P05_V20_CENTER_SPREAD_CANDIDATE_A / CURRENT PREFERRED / PHYSICAL SPREAD QA PASSED / P04 SOURCE GAPS OPEN`;
+- logical size `1164.1 x 816.38` Figma units, representing the `296 x 210 mm` trimmed spread;
+- physical fold guide `3373:62` remains a non-printing QA layer.
+
+P04 production A `3373:3`:
+- large elastic Okinawa PLACE HERO slot `3373:12`;
+- smaller, differently proportioned Korea PEOPLE/ACTION slot `3373:10`;
+- Korea DETAIL/PLACE slot `3373:9`;
+- visible native/source-honest role labels state that real photography is still pending;
+- equal card geometry and lower explanatory UI panels were removed after screenshot QA;
+- slots now overlap with deliberate inequality and can absorb portrait or landscape sources without rebuilding the spread story.
+
+P05 production F `3373:29`:
+- full-resolution Hawaii ENVIRONMENT HERO `3373:31`, Drive `1G-8t1JbX-GyqeMhuPLCPjsLKT_oue4Rb`, image hash `d5b01512eafc825820df06f40392a9d72fef3d85`, `4500 x 3000`, approximately `374 ppi`;
+- real couple-kiss EMOTION support `3373:32`, Drive `1sIghnrqtfs0WxwBiVdmsZopsQ29tIpiw`, image hash `e4ce0f0ae0ca2c86b8fe7beb4523c8e34264bc0b`, `4500 x 3000`;
+- `HAWAII` increased to native `M PLUS 1 Black 64` and remains the spread's largest display read;
+- proposal calm field `3373:60` uses only a short grounded heading because final proposal facts are not verified;
+- arrival field `3373:56` retains editable `YOKOHAMA → 2026.10.24` and `そして、今日へ。`.
+
+Route/fold/depth correction:
+- P04 back route `3373:5` runs beneath the elastic photo mass;
+- P04 front arrow `3377:2` stops before the fold;
+- P05 front route `3373:54` and `3373:55` re-emerges after the fold and reaches the arrival object;
+- no faces, small copy or critical facts rely on fold alignment.
+
+Final screenshot QA:
+- thumbnail: the spread reads as `P04 journey accumulation → P05 Hawaii peak` rather than two equal pages;
+- reading scale: title, photo-role labels, emotion image, calm proposal field, route and arrival remain separable;
+- A5 provisional scale: visible text is `10 pt` or larger, Hawaii HERO retains sufficient source resolution, and the fold contains no critical content;
+- no generated personal-memory photo or third-party asset is present.
+
+Live Drive recheck again returned only reference/page/generated/editorial results for `沖縄` and `韓国`; none was promoted. The largest remaining visible spread gap is therefore the absence of verified real Okinawa/Korea photography inside the otherwise production-ready elastic P04 geometry.
+
 ## Whole-book acceptance
 
 A V20 design candidate must show:

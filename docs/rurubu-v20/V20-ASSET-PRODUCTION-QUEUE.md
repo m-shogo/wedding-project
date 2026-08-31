@@ -59,7 +59,7 @@ QA:
 - visual personality is travel editorial, not bridal stationery.
 
 ## A02 — `V20_P01_TROPICAL_FRAME_CLUSTER_A`
-Status: `REJECTED_REGENERATE`
+Status: `RETIRED`
 
 Job:
 - create authored environment/depth around the HERO photo and masthead.
@@ -97,6 +97,13 @@ QA:
 - repeated failure fingerprint: `imagegen / transparent PNG / checkerboard baked into RGB output`;
 - all candidates are rejected and none was uploaded to Drive or placed in Figma;
 - next generation must prove true alpha before visual placement; do not repeat the same extraction method without a changed capability or input contract.
+
+2026-08-31 final production decision:
+- live Figma compared Candidate H without a bridge against two additional `035`-hash-only prepared-art tests;
+- Candidate I / bridge A added a duplicated palm mass at the left edge and weakened the support-photo path;
+- Candidate J / bridge B added a cropped photo fragment plus native print strip but broke the masthead/date quiet zone;
+- Candidate H without a bridge remained stronger at thumbnail, reading and A5 provisional scales;
+- the bridge is therefore retired for the current P01 lock instead of being regenerated indefinitely.
 
 ## A03 — `V20_P01_FEATURE_VESSEL_A`
 Status: `READY_TO_GENERATE`
@@ -156,7 +163,7 @@ Do not generate until A01–A05 are placed and actual gaps are visible.
 # PRIORITY B — P04–P05 CENTER SPREAD
 
 ## B01 — `V20_P45_ROUTE_BACK_A`
-Status: `READY_TO_GENERATE`
+Status: `PLACED_IN_FIGMA`
 
 Job:
 - continuous journey movement beneath photography.
@@ -178,13 +185,23 @@ Forbidden:
 - flight numbers;
 - uniform dots in a perfect SVG-dashboard style.
 
+2026-08-31 production state:
+- native editable back-layer geometry is placed at `3373:5` inside center-spread wrapper `3373:2`;
+- it runs behind the P04 elastic photo mass and stops before the physical fold;
+- no generated route asset or fake travel data was introduced.
+
 ## B02 — `V20_P45_ROUTE_FRONT_A`
-Status: `READY_TO_GENERATE`
+Status: `PLACED_IN_FIGMA`
 
 Job:
 - selected route marks/arrows that reappear above photos and paper objects, creating depth.
 
 Must visually belong to B01 but contain only the pieces that should sit on top.
+
+2026-08-31 production state:
+- P04 front arrow `3377:2` disappears before the fold;
+- P05 route nodes `3373:54` and `3373:55` re-emerge above the Hawaii photo and lead to the arrival field;
+- the simple native geometry is accepted for this production pass pending physical proof.
 
 ## B03 — `V20_P45_LEFT_EDGE_TRAVEL_CLUSTER_A`
 Status: `READY_TO_GENERATE`
@@ -215,7 +232,7 @@ Set behavior:
 No destination names baked in.
 
 ## B05 — `V20_P05_PROPOSAL_HIGHLIGHT_A`
-Status: `READY_TO_GENERATE`
+Status: `PLACED_IN_FIGMA`
 
 Job:
 - create a locally calm but deeply embedded reading island for proposal story.
@@ -228,8 +245,12 @@ Direction:
 - edges may tuck behind photo/stamp/route;
 - calm internally, but not a detached UI card.
 
+2026-08-31 production state:
+- native irregular calm field `3373:60` and heading `3373:61` remain editable inside P05 Production F;
+- no unverified proposal paragraph was added.
+
 ## B06 — `V20_P05_ARRIVAL_MARKER_A`
-Status: `READY_TO_GENERATE`
+Status: `PLACED_IN_FIGMA`
 
 Job:
 - final journey node supporting native `YOKOHAMA / 2026.10.24`.
@@ -239,6 +260,10 @@ Direction:
 - can overlap route + paper/photo layers;
 - no fake flight/transport facts;
 - no baked date/location.
+
+2026-08-31 production state:
+- native irregular arrival field `3373:56` carries editable `YOKOHAMA → 2026.10.24` and `そして、今日へ。` text;
+- it is connected to the front route rather than treated as a footer card.
 
 ## B07 — `V20_P45_POSTCARD_FRAME_SET_A`
 Status: `WAIT_FOR_OKINAWA_KOREA_SOURCE_REVIEW`
