@@ -1,0 +1,31 @@
+name: Wedding Final Approval Completion Binding CI
+
+on:
+  pull_request:
+    paths:
+      - 'motion-studio/scripts/wedding-final-approval-completion-binding.mts'
+      - 'motion-studio/scripts/wedding-davinci-delivery-readiness.mts'
+      - '.github/workflows/wedding-final-approval-completion-binding-ci.yml'
+  workflow_dispatch:
+
+jobs:
+  final-approval-completion-binding:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Verify final approval + Actual completion binding
+        working-directory: motion-studio
+        run: |
+          node --no-warnings scripts/wedding-final-approval-completion-binding.mts --self-test | tee /tmp/final-approval-completion.log
+          grep -q 'Wedding final approval completion binding self-test: PASS' /tmp/final-approval-completion.log
+          grep -q 'finalApprovalDrift=BLOCKED completionProofDrift=BLOCKED' /tmp/final-approval-completion.log
+      - name: Keep derived binding outside Human / GUI authority
+        run: |
+          grep -q 'performsMacDaVinciGuiActual: false' motion-studio/scripts/wedding-final-approval-completion-binding.mts
+          grep -q 'performsHumanApproval: false' motion-studio/scripts/wedding-final-approval-completion-binding.mts
+          grep -q 'productionReadyPromotedByThisBinding: false' motion-studio/scripts/wedding-final-approval-completion-binding.mts
+          ! grep -q 'performsMacDaVinciGuiActual: true' motion-studio/scripts/wedding-final-approval-completion-binding.mts
+          ! grep -q 'performsHumanApproval: true' motion-studio/scripts/wedding-final-approval-completion-binding.mts
