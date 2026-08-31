@@ -1,0 +1,65 @@
+name: Wedding Project Rhythm Review Dashboard CI
+
+on:
+  pull_request:
+    paths:
+      - 'movie-dashboard/src/components/ProjectRhythmReviewOperator.tsx'
+      - 'movie-dashboard/src/components/MaskRevealSceneHandoffCard.tsx'
+      - 'movie-dashboard/src/components/SelectedSceneRenderProjectCard.tsx'
+      - 'motion-studio/scripts/project-rhythm-review.mts'
+      - '.github/workflows/wedding-project-rhythm-review-dashboard-ci.yml'
+  workflow_dispatch:
+
+jobs:
+  project-rhythm-review-dashboard:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Guard Human review operator contract
+        run: |
+          grep -q 'PROJECT RHYTHM HUMAN REVIEW' movie-dashboard/src/components/ProjectRhythmReviewOperator.tsx
+          grep -q 'PATTERN_SWITCH' movie-dashboard/src/components/ProjectRhythmReviewOperator.tsx
+          grep -q 'DURATION' movie-dashboard/src/components/ProjectRhythmReviewOperator.tsx
+          grep -q 'PACING' movie-dashboard/src/components/ProjectRhythmReviewOperator.tsx
+          grep -q 'TRANSITION' movie-dashboard/src/components/ProjectRhythmReviewOperator.tsx
+          grep -q 'humanPlaybackPerformed' movie-dashboard/src/components/ProjectRhythmReviewOperator.tsx
+          grep -q 'wedding-movie-project-rhythm-human-review/v1' movie-dashboard/src/components/ProjectRhythmReviewOperator.tsx
+          grep -q 'wedding-movie-project-rhythm-correction-queue/v1' movie-dashboard/src/components/ProjectRhythmReviewOperator.tsx
+          grep -q 'DERIVED_ONLY_FROM_EXPLICIT_HUMAN_RHYTHM_FAIL_VERDICTS' movie-dashboard/src/components/ProjectRhythmReviewOperator.tsx
+          grep -q 'data-preview-reel-scene' movie-dashboard/src/components/ProjectRhythmReviewOperator.tsx
+          grep -q 'project-rhythm-review.mts' movie-dashboard/src/components/ProjectRhythmReviewOperator.tsx
+          grep -q 'remotionStudioGuiActual === "NOT_RUN"' movie-dashboard/src/components/ProjectRhythmReviewOperator.tsx
+          grep -q 'palmierGuiActual === "NOT_RUN"' movie-dashboard/src/components/ProjectRhythmReviewOperator.tsx
+          grep -q 'macDaVinciGuiActual === "NOT_RUN"' movie-dashboard/src/components/ProjectRhythmReviewOperator.tsx
+          grep -q 'productionReady === false' movie-dashboard/src/components/ProjectRhythmReviewOperator.tsx
+
+      - name: Guard operator mount after Project Delivery
+        run: |
+          grep -q 'import { ProjectRhythmReviewOperator }' movie-dashboard/src/components/MaskRevealSceneHandoffCard.tsx
+          grep -q '<ProjectRhythmReviewOperator projectId={scene.projectId} />' movie-dashboard/src/components/MaskRevealSceneHandoffCard.tsx
+          node --input-type=module <<'NODE'
+          import {readFileSync} from 'node:fs';
+          const source=readFileSync('movie-dashboard/src/components/MaskRevealSceneHandoffCard.tsx','utf8');
+          const delivery=source.indexOf('<TypographyProjectDeliveryBatchCard projectId={scene.projectId} />');
+          const rhythm=source.indexOf('<ProjectRhythmReviewOperator projectId={scene.projectId} />');
+          if(delivery < 0 || rhythm < 0 || rhythm < delivery) throw new Error('rhythm operator must follow project delivery surface');
+          NODE
+
+      - name: Guard continuous reel seek bridge still exists
+        run: |
+          grep -q 'data-preview-reel-scene' movie-dashboard/src/components/SelectedSceneRenderProjectCard.tsx
+          grep -q 'seekReel(boundary.startSeconds)' movie-dashboard/src/components/SelectedSceneRenderProjectCard.tsx
+
+      - name: Build Movie Dashboard
+        working-directory: movie-dashboard
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm build
