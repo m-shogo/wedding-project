@@ -16,6 +16,14 @@ const required = [
   "ROLE:${scene.sceneId}",
   "TRANSITION_AUTHORITY_STALE",
   "readyForContinuousRealMediaPreview",
+  "framingBoundScenes",
+  "data-real-media-framing",
+  "data-framing-revision",
+  "framing.fit",
+  "framing.focusX",
+  "framing.focusY",
+  "framing.scale",
+  "framing.revision",
   "remotionStudioGuiActual === \"NOT_RUN\"",
   "palmierGuiActual === \"NOT_RUN\"",
   "macDaVinciGuiActual === \"NOT_RUN\"",
@@ -55,4 +63,4 @@ if (!intake.includes("<WeddingRealMediaVisualReviewOperatorCard projectId={proje
 if (/humanVisualReviewPerformed:\s*true/.test(visualReview)) {
   throw new Error("visual review operator must not auto-promote Human review performed");
 }
-console.log("Wedding Movie production readiness + real-media visual review operator contracts: PASS");
+console.log("Wedding Movie production readiness + real-media framing + visual review operator contracts: PASS");
