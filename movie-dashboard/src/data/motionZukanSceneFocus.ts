@@ -12,7 +12,7 @@ export type MotionZukanSceneFocusAxis =
   | "TITLE_READABLE"
   | "TEXT_MEDIA_CONTRAST"
   | "NO_UNINTENDED_EDGE_CLIP";
-export type MotionZukanSceneFocusSurface = "SCENE_BOUND_A_B_COMPARE" | "SCENE_TIMING_AND_A_B_COMPARE";
+export type MotionZukanSceneFocusSurface = "SCENE_BOUND_A_B_COMPARE" | "SCENE_TIMING_AND_A_B_COMPARE" | "REAL_MEDIA_FRAMING_OPERATOR";
 export type MotionZukanSceneFocusRequester = "PROJECT_RHYTHM_CORRECTION_QUEUE" | "REAL_MEDIA_VISUAL_CORRECTION_QUEUE";
 
 export type MotionZukanSceneFocusRequest = {
@@ -34,7 +34,7 @@ const AXES = new Set<MotionZukanSceneFocusAxis>([
   "TEXT_MEDIA_CONTRAST",
   "NO_UNINTENDED_EDGE_CLIP",
 ]);
-const SURFACES = new Set<MotionZukanSceneFocusSurface>(["SCENE_BOUND_A_B_COMPARE", "SCENE_TIMING_AND_A_B_COMPARE"]);
+const SURFACES = new Set<MotionZukanSceneFocusSurface>(["SCENE_BOUND_A_B_COMPARE", "SCENE_TIMING_AND_A_B_COMPARE", "REAL_MEDIA_FRAMING_OPERATOR"]);
 const REQUESTERS = new Set<MotionZukanSceneFocusRequester>(["PROJECT_RHYTHM_CORRECTION_QUEUE", "REAL_MEDIA_VISUAL_CORRECTION_QUEUE"]);
 
 export function isMotionZukanSceneFocusRequest(value: unknown): value is MotionZukanSceneFocusRequest {
