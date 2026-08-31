@@ -1,4 +1,5 @@
 import {useMemo, useState} from "react";
+import {requestMotionZukanSceneFocus} from "../data/motionZukanSceneFocus";
 import type {SceneProjectId} from "../data/visualSceneComposer";
 import {downloadText} from "../lib/exporters";
 
@@ -39,24 +40,26 @@ type RhythmReview = {
   };
 };
 
+type RhythmFailure = {
+  sceneId: string;
+  sourceRevision: string;
+  patternId: string;
+  productionRole: string;
+  axis: RhythmAxis;
+  notes: string;
+  startFrame: number;
+  endFrameExclusive: number;
+  durationFrames: number;
+  startSeconds: number;
+  endSeconds: number;
+  returnTo: "SCENE_TIMING_AND_A_B_COMPARE" | "SCENE_BOUND_A_B_COMPARE";
+};
+
 type RhythmQueue = {
   schemaVersion: "wedding-movie-project-rhythm-correction-queue/v1";
   authority: "DERIVED_ONLY_FROM_EXPLICIT_HUMAN_RHYTHM_FAIL_VERDICTS";
   projectId: SceneProjectId;
-  failures: Array<{
-    sceneId: string;
-    sourceRevision: string;
-    patternId: string;
-    productionRole: string;
-    axis: RhythmAxis;
-    notes: string;
-    startFrame: number;
-    endFrameExclusive: number;
-    durationFrames: number;
-    startSeconds: number;
-    endSeconds: number;
-    returnTo: "SCENE_TIMING_AND_A_B_COMPARE" | "SCENE_BOUND_A_B_COMPARE";
-  }>;
+  failures: RhythmFailure[];
   summary: {
     totalScenes: number;
     failedAxes: number;
@@ -185,6 +188,17 @@ export function ProjectRhythmReviewOperator({projectId}: {projectId: SceneProjec
     target?.scrollIntoView({behavior: "smooth", block: "center"});
   }
 
+  function focusCorrectionTarget(failure: RhythmFailure) {
+    requestMotionZukanSceneFocus({
+      projectId,
+      sceneId: failure.sceneId,
+      sourceRevision: failure.sourceRevision,
+      axis: failure.axis,
+      surface: failure.returnTo,
+      requestedBy: "PROJECT_RHYTHM_CORRECTION_QUEUE",
+    });
+  }
+
   function exportReview() {
     if (!review) return;
     downloadText(`${JSON.stringify(review, null, 2)}\n`, `${projectId}-project-rhythm-human-review.json`);
@@ -248,7 +262,13 @@ export function ProjectRhythmReviewOperator({projectId}: {projectId: SceneProjec
           <div className="mt-2 space-y-1">
             {queue.failures.map((failure, index) => (
               <div key={`${failure.sceneId}:${failure.axis}:${index}`} className="border border-amber-200 p-2 text-[7px] dark:border-amber-900">
-                <div className="flex flex-wrap items-center justify-between gap-2"><span className="font-semibold text-navy-700 dark:text-navy-200">{failure.sceneId} / {failure.axis} / {failure.returnTo}</span><button type="button" onClick={() => seekScene(failure.sceneId)} className="border border-violet-200 px-2 py-1 text-violet-700 dark:border-violet-900 dark:text-violet-300">問題箇所を再生</button></div>
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <span className="font-semibold text-navy-700 dark:text-navy-200">{failure.sceneId} / {failure.axis} / {failure.returnTo}</span>
+                  <div className="flex flex-wrap gap-1">
+                    <button type="button" onClick={() => seekScene(failure.sceneId)} className="border border-violet-200 px-2 py-1 text-violet-700 dark:border-violet-900 dark:text-violet-300">問題箇所を再生</button>
+                    <button type="button" onClick={() => focusCorrectionTarget(failure)} className="border border-fuchsia-300 px-2 py-1 font-semibold text-fuchsia-700 dark:border-fuchsia-800 dark:text-fuchsia-300" data-rhythm-correction-focus-scene={failure.sceneId}>修正Sceneへ</button>
+                  </div>
+                </div>
                 <p className="mt-1 font-mono text-navy-400">{failure.startSeconds.toFixed(2)}–{failure.endSeconds.toFixed(2)}s / {failure.durationFrames}f / {failure.patternId} / {failure.productionRole}</p>
                 {failure.notes ? <p className="mt-1 text-amber-800 dark:text-amber-200">Human note: {failure.notes}</p> : null}
               </div>
@@ -258,7 +278,7 @@ export function ProjectRhythmReviewOperator({projectId}: {projectId: SceneProjec
         </div>
       ) : null}
 
-      <p className="mt-2 border-l-2 border-amber-300 pl-2 text-[7px] leading-3 text-amber-800 dark:text-amber-200">このOperatorはHuman review JSONの編集とCorrection Queueのナビゲーションだけを行います。CLI verifierがsource SHA/currentnessを最終判定します。NOT_RUNをFAIL/PASSへ自動変換せず、Remotion Studio / Palmier / Mac DaVinci GUI ActualはNOT_RUN、productionReady=falseのままです。</p>
+      <p className="mt-2 border-l-2 border-amber-300 pl-2 text-[7px] leading-3 text-amber-800 dark:text-amber-200">このOperatorはHuman review JSONの編集とCorrection Queueのナビゲーションだけを行います。CLI verifierがsource SHA/currentnessを最終判定します。修正Scene navigationもbrowser内のfocus requestだけでproduction evidenceを書き換えません。NOT_RUNをFAIL/PASSへ自動変換せず、Remotion Studio / Palmier / Mac DaVinci GUI ActualはNOT_RUN、productionReady=falseのままです。</p>
     </section>
   );
 }
