@@ -18,7 +18,7 @@ const canonicalPlanCommand = (projectId: SceneProjectId) =>
   `cd motion-studio && node --no-warnings scripts/build-wedding-palmier-typography-assembly-plan.mts --movie=${projectId} --write`;
 
 const timelineVerifyCommand = (projectId: SceneProjectId) =>
-  `cd motion-studio && node --no-warnings scripts/verify-wedding-palmier-typography-timeline-export.mts --movie=${projectId} --fcpxml=\"$HOME/Downloads/${projectId}.fcpxml\" --write`;
+  `cd motion-studio && node --no-warnings scripts/verify-wedding-palmier-typography-timeline-export.mts --movie=${projectId} --xml=\"$HOME/Downloads/${projectId}.fcpxml\" --write`;
 
 export function PalmierAssemblyOperatorCard({projectId}: {projectId: SceneProjectId}) {
   const [revision, setRevision] = useState(0);
