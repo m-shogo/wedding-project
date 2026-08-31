@@ -97,7 +97,7 @@ export function WeddingVisualQaCorrectionQueueCard({projectId}: {projectId: Scen
       <div className="mt-3 grid gap-2 sm:grid-cols-2">
         {failed.map(({media, axis}) => {
           const range = timecodes.mediaRanges.find((item) => item.slot === media.slot);
-          const source = axis === "crop" || axis === "focus" ? "motion-studio/src/ProfileV1RealMediaPreview.tsx" : "motion-studio/src/data/profileV1ProductionPlan.ts";
+          const source = axis === "crop" || axis === "focus" ? "motion-studio/src/compositions/profile/ProfileV1RealMediaPreview.tsx" : "motion-studio/src/data/profileV1ProductionPlan.ts";
           return <div key={`${media.slot}:${axis}`} className="border border-rose-200 p-2 text-[7px] dark:border-rose-900" data-correction-slot={media.slot ?? "INVALID"} data-correction-axis={axis}><div className="flex items-center justify-between gap-2"><p className="text-[9px] font-semibold">{media.label} / {media.slot}</p><span className="font-mono text-rose-700 dark:text-rose-300">FAIL / {axis}</span></div><p className="mt-1">chapter={media.chapterId} / file=<code>{media.file}</code></p>{range ? <p className="font-mono text-sky-700 dark:text-sky-300">review {formatProfileReviewTimecode(range.startSec)}–{formatProfileReviewTimecode(range.endSec)}</p> : null}<p className="mt-1">修正候補: <code>{source}</code></p><button type="button" onClick={() => copyText(source)} className="mt-2 border border-rose-300 px-2 py-1 font-semibold dark:border-rose-800">source pathをコピー</button></div>;
         })}
         {failedChapters.map(({chapter, axis}) => {
