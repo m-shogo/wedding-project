@@ -5,7 +5,21 @@ export const WEDDING_DAVINCI_FINAL_DELIVERY_PREFLIGHT_SCHEMA = "wedding-davinci-
 export const WEDDING_DAVINCI_OPERATOR_PACKET_SCHEMA = "wedding-davinci-operator-packet/v1" as const;
 
 type SnapshotState = "NOT_RUN" | "CURRENT" | "STALE" | "INVALID";
+type FinalEvidenceManifestState = "NOT_RUN" | "CURRENT" | "STALE" | "INVALID";
 type PreflightState = "READY" | "SNAPSHOT_REQUIRED" | "STALE" | "INVALID" | "UPSTREAM_BLOCKED";
+
+type FinalEvidenceManifestReadiness = {
+  readonly state: FinalEvidenceManifestState;
+  readonly current: boolean;
+  readonly manifestPath: string;
+  readonly mismatches: readonly string[];
+  readonly manifestSha256: string | null;
+  readonly readinessSha256: string | null;
+  readonly openingEvidenceChainSha256: string | null;
+  readonly profileEvidenceChainSha256: string | null;
+  readonly writeCommand: string;
+  readonly strictCommand: string;
+};
 
 export type WeddingDavinciSnapshotAudit = {
   state: SnapshotState;
@@ -25,7 +39,7 @@ export function buildWeddingDavinciFinalDeliveryPreflight(
   snapshot: WeddingDavinciSnapshotAudit = defaultWeddingDavinciSnapshotAudit,
 ) {
   const live = buildWeddingDavinciDeliveryReadiness();
-  const finalEvidenceManifest = weddingFinalDeliveryEvidenceManifestReadiness;
+  const finalEvidenceManifest = weddingFinalDeliveryEvidenceManifestReadiness as FinalEvidenceManifestReadiness;
   const blockerCodes: string[] = [];
 
   if (snapshot.state === "NOT_RUN") blockerCodes.push("WEDDING_DAVINCI_SNAPSHOT_REQUIRED");
