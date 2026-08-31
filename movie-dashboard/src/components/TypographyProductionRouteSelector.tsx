@@ -16,12 +16,14 @@ import {
   type DaVinciTypographyRouteStatus,
   type TypographyProductionPatternId,
 } from "../data/typographySceneProductionRouting";
+import {saveTypographyProductionRoleContext} from "../data/typographyProductionRoleContextStore";
 import {
   clearTypographyProductionSelection,
   loadTypographyProductionSelection,
   saveTypographyProductionSelection,
   TYPOGRAPHY_PRODUCTION_SELECTION_CHANGED_EVENT,
 } from "../data/typographyProductionSelectionStore";
+import {getWeddingTypographyProductionRoleGuide} from "../data/weddingTypographyProductionRoleGuide.generated";
 import type {MaskRevealSceneInstance} from "../data/visualSceneComposer";
 import {downloadText} from "../lib/exporters";
 
@@ -37,6 +39,7 @@ export function TypographyProductionRouteSelector({scene}: {scene: MaskRevealSce
   const [charStaggerEvaluatedEvidence, setCharStaggerEvaluatedEvidence] = useState<CharStaggerDaVinciEvaluatedEvidenceV1 | null>(null);
   const [charStaggerEvidenceError, setCharStaggerEvidenceError] = useState<string | null>(null);
   const selection = useMemo(() => loadTypographyProductionSelection(scene), [scene.sceneId, scene.updatedAt, revision]);
+  const rolePresets = useMemo(() => getWeddingTypographyProductionRoleGuide(scene.projectId), [scene.projectId]);
   const bundle = useMemo(() => (selection ? buildTypographySceneProductionBundle(scene, selection) : null), [scene, selection]);
   const charStaggerActualArtifact = useMemo(
     () => selection?.patternId === "type-char-stagger" ? createCharStaggerDaVinciActualArtifact(scene, selection) : null,
@@ -60,6 +63,15 @@ export function TypographyProductionRouteSelector({scene}: {scene: MaskRevealSce
 
   function choose(patternId: TypographyProductionPatternId) {
     saveTypographyProductionSelection(scene, patternId);
+    setRevision((value) => value + 1);
+  }
+
+  function chooseRolePreset(
+    productionRole: (typeof rolePresets)[number]["role"],
+    patternId: TypographyProductionPatternId,
+  ) {
+    const selectedRoute = saveTypographyProductionSelection(scene, patternId);
+    saveTypographyProductionRoleContext(scene, selectedRoute, productionRole);
     setRevision((value) => value + 1);
   }
 
@@ -108,6 +120,40 @@ export function TypographyProductionRouteSelector({scene}: {scene: MaskRevealSce
         {selection ? <button type="button" onClick={clear} className="text-[9px] font-semibold text-navy-400 underline">選択を解除</button> : null}
       </div>
 
+      <div className="mt-3 border-2 border-fuchsia-300 dark:border-fuchsia-800 p-2.5" data-remotion-role-presets={scene.projectId}>
+        <div className="flex flex-wrap items-start justify-between gap-2">
+          <div>
+            <p className="text-[8px] tracking-[0.14em] font-semibold text-fuchsia-700 dark:text-fuchsia-300">WEDDING ROLE PRESETS / ONE-CLICK HUMAN BINDING</p>
+            <p className="mt-1 text-[8px] leading-4 text-navy-500 dark:text-navy-300">Wedding用途のRoleと推奨Elementを同時にHuman-selectedとして保存します。Primary / Fallbackのどれを押すかは人間が決めます。</p>
+          </div>
+          <span className="font-mono text-[7px] text-fuchsia-700 dark:text-fuchsia-300">AUTO SELECT = OFF</span>
+        </div>
+        <div className="mt-2 grid gap-2 lg:grid-cols-3">
+          {rolePresets.map((preset) => {
+            const patternIds = [preset.primaryPatternId, ...preset.fallbackPatternIds] as TypographyProductionPatternId[];
+            return (
+              <div key={preset.role} className="border border-fuchsia-100 dark:border-fuchsia-900 p-2">
+                <p className="text-[8px] font-semibold text-navy-800 dark:text-sand-100">{preset.role}</p>
+                <p className="mt-1 text-[7px] leading-3 text-navy-400">{preset.reason}</p>
+                <div className="mt-2 flex flex-wrap gap-1">
+                  {patternIds.map((patternId, index) => (
+                    <button
+                      key={`${preset.role}:${patternId}`}
+                      type="button"
+                      onClick={() => chooseRolePreset(preset.role, patternId)}
+                      className={`border px-2 py-1 text-[7px] font-semibold ${selection?.patternId === patternId ? "border-fuchsia-500 bg-fuchsia-50 text-fuchsia-800 dark:bg-fuchsia-950/20 dark:text-fuchsia-200" : "border-sand-200 text-navy-500 dark:border-navy-600 dark:text-navy-300"}`}
+                    >
+                      {index === 0 ? "PRIMARY" : `FALLBACK ${index}`} / {patternId}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+        <p className="mt-2 border-l-2 border-amber-300 pl-2 text-[7px] leading-3 text-amber-800 dark:text-amber-200">Preset clickは現在Scene revisionへroute + Role contextをbindingする操作です。Remotion Studio GUI Actual、DaVinci GUI Actual、productionReadyを自動昇格しません。</p>
+      </div>
+
       <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-2">
         {typographyProductionRoutes.map((route) => {
           const selected = selection?.patternId === route.patternId;
@@ -146,10 +192,7 @@ export function TypographyProductionRouteSelector({scene}: {scene: MaskRevealSce
                 <div className="flex flex-wrap gap-1.5">
                   <button type="button" onClick={exportCharStaggerActualArtifact} className="border border-sky-300 dark:border-sky-700 px-2.5 py-1.5 font-semibold text-sky-700 dark:text-sky-300">Actual JSONを書き出す</button>
                   <button type="button" onClick={exportCharStaggerCaptureTemplate} className="border border-sky-300 dark:border-sky-700 px-2.5 py-1.5 font-semibold text-sky-700 dark:text-sky-300">Readback template</button>
-                  <label className="cursor-pointer border border-sky-300 dark:border-sky-700 px-2.5 py-1.5 font-semibold text-sky-700 dark:text-sky-300">
-                    Readback取込
-                    <input type="file" accept="application/json,.json" className="sr-only" onChange={(event) => void importCharStaggerCapture(event.currentTarget.files?.[0])} />
-                  </label>
+                  <label className="cursor-pointer border border-sky-300 dark:border-sky-700 px-2.5 py-1.5 font-semibold text-sky-700 dark:text-sky-300">Readback取込<input type="file" accept="application/json,.json" className="sr-only" onChange={(event) => void importCharStaggerCapture(event.currentTarget.files?.[0])} /></label>
                 </div>
               </div>
               <p className="mt-2 text-navy-400">このEVIDENCE_ONLYテンプレートでは、Actual JSONを作業指示、Readback templateをMac Resolveで実測値・live Fusion input名・1x/half-speed QAを記録する容器として分離します。取込時はsceneId / sourceRevisionをfail-closeで検証します。</p>
