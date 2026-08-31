@@ -8,6 +8,7 @@ on:
       - 'motion-studio/scripts/generate-wedding-project-remotion-stage-status-dashboard.mts'
       - 'movie-dashboard/src/generated/weddingProjectRemotionStageStatus.ts'
       - 'movie-dashboard/src/components/WeddingProjectRemotionStageStatusCard.tsx'
+      - 'movie-dashboard/src/components/PalmierAssemblyOperatorCard.tsx'
       - 'movie-dashboard/src/data/weddingMovieProductionCriticalPathRuntimeSnapshot.ts'
       - 'movie-dashboard/scripts/verify-wedding-movie-production-critical-path-runtime-snapshot.mjs'
       - '.github/workflows/wedding-palmier-timeline-dashboard-ci.yml'
@@ -54,6 +55,17 @@ jobs:
           grep -q 'timeline.next.command' movie-dashboard/src/components/WeddingProjectRemotionStageStatusCard.tsx
           grep -q 'Palmier GUI Actual' movie-dashboard/src/components/WeddingProjectRemotionStageStatusCard.tsx
           ! grep -q 'palmierGuiActual=PASS' movie-dashboard/src/components/WeddingProjectRemotionStageStatusCard.tsx
+
+      - name: Palmier Assembly Operator exposes human assembly sequence
+        run: |
+          grep -q 'PALMIER ASSEMBLY OPERATOR' movie-dashboard/src/components/PalmierAssemblyOperatorCard.tsx
+          grep -q 'markerをコピー' movie-dashboard/src/components/PalmierAssemblyOperatorCard.tsx
+          grep -q 'placement.startSeconds' movie-dashboard/src/components/PalmierAssemblyOperatorCard.tsx
+          grep -q 'build-wedding-palmier-typography-assembly-plan.mts' movie-dashboard/src/components/PalmierAssemblyOperatorCard.tsx
+          grep -q 'verify-wedding-palmier-typography-timeline-export.mts' movie-dashboard/src/components/PalmierAssemblyOperatorCard.tsx
+          grep -q 'PalmierAssemblyOperatorCard' movie-dashboard/src/components/WeddingProjectRemotionStageStatusCard.tsx
+          grep -q 'Mac DaVinci GUI Actual PASS' movie-dashboard/src/components/PalmierAssemblyOperatorCard.tsx
+          ! grep -q 'productionReady=YES' movie-dashboard/src/components/PalmierAssemblyOperatorCard.tsx
 
       - name: Runtime Critical Path binds the same Palmier authority
         working-directory: movie-dashboard
