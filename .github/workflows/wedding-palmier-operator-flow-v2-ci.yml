@@ -1,0 +1,48 @@
+name: Wedding Palmier Operator Flow V2 CI
+
+on:
+  pull_request:
+    paths:
+      - 'movie-dashboard/src/components/PalmierAssemblyOperatorCard.tsx'
+      - '.github/workflows/wedding-palmier-operator-flow-v2-ci.yml'
+  workflow_dispatch:
+
+jobs:
+  operator-flow-v2:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Operator flow exposes next incomplete and auto-advance
+        run: |
+          grep -q 'data-palmier-operator-flow="V2"' movie-dashboard/src/components/PalmierAssemblyOperatorCard.tsx
+          grep -q 'NEXT INCOMPLETE SCENE' movie-dashboard/src/components/PalmierAssemblyOperatorCard.tsx
+          grep -q '次の未完Sceneへ' movie-dashboard/src/components/PalmierAssemblyOperatorCard.tsx
+          grep -q 'scrollIntoView' movie-dashboard/src/components/PalmierAssemblyOperatorCard.tsx
+          grep -q 'nextIncomplete' movie-dashboard/src/components/PalmierAssemblyOperatorCard.tsx
+          grep -q 'ASSEMBLY CHECKLIST COMPLETE' movie-dashboard/src/components/PalmierAssemblyOperatorCard.tsx
+          grep -q 'timelineVerifyCommand' movie-dashboard/src/components/PalmierAssemblyOperatorCard.tsx
+
+      - name: Operator flow remains revision-bound and evidence-safe
+        run: |
+          grep -q 'scene.sceneId}@${scene.sourceRevision}' movie-dashboard/src/components/PalmierAssemblyOperatorCard.tsx
+          grep -q 'session内の作業メモ' movie-dashboard/src/components/PalmierAssemblyOperatorCard.tsx
+          grep -q 'FCPXML receipt CURRENT' movie-dashboard/src/components/PalmierAssemblyOperatorCard.tsx
+          grep -q 'Palmier GUI Actual PASS' movie-dashboard/src/components/PalmierAssemblyOperatorCard.tsx
+          grep -q 'Mac DaVinci GUI Actual PASS' movie-dashboard/src/components/PalmierAssemblyOperatorCard.tsx
+          ! grep -q 'localStorage' movie-dashboard/src/components/PalmierAssemblyOperatorCard.tsx
+          ! grep -q 'sessionStorage' movie-dashboard/src/components/PalmierAssemblyOperatorCard.tsx
+          ! grep -q 'productionReady=YES' movie-dashboard/src/components/PalmierAssemblyOperatorCard.tsx
+
+      - name: Build Movie Dashboard
+        working-directory: movie-dashboard
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm build
