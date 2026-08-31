@@ -1,4 +1,4 @@
-import {AbsoluteFill, interpolate, Sequence, useCurrentFrame} from 'remotion';
+import {AbsoluteFill, Audio, Img, interpolate, OffthreadVideo, Sequence, staticFile, useCurrentFrame} from 'remotion';
 import {
   WeddingSceneTypographyCandidateV1,
   type WeddingSceneTypographyCandidateProps,
@@ -11,13 +11,34 @@ export type WeddingProjectTypographyPreviewReelScene = {
   durationFrames: number;
   transitionInFrames?: number;
   transitionOutFrames?: number;
+  media?: {
+    kind: 'IMAGE' | 'VIDEO';
+    src: string;
+    sha256?: string;
+    label?: string;
+  };
   props: WeddingSceneTypographyCandidateProps;
 };
 
 export type WeddingProjectTypographyPreviewReelProps = {
   projectId: 'opening' | 'profile';
   scenes: WeddingProjectTypographyPreviewReelScene[];
+  bgmSrc?: string | null;
 };
+
+function RealMediaLayer({scene}: {scene: WeddingProjectTypographyPreviewReelScene}) {
+  if (!scene.media) return null;
+  const src = staticFile(scene.media.src);
+  const style = {width: '100%', height: '100%', objectFit: 'cover' as const};
+  return (
+    <AbsoluteFill data-real-media-kind={scene.media.kind} data-real-media-sha256={scene.media.sha256 ?? ''}>
+      {scene.media.kind === 'VIDEO'
+        ? <OffthreadVideo src={src} muted style={style} />
+        : <Img src={src} style={style} />}
+      <AbsoluteFill style={{background: 'linear-gradient(180deg, rgba(4,12,20,0.10) 0%, rgba(4,12,20,0.28) 62%, rgba(4,12,20,0.48) 100%)'}} />
+    </AbsoluteFill>
+  );
+}
 
 function TransitionedScene({scene}: {scene: WeddingProjectTypographyPreviewReelScene}) {
   const frame = useCurrentFrame();
@@ -33,7 +54,8 @@ function TransitionedScene({scene}: {scene: WeddingProjectTypographyPreviewReelS
 
   return (
     <AbsoluteFill style={{opacity: Math.min(opacityIn, opacityOut)}} data-transition-in-frames={transitionInFrames} data-transition-out-frames={transitionOutFrames}>
-      <WeddingSceneTypographyCandidateV1 {...scene.props} />
+      <RealMediaLayer scene={scene} />
+      <WeddingSceneTypographyCandidateV1 {...scene.props} transparentBackground={Boolean(scene.media)} />
     </AbsoluteFill>
   );
 }
@@ -41,9 +63,11 @@ function TransitionedScene({scene}: {scene: WeddingProjectTypographyPreviewReelS
 export function WeddingProjectTypographyPreviewReel({
   projectId,
   scenes,
+  bgmSrc = null,
 }: WeddingProjectTypographyPreviewReelProps) {
   return (
-    <AbsoluteFill style={{backgroundColor: '#071523'}} data-project-preview-reel={projectId}>
+    <AbsoluteFill style={{backgroundColor: '#071523'}} data-project-preview-reel={projectId} data-real-media-preview={scenes.some((scene) => Boolean(scene.media)) ? 'BOUND' : 'TYPOGRAPHY_ONLY'}>
+      {bgmSrc ? <Audio src={staticFile(bgmSrc)} /> : null}
       {scenes.map((scene) => (
         <Sequence
           key={`${scene.sceneId}@${scene.startFrame}`}
