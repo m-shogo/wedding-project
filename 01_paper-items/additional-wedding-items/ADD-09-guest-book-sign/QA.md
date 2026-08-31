@@ -1,162 +1,170 @@
 # ADD-09 ゲストブックサイン — QA
 
-Status: `CURRENT / PEN_TRAY_WELCOME_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / FAMILY_DIVERSITY_PASS / LONG_COPY_STRESS_PASS / AUTO_HEIGHT_PASS / CORNER_TAB_SUBTRACTION_PASS / DESK_PAPER_EDGE_SUBTRACTION_PASS / OPEN_PAPER_TOP_SUBTRACTION_PASS / ROLLBACK_SAFE / LEGACY_AND_PRIOR_VNEXT_PRESERVED / NOT_PRINT_READY`
-Updated: 2026-08-28
+Status: `CURRENT / V4_SELECTED / INK_PATH / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / THREE_SCALE_QA_PASS / LONG_COPY_STRESS_PASS / ACTUAL_SIZE_QA_PASS / PRINT_GEOMETRY_APPLIED / CLEANROOM_PROVENANCE_PASS / ROLLBACK_SAFE / NOT_PRINT_READY`
+Updated: 2026-08-31
 Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
 
 ## Current live authority
 
 - Figma file: `PjFWBpDwaQM5LfvgdqSFvU`
-- Current: `41:56 / CURRENT / ADD-09 / PEN TRAY WELCOME / OPEN PAPER TOP / 2026-08-28`
-- promoted hidden top edge: `41:57 / TOP / HOSPITALITY EDGE` — `visible=false`
-- long-copy stress: `41:76 / QA / ADD-09 / PEN TRAY WELCOME / LONG COPY / OPEN PAPER TOP / 2026-08-28` — hidden after QA
-- promoted hidden stress top edge: `41:77 / TOP / HOSPITALITY EDGE` — `visible=false`
-- bounded OPEN_PAPER_TOP comparisons: `53:2 / 53:38` — hidden after verification
-- pre-OPEN_PAPER_TOP rollbacks: `58:2 / 58:38` — hidden
-- previous pre-paper-edge rollbacks: `52:2 / 52:38` — hidden
-- previous no-paper-edge comparison: `51:2` — hidden
-- previous pre-corner-tab rollback: `47:38 / 47:74` — hidden
-- previous no-tab comparison: `47:2` — hidden
-- prior Current/history remains preserved (`38:43`, `35:2`, `16:3`, `1:3`)
+- V4 page: `65:2 / V4 / ADD-09 / INK PATH / 2026-08-31`
+- print / bleed parent: `66:2 / PRINT / V4 / ADD-09 / A5 / BLEED 3MM`
+- trim Current: `65:3 / TRIM / V4 / ADD-09 / A5 148x210 / INK PATH`
+- hidden final long-copy stress: `66:33 / QA / V4 / ADD-09 / A5 / LONG COPY / FINAL`
 - exact Drive authority: `1D259ugx13El0JYxvn8yyskIjc2c2liF4 / ADD-09_ゲストブックサイン`
-- Drive write this refinement: `0`
+- Drive writes for V4: `0`
+- detailed promotion evidence: `FIGMA-V4-INK-PATH-PROMOTION-QA-2026-08-31.md`
 
-## V4 direction — PEN TRAY WELCOME
+The previous selected Current `41:56 / PEN TRAY WELCOME / OPEN PAPER TOP` remains preserved in the Figma file as comparison / rollback history. It is no longer the V4 Current authority.
 
-Emotional brief:
+## V4 clean-room provenance
 
-`ゲストブックの表紙を描くのではなく、ゲストが実際に「書く」記帳テーブルの空気をサイン化する。`
+The 2026-08-31 V4 was built from a new blank page/frame. No old production, V2/V3, vNext frame, layout group, pen geometry, bottom desk field, decorative vector, image crop, generated asset or component was copied into the V4 authoring surface.
+
+Only verified non-visual requirements were carried forward:
+
+- Guest Book sign / writing-guidance role;
+- confirmed wedding date `2026.10.24`;
+- semantic editable placeholders for writing method, pen guidance and installation/location;
+- item print specification from `SPEC.md`.
+
+## V4 art direction — INK PATH
 
 First read:
 
-`旅の途中で、ひとこと。`
+`今日の旅に、ひとこと。`
 
-Current visual system:
+Visual system:
 
-- warm open paper field;
-- deep hospitality-green bottom writing-desk field with direct physical/action meaning;
-- one coral entry rule used for hierarchy;
-- one connected pen cue in the writing zone;
-- Japanese-first title and operational copy;
-- no full-width top decorative bar;
-- no standalone corner tab;
-- no pale-blue desk separator rail;
-- no stitched binding/spine, giant circle/capsule/sun, fake hotel/airline credential, form-card UI, QR/route/stamp cosplay.
+- warm paper field;
+- Japanese serif hero with Japanese-first hierarchy;
+- three native operational roles without cards/boxes;
+- narrow editable writing rail ending in an editable pen-nib SVG;
+- one editable signature-path SVG;
+- one short coral entry rule;
+- no raster background, generated person, stock image, badge, fake credential, route/stamp cosplay, repeated rounded-card grid, purposeless English filler or web/admin UI grammar.
 
-## 2026-08-28 OPEN_PAPER_TOP bounded comparison — VERIFIED_LOCAL
+The first draft's thick rounded rail + three dots was rejected during screenshot QA because it read like a UI timeline. It was replaced with the final thin continuous writing rail. A hero/lead overlap was also detected and repaired before promotion.
 
-### Visible problem
-
-The former `41:57 / TOP / HOSPITALITY EDGE` was a full-width `1000×54` dark-green strip at the canvas top edge. It had no trim, fold, binding, information, navigation or guest-action job and read like a web/app header before the physical paper field.
-
-Normalized fingerprint:
-
-`FULL_WIDTH_DECORATIVE_EDGE_READS_AS_WEB_HEADER`
-
-### Bounded test
-
-Rollback-safe comparisons were cloned from Current and the realistic long-copy proof:
-
-- short-copy comparison `53:2`;
-- long-copy comparison `53:38`.
-
-Only the cloned `TOP / HOSPITALITY EDGE` was hidden. Typography, native copy, Auto Layout, paper field, writing desk, connected pen, colors, date, placeholders and all other geometry remained unchanged.
-
-### Three-scale / actual-size result
-
-`OPEN_PAPER_TOP` is clearly stronger than the pre-change Current:
-
-- whole-item / ~500px: **PASS / stronger** — `GUEST BOOK → Japanese hero → instruction` becomes the first read instead of a detached dark header;
-- reading / `705×1000`: **PASS** — the open warm paper field reads as a physical sign rather than an app panel;
-- native `1000×1419`: **PASS** — top does not look unfinished; bottom writing-desk field remains the physical anchor;
-- realistic long-copy / native `1000×1419`: **PASS** — no collision or loss of contrast after subtraction.
-
-Decision: `CLEAR_OPEN_PAPER_TOP_WIN`.
-
-### Promotion / rollback
-
-Before production mutation, complete pre-change rollbacks were created:
-
-- `58:2 / ROLLBACK / ADD-09 / PRE-OPEN-PAPER-TOP / CURRENT / 2026-08-28`;
-- `58:38 / ROLLBACK / ADD-09 / PRE-OPEN-PAPER-TOP / LONG COPY / 2026-08-28`.
-
-Promoted bounded change:
-
-- Current top edge `41:57` → hidden;
-- stress top edge `41:77` → hidden;
-- Current/stress root names updated to `OPEN PAPER TOP`;
-- comparison roots `53:2 / 53:38` hidden after verification.
-
-No replacement ornament was added.
-
-## Structure / hybrid authoring QA
-
-Fresh post-promotion readback:
-
-### Current `41:56`
-
-- visible native text: `12`;
-- outside visible text: `0`;
-- IMAGE-fill nodes: `0`;
-- top hospitality edge visible: `false`;
-- corner tab visible: `false`;
-- desk paper edge visible: `false`.
-
-### Long-copy `41:76`
-
-- hidden after QA;
-- visible-when-revealed native text: `12`;
-- outside visible text: `0`;
-- IMAGE-fill nodes: `0`;
-- top hospitality edge visible: `false`;
-- prior dynamic-copy stress remains visually PASS.
+## Hybrid authoring / structure QA
 
 Responsibility split:
 
-- variable/final copy: native editable Figma text;
-- semantic placeholders: native editable Figma text;
-- dynamic operational information: native vertical Auto Layout;
-- writing desk + connected pen: simple editable native fixed geometry with direct physical meaning;
+- variable/factual copy: native editable Figma text;
+- semantic placeholder values: native editable Figma text;
+- content reflow: native vertical Auto Layout;
+- pen nib / signature path: editable SVG;
+- simple rail / entry rule: native vector geometry;
 - generated/composed raster: `0`;
-- editable SVG required: `0`;
-- replaceable image role: `0`.
+- replaceable photo/image role: `0`.
 
-`FINAL MISSING ASSET LIST: 0 production raster assets missing`.
+Final production readback:
 
-Image generation is intentionally not used: the diagnosed defect was purposeless containment geometry, not missing photography/illustration/texture.
+- visible native text: `11`;
+- text outside trim: `0`;
+- text outside authoritative 10 mm safe: `0`;
+- non-auto-height text: `0`;
+- fixed-art/text collisions: `0`;
+- IMAGE-fill nodes: `0`.
 
-## Long-copy / prior repairs retained
+`IMAGE_GENERATION_NOT_REQUIRED`: the diagnosed bottleneck was composition / typography / print semantics, not a missing image asset.
 
-Earlier verified repairs remain valid:
+## Long-copy stress
 
-- `CORNER_TAB_SUBTRACTION_PASS` — isolated mustard top-right tab removed;
-- `DESK_PAPER_EDGE_SUBTRACTION_PASS` — ambiguous pale-blue desk separator removed;
-- `AUTO_HEIGHT_PASS / LONG_COPY_STRESS_PASS` — variable name/guidance/closing/date roles participate in a dynamic native flow and realistic long copy remains above the fixed desk field.
+Dynamic operational values were tested on hidden stress `66:33`.
 
-The 2026-08-28 top-edge subtraction changed none of those text/flow roles.
+The first stress exposed a real collision between closing/date and the fixed signature path. It also showed that a fixed separator line became semantically misplaced after reflow. Promotion was blocked until both were repaired.
 
-## Learning state
+Final stress readback:
 
-`FULL_WIDTH_DECORATIVE_EDGE_READS_AS_WEB_HEADER`: `VERIFIED_LOCAL` for ADD-09.
+- visible native text when revealed: `11`;
+- outside trim: `0`;
+- outside 10 mm safe: `0`;
+- non-auto-height text: `0`;
+- fixed-art/text collisions: `0`;
+- IMAGE fills: `0`.
 
-This independently confirms the failure fingerprint already seen elsewhere, but only the QA method transfers. Do not copy ADD-09 colors, geometry, pen treatment or a blanket `remove top bars` rule into other items. Full-width fields remain valid when an item independently proves a real physical, navigational, hierarchy or emotional job.
+Stress is hidden after QA.
 
-## Print / deferred finalization
+## Print-first QA
+
+`SPEC.md` is authoritative for:
+
+- Primary trim: **A5 portrait, 148 × 210 mm**;
+- alternate: A4 portrait reflow;
+- bleed: **3 mm all sides**;
+- safe: **10 mm from trim edge**.
+
+V4 production geometry:
+
+- A5 trim working root: `1000 × 1419 px`;
+- trim scale: `6.756756 px/mm`;
+- bleed parent: `154 × 216 mm` = about `1040.54 × 1459.54 px`;
+- bleed inset: about `20.27 px` per edge;
+- hidden non-print safe guide: about `67.57 px` from trim = 10 mm.
+
+### Actual-size typography
+
+Approximate A5 print sizes:
+
+- hero: **30.2 pt**;
+- operational values: **11.3 pt**;
+- lead: **10.5 pt**;
+- closing: **10.1 pt**;
+- date: **8.8 pt**;
+- kicker / operational labels: **8.4 pt**.
+
+A first actual-size audit caught operational labels at about **6.7 pt**. They were increased before V4 promotion.
+
+### Three-scale QA
+
+- thumbnail `353 × 500`: PASS — hero is the 3-second first read and no web/UI impression dominates;
+- reading `705 × 1000`: PASS — hero → lead → operational roles → closing is clear;
+- native / print-detail `1000 × 1419`, plus bleed render: PASS — type, pen nib and signature path remain credible.
+
+## Resolution
+
+Production raster IMAGE fill count is `0`.
+
+- effective PPI: `N/A`;
+- `RESOLUTION_WARNING=NONE`.
+
+Editable SVG/vector geometry is not treated as raster-resolution evidence.
+
+## CMYK / physical risks
+
+Still deferred to final production proof:
+
+- deep navy / deep green may close up after CMYK conversion;
+- coral may dull or shift by profile / stock;
+- warm paper field must be checked against actual paper white;
+- small dark copy black construction must follow printer guidance; do not assume rich black / registration black;
+- grayscale hierarchy must be rechecked from the converted output;
+- holder/easel/tabletop installation and viewing distance remain unproven.
+
+## Deferred finalization
 
 `DESIGN_COMPLETE != PRINT_READY`.
 
-Keep `NOT_PRINT_READY` until authoritative final inputs/proofs exist:
+Remain `NOT_PRINT_READY` until:
 
-- final writing method and real pen placement;
-- final installation wording/location;
-- final printer template / bleed / safe-area / stock / CMYK profile;
-- 100% physical proof and venue-distance readability;
-- holder/easel occlusion and venue-lighting check.
+- final writing method and real pen placement are confirmed;
+- final installation wording/location is confirmed;
+- final stock and printer CMYK/profile are fixed;
+- PDF export / font embedding is checked;
+- transparency / overprint / knockout are checked;
+- preflight is clean;
+- 100% print or physical proof is reviewed;
+- holder/easel occlusion and venue-lighting are verified.
 
-No raster production asset is present, so effective raster PPI is `N/A` for this refinement.
+QR, punch, fold, perforation and handwriting-entry fields are not production features of this sign itself.
+
+## Retained historical evidence
+
+Prior production, clean-room studies, the earlier V4 Journey Line, PEN TRAY WELCOME and its bounded subtraction QA remain preserved in Figma/Git history and the dated evidence files in this directory. Their verified structural/failure-learning evidence remains reusable, but they are not the current V4 visual authority.
 
 ## Decision / next
 
-`CURRENT_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / OPEN_PAPER_TOP_SUBTRACTION_PASS / LONG_COPY_STRESS_PASS / ROLLBACK_SAFE / NOT_PRINT_READY`.
+`V4_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / THREE_SCALE_QA_PASS / LONG_COPY_STRESS_PASS / ACTUAL_SIZE_QA_PASS / PRINT_GEOMETRY_APPLIED / CLEANROOM_PROVENANCE_PASS / ROLLBACK_SAFE / NOT_PRINT_READY`.
 
-The locally reopened ADD-09 sellable gate is restored. Continue progression with `ADD-10` and later targets; do not reopen ADD-09 without a new screenshot-supported or physical-proof defect.
+Proceed to `ADD-10`.
