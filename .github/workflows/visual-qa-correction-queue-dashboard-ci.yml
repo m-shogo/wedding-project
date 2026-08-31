@@ -1,0 +1,65 @@
+name: Visual QA Correction Queue Dashboard CI
+
+on:
+  pull_request:
+    paths:
+      - 'movie-dashboard/src/components/WeddingVisualQaCorrectionQueueCard.tsx'
+      - 'movie-dashboard/src/components/WeddingMediaIntakeChecklistCard.tsx'
+      - 'movie-dashboard/src/data/openingCropReviewGate.generated.ts'
+      - 'movie-dashboard/src/data/openingCropReviewTimecodes.ts'
+      - 'movie-dashboard/src/data/profileRealMediaReviewGate.generated.ts'
+      - 'movie-dashboard/src/data/profileRealMediaTimecodes.ts'
+      - '.github/workflows/visual-qa-correction-queue-dashboard-ci.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  correction-queue:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Correction queue consumes Human FAIL only
+        run: |
+          grep -q 'slot.review === "FAIL"' movie-dashboard/src/components/WeddingVisualQaCorrectionQueueCard.tsx
+          grep -q 'media.qa\[axis\] === "FAIL"' movie-dashboard/src/components/WeddingVisualQaCorrectionQueueCard.tsx
+          grep -q 'chapter\[axis\] === "FAIL"' movie-dashboard/src/components/WeddingVisualQaCorrectionQueueCard.tsx
+          grep -q 'NOT_RUNはCorrection Queueへ混ぜません' movie-dashboard/src/components/WeddingVisualQaCorrectionQueueCard.tsx
+
+      - name: Correction queue points to render and fresh review loop
+        run: |
+          grep -q 'render:opening-v1:preview' movie-dashboard/src/components/WeddingVisualQaCorrectionQueueCard.tsx
+          grep -q 'opening-v1-crop-review-evidence.mts --init' movie-dashboard/src/components/WeddingVisualQaCorrectionQueueCard.tsx
+          grep -q 'render:profile-v1:real-media-preview' movie-dashboard/src/components/WeddingVisualQaCorrectionQueueCard.tsx
+          grep -q 'profile:real-media-review:init' movie-dashboard/src/components/WeddingVisualQaCorrectionQueueCard.tsx
+          grep -q 'openingReviewRangeFor' movie-dashboard/src/components/WeddingVisualQaCorrectionQueueCard.tsx
+          grep -q 'buildProfileRealMediaTimecodes' movie-dashboard/src/components/WeddingVisualQaCorrectionQueueCard.tsx
+
+      - name: Correction queue preserves evidence boundaries
+        run: |
+          grep -q 'Mac/Studio GUI Actual = NOT_RUN' movie-dashboard/src/components/WeddingVisualQaCorrectionQueueCard.tsx
+          grep -q 'Mac DaVinci GUI Actual=NOT_RUN' movie-dashboard/src/components/WeddingVisualQaCorrectionQueueCard.tsx
+          grep -q 'productionReady=false' movie-dashboard/src/components/WeddingVisualQaCorrectionQueueCard.tsx
+          ! grep -q 'localStorage' movie-dashboard/src/components/WeddingVisualQaCorrectionQueueCard.tsx
+          ! grep -q 'sessionStorage' movie-dashboard/src/components/WeddingVisualQaCorrectionQueueCard.tsx
+
+      - name: Correction queue mounts after Human review install flow
+        run: |
+          grep -q 'WeddingVisualQaCorrectionQueueCard' movie-dashboard/src/components/WeddingMediaIntakeChecklistCard.tsx
+          grep -q '<WeddingReviewEvidenceInstallCard projectId={projectId} />' movie-dashboard/src/components/WeddingMediaIntakeChecklistCard.tsx
+          grep -q '<WeddingVisualQaCorrectionQueueCard projectId={projectId} />' movie-dashboard/src/components/WeddingMediaIntakeChecklistCard.tsx
+
+      - name: Build Movie Dashboard
+        working-directory: movie-dashboard
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm build
