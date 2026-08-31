@@ -22,6 +22,7 @@ import {
   VisualMotionTypeOnRhythmV1,
   VisualMotionVerticalWipeV1,
   VisualMotionWordPunchV1,
+  WeddingSceneTypographyCandidateV1,
 } from './compositions/common/VisualMotionTypographyConcepts';
 import {
   VisualMotionDirectionalPanStockV1,
@@ -89,6 +90,15 @@ export function StartMotionKitRoot() {
         height={720}
         fps={30}
         durationInFrames={120}
+      />
+      <Composition
+        id="WeddingSceneTypographyCandidateV1"
+        component={WeddingSceneTypographyCandidateV1}
+        defaultProps={{text: 'WELCOME', mode: 'mask', intensity: 'S', label: 'SCENE-BOUND TYPOGRAPHY'}}
+        width={1280}
+        height={720}
+        fps={30}
+        durationInFrames={900}
       />
       <Composition
         id="VisualMotionStaticHeroStockV1"
