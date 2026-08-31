@@ -41,6 +41,13 @@ for (const token of [
   "data-real-media-framing-scene",
   "scrollIntoView",
   "canonical fresh visual QA refresh",
+  "loadedSnapshot",
+  "data-framing-dirty",
+  "data-framing-refresh-required",
+  "FRAMING DIRTY — 旧preview / stills / Human review / correction queueはSTALE",
+  "data-framing-fresh-qa-chain",
+  "refresh-wedding-project-real-media-visual-qa.mts",
+  "refresh後のHuman visual reviewは必ずNOT_RUNから再開",
 ]) requireText(framing, token, "real-media framing correction target");
 for (const token of ["fromSourceRevision", "toSourceRevision", "REAL_PREVIEW_VISUAL_REVIEW_TRANSITION_SCENE_MISSING", "refresh-wedding-project-real-media-visual-qa.mts", "render-wedding-project-real-media-preview.mts"]) requireText(backend, token, "visual correction queue revision/refresh binding");
 for (const token of ["render-wedding-project-real-media-preview.mts", "wedding-project-real-media-preview-qa-stills.mts", "wedding-project-real-media-preview-visual-review.mts", "humanVisualReviewPerformed:false", "humanVisualReview:\"NOT_RUN\""]) requireText(refresh, token, "canonical visual QA refresh chain");
@@ -52,7 +59,8 @@ requireText(transition, "data-rhythm-transition-correction", "transition target"
 if (!operator.includes("旧preview / stills / Human review / correction queueはSTALE")) throw new Error("STALE UX must explicitly invalidate old visual artifacts");
 if (!operator.includes("rerenderRealPreview") || !operator.includes("extractFreshQaStills") || !operator.includes("initFreshVisualReview")) throw new Error("fresh correction cycle commands missing");
 if (!operator.includes('disabled={queueCurrentness.status!=="CURRENT"||stale}')) throw new Error("STALE queue navigation must be disabled");
+if (!framing.includes("JSON.stringify(manifest) !== loadedSnapshot")) throw new Error("framing edits must become DIRTY relative to the loaded production manifest");
 for (const forbidden of ['remotionStudioGuiActual: "PASS"','palmierGuiActual: "PASS"','macDaVinciGuiActual: "PASS"','productionReady: true','humanVisualReviewPerformed: true']) {
   if (operator.includes(forbidden) || framing.includes(forbidden) || focus.includes(forbidden) || backend.includes(forbidden) || refresh.includes(forbidden)) throw new Error(`visual correction navigation must not promote evidence: ${forbidden}`);
 }
-console.log("real-media crop FAIL -> revision-bound framing operator -> canonical refresh contracts: PASS");
+console.log("real-media crop FAIL -> framing DIRTY -> revision-bound canonical fresh QA refresh contracts: PASS");

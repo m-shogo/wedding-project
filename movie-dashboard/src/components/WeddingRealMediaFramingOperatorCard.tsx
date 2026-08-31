@@ -43,6 +43,7 @@ function currentFraming(scene: MediaScene) {
 
 export function WeddingRealMediaFramingOperatorCard({projectId}: {projectId: SceneProjectId}) {
   const [manifest, setManifest] = useState<MediaManifest | null>(null);
+  const [loadedSnapshot, setLoadedSnapshot] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [composerRevision, setComposerRevision] = useState(0);
   const [focusedSceneId, setFocusedSceneId] = useState<string | null>(null);
@@ -82,8 +83,10 @@ export function WeddingRealMediaFramingOperatorCard({projectId}: {projectId: Sce
       const value = JSON.parse(await file.text());
       if (!isManifest(value, projectId)) throw new Error("schema / project / media binding mismatch");
       setManifest(value);
+      setLoadedSnapshot(JSON.stringify(value));
     } catch (reason) {
       setManifest(null);
+      setLoadedSnapshot(null);
       setError(reason instanceof Error ? reason.message : "invalid production media manifest");
     }
   }
@@ -106,13 +109,19 @@ export function WeddingRealMediaFramingOperatorCard({projectId}: {projectId: Sce
   }
 
   const staleSceneIds = manifest?.scenes.filter((scene) => currentSceneRevisions.get(scene.sceneId) !== scene.sourceRevision).map((scene) => scene.sceneId) ?? [];
+  const dirty = Boolean(manifest && loadedSnapshot && JSON.stringify(manifest) !== loadedSnapshot);
   const canExport = Boolean(manifest) && staleSceneIds.length === 0;
+  const exportedMediaPath = `out/production/${projectId}/${projectId}-production-media-input.json`;
+  const selectedManifestPath = `out/production/${projectId}/${projectId}-selected-scene-render-manifest.json`;
+  const readinessAuditPath = `out/production/${projectId}/${projectId}-production-readiness-audit.json`;
+  const refreshCommand = `node motion-studio/scripts/refresh-wedding-project-real-media-visual-qa.mts --selected-manifest=${selectedManifestPath} --readiness-audit=${readinessAuditPath}`;
 
   return (
-    <section className="mt-3 border-2 border-cyan-300 dark:border-cyan-800 p-3" data-real-media-framing-operator={projectId} data-framing-current={canExport ? "CURRENT" : manifest ? "STALE" : "NOT_RUN"}>
+    <section className="mt-3 border-2 border-cyan-300 dark:border-cyan-800 p-3" data-real-media-framing-operator={projectId} data-framing-current={canExport ? "CURRENT" : manifest ? "STALE" : "NOT_RUN"} data-framing-dirty={dirty ? "true" : "false"}>
       <div className="flex flex-wrap items-start justify-between gap-2"><div><p className="text-[8px] font-semibold tracking-[0.14em] text-cyan-700 dark:text-cyan-300">REAL MEDIA FRAMING OPERATOR / {projectId.toUpperCase()}</p><p className="mt-1 text-[11px] font-semibold">Human crop / focusをproduction media manifestへ保存</p><p className="mt-1 text-[8px] opacity-70">COVER / CONTAIN、focus X/Y、scaleを変更するとframing revisionも更新。CROP_SUBJECT_SAFE FAILから該当Sceneへ直接戻れます。</p></div><label className="cursor-pointer border border-cyan-300 px-2.5 py-1.5 text-[8px] font-semibold">Media JSON読込<input className="hidden" type="file" accept="application/json,.json" onChange={(event) => void loadFile(event.target.files?.[0] ?? null)} /></label></div>
       {error ? <p className="mt-2 border border-rose-300 p-2 text-[8px] text-rose-700">MEDIA_MANIFEST_INVALID: {error}</p> : null}
       {staleSceneIds.length > 0 ? <p className="mt-2 border border-amber-300 p-2 text-[8px] text-amber-800">STALE_REAL_MEDIA_FRAMING_BINDING: {staleSceneIds.join(" / ")}。現在のScene revisionへsilent rebaseしません。</p> : null}
+      {dirty ? <div className="mt-2 border-2 border-amber-400 bg-amber-50 p-2 text-[8px] text-amber-900 dark:bg-transparent dark:text-amber-200" data-framing-refresh-required="true"><p className="font-semibold">FRAMING DIRTY — 旧preview / stills / Human review / correction queueはSTALE</p><p className="mt-1">Media JSONを書き出し、fresh Production Readiness Auditを生成してからcanonical fresh visual QA refreshを実行してください。変更前のHuman visual PASSは引き継ぎません。</p></div> : null}
       {focusedSceneId ? <p className="mt-2 border border-cyan-300 p-2 text-[8px] text-cyan-800 dark:text-cyan-200" data-framing-correction-focus={focusedSceneId}>Visual QA correction focus: {focusedSceneId} / CROP_SUBJECT_SAFE</p> : null}
 
       {manifest ? <div className="mt-2 space-y-2">{manifest.scenes.map((scene) => {
@@ -130,6 +139,7 @@ export function WeddingRealMediaFramingOperatorCard({projectId}: {projectId: Sce
       })}</div> : <p className="mt-2 text-[8px] opacity-70">`wedding-movie-production-media-input/v1` を読み込むとScene framingを編集できます。Correction focusを受けた場合も、正本Media JSONを読み込むまで値は作りません。</p>}
 
       <button type="button" disabled={!canExport} onClick={() => manifest && downloadText(`${JSON.stringify(manifest, null, 2)}\n`, `${projectId}-production-media-input.json`)} className="mt-3 border border-cyan-400 px-3 py-1.5 text-[8px] font-semibold disabled:cursor-not-allowed disabled:opacity-40">Framing反映Media JSONを書き出す</button>
+      {manifest ? <div className="mt-3 border border-slate-300 p-2 text-[7px] leading-3" data-framing-fresh-qa-chain={projectId}><p className="font-semibold">FRAMING → FRESH VISUAL QA CHAIN</p><p className="mt-1">1. exportしたMedia JSONを正本production inputへ反映: <code>{exportedMediaPath}</code></p><p>2. fresh Production Readiness Auditを生成し、framing revision transportを確認</p><p>3. canonical refresh:</p><code className="mt-1 block break-all border bg-white/50 p-1 font-mono dark:bg-black/20">{refreshCommand}</code><p className="mt-1">refresh後のHuman visual reviewは必ずNOT_RUNから再開します。</p></div> : null}
       <p className="mt-2 border-l-2 border-amber-300 pl-2 text-[7px] leading-3 text-amber-800 dark:text-amber-200">このoperatorは既存media approvalを保持してcrop/focus production stateを編集するだけです。Human visual QA PASS、Remotion Studio GUI Actual、Palmier GUI Actual、Mac DaVinci GUI Actualを自動生成しません。変更後はreadiness audit → canonical fresh visual QA refreshを再実行してください。</p>
     </section>
   );
