@@ -1,5 +1,6 @@
 import { openingProductionStatus } from "../data/openingProductionStatus.generated";
 import { profileAssemblyReviewReadiness } from "../data/profileAssemblyReviewReadiness.generated";
+import { profileProductionStatus } from "../data/profileProductionStatus.generated";
 
 export type WeddingProject = "Opening" | "Profile";
 export type ActionKind = "INPUT_REQUIRED" | "COMMAND" | "HUMAN" | "READY";
@@ -13,6 +14,8 @@ export type ProductionAction = {
   commands: string[];
   recoveryHint: string;
 };
+
+const isCurrentStage = (state: string) => state === "PASS" || state === "CURRENT";
 
 export function deriveOpeningNextAction(): ProductionAction {
   const status = openingProductionStatus;
@@ -120,6 +123,7 @@ export function deriveOpeningNextAction(): ProductionAction {
 
 export function deriveProfileNextAction(): ProductionAction {
   const readiness = profileAssemblyReviewReadiness;
+  const production = profileProductionStatus;
 
   if (!Boolean(readiness.finalRenderEligible)) {
     return {
@@ -192,14 +196,74 @@ export function deriveProfileNextAction(): ProductionAction {
     };
   }
 
+  if (!isCurrentStage(String(production.stages.finalRender.state))) {
+    return {
+      project: "Profile",
+      kind: "COMMAND",
+      phase: "FINAL RENDER",
+      title: "final render + technical QA",
+      detail: "assemblyReadyかつHuman QA currentなsourceからfinal MP4を生成しtechnical QAする。render成功だけではHuman final-render reviewやDaVinci ActualをPASSにしない。",
+      commands: [...production.stages.finalRender.recovery],
+      recoveryHint: "current assembly sourceからprofile final renderを再生成",
+    };
+  }
+
+  if (!isCurrentStage(String(production.stages.finalRenderReview.state))) {
+    return {
+      project: "Profile",
+      kind: "HUMAN",
+      phase: "FINAL RENDER REVIEW",
+      title: "Profile final MP4 Human review",
+      detail: "current final MP4をHumanが実視聴し、review evidenceをrender SHAへ束縛する。technical QA PASSだけでは完了扱いにしない。",
+      commands: [...production.stages.finalRenderReview.recovery],
+      recoveryHint: "profile final-render review evidenceをcurrent final MP4へ再init",
+    };
+  }
+
+  if (!isCurrentStage(String(production.stages.productionBundle.state))) {
+    return {
+      project: "Profile",
+      kind: "COMMAND",
+      phase: "PRODUCTION BUNDLE",
+      title: "SHA-bound production bundle export",
+      detail: "Human-reviewed final renderからPalmier / DaVinciへ渡すcanonical production bundleを生成する。bundle生成はMac DaVinci Actualではない。",
+      commands: [...production.stages.productionBundle.recovery],
+      recoveryHint: "current Human final-render reviewからproduction bundleを再export",
+    };
+  }
+
+  if (!isCurrentStage(String(production.stages.davinciFinishing.state))) {
+    return {
+      project: "Profile",
+      kind: "HUMAN",
+      phase: "MAC DAVINCI ACTUAL",
+      title: "DaVinci finishing Actual evidence",
+      detail: "production bundleをMac DaVinci Resolveへ持ち込み、timeline insertion / color / audio / title-safe / 1x・half-speed / exportをHumanが実機確認する。",
+      commands: [...production.stages.davinciFinishing.recovery],
+      recoveryHint: "DaVinci finishing evidenceをcurrent production bundleへ再initしHuman Actualを実施",
+    };
+  }
+
+  if (!isCurrentStage(String(production.stages.finalDeliveryApproval.state))) {
+    return {
+      project: "Profile",
+      kind: "HUMAN",
+      phase: "FINAL DELIVERY APPROVAL",
+      title: "Human final delivery approval",
+      detail: "current Mac DaVinci Actual evidenceへ最終承認を束縛する。ここで初めてProfile delivery approvalをHuman判断する。",
+      commands: [...production.stages.finalDeliveryApproval.recovery],
+      recoveryHint: "final delivery approval evidenceをcurrent DaVinci Actualへ再init",
+    };
+  }
+
   return {
     project: "Profile",
     kind: "READY",
-    phase: "FINAL RENDER",
-    title: "final render + technical / Human review",
-    detail: "Profile assembly input + Human QAはcurrent。final render後もHuman final-render reviewとMac DaVinci Actualは別工程。",
-    commands: ["pnpm render:profile-v1", "pnpm check:profile-render"],
-    recoveryHint: "current assembly sourceからfinal renderを再生成",
+    phase: "DELIVERY READY",
+    title: "Profile production chain current",
+    detail: "final render / Human final review / production bundle / Mac DaVinci Actual / final delivery approvalがcurrent。表示だけでproductionReadyを新規昇格しない。",
+    commands: [],
+    recoveryHint: "current canonical handoff artifactsをdeliveryへ使用",
   };
 }
 
