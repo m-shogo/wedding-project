@@ -36,7 +36,7 @@ export function TypographyProductionRoleGuide({projectId}: {projectId: SceneProj
         ))}
       </div>
 
-      <TypographyElementVisualComparison />
+      <TypographyElementVisualComparison projectId={projectId} />
 
       <p className="mt-2 text-[9px] leading-4 text-amber-700 dark:text-amber-300">
         用途・強さ・避ける場面は選択補助です。previewも比較用の判断材料であり、このガイド表示だけではRemotion Studio / DaVinci Resolve Actual、production-ready、Human approvalのいずれも成立しません。
