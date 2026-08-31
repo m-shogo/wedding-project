@@ -4,6 +4,7 @@ import type {SceneProjectId} from "../data/visualSceneComposer";
 import {OpeningCropReviewOperatorCard} from "./OpeningCropReviewOperatorCard";
 import {ProfileRealMediaReviewOperatorCard} from "./ProfileRealMediaReviewOperatorCard";
 import {WeddingMovieProductionReadinessOperatorCard} from "./WeddingMovieProductionReadinessOperatorCard";
+import {WeddingRealMediaFramingOperatorCard} from "./WeddingRealMediaFramingOperatorCard";
 import {WeddingRealMediaVisualReviewOperatorCard} from "./WeddingRealMediaVisualReviewOperatorCard";
 import {WeddingReviewEvidenceInstallCard} from "./WeddingReviewEvidenceInstallCard";
 import {WeddingVisualQaCorrectionQueueCard} from "./WeddingVisualQaCorrectionQueueCard";
@@ -55,10 +56,7 @@ export function WeddingMediaIntakeChecklistCard({projectId}: {projectId: ScenePr
         <div className="mt-3 grid gap-1 sm:grid-cols-2 xl:grid-cols-3">
           {slots.map((slot) => (
             <div key={slot.id} className={`border p-2 text-[7px] ${slot.ready ? "border-emerald-200 dark:border-emerald-800" : "border-amber-200 dark:border-amber-800"}`} data-media-intake-slot={slot.id} data-media-intake-state={slot.ready ? "READY" : "MISSING"}>
-              <div className="flex items-center justify-between gap-2">
-                <span className="font-semibold">{slot.label}</span>
-                <span className="font-mono">{slot.ready ? "READY" : "MISSING"}</span>
-              </div>
+              <div className="flex items-center justify-between gap-2"><span className="font-semibold">{slot.label}</span><span className="font-mono">{slot.ready ? "READY" : "MISSING"}</span></div>
               <p className="mt-1 font-mono">{slot.canonicalStem}.* / {slot.kind}</p>
               <p className="mt-1 opacity-60">chapter={slot.chapterId}</p>
             </div>
@@ -74,6 +72,7 @@ export function WeddingMediaIntakeChecklistCard({projectId}: {projectId: ScenePr
 
         <p className="mt-2 border-l-2 border-amber-300 pl-2 text-[7px] leading-3 text-amber-800 dark:text-amber-200">このchecklistは準備用表示です。素材名が揃ったこと ≠ Human visual QA PASS ≠ Remotion Studio GUI Actual PASS ≠ Mac DaVinci GUI Actual PASS ≠ productionReady。</p>
       </section>
+      <WeddingRealMediaFramingOperatorCard projectId={projectId} />
       <WeddingMovieProductionReadinessOperatorCard projectId={projectId} />
       <WeddingRealMediaVisualReviewOperatorCard projectId={projectId} />
       {isOpening ? <OpeningCropReviewOperatorCard /> : <ProfileRealMediaReviewOperatorCard />}

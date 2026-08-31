@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - 'movie-dashboard/src/components/WeddingMovieProductionReadinessOperatorCard.tsx'
+      - 'movie-dashboard/src/components/WeddingRealMediaFramingOperatorCard.tsx'
       - 'movie-dashboard/src/components/WeddingRealMediaVisualReviewOperatorCard.tsx'
       - 'movie-dashboard/src/components/WeddingMediaIntakeChecklistCard.tsx'
       - 'movie-dashboard/scripts/verify-production-readiness-operator-contracts.mjs'
@@ -22,7 +23,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Verify production readiness operator contracts
+      - name: Verify production readiness + framing operator contracts
         run: node movie-dashboard/scripts/verify-production-readiness-operator-contracts.mjs
       - name: Build Movie Dashboard
         working-directory: movie-dashboard
