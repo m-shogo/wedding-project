@@ -60,6 +60,20 @@ export interface DummyProductionRender {
   finalPublicationApproved: false;
 }
 
+export interface JapaneseFriendsOpeningRender {
+  id: "japanese-friends-opening-demo-v1";
+  authority: "FICTIONAL_CAST_DEMO";
+  title: string;
+  localPath: string;
+  manifestPath: string;
+  durationSeconds: 105;
+  width: 1920;
+  height: 1080;
+  fps: 30;
+  fictionalCast: true;
+  finalPublicationApproved: false;
+}
+
 export interface DemoStockMediaPack {
   schemaVersion: "motion-zukan-demo-stock-pack/v1";
   authority: "DEMO_ONLY_NOT_PRODUCTION";
@@ -119,6 +133,19 @@ export const demoStockMediaCatalog = {
     bgmStatus: "DUMMY_CANDIDATE",
     finalPublicationApproved: false,
   } satisfies DummyProductionRender,
+  japaneseFriendsOpening: {
+    id: "japanese-friends-opening-demo-v1",
+    authority: "FICTIONAL_CAST_DEMO",
+    title: "日本の王道・友人と盛り上がる105秒OP",
+    localPath: "/demo-renders/japanese-friends-opening-demo-v1.mp4",
+    manifestPath: "/demo-renders/japanese-friends-opening-demo-v1.manifest.json",
+    durationSeconds: 105,
+    width: 1920,
+    height: 1080,
+    fps: 30,
+    fictionalCast: true,
+    finalPublicationApproved: false,
+  } satisfies JapaneseFriendsOpeningRender,
 } as const;
 
 export function buildDemoStockMediaPack(genre: DemoBgmGenre): DemoStockMediaPack {

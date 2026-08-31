@@ -13,6 +13,7 @@ const shelf = fs.readFileSync(path.join(root, "src/components/DemoStockMediaShel
 const page = fs.readFileSync(path.join(root, "src/pages/VisualMotionLibrary.tsx"), "utf8");
 const studioPackage = fs.readFileSync(path.join(root, "../motion-studio/package.json"), "utf8");
 const dummyPublisher = fs.readFileSync(path.join(root, "../motion-studio/scripts/publish-opening-dummy-render.mts"), "utf8");
+const japaneseOpeningPublisher = fs.readFileSync(path.join(root, "../motion-studio/scripts/publish-japanese-friends-opening-demo.mts"), "utf8");
 const errors = [];
 
 const expectedFiles = new Map([
@@ -41,6 +42,8 @@ const expectedDemoRenders = [
 ];
 const expectedDummyProductionRender = "public/demo-renders/opening-v1-dummy-production.mp4";
 const expectedDummyProductionManifest = "public/demo-renders/opening-v1-dummy-production.manifest.json";
+const expectedJapaneseOpeningRender = "public/demo-renders/japanese-friends-opening-demo-v1.mp4";
+const expectedJapaneseOpeningManifest = "public/demo-renders/japanese-friends-opening-demo-v1.manifest.json";
 const demoBinaryFiles = [...expectedFiles.keys(), ...expectedDemoRenders, expectedDummyProductionRender];
 const demoMediaState = classifyMediaSet(demoBinaryFiles.map((relative) => path.join(root, relative)));
 assertCompleteOrAbsent("Demo stock/render media", demoMediaState, errors);
@@ -148,6 +151,33 @@ if (demoMediaState.mode === "COMPLETE") {
   }
 }
 
+{
+  const manifestPath = path.join(root, expectedJapaneseOpeningManifest);
+  const renderPath = path.join(root, expectedJapaneseOpeningRender);
+  if (!fs.existsSync(manifestPath)) {
+    errors.push(`missing Japanese friends opening integrity manifest: ${expectedJapaneseOpeningManifest}`);
+  } else {
+    try {
+      const manifest = JSON.parse(fs.readFileSync(manifestPath, "utf8"));
+      if (manifest.schemaVersion !== "japanese-friends-opening-demo-manifest/v1" || manifest.authority !== "FICTIONAL_CAST_DEMO" || manifest.publicationApproved !== false || manifest.qa?.status !== "PASSED") {
+        errors.push("Japanese friends opening manifest authority or QA guard mismatch");
+      }
+      if (manifest.content?.fictionalCast !== true || manifest.content?.generatedPhotoCount !== 5 || manifest.content?.sceneCount !== 15 || manifest.content?.bgmRightsStatus !== "DUMMY_CANDIDATE") {
+        errors.push("Japanese friends opening fictional-content guard mismatch");
+      }
+      if (manifest.video?.codec !== "h264" || manifest.video?.width !== 1920 || manifest.video?.height !== 1080 || manifest.video?.fps !== "30/1" || manifest.video?.durationSeconds < 105 || manifest.video?.durationSeconds > 105.1) {
+        errors.push("Japanese friends opening manifest video contract mismatch");
+      }
+      if (fs.existsSync(renderPath)) {
+        const actualHash = crypto.createHash("sha256").update(fs.readFileSync(renderPath)).digest("hex");
+        if (manifest.artifact?.sha256 !== actualHash || manifest.artifact?.byteSize !== fs.statSync(renderPath).size) errors.push("Japanese friends opening manifest hash/size does not match MP4");
+      }
+    } catch (error) {
+      errors.push(`Japanese friends opening manifest is invalid: ${error instanceof Error ? error.message : String(error)}`);
+    }
+  }
+}
+
 const count = (token) => catalog.split(token).length - 1;
 if (count('authority: "DEMO_ONLY_NOT_USER_MEDIA"') !== 12) errors.push("photo authority must appear once in the interface and once per 11 records");
 if (count('authority: "BGM_CANDIDATE"') !== 5) errors.push("BGM authority must appear once in the interface and once per 4 records");
@@ -161,15 +191,27 @@ for (const token of ['schemaVersion: "demo-stock-media/v1"', "contentIdRegistere
 for (const token of ["DUMMY_PRODUCTION_SIMULATION", "canonicalPhotoSlots: 11", 'bgmStatus: "DUMMY_CANDIDATE"']) {
   if (!catalog.includes(token)) errors.push(`catalog missing dummy production guard token: ${token}`);
 }
+for (const token of ["FICTIONAL_CAST_DEMO", "japanese-friends-opening-demo-v1", "fictionalCast: true", "durationSeconds: 105"]) {
+  if (!catalog.includes(token)) errors.push(`catalog missing Japanese friends opening guard token: ${token}`);
+}
 for (const token of ["STOCK DEMO / NOT YOUR PHOTOS", "DUMMY PRODUCTION SIMULATION / 60-SECOND FULL RENDER", "本人写真・実公開承認を示すものではありません", 'download="opening-v1-dummy-production.mp4"', "60秒MP4をダウンロード", 'cache: "no-store"', 'manifest.authority !== "DUMMY_PRODUCTION_SIMULATION"', 'qa?.status !== "PASSED"', "QA PASSED · SHA-256", "QA manifestを検証できません", "QA manifest JSONを開く", "20-SECOND RENDERED DEMOS", "DEMO RENDER ONLY · 最終公開は未承認", "DEMO PACK / SAFE IMPORT", "11枚＋選択BGMを素材BOXへ", "デモパックJSONをコピー", "Content ID登録済み", "最終公開は未承認", "<video", "<audio controls"]) {
   if (!shelf.includes(token)) errors.push(`media shelf missing disclosure token: ${token}`);
+}
+for (const token of ["JAPANESE WEDDING OPENING / FICTIONAL CAST DEMO", "人物・文言はすべて架空です", 'download="japanese-friends-opening-demo-v1.mp4"', "105秒MP4をダウンロード", 'manifest.authority !== "FICTIONAL_CAST_DEMO"']) {
+  if (!shelf.includes(token)) errors.push(`media shelf missing Japanese friends opening disclosure token: ${token}`);
 }
 if (!page.includes("<DemoStockMediaShelf />")) errors.push("VisualMotionLibrary must mount DemoStockMediaShelf");
 for (const token of ["render:opening-v1:dummy-production", "publish:opening-v1:dummy-production"]) {
   if (!studioPackage.includes(token)) errors.push(`motion-studio package missing reproducible dummy publish command: ${token}`);
 }
+for (const token of ["render:japanese-friends-opening-demo", "publish:japanese-friends-opening-demo"]) {
+  if (!studioPackage.includes(token)) errors.push(`motion-studio package missing reproducible Japanese friends opening command: ${token}`);
+}
 for (const token of ["DUMMY_PRODUCTION_SIMULATION", "publicationApproved !== false", "check-opening-render.mts", "copyFileSync", "opening-v1-dummy-render-manifest/v1", "createHash('sha256')"]) {
   if (!dummyPublisher.includes(token)) errors.push(`dummy publisher missing fail-closed token: ${token}`);
+}
+for (const token of ["FICTIONAL_CAST_DEMO", "publicationApproved: false", "generatedPhotoCount: 5", "sceneCount: 15", "DUMMY_CANDIDATE", "createHash('sha256')"]) {
+  if (!japaneseOpeningPublisher.includes(token)) errors.push(`Japanese friends opening publisher missing fail-closed token: ${token}`);
 }
 
 try {

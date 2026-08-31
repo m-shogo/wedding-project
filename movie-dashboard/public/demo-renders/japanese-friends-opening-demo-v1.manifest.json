@@ -1,0 +1,40 @@
+{
+  "schemaVersion": "japanese-friends-opening-demo-manifest/v1",
+  "authority": "FICTIONAL_CAST_DEMO",
+  "publicationApproved": false,
+  "generatedAt": "2026-08-31T02:05:07.905Z",
+  "artifact": {
+    "file": "japanese-friends-opening-demo-v1.mp4",
+    "sha256": "c8bea578335ebfc85e05914b0fdee6ae05800fd1d0cd6389e95d901178cb16f4",
+    "byteSize": 81314996
+  },
+  "video": {
+    "codec": "h264",
+    "width": 1920,
+    "height": 1080,
+    "fps": "30/1",
+    "durationSeconds": 105.045333
+  },
+  "audio": {
+    "codec": "aac",
+    "sampleRate": "48000",
+    "channels": 2
+  },
+  "content": {
+    "fictionalCast": true,
+    "generatedPhotoCount": 5,
+    "sceneCount": 15,
+    "bgmRightsStatus": "DUMMY_CANDIDATE"
+  },
+  "qa": {
+    "status": "PASSED",
+    "checks": [
+      "typecheck",
+      "story-contract",
+      "resolution",
+      "fps",
+      "duration",
+      "audio-format"
+    ]
+  }
+}

@@ -21,6 +21,7 @@ export function DemoStockMediaShelf() {
   const [selectedGenre, setSelectedGenre] = useState<DemoBgmGenre>("CINEMATIC");
   const [feedback, setFeedback] = useState("");
   const [productionManifest, setProductionManifest] = useState<ProductionManifestState>({ status: "LOADING" });
+  const [friendsOpeningManifest, setFriendsOpeningManifest] = useState<ProductionManifestState>({ status: "LOADING" });
 
   useEffect(() => {
     const controller = new AbortController();
@@ -47,6 +48,33 @@ export function DemoStockMediaShelf() {
       .catch((error: unknown) => {
         if (error instanceof DOMException && error.name === "AbortError") return;
         setProductionManifest({ status: "INVALID" });
+      });
+    return () => controller.abort();
+  }, []);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    void fetch(demoStockMediaCatalog.japaneseFriendsOpening.manifestPath, { cache: "no-store", signal: controller.signal })
+      .then(async (response) => {
+        if (!response.ok) throw new Error(`manifest HTTP ${response.status}`);
+        return response.json() as Promise<Record<string, unknown>>;
+      })
+      .then((manifest) => {
+        const artifact = manifest.artifact as Record<string, unknown> | undefined;
+        const qa = manifest.qa as Record<string, unknown> | undefined;
+        if (
+          manifest.schemaVersion !== "japanese-friends-opening-demo-manifest/v1" ||
+          manifest.authority !== "FICTIONAL_CAST_DEMO" ||
+          manifest.publicationApproved !== false ||
+          qa?.status !== "PASSED" ||
+          typeof artifact?.sha256 !== "string" ||
+          typeof manifest.generatedAt !== "string"
+        ) throw new Error("manifest guard mismatch");
+        setFriendsOpeningManifest({ status: "VALID", sha256: artifact.sha256, generatedAt: manifest.generatedAt });
+      })
+      .catch((error: unknown) => {
+        if (error instanceof DOMException && error.name === "AbortError") return;
+        setFriendsOpeningManifest({ status: "INVALID" });
       });
     return () => controller.abort();
   }, []);
@@ -110,6 +138,24 @@ export function DemoStockMediaShelf() {
           >
             60秒MP4をダウンロード
           </a>
+        </div>
+      </article>
+
+      <article className="mt-5 overflow-hidden border-2 border-sky-400 dark:border-sky-700 bg-white dark:bg-navy-800">
+        <div className="p-3 border-b border-sky-300 dark:border-sky-800 bg-sky-50 dark:bg-sky-950/20">
+          <p className="text-[10px] tracking-[0.18em] font-semibold text-sky-800 dark:text-sky-200">JAPANESE WEDDING OPENING / FICTIONAL CAST DEMO</p>
+          <h3 className="mt-1 text-base font-bold text-navy-900 dark:text-sand-100">{demoStockMediaCatalog.japaneseFriendsOpening.title}</h3>
+          <p className="mt-1 text-[10px] leading-4 text-sky-800 dark:text-sky-200">カウントダウン、新郎新婦紹介、友人チーム、ゲストへのお願い、入場直前までを王道構成で制作。人物・文言はすべて架空です。</p>
+        </div>
+        <video controls preload="metadata" playsInline src={demoStockMediaCatalog.japaneseFriendsOpening.localPath} aria-label="日本の王道・友人と盛り上がる105秒オープニングムービー" className="aspect-video w-full bg-black object-contain" />
+        <div className="flex flex-wrap items-center justify-between gap-3 p-3 text-[10px] text-navy-500 dark:text-navy-300">
+          <div>
+            <p>105秒 · 1920×1080 · 30fps · H.264/AAC</p>
+            <p className="mt-1 font-semibold text-sky-700 dark:text-sky-300">FICTIONAL CAST · AI生成ダミー写真5枚 · 最終公開は未承認</p>
+            {friendsOpeningManifest.status === "VALID" ? <p role="status" className="mt-1 font-mono text-emerald-700 dark:text-emerald-300">QA PASSED · SHA-256 {friendsOpeningManifest.sha256.slice(0, 12)}…</p> : friendsOpeningManifest.status === "INVALID" ? <p role="alert" className="mt-1 font-semibold text-red-700 dark:text-red-300">QA manifestを検証できません</p> : <p role="status" className="mt-1 text-navy-400">QA manifest確認中…</p>}
+            <a href={demoStockMediaCatalog.japaneseFriendsOpening.manifestPath} target="_blank" rel="noreferrer" className="mt-1 inline-block underline text-sky-700 dark:text-sky-300">QA manifest JSONを開く</a>
+          </div>
+          <a href={demoStockMediaCatalog.japaneseFriendsOpening.localPath} download="japanese-friends-opening-demo-v1.mp4" className="border border-sky-700 bg-sky-700 px-3 py-2 font-semibold text-white">105秒MP4をダウンロード</a>
         </div>
       </article>
 
