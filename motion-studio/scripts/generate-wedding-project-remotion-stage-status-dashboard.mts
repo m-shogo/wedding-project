@@ -32,6 +32,13 @@ type PalmierTimelineReport = {
     palmierFcpxml?: string | null;
     palmierFcpxmlSha256?: string | null;
   };
+  transition?: {
+    transitionEdgeCount?: number;
+    verifiedTransitionEdgeCount?: number;
+    crossDissolveCount?: number;
+    transitionProofSha256?: string | null;
+    transitionProof?: unknown[];
+  };
   next: {kind: string; command: string};
 };
 
@@ -68,6 +75,13 @@ const normalizePalmierTimeline = (report: PalmierTimelineReport) => ({
     palmierFcpxml: normalizeOptionalPath(report.source?.palmierFcpxml),
     palmierFcpxmlSha256: report.source?.palmierFcpxmlSha256 ?? null,
   },
+  transition: {
+    transitionEdgeCount: report.transition?.transitionEdgeCount ?? 0,
+    verifiedTransitionEdgeCount: report.transition?.verifiedTransitionEdgeCount ?? 0,
+    crossDissolveCount: report.transition?.crossDissolveCount ?? 0,
+    transitionProofSha256: report.transition?.transitionProofSha256 ?? null,
+    transitionProof: report.transition?.transitionProof ?? [],
+  },
   next: report.next,
 });
 const normalize = (report: CheckerReport, palmierTimeline: PalmierTimelineReport) => ({
@@ -88,6 +102,7 @@ const snapshot = {
   profile: normalize(runChecker('profile'), runPalmierTimelineChecker('profile')),
   evidenceBoundary: {
     palmierGuiActual: 'NOT_RUN_UNLESS_HUMAN_EXECUTED',
+    transitionAppliedGuiActual: 'NOT_RUN_UNLESS_HUMAN_EXECUTED',
     macRemotionStudioGuiActual: 'NOT_RUN_UNLESS_HUMAN_EXECUTED',
     macDavinciResolveGuiActual: 'NOT_RUN_UNLESS_HUMAN_EXECUTED',
     productionReadyPromotedBySnapshot: false,

@@ -3,6 +3,18 @@ import {existsSync, readFileSync} from 'node:fs';
 import {join, resolve} from 'node:path';
 
 type MovieId = 'opening' | 'profile';
+type TransitionKind = 'HARD_CUT' | 'CROSS_DISSOLVE';
+type TransitionCheck = {
+  order?: number;
+  edgeId?: string;
+  fromSceneId?: string;
+  toSceneId?: string;
+  state?: string;
+  expectedTransition?: TransitionKind;
+  expectedDurationFrames?: number;
+  transitionOccurrenceCountBetweenMarkers?: number;
+  matchedDurationFrames?: number;
+};
 type Receipt = {
   schemaVersion?: string;
   authority?: string;
@@ -21,13 +33,7 @@ type Receipt = {
     transitionDurationMatchesAssemblyPlan?: boolean;
     noUnboundTransitions?: boolean;
     markerChecks?: Array<{state?: string; markerOccurrenceCount?: number}>;
-    transitionChecks?: Array<{
-      state?: string;
-      expectedTransition?: 'HARD_CUT' | 'CROSS_DISSOLVE';
-      expectedDurationFrames?: number;
-      transitionOccurrenceCountBetweenMarkers?: number;
-      matchedDurationFrames?: number;
-    }>;
+    transitionChecks?: TransitionCheck[];
   };
   evidenceBoundary?: {
     palmierTransitionIntentVerifiedFromFcpxml?: boolean;
@@ -45,6 +51,27 @@ const argValue = (name: string) => {
   return index >= 0 ? process.argv[index + 1] : undefined;
 };
 const sha256 = (content: string) => createHash('sha256').update(content).digest('hex');
+const transitionProofFor = (receipt: Receipt) => (receipt.verification?.transitionChecks ?? []).map((check) => ({
+  order: check.order ?? null,
+  edgeId: check.edgeId ?? null,
+  fromSceneId: check.fromSceneId ?? null,
+  toSceneId: check.toSceneId ?? null,
+  transition: check.expectedTransition ?? null,
+  durationFrames: check.expectedDurationFrames ?? 0,
+  transitionOccurrenceCountBetweenMarkers: check.transitionOccurrenceCountBetweenMarkers ?? 0,
+  matchedDurationFrames: check.matchedDurationFrames ?? 0,
+  state: check.state ?? null,
+}));
+const transitionSummaryFor = (receipt: Receipt) => {
+  const transitionProof = transitionProofFor(receipt);
+  return {
+    transitionEdgeCount: receipt.verification?.transitionEdgeCount ?? transitionProof.length,
+    verifiedTransitionEdgeCount: transitionProof.filter((edge) => edge.state === 'CURRENT').length,
+    crossDissolveCount: transitionProof.filter((edge) => edge.transition === 'CROSS_DISSOLVE').length,
+    transitionProofSha256: sha256(JSON.stringify(transitionProof)),
+    transitionProof,
+  };
+};
 
 const evaluate = (movieId: MovieId, receipt: Receipt, planRaw: string | null, xmlRaw: string | null) => {
   const invalid = (detail: string) => ({state: 'INVALID' as const, detail});
@@ -60,7 +87,7 @@ const evaluate = (movieId: MovieId, receipt: Receipt, planRaw: string | null, xm
   const expectedTransitionEdges = Math.max(0, Number(receipt.verification?.sceneCount ?? 0) - 1);
   if (transitionChecks.length !== expectedTransitionEdges || transitionChecks.length !== receipt.verification?.transitionEdgeCount) return invalid('RECEIPT_TRANSITION_CHECK_COUNT_INVALID');
   if (transitionChecks.some((check) => {
-    if (check.state !== 'CURRENT') return true;
+    if (check.state !== 'CURRENT' || !check.edgeId || !check.fromSceneId || !check.toSceneId) return true;
     if (check.expectedTransition === 'HARD_CUT') return check.expectedDurationFrames !== 0 || check.transitionOccurrenceCountBetweenMarkers !== 0 || check.matchedDurationFrames !== 0;
     if (check.expectedTransition === 'CROSS_DISSOLVE') return !Number.isInteger(check.expectedDurationFrames) || check.expectedDurationFrames! < 6 || check.expectedDurationFrames! > 30 || check.transitionOccurrenceCountBetweenMarkers !== 1 || check.matchedDurationFrames !== check.expectedDurationFrames;
     return true;
@@ -91,11 +118,13 @@ const runSelfTest = () => {
       transitionDurationMatchesAssemblyPlan: true,
       noUnboundTransitions: true,
       markerChecks: [{state: 'CURRENT', markerOccurrenceCount: 1}, {state: 'CURRENT', markerOccurrenceCount: 1}],
-      transitionChecks: [{state: 'CURRENT', expectedTransition: 'CROSS_DISSOLVE', expectedDurationFrames: 12, transitionOccurrenceCountBetweenMarkers: 1, matchedDurationFrames: 12}],
+      transitionChecks: [{order: 1, edgeId: 'A__B', fromSceneId: 'A', toSceneId: 'B', state: 'CURRENT', expectedTransition: 'CROSS_DISSOLVE', expectedDurationFrames: 12, transitionOccurrenceCountBetweenMarkers: 1, matchedDurationFrames: 12}],
     },
     evidenceBoundary: {palmierTransitionIntentVerifiedFromFcpxml: true, palmierGuiActualPerformedByThisVerifier: false, transitionAppliedGuiActualPerformedByThisVerifier: false, productionReadyPromotedByThisVerifier: false},
   };
   if (evaluate('opening', receipt, plan, xml).state !== 'CURRENT') throw new Error('SELF_TEST_CURRENT_FAILED');
+  const summary = transitionSummaryFor(receipt);
+  if (summary.transitionEdgeCount !== 1 || summary.verifiedTransitionEdgeCount !== 1 || summary.crossDissolveCount !== 1 || !/^[a-f0-9]{64}$/.test(summary.transitionProofSha256)) throw new Error('SELF_TEST_TRANSITION_SUMMARY_FAILED');
   const drift = evaluate('opening', receipt, plan, `${xml}<!--drift-->`);
   if (drift.state !== 'STALE' || drift.detail !== 'PALMIER_FCPXML_SHA_DRIFT') throw new Error('SELF_TEST_FCPXML_DRIFT_FAILED');
   if (evaluate('opening', receipt, null, xml).state !== 'STALE') throw new Error('SELF_TEST_MISSING_PLAN_FAILED');
@@ -128,6 +157,7 @@ if (!existsSync(receiptPath)) {
     receiptPath: null,
     receiptSha256: null,
     source: {assemblyPlan: null, assemblyPlanSha256: null, palmierFcpxml: null, palmierFcpxmlSha256: null},
+    transition: {transitionEdgeCount: 0, verifiedTransitionEdgeCount: 0, crossDissolveCount: 0, transitionProofSha256: null, transitionProof: []},
     next: {kind: 'VERIFY_REAL_PALMIER_FCPXML', command: `node --no-warnings scripts/verify-wedding-palmier-typography-timeline-export.mts --movie=${movieId} --xml='<real-palmier-fcpxml-path>' --write`},
     evidenceBoundary: {palmierGuiActualPerformedByThisCheck: false, transitionAppliedGuiActualPerformedByThisCheck: false, macDavinciResolveGuiActual: 'NOT_RUN_UNLESS_HUMAN_EXECUTED', productionReadyPromotedByThisCheck: false},
   } as const;
@@ -154,6 +184,7 @@ const result = evaluate(movieId, receipt, planRaw, xmlRaw);
 const next = result.state === 'CURRENT'
   ? {kind: 'RUN_CANONICAL_PROJECT_REMOTION_HANDOFF_WHEN_UPSTREAM_READY', command: `node --no-warnings scripts/prepare-wedding-project-remotion-production-handoff.mts --movie=${movieId} --phase=handoff`}
   : {kind: 'REVERIFY_REAL_PALMIER_FCPXML', command: `node --no-warnings scripts/verify-wedding-palmier-typography-timeline-export.mts --movie=${movieId} --xml='${xmlPath ?? '<real-palmier-fcpxml-path>'}' --write`};
+const transition = transitionSummaryFor(receipt);
 const report = {
   schemaVersion: 'wedding-palmier-typography-timeline-export-receipt-currentness/v1',
   authority: 'READ_ONLY_PALMIER_TIMELINE_EXPORT_RECEIPT_CURRENTNESS',
@@ -168,6 +199,7 @@ const report = {
     palmierFcpxml: xmlPath,
     palmierFcpxmlSha256: receipt.source?.palmierFcpxml?.sha256 ?? null,
   },
+  transition,
   next,
   evidenceBoundary: {palmierGuiActualPerformedByThisCheck: false, transitionAppliedGuiActualPerformedByThisCheck: false, macDavinciResolveGuiActual: 'NOT_RUN_UNLESS_HUMAN_EXECUTED', productionReadyPromotedByThisCheck: false},
   guardrails: ['CURRENT_RECEIPT != PALMIER_GUI_ACTUAL_PROVEN', 'CURRENT_RECEIPT != TRANSITION_GUI_ACTUAL_PASS', 'CURRENT_RECEIPT != MAC_DAVINCI_GUI_ACTUAL_PASS', 'CURRENT_RECEIPT != PRODUCTION_READY'],
@@ -176,6 +208,9 @@ if (process.argv.includes('--json')) console.log(JSON.stringify(report, null, 2)
 else {
   console.log(`palmierTimelineExportReceipt=${report.state}`);
   if (report.detail) console.log(`detail=${report.detail}`);
+  console.log(`transitionsVerified=${report.transition.verifiedTransitionEdgeCount}/${report.transition.transitionEdgeCount}`);
+  console.log(`crossDissolves=${report.transition.crossDissolveCount}`);
+  console.log(`transitionProofSha256=${report.transition.transitionProofSha256}`);
   console.log(`next=${report.next.kind}`);
   console.log(`nextCommand=${report.next.command}`);
   console.log('transitionAppliedGuiActual=NOT_RUN_UNLESS_HUMAN_EXECUTED');

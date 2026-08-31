@@ -39,10 +39,29 @@ type ProjectRemotionIdentityPreflight = ProjectPreflight & {
   sourceBatchSha256: string | null;
 };
 
+type PalmierTransitionProofEdge = {
+  order: number | null;
+  edgeId: string;
+  fromSceneId: string;
+  toSceneId: string;
+  transition: "HARD_CUT" | "CROSS_DISSOLVE";
+  durationFrames: number;
+  transitionOccurrenceCountBetweenMarkers: number;
+  matchedDurationFrames: number;
+  state: "CURRENT";
+};
+
 type PalmierTimelinePreflight = ProjectPreflight & {
   receiptSha256: string | null;
   assemblyPlanSha256: string | null;
   palmierFcpxmlSha256: string | null;
+  transitionEdgeCount: number | null;
+  verifiedTransitionEdgeCount: number | null;
+  crossDissolveCount: number | null;
+  transitionProofSha256: string | null;
+  recoveryTransitionProofSha256: string | null;
+  transitionProofCurrent: boolean;
+  transitionProof: PalmierTransitionProofEdge[];
 };
 
 export type WeddingDavinciGuiActualStartGateAudit = {
@@ -84,12 +103,14 @@ export type WeddingDavinciGuiActualStartGateAudit = {
   note: string;
   evidenceBoundary: {
     palmierGuiActual: "NOT_PROMOTED_BY_DASHBOARD_GATE_AUDIT";
+    palmierTransitionAppliedGuiActual: "NOT_PROMOTED_BY_DASHBOARD_GATE_AUDIT";
     macDavinciResolveGuiActual: "NOT_PROMOTED_BY_DASHBOARD_GATE_AUDIT";
     productionReady: false;
   };
 };
 
 const canonicalAuthority = "DERIVED_MAC_DAVINCI_GUI_ACTUAL_START_GATE";
+const shaPattern = /^[a-f0-9]{64}$/;
 const allowedStates = new Set<WeddingDavinciGuiActualStartGateAuditState>([
   "TRANSPORT_NOT_CURRENT",
   "PROJECT_MOTION_BLOCKED",
@@ -135,6 +156,13 @@ const emptyPalmierTimelinePreflight = (): PalmierTimelinePreflight => ({
   receiptSha256: null,
   assemblyPlanSha256: null,
   palmierFcpxmlSha256: null,
+  transitionEdgeCount: null,
+  verifiedTransitionEdgeCount: null,
+  crossDissolveCount: null,
+  transitionProofSha256: null,
+  recoveryTransitionProofSha256: null,
+  transitionProofCurrent: false,
+  transitionProof: [],
 });
 
 const emptyProject = () => ({
@@ -174,14 +202,38 @@ const result = (
   mismatches,
   inspectCommand: commandFor(movieId, false),
   strictGuiStartCommand: commandFor(movieId, true),
-  note: "Motion Zukan audits the canonical gate artifact and rechecks transported Project Motion, Project Remotion identity, and Palmier timeline SHA authority against current Dashboard authorities. GUI_ACTUAL_ALLOWED means a human may start the real Mac GUI review; it never means GUI Actual was executed or passed.",
+  note: "Motion Zukan audits the canonical gate artifact and rechecks transported Project Motion, Project Remotion identity, Palmier real FCPXML SHA authority, and verified transition proof/counts against current Dashboard authorities. GUI_ACTUAL_ALLOWED means a human may start the real Mac GUI review; it never means GUI Actual was executed or passed.",
   evidenceBoundary: {
     palmierGuiActual: "NOT_PROMOTED_BY_DASHBOARD_GATE_AUDIT",
+    palmierTransitionAppliedGuiActual: "NOT_PROMOTED_BY_DASHBOARD_GATE_AUDIT",
     macDavinciResolveGuiActual: "NOT_PROMOTED_BY_DASHBOARD_GATE_AUDIT",
     productionReady: false,
   },
   ...overrides,
 });
+
+const normalizeTransitionProof = (value: unknown): PalmierTransitionProofEdge[] => {
+  if (!Array.isArray(value)) return [];
+  return value.flatMap((raw): PalmierTransitionProofEdge[] => {
+    if (!raw || typeof raw !== "object") return [];
+    const edge = raw as Record<string, unknown>;
+    if (
+      typeof edge.edgeId !== "string" || typeof edge.fromSceneId !== "string" || typeof edge.toSceneId !== "string" ||
+      (edge.transition !== "HARD_CUT" && edge.transition !== "CROSS_DISSOLVE") || edge.state !== "CURRENT"
+    ) return [];
+    return [{
+      order: typeof edge.order === "number" ? edge.order : null,
+      edgeId: edge.edgeId,
+      fromSceneId: edge.fromSceneId,
+      toSceneId: edge.toSceneId,
+      transition: edge.transition,
+      durationFrames: typeof edge.durationFrames === "number" ? edge.durationFrames : 0,
+      transitionOccurrenceCountBetweenMarkers: typeof edge.transitionOccurrenceCountBetweenMarkers === "number" ? edge.transitionOccurrenceCountBetweenMarkers : 0,
+      matchedDurationFrames: typeof edge.matchedDurationFrames === "number" ? edge.matchedDurationFrames : 0,
+      state: "CURRENT",
+    }];
+  });
+};
 
 export function auditWeddingDavinciGuiActualStartGate(
   movieId: WeddingMovieId,
@@ -198,6 +250,7 @@ export function auditWeddingDavinciGuiActualStartGate(
   if (gate.movieId !== movieId) mismatches.push("GUI_START_GATE_MOVIE_ID_MISMATCH");
   if (!allowedStates.has(gate.state)) mismatches.push("GUI_START_GATE_STATE_INVALID");
   if (gate.evidenceBoundary?.productionReady !== false) mismatches.push("GUI_START_GATE_PRODUCTION_READY_BOUNDARY_INVALID");
+  if (gate.evidenceBoundary?.palmierTransitionAppliedGuiActual !== "NOT_PROMOTED_BY_START_GATE") mismatches.push("GUI_START_GATE_TRANSITION_GUI_ACTUAL_BOUNDARY_INVALID");
 
   const claimedAllowed = gate.guiActualStartAllowed === true;
   if (claimedAllowed !== (gate.state === "GUI_ACTUAL_ALLOWED")) mismatches.push("GUI_START_GATE_ALLOWED_FLAG_STATE_MISMATCH");
@@ -235,12 +288,18 @@ export function auditWeddingDavinciGuiActualStartGate(
     if (!["CURRENT", "NOT_APPLICABLE", "INVALID"].includes(palmierTimeline.state)) mismatches.push("GUI_START_GATE_PALMIER_TIMELINE_PREFLIGHT_STATE_INVALID");
     if (typeof palmierTimeline.command !== "string") mismatches.push("GUI_START_GATE_PALMIER_TIMELINE_PREFLIGHT_COMMAND_MISSING");
     if (palmierTimeline.state === "CURRENT") {
-      for (const key of ["receiptSha256", "assemblyPlanSha256", "palmierFcpxmlSha256"]) {
-        if (!/^[a-f0-9]{64}$/.test(palmierTimeline[key] ?? "")) mismatches.push(`GUI_START_GATE_PALMIER_TIMELINE_${key.toUpperCase()}_INVALID`);
+      for (const key of ["receiptSha256", "assemblyPlanSha256", "palmierFcpxmlSha256", "transitionProofSha256", "recoveryTransitionProofSha256"]) {
+        if (!shaPattern.test(palmierTimeline[key] ?? "")) mismatches.push(`GUI_START_GATE_PALMIER_TIMELINE_${key.toUpperCase()}_INVALID`);
       }
+      if (palmierTimeline.transitionProofCurrent !== true) mismatches.push("GUI_START_GATE_PALMIER_TRANSITION_PROOF_NOT_CURRENT");
+      if (palmierTimeline.transitionProofSha256 !== palmierTimeline.recoveryTransitionProofSha256) mismatches.push("GUI_START_GATE_PALMIER_TRANSITION_PROOF_SHA_MISMATCH");
+      if (!Number.isInteger(palmierTimeline.transitionEdgeCount) || !Number.isInteger(palmierTimeline.crossDissolveCount)) mismatches.push("GUI_START_GATE_PALMIER_TRANSITION_COUNTS_INVALID");
+      const transitionProof = normalizeTransitionProof(palmierTimeline.transitionProof);
+      if (transitionProof.length !== palmierTimeline.transitionEdgeCount) mismatches.push("GUI_START_GATE_PALMIER_TRANSITION_PROOF_EDGE_COUNT_INVALID");
+      if (transitionProof.filter((edge) => edge.transition === "CROSS_DISSOLVE").length !== palmierTimeline.crossDissolveCount) mismatches.push("GUI_START_GATE_PALMIER_CROSS_DISSOLVE_COUNT_INVALID");
     }
     if (palmierTimeline.state === "INVALID" && gate.state !== "PALMIER_TIMELINE_BLOCKED" && projectMotion?.state !== "INVALID" && projectRemotionIdentity?.state !== "INVALID") mismatches.push("GUI_START_GATE_PALMIER_TIMELINE_INVALID_NOT_BLOCKED");
-    if (gate.state === "PALMIER_TIMELINE_BLOCKED" && palmierTimeline.state !== "INVALID") mismatches.push("GUI_START_GATE_PALMIER_TIMELINE_BLOCK_WITHOUT_INVALID_STATE");
+    if (gate.state === "PALMIER_TIMELINE_BLOCKED" && palmierTimeline.state !== "INVALID" && palmierTimeline.transitionProofCurrent !== false) mismatches.push("GUI_START_GATE_PALMIER_TIMELINE_BLOCK_WITHOUT_INVALID_STATE");
     if (gate.state === "PALMIER_TIMELINE_BLOCKED" && gate.nextAction?.kind !== "REVALIDATE_PALMIER_TIMELINE") mismatches.push("GUI_START_GATE_PALMIER_TIMELINE_RECOVERY_ACTION_INVALID");
     if (gate.state === "PALMIER_TIMELINE_BLOCKED" && gate.nextAction?.command !== palmierTimeline.command) mismatches.push("GUI_START_GATE_PALMIER_TIMELINE_RECOVERY_COMMAND_MISMATCH");
   }
@@ -275,12 +334,15 @@ export function auditWeddingDavinciGuiActualStartGate(
     if ((palmierTimeline.receiptSha256 ?? null) !== livePalmierTimeline.receiptSha256) liveMismatchCodes.push("GUI_START_GATE_PALMIER_TIMELINE_RECEIPT_SHA_STALE");
     if ((palmierTimeline.assemblyPlanSha256 ?? null) !== livePalmierTimeline.assemblyPlanSha256) liveMismatchCodes.push("GUI_START_GATE_PALMIER_TIMELINE_ASSEMBLY_PLAN_SHA_STALE");
     if ((palmierTimeline.palmierFcpxmlSha256 ?? null) !== livePalmierTimeline.palmierFcpxmlSha256) liveMismatchCodes.push("GUI_START_GATE_PALMIER_TIMELINE_FCPXML_SHA_STALE");
+    if ((palmierTimeline.transitionEdgeCount ?? null) !== livePalmierTimeline.transitionEdgeCount) liveMismatchCodes.push("GUI_START_GATE_PALMIER_TRANSITION_EDGE_COUNT_STALE");
+    if ((palmierTimeline.crossDissolveCount ?? null) !== livePalmierTimeline.crossDissolveCount) liveMismatchCodes.push("GUI_START_GATE_PALMIER_CROSS_DISSOLVE_COUNT_STALE");
+    if ((palmierTimeline.transitionProofSha256 ?? null) !== livePalmierTimeline.transitionProofSha256) liveMismatchCodes.push("GUI_START_GATE_PALMIER_TRANSITION_PROOF_SHA_STALE");
     if ((palmierTimeline.error ?? null) !== livePalmierTimeline.error) liveMismatchCodes.push("GUI_START_GATE_PALMIER_TIMELINE_ERROR_STALE");
   }
   mismatches.push(...liveMismatchCodes);
 
   const contractInvalid = mismatches.some((code) =>
-    code.includes("MISMATCH") || code.includes("INVALID") || code.includes("MISSING") || code.includes("NOT_BLOCKED") || code.includes("WITHOUT_INVALID_STATE"),
+    code.includes("MISMATCH") || code.includes("INVALID") || code.includes("MISSING") || code.includes("NOT_BLOCKED") || code.includes("WITHOUT_INVALID_STATE") || code.includes("NOT_CURRENT"),
   );
   if (contractInvalid) return result(movieId, "INVALID", mismatches);
   if (liveMismatchCodes.length > 0) {
@@ -288,16 +350,17 @@ export function auditWeddingDavinciGuiActualStartGate(
       canonicalGateLoaded: true,
       liveProjectMotionMatch: !liveMismatchCodes.some((code) => code.includes("PROJECT_MOTION_")),
       liveProjectRemotionIdentityMatch: !liveMismatchCodes.some((code) => code.includes("PROJECT_REMOTION_IDENTITY_")),
-      livePalmierTimelineMatch: !liveMismatchCodes.some((code) => code.includes("PALMIER_TIMELINE_")),
+      livePalmierTimelineMatch: !liveMismatchCodes.some((code) => code.includes("PALMIER_TIMELINE_") || code.includes("PALMIER_TRANSITION_") || code.includes("PALMIER_CROSS_DISSOLVE_")),
       nextAction: {
         kind: "REGENERATE_CANONICAL_START_GATE",
         command: commandFor(movieId, false),
         humanOnly: false,
-        reason: "The loaded canonical start-gate JSON carries an older Project Motion, Project Remotion identity, and/or Palmier timeline SHA preflight than the current Dashboard authority. Regenerate the canonical artifact and rerun strict GUI-start verification before Mac GUI Actual.",
+        reason: "The loaded canonical start-gate JSON carries an older Project Motion, Project Remotion identity, Palmier timeline, and/or transition-proof authority than the current Dashboard snapshot. Regenerate the canonical artifact and rerun strict GUI-start verification before Mac GUI Actual.",
       },
     });
   }
 
+  const transitionProof = normalizeTransitionProof(palmierTimeline?.transitionProof);
   return result(movieId, gate.state, [], {
     guiActualStartAllowed: claimedAllowed,
     canonicalGateLoaded: true,
@@ -338,6 +401,13 @@ export function auditWeddingDavinciGuiActualStartGate(
         receiptSha256: typeof palmierTimeline.receiptSha256 === "string" ? palmierTimeline.receiptSha256 : null,
         assemblyPlanSha256: typeof palmierTimeline.assemblyPlanSha256 === "string" ? palmierTimeline.assemblyPlanSha256 : null,
         palmierFcpxmlSha256: typeof palmierTimeline.palmierFcpxmlSha256 === "string" ? palmierTimeline.palmierFcpxmlSha256 : null,
+        transitionEdgeCount: Number.isInteger(palmierTimeline.transitionEdgeCount) ? palmierTimeline.transitionEdgeCount : null,
+        verifiedTransitionEdgeCount: transitionProof.length,
+        crossDissolveCount: Number.isInteger(palmierTimeline.crossDissolveCount) ? palmierTimeline.crossDissolveCount : null,
+        transitionProofSha256: typeof palmierTimeline.transitionProofSha256 === "string" ? palmierTimeline.transitionProofSha256 : null,
+        recoveryTransitionProofSha256: typeof palmierTimeline.recoveryTransitionProofSha256 === "string" ? palmierTimeline.recoveryTransitionProofSha256 : null,
+        transitionProofCurrent: palmierTimeline.transitionProofCurrent === true,
+        transitionProof,
         error: typeof palmierTimeline.error === "string" ? palmierTimeline.error : null,
       },
       evidenceState: typeof gate.project?.evidenceState === "string" ? gate.project.evidenceState : null,
