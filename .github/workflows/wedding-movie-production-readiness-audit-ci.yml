@@ -1,0 +1,114 @@
+name: Wedding Movie Production Readiness Audit CI
+
+on:
+  pull_request:
+    paths:
+      - "motion-studio/scripts/wedding-movie-production-readiness-audit.mts"
+      - ".github/workflows/wedding-movie-production-readiness-audit-ci.yml"
+  push:
+    branches: [main]
+    paths:
+      - "motion-studio/scripts/wedding-movie-production-readiness-audit.mts"
+      - ".github/workflows/wedding-movie-production-readiness-audit-ci.yml"
+
+jobs:
+  production-readiness-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Build current real-media fixtures
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/movie-readiness/media
+          printf 'scene-a-image' > /tmp/movie-readiness/media/scene-a.jpg
+          printf 'scene-b-video' > /tmp/movie-readiness/media/scene-b.mp4
+          printf 'approved-bgm' > /tmp/movie-readiness/media/opening.wav
+          A_SHA=$(sha256sum /tmp/movie-readiness/media/scene-a.jpg | awk '{print $1}')
+          B_SHA=$(sha256sum /tmp/movie-readiness/media/scene-b.mp4 | awk '{print $1}')
+          AUDIO_SHA=$(sha256sum /tmp/movie-readiness/media/opening.wav | awk '{print $1}')
+          cat > /tmp/movie-readiness/batch.json <<'JSON'
+          {
+            "schemaVersion":"wedding-movie-typography-project-delivery/v1",
+            "authority":"DERIVED_PROJECT_HANDOFF",
+            "projectId":"opening",
+            "timeline":{"transitions":[{"fromSceneId":"scene-a","toSceneId":"scene-b","transition":"CROSS_DISSOLVE","durationFrames":12,"status":"HUMAN_SELECTED_CURRENT"}]},
+            "scenes":[
+              {
+                "sceneId":"scene-a","sourceRevision":"rev-a","status":"CURRENT_PACKAGE_READY","selectedPatternId":"type-mask-reveal","roleContextStatus":"CURRENT_ROLE_CONTEXT","productionRole":"TITLE_REVEAL",
+                "package":{"identity":{"sourceRevision":"rev-a"},"canonical":{"humanState":{"resolvedEditableIntent":{"text":"OUR JOURNEY BEGINS","mediaLabel":"Shogo & Shiori airport portrait","sceneDurationSeconds":4},"canonicalSceneState":{"sceneDurationSeconds":4}}}}
+              },
+              {
+                "sceneId":"scene-b","sourceRevision":"rev-b","status":"CURRENT_PACKAGE_READY","selectedPatternId":"split-rise","roleContextStatus":"CURRENT_ROLE_CONTEXT","productionRole":"IMPACT_TITLE",
+                "package":{"identity":{"sourceRevision":"rev-b"},"canonical":{"humanState":{"resolvedEditableIntent":{"text":"READY FOR TAKEOFF","mediaLabel":"Travel montage master clip","sceneDurationSeconds":5},"canonicalSceneState":{"sceneDurationSeconds":5}}}}
+              }
+            ],
+            "summary":{"staleTransitions":0,"batchReadyForPalmierDaVinciHandoff":true,"productionReady":false}
+          }
+          JSON
+          cat > /tmp/movie-readiness/media.json <<JSON
+          {
+            "schemaVersion":"wedding-movie-production-media-input/v1",
+            "projectId":"opening",
+            "scenes":[
+              {"sceneId":"scene-a","sourceRevision":"rev-a","kind":"IMAGE","path":"/tmp/movie-readiness/media/scene-a.jpg","sha256":"${A_SHA}","humanApproved":true},
+              {"sceneId":"scene-b","sourceRevision":"rev-b","kind":"VIDEO","path":"/tmp/movie-readiness/media/scene-b.mp4","sha256":"${B_SHA}","humanApproved":true}
+            ]
+          }
+          JSON
+          cat > /tmp/movie-readiness/audio.json <<JSON
+          {"schemaVersion":"wedding-movie-production-audio-input/v1","projectId":"opening","usage":"BGM","path":"/tmp/movie-readiness/media/opening.wav","sha256":"${AUDIO_SHA}","humanApproved":true}
+          JSON
+      - name: Audit fully bound production inputs
+        run: node --no-warnings motion-studio/scripts/wedding-movie-production-readiness-audit.mts --batch=/tmp/movie-readiness/batch.json --media-manifest=/tmp/movie-readiness/media.json --audio-manifest=/tmp/movie-readiness/audio.json --output=/tmp/movie-readiness/audit.json --strict-real-preview-ready
+      - name: Verify ready scene queue and evidence boundary
+        run: |
+          node --input-type=module <<'NODE'
+          import {readFileSync} from 'node:fs';
+          const a=JSON.parse(readFileSync('/tmp/movie-readiness/audit.json','utf8'));
+          if(a.schemaVersion!=='wedding-movie-production-readiness-audit/v1') throw new Error('schema');
+          if(a.summary.readyForRealMediaPreview!==2||a.summary.waitingHumanInput!==0||a.summary.blockedByStaleAuthority!==0) throw new Error('scene readiness');
+          if(a.summary.readyForContinuousRealMediaPreview!==true) throw new Error('preview not ready');
+          if(a.nextActions.renderableSceneIds.join(',')!=='scene-a,scene-b') throw new Error('render queue');
+          if(a.audio.state!=='CURRENT') throw new Error('audio binding');
+          if(a.evidenceBoundary.remotionStudioGuiActual!=='NOT_RUN'||a.evidenceBoundary.palmierGuiActual!=='NOT_RUN'||a.evidenceBoundary.macDaVinciGuiActual!=='NOT_RUN'||a.evidenceBoundary.productionReady!==false) throw new Error('evidence boundary');
+          NODE
+      - name: Verify post-audit media tamper fail-closes
+        shell: bash
+        run: |
+          printf 'tampered' >> /tmp/movie-readiness/media/scene-b.mp4
+          if node --no-warnings motion-studio/scripts/wedding-movie-production-readiness-audit.mts --batch=/tmp/movie-readiness/batch.json --media-manifest=/tmp/movie-readiness/media.json --audio-manifest=/tmp/movie-readiness/audio.json --output=/tmp/movie-readiness/tampered.json --strict-real-preview-ready 2>/tmp/movie-readiness/tampered.err; then
+            echo 'expected tampered media to block strict readiness' >&2
+            exit 1
+          fi
+          grep -q 'MOVIE_PRODUCTION_REAL_MEDIA_PREVIEW_NOT_READY' /tmp/movie-readiness/tampered.err
+          node --input-type=module <<'NODE'
+          import {readFileSync} from 'node:fs';
+          const a=JSON.parse(readFileSync('/tmp/movie-readiness/tampered.json','utf8'));
+          const scene=a.scenes.find((x)=>x.sceneId==='scene-b');
+          if(scene.readiness!=='BLOCKED_BY_STALE_AUTHORITY'||!scene.blockers.includes('REAL_MEDIA_SHA_MISMATCH')) throw new Error('tamper blocker missing');
+          NODE
+      - name: Verify placeholder copy remains Human input, never auto-fails or auto-passes
+        shell: bash
+        run: |
+          node --input-type=module <<'NODE'
+          import {readFileSync,writeFileSync} from 'node:fs';
+          const b=JSON.parse(readFileSync('/tmp/movie-readiness/batch.json','utf8'));
+          b.scenes[0].package.canonical.humanState.resolvedEditableIntent.text='WELCOME';
+          writeFileSync('/tmp/movie-readiness/placeholder-batch.json',JSON.stringify(b,null,2)+'\n');
+          const m=JSON.parse(readFileSync('/tmp/movie-readiness/media.json','utf8'));
+          const {createHash}=await import('node:crypto');
+          m.scenes[1].sha256=createHash('sha256').update(readFileSync('/tmp/movie-readiness/media/scene-b.mp4')).digest('hex');
+          writeFileSync('/tmp/movie-readiness/current-media.json',JSON.stringify(m,null,2)+'\n');
+          NODE
+          node --no-warnings motion-studio/scripts/wedding-movie-production-readiness-audit.mts --batch=/tmp/movie-readiness/placeholder-batch.json --media-manifest=/tmp/movie-readiness/current-media.json --audio-manifest=/tmp/movie-readiness/audio.json --output=/tmp/movie-readiness/placeholder.json
+          node --input-type=module <<'NODE'
+          import {readFileSync} from 'node:fs';
+          const a=JSON.parse(readFileSync('/tmp/movie-readiness/placeholder.json','utf8'));
+          const scene=a.scenes.find((x)=>x.sceneId==='scene-a');
+          if(scene.readiness!=='WAITING_HUMAN_INPUT'||!scene.humanInputs.includes('FINAL_COPY_REQUIRED')) throw new Error('placeholder classification');
+          if(a.summary.productionReady!==false) throw new Error('productionReady boundary');
+          NODE
