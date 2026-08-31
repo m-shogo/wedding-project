@@ -81,6 +81,8 @@ export function TypographySceneBoundElementComparison({scene}: {scene: MaskRevea
       <div className="mt-3 space-y-3">
         {roles.map((role) => {
           const ids = [role.primaryPatternId, ...role.fallbackPatternIds] as TypographyProductionPatternId[];
+          const batchCommand = ids.map((patternId) => candidateRenderCommand(scene, patternId, role.role)).join(" && ");
+          const batchKey = `batch:${role.role}`;
           return (
             <div key={role.role} className="border border-fuchsia-100 dark:border-fuchsia-900 p-2.5" data-scene-bound-role={role.role}>
               <div className="flex flex-wrap items-start justify-between gap-2">
@@ -88,7 +90,10 @@ export function TypographySceneBoundElementComparison({scene}: {scene: MaskRevea
                   <p className="text-[9px] font-semibold text-fuchsia-700 dark:text-fuchsia-300">{role.role}</p>
                   <p className="mt-1 text-[7px] leading-3 text-navy-400">{role.reason}</p>
                 </div>
-                <span className="font-mono text-[7px] text-navy-400">A PRIMARY / B-C FALLBACK</span>
+                <div className="flex flex-wrap items-center gap-1.5">
+                  <span className="font-mono text-[7px] text-navy-400">A PRIMARY / B-C FALLBACK</span>
+                  <button type="button" onClick={() => void copyCommand(batchKey, batchCommand)} className="border border-fuchsia-300 dark:border-fuchsia-800 px-2 py-1 text-[7px] font-semibold text-fuchsia-700 dark:text-fuchsia-300">{copied === batchKey ? "A/B/C BATCH COPIED ✓" : "A/B/Cを同条件で一括render"}</button>
+                </div>
               </div>
               <div className="mt-2 grid gap-2 lg:grid-cols-3">
                 {ids.map((patternId, index) => {
