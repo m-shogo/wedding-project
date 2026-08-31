@@ -1,0 +1,34 @@
+name: Wedding Rhythm Scene Timing Correction Dashboard CI
+
+on:
+  pull_request:
+    paths:
+      - 'movie-dashboard/src/components/RhythmSceneTimingCorrectionCard.tsx'
+      - 'movie-dashboard/src/components/MaskRevealSceneHandoffCard.tsx'
+      - 'movie-dashboard/src/data/visualSceneComposer.ts'
+      - 'movie-dashboard/src/data/motionZukanSceneFocus.ts'
+      - 'movie-dashboard/scripts/verify-rhythm-scene-timing-correction.mjs'
+      - '.github/workflows/wedding-rhythm-scene-timing-correction-dashboard-ci.yml'
+  workflow_dispatch:
+
+jobs:
+  rhythm-scene-timing-correction-dashboard:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Guard Human Rhythm Scene timing correction
+        run: node movie-dashboard/scripts/verify-rhythm-scene-timing-correction.mjs
+
+      - name: Build Movie Dashboard
+        working-directory: movie-dashboard
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm build
