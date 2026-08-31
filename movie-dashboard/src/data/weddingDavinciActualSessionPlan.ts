@@ -15,11 +15,29 @@ type ProjectRemotionIdentityPreflight = {
   sourceBatchSha256: string | null;
   error: string | null;
 };
+type PalmierTransitionProofEdge = {
+  order?: number | null;
+  edgeId?: string | null;
+  fromSceneId?: string | null;
+  toSceneId?: string | null;
+  transition?: "HARD_CUT" | "CROSS_DISSOLVE" | null;
+  durationFrames?: number;
+  transitionOccurrenceCountBetweenMarkers?: number;
+  matchedDurationFrames?: number;
+  state?: string | null;
+};
 type PalmierTimelineSnapshot = {
   state: "MISSING" | "CURRENT" | "STALE" | "INVALID";
   detail: string | null;
   receiptSha256: string | null;
   source: {assemblyPlanSha256: string | null; palmierFcpxmlSha256: string | null};
+  transition: {
+    transitionEdgeCount: number;
+    verifiedTransitionEdgeCount: number;
+    crossDissolveCount: number;
+    transitionProofSha256: string | null;
+    transitionProof: readonly PalmierTransitionProofEdge[];
+  };
 };
 type PalmierTimelinePreflight = {
   state: "CURRENT" | "NOT_APPLICABLE" | "INVALID";
@@ -29,6 +47,11 @@ type PalmierTimelinePreflight = {
   receiptSha256: string | null;
   assemblyPlanSha256: string | null;
   palmierFcpxmlSha256: string | null;
+  transitionEdgeCount: number | null;
+  verifiedTransitionEdgeCount: number | null;
+  crossDissolveCount: number | null;
+  transitionProofSha256: string | null;
+  transitionProof: readonly PalmierTransitionProofEdge[];
   error: string | null;
 };
 
@@ -36,6 +59,7 @@ const manualChecklist = [
   "Source render readback SHA が recovery-bound expected SHA と一致することを確認",
   "Project Motion / Project Remotion identityのtransported SHA authorityを確認",
   "Palmier timeline receipt / Assembly Plan SHA / real FCPXML SHA がtransported preflightと一致することを確認",
+  "Palmier transition proofが verified X/X で、transition proof SHA / Cross Dissolve countがtransported Start Gateと一致することを確認",
   "DaVinci Resolve version / project / timeline / insertion / duration / FPS を記録",
   "color / audio / title-safe・framing / playback 1x / playback 0.5x をMac GUIで実確認",
   "DaVinci export の path / SHA / duration / dimensions / FPS / audio presence / watched-with-sound を記録",
@@ -46,15 +70,21 @@ const buildPalmierTimelinePreflight = (movieId: MovieId, projectRemotionApplicab
   const timeline = weddingProjectRemotionStageStatus[movieId].palmierTimelineExport as PalmierTimelineSnapshot;
   const applicable = projectRemotionApplicable || timeline.state !== "MISSING";
   const command = `node --no-warnings scripts/check-wedding-palmier-typography-timeline-export-receipt.mts --movie=${movieId} --strict`;
-  if (!applicable) return {state: "NOT_APPLICABLE", current: false, applicable: false, command, receiptSha256: null, assemblyPlanSha256: null, palmierFcpxmlSha256: null, error: null};
+  const emptyTransition = {transitionEdgeCount: null, verifiedTransitionEdgeCount: null, crossDissolveCount: null, transitionProofSha256: null, transitionProof: [] as const};
+  if (!applicable) return {state: "NOT_APPLICABLE", current: false, applicable: false, command, receiptSha256: null, assemblyPlanSha256: null, palmierFcpxmlSha256: null, ...emptyTransition, error: null};
   if (timeline.state === "CURRENT") return {
     state: "CURRENT", current: true, applicable: true, command,
     receiptSha256: timeline.receiptSha256,
     assemblyPlanSha256: timeline.source.assemblyPlanSha256,
     palmierFcpxmlSha256: timeline.source.palmierFcpxmlSha256,
+    transitionEdgeCount: timeline.transition.transitionEdgeCount,
+    verifiedTransitionEdgeCount: timeline.transition.verifiedTransitionEdgeCount,
+    crossDissolveCount: timeline.transition.crossDissolveCount,
+    transitionProofSha256: timeline.transition.transitionProofSha256,
+    transitionProof: timeline.transition.transitionProof,
     error: null,
   };
-  return {state: "INVALID", current: false, applicable: true, command, receiptSha256: null, assemblyPlanSha256: null, palmierFcpxmlSha256: null, error: timeline.detail ?? `PALMIER_TIMELINE_${timeline.state}`};
+  return {state: "INVALID", current: false, applicable: true, command, receiptSha256: null, assemblyPlanSha256: null, palmierFcpxmlSha256: null, ...emptyTransition, error: timeline.detail ?? `PALMIER_TIMELINE_${timeline.state}`};
 };
 
 const buildActions = (movieId: MovieId, projectMotionCommand: string, projectRemotionIdentityCommand: string, palmierTimelineCommand: string) => {
@@ -63,7 +93,7 @@ const buildActions = (movieId: MovieId, projectMotionCommand: string, projectRem
     {order: 1, kind: "SAFE_PREP" as const, label: "Recovery sidecarをCURRENT化", command: `cd motion-studio && node --no-warnings scripts/export-wedding-davinci-production-recovery.mts --movie=${movieId}`, humanOnly: false},
     {order: 2, kind: "PROJECT_MOTION_PREFLIGHT" as const, label: "Project Motion provenanceを再検証", command: `cd motion-studio && ${projectMotionCommand}`, humanOnly: false, note: "CURRENT / NOT_APPLICABLE / INVALID のlive判定をMac Actual開始前に再確認する。browser表示だけでCURRENTとは扱わない。"},
     {order: 3, kind: "PROJECT_REMOTION_IDENTITY_PREFLIGHT" as const, label: "Project Remotion identityを再検証", command: `cd motion-studio && ${projectRemotionIdentityCommand}`, humanOnly: false, note: "Project Typography batch / identity receipt / Resolve sidecar / recovery chainをMac Actual開始前に再検証する。generated snapshot表示だけでCURRENTとは扱わない。"},
-    {order: 4, kind: "PALMIER_TIMELINE_PREFLIGHT" as const, label: "Palmier timeline / real FCPXMLを再検証", command: `cd motion-studio && ${palmierTimelineCommand}`, humanOnly: false, note: "Project Remotion typography使用時はreceipt / Assembly Plan / real FCPXML SHAがCURRENTであることをActual evidence init前に確認する。CURRENT表示はPalmier GUI Actual証明ではない。"},
+    {order: 4, kind: "PALMIER_TIMELINE_PREFLIGHT" as const, label: "Palmier timeline / transition proofを再検証", command: `cd motion-studio && ${palmierTimelineCommand}`, humanOnly: false, note: "Project Remotion typography使用時はreceipt / Assembly Plan / real FCPXML SHAに加え、transition edge proofとproof SHAがCURRENTであることをActual evidence init前に確認する。CURRENT表示はPalmier/transition GUI Actual証明ではない。"},
     {order: 5, kind: "EVIDENCE_INIT" as const, label: "Actual evidence templateを初期化", command: `cd motion-studio && node --no-warnings scripts/${prefix}-v1-davinci-finishing-evidence.mts --init`, humanOnly: false, note: "作成時点では全GUI verdictがNOT_RUN。template作成はActual実行ではない。"},
     {order: 6, kind: "MAC_GUI_ACTUAL" as const, label: "MacのDaVinci ResolveでActual確認", command: null, humanOnly: true, checklist: manualChecklist},
     {order: 7, kind: "STRICT_VERIFY" as const, label: "Current Actual evidenceをstrict検証", command: `cd motion-studio && node --no-warnings scripts/${prefix}-v1-davinci-finishing-evidence.mts --strict`, humanOnly: false},
@@ -104,7 +134,7 @@ export function buildWeddingDavinciActualSessionPlan() {
     authority: "MOTION_ZUKAN_DERIVED_MAC_DAVINCI_ACTUAL_SESSION_PLAN" as const,
     projectRemotionIdentitySnapshot: {schemaVersion: weddingProjectRemotionIdentityPreflight.schemaVersion, authority: weddingProjectRemotionIdentityPreflight.authority},
     palmierTimelineSnapshot: {schemaVersion: weddingProjectRemotionStageStatus.schemaVersion, authority: weddingProjectRemotionStageStatus.authority},
-    evidenceBoundary: {palmierGuiActual: "NOT_PROMOTED_BY_DASHBOARD" as const, macRemotionStudioGuiActual: "NOT_PROMOTED_BY_DASHBOARD" as const, macDavinciResolveGuiActual: "NOT_PROMOTED_BY_DASHBOARD" as const, humanFinalApproval: "NOT_PROMOTED_BY_DASHBOARD" as const, productionReady: false as const},
+    evidenceBoundary: {palmierGuiActual: "NOT_PROMOTED_BY_DASHBOARD" as const, transitionAppliedGuiActual: "NOT_PROMOTED_BY_DASHBOARD" as const, macRemotionStudioGuiActual: "NOT_PROMOTED_BY_DASHBOARD" as const, macDavinciResolveGuiActual: "NOT_PROMOTED_BY_DASHBOARD" as const, humanFinalApproval: "NOT_PROMOTED_BY_DASHBOARD" as const, productionReady: false as const},
     sessionOrder: ["opening", "profile"] as const,
     projects: {opening: buildProject("opening"), profile: buildProject("profile")},
     weddingFinalization: [
@@ -116,7 +146,7 @@ export function buildWeddingDavinciActualSessionPlan() {
       "DASHBOARD_PLAN_EXISTS != GUI_ACTUAL_EXECUTED",
       "PROJECT_MOTION_PREFLIGHT_STATE_TRANSPORTED_WITH_SESSION_PLAN", "PROJECT_MOTION_PREFLIGHT_INVALID => SESSION_PLAN_BLOCKED", "PROJECT_MOTION_PREFLIGHT_CURRENT != GUI_ACTUAL_PASS",
       "PROJECT_REMOTION_IDENTITY_PREFLIGHT_STATE_TRANSPORTED_WITH_SESSION_PLAN", "PROJECT_REMOTION_IDENTITY_PREFLIGHT_INVALID => SESSION_PLAN_BLOCKED", "PROJECT_REMOTION_IDENTITY_CURRENT != GUI_ACTUAL_PASS",
-      "PALMIER_TIMELINE_PREFLIGHT_STATE_TRANSPORTED_WITH_SESSION_PLAN", "PALMIER_TIMELINE_PREFLIGHT_INVALID => SESSION_PLAN_BLOCKED", "PALMIER_TIMELINE_CURRENT != PALMIER_GUI_ACTUAL_PROVEN", "PALMIER_TIMELINE_CURRENT != GUI_ACTUAL_PASS",
+      "PALMIER_TIMELINE_PREFLIGHT_STATE_TRANSPORTED_WITH_SESSION_PLAN", "PALMIER_TIMELINE_PREFLIGHT_INVALID => SESSION_PLAN_BLOCKED", "PALMIER_TRANSITION_PROOF_SUMMARY_VISIBLE_IN_MOTION_ZUKAN", "PALMIER_TRANSITION_PROOF_CURRENT != TRANSITION_GUI_ACTUAL_PASS", "PALMIER_TIMELINE_CURRENT != PALMIER_GUI_ACTUAL_PROVEN", "PALMIER_TIMELINE_CURRENT != GUI_ACTUAL_PASS",
       "EVIDENCE_TEMPLATE_EXISTS != GUI_ACTUAL_PASS", "CI_MUST_NOT_PROMOTE_MAC_GUI_ACTUAL", "FINAL_HUMAN_APPROVAL_REQUIRES_STRICT_CURRENT_ACTUAL_EVIDENCE",
     ],
   } as const;
