@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - 'motion-studio/scripts/wedding-venue-delivery-redundancy.mts'
+      - 'motion-studio/scripts/wedding-venue-delivery-redundancy-currentness.mts'
       - 'motion-studio/scripts/check-wedding-venue-delivery-redundancy.mts'
       - 'motion-studio/scripts/wedding-venue-delivery-package-verify.mts'
       - '.github/workflows/wedding-venue-delivery-redundancy-ci.yml'
@@ -11,6 +12,7 @@ on:
     branches: [main]
     paths:
       - 'motion-studio/scripts/wedding-venue-delivery-redundancy.mts'
+      - 'motion-studio/scripts/wedding-venue-delivery-redundancy-currentness.mts'
       - 'motion-studio/scripts/check-wedding-venue-delivery-redundancy.mts'
       - 'motion-studio/scripts/wedding-venue-delivery-package-verify.mts'
       - '.github/workflows/wedding-venue-delivery-redundancy-ci.yml'
@@ -33,6 +35,6 @@ jobs:
             sudo apt-get update
             sudo apt-get install -y ffmpeg
           fi
-      - name: Run real-MP4 three-copy redundancy fixtures
+      - name: Run real-MP4 three-copy redundancy and strict-current fixtures
         working-directory: motion-studio
         run: node --no-warnings scripts/check-wedding-venue-delivery-redundancy.mts
