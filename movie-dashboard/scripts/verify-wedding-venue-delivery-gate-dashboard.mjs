@@ -5,6 +5,7 @@ const root = process.cwd();
 const read = (path) => readFileSync(join(root, path), 'utf8');
 const model = read('src/data/weddingVenueDeliveryGate.ts');
 const page = read('src/pages/WeddingVenueDeliveryGate.tsx');
+const actualOperator = read('src/components/WeddingVenueDeliveryActualOperator.tsx');
 const app = read('src/App.tsx');
 
 const requireText = (source, value, label) => {
@@ -49,10 +50,29 @@ for (const token of [
   '3-copy receipt SHA',
   'Departure report binds receipt SHA',
   'CANONICAL OPERATOR CHAIN',
+  'WeddingVenueDeliveryActualOperator',
   'physical USB',
   'cloud upload',
   'venue playback',
 ]) requireText(page, token, 'gate page');
+
+for (const token of [
+  'HUMAN VENUE ACTUAL / POST-DELIVERY',
+  'wedding-venue-delivery-actual-evidence/v1',
+  'HUMAN_VENUE_DELIVERY_ACTUAL',
+  'LIVE_CURRENTNESS_NOT_CURRENT',
+  'VENUE_ACTUAL_RECEIPT_SHA_STALE',
+  'PRIMARY_USB',
+  'BACKUP_USB',
+  'CLOUD_BACKUP',
+  'NOT_RUN',
+  'PASS',
+  'FAIL',
+  'wedding-venue-delivery-actual-evidence.mts --init',
+  'wedding-venue-delivery-actual-evidence.mts --strict --json',
+  'EXPORT HUMAN EVIDENCE JSON',
+  '画面はPASSを自動設定しません',
+]) requireText(actualOperator, token, 'Human Actual operator');
 
 requireText(app, 'movie-coach/motion-library/venue-delivery', 'App route');
 requireText(app, 'WeddingVenueDeliveryGate', 'App import');
@@ -61,5 +81,6 @@ console.log('✅ Wedding Venue Delivery Gate v3 dashboard contract passed');
 console.log('✅ Projection → package → offline verification → receipt → live redundancy currentness bindings are visible');
 console.log('✅ receipt alone cannot report VENUE DELIVERY READY; departure strict-current is required');
 console.log('✅ PRIMARY_USB / BACKUP_USB / CLOUD_BACKUP live copies are all required exactly once');
-console.log('✅ Opening/Profile approved, source and live redundant-copy SHAs are fail-closed');
-console.log('✅ physical USB / cloud upload / venue playback Actual remain unpromoted');
+console.log('✅ post-delivery Human Actual operator stays locked until transport/live bindings are CURRENT');
+console.log('✅ Human Actual editing starts from canonical NOT_RUN evidence and never auto-promotes PASS');
+console.log('✅ physical USB / cloud upload / venue playback Actual remain Human-only');
