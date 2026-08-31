@@ -19,7 +19,7 @@ import {getPatternPreview, motionPatterns} from "../data/visualMotionLibrary";
 const FPS = 30;
 
 function shellSingleQuote(value: string) {
-  return `'${value.replaceAll("'", `'"'"'`)}'`;
+  return `'${value.split("'").join(`'"'"'`)}'`;
 }
 
 function candidateRenderCommand(
