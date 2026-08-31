@@ -24,6 +24,7 @@ const repoRoot = path.resolve(root, '..');
 const engines = fs.readFileSync(path.join(root, 'src/motion-kit/engines.tsx'), 'utf8');
 const presets = fs.readFileSync(path.join(root, 'src/motion-kit/renderablePresets.ts'), 'utf8');
 const reel = fs.readFileSync(path.join(root, 'src/compositions/common/StartMotionReel.tsx'), 'utf8');
+const startSyncComposition = fs.readFileSync(path.join(root, 'src/compositions/common/JapaneseFriendsOpeningStartSync.tsx'), 'utf8');
 const rootFile = fs.readFileSync(path.join(root, 'src/StartMotionKitRoot.tsx'), 'utf8');
 const startSyncRender = fs.readFileSync(path.join(root, 'scripts/render-japanese-friends-opening-start-sync.mts'), 'utf8');
 const index = fs.readFileSync(path.join(root, 'src/index-start-motion-kit.ts'), 'utf8');
@@ -84,6 +85,18 @@ for (const token of ['id="JapaneseFriendsOpeningDemoV1"', 'japaneseFriendsOpenin
 if (startWeddingEditDurationInFrames !== 4368) errors.push(`StaRt sync opening must remain 145.6 seconds / 4368 frames, found ${startWeddingEditDurationInFrames}`);
 for (const token of ['id="JapaneseFriendsOpeningStartSyncV1"', 'startWeddingEditDurationInFrames', 'defaultProps={{audioPath: null, lyricPhrases: []}}']) {
   requireText(rootFile, token, `StaRt sync opening composition wiring missing: ${token}`);
+}
+for (const token of [
+  'function CharacterBurst',
+  'function WordTiles',
+  'function StretchLyric',
+  'function BeatGraphics',
+  "role: 'GROOM'",
+  "role: 'BRIDE'",
+  "gridTemplateColumns: 'repeat(2, 1fr)'",
+  'Math.floor(beatIndex / 4)',
+]) {
+  requireText(startSyncComposition, token, `StaRt sync uptempo/profile treatment missing: ${token}`);
 }
 for (const token of [
   'local/lyrics-wedding-edit.local.json',
