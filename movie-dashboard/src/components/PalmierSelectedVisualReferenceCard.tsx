@@ -30,6 +30,7 @@ function baseName(path: string) {
 export function PalmierSelectedVisualReferenceCard({projectId}: {projectId: SceneProjectId}) {
   const [manifest, setManifest] = useState<SelectedSceneManifest | null>(null);
   const [activeSceneId, setActiveSceneId] = useState<string | null>(null);
+  const [operatorSyncedSceneId, setOperatorSyncedSceneId] = useState<string | null>(null);
   const [videos, setVideos] = useState<Record<string, LocalVideo>>({});
   const [error, setError] = useState<string | null>(null);
   const objectUrls = useRef<Set<string>>(new Set());
@@ -38,6 +39,32 @@ export function PalmierSelectedVisualReferenceCard({projectId}: {projectId: Scen
     objectUrls.current.forEach((url) => URL.revokeObjectURL(url));
     objectUrls.current.clear();
   }, []);
+
+  useEffect(() => {
+    const operatorSelector = `[data-palmier-assembly-operator="${projectId}"]`;
+    const syncFromOperator = () => {
+      const operator = document.querySelector<HTMLElement>(operatorSelector);
+      const active = operator?.querySelector<HTMLElement>('[data-palmier-active-scene="true"]');
+      if (!active?.id) return;
+      const prefix = `palmier-${projectId}-`;
+      const revisionKey = active.id.startsWith(prefix) ? active.id.slice(prefix.length) : null;
+      const splitIndex = revisionKey?.lastIndexOf("@") ?? -1;
+      const sceneId = splitIndex > 0 ? revisionKey!.slice(0, splitIndex) : null;
+      if (!sceneId) return;
+      setOperatorSyncedSceneId(sceneId);
+      setActiveSceneId(sceneId);
+    };
+
+    syncFromOperator();
+    const observer = new MutationObserver(syncFromOperator);
+    observer.observe(document.body, {
+      subtree: true,
+      childList: true,
+      attributes: true,
+      attributeFilter: ["data-palmier-active-scene"],
+    });
+    return () => observer.disconnect();
+  }, [projectId]);
 
   async function loadManifest(file: File | null) {
     if (!file) return;
@@ -55,7 +82,10 @@ export function PalmierSelectedVisualReferenceCard({projectId}: {projectId: Scen
         !Array.isArray(parsed.scenes)
       ) throw new Error("manifest identity/evidence boundary mismatch");
       setManifest(parsed);
-      setActiveSceneId(parsed.scenes[0]?.sceneId ?? null);
+      const preferred = operatorSyncedSceneId && parsed.scenes.some((scene) => scene.sceneId === operatorSyncedSceneId)
+        ? operatorSyncedSceneId
+        : parsed.scenes[0]?.sceneId ?? null;
+      setActiveSceneId(preferred);
     } catch (cause) {
       setManifest(null);
       setActiveSceneId(null);
@@ -85,6 +115,7 @@ export function PalmierSelectedVisualReferenceCard({projectId}: {projectId: Scen
   const activeScene = activeIndex >= 0 ? manifest?.scenes[activeIndex] ?? null : null;
   const activeVideo = activeScene ? videos[baseName(activeScene.output)] ?? null : null;
   const matchedCount = manifest?.scenes.filter((scene) => Boolean(videos[baseName(scene.output)])).length ?? 0;
+  const followsOperator = Boolean(activeScene && operatorSyncedSceneId === activeScene.sceneId);
 
   function move(delta: number) {
     if (!manifest || manifest.scenes.length === 0) return;
@@ -93,13 +124,14 @@ export function PalmierSelectedVisualReferenceCard({projectId}: {projectId: Scen
   }
 
   return (
-    <section className="mt-3 border-2 border-indigo-300 dark:border-indigo-800 p-3" data-palmier-selected-visual-reference={projectId}>
+    <section className="mt-3 border-2 border-indigo-300 dark:border-indigo-800 p-3" data-palmier-selected-visual-reference={projectId} data-palmier-visual-sync={followsOperator ? "OPERATOR_ACTIVE" : "MANUAL"}>
       <div className="flex flex-wrap items-start justify-between gap-2">
         <div>
           <p className="text-[8px] font-semibold tracking-[0.14em] text-indigo-700 dark:text-indigo-300">PALMIER SELECTED VISUAL REFERENCE / {projectId.toUpperCase()}</p>
-          <p className="mt-1 text-[8px] leading-4 text-navy-500 dark:text-navy-300">#799のselected Scene render manifestとMP4をそのまま読み込み、Palmier配置前にHuman-selected pattern / Role / exact timingの見た目をScene順で確認します。</p>
+          <p className="mt-1 text-[8px] leading-4 text-navy-500 dark:text-navy-300">#799のselected Scene render manifestとMP4をそのまま読み込み、Palmier Assembly Operatorの「次の未完Scene」とvisual referenceを自動同期します。</p>
         </div>
-        <div className="flex flex-wrap gap-1.5">
+        <div className="flex flex-wrap items-center gap-1.5">
+          <span className={`border px-2 py-1 font-mono text-[7px] ${followsOperator ? "border-emerald-300 text-emerald-700 dark:border-emerald-800 dark:text-emerald-300" : "border-sand-300 text-navy-400 dark:border-navy-700"}`}>{followsOperator ? "FOLLOWING OPERATOR" : "MANUAL VISUAL"}</span>
           <label className="cursor-pointer border border-indigo-300 dark:border-indigo-800 px-2 py-1 text-[7px] font-semibold text-indigo-700 dark:text-indigo-300">manifest<input type="file" accept="application/json,.json" className="sr-only" onChange={(event) => void loadManifest(event.currentTarget.files?.[0] ?? null)} /></label>
           <label className="cursor-pointer border border-indigo-300 dark:border-indigo-800 px-2 py-1 text-[7px] font-semibold text-indigo-700 dark:text-indigo-300">selected MP4<input type="file" multiple accept="video/mp4,.mp4" className="sr-only" onChange={(event) => loadVideos(event.currentTarget.files)} /></label>
         </div>
@@ -138,16 +170,16 @@ export function PalmierSelectedVisualReferenceCard({projectId}: {projectId: Scen
                 <p>class {activeScene.selectionClass ?? "CUSTOM"}</p>
                 <p className="mt-1 font-mono">{activeScene.timeline.startSeconds.toFixed(2)}s → {activeScene.timeline.endSeconds.toFixed(2)}s / {activeScene.timeline.durationSeconds.toFixed(2)}s / {activeScene.timeline.frames}f</p>
                 <p className="mt-1 break-all font-mono text-[6px]">render SHA {activeScene.render.sha256 ?? "NOT_RENDERED"}</p>
-                <p className="mt-2 border-l-2 border-indigo-300 pl-2">このvisualを見ながら下のPalmier Assembly Operatorで同じScene順・Role・marker・timingを配置します。</p>
+                <p className="mt-2 border-l-2 border-indigo-300 pl-2">{followsOperator ? "Assembly Operatorのactive Sceneと同期中。checklist完了でoperatorが次Sceneへauto-advanceすると、このvisualも同じSceneへ切り替わります。" : "手動Scene選択中。Operatorがactive Sceneを変更すると再び自動同期します。"}</p>
               </div>
             </article>
           ) : null}
         </>
       ) : (
-        <p className="mt-2 border border-dashed border-indigo-200 dark:border-indigo-900 p-2 text-[7px] leading-3 text-navy-400">先にProject Deliveryでselected Sceneを一括renderし、そのmanifestとMP4をここへ読み込んでください。</p>
+        <p className="mt-2 border border-dashed border-indigo-200 dark:border-indigo-900 p-2 text-[7px] leading-3 text-navy-400">先にProject Deliveryでselected Sceneを一括renderし、そのmanifestとMP4をここへ読み込んでください。Operator active Sceneはmanifest読込前から監視しています。</p>
       )}
 
-      <p className="mt-2 border-l-2 border-amber-300 pl-2 text-[7px] leading-3 text-amber-800 dark:text-amber-200">browser-memory visual reference only。ファイル読込・再生・Scene切替はPalmier GUI Actual / Remotion Studio GUI Actual / Mac DaVinci GUI Actual / productionReadyを昇格しません。</p>
+      <p className="mt-2 border-l-2 border-amber-300 pl-2 text-[7px] leading-3 text-amber-800 dark:text-amber-200">browser-memory visual reference only。DOM上のOperator active state同期・ファイル読込・再生・Scene切替はPalmier GUI Actual / Remotion Studio GUI Actual / Mac DaVinci GUI Actual / productionReadyを昇格しません。</p>
     </section>
   );
 }
