@@ -87,8 +87,25 @@ const palmierTimelinePreflight = project.palmierTimelinePreflight ?? {
   receiptSha256: null,
   assemblyPlanSha256: null,
   palmierFcpxmlSha256: null,
+  transitionEdgeCount: null,
+  crossDissolveCount: null,
+  transitionProofSha256: null,
+  recoveryTransitionProofSha256: null,
+  transitionProof: [],
   error: 'SESSION_PLAN_PALMIER_TIMELINE_PREFLIGHT_MISSING',
 };
+const transitionProofTransportCurrent = palmierTimelinePreflight.state !== 'CURRENT' || (
+  Number.isInteger(palmierTimelinePreflight.transitionEdgeCount) &&
+  Number.isInteger(palmierTimelinePreflight.crossDissolveCount) &&
+  palmierTimelinePreflight.transitionEdgeCount >= 0 &&
+  palmierTimelinePreflight.crossDissolveCount >= 0 &&
+  palmierTimelinePreflight.crossDissolveCount <= palmierTimelinePreflight.transitionEdgeCount &&
+  /^[a-f0-9]{64}$/.test(palmierTimelinePreflight.transitionProofSha256 ?? '') &&
+  palmierTimelinePreflight.transitionProofSha256 === palmierTimelinePreflight.recoveryTransitionProofSha256 &&
+  Array.isArray(palmierTimelinePreflight.transitionProof) &&
+  palmierTimelinePreflight.transitionProof.length === palmierTimelinePreflight.transitionEdgeCount &&
+  palmierTimelinePreflight.transitionProof.every((edge: any) => edge?.state === 'CURRENT' && typeof edge?.edgeId === 'string' && ['HARD_CUT', 'CROSS_DISSOLVE'].includes(edge?.transition))
+);
 let state: StartGateState;
 let nextAction: {kind: string; command: string | null; humanOnly: boolean; reason: string};
 
@@ -120,15 +137,17 @@ if (transport.state !== 'CURRENT' || transport.current !== true) {
       ? `Project Remotion identity preflight is INVALID: ${projectRemotionIdentityPreflight.error}. Regenerate the canonical production handoff, repair the batch/receipt/Resolve identity sidecar/recovery chain, regenerate the Session Plan, and revalidate transport before Mac GUI Actual.`
       : 'Project Remotion identity preflight is INVALID. Regenerate the canonical production handoff and Session Plan, then revalidate transport before Mac GUI Actual.',
   };
-} else if (palmierTimelinePreflight.state === 'INVALID') {
+} else if (palmierTimelinePreflight.state === 'INVALID' || !transitionProofTransportCurrent) {
   state = 'PALMIER_TIMELINE_BLOCKED';
   nextAction = {
     kind: 'REVALIDATE_PALMIER_TIMELINE',
     command: palmierTimelinePreflight.command,
     humanOnly: false,
-    reason: palmierTimelinePreflight.error
-      ? `Palmier timeline preflight is INVALID: ${palmierTimelinePreflight.error}. Re-verify the real Palmier FCPXML against the current Assembly Plan, regenerate the Session Plan, and revalidate transport before Mac GUI Actual.`
-      : 'Palmier timeline preflight is INVALID. Re-verify the real Palmier FCPXML against the current Assembly Plan, regenerate the Session Plan, and revalidate transport before Mac GUI Actual.',
+    reason: !transitionProofTransportCurrent
+      ? 'Palmier transition proof transport is missing, malformed, or no longer matches the recovery-bound proof SHA. Re-verify the real Palmier FCPXML, regenerate the Session Plan, and revalidate transport before Mac GUI Actual.'
+      : palmierTimelinePreflight.error
+        ? `Palmier timeline preflight is INVALID: ${palmierTimelinePreflight.error}. Re-verify the real Palmier FCPXML against the current Assembly Plan, regenerate the Session Plan, and revalidate transport before Mac GUI Actual.`
+        : 'Palmier timeline preflight is INVALID. Re-verify the real Palmier FCPXML against the current Assembly Plan, regenerate the Session Plan, and revalidate transport before Mac GUI Actual.',
   };
 } else if (!project.handoffIdentitySha256 || project.sessionState === 'BLOCKED_UPSTREAM') {
   state = 'UPSTREAM_BLOCKED';
@@ -153,7 +172,7 @@ if (transport.state !== 'CURRENT' || transport.current !== true) {
     kind: 'MAC_GUI_ACTUAL',
     command: null,
     humanOnly: true,
-    reason: 'Transport is CURRENT, Project Motion / Project Remotion identity / Palmier timeline are CURRENT or NOT_APPLICABLE, and an Actual evidence template exists in progress. The next step is the real human Mac DaVinci GUI review.',
+    reason: 'Transport is CURRENT, Project Motion / Project Remotion identity / Palmier timeline are CURRENT or NOT_APPLICABLE, the recovery-bound transition proof is CURRENT, and an Actual evidence template exists in progress. The next step is the real human Mac DaVinci GUI review.',
   };
 } else if (evidenceState === 'PASS') {
   const verify = project.orderedActions.find((action: any) => action.kind === 'STRICT_VERIFY');
@@ -220,6 +239,12 @@ const gate = {
       receiptSha256: palmierTimelinePreflight.receiptSha256 ?? null,
       assemblyPlanSha256: palmierTimelinePreflight.assemblyPlanSha256 ?? null,
       palmierFcpxmlSha256: palmierTimelinePreflight.palmierFcpxmlSha256 ?? null,
+      transitionEdgeCount: palmierTimelinePreflight.transitionEdgeCount ?? null,
+      crossDissolveCount: palmierTimelinePreflight.crossDissolveCount ?? null,
+      transitionProofSha256: palmierTimelinePreflight.transitionProofSha256 ?? null,
+      recoveryTransitionProofSha256: palmierTimelinePreflight.recoveryTransitionProofSha256 ?? null,
+      transitionProofCurrent: transitionProofTransportCurrent,
+      transitionProof: [...(palmierTimelinePreflight.transitionProof ?? [])],
       error: palmierTimelinePreflight.error ?? null,
     },
     evidenceState,
@@ -231,6 +256,7 @@ const gate = {
   evidenceBoundary: {
     macRemotionStudioGuiActual: 'NOT_PROMOTED_BY_START_GATE',
     palmierGuiActual: 'NOT_PROMOTED_BY_START_GATE',
+    palmierTransitionAppliedGuiActual: 'NOT_PROMOTED_BY_START_GATE',
     macDavinciResolveGuiActual: state === 'GUI_ACTUAL_ALLOWED' ? 'HUMAN_ACTION_ALLOWED_NOT_EXECUTED' : 'NOT_RUN_OR_NOT_ALLOWED',
     humanFinalApproval: 'NOT_PROMOTED_BY_START_GATE',
     productionReady: false,
@@ -243,7 +269,10 @@ const gate = {
     'PROJECT_REMOTION_IDENTITY_INVALID => GUI_ACTUAL_START_BLOCKED',
     'PALMIER_TIMELINE_CURRENT_OR_NOT_APPLICABLE_REQUIRED_BEFORE_GUI_ACTUAL',
     'PALMIER_TIMELINE_INVALID => GUI_ACTUAL_START_BLOCKED',
+    'PALMIER_TRANSITION_PROOF_CURRENT_REQUIRED_BEFORE_GUI_ACTUAL',
+    'PALMIER_TRANSITION_PROOF_SHA_DRIFT => GUI_ACTUAL_START_BLOCKED',
     'PALMIER_TIMELINE_CURRENT != PALMIER_GUI_ACTUAL_PROVEN',
+    'PALMIER_TRANSITION_PROOF_CURRENT != TRANSITION_GUI_ACTUAL_PASS',
     'PALMIER_TIMELINE_CURRENT != MAC_DAVINCI_GUI_ACTUAL_PASS',
     'EVIDENCE_TEMPLATE_REQUIRED_BEFORE_GUI_ACTUAL',
     'START_GATE_ARTIFACT_EXISTS != GUI_ACTUAL_EXECUTED',
@@ -263,6 +292,9 @@ else {
   console.log(`Wedding DaVinci GUI Actual start gate: ${movieId}=${gate.state}`);
   console.log(`next=${gate.nextAction.kind}`);
   console.log(`artifact=${relativeOutputPath}${process.argv.includes('--write') ? ' / WRITTEN' : ' / NOT_WRITTEN'}`);
+  if (gate.project.palmierTimelinePreflight.state === 'CURRENT') {
+    console.log(`palmierTransitions=${gate.project.palmierTimelinePreflight.transitionEdgeCount} / crossDissolves=${gate.project.palmierTimelinePreflight.crossDissolveCount} / proof=${gate.project.palmierTimelinePreflight.transitionProofSha256}`);
+  }
   for (const mismatch of gate.transport.mismatches) console.log(`BLOCK / ${mismatch}`);
 }
 
