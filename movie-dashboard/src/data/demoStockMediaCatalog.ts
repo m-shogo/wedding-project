@@ -74,6 +74,22 @@ export interface JapaneseFriendsOpeningRender {
   finalPublicationApproved: false;
 }
 
+export interface JapaneseFriendsOpeningStartSyncRender {
+  id: "japanese-friends-opening-start-sync-v1";
+  authority: "PRIVATE_START_SYNC_DEMO";
+  title: string;
+  localPath: string;
+  manifestPath: string;
+  durationSeconds: 145.6;
+  width: 1920;
+  height: 1080;
+  fps: 30;
+  bpm: 187.5;
+  lyricsIncluded: true;
+  rightsCleared: false;
+  finalPublicationApproved: false;
+}
+
 export interface DemoStockMediaPack {
   schemaVersion: "motion-zukan-demo-stock-pack/v1";
   authority: "DEMO_ONLY_NOT_PRODUCTION";
@@ -146,6 +162,21 @@ export const demoStockMediaCatalog = {
     fictionalCast: true,
     finalPublicationApproved: false,
   } satisfies JapaneseFriendsOpeningRender,
+  japaneseFriendsOpeningStartSync: {
+    id: "japanese-friends-opening-start-sync-v1",
+    authority: "PRIVATE_START_SYNC_DEMO",
+    title: "Mrs. GREEN APPLE『StaRt』歌詞・ビート同期OP",
+    localPath: "/demo-renders/japanese-friends-opening-start-sync-v1.mp4",
+    manifestPath: "/demo-renders/japanese-friends-opening-start-sync-v1.manifest.json",
+    durationSeconds: 145.6,
+    width: 1920,
+    height: 1080,
+    fps: 30,
+    bpm: 187.5,
+    lyricsIncluded: true,
+    rightsCleared: false,
+    finalPublicationApproved: false,
+  } satisfies JapaneseFriendsOpeningStartSyncRender,
 } as const;
 
 export function buildDemoStockMediaPack(genre: DemoBgmGenre): DemoStockMediaPack {

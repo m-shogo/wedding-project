@@ -17,6 +17,11 @@ import {
   japaneseFriendsOpeningDurationFrames,
   japaneseFriendsOpeningStory,
 } from '../src/data/japaneseFriendsOpeningStory.ts';
+import {
+  weddingEditAudioPath,
+  weddingEditDurationInFrames,
+  weddingEditLyricPhrases,
+} from '../src/data/startWeddingEdit/generated.ts';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const repoRoot = path.resolve(root, '..');
@@ -77,6 +82,14 @@ if (new Set(japaneseFriendsOpeningStory.map((scene) => scene.kind)).size < 8) er
 if (new Set(japaneseFriendsOpeningStory.map((scene) => scene.asset)).size !== 5) errors.push('Japanese friends opening must exercise all 5 generated dummy photo assets');
 for (const token of ['id="JapaneseFriendsOpeningDemoV1"', 'japaneseFriendsOpeningDurationFrames']) {
   requireText(rootFile, token, `Japanese friends opening composition wiring missing: ${token}`);
+}
+
+if (weddingEditDurationInFrames !== 4368) errors.push(`StaRt sync opening must remain 145.6 seconds / 4368 frames, found ${weddingEditDurationInFrames}`);
+if (weddingEditLyricPhrases.length !== 30) errors.push(`StaRt sync opening must retain 30 timed lyric phrases, found ${weddingEditLyricPhrases.length}`);
+if (!weddingEditAudioPath?.endsWith('start-wedding-edit.m4a')) errors.push('StaRt sync opening must retain the local wedding-edit audio binding');
+if (weddingEditLyricPhrases.filter((phrase) => phrase.threeHitFrameSecs?.length === 3).length !== 4) errors.push('StaRt sync opening must retain all four measured three-hit phrases');
+for (const token of ['id="JapaneseFriendsOpeningStartSyncV1"', 'weddingEditDurationInFrames']) {
+  requireText(rootFile, token, `StaRt sync opening composition wiring missing: ${token}`);
 }
 
 // --- transition-wipe direction/variant wiring regression check ---------------------------

@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "japanese-friends-opening-start-sync-manifest/v1",
+  "authority": "PRIVATE_START_SYNC_DEMO",
+  "publicationApproved": false,
+  "rightsStatus": "MUSIC_AND_LYRICS_NOT_CLEARED",
+  "generatedAt": "2026-08-31T02:44:43.970Z",
+  "artifact": {
+    "file": "japanese-friends-opening-start-sync-v1.mp4",
+    "sha256": "47583a4ab4ebf031a8d8cb6aac5712835a73526911842733bc8a66dac6307ee6",
+    "byteSize": 161470450
+  },
+  "source": {
+    "title": "StaRt",
+    "sourceAudioSha256": "2e40115b86e15f9d60a02623e83aa09edd4d69b6822fe2ad606b20c40f18828c",
+    "editEndSeconds": 145.6,
+    "bpm": 187.5
+  },
+  "video": {
+    "codec": "h264",
+    "width": 1920,
+    "height": 1080,
+    "fps": "30/1",
+    "durationSeconds": 145.642667
+  },
+  "audio": {
+    "codec": "aac",
+    "sampleRate": "48000",
+    "channels": 2
+  },
+  "timing": {
+    "lyricPhraseCount": 30,
+    "measuredThreeHitPhraseCount": 4,
+    "verifiedByListening": false,
+    "humanReviewRequired": true
+  },
+  "qa": {
+    "status": "AUTOMATED_PASSED",
+    "checks": [
+      "resolution",
+      "fps",
+      "duration",
+      "audio-format",
+      "black-detect",
+      "silence-detect"
+    ]
+  }
+}

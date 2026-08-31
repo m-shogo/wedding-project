@@ -22,6 +22,7 @@ export function DemoStockMediaShelf() {
   const [feedback, setFeedback] = useState("");
   const [productionManifest, setProductionManifest] = useState<ProductionManifestState>({ status: "LOADING" });
   const [friendsOpeningManifest, setFriendsOpeningManifest] = useState<ProductionManifestState>({ status: "LOADING" });
+  const [startSyncManifest, setStartSyncManifest] = useState<ProductionManifestState>({ status: "LOADING" });
 
   useEffect(() => {
     const controller = new AbortController();
@@ -48,6 +49,34 @@ export function DemoStockMediaShelf() {
       .catch((error: unknown) => {
         if (error instanceof DOMException && error.name === "AbortError") return;
         setProductionManifest({ status: "INVALID" });
+      });
+    return () => controller.abort();
+  }, []);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    void fetch(demoStockMediaCatalog.japaneseFriendsOpeningStartSync.manifestPath, { cache: "no-store", signal: controller.signal })
+      .then(async (response) => {
+        if (!response.ok) throw new Error(`manifest HTTP ${response.status}`);
+        return response.json() as Promise<Record<string, unknown>>;
+      })
+      .then((manifest) => {
+        const artifact = manifest.artifact as Record<string, unknown> | undefined;
+        const qa = manifest.qa as Record<string, unknown> | undefined;
+        if (
+          manifest.schemaVersion !== "japanese-friends-opening-start-sync-manifest/v1" ||
+          manifest.authority !== "PRIVATE_START_SYNC_DEMO" ||
+          manifest.publicationApproved !== false ||
+          manifest.rightsStatus !== "MUSIC_AND_LYRICS_NOT_CLEARED" ||
+          qa?.status !== "AUTOMATED_PASSED" ||
+          typeof artifact?.sha256 !== "string" ||
+          typeof manifest.generatedAt !== "string"
+        ) throw new Error("manifest guard mismatch");
+        setStartSyncManifest({ status: "VALID", sha256: artifact.sha256, generatedAt: manifest.generatedAt });
+      })
+      .catch((error: unknown) => {
+        if (error instanceof DOMException && error.name === "AbortError") return;
+        setStartSyncManifest({ status: "INVALID" });
       });
     return () => controller.abort();
   }, []);
@@ -156,6 +185,24 @@ export function DemoStockMediaShelf() {
             <a href={demoStockMediaCatalog.japaneseFriendsOpening.manifestPath} target="_blank" rel="noreferrer" className="mt-1 inline-block underline text-sky-700 dark:text-sky-300">QA manifest JSONを開く</a>
           </div>
           <a href={demoStockMediaCatalog.japaneseFriendsOpening.localPath} download="japanese-friends-opening-demo-v1.mp4" className="border border-sky-700 bg-sky-700 px-3 py-2 font-semibold text-white">105秒MP4をダウンロード</a>
+        </div>
+      </article>
+
+      <article className="mt-5 overflow-hidden border-2 border-fuchsia-500 dark:border-fuchsia-700 bg-white dark:bg-navy-800">
+        <div className="p-3 border-b border-fuchsia-300 dark:border-fuchsia-800 bg-fuchsia-50 dark:bg-fuchsia-950/20">
+          <p className="text-[10px] tracking-[0.18em] font-semibold text-fuchsia-800 dark:text-fuchsia-200">START SYNC / PRIVATE WEDDING SCREENING ONLY</p>
+          <h3 className="mt-1 text-base font-bold text-navy-900 dark:text-sand-100">{demoStockMediaCatalog.japaneseFriendsOpeningStartSync.title}</h3>
+          <p className="mt-1 text-[10px] leading-4 text-fuchsia-800 dark:text-fuchsia-200">187.5 BPM、歌詞30フレーズ、実測3-hit 4か所へ同期。音源・歌詞の利用権は未確認のため、私的確認専用です。</p>
+        </div>
+        <video controls preload="metadata" playsInline src={demoStockMediaCatalog.japaneseFriendsOpeningStartSync.localPath} aria-label="StaRt歌詞・ビート同期145.6秒オープニングムービー" className="aspect-video w-full bg-black object-contain" />
+        <div className="flex flex-wrap items-center justify-between gap-3 p-3 text-[10px] text-navy-500 dark:text-navy-300">
+          <div>
+            <p>145.6秒 · 1920×1080 · 30fps · H.264/AAC · 187.5 BPM</p>
+            <p className="mt-1 font-semibold text-red-700 dark:text-red-300">MUSIC / LYRICS RIGHTS NOT CLEARED · 最終公開は未承認</p>
+            {startSyncManifest.status === "VALID" ? <p role="status" className="mt-1 font-mono text-emerald-700 dark:text-emerald-300">QA PASSED · SHA-256 {startSyncManifest.sha256.slice(0, 12)}…</p> : startSyncManifest.status === "INVALID" ? <p role="alert" className="mt-1 font-semibold text-red-700 dark:text-red-300">QA manifestを検証できません</p> : <p role="status" className="mt-1 text-navy-400">QA manifest確認中…</p>}
+            <a href={demoStockMediaCatalog.japaneseFriendsOpeningStartSync.manifestPath} target="_blank" rel="noreferrer" className="mt-1 inline-block underline text-fuchsia-700 dark:text-fuchsia-300">権利・QA manifest JSONを開く</a>
+          </div>
+          <a href={demoStockMediaCatalog.japaneseFriendsOpeningStartSync.localPath} download="japanese-friends-opening-start-sync-v1.mp4" className="border border-fuchsia-700 bg-fuchsia-700 px-3 py-2 font-semibold text-white">145.6秒MP4をダウンロード</a>
         </div>
       </article>
 
