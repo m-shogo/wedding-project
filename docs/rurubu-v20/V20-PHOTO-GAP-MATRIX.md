@@ -1,10 +1,14 @@
 # V20 Photo Gap Matrix
 
-Status: `LIVE_INPUT_GATE / SECOND_PASS_UPDATED`
+Status: `LIVE_INPUT_GATE / DUMMY_HANDOFF_LIST_ADDED`
 
 Purpose: make missing photo roles visible before Figma geometry hardens around placeholders.
 
 Important: `NOT YET SURFACED` means current Drive search has not surfaced a suitable confirmed real photo. It does NOT prove the photo does not exist elsewhere.
+
+Actionable handoff list:
+- exact photo requests, candidate counts, orientation and current Figma slots are maintained in `V20-PHOTO-REPLACEMENT-LIST.md`;
+- P04 and P06 keep explicit dummy images until those real sources arrive.
 
 ## Search evidence so far
 

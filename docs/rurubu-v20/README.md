@@ -63,21 +63,22 @@ Read in this order:
 14. `V20-PHOTO-INVENTORY-FIRST-PASS.md`
 15. `V20-HAWAII-RAW-PHOTO-REVIEW.md`
 16. `V20-PHOTO-GAP-MATRIX.md`
-17. `V20-PRODUCTION-GEOMETRY.md`
-18. `V20-PAGE-MANUALS.md`
-19. `V20-P07-SEATED-GUEST-MANUAL.md` — canonical override of the old schedule-first P07 section;
-20. page-role production briefs/addenda when present;
-21. `V20-GREYBOX-SILHOUETTE-SPEC.md`
-22. `V20-ASSET-FIRST-ASSEMBLY-CONTRACT.md`
-23. `V20-LAYER-OVERLAP-SYSTEM.md`
-24. `V20-EDITORIAL-CONTAINER-AND-TITLE-GRAMMAR.md`
-25. `V20-PARTS-SYSTEM.md`
-26. `V20-P01-COVER-PRODUCTION-BRIEF.md`
-27. `V20-P45-CENTER-SPREAD-PRODUCTION-BRIEF.md`
-28. `V20-ASSET-PRODUCTION-QUEUE.md`
-29. `V20-QUALITY-GATES.md`
-30. `V20-ACCEPTANCE-EVIDENCE.md`
-31. only then derive exact asset-generation and Figma placement instructions.
+17. `V20-PHOTO-REPLACEMENT-LIST.md`
+18. `V20-PRODUCTION-GEOMETRY.md`
+19. `V20-PAGE-MANUALS.md`
+20. `V20-P07-SEATED-GUEST-MANUAL.md` — canonical override of the old schedule-first P07 section;
+21. page-role production briefs/addenda when present;
+22. `V20-GREYBOX-SILHOUETTE-SPEC.md`
+23. `V20-ASSET-FIRST-ASSEMBLY-CONTRACT.md`
+24. `V20-LAYER-OVERLAP-SYSTEM.md`
+25. `V20-EDITORIAL-CONTAINER-AND-TITLE-GRAMMAR.md`
+26. `V20-PARTS-SYSTEM.md`
+27. `V20-P01-COVER-PRODUCTION-BRIEF.md`
+28. `V20-P45-CENTER-SPREAD-PRODUCTION-BRIEF.md`
+29. `V20-ASSET-PRODUCTION-QUEUE.md`
+30. `V20-QUALITY-GATES.md`
+31. `V20-ACCEPTANCE-EVIDENCE.md`
+32. only then derive exact asset-generation and Figma placement instructions.
 
 `V20-IDEA-BANK.md` is a controlled idea pool, not a mandatory design authority.
 

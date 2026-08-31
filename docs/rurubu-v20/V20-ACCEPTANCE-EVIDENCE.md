@@ -499,3 +499,23 @@ Largest remaining visible quality gap:
 
 Next exact task:
 retrieve pixel-open verified real everyday, food and Cookie/Melon sources; replace the temporary P06 image fills inside `3447:150`; then re-run spread `3447:90` and full-book contact `3465:2` QA without changing the adopted PNG tab/tape system.
+
+## Dummy-photo handoff pass — 2026-08-31
+
+The immediate real-photo replacement was deferred by user direction. Current dummy images remain visible so the book can continue to be reviewed before final source intake.
+
+Actionable replacement requests are now maintained in `V20-PHOTO-REPLACEMENT-LIST.md`:
+- priority A: three P04 travel roles and four P06 everyday roles;
+- priority B: two optional P07 atmosphere roles and one recommended P08 closing alternative;
+- priority C: P02/P03/P08 role-fit checks for existing real sources.
+
+Figma layer names now carry the matching request IDs:
+- P04 `3434:13` = `REQ-P04-01`, `3434:10` = `REQ-P04-02`, `3434:9` = `REQ-P04-03`;
+- P06 `3447:154` = `REQ-P06-01`, `3447:155` = `REQ-P06-02`, `3447:156` = `REQ-P06-03`, `3447:157` = `REQ-P06-04`;
+- P07 `3447:207` = `REQ-P07-01`, `3447:221` = `REQ-P07-02`;
+- P08 `3446:3` = `REQ-P08-01`.
+
+P04 `3434:3` and P06 `3447:150` were screenshot-reviewed after the metadata-only rename. Their visible layout, crops and adopted PNG editorial parts remain unchanged.
+
+Revised next exact task:
+continue non-photo layout/copy work with the current dummies. When the requested sources arrive, replace the independent fills by request ID, remove `REPLACE REQUIRED` only after source verification, and rerun spread/full-book QA.
