@@ -29,15 +29,16 @@ jobs:
             "schemaVersion":"wedding-palmier-typography-assembly-plan/v1",
             "authority":"CANONICAL_STAGED_PROJECT_REMOTION_BATCH",
             "movieId":"opening",
+            "timeline":{"transitions":[{"order":1,"edgeId":"scene-a->scene-b","fromSceneId":"scene-a","toSceneId":"scene-b","transition":"HARD_CUT","durationFrames":0,"sourceStatus":"DEFAULT_HARD_CUT"}]},
             "scenes":[
-              {"order":1,"sceneId":"scene-a","sourceRevision":"rev-a","patternId":"type-mask-reveal","palmier":{"markerId":"WEDDING_SCENE:scene-a","expectedXmlFileName":"a.fcpxml","projectTimelineXmlFileName":"opening.fcpxml"}},
-              {"order":2,"sceneId":"scene-b","sourceRevision":"rev-b","patternId":"type-char-stagger","palmier":{"markerId":"WEDDING_SCENE:scene-b","expectedXmlFileName":"b.fcpxml","projectTimelineXmlFileName":"opening.fcpxml"}}
+              {"order":1,"sceneId":"scene-a","sourceRevision":"rev-a","patternId":"type-mask-reveal","palmier":{"markerId":"WEDDING_SCENE:scene-a","expectedXmlFileName":"a.fcpxml","projectTimelineXmlFileName":"opening.fcpxml","transitionIn":null,"transitionOut":{"toSceneId":"scene-b","transition":"HARD_CUT","durationFrames":0}}},
+              {"order":2,"sceneId":"scene-b","sourceRevision":"rev-b","patternId":"type-char-stagger","palmier":{"markerId":"WEDDING_SCENE:scene-b","expectedXmlFileName":"b.fcpxml","projectTimelineXmlFileName":"opening.fcpxml","transitionIn":{"fromSceneId":"scene-a","transition":"HARD_CUT","durationFrames":0},"transitionOut":null}}
             ],
-            "summary":{"sceneCount":2,"palmierAssemblyReady":true,"productionReady":false}
+            "summary":{"sceneCount":2,"transitionEdgeCount":1,"crossDissolveCount":0,"palmierAssemblyReady":true,"productionReady":false}
           }
           JSON
           cat > /tmp/palmier-binding/opening.fcpxml <<'XML'
-          <fcpxml version="1.11"><library><event><project><sequence><spine><marker value="WEDDING_SCENE:scene-a"/><marker value="WEDDING_SCENE:scene-b"/></spine></sequence></project></event></library></fcpxml>
+          <fcpxml version="1.11"><library><event><project><sequence><spine><asset-clip><marker value="WEDDING_SCENE:scene-a"/></asset-clip><asset-clip><marker value="WEDDING_SCENE:scene-b"/></asset-clip></spine></sequence></project></event></library></fcpxml>
           XML
           cat > /tmp/palmier-binding/recovery.json <<'JSON'
           {
@@ -66,7 +67,10 @@ jobs:
           const fs = require('fs');
           const crypto = require('crypto');
           const recovery = JSON.parse(fs.readFileSync('/tmp/palmier-binding/recovery.json', 'utf8'));
+          const receipt = JSON.parse(fs.readFileSync('/tmp/palmier-binding/receipt.json', 'utf8'));
           const sha = (p) => crypto.createHash('sha256').update(fs.readFileSync(p)).digest('hex');
+          if (receipt.verification.transitionIntentMatchesAssemblyPlan !== true) throw new Error('transition proof missing');
+          if (receipt.verification.transitionChecks[0].expectedTransition !== 'HARD_CUT') throw new Error('hard-cut proof missing');
           const bound = recovery.palmierTimelineExport;
           if (bound.authority !== 'SHA_BOUND_PALMIER_TIMELINE_EXPORT_HANDOFF') throw new Error('authority mismatch');
           if (bound.state !== 'CURRENT' || bound.movieId !== 'opening') throw new Error('binding state mismatch');
