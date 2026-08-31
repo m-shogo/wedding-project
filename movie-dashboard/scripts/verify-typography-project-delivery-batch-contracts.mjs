@@ -10,6 +10,8 @@ const revalidationCard = read("src/components/ProjectTypographyRoleHandoffRevali
 const handoff = read("src/components/MaskRevealSceneHandoffCard.tsx");
 const scenePackage = read("src/data/typographySceneDeliveryPackage.ts");
 const roleManifest = read("src/data/projectTypographyRoleHandoffManifest.ts");
+const transitionStore = read("src/data/projectSceneTransitionSelectionStore.ts");
+const transitionCard = read("src/components/RhythmSceneTransitionCorrectionCard.tsx");
 
 const errors = [];
 const requireText = (source, token, message) => {
@@ -29,6 +31,10 @@ for (const token of [
   'STALE_HUMAN_SELECTED_TYPOGRAPHY_ROUTE',
   'HUMAN_SELECTED_TYPOGRAPHY_ROLE_REQUIRED',
   'STALE_HUMAN_SELECTED_TYPOGRAPHY_ROLE',
+  'STALE_HUMAN_SELECTED_TRANSITION',
+  'resolveProjectSceneTransitions(',
+  'transitions: transitions.map((transition) => ({...transition}))',
+  'staleTransitions === 0',
   'buildTypographySceneDeliveryPackage(scene, selection)',
   'buildTypographySceneRoleDeliveryPackage(scene, selection, context.productionRole)',
   'currentPackages === items.length',
@@ -53,9 +59,30 @@ for (const token of [
   'remotionIdentityVerificationState: identityVerificationState',
   'batchReadyはproductionReadyもRemotion identity currentnessも意味せず',
   'productionReady: false',
-  'stale contextをsilent rebaseしない',
+  'stale context/transitionをsilent rebaseしない',
   'production prep identity/stage commandのCURRENTもRemotion Studio GUI Actual / Mac DaVinci Actual / Human promotion',
 ]) requireText(batch, token, `project batch contract missing: ${token}`);
+
+for (const token of [
+  'schemaVersion: "project-scene-transition-selection/v1"',
+  'authority: "HUMAN_SELECTED_TRANSITION"',
+  '"HARD_CUT"',
+  '"CROSS_DISSOLVE"',
+  '"STALE_HUMAN_SELECTION"',
+  'fromRevision === fromScene.updatedAt',
+  'toRevision === toScene.updatedAt',
+  'MAX_CROSS_DISSOLVE_FRAMES = 30',
+  'MIN_CROSS_DISSOLVE_FRAMES = 6',
+]) requireText(transitionStore, token, `transition authority missing: ${token}`);
+
+for (const token of [
+  'HUMAN SCENE EDGE TRANSITION',
+  'request.axis !== "TRANSITION"',
+  'createProjectSceneTransitionSelection(',
+  'saveProjectSceneTransitionSelection(',
+  'Scene revisionが更新済みです',
+  'Remotion Studio GUI Actual / Palmier GUI Actual / Mac DaVinci GUI Actual',
+]) requireText(transitionCard, token, `transition correction UI missing: ${token}`);
 
 for (const token of [
   'schemaVersion: "wedding-movie-project-role-handoff/v1"',
@@ -122,6 +149,8 @@ requireText(handoff, 'import { TypographyProjectDeliveryBatchCard }', "Scene han
 requireText(handoff, '<TypographyProjectDeliveryBatchCard projectId={scene.projectId} />', "Scene handoff does not render project batch card");
 requireText(handoff, 'import { ProjectTypographyRoleHandoffRevalidationCard }', "Scene handoff does not import project revalidation card");
 requireText(handoff, '<ProjectTypographyRoleHandoffRevalidationCard projectId={scene.projectId} />', "Scene handoff does not render project revalidation card");
+requireText(handoff, 'import { RhythmSceneTransitionCorrectionCard }', "Scene handoff does not import transition correction card");
+requireText(handoff, '<RhythmSceneTransitionCorrectionCard scene={scene} />', "Scene handoff does not render transition correction card");
 requireText(scenePackage, 'actualEvidenceState: "NOT_RUN"', "Scene package no longer preserves NOT_RUN Actual evidence");
 requireText(scenePackage, 'productionReady: false', "Scene package no longer fails closed for production readiness");
 
@@ -140,4 +169,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log("Typography Project Delivery Batch contracts OK: UI export requires current route + persisted role context, the visible Remotion verification command now verifies downloaded operator artifacts and safe-stages them to canonical paths before handoff, while identity currentness, Studio/DaVinci Actual, and productionReady remain unclaimed.");
+console.log("Typography Project Delivery Batch contracts OK: UI export requires current route + persisted role context + current Human transition bindings; stale Scene-edge transition selections fail closed, while identity currentness, Studio/DaVinci Actual, and productionReady remain unclaimed.");
