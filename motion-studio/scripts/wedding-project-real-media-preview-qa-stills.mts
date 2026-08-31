@@ -34,6 +34,11 @@ function probeDimensions(path: string) {
     fail("REAL_MEDIA_PREVIEW_QA_STILL_PROBE_JSON_INVALID", path);
   }
 }
+function framingIdentity(scene: any) {
+  const framing = scene?.framing;
+  if (!framing || !["COVER", "CONTAIN"].includes(framing.fit) || !String(framing.revision ?? "").trim()) fail("REAL_MEDIA_PREVIEW_QA_FRAMING_IDENTITY_MISSING", String(scene?.sceneId));
+  return {fit: framing.fit, focusX: Number(framing.focusX), focusY: Number(framing.focusY), scale: Number(framing.scale), revision: String(framing.revision)};
+}
 
 const previewManifestArg = arg("preview-manifest");
 if (!previewManifestArg) fail("REAL_MEDIA_PREVIEW_QA_MANIFEST_REQUIRED", "pass --preview-manifest=/path/to/real-media-preview-manifest.json");
@@ -44,7 +49,7 @@ try { preview = JSON.parse(readFileSync(previewManifestPath, "utf8")); } catch {
 if (preview.schemaVersion !== "wedding-movie-project-real-media-preview/v1" || preview.authority !== "DERIVED_FROM_CURRENT_SELECTED_SCENES_AND_PRODUCTION_READINESS_AUDIT") fail("REAL_MEDIA_PREVIEW_QA_SCHEMA_MISMATCH");
 if (preview.projectId !== "opening" && preview.projectId !== "profile") fail("REAL_MEDIA_PREVIEW_QA_PROJECT_INVALID", String(preview.projectId));
 if (preview.render?.state !== "RENDERED" || !preview.render?.sha256) fail("REAL_MEDIA_PREVIEW_QA_RENDER_REQUIRED");
-if (preview.summary?.allRealMediaBoundCurrent !== true || preview.summary?.bgmCurrent !== true || preview.summary?.transitionsCurrent !== true || preview.summary?.productionReady !== false) fail("REAL_MEDIA_PREVIEW_QA_SOURCE_NOT_CURRENT");
+if (preview.summary?.allRealMediaBoundCurrent !== true || preview.summary?.framingCurrent !== true || preview.summary?.bgmCurrent !== true || preview.summary?.transitionsCurrent !== true || preview.summary?.productionReady !== false) fail("REAL_MEDIA_PREVIEW_QA_SOURCE_NOT_CURRENT");
 if (preview.evidenceBoundary?.remotionStudioGuiActual !== "NOT_RUN" || preview.evidenceBoundary?.palmierGuiActual !== "NOT_RUN" || preview.evidenceBoundary?.macDaVinciGuiActual !== "NOT_RUN" || preview.evidenceBoundary?.visualQa !== "NOT_RUN") fail("REAL_MEDIA_PREVIEW_QA_EVIDENCE_BOUNDARY_INVALID");
 if (!Array.isArray(preview.scenes) || preview.scenes.length === 0) fail("REAL_MEDIA_PREVIEW_QA_SCENES_MISSING");
 const fps = Number(preview.fps ?? 30);
@@ -69,6 +74,7 @@ for (const scene of preview.scenes) {
   const mediaPath = resolve(scene.mediaPath ?? "");
   if (!mediaPath || !existsSync(mediaPath)) fail("REAL_MEDIA_PREVIEW_QA_MEDIA_NOT_FOUND", String(scene.sceneId));
   if (!scene.mediaSha256 || sha256(mediaPath) !== scene.mediaSha256) fail("REAL_MEDIA_PREVIEW_QA_MEDIA_SHA_MISMATCH", String(scene.sceneId));
+  framingIdentity(scene);
 }
 const bgmPath = resolve(preview.identity?.bgmPath ?? "");
 if (!bgmPath || !existsSync(bgmPath) || !preview.identity?.bgmSha256 || sha256(bgmPath) !== preview.identity.bgmSha256) fail("REAL_MEDIA_PREVIEW_QA_BGM_SHA_MISMATCH");
@@ -81,6 +87,7 @@ for (const scene of preview.scenes) {
   const endExclusive = Number(scene.endFrameExclusive);
   const duration = Number(scene.durationFrames);
   if (!(start >= 0) || !(endExclusive > start) || duration !== endExclusive - start) fail("REAL_MEDIA_PREVIEW_QA_SCENE_FRAMES_INVALID", String(scene.sceneId));
+  const framing = framingIdentity(scene);
   const sampleFrames = [
     {kind: "SCENE_START_SAFE", frame: Math.min(endExclusive - 1, start + Math.min(2, Math.max(0, duration - 1)))},
     {kind: "SCENE_MID", frame: start + Math.floor((duration - 1) / 2)},
@@ -91,15 +98,16 @@ for (const scene of preview.scenes) {
     const path = resolve(outputDir, fileName);
     extractStill(previewPath, path, frameToSeconds(sample.frame, fps));
     const dimensions = probeDimensions(path);
-    stills.push({kind: sample.kind, sceneId: scene.sceneId, sourceRevision: scene.sourceRevision, patternId: scene.patternId, productionRole: scene.productionRole, mediaSha256: scene.mediaSha256, frame: sample.frame, seconds: frameToSeconds(sample.frame, fps), path, sha256: sha256(path), bytes: statSync(path).size, ...dimensions});
+    stills.push({kind: sample.kind, sceneId: scene.sceneId, sourceRevision: scene.sourceRevision, patternId: scene.patternId, productionRole: scene.productionRole, mediaSha256: scene.mediaSha256, framing, framingRevision: framing.revision, frame: sample.frame, seconds: frameToSeconds(sample.frame, fps), path, sha256: sha256(path), bytes: statSync(path).size, ...dimensions});
   }
 }
 
 const transitionStills: any[] = [];
 for (const transition of preview.transitions ?? []) {
   if (transition.transition !== "CROSS_DISSOLVE") continue;
+  const fromScene = preview.scenes.find((scene: any) => scene.sceneId === transition.fromSceneId);
   const toScene = preview.scenes.find((scene: any) => scene.sceneId === transition.toSceneId);
-  if (!toScene) fail("REAL_MEDIA_PREVIEW_QA_TRANSITION_SCENE_MISSING", `${transition.fromSceneId}->${transition.toSceneId}`);
+  if (!fromScene || !toScene) fail("REAL_MEDIA_PREVIEW_QA_TRANSITION_SCENE_MISSING", `${transition.fromSceneId}->${transition.toSceneId}`);
   const durationFrames = Number(transition.durationFrames ?? 0);
   if (!(durationFrames > 0)) fail("REAL_MEDIA_PREVIEW_QA_TRANSITION_DURATION_INVALID", `${transition.fromSceneId}->${transition.toSceneId}`);
   const frame = Number(toScene.startFrame) + Math.floor(durationFrames / 2);
@@ -107,7 +115,7 @@ for (const transition of preview.transitions ?? []) {
   const path = resolve(outputDir, fileName);
   extractStill(previewPath, path, frameToSeconds(frame, fps));
   const dimensions = probeDimensions(path);
-  transitionStills.push({kind: "CROSS_DISSOLVE_MID", fromSceneId: transition.fromSceneId, toSceneId: transition.toSceneId, durationFrames, frame, seconds: frameToSeconds(frame, fps), path, sha256: sha256(path), bytes: statSync(path).size, ...dimensions});
+  transitionStills.push({kind: "CROSS_DISSOLVE_MID", fromSceneId: transition.fromSceneId, toSceneId: transition.toSceneId, fromFramingRevision: framingIdentity(fromScene).revision, toFramingRevision: framingIdentity(toScene).revision, durationFrames, frame, seconds: frameToSeconds(frame, fps), path, sha256: sha256(path), bytes: statSync(path).size, ...dimensions});
 }
 
 const manifest = {
@@ -119,7 +127,7 @@ const manifest = {
   fps,
   stills,
   transitionStills,
-  summary: {sceneCount: preview.scenes.length, stillCount: stills.length, transitionStillCount: transitionStills.length, sourceCurrentVerified: true, humanVisualQa: "NOT_RUN", productionReady: false},
+  summary: {sceneCount: preview.scenes.length, stillCount: stills.length, transitionStillCount: transitionStills.length, sourceCurrentVerified: true, framingCurrentVerified: true, humanVisualQa: "NOT_RUN", productionReady: false},
   humanReviewChecklist: {
     sceneChecks: ["CROP_SUBJECT_SAFE", "TITLE_READABLE", "TEXT_MEDIA_CONTRAST", "NO_UNINTENDED_EDGE_CLIP", "VISUAL_TEMPO_FEELS_INTENTIONAL"],
     transitionChecks: ["TRANSITION_VISUALLY_CLEAN", "NO_FLASH_OR_UNINTENDED_BLACK_FRAME", "SUBJECT_CONTINUITY_ACCEPTABLE"],
@@ -128,8 +136,8 @@ const manifest = {
     reviewedAt: null,
     notes: null,
   },
-  evidenceBoundary: {remotionStudioGuiActual: "NOT_RUN", palmierGuiActual: "NOT_RUN", macDaVinciGuiActual: "NOT_RUN", visualQa: "NOT_RUN", productionReady: false, rule: "Extracted stills are mechanical visual-review artifacts only. They do not auto-evaluate crop, readability, pacing, transition aesthetics, or any GUI Actual evidence."},
+  evidenceBoundary: {remotionStudioGuiActual: "NOT_RUN", palmierGuiActual: "NOT_RUN", macDaVinciGuiActual: "NOT_RUN", visualQa: "NOT_RUN", productionReady: false, rule: "Extracted stills are mechanical visual-review artifacts bound to the exact current framing revision. They do not auto-evaluate crop, readability, pacing, transition aesthetics, or any GUI Actual evidence."},
 };
 mkdirSync(dirname(manifestPath), {recursive: true});
 writeFileSync(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`);
-console.log(JSON.stringify({manifestPath, projectId: preview.projectId, sceneCount: preview.scenes.length, stillCount: stills.length, transitionStillCount: transitionStills.length, previewSha256}, null, 2));
+console.log(JSON.stringify({manifestPath, projectId: preview.projectId, sceneCount: preview.scenes.length, stillCount: stills.length, transitionStillCount: transitionStills.length, previewSha256, framingCurrentVerified: true}, null, 2));
