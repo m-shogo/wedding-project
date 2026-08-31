@@ -30,7 +30,9 @@ export const profileRealMediaReviewGate = {
     "chapters": [],
     "review": {
       "overall": "NOT_RUN",
-      "reviewedAt": null
+      "reviewer": null,
+      "reviewedAt": null,
+      "notes": ""
     }
   }
 } as const;

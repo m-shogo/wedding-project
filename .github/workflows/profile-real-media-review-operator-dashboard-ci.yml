@@ -1,0 +1,65 @@
+name: Profile Real Media Review Operator Dashboard CI
+
+on:
+  pull_request:
+    paths:
+      - 'movie-dashboard/src/components/ProfileRealMediaReviewOperatorCard.tsx'
+      - 'movie-dashboard/src/components/WeddingMediaIntakeChecklistCard.tsx'
+      - 'movie-dashboard/scripts/sync-profile-real-media-review-gate.mjs'
+      - 'movie-dashboard/src/data/profileRealMediaReviewGate.generated.ts'
+      - '.github/workflows/profile-real-media-review-operator-dashboard-ci.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  operator:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Review audit exposes round-trip evidence fields
+        run: |
+          grep -q 'extension:' movie-dashboard/scripts/sync-profile-real-media-review-gate.mjs
+          grep -q 'reviewer:' movie-dashboard/scripts/sync-profile-real-media-review-gate.mjs
+          grep -q 'notes:' movie-dashboard/scripts/sync-profile-real-media-review-gate.mjs
+          grep -q '"reviewer": null' movie-dashboard/src/data/profileRealMediaReviewGate.generated.ts
+          grep -q '"notes": ""' movie-dashboard/src/data/profileRealMediaReviewGate.generated.ts
+
+      - name: Operator is Human-only and fail-closed
+        run: |
+          grep -q 'audit.evidenceExists' movie-dashboard/src/components/ProfileRealMediaReviewOperatorCard.tsx
+          grep -q 'audit.media.length === 17' movie-dashboard/src/components/ProfileRealMediaReviewOperatorCard.tsx
+          grep -q 'audit.chapters.length === 5' movie-dashboard/src/components/ProfileRealMediaReviewOperatorCard.tsx
+          grep -q 'PROFILE REAL-MEDIA VISUAL QA OPERATOR' movie-dashboard/src/components/ProfileRealMediaReviewOperatorCard.tsx
+          grep -q '次の未review素材へ' movie-dashboard/src/components/ProfileRealMediaReviewOperatorCard.tsx
+          grep -q 'Human review evidence JSONを書き出す' movie-dashboard/src/components/ProfileRealMediaReviewOperatorCard.tsx
+          grep -q 'bgmReviewed: false' movie-dashboard/src/components/ProfileRealMediaReviewOperatorCard.tsx
+          grep -q 'macDaVinciActual: "NOT_RUN"' movie-dashboard/src/components/ProfileRealMediaReviewOperatorCard.tsx
+          grep -q 'productionReady: false' movie-dashboard/src/components/ProfileRealMediaReviewOperatorCard.tsx
+          ! grep -q 'localStorage' movie-dashboard/src/components/ProfileRealMediaReviewOperatorCard.tsx
+          ! grep -q 'sessionStorage' movie-dashboard/src/components/ProfileRealMediaReviewOperatorCard.tsx
+
+      - name: Operator is mounted only on Profile intake flow
+        run: |
+          grep -q 'ProfileRealMediaReviewOperatorCard' movie-dashboard/src/components/WeddingMediaIntakeChecklistCard.tsx
+          grep -q '!isOpening ? <ProfileRealMediaReviewOperatorCard />' movie-dashboard/src/components/WeddingMediaIntakeChecklistCard.tsx
+
+      - name: Generated audit remains current in fresh clone
+        run: |
+          node movie-dashboard/scripts/sync-profile-real-media-review-gate.mjs --write
+          git diff --exit-code -- movie-dashboard/src/data/profileRealMediaReviewGate.generated.ts
+
+      - name: Build Movie Dashboard
+        working-directory: movie-dashboard
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm build
