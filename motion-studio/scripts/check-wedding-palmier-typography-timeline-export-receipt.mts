@@ -128,7 +128,7 @@ if (!existsSync(receiptPath)) {
     receiptPath: null,
     receiptSha256: null,
     source: {assemblyPlan: null, assemblyPlanSha256: null, palmierFcpxml: null, palmierFcpxmlSha256: null},
-    next: {kind: 'VERIFY_REAL_PALMIER_FCPXML_MARKERS_AND_TRANSITIONS', command: `node --no-warnings scripts/verify-wedding-palmier-typography-timeline-export.mts --movie=${movieId} --xml='<real-palmier-fcpxml-path>' --write`},
+    next: {kind: 'VERIFY_REAL_PALMIER_FCPXML', command: `node --no-warnings scripts/verify-wedding-palmier-typography-timeline-export.mts --movie=${movieId} --xml='<real-palmier-fcpxml-path>' --write`},
     evidenceBoundary: {palmierGuiActualPerformedByThisCheck: false, transitionAppliedGuiActualPerformedByThisCheck: false, macDavinciResolveGuiActual: 'NOT_RUN_UNLESS_HUMAN_EXECUTED', productionReadyPromotedByThisCheck: false},
   } as const;
   if (process.argv.includes('--json')) console.log(JSON.stringify(missing, null, 2));
@@ -153,7 +153,7 @@ const xmlRaw = xmlPath && existsSync(xmlPath) ? readFileSync(xmlPath, 'utf8') : 
 const result = evaluate(movieId, receipt, planRaw, xmlRaw);
 const next = result.state === 'CURRENT'
   ? {kind: 'RUN_CANONICAL_PROJECT_REMOTION_HANDOFF_WHEN_UPSTREAM_READY', command: `node --no-warnings scripts/prepare-wedding-project-remotion-production-handoff.mts --movie=${movieId} --phase=handoff`}
-  : {kind: 'REVERIFY_REAL_PALMIER_FCPXML_MARKERS_AND_TRANSITIONS', command: `node --no-warnings scripts/verify-wedding-palmier-typography-timeline-export.mts --movie=${movieId} --xml='${xmlPath ?? '<real-palmier-fcpxml-path>'}' --write`};
+  : {kind: 'REVERIFY_REAL_PALMIER_FCPXML', command: `node --no-warnings scripts/verify-wedding-palmier-typography-timeline-export.mts --movie=${movieId} --xml='${xmlPath ?? '<real-palmier-fcpxml-path>'}' --write`};
 const report = {
   schemaVersion: 'wedding-palmier-typography-timeline-export-receipt-currentness/v1',
   authority: 'READ_ONLY_PALMIER_TIMELINE_EXPORT_RECEIPT_CURRENTNESS',
