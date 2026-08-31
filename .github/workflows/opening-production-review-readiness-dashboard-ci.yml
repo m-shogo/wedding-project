@@ -66,10 +66,16 @@ jobs:
           grep -q 'OPENING EXACT NEXT HUMAN QA GATE' src/components/OpeningReviewNextActionPanel.tsx
           grep -q 'deriveOpeningNextAction' src/components/OpeningReviewNextActionPanel.tsx
           grep -q 'SHARED_ACTION_AUTHORITY = weddingProductionActions' src/components/OpeningReviewNextActionPanel.tsx
-          grep -q 'opening-v1-crop-review-evidence.mts --strict' src/lib/weddingProductionActions.ts
-          grep -q 'pnpm render:opening-v1:preview' src/lib/weddingProductionActions.ts
-          grep -q 'pnpm opening:preview-review:strict' src/lib/weddingProductionActions.ts
-          grep -q 'opening-v1-audio-listening-review.mts --strict' src/lib/weddingProductionActions.ts
+          grep -q 'status.stages.cropReview.recovery' src/lib/weddingProductionActions.ts
+          grep -q 'status.stages.previewRender.recovery' src/lib/weddingProductionActions.ts
+          grep -q 'status.stages.previewReview.recovery' src/lib/weddingProductionActions.ts
+          grep -q 'status.stages.audioListeningReview.recovery' src/lib/weddingProductionActions.ts
+          grep -q 'phase: "FINAL RENDER"' src/lib/weddingProductionActions.ts
+          grep -q 'phase: "FINAL RENDER REVIEW"' src/lib/weddingProductionActions.ts
+          grep -q 'phase: "PRODUCTION BUNDLE"' src/lib/weddingProductionActions.ts
+          grep -q 'phase: "MAC DAVINCI ACTUAL"' src/lib/weddingProductionActions.ts
+          grep -q 'phase: "FINAL DELIVERY APPROVAL"' src/lib/weddingProductionActions.ts
+          grep -q 'Opening production chain current' src/lib/weddingProductionActions.ts
           grep -q 'COMMAND_COPIED != COMMAND_EXECUTED' src/components/OpeningReviewNextActionPanel.tsx
           grep -q '<OpeningProductionReviewReadinessPanel />' src/pages/MotionZukanWorkspaceHandoff.tsx
           grep -q '<OpeningReviewNextActionPanel />' src/pages/MotionZukanWorkspaceHandoff.tsx
