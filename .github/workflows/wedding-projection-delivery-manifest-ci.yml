@@ -1,0 +1,38 @@
+name: Wedding Projection Delivery Manifest CI
+
+on:
+  pull_request:
+    paths:
+      - 'motion-studio/scripts/wedding-projection-delivery-manifest.mts'
+      - 'motion-studio/scripts/check-wedding-projection-delivery-manifest.mts'
+      - '.github/workflows/wedding-projection-delivery-manifest-ci.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'motion-studio/scripts/wedding-projection-delivery-manifest.mts'
+      - 'motion-studio/scripts/check-wedding-projection-delivery-manifest.mts'
+      - '.github/workflows/wedding-projection-delivery-manifest-ci.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  projection-delivery-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Ensure ffmpeg and ffprobe are available
+        run: |
+          if ! command -v ffmpeg >/dev/null 2>&1 || ! command -v ffprobe >/dev/null 2>&1; then
+            sudo apt-get update
+            sudo apt-get install -y ffmpeg
+          fi
+          ffmpeg -version | head -n 1
+          ffprobe -version | head -n 1
+      - name: Run projection-delivery contract and real MP4 probe fixtures
+        working-directory: motion-studio
+        run: node --no-warnings scripts/check-wedding-projection-delivery-manifest.mts
