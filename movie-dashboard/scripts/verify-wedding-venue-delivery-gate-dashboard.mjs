@@ -12,34 +12,45 @@ const requireText = (source, value, label) => {
 };
 
 for (const token of [
+  'wedding-venue-delivery-gate-dashboard/v2',
   'PROJECTION_TO_PACKAGE_SHA_MISMATCH',
   'PACKAGE_TO_OFFLINE_PROJECTION_SHA_MISMATCH',
   'DELIVERY_MANIFEST_SHA_MISMATCH',
   'APPROVED_EXPORT_SHA_MISMATCH',
   'COPY_SOURCE_SHA_MISMATCH',
   'OFFLINE_COPY_SHA_MISMATCH',
-  'NOT_PROMOTED_BY_DASHBOARD_GATE',
-  'wedding-projection-delivery-manifest-currentness.mts --strict-current',
-  'wedding-venue-delivery-package.mts --write',
-  'wedding-venue-delivery-package-verify.mts',
+  'THREE_COPY_REDUNDANCY_',
+  'THREE_COPY_TARGET_SET_INVALID',
+  'REDUNDANCY_SOURCE_PROJECTION_SHA_MISMATCH',
+  'REDUNDANCY_SOURCE_DELIVERY_SHA_MISMATCH',
+  'PRIMARY_USB',
+  'BACKUP_USB',
+  'CLOUD_BACKUP',
+  'wedding-venue-delivery-redundancy.mts',
+  'physicalUsbInsertedActual',
+  'cloudUploadActual',
+  'venuePlaybackActual',
 ]) requireText(model, token, 'gate model');
 
 for (const token of [
   'VENUE DELIVERY READY',
-  'wedding-projection-delivery-currentness.json',
-  'DELIVERY-MANIFEST.json',
-  'OFFLINE VERIFY',
+  '3-Copy Redundancy',
+  'wedding-venue-delivery-redundancy.json',
+  'PRIMARY_USB / BACKUP_USB / CLOUD_BACKUP',
   'Approved export SHA',
   'Copied / verified SHA',
+  '3-copy receipt SHA',
   'CANONICAL OPERATOR CHAIN',
-  'GUI Actual',
+  'physical USB',
+  'cloud upload',
+  'venue playback',
 ]) requireText(page, token, 'gate page');
 
 requireText(app, 'movie-coach/motion-library/venue-delivery', 'App route');
 requireText(app, 'WeddingVenueDeliveryGate', 'App import');
 
-console.log('✅ Wedding Venue Delivery Gate dashboard contract passed');
-console.log('✅ Projection → package → offline verification SHA bindings are visible');
-console.log('✅ Opening/Profile approved export and copied SHA are visible');
-console.log('✅ Canonical build/verify commands are exposed');
-console.log('✅ GUI Actual remains NOT_PROMOTED');
+console.log('✅ Wedding Venue Delivery Gate v2 dashboard contract passed');
+console.log('✅ Projection → package → offline verification → three-copy receipt SHA bindings are visible');
+console.log('✅ PRIMARY_USB / BACKUP_USB / CLOUD_BACKUP are all required exactly once');
+console.log('✅ Opening/Profile approved, source and redundant-copy SHAs are fail-closed');
+console.log('✅ physical USB / cloud upload / venue playback Actual remain unpromoted');
