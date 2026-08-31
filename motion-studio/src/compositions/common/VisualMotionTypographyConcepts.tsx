@@ -1,9 +1,9 @@
 import {AbsoluteFill} from 'remotion';
 import {TypographyRevealEngine, type MotionIntensity, type TypographyRevealMode} from '../../motion-kit/engines';
 
-function TypographyConcept({mode, text, label, intensity = 'M'}: {mode: TypographyRevealMode; text: string; label: string; intensity?: MotionIntensity}) {
+function TypographyConcept({mode, text, label, intensity = 'M', transparentBackground = false}: {mode: TypographyRevealMode; text: string; label: string; intensity?: MotionIntensity; transparentBackground?: boolean}) {
   return (
-    <AbsoluteFill style={{background: 'linear-gradient(135deg, #071523 0%, #102b42 58%, #1b4058 100%)'}}>
+    <AbsoluteFill style={{background: transparentBackground ? 'transparent' : 'linear-gradient(135deg, #071523 0%, #102b42 58%, #1b4058 100%)'}}>
       <TypographyRevealEngine mode={mode} text={text} intensity={intensity} transparent />
       <div style={{position: 'absolute', left: 28, bottom: 24, padding: '8px 12px', background: 'rgba(5,18,31,0.76)', color: '#f0d37a', fontFamily: 'Arial, sans-serif', fontSize: 15, letterSpacing: '0.12em'}}>
         {label} · REPO RENDER
@@ -17,6 +17,7 @@ export type WeddingSceneTypographyCandidateProps = {
   mode: TypographyRevealMode;
   intensity: MotionIntensity;
   label: string;
+  transparentBackground?: boolean;
 };
 
 export function WeddingSceneTypographyCandidateV1({
@@ -24,8 +25,9 @@ export function WeddingSceneTypographyCandidateV1({
   mode,
   intensity,
   label,
+  transparentBackground = false,
 }: WeddingSceneTypographyCandidateProps) {
-  return <TypographyConcept mode={mode} text={text} label={label} intensity={intensity} />;
+  return <TypographyConcept mode={mode} text={text} label={label} intensity={intensity} transparentBackground={transparentBackground} />;
 }
 
 export function VisualMotionWordPunchV1() {
