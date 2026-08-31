@@ -25,6 +25,9 @@ type ProjectSnapshot = {
   sourceRenderSha256: string | null;
   auditState: string;
   auditCurrent: boolean;
+  transitionGate: {current: boolean; state: string};
+  transitionActualEvidenceSha256: string | null;
+  transitionProofSha256: string | null;
   davinciActualEvidenceSha256: string | null;
   finalApprovalSha256: string | null;
   finalApprovalCurrent: boolean;
@@ -79,11 +82,13 @@ if (snapshot) {
       mismatches.push(`${project.toUpperCase()}_READINESS_SNAPSHOT_MISSING`);
       return;
     }
-    const fields: Array<keyof ProjectSnapshot> = [
+    const fields: Array<Exclude<keyof ProjectSnapshot, 'transitionGate'>> = [
       'handoffIdentitySha256',
       'sourceRenderSha256',
       'auditState',
       'auditCurrent',
+      'transitionActualEvidenceSha256',
+      'transitionProofSha256',
       'davinciActualEvidenceSha256',
       'finalApprovalSha256',
       'finalApprovalCurrent',
@@ -94,6 +99,9 @@ if (snapshot) {
       if (carried[field] !== expected[field]) {
         mismatches.push(`${project.toUpperCase()}_${String(field).replace(/([A-Z])/g, '_$1').toUpperCase()}_STALE`);
       }
+    }
+    if (carried.transitionGate?.current !== expected.transitionGate?.current || carried.transitionGate?.state !== expected.transitionGate?.state) {
+      mismatches.push(`${project.toUpperCase()}_TRANSITION_GATE_STATE_STALE`);
     }
   };
 
@@ -127,12 +135,16 @@ const report = {
     ready: live.ready,
     openingNextGate: live.opening.nextGate,
     profileNextGate: live.profile.nextGate,
+    openingTransitionGate: live.opening.transitionGate?.state ?? 'BLOCKED',
+    profileTransitionGate: live.profile.transitionGate?.state ?? 'BLOCKED',
   },
   mismatches,
   guardrails: [
     'SNAPSHOT_CURRENT != WEDDING_DELIVERY_READY',
     'OPENING_OR_PROFILE_BINDING_CHANGED => SNAPSHOT_STALE',
     'DAVINCI_ACTUAL_EVIDENCE_CHANGED => SNAPSHOT_STALE',
+    'TRANSITION_ACTUAL_EVIDENCE_CHANGED => SNAPSHOT_STALE',
+    'TRANSITION_PROOF_CHANGED => SNAPSHOT_STALE',
     'FINAL_APPROVAL_CHANGED => SNAPSHOT_STALE',
     'NOT_RUN != VERIFIED',
     'CI_MUST_NOT_PROMOTE_MAC_GUI_ACTUAL',
