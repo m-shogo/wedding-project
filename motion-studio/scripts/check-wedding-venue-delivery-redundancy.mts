@@ -69,12 +69,24 @@ if (report.redundancyReady !== true || report.copies?.length !== 3 || !report.co
 if (!report.copies.every((copy) => copy.openingSha256 === openingSha && copy.profileSha256 === profileSha)) throw new Error('copied movie SHA mismatch');
 if (report.evidenceBoundary?.physicalUsbInsertedActual !== 'NOT_PROMOTED_BY_REDUNDANCY_SCRIPT' || report.evidenceBoundary?.cloudUploadActual !== 'NOT_PROMOTED_BY_REDUNDANCY_SCRIPT' || report.evidenceBoundary?.venuePlaybackActual !== 'NOT_RUN') throw new Error('external Actual evidence promoted');
 
+const currentnessScript = join(root, 'scripts/wedding-venue-delivery-redundancy-currentness.mts');
+const current = spawnSync(process.execPath, ['--no-warnings', currentnessScript, `--receipt=${rel(receipt)}`, '--strict-current', '--json'], {cwd: root, encoding: 'utf8'});
+if (current.status !== 0) throw new Error(`fresh redundancy receipt rejected:\n${current.stderr || current.stdout}`);
+const currentReport = JSON.parse(current.stdout) as {state?: string; current?: boolean; copies?: Array<{state?: string}>; evidenceBoundary?: Record<string, string>};
+if (currentReport.state !== 'CURRENT' || currentReport.current !== true || currentReport.copies?.length !== 3 || !currentReport.copies.every((copy) => copy.state === 'CURRENT')) throw new Error('fresh redundancy receipt not CURRENT');
+if (currentReport.evidenceBoundary?.venuePlaybackActual !== 'NOT_RUN') throw new Error('currentness promoted venue playback Actual');
+
 writeFileSync(join(backup, '01_OPENING.mp4'), Buffer.concat([readFileSync(join(backup, '01_OPENING.mp4')), Buffer.from('tamper')]));
 const verifyTampered = spawnSync(process.execPath, ['--no-warnings', join(root, 'scripts/wedding-venue-delivery-package-verify.mts'), `--package-dir=${rel(backup)}`, '--json'], {cwd: root, encoding: 'utf8'});
 if (verifyTampered.status === 0 || !`${verifyTampered.stderr}\n${verifyTampered.stdout}`.includes('OPENING_VENUE_FILE_SHA_STALE')) throw new Error('tampered backup copy accepted');
 
-console.log('✅ Wedding venue three-copy redundancy contract passed');
+const stale = spawnSync(process.execPath, ['--no-warnings', currentnessScript, `--receipt=${rel(receipt)}`, '--strict-current', '--json'], {cwd: root, encoding: 'utf8'});
+if (stale.status === 0) throw new Error('post-receipt backup tamper remained CURRENT');
+const staleText = `${stale.stderr}\n${stale.stdout}`;
+if (!staleText.includes('BACKUP_USB_OFFLINE_VERIFY_FAILED')) throw new Error(`post-receipt tamper did not surface expected stale blocker:\n${staleText}`);
+
+console.log('✅ Wedding venue three-copy redundancy + strict-current contract passed');
 console.log('✅ PRIMARY_USB / BACKUP_USB / CLOUD_BACKUP copies each offline-verified');
-console.log('✅ Opening/Profile SHAs remain identical across all copies');
-console.log('✅ Post-copy tamper is rejected by offline verifier');
+console.log('✅ Fresh redundancy receipt re-verifies CURRENT at all live target paths');
+console.log('✅ Post-receipt backup tamper makes strict-current fail closed');
 console.log('✅ Physical USB/cloud/venue playback Actual remain NOT_RUN');
