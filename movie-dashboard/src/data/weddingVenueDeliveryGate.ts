@@ -1,4 +1,4 @@
-export const WEDDING_VENUE_DELIVERY_GATE_SCHEMA = "wedding-venue-delivery-gate-dashboard/v2" as const;
+export const WEDDING_VENUE_DELIVERY_GATE_SCHEMA = "wedding-venue-delivery-gate-dashboard/v3" as const;
 
 type GateState = "NOT_RUN" | "CURRENT" | "STALE" | "INVALID";
 
@@ -70,6 +70,22 @@ type RedundancyReceipt = {
   copies?: RedundancyCopy[];
 };
 
+type RedundancyCurrentness = {
+  schemaVersion?: string;
+  authority?: string;
+  state?: string;
+  current?: boolean;
+  receiptSha256?: string | null;
+  mismatches?: string[];
+  source?: {
+    projectionManifestSha256?: string | null;
+    deliveryManifestSha256?: string | null;
+    openingSha256?: string | null;
+    profileSha256?: string | null;
+  } | null;
+  copies?: RedundancyCopy[];
+};
+
 export type WeddingVenueDeliveryGateAudit = {
   schemaVersion: typeof WEDDING_VENUE_DELIVERY_GATE_SCHEMA;
   state: GateState;
@@ -80,10 +96,12 @@ export type WeddingVenueDeliveryGateAudit = {
   packageState: GateState;
   offlineVerifyState: GateState;
   redundancyState: GateState;
+  redundancyCurrentnessState: GateState;
   blockers: string[];
   projectionManifestSha256: string | null;
   deliveryManifestSha256: string | null;
   redundancyReceiptSha256: string | null;
+  redundancyCurrentnessReceiptSha256: string | null;
   packageDir: string | null;
   opening: {
     filename: string | null;
@@ -110,6 +128,7 @@ export type WeddingVenueDeliveryGateAudit = {
     buildPackage: string;
     verifyPackage: string;
     buildThreeCopyRedundancy: string;
+    strictThreeCopyRedundancy: string;
   };
   evidenceBoundary: {
     macRemotionStudioGuiActual: "NOT_PROMOTED_BY_DASHBOARD_GATE";
@@ -149,11 +168,13 @@ export function auditWeddingVenueDeliveryGate(
   packageManifestInput: unknown,
   offlineVerificationInput: unknown,
   redundancyReceiptInput: unknown = null,
+  redundancyCurrentnessInput: unknown = null,
 ): WeddingVenueDeliveryGateAudit {
   const projection = projectionInput as ProjectionCurrentness | null;
   const packageManifest = packageManifestInput as VenuePackageManifest | null;
   const offline = offlineVerificationInput as OfflineVerification | null;
   const redundancy = redundancyReceiptInput as RedundancyReceipt | null;
+  const redundancyCurrentness = redundancyCurrentnessInput as RedundancyCurrentness | null;
 
   const projectionValid = projection?.schemaVersion === "wedding-projection-delivery-manifest-currentness/v1"
     && projection.authority === "DERIVED_PROJECTION_DELIVERY_CURRENTNESS";
@@ -185,12 +206,28 @@ export function auditWeddingVenueDeliveryGate(
   const redundancyCurrent = redundancyValid && redundancy?.redundancyReady === true && uniqueTargets && copiesCurrent;
   const redundancyState = stateFromInput(redundancyReceiptInput, redundancyValid, redundancyCurrent);
 
+  const liveValid = redundancyCurrentness?.schemaVersion === "wedding-venue-delivery-redundancy-currentness/v1"
+    && redundancyCurrentness.authority === "DERIVED_THREE_COPY_REDUNDANCY_CURRENTNESS";
+  const liveIds = redundancyCurrentness?.copies?.map((copy) => copy.targetId) ?? [];
+  const liveUniqueTargets = expectedTargets.every((id) => liveIds.filter((value) => value === id).length === 1)
+    && liveIds.length === expectedTargets.length;
+  const liveCopiesCurrent = redundancyCurrentness?.copies?.every((copy) => copy.state === "CURRENT") === true;
+  const liveCurrent = liveValid
+    && redundancyCurrentness?.state === "CURRENT"
+    && redundancyCurrentness.current === true
+    && (redundancyCurrentness.mismatches?.length ?? 0) === 0
+    && liveUniqueTargets
+    && liveCopiesCurrent;
+  const redundancyCurrentnessState = stateFromInput(redundancyCurrentnessInput, liveValid, liveCurrent);
+
   const blockers: string[] = [];
   if (projectionState !== "CURRENT") blockers.push(`PROJECTION_${projectionState}`);
   if (packageState !== "CURRENT") blockers.push(`VENUE_PACKAGE_${packageState}`);
   if (offlineVerifyState !== "CURRENT") blockers.push(`OFFLINE_VERIFY_${offlineVerifyState}`);
   if (redundancyState !== "CURRENT") blockers.push(`THREE_COPY_REDUNDANCY_${redundancyState}`);
+  if (redundancyCurrentnessState !== "CURRENT") blockers.push(`THREE_COPY_LIVE_CURRENTNESS_${redundancyCurrentnessState}`);
   if (redundancyValid && !uniqueTargets) blockers.push("THREE_COPY_TARGET_SET_INVALID");
+  if (liveValid && !liveUniqueTargets) blockers.push("THREE_COPY_LIVE_TARGET_SET_INVALID");
 
   const projectionSha = projection?.carried?.manifestSha256 ?? null;
   const packageProjectionSha = packageManifest?.projectionManifestSha256 ?? null;
@@ -225,17 +262,28 @@ export function auditWeddingVenueDeliveryGate(
     }
   }
 
-  const packageReady = blockers.filter((item) => !item.startsWith("THREE_COPY_") && !item.startsWith("REDUNDANCY_") && !expectedTargets.some((target) => item.startsWith(`${target}_`))).length === 0;
-  const redundancyReady = redundancyState === "CURRENT" && blockers.length === 0;
+  const liveSource = redundancyCurrentness?.source;
+  if (redundancyCurrentnessState === "CURRENT") {
+    if (redundancyCurrentness?.receiptSha256 !== redundancy?.receiptSha256) blockers.push("LIVE_CURRENTNESS_RECEIPT_SHA_MISMATCH");
+    if (liveSource?.projectionManifestSha256 !== projectionSha) blockers.push("LIVE_SOURCE_PROJECTION_SHA_MISMATCH");
+    if (liveSource?.deliveryManifestSha256 !== deliveryManifestSha) blockers.push("LIVE_SOURCE_DELIVERY_SHA_MISMATCH");
+    if (liveSource?.openingSha256 !== offline?.opening?.sha256) blockers.push("LIVE_SOURCE_OPENING_SHA_MISMATCH");
+    if (liveSource?.profileSha256 !== offline?.profile?.sha256) blockers.push("LIVE_SOURCE_PROFILE_SHA_MISMATCH");
+  }
+
+  const packageReady = blockers.filter((item) => !item.startsWith("THREE_COPY_") && !item.startsWith("REDUNDANCY_") && !item.startsWith("LIVE_") && !expectedTargets.some((target) => item.startsWith(`${target}_`))).length === 0;
+  const redundancyReady = redundancyState === "CURRENT" && redundancyCurrentnessState === "CURRENT" && blockers.length === 0;
   const ready = packageReady && redundancyReady;
+  const states = [projectionState, packageState, offlineVerifyState, redundancyState, redundancyCurrentnessState];
   const state: GateState = ready
     ? "CURRENT"
-    : [projectionState, packageState, offlineVerifyState, redundancyState].includes("INVALID")
+    : states.includes("INVALID")
       ? "INVALID"
-      : [projectionState, packageState, offlineVerifyState, redundancyState].includes("STALE") || blockers.some((item) => item.includes("MISMATCH"))
+      : states.includes("STALE") || blockers.some((item) => item.includes("MISMATCH"))
         ? "STALE"
         : "NOT_RUN";
 
+  const copyAuthority = redundancyCurrentnessState === "CURRENT" ? redundancyCurrentness?.copies : redundancy?.copies;
   return {
     schemaVersion: WEDDING_VENUE_DELIVERY_GATE_SCHEMA,
     state,
@@ -246,10 +294,12 @@ export function auditWeddingVenueDeliveryGate(
     packageState,
     offlineVerifyState,
     redundancyState,
+    redundancyCurrentnessState,
     blockers,
     projectionManifestSha256: projectionSha,
     deliveryManifestSha256: deliveryManifestSha,
     redundancyReceiptSha256: redundancy?.receiptSha256 ?? null,
+    redundancyCurrentnessReceiptSha256: redundancyCurrentness?.receiptSha256 ?? null,
     packageDir: offline?.packageDir ?? null,
     opening: {
       filename: packageManifest?.opening?.filename ?? null,
@@ -264,7 +314,7 @@ export function auditWeddingVenueDeliveryGate(
       technical: packageManifest?.profile?.technical ?? null,
     },
     redundancyCopies: expectedTargets.map((targetId) => {
-      const copy = redundancy?.copies?.find((item) => item.targetId === targetId);
+      const copy = copyAuthority?.find((item) => item.targetId === targetId);
       return {
         targetId,
         path: copy?.path ?? null,
@@ -279,6 +329,7 @@ export function auditWeddingVenueDeliveryGate(
       buildPackage: "cd motion-studio && node --no-warnings scripts/wedding-venue-delivery-package.mts --write",
       verifyPackage: "cd motion-studio && node --no-warnings scripts/wedding-venue-delivery-package-verify.mts --package-dir=out/delivery/wedding-venue --json > out/delivery/wedding-venue-verification.json",
       buildThreeCopyRedundancy: "cd motion-studio && node --no-warnings scripts/wedding-venue-delivery-redundancy.mts --source=out/delivery/wedding-venue --primary=<PRIMARY_USB_FOLDER> --backup=<BACKUP_USB_FOLDER> --cloud=<CLOUD_BACKUP_FOLDER> --write",
+      strictThreeCopyRedundancy: "cd motion-studio && node --no-warnings scripts/wedding-venue-delivery-redundancy-currentness.mts --strict-current --json > out/handoff/wedding/wedding-venue-delivery-redundancy-currentness.json",
     },
     evidenceBoundary: {
       macRemotionStudioGuiActual: "NOT_PROMOTED_BY_DASHBOARD_GATE",
