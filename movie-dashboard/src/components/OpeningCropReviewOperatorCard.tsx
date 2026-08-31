@@ -1,5 +1,6 @@
-import {useMemo, useState} from "react";
+import {useEffect, useMemo, useRef, useState} from "react";
 import {openingCropReviewGate} from "../data/openingCropReviewGate.generated";
+import {formatOpeningReviewTimecode, openingReviewRangeFor} from "../data/openingCropReviewTimecodes";
 import {downloadText} from "../lib/exporters";
 
 type ReviewState = "NOT_RUN" | "PASS" | "FAIL";
@@ -50,6 +51,13 @@ export function OpeningCropReviewOperatorCard() {
     const firstRequired = audit.slots.findIndex((slot) => slot.cropQaRequired && slot.review === "NOT_RUN");
     return firstRequired >= 0 ? firstRequired : 0;
   });
+  const [previewObjectUrl, setPreviewObjectUrl] = useState<string | null>(null);
+  const [previewFilename, setPreviewFilename] = useState<string | null>(null);
+  const previewRef = useRef<HTMLVideoElement | null>(null);
+
+  useEffect(() => () => {
+    if (previewObjectUrl) URL.revokeObjectURL(previewObjectUrl);
+  }, [previewObjectUrl]);
 
   const requiredSlots = useMemo(() => slots.filter((slot) => slot.cropQaRequired), [slots]);
   const reviewedRequiredCount = useMemo(() => requiredSlots.filter((slot) => slot.review !== "NOT_RUN").length, [requiredSlots]);
@@ -59,11 +67,25 @@ export function OpeningCropReviewOperatorCard() {
   const allRequiredPass = allRequiredReviewed && passedRequiredCount === requiredSlots.length;
   const canExport = allRequiredReviewed && reviewer.trim().length > 0;
 
+  function seekPreview(seconds: number) {
+    const video = previewRef.current;
+    if (!video || !Number.isFinite(seconds)) return;
+    video.currentTime = Math.max(0, Math.min(seconds, Number.isFinite(video.duration) ? video.duration : seconds));
+    void video.play().catch(() => undefined);
+  }
+
+  function focusSlot(index: number, seek = true) {
+    setFocusedIndex(index);
+    if (!seek) return;
+    const range = openingReviewRangeFor(slots[index]?.key ?? null);
+    if (range) seekPreview(range.seekSec);
+  }
+
   function setReview(index: number, review: ReviewState) {
     setSlots((current) => current.map((slot, slotIndex) => slotIndex === index ? {...slot, review} : slot));
     if (review !== "NOT_RUN") {
       const next = slots.findIndex((slot, slotIndex) => slotIndex > index && slot.cropQaRequired && slot.review === "NOT_RUN");
-      if (next >= 0) setFocusedIndex(next);
+      if (next >= 0) focusSlot(next);
     }
   }
 
@@ -72,7 +94,18 @@ export function OpeningCropReviewOperatorCard() {
   }
 
   function focusNextIncomplete() {
-    if (firstIncompleteIndex >= 0) setFocusedIndex(firstIncompleteIndex);
+    if (firstIncompleteIndex >= 0) focusSlot(firstIncompleteIndex);
+  }
+
+  function loadPreview(file: File | null) {
+    if (previewObjectUrl) URL.revokeObjectURL(previewObjectUrl);
+    if (!file) {
+      setPreviewObjectUrl(null);
+      setPreviewFilename(null);
+      return;
+    }
+    setPreviewObjectUrl(URL.createObjectURL(file));
+    setPreviewFilename(file.name);
   }
 
   function exportEvidence() {
@@ -108,6 +141,7 @@ export function OpeningCropReviewOperatorCard() {
   }
 
   const focused = slots[Math.min(focusedIndex, Math.max(slots.length - 1, 0))];
+  const focusedRange = openingReviewRangeFor(focused?.key ?? null);
 
   return (
     <section className="mt-3 border-2 border-cyan-300 p-3 dark:border-cyan-800" data-opening-crop-review-operator="READY">
@@ -120,6 +154,33 @@ export function OpeningCropReviewOperatorCard() {
         <button type="button" onClick={focusNextIncomplete} disabled={firstIncompleteIndex < 0} className="border border-cyan-300 px-2 py-1 text-[8px] font-semibold disabled:opacity-40 dark:border-cyan-800">次の未review写真へ</button>
       </div>
 
+      <div className="mt-3 border-2 border-sky-200 p-3 dark:border-sky-900" data-opening-review-timecode-bridge={previewObjectUrl ? "LOADED" : "WAITING_LOCAL_PREVIEW"}>
+        <div className="flex flex-wrap items-start justify-between gap-2">
+          <div>
+            <p className="text-[8px] font-semibold tracking-[0.14em] text-sky-700 dark:text-sky-300">OPENING VISUAL QA TIMECODE BRIDGE</p>
+            <p className="mt-1 text-[9px] font-semibold">OpeningV1 60秒renderを選ぶと、11写真の実登場箇所へ0.5秒pre-rollして即seek</p>
+            <p className="mt-1 text-[7px] text-navy-400">memory cuts = canonical 30fps frame-rounded 29% / 59% · timeline = 2s cold open → 3×11s memories → 2×9s heroes → 7s utility</p>
+          </div>
+          <label className="cursor-pointer border border-sky-300 px-2 py-1 text-[8px] font-semibold dark:border-sky-800">
+            OpeningV1 MP4を選ぶ
+            <input type="file" accept="video/*" className="hidden" onChange={(event) => loadPreview(event.target.files?.[0] ?? null)} />
+          </label>
+        </div>
+        {previewObjectUrl ? (
+          <div className="mt-3 grid gap-3 lg:grid-cols-[minmax(0,1fr)_240px]">
+            <video ref={previewRef} src={previewObjectUrl} controls preload="metadata" className="w-full border border-sky-200 bg-black dark:border-sky-900" data-opening-review-preview-player="LOCAL_FILE" />
+            <div className="text-[7px] leading-4">
+              <p><span className="font-semibold">local file:</span> {previewFilename}</p>
+              <p><span className="font-semibold">crop authority:</span> <code>{audit.evidencePath}</code></p>
+              <p><span className="font-semibold">binding:</span> <code>{audit.bindingFingerprintSha256?.slice(0, 16)}…</code></p>
+              <p className="mt-2 border-l-2 border-amber-300 pl-2 text-amber-800 dark:text-amber-200">選択した動画は視覚確認用のローカルnavigation surfaceです。crop evidenceのSHA/currentness authorityは既存strict verifierのまま。動画選択・seekだけではPASSにもActualにもなりません。</p>
+            </div>
+          </div>
+        ) : (
+          <p className="mt-2 text-[7px] leading-4 text-navy-500 dark:text-navy-300">current OpeningV1 render/previewを選ぶとplayerが有効になります。Dashboardはローカル動画をcanonical evidenceとして保存しません。</p>
+        )}
+      </div>
+
       {focused ? (
         <div className="mt-3 border border-cyan-200 p-3 dark:border-cyan-900" data-opening-crop-focused-slot={focused.key ?? "INVALID"}>
           <div className="flex flex-wrap items-start justify-between gap-2">
@@ -128,29 +189,37 @@ export function OpeningCropReviewOperatorCard() {
               <p className="mt-1 text-[7px] text-navy-400">{focused.file} / sha={focused.mediaSha256?.slice(0, 12)}…</p>
               <p className="mt-1 text-[7px] text-navy-400">fit={focused.fit} ({focused.fitSource}) / focus={focused.focus ? `${focused.focus.x},${focused.focus.y}` : "none"} ({focused.focusSource})</p>
               <p className="mt-1 text-[7px] text-navy-400">presentationRevision={focused.presentationRevision?.slice(0, 12)}… / cropQaRequired={String(focused.cropQaRequired)}</p>
+              {focusedRange ? <p className="mt-1 font-mono text-[7px] text-sky-700 dark:text-sky-300">scene={focusedRange.sceneId} · {formatOpeningReviewTimecode(focusedRange.startSec)} → {formatOpeningReviewTimecode(focusedRange.endSec)} · seek={formatOpeningReviewTimecode(focusedRange.seekSec)}</p> : null}
             </div>
-            {focused.cropQaRequired ? (
-              <div className="flex gap-1">
-                {(["PASS", "FAIL"] as const).map((state) => (
-                  <button key={state} type="button" onClick={() => setReview(focusedIndex, state)} className={`border px-2 py-1 text-[8px] ${focused.review === state ? "border-cyan-500 font-bold" : "border-sand-200 dark:border-navy-700"}`}>{state}</button>
-                ))}
-              </div>
-            ) : <span className="border border-emerald-300 px-2 py-1 text-[7px] text-emerald-700 dark:border-emerald-800 dark:text-emerald-300">CONTAIN / CROP QA NOT REQUIRED</span>}
+            <div className="flex flex-wrap gap-1">
+              <button type="button" onClick={() => focusedRange && seekPreview(focusedRange.seekSec)} disabled={!previewObjectUrl || !focusedRange} className="border border-sky-300 px-2 py-1 text-[8px] font-semibold disabled:opacity-40 dark:border-sky-800">映像でcrop確認</button>
+              {focused.cropQaRequired ? (
+                <>
+                  {(["PASS", "FAIL"] as const).map((state) => (
+                    <button key={state} type="button" onClick={() => setReview(focusedIndex, state)} className={`border px-2 py-1 text-[8px] ${focused.review === state ? "border-cyan-500 font-bold" : "border-sand-200 dark:border-navy-700"}`}>{state}</button>
+                  ))}
+                </>
+              ) : <span className="border border-emerald-300 px-2 py-1 text-[7px] text-emerald-700 dark:border-emerald-800 dark:text-emerald-300">CONTAIN / CROP QA NOT REQUIRED</span>}
+            </div>
           </div>
           <label className="mt-3 block text-[7px] font-semibold">Notes<textarea value={focused.notes} onChange={(event) => setNotes(focusedIndex, event.target.value)} className="mt-1 block min-h-16 w-full border border-sand-300 bg-transparent p-2 text-[8px] dark:border-navy-600" placeholder="顔切れ、視線、余白、タイトルsafeとの干渉など" /></label>
         </div>
       ) : null}
 
       <div className="mt-3 grid gap-1 sm:grid-cols-2 xl:grid-cols-3">
-        {slots.map((slot, index) => (
-          <button key={slot.key ?? index} type="button" onClick={() => setFocusedIndex(index)} className={`border p-2 text-left text-[7px] ${index === focusedIndex ? "border-cyan-500" : "border-sand-200 dark:border-navy-700"}`} data-opening-crop-review-slot={slot.key ?? "INVALID"}>
-            <div className="flex items-center justify-between gap-2">
-              <span className="font-semibold">{index + 1}. {slot.key}</span>
-              <span className="font-mono">{slot.cropQaRequired ? slot.review : "AUTO PASS"}</span>
-            </div>
-            <p className="mt-1 opacity-60">{slot.fit} / focus {slot.focus ? `${slot.focus.x},${slot.focus.y}` : "none"}</p>
-          </button>
-        ))}
+        {slots.map((slot, index) => {
+          const range = openingReviewRangeFor(slot.key);
+          return (
+            <button key={slot.key ?? index} type="button" onClick={() => focusSlot(index)} className={`border p-2 text-left text-[7px] ${index === focusedIndex ? "border-cyan-500" : "border-sand-200 dark:border-navy-700"}`} data-opening-crop-review-slot={slot.key ?? "INVALID"}>
+              <div className="flex items-center justify-between gap-2">
+                <span className="font-semibold">{index + 1}. {slot.key}</span>
+                <span className="font-mono">{slot.cropQaRequired ? slot.review : "AUTO PASS"}</span>
+              </div>
+              <p className="mt-1 opacity-60">{slot.fit} / focus {slot.focus ? `${slot.focus.x},${slot.focus.y}` : "none"}</p>
+              {range ? <p className="mt-1 font-mono text-sky-700 dark:text-sky-300">{formatOpeningReviewTimecode(range.startSec)}–{formatOpeningReviewTimecode(range.endSec)}</p> : null}
+            </button>
+          );
+        })}
       </div>
 
       <div className="mt-3 grid gap-2 sm:grid-cols-[1fr_auto] sm:items-end">
@@ -159,7 +228,7 @@ export function OpeningCropReviewOperatorCard() {
       </div>
 
       <p className="mt-2 text-[7px] leading-4 text-navy-500 dark:text-navy-300">downloadした <code>opening-v1-crop-review-evidence.json</code> を <code>motion-studio/out/qa/opening-v1-crop-review-evidence.json</code> に置き、<code>node --no-warnings scripts/opening-v1-crop-review-evidence.mts --strict</code> でmedia SHA・effective crop・Human verdictを再検証してください。</p>
-      <p className="mt-3 border-l-2 border-amber-300 pl-2 text-[7px] leading-3 text-amber-800 dark:text-amber-200">Operator stateはブラウザsession内だけ。PASS/FAILはHumanが明示的に押した値だけを書き出します。Mac Studio Actual=NOT_RUN / Mac DaVinci GUI Actual=NOT_RUN / productionReady=false を固定します。</p>
+      <p className="mt-3 border-l-2 border-amber-300 pl-2 text-[7px] leading-3 text-amber-800 dark:text-amber-200">Operator stateとlocal previewはブラウザsession内だけ。timecode navigationはOpeningV1のcanonical timingを鏡像化した作業補助です。PASS/FAILはHumanが明示的に押した値だけを書き出し、Mac Studio Actual=NOT_RUN / Mac DaVinci GUI Actual=NOT_RUN / productionReady=false を固定します。</p>
     </section>
   );
 }
