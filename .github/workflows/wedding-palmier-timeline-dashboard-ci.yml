@@ -9,6 +9,7 @@ on:
       - 'movie-dashboard/src/generated/weddingProjectRemotionStageStatus.ts'
       - 'movie-dashboard/src/components/WeddingProjectRemotionStageStatusCard.tsx'
       - 'movie-dashboard/src/components/PalmierAssemblyOperatorCard.tsx'
+      - 'movie-dashboard/src/components/PalmierMarkerSequenceCard.tsx'
       - 'movie-dashboard/src/data/weddingMovieProductionCriticalPathRuntimeSnapshot.ts'
       - 'movie-dashboard/scripts/verify-wedding-movie-production-critical-path-runtime-snapshot.mjs'
       - '.github/workflows/wedding-palmier-timeline-dashboard-ci.yml'
@@ -78,6 +79,17 @@ jobs:
           grep -q 'session内の作業メモ' movie-dashboard/src/components/PalmierAssemblyOperatorCard.tsx
           ! grep -q 'localStorage' movie-dashboard/src/components/PalmierAssemblyOperatorCard.tsx
           ! grep -q 'sessionStorage' movie-dashboard/src/components/PalmierAssemblyOperatorCard.tsx
+
+      - name: Palmier marker sequence is ordered, guarded, and clipboard-only
+        run: |
+          grep -q 'PALMIER MARKER SEQUENCE' movie-dashboard/src/components/PalmierMarkerSequenceCard.tsx
+          grep -q 'allCurrent' movie-dashboard/src/components/PalmierMarkerSequenceCard.tsx
+          grep -q 'navigator.clipboard.writeText' movie-dashboard/src/components/PalmierMarkerSequenceCard.tsx
+          grep -q '全markerを順番どおりコピー' movie-dashboard/src/components/PalmierMarkerSequenceCard.tsx
+          grep -q 'PalmierMarkerSequenceCard' movie-dashboard/src/components/WeddingProjectRemotionStageStatusCard.tsx
+          grep -q 'productionReadyを生成しません' movie-dashboard/src/components/PalmierMarkerSequenceCard.tsx
+          ! grep -q 'localStorage' movie-dashboard/src/components/PalmierMarkerSequenceCard.tsx
+          ! grep -q 'sessionStorage' movie-dashboard/src/components/PalmierMarkerSequenceCard.tsx
 
       - name: Runtime Critical Path binds the same Palmier authority
         working-directory: movie-dashboard
