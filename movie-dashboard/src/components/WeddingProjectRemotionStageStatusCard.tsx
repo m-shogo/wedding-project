@@ -1,6 +1,7 @@
 import {weddingProjectRemotionStageStatus} from "../generated/weddingProjectRemotionStageStatus";
 import type {SceneProjectId} from "../data/visualSceneComposer";
 import {PalmierAssemblyOperatorCard} from "./PalmierAssemblyOperatorCard";
+import {PalmierMarkerSequenceCard} from "./PalmierMarkerSequenceCard";
 
 type StageState = "NOT_STAGED" | "STAGED_CURRENT" | "HANDOFF_CURRENT" | "INVALID";
 type PalmierTimelineState = "MISSING" | "CURRENT" | "STALE" | "INVALID";
@@ -100,6 +101,7 @@ export function WeddingProjectRemotionStageStatusCard({projectId}: {projectId: S
         </p>
       </section>
       <PalmierAssemblyOperatorCard projectId={projectId} />
+      <PalmierMarkerSequenceCard projectId={projectId} />
     </>
   );
 }
