@@ -13,6 +13,10 @@ import {
 import {resolveAllDirectorRecipes} from '../src/motion-kit/directorRecipeAdapter.ts';
 import type {TransitionWipeDirection, TransitionWipeVariant} from '../src/motion-kit/engines.tsx';
 import {motionZukanDummyStory} from '../src/data/motionZukanDummyStory.ts';
+import {
+  japaneseFriendsOpeningDurationFrames,
+  japaneseFriendsOpeningStory,
+} from '../src/data/japaneseFriendsOpeningStory.ts';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const repoRoot = path.resolve(root, '..');
@@ -64,6 +68,16 @@ if (new Set(motionZukanDummyStory.map((scene) => scene.photoIndex)).size !== 11)
 if (new Set(motionZukanDummyStory.map((scene) => scene.layout)).size < 7) errors.push('dummy production story must retain all 7 authored layout families');
 if (new Set(motionZukanDummyStory.map((scene) => scene.motion)).size < 5) errors.push('dummy production story must retain all 5 camera motion families');
 if (new Set(motionZukanDummyStory.map((scene) => scene.transition)).size < 6) errors.push('dummy production story must retain all 6 transition families');
+
+// The Japanese friends opening is a separate 105-second reference film. Keep its
+// common reception-opening arc and fictional/dummy guard explicit.
+if (japaneseFriendsOpeningStory.length !== 15) errors.push(`Japanese friends opening must retain 15 authored scenes, found ${japaneseFriendsOpeningStory.length}`);
+if (japaneseFriendsOpeningDurationFrames !== 3150) errors.push(`Japanese friends opening must remain 105 seconds / 3150 frames, found ${japaneseFriendsOpeningDurationFrames}`);
+if (new Set(japaneseFriendsOpeningStory.map((scene) => scene.kind)).size < 8) errors.push('Japanese friends opening must retain at least 8 scene families');
+if (new Set(japaneseFriendsOpeningStory.map((scene) => scene.asset)).size !== 5) errors.push('Japanese friends opening must exercise all 5 generated dummy photo assets');
+for (const token of ['id="JapaneseFriendsOpeningDemoV1"', 'japaneseFriendsOpeningDurationFrames']) {
+  requireText(rootFile, token, `Japanese friends opening composition wiring missing: ${token}`);
+}
 
 // --- transition-wipe direction/variant wiring regression check ---------------------------
 //
