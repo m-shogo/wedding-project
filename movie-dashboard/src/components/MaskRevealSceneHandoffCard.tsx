@@ -22,6 +22,7 @@ import { TypographyProductionRoleGuide } from "./TypographyProductionRoleGuide";
 import { TypographyProductionRouteSelector } from "./TypographyProductionRouteSelector";
 import { TypographyProductionRoutingMatrix } from "./TypographyProductionRoutingMatrix";
 import { TypographyProjectDeliveryBatchCard } from "./TypographyProjectDeliveryBatchCard";
+import { TypographySceneBoundElementComparison } from "./TypographySceneBoundElementComparison";
 import { TypographySceneDeliveryPackageCard } from "./TypographySceneDeliveryPackageCard";
 
 const TRANSPORT_LABEL_JA: Record<string, string> = {
@@ -91,6 +92,7 @@ export function MaskRevealSceneHandoffCard({ scene }: { scene: MaskRevealSceneIn
       <WeddingMediaIntakeChecklistCard projectId={scene.projectId} />
       <WeddingSceneMotionProductionHandoffCard scene={scene} />
       <TypographyProductionRoleGuide projectId={scene.projectId} />
+      <TypographySceneBoundElementComparison scene={scene} />
       <TypographyProductionRouteSelector scene={scene} />
       <TypographySceneDeliveryPackageCard scene={scene} />
       <TypographyProjectDeliveryBatchCard projectId={scene.projectId} />

@@ -1,0 +1,61 @@
+name: Wedding Scene-bound Remotion Compare CI
+
+on:
+  pull_request:
+    paths:
+      - 'movie-dashboard/src/components/TypographySceneBoundElementComparison.tsx'
+      - 'movie-dashboard/src/components/MaskRevealSceneHandoffCard.tsx'
+      - 'motion-studio/src/StartMotionKitRoot.tsx'
+      - 'motion-studio/src/compositions/common/VisualMotionTypographyConcepts.tsx'
+      - '.github/workflows/wedding-scene-bound-remotion-compare-ci.yml'
+  workflow_dispatch:
+
+jobs:
+  scene-bound-remotion-compare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Scene-bound compare stays Human-selected and revision-bound
+        run: |
+          grep -q 'SCENE-BOUND REMOTION ELEMENT A/B/C' movie-dashboard/src/components/TypographySceneBoundElementComparison.tsx
+          grep -q 'resolveMaskRevealEditableIntent' movie-dashboard/src/components/TypographySceneBoundElementComparison.tsx
+          grep -q 'scene.updatedAt' movie-dashboard/src/components/TypographySceneBoundElementComparison.tsx
+          grep -q 'scene.computedDurationSeconds' movie-dashboard/src/components/TypographySceneBoundElementComparison.tsx
+          grep -q 'saveTypographyProductionSelection' movie-dashboard/src/components/TypographySceneBoundElementComparison.tsx
+          grep -q 'saveTypographyProductionRoleContext' movie-dashboard/src/components/TypographySceneBoundElementComparison.tsx
+          grep -q 'AUTO SELECT = OFF' movie-dashboard/src/components/TypographySceneBoundElementComparison.tsx
+          grep -q 'WeddingSceneTypographyCandidateV1' movie-dashboard/src/components/TypographySceneBoundElementComparison.tsx
+          ! grep -q 'productionReady=YES' movie-dashboard/src/components/TypographySceneBoundElementComparison.tsx
+
+      - name: Dynamic Remotion composition uses canonical TypographyRevealEngine
+        run: |
+          grep -q 'WeddingSceneTypographyCandidateV1' motion-studio/src/compositions/common/VisualMotionTypographyConcepts.tsx
+          grep -q 'TypographyRevealEngine' motion-studio/src/compositions/common/VisualMotionTypographyConcepts.tsx
+          grep -q 'id="WeddingSceneTypographyCandidateV1"' motion-studio/src/StartMotionKitRoot.tsx
+          grep -q "durationInFrames={900}" motion-studio/src/StartMotionKitRoot.tsx
+
+      - name: Typecheck Motion Studio
+        working-directory: motion-studio
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm typecheck
+
+      - name: Render same-input candidate smoke
+        working-directory: motion-studio
+        run: |
+          pnpm exec remotion render src/index-start-motion-kit.ts WeddingSceneTypographyCandidateV1 out/qa/scene-bound-remotion/ci-smoke.mp4 --props='{"text":"SHOGO & SHIORI","mode":"stagger","intensity":"M","label":"CI SCENE-BOUND"}' --frames=0-11 --scale=0.2 --crf=35
+          test -s out/qa/scene-bound-remotion/ci-smoke.mp4
+
+      - name: Build Movie Dashboard
+        working-directory: movie-dashboard
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm build
