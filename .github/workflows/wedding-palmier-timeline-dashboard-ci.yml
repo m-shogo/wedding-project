@@ -67,6 +67,18 @@ jobs:
           grep -q 'Mac DaVinci GUI Actual PASS' movie-dashboard/src/components/PalmierAssemblyOperatorCard.tsx
           ! grep -q 'productionReady=YES' movie-dashboard/src/components/PalmierAssemblyOperatorCard.tsx
 
+      - name: Palmier operator progress is revision-bound and non-evidence
+        run: |
+          grep -q 'progressByRevision' movie-dashboard/src/components/PalmierAssemblyOperatorCard.tsx
+          grep -q 'scene.sceneId}@${scene.sourceRevision}' movie-dashboard/src/components/PalmierAssemblyOperatorCard.tsx
+          grep -q '1. Scene配置' movie-dashboard/src/components/PalmierAssemblyOperatorCard.tsx
+          grep -q '2. Marker追加' movie-dashboard/src/components/PalmierAssemblyOperatorCard.tsx
+          grep -q '3. Timing確認' movie-dashboard/src/components/PalmierAssemblyOperatorCard.tsx
+          grep -q 'aria-pressed' movie-dashboard/src/components/PalmierAssemblyOperatorCard.tsx
+          grep -q 'session内の作業メモ' movie-dashboard/src/components/PalmierAssemblyOperatorCard.tsx
+          ! grep -q 'localStorage' movie-dashboard/src/components/PalmierAssemblyOperatorCard.tsx
+          ! grep -q 'sessionStorage' movie-dashboard/src/components/PalmierAssemblyOperatorCard.tsx
+
       - name: Runtime Critical Path binds the same Palmier authority
         working-directory: movie-dashboard
         run: node scripts/verify-wedding-movie-production-critical-path-runtime-snapshot.mjs
