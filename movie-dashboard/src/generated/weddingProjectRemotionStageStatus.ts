@@ -34,6 +34,13 @@ export const weddingProjectRemotionStageStatus = {
         "palmierFcpxml": null,
         "palmierFcpxmlSha256": null
       },
+      "transition": {
+        "transitionEdgeCount": 0,
+        "verifiedTransitionEdgeCount": 0,
+        "crossDissolveCount": 0,
+        "transitionProofSha256": null,
+        "transitionProof": []
+      },
       "next": {
         "kind": "VERIFY_REAL_PALMIER_FCPXML",
         "command": "node --no-warnings scripts/verify-wedding-palmier-typography-timeline-export.mts --movie=opening --xml='<real-palmier-fcpxml-path>' --write"
@@ -70,6 +77,13 @@ export const weddingProjectRemotionStageStatus = {
         "palmierFcpxml": null,
         "palmierFcpxmlSha256": null
       },
+      "transition": {
+        "transitionEdgeCount": 0,
+        "verifiedTransitionEdgeCount": 0,
+        "crossDissolveCount": 0,
+        "transitionProofSha256": null,
+        "transitionProof": []
+      },
       "next": {
         "kind": "VERIFY_REAL_PALMIER_FCPXML",
         "command": "node --no-warnings scripts/verify-wedding-palmier-typography-timeline-export.mts --movie=profile --xml='<real-palmier-fcpxml-path>' --write"
@@ -78,6 +92,7 @@ export const weddingProjectRemotionStageStatus = {
   },
   "evidenceBoundary": {
     "palmierGuiActual": "NOT_RUN_UNLESS_HUMAN_EXECUTED",
+    "transitionAppliedGuiActual": "NOT_RUN_UNLESS_HUMAN_EXECUTED",
     "macRemotionStudioGuiActual": "NOT_RUN_UNLESS_HUMAN_EXECUTED",
     "macDavinciResolveGuiActual": "NOT_RUN_UNLESS_HUMAN_EXECUTED",
     "productionReadyPromotedBySnapshot": false
