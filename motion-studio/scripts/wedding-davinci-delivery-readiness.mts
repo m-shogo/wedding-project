@@ -48,6 +48,27 @@ type TransitionGate = {
   blocker: string | null;
 };
 
+type CompletionReceipt = {
+  schemaVersion?: string;
+  authority?: string;
+  movieId?: string;
+  sourceRecovery?: {sha256?: string};
+  finishingEvidence?: {sha256?: string};
+  transitionActualEvidence?: {sha256?: string; transitionProofSha256?: string};
+};
+
+type CompletionGate = {
+  current: boolean;
+  state: 'CURRENT' | 'BLOCKED';
+  receiptPath: string;
+  receiptSha256: string | null;
+  recoverySha256: string | null;
+  finishingEvidenceSha256: string | null;
+  transitionEvidenceSha256: string | null;
+  transitionProofSha256: string | null;
+  blocker: string | null;
+};
+
 const runAudit = (scriptName: string): AuditReport => {
   const result = spawnSync(process.execPath, ['--no-warnings', join(root, 'scripts', scriptName), '--json'], {
     cwd: root,
@@ -85,13 +106,45 @@ const transitionGate = (movieId: 'opening' | 'profile'): TransitionGate => {
   };
 };
 
-const nextGate = (audit: AuditReport, projectMotionState: 'CURRENT' | 'NOT_APPLICABLE' | 'INVALID', transition: TransitionGate) => {
+const completionGate = (movieId: 'opening' | 'profile'): CompletionGate => {
+  const receiptPath = join(root, `out/qa/${movieId}-v1-davinci-actual-completion-receipt.json`);
+  const result = spawnSync(process.execPath, [
+    '--no-warnings',
+    join(root, 'scripts/wedding-davinci-actual-completion-receipt.mts'),
+    `--movie=${movieId}`,
+  ], {cwd: root, encoding: 'utf8'});
+  let receipt: CompletionReceipt | null = null;
+  if (existsSync(receiptPath)) {
+    try { receipt = JSON.parse(readFileSync(receiptPath, 'utf8')) as CompletionReceipt; }
+    catch { receipt = null; }
+  }
+  const current = result.status === 0;
+  return {
+    current,
+    state: current ? 'CURRENT' : 'BLOCKED',
+    receiptPath: rel(receiptPath),
+    receiptSha256: existsSync(receiptPath) ? shaFile(receiptPath) : null,
+    recoverySha256: receipt?.sourceRecovery?.sha256 ?? null,
+    finishingEvidenceSha256: receipt?.finishingEvidence?.sha256 ?? null,
+    transitionEvidenceSha256: receipt?.transitionActualEvidence?.sha256 ?? null,
+    transitionProofSha256: receipt?.transitionActualEvidence?.transitionProofSha256 ?? null,
+    blocker: current ? null : (result.stderr || result.stdout || 'DAVINCI_ACTUAL_COMPLETION_RECEIPT_BLOCKED').trim().split('\n')[0],
+  };
+};
+
+const nextGate = (
+  audit: AuditReport,
+  projectMotionState: 'CURRENT' | 'NOT_APPLICABLE' | 'INVALID',
+  transition: TransitionGate,
+  completion: CompletionGate,
+) => {
   if (projectMotionState === 'INVALID') return 'REVALIDATE_PROJECT_MOTION_PROVENANCE';
   if (audit.state === 'INVALID') return 'REPAIR_INVALID_BINDING';
   if (audit.state === 'STALE') return 'REBUILD_STALE_BINDING';
   if (audit.state === 'CURRENT_FAIL') return 'FIX_DAVINCI_ACTUAL';
   if (audit.state === 'NOT_RUN' || audit.state === 'CURRENT_NOT_RUN') return 'RUN_MAC_DAVINCI_ACTUAL';
   if (!transition.current) return 'RUN_DAVINCI_TRANSITION_ACTUAL';
+  if (!completion.current) return 'BUILD_DAVINCI_ACTUAL_COMPLETION_RECEIPT';
   if (!audit.finalApproval.current || !audit.finalApproval.productionReady) return 'RUN_FINAL_DELIVERY_APPROVAL';
   return 'READY';
 };
@@ -100,8 +153,9 @@ const projectEntry = (
   audit: AuditReport,
   projectMotion: ReturnType<typeof runWeddingProjectMotionProvenancePreflight>,
   transition: TransitionGate,
+  completion: CompletionGate,
 ) => {
-  const ready = projectMotion.state !== 'INVALID' && audit.state === 'CURRENT_PASS' && transition.current && audit.finalApproval.current && audit.finalApproval.productionReady;
+  const ready = projectMotion.state !== 'INVALID' && audit.state === 'CURRENT_PASS' && transition.current && completion.current && audit.finalApproval.current && audit.finalApproval.productionReady;
   return {
     ready,
     handoffIdentitySha256: audit.recovery.sha256,
@@ -113,12 +167,14 @@ const projectEntry = (
     transitionGate: transition,
     transitionActualEvidenceSha256: transition.evidenceSha256,
     transitionProofSha256: transition.proofSha256,
+    completionGate: completion,
+    davinciActualCompletionReceiptSha256: completion.receiptSha256,
     davinciActualEvidenceSha256: audit.actualEvidence.sha256,
     davinciActualReviewOverall: audit.actualEvidence.reviewOverall,
     finalApprovalSha256: audit.finalApproval.sha256,
     finalApprovalCurrent: audit.finalApproval.current,
     finalApprovalDecision: audit.finalApproval.decision,
-    nextGate: nextGate(audit, projectMotion.state, transition),
+    nextGate: nextGate(audit, projectMotion.state, transition, completion),
   };
 };
 
@@ -128,8 +184,10 @@ const openingProjectMotion = runWeddingProjectMotionProvenancePreflight(root, 'o
 const profileProjectMotion = runWeddingProjectMotionProvenancePreflight(root, 'profile');
 const openingTransitionGate = transitionGate('opening');
 const profileTransitionGate = transitionGate('profile');
-const opening = projectEntry(openingAudit, openingProjectMotion, openingTransitionGate);
-const profile = projectEntry(profileAudit, profileProjectMotion, profileTransitionGate);
+const openingCompletionGate = completionGate('opening');
+const profileCompletionGate = completionGate('profile');
+const opening = projectEntry(openingAudit, openingProjectMotion, openingTransitionGate, openingCompletionGate);
+const profile = projectEntry(profileAudit, profileProjectMotion, profileTransitionGate, profileCompletionGate);
 const ready = opening.ready && profile.ready;
 
 const report = {
@@ -148,6 +206,8 @@ const report = {
     'DAVINCI_ACTUAL_EVIDENCE_SHA_CHANGED => REVALIDATE_FINAL_APPROVAL',
     'TRANSITION_ACTUAL_EVIDENCE_MUST_BIND_TO_SAME_CURRENT_RECOVERY_AS_DAVINCI_FINISHING_EVIDENCE',
     'TRANSITION_ACTUAL_EVIDENCE_SHA_CHANGED => READINESS_SNAPSHOT_STALE',
+    'DAVINCI_ACTUAL_COMPLETION_RECEIPT_MUST_BIND_FINISHING_AND_TRANSITION_EVIDENCE_TO_SAME_RECOVERY',
+    'DAVINCI_ACTUAL_COMPLETION_RECEIPT_DRIFT => DELIVERY_BLOCKED',
     'CROSS_DISSOLVE_REQUIRES_HUMAN_DURATION_PRESERVATION_PASS',
     'NOT_RUN != VERIFIED',
     'CI_MUST_NOT_PROMOTE_MAC_GUI_ACTUAL',
