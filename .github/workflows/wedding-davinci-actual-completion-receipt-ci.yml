@@ -1,0 +1,30 @@
+name: Wedding DaVinci Actual Completion Receipt CI
+
+on:
+  pull_request:
+    paths:
+      - 'motion-studio/scripts/wedding-davinci-actual-completion-receipt.mts'
+      - '.github/workflows/wedding-davinci-actual-completion-receipt-ci.yml'
+  workflow_dispatch:
+
+jobs:
+  davinci-actual-completion-receipt:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Verify finishing + transition Actual completion receipt
+        working-directory: motion-studio
+        run: |
+          node --no-warnings scripts/wedding-davinci-actual-completion-receipt.mts --self-test | tee /tmp/davinci-completion.log
+          grep -q 'Wedding DaVinci Actual completion receipt self-test: PASS' /tmp/davinci-completion.log
+          grep -q 'finishingDrift=BLOCKED transitionDrift=BLOCKED' /tmp/davinci-completion.log
+      - name: Keep GUI Actual evidence human-only
+        run: |
+          grep -q "performsMacDaVinciGuiActual: false" motion-studio/scripts/wedding-davinci-actual-completion-receipt.mts
+          grep -q "productionReady: false" motion-studio/scripts/wedding-davinci-actual-completion-receipt.mts
+          grep -q "macDaVinciActualWasHumanRecorded: true" motion-studio/scripts/wedding-davinci-actual-completion-receipt.mts
+          ! grep -q "performsMacDaVinciGuiActual: true" motion-studio/scripts/wedding-davinci-actual-completion-receipt.mts
+          ! grep -q "productionReady: true" motion-studio/scripts/wedding-davinci-actual-completion-receipt.mts
