@@ -1,0 +1,48 @@
+name: Wedding Remotion Role Presets CI
+
+on:
+  pull_request:
+    paths:
+      - 'movie-dashboard/src/components/TypographyProductionRouteSelector.tsx'
+      - 'movie-dashboard/src/data/typographyProductionSelectionStore.ts'
+      - 'movie-dashboard/src/data/typographyProductionRoleContextStore.ts'
+      - 'movie-dashboard/src/data/weddingTypographyProductionRoleGuide.generated.ts'
+      - '.github/workflows/wedding-remotion-role-presets-ci.yml'
+  workflow_dispatch:
+
+jobs:
+  role-presets:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Role presets are explicit human actions
+        run: |
+          grep -q 'WEDDING ROLE PRESETS / ONE-CLICK HUMAN BINDING' movie-dashboard/src/components/TypographyProductionRouteSelector.tsx
+          grep -q 'AUTO SELECT = OFF' movie-dashboard/src/components/TypographyProductionRouteSelector.tsx
+          grep -q 'chooseRolePreset' movie-dashboard/src/components/TypographyProductionRouteSelector.tsx
+          grep -q 'saveTypographyProductionSelection' movie-dashboard/src/components/TypographyProductionRouteSelector.tsx
+          grep -q 'saveTypographyProductionRoleContext' movie-dashboard/src/components/TypographyProductionRouteSelector.tsx
+          grep -q 'onClick={() => chooseRolePreset' movie-dashboard/src/components/TypographyProductionRouteSelector.tsx
+          grep -q 'PRIMARY' movie-dashboard/src/components/TypographyProductionRouteSelector.tsx
+          grep -q 'FALLBACK' movie-dashboard/src/components/TypographyProductionRouteSelector.tsx
+
+      - name: Presets preserve evidence boundary
+        run: |
+          grep -q 'Remotion Studio GUI Actual' movie-dashboard/src/components/TypographyProductionRouteSelector.tsx
+          grep -q 'DaVinci GUI Actual' movie-dashboard/src/components/TypographyProductionRouteSelector.tsx
+          grep -q 'productionReadyを自動昇格しません' movie-dashboard/src/components/TypographyProductionRouteSelector.tsx
+          ! grep -q 'productionReady=YES' movie-dashboard/src/components/TypographyProductionRouteSelector.tsx
+
+      - name: Build Movie Dashboard
+        working-directory: movie-dashboard
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm build
