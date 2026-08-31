@@ -1,0 +1,38 @@
+name: Wedding Venue Delivery Package CI
+
+on:
+  pull_request:
+    paths:
+      - 'motion-studio/scripts/wedding-venue-delivery-package.mts'
+      - 'motion-studio/scripts/wedding-venue-delivery-package-verify.mts'
+      - 'motion-studio/scripts/check-wedding-venue-delivery-package.mts'
+      - '.github/workflows/wedding-venue-delivery-package-ci.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'motion-studio/scripts/wedding-venue-delivery-package.mts'
+      - 'motion-studio/scripts/wedding-venue-delivery-package-verify.mts'
+      - 'motion-studio/scripts/check-wedding-venue-delivery-package.mts'
+      - '.github/workflows/wedding-venue-delivery-package-ci.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  venue-package-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Ensure ffmpeg and ffprobe are available
+        run: |
+          if ! command -v ffmpeg >/dev/null 2>&1 || ! command -v ffprobe >/dev/null 2>&1; then
+            sudo apt-get update
+            sudo apt-get install -y ffmpeg
+          fi
+      - name: Run real-MP4 offline venue package verification fixtures
+        working-directory: motion-studio
+        run: node --no-warnings scripts/check-wedding-venue-delivery-package.mts
