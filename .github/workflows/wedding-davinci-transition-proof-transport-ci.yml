@@ -1,0 +1,42 @@
+name: Wedding DaVinci Transition Proof Transport CI
+
+on:
+  pull_request:
+    paths:
+      - "motion-studio/scripts/wedding-davinci-actual-session-plan.mts"
+      - "motion-studio/scripts/wedding-davinci-gui-actual-start-gate.mts"
+      - "motion-studio/scripts/check-wedding-davinci-transition-proof-transport.mts"
+      - "motion-studio/scripts/apply-wedding-palmier-timeline-production-handoff.mts"
+      - "motion-studio/scripts/check-wedding-palmier-typography-timeline-export-receipt.mts"
+      - ".github/workflows/wedding-davinci-transition-proof-transport-ci.yml"
+  push:
+    branches: [main]
+    paths:
+      - "motion-studio/scripts/wedding-davinci-actual-session-plan.mts"
+      - "motion-studio/scripts/wedding-davinci-gui-actual-start-gate.mts"
+      - "motion-studio/scripts/check-wedding-davinci-transition-proof-transport.mts"
+      - "motion-studio/scripts/apply-wedding-palmier-timeline-production-handoff.mts"
+      - "motion-studio/scripts/check-wedding-palmier-typography-timeline-export-receipt.mts"
+      - ".github/workflows/wedding-davinci-transition-proof-transport-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Verify transition proof transport and GUI evidence boundaries
+        working-directory: motion-studio
+        run: node --no-warnings scripts/check-wedding-davinci-transition-proof-transport.mts
+      - name: Verify existing Session Plan contract remains valid
+        working-directory: motion-studio
+        run: node --no-warnings scripts/check-wedding-davinci-actual-session-plan.mts
+      - name: Verify existing Start Gate contract remains valid
+        working-directory: motion-studio
+        run: node --no-warnings scripts/check-wedding-davinci-gui-actual-start-gate.mts
