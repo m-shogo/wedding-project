@@ -1,5 +1,6 @@
 import {openingDavinciActualBindingAudit} from "./openingDavinciActualBindingAudit.generated";
 import {profileDavinciActualBindingAudit} from "./profileDavinciActualBindingAudit.generated";
+import {weddingDavinciTransitionActualReadiness} from "./weddingDavinciTransitionActualReadiness.generated";
 import {weddingProjectMotionProvenancePreflight} from "./weddingProjectMotionProvenancePreflight.generated";
 import {buildOpeningProductionStatusHandoff} from "./openingProductionStatusHandoff";
 import {buildProfileProductionStatusHandoff} from "./profileProductionStatusHandoff";
@@ -15,17 +16,19 @@ type ProjectMotionPreflight = {
   command: string;
   error: string | null;
 };
+type TransitionActualReadiness = typeof weddingDavinciTransitionActualReadiness.opening | typeof weddingDavinciTransitionActualReadiness.profile;
 
 const classifyProjectState = (
   auditState: string,
   finalApprovalCurrent: boolean,
   productionReady: boolean,
   projectMotion: ProjectMotionPreflight,
+  transitionActual: TransitionActualReadiness,
 ): ProjectReadinessState => {
   if (projectMotion.state === "INVALID") return "INVALID";
   if (auditState === "INVALID") return "INVALID";
   if (auditState === "STALE") return "STALE";
-  if (auditState === "CURRENT_PASS" && finalApprovalCurrent && productionReady) return "READY";
+  if (auditState === "CURRENT_PASS" && transitionActual.current && finalApprovalCurrent && productionReady) return "READY";
   return "BLOCKED";
 };
 
@@ -37,23 +40,38 @@ const projectMotionNextGate = (projectMotion: ProjectMotionPreflight) => project
     }
   : null;
 
+const transitionNextGate = (auditState: string, transitionActual: TransitionActualReadiness) =>
+  auditState === "CURRENT_PASS" && !transitionActual.current
+    ? {
+        stage: "RUN_DAVINCI_TRANSITION_ACTUAL",
+        command: transitionActual.initCommand,
+        strictCommand: transitionActual.strictCommand,
+        finalGateCommand: transitionActual.finalGateCommand,
+        blocker: "Mac DaVinci上で各transition edgeの保持とCROSS_DISSOLVE尺をHuman確認し、current recoveryへSHA bindingされたevidenceをstrict検証する",
+      }
+    : null;
+
 export function buildWeddingDavinciDeliveryReadiness() {
   const openingHandoff = buildOpeningProductionStatusHandoff();
   const profileHandoff = buildProfileProductionStatusHandoff();
   const openingProjectMotion: ProjectMotionPreflight = weddingProjectMotionProvenancePreflight.opening;
   const profileProjectMotion: ProjectMotionPreflight = weddingProjectMotionProvenancePreflight.profile;
+  const openingTransitionActual = weddingDavinciTransitionActualReadiness.opening;
+  const profileTransitionActual = weddingDavinciTransitionActualReadiness.profile;
 
   const openingState = classifyProjectState(
     openingDavinciActualBindingAudit.state,
     openingDavinciActualBindingAudit.finalApproval.current,
     openingDavinciActualBindingAudit.finalApproval.productionReady,
     openingProjectMotion,
+    openingTransitionActual,
   );
   const profileState = classifyProjectState(
     profileDavinciActualBindingAudit.state,
     profileDavinciActualBindingAudit.finalApproval.current,
     profileDavinciActualBindingAudit.finalApproval.productionReady,
     profileProjectMotion,
+    profileTransitionActual,
   );
 
   const overallState: WeddingReadinessState =
@@ -74,9 +92,15 @@ export function buildWeddingDavinciDeliveryReadiness() {
       schemaVersion: weddingProjectMotionProvenancePreflight.schemaVersion,
       authority: weddingProjectMotionProvenancePreflight.authority,
     },
+    transitionActualSnapshot: {
+      schemaVersion: weddingDavinciTransitionActualReadiness.schemaVersion,
+      authority: weddingDavinciTransitionActualReadiness.authority,
+      guardrails: [...weddingDavinciTransitionActualReadiness.guardrails],
+    },
     opening: {
       state: openingState,
       projectMotion: openingProjectMotion,
+      transitionActual: openingTransitionActual,
       handoff: {
         schemaVersion: openingHandoff.schemaVersion,
         davinciContractVersion: openingHandoff.opening.production.davinciHandoff.contractVersion,
@@ -95,11 +119,14 @@ export function buildWeddingDavinciDeliveryReadiness() {
         finalApprovalDecision: openingDavinciActualBindingAudit.finalApproval.decision,
         productionReady: openingDavinciActualBindingAudit.finalApproval.productionReady,
       },
-      nextGate: projectMotionNextGate(openingProjectMotion) ?? openingHandoff.opening.production.nextGate,
+      nextGate: projectMotionNextGate(openingProjectMotion)
+        ?? transitionNextGate(openingDavinciActualBindingAudit.state, openingTransitionActual)
+        ?? openingHandoff.opening.production.nextGate,
     },
     profile: {
       state: profileState,
       projectMotion: profileProjectMotion,
+      transitionActual: profileTransitionActual,
       handoff: {
         schemaVersion: profileHandoff.schemaVersion,
         davinciContractVersion: profileHandoff.profile.production.davinciHandoff.contractVersion,
@@ -118,7 +145,9 @@ export function buildWeddingDavinciDeliveryReadiness() {
         finalApprovalDecision: profileDavinciActualBindingAudit.finalApproval.decision,
         productionReady: profileDavinciActualBindingAudit.finalApproval.productionReady,
       },
-      nextGate: projectMotionNextGate(profileProjectMotion) ?? profileHandoff.profile.production.nextGate,
+      nextGate: projectMotionNextGate(profileProjectMotion)
+        ?? transitionNextGate(profileDavinciActualBindingAudit.state, profileTransitionActual)
+        ?? profileHandoff.profile.production.nextGate,
     },
     guardrails: [
       "WEDDING_READY_REQUIRES_OPENING_AND_PROFILE_READY",
@@ -127,6 +156,10 @@ export function buildWeddingDavinciDeliveryReadiness() {
       "PROJECT_MOTION_NOT_APPLICABLE != VERIFIED",
       "RECOVERY_SHA_CHANGED => DELIVERY_READINESS_STALE",
       "DAVINCI_ACTUAL_SHA_CHANGED => FINAL_APPROVAL_STALE",
+      "TRANSITION_ACTUAL_CURRENT_REQUIRED_BEFORE_FINAL_DELIVERY_READY",
+      "TRANSITION_ACTUAL_GENERATED_SNAPSHOT != LIVE_MAC_DAVINCI_GUI_ACTUAL",
+      "TRANSITION_PROOF_SHA_CHANGED => REVALIDATE_TRANSITION_ACTUAL",
+      "CROSS_DISSOLVE_DURATION_REQUIRES_HUMAN_PASS",
       "FINAL_APPROVAL_CURRENT_REQUIRES_CURRENT_RECOVERY_AND_ACTUAL_EVIDENCE",
       "NOT_RUN != VERIFIED",
       "CI_MUST_NOT_PROMOTE_MAC_GUI_ACTUAL",
