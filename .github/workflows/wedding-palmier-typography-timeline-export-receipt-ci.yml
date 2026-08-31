@@ -18,11 +18,11 @@ jobs:
         with:
           node-version: 22
 
-      - name: Receipt self-test covers current, duplicate and reversed markers
+      - name: Receipt self-test covers marker and transition intent
         working-directory: motion-studio
         run: node --no-warnings scripts/verify-wedding-palmier-typography-timeline-export.mts --self-test
 
-      - name: Receipt currentness self-test catches source drift
+      - name: Receipt currentness self-test catches source and transition evidence drift
         working-directory: motion-studio
         run: node --no-warnings scripts/check-wedding-palmier-typography-timeline-export-receipt.mts --self-test
 
@@ -44,6 +44,7 @@ jobs:
           const report = JSON.parse(fs.readFileSync('/tmp/currentness.json', 'utf8'));
           if (report.state !== 'MISSING') throw new Error(`expected MISSING, got ${report.state}`);
           if (report.evidenceBoundary.palmierGuiActualPerformedByThisCheck !== false) throw new Error('currentness checker must not claim Palmier GUI Actual');
+          if (report.evidenceBoundary.transitionAppliedGuiActualPerformedByThisCheck !== false) throw new Error('currentness checker must not claim transition GUI Actual');
           if (report.evidenceBoundary.productionReadyPromotedByThisCheck !== false) throw new Error('currentness checker must not promote productionReady');
           NODE
           if node --no-warnings scripts/check-wedding-palmier-typography-timeline-export-receipt.mts --movie=opening --strict >/tmp/currentness-strict.log 2>&1; then
@@ -52,25 +53,35 @@ jobs:
           fi
           grep -q 'palmierTimelineExportReceipt=MISSING' /tmp/currentness-strict.log
 
-      - name: Receipt is SHA-bound and does not fabricate GUI evidence
+      - name: Receipt is SHA-bound and verifies transition intent without fabricating GUI evidence
         run: |
           grep -q "VERIFIED_PALMIER_TIMELINE_EXPORT_AGAINST_ASSEMBLY_PLAN" motion-studio/scripts/verify-wedding-palmier-typography-timeline-export.mts
           grep -q "assemblyPlan: {path: planPath, sha256: sha256(planRaw)}" motion-studio/scripts/verify-wedding-palmier-typography-timeline-export.mts
           grep -q "palmierFcpxml: {path: xmlPath, sha256: sha256(xmlRaw)}" motion-studio/scripts/verify-wedding-palmier-typography-timeline-export.mts
           grep -q "allMarkersPresentExactlyOnce: true" motion-studio/scripts/verify-wedding-palmier-typography-timeline-export.mts
           grep -q "markerOrderMatchesAssemblyPlan: true" motion-studio/scripts/verify-wedding-palmier-typography-timeline-export.mts
+          grep -q "transitionIntentMatchesAssemblyPlan: true" motion-studio/scripts/verify-wedding-palmier-typography-timeline-export.mts
+          grep -q "transitionDurationMatchesAssemblyPlan: true" motion-studio/scripts/verify-wedding-palmier-typography-timeline-export.mts
+          grep -q "noUnboundTransitions: true" motion-studio/scripts/verify-wedding-palmier-typography-timeline-export.mts
+          grep -q "PALMIER_TIMELINE_HARD_CUT_HAS_TRANSITION" motion-studio/scripts/verify-wedding-palmier-typography-timeline-export.mts
+          grep -q "PALMIER_TIMELINE_CROSS_DISSOLVE_DURATION_MISMATCH" motion-studio/scripts/verify-wedding-palmier-typography-timeline-export.mts
+          grep -q "palmierTransitionIntentVerifiedFromFcpxml: true" motion-studio/scripts/verify-wedding-palmier-typography-timeline-export.mts
           grep -q "palmierGuiActualPerformedByThisVerifier: false" motion-studio/scripts/verify-wedding-palmier-typography-timeline-export.mts
+          grep -q "transitionAppliedGuiActualPerformedByThisVerifier: false" motion-studio/scripts/verify-wedding-palmier-typography-timeline-export.mts
           grep -q "macDavinciResolveGuiActual: 'NOT_RUN_UNLESS_HUMAN_EXECUTED'" motion-studio/scripts/verify-wedding-palmier-typography-timeline-export.mts
           grep -q "productionReadyPromotedByThisVerifier: false" motion-studio/scripts/verify-wedding-palmier-typography-timeline-export.mts
           ! grep -q "productionReady: true" motion-studio/scripts/verify-wedding-palmier-typography-timeline-export.mts
           ! grep -q "macDavinciResolveGuiActual: 'PASS'" motion-studio/scripts/verify-wedding-palmier-typography-timeline-export.mts
 
-      - name: Currentness checker is read-only and evidence-safe
+      - name: Currentness checker requires transition proof and remains evidence-safe
         run: |
           grep -q "ASSEMBLY_PLAN_SHA_DRIFT" motion-studio/scripts/check-wedding-palmier-typography-timeline-export-receipt.mts
           grep -q "PALMIER_FCPXML_SHA_DRIFT" motion-studio/scripts/check-wedding-palmier-typography-timeline-export-receipt.mts
+          grep -q "RECEIPT_TRANSITION_VERIFICATION_INVALID" motion-studio/scripts/check-wedding-palmier-typography-timeline-export-receipt.mts
+          grep -q "RECEIPT_TRANSITION_CHECKS_INVALID" motion-studio/scripts/check-wedding-palmier-typography-timeline-export-receipt.mts
           grep -q "READ_ONLY_PALMIER_TIMELINE_EXPORT_RECEIPT_CURRENTNESS" motion-studio/scripts/check-wedding-palmier-typography-timeline-export-receipt.mts
           grep -q "palmierGuiActualPerformedByThisCheck: false" motion-studio/scripts/check-wedding-palmier-typography-timeline-export-receipt.mts
+          grep -q "transitionAppliedGuiActualPerformedByThisCheck: false" motion-studio/scripts/check-wedding-palmier-typography-timeline-export-receipt.mts
           grep -q "productionReadyPromotedByThisCheck: false" motion-studio/scripts/check-wedding-palmier-typography-timeline-export-receipt.mts
           ! grep -Eq 'writeFileSync|renameSync|copyFileSync|mkdirSync' motion-studio/scripts/check-wedding-palmier-typography-timeline-export-receipt.mts
           ! grep -q "macDavinciResolveGuiActual: 'PASS'" motion-studio/scripts/check-wedding-palmier-typography-timeline-export-receipt.mts
