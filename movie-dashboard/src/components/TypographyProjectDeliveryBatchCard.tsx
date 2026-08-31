@@ -1,4 +1,5 @@
 import {useEffect, useMemo, useState} from "react";
+import {SelectedSceneRenderProjectCard} from "./SelectedSceneRenderProjectCard";
 import {
   loadMotionZukanProductionWorkspaceState,
   MOTION_ZUKAN_PRODUCTION_WORKSPACE_CHANGED_EVENT,
@@ -149,6 +150,8 @@ export function TypographyProjectDeliveryBatchCard({projectId}: {projectId: Scen
           Project identity verification={identityPlan.state}。batchReady / package export ≠ identity CURRENT ≠ Studio GUI Actual PASS ≠ DaVinci GUI Actual PASS。
         </p>
       </div>
+
+      <SelectedSceneRenderProjectCard projectId={projectId} batchReady={routeReady} />
 
       {openingMedia ? (
         <div className="mt-2 border border-sky-200 dark:border-sky-800 p-2">
