@@ -1,0 +1,61 @@
+name: Wedding Palmier Selected Visual Reference CI
+
+on:
+  pull_request:
+    paths:
+      - 'movie-dashboard/src/components/PalmierSelectedVisualReferenceCard.tsx'
+      - 'movie-dashboard/src/components/WeddingProjectRemotionStageStatusCard.tsx'
+      - '.github/workflows/wedding-palmier-selected-visual-reference-ci.yml'
+  workflow_dispatch:
+
+jobs:
+  palmier-selected-visual-reference:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Selected render authority is reused without new production evidence
+        run: |
+          grep -q 'wedding-movie-selected-scene-render-manifest/v1' movie-dashboard/src/components/PalmierSelectedVisualReferenceCard.tsx
+          grep -q 'DERIVED_FROM_CURRENT_PROJECT_TYPOGRAPHY_BATCH' movie-dashboard/src/components/PalmierSelectedVisualReferenceCard.tsx
+          grep -q 'sourceBatch.sha256' movie-dashboard/src/components/PalmierSelectedVisualReferenceCard.tsx
+          grep -q 'sourceRevision' movie-dashboard/src/components/PalmierSelectedVisualReferenceCard.tsx
+          grep -q 'productionRole' movie-dashboard/src/components/PalmierSelectedVisualReferenceCard.tsx
+          grep -q 'patternId' movie-dashboard/src/components/PalmierSelectedVisualReferenceCard.tsx
+          grep -q 'render.sha256' movie-dashboard/src/components/PalmierSelectedVisualReferenceCard.tsx
+
+      - name: Local playback stays browser-memory-only and Actual remains NOT_RUN
+        run: |
+          grep -q 'URL.createObjectURL' movie-dashboard/src/components/PalmierSelectedVisualReferenceCard.tsx
+          grep -q 'URL.revokeObjectURL' movie-dashboard/src/components/PalmierSelectedVisualReferenceCard.tsx
+          ! grep -q 'localStorage' movie-dashboard/src/components/PalmierSelectedVisualReferenceCard.tsx
+          ! grep -q 'sessionStorage' movie-dashboard/src/components/PalmierSelectedVisualReferenceCard.tsx
+          grep -q 'remotionStudioGuiActual !== "NOT_RUN"' movie-dashboard/src/components/PalmierSelectedVisualReferenceCard.tsx
+          grep -q 'palmierGuiActual !== "NOT_RUN"' movie-dashboard/src/components/PalmierSelectedVisualReferenceCard.tsx
+          grep -q 'macDaVinciGuiActual !== "NOT_RUN"' movie-dashboard/src/components/PalmierSelectedVisualReferenceCard.tsx
+          grep -q 'productionReady !== false' movie-dashboard/src/components/PalmierSelectedVisualReferenceCard.tsx
+          grep -q 'browser-memory visual reference only' movie-dashboard/src/components/PalmierSelectedVisualReferenceCard.tsx
+
+      - name: Surface is mounted directly before Palmier Assembly Operator
+        run: |
+          grep -q 'PalmierSelectedVisualReferenceCard' movie-dashboard/src/components/WeddingProjectRemotionStageStatusCard.tsx
+          python - <<'PY'
+          from pathlib import Path
+          text = Path('movie-dashboard/src/components/WeddingProjectRemotionStageStatusCard.tsx').read_text()
+          visual = text.index('<PalmierSelectedVisualReferenceCard')
+          operator = text.index('<PalmierAssemblyOperatorCard')
+          assert visual < operator
+          PY
+
+      - name: Build Movie Dashboard
+        working-directory: movie-dashboard
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm build
