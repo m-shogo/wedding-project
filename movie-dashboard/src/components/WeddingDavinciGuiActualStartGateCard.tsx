@@ -43,9 +43,9 @@ export function WeddingDavinciGuiActualStartGateCard() {
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <p className="text-[10px] tracking-[0.2em] font-semibold text-amber-700 dark:text-amber-300">MAC DAVINCI GUI ACTUAL START GATE</p>
-          <h2 className="mt-1 text-lg font-bold text-navy-900 dark:text-sand-100">Session Plan CURRENT → Project Motion + Remotion identity + Palmier timeline CURRENT → Evidence init → Human Mac GUI</h2>
+          <h2 className="mt-1 text-lg font-bold text-navy-900 dark:text-sand-100">Session Plan CURRENT → Palmier transition proof verified → Evidence init → Human Mac GUI</h2>
           <p className="mt-2 text-xs leading-5 text-navy-500 dark:text-navy-300">
-            Motion Studioのcanonical start-gate JSON artifactを生成・読み込み、Opening/ProfileそれぞれのTransport・Project Motion・Project Remotion identity・Palmier real FCPXML SHA authority・正確な次アクションを表示します。GUI_ACTUAL_ALLOWEDは「人間が開始してよい」だけで、実行済み/PASSではありません。
+            Motion Studioのcanonical start-gate JSON artifactを生成・読み込み、Opening/ProfileそれぞれのTransport・Project Motion・Project Remotion identity・Palmier real FCPXML SHA authorityに加えて、検証済みtransition edge数・Cross Dissolve数・transition proof SHAまで表示します。GUI_ACTUAL_ALLOWEDは「人間が開始してよい」だけで、実行済み/PASSではありません。
           </p>
         </div>
         <p className="text-[10px] leading-4 text-amber-700 dark:text-amber-300">GUI Actual synthetic promotion: FORBIDDEN</p>
@@ -58,6 +58,7 @@ export function WeddingDavinciGuiActualStartGateCard() {
           const projectMotion = audit.project.projectMotionPreflight;
           const projectRemotionIdentity = audit.project.projectRemotionIdentityPreflight;
           const palmierTimeline = audit.project.palmierTimelinePreflight;
+          const transitionVerified = palmierTimeline.state === "CURRENT" && palmierTimeline.transitionProofCurrent;
           return (
             <article key={movieId} className="border border-sand-200 dark:border-navy-600 p-4">
               <div className="flex flex-wrap items-center justify-between gap-2">
@@ -93,6 +94,14 @@ export function WeddingDavinciGuiActualStartGateCard() {
                 <dt className="font-semibold">Timeline receipt</dt><dd className="font-mono">{shortSha(palmierTimeline.receiptSha256)}</dd>
                 <dt className="font-semibold">Assembly Plan</dt><dd className="font-mono">{shortSha(palmierTimeline.assemblyPlanSha256)}</dd>
                 <dt className="font-semibold">Real FCPXML</dt><dd className="font-mono">{shortSha(palmierTimeline.palmierFcpxmlSha256)}</dd>
+                <dt className="font-semibold">Palmier transitions</dt>
+                <dd className={transitionVerified ? "font-bold text-emerald-700 dark:text-emerald-300" : "font-semibold text-amber-700 dark:text-amber-300"}>
+                  {palmierTimeline.transitionEdgeCount == null ? "—" : `${palmierTimeline.verifiedTransitionEdgeCount ?? 0}/${palmierTimeline.transitionEdgeCount} VERIFIED`}
+                </dd>
+                <dt className="font-semibold">Cross Dissolves</dt><dd>{palmierTimeline.crossDissolveCount ?? "—"}</dd>
+                <dt className="font-semibold">Transition proof</dt><dd className="font-mono">{shortSha(palmierTimeline.transitionProofSha256)}</dd>
+                <dt className="font-semibold">Recovery proof</dt><dd className="font-mono">{shortSha(palmierTimeline.recoveryTransitionProofSha256)}</dd>
+                <dt className="font-semibold">Proof binding</dt><dd className={transitionVerified ? "font-bold text-emerald-700 dark:text-emerald-300" : "font-semibold text-amber-700 dark:text-amber-300"}>{transitionVerified ? "CURRENT" : palmierTimeline.state === "CURRENT" ? "BLOCKED" : "—"}</dd>
                 <dt className="font-semibold">Session</dt><dd>{audit.project.sessionState ?? "—"}</dd>
                 <dt className="font-semibold">Evidence</dt><dd>{audit.project.evidenceState ?? "—"}</dd>
                 <dt className="font-semibold">Handoff SHA</dt><dd className="font-mono">{shortSha(audit.project.handoffIdentitySha256)}</dd>
@@ -100,6 +109,26 @@ export function WeddingDavinciGuiActualStartGateCard() {
                 <dt className="font-semibold">GUI start</dt><dd>{audit.guiActualStartAllowed ? "ALLOWED / HUMAN ONLY" : "BLOCKED"}</dd>
                 <dt className="font-semibold">Next</dt><dd>{audit.nextAction.kind}</dd>
               </dl>
+
+              {palmierTimeline.transitionProof.length > 0 && (
+                <div className="mt-3 border border-emerald-200 dark:border-emerald-900/50 p-3" data-palmier-transition-proof-summary>
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <p className="text-[9px] font-semibold text-emerald-800 dark:text-emerald-300">Palmier transition edge proof</p>
+                    <span className="text-[9px] font-mono text-navy-400">{shortSha(palmierTimeline.transitionProofSha256)}</span>
+                  </div>
+                  <ul className="mt-2 space-y-1 text-[9px] leading-4 text-navy-500 dark:text-navy-300">
+                    {palmierTimeline.transitionProof.map((edge) => (
+                      <li key={edge.edgeId}>
+                        <span className="font-mono">{edge.fromSceneId} → {edge.toSceneId}</span>
+                        {" / "}<span className="font-semibold">{edge.transition}</span>
+                        {" / "}{edge.durationFrames}f
+                        {" / "}<span className="text-emerald-700 dark:text-emerald-300">{edge.state}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <p className="mt-2 text-[9px] leading-4 text-navy-400">FCPXML構造とHuman-selected transition intentの一致証拠です。Palmier上で人間がtransitionを見た/操作したGUI Actual PASSではありません。</p>
+                </div>
+              )}
 
               {projectMotion.error && <p className="mt-3 border-l-2 border-rose-400 pl-3 text-[10px] leading-4 text-rose-700 dark:text-rose-300">Project Motion blocker: {projectMotion.error}</p>}
               {projectMotion.command && <div className="mt-3"><p className="text-[9px] font-semibold text-navy-700 dark:text-sand-200">Project Motion canonical verifier</p><code className="mt-1 block overflow-x-auto bg-navy-950 px-3 py-2 text-[9px] leading-4 text-sand-100">cd motion-studio &amp;&amp; {projectMotion.command}</code></div>}
@@ -110,9 +139,9 @@ export function WeddingDavinciGuiActualStartGateCard() {
               {palmierTimeline.error && <p className="mt-3 border-l-2 border-rose-400 pl-3 text-[10px] leading-4 text-rose-700 dark:text-rose-300">Palmier timeline blocker: {palmierTimeline.error}</p>}
               {palmierTimeline.command && (
                 <div className="mt-3" data-palmier-timeline-start-gate-preflight>
-                  <p className="text-[9px] font-semibold text-navy-700 dark:text-sand-200">Palmier timeline canonical verifier</p>
+                  <p className="text-[9px] font-semibold text-navy-700 dark:text-sand-200">Palmier timeline + transition canonical verifier</p>
                   <code className="mt-1 block overflow-x-auto bg-navy-950 px-3 py-2 text-[9px] leading-4 text-sand-100">cd motion-studio &amp;&amp; {palmierTimeline.command}</code>
-                  <p className="mt-1 text-[9px] leading-4 text-navy-400">receipt / Assembly Plan / real FCPXML SHAはloaded gateと現在のMotion Zukan authorityで再照合します。SHA表示やCURRENTはPalmier GUI Actual / DaVinci GUI Actual PASSを意味しません。</p>
+                  <p className="mt-1 text-[9px] leading-4 text-navy-400">receipt / Assembly Plan / real FCPXML SHAとtransition edge count / Cross Dissolve count / proof SHAをloaded gateと現在のMotion Zukan authorityで再照合します。CURRENTはPalmier transition GUI Actual / DaVinci GUI Actual PASSを意味しません。</p>
                 </div>
               )}
 
@@ -135,7 +164,7 @@ export function WeddingDavinciGuiActualStartGateCard() {
         })}
       </div>
 
-      <p className="mt-4 text-[10px] leading-4 text-navy-400">canonical gate JSON・Dashboard・CIの存在、Project Motion / Project Remotion identity / Palmier timeline verifier commandやSHAの表示はMac/Studio/Palmier/DaVinci Actual PASSを意味しません。今回GUIを実操作していない場合、Actual evidenceはNOT_RUNのままです。</p>
+      <p className="mt-4 text-[10px] leading-4 text-navy-400">canonical gate JSON・Dashboard・CIの存在、Project Motion / Project Remotion identity / Palmier timeline verifier command、transition proof CURRENTやverified X/X表示はMac/Studio/Palmier/DaVinci Actual PASSを意味しません。今回GUIを実操作していない場合、Actual evidenceはNOT_RUNのままです。</p>
     </section>
   );
 }
