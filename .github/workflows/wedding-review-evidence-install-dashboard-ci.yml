@@ -1,0 +1,56 @@
+name: Wedding Review Evidence Install Dashboard CI
+
+on:
+  pull_request:
+    paths:
+      - 'movie-dashboard/src/components/WeddingReviewEvidenceInstallCard.tsx'
+      - 'movie-dashboard/src/components/WeddingMediaIntakeChecklistCard.tsx'
+      - '.github/workflows/wedding-review-evidence-install-dashboard-ci.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  install-command:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Opening and Profile commands use canonical evidence and strict verifiers
+        run: |
+          grep -q 'opening-v1-crop-review-evidence.json' movie-dashboard/src/components/WeddingReviewEvidenceInstallCard.tsx
+          grep -q 'profile-v1-real-media-review.json' movie-dashboard/src/components/WeddingReviewEvidenceInstallCard.tsx
+          grep -q 'opening-v1-crop-review-evidence.mts --strict' movie-dashboard/src/components/WeddingReviewEvidenceInstallCard.tsx
+          grep -q 'profile:real-media-review:strict' movie-dashboard/src/components/WeddingReviewEvidenceInstallCard.tsx
+          grep -q 'sync-opening-crop-review-gate.mjs --write' movie-dashboard/src/components/WeddingReviewEvidenceInstallCard.tsx
+          grep -q 'sync-profile-real-media-review-gate.mjs --write' movie-dashboard/src/components/WeddingReviewEvidenceInstallCard.tsx
+          grep -q 'pnpm sync:production-state' movie-dashboard/src/components/WeddingReviewEvidenceInstallCard.tsx
+
+      - name: Surface is copy-only and preserves evidence boundaries
+        run: |
+          grep -q 'navigator.clipboard.writeText' movie-dashboard/src/components/WeddingReviewEvidenceInstallCard.tsx
+          grep -q 'strict PASS ≠ Remotion Studio GUI Actual PASS' movie-dashboard/src/components/WeddingReviewEvidenceInstallCard.tsx
+          grep -q 'Mac Studio Actual PASS' movie-dashboard/src/components/WeddingReviewEvidenceInstallCard.tsx
+          grep -q 'Mac DaVinci GUI Actual PASS' movie-dashboard/src/components/WeddingReviewEvidenceInstallCard.tsx
+          grep -q 'productionReady' movie-dashboard/src/components/WeddingReviewEvidenceInstallCard.tsx
+          ! grep -q 'fetch(' movie-dashboard/src/components/WeddingReviewEvidenceInstallCard.tsx
+          ! grep -q 'localStorage' movie-dashboard/src/components/WeddingReviewEvidenceInstallCard.tsx
+
+      - name: Install handoff is mounted after project review operator
+        run: |
+          grep -q 'WeddingReviewEvidenceInstallCard' movie-dashboard/src/components/WeddingMediaIntakeChecklistCard.tsx
+          grep -q '<WeddingReviewEvidenceInstallCard projectId={projectId} />' movie-dashboard/src/components/WeddingMediaIntakeChecklistCard.tsx
+
+      - name: Build Movie Dashboard
+        working-directory: movie-dashboard
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm build
