@@ -1,0 +1,73 @@
+name: StaRt Sync Human Listening Review CI
+
+on:
+  pull_request:
+    paths:
+      - 'motion-studio/scripts/japanese-friends-opening-start-sync-listening-review.mts'
+      - 'movie-dashboard/scripts/sync-start-sync-listening-review-gate.mjs'
+      - 'movie-dashboard/src/data/startSyncListeningReviewGate.generated.ts'
+      - 'movie-dashboard/src/components/StartSyncListeningReviewOperatorCard.tsx'
+      - 'movie-dashboard/src/pages/MotionZukanWorkspaceHandoff.tsx'
+      - 'movie-dashboard/public/demo-renders/japanese-friends-opening-start-sync-v1.manifest.json'
+      - '.github/workflows/start-sync-human-listening-review-ci.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  listening-review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Copyright-safe timing binding self-test
+        working-directory: motion-studio
+        run: node --no-warnings scripts/japanese-friends-opening-start-sync-listening-review.mts --self-test
+
+      - name: Fresh clone remains NOT_RUN and generated gate current
+        run: |
+          node movie-dashboard/scripts/sync-start-sync-listening-review-gate.mjs --write
+          git diff --exit-code -- movie-dashboard/src/data/startSyncListeningReviewGate.generated.ts
+          grep -q '"state": "NOT_RUN"' movie-dashboard/src/data/startSyncListeningReviewGate.generated.ts
+          grep -q '"verifiedByListening": false' movie-dashboard/src/data/startSyncListeningReviewGate.generated.ts
+          grep -q '"humanReviewRequired": true' movie-dashboard/src/data/startSyncListeningReviewGate.generated.ts
+
+      - name: Listening evidence cannot promote rights or GUI Actual
+        run: |
+          grep -q "rightsCleared: false" motion-studio/scripts/japanese-friends-opening-start-sync-listening-review.mts
+          grep -q "publicationApproved: false" motion-studio/scripts/japanese-friends-opening-start-sync-listening-review.mts
+          grep -q "macDaVinciActual: 'NOT_RUN'" motion-studio/scripts/japanese-friends-opening-start-sync-listening-review.mts
+          grep -q "productionReady: false" motion-studio/scripts/japanese-friends-opening-start-sync-listening-review.mts
+          grep -q 'phraseCount: 30' movie-dashboard/src/components/StartSyncListeningReviewOperatorCard.tsx
+          grep -q 'measuredThreeHitPhraseCount: 4' movie-dashboard/src/components/StartSyncListeningReviewOperatorCard.tsx
+          grep -q 'rightsCleared: false' movie-dashboard/src/components/StartSyncListeningReviewOperatorCard.tsx
+          grep -q 'publicationApproved: false' movie-dashboard/src/components/StartSyncListeningReviewOperatorCard.tsx
+          grep -q 'macDaVinciActual: "NOT_RUN"' movie-dashboard/src/components/StartSyncListeningReviewOperatorCard.tsx
+          grep -q 'productionReady: false' movie-dashboard/src/components/StartSyncListeningReviewOperatorCard.tsx
+
+      - name: No lyric text is persisted in tracked review authority
+        run: |
+          ! grep -q 'phrase.text' motion-studio/scripts/japanese-friends-opening-start-sync-listening-review.mts
+          ! grep -q 'text: phrase' movie-dashboard/scripts/sync-start-sync-listening-review-gate.mjs
+          grep -q '歌詞本文はこのevidenceに保存しません' movie-dashboard/src/components/StartSyncListeningReviewOperatorCard.tsx
+
+      - name: Operator supports seek and per-phrase Human verdicts
+        run: |
+          grep -q 'video.currentTime' movie-dashboard/src/components/StartSyncListeningReviewOperatorCard.tsx
+          grep -q '次の未review phraseへ' movie-dashboard/src/components/StartSyncListeningReviewOperatorCard.tsx
+          grep -q 'Listening evidence JSONを書き出す' movie-dashboard/src/components/StartSyncListeningReviewOperatorCard.tsx
+          grep -q '<StartSyncListeningReviewOperatorCard />' movie-dashboard/src/pages/MotionZukanWorkspaceHandoff.tsx
+
+      - name: Build Movie Dashboard
+        working-directory: movie-dashboard
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm build
