@@ -1,0 +1,85 @@
+name: Wedding Project Real Media Preview QA Stills CI
+
+on:
+  pull_request:
+    paths:
+      - 'motion-studio/scripts/wedding-project-real-media-preview-qa-stills.mts'
+      - '.github/workflows/wedding-project-real-media-preview-qa-stills-ci.yml'
+  workflow_dispatch:
+
+jobs:
+  qa-stills:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install ffmpeg
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg
+      - name: Build current preview authority fixture
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/qa-stills
+          printf '{"batch":"current"}\n' > /tmp/qa-stills/batch.json
+          printf '{"selected":"current"}\n' > /tmp/qa-stills/selected.json
+          printf '{"audit":"current"}\n' > /tmp/qa-stills/audit.json
+          printf 'media-a-current' > /tmp/qa-stills/media-a.jpg
+          printf 'media-b-current' > /tmp/qa-stills/media-b.mp4
+          printf 'bgm-current' > /tmp/qa-stills/bgm.wav
+          ffmpeg -hide_banner -loglevel error -f lavfi -i color=c=0x223344:s=640x360:d=1 -f lavfi -i sine=frequency=440:sample_rate=48000:duration=1 -shortest -r 30 -c:v libx264 -pix_fmt yuv420p -c:a aac -ac 2 -y /tmp/qa-stills/preview.mp4
+          BATCH_SHA=$(sha256sum /tmp/qa-stills/batch.json | awk '{print $1}')
+          SELECTED_SHA=$(sha256sum /tmp/qa-stills/selected.json | awk '{print $1}')
+          AUDIT_SHA=$(sha256sum /tmp/qa-stills/audit.json | awk '{print $1}')
+          A_SHA=$(sha256sum /tmp/qa-stills/media-a.jpg | awk '{print $1}')
+          B_SHA=$(sha256sum /tmp/qa-stills/media-b.mp4 | awk '{print $1}')
+          BGM_SHA=$(sha256sum /tmp/qa-stills/bgm.wav | awk '{print $1}')
+          PREVIEW_SHA=$(sha256sum /tmp/qa-stills/preview.mp4 | awk '{print $1}')
+          cat > /tmp/qa-stills/preview-manifest.json <<JSON
+          {
+            "schemaVersion":"wedding-movie-project-real-media-preview/v1",
+            "authority":"DERIVED_FROM_CURRENT_SELECTED_SCENES_AND_PRODUCTION_READINESS_AUDIT",
+            "projectId":"opening",
+            "fps":30,
+            "identity":{"identitySha256":"identity-fixture","selectedManifestPath":"/tmp/qa-stills/selected.json","selectedManifestSha256":"${SELECTED_SHA}","readinessAuditPath":"/tmp/qa-stills/audit.json","readinessAuditSha256":"${AUDIT_SHA}","sourceBatchPath":"/tmp/qa-stills/batch.json","sourceBatchSha256":"${BATCH_SHA}","bgmPath":"/tmp/qa-stills/bgm.wav","bgmSha256":"${BGM_SHA}"},
+            "scenes":[
+              {"order":1,"sceneId":"scene-a","sourceRevision":"rev-a","patternId":"type-mask-reveal","productionRole":"TITLE_REVEAL","mediaKind":"IMAGE","mediaPath":"/tmp/qa-stills/media-a.jpg","mediaSha256":"${A_SHA}","startFrame":0,"endFrameExclusive":18,"durationFrames":18,"transitionInFrames":0,"transitionOutFrames":6},
+              {"order":2,"sceneId":"scene-b","sourceRevision":"rev-b","patternId":"split-rise","productionRole":"IMPACT_TITLE","mediaKind":"VIDEO","mediaPath":"/tmp/qa-stills/media-b.mp4","mediaSha256":"${B_SHA}","startFrame":12,"endFrameExclusive":30,"durationFrames":18,"transitionInFrames":6,"transitionOutFrames":0}
+            ],
+            "transitions":[{"fromSceneId":"scene-a","toSceneId":"scene-b","transition":"CROSS_DISSOLVE","durationFrames":6,"sourceStatus":"HUMAN_SELECTED_CURRENT"}],
+            "timeline":{"totalFrames":30,"durationSeconds":1},
+            "output":"/tmp/qa-stills/preview.mp4",
+            "render":{"state":"RENDERED","sha256":"${PREVIEW_SHA}","bytes":1234},
+            "summary":{"totalScenes":2,"allRealMediaBoundCurrent":true,"bgmCurrent":true,"frameBoundariesVerified":true,"transitionsCurrent":true,"productionReady":false},
+            "evidenceBoundary":{"remotionStudioGuiActual":"NOT_RUN","palmierGuiActual":"NOT_RUN","macDaVinciGuiActual":"NOT_RUN","visualQa":"NOT_RUN","productionReady":false}
+          }
+          JSON
+      - name: Extract scene and transition QA stills
+        run: node --no-warnings motion-studio/scripts/wedding-project-real-media-preview-qa-stills.mts --preview-manifest=/tmp/qa-stills/preview-manifest.json --output-dir=/tmp/qa-stills/stills --manifest=/tmp/qa-stills/stills-manifest.json
+      - name: Verify still artifacts and evidence boundary
+        run: |
+          node --input-type=module <<'NODE'
+          import {existsSync,readFileSync} from 'node:fs';
+          const m=JSON.parse(readFileSync('/tmp/qa-stills/stills-manifest.json','utf8'));
+          if(m.schemaVersion!=='wedding-movie-real-media-preview-qa-stills/v1') throw new Error('schema');
+          if(m.summary.sceneCount!==2||m.summary.stillCount!==6||m.summary.transitionStillCount!==1) throw new Error('counts');
+          if(m.summary.sourceCurrentVerified!==true||m.summary.humanVisualQa!=='NOT_RUN'||m.summary.productionReady!==false) throw new Error('summary boundary');
+          if(m.humanReviewChecklist.verdict!=='NOT_RUN'||m.humanReviewChecklist.reviewer!==null||m.humanReviewChecklist.reviewedAt!==null) throw new Error('human review auto-promoted');
+          if(m.evidenceBoundary.visualQa!=='NOT_RUN'||m.evidenceBoundary.remotionStudioGuiActual!=='NOT_RUN'||m.evidenceBoundary.palmierGuiActual!=='NOT_RUN'||m.evidenceBoundary.macDaVinciGuiActual!=='NOT_RUN'||m.evidenceBoundary.productionReady!==false) throw new Error('evidence boundary');
+          for(const still of [...m.stills,...m.transitionStills]) {
+            if(!existsSync(still.path)||!still.sha256||still.width!==640||still.height!==360) throw new Error(`still invalid: ${still.path}`);
+          }
+          const kinds=m.stills.map((s)=>s.kind);
+          for(const expected of ['SCENE_START_SAFE','SCENE_MID','SCENE_END_SAFE']) if(!kinds.includes(expected)) throw new Error(`missing ${expected}`);
+          NODE
+      - name: Post-manifest preview tamper fails closed
+        shell: bash
+        run: |
+          printf 'tamper' >> /tmp/qa-stills/preview.mp4
+          if node --no-warnings motion-studio/scripts/wedding-project-real-media-preview-qa-stills.mts --preview-manifest=/tmp/qa-stills/preview-manifest.json --output-dir=/tmp/qa-stills/stale-stills 2>/tmp/qa-stills/stale.err; then
+            echo 'expected preview SHA drift to block still extraction' >&2
+            exit 1
+          fi
+          grep -q 'REAL_MEDIA_PREVIEW_QA_VIDEO_SHA_MISMATCH' /tmp/qa-stills/stale.err
