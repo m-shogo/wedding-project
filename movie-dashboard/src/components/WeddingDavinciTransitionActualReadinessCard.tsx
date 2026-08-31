@@ -32,7 +32,7 @@ export function WeddingDavinciTransitionActualReadinessCard() {
           <p className={`text-sm font-bold ${allCurrent ? "text-emerald-700 dark:text-emerald-300" : "text-amber-700 dark:text-amber-300"}`}>
             {allCurrent ? "FINAL EVIDENCE CHAIN CURRENT" : "HUMAN ACTUAL / FINAL BINDING REQUIRED"}
           </p>
-          <p className="mt-1 text-[10px] text-navy-400">NOT_RUN != PASS / DERIVED BINDING != HUMAN APPROVAL</p>
+          <p className="mt-1 text-[10px] text-navy-400">NOT_RUN != PASS / RECEIPT != GUI ACTUAL / DERIVED BINDING != HUMAN APPROVAL</p>
         </div>
       </div>
 
