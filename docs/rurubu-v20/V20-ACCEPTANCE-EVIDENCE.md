@@ -373,3 +373,60 @@ Current acceptance state:
 - `DESIGN_COMPLETE`: yes, as a visible whole-book candidate;
 - `SOURCE_COMPLETE`: no, because P04 real Okinawa/Korea sources, P06 role-specific everyday/dog sources, P07 final verified venue details and several personal copy fields remain open;
 - `PRINT_READY`: no, pending source replacement, final copy lock, 11-destination confirmation, printer template, bleed/export, CMYK/profile and physical proof.
+
+## Full-book visible quality pass — 2026-08-31
+
+Current review surface:
+- contact sheet `3420:2` / `V20_FULL_BOOK_CONTACT_SHEET_D / CURRENT PREFERRED / VISIBLE QUALITY PASS / PRINT READY NO`;
+- P01 `3355:2` and P05 `3373:29` remained locked;
+- updated P02 `3407:3`, P03 `3407:22`, P04 `3373:3`, P06 `3408:3` and P07 `3408:19`;
+- P08 `3410:2` was screenshot-reviewed and held.
+
+### P04 visible quality
+
+The repeated single coast image was removed from all three P04 roles. Current distinct fills:
+- PLACE HERO `3373:12`: Drive `1asmjKbDFm_9Eozm6Qq2ZVx2PyF7zMFBC`, hash `2605e0f2b32da7bba5b1b3f88e245be77df27ab3`;
+- anonymous TRAVEL ACTION `3373:10`: Drive `1jI8Km3W1uPqcx4Z75wi4LdTfkG6j66mZ`, hash `84842aba6d58e7cc4fb63139acc0b2c215b258c4`;
+- generic TRAVEL DETAIL `3373:9`: Drive `1UUCs1p3boxq4CaTOU1Bdz687NyRyOft4`, hash `1ab55531178fa16f66a9c2080bb2e74bc2f93692`.
+
+All three remain generated temporary assets and do not claim Okinawa, Korea or autobiographical memory. The visible production marker `3413:2` is hidden. Reader-facing, fact-independent captions were added with supports `3419:2`, `3419:3`, `3419:4`; route/fold continuity and the weaker-left/stronger-right spread hierarchy remain intact.
+
+### P06 visible quality
+
+The reused Hawaii/wedding photography was removed from the current P06 frame. Current generated temporary roles:
+- LIFE HERO `3408:7`: Drive `1OzCb8szXQwzPs3YDVjIZvZhFPrqsmkF0`, hash `c8d652cf45e81607795989575effb560c68752d2`;
+- FOOD `3408:8`: Drive `169_GxGWMHNaFG9AASluleqVFCExjSNhp`, hash `728a0204eb5ee66e574b132d9b50fbdb3866dfe4`;
+- PET-LIFE `3408:9`: Drive `1lgcwtFn7up34pDHooRTHiErVjOj0Wl93`, hash `88563f699fd6d409fa0450db26f4634f0ecddc21`;
+- FUN `3408:10`: Drive `1nVJx5NZIlFVNtsvBpzLNXaj5ij1C2jl-`, hash `15abdfd38f2eb01b6c367d177f5e971fca70e68d`.
+
+The dog image shows only a generic partial pet-life scene and is explicitly not Cookie or Melon. Visible production notes were replaced by native reader-facing `WEEKEND NOTES`, an everyday observation line and a short discovery line.
+
+### P07 visible quality
+
+P07 remains a seated-guest discovery page led by the native `11 DESTINATIONS AROUND YOU` structure. Two small atmosphere-only details were added behind/among destination labels:
+- paper discovery `3418:2`: Drive `1IpuiH8gI6T-7ELC6_LpyFf_C5msNhJqF`, hash `07e19b61460c8a3bb810d49a9fa54f29fc79a020`;
+- table-color discovery `3418:3`: Drive `1FK4xuMKfEyB27btaavNX6mrvURreJ2o_`, hash `f8b1e25bb9ec34ba27a420616c5835de1667af88`.
+
+Neither image is accepted as actual venue evidence. The visible `実在する会場ディテールを確認後にここへ。` production note was replaced by a reader-facing prompt. No schedule, access, table assignment or operational wedding fact was added.
+
+### P02–P03 micro correction
+
+- P02 Japanese kicker support `3418:4` separates `このふたり、どんな人？` from the `WHO WE ARE` display mass without removing either;
+- P03 episode shapes/text `3407:28`–`3407:33` now behave as offset hard-shadow print slabs rather than equal rounded UI cards;
+- P03 narrative `3407:36` no longer exposes production instructions or unverified-story warnings to the reader.
+
+### Final QA evidence
+
+- page screenshots reviewed: P04, P06, P07, P08, P01 and P05;
+- spread screenshots reviewed: `3373:2`, `3408:2`, `3407:2`;
+- final contact sheet reviewed: `3420:2`;
+- current eight-page source audit found zero visible strings matching the production-note set `REPLACE BEFORE PRINT / REAL FACTS ONLY / 確認後 / 未確認 / native text / 実在する会場ディテール / GENERATED TEMP VISUAL`;
+- current visible fonts are limited to the established `M PLUS 1` and `Inter` families;
+- minimum visible Figma font size by page: P01 10, P02 13, P03 14, P04 10, P05 10, P06 14, P07 13, P08 12;
+- the P04/P06/P07 generated images remain replaceable independent fills with Drive IDs and Figma hashes recorded in their layer names.
+
+One rejected generation:
+- the first P06 FUN variant was rejected because a circular crop and black corners were baked into the raster, reducing crop flexibility;
+- it was not copied into the repository, uploaded to Drive or placed in Figma.
+
+Current state remains `DESIGN_COMPLETE / SOURCE_COMPLETE = NO / PRINT_READY = NO`.

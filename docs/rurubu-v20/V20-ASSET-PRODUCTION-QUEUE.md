@@ -292,7 +292,7 @@ No new factual personal claims were introduced. Temporary real-source crop reuse
 
 ## B09 — `V20_P04_GENERIC_COAST_TEMP_A`
 
-Status: `PLACED_AS_GENERATED_TEMP / REPLACE_BEFORE_PRINT`
+Status: `SUPERSEDED / RETAINED_AS_PRODUCTION_HISTORY / NOT IN CURRENT P04`
 
 Purpose:
 - remove the last large greybox void from P04 so the center-spread hierarchy can be judged now;
@@ -311,6 +311,37 @@ Replacement gate:
 - replace `3373:10` with verified Korea people/action photography;
 - replace `3373:9` with verified Korea detail/place photography;
 - remove the generated-temp marker only after source IDs and print resolution are recorded.
+
+## B10 — `V20_P04_DISTINCT_TEMP_SET_B`
+
+Status: `PLACED / GENERATED TEMP / REPLACE REQUIRED`
+
+Current set:
+- PLACE HERO: `V20_P04_PLACE_HERO_TEMP_B.png`, Drive `1asmjKbDFm_9Eozm6Qq2ZVx2PyF7zMFBC`, node `3373:12`, hash `2605e0f2b32da7bba5b1b3f88e245be77df27ab3`;
+- TRAVEL ACTION: `V20_P04_TRAVEL_ACTION_TEMP_B.png`, Drive `1jI8Km3W1uPqcx4Z75wi4LdTfkG6j66mZ`, node `3373:10`, hash `84842aba6d58e7cc4fb63139acc0b2c215b258c4`;
+- TRAVEL DETAIL: `V20_P04_TRAVEL_DETAIL_TEMP_B.png`, Drive `1UUCs1p3boxq4CaTOU1Bdz687NyRyOft4`, node `3373:9`, hash `1ab55531178fa16f66a9c2080bb2e74bc2f93692`.
+
+The three images have distinct distance, viewpoint and information roles. They contain no authoritative copy and are not autobiographical evidence.
+
+## C01 — `V20_P06_OFF_THE_MAP_TEMP_SET_A`
+
+Status: `PLACED / GENERATED TEMP / REPLACE REQUIRED`
+
+- LIFE HERO: Drive `1OzCb8szXQwzPs3YDVjIZvZhFPrqsmkF0`, node `3408:7`, hash `c8d652cf45e81607795989575effb560c68752d2`;
+- FOOD: Drive `169_GxGWMHNaFG9AASluleqVFCExjSNhp`, node `3408:8`, hash `728a0204eb5ee66e574b132d9b50fbdb3866dfe4`;
+- PET-LIFE: Drive `1lgcwtFn7up34pDHooRTHiErVjOj0Wl93`, node `3408:9`, hash `88563f699fd6d409fa0450db26f4634f0ecddc21`;
+- FUN B: Drive `1nVJx5NZIlFVNtsvBpzLNXaj5ij1C2jl-`, node `3408:10`, hash `15abdfd38f2eb01b6c367d177f5e971fca70e68d`.
+
+The first FUN generation was rejected for baked circular masking/black corners and was not persisted.
+
+## C02 — `V20_P07_DISCOVERY_DETAIL_TEMP_SET_A`
+
+Status: `PLACED / GENERATED ATMOSPHERE ONLY / REPLACE OPTIONAL`
+
+- PAPER DISCOVERY: Drive `1IpuiH8gI6T-7ELC6_LpyFf_C5msNhJqF`, node `3418:2`, hash `07e19b61460c8a3bb810d49a9fa54f29fc79a020`;
+- TABLE COLOR: Drive `1FK4xuMKfEyB27btaavNX6mrvURreJ2o_`, node `3418:3`, hash `f8b1e25bb9ec34ba27a420616c5835de1667af88`.
+
+These are visual cues only and must not be cited as verified venue décor, paper, flower or table evidence.
 
 ---
 
