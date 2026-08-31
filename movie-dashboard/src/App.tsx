@@ -48,6 +48,7 @@ import { DirectorRecipeCatalog } from "./pages/DirectorRecipeCatalog";
 import { StartSelectionMode } from "./pages/StartSelectionMode";
 import { StartProductionWorkspace } from "./pages/StartProductionWorkspace";
 import { VisualMotionLibrary } from "./pages/VisualMotionLibrary";
+import { WeddingVenueDeliveryGate } from "./pages/WeddingVenueDeliveryGate";
 import { MotionZukanWorkspaceHandoff } from "./pages/MotionZukanWorkspaceHandoff";
 import { Guide } from "./pages/Guide";
 import { AssetPlacementGuide } from "./pages/AssetPlacementGuide";
@@ -63,6 +64,7 @@ export default function App() {
               <Route index element={<Dashboard />} />
               <Route path="movie-coach" element={<MovieCoach />} />
               <Route path="movie-coach/motion-library" element={<VisualMotionLibrary />} />
+              <Route path="movie-coach/motion-library/venue-delivery" element={<WeddingVenueDeliveryGate />} />
               <Route path="movie-coach/motion-workspace-handoff" element={<MotionZukanWorkspaceHandoff />} />
               <Route path="movie-coach/dictionary" element={<MovieCoachDictionary />} />
               <Route path="movie-coach/profile" element={<ProfileMovieCoach />} />
