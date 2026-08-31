@@ -20,9 +20,13 @@ const canonicalPlanCommand = (projectId: SceneProjectId) =>
 const timelineVerifyCommand = (projectId: SceneProjectId) =>
   `cd motion-studio && node --no-warnings scripts/verify-wedding-palmier-typography-timeline-export.mts --movie=${projectId} --xml=\"$HOME/Downloads/${projectId}.fcpxml\" --write`;
 
+type OperatorProgress = {placed: boolean; markerAdded: boolean; timingReviewed: boolean};
+const emptyProgress = (): OperatorProgress => ({placed: false, markerAdded: false, timingReviewed: false});
+
 export function PalmierAssemblyOperatorCard({projectId}: {projectId: SceneProjectId}) {
   const [revision, setRevision] = useState(0);
   const [copiedMarker, setCopiedMarker] = useState<string | null>(null);
+  const [progressByRevision, setProgressByRevision] = useState<Record<string, OperatorProgress>>({});
   const snapshot = useMemo(() => {
     const composer = loadMotionZukanComposerState();
     const timeline = composer.timelines.find((item) => item.projectId === projectId);
@@ -56,6 +60,10 @@ export function PalmierAssemblyOperatorCard({projectId}: {projectId: SceneProjec
   const readySceneCount = batch.scenes.filter(
     (scene) => scene.status === "CURRENT_PACKAGE_READY" && scene.roleContextStatus === "CURRENT_ROLE_CONTEXT" && scene.package,
   ).length;
+  const completedSceneCount = batch.scenes.filter((scene) => {
+    const progress = progressByRevision[`${scene.sceneId}@${scene.sourceRevision}`];
+    return Boolean(progress?.placed && progress.markerAdded && progress.timingReviewed);
+  }).length;
 
   async function copyMarker(sceneId: string, marker: string) {
     await navigator.clipboard.writeText(marker);
@@ -63,12 +71,20 @@ export function PalmierAssemblyOperatorCard({projectId}: {projectId: SceneProjec
     window.setTimeout(() => setCopiedMarker((current) => (current === sceneId ? null : current)), 1200);
   }
 
+  function toggleProgress(sceneId: string, sourceRevision: string, key: keyof OperatorProgress) {
+    const revisionKey = `${sceneId}@${sourceRevision}`;
+    setProgressByRevision((current) => {
+      const progress = current[revisionKey] ?? emptyProgress();
+      return {...current, [revisionKey]: {...progress, [key]: !progress[key]}};
+    });
+  }
+
   return (
     <section className="mt-3 border-2 border-cyan-300 dark:border-cyan-800 p-3" data-palmier-assembly-operator={projectId}>
       <div className="flex flex-wrap items-start justify-between gap-2">
         <div>
           <p className="text-[8px] tracking-[0.14em] font-semibold text-cyan-700 dark:text-cyan-300">PALMIER ASSEMBLY OPERATOR / {projectId.toUpperCase()}</p>
-          <p className="mt-1 text-[11px] font-semibold text-navy-800 dark:text-sand-100">{readySceneCount}/{batch.summary.totalScenes} Scene ready</p>
+          <p className="mt-1 text-[11px] font-semibold text-navy-800 dark:text-sand-100">{readySceneCount}/{batch.summary.totalScenes} Scene ready / assembly {completedSceneCount}/{batch.summary.totalScenes}</p>
           <p className="mt-1 text-[8px] leading-4 text-navy-500 dark:text-navy-300">
             Scene順・marker・Human-selected pattern/Role・timingを1画面で確認。ここはoperator previewで、canonical Assembly Planはstage後にCLIで生成します。
           </p>
@@ -78,8 +94,19 @@ export function PalmierAssemblyOperatorCard({projectId}: {projectId: SceneProjec
         </span>
       </div>
 
-      <div className="mt-2 h-1.5 overflow-hidden bg-sand-100 dark:bg-navy-700">
-        <div className="h-full bg-current transition-all" style={{width: `${batch.summary.totalScenes ? (readySceneCount / batch.summary.totalScenes) * 100 : 0}%`}} />
+      <div className="mt-2 grid gap-1 sm:grid-cols-2">
+        <div>
+          <p className="mb-1 text-[7px] uppercase tracking-wide opacity-70">Input readiness</p>
+          <div className="h-1.5 overflow-hidden bg-sand-100 dark:bg-navy-700">
+            <div className="h-full bg-current transition-all" style={{width: `${batch.summary.totalScenes ? (readySceneCount / batch.summary.totalScenes) * 100 : 0}%`}} />
+          </div>
+        </div>
+        <div>
+          <p className="mb-1 text-[7px] uppercase tracking-wide opacity-70">Human assembly checklist</p>
+          <div className="h-1.5 overflow-hidden bg-sand-100 dark:bg-navy-700">
+            <div className="h-full bg-current transition-all" style={{width: `${batch.summary.totalScenes ? (completedSceneCount / batch.summary.totalScenes) * 100 : 0}%`}} />
+          </div>
+        </div>
       </div>
 
       <div className="mt-3 space-y-2">
@@ -88,8 +115,11 @@ export function PalmierAssemblyOperatorCard({projectId}: {projectId: SceneProjec
           const pkg = scene.package;
           const current = scene.status === "CURRENT_PACKAGE_READY" && scene.roleContextStatus === "CURRENT_ROLE_CONTEXT" && Boolean(pkg);
           const marker = pkg?.timeline.sceneMarkerId ?? null;
+          const progressKey = `${scene.sceneId}@${scene.sourceRevision}`;
+          const progress = progressByRevision[progressKey] ?? emptyProgress();
+          const complete = progress.placed && progress.markerAdded && progress.timingReviewed;
           return (
-            <article key={scene.sceneId} className={`border p-2 ${current ? "border-cyan-200 dark:border-cyan-900" : "border-amber-200 dark:border-amber-900"}`} data-palmier-scene-status={current ? "CURRENT" : "BLOCKED"}>
+            <article key={scene.sceneId} className={`border p-2 ${complete ? "border-emerald-300 dark:border-emerald-800" : current ? "border-cyan-200 dark:border-cyan-900" : "border-amber-200 dark:border-amber-900"}`} data-palmier-scene-status={current ? "CURRENT" : "BLOCKED"} data-palmier-operator-progress={complete ? "COMPLETE" : "INCOMPLETE"}>
               <div className="flex flex-wrap items-start justify-between gap-2">
                 <div>
                   <p className="text-[8px] font-semibold text-navy-800 dark:text-sand-100">{index + 1}. {scene.sceneId}</p>
@@ -126,6 +156,25 @@ export function PalmierAssemblyOperatorCard({projectId}: {projectId: SceneProjec
                   </button>
                 </div>
               ) : null}
+
+              <div className="mt-2 flex flex-wrap gap-1" aria-label={`${scene.sceneId} Palmier assembly checklist`}>
+                {([
+                  ["placed", "1. Scene配置"],
+                  ["markerAdded", "2. Marker追加"],
+                  ["timingReviewed", "3. Timing確認"],
+                ] as const).map(([key, label]) => (
+                  <button
+                    key={key}
+                    type="button"
+                    disabled={!current}
+                    aria-pressed={progress[key]}
+                    onClick={() => toggleProgress(scene.sceneId, scene.sourceRevision, key)}
+                    className={`border px-2 py-1 text-[7px] font-semibold disabled:cursor-not-allowed disabled:opacity-40 ${progress[key] ? "border-emerald-300 text-emerald-700 dark:border-emerald-800 dark:text-emerald-300" : "border-sand-300 text-navy-500 dark:border-navy-600 dark:text-navy-300"}`}
+                  >
+                    {progress[key] ? "✓ " : ""}{label}
+                  </button>
+                ))}
+              </div>
             </article>
           );
         })}
@@ -139,7 +188,7 @@ export function PalmierAssemblyOperatorCard({projectId}: {projectId: SceneProjec
       </div>
 
       <p className="mt-2 border-l-2 border-amber-300 pl-2 text-[7px] leading-3 text-amber-800 dark:text-amber-200">
-        Operator preview / READY_TO_STAGE / canonical Assembly Plan / FCPXML receipt CURRENT ≠ Palmier GUI Actual PASS ≠ Remotion Studio GUI Actual PASS ≠ Mac DaVinci GUI Actual PASS。GUI Actualは人間が実行した場合だけ記録します。
+        Human assembly checklistはこの画面session内の作業メモだけで、Scene revision単位に分離されます。チェック完了 ≠ FCPXML receipt CURRENT ≠ Palmier GUI Actual PASS ≠ Remotion Studio GUI Actual PASS ≠ Mac DaVinci GUI Actual PASS。GUI Actualは人間が実行した場合だけ記録します。
       </p>
     </section>
   );
