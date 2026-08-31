@@ -11,11 +11,11 @@ import {
   useVideoConfig,
 } from 'remotion';
 import {
-  weddingEditAudioPath,
-  weddingEditDurationInFrames,
-  weddingEditLyricPhrases,
-  weddingEditRange,
-} from '../../data/startWeddingEdit/generated';
+  type JapaneseFriendsOpeningStartSyncProps,
+  type StartWeddingLyricPhrase,
+  startWeddingEditDurationInFrames,
+  startWeddingEditRange,
+} from '../../data/startWeddingEditPublic';
 import {
   buildCubicBezierArcLengthLut,
   cubicBezierPointAtArcProgress,
@@ -110,7 +110,7 @@ function Confetti({seconds}: {seconds: number}) {
   );
 }
 
-function ThreeHitLyric({phrase, seconds}: {phrase: (typeof weddingEditLyricPhrases)[number]; seconds: number}) {
+function ThreeHitLyric({phrase, seconds}: {phrase: StartWeddingLyricPhrase; seconds: number}) {
   const emphasis = phrase.emphasisWord ?? '';
   const glyphs = Array.from(emphasis);
   const unitSize = Math.max(1, Math.floor(glyphs.length / 3));
@@ -130,8 +130,8 @@ function ThreeHitLyric({phrase, seconds}: {phrase: (typeof weddingEditLyricPhras
   );
 }
 
-function LyricTypography({seconds}: {seconds: number}) {
-  const phrase = weddingEditLyricPhrases.find((item) => seconds >= item.startSec && seconds < item.endSec);
+function LyricTypography({seconds, lyricPhrases}: {seconds: number; lyricPhrases: StartWeddingLyricPhrase[]}) {
+  const phrase = lyricPhrases.find((item) => seconds >= item.startSec && seconds < item.endSec);
   if (!phrase) return null;
   const enter = interpolate(seconds, [phrase.startSec, phrase.startSec + 0.24], [0, 1], {...clamp, easing: Easing.out(Easing.back(1.5))});
   const exit = interpolate(seconds, [phrase.exitSec, phrase.endSec], [1, 0], clamp);
@@ -192,7 +192,7 @@ function Interlude({seconds}: {seconds: number}) {
 
 function FrameChrome({seconds}: {seconds: number}) {
   const section = sectionAt(seconds);
-  const progress = seconds / weddingEditRange.sourceEndSec;
+  const progress = seconds / startWeddingEditRange.sourceEndSec;
   return (
     <>
       <div style={{position: 'absolute', left: 42, top: 34, display: 'flex', gap: 13, alignItems: 'center', color: '#fff', fontFamily: font, fontSize: 13, fontWeight: 900, letterSpacing: '0.16em'}}><span style={{width: 34, height: 4, background: '#ffd33d'}} />START SYNC · PRIVATE SCREENING</div>
@@ -202,19 +202,19 @@ function FrameChrome({seconds}: {seconds: number}) {
   );
 }
 
-export function JapaneseFriendsOpeningStartSync() {
+export function JapaneseFriendsOpeningStartSync({audioPath = null, lyricPhrases = []}: JapaneseFriendsOpeningStartSyncProps) {
   const frame = useCurrentFrame();
   const seconds = frame / 30;
   const section = sectionAt(seconds);
   const sectionIndex = sections.findIndex((item) => item.id === section.id);
   const isChorus = section.id === 'chorus-1' || section.id === 'chorus-2';
   const isInterlude = section.id.startsWith('interlude-');
-  const fadeOut = interpolate(seconds, [weddingEditRange.fadeOutStartSec, weddingEditRange.sourceEndSec], [1, 0], clamp);
+  const fadeOut = interpolate(seconds, [startWeddingEditRange.fadeOutStartSec, startWeddingEditRange.sourceEndSec], [1, 0], clamp);
   return (
     <AbsoluteFill style={{background: '#061827', opacity: fadeOut}}>
-      {section.id === 'intro' ? <Intro seconds={seconds} /> : isInterlude ? <Interlude seconds={seconds} /> : <>{isChorus ? <ChorusPanels seconds={seconds} sectionIndex={sectionIndex} /> : <PhotoBackdrop seconds={seconds} sectionIndex={sectionIndex} />}{isChorus ? <Confetti seconds={seconds} /> : null}<LyricTypography seconds={seconds} /></>}
+      {section.id === 'intro' ? <Intro seconds={seconds} /> : isInterlude ? <Interlude seconds={seconds} /> : <>{isChorus ? <ChorusPanels seconds={seconds} sectionIndex={sectionIndex} /> : <PhotoBackdrop seconds={seconds} sectionIndex={sectionIndex} />}{isChorus ? <Confetti seconds={seconds} /> : null}<LyricTypography seconds={seconds} lyricPhrases={lyricPhrases} /></>}
       <FrameChrome seconds={seconds} />
-      {weddingEditAudioPath ? <Audio src={staticFile(weddingEditAudioPath)} endAt={weddingEditDurationInFrames} volume={interpolate(seconds, [0, 0.7, weddingEditRange.fadeOutStartSec, weddingEditRange.sourceEndSec], [0, 1, 1, 0], clamp)} /> : null}
+      {audioPath ? <Audio src={staticFile(audioPath)} endAt={startWeddingEditDurationInFrames} volume={interpolate(seconds, [0, 0.7, startWeddingEditRange.fadeOutStartSec, startWeddingEditRange.sourceEndSec], [0, 1, 1, 0], clamp)} /> : null}
     </AbsoluteFill>
   );
 }

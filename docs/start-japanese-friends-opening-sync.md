@@ -18,6 +18,8 @@ cd motion-studio
 pnpm render:japanese-friends-opening-start-sync
 ```
 
+このコマンドはignore対象のローカル歌詞JSONと音源を検証し、Remotionのinput propsとして注入する。CI用compositionの既定値には歌詞・音源を含めず、Gitへ著作物を持ち込まない。
+
 本番レンダーは `motion-studio/out/opening/japanese_friends_opening_start_sync_v1.mp4` に生成され、ローカルのモーション図鑑へコピーされます。publisherは解像度・fps・尺・音声形式・黒画面・1秒以上の無音を検査し、追跡可能なmanifestだけをGit管理します。
 
 ## 権利とタイミング

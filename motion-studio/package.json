@@ -55,7 +55,7 @@
     "publish:japanese-friends-opening-demo": "node --no-warnings scripts/publish-japanese-friends-opening-demo.mts",
     "render:japanese-friends-opening-demo": "remotion render src/index-start-motion-kit.ts JapaneseFriendsOpeningDemoV1 out/opening/japanese_friends_opening_demo_v1.mp4 && pnpm publish:japanese-friends-opening-demo",
     "publish:japanese-friends-opening-start-sync": "node --no-warnings scripts/publish-japanese-friends-opening-start-sync.mts",
-    "render:japanese-friends-opening-start-sync": "remotion render src/index-start-motion-kit.ts JapaneseFriendsOpeningStartSyncV1 out/opening/japanese_friends_opening_start_sync_v1.mp4 && pnpm publish:japanese-friends-opening-start-sync",
+    "render:japanese-friends-opening-start-sync": "node --no-warnings scripts/render-japanese-friends-opening-start-sync.mts",
     "render:opening-v1:preview": "pnpm prepare:opening-v1 && pnpm opening:assembly-preflight:strict && remotion render src/index-opening-v1.ts OpeningV1 out/preview/opening_v1_preview.mp4 --scale=0.5 --crf=24",
     "qa:opening-stills": "pnpm prepare:opening-v1 && node --no-warnings scripts/render-opening-v1-qa-stills.mts",
     "opening:preflight": "node --no-warnings scripts/opening-photo-preflight.mts",
