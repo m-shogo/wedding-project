@@ -59,7 +59,7 @@ QA:
 - visual personality is travel editorial, not bridal stationery.
 
 ## A02 — `V20_P01_TROPICAL_FRAME_CLUSTER_A`
-Status: `READY_TO_GENERATE`
+Status: `REJECTED_REGENERATE`
 
 Job:
 - create authored environment/depth around the HERO photo and masthead.
@@ -89,6 +89,14 @@ QA:
 - looks intentionally composed even when 30–50% is hidden;
 - no obvious generative repetition;
 - edge/cutout quality survives print size.
+
+2026-08-31 attempt result:
+- three materially different bridge directions were generated for comparison: tropical extension, tactile ephemera collision and graphic print burst;
+- their composition/color directions were useful, but all three raster files reported `hasAlpha: no` and contained a baked checkerboard background;
+- one background-extraction regeneration was attempted on the tropical extension and again returned `hasAlpha: no`;
+- repeated failure fingerprint: `imagegen / transparent PNG / checkerboard baked into RGB output`;
+- all candidates are rejected and none was uploaded to Drive or placed in Figma;
+- next generation must prove true alpha before visual placement; do not repeat the same extraction method without a changed capability or input contract.
 
 ## A03 — `V20_P01_FEATURE_VESSEL_A`
 Status: `READY_TO_GENERATE`

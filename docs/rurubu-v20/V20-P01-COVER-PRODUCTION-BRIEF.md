@@ -85,8 +85,10 @@ Color consequence:
 
 Transfer state:
 - the source is verified and suitable for P01 support testing;
-- direct Figma byte upload was retried on 2026-08-31 but the external `mcp.figma.com` upload host again failed DNS resolution from the execution environment;
-- therefore `036` is **NOT YET PLACED** in Figma and must not be reported as placed/approved-in-layout until a real Figma screenshot proves it.
+- the original `4500 x 3000` source was successfully transferred to live Figma node `3355:8` on 2026-08-31;
+- verified Figma image hash: `fff2e955f6806513de82afd22bc93869e2e14ddb`;
+- Plugin API readback confirmed `4500 x 3000`, and a post-transfer Candidate H screenshot verified the intended close-couple crop;
+- `036` is therefore `PLACED_IN_FIGMA / SOURCE VERIFIED`, while final layout approval still depends on the complete P01 composition and print proof.
 
 The evidence strengthens the two-photo strategy: `035 = environmental travel scale`, `036 = human recognition/personality`.
 

@@ -196,6 +196,73 @@ Google Drive image-only searches were repeated after the real-photo Figma correc
 
 Therefore P04 and dog-specific P06 roles remain explicit source gaps. No generated scenery, reference page, or unrelated image is promoted to real-memory evidence.
 
+## Full-resolution production replacement — P01 Candidate H / P05 Candidate E / 2026-08-31
+
+The live preferred candidates were re-opened and visually reviewed before write:
+- P01 Candidate H `3355:2`;
+- P05 Candidate E `3355:37`.
+
+The first screenshots proved the editorial hierarchy but also exposed severe blocky pixelation from the legacy low-resolution HERO proxies. Full-resolution Drive masters were then downloaded, pixel-opened and transferred to the existing replaceable Figma image-fill roles without flattening either page.
+
+Verified P01 replacements:
+- HERO node `3355:7`;
+- Drive ID `1_Tbnct5i8xqEgBwtiY3PsfzUSSWGpBkc` / `035.jpg`;
+- source and Figma readback: `4500 x 3000`;
+- Figma image hash `743b9dadda4774b8dc0f323db2a1fa4485744349`;
+- support node `3355:8`;
+- Drive ID `183kgq1fGMRNiEQFBkp4KlSkaIdIulaKL` / `036.jpg`;
+- source and Figma readback: `4500 x 3000`;
+- Figma image hash `fff2e955f6806513de82afd22bc93869e2e14ddb`.
+
+Verified P05 replacement:
+- HERO node `3355:39`;
+- Drive ID `1G-8t1JbX-GyqeMhuPLCPjsLKT_oue4Rb` / `REAL_PHOTO_COVER_HAWAII_PALMS_COUPLE_WIDE_02.jpg`;
+- source and Figma readback: `4500 x 3000`;
+- Figma image hash `d5b01512eafc825820df06f40392a9d72fef3d85`.
+
+Transport detail:
+- the two source files above the Figma `10 MB` upload limit were converted to non-destructive transfer derivatives at the same `4500 x 3000` pixel dimensions;
+- P01 HERO transfer derivative: about `6.9 MB`;
+- P05 HERO transfer derivative: about `5.9 MB`;
+- original Drive masters remain unchanged.
+
+Post-transfer screenshot findings:
+- P01: palm fronds, sky, shoreline, grass and both photo subjects now resolve cleanly; the `旅する WEDDING → 2人 → ふたりの旅と、今日という一日。` reading path is materially stronger because source detail no longer reads as a damaged preview;
+- P05: palms, sky, foreground couple and the printed-photo support now separate clearly; `HAWAII` remains the first read, followed by the emotional image, proposal field and arrival marker;
+- both pages retain deliberate image-weight inequality and independently replaceable real-photo roles;
+- no generated bridge asset was placed during this pass.
+
+Japanese microcopy correction actually tested in Figma:
+- `3355:10` P01 support caption: `Inter Semi Bold 13` → `M PLUS 1 Bold 13`;
+- `3355:35` P01 issue meta: `Inter Semi Bold 9` → `M PLUS 1 Medium 10`;
+- `3355:56` P05 HERO caption: `Inter Semi Bold 10` → `M PLUS 1 Medium 11`;
+- `3355:57` P05 emotion caption: `Inter Semi Bold 9` → `M PLUS 1 Medium 10`;
+- new support node `3366:2` adds a cream printed-photo caption strip behind `3355:57`; post-change screenshot confirms the previously low-contrast caption now reads against a stable local field;
+- date/location and Latin-heavy metadata remain in Inter.
+
+Resolution consequence:
+- P01 and P05 promoted HERO/support roles now exceed the `300 ppi` target at their current A5 physical placement;
+- the remaining print warning is not source pixel capacity but actual printer-template, CMYK and physical proof verification.
+
+Generated bridge-art comparison:
+- Candidate A: tropical editorial extension;
+- Candidate B: tactile ephemera collision;
+- Candidate C: graphic print burst;
+- all three, plus one attempted alpha-extraction revision of A, were rejected because file inspection reported `hasAlpha: no` and the checkerboard was baked into RGB pixels;
+- no rejected asset was placed in Figma or promoted to Drive/Git production asset status.
+
+Live Google Drive source-gap recheck:
+- image searches `沖縄` and `韓国` still returned page/reference/generated editorial files rather than promotable autobiographical trip photos;
+- rejected examples include `1DmbuDQ1I7ZhBr58ULJ4hXczkdRbmEI6u` / `REFERENCE_RURUBU_WEDDING_GOAL_MEMORY_1DAY_PAGE01.png`, `1JDainj5YYuEVSyS2QIxNy9IJBQ2r7d7s` / `PAGE01.png`, `1C-4MEw3-NbR__TN18ShvzwwY6qYRRZUj` / `REFERENCE_RURUBU_WEDDING_GOAL_PROFILE_QA_PAGE02.png` and `1WT9ks_SSOBMoyD2aagFVIdZ0ar637VQt` / `PAGE02.png`;
+- `クッキー`, `メロン`, `日常` and `犬` returned zero image results;
+- no result from this search was promoted or placed.
+
+Current single largest P01 visible gap:
+`TRUE-ALPHA, PHOTO-DERIVED BRIDGE ART THAT IMPROVES THE PAGE AFTER PLACEMENT`.
+
+Current single largest P04–P05 spread gap:
+`P04 OKINAWA/KOREA REAL-PHOTO SOURCES + COMPLETE TWO-PAGE SPREAD QA`.
+
 ## Whole-book acceptance
 
 A V20 design candidate must show:
