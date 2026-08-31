@@ -8,11 +8,17 @@ const repoRoot = resolve(dashboardRoot, '..');
 const motionRoot = resolve(repoRoot, 'motion-studio');
 const scriptPath = resolve(motionRoot, 'scripts/wedding-davinci-delivery-readiness.mts');
 
-const sync = spawnSync(process.execPath, ['scripts/sync-wedding-project-motion-provenance-preflight.mjs'], {
+const projectMotionSync = spawnSync(process.execPath, ['scripts/sync-wedding-project-motion-provenance-preflight.mjs'], {
   cwd: dashboardRoot,
   encoding: 'utf8',
 });
-if (sync.status !== 0) throw new Error(sync.stderr || sync.stdout || 'Project Motion dashboard preflight snapshot stale');
+if (projectMotionSync.status !== 0) throw new Error(projectMotionSync.stderr || projectMotionSync.stdout || 'Project Motion dashboard preflight snapshot stale');
+
+const transitionActualSync = spawnSync(process.execPath, ['scripts/sync-wedding-davinci-transition-actual-readiness.mjs'], {
+  cwd: dashboardRoot,
+  encoding: 'utf8',
+});
+if (transitionActualSync.status !== 0) throw new Error(transitionActualSync.stderr || transitionActualSync.stdout || 'Transition Actual dashboard snapshot stale');
 
 const run = spawnSync(process.execPath, ['--no-warnings', scriptPath, '--json'], {
   cwd: motionRoot,
@@ -85,13 +91,30 @@ for (const token of [
   if (!generatedSource.includes(token)) fail(`Generated Project Motion dashboard preflight missing ${token}`);
 }
 
+const transitionGeneratedSource = readFileSync(resolve(dashboardRoot, 'src/data/weddingDavinciTransitionActualReadiness.generated.ts'), 'utf8');
+for (const token of [
+  'wedding-davinci-transition-actual-dashboard/v1',
+  'MOTION_STUDIO_DERIVED_TRANSITION_ACTUAL_READINESS',
+  'wedding-davinci-transition-actual-evidence.mts --movie=opening --init',
+  'wedding-davinci-transition-actual-evidence.mts --movie=profile --strict',
+  'wedding-final-delivery-transition-gate.mts --movie=opening',
+  'GENERATED_DASHBOARD_SNAPSHOT != LIVE_MAC_DAVINCI_GUI_ACTUAL',
+  'CURRENT_REQUIRES_CANONICAL_CLI_STRICT',
+]) {
+  if (!transitionGeneratedSource.includes(token)) fail(`Generated transition Actual readiness missing ${token}`);
+}
+
 const dataSource = readFileSync(resolve(dashboardRoot, 'src/data/weddingDavinciDeliveryReadiness.ts'), 'utf8');
 for (const token of [
   'WEDDING_DAVINCI_DELIVERY_READINESS_SCHEMA',
   'weddingProjectMotionProvenancePreflight',
-  'projectMotionSnapshot',
-  'projectMotion: openingProjectMotion',
-  'projectMotion: profileProjectMotion',
+  'weddingDavinciTransitionActualReadiness',
+  'transitionActualSnapshot',
+  'transitionActual: openingTransitionActual',
+  'transitionActual: profileTransitionActual',
+  'RUN_DAVINCI_TRANSITION_ACTUAL',
+  'TRANSITION_ACTUAL_CURRENT_REQUIRED_BEFORE_FINAL_DELIVERY_READY',
+  'CROSS_DISSOLVE_DURATION_REQUIRES_HUMAN_PASS',
   'REVALIDATE_PROJECT_MOTION_PROVENANCE',
   'PROJECT_MOTION_INVALID => WEDDING_DELIVERY_INVALID',
   'finalRenderBoundRecoverySha256',
@@ -157,7 +180,25 @@ for (const token of [
   if (!componentSource.includes(token)) fail(`Wedding readiness card missing ${token}`);
 }
 
+const transitionComponentSource = readFileSync(resolve(dashboardRoot, 'src/components/WeddingDavinciTransitionActualReadinessCard.tsx'), 'utf8');
+for (const token of [
+  'DAVINCI TRANSITION ACTUAL / HUMAN GATE',
+  'HARD CUT保持',
+  'CROSS DISSOLVE保持',
+  'Evidence SHA',
+  'Proof SHA',
+  'Human review',
+  'HUMAN / MAC DAVINCI GUI REQUIRED',
+  'INIT — verdictは全てNOT_RUN',
+  'STRICT — Human確認後のみ通る',
+  'FINAL DELIVERY TRANSITION GATE',
+  'GENERATED DASHBOARD SNAPSHOT != LIVE MAC DAVINCI GUI ACTUAL',
+]) {
+  if (!transitionComponentSource.includes(token)) fail(`Transition Actual operator card missing ${token}`);
+}
+
 const zukanSource = readFileSync(resolve(dashboardRoot, 'src/pages/VisualMotionLibrary.tsx'), 'utf8');
 if (!zukanSource.includes('WeddingDavinciDeliveryReadinessCard')) fail('Motion Zukan must surface wedding-wide readiness');
+if (!zukanSource.includes('WeddingDavinciTransitionActualReadinessCard')) fail('Motion Zukan must surface transition Actual Human gate');
 
-console.log(`Wedding DaVinci readiness + transition Actual gate + Project Motion preflight + operator packet surface OK: state=${report.state} opening=${report.opening.nextGate}/${report.opening.transitionGate.state} profile=${report.profile.nextGate}/${report.profile.transitionGate.state}`);
+console.log(`Wedding DaVinci readiness + visible transition Actual operator + Project Motion preflight + operator packet surface OK: state=${report.state} opening=${report.opening.nextGate}/${report.opening.transitionGate.state} profile=${report.profile.nextGate}/${report.profile.transitionGate.state}`);
