@@ -60,7 +60,7 @@ jobs:
       - name: Palmier Assembly Operator exposes human assembly sequence
         run: |
           grep -q 'PALMIER ASSEMBLY OPERATOR' movie-dashboard/src/components/PalmierAssemblyOperatorCard.tsx
-          grep -q 'markerをコピー' movie-dashboard/src/components/PalmierAssemblyOperatorCard.tsx
+          grep -q 'markerだけコピー' movie-dashboard/src/components/PalmierAssemblyOperatorCard.tsx
           grep -q 'placement.startSeconds' movie-dashboard/src/components/PalmierAssemblyOperatorCard.tsx
           grep -q 'build-wedding-palmier-typography-assembly-plan.mts' movie-dashboard/src/components/PalmierAssemblyOperatorCard.tsx
           grep -q 'verify-wedding-palmier-typography-timeline-export.mts' movie-dashboard/src/components/PalmierAssemblyOperatorCard.tsx
@@ -76,7 +76,7 @@ jobs:
           grep -q '2. Marker追加' movie-dashboard/src/components/PalmierAssemblyOperatorCard.tsx
           grep -q '3. Timing確認' movie-dashboard/src/components/PalmierAssemblyOperatorCard.tsx
           grep -q 'aria-pressed' movie-dashboard/src/components/PalmierAssemblyOperatorCard.tsx
-          grep -q 'session内の作業メモ' movie-dashboard/src/components/PalmierAssemblyOperatorCard.tsx
+          grep -q 'session内の作業補助' movie-dashboard/src/components/PalmierAssemblyOperatorCard.tsx
           ! grep -q 'localStorage' movie-dashboard/src/components/PalmierAssemblyOperatorCard.tsx
           ! grep -q 'sessionStorage' movie-dashboard/src/components/PalmierAssemblyOperatorCard.tsx
 

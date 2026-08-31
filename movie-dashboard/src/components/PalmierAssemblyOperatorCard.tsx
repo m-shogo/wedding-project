@@ -24,9 +24,45 @@ type OperatorProgress = {placed: boolean; markerAdded: boolean; timingReviewed: 
 const emptyProgress = (): OperatorProgress => ({placed: false, markerAdded: false, timingReviewed: false});
 const isComplete = (progress: OperatorProgress) => progress.placed && progress.markerAdded && progress.timingReviewed;
 
+type ScenePacketInput = {
+  projectId: SceneProjectId;
+  order: number;
+  sceneId: string;
+  sourceRevision: string;
+  selectedPatternId: string | null;
+  productionRole: string | null;
+  selectionClass: string | null;
+  startSeconds: number | null;
+  endSeconds: number | null;
+  durationSeconds: number | null;
+  deliverySidecarFileName: string | null;
+  palmierTimelineXmlFileName: string | null;
+  marker: string | null;
+  instruction: string | null;
+};
+
+const formatSeconds = (value: number | null) => value === null ? "MISSING" : `${value.toFixed(2)}s`;
+
+const buildSceneInstructionPacket = (input: ScenePacketInput) => [
+  `PALMIER SCENE PACKET / ${input.projectId.toUpperCase()} / ${String(input.order).padStart(2, "0")}`,
+  `scene=${input.sceneId}`,
+  `revision=${input.sourceRevision}`,
+  `time=${formatSeconds(input.startSeconds)} -> ${formatSeconds(input.endSeconds)} / duration=${formatSeconds(input.durationSeconds)}`,
+  `pattern=${input.selectedPatternId ?? "NOT_SELECTED"}`,
+  `role=${input.productionRole ?? "NOT_SELECTED"}`,
+  `class=${input.selectionClass ?? "N/A"}`,
+  `package=${input.deliverySidecarFileName ?? "MISSING"}`,
+  `timeline=${input.palmierTimelineXmlFileName ?? "MISSING"}`,
+  `marker=${input.marker ?? "MISSING"}`,
+  "instruction:",
+  input.instruction ?? "BLOCKED: Human route / Role / delivery packageをCURRENTへ戻してから配置する。",
+  "checklist: Scene配置 -> Marker追加 -> Timing確認",
+].join("\n");
+
 export function PalmierAssemblyOperatorCard({projectId}: {projectId: SceneProjectId}) {
   const [revision, setRevision] = useState(0);
   const [copiedMarker, setCopiedMarker] = useState<string | null>(null);
+  const [copiedPacket, setCopiedPacket] = useState<string | null>(null);
   const [progressByRevision, setProgressByRevision] = useState<Record<string, OperatorProgress>>({});
   const [activeRevisionKey, setActiveRevisionKey] = useState<string | null>(null);
 
@@ -64,7 +100,25 @@ export function PalmierAssemblyOperatorCard({projectId}: {projectId: SceneProjec
     const revisionKey = `${scene.sceneId}@${scene.sourceRevision}`;
     const progress = progressByRevision[revisionKey] ?? emptyProgress();
     const current = scene.status === "CURRENT_PACKAGE_READY" && scene.roleContextStatus === "CURRENT_ROLE_CONTEXT" && Boolean(scene.package);
-    return {scene, index, revisionKey, progress, current, complete: isComplete(progress)};
+    const placement = placementByScene.get(scene.sceneId) ?? null;
+    const pkg = scene.package;
+    const packet = buildSceneInstructionPacket({
+      projectId,
+      order: index + 1,
+      sceneId: scene.sceneId,
+      sourceRevision: scene.sourceRevision,
+      selectedPatternId: scene.selectedPatternId,
+      productionRole: scene.productionRole,
+      selectionClass: scene.selectionClass,
+      startSeconds: placement?.startSeconds ?? null,
+      endSeconds: placement?.endSeconds ?? null,
+      durationSeconds: placement?.durationSeconds ?? null,
+      deliverySidecarFileName: pkg?.files.deliverySidecarFileName ?? null,
+      palmierTimelineXmlFileName: pkg?.files.palmierTimelineXmlFileName ?? null,
+      marker: pkg?.timeline.sceneMarkerId ?? null,
+      instruction: pkg?.timeline.instruction ?? null,
+    });
+    return {scene, index, revisionKey, progress, current, complete: isComplete(progress), placement, packet};
   });
   const readySceneCount = sceneRows.filter((row) => row.current).length;
   const completedSceneCount = sceneRows.filter((row) => row.complete).length;
@@ -72,6 +126,7 @@ export function PalmierAssemblyOperatorCard({projectId}: {projectId: SceneProjec
   const effectiveActiveKey = activeRevisionKey && sceneRows.some((row) => row.revisionKey === activeRevisionKey && row.current && !row.complete)
     ? activeRevisionKey
     : firstIncomplete?.revisionKey ?? null;
+  const activeRow = effectiveActiveKey ? sceneRows.find((row) => row.revisionKey === effectiveActiveKey) ?? null : null;
   const allAssemblyComplete = batch.summary.totalScenes > 0 && completedSceneCount === batch.summary.totalScenes;
 
   function focusRevisionKey(revisionKey: string | null) {
@@ -86,6 +141,12 @@ export function PalmierAssemblyOperatorCard({projectId}: {projectId: SceneProjec
     await navigator.clipboard.writeText(marker);
     setCopiedMarker(sceneId);
     window.setTimeout(() => setCopiedMarker((current) => (current === sceneId ? null : current)), 1200);
+  }
+
+  async function copyInstructionPacket(revisionKey: string, packet: string) {
+    await navigator.clipboard.writeText(packet);
+    setCopiedPacket(revisionKey);
+    window.setTimeout(() => setCopiedPacket((current) => (current === revisionKey ? null : current)), 1600);
   }
 
   function toggleProgress(sceneId: string, sourceRevision: string, key: keyof OperatorProgress) {
@@ -110,12 +171,12 @@ export function PalmierAssemblyOperatorCard({projectId}: {projectId: SceneProjec
   }
 
   return (
-    <section className="mt-3 border-2 border-cyan-300 dark:border-cyan-800 p-3" data-palmier-assembly-operator={projectId} data-palmier-operator-flow="V2">
+    <section className="mt-3 border-2 border-cyan-300 dark:border-cyan-800 p-3" data-palmier-assembly-operator={projectId} data-palmier-operator-flow="V3_PACKET">
       <div className="flex flex-wrap items-start justify-between gap-2">
         <div>
           <p className="text-[8px] tracking-[0.14em] font-semibold text-cyan-700 dark:text-cyan-300">PALMIER ASSEMBLY OPERATOR / {projectId.toUpperCase()}</p>
           <p className="mt-1 text-[11px] font-semibold text-navy-800 dark:text-sand-100">{readySceneCount}/{batch.summary.totalScenes} Scene ready / assembly {completedSceneCount}/{batch.summary.totalScenes}</p>
-          <p className="mt-1 text-[8px] leading-4 text-navy-500 dark:text-navy-300">Scene配置 → marker → timing確認を終えたら次の未完Sceneへ自動advanceします。revision変更後の古いchecklistは再利用しません。</p>
+          <p className="mt-1 text-[8px] leading-4 text-navy-500 dark:text-navy-300">Instruction packetを1回コピー → Scene配置 → marker → timing確認 → 次の未完Sceneへ。revision変更後の古いchecklistは再利用しません。</p>
         </div>
         <span className={`border px-2 py-1 font-mono text-[8px] ${assemblyReady ? "border-emerald-300 text-emerald-700 dark:border-emerald-800 dark:text-emerald-300" : "border-amber-300 text-amber-700 dark:border-amber-800 dark:text-amber-300"}`}>{assemblyReady ? "READY_TO_STAGE" : "BLOCKED"}</span>
       </div>
@@ -132,12 +193,18 @@ export function PalmierAssemblyOperatorCard({projectId}: {projectId: SceneProjec
       </div>
 
       {!allAssemblyComplete ? (
-        <div className="mt-3 flex flex-wrap items-center justify-between gap-2 border-2 border-cyan-300 dark:border-cyan-800 p-2" data-palmier-next-incomplete={effectiveActiveKey ?? "NONE"}>
-          <div>
-            <p className="text-[7px] font-semibold uppercase tracking-wide text-cyan-700 dark:text-cyan-300">NEXT INCOMPLETE SCENE</p>
-            <p className="mt-1 font-mono text-[8px]">{effectiveActiveKey ?? "CURRENTな未完Sceneなし"}</p>
+        <div className="mt-3 border-2 border-cyan-300 dark:border-cyan-800 p-2" data-palmier-next-incomplete={effectiveActiveKey ?? "NONE"}>
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <p className="text-[7px] font-semibold uppercase tracking-wide text-cyan-700 dark:text-cyan-300">NEXT INCOMPLETE SCENE</p>
+              <p className="mt-1 font-mono text-[8px]">{effectiveActiveKey ?? "CURRENTな未完Sceneなし"}</p>
+            </div>
+            <div className="flex flex-wrap gap-1">
+              <button type="button" disabled={!activeRow} onClick={() => activeRow && void copyInstructionPacket(activeRow.revisionKey, activeRow.packet)} className="border border-cyan-300 dark:border-cyan-800 px-2.5 py-1.5 text-[8px] font-semibold text-cyan-700 dark:text-cyan-300 disabled:cursor-not-allowed disabled:opacity-40">{activeRow && copiedPacket === activeRow.revisionKey ? "PACKET COPIED ✓" : "次Scene packetをコピー"}</button>
+              <button type="button" disabled={!effectiveActiveKey} onClick={() => focusRevisionKey(effectiveActiveKey)} className="border border-cyan-300 dark:border-cyan-800 px-2.5 py-1.5 text-[8px] font-semibold text-cyan-700 dark:text-cyan-300 disabled:cursor-not-allowed disabled:opacity-40">次の未完Sceneへ</button>
+            </div>
           </div>
-          <button type="button" disabled={!effectiveActiveKey} onClick={() => focusRevisionKey(effectiveActiveKey)} className="border border-cyan-300 dark:border-cyan-800 px-2.5 py-1.5 text-[8px] font-semibold text-cyan-700 dark:text-cyan-300 disabled:cursor-not-allowed disabled:opacity-40">次の未完Sceneへ</button>
+          {activeRow ? <pre className="mt-2 max-h-44 overflow-auto whitespace-pre-wrap border border-cyan-100 dark:border-cyan-950 p-2 font-mono text-[7px] leading-3" data-palmier-active-packet={activeRow.revisionKey}>{activeRow.packet}</pre> : null}
         </div>
       ) : (
         <div className="mt-3 border-2 border-emerald-300 dark:border-emerald-800 p-2.5" data-palmier-assembly-complete="true">
@@ -148,8 +215,7 @@ export function PalmierAssemblyOperatorCard({projectId}: {projectId: SceneProjec
       )}
 
       <div className="mt-3 space-y-2">
-        {sceneRows.map(({scene, index, revisionKey, progress, current, complete}) => {
-          const placement = placementByScene.get(scene.sceneId);
+        {sceneRows.map(({scene, index, revisionKey, progress, current, complete, placement, packet}) => {
           const pkg = scene.package;
           const marker = pkg?.timeline.sceneMarkerId ?? null;
           const active = effectiveActiveKey === revisionKey;
@@ -170,12 +236,12 @@ export function PalmierAssemblyOperatorCard({projectId}: {projectId: SceneProjec
                 </div>
               ) : <p className="mt-2 text-[7px] leading-3 text-amber-700 dark:text-amber-300">先にHuman route / RoleをCURRENTへ戻してください。Palmier配置はまだ開始しません。</p>}
 
-              {marker ? (
-                <div className="mt-2 flex flex-wrap items-center gap-2">
-                  <code className="max-w-full flex-1 overflow-x-auto whitespace-nowrap border border-cyan-200 dark:border-cyan-900 px-2 py-1 text-[8px]">{marker}</code>
-                  <button type="button" onClick={() => void copyMarker(scene.sceneId, marker)} className="border border-cyan-300 dark:border-cyan-800 px-2 py-1 text-[8px] font-semibold text-cyan-700 dark:text-cyan-300">{copiedMarker === scene.sceneId ? "COPIED ✓" : "markerをコピー"}</button>
-                </div>
-              ) : null}
+              <div className="mt-2 flex flex-wrap gap-1">
+                <button type="button" disabled={!current} onClick={() => void copyInstructionPacket(revisionKey, packet)} className="border border-cyan-300 dark:border-cyan-800 px-2 py-1 text-[8px] font-semibold text-cyan-700 dark:text-cyan-300 disabled:cursor-not-allowed disabled:opacity-40">{copiedPacket === revisionKey ? "PACKET COPIED ✓" : "Scene packetをコピー"}</button>
+                {marker ? <button type="button" onClick={() => void copyMarker(scene.sceneId, marker)} className="border border-cyan-300 dark:border-cyan-800 px-2 py-1 text-[8px] font-semibold text-cyan-700 dark:text-cyan-300">{copiedMarker === scene.sceneId ? "MARKER COPIED ✓" : "markerだけコピー"}</button> : null}
+              </div>
+
+              {active ? <pre className="mt-2 max-h-44 overflow-auto whitespace-pre-wrap border border-cyan-100 dark:border-cyan-950 p-2 font-mono text-[7px] leading-3" data-palmier-scene-packet={revisionKey}>{packet}</pre> : null}
 
               <div className="mt-2 flex flex-wrap gap-1" aria-label={`${scene.sceneId} Palmier assembly checklist`}>
                 {([["placed", "1. Scene配置"], ["markerAdded", "2. Marker追加"], ["timingReviewed", "3. Timing確認"]] as const).map(([key, label]) => (
@@ -194,7 +260,7 @@ export function PalmierAssemblyOperatorCard({projectId}: {projectId: SceneProjec
         <code className="mt-1 block max-w-full overflow-x-auto whitespace-nowrap text-[8px] leading-4">{timelineVerifyCommand(projectId)}</code>
       </div>
 
-      <p className="mt-2 border-l-2 border-amber-300 pl-2 text-[7px] leading-3 text-amber-800 dark:text-amber-200">Human assembly checklist / focus / auto-advanceはこの画面session内の作業メモだけで、Scene revision単位に分離されます。チェック完了 ≠ FCPXML receipt CURRENT ≠ Palmier GUI Actual PASS ≠ Remotion Studio GUI Actual PASS ≠ Mac DaVinci GUI Actual PASS。GUI Actualは人間が実行した場合だけ記録します。</p>
+      <p className="mt-2 border-l-2 border-amber-300 pl-2 text-[7px] leading-3 text-amber-800 dark:text-amber-200">Instruction packet copy / Human assembly checklist / focus / auto-advanceはこの画面session内の作業補助だけで、Scene revision単位に分離されます。packet copyやチェック完了 ≠ FCPXML receipt CURRENT ≠ Palmier GUI Actual PASS ≠ Remotion Studio GUI Actual PASS ≠ Mac DaVinci GUI Actual PASS。GUI Actualは人間が実行した場合だけ記録します。</p>
     </section>
   );
 }
