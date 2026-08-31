@@ -389,7 +389,7 @@ Adopted generated PNG parts:
 - P04–P05 sparse route C: node `3434:69`;
 - P06 Best Shots tab and tape: nodes `3447:158`, `3447:171`;
 - P07 luggage, ticket, stamp and hand-cut families: nodes `3447:184`, `3447:190`, `3447:195`, `3447:199`, `3447:216`, `3447:223`;
-- P08 issue stamp: node `3446:16`.
+- P08 issue stamp: source candidate node `3446:16`; current adopted P08 clone node `3474:13`.
 
 Route comparison:
 - Candidate A scenic printed route: spread `3463:3`, rejected because its opaque scenic mass competes with photography;
@@ -401,5 +401,5 @@ Current Figma:
 - P02–P03 current spread `3447:2`;
 - P04–P05 current spread `3434:2`;
 - P06–P07 current spread `3447:90`;
-- P08 current `3446:2`;
-- full-book generated-PNG contact sheet `3465:2`.
+- P08 current `3474:2`, using verified REAL_PHOTO `001.jpg` at `3474:3`;
+- full-book generated-PNG contact sheet `3477:2`.

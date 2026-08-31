@@ -69,7 +69,7 @@ Therefore Okinawa/Korea remain real-photo gaps, not permission to substitute gen
 | P06 Real life | NOT YET SURFACED as non-Hawaii casual set | Hawaii `036` can support but is not true everyday-life evidence | optional | everyday action/food still gap | everyday details gap | keep P06 module count flexible until actual casual photos surface |
 | P06 Dogs | not required as hero | real Cookie/Melon photos NOT YET SURFACED | optional | optional | decorative corgi art exists but is not autobiographical photo evidence | real-photo inclusion remains optional; do not use generic corgi art as if it depicts the actual dogs |
 | P07 Wedding day | photo optional; page can work information-first | optional | venue real imagery not yet confirmed here | food/table only if factual/useful | schedule is native text | layout must not depend on fake venue/food imagery |
-| P08 Closing | `001` is a strong calm candidate | optional | strong Hawaii environment available | no | optional | likely enough, but choose after whole-book rhythm is visible |
+| P08 Closing | `001` adopted | couple back-view visible | calm Hawaii ocean/sky | no | wide negative space | `REQ-P08-01` fulfilled in current P08 `3474:2`; P05 photo repetition removed |
 
 ## Page-level minimums before greybox hardening
 

@@ -254,11 +254,11 @@ Prompts are execution artifacts generated from page manuals and asset briefs, no
 
 ## Current production priority
 
-1. continue P01 prepared assets + first decorated cover assembly;
-2. continue P04–P05 major composites + first decorated center-spread assembly;
-3. collect/verify the physical wedding details that will populate P07 while keeping its new discovery layout flexible;
-4. continue real-photo recovery for P02/P04/P06 gaps;
-5. feed only proven production lessons back into P02/P03/P06/P08;
-6. avoid building a giant generic parts library before page evidence exists.
+1. retain the current generated-PNG editorial-parts system and P01/P05 locks;
+2. replace P06 LIFE / FOOD / PET-LIFE / FUN dummies when verified real sources arrive;
+3. replace the three P04 travel dummies when verified Okinawa/Korea sources arrive;
+4. collect/verify the physical wedding details that will populate P07 while keeping discovery-first behavior;
+5. lock the remaining personal copy;
+6. move to printer-template, bleed/export, profile/preflight and physical-proof work after source/copy gates close.
 
 This sequencing is intentional: the goal is to finish authored magazine pages, not to endlessly improve a design system.

@@ -519,3 +519,54 @@ P04 `3434:3` and P06 `3447:150` were screenshot-reviewed after the metadata-only
 
 Revised next exact task:
 continue non-photo layout/copy work with the current dummies. When the requested sources arrive, replace the independent fills by request ID, remove `REPLACE REQUIRED` only after source verification, and rerun spread/full-book QA.
+
+## P08 real closing-photo acceptance pass — 2026-08-31
+
+Largest visible gap selected from the full-book contact review:
+- P08 reused the same Hawaii environment source as P05, weakening the quiet release after the center-spread peak.
+
+Verified REAL_PHOTO source:
+- file `001.jpg`;
+- Drive ID `1XAVLtR1y-M6yW_N9CB8QQUixXYdbOke6`;
+- visually opened from the mounted Drive source, not judged from filename alone;
+- source dimensions `4500 x 3000`;
+- SHA-256 `a5a7d7a335ca679d84d61f7b41c514e7e711435e76a80401d85dd004777de7cb`;
+- effective resolution at the 216 mm full-bleed page height is `352.8 ppi`;
+- Figma image hash `16a2b4e2ce0a2532909a01a7fd61bcbf766fa96a`.
+
+Compared P08 candidates:
+- original `3446:2`: rejected/superseded because it reused the P05 environment photo;
+- Candidate C `3473:2`: rejected because the unchanged paper field hid the couple too heavily;
+- Candidate D `3474:2`: adopted after moving the paper field/stamp upward to reveal the couple's back-view while retaining the broad quiet sky.
+
+Current P08:
+- frame `3474:2`;
+- photo `3474:3`;
+- `REQ-P08-01` fulfilled;
+- generated issue stamp retained at `3474:13`;
+- internal reader-facing failure `DESIGN COMPLETE ≠ PRINT READY` removed from the page and replaced by native issue metadata `SPECIAL WEDDING ISSUE / YOKOHAMA 2026` at `3474:19`;
+- minimum visible text size remains `12` Figma points;
+- visible font families remain `Inter` and `M PLUS 1`.
+
+QA:
+- P08 page reviewed at reading scale;
+- full-book contact `3477:2` screenshot-reviewed;
+- P01 remains the strongest entry, P04–P05 remains the peak, and P08 now closes with a distinct real couple image rather than repeating P05;
+- the only production-note string matched by the current-page audit is P04 node `3434:33`, which is explicitly hidden from the reader.
+
+Current preferred nodes after this pass:
+- P01 `3355:2`;
+- P02–P03 `3447:2`;
+- P04–P05 `3434:2`;
+- P06–P07 `3447:90`;
+- P08 `3474:2`;
+- full-book contact `3477:2`.
+
+Current acceptance state remains:
+- `DESIGN_COMPLETE`: yes;
+- `SOURCE_COMPLETE`: no;
+- `COPY_LOCKED`: no;
+- `PRINT_READY`: no.
+
+Largest remaining visible/source gap:
+`P06 REAL EVERYDAY / FOOD / COOKIE / MELON REPLACEMENT`, with current dummies intentionally retained until verified sources arrive.
