@@ -18,6 +18,14 @@ import {
 } from "../data/visualSceneComposer";
 import {downloadText} from "../lib/exporters";
 
+type RealMediaFraming = {
+  fit: "COVER" | "CONTAIN";
+  focusX: number;
+  focusY: number;
+  scale: number;
+  revision: string;
+};
+
 type AuditScene = {
   sceneId: string;
   sourceRevision: string;
@@ -25,7 +33,7 @@ type AuditScene = {
   productionRole: string | null;
   text: string;
   mediaLabel: string;
-  media: {state: string; path: string | null; sha256: string | null; kind: string | null; blocker: string | null};
+  media: {state: string; path: string | null; sha256: string | null; kind: string | null; blocker: string | null; framing?: RealMediaFraming | null};
   transitionAfter: {toSceneId: string; type: string; durationFrames: number; status: string} | null;
   readiness: "READY_FOR_REAL_MEDIA_PREVIEW" | "WAITING_HUMAN_INPUT" | "BLOCKED_BY_STALE_AUTHORITY";
   blockers: string[];
@@ -48,6 +56,7 @@ type ProductionReadinessAudit = {
     projectHumanInputs: string[];
     projectBlockers: string[];
     readyForContinuousRealMediaPreview: boolean;
+    framingBoundScenes?: number;
     productionReady: false;
   };
   nextActions: {renderableSceneIds: string[]; waitingSceneIds: string[]; blockedSceneIds: string[]; renderSelectedScenes: string | null; renderContinuousPreview: string | null};
@@ -156,7 +165,7 @@ export function WeddingMovieProductionReadinessOperatorCard({projectId}: {projec
       </div>
 
       <div className="mt-2 border border-teal-200 dark:border-teal-900 p-2 text-[7px] leading-4">
-        <div className="flex flex-wrap items-center justify-between gap-2"><span className="font-semibold">1. Current batchを書き出す → 2. real media/BGM manifestを用意 → 3. audit</span><button type="button" onClick={() => current && downloadText(current.batchJson, `${projectId}-typography-production-batch.json`)} disabled={!current} className="border px-2 py-1 disabled:opacity-40">Batch JSON</button></div>
+        <div className="flex flex-wrap items-center justify-between gap-2"><span className="font-semibold">1. Current batchを書き出す → 2. real media/BGM + framing manifestを用意 → 3. audit</span><button type="button" onClick={() => current && downloadText(current.batchJson, `${projectId}-typography-production-batch.json`)} disabled={!current} className="border px-2 py-1 disabled:opacity-40">Batch JSON</button></div>
         <code className="mt-1 block max-w-full overflow-x-auto whitespace-nowrap">{auditCommand}</code>
         <button type="button" onClick={() => void copy(auditCommand, "audit")} className="mt-1 border px-2 py-1">{copied === "audit" ? "COPIED ✓" : "audit commandをコピー"}</button>
       </div>
@@ -166,19 +175,23 @@ export function WeddingMovieProductionReadinessOperatorCard({projectId}: {projec
 
       {audit ? (
         <>
-          <div className="mt-2 grid grid-cols-2 gap-1 sm:grid-cols-4 text-[8px]">
-            <div className="border p-2">READY {audit.summary.readyForRealMediaPreview}</div><div className="border p-2">HUMAN待ち {audit.summary.waitingHumanInput}</div><div className="border p-2">STALE/BLOCKED {audit.summary.blockedByStaleAuthority}</div><div className="border p-2">BGM {audit.audio.state}</div>
+          <div className="mt-2 grid grid-cols-2 gap-1 sm:grid-cols-5 text-[8px]">
+            <div className="border p-2">READY {audit.summary.readyForRealMediaPreview}</div><div className="border p-2">HUMAN待ち {audit.summary.waitingHumanInput}</div><div className="border p-2">STALE/BLOCKED {audit.summary.blockedByStaleAuthority}</div><div className="border p-2">FRAMING {audit.summary.framingBoundScenes ?? audit.scenes.filter((scene) => Boolean(scene.media.framing)).length}/{audit.summary.totalScenes}</div><div className="border p-2">BGM {audit.audio.state}</div>
           </div>
           <div className="mt-2 space-y-1">
-            {audit.scenes.map((scene) => (
-              <div key={scene.sceneId} className="border border-sand-200 dark:border-navy-700 p-2 text-[7px] leading-4" data-production-readiness-scene={scene.sceneId} data-readiness={scene.readiness}>
-                <div className="flex flex-wrap items-center justify-between gap-2"><span className="font-semibold">{scene.sceneId} / {scene.patternId ?? "NO_PATTERN"} / {scene.productionRole ?? "NO_ROLE"}</span><span className="font-mono">{readinessLabel[scene.readiness]}</span></div>
-                <p>{scene.text || "COPY EMPTY"} / media={scene.media.kind ?? "N/A"} {scene.media.state}</p>
-                {scene.humanInputs.length ? <p className="text-amber-700 dark:text-amber-300">Human: {scene.humanInputs.join(" / ")}</p> : null}
-                {scene.blockers.length ? <p className="text-rose-700 dark:text-rose-300">Blocker: {scene.blockers.join(" / ")}</p> : null}
-                {scene.transitionAfter ? <p className="opacity-70">→ {scene.transitionAfter.toSceneId}: {scene.transitionAfter.type} {scene.transitionAfter.durationFrames}f / {scene.transitionAfter.status}</p> : null}
-              </div>
-            ))}
+            {audit.scenes.map((scene) => {
+              const framing = scene.media.framing;
+              return (
+                <div key={scene.sceneId} className="border border-sand-200 dark:border-navy-700 p-2 text-[7px] leading-4" data-production-readiness-scene={scene.sceneId} data-readiness={scene.readiness} data-framing-revision={framing?.revision ?? "NONE"}>
+                  <div className="flex flex-wrap items-center justify-between gap-2"><span className="font-semibold">{scene.sceneId} / {scene.patternId ?? "NO_PATTERN"} / {scene.productionRole ?? "NO_ROLE"}</span><span className="font-mono">{readinessLabel[scene.readiness]}</span></div>
+                  <p>{scene.text || "COPY EMPTY"} / media={scene.media.kind ?? "N/A"} {scene.media.state}</p>
+                  {framing ? <p className="font-mono text-teal-700 dark:text-teal-300" data-real-media-framing={scene.sceneId}>framing={framing.fit} / focus {framing.focusX}%×{framing.focusY}% / scale {framing.scale.toFixed(2)} / rev {framing.revision}</p> : <p className="text-amber-700 dark:text-amber-300">framing=NONE</p>}
+                  {scene.humanInputs.length ? <p className="text-amber-700 dark:text-amber-300">Human: {scene.humanInputs.join(" / ")}</p> : null}
+                  {scene.blockers.length ? <p className="text-rose-700 dark:text-rose-300">Blocker: {scene.blockers.join(" / ")}</p> : null}
+                  {scene.transitionAfter ? <p className="opacity-70">→ {scene.transitionAfter.toSceneId}: {scene.transitionAfter.type} {scene.transitionAfter.durationFrames}f / {scene.transitionAfter.status}</p> : null}
+                </div>
+              );
+            })}
           </div>
           <div className="mt-2 border-t border-teal-200 dark:border-teal-900 pt-2 text-[7px] leading-4">
             <p>Renderable: {audit.nextActions.renderableSceneIds.join(" / ") || "NONE"}</p><p>Human待ち: {audit.nextActions.waitingSceneIds.join(" / ") || "NONE"}</p><p>Stale/blocked: {audit.nextActions.blockedSceneIds.join(" / ") || "NONE"}</p>
@@ -188,7 +201,7 @@ export function WeddingMovieProductionReadinessOperatorCard({projectId}: {projec
         </>
       ) : null}
 
-      <p className="mt-2 border-l-2 border-amber-300 pl-2 text-[7px] leading-3 text-amber-800 dark:text-amber-200">Audit CURRENT / media SHA一致 ≠ visual QA PASS ≠ Remotion Studio GUI Actual PASS ≠ Palmier GUI Actual PASS ≠ Mac DaVinci GUI Actual PASS。Human/GUI evidenceは自動昇格しません。</p>
+      <p className="mt-2 border-l-2 border-amber-300 pl-2 text-[7px] leading-3 text-amber-800 dark:text-amber-200">Audit CURRENT / media SHA一致 / framing CURRENT ≠ visual QA PASS ≠ Remotion Studio GUI Actual PASS ≠ Palmier GUI Actual PASS ≠ Mac DaVinci GUI Actual PASS。Human/GUI evidenceは自動昇格しません。</p>
     </section>
   );
 }

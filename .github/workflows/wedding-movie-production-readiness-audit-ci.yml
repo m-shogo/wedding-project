@@ -37,14 +37,8 @@ jobs:
             "projectId":"opening",
             "timeline":{"transitions":[{"fromSceneId":"scene-a","toSceneId":"scene-b","transition":"CROSS_DISSOLVE","durationFrames":12,"status":"HUMAN_SELECTED_CURRENT"}]},
             "scenes":[
-              {
-                "sceneId":"scene-a","sourceRevision":"rev-a","status":"CURRENT_PACKAGE_READY","selectedPatternId":"type-mask-reveal","roleContextStatus":"CURRENT_ROLE_CONTEXT","productionRole":"TITLE_REVEAL",
-                "package":{"identity":{"sourceRevision":"rev-a"},"canonical":{"humanState":{"resolvedEditableIntent":{"text":"OUR JOURNEY BEGINS","mediaLabel":"Shogo & Shiori airport portrait","sceneDurationSeconds":4},"canonicalSceneState":{"sceneDurationSeconds":4}}}}
-              },
-              {
-                "sceneId":"scene-b","sourceRevision":"rev-b","status":"CURRENT_PACKAGE_READY","selectedPatternId":"split-rise","roleContextStatus":"CURRENT_ROLE_CONTEXT","productionRole":"IMPACT_TITLE",
-                "package":{"identity":{"sourceRevision":"rev-b"},"canonical":{"humanState":{"resolvedEditableIntent":{"text":"READY FOR TAKEOFF","mediaLabel":"Travel montage master clip","sceneDurationSeconds":5},"canonicalSceneState":{"sceneDurationSeconds":5}}}}
-              }
+              {"sceneId":"scene-a","sourceRevision":"rev-a","status":"CURRENT_PACKAGE_READY","selectedPatternId":"type-mask-reveal","roleContextStatus":"CURRENT_ROLE_CONTEXT","productionRole":"TITLE_REVEAL","package":{"identity":{"sourceRevision":"rev-a"},"canonical":{"humanState":{"resolvedEditableIntent":{"text":"OUR JOURNEY BEGINS","mediaLabel":"Shogo & Shiori airport portrait","sceneDurationSeconds":4},"canonicalSceneState":{"sceneDurationSeconds":4}}}}},
+              {"sceneId":"scene-b","sourceRevision":"rev-b","status":"CURRENT_PACKAGE_READY","selectedPatternId":"split-rise","roleContextStatus":"CURRENT_ROLE_CONTEXT","productionRole":"IMPACT_TITLE","package":{"identity":{"sourceRevision":"rev-b"},"canonical":{"humanState":{"resolvedEditableIntent":{"text":"READY FOR TAKEOFF","mediaLabel":"Travel montage master clip","sceneDurationSeconds":5},"canonicalSceneState":{"sceneDurationSeconds":5}}}}}
             ],
             "summary":{"staleTransitions":0,"batchReadyForPalmierDaVinciHandoff":true,"productionReady":false}
           }
@@ -54,8 +48,8 @@ jobs:
             "schemaVersion":"wedding-movie-production-media-input/v1",
             "projectId":"opening",
             "scenes":[
-              {"sceneId":"scene-a","sourceRevision":"rev-a","kind":"IMAGE","path":"/tmp/movie-readiness/media/scene-a.jpg","sha256":"${A_SHA}","humanApproved":true},
-              {"sceneId":"scene-b","sourceRevision":"rev-b","kind":"VIDEO","path":"/tmp/movie-readiness/media/scene-b.mp4","sha256":"${B_SHA}","humanApproved":true}
+              {"sceneId":"scene-a","sourceRevision":"rev-a","kind":"IMAGE","path":"/tmp/movie-readiness/media/scene-a.jpg","sha256":"${A_SHA}","humanApproved":true,"framing":{"fit":"COVER","focusX":24,"focusY":38,"scale":1.16,"revision":"frame-a-r3","sourceRevision":"rev-a"}},
+              {"sceneId":"scene-b","sourceRevision":"rev-b","kind":"VIDEO","path":"/tmp/movie-readiness/media/scene-b.mp4","sha256":"${B_SHA}","humanApproved":true,"framing":{"fit":"CONTAIN","focusX":50,"focusY":50,"scale":1,"revision":"frame-b-r1","sourceRevision":"rev-b"}}
             ]
           }
           JSON
@@ -64,17 +58,39 @@ jobs:
           JSON
       - name: Audit fully bound production inputs
         run: node --no-warnings motion-studio/scripts/wedding-movie-production-readiness-audit.mts --batch=/tmp/movie-readiness/batch.json --media-manifest=/tmp/movie-readiness/media.json --audio-manifest=/tmp/movie-readiness/audio.json --output=/tmp/movie-readiness/audit.json --strict-real-preview-ready
-      - name: Verify ready scene queue and evidence boundary
+      - name: Verify ready scene queue, framing and evidence boundary
         run: |
           node --input-type=module <<'NODE'
           import {readFileSync} from 'node:fs';
           const a=JSON.parse(readFileSync('/tmp/movie-readiness/audit.json','utf8'));
           if(a.schemaVersion!=='wedding-movie-production-readiness-audit/v1') throw new Error('schema');
           if(a.summary.readyForRealMediaPreview!==2||a.summary.waitingHumanInput!==0||a.summary.blockedByStaleAuthority!==0) throw new Error('scene readiness');
-          if(a.summary.readyForContinuousRealMediaPreview!==true) throw new Error('preview not ready');
+          if(a.summary.readyForContinuousRealMediaPreview!==true||a.summary.framingBoundScenes!==2) throw new Error('preview/framing not ready');
           if(a.nextActions.renderableSceneIds.join(',')!=='scene-a,scene-b') throw new Error('render queue');
+          const first=a.scenes[0].media.framing;
+          const second=a.scenes[1].media.framing;
+          if(first.fit!=='COVER'||first.focusX!==24||first.focusY!==38||first.scale!==1.16||first.revision!=='frame-a-r3') throw new Error('scene-a framing transport');
+          if(second.fit!=='CONTAIN'||second.revision!=='frame-b-r1') throw new Error('scene-b framing transport');
           if(a.audio.state!=='CURRENT') throw new Error('audio binding');
           if(a.evidenceBoundary.remotionStudioGuiActual!=='NOT_RUN'||a.evidenceBoundary.palmierGuiActual!=='NOT_RUN'||a.evidenceBoundary.macDaVinciGuiActual!=='NOT_RUN'||a.evidenceBoundary.productionReady!==false) throw new Error('evidence boundary');
+          NODE
+      - name: Verify stale framing source revision fails closed
+        shell: bash
+        run: |
+          node --input-type=module <<'NODE'
+          import {readFileSync,writeFileSync} from 'node:fs';
+          const m=JSON.parse(readFileSync('/tmp/movie-readiness/media.json','utf8'));
+          m.scenes[0].framing.sourceRevision='rev-old';
+          writeFileSync('/tmp/movie-readiness/stale-framing-media.json',JSON.stringify(m));
+          NODE
+          if node --no-warnings motion-studio/scripts/wedding-movie-production-readiness-audit.mts --batch=/tmp/movie-readiness/batch.json --media-manifest=/tmp/movie-readiness/stale-framing-media.json --audio-manifest=/tmp/movie-readiness/audio.json --output=/tmp/movie-readiness/stale-framing.json --strict-real-preview-ready 2>/tmp/movie-readiness/stale-framing.err; then
+            echo 'expected stale framing binding to block strict readiness' >&2
+            exit 1
+          fi
+          node --input-type=module <<'NODE'
+          import {readFileSync} from 'node:fs';
+          const a=JSON.parse(readFileSync('/tmp/movie-readiness/stale-framing.json','utf8'));
+          if(!a.scenes[0].blockers.includes('STALE_REAL_MEDIA_FRAMING_BINDING')) throw new Error('stale framing blocker missing');
           NODE
       - name: Verify post-audit media tamper fail-closes
         shell: bash
