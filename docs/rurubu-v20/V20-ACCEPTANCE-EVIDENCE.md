@@ -430,3 +430,72 @@ One rejected generation:
 - it was not copied into the repository, uploaded to Drive or placed in Figma.
 
 Current state remains `DESIGN_COMPLETE / SOURCE_COMPLETE = NO / PRINT_READY = NO`.
+
+## Generated PNG editorial-parts acceptance pass — 2026-08-31
+
+This section supersedes the same-day SVG editorial-parts trial as the current format decision.
+
+### Current preferred nodes
+
+- P01 lock, untouched: `3355:2`;
+- P02–P03 spread: `3447:2`;
+  - P02 `3447:43`;
+  - P03 `3447:67`;
+- P04–P05 spread: `3434:2`;
+  - P04 `3434:3`;
+  - P05 `3434:34`, content unchanged;
+  - adopted sparse generated-PNG route `3434:69`;
+- P06–P07 spread: `3447:90`;
+  - P06 `3447:150`;
+  - P07 `3447:174`;
+- P08: `3446:2`;
+- current full-book contact sheet: `3465:2`.
+
+Route candidates compared in the live spread:
+- Candidate A `3463:3`: scenic printed route, rejected;
+- Candidate B `3462:2`: travel-ephemera route, rejected;
+- Candidate C `3434:2`: sparse generated PNG route, adopted.
+
+### Alpha and source evidence
+
+- all ten adopted files are RGBA PNGs with measured transparent pixels;
+- all ten adopted files were uploaded and read back from Drive folder `1Xs7x_CqOLvXin2bkbjNGosJ8TtSskW_w`;
+- image hashes and exact Git/Drive/SHA records are in `assets/rurubu-v20/editorial-parts/README.md`;
+- generated artwork contains no baked authoritative name, destination, date, body copy or official mark;
+- reader-facing text remains native and independently editable in Figma;
+- the earlier SVG folder `1Ch422qqyxPD_AAJ5UHLtMRUrvKKatS5Z` is superseded, not current.
+
+### Page QA
+
+- P07: four materially distinct paper families replace selected flat shells while five native color labels remain; this keeps the `TODAY'S TRAVEL GUIDE → 11 DESTINATIONS → discovery` order and avoids turning all eleven items into one sticker family.
+- P04–P05: sparse route C joins the spread without covering faces, Hawaii display or proposal/arrival fields; the route weakens around the fold and returns on P05.
+- P06: the generated tab and tape add tactile everyday-editorial character without increasing the photo count or creating scrapbook overload.
+- P03: the single paper edge softens Episode 01 while the page remains calmer than P06/P07.
+- P02: the generated profile badge makes the Q&A support read as travel-editorial rather than a plain ellipse and stays subordinate to the portrait and title.
+- P08: the generated issue stamp adds matte print character while preserving the quiet close.
+- P01: no new part was added and the visual lock remains intact.
+- P05: content and hierarchy remain locked; only spread continuity passes across it.
+
+### Full-book QA
+
+Contact sheet `3465:2` was screenshot-reviewed.
+
+- 3-second scan: P01 remains the strongest entry; P04–P05 remains the emotional peak; P08 remains the calm exit.
+- page rhythm: P02/P03 and P06/P07 retain clear internal contrast rather than becoming a repeated template.
+- editorial density: generated paper/ink artifacts now bridge photos and native text, most visibly on P06 and P07.
+- repeated-family warning: no all-book ticket system was introduced; route, tab/tape, episode edge, profile badge, destination shells and issue stamp remain page-specific.
+- A5 readability: current page minima remain P01 10, P02 13, P03 14, P04 12, P05 10, P06 14, P07 13 and P08 12 Figma points; the contact-sheet clone is excluded because it is intentionally scaled.
+- visible production-note audit remains zero for `REPLACE BEFORE PRINT / REAL FACTS ONLY / 確認後 / 未確認 / native text / 実在する会場ディテール / GENERATED TEMP VISUAL`.
+- visible font families remain limited to `M PLUS 1` and `Inter`.
+
+Current acceptance state:
+- `DESIGN_COMPLETE`: yes, as a generated-PNG editorial-parts candidate;
+- `SOURCE_COMPLETE`: no;
+- `COPY_LOCKED`: no;
+- `PRINT_READY`: no.
+
+Largest remaining visible quality gap:
+`P06 REAL EVERYDAY / COOKIE / MELON SOURCE REPLACEMENT`.
+
+Next exact task:
+retrieve pixel-open verified real everyday, food and Cookie/Melon sources; replace the temporary P06 image fills inside `3447:150`; then re-run spread `3447:90` and full-book contact `3465:2` QA without changing the adopted PNG tab/tape system.

@@ -361,3 +361,45 @@ Every generated/composed asset must pass:
 10. `FIGMA ROLE` — can be placed/overlapped without requiring Figma to rebuild the artwork atom-by-atom.
 
 An asset failing 2, 3 or 6 is rejected even if it is visually attractive.
+
+---
+
+# GENERATED PNG EDITORIAL PARTS PASS — 2026-08-31
+
+Status: `PLACED_IN_FIGMA / GENERATED PNG CURRENT`
+
+User direction changed the production format from editable SVG trials to generated raster PNG because the generated paper/ink character is visually stronger and SVG rendering can be fragile. The SVG trials are superseded and are not current production sources.
+
+Generation and alpha workflow:
+- original artwork was generated without authoritative text on a controlled chroma field;
+- delivered files were isolated to RGBA PNG;
+- actual alpha-channel pixel counts were inspected;
+- the first imagegen attempts with checkerboards baked into RGB remain rejected;
+- current PNGs contain real transparent pixels and no checkerboard.
+
+Current production folder:
+- Git: `assets/rurubu-v20/editorial-parts/`;
+- manifest: `assets/rurubu-v20/editorial-parts/README.md`;
+- Drive: `1Xs7x_CqOLvXin2bkbjNGosJ8TtSskW_w` / `RURUBU_V20_EDITORIAL_PARTS_PNG_CURRENT_2026-08-31`;
+- superseded SVG Drive folder: `1Ch422qqyxPD_AAJ5UHLtMRUrvKKatS5Z`.
+
+Adopted generated PNG parts:
+- P02 profile badge: node `3447:57`;
+- P03 episode paper edge: node `3447:73`;
+- P04–P05 sparse route C: node `3434:69`;
+- P06 Best Shots tab and tape: nodes `3447:158`, `3447:171`;
+- P07 luggage, ticket, stamp and hand-cut families: nodes `3447:184`, `3447:190`, `3447:195`, `3447:199`, `3447:216`, `3447:223`;
+- P08 issue stamp: node `3446:16`.
+
+Route comparison:
+- Candidate A scenic printed route: spread `3463:3`, rejected because its opaque scenic mass competes with photography;
+- Candidate B ephemera route: spread `3462:2`, rejected because it hides the proposal/title/photo structure;
+- Candidate C sparse route: current spread `3434:2`, adopted because it preserves photo hierarchy, fold quieting and route continuity.
+
+Current Figma:
+- P01 remains untouched at `3355:2`;
+- P02–P03 current spread `3447:2`;
+- P04–P05 current spread `3434:2`;
+- P06–P07 current spread `3447:90`;
+- P08 current `3446:2`;
+- full-book generated-PNG contact sheet `3465:2`.
