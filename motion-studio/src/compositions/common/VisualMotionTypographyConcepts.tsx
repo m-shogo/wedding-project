@@ -1,7 +1,7 @@
 import {AbsoluteFill} from 'remotion';
-import {TypographyRevealEngine, type TypographyRevealMode} from '../../motion-kit/engines';
+import {TypographyRevealEngine, type MotionIntensity, type TypographyRevealMode} from '../../motion-kit/engines';
 
-function TypographyConcept({mode, text, label, intensity = 'M'}: {mode: TypographyRevealMode; text: string; label: string; intensity?: 'S' | 'M' | 'L'}) {
+function TypographyConcept({mode, text, label, intensity = 'M'}: {mode: TypographyRevealMode; text: string; label: string; intensity?: MotionIntensity}) {
   return (
     <AbsoluteFill style={{background: 'linear-gradient(135deg, #071523 0%, #102b42 58%, #1b4058 100%)'}}>
       <TypographyRevealEngine mode={mode} text={text} intensity={intensity} transparent />
@@ -10,6 +10,22 @@ function TypographyConcept({mode, text, label, intensity = 'M'}: {mode: Typograp
       </div>
     </AbsoluteFill>
   );
+}
+
+export type WeddingSceneTypographyCandidateProps = {
+  text: string;
+  mode: TypographyRevealMode;
+  intensity: MotionIntensity;
+  label: string;
+};
+
+export function WeddingSceneTypographyCandidateV1({
+  text,
+  mode,
+  intensity,
+  label,
+}: WeddingSceneTypographyCandidateProps) {
+  return <TypographyConcept mode={mode} text={text} label={label} intensity={intensity} />;
 }
 
 export function VisualMotionWordPunchV1() {
