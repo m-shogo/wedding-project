@@ -1,0 +1,110 @@
+name: Wedding Project Rhythm Review CI
+
+on:
+  pull_request:
+    paths:
+      - "motion-studio/scripts/project-rhythm-review.mts"
+      - ".github/workflows/wedding-project-rhythm-review-ci.yml"
+  push:
+    branches: [main]
+    paths:
+      - "motion-studio/scripts/project-rhythm-review.mts"
+      - ".github/workflows/wedding-project-rhythm-review-ci.yml"
+
+jobs:
+  rhythm-review-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.17.1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: motion-studio/pnpm-lock.yaml
+      - name: Install Motion Studio dependencies
+        working-directory: motion-studio
+        run: pnpm install --frozen-lockfile
+      - name: Build current selected/reel fixtures
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/rhythm-review
+          cat > /tmp/rhythm-review/selected.json <<'JSON'
+          {
+            "schemaVersion":"wedding-movie-selected-scene-render-manifest/v1",
+            "authority":"DERIVED_FROM_CURRENT_PROJECT_TYPOGRAPHY_BATCH",
+            "projectId":"opening",
+            "summary":{"allSelectionsCurrent":true,"productionReady":false},
+            "evidenceBoundary":{"remotionStudioGuiActual":"NOT_RUN","palmierGuiActual":"NOT_RUN","macDaVinciGuiActual":"NOT_RUN"}
+          }
+          JSON
+          SELECTED_SHA=$(sha256sum /tmp/rhythm-review/selected.json | awk '{print $1}')
+          cat > /tmp/rhythm-review/reel.json <<JSON
+          {
+            "schemaVersion":"wedding-movie-project-typography-preview-reel/v1",
+            "authority":"DERIVED_FROM_CURRENT_SELECTED_SCENE_RENDER_MANIFEST",
+            "projectId":"opening",
+            "fps":30,
+            "sourceSelectedSceneManifest":{"path":"/tmp/rhythm-review/selected.json","sha256":"${SELECTED_SHA}"},
+            "timeline":{"boundaries":[
+              {"order":1,"sceneId":"scene-a","sourceRevision":"rev-a","patternId":"split-rise","productionRole":"TITLE_REVEAL","startFrame":0,"endFrameExclusive":60,"durationFrames":60,"startSeconds":0,"endSeconds":2,"gapFromPreviousFrames":0},
+              {"order":2,"sceneId":"scene-b","sourceRevision":"rev-b","patternId":"mask-reveal","productionRole":"CHAPTER_TITLE","startFrame":60,"endFrameExclusive":150,"durationFrames":90,"startSeconds":2,"endSeconds":5,"gapFromPreviousFrames":0}
+            ]},
+            "summary":{"frameBoundariesVerified":true,"selectionsCurrent":true,"productionReady":false},
+            "evidenceBoundary":{"remotionStudioGuiActual":"NOT_RUN","palmierGuiActual":"NOT_RUN","macDaVinciGuiActual":"NOT_RUN"}
+          }
+          JSON
+      - name: Init human rhythm review template
+        run: node --no-warnings motion-studio/scripts/project-rhythm-review.mts --reel-manifest=/tmp/rhythm-review/reel.json --init --output=/tmp/rhythm-review/review.json
+      - name: Record explicit Human playback verdict fixture
+        run: |
+          node --input-type=module <<'NODE'
+          import {readFileSync, writeFileSync} from 'node:fs';
+          const path='/tmp/rhythm-review/review.json';
+          const review=JSON.parse(readFileSync(path,'utf8'));
+          review.evidenceBoundary.humanPlaybackPerformed=true;
+          for (const scene of review.scenes) for (const axis of Object.keys(scene.axes)) scene.axes[axis].verdict='PASS';
+          review.scenes[1].axes.PACING={verdict:'FAIL',notes:'Second scene feels rushed after the title reveal.'};
+          review.scenes[1].axes.TRANSITION={verdict:'FAIL',notes:'Pattern switch needs more breathing room.'};
+          review.finalVerdict='FAIL';
+          review.finalNotes='Return scene-b to Scene-bound A/B and timing review.';
+          writeFileSync(path, JSON.stringify(review,null,2)+'\n');
+          NODE
+      - name: Build correction queue from explicit FAIL only
+        run: node --no-warnings motion-studio/scripts/project-rhythm-review.mts --reel-manifest=/tmp/rhythm-review/reel.json --review=/tmp/rhythm-review/review.json --output=/tmp/rhythm-review/queue.json
+      - name: Verify queue semantics and evidence boundary
+        run: |
+          node --input-type=module <<'NODE'
+          import {readFileSync} from 'node:fs';
+          const q=JSON.parse(readFileSync('/tmp/rhythm-review/queue.json','utf8'));
+          if(q.schemaVersion!=='wedding-movie-project-rhythm-correction-queue/v1') throw new Error('queue schema');
+          if(q.authority!=='DERIVED_ONLY_FROM_EXPLICIT_HUMAN_RHYTHM_FAIL_VERDICTS') throw new Error('queue authority');
+          if(q.failures.length!==2) throw new Error(`expected 2 FAIL axes, got ${q.failures.length}`);
+          if(q.failures.some((x)=>x.sceneId!=='scene-b')) throw new Error('wrong failed scene');
+          if(q.failures.map((x)=>x.axis).sort().join(',')!=='PACING,TRANSITION') throw new Error('wrong axes');
+          if(q.summary.notRunAxes!==0 || q.summary.finalVerdict!=='FAIL' || q.summary.productionReady!==false) throw new Error('summary boundary');
+          if(q.evidenceBoundary.remotionStudioGuiActual!=='NOT_RUN'||q.evidenceBoundary.palmierGuiActual!=='NOT_RUN'||q.evidenceBoundary.macDaVinciGuiActual!=='NOT_RUN') throw new Error('GUI Actual boundary');
+          if(!q.nextActions?.renderContinuousReel?.includes('render-wedding-project-typography-preview-reel.mts')) throw new Error('rerender chain missing');
+          NODE
+      - name: Verify NOT_RUN never becomes FAIL
+        run: |
+          node --no-warnings motion-studio/scripts/project-rhythm-review.mts --reel-manifest=/tmp/rhythm-review/reel.json --init --output=/tmp/rhythm-review/not-run-review.json
+          node --no-warnings motion-studio/scripts/project-rhythm-review.mts --reel-manifest=/tmp/rhythm-review/reel.json --review=/tmp/rhythm-review/not-run-review.json --output=/tmp/rhythm-review/not-run-queue.json
+          node --input-type=module <<'NODE'
+          import {readFileSync} from 'node:fs';
+          const q=JSON.parse(readFileSync('/tmp/rhythm-review/not-run-queue.json','utf8'));
+          if(q.failures.length!==0) throw new Error('NOT_RUN converted to FAIL');
+          if(q.summary.reviewComplete!==false || q.summary.notRunAxes!==8) throw new Error('NOT_RUN count mismatch');
+          NODE
+      - name: Verify stale selected manifest fail-closes
+        shell: bash
+        run: |
+          echo 'stale' >> /tmp/rhythm-review/selected.json
+          if node --no-warnings motion-studio/scripts/project-rhythm-review.mts --reel-manifest=/tmp/rhythm-review/reel.json --init --output=/tmp/rhythm-review/stale.json 2>/tmp/rhythm-review/stale.err; then
+            echo 'expected stale authority failure' >&2
+            exit 1
+          fi
+          grep -q 'RHYTHM_REVIEW_SELECTED_MANIFEST_STALE' /tmp/rhythm-review/stale.err
