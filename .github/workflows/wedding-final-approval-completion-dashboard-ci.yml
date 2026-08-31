@@ -1,0 +1,45 @@
+name: Wedding Final Approval Completion Dashboard CI
+
+on:
+  pull_request:
+    paths:
+      - 'motion-studio/scripts/wedding-final-approval-completion-binding.mts'
+      - 'motion-studio/scripts/wedding-davinci-delivery-readiness.mts'
+      - 'movie-dashboard/scripts/sync-wedding-final-approval-completion-readiness.mjs'
+      - 'movie-dashboard/src/data/weddingFinalApprovalCompletionReadiness.generated.ts'
+      - 'movie-dashboard/src/data/weddingDavinciDeliveryReadiness.ts'
+      - 'movie-dashboard/src/components/WeddingDavinciTransitionActualReadinessCard.tsx'
+      - '.github/workflows/wedding-final-approval-completion-dashboard-ci.yml'
+  workflow_dispatch:
+
+jobs:
+  final-approval-completion-dashboard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+          run_install: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: movie-dashboard/pnpm-lock.yaml
+      - name: Verify generated final approval completion snapshot is current
+        working-directory: movie-dashboard
+        run: node scripts/sync-wedding-final-approval-completion-readiness.mjs
+      - name: Verify Dashboard readiness requires final binding
+        run: |
+          grep -q 'weddingFinalApprovalCompletionReadiness' movie-dashboard/src/data/weddingDavinciDeliveryReadiness.ts
+          grep -q 'FINAL_APPROVAL_COMPLETION_BINDING_CURRENT_REQUIRED_BEFORE_FINAL_DELIVERY_READY' movie-dashboard/src/data/weddingDavinciDeliveryReadiness.ts
+          grep -q 'BIND_FINAL_APPROVAL_TO_ACTUAL_COMPLETION' movie-dashboard/src/data/weddingDavinciDeliveryReadiness.ts
+          grep -q 'Final Approval' movie-dashboard/src/components/WeddingDavinciTransitionActualReadinessCard.tsx
+          grep -q 'Final Binding' movie-dashboard/src/components/WeddingDavinciTransitionActualReadinessCard.tsx
+          grep -q 'FINAL APPROVAL COMPLETION BINDING' movie-dashboard/src/components/WeddingDavinciTransitionActualReadinessCard.tsx
+          grep -q 'DERIVED BINDING != HUMAN APPROVAL' movie-dashboard/src/components/WeddingDavinciTransitionActualReadinessCard.tsx
+      - name: Build Movie Dashboard
+        working-directory: movie-dashboard
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm build
