@@ -12,7 +12,7 @@ const requireText = (source, value, label) => {
 };
 
 for (const token of [
-  'wedding-venue-delivery-gate-dashboard/v2',
+  'wedding-venue-delivery-gate-dashboard/v3',
   'PROJECTION_TO_PACKAGE_SHA_MISMATCH',
   'PACKAGE_TO_OFFLINE_PROJECTION_SHA_MISMATCH',
   'DELIVERY_MANIFEST_SHA_MISMATCH',
@@ -21,12 +21,17 @@ for (const token of [
   'OFFLINE_COPY_SHA_MISMATCH',
   'THREE_COPY_REDUNDANCY_',
   'THREE_COPY_TARGET_SET_INVALID',
-  'REDUNDANCY_SOURCE_PROJECTION_SHA_MISMATCH',
-  'REDUNDANCY_SOURCE_DELIVERY_SHA_MISMATCH',
+  'THREE_COPY_LIVE_CURRENTNESS_',
+  'THREE_COPY_LIVE_TARGET_SET_INVALID',
+  'LIVE_CURRENTNESS_RECEIPT_SHA_MISMATCH',
+  'LIVE_SOURCE_PROJECTION_SHA_MISMATCH',
+  'LIVE_SOURCE_DELIVERY_SHA_MISMATCH',
   'PRIMARY_USB',
   'BACKUP_USB',
   'CLOUD_BACKUP',
   'wedding-venue-delivery-redundancy.mts',
+  'wedding-venue-delivery-redundancy-currentness.mts',
+  'strictThreeCopyRedundancy',
   'physicalUsbInsertedActual',
   'cloudUploadActual',
   'venuePlaybackActual',
@@ -34,12 +39,15 @@ for (const token of [
 
 for (const token of [
   'VENUE DELIVERY READY',
-  '3-Copy Redundancy',
+  '3-Copy Receipt',
+  'Departure Live Verify',
   'wedding-venue-delivery-redundancy.json',
+  'wedding-venue-delivery-redundancy-currentness.json',
   'PRIMARY_USB / BACKUP_USB / CLOUD_BACKUP',
   'Approved export SHA',
   'Copied / verified SHA',
   '3-copy receipt SHA',
+  'Departure report binds receipt SHA',
   'CANONICAL OPERATOR CHAIN',
   'physical USB',
   'cloud upload',
@@ -49,8 +57,9 @@ for (const token of [
 requireText(app, 'movie-coach/motion-library/venue-delivery', 'App route');
 requireText(app, 'WeddingVenueDeliveryGate', 'App import');
 
-console.log('✅ Wedding Venue Delivery Gate v2 dashboard contract passed');
-console.log('✅ Projection → package → offline verification → three-copy receipt SHA bindings are visible');
-console.log('✅ PRIMARY_USB / BACKUP_USB / CLOUD_BACKUP are all required exactly once');
-console.log('✅ Opening/Profile approved, source and redundant-copy SHAs are fail-closed');
+console.log('✅ Wedding Venue Delivery Gate v3 dashboard contract passed');
+console.log('✅ Projection → package → offline verification → receipt → live redundancy currentness bindings are visible');
+console.log('✅ receipt alone cannot report VENUE DELIVERY READY; departure strict-current is required');
+console.log('✅ PRIMARY_USB / BACKUP_USB / CLOUD_BACKUP live copies are all required exactly once');
+console.log('✅ Opening/Profile approved, source and live redundant-copy SHAs are fail-closed');
 console.log('✅ physical USB / cloud upload / venue playback Actual remain unpromoted');
