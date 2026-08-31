@@ -1,0 +1,30 @@
+name: Wedding Project Real Media Preview Human Review Dashboard CI
+
+on:
+  pull_request:
+    paths:
+      - 'movie-dashboard/src/components/WeddingProjectRealMediaVisualReviewCard.tsx'
+      - 'movie-dashboard/src/components/WeddingMediaIntakeChecklistCard.tsx'
+      - 'movie-dashboard/scripts/verify-real-media-visual-review-contracts.mjs'
+      - '.github/workflows/wedding-project-real-media-preview-human-review-dashboard-ci.yml'
+  workflow_dispatch:
+
+jobs:
+  dashboard:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Verify Human visual review contracts
+        run: node movie-dashboard/scripts/verify-real-media-visual-review-contracts.mjs
+      - name: Build Movie Dashboard
+        working-directory: movie-dashboard
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm build
