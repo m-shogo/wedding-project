@@ -19,6 +19,9 @@ for (const token of [
   'COPY_SOURCE_SHA_MISMATCH',
   'OFFLINE_COPY_SHA_MISMATCH',
   'NOT_PROMOTED_BY_DASHBOARD_GATE',
+  'wedding-projection-delivery-manifest-currentness.mts --strict-current',
+  'wedding-venue-delivery-package.mts --write',
+  'wedding-venue-delivery-package-verify.mts',
 ]) requireText(model, token, 'gate model');
 
 for (const token of [
@@ -28,8 +31,7 @@ for (const token of [
   'OFFLINE VERIFY',
   'Approved export SHA',
   'Copied / verified SHA',
-  'wedding-venue-delivery-package.mts --write',
-  'wedding-venue-delivery-package-verify.mts',
+  'CANONICAL OPERATOR CHAIN',
   'GUI Actual',
 ]) requireText(page, token, 'gate page');
 
