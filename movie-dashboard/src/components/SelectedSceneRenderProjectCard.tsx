@@ -1,4 +1,12 @@
 import {useEffect, useRef, useState} from "react";
+import {
+  listTypographyProductionRoleContexts,
+  TYPOGRAPHY_PRODUCTION_ROLE_CONTEXT_CHANGED_EVENT,
+} from "../data/typographyProductionRoleContextStore";
+import {
+  listTypographyProductionSelections,
+  TYPOGRAPHY_PRODUCTION_SELECTION_CHANGED_EVENT,
+} from "../data/typographyProductionSelectionStore";
 import type {SceneProjectId} from "../data/visualSceneComposer";
 
 type SelectedSceneManifest = {
@@ -54,6 +62,41 @@ function fileName(path: string) {
   return path.split(/[\\/]/).pop() ?? path;
 }
 
+function manifestMatchesCurrentHumanRouting(manifest: SelectedSceneManifest) {
+  const selections = listTypographyProductionSelections();
+  const roleContexts = listTypographyProductionRoleContexts();
+  if (manifest.scenes.length === 0) return false;
+  return manifest.scenes.every((scene) => {
+    const selection = selections.find((item) => item.sceneId === scene.sceneId);
+    const role = roleContexts.find((item) => item.sceneId === scene.sceneId);
+    return Boolean(
+      selection
+      && role
+      && selection.sourceRevision === scene.sourceRevision
+      && selection.patternId === scene.patternId
+      && role.projectId === manifest.projectId
+      && role.sourceRevision === scene.sourceRevision
+      && role.patternId === scene.patternId
+      && role.productionRole === scene.productionRole
+      && role.routeSelectedAt === selection.selectedAt,
+    );
+  });
+}
+
+function reelMatchesSelectedManifest(reel: PreviewReelManifest, selected: SelectedSceneManifest) {
+  if (reel.projectId !== selected.projectId || reel.timeline.boundaries.length !== selected.scenes.length) return false;
+  return reel.timeline.boundaries.every((boundary, index) => {
+    const scene = selected.scenes[index];
+    return Boolean(
+      scene
+      && boundary.sceneId === scene.sceneId
+      && boundary.sourceRevision === scene.sourceRevision
+      && boundary.patternId === scene.patternId
+      && boundary.productionRole === scene.productionRole,
+    );
+  });
+}
+
 export function SelectedSceneRenderProjectCard({projectId, batchReady}: {projectId: SceneProjectId; batchReady: boolean}) {
   const [copied, setCopied] = useState(false);
   const [reelCopied, setReelCopied] = useState(false);
@@ -63,6 +106,7 @@ export function SelectedSceneRenderProjectCard({projectId, batchReady}: {project
   const [reelManifest, setReelManifest] = useState<PreviewReelManifest | null>(null);
   const [reelError, setReelError] = useState<string | null>(null);
   const [reelVideo, setReelVideo] = useState<LocalVideo | null>(null);
+  const [routingRevision, setRoutingRevision] = useState(0);
   const objectUrls = useRef<Set<string>>(new Set());
   const reelPlayer = useRef<HTMLVideoElement | null>(null);
   const command = `node --no-warnings motion-studio/scripts/render-selected-wedding-typography-scenes.mts --batch="$HOME/Downloads/${projectId}-typography-production-batch.json" --render`;
@@ -71,6 +115,19 @@ export function SelectedSceneRenderProjectCard({projectId, batchReady}: {project
   useEffect(() => () => {
     objectUrls.current.forEach((url) => URL.revokeObjectURL(url));
     objectUrls.current.clear();
+  }, []);
+
+  useEffect(() => {
+    const refreshRouting = () => {
+      reelPlayer.current?.pause();
+      setRoutingRevision((value) => value + 1);
+    };
+    window.addEventListener(TYPOGRAPHY_PRODUCTION_SELECTION_CHANGED_EVENT, refreshRouting);
+    window.addEventListener(TYPOGRAPHY_PRODUCTION_ROLE_CONTEXT_CHANGED_EVENT, refreshRouting);
+    return () => {
+      window.removeEventListener(TYPOGRAPHY_PRODUCTION_SELECTION_CHANGED_EVENT, refreshRouting);
+      window.removeEventListener(TYPOGRAPHY_PRODUCTION_ROLE_CONTEXT_CHANGED_EVENT, refreshRouting);
+    };
   }, []);
 
   async function copyCommand() {
@@ -101,6 +158,9 @@ export function SelectedSceneRenderProjectCard({projectId, batchReady}: {project
       ) {
         throw new Error("manifest identity/evidence boundary mismatch");
       }
+      if (!manifestMatchesCurrentHumanRouting(parsed)) {
+        throw new Error("manifest is stale against current Human-selected route / Role context");
+      }
       setManifest(parsed);
     } catch (error) {
       setManifest(null);
@@ -125,6 +185,9 @@ export function SelectedSceneRenderProjectCard({projectId, batchReady}: {project
         parsed.evidenceBoundary?.macDaVinciGuiActual !== "NOT_RUN"
       ) {
         throw new Error("preview reel identity/evidence boundary mismatch");
+      }
+      if (!manifest || !manifestMatchesCurrentHumanRouting(manifest) || !reelMatchesSelectedManifest(parsed, manifest)) {
+        throw new Error("preview reel is stale against current selected Scene manifest / Human routing");
       }
       setReelManifest(parsed);
     } catch (error) {
@@ -170,10 +233,13 @@ export function SelectedSceneRenderProjectCard({projectId, batchReady}: {project
     void reelPlayer.current.play().catch(() => undefined);
   }
 
-  const currentManifest = manifest?.projectId === projectId ? manifest : null;
-  const currentReel = reelManifest?.projectId === projectId ? reelManifest : null;
+  const routingCurrent = Boolean(manifest && manifestMatchesCurrentHumanRouting(manifest));
+  const currentManifest = manifest?.projectId === projectId && routingCurrent ? manifest : null;
+  const reelCurrent = Boolean(currentManifest && reelManifest && reelMatchesSelectedManifest(reelManifest, currentManifest));
+  const currentReel = reelManifest?.projectId === projectId && reelCurrent ? reelManifest : null;
   const matched = currentManifest?.scenes.filter((scene) => Boolean(videos[fileName(scene.output)])).length ?? 0;
   const reelFileMatches = Boolean(currentReel && reelVideo && fileName(currentReel.output) === reelVideo.name);
+  void routingRevision;
 
   return (
     <div className="mt-2 border-2 border-indigo-300 dark:border-indigo-800 p-2.5" data-selected-scene-render-project={projectId}>
@@ -190,9 +256,10 @@ export function SelectedSceneRenderProjectCard({projectId, batchReady}: {project
       <div className="mt-2 flex flex-wrap gap-1.5">
         <label className="cursor-pointer border border-sky-300 dark:border-sky-800 px-2 py-1 text-[7px] font-semibold text-sky-700 dark:text-sky-300">render manifestを読み込む<input type="file" accept="application/json,.json" className="sr-only" onChange={(event) => void loadManifest(event.currentTarget.files?.[0] ?? null)} /></label>
         <label className="cursor-pointer border border-sky-300 dark:border-sky-800 px-2 py-1 text-[7px] font-semibold text-sky-700 dark:text-sky-300">selected MP4を読み込む<input type="file" multiple accept="video/mp4,.mp4" className="sr-only" onChange={(event) => loadVideos(event.currentTarget.files)} /></label>
-        {currentManifest ? <span className="px-2 py-1 font-mono text-[7px] text-indigo-600 dark:text-indigo-300">MANIFEST {currentManifest.summary.renderedScenes}/{currentManifest.summary.totalScenes} rendered / LOCAL VIDEO {matched}/{currentManifest.scenes.length}</span> : null}
+        {currentManifest ? <span className="px-2 py-1 font-mono text-[7px] text-indigo-600 dark:text-indigo-300">MANIFEST CURRENT / {currentManifest.summary.renderedScenes}/{currentManifest.summary.totalScenes} rendered / LOCAL VIDEO {matched}/{currentManifest.scenes.length}</span> : null}
       </div>
 
+      {manifest && !routingCurrent ? <p className="mt-2 border-2 border-amber-300 px-2 py-1.5 text-[7px] font-semibold text-amber-800 dark:border-amber-800 dark:text-amber-200" data-selected-scene-routing-stale={projectId}>HUMAN ROUTE / ROLE CHANGED — loaded selected Scene manifestとcontinuous reelはSTALEです。最新Typography packageを書き出し → selected Scene再render → reel再renderしてください。</p> : null}
       {manifestError ? <p className="mt-2 border border-rose-300 px-2 py-1 text-[7px] text-rose-700 dark:border-rose-800 dark:text-rose-300">INVALID / {manifestError}</p> : null}
 
       {currentManifest ? (
@@ -230,8 +297,9 @@ export function SelectedSceneRenderProjectCard({projectId, batchReady}: {project
         <div className="mt-2 flex flex-wrap gap-1.5">
           <label className="cursor-pointer border border-violet-300 dark:border-violet-800 px-2 py-1 text-[7px] font-semibold text-violet-700 dark:text-violet-300">reel manifestを読み込む<input type="file" accept="application/json,.json" className="sr-only" onChange={(event) => void loadReelManifest(event.currentTarget.files?.[0] ?? null)} /></label>
           <label className="cursor-pointer border border-violet-300 dark:border-violet-800 px-2 py-1 text-[7px] font-semibold text-violet-700 dark:text-violet-300">continuous MP4を読み込む<input type="file" accept="video/mp4,.mp4" className="sr-only" onChange={(event) => loadReelVideo(event.currentTarget.files?.[0] ?? null)} /></label>
-          {currentReel ? <span className="px-2 py-1 font-mono text-[7px] text-violet-600 dark:text-violet-300">{currentReel.summary.totalScenes} Scenes / {currentReel.timeline.totalFrames}f / {currentReel.timeline.durationSeconds.toFixed(2)}s / FRAME BOUNDARY VERIFIED</span> : null}
+          {currentReel ? <span className="px-2 py-1 font-mono text-[7px] text-violet-600 dark:text-violet-300">REEL CURRENT / {currentReel.summary.totalScenes} Scenes / {currentReel.timeline.totalFrames}f / {currentReel.timeline.durationSeconds.toFixed(2)}s / FRAME BOUNDARY VERIFIED</span> : null}
         </div>
+        {reelManifest && !reelCurrent ? <p className="mt-2 border border-amber-300 px-2 py-1 text-[7px] text-amber-800 dark:border-amber-800 dark:text-amber-200">REEL STALE / current Human route・Roleまたはselected Scene manifestと一致しません。旧reelはHuman rhythm evidenceに使わないでください。</p> : null}
         {reelError ? <p className="mt-2 border border-rose-300 px-2 py-1 text-[7px] text-rose-700 dark:border-rose-800 dark:text-rose-300">INVALID / {reelError}</p> : null}
         {currentReel ? (
           <>
@@ -251,7 +319,7 @@ export function SelectedSceneRenderProjectCard({projectId, batchReady}: {project
         <p className="mt-2 border-l-2 border-amber-300 pl-2 text-[7px] leading-3 text-amber-800 dark:text-amber-200">Continuous reelはHuman rhythm reviewを助けるCLI visual referenceです。再生・seek・frame boundary verifyだけではHuman approval / Remotion Studio GUI Actual / Palmier GUI Actual / Mac DaVinci GUI Actual / productionReadyを昇格しません。</p>
       </div>
 
-      <p className="mt-2 border-l-2 border-amber-300 pl-2 text-[7px] leading-3 text-amber-800 dark:text-amber-200">CLI render + SHA manifest + LOCAL playbackはPalmier配置用visual referenceです。Remotion Studio GUI Actual / Palmier GUI Actual / Mac DaVinci GUI ActualはすべてNOT_RUNのまま。productionReadyへ自動昇格しません。</p>
+      <p className="mt-2 border-l-2 border-amber-300 pl-2 text-[7px] leading-3 text-amber-800 dark:text-amber-200">CLI render + SHA manifest + LOCAL playbackはPalmier配置用visual referenceです。Human route / Role変更後の旧manifest・旧reelはfail-closeでCURRENTから外します。Remotion Studio GUI Actual / Palmier GUI Actual / Mac DaVinci GUI ActualはすべてNOT_RUNのまま。productionReadyへ自動昇格しません。</p>
     </div>
   );
 }
