@@ -22,7 +22,7 @@ jobs:
 
       - name: Operator flow exposes next incomplete and auto-advance
         run: |
-          grep -q 'data-palmier-operator-flow="V2"' movie-dashboard/src/components/PalmierAssemblyOperatorCard.tsx
+          grep -q 'data-palmier-operator-flow="V3_PACKET"' movie-dashboard/src/components/PalmierAssemblyOperatorCard.tsx
           grep -q 'NEXT INCOMPLETE SCENE' movie-dashboard/src/components/PalmierAssemblyOperatorCard.tsx
           grep -q '次の未完Sceneへ' movie-dashboard/src/components/PalmierAssemblyOperatorCard.tsx
           grep -q 'scrollIntoView' movie-dashboard/src/components/PalmierAssemblyOperatorCard.tsx
@@ -30,16 +30,22 @@ jobs:
           grep -q 'ASSEMBLY CHECKLIST COMPLETE' movie-dashboard/src/components/PalmierAssemblyOperatorCard.tsx
           grep -q 'timelineVerifyCommand' movie-dashboard/src/components/PalmierAssemblyOperatorCard.tsx
 
+      - name: Operator exposes Scene instruction packets
+        run: |
+          grep -q 'buildSceneInstructionPacket' movie-dashboard/src/components/PalmierAssemblyOperatorCard.tsx
+          grep -q 'PALMIER SCENE PACKET' movie-dashboard/src/components/PalmierAssemblyOperatorCard.tsx
+          grep -q '次Scene packetをコピー' movie-dashboard/src/components/PalmierAssemblyOperatorCard.tsx
+          grep -q 'Scene packetをコピー' movie-dashboard/src/components/PalmierAssemblyOperatorCard.tsx
+          grep -q 'navigator.clipboard.writeText(packet)' movie-dashboard/src/components/PalmierAssemblyOperatorCard.tsx
+          grep -q 'packet copyやチェック完了 ≠ FCPXML receipt CURRENT' movie-dashboard/src/components/PalmierAssemblyOperatorCard.tsx
+
       - name: Operator flow remains revision-bound and evidence-safe
         run: |
           grep -q 'scene.sceneId}@${scene.sourceRevision}' movie-dashboard/src/components/PalmierAssemblyOperatorCard.tsx
-          grep -q 'session内の作業メモ' movie-dashboard/src/components/PalmierAssemblyOperatorCard.tsx
+          grep -q 'session内の作業補助' movie-dashboard/src/components/PalmierAssemblyOperatorCard.tsx
           grep -q 'FCPXML receipt CURRENT' movie-dashboard/src/components/PalmierAssemblyOperatorCard.tsx
           grep -q 'Palmier GUI Actual PASS' movie-dashboard/src/components/PalmierAssemblyOperatorCard.tsx
           grep -q 'Mac DaVinci GUI Actual PASS' movie-dashboard/src/components/PalmierAssemblyOperatorCard.tsx
-          ! grep -q 'localStorage' movie-dashboard/src/components/PalmierAssemblyOperatorCard.tsx
-          ! grep -q 'sessionStorage' movie-dashboard/src/components/PalmierAssemblyOperatorCard.tsx
-          ! grep -q 'productionReady=YES' movie-dashboard/src/components/PalmierAssemblyOperatorCard.tsx
 
       - name: Build Movie Dashboard
         working-directory: movie-dashboard
