@@ -43,9 +43,9 @@ export function WeddingDavinciGuiActualStartGateCard() {
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <p className="text-[10px] tracking-[0.2em] font-semibold text-amber-700 dark:text-amber-300">MAC DAVINCI GUI ACTUAL START GATE</p>
-          <h2 className="mt-1 text-lg font-bold text-navy-900 dark:text-sand-100">Session Plan CURRENT → Project Motion + Remotion identity CURRENT → Evidence init → Human Mac GUI</h2>
+          <h2 className="mt-1 text-lg font-bold text-navy-900 dark:text-sand-100">Session Plan CURRENT → Project Motion + Remotion identity + Palmier timeline CURRENT → Evidence init → Human Mac GUI</h2>
           <p className="mt-2 text-xs leading-5 text-navy-500 dark:text-navy-300">
-            Motion Studioのcanonical start-gate JSON artifactを生成・読み込み、Opening/ProfileそれぞれのTransport・Project Motion・Project Remotion identity・正確な次アクションを表示します。GUI_ACTUAL_ALLOWEDは「人間が開始してよい」だけで、実行済み/PASSではありません。
+            Motion Studioのcanonical start-gate JSON artifactを生成・読み込み、Opening/ProfileそれぞれのTransport・Project Motion・Project Remotion identity・Palmier real FCPXML SHA authority・正確な次アクションを表示します。GUI_ACTUAL_ALLOWEDは「人間が開始してよい」だけで、実行済み/PASSではありません。
           </p>
         </div>
         <p className="text-[10px] leading-4 text-amber-700 dark:text-amber-300">GUI Actual synthetic promotion: FORBIDDEN</p>
@@ -57,6 +57,7 @@ export function WeddingDavinciGuiActualStartGateCard() {
           const label = movieId === "opening" ? "Opening" : "Profile";
           const projectMotion = audit.project.projectMotionPreflight;
           const projectRemotionIdentity = audit.project.projectRemotionIdentityPreflight;
+          const palmierTimeline = audit.project.palmierTimelinePreflight;
           return (
             <article key={movieId} className="border border-sand-200 dark:border-navy-600 p-4">
               <div className="flex flex-wrap items-center justify-between gap-2">
@@ -67,12 +68,7 @@ export function WeddingDavinciGuiActualStartGateCard() {
               <div className="mt-3 flex flex-wrap items-center gap-3">
                 <label className="cursor-pointer border border-amber-500 px-3 py-2 text-[11px] font-semibold text-amber-800 dark:text-amber-200 hover:bg-amber-100 dark:hover:bg-amber-950/40">
                   canonical gate JSONを読み込む
-                  <input
-                    type="file"
-                    accept="application/json,.json"
-                    className="hidden"
-                    onChange={(event) => void inspect(movieId, event.target.files?.[0])}
-                  />
+                  <input type="file" accept="application/json,.json" className="hidden" onChange={(event) => void inspect(movieId, event.target.files?.[0])} />
                 </label>
                 <span className="text-[10px] text-navy-400">loaded: {audit.canonicalGateLoaded ? "YES" : "NO"}</span>
               </div>
@@ -86,18 +82,17 @@ export function WeddingDavinciGuiActualStartGateCard() {
               <dl className="mt-4 grid grid-cols-[max-content_1fr] gap-x-3 gap-y-2 text-[10px] leading-4 text-navy-500 dark:text-navy-300">
                 <dt className="font-semibold">Transport</dt><dd>{audit.transport.state} / current={audit.transport.current ? "YES" : "NO"}</dd>
                 <dt className="font-semibold">Project Motion</dt>
-                <dd>
-                  <span className={`font-bold ${stateClass(projectMotion.state ?? "NOT_RUN")}`}>{projectMotion.state ?? "—"}</span>
-                  {projectMotion.state && <> / applicable={projectMotion.applicable ? "YES" : "NO"} / current={projectMotion.current ? "YES" : "NO"}</>}
-                </dd>
+                <dd><span className={`font-bold ${stateClass(projectMotion.state ?? "NOT_RUN")}`}>{projectMotion.state ?? "—"}</span>{projectMotion.state && <> / applicable={projectMotion.applicable ? "YES" : "NO"} / current={projectMotion.current ? "YES" : "NO"}</>}</dd>
                 <dt className="font-semibold">Remotion identity</dt>
-                <dd>
-                  <span className={`font-bold ${stateClass(projectRemotionIdentity.state ?? "NOT_RUN")}`}>{projectRemotionIdentity.state ?? "—"}</span>
-                  {projectRemotionIdentity.state && <> / applicable={projectRemotionIdentity.applicable ? "YES" : "NO"} / current={projectRemotionIdentity.current ? "YES" : "NO"}</>}
-                </dd>
+                <dd><span className={`font-bold ${stateClass(projectRemotionIdentity.state ?? "NOT_RUN")}`}>{projectRemotionIdentity.state ?? "—"}</span>{projectRemotionIdentity.state && <> / applicable={projectRemotionIdentity.applicable ? "YES" : "NO"} / current={projectRemotionIdentity.current ? "YES" : "NO"}</>}</dd>
                 <dt className="font-semibold">Identity receipt</dt><dd className="font-mono">{shortSha(projectRemotionIdentity.receiptSha256)}</dd>
                 <dt className="font-semibold">Resolve identity</dt><dd className="font-mono">{shortSha(projectRemotionIdentity.resolveSidecarSha256)}</dd>
                 <dt className="font-semibold">Source Batch</dt><dd className="font-mono">{shortSha(projectRemotionIdentity.sourceBatchSha256)}</dd>
+                <dt className="font-semibold">Palmier timeline</dt>
+                <dd><span className={`font-bold ${stateClass(palmierTimeline.state ?? "NOT_RUN")}`}>{palmierTimeline.state ?? "—"}</span>{palmierTimeline.state && <> / applicable={palmierTimeline.applicable ? "YES" : "NO"} / current={palmierTimeline.current ? "YES" : "NO"}</>}</dd>
+                <dt className="font-semibold">Timeline receipt</dt><dd className="font-mono">{shortSha(palmierTimeline.receiptSha256)}</dd>
+                <dt className="font-semibold">Assembly Plan</dt><dd className="font-mono">{shortSha(palmierTimeline.assemblyPlanSha256)}</dd>
+                <dt className="font-semibold">Real FCPXML</dt><dd className="font-mono">{shortSha(palmierTimeline.palmierFcpxmlSha256)}</dd>
                 <dt className="font-semibold">Session</dt><dd>{audit.project.sessionState ?? "—"}</dd>
                 <dt className="font-semibold">Evidence</dt><dd>{audit.project.evidenceState ?? "—"}</dd>
                 <dt className="font-semibold">Handoff SHA</dt><dd className="font-mono">{shortSha(audit.project.handoffIdentitySha256)}</dd>
@@ -106,45 +101,27 @@ export function WeddingDavinciGuiActualStartGateCard() {
                 <dt className="font-semibold">Next</dt><dd>{audit.nextAction.kind}</dd>
               </dl>
 
-              {projectMotion.error && (
-                <p className="mt-3 border-l-2 border-rose-400 pl-3 text-[10px] leading-4 text-rose-700 dark:text-rose-300">
-                  Project Motion blocker: {projectMotion.error}
-                </p>
-              )}
-              {projectMotion.command && (
-                <div className="mt-3">
-                  <p className="text-[9px] font-semibold text-navy-700 dark:text-sand-200">Project Motion canonical verifier</p>
-                  <code className="mt-1 block overflow-x-auto bg-navy-950 px-3 py-2 text-[9px] leading-4 text-sand-100">cd motion-studio &amp;&amp; {projectMotion.command}</code>
-                </div>
-              )}
+              {projectMotion.error && <p className="mt-3 border-l-2 border-rose-400 pl-3 text-[10px] leading-4 text-rose-700 dark:text-rose-300">Project Motion blocker: {projectMotion.error}</p>}
+              {projectMotion.command && <div className="mt-3"><p className="text-[9px] font-semibold text-navy-700 dark:text-sand-200">Project Motion canonical verifier</p><code className="mt-1 block overflow-x-auto bg-navy-950 px-3 py-2 text-[9px] leading-4 text-sand-100">cd motion-studio &amp;&amp; {projectMotion.command}</code></div>}
 
-              {projectRemotionIdentity.error && (
-                <p className="mt-3 border-l-2 border-rose-400 pl-3 text-[10px] leading-4 text-rose-700 dark:text-rose-300">
-                  Project Remotion identity blocker: {projectRemotionIdentity.error}
-                </p>
-              )}
-              {projectRemotionIdentity.command && (
-                <div className="mt-3">
-                  <p className="text-[9px] font-semibold text-navy-700 dark:text-sand-200">Project Remotion identity canonical verifier</p>
-                  <code className="mt-1 block overflow-x-auto bg-navy-950 px-3 py-2 text-[9px] leading-4 text-sand-100">cd motion-studio &amp;&amp; {projectRemotionIdentity.command}</code>
-                  <p className="mt-1 text-[9px] leading-4 text-navy-400">receipt / Resolve sidecar / source Batch SHAの表示自体はCURRENTを証明しません。canonical gateでlive authorityと再照合します。</p>
+              {projectRemotionIdentity.error && <p className="mt-3 border-l-2 border-rose-400 pl-3 text-[10px] leading-4 text-rose-700 dark:text-rose-300">Project Remotion identity blocker: {projectRemotionIdentity.error}</p>}
+              {projectRemotionIdentity.command && <div className="mt-3"><p className="text-[9px] font-semibold text-navy-700 dark:text-sand-200">Project Remotion identity canonical verifier</p><code className="mt-1 block overflow-x-auto bg-navy-950 px-3 py-2 text-[9px] leading-4 text-sand-100">cd motion-studio &amp;&amp; {projectRemotionIdentity.command}</code></div>}
+
+              {palmierTimeline.error && <p className="mt-3 border-l-2 border-rose-400 pl-3 text-[10px] leading-4 text-rose-700 dark:text-rose-300">Palmier timeline blocker: {palmierTimeline.error}</p>}
+              {palmierTimeline.command && (
+                <div className="mt-3" data-palmier-timeline-start-gate-preflight>
+                  <p className="text-[9px] font-semibold text-navy-700 dark:text-sand-200">Palmier timeline canonical verifier</p>
+                  <code className="mt-1 block overflow-x-auto bg-navy-950 px-3 py-2 text-[9px] leading-4 text-sand-100">cd motion-studio &amp;&amp; {palmierTimeline.command}</code>
+                  <p className="mt-1 text-[9px] leading-4 text-navy-400">receipt / Assembly Plan / real FCPXML SHAはloaded gateと現在のMotion Zukan authorityで再照合します。SHA表示やCURRENTはPalmier GUI Actual / DaVinci GUI Actual PASSを意味しません。</p>
                 </div>
               )}
 
               <p className="mt-3 text-[10px] leading-4 text-navy-600 dark:text-navy-300">{audit.nextAction.reason}</p>
-              {audit.nextAction.command && (
-                <code className="mt-2 block overflow-x-auto bg-navy-950 px-3 py-2 text-[9px] leading-4 text-sand-100">{audit.nextAction.command}</code>
-              )}
-              {audit.nextAction.humanOnly && (
-                <p className="mt-2 border-l-2 border-amber-400 pl-3 text-[10px] font-semibold leading-4 text-amber-800 dark:text-amber-300">
-                  HUMAN / MAC GUI — automation commandなし。ここから実機で確認し、evidenceへ記録する。
-                </p>
-              )}
+              {audit.nextAction.command && <code className="mt-2 block overflow-x-auto bg-navy-950 px-3 py-2 text-[9px] leading-4 text-sand-100">{audit.nextAction.command}</code>}
+              {audit.nextAction.humanOnly && <p className="mt-2 border-l-2 border-amber-400 pl-3 text-[10px] font-semibold leading-4 text-amber-800 dark:text-amber-300">HUMAN / MAC GUI — automation commandなし。ここから実機で確認し、evidenceへ記録する。</p>}
 
               {(audit.mismatches.length > 0 || audit.transport.mismatches.length > 0) && (
-                <ul className="mt-3 space-y-1 text-[9px] leading-4 text-rose-700 dark:text-rose-300">
-                  {[...audit.mismatches, ...audit.transport.mismatches].map((reason, index) => <li key={`${reason}-${index}`}>• {reason}</li>)}
-                </ul>
+                <ul className="mt-3 space-y-1 text-[9px] leading-4 text-rose-700 dark:text-rose-300">{[...audit.mismatches, ...audit.transport.mismatches].map((reason, index) => <li key={`${reason}-${index}`}>• {reason}</li>)}</ul>
               )}
 
               <div className="mt-4 border-t border-sand-200 dark:border-navy-600 pt-3">
@@ -158,9 +135,7 @@ export function WeddingDavinciGuiActualStartGateCard() {
         })}
       </div>
 
-      <p className="mt-4 text-[10px] leading-4 text-navy-400">
-        canonical gate JSON・Dashboard・CIの存在、Project Motion / Project Remotion identity verifier commandやSHAの表示はMac/Studio/DaVinci Actual PASSを意味しません。今回GUIを実操作していない場合、Actual evidenceはNOT_RUNのままです。
-      </p>
+      <p className="mt-4 text-[10px] leading-4 text-navy-400">canonical gate JSON・Dashboard・CIの存在、Project Motion / Project Remotion identity / Palmier timeline verifier commandやSHAの表示はMac/Studio/Palmier/DaVinci Actual PASSを意味しません。今回GUIを実操作していない場合、Actual evidenceはNOT_RUNのままです。</p>
     </section>
   );
 }

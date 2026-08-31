@@ -24,10 +24,13 @@ type PalmierTimelineReport = {
   movieId: MovieId;
   state: 'MISSING' | 'CURRENT' | 'STALE' | 'INVALID';
   detail: string | null;
-  receiptPath?: string;
+  receiptPath?: string | null;
+  receiptSha256?: string | null;
   source?: {
     assemblyPlan?: string | null;
+    assemblyPlanSha256?: string | null;
     palmierFcpxml?: string | null;
+    palmierFcpxmlSha256?: string | null;
   };
   next: {kind: string; command: string};
 };
@@ -38,9 +41,7 @@ const runChecker = (movieId: MovieId): CheckerReport => {
     ['--no-warnings', join(motionStudioRoot, 'scripts/check-wedding-project-remotion-production-stage-status.mts'), `--movie=${movieId}`, '--json'],
     {cwd: motionStudioRoot, encoding: 'utf8'},
   );
-  if (result.status !== 0) {
-    throw new Error(`stage status checker failed for ${movieId}: ${result.stderr || result.stdout}`);
-  }
+  if (result.status !== 0) throw new Error(`stage status checker failed for ${movieId}: ${result.stderr || result.stdout}`);
   return JSON.parse(result.stdout) as CheckerReport;
 };
 
@@ -50,9 +51,7 @@ const runPalmierTimelineChecker = (movieId: MovieId): PalmierTimelineReport => {
     ['--no-warnings', join(motionStudioRoot, 'scripts/check-wedding-palmier-typography-timeline-export-receipt.mts'), `--movie=${movieId}`, '--json'],
     {cwd: motionStudioRoot, encoding: 'utf8'},
   );
-  if (result.status !== 0) {
-    throw new Error(`Palmier timeline receipt checker failed for ${movieId}: ${result.stderr || result.stdout}`);
-  }
+  if (result.status !== 0) throw new Error(`Palmier timeline receipt checker failed for ${movieId}: ${result.stderr || result.stdout}`);
   return JSON.parse(result.stdout) as PalmierTimelineReport;
 };
 
@@ -62,9 +61,12 @@ const normalizePalmierTimeline = (report: PalmierTimelineReport) => ({
   state: report.state,
   detail: report.detail,
   receiptPath: normalizeOptionalPath(report.receiptPath),
+  receiptSha256: report.receiptSha256 ?? null,
   source: {
     assemblyPlan: normalizeOptionalPath(report.source?.assemblyPlan),
+    assemblyPlanSha256: report.source?.assemblyPlanSha256 ?? null,
     palmierFcpxml: normalizeOptionalPath(report.source?.palmierFcpxml),
+    palmierFcpxmlSha256: report.source?.palmierFcpxmlSha256 ?? null,
   },
   next: report.next,
 });

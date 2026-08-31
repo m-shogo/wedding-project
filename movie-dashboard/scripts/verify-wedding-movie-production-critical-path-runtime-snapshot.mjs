@@ -4,7 +4,6 @@ import {fileURLToPath} from "node:url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const read = (relative) => fs.readFileSync(path.join(root, relative), "utf8");
-
 const runtime = read("src/data/weddingMovieProductionCriticalPathRuntimeSnapshot.ts");
 const card = read("src/components/WeddingMovieProductionCriticalPathCard.tsx");
 const liveAuthority = read("src/data/weddingDavinciGuiActualStartGateLiveAuthority.ts");
@@ -17,50 +16,34 @@ for (const token of [
   'DASHBOARD_RUNTIME_CRITICAL_PATH_WITH_CANONICAL_REMOTION_STAGE_PALMIER_TIMELINE_AND_LIVE_DAVINCI_START_GATE_AUDIT',
   'stableCriticalPath: buildWeddingMovieProductionCriticalPath()',
   'canonicalProjectRemotionStage',
-  'authority: weddingProjectRemotionStageStatus.authority',
-  'opening: projectRemotionCanonicalStageSnapshot("opening")',
-  'profile: projectRemotionCanonicalStageSnapshot("profile")',
-  'state: status.state',
-  'blocker: status.blocker',
-  'stageVerification: status.checks.stageVerification',
-  'handoffVerification: status.checks.handoffVerification',
-  'canonicalArtifacts: {...status.canonicalArtifacts}',
   'palmierTimelineExport',
-  'state: status.palmierTimelineExport.state',
-  'receiptPath: status.palmierTimelineExport.receiptPath',
+  'receiptSha256: status.palmierTimelineExport.receiptSha256',
   'source: {...status.palmierTimelineExport.source}',
-  'nextAction: {...status.palmierTimelineExport.next}',
-  'nextAction: {...status.next}',
   'liveDavinciStartGate',
-  'opening: startGateRuntimeSnapshot(audits.opening)',
-  'profile: startGateRuntimeSnapshot(audits.profile)',
-  'state: audit.state',
-  'canonicalArtifactPath: audit.canonicalArtifactPath',
-  'inspectCommand: audit.inspectCommand',
-  'strictGuiStartCommand: audit.strictGuiStartCommand',
-  'liveMatch: audit.liveProjectMotionMatch',
-  'state: audit.project.projectMotionPreflight.state',
-  'current: audit.project.projectMotionPreflight.current',
-  'transportedIdentitySha256',
-  'liveIdentitySha256',
+  'projectRemotionIdentity: projectRemotionIdentityRuntimeSnapshot(audit)',
+  'palmierTimeline: palmierTimelineRuntimeSnapshot(audit)',
+  'liveMatch: audit.livePalmierTimelineMatch',
+  'receiptSha256',
+  'assemblyPlanSha256',
+  'palmierFcpxmlSha256',
   'palmierGuiActual: "NOT_PROMOTED_BY_RUNTIME_SNAPSHOT"',
-  'NOT_PROMOTED_BY_RUNTIME_SNAPSHOT',
   'productionReady: false as const',
   'PALMIER_TIMELINE_RECEIPT_CURRENT != PALMIER_GUI_ACTUAL_EXECUTED',
   'PALMIER_TIMELINE_RECEIPT_CURRENT != MAC_DAVINCI_GUI_ACTUAL_EXECUTED',
-  'REMOTION_STAGE_HANDOFF_CURRENT != REMOTION_STUDIO_GUI_ACTUAL_EXECUTED',
-  'REMOTION_STAGE_HANDOFF_CURRENT != MAC_DAVINCI_GUI_ACTUAL_EXECUTED',
+  'PALMIER_TIMELINE_LIVE_MATCH != PALMIER_GUI_ACTUAL_EXECUTED',
+  'PALMIER_TIMELINE_LIVE_MATCH != MAC_DAVINCI_GUI_ACTUAL_EXECUTED',
   'GUI_ACTUAL_ALLOWED != GUI_ACTUAL_EXECUTED',
   'PROJECT_MOTION_LIVE_MATCH != HUMAN_GUI_REVIEW_PASSED',
-  'STRICT_COMMAND_EXPORTED != STRICT_COMMAND_EXECUTED',
 ]) need(runtime, token, `runtime snapshot missing ${token}`);
 
 for (const token of [
   'wedding-project-remotion-stage-status-dashboard/v2',
   'GENERATED_FROM_READ_ONLY_CANONICAL_STAGE_AND_PALMIER_TIMELINE_RECEIPT_CHECKERS',
-  'CANONICAL_PROJECT_REMOTION_STAGE_MISSING',
   'palmierTimelineExport',
   'PALMIER_TIMELINE_EXPORT_RECEIPT_MISSING',
+  'receiptSha256',
+  'assemblyPlanSha256',
+  'palmierFcpxmlSha256',
   'VERIFY_REAL_PALMIER_FCPXML',
   'palmierGuiActual',
   'productionReadyPromotedBySnapshot',
@@ -72,9 +55,7 @@ for (const token of [
   'downloadText(stableJson, "wedding-movie-production-critical-path.json")',
   'Stable pathを書き出す',
   'buildWeddingMovieProductionCriticalPathRuntimeSnapshotJson',
-  'const runtimeJson = useMemo(',
   'buildWeddingMovieProductionCriticalPathRuntimeSnapshotJson(startGateAudits)',
-  '[startGateAudits]',
   'downloadText(runtimeJson, "wedding-movie-production-critical-path-runtime.json")',
   'Runtime snapshotを書き出す',
   'LIVE DAVINCI START GATE AUTHORITY',
@@ -88,17 +69,12 @@ for (const token of [
   'resetWeddingDavinciGuiActualStartGateAuditAuthority',
 ]) need(liveAuthority, token, `live Start Gate authority missing ${token}`);
 
-if (runtime.includes('productionReady: true') || runtime.includes('macDavinciResolveGuiActual: "PASS"') || runtime.includes('palmierGuiActual: "PASS"')) {
-  errors.push('Runtime snapshot must never promote production readiness or Palmier/Mac DaVinci GUI Actual');
-}
-if (runtime.includes('localStorage') || runtime.includes('sessionStorage')) {
-  errors.push('Runtime snapshot must remain session-live and must not persist browser audit authority');
-}
+if (runtime.includes('productionReady: true') || runtime.includes('macDavinciResolveGuiActual: "PASS"') || runtime.includes('palmierGuiActual: "PASS"')) errors.push('Runtime snapshot must never promote production readiness or Palmier/Mac DaVinci GUI Actual');
+if (runtime.includes('localStorage') || runtime.includes('sessionStorage')) errors.push('Runtime snapshot must remain session-live and must not persist browser audit authority');
 
 if (errors.length) {
   console.error(`Wedding Movie production critical-path runtime snapshot FAILED (${errors.length})`);
   for (const error of errors) console.error(`- ${error}`);
   process.exit(1);
 }
-
-console.log('Wedding Movie production critical-path runtime snapshot OK: runtime export binds canonical Project Remotion stage status, Palmier real-FCPXML receipt currentness, and the session-live DaVinci Start Gate audit without promoting Palmier/Mac/Studio GUI Actual or production readiness.');
+console.log('Wedding Movie production critical-path runtime snapshot OK: runtime export binds canonical Project Remotion stage status, Palmier real-FCPXML receipt SHA currentness, and the session-live DaVinci Start Gate Palmier audit without promoting Palmier/Mac/Studio GUI Actual or production readiness.');

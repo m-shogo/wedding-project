@@ -1,7 +1,7 @@
 import {buildWeddingDavinciActualSessionPlan} from "./weddingDavinciActualSessionPlan";
 
 export const WEDDING_DAVINCI_GUI_ACTUAL_START_GATE_AUDIT_SCHEMA =
-  "wedding-davinci-gui-actual-start-gate-audit-dashboard/v4" as const;
+  "wedding-davinci-gui-actual-start-gate-audit-dashboard/v5" as const;
 
 export const CANONICAL_WEDDING_DAVINCI_GUI_ACTUAL_START_GATE_SCHEMA =
   "wedding-davinci-gui-actual-start-gate/v1" as const;
@@ -16,6 +16,7 @@ export type WeddingDavinciGuiActualStartGateAuditState =
   | "TRANSPORT_NOT_CURRENT"
   | "PROJECT_MOTION_BLOCKED"
   | "PROJECT_REMOTION_IDENTITY_BLOCKED"
+  | "PALMIER_TIMELINE_BLOCKED"
   | "UPSTREAM_BLOCKED"
   | "EVIDENCE_INIT_REQUIRED"
   | "GUI_ACTUAL_ALLOWED"
@@ -38,6 +39,12 @@ type ProjectRemotionIdentityPreflight = ProjectPreflight & {
   sourceBatchSha256: string | null;
 };
 
+type PalmierTimelinePreflight = ProjectPreflight & {
+  receiptSha256: string | null;
+  assemblyPlanSha256: string | null;
+  palmierFcpxmlSha256: string | null;
+};
+
 export type WeddingDavinciGuiActualStartGateAudit = {
   schemaVersion: typeof WEDDING_DAVINCI_GUI_ACTUAL_START_GATE_AUDIT_SCHEMA;
   movieId: WeddingMovieId;
@@ -46,6 +53,7 @@ export type WeddingDavinciGuiActualStartGateAudit = {
   canonicalGateLoaded: boolean;
   liveProjectMotionMatch: boolean;
   liveProjectRemotionIdentityMatch: boolean;
+  livePalmierTimelineMatch: boolean;
   canonicalArtifactPath: string;
   transport: {
     state: string;
@@ -58,6 +66,7 @@ export type WeddingDavinciGuiActualStartGateAudit = {
     sessionState: string | null;
     projectMotionPreflight: ProjectPreflight;
     projectRemotionIdentityPreflight: ProjectRemotionIdentityPreflight;
+    palmierTimelinePreflight: PalmierTimelinePreflight;
     evidenceState: string | null;
     handoffIdentitySha256: string | null;
     actualRecoverySha256: string | null;
@@ -74,6 +83,7 @@ export type WeddingDavinciGuiActualStartGateAudit = {
   strictGuiStartCommand: string;
   note: string;
   evidenceBoundary: {
+    palmierGuiActual: "NOT_PROMOTED_BY_DASHBOARD_GATE_AUDIT";
     macDavinciResolveGuiActual: "NOT_PROMOTED_BY_DASHBOARD_GATE_AUDIT";
     productionReady: false;
   };
@@ -84,6 +94,7 @@ const allowedStates = new Set<WeddingDavinciGuiActualStartGateAuditState>([
   "TRANSPORT_NOT_CURRENT",
   "PROJECT_MOTION_BLOCKED",
   "PROJECT_REMOTION_IDENTITY_BLOCKED",
+  "PALMIER_TIMELINE_BLOCKED",
   "UPSTREAM_BLOCKED",
   "EVIDENCE_INIT_REQUIRED",
   "GUI_ACTUAL_ALLOWED",
@@ -119,10 +130,18 @@ const emptyRemotionIdentityPreflight = (): ProjectRemotionIdentityPreflight => (
   sourceBatchSha256: null,
 });
 
+const emptyPalmierTimelinePreflight = (): PalmierTimelinePreflight => ({
+  ...emptyPreflight(),
+  receiptSha256: null,
+  assemblyPlanSha256: null,
+  palmierFcpxmlSha256: null,
+});
+
 const emptyProject = () => ({
   sessionState: null,
   projectMotionPreflight: emptyPreflight(),
   projectRemotionIdentityPreflight: emptyRemotionIdentityPreflight(),
+  palmierTimelinePreflight: emptyPalmierTimelinePreflight(),
   evidenceState: null,
   handoffIdentitySha256: null,
   actualRecoverySha256: null,
@@ -142,6 +161,7 @@ const result = (
   canonicalGateLoaded: false,
   liveProjectMotionMatch: false,
   liveProjectRemotionIdentityMatch: false,
+  livePalmierTimelineMatch: false,
   canonicalArtifactPath: canonicalWeddingDavinciGuiActualStartGateArtifactPath(movieId),
   transport: emptyTransport(),
   project: emptyProject(),
@@ -154,8 +174,9 @@ const result = (
   mismatches,
   inspectCommand: commandFor(movieId, false),
   strictGuiStartCommand: commandFor(movieId, true),
-  note: "Motion Zukan audits the canonical gate artifact and rechecks transported Project Motion and Project Remotion identity states against current Dashboard authorities. GUI_ACTUAL_ALLOWED means a human may start the real Mac GUI review; it never means GUI Actual was executed or passed.",
+  note: "Motion Zukan audits the canonical gate artifact and rechecks transported Project Motion, Project Remotion identity, and Palmier timeline SHA authority against current Dashboard authorities. GUI_ACTUAL_ALLOWED means a human may start the real Mac GUI review; it never means GUI Actual was executed or passed.",
   evidenceBoundary: {
+    palmierGuiActual: "NOT_PROMOTED_BY_DASHBOARD_GATE_AUDIT",
     macDavinciResolveGuiActual: "NOT_PROMOTED_BY_DASHBOARD_GATE_AUDIT",
     productionReady: false,
   },
@@ -201,15 +222,33 @@ export function auditWeddingDavinciGuiActualStartGate(
   } else {
     if (!["CURRENT", "NOT_APPLICABLE", "INVALID"].includes(projectRemotionIdentity.state)) mismatches.push("GUI_START_GATE_PROJECT_REMOTION_IDENTITY_PREFLIGHT_STATE_INVALID");
     if (typeof projectRemotionIdentity.command !== "string") mismatches.push("GUI_START_GATE_PROJECT_REMOTION_IDENTITY_PREFLIGHT_COMMAND_MISSING");
-    if (projectRemotionIdentity.state === "INVALID" && gate.state !== "PROJECT_REMOTION_IDENTITY_BLOCKED") mismatches.push("GUI_START_GATE_PROJECT_REMOTION_IDENTITY_INVALID_NOT_BLOCKED");
+    if (projectRemotionIdentity.state === "INVALID" && gate.state !== "PROJECT_REMOTION_IDENTITY_BLOCKED" && projectMotion?.state !== "INVALID") mismatches.push("GUI_START_GATE_PROJECT_REMOTION_IDENTITY_INVALID_NOT_BLOCKED");
     if (gate.state === "PROJECT_REMOTION_IDENTITY_BLOCKED" && projectRemotionIdentity.state !== "INVALID") mismatches.push("GUI_START_GATE_PROJECT_REMOTION_IDENTITY_BLOCK_WITHOUT_INVALID_STATE");
     if (gate.state === "PROJECT_REMOTION_IDENTITY_BLOCKED" && gate.nextAction?.kind !== "REVALIDATE_PROJECT_REMOTION_IDENTITY") mismatches.push("GUI_START_GATE_PROJECT_REMOTION_IDENTITY_RECOVERY_ACTION_INVALID");
     if (gate.state === "PROJECT_REMOTION_IDENTITY_BLOCKED" && gate.nextAction?.command !== projectRemotionIdentity.command) mismatches.push("GUI_START_GATE_PROJECT_REMOTION_IDENTITY_RECOVERY_COMMAND_MISMATCH");
   }
 
+  const palmierTimeline = gate.project?.palmierTimelinePreflight;
+  if (!palmierTimeline || typeof palmierTimeline !== "object") {
+    mismatches.push("GUI_START_GATE_PALMIER_TIMELINE_PREFLIGHT_MISSING");
+  } else {
+    if (!["CURRENT", "NOT_APPLICABLE", "INVALID"].includes(palmierTimeline.state)) mismatches.push("GUI_START_GATE_PALMIER_TIMELINE_PREFLIGHT_STATE_INVALID");
+    if (typeof palmierTimeline.command !== "string") mismatches.push("GUI_START_GATE_PALMIER_TIMELINE_PREFLIGHT_COMMAND_MISSING");
+    if (palmierTimeline.state === "CURRENT") {
+      for (const key of ["receiptSha256", "assemblyPlanSha256", "palmierFcpxmlSha256"]) {
+        if (!/^[a-f0-9]{64}$/.test(palmierTimeline[key] ?? "")) mismatches.push(`GUI_START_GATE_PALMIER_TIMELINE_${key.toUpperCase()}_INVALID`);
+      }
+    }
+    if (palmierTimeline.state === "INVALID" && gate.state !== "PALMIER_TIMELINE_BLOCKED" && projectMotion?.state !== "INVALID" && projectRemotionIdentity?.state !== "INVALID") mismatches.push("GUI_START_GATE_PALMIER_TIMELINE_INVALID_NOT_BLOCKED");
+    if (gate.state === "PALMIER_TIMELINE_BLOCKED" && palmierTimeline.state !== "INVALID") mismatches.push("GUI_START_GATE_PALMIER_TIMELINE_BLOCK_WITHOUT_INVALID_STATE");
+    if (gate.state === "PALMIER_TIMELINE_BLOCKED" && gate.nextAction?.kind !== "REVALIDATE_PALMIER_TIMELINE") mismatches.push("GUI_START_GATE_PALMIER_TIMELINE_RECOVERY_ACTION_INVALID");
+    if (gate.state === "PALMIER_TIMELINE_BLOCKED" && gate.nextAction?.command !== palmierTimeline.command) mismatches.push("GUI_START_GATE_PALMIER_TIMELINE_RECOVERY_COMMAND_MISMATCH");
+  }
+
   const liveProject = buildWeddingDavinciActualSessionPlan().projects[movieId];
   const liveProjectMotion = liveProject.projectMotionPreflight;
   const liveProjectRemotionIdentity = liveProject.projectRemotionIdentityPreflight;
+  const livePalmierTimeline = liveProject.palmierTimelinePreflight;
   const liveMismatchCodes: string[] = [];
   if (projectMotion && typeof projectMotion === "object") {
     if (projectMotion.state !== liveProjectMotion.state) liveMismatchCodes.push("GUI_START_GATE_PROJECT_MOTION_STATE_STALE");
@@ -228,6 +267,16 @@ export function auditWeddingDavinciGuiActualStartGate(
     if ((projectRemotionIdentity.sourceBatchSha256 ?? null) !== liveProjectRemotionIdentity.sourceBatchSha256) liveMismatchCodes.push("GUI_START_GATE_PROJECT_REMOTION_IDENTITY_SOURCE_BATCH_SHA_STALE");
     if ((projectRemotionIdentity.error ?? null) !== liveProjectRemotionIdentity.error) liveMismatchCodes.push("GUI_START_GATE_PROJECT_REMOTION_IDENTITY_ERROR_STALE");
   }
+  if (palmierTimeline && typeof palmierTimeline === "object") {
+    if (palmierTimeline.state !== livePalmierTimeline.state) liveMismatchCodes.push("GUI_START_GATE_PALMIER_TIMELINE_STATE_STALE");
+    if (Boolean(palmierTimeline.applicable) !== livePalmierTimeline.applicable) liveMismatchCodes.push("GUI_START_GATE_PALMIER_TIMELINE_APPLICABILITY_STALE");
+    if (Boolean(palmierTimeline.current) !== livePalmierTimeline.current) liveMismatchCodes.push("GUI_START_GATE_PALMIER_TIMELINE_CURRENTNESS_STALE");
+    if ((palmierTimeline.command ?? null) !== livePalmierTimeline.command) liveMismatchCodes.push("GUI_START_GATE_PALMIER_TIMELINE_COMMAND_STALE");
+    if ((palmierTimeline.receiptSha256 ?? null) !== livePalmierTimeline.receiptSha256) liveMismatchCodes.push("GUI_START_GATE_PALMIER_TIMELINE_RECEIPT_SHA_STALE");
+    if ((palmierTimeline.assemblyPlanSha256 ?? null) !== livePalmierTimeline.assemblyPlanSha256) liveMismatchCodes.push("GUI_START_GATE_PALMIER_TIMELINE_ASSEMBLY_PLAN_SHA_STALE");
+    if ((palmierTimeline.palmierFcpxmlSha256 ?? null) !== livePalmierTimeline.palmierFcpxmlSha256) liveMismatchCodes.push("GUI_START_GATE_PALMIER_TIMELINE_FCPXML_SHA_STALE");
+    if ((palmierTimeline.error ?? null) !== livePalmierTimeline.error) liveMismatchCodes.push("GUI_START_GATE_PALMIER_TIMELINE_ERROR_STALE");
+  }
   mismatches.push(...liveMismatchCodes);
 
   const contractInvalid = mismatches.some((code) =>
@@ -239,11 +288,12 @@ export function auditWeddingDavinciGuiActualStartGate(
       canonicalGateLoaded: true,
       liveProjectMotionMatch: !liveMismatchCodes.some((code) => code.includes("PROJECT_MOTION_")),
       liveProjectRemotionIdentityMatch: !liveMismatchCodes.some((code) => code.includes("PROJECT_REMOTION_IDENTITY_")),
+      livePalmierTimelineMatch: !liveMismatchCodes.some((code) => code.includes("PALMIER_TIMELINE_")),
       nextAction: {
         kind: "REGENERATE_CANONICAL_START_GATE",
         command: commandFor(movieId, false),
         humanOnly: false,
-        reason: "The loaded canonical start-gate JSON carries an older Project Motion and/or Project Remotion identity preflight than the current Dashboard authority. Regenerate the canonical artifact and rerun strict GUI-start verification before Mac GUI Actual.",
+        reason: "The loaded canonical start-gate JSON carries an older Project Motion, Project Remotion identity, and/or Palmier timeline SHA preflight than the current Dashboard authority. Regenerate the canonical artifact and rerun strict GUI-start verification before Mac GUI Actual.",
       },
     });
   }
@@ -253,6 +303,7 @@ export function auditWeddingDavinciGuiActualStartGate(
     canonicalGateLoaded: true,
     liveProjectMotionMatch: true,
     liveProjectRemotionIdentityMatch: true,
+    livePalmierTimelineMatch: true,
     transport: {
       state: String(gate.transport?.state ?? "UNKNOWN"),
       current: gate.transport?.current === true,
@@ -278,6 +329,16 @@ export function auditWeddingDavinciGuiActualStartGate(
         receiptSha256: typeof projectRemotionIdentity.receiptSha256 === "string" ? projectRemotionIdentity.receiptSha256 : null,
         sourceBatchSha256: typeof projectRemotionIdentity.sourceBatchSha256 === "string" ? projectRemotionIdentity.sourceBatchSha256 : null,
         error: typeof projectRemotionIdentity.error === "string" ? projectRemotionIdentity.error : null,
+      },
+      palmierTimelinePreflight: {
+        state: typeof palmierTimeline.state === "string" ? palmierTimeline.state : null,
+        applicable: palmierTimeline.applicable === true,
+        current: palmierTimeline.current === true,
+        command: typeof palmierTimeline.command === "string" ? palmierTimeline.command : null,
+        receiptSha256: typeof palmierTimeline.receiptSha256 === "string" ? palmierTimeline.receiptSha256 : null,
+        assemblyPlanSha256: typeof palmierTimeline.assemblyPlanSha256 === "string" ? palmierTimeline.assemblyPlanSha256 : null,
+        palmierFcpxmlSha256: typeof palmierTimeline.palmierFcpxmlSha256 === "string" ? palmierTimeline.palmierFcpxmlSha256 : null,
+        error: typeof palmierTimeline.error === "string" ? palmierTimeline.error : null,
       },
       evidenceState: typeof gate.project?.evidenceState === "string" ? gate.project.evidenceState : null,
       handoffIdentitySha256: typeof gate.project?.handoffIdentitySha256 === "string" ? gate.project.handoffIdentitySha256 : null,

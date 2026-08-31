@@ -1,26 +1,28 @@
 import {weddingProjectRemotionStageStatus} from "../generated/weddingProjectRemotionStageStatus";
 import {buildWeddingMovieProductionCriticalPath} from "./weddingMovieProductionCriticalPath";
-import type {
-  WeddingDavinciGuiActualStartGateAudit,
-  WeddingMovieId,
-} from "./weddingDavinciGuiActualStartGateAudit";
+import type {WeddingDavinciGuiActualStartGateAudit, WeddingMovieId} from "./weddingDavinciGuiActualStartGateAudit";
 
-export const WEDDING_MOVIE_PRODUCTION_CRITICAL_PATH_RUNTIME_SNAPSHOT_SCHEMA =
-  "wedding-movie-production-critical-path-runtime-snapshot/v3" as const;
-
-export type WeddingDavinciGuiActualStartGateRuntimeAuditMap = Record<
-  WeddingMovieId,
-  WeddingDavinciGuiActualStartGateAudit
->;
+export const WEDDING_MOVIE_PRODUCTION_CRITICAL_PATH_RUNTIME_SNAPSHOT_SCHEMA = "wedding-movie-production-critical-path-runtime-snapshot/v3" as const;
+export type WeddingDavinciGuiActualStartGateRuntimeAuditMap = Record<WeddingMovieId, WeddingDavinciGuiActualStartGateAudit>;
 
 function projectMotionRuntimeSnapshot(audit: WeddingDavinciGuiActualStartGateAudit) {
+  return {...audit.project.projectMotionPreflight, liveMatch: audit.liveProjectMotionMatch};
+}
+function projectRemotionIdentityRuntimeSnapshot(audit: WeddingDavinciGuiActualStartGateAudit) {
+  return {...audit.project.projectRemotionIdentityPreflight, liveMatch: audit.liveProjectRemotionIdentityMatch};
+}
+function palmierTimelineRuntimeSnapshot(audit: WeddingDavinciGuiActualStartGateAudit) {
+  const palmier = audit.project.palmierTimelinePreflight;
   return {
-    state: audit.project.projectMotionPreflight.state,
-    applicable: audit.project.projectMotionPreflight.applicable,
-    current: audit.project.projectMotionPreflight.current,
-    command: audit.project.projectMotionPreflight.command,
-    error: audit.project.projectMotionPreflight.error,
-    liveMatch: audit.liveProjectMotionMatch,
+    state: palmier.state,
+    applicable: palmier.applicable,
+    current: palmier.current,
+    command: palmier.command,
+    receiptSha256: palmier.receiptSha256,
+    assemblyPlanSha256: palmier.assemblyPlanSha256,
+    palmierFcpxmlSha256: palmier.palmierFcpxmlSha256,
+    error: palmier.error,
+    liveMatch: audit.livePalmierTimelineMatch,
   };
 }
 
@@ -32,14 +34,10 @@ function startGateRuntimeSnapshot(audit: WeddingDavinciGuiActualStartGateAudit) 
     canonicalArtifactPath: audit.canonicalArtifactPath,
     inspectCommand: audit.inspectCommand,
     strictGuiStartCommand: audit.strictGuiStartCommand,
-    transport: {
-      state: audit.transport.state,
-      current: audit.transport.current,
-      mismatches: [...audit.transport.mismatches],
-      transportedIdentitySha256: audit.transport.transportedIdentitySha256,
-      liveIdentitySha256: audit.transport.liveIdentitySha256,
-    },
+    transport: {...audit.transport, mismatches: [...audit.transport.mismatches]},
     projectMotion: projectMotionRuntimeSnapshot(audit),
+    projectRemotionIdentity: projectRemotionIdentityRuntimeSnapshot(audit),
+    palmierTimeline: palmierTimelineRuntimeSnapshot(audit),
     nextAction: {...audit.nextAction},
     mismatches: [...audit.mismatches],
     evidenceBoundary: {...audit.evidenceBoundary},
@@ -59,6 +57,7 @@ function projectRemotionCanonicalStageSnapshot(movieId: WeddingMovieId) {
       state: status.palmierTimelineExport.state,
       detail: status.palmierTimelineExport.detail,
       receiptPath: status.palmierTimelineExport.receiptPath,
+      receiptSha256: status.palmierTimelineExport.receiptSha256,
       source: {...status.palmierTimelineExport.source},
       nextAction: {...status.palmierTimelineExport.next},
     },
@@ -66,9 +65,7 @@ function projectRemotionCanonicalStageSnapshot(movieId: WeddingMovieId) {
   };
 }
 
-export function buildWeddingMovieProductionCriticalPathRuntimeSnapshot(
-  audits: WeddingDavinciGuiActualStartGateRuntimeAuditMap,
-) {
+export function buildWeddingMovieProductionCriticalPathRuntimeSnapshot(audits: WeddingDavinciGuiActualStartGateRuntimeAuditMap) {
   return {
     schemaVersion: WEDDING_MOVIE_PRODUCTION_CRITICAL_PATH_RUNTIME_SNAPSHOT_SCHEMA,
     authority: "DASHBOARD_RUNTIME_CRITICAL_PATH_WITH_CANONICAL_REMOTION_STAGE_PALMIER_TIMELINE_AND_LIVE_DAVINCI_START_GATE_AUDIT" as const,
@@ -78,10 +75,7 @@ export function buildWeddingMovieProductionCriticalPathRuntimeSnapshot(
       opening: projectRemotionCanonicalStageSnapshot("opening"),
       profile: projectRemotionCanonicalStageSnapshot("profile"),
     },
-    liveDavinciStartGate: {
-      opening: startGateRuntimeSnapshot(audits.opening),
-      profile: startGateRuntimeSnapshot(audits.profile),
-    },
+    liveDavinciStartGate: {opening: startGateRuntimeSnapshot(audits.opening), profile: startGateRuntimeSnapshot(audits.profile)},
     evidenceBoundary: {
       palmierGuiActual: "NOT_PROMOTED_BY_RUNTIME_SNAPSHOT" as const,
       macDavinciResolveGuiActual: "NOT_PROMOTED_BY_RUNTIME_SNAPSHOT" as const,
@@ -94,6 +88,8 @@ export function buildWeddingMovieProductionCriticalPathRuntimeSnapshot(
       "RUNTIME_SNAPSHOT_EXPORTED != MAC_DAVINCI_GUI_ACTUAL_EXECUTED",
       "PALMIER_TIMELINE_RECEIPT_CURRENT != PALMIER_GUI_ACTUAL_EXECUTED",
       "PALMIER_TIMELINE_RECEIPT_CURRENT != MAC_DAVINCI_GUI_ACTUAL_EXECUTED",
+      "PALMIER_TIMELINE_LIVE_MATCH != PALMIER_GUI_ACTUAL_EXECUTED",
+      "PALMIER_TIMELINE_LIVE_MATCH != MAC_DAVINCI_GUI_ACTUAL_EXECUTED",
       "REMOTION_STAGE_HANDOFF_CURRENT != REMOTION_STUDIO_GUI_ACTUAL_EXECUTED",
       "REMOTION_STAGE_HANDOFF_CURRENT != MAC_DAVINCI_GUI_ACTUAL_EXECUTED",
       "GUI_ACTUAL_ALLOWED != GUI_ACTUAL_EXECUTED",
@@ -105,8 +101,6 @@ export function buildWeddingMovieProductionCriticalPathRuntimeSnapshot(
   };
 }
 
-export function buildWeddingMovieProductionCriticalPathRuntimeSnapshotJson(
-  audits: WeddingDavinciGuiActualStartGateRuntimeAuditMap,
-) {
+export function buildWeddingMovieProductionCriticalPathRuntimeSnapshotJson(audits: WeddingDavinciGuiActualStartGateRuntimeAuditMap) {
   return JSON.stringify(buildWeddingMovieProductionCriticalPathRuntimeSnapshot(audits), null, 2);
 }

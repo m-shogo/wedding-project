@@ -27,9 +27,12 @@ export const weddingProjectRemotionStageStatus = {
       "state": "MISSING",
       "detail": "PALMIER_TIMELINE_EXPORT_RECEIPT_MISSING",
       "receiptPath": null,
+      "receiptSha256": null,
       "source": {
         "assemblyPlan": null,
-        "palmierFcpxml": null
+        "assemblyPlanSha256": null,
+        "palmierFcpxml": null,
+        "palmierFcpxmlSha256": null
       },
       "next": {
         "kind": "VERIFY_REAL_PALMIER_FCPXML",
@@ -60,9 +63,12 @@ export const weddingProjectRemotionStageStatus = {
       "state": "MISSING",
       "detail": "PALMIER_TIMELINE_EXPORT_RECEIPT_MISSING",
       "receiptPath": null,
+      "receiptSha256": null,
       "source": {
         "assemblyPlan": null,
-        "palmierFcpxml": null
+        "assemblyPlanSha256": null,
+        "palmierFcpxml": null,
+        "palmierFcpxmlSha256": null
       },
       "next": {
         "kind": "VERIFY_REAL_PALMIER_FCPXML",

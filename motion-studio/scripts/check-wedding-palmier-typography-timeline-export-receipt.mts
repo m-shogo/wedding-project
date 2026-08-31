@@ -82,7 +82,17 @@ if (movieArg !== 'opening' && movieArg !== 'profile') {
 const movieId: MovieId = movieArg;
 const receiptPath = resolve(argValue('--receipt') ?? join(motionStudioRoot, `out/handoff/wedding/${movieId}-palmier-typography-timeline-export-receipt.json`));
 if (!existsSync(receiptPath)) {
-  const missing = {schemaVersion: 'wedding-palmier-typography-timeline-export-receipt-currentness/v1', movieId, state: 'MISSING', detail: 'PALMIER_TIMELINE_EXPORT_RECEIPT_MISSING', next: {kind: 'VERIFY_REAL_PALMIER_FCPXML', command: `node --no-warnings scripts/verify-wedding-palmier-typography-timeline-export.mts --movie=${movieId} --xml='<real-palmier-fcpxml-path>' --write`}, evidenceBoundary: {palmierGuiActualPerformedByThisCheck: false, macDavinciResolveGuiActual: 'NOT_RUN_UNLESS_HUMAN_EXECUTED', productionReadyPromotedByThisCheck: false}} as const;
+  const missing = {
+    schemaVersion: 'wedding-palmier-typography-timeline-export-receipt-currentness/v1',
+    movieId,
+    state: 'MISSING',
+    detail: 'PALMIER_TIMELINE_EXPORT_RECEIPT_MISSING',
+    receiptPath: null,
+    receiptSha256: null,
+    source: {assemblyPlan: null, assemblyPlanSha256: null, palmierFcpxml: null, palmierFcpxmlSha256: null},
+    next: {kind: 'VERIFY_REAL_PALMIER_FCPXML', command: `node --no-warnings scripts/verify-wedding-palmier-typography-timeline-export.mts --movie=${movieId} --xml='<real-palmier-fcpxml-path>' --write`},
+    evidenceBoundary: {palmierGuiActualPerformedByThisCheck: false, macDavinciResolveGuiActual: 'NOT_RUN_UNLESS_HUMAN_EXECUTED', productionReadyPromotedByThisCheck: false},
+  } as const;
   if (process.argv.includes('--json')) console.log(JSON.stringify(missing, null, 2));
   else console.log(`palmierTimelineExportReceipt=MISSING\nnextCommand=${missing.next.command}`);
   if (process.argv.includes('--strict')) process.exit(3);
@@ -90,8 +100,10 @@ if (!existsSync(receiptPath)) {
 }
 
 let receipt: Receipt;
+let receiptRaw: string;
 try {
-  receipt = JSON.parse(readFileSync(receiptPath, 'utf8')) as Receipt;
+  receiptRaw = readFileSync(receiptPath, 'utf8');
+  receipt = JSON.parse(receiptRaw) as Receipt;
 } catch (error) {
   console.error(`BLOCK / PALMIER_TIMELINE_EXPORT_RECEIPT_PARSE_FAILED / ${error instanceof Error ? error.message : String(error)}`);
   process.exit(2);
@@ -111,7 +123,13 @@ const report = {
   state: result.state,
   detail: result.detail,
   receiptPath,
-  source: {assemblyPlan: planPath, palmierFcpxml: xmlPath},
+  receiptSha256: sha256(receiptRaw),
+  source: {
+    assemblyPlan: planPath,
+    assemblyPlanSha256: receipt.source?.assemblyPlan?.sha256 ?? null,
+    palmierFcpxml: xmlPath,
+    palmierFcpxmlSha256: receipt.source?.palmierFcpxml?.sha256 ?? null,
+  },
   next,
   evidenceBoundary: {palmierGuiActualPerformedByThisCheck: false, macDavinciResolveGuiActual: 'NOT_RUN_UNLESS_HUMAN_EXECUTED', productionReadyPromotedByThisCheck: false},
   guardrails: ['CURRENT_RECEIPT != PALMIER_GUI_ACTUAL_PROVEN', 'CURRENT_RECEIPT != MAC_DAVINCI_GUI_ACTUAL_PASS', 'CURRENT_RECEIPT != PRODUCTION_READY'],
