@@ -27,20 +27,17 @@ for (const token of [
   "MOTION_ZUKAN_COMPOSER_CHANGED_EVENT",
   "PROJECT_SCENE_TRANSITION_SELECTION_CHANGED_EVENT",
   "resolveProjectSceneTransitions",
-  'edge.transition!=="CROSS_DISSOLVE"',
-  "queueCurrentness.status!==\"CURRENT\"",
-  "oldqueue-never-match",
-].filter((token) => token !== "oldqueue-never-match")) requireText(operator, token, "visual correction operator");
+  'edge.transition !== "CROSS_DISSOLVE"',
+  'queueCurrentness?.status!=="CURRENT"',
+]) requireText(operator, token, "visual correction operator");
 for (const token of ["fromSourceRevision", "toSourceRevision", "REAL_PREVIEW_VISUAL_REVIEW_TRANSITION_SCENE_MISSING"]) requireText(backend, token, "visual correction queue revision binding");
 requireText(openingCrop, "data-opening-crop-review-operator", "Opening crop target");
 requireText(profileMedia, "data-profile-real-media-review-operator", "Profile media target");
 requireText(timing, "data-rhythm-scene-timing-correction", "timing target");
 requireText(transition, "data-rhythm-transition-correction", "transition target");
-
 if (!operator.includes("旧preview / stills / Human review / correction queueはSTALE")) throw new Error("STALE UX must explicitly invalidate old visual artifacts");
 if (!operator.includes("rerenderRealPreview") || !operator.includes("extractFreshQaStills") || !operator.includes("initFreshVisualReview")) throw new Error("fresh correction cycle commands missing");
 if (!operator.includes('disabled={queueCurrentness.status!=="CURRENT"||stale}')) throw new Error("STALE queue navigation must be disabled");
-
 for (const forbidden of ['remotionStudioGuiActual: "PASS"','palmierGuiActual: "PASS"','macDaVinciGuiActual: "PASS"','productionReady: true']) {
   if (operator.includes(forbidden) || focus.includes(forbidden) || backend.includes(forbidden)) throw new Error(`visual correction navigation must not promote evidence: ${forbidden}`);
 }
