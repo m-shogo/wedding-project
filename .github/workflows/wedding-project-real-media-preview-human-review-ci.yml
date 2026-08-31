@@ -1,0 +1,130 @@
+name: Wedding Project Real Media Preview Human Review CI
+
+on:
+  pull_request:
+    paths:
+      - 'motion-studio/scripts/wedding-project-real-media-preview-human-review.mts'
+      - '.github/workflows/wedding-project-real-media-preview-human-review-ci.yml'
+  workflow_dispatch:
+
+jobs:
+  human-review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Build current still-review fixtures
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/human-review
+          printf 'preview-current' > /tmp/human-review/preview.mp4
+          printf 'scene-a-start' > /tmp/human-review/a-start.png
+          printf 'scene-a-mid' > /tmp/human-review/a-mid.png
+          printf 'scene-a-end' > /tmp/human-review/a-end.png
+          printf 'scene-b-start' > /tmp/human-review/b-start.png
+          printf 'scene-b-mid' > /tmp/human-review/b-mid.png
+          printf 'scene-b-end' > /tmp/human-review/b-end.png
+          printf 'transition-mid' > /tmp/human-review/transition.png
+          PREVIEW_SHA=$(sha256sum /tmp/human-review/preview.mp4 | awk '{print $1}')
+          A_START=$(sha256sum /tmp/human-review/a-start.png | awk '{print $1}')
+          A_MID=$(sha256sum /tmp/human-review/a-mid.png | awk '{print $1}')
+          A_END=$(sha256sum /tmp/human-review/a-end.png | awk '{print $1}')
+          B_START=$(sha256sum /tmp/human-review/b-start.png | awk '{print $1}')
+          B_MID=$(sha256sum /tmp/human-review/b-mid.png | awk '{print $1}')
+          B_END=$(sha256sum /tmp/human-review/b-end.png | awk '{print $1}')
+          TRANSITION=$(sha256sum /tmp/human-review/transition.png | awk '{print $1}')
+          cat > /tmp/human-review/stills.json <<JSON
+          {
+            "schemaVersion":"wedding-movie-real-media-preview-qa-stills/v1",
+            "authority":"DERIVED_VISUAL_QA_ARTIFACTS_FROM_CURRENT_REAL_MEDIA_PREVIEW",
+            "projectId":"opening",
+            "source":{"previewPath":"/tmp/human-review/preview.mp4","previewSha256":"${PREVIEW_SHA}","identitySha256":"identity-current"},
+            "stills":[
+              {"kind":"SCENE_START_SAFE","sceneId":"scene-a","path":"/tmp/human-review/a-start.png","sha256":"${A_START}"},
+              {"kind":"SCENE_MID","sceneId":"scene-a","path":"/tmp/human-review/a-mid.png","sha256":"${A_MID}"},
+              {"kind":"SCENE_END_SAFE","sceneId":"scene-a","path":"/tmp/human-review/a-end.png","sha256":"${A_END}"},
+              {"kind":"SCENE_START_SAFE","sceneId":"scene-b","path":"/tmp/human-review/b-start.png","sha256":"${B_START}"},
+              {"kind":"SCENE_MID","sceneId":"scene-b","path":"/tmp/human-review/b-mid.png","sha256":"${B_MID}"},
+              {"kind":"SCENE_END_SAFE","sceneId":"scene-b","path":"/tmp/human-review/b-end.png","sha256":"${B_END}"}
+            ],
+            "transitionStills":[{"kind":"CROSS_DISSOLVE_MID","fromSceneId":"scene-a","toSceneId":"scene-b","path":"/tmp/human-review/transition.png","sha256":"${TRANSITION}"}],
+            "summary":{"sourceCurrentVerified":true,"humanVisualQa":"NOT_RUN","productionReady":false},
+            "evidenceBoundary":{"visualQa":"NOT_RUN","remotionStudioGuiActual":"NOT_RUN","palmierGuiActual":"NOT_RUN","macDaVinciGuiActual":"NOT_RUN","productionReady":false}
+          }
+          JSON
+      - name: Init review template stays NOT_RUN
+        run: node --no-warnings motion-studio/scripts/wedding-project-real-media-preview-human-review.mts --stills-manifest=/tmp/human-review/stills.json --evidence=/tmp/human-review/review.json --init
+      - name: Verify NOT_RUN template
+        run: |
+          node --input-type=module <<'NODE'
+          import {readFileSync} from 'node:fs';
+          const e=JSON.parse(readFileSync('/tmp/human-review/review.json','utf8'));
+          if(e.review.overall!=='NOT_RUN'||e.review.reviewer!==null||e.review.reviewedAt!==null) throw new Error('review auto-promoted');
+          if(e.scenes.length!==2||e.transitions.length!==1) throw new Error('binding counts');
+          for(const scene of e.scenes) for(const value of Object.values(scene.axes)) if(value!=='NOT_RUN') throw new Error('scene auto verdict');
+          for(const edge of e.transitions) for(const value of Object.values(edge.axes)) if(value!=='NOT_RUN') throw new Error('transition auto verdict');
+          if(e.evidenceBoundary.remotionStudioGuiActual!=='NOT_RUN'||e.evidenceBoundary.palmierGuiActual!=='NOT_RUN'||e.evidenceBoundary.macDaVinciGuiActual!=='NOT_RUN'||e.evidenceBoundary.productionReady!==false) throw new Error('GUI boundary');
+          NODE
+      - name: Human PASS fixture finalizes with empty correction queue
+        run: |
+          node --input-type=module <<'NODE'
+          import {readFileSync,writeFileSync} from 'node:fs';
+          const p='/tmp/human-review/review.json';
+          const e=JSON.parse(readFileSync(p,'utf8'));
+          for(const scene of e.scenes) for(const axis of Object.keys(scene.axes)) scene.axes[axis]='PASS';
+          for(const edge of e.transitions) for(const axis of Object.keys(edge.axes)) edge.axes[axis]='PASS';
+          e.review={overall:'PASS',reviewer:'HUMAN_FIXTURE_ONLY',reviewedAt:'2026-09-01T05:00:00+09:00',notes:'CI fixture only'};
+          writeFileSync(p,JSON.stringify(e,null,2)+'\n');
+          NODE
+          node --no-warnings motion-studio/scripts/wedding-project-real-media-preview-human-review.mts --stills-manifest=/tmp/human-review/stills.json --evidence=/tmp/human-review/review.json --output=/tmp/human-review/pass-result.json --correction-queue=/tmp/human-review/pass-queue.json --strict-pass
+          node --input-type=module <<'NODE'
+          import {readFileSync} from 'node:fs';
+          const r=JSON.parse(readFileSync('/tmp/human-review/pass-result.json','utf8'));
+          const q=JSON.parse(readFileSync('/tmp/human-review/pass-queue.json','utf8'));
+          if(r.review.overall!=='PASS'||r.summary.corrections!==0||r.summary.productionReady!==false) throw new Error('pass result');
+          if(q.summary.state!=='EMPTY'||q.corrections.length!==0) throw new Error('pass queue');
+          if(r.evidenceBoundary.remotionStudioGuiActual!=='NOT_RUN'||r.evidenceBoundary.palmierGuiActual!=='NOT_RUN'||r.evidenceBoundary.macDaVinciGuiActual!=='NOT_RUN') throw new Error('actual promoted');
+          NODE
+      - name: Human FAIL fixture emits only FAIL axes and strict-pass blocks
+        shell: bash
+        run: |
+          node --no-warnings motion-studio/scripts/wedding-project-real-media-preview-human-review.mts --stills-manifest=/tmp/human-review/stills.json --evidence=/tmp/human-review/fail-review.json --init
+          node --input-type=module <<'NODE'
+          import {readFileSync,writeFileSync} from 'node:fs';
+          const p='/tmp/human-review/fail-review.json';
+          const e=JSON.parse(readFileSync(p,'utf8'));
+          for(const scene of e.scenes) for(const axis of Object.keys(scene.axes)) scene.axes[axis]='PASS';
+          for(const edge of e.transitions) for(const axis of Object.keys(edge.axes)) edge.axes[axis]='PASS';
+          e.scenes[0].axes.TITLE_READABLE='FAIL';
+          e.scenes[0].notes='Title loses contrast';
+          e.transitions[0].axes.TRANSITION_VISUALLY_CLEAN='FAIL';
+          e.transitions[0].notes='Dissolve feels muddy';
+          e.review={overall:'FAIL',reviewer:'HUMAN_FIXTURE_ONLY',reviewedAt:'2026-09-01T05:01:00+09:00',notes:'CI fixture only'};
+          writeFileSync(p,JSON.stringify(e,null,2)+'\n');
+          NODE
+          node --no-warnings motion-studio/scripts/wedding-project-real-media-preview-human-review.mts --stills-manifest=/tmp/human-review/stills.json --evidence=/tmp/human-review/fail-review.json --output=/tmp/human-review/fail-result.json --correction-queue=/tmp/human-review/fail-queue.json
+          node --input-type=module <<'NODE'
+          import {readFileSync} from 'node:fs';
+          const q=JSON.parse(readFileSync('/tmp/human-review/fail-queue.json','utf8'));
+          if(q.summary.correctionCount!==2||q.summary.state!=='ACTION_REQUIRED') throw new Error('fail queue count');
+          if(!q.corrections.some((c)=>c.kind==='SCENE_AXIS'&&c.axis==='TITLE_READABLE')) throw new Error('scene fail missing');
+          if(!q.corrections.some((c)=>c.kind==='TRANSITION_AXIS'&&c.axis==='TRANSITION_VISUALLY_CLEAN')) throw new Error('transition fail missing');
+          NODE
+          if node --no-warnings motion-studio/scripts/wedding-project-real-media-preview-human-review.mts --stills-manifest=/tmp/human-review/stills.json --evidence=/tmp/human-review/fail-review.json --output=/tmp/human-review/strict-fail.json --correction-queue=/tmp/human-review/strict-fail-queue.json --strict-pass 2>/tmp/human-review/strict.err; then
+            echo 'expected Human FAIL to block strict-pass' >&2
+            exit 1
+          fi
+          grep -q 'REAL_MEDIA_VISUAL_REVIEW_HUMAN_FAIL' /tmp/human-review/strict.err
+      - name: Preview drift invalidates old Human evidence
+        shell: bash
+        run: |
+          printf 'tamper' >> /tmp/human-review/preview.mp4
+          if node --no-warnings motion-studio/scripts/wedding-project-real-media-preview-human-review.mts --stills-manifest=/tmp/human-review/stills.json --evidence=/tmp/human-review/review.json 2>/tmp/human-review/stale.err; then
+            echo 'expected preview drift to invalidate review source' >&2
+            exit 1
+          fi
+          grep -q 'REAL_MEDIA_VISUAL_REVIEW_PREVIEW_SHA_MISMATCH' /tmp/human-review/stale.err
