@@ -1,0 +1,30 @@
+name: Wedding Final Delivery Transition Gate CI
+
+on:
+  pull_request:
+    paths:
+      - 'motion-studio/scripts/wedding-final-delivery-transition-gate.mts'
+      - '.github/workflows/wedding-final-delivery-transition-gate-ci.yml'
+  workflow_dispatch:
+
+jobs:
+  final-delivery-transition-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Verify CURRENT, failed edge, and recovery drift contracts
+        working-directory: motion-studio
+        run: |
+          node --no-warnings scripts/wedding-final-delivery-transition-gate.mts --self-test | tee /tmp/final-delivery-transition-gate.log
+          grep -q 'selfTest=PASS' /tmp/final-delivery-transition-gate.log
+
+      - name: Final gate cannot promote GUI Actual or production readiness
+        run: |
+          grep -q "macDaVinciGuiActual: 'NOT_RUN'" motion-studio/scripts/wedding-final-delivery-transition-gate.mts
+          grep -q 'productionReady: false' motion-studio/scripts/wedding-final-delivery-transition-gate.mts
+          ! grep -q "macDaVinciGuiActual: 'PASS'" motion-studio/scripts/wedding-final-delivery-transition-gate.mts
+          ! grep -q 'productionReady: true' motion-studio/scripts/wedding-final-delivery-transition-gate.mts
