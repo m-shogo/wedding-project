@@ -36,6 +36,12 @@ import {
   type DemoStockMediaPack,
 } from "../data/demoStockMediaCatalog";
 import {
+  announceMotionZukanSceneFocusResolved,
+  isMotionZukanSceneFocusRequest,
+  MOTION_ZUKAN_SCENE_FOCUS_REQUEST_EVENT,
+  type MotionZukanSceneFocusRequest,
+} from "../data/motionZukanSceneFocus";
+import {
   duplicateSceneInstance,
   loadMotionZukanComposerState,
   MOTION_ZUKAN_COMPOSER_CHANGED_EVENT,
@@ -191,6 +197,40 @@ export function MotionZukanProductionWorkspace() {
     return () => window.removeEventListener(MOTION_ZUKAN_DEMO_STOCK_PACK_APPLY_EVENT, onDemoStockPackApply);
   }, []);
 
+  useEffect(() => {
+    function onSceneFocusRequest(event: Event) {
+      const request = (event as CustomEvent<unknown>).detail;
+      if (!isMotionZukanSceneFocusRequest(request)) return;
+      const currentScene = composerRef.current.scenes.find((scene) => scene.sceneId === request.sceneId && scene.projectId === request.projectId);
+      if (!currentScene) {
+        setHandoffFeedback(`Scene focus拒否: ${request.sceneId} は現在の${request.projectId}に存在しません`);
+        return;
+      }
+      if (currentScene.updatedAt !== request.sourceRevision) {
+        setHandoffFeedback(`Scene focus拒否: ${request.sceneId} はstale revisionです`);
+        return;
+      }
+      setProjectId(request.projectId);
+      setSelectedSceneId(request.sceneId);
+      setHandoffFeedback(`Rhythm correction focus: ${request.sceneId} / ${request.axis}`);
+      window.setTimeout(() => {
+        focusResolvedScene(request);
+      }, 0);
+    }
+    window.addEventListener(MOTION_ZUKAN_SCENE_FOCUS_REQUEST_EVENT, onSceneFocusRequest);
+    return () => window.removeEventListener(MOTION_ZUKAN_SCENE_FOCUS_REQUEST_EVENT, onSceneFocusRequest);
+  }, []);
+
+  function focusResolvedScene(request: MotionZukanSceneFocusRequest) {
+    const escaped = typeof CSS !== "undefined" && CSS.escape ? CSS.escape(request.sceneId) : request.sceneId.replace(/"/g, "\\\"");
+    const selector = request.surface === "SCENE_BOUND_A_B_COMPARE"
+      ? `[data-scene-bound-remotion-comparison="${escaped}"]`
+      : `[data-motion-zukan-selected-scene="${escaped}"]`;
+    const target = document.querySelector<HTMLElement>(selector) ?? document.getElementById("motion-zukan-production-workspace");
+    target?.scrollIntoView({behavior: "smooth", block: "center"});
+    announceMotionZukanSceneFocusResolved(request);
+  }
+
   const projectScenes = useMemo(() => {
     const timeline = composer.timelines.find((item) => item.projectId === projectId);
     const ids = timeline?.sceneIds ?? [];
@@ -243,9 +283,6 @@ export function MotionZukanProductionWorkspace() {
     suppressComposerEventRef.current = true;
     setComposer(next);
     saveMotionZukanComposerState(next);
-    // saveMotionZukanComposerState now defers its event dispatch to a macrotask (see its
-    // definition), so the suppress flag must be reset via a macrotask too, queued after it,
-    // otherwise it flips back to false before the deferred dispatch this call caused arrives.
     setTimeout(() => {
       suppressComposerEventRef.current = false;
     }, 0);
@@ -450,7 +487,7 @@ export function MotionZukanProductionWorkspace() {
           )}
 
           {selectedScene && selectedMeta && (
-            <div className="mt-4 grid grid-cols-1 xl:grid-cols-[0.8fr_1.2fr] gap-4 border border-sand-200 dark:border-navy-600 bg-white dark:bg-navy-800 p-4">
+            <div data-motion-zukan-selected-scene={selectedScene.sceneId} className="mt-4 grid grid-cols-1 xl:grid-cols-[0.8fr_1.2fr] gap-4 border border-sand-200 dark:border-navy-600 bg-white dark:bg-navy-800 p-4">
               <div>
                 <p className="text-[10px] tracking-[0.2em] font-semibold text-sky-700 dark:text-sky-300">SELECTED SCENE</p>
                 <p className="mt-1 text-sm font-bold text-navy-900 dark:text-sand-100">{sceneName(selectedScene)}</p>
@@ -620,7 +657,7 @@ export function MotionZukanProductionWorkspace() {
               <input type="file" accept="application/json,.json" onChange={importProductionHandoff} className="sr-only" />
             </label>
             <p className="mt-1 text-[9px] leading-4 text-navy-400">Scene・素材割当・曲候補・未完了チェックを保存します。外部Production Gateの合格やデモ素材の本番承認は含みません。</p>
-            {handoffFeedback && <p role="status" className={`mt-2 text-[10px] font-semibold ${handoffFeedback.startsWith("読込拒否") ? "text-red-600" : "text-emerald-700 dark:text-emerald-300"}`}>{handoffFeedback}</p>}
+            {handoffFeedback && <p role="status" className={`mt-2 text-[10px] font-semibold ${handoffFeedback.startsWith("読込拒否") || handoffFeedback.startsWith("Scene focus拒否") ? "text-red-600" : "text-emerald-700 dark:text-emerald-300"}`}>{handoffFeedback}</p>}
             <div className="mt-2 space-y-2 max-h-48 overflow-auto">
               {projectVersions.map((version) => (
                 <div key={version.versionId} className="flex items-center justify-between gap-3 border border-sand-200 dark:border-navy-600 bg-white dark:bg-navy-800 p-2">
