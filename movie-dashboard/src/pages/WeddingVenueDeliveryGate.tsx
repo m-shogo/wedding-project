@@ -25,9 +25,10 @@ export function WeddingVenueDeliveryGate() {
   const [packageManifest, setPackageManifest] = useState<unknown>(null);
   const [offlineVerification, setOfflineVerification] = useState<unknown>(null);
   const [redundancyReceipt, setRedundancyReceipt] = useState<unknown>(null);
+  const [redundancyCurrentness, setRedundancyCurrentness] = useState<unknown>(null);
   const audit = useMemo(
-    () => auditWeddingVenueDeliveryGate(projection, packageManifest, offlineVerification, redundancyReceipt),
-    [projection, packageManifest, offlineVerification, redundancyReceipt],
+    () => auditWeddingVenueDeliveryGate(projection, packageManifest, offlineVerification, redundancyReceipt, redundancyCurrentness),
+    [projection, packageManifest, offlineVerification, redundancyReceipt, redundancyCurrentness],
   );
 
   const movies = [["Opening", audit.opening], ["Profile", audit.profile]] as const;
@@ -35,32 +36,33 @@ export function WeddingVenueDeliveryGate() {
     ["Projection", audit.projectionState],
     ["Venue Package", audit.packageState],
     ["Offline Verify", audit.offlineVerifyState],
-    ["3-Copy Redundancy", audit.redundancyState],
+    ["3-Copy Receipt", audit.redundancyState],
+    ["Departure Live Verify", audit.redundancyCurrentnessState],
   ] as const;
 
   return (
     <div>
       <Header
         title="式場持出し Gate"
-        description="Human-approved DaVinci export → Projection → package → offline verify → 本番/予備/クラウド3-copy をSHA-boundで最終確認"
+        description="Human-approved DaVinci export → Projection → package → 3-copy → 出発直前live reverifyをSHA-boundで最終確認"
       />
 
       <section className="mb-8 border border-sand-300 dark:border-navy-600 bg-white dark:bg-navy-800 p-5">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
             <p className="text-[10px] tracking-[0.2em] font-semibold text-violet-700 dark:text-violet-300">VENUE DELIVERY / FINAL TRANSPORT GATE</p>
-            <h2 className="mt-1 text-xl font-bold text-navy-900 dark:text-sand-100">本番USB・予備USB・クラウド予備が同じ承認済み2本か確認する</h2>
+            <h2 className="mt-1 text-xl font-bold text-navy-900 dark:text-sand-100">本番USB・予備USB・クラウド予備を出発直前にlive再検証する</h2>
             <p className="mt-2 max-w-3xl text-xs leading-5 text-navy-500 dark:text-navy-300">
-              canonical CLIの結果を読み込み、Projection・package・offline verify・3-copy receiptを相互SHA bindingします。ブラウザだけでffprobeやSHA検証を代替せず、GUI ActualやHuman approvalも生成しません。
+              receiptは3-copy作成時の証拠、strict-current reportは現在地点のauthorityです。canonical CLIで各targetを再ffprobe/SHA検証し、古いreceiptだけではREADYにしません。GUI ActualやHuman approvalも生成しません。
             </p>
           </div>
           <div className="text-right">
             <p className={`text-lg font-bold ${stateClass(audit.state)}`}>{audit.ready ? "VENUE DELIVERY READY" : audit.state}</p>
-            <p className="mt-1 text-[10px] text-navy-400">package={audit.packageReady ? "READY" : "BLOCKED"} / redundancy={audit.redundancyReady ? "READY" : "BLOCKED"}</p>
+            <p className="mt-1 text-[10px] text-navy-400">package={audit.packageReady ? "READY" : "BLOCKED"} / live redundancy={audit.redundancyReady ? "READY" : "BLOCKED"}</p>
           </div>
         </div>
 
-        <div className="mt-5 grid gap-3 md:grid-cols-4">
+        <div className="mt-5 grid gap-3 md:grid-cols-5">
           {stages.map(([label, state]) => (
             <div key={label} className="border border-sand-200 dark:border-navy-600 p-3">
               <p className="text-[10px] font-semibold text-navy-400">{label}</p>
@@ -79,7 +81,7 @@ export function WeddingVenueDeliveryGate() {
         )}
       </section>
 
-      <section className="mb-8 grid gap-4 xl:grid-cols-4">
+      <section className="mb-8 grid gap-4 xl:grid-cols-5">
         <label className="border border-sky-200 dark:border-sky-900/60 p-4 cursor-pointer">
           <p className="text-[10px] font-semibold text-sky-700 dark:text-sky-300">1. PROJECTION CURRENTNESS</p>
           <p className="mt-2 text-xs text-navy-500 dark:text-navy-300">`wedding-projection-delivery-currentness.json` を読み込む</p>
@@ -99,6 +101,11 @@ export function WeddingVenueDeliveryGate() {
           <p className="text-[10px] font-semibold text-violet-700 dark:text-violet-300">4. 3-COPY RECEIPT</p>
           <p className="mt-2 text-xs text-navy-500 dark:text-navy-300">`wedding-venue-delivery-redundancy.json` を読み込む</p>
           <input type="file" accept="application/json,.json" className="mt-3 block w-full text-xs" onChange={(event) => void loadJson(event.target.files?.[0], setRedundancyReceipt)} />
+        </label>
+        <label className="border border-rose-200 dark:border-rose-900/60 p-4 cursor-pointer">
+          <p className="text-[10px] font-semibold text-rose-700 dark:text-rose-300">5. DEPARTURE LIVE VERIFY</p>
+          <p className="mt-2 text-xs text-navy-500 dark:text-navy-300">`wedding-venue-delivery-redundancy-currentness.json` を読み込む</p>
+          <input type="file" accept="application/json,.json" className="mt-3 block w-full text-xs" onChange={(event) => void loadJson(event.target.files?.[0], setRedundancyCurrentness)} />
         </label>
       </section>
 
@@ -121,10 +128,13 @@ export function WeddingVenueDeliveryGate() {
       <section className="mb-8 border border-sand-300 dark:border-navy-600 bg-white dark:bg-navy-800 p-5">
         <div className="flex flex-wrap items-end justify-between gap-3">
           <div>
-            <p className="text-[10px] tracking-[0.2em] font-semibold text-emerald-700 dark:text-emerald-300">THREE-COPY REDUNDANCY</p>
+            <p className="text-[10px] tracking-[0.2em] font-semibold text-emerald-700 dark:text-emerald-300">LIVE THREE-COPY CURRENTNESS</p>
             <h3 className="mt-1 text-base font-bold text-navy-900 dark:text-sand-100">PRIMARY_USB / BACKUP_USB / CLOUD_BACKUP</h3>
           </div>
-          <p className="text-[10px] font-mono text-navy-400">receipt {shortSha(audit.redundancyReceiptSha256)}</p>
+          <div className="text-right text-[10px] font-mono text-navy-400">
+            <p>receipt {shortSha(audit.redundancyReceiptSha256)}</p>
+            <p>live binds {shortSha(audit.redundancyCurrentnessReceiptSha256)}</p>
+          </div>
         </div>
         <div className="mt-4 grid gap-3 xl:grid-cols-3">
           {audit.redundancyCopies.map((copyItem) => (
@@ -141,12 +151,12 @@ export function WeddingVenueDeliveryGate() {
             </article>
           ))}
         </div>
-        <p className="mt-3 text-[10px] leading-4 text-amber-700 dark:text-amber-300">デフォルトのprimary/backup/cloudパスはローカルstagingです。実USB挿入・クラウドupload・式場再生は、人間が本当に実施するまでActual = NOT_RUNのままです。</p>
+        <p className="mt-3 text-[10px] leading-4 text-amber-700 dark:text-amber-300">CURRENT表示はstrict-current CLIが現在のpathを再verifyした結果です。path消失・USB抜き差し後の別内容・ファイル変更はSTALE/BLOCK。実USB挿入・クラウドupload・式場再生Actual自体は、人間が本当に実施するまでNOT_RUNです。</p>
       </section>
 
       <section className="mb-10 border border-violet-200 dark:border-violet-900/60 bg-violet-50/30 dark:bg-violet-950/10 p-5">
         <p className="text-[10px] tracking-[0.2em] font-semibold text-violet-700 dark:text-violet-300">CANONICAL OPERATOR CHAIN</p>
-        <h3 className="mt-1 text-base font-bold text-navy-900 dark:text-sand-100">式場Package生成 → verify → 3-copy offline verificationまで一本道</h3>
+        <h3 className="mt-1 text-base font-bold text-navy-900 dark:text-sand-100">式場Package生成 → 3-copy → 出発直前strict-currentまで一本道</h3>
         <ol className="mt-4 space-y-3">
           {Object.entries(audit.commands).map(([key, command], index) => (
             <li key={key} className="border-l-2 border-violet-300 dark:border-violet-800 pl-3">
@@ -162,6 +172,7 @@ export function WeddingVenueDeliveryGate() {
           <p>Projection SHA: <span className="font-mono">{shortSha(audit.projectionManifestSha256)}</span></p>
           <p>Delivery Manifest SHA: <span className="font-mono">{shortSha(audit.deliveryManifestSha256)}</span></p>
           <p>3-copy receipt SHA: <span className="font-mono">{shortSha(audit.redundancyReceiptSha256)}</span></p>
+          <p>Departure report binds receipt SHA: <span className="font-mono">{shortSha(audit.redundancyCurrentnessReceiptSha256)}</span></p>
           <p>Verified source package dir: <span className="font-mono">{audit.packageDir ?? "—"}</span></p>
           <p className="mt-2 text-amber-700 dark:text-amber-300">Mac/Studio/Palmier/DaVinci GUI Actual・physical USB・cloud upload・venue playbackは、この画面によってPASSへ昇格しません。</p>
         </div>
