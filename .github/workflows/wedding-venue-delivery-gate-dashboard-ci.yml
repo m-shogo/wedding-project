@@ -1,0 +1,41 @@
+name: Wedding Venue Delivery Gate Dashboard CI
+
+on:
+  pull_request:
+    paths:
+      - 'movie-dashboard/src/data/weddingVenueDeliveryGate.ts'
+      - 'movie-dashboard/src/pages/WeddingVenueDeliveryGate.tsx'
+      - 'movie-dashboard/src/App.tsx'
+      - 'movie-dashboard/scripts/verify-wedding-venue-delivery-gate-dashboard.mjs'
+      - '.github/workflows/wedding-venue-delivery-gate-dashboard-ci.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'movie-dashboard/src/data/weddingVenueDeliveryGate.ts'
+      - 'movie-dashboard/src/pages/WeddingVenueDeliveryGate.tsx'
+      - 'movie-dashboard/src/App.tsx'
+      - 'movie-dashboard/scripts/verify-wedding-venue-delivery-gate-dashboard.mjs'
+      - '.github/workflows/wedding-venue-delivery-gate-dashboard-ci.yml'
+
+jobs:
+  venue-delivery-gate-dashboard:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: movie-dashboard
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+          run_install: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: movie-dashboard/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - name: Verify venue delivery gate contract
+        run: node scripts/verify-wedding-venue-delivery-gate-dashboard.mjs
+      - name: Typecheck and build dashboard
+        run: pnpm build
