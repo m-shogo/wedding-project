@@ -13,7 +13,9 @@ on:
       - "motion-studio/scripts/wedding-davinci-delivery-readiness-snapshot.mts"
       - "motion-studio/scripts/wedding-davinci-final-delivery-preflight.mts"
       - "movie-dashboard/scripts/sync-wedding-project-motion-provenance-preflight.mjs"
+      - "movie-dashboard/scripts/sync-wedding-davinci-transition-actual-readiness.mjs"
       - "movie-dashboard/src/data/weddingProjectMotionProvenancePreflight.generated.ts"
+      - "movie-dashboard/src/data/weddingDavinciTransitionActualReadiness.generated.ts"
       - "movie-dashboard/src/data/openingDavinciActualBindingAudit.generated.ts"
       - "movie-dashboard/src/data/profileDavinciActualBindingAudit.generated.ts"
       - "movie-dashboard/src/data/openingProductionStatusHandoff.ts"
@@ -21,6 +23,7 @@ on:
       - "movie-dashboard/src/data/weddingDavinciDeliveryReadiness.ts"
       - "movie-dashboard/src/data/weddingDavinciFinalDeliveryPreflight.ts"
       - "movie-dashboard/src/components/WeddingDavinciDeliveryReadinessCard.tsx"
+      - "movie-dashboard/src/components/WeddingDavinciTransitionActualReadinessCard.tsx"
       - "movie-dashboard/src/pages/VisualMotionLibrary.tsx"
       - "movie-dashboard/scripts/verify-wedding-davinci-delivery-readiness.mjs"
       - ".github/workflows/wedding-davinci-delivery-readiness-ci.yml"
@@ -37,7 +40,9 @@ on:
       - "motion-studio/scripts/wedding-davinci-delivery-readiness-snapshot.mts"
       - "motion-studio/scripts/wedding-davinci-final-delivery-preflight.mts"
       - "movie-dashboard/scripts/sync-wedding-project-motion-provenance-preflight.mjs"
+      - "movie-dashboard/scripts/sync-wedding-davinci-transition-actual-readiness.mjs"
       - "movie-dashboard/src/data/weddingProjectMotionProvenancePreflight.generated.ts"
+      - "movie-dashboard/src/data/weddingDavinciTransitionActualReadiness.generated.ts"
       - "movie-dashboard/src/data/openingDavinciActualBindingAudit.generated.ts"
       - "movie-dashboard/src/data/profileDavinciActualBindingAudit.generated.ts"
       - "movie-dashboard/src/data/openingProductionStatusHandoff.ts"
@@ -45,6 +50,7 @@ on:
       - "movie-dashboard/src/data/weddingDavinciDeliveryReadiness.ts"
       - "movie-dashboard/src/data/weddingDavinciFinalDeliveryPreflight.ts"
       - "movie-dashboard/src/components/WeddingDavinciDeliveryReadinessCard.tsx"
+      - "movie-dashboard/src/components/WeddingDavinciTransitionActualReadinessCard.tsx"
       - "movie-dashboard/src/pages/VisualMotionLibrary.tsx"
       - "movie-dashboard/scripts/verify-wedding-davinci-delivery-readiness.mjs"
       - ".github/workflows/wedding-davinci-delivery-readiness-ci.yml"
@@ -67,7 +73,7 @@ jobs:
           node-version: 22
           cache: pnpm
           cache-dependency-path: movie-dashboard/pnpm-lock.yaml
-      - name: Verify cross-project readiness command, transition Actual gate, Project Motion dashboard snapshot, and Motion Zukan final delivery surface
+      - name: Verify cross-project readiness command, transition Actual snapshot, Human operator, Project Motion snapshot, and Motion Zukan final delivery surface
         working-directory: movie-dashboard
         run: node scripts/verify-wedding-davinci-delivery-readiness.mjs
       - name: Install Movie Dashboard dependencies
