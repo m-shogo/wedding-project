@@ -1,5 +1,6 @@
-import {useMemo, useState} from "react";
+import {useEffect, useMemo, useRef, useState} from "react";
 import {profileRealMediaReviewGate} from "../data/profileRealMediaReviewGate.generated";
+import {buildProfileRealMediaTimecodes, formatProfileReviewTimecode} from "../data/profileRealMediaTimecodes";
 import {downloadText} from "../lib/exporters";
 
 type QaState = "NOT_RUN" | "PASS" | "FAIL";
@@ -91,11 +92,19 @@ export function ProfileRealMediaReviewOperatorCard() {
   const [reviewer, setReviewer] = useState(audit.review.reviewer ?? "");
   const [notes, setNotes] = useState(audit.review.notes ?? "");
   const [focusedMediaIndex, setFocusedMediaIndex] = useState(0);
+  const [previewObjectUrl, setPreviewObjectUrl] = useState<string | null>(null);
+  const [previewFilename, setPreviewFilename] = useState<string | null>(null);
+  const previewRef = useRef<HTMLVideoElement | null>(null);
+
+  useEffect(() => () => {
+    if (previewObjectUrl) URL.revokeObjectURL(previewObjectUrl);
+  }, [previewObjectUrl]);
 
   const mediaReviewed = useMemo(() => mediaDraft.filter(allMediaAxesReviewed).length, [mediaDraft]);
   const mediaPassed = useMemo(() => mediaDraft.filter(allMediaAxesPass).length, [mediaDraft]);
   const chaptersReviewed = useMemo(() => chapterDraft.filter(allChapterAxesReviewed).length, [chapterDraft]);
   const chaptersPassed = useMemo(() => chapterDraft.filter(allChapterAxesPass).length, [chapterDraft]);
+  const timecodes = useMemo(() => buildProfileRealMediaTimecodes(mediaDraft, chapterDraft), [mediaDraft, chapterDraft]);
   const firstIncompleteMediaIndex = mediaDraft.findIndex((item) => !allMediaAxesReviewed(item));
   const allHumanAxesReviewed = auditReady && mediaReviewed === 17 && chaptersReviewed === 5;
   const allHumanAxesPass = auditReady && mediaPassed === 17 && chaptersPassed === 5;
@@ -113,16 +122,43 @@ export function ProfileRealMediaReviewOperatorCard() {
       : item));
   }
 
+  function seekPreview(seconds: number) {
+    const video = previewRef.current;
+    if (!video || !Number.isFinite(seconds)) return;
+    video.currentTime = Math.max(0, Math.min(seconds, Number.isFinite(video.duration) ? video.duration : seconds));
+    void video.play().catch(() => undefined);
+  }
+
+  function focusMedia(index: number, seek = true) {
+    setFocusedMediaIndex(index);
+    if (!seek) return;
+    const slot = mediaDraft[index]?.slot;
+    if (!slot) return;
+    const range = timecodes.mediaRanges.find((item) => item.slot === slot);
+    if (range) seekPreview(range.seekSec);
+  }
+
   function markMediaPass(index: number) {
     setMediaDraft((current) => current.map((item, itemIndex) => itemIndex === index
-      ? { ...item, qa: {crop: "PASS", focus: "PASS", color: "PASS", emotionalFit: "PASS", contentAccuracy: "PASS"} }
+      ? {...item, qa: {crop: "PASS", focus: "PASS", color: "PASS", emotionalFit: "PASS", contentAccuracy: "PASS"}}
       : item));
     const next = mediaDraft.findIndex((item, itemIndex) => itemIndex > index && !allMediaAxesReviewed(item));
-    if (next >= 0) setFocusedMediaIndex(next);
+    if (next >= 0) focusMedia(next);
   }
 
   function focusNextIncomplete() {
-    if (firstIncompleteMediaIndex >= 0) setFocusedMediaIndex(firstIncompleteMediaIndex);
+    if (firstIncompleteMediaIndex >= 0) focusMedia(firstIncompleteMediaIndex);
+  }
+
+  function loadPreview(file: File | null) {
+    if (previewObjectUrl) URL.revokeObjectURL(previewObjectUrl);
+    if (!file) {
+      setPreviewObjectUrl(null);
+      setPreviewFilename(null);
+      return;
+    }
+    setPreviewObjectUrl(URL.createObjectURL(file));
+    setPreviewFilename(file.name);
   }
 
   function exportEvidence() {
@@ -168,6 +204,7 @@ export function ProfileRealMediaReviewOperatorCard() {
   }
 
   const focused = mediaDraft[Math.min(focusedMediaIndex, Math.max(mediaDraft.length - 1, 0))];
+  const focusedRange = focused?.slot ? timecodes.mediaRanges.find((item) => item.slot === focused.slot) : undefined;
 
   return (
     <section className="mt-3 border-2 border-fuchsia-300 p-3 dark:border-fuchsia-800" data-profile-real-media-review-operator="READY">
@@ -180,14 +217,45 @@ export function ProfileRealMediaReviewOperatorCard() {
         <button type="button" onClick={focusNextIncomplete} disabled={firstIncompleteMediaIndex < 0} className="border border-fuchsia-300 px-2 py-1 text-[8px] font-semibold disabled:opacity-40 dark:border-fuchsia-800">次の未review素材へ</button>
       </div>
 
+      <div className="mt-3 border-2 border-cyan-200 p-3 dark:border-cyan-900" data-profile-review-timecode-bridge={previewObjectUrl ? "LOADED" : "WAITING_LOCAL_PREVIEW"}>
+        <div className="flex flex-wrap items-start justify-between gap-2">
+          <div>
+            <p className="text-[8px] font-semibold tracking-[0.14em] text-cyan-700 dark:text-cyan-300">VISUAL QA TIMECODE BRIDGE</p>
+            <p className="mt-1 text-[9px] font-semibold">review対象を押すとcanonical preview内の該当time rangeへ0.5秒pre-rollしてseek</p>
+            <p className="mt-1 text-[7px] text-navy-400">authority: ProfileV1RealMediaPreview = 5 chapters × 6s / chapter slots evenly divided</p>
+          </div>
+          <label className="cursor-pointer border border-cyan-300 px-2 py-1 text-[8px] font-semibold dark:border-cyan-800">
+            preview MP4を選ぶ
+            <input type="file" accept="video/*" className="hidden" onChange={(event) => loadPreview(event.target.files?.[0] ?? null)} />
+          </label>
+        </div>
+        {previewObjectUrl ? (
+          <div className="mt-3 grid gap-3 lg:grid-cols-[minmax(0,1fr)_240px]">
+            <video ref={previewRef} src={previewObjectUrl} controls preload="metadata" className="w-full border border-cyan-200 bg-black dark:border-cyan-900" data-profile-review-preview-player="LOCAL_FILE" />
+            <div className="text-[7px] leading-4">
+              <p><span className="font-semibold">local file:</span> {previewFilename}</p>
+              <p><span className="font-semibold">canonical evidence path:</span> <code>{audit.preview?.path}</code></p>
+              <p><span className="font-semibold">canonical SHA:</span> <code>{audit.preview?.sha256?.slice(0, 16)}…</code></p>
+              <p className="mt-2 border-l-2 border-amber-300 pl-2 text-amber-800 dark:text-amber-200">ブラウザで選んだfileはnavigation用です。SHA検証済みcanonical previewであることは既存strict verifierがauthority。file選択だけではHuman PASSにもevidenceにもなりません。</p>
+            </div>
+          </div>
+        ) : (
+          <p className="mt-2 text-[7px] leading-4 text-navy-500 dark:text-navy-300"><code>{audit.preview?.path}</code> をローカルから選ぶとplayerが有効になります。Dashboardはローカルpathを読み取ったり自動でevidence化しません。</p>
+        )}
+      </div>
+
       {focused ? (
         <div className="mt-3 border border-fuchsia-200 p-3 dark:border-fuchsia-900" data-profile-review-focused-slot={focused.slot ?? "INVALID"}>
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div>
               <p className="text-[10px] font-semibold">{focused.label} <span className="font-mono text-[7px] opacity-60">{focused.slot}</span></p>
               <p className="mt-1 text-[7px] text-navy-400">{focused.file} / chapter={focused.chapterId} / sha={focused.sha256?.slice(0, 12)}…</p>
+              {focusedRange ? <p className="mt-1 font-mono text-[7px] text-cyan-700 dark:text-cyan-300">preview {formatProfileReviewTimecode(focusedRange.startSec)} → {formatProfileReviewTimecode(focusedRange.endSec)} / seek={formatProfileReviewTimecode(focusedRange.seekSec)}</p> : null}
             </div>
-            <button type="button" onClick={() => markMediaPass(focusedMediaIndex)} className="border border-emerald-300 px-2 py-1 text-[8px] font-semibold text-emerald-700 dark:border-emerald-800 dark:text-emerald-300">5項目すべてPASS</button>
+            <div className="flex flex-wrap gap-1">
+              <button type="button" onClick={() => focusedRange && seekPreview(focusedRange.seekSec)} disabled={!previewObjectUrl || !focusedRange} className="border border-cyan-300 px-2 py-1 text-[8px] font-semibold disabled:opacity-40 dark:border-cyan-800">映像で確認</button>
+              <button type="button" onClick={() => markMediaPass(focusedMediaIndex)} className="border border-emerald-300 px-2 py-1 text-[8px] font-semibold text-emerald-700 dark:border-emerald-800 dark:text-emerald-300">5項目すべてPASS</button>
+            </div>
           </div>
           <div className="mt-3 grid gap-2 sm:grid-cols-5">
             {MEDIA_AXES.map(({key, label}) => (
@@ -207,33 +275,43 @@ export function ProfileRealMediaReviewOperatorCard() {
       <details className="mt-3">
         <summary className="cursor-pointer text-[8px] font-semibold text-fuchsia-700 dark:text-fuchsia-300">17素材一覧を開く</summary>
         <div className="mt-2 grid gap-1 sm:grid-cols-2 xl:grid-cols-3">
-          {mediaDraft.map((item, index) => (
-            <button key={item.slot ?? index} type="button" onClick={() => setFocusedMediaIndex(index)} className={`border p-2 text-left text-[7px] ${index === focusedMediaIndex ? "border-fuchsia-500" : "border-sand-200 dark:border-navy-700"}`} data-profile-review-slot={item.slot ?? "INVALID"}>
-              <span className="font-semibold">{index + 1}. {item.label}</span>
-              <span className="ml-2 font-mono">{allMediaAxesPass(item) ? "PASS" : allMediaAxesReviewed(item) ? "FAIL" : "NOT_RUN"}</span>
-            </button>
-          ))}
+          {mediaDraft.map((item, index) => {
+            const range = item.slot ? timecodes.mediaRanges.find((candidate) => candidate.slot === item.slot) : undefined;
+            return (
+              <button key={item.slot ?? index} type="button" onClick={() => focusMedia(index)} className={`border p-2 text-left text-[7px] ${index === focusedMediaIndex ? "border-fuchsia-500" : "border-sand-200 dark:border-navy-700"}`} data-profile-review-slot={item.slot ?? "INVALID"}>
+                <span className="font-semibold">{index + 1}. {item.label}</span>
+                <span className="ml-2 font-mono">{allMediaAxesPass(item) ? "PASS" : allMediaAxesReviewed(item) ? "FAIL" : "NOT_RUN"}</span>
+                {range ? <span className="mt-1 block font-mono text-cyan-700 dark:text-cyan-300">{formatProfileReviewTimecode(range.startSec)}–{formatProfileReviewTimecode(range.endSec)}</span> : null}
+              </button>
+            );
+          })}
         </div>
       </details>
 
       <div className="mt-3 border-t border-fuchsia-200 pt-3 dark:border-fuchsia-900">
         <p className="text-[8px] font-semibold text-fuchsia-700 dark:text-fuchsia-300">CHAPTER QA / visualFlow ・ readability ・ mediaRoleFit</p>
         <div className="mt-2 space-y-2">
-          {chapterDraft.map((chapter, index) => (
-            <div key={chapter.chapterId ?? index} className="border border-sand-200 p-2 dark:border-navy-700">
-              <p className="text-[8px] font-semibold">{chapter.title} <span className="font-mono opacity-50">{chapter.chapterId}</span></p>
-              <div className="mt-2 flex flex-wrap gap-2">
-                {CHAPTER_AXES.map(({key, label}) => (
-                  <div key={key} className="flex items-center gap-1 text-[7px]">
-                    <span>{label}</span>
-                    {(["PASS", "FAIL"] as const).map((state) => (
-                      <button key={state} type="button" onClick={() => setChapterQa(index, key, state)} className={`border px-1.5 py-1 ${chapter[key] === state ? "border-fuchsia-500 font-bold" : "border-sand-200 dark:border-navy-700"}`}>{state}</button>
-                    ))}
-                  </div>
-                ))}
+          {chapterDraft.map((chapter, index) => {
+            const range = chapter.chapterId ? timecodes.chapterRanges.find((candidate) => candidate.chapterId === chapter.chapterId) : undefined;
+            return (
+              <div key={chapter.chapterId ?? index} className="border border-sand-200 p-2 dark:border-navy-700">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <p className="text-[8px] font-semibold">{chapter.title} <span className="font-mono opacity-50">{chapter.chapterId}</span>{range ? <span className="ml-2 font-mono text-cyan-700 dark:text-cyan-300">{formatProfileReviewTimecode(range.startSec)}–{formatProfileReviewTimecode(range.endSec)}</span> : null}</p>
+                  <button type="button" onClick={() => range && seekPreview(range.seekSec)} disabled={!previewObjectUrl || !range} className="border border-cyan-300 px-2 py-1 text-[7px] font-semibold disabled:opacity-40 dark:border-cyan-800">章頭を再生</button>
+                </div>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {CHAPTER_AXES.map(({key, label}) => (
+                    <div key={key} className="flex items-center gap-1 text-[7px]">
+                      <span>{label}</span>
+                      {(["PASS", "FAIL"] as const).map((state) => (
+                        <button key={state} type="button" onClick={() => setChapterQa(index, key, state)} className={`border px-1.5 py-1 ${chapter[key] === state ? "border-fuchsia-500 font-bold" : "border-sand-200 dark:border-navy-700"}`}>{state}</button>
+                      ))}
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
 
@@ -250,7 +328,7 @@ export function ProfileRealMediaReviewOperatorCard() {
         <p className="mt-2 text-[7px] leading-4 text-navy-500 dark:text-navy-300">downloadした <code>profile-v1-real-media-review.json</code> を <code>motion-studio/out/qa/profile-v1-real-media-review.json</code> に置き、<code>pnpm profile:real-media-review:strict</code> でcurrentnessとHuman verdictを再検証してください。</p>
       </div>
 
-      <p className="mt-3 border-l-2 border-amber-300 pl-2 text-[7px] leading-3 text-amber-800 dark:text-amber-200">Operator stateはブラウザsession内だけ。exportは既存SHA-bound initialized evidenceを土台にHuman入力を反映するだけです。BGM review=false / Remotion Studio GUI Actual=NOT_RUN / Mac DaVinci GUI Actual=NOT_RUN / productionReady=false を固定します。</p>
+      <p className="mt-3 border-l-2 border-amber-300 pl-2 text-[7px] leading-3 text-amber-800 dark:text-amber-200">Operator stateとlocal preview fileはブラウザsession内だけ。timecode navigationは既存preview timingの鏡像であり、新しいproduction evidenceではありません。BGM review=false / Remotion Studio GUI Actual=NOT_RUN / Mac DaVinci GUI Actual=NOT_RUN / productionReady=false を固定します。</p>
     </section>
   );
 }
