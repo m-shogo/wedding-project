@@ -28,10 +28,14 @@ type ProjectSnapshot = {
   transitionGate: {current: boolean; state: string};
   transitionActualEvidenceSha256: string | null;
   transitionProofSha256: string | null;
+  completionGate: {current: boolean; state: string};
+  davinciActualCompletionReceiptSha256: string | null;
   davinciActualEvidenceSha256: string | null;
   finalApprovalSha256: string | null;
   finalApprovalCurrent: boolean;
   finalApprovalDecision: string;
+  approvalCompletionGate: {current: boolean; state: string};
+  finalApprovalCompletionBindingSha256: string | null;
   nextGate: string;
 };
 
@@ -82,17 +86,19 @@ if (snapshot) {
       mismatches.push(`${project.toUpperCase()}_READINESS_SNAPSHOT_MISSING`);
       return;
     }
-    const fields: Array<Exclude<keyof ProjectSnapshot, 'transitionGate'>> = [
+    const fields: Array<Exclude<keyof ProjectSnapshot, 'transitionGate' | 'completionGate' | 'approvalCompletionGate'>> = [
       'handoffIdentitySha256',
       'sourceRenderSha256',
       'auditState',
       'auditCurrent',
       'transitionActualEvidenceSha256',
       'transitionProofSha256',
+      'davinciActualCompletionReceiptSha256',
       'davinciActualEvidenceSha256',
       'finalApprovalSha256',
       'finalApprovalCurrent',
       'finalApprovalDecision',
+      'finalApprovalCompletionBindingSha256',
       'nextGate',
     ];
     for (const field of fields) {
@@ -102,6 +108,12 @@ if (snapshot) {
     }
     if (carried.transitionGate?.current !== expected.transitionGate?.current || carried.transitionGate?.state !== expected.transitionGate?.state) {
       mismatches.push(`${project.toUpperCase()}_TRANSITION_GATE_STATE_STALE`);
+    }
+    if (carried.completionGate?.current !== expected.completionGate?.current || carried.completionGate?.state !== expected.completionGate?.state) {
+      mismatches.push(`${project.toUpperCase()}_ACTUAL_COMPLETION_GATE_STATE_STALE`);
+    }
+    if (carried.approvalCompletionGate?.current !== expected.approvalCompletionGate?.current || carried.approvalCompletionGate?.state !== expected.approvalCompletionGate?.state) {
+      mismatches.push(`${project.toUpperCase()}_FINAL_APPROVAL_COMPLETION_GATE_STATE_STALE`);
     }
   };
 
@@ -137,6 +149,14 @@ const report = {
     profileNextGate: live.profile.nextGate,
     openingTransitionGate: live.opening.transitionGate?.state ?? 'BLOCKED',
     profileTransitionGate: live.profile.transitionGate?.state ?? 'BLOCKED',
+    openingCompletionGate: live.opening.completionGate?.state ?? 'BLOCKED',
+    profileCompletionGate: live.profile.completionGate?.state ?? 'BLOCKED',
+    openingFinalApprovalCompletionGate: live.opening.approvalCompletionGate?.state ?? 'BLOCKED',
+    profileFinalApprovalCompletionGate: live.profile.approvalCompletionGate?.state ?? 'BLOCKED',
+    openingActualCompletionReceiptSha256: live.opening.davinciActualCompletionReceiptSha256 ?? null,
+    profileActualCompletionReceiptSha256: live.profile.davinciActualCompletionReceiptSha256 ?? null,
+    openingFinalApprovalCompletionBindingSha256: live.opening.finalApprovalCompletionBindingSha256 ?? null,
+    profileFinalApprovalCompletionBindingSha256: live.profile.finalApprovalCompletionBindingSha256 ?? null,
   },
   mismatches,
   guardrails: [
@@ -145,7 +165,11 @@ const report = {
     'DAVINCI_ACTUAL_EVIDENCE_CHANGED => SNAPSHOT_STALE',
     'TRANSITION_ACTUAL_EVIDENCE_CHANGED => SNAPSHOT_STALE',
     'TRANSITION_PROOF_CHANGED => SNAPSHOT_STALE',
+    'DAVINCI_ACTUAL_COMPLETION_RECEIPT_CHANGED => SNAPSHOT_STALE',
+    'DAVINCI_ACTUAL_COMPLETION_GATE_CHANGED => SNAPSHOT_STALE',
     'FINAL_APPROVAL_CHANGED => SNAPSHOT_STALE',
+    'FINAL_APPROVAL_COMPLETION_BINDING_CHANGED => SNAPSHOT_STALE',
+    'FINAL_APPROVAL_COMPLETION_GATE_CHANGED => SNAPSHOT_STALE',
     'NOT_RUN != VERIFIED',
     'CI_MUST_NOT_PROMOTE_MAC_GUI_ACTUAL',
   ],
