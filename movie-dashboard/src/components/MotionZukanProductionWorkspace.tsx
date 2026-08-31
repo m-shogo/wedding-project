@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState, type ChangeEvent, type FormEvent } from "react";
 import { DndContext, closestCenter, type DragEndEvent } from "@dnd-kit/core";
 import { SortableContext, arrayMove, horizontalListSortingStrategy, useSortable } from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
+import { CSS as DndCSS } from "@dnd-kit/utilities";
 import { resolveMaskRevealEditableIntent } from "../data/humanEditableMotionIntent";
 import {
   addMediaAsset,
@@ -110,7 +110,7 @@ function SortableSceneCard({
   return (
     <div
       ref={setNodeRef}
-      style={{ transform: CSS.Transform.toString(transform), transition }}
+      style={{ transform: DndCSS.Transform.toString(transform), transition }}
       className={`min-w-[180px] border p-3 bg-white dark:bg-navy-900 ${selected ? "border-sky-500 ring-1 ring-sky-300" : "border-sand-300 dark:border-navy-600"} ${isDragging ? "opacity-60" : ""}`}
     >
       {previewSrc ? (
