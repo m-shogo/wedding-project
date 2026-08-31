@@ -42,7 +42,7 @@ function emptyAudit(parseState = "MISSING", evidenceSha256 = null) {
     canonicalPlanFingerprint: null,
     media: [],
     chapters: [],
-    review: {overall: "NOT_RUN", reviewedAt: null},
+    review: {overall: "NOT_RUN", reviewer: null, reviewedAt: null, notes: ""},
   };
 }
 
@@ -75,6 +75,7 @@ function buildAudit() {
         chapterId: typeof item?.chapterId === "string" ? item.chapterId : null,
         label: typeof item?.label === "string" ? item.label : null,
         file: typeof item?.file === "string" ? item.file : null,
+        extension: typeof item?.extension === "string" ? item.extension : null,
         sha256: typeof item?.sha256 === "string" ? item.sha256 : null,
         qa: {
           crop: item?.qa?.crop ?? "NOT_RUN",
@@ -113,7 +114,9 @@ function buildAudit() {
     chapters,
     review: {
       overall: evidence?.review?.overall ?? "NOT_RUN",
+      reviewer: typeof evidence?.review?.reviewer === "string" ? evidence.review.reviewer : null,
       reviewedAt: typeof evidence?.review?.reviewedAt === "string" ? evidence.review.reviewedAt : null,
+      notes: typeof evidence?.review?.notes === "string" ? evidence.review.notes : "",
     },
   };
 }
