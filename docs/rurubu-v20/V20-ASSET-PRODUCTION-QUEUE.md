@@ -277,18 +277,40 @@ No generation until major-photo/route/title/paper collisions prove that addition
 
 ---
 
-# PRIORITY C — after P01/P45 evidence
+# PRIORITY C — whole-book visible production
 
-Do NOT start C before at least one decorated P01 and P04–P05 assembly exists.
+Status: `COMPLETED_AS_VISIBLE_DESIGN / SOURCE_REPLACEMENT_OPEN`
 
-Likely future jobs:
-- P02 asymmetric profile annotation family;
-- P03 story article/paper intrusion assets;
-- P06 candid tape/note/cutout assets;
-- P07 time/itinerary editorial vessels;
-- P08 closing postcard/edge cluster.
+2026-08-31 production state:
+- P02–P03 production spread `3407:2` is assembled and screenshot-reviewed;
+- P06–P07 production spread `3408:2` is assembled and screenshot-reviewed;
+- P07 is the canonical seated-guest discovery concept, not the superseded time/itinerary concept;
+- P08 quiet close `3410:2` is assembled and screenshot-reviewed;
+- final whole-book contact sheet `3413:3` shows P01–P08 together.
 
-The exact asset list must be revised using lessons from the first real compositions.
+No new factual personal claims were introduced. Temporary real-source crop reuse is disclosed in layer names and remains replaceable.
+
+## B09 — `V20_P04_GENERIC_COAST_TEMP_A`
+
+Status: `PLACED_AS_GENERATED_TEMP / REPLACE_BEFORE_PRINT`
+
+Purpose:
+- remove the last large greybox void from P04 so the center-spread hierarchy can be judged now;
+- provide one flexible no-person travel image for three crop roles without claiming it depicts Okinawa, Korea or the couple's memory.
+
+Evidence:
+- repository path `assets/rurubu-v20/generated-temp/V20_P04_GENERIC_COAST_TEMP_A.png`;
+- SHA-256 `ed2a1b056c737c6b41e1fa53a19cf197383ce60b19993caa135c552ba1dd4934`;
+- Drive ID `1ctxFvrvJhYWRWCU_OzDNs9K6Zx85Jxhq`;
+- Figma hash `9355bec66d5083714368a1ab96fb3e69a3337822`;
+- P04 placements `3373:12`, `3373:10`, `3373:9`;
+- current P04 management marker `3413:2`.
+
+Replacement gate:
+- replace `3373:12` with verified Okinawa place photography;
+- replace `3373:10` with verified Korea people/action photography;
+- replace `3373:9` with verified Korea detail/place photography;
+- remove the generated-temp marker only after source IDs and print resolution are recorded.
 
 ---
 

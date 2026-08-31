@@ -334,3 +334,42 @@ A V20 design candidate must show:
 - no unresolved low-res/proxy/fact issue silently treated as final.
 
 `DESIGN_ACCEPTED` is still not `PRINT_READY` until printer template, export, color/output and physical proof requirements pass.
+
+## Full-book visible production pass — 2026-08-31
+
+The live V20 surface now has a visible production candidate for every page. The final whole-book review surface is:
+- contact sheet `3413:3` / `V20_FULL_BOOK_CONTACT_SHEET_C / CURRENT PREFERRED / 8 PAGES / DESIGN COMPLETE / PRINT READY NO`;
+- P01 locked cover `3355:2`;
+- P02–P03 physical spread `3407:2`, containing P02 `3407:3` and P03 `3407:22`;
+- P04–P05 current preferred spread `3373:2`, containing P04 `3373:3` and P05 `3373:29`;
+- P06–P07 physical spread `3408:2`, containing P06 `3408:3` and P07 `3408:19`;
+- P08 quiet close `3410:2`.
+
+Page behavior confirmed in screenshot QA:
+- P02 is a bright, asymmetric personality introduction using verified real-source crops only as temporary profile roles; no unverified biography was added;
+- P03 is calmer and story-led, with semantic native copy that explicitly avoids unverified dates or events;
+- P04 now has a complete visible photo field using one clearly managed generated generic coast asset, while the real Okinawa/Korea replacement requirement remains open;
+- P06 uses unequal real-source temporary crops and remains viable without dog-specific or unverified daily-life claims;
+- P07 is a zero-photo seated-guest discovery page, not a timetable or access page; the 11 destination names remain native `GROUNDED_CANDIDATE / CONFIRM` layers and no table numbers or guest assignments were invented;
+- P08 is a calm closing image with the verified names, date and location in native text.
+
+Generated temporary asset adopted for visible completion:
+- repository path `assets/rurubu-v20/generated-temp/V20_P04_GENERIC_COAST_TEMP_A.png`;
+- SHA-256 `ed2a1b056c737c6b41e1fa53a19cf197383ce60b19993caa135c552ba1dd4934`;
+- source dimensions `1402 x 1122`;
+- Drive ID `1ctxFvrvJhYWRWCU_OzDNs9K6Zx85Jxhq`;
+- Figma image hash `9355bec66d5083714368a1ab96fb3e69a3337822`;
+- placed only in P04 nodes `3373:12`, `3373:10` and `3373:9`;
+- contains no people, names, dates, logos or authoritative copy and is not accepted as autobiographical evidence;
+- all three roles are explicitly named `GENERATED ... TEMP / REPLACE REQUIRED` in Figma, with a small non-final QA marker `3413:2`.
+
+Final QA correction pass:
+- P04 image fills were re-applied directly after the upload transport left the old placeholder fills visible;
+- P03 calm-body text `3407:36` was shortened and reduced to remove lower-edge overflow;
+- P08 sign-off text `3410:14` was resized to remove awkward character wrapping;
+- superseded contact sheets remain named as superseded; `3413:3` is the current review surface.
+
+Current acceptance state:
+- `DESIGN_COMPLETE`: yes, as a visible whole-book candidate;
+- `SOURCE_COMPLETE`: no, because P04 real Okinawa/Korea sources, P06 role-specific everyday/dog sources, P07 final verified venue details and several personal copy fields remain open;
+- `PRINT_READY`: no, pending source replacement, final copy lock, 11-destination confirmation, printer template, bleed/export, CMYK/profile and physical proof.
