@@ -1,5 +1,6 @@
+import {createHash} from 'node:crypto';
 import {spawnSync} from 'node:child_process';
-import {mkdirSync, writeFileSync} from 'node:fs';
+import {existsSync, mkdirSync, readFileSync, writeFileSync} from 'node:fs';
 import {dirname, join, relative} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {runWeddingProjectMotionProvenancePreflight} from './wedding-project-motion-provenance-preflight.mts';
@@ -7,6 +8,7 @@ import {runWeddingProjectMotionProvenancePreflight} from './wedding-project-moti
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const outPath = join(root, 'out/handoff/wedding/wedding-davinci-delivery-readiness.json');
 const rel = (path: string) => relative(root, path).replaceAll('\\', '/');
+const shaFile = (path: string) => createHash('sha256').update(readFileSync(path)).digest('hex');
 
 type AuditReport = {
   state: string;
@@ -22,6 +24,30 @@ type AuditReport = {
   };
 };
 
+type TransitionActualEvidence = {
+  schemaVersion: string;
+  authority: string;
+  movieId: string;
+  palmierTransitionProof?: {
+    transitionProofSha256?: string;
+    transitionEdgeCount?: number;
+    crossDissolveCount?: number;
+  };
+  review?: {overall?: string};
+};
+
+type TransitionGate = {
+  current: boolean;
+  state: 'CURRENT' | 'BLOCKED';
+  evidencePath: string;
+  evidenceSha256: string | null;
+  proofSha256: string | null;
+  edgeCount: number | null;
+  crossDissolveCount: number | null;
+  reviewOverall: string;
+  blocker: string | null;
+};
+
 const runAudit = (scriptName: string): AuditReport => {
   const result = spawnSync(process.execPath, ['--no-warnings', join(root, 'scripts', scriptName), '--json'], {
     cwd: root,
@@ -33,12 +59,39 @@ const runAudit = (scriptName: string): AuditReport => {
   return JSON.parse(result.stdout) as AuditReport;
 };
 
-const nextGate = (audit: AuditReport, projectMotionState: 'CURRENT' | 'NOT_APPLICABLE' | 'INVALID') => {
+const transitionGate = (movieId: 'opening' | 'profile'): TransitionGate => {
+  const evidencePath = join(root, `out/qa/${movieId}-v1-davinci-transition-actual-evidence.json`);
+  const result = spawnSync(process.execPath, [
+    '--no-warnings',
+    join(root, 'scripts/wedding-final-delivery-transition-gate.mts'),
+    `--movie=${movieId}`,
+  ], {cwd: root, encoding: 'utf8'});
+  let evidence: TransitionActualEvidence | null = null;
+  if (existsSync(evidencePath)) {
+    try { evidence = JSON.parse(readFileSync(evidencePath, 'utf8')) as TransitionActualEvidence; }
+    catch { evidence = null; }
+  }
+  const current = result.status === 0;
+  return {
+    current,
+    state: current ? 'CURRENT' : 'BLOCKED',
+    evidencePath: rel(evidencePath),
+    evidenceSha256: existsSync(evidencePath) ? shaFile(evidencePath) : null,
+    proofSha256: evidence?.palmierTransitionProof?.transitionProofSha256 ?? null,
+    edgeCount: Number.isInteger(evidence?.palmierTransitionProof?.transitionEdgeCount) ? evidence!.palmierTransitionProof!.transitionEdgeCount! : null,
+    crossDissolveCount: Number.isInteger(evidence?.palmierTransitionProof?.crossDissolveCount) ? evidence!.palmierTransitionProof!.crossDissolveCount! : null,
+    reviewOverall: evidence?.review?.overall ?? 'NOT_RUN',
+    blocker: current ? null : (result.stderr || result.stdout || 'FINAL_DELIVERY_TRANSITION_GATE_BLOCKED').trim().split('\n')[0],
+  };
+};
+
+const nextGate = (audit: AuditReport, projectMotionState: 'CURRENT' | 'NOT_APPLICABLE' | 'INVALID', transition: TransitionGate) => {
   if (projectMotionState === 'INVALID') return 'REVALIDATE_PROJECT_MOTION_PROVENANCE';
   if (audit.state === 'INVALID') return 'REPAIR_INVALID_BINDING';
   if (audit.state === 'STALE') return 'REBUILD_STALE_BINDING';
   if (audit.state === 'CURRENT_FAIL') return 'FIX_DAVINCI_ACTUAL';
   if (audit.state === 'NOT_RUN' || audit.state === 'CURRENT_NOT_RUN') return 'RUN_MAC_DAVINCI_ACTUAL';
+  if (!transition.current) return 'RUN_DAVINCI_TRANSITION_ACTUAL';
   if (!audit.finalApproval.current || !audit.finalApproval.productionReady) return 'RUN_FINAL_DELIVERY_APPROVAL';
   return 'READY';
 };
@@ -46,8 +99,9 @@ const nextGate = (audit: AuditReport, projectMotionState: 'CURRENT' | 'NOT_APPLI
 const projectEntry = (
   audit: AuditReport,
   projectMotion: ReturnType<typeof runWeddingProjectMotionProvenancePreflight>,
+  transition: TransitionGate,
 ) => {
-  const ready = projectMotion.state !== 'INVALID' && audit.state === 'CURRENT_PASS' && audit.finalApproval.current && audit.finalApproval.productionReady;
+  const ready = projectMotion.state !== 'INVALID' && audit.state === 'CURRENT_PASS' && transition.current && audit.finalApproval.current && audit.finalApproval.productionReady;
   return {
     ready,
     handoffIdentitySha256: audit.recovery.sha256,
@@ -56,12 +110,15 @@ const projectEntry = (
     auditCurrent: audit.current,
     mismatches: [...audit.mismatches],
     projectMotion,
+    transitionGate: transition,
+    transitionActualEvidenceSha256: transition.evidenceSha256,
+    transitionProofSha256: transition.proofSha256,
     davinciActualEvidenceSha256: audit.actualEvidence.sha256,
     davinciActualReviewOverall: audit.actualEvidence.reviewOverall,
     finalApprovalSha256: audit.finalApproval.sha256,
     finalApprovalCurrent: audit.finalApproval.current,
     finalApprovalDecision: audit.finalApproval.decision,
-    nextGate: nextGate(audit, projectMotion.state),
+    nextGate: nextGate(audit, projectMotion.state, transition),
   };
 };
 
@@ -69,8 +126,10 @@ const openingAudit = runAudit('opening-v1-davinci-actual-binding-audit.mts');
 const profileAudit = runAudit('profile-v1-davinci-actual-binding-audit.mts');
 const openingProjectMotion = runWeddingProjectMotionProvenancePreflight(root, 'opening');
 const profileProjectMotion = runWeddingProjectMotionProvenancePreflight(root, 'profile');
-const opening = projectEntry(openingAudit, openingProjectMotion);
-const profile = projectEntry(profileAudit, profileProjectMotion);
+const openingTransitionGate = transitionGate('opening');
+const profileTransitionGate = transitionGate('profile');
+const opening = projectEntry(openingAudit, openingProjectMotion, openingTransitionGate);
+const profile = projectEntry(profileAudit, profileProjectMotion, profileTransitionGate);
 const ready = opening.ready && profile.ready;
 
 const report = {
@@ -87,6 +146,9 @@ const report = {
     'PROJECT_MOTION_PROVENANCE_DRIFT => REVALIDATE_BEFORE_DELIVERY',
     'HANDOFF_IDENTITY_SHA_CHANGED => REVALIDATE_DAVINCI_ACTUAL',
     'DAVINCI_ACTUAL_EVIDENCE_SHA_CHANGED => REVALIDATE_FINAL_APPROVAL',
+    'TRANSITION_ACTUAL_EVIDENCE_MUST_BIND_TO_SAME_CURRENT_RECOVERY_AS_DAVINCI_FINISHING_EVIDENCE',
+    'TRANSITION_ACTUAL_EVIDENCE_SHA_CHANGED => READINESS_SNAPSHOT_STALE',
+    'CROSS_DISSOLVE_REQUIRES_HUMAN_DURATION_PRESERVATION_PASS',
     'NOT_RUN != VERIFIED',
     'CI_MUST_NOT_PROMOTE_MAC_GUI_ACTUAL',
   ],

@@ -5,6 +5,8 @@ on:
     paths:
       - "motion-studio/scripts/opening-v1-davinci-actual-binding-audit.mts"
       - "motion-studio/scripts/profile-v1-davinci-actual-binding-audit.mts"
+      - "motion-studio/scripts/wedding-davinci-transition-actual-evidence.mts"
+      - "motion-studio/scripts/wedding-final-delivery-transition-gate.mts"
       - "motion-studio/scripts/wedding-project-motion-provenance-preflight.mts"
       - "motion-studio/scripts/verify-wedding-project-motion-production-provenance.mts"
       - "motion-studio/scripts/wedding-davinci-delivery-readiness.mts"
@@ -27,6 +29,8 @@ on:
     paths:
       - "motion-studio/scripts/opening-v1-davinci-actual-binding-audit.mts"
       - "motion-studio/scripts/profile-v1-davinci-actual-binding-audit.mts"
+      - "motion-studio/scripts/wedding-davinci-transition-actual-evidence.mts"
+      - "motion-studio/scripts/wedding-final-delivery-transition-gate.mts"
       - "motion-studio/scripts/wedding-project-motion-provenance-preflight.mts"
       - "motion-studio/scripts/verify-wedding-project-motion-production-provenance.mts"
       - "motion-studio/scripts/wedding-davinci-delivery-readiness.mts"
@@ -63,7 +67,7 @@ jobs:
           node-version: 22
           cache: pnpm
           cache-dependency-path: movie-dashboard/pnpm-lock.yaml
-      - name: Verify cross-project readiness command, Project Motion dashboard snapshot, and Motion Zukan final delivery surface
+      - name: Verify cross-project readiness command, transition Actual gate, Project Motion dashboard snapshot, and Motion Zukan final delivery surface
         working-directory: movie-dashboard
         run: node scripts/verify-wedding-davinci-delivery-readiness.mjs
       - name: Install Movie Dashboard dependencies
