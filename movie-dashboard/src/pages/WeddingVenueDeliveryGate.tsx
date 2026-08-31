@@ -1,5 +1,6 @@
 import {useMemo, useState} from "react";
 import {Header} from "../components/Header";
+import {WeddingVenueDeliveryActualOperator} from "../components/WeddingVenueDeliveryActualOperator";
 import {auditWeddingVenueDeliveryGate} from "../data/weddingVenueDeliveryGate";
 
 const shortSha = (value: string | null) => value ? `${value.slice(0, 12)}…` : "—";
@@ -177,6 +178,8 @@ export function WeddingVenueDeliveryGate() {
           <p className="mt-2 text-amber-700 dark:text-amber-300">Mac/Studio/Palmier/DaVinci GUI Actual・physical USB・cloud upload・venue playbackは、この画面によってPASSへ昇格しません。</p>
         </div>
       </section>
+
+      <WeddingVenueDeliveryActualOperator currentnessInput={redundancyCurrentness} transportCurrent={audit.ready} />
     </div>
   );
 }
