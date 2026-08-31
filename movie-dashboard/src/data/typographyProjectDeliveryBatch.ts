@@ -5,6 +5,12 @@ import {
 import {buildTypographySceneRoleDeliveryPackage, type TypographySceneRoleDeliveryPackageV1} from "./typographySceneRoleDeliveryPackage";
 import type {TypographyProductionRoleContextV1} from "./typographyProductionRoleContextStore";
 import type {TypographyProductionSelectionV1} from "./typographySceneProductionRouting";
+import {
+  listProjectSceneTransitionSelections,
+  resolveProjectSceneTransitions,
+  type ProjectSceneTransitionSelectionV1,
+  type ResolvedProjectSceneTransitionV1,
+} from "./projectSceneTransitionSelectionStore";
 import type {MaskRevealSceneInstance, ProjectTimelineV1, SceneProjectId} from "./visualSceneComposer";
 
 export type TypographyProjectDeliverySceneStatus = "CURRENT_PACKAGE_READY" | "MISSING_HUMAN_ROUTE" | "STALE_HUMAN_ROUTE";
@@ -30,7 +36,13 @@ export interface TypographyProjectDeliveryBatchV1 {
   schemaVersion: "wedding-movie-typography-project-delivery/v1";
   authority: "DERIVED_PROJECT_HANDOFF";
   projectId: SceneProjectId;
-  timeline: {authority: "STRUCTURED_SCENE_TIMELINE"; sceneIds: string[]; placements: ProjectTimelineV1["placements"]; totalComputedDurationSeconds: number};
+  timeline: {
+    authority: "STRUCTURED_SCENE_TIMELINE";
+    sceneIds: string[];
+    placements: ProjectTimelineV1["placements"];
+    transitions: ResolvedProjectSceneTransitionV1[];
+    totalComputedDurationSeconds: number;
+  };
   scenes: TypographyProjectDeliverySceneItemV1[];
   remotionElementIdentityVerification: {
     state: TypographyProjectRemotionIdentityVerificationState;
@@ -60,6 +72,8 @@ export interface TypographyProjectDeliveryBatchV1 {
     currentRoleContexts: number;
     missingRoleContexts: number;
     staleRoleContexts: number;
+    currentTransitions: number;
+    staleTransitions: number;
     remotionIdentityVerificationState: TypographyProjectRemotionIdentityVerificationState;
     batchReadyForPalmierDaVinciHandoff: boolean;
     productionReady: false;
@@ -106,12 +120,14 @@ export function buildTypographyProjectDeliveryBatch(
   timeline: ProjectTimelineV1,
   selections: TypographyProductionSelectionV1[],
   roleContexts?: TypographyProductionRoleContextV1[],
+  transitionSelections: ProjectSceneTransitionSelectionV1[] = listProjectSceneTransitionSelections(projectId),
 ): TypographyProjectDeliveryBatchV1 {
   if (timeline.projectId !== projectId) throw new Error("TYPOGRAPHY_PROJECT_DELIVERY_TIMELINE_PROJECT_MISMATCH");
   const projectScenes = orderedProjectScenes(scenes.filter((scene) => scene.projectId === projectId), timeline);
   const selectionByScene = new Map(selections.map((selection) => [selection.sceneId, selection]));
   const roleContextRequired = roleContexts !== undefined;
   const roleContextByScene = new Map((roleContexts ?? []).map((context) => [context.sceneId, context]));
+  const transitions = resolveProjectSceneTransitions(projectId, scenes, timeline, transitionSelections);
 
   const items: TypographyProjectDeliverySceneItemV1[] = projectScenes.map((scene) => {
     const selection = selectionByScene.get(scene.sceneId) ?? null;
@@ -141,9 +157,15 @@ export function buildTypographyProjectDeliveryBatch(
   const currentRoleContexts = items.filter((item) => item.roleContextStatus === "CURRENT_ROLE_CONTEXT").length;
   const missingRoleContexts = items.filter((item) => item.roleContextStatus === "MISSING_ROLE_CONTEXT").length;
   const staleRoleContexts = items.filter((item) => item.roleContextStatus === "STALE_ROLE_CONTEXT").length;
-  const blockers = items.flatMap((item) => [item.blocker, item.roleBlocker].filter((value): value is string => Boolean(value)).map((value) => `${item.sceneId}:${value}`));
+  const staleTransitions = transitions.filter((item) => item.status === "STALE_HUMAN_SELECTION").length;
+  const currentTransitions = transitions.length - staleTransitions;
+  const blockers = [
+    ...items.flatMap((item) => [item.blocker, item.roleBlocker].filter((value): value is string => Boolean(value)).map((value) => `${item.sceneId}:${value}`)),
+    ...transitions.filter((item) => item.status === "STALE_HUMAN_SELECTION").map((item) => `${item.fromSceneId}->${item.toSceneId}:STALE_HUMAN_SELECTED_TRANSITION`),
+  ];
   const routeReady = items.length > 0 && currentPackages === items.length;
   const roleReady = !roleContextRequired || currentRoleContexts === items.length;
+  const transitionReady = staleTransitions === 0;
   const identitySceneBindings = items.flatMap((item) => {
     const identity = item.package?.remotion.handoffIdentity;
     return identity ? [{
@@ -167,7 +189,13 @@ export function buildTypographyProjectDeliveryBatch(
     schemaVersion: "wedding-movie-typography-project-delivery/v1",
     authority: "DERIVED_PROJECT_HANDOFF",
     projectId,
-    timeline: {authority: "STRUCTURED_SCENE_TIMELINE", sceneIds: [...timeline.sceneIds], placements: timeline.placements.map((placement) => ({...placement})), totalComputedDurationSeconds: timeline.totalComputedDurationSeconds},
+    timeline: {
+      authority: "STRUCTURED_SCENE_TIMELINE",
+      sceneIds: [...timeline.sceneIds],
+      placements: timeline.placements.map((placement) => ({...placement})),
+      transitions: transitions.map((transition) => ({...transition})),
+      totalComputedDurationSeconds: timeline.totalComputedDurationSeconds,
+    },
     scenes: items,
     remotionElementIdentityVerification: {
       state: identityVerificationState,
@@ -180,13 +208,27 @@ export function buildTypographyProjectDeliveryBatch(
       mustRunBeforePalmierDaVinciHandoff: identitySceneBindings.length > 0,
       rule: "Project batchはHuman-selected Scene routeから必要なRemotion Element identityだけを集約する。batch build自身はSHA currentnessを実行・証明しない。Motion ZukanからTypography batchとHuman Project Role manifestをDownloadsへ書き出した後、visible production prep commandでexternal batchのidentity receiptを生成・再検証し、external batch/role bindingを検証してからcanonical pathへatomic stageする。Palmier/DaVinci handoffはそのcanonical inputsを別phaseで再検証する。catalog identityの存在をproject adoptionやGUI Actualへ読み替えない。",
     },
-    summary: {totalScenes: items.length, currentPackages, missingRoutes, staleRoutes, roleContextRequired, currentRoleContexts, missingRoleContexts, staleRoleContexts, remotionIdentityVerificationState: identityVerificationState, batchReadyForPalmierDaVinciHandoff: routeReady && roleReady, productionReady: false},
+    summary: {
+      totalScenes: items.length,
+      currentPackages,
+      missingRoutes,
+      staleRoutes,
+      roleContextRequired,
+      currentRoleContexts,
+      missingRoleContexts,
+      staleRoleContexts,
+      currentTransitions,
+      staleTransitions,
+      remotionIdentityVerificationState: identityVerificationState,
+      batchReadyForPalmierDaVinciHandoff: routeReady && roleReady && transitionReady,
+      productionReady: false,
+    },
     blockers,
-    executionRule: "UI/production manifest経由では全SceneがCURRENT_PACKAGE_READYかつCURRENT_ROLE_CONTEXTの時だけbatch exportする。既存4引数contract callerはroute-only互換を維持する。Scene/route更新後のstale contextをsilent rebaseしない。batchReadyForPalmierDaVinciHandoffはroute/role package readinessであり、Remotion Element SHA currentnessとcanonical stagingは別の必須pre-handoff operationとしてNOT_RUNのまま保持する。",
-    evidenceRule: "role + pattern + PRIMARY/FALLBACK/CUSTOMはHuman-selected role/routeからderivedする。batchReadyはproductionReadyもRemotion identity currentnessも意味せず、production prep identity/stage commandのCURRENTもRemotion Studio GUI Actual / Mac DaVinci Actual / Human promotion / Scene-bound Release Gateへ昇格させない。",
+    executionRule: "UI/production manifest経由では全SceneがCURRENT_PACKAGE_READYかつCURRENT_ROLE_CONTEXT、かつ保存済みtransitionがCURRENTの時だけbatch exportする。未選択edgeはDEFAULT_HARD_CUTとして安全に扱う。Scene/route更新後のstale context/transitionをsilent rebaseしない。batchReadyForPalmierDaVinciHandoffはroute/role/transition package readinessであり、Remotion Element SHA currentnessとcanonical stagingは別の必須pre-handoff operationとしてNOT_RUNのまま保持する。",
+    evidenceRule: "role + pattern + PRIMARY/FALLBACK/CUSTOMとScene edge transitionはHuman-selected stateからderivedする。batchReadyはproductionReadyもRemotion identity currentnessも意味せず、transition renderやproduction prep identity/stage commandのCURRENTもRemotion Studio GUI Actual / Mac DaVinci Actual / Human promotion / Scene-bound Release Gateへ昇格させない。",
   };
 }
 
-export function buildTypographyProjectDeliveryBatchJson(projectId: SceneProjectId, scenes: MaskRevealSceneInstance[], timeline: ProjectTimelineV1, selections: TypographyProductionSelectionV1[], roleContexts?: TypographyProductionRoleContextV1[]) {
-  return JSON.stringify(buildTypographyProjectDeliveryBatch(projectId, scenes, timeline, selections, roleContexts), null, 2);
+export function buildTypographyProjectDeliveryBatchJson(projectId: SceneProjectId, scenes: MaskRevealSceneInstance[], timeline: ProjectTimelineV1, selections: TypographyProductionSelectionV1[], roleContexts?: TypographyProductionRoleContextV1[], transitionSelections?: ProjectSceneTransitionSelectionV1[]) {
+  return JSON.stringify(buildTypographyProjectDeliveryBatch(projectId, scenes, timeline, selections, roleContexts, transitionSelections), null, 2);
 }

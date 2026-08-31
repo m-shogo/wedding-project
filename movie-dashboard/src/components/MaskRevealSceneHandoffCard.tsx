@@ -14,6 +14,7 @@ import { ProfileProductionStatusHandoffCard } from "./ProfileProductionStatusHan
 import { ProjectRhythmReviewOperator } from "./ProjectRhythmReviewOperator";
 import { ProjectTypographyRoleHandoffRevalidationCard } from "./ProjectTypographyRoleHandoffRevalidationCard";
 import { RhythmSceneTimingCorrectionCard } from "./RhythmSceneTimingCorrectionCard";
+import { RhythmSceneTransitionCorrectionCard } from "./RhythmSceneTransitionCorrectionCard";
 import { WeddingMediaIntakeChecklistCard } from "./WeddingMediaIntakeChecklistCard";
 import { WeddingMovieProductionCriticalPathCard } from "./WeddingMovieProductionCriticalPathCard";
 import { WeddingProductionNextActionCard } from "./WeddingProductionNextActionCard";
@@ -95,6 +96,7 @@ export function MaskRevealSceneHandoffCard({ scene }: { scene: MaskRevealSceneIn
       <WeddingSceneMotionProductionHandoffCard scene={scene} />
       <TypographyProductionRoleGuide projectId={scene.projectId} />
       <RhythmSceneTimingCorrectionCard scene={scene} />
+      <RhythmSceneTransitionCorrectionCard scene={scene} />
       <TypographySceneBoundElementComparison scene={scene} />
       <TypographyProductionRouteSelector scene={scene} />
       <TypographySceneDeliveryPackageCard scene={scene} />

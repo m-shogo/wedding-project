@@ -109,6 +109,26 @@ for (const [index, sceneId] of batch.timeline.sceneIds.entries()) {
   if (scenes[index]?.sceneId !== sceneId) fail("SELECTED_SCENE_RENDER_ORDER_MISMATCH", String(sceneId));
 }
 
+const sourceTransitions = Array.isArray(batch.timeline.transitions) ? batch.timeline.transitions : [];
+const transitions = batch.timeline.sceneIds.slice(1).map((toSceneId: string, index: number) => {
+  const fromSceneId = batch.timeline.sceneIds[index];
+  const source = sourceTransitions.find((item: any) => item.fromSceneId === fromSceneId && item.toSceneId === toSceneId) ?? null;
+  if (source?.status === "STALE_HUMAN_SELECTION") fail("SELECTED_SCENE_RENDER_TRANSITION_STALE", `${fromSceneId}->${toSceneId}`);
+  const transition = source?.transition === "CROSS_DISSOLVE" ? "CROSS_DISSOLVE" : "HARD_CUT";
+  const durationFrames = transition === "CROSS_DISSOLVE" ? Math.round(Number(source?.durationFrames ?? 0)) : 0;
+  if (transition === "CROSS_DISSOLVE" && (!(durationFrames >= 6) || durationFrames > 30)) {
+    fail("SELECTED_SCENE_RENDER_TRANSITION_DURATION_INVALID", `${fromSceneId}->${toSceneId}:${durationFrames}`);
+  }
+  return {
+    fromSceneId,
+    toSceneId,
+    transition,
+    durationFrames,
+    sourceStatus: source?.status ?? "DEFAULT_HARD_CUT",
+    selectedAt: source?.selectedAt ?? null,
+  };
+});
+
 if (shouldRender) {
   mkdirSync(outputRoot, {recursive: true});
   for (const scene of scenes) {
@@ -146,9 +166,12 @@ const manifest = {
   },
   composition: COMPOSITION,
   scenes,
+  transitions,
   summary: {
     totalScenes: scenes.length,
     renderedScenes: scenes.filter((scene: any) => scene.render.state === "RENDERED").length,
+    transitionEdges: transitions.length,
+    crossDissolveEdges: transitions.filter((item: any) => item.transition === "CROSS_DISSOLVE").length,
     allSelectionsCurrent: true,
     productionReady: false,
   },
@@ -156,10 +179,10 @@ const manifest = {
     remotionStudioGuiActual: "NOT_RUN",
     palmierGuiActual: "NOT_RUN",
     macDaVinciGuiActual: "NOT_RUN",
-    rule: "CLI selected-scene renders and SHA-bound manifest are visual-reference artifacts only. They do not promote Remotion Studio GUI Actual, Palmier GUI Actual, Mac DaVinci GUI Actual, Human approval, or productionReady.",
+    rule: "CLI selected-scene renders, Human-selected transition bindings, and SHA-bound manifest are visual-reference artifacts only. They do not promote Remotion Studio GUI Actual, Palmier GUI Actual, Mac DaVinci GUI Actual, Human approval, or productionReady.",
   },
 };
 
 mkdirSync(dirname(manifestPath), {recursive: true});
 writeFileSync(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`);
-console.log(JSON.stringify({manifestPath, projectId, scenes: scenes.length, rendered: manifest.summary.renderedScenes}, null, 2));
+console.log(JSON.stringify({manifestPath, projectId, scenes: scenes.length, transitions: transitions.length, rendered: manifest.summary.renderedScenes}, null, 2));

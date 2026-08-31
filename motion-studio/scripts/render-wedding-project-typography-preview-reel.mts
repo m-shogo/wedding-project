@@ -56,18 +56,18 @@ if (!sourceBatchPath || !existsSync(sourceBatchPath)) fail("PROJECT_PREVIEW_SOUR
 const currentBatchSha = sha256(sourceBatchPath);
 if (currentBatchSha !== selected.sourceBatch?.sha256) fail("PROJECT_PREVIEW_SOURCE_BATCH_STALE", sourceBatchPath);
 
-let previousStartFrame = -1;
-const scenes = selected.scenes.map((scene: any, index: number) => {
+let previousSourceStartFrame = -1;
+const sourceScenes = selected.scenes.map((scene: any, index: number) => {
   if (scene.order !== index + 1) fail("PROJECT_PREVIEW_SCENE_ORDER_MISMATCH", scene.sceneId);
   if (!scene.sceneId || !scene.sourceRevision || !scene.patternId || !scene.productionRole) fail("PROJECT_PREVIEW_SCENE_IDENTITY_INVALID", String(scene.sceneId));
   if (!scene.props || typeof scene.props.text !== "string" || !scene.props.mode || !scene.props.intensity) fail("PROJECT_PREVIEW_SCENE_PROPS_INVALID", scene.sceneId);
-  const startFrame = exactFrame(scene.timeline?.startSeconds, "PROJECT_PREVIEW_START_INVALID", scene.sceneId);
-  const endFrame = exactFrame(scene.timeline?.endSeconds, "PROJECT_PREVIEW_END_INVALID", scene.sceneId);
-  const durationFrames = endFrame - startFrame;
+  const sourceStartFrame = exactFrame(scene.timeline?.startSeconds, "PROJECT_PREVIEW_START_INVALID", scene.sceneId);
+  const sourceEndFrame = exactFrame(scene.timeline?.endSeconds, "PROJECT_PREVIEW_END_INVALID", scene.sceneId);
+  const durationFrames = sourceEndFrame - sourceStartFrame;
   if (!(durationFrames > 0)) fail("PROJECT_PREVIEW_DURATION_INVALID", scene.sceneId);
   if (durationFrames !== scene.timeline?.frames) fail("PROJECT_PREVIEW_FRAME_BOUNDARY_MISMATCH", `${scene.sceneId}:${durationFrames}!=${scene.timeline?.frames}`);
-  if (startFrame < previousStartFrame) fail("PROJECT_PREVIEW_TIMELINE_ORDER_INVALID", scene.sceneId);
-  previousStartFrame = startFrame;
+  if (sourceStartFrame < previousSourceStartFrame) fail("PROJECT_PREVIEW_TIMELINE_ORDER_INVALID", scene.sceneId);
+  previousSourceStartFrame = sourceStartFrame;
   return {
     order: scene.order,
     sceneId: scene.sceneId,
@@ -75,12 +75,54 @@ const scenes = selected.scenes.map((scene: any, index: number) => {
     patternId: scene.patternId,
     productionRole: scene.productionRole,
     selectionClass: scene.selectionClass ?? null,
+    sourceStartFrame,
+    sourceEndFrame,
+    durationFrames,
+    sourceStartSeconds: scene.timeline.startSeconds,
+    sourceEndSeconds: scene.timeline.endSeconds,
+    props: scene.props,
+  };
+});
+
+const selectedTransitions = Array.isArray(selected.transitions) ? selected.transitions : [];
+const transitionByEdge = new Map(selectedTransitions.map((item: any) => [`${item.fromSceneId}->${item.toSceneId}`, item]));
+const transitions = sourceScenes.slice(1).map((scene: any, index: number) => {
+  const previous = sourceScenes[index];
+  const edgeKey = `${previous.sceneId}->${scene.sceneId}`;
+  const source: any = transitionByEdge.get(edgeKey) ?? null;
+  const transition = source?.transition === "CROSS_DISSOLVE" ? "CROSS_DISSOLVE" : "HARD_CUT";
+  const durationFrames = transition === "CROSS_DISSOLVE" ? Math.round(Number(source?.durationFrames ?? 0)) : 0;
+  if (source?.sourceStatus === "STALE_HUMAN_SELECTION") fail("PROJECT_PREVIEW_TRANSITION_STALE", edgeKey);
+  if (transition === "CROSS_DISSOLVE") {
+    if (!(durationFrames >= 6) || durationFrames > 30) fail("PROJECT_PREVIEW_TRANSITION_DURATION_INVALID", `${edgeKey}:${durationFrames}`);
+    if (durationFrames >= previous.durationFrames || durationFrames >= scene.durationFrames) fail("PROJECT_PREVIEW_TRANSITION_EXCEEDS_SCENE", edgeKey);
+  }
+  return {
+    fromSceneId: previous.sceneId,
+    toSceneId: scene.sceneId,
+    transition,
+    durationFrames,
+    sourceStatus: source?.sourceStatus ?? "DEFAULT_HARD_CUT",
+    selectedAt: source?.selectedAt ?? null,
+  };
+});
+
+let previewCursor = 0;
+const scenes = sourceScenes.map((scene: any, index: number) => {
+  const transitionIn = index === 0 ? null : transitions[index - 1];
+  const transitionOut = transitions[index] ?? null;
+  const overlapFrames = transitionIn?.transition === "CROSS_DISSOLVE" ? transitionIn.durationFrames : 0;
+  const startFrame = index === 0 ? 0 : previewCursor - overlapFrames;
+  const endFrame = startFrame + scene.durationFrames;
+  previewCursor = endFrame;
+  return {
+    ...scene,
     startFrame,
     endFrame,
-    durationFrames,
-    startSeconds: scene.timeline.startSeconds,
-    endSeconds: scene.timeline.endSeconds,
-    props: scene.props,
+    startSeconds: startFrame / FPS,
+    endSeconds: endFrame / FPS,
+    transitionInFrames: transitionIn?.transition === "CROSS_DISSOLVE" ? transitionIn.durationFrames : 0,
+    transitionOutFrames: transitionOut?.transition === "CROSS_DISSOLVE" ? transitionOut.durationFrames : 0,
   };
 });
 
@@ -92,12 +134,16 @@ const boundaries = scenes.map((scene: any, index: number) => ({
   sourceRevision: scene.sourceRevision,
   patternId: scene.patternId,
   productionRole: scene.productionRole,
+  sourceStartFrame: scene.sourceStartFrame,
+  sourceEndFrameExclusive: scene.sourceEndFrame,
   startFrame: scene.startFrame,
   endFrameExclusive: scene.endFrame,
   durationFrames: scene.durationFrames,
   startSeconds: scene.startSeconds,
   endSeconds: scene.endSeconds,
   gapFromPreviousFrames: index === 0 ? scene.startFrame : scene.startFrame - scenes[index - 1].endFrame,
+  transitionInFrames: scene.transitionInFrames,
+  transitionOutFrames: scene.transitionOutFrames,
 }));
 
 const output = resolve(arg("output") ?? `out/qa/project-typography-preview/${projectId}/${projectId}-selected-typography-preview-reel.mp4`);
@@ -110,6 +156,8 @@ const props = {
     sceneId: scene.sceneId,
     startFrame: scene.startFrame,
     durationFrames: scene.durationFrames,
+    transitionInFrames: scene.transitionInFrames,
+    transitionOutFrames: scene.transitionOutFrames,
     props: scene.props,
   })),
 };
@@ -155,11 +203,14 @@ const manifest = {
     totalFrames,
     durationSeconds: totalFrames / FPS,
     boundaries,
+    transitions,
   },
   output,
   render: {state: renderState, sha256: renderSha256, bytes: renderBytes},
   summary: {
     totalScenes: scenes.length,
+    transitionEdges: transitions.length,
+    crossDissolveEdges: transitions.filter((item: any) => item.transition === "CROSS_DISSOLVE").length,
     frameBoundariesVerified: true,
     selectionsCurrent: true,
     productionReady: false,
@@ -168,10 +219,10 @@ const manifest = {
     remotionStudioGuiActual: "NOT_RUN",
     palmierGuiActual: "NOT_RUN",
     macDaVinciGuiActual: "NOT_RUN",
-    rule: "Continuous CLI preview render validates selected Scene rhythm and boundaries only. Human playback review and all GUI Actual evidence remain NOT_RUN until explicitly performed.",
+    rule: "Continuous CLI preview render validates selected Scene rhythm, frame boundaries, and Human-selected transition intent only. Human playback review and all GUI Actual evidence remain NOT_RUN until explicitly performed.",
   },
 };
 
 mkdirSync(dirname(manifestPath), {recursive: true});
 writeFileSync(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`);
-console.log(JSON.stringify({manifestPath, output, projectId, scenes: scenes.length, totalFrames, renderState}, null, 2));
+console.log(JSON.stringify({manifestPath, output, projectId, scenes: scenes.length, transitions: transitions.length, totalFrames, renderState}, null, 2));
