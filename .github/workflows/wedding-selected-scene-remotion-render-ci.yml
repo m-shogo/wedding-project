@@ -1,0 +1,133 @@
+name: Wedding Selected Scene Remotion Render CI
+
+on:
+  pull_request:
+    paths:
+      - 'motion-studio/scripts/render-selected-wedding-typography-scenes.mts'
+      - 'movie-dashboard/src/components/SelectedSceneRenderProjectCard.tsx'
+      - 'movie-dashboard/src/components/TypographyProjectDeliveryBatchCard.tsx'
+      - '.github/workflows/wedding-selected-scene-remotion-render-ci.yml'
+  workflow_dispatch:
+
+jobs:
+  selected-scene-remotion-render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install Motion Studio
+        working-directory: motion-studio
+        run: pnpm install --frozen-lockfile
+
+      - name: Build CURRENT one-scene production batch fixture
+        run: |
+          cat > /tmp/opening-typography-production-batch.json <<'JSON'
+          {
+            "schemaVersion": "wedding-movie-typography-project-delivery/v1",
+            "authority": "DERIVED_PROJECT_HANDOFF",
+            "projectId": "opening",
+            "timeline": {
+              "sceneIds": ["ci-opening-hero"],
+              "placements": [{"sceneId":"ci-opening-hero","startSeconds":0,"endSeconds":1,"durationSeconds":1}],
+              "totalComputedDurationSeconds": 1
+            },
+            "scenes": [{
+              "sceneId": "ci-opening-hero",
+              "sourceRevision": "2026-08-31T00:00:00.000Z",
+              "status": "CURRENT_PACKAGE_READY",
+              "selectedPatternId": "type-mask-reveal",
+              "selectedRevision": "2026-08-31T00:00:00.000Z",
+              "roleContextStatus": "CURRENT_ROLE_CONTEXT",
+              "productionRole": "OPENING_TITLE_HERO",
+              "selectionClass": "PRIMARY",
+              "package": {
+                "identity": {
+                  "sceneId": "ci-opening-hero",
+                  "projectId": "opening",
+                  "sourceRevision": "2026-08-31T00:00:00.000Z",
+                  "patternId": "type-mask-reveal"
+                },
+                "canonical": {
+                  "mode": "mask",
+                  "humanState": {
+                    "resolvedEditableIntent": {
+                      "text": "SHOGO & SHIORI",
+                      "intensity": "M"
+                    }
+                  }
+                }
+              }
+            }],
+            "summary": {"batchReadyForPalmierDaVinciHandoff": true}
+          }
+          JSON
+
+      - name: Plan selected Scene manifest without claiming Actual
+        run: |
+          node --no-warnings motion-studio/scripts/render-selected-wedding-typography-scenes.mts \
+            --batch=/tmp/opening-typography-production-batch.json \
+            --manifest=/tmp/selected-plan.json
+          node - <<'NODE'
+          const fs = require('fs');
+          const m = JSON.parse(fs.readFileSync('/tmp/selected-plan.json', 'utf8'));
+          if (m.schemaVersion !== 'wedding-movie-selected-scene-render-manifest/v1') process.exit(1);
+          if (m.scenes.length !== 1 || m.scenes[0].timeline.frames !== 30) process.exit(1);
+          if (m.scenes[0].patternId !== 'type-mask-reveal') process.exit(1);
+          if (m.scenes[0].productionRole !== 'OPENING_TITLE_HERO') process.exit(1);
+          if (m.summary.renderedScenes !== 0 || m.summary.productionReady !== false) process.exit(1);
+          if (m.evidenceBoundary.remotionStudioGuiActual !== 'NOT_RUN') process.exit(1);
+          if (m.evidenceBoundary.palmierGuiActual !== 'NOT_RUN') process.exit(1);
+          if (m.evidenceBoundary.macDaVinciGuiActual !== 'NOT_RUN') process.exit(1);
+          NODE
+
+      - name: Render selected Scene smoke and bind SHA
+        run: |
+          node --no-warnings motion-studio/scripts/render-selected-wedding-typography-scenes.mts \
+            --batch=/tmp/opening-typography-production-batch.json \
+            --manifest=/tmp/selected-render.json \
+            --output-dir=out/qa/selected-scene-remotion/ci \
+            --render --smoke
+          node - <<'NODE'
+          const fs = require('fs');
+          const m = JSON.parse(fs.readFileSync('/tmp/selected-render.json', 'utf8'));
+          const scene = m.scenes[0];
+          if (m.summary.renderedScenes !== 1 || scene.render.state !== 'RENDERED') process.exit(1);
+          if (!/^[a-f0-9]{64}$/.test(scene.render.sha256)) process.exit(1);
+          if (!(scene.render.bytes > 0) || !fs.existsSync(scene.output)) process.exit(1);
+          NODE
+
+      - name: Fail closed on stale selected Scene revision
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const p = '/tmp/opening-typography-production-batch.json';
+          const x = JSON.parse(fs.readFileSync(p, 'utf8'));
+          x.scenes[0].selectedRevision = 'STALE';
+          fs.writeFileSync('/tmp/stale-batch.json', JSON.stringify(x));
+          NODE
+          if node --no-warnings motion-studio/scripts/render-selected-wedding-typography-scenes.mts --batch=/tmp/stale-batch.json --manifest=/tmp/stale.json; then
+            echo 'expected stale batch to fail' >&2
+            exit 1
+          fi
+
+      - name: Guard evidence boundary in source
+        run: |
+          grep -q 'SELECTED_SCENE_RENDER_REVISION_MISMATCH' motion-studio/scripts/render-selected-wedding-typography-scenes.mts
+          grep -q 'DERIVED_FROM_CURRENT_PROJECT_TYPOGRAPHY_BATCH' motion-studio/scripts/render-selected-wedding-typography-scenes.mts
+          grep -q 'remotionStudioGuiActual: "NOT_RUN"' motion-studio/scripts/render-selected-wedding-typography-scenes.mts
+          grep -q 'palmierGuiActual: "NOT_RUN"' motion-studio/scripts/render-selected-wedding-typography-scenes.mts
+          grep -q 'macDaVinciGuiActual: "NOT_RUN"' motion-studio/scripts/render-selected-wedding-typography-scenes.mts
+          grep -q 'productionReady: false' motion-studio/scripts/render-selected-wedding-typography-scenes.mts
+
+      - name: Build Movie Dashboard
+        working-directory: movie-dashboard
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm build
