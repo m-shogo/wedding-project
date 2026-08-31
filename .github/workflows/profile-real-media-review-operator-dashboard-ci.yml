@@ -48,10 +48,10 @@ jobs:
           ! grep -q 'localStorage' movie-dashboard/src/components/ProfileRealMediaReviewOperatorCard.tsx
           ! grep -q 'sessionStorage' movie-dashboard/src/components/ProfileRealMediaReviewOperatorCard.tsx
 
-      - name: Operator is mounted only on Profile intake flow
+      - name: Operator remains the Profile branch of the intake project switch
         run: |
           grep -q 'ProfileRealMediaReviewOperatorCard' movie-dashboard/src/components/WeddingMediaIntakeChecklistCard.tsx
-          grep -q '!isOpening ? <ProfileRealMediaReviewOperatorCard />' movie-dashboard/src/components/WeddingMediaIntakeChecklistCard.tsx
+          grep -q 'isOpening ? <OpeningCropReviewOperatorCard /> : <ProfileRealMediaReviewOperatorCard />' movie-dashboard/src/components/WeddingMediaIntakeChecklistCard.tsx
 
       - name: Generated audit remains current in fresh clone
         run: |

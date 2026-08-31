@@ -1,0 +1,60 @@
+name: Opening Crop Review Operator Dashboard CI
+
+on:
+  pull_request:
+    paths:
+      - 'movie-dashboard/src/components/OpeningCropReviewOperatorCard.tsx'
+      - 'movie-dashboard/src/components/WeddingMediaIntakeChecklistCard.tsx'
+      - 'movie-dashboard/scripts/sync-opening-crop-review-gate.mjs'
+      - 'movie-dashboard/src/data/openingCropReviewGate.generated.ts'
+      - '.github/workflows/opening-crop-review-operator-dashboard-ci.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  operator:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Generated crop audit is read-only and current
+        run: |
+          grep -q 'opening-v1-crop-review-evidence.mts' movie-dashboard/scripts/sync-opening-crop-review-gate.mjs
+          grep -q 'bindingFingerprintSha256' movie-dashboard/scripts/sync-opening-crop-review-gate.mjs
+          grep -q 'presentationRevision' movie-dashboard/scripts/sync-opening-crop-review-gate.mjs
+          node movie-dashboard/scripts/sync-opening-crop-review-gate.mjs --write
+          git diff --exit-code -- movie-dashboard/src/data/openingCropReviewGate.generated.ts
+
+      - name: Opening operator preserves Human and Actual boundaries
+        run: |
+          grep -q 'audit.slots.length === 11' movie-dashboard/src/components/OpeningCropReviewOperatorCard.tsx
+          grep -q '次の未review写真へ' movie-dashboard/src/components/OpeningCropReviewOperatorCard.tsx
+          grep -q 'Crop review evidence JSONを書き出す' movie-dashboard/src/components/OpeningCropReviewOperatorCard.tsx
+          grep -q 'bindingFingerprintSha256' movie-dashboard/src/components/OpeningCropReviewOperatorCard.tsx
+          grep -q 'presentationRevision' movie-dashboard/src/components/OpeningCropReviewOperatorCard.tsx
+          grep -q 'macStudioActual: "NOT_RUN"' movie-dashboard/src/components/OpeningCropReviewOperatorCard.tsx
+          grep -q 'macDaVinciActual: "NOT_RUN"' movie-dashboard/src/components/OpeningCropReviewOperatorCard.tsx
+          grep -q 'productionReady: false' movie-dashboard/src/components/OpeningCropReviewOperatorCard.tsx
+          ! grep -q 'localStorage' movie-dashboard/src/components/OpeningCropReviewOperatorCard.tsx
+          ! grep -q 'sessionStorage' movie-dashboard/src/components/OpeningCropReviewOperatorCard.tsx
+
+      - name: Opening and Profile operators mount on their own project flows
+        run: |
+          grep -q 'OpeningCropReviewOperatorCard' movie-dashboard/src/components/WeddingMediaIntakeChecklistCard.tsx
+          grep -q 'ProfileRealMediaReviewOperatorCard' movie-dashboard/src/components/WeddingMediaIntakeChecklistCard.tsx
+          grep -q 'isOpening ? <OpeningCropReviewOperatorCard /> : <ProfileRealMediaReviewOperatorCard />' movie-dashboard/src/components/WeddingMediaIntakeChecklistCard.tsx
+
+      - name: Build Movie Dashboard
+        working-directory: movie-dashboard
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm build
