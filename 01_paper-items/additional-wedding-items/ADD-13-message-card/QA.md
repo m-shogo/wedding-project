@@ -1,166 +1,101 @@
 # ADD-13 メッセージカード — QA
 
-Status: `CURRENT / FAMILY_DIVERSE_RESORT_DESK_LETTER_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / FAMILY_SCALE_TEMPLATE_REPETITION_CLOSED_FOR_ADD13 / LONG_COPY_STRESS_PASS / HANDWRITING_AREA_55_PERCENT_PASS / FLOATING_DESK_MARK_SUBTRACTION_PASS / CORNER_FOLD_CUE_SUBTRACTION_PASS / GUEST_GUIDE_SEMANTIC_SUBTRACTION_PASS / LEGACY_PRESERVED / ROLLBACK_SAFE / NOT_PRINT_READY`
-Updated: 2026-08-27
+Status: `CURRENT / V4_FIELD_NOTE_MARGIN_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / THREE_SCALE_QA_PASS / LONG_COPY_STRESS_PASS / HANDWRITING_AREA_55_PERCENT_PASS / STRUCTURE_QA_PASS / CLEANROOM_PROVENANCE_PASS / LEGACY_PRESERVED / NOT_PRINT_READY`
+Updated: 2026-08-31
 Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
-Professional quality authority: `docs/design-learning/PROFESSIONAL-DESIGN-COUNCIL-VNEXT-2026-08-20.md`
 
 ## Current selected authority
 
+- detailed V4 evidence: `V4-CLEANROOM-FIELD-NOTE-QA-2026-08-30.md`
 - Figma file: `8ad7bEPAc8I88gs1JxsWhe`
-- Current front: `52:72 / CURRENT / FAMILY-DIVERSE / ADD13 / FRONT / RESORT DESK LETTER`
-- Current back: `52:91 / CURRENT / FAMILY-DIVERSE / ADD13 / BACK / LETTER 02`
-- hidden realistic long-copy stress: `52:109 / 52:128`
-- pre-guide-hidden rollback: `62:38 / 62:56`
-- guide-hidden comparisons: `62:2 / 62:20`, hidden after verification
-- latest no-fold comparisons: `61:2 / 61:21` — hidden after adoption
-- latest complete pre-fold rollbacks: `61:39 / 61:58 / 61:76 / 61:95` — hidden
+- production page: `0:1 / 01_PRODUCTION`
+- V4 front: `64:2 / V4 / ADD-13 / FRONT / FIELD NOTE MARGIN / CLEANROOM`
+- V4 back: `64:19 / V4 / ADD-13 / BACK / OPEN FIELD NOTE / CLEANROOM`
+- hidden realistic long-copy stress: `65:3 / 65:21`
 - exact Drive authority: `1Md8oCMsw4F9tZjQueNmQQ2dYR1I7JwZl / ADD-13_Message_Card`
-- Drive write for latest cleanup: `0`
+- Drive readback: folder exists and currently contains no required production asset
+- Drive writes for V4: `0`
 
-Canonical current evidence:
+Previous `RESORT DESK LETTER`, prior vNext, V2/V3 and legacy remain preserved as comparison / rollback history only. They are not construction bases for V4.
 
-- `FAMILY-DIVERSE-RESORT-DESK-LETTER-QA-2026-08-21.md`
-- `FIGMA-BACK-ARTIFACT-LABEL-POLISH-2026-08-23.md`
-- `FIGMA-FLOATING-DESK-MARK-SUBTRACTION-QA-2026-08-23.md`
-- `FIGMA-CORNER-FOLD-SUBTRACTION-QA-2026-08-23.md`
-- `OBSERVED-GUEST-FACING-GUIDE-COPY-2026-08-25.md`
-- `FIGMA-GUEST-GUIDE-SEMANTIC-SUBTRACTION-QA-2026-08-27.md`
+## V4 result
 
-## Current visual direction — RESORT DESK LETTER
+The V4 clean-room already existed in Figma with complete item-specific evidence, but `QA.md` still pointed to the earlier family-diverse Current. On 2026-08-31 the exact V4 Figma root and Drive authority were live re-read before Current authority was corrected. No Figma geometry was mutated in this reconciliation step.
 
-The selected replacement was authored from blank frames using only verified non-visual requirements: A6 landscape `148×105 mm`, duplex role, >=55% handwriting area, native editable title/prompt/name/date roles, safe-area/readability constraints, and unresolved-input boundaries.
+V4 direction: `FIELD NOTE MARGIN`.
 
-### Front `52:72`
+- front uses a broad cobalt editorial margin, narrow coral register, asymmetric Japanese display title and large warm-paper handwriting field;
+- back uses an offset cobalt index block with coral edge, a stronger Japanese first-read title and open writing field;
+- no fake stamp, airline credential, decorative English filler, generic travel icon, rounded-card UI or rasterized variable copy;
+- front/back are related without being mirrored templates.
 
-- resort/hotel writing-desk stationery metaphor rather than a colorful postcard graphic;
-- dark resort-green letterhead strip;
-- thin terracotta paper/binding edge;
-- Japanese-first `旅の途中から、ひとこと。`;
-- broad open handwriting rules remain the dominant function;
-- native `[メッセージテーマ]`, `おなまえ`, date roles;
-- former small butter-yellow desk mark remains hidden after bounded subtraction;
-- former top-right fold cue remains hidden after bounded subtraction;
-- no giant circle/capsule/sun, fake stamp/barcode/airline credential, generic travel icon, gradient, shadow or rasterized copy.
+Responsibility split:
 
-### Back `52:91`
-
-- quieter second-letter face from the same stationery family;
-- narrow green stationery strip;
-- strip identity `LETTER 02`, pairing with front `YOKOHAMA · LETTER 01` without implying a checkout instruction;
-- Japanese-first `帰る前に、ひとこと。`;
-- large uninterrupted writing lane;
-- former bottom-right fold cue remains hidden;
-- native `[自由記入]`, name/date roles;
-- former `52:100 / TEXT / GUIDE = 書く場所は、広めに。` is now intentionally hidden after a 2026-08-27 bounded semantic-copy comparison proved it described the designer's layout intent rather than a guest action;
-- no fake postal/transport data or tropical clip-art.
-
-## 2026-08-27 guest-guide semantic subtraction
-
-Fresh native `1400×993` review had reopened the sellable visual gate because `書く場所は、広めに。` was visible finished-product copy with no reader-facing job.
-
-Rollback-safe comparisons changed only guide visibility:
-
-- `62:2` — Current back with guide hidden
-- `62:20` — realistic long-copy back with guide hidden
-
-Result:
-
-- whole-item: PASS; the page reads more directly from the headline into the writing surface;
-- reading scale: PASS; no grouping/instruction loss;
-- native `1400×993`: PASS;
-- realistic long-copy: PASS;
-- handwriting geometry unchanged;
-- no replacement filler copy added.
-
-Complete pre-change rollbacks:
-
-- `62:38` — Current back before guide subtraction
-- `62:56` — long-copy back before guide subtraction
-
-Promoted Current mutation:
-
-- `52:100 / TEXT / GUIDE` → hidden
-- `52:137 / TEXT / GUIDE` → hidden in stress
-
-The comparison roots were hidden after verification.
-
-Learning state: `VERIFIED_LOCAL → CROSS_ITEM_CANDIDATE`.
-
-Transfer only the QA question: **is this sentence for the reader, or is it the designer explaining the design?** Do not transfer ADD-13's exact stationery layout, copy, palette or writing geometry.
-
-## Prior bounded subtractions retained
-
-### Floating desk mark
-
-`52:90 / PAPER / SMALL DESK MARK` was previously removed after whole/read/native comparison showed it had no binding, trim/fold, writing, or reader-facing role. The green letterhead, terracotta edge and handwriting surface remained sufficient.
-
-### Corner / bottom fold cues
-
-The yellow triangular fold cues were previously removed from front/back after bounded comparisons showed they read more like detached marker/warning glyphs than credible paper construction. Front/back stationery identity remained clear without them.
-
-These earlier passes remain `VERIFIED_LOCAL` and are not a blanket rule to remove all fold or accent geometry.
-
-## Three-scale / long-copy / structure QA — 2026-08-27 readback
-
-### Selected back `52:91`
-
-- canvas `1400×993`
-- visible native text `5`
-- fixed-height text `0`
-- IMAGE fills `0`
-- outside text `0`
-- text collisions `0`
-- `TEXT / GUIDE` hidden
-- semantic handwriting area `52:99 / AREA_HANDWRITING_MAIN = 900×870`
-- handwriting-area ratio `56.32%`
-- SPEC minimum `55%`
-
-### Hidden long-copy back `52:128`
-
-- visible native text `5`
-- fixed-height text `0`
-- IMAGE fills `0`
-- outside text `0`
-- text collisions `0`
-- `TEXT / GUIDE` hidden
-- handwriting area remains `900×870 / 56.32%`
-
-Front structural evidence remains valid from the existing clean-room/long-copy passes: native editable text, no IMAGE fills, no unintended fold cues, handwriting function preserved.
-
-## Hybrid authoring / image decision
-
-- variable/factual/guest-facing copy: native Figma text;
-- writing rules / paper edges: simple native functional geometry;
+- variable / factual / guest-facing copy: native editable Figma text;
+- handwriting rules / margin / edge geometry: native editable vector/shape geometry;
 - generated/composed raster: `0`;
 - replaceable image roles: `0`;
-- IMAGE fills: `0`;
-- image generation for this repair: `0`;
-- Drive write for this repair: `0`.
+- IMAGE fills: `0`.
 
-`IMAGE_GENERATION_NOT_REQUIRED`: the diagnosed defect was semantic audience mismatch, not missing photography or illustration. Generated resort/aircraft/tropical imagery would reduce writing space and increase stock/AI-template risk.
+`IMAGE_GENERATION_NOT_REQUIRED`: the functional visual problem is typography/composition around a handwriting surface, not missing imagery.
 
-## Professional Design Council
+## Fresh authority / structure verification
 
-Historical score remains `92/100 / PASS / NO VETO` for the selected overall direction. The desk-mark/fold-cue/guide subtractions removed unsupported production noise without changing the artifact concept, Japanese editorial craft, handwriting function, print credibility, editability, or family diversity.
+Live Figma metadata on `64:2` confirmed the selected V4 front still contains the recorded cobalt margin, coral register, native title/prompt/name/date roles, and semantic handwriting field `64:10` with seven writing rules. The exact V4 page/file and Drive folder still agree with the detailed V4 evidence.
 
-The specific semantic defect that had reopened `SELLABLE_VISUAL_QA_PASS` is now closed with fresh whole/read/native/long-copy evidence.
+The V4 evidence records its own fresh correction pass: an unsupported back header rule was removed after long-copy stress, and the handwriting geometry was enlarged before promotion to satisfy the verified >=55% requirement.
 
-## Deferred finalization
+Final semantic handwriting areas:
 
-Remain `NOT_PRINT_READY` until the following are authoritative:
+- front: `960×800 px` = **55.24%** of the `1400×993` canvas;
+- back: `1200×640 px` = **55.24%**;
+- writing-rule thickness: `3 px` ≈ **0.317 mm** at final A6 scale.
 
-- final title/theme/prompt copy;
-- final signer/name/date policy;
-- actual handwriting test with intended pen;
-- paper stock;
-- printer template/profile and exact bleed/export settings;
-- 100% physical proof.
+Selected readback recorded by the V4 evidence:
 
-Do not invent final personal copy or signer details.
+- front visible native text `6`, fixed-height text `0`, outside text `0`, overlaps `0`, IMAGE fills `0`;
+- back visible native text `6`, fixed-height text `0`, outside text `0`, overlaps `0`, IMAGE fills `0`;
+- hidden stress `65:3 / 65:21` remains reflow-safe with fixed-height text `0` and no text outside root.
 
-## Result
+## Print-first status
 
-`FAMILY_DIVERSE_RESORT_DESK_LETTER_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / GUEST_GUIDE_SEMANTIC_SUBTRACTION_PASS / FAMILY_SCALE_TEMPLATE_REPETITION_CLOSED_FOR_ADD13 / LONG_COPY_STRESS_PASS / HANDWRITING_AREA_55_PERCENT_PASS / FLOATING_DESK_MARK_SUBTRACTION_PASS / CORNER_FOLD_CUE_SUBTRACTION_PASS / LEGACY_PRESERVED / ROLLBACK_SAFE / NOT_PRINT_READY`.
+Working physical authority: **A6 landscape `148×105 mm`**, Figma `1400×993 px`, approximately `9.46 px/mm`.
 
-ADD-13's local semantic-copy reopen is closed. Do not add replacement filler text unless a real guest-facing instruction becomes authoritative.
+Approximate actual-size type:
+
+Front:
+
+- index 62px ≈ **18.6pt**;
+- display title 52px ≈ **15.6pt**;
+- kicker 24px ≈ **7.2pt**;
+- prompt 28px ≈ **8.4pt**;
+- name/date 24px ≈ **7.2pt**.
+
+Back:
+
+- index 44px ≈ **13.2pt**;
+- display title 64px ≈ **19.2pt**;
+- kicker 27px ≈ **8.1pt**;
+- prompt 28px ≈ **8.4pt**;
+- name/date 24px ≈ **7.2pt**.
+
+The ~7.2pt roles are short secondary labels only and remain a physical-proof checkpoint.
+
+Raster effective PPI: `N/A`; `RESOLUTION_WARNING=NONE` because V4 contains no raster IMAGE fill.
+
+Printer-authoritative template / exact bleed / final safe geometry are not yet fixed; no guessed production bleed is introduced. `DEFERRED_FINALIZATION` remains for those inputs.
+
+Physical / production checks still required:
+
+- final title/theme/prompt/name/date policy;
+- paper stock and real black-pen / pencil handwriting proof at 100% actual size;
+- handwriting comfort and rule visibility on final stock;
+- duplex front/back flip orientation and imposition;
+- printer template/profile and final trim/bleed/safe;
+- deep cobalt, coral, warm cream and near-black CMYK / grayscale proof;
+- final black construction;
+- PDF export, font embedding, transparency, overprint/knockout, preflight and physical proof.
+
+Fold / punch / perforation / QR / sticker / case attachment are not currently authoritative and are not inferred from the visual design.
+
+`DESIGN_COMPLETE != PRINT_READY` remains in force.
