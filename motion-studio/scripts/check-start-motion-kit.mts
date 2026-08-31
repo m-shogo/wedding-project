@@ -17,6 +17,7 @@ import {
   japaneseFriendsOpeningDurationFrames,
   japaneseFriendsOpeningStory,
 } from '../src/data/japaneseFriendsOpeningStory.ts';
+import {startWeddingEditDurationInFrames} from '../src/data/startWeddingEditPublic.ts';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const repoRoot = path.resolve(root, '..');
@@ -24,6 +25,7 @@ const engines = fs.readFileSync(path.join(root, 'src/motion-kit/engines.tsx'), '
 const presets = fs.readFileSync(path.join(root, 'src/motion-kit/renderablePresets.ts'), 'utf8');
 const reel = fs.readFileSync(path.join(root, 'src/compositions/common/StartMotionReel.tsx'), 'utf8');
 const rootFile = fs.readFileSync(path.join(root, 'src/StartMotionKitRoot.tsx'), 'utf8');
+const startSyncRender = fs.readFileSync(path.join(root, 'scripts/render-japanese-friends-opening-start-sync.mts'), 'utf8');
 const index = fs.readFileSync(path.join(root, 'src/index-start-motion-kit.ts'), 'utf8');
 const catalog = fs.readFileSync(path.join(repoRoot, 'movie-dashboard/src/data/startMotionKit.ts'), 'utf8');
 const errors: string[] = [];
@@ -77,6 +79,21 @@ if (new Set(japaneseFriendsOpeningStory.map((scene) => scene.kind)).size < 8) er
 if (new Set(japaneseFriendsOpeningStory.map((scene) => scene.asset)).size !== 5) errors.push('Japanese friends opening must exercise all 5 generated dummy photo assets');
 for (const token of ['id="JapaneseFriendsOpeningDemoV1"', 'japaneseFriendsOpeningDurationFrames']) {
   requireText(rootFile, token, `Japanese friends opening composition wiring missing: ${token}`);
+}
+
+if (startWeddingEditDurationInFrames !== 4368) errors.push(`StaRt sync opening must remain 145.6 seconds / 4368 frames, found ${startWeddingEditDurationInFrames}`);
+for (const token of ['id="JapaneseFriendsOpeningStartSyncV1"', 'startWeddingEditDurationInFrames', 'defaultProps={{audioPath: null, lyricPhrases: []}}']) {
+  requireText(rootFile, token, `StaRt sync opening composition wiring missing: ${token}`);
+}
+for (const token of [
+  'local/lyrics-wedding-edit.local.json',
+  'public/local-start-wedding-edit/audio/start-wedding-edit.m4a',
+  'lyricDocument.phrases.length !== 30',
+  'measuredThreeHits.length !== 4',
+  "audioPath: 'local-start-wedding-edit/audio/start-wedding-edit.m4a'",
+  "'--props'",
+]) {
+  requireText(startSyncRender, token, `StaRt sync local-props render guard missing: ${token}`);
 }
 
 // --- transition-wipe direction/variant wiring regression check ---------------------------

@@ -59,7 +59,9 @@ import {
   motionZukanStockDemoDurationFrames,
 } from './compositions/common/MotionZukanStockDemo';
 import {JapaneseFriendsOpening} from './compositions/common/JapaneseFriendsOpening';
+import {JapaneseFriendsOpeningStartSync} from './compositions/common/JapaneseFriendsOpeningStartSync';
 import {japaneseFriendsOpeningDurationFrames} from './data/japaneseFriendsOpeningStory';
+import {startWeddingEditDurationInFrames} from './data/startWeddingEditPublic';
 
 export function StartMotionKitRoot() {
   return (
@@ -171,6 +173,7 @@ export function StartMotionKitRoot() {
       <Composition id="MotionZukanStockDemoAmbientV1" component={MotionZukanStockDemo} defaultProps={{genre: 'AMBIENT'}} width={1280} height={720} fps={30} durationInFrames={motionZukanStockDemoDurationFrames} />
       <Composition id="OpeningV1DummyProduction" component={MotionZukanDummyProduction} width={1920} height={1080} fps={30} durationInFrames={motionZukanDummyProductionDurationFrames} />
       <Composition id="JapaneseFriendsOpeningDemoV1" component={JapaneseFriendsOpening} width={1920} height={1080} fps={30} durationInFrames={japaneseFriendsOpeningDurationFrames} />
+      <Composition id="JapaneseFriendsOpeningStartSyncV1" component={JapaneseFriendsOpeningStartSync} width={1920} height={1080} fps={30} durationInFrames={startWeddingEditDurationInFrames} defaultProps={{audioPath: null, lyricPhrases: []}} />
     </>
   );
 }
