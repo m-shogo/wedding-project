@@ -1,0 +1,34 @@
+name: Wedding DaVinci Transition Actual Evidence CI
+
+on:
+  pull_request:
+    paths:
+      - 'motion-studio/scripts/wedding-davinci-transition-actual-evidence.mts'
+      - '.github/workflows/wedding-davinci-transition-actual-evidence-ci.yml'
+  workflow_dispatch:
+
+jobs:
+  transition-actual-evidence:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Run transition Actual evidence contract self-test
+        working-directory: motion-studio
+        run: |
+          node --no-warnings scripts/wedding-davinci-transition-actual-evidence.mts --self-test > /tmp/transition-actual-self-test.log
+          cat /tmp/transition-actual-self-test.log
+          grep -q 'Wedding DaVinci transition Actual evidence: ACTUAL_VERIFIED (opening)' /tmp/transition-actual-self-test.log
+          grep -q 'STALE_DAVINCI_TRANSITION_RECOVERY_SHA' /tmp/transition-actual-self-test.log
+          grep -q 'selfTest=PASS' /tmp/transition-actual-self-test.log
+
+      - name: Evidence boundary remains fail-closed
+        run: |
+          grep -q "macDaVinciActual: 'NOT_RUN'" motion-studio/scripts/wedding-davinci-transition-actual-evidence.mts
+          grep -q 'productionReady: false' motion-studio/scripts/wedding-davinci-transition-actual-evidence.mts
+          grep -q "preservation: 'NOT_RUN'" motion-studio/scripts/wedding-davinci-transition-actual-evidence.mts
+          ! grep -q "macDaVinciActual: 'PASS'" motion-studio/scripts/wedding-davinci-transition-actual-evidence.mts
+          ! grep -q 'productionReady: true' motion-studio/scripts/wedding-davinci-transition-actual-evidence.mts
