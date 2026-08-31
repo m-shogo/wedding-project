@@ -2,20 +2,6 @@ import {openingProductionGate} from "../data/openingProductionGate.generated";
 import {profileProductionGate} from "../data/profileProductionGate.generated";
 import type {SceneProjectId} from "../data/visualSceneComposer";
 
-const openingAliases: Record<string, readonly string[]> = {
-  "okinawa-01": ["okinawa-01", "okinawa01", "okinawa-1"],
-  "okinawa-02": ["okinawa-02", "okinawa02", "okinawa-2"],
-  "okinawa-03": ["okinawa-03", "okinawa03", "okinawa-3"],
-  "seoul-01": ["seoul-01", "seoul01", "seoul-1", "korea-01", "korea01"],
-  "seoul-02": ["seoul-02", "seoul02", "seoul-2", "korea-02", "korea02"],
-  "seoul-03": ["seoul-03", "seoul03", "seoul-3", "korea-03", "korea03"],
-  "hawaii-01": ["hawaii-01", "hawaii01", "hawaii-1"],
-  "hawaii-02": ["hawaii-02", "hawaii02", "hawaii-2"],
-  "hawaii-03": ["hawaii-03", "hawaii03", "hawaii-3"],
-  "hero-01": ["hero-01", "hero01", "hero-1", "couple-01", "couple01"],
-  "hero-02": ["hero-02", "hero02", "hero-2", "couple-02", "couple02"],
-};
-
 export function WeddingMediaIntakeChecklistCard({projectId}: {projectId: SceneProjectId}) {
   const isOpening = projectId === "opening";
   const slots = isOpening
@@ -26,7 +12,6 @@ export function WeddingMediaIntakeChecklistCard({projectId}: {projectId: ScenePr
         canonicalStem: slot.key,
         ready: slot.resolved,
         chapterId: slot.key.split("-")[0],
-        aliases: openingAliases[slot.key] ?? [slot.key],
       }))
     : profileProductionGate.mediaSlots.map((slot) => ({
         id: slot.id,
@@ -35,7 +20,6 @@ export function WeddingMediaIntakeChecklistCard({projectId}: {projectId: ScenePr
         canonicalStem: slot.canonicalStem,
         ready: slot.ready,
         chapterId: slot.chapterId,
-        aliases: [slot.canonicalStem] as readonly string[],
       }));
   const missing = slots.filter((slot) => !slot.ready);
   const expected = slots.length;
@@ -50,7 +34,7 @@ export function WeddingMediaIntakeChecklistCard({projectId}: {projectId: ScenePr
         <div>
           <p className="text-[8px] tracking-[0.14em] font-semibold text-lime-700 dark:text-lime-300">REAL MEDIA INTAKE CHECKLIST / {projectId.toUpperCase()}</p>
           <p className="mt-1 text-[11px] font-semibold text-navy-800 dark:text-sand-100">素材 {ready}/{expected} / BGM {bgm.ready ? "READY" : "MISSING / NOT_CURRENT"}</p>
-          <p className="mt-1 text-[8px] leading-4 text-navy-500 dark:text-navy-300">1フォルダにcanonical stemまたは許可aliasで素材を置けば、既存intake CLIが安全に照合・copy・SHA receipt化します。</p>
+          <p className="mt-1 text-[8px] leading-4 text-navy-500 dark:text-navy-300">1フォルダに下記canonical stemで素材を置けば、既存intake CLIが安全に照合・copy・SHA receipt化します。</p>
         </div>
         <span className="border border-lime-300 dark:border-lime-800 px-2 py-1 font-mono text-[8px] text-lime-700 dark:text-lime-300">MISSING {missing.length}</span>
       </div>
@@ -58,7 +42,7 @@ export function WeddingMediaIntakeChecklistCard({projectId}: {projectId: ScenePr
       <div className="mt-2 border border-lime-200 dark:border-lime-900 p-2 text-[8px] leading-4">
         <p><span className="font-semibold">Target:</span> <code>{target}</code></p>
         <p><span className="font-semibold">形式:</span> {accepted}</p>
-        <p className="text-navy-400">拡張子は自由、stemだけ合わせます。例: <code>{slots[0]?.canonicalStem}.jpg</code></p>
+        <p className="text-navy-400">拡張子は自由、canonical stemだけ合わせます。例: <code>{slots[0]?.canonicalStem}.jpg</code></p>
       </div>
 
       <div className="mt-3 grid gap-1 sm:grid-cols-2 xl:grid-cols-3">
@@ -70,7 +54,6 @@ export function WeddingMediaIntakeChecklistCard({projectId}: {projectId: ScenePr
             </div>
             <p className="mt-1 font-mono">{slot.canonicalStem}.* / {slot.kind}</p>
             <p className="mt-1 opacity-60">chapter={slot.chapterId}</p>
-            {slot.aliases.length > 1 ? <p className="mt-1 break-words opacity-70">aliases: {slot.aliases.join(" / ")}</p> : null}
           </div>
         ))}
       </div>
