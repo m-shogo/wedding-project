@@ -3,6 +3,7 @@ import {readFileSync} from "node:fs";
 const focus = readFileSync("movie-dashboard/src/data/motionZukanSceneFocus.ts", "utf8");
 const operator = readFileSync("movie-dashboard/src/components/WeddingRealMediaVisualReviewOperatorCard.tsx", "utf8");
 const backend = readFileSync("motion-studio/scripts/wedding-project-real-media-preview-visual-review.mts", "utf8");
+const refresh = readFileSync("motion-studio/scripts/refresh-wedding-project-real-media-visual-qa.mts", "utf8");
 const openingCrop = readFileSync("movie-dashboard/src/components/OpeningCropReviewOperatorCard.tsx", "utf8");
 const profileMedia = readFileSync("movie-dashboard/src/components/ProfileRealMediaReviewOperatorCard.tsx", "utf8");
 const timing = readFileSync("movie-dashboard/src/components/RhythmSceneTimingCorrectionCard.tsx", "utf8");
@@ -30,7 +31,9 @@ for (const token of [
   'edge.transition !== "CROSS_DISSOLVE"',
   'queueCurrentness?.status!=="CURRENT"',
 ]) requireText(operator, token, "visual correction operator");
-for (const token of ["fromSourceRevision", "toSourceRevision", "REAL_PREVIEW_VISUAL_REVIEW_TRANSITION_SCENE_MISSING"]) requireText(backend, token, "visual correction queue revision binding");
+for (const token of ["fromSourceRevision", "toSourceRevision", "REAL_PREVIEW_VISUAL_REVIEW_TRANSITION_SCENE_MISSING", "refresh-wedding-project-real-media-visual-qa.mts", "render-wedding-project-real-media-preview.mts"]) requireText(backend, token, "visual correction queue revision/refresh binding");
+for (const token of ["render-wedding-project-real-media-preview.mts", "wedding-project-real-media-preview-qa-stills.mts", "wedding-project-real-media-preview-visual-review.mts", "humanVisualReviewPerformed:false", "humanVisualReview:\"NOT_RUN\""]) requireText(refresh, token, "canonical visual QA refresh chain");
+if (backend.includes("motion-studio/scripts/wedding-project-real-media-preview.mts")) throw new Error("non-canonical missing rerender script must never be emitted");
 requireText(openingCrop, "data-opening-crop-review-operator", "Opening crop target");
 requireText(profileMedia, "data-profile-real-media-review-operator", "Profile media target");
 requireText(timing, "data-rhythm-scene-timing-correction", "timing target");
@@ -39,6 +42,6 @@ if (!operator.includes("旧preview / stills / Human review / correction queueは
 if (!operator.includes("rerenderRealPreview") || !operator.includes("extractFreshQaStills") || !operator.includes("initFreshVisualReview")) throw new Error("fresh correction cycle commands missing");
 if (!operator.includes('disabled={queueCurrentness.status!=="CURRENT"||stale}')) throw new Error("STALE queue navigation must be disabled");
 for (const forbidden of ['remotionStudioGuiActual: "PASS"','palmierGuiActual: "PASS"','macDaVinciGuiActual: "PASS"','productionReady: true']) {
-  if (operator.includes(forbidden) || focus.includes(forbidden) || backend.includes(forbidden)) throw new Error(`visual correction navigation must not promote evidence: ${forbidden}`);
+  if (operator.includes(forbidden) || focus.includes(forbidden) || backend.includes(forbidden) || refresh.includes(forbidden)) throw new Error(`visual correction navigation must not promote evidence: ${forbidden}`);
 }
-console.log("real-media visual correction live-currentness contracts: PASS");
+console.log("real-media visual correction live-currentness + canonical refresh contracts: PASS");

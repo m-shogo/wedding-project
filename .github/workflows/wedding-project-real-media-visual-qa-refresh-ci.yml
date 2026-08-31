@@ -1,0 +1,74 @@
+name: Wedding Project Real Media Visual QA Refresh CI
+
+on:
+  pull_request:
+    paths:
+      - 'motion-studio/scripts/refresh-wedding-project-real-media-visual-qa.mts'
+      - 'motion-studio/scripts/render-wedding-project-real-media-preview.mts'
+      - 'motion-studio/scripts/wedding-project-real-media-preview-qa-stills.mts'
+      - 'motion-studio/scripts/wedding-project-real-media-preview-visual-review.mts'
+      - '.github/workflows/wedding-project-real-media-visual-qa-refresh-ci.yml'
+  workflow_dispatch:
+
+jobs:
+  fresh-visual-qa-chain:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install ffmpeg
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg
+      - name: Install Motion Studio dependencies
+        working-directory: motion-studio
+        run: pnpm install --frozen-lockfile
+      - name: Build current real-media authority fixtures
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/real-qa-refresh
+          printf '{"fixture":"fresh-qa-chain"}\n' > /tmp/real-qa-refresh/batch.json
+          ffmpeg -hide_banner -loglevel error -f lavfi -i color=c=0x224466:s=1280x720 -frames:v 1 -y /tmp/real-qa-refresh/scene-a.jpg
+          ffmpeg -hide_banner -loglevel error -f lavfi -i color=c=0x884422:s=1280x720:d=2 -r 30 -c:v libx264 -pix_fmt yuv420p -y /tmp/real-qa-refresh/scene-b.mp4
+          ffmpeg -hide_banner -loglevel error -f lavfi -i sine=frequency=440:sample_rate=48000:duration=2 -ac 2 -y /tmp/real-qa-refresh/bgm.wav
+          BATCH_SHA=$(sha256sum /tmp/real-qa-refresh/batch.json | awk '{print $1}')
+          A_SHA=$(sha256sum /tmp/real-qa-refresh/scene-a.jpg | awk '{print $1}')
+          B_SHA=$(sha256sum /tmp/real-qa-refresh/scene-b.mp4 | awk '{print $1}')
+          BGM_SHA=$(sha256sum /tmp/real-qa-refresh/bgm.wav | awk '{print $1}')
+          cat > /tmp/real-qa-refresh/selected.json <<JSON
+          {"schemaVersion":"wedding-movie-selected-scene-render-manifest/v1","authority":"DERIVED_FROM_CURRENT_PROJECT_TYPOGRAPHY_BATCH","projectId":"opening","sourceBatch":{"path":"/tmp/real-qa-refresh/batch.json","sha256":"${BATCH_SHA}"},"scenes":[{"order":1,"sceneId":"scene-a","sourceRevision":"rev-a","patternId":"type-mask-reveal","productionRole":"TITLE_REVEAL","selectionClass":"PRIMARY","timeline":{"startSeconds":0,"endSeconds":1,"frames":30},"props":{"text":"OUR JOURNEY","mode":"mask","intensity":"S","label":"OPENING A"}},{"order":2,"sceneId":"scene-b","sourceRevision":"rev-b","patternId":"split-rise","productionRole":"IMPACT_TITLE","selectionClass":"PRIMARY","timeline":{"startSeconds":1,"endSeconds":2,"frames":30},"props":{"text":"READY FOR TAKEOFF","mode":"punch","intensity":"M","label":"OPENING B"}}],"transitions":[{"fromSceneId":"scene-a","toSceneId":"scene-b","transition":"CROSS_DISSOLVE","durationFrames":6,"sourceStatus":"HUMAN_SELECTED_CURRENT"}],"summary":{"allSelectionsCurrent":true,"productionReady":false},"evidenceBoundary":{"remotionStudioGuiActual":"NOT_RUN","palmierGuiActual":"NOT_RUN","macDaVinciGuiActual":"NOT_RUN"}}
+          JSON
+          cat > /tmp/real-qa-refresh/audit.json <<JSON
+          {"schemaVersion":"wedding-movie-production-readiness-audit/v1","authority":"DERIVED_FROM_CURRENT_HUMAN_MASTER_AND_REAL_MEDIA_BINDINGS","projectId":"opening","source":{"batchSha256":"${BATCH_SHA}"},"scenes":[{"sceneId":"scene-a","sourceRevision":"rev-a","patternId":"type-mask-reveal","productionRole":"TITLE_REVEAL","readiness":"READY_FOR_REAL_MEDIA_PREVIEW","media":{"state":"CURRENT","path":"/tmp/real-qa-refresh/scene-a.jpg","sha256":"${A_SHA}","kind":"IMAGE"}},{"sceneId":"scene-b","sourceRevision":"rev-b","patternId":"split-rise","productionRole":"IMPACT_TITLE","readiness":"READY_FOR_REAL_MEDIA_PREVIEW","media":{"state":"CURRENT","path":"/tmp/real-qa-refresh/scene-b.mp4","sha256":"${B_SHA}","kind":"VIDEO"}}],"audio":{"state":"CURRENT","path":"/tmp/real-qa-refresh/bgm.wav","sha256":"${BGM_SHA}"},"summary":{"readyForContinuousRealMediaPreview":true,"productionReady":false},"evidenceBoundary":{"remotionStudioGuiActual":"NOT_RUN","palmierGuiActual":"NOT_RUN","macDaVinciGuiActual":"NOT_RUN","productionReady":false}}
+          JSON
+      - name: Run canonical fresh visual QA chain
+        run: node --no-warnings motion-studio/scripts/refresh-wedding-project-real-media-visual-qa.mts --selected-manifest=/tmp/real-qa-refresh/selected.json --readiness-audit=/tmp/real-qa-refresh/audit.json --output-dir=/tmp/real-qa-refresh/output
+      - name: Verify rendered preview, stills, and fresh NOT_RUN review
+        run: |
+          node --input-type=module <<'NODE'
+          import {readFileSync} from 'node:fs';
+          const root='/tmp/real-qa-refresh/output';
+          const receipt=JSON.parse(readFileSync(`${root}/opening-real-media-visual-qa-refresh-receipt.json`,'utf8'));
+          const stills=JSON.parse(readFileSync(`${root}/opening-real-media-preview-qa-stills-manifest.json`,'utf8'));
+          const review=JSON.parse(readFileSync(`${root}/opening-real-media-human-visual-review.json`,'utf8'));
+          if(receipt.schemaVersion!=='wedding-movie-real-media-visual-qa-refresh-receipt/v1'||receipt.summary.rendered!==true) throw new Error('refresh receipt');
+          if(receipt.summary.humanVisualReview!=='NOT_RUN'||receipt.evidenceBoundary.humanVisualReviewPerformed!==false) throw new Error('human review boundary');
+          if(stills.summary.stillCount!==6||stills.summary.transitionStillCount!==1||stills.summary.humanVisualQa!=='NOT_RUN') throw new Error('fresh stills');
+          if(review.finalVerdict!=='NOT_RUN'||review.evidenceBoundary.humanVisualReviewPerformed!==false) throw new Error('fresh review must remain NOT_RUN');
+          for(const scene of review.scenes) for(const check of Object.values(scene.checks)) if(check.verdict!=='NOT_RUN') throw new Error('scene auto-pass');
+          for(const transition of review.transitions) for(const check of Object.values(transition.checks)) if(check.verdict!=='NOT_RUN') throw new Error('transition auto-pass');
+          NODE
+      - name: Post-audit media drift fails before refreshing evidence
+        shell: bash
+        run: |
+          printf 'tamper' >> /tmp/real-qa-refresh/scene-a.jpg
+          if node --no-warnings motion-studio/scripts/refresh-wedding-project-real-media-visual-qa.mts --selected-manifest=/tmp/real-qa-refresh/selected.json --readiness-audit=/tmp/real-qa-refresh/audit.json --output-dir=/tmp/real-qa-refresh/stale 2>/tmp/real-qa-refresh/stale.err; then
+            echo 'expected stale media to fail closed' >&2
+            exit 1
+          fi
+          grep -Eq 'REAL_MEDIA_PREVIEW_MEDIA_SHA_MISMATCH|REAL_MEDIA_VISUAL_QA_REFRESH_STEP_FAILED' /tmp/real-qa-refresh/stale.err
