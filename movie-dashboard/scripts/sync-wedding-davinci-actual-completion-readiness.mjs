@@ -31,7 +31,6 @@ const project = (movieId) => {
     finishingEvidenceSha256: gate.finishingEvidenceSha256,
     transitionEvidenceSha256: gate.transitionEvidenceSha256,
     transitionProofSha256: gate.transitionProofSha256,
-    blocker: gate.blocker,
     writeCommand: `cd motion-studio && node --no-warnings scripts/wedding-davinci-actual-completion-receipt.mts --movie=${movieId} --write`,
     strictCommand: `cd motion-studio && node --no-warnings scripts/wedding-davinci-actual-completion-receipt.mts --movie=${movieId}`,
   };
