@@ -35,6 +35,18 @@ jobs:
           grep -q 'WeddingSceneTypographyCandidateV1' movie-dashboard/src/components/TypographySceneBoundElementComparison.tsx
           ! grep -q 'productionReady=YES' movie-dashboard/src/components/TypographySceneBoundElementComparison.tsx
 
+      - name: Local Scene-bound renders are memory-only synchronized comparison
+        run: |
+          grep -q 'URL.createObjectURL' movie-dashboard/src/components/TypographySceneBoundElementComparison.tsx
+          grep -q 'URL.revokeObjectURL' movie-dashboard/src/components/TypographySceneBoundElementComparison.tsx
+          grep -q 'A/B/C SYNC PLAY' movie-dashboard/src/components/TypographySceneBoundElementComparison.tsx
+          grep -q 'LOCAL SCENE-BOUND RENDER' movie-dashboard/src/components/TypographySceneBoundElementComparison.tsx
+          grep -q 'multiple accept="video/mp4,.mp4"' movie-dashboard/src/components/TypographySceneBoundElementComparison.tsx
+          grep -q 'sceneRevisionKey' movie-dashboard/src/components/TypographySceneBoundElementComparison.tsx
+          grep -q 'sourceRevision: scene.updatedAt' movie-dashboard/src/components/TypographySceneBoundElementComparison.tsx
+          ! grep -q 'localStorage' movie-dashboard/src/components/TypographySceneBoundElementComparison.tsx
+          ! grep -q 'sessionStorage' movie-dashboard/src/components/TypographySceneBoundElementComparison.tsx
+
       - name: Dynamic Remotion composition uses canonical TypographyRevealEngine
         run: |
           grep -q 'WeddingSceneTypographyCandidateV1' motion-studio/src/compositions/common/VisualMotionTypographyConcepts.tsx

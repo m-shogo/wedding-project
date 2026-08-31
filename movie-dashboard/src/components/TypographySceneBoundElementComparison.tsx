@@ -1,4 +1,4 @@
-import {useMemo, useState} from "react";
+import {useEffect, useMemo, useRef, useState} from "react";
 import {resolveMaskRevealEditableIntent} from "../data/humanEditableMotionIntent";
 import {
   loadTypographyProductionRoleContext,
@@ -17,6 +17,12 @@ import type {MaskRevealSceneInstance} from "../data/visualSceneComposer";
 import {getPatternPreview, motionPatterns} from "../data/visualMotionLibrary";
 
 const FPS = 30;
+
+type LocalSceneBoundRender = {
+  fileName: string;
+  objectUrl: string;
+  sourceRevision: string;
+};
 
 function shellSingleQuote(value: string) {
   return `'${value.split("'").join(`'"'"'`)}'`;
@@ -43,6 +49,10 @@ function candidateRenderCommand(
 export function TypographySceneBoundElementComparison({scene}: {scene: MaskRevealSceneInstance}) {
   const [revision, setRevision] = useState(0);
   const [copied, setCopied] = useState<string | null>(null);
+  const [localRenders, setLocalRenders] = useState<Record<string, LocalSceneBoundRender>>({});
+  const objectUrls = useRef<Set<string>>(new Set());
+  const videoRefs = useRef<Record<string, HTMLVideoElement | null>>({});
+  const sceneRevisionKey = `${scene.sceneId}@${scene.updatedAt}`;
   const resolved = useMemo(() => resolveMaskRevealEditableIntent(scene.editableIntent), [scene]);
   const roles = useMemo(() => getWeddingTypographyProductionRoleGuide(scene.projectId), [scene.projectId]);
   const selection = useMemo(() => loadTypographyProductionSelection(scene), [scene.sceneId, scene.updatedAt, revision]);
@@ -50,6 +60,22 @@ export function TypographySceneBoundElementComparison({scene}: {scene: MaskRevea
     () => (selection ? loadTypographyProductionRoleContext(scene, selection) : null),
     [scene.sceneId, scene.updatedAt, selection, revision],
   );
+
+  useEffect(() => {
+    setLocalRenders((current) => {
+      Object.values(current).forEach((render) => {
+        URL.revokeObjectURL(render.objectUrl);
+        objectUrls.current.delete(render.objectUrl);
+      });
+      return {};
+    });
+    videoRefs.current = {};
+  }, [sceneRevisionKey]);
+
+  useEffect(() => () => {
+    objectUrls.current.forEach((url) => URL.revokeObjectURL(url));
+    objectUrls.current.clear();
+  }, []);
 
   function choose(role: (typeof roles)[number]["role"], patternId: TypographyProductionPatternId) {
     const selected = saveTypographyProductionSelection(scene, patternId);
@@ -63,13 +89,68 @@ export function TypographySceneBoundElementComparison({scene}: {scene: MaskRevea
     window.setTimeout(() => setCopied((current) => current === key ? null : current), 1400);
   }
 
+  function importRoleRenders(role: string, patternIds: TypographyProductionPatternId[], files: FileList | null) {
+    if (!files) return;
+    const incoming = Array.from(files);
+    setLocalRenders((current) => {
+      const next = {...current};
+      patternIds.forEach((patternId) => {
+        const file = incoming.find((item) => item.name === `${patternId}.mp4` || item.name.includes(patternId));
+        if (!file) return;
+        const key = `${role}:${patternId}`;
+        const previous = next[key];
+        if (previous) {
+          URL.revokeObjectURL(previous.objectUrl);
+          objectUrls.current.delete(previous.objectUrl);
+        }
+        const objectUrl = URL.createObjectURL(file);
+        objectUrls.current.add(objectUrl);
+        next[key] = {fileName: file.name, objectUrl, sourceRevision: scene.updatedAt};
+      });
+      return next;
+    });
+  }
+
+  function clearRoleRenders(role: string, patternIds: TypographyProductionPatternId[]) {
+    setLocalRenders((current) => {
+      const next = {...current};
+      patternIds.forEach((patternId) => {
+        const key = `${role}:${patternId}`;
+        const render = next[key];
+        if (render) {
+          URL.revokeObjectURL(render.objectUrl);
+          objectUrls.current.delete(render.objectUrl);
+          delete next[key];
+        }
+        delete videoRefs.current[key];
+      });
+      return next;
+    });
+  }
+
+  async function playRoleInSync(role: string, patternIds: TypographyProductionPatternId[]) {
+    const videos = patternIds
+      .map((patternId) => videoRefs.current[`${role}:${patternId}`])
+      .filter((video): video is HTMLVideoElement => Boolean(video));
+    videos.forEach((video) => {
+      video.pause();
+      video.currentTime = 0;
+      video.muted = true;
+    });
+    await Promise.all(videos.map((video) => video.play().catch(() => undefined)));
+  }
+
+  function pauseRoleInSync(role: string, patternIds: TypographyProductionPatternId[]) {
+    patternIds.forEach((patternId) => videoRefs.current[`${role}:${patternId}`]?.pause());
+  }
+
   return (
     <section className="mt-3 border-2 border-fuchsia-300 dark:border-fuchsia-800 p-3" data-scene-bound-remotion-comparison={scene.sceneId}>
       <div className="flex flex-wrap items-start justify-between gap-2">
         <div>
           <p className="text-[8px] font-semibold tracking-[0.14em] text-fuchsia-700 dark:text-fuchsia-300">SCENE-BOUND REMOTION ELEMENT A/B/C</p>
           <p className="mt-1 text-[10px] font-semibold text-navy-800 dark:text-sand-100">{resolved.text || "(empty text)"}</p>
-          <p className="mt-1 text-[8px] leading-4 text-navy-500 dark:text-navy-300">同じScene revision・文字・{scene.computedDurationSeconds.toFixed(2)}秒・intensity {resolved.intensity}でPRIMARY + FALLBACKを比較します。REFERENCE previewは既存sample、下のcommandはこのScene入力をRemotionで実renderします。</p>
+          <p className="mt-1 text-[8px] leading-4 text-navy-500 dark:text-navy-300">同じScene revision・文字・{scene.computedDurationSeconds.toFixed(2)}秒・intensity {resolved.intensity}でPRIMARY + FALLBACKを比較します。render後のMP4をRole単位で読み込むと、A/B/Cを同じ0秒から同期再生できます。</p>
         </div>
         <div className="text-right font-mono text-[7px] text-navy-400">
           <p>{scene.sceneId}</p>
@@ -83,16 +164,22 @@ export function TypographySceneBoundElementComparison({scene}: {scene: MaskRevea
           const ids = [role.primaryPatternId, ...role.fallbackPatternIds] as TypographyProductionPatternId[];
           const batchCommand = ids.map((patternId) => candidateRenderCommand(scene, patternId, role.role)).join(" && ");
           const batchKey = `batch:${role.role}`;
+          const loadedCount = ids.filter((patternId) => Boolean(localRenders[`${role.role}:${patternId}`])).length;
+          const allLoaded = loadedCount === ids.length;
           return (
             <div key={role.role} className="border border-fuchsia-100 dark:border-fuchsia-900 p-2.5" data-scene-bound-role={role.role}>
               <div className="flex flex-wrap items-start justify-between gap-2">
                 <div>
                   <p className="text-[9px] font-semibold text-fuchsia-700 dark:text-fuchsia-300">{role.role}</p>
                   <p className="mt-1 text-[7px] leading-3 text-navy-400">{role.reason}</p>
+                  <p className="mt-1 font-mono text-[7px] text-navy-400">LOCAL SCENE-BOUND RENDER {loadedCount}/{ids.length} / memory only / revision {scene.updatedAt}</p>
                 </div>
                 <div className="flex flex-wrap items-center gap-1.5">
-                  <span className="font-mono text-[7px] text-navy-400">A PRIMARY / B-C FALLBACK</span>
                   <button type="button" onClick={() => void copyCommand(batchKey, batchCommand)} className="border border-fuchsia-300 dark:border-fuchsia-800 px-2 py-1 text-[7px] font-semibold text-fuchsia-700 dark:text-fuchsia-300">{copied === batchKey ? "A/B/C BATCH COPIED ✓" : "A/B/Cを同条件で一括render"}</button>
+                  <label className="cursor-pointer border border-sky-300 dark:border-sky-800 px-2 py-1 text-[7px] font-semibold text-sky-700 dark:text-sky-300">rendered MP4を読み込む<input type="file" multiple accept="video/mp4,.mp4" className="sr-only" onChange={(event) => importRoleRenders(role.role, ids, event.currentTarget.files)} /></label>
+                  <button type="button" disabled={!allLoaded} onClick={() => void playRoleInSync(role.role, ids)} className="border border-emerald-300 dark:border-emerald-800 px-2 py-1 text-[7px] font-semibold text-emerald-700 dark:text-emerald-300 disabled:cursor-not-allowed disabled:opacity-40">A/B/C SYNC PLAY</button>
+                  <button type="button" disabled={!loadedCount} onClick={() => pauseRoleInSync(role.role, ids)} className="border border-sand-300 dark:border-navy-600 px-2 py-1 text-[7px] font-semibold text-navy-500 dark:text-navy-300 disabled:cursor-not-allowed disabled:opacity-40">PAUSE</button>
+                  <button type="button" disabled={!loadedCount} onClick={() => clearRoleRenders(role.role, ids)} className="border border-sand-300 dark:border-navy-600 px-2 py-1 text-[7px] font-semibold text-navy-400 disabled:cursor-not-allowed disabled:opacity-40">LOCAL CLEAR</button>
                 </div>
               </div>
               <div className="mt-2 grid gap-2 lg:grid-cols-3">
@@ -101,11 +188,20 @@ export function TypographySceneBoundElementComparison({scene}: {scene: MaskRevea
                   const preview = pattern ? getPatternPreview(pattern) : undefined;
                   const command = candidateRenderCommand(scene, patternId, role.role);
                   const key = `${role.role}:${patternId}`;
+                  const localRender = localRenders[key];
                   const selected = selection?.patternId === patternId && roleContext?.productionRole === role.role;
                   return (
-                    <article key={key} className={`overflow-hidden border ${selected ? "border-emerald-400 dark:border-emerald-700" : index === 0 ? "border-fuchsia-300 dark:border-fuchsia-800" : "border-sand-200 dark:border-navy-600"}`} data-scene-bound-candidate={key}>
+                    <article key={key} className={`overflow-hidden border ${selected ? "border-emerald-400 dark:border-emerald-700" : index === 0 ? "border-fuchsia-300 dark:border-fuchsia-800" : "border-sand-200 dark:border-navy-600"}`} data-scene-bound-candidate={key} data-scene-bound-local-render={localRender ? "LOADED" : "REFERENCE"}>
                       <div className="aspect-video bg-navy-950/5 dark:bg-black/20">
-                        {preview?.assetPath ? <video className="h-full w-full object-cover" src={preview.assetPath} poster={preview.posterPath ?? undefined} controls muted loop playsInline preload="metadata" /> : preview?.posterPath ? <img className="h-full w-full object-cover" src={preview.posterPath} alt={`${patternId} reference`} loading="lazy" /> : <div className="flex h-full items-center justify-center px-3 text-center text-[8px] text-navy-400">REFERENCE preview MISSING</div>}
+                        {localRender ? (
+                          <video ref={(node) => { videoRefs.current[key] = node; }} className="h-full w-full object-cover" src={localRender.objectUrl} controls muted playsInline preload="metadata" />
+                        ) : preview?.assetPath ? (
+                          <video className="h-full w-full object-cover" src={preview.assetPath} poster={preview.posterPath ?? undefined} controls muted loop playsInline preload="metadata" />
+                        ) : preview?.posterPath ? (
+                          <img className="h-full w-full object-cover" src={preview.posterPath} alt={`${patternId} reference`} loading="lazy" />
+                        ) : (
+                          <div className="flex h-full items-center justify-center px-3 text-center text-[8px] text-navy-400">REFERENCE preview MISSING</div>
+                        )}
                       </div>
                       <div className="p-2">
                         <div className="flex items-start justify-between gap-2">
@@ -113,9 +209,9 @@ export function TypographySceneBoundElementComparison({scene}: {scene: MaskRevea
                             <p className="text-[9px] font-semibold text-navy-800 dark:text-sand-100">{String.fromCharCode(65 + index)} / {index === 0 ? "PRIMARY" : `FALLBACK ${index}`}</p>
                             <p className="mt-0.5 font-mono text-[7px] text-navy-400">{patternId}</p>
                           </div>
-                          <span className="font-mono text-[7px] text-navy-400">{getTypographyProductionRoute(patternId)?.canonicalMode ?? "?"}</span>
+                          <span className={`font-mono text-[7px] ${localRender ? "text-emerald-600 dark:text-emerald-300" : "text-navy-400"}`}>{localRender ? "SCENE-BOUND LOCAL" : "REFERENCE"}</span>
                         </div>
-                        <p className="mt-2 text-[7px] leading-3 text-navy-400">REFERENCE preview {preview?.status ?? "MISSING"} / Scene-bound renderはactual text + actual durationをprops/frame rangeへ固定。</p>
+                        <p className="mt-2 text-[7px] leading-3 text-navy-400">{localRender ? `${localRender.fileName} / bound in-memory to ${localRender.sourceRevision}` : `REFERENCE preview ${preview?.status ?? "MISSING"}`} / mode {getTypographyProductionRoute(patternId)?.canonicalMode ?? "?"}</p>
                         <div className="mt-2 grid gap-1">
                           <button type="button" onClick={() => void copyCommand(key, command)} className="border border-sky-300 dark:border-sky-800 px-2 py-1.5 text-[7px] font-semibold text-sky-700 dark:text-sky-300">{copied === key ? "RENDER COMMAND COPIED ✓" : "Scene-bound render command"}</button>
                           <button type="button" onClick={() => choose(role.role, patternId)} className={`border px-2 py-1.5 text-[7px] font-semibold ${selected ? "border-emerald-400 text-emerald-700 dark:border-emerald-700 dark:text-emerald-300" : "border-fuchsia-300 text-fuchsia-700 dark:border-fuchsia-800 dark:text-fuchsia-300"}`}>{selected ? "HUMAN SELECTED + ROLE BOUND ✓" : "このSceneにHuman採用"}</button>
@@ -134,7 +230,7 @@ export function TypographySceneBoundElementComparison({scene}: {scene: MaskRevea
         })}
       </div>
 
-      <p className="mt-3 border-l-2 border-amber-300 pl-2 text-[7px] leading-3 text-amber-800 dark:text-amber-200">AUTO SELECT = OFF。Human採用は既存のcurrent Scene revisionへroute + Role contextをbindingし、Palmier instruction packetへ反映されます。render command生成・REFERENCE preview・Human選択のいずれもRemotion Studio GUI Actual / Palmier GUI Actual / Mac DaVinci GUI Actual / productionReadyを自動昇格しません。</p>
+      <p className="mt-3 border-l-2 border-amber-300 pl-2 text-[7px] leading-3 text-amber-800 dark:text-amber-200">AUTO SELECT = OFF。LOCAL MP4は比較用のbrowser-memory previewだけで、Scene revision変更時に破棄します。Human採用だけが既存のcurrent Scene revisionへroute + Role contextをbindingし、Palmier instruction packetへ反映されます。LOCAL render読込・同期再生・Human選択のいずれもRemotion Studio GUI Actual / Palmier GUI Actual / Mac DaVinci GUI Actual / productionReadyを自動昇格しません。</p>
     </section>
   );
 }
