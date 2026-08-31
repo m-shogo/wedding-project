@@ -1,139 +1,91 @@
 # ADD-16 両親贈呈品メッセージカード — QA
 
-Status: `CURRENT / PROFESSIONAL_VNEXT_HOME_TEXTILE_MAT_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / FAMILY_DIVERSITY_PASS / LONG_COPY_STRESS_PASS / AUTO_HEIGHT_PASS / JAPANESE_KICKER_FONT_ASSIGNMENT_PASS / GENERIC_ENGLISH_KICKER_SUBTRACTION_PASS / VERTICAL_THREAD_SUBTRACTION_PASS / ACTUAL_SIZE_DATE_LEGIBILITY_PASS / WRITING_SURFACE_PASS / LEGACY_PRESERVED / ROLLBACK_SAFE / NOT_PRINT_READY`
-Updated: 2026-08-24
+Status: `CURRENT / V4_CLEANROOM_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / STRUCTURE_QA_PASS / LONG_COPY_STRESS_PASS / PRINT_SAFE_TEXT_PASS / WRITING_SURFACE_PASS / LEGACY_PRESERVED / NOT_PRINT_READY`
+Updated: 2026-08-31
 Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
-Professional quality authority: `docs/design-learning/PROFESSIONAL-DESIGN-COUNCIL-VNEXT-2026-08-20.md`
 
-## Current selected authority
+## Selected V4 authority
+
+The selected production direction is the blank-frame V4 `HOME PORT FOLIO`. Previous production / V2 / V3 / professional-vNext `HOME TEXTILE MAT` remain comparison and rollback history only; they are not V4 construction material or sellable-visual completion evidence.
 
 - Figma file: `ylmVBbwNcnjueYrymNpa3c`
-- Current page: `57:2 / CURRENT_SELECTED / ADD-16 / HOME TEXTILE MAT / 2026-08-22`
-- Current front: `57:3 / CURRENT_SELECTED / ADD16 / FRONT / HOME TEXTILE MAT`
-- Current back: `57:17 / CURRENT_SELECTED / ADD16 / BACK / HOME TEXTILE MAT WRITING`
-- hidden realistic long-copy stress: `57:36 / 57:50`
-- latest date-legibility comparison: `72:2 / QA / ADD-16 / FRONT / DATE LEGIBILITY 24PX / 2026-08-24` — hidden after adoption
-- latest pre-date-legibility rollbacks: `72:18 / 72:34` — hidden
-- prior no-vertical-thread comparisons: `69:2 / 69:18 / 69:37 / 69:53` — hidden
-- prior pre-thread rollbacks: `70:2 / 70:18 / 70:37 / 70:53` — hidden
-- pre-font-repair front rollbacks: `66:2 / 66:18`
-- pre-English-kicker-subtraction back rollbacks: `68:2 / 68:21`
-- no-English-kicker comparison: `67:2` — hidden
-- three-direction blank-frame study: `56:2`
-- exact Drive authority: `1BOyETtL1_loGXNjGV9S30sJKEhZNjd6O / ADD-16_両親贈呈品メッセージカード`
-- Drive write for latest pass: `0`
+- page: `76:2 / V4 / ADD-16 / HOME PORT FOLIO / CLEANROOM / 2026-08-31`
+- front: `76:3 / V4 / ADD16 / FRONT / HOME PORT FOLIO / BLEED 3MM`
+- back: `76:17 / V4 / ADD16 / BACK / LETTER FIELD / BLEED 3MM`
+- hidden front long-copy stress: `76:33`
+- hidden back long-copy stress: `76:49`
+- front variable native-text stack: `76:63`
+- hidden stress variable native-text stack: `76:64`
+- Drive authority: `1BOyETtL1_loGXNjGV9S30sJKEhZNjd6O / ADD-16_両親贈呈品メッセージカード`
+- canonical evidence: `V4-CLEANROOM-HOME-PORT-FOLIO-QA-2026-08-31.md`
 
-Canonical current evidence:
-- `PROFESSIONAL-VNEXT-HOME-TEXTILE-MAT-FAMILY-DIVERSITY-QA-2026-08-22.md`
-- `FIGMA-JAPANESE-KICKER-FONT-ASSIGNMENT-QA-2026-08-23.md`
-- `FIGMA-BACK-GENERIC-ENGLISH-KICKER-SUBTRACTION-QA-2026-08-23.md`
-- `FIGMA-VERTICAL-THREAD-SUBTRACTION-QA-2026-08-23.md`
-- `FIGMA-ACTUAL-SIZE-DATE-LEGIBILITY-QA-2026-08-24.md`
-- item Current entry point: `CURRENT.md`
+## V4 visual / structure result
 
-## Current visual direction — HOME TEXTILE MAT
+`HOME PORT FOLIO` uses a quiet keepsake / ceremonial-folio direction: warm ivory, deep navy, muted mint, neutral silver-gray, Japanese-first gratitude hierarchy, and a meaningful origin-to-destination rule. It does not imitate passport / airline ticket / rail ticket / Rurubu grammar and does not use generic badge, sticker, web-card, generated-family, or stock-travel imagery.
 
-Emotional brief: `育ててもらった時間を、これからの暮らしへ持っていく。`
+All variable/factual copy remains Figma native text. Route/origin/writing rules are native vector/shape geometry. Editable SVG=`0`; generated/composed raster=`0`; replaceable image=`0`; IMAGE fills=`0`.
 
-### Front `57:3`
+Final normal + stress structural readback:
+- front visible text `6/6` auto-height; outside=`0`; overlap=`0`; unsafe text=`0`;
+- back visible text `5/5` auto-height; outside=`0`; overlap=`0`; unsafe text=`0`;
+- stress front `6/6` auto-height; outside=`0`; overlap=`0`; unsafe text=`0`;
+- stress back `5/5` auto-height; outside=`0`; overlap=`0`; unsafe text=`0`.
 
-- dark forest selvage as tactile anchor;
-- warm oat paper field;
-- rust + saffron short weave bands;
-- former long `THREAD / VERTICAL` hidden because it read as an editorial/UI rail rather than textile structure;
-- Japanese-first `育ててくれた時間を、これからの力に。`;
-- native Japanese kicker `両親へ` explicitly `Noto Sans JP Bold`;
-- open native parent-message role and signature;
-- confirmed date `2026.10.24`: `Inter Bold / 24 px / 32 px line-height / textAutoResize=HEIGHT` after actual-size legibility repair;
-- no envelope flap, giant circle/capsule, fake airline credential, route UI, tropical clip-art or generated family/person imagery.
+During V4 QA, fixed-height text behavior, a long-recipient collision, and a date safe-area overrun were found and repaired before selection.
 
-### Back `57:17`
+## Print-first authority
 
-- open writing mat rather than another letter/envelope artifact;
-- same selvedge/weave language without former vertical rail;
-- Japanese-first `ことばを、持って帰ろう。`;
-- broad unboxed writing surface with functional rules;
-- separate guide and signature footer lanes;
-- former English microcopy `FOR THE WORDS WE WANT TO KEEP` hidden because it had no reader-facing artifact/function/factual job.
+SPEC authority:
+- trim: `100 × 148 mm portrait`;
+- duplex front/back;
+- bleed: `3 mm each edge`;
+- safe: `8 mm minimum inward from trim`.
 
-## Actual-size date-legibility repair — 2026-08-24
+V4 geometry at `7 px/mm`:
+- bleed canvas `106 × 154 mm = 742 × 1078 px`;
+- trim `100 × 148 mm = 700 × 1036 px`, inset `21 px` from bleed edge;
+- text-safe boundary begins `77 px` inward from bleed edge (`3 mm bleed + 8 mm safe`).
 
-Fresh native `700×1036` review found the confirmed front date visually weak at `18 px / 26 px line-height` despite technically fitting.
+Approximate actual-size type:
+- front hero `62 px ≈ 25.1 pt`;
+- front message `28 px ≈ 11.3 pt`;
+- recipient `26 px ≈ 10.5 pt`;
+- signature/date `24 px ≈ 9.7 pt`;
+- optional line `22 px ≈ 8.9 pt`;
+- back hero `52 px ≈ 21.1 pt`;
+- back body `27 px ≈ 10.9 pt`;
+- writing label `20 px ≈ 8.1 pt`.
 
-Rollback-safe comparison:
-- `72:2 / QA / ADD-16 / FRONT / DATE LEGIBILITY 24PX / 2026-08-24`;
-- only date typography changed `18 / 26 → 24 / 32`;
-- characters, font family/style, x/y/width and surrounding layout unchanged.
+Three-scale QA: thumbnail / 3-second scan, reading scale, and native `742 × 1078 px` print-detail all PASS. Japanese hero remains first-read; no admin-card/template impression is present; long copy remains within the 8 mm safe boundary.
 
-Result: 24px date remained clearly subordinate to the Japanese display while becoming more credible at physical/detail scale.
+Raster IMAGE fills=`0`, therefore effective PPI=`N/A` and `RESOLUTION_WARNING=NONE` for this selected V4.
 
-Complete hidden pre-change rollbacks:
-- Current front `72:18`;
-- long-copy front `72:34`.
+## Physical-use QA
 
-Promoted state:
-- Current `57:16`: `24 px / 32 px / HEIGHT`;
-- stress `57:49`: `24 px / 32 px / HEIGHT`;
-- comparison `72:2`: hidden after verification.
+The back retains a functional handwritten/signature surface with two restrained rules. Punch / fold / QR / perforation are not part of the selected primary 100 × 148 mm authority.
 
-Whole / reading / native actual-size and realistic long-copy screenshots: PASS.
-This is a `VERIFIED_LOCAL` application of the already promoted factual-microtype actual-size QA rule, not a new universal point-size rule.
-
-## Other retained repairs
-
-- Japanese front kicker fallback repaired: `Inter Bold → Noto Sans JP Bold`.
-- generic English back kicker removed after bounded reader-facing-role comparison.
-- long vertical thread removed after Current + stress comparison proved selvedge/weft already carried the textile metaphor.
-
-## Structure / long-copy QA
-
-Live readback after date repair:
-- selected front `57:3`: native visible text `5`; fixed-height `0`; outside `0`; IMAGE fills `0`; date `57:16 = 24/32/HEIGHT`; kicker `Noto Sans JP Bold`; vertical thread hidden.
-- selected back `57:17`: native visible text `4`; fixed-height `0`; outside `0`; IMAGE fills `0`; generic English kicker hidden; vertical thread hidden.
-- stress front `57:36`: native visible text `5`; fixed-height `0`; outside `0`; IMAGE fills `0`; date `57:49 = 24/32/HEIGHT`.
-- stress back `57:50`: native visible text `4`; fixed-height `0`; outside `0`; IMAGE fills `0`.
-
-All final/variable copy remains native editable text.
-
-## Hybrid / image decision
-
-- variable/factual/emotional copy: native Figma text;
-- weave/selvage/writing rules: simple native functional geometry;
-- generated/composed raster: `0`;
-- editable SVG: `0`;
-- replaceable image role: `0`;
-- image generation: `0`;
-- Drive write: `0`.
-
-The latest diagnosed quality gap was factual typography, not missing photography/illustration. Generated parents/family remain prohibited.
-
-## Professional Design Council
-
-Score remains `93/100 / PASS / NO VETO`.
-
-- Concept clarity / ownability: 14/15
-- Emotional excitement / want-to-pick-up: 14/15
-- Japanese editorial craft: 14/15
-- Composition / hierarchy / rhythm: 13/15
-- Travel/homecoming integration without cliché: 8/10
-- Item-specific functionality: 10/10
-- Physical print credibility: 10/10
-- Editability / content resilience: 5/5
-- Family fit without template sameness: 5/5
-
-## Deferred finalization
-
-Still unresolved and intentionally not fabricated:
-- one card per family vs shared card;
-- actual gift/package/attachment method;
+Still deferred:
+- one card per family vs one shared card;
+- actual gift/package dimensions, wrapping and attachment method;
 - whether names appear on front;
-- final body copy / signatures / forms of address;
-- paper stock/finish;
-- printer template/profile, bleed/export settings;
-- physical attachment and 100% print proof.
+- final recipient/body copy/signatures/forms of address;
+- final paper stock/finish;
+- real black-pen/pencil writing proof;
+- physical package/ribbon/flower interference test;
+- duplex registration proof.
 
-These remain `BLOCKED_REQUIRED_INPUT / DEFERRED_FINALIZATION` and do not invalidate the current visual/design selection.
+## CMYK / production risk
+
+Before `PRINT_READY`:
+- deep navy must be proofed for shadow plugging and black construction;
+- mint / silver-gray must be proofed for dulling and contrast loss;
+- warm ivory must be checked against actual stock;
+- small black/navy text must not use registration black;
+- vendor profile/black recipe must not be guessed in Figma;
+- PDF export, font embedding, transparency, overprint/knockout, preflight, 100% print proof / physical proof remain required.
+
+`DESIGN_COMPLETE != PRINT_READY`.
 
 ## Result
 
-`PROFESSIONAL_VNEXT_HOME_TEXTILE_MAT_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / ACTUAL_SIZE_DATE_LEGIBILITY_PASS / NOT_PRINT_READY`.
+`V4_CLEANROOM_SELECTED / SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS / STRUCTURE_QA_PASS / LONG_COPY_STRESS_PASS / PRINT_SAFE_TEXT_PASS / WRITING_SURFACE_PASS / NOT_PRINT_READY`.
