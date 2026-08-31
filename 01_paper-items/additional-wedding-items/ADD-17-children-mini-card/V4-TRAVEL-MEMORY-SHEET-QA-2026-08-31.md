@@ -1,26 +1,27 @@
 # ADD-17 子ども向けミニカード / ぬりえ — V4 TRAVEL MEMORY SHEET QA / 2026-08-31
 
-State: `V4_CLEANROOM_CREATED / STRUCTURE_QA_PASS / SELLABLE_VISUAL_QA_IN_PROGRESS / BLOCKED_REQUIRED_INPUT / NOT_PRINT_READY`
+State: `V4_SELECTED / SELLABLE_VISUAL_QA_PASS / DESIGN_QA_PASS_WITH_PLACEHOLDERS / STRUCTURE_QA_PASS / ACTIVITY_CAPACITY_QA_PASS / BLOCKED_REQUIRED_INPUT / NOT_PRINT_READY`
 Scope: non-Rurubu only
 Current authority: `docs/automation/non-rurubu-figma-quality-current.md`
 
 ## Live authority
 
-- run start / pre-write latest `main`: `00e0fd7017dc14a2644714aee92768b691f717d1`
+- run-start latest `main`: `9a090ea567d0ba4c1dc98d86eede81c3797c0e6b`
+- pre-write latest `main`: `9a090ea567d0ba4c1dc98d86eede81c3797c0e6b`
 - Figma file: `PAvkRggJiRuXVypi3RgZCN`
-- live pre-run page: `0:1 / CURRENT_SELECTED / ADD-17 / FOLDOUT DISCOVERY MAP / 2026-08-22`
-- new V4 page: `87:2 / V4 / ADD-17 / TRAVEL MEMORY SHEET / 2026-08-31`
-- new V4 front: `87:3`
-- new V4 back: `87:16`
+- retained previous selected page: `0:1 / CURRENT_SELECTED / ADD-17 / FOLDOUT DISCOVERY MAP / 2026-08-22`
+- V4 page: `87:2 / V4 / ADD-17 / TRAVEL MEMORY SHEET / 2026-08-31`
+- V4 front: `87:3`
+- V4 back: `87:16`
 - exact Drive authority: `1xqxYqJ6_-0nPYSKrWkISHYljiNGIP5mB / ADD-17_子ども向けミニカード_ぬりえ`
 - Drive write: `0`
 - generated/raster asset: `0`
 
-The older production / V2 / V3 / vNext material was not duplicated into V4. V4 was authored from a blank page and blank frames. Older work remains comparison / rollback only.
+V4 was authored from blank frames. Older production / V2 / V3 / vNext material was not duplicated into V4 and remains comparison / rollback only.
 
 ## V4 art direction
 
-`TRAVEL MEMORY SHEET` is an age-independent, neutral activity sheet rather than a fake ticket/passport or web-card composition.
+`TRAVEL MEMORY SHEET` is an age-independent, neutral activity sheet rather than a fake ticket/passport, generic kid-character product, or web-card composition.
 
 Front reading flow:
 1. `きょうの旅のきろく`
@@ -32,11 +33,11 @@ Front reading flow:
 Back reading flow:
 1. `もうひとつ、のこしておこう`
 2. `いちばん心にのこったこと`
-3. open writing rules
+3. six open writing rules
 4. optional small sketch corner
 5. name/date
 
-Visual system: warm paper, deep navy memory spine, small apricot entry tick, restrained sage corner/edge cues. No Rurubu grammar, no airplane/passport literalism, no fake badge/status UI, no stock imagery, no generated child/person imagery.
+Visual system: warm paper, deep navy memory spine, small apricot entry tick, restrained sage edge/sketch cues. No Rurubu grammar, no airplane/passport literalism, no fake badge/status UI, no stock imagery, no generated child/person imagery.
 
 ## Hybrid roles
 
@@ -56,45 +57,50 @@ Working production geometry follows the retained verified A6 physical model:
 - bleed canvas: `111 × 154mm`
 - Figma scale: `10px/mm`
 - canvas: `1110 × 1540px`
-- hidden safe guide: `8mm from trim` = `110px from bleed edge`
+- safe: `8mm from trim` = `110px from bleed edge`
 - fold / punch / perforation: not currently required
 - QR: not applicable
-- handwriting/drawing area: primary functional surface; physical pen/pencil proof remains required
+- handwriting/drawing area: primary functional surface; physical pen/pencil/crayon proof remains required
+
+Final structural readback after the 2026-08-31 correction shows:
+
+- front `87:3`: native text `7`, fixed-height text `0`, text outside root `0`, unsafe text `0`, IMAGE fills `0`
+- back `87:16`: native text `6`, fixed-height text `0`, text outside root `0`, unsafe text `0`, IMAGE fills `0`
+
+During final actual-size QA, the front kicker and multiple back text roles were found 5–15px inside the nominal 8mm safe requirement or 2px beyond its bottom edge. They were moved into the verified safe area rather than weakening the safe rule. The optional back sketch label also intersected its L-shaped corner cue; the cue was widened/repositioned and the label moved/darkened so the functional instruction no longer crosses a rule.
 
 ## Actual-size typography
 
-At `10px/mm`, 1 Figma px ≈ 0.2835pt.
+At `10px/mm`, 1 Figma px ≈ `0.2835pt`.
 
 - front title `74px` ≈ `21.0pt`
 - back title `70px` ≈ `19.8pt`
-- small supporting roles were raised during this run from 26–34px-class values to mostly `34–36px` ≈ `9.6–10.2pt`
+- supporting roles mostly `34–36px` ≈ `9.6–10.2pt`
 - name/date labels `36px` ≈ `10.2pt`
 
-This correction avoids leaving kid-facing helper/name/date roles in the ~7–9pt range at A6 actual size.
+This avoids leaving kid-facing helper/name/date roles in microtype territory.
 
-## Structure QA
+## Activity-capacity QA
 
-Front `87:3` before the small-type correction:
-- visible native text: `7`
-- fixed-height text: `0`
-- text outside root: `0`
-- IMAGE fills: `0`
+The final functional surfaces were measured at actual production scale rather than stress-testing fixed guest-facing titles as if they were variable copy:
 
-Back `87:16` before the small-type correction:
-- visible native text: `6`
-- fixed-height text: `0`
-- text outside root: `0`
-- IMAGE fills: `0`
+- front free drawing/writing field: `82 × 65mm`
+- back writing rules: `6` lines, each `79mm` wide
+- back line pitch: `11.2mm`
+- name writing lane: approximately `48mm`
+- optional back sketch corner: approximately `22.5 × 16.5mm`
 
-All semantic text uses `textAutoResize=HEIGHT`. The back sketch label was widened while increasing type size so the functional annotation does not collapse into microtype.
+The title, lead and instructional sentences are fixed copy, so a synthetic long-title clone would not represent a production variable role. A temporary hidden clone was used to probe that distinction, then removed after it produced irrelevant fixed-copy collisions. The production V4 retains no hidden stress debris. The actual variable/physical-writing surfaces remain spacious and separate from trim/safe boundaries.
 
-## Three-scale QA
+## Three-scale / sellable visual QA
 
-- thumbnail / 3-second scan: V4 front/back screenshots captured at ~505×700; hierarchy reads as physical activity stationery rather than dashboard/card UI.
-- reading scale: front/back reviewed after blank-frame construction; title → activity field → identity/date sequence remains clear.
-- actual-size / print-detail: back re-rendered at native `1110×1540` after microtype correction; supporting copy was increased to ~10pt-class where practical.
+- thumbnail / 3-second scan: front/back read immediately as a coordinated physical activity-stationery pair, not an admin/dashboard/card UI.
+- reading scale: Japanese title hierarchy → activity surface → identity/date remains clear on both faces.
+- actual-size / print-detail: safe geometry, ~10pt-class support text, line spacing, writing area and sketch label/corner relationship were checked and corrected.
+- V4 is materially different from retained `FOLDOUT DISCOVERY MAP`; the retained previous selected design remains rollback/comparison only.
+- the restrained family language does not rely on generic AI backgrounds, decorative English filler, meaningless badges, fake travel credentials, or generated children.
 
-`SELLABLE_VISUAL_QA_PASS` is intentionally not promoted in this evidence yet. A final whole-family V4 comparison plus long-copy/activity stress should be completed before promotion.
+Result: `SELLABLE_VISUAL_QA_PASS + DESIGN_QA_PASS_WITH_PLACEHOLDERS`.
 
 ## Resolution / CMYK
 
@@ -102,11 +108,12 @@ All semantic text uses `textAutoResize=HEIGHT`. The back sketch label was widene
 - effective PPI: `N/A`
 - `RESOLUTION_WARNING`: none
 - CMYK risks: deep navy, apricot, sage and warm paper may shift/dull; grayscale hierarchy must remain legible
+- the slightly darkened sage sketch instruction still requires CMYK/physical proof on the selected stock
 - black construction is not finalized until printer profile/specification is known
 
 ## Deferred / blocked finalization
 
-Final wedding adoption remains `BLOCKED_REQUIRED_INPUT` until authoritative child attendance/count/age/activity-use information exists.
+Final wedding adoption remains `BLOCKED_REQUIRED_INPUT` until authoritative child attendance/count/age/activity-use information exists. This input does not revoke the V4 visual/design gates; it controls whether the item is actually produced and how many age adaptations are needed.
 
 `DESIGN_COMPLETE != PRINT_READY`.
 
