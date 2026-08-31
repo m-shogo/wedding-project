@@ -1,0 +1,30 @@
+name: Wedding Venue Delivery Actual Evidence CI
+
+on:
+  pull_request:
+    paths:
+      - 'motion-studio/scripts/wedding-venue-delivery-actual-evidence.mts'
+      - '.github/workflows/wedding-venue-delivery-actual-evidence-ci.yml'
+  push:
+    branches:
+      - main
+      - 'automation/**'
+    paths:
+      - 'motion-studio/scripts/wedding-venue-delivery-actual-evidence.mts'
+      - '.github/workflows/wedding-venue-delivery-actual-evidence-ci.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  verify-human-actual-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify venue delivery Human Actual evidence contract
+        working-directory: motion-studio
+        run: node --no-warnings scripts/wedding-venue-delivery-actual-evidence.mts --self-test
