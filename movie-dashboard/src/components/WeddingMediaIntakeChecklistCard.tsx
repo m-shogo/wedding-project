@@ -4,6 +4,7 @@ import type {SceneProjectId} from "../data/visualSceneComposer";
 import {OpeningCropReviewOperatorCard} from "./OpeningCropReviewOperatorCard";
 import {ProfileRealMediaReviewOperatorCard} from "./ProfileRealMediaReviewOperatorCard";
 import {WeddingReviewEvidenceInstallCard} from "./WeddingReviewEvidenceInstallCard";
+import {WeddingVisualQaCorrectionQueueCard} from "./WeddingVisualQaCorrectionQueueCard";
 
 export function WeddingMediaIntakeChecklistCard({projectId}: {projectId: SceneProjectId}) {
   const isOpening = projectId === "opening";
@@ -73,6 +74,7 @@ export function WeddingMediaIntakeChecklistCard({projectId}: {projectId: ScenePr
       </section>
       {isOpening ? <OpeningCropReviewOperatorCard /> : <ProfileRealMediaReviewOperatorCard />}
       <WeddingReviewEvidenceInstallCard projectId={projectId} />
+      <WeddingVisualQaCorrectionQueueCard projectId={projectId} />
     </>
   );
 }
