@@ -19,19 +19,12 @@ permissions:
 jobs:
   verify-human-actual-contract:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 9
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
-          cache: pnpm
-          cache-dependency-path: motion-studio/pnpm-lock.yaml
-      - name: Install Motion Studio dependencies
-        working-directory: motion-studio
-        run: pnpm install --frozen-lockfile
+          node-version: '22'
       - name: Verify venue delivery Human Actual evidence contract
         working-directory: motion-studio
         run: node --no-warnings scripts/wedding-venue-delivery-actual-evidence.mts --self-test
