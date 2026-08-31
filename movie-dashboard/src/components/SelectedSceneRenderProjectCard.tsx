@@ -20,6 +20,34 @@ type SelectedSceneManifest = {
   evidenceBoundary: {remotionStudioGuiActual: "NOT_RUN"; palmierGuiActual: "NOT_RUN"; macDaVinciGuiActual: "NOT_RUN"};
 };
 
+type PreviewReelManifest = {
+  schemaVersion: "wedding-movie-project-typography-preview-reel/v1";
+  authority: "DERIVED_FROM_CURRENT_SELECTED_SCENE_RENDER_MANIFEST";
+  projectId: SceneProjectId;
+  fps: number;
+  timeline: {
+    totalFrames: number;
+    durationSeconds: number;
+    boundaries: Array<{
+      order: number;
+      sceneId: string;
+      sourceRevision: string;
+      patternId: string;
+      productionRole: string;
+      startFrame: number;
+      endFrameExclusive: number;
+      durationFrames: number;
+      startSeconds: number;
+      endSeconds: number;
+      gapFromPreviousFrames: number;
+    }>;
+  };
+  output: string;
+  render: {state: "PLANNED" | "RENDERED"; sha256: string | null; bytes: number | null};
+  summary: {totalScenes: number; frameBoundariesVerified: true; selectionsCurrent: true; productionReady: false};
+  evidenceBoundary: {remotionStudioGuiActual: "NOT_RUN"; palmierGuiActual: "NOT_RUN"; macDaVinciGuiActual: "NOT_RUN"};
+};
+
 type LocalVideo = {name: string; url: string};
 
 function fileName(path: string) {
@@ -28,11 +56,17 @@ function fileName(path: string) {
 
 export function SelectedSceneRenderProjectCard({projectId, batchReady}: {projectId: SceneProjectId; batchReady: boolean}) {
   const [copied, setCopied] = useState(false);
+  const [reelCopied, setReelCopied] = useState(false);
   const [manifest, setManifest] = useState<SelectedSceneManifest | null>(null);
   const [manifestError, setManifestError] = useState<string | null>(null);
   const [videos, setVideos] = useState<Record<string, LocalVideo>>({});
+  const [reelManifest, setReelManifest] = useState<PreviewReelManifest | null>(null);
+  const [reelError, setReelError] = useState<string | null>(null);
+  const [reelVideo, setReelVideo] = useState<LocalVideo | null>(null);
   const objectUrls = useRef<Set<string>>(new Set());
+  const reelPlayer = useRef<HTMLVideoElement | null>(null);
   const command = `node --no-warnings motion-studio/scripts/render-selected-wedding-typography-scenes.mts --batch="$HOME/Downloads/${projectId}-typography-production-batch.json" --render`;
+  const reelCommand = `node --no-warnings motion-studio/scripts/render-wedding-project-typography-preview-reel.mts --selected-manifest="$HOME/Downloads/${projectId}-selected-scene-render-manifest.json" --render`;
 
   useEffect(() => () => {
     objectUrls.current.forEach((url) => URL.revokeObjectURL(url));
@@ -43,6 +77,12 @@ export function SelectedSceneRenderProjectCard({projectId, batchReady}: {project
     await navigator.clipboard.writeText(command);
     setCopied(true);
     window.setTimeout(() => setCopied(false), 1400);
+  }
+
+  async function copyReelCommand() {
+    await navigator.clipboard.writeText(reelCommand);
+    setReelCopied(true);
+    window.setTimeout(() => setReelCopied(false), 1400);
   }
 
   async function loadManifest(file: File | null) {
@@ -68,6 +108,31 @@ export function SelectedSceneRenderProjectCard({projectId, batchReady}: {project
     }
   }
 
+  async function loadReelManifest(file: File | null) {
+    if (!file) return;
+    setReelError(null);
+    try {
+      const parsed = JSON.parse(await file.text()) as PreviewReelManifest;
+      if (
+        parsed.schemaVersion !== "wedding-movie-project-typography-preview-reel/v1" ||
+        parsed.authority !== "DERIVED_FROM_CURRENT_SELECTED_SCENE_RENDER_MANIFEST" ||
+        parsed.projectId !== projectId ||
+        parsed.summary?.frameBoundariesVerified !== true ||
+        parsed.summary?.selectionsCurrent !== true ||
+        parsed.summary?.productionReady !== false ||
+        parsed.evidenceBoundary?.remotionStudioGuiActual !== "NOT_RUN" ||
+        parsed.evidenceBoundary?.palmierGuiActual !== "NOT_RUN" ||
+        parsed.evidenceBoundary?.macDaVinciGuiActual !== "NOT_RUN"
+      ) {
+        throw new Error("preview reel identity/evidence boundary mismatch");
+      }
+      setReelManifest(parsed);
+    } catch (error) {
+      setReelManifest(null);
+      setReelError(error instanceof Error ? error.message : "preview reel manifest parse failed");
+    }
+  }
+
   function loadVideos(files: FileList | null) {
     if (!files) return;
     const incoming = Array.from(files);
@@ -86,8 +151,29 @@ export function SelectedSceneRenderProjectCard({projectId, batchReady}: {project
     });
   }
 
+  function loadReelVideo(file: File | null) {
+    if (!file) return;
+    setReelVideo((current) => {
+      if (current) {
+        URL.revokeObjectURL(current.url);
+        objectUrls.current.delete(current.url);
+      }
+      const url = URL.createObjectURL(file);
+      objectUrls.current.add(url);
+      return {name: file.name, url};
+    });
+  }
+
+  function seekReel(seconds: number) {
+    if (!reelPlayer.current) return;
+    reelPlayer.current.currentTime = Math.max(0, seconds - 0.25);
+    void reelPlayer.current.play().catch(() => undefined);
+  }
+
   const currentManifest = manifest?.projectId === projectId ? manifest : null;
+  const currentReel = reelManifest?.projectId === projectId ? reelManifest : null;
   const matched = currentManifest?.scenes.filter((scene) => Boolean(videos[fileName(scene.output)])).length ?? 0;
+  const reelFileMatches = Boolean(currentReel && reelVideo && fileName(currentReel.output) === reelVideo.name);
 
   return (
     <div className="mt-2 border-2 border-indigo-300 dark:border-indigo-800 p-2.5" data-selected-scene-render-project={projectId}>
@@ -131,6 +217,39 @@ export function SelectedSceneRenderProjectCard({projectId, batchReady}: {project
           })}
         </div>
       ) : null}
+
+      <div className="mt-3 border-2 border-violet-300 dark:border-violet-800 p-2.5" data-project-typography-preview-reel={projectId}>
+        <div className="flex flex-wrap items-start justify-between gap-2">
+          <div>
+            <p className="text-[8px] font-semibold tracking-[0.14em] text-violet-700 dark:text-violet-300">CONTINUOUS PROJECT PREVIEW REEL</p>
+            <p className="mt-1 text-[8px] leading-4 text-navy-500 dark:text-navy-300">選択済みSceneをexact 30fps timelineへ並べ、1本のRemotion previewとしてrenderします。Scene単体では見えないpattern切替・尺・テンポ・前後のつながりをPalmier前に確認します。</p>
+          </div>
+          <button type="button" disabled={!currentManifest} onClick={() => void copyReelCommand()} className="border border-violet-300 dark:border-violet-800 px-2 py-1.5 text-[8px] font-semibold text-violet-700 dark:text-violet-300 disabled:cursor-not-allowed disabled:opacity-40">{reelCopied ? "REEL COMMAND COPIED ✓" : "全Sceneを1本でrender"}</button>
+        </div>
+        <code className="mt-2 block max-w-full overflow-x-auto whitespace-nowrap border-l-2 border-violet-300 pl-2 text-[7px] leading-4 text-navy-500 dark:text-navy-300">{reelCommand}</code>
+        <div className="mt-2 flex flex-wrap gap-1.5">
+          <label className="cursor-pointer border border-violet-300 dark:border-violet-800 px-2 py-1 text-[7px] font-semibold text-violet-700 dark:text-violet-300">reel manifestを読み込む<input type="file" accept="application/json,.json" className="sr-only" onChange={(event) => void loadReelManifest(event.currentTarget.files?.[0] ?? null)} /></label>
+          <label className="cursor-pointer border border-violet-300 dark:border-violet-800 px-2 py-1 text-[7px] font-semibold text-violet-700 dark:text-violet-300">continuous MP4を読み込む<input type="file" accept="video/mp4,.mp4" className="sr-only" onChange={(event) => loadReelVideo(event.currentTarget.files?.[0] ?? null)} /></label>
+          {currentReel ? <span className="px-2 py-1 font-mono text-[7px] text-violet-600 dark:text-violet-300">{currentReel.summary.totalScenes} Scenes / {currentReel.timeline.totalFrames}f / {currentReel.timeline.durationSeconds.toFixed(2)}s / FRAME BOUNDARY VERIFIED</span> : null}
+        </div>
+        {reelError ? <p className="mt-2 border border-rose-300 px-2 py-1 text-[7px] text-rose-700 dark:border-rose-800 dark:text-rose-300">INVALID / {reelError}</p> : null}
+        {currentReel ? (
+          <>
+            <div className="mt-2 aspect-video bg-navy-950/5 dark:bg-black/20">
+              {reelVideo && reelFileMatches ? <video ref={reelPlayer} className="h-full w-full object-contain" src={reelVideo.url} controls playsInline preload="metadata" /> : <div className="flex h-full items-center justify-center px-3 text-center text-[8px] text-navy-400">{fileName(currentReel.output)} を読み込むと、全Sceneのcontinuous rhythm previewを確認できます。</div>}
+            </div>
+            <div className="mt-2 flex flex-wrap gap-1">
+              {currentReel.timeline.boundaries.map((boundary) => (
+                <button key={`${boundary.sceneId}@${boundary.startFrame}`} type="button" disabled={!reelFileMatches} onClick={() => seekReel(boundary.startSeconds)} className="border border-violet-200 dark:border-violet-900 px-2 py-1 text-left text-[7px] text-violet-700 dark:text-violet-300 disabled:opacity-40" data-preview-reel-scene={boundary.sceneId}>
+                  {boundary.order}. {boundary.sceneId} · {boundary.startSeconds.toFixed(2)}s · {boundary.durationFrames}f{boundary.gapFromPreviousFrames !== 0 ? ` · GAP ${boundary.gapFromPreviousFrames}f` : ""}
+                </button>
+              ))}
+            </div>
+            <p className="mt-2 break-all font-mono text-[6px] leading-3 text-navy-400">render={currentReel.render.state} / sha={currentReel.render.sha256 ?? "NOT_RENDERED"} / local={reelFileMatches ? "MATCHED" : "NOT_LOADED"}</p>
+          </>
+        ) : null}
+        <p className="mt-2 border-l-2 border-amber-300 pl-2 text-[7px] leading-3 text-amber-800 dark:text-amber-200">Continuous reelはHuman rhythm reviewを助けるCLI visual referenceです。再生・seek・frame boundary verifyだけではHuman approval / Remotion Studio GUI Actual / Palmier GUI Actual / Mac DaVinci GUI Actual / productionReadyを昇格しません。</p>
+      </div>
 
       <p className="mt-2 border-l-2 border-amber-300 pl-2 text-[7px] leading-3 text-amber-800 dark:text-amber-200">CLI render + SHA manifest + LOCAL playbackはPalmier配置用visual referenceです。Remotion Studio GUI Actual / Palmier GUI Actual / Mac DaVinci GUI ActualはすべてNOT_RUNのまま。productionReadyへ自動昇格しません。</p>
     </div>
