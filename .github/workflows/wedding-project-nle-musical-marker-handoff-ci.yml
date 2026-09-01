@@ -1,0 +1,54 @@
+name: Wedding Project NLE Musical Marker Handoff CI
+
+on:
+  pull_request:
+    paths:
+      - 'motion-studio/scripts/wedding-project-nle-musical-marker-handoff.mts'
+      - 'motion-studio/scripts/verify-wedding-project-nle-musical-marker-handoff-currentness.mts'
+      - '.github/workflows/wedding-project-nle-musical-marker-handoff-ci.yml'
+  workflow_dispatch:
+
+jobs:
+  marker-handoff:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build CURRENT alignment and Human-selection fixture
+        run: |
+          mkdir -p /tmp/nle-marker
+          cat > /tmp/nle-marker/alignment.json <<'JSON'
+          {"schemaVersion":"wedding-movie-bgm-rhythm-alignment/v1","authority":"DERIVED_ALIGNMENT_DISTANCES_FROM_CURRENT_RHYTHM_AND_HUMAN_BGM_CUES","projectId":"opening","fps":30,"source":{"rhythmPassSha256":"rhythm-sha","bgmCueMapSha256":"cue-map-sha","bgmSha256":"bgm-sha"},"cues":[{"id":"phrase-a","type":"PHRASE","label":"Verse start","frame":30,"seconds":1},{"id":"hit-a","type":"HIT","label":"Big hit","frame":90,"seconds":3}],"events":[{"id":"scene:intro:start","kind":"SCENE_START","sceneId":"intro","sourceRevision":"scene-r1","timingRevision":"timing-r1","frame":0,"seconds":0},{"id":"scene:intro:end","kind":"SCENE_END","sceneId":"intro","sourceRevision":"scene-r1","timingRevision":"timing-r1","frame":84,"seconds":2.8},{"id":"edge:intro->travel:mid","kind":"TRANSITION_MIDPOINT","fromSceneId":"intro","toSceneId":"travel","fromSourceRevision":"scene-r1","toSourceRevision":"scene-r2","fromTimingRevision":"timing-r1","toTimingRevision":"timing-r2","transition":"CROSS_DISSOLVE","durationFrames":6,"frame":87,"seconds":2.9}]}
+          JSON
+          ALIGNMENT_SHA=$(sha256sum /tmp/nle-marker/alignment.json | awk '{print $1}')
+          cat > /tmp/nle-marker/currentness.json <<JSON
+          {"schemaVersion":"wedding-movie-bgm-rhythm-alignment-currentness/v1","authority":"LIVE_REVALIDATION_OF_BGM_RHYTHM_ALIGNMENT_AGAINST_CURRENT_RHYTHM_AND_AUDIO","projectId":"opening","state":"CURRENT","source":{"alignmentSha256":"${ALIGNMENT_SHA}"},"mismatches":[]}
+          JSON
+          cat > /tmp/nle-marker/selection.json <<JSON
+          {"schemaVersion":"wedding-movie-bgm-rhythm-human-selection/v1","authority":"HUMAN_SELECTED_BGM_CUE_AND_CURRENT_RHYTHM_EVENT_FOR_MANUAL_EDIT","projectId":"opening","revision":"selection-r1","source":{"alignmentSha256":"${ALIGNMENT_SHA}"},"selection":{"performed":true,"event":{"id":"edge:intro->travel:mid","kind":"TRANSITION_MIDPOINT","frame":87,"seconds":2.9},"cue":{"id":"hit-a","type":"HIT","label":"Big hit","frame":90,"seconds":3},"distanceFrames":-3,"distanceSeconds":-0.1,"editTarget":{"kind":"TRANSITION_EDGE","fromSceneId":"intro","toSceneId":"travel","fromSourceRevision":"scene-r1","toSourceRevision":"scene-r2","fromTimingRevision":"timing-r1","toTimingRevision":"timing-r2","transition":"CROSS_DISSOLVE","durationFrames":6}},"summary":{"editApplied":false,"productionReady":false}}
+          JSON
+      - name: Generate JSON and CSV NLE marker sidecars
+        run: node --no-warnings motion-studio/scripts/wedding-project-nle-musical-marker-handoff.mts --alignment=/tmp/nle-marker/alignment.json --alignment-currentness=/tmp/nle-marker/currentness.json --human-selection=/tmp/nle-marker/selection.json --output=/tmp/nle-marker/handoff.json --csv-output=/tmp/nle-marker/handoff.csv
+      - name: Verify marker semantics and evidence boundary
+        run: |
+          node --input-type=module <<'NODE'
+          import {readFileSync} from 'node:fs';
+          const x=JSON.parse(readFileSync('/tmp/nle-marker/handoff.json','utf8'));
+          if(x.schemaVersion!=='wedding-movie-nle-musical-marker-handoff/v1'||x.projectId!=='opening'||x.fps!==30) throw new Error('handoff schema');
+          if(x.summary.bgmCueCount!==2||x.summary.movieEventCount!==3||x.summary.humanEditTargetCount!==1||x.summary.markerCount!==6) throw new Error('marker counts');
+          const hit=x.markers.find((m)=>m.id==='bgm:hit-a'); if(!hit||hit.timecode!=='00:00:03:00'||hit.source.bgmSha256!=='bgm-sha'||hit.humanMarked!==true) throw new Error('hit marker');
+          const edge=x.markers.find((m)=>m.id==='movie:edge:intro->travel:mid'); if(!edge||edge.timecode!=='00:00:02:27'||edge.source.fromTimingRevision!=='timing-r1'||edge.source.toTimingRevision!=='timing-r2') throw new Error('edge revision binding');
+          const decision=x.markers.find((m)=>m.category==='HUMAN_EDIT_TARGET'); if(!decision||decision.frame!==87||decision.source.distanceFrames!==-3||decision.source.editTarget.kind!=='TRANSITION_EDGE') throw new Error('Human decision marker');
+          if(x.evidenceBoundary.palmierGuiActual!=='NOT_RUN'||x.evidenceBoundary.macDaVinciGuiActual!=='NOT_RUN'||x.evidenceBoundary.productionReady!==false||x.summary.daVinciImportActual!=='NOT_RUN') throw new Error('Actual promotion');
+          const csv=readFileSync('/tmp/nle-marker/handoff.csv','utf8'); if(!csv.includes('"00:00:03:00"')||!csv.includes('"HUMAN_EDIT_TARGET"')||!csv.includes('"Big hit"')) throw new Error('csv marker sidecar');
+          NODE
+      - name: Verify strict CURRENT
+        run: node --no-warnings motion-studio/scripts/verify-wedding-project-nle-musical-marker-handoff-currentness.mts --handoff=/tmp/nle-marker/handoff.json --output=/tmp/nle-marker/handoff-currentness.json --strict-current=1
+      - name: Alignment drift fails closed
+        run: |
+          printf '\n' >> /tmp/nle-marker/alignment.json
+          if node --no-warnings motion-studio/scripts/verify-wedding-project-nle-musical-marker-handoff-currentness.mts --handoff=/tmp/nle-marker/handoff.json --output=/tmp/nle-marker/stale.json --strict-current=1; then
+            echo 'expected alignment drift to block' >&2; exit 1
+          fi
+          grep -q '"state": "STALE"' /tmp/nle-marker/stale.json
+          grep -q 'ALIGNMENT_SHA_DRIFT' /tmp/nle-marker/stale.json
