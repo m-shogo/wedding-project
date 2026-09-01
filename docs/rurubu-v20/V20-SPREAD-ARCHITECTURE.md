@@ -1,318 +1,133 @@
 # V20 Spread-First Architecture
 
-Status: `PREFERRED_V20_PAGE_MAP / SEATED_GUEST_CONTEXT`
+Status: `CURRENT_PAGE_MAP / RESET_2026-09-01`
 
 Format: A5 portrait, 8 pages fixed.
 
-V20 is designed as a physical booklet, not eight unrelated canvases.
-
-Primary reading context: guests are already at the wedding venue and seated. V20 is therefore a table-side editorial booklet, not a pre-arrival guide.
+Highest page-role authority: `V20-CURRENT-PAGE-ARCHITECTURE.md`.
 
 Physical reading units:
 - P01 = front cover;
-- P02–P03 = spread 1;
-- P04–P05 = center spread / emotional peak;
-- P06–P07 = spread 3;
+- P02–P03 = profile/story spread;
+- P04–P05 = center `MEMORIES` spread;
+- P06–P07 = real-life/closing spread;
 - P08 = back cover.
-
-Do not impose printer sheets inside the editable design master. Design/export logical pages P01–P08 and handle imposition later according to the printer/workflow.
-
----
 
 ## Book-level narrative
 
-`OPEN THE TRIP`
+`OPEN`
 → `MEET THE TWO PEOPLE`
 → `UNDERSTAND THEIR STORY`
-→ `TRAVEL THROUGH THEIR MEMORIES`
-→ `SEE THEIR REAL LIFE / BEST SHOTS`
-→ `DISCOVER TODAY'S WEDDING WORLD`
-→ `CLOSE THE JOURNEY WARMLY`
+→ `REMEMBER PLACES`
+→ `REMEMBER PEOPLE`
+→ `SEE REAL LIFE`
+→ `THANK THE GUESTS`
+→ `CLOSE LIKE A MAGAZINE`.
 
-The guest should feel that the booklet itself is a miniature journey and that the final interior page makes the actual venue around them more interesting.
+# P01 — COVER
 
----
-
-# P01 — COVER / DEPARTURE
-
-Page job:
-Within 3 seconds, communicate: joyful travel magazine + this couple + this date + worth opening.
-
-Primary content:
-- original V20 masthead / travel-magazine title;
-- hero couple photo;
-- SHOGO & SHIORI;
-- 2026.10.24;
-- YOKOHAMA;
-- 3–5 tiny editorial cover hooks only when grounded.
+Role:
+`るるぶ WEDDING` + couple + date + a few cover hooks.
 
 Composition verb:
-`STACK + CROP + BURST + COLLIDE`
+`STACK + CROP + COLLIDE`.
 
 Density:
-very high impact, but not tiny-copy heavy.
+7.5/10.
 
-Photos:
-1 hero + 1–3 satellites/cutouts.
+# P02–P03 — WHO → STORY
 
-Important:
-- cover is a poster, not an index page;
-- title/photo must remain legible from thumbnail distance;
-- title, photography, vessels and decorative art may overlap strongly when readability support exists;
-- do not copy a commercial magazine logo exactly; V20 should have an original masthead with Japanese travel-magazine energy.
+P02:
+- quick-scan profile;
+- 2 main people photos;
+- 3–5 facts each;
+- optional very small shared/Q&A module.
 
----
+P03:
+- 3–4 short relationship chapters;
+- 2–4 story photos;
+- quieter emotional reading.
 
-# P02 — WHO WE ARE / PROFILE
+Spread relationship:
+P02 is structured and lively; P03 is calmer and narrative. They should share publication DNA without mirroring geometry.
 
-Page job:
-Let guests understand both people quickly and enjoy small discoveries.
+# P04–P05 — CENTER SPREAD / MEMORIES
 
-Primary content:
-- SHOGO profile;
-- SHIORI profile;
-- 2 main profile photos;
-- 3–7 elastic facts per person;
-- optional dogs / couple-life mini feature;
-- optional 1–2 Q&A snippets if real answers exist later.
+New center-spread concept:
 
-Composition verb:
-`PAIR + OFFSET + ANNOTATE`
+`PLACES WE REMEMBER → PEOPLE WE REMEMBER`.
 
-Density:
-medium-high.
+P04:
+- all travel memories;
+- strongest travel-magazine page;
+- 5–7 travel photos;
+- 2–4 real memory/destination clusters.
 
-Photos:
-2 main portraits + 1–3 lifestyle/detail images.
+P05:
+- family & friends memories;
+- 5–7 people photos;
+- warm, recognizable, human photography.
 
-Key rule:
-Equal respect does not mean symmetric employee cards.
+The center spread should feel like one broad `MEMORIES` chapter, but a literal route does **not** need to cross the fold anymore.
 
----
+Do not carry old P05 Hawaii-only / proposal-arrival composition into the new role.
 
-# P03 — OUR STORY / HOW WE GOT HERE
+Fold rule:
+- no face, small caption or critical text depends on the fold;
+- background color/paper/soft decorative continuity may cross the fold;
+- P04 and P05 may share one subtle chapter cue, but their photo language should differ.
 
-Page job:
-Make the relationship understandable emotionally even when exact dates are missing.
+# P06–P07 — REAL LIFE → THANK YOU
 
-Primary content:
-- meeting/early-outing episode;
-- growing closer / dating episode;
-- proposal episode teaser;
-- registration/wedding arrival markers where useful;
-- 2–4 story photos.
+P06:
+- candid everyday personality;
+- 4–6 photos;
+- playful but readable.
 
-Composition verb:
-`FLOW + EPISODE + INTERRUPTION`
+P07:
+- one calm strong photo;
+- short thank-you/closing message;
+- names/date;
+- minimal final motif.
 
-Density:
-medium; calmer than P02 and P04–P05.
+Spread relationship:
+P06 carries the last playful energy. P07 deliberately slows the book down.
 
-Key rule:
-Story is episode-led, not a corporate timeline. Dates are secondary and optional where unconfirmed.
+Explicitly do not reconstruct the old P07 guide/discovery/timetable page.
 
-Spread relationship P02–P03:
-- P02 answers “who are they?”;
-- P03 answers “how did they become us?”;
-- use one small visual bridge such as a route fragment, ticket edge, or shared color cue, but do not make the two pages mirror each other.
+# P08 — MAGAZINE BACK COVER
 
----
+P08 stands alone.
 
-# P04–P05 — CENTER SPREAD / OUR JOURNEY
-
-This is the visual and emotional peak of V20.
-
-Spread job:
-Turn the couple's real travel memories into the clearest travel-magazine moment in the booklet.
-
-Primary content:
-- Okinawa;
-- Korea;
-- Hawaii;
-- Yokohama as the arrival/current destination where editorially useful;
-- Hawaii proposal as the emotional high point;
-- 6–9 photos across the spread;
-- a route/map device that connects real destinations rather than decorating randomly.
-
-Composition verb:
-`ROUTE + HERO + SATELLITES + ARRIVAL + COLLISION`
+Role:
+- quiet back-cover field/photo/art;
+- minimal meta;
+- barcode digits exactly `2026102400000`;
+- optional tiny issue/travel/wedding mark.
 
 Density:
-high, clustered, photo-led.
+2–3/10.
 
-Recommended left/right behavior:
-- P04: departure / Okinawa / Korea / exploratory energy;
-- P05: Hawaii / proposal / arrival toward Yokohama;
-- one route may cross the center fold;
-- no critical text, face, eye, date, or small marker should depend on the fold itself.
-
-Center-fold rule:
-The fold may carry atmosphere and route continuity, not critical information.
-
-This spread is the strongest place to use mixed postcard/polaroid/cutout/map/photo treatments and strong layer overlap.
-
----
-
-# P06 — OFF THE MAP / BEST SHOTS + REAL LIFE
-
-Page job:
-Show the couple's personality through candid imagery rather than more destination explanation.
-
-Primary content:
-- 5–8 best-shot / candid / everyday images;
-- dogs where suitable;
-- very short captions;
-- optional tiny facts / real Q&A snippets;
-- one large playful image to avoid equal gallery tiles.
-
-Composition verb:
-`MOSAIC + CUTOUT + NOTE`
-
-Density:
-medium-high visual density, low copy density.
-
-Key distinction from P04–P05:
-- center spread = WHERE / journey / destination stories;
-- P06 = WHO / everyday personality / candid texture.
-
-Do not repeat the same travel-photo frame system from the center spread.
-
----
-
-# P07 — TODAY'S TRAVEL GUIDE / LOOK AROUND THE WEDDING
-
-Page job:
-Reward guests who are already seated. Make the physical wedding around them more fun to notice, discuss and remember.
-
-This page is NOT a timetable, access page, dress-code page or pre-arrival instruction page.
-
-Primary content candidates:
-- `TODAY'S DESTINATION / YOKOHAMA / 2026.10.24` as the editorial anchor;
-- the wedding's travel concept and destination-themed table/decor idea;
-- 3–6 `LOOK AROUND` discoveries grounded in actual venue/wedding details;
-- 2–4 `EDITOR'S PICK` details that the couple intentionally chose or made;
-- tiny visual references to real travel motifs visible in the room;
-- optional one verified venue/detail photo or illustration when useful.
-
-Potential grounded discovery categories, final wording still subject to confirmation:
-- table destination themes;
-- flower/decor details;
-- travel-signage / ticket / passport motifs used physically at the wedding;
-- cake or other meaningful design detail;
-- one small hidden/easter-egg style observation if actually present.
-
-Composition verb:
-`DISCOVER + CIRCLE + POINT + COLLIDE`
-
-Density:
-medium-high editorial density, low long-copy density.
-
-Suggested silhouette:
-- one large `TODAY'S TRAVEL GUIDE` title colliding with a background/photo/illustration;
-- one irregular world/travel cluster spanning roughly 35–50% of page perception;
-- 3–6 unequal discovery callouts placed around/over that cluster;
-- one visually stronger `EDITOR'S PICK` vessel;
-- one calm factual field for any explanatory copy;
-- stamps/arrows/labels may strongly overlap photography and background art when native copy remains readable.
-
-Important:
-- this is not a literal seating map unless a verified map is intentionally supplied;
-- do not tell guests where to sit; they are already seated;
-- do not list all table facts if the result becomes a tiny unreadable directory;
-- choose the most interesting details rather than cataloguing everything;
-- do not duplicate menu/drink/seating/escort information owned by other paper items;
-- no dress code, access directions, parking, check-in, RSVP or arrival guidance;
-- no fake venue facts, table destinations, hidden details or couple intentions.
-
-Spread relationship P06–P07:
-- P06 = `OUR REAL LIFE / WHO WE ARE` through candid photography;
-- P07 = `LOOK AROUND / WHERE YOU ARE NOW` through wedding discoveries;
-- together they move from the couple's everyday world into the guest's present physical experience.
-
-Photo budget:
-0–2 photos. P07 must work even with zero photos because the strongest content is editorial discovery, not gallery imagery.
-
----
-
-# P08 — BACK COVER / CONTINUE THE JOURNEY
-
-Page job:
-Close warmly and confidently without becoming a leftovers page.
-
-Primary content:
-- short thank-you message;
-- SHOGO & SHIORI;
-- date / YOKOHAMA reprise;
-- one calm photo or small closing collage;
-- subtle issue/postcard/stamp/barcode-like nonfunctional decorative metadata if clearly decorative;
-- QR only if a real verified destination is supplied.
-
-Composition verb:
-`RESOLVE + BREATHE + SIGN OFF`
-
-Density:
-low-medium.
-
-Key rule:
-The eye should feel a release after P07.
-
----
+It is not the main thank-you page and not a leftovers page.
 
 # Whole-book density rhythm
 
-- P01: 9/10 impact
-- P02: 7/10
-- P03: 5.5/10
-- P04–P05: 9/10 center-spread peak
-- P06: 7.5/10 image density
-- P07: 7/10 discovery/editorial density
-- P08: 4/10
+- P01: 7.5/10
+- P02: 6/10
+- P03: 5–5.5/10
+- P04: 8/10
+- P05: 7/10
+- P06: 6.5/10
+- P07: 3.5–4/10
+- P08: 2–3/10
 
-Do not make all pages equally loud.
+# Architecture anti-regression
 
----
+Do not revive without explicit user instruction:
+- P04–P05 as one Hawaii/proposal route story;
+- P05 as Hawaii-only feature;
+- P07 travel guide / `11 DESTINATIONS` / wedding discoveries;
+- P07 schedule;
+- P08 as the primary closing-message page.
 
-# Photo budget by page
-
-Working target only:
-- P01: 2–4
-- P02: 4–5
-- P03: 2–4
-- P04–P05: 6–9
-- P06: 5–8
-- P07: 0–2
-- P08: 1–2
-
-Total planned slots: roughly 20–34, with a preferred unique-photo range around 23–31 after actual selection.
-
-A photo used as a hero should normally not be reused elsewhere unless the reprise is deliberate.
-
----
-
-# Why this architecture is resilient
-
-It does not require:
-- a full Q&A set;
-- exact relationship dates;
-- a fixed number of profile fields;
-- fabricated Friends/Family copy;
-- a food/cafe page just to fill space;
-- pre-arrival logistics that are no longer useful when the guest reads the booklet.
-
-If more real content arrives, it can enrich P02/P03/P06/P07 without changing the eight-page spine.
-
-If content remains missing, the book still works because the center spread and P06 can be photo-led while P07 can be curated around verified wedding details.
-
----
-
-# Architecture change rule
-
-Do not change this page map because one Figma layout is difficult.
-
-Change the map only if:
-1. new real content materially changes the editorial story;
-2. a genuinely useful seated-guest editorial block has no valid home;
-3. actual photo inventory proves a page impossible;
-4. print/binding constraints materially require a different structure.
-
-A styling problem is not an architecture reason.
+A Figma styling difficulty is not permission to recover an obsolete page role.
