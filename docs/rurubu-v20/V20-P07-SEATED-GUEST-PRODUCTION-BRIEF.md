@@ -1,232 +1,222 @@
 # V20 P07 Seated-Guest Production Brief
 
-Status: `CANONICAL_P07_OVERRIDE`
+Status: `CANONICAL_P07_OVERRIDE / HIGH_DENSITY_DISCOVERY / ZERO_BASE_PNG`
 
-This file supersedes the older `P07 — TODAY'S TRAVEL GUIDE / WEDDING DAY` schedule-first section in `V20-PAGE-MANUALS.md`.
-
-The old timetable concept is not production authority for V20.
+This file supersedes all older schedule/timetable-first P07 production concepts.
 
 ## 1. Page job
 
-P07 is read by guests who have already arrived and are seated.
+P07 is read by guests who are already inside the venue.
 
-Its job is NOT to explain how to get to the wedding or repeat the day's timetable.
+Its job:
+- make the travel concept around them noticeable;
+- create fun visual discovery and conversation;
+- connect P04–P05 travel memories to today's physical wedding space;
+- feel like a real Japanese travel-guide feature about a place the reader is already inside.
 
-Its job is:
-- make guests notice the travel concept around them;
-- give them fun things to discover from their seats and during the reception;
-- create table conversation;
-- connect the couple's travel story on P04–P05 to the physical wedding space around the reader.
+Not its job:
+- timetable;
+- access;
+- check-in;
+- seating navigation;
+- pre-arrival logistics.
 
-Working title family:
-- `TODAY'S TRAVEL GUIDE`
-- `FIND THE JOURNEY AROUND YOU`
-- Japanese primary title to be written natively later.
+## 2. First / second read
 
-## 2. Editorial thesis
+FIRST:
+`TODAY'S TRAVEL GUIDE`
 
-`The trip did not end when the guests arrived. Today's venue itself is another travel spread.`
+SECOND:
+large `11` / `11 DESTINATIONS AROUND YOU` family.
 
-P07 should feel like a Rurubu feature about a place the reader is already standing/sitting inside.
+At thumbnail scale these must dominate before individual destination names.
 
-It is a discovery page, not a navigation page.
+## 3. Composition verb
 
-## 3. Primary feature — 11 destinations / table journey
+`MAP + SCATTER + CIRCLE + POINT + COLLIDE + DISCOVER`
 
-Current project context contains an 11-table destination/theme concept.
+Not `TABLE + GRID + LIST`.
 
-Current candidate themes from project context:
-- Hawaii;
-- Italy;
-- France;
-- Spain;
-- Taiwan;
-- Japan;
-- Hong Kong;
-- Star / star-themed table;
-- Bali;
-- Korea;
-- Maldives.
+## 4. Main silhouette
 
-Status: `GROUNDED_CANDIDATE / FINAL WORDING + ORDER TO CONFIRM BEFORE COPY LOCK`.
+Target behavior:
+- title upper-left/top and materially overlapping the journey composition;
+- giant `11` behind/through part of title or destination cluster;
+- one broad journey/map/route environment occupying roughly 55–70% perceived area;
+- 3–4 destination vessels materially stronger than the rest;
+- remaining destination names distributed at unequal scale/depth;
+- one stronger LOOK AROUND or EDITOR'S PICK vessel invading the main composition;
+- 1–3 small verified detail photos only when useful;
+- 2–4 active edges/corners on this high-energy page;
+- one embedded calm reading island.
 
-Do not attach table numbers, guest names or seating assignments unless separately verified and intentionally requested. This is not the seating chart.
+## 5. Destination family
 
-## 4. Reading path
+Do not build eleven identical chips.
 
-1. large `TODAY'S TRAVEL GUIDE` / `LOOK AROUND!` title collision;
-2. central visual route/world/travel composition;
-3. 3–4 visually stronger destination labels;
-4. remaining destination discoveries scattered around the composition;
-5. 2–4 short `TODAY'S DETAIL` callouts about verified wedding/travel-theme details;
-6. one small closing prompt such as a native equivalent of `Which destination did you find?` only if wording feels natural and not gimmicky.
-
-The page should be understandable without reading every destination.
-
-## 5. Composition verb
-
-`MAP + SCATTER + COLLIDE + DISCOVER`
-
-Not:
-`TABLE + GRID + LIST`.
-
-## 6. Visual silhouette
-
-Preferred structure:
-- title enters from upper-left/top and overlaps map/route art strongly;
-- one large background travel/map/route composite occupies roughly the middle 55–70% of perceived page area;
-- destination label vessels float at different scale/depth, often crossing route/photo/map boundaries;
-- 1–2 labels may be mostly over photography or illustration;
-- one paper-note discovery field intrudes into the main composition rather than sitting as a detached card;
-- one or two destination labels may crop at page edges;
-- lower-right or bottom acts as a small resolve/summary, not a footer bar.
-
-## 7. Strong overlap policy
-
-P07 follows `FULL EDITORIAL COLLISION`.
-
-Explicitly allowed:
-- destination label over map + route + photo;
-- title over illustration + destination label;
-- large number `11` behind/through the title;
-- route under one label and over another;
-- paper discovery note covering part of map art;
-- edge floral/travel cluster partly hiding a destination vessel;
-- one mini photo/detail image crossing the map boundary.
-
-Protect only:
-- native small factual text;
-- any final verified wedding-detail explanation;
-- important faces if photos are used.
-
-## 8. Information vessels
-
-Do not use eleven repeated chips or identical rounded labels.
-
-Create a related but varied editorial family:
+Generate a coherent but varied zero-base PNG family:
 - 2–3 stamp shells;
-- 2 ticket/tab forms;
-- 1 large burst or irregular destination slab;
+- 1–2 ticket/tab forms;
+- one irregular large slab/burst;
 - 1–2 paper-note forms;
-- 1 circular/oval locator form;
-- 1 vertical strip/tag;
-- some destination names may be text-only with keyline/shadow directly over artwork.
+- one circular/oval locator;
+- one vertical strip/tag;
+- text-only/keyline treatment where useful.
 
-The family should share print DNA but not silhouette.
+Approximately 6–8 silhouettes are enough to support 11 destinations through changes in scale, crop, rotation and depth.
 
-## 9. Large prepared assets
+Old SVG/icon/label silhouettes are forbidden references. Keep only the functional job.
 
-### `V20_P07_WORLD_JOURNEY_BACK_A`
-Role:
-- broad background journey/map/route environment;
-- no authoritative destination names baked in;
-- contains large quiet openings for native labels;
-- imperfect print/editorial map language, not functional cartography.
+`KEEP THE JOB; REDESIGN THE OBJECT.`
 
-### `V20_P07_WORLD_JOURNEY_FRONT_A`
-Role:
-- selected route/arrows/stamps that cross above destination vessels and photo/detail elements;
-- visually paired with BACK.
+## 6. Large prepared assets
 
-### `V20_P07_DESTINATION_VESSEL_SET_A`
-Role:
-- varied text-support vessels for destination names;
-- 6–8 silhouettes/variants are enough; reuse with different scale/depth rather than create eleven identical objects.
+### `V20_P07_TRAVEL_GUIDE_TITLE_UNIT`
+- dominant title art / holder relationship;
+- thick print/display energy;
+- interacts with giant `11`, journey art and destination labels;
+- no generic clean header bar.
 
-### `V20_P07_LOOK_AROUND_CLUSTER_A`
-Role:
-- one high-energy callout cluster with travel/print/flower cues;
-- page-specific, may be 40–60% hidden by title/map/photo after assembly.
+### `V20_P07_11_DESTINATIONS_UNIT`
+- giant numeral/second-read graphic support;
+- may sit behind title and parts of journey art;
+- exact authoritative wording can remain native.
 
-### `V20_P07_TODAYS_DETAIL_NOTE_A`
-Role:
-- irregular support for one or two short native callouts;
-- not a generic rounded information card.
+### `V20_P07_WORLD_JOURNEY_BACK`
+- broad editorial journey/map/route field;
+- no fake cartography or country facts;
+- large transparent/quiet openings for labels;
+- imperfect print/editorial language rather than map-app UI.
+
+### `V20_P07_WORLD_JOURNEY_FRONT`
+- selected route/arrows/stamp fragments that cross above destination vessels/photos;
+- paired with BACK to create real depth.
+
+### `V20_P07_DESTINATION_VESSEL_SET`
+- 6–8 varied silhouettes;
+- real alpha;
+- no authoritative names baked in;
+- designed to overlap map/route/photo/each other.
+
+### `V20_P07_LOOK_AROUND_UNIT`
+- high-energy callout cluster;
+- may include paper/ribbon/marker/route cue;
+- page-specific;
+- can be significantly occluded in final assembly.
+
+### `V20_P07_EDITORS_PICK_UNIT`
+- stronger local article/discovery vessel;
+- serves as embedded calm island;
+- intended for short native verified copy.
+
+### `V20_P07_MICRO_GUIDE_SET`
+Only after main hierarchy passes:
+- tiny route node;
+- arrow;
+- small camera/location/travel mark;
+- tiny stamp/issue detail;
+- small paper fragment;
+- optional page-edge discovery cue.
+
+## 7. Density calibration
+
+Target energy: `HIGH / ~8/10`.
+
+Once title/11/journey/destination hierarchy works, approximately 8–16 small discoverable events can be appropriate.
+
+They must be:
+- unequal;
+- partially hidden where useful;
+- connected to content/flow;
+- not evenly sprinkled.
+
+## 8. Strong overlap plan
+
+Plan explicit relationships:
+- title over BACK environment;
+- giant `11` behind title / some destination labels;
+- route BACK below labels;
+- 1–2 destination vessels crossing journey art and another object;
+- one verified detail photo crossing map/journey boundary if available;
+- EDITOR'S PICK / LOOK AROUND vessel covering meaningful background area;
+- route FRONT / stamp fragments crossing above selected labels;
+- one edge object partly cropped;
+- one noncritical shell partly hidden behind another layer.
+
+## 9. Copy / truth
+
+Native/editable:
+- all destination names;
+- exact `11` wording;
+- verified wedding-detail copy;
+- location/date;
+- all factual claims.
+
+Generated artwork must not invent:
+- country/local facts;
+- table numbers/seating assignments;
+- fake airline/gate data;
+- operational venue information;
+- generic wedding detail pretending to be real.
 
 ## 10. Photo policy
 
-P07 can succeed with ZERO photography.
+P07 can work with zero photography.
 
-If verified wedding/venue detail photography exists and improves the page:
-- use 1–3 small detail images maximum;
-- use them as discoveries layered into the map/route composition;
-- do not turn P07 into another gallery.
+If verified real wedding/venue/decor/food detail photos improve discovery:
+- use 1–3 small images;
+- frame them as discoveries inside the journey composition;
+- do not create another gallery;
+- do not substitute generated filler for factual evidence.
 
-Do not use unrelated stock/generated venue photography as factual evidence.
+## 11. One-shot proof test
 
-## 11. Copy policy
+Before mass-producing all units, a full-page art-direction proof may be generated from this brief.
 
-Native/editable:
-- page title;
-- all destination names;
-- `11` / count wording;
-- all wedding-detail callouts;
-- any question/prompt;
-- names/date if repeated as small metadata.
+Pass only if a first glance gives:
+- real Japanese travel-guide density;
+- giant title/11 hierarchy;
+- destination exploration;
+- deep layered collision;
+- many rewarding small details;
+- no dashboard/grid/timetable feeling.
 
-Generated/composed artwork must NOT bake authoritative destination names or Japanese copy.
+If the proof looks like a generic travel scrapbook, revise this brief/direction before asset production.
 
-## 12. Explicit exclusions
+## 12. Production sequence
 
-P07 must not include as primary content:
-- dress code;
-- access map;
-- station directions;
-- parking;
-- check-in time;
-- ceremony timetable;
-- reception timetable;
-- food/drink menu already owned by another paper item;
-- seating chart already owned by another paper item;
-- escort-card instructions;
-- fake flight numbers or boarding information;
-- generic wedding etiquette.
+1. inspect current P07 + full-book contact;
+2. generate 2–3 serious full-page visual-direction proofs if useful;
+3. choose/merge the strongest editorial behavior conceptually;
+4. produce TITLE / 11 / WORLD BACK;
+5. place in Figma and validate major hierarchy;
+6. produce destination vessel family;
+7. produce LOOK AROUND / EDITOR'S PICK;
+8. add verified detail photo units if sources exist;
+9. produce WORLD FRONT;
+10. add native destination/factual copy;
+11. add micro guide set only after main page works;
+12. page / P06–P07 spread / full-book / A5 QA;
+13. keep new version only if it convincingly beats current.
 
-## 13. Relationship to P06
+## 13. Reject
 
-P06 says:
-`THIS IS WHAT WE ARE LIKE IN REAL LIFE.`
+- 11 identical labels;
+- seating-chart feel;
+- timetable/itinerary UI;
+- Google Maps/transit aesthetic;
+- legacy flat SVG/icon-pack look;
+- generic sticker sheet;
+- title and background isolated from one another;
+- evenly distributed icons;
+- invented travel facts;
+- bright colors carrying weak hierarchy;
+- clean wedding-template page with travel decorations.
 
-P07 says:
-`NOW LOOK UP — THE TRAVEL STORY IS AROUND YOU TODAY.`
+## 14. Success
 
-Therefore P06–P07 becomes a strong contrast spread:
-- P06 = photography / human / candid / irregular scrapbook;
-- P07 = graphic / environmental / discovery / map + label collision.
+The intended reaction is:
 
-They share tactile paper language, but not the same mosaic silhouette.
+`今日の会場を旅行雑誌みたいに見て回れる。`
 
-## 14. Density
-
-Target density: `8/10`, but information is fragmented into discoveries rather than one long body block.
-
-At thumbnail scale:
-- title;
-- large `11` or central journey graphic;
-- 3–4 strong destinations;
-should read first.
-
-At A5 reading scale:
-- remaining destinations;
-- small `LOOK AROUND` notes;
-- micro discoveries;
-become rewarding.
-
-## 15. QA
-
-Reject if:
-- it looks like a seating chart;
-- destination names are arranged in an even grid;
-- eleven identical pills/cards appear;
-- map looks like Google Maps/transit UI;
-- decorative country facts are invented;
-- page explains information guests needed before arrival;
-- content duplicates menu/drink/seating utility;
-- map/labels are isolated rather than colliding;
-- travel graphics overpower all native content.
-
-Pass when:
-- a seated guest can glance around the venue and connect the page to what they see;
-- the page creates at least one conversation starter;
-- it feels like a playful travel-magazine feature;
-- it remains truthful even if some final wedding-detail callouts are removed.
+The page should feel like an authored high-density guide feature, not an information dashboard.
