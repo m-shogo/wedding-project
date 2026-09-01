@@ -614,6 +614,8 @@ function kitPresetToPattern(preset: StartMotionPreset): MotionPatternRecord {
                   ? ["preview-photo-small-push-davinci-actual", "preview-photo-small-push-concept"]
                   : preset.id === "flash-one-frame-soft"
                     ? ["preview-flash-one-frame-soft-davinci-actual", "preview-flash-one-frame-soft-concept"]
+                    : preset.id === "type-char-stagger"
+                      ? ["preview-type-char-stagger-davinci-actual", "preview-type-char-stagger-concept"]
         : [`preview-${preset.id}-concept`],
     reuseEvidence: {
       searchedExistingPatterns: true,
@@ -724,6 +726,23 @@ function kitPresetToImplementation(preset: StartMotionPreset): MotionImplementat
       studioRequired: false,
       verified: true,
       notes: "専用Resolve projectで1280x720 / 24fps / 95framesを構築。Text+単体ではなくFusion Merge後のEXR 118framesをResolve Saverで実Renderし、その先頭95framesをH.264へ収録。ffprobe・SHA-256・frame 0/5/11/50/94 pixel oracle・通常速度目視QAを通過。位置/scale motionはなくBlendだけが0→1へ変化する。",
+    };
+  }
+  if (preset.id === "type-char-stagger") {
+    return {
+      id: "impl-type-char-stagger",
+      patternId: "type-char-stagger",
+      kind: "DAVINCI_TEXT_PLUS",
+      status: "PRODUCTION_READY",
+      method: "文字ごとに独立したText+ + Mergeを直列合成し、Mergeそれぞれのblendを異なる開始frameでkeyframeして時間差を作る。",
+      artifactType: "NONE",
+      artifactPath: null,
+      installed: true,
+      tested: true,
+      resolveVersion: "21.0.4.5",
+      studioRequired: false,
+      verified: true,
+      notes: "専用Resolve projectで1280x720 / 24fps timelineへFusion Saver(EXR)を直接render。H(frame0→4)/I(6→10)/!(12→16)の3文字を個別のText+ + MergeでBlend keyframeし、frame2/20の目視で時間差の立ち上がりを確認済み。BezierSplineは最初のkeyframe手前を接線で外挿するため、後発文字にわずかな早期フェードインが乗る(次回はEase-Inで補正余地あり)。",
     };
   }
   if (preset.id === "flash-one-frame-soft") {
@@ -1045,6 +1064,22 @@ motionPreviews.push({
   resolveVersion: "21.0.4.5",
   verified: true,
   notes: "白Backgroundとの合成をBlend 0(frame24)→0.85(frame27)→0(frame30)で往復させたソフトフラッシュ。Resolve Fusion Saverの直接EXR出力をffmpegでH.264化し、frame24/27の目視で切り替わりを確認済み。",
+});
+motionPreviews.push({
+  id: "preview-type-char-stagger-davinci-actual",
+  patternId: "type-char-stagger",
+  sourceType: "ACTUAL_DAVINCI_RENDER",
+  status: "VERIFIED",
+  freshness: "CURRENT",
+  assetPath: "/motion-previews/type-char-stagger/davinci-actual-v1.mp4",
+  posterPath: "/motion-previews/type-char-stagger/davinci-actual-v1-poster.png",
+  generatedBy: "DaVinci Resolve Free 21.0.4.5 / native 3x Fusion Text+ + Merge chain / Saver EXR render",
+  generatedAt: "2026-09-01T16:25:00+09:00",
+  implementationId: "impl-type-char-stagger",
+  sampleAssetSetId: "sample-generic-typography-v1",
+  resolveVersion: "21.0.4.5",
+  verified: true,
+  notes: "H/I/!の3文字をそれぞれ別のText+ + Mergeで直列合成し、Blendの開始frameを0/6/12へずらして立ち上げ。Resolve Fusion Saverの直接EXR出力をffmpegでH.264化。frame2/20の目視で時間差の立ち上がりを確認済み。",
 });
 motionPreviews.push(...kitPatternsExcludingMaskSlide.map(kitPresetToPreview));
 

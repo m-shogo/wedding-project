@@ -60,10 +60,10 @@ export function VisualMotionLibrary() {
 
       <section className="mb-8 border-l-2 border-emerald-600 pl-5">
         <p className="text-[10px] tracking-[0.2em] font-semibold text-emerald-700 dark:text-emerald-300">VERTICAL SLICE / HUMAN MASTER</p>
-        <h2 className="mt-1 text-xl font-bold text-navy-900 dark:text-sand-100">Native App Actual 7件を、検証根拠と一緒に公開する</h2>
+        <h2 className="mt-1 text-xl font-bold text-navy-900 dark:text-sand-100">Native App Actual 8件を、検証根拠と一緒に公開する</h2>
         <p className="mt-2 text-sm leading-6 text-navy-600 dark:text-navy-300">
           人間が理解できるScene Duration / Delay / Hold / Position / Direction等を正本として編集できるのはMask Revealのみ。
-          他のMotion Kit presetは、31件の永続Remotion TESTEDと2件のsource-media Actual TESTEDを証拠種別ごとに分けている。Mask Reveal・Quiet Caption・Static Hero・Word Punch・Small Push・Flash SoftはDaVinci Actual、Hard Cut AccentはPalmier Actualまで到達済み。
+          他のMotion Kit presetは、31件の永続Remotion TESTEDと2件のsource-media Actual TESTEDを証拠種別ごとに分けている。Mask Reveal・Quiet Caption・Static Hero・Word Punch・Small Push・Flash Soft・Char StaggerはDaVinci Actual、Hard Cut AccentはPalmier Actualまで到達済み。
         </p>
       </section>
 
@@ -82,6 +82,7 @@ export function VisualMotionLibrary() {
           <p className="border-l-2 border-emerald-500 pl-3"><span className="font-mono">type-word-punch</span> — DaVinci Fusion Saverで単発Blendパンチ(GO!)を実機確認済み</p>
           <p className="border-l-2 border-emerald-500 pl-3"><span className="font-mono">photo-small-push</span> — DaVinci Fusion TransformのSize keyframe(1.00→1.05)を実機確認済み</p>
           <p className="border-l-2 border-emerald-500 pl-3"><span className="font-mono">flash-one-frame-soft</span> — DaVinci Fusion Background+Mergeのソフトフラッシュを実機確認済み</p>
+          <p className="border-l-2 border-emerald-500 pl-3"><span className="font-mono">type-char-stagger</span> — DaVinci Fusion 3x Text+の時間差Blendを実機確認済み</p>
           <p className="border-l-2 border-emerald-500 pl-3"><span className="font-mono">cut-match-shape</span> — Pexels実動画2本の太陽中心を合わせてTESTED</p>
           <p className="border-l-2 border-emerald-500 pl-3"><span className="font-mono">whip-source-matched</span> — Pexels列車窓2本の同方向camera motionでTESTED</p>
         </div>
