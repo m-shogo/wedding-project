@@ -1,243 +1,201 @@
 # V20 Editorial Container & Title Grammar
 
-Status: `CANONICAL / IMAGEGEN_FIRST / ANTI-UI / CURRENT_P07_DISCOVERY`
+Status: `CANONICAL / IMAGEGEN_FIRST / ANTI_UI / CURRENT_PAGE_ROLES_2026-09-01`
 
-Purpose: define how V20 uses titles, subtitles, boxes, bands, frames, labels and article vessels as **physical magazine editorial forms**, not reusable app components.
+Highest page-role authority:
+- `V20-CURRENT-PAGE-ARCHITECTURE.md`
+- `V20-PAGE-BY-PAGE-DESIGN-SPEC.md`
 
-## 1. Core rule
+Purpose: define how titles, subtitles, frames, labels and article vessels behave as physical magazine editorial forms rather than reusable app components.
 
-Boxes, bands, labels, rounded shapes and frames are allowed. Generic repeated UI containers are not.
+## Core rule
 
-A vessel may cover a large part of photography if it improves hierarchy/readability. A title may cross background, photo, frame, subtitle and another label in one silhouette.
+Boxes, bands, labels and frames are allowed. Repeated generic UI containers are not.
 
-The question is not `is this a box?`; it is `does this look deliberately edited for this exact magazine page?`
+The question is not `is this a box?`; it is:
+`does this object feel deliberately edited for this exact page and information job?`
 
-## 2. Current P01 masthead direction
+Book-wide calibration:
+- Rurubu-like character 100%
+- information/clutter load about 75% of previous max-clutter tests
+- readability high
 
-Under `V20-PRIVATE-HOMAGE-AND-LAYERED-PAGE-GENERATION-RULE.md`, the working private masthead text may be:
+## P01 masthead
 
-`るるぶ WEDDING`
+Working private masthead text may be `るるぶ WEDDING`.
 
-Treat it as the dominant cover graphic mass:
-- large enough to define the cover at thumbnail scale;
-- strong red/coral/yellow/blue/cream/ink relationships as appropriate;
-- thick keyline/outline;
-- hard offset shadow;
-- possible attached ribbon/tab/burst;
-- deep collision with HERO/support photography;
-- not a timid plain-text header.
+Treat it as the dominant cover graphic mass with strong keyline/shadow/paper interaction and photo collision. Do not import or trace an official commercial logo asset.
 
-Do not import/vector-trace an official third-party logo asset. The goal is a convincing authored homage, not an official asset copy.
-
-## 3. Editorial vessel families
+## Editorial vessel families
 
 ### PAPER / PRINT
-- torn/clean paper note;
-- postcard field;
-- printed-photo caption foot;
-- taped memo;
-- clipped magazine inset;
-- offset paper stack;
-- ticket/coupon/baggage-tag form;
-- stamp-frame field.
+- torn/clean paper note
+- postcard field
+- printed-photo caption foot
+- taped memo
+- clipped magazine inset
+- offset paper stack
+- ticket/notch form
+- stamp-frame field
 
 ### DISPLAY / PROMO
-- burst/sunburst;
-- irregular slab/blob;
-- thick outlined badge;
-- diagonal ribbon;
-- vertical side strip;
-- giant color slab behind title;
-- marker-stroke backplate;
-- circular/oval feature badge;
-- asymmetric corner enclosure.
+- irregular slab
+- burst
+- ribbon
+- vertical strip
+- marker backplate
+- circular/oval badge
+- asymmetric corner enclosure
 
-### INFORMATION / READING
-- quiet cream article field;
-- local opaque/translucent support;
-- inset article column;
-- caption tab attached directly to photo;
-- mini fact/index strip;
-- numbered locator/destination plate;
-- small editorial footnote plate.
+### READING / FACTUAL
+- quiet cream article field
+- local contrast support
+- inset story field
+- caption tab attached to photo
+- mini fact strip
+- Q&A shell
+- friend-memory caption vessel
+- tiny back-cover meta plate
 
 ### IMAGE-BOUND
-- label physically crossing a photo edge;
-- destination badge embedded into a photo corner;
-- caption partly inside/partly outside photo;
-- title partly behind subject/photo;
-- photo frame whose edge becomes text support.
+- label crossing photo edge
+- caption partly inside/outside photo
+- title partly behind subject/photo
+- frame edge used as text support
 
-## 4. Container choice by information job
+## Container choice by job
 
-- HERO / COVER TITLE → giant graphic silhouette, outline, slab/ribbon, direct photo collision;
-- subtitle → attached ribbon/slanted paper/mini feature plate, not plain text underneath by default;
-- short `look here` fact → burst/badge/small paper tag;
-- destination → stamp/locator/ticket/postcard label;
-- narrative paragraph → calm paper/article field embedded in the composition;
-- caption → attached strip/tab/note;
-- profile fact → varied annotations/mini labels;
-- proposal → unique warm article vessel, not another generic card;
-- P07 discovery → varied destination vessels + LOOK AROUND / EDITOR'S PICK supports;
-- closing → restrained postcard/stamp/message field.
+- P01 cover title → giant graphic silhouette + strong photo collision
+- P02 profile fact → compact varied fact labels / tidy Q&A vessels
+- P03 story paragraph → calm article/episode fields / emotional Q&A vessels
+- P04 travel memory → destination/memory labels, tickets/stamps, short caption vessels
+- **P05 friends → SHOGO/SHIORI section labels + medium/small photo backings + short caption vessels; no proposal vessel, no destination vessel system, no giant hero support**
+- P06 real life → playful notes/tape/caption/Q&A vessels
+- P07 closing → restrained message support only when needed
+- P08 back cover → tiny issue/meta/barcode support only
 
-The obsolete schedule/time-field P07 grammar is not current authority.
+## Repetition control
 
-## 5. Repetition control
+Reject:
+- identical rounded cards
+- repeated pills
+- one full-width title bar on every page
+- identical photo frames everywhere
+- every fact in one box family
+- legacy SVG icon/label grammar reused merely for continuity
 
-Bad:
-- 4 identical rounded cards;
-- 6 identical pills;
-- one full-width title bar repeated across pages;
-- every photo with the same white frame/shadow;
-- every fact in the same box;
-- one old SVG icon/label family reused everywhere.
+Good publication DNA means related print behavior with page-specific geometry.
 
-Good:
-- related destination vessels that vary in silhouette/scale/depth;
-- profile labels sharing print DNA but not geometry;
-- ticket/stamp families reappearing with different crop/rotation/job;
-- P04–P05 related travel vocabulary while proposal/Hawaii title remain unique.
+## Title silhouette by page
 
-Adjacent pages should not use the same dominant vessel silhouette.
+- P01: giant masthead mass
+- P02: people-feature title integrated with portraits
+- P03: quieter story title
+- P04: strong travel-feature title
+- P05: warm `友達との思い出` title + clear `SHOGO FRIENDS` / `SHIORI FRIENDS` sublabels
+- P06: playful everyday-life title
+- P07: restrained closing phrase
+- P08: little or no large title
 
-## 6. Title silhouette grammar
+Do not force one shared header component.
 
-Major titles are graphic shapes.
+## Subtitle grammar
 
-Allowed:
-- giant horizontal word mass;
-- 2-line staggered stack;
-- diagonal band + oversized word;
-- vertical edge title;
-- outlined type directly on photo;
-- huge word partly hidden by subject/photo;
-- giant numeral + smaller explanatory title;
-- title crossing multiple photos;
-- title split/interrupted by a stamp/label;
-- title on irregular paper/slab;
-- title cropped at bleed.
+Subtitle is a real second read when used. Prefer a small ribbon/tab/strip/feature plaque that interacts with title/photo rather than plain text floating underneath.
 
-Do not force P01–P08 into one header component.
+P07/P08 may intentionally omit this layer.
 
-## 7. Subtitle grammar
-
-A subtitle is a real SECOND READ, not an afterthought.
-
-Prefer generated/support forms such as:
-- cyan/navy/red/yellow ribbon;
-- slanted strip;
-- attached paper tab;
-- feature plaque;
-- mini burst;
-- ticket fragment.
-
-Subtitle should physically interact with the title/hero composition.
-
-## 8. Strong collision
-
-Explicitly allowed:
-- photo behind title, frame over photo, stamp over title;
-- background illustration entering photography;
-- paper field covering substantial photo area;
-- support photo covering HERO corner;
-- title partly behind a cutout subject;
-- destination label crossing route + photo + frame;
-- caption straddling photo boundary;
-- giant `11` behind P07 title/destination cluster;
-- title/ornament partly cropped at bleed.
-
-There is no universal overlap percentage.
-
-## 9. Text support
-
-Solve readability locally using varied methods:
-- opaque/near-opaque paper;
-- local contrast slab;
-- thick keyline;
-- hard offset shadow;
-- ribbon/strip;
-- marker backplate;
-- photo negative space;
-- attached caption foot;
-- controlled local image darkening/lightening.
-
-Do not solve every text problem with the same white rounded rectangle.
-
-## 10. Scale-jump rule
-
-Authentic editorial energy depends on extreme size inequality.
-
-Prefer:
-- one dominant HERO / title event;
-- 2–4 medium events;
-- many tiny discoveries;
-- giant number beside very small labels;
-- broad article field beside tiny stamp/route details.
-
-Avoid 5 photos + 5 labels + 5 boxes with similar weight.
-
-## 11. Background / frame behavior
-
-Background is active and may contain paper texture, broad color field, route/map fragment, cropped type/numeral, edge illustration or print marks.
-
-Frames are visual actors, not neutral wrappers. A generated frame may:
-- sit behind and above a photo through split assets;
-- carry caption support;
-- rotate independently;
-- be cropped by page edge;
-- interact with title/tape/stamp.
-
-Not every photo needs a frame.
-
-## 12. Intentional occlusion
-
-Do not expose every asset fully.
+## Collision
 
 Allowed:
-- partial stamp behind photo;
-- cropped flowers/travel object at bleed;
-- paper label disappearing behind another layer;
-- support photo covering HERO corner;
-- title partly disappearing behind a subject while still legible.
+- title over photo
+- frame above/below photo through split assets
+- stamp/tape crossing a photo edge
+- caption straddling a photo boundary
+- support photo overlapping another support photo
+- noncritical edge object cropped at bleed
 
-A page where every generated object is fully visible like a sticker sheet is a failure.
+P05 rule:
+- overlap remains cluster-local
+- friend faces must stay recognizable
+- no page-wide centerpiece is created by a vessel or frame
 
-## 13. Page-to-page differentiation
+P07/P08 rule:
+- collision is restrained.
 
-- P01: giant `るるぶ WEDDING` masthead + aggressive photo/title/coverline collision;
-- P02: asymmetric portraits + annotation/profile vessels + mini editorial facts;
-- P03: quieter title + article/episode units invaded by photo/route;
-- P04–P05: destination collage + route BACK/FRONT + Hawaii feature title + proposal calm island;
-- P06: irregular candid snapshot/photo-frame units + notes/tape/food/paw micro cues;
-- P07: `TODAY'S TRAVEL GUIDE` + giant `11` + varied destination vessels + map/route + LOOK AROUND / EDITOR'S PICK discovery;
-- P08: calm closing image/message with one or two deliberate overlaps/edge events.
+## Text support
 
-## 14. Anti-cheap / anti-AI diagnosis
+Use varied local methods:
+- opaque paper
+- contrast slab
+- keyline
+- hard offset shadow
+- ribbon/strip
+- marker backplate
+- photo negative space
+- attached caption foot
 
-Redesign if:
-- page can be described as `cards in a grid`;
-- every object is politely separated;
-- all radii/shadows are consistent like a design system;
-- old flat SVG/icon-pack look appears;
-- every title sits at the top in the same way;
-- decorative elements merely fill gaps;
-- colors alone create hierarchy;
-- the page is `red + yellow + blue + stickers` but lacks title mass/photo hierarchy/collision;
-- it feels like wedding stationery imitating a magazine rather than a real magazine composition.
+Do not solve every text problem with a white rounded rectangle.
 
-## 15. Asset-generation consequence
+## Scale rule
 
-Generate page-aware vessels/units, not generic labels.
+General energetic pages:
+- one first-read event
+- 1–3 medium events
+- selective micro discoveries
 
-Good brief example:
-`P01 lower coverline feature vessel: high-impact yellow/cream printed editorial slab for the current HERO crop, irregular silhouette, one red/cyan attached accent, intended to overlap photography substantially, real transparent exterior, no text baked in, visually compatible with the large るるぶ WEDDING masthead.`
+P05 exception:
+- title is the first read
+- `SHOGO FRIENDS` and `SHIORI FRIENDS` are the two main secondary reads
+- photos have local scale differences but no single image dominates the whole page
 
-Bad:
-`yellow rounded label, Rurubu style.`
+P07/P08 deliberately use fewer events.
 
-## 16. Final principle
+## Background / frame behavior
 
-V20 should feel like information, photos and display type were edited into a physical travel magazine.
+Background may contain paper tone, broad color fields, low-information texture and page-specific atmospheric marks.
 
-`AUTHENTIC EDITORIAL PHENOMENA > GENERIC STYLE TOKENS.`
+P04 may use route/travel atmosphere.
+P05 does not inherit a cross-fold route/map background requirement.
+
+Frames are optional actors, not universal wrappers.
+
+## Intentional occlusion
+
+Partial hiding is allowed when it improves depth, but do not hide:
+- eyes/faces
+- important gestures
+- factual copy
+- P05 friend recognition
+- P08 barcode digits
+
+## Current page differentiation
+
+- P01: masthead + strong cover photography
+- P02: asymmetric profile/photo annotations + Q1/Q2
+- P03: story episodes + Q3/Q4 + calm narrative field
+- P04: travel hero + unequal travel-memory clusters
+- P05: two friend-memory clusters, no family, no giant hero
+- P06: candid/life mosaic + Q5/Q6
+- P07: calm photo/message close
+- P08: sparse magazine back cover
+
+## Explicit obsolete grammar
+
+Do not recover:
+- P05 family/FAMILY role
+- P05 giant hero
+- P05 Hawaii destination-title system
+- P05 proposal article vessel
+- P05 arrival marker
+- P04–P05 mandatory route crossing the fold
+- P07 `TODAY'S TRAVEL GUIDE`
+- P07 giant `11`
+- P07 destination vessel system
+- P07 `LOOK AROUND` / `EDITOR'S PICK`
+- P07 timetable/itinerary
+- P08 main closing-message page
+
+## Final principle
+
+`PAGE-SPECIFIC EDITORIAL FORM > REUSABLE COMPONENT GRAMMAR.`
