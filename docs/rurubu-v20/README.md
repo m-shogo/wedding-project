@@ -13,10 +13,14 @@ Historical V10/V11/V12/V20 experiments may remain only for provenance or fact/so
 3. `V20-PAGE-BY-PAGE-DESIGN-SPEC.md` — detailed P01–P08 design authority
 4. `V20-PAGE-MANUALS.md`
 5. `V20-P01-P08-VISUAL-PRODUCTION-BIBLE.md`
-6. `V20-LEGACY-QUARANTINE.md`
-7. source/print/QA documents as relevant
+6. `V20-CURRENT-ACCEPTANCE-GATE.md` — highest current completion/acceptance authority
+7. `V20-QUALITY-GATES.md`
+8. `V20-LEGACY-QUARANTINE.md`
+9. source/print documents as relevant
 
-If an older document conflicts with items 2–5, the current files win. Do not average old and new directions.
+`V20-ACCEPTANCE-EVIDENCE.md` is historical evidence only where it describes obsolete page roles. It may preserve source hashes/provenance/lessons, but it cannot restore old P05/P07/P08 design authority.
+
+If an older document conflicts with items 2–7, the current files win. Do not average old and new directions.
 
 ## Fixed facts
 
@@ -76,25 +80,25 @@ Design: `70% shared format + 30% page-specific expression`.
 
 ## P05 hard reset
 
-P05 is now **friends only**.
+P05 is **friends only**.
 
 Current structure:
 - title: `友達との思い出`
-- left/first cluster: `SHOGO FRIENDS`
-- right/second cluster: `SHIORI FRIENDS`
-- about 3–4 photos per cluster, final total roughly 6–8 depending on source quality
+- `SHOGO FRIENDS`: about 3–4 final photos
+- `SHIORI FRIENDS`: about 3–4 final photos
+- final total roughly 6–8 depending on source quality
 - no single oversized centerpiece photo
-- use several medium/small photos with unequal rhythm
+- medium/small photos with controlled inequality
 - short grounded captions only
-- warm, lively, social, magazine-like; density target `65–70/100`
+- density target `65–70/100`
 
 Explicitly obsolete for P05:
-- family memories
-- FAMILY cluster
+- family memories / FAMILY cluster
+- `Family & Friends` role
 - one giant anchor/hero photo
 - Hawaii-only feature
 - proposal/arrival feature
-- reuse of old Hawaii title/proposal vessels as current design authority
+- old Hawaii title/proposal vessels as current authority
 
 ## Other obsolete roles
 
@@ -140,4 +144,4 @@ Never infer friend identities, names, relationships or anecdotes from photos.
 Human-readable digits must remain exactly `2026102400000`.
 Use a Code 128-compatible/decorative treatment if encoding is needed. Do not alter the last digit to satisfy EAN-13 and do not present it as real JAN/ISBN commerce metadata.
 
-The goal is eight convincing authored magazine pages, with P05 now permanently defined as `SHOGO FRIENDS + SHIORI FRIENDS` unless the user explicitly changes it again.
+The goal is eight convincing authored magazine pages, with P05 defined as `SHOGO FRIENDS + SHIORI FRIENDS` unless the user explicitly changes it again.
