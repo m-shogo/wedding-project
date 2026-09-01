@@ -1,0 +1,101 @@
+name: Wedding Project BGM Rhythm Alignment CI
+
+on:
+  pull_request:
+    paths:
+      - 'motion-studio/scripts/wedding-project-bgm-cue-map.mts'
+      - 'motion-studio/scripts/wedding-project-bgm-rhythm-alignment.mts'
+      - '.github/workflows/wedding-project-bgm-rhythm-alignment-ci.yml'
+  workflow_dispatch:
+
+jobs:
+  bgm-rhythm-alignment:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Build approved BGM and Human cue fixture
+        run: |
+          mkdir -p /tmp/bgm-rhythm
+          ffmpeg -v error -f lavfi -i 'sine=frequency=440:duration=12' -ar 48000 -ac 2 -y /tmp/bgm-rhythm/bgm.wav
+          BGM_SHA=$(sha256sum /tmp/bgm-rhythm/bgm.wav | awk '{print $1}')
+          cat > /tmp/bgm-rhythm/audio.json <<JSON
+          {"schemaVersion":"wedding-movie-production-audio-input/v1","projectId":"opening","usage":"BGM","path":"/tmp/bgm-rhythm/bgm.wav","sha256":"${BGM_SHA}","humanApproved":true}
+          JSON
+          cat > /tmp/bgm-rhythm/human-cues.json <<JSON
+          {"schemaVersion":"wedding-movie-human-bgm-cues/v1","projectId":"opening","audioSha256":"${BGM_SHA}","humanMarked":true,"reviewer":"HUMAN_FIXTURE_ONLY","reviewedAt":"2026-09-01T00:00:00.000Z","notes":"CI fixture only","cues":[
+            {"id":"intro-hit","type":"HIT","label":"opening hit","seconds":1.0},
+            {"id":"build-a","type":"BUILD","label":"build begins","seconds":3.0},
+            {"id":"phrase-a","type":"PHRASE","label":"phrase change","seconds":5.0},
+            {"id":"release-a","type":"RELEASE","label":"release","seconds":8.0}
+          ]}
+          JSON
+      - name: Canonicalize Human BGM cues
+        run: node --no-warnings motion-studio/scripts/wedding-project-bgm-cue-map.mts --audio-manifest=/tmp/bgm-rhythm/audio.json --cues=/tmp/bgm-rhythm/human-cues.json --output=/tmp/bgm-rhythm/cue-map.json
+      - name: Build current rhythm fixture bound to same BGM
+        run: |
+          BGM_SHA=$(sha256sum /tmp/bgm-rhythm/bgm.wav | awk '{print $1}')
+          cat > /tmp/bgm-rhythm/preview.json <<JSON
+          {"schemaVersion":"wedding-movie-project-real-media-preview/v1","authority":"DERIVED_FROM_CURRENT_SELECTED_SCENES_AND_PRODUCTION_READINESS_AUDIT","projectId":"opening","identity":{"bgmSha256":"${BGM_SHA}"}}
+          JSON
+          PREVIEW_SHA=$(sha256sum /tmp/bgm-rhythm/preview.json | awk '{print $1}')
+          cat > /tmp/bgm-rhythm/rhythm.json <<JSON
+          {
+            "schemaVersion":"wedding-movie-production-rhythm-pass/v1",
+            "authority":"DERIVED_WHOLE_PROJECT_RHYTHM_MAP_FROM_CURRENT_RENDERED_REAL_MEDIA_PREVIEW",
+            "projectId":"opening","fps":30,
+            "source":{"previewManifestPath":"/tmp/bgm-rhythm/preview.json","previewManifestSha256":"${PREVIEW_SHA}"},
+            "scenes":[
+              {"sceneId":"intro","sourceRevision":"r1","timingRevision":"t1","startFrame":0,"endFrameExclusive":90},
+              {"sceneId":"travel","sourceRevision":"r2","timingRevision":"t2","startFrame":84,"endFrameExclusive":180},
+              {"sceneId":"close","sourceRevision":"r3","timingRevision":"t3","startFrame":168,"endFrameExclusive":300}
+            ],
+            "transitions":[
+              {"fromSceneId":"intro","toSceneId":"travel","transition":"CROSS_DISSOLVE","durationFrames":6},
+              {"fromSceneId":"travel","toSceneId":"close","transition":"CROSS_DISSOLVE","durationFrames":12}
+            ],
+            "evidenceBoundary":{"remotionStudioGuiActual":"NOT_RUN","palmierGuiActual":"NOT_RUN","macDaVinciGuiActual":"NOT_RUN","productionReady":false}
+          }
+          JSON
+      - name: Generate BGM x whole-project rhythm alignment
+        run: node --no-warnings motion-studio/scripts/wedding-project-bgm-rhythm-alignment.mts --rhythm-pass=/tmp/bgm-rhythm/rhythm.json --bgm-cue-map=/tmp/bgm-rhythm/cue-map.json --output=/tmp/bgm-rhythm/alignment.json
+      - name: Verify frame distances and Human-only boundary
+        run: |
+          node --input-type=module <<'NODE'
+          import {readFileSync} from 'node:fs';
+          const cues=JSON.parse(readFileSync('/tmp/bgm-rhythm/cue-map.json','utf8'));
+          const value=JSON.parse(readFileSync('/tmp/bgm-rhythm/alignment.json','utf8'));
+          if(cues.schemaVersion!=='wedding-movie-bgm-cue-map/v1'||cues.summary.cueCount!==4) throw new Error('cue map');
+          if(cues.evidenceBoundary.automaticBeatDetection!==false||cues.summary.productionReady!==false) throw new Error('cue boundary');
+          if(value.schemaVersion!=='wedding-movie-bgm-rhythm-alignment/v1') throw new Error('alignment schema');
+          if(value.events.length!==8) throw new Error(`event count ${value.events.length}`);
+          const introEnd=value.events.find((x)=>x.id==='scene:intro:end');
+          if(!introEnd||introEnd.frame!==90||introEnd.nearestCue.cueId!=='build-a'||introEnd.nearestCue.distanceFrames!==0) throw new Error('intro end alignment');
+          const firstEdge=value.events.find((x)=>x.id==='edge:intro->travel:mid');
+          if(!firstEdge||firstEdge.frame!==87||firstEdge.nearestCue.cueId!=='build-a'||firstEdge.nearestCue.distanceFrames!==-3) throw new Error('edge midpoint alignment');
+          if(value.humanSelection.performed!==false||value.summary.humanSelection!=='NOT_RUN') throw new Error('Human selection auto-promotion');
+          if(value.alignmentCandidates.some((x)=>x.selectionState!=='NOT_SELECTED'||x.qualityVerdict!=='NOT_RUN')) throw new Error('candidate auto-selection');
+          if(value.evidenceBoundary.automaticEditPointSelection!==false||value.evidenceBoundary.alignmentDistanceIsQualityVerdict!==false||value.summary.productionReady!==false) throw new Error('alignment boundary');
+          if(value.evidenceBoundary.remotionStudioGuiActual!=='NOT_RUN'||value.evidenceBoundary.palmierGuiActual!=='NOT_RUN'||value.evidenceBoundary.macDaVinciGuiActual!=='NOT_RUN') throw new Error('GUI boundary');
+          NODE
+      - name: Stale Human cue audio binding blocks
+        run: |
+          cp /tmp/bgm-rhythm/human-cues.json /tmp/bgm-rhythm/stale-cues.json
+          node --input-type=module <<'NODE'
+          import {readFileSync,writeFileSync} from 'node:fs';
+          const p='/tmp/bgm-rhythm/stale-cues.json';const x=JSON.parse(readFileSync(p,'utf8'));x.audioSha256='0'.repeat(64);writeFileSync(p,JSON.stringify(x));
+          NODE
+          if node --no-warnings motion-studio/scripts/wedding-project-bgm-cue-map.mts --audio-manifest=/tmp/bgm-rhythm/audio.json --cues=/tmp/bgm-rhythm/stale-cues.json --output=/tmp/bgm-rhythm/stale-map.json 2>/tmp/bgm-rhythm/stale-cue.err; then
+            echo 'expected stale Human cue audio binding to block' >&2; exit 1
+          fi
+          grep -q 'BGM_CUE_HUMAN_AUDIO_BINDING_STALE' /tmp/bgm-rhythm/stale-cue.err
+      - name: Preview drift blocks alignment
+        run: |
+          printf '\n' >> /tmp/bgm-rhythm/preview.json
+          if node --no-warnings motion-studio/scripts/wedding-project-bgm-rhythm-alignment.mts --rhythm-pass=/tmp/bgm-rhythm/rhythm.json --bgm-cue-map=/tmp/bgm-rhythm/cue-map.json --output=/tmp/bgm-rhythm/stale-alignment.json 2>/tmp/bgm-rhythm/stale-alignment.err; then
+            echo 'expected preview SHA drift to block' >&2; exit 1
+          fi
+          grep -q 'BGM_RHYTHM_ALIGNMENT_PREVIEW_SHA_DRIFT' /tmp/bgm-rhythm/stale-alignment.err
