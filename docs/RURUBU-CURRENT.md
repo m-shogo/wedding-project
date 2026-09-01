@@ -7,6 +7,7 @@ The only current Rurubu WEDDING production version is **V30**.
 Read first, in this order:
 1. `docs/rurubu-v30/README.md`
 2. `assets/rurubu-v30/README.md`
+3. this file's `V30 HARD PRODUCTION OVERRIDES`, `Balanced visual-production doctrine`, and `Finalization / anti-regression gates`
 
 The second file is not optional: it contains the current production-asset, replacement-mask, one-part-one-image, Canva-ban, and accident-prevention gates that must be applied during execution.
 
@@ -209,6 +210,128 @@ Do not enforce identical decoration counts, identical title geometry, identical 
 
 The rule system exists to prevent accidents, fabrication and template drift — **not to make every page obey the same visible formula**.
 
+## Finalization / anti-regression gates — READ EVERY RUN
+
+These rules are the final layer of the V30 production system. They exist to stop endless redesign, protect the best candidate already achieved, and separate design quality from production completion.
+
+### Golden Snapshot / CURRENT BEST
+
+Maintain one clearly identified **CURRENT BEST** visual baseline for the whole book.
+
+- Save the strongest current 8-page contact sheet to Drive `90_QA_EXPORT` as a Golden Snapshot / CURRENT BEST reference.
+- Also preserve relevant page/spread/A5 renders when a page becomes a new best.
+- A newer render does **not** automatically replace CURRENT BEST.
+- Replace CURRENT BEST only when the new candidate is equal or better at all relevant views: page, spread, 8-page contact sheet, and A5 actual-size readability.
+- If a new change is stronger locally but weakens the spread/book rhythm, it does not become CURRENT BEST until the broader regression is fixed.
+- Use timestamp/Git SHA or another traceable identifier so the baseline can be recovered.
+
+`NEWER ≠ BETTER. CURRENT BEST IS A QUALITY BASELINE, NOT A RECENCY LABEL.`
+
+### Page-specific Signature Move
+
+Each page should have at least one recognizable page-specific editorial move or silhouette that helps it feel authored rather than templated.
+
+Examples:
+- an unusually strong masthead/photo relationship;
+- a distinctive travel-photo collision;
+- a friend-photo cluster geometry unique to P05;
+- a calm closing field on P07;
+- a deliberately sparse, edited back-cover gesture on P08.
+
+This is **not** a quota for extra decoration. A Signature Move may be created by title scale, crop, photo hierarchy, collision, calm space, or one strong editorial object.
+
+Do not force the same Signature Move across pages. If a page already has a strong unique silhouette, do not add another object merely to satisfy this rule.
+
+### Generated-text boundary — HARD RULE
+
+Do not rely on image generation for guest-facing factual/personal text.
+
+Keep native/editable in Figma:
+- names;
+- dates;
+- body copy;
+- captions;
+- Q&A questions/answers;
+- friend labels/names/relationships;
+- thank-you copy;
+- factual place names and autobiographical details;
+- barcode digits and any precision metadata.
+
+Generated title/display art may include decorative lettering only when intentionally approved, short, visually important, and not carrying fragile factual/personal information that will need correction.
+
+Reject generated assets containing:
+- garbled Japanese;
+- invented personal copy;
+- fake factual text;
+- accidental pseudo-writing that appears meaningful;
+- baked text that should remain editable.
+
+`READING TEXT = NATIVE. GENERATED TEXT = EXCEPTIONAL DISPLAY ART ONLY.`
+
+### Remove Test
+
+For decorative/editorial assets, perform a mental or practical removal test.
+
+- If removing one decorative object destroys the factual information architecture, too much meaning may be baked into decoration; move authoritative information back to native/editable structure.
+- If removing many objects changes almost nothing, the page is likely carrying filler and should be simplified.
+- Keep objects that improve hierarchy, grouping, tactile depth, reading path, photo framing, or page-specific character.
+- Do not keep an object merely because generation effort was already spent on it.
+
+### Final Photo Replacement PASS — separate production stage
+
+Do not treat `DESIGN_COMPLETE` and `FINAL PHOTO SOURCES INSTALLED` as the same milestone.
+
+When final real photos become available, perform a dedicated replacement pass across all photo slots:
+
+`SWAP FINAL PHOTO`
+→ `CROP / FOCAL ADJUSTMENT`
+→ `MASK / CLIP CHECK`
+→ `FACE / GESTURE SAFE-ZONE CHECK`
+→ `A5 ACTUAL-SIZE CHECK`
+→ `SPREAD CHECK`
+→ `CONTACT-SHEET CHECK`
+
+Do not assume a layout validated with proxies automatically works with final photographs.
+
+P05 requires this pass for all 8 independent friend-photo slots.
+
+### Print Reality Test
+
+Screen polish is not sufficient.
+
+Before a page/book is considered visually final, inspect it in ways that expose weak hierarchy:
+- A5 actual-size view / physical proof when possible;
+- a reduced thumbnail / 3-second scan;
+- slightly increased viewing distance;
+- grayscale or strongly reduced-saturation check when useful.
+
+Purpose:
+- confirm first-read hierarchy survives without relying only on color;
+- confirm faces remain recognizable;
+- confirm captions/body copy remain readable;
+- confirm busy pages still have recovery space;
+- confirm P07/P08 still feel intentionally quiet rather than unfinished.
+
+If the page only works when zoomed in on a bright screen, it is not finished.
+
+### Rule-system stop condition — IMPORTANT
+
+V30 now has enough design/production governance.
+
+Do **not** keep adding aesthetic rules, quotas, micro-tokens, mandatory decoration counts, fixed rotation formulas, fixed color counts, or page-by-page geometry formulas merely because more rules feel safer.
+
+Add a new rule only when at least one is true:
+- a concrete production failure occurred that existing rules did not prevent;
+- a repeated failure pattern is visible across runs;
+- a factual/print/editability risk needs an explicit guardrail;
+- the user explicitly changes the creative direction.
+
+Otherwise:
+
+`STOP WRITING RULES → MAKE THE BOOK BETTER.`
+
+The system should stay strict about accidents and truth, but permissive about strong visual authorship.
+
 ## Core quality target
 
 The target is not `maximum ImageGen`.
@@ -236,6 +359,8 @@ The target is:
 `1 PHOTO SLOT = 1 REPLACEABLE CLIPPED MASK.`
 
 `STRICT PROCESS + LOCKED CONTENT ROLE + FREE HIGH-QUALITY VISUAL EXECUTION.`
+
+`GOLDEN SNAPSHOT + SIGNATURE MOVE + FINAL PHOTO REPLACEMENT PASS + PRINT REALITY TEST.`
 
 `docs/rurubu-v20/` and `assets/rurubu-v20/` are frozen historical/reference material only and must never be treated as current production authority.
 
