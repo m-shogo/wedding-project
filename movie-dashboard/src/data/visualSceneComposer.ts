@@ -17,11 +17,13 @@ export type ScenePrimarySubject = "IMAGE" | "TEXT" | "MULTI_IMAGE" | "TRANSITION
 export type SceneComplexity = "CALM" | "BALANCED" | "BUSY";
 export type SceneInstanceStatus = "ADOPTED" | "LOCKED" | "REVIEW";
 
+// recipeId/label/patternId are widened to string so a SceneInstance can record provenance for
+// any composable pattern (Mask Reveal, Word Punch, Small Push, ...), not only Mask Reveal.
 export interface MaskRevealSceneRecipe {
-  recipeId: "scene-recipe-mask-reveal-hero-v1";
+  recipeId: string;
   revision: 1;
-  label: "Hero Photo + Mask Reveal";
-  patternId: "type-mask-reveal";
+  label: string;
+  patternId: string;
   primarySubject: "IMAGE";
   secondarySubject: "TEXT";
   authority: "EDITABLE_DEFAULT_ONLY";
@@ -143,10 +145,23 @@ function refreshSceneDerivedState(scene: MaskRevealSceneInstance, editableIntent
   };
 }
 
+function recipeForIntent(intent: MaskRevealEditableIntent): MaskRevealSceneRecipe {
+  if (intent.patternId === maskRevealHeroSceneRecipe.patternId) return maskRevealHeroSceneRecipe;
+  return {
+    recipeId: `scene-recipe-${intent.patternId}-v1`,
+    revision: 1,
+    label: `Hero Photo + ${intent.davinciImplementation.detailLabel}`,
+    patternId: intent.patternId,
+    primarySubject: "IMAGE",
+    secondarySubject: "TEXT",
+    authority: "EDITABLE_DEFAULT_ONLY",
+  };
+}
+
 export function adoptMaskRevealScene(
   sourceIntent: MaskRevealEditableIntent,
   sceneId = createSceneId(),
-  recipe: MaskRevealSceneRecipe = maskRevealHeroSceneRecipe,
+  recipe: MaskRevealSceneRecipe = recipeForIntent(sourceIntent),
   createdAt = nowIso(),
 ): MaskRevealSceneInstance {
   const editableIntent = cloneEditableIntent(sourceIntent);

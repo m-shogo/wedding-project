@@ -5,10 +5,10 @@ import {
 
 export interface MotionVerificationEvidenceTemplateV1 {
   schemaVersion: "motion-verification/v1";
-  patternId: "type-mask-reveal";
+  patternId: string;
   markerId: string;
-  sampleAssetSetId: "sample-typography-welcome-v1";
-  implementationId: "impl-type-mask-reveal-davinci-text-plus";
+  sampleAssetSetId: string;
+  implementationId: string;
   status: "PENDING_LOCAL_DAVINCI";
   targetPreviewSourceType: "ACTUAL_DAVINCI_RENDER";
   candidatePreviewAssetPath: null;
@@ -38,7 +38,7 @@ export interface MotionVerificationEvidenceTemplateV1 {
 
 export interface MotionHandoffManifestV1 {
   schemaVersion: "motion-handoff/v1";
-  patternId: "type-mask-reveal";
+  patternId: string;
   project: {
     section: MaskRevealPromptInput["section"];
     markerId: string;
@@ -60,7 +60,7 @@ export interface MotionHandoffManifestV1 {
     instruction: string;
   };
   davinci: {
-    implementationId: "impl-type-mask-reveal-davinci-text-plus";
+    implementationId: string;
     responsibility: "FINAL_MOTION_AND_RENDER";
     finishManifest: string;
     resolveVersion: null;
@@ -85,8 +85,9 @@ export interface MaskRevealExecutionOutputs {
   verificationChecklist: string;
 }
 
-function markerIdFor(section: MaskRevealPromptInput["section"]) {
-  return `VML_MASK_REVEAL_${section}`;
+function markerIdFor(section: MaskRevealPromptInput["section"], patternId: string) {
+  const slug = patternId.replace(/^type-|^photo-|^cut-|^wipe-|^flash-|^accent-/, "").replace(/-/g, "_").toUpperCase();
+  return `VML_${slug}_${section}`;
 }
 
 export function buildMaskRevealMotionHandoffManifest(input: MaskRevealPromptInput): MotionHandoffManifestV1 {
@@ -94,11 +95,13 @@ export function buildMaskRevealMotionHandoffManifest(input: MaskRevealPromptInpu
   const text = input.text.trim().slice(0, 24) || "WELCOME";
   const mediaLabel = input.mediaLabel?.trim() || "選択したHero写真";
   const durationSeconds = Math.max(0.4, Math.min(3, input.durationSeconds));
-  const markerId = markerIdFor(input.section);
+  const patternId = input.patternId ?? "type-mask-reveal";
+  const implementationId = input.implementationId ?? "impl-type-mask-reveal-davinci-text-plus";
+  const markerId = markerIdFor(input.section, patternId);
 
   return {
     schemaVersion: "motion-handoff/v1",
-    patternId: "type-mask-reveal",
+    patternId,
     project: {
       section: input.section,
       markerId,
@@ -110,7 +113,7 @@ export function buildMaskRevealMotionHandoffManifest(input: MaskRevealPromptInpu
     timeline: {
       producer: "Palmier",
       expectedFormat: "NLE_XML",
-      companionFileName: "palmier-mask-reveal-timeline.xml",
+      companionFileName: `palmier-${patternId}-timeline.xml`,
       xmlGeneratedExternally: true,
       rule: "Palmierが実timelineから書き出したNLE XMLを正本にする。このアプリはXMLを捏造・再実装せず、同じmarkerIdを持つsidecar manifestだけを生成する。",
     },
@@ -120,7 +123,7 @@ export function buildMaskRevealMotionHandoffManifest(input: MaskRevealPromptInpu
       instruction: outputs.palmierInstruction,
     },
     davinci: {
-      implementationId: "impl-type-mask-reveal-davinci-text-plus",
+      implementationId,
       responsibility: "FINAL_MOTION_AND_RENDER",
       finishManifest: outputs.davinciFinishManifest,
       resolveVersion: null,
@@ -139,10 +142,10 @@ export function buildMaskRevealMotionHandoffManifest(input: MaskRevealPromptInpu
     },
     verificationEvidence: {
       schemaVersion: "motion-verification/v1",
-      patternId: "type-mask-reveal",
+      patternId,
       markerId,
-      sampleAssetSetId: "sample-typography-welcome-v1",
-      implementationId: "impl-type-mask-reveal-davinci-text-plus",
+      sampleAssetSetId: "sample-generic-hero-photo-v1",
+      implementationId,
       status: "PENDING_LOCAL_DAVINCI",
       targetPreviewSourceType: "ACTUAL_DAVINCI_RENDER",
       candidatePreviewAssetPath: null,
@@ -176,23 +179,25 @@ export function buildMaskRevealExecutionOutputs(input: MaskRevealPromptInput): M
   const manifest = buildMaskRevealMotionHandoffManifest(input);
   const markerId = manifest.project.markerId;
 
+  const patternId = manifest.patternId;
+
   return {
     nleXmlHandoff: [
       "Palmier → DaVinci NLE XML Handoff",
       `1. Palmierでrough timing/orderを確定し、対象title位置を ${markerId} として識別する。`,
       `2. 実timelineから ${manifest.timeline.companionFileName} をDaVinci互換NLE XMLとして書き出す。`,
       "3. DaVinci ResolveへXMLをimportし、media relink / clip order / title timingを確認する。",
-      `4. ${markerId} の対象区間へ専用title trackでText+ Mask Revealを適用する。`,
+      `4. ${markerId} の対象区間へ専用title trackで ${patternId} を適用する。`,
       "5. Palmier側で代替effectを焼き込まない。最終motion authorityはDaVinciに置く。",
-      "6. XMLとmask-reveal-motion-handoff.jsonを必ずセットで扱う。",
+      `6. XMLと${patternId}-motion-handoff.jsonを必ずセットで扱う。`,
     ].join("\n"),
     verificationChecklist: [
-      "Mask Reveal completion gate",
+      `${patternId} completion gate`,
       `[ ] Palmier rough timingを作成し、${markerId} の対象区間を保持`,
       `[ ] ${manifest.timeline.companionFileName} をPalmier実timelineからexport`,
       "[ ] DaVinci ResolveへXMLをimportし、media relink / timingを確認",
-      "[ ] Text+ + rectangular mask + keyframe easingで実装",
-      "[ ] 1280x720 / 30fps / WELCOME共通sampleでActual renderを書き出す",
+      `[ ] ${manifest.davinci.implementationId} の方式で実装`,
+      "[ ] 1280x720 / 30fps / 共通sampleでActual renderを書き出す",
       "[ ] Concept Previewとは別assetとしてActual Previewを登録",
       "[ ] local Resolve versionを記録",
       "[ ] 通常速度と0.5xでVisual QA",

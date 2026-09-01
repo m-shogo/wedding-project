@@ -4,6 +4,7 @@ import {
   applyHumanSelection,
   createDefaultMaskRevealEditableIntent,
   getEditableDecisionState,
+  MASK_REVEAL_PATTERN_INFO,
   resolveEditableValue,
   resolveMaskRevealEditableIntent,
   retargetMaskRevealSection,
@@ -18,6 +19,7 @@ import {
 } from "../data/humanEditableMotionIntent";
 import { buildMaskRevealEditableProductionOutputs } from "../data/maskRevealEditableProduction";
 import { buildMaskRevealExecutionOutputs } from "../data/maskRevealHandoff";
+import { composablePatterns } from "../data/visualMotionLibrary";
 import {
   buildMaskRevealDaVinciValueBridge,
   detectLayerDelayPreset,
@@ -56,6 +58,12 @@ const intensityLabels: Record<MaskRevealIntensity, string> = { S: "弱", M: "中
 type Level = "EASY" | "DETAIL" | "DAVINCI";
 
 export function MaskRevealEditableWorkspace() {
+  const patterns = useMemo(() => {
+    const list = composablePatterns();
+    // Mask Reveal stays first and always present even if its data-driven entry is momentarily
+    // missing, since it's the one pattern with a fully hand-verified Composer -> DaVinci loop.
+    return list.some((item) => item.patternId === MASK_REVEAL_PATTERN_INFO.patternId) ? list : [MASK_REVEAL_PATTERN_INFO, ...list];
+  }, []);
   const [intent, setIntent] = useState(() => createDefaultMaskRevealEditableIntent("OPENING_INTRO"));
   const [level, setLevel] = useState<Level>("EASY");
   const [copied, setCopied] = useState("");
@@ -74,6 +82,8 @@ export function MaskRevealEditableWorkspace() {
     section: intent.section,
     intensity: resolved.intensity,
     durationSeconds: resolved.enterDurationSeconds,
+    patternId: intent.patternId,
+    implementationId: intent.davinciImplementation.implementationId,
   });
 
   // saveMotionZukanComposerState dispatches MOTION_ZUKAN_COMPOSER_CHANGED_EVENT, which other
@@ -100,8 +110,20 @@ export function MaskRevealEditableWorkspace() {
   }
 
   function changeSection(section: MaskRevealSection) {
-    setIntent((current) => retargetMaskRevealSection(current, section));
+    const pattern = patterns.find((item) => item.patternId === intent.patternId) ?? MASK_REVEAL_PATTERN_INFO;
+    setIntent((current) => retargetMaskRevealSection(current, section, pattern));
     if (editingSceneId) updateComposer((current) => retargetSceneInstanceSection(current, editingSceneId, section));
+  }
+
+  function changePattern(patternId: string) {
+    const pattern = patterns.find((item) => item.patternId === patternId);
+    if (!pattern) return;
+    // A fresh default intent for the newly chosen pattern, kept on the same section. Switching
+    // patterns is treated as "start this scene over with a different motion" rather than trying
+    // to carry over field values that may not make sense for the new pattern (e.g. a Mask
+    // Reveal direction on a Flash Soft scene).
+    setIntent(createDefaultMaskRevealEditableIntent(intent.section, pattern));
+    setEditingSceneId(null);
   }
 
   function chooseLayerDelayPreset(preset: LayerDelayPreset) {
@@ -171,6 +193,12 @@ export function MaskRevealEditableWorkspace() {
         {level === "EASY" && (
           <div className="space-y-5">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <SimpleField label={`演出パターン(${patterns.length}件から選択)`}>
+                <select value={intent.patternId} onChange={(event) => changePattern(event.target.value)} className={controlClass}>
+                  {patterns.map((pattern) => <option key={pattern.patternId} value={pattern.patternId}>{pattern.detailLabel}</option>)}
+                </select>
+                <p className="mt-1 text-[10px] leading-4 text-navy-400">{patterns.find((item) => item.patternId === intent.patternId)?.easyLabel}</p>
+              </SimpleField>
               <SimpleField label="使う場所">
                 <select value={intent.section} onChange={(event) => changeSection(event.target.value as MaskRevealSection)} className={controlClass}>
                   <option value="OPENING_INTRO">Opening Intro</option>
@@ -280,7 +308,7 @@ export function MaskRevealEditableWorkspace() {
             <div className="border border-sand-200 dark:border-navy-600 p-4">
               <p className="text-[10px] tracking-[0.18em] font-semibold text-amber-700 dark:text-amber-300">DERIVED / NOT HUMAN MASTER</p>
               <p className="mt-1 text-sm font-bold text-navy-900 dark:text-sand-100">Canonical → DaVinci Value Bridge</p>
-              <p className="mt-1 text-[11px] text-navy-500 dark:text-navy-300">Project Context: {davinciBridge.projectContext.width}×{davinciBridge.projectContext.height} / {davinciBridge.projectContext.fps}fps（Mask Reveal Vertical Slice）</p>
+              <p className="mt-1 text-[11px] text-navy-500 dark:text-navy-300">Project Context: {davinciBridge.projectContext.width}×{davinciBridge.projectContext.height} / {davinciBridge.projectContext.fps}fps（{intent.davinciImplementation.detailLabel}）</p>
               <dl className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3 text-[11px] text-navy-600 dark:text-navy-300">
                 <BridgeRow label="Layer Delay" value={`${davinciBridge.timing.layerDelay.seconds}秒 → ${davinciBridge.timing.layerDelay.resolvedFrames} frames`} />
                 <BridgeRow label="Motion Delay" value={`${davinciBridge.timing.motionDelay.seconds}秒 → ${davinciBridge.timing.motionDelay.resolvedFrames} frames`} />
@@ -359,7 +387,7 @@ function ProjectTimelinePanel({ state, editingSceneId, onEdit, onDelete }: { sta
                       <div className="flex items-start justify-between gap-3">
                         <div className="min-w-0">
                           <p className="text-[10px] text-navy-400">#{index + 1} · {scene.editableIntent.section} · {scene.recipeProvenance.recipeId}</p>
-                          <p className="mt-1 text-xs font-semibold text-navy-800 dark:text-sand-100 truncate">{resolvedScene.text} / Mask Reveal</p>
+                          <p className="mt-1 text-xs font-semibold text-navy-800 dark:text-sand-100 truncate">{resolvedScene.text} / {scene.editableIntent.davinciImplementation.detailLabel}</p>
                           <p className="mt-1 text-[10px] text-navy-500 dark:text-navy-300">{positionLabels[resolvedScene.positionPreset]} / {directionLabels[resolvedScene.direction]} / {scene.computedDurationSeconds.toFixed(1)}秒 / {scene.status}</p>
                           {placement && <p className="mt-1 text-[10px] font-mono text-navy-400">{placement.startSeconds.toFixed(1)}s → {placement.endSeconds.toFixed(1)}s</p>}
                           {scene.durationDeltaSeconds > 0 && <p className="mt-1 text-[10px] text-amber-700 dark:text-amber-300">Targetとの差 +{scene.durationDeltaSeconds.toFixed(1)}秒</p>}

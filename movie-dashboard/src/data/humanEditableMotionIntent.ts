@@ -28,11 +28,11 @@ export interface MaskRevealEditableFields {
   sceneDurationSeconds: EditableValue<number>;
   layerDelaySeconds: EditableValue<number>;
   motionDelaySeconds: EditableValue<number>;
-  enterMotion: EditableValue<"MASK_REVEAL">;
+  enterMotion: EditableValue<string>;
   enterDurationSeconds: EditableValue<number>;
   holdMotion: EditableValue<"HOLD">;
   holdDurationSeconds: EditableValue<number>;
-  exitMotion: EditableValue<"NONE">;
+  exitMotion: EditableValue<string>;
   exitDurationSeconds: EditableValue<number>;
   staggerDelaySeconds: EditableValue<number>;
   positionPreset: EditableValue<PositionPreset>;
@@ -48,22 +48,51 @@ export interface MaskRevealEditableFields {
   intensity: EditableValue<MaskRevealIntensity>;
 }
 
+// patternId/davinciImplementation are widened to string so any pattern with a registered
+// implementation (not only type-mask-reveal) can drive this same editable intent shape. The
+// field STRUCTURE (Scene Duration / Delay / Position / Direction / Intensity...) is generic
+// across patterns already; only the pattern identity and DaVinci tooling differ.
 export interface MaskRevealEditableIntent {
   schemaVersion: "human-editable-motion/v1";
-  patternId: "type-mask-reveal";
+  patternId: string;
   section: MaskRevealSection;
   fields: MaskRevealEditableFields;
   davinciImplementation: {
-    implementationId: "impl-type-mask-reveal-davinci-text-plus";
-    easyLabel: "下からスッと文字が出る";
-    detailLabel: "Mask Reveal / Ease Out";
-    tools: readonly ["Text+", "Fusion", "Rectangle Mask", "Keyframe", "Spline"];
+    implementationId: string;
+    easyLabel: string;
+    detailLabel: string;
+    tools: readonly string[];
   };
 }
 
 function editable<T>(defaultValue: T, aiSuggestedValue: T | null = null, aiReason: string | null = null): EditableValue<T> {
   return { defaultValue, aiSuggestedValue, aiReason, humanSelectedValue: null, locked: false };
 }
+
+// Everything a Scene Composer needs to know about a pattern to build a default editable intent
+// for it. Comes from the Motion Pattern + Implementation registry (visualMotionLibrary.ts), not
+// invented here — this file stays free of any specific pattern's identity.
+export interface ComposablePatternInfo {
+  patternId: string;
+  implementationId: string;
+  easyLabel: string;
+  detailLabel: string;
+  tools: readonly string[];
+  enterMotionLabel: string;
+  defaultText: string;
+  defaultMediaLabel: string;
+}
+
+export const MASK_REVEAL_PATTERN_INFO: ComposablePatternInfo = {
+  patternId: "type-mask-reveal",
+  implementationId: "impl-type-mask-reveal-davinci-text-plus",
+  easyLabel: "下からスッと文字が出る",
+  detailLabel: "Mask Reveal / Ease Out",
+  tools: ["Text+", "Fusion", "Rectangle Mask", "Keyframe", "Spline"],
+  enterMotionLabel: "MASK_REVEAL",
+  defaultText: "WELCOME",
+  defaultMediaLabel: "Hero Photo",
+};
 
 export function resolveEditableValue<T>(value: EditableValue<T>): T {
   return value.humanSelectedValue ?? value.aiSuggestedValue ?? value.defaultValue;
@@ -76,7 +105,10 @@ export function getEditableDecisionState<T>(value: EditableValue<T>): EditableDe
   return "DEFAULT";
 }
 
-export function createDefaultMaskRevealEditableIntent(section: MaskRevealSection = "OPENING_INTRO"): MaskRevealEditableIntent {
+export function createDefaultMaskRevealEditableIntent(
+  section: MaskRevealSection = "OPENING_INTRO",
+  pattern: ComposablePatternInfo = MASK_REVEAL_PATTERN_INFO,
+): MaskRevealEditableIntent {
   const profile = section.startsWith("PROFILE_");
   const sceneDuration = profile ? 5 : 4;
   const layerDelay = profile ? 0.8 : 0.6;
@@ -85,15 +117,15 @@ export function createDefaultMaskRevealEditableIntent(section: MaskRevealSection
 
   return {
     schemaVersion: "human-editable-motion/v1",
-    patternId: "type-mask-reveal",
+    patternId: pattern.patternId,
     section,
     fields: {
-      text: editable("WELCOME"),
-      mediaLabel: editable("Hero Photo"),
+      text: editable(pattern.defaultText),
+      mediaLabel: editable(pattern.defaultMediaLabel),
       sceneDurationSeconds: editable(4, sceneDuration, profile ? "Profileは文字を読む時間を長めに確保するため。" : "Opening introは4秒でテンポを保つため。"),
       layerDelaySeconds: editable(0.6, layerDelay, profile ? "写真を先に見せてから章タイトルを出すため。" : "写真を一瞬先に見せてからタイトルを入れるため。"),
       motionDelaySeconds: editable(0),
-      enterMotion: editable("MASK_REVEAL"),
+      enterMotion: editable(pattern.enterMotionLabel),
       enterDurationSeconds: editable(0.6, enterDuration, profile ? "Profileでは急がず読みやすく入れるため。" : "Openingではテンポを損なわず自然に見せるため。"),
       holdMotion: editable("HOLD"),
       holdDurationSeconds: editable(2.8, holdDuration, "Scene DurationからDelayとEnterを引いた読み時間。"),
@@ -113,10 +145,10 @@ export function createDefaultMaskRevealEditableIntent(section: MaskRevealSection
       intensity: editable("S"),
     },
     davinciImplementation: {
-      implementationId: "impl-type-mask-reveal-davinci-text-plus",
-      easyLabel: "下からスッと文字が出る",
-      detailLabel: "Mask Reveal / Ease Out",
-      tools: ["Text+", "Fusion", "Rectangle Mask", "Keyframe", "Spline"],
+      implementationId: pattern.implementationId,
+      easyLabel: pattern.easyLabel,
+      detailLabel: pattern.detailLabel,
+      tools: pattern.tools,
     },
   };
 }
@@ -173,8 +205,12 @@ export function applyAiSuggestion<K extends MaskRevealEditableFieldKey>(
   } as MaskRevealEditableIntent;
 }
 
-export function retargetMaskRevealSection(intent: MaskRevealEditableIntent, section: MaskRevealSection): MaskRevealEditableIntent {
-  const nextDefaults = createDefaultMaskRevealEditableIntent(section);
+export function retargetMaskRevealSection(
+  intent: MaskRevealEditableIntent,
+  section: MaskRevealSection,
+  pattern: ComposablePatternInfo = MASK_REVEAL_PATTERN_INFO,
+): MaskRevealEditableIntent {
+  const nextDefaults = createDefaultMaskRevealEditableIntent(section, pattern);
   const fields = { ...intent.fields } as MaskRevealEditableFields;
 
   (Object.keys(fields) as MaskRevealEditableFieldKey[]).forEach((key) => {

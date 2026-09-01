@@ -40,11 +40,14 @@ requireAll(data, [
 
 requireAll(handoff, [
   'schemaVersion: "motion-handoff/v1"', 'expectedFormat: "NLE_XML"', 'xmlGeneratedExternally: true',
-  'companionFileName: "palmier-mask-reveal-timeline.xml"', 'markerIdFor', '`VML_MASK_REVEAL_${section}`',
+  'companionFileName: `palmier-${patternId}-timeline.xml`', 'markerIdFor', '`VML_${slug}_${section}`',
   'buildMaskRevealExecutionOutputs', 'nleXmlHandoff', 'verificationChecklist',
-  'implementationId: "impl-type-mask-reveal-davinci-text-plus"', '"opened-in-davinci"', '"render-tested"',
+  // patternId/implementationId are now taken from MaskRevealPromptInput (any registered
+  // PRODUCTION_READY pattern, not only type-mask-reveal) so this checks the fallback default
+  // used when a caller omits them, not a hardcoded literal in the manifest itself.
+  'implementationId ?? "impl-type-mask-reveal-davinci-text-plus"', '"opened-in-davinci"', '"render-tested"',
   '"visual-QA"', '"resolve-version-recorded"', 'canonicalTarget: "ACTUAL_DAVINCI_RENDER"', 'productionReady: false',
-  'schemaVersion: "motion-verification/v1"', 'sampleAssetSetId: "sample-typography-welcome-v1"',
+  'schemaVersion: "motion-verification/v1"', 'sampleAssetSetId: "sample-generic-hero-photo-v1"',
   'status: "PENDING_LOCAL_DAVINCI"', 'targetPreviewSourceType: "ACTUAL_DAVINCI_RENDER"',
   'candidatePreviewAssetPath: null', 'renderSha256: null', 'visualQa1x: false', 'visualQaHalfSpeed: false',
   'sampleAssetSetMatched: false', 'conceptPreviewKeptSeparate: false', 'false/nullの未確認項目が残る間はProduction Readyへ昇格しない',

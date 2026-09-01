@@ -89,7 +89,9 @@ export function buildMaskRevealEditableProductionOutputs(intent: MaskRevealEdita
     section: intent.section,
     intensity: resolved.intensity,
     durationSeconds: resolved.enterDurationSeconds,
-  } as const;
+    patternId: intent.patternId,
+    implementationId: intent.davinciImplementation.implementationId,
+  };
   const base = buildMaskRevealPromptOutputs(legacyInput);
   const sourceOfTruth = buildMaskRevealEditableSourceOfTruth(intent);
   const legacyHandoff = buildMaskRevealMotionHandoffManifest(legacyInput);
@@ -104,7 +106,7 @@ export function buildMaskRevealEditableProductionOutputs(intent: MaskRevealEdita
     : ["- none yet"];
 
   const humanBrief = [
-    `${intent.section} / Mask Reveal`,
+    `${intent.section} / ${intent.davinciImplementation.detailLabel}`,
     `Scene Duration: ${resolved.sceneDurationSeconds.toFixed(1)} sec`,
     `Text: ${resolved.text}`,
     `Layer Delay: ${resolved.layerDelaySeconds.toFixed(1)} sec`,
@@ -140,7 +142,7 @@ export function buildMaskRevealEditableProductionOutputs(intent: MaskRevealEdita
     "- minor crop only within the selected Crop / Focus rule and only when media/crop is not locked",
     "",
     "If a locked value makes the scene invalid, report the conflict. Do not replace it.",
-    "Use exactly the registered pattern type-mask-reveal; do not invent a substitute effect.",
+    `Use exactly the registered pattern ${intent.patternId}; do not invent a substitute effect.`,
   ].join("\n");
 
   const palmierInstruction = [
@@ -173,14 +175,14 @@ export function buildMaskRevealEditableProductionOutputs(intent: MaskRevealEdita
     `Direction: ${resolved.direction} / Distance ${resolved.distancePercent}%`,
     `Scale: ${resolved.scaleFromPercent}% → ${resolved.scaleToPercent}%`,
     `Intensity: ${resolved.intensity}`,
-    "Tools: Text+ / Fusion / Rectangle Mask / Keyframe / Spline",
+    `Tools: ${intent.davinciImplementation.tools.join(" / ")}`,
     "LOCKED values must match the sidecar editable source of truth.",
     "Actual render is implementation evidence, not the source of truth.",
     "Verification required: opened-in-davinci → render-tested → visual-QA → record local Resolve version",
   ].join("\n");
 
   const machine = {
-    schemaVersion: "mask-reveal-production/v2",
+    schemaVersion: "scene-production/v2",
     authority: "HUMAN_MASTER",
     editableSourceOfTruth: sourceOfTruth,
     resolved,

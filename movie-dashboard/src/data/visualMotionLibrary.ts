@@ -1,4 +1,5 @@
 import { startMotionPresets, type StartMotionPreset } from "./startMotionKit";
+import type { ComposablePatternInfo } from "./humanEditableMotionIntent";
 
 export type MotionPatternCategory =
   | "TYPOGRAPHY"
@@ -161,6 +162,10 @@ export interface MaskRevealPromptInput {
   section: "OPENING_INTRO" | "OPENING_CHORUS" | "PROFILE_CHAPTER" | "PROFILE_COUPLE_STORY";
   intensity: "S" | "M" | "L";
   durationSeconds: number;
+  // Optional so existing type-mask-reveal-only callers keep working unchanged.
+  // Any other pattern with a registered PRODUCTION_READY implementation can pass its own IDs.
+  patternId?: string;
+  implementationId?: string;
 }
 
 export interface MotionPromptOutputs {
@@ -1122,28 +1127,30 @@ function clampMaskRevealInput(input: MaskRevealPromptInput): MaskRevealPromptInp
 export function buildMaskRevealPromptOutputs(rawInput: MaskRevealPromptInput): MotionPromptOutputs {
   const input = clampMaskRevealInput(rawInput);
   const media = input.mediaLabel?.trim() || "選択したHero写真";
+  const patternId = input.patternId ?? "type-mask-reveal";
+  const implementationId = input.implementationId ?? "impl-type-mask-reveal-davinci-text-plus";
   const manifest = {
-    patternId: "type-mask-reveal",
+    patternId,
     text: input.text,
     media: media,
     section: input.section,
     durationSeconds: input.durationSeconds,
     intensity: input.intensity,
     palmierCapability: "PALMIER_TIMING_ONLY",
-    davinciImplementationId: "impl-type-mask-reveal-davinci-text-plus",
+    davinciImplementationId: implementationId,
     avoid: ["bounce", "glow", "excessive-motion-blur", "covering-subject-face", "effect-for-effect"],
   } as const;
 
   return {
     humanBrief: [
       `${input.section}で ${media} を使用。`,
-      `「${input.text}」を ${input.durationSeconds.toFixed(1)}秒程度のMask Revealで表示する。`,
+      `「${input.text}」を ${input.durationSeconds.toFixed(1)}秒程度の${patternId}で表示する。`,
       `強さは${input.intensity}。写真と可読性を主役にし、文字は境界からスッと現れて静かに止める。`,
       "禁止: bounce / glow / 強すぎるmotion blur / 顔を覆う配置 / effect-for-effect。",
     ].join("\n"),
     claudeCreativeInstruction: [
       "Use exactly this registered motion pattern:",
-      "- type-mask-reveal",
+      `- ${patternId}`,
       `Text: ${input.text}`,
       `Media: ${media}`,
       `Section: ${input.section}`,
@@ -1158,7 +1165,7 @@ export function buildMaskRevealPromptOutputs(rawInput: MaskRevealPromptInput): M
       `Place title: ${input.text}`,
       `Reserve approximately ${input.durationSeconds.toFixed(1)} sec for the title reveal timing.`,
       "Palmier responsibility is rough timing and placement only for this pattern.",
-      "If exact Mask Reveal cannot be reproduced natively, do not invent a substitute effect.",
+      `If exact ${patternId} cannot be reproduced natively, do not invent a substitute effect.`,
       "Leave timing/placement ready for DaVinci finishing and preserve the marker in the handoff.",
     ].join("\n"),
     davinciFinishManifest: [
@@ -1183,4 +1190,43 @@ export function getPatternImplementation(pattern: MotionPatternRecord) {
 
 export function getPatternPreview(pattern: MotionPatternRecord) {
   return motionPreviews.find((item) => pattern.previewIds.includes(item.id));
+}
+
+// Patterns the Scene Composer can actually drive end-to-end (register text/media -> generate
+// Human Brief / Palmier Instruction / DaVinci Finish Manifest -> adopt as a Scene). Limited to
+// PRODUCTION_READY implementations so the Composer never lets someone "adopt" a pattern that has
+// no real DaVinci/Palmier evidence behind it yet.
+export function composablePatterns(): ComposablePatternInfo[] {
+  const result: ComposablePatternInfo[] = [];
+  for (const pattern of motionPatterns) {
+    const implementation = getPatternImplementation(pattern);
+    if (!implementation || implementation.status !== "PRODUCTION_READY") continue;
+    const enterMotionLabel = pattern.id.replace(/^type-|^photo-|^cut-|^wipe-|^flash-|^accent-/, "").replace(/-/g, "_").toUpperCase();
+    result.push({
+      patternId: pattern.id,
+      implementationId: implementation.id,
+      easyLabel: pattern.looksLike,
+      detailLabel: `${pattern.commonName} / ${pattern.japaneseName}`,
+      tools: implementationToolList(implementation),
+      enterMotionLabel,
+      defaultText: pattern.categories.includes("TYPOGRAPHY") ? "WELCOME" : "",
+      defaultMediaLabel: "Hero Photo",
+    });
+  }
+  return result;
+}
+
+function implementationToolList(implementation: MotionImplementationRecord): string[] {
+  switch (implementation.kind) {
+    case "DAVINCI_TEXT_PLUS":
+      return ["Text+", "Fusion", "Merge", "Keyframe", "Spline"];
+    case "DAVINCI_FUSION":
+      return ["Fusion", "Transform", "Merge", "Keyframe", "Spline"];
+    case "DAVINCI_EDIT_NATIVE":
+      return ["Edit Page", "Timeline Clip"];
+    case "PALMIER_NATIVE_EDIT":
+      return ["Palmier Native Timeline"];
+    default:
+      return ["DaVinci Resolve"];
+  }
 }
