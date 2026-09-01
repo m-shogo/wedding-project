@@ -1,0 +1,33 @@
+name: Wedding Project Production Rhythm Correction Operator Dashboard CI
+
+on:
+  pull_request:
+    paths:
+      - 'movie-dashboard/src/components/WeddingProductionRhythmCorrectionQueueCard.tsx'
+      - 'movie-dashboard/src/components/WeddingMediaIntakeChecklistCard.tsx'
+      - 'movie-dashboard/scripts/verify-production-rhythm-correction-operator-contracts.mjs'
+      - '.github/workflows/wedding-project-production-rhythm-correction-operator-dashboard-ci.yml'
+  workflow_dispatch:
+
+jobs:
+  operator:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.4.1
+          run_install: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: movie-dashboard/pnpm-lock.yaml
+      - name: Verify production rhythm correction operator contracts
+        run: node movie-dashboard/scripts/verify-production-rhythm-correction-operator-contracts.mjs
+      - name: Build Movie Dashboard
+        working-directory: movie-dashboard
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm build
