@@ -1,709 +1,477 @@
 # V20 Page Manuals — P01 to P08
 
-Status: `CANONICAL_PAGE_EXPLANATIONS_BEFORE_FIGMA`
+Status: `CANONICAL_PAGE_EXPLANATIONS / RESET_2026-09-01`
 
-These manuals are design authority for V20. Figma receives placement instructions derived from them; Figma does not invent page composition from a generic style prompt.
+This file follows `V20-CURRENT-PAGE-ARCHITECTURE.md`.
 
-Physical frame/bleed/safe rules come from `V20-PRODUCTION-GEOMETRY.md`.
+If an older manual, production brief, Figma baseline or evidence note conflicts with the page roles below, the older role is historical only.
 
-Global content rule: missing personal facts remain missing. Never design a module that requires fabricated copy.
+Global rules:
+- A5 portrait, 8 pages;
+- wedding date is `2026.10.24`;
+- do not fabricate personal facts/captions;
+- current visual clutter target is approximately 75% of the previous maximum-clutter experiments;
+- one-shot page generation may be used as art-direction proof, then rebuild as layered assets;
+- real photos remain replaceable;
+- authoritative personal/factual copy remains native/editable;
+- old SVG visual language has zero current design authority.
 
 ---
 
-# P01 — COVER / DEPARTURE
+# P01 — COVER / るるぶ WEDDING
 
 ## Page job
 
 In 3 seconds:
-1. this is a joyful travel-magazine-like wedding booklet;
+1. this is a joyful Japanese travel-magazine-style wedding special issue;
 2. SHOGO & SHIORI are the protagonists;
-3. 2026.10.24 / YOKOHAMA is today's destination;
-4. the cover feels rich enough to open.
+3. the wedding date is `2026.10.24`;
+4. the page looks exciting enough to open without becoming visually exhausting.
 
 ## Reading path
 
-1. original V20 masthead;
-2. hero couple photo;
-3. names + date/location;
-4. 2–4 grounded cover hooks;
-5. tiny travel/editorial discoveries.
-
-## Zone map
-
-Use trim coordinates conceptually; bleed art may extend outside trim.
-
-- top 5–25%: masthead/title silhouette, not a thin centered header;
-- center 20–78%: hero photo/cutout cluster;
-- upper-right or right-center: date/location stamp or issue marker;
-- lower 65–94%: 2–4 editorial hooks + 1–2 smaller photo/object clusters;
-- corners/bleed: foliage/flower/travel accents with at least one cropped edge anchor.
-
-Do not divide into equal horizontal bands.
+1. `るるぶ WEDDING` masthead;
+2. dominant couple/Hawaii hero;
+3. SHOGO & SHIORI / 2026 / date;
+4. 1–2 strong cover hooks;
+5. a few small travel/wedding discoveries.
 
 ## Photo plan
 
-- `P01_HERO`: 1 real couple image, visually dominant, replaceable;
-- `P01_SUPPORT_A/B`: 1–2 real images or cutout/photo details;
-- optional `P01_CUTOUT`: one subject/object cutout only if it improves depth.
+- 1 dominant hero;
+- 0–2 support/detail photos only if they strengthen the cover.
 
-Hero should occupy roughly 50–70% of perceived image weight.
-
-## Title plan
-
-- create an ORIGINAL V20 masthead rather than tracing a commercial logo;
-- title may use thick display letters, white keyline, hard offset shadow, ribbon/marker accents;
-- `SHOGO & SHIORI`, date and location remain native text;
-- no generated Japanese coverline text baked into an image.
+Do not use many tiny photos merely to imitate magazine density.
 
 ## Parts
 
-Required:
-- masthead;
-- date/location stamp;
-- one feature burst/tag;
-- one edge foliage/flower cluster;
-- airplane/camera/suitcase object cluster, maximum 1 hero-scale supporting cluster;
-- 1–2 photo-frame treatments.
+- canonical/approved masthead direction;
+- date/issue unit;
+- 1–2 cover-hook vessels;
+- one tropical/travel edge cluster;
+- optional support-photo frame;
+- only a few micro icons/stamps after hierarchy passes.
 
-## Color jobs
+## Density
 
-Suggested:
-- dominant OCEAN/SKY field or blue-dominant hero environment;
-- HOT_PINK display accent;
-- SUN burst/highlight;
-- PAPER/WHITE keyline support;
-- INK for small readable facts.
+`7.5/10`.
 
-Do not make pink/yellow/blue equally large.
+The cover should be energetic, but visibly cleaner than the earlier maximum-clutter P01 test.
 
-## Overlap / depth
+## Reject
 
-Good targets:
-- masthead overlaps hero crop slightly;
-- one decoration crosses a photo-frame edge;
-- one edge decoration enters bleed;
-- one lower editorial hook overlaps a stable paper/tag field.
-
-## Editability contract
-
-Native:
-- names;
-- date;
-- location;
-- cover hooks;
-- issue/meta text.
-
-Replaceable:
-- all couple photos.
-
-Composed art:
-- masthead decoration;
-- foliage;
-- travel object;
-- burst/stamp artwork without variable text.
-
-## Anti-patterns
-
-- centered logo + centered photo + centered date;
-- 3 equal photo cards along bottom;
-- tiny fake coverlines filling gaps;
-- direct commercial magazine logo copy;
-- generated fake text;
-- soft-shadow web hero.
-
-## Completion check
-
-At thumbnail scale, masthead and couple photo must still be distinguishable and stronger than every small decoration.
+- wedding-card layout;
+- tiny masthead;
+- cover index overloaded with many features;
+- 3+ equal small photo cards;
+- decorations filling every gap;
+- old SVG/vector-kit look.
 
 ---
 
-# P02 — WHO WE ARE / PROFILE
+# P02 — PROFILE / WHO WE ARE
 
 ## Page job
 
-Guests should understand both people within 10–20 seconds, then discover small facts without feeling they are reading employee profiles.
-
-## Spread role
-
-P02 is the structured/quick-scan half of the P02–P03 spread. P03 is more narrative. Do not mirror them.
+Let guests understand both people quickly without turning the page into a questionnaire dump.
 
 ## Reading path
 
-1. page title / `WHO WE ARE` equivalent;
-2. first portrait + name;
-3. second portrait + name;
-4. short facts around each;
-5. couple-life/dogs or optional real Q&A micro-feature.
-
-## Zone map
-
-Recommended asymmetry:
-- title: top-left 5–18%;
-- SHOGO portrait: left/upper-middle, larger or taller frame;
-- SHIORI portrait: right/lower-middle or vice versa, offset vertically;
-- profile facts: attached near each portrait in 2–4 small clusters, not a single form/table;
-- bottom/edge: one shared `US / WITH COOKIE & MELON / LIFE` mini-feature when real assets support it.
-
-Equal editorial respect does not require equal rectangle geometry.
+1. profile title;
+2. SHOGO photo + name;
+3. SHIORI photo + name;
+4. 3–5 short facts for each when confirmed;
+5. optional one shared mini feature or maximum 1–2 Q&A snippets.
 
 ## Photo plan
 
-- 2 main profile portraits;
-- 1–2 personality/lifestyle detail photos;
-- optional 1 dog/couple-life image.
+- 2 main portraits/personality photos;
+- optional 1 shared/support photo.
 
-Use at least two frame shapes/sizes.
+## Content rule
 
-## Content elasticity
+Move out of P02:
+- relationship chronology → P03;
+- travel memories → P04;
+- family/friend memories → P05;
+- daily-life photo collection → P06.
 
-Each person must be able to support:
-- minimum: name + 3 facts;
-- ideal: name + 4–6 facts;
-- maximum before redesign: 7 short facts.
-
-If more copy arrives, edit selection rather than shrinking type.
-
-## Profile fact grammar
-
-Use short editorial labels such as:
-`HOMETOWN`, `LIKE`, `TRIP`, `HOBBY`, etc. only where real facts exist.
-
-Japanese meaning stays primary. Decorative English is secondary.
-
-## Optional Q&A insertion
-
-If real answers later exist:
-- allow up to 2 short Q&A snippets;
-- one near each person or one shared bottom module;
-- do not create a fixed empty Q&A box now.
+P02 is not responsible for telling the whole relationship.
 
 ## Parts
 
-- section title;
-- two portrait frame treatments;
-- mini-fact label family;
-- annotation arrows;
-- shared-life chip/tag;
-- optional small ticket/stamp.
+- one title unit;
+- two distinct profile frame/annotation units;
+- short fact-label family;
+- optional one shared/Q&A unit;
+- a few small annotations/icons.
 
-## Color jobs
+## Density
 
-- PAPER dominant;
-- blue and pink as section/person accents with explicit names, never color-only identification;
-- SUN only for one shared highlight;
-- INK body.
+`6/10`.
 
-## Calm zone
+## Reject
 
-Facts must sit on clean paper fields, not on busy photography.
-
-## Anti-patterns
-
-- left card = groom, right card = bride with identical fields;
-- blue means man / pink means woman without labels;
-- 10 tiny profile facts;
-- every fact inside a pill;
-- identical portrait circles.
-
-## Completion check
-
-Cover names with your hand mentally: the page should still feel like two distinct people, not two repeated components.
+- 6-question Q&A grid;
+- timeline at bottom;
+- travel-photo collage around profiles;
+- symmetric employee cards;
+- 10+ facts per person;
+- every fact in a pill/card.
 
 ---
 
-# P03 — OUR STORY / HOW WE GOT HERE
+# P03 — OUR STORY
 
 ## Page job
 
-Tell the relationship as a short emotional magazine feature. The page must work even if exact dates remain unknown.
-
-## Spread role
-
-P02 says WHO. P03 says HOW WE BECAME US.
-
-Use one subtle shared cue from P02—route fragment, color, tag shape, or small motif—not the same composition.
+Explain how the relationship progressed to the wedding day in a short emotional feature.
 
 ## Reading path
 
 1. story title;
-2. emotional/story anchor photo;
-3. episode 1;
-4. episode 2;
-5. proposal/registration/wedding arrival marker.
-
-## Zone map
-
-One recommended silhouette:
-- top-left title + intro line;
-- top-right/center hero story photo;
-- middle-left episode cluster 1;
-- center/lower episode cluster 2;
-- lower-right proposal/arrival cluster, visually stronger than ordinary milestones;
-- one quiet body-copy field across roughly 20–30% of page area.
+2. one emotional anchor photo;
+3. chapter 1–2;
+4. proposal/important milestone;
+5. registration / wedding-day arrival.
 
 ## Story structure
 
-Use 3–4 episodes max.
+Use 3–4 chapters maximum, only from confirmed material.
 
-Suggested content roles, subject to final fact confirmation:
-1. meeting / early outings;
-2. growing closer / dating;
-3. Hawaii proposal;
-4. registration → wedding arrival.
+Possible roles:
+- meeting / early outings;
+- becoming a couple;
+- proposal;
+- marriage registration / arriving at the wedding day.
 
-Dates are optional metadata, not the structural spine.
-
-## Copy budget
-
-- episode title: short;
-- body: approximately 45–100 Japanese characters each as a working budget;
-- total narrative should not force body type below comfortable A5 size.
+Exact dates are optional unless grounded.
 
 ## Photo plan
 
-2–4 photos:
+2–4 photos.
+
+Do not repeat the destination-photo-gallery behavior of P04.
+
+## Parts
+
+- story title;
+- 2–3 episode vessels;
+- one stronger milestone/proposal cue;
+- restrained route/thread only if it genuinely improves chronology;
+- very limited micro detail.
+
+## Density
+
+`5–5.5/10`.
+
+## Reject
+
+- corporate timeline;
+- six equal milestone nodes;
+- forced dates;
+- long travel descriptions;
+- dense photo scrapbook.
+
+---
+
+# P04 — ALL TRAVEL MEMORIES / OUR JOURNEY
+
+## Page job
+
+Gather the couple's travel memories on this page. This is the strongest travel-magazine interior page.
+
+## Reading path
+
+1. travel-memory title;
+2. strongest travel hero;
+3. 2–4 destination/memory clusters;
+4. smaller travel/detail photos;
+5. short captions/memory notes.
+
+## Content
+
+Verified travel memories such as Okinawa, Korea, Hawaii and other supplied trips may live here.
+
+Hawaii is one important memory, not a required separate P05 feature anymore.
+
+Proposal may be referenced here only as part of the travel memory; the relationship meaning belongs primarily on P03.
+
+## Photo plan
+
+Target 5–7 photos:
+- 1 hero;
+- 4–6 unequal support/action/detail photos.
+
+Use large photo differences. Do not make every destination the same size.
+
+## Parts
+
+- one strong travel title unit;
+- destination/memory label family with varied silhouettes;
+- 2–4 short caption/article vessels;
+- optional route BACK/FRONT connecting real memories;
+- 1–2 stamp/ticket/camera micro accents;
+- one edge cluster.
+
+## Density
+
+`8/10` — highest travel-editorial density in the booklet, but not maximum clutter.
+
+## Reject
+
+- all-polaroid grid;
+- equal destination cards;
+- fake generic destination facts;
+- huge decorative map covering the photos;
+- tiny stickers filling every cream area.
+
+---
+
+# P05 — FAMILY & FRIENDS MEMORIES
+
+## Page job
+
+Show the people and relationships that have been part of the couple's lives.
+
+This page replaces the old P05 Hawaii-only / proposal-arrival role.
+
+## Reading path
+
+1. warm page title;
+2. one representative/emotional people photo;
+3. FAMILY cluster;
+4. FRIENDS cluster;
+5. several smaller memories/captions.
+
+The exact split depends on the real photo pool. Do not force equal halves.
+
+## Photo plan
+
+Target 5–7 real photos:
 - 1 anchor;
-- 1–3 supporting memories.
+- 4–6 supporting family/friend memories.
 
-Avoid same treatment as P02 portraits.
+Group photos should remain large enough for faces to be recognizable at A5.
 
-## Parts
+## Copy
 
-- episode label;
-- restrained route/thread;
-- one paper-note support;
-- proposal highlight stamp/tag;
-- date/registration small marker if confirmed.
+Use short grounded captions only.
 
-## Color jobs
-
-- PAPER/SAND calm field;
-- one emotional pink/coral family accent;
-- OCEAN used as a journey connector, not a giant field;
-- INK body.
-
-## Overlap
-
-Less than P01/P04–P05.
-Use 1–3 overlaps so narrative remains readable.
-
-## Anti-patterns
-
-- six identical timeline nodes;
-- vertical corporate roadmap;
-- forcing missing dates into the design;
-- every episode in a rounded card;
-- decorative airplane path unrelated to chronology.
-
-## Completion check
-
-A guest who ignores all dates should still understand the story order.
-
----
-
-# P04 — CENTER SPREAD LEFT / JOURNEY DEPARTURE
-
-## Page job
-
-Begin the booklet's largest visual feature: real travel memories. P04 should feel like departure/exploration and naturally lead the eye through the center fold to P05.
-
-## Spread reading path
-
-P04 title/route entry
-→ Okinawa / first hero memory
-→ Korea / support memory
-→ route crosses fold
-→ P05 Hawaii emotional peak
-→ Yokohama arrival.
-
-## Zone map
-
-- top-left: spread title or left-side title fragment;
-- left/center: largest P04 destination image;
-- upper/right or lower/right: second destination cluster;
-- route runs through 2–3 visible landmarks and continues toward fold;
-- edge foliage/flower/photo crop may enter left/top/bottom bleed;
-- keep fold-side critical copy away from center.
-
-## Photo plan
-
-P04 target 3–5 photos:
-- 1 dominant destination hero;
-- 2–4 smaller destination/details.
-
-Use mixed landscape/postcard/cutout shapes.
-
-## Destination content
-
-Likely roles:
-- Okinawa as stronger left-side anchor;
-- Korea as a secondary exploration/food/walking cluster.
-
-Exact local place/date is optional until confirmed.
+Do not identify every person, relationship or anecdote unless the user supplies/approves it.
 
 ## Parts
 
-- spread route;
-- destination marker 01/02;
-- destination stamp treatment;
-- postcard/polaroid frame mix;
-- one page-edge tropical cluster;
-- tiny camera/ticket micro-discovery.
+- warm feature title;
+- family/friends section markers if helpful;
+- varied photo frames/backing paper;
+- 2–4 caption vessels;
+- tape/handwritten-style arrows only as visual accents, never fake quotes;
+- restrained heart/flower/travel continuation motifs.
 
-## Color jobs
+## Density
 
-Photography leads.
-OCEAN is the route/navigation identity.
-SUN/HOT_PINK are selective labels, not large equal blocks.
+`7/10` — lively and warm, but photography stays dominant.
 
-## Fold rule
+## Reject
 
-Only route/background/atmosphere may depend on crossing the fold. No critical caption/face/destination name on fold.
-
-## Anti-patterns
-
-- two equal destination cards;
-- map UI with pins in a clean grid;
-- every photo polaroid;
-- too much sticker density before destination hierarchy works.
+- old HAWAII feature-door preserved from previous P05;
+- old proposal article vessel used merely because it exists;
+- exhaustive people directory;
+- tiny unreadable group photos;
+- invented sentimental copy.
 
 ---
 
-# P05 — CENTER SPREAD RIGHT / HAWAII PEAK + ARRIVAL
+# P06 — REAL LIFE / FAVORITES / BEST SHOTS
 
 ## Page job
 
-Deliver the emotional peak of the center spread, then land the journey at today's wedding destination.
+Show the couple's everyday personality after the more structured profile/story/memories pages.
 
 ## Reading path
 
-1. route enters from P04;
-2. Hawaii hero/proposal story;
-3. 1–2 supporting Hawaii details;
-4. arrival marker / Yokohama / wedding-day destination cue.
-
-## Zone map
-
-- center/right: Hawaii hero image, largest visual on the entire center spread or tied with P04 hero;
-- top/right or lower/right: proposal copy on a calm field;
-- far-right/lower: `ARRIVAL / YOKOHAMA / 2026.10.24` marker;
-- right edge: one restrained tropical/travel object cluster;
-- leave enough clear space around proposal copy that emotion is not buried in clutter.
+1. playful title;
+2. one candid hero;
+3. 3–5 smaller real-life moments;
+4. Cookie/Melon, food, hobby/fun details when real assets exist;
+5. very short captions.
 
 ## Photo plan
 
-P05 target 3–4 photos:
-- Hawaii hero;
-- 1–2 support photos;
-- optional arrival/wedding-related image only if real and compositionally useful.
-
-## Proposal treatment
-
-The proposal is not just another destination card.
-Give it one unique treatment:
-- slightly larger story label;
-- distinct warm highlight field;
-- special stamp/tag;
-- more calm space around copy.
-
-Do not fake an exact proposal date.
+Target 4–6 photos:
+- 1 LIFE hero;
+- 3–5 support roles such as FOOD / PET-LIFE / FUN / DETAIL.
 
 ## Parts
 
-- continuation route;
-- Hawaii destination marker;
-- proposal highlight device;
-- arrival/Yokohama marker;
-- one edge decoration cluster;
-- 1–2 mixed photo frames.
+- title/subtitle unit;
+- BEST SHOTS or equivalent small feature unit;
+- 2–3 varied photo-frame treatments;
+- pet/food/fun small cue family;
+- short caption vessels.
 
-## Color jobs
+## Density
 
-Photography dominant.
-HOT_PINK or warm coral family may mark proposal emotion.
-OCEAN keeps journey continuity.
-SUN may mark arrival.
+`6.5/10`.
 
-## Anti-patterns
-
-- proposal buried among equal labels;
-- huge decorative map covering photos;
-- split-face photo across fold;
-- four equal square photos.
-
-## Completion check for P04–P05
-
-View both pages together at thumbnail scale:
-- one continuous spread story must exist;
-- P04 and P05 should not look like two unrelated pages;
-- P05 emotional peak should be visible without reading body text;
-- route must connect real editorial content.
-
----
-
-# P06 — OFF THE MAP / BEST SHOTS + REAL LIFE
-
-## Page job
-
-After destination stories, reveal everyday personality. This is a visual “breather” from long copy, not an empty calm page.
-
-## Reading path
-
-1. playful page title;
-2. one large candid/best-shot image;
-3. irregular photo mosaic;
-4. short captions/notes;
-5. dogs / tiny real facts / optional Q&A discoveries.
-
-## Zone map
-
-- title in one corner or vertical edge, not necessarily full-width top;
-- hero candid takes roughly 30–45% of page image weight;
-- 4–7 satellites arranged around it with intentional gaps/overlap;
-- one bottom/side cluster reserved for dogs or shared-life detail;
-- captions stay attached directly to images.
-
-## Photo plan
-
-Target 5–8 photos.
-
-Mix:
-- candid couple;
-- daily-life detail;
-- dog photo;
-- food/activity detail only when meaningful;
-- avoid simply reusing the best destination photos from P04–P05.
-
-## Copy budget
-
-- title/subtitle;
-- captions mostly 10–35 Japanese characters;
-- optional 1–3 tiny real fact/Q&A snippets;
-- no long body paragraph required.
-
-## Parts
-
-- tape/note caption support;
-- one cutout-outline treatment;
-- handwritten arrow/heart;
-- tiny shared-life label;
-- optional Q&A mini-label.
-
-## Color jobs
-
-Lighter PAPER base with playful accents.
-Keep overall large color-block intensity below center spread so the images breathe.
-
-## Anti-patterns
+## Reject
 
 - 6 equal Instagram tiles;
-- every photo tilted;
-- captions floating far from their photo;
+- travel-destination labels repeated from P04;
 - fake handwritten quotes;
-- using destination labels again.
-
-## Completion check
-
-If all captions are hidden, the photo arrangement alone should still feel intentional and human rather than a gallery component.
+- too many anonymous TEMP images instead of real-photo replacement planning.
 
 ---
 
-# P07 — TODAY'S TRAVEL GUIDE / WEDDING DAY
+# P07 — CLOSING MESSAGE / THANK YOU
 
 ## Page job
 
-Guests can find the day's important times immediately. The page also completes the booklet's travel metaphor: all earlier journeys arrive at today.
+End the interior editorial story warmly and clearly.
+
+P07 is now the closing page. All old guide/discovery/schedule roles are obsolete.
 
 ## Reading path
 
-1. `TODAY / WEDDING DAY` title;
-2. date/location;
-3. 14:10 Ceremony;
-4. unresolved 14:40–15:00 guidance slot;
-5. 15:00 Reception;
-6. 17:30 finish marker;
-7. optional practical note/photo.
-
-## Zone map
-
-Do not create a timetable table.
-
-Recommended rhythm:
-- title/date top;
-- one strong route/chronology connector descending or diagonally moving through page;
-- large time markers at intentionally different positions/scale;
-- event label + short native description beside each time;
-- one small photo/venue/detail reward interrupting the chronology;
-- lower/end area resolves at 17:30 / closing marker.
-
-## Time hierarchy
-
-Times are functional hero typography.
-
-Working importance:
-- 14:10 and 15:00 largest;
-- 14:40 clearly visible but structurally marked as unresolved guidance until copy is confirmed;
-- 17:30 separate finish marker.
-
-Do not hide times inside decorative ticket art.
-
-## Copy safety
-
-All schedule facts remain native editable text.
-The 14:40–15:00 wording stays a semantic placeholder until authoritative wording exists.
-
-No invented:
-- opening time;
-- gate/floor;
-- flight number;
-- transport instruction;
-- QR;
-- venue operational fact.
+1. calm closing photo;
+2. short thank-you / final message;
+3. SHOGO & SHIORI;
+4. `2026.10.24`;
+5. one small final journey/wedding motif.
 
 ## Photo plan
 
-1–3 images max:
-- venue/detail/food only if verified and useful;
-- this is not a photo gallery.
+1 strong real photo, optional 1 tiny support image only if clearly better.
+
+The previous P08 closing-photo behavior can be considered as a source/baseline for this new P07 role, but do not blindly copy its old geometry.
+
+## Copy budget
+
+Approximately 40–100 Japanese characters for the final message, subject to user approval.
 
 ## Parts
 
-- itinerary stop markers;
-- chronology connector;
-- time emphasis fields;
-- practical-note label;
-- optional destination/venue marker.
+- restrained closing title/phrase;
+- one calm message vessel if needed;
+- one small issue/final-stop/travel mark;
+- one subtle edge element.
 
-## Color jobs
+## Density
 
-OCEAN/INK provide structure.
-SUN/warm color highlights one event/arrival.
-PAPER fields protect explanatory copy.
+`3.5–4/10`.
 
-## Anti-patterns
+## Explicitly forbidden on P07
 
-- airline boarding-pass cosplay with fake flight facts;
-- fake transit map complexity;
-- equal schedule cards;
-- tiny descriptions surrounding giant decorative art;
-- QR placeholder that looks functional.
+- `TODAY'S TRAVEL GUIDE`;
+- `11 DESTINATIONS`;
+- `LOOK AROUND`;
+- `EDITOR'S PICK`;
+- destination-table guide;
+- schedule/timetable;
+- route/map information page;
+- dense venue detail system.
 
-## Completion check
+## Reject
 
-At arm's-length thumbnail-ish view, 14:10 / 15:00 / 17:30 and page purpose should still be obvious.
+- guide page leftovers;
+- dense collage;
+- generic empty wedding thank-you card with no editorial identity;
+- too many micro decorations.
 
 ---
 
-# P08 — BACK COVER / CONTINUE THE JOURNEY
+# P08 — BACK COVER / MAGAZINE BACK COVER
 
 ## Page job
 
-Create a warm, deliberate ending. The back cover should feel designed even with fewer elements.
+Look like a convincing, restrained magazine back cover.
+
+This is **not** another feature page and **not** the main thank-you page.
 
 ## Reading path
 
-1. closing photo/message;
-2. names/date;
-3. one final journey/sign-off cue;
-4. tiny issue/postcard metadata.
+There should barely be a reading path. One calm field/photo/art direction first, then minimal publication-style metadata/barcode detail.
 
-## Zone map
+## Allowed/default content
 
-- one large calm photo OR one medium photo + generous stable paper field;
-- closing message in a quiet high-contrast area;
-- small names/date near bottom or side;
-- one edge decoration/stamp only;
-- optional decorative barcode/issue block clearly nonfunctional;
-- real QR only if verified.
+- subtle issue/publication mark;
+- optional small SHOGO & SHIORI;
+- optional small `2026.10.24`;
+- one tiny wedding/travel motif;
+- decorative barcode;
+- barcode digits exactly `2026102400000`.
+
+Use a Code 128-compatible/decorative barcode approach if an actually encoded barcode is desired, so the exact digits remain unchanged.
+
+Do not silently alter the digits to satisfy EAN-13 checksum.
 
 ## Photo plan
 
-1–2 photos maximum.
-A deliberate cover-photo reprise is allowed once if it creates book closure; otherwise prefer a unique calm image.
+0–1 photo.
+
+A quiet full/partial background photo is allowed, but no collage.
 
 ## Parts
 
-- closing stamp/postcard cue;
-- small issue metadata;
-- one edge accent;
-- optional verified QR frame.
+- back-cover base/background;
+- tiny issue/meta unit;
+- barcode unit with exact digits;
+- optional one tiny edge mark.
 
-## Color jobs
+## Density
 
-PAPER/warm field dominant.
-One reprise accent from P01 creates closure.
-Avoid a rainbow finale.
+`2–3/10` — quietest page in the book.
 
-## Anti-patterns
+## Reject
 
-- leftover photos forced in;
-- five mini sections because space exists;
-- sentimental low-contrast script;
-- fake functional QR/barcode;
-- giant logo repetition competing with thank-you.
-
-## Completion check
-
-P08 should feel quieter than P07 but not unfinished.
+- long thank-you copy;
+- multiple feature hooks;
+- large photo collage;
+- QR unless explicitly supplied later;
+- fake real publisher/price/ISBN/JAN claims;
+- old P07 destination-guide assets;
+- old P08 closing-page content density.
 
 ---
 
-# Cross-page layer contract
+# Physical spread logic
 
-For every page use semantic groups such as:
+## P02–P03
+`WHO WE ARE → OUR STORY`
 
-- `GUIDES`;
-- `BACKGROUND`;
-- `EDGE DECOR`;
-- `PHOTO / SOURCE / ...`;
-- `PHOTO MASK / ... / REPLACEABLE`;
-- `FRAME / ...`;
-- `DISPLAY / TITLE`;
-- `TEXT / NATIVE / ...`;
-- `PART / ...`;
-- `FOREGROUND`;
-- `QA / NOT EXPORT`.
+P02 is quick-scan; P03 is narrative.
 
-Do not leave final nodes named `Rectangle 123`, `Group 42`, `Image 7` when semantic naming is known.
+## P04–P05 center spread
+`PLACES WE REMEMBER → PEOPLE WE REMEMBER`
 
-# Cross-page photo replacement contract
+Treat the center spread as a broad `MEMORIES` chapter:
+- P04 = travel/place memories;
+- P05 = family/friend/people memories.
 
-Every real photo slot records:
-- page;
-- role;
-- desired orientation/aspect;
-- focal point;
-- minimum source pixels for final size;
-- proxy/final status;
-- source locator/Drive ID when available.
+They should share publication DNA, but no longer require one literal route across the fold.
 
-A future photo replacement must not require rebuilding the decorative frame.
+## P06–P07
+`OUR REAL LIFE → THANK YOU`
 
-# Cross-page content-key contract
+P06 is playful; P07 slows down.
 
-Native text should eventually use semantic content keys, for example:
-- `P02_SHOGO_FACT_01`;
-- `P03_EPISODE_02_BODY`;
-- `P05_HAWAII_PROPOSAL_BODY`;
-- `P07_CEREMONY_TIME`;
-- `P08_THANKYOU_BODY`.
+## P08
+Standalone back cover.
 
-This lets copy change without ambiguity and supports automated missing-content checks later.
+---
 
-# Figma execution rule
+# Whole-book density rhythm
 
-Do NOT hand Figma only this instruction:
-`make P05 more Rurubu-like`.
+- P01: 7.5/10
+- P02: 6/10
+- P03: 5–5.5/10
+- P04: 8/10
+- P05: 7/10
+- P06: 6.5/10
+- P07: 3.5–4/10
+- P08: 2–3/10
 
-For each page, convert the manual into an explicit placement pass:
-1. create/verify geometry and guides;
-2. place title zone;
-3. place hero photo mask;
-4. place support photo masks;
-5. place native content fields;
-6. place route/structural parts;
-7. place display parts;
-8. add only justified foreground accents;
-9. screenshot at thumbnail + reading scale;
-10. compare against this page job and visual grammar;
-11. correct structure before micro-decoration.
+The book should still feel like one publication, but not every page should shout.
+
+`DO NOT RECOVER OLD PAGE ROLES FROM OLD FIGMA OR OLD BRIEFS.`
