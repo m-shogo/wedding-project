@@ -1,0 +1,34 @@
+import {createHash} from "node:crypto";
+import {existsSync,mkdirSync,readFileSync,writeFileSync} from "node:fs";
+import {dirname,resolve} from "node:path";
+import {spawnSync} from "node:child_process";
+
+function arg(name:string){const prefix=`--${name}=`;const value=process.argv.find((item)=>item.startsWith(prefix));return value?value.slice(prefix.length):null;}
+function fail(code:string,detail?:string):never{console.error(`${code}${detail?`: ${detail}`:""}`);process.exit(1);}
+function sha256(path:string){return createHash("sha256").update(readFileSync(path)).digest("hex");}
+function load(path:string,code:string){if(!existsSync(path))fail(`${code}_NOT_FOUND`,path);try{return JSON.parse(readFileSync(path,"utf8"));}catch{fail(`${code}_INVALID`,path);}}
+function run(script:string,args:string[]){const result=spawnSync(process.execPath,["--no-warnings",resolve(script),...args],{stdio:"inherit"});if(result.status!==0)fail("BGM_RHYTHM_REFRESH_STEP_FAILED",`${script}:${result.status??"signal"}`);}
+
+const selectedArg=arg("selected-manifest");const auditArg=arg("readiness-audit");const cueMapArg=arg("bgm-cue-map");const outputDirArg=arg("output-dir");
+if(!selectedArg)fail("BGM_RHYTHM_REFRESH_SELECTED_MANIFEST_REQUIRED");
+if(!auditArg)fail("BGM_RHYTHM_REFRESH_READINESS_AUDIT_REQUIRED");
+if(!cueMapArg)fail("BGM_RHYTHM_REFRESH_CUE_MAP_REQUIRED");
+if(!outputDirArg)fail("BGM_RHYTHM_REFRESH_OUTPUT_DIR_REQUIRED");
+const selectedPath=resolve(selectedArg);const auditPath=resolve(auditArg);const cueMapPath=resolve(cueMapArg);const outputDir=resolve(outputDirArg);
+const selected=load(selectedPath,"BGM_RHYTHM_REFRESH_SELECTED_MANIFEST");const audit=load(auditPath,"BGM_RHYTHM_REFRESH_READINESS_AUDIT");const cueMap=load(cueMapPath,"BGM_RHYTHM_REFRESH_CUE_MAP");
+if(selected.schemaVersion!=="wedding-movie-selected-scene-render-manifest/v1"||(selected.projectId!=="opening"&&selected.projectId!=="profile"))fail("BGM_RHYTHM_REFRESH_SELECTED_SCHEMA_MISMATCH");
+const projectId=selected.projectId as "opening"|"profile";
+if(audit.schemaVersion!=="wedding-movie-production-readiness-audit/v1"||audit.projectId!==projectId||audit.summary?.readyForContinuousRealMediaPreview!==true)fail("BGM_RHYTHM_REFRESH_AUDIT_NOT_READY");
+if(cueMap.schemaVersion!=="wedding-movie-bgm-cue-map/v1"||cueMap.authority!=="HUMAN_MARKED_BGM_CUES_BOUND_TO_CURRENT_APPROVED_AUDIO"||cueMap.projectId!==projectId)fail("BGM_RHYTHM_REFRESH_CUE_MAP_SCHEMA_MISMATCH");
+if(cueMap.evidenceBoundary?.automaticBeatDetection!==false||cueMap.evidenceBoundary?.remotionStudioGuiActual!=="NOT_RUN"||cueMap.evidenceBoundary?.palmierGuiActual!=="NOT_RUN"||cueMap.evidenceBoundary?.macDaVinciGuiActual!=="NOT_RUN"||cueMap.evidenceBoundary?.productionReady!==false)fail("BGM_RHYTHM_REFRESH_CUE_MAP_BOUNDARY_INVALID");
+mkdirSync(outputDir,{recursive:true});
+const previewPath=resolve(outputDir,`${projectId}-real-media-preview-manifest.json`);const rhythmPath=resolve(outputDir,`${projectId}-production-rhythm-pass.json`);const rhythmCurrentnessPath=resolve(outputDir,`${projectId}-production-rhythm-pass-currentness.json`);const alignmentPath=resolve(outputDir,`${projectId}-bgm-rhythm-alignment.json`);const alignmentCurrentnessPath=resolve(outputDir,`${projectId}-bgm-rhythm-alignment-currentness.json`);const receiptPath=resolve(outputDir,`${projectId}-bgm-rhythm-refresh-receipt.json`);
+run("motion-studio/scripts/refresh-wedding-project-real-media-visual-qa.mts",[`--selected-manifest=${selectedPath}`,`--readiness-audit=${auditPath}`,`--output-dir=${outputDir}`]);
+run("motion-studio/scripts/wedding-project-production-rhythm-pass.mts",[`--preview-manifest=${previewPath}`,`--output=${rhythmPath}`]);
+run("motion-studio/scripts/verify-wedding-project-production-rhythm-pass-currentness.mts",[`--rhythm-pass=${rhythmPath}`,"--strict-current",`--output=${rhythmCurrentnessPath}`]);
+run("motion-studio/scripts/wedding-project-bgm-rhythm-alignment.mts",[`--rhythm-pass=${rhythmPath}`,`--bgm-cue-map=${cueMapPath}`,`--output=${alignmentPath}`]);
+run("motion-studio/scripts/verify-wedding-project-bgm-rhythm-alignment-currentness.mts",[`--alignment=${alignmentPath}`,`--rhythm-currentness=${rhythmCurrentnessPath}`,"--strict-current",`--output=${alignmentCurrentnessPath}`]);
+const preview=load(previewPath,"BGM_RHYTHM_REFRESH_PREVIEW");const rhythmCurrentness=load(rhythmCurrentnessPath,"BGM_RHYTHM_REFRESH_RHYTHM_CURRENTNESS");const alignment=load(alignmentPath,"BGM_RHYTHM_REFRESH_ALIGNMENT");const alignmentCurrentness=load(alignmentCurrentnessPath,"BGM_RHYTHM_REFRESH_ALIGNMENT_CURRENTNESS");
+if(preview.identity?.bgmSha256!==cueMap.source?.audioSha256)fail("BGM_RHYTHM_REFRESH_BGM_CUE_BINDING_STALE");if(rhythmCurrentness.state!=="CURRENT")fail("BGM_RHYTHM_REFRESH_RHYTHM_NOT_CURRENT");if(alignmentCurrentness.state!=="CURRENT")fail("BGM_RHYTHM_REFRESH_ALIGNMENT_NOT_CURRENT");if(alignment.summary?.humanSelection!=="NOT_RUN"||alignment.evidenceBoundary?.humanSelectionPerformed!==false)fail("BGM_RHYTHM_REFRESH_HUMAN_SELECTION_PROMOTED");
+const result={schemaVersion:"wedding-movie-bgm-rhythm-refresh-receipt/v1",authority:"CANONICAL_FRESH_REAL_MEDIA_RENDER_TO_CURRENT_BGM_RHYTHM_ALIGNMENT_CHAIN",generatedAt:new Date().toISOString(),projectId,source:{selectedManifestPath:selectedPath,selectedManifestSha256:sha256(selectedPath),readinessAuditPath:auditPath,readinessAuditSha256:sha256(auditPath),bgmCueMapPath:cueMapPath,bgmCueMapSha256:sha256(cueMapPath)},outputs:{previewManifest:{path:previewPath,sha256:sha256(previewPath)},rhythmPass:{path:rhythmPath,sha256:sha256(rhythmPath)},rhythmCurrentness:{path:rhythmCurrentnessPath,sha256:sha256(rhythmCurrentnessPath),state:rhythmCurrentness.state},bgmRhythmAlignment:{path:alignmentPath,sha256:sha256(alignmentPath),revision:alignment.revision},bgmRhythmCurrentness:{path:alignmentCurrentnessPath,sha256:sha256(alignmentCurrentnessPath),state:alignmentCurrentness.state}},summary:{freshRender:true,rhythmCurrent:true,bgmRhythmAlignmentCurrent:true,humanBgmEditSelection:"NOT_RUN",humanVisualQa:"NOT_RUN",productionReady:false},evidenceBoundary:{humanBgmCueAuthority:"PRESERVED_FROM_INPUT_CUE_MAP",automaticBeatDetection:false,automaticEditPointSelection:false,humanBgmEditSelectionPerformed:false,humanVisualQa:"NOT_RUN",remotionStudioGuiActual:"NOT_RUN",palmierGuiActual:"NOT_RUN",macDaVinciGuiActual:"NOT_RUN",productionReady:false,rule:"This command refreshes mechanical render/rhythm/alignment evidence only. It preserves the existing Human cue map and starts edit selection at NOT_RUN; it does not create musical or visual quality PASS or promote GUI Actual evidence."}};
+mkdirSync(dirname(receiptPath),{recursive:true});writeFileSync(receiptPath,`${JSON.stringify(result,null,2)}\n`);console.log(JSON.stringify({receipt:receiptPath,projectId,rhythmCurrent:true,bgmRhythmAlignmentCurrent:true,humanBgmEditSelection:"NOT_RUN",humanVisualQa:"NOT_RUN",productionReady:false},null,2));
