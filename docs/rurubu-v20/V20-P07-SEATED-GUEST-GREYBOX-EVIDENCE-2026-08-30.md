@@ -1,122 +1,33 @@
-# V20 P07 Seated-Guest Greybox Evidence — 2026-08-30
+# V20 P07 Seated-Guest Greybox Evidence — Historical Archive
 
-Status: `FIGMA_EVIDENCE / P07_ROLE_REPLACED`
+Status: `HISTORICAL_ONLY / CURRENT_P07_ROLE_REPLACED`
 
-## Why P07 changed
+This file previously documented the obsolete P07 `TODAY'S TRAVEL GUIDE / 11 DESTINATIONS / LOOK AROUND` discovery concept.
 
-The previous P07 greybox was schedule-first:
-- 14:10 Ceremony;
-- 14:40 unresolved interval;
-- 15:00 Reception;
-- 17:30 Finish.
+That concept has **zero current V20 page-role authority**.
 
-That structure was valid as a generic wedding-day utility idea, but it no longer matches the actual primary reading context for V20: guests are already inside the venue and seated.
+Current P07 is defined by:
+- `V20-CURRENT-PAGE-ARCHITECTURE.md`
+- `V20-PAGE-BY-PAGE-DESIGN-SPEC.md`
+- `V20-PAGE-MANUALS.md`
+- `V20-CURRENT-ACCEPTANCE-GATE.md`
 
-A seated Rurubu booklet should reward discovery and conversation rather than explain pre-arrival logistics or re-show a timetable.
+Current P07:
+- one calm strong photo
+- short thank-you/closing message
+- SHOGO & SHIORI
+- `2026.10.24`
+- one restrained final motif
+- density about 35–40/100
 
-Therefore the schedule-first P07 is retired as V20 production authority.
+Do not recover from Git history:
+- `TODAY'S TRAVEL GUIDE`
+- `11 DESTINATIONS`
+- destination-map/discovery system
+- `LOOK AROUND`
+- `EDITOR'S PICK`
+- timetable/schedule-first P07
 
-## New P07 authority
+Old Figma frame IDs/screenshots may remain useful only as provenance that prior experiments existed. They are not design baselines for current P07.
 
-Canonical brief:
-`V20-P07-SEATED-GUEST-PRODUCTION-BRIEF.md`
-
-Concept:
-`TODAY'S TRAVEL GUIDE / FIND THE JOURNEY AROUND YOU`
-
-Composition verb:
-`MAP + SCATTER + COLLIDE + DISCOVER`
-
-Primary current feature:
-`11 DESTINATIONS / TABLE JOURNEY`
-
-Final destination wording/order remains subject to content confirmation before print.
-
-## Figma evidence
-
-Figma file:
-`bfM0d4c9dCeBv5pCkJ3TNM`
-
-V20 page:
-`13_RURUBU_V20_GREYBOX`
-
-P07 frame ID:
-`3287:29`
-
-Current frame name:
-`P07_V20_GREYBOX / TODAY'S TRAVEL GUIDE / FIND THE JOURNEY`
-
-The old timetable nodes were removed from this frame.
-
-New greybox contains:
-- giant display `11`;
-- strong title slab overlapping the `11` and map field;
-- abstract map/journey background field;
-- route layers crossing through destination vessels;
-- varied destination vessels rather than eleven identical chips;
-- large Hawaii label plus smaller Italy/France/Spain/Taiwan/Japan/Hong Kong/Star/Bali/Korea/Maldives candidate labels;
-- irregular `TODAY'S DETAIL` paper field;
-- optional detail-photo/object slot;
-- edge `LOOK AROUND` cluster placeholder.
-
-## Spread QA
-
-The P06–P07 QA preview was refreshed from the new P07 source.
-
-Current P07 preview clone ID:
-`3311:2`
-
-Old timetable preview clone `3291:104` was removed.
-
-The spread now has intentional contrast:
-- P06 = human/candid/photo-led irregular mosaic;
-- P07 = graphic/discovery/map + label collision.
-
-This is stronger than having P06 photo mosaic next to a generic timetable UI.
-
-## Current visual result
-
-The new P07 greybox no longer reads as:
-- timetable;
-- dashboard;
-- seating chart;
-- transit app;
-- equal destination-card grid.
-
-At thumbnail scale, the intended first reads are:
-1. `11`;
-2. `TODAY'S TRAVEL GUIDE`;
-3. Hawaii / several strong destination labels;
-4. journey field.
-
-At A5 scale, the remaining destination labels and wedding-detail notes become discoveries.
-
-## Content exclusions fixed by this change
-
-P07 does not allocate production space to:
-- dress code;
-- access/station directions;
-- parking;
-- check-in instructions;
-- ceremony/reception timetable as primary content;
-- food/drink menu already owned elsewhere;
-- seating chart/escort-card utility already owned elsewhere.
-
-## Remaining content requirements
-
-Before final native copy lock:
-- confirm final 11 table/destination theme wording;
-- confirm whether `Star` is the final printed theme wording;
-- choose 2–4 real wedding-day details worth a small discovery callout;
-- remove any destination/theme that changes before print rather than preserving stale copy.
-
-## Next production implication
-
-Do not generate P07 decorative assets yet ahead of P01/P04–P05 priority unless needed.
-
-When P07 asset production begins, derive assets from:
-- `V20-P07-SEATED-GUEST-PRODUCTION-BRIEF.md`;
-- lessons from real decorated P01 and P04–P05 compositions;
-- the current P07 greybox silhouette.
-
-Do not resurrect the timetable because it appears in an older page manual or previous screenshot.
+`CURRENT P07 = THANK YOU / CLOSING. OLD DISCOVERY GREYBOX = HISTORY ONLY.`
