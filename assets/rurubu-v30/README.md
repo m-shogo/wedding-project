@@ -8,6 +8,66 @@ Do not copy old generated V20 decorations into V30 merely to preserve prior work
 
 V20 assets are historical/reference only unless `docs/rurubu-v30/README.md` explicitly permits a verified source/provenance reuse.
 
+## Visual creation tool boundary — HARD RULE
+
+Previous Canva-based page/part construction reduced the visual quality and pushed the work toward generic wedding-template / card-layout aesthetics. V30 must not return to that production path.
+
+### Canva is NOT a V30 production design tool
+
+Do **not** use Canva, Canva templates, Canva page layouts, Canva-generated decoration packs, or Canva AI composition as the visual source for V30 production.
+
+Do not:
+- design/rebuild P01–P08 in Canva;
+- create magazine layouts in Canva and import them into Figma;
+- use Canva template geometry as a starting point;
+- use Canva sticker/card/ribbon/gradient packs to establish the publication look;
+- use Canva as an intermediate flattening/export step for production graphics;
+- recreate an existing V30 page with Canva merely because it is faster.
+
+A Canva-looking result is a reject condition even if Canva itself was not literally used: generic wedding template, evenly spaced cards, repeated rounded boxes, polished-but-flat symmetry, generic gradients and sticker-pack decoration must be redesigned.
+
+### Generated visual art comes from image-generation models
+
+For non-photographic editorial visuals that need authored personality, use an **image-generation model** such as the available ImageGen / Imagen-class workflow, following `docs/rurubu-v30/README.md`.
+
+Generated visual candidates include:
+- title/masthead art;
+- paper/backing objects;
+- photo frames;
+- tickets;
+- stamps;
+- ribbons;
+- tape;
+- caption/Q&A vessels;
+- editorial edge objects;
+- page-aware ornaments;
+- restrained texture/atmosphere when genuinely needed.
+
+Generated visuals must still follow the V30 pipeline:
+
+`PAGE INTENT`
+→ `PAGE-SPECIFIC IMAGE-GENERATION BRIEF`
+→ `SAFE SOLID KEY BACKGROUND`
+→ `PYTHON ALPHA CUTOUT`
+→ `ALPHA QA`
+→ `02_PRODUCTION_RGBA`
+→ `FIGMA LAYERED PLACEMENT`
+
+Do not substitute generic Figma/Canva primitives when a page-specific generated visual unit is what creates the magazine quality.
+
+### Figma remains compositor only
+
+Figma is for:
+- placing/cropping real photographs;
+- masks and replaceability;
+- placing QA-passed generated assets;
+- z-order/scale/rotation/overlap;
+- native authoritative text;
+- page/spread/A5 QA;
+- editable final assembly.
+
+Figma is not the primary visual-asset generator. Canva is not part of the V30 production chain.
+
 ## Git page ownership
 
 Preferred structure as assets are adopted:
