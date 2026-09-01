@@ -8,7 +8,31 @@ export interface EditableValue<T> {
   locked: boolean;
 }
 
-export type MaskRevealSection = "OPENING_INTRO" | "OPENING_CHORUS" | "PROFILE_CHAPTER" | "PROFILE_COUPLE_STORY";
+// The original 4 values are generic buckets (Opening V1 Short Candidate / Profile). They cannot
+// represent StaRt Extended's actual 14-section song structure (startExtendedRhythmMap.ts) — the
+// production target this whole Motion Zukan -> Scene Composer -> Palmier -> DaVinci line exists to
+// serve (docs/opening-authority.md: StaRt Extended = 本命方向). The 14 START_* values below let a
+// Scene reference a real section by name instead of only "OPENING_CHORUS" generically, so Scenes
+// can be built section-by-section against the actual song rather than a coarse placeholder.
+export type MaskRevealSection =
+  | "OPENING_INTRO"
+  | "OPENING_CHORUS"
+  | "PROFILE_CHAPTER"
+  | "PROFILE_COUPLE_STORY"
+  | "START_OPENING_PICKUP"
+  | "START_INTRO"
+  | "START_VERSE_1A"
+  | "START_VERSE_1B"
+  | "START_CHORUS_1A"
+  | "START_CHORUS_1B"
+  | "START_INTERLUDE_1"
+  | "START_VERSE_2A"
+  | "START_VERSE_2B"
+  | "START_CHORUS_2A"
+  | "START_CHORUS_2B"
+  | "START_INTERLUDE_2A"
+  | "START_INTERLUDE_2B"
+  | "START_END_WINDOW";
 export type MaskRevealIntensity = "S" | "M" | "L";
 export type MaskRevealDirection = "UP" | "DOWN" | "LEFT" | "RIGHT";
 export type PositionPreset =

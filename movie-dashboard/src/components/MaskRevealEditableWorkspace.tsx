@@ -77,7 +77,39 @@ const sectionLabels: Record<MaskRevealSection, string> = {
   OPENING_CHORUS: "Openingのサビ",
   PROFILE_CHAPTER: "Profileの章",
   PROFILE_COUPLE_STORY: "Profileの馴れ初め",
+  START_OPENING_PICKUP: "StaRt 冒頭・静かな期待(0-7s)",
+  START_INTRO: "StaRt イントロ・出発(7-17s)",
+  START_VERSE_1A: "StaRt 1番A・最初の旅(17-28s)",
+  START_VERSE_1B: "StaRt 1番B・サビへ加速(28-38s)",
+  START_CHORUS_1A: "StaRt 1サビ前半・Hero(38-48s)",
+  START_CHORUS_1B: "StaRt 1サビ後半・3-hit(48-58s)",
+  START_INTERLUDE_1: "StaRt 間奏1・場面転換(58-68s)",
+  START_VERSE_2A: "StaRt 2番A・後半の旅(68-78s)",
+  START_VERSE_2B: "StaRt 2番B・遊び心(78-88s)",
+  START_CHORUS_2A: "StaRt 2サビ前半・最強Hero(88-98s)",
+  START_CHORUS_2B: "StaRt 2サビ後半・3-hit(98-108s)",
+  START_INTERLUDE_2A: "StaRt 間奏2前半・総集編(108-118s)",
+  START_INTERLUDE_2B: "StaRt 間奏2後半・上昇(118-126s)",
+  START_END_WINDOW: "StaRt 終盤・入場直前(126-129s)",
 };
+
+// In startExtendedRhythmMap.ts section order, for the section picker's optgroup.
+const START_EXTENDED_SECTIONS: MaskRevealSection[] = [
+  "START_OPENING_PICKUP",
+  "START_INTRO",
+  "START_VERSE_1A",
+  "START_VERSE_1B",
+  "START_CHORUS_1A",
+  "START_CHORUS_1B",
+  "START_INTERLUDE_1",
+  "START_VERSE_2A",
+  "START_VERSE_2B",
+  "START_CHORUS_2A",
+  "START_CHORUS_2B",
+  "START_INTERLUDE_2A",
+  "START_INTERLUDE_2B",
+  "START_END_WINDOW",
+];
 
 const sceneStatusLabels: Record<SceneInstanceStatus, string> = {
   ADOPTED: "採用済み",
@@ -497,10 +529,15 @@ export function MaskRevealEditableWorkspace() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <SimpleField label="使う場所">
                 <select value={intent.section} onChange={(event) => changeSection(event.target.value as MaskRevealSection)} className={controlClass}>
-                  <option value="OPENING_INTRO">{sectionLabels.OPENING_INTRO}</option>
-                  <option value="OPENING_CHORUS">{sectionLabels.OPENING_CHORUS}</option>
-                  <option value="PROFILE_CHAPTER">{sectionLabels.PROFILE_CHAPTER}</option>
-                  <option value="PROFILE_COUPLE_STORY">{sectionLabels.PROFILE_COUPLE_STORY}</option>
+                  <optgroup label="StaRt Extended(本命・14 section)">
+                    {START_EXTENDED_SECTIONS.map((section) => <option key={section} value={section}>{sectionLabels[section]}</option>)}
+                  </optgroup>
+                  <optgroup label="Opening V1 Short / Profile">
+                    <option value="OPENING_INTRO">{sectionLabels.OPENING_INTRO}</option>
+                    <option value="OPENING_CHORUS">{sectionLabels.OPENING_CHORUS}</option>
+                    <option value="PROFILE_CHAPTER">{sectionLabels.PROFILE_CHAPTER}</option>
+                    <option value="PROFILE_COUPLE_STORY">{sectionLabels.PROFILE_COUPLE_STORY}</option>
+                  </optgroup>
                 </select>
               </SimpleField>
               <div />

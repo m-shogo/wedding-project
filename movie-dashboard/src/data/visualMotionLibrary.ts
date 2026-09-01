@@ -1,5 +1,5 @@
 import { startMotionPresets, type StartMotionPreset } from "./startMotionKit";
-import type { ComposablePatternInfo } from "./humanEditableMotionIntent";
+import type { ComposablePatternInfo, MaskRevealSection } from "./humanEditableMotionIntent";
 
 export type MotionPatternCategory =
   | "TYPOGRAPHY"
@@ -159,7 +159,7 @@ export interface MotionPreviewRecord {
 export interface MaskRevealPromptInput {
   text: string;
   mediaLabel?: string;
-  section: "OPENING_INTRO" | "OPENING_CHORUS" | "PROFILE_CHAPTER" | "PROFILE_COUPLE_STORY";
+  section: MaskRevealSection;
   intensity: "S" | "M" | "L";
   durationSeconds: number;
   // Optional so existing type-mask-reveal-only callers keep working unchanged.
