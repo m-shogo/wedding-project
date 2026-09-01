@@ -1,81 +1,54 @@
 # V20 Page Content Scorecard
 
-Status: `CURRENT / PAGE_ROLES_RESET_2026-09-01`
+Status: `CURRENT / P05_FRIENDS_ONLY_2026-09-01`
 
-Highest page-role authority: `V20-CURRENT-PAGE-ARCHITECTURE.md`.
+Highest authority: `V20-CURRENT-PAGE-ARCHITECTURE.md`.
 
-Score each page on whether its content belongs there, not whether the current Figma looks finished.
+| Page | Current role | Target density | Main risk |
+|---|---|---:|---|
+| P01 | Cover | 7.5/10 | overfilled cover |
+| P02 | Profile + Q1/Q2 | 6/10 | profile/Q&A dump |
+| P03 | Our Story + Q3/Q4 | 5–5.5/10 | corporate timeline |
+| P04 | All Travel Memories | 8/10 | equal destination cards |
+| P05 | Friends Memories: SHOGO + SHIORI | 7/10 | giant hero, family content, tiny faces |
+| P06 | Real Life + Q5/Q6 | 6.5/10 | generic grid |
+| P07 | Closing Message | 3.5–4/10 | old guide content returning |
+| P08 | Magazine Back Cover | 2–3/10 | another feature page |
 
-| Page | Current role | Content focus | Target density | Main risk |
-|---|---|---|---:|---|
-| P01 | Cover | masthead + hero + date + few hooks | 7.5/10 | overfilling the cover |
-| P02 | Profile | two people + short facts | 6/10 | Q&A/profile dump |
-| P03 | Our Story | 3–4 grounded chapters | 5–5.5/10 | corporate timeline / forced dates |
-| P04 | All Travel Memories | real trips gathered on one page | 8/10 | equal destination cards / too many stickers |
-| P05 | Family & Friends | people memories | 7/10 | tiny group photos / invented captions |
-| P06 | Real Life / Best Shots | everyday, pets, food, fun | 6.5/10 | generic gallery grid |
-| P07 | Closing Message | calm photo + thank-you | 3.5–4/10 | old P07 guide content returning |
-| P08 | Magazine Back Cover | minimal back-cover meta + barcode | 2–3/10 | turning back cover into another feature page |
+## P05 PASS
 
-## Page-specific content gates
+PASS only when:
+- page is friends-only
+- `SHOGO FRIENDS` and `SHIORI FRIENDS` are both immediately visible
+- roughly 3–4 final photos per side when sources support it
+- **no single page-wide hero/anchor exists**
+- faces remain recognizable at A5
+- photo sizes vary without one photo taking over the page
+- captions are short and grounded
+- no family/FAMILY content appears
+- no old Hawaii/proposal/arrival structure appears
 
-### P01
-PASS when:
-- cover is understandable in 3 seconds;
-- only a few hooks remain;
-- couple photography is not buried.
+FAIL when:
+- family/friend combined role returns
+- one anchor dominates
+- the page becomes two rigid equal UI cards
+- old P05 assets dictate the composition
+- identities/relationships/anecdotes are invented
 
-### P02
-PASS when:
-- each person can be understood with 3–5 grounded facts;
-- optional Q&A stays very small;
-- no timeline/travel archive remains.
+## Other page gates
 
-### P03
-PASS when:
-- story order works without exact dates;
-- 3–4 chapters are enough;
-- proposal/registration are not buried.
+P01: masthead/couple/date read in 3 seconds.
 
-### P04
-PASS when:
-- all chosen travel memories can coexist without a directory/grid feeling;
-- one photo is clearly dominant;
-- labels/captions remain short and grounded.
+P02: 3–5 facts each + Q1/Q2, no story/travel/friend archive.
 
-### P05
-PASS when:
-- family/friend photos are recognizable at A5;
-- one anchor exists;
-- captions do not invent identities or anecdotes;
-- old Hawaii-only structure is gone.
+P03: 3–4 story chapters + Q3/Q4, no forced dates.
 
-### P06
-PASS when:
-- it clearly feels like real life, not another trip page;
-- pet/food/fun material is real;
-- photo hierarchy is irregular but readable.
+P04: verified travel memories, strong photo hierarchy, short personal captions.
 
-### P07
-PASS when:
-- the page emotionally closes the booklet interior;
-- one strong photo + short message is sufficient;
-- no `TODAY'S TRAVEL GUIDE`, `11 DESTINATIONS`, timetable or discovery system remains.
+P06: real-life material + Q5/Q6, distinct from travel P04.
 
-### P08
-PASS when:
-- the page can be understood as a magazine back cover;
-- information is minimal;
-- barcode digits read exactly `2026102400000`;
-- there is no main thank-you message or feature collage.
+P07: one strong photo + short message, no guide/schedule system.
 
-## Global fail conditions
+P08: minimal back cover, barcode exactly `2026102400000`.
 
-FAIL if:
-- an old Figma page role is preserved simply because it already exists;
-- content is invented to fill a prebuilt vessel;
-- a page contains material assigned to another page in the current architecture;
-- density is raised by shrinking text or adding tiny filler;
-- obsolete P05/P07/P08 roles reappear.
-
-`CONTENT BELONGING > LEGACY LAYOUT CONTINUITY.`
+`P05 CONTENT BELONGING = FRIENDS ONLY / SHOGO + SHIORI / NO FAMILY / NO GIANT HERO.`
