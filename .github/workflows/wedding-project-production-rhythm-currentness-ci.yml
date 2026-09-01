@@ -1,0 +1,96 @@
+name: Wedding Project Production Rhythm Currentness CI
+
+on:
+  pull_request:
+    paths:
+      - 'motion-studio/scripts/wedding-project-production-rhythm-pass.mts'
+      - 'motion-studio/scripts/verify-wedding-project-production-rhythm-pass-currentness.mts'
+      - '.github/workflows/wedding-project-production-rhythm-currentness-ci.yml'
+  workflow_dispatch:
+
+jobs:
+  currentness:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Create current preview + rhythm fixture
+        run: |
+          mkdir -p /tmp/rhythm-current
+          printf 'render-v1' > /tmp/rhythm-current/opening.mp4
+          RENDER_SHA=$(sha256sum /tmp/rhythm-current/opening.mp4 | awk '{print $1}')
+          cat > /tmp/rhythm-current/preview.json <<JSON
+          {
+            "schemaVersion":"wedding-movie-project-real-media-preview/v1",
+            "authority":"DERIVED_FROM_CURRENT_SELECTED_SCENES_AND_PRODUCTION_READINESS_AUDIT",
+            "projectId":"opening",
+            "fps":30,
+            "scenes":[
+              {"sceneId":"a","sourceRevision":"r1","patternId":"p1","productionRole":"TITLE_REVEAL","timing":{"revision":"t1"},"startFrame":0,"endFrameExclusive":60,"durationFrames":60,"transitionInFrames":0,"transitionOutFrames":6},
+              {"sceneId":"b","sourceRevision":"r2","patternId":"p2","productionRole":"PHOTO_MONTAGE","timing":{"revision":"t2"},"startFrame":54,"endFrameExclusive":144,"durationFrames":90,"transitionInFrames":6,"transitionOutFrames":0}
+            ],
+            "transitions":[{"fromSceneId":"a","toSceneId":"b","transition":"CROSS_DISSOLVE","durationFrames":6,"sourceStatus":"HUMAN_SELECTED"}],
+            "timeline":{"totalFrames":144,"durationSeconds":4.8},
+            "output":"/tmp/rhythm-current/opening.mp4",
+            "render":{"state":"RENDERED","sha256":"${RENDER_SHA}","bytes":9},
+            "summary":{"allRealMediaBoundCurrent":true,"framingCurrent":true,"timingCurrent":true,"bgmCurrent":true,"productionReady":false},
+            "evidenceBoundary":{"remotionStudioGuiActual":"NOT_RUN","palmierGuiActual":"NOT_RUN","macDaVinciGuiActual":"NOT_RUN","productionReady":false}
+          }
+          JSON
+          node --no-warnings motion-studio/scripts/wedding-project-production-rhythm-pass.mts --preview-manifest=/tmp/rhythm-current/preview.json --output=/tmp/rhythm-current/rhythm.json
+      - name: Current rhythm pass succeeds strict-current
+        run: |
+          node --no-warnings motion-studio/scripts/verify-wedding-project-production-rhythm-pass-currentness.mts --rhythm-pass=/tmp/rhythm-current/rhythm.json --strict-current --output=/tmp/rhythm-current/current.json
+          node --input-type=module <<'NODE'
+          import {readFileSync} from 'node:fs';
+          const value=JSON.parse(readFileSync('/tmp/rhythm-current/current.json','utf8'));
+          if(value.state!=='CURRENT'||value.mismatches.length!==0) throw new Error('expected CURRENT');
+          if(!Object.values(value.checks).every(Boolean)) throw new Error('currentness check false');
+          if(value.evidenceBoundary.humanRhythmReviewPerformed!==false||value.evidenceBoundary.humanVisualQa!=='NOT_RUN') throw new Error('Human boundary');
+          if(value.evidenceBoundary.remotionStudioGuiActual!=='NOT_RUN'||value.evidenceBoundary.palmierGuiActual!=='NOT_RUN'||value.evidenceBoundary.macDaVinciGuiActual!=='NOT_RUN'||value.evidenceBoundary.productionReady!==false) throw new Error('GUI boundary');
+          NODE
+      - name: Render tamper makes rhythm pass stale
+        run: |
+          cp /tmp/rhythm-current/opening.mp4 /tmp/rhythm-current/opening.original.mp4
+          printf 'tampered' >> /tmp/rhythm-current/opening.mp4
+          if node --no-warnings motion-studio/scripts/verify-wedding-project-production-rhythm-pass-currentness.mts --rhythm-pass=/tmp/rhythm-current/rhythm.json --strict-current --output=/tmp/rhythm-current/render-stale.json; then
+            echo 'expected stale render to block' >&2
+            exit 1
+          fi
+          grep -q 'SOURCE_RENDER_PREVIEW_SHA_DRIFT' /tmp/rhythm-current/render-stale.json
+          mv /tmp/rhythm-current/opening.original.mp4 /tmp/rhythm-current/opening.mp4
+      - name: Preview timing drift makes rhythm pass stale
+        run: |
+          cp /tmp/rhythm-current/preview.json /tmp/rhythm-current/preview.original.json
+          node --input-type=module <<'NODE'
+          import {readFileSync,writeFileSync} from 'node:fs';
+          const p='/tmp/rhythm-current/preview.json';
+          const value=JSON.parse(readFileSync(p,'utf8'));
+          value.scenes[1].timing.revision='t3';
+          writeFileSync(p,JSON.stringify(value,null,2));
+          NODE
+          if node --no-warnings motion-studio/scripts/verify-wedding-project-production-rhythm-pass-currentness.mts --rhythm-pass=/tmp/rhythm-current/rhythm.json --strict-current --output=/tmp/rhythm-current/timing-stale.json; then
+            echo 'expected stale preview to block' >&2
+            exit 1
+          fi
+          grep -q 'SOURCE_PREVIEW_SHA_DRIFT' /tmp/rhythm-current/timing-stale.json
+          grep -q 'SCENE_TIMING_OR_POSITION_DRIFT' /tmp/rhythm-current/timing-stale.json
+          mv /tmp/rhythm-current/preview.original.json /tmp/rhythm-current/preview.json
+      - name: Transition drift makes rhythm pass stale
+        run: |
+          cp /tmp/rhythm-current/preview.json /tmp/rhythm-current/preview.original.json
+          node --input-type=module <<'NODE'
+          import {readFileSync,writeFileSync} from 'node:fs';
+          const p='/tmp/rhythm-current/preview.json';
+          const value=JSON.parse(readFileSync(p,'utf8'));
+          value.transitions[0].durationFrames=12;
+          writeFileSync(p,JSON.stringify(value,null,2));
+          NODE
+          if node --no-warnings motion-studio/scripts/verify-wedding-project-production-rhythm-pass-currentness.mts --rhythm-pass=/tmp/rhythm-current/rhythm.json --strict-current --output=/tmp/rhythm-current/transition-stale.json; then
+            echo 'expected transition drift to block' >&2
+            exit 1
+          fi
+          grep -q 'TRANSITION_DRIFT' /tmp/rhythm-current/transition-stale.json
