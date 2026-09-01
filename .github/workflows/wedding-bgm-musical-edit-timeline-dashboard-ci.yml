@@ -1,0 +1,55 @@
+name: Wedding BGM Musical Edit Timeline Dashboard CI
+
+on:
+  pull_request:
+    paths:
+      - 'movie-dashboard/src/components/WeddingBgmRhythmAlignmentCard.tsx'
+      - '.github/workflows/wedding-bgm-musical-edit-timeline-dashboard-ci.yml'
+  workflow_dispatch:
+
+jobs:
+  contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify whole-project musical edit timeline contract
+        run: |
+          node <<'NODE'
+          const fs=require('fs');
+          const card=fs.readFileSync('movie-dashboard/src/components/WeddingBgmRhythmAlignmentCard.tsx','utf8');
+          for(const token of [
+            'data-musical-edit-timeline',
+            'data-musical-edit-timeline-state',
+            'data-musical-edit-cue-lane',
+            'data-musical-edit-event-lane',
+            'data-musical-cue-marker',
+            'data-musical-event-marker',
+            'data-musical-edit-human-pair',
+            'WHOLE-PROJECT MUSICAL EDIT TIMELINE',
+            'Human-marked phrase / build / hit / release',
+            'SCENE_START',
+            'SCENE_END',
+            'TRANSITION_MIDPOINT',
+            'setSelectedCueId(cue.id)',
+            'setSelectedEventId(event.id)',
+            'selectedCue.frame-selectedEvent.frame',
+            'nearest cue proximity only',
+            '自動beat検出・自動edit point採用・品質PASSは行いません',
+            'cueへ自動snapせず',
+            'humanSelectionPerformed:false',
+            'remotionStudioGuiActual:"NOT_RUN"',
+            'palmierGuiActual:"NOT_RUN"',
+            'macDaVinciGuiActual:"NOT_RUN"',
+            'productionReady:false'
+          ]) if(!card.includes(token)) throw new Error(`missing musical timeline contract token: ${token}`);
+          for(const forbidden of [
+            'automaticEditPointSelection:true',
+            'automaticSnapApplied:true',
+            'humanSelectionPerformed:true',
+            'remotionStudioGuiActual:"PASS"',
+            'palmierGuiActual:"PASS"',
+            'macDaVinciGuiActual:"PASS"',
+            'productionReady:true'
+          ]) if(card.includes(forbidden)) throw new Error(`forbidden musical timeline auto-promotion: ${forbidden}`);
+          NODE
