@@ -1,269 +1,246 @@
 # V20 Parts System
 
-Status: `CANONICAL_PARTS_ARCHITECTURE`
+Status: `CANONICAL_PARTS_ARCHITECTURE / CURRENT_PAGE_ROLES_2026-09-01`
 
-Purpose: make V20 rich and repeatable without turning it into a component showcase or sticker dump.
+Highest page-role authority:
+- `V20-CURRENT-PAGE-ARCHITECTURE.md`
+- `V20-PAGE-BY-PAGE-DESIGN-SPEC.md`
 
-## 1. Core rule
+Purpose: create only the editorial parts the current pages actually need, without building a generic sticker/component library or reviving obsolete P05/P07 roles.
+
+## Core rule
 
 A part exists only when it has an editorial job.
 
-Every part must answer at least one:
-- does it establish hierarchy?
-- group related information?
-- guide reading order?
-- communicate travel/wedding meaning?
-- frame/crop a photo?
-- create a tactile printed-object feeling?
-- support a specific page's story?
+It must help at least one:
+- hierarchy
+- grouping
+- reading order
+- photo framing/crop
+- tactile print behavior
+- page-specific story/memory meaning
+- factual readability
 
 If none apply, do not create it.
 
-## 2. Part classes
+## Part classes
 
-### A. STRUCTURAL
-Reusable and mostly native/vector.
+### STRUCTURAL
+Mostly editable/native when simple:
+- photo mask/frame
+- section label
+- mini fact marker
+- simple rule
+- page number/meta
+- simple route only where current page needs it
 
-- `FRAME / PHOTO / POSTCARD`
-- `FRAME / PHOTO / POLAROID`
-- `FRAME / PHOTO / CLEAN PAPER`
-- `MASK / CIRCLE`
-- `MASK / ORGANIC CUTOUT SUPPORT`
-- `LABEL / SECTION`
-- `LABEL / MINI FACT`
-- `MARKER / NUMBER`
-- `MAP / PIN`
-- `ROUTE / DOTTED`
-- `ROUTE / HANDDRAWN`
-- `RULE / EDITORIAL`
-- `PAGE / NUMBER`
-- `META / ISSUE DATE LOCATION`
+### DISPLAY
+Stronger personality:
+- masthead/title backplate
+- feature burst
+- stamp shell
+- ticket/tag
+- tape/paper
+- hand-drawn arrow/heart
 
-These should remain editable and recolorable where practical.
+### ILLUSTRATIVE / ATMOSPHERE
+Page-specific generated/custom art:
+- foliage/flower cluster
+- airplane/camera/suitcase cue
+- paper texture
+- broad color/paper field
 
-### B. DISPLAY
-Stronger visual personality; may be composed/vector/raster depending on quality.
-
-- `MASTHEAD / V20`
-- `TITLE BACKPLATE / RIBBON`
-- `BURST / FEATURE`
-- `STAMP / DATE`
-- `STAMP / DESTINATION`
-- `TICKET / TAG`
-- `TAPE / PAPER`
-- `HANDNOTE / ARROW`
-- `HANDNOTE / HEART`
-
-Authoritative variable copy must stay native even when display art is raster.
-
-### C. ILLUSTRATIVE / ATMOSPHERE
-Can be generated or custom artwork if needed.
-
-- `FOLIAGE / CORNER`
-- `FLOWER / HIBISCUS-LIKE TROPICAL`
-- `TRAVEL OBJECT / AIRPLANE`
-- `TRAVEL OBJECT / SUITCASE`
-- `TRAVEL OBJECT / CAMERA`
-- `TRAVEL OBJECT / PASSPORT-TICKET ABSTRACT`
-- `BACKGROUND / PAPER TEXTURE`
-- `BACKGROUND / COLOR SHAPE`
-
-Use sparingly and page-specifically.
-
-### D. CONTENT-SPECIFIC
-Only create after the page manual requires it.
+### CONTENT-SPECIFIC
+Create only after current page manual requires it.
 
 Examples:
-- P04–P05 route/map connector;
-- P07 itinerary stop marker;
-- P06 dog/candid annotation treatment;
-- P08 closing stamp/postcard treatment.
+- P04 travel-memory route or stamp family
+- P05 SHOGO/SHIORI friend labels and photo backings
+- P06 playful note/Q&A support
+- P07 closing-message support
+- P08 issue/barcode meta support
 
-Do not generalize a one-page solution into a global component prematurely.
+## Current minimal shared kit
 
-## 3. Minimum viable shared kit
+Do not overbuild.
 
-Before Figma assembly, V20 only needs this shared kit:
+Useful shared DNA may include:
+- original V20 masthead family
+- 2–3 photo-print/backing families
+- 2 label families
+- one date/location meta family
+- one small stamp family
+- one ticket/tag family
+- a few edge-decoration clusters
+- one small travel-object cue family
+- one handwritten arrow/heart family
+- folio/issue metadata treatment
 
-1. original V20 masthead family;
-2. 3 photo-frame families;
-3. 2 label families;
-4. 1 date/location stamp family;
-5. 2 route-line styles;
-6. 1 number-marker family;
-7. 1 ticket/tag family;
-8. 2 edge-decoration clusters;
-9. 3 small travel-object illustrations;
-10. 1 handwritten arrow/heart set;
-11. page number / issue metadata treatment.
+Everything else must be justified by a current page proof.
 
-Everything else must be justified by a page manual.
+## Variation without template repetition
 
-## 4. Variation without template repetition
+Related parts may have 2–4 meaningful variants.
 
-Each reusable family may have controlled variants.
+Do not:
+- create 12 near-identical variants
+- reuse same frame at same size/angle on adjacent pages
+- repeat same corner cluster in same location
+- use one stamp as default filler
 
-Example `FRAME / PHOTO / POSTCARD`:
-- A: clean white edge;
-- B: thicker bottom caption edge;
-- C: tape/stamp-ready corner.
+## Metadata contract
 
-Do not create 12 near-identical variants. Prefer 2–4 meaningful variants.
+Every production part should eventually record:
+- semantic name / partId
+- class
+- source
+- source locator / Drive ID where applicable
+- page/job
+- editable fields
+- intended physical size
+- transparency requirement
+- raster pixel dimensions when applicable
+- provenance/license state
+- `REFERENCE_ONLY` / `SUPERSEDED` classification when applicable
 
-## 5. Reuse rule
+## Naming examples
 
-A shared part should provide identity, not identical composition.
+Current examples:
+- `V20_P01_MASTHEAD_UNIT_A`
+- `V20_P02_QA_SHELL_TIDY_A`
+- `V20_P03_EPISODE_EDGE_A`
+- `V20_P04_TRAVEL_MEMORY_LABEL_A`
+- `V20_P05_SHOGO_FRIENDS_LABEL_A`
+- `V20_P05_SHIORI_FRIENDS_LABEL_A`
+- `V20_P05_FRIEND_PHOTO_BACKING_A`
+- `V20_P06_QA_SHELL_PLAYFUL_A`
+- `V20_P07_CLOSING_MESSAGE_SUPPORT_A`
+- `V20_P08_ISSUE_META_A`
 
-Across adjacent pages:
-- do not reuse the same frame variant at the same size and angle;
-- do not repeat the same corner flower cluster in the same corner;
-- do not repeat the same burst treatment for major titles;
-- do not use one stamp as the default solution for every empty space.
+Do not use old names such as P05 HAWAII HERO or P07 itinerary stop as current semantic roles.
 
-## 6. Part metadata contract
+## Native vs generated
 
-Every production part should eventually have:
+Prefer native/editable when:
+- geometry is simple
+- exact text matters
+- future editing is likely
 
-- `partId`;
-- semantic name;
-- class: STRUCTURAL / DISPLAY / ILLUSTRATIVE / CONTENT-SPECIFIC;
-- source: NATIVE / ORIGINAL_VECTOR / GENERATED / LICENSED;
-- source locator / Drive ID where applicable;
-- pages allowed/used;
-- editable fields;
-- color variants;
-- intended physical size range;
-- transparency requirement;
-- final pixel dimensions if raster;
-- print-resolution status;
-- provenance/license note if external;
-- `REFERENCE_ONLY` flag when not production art.
+Use generation/custom raster when:
+- page-specific illustrated complexity materially improves quality
+- tactile/organic visual behavior would look weak from primitives
 
-This prevents mystery assets from entering final print.
+Authoritative text remains native.
 
-## 7. Naming convention
+## Generation brief contract
 
-Examples:
+Every generated part brief specifies:
+- exact page/job
+- intended physical size/aspect
+- transparent vs opaque
+- crop/overlap expectation
+- no fake text
+- no fake autobiographical people/memories
+- visual family
+- forbidden obsolete roles/assets
+- z-order expectation
 
-- `V20_FRAME_POSTCARD_A`
-- `V20_LABEL_SECTION_BLUE_A`
-- `V20_STAMP_DATE_RING_A`
-- `V20_ROUTE_HANDDRAWN_A`
-- `V20_FOLIAGE_CORNER_PINKGREEN_A`
-- `V20_TRAVEL_CAMERA_A`
-- `V20_P07_STOP_MARKER_A`
+Never prompt only `make a Rurubu-style sticker`.
 
-Figma layer examples:
-- `PART / V20_FRAME_POSTCARD_A`
-- `PHOTO MASK / P05 HAWAII HERO / REPLACEABLE`
-- `TEXT / P07 CEREMONY TIME / NATIVE`
+## Part-quality gate
 
-## 8. Native-first vs generation
+Before promotion:
+- clear current editorial job
+- no duplicate function
+- no incorrect/fake text
+- clean alpha/mask edges
+- adequate print resolution
+- does not overpower page hierarchy
+- intentional at A5 size
+- provenance recorded
+- removable without destroying information architecture
 
-Prefer native/vector when:
-- geometry is simple;
-- recoloring matters;
-- text is involved;
-- the part must scale cleanly;
-- a future editor will need to adjust it.
-
-Use image generation/custom raster when:
-- hand-drawn/illustrative complexity materially improves quality;
-- foliage/flower/object cluster would look synthetic if constructed from generic vectors;
-- texture/illustration is decorative and non-authoritative.
-
-Do not generate text-heavy stamps or tickets when exact Japanese wording matters. Generate art without text, then overlay native text.
-
-## 9. Generation brief contract
-
-Any generated part brief must specify:
-- exact purpose and page;
-- transparent vs opaque background;
-- composition-safe margins;
-- approximate aspect ratio;
-- whether cropping is allowed;
-- no fake text unless the text is deliberately absent/abstract;
-- no people when a real-couple photo is required;
-- required visual family;
-- target print size and minimum raster dimensions;
-- forbidden elements;
-- z-order expectation.
-
-Never prompt simply “make a Rurubu-style sticker.”
-
-## 10. Part-quality gate
-
-Before a part is promoted:
-- it has a clear editorial job;
-- it is not duplicative;
-- it does not contain incorrect text;
-- transparency/mask edges are clean;
-- raster dimensions support intended print size;
-- it does not visually overpower the page hero;
-- it still looks intentional at A5 actual size;
-- provenance is recorded;
-- it can be removed without destroying the information architecture.
-
-That last test matters: decoration should enrich the page, not carry critical facts.
-
-## 11. Parts planned by page
+## Parts planned by current page
 
 ### P01
-- V20 masthead;
-- feature burst;
-- date/location stamp;
-- one edge foliage cluster;
-- one travel-object cluster;
-- 1–2 photo frames/cutout outlines.
+- masthead
+- 1–2 cover-hook supports
+- date/location support
+- restrained edge/travel cluster
+- optional support-photo frame
 
 ### P02
-- profile label family;
-- 2 differentiated portrait frames;
-- mini-fact markers;
-- optional dog/couple-life chip;
-- one annotation arrow.
+- profile title
+- differentiated profile/photo backings
+- fact labels
+- tidy Q1/Q2 shell
+- small annotations
 
 ### P03
-- story episode label;
-- small route/thread;
-- one editorial paper-note support;
-- proposal teaser stamp/tag;
-- restrained photo frames.
+- story title
+- episode vessels
+- emotional Q3/Q4 shell
+- optional restrained progression thread
 
-### P04–P05
-- center-spread route;
-- destination markers;
-- postcard/polaroid mix;
-- destination stamp set;
-- one/two page-edge tropical clusters;
-- one proposal/emotional highlight device.
+### P04
+- travel title
+- varied memory/destination labels
+- 5–6-photo support ecology as source pool permits
+- optional route BACK/FRONT
+- ticket/stamp/edge accents
+
+### P05 — FRIENDS ONLY
+- `友達との思い出` title
+- `SHOGO FRIENDS` label
+- `SHIORI FRIENDS` label
+- varied medium/small photo backings
+- short caption vessels
+- restrained friend-memory accents
+
+Hard P05 restrictions:
+- no family/FAMILY part
+- no giant hero frame
+- no HAWAII title system
+- no proposal article vessel
+- no arrival marker
+- no mandatory center-spread route
 
 ### P06
-- candid caption tape/note;
-- one cutout outline treatment;
-- small heart/arrow set;
-- optional tiny Q&A label treatment.
+- playful title
+- best-shots/note/tape support
+- Q5/Q6 playful shell
+- small pet/food/fun cues only when grounded
 
 ### P07
-- itinerary stop marker;
-- chronology connector;
-- time emphasis field;
-- practical-note label;
-- optional verified venue marker.
+- restrained closing phrase/message support
+- at most one small final motif
+
+Do not create guide/map/destination/timetable systems.
 
 ### P08
-- closing stamp/postcard cue;
-- subtle issue metadata;
-- one restrained edge accent;
-- optional verified QR frame only if a real QR exists.
+- quiet issue/meta support
+- barcode support with native digits exactly `2026102400000`
+- optional tiny edge mark
 
-## 12. Anti-bloat rule
+## Obsolete parts quarantine
 
-Do not make the library “complete” before pages exist.
+Never treat these jobs as current merely because historical files exist:
+- P05 Hawaii/proposal/arrival parts
+- P05 family parts
+- P05 giant hero
+- old P04–P05 mandatory cross-fold route
+- P07 itinerary stop marker
+- P07 destination vessels / giant `11`
+- P07 LOOK AROUND / EDITOR'S PICK
+- old P08 closing stamp/message system
 
-Create:
-1. shared minimum kit;
-2. page skeletons from manuals;
-3. identify true missing roles;
-4. generate/design only those missing parts;
-5. retire unused experimental parts instead of forcing them onto pages.
+## Anti-bloat rule
+
+Build from page proofs:
+1. approve page silhouette
+2. identify missing editorial jobs
+3. create only those parts
+4. place and A5-QA them
+5. retire unused experiments
+
+`PAGE NEED > LIBRARY COMPLETENESS.`
