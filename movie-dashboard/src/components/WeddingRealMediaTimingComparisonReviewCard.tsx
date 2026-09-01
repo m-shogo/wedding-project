@@ -271,7 +271,7 @@ export function WeddingRealMediaTimingComparisonReviewCard({projectId}: {project
     && Boolean(selectedComparison?.timingChanged)
     && Boolean(beforeImage && afterImage);
   const receiptPath = `out/qa/project-real-media-preview/${projectId}/${projectId}-timing-before-after.json`;
-  const selectedPath = `out/qa/project-selected-scenes/${projectId}/${projectId}-selected-scenes.json`;
+  const selectedPath = `out/qa/selected-scene-remotion/${projectId}/selected-scene-render-manifest.json`;
   const currentnessPath = `out/qa/project-real-media-preview/${projectId}/${projectId}-timing-before-after-currentness.json`;
   const strictCommand = `node --no-warnings motion-studio/scripts/verify-wedding-project-real-media-timing-qa-comparison-currentness.mts --receipt=${receiptPath} --current-selected=${selectedPath} --strict-current --output=${currentnessPath}`;
 
