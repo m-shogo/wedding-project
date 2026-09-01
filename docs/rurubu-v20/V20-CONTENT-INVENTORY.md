@@ -1,255 +1,264 @@
 # V20 Content Inventory
 
-Status: `GROUNDING_AUTHORITY_BEFORE_LAYOUT / SEATED_GUEST_CONTEXT`
+Status: `GROUNDING_AUTHORITY / CURRENT_PAGE_ARCHITECTURE_ALIGNED_2026-09-01`
 
-V20 is a clean-slate visual redesign. This file may recover factual content from older project records, but it does not inherit any prior page structure, composition, Figma geometry, color assignment, or visual rule.
+This file inventories real content for the current page map. It does not grant authority to old page structures.
 
-Primary reading context: guests are already at the wedding/reception venue and seated. V20 is therefore a table-side editorial booklet, not a pre-arrival logistics guide.
+Highest page-role authority: `V20-CURRENT-PAGE-ARCHITECTURE.md`.
 
 ## Fixed production constraints
 
-- format: A5 portrait;
-- trim: 148 x 210 mm;
-- page count: 8 pages fixed;
-- working bleed assumption: 3 mm each side until printer template overrides it;
-- production master: editable, page-by-page Figma source;
-- replaceable people/travel/venue photos stay replaceable;
-- changing guest-facing facts remain native text;
-- whole-page flattening is not allowed as the editable master.
+- A5 portrait;
+- trim 148 x 210 mm;
+- 8 pages;
+- wedding date `2026.10.24`;
+- numeric date `20261024`;
+- P08 barcode digits `2026102400000` exactly;
+- editable Figma master;
+- replaceable people/travel/family/friend/life photos;
+- factual/personal text stays native/editable;
+- whole-page flattening is not the editable master.
 
 ## Grounding states
 
-- `FIXED`: sufficiently grounded for structural planning.
-- `GROUNDED_CANDIDATE`: real project evidence exists, but wording/detail still needs final editorial confirmation.
-- `TODO`: must be supplied/confirmed before final copy lock.
-- `DO_NOT_INFER`: AI must never fill this from assumptions, photo metadata, generic wedding copy, or fabricated memory.
+- `FIXED`: sufficiently grounded.
+- `GROUNDED_CANDIDATE`: project evidence exists but exact wording/photo selection may still change.
+- `TODO`: user/source confirmation needed before final copy lock.
+- `DO_NOT_INFER`: AI must never fabricate it.
 
 ## Identity / event facts
 
 - `SHOGO`: FIXED display name.
 - `SHIORI`: FIXED display name.
 - wedding date `2026.10.24`: FIXED.
-- location label `YOKOHAMA`: FIXED.
+- location label `YOKOHAMA`: FIXED where used.
 - marriage registration date `2026.02.11`: FIXED.
 - overall concept `TRAVEL`: FIXED.
-- Japanese kanji spelling/glyph choice for final printed names: TODO before print if used.
 
-## Strong content blocks
+Do not recover wrong historical date variants.
 
-### A. Couple profile
-Purpose: let guests quickly understand the two people.
+# Current content blocks
 
-Available now:
-- display names: FIXED;
-- couple/dog-life material exists as grounded candidate content;
-- dogs `くっきー` / `めろん`: grounded project fact.
+## A. P01 Cover
 
-Still TODO if published:
+Purpose: open the booklet with immediate magazine energy.
+
+Grounded:
+- names;
+- wedding date;
+- current approved `るるぶ WEDDING` masthead direction;
+- verified couple/Hawaii photo sources already exist in the project.
+
+TODO:
+- final exact cover hooks if any.
+
+Do not force detailed contents onto the cover.
+
+## B. P02 Couple profile
+
+Purpose: let guests understand each person quickly.
+
+Grounded:
+- display names;
+- couple/dog-life material exists elsewhere in the project;
+- dogs Cookie/Melon are project-grounded.
+
+TODO where published:
 - birthdays;
 - hometowns;
 - jobs;
 - favorite foods;
-- individual favorite places;
-- person-specific hobbies/personality copy.
+- person-specific hobbies/preferences/personality copy.
 
 Architecture implication:
-- profile deserves space, but V20 must not depend on many unconfirmed profile fields;
-- build an elastic profile page that works with 3–7 facts per person;
-- do not create a rigid employee-card grid.
+- page must work with only 3–5 short facts per person;
+- maximum 1–2 short Q&A snippets;
+- no timeline or travel archive here.
 
-### B. Relationship story
-Purpose: explain the emotional path rather than only dates.
+## C. P03 Relationship story
 
-Grounded candidate material exists for:
-- early outings such as bowling / board-game cafe / yakiniku / teamLab;
-- relationship progression toward dating;
+Purpose: explain the emotional path to the wedding day.
+
+Grounded candidate roles:
+- meeting / early outings;
+- relationship progression;
 - Hawaii proposal;
 - marriage registration;
-- wedding day destination.
+- wedding day arrival.
 
-Still TODO:
+TODO:
 - exact meeting date/year;
-- exact dating start date;
+- exact dating start;
 - exact proposal date/year;
-- exact cohabitation timing.
+- any anecdotal wording not already sourced.
 
 Architecture implication:
-- use episode-led storytelling, not a date-heavy corporate timeline;
-- missing dates must not weaken the design.
+- 3–4 chapters max;
+- dates are optional metadata unless confirmed;
+- destination-photo detail belongs mainly on P04.
 
-### C. Travel memories
-Purpose: make the travel concept factual and personal rather than decorative.
+## D. P04 Travel memories
 
-Grounded candidate destinations:
+Purpose: gather the couple's travel memories on one page.
+
+Grounded candidate destinations include:
 - Okinawa;
 - Korea;
 - Hawaii;
-- Yokohama as the current/final destination.
+- other real trip material supplied/verified later.
 
-Hawaii has especially strong emotional material because the proposal episode is grounded.
+Hawaii is no longer reserved for P05.
 
 Architecture implication:
-- this is the strongest candidate for the center spread;
-- use destination-led storytelling and photo hierarchy;
-- exact sub-location/date stays native and optional until confirmed.
+- this is the strongest travel-editorial interior page;
+- target 5–7 unequal photos;
+- 2–4 memory/destination clusters;
+- no generic destination facts;
+- proposal may be referenced as a Hawaii memory, while relationship meaning remains on P03.
 
-### D. Photo-led life / best shots
-Purpose: show personality that prose cannot.
+Current source gap:
+- P04 still needs verified real travel-photo selection beyond the already verified Hawaii material.
 
-Expected source types:
+## E. P05 Family & friends memories
+
+Purpose: show the people and relationships that have surrounded the couple.
+
+This is now a fixed page role.
+
+Current state:
+- exact family/friend photo assignment and captions are TODO/source-dependent;
+- no person names, relationship labels or anecdotes should be inferred from faces alone.
+
+Architecture implication:
+- target 5–7 real photos;
+- one anchor + supporting family/friend memories;
+- FAMILY and FRIENDS clusters may be used if the real source pool supports them;
+- faces must remain readable at A5;
+- old P05 Hawaii/proposal assets have no current role authority.
+
+## F. P06 Real life / favorites / best shots
+
+Purpose: show everyday personality that does not belong in formal profile/story/travel pages.
+
+Expected grounded source types:
 - candid couple photos;
-- travel photos not already acting as destination heroes;
 - daily-life photos;
-- dog photo(s);
-- food/activity detail photos where real and relevant.
+- dog photos;
+- food/activity/hobby details where personally meaningful.
 
 Architecture implication:
-- create one highly visual page with very short captions;
-- this page is the safety valve when factual profile/Q&A copy is still incomplete;
-- it must not become a duplicate of the destination-led center spread.
+- target 4–6 photos;
+- one candid hero;
+- very short captions;
+- do not duplicate P04 travel imagery.
 
-### E. Today's wedding discoveries / seated guest guide
-Purpose: reward guests who are already seated by making the wedding's travel concept more discoverable and enjoyable.
+Current source gap:
+- real LIFE / FOOD / PET-LIFE / FUN source pool remains incomplete.
 
-This supersedes the previous assumption that P07 should be a schedule-first utility page.
+## G. P07 Closing message
 
-Strong candidate content:
-- confirmed table/décor destination themes;
-- travel motifs guests can physically notice around the room;
-- 2–4 wedding details that have real meaning to the couple;
-- small `LOOK AROUND` / `EDITOR'S PICK` discoveries;
-- one small photo/detail illustration only when useful.
+Purpose: emotionally close the interior pages.
 
-Current project context contains an 11-table destination/theme concept. Final destination wording/order and any table-specific facts remain TODO before final copy lock.
-
-Architecture implication:
-- build P07 as a visual editorial discovery page, not a timetable/table UI;
-- the point is not to tell guests where to sit; they are already seated;
-- use route/map/travel-magazine language as visual storytelling, not navigation instructions;
-- this page should create conversation and encourage guests to look around the venue.
-
-### F. Closing / thank-you
-Purpose: close the physical booklet with emotional calm.
-
-Available:
+Grounded:
 - names/date/location;
-- travel/journey framing can support editorial copy.
+- strong real closing-photo candidates may be recovered from prior P08 source evidence.
 
 TODO:
-- final thank-you copy if a personal message is wanted;
-- any QR/social/website destination.
+- final thank-you/closing wording.
 
 Architecture implication:
-- keep P08 deliberately calmer than the interior;
-- no leftover-section dumping.
+- one strong photo;
+- roughly 40–100 Japanese characters if a personal message is used;
+- deliberately low density.
 
-## Known schedule facts — retained but de-prioritized in V20
+Explicitly obsolete here:
+- `TODAY'S TRAVEL GUIDE`;
+- `11 DESTINATIONS`;
+- table/destination discovery guide;
+- `LOOK AROUND`;
+- `EDITOR'S PICK`;
+- timetable/schedule.
 
-Confirmed project facts remain:
-- Ceremony `14:10–14:40`;
-- `14:40–15:00` wording unresolved;
-- Reception `15:00–17:30`.
+## H. P08 Magazine back cover
 
-These remain valid project facts but do NOT automatically justify a dedicated Rurubu page because the primary V20 reading moment is after guests have arrived and are seated.
+Purpose: finish the physical booklet like a restrained magazine back cover.
 
-Default treatment:
-- no schedule-first P07;
-- do not feature ceremony timing just because it is known;
-- if a time later supports a specific editorial moment, keep it native and minor;
-- dedicated timetable/logistics belong in another artifact if needed.
+Fixed:
+- barcode human-readable digits `2026102400000`.
 
-DO NOT INFER:
-- opening time;
-- exact gate/floor;
-- transport credentials;
-- flight number;
-- QR destination;
-- unresolved 14:40–15:00 instructions.
+Allowed:
+- 0–1 calm photo/background;
+- tiny issue/meta mark;
+- optional small names/date;
+- one tiny travel/wedding mark;
+- decorative barcode.
 
-## Explicitly out of scope for seated V20
+Barcode rule:
+- preserve exact digits;
+- use Code 128-compatible/decorative treatment if encoded;
+- do not silently alter the last digit for EAN-13 checksum.
 
-Do not allocate meaningful page space to:
+Do not put:
+- main thank-you message;
+- feature collage;
+- old P07 discovery content;
+- QR unless explicitly supplied;
+- fake real publisher/price/ISBN/JAN claims.
+
+# Q&A
+
+No dedicated Q&A page.
+
+If strong real answers arrive:
+- maximum 1–2 short snippets on P02;
+- optionally one tiny life-oriented snippet on P06 if it materially helps.
+
+Never fabricate answers.
+
+# Travel-theme wedding details / old P07 material
+
+Table destinations, decor discoveries, `11 DESTINATIONS`, `LOOK AROUND`, `EDITOR'S PICK` and similar material are **not part of the current fixed eight-page architecture**.
+
+They may remain in historical project records for provenance, but do not assign them page space unless the user explicitly reopens that idea.
+
+# Known schedule facts
+
+Existing wedding schedule facts remain project facts but have no dedicated Rurubu page role.
+
+Do not use them to recreate an old P07 itinerary/timetable.
+
+# Explicitly out of scope
+
+Do not allocate meaningful V20 space to:
 - dress code;
-- access directions;
-- nearest station / transit guidance;
-- parking information;
+- access/transit directions;
+- parking;
 - check-in/arrival instructions;
 - what to bring;
-- RSVP information;
+- RSVP;
 - generic wedding etiquette;
-- other pre-arrival reminders.
+- duplicated menu/drink/seating/escort utility.
 
-## Duplication boundary with other paper items
+# Working photo budget
 
-If another wedding paper item already carries functional information, V20 should not duplicate it as filler.
+Current rough target:
+- P01: 1–3;
+- P02: 2–3;
+- P03: 2–4;
+- P04: 5–7;
+- P05: 5–7;
+- P06: 4–6;
+- P07: 1–2;
+- P08: 0–1.
 
-By default do not repeat:
-- food menu;
-- drink menu;
-- seating chart;
-- escort-card function;
-- functional ticket data.
+Total unique-photo target: approximately 20–30, adjusted after real source review.
 
-They may appear only as tiny thematic/editorial references if useful.
-
-## Conditional content blocks
-
-### Q&A
-Current project evidence does not yet contain enough reliable paired answers for a full page.
-
-Decision:
-- do NOT allocate a fixed V20 page to Q&A;
-- if strong answers arrive, insert 2–4 short Q&A modules into P02 profile or P06 life/best-shots without changing the book architecture;
-- never fabricate answers to fill a predesigned module.
-
-### Friends / family
-Not enough grounded copy/photo assignment currently exists to justify a fixed page.
-
-Decision:
-- optional micro-caption/photo roles only if actual material is later supplied;
-- no fixed V20 page allocation now.
-
-### Food / cafe
-Use only when tied to a real memory.
-
-Decision:
-- food is supporting editorial material, not a mandatory page theme;
-- do not repeat reception menu content already owned by another paper item.
-
-## Recommended content budget
-
-The purpose of the budget is to prevent late-stage shrinking and overcrowding.
-
-- total unique photo target: about 24–32 usable images across the booklet;
-- intentional repeat of the same image: maximum 1 repeat unless it is a deliberate cover/back-cover reprise;
-- body-copy blocks: short; avoid any page whose design only works because body text is forced below comfortable A5 size;
-- destination/story paragraphs: roughly 45–100 Japanese characters per module as a working target;
-- gallery captions: roughly 10–35 Japanese characters;
-- profile facts: short label/value pairs rather than long prose;
-- P07 discovery callouts: usually 1–3 lines each, visually scannable from the table;
-- P08 closing message: approximately 40–100 Japanese characters if used.
-
-These are layout budgets, not forced copy lengths.
-
-## Content architecture gate result
-
-The strongest architecture should be built around:
-1. cover;
-2. profile;
-3. relationship story;
-4. center-spread travel memories;
-5. photo-led life/best shots;
-6. seated wedding-day discoveries / travel-theme guide;
-7. closing.
-
-This structure remains useful even when Q&A and minor profile facts arrive late. It also avoids wasting premium A5 magazine space on information the guest needed before arriving.
-
-## Hard anti-fabrication rule
+# Hard anti-fabrication rule
 
 When content is missing:
 - leave a semantic placeholder;
 - reduce the module;
-- substitute a verified photo-led module;
+- substitute a verified photo-led treatment;
 - or remove the module.
 
-Never solve missing personal content by inventing a date, memory, quote, preference, venue fact, schedule fact, decor fact, or relationship detail.
+Never invent a date, memory, quote, preference, relationship label, person identity, venue fact, decor fact or travel fact to satisfy a layout.
