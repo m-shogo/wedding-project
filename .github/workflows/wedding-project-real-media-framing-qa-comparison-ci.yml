@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - 'motion-studio/scripts/compare-wedding-project-real-media-framing-qa-stills.mts'
+      - 'motion-studio/scripts/verify-wedding-project-real-media-framing-qa-comparison-currentness.mts'
       - 'motion-studio/scripts/wedding-project-real-media-preview-qa-stills.mts'
       - '.github/workflows/wedding-project-real-media-framing-qa-comparison-ci.yml'
   workflow_dispatch:
@@ -14,15 +15,20 @@ jobs:
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
-      - name: Build framing-bound before/after QA manifests
+      - name: Build framing-bound before/after QA manifests with real still files
         shell: bash
         run: |
           set -euo pipefail
           mkdir -p /tmp/framing-compare
           node --input-type=module <<'NODE'
+          import {createHash} from 'node:crypto';
           import {writeFileSync} from 'node:fs';
+          const sha=(path)=>createHash('sha256').update(readFileSync(path)).digest('hex');
+          import {readFileSync} from 'node:fs';
           const boundary={visualQa:'NOT_RUN',remotionStudioGuiActual:'NOT_RUN',palmierGuiActual:'NOT_RUN',macDaVinciGuiActual:'NOT_RUN',productionReady:false};
           const framing=(focusX,revision)=>({fit:'COVER',focusX,focusY:50,scale:1,revision});
+          const kinds=['SCENE_START_SAFE','SCENE_MID','SCENE_END_SAFE'];
+          for(const prefix of ['before','after']) for(const kind of kinds) writeFileSync(`/tmp/framing-compare/${prefix}-${kind}.png`,Buffer.from(`${prefix}:${kind}:real-fixture`));
           const build=(focusX,revision,prefix)=>({
             schemaVersion:'wedding-movie-real-media-preview-qa-stills/v1',
             authority:'DERIVED_VISUAL_QA_ARTIFACTS_FROM_CURRENT_REAL_MEDIA_PREVIEW',
@@ -30,11 +36,12 @@ jobs:
             source:{previewSha256:`${prefix}-preview`},
             summary:{sourceCurrentVerified:true,framingCurrentVerified:true,humanVisualQa:'NOT_RUN',productionReady:false},
             evidenceBoundary:boundary,
-            stills:['SCENE_START_SAFE','SCENE_MID','SCENE_END_SAFE'].map((kind,index)=>({kind,sceneId:'scene-a',sourceRevision:'rev-a',patternId:'type-mask-reveal',productionRole:'TITLE_REVEAL',mediaSha256:'same-media-sha',framing:framing(focusX,revision),framingRevision:revision,frame:index*10,path:`/tmp/${prefix}-${kind}.png`,sha256:`${prefix}-${kind}-sha`})),
+            stills:kinds.map((kind,index)=>({kind,sceneId:'scene-a',sourceRevision:'rev-a',patternId:'type-mask-reveal',productionRole:'TITLE_REVEAL',mediaSha256:'same-media-sha',framing:framing(focusX,revision),framingRevision:revision,frame:index*10,path:`/tmp/framing-compare/${prefix}-${kind}.png`,sha256:sha(`/tmp/framing-compare/${prefix}-${kind}.png`)})),
             transitionStills:[]
           });
           writeFileSync('/tmp/framing-compare/before.json',JSON.stringify(build(50,'rev-a__cover__x50__y50__s1','before')));
           writeFileSync('/tmp/framing-compare/after.json',JSON.stringify(build(25,'rev-a__cover__x25__y50__s1','after')));
+          writeFileSync('/tmp/framing-compare/current-media.json',JSON.stringify({schemaVersion:'wedding-movie-production-media-input/v1',projectId:'opening',scenes:[{sceneId:'scene-a',sourceRevision:'rev-a',kind:'IMAGE',path:'/tmp/media.jpg',sha256:'same-media-sha',humanApproved:true,framing:{fit:'COVER',focusX:25,focusY:50,scale:1,revision:'rev-a__cover__x25__y50__s1',sourceRevision:'rev-a'}}]}));
           NODE
       - name: Framing-only correction produces before/after receipt
         run: node --no-warnings motion-studio/scripts/compare-wedding-project-real-media-framing-qa-stills.mts --before-manifest=/tmp/framing-compare/before.json --after-manifest=/tmp/framing-compare/after.json --require-framing-change --output=/tmp/framing-compare/receipt.json
@@ -48,7 +55,43 @@ jobs:
           if(receipt.scenes[0].before.framingRevision===receipt.scenes[0].after.framingRevision) throw new Error('framing revision did not change');
           if(receipt.evidenceBoundary.humanVisualReviewPerformed!==false||receipt.summary.humanVisualQa!=='NOT_RUN'||receipt.evidenceBoundary.productionReady!==false) throw new Error('evidence boundary');
           NODE
-      - name: Media drift fails closed
+      - name: Strict currentness revalidates manifests, still files, and current media
+        run: |
+          node --no-warnings motion-studio/scripts/verify-wedding-project-real-media-framing-qa-comparison-currentness.mts --receipt=/tmp/framing-compare/receipt.json --current-media=/tmp/framing-compare/current-media.json --strict-current --output=/tmp/framing-compare/currentness.json
+          node --input-type=module <<'NODE'
+          import {readFileSync} from 'node:fs';
+          const currentness=JSON.parse(readFileSync('/tmp/framing-compare/currentness.json','utf8'));
+          if(currentness.schemaVersion!=='wedding-movie-real-media-framing-qa-comparison-currentness/v1'||currentness.state!=='CURRENT') throw new Error('currentness');
+          if(!currentness.checks.sourceManifestHashesCurrent||!currentness.checks.stillFilesCurrent||!currentness.checks.currentMediaBindingCurrent||!currentness.checks.receiptManifestBindingCurrent) throw new Error('checks');
+          if(currentness.evidenceBoundary.humanVisualQa!=='NOT_RUN'||currentness.evidenceBoundary.productionReady!==false) throw new Error('boundary');
+          NODE
+      - name: Post-comparison still tamper becomes STALE
+        shell: bash
+        run: |
+          cp /tmp/framing-compare/before-SCENE_MID.png /tmp/framing-compare/before-SCENE_MID.clean.png
+          printf 'tampered-after-comparison' > /tmp/framing-compare/before-SCENE_MID.png
+          if node --no-warnings motion-studio/scripts/verify-wedding-project-real-media-framing-qa-comparison-currentness.mts --receipt=/tmp/framing-compare/receipt.json --current-media=/tmp/framing-compare/current-media.json --strict-current --output=/tmp/framing-compare/stale-still.json; then
+            echo 'expected still tamper to fail strict-current' >&2
+            exit 1
+          fi
+          grep -q 'STILL_SHA_DRIFT' /tmp/framing-compare/stale-still.json
+          mv /tmp/framing-compare/before-SCENE_MID.clean.png /tmp/framing-compare/before-SCENE_MID.png
+      - name: Current framing drift becomes STALE
+        shell: bash
+        run: |
+          node --input-type=module <<'NODE'
+          import {readFileSync,writeFileSync} from 'node:fs';
+          const value=JSON.parse(readFileSync('/tmp/framing-compare/current-media.json','utf8'));
+          value.scenes[0].framing.focusX=80;
+          value.scenes[0].framing.revision='rev-a__cover__x80__y50__s1';
+          writeFileSync('/tmp/framing-compare/current-media-drift.json',JSON.stringify(value));
+          NODE
+          if node --no-warnings motion-studio/scripts/verify-wedding-project-real-media-framing-qa-comparison-currentness.mts --receipt=/tmp/framing-compare/receipt.json --current-media=/tmp/framing-compare/current-media-drift.json --strict-current --output=/tmp/framing-compare/stale-media.json; then
+            echo 'expected framing drift to fail strict-current' >&2
+            exit 1
+          fi
+          grep -q 'CURRENT_MEDIA_FRAMING_DRIFT' /tmp/framing-compare/stale-media.json
+      - name: Media drift fails closed at comparison creation
         shell: bash
         run: |
           node --input-type=module <<'NODE'
