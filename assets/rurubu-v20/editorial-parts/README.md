@@ -15,15 +15,15 @@ Potentially reusable only after current page-proof review:
 - `p06/V20_P06_TAPE_FRAGMENT_GEN_A.png`
 - `p08/V20_P08_ISSUE_STAMP_GEN_A.png`
 
-## P05 obsolete assets
+## P05 obsolete assets — removed
 
-Current P05 is `友達との思い出` with `SHOGO FRIENDS` + `SHIORI FRIENDS`, no family, no giant hero.
+Current P05 is `友達との思い出` with `SHOGO FRIENDS` + `SHIORI FRIENDS`, no family and no giant hero.
 
-Physical status:
-- `p05/V20_P05_HAWAII_TITLE_SUBTITLE_HOLDER_GEN_A.png` — **REMOVED from current branch**; Git history only
-- `p05/V20_P05_PROPOSAL_ARTICLE_FRAME_GEN_B.png` — **SUPERSEDED / DO NOT USE**; physical file may remain for provenance because deletion was not completed
+The two obsolete P05 production PNGs have been removed from the current branch and now exist only in Git history:
+- `p05/V20_P05_HAWAII_TITLE_SUBTITLE_HOLDER_GEN_A.png`
+- `p05/V20_P05_PROPOSAL_ARTICLE_FRAME_GEN_B.png`
 
-Neither asset may be recolored, traced, raster-wrapped or repurposed into the new P05 design.
+Do not recover, recolor, trace, raster-wrap or repurpose either asset into the current friends page.
 
 New P05 assets must be created from zero:
 - friends page title
