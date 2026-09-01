@@ -451,6 +451,19 @@ export function MaskRevealEditableWorkspace() {
     setPresets(removeScenePreset(id));
   }
 
+  // Explicit escape hatch for a real trap: adoptCurrentScene()/adoptAsAnotherScene() leave
+  // editingSceneId pointed at the just-adopted Scene (so quick follow-up tweaks apply to it).
+  // If the very next thing a user does is change ONLY the section (before touching pattern —
+  // changePattern/changeImagePattern already reset editingSceneId themselves, this is the one
+  // structural change that doesn't), changeSection() silently retargets the previous Scene
+  // instead of starting a new one. Discovered by hitting it directly while building a real
+  // multi-Scene StaRt sequence. This button gives an unambiguous "start over" action instead of
+  // relying on users to know "change pattern first" defends against it.
+  function startNewScene() {
+    setIntent(createDefaultMaskRevealEditableIntent(intent.section));
+    setEditingSceneId(null);
+  }
+
   function duplicateScene(sceneId: string) {
     // For the "same combination, next section" workflow: keep the pattern/timing/position
     // choices, land on the duplicate immediately so only Text/Media need retyping.
@@ -692,7 +705,12 @@ export function MaskRevealEditableWorkspace() {
               <p className="text-[10px] tracking-[0.18em] font-semibold text-emerald-700 dark:text-emerald-300">SCENE INSTANCE</p>
               <p className="mt-1 text-sm font-bold text-navy-900 dark:text-sand-100">Target {timing.targetDurationSeconds.toFixed(1)}秒 / Computed {timing.computedDurationSeconds.toFixed(1)}秒</p>
               <p className="mt-1 text-[11px] leading-5 text-navy-500 dark:text-navy-300">{timing.durationDeltaSeconds > 0 ? `Text timingがTargetより ${timing.durationDeltaSeconds.toFixed(1)}秒長い状態です。人間の値を勝手に縮めず差分を表示しています。` : "Targetと構造上のScene尺は一致しています。"}</p>
-              {editingSceneId && <p className="mt-1 text-[10px] text-sky-700 dark:text-sky-300">採用済みSceneを編集中。変更はfield単位で自動保存されます。</p>}
+              {editingSceneId && (
+                <p className="mt-1 text-[10px] text-sky-700 dark:text-sky-300">
+                  採用済みSceneを編集中。変更はfield単位で自動保存されます。
+                  別のSceneを新しく作るなら<button type="button" onClick={startNewScene} className="underline font-semibold">新しいSceneから始める</button>を押してください（先に使う場所だけ変えると、このSceneが上書きされます）。
+                </p>
+              )}
             </div>
             <div className="flex flex-wrap gap-2">
               {!editingSceneId ? <button type="button" onClick={adoptCurrentScene} className="bg-emerald-700 text-white px-4 py-2 text-xs font-semibold">このSceneを採用</button> : <button type="button" onClick={adoptAsAnotherScene} className="border border-emerald-600 text-emerald-700 dark:text-emerald-300 px-4 py-2 text-xs font-semibold">別Sceneとして採用</button>}
