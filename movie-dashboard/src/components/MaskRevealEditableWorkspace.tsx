@@ -80,11 +80,11 @@ const BROADCAST_FIELD_GROUPS: Array<{ id: BroadcastFieldId; label: string; keys:
   { id: "direction", label: "文字の登場方向", keys: ["direction"] },
   { id: "position", label: "位置", keys: ["positionPreset", "positionXPercent", "positionYPercent"] },
   { id: "layerDelaySeconds", label: "文字を出すタイミング", keys: ["layerDelaySeconds"] },
-  { id: "sceneTiming", label: "Scene Duration / Hold / Exit", keys: ["sceneDurationSeconds", "holdDurationSeconds", "exitDurationSeconds"] },
-  { id: "motionTiming", label: "文字の動く速さ(Delay/Duration/Stagger)", keys: ["motionDelaySeconds", "enterDurationSeconds", "staggerDelaySeconds"] },
+  { id: "sceneTiming", label: "写真を見せる長さ・止める時間", keys: ["sceneDurationSeconds", "holdDurationSeconds", "exitDurationSeconds"] },
+  { id: "motionTiming", label: "文字が動く速さ・タイミング", keys: ["motionDelaySeconds", "enterDurationSeconds", "staggerDelaySeconds"] },
   { id: "imageMotionDurationSeconds", label: "画像の動きの長さ", keys: ["imageMotionDurationSeconds"] },
-  { id: "positionDetail", label: "位置の微調整・距離・スケール", keys: ["positionOffsetXPercent", "positionOffsetYPercent", "distancePercent", "scaleFromPercent", "scaleToPercent"] },
-  { id: "cropFocus", label: "Crop / Focus", keys: ["cropFocus"] },
+  { id: "positionDetail", label: "位置の微調整・動く距離・拡大率", keys: ["positionOffsetXPercent", "positionOffsetYPercent", "distancePercent", "scaleFromPercent", "scaleToPercent"] },
+  { id: "cropFocus", label: "写真の切り取り位置", keys: ["cropFocus"] },
 ];
 
 type Level = "EASY" | "DETAIL" | "DAVINCI";
@@ -236,9 +236,13 @@ export function MaskRevealEditableWorkspace() {
     if (editingSceneId === sceneId) setEditingSceneId(null);
   }
 
-  function applyBroadcast() {
+  // Shared by both the one-click "everything" button and the "選んで反映" detail checkboxes, so
+  // the LOCKED-respecting loop only lives in one place. Runs as a single updateComposer call
+  // (one React state update -> one persisted composerState -> one MOTION_ZUKAN_COMPOSER_CHANGED
+  // event) so the outer Undo/Redo history in MotionZukanProductionWorkspace captures the whole
+  // broadcast as one undo-able step, not one step per Scene/field.
+  function runBroadcast(activeKeys: MaskRevealEditableFieldKey[]) {
     const projectId = intent.section.startsWith("PROFILE_") ? "profile" : "opening";
-    const activeKeys = BROADCAST_FIELD_GROUPS.filter((group) => broadcastFields[group.id]).flatMap((group) => group.keys);
     if (activeKeys.length === 0) return;
     updateComposer((current) => {
       let next = current;
@@ -255,14 +259,40 @@ export function MaskRevealEditableWorkspace() {
     });
   }
 
+  // The beginner-facing default: copy every broadcastable value in one click, no need to
+  // understand what any individual group means. Still LOCKED-safe and still a single Undo step.
+  function applyBroadcastAll() {
+    runBroadcast(BROADCAST_FIELD_GROUPS.flatMap((group) => group.keys));
+  }
+
+  function applyBroadcastSelected() {
+    runBroadcast(BROADCAST_FIELD_GROUPS.filter((group) => broadcastFields[group.id]).flatMap((group) => group.keys));
+  }
+
   function broadcastTargetCount() {
     const projectId = intent.section.startsWith("PROFILE_") ? "profile" : "opening";
     return composerState.scenes.filter((scene) => scene.projectId === projectId && scene.sceneId !== editingSceneId).length;
   }
 
+  // detailLabel is always "CommonName / 日本語名" (e.g. "Word Punch / 一語だけ強調して出す"),
+  // and that Japanese half is the same short phrase already shown in the pattern dropdown. Not
+  // using `easyLabel` (= pattern.looksLike) here: it's short for some patterns ("下からスッと
+  // 文字が出る") but for others carries a long technical aside baked in (frame counts etc.),
+  // which read badly as a preset chip's default name.
+  function naturalPatternName(detailLabel: string) {
+    const parts = detailLabel.split(" / ");
+    return parts.length > 1 ? parts[parts.length - 1] : detailLabel;
+  }
+
+  // Natural-language default name so a preset chip reads like "マスクから文字がスッと現れる +
+  // 写真をゆっくり寄せる" — recognizable without knowing any motion-design term, matching this
+  // project's "日本語名を最優先" principle. Still just a starting point in the editable name
+  // field; the user can rename before saving.
   function defaultPresetName() {
-    const textLabel = patterns.find((item) => item.patternId === intent.patternId)?.detailLabel ?? intent.patternId;
-    const imageLabel = resolved.imagePatternId ? imagePatterns.find((item) => item.patternId === resolved.imagePatternId)?.detailLabel ?? "" : "";
+    const textPattern = patterns.find((item) => item.patternId === intent.patternId);
+    const textLabel = textPattern ? naturalPatternName(textPattern.detailLabel) : intent.patternId;
+    const imagePattern = resolved.imagePatternId ? imagePatterns.find((item) => item.patternId === resolved.imagePatternId) : undefined;
+    const imageLabel = imagePattern ? naturalPatternName(imagePattern.detailLabel) : "";
     return imageLabel ? `${textLabel} + ${imageLabel}` : textLabel;
   }
 
@@ -601,17 +631,21 @@ export function MaskRevealEditableWorkspace() {
         <p className="mt-2 text-[11px] leading-5 text-navy-400">Palmierからは実timelineのNLE XMLを書き出し、Human Master Scene値をserializationしたMotion Handoff JSONをsidecarとしてDaVinciへ渡します。JSON / XML自体はHuman Masterではなく、XMLをこのアプリ側で捏造しません。</p>
 
         <div className="mt-4 border border-amber-200 dark:border-amber-900 bg-amber-50/40 dark:bg-amber-950/10 p-4">
-          <p className="text-[10px] tracking-[0.18em] font-semibold text-amber-700 dark:text-amber-300">BROADCAST / 一括反映</p>
-          <p className="mt-1 text-[11px] leading-5 text-navy-500 dark:text-navy-300">今の{intent.section.startsWith("PROFILE_") ? "Profile" : "Opening"}の値を、他の採用済みSceneへチェックした項目だけ反映する。LOCKEDなSceneのfieldは変更しない。対象: {broadcastTargetCount()}件。</p>
-          <div className="mt-3 flex flex-wrap gap-3">
-            {BROADCAST_FIELD_GROUPS.map((group) => (
-              <label key={group.id} className="flex items-center gap-1.5 text-[11px] text-navy-600 dark:text-navy-300">
-                <input type="checkbox" checked={broadcastFields[group.id]} onChange={(event) => setBroadcastFields((current) => ({ ...current, [group.id]: event.target.checked }))} />
-                {group.label}
-              </label>
-            ))}
-          </div>
-          <button type="button" onClick={applyBroadcast} disabled={broadcastTargetCount() === 0} className="mt-3 bg-amber-700 disabled:opacity-40 text-white px-4 py-2 text-xs font-semibold">チェックした項目を他のSceneへ反映</button>
+          <p className="text-[10px] tracking-[0.18em] font-semibold text-amber-700 dark:text-amber-300">見た目をそろえる</p>
+          <p className="mt-1 text-[11px] leading-5 text-navy-500 dark:text-navy-300">今編集しているSceneの見た目を、他の採用済みSceneにもコピーできます。テキストや写真そのものは変わりません。片方だけ気に入らなければ、その項目にLOCKを付けてから使えばそこだけ変わりません。対象: {broadcastTargetCount()}件。気に入らなければ↶Undoで戻せます。</p>
+          <button type="button" onClick={applyBroadcastAll} disabled={broadcastTargetCount() === 0} className="mt-3 bg-amber-700 disabled:opacity-40 text-white px-4 py-2 text-sm font-semibold">この見た目を他のSceneにも使う({broadcastTargetCount()}件)</button>
+          <details className="mt-3">
+            <summary className="cursor-pointer text-[11px] text-amber-700 dark:text-amber-300">項目を選んで一部だけ反映する</summary>
+            <div className="mt-3 flex flex-wrap gap-3">
+              {BROADCAST_FIELD_GROUPS.map((group) => (
+                <label key={group.id} className="flex items-center gap-1.5 text-[11px] text-navy-600 dark:text-navy-300">
+                  <input type="checkbox" checked={broadcastFields[group.id]} onChange={(event) => setBroadcastFields((current) => ({ ...current, [group.id]: event.target.checked }))} />
+                  {group.label}
+                </label>
+              ))}
+            </div>
+            <button type="button" onClick={applyBroadcastSelected} disabled={broadcastTargetCount() === 0} className="mt-3 border border-amber-700 text-amber-700 dark:text-amber-300 px-4 py-2 text-xs font-semibold">チェックした項目だけ反映する</button>
+          </details>
         </div>
       </div>
 
