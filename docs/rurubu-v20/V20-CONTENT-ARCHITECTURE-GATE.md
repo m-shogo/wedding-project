@@ -1,44 +1,61 @@
 # V20 Content Architecture Gate
 
-Status: `MANDATORY_BEFORE_PAGE_MANUALS`
+Status: `PASSED / CURRENT_PAGE_MAP_FIXED_2026-09-01`
 
-V20 does not inherit an old P01–P08 role map.
+The content architecture gate has been rerun and the current eight-page role map is fixed in:
 
-Before writing page manuals, inventory the actual confirmed content and decide from zero what deserves a page, what can share a page, and what should be removed.
+`V20-CURRENT-PAGE-ARCHITECTURE.md`
 
-## Required inventory
-For each candidate content block record:
-- purpose for the guest;
-- factual source / confirmation status;
-- amount of copy;
-- available photo quantity and quality;
-- whether it benefits from travel-magazine treatment;
-- whether it is essential, optional, or decorative;
-- whether it changes before print;
-- whether it overlaps another content block.
+Do not reopen the gate merely because an older Figma layout or old asset queue is easier to reuse.
 
-Candidate themes may include profile, Q&A, relationship story, chronology, memory trips, maps, wedding-day guide, venue/cafe/food, guest interaction, thank-you/closing, or other ideas. These are candidates only, not inherited page roles.
+## Current gate result
 
-## Architecture questions
-1. What should a guest understand from the booklet as a whole?
-2. What should be the emotional peak?
-3. Which pages should be dense and playful?
-4. Which page should be calm enough to reset the eye?
-5. Which content has enough real material to justify a full page?
-6. Which content would feel forced if included only because an older version had it?
-7. Where can the travel concept become editorial utility rather than decoration?
-8. What information is likely to change and therefore must stay native/editable?
+- P01 = Cover / `るるぶ WEDDING`
+- P02 = Profile / Who We Are
+- P03 = Our Story
+- P04 = All Travel Memories / Our Journey
+- P05 = Family & Friends Memories
+- P06 = Real Life / Favorites / Best Shots
+- P07 = Closing Message / Thank You
+- P08 = Magazine Back Cover
 
-## Gate output
-Only after the inventory is complete, define a new V20 page map with:
-- page number;
-- page job;
-- primary content;
-- supporting content;
-- visual composition verb;
-- expected density;
-- required photos;
-- required parts;
-- editability risks.
+Fixed event date:
+`2026.10.24`
 
-No Figma structural write before this gate passes.
+P08 barcode digits:
+`2026102400000`
+
+## Why this map passed
+
+- P02 no longer carries profile + Q&A + chronology + travel at once;
+- P03 owns relationship progression;
+- P04 gathers travel memories in one clear home;
+- P05 creates a dedicated home for family/friend memories;
+- P06 owns everyday personality;
+- P07 provides an emotional interior close;
+- P08 can behave like a real low-information magazine back cover;
+- old wedding-day guide/discovery content is no longer required to fill a page.
+
+## Obsolete candidates
+
+The following no longer justify a fixed page in current V20:
+- P05 Hawaii-only feature / proposal-arrival page;
+- P07 timetable;
+- P07 `TODAY'S TRAVEL GUIDE`;
+- P07 `11 DESTINATIONS`;
+- P07 `LOOK AROUND` / `EDITOR'S PICK`;
+- P08 main thank-you/message page.
+
+Historical project facts may remain true, but they do not recreate these old page roles.
+
+## Reopen conditions
+
+Only reopen architecture if the user explicitly changes the page content strategy or a genuine print/binding constraint makes the current map impossible.
+
+Do not reopen for:
+- styling difficulty;
+- legacy asset availability;
+- old Figma convenience;
+- desire to reuse already-generated P05/P07 artwork.
+
+`CURRENT CONTENT ARCHITECTURE IS A USER DECISION, NOT A LEGACY-LAYOUT SUGGESTION.`
