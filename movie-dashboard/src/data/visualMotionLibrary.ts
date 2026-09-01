@@ -617,7 +617,9 @@ function kitPresetToPattern(preset: StartMotionPreset): MotionPatternRecord {
                 ? ["preview-type-word-punch-davinci-actual", "preview-type-word-punch-concept"]
                 : preset.id === "photo-small-push"
                   ? ["preview-photo-small-push-davinci-actual", "preview-photo-small-push-concept"]
-                  : preset.id === "flash-one-frame-soft"
+                  : preset.id === "photo-slow-pull"
+                    ? ["preview-photo-slow-pull-davinci-actual", "preview-photo-slow-pull-concept"]
+                    : preset.id === "flash-one-frame-soft"
                     ? ["preview-flash-one-frame-soft-davinci-actual", "preview-flash-one-frame-soft-concept"]
                     : preset.id === "type-char-stagger"
                       ? ["preview-type-char-stagger-davinci-actual", "preview-type-char-stagger-concept"]
@@ -782,6 +784,23 @@ function kitPresetToImplementation(preset: StartMotionPreset): MotionImplementat
       studioRequired: false,
       verified: true,
       notes: "専用Resolve projectで1280x720 / 30fps timelineへFusion Saver(EXR)を直接render。Transform.Sizeを0(1.00)→119(1.05)でkeyframe。frame0/118のpixel差分(サンプリング平均abs diff 1.4→17.2、watermark帯の見かけ幅拡大)で寄りを確認済み。Deliverページのタイムラインrenderはこのproject構成でTransform keyframeを反映しない既知の不具合があったため、Fusion内蔵Saverでの直接renderに切り替えた。",
+    };
+  }
+  if (preset.id === "photo-slow-pull") {
+    return {
+      id: "impl-photo-slow-pull",
+      patternId: "photo-slow-pull",
+      kind: "DAVINCI_FUSION",
+      status: "PRODUCTION_READY",
+      method: "DaVinci Resolve Fusion Transformを写真クリップへ適用し、Sizeだけを1.06→1.00でframe 0〜119へ線形keyframe(photo-small-pushと同じ機構を逆方向に使用)。位置・回転は固定。",
+      artifactType: "NONE",
+      artifactPath: null,
+      installed: true,
+      tested: true,
+      resolveVersion: "21.0.4.5",
+      studioRequired: false,
+      verified: true,
+      notes: "専用Resolve project (MotionZukan_SlowPull_Actual_20260902_Claude)で1280x720 / 30fps timelineへFusion Saver(EXR)を直接render。Transform.Sizeを0(1.06)→119(1.00)でkeyframe。GetInput readbackでSIZE_AT_0=1.06 / SIZE_AT_119=1を確認。frame0/119のpixel差分(mean 17.46、max 244)はphoto-small-pushの確認済み差分(mean 17.2、max 217)と同水準で、静止フレームではないことを確認した。",
     };
   }
   if (preset.id === "photo-static-hero") {
@@ -1053,6 +1072,22 @@ motionPreviews.push({
   resolveVersion: "21.0.4.5",
   verified: true,
   notes: "Transform.Sizeを1.00(frame0)→1.05(frame119)で線形push。Resolve Fusion Saverの直接EXR出力をffmpegでH.264化。frame0/118のサンプリング平均pixel差分1.4→17.2(max 217)で寄りを確認済み。",
+});
+motionPreviews.push({
+  id: "preview-photo-slow-pull-davinci-actual",
+  patternId: "photo-slow-pull",
+  sourceType: "ACTUAL_DAVINCI_RENDER",
+  status: "VERIFIED",
+  freshness: "CURRENT",
+  assetPath: "/motion-previews/photo-slow-pull/davinci-actual-v1.mp4",
+  posterPath: "/motion-previews/photo-slow-pull/davinci-actual-v1-poster.png",
+  generatedBy: "DaVinci Resolve Free 21.0.4.5 / native Fusion Transform / Saver EXR render",
+  generatedAt: "2026-09-02T00:27:00+09:00",
+  implementationId: "impl-photo-slow-pull",
+  sampleAssetSetId: "sample-generic-hero-photo-v1",
+  resolveVersion: "21.0.4.5",
+  verified: true,
+  notes: "Transform.Sizeを1.06(frame0)→1.00(frame119)で線形pull(photo-small-pushの逆方向)。Resolve Fusion Saverの直接EXR出力をffmpegでH.264化。GetInput readbackでSIZE_AT_0=1.06/SIZE_AT_119=1を確認、frame0/119のpixel差分(mean 17.46、max 244)で引きを確認済み。",
 });
 motionPreviews.push({
   id: "preview-flash-one-frame-soft-davinci-actual",
