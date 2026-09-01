@@ -2,8 +2,6 @@
 
 Status: `CURRENT_NEED_MANIFEST / P05_FRIENDS_ONLY_2026-09-01`
 
-This file records current asset needs/classes. Historical produced assets remain provenance only unless explicitly re-adopted after current page-proof review.
-
 Highest authority: `V20-CURRENT-PAGE-ARCHITECTURE.md`.
 
 ## Current roles
@@ -14,25 +12,25 @@ Highest authority: `V20-CURRENT-PAGE-ARCHITECTURE.md`.
 - P04 all travel memories
 - P05 friends memories only: SHOGO FRIENDS + SHIORI FRIENDS
 - P06 real life + Q5/Q6
-- P07 closing message
-- P08 magazine back cover
+- P07 closing
+- P08 back cover
 
-## Historical asset classification
+## Classification
 
-- `REUSABLE_SOURCE`: real source/provenance remains valid
-- `VISUAL_REFERENCE_ONLY`: may teach quality but not current page structure
-- `SUPERSEDED`: tied to obsolete role and must not be assembled into current pages
+- `REUSABLE_SOURCE` — provenance/source remains useful
+- `VISUAL_REFERENCE_ONLY` — style lesson only
+- `SUPERSEDED` — obsolete semantic job; never current assembly input
+- `REMOVED_CURRENT_BRANCH` — physically removed from current branch; Git history only
 
-## Explicit P05 superseded assets
+## P05 legacy status
 
-Treat as `SUPERSEDED` for current P05 assembly unless re-generated from zero for a new semantic job:
-- old `V20_P05_HAWAII_TITLE_SUBTITLE_HOLDER_GEN_A.png`
-- old `V20_P05_PROPOSAL_ARTICLE_FRAME_GEN_B.png`
-- old P04–P05 route assets when their only purpose is the obsolete Hawaii/proposal center-spread narrative
+- `V20_P05_HAWAII_TITLE_SUBTITLE_HOLDER_GEN_A.png` — `REMOVED_CURRENT_BRANCH`
+- `V20_P05_PROPOSAL_ARTICLE_FRAME_GEN_B.png` — `SUPERSEDED / DO_NOT USE`; physical file may remain for provenance
+- old P04–P05 route assets — `VISUAL_REFERENCE_ONLY` or `SUPERSEDED` whenever their semantic job is the obsolete Hawaii/proposal center narrative
 
-Do not rasterize/recolor/trace these into new P05 friend assets.
+Do not recolor, trace, raster-wrap or cosmetically repurpose obsolete P05 assets.
 
-## Current P05 required manifest classes
+## Current P05 required classes
 
 - `P05_FRIENDS_TITLE_UNIT`
 - `P05_SHOGO_FRIENDS_LABEL_UNIT`
@@ -40,22 +38,22 @@ Do not rasterize/recolor/trace these into new P05 friend assets.
 - 3–4 varied friend-photo frame/backing types
 - short caption vessels
 - restrained friend-memory micro accents
-- optional small `MEMORIES` chapter cue shared with P04
+- optional small `MEMORIES` cue shared with P04
 
-No current need exists for:
-- family marker
-- FAMILY cluster vessel
+No current need:
+- family/FAMILY marker
 - giant P05 hero frame
+- page-wide anchor frame
 - Hawaii destination title
 - proposal article frame
 - arrival feature
 
 ## P08
 
-Barcode human-readable digits: `2026102400000` exactly.
+Barcode digits: `2026102400000` exactly.
 
 ## Adoption rule
 
-Only assets that survive current one-shot page proof → layered reconstruction → A5 QA become `ADOPTED_CURRENT`.
+Only assets that pass current page proof → layered reconstruction → A5 QA may become `ADOPTED_CURRENT`.
 
-`HISTORICAL FILE EXISTS != CURRENT ASSET NEED.`
+`P05 CURRENT NEED = FRIENDS TITLE + SHOGO/SHIORI LABELS + MULTI-PHOTO FRAMES.`
