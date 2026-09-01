@@ -1,78 +1,162 @@
 # V20 写真準備・差し替えリスト
 
-Status: `HANDOFF_LIST / DUMMY_PHOTOS_ACTIVE`
+Status: `CURRENT_HANDOFF_LIST / PAGE_ROLES_RESET_2026-09-01`
 
-Purpose: 現在Figmaに入っているダミー／仮写真を、あとから実写へ安全に差し替えるための準備一覧。写真が届くまでは現行ダミーを維持し、生成画像を実際の思い出として扱わない。
+Highest page-role authority: `V20-CURRENT-PAGE-ARCHITECTURE.md`.
 
-## まず用意する写真
+Old Figma slot IDs may remain useful as historical geometry evidence, but they are not current page-role authority after the architecture reset.
 
-### 優先度A — 必須差し替え
+Generated TEMP images are composition placeholders only and must never be presented as the couple's real memories.
 
-| ID | 使用ページ | 用意する写真 | 推奨候補数 | 向き・構図 | 現行Figma枠 |
-|---|---|---|---:|---|---|
-| `REQ-P04-01` | P04 | 沖縄または韓国の「場所が分かる」旅の主役写真。ふたり＋景色、または景色単体 | 3–5枚 | 縦位置優先。被写体を中央に詰めず、上下にトリミング余白 | `3434:13` PLACE HERO / 356×470 |
-| `REQ-P04-02` | P04 | 旅先で何かをしている写真。歩く、食べる、買う、乗る、笑う等 | 3–5枚 | 縦〜正方形。動作と表情が分かり、左右に少し余白 | `3434:10` TRAVEL ACTION / 250×264 |
-| `REQ-P04-03` | P04 | 旅のディテール。料理、看板、チケット、街角、手元、小物等 | 3–5枚 | 正方形〜横位置。寄りの画で主題が一つ | `3434:9` TRAVEL DETAIL / 206×194 |
-| `REQ-P06-01` | P06 | ふたりの日常を代表する自然な一枚。家、散歩、買い物、食卓、何気ない外出等 | 4–6枚 | 縦〜やや縦。顔と状況が見え、上下左右にトリミング余白 | `3447:154` LIFE HERO / 300×338 |
-| `REQ-P06-02` | P06 | ふたりらしい食の写真。家ごはん、よく行く店、好きな料理、作っている場面等 | 3–5枚 | 横〜正方形。料理だけでも人物入りでも可 | `3447:155` FOOD / 226×194 |
-| `REQ-P06-03` | P06 | Cookie／Melonの実写。どちらか一匹、または一緒にいる自然な様子 | 5–8枚 | 横〜正方形。目と顔が見え、耳・足先を切らない候補を優先 | `3447:156` PET-LIFE / 248×216 |
-| `REQ-P06-04` | P06 | 遊び・趣味・ちょっと笑える日常写真。ゲーム、イベント、変顔、失敗写真等 | 3–5枚 | 横位置優先。小さく置いても動きや表情が伝わるもの | `3447:157` FUN / 196×150 |
+# 優先度A — 新構成で必須
 
-### 優先度B — あると誌面が良くなる
+## P04 — 旅の思い出を集結
 
-| ID | 使用ページ | 用意する写真 | 推奨候補数 | 向き・構図 | 現行Figma枠 |
-|---|---|---|---:|---|---|
-| `REQ-P07-01` | P07 | 実際の会場・建物・入口・ペーパーアイテム等、当日の場所を補足できる写真 | 2–4枚 | 横位置。小さくても場所や物が判別できる | `3447:207` PAPER DISCOVERY / 138×106 |
-| `REQ-P07-02` | P07 | 実際のテーブル装花、料理、食器、会場の色味が分かる写真 | 2–4枚 | 横〜正方形。色と質感が主役 | `3447:221` TABLE COLOR / 132×112 |
+Goal: P04だけで複数の旅の記憶が成立する写真プールを作る。
 
-### 優先度C — 現行実写の役割確認／より合う写真があれば交換
+Prepare:
+- `REQ-P04-TRAVEL-HERO`: 旅の主役写真 3–5候補;
+- `REQ-P04-PLACE`: 沖縄 / 韓国 / ハワイ / その他の実旅行の場所写真 6–10候補;
+- `REQ-P04-ACTION`: 歩く・食べる・乗る・遊ぶ等の旅行中の動作 4–8候補;
+- `REQ-P04-DETAIL`: 料理・看板・街角・チケット・小物等 4–8候補.
 
-| ID | 使用ページ | 確認・候補 | 現状 |
-|---|---|---|---|
-| `CHECK-P02-01` | P02 | ふたりのプロフィールらしい自然な写真、または各人の人柄が伝わる写真 | Hawaii `036` と `035`を仮使用中。非対称構成のため、揃いのソロ写真2枚は必須ではない |
-| `CHECK-P03-01` | P03 | 本文の実話エピソードと時期・内容が一致する感情写真 | 実写カップル写真をストーリー役として仮使用中 |
+Final page target:
+- 1 hero + 4–6 supports = 5–7 photos.
 
-### 完了 — 実写へ差し替え済み
+Hawaiiの既存実写は再利用候補だが、P04をHawaiiだけにしない。
 
-| ID | 使用ページ | 採用写真 | Drive ID | Figma | QA |
-|---|---|---|---|---|---|
-| `REQ-P08-01` | P08 | `001.jpg` / 海を望むふたりの後ろ姿 | `1XAVLtR1y-M6yW_N9CB8QQUixXYdbOke6` | current P08 `3474:2`; photo `3474:3`; hash `16a2b4e2ce0a2532909a01a7fd61bcbf766fa96a` | 4500×3000、全高配置換算352.8ppi、P05との写真重複解消、contact `3477:2`で確認済み |
+## P05 — 家族と友達の思い出
 
-P01とP05は現在の実写で成立しているため、今回の追加準備対象外。
+New fixed page role.
 
-P02の下部プロフィール索引は2026-09-01に整理済み。現行P02 `3447:43`、見開き `3447:2`、最新全体確認 `3517:2`。写真が届くまでは既存2枚を維持し、`好きなこと / 旅のスタイル / 今日のひとこと`の中身は本人確認後にネイティブテキストへ入力する。
+Prepare:
+- `REQ-P05-FAMILY`: 家族との思い出写真 6–12候補;
+- `REQ-P05-FRIENDS`: 友達との思い出写真 8–16候補;
+- `REQ-P05-ANCHOR`: 家族/友達ページの代表にできる感情・雰囲気の強い写真 3–5候補.
 
-## まとめて渡す場合の目安
+Final page target:
+- 1 anchor + 4–6 supports = 5–7 photos.
 
-- P04 沖縄・韓国・旅ディテール: 合計9–15枚
-- P06 日常・食・犬・遊び: 合計15–24枚
-- P07 会場補足（任意）: 合計4–8枚
+Important:
+- 集合写真はA5で顔が判別できる解像度を優先;
+- 誰が誰か、関係性、エピソードは写真だけから推測しない;
+- 人名/関係ラベル/キャプションは本人確認後に追加.
 
-同じ場面の連写だけでなく、距離・向き・表情が異なる候補があると誌面のトリミング自由度が上がる。
+## P06 — 日常 / 好きなもの / BEST SHOTS
 
-## ファイル準備ルール
+Prepare:
+- `REQ-P06-LIFE`: ふたりの日常を代表する自然な写真 4–6候補;
+- `REQ-P06-FOOD`: ふたりらしい食の写真 3–5候補;
+- `REQ-P06-PET`: Cookie / Melonの実写 5–8候補;
+- `REQ-P06-FUN`: 趣味・遊び・面白い場面 3–5候補.
 
-- 元のJPEG／HEICを優先し、SNSから保存した小さい画像やスクリーンショットは避ける。
-- 長辺2,000px以上を目安にし、可能ならオリジナル解像度のまま渡す。
-- フィルターや文字入れ前の画像を優先する。
-- 近い写真を選別しすぎず、候補を複数残す。
-- ファイル名の先頭に上表のIDを付けると差し替えが早い。
+Final page target:
+- 1 candid hero + 3–5 supports = 4–6 photos.
 
-例:
+# 優先度B — P02 / P03の精度向上
+
+## P02 Profile
+
+Prepare if available:
+- SHOGOらしさが分かる写真 2–4候補;
+- SHIORIらしさが分かる写真 2–4候補;
+- ふたりの共有写真 1–3候補.
+
+Final target:
+2 main + optional 1 support.
+
+## P03 Our Story
+
+Prepare:
+- 出会い/初期を象徴する写真;
+- 交際中の代表写真;
+- proposal/important milestone photo if real;
+- registration / wedding-arrival-related photo if useful.
+
+Final target:
+2–4 photos.
+
+Do not force photos that do not actually match the story chapter.
+
+# 優先度C — P07 Closing / P08 Back Cover
+
+## P07 Closing
+
+The previously verified closing source may be reused as a candidate:
+- `001.jpg`;
+- Drive `1XAVLtR1y-M6yW_N9CB8QQUixXYdbOke6`;
+- 4500×3000;
+- previous Figma hash `16a2b4e2ce0a2532909a01a7fd61bcbf766fa96a`.
+
+This source was formerly used on old P08. It is now a **candidate source for new P07 closing**, not a reason to keep old P08 geometry.
+
+Prepare 2–4 alternative calm closing photos if available.
+
+Final target:
+1 strong photo, optional 1 tiny support.
+
+## P08 Back cover
+
+Final target:
+0–1 photo.
+
+A calm background photo may be used, but P08 does not need a photo if a restrained paper/color/art direction works better.
+
+No collage.
+
+# P01 existing strength
+
+P01 already has verified real Hawaii/couple sources and does not currently require a large new photo request.
+
+If a materially better cover hero/support pool exists, it may still be compared because no page is permanently locked.
+
+# Removed old requests
+
+The following old photo requests are no longer current V20 requirements:
+- P07 venue/building discovery photo;
+- P07 table/floral/food discovery photo;
+- any photo required solely for `TODAY'S TRAVEL GUIDE` / `11 DESTINATIONS` / `LOOK AROUND` / `EDITOR'S PICK`.
+
+Do not source these for V20 unless the user explicitly restores that concept.
+
+# まとめて渡す場合の目安
+
+Recommended raw candidate pool:
+- P04 travel: 15–30候補;
+- P05 family/friends: 17–33候補;
+- P06 real life: 15–24候補;
+- P02/P03/P07 alternatives: as available.
+
+最終誌面で全部使うわけではない。候補を多めに用意して、A5で最も強い5–7枚等へ絞る。
+
+# ファイル準備ルール
+
+- 元JPEG/HEIC優先;
+- 長辺2,000px以上を目安;
+- SNS保存画像やスクリーンショットは可能な限り避ける;
+- 文字入れ/強いフィルター前の原本を優先;
+- 連写だけでなく距離・向き・表情違いを残す.
+
+Example:
 
 ```text
-REQ-P06-03_cookie_sofa_01.jpg
-REQ-P06-03_melon_walk_02.jpg
-REQ-P04-02_korea_market_01.jpg
+REQ-P04-PLACE_korea_01.jpg
+REQ-P05-FAMILY_01.jpg
+REQ-P05-FRIENDS_03.jpg
+REQ-P06-PET_cookie_melon_02.jpg
 ```
 
-## Figma差し替えルール
+# Figma差し替えルール
 
-- 現行ダミーの枠サイズ・重なり・キャプション位置は維持し、まず画像だけを交換する。
-- 実写への交換後に `FILL` とトリミング位置を調整する。
-- Cookie／Melon、旅先、会場などの固有情報は、本人確認できるファイルだけを使用する。
-- 交換済みノード名には `REAL SOURCE` と出典を記録し、`REPLACE REQUIRED` を外す。
+Because page roles changed, do not preserve old slot geometry blindly.
 
-## 現行ダミーの意味
+New workflow:
+1. build/approve the new page proof;
+2. derive the new layered page composition;
+3. create replaceable photo frames;
+4. place verified real sources;
+5. adjust crop/scale at A5;
+6. record source provenance/hash;
+7. remove TEMP/REPLACE REQUIRED status only after verified replacement.
 
-P04とP06の生成画像は構図・色・ページ密度を確認するための仮素材であり、本人たちの実際の旅行・日常・ペットを表すものではない。最終納品前に優先度Aの7枠は必ず実写へ差し替える。
+`OLD SLOT != NEW PAGE ROLE.`
