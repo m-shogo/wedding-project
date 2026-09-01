@@ -3,6 +3,7 @@ import {readFileSync} from "node:fs";
 const operator = readFileSync(new URL("../src/components/WeddingMovieProductionReadinessOperatorCard.tsx", import.meta.url), "utf8");
 const framing = readFileSync(new URL("../src/components/WeddingRealMediaFramingOperatorCard.tsx", import.meta.url), "utf8");
 const framingComparison = readFileSync(new URL("../src/components/WeddingRealMediaFramingComparisonReviewCard.tsx", import.meta.url), "utf8");
+const timingComparison = readFileSync(new URL("../src/components/WeddingRealMediaTimingComparisonReviewCard.tsx", import.meta.url), "utf8");
 const visualReview = readFileSync(new URL("../src/components/WeddingRealMediaVisualReviewOperatorCard.tsx", import.meta.url), "utf8");
 const intake = readFileSync(new URL("../src/components/WeddingMediaIntakeChecklistCard.tsx", import.meta.url), "utf8");
 
@@ -97,6 +98,37 @@ if (/humanVisualReviewPerformed:\s*true/.test(framingComparison)) throw new Erro
 if (/productionReady:\s*true/.test(framingComparison)) throw new Error("framing comparison review must never manufacture productionReady");
 if (!framingComparison.includes("createHash(buffer)")) throw new Error("framing comparison receipt/media/stills must be browser-SHA verified before review");
 
+const timingComparisonRequired = [
+  "wedding-movie-real-media-timing-qa-comparison/v1",
+  "wedding-movie-real-media-timing-qa-comparison-currentness/v1",
+  "LIVE_REVALIDATION_OF_TIMING_COMPARISON_AGAINST_SOURCE_MANIFESTS_STILLS_AND_CURRENT_SELECTED_SCENES",
+  "data-real-media-timing-comparison-review",
+  "data-timing-comparison-current",
+  "data-timing-comparison-strict-current",
+  "data-human-visual-qa=\"NOT_RUN\"",
+  "sameSceneMediaFramingAuthorityVerified",
+  "CURRENTNESS_RECEIPT_SHA_MISMATCH",
+  "CURRENTNESS_SELECTED_SHA_MISMATCH",
+  "currentness.source.receiptSha256 !== receiptSha",
+  "currentness.source.currentSelectedSha256 !== selectedSha",
+  "STILL_SHA_MISMATCH",
+  "BEFORE TOTAL",
+  "AFTER TOTAL",
+  "MOVIE DELTA",
+  "隣接transition位置",
+  "HUMAN REVIEW READY",
+  "HUMAN REVIEW BLOCKED",
+  "verify-wedding-project-real-media-timing-qa-comparison-currentness.mts",
+  "--current-selected=",
+  "--strict-current",
+];
+for (const token of timingComparisonRequired) if (!timingComparison.includes(token)) throw new Error(`timing comparison review contract missing: ${token}`);
+if (!intake.includes("<WeddingRealMediaTimingComparisonReviewCard projectId={projectId} />")) throw new Error("timing comparison review is not mounted in the real-media intake surface");
+if (/humanVisualReviewPerformed:\s*true/.test(timingComparison)) throw new Error("timing comparison review must never manufacture Human visual review evidence");
+if (/productionReady:\s*true/.test(timingComparison)) throw new Error("timing comparison review must never manufacture productionReady");
+if (!timingComparison.includes("createHash(buffer)")) throw new Error("timing comparison receipt/selected/stills must be browser-SHA verified before review");
+if (!timingComparison.includes('browserBinding.state === "CURRENT"') || !timingComparison.includes('strictBinding.state === "CURRENT"')) throw new Error("timing Human review must fail closed unless browser and canonical strict currentness are CURRENT");
+
 const visualRequired = [
   "wedding-movie-real-media-human-visual-review/v1",
   "data-real-media-visual-review-operator",
@@ -114,4 +146,4 @@ const visualRequired = [
 for (const token of visualRequired) if (!visualReview.includes(token)) throw new Error(`real-media visual review operator contract missing: ${token}`);
 if (!intake.includes("<WeddingRealMediaVisualReviewOperatorCard projectId={projectId} />")) throw new Error("real-media visual review operator is not mounted in the real-media intake surface");
 if (/humanVisualReviewPerformed:\s*true/.test(visualReview)) throw new Error("visual review operator must not auto-promote Human review performed");
-console.log("Wedding Movie production readiness + Human framing + strict-current framing comparison + visual review operator contracts: PASS");
+console.log("Wedding Movie production readiness + Human framing + strict-current framing/timing comparison + visual review operator contracts: PASS");
