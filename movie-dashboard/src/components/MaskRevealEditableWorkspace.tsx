@@ -9,6 +9,7 @@ import {
   resolveMaskRevealEditableIntent,
   retargetMaskRevealSection,
   setEditableFieldLock,
+  type EditableDecisionState,
   type EditableValue,
   type MaskRevealDirection,
   type MaskRevealEditableFieldKey,
@@ -58,6 +59,17 @@ const directionLabels: Record<MaskRevealDirection, string> = {
 };
 
 const intensityLabels: Record<MaskRevealIntensity, string> = { S: "弱", M: "中", L: "強" };
+
+// Display-only labels: the underlying EditableDecisionState / EditableValue vocabulary
+// (DEFAULT/AI_SUGGESTED/HUMAN_SELECTED/LOCKED) is the Human-Readable/Human-Editable Movie
+// Contract's cross-project term and stays as-is in code, handoff output, and data — only what a
+// beginner reads on screen changes here.
+const decisionStateLabels: Record<EditableDecisionState, string> = {
+  DEFAULT: "初期値",
+  AI_SUGGESTED: "AI提案",
+  HUMAN_SELECTED: "選択済み",
+  LOCKED: "固定中",
+};
 
 type BroadcastFieldId =
   | "intensity"
@@ -284,6 +296,15 @@ export function MaskRevealEditableWorkspace() {
     return parts.length > 1 ? parts[parts.length - 1] : detailLabel;
   }
 
+  // Same split, reformatted "日本語名（CommonName）" for the pattern picker dropdowns — leads
+  // with the recognizable Japanese phrase per this project's "日本語名を最優先...大きく:[日本語]
+  // 小さく: Character Stagger" rule, instead of the raw "CommonName / 日本語名" data shape which
+  // put the English technical term first.
+  function japaneseFirstLabel(detailLabel: string) {
+    const parts = detailLabel.split(" / ");
+    return parts.length > 1 ? `${parts[parts.length - 1]}（${parts[0]}）` : detailLabel;
+  }
+
   // Natural-language default name so a preset chip reads like "マスクから文字がスッと現れる +
   // 写真をゆっくり寄せる" — recognizable without knowing any motion-design term, matching this
   // project's "日本語名を最優先" principle. Still just a starting point in the editable name
@@ -471,7 +492,7 @@ export function MaskRevealEditableWorkspace() {
               <div />
               <SimpleField label={`文字の動き(${patterns.length}件から選択)`}>
                 <select value={intent.patternId} onChange={(event) => changePattern(event.target.value)} className={controlClass}>
-                  {patterns.map((pattern) => <option key={pattern.patternId} value={pattern.patternId}>{pattern.detailLabel}</option>)}
+                  {patterns.map((pattern) => <option key={pattern.patternId} value={pattern.patternId}>{japaneseFirstLabel(pattern.detailLabel)}</option>)}
                 </select>
                 <p className="mt-1 text-[10px] leading-4 text-navy-400">{patterns.find((item) => item.patternId === intent.patternId)?.easyLabel}</p>
               </SimpleField>
@@ -481,7 +502,7 @@ export function MaskRevealEditableWorkspace() {
               <SimpleField label={`画像の動き(${imagePatterns.length}件から選択・任意)`}>
                 <select value={resolved.imagePatternId} onChange={(event) => changeImagePattern(event.target.value)} className={controlClass}>
                   <option value="">なし(静止したまま背景に使う)</option>
-                  {imagePatterns.map((pattern) => <option key={pattern.patternId} value={pattern.patternId}>{pattern.detailLabel}</option>)}
+                  {imagePatterns.map((pattern) => <option key={pattern.patternId} value={pattern.patternId}>{japaneseFirstLabel(pattern.detailLabel)}</option>)}
                 </select>
                 <p className="mt-1 text-[10px] leading-4 text-navy-400">{resolved.imagePatternId ? imagePatterns.find((item) => item.patternId === resolved.imagePatternId)?.easyLabel : "文字の背景としてのみ写真を使う場合はここは「なし」のままでよい。"}</p>
               </SimpleField>
@@ -786,28 +807,28 @@ function EditableControl<T>({ label, field, onLock, children }: { label: string;
   const state = getEditableDecisionState(field);
   return (
     <div className="border border-sand-200 dark:border-navy-600 p-3">
-      <div className="flex items-center justify-between gap-3"><span className="text-[10px] tracking-[0.16em] font-semibold text-navy-400">{label}</span><button type="button" onClick={() => onLock(!field.locked)} className={`text-[10px] ${field.locked ? "text-amber-700 dark:text-amber-300 font-bold" : "text-navy-400"}`}>{field.locked ? "LOCKED 🔒" : "LOCK"}</button></div>
+      <div className="flex items-center justify-between gap-3"><span className="text-[10px] tracking-[0.16em] font-semibold text-navy-400">{label}</span><button type="button" onClick={() => onLock(!field.locked)} className={`text-[10px] ${field.locked ? "text-amber-700 dark:text-amber-300 font-bold" : "text-navy-400"}`}>{field.locked ? "固定中 🔒" : "固定する"}</button></div>
       <div className="mt-2">{children}</div>
-      <p className="mt-2 text-[10px] font-semibold text-emerald-700 dark:text-emerald-300">{state}</p>
-      {field.aiSuggestedValue !== null && <p className="mt-1 text-[10px] text-navy-500 dark:text-navy-300">AI Suggested: {String(field.aiSuggestedValue)}</p>}
-      {field.aiReason && <p className="mt-1 text-[10px] leading-4 text-navy-400">Reason: {field.aiReason}</p>}
-      {field.humanSelectedValue !== null && <p className="mt-1 text-[10px] text-sky-700 dark:text-sky-300">Human Selected: {String(field.humanSelectedValue)}</p>}
+      <p className="mt-2 text-[10px] font-semibold text-emerald-700 dark:text-emerald-300">{decisionStateLabels[state]}</p>
+      {field.aiSuggestedValue !== null && <p className="mt-1 text-[10px] text-navy-500 dark:text-navy-300">AI提案: {String(field.aiSuggestedValue)}</p>}
+      {field.aiReason && <p className="mt-1 text-[10px] leading-4 text-navy-400">理由: {field.aiReason}</p>}
+      {field.humanSelectedValue !== null && <p className="mt-1 text-[10px] text-sky-700 dark:text-sky-300">選択済み: {String(field.humanSelectedValue)}</p>}
     </div>
   );
 }
 
-function PresetChoiceGroup({ label, state, selected, choices, custom, aiSuggested, reason, humanSelected, locked, onLock, onSelect }: { label: string; state: string; selected: string; choices: ReadonlyArray<{ id: string; label: string }>; custom: boolean; aiSuggested: string | null; reason: string | null; humanSelected: string | null; locked: boolean; onLock: (locked: boolean) => void; onSelect: (value: string) => void }) {
+function PresetChoiceGroup({ label, state, selected, choices, custom, aiSuggested, reason, humanSelected, locked, onLock, onSelect }: { label: string; state: EditableDecisionState; selected: string; choices: ReadonlyArray<{ id: string; label: string }>; custom: boolean; aiSuggested: string | null; reason: string | null; humanSelected: string | null; locked: boolean; onLock: (locked: boolean) => void; onSelect: (value: string) => void }) {
   return (
     <div className="border border-sand-200 dark:border-navy-600 p-3">
-      <div className="flex items-center justify-between gap-3"><span className="text-[10px] tracking-[0.16em] font-semibold text-navy-400">{label}</span><button type="button" onClick={() => onLock(!locked)} className={`text-[10px] ${locked ? "text-amber-700 dark:text-amber-300 font-bold" : "text-navy-400"}`}>{locked ? "LOCKED 🔒" : "LOCK"}</button></div>
+      <div className="flex items-center justify-between gap-3"><span className="text-[10px] tracking-[0.16em] font-semibold text-navy-400">{label}</span><button type="button" onClick={() => onLock(!locked)} className={`text-[10px] ${locked ? "text-amber-700 dark:text-amber-300 font-bold" : "text-navy-400"}`}>{locked ? "固定中 🔒" : "固定する"}</button></div>
       <div className="mt-3 flex flex-wrap gap-2">
         {choices.map((choice) => <ChoiceButton key={choice.id} selected={!custom && selected === choice.id} onClick={() => onSelect(choice.id)}>{choice.label}</ChoiceButton>)}
         {custom && <ChoiceButton selected onClick={() => undefined}>カスタム</ChoiceButton>}
       </div>
-      <p className="mt-2 text-[10px] font-semibold text-emerald-700 dark:text-emerald-300">{state}</p>
-      {aiSuggested && <p className="mt-1 text-[10px] text-navy-500 dark:text-navy-300">AI Suggested: {aiSuggested}</p>}
-      {reason && <p className="mt-1 text-[10px] leading-4 text-navy-400">Reason: {reason}</p>}
-      {humanSelected && <p className="mt-1 text-[10px] text-sky-700 dark:text-sky-300">Human Selected: {humanSelected}</p>}
+      <p className="mt-2 text-[10px] font-semibold text-emerald-700 dark:text-emerald-300">{decisionStateLabels[state]}</p>
+      {aiSuggested && <p className="mt-1 text-[10px] text-navy-500 dark:text-navy-300">AI提案: {aiSuggested}</p>}
+      {reason && <p className="mt-1 text-[10px] leading-4 text-navy-400">理由: {reason}</p>}
+      {humanSelected && <p className="mt-1 text-[10px] text-sky-700 dark:text-sky-300">選択済み: {humanSelected}</p>}
     </div>
   );
 }
@@ -827,7 +848,7 @@ function BridgeRow({ label, value }: { label: string; value: string }) {
 function OutputCard({ label, value, copied, onCopy }: { label: string; value: string; copied: string; onCopy: (label: string, value: string) => Promise<void> }) {
   return (
     <section className="border border-sand-300 dark:border-navy-600 min-w-0">
-      <div className="px-3 py-2 border-b border-sand-200 dark:border-navy-600 flex items-center justify-between gap-3"><h4 className="text-xs font-semibold text-navy-800 dark:text-sand-100">{label}</h4><button type="button" onClick={() => void onCopy(label, value)} className="text-[10px] text-sky-700 dark:text-sky-300">{copied === label ? "COPIED ✓" : "COPY"}</button></div>
+      <div className="px-3 py-2 border-b border-sand-200 dark:border-navy-600 flex items-center justify-between gap-3"><h4 className="text-xs font-semibold text-navy-800 dark:text-sand-100">{label}</h4><button type="button" onClick={() => void onCopy(label, value)} className="text-[10px] text-sky-700 dark:text-sky-300">{copied === label ? "コピー済み ✓" : "コピー"}</button></div>
       <pre className="p-3 text-[11px] leading-5 whitespace-pre-wrap overflow-x-auto text-navy-600 dark:text-navy-300">{value}</pre>
     </section>
   );

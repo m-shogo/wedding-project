@@ -74,7 +74,7 @@ requireAll(production, [
 ], "Human-editable production bridge missing");
 
 requireAll(workspace, [
-  'モーション図鑑 / HUMAN MASTER', 'かんたん', '詳細', 'DaVinci', 'AI Suggested:', 'Reason:', 'Human Selected:', 'LOCKED 🔒',
+  'モーション図鑑 / HUMAN MASTER', 'かんたん', '詳細', 'DaVinci', 'AI提案:', '理由:', '選択済み:', '固定中 🔒',
   'Scene Duration', 'Layer Delay', 'Motion Delay', 'Motion Duration', 'Hold', 'Stagger Delay', 'Distance', 'Scale From',
   'AI指示を作る', 'Human Brief', 'Claude Creative Instruction', 'Palmier Instruction', 'NLE XML Handoff',
   'DaVinci Finish Manifest', 'Verification Checklist', 'Editable Scene Serialization (JSON)', 'Machine JSON',
