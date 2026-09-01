@@ -417,3 +417,17 @@ Status: `PLACED / SCREENSHOT REVIEWED / NO NEW RASTER`
 - current whole-book contact is `3509:4`.
 
 No new generated asset was justified. The improvement came from turning the loose lower labels into one page-specific print information strap while preserving the verified photo sources and the generated profile badge.
+
+## P05 generated title + article vessel — 2026-09-01
+
+Status: `PLACED / DRIVE VERIFIED / ALPHA VERIFIED / SCREENSHOT REVIEWED`
+
+- current P04–P05 spread remains `3434:2`;
+- current P05 remains `3434:34`;
+- generated title/subtitle holder `3515:2` uses Figma hash `ac42b546ac370bf318a948ce17f56fe450a55741`;
+- generated proposal article vessel `3515:3` uses Figma hash `b624c2d07e59ce1ea3ff2e65cc424c5477d36f99`;
+- current sparse route `3434:69` and all current real-photo hashes were preserved;
+- comparison spread `3512:2` is retained as decision evidence;
+- current whole-book contact is `3517:2`.
+
+Title B/C and the image-generation alpha-retry were rejected for baked checkerboard/no real alpha. Article A was rejected because its tall silhouette would remove the intended calm island. Exact SHA and rejection evidence are recorded in `assets/rurubu-v20/editorial-parts/README.md`.

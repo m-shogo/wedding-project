@@ -609,3 +609,42 @@ Current preferred nodes:
 - full-book contact `3509:4`.
 
 Largest remaining source gap is unchanged: verified P06 everyday, food and Cookie/Melon photography, followed by the three P04 Okinawa/Korea travel roles. Current dummies remain visible by user direction until replacement sources arrive.
+
+## P05 generated-title and article-vessel pass — 2026-09-01
+
+The latest image-generation-centered brief reprioritized P05 as the all-book travel-feature peak. The current real photographs and sparse route were retained. Only the title/subtitle holder and proposal article vessel were replaced after rollback-safe comparison.
+
+Generated candidates:
+- three materially different `HAWAII` title structures were generated;
+- title B and C were rejected because their checkerboards were baked into RGB and `hasAlpha` was false;
+- a generated background-extraction retry of title A was also rejected for the same reason;
+- clean original title A was promoted through deterministic edge-connected white-background isolation and actual alpha-channel inspection;
+- two article-vessel structures were generated;
+- article A was rejected before placement because its tall silhouette would collapse the lower calm island and collide with arrival;
+- article B was alpha-prepared from a controlled chroma background and adopted.
+
+Adopted assets:
+- `V20_P05_HAWAII_TITLE_SUBTITLE_HOLDER_GEN_A.png`: Git `assets/rurubu-v20/editorial-parts/p05/`, Drive `1Ee0LRowrT4WenMrVvfclMQJEEkY20AXp`, SHA-256 `fa9e1b9ab19603dffe02eb407d95ee2abe4e612a5a0541e637899c89ba3680c8`, Figma `3515:2`, hash `ac42b546ac370bf318a948ce17f56fe450a55741`, 617,159 fully transparent pixels, about 434.0 ppi at current width;
+- `V20_P05_PROPOSAL_ARTICLE_FRAME_GEN_B.png`: Git `assets/rurubu-v20/editorial-parts/p05/`, Drive `1O55am6Q7OwmWErxnHc82FiVASyZIemer`, SHA-256 `b174c3666ab5574c3087ee01a04f350e3c24fbace3162637f9c1201bb08fc49b`, Figma `3515:3`, hash `b624c2d07e59ce1ea3ff2e65cc424c5477d36f99`, 268,412 fully transparent pixels, about 476.1 ppi at current width.
+
+Native authoritative text remains separate:
+- subtitle `旅のピークは、ここ。` at `3434:52`;
+- proposal headline `ふたりの物語、その先へ。` at `3434:67`.
+
+Figma comparison and adoption:
+- comparison spread `3512:2`, P05 candidate `3512:34`;
+- current spread remains `3434:2`;
+- current P05 remains `3434:34` and is renamed `P05_V20_PRODUCTION_G / GENERATED TITLE + ARTICLE VESSEL / FULL-RES VERIFIED / CURRENT PREFERRED`;
+- previous title support/text and proposal polygon remain hidden, not deleted: `3434:38`, `3434:50`, `3434:51`, `3434:66`;
+- the current route `3434:69` and all real-photo fills remain unchanged.
+
+QA:
+- P05 page and P04–P05 spread were screenshot-reviewed after the route-node/headline collision was resolved;
+- current full-book contact `3517:2` and P04–P05 preview `3517:276` were screenshot-reviewed;
+- the generated title creates a stronger first read without exceeding P01's cover authority;
+- the article vessel increases print tactility while leaving the arrival object and lower route legible;
+- visible text audit across P01–P08 found zero banned production-note strings;
+- visible fonts remain `M PLUS 1` and `Inter`;
+- P05 minimum visible native-text size remains 10 Figma points.
+
+Current state remains `DESIGN_COMPLETE = YES / SOURCE_COMPLETE = NO / COPY_LOCKED = NO / PRINT_READY = NO`.
