@@ -17,6 +17,7 @@ function fail(code: string, detail?: string): never {
   process.exit(1);
 }
 function sha256(path: string) { return createHash("sha256").update(readFileSync(path)).digest("hex"); }
+function stableSha(value: unknown) { return createHash("sha256").update(JSON.stringify(value)).digest("hex"); }
 function exactFrame(seconds: unknown, code: string, sceneId: string) {
   const numeric = Number(seconds);
   if (!Number.isFinite(numeric) || numeric < 0) fail(code, sceneId);
@@ -43,6 +44,21 @@ function parseFraming(media: any, sceneId: string) {
   if (!revision) fail("REAL_MEDIA_PREVIEW_FRAMING_REVISION_REQUIRED", sceneId);
   return {fit, focusX, focusY, scale, revision};
 }
+function parseTiming(scene: any, durationFrames: number) {
+  const raw = scene?.timing;
+  if (!raw) fail("REAL_MEDIA_PREVIEW_TIMING_BINDING_REQUIRED", scene.sceneId);
+  const targetDurationSeconds = Number(raw.targetDurationSeconds);
+  const computedDurationSeconds = Number(raw.computedDurationSeconds);
+  const timingFrames = Number(raw.durationFrames);
+  const fps = Number(raw.fps);
+  if (raw.sourceRevision !== scene.sourceRevision) fail("REAL_MEDIA_PREVIEW_TIMING_SOURCE_REVISION_STALE", scene.sceneId);
+  if (!Number.isFinite(targetDurationSeconds) || targetDurationSeconds <= 0) fail("REAL_MEDIA_PREVIEW_TIMING_TARGET_INVALID", scene.sceneId);
+  if (!Number.isFinite(computedDurationSeconds) || computedDurationSeconds <= 0) fail("REAL_MEDIA_PREVIEW_TIMING_COMPUTED_INVALID", scene.sceneId);
+  if (fps !== FPS || timingFrames !== durationFrames || exactFrame(computedDurationSeconds, "REAL_MEDIA_PREVIEW_TIMING_COMPUTED_INVALID", scene.sceneId) !== durationFrames) fail("REAL_MEDIA_PREVIEW_TIMING_FRAME_DRIFT", scene.sceneId);
+  const identity = {sceneId: scene.sceneId, sourceRevision: scene.sourceRevision, targetDurationSeconds, computedDurationSeconds, durationFrames: timingFrames, fps};
+  if (!raw.revision || raw.revision !== stableSha(identity)) fail("REAL_MEDIA_PREVIEW_TIMING_REVISION_STALE", scene.sceneId);
+  return {...identity, revision: raw.revision};
+}
 
 const selectedArg = arg("selected-manifest");
 const auditArg = arg("readiness-audit");
@@ -58,6 +74,7 @@ if (audit.schemaVersion !== "wedding-movie-production-readiness-audit/v1" || aud
 if (selected.projectId !== audit.projectId || (selected.projectId !== "opening" && selected.projectId !== "profile")) fail("REAL_MEDIA_PREVIEW_PROJECT_MISMATCH");
 const projectId = selected.projectId as "opening" | "profile";
 if (selected.summary?.allSelectionsCurrent !== true || selected.summary?.productionReady !== false) fail("REAL_MEDIA_PREVIEW_SELECTED_AUTHORITY_NOT_CURRENT");
+if (selected.summary?.timingBoundScenes !== selected.scenes?.length) fail("REAL_MEDIA_PREVIEW_SELECTED_TIMING_INCOMPLETE");
 if (audit.summary?.readyForContinuousRealMediaPreview !== true || audit.summary?.productionReady !== false) fail("REAL_MEDIA_PREVIEW_AUDIT_NOT_READY");
 if (selected.evidenceBoundary?.remotionStudioGuiActual !== "NOT_RUN" || audit.evidenceBoundary?.remotionStudioGuiActual !== "NOT_RUN" || audit.evidenceBoundary?.palmierGuiActual !== "NOT_RUN" || audit.evidenceBoundary?.macDaVinciGuiActual !== "NOT_RUN") fail("REAL_MEDIA_PREVIEW_EVIDENCE_BOUNDARY_INVALID");
 
@@ -87,9 +104,10 @@ const sourceScenes = selected.scenes.map((scene: any, index: number) => {
   const sourceEndFrame = exactFrame(scene.timeline?.endSeconds, "REAL_MEDIA_PREVIEW_END_INVALID", scene.sceneId);
   const durationFrames = sourceEndFrame - sourceStartFrame;
   if (!(durationFrames > 0) || durationFrames !== scene.timeline?.frames) fail("REAL_MEDIA_PREVIEW_FRAME_BOUNDARY_MISMATCH", scene.sceneId);
+  const timing = parseTiming(scene, durationFrames);
   if (sourceStartFrame < previousSourceStartFrame) fail("REAL_MEDIA_PREVIEW_TIMELINE_ORDER_INVALID", scene.sceneId);
   previousSourceStartFrame = sourceStartFrame;
-  return {scene, bound, mediaPath, mediaSha256, framing, sourceStartFrame, sourceEndFrame, durationFrames, order: index + 1};
+  return {scene, bound, mediaPath, mediaSha256, framing, timing, sourceStartFrame, sourceEndFrame, durationFrames, order: index + 1};
 });
 
 const selectedTransitions = Array.isArray(selected.transitions) ? selected.transitions : [];
@@ -118,7 +136,7 @@ const timelineScenes = sourceScenes.map((entry: any, index: number) => {
 const totalFrames = Math.max(...timelineScenes.map((scene: any) => scene.endFrame));
 if (!(totalFrames > 0)) fail("REAL_MEDIA_PREVIEW_TOTAL_FRAMES_INVALID");
 
-const identitySha256 = createHash("sha256").update(JSON.stringify({projectId, batchSha256, selectedSha256: sha256(selectedPath), auditSha256: sha256(auditPath), media: timelineScenes.map((scene: any) => [scene.scene.sceneId, scene.mediaSha256, scene.framing]), bgm: audit.audio.sha256})).digest("hex");
+const identitySha256 = createHash("sha256").update(JSON.stringify({projectId, batchSha256, selectedSha256: sha256(selectedPath), auditSha256: sha256(auditPath), media: timelineScenes.map((scene: any) => [scene.scene.sceneId, scene.mediaSha256, scene.framing, scene.timing]), bgm: audit.audio.sha256})).digest("hex");
 const stageRelative = `__wedding-real-preview/${projectId}-${identitySha256.slice(0, 12)}`;
 const stageDir = resolve("motion-studio/public", stageRelative);
 const output = resolve(arg("output") ?? `out/qa/project-real-media-preview/${projectId}/${projectId}-real-media-preview.mp4`);
@@ -169,13 +187,13 @@ const manifest = {
   fps: FPS,
   composition: COMPOSITION,
   identity: {identitySha256, selectedManifestPath: selectedPath, selectedManifestSha256: sha256(selectedPath), readinessAuditPath: auditPath, readinessAuditSha256: sha256(auditPath), sourceBatchPath, sourceBatchSha256: batchSha256, bgmPath, bgmSha256: audit.audio.sha256},
-  scenes: timelineScenes.map((entry: any) => ({order: entry.order, sceneId: entry.scene.sceneId, sourceRevision: entry.scene.sourceRevision, patternId: entry.scene.patternId, productionRole: entry.scene.productionRole, mediaKind: entry.bound.media.kind, mediaPath: entry.mediaPath, mediaSha256: entry.mediaSha256, framing: entry.framing, startFrame: entry.startFrame, endFrameExclusive: entry.endFrame, durationFrames: entry.durationFrames, transitionInFrames: entry.transitionInFrames, transitionOutFrames: entry.transitionOutFrames})),
+  scenes: timelineScenes.map((entry: any) => ({order: entry.order, sceneId: entry.scene.sceneId, sourceRevision: entry.scene.sourceRevision, patternId: entry.scene.patternId, productionRole: entry.scene.productionRole, mediaKind: entry.bound.media.kind, mediaPath: entry.mediaPath, mediaSha256: entry.mediaSha256, framing: entry.framing, timing: entry.timing, startFrame: entry.startFrame, endFrameExclusive: entry.endFrame, durationFrames: entry.durationFrames, transitionInFrames: entry.transitionInFrames, transitionOutFrames: entry.transitionOutFrames})),
   transitions,
   timeline: {totalFrames, durationSeconds: totalFrames / FPS},
   output,
   render: {state: renderState, sha256: renderSha256, bytes: renderBytes},
-  summary: {totalScenes: timelineScenes.length, allRealMediaBoundCurrent: true, framingCurrent: true, bgmCurrent: true, frameBoundariesVerified: true, transitionsCurrent: true, productionReady: false},
-  evidenceBoundary: {remotionStudioGuiActual: "NOT_RUN", palmierGuiActual: "NOT_RUN", macDaVinciGuiActual: "NOT_RUN", visualQa: "NOT_RUN", productionReady: false, rule: "A CLI real-media preview render proves deterministic binding of Human-approved media/BGM and current framing state to current Scene authority. It does not constitute Human visual QA, Remotion Studio GUI Actual, Palmier GUI Actual, Mac DaVinci Actual, or production approval."},
+  summary: {totalScenes: timelineScenes.length, allRealMediaBoundCurrent: true, framingCurrent: true, timingCurrent: true, bgmCurrent: true, frameBoundariesVerified: true, transitionsCurrent: true, productionReady: false},
+  evidenceBoundary: {remotionStudioGuiActual: "NOT_RUN", palmierGuiActual: "NOT_RUN", macDaVinciGuiActual: "NOT_RUN", visualQa: "NOT_RUN", productionReady: false, rule: "A CLI real-media preview render proves deterministic binding of Human-approved media/BGM plus current Human timing/framing state to current Scene authority. It does not constitute Human visual QA, Remotion Studio GUI Actual, Palmier GUI Actual, Mac DaVinci Actual, or production approval."},
 };
 mkdirSync(dirname(manifestPath), {recursive: true});
 writeFileSync(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`);
