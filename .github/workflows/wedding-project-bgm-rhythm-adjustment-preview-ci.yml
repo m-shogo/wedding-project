@@ -1,0 +1,48 @@
+name: Wedding Project BGM Rhythm Adjustment Preview CI
+
+on:
+  pull_request:
+    paths:
+      - 'motion-studio/scripts/wedding-project-bgm-rhythm-adjustment-preview.mts'
+      - '.github/workflows/wedding-project-bgm-rhythm-adjustment-preview-ci.yml'
+  workflow_dispatch:
+
+jobs:
+  adjustment-preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build CURRENT Human-selection fixture
+        run: |
+          mkdir -p /tmp/bgm-adjustment
+          cat > /tmp/bgm-adjustment/alignment.json <<'JSON'
+          {"schemaVersion":"wedding-movie-bgm-rhythm-alignment/v1","projectId":"opening","fps":30,"events":[{"id":"edge:intro->travel:mid","kind":"TRANSITION_MIDPOINT","frame":87}],"cues":[{"id":"hit-a","type":"HIT","label":"Human hit","frame":90}]}
+          JSON
+          ALIGNMENT_SHA=$(sha256sum /tmp/bgm-adjustment/alignment.json | awk '{print $1}')
+          cat > /tmp/bgm-adjustment/selection.json <<JSON
+          {"schemaVersion":"wedding-movie-bgm-rhythm-human-selection/v1","authority":"HUMAN_SELECTED_BGM_CUE_AND_CURRENT_RHYTHM_EVENT_FOR_MANUAL_EDIT","projectId":"opening","source":{"alignmentPath":"/tmp/bgm-adjustment/alignment.json","alignmentSha256":"${ALIGNMENT_SHA}","rhythmPassSha256":"rhythm-sha","bgmCueMapSha256":"cue-map-sha","bgmSha256":"bgm-sha"},"selection":{"performed":true,"event":{"id":"edge:intro->travel:mid","kind":"TRANSITION_MIDPOINT","frame":87,"seconds":2.9},"cue":{"id":"hit-a","type":"HIT","label":"Human hit","frame":90,"seconds":3},"distanceFrames":-3,"distanceSeconds":-0.1,"editTarget":{"kind":"TRANSITION_EDGE","fromSceneId":"intro","toSceneId":"travel","fromSourceRevision":"scene-r1","toSourceRevision":"scene-r2","fromTimingRevision":"timing-r1","toTimingRevision":"timing-r2","transition":"CROSS_DISSOLVE","durationFrames":6}},"summary":{"humanSelection":"PERFORMED","automaticSnapApplied":false,"editApplied":false,"productionReady":false},"evidenceBoundary":{"automaticEditPointSelection":false,"automaticSnapApplied":false,"editApplied":false,"humanSelectionPerformed":true,"remotionStudioGuiActual":"NOT_RUN","palmierGuiActual":"NOT_RUN","macDaVinciGuiActual":"NOT_RUN","productionReady":false}}
+          JSON
+          SELECTION_SHA=$(sha256sum /tmp/bgm-adjustment/selection.json | awk '{print $1}')
+          cat > /tmp/bgm-adjustment/currentness.json <<JSON
+          {"schemaVersion":"wedding-movie-bgm-rhythm-human-selection-currentness/v1","authority":"LIVE_REVALIDATION_OF_HUMAN_BGM_RHYTHM_SELECTION_AGAINST_EXACT_ALIGNMENT_AND_CUE_EVENT_PAIR","projectId":"opening","state":"CURRENT","source":{"selectionSha256":"${SELECTION_SHA}"},"checks":{"all":true},"mismatches":[]}
+          JSON
+      - name: Derive exact mechanical delta
+        run: node --no-warnings motion-studio/scripts/wedding-project-bgm-rhythm-adjustment-preview.mts --selection=/tmp/bgm-adjustment/selection.json --selection-currentness=/tmp/bgm-adjustment/currentness.json --output=/tmp/bgm-adjustment/preview.json
+      - name: Verify delta and no automatic edit
+        run: |
+          node --input-type=module <<'NODE'
+          import {readFileSync} from 'node:fs';
+          const x=JSON.parse(readFileSync('/tmp/bgm-adjustment/preview.json','utf8'));
+          if(x.schemaVersion!=='wedding-movie-bgm-rhythm-adjustment-preview/v1'||x.fps!==30) throw new Error('preview schema/fps');
+          if(x.adjustment.kind!=='TRANSITION_MIDPOINT_SHIFT_PREVIEW'||x.adjustment.currentMidpointFrame!==87||x.adjustment.cueTargetFrame!==90||x.adjustment.requiredDeltaFrames!==3||x.adjustment.projectedMidpointFrame!==90) throw new Error('mechanical edge delta');
+          if(x.summary.deltaSeconds!==0.1||x.summary.automaticRecommendation!==false||x.summary.automaticSnapApplied!==false||x.summary.editApplied!==false||x.summary.humanDecision!=='NOT_RUN') throw new Error('automatic decision/edit promotion');
+          if(x.evidenceBoundary.remotionStudioGuiActual!=='NOT_RUN'||x.evidenceBoundary.palmierGuiActual!=='NOT_RUN'||x.evidenceBoundary.macDaVinciGuiActual!=='NOT_RUN'||x.evidenceBoundary.productionReady!==false) throw new Error('evidence boundary');
+          NODE
+      - name: Alignment drift fails closed
+        run: |
+          printf '\n' >> /tmp/bgm-adjustment/alignment.json
+          if node --no-warnings motion-studio/scripts/wedding-project-bgm-rhythm-adjustment-preview.mts --selection=/tmp/bgm-adjustment/selection.json --selection-currentness=/tmp/bgm-adjustment/currentness.json --output=/tmp/bgm-adjustment/stale.json 2>/tmp/bgm-adjustment/stale.err; then
+            echo 'expected alignment drift to block' >&2; exit 1
+          fi
+          grep -q 'BGM_ADJUSTMENT_PREVIEW_ALIGNMENT_SHA_DRIFT' /tmp/bgm-adjustment/stale.err
