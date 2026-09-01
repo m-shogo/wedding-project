@@ -1,6 +1,6 @@
 # V20 editorial parts — generated PNG manifest
 
-Status: `CURRENT_CLASSIFICATION / P05_FRIENDS_ONLY_2026-09-01`
+Status: `CURRENT_CLASSIFICATION / P05_FRIENDS_ONLY_2026-09-01 / P07_OLD_GUIDE_ASSETS_REMOVED`
 
 Current authority: `docs/rurubu-v20/V20-CURRENT-PAGE-ARCHITECTURE.md`.
 
@@ -37,18 +37,33 @@ New P05 assets must be created from zero:
 
 Old cross-spread route assets are historical/comparison only when tied to the obsolete Hawaii/proposal story. P04 may independently use a new restrained travel route if its current proof needs it; P05 has no cross-fold route requirement.
 
-## P07 old guide assets
+## P07 obsolete guide assets — removed
 
-Old luggage-tag/ticket/stamp/hand-cut guide assets are not current P07 production assets. Current P07 is a calm thank-you/closing page.
+Current P07 is `CLOSING MESSAGE / THANK YOU`.
+
+The former seated-guest/guide PNGs have been removed from the current branch and remain only in Git history:
+- `p07/V20_P07_LUGGAGE_TAG_SHELL_GEN_A.png`
+- `p07/V20_P07_TICKET_STUB_SHELL_GEN_A.png`
+- `p07/V20_P07_STAMP_SHELL_GEN_A.png`
+- `p07/V20_P07_HANDCUT_LABEL_GEN_A.png`
+
+The former generated-temp discovery/table-color P07 assets were also removed from the current branch:
+- `generated-temp/V20_P07_PAPER_DISCOVERY_TEMP_A.png`
+- `generated-temp/V20_P07_TABLE_COLOR_TEMP_A.png`
+
+Do not recover them for the current P07. Build the closing page from the current page proof and current authority only.
 
 ## Classification
 
 - `CURRENT_CANDIDATE` — semantic job still matches current architecture and passes proof review
 - `VISUAL_REFERENCE_ONLY` — style lesson only
 - `SUPERSEDED` — obsolete page meaning; never current assembly input
+- `REMOVED_CURRENT_BRANCH` — available only through Git history/provenance; never current assembly input
 
 ## Zero-base rule
 
 `KEEP THE JOB; REDESIGN THE OBJECT FROM ZERO.`
 
 `P05 = FRIENDS ONLY / SHOGO FRIENDS + SHIORI FRIENDS / NO FAMILY / NO GIANT HERO.`
+
+`P07 = CLOSING MESSAGE / THANK YOU / NO SEATED-GUEST GUIDE / NO TIMETABLE / NO 11 DESTINATIONS.`
