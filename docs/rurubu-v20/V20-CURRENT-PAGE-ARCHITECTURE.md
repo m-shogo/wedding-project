@@ -1,363 +1,223 @@
 # Rurubu WEDDING V20 — Current P01–P08 Content Architecture
 
-Status: `HIGHEST_CURRENT_PAGE_ROLE_AUTHORITY / USER_RESET_2026-09-01 / QA_2_2_2_LOCKED`
+Status: `HIGHEST_CURRENT_PAGE_ROLE_AUTHORITY / USER_RESET_2026-09-01 / P05_FRIENDS_ONLY_LOCKED`
 
-This file is the current source of truth for what belongs on P01–P08.
+This file is the source of truth for what belongs on P01–P08.
 
-Detailed visual implementation authority is:
+Detailed design authority: `V20-PAGE-BY-PAGE-DESIGN-SPEC.md`.
 
-`V20-PAGE-BY-PAGE-DESIGN-SPEC.md`
+## Fixed event facts
 
-That design spec defines page hierarchy, photo counts, Q&A behavior, density, overlap, generated units, native-text boundaries, and per-page acceptance checks.
+- wedding day: `2026.10.24`
+- numeric date: `20261024`
+- P08 barcode digits: `2026102400000`
+- A5 portrait, 8 pages
 
-If any older V20 document says:
-- P05 is a Hawaii-only peak;
-- P07 is a timetable, travel guide, `11 DESTINATIONS`, `LOOK AROUND`, wedding-day discovery page, or seated-guest guide;
-- P08 is the main thank-you/message page;
-- P04–P05 must be one continuous route-driven travel story;
-- all six Q&A belong on P02;
-then that older page-role statement is obsolete.
-
-Do not average old and new roles. Use this file plus `V20-PAGE-BY-PAGE-DESIGN-SPEC.md`.
-
-## Fixed event fact
-
-Wedding day is:
-
-`2026.10.24`
-
-Machine/numeric form:
-
-`20261024`
-
-P08 decorative barcode human-readable digits are exactly:
-
-`2026102400000`
-
-Do not use `20161026`, `20261026`, or any other accidental date variant.
-
-Because `2026102400000` is not being specified as an EAN-13 commerce identifier, preserve the exact digits using a Code 128-style/decorative barcode treatment rather than silently changing the final digit to satisfy EAN-13 checksum rules.
-
-# Book-wide editorial principle
-
-The user-defined target is:
+## Book-wide target
 
 - `RURUBU FEEL = 100%`
-- `EDITORIAL DENSITY = 75% OF THE PREVIOUS MAXIMUM-CLUTTER TESTS`
+- `EDITORIAL DENSITY = 75% OF PREVIOUS MAXIMUM-CLUTTER TESTS`
 - `READABILITY = HIGH`
 
-`75%` applies to information/clutter load, **not** to how strongly the booklet should feel like a Japanese travel magazine.
+75% means fewer simultaneous elements, not weaker magazine character.
 
-Keep full-strength magazine behavior:
-- bold display hierarchy;
-- unequal photography;
-- title/photo/frame collision;
-- vivid travel-magazine color relationships;
-- tactile editorial objects;
-- authored asymmetry;
-- page-specific discoveries.
+## Shared Q&A allocation
 
-Reduce only overload:
-- fewer tiny stickers;
-- fewer competing mini-features;
-- fewer micro labels;
-- more visible photography;
-- intentional calm zones;
-- no gap filling for its own sake.
+Exactly six slots:
+- P02 `Q1/Q2` — profile/personality
+- P03 `Q3/Q4` — relationship/story
+- P06 `Q5/Q6` — daily-life/playful/future
 
-`FULL-STRENGTH MAGAZINE CHARACTER, EDITED TO 75% INFORMATION LOAD.`
-
-# Shared Q&A allocation — locked
-
-Exactly six Q&A slots are distributed across the booklet:
-
-- P02: `Q1`, `Q2` — profile/personality-oriented;
-- P03: `Q3`, `Q4` — relationship/story-oriented;
-- P06: `Q5`, `Q6` — daily-life/playful/future-oriented.
-
-Actual wording and answers remain TODO until supplied/confirmed. Never fabricate them.
-
-Visual system:
-- `70% common format` across all six;
-- `30% page-specific expression`;
-- P02 = tidy;
-- P03 = emotional;
-- P06 = playful.
-
-The six questions must feel like one recurring magazine feature, not six unrelated designs and not six identical pasted boxes.
+Visual system: `70% common + 30% page-specific`.
 
 # P01 — COVER / るるぶ WEDDING
 
-## Job
-Make guests immediately want to open the booklet.
+Job: immediate joyful Japanese travel-magazine wedding cover.
 
-## Core content
-- approved `るるぶ WEDDING` masthead direction;
-- SHOGO & SHIORI;
-- `2026.10.24`;
-- YOKOHAMA when useful;
-- one strong couple/Hawaii hero image;
-- 1–2 smaller cover hooks;
-- optional 1 small support photo/detail only if it improves the cover.
+Core:
+- `るるぶ WEDDING`
+- SHOGO & SHIORI
+- `2026.10.24`
+- one strong couple hero
+- 1–2 cover hooks
+- optional limited support detail
 
-## Do not put here
-- detailed profile;
-- full story chronology;
-- long table of contents;
-- many tiny feature lists.
-
-## Density
-`75/100` of maximum-clutter load — energetic, but photos remain large and readable.
+Density: `75/100`.
 
 # P02 — PROFILE / WHO WE ARE + Q1/Q2
 
-## Job
-Let guests understand each person quickly.
+Job: understand each person quickly.
 
-## Core content
-- SHOGO profile;
-- SHIORI profile;
-- 2 main portraits/personality photos;
-- approximately 3–5 short facts per person when real facts exist;
-- exactly two Q&A slots: `Q1`, `Q2`;
-- optional tiny shared-life feature only if real material supports it.
+Core:
+- SHOGO profile
+- SHIORI profile
+- 2 main portraits/personality photos
+- 3–5 short grounded facts per person
+- exactly Q1/Q2
 
-Q1/Q2 should reveal personality/taste/hobby/travel style rather than repeat basic profile fields.
+Do not put story chronology, travel archive or friend-memory gallery here.
 
-## Do not put here
-- relationship timeline;
-- full travel history;
-- family/friend history;
-- more than two Q&A;
-- wedding-day guide content.
-
-## Density
-`58–62/100` — lively people feature with breathing room.
+Density: `58–62/100`.
 
 # P03 — OUR STORY + Q3/Q4
 
-## Job
-Explain how the two became a couple and arrived at the wedding day.
+Job: explain how the relationship progressed to the wedding day.
 
-## Core content
-Use 3–4 short story chapters, only when grounded:
-- meeting / early outings;
-- becoming a couple;
-- proposal;
-- marriage registration / arriving at the wedding day.
+Core:
+- 3–4 grounded story chapters
+- 2–3 preferred photos, max 4 if page still breathes
+- exactly Q3/Q4
+- proposal relationship meaning lives here; P04 may show Hawaii only as a travel memory
 
-Use 2–3 real photos as the preferred target, with a maximum of 4 only when the page still breathes.
-
-Exactly two Q&A slots: `Q3`, `Q4`.
-
-Q3/Q4 should reveal relationship perception, such as first impressions or what they value about each other. Actual wording/answers remain TODO.
-
-Exact dates are optional unless confirmed.
-
-## P03/P04 duplication boundary
-
-P03 owns the relationship meaning/order of the proposal story.
-P04 may show Hawaii as one travel memory.
-Do not repeat the same long proposal story on both pages.
-
-## Do not put here
-- detailed travel destination gallery;
-- family/friend photo archive;
-- rigid corporate timeline with many nodes.
-
-## Density
-`48–55/100` — quieter narrative page.
+Density: `48–55/100`.
 
 # P04 — ALL TRAVEL MEMORIES / OUR JOURNEY
 
-## Job
-This is the single page where the couple's travel memories are gathered together and the strongest interior travel-magazine behavior appears.
+Job: gather verified travel memories on the strongest interior travel-magazine page.
 
-## Core content
-Travel memories live here, including destinations such as Okinawa, Korea, Hawaii and other verified trips/photos selected later.
+Core:
+- 1 travel hero
+- 4–5 unequal support/detail photos
+- 3–4 destination/memory clusters from verified trips such as Okinawa, Korea, Hawaii and later confirmed trips
+- short grounded captions/micro memories
 
-Recommended structure:
-- 1 dominant travel HERO;
-- 4–5 unequal support/detail photos;
-- 3–4 destination/memory clusters as material supports;
-- short captions or micro memories;
-- route/stamp/travel graphics only when they connect real memories.
+Do not use generic internet travel facts or equal destination cards.
 
-Hawaii/proposal may appear briefly as a travel memory, but P04 is not a Hawaii-only page.
+Density: `75/100`.
 
-## Do not put here
-- family/friend memory archive;
-- wedding-day table destination guide;
-- generic travel facts copied from the internet;
-- equal destination cards;
-- duplicated long proposal copy.
-
-## Density
-`75/100` — interior travel-feature peak while remaining below maximum clutter.
-
-# P05 — FAMILY & FRIENDS MEMORIES
+# P05 — FRIENDS MEMORIES ONLY
 
 ## Job
-Show the people and relationships that surrounded the couple before this wedding day.
 
-## Core content
-- family memories;
-- friend memories;
-- real group/candid photos;
-- short, grounded captions;
-- visually separate but connected FAMILY / FRIENDS clusters when the photo pool supports it.
+Show the friends who have shared important, funny and memorable time with the couple.
 
-Recommended photo plan:
-- 1 emotional/representative anchor;
-- 4–6 supporting memories;
-- curate rather than making faces microscopic;
-- no need to identify every person unless wording is supplied/approved.
+P05 is **not** a family page.
+
+## Fixed structure
+
+Two clearly readable editorial clusters:
+
+### SHOGO FRIENDS
+- SHOGO-side friend memories
+- roughly 3–4 final photos when the source pool supports it
+- short grounded captions only
+
+### SHIORI FRIENDS
+- SHIORI-side friend memories
+- roughly 3–4 final photos when the source pool supports it
+- short grounded captions only
+
+## Photo hierarchy
+
+There is **no single giant hero/anchor photo** on P05.
+
+Preferred final total: approximately `6–8 photos`.
+
+Use:
+- medium photos
+- smaller supporting photos
+- unequal but balanced rhythm
+- separate SHOGO/SHIORI clusters
+
+No photo should dominate the whole page like a cover or P04 hero.
+
+The strongest photo inside a cluster may be somewhat larger, but it must remain part of a multi-photo friends feature rather than becoming one page-wide centerpiece.
+
+## Editorial behavior
+
+- title: `友達との思い出` or equivalent final-approved friends-memory title
+- section labels: `SHOGO FRIENDS` and `SHIORI FRIENDS`
+- lively, warm, social, fun
+- strong magazine identity at `65–70/100` density
+- breathing room between clusters
+- photo faces large enough to recognize at A5
+- short captions close to photos
 
 ## Do not put here
-- Hawaii feature-door content merely because an old layout had it;
-- invented friend/family anecdotes;
-- exhaustive people directory;
-- wedding-day logistics.
 
-## Density
-`65–70/100` — warm, lively and human, with recognizable photos.
+- family content
+- `FAMILY` label or family-memory cluster
+- one giant anchor/hero photo
+- Hawaii-only feature
+- proposal/arrival article
+- old P05 Hawaii title/proposal vessels as current design authority
+- exhaustive friend directory
+- inferred identities/relationships/anecdotes
 
 # P06 — REAL LIFE / FAVORITES / BEST SHOTS + Q5/Q6
 
-## Job
-Show what the couple are like in ordinary life beyond formal wedding/travel storytelling.
+Job: show ordinary, funny and relaxed life.
 
-## Core content
-- everyday couple photos;
-- food where personally meaningful;
-- Cookie / Melon when real photos are available;
-- hobbies/fun moments;
-- best shots / funny or relaxed moments;
-- exactly two Q&A slots: `Q5`, `Q6`;
-- short captions.
+Core:
+- 1 candid hero
+- 3–4 support/detail photos
+- Cookie/Melon, food, hobbies/fun when real material supports them
+- exactly Q5/Q6
 
-Q5/Q6 should be the lightest two questions: daily-life behavior, playful differences, or something they want to do together. Actual wording/answers remain TODO.
-
-Recommended photo plan:
-- 1 candid hero;
-- 3–4 support/detail photos.
-
-## Do not put here
-- duplicate P04 travel heroes;
-- long prose;
-- fabricated handwritten quotes;
-- equal Instagram-grid tiles;
-- more than two Q&A.
-
-## Density
-`60–65/100` — playful, photo-led and readable.
+Density: `60–65/100`.
 
 # P07 — CLOSING MESSAGE / THANK YOU
 
-## Job
-End the interior story emotionally before the physical back cover.
+Job: emotionally close the interior story.
 
-## Core content
-- one calm strong photo;
-- short thank-you / closing message;
-- SHOGO & SHIORI;
-- `2026.10.24`;
-- one restrained closing/continuation motif if useful.
+Core:
+- one calm strong photo
+- short thank-you message
+- SHOGO & SHIORI
+- `2026.10.24`
+- one restrained closing motif
 
-Recommended message budget:
-roughly 40–100 Japanese characters, subject to final user copy.
+Density: `35–40/100`.
 
-## Do not put here
-- `TODAY'S TRAVEL GUIDE`;
-- `11 DESTINATIONS`;
-- `LOOK AROUND`;
-- `EDITOR'S PICK`;
-- seating/table destination guide;
-- schedule/timetable;
-- dense travel map;
-- Q&A.
+Do not restore old guide/schedule/11-destinations content.
 
-## Density
-`35–40/100` — deliberate emotional release.
+# P08 — MAGAZINE BACK COVER
 
-# P08 — BACK COVER / MAGAZINE BACK COVER
+Job: quiet real-magazine-like back cover.
 
-## Job
-Look like the restrained back cover of a real magazine, not another editorial feature page.
+Core ceiling:
+- 0–1 calm photo/background
+- tiny issue/meta mark
+- optional small names/date
+- one tiny travel/wedding mark
+- decorative barcode with exact digits `2026102400000`
 
-At eight pages there is no meaningful thick physical spine; the requested `背表紙` behavior is implemented as the back cover.
-
-## Core content
-Keep information minimal.
-
-Allowed/default elements:
-- subtle publication/issue mark;
-- SHOGO & SHIORI only if composition needs it;
-- `2026.10.24` only if composition needs it;
-- one tiny decorative travel/wedding mark;
-- decorative barcode near the conventional lower-right/lower area;
-- barcode digits exactly `2026102400000`;
-- optional very small editorial-style decorative line, but no invented real publisher/legal claim.
-
-Background may be:
-- calm photo;
-- quiet color/paper field;
-- restrained travel/wedding artwork.
-
-Prefer no more than 3–4 visible information objects total.
-
-## Do not put here
-- long thank-you message;
-- photo collage;
-- many feature hooks;
-- Q&A;
-- QR unless explicitly supplied later;
-- fake price/publisher/ISBN/JAN claims presented as real commerce metadata;
-- old P07 content.
-
-## Density
-`20–25/100` — the quietest page in the booklet.
+Density: `20–25/100`.
 
 # Physical spread relationships
 
-- P02–P03: `WHO WE ARE → HOW WE BECAME US`.
-  - shared Q&A family acts as one bridge;
-  - P02 tidy / P03 emotional;
-  - do not mirror layouts.
-- P04–P05 center spread: `PLACES WE REMEMBER → PEOPLE WE REMEMBER`.
-  - P04 = travel/place memories;
-  - P05 = family/friend/people memories;
-  - shared small `MEMORIES` chapter cue is allowed;
-  - they do not need a literal route crossing the fold.
-- P06–P07: `OUR REAL LIFE → THANK YOU / CLOSING`.
-  - P06 playful Q&A/photo energy;
-  - P07 deliberate release.
-- P08 stands alone as the physical back cover.
+- P02–P03: `WHO WE ARE → HOW WE BECAME US`
+- P04–P05: `PLACES WE REMEMBER → FRIENDS WE REMEMBER`
+  - P04 = travel/place memories
+  - P05 = friends only, split SHOGO/SHIORI
+  - a small shared `MEMORIES` chapter cue is allowed
+  - no literal route crossing is required
+- P06–P07: `OUR REAL LIFE → THANK YOU`
+- P08: standalone back cover
 
 # Full-book rhythm
 
-`P01 OPEN / WOW`
-→ `P02 PEOPLE + Q1/Q2`
+`P01 WOW`
+→ `P02 PROFILE + Q1/Q2`
 → `P03 STORY + Q3/Q4`
-→ `P04 TRAVEL MEMORIES PEAK`
-→ `P05 PEOPLE MEMORIES / WARMTH`
-→ `P06 REAL LIFE / FUN + Q5/Q6`
-→ `P07 EMOTIONAL CLOSE`
-→ `P08 BACK-COVER RELEASE`.
+→ `P04 TRAVEL PEAK`
+→ `P05 FRIENDS / SOCIAL WARMTH`
+→ `P06 REAL LIFE + Q5/Q6`
+→ `P07 THANK YOU`
+→ `P08 BACK COVER`.
 
 # Obsolete role quarantine
 
-The following are no longer current page roles and must not be revived without a new explicit user instruction:
-- P05 = Hawaii-only feature page;
-- P05 = proposal/arrival page;
-- P07 = wedding-day schedule;
-- P07 = seated-guest discovery page;
-- P07 = `TODAY'S TRAVEL GUIDE`;
-- P07 = `11 DESTINATIONS`;
-- P07 = `LOOK AROUND` / `EDITOR'S PICK`;
-- P08 = primary closing-message page;
-- P02 = all six Q&A.
+Do not revive without explicit user instruction:
+- P05 family memories
+- P05 FAMILY & FRIENDS role
+- P05 giant anchor/hero photo
+- P05 Hawaii-only / proposal-arrival role
+- P07 schedule/timetable
+- P07 `TODAY'S TRAVEL GUIDE`
+- P07 `11 DESTINATIONS`
+- P07 `LOOK AROUND` / `EDITOR'S PICK`
+- P08 primary thank-you page
+- P02 all-six-Q&A page
 
-Old files may remain only as historical/provenance records where necessary. They have zero current page-role authority.
-
-`CURRENT PAGE ROLES ARE P01–P08 ABOVE. DETAILED DESIGN IS V20-PAGE-BY-PAGE-DESIGN-SPEC.md. DO NOT MERGE THEM WITH OLD ROLES.`
+`P05 = SHOGO FRIENDS + SHIORI FRIENDS. FAMILY IS OUT. GIANT HERO IS OUT.`
