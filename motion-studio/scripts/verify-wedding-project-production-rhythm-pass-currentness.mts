@@ -7,7 +7,7 @@ function flag(name:string){return process.argv.includes(`--${name}`);}
 function sha256(path:string){return createHash("sha256").update(readFileSync(path)).digest("hex");}
 function load(path:string,code:string){if(!existsSync(path))throw new Error(`${code}_FILE_NOT_FOUND:${path}`);try{return JSON.parse(readFileSync(path,"utf8"));}catch{throw new Error(`${code}_JSON_INVALID:${path}`);}}
 function push(items:string[],code:string,detail?:string){items.push(detail?`${code}:${detail}`:code);}
-function sceneIdentity(scene:any){return JSON.stringify({sceneId:scene?.sceneId,sourceRevision:scene?.sourceRevision,productionRole:scene?.productionRole??null,patternId:scene?.patternId??null,timingRevision:scene?.timing?.revision??null,durationFrames:scene?.durationFrames,startFrame:scene?.startFrame,endFrameExclusive:scene?.endFrameExclusive,transitionInFrames:scene?.transitionInFrames??0,transitionOutFrames:scene?.transitionOutFrames??0});}
+function sceneIdentity(scene:any){return JSON.stringify({sceneId:scene?.sceneId,sourceRevision:scene?.sourceRevision,productionRole:scene?.productionRole??null,patternId:scene?.patternId??null,timingRevision:scene?.timing?.revision??scene?.timingRevision??null,durationFrames:scene?.durationFrames,startFrame:scene?.startFrame,endFrameExclusive:scene?.endFrameExclusive,transitionInFrames:scene?.transitionInFrames??0,transitionOutFrames:scene?.transitionOutFrames??0});}
 function transitionIdentity(value:any){return JSON.stringify({fromSceneId:value?.fromSceneId,toSceneId:value?.toSceneId,transition:value?.transition,durationFrames:Number(value?.durationFrames??0),sourceStatus:value?.sourceStatus??null});}
 
 const rhythmArg=arg("rhythm-pass");
@@ -44,8 +44,7 @@ if(preview){
     for(const scene of preview.scenes){
       const bound:any=rhythmByScene.get(scene.sceneId);
       if(!bound){push(mismatches,"SCENE_MISSING_FROM_RHYTHM",scene.sceneId);continue;}
-      const projected={...scene,timing:{revision:bound.timingRevision}};
-      if(sceneIdentity(projected)!==sceneIdentity(bound))push(mismatches,"SCENE_TIMING_OR_POSITION_DRIFT",scene.sceneId);
+      if(sceneIdentity(scene)!==sceneIdentity(bound))push(mismatches,"SCENE_TIMING_OR_POSITION_DRIFT",scene.sceneId);
       const durationSeconds=Number(scene.durationFrames)/Number(preview.fps);
       if(Math.abs(durationSeconds-Number(bound.durationSeconds))>0.00001)push(mismatches,"SCENE_DURATION_SECONDS_DRIFT",scene.sceneId);
     }
