@@ -27,6 +27,7 @@ const reel = fs.readFileSync(path.join(root, 'src/compositions/common/StartMotio
 const startSyncComposition = fs.readFileSync(path.join(root, 'src/compositions/common/JapaneseFriendsOpeningStartSync.tsx'), 'utf8');
 const rootFile = fs.readFileSync(path.join(root, 'src/StartMotionKitRoot.tsx'), 'utf8');
 const startSyncRender = fs.readFileSync(path.join(root, 'scripts/render-japanese-friends-opening-start-sync.mts'), 'utf8');
+const startSyncPublicData = fs.readFileSync(path.join(root, 'src/data/startWeddingEditPublic.ts'), 'utf8');
 const index = fs.readFileSync(path.join(root, 'src/index-start-motion-kit.ts'), 'utf8');
 const catalog = fs.readFileSync(path.join(repoRoot, 'movie-dashboard/src/data/startMotionKit.ts'), 'utf8');
 const errors: string[] = [];
@@ -91,12 +92,21 @@ for (const token of [
   'function WordTiles',
   'function StretchLyric',
   'function BeatGraphics',
-  "role: 'GROOM'",
-  "role: 'BRIDE'",
+  'function ChorusHeroSplit',
+  'function ChorusDiagonalStack',
+  'function HitFlash',
   "gridTemplateColumns: 'repeat(2, 1fr)'",
   'Math.floor(beatIndex / 4)',
+  'groomProfile',
+  'brideProfile',
+  'coupleNames',
 ]) {
   requireText(startSyncComposition, token, `StaRt sync uptempo/profile treatment missing: ${token}`);
+}
+// Profile content (names, facts, role labels) must live in the copyright-safe public data
+// module so it stays Human-editable/replaceable via props, not hardcoded inline in JSX.
+for (const token of ["role: 'GROOM'", "role: 'BRIDE'", 'defaultGroomProfile', 'defaultBrideProfile', 'defaultCoupleNames']) {
+  requireText(startSyncPublicData, token, `StaRt sync profile data missing from public data module: ${token}`);
 }
 for (const token of [
   'local/lyrics-wedding-edit.local.json',
