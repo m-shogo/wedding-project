@@ -192,13 +192,129 @@ Do not return to planning/spec accumulation. Production is the priority.
 3. Review P02–P03, P04–P05, P06–P07 as spreads.
 4. Identify the 4–10 important visual units that create each page's quality.
 5. Generate/rebuild those units at high quality.
-6. Assemble them as editable layers in Figma.
-7. Keep real photos independently replaceable.
-8. Keep names/date/profile/Q&A/story/captions as native editable text.
-9. QA at A5 actual-size equivalent.
-10. Only after design/source/copy are complete, run print QA.
+6. Process generated isolated assets through the canonical chroma-background → Python alpha-cutout pipeline below.
+7. Save both source and transparent-production versions with clear provenance; upload the QA-passed production asset to the shared Drive asset area when available.
+8. Assemble the transparent production assets as editable layers in Figma.
+9. Keep real photos independently replaceable.
+10. Keep names/date/profile/Q&A/story/captions as native editable text.
+11. QA at A5 actual-size equivalent.
+12. Only after design/source/copy are complete, run print QA.
 
 Do not deliver a flattened whole-page generation as the final master.
+
+## Canonical image-generation / transparency / Drive pipeline
+
+This is a hard V30 production rule for isolated generated editorial parts.
+
+### A. Generate the object on a deliberately removable solid background
+
+For title parts, paper parts, tickets, stamps, ribbons, tape, labels, frames, ornaments and similar generated editorial objects:
+
+- generate **one isolated object or one intentionally grouped production unit per image**;
+- use a **flat single-color background that does not overlap the asset's own colors**;
+- the key color is chosen per asset, not always green;
+- if the asset contains green, use a clearly separated magenta/cyan/blue/etc. key background instead;
+- keep enough clean margin around the object so the outer background is connected to the canvas edges;
+- do not generate a scenic/gradient/textured background behind an object intended for alpha extraction;
+- do not let the key color leak into the object itself;
+- preserve intentional white, cream, yellow, red, green, blue and other interior colors in the object;
+- avoid unwanted cast shadows into the key background. If a shadow is a deliberate part of the editorial object, treat it as part of the alpha silhouette and QA it separately.
+
+### B. Python cutout — edge-connected background removal, not naive global color deletion
+
+After generation, use Python/image processing to convert the keyed background to real alpha transparency.
+
+Preferred behavior:
+
+- sample/know the key background color;
+- identify background connected to the outer image edges/corners;
+- remove the connected key-background region with a controlled tolerance;
+- do **not** globally delete every pixel that happens to resemble the key color inside the artwork;
+- preserve interior white/cream/detail areas;
+- preserve intentional holes/cutouts according to the artwork;
+- clean the fringe/halo so no visible key-color edge remains;
+- output true RGBA PNG with alpha channel.
+
+### C. Mandatory alpha QA
+
+Before an asset is considered usable:
+
+- alpha channel exists;
+- outer canvas is transparent;
+- no visible key-color residue / halo;
+- no accidental holes in the object;
+- intentional internal white/cream/color regions remain intact;
+- no unexpected opaque rectangle/background remains;
+- edges look clean at 100% and enlarged inspection;
+- test the PNG over both a light and a dark temporary background;
+- record whether the asset is SOURCE / CUTOUT-QA / ADOPTED.
+
+If QA fails, fix/regenerate the asset. Do not place a known-bad cutout in the final Figma composition.
+
+### D. Source + production asset storage
+
+Keep two conceptual states:
+
+1. `SOURCE_KEYED`
+   - original generated image with removable solid background
+   - useful for regeneration/provenance
+
+2. `PRODUCTION_RGBA`
+   - Python-cutout transparent PNG
+   - QA passed
+   - this is the version intended for Drive/Figma placement
+
+New adopted production assets belong in Git under:
+`assets/rurubu-v30/p01/` ... `assets/rurubu-v30/p08/`
+
+When the shared Google Drive production folder is available, upload the QA-passed transparent PNG there as the placement source. Do not upload only the uncut keyed source and then treat it as production-ready.
+
+### E. Batch strategy — do not blindly generate the whole book in one giant batch
+
+Best V30 workflow:
+
+1. approve/choose the page art-direction proof;
+2. decompose **that page** into roughly 4–10 important generated units;
+3. write explicit prompts for those units;
+4. generate that page's unit batch efficiently;
+5. cut out each unit with Python;
+6. alpha-QA the batch;
+7. save/upload the production PNG batch;
+8. place and layer that batch in Figma;
+9. review the page and spread;
+10. regenerate only weak units.
+
+Do not generate dozens of generic decorations first and try to find a use for them later.
+Do not generate P01–P08 as one uncontrolled asset dump before page hierarchy is understood.
+
+A multi-page generation run is allowed only when the requested units are already clearly specified and named. Even then, keep page ownership explicit and QA each asset independently.
+
+### F. Naming / traceability
+
+Use semantic page-specific names, e.g.:
+
+- `V30_P05_FRIENDS_TITLE_SOURCE_KEYED.png`
+- `V30_P05_FRIENDS_TITLE_PRODUCTION_RGBA.png`
+- `V30_P05_SHOGO_LABEL_PRODUCTION_RGBA.png`
+- `V30_P08_ISSUE_STAMP_PRODUCTION_RGBA.png`
+
+Avoid anonymous `image1.png`, `final2.png`, `new.png` naming.
+
+### G. Placement principle
+
+The expected flow is:
+
+`PAGE PROOF`
+→ `4–10 IMPORTANT UNITS`
+→ `IMAGE GENERATION ON SAFE SOLID KEY BACKGROUND`
+→ `PYTHON ALPHA CUTOUT`
+→ `ALPHA QA`
+→ `DRIVE / GIT PRODUCTION ASSET`
+→ `FIGMA LAYERED PLACEMENT`
+→ `PAGE / SPREAD / A5 QA`
+→ `TARGETED REGENERATION IF NEEDED`
+
+This is the default V30 image-production pipeline.
 
 ## Canonical layer order
 
@@ -216,6 +332,8 @@ Do not deliver a flattened whole-page generation as the final master.
 12. SELECTIVE MICRO DISCOVERIES
 13. FOLIO / META
 14. QA / GUIDES
+
+Layering is intentional: do not flatten the page and do not treat generated decoration as one merged wallpaper. Background, photos, frame/backing, title, vessels, native text and foreground accents remain separable enough to edit/reorder/replace.
 
 ## Legacy policy
 
@@ -255,6 +373,7 @@ At the start of every V30 run:
 2. inspect the current V30 Figma board `3535:2`;
 3. confirm no V31 is being created;
 4. do not use `docs/rurubu-v20/` as current authority;
-5. make concrete progress on P01–P08 production.
+5. follow the chroma-background → Python alpha-cutout → QA → Drive/Git → layered Figma pipeline for generated isolated assets;
+6. make concrete progress on P01–P08 production.
 
 **CURRENT = V30. V20 = FROZEN HISTORY.**
