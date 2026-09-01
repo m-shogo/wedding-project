@@ -1,345 +1,223 @@
 # Rurubu WEDDING V20 — ImageGen-first Editorial Rebuild Policy
 
-Status: `CURRENT / PRODUCTION AUTHORITY / ALL-PAGES-OPEN / ZERO-BASE-PNG`
+Status: `CURRENT / PRODUCTION_AUTHORITY / CURRENT_PAGE_ROLES_2026-09-01`
 
-This document records the current production direction for Rurubu WEDDING V20. It exists to prevent future production runs from falling back to legacy SVG aesthetics, overusing native Figma geometry, or treating currently preferred pages as permanently locked before the book reaches the target editorial quality.
+Highest page-role authority:
+- `V20-CURRENT-PAGE-ARCHITECTURE.md`
+- `V20-PAGE-BY-PAGE-DESIGN-SPEC.md`
 
-## 1. Target quality
+Purpose: define how ImageGen and Figma cooperate to reach convincing Japanese travel-magazine editorial quality without reviving obsolete V20 roles or maximum-clutter habits.
 
-V20 should aim for the excitement, density, hierarchy, layered collisions and page-discovery experience of a high-quality Japanese travel information magazine.
+## Target
 
-The goal is not to reproduce a specific commercial magazine page 1:1. The goal is to transfer the editorial principles that make strong Japanese travel magazines exciting to browse:
+- `RURUBU FEEL = 100%`
+- `EDITORIAL DENSITY = 75% OF PREVIOUS MAXIMUM-CLUTTER TESTS`
+- `READABILITY = HIGH`
 
-- dominant title events;
-- strong secondary subtitles;
-- many unequal photo roles;
-- dense but readable information clusters;
-- multiple scales of headlines, captions and micro-notes;
-- deep front/back layer interaction;
-- tickets, stamps, ribbons, cut paper, article vessels and photo-bound labels;
-- page-edge crops and partial objects;
-- small icons and discoveries that reward looking around;
-- strong page-to-page tempo;
-- deliberate calm islands inside otherwise dense pages.
+Do not interpret the 75% target as weaker editorial character. Keep strong title hierarchy, photo inequality, tactile print objects, authored asymmetry and meaningful collision. Reduce filler, tiny stickers, microcopy and competing mini-features.
 
-A page is not finished merely because it is clean, readable or structurally complete. It should also feel authored, exciting and magazine-like.
+## Current page roles
 
-## 2. No permanent visual locks yet
+- P01 cover
+- P02 profile + Q1/Q2
+- P03 story + Q3/Q4
+- P04 travel memories
+- P05 friends only: SHOGO FRIENDS + SHIORI FRIENDS
+- P06 real life + Q5/Q6
+- P07 thank-you / closing
+- P08 magazine back cover
 
-P01, P05, P08 and every other page remain visually improvable.
+Any older ImageGen brief that conflicts with these roles is historical only.
 
-Current preferred nodes are baselines, not untouchable final masters.
+## One-shot page proof
 
-Do not use `LOCK` as a reason to avoid high-value visual improvement. A current page may be held unchanged in a specific run when a candidate does not beat it, but no page is permanently blocked from future improvement until the whole book reaches the target editorial quality and survives full-book/A5 proof review.
+A full A5 page generation is allowed as an **art-direction proof**.
 
-Rules:
+Use it to test:
+- first read
+- photo hierarchy
+- title scale
+- density
+- page uniqueness
+- overlap/calm balance
 
-- preserve the current preferred version before risky experiments;
-- create non-destructive candidates where useful;
-- compare current vs candidate on the actual page, spread and full-book contact sheet;
-- adopt only when the new version materially improves editorial quality;
-- revert or reject when the current version is stronger.
+Do not use the whole generated page as the final flattened editable master.
 
-`CURRENT PREFERRED != PERMANENTLY LOCKED`.
+Approved proof → decompose into layered production assets.
 
-## 3. Old SVG legacy is not design authority
+## Zero-base rule
 
-Legacy SVG-derived parts and the design language behind them are superseded when they look generic, flat, icon-pack-like, UI-like or visually weak.
+Weak legacy SVG/PNG parts have no visual authority.
 
-Do NOT:
+`KEEP THE JOB; REDESIGN THE OBJECT FROM ZERO.`
 
-- convert an old SVG to PNG and call it a redesign;
-- rasterize an old vector and preserve its silhouette;
-- use an old SVG as a visual tracing reference for a new PNG;
-- keep the same old composition and merely add paper texture, shadow or color;
-- upscale old vector-looking art into a larger raster asset;
-- treat legacy icon geometry, corner radii, strokes, layout or grouping as authority.
+Do not:
+- rasterize an old SVG and call it new;
+- trace old silhouettes;
+- recolor old geometry as a shortcut;
+- preserve obsolete P05/P07 structure because assets already exist.
 
-The only thing that may be inherited from a weak legacy asset is its functional job.
+## ImageGen's job
 
-Example:
+ImageGen may create difficult page-aware visual personality:
+- masthead/title art
+- subtitle holders
+- photo frames/backings
+- profile/story/Q&A vessels
+- travel-memory labels
+- friend-memory labels/backings
+- tickets/stamps/tape/ribbons
+- restrained route art for P04 when useful
+- edge clusters
+- small editorial accents
 
-`old destination label` may contribute only the requirement `a destination-label editorial vessel is needed`.
+Do not generate fake autobiographical people, friends, dogs or memories as production truth.
 
-Its shape, stroke, colors, icon, spacing, silhouette and composition must be reconsidered from zero.
+## Figma's job
 
-## 4. Zero-base PNG generation
+Figma primarily:
+- places/crops real photos
+- controls z-order
+- keeps real photos replaceable
+- keeps factual/personal text native/editable
+- adjusts line breaks
+- performs page/spread/A5 QA
+- handles final print geometry and export preparation
 
-When a legacy part is weak, redesign it from a blank visual brief as new page-aware raster editorial artwork.
+Do not rebuild the magazine personality from generic native card/pill geometry.
 
-Preferred method:
+## Generated vs native text
 
-1. inspect the actual page/spread first;
-2. identify the missing editorial job;
-3. inspect the page photography, palette, title mass, negative space and current collisions;
-4. define the required physical size and text quiet zone;
-5. design 2–3 materially different candidates from zero;
-6. generate as high-resolution PNG with real alpha when transparency is required;
-7. pixel-check alpha instead of trusting the prompt;
-8. place each serious candidate in the actual Figma page;
-9. compare page / spread / full-book behavior;
-10. approve only the strongest candidate.
+Generated art may carry decorative/non-variable title treatments after approval.
 
-Do not derive the new artwork from the rejected SVG's visual form.
+Keep native/editable:
+- names
+- dates
+- profile facts
+- story copy
+- all Q&A question/answer text
+- friend captions
+- thank-you copy
+- P08 barcode human-readable digits
 
-## 5. ImageGen is the primary design-production surface
+Never bake fake Japanese paragraph text into production art.
 
-Figma should increasingly behave as a compositor rather than the place where visual personality is invented from primitive geometry.
+## Page-specific generation needs
 
-Image generation should be considered for:
+### P01
+Generate high-impact masthead/support/edge units only after the cover proof works. Photography remains the core protagonist layer.
 
-- mastheads;
-- page titles;
-- subtitles and subtitle holders;
-- headline slabs;
-- article/text vessels;
-- short-copy frames;
-- caption vessels;
-- Q&A/profile vessels;
-- photo frames and photo-bound caption structures;
-- ticket/luggage-tag/stamp families;
-- route composites;
-- badges;
-- ribbons;
-- tape/paper fragments;
-- bursts;
-- arrows;
-- decorative clusters;
-- guide marks;
-- small editorial icons;
-- page-edge ornaments;
-- micro-discovery units.
+### P02
+Generate profile frames, fact-label family and tidy Q&A shell. Avoid equal employee cards.
 
-Figma should mainly:
+### P03
+Generate story title/episode vessels and emotional Q&A shell. Keep narrative field calm enough to read.
 
-- place assets;
-- control z-order;
-- mask/crop photos;
-- keep real photos independently replaceable;
-- keep authoritative/factual copy native and editable;
-- make final text positioning and line-break adjustments;
-- perform spread/full-book/A5 QA.
+### P04
+Generate strongest travel-page units: title, varied memory/destination vessels, optional route back/front, ticket/stamp clusters and selective edge art.
 
-Avoid solving page personality with repeated native rectangles, circles, polygons, pills or generic card grammar when a purpose-built editorial asset would produce a stronger magazine result.
+### P05
+Current hard rule:
+`FRIENDS ONLY / SHOGO FRIENDS + SHIORI FRIENDS / NO FAMILY / NO GIANT HERO.`
 
-## 6. Generate the vessel first; copy may adapt later
+Generate from zero:
+- friends page title
+- SHOGO FRIENDS label
+- SHIORI FRIENDS label
+- varied medium/small photo backings
+- short caption vessels
+- restrained social/friend-memory accents
 
-Article frames and information vessels do not need to be perfectly sized to current draft copy before they can be designed.
+Do **not** generate:
+- giant P05 hero frame
+- FAMILY marker
+- Hawaii destination-title system
+- proposal article vessel
+- arrival marker
+- mandatory cross-fold journey route
 
-It is acceptable — and often desirable — to create the visually strongest vessel first, then let the human editor adjust final copy length, line breaks and minor text size to fit the vessel.
+### P06
+Generate playful title/note/tape/Q&A units around real everyday-life photography.
 
-Generate vessels with intentional quiet zones for native text.
+### P07
+Generate very little: restrained closing phrase/message support and at most one small final motif. Do not restore guide/map/destination systems.
 
-Useful vessel classes include:
+### P08
+Generate quiet back-cover art/meta support only. Barcode digits remain native and exactly `2026102400000`.
 
-- 2-line short note;
-- 3–4-line feature note;
-- 6–8-line article field;
-- photo caption tab;
-- episode field;
-- profile/Q&A field;
-- editor-pick field;
-- destination label;
-- small fact/index strip.
+## Density discipline
 
-Do not bake authoritative long body copy into generated artwork.
+The correction for a weak page is not automatically “generate more assets.”
 
-## 7. Prefer editorial units over isolated stickers
+Fix in this order:
+1. page role
+2. photo/source choice
+3. title hierarchy
+4. composition silhouette
+5. reading path
+6. photo-size relationship
+7. calm field
+8. overlap
+9. color job
+10. medium editorial units
+11. micro discoveries last
 
-Do not only generate one icon or one rectangle at a time.
+A page must still work if one decorative unit disappears.
 
-Where useful, generate a coherent editorial unit that already includes multiple interacting visual functions, for example:
+## Asset granularity
 
-- `BEST SHOTS UNIT` = caption vessel + tape + tiny icon + accent edge;
-- `EPISODE UNIT` = article vessel + chapter tab + print edge + micro marker;
-- `DESTINATION UNIT` = label shell + tiny route cue + small icon + paper collision;
-- `FEATURE TITLE UNIT` = title art + subtitle holder + burst + route fragment;
-- `PHOTO FEATURE UNIT` = photo frame + caption tab + paper backing + tiny label.
-
-Figma then places the finished unit and overlays only the editable/native text that must remain factual.
-
-## 8. Deep layer structure is mandatory
-
-The book should not look like a flat set of clean components.
-
-Think in multiple depth levels:
-
-- paper/background;
-- hero photography;
-- support photography;
-- photo frames/backing;
-- route or page-specific decorative layer;
-- main title artwork;
-- subtitle/ribbon;
-- article vessel;
-- label/ticket/tag;
-- icon/burst/stamp;
-- tiny caption/meta/folio.
-
-These levels may cross one another.
+Prefer coherent semi-atomic units when they represent one editorial event, but keep factual content separate.
 
 Examples:
+- profile annotation unit
+- episode unit
+- travel-memory unit
+- friend-photo backing + caption support
+- playful best-shots unit
 
-- title overlaps the hero photo;
-- subtitle bites into the title;
-- route goes behind one photo and returns in front of another;
-- article vessel partially covers a photo;
-- stamp overlaps both a label and image edge;
-- a mini icon sits partly outside the trim/crop area;
-- a photo frame is itself partly hidden by a title or article field.
+Do not build a huge generic reusable sticker library before page proofs establish real needs.
 
-The target is magazine layering, not clean UI stacking.
+## Transparency / technical QA
 
-## 9. More density and excitement, without losing reading order
+For floating raster assets:
+- real alpha when required
+- no baked checkerboard
+- no matte/halo
+- intended A5 placement resolution sufficient
+- no fake text
+- no mysterious external provenance
 
-Current V20 production has often been too clean and too restrained compared with the intended travel-magazine experience.
+## Review levels
 
-Future passes should be willing to increase:
+Every serious candidate is reviewed at:
+1. asset technical QA
+2. page hierarchy/readability
+3. spread relationship
+4. full-book rhythm
+5. A5 actual-size
 
-- small captions;
-- tiny labels;
-- page-specific icons;
-- mini photos/details;
-- route points;
-- short editorial notes;
-- badges;
-- asymmetric edge elements;
-- feature-support graphics;
-- photo/title collisions.
+Reject a candidate that is merely busier.
 
-But density must remain hierarchical.
+## Current spread implications
 
-A useful target pattern is:
+- P02–P03: WHO → STORY
+- P04–P05: PLACES WE REMEMBER → FRIENDS WE REMEMBER; no required cross-fold route
+- P06–P07: REAL LIFE → THANK YOU
+- P08: standalone back cover
 
-- 1 dominant first-read event;
-- 2–4 medium secondary events;
-- several micro discoveries;
-- at least one calm area where the eye can recover.
+## Explicit obsolete generation briefs
 
-`MAGAZINE DENSITY != RANDOM CLUTTER`.
+Do not recover:
+- P05 family/FAMILY assets
+- P05 giant hero
+- P05 Hawaii/proposal/arrival assets
+- P07 `TODAY'S TRAVEL GUIDE`
+- P07 `11 DESTINATIONS`
+- P07 `LOOK AROUND` / `EDITOR'S PICK`
+- P07 destination/map/timetable assets
+- P08 main thank-you composition
+- maximum-clutter micro-detail quotas
 
-## 10. Titles and subtitles are major generated assets
+## Final principle
 
-Titles and subtitles should not default to plain native Figma text when that produces a mockup-like result.
-
-For important display moments, test generated title/subtitle artwork with:
-
-- strong scale;
-- outlines/keylines;
-- controlled offset shadows;
-- paper/ribbon support;
-- slight print roughness;
-- asymmetry;
-- layer collision;
-- page-specific ornaments.
-
-Keep long factual copy native.
-
-Generated title artwork must remain readable and should be compared at actual A5 size.
-
-## 11. Icons and ornaments must be page-aware
-
-Do not revive generic old SVG icon sets.
-
-New icons/ornaments should be designed for the current page and publication DNA. Possible roles include:
-
-- route marker;
-- camera cue;
-- food cue;
-- dog/paw cue;
-- wave/sun/flower cue;
-- location marker;
-- travel/ticket cue;
-- small arrow;
-- discovery marker;
-- issue/stamp cue.
-
-They should support the page rather than form a reusable corporate icon pack.
-
-## 12. Photo frames may also be generated
-
-Do not default every image to a rectangle with a white stroke or corner radius.
-
-Different photo roles may use different generated treatments:
-
-- HERO: minimal frame or bleed;
-- EMOTION: printed-photo object / paper backing;
-- DETAIL: ticket-attached or irregular small frame;
-- LIFE/FUN: casual printed frame, tape, cut-paper treatment;
-- DISCOVERY: small guide-card/photo-label hybrid.
-
-Important real photography must remain replaceable and crop-safe.
-
-## 13. Full-book improvement priority
-
-All eight pages remain candidates for improvement.
-
-Do not block P01, P05 or P08 merely because they are currently among the strongest pages.
-
-Instead:
-
-- protect current preferred versions;
-- keep improving the weakest pages first;
-- revisit stronger pages when full-book comparison shows that their title/subtitle density, editorial artifacts, layering or excitement still lag the target reference experience;
-- stop only when the candidate fails to beat current.
-
-A page may be temporarily held, not permanently closed.
-
-## 14. Review standard
-
-Every meaningful candidate must be reviewed at four levels:
-
-1. asset alone — technical defects only;
-2. page — first read / hierarchy / collision / readability;
-3. spread — balance / fold / left-right tempo;
-4. full-book contact — page differentiation / peak / calm / publication DNA.
-
-Then inspect at A5 actual size.
-
-Ask:
-
-- does this look more like an authored travel-magazine page and less like a Figma mockup?;
-- is there more excitement and discovery?;
-- did the page gain real layer depth?;
-- did title/subtitle hierarchy improve?;
-- are the micro details useful rather than random?;
-- did the page become merely busier, or actually better?;
-- should something be removed, enlarged, replaced or moved behind/in front instead?;
-- does the current version still beat the candidate?
-
-## 15. Technical requirements for generated assets
-
-Preferred:
-
-- high-resolution PNG;
-- real transparent alpha where required;
-- approximately 300 ppi or better at intended placement size;
-- no baked checkerboard;
-- no fake paragraph text;
-- no random glyphs;
-- no glossy 3D unless a rare page-specific reason exists;
-- no generic corporate icon-pack look;
-- no dependence on old SVG silhouettes.
-
-Rejected assets should remain documented with the actual rejection reason.
-
-## 16. Current production consequence
-
-From this point forward:
-
-- do not describe P01/P05/P08 as permanently locked;
-- do not preserve weak legacy SVG-derived visual language for continuity;
-- use current preferred nodes as safe baselines;
-- redesign weak visual parts from zero as PNG editorial artwork;
-- generate frames/vessels as well as titles, subtitles, icons and ornaments;
-- let final human copy adapt to strong generated vessels where appropriate;
-- increase multi-layer editorial density and magazine excitement across the whole book;
-- keep Figma primarily as the editable compositor and QA surface.
-
-The guiding principle is:
-
-`CURRENT PREFERRED IS A BASELINE, NOT A CEILING.`
-
-and:
-
-`KEEP THE JOB; REDESIGN THE OBJECT.`
+`GENERATE THE PAGE-SPECIFIC EDITORIAL PERSONALITY; KEEP REAL MEMORIES AND AUTHORITATIVE COPY EDITABLE.`
