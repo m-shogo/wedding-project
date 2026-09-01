@@ -5,6 +5,7 @@ on:
     paths:
       - 'movie-dashboard/src/components/WeddingBgmRhythmSelectionResumeCard.tsx'
       - 'movie-dashboard/src/components/WeddingMediaIntakeChecklistCard.tsx'
+      - 'motion-studio/scripts/wedding-project-bgm-rhythm-adjustment-preview.mts'
       - '.github/workflows/wedding-bgm-selection-resume-dashboard-ci.yml'
   workflow_dispatch:
 
@@ -14,27 +15,42 @@ jobs:
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
-      - name: Verify persisted Human selection resume contract
+      - name: Verify persisted Human selection resume + adjustment preview contract
         run: |
           node <<'NODE'
           const fs=require('fs');
           const card=fs.readFileSync('movie-dashboard/src/components/WeddingBgmRhythmSelectionResumeCard.tsx','utf8');
           const parent=fs.readFileSync('movie-dashboard/src/components/WeddingMediaIntakeChecklistCard.tsx','utf8');
+          const preview=fs.readFileSync('motion-studio/scripts/wedding-project-bgm-rhythm-adjustment-preview.mts','utf8');
           for(const token of [
             'wedding-movie-bgm-rhythm-human-selection/v1',
             'wedding-movie-bgm-rhythm-human-selection-currentness/v1',
+            'wedding-movie-bgm-rhythm-adjustment-preview/v1',
+            'MECHANICAL_DELTA_PREVIEW_FROM_CURRENT_HUMAN_SELECTED_BGM_CUE_AND_RHYTHM_EVENT',
             'data-bgm-selection-resume-state',
             'data-resume-human-bgm-selection',
+            'data-bgm-adjustment-preview-state',
+            'data-bgm-adjustment-timeline',
+            'ADJUSTMENT_SELECTION_SHA_MISMATCH',
+            'ADJUSTMENT_CURRENTNESS_SHA_MISMATCH',
+            'ADJUSTMENT_SCENE_TARGET_MISMATCH',
+            'ADJUSTMENT_EDGE_TARGET_MISMATCH',
             'check(target.fromSceneId,target.fromSourceRevision,"EDGE_FROM")',
             'check(target.toSceneId,target.toSourceRevision,"EDGE_TO")',
+            'targetDurationSeconds',
+            'computedDurationSeconds',
+            'automaticRecommendation:false',
             'automaticSnapApplied:false',
             'editApplied:false',
+            'humanDecisionPerformed:false',
             'remotionStudioGuiActual:"NOT_RUN"',
             'palmierGuiActual:"NOT_RUN"',
             'macDaVinciGuiActual:"NOT_RUN"',
             'productionReady:false',
-            'verify-wedding-project-bgm-rhythm-human-selection-currentness.mts'
-          ]) if(!card.includes(token)) throw new Error(`missing resume contract token: ${token}`);
+            'verify-wedding-project-bgm-rhythm-human-selection-currentness.mts',
+            'wedding-project-bgm-rhythm-adjustment-preview.mts'
+          ]) if(!card.includes(token)) throw new Error(`missing resume/preview contract token: ${token}`);
           if(!parent.includes('WeddingBgmRhythmSelectionResumeCard')||!parent.includes('<WeddingBgmRhythmSelectionResumeCard projectId={projectId} />')) throw new Error('resume operator not mounted');
-          if(card.includes('automaticSnapApplied:true')||card.includes('editApplied:true')||card.includes('productionReady:true')) throw new Error('resume operator auto-promotes forbidden evidence/edit state');
+          for(const token of ['automaticRecommendation:false','automaticSnapApplied:false','editApplied:false','humanDecision:"NOT_RUN"','productionReady:false']) if(!preview.includes(token)) throw new Error(`mechanical preview evidence boundary drift: ${token}`);
+          if(card.includes('automaticRecommendation:true')||card.includes('automaticSnapApplied:true')||card.includes('editApplied:true')||card.includes('humanDecisionPerformed:true')||card.includes('productionReady:true')) throw new Error('resume/preview operator auto-promotes forbidden evidence/edit state');
           NODE
