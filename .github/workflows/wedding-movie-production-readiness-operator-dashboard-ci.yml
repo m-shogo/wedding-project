@@ -5,8 +5,10 @@ on:
     paths:
       - 'movie-dashboard/src/components/WeddingMovieProductionReadinessOperatorCard.tsx'
       - 'movie-dashboard/src/components/WeddingRealMediaFramingOperatorCard.tsx'
+      - 'movie-dashboard/src/components/WeddingRealMediaFramingComparisonReviewCard.tsx'
       - 'movie-dashboard/src/components/WeddingRealMediaVisualReviewOperatorCard.tsx'
       - 'movie-dashboard/src/components/WeddingMediaIntakeChecklistCard.tsx'
+      - 'movie-dashboard/src/lib/browserHash.ts'
       - 'movie-dashboard/scripts/verify-production-readiness-operator-contracts.mjs'
       - '.github/workflows/wedding-movie-production-readiness-operator-dashboard-ci.yml'
   workflow_dispatch:
@@ -23,7 +25,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Verify production readiness + framing operator contracts
+      - name: Verify production readiness + framing + comparison operator contracts
         run: node movie-dashboard/scripts/verify-production-readiness-operator-contracts.mjs
       - name: Build Movie Dashboard
         working-directory: movie-dashboard
