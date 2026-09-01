@@ -1,133 +1,99 @@
 # V20 Spread-First Architecture
 
-Status: `CURRENT_PAGE_MAP / RESET_2026-09-01`
+Status: `CURRENT_PAGE_MAP / P05_FRIENDS_ONLY_2026-09-01`
 
-Format: A5 portrait, 8 pages fixed.
+Format: A5 portrait, 8 pages.
+Highest authority: `V20-CURRENT-PAGE-ARCHITECTURE.md`.
 
-Highest page-role authority: `V20-CURRENT-PAGE-ARCHITECTURE.md`.
+Physical units:
+- P01 front cover
+- P02–P03 profile/story spread
+- P04–P05 center MEMORIES spread
+- P06–P07 real-life/closing spread
+- P08 back cover
 
-Physical reading units:
-- P01 = front cover;
-- P02–P03 = profile/story spread;
-- P04–P05 = center `MEMORIES` spread;
-- P06–P07 = real-life/closing spread;
-- P08 = back cover.
-
-## Book-level narrative
+## Book narrative
 
 `OPEN`
-→ `MEET THE TWO PEOPLE`
+→ `MEET THEM`
 → `UNDERSTAND THEIR STORY`
 → `REMEMBER PLACES`
-→ `REMEMBER PEOPLE`
+→ `REMEMBER FRIENDS`
 → `SEE REAL LIFE`
 → `THANK THE GUESTS`
 → `CLOSE LIKE A MAGAZINE`.
 
-# P01 — COVER
+## P02–P03
 
-Role:
-`るるぶ WEDDING` + couple + date + a few cover hooks.
+`WHO → STORY`
 
-Composition verb:
-`STACK + CROP + COLLIDE`.
+P02: quick-scan profile + Q1/Q2.
+P03: quieter relationship story + Q3/Q4.
 
-Density:
-7.5/10.
+Do not mirror layouts.
 
-# P02–P03 — WHO → STORY
+## P04–P05 — CENTER MEMORIES SPREAD
 
-P02:
-- quick-scan profile;
-- 2 main people photos;
-- 3–5 facts each;
-- optional very small shared/Q&A module.
+Current concept:
 
-P03:
-- 3–4 short relationship chapters;
-- 2–4 story photos;
-- quieter emotional reading.
+`PLACES WE REMEMBER → FRIENDS WE REMEMBER`.
 
-Spread relationship:
-P02 is structured and lively; P03 is calmer and narrative. They should share publication DNA without mirroring geometry.
+### P04
+- all travel memories
+- strongest travel-magazine interior page
+- 1 hero + 4–5 supports/details
+- verified destination/memory clusters
 
-# P04–P05 — CENTER SPREAD / MEMORIES
+### P05
+- friends memories only
+- `SHOGO FRIENDS`
+- `SHIORI FRIENDS`
+- about 3–4 photos per cluster
+- total about 6–8 photos
+- **no giant hero/anchor photo**
+- no family content
 
-New center-spread concept:
+Spread behavior:
+- one subtle shared `MEMORIES` chapter cue is allowed
+- shared publication DNA, not identical layout
+- P04 may use strong hero/travel hierarchy
+- P05 must use two friend-photo territories with medium/small rhythm
+- no literal route across fold required
+- no critical face/text on fold
 
-`PLACES WE REMEMBER → PEOPLE WE REMEMBER`.
+Do not carry old Hawaii/proposal P05 composition into the spread.
 
-P04:
-- all travel memories;
-- strongest travel-magazine page;
-- 5–7 travel photos;
-- 2–4 real memory/destination clusters.
+## P06–P07
 
-P05:
-- family & friends memories;
-- 5–7 people photos;
-- warm, recognizable, human photography.
+`REAL LIFE → THANK YOU`
 
-The center spread should feel like one broad `MEMORIES` chapter, but a literal route does **not** need to cross the fold anymore.
+P06: playful candid life + Q5/Q6.
+P07: one calm photo + short thank-you.
 
-Do not carry old P05 Hawaii-only / proposal-arrival composition into the new role.
+P07 deliberately decelerates.
 
-Fold rule:
-- no face, small caption or critical text depends on the fold;
-- background color/paper/soft decorative continuity may cross the fold;
-- P04 and P05 may share one subtle chapter cue, but their photo language should differ.
+## P08
 
-# P06–P07 — REAL LIFE → THANK YOU
+Standalone quiet magazine back cover with barcode `2026102400000`.
 
-P06:
-- candid everyday personality;
-- 4–6 photos;
-- playful but readable.
+## Density rhythm
 
-P07:
-- one calm strong photo;
-- short thank-you/closing message;
-- names/date;
-- minimal final motif.
+- P01 7.5/10
+- P02 6/10
+- P03 5–5.5/10
+- P04 8/10
+- P05 7/10
+- P06 6.5/10
+- P07 3.5–4/10
+- P08 2–3/10
 
-Spread relationship:
-P06 carries the last playful energy. P07 deliberately slows the book down.
+## Anti-regression
 
-Explicitly do not reconstruct the old P07 guide/discovery/timetable page.
+Do not revive:
+- P05 family/friends combined role
+- P05 giant people hero
+- P05 Hawaii/proposal role
+- old P07 guide/schedule/discovery roles
+- P08 main thank-you role
 
-# P08 — MAGAZINE BACK COVER
-
-P08 stands alone.
-
-Role:
-- quiet back-cover field/photo/art;
-- minimal meta;
-- barcode digits exactly `2026102400000`;
-- optional tiny issue/travel/wedding mark.
-
-Density:
-2–3/10.
-
-It is not the main thank-you page and not a leftovers page.
-
-# Whole-book density rhythm
-
-- P01: 7.5/10
-- P02: 6/10
-- P03: 5–5.5/10
-- P04: 8/10
-- P05: 7/10
-- P06: 6.5/10
-- P07: 3.5–4/10
-- P08: 2–3/10
-
-# Architecture anti-regression
-
-Do not revive without explicit user instruction:
-- P04–P05 as one Hawaii/proposal route story;
-- P05 as Hawaii-only feature;
-- P07 travel guide / `11 DESTINATIONS` / wedding discoveries;
-- P07 schedule;
-- P08 as the primary closing-message page.
-
-A Figma styling difficulty is not permission to recover an obsolete page role.
+`CENTER SPREAD = TRAVEL PLACES → SHOGO/SHIORI FRIENDS.`
