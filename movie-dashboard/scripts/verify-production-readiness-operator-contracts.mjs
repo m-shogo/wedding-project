@@ -88,7 +88,6 @@ const comparisonRequired = [
   "data-framing-comparison-image-pair",
   "HUMAN REVIEW READY",
   "HUMAN REVIEW BLOCKED",
-  "compare-wedding-project-real-media-framing-qa-stills.mts",
   "verify-wedding-project-real-media-framing-qa-comparison-currentness.mts",
   "--strict-current",
 ];
