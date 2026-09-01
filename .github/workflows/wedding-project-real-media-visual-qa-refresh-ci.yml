@@ -5,9 +5,15 @@ on:
     paths:
       - 'motion-studio/scripts/render-selected-wedding-typography-scenes.mts'
       - 'motion-studio/scripts/refresh-wedding-project-real-media-visual-qa.mts'
+      - 'motion-studio/scripts/refresh-wedding-project-bgm-rhythm-alignment.mts'
       - 'motion-studio/scripts/render-wedding-project-real-media-preview.mts'
       - 'motion-studio/scripts/wedding-project-real-media-preview-qa-stills.mts'
       - 'motion-studio/scripts/wedding-project-real-media-preview-visual-review.mts'
+      - 'motion-studio/scripts/wedding-project-production-rhythm-pass.mts'
+      - 'motion-studio/scripts/verify-wedding-project-production-rhythm-pass-currentness.mts'
+      - 'motion-studio/scripts/wedding-project-bgm-cue-map.mts'
+      - 'motion-studio/scripts/wedding-project-bgm-rhythm-alignment.mts'
+      - 'motion-studio/scripts/verify-wedding-project-bgm-rhythm-alignment-currentness.mts'
       - '.github/workflows/wedding-project-real-media-visual-qa-refresh-ci.yml'
   workflow_dispatch:
 
@@ -47,6 +53,12 @@ jobs:
           cat > /tmp/real-qa-refresh/audit.json <<JSON
           {"schemaVersion":"wedding-movie-production-readiness-audit/v1","authority":"DERIVED_FROM_CURRENT_HUMAN_MASTER_AND_REAL_MEDIA_BINDINGS","projectId":"opening","source":{"batchSha256":"${BATCH_SHA}"},"scenes":[{"sceneId":"scene-a","sourceRevision":"rev-a","patternId":"type-mask-reveal","productionRole":"TITLE_REVEAL","readiness":"READY_FOR_REAL_MEDIA_PREVIEW","media":{"state":"CURRENT","path":"/tmp/real-qa-refresh/scene-a.jpg","sha256":"${A_SHA}","kind":"IMAGE"}},{"sceneId":"scene-b","sourceRevision":"rev-b","patternId":"split-rise","productionRole":"IMPACT_TITLE","readiness":"READY_FOR_REAL_MEDIA_PREVIEW","media":{"state":"CURRENT","path":"/tmp/real-qa-refresh/scene-b.mp4","sha256":"${B_SHA}","kind":"VIDEO"}}],"audio":{"state":"CURRENT","path":"/tmp/real-qa-refresh/bgm.wav","sha256":"${BGM_SHA}"},"summary":{"readyForContinuousRealMediaPreview":true,"productionReady":false},"evidenceBoundary":{"remotionStudioGuiActual":"NOT_RUN","palmierGuiActual":"NOT_RUN","macDaVinciGuiActual":"NOT_RUN","productionReady":false}}
           JSON
+          cat > /tmp/real-qa-refresh/audio.json <<JSON
+          {"schemaVersion":"wedding-movie-production-audio-input/v1","projectId":"opening","usage":"BGM","path":"/tmp/real-qa-refresh/bgm.wav","sha256":"${BGM_SHA}","humanApproved":true}
+          JSON
+          cat > /tmp/real-qa-refresh/human-cues.json <<JSON
+          {"schemaVersion":"wedding-movie-human-bgm-cues/v1","projectId":"opening","audioSha256":"${BGM_SHA}","humanMarked":true,"reviewer":"HUMAN_FIXTURE_ONLY","reviewedAt":"2026-09-01T00:00:00.000Z","notes":"CI fixture only","cues":[{"id":"hit-a","type":"HIT","label":"fixture hit","seconds":0.5},{"id":"phrase-a","type":"PHRASE","label":"fixture phrase","seconds":1.0},{"id":"release-a","type":"RELEASE","label":"fixture release","seconds":1.5}]}
+          JSON
       - name: Run canonical fresh visual QA chain
         run: node --no-warnings motion-studio/scripts/refresh-wedding-project-real-media-visual-qa.mts --selected-manifest=/tmp/real-qa-refresh/selected.json --readiness-audit=/tmp/real-qa-refresh/audit.json --output-dir=/tmp/real-qa-refresh/output
       - name: Verify rendered preview, stills, and fresh NOT_RUN review
@@ -66,6 +78,38 @@ jobs:
           for(const scene of review.scenes) for(const check of Object.values(scene.checks)) if(check.verdict!=='NOT_RUN') throw new Error('scene auto-pass');
           for(const transition of review.transitions) for(const check of Object.values(transition.checks)) if(check.verdict!=='NOT_RUN') throw new Error('transition auto-pass');
           NODE
+      - name: Canonicalize Human BGM cue fixture
+        run: node --no-warnings motion-studio/scripts/wedding-project-bgm-cue-map.mts --audio-manifest=/tmp/real-qa-refresh/audio.json --cues=/tmp/real-qa-refresh/human-cues.json --output=/tmp/real-qa-refresh/opening-bgm-cue-map.json
+      - name: Run one-command real render to BGM rhythm alignment refresh
+        run: node --no-warnings motion-studio/scripts/refresh-wedding-project-bgm-rhythm-alignment.mts --selected-manifest=/tmp/real-qa-refresh/selected.json --readiness-audit=/tmp/real-qa-refresh/audit.json --bgm-cue-map=/tmp/real-qa-refresh/opening-bgm-cue-map.json --output-dir=/tmp/real-qa-refresh/bgm-output
+      - name: Verify fresh rhythm and alignment remain mechanical and CURRENT
+        run: |
+          node --input-type=module <<'NODE'
+          import {readFileSync} from 'node:fs';
+          const root='/tmp/real-qa-refresh/bgm-output';
+          const receipt=JSON.parse(readFileSync(`${root}/opening-bgm-rhythm-refresh-receipt.json`,'utf8'));
+          const rhythmCurrent=JSON.parse(readFileSync(`${root}/opening-production-rhythm-pass-currentness.json`,'utf8'));
+          const alignment=JSON.parse(readFileSync(`${root}/opening-bgm-rhythm-alignment.json`,'utf8'));
+          const alignmentCurrent=JSON.parse(readFileSync(`${root}/opening-bgm-rhythm-alignment-currentness.json`,'utf8'));
+          if(receipt.schemaVersion!=='wedding-movie-bgm-rhythm-refresh-receipt/v1'||receipt.summary.freshRender!==true) throw new Error('BGM refresh receipt');
+          if(rhythmCurrent.state!=='CURRENT'||alignmentCurrent.state!=='CURRENT') throw new Error('currentness');
+          if(alignment.summary.humanSelection!=='NOT_RUN'||receipt.summary.humanBgmEditSelection!=='NOT_RUN') throw new Error('Human edit selection auto-promoted');
+          if(receipt.summary.humanVisualQa!=='NOT_RUN'||receipt.summary.productionReady!==false) throw new Error('review/production boundary');
+          if(receipt.evidenceBoundary.remotionStudioGuiActual!=='NOT_RUN'||receipt.evidenceBoundary.palmierGuiActual!=='NOT_RUN'||receipt.evidenceBoundary.macDaVinciGuiActual!=='NOT_RUN') throw new Error('GUI Actual boundary');
+          NODE
+      - name: Stale cue map BGM fails the one-command chain
+        shell: bash
+        run: |
+          cp /tmp/real-qa-refresh/opening-bgm-cue-map.json /tmp/real-qa-refresh/stale-cue-map.json
+          node --input-type=module <<'NODE'
+          import {readFileSync,writeFileSync} from 'node:fs';
+          const p='/tmp/real-qa-refresh/stale-cue-map.json';const x=JSON.parse(readFileSync(p,'utf8'));x.source.audioSha256='0'.repeat(64);writeFileSync(p,JSON.stringify(x));
+          NODE
+          if node --no-warnings motion-studio/scripts/refresh-wedding-project-bgm-rhythm-alignment.mts --selected-manifest=/tmp/real-qa-refresh/selected.json --readiness-audit=/tmp/real-qa-refresh/audit.json --bgm-cue-map=/tmp/real-qa-refresh/stale-cue-map.json --output-dir=/tmp/real-qa-refresh/stale-bgm-output 2>/tmp/real-qa-refresh/stale-bgm.err; then
+            echo 'expected stale BGM cue binding to fail closed' >&2
+            exit 1
+          fi
+          grep -Eq 'BGM_RHYTHM_ALIGNMENT_BGM_SHA_MISMATCH|BGM_RHYTHM_REFRESH_STEP_FAILED|BGM_RHYTHM_REFRESH_BGM_CUE_BINDING_STALE' /tmp/real-qa-refresh/stale-bgm.err
       - name: Post-audit media drift fails before refreshing evidence
         shell: bash
         run: |
