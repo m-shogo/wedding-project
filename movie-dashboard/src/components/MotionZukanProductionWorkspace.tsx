@@ -440,7 +440,7 @@ export function MotionZukanProductionWorkspace() {
         <div>
           <p className="text-[10px] tracking-[0.2em] font-semibold text-emerald-700 dark:text-emerald-300">PRODUCTION WORKSPACE / HUMAN CONTROL</p>
           <h2 className="mt-1 text-xl font-bold text-navy-900 dark:text-sand-100">素材・Scene・曲・完成確認をここでまとめる</h2>
-          <p className="mt-2 text-xs leading-5 text-navy-500 dark:text-navy-300">AI採点なし。Scene本体のHUMAN_SELECTED / LOCKEDを勝手に変更しません。</p>
+          <p className="mt-2 text-xs leading-5 text-navy-500 dark:text-navy-300">AI採点なし。Sceneであなたが選んだ値・固定した値を勝手に変更しません。</p>
         </div>
         <div className="flex flex-wrap gap-2">
           <button type="button" onClick={() => setProjectId("opening")} className={`px-3 py-2 text-xs border ${projectId === "opening" ? "border-sky-500 text-sky-700 dark:text-sky-300" : "border-sand-300 dark:border-navy-600"}`}>Opening</button>
@@ -494,8 +494,8 @@ export function MotionZukanProductionWorkspace() {
                 <p className="mt-1 text-[10px] font-mono text-navy-400 break-all">{selectedScene.sceneId}</p>
                 <div className="mt-3 flex flex-wrap gap-2">
                   <button type="button" onClick={duplicateSelectedScene} className="px-3 py-2 text-xs border border-sand-300 dark:border-navy-600">Sceneを複製</button>
-                  <span className="px-3 py-2 text-xs border border-sand-200 dark:border-navy-600 text-navy-500">HUMAN_SELECTED {selectedScene.humanSelectedFields.length}</span>
-                  <span className="px-3 py-2 text-xs border border-sand-200 dark:border-navy-600 text-navy-500">LOCKED {selectedScene.lockedFields.length}</span>
+                  <span className="px-3 py-2 text-xs border border-sand-200 dark:border-navy-600 text-navy-500">選択済み {selectedScene.humanSelectedFields.length}</span>
+                  <span className="px-3 py-2 text-xs border border-sand-200 dark:border-navy-600 text-navy-500">固定中 {selectedScene.lockedFields.length}</span>
                 </div>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-[180px_1fr] gap-3">
