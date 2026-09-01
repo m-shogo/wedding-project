@@ -45,8 +45,8 @@ jobs:
           node --no-warnings motion-studio/scripts/verify-wedding-project-production-rhythm-pass-currentness.mts --rhythm-pass=/tmp/rhythm-queue/rhythm.json --strict-current --output=/tmp/rhythm-queue/current.json
           RHYTHM_SHA=$(sha256sum /tmp/rhythm-queue/rhythm.json | awk '{print $1}')
           CURRENT_SHA=$(sha256sum /tmp/rhythm-queue/current.json | awk '{print $1}')
-          PREVIEW_SHA=$(node --input-type=module -e "console.log(JSON.parse(require('fs').readFileSync('/tmp/rhythm-queue/current.json','utf8')).source.previewManifestSha256)")
-          CURRENT_RENDER_SHA=$(node --input-type=module -e "console.log(JSON.parse(require('fs').readFileSync('/tmp/rhythm-queue/current.json','utf8')).source.renderSha256)")
+          PREVIEW_SHA=$(node -e "console.log(JSON.parse(require('fs').readFileSync('/tmp/rhythm-queue/current.json','utf8')).source.previewManifestSha256)")
+          CURRENT_RENDER_SHA=$(node -e "console.log(JSON.parse(require('fs').readFileSync('/tmp/rhythm-queue/current.json','utf8')).source.renderSha256)")
           cat > /tmp/rhythm-queue/review.json <<JSON
           {
             "schemaVersion":"wedding-movie-production-rhythm-human-review/v1",
