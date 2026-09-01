@@ -45,41 +45,57 @@ jobs:
             "fps":30,
             "identity":{"identitySha256":"identity-fixture","selectedManifestPath":"/tmp/qa-stills/selected.json","selectedManifestSha256":"${SELECTED_SHA}","readinessAuditPath":"/tmp/qa-stills/audit.json","readinessAuditSha256":"${AUDIT_SHA}","sourceBatchPath":"/tmp/qa-stills/batch.json","sourceBatchSha256":"${BATCH_SHA}","bgmPath":"/tmp/qa-stills/bgm.wav","bgmSha256":"${BGM_SHA}"},
             "scenes":[
-              {"order":1,"sceneId":"scene-a","sourceRevision":"rev-a","patternId":"type-mask-reveal","productionRole":"TITLE_REVEAL","mediaKind":"IMAGE","mediaPath":"/tmp/qa-stills/media-a.jpg","mediaSha256":"${A_SHA}","startFrame":0,"endFrameExclusive":18,"durationFrames":18,"transitionInFrames":0,"transitionOutFrames":6},
-              {"order":2,"sceneId":"scene-b","sourceRevision":"rev-b","patternId":"split-rise","productionRole":"IMPACT_TITLE","mediaKind":"VIDEO","mediaPath":"/tmp/qa-stills/media-b.mp4","mediaSha256":"${B_SHA}","startFrame":12,"endFrameExclusive":30,"durationFrames":18,"transitionInFrames":6,"transitionOutFrames":0}
+              {"order":1,"sceneId":"scene-a","sourceRevision":"rev-a","patternId":"type-mask-reveal","productionRole":"TITLE_REVEAL","mediaKind":"IMAGE","mediaPath":"/tmp/qa-stills/media-a.jpg","mediaSha256":"${A_SHA}","framing":{"fit":"COVER","focusX":40,"focusY":45,"scale":1.1,"revision":"framing-a-r1"},"timing":{"sceneId":"scene-a","sourceRevision":"rev-a","targetDurationSeconds":0.6,"computedDurationSeconds":0.6,"durationFrames":18,"fps":30,"revision":"timing-a-r1"},"startFrame":0,"endFrameExclusive":18,"durationFrames":18,"transitionInFrames":0,"transitionOutFrames":6},
+              {"order":2,"sceneId":"scene-b","sourceRevision":"rev-b","patternId":"split-rise","productionRole":"IMPACT_TITLE","mediaKind":"VIDEO","mediaPath":"/tmp/qa-stills/media-b.mp4","mediaSha256":"${B_SHA}","framing":{"fit":"CONTAIN","focusX":50,"focusY":50,"scale":1,"revision":"framing-b-r1"},"timing":{"sceneId":"scene-b","sourceRevision":"rev-b","targetDurationSeconds":0.6,"computedDurationSeconds":0.6,"durationFrames":18,"fps":30,"revision":"timing-b-r1"},"startFrame":12,"endFrameExclusive":30,"durationFrames":18,"transitionInFrames":6,"transitionOutFrames":0}
             ],
             "transitions":[{"fromSceneId":"scene-a","toSceneId":"scene-b","transition":"CROSS_DISSOLVE","durationFrames":6,"sourceStatus":"HUMAN_SELECTED_CURRENT"}],
             "timeline":{"totalFrames":30,"durationSeconds":1},
             "output":"/tmp/qa-stills/preview.mp4",
             "render":{"state":"RENDERED","sha256":"${PREVIEW_SHA}","bytes":1234},
-            "summary":{"totalScenes":2,"allRealMediaBoundCurrent":true,"bgmCurrent":true,"frameBoundariesVerified":true,"transitionsCurrent":true,"productionReady":false},
+            "summary":{"totalScenes":2,"allRealMediaBoundCurrent":true,"framingCurrent":true,"timingCurrent":true,"bgmCurrent":true,"frameBoundariesVerified":true,"transitionsCurrent":true,"productionReady":false},
             "evidenceBoundary":{"remotionStudioGuiActual":"NOT_RUN","palmierGuiActual":"NOT_RUN","macDaVinciGuiActual":"NOT_RUN","visualQa":"NOT_RUN","productionReady":false}
           }
           JSON
       - name: Extract scene and transition QA stills
         run: node --no-warnings motion-studio/scripts/wedding-project-real-media-preview-qa-stills.mts --preview-manifest=/tmp/qa-stills/preview-manifest.json --output-dir=/tmp/qa-stills/stills --manifest=/tmp/qa-stills/stills-manifest.json
-      - name: Verify still artifacts and evidence boundary
+      - name: Verify still timing/framing artifacts and evidence boundary
         run: |
           node --input-type=module <<'NODE'
           import {existsSync,readFileSync} from 'node:fs';
           const m=JSON.parse(readFileSync('/tmp/qa-stills/stills-manifest.json','utf8'));
           if(m.schemaVersion!=='wedding-movie-real-media-preview-qa-stills/v1') throw new Error('schema');
           if(m.summary.sceneCount!==2||m.summary.stillCount!==6||m.summary.transitionStillCount!==1) throw new Error('counts');
-          if(m.summary.sourceCurrentVerified!==true||m.summary.humanVisualQa!=='NOT_RUN'||m.summary.productionReady!==false) throw new Error('summary boundary');
+          if(m.summary.sourceCurrentVerified!==true||m.summary.framingCurrentVerified!==true||m.summary.timingCurrentVerified!==true||m.summary.humanVisualQa!=='NOT_RUN'||m.summary.productionReady!==false) throw new Error('summary boundary');
           if(m.humanReviewChecklist.verdict!=='NOT_RUN'||m.humanReviewChecklist.reviewer!==null||m.humanReviewChecklist.reviewedAt!==null) throw new Error('human review auto-promoted');
           if(m.evidenceBoundary.visualQa!=='NOT_RUN'||m.evidenceBoundary.remotionStudioGuiActual!=='NOT_RUN'||m.evidenceBoundary.palmierGuiActual!=='NOT_RUN'||m.evidenceBoundary.macDaVinciGuiActual!=='NOT_RUN'||m.evidenceBoundary.productionReady!==false) throw new Error('evidence boundary');
-          for(const still of [...m.stills,...m.transitionStills]) {
+          for(const still of m.stills) {
             if(!existsSync(still.path)||!still.sha256||still.width!==640||still.height!==360) throw new Error(`still invalid: ${still.path}`);
+            if(!still.framingRevision||!still.timingRevision||still.timing?.revision!==still.timingRevision) throw new Error('scene identity missing');
           }
+          const tr=m.transitionStills[0];
+          if(tr.fromTimingRevision!=='timing-a-r1'||tr.toTimingRevision!=='timing-b-r1') throw new Error('transition timing binding');
           const kinds=m.stills.map((s)=>s.kind);
           for(const expected of ['SCENE_START_SAFE','SCENE_MID','SCENE_END_SAFE']) if(!kinds.includes(expected)) throw new Error(`missing ${expected}`);
           NODE
+      - name: Timing frame drift fails closed
+        shell: bash
+        run: |
+          cp /tmp/qa-stills/preview-manifest.json /tmp/qa-stills/preview-stale-timing.json
+          node --input-type=module <<'NODE'
+          import {readFileSync,writeFileSync} from 'node:fs';
+          const p='/tmp/qa-stills/preview-stale-timing.json'; const m=JSON.parse(readFileSync(p,'utf8'));
+          m.scenes[0].timing.durationFrames=17;
+          writeFileSync(p,JSON.stringify(m,null,2)+'\n');
+          NODE
+          if node --no-warnings motion-studio/scripts/wedding-project-real-media-preview-qa-stills.mts --preview-manifest=/tmp/qa-stills/preview-stale-timing.json --output-dir=/tmp/qa-stills/stale-timing 2>/tmp/qa-stills/timing.err; then
+            echo 'expected timing frame drift to block still extraction' >&2; exit 1
+          fi
+          grep -q 'REAL_MEDIA_PREVIEW_QA_TIMING_FRAME_DRIFT' /tmp/qa-stills/timing.err
       - name: Post-manifest preview tamper fails closed
         shell: bash
         run: |
           printf 'tamper' >> /tmp/qa-stills/preview.mp4
           if node --no-warnings motion-studio/scripts/wedding-project-real-media-preview-qa-stills.mts --preview-manifest=/tmp/qa-stills/preview-manifest.json --output-dir=/tmp/qa-stills/stale-stills 2>/tmp/qa-stills/stale.err; then
-            echo 'expected preview SHA drift to block still extraction' >&2
-            exit 1
+            echo 'expected preview SHA drift to block still extraction' >&2; exit 1
           fi
           grep -q 'REAL_MEDIA_PREVIEW_QA_VIDEO_SHA_MISMATCH' /tmp/qa-stills/stale.err
