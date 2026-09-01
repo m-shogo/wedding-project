@@ -1,61 +1,17 @@
-# V20 Asset Production Manifest
+# V20 Asset Production Manifest — FROZEN
 
-Status: `CURRENT_NEED_MANIFEST / P05_FRIENDS_ONLY_2026-09-01`
+Status: `HISTORICAL_ONLY / SUPERSEDED_BY_V30 / DO_NOT_USE_FOR_CURRENT_ASSET_PRODUCTION`
 
-Highest authority: `V20-CURRENT-PAGE-ARCHITECTURE.md`.
+This former V20 manifest is no longer executable.
 
-## Current roles
+Current production authority:
+`docs/rurubu-v30/README.md`
 
-- P01 cover
-- P02 profile + Q1/Q2
-- P03 story + Q3/Q4
-- P04 all travel memories
-- P05 friends memories only: SHOGO FRIENDS + SHIORI FRIENDS
-- P06 real life + Q5/Q6
-- P07 closing
-- P08 back cover
+New production assets belong under:
+`assets/rurubu-v30/`
 
-## Classification
+Do not place new production assets under `assets/rurubu-v20/`.
 
-- `REUSABLE_SOURCE` — provenance/source remains useful
-- `VISUAL_REFERENCE_ONLY` — style lesson only
-- `SUPERSEDED` — obsolete semantic job; never current assembly input
-- `REMOVED_CURRENT_BRANCH` — physically removed from current branch; Git history only
+Former V20 asset decisions remain available in Git history for provenance only.
 
-## P05 legacy status
-
-Both obsolete P05 production PNGs are now `REMOVED_CURRENT_BRANCH`:
-- `V20_P05_HAWAII_TITLE_SUBTITLE_HOLDER_GEN_A.png`
-- `V20_P05_PROPOSAL_ARTICLE_FRAME_GEN_B.png`
-
-Old P04–P05 route assets are `VISUAL_REFERENCE_ONLY` or `SUPERSEDED` whenever their semantic job is the obsolete Hawaii/proposal center narrative.
-
-Do not recover, recolor, trace, raster-wrap or cosmetically repurpose obsolete P05 assets.
-
-## Current P05 required classes
-
-- `P05_FRIENDS_TITLE_UNIT`
-- `P05_SHOGO_FRIENDS_LABEL_UNIT`
-- `P05_SHIORI_FRIENDS_LABEL_UNIT`
-- 3–4 varied friend-photo frame/backing types
-- short caption vessels
-- restrained friend-memory micro accents
-- optional small `MEMORIES` cue shared with P04
-
-No current need:
-- family/FAMILY marker
-- giant P05 hero frame
-- page-wide anchor frame
-- Hawaii destination title
-- proposal article frame
-- arrival feature
-
-## P08
-
-Barcode digits: `2026102400000` exactly.
-
-## Adoption rule
-
-Only assets that pass current page proof → layered reconstruction → A5 QA may become `ADOPTED_CURRENT`.
-
-`P05 CURRENT NEED = FRIENDS TITLE + SHOGO/SHIORI LABELS + MULTI-PHOTO FRAMES.`
+**CURRENT = V30. V20 = FROZEN HISTORY.**
