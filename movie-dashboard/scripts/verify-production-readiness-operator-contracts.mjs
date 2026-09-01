@@ -64,8 +64,11 @@ if (/humanVisualReviewPerformed:\s*true/.test(framing)) throw new Error("framing
 const comparisonRequired = [
   "wedding-movie-real-media-framing-qa-comparison/v1",
   "DERIVED_COMPARISON_OF_TWO_CURRENT_REAL_MEDIA_QA_STILL_MANIFESTS",
+  "wedding-movie-real-media-framing-qa-comparison-currentness/v1",
+  "LIVE_REVALIDATION_OF_FRAMING_COMPARISON_AGAINST_SOURCE_MANIFESTS_STILLS_AND_CURRENT_MEDIA",
   "data-real-media-framing-comparison-review",
   "data-comparison-current",
+  "data-comparison-strict-current",
   "data-human-visual-qa=\"NOT_RUN\"",
   "sameSceneAndMediaAuthorityVerified",
   "humanVisualReviewPerformed",
@@ -74,18 +77,26 @@ const comparisonRequired = [
   "macDaVinciGuiActual",
   "STILL_SHA_MISMATCH",
   "STALE_FRAMING_COMPARISON",
+  "STRICT_CURRENTNESS_REQUIRED",
+  "CURRENTNESS_RECEIPT_SHA_MISMATCH",
+  "CURRENTNESS_MEDIA_SHA_MISMATCH",
   "currentMedia.sha256 !== scene.mediaSha256",
   "revision !== scene.after.framingRevision",
+  "strictCurrentness.source.receiptSha256 !== receiptSha",
+  "strictCurrentness.source.currentMediaSha256 !== mediaSha",
+  "browserBinding.state === \"CURRENT\" && strictBinding.state === \"CURRENT\"",
   "data-framing-comparison-image-pair",
   "HUMAN REVIEW READY",
   "HUMAN REVIEW BLOCKED",
   "compare-wedding-project-real-media-framing-qa-stills.mts",
+  "verify-wedding-project-real-media-framing-qa-comparison-currentness.mts",
+  "--strict-current",
 ];
 for (const token of comparisonRequired) if (!framingComparison.includes(token)) throw new Error(`framing comparison review contract missing: ${token}`);
 if (!intake.includes("<WeddingRealMediaFramingComparisonReviewCard projectId={projectId} />")) throw new Error("framing comparison review is not mounted in the real-media intake surface");
 if (/humanVisualReviewPerformed:\s*true/.test(framingComparison)) throw new Error("framing comparison review must never manufacture Human visual review evidence");
 if (/productionReady:\s*true/.test(framingComparison)) throw new Error("framing comparison review must never manufacture productionReady");
-if (!framingComparison.includes("createHash(buffer)")) throw new Error("framing comparison stills must be browser-SHA verified before display");
+if (!framingComparison.includes("createHash(buffer)")) throw new Error("framing comparison receipt/media/stills must be browser-SHA verified before review");
 
 const visualRequired = [
   "wedding-movie-real-media-human-visual-review/v1",
@@ -104,4 +115,4 @@ const visualRequired = [
 for (const token of visualRequired) if (!visualReview.includes(token)) throw new Error(`real-media visual review operator contract missing: ${token}`);
 if (!intake.includes("<WeddingRealMediaVisualReviewOperatorCard projectId={projectId} />")) throw new Error("real-media visual review operator is not mounted in the real-media intake surface");
 if (/humanVisualReviewPerformed:\s*true/.test(visualReview)) throw new Error("visual review operator must not auto-promote Human review performed");
-console.log("Wedding Movie production readiness + Human framing + framing comparison + visual review operator contracts: PASS");
+console.log("Wedding Movie production readiness + Human framing + strict-current framing comparison + visual review operator contracts: PASS");
