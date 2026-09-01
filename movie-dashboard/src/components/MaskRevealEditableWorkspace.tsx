@@ -19,7 +19,7 @@ import {
 } from "../data/humanEditableMotionIntent";
 import { buildMaskRevealEditableProductionOutputs } from "../data/maskRevealEditableProduction";
 import { buildMaskRevealExecutionOutputs } from "../data/maskRevealHandoff";
-import { composablePatterns } from "../data/visualMotionLibrary";
+import { composableImagePatterns, composableTextPatterns } from "../data/visualMotionLibrary";
 import {
   buildMaskRevealDaVinciValueBridge,
   detectLayerDelayPreset,
@@ -33,7 +33,9 @@ import {
 import {
   adoptMaskRevealScene,
   adoptSceneInstance,
+  buildMaskRevealSceneExport,
   computeMaskRevealSceneDuration,
+  duplicateSceneInstance,
   loadMotionZukanComposerState,
   removeSceneInstance,
   retargetSceneInstanceSection,
@@ -42,6 +44,7 @@ import {
   updateSceneInstanceFieldLock,
   type MaskRevealSceneInstance,
   type MotionZukanComposerState,
+  type SceneProjectId,
 } from "../data/visualSceneComposer";
 
 const positionLabels: Record<PositionPreset, string> = Object.fromEntries(positionPresetOptions.map((item) => [item.id, item.label])) as Record<PositionPreset, string>;
@@ -59,11 +62,12 @@ type Level = "EASY" | "DETAIL" | "DAVINCI";
 
 export function MaskRevealEditableWorkspace() {
   const patterns = useMemo(() => {
-    const list = composablePatterns();
+    const list = composableTextPatterns();
     // Mask Reveal stays first and always present even if its data-driven entry is momentarily
     // missing, since it's the one pattern with a fully hand-verified Composer -> DaVinci loop.
     return list.some((item) => item.patternId === MASK_REVEAL_PATTERN_INFO.patternId) ? list : [MASK_REVEAL_PATTERN_INFO, ...list];
   }, []);
+  const imagePatterns = useMemo(() => composableImagePatterns(), []);
   const [intent, setIntent] = useState(() => createDefaultMaskRevealEditableIntent("OPENING_INTRO"));
   const [level, setLevel] = useState<Level>("EASY");
   const [copied, setCopied] = useState("");
@@ -109,20 +113,44 @@ export function MaskRevealEditableWorkspace() {
     if (editingSceneId) updateComposer((current) => updateSceneInstanceFieldLock(current, editingSceneId, key, locked));
   }
 
+  function currentImagePattern() {
+    return imagePatterns.find((item) => item.patternId === resolved.imagePatternId) ?? null;
+  }
+
   function changeSection(section: MaskRevealSection) {
     const pattern = patterns.find((item) => item.patternId === intent.patternId) ?? MASK_REVEAL_PATTERN_INFO;
-    setIntent((current) => retargetMaskRevealSection(current, section, pattern));
+    const imagePattern = currentImagePattern();
+    setIntent((current) => retargetMaskRevealSection(current, section, pattern, imagePattern));
     if (editingSceneId) updateComposer((current) => retargetSceneInstanceSection(current, editingSceneId, section));
   }
 
   function changePattern(patternId: string) {
     const pattern = patterns.find((item) => item.patternId === patternId);
     if (!pattern) return;
-    // A fresh default intent for the newly chosen pattern, kept on the same section. Switching
-    // patterns is treated as "start this scene over with a different motion" rather than trying
-    // to carry over field values that may not make sense for the new pattern (e.g. a Mask
-    // Reveal direction on a Flash Soft scene).
-    setIntent(createDefaultMaskRevealEditableIntent(intent.section, pattern));
+    // A fresh default intent for the newly chosen TEXT pattern, kept on the same section AND the
+    // same image-layer selection (the two layers are independent — switching the text motion
+    // should not silently drop an already-chosen image motion).
+    setIntent(createDefaultMaskRevealEditableIntent(intent.section, pattern, currentImagePattern()));
+    setEditingSceneId(null);
+  }
+
+  function changeImagePattern(patternId: string) {
+    const pattern = imagePatterns.find((item) => item.patternId === patternId) ?? null;
+    setIntent((current) => {
+      const withPatternId = applyHumanSelection(current, "imagePatternId", pattern?.patternId ?? "");
+      // Seed a sensible default duration the first time an image pattern is chosen; leave it
+      // alone (still human-editable afterward) on subsequent switches.
+      const withDuration = pattern && current.fields.imageMotionDurationSeconds.humanSelectedValue === null
+        ? applyHumanSelection(withPatternId, "imageMotionDurationSeconds", resolveEditableValue(current.fields.sceneDurationSeconds))
+        : withPatternId;
+      return {
+        ...withDuration,
+        imageImplementation: pattern && { implementationId: pattern.implementationId, easyLabel: pattern.easyLabel, detailLabel: pattern.detailLabel, tools: pattern.tools },
+      };
+    });
+    // imageImplementation lives outside `fields`, so a granular per-field composer update can't
+    // carry it. Same as changePattern: stop editing the adopted Scene so "このSceneを採用" writes
+    // the whole updated intent back atomically instead of leaving a stale imageImplementation.
     setEditingSceneId(null);
   }
 
@@ -166,6 +194,16 @@ export function MaskRevealEditableWorkspace() {
     if (editingSceneId === sceneId) setEditingSceneId(null);
   }
 
+  function duplicateScene(sceneId: string) {
+    // For the "same combination, next section" workflow: keep the pattern/timing/position
+    // choices, land on the duplicate immediately so only Text/Media need retyping.
+    const before = new Set(composerState.scenes.map((scene) => scene.sceneId));
+    const next = duplicateSceneInstance(composerState, sceneId);
+    const duplicate = next.scenes.find((scene) => !before.has(scene.sceneId));
+    setComposerState(next);
+    if (duplicate) editScene(duplicate);
+  }
+
   async function copy(label: string, value: string) {
     await navigator.clipboard.writeText(value);
     setCopied(label);
@@ -193,12 +231,6 @@ export function MaskRevealEditableWorkspace() {
         {level === "EASY" && (
           <div className="space-y-5">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <SimpleField label={`演出パターン(${patterns.length}件から選択)`}>
-                <select value={intent.patternId} onChange={(event) => changePattern(event.target.value)} className={controlClass}>
-                  {patterns.map((pattern) => <option key={pattern.patternId} value={pattern.patternId}>{pattern.detailLabel}</option>)}
-                </select>
-                <p className="mt-1 text-[10px] leading-4 text-navy-400">{patterns.find((item) => item.patternId === intent.patternId)?.easyLabel}</p>
-              </SimpleField>
               <SimpleField label="使う場所">
                 <select value={intent.section} onChange={(event) => changeSection(event.target.value as MaskRevealSection)} className={controlClass}>
                   <option value="OPENING_INTRO">Opening Intro</option>
@@ -207,13 +239,40 @@ export function MaskRevealEditableWorkspace() {
                   <option value="PROFILE_COUPLE_STORY">Profile Couple Story</option>
                 </select>
               </SimpleField>
+              <div />
+              <SimpleField label={`文字の動き(${patterns.length}件から選択)`}>
+                <select value={intent.patternId} onChange={(event) => changePattern(event.target.value)} className={controlClass}>
+                  {patterns.map((pattern) => <option key={pattern.patternId} value={pattern.patternId}>{pattern.detailLabel}</option>)}
+                </select>
+                <p className="mt-1 text-[10px] leading-4 text-navy-400">{patterns.find((item) => item.patternId === intent.patternId)?.easyLabel}</p>
+              </SimpleField>
               <EditableControl label="文字" field={intent.fields.text} onLock={(value) => lock("text", value)}>
                 <input value={resolveEditableValue(intent.fields.text)} maxLength={24} onChange={(event) => select("text", event.target.value)} className={controlClass} />
               </EditableControl>
+              <SimpleField label={`画像の動き(${imagePatterns.length}件から選択・任意)`}>
+                <select value={resolved.imagePatternId} onChange={(event) => changeImagePattern(event.target.value)} className={controlClass}>
+                  <option value="">なし(静止したまま背景に使う)</option>
+                  {imagePatterns.map((pattern) => <option key={pattern.patternId} value={pattern.patternId}>{pattern.detailLabel}</option>)}
+                </select>
+                <p className="mt-1 text-[10px] leading-4 text-navy-400">{resolved.imagePatternId ? imagePatterns.find((item) => item.patternId === resolved.imagePatternId)?.easyLabel : "文字の背景としてのみ写真を使う場合はここは「なし」のままでよい。"}</p>
+              </SimpleField>
               <EditableControl label="写真 / 動画" field={intent.fields.mediaLabel} onLock={(value) => lock("mediaLabel", value)}>
                 <input value={resolveEditableValue(intent.fields.mediaLabel)} onChange={(event) => select("mediaLabel", event.target.value)} className={controlClass} />
               </EditableControl>
+              {resolved.imagePatternId && (
+                <EditableControl label="画像の動きの長さ" field={intent.fields.imageMotionDurationSeconds} onLock={(value) => lock("imageMotionDurationSeconds", value)}>
+                  <div className="flex items-center gap-2">
+                    <input type="number" step="0.1" min="0.5" value={resolveEditableValue(intent.fields.imageMotionDurationSeconds)} onChange={(event) => select("imageMotionDurationSeconds", Number(event.target.value))} className={controlClass} />
+                    <span className="text-xs text-navy-400">秒</span>
+                  </div>
+                </EditableControl>
+              )}
             </div>
+            {resolved.imagePatternId && (
+              <p className="text-[11px] leading-5 text-navy-500 dark:text-navy-300 border border-sand-200 dark:border-navy-600 p-3">
+                文字と画像は別レイヤーとして独立に動きます。Scene全体の長さは、文字側({timing.textStructuralEndSeconds.toFixed(1)}秒)と画像側({timing.imageStructuralEndSeconds.toFixed(1)}秒)の長い方({timing.longerLayer === "IMAGE" ? "画像" : timing.longerLayer === "TEXT" ? "文字" : "-"}が基準)に自動的に合わせられます。
+              </p>
+            )}
 
             <PresetChoiceGroup
               label="文字を出すタイミング"
@@ -343,7 +402,7 @@ export function MaskRevealEditableWorkspace() {
         <p className="mt-2 text-[11px] leading-5 text-navy-400">Palmierからは実timelineのNLE XMLを書き出し、Human Master Scene値をserializationしたMotion Handoff JSONをsidecarとしてDaVinciへ渡します。JSON / XML自体はHuman Masterではなく、XMLをこのアプリ側で捏造しません。</p>
       </div>
 
-      <ProjectTimelinePanel state={composerState} editingSceneId={editingSceneId} onEdit={editScene} onDelete={deleteScene} />
+      <ProjectTimelinePanel state={composerState} editingSceneId={editingSceneId} onEdit={editScene} onDelete={deleteScene} onDuplicate={duplicateScene} copied={copied} onCopy={copy} />
 
       <div className="border-t border-sand-200 dark:border-navy-600 p-5 grid grid-cols-1 xl:grid-cols-2 gap-4">
         <OutputCard label="Human Brief" value={outputs.humanBrief} copied={copied} onCopy={copy} />
@@ -360,7 +419,7 @@ export function MaskRevealEditableWorkspace() {
   );
 }
 
-function ProjectTimelinePanel({ state, editingSceneId, onEdit, onDelete }: { state: MotionZukanComposerState; editingSceneId: string | null; onEdit: (scene: MaskRevealSceneInstance) => void; onDelete: (sceneId: string) => void }) {
+function ProjectTimelinePanel({ state, editingSceneId, onEdit, onDelete, onDuplicate, copied, onCopy }: { state: MotionZukanComposerState; editingSceneId: string | null; onEdit: (scene: MaskRevealSceneInstance) => void; onDelete: (sceneId: string) => void; onDuplicate: (sceneId: string) => void; copied: string; onCopy: (label: string, value: string) => Promise<void> }) {
   return (
     <section className="border-t border-sand-200 dark:border-navy-600 p-5">
       <div className="flex flex-wrap items-end justify-between gap-3">
@@ -382,18 +441,24 @@ function ProjectTimelinePanel({ state, editingSceneId, onEdit, onDelete }: { sta
                 <ol className="mt-3 space-y-2">{scenes.map((scene, index) => {
                   const resolvedScene = resolveMaskRevealEditableIntent(scene.editableIntent);
                   const placement = timeline?.placements.find((item) => item.sceneId === scene.sceneId);
+                  const hasImageLayer = scene.editableIntent.imageImplementation !== null && resolvedScene.imagePatternId !== "";
                   return (
                     <li key={scene.sceneId} className={`border p-3 ${editingSceneId === scene.sceneId ? "border-sky-400 bg-sky-50/60 dark:bg-sky-950/20" : "border-sand-200 dark:border-navy-600"}`}>
                       <div className="flex items-start justify-between gap-3">
                         <div className="min-w-0">
                           <p className="text-[10px] text-navy-400">#{index + 1} · {scene.editableIntent.section} · {scene.recipeProvenance.recipeId}</p>
                           <p className="mt-1 text-xs font-semibold text-navy-800 dark:text-sand-100 truncate">{resolvedScene.text} / {scene.editableIntent.davinciImplementation.detailLabel}</p>
+                          {hasImageLayer && <p className="mt-1 text-[10px] text-navy-500 dark:text-navy-300 truncate">画像: {resolvedScene.mediaLabel} / {scene.editableIntent.imageImplementation!.detailLabel} / {resolvedScene.imageMotionDurationSeconds.toFixed(1)}秒</p>}
                           <p className="mt-1 text-[10px] text-navy-500 dark:text-navy-300">{positionLabels[resolvedScene.positionPreset]} / {directionLabels[resolvedScene.direction]} / {scene.computedDurationSeconds.toFixed(1)}秒 / {scene.status}</p>
                           {placement && <p className="mt-1 text-[10px] font-mono text-navy-400">{placement.startSeconds.toFixed(1)}s → {placement.endSeconds.toFixed(1)}s</p>}
                           {scene.durationDeltaSeconds > 0 && <p className="mt-1 text-[10px] text-amber-700 dark:text-amber-300">Targetとの差 +{scene.durationDeltaSeconds.toFixed(1)}秒</p>}
                           <p className="mt-1 text-[10px] text-navy-400">HUMAN_SELECTED {scene.humanSelectedFields.length} / LOCKED {scene.lockedFields.length}</p>
                         </div>
-                        <div className="flex gap-2 shrink-0"><button type="button" onClick={() => onEdit(scene)} className="text-[10px] text-sky-700 dark:text-sky-300">編集</button><button type="button" onClick={() => onDelete(scene.sceneId)} className="text-[10px] text-red-500">削除</button></div>
+                        <div className="flex gap-2 shrink-0">
+                          <button type="button" onClick={() => onDuplicate(scene.sceneId)} className="text-[10px] text-emerald-700 dark:text-emerald-300" title="同じ組み合わせ(パターン/位置/強さ)を保ったまま次のSceneを作る">複製</button>
+                          <button type="button" onClick={() => onEdit(scene)} className="text-[10px] text-sky-700 dark:text-sky-300">編集</button>
+                          <button type="button" onClick={() => onDelete(scene.sceneId)} className="text-[10px] text-red-500">削除</button>
+                        </div>
                       </div>
                       <MaskRevealSceneHandoffCard scene={scene} />
                     </li>
@@ -401,11 +466,62 @@ function ProjectTimelinePanel({ state, editingSceneId, onEdit, onDelete }: { sta
                 })}</ol>
               )}
               {(timeline?.edges.length ?? 0) > 0 && <p className="mt-3 text-[10px] text-navy-400">SceneEdge: {timeline?.edges.length} / default HARD CUT</p>}
+              {scenes.length > 0 && <ProjectBundleExport projectId={projectId} scenes={scenes} timeline={timeline} copied={copied} onCopy={onCopy} />}
             </div>
           );
         })}
       </div>
     </section>
+  );
+}
+
+// Bundles every adopted Scene in one project (in timeline order) into one document, so a 14-Scene
+// Opening doesn't mean copy-pasting 14 separate Human Brief / Palmier / DaVinci cards one at a
+// time. Same per-Scene outputs as the single-Scene cards below, just concatenated with placement.
+function ProjectBundleExport({ projectId, scenes, timeline, copied, onCopy }: { projectId: SceneProjectId; scenes: MaskRevealSceneInstance[]; timeline: MotionZukanComposerState["timelines"][number] | undefined; copied: string; onCopy: (label: string, value: string) => Promise<void> }) {
+  const bundle = useMemo(() => {
+    const sections = scenes.map((scene, index) => {
+      const placement = timeline?.placements.find((item) => item.sceneId === scene.sceneId);
+      const outputs = buildMaskRevealEditableProductionOutputs(scene.editableIntent);
+      const placementLine = placement ? `Placement: ${placement.startSeconds.toFixed(1)}s → ${placement.endSeconds.toFixed(1)}s` : "Placement: (not yet in a rebuilt timeline)";
+      return [
+        `=== Scene ${index + 1}/${scenes.length} · ${scene.sceneId} ===`,
+        placementLine,
+        "",
+        "--- Human Brief ---",
+        outputs.humanBrief,
+        "",
+        "--- Palmier Instruction ---",
+        outputs.palmierInstruction,
+        "",
+        "--- DaVinci Finish Manifest ---",
+        outputs.davinciFinishManifest,
+      ].join("\n");
+    });
+    return [
+      `${projectId.toUpperCase()} PROJECT BUNDLE / ${scenes.length} Scenes / ${(timeline?.totalComputedDurationSeconds ?? 0).toFixed(1)} sec total`,
+      "Scenes are in current Project Timeline order. Each Scene keeps its own HUMAN_SELECTED/LOCKED values; adopting a bundle export does not merge or reorder Scenes.",
+      "",
+      ...sections,
+    ].join("\n\n");
+  }, [scenes, timeline, projectId]);
+
+  const bundleJson = useMemo(() => JSON.stringify({
+    schemaVersion: "scene-project-bundle/v1",
+    projectId,
+    totalComputedDurationSeconds: timeline?.totalComputedDurationSeconds ?? 0,
+    scenes: scenes.map((scene) => buildMaskRevealSceneExport(scene)),
+  }, null, 2), [scenes, timeline, projectId]);
+
+  return (
+    <div className="mt-4 border-t border-sand-200 dark:border-navy-600 pt-3">
+      <p className="text-[10px] tracking-[0.16em] font-semibold text-navy-400">{scenes.length}件まとめて書き出す</p>
+      <p className="mt-1 text-[10px] leading-4 text-navy-400">Palmier/DaVinciへ1件ずつコピーする代わりに、この{projectId === "opening" ? "Opening" : "Profile"}の全Sceneを順番通り1つの文書にまとめます。</p>
+      <div className="mt-2 flex flex-wrap gap-2">
+        <button type="button" onClick={() => void onCopy(`${projectId}-bundle-text`, bundle)} className="border border-emerald-600 text-emerald-700 dark:text-emerald-300 px-3 py-1.5 text-[10px] font-semibold">{copied === `${projectId}-bundle-text` ? "COPIED ✓" : `${scenes.length}件を1つのテキストとしてコピー`}</button>
+        <button type="button" onClick={() => void onCopy(`${projectId}-bundle-json`, bundleJson)} className="border border-sand-300 dark:border-navy-600 text-navy-600 dark:text-navy-300 px-3 py-1.5 text-[10px] font-semibold">{copied === `${projectId}-bundle-json` ? "COPIED ✓" : "JSONとしてコピー"}</button>
+      </div>
+    </div>
   );
 }
 

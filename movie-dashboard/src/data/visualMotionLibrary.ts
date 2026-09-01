@@ -1216,6 +1216,31 @@ export function composablePatterns(): ComposablePatternInfo[] {
   return result;
 }
 
+// Split by category so the Scene Composer can offer a "text motion" picker and a separate
+// "image motion" picker instead of one flat list mixing typography and photo patterns. Cut /
+// flash patterns are deliberately excluded from both: they describe a transition at the edge
+// between two Scenes, not a layer's own motion (see visual-scene-composer-design-rules.md #13).
+export function composableTextPatterns(): ComposablePatternInfo[] {
+  const textPatternIds = new Set(motionPatterns.filter((pattern) => pattern.categories.includes("TYPOGRAPHY")).map((pattern) => pattern.id));
+  return composablePatterns().filter((pattern) => textPatternIds.has(pattern.patternId));
+}
+
+export function composableImagePatterns(): ComposablePatternInfo[] {
+  // categories.includes("PHOTO") alone isn't enough: cut-hard-accent / flash-one-frame-soft are
+  // TRANSITION patterns that also happen to operate on photo/video media (source includes
+  // "photo"), so they pick up a PHOTO tag too. Require PHOTO and NOT TRANSITION so only patterns
+  // that are actually about presenting one image/video (Static Hero, Small Push, ...) show up
+  // here — transitions stay out of both layer pickers per the SceneEdge design rule.
+  const imagePatternIds = new Set(
+    motionPatterns.filter((pattern) => pattern.categories.includes("PHOTO") && !pattern.categories.includes("TRANSITION")).map((pattern) => pattern.id),
+  );
+  return composablePatterns().filter((pattern) => imagePatternIds.has(pattern.patternId));
+}
+
+export function findComposablePattern(patternId: string): ComposablePatternInfo | null {
+  return composablePatterns().find((pattern) => pattern.patternId === patternId) ?? null;
+}
+
 function implementationToolList(implementation: MotionImplementationRecord): string[] {
   switch (implementation.kind) {
     case "DAVINCI_TEXT_PLUS":

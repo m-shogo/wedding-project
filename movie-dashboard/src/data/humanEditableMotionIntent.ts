@@ -35,6 +35,13 @@ export interface MaskRevealEditableFields {
   exitMotion: EditableValue<string>;
   exitDurationSeconds: EditableValue<number>;
   staggerDelaySeconds: EditableValue<number>;
+  // Independent image layer: which PHOTO-category pattern drives the image's own motion, and how
+  // long that motion should run. "" means "no separate image motion" (image is just a static
+  // backdrop for the text layer, matching the original single-layer behavior). Kept independent
+  // of the text-layer's enterDurationSeconds/holdDurationSeconds per the Human-Readable/Editable
+  // Movie Contract's "Image and text motion remain independently editable" rule.
+  imagePatternId: EditableValue<string>;
+  imageMotionDurationSeconds: EditableValue<number>;
   positionPreset: EditableValue<PositionPreset>;
   positionXPercent: EditableValue<number>;
   positionYPercent: EditableValue<number>;
@@ -63,6 +70,13 @@ export interface MaskRevealEditableIntent {
     detailLabel: string;
     tools: readonly string[];
   };
+  // null when no independent image pattern is selected (imagePatternId field resolves to "").
+  imageImplementation: {
+    implementationId: string;
+    easyLabel: string;
+    detailLabel: string;
+    tools: readonly string[];
+  } | null;
 }
 
 function editable<T>(defaultValue: T, aiSuggestedValue: T | null = null, aiReason: string | null = null): EditableValue<T> {
@@ -108,6 +122,7 @@ export function getEditableDecisionState<T>(value: EditableValue<T>): EditableDe
 export function createDefaultMaskRevealEditableIntent(
   section: MaskRevealSection = "OPENING_INTRO",
   pattern: ComposablePatternInfo = MASK_REVEAL_PATTERN_INFO,
+  imagePattern: ComposablePatternInfo | null = null,
 ): MaskRevealEditableIntent {
   const profile = section.startsWith("PROFILE_");
   const sceneDuration = profile ? 5 : 4;
@@ -132,6 +147,8 @@ export function createDefaultMaskRevealEditableIntent(
       exitMotion: editable("NONE"),
       exitDurationSeconds: editable(0),
       staggerDelaySeconds: editable(0),
+      imagePatternId: editable(imagePattern?.patternId ?? ""),
+      imageMotionDurationSeconds: editable(sceneDuration),
       positionPreset: editable("BOTTOM_RIGHT"),
       positionXPercent: editable(80),
       positionYPercent: editable(78),
@@ -149,6 +166,12 @@ export function createDefaultMaskRevealEditableIntent(
       easyLabel: pattern.easyLabel,
       detailLabel: pattern.detailLabel,
       tools: pattern.tools,
+    },
+    imageImplementation: imagePattern && {
+      implementationId: imagePattern.implementationId,
+      easyLabel: imagePattern.easyLabel,
+      detailLabel: imagePattern.detailLabel,
+      tools: imagePattern.tools,
     },
   };
 }
@@ -209,8 +232,9 @@ export function retargetMaskRevealSection(
   intent: MaskRevealEditableIntent,
   section: MaskRevealSection,
   pattern: ComposablePatternInfo = MASK_REVEAL_PATTERN_INFO,
+  imagePattern: ComposablePatternInfo | null = null,
 ): MaskRevealEditableIntent {
-  const nextDefaults = createDefaultMaskRevealEditableIntent(section, pattern);
+  const nextDefaults = createDefaultMaskRevealEditableIntent(section, pattern, imagePattern);
   const fields = { ...intent.fields } as MaskRevealEditableFields;
 
   (Object.keys(fields) as MaskRevealEditableFieldKey[]).forEach((key) => {
@@ -242,6 +266,8 @@ export function resolveMaskRevealEditableIntent(intent: MaskRevealEditableIntent
     exitMotion: resolveEditableValue(f.exitMotion),
     exitDurationSeconds: resolveEditableValue(f.exitDurationSeconds),
     staggerDelaySeconds: resolveEditableValue(f.staggerDelaySeconds),
+    imagePatternId: resolveEditableValue(f.imagePatternId),
+    imageMotionDurationSeconds: resolveEditableValue(f.imageMotionDurationSeconds),
     positionPreset: resolveEditableValue(f.positionPreset),
     positionXPercent: resolveEditableValue(f.positionXPercent),
     positionYPercent: resolveEditableValue(f.positionYPercent),

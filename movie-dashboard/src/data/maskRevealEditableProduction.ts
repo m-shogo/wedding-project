@@ -29,6 +29,8 @@ function readableFieldName(key: MaskRevealEditableFieldKey) {
     exitMotion: "Exit Motion",
     exitDurationSeconds: "Exit Duration",
     staggerDelaySeconds: "Stagger Delay",
+    imagePatternId: "Image Motion Pattern",
+    imageMotionDurationSeconds: "Image Motion Duration",
     positionPreset: "Position",
     positionXPercent: "Position X",
     positionYPercent: "Position Y",
@@ -78,6 +80,7 @@ export function buildMaskRevealEditableSourceOfTruth(intent: MaskRevealEditableI
     rule: "HUMAN_SELECTED / LOCKED must never be silently overwritten by Claude, Codex, Palmier, automation, preset updates, or DaVinci handoff generation.",
     fields,
     implementation: intent.davinciImplementation,
+    imageImplementation: intent.imageImplementation,
   };
 }
 
@@ -105,9 +108,19 @@ export function buildMaskRevealEditableProductionOutputs(intent: MaskRevealEdita
     ? humanSelectedKeys.map((key) => `- ${readableFieldName(key)}: ${formatValue(sourceOfTruth.fields[key].effective)}`)
     : ["- none yet"];
 
+  const hasImageLayer = intent.imageImplementation !== null && resolved.imagePatternId !== "";
+  const imageLayerLines = hasImageLayer
+    ? [
+        `Image Motion: ${intent.imageImplementation!.detailLabel} (${resolved.imagePatternId})`,
+        `Image Motion Duration: ${resolved.imageMotionDurationSeconds.toFixed(1)} sec`,
+      ]
+    : ["Image Motion: none (static backdrop only)"];
+
   const humanBrief = [
-    `${intent.section} / ${intent.davinciImplementation.detailLabel}`,
+    `${intent.section} / ${intent.davinciImplementation.detailLabel}${hasImageLayer ? ` + ${intent.imageImplementation!.detailLabel}` : ""}`,
     `Scene Duration: ${resolved.sceneDurationSeconds.toFixed(1)} sec`,
+    "",
+    "TEXT LAYER",
     `Text: ${resolved.text}`,
     `Layer Delay: ${resolved.layerDelaySeconds.toFixed(1)} sec`,
     `Motion Delay: ${resolved.motionDelaySeconds.toFixed(1)} sec`,
@@ -120,6 +133,12 @@ export function buildMaskRevealEditableProductionOutputs(intent: MaskRevealEdita
     `Scale: ${resolved.scaleFromPercent}% → ${resolved.scaleToPercent}%`,
     `Crop / Focus: ${resolved.cropFocus}`,
     `Intensity: ${resolved.intensity}`,
+    "",
+    "IMAGE LAYER",
+    `Media: ${resolved.mediaLabel}`,
+    ...imageLayerLines,
+    "",
+    "Text layer and Image layer are independently editable. Scene Duration is the longer of the two — changing one layer's timing does not change the other.",
     "人間が1項目だけ変更した場合、無関係なText / Crop / Timing / Motionを再生成しない。",
   ].join("\n");
 
@@ -149,19 +168,23 @@ export function buildMaskRevealEditableProductionOutputs(intent: MaskRevealEdita
     "PALMIER ROUGH / HUMAN MASTER AUTHORITY",
     `Scene Duration: ${resolved.sceneDurationSeconds.toFixed(1)} sec`,
     `Media: ${resolved.mediaLabel}`,
+    hasImageLayer ? `Image Motion: ${intent.imageImplementation!.detailLabel} / ${resolved.imageMotionDurationSeconds.toFixed(1)} sec` : "Image Motion: none (static backdrop)",
     `Text: ${resolved.text}`,
     `Layer Delay: ${resolved.layerDelaySeconds.toFixed(1)} sec`,
     `Reserved Enter Duration: ${resolved.enterDurationSeconds.toFixed(1)} sec`,
     `Hold: ${resolved.holdDurationSeconds.toFixed(1)} sec`,
     `Position intent: ${resolved.positionPreset} / X ${resolved.positionXPercent}% / Y ${resolved.positionYPercent}%`,
     `Direction: ${resolved.direction}`,
-    "Do not bake a substitute effect when exact Mask Reveal is unavailable.",
+    `Do not bake a substitute effect when exact ${intent.patternId} is unavailable.`,
+    hasImageLayer ? `Image motion (${intent.imageImplementation!.detailLabel}) and text motion are separate layers; do not merge them into one effect.` : null,
     "Preserve locked/human-selected intent in the sidecar manifest for DaVinci finishing.",
     "If Palmier applies an approximation, record intended value, applied value, and delta instead of erasing the intent.",
-  ].join("\n");
+  ].filter((line): line is string => line !== null).join("\n");
 
   const davinciFinishManifest = [
     "DAVINCI FINAL / HUMAN MASTER AUTHORITY",
+    "",
+    "TEXT LAYER",
     `Implementation: ${intent.davinciImplementation.implementationId}`,
     `Text: ${resolved.text}`,
     `Scene Duration: ${resolved.sceneDurationSeconds.toFixed(1)} sec`,
@@ -176,6 +199,18 @@ export function buildMaskRevealEditableProductionOutputs(intent: MaskRevealEdita
     `Scale: ${resolved.scaleFromPercent}% → ${resolved.scaleToPercent}%`,
     `Intensity: ${resolved.intensity}`,
     `Tools: ${intent.davinciImplementation.tools.join(" / ")}`,
+    "",
+    "IMAGE LAYER",
+    hasImageLayer ? `Implementation: ${intent.imageImplementation!.implementationId}` : "Implementation: none (static backdrop, no independent image motion)",
+    `Media: ${resolved.mediaLabel}`,
+    ...(hasImageLayer
+      ? [
+          `Image Motion Duration: ${resolved.imageMotionDurationSeconds.toFixed(1)} sec`,
+          `Tools: ${intent.imageImplementation!.tools.join(" / ")}`,
+        ]
+      : []),
+    "",
+    "Text layer and Image layer are independent Fusion/Edit setups within the same Scene; do not collapse them into one node graph unless the two implementations already share tooling.",
     "LOCKED values must match the sidecar editable source of truth.",
     "Actual render is implementation evidence, not the source of truth.",
     "Verification required: opened-in-davinci → render-tested → visual-QA → record local Resolve version",
@@ -194,6 +229,7 @@ export function buildMaskRevealEditableProductionOutputs(intent: MaskRevealEdita
     },
     davinci: {
       implementationId: intent.davinciImplementation.implementationId,
+      imageImplementationId: intent.imageImplementation?.implementationId ?? null,
       lockedFields: lockedKeys,
       adjustableOnlyWhenUnlocked: ["exactEasing", "subFrameTiming", "minorCropWithinFocusRule"],
     },
