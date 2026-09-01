@@ -1,0 +1,47 @@
+name: Wedding Human BGM Cue Marker Dashboard CI
+
+on:
+  pull_request:
+    paths:
+      - 'movie-dashboard/src/components/WeddingHumanBgmCueMarkerCard.tsx'
+      - 'movie-dashboard/src/components/WeddingMediaIntakeChecklistCard.tsx'
+      - 'motion-studio/scripts/wedding-project-bgm-cue-map.mts'
+      - '.github/workflows/wedding-human-bgm-cue-marker-dashboard-ci.yml'
+  workflow_dispatch:
+
+jobs:
+  contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify Human BGM cue marker operator contract
+        run: |
+          node <<'NODE'
+          const fs=require('fs');
+          const card=fs.readFileSync('movie-dashboard/src/components/WeddingHumanBgmCueMarkerCard.tsx','utf8');
+          const parent=fs.readFileSync('movie-dashboard/src/components/WeddingMediaIntakeChecklistCard.tsx','utf8');
+          const canonical=fs.readFileSync('motion-studio/scripts/wedding-project-bgm-cue-map.mts','utf8');
+          for(const token of [
+            'wedding-movie-production-audio-input/v1',
+            'wedding-movie-human-bgm-cues/v1',
+            'data-human-bgm-cue-marker',
+            'data-human-bgm-cue-binding',
+            'data-human-bgm-audio-player',
+            'data-mark-human-bgm-cue',
+            'data-human-bgm-cue-list',
+            'data-export-human-bgm-cues',
+            'PHRASE','HIT','BUILD','RELEASE',
+            'Math.round(raw*FPS)',
+            'manifest.sha256!==audioSha',
+            'humanMarked:true',
+            'reviewedAt:new Date().toISOString()',
+            'wedding-project-bgm-cue-map.mts',
+            'automaticBeatDetection=false',
+            'automaticEditPointSelection=false',
+            'productionReady'
+          ]) if(!card.includes(token)) throw new Error(`missing Human BGM cue marker token: ${token}`);
+          if(!parent.includes('WeddingHumanBgmCueMarkerCard')||!parent.includes('<WeddingHumanBgmCueMarkerCard projectId={projectId} />')) throw new Error('Human BGM cue marker is not mounted');
+          for(const token of ['HUMAN_MARKED_BGM_CUES_BOUND_TO_CURRENT_APPROVED_AUDIO','automaticBeatDetection:false','automaticQualityVerdict:false','remotionStudioGuiActual:"NOT_RUN"','palmierGuiActual:"NOT_RUN"','macDaVinciGuiActual:"NOT_RUN"','productionReady:false']) if(!canonical.includes(token)) throw new Error(`canonical BGM cue-map boundary drift: ${token}`);
+          for(const forbidden of ['automaticBeatDetection=true','automaticEditPointSelection=true','productionReady=true']) if(card.includes(forbidden)) throw new Error(`forbidden cue marker auto-promotion: ${forbidden}`);
+          NODE
