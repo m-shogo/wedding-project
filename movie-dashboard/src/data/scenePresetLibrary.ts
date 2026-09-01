@@ -1,23 +1,36 @@
 import type { MaskRevealDirection, MaskRevealIntensity, PositionPreset } from "./humanEditableMotionIntent";
 
 // A named, reusable "combination" of structural Scene choices (which text pattern, which image
-// pattern, position, direction, intensity, timing) WITHOUT the per-scene content (Text / Media
-// Label). The point is: build one combination once ("Small Push写真 + Mask Reveal右下タイトル"),
-// name it, and reuse it for every following Scene without re-picking every dropdown each time.
-// Text/Media stay scene-specific and are never captured here.
+// pattern, position, direction, intensity, every numeric timing field) WITHOUT the per-scene
+// content (Text / Media Label). The point is: build one combination once ("Small Push写真 +
+// Mask Reveal右下タイトル、Hold長め"), name it, and reuse it for every following Scene without
+// re-picking every dropdown/number each time. Text/Media stay scene-specific and are never
+// captured here — only values that describe HOW a Scene moves, not WHAT it shows.
 export interface ScenePreset {
   schemaVersion: "scene-preset/v1";
   id: string;
   name: string;
   patternId: string;
   imagePatternId: string;
+  sceneDurationSeconds: number;
+  layerDelaySeconds: number;
+  motionDelaySeconds: number;
+  enterDurationSeconds: number;
+  holdDurationSeconds: number;
+  exitDurationSeconds: number;
+  staggerDelaySeconds: number;
+  imageMotionDurationSeconds: number;
   positionPreset: PositionPreset;
   positionXPercent: number;
   positionYPercent: number;
+  positionOffsetXPercent: number;
+  positionOffsetYPercent: number;
   direction: MaskRevealDirection;
+  distancePercent: number;
+  scaleFromPercent: number;
+  scaleToPercent: number;
+  cropFocus: "CENTER" | "SUBJECT_SAFE";
   intensity: MaskRevealIntensity;
-  layerDelaySeconds: number;
-  imageMotionDurationSeconds: number;
   createdAt: string;
 }
 
@@ -49,6 +62,15 @@ export function addScenePreset(preset: Omit<ScenePreset, "schemaVersion" | "id" 
     createdAt: new Date().toISOString(),
   };
   const presets = [...loadScenePresets(), next];
+  saveScenePresets(presets);
+  return presets;
+}
+
+// Overwrites an existing preset's structural values in place (keeps id/name/createdAt) — for
+// "この見た目を今の値に更新" instead of deleting and re-saving under a new id every time a
+// combination gets refined.
+export function updateScenePreset(id: string, values: Omit<ScenePreset, "schemaVersion" | "id" | "name" | "createdAt">): ScenePreset[] {
+  const presets = loadScenePresets().map((preset) => (preset.id === id ? { ...preset, ...values } : preset));
   saveScenePresets(presets);
   return presets;
 }

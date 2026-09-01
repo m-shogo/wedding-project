@@ -19,7 +19,7 @@ import {
 } from "../data/humanEditableMotionIntent";
 import { buildMaskRevealEditableProductionOutputs } from "../data/maskRevealEditableProduction";
 import { buildMaskRevealExecutionOutputs } from "../data/maskRevealHandoff";
-import { addScenePreset, loadScenePresets, removeScenePreset, type ScenePreset } from "../data/scenePresetLibrary";
+import { addScenePreset, loadScenePresets, removeScenePreset, updateScenePreset, type ScenePreset } from "../data/scenePresetLibrary";
 import { composableImagePatterns, composableTextPatterns } from "../data/visualMotionLibrary";
 import {
   buildMaskRevealDaVinciValueBridge,
@@ -59,16 +59,32 @@ const directionLabels: Record<MaskRevealDirection, string> = {
 
 const intensityLabels: Record<MaskRevealIntensity, string> = { S: "弱", M: "中", L: "強" };
 
-type BroadcastFieldId = "intensity" | "direction" | "position" | "layerDelaySeconds";
+type BroadcastFieldId =
+  | "intensity"
+  | "direction"
+  | "position"
+  | "layerDelaySeconds"
+  | "sceneTiming"
+  | "motionTiming"
+  | "imageMotionDurationSeconds"
+  | "positionDetail"
+  | "cropFocus";
 
 // Each broadcastable "group" touches one or more MaskRevealEditableFieldKey values together
 // (position bundles preset+X+Y, matching how choosePositionPreset already sets them as one
 // unit). Kept as data so the bulk-apply button loop doesn't need one hand-written case per field.
+// `enterMotion`/`holdMotion`/`exitMotion` are deliberately excluded — they're pattern-identity
+// labels with no dedicated editor control, not independently tunable values.
 const BROADCAST_FIELD_GROUPS: Array<{ id: BroadcastFieldId; label: string; keys: MaskRevealEditableFieldKey[] }> = [
   { id: "intensity", label: "強さ", keys: ["intensity"] },
   { id: "direction", label: "文字の登場方向", keys: ["direction"] },
   { id: "position", label: "位置", keys: ["positionPreset", "positionXPercent", "positionYPercent"] },
   { id: "layerDelaySeconds", label: "文字を出すタイミング", keys: ["layerDelaySeconds"] },
+  { id: "sceneTiming", label: "Scene Duration / Hold / Exit", keys: ["sceneDurationSeconds", "holdDurationSeconds", "exitDurationSeconds"] },
+  { id: "motionTiming", label: "文字の動く速さ(Delay/Duration/Stagger)", keys: ["motionDelaySeconds", "enterDurationSeconds", "staggerDelaySeconds"] },
+  { id: "imageMotionDurationSeconds", label: "画像の動きの長さ", keys: ["imageMotionDurationSeconds"] },
+  { id: "positionDetail", label: "位置の微調整・距離・スケール", keys: ["positionOffsetXPercent", "positionOffsetYPercent", "distancePercent", "scaleFromPercent", "scaleToPercent"] },
+  { id: "cropFocus", label: "Crop / Focus", keys: ["cropFocus"] },
 ];
 
 type Level = "EASY" | "DETAIL" | "DAVINCI";
@@ -89,7 +105,17 @@ export function MaskRevealEditableWorkspace() {
   const [editingSceneId, setEditingSceneId] = useState<string | null>(null);
   const [presets, setPresets] = useState<ScenePreset[]>(() => loadScenePresets());
   const [presetNameDraft, setPresetNameDraft] = useState<string | null>(null);
-  const [broadcastFields, setBroadcastFields] = useState<Record<BroadcastFieldId, boolean>>({ intensity: true, direction: false, position: false, layerDelaySeconds: false });
+  const [broadcastFields, setBroadcastFields] = useState<Record<BroadcastFieldId, boolean>>({
+    intensity: true,
+    direction: false,
+    position: false,
+    layerDelaySeconds: false,
+    sceneTiming: false,
+    motionTiming: false,
+    imageMotionDurationSeconds: false,
+    positionDetail: false,
+    cropFocus: false,
+  });
   const outputs = useMemo(() => buildMaskRevealEditableProductionOutputs(intent), [intent, outputRevision]);
   const resolved = resolveMaskRevealEditableIntent(intent);
   const timing = computeMaskRevealSceneDuration(intent);
@@ -240,6 +266,34 @@ export function MaskRevealEditableWorkspace() {
     return imageLabel ? `${textLabel} + ${imageLabel}` : textLabel;
   }
 
+  // Every structural (non-content) value a preset can carry, snapshotted from the currently
+  // resolved intent. Shared by "save as new" and "overwrite existing" so the two never drift.
+  function presetValuesFromCurrent(): Omit<ScenePreset, "schemaVersion" | "id" | "name" | "createdAt"> {
+    return {
+      patternId: intent.patternId,
+      imagePatternId: resolved.imagePatternId,
+      sceneDurationSeconds: resolved.sceneDurationSeconds,
+      layerDelaySeconds: resolved.layerDelaySeconds,
+      motionDelaySeconds: resolved.motionDelaySeconds,
+      enterDurationSeconds: resolved.enterDurationSeconds,
+      holdDurationSeconds: resolved.holdDurationSeconds,
+      exitDurationSeconds: resolved.exitDurationSeconds,
+      staggerDelaySeconds: resolved.staggerDelaySeconds,
+      imageMotionDurationSeconds: resolved.imageMotionDurationSeconds,
+      positionPreset: resolved.positionPreset,
+      positionXPercent: resolved.positionXPercent,
+      positionYPercent: resolved.positionYPercent,
+      positionOffsetXPercent: resolved.positionOffsetXPercent,
+      positionOffsetYPercent: resolved.positionOffsetYPercent,
+      direction: resolved.direction,
+      distancePercent: resolved.distancePercent,
+      scaleFromPercent: resolved.scaleFromPercent,
+      scaleToPercent: resolved.scaleToPercent,
+      cropFocus: resolved.cropFocus,
+      intensity: resolved.intensity,
+    };
+  }
+
   function startSavePreset() {
     setPresetNameDraft(defaultPresetName());
   }
@@ -247,19 +301,12 @@ export function MaskRevealEditableWorkspace() {
   function confirmSavePreset() {
     const name = (presetNameDraft ?? "").trim();
     if (!name) return;
-    setPresets(addScenePreset({
-      name,
-      patternId: intent.patternId,
-      imagePatternId: resolved.imagePatternId,
-      positionPreset: resolved.positionPreset,
-      positionXPercent: resolved.positionXPercent,
-      positionYPercent: resolved.positionYPercent,
-      direction: resolved.direction,
-      intensity: resolved.intensity,
-      layerDelaySeconds: resolved.layerDelaySeconds,
-      imageMotionDurationSeconds: resolved.imageMotionDurationSeconds,
-    }));
+    setPresets(addScenePreset({ name, ...presetValuesFromCurrent() }));
     setPresetNameDraft(null);
+  }
+
+  function overwritePreset(id: string) {
+    setPresets(updateScenePreset(id, presetValuesFromCurrent()));
   }
 
   function cancelSavePreset() {
@@ -270,17 +317,35 @@ export function MaskRevealEditableWorkspace() {
     const pattern = patterns.find((item) => item.patternId === preset.patternId) ?? MASK_REVEAL_PATTERN_INFO;
     const imagePattern = preset.imagePatternId ? imagePatterns.find((item) => item.patternId === preset.imagePatternId) ?? null : null;
     // Starts a fresh intent from the preset's pattern pair (same rule as changePattern: a
-    // structural change is "start this Scene over"), then layers the preset's position/direction/
-    // intensity/timing on top. Text/Media are intentionally left at their pattern defaults —
-    // presets never carry scene-specific content.
+    // structural change is "start this Scene over"), then layers every preset value on top.
+    // Text/Media are intentionally left at their pattern defaults — presets never carry
+    // scene-specific content. Fields absent on an older-shape stored preset (`undefined`) are
+    // left at that fresh default rather than overwritten, so a preset saved before this field
+    // set expanded still applies cleanly instead of writing `undefined` into the intent.
     let next = createDefaultMaskRevealEditableIntent(intent.section, pattern, imagePattern);
-    next = applyHumanSelection(next, "positionPreset", preset.positionPreset);
-    next = applyHumanSelection(next, "positionXPercent", preset.positionXPercent);
-    next = applyHumanSelection(next, "positionYPercent", preset.positionYPercent);
-    next = applyHumanSelection(next, "direction", preset.direction);
-    next = applyHumanSelection(next, "intensity", preset.intensity);
-    next = applyHumanSelection(next, "layerDelaySeconds", preset.layerDelaySeconds);
-    if (imagePattern) next = applyHumanSelection(next, "imageMotionDurationSeconds", preset.imageMotionDurationSeconds);
+    const apply = <K extends MaskRevealEditableFieldKey>(key: K, value: MaskRevealEditableFields[K]["defaultValue"] | undefined) => {
+      if (value === undefined) return;
+      next = applyHumanSelection(next, key, value);
+    };
+    apply("positionPreset", preset.positionPreset);
+    apply("positionXPercent", preset.positionXPercent);
+    apply("positionYPercent", preset.positionYPercent);
+    apply("positionOffsetXPercent", preset.positionOffsetXPercent);
+    apply("positionOffsetYPercent", preset.positionOffsetYPercent);
+    apply("direction", preset.direction);
+    apply("intensity", preset.intensity);
+    apply("layerDelaySeconds", preset.layerDelaySeconds);
+    apply("sceneDurationSeconds", preset.sceneDurationSeconds);
+    apply("motionDelaySeconds", preset.motionDelaySeconds);
+    apply("enterDurationSeconds", preset.enterDurationSeconds);
+    apply("holdDurationSeconds", preset.holdDurationSeconds);
+    apply("exitDurationSeconds", preset.exitDurationSeconds);
+    apply("staggerDelaySeconds", preset.staggerDelaySeconds);
+    apply("distancePercent", preset.distancePercent);
+    apply("scaleFromPercent", preset.scaleFromPercent);
+    apply("scaleToPercent", preset.scaleToPercent);
+    apply("cropFocus", preset.cropFocus);
+    if (imagePattern) apply("imageMotionDurationSeconds", preset.imageMotionDurationSeconds);
     setIntent(next);
     setEditingSceneId(null);
   }
@@ -355,6 +420,7 @@ export function MaskRevealEditableWorkspace() {
               {presets.map((preset) => (
                 <div key={preset.id} className="flex items-center gap-1 border border-sand-300 dark:border-navy-600">
                   <button type="button" onClick={() => applyPreset(preset)} className="px-2 py-1.5 text-[10px] text-navy-700 dark:text-sand-100">{preset.name}</button>
+                  <button type="button" onClick={() => overwritePreset(preset.id)} className="px-2 py-1.5 text-[10px] text-sky-600" title="今の値でこのプリセットを上書き保存">⟳</button>
                   <button type="button" onClick={() => deletePreset(preset.id)} className="px-2 py-1.5 text-[10px] text-red-500" title="このプリセットを削除">×</button>
                 </div>
               ))}
