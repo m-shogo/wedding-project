@@ -9,6 +9,7 @@ const required=[
   "data-production-rhythm-correction-binding",
   "data-production-rhythm-live-composer",
   "data-production-rhythm-correction-refresh-required",
+  "data-rhythm-transition-edge-selector",
   "QUEUE_RHYTHM_SHA_MISMATCH",
   "QUEUE_CURRENTNESS_SHA_MISMATCH",
   "RHYTHM_CURRENTNESS_NOT_CURRENT",
@@ -21,12 +22,17 @@ const required=[
   "MECHANICAL_CUE_ONLY_NOT_QUALITY_VERDICT",
   'requestedBy:"PROJECT_RHYTHM_CORRECTION_QUEUE"',
   'axis:"PACING"',
+  'axis:"TRANSITION"',
   'surface:"SCENE_TIMING_AND_A_B_COMPARE"',
+  "edge.returnTo.focusSceneId",
+  "edge.returnTo.focusSourceRevision",
+  "Human-selected EdgeをTransition editorへ",
+  "Scene edgeを選択",
   "createHash(buffer)",
   "loadMotionZukanComposerState",
   "MOTION_ZUKAN_COMPOSER_CHANGED_EVENT",
   "current.updatedAt!==source.sourceRevision",
-  "exact SceneはHuman選択必須",
+  "Human選択必須",
   "quality verdictではありません",
   "TIMING EDIT DETECTED → OLD RHYTHM EVIDENCE STALE",
   "refresh-wedding-project-real-media-visual-qa.mts",
@@ -45,6 +51,7 @@ if(!intake.includes("<WeddingProductionRhythmCorrectionQueueCard projectId={proj
 if(/productionReady\s*:\s*true/.test(operator)) throw new Error("operator must never manufacture productionReady");
 if(/humanVisualQa\s*:\s*["']PASS["']/.test(operator)) throw new Error("operator must never manufacture Human visual QA PASS");
 if(!operator.includes('disabled={gate.state!=="BOUND"}')) throw new Error("mechanical correction navigation must fail closed unless queue/rhythm/currentness/live composer are bound");
-if(!operator.includes('disabled={gate.state!=="BOUND"||!humanSelections[item.id]}')) throw new Error("Human FAIL navigation must require explicit Human Scene selection");
+if(!operator.includes('disabled={gate.state!=="BOUND"||!humanSelections[item.id]}')) throw new Error("Human non-transition FAIL navigation must require explicit Human Scene selection");
+if(!operator.includes('disabled={gate.state!=="BOUND"||!humanEdgeSelections[item.id]}')) throw new Error("Human transition cadence FAIL navigation must require explicit Human edge selection");
 if(!operator.includes('if(liveComposerBinding.state==="STALE")reasons.push(...liveComposerBinding.reasons)')) throw new Error("live composer Scene revision drift must invalidate the loaded correction queue");
-console.log("Wedding production rhythm correction queue Motion Zukan live-stale operator contracts: PASS");
+console.log("Wedding production rhythm correction queue Motion Zukan live-stale + Human edge-selection operator contracts: PASS");

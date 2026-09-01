@@ -53,8 +53,8 @@ jobs:
             "authority":"EXPLICIT_HUMAN_WHOLE_PROJECT_RHYTHM_REVIEW_BOUND_TO_CURRENT_RHYTHM_PASS",
             "projectId":"opening",
             "source":{"rhythmPassSha256":"${RHYTHM_SHA}","currentnessSha256":"${CURRENT_SHA}","previewManifestSha256":"${PREVIEW_SHA}","renderSha256":"${CURRENT_RENDER_SHA}"},
-            "review":{"performed":true,"reviewer":"HUMAN_FIXTURE_ONLY","reviewedAt":"2026-09-01T00:00:00Z","axes":{"openingPace":{"verdict":"FAIL","notes":"fixture"},"midsectionVariety":{"verdict":"PASS","notes":""},"emotionalHold":{"verdict":"PASS","notes":""},"endingBreathingRoom":{"verdict":"PASS","notes":""},"transitionCadence":{"verdict":"PASS","notes":""},"overallRhythm":{"verdict":"FAIL","notes":"fixture"}},"finalVerdict":"FAIL"},
-            "summary":{"allAxesReviewed":true,"failedAxes":["openingPace","overallRhythm"],"productionReady":false},
+            "review":{"performed":true,"reviewer":"HUMAN_FIXTURE_ONLY","reviewedAt":"2026-09-01T00:00:00Z","axes":{"openingPace":{"verdict":"FAIL","notes":"fixture"},"midsectionVariety":{"verdict":"PASS","notes":""},"emotionalHold":{"verdict":"PASS","notes":""},"endingBreathingRoom":{"verdict":"PASS","notes":""},"transitionCadence":{"verdict":"FAIL","notes":"fixture edge"},"overallRhythm":{"verdict":"FAIL","notes":"fixture"}},"finalVerdict":"FAIL"},
+            "summary":{"allAxesReviewed":true,"failedAxes":["openingPace","transitionCadence","overallRhythm"],"productionReady":false},
             "evidenceBoundary":{"humanRhythmReviewPerformed":true,"humanVisualQa":"NOT_RUN","remotionStudioGuiActual":"NOT_RUN","palmierGuiActual":"NOT_RUN","macDaVinciGuiActual":"NOT_RUN","productionReady":false}
           }
           JSON
@@ -65,8 +65,14 @@ jobs:
           import {readFileSync} from 'node:fs';
           const q=JSON.parse(readFileSync('/tmp/rhythm-queue/queue.json','utf8'));
           if(q.schemaVersion!=='wedding-movie-production-rhythm-correction-queue/v1') throw new Error('schema');
-          if(q.summary.humanFailedAxisCount!==2) throw new Error('Human FAIL count');
+          if(q.summary.humanFailedAxisCount!==3) throw new Error('Human FAIL count');
           if(q.items.filter((x)=>x.kind==='HUMAN_AXIS_FAIL').some((x)=>x.sceneBindings.length!==0||x.selectionAuthority!=='HUMAN_MUST_SELECT_EXACT_SCENE_OR_EDGE_BEFORE_EDIT')) throw new Error('Human FAIL must not auto-select Scene');
+          const transition=q.items.find((x)=>x.kind==='HUMAN_AXIS_FAIL'&&x.axis==='transitionCadence');
+          if(!transition||transition.edgeCandidates.length!==1) throw new Error('transition FAIL requires current edge candidates');
+          const edge=transition.edgeCandidates[0];
+          if(edge.fromSceneId!=='a'||edge.toSceneId!=='b'||edge.fromSourceRevision!=='r1'||edge.toSourceRevision!=='r2'||edge.fromTimingRevision!=='t1'||edge.toTimingRevision!=='t2') throw new Error('transition edge revision binding');
+          if(edge.returnTo.axis!=='TRANSITION'||edge.returnTo.focusSceneId!=='b'||edge.returnTo.focusSourceRevision!=='r2') throw new Error('transition correction route');
+          if(q.summary.humanTransitionEdgeCandidateCount!==1||q.summary.requiresHumanEdgeSelection!==true||q.summary.requiresHumanSceneSelection!==true) throw new Error('Human selection summary');
           if(!q.items.some((x)=>x.kind==='MECHANICAL_CUE'&&x.sceneBindings.length>0)) throw new Error('expected exact mechanical Scene binding');
           if(q.evidenceBoundary.humanVisualQa!=='NOT_RUN'||q.evidenceBoundary.remotionStudioGuiActual!=='NOT_RUN'||q.evidenceBoundary.palmierGuiActual!=='NOT_RUN'||q.evidenceBoundary.macDaVinciGuiActual!=='NOT_RUN'||q.evidenceBoundary.productionReady!==false) throw new Error('evidence boundary');
           NODE
