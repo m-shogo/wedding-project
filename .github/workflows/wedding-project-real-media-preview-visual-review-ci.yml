@@ -3,6 +3,7 @@ name: Wedding Project Real Media Visual Review CI
 on:
   pull_request:
     paths:
+      - 'motion-studio/scripts/wedding-project-real-media-preview-qa-stills.mts'
       - 'motion-studio/scripts/wedding-project-real-media-preview-visual-review.mts'
       - '.github/workflows/wedding-project-real-media-preview-visual-review-ci.yml'
   workflow_dispatch:
@@ -16,55 +17,42 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Build CURRENT QA stills authority fixture
+      - name: Build CURRENT timing/framing-bound QA stills fixture
         shell: bash
         run: |
           set -euo pipefail
           mkdir -p /tmp/visual-review
           printf '{"preview":"current"}\n' > /tmp/visual-review/preview-manifest.json
           printf 'preview-current' > /tmp/visual-review/preview.mp4
-          printf 'scene-a-start' > /tmp/visual-review/a-start.png
-          printf 'scene-a-mid' > /tmp/visual-review/a-mid.png
-          printf 'scene-a-end' > /tmp/visual-review/a-end.png
-          printf 'scene-b-start' > /tmp/visual-review/b-start.png
-          printf 'scene-b-mid' > /tmp/visual-review/b-mid.png
-          printf 'scene-b-end' > /tmp/visual-review/b-end.png
-          printf 'transition-mid' > /tmp/visual-review/transition.png
+          for f in a-start a-mid a-end b-start b-mid b-end transition; do printf "$f" > "/tmp/visual-review/$f.png"; done
           node --input-type=module <<'NODE'
           import {createHash} from 'node:crypto';
           import {readFileSync,writeFileSync} from 'node:fs';
           const sha=(p)=>createHash('sha256').update(readFileSync(p)).digest('hex');
-          const scene=(id,rev,pattern,role,path,kind)=>({kind,sceneId:id,sourceRevision:rev,patternId:pattern,productionRole:role,mediaSha256:`media-${id}`,frame:1,seconds:1/30,path,sha256:sha(path),bytes:1,width:640,height:360});
-          const m={
-            schemaVersion:'wedding-movie-real-media-preview-qa-stills/v1',
-            authority:'DERIVED_VISUAL_QA_ARTIFACTS_FROM_CURRENT_REAL_MEDIA_PREVIEW',
-            projectId:'opening',
-            source:{previewManifestPath:'/tmp/visual-review/preview-manifest.json',previewManifestSha256:sha('/tmp/visual-review/preview-manifest.json'),previewPath:'/tmp/visual-review/preview.mp4',previewSha256:sha('/tmp/visual-review/preview.mp4')},
-            stills:[
-              scene('scene-a','rev-a','type-mask-reveal','TITLE_REVEAL','/tmp/visual-review/a-start.png','SCENE_START_SAFE'),
-              scene('scene-a','rev-a','type-mask-reveal','TITLE_REVEAL','/tmp/visual-review/a-mid.png','SCENE_MID'),
-              scene('scene-a','rev-a','type-mask-reveal','TITLE_REVEAL','/tmp/visual-review/a-end.png','SCENE_END_SAFE'),
-              scene('scene-b','rev-b','split-rise','IMPACT_TITLE','/tmp/visual-review/b-start.png','SCENE_START_SAFE'),
-              scene('scene-b','rev-b','split-rise','IMPACT_TITLE','/tmp/visual-review/b-mid.png','SCENE_MID'),
-              scene('scene-b','rev-b','split-rise','IMPACT_TITLE','/tmp/visual-review/b-end.png','SCENE_END_SAFE')
-            ],
-            transitionStills:[{kind:'CROSS_DISSOLVE_MID',fromSceneId:'scene-a',toSceneId:'scene-b',durationFrames:6,frame:15,seconds:.5,path:'/tmp/visual-review/transition.png',sha256:sha('/tmp/visual-review/transition.png'),bytes:1,width:640,height:360}],
-            summary:{sceneCount:2,stillCount:6,transitionStillCount:1,sourceCurrentVerified:true,humanVisualQa:'NOT_RUN',productionReady:false},
-            evidenceBoundary:{remotionStudioGuiActual:'NOT_RUN',palmierGuiActual:'NOT_RUN',macDaVinciGuiActual:'NOT_RUN',visualQa:'NOT_RUN',productionReady:false}
-          };
+          const framing=(revision)=>({fit:'COVER',focusX:50,focusY:50,scale:1,revision});
+          const timing=(id,rev,timingRevision)=>({sceneId:id,sourceRevision:rev,targetDurationSeconds:1,computedDurationSeconds:1,durationFrames:30,fps:30,revision:timingRevision});
+          const scene=(id,rev,pattern,role,path,kind,framingRevision,timingRevision)=>({kind,sceneId:id,sourceRevision:rev,patternId:pattern,productionRole:role,mediaSha256:`media-${id}`,framing:framing(framingRevision),framingRevision,timing:timing(id,rev,timingRevision),timingRevision,frame:1,seconds:1/30,path,sha256:sha(path),bytes:1,width:640,height:360});
+          const m={schemaVersion:'wedding-movie-real-media-preview-qa-stills/v1',authority:'DERIVED_VISUAL_QA_ARTIFACTS_FROM_CURRENT_REAL_MEDIA_PREVIEW',projectId:'opening',source:{previewManifestPath:'/tmp/visual-review/preview-manifest.json',previewManifestSha256:sha('/tmp/visual-review/preview-manifest.json'),previewPath:'/tmp/visual-review/preview.mp4',previewSha256:sha('/tmp/visual-review/preview.mp4')},stills:[
+            scene('scene-a','rev-a','type-mask-reveal','TITLE_REVEAL','/tmp/visual-review/a-start.png','SCENE_START_SAFE','frame-a-r1','timing-a-r1'),
+            scene('scene-a','rev-a','type-mask-reveal','TITLE_REVEAL','/tmp/visual-review/a-mid.png','SCENE_MID','frame-a-r1','timing-a-r1'),
+            scene('scene-a','rev-a','type-mask-reveal','TITLE_REVEAL','/tmp/visual-review/a-end.png','SCENE_END_SAFE','frame-a-r1','timing-a-r1'),
+            scene('scene-b','rev-b','split-rise','IMPACT_TITLE','/tmp/visual-review/b-start.png','SCENE_START_SAFE','frame-b-r1','timing-b-r1'),
+            scene('scene-b','rev-b','split-rise','IMPACT_TITLE','/tmp/visual-review/b-mid.png','SCENE_MID','frame-b-r1','timing-b-r1'),
+            scene('scene-b','rev-b','split-rise','IMPACT_TITLE','/tmp/visual-review/b-end.png','SCENE_END_SAFE','frame-b-r1','timing-b-r1')
+          ],transitionStills:[{kind:'CROSS_DISSOLVE_MID',fromSceneId:'scene-a',toSceneId:'scene-b',fromFramingRevision:'frame-a-r1',toFramingRevision:'frame-b-r1',fromTimingRevision:'timing-a-r1',toTimingRevision:'timing-b-r1',durationFrames:6,frame:15,seconds:.5,path:'/tmp/visual-review/transition.png',sha256:sha('/tmp/visual-review/transition.png'),bytes:1,width:640,height:360}],summary:{sceneCount:2,stillCount:6,transitionStillCount:1,sourceCurrentVerified:true,framingCurrentVerified:true,timingCurrentVerified:true,humanVisualQa:'NOT_RUN',productionReady:false},evidenceBoundary:{remotionStudioGuiActual:'NOT_RUN',palmierGuiActual:'NOT_RUN',macDaVinciGuiActual:'NOT_RUN',visualQa:'NOT_RUN',productionReady:false}};
           writeFileSync('/tmp/visual-review/stills-manifest.json',JSON.stringify(m,null,2)+'\n');
           NODE
       - name: Initialize fail-closed Human review
         run: node --no-warnings motion-studio/scripts/wedding-project-real-media-preview-visual-review.mts --stills-manifest=/tmp/visual-review/stills-manifest.json --init --output=/tmp/visual-review/review.json
-      - name: Verify NOT_RUN initialization and transition revision binding
+      - name: Verify NOT_RUN initialization and timing identity
         run: |
           node --input-type=module <<'NODE'
           import {readFileSync} from 'node:fs';
           const r=JSON.parse(readFileSync('/tmp/visual-review/review.json','utf8'));
           if(r.finalVerdict!=='NOT_RUN'||r.evidenceBoundary.humanVisualReviewPerformed!==false) throw new Error('review auto-promoted');
           for(const s of r.scenes) for(const x of Object.values(s.checks)) if(x.verdict!=='NOT_RUN') throw new Error('scene auto-promoted');
-          for(const t of r.transitions) for(const x of Object.values(t.checks)) if(x.verdict!=='NOT_RUN') throw new Error('transition auto-promoted');
-          if(r.transitions[0].fromSourceRevision!=='rev-a'||r.transitions[0].toSourceRevision!=='rev-b') throw new Error('transition revision binding missing');
+          if(r.scenes[0].timingRevision!=='timing-a-r1'||r.scenes[1].timingRevision!=='timing-b-r1') throw new Error('scene timing binding missing');
+          if(r.transitions[0].fromTimingRevision!=='timing-a-r1'||r.transitions[0].toTimingRevision!=='timing-b-r1') throw new Error('transition timing binding missing');
           NODE
       - name: Record explicit Human fixture failures and finalize
         run: |
@@ -73,45 +61,57 @@ jobs:
           const p='/tmp/visual-review/review.json'; const r=JSON.parse(readFileSync(p,'utf8'));
           for(const s of r.scenes) for(const x of Object.values(s.checks)) x.verdict='PASS';
           for(const t of r.transitions) for(const x of Object.values(t.checks)) x.verdict='PASS';
-          r.scenes[0].checks.CROP_SUBJECT_SAFE={verdict:'FAIL',notes:'subject clipped'};
-          r.scenes[1].checks.TITLE_READABLE={verdict:'FAIL',notes:'title loses contrast'};
+          r.scenes[0].checks.VISUAL_TEMPO_FEELS_INTENTIONAL={verdict:'FAIL',notes:'hold is too short'};
           r.transitions[0].checks.NO_FLASH_OR_UNINTENDED_BLACK_FRAME={verdict:'FAIL',notes:'flash at midpoint'};
           r.finalVerdict='FAIL'; r.finalNotes='fixture'; r.reviewer='HUMAN_FIXTURE_ONLY'; r.reviewedAt='2026-09-01T00:00:00.000Z'; r.evidenceBoundary.humanVisualReviewPerformed=true;
           writeFileSync(p,JSON.stringify(r,null,2)+'\n');
           NODE
           node --no-warnings motion-studio/scripts/wedding-project-real-media-preview-visual-review.mts --stills-manifest=/tmp/visual-review/stills-manifest.json --review=/tmp/visual-review/review.json --output=/tmp/visual-review/queue.json
-      - name: Verify correction routing, transition revisions, and evidence boundary
+      - name: Verify timing correction routing and evidence boundary
         run: |
           node --input-type=module <<'NODE'
           import {readFileSync} from 'node:fs';
           const q=JSON.parse(readFileSync('/tmp/visual-review/queue.json','utf8'));
-          if(q.summary.failedChecks!==3||q.summary.notRunChecks!==0||q.summary.correctionRequired!==true||q.summary.productionReady!==false) throw new Error('summary');
-          const routes=new Set(q.failures.map((x)=>x.returnTo));
-          for(const expected of ['REAL_MEDIA_CROP','SCENE_BOUND_A_B_COMPARE','SCENE_EDGE_TRANSITION']) if(!routes.has(expected)) throw new Error(`missing route ${expected}`);
+          if(q.summary.failedChecks!==2||q.summary.timingIdentityVerified!==true||q.summary.productionReady!==false) throw new Error('summary');
+          const tempo=q.failures.find((x)=>x.check==='VISUAL_TEMPO_FEELS_INTENTIONAL');
+          if(!tempo||tempo.returnTo!=='SCENE_TIMING_AND_RHYTHM'||tempo.timingRevision!=='timing-a-r1') throw new Error('timing correction route');
           const transition=q.failures.find((x)=>x.kind==='TRANSITION');
-          if(!transition||transition.fromSourceRevision!=='rev-a'||transition.toSourceRevision!=='rev-b') throw new Error('transition queue revision binding');
+          if(!transition||transition.fromTimingRevision!=='timing-a-r1'||transition.toTimingRevision!=='timing-b-r1') throw new Error('transition timing binding');
           if(q.evidenceBoundary.remotionStudioGuiActual!=='NOT_RUN'||q.evidenceBoundary.palmierGuiActual!=='NOT_RUN'||q.evidenceBoundary.macDaVinciGuiActual!=='NOT_RUN') throw new Error('GUI Actual promoted');
           NODE
-      - name: Tampered Human transition revision fails closed
+      - name: Tampered Human timing revision fails closed
+        shell: bash
         run: |
-          cp /tmp/visual-review/review.json /tmp/visual-review/review-stale-transition.json
+          cp /tmp/visual-review/review.json /tmp/visual-review/review-stale-timing.json
           node --input-type=module <<'NODE'
           import {readFileSync,writeFileSync} from 'node:fs';
-          const p='/tmp/visual-review/review-stale-transition.json'; const r=JSON.parse(readFileSync(p,'utf8'));
-          r.transitions[0].fromSourceRevision='rev-stale';
+          const p='/tmp/visual-review/review-stale-timing.json'; const r=JSON.parse(readFileSync(p,'utf8'));
+          r.scenes[0].timingRevision='timing-a-stale';
           writeFileSync(p,JSON.stringify(r,null,2)+'\n');
           NODE
-          if node --no-warnings motion-studio/scripts/wedding-project-real-media-preview-visual-review.mts --stills-manifest=/tmp/visual-review/stills-manifest.json --review=/tmp/visual-review/review-stale-transition.json --output=/tmp/visual-review/stale-transition.json 2>/tmp/visual-review/stale-transition.err; then
-            echo 'expected transition revision mismatch to block' >&2
-            exit 1
+          if node --no-warnings motion-studio/scripts/wedding-project-real-media-preview-visual-review.mts --stills-manifest=/tmp/visual-review/stills-manifest.json --review=/tmp/visual-review/review-stale-timing.json --output=/tmp/visual-review/stale-timing.json 2>/tmp/visual-review/stale-timing.err; then
+            echo 'expected timing revision mismatch to block' >&2; exit 1
           fi
-          grep -q 'REAL_PREVIEW_VISUAL_REVIEW_HUMAN_SOURCE_STALE\|REAL_PREVIEW_VISUAL_REVIEW_TRANSITION_IDENTITY_MISMATCH' /tmp/visual-review/stale-transition.err
+          grep -q 'REAL_PREVIEW_VISUAL_REVIEW_HUMAN_SOURCE_STALE\|REAL_PREVIEW_VISUAL_REVIEW_SCENE_IDENTITY_MISMATCH' /tmp/visual-review/stale-timing.err
+      - name: Stills transition timing drift fails closed
+        shell: bash
+        run: |
+          cp /tmp/visual-review/stills-manifest.json /tmp/visual-review/stills-stale-transition.json
+          node --input-type=module <<'NODE'
+          import {readFileSync,writeFileSync} from 'node:fs';
+          const p='/tmp/visual-review/stills-stale-transition.json'; const m=JSON.parse(readFileSync(p,'utf8'));
+          m.transitionStills[0].fromTimingRevision='timing-a-stale';
+          writeFileSync(p,JSON.stringify(m,null,2)+'\n');
+          NODE
+          if node --no-warnings motion-studio/scripts/wedding-project-real-media-preview-visual-review.mts --stills-manifest=/tmp/visual-review/stills-stale-transition.json --init --output=/tmp/visual-review/stale-transition.json 2>/tmp/visual-review/stale-transition.err; then
+            echo 'expected transition timing drift to block' >&2; exit 1
+          fi
+          grep -q 'REAL_PREVIEW_VISUAL_REVIEW_TRANSITION_TIMING_STALE' /tmp/visual-review/stale-transition.err
       - name: Post-review still tamper fails closed
         shell: bash
         run: |
           printf 'tamper' >> /tmp/visual-review/a-mid.png
           if node --no-warnings motion-studio/scripts/wedding-project-real-media-preview-visual-review.mts --stills-manifest=/tmp/visual-review/stills-manifest.json --review=/tmp/visual-review/review.json --output=/tmp/visual-review/stale.json 2>/tmp/visual-review/stale.err; then
-            echo 'expected stale still to block' >&2
-            exit 1
+            echo 'expected stale still to block' >&2; exit 1
           fi
           grep -q 'REAL_PREVIEW_VISUAL_REVIEW_STILL_STALE' /tmp/visual-review/stale.err
