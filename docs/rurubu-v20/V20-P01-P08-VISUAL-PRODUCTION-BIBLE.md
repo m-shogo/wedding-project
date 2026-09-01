@@ -1,432 +1,146 @@
 # Rurubu WEDDING V20 — P01–P08 Visual Production Bible
 
-Status: `CURRENT / PRE-CODEX VISUAL DECISION AUTHORITY / RESET_2026-09-01`
+Status: `CURRENT / PRE-CODEX VISUAL AUTHORITY / P05_FRIENDS_ONLY_2026-09-01`
 
-Purpose: make each page specific enough that a later Codex run can generate a convincing A5 page proof and then decompose it into layered production assets without inventing the page role.
+Highest page-role authority: `V20-CURRENT-PAGE-ARCHITECTURE.md`.
 
-Highest page-role authority:
-- `V20-CURRENT-PAGE-ARCHITECTURE.md`.
+## Global target
 
-Important:
-- wedding day is `2026.10.24`;
-- P08 barcode digits are `2026102400000` exactly;
-- P01 may use the approved `るるぶ WEDDING` masthead direction;
-- current visual clutter target is roughly 75% of the earlier maximum-clutter experiments;
-- all current Figma pages are rollback baselines, not role authority;
-- old SVG/V10/V11/V12 visual grammar has zero current authority;
-- old P05 Hawaii-only, old P07 guide/discovery and old P08 closing roles are obsolete.
+- `RURUBU FEEL = 100%`
+- `EDITORIAL DENSITY = 75% OF PREVIOUS MAXIMUM-CLUTTER TESTS`
+- A5 portrait / 8 pages
+- wedding date `2026.10.24`
+- P08 barcode digits `2026102400000`
 
-# 0. PRE-CODEX TEST
+One-shot page images are art-direction proofs only. Approved proofs must be decomposed into layered production assets.
 
-Before production, each page should be capable of a strong one-shot A5 art-direction proof.
+## Canonical stack
 
-The proof is a test of:
-- title scale;
-- photo hierarchy;
-- secondary information count;
-- calm-zone placement;
-- page-specific color behavior;
-- overlap depth;
-- edge activity;
-- whether it looks like a real edited magazine page rather than a wedding template.
-
-If the proof is strong, decompose it into layered assets. Do not use the proof as the final flattened editable master.
-
-# 1. BOOK-WIDE DENSITY TARGET
-
-Earlier experiments pushed clutter too far. The current goal is **strong travel-magazine authenticity at about 75% of that maximum visual load**.
-
-General rule:
-- FIRST READ: 1 dominant event;
-- SECOND READS: usually 2–3 meaningful events;
-- MICRO DISCOVERIES: selective, page-dependent;
-- PHOTO HIERARCHY: visibly unequal;
-- CALM AREA: intentional and useful;
-- COLLISION: enough to feel edited, not enough to hide the photography;
-- no tiny-information dumping.
-
-Dense does not mean everything must be occupied.
-
-# 2. CANONICAL PRODUCTION STACK
-
-After a page proof wins, rebuild from back to front:
 1. PAPER / BASE
-2. LARGE BACKGROUND / ENVIRONMENT ART
-3. HERO REAL PHOTO
-4. UNEQUAL SUPPORT / DETAIL PHOTOS
-5. PHOTO-FRAME / PAPER-BACKING UNITS
-6. ROUTE BACK / LARGE FLOW only where relevant
-7. MAIN TITLE / MASTHEAD UNIT
-8. SUBTITLE / SECOND-READ UNIT
-9. ARTICLE / PROFILE / EPISODE / MEMORY VESSELS
-10. CAPTION / LABEL / TICKET / STAMP UNITS
-11. ROUTE FRONT / FOREGROUND COLLISION only where relevant
-12. NATIVE AUTHORITATIVE TEXT
-13. MICRO DISCOVERIES
-14. FOLIO / META / EDGE ACCENTS
-15. HIDDEN QA / GUIDES
-
-# 3. P01 — COVER / るるぶ WEDDING
-
-## Promise
-A joyful real-looking Japanese travel-magazine wedding special issue.
-
-## Energy
-`7.5/10 / HIGH, NOT MAXIMUM CLUTTER`
-
-## First read
-`るるぶ WEDDING` masthead + strong couple/Hawaii photography.
-
-## Photo roles
-- 1 dominant hero;
-- optional 0–2 support/detail images.
-
-## Secondary events
-2–3 maximum:
-- date/2026 issue cue;
-- 1–2 cover hooks;
-- optional one feature burst.
-
-## Micro discoveries
-Roughly 3–7, only after the masthead and hero work.
-
-## Generated units
-- masthead unit;
-- one date/issue unit;
-- 1–2 cover-hook vessels;
-- one edge tropical/travel cluster;
-- optional support-photo frame;
-- very small micro set.
-
-## Principal collision
-Masthead overlaps/crops into hero; one support object or vessel crosses another layer; at least one edge object crops.
-
-## Reject
-- overfilled feature list;
-- many small photos;
-- cover that resembles a sticker sheet;
-- timid masthead;
-- old SVG grammar.
-
-# 4. P02 — PROFILE / WHO WE ARE
-
-## Promise
-Understand SHOGO and SHIORI quickly.
-
-## Energy
-`6/10 / PEOPLE FEATURE`
-
-## First read
-Profile title + two distinct people photos.
-
-## Photo roles
-- 2 main portraits/personality photos;
-- optional 1 shared support photo.
-
-## Secondary events
-- SHOGO profile cluster;
-- SHIORI profile cluster;
-- optional one shared mini feature/Q&A.
-
-## Content budget
-- 3–5 facts per person when grounded;
-- maximum 1–2 Q&A snippets.
-
-## Micro discoveries
-Roughly 3–6 annotations/icons/caption details.
-
-## Generated units
-- title unit;
-- two different profile frame/annotation units;
-- short fact-label family;
-- optional one shared/Q&A vessel;
-- small annotation set.
-
-## Reject
-- timeline;
-- travel history;
-- six Q&A boxes;
-- equal employee cards;
-- dense lower-page information dump.
-
-# 5. P03 — OUR STORY
-
-## Promise
-Understand the relationship progression emotionally.
+2. BACKGROUND / ENVIRONMENT
+3. REAL PHOTOS
+4. PHOTO FRAME / BACKING UNITS
+5. ROUTE/THREAD BACK if relevant
+6. MAIN TITLE
+7. SECOND-READ/SUBTITLE
+8. PROFILE/STORY/TRAVEL/FRIENDS/Q&A VESSELS
+9. CAPTION/TICKET/STAMP/LABEL UNITS
+10. ROUTE/THREAD FRONT if relevant
+11. NATIVE AUTHORITATIVE TEXT
+12. SELECTIVE MICRO DISCOVERIES
+13. FOLIO/META/EDGE ACCENTS
+14. QA/GUIDES
 
-## Energy
-`5–5.5/10 / QUIET NARRATIVE`
+## P01 — COVER
 
-## First read
-Story title + anchor photo.
+Energy: 7.5/10.
 
-## Photo roles
-2–4 photos.
+1 hero + 0–2 supports. Strong `るるぶ WEDDING` masthead, date/names and only 1–2 cover hooks. Do not fill every edge.
 
-## Secondary events
-3–4 story chapters max.
+## P02 — PROFILE + Q1/Q2
 
-Possible grounded roles:
-- meeting / early outings;
-- becoming a couple;
-- proposal;
-- registration / arriving at wedding day.
+Energy: 6/10.
 
-## Micro discoveries
-Roughly 2–5: chapter marker, tiny route/thread, one milestone stamp, paper edge.
+2 main portraits + optional 1 shared support. Two distinct person clusters, 3–5 facts each, exactly Q1/Q2. Q&A variant tidy.
 
-## Generated units
-- story title;
-- 2–3 episode vessels;
-- one stronger milestone/proposal cue;
-- optional restrained chronology thread.
+## P03 — OUR STORY + Q3/Q4
 
-## Reject
-- corporate timeline;
-- forced dates;
-- destination-photo gallery;
-- empty luxury layout with no story texture.
+Energy: 5–5.5/10.
 
-# 6. P04 — ALL TRAVEL MEMORIES / OUR JOURNEY
+1 story anchor + 1–2 supports. 3–4 grounded chapters and exactly Q3/Q4. Q&A variant emotional. No corporate timeline.
 
-## Promise
-The single strongest travel-magazine interior page: many real journeys, clearly edited rather than dumped.
+## P04 — TRAVEL MEMORIES
 
-## Energy
-`8/10 / INTERIOR TRAVEL PEAK`
+Energy: 8/10.
 
-## First read
-Travel-memory title + strongest travel hero.
+1 travel hero + 4–5 unequal supports/details. 3–4 verified destination/memory clusters. Strongest interior travel-magazine page. Hawaii belongs here as one trip memory, not on P05.
 
-## Photo roles
-Target 5–7:
-- 1 hero;
-- 4–6 unequal support/action/detail photos.
+## P05 — FRIENDS MEMORIES ONLY
 
-## Secondary events
-2–4 destination/memory clusters from verified trips such as Okinawa, Korea, Hawaii and other supplied travel material.
-
-Hawaii is part of this page now. Do not reserve it for P05.
+Energy: 7/10 / warm-social-human.
 
-## Micro discoveries
-Roughly 5–9: short captions, stamp/ticket fragments, one route pair, tiny camera/travel cues.
+### Promise
 
-## Generated units
-- travel title unit;
-- varied destination/memory label family;
-- 2–4 caption/article vessels;
-- route BACK/FRONT if useful;
-- 1 edge cluster;
-- small travel micro set.
+A lively friends feature that instantly reads as two related editorial clusters:
+- `SHOGO FRIENDS`
+- `SHIORI FRIENDS`
 
-## Principal collision
-Hero, title, one memory vessel and one support photo overlap meaningfully; route may move behind and in front of some photos but must not cover the page.
+### Photo roles
 
-## Reject
-- equal destination cards;
-- fake travel-guide facts;
-- huge map graphic;
-- all-polaroid gallery;
-- maximum-clutter sticker carpet.
+**No single giant hero/anchor.**
 
-# 7. P05 — FAMILY & FRIENDS MEMORIES
+Target:
+- SHOGO side: 3–4 friend photos
+- SHIORI side: 3–4 friend photos
+- total 6–8
 
-## Promise
-Warmly show the people who have been part of the couple's lives.
+Use medium/small photos with controlled inequality. Each side may have one locally stronger image, but neither image may dominate the page as a whole.
 
-## Energy
-`7/10 / WARM HUMAN MEMORY`
+### Secondary events
 
-## First read
-Warm title + one representative/emotional people photo.
+- friends-memory title
+- SHOGO FRIENDS cluster
+- SHIORI FRIENDS cluster
+- short caption notes
 
-## Photo roles
-Target 5–7 real photos:
-- 1 anchor;
-- 4–6 supporting family/friend memories.
-
-## Secondary events
-Usually 2–3:
-- family cluster;
-- friends cluster;
-- one shared memory/caption cluster.
+### Generated units
 
-Do not force equal family/friends halves if the photo pool does not support them.
-
-## Micro discoveries
-Roughly 3–7: caption tabs, tape, small hearts/flowers, tiny handwritten-style arrows without fake quotes.
+- `P05_FRIENDS_TITLE_UNIT`
+- `P05_SHOGO_FRIENDS_LABEL_UNIT`
+- `P05_SHIORI_FRIENDS_LABEL_UNIT`
+- varied photo frame/backing family
+- short caption vessels
+- restrained tape/camera/heart/travel-memory accents
+- optional small shared `MEMORIES` cue with P04
 
-## Generated units
-- title unit;
-- family/friends marker pair if useful;
-- 2–3 varied frame/backing units;
-- 2–4 caption vessels;
-- one restrained edge/memory cluster.
-
-## Principal collision
-People photography remains large; title or marker can intrude into the anchor; some support photos overlap each other, but faces must remain readable at A5.
-
-## Reject
-- old HAWAII title/vessel preserved for continuity;
-- proposal article field reused just because it exists;
-- tiny group-photo mosaic;
-- invented names/relationships/anecdotes.
+### Principal layering
 
-# 8. P06 — REAL LIFE / FAVORITES / BEST SHOTS
+Light overlaps inside each cluster; labels may cross frame edges. Do not create a single centerpiece stack that visually unifies all photos into one giant hero event.
 
-## Promise
-Show everyday personality and relaxed moments.
+### Calm space
 
-## Energy
-`6.5/10 / PLAYFUL`
+Keep enough cream/paper space between/around clusters so `SHOGO` and `SHIORI` territories are legible immediately.
 
-## Photo roles
-Target 4–6:
-- 1 candid LIFE hero;
-- 3–5 support roles such as FOOD / PET-LIFE / FUN / DETAIL.
+### Hard reject
 
-## Secondary events
-2–3:
-- best-shots feature;
-- pet/life or food/fun cluster;
-- one short notes/caption cluster.
+- family content
+- FAMILY marker
+- giant hero/anchor photo
+- Hawaii-only/proposal/arrival feature
+- old P05 Hawaii title/proposal vessels as authority
+- tiny contact-sheet faces
+- inferred friend names/relationships/anecdotes
+- rigid symmetric UI cards
 
-## Micro discoveries
-Roughly 3–7.
+## P06 — REAL LIFE + Q5/Q6
 
-## Generated units
-- title/subtitle unit;
-- best-shots unit;
-- varied photo-frame units;
-- pet/food/fun cue family;
-- caption vessels.
+Energy: 6.5/10.
 
-## Reject
-- equal Instagram grid;
-- many TEMP photos becoming truth;
-- duplicate P04 travel treatment;
-- fake handwritten quotes.
+1 candid hero + 3–4 supports/details. Everyday life, Cookie/Melon, food/hobbies/fun when real. Exactly Q5/Q6; playful variant.
 
-# 9. P07 — CLOSING MESSAGE / THANK YOU
+## P07 — THANK YOU
 
-## Promise
-A warm emotional closing before the physical back cover.
+Energy: 3.5–4/10.
 
-## Energy
-`3.5–4/10 / RELEASE`
+One calm strong photo + short thank-you + names/date + one restrained final motif. No old travel-guide/schedule content.
 
-## First read
-One calm strong photo + short closing message.
+## P08 — BACK COVER
 
-## Photo roles
-1 strong real photo; optional 1 tiny support image only if clearly helpful.
+Energy: 2–3/10.
 
-## Secondary events
-- message;
-- names/date;
-- one small final-journey/wedding mark.
+0–1 calm photo/background, tiny meta, optional names/date, one tiny motif and barcode `2026102400000`. No collage or long message.
 
-## Micro discoveries
-0–3.
+## Spread rhythm
 
-## Generated units
-- restrained closing title/phrase;
-- optional message vessel;
-- one final-stop/issue mark;
-- one subtle edge accent.
+- P02–P03: `WHO → STORY`
+- P04–P05: `PLACES WE REMEMBER → FRIENDS WE REMEMBER`
+  - P04 travel hero behavior
+  - P05 multi-photo friend clusters, no giant hero
+- P06–P07: `REAL LIFE → THANK YOU`
+- P08 standalone back cover
 
-## Explicit reject
-- `TODAY'S TRAVEL GUIDE`;
-- `11 DESTINATIONS`;
-- `LOOK AROUND`;
-- `EDITOR'S PICK`;
-- table destination guide;
-- itinerary/timetable;
-- dense map/route page;
-- large information collage.
+## Final pre-Codex gate
 
-# 10. P08 — MAGAZINE BACK COVER
+Reject any proof that restores obsolete page meaning. In particular, P05 must visually read `SHOGO FRIENDS + SHIORI FRIENDS`, not family/friends, not Hawaii/proposal, and not one huge people photo.
 
-## Promise
-The physical object should end like a real magazine: quiet, intentional, slightly editorial, not another content page.
-
-## Energy
-`2–3/10 / QUIETEST`
-
-## First read
-One calm back-cover field/photo/art direction.
-
-## Secondary detail
-Minimal:
-- tiny issue/publication mark;
-- optional small names/date;
-- barcode unit;
-- optional one tiny travel/wedding mark.
-
-## Barcode
-Human-readable digits must be exactly:
-
-`2026102400000`
-
-Do not silently change the digits to make them EAN-13-valid. If encoding is desired, use Code 128-compatible/decorative treatment.
-
-## Photo roles
-0–1 photo.
-
-## Micro discoveries
-0–2.
-
-## Generated units
-- back-cover base/art;
-- barcode/meta unit;
-- optional tiny edge mark.
-
-## Reject
-- main thank-you message;
-- photo collage;
-- feature hooks;
-- QR without verified destination;
-- fake publisher/price/ISBN/JAN claims;
-- old P07 guide assets.
-
-# 11. SPREAD RHYTHM
-
-P02–P03:
-`WHO WE ARE → OUR STORY`.
-
-P04–P05 center spread:
-`PLACES WE REMEMBER → PEOPLE WE REMEMBER`.
-
-P06–P07:
-`OUR REAL LIFE → THANK YOU`.
-
-P08:
-stand-alone back cover.
-
-# 12. FULL-BOOK TEMPERATURE
-
-`P01 7.5`
-→ `P02 6`
-→ `P03 5–5.5`
-→ `P04 8`
-→ `P05 7`
-→ `P06 6.5`
-→ `P07 3.5–4`
-→ `P08 2–3`.
-
-# 13. FINAL PRE-CODEX ACCEPTANCE
-
-A page brief is ready when a one-shot proof can produce the intended page without importing an obsolete page role.
-
-If the proof still looks like:
-- wedding template;
-- card grid;
-- flat SVG sticker sheet;
-- maximum-clutter scrapbook;
-- old P05 Hawaii feature;
-- old P07 guide page;
-then the brief is not ready.
-
-Once a proof wins, decompose and rebuild as editable layered production work.
-
-`CURRENT PAGE ROLE FIRST. AUTHENTIC MAGAZINE EDITING SECOND. LAYERED PRODUCTION THIRD.`
+`P05 = FRIENDS ONLY / TWO CLUSTERS / NO GIANT HERO.`
