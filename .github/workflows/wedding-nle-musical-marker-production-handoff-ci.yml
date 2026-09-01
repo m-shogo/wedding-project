@@ -1,0 +1,55 @@
+name: Wedding NLE Musical Marker Production Handoff CI
+
+on:
+  pull_request:
+    paths:
+      - 'motion-studio/scripts/apply-wedding-nle-musical-marker-production-handoff.mts'
+      - 'motion-studio/scripts/wedding-project-nle-musical-marker-handoff.mts'
+      - 'motion-studio/scripts/verify-wedding-project-nle-musical-marker-handoff-currentness.mts'
+      - '.github/workflows/wedding-nle-musical-marker-production-handoff-ci.yml'
+  workflow_dispatch:
+
+jobs:
+  recovery-binding:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build CURRENT marker pack fixture
+        working-directory: motion-studio
+        run: |
+          mkdir -p /tmp/marker-recovery
+          cat > /tmp/marker-recovery/alignment.json <<'JSON'
+          {"schemaVersion":"wedding-movie-bgm-rhythm-alignment/v1","authority":"DERIVED_ALIGNMENT_DISTANCES_FROM_CURRENT_RHYTHM_AND_HUMAN_BGM_CUES","projectId":"opening","fps":30,"source":{"rhythmPassSha256":"rhythm-sha","bgmCueMapSha256":"cue-map-sha","bgmSha256":"bgm-sha"},"cues":[{"id":"hit-a","type":"HIT","label":"Big hit","frame":90,"seconds":3}],"events":[{"id":"scene:intro:end","kind":"SCENE_END","sceneId":"intro","sourceRevision":"scene-r1","timingRevision":"timing-r1","frame":84,"seconds":2.8}]}
+          JSON
+          ALIGNMENT_SHA=$(sha256sum /tmp/marker-recovery/alignment.json | awk '{print $1}')
+          cat > /tmp/marker-recovery/currentness.json <<JSON
+          {"schemaVersion":"wedding-movie-bgm-rhythm-alignment-currentness/v1","authority":"LIVE_REVALIDATION_OF_BGM_RHYTHM_ALIGNMENT_AGAINST_CURRENT_RHYTHM_AND_AUDIO","projectId":"opening","state":"CURRENT","source":{"alignmentSha256":"${ALIGNMENT_SHA}"}}
+          JSON
+          node --no-warnings scripts/wedding-project-nle-musical-marker-handoff.mts --alignment=/tmp/marker-recovery/alignment.json --alignment-currentness=/tmp/marker-recovery/currentness.json --output=/tmp/marker-recovery/handoff.json --csv-output=/tmp/marker-recovery/handoff.csv
+          node --no-warnings scripts/verify-wedding-project-nle-musical-marker-handoff-currentness.mts --handoff=/tmp/marker-recovery/handoff.json --output=/tmp/marker-recovery/handoff-currentness.json --strict-current=1
+      - name: Apply marker pack to DaVinci production recovery
+        working-directory: motion-studio
+        run: |
+          cat > /tmp/marker-recovery/recovery.json <<'JSON'
+          {"schemaVersion":"wedding-davinci-production-recovery-export/v1","authority":"FINAL_RENDER_BOUND_DAVINCI_RECOVERY","recovery":{"movieId":"opening","stage":"davinciFinishing","productionReady":false,"actual":{"state":"NOT_RUN"}}}
+          JSON
+          node --no-warnings scripts/apply-wedding-nle-musical-marker-production-handoff.mts --movie=opening --recovery=/tmp/marker-recovery/recovery.json --marker-handoff=/tmp/marker-recovery/handoff.json --marker-currentness=/tmp/marker-recovery/handoff-currentness.json
+      - name: Verify SHA binding and Actual boundary
+        run: |
+          node --input-type=module <<'NODE'
+          import {readFileSync} from 'node:fs';
+          const x=JSON.parse(readFileSync('/tmp/marker-recovery/recovery.json','utf8')).musicalMarkerHandoff;
+          if(x.authority!=='SHA_BOUND_CURRENT_NLE_MUSICAL_MARKER_HANDOFF'||x.state!=='CURRENT'||x.movieId!=='opening') throw new Error('recovery marker contract');
+          if(x.verification.markerCount!==2||x.verification.bgmCueCount!==1||x.verification.movieEventCount!==1||x.verification.humanEditTargetCount!==0||x.verification.exactTimecodesPresent!==true) throw new Error('marker verification');
+          if(x.source.bgmSha256!=='bgm-sha'||x.source.rhythmPassSha256!=='rhythm-sha'||x.source.bgmCueMapSha256!=='cue-map-sha') throw new Error('source binding');
+          if(x.palmierMarkerImportActual!=='NOT_RUN'||x.daVinciMarkerImportActual!=='NOT_RUN'||x.macDaVinciGuiActual!=='NOT_RUN'||x.productionReady!==false) throw new Error('Actual promotion');
+          NODE
+      - name: Stale marker pack fails closed
+        working-directory: motion-studio
+        run: |
+          printf '\n' >> /tmp/marker-recovery/alignment.json
+          if node --no-warnings scripts/apply-wedding-nle-musical-marker-production-handoff.mts --movie=opening --recovery=/tmp/marker-recovery/recovery.json --marker-handoff=/tmp/marker-recovery/handoff.json --marker-currentness=/tmp/marker-recovery/handoff-currentness.json 2>/tmp/marker-recovery/stale.err; then
+            echo 'expected stale marker handoff to block' >&2; exit 1
+          fi
+          grep -q 'NLE_MARKER_HANDOFF_NOT_CURRENT' /tmp/marker-recovery/stale.err
