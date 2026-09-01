@@ -4,6 +4,7 @@ const operator = readFileSync(new URL("../src/components/WeddingMovieProductionR
 const framing = readFileSync(new URL("../src/components/WeddingRealMediaFramingOperatorCard.tsx", import.meta.url), "utf8");
 const framingComparison = readFileSync(new URL("../src/components/WeddingRealMediaFramingComparisonReviewCard.tsx", import.meta.url), "utf8");
 const timingComparison = readFileSync(new URL("../src/components/WeddingRealMediaTimingComparisonReviewCard.tsx", import.meta.url), "utf8");
+const rhythmReview = readFileSync(new URL("../src/components/WeddingProductionRhythmReviewCard.tsx", import.meta.url), "utf8");
 const visualReview = readFileSync(new URL("../src/components/WeddingRealMediaVisualReviewOperatorCard.tsx", import.meta.url), "utf8");
 const intake = readFileSync(new URL("../src/components/WeddingMediaIntakeChecklistCard.tsx", import.meta.url), "utf8");
 
@@ -129,6 +130,40 @@ if (/productionReady:\s*true/.test(timingComparison)) throw new Error("timing co
 if (!timingComparison.includes("createHash(buffer)")) throw new Error("timing comparison receipt/selected/stills must be browser-SHA verified before review");
 if (!timingComparison.includes('browserBinding.state === "CURRENT"') || !timingComparison.includes('strictBinding.state === "CURRENT"')) throw new Error("timing Human review must fail closed unless browser and canonical strict currentness are CURRENT");
 
+const rhythmRequired = [
+  "wedding-movie-production-rhythm-pass/v1",
+  "wedding-movie-production-rhythm-pass-currentness/v1",
+  "LIVE_REVALIDATION_OF_PRODUCTION_RHYTHM_PASS_AGAINST_CURRENT_RENDERED_REAL_MEDIA_PREVIEW",
+  "data-production-rhythm-review",
+  "data-production-rhythm-current",
+  "data-production-rhythm-timeline",
+  "data-production-rhythm-scene",
+  "data-production-rhythm-human-operator",
+  "wedding-movie-production-rhythm-human-review/v1",
+  "EXPLICIT_HUMAN_WHOLE_PROJECT_RHYTHM_REVIEW_BOUND_TO_CURRENT_RHYTHM_PASS",
+  "RHYTHM_PASS_SHA_MISMATCH",
+  "PREVIEW_MANIFEST_SHA_NOT_CURRENT",
+  "RENDER_SHA_NOT_CURRENT",
+  "requestMotionZukanSceneFocus",
+  'requestedBy:"PROJECT_RHYTHM_CORRECTION_QUEUE"',
+  'axis:"PACING"',
+  'surface:"SCENE_TIMING_AND_A_B_COMPARE"',
+  "mechanical cue",
+  "quality verdictではありません",
+  "Human rhythm review JSONを書き出す",
+  "Human visual QA = NOT_RUN",
+  "Remotion Studio GUI Actual = NOT_RUN",
+  "Palmier GUI Actual = NOT_RUN",
+  "Mac DaVinci GUI Actual = NOT_RUN",
+  "productionReady:false",
+];
+for (const token of rhythmRequired) if (!rhythmReview.includes(token)) throw new Error(`whole-project rhythm review contract missing: ${token}`);
+if (!intake.includes("<WeddingProductionRhythmReviewCard projectId={projectId} />")) throw new Error("whole-project rhythm review is not mounted in the real-media intake surface");
+if (!rhythmReview.includes("const [performed,setPerformed]=useState(false)")) throw new Error("whole-project Human rhythm review must initialize NOT_RUN / not performed");
+if (!rhythmReview.includes('const initialAxes=()=>Object.fromEntries(AXES.map(({key})=>[key,{verdict:"NOT_RUN",notes:""}]))')) throw new Error("whole-project Human rhythm axes must initialize NOT_RUN");
+if (!rhythmReview.includes('const canExport=gate.state==="CURRENT"&&performed&&allReviewed')) throw new Error("whole-project Human rhythm evidence export must require CURRENT + explicit performed + all axes reviewed");
+if (!rhythmReview.includes('disabled={gate.state!=="CURRENT"}')) throw new Error("whole-project rhythm correction navigation / review controls must fail closed when strict authority is not CURRENT");
+
 const visualRequired = [
   "wedding-movie-real-media-human-visual-review/v1",
   "data-real-media-visual-review-operator",
@@ -146,4 +181,4 @@ const visualRequired = [
 for (const token of visualRequired) if (!visualReview.includes(token)) throw new Error(`real-media visual review operator contract missing: ${token}`);
 if (!intake.includes("<WeddingRealMediaVisualReviewOperatorCard projectId={projectId} />")) throw new Error("real-media visual review operator is not mounted in the real-media intake surface");
 if (/humanVisualReviewPerformed:\s*true/.test(visualReview)) throw new Error("visual review operator must not auto-promote Human review performed");
-console.log("Wedding Movie production readiness + Human framing + strict-current framing/timing comparison + visual review operator contracts: PASS");
+console.log("Wedding Movie production readiness + Human framing + strict-current framing/timing comparison + whole-project rhythm + visual review operator contracts: PASS");
