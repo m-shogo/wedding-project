@@ -1,108 +1,106 @@
 # Rurubu WEDDING V20 — Editorial Budgets & Change Resilience
 
-Status: `CANONICAL_FOUNDATION`
+Status: `CANONICAL_FOUNDATION / CURRENT_PAGE_ROLES_2026-09-01`
 
-Purpose: prevent late-stage layout collapse caused by too much copy, wrong photo assumptions, or one factual change forcing a whole-page redesign.
+Highest page-role authority: `V20-CURRENT-PAGE-ARCHITECTURE.md`.
 
-## 1. Core rule
+Purpose: prevent layout collapse caused by too much copy, wrong photo assumptions or legacy page roles.
 
-V20 must be designed with *capacity*, not only with today's content.
+## Core rule
 
-Every page reserves space for:
-- copy expansion;
-- photo replacement with a different crop;
-- one missing/late fact;
-- one decorative element being removed without leaving a visual hole.
+Design with capacity, not forced fill.
 
-Do not tune a page so tightly that the current placeholder text is the only text length that fits.
+Every page should tolerate:
+- modest copy expansion;
+- photo replacement with different crop;
+- one support photo being removed;
+- one decorative element disappearing without exposing a hole.
 
-## 2. Copy budgets
+## Copy budgets
 
-Working A5 targets. These are editorial budgets, not mandatory fill quotas.
-
-| Copy role | Preferred budget | Stress-test budget |
+| Copy role | Preferred budget | Stress budget |
 |---|---:|---:|
 | Hero/title | 6–18 Japanese chars | +25% |
 | Section title | 8–24 chars | +30% |
 | Short callout | 10–35 chars | +40% |
-| Caption | 18–55 chars | +40% |
+| Caption | 15–45 chars | +40% |
 | Profile fact | 6–28 chars each | +40% |
-| Short story block | 55–120 chars | +35% |
-| Main narrative block | 100–220 chars | +30% |
-| Wedding-day stop label | 8–35 chars | +50% |
+| Short story block | 45–100 chars | +35% |
+| P07 closing message | 40–100 chars | +20% |
+| P08 meta | minimal only | do not expand into feature copy |
 
-If copy exceeds stress-test range, first edit/restructure the copy. Do not silently shrink type below the readability floor.
+If copy exceeds the budget, edit/restructure first. Do not silently shrink type.
 
-## 3. Photo budgets
+## Page photo budgets
 
-Each page manual defines a preferred count and a minimum viable count.
+- P01: 1–3
+- P02: 2–3
+- P03: 2–4
+- P04: 5–7
+- P05: 5–7
+- P06: 4–6
+- P07: 1–2
+- P08: 0–1
 
-Rule:
-- layout must still work with one fewer support photo;
-- hero photo replacement must tolerate reasonable changes in portrait/landscape crop;
-- do not depend on one exact face position unless that image is frozen and final;
-- keep at least 8–12% crop overscan inside replaceable masks where practical.
+Layout should usually survive one fewer support photo.
 
-P04–P05 center spread gets the largest photo budget, but it must not become a contact sheet.
+P05 group photos require enough physical size for recognizable faces.
 
-## 4. Density budget
+## Density budget
 
-Each page contains:
+Current visual-load target is approximately 75% of the earlier maximum-clutter experiments.
+
+Each energetic page should generally have:
 - one dominant cluster;
-- one secondary cluster;
-- one calm reading field;
-- optional micro-discovery layer.
+- 1–2 secondary clusters;
+- one calm reading/recovery field;
+- optional selective micro-discovery layer.
 
-Do not spend all visual energy at once.
+Do not spend all visual energy everywhere.
 
-A page fails if:
-- every region is equally dense;
-- all photos are equally large;
-- all accents are equally saturated;
-- removing one sticker makes the composition look empty.
-
-## 5. Change classes
+## Change classes
 
 ### A — SAFE CHANGE
-Should not trigger structural redesign:
-- caption correction;
-- name/date typo fix;
+- typo/caption correction;
 - photo swap within same semantic role;
 - one decorative accent removal;
-- small copy expansion within stress budget.
+- small copy expansion within budget.
 
 ### B — LOCAL REFLOW
-May change one cluster only:
 - longer profile fact;
-- different aspect ratio support photo;
-- one added/removed travel spot note;
-- changed wedding-day wording.
+- different support-photo aspect ratio;
+- one travel memory added/removed on P04;
+- one family/friend photo added/removed on P05;
+- closing copy length change on P07.
 
 ### C — ARCHITECTURE CHANGE
-Requires page-manual review before Figma edit:
 - page purpose changes;
 - new full content category;
-- removing a major destination;
-- turning one page into a different editorial genre;
-- changing 8-page count or A5 format.
+- P04 no longer owning travel memories;
+- P05 no longer owning family/friend memories;
+- P07 restored to a guide/discovery page;
+- P08 restored to a full closing-message page;
+- changing page count or A5 format.
 
-Do not solve a Class C change by local Figma nudging.
+Class C requires explicit architecture review/user direction. Do not solve it with Figma nudging.
 
-## 6. Late-content reserve
+## Late-content reserve
 
-Before declaring a page structurally frozen:
-- retain one flexible support-photo role OR one flexible text/callout role;
-- ensure one calm field can expand modestly;
-- ensure decorative layers are independent of factual text;
-- ensure titles do not trap variable body copy inside raster art.
+Before a page is considered structurally stable:
+- retain one flexible support-photo/text role where appropriate;
+- keep one calm field moderately elastic;
+- keep decoration independent of factual copy;
+- avoid raster title art that traps variable body copy.
 
-## 7. Stress test
+## Stress test
 
-Before visual polish, each page must pass:
+Each page should pass:
 1. current copy;
-2. +30–40% representative copy where variable;
-3. hero photo shifted/cropped differently;
+2. representative copy expansion;
+3. hero crop shifted;
 4. one support photo removed;
 5. decoration layer hidden.
 
-If the page collapses under any of these, the structure is too brittle.
+P08 additionally passes only when barcode digits remain exactly `2026102400000` and the page still reads as a sparse back cover.
+
+`CAPACITY > FORCED FILL.`
