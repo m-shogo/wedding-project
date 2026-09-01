@@ -1,6 +1,6 @@
 # V30 P01 production assets
 
-Status: `P01_DESIGN_COMPLETE_WITH_DUMMY_PHOTOS / FINAL_PHOTO_REPLACEMENT_PENDING`
+Status: `P01_FIGMA_COMPLETE_WITH_DUMMY_PHOTOS / FINAL_PHOTO_REPLACEMENT_PENDING`
 
 P01 was rebuilt page-by-page from the current V30 rules. Canva, Canva templates, Canva-like geometry, V20 assets, generated people, generated autobiographical photos, packed production sheets and flattened page masters are not used.
 
@@ -66,6 +66,7 @@ Dummy/reference photos are temporary non-person images and are not autobiographi
 ## Visual QA / current best
 
 - P01 CURRENT BEST: Drive ID `1GbFIs99JhyiMXuPDzwio0wJr8XWUHTQU`
+- Final Figma 2x sRGB review export (`1118 × 1588`, fully opaque): Drive ID `1th-pltmuHjMKTCxEV-IM9rbsQf9kbw5Y`
 - Grayscale print-reality QA: Drive ID `1RgCLGti8jUyyD3igJ4kgxQaKVDBXEZ_i`
 - Thumbnail / three-second scan QA: Drive ID `1VlT4McRVWIYiJkc0vJsQkgN3X8t9FjLJ`
 - Temporary replacement-test proof: Drive ID `1twXmGjoBYPLK0BgKq7SsE5Pb_sGnuF9r`
@@ -75,6 +76,6 @@ Dummy/reference photos are temporary non-person images and are not autobiographi
 
 ## Remaining production boundary
 
-`P01 DESIGN_COMPLETE = YES` with dummy photos.
+`P01 FIGMA_COMPLETE = YES` with dummy photos. The page frame has square print edges, no page-frame stroke, and a verified 2x sRGB PNG review-export setting.
 
 `P01 FINAL_PHOTO_SOURCES_INSTALLED = NO` and `PRINT_READY = NO` until the real couple photographs are supplied, swapped, cropped and rechecked at A5/spread/contact-sheet level.
