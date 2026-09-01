@@ -4,6 +4,7 @@ import type {SceneProjectId} from "../data/visualSceneComposer";
 import {OpeningCropReviewOperatorCard} from "./OpeningCropReviewOperatorCard";
 import {ProfileRealMediaReviewOperatorCard} from "./ProfileRealMediaReviewOperatorCard";
 import {WeddingMovieProductionReadinessOperatorCard} from "./WeddingMovieProductionReadinessOperatorCard";
+import {WeddingProductionRhythmCorrectionQueueCard} from "./WeddingProductionRhythmCorrectionQueueCard";
 import {WeddingProductionRhythmReviewCard} from "./WeddingProductionRhythmReviewCard";
 import {WeddingRealMediaFramingComparisonReviewCard} from "./WeddingRealMediaFramingComparisonReviewCard";
 import {WeddingRealMediaFramingOperatorCard} from "./WeddingRealMediaFramingOperatorCard";
@@ -79,6 +80,7 @@ export function WeddingMediaIntakeChecklistCard({projectId}: {projectId: ScenePr
       <WeddingRealMediaFramingComparisonReviewCard projectId={projectId} />
       <WeddingRealMediaTimingComparisonReviewCard projectId={projectId} />
       <WeddingProductionRhythmReviewCard projectId={projectId} />
+      <WeddingProductionRhythmCorrectionQueueCard projectId={projectId} />
       <WeddingMovieProductionReadinessOperatorCard projectId={projectId} />
       <WeddingRealMediaVisualReviewOperatorCard projectId={projectId} />
       {isOpening ? <OpeningCropReviewOperatorCard /> : <ProfileRealMediaReviewOperatorCard />}
