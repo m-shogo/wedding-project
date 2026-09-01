@@ -76,6 +76,8 @@ Keep:
 - paper/ticket/stamp/ribbon tactility
 - authored asymmetry
 - lively travel-magazine energy
+- selected calm space
+- deliberate editorial surprises
 
 Reduce:
 - tiny stickers
@@ -85,6 +87,322 @@ Reduce:
 - decoration used only to fill empty space
 
 `FULL-STRENGTH MAGAZINE CHARACTER, EDITED TO 75% INFORMATION LOAD.`
+
+## What “Rurubu-like” means
+
+Rurubu feeling is **not** a sticker kit, a color palette, or a copied commercial layout.
+
+The desired behavior is:
+
+`EDITORIAL IDEA → CLEAR PAGE PROMISE → FIRST READ → STRONG TITLE/PHOTO GESTURE → UNEQUAL PHOTO HIERARCHY → ASYMMETRIC CLUSTERS → PURPOSE-BUILT PRINT OBJECTS → MEANINGFUL COLLISION → HUMAN COPY → SELECTIVE DISCOVERY → CALM SPACE → PAGE TEMPO`.
+
+The page should feel rich before body copy without filling every gap.
+
+Translate travel-magazine editorial thinking into the couple's real story:
+- who are they?
+- how did their story develop?
+- where did they travel?
+- who are the friends around them?
+- what is ordinary life like?
+- how does the book emotionally close?
+
+A page is not successful merely because it contains colorful tickets, stamps or arrows. Every object must help the page tell or organize something.
+
+## Five visual levels
+
+Most energetic pages may use:
+
+1. `FIRST READ` — title or primary visual event
+2. `SECOND READ` — main photo/story cluster
+3. `EDITORIAL SUPPORT` — secondary photos/labels/vessels
+4. `FACTUAL COPY` — names, dates, captions, Q&A, story copy
+5. `MICRO DISCOVERY` — tiny stamp, arrow, ticket fragment, doodle or issue detail
+
+P07 and especially P08 intentionally use fewer levels.
+
+Hard test:
+- if 4 or more objects compete at nearly the same size/contrast, hierarchy is weak;
+- at thumbnail/squint view, the first read must be obvious;
+- energetic pages usually have 1 first-read event + 1–3 meaningful secondary events, not 10 equal events.
+
+## Anti-AI / anti-template hard gate
+
+Immediately revise a page if it shows any of these symptoms:
+
+- 3+ equal cards in a clean grid
+- same corner radius on nearly every image/box
+- every section centered
+- generic gradient background
+- soft SaaS shadow on every card
+- repeated pill badges
+- one identical header component on every page
+- identical photo frames everywhere
+- equal spacing everywhere
+- identical photo counts/positions on adjacent pages
+- one Auto Layout stack controlling the whole editorial page
+- random sticker distribution used to fill holes
+- fake hand-writing/English that carries no meaning
+- meaningless decorative English
+- too many tiny objects because the page felt empty
+- luxury-brochure emptiness with no editorial event
+- generated “scrapbook” texture with no relation to the actual photos/story
+- AI-clean symmetry that looks mathematically balanced rather than edited
+
+**Generic gradients are not part of the V30 design language.** Do not add gradients merely because an AI tool suggests them. Broad flat color fields, paper tone, photography and controlled texture are preferred.
+
+The anti-AI target is not “make it messy.” The target is **authored irregularity**: purposeful hierarchy, local asymmetry, different object jobs, different page silhouettes and selective imperfections.
+
+## Figma = compositor, not the source of magazine personality
+
+Figma's main job is assembly and editability.
+
+Figma should primarily:
+- place and crop real photos;
+- use non-destructive masks so photos remain replaceable;
+- position transparent generated editorial assets;
+- control z-order and overlap;
+- keep factual/personal copy native and editable;
+- adjust line breaks and local typography;
+- maintain trim/bleed/safe guides;
+- perform contact-sheet, spread and A5 QA;
+- prepare the editable sRGB master for print handoff.
+
+Figma should **not** create the publication personality by stacking generic rectangles, cards, pills and shadows.
+
+Simple native geometry is allowed when it is genuinely simple and useful, but the visual identity should come mainly from:
+
+`REAL PHOTOGRAPHY + PAGE-SPECIFIC PREPARED ART + NATIVE TYPOGRAPHY/COPY + EDITORIAL COMPOSITION`.
+
+### Auto Layout boundary
+
+Auto Layout is useful locally for things that truly have a responsive structural relationship, such as a small label/copy group or a tidy factual unit.
+
+Do **not** make the whole page one responsive UI stack. Freeform editorial clusters, collisions and uneven photography remain intentionally positioned.
+
+### Non-destructive photo rule
+
+Real photographs remain separate from their frames/backings. Use masks/crops without destructively trimming the underlying source. A photo must be swappable without rebuilding the surrounding editorial art.
+
+### No flattening
+
+Never flatten a finished page into one final raster master.
+
+Background, photos, frames/backings, titles, vessels, native text and foreground accents remain separable enough to:
+- reorder;
+- hide;
+- replace;
+- revise copy;
+- swap photos;
+- regenerate one weak part without rebuilding the page.
+
+## Real source → generated-art bridge
+
+Inspect the real source photos before generating page-specific art.
+
+Generated decoration should respond to the actual page composition, photo subjects, crop direction, empty areas and story role. It must not look like a prebuilt unrelated sticker pack dropped on top afterward.
+
+During layout development, lower-resolution real-photo proxies are acceptable because final real photos will be replaced later. That tolerance does **not** apply to the quality of title art, frames, ornaments, alpha edges or other production graphics; those must be judged strictly.
+
+## Composition grammar
+
+Use:
+- asymmetric clusters;
+- strong large/medium/small contrast;
+- partial overlap;
+- 2–3 meaningful anchor zones rather than even distribution;
+- selected edge cropping;
+- one calm/readable field inside busy pages;
+- mixed print-object treatments only when each has a different semantic job.
+
+Avoid:
+- equal card grids;
+- four identical image tiles;
+- exact symmetry;
+- equal spacing everywhere;
+- repeated filler decorations.
+
+### Meaningful overlap targets
+
+Purposeful overlap creates tactile editorial depth.
+
+Good examples:
+- title overlaps a photo edge;
+- tape/stamp crosses one printed-photo edge;
+- frame/backing extends behind and in front of a photo through separate assets;
+- caption straddles a photo boundary;
+- a P04 route disappears behind an object and reappears;
+- P05 friend photos overlap locally while faces remain readable.
+
+Bad examples:
+- body text covered;
+- faces/eyes blocked;
+- every object overlaps everything;
+- overlap used to hide poor spacing.
+
+Working target:
+- energetic pages: about 2–5 meaningful overlap relationships;
+- P07: 0–2;
+- P08: 0–1.
+
+### Rotation discipline
+
+Paper/photo objects normally stay within about `0–6°` either direction. Stronger angles require a composition reason. Do not rotate every photo simply to manufacture “scrapbook” energy.
+
+### Active edges
+
+Selected page edges may be activated by crop, paper, stamp fragment, route, foliage/organic accent or broad color field. Do not activate every corner. Critical copy, dates, faces and eyes remain inside safe areas.
+
+## Invisible structure: freeform does not mean random
+
+Editorial pages may visibly break the grid, but they still need an invisible structure.
+
+Maintain:
+- trim;
+- bleed;
+- safe margins;
+- fold awareness where relevant;
+- a hidden alignment/grid logic;
+- consistent factual text baselines where useful;
+- intentional calm fields.
+
+Break the grid deliberately for titles, photos and editorial objects. Do not drift by accident.
+
+Busy pages still need recovery space. White/negative space is an active design tool, but it must feel intentional rather than unfinished.
+
+## Color grammar
+
+Working principle:
+- one dominant accent;
+- one support accent;
+- optional one surprise accent;
+- paper/ink/photography stabilize readability.
+
+Do not use every publication color equally on every page.
+
+Color has jobs, not quotas. Use contrast to establish hierarchy.
+
+Current broad family may include ocean cyan/blue, hot coral/pink, sun yellow, navy/ink, warm paper/cream and limited natural accents, but the exact mixture is page-specific.
+
+No generic gradients.
+
+## Typography grammar
+
+Japanese is primary.
+
+Working A5 ranges before actual-size proof:
+- page title: roughly `22–34 pt` equivalent
+- section title: roughly `13–20 pt`
+- body: roughly `9–10.5 pt`
+- captions: roughly `8–9 pt`
+- noncritical micro meta: roughly `7.5 pt` floor
+
+These are working ranges, not rigid tokens. Actual-size print proof wins.
+
+Rules:
+- do not shrink important text simply to preserve an overloaded layout;
+- edit or restructure content first;
+- authoritative Japanese text remains native/editable unless a generated display-title treatment is explicitly approved;
+- long body copy is never baked into raster decoration;
+- Q&A stays native/editable;
+- names/dates/captions stay native/editable;
+- fake Japanese paragraph text is forbidden;
+- meaningless decorative English is avoided.
+
+## Editorial object ecology
+
+Boxes are not inherently bad. Repeated generic UI containers are bad.
+
+Useful families include:
+
+### PAPER / PRINT
+- clean/torn paper note
+- postcard field
+- printed-photo caption foot
+- taped memo
+- clipped magazine inset
+- offset paper stack
+- ticket/notch form
+- stamp-frame field
+
+### DISPLAY / PROMO
+- irregular slab
+- burst
+- ribbon
+- vertical strip
+- marker backplate
+- circular/oval badge
+- asymmetric corner enclosure
+
+### READING / FACTUAL
+- quiet article field
+- local contrast support
+- story inset
+- caption tab attached to photo
+- mini fact strip
+- Q&A shell
+- friend-memory caption vessel
+- tiny back-cover meta plate
+
+### IMAGE-BOUND
+- label crossing a photo edge
+- caption partly inside/outside a photo
+- title partly behind/over a photo
+- frame edge acting as text support
+
+Good publication DNA means related print behavior with **page-specific geometry**, not one reusable UI component family.
+
+## Parts rule — a part must have a job
+
+A production part exists only when it improves at least one of:
+- hierarchy;
+- grouping;
+- reading order;
+- photo framing/crop;
+- tactile print behavior;
+- page-specific story/memory meaning;
+- factual readability.
+
+If it does none of these, do not create it.
+
+Do not build a giant generic sticker library before real page proofs establish a need.
+
+Related parts may have about 2–4 meaningful variants. Do not generate 12 near-identical versions and treat volume as quality.
+
+A decorative part should be removable without destroying the information architecture.
+
+## Generated-part brief contract
+
+Before generating an isolated part, define:
+- exact page;
+- semantic job;
+- intended physical size/aspect ratio;
+- transparent vs opaque production requirement;
+- source-photo relationship;
+- crop/overlap expectation;
+- z-order expectation;
+- visual family;
+- native/editable fields;
+- forbidden fake text/facts;
+- forbidden legacy roles/assets.
+
+Never use a vague prompt such as `make a Rurubu-style sticker` as the complete production brief.
+
+## Production asset metadata / provenance
+
+Every adopted production part should be traceable with, where applicable:
+- semantic name / part ID;
+- page/job;
+- source type;
+- original source locator / Drive ID;
+- generation prompt/version when relevant;
+- editable fields;
+- intended physical size;
+- transparency requirement;
+- raster pixel dimensions;
+- provenance/license state;
+- `SOURCE_KEYED` / `PRODUCTION_RGBA` / `ADOPTED` / `REFERENCE_ONLY` / `SUPERSEDED` state.
+
+Avoid anonymous `image1.png`, `final2.png`, `new.png` naming.
 
 ## Current P01–P08 roles
 
@@ -110,6 +428,7 @@ Reduce:
 - proposal belongs here as relationship meaning
 - Q3/Q4 only
 - density 48–55
+- do not repeat one identical ticket/card four times; vary editorial vessel geometry while preserving reading order
 
 ### P04 — ALL TRAVEL MEMORIES / OUR JOURNEY
 - strongest interior travel-magazine page
@@ -171,6 +490,8 @@ Never restore:
 - 3–4 visible information objects max
 - density 20–25
 - no long thank-you / fake price / fake publisher / JAN / ISBN claim
+- no `VOL.20`, `V20`, or other superseded version text; if version is visible, it must be V30/current or omitted
+- sparse must read as deliberately edited, not as an unfinished empty page
 
 ## Q&A lock
 
@@ -187,20 +508,41 @@ Questions and answers are not locked yet. Never fabricate them.
 
 Do not return to planning/spec accumulation. Production is the priority.
 
-1. Use the current V30 A5 page proof as art direction.
+1. Review the real source/proxy photos and current page proof.
 2. Review P01–P08 as a contact sheet.
 3. Review P02–P03, P04–P05, P06–P07 as spreads.
-4. Identify the 4–10 important visual units that create each page's quality.
-5. Generate/rebuild those units at high quality.
-6. Process generated isolated assets through the canonical chroma-background → Python alpha-cutout pipeline below.
-7. Save both source and transparent-production versions with clear provenance; upload the QA-passed production asset to the shared Drive asset area when available.
-8. Assemble the transparent production assets as editable layers in Figma.
-9. Keep real photos independently replaceable.
-10. Keep names/date/profile/Q&A/story/captions as native editable text.
-11. QA at A5 actual-size equivalent.
-12. Only after design/source/copy are complete, run print QA.
+4. Identify the largest visual weakness before adding decoration.
+5. Identify the 4–10 important visual units that create each page's quality.
+6. Generate/rebuild those units at high quality.
+7. Process generated isolated assets through the canonical chroma-background → Python alpha-cutout pipeline below.
+8. Save both source and transparent-production versions with clear provenance; upload the QA-passed production asset to the shared Drive asset area when available.
+9. Assemble the transparent production assets as editable layers in Figma.
+10. Keep real photos independently replaceable.
+11. Keep names/date/profile/Q&A/story/captions as native editable text.
+12. QA at thumbnail, spread and A5 actual-size equivalent.
+13. Regenerate only the weak units.
+14. Only after design/source/copy are complete, run print QA.
 
 Do not deliver a flattened whole-page generation as the final master.
+
+## Quality correction order
+
+When a page looks weak, do **not** automatically add more stickers/assets.
+
+Fix in this order:
+1. real source/photo choice
+2. crop/focal point
+3. title hierarchy
+4. composition silhouette
+5. reading path
+6. photo-size relationships
+7. calm field / negative space
+8. meaningful overlap
+9. color job / contrast
+10. medium-sized editorial units
+11. micro discoveries last
+
+`QUALITY = AUTHORED HIERARCHY + SOURCE QUALITY + CONTROLLED DENSITY, NOT MORE OBJECTS.`
 
 ## Canonical image-generation / transparency / Drive pipeline
 
@@ -225,7 +567,6 @@ For title parts, paper parts, tickets, stamps, ribbons, tape, labels, frames, or
 After generation, use Python/image processing to convert the keyed background to real alpha transparency.
 
 Preferred behavior:
-
 - sample/know the key background color;
 - identify background connected to the outer image edges/corners;
 - remove the connected key-background region with a controlled tolerance;
@@ -238,7 +579,6 @@ Preferred behavior:
 ### C. Mandatory alpha QA
 
 Before an asset is considered usable:
-
 - alpha channel exists;
 - outer canvas is transparent;
 - no visible key-color residue / halo;
@@ -262,17 +602,16 @@ Keep two conceptual states:
 2. `PRODUCTION_RGBA`
    - Python-cutout transparent PNG
    - QA passed
-   - this is the version intended for Drive/Figma placement
+   - intended for Drive/Figma placement
 
 New adopted production assets belong in Git under:
 `assets/rurubu-v30/p01/` ... `assets/rurubu-v30/p08/`
 
 When the shared Google Drive production folder is available, upload the QA-passed transparent PNG there as the placement source. Do not upload only the uncut keyed source and then treat it as production-ready.
 
-### E. Batch strategy — do not blindly generate the whole book in one giant batch
+### E. Batch strategy — page-owned batches
 
 Best V30 workflow:
-
 1. approve/choose the page art-direction proof;
 2. decompose **that page** into roughly 4–10 important generated units;
 3. write explicit prompts for those units;
@@ -292,7 +631,6 @@ A multi-page generation run is allowed only when the requested units are already
 ### F. Naming / traceability
 
 Use semantic page-specific names, e.g.:
-
 - `V30_P05_FRIENDS_TITLE_SOURCE_KEYED.png`
 - `V30_P05_FRIENDS_TITLE_PRODUCTION_RGBA.png`
 - `V30_P05_SHOGO_LABEL_PRODUCTION_RGBA.png`
@@ -304,7 +642,8 @@ Avoid anonymous `image1.png`, `final2.png`, `new.png` naming.
 
 The expected flow is:
 
-`PAGE PROOF`
+`REAL SOURCE REVIEW`
+→ `PAGE PROOF`
 → `4–10 IMPORTANT UNITS`
 → `IMAGE GENERATION ON SAFE SOLID KEY BACKGROUND`
 → `PYTHON ALPHA CUTOUT`
@@ -333,7 +672,76 @@ This is the default V30 image-production pipeline.
 13. FOLIO / META
 14. QA / GUIDES
 
-Layering is intentional: do not flatten the page and do not treat generated decoration as one merged wallpaper. Background, photos, frame/backing, title, vessels, native text and foreground accents remain separable enough to edit/reorder/replace.
+Layering is intentional: generated decoration is not one merged wallpaper. Background, photos, frame/backing, title, vessels, native text and foreground accents remain independently controllable.
+
+## Full-book rhythm / silhouettes
+
+At thumbnail scale, pages must not collapse into the same template.
+
+- P01: huge masthead + strong couple/environment photography
+- P02: asymmetric two-person profile clusters + Q1/Q2
+- P03: story anchor + varied episodes + Q3/Q4 + calm narrative field
+- P04: strong travel feature + unequal travel memories
+- P05: two readable friend-memory clusters with no page-wide hero
+- P06: irregular candid/life mosaic + Q5/Q6
+- P07: one calm closing photo/message field
+- P08: sparse back-cover field + tiny meta/barcode
+
+If adjacent pages have the same silhouette, fix structure before decoration.
+
+Spread rhythm:
+- P02–P03 = `WHO → STORY`
+- P04–P05 = `PLACES WE REMEMBER → FRIENDS WE REMEMBER`
+- P06–P07 = `REAL LIFE → THANK YOU`
+- P08 = standalone back cover
+
+## Originality / brand distance
+
+V30 should evoke the excitement and editing behavior of Japanese travel magazines while remaining an original private wedding publication.
+
+Therefore:
+- derive editorial principles rather than copying exact commercial layouts;
+- do not trace/import an official commercial logo vector;
+- do not reproduce a specific page pixel-for-pixel;
+- use Rurubu references as energy, hierarchy and editing calibration;
+- build original geometry around the couple's real content.
+
+## Print-production handoff
+
+Figma remains the editable sRGB production master/compositor.
+
+Final print workflow is separate from design completion:
+
+`FIGMA EDITABLE sRGB MASTER`
+→ `HIGH-QUALITY PDF EXPORT`
+→ `PRINT/PREFLIGHT SOFTWARE`
+→ `CMYK CONVERSION USING PRINTER-SPECIFIED PROFILE`
+→ `PREFLIGHT`
+→ `FINAL PRINT PDF`
+→ `PHYSICAL PROOF WHEN POSSIBLE`
+
+Default working candidates when the print provider gives no different instruction:
+- bleed: about `3 mm`;
+- PDF/X-4 as preferred modern print-PDF candidate;
+- CMYK candidate: Japan Color 2001 Coated;
+- raster effective resolution target: about `300 ppi` at final placed size where practical.
+
+The print provider's actual specification overrides these defaults.
+
+Commercial-print QA must include:
+- trim dimensions;
+- bleed coverage;
+- safe/fold zones;
+- no critical faces/text near trim/fold;
+- effective PPI at final size;
+- missing/broken font or image issues;
+- overset/clipped text;
+- PDF page dimensions;
+- barcode digits exact;
+- color conversion/profile;
+- transparency/output integrity.
+
+Low-resolution proxies are acceptable during layout, but final print assets must be replaced with suitable-resolution sources before `PRINT_READY = YES`.
 
 ## Legacy policy
 
@@ -373,7 +781,12 @@ At the start of every V30 run:
 2. inspect the current V30 Figma board `3535:2`;
 3. confirm no V31 is being created;
 4. do not use `docs/rurubu-v20/` as current authority;
-5. follow the chroma-background → Python alpha-cutout → QA → Drive/Git → layered Figma pipeline for generated isolated assets;
-6. make concrete progress on P01–P08 production.
+5. run the anti-AI / anti-template gate before adding decoration;
+6. inspect real source/proxy photos before generating page-specific art;
+7. follow the safe-key-background → Python alpha-cutout → QA → Drive/Git → layered Figma pipeline for generated isolated assets;
+8. use Figma primarily as compositor, not as a generic UI-shape design generator;
+9. review contact sheet, spreads and A5 actual-size equivalent;
+10. fix the largest visual gap before microdetails;
+11. make concrete progress on P01–P08 production.
 
 **CURRENT = V30. V20 = FROZEN HISTORY.**
