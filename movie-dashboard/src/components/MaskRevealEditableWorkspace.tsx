@@ -19,6 +19,7 @@ import {
 } from "../data/humanEditableMotionIntent";
 import { buildMaskRevealEditableProductionOutputs } from "../data/maskRevealEditableProduction";
 import { buildMaskRevealExecutionOutputs } from "../data/maskRevealHandoff";
+import { addScenePreset, loadScenePresets, removeScenePreset, type ScenePreset } from "../data/scenePresetLibrary";
 import { composableImagePatterns, composableTextPatterns } from "../data/visualMotionLibrary";
 import {
   buildMaskRevealDaVinciValueBridge,
@@ -58,6 +59,18 @@ const directionLabels: Record<MaskRevealDirection, string> = {
 
 const intensityLabels: Record<MaskRevealIntensity, string> = { S: "弱", M: "中", L: "強" };
 
+type BroadcastFieldId = "intensity" | "direction" | "position" | "layerDelaySeconds";
+
+// Each broadcastable "group" touches one or more MaskRevealEditableFieldKey values together
+// (position bundles preset+X+Y, matching how choosePositionPreset already sets them as one
+// unit). Kept as data so the bulk-apply button loop doesn't need one hand-written case per field.
+const BROADCAST_FIELD_GROUPS: Array<{ id: BroadcastFieldId; label: string; keys: MaskRevealEditableFieldKey[] }> = [
+  { id: "intensity", label: "強さ", keys: ["intensity"] },
+  { id: "direction", label: "文字の登場方向", keys: ["direction"] },
+  { id: "position", label: "位置", keys: ["positionPreset", "positionXPercent", "positionYPercent"] },
+  { id: "layerDelaySeconds", label: "文字を出すタイミング", keys: ["layerDelaySeconds"] },
+];
+
 type Level = "EASY" | "DETAIL" | "DAVINCI";
 
 export function MaskRevealEditableWorkspace() {
@@ -74,6 +87,9 @@ export function MaskRevealEditableWorkspace() {
   const [outputRevision, setOutputRevision] = useState(0);
   const [composerState, setComposerState] = useState<MotionZukanComposerState>(() => loadMotionZukanComposerState());
   const [editingSceneId, setEditingSceneId] = useState<string | null>(null);
+  const [presets, setPresets] = useState<ScenePreset[]>(() => loadScenePresets());
+  const [presetNameDraft, setPresetNameDraft] = useState<string | null>(null);
+  const [broadcastFields, setBroadcastFields] = useState<Record<BroadcastFieldId, boolean>>({ intensity: true, direction: false, position: false, layerDelaySeconds: false });
   const outputs = useMemo(() => buildMaskRevealEditableProductionOutputs(intent), [intent, outputRevision]);
   const resolved = resolveMaskRevealEditableIntent(intent);
   const timing = computeMaskRevealSceneDuration(intent);
@@ -194,6 +210,85 @@ export function MaskRevealEditableWorkspace() {
     if (editingSceneId === sceneId) setEditingSceneId(null);
   }
 
+  function applyBroadcast() {
+    const projectId = intent.section.startsWith("PROFILE_") ? "profile" : "opening";
+    const activeKeys = BROADCAST_FIELD_GROUPS.filter((group) => broadcastFields[group.id]).flatMap((group) => group.keys);
+    if (activeKeys.length === 0) return;
+    updateComposer((current) => {
+      let next = current;
+      for (const scene of current.scenes) {
+        if (scene.projectId !== projectId || scene.sceneId === editingSceneId) continue;
+        for (const key of activeKeys) {
+          // Respect LOCKED per-scene, per-field — a bulk change never overrides a field someone
+          // deliberately pinned on one specific Scene.
+          if (scene.editableIntent.fields[key].locked) continue;
+          next = updateSceneInstanceField(next, scene.sceneId, key, resolved[key] as never);
+        }
+      }
+      return next;
+    });
+  }
+
+  function broadcastTargetCount() {
+    const projectId = intent.section.startsWith("PROFILE_") ? "profile" : "opening";
+    return composerState.scenes.filter((scene) => scene.projectId === projectId && scene.sceneId !== editingSceneId).length;
+  }
+
+  function defaultPresetName() {
+    const textLabel = patterns.find((item) => item.patternId === intent.patternId)?.detailLabel ?? intent.patternId;
+    const imageLabel = resolved.imagePatternId ? imagePatterns.find((item) => item.patternId === resolved.imagePatternId)?.detailLabel ?? "" : "";
+    return imageLabel ? `${textLabel} + ${imageLabel}` : textLabel;
+  }
+
+  function startSavePreset() {
+    setPresetNameDraft(defaultPresetName());
+  }
+
+  function confirmSavePreset() {
+    const name = (presetNameDraft ?? "").trim();
+    if (!name) return;
+    setPresets(addScenePreset({
+      name,
+      patternId: intent.patternId,
+      imagePatternId: resolved.imagePatternId,
+      positionPreset: resolved.positionPreset,
+      positionXPercent: resolved.positionXPercent,
+      positionYPercent: resolved.positionYPercent,
+      direction: resolved.direction,
+      intensity: resolved.intensity,
+      layerDelaySeconds: resolved.layerDelaySeconds,
+      imageMotionDurationSeconds: resolved.imageMotionDurationSeconds,
+    }));
+    setPresetNameDraft(null);
+  }
+
+  function cancelSavePreset() {
+    setPresetNameDraft(null);
+  }
+
+  function applyPreset(preset: ScenePreset) {
+    const pattern = patterns.find((item) => item.patternId === preset.patternId) ?? MASK_REVEAL_PATTERN_INFO;
+    const imagePattern = preset.imagePatternId ? imagePatterns.find((item) => item.patternId === preset.imagePatternId) ?? null : null;
+    // Starts a fresh intent from the preset's pattern pair (same rule as changePattern: a
+    // structural change is "start this Scene over"), then layers the preset's position/direction/
+    // intensity/timing on top. Text/Media are intentionally left at their pattern defaults —
+    // presets never carry scene-specific content.
+    let next = createDefaultMaskRevealEditableIntent(intent.section, pattern, imagePattern);
+    next = applyHumanSelection(next, "positionPreset", preset.positionPreset);
+    next = applyHumanSelection(next, "positionXPercent", preset.positionXPercent);
+    next = applyHumanSelection(next, "positionYPercent", preset.positionYPercent);
+    next = applyHumanSelection(next, "direction", preset.direction);
+    next = applyHumanSelection(next, "intensity", preset.intensity);
+    next = applyHumanSelection(next, "layerDelaySeconds", preset.layerDelaySeconds);
+    if (imagePattern) next = applyHumanSelection(next, "imageMotionDurationSeconds", preset.imageMotionDurationSeconds);
+    setIntent(next);
+    setEditingSceneId(null);
+  }
+
+  function deletePreset(id: string) {
+    setPresets(removeScenePreset(id));
+  }
+
   function duplicateScene(sceneId: string) {
     // For the "same combination, next section" workflow: keep the pattern/timing/position
     // choices, land on the duplicate immediately so only Text/Media need retyping.
@@ -228,6 +323,44 @@ export function MaskRevealEditableWorkspace() {
       </div>
 
       <div className="p-5">
+        <div className="mb-5 border border-sand-200 dark:border-navy-600 p-3">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <p className="text-[10px] tracking-[0.16em] font-semibold text-navy-400">よく使う組み合わせ</p>
+              <p className="mt-1 text-[10px] leading-4 text-navy-400">文字パターン・画像パターン・位置・強さ・タイミングを名前で保存/呼び出し。文字と写真の中身は毎回入力する。</p>
+            </div>
+            {presetNameDraft === null ? (
+              <button type="button" onClick={startSavePreset} className="border border-sky-600 text-sky-700 dark:text-sky-300 px-3 py-1.5 text-[10px] font-semibold shrink-0">今の組み合わせを保存</button>
+            ) : (
+              <div className="flex items-center gap-2 shrink-0">
+                <input
+                  type="text"
+                  autoFocus
+                  value={presetNameDraft}
+                  onChange={(event) => setPresetNameDraft(event.target.value)}
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter") confirmSavePreset();
+                    if (event.key === "Escape") cancelSavePreset();
+                  }}
+                  placeholder="この組み合わせの名前"
+                  className="border border-sky-600 bg-white dark:bg-navy-900 text-navy-900 dark:text-sand-100 px-2 py-1.5 text-[10px] w-56"
+                />
+                <button type="button" onClick={confirmSavePreset} disabled={!presetNameDraft.trim()} className="bg-sky-700 disabled:opacity-40 text-white px-3 py-1.5 text-[10px] font-semibold">保存</button>
+                <button type="button" onClick={cancelSavePreset} className="border border-sand-300 dark:border-navy-600 px-3 py-1.5 text-[10px]">キャンセル</button>
+              </div>
+            )}
+          </div>
+          {presets.length > 0 && (
+            <div className="mt-3 flex flex-wrap gap-2">
+              {presets.map((preset) => (
+                <div key={preset.id} className="flex items-center gap-1 border border-sand-300 dark:border-navy-600">
+                  <button type="button" onClick={() => applyPreset(preset)} className="px-2 py-1.5 text-[10px] text-navy-700 dark:text-sand-100">{preset.name}</button>
+                  <button type="button" onClick={() => deletePreset(preset.id)} className="px-2 py-1.5 text-[10px] text-red-500" title="このプリセットを削除">×</button>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
         {level === "EASY" && (
           <div className="space-y-5">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -400,6 +533,20 @@ export function MaskRevealEditableWorkspace() {
           </div>
         </div>
         <p className="mt-2 text-[11px] leading-5 text-navy-400">Palmierからは実timelineのNLE XMLを書き出し、Human Master Scene値をserializationしたMotion Handoff JSONをsidecarとしてDaVinciへ渡します。JSON / XML自体はHuman Masterではなく、XMLをこのアプリ側で捏造しません。</p>
+
+        <div className="mt-4 border border-amber-200 dark:border-amber-900 bg-amber-50/40 dark:bg-amber-950/10 p-4">
+          <p className="text-[10px] tracking-[0.18em] font-semibold text-amber-700 dark:text-amber-300">BROADCAST / 一括反映</p>
+          <p className="mt-1 text-[11px] leading-5 text-navy-500 dark:text-navy-300">今の{intent.section.startsWith("PROFILE_") ? "Profile" : "Opening"}の値を、他の採用済みSceneへチェックした項目だけ反映する。LOCKEDなSceneのfieldは変更しない。対象: {broadcastTargetCount()}件。</p>
+          <div className="mt-3 flex flex-wrap gap-3">
+            {BROADCAST_FIELD_GROUPS.map((group) => (
+              <label key={group.id} className="flex items-center gap-1.5 text-[11px] text-navy-600 dark:text-navy-300">
+                <input type="checkbox" checked={broadcastFields[group.id]} onChange={(event) => setBroadcastFields((current) => ({ ...current, [group.id]: event.target.checked }))} />
+                {group.label}
+              </label>
+            ))}
+          </div>
+          <button type="button" onClick={applyBroadcast} disabled={broadcastTargetCount() === 0} className="mt-3 bg-amber-700 disabled:opacity-40 text-white px-4 py-2 text-xs font-semibold">チェックした項目を他のSceneへ反映</button>
+        </div>
       </div>
 
       <ProjectTimelinePanel state={composerState} editingSceneId={editingSceneId} onEdit={editScene} onDelete={deleteScene} onDuplicate={duplicateScene} copied={copied} onCopy={copy} />
