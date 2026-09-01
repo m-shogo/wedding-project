@@ -1,138 +1,150 @@
 # Rurubu WEDDING V20 — Legacy Quarantine
 
-Status: `CURRENT / HARD AUTHORITY BOUNDARY / DO-NOT-INHERIT-VISUALS`
+Status: `CURRENT / HARD AUTHORITY BOUNDARY / PAGE_ROLES_2026-09-01`
 
-Purpose: keep historical project material available for provenance and fact recovery without allowing old V10/V11/V12 layouts, old SVG aesthetics, obsolete P07 schedule concepts, old mastheads, or temporary visual locks to leak back into current V20 production.
+Purpose: preserve useful provenance without allowing obsolete V10/V11/V12/V20 layouts, old page roles, old assets or stale evidence to leak into current V20 production.
 
-## 1. Hard rule
+## Hard rule
 
-Historical material may remain in Git, Drive and Figma. Presence does **not** make it design authority.
+Historical material may remain in Git, Drive and Figma. Presence does **not** make it current authority.
 
-For V20 visual production:
+`RECOVER TRUE FACTS / REAL SOURCES; DO NOT RECOVER OLD PAGE ROLES OR VISUAL AUTHORITY.`
 
-`HISTORY MAY REMAIN; VISUAL AUTHORITY MUST NOT LEAK.`
+## Highest current authority
 
-If an older file conflicts with current V20 authority, the current V20 authority wins automatically.
+Use:
+1. `README.md`
+2. `V20-CURRENT-PAGE-ARCHITECTURE.md`
+3. `V20-PAGE-BY-PAGE-DESIGN-SPEC.md`
+4. `V20-PAGE-MANUALS.md`
+5. `V20-P01-P08-VISUAL-PRODUCTION-BIBLE.md`
+6. `V20-CURRENT-ACCEPTANCE-GATE.md`
+7. `V20-QUALITY-GATES.md`
 
-## 2. Quarantined visual sources
+If anything below conflicts with these, current authority wins automatically.
 
-The following are non-authoritative for V20 visual design:
+## Current page roles
 
-- V10 / V11 / V12 page composition and component grammar;
-- old Figma reference-node mappings and old layout coordinates;
-- old prompt wording and old AI-look scoring;
-- old color assignments when they conflict with current page-aware art direction;
-- old SVG or SVG-derived icon/frame/label silhouettes;
-- rasterized versions of those old SVGs;
-- legacy generic UI-like cards, pills, polygons, icon-pack treatments and flat vector shells;
-- old masthead treatments such as `旅する WEDDING` when they conflict with the current private-homage masthead direction;
-- the old schedule/timetable-first P07 concept;
-- old statements that P01, P05 or P08 are permanently visually locked;
-- rejected candidate nodes/assets merely because they still exist in Figma/Drive/Git.
+- P01 Cover / `るるぶ WEDDING`
+- P02 Profile + Q1/Q2
+- P03 Our Story + Q3/Q4
+- P04 All Travel Memories
+- P05 Friends Memories only: `SHOGO FRIENDS` + `SHIORI FRIENDS`
+- P06 Real Life + Q5/Q6
+- P07 Closing / Thank You
+- P08 Magazine Back Cover
 
-## 3. What may be recovered from history
+## P05 quarantine
 
-Only information that remains true and useful may be recovered, such as:
+Obsolete and forbidden as current design/content authority:
+- family memories on P05
+- `FAMILY & FRIENDS` role
+- `FAMILY` cluster
+- one giant page-wide P05 hero/anchor photo
+- P05 Hawaii-only feature
+- P05 proposal/arrival feature
+- old Hawaii title/proposal vessels
+- old cross-spread route logic whose purpose is the obsolete Hawaii/proposal story
 
-- confirmed names/date/location;
-- verified personal facts;
-- verified relationship facts;
-- real photographs and their source locators;
-- verified venue/decor/theme facts;
-- print constraints;
-- provenance, hashes and replacement records.
+Current P05:
+- friends only
+- SHOGO FRIENDS + SHIORI FRIENDS
+- about 3–4 photos per cluster / 6–8 total when sources support it
+- no giant hero
+- density around 65–70/100
 
-Recovering a fact or real photo never grants permission to inherit the old layout around it.
+## P07 quarantine
 
-`RECOVER FACTS / SOURCES; DO NOT RECOVER OLD DESIGN AUTHORITY.`
+All old P07 guide/discovery/schedule roles are obsolete:
+- timetable/schedule-first P07
+- `TODAY'S TRAVEL GUIDE`
+- `11 DESTINATIONS`
+- `LOOK AROUND`
+- `EDITOR'S PICK`
+- seated-guest discovery/map/destination system
+- old luggage-tag/ticket/stamp/hand-cut guide assets as current production parts
 
-## 4. Old SVG rule
+Current P07 is:
+- one calm strong photo
+- short thank-you/closing message
+- SHOGO & SHIORI
+- `2026.10.24`
+- one restrained final motif
 
-Old SVGs and their derived PNGs may remain for history/provenance only.
+Old `V20-P07-SEATED-GUEST-*` documents are superseded historical stubs only.
+
+## P08 quarantine
+
+Old P08 as the main closing-message feature is obsolete.
+
+Current P08 is a sparse magazine back cover:
+- 0–1 calm photo/background
+- minimal issue/meta
+- optional small names/date
+- one tiny motif
+- barcode digits exactly `2026102400000`
+
+No long message or collage.
+
+## Historical acceptance evidence
+
+`V20-ACCEPTANCE-EVIDENCE.md` contains valuable historical source/provenance and live-production observations, including obsolete P05/P07/P08 page-role evidence.
+
+It is **not current acceptance authority** where those old roles are concerned.
+
+Current completion authority is `V20-CURRENT-ACCEPTANCE-GATE.md`.
+
+Do not read a historical node, screenshot, hash or old successful candidate as permission to restore its former page role.
+
+## Old asset rule
+
+Old SVGs and obsolete generated PNGs may be kept only where useful for provenance/history.
 
 They must not be:
-- converted to PNG and called a redesign;
-- traced or used as silhouette references;
-- recolored/textured/shadowed as a shortcut;
-- used to seed a new icon family;
-- treated as a style library.
+- rasterized/recolored and called a redesign
+- traced
+- used as silhouette authority
+- used merely because they already exist
+- assembled into current pages when their semantic job is obsolete
 
-When an old object still has a useful job:
+When an old semantic job remains useful:
 
 `KEEP THE JOB; REDESIGN THE OBJECT FROM ZERO.`
 
-The current production output should be page-aware generated PNG editorial art, not a polished version of old SVG geometry.
+## Physical P05 asset state
 
-## 5. P01 current override
+- old P05 Hawaii title PNG has been removed from the current branch; Git history only
+- old P05 proposal article PNG may remain physically for provenance, but is `SUPERSEDED / DO NOT USE`
+- current P05 assets must be newly created for the friends-only page
 
-Older P01 documents may contain historical wording such as `VISUAL LOCK CANDIDATE` or describe an original V20 masthead.
+## What may be recovered
 
-Those are historical decisions only.
+Allowed recovery:
+- confirmed names/date/location
+- verified relationship facts
+- real photographs and source locators
+- verified print constraints
+- provenance/hashes
+- true content that still belongs in the current architecture
 
-Current rule:
-- P01 current Figma is a safe baseline, not a ceiling;
-- P01 may be redesigned when a candidate clearly wins;
-- working private masthead wording may be `るるぶ WEDDING`;
-- the art direction should push strongly toward authentic high-saturation Japanese travel-magazine energy;
-- do not import or vector-trace an official third-party logo asset;
-- judge by whether the page looks convincingly like a professionally edited travel-magazine cover rather than a wedding-template imitation.
+Not allowed:
+- old page map
+- old Figma geometry
+- old visual locks
+- old generated-asset purpose
+- stale completion status
 
-## 6. P07 current override
+## Visual calibration
 
-Any schedule-first P07 text is obsolete visual/content authority.
+Current target:
+- Rurubu-like editorial character = 100%
+- information/clutter load = about 75% of previous max-clutter tests
+- readability high
 
-Current P07 is seated-guest discovery:
-- `TODAY'S TRAVEL GUIDE`;
-- large `11` / destination-discovery event;
-- destination vessel ecology;
-- route/map-like editorial composition;
-- `LOOK AROUND` / `EDITOR'S PICK` / verified wedding-detail discoveries;
-- no timetable-first hierarchy;
-- no access/check-in/parking/RSVP/logistics-first content.
+Do not reintroduce maximum clutter simply because older references were denser.
 
-Use `V20-P07-SEATED-GUEST-MANUAL.md` and `V20-P07-SEATED-GUEST-PRODUCTION-BRIEF.md`.
+## Final boundary
 
-## 7. Current authority order for visual production
-
-Before any visual production, read at minimum:
-
-1. `README.md`;
-2. `V20-LEGACY-QUARANTINE.md`;
-3. `V20-PRIVATE-HOMAGE-AND-LAYERED-PAGE-GENERATION-RULE.md`;
-4. `V20-IMAGEGEN-EDITORIAL-REBUILD-POLICY.md`;
-5. `V20-RURUBU-DESIGN-DECODE.md`;
-6. `V20-NORTH-STAR-DENSITY-EXTRACTION.md`;
-7. `V20-P01-P08-VISUAL-PRODUCTION-BIBLE.md`;
-8. page-specific current manuals/briefs;
-9. `V20-LAYER-OVERLAP-SYSTEM.md`;
-10. `V20-EDITORIAL-CONTAINER-AND-TITLE-GRAMMAR.md`;
-11. `V20-QUALITY-GATES.md`.
-
-If a lower-priority/historical document conflicts with these, do not compromise between them. Follow the current authority.
-
-## 8. Quality direction
-
-V20 is not trying to look merely `travel-inspired`.
-
-The visual target is a convincing, professionally edited Japanese travel-magazine experience:
-- large title mass;
-- extreme scale jumps;
-- unequal photo hierarchy;
-- dense secondary information;
-- 8–18 micro discoveries on appropriately dense pages;
-- 2–4 active edges on energetic pages;
-- deep front/back collisions;
-- tactile paper/print vessels;
-- saturated red/yellow/blue/cream/ink relationships where appropriate;
-- page-specific title/vessel/photo-frame behavior;
-- embedded calm islands so high density remains readable.
-
-Do not mistake `red + yellow + blue + stickers` for authenticity. Cheap generic vectors, evenly distributed stickers, repeated rounded cards, weak title scale or polite isolated photos are rejection conditions.
-
-## 9. Final boundary
-
-Historical data stays available so evidence is not destroyed.
-
-But no future Codex/Figma/ImageGen run may use historical visual language merely because it is easier to find or already exists.
+Historical evidence is allowed to exist; **historical authority is not**.
 
 `CURRENT V20 AUTHORITY > LEGACY CONVENIENCE.`
