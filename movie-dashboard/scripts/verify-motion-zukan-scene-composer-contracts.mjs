@@ -50,7 +50,7 @@ for (const token of [
   'targetDurationSeconds',
   'computedDurationSeconds',
   'durationDeltaSeconds',
-  'Math.max(value.sceneDurationSeconds, textStructuralEnd)',
+  'Math.max(value.sceneDurationSeconds, textStructuralEnd, imageStructuralEnd)',
   'structuredClone(intent)',
   'humanSelectedFields',
   'lockedFields',
@@ -75,7 +75,7 @@ if (composer.includes("productionStore") || composer.includes('from "../types/mo
 for (const token of [
   "モーション図鑑 / HUMAN MASTER",
   "選ぶだけで成立し、必要なら数字まで降りられるScene",
-  "Preset First → Accordion Detail → DaVinci Final Precision",
+  "まず「かんたん」で選ぶだけで成立し、必要な時だけ「詳細」「DaVinci」で数字まで降りられます。",
   "かんたん",
   "詳細",
   "DaVinci",

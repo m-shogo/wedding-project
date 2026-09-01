@@ -46,6 +46,7 @@ import {
   updateSceneInstanceFieldLock,
   type MaskRevealSceneInstance,
   type MotionZukanComposerState,
+  type SceneInstanceStatus,
   type SceneProjectId,
 } from "../data/visualSceneComposer";
 
@@ -69,6 +70,19 @@ const decisionStateLabels: Record<EditableDecisionState, string> = {
   AI_SUGGESTED: "AI提案",
   HUMAN_SELECTED: "選択済み",
   LOCKED: "固定中",
+};
+
+const sectionLabels: Record<MaskRevealSection, string> = {
+  OPENING_INTRO: "Openingの冒頭",
+  OPENING_CHORUS: "Openingのサビ",
+  PROFILE_CHAPTER: "Profileの章",
+  PROFILE_COUPLE_STORY: "Profileの馴れ初め",
+};
+
+const sceneStatusLabels: Record<SceneInstanceStatus, string> = {
+  ADOPTED: "採用済み",
+  LOCKED: "固定あり",
+  REVIEW: "確認中",
 };
 
 type BroadcastFieldId =
@@ -428,7 +442,7 @@ export function MaskRevealEditableWorkspace() {
           <div>
             <p className="text-[10px] tracking-[0.2em] font-semibold text-emerald-700 dark:text-emerald-300">モーション図鑑 / HUMAN MASTER</p>
             <h3 className="mt-1 text-lg font-bold text-navy-900 dark:text-sand-100">選ぶだけで成立し、必要なら数字まで降りられるScene</h3>
-            <p className="mt-2 text-xs leading-5 text-navy-500 dark:text-navy-300">Preset First → Accordion Detail → DaVinci Final Precision。AIは提案者で、HUMAN_SELECTED / LOCKEDは人間が変更しない限り保持します。</p>
+            <p className="mt-2 text-xs leading-5 text-navy-500 dark:text-navy-300">まず「かんたん」で選ぶだけで成立し、必要な時だけ「詳細」「DaVinci」で数字まで降りられます。AIは提案するだけで、あなたが選んだ値・固定した値は勝手に変更しません。</p>
           </div>
           <div className="flex border border-sand-300 dark:border-navy-600">
             <LevelButton active={level === "EASY"} onClick={() => setLevel("EASY")}>かんたん</LevelButton>
@@ -483,10 +497,10 @@ export function MaskRevealEditableWorkspace() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <SimpleField label="使う場所">
                 <select value={intent.section} onChange={(event) => changeSection(event.target.value as MaskRevealSection)} className={controlClass}>
-                  <option value="OPENING_INTRO">Opening Intro</option>
-                  <option value="OPENING_CHORUS">Opening Chorus</option>
-                  <option value="PROFILE_CHAPTER">Profile Chapter</option>
-                  <option value="PROFILE_COUPLE_STORY">Profile Couple Story</option>
+                  <option value="OPENING_INTRO">{sectionLabels.OPENING_INTRO}</option>
+                  <option value="OPENING_CHORUS">{sectionLabels.OPENING_CHORUS}</option>
+                  <option value="PROFILE_CHAPTER">{sectionLabels.PROFILE_CHAPTER}</option>
+                  <option value="PROFILE_COUPLE_STORY">{sectionLabels.PROFILE_COUPLE_STORY}</option>
                 </select>
               </SimpleField>
               <div />
@@ -714,13 +728,13 @@ function ProjectTimelinePanel({ state, editingSceneId, onEdit, onDelete, onDupli
                     <li key={scene.sceneId} className={`border p-3 ${editingSceneId === scene.sceneId ? "border-sky-400 bg-sky-50/60 dark:bg-sky-950/20" : "border-sand-200 dark:border-navy-600"}`}>
                       <div className="flex items-start justify-between gap-3">
                         <div className="min-w-0">
-                          <p className="text-[10px] text-navy-400">#{index + 1} · {scene.editableIntent.section} · {scene.recipeProvenance.recipeId}</p>
+                          <p className="text-[10px] text-navy-400">#{index + 1} · {sectionLabels[scene.editableIntent.section]} · {scene.recipeProvenance.recipeId}</p>
                           <p className="mt-1 text-xs font-semibold text-navy-800 dark:text-sand-100 truncate">{resolvedScene.text} / {scene.editableIntent.davinciImplementation.detailLabel}</p>
                           {hasImageLayer && <p className="mt-1 text-[10px] text-navy-500 dark:text-navy-300 truncate">画像: {resolvedScene.mediaLabel} / {scene.editableIntent.imageImplementation!.detailLabel} / {resolvedScene.imageMotionDurationSeconds.toFixed(1)}秒</p>}
-                          <p className="mt-1 text-[10px] text-navy-500 dark:text-navy-300">{positionLabels[resolvedScene.positionPreset]} / {directionLabels[resolvedScene.direction]} / {scene.computedDurationSeconds.toFixed(1)}秒 / {scene.status}</p>
+                          <p className="mt-1 text-[10px] text-navy-500 dark:text-navy-300">{positionLabels[resolvedScene.positionPreset]} / {directionLabels[resolvedScene.direction]} / {scene.computedDurationSeconds.toFixed(1)}秒 / {sceneStatusLabels[scene.status]}</p>
                           {placement && <p className="mt-1 text-[10px] font-mono text-navy-400">{placement.startSeconds.toFixed(1)}s → {placement.endSeconds.toFixed(1)}s</p>}
-                          {scene.durationDeltaSeconds > 0 && <p className="mt-1 text-[10px] text-amber-700 dark:text-amber-300">Targetとの差 +{scene.durationDeltaSeconds.toFixed(1)}秒</p>}
-                          <p className="mt-1 text-[10px] text-navy-400">HUMAN_SELECTED {scene.humanSelectedFields.length} / LOCKED {scene.lockedFields.length}</p>
+                          {scene.durationDeltaSeconds > 0 && <p className="mt-1 text-[10px] text-amber-700 dark:text-amber-300">目標の長さより +{scene.durationDeltaSeconds.toFixed(1)}秒長い</p>}
+                          <p className="mt-1 text-[10px] text-navy-400">選択済み {scene.humanSelectedFields.length} / 固定中 {scene.lockedFields.length}</p>
                         </div>
                         <div className="flex gap-2 shrink-0">
                           <button type="button" onClick={() => onDuplicate(scene.sceneId)} className="text-[10px] text-emerald-700 dark:text-emerald-300" title="同じ組み合わせ(パターン/位置/強さ)を保ったまま次のSceneを作る">複製</button>
