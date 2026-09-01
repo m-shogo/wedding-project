@@ -1,10 +1,12 @@
 # Rurubu WEDDING V20
 
-Status: `CLEAN_SLATE_CANONICAL / SPEC_FIRST / ASSET_FIRST / FULL_EDITORIAL_COLLISION / SEATED_GUEST_EDITORIAL`
+Status: `CLEAN_SLATE_CANONICAL / IMAGEGEN_FIRST / FULL_EDITORIAL_COLLISION / SEATED_GUEST_EDITORIAL / ALL_PAGES_OPEN`
 
 V20 is a complete redesign track.
 
-It does NOT inherit V10/V11 page composition, Figma layout, page-role mapping, old reference nodes, old AI-look scoring, old prompts, frame geometry, component grammar or color assignment as design authority.
+It does **not** inherit V10/V11/V12 page composition, Figma layout, page-role mapping, old reference nodes, old AI-look scoring, old prompts, frame geometry, component grammar or old color assignment as visual authority.
+
+Historical material may remain for provenance and fact/source recovery, but current V20 production must follow `V20-LEGACY-QUARANTINE.md`.
 
 ## Fixed production facts
 
@@ -14,7 +16,33 @@ It does NOT inherit V10/V11 page composition, Figma layout, page-role mapping, o
 - 3 mm bleed is the current working assumption until printer-specific template overrides it;
 - editable Figma master;
 - replaceable real photos;
-- variable/authoritative text remains native.
+- authoritative/personal/factual text remains native/editable;
+- `FIGMA COMPLETE != PRINT READY`.
+
+## Current visual target
+
+V20 should feel like a professionally edited, high-energy Japanese travel magazine made specifically for this wedding — not merely a wedding booklet with travel stickers.
+
+For this private/noncommercial booklet, the working P01 masthead may be:
+
+`るるぶ WEDDING`
+
+The visual direction may strongly use:
+- saturated red / yellow / cyan-blue / navy / cream relationships;
+- thick display lettering;
+- white/cream keylines;
+- hard offset shadows;
+- strong title/photo collision;
+- unequal photo hierarchy;
+- dense secondary information;
+- tactile paper/ticket/stamp/ribbon/frame treatments;
+- routes that move behind and in front of other layers;
+- active page edges;
+- many small discoveries where the page role calls for them.
+
+Do not import/vector-trace an official third-party logo file or pixel-copy a specific published page. The goal is to reproduce the **visual phenomena and editorial energy** convincingly while re-authoring the actual page for SHOGO & SHIORI.
+
+`REFERENCE STRONGLY; RE-AUTHOR THE PAGE.`
 
 ## Reading context
 
@@ -22,11 +50,11 @@ V20 is primarily read after guests have arrived and are seated at the wedding/re
 
 It is a table-side travel magazine about the couple and today's wedding experience, not a pre-arrival logistics leaflet.
 
-Therefore V20 does NOT spend premium page space on dress code, access, transit, parking, arrival/check-in instructions, RSVP, what-to-bring reminders or other information the guest needed before arriving.
+Therefore V20 does not spend premium page space on dress code, access, transit, parking, arrival/check-in instructions, RSVP, what-to-bring reminders or other information the guest needed before arriving.
 
 If another paper item owns menu/drink/seating/escort utility, V20 does not duplicate that content merely to fill space.
 
-The editorial filter is:
+Editorial filter:
 
 `WHO ARE THESE TWO?`
 → `WHAT IS THEIR STORY?`
@@ -41,50 +69,64 @@ Google Drive image:
 - file ID `12ppT-SV-8OmOgz_a0MuhrkT3gNOOKsY3`;
 - file `0c570e8f-ebc5-42c6-8512-b05644a8aa6a.png`.
 
-This is taste/energy calibration only. It is NOT a template or page-coordinate authority.
+This image has been directly reviewed and concretely decoded in `V20-NORTH-STAR-DENSITY-EXTRACTION.md`.
 
-## V20 canonical chain
+It is a taste/density/layering calibration source, not a coordinate template.
 
-Read in this order:
+Key extracted principle:
 
-1. `V20-NORTH-STAR-IMAGE.md`
-2. `V20-SEATED-GUEST-CONTENT-CONTRACT.md`
-3. `V20-SEATED-GUEST-CONTENT-AUDIT.md`
-4. `V20-PAGE-CONTENT-SCORECARD.md`
-5. `V20-CONTENT-INVENTORY.md`
-6. `V20-TRUTH-EDITORIAL-BOUNDARY.md`
-7. `V20-CONTENT-ARCHITECTURE-GATE.md`
-8. `V20-SPREAD-ARCHITECTURE.md`
-9. `V20-READING-PATH-SYSTEM.md`
-10. `V20-VISUAL-GRAMMAR.md`
-11. `V20-PAGE-DIFFERENTIATION-MATRIX.md`
-12. `V20-EDITORIAL-BUDGETS-AND-CHANGE-RESILIENCE.md`
-13. `V20-PHOTO-ROLE-SYSTEM.md`
-14. `V20-PHOTO-INVENTORY-FIRST-PASS.md`
-15. `V20-HAWAII-RAW-PHOTO-REVIEW.md`
-16. `V20-PHOTO-GAP-MATRIX.md`
-17. `V20-PHOTO-REPLACEMENT-LIST.md`
-18. `V20-PRODUCTION-GEOMETRY.md`
-19. `V20-PAGE-MANUALS.md`
-20. `V20-P07-SEATED-GUEST-MANUAL.md` — canonical override of the old schedule-first P07 section;
-21. page-role production briefs/addenda when present;
-22. `V20-GREYBOX-SILHOUETTE-SPEC.md`
-23. `V20-ASSET-FIRST-ASSEMBLY-CONTRACT.md`
-24. `V20-LAYER-OVERLAP-SYSTEM.md`
-25. `V20-EDITORIAL-CONTAINER-AND-TITLE-GRAMMAR.md`
-26. `V20-PARTS-SYSTEM.md`
-27. `V20-P01-COVER-PRODUCTION-BRIEF.md`
-28. `V20-P45-CENTER-SPREAD-PRODUCTION-BRIEF.md`
-29. `V20-ASSET-PRODUCTION-QUEUE.md`
-30. `V20-QUALITY-GATES.md`
-31. `V20-ACCEPTANCE-EVIDENCE.md`
-32. only then derive exact asset-generation and Figma placement instructions.
+`THE PAGE IS RICH BEFORE THE READER READS THE BODY COPY.`
 
-`V20-IDEA-BANK.md` is a controlled idea pool, not a mandatory design authority.
+## Current V20 authority chain
 
-## Current preferred 8-page spine
+Read current visual production authority in this order before any write:
 
-- P01 COVER / DEPARTURE
+1. `README.md`
+2. `V20-LEGACY-QUARANTINE.md`
+3. `V20-PRIVATE-HOMAGE-AND-LAYERED-PAGE-GENERATION-RULE.md`
+4. `V20-IMAGEGEN-EDITORIAL-REBUILD-POLICY.md`
+5. `V20-RURUBU-DESIGN-DECODE.md`
+6. `V20-NORTH-STAR-IMAGE.md`
+7. `V20-NORTH-STAR-DENSITY-EXTRACTION.md`
+8. `V20-P01-P08-VISUAL-PRODUCTION-BIBLE.md`
+9. `V20-SEATED-GUEST-CONTENT-CONTRACT.md`
+10. `V20-SEATED-GUEST-CONTENT-AUDIT.md`
+11. `V20-PAGE-CONTENT-SCORECARD.md`
+12. `V20-CONTENT-INVENTORY.md`
+13. `V20-TRUTH-EDITORIAL-BOUNDARY.md`
+14. `V20-CONTENT-ARCHITECTURE-GATE.md`
+15. `V20-SPREAD-ARCHITECTURE.md`
+16. `V20-READING-PATH-SYSTEM.md`
+17. `V20-VISUAL-GRAMMAR.md`
+18. `V20-PAGE-DIFFERENTIATION-MATRIX.md`
+19. `V20-EDITORIAL-BUDGETS-AND-CHANGE-RESILIENCE.md`
+20. `V20-PHOTO-ROLE-SYSTEM.md`
+21. `V20-PHOTO-INVENTORY-FIRST-PASS.md`
+22. `V20-HAWAII-RAW-PHOTO-REVIEW.md`
+23. `V20-PHOTO-GAP-MATRIX.md`
+24. `V20-PHOTO-REPLACEMENT-LIST.md`
+25. `V20-PRODUCTION-GEOMETRY.md`
+26. `V20-PAGE-MANUALS.md` — P07 schedule-first history is superseded; do not use it as current P07 authority
+27. `V20-P07-SEATED-GUEST-MANUAL.md`
+28. `V20-P07-SEATED-GUEST-PRODUCTION-BRIEF.md`
+29. page-specific current production briefs/addenda
+30. `V20-GREYBOX-SILHOUETTE-SPEC.md`
+31. `V20-ASSET-FIRST-ASSEMBLY-CONTRACT.md`
+32. `V20-LAYER-OVERLAP-SYSTEM.md`
+33. `V20-EDITORIAL-CONTAINER-AND-TITLE-GRAMMAR.md`
+34. `V20-PARTS-SYSTEM.md`
+35. `V20-ASSET-PRODUCTION-QUEUE.md`
+36. `V20-QUALITY-GATES.md`
+37. `V20-ACCEPTANCE-EVIDENCE.md`
+38. only then derive exact ImageGen asset briefs and Figma placement instructions.
+
+If an older/historical document contradicts the current authority above, the current authority wins. Do not average the two directions.
+
+`V20-IDEA-BANK.md` remains a controlled idea pool, not mandatory design authority.
+
+## Current 8-page spine
+
+- P01 COVER / `るるぶ WEDDING` / DEPARTURE
 - P02 WHO WE ARE / PROFILE
 - P03 OUR STORY / HOW WE GOT HERE
 - P04 CENTER SPREAD LEFT / JOURNEY DEPARTURE
@@ -95,170 +137,106 @@ Read in this order:
 
 Physical spread thinking:
 - P02–P03;
-- P04–P05 center spread = emotional/visual peak;
+- P04–P05 = center-spread emotional/visual peak;
 - P06–P07.
 
-## High-leverage foundation set
+## No permanent visual locks yet
 
-These are the final foundation layers before production. Do not add more governance unless real production exposes a missing rule.
+Current preferred Figma nodes are safe baselines, not ceilings.
 
-1. `SEATED-GUEST VALUE` — every content block must reward someone who is already inside the venue; pre-arrival instructions are removed.
-2. `CHANGE RESILIENCE` — copy/photo/aspect changes must not trigger redesign or tiny type.
-3. `PHOTO ROLES` — select HERO/EMOTION/PLACE/ACTION/DETAIL/etc before frame geometry.
-4. `READING PATH` — define 1st/2nd/3rd/useful-info/micro-discovery hierarchy before decoration.
-5. `TRUTH BOUNDARY` — separate FACT / EDITORIAL COPY / DECORATIVE FICTION; never fabricate autobiographical/operational facts.
-6. `PAGE DIFFERENTIATION` — adjacent spreads should materially differ across at least four composition axes.
-7. `ACCEPTANCE EVIDENCE` — prove scan order, A5 readability, editability, change resilience, provenance and anti-template behavior.
-8. `PHOTO GAP MATRIX` — missing real-photo roles remain visible gaps rather than silently becoming generated fake memories or bad placeholder geometry.
-9. `SOURCE-PIXEL REVIEW` — important real photos are visually opened and classified; filenames alone are never evidence of role/crop quality.
-10. `GREYBOX BEFORE PARTS` — silhouette/hierarchy must pass before decorative assets are allowed to rescue weak layout.
-11. `ASSET-FIRST ASSEMBLY` — most visual personality arrives as approved real photography and prepared editorial artwork; Figma behaves mainly as an editable compositor.
-12. `FULL EDITORIAL COLLISION` — background, photo, frame, title, vessel, route, stamp and decoration may overlap strongly or nearly completely when hierarchy improves.
-13. `TEXT SUPPORT, NOT SEPARATION` — readability is protected by paper fields, slabs, ribbons, keylines, local contrast and other support methods rather than by moving text away from imagery.
-14. `EDITORIAL VESSELS, NOT GENERIC UI` — boxes/bands/cards/rounded shapes are welcome when they are page-aware magazine forms; repeated generic UI containers are not.
-15. `PHOTO-FIRST GEOMETRY` — strongest real source behavior drives mask/frame geometry; frames never dictate important source cropping merely because they already exist.
-16. `NO FUNCTIONAL DUPLICATION` — menu/drink/seating/escort/access content stays in the artifact that owns that function; V20 uses its pages for story, personality, discovery and keepsake value.
+P01/P05/P08 and every other page may be improved when a non-destructive candidate clearly beats current at:
+- page view;
+- spread view where relevant;
+- full-book contact;
+- A5 actual-size review.
 
-## Asset-first rule
+`CURRENT PREFERRED != PERMANENTLY LOCKED.`
 
-V20 should feel authored before the assets reach the final page.
+Do not reopen a page merely to change it; reopen when a serious candidate can improve authentic magazine quality.
+
+## Canonical generation architecture
+
+A one-shot whole-page image may be generated as an **art-direction proof**. It is not the preferred final flattened production asset.
+
+If the proof is strong, decompose the successful visual behavior and rebuild the page from background to foreground:
+
+1. PAPER / BASE
+2. LARGE BACKGROUND / ENVIRONMENT COMPOSITE
+3. HERO REAL PHOTO
+4. UNEQUAL SUPPORT / DETAIL PHOTOS
+5. GENERATED PHOTO-FRAME / PAPER-BACKING UNITS
+6. ROUTE BACK / LARGE FLOW ART
+7. GENERATED MAIN TITLE / MASTHEAD UNIT
+8. GENERATED SUBTITLE / SECOND-READ UNIT
+9. GENERATED ARTICLE / PROFILE / EPISODE / DISCOVERY VESSELS
+10. CAPTION / LABEL / TICKET / STAMP UNITS
+11. ROUTE FRONT / FOREGROUND COLLISION
+12. NATIVE AUTHORITATIVE TEXT
+13. MICRO DISCOVERIES
+14. FOLIO / META / EDGE ACCENTS
+15. HIDDEN QA / GUIDES
+
+Figma is primarily the compositor and QA surface.
+
+## Asset-first / zero-base rule
 
 Prepared artwork carries the difficult visual language:
-- original masthead art;
-- page-specific tropical/flower clusters;
-- travel illustrations;
+- masthead/title/subtitle art;
+- page-specific tropical/flower/travel clusters;
+- article/text vessels;
+- photo-frame and caption units;
 - paper/tape/stamp/ticket/ribbon treatments;
-- irregular editorial vessels;
-- title support/slab artwork;
-- route front/back composites;
-- handwritten/print accents;
-- page-specific decorative devices.
+- route BACK/FRONT composites;
+- page-specific icons and micro discoveries.
 
-Figma should mainly:
-- place and overlap these assets;
-- keep real photos independently replaceable;
-- keep authoritative copy native/editable;
-- manage masks, z-order, trim/safe geometry and final polish;
-- resize text-support geometry when actual copy changes.
+Do not build the publication personality from repeated Figma cards, pills, rounded rectangles, polygons, generic gradients or generic icon packs.
 
-Do not build the editorial personality from repeated Figma cards, pills, rounded rectangles, generic gradients, generic icons or full-page Auto Layout.
+Old SVG visual language is quarantined.
 
-## Full layer / overlap rule
+When an old part still has a useful function:
 
-V20 is NOT based on “small overlaps.”
+`KEEP THE JOB; REDESIGN THE OBJECT.`
 
-Background, photography, frames, title art, boxes/bands, stamps, routes and decoration may cover one another heavily. There is no global overlap percentage.
+## Authenticity / anti-downgrade rule
 
-Explicitly valid examples:
-- masthead crosses HERO photo and frame;
-- a feature box covers most of a photo corner;
-- title sits behind a cutout subject while still reading clearly;
-- paper field covers a large photo region to hold native text;
-- support photo obscures HERO photo corner;
-- route runs under one photo and over another through split assets;
-- destination label crosses route + photo + frame;
-- page-edge illustration is mostly cropped and partly hidden;
-- a stamp is intentionally only partly visible.
+Do not mistake `red + yellow + blue + stickers` for a convincing travel-magazine page.
 
-The rule is: `COLLISION MAY BE STRONG; READABILITY AND HIERARCHY MUST BE STRONGER.`
+Reject or redesign when:
+- title scale is timid;
+- photos sit politely separated from titles/vessels;
+- all photos are equal cards;
+- all labels share one rounded silhouette;
+- old flat SVG/icon-pack aesthetics reappear;
+- decorations are evenly sprinkled to fill whitespace;
+- every asset is fully visible like a sticker catalogue;
+- page edges are inactive on an energetic page;
+- high density is achieved only by tiny stickers;
+- the page looks like a wedding template imitating a magazine rather than an edited magazine page.
 
-## Editorial container rule
+Dense pages should use the North-Star calibration: extreme scale jumps, substantial photography or strong information graphics, deep front/back collisions, active edges, page-specific vessels, and rewarding micro discoveries while retaining one dominant first read and an embedded calm island.
 
-Do NOT translate anti-UI guidance into “no boxes / no bands / no rounded shapes.”
+## What may be recovered from older records
 
-Use them as editorial forms:
-- paper notes;
-- tickets;
-- ribbons;
-- bursts;
-- irregular slabs;
-- caption tabs;
-- postcard fields;
-- stamp frames;
-- vertical strips;
-- quiet article fields;
-- photo-bound labels;
-- circles/ovals;
-- asymmetric enclosures.
-
-What is rejected is repeating the same generic card silhouette everywhere.
-
-## Current content consequence
-
-The seated-guest audit currently says:
-
-- P01 cover = very high value;
-- P02 profile = high only when facts are personal rather than form fields;
-- P03 story = high value, but final episode wording still needs curation;
-- P04–P05 travel = very high value, pending real Okinawa/Korea source-photo review;
-- P06 real life = very high when candid/daily-life/dog photos are found;
-- P07 = wedding-discovery page, not timetable/logistics;
-- P08 = keep the thank-you short, personal and non-template.
-
-Highest-value unresolved content inputs are:
-- interesting individual profile facts;
-- concise relationship episode copy;
-- Okinawa/Korea real photo pools + one real memory/detail each;
-- candid/daily-life/dog photo pool;
-- final visible wedding details for P07;
-- final personal thank-you copy.
-
-## Current photo evidence consequence
-
-The raw `ハワイ写真` folder has been visually reviewed for multiple source roles. Hawaii currently has enough real-photo depth for environmental hero, emotional, profile/personality and closing roles.
-
-This does NOT mean V20 becomes a Hawaii book.
-
-Current unresolved source gaps include:
-- Okinawa real-photo pool;
-- Korea real-photo pool;
-- non-Hawaii everyday/casual pool;
-- actual Cookie/Melon dog photos if used photographically;
-- Shogo solo portrait only if P02 ultimately requires a solo-pair structure.
-
-Because of these gaps:
-- P01 may proceed to source-aware hero production with alternate source behavior retained;
-- P02 should use a non-symmetrical profile grammar that does not require a matched portrait pair;
-- P04 Okinawa/Korea masks stay elastic;
-- P06 already tests MIN/IDEAL/MAX photo-count states;
-- P07 is discovery-first and can succeed with zero or a few verified detail photos.
-
-## What V20 may recover from older project records
-
-Only facts/source assets that remain true, for example:
+Only facts and sources that remain true, such as:
 - confirmed names/date/location/content;
 - real photos;
-- real schedule facts;
-- real decor/theme facts;
+- verified decor/theme facts;
+- verified relationship facts;
 - print constraints;
 - provenance/source locators.
 
-Recovering a fact is NOT permission to inherit the old layout around that fact.
-
-## Hard workflow rule
-
-`SEATED-GUEST CONTENT VALUE`
-→ `CONTENT + PAGE MANUAL`
-→ `PHOTO ROLE + SOURCE PIXEL REVIEW + GAP INVENTORY`
-→ `GREYBOX / SILHOUETTE`
-→ `PAGE-SPECIFIC PREPARED ASSET PRODUCTION + QA`
-→ `FIGMA ASSEMBLY / FULL EDITORIAL COLLISION`
-→ `NATIVE TEXT + TEXT SUPPORT ADJUSTMENT`
-→ `EDITORIAL POLISH`
-→ `V20 QA + ACCEPTANCE EVIDENCE`
-→ `PRINT PREFLIGHT`
-
-Figma must not be asked to invent the page with prompts like “make this more Rurubu-like.”
-
-Prompts are execution artifacts generated from page manuals and asset briefs, not the source of design intelligence.
+Recovering a fact or source is never permission to inherit its old layout.
 
 ## Current production priority
 
-1. retain the current generated-PNG editorial-parts system and P01/P05 locks;
-2. replace P06 LIFE / FOOD / PET-LIFE / FUN dummies when verified real sources arrive;
-3. replace the three P04 travel dummies when verified Okinawa/Korea sources arrive;
-4. collect/verify the physical wedding details that will populate P07 while keeping discovery-first behavior;
-5. lock the remaining personal copy;
-6. move to printer-template, bleed/export, profile/preflight and physical-proof work after source/copy gates close.
+1. preserve current preferred nodes as rollback baselines, not locks;
+2. use the Bible + North-Star density extraction to test whether each page can produce a convincing full-page art-direction proof;
+3. decompose successful proofs into page-aware layered PNG units;
+4. improve P01–P08 in order of visible quality gap, with P04/P06 source gaps kept explicit;
+5. replace P04 Okinawa/Korea temp photos when verified real sources arrive;
+6. replace P06 LIFE / FOOD / PET-LIFE / FUN temp photos when verified real sources arrive;
+7. keep P07 discovery-first and grounded in real wedding details;
+8. lock personal copy only after strong vessels/layout are stable;
+9. move to printer-template, bleed/export, CMYK/profile/preflight and physical proof after visual/source/copy gates close.
 
-This sequencing is intentional: the goal is to finish authored magazine pages, not to endlessly improve a design system.
+The goal is not to finish a design system. The goal is to finish eight convincing, authored magazine pages.
