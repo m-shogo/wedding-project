@@ -62,7 +62,10 @@ for (const anchorSec of ANCHOR_SECONDS) {
   // をここで独立に再計算し、実際にgenerated.tsへ書き込まれた値と突き合わせる
   // (「同じ式を2箇所に書いている」こと自体は許容するが、結果が一致しなければ
   // どちらかが壊れている証拠になる)。
-  const expectedStartSec = (phrase.startMs + globalContentOffsetMs - sourceStartMs) / 1000;
+  const onsetCue = phrase.cues.find((c) => c.kind === 'phrase-onset');
+  const expectedStartSec = onsetCue
+    ? (resolveEffectiveCueTimeMs(onsetCue, phrase, master.audio) - sourceStartMs) / 1000
+    : (phrase.startMs + phrase.phraseOffsetMs + globalContentOffsetMs - sourceStartMs) / 1000;
   const expectedEndSec = (phrase.endMs + globalContentOffsetMs - sourceStartMs) / 1000;
   const deltaStartMs = (generated.startSec - expectedStartSec) * 1000;
   const deltaEndMs = (generated.endSec - expectedEndSec) * 1000;

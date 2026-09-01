@@ -82,6 +82,11 @@ for (const d of input.decisions) {
     for (const b of master.editorialBlocks) {
       const lc = b.letterCues?.find((x) => x.cueId === d.cueId);
       if (lc) {
+        if (lc.verifiedByListening) {
+          skipped.push(`${d.cueId}(既にverified、再適用しない)`);
+          letterFound = true;
+          break;
+        }
         if (d.status === 'ok' || d.status === 'adjust') {
           lc.verifiedByListening = true;
           // letterCueはcueOffsetMsを持たない(letterCue専用のtimeMsを直接調整)
@@ -104,8 +109,11 @@ for (const d of input.decisions) {
   }
 
   const {cue} = found;
-  if (cue.timingSource === 'manual' && cue.verifiedByListening) {
-    skipped.push(`${d.cueId}(既にmanual+verified、上書きしない)`);
+  // decisions.local.jsonは前回までの判定を保持したまま再保存されるため、
+  // verified済みcueを再度加算すると同じdeltaMsが二重適用される。
+  // timingSourceに関係なく、人間確認済みなら一方向操作としてskipする。
+  if (cue.verifiedByListening) {
+    skipped.push(`${d.cueId}(既にverified、再適用しない)`);
     continue;
   }
 

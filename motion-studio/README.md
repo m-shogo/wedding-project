@@ -501,12 +501,20 @@ open local/analysis/start-wedding/listening-review.local.html   # ブラウザ�
 ```sh
 pnpm apply:listening-verification   # decisionsに列挙したcueだけへ安全に反映
 pnpm sync:timing-master             # generated.tsへ反映
+pnpm export:timing-interchange      # 歌詞本文なしのAI向けJSON + LYRIC_### WebVTT/SRT + SHA-256 manifestをlocalへ生成
 ```
 
 decisionsに列挙されていないcueは一切変更されない(全件一律verified化はしない)。
 `status=adjust`のdeltaMsは既存`cueOffsetMs`への加算であり、置換ではない
 (二重適用防止のため`resolveEffectiveCueTimeMs()`経由でのみ最終合成される)。
 `status=reject`のcueは`verifiedByListening`をtrueにせず、再確認が必要な状態のまま残す。
+
+AIや字幕ツールへタイミングだけ渡す場合は`pnpm export:timing-interchange`を使う。
+`local/analysis/start-wedding/interchange/timing-master.interchange-manifest.local.json`には、JSON/WebVTT/SRTそれぞれのSHA-256・byte数と、3ファイルをまとめた`bundleSha256`が入る。同じmaster revisionから生成された内容が途中で差し替わっていないか、人間とAIのどちらからも検証できる。manifestは生成日時を持たず、同じ入力では同じ内容になる。
+出力先は`local/analysis/start-wedding/interchange/`で、JSONにはphrase/cueの時刻、
+補正量、confidence、検証状態、解析provenanceを含む。WebVTT/SRTの表示本文は
+`LYRIC_### | P### | section | status`だけで、歌詞本文・音源・音源ファイル名は含めない。
+生成時に歌詞本文または音源名の混入を検出した場合はfail-closedで停止する。
 
 ## 関連
 

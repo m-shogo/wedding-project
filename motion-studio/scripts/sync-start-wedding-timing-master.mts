@@ -128,6 +128,7 @@ const nearestBeatSec = (sec: number): number | null => {
 };
 
 const enrichedPhrases = master.phrases.map((p) => {
+  const phraseOnsetCue = p.cues.find((c) => c.kind === 'phrase-onset');
   const wordCues = p.cues.filter((c) => c.kind === 'word-accent');
   const importantWords: ImportantWordOut[] = wordCues.map((c) => ({
     cueId: c.cueId,
@@ -144,7 +145,11 @@ const enrichedPhrases = master.phrases.map((p) => {
     lineNumber: p.lineNumber,
     sectionId: p.sectionId,
     text: p.text,
-    startSec: toEditSec(p.startMs),
+    // phrase-onsetの人間補正を実際のSequence開始へ伝播する。p.startMsと
+    // onset cue.timeMsは基底時刻として一致するが、聴取後のcueOffsetMsは
+    // onset cue側だけに入るため、未補正のp.startMsを使うと確認マスターと
+    // 映像表示が食い違う。onsetが無いlegacy phraseだけp.startMsへfallback。
+    startSec: phraseOnsetCue ? toEditSecForCue(phraseOnsetCue, p) : toEditSec(p.startMs + p.phraseOffsetMs),
     endSec: toEditSec(p.endMs),
     emphasisWord: null as string | null,
     threeHitFrameSecs: hitCues.length > 0 ? hitCues.map((c) => toEditSecForCue(c, p)) : null,
@@ -192,6 +197,7 @@ writeFileSync(
 // - globalContentOffsetMs・sourceStartMsを正しく時間変換へ反映
 // - cue単体の時刻はresolveEffectiveCueTimeMs()経由でphraseOffsetMs/cueOffsetMsも合成
 //   (二重適用防止のため、cue.timeMsへ個別にoffsetを足し込む処理は他に存在しない)
+// - phrase startSecもphrase-onset cueのeffective時刻から派生し、人間補正を表示開始へ伝播
 
 import type {LyricPhrase} from './localLyricsWeddingEdit.ts';
 import type {LocalEditRange} from './localEditRange.ts';

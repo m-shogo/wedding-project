@@ -42,6 +42,14 @@ if (!existsSync(audioPath)) {
 }
 mkdirSync(outDir, {recursive: true});
 
+// 🔔確認は、cue単位の短い切り出しクリップだと窓(1.0/1.2秒)を超える大きな
+// ズレ(例: 1秒以上)で無音になってしまう(クリック音が窓の外に出るため)。
+// これを解消するため、フルの音源をmp3へ変換して1本だけ生成し、🔔確認は
+// このフル音源から必要な範囲を都度切り出して再生する(どれだけズラしても
+// 曲の長さの範囲内なら必ず鳴る)。
+const fullSongPath = join(dirname(htmlPath), 'full-song.local.mp3');
+execFileSync('ffmpeg', ['-y', '-i', audioPath, '-ac', '2', '-b:a', '160k', fullSongPath], {stdio: 'pipe'});
+
 const WINDOW_BEFORE_SEC = 1.0;
 const WINDOW_AFTER_SEC = 1.2;
 
@@ -281,7 +289,7 @@ writeFileSync(
   .btn-check:hover { background: #24384a; }
   .nudge-label { font-size: 11px; color: #888; }
   .nudge-row { display: flex; align-items: center; gap: 4px; }
-  .nudge-current { display: inline-block; min-width: 44px; text-align: center; font-size: 12px; color: #F4C95D; font-weight: 700; }
+  .nudge-current { display: inline-block; min-width: 150px; text-align: center; font-size: 12px; color: #F4C95D; font-weight: 700; }
   .golden-toggle { font-size: 12px; color: #F4C95D; cursor: pointer; }
   .judge-status { font-size: 12px; color: #888; margin-top: 4px; }
   .judge-status.is-ok { color: #7CF29A; }
@@ -431,49 +439,57 @@ ${rows}
   }
   var state = loadState(); // cueId -> {status: 'ok'|'reject', deltaMs: number, golden: boolean}
 
-  // 「🔔 ズレ確認」: 現在の±ms補正込みの位置で短いクリック音を鳴らし、
-  // 歌詞の頭と音が揃うかどうかを、数字ではなく耳で確認できるようにする。
-  // (数字をやり取りする往復を無くすための機能。判定ロジックには影響しない。)
+  // 「🔔 ズレ確認」: 補正込みの実際の時刻の周辺を、フル音源から直接切り出して
+  // 再生し、その位置に短いクリック音を重ねる。cue単位の短い切り出しクリップ
+  // (窓1.0/1.2秒)だと、1秒を超えるような大きな補正でクリック音が窓の外へ出て
+  // 無音になってしまう(「1秒戻したら確認できない」問題)。フル音源からその場で
+  // 必要な範囲を取るため、補正量がどれだけ大きくても曲の長さの範囲内なら必ず
+  // 鳴る。数字をやり取りする往復を無くすための機能で、判定ロジックには影響しない。
+  var CONFIRM_PREROLL_SEC = 1.0;
+  var CONFIRM_POSTROLL_SEC = 1.5;
   var audioCtx = null;
-  var bufferCache = {};
+  var fullSongBufferPromise = null;
   function getAudioCtx() {
     if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     return audioCtx;
   }
-  function loadBuffer(cueId, src) {
-    if (bufferCache[cueId]) return Promise.resolve(bufferCache[cueId]);
-    return fetch(src)
-      .then(function (r) { return r.arrayBuffer(); })
-      .then(function (ab) { return getAudioCtx().decodeAudioData(ab); })
-      .then(function (buf) { bufferCache[cueId] = buf; return buf; });
+  function loadFullSongBuffer() {
+    if (!fullSongBufferPromise) {
+      fullSongBufferPromise = fetch('full-song.local.mp3')
+        .then(function (r) { return r.arrayBuffer(); })
+        .then(function (ab) { return getAudioCtx().decodeAudioData(ab); });
+    }
+    return fullSongBufferPromise;
   }
-  function playWithClick(cueId, src, clickAtSec, btn) {
+  function playWithClick(absoluteTimeSec, btn) {
     var originalLabel = btn.textContent;
     btn.disabled = true;
-    btn.textContent = '⏳ 読み込み中...';
-    loadBuffer(cueId, src)
+    btn.textContent = '⏳';
+    loadFullSongBuffer()
       .then(function (buffer) {
         btn.disabled = false;
         btn.textContent = originalLabel;
         var ctx = getAudioCtx();
         if (ctx.state === 'suspended') ctx.resume();
+        var sliceStartSec = Math.max(0, absoluteTimeSec - CONFIRM_PREROLL_SEC);
+        var actualPreroll = absoluteTimeSec - sliceStartSec; // 曲の先頭に近い場合は前が詰まる
+        var sliceDurationSec = Math.min(buffer.duration - sliceStartSec, actualPreroll + CONFIRM_POSTROLL_SEC);
+        if (sliceDurationSec <= 0) return;
         var startAt = ctx.currentTime + 0.05;
         var source = ctx.createBufferSource();
         source.buffer = buffer;
         source.connect(ctx.destination);
-        source.start(startAt);
-        if (clickAtSec >= 0 && clickAtSec <= buffer.duration) {
-          var osc = ctx.createOscillator();
-          var gain = ctx.createGain();
-          osc.type = 'square';
-          osc.frequency.value = 1800;
-          gain.gain.setValueAtTime(0.35, startAt + clickAtSec);
-          gain.gain.exponentialRampToValueAtTime(0.001, startAt + clickAtSec + 0.05);
-          osc.connect(gain);
-          gain.connect(ctx.destination);
-          osc.start(startAt + clickAtSec);
-          osc.stop(startAt + clickAtSec + 0.06);
-        }
+        source.start(startAt, sliceStartSec, sliceDurationSec);
+        var osc = ctx.createOscillator();
+        var gain = ctx.createGain();
+        osc.type = 'square';
+        osc.frequency.value = 1800;
+        gain.gain.setValueAtTime(0.35, startAt + actualPreroll);
+        gain.gain.exponentialRampToValueAtTime(0.001, startAt + actualPreroll + 0.05);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(startAt + actualPreroll);
+        osc.stop(startAt + actualPreroll + 0.06);
       })
       .catch(function () {
         btn.disabled = false;
@@ -550,7 +566,9 @@ ${rows}
     okBtn.classList.toggle('active', entry.status === 'ok');
     wrongBtn.classList.toggle('active', entry.status === 'adjust');
     rejectBtn.classList.toggle('active', entry.status === 'reject');
-    currentEl.textContent = entry.deltaMs === 0 ? 'ズレなし' : Math.abs(entry.deltaMs) + 'ms ' + (entry.deltaMs < 0 ? '早く' : '遅く');
+    var designedSec = parseFloat(tr.getAttribute('data-designedsec'));
+    var currentSec = designedSec + entry.deltaMs / 1000;
+    currentEl.textContent = designedSec.toFixed(3) + 's → ' + currentSec.toFixed(3) + 's' + (entry.deltaMs === 0 ? '(ズレなし)' : ' (' + (entry.deltaMs > 0 ? '+' : '') + entry.deltaMs + 'ms)');
     if (goldenInput) goldenInput.checked = !!entry.golden;
     var noteInput = tr.querySelector('[data-role=note]');
     if (noteInput && document.activeElement !== noteInput) noteInput.value = entry.note || '';
@@ -618,6 +636,11 @@ ${rows}
         if (entry.status !== 'reject') entry.status = 'adjust';
         renderRow(tr);
         saveState();
+        // ボタンを押した瞬間、その場で補正込みの位置を鳴らして確認できるように
+        // する(「押したらリアルタイムで直して聴きたい」というフィードバック対応)。
+        // 別途🔔を押す手間を無くす。
+        var designedSec = parseFloat(tr.getAttribute('data-designedsec'));
+        if (checkBtn) playWithClick(designedSec + entry.deltaMs / 1000, checkBtn);
       });
     });
     tr.querySelector('.btn-reset').addEventListener('click', function () {
@@ -630,11 +653,9 @@ ${rows}
     if (checkBtn) {
       checkBtn.addEventListener('click', function () {
         var entry = getEntry(cueId);
-        var audioEl = tr.querySelector('audio');
-        var src = audioEl.getAttribute('src');
-        var designOffset = parseFloat(tr.getAttribute('data-designoffset'));
-        var clickAtSec = designOffset + entry.deltaMs / 1000;
-        playWithClick(cueId, src, clickAtSec, checkBtn);
+        var designedSec = parseFloat(tr.getAttribute('data-designedsec'));
+        var absoluteTimeSec = designedSec + entry.deltaMs / 1000;
+        playWithClick(absoluteTimeSec, checkBtn);
       });
     }
     var goldenInput = tr.querySelector('[data-role=golden]');

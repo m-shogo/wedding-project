@@ -1,6 +1,7 @@
-// 「歌詞と動画演出が噛み合っているか」「音声と歌詞のズレを前後の文脈込みで判断したい」
-// という要望に応えるための、歌詞全文 + 秒数 + 演出 + フレーズ単位の音声(前後1秒の
-// 文脈込み) + cue単位の判定UIを1枚にまとめたローカル専用reference。
+// 「歌詞と動画演出が噛み合っているか」「音声と歌詞のズレを文脈込みで判断したい」
+// という要望に応えるための、歌詞全文 + 秒数 + 演出 + フレーズ単位の音声
+// (直前1秒を含み、次フレーズ開始前で終了) + cue単位の判定UIを1枚にまとめた
+// ローカル専用reference。
 //
 // listening-review.local.html(cue単位の短いクリップ)と役割は重なるが、こちらは
 // 「フレーズ全体を通しで聴きながら、その中の各cueを判定する」ための画面。
@@ -40,6 +41,12 @@ if (!existsSync(audioPath)) {
 }
 mkdirSync(clipsDir, {recursive: true});
 
+// 🔔確認用のフル音源(render-cue-listening-clips.mtsと同じファイル)。
+// このscript単体で実行された場合でも動くよう、ここでも生成する
+// (実行順に依存しない)。
+const fullSongPath = join(dirname(outPath), 'full-song.local.mp3');
+execFileSync('ffmpeg', ['-y', '-i', audioPath, '-ac', '2', '-b:a', '160k', fullSongPath], {stdio: 'pipe'});
+
 // フレーズの前後にこれだけ文脈を足す。「前後もあってどこまでずらすか分からない」
 // というフィードバックに対応するため、cue単位クリップ(1.0/1.2秒)より広く取る。
 const PHRASE_PAD_BEFORE_SEC = 1.0;
@@ -49,9 +56,16 @@ const escapeHtml = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;')
 const escapeAttr = (s: string) => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;');
 const fmtSec = (ms: number) => (ms / 1000).toFixed(3) + 's';
 
-const phraseClips = master.phrases.map((p) => {
+const phraseClips = master.phrases.map((p, phraseIndex) => {
   const clipStartSec = Math.max(0, p.startMs / 1000 - PHRASE_PAD_BEFORE_SEC);
-  const clipDurationSec = p.endMs / 1000 - clipStartSec + PHRASE_PAD_AFTER_SEC;
+  const paddedEndSec = p.endMs / 1000 + PHRASE_PAD_AFTER_SEC;
+  const nextPhrase = master.phrases[phraseIndex + 1];
+  // 次の歌詞が確認クリップへ入ると、現在のphraseの終端と取り違えやすい。
+  // 後余白は次phrase開始までに限定し、最低でも現在phraseの宣言endまでは残す。
+  const clipEndSec = nextPhrase
+    ? Math.max(p.endMs / 1000, Math.min(paddedEndSec, nextPhrase.startMs / 1000))
+    : paddedEndSec;
+  const clipDurationSec = Math.max(0.1, clipEndSec - clipStartSec);
   const fileName = `${p.phraseId.replace(/[^A-Za-z0-9_-]/g, '_')}.mp3`;
   const outFile = join(clipsDir, fileName);
   execFileSync(
@@ -103,7 +117,7 @@ const rows = master.phrases
       <td class="anim">
         演出: ${p.selectedAnimation ? escapeHtml(p.selectedAnimation) : '(未割当)'}<br/>
         <audio controls preload="none" src="lyric-phrase-clips/${escapeAttr(clip.clipFile)}"></audio>
-        <span class="hint">(前後${PHRASE_PAD_BEFORE_SEC}〜${PHRASE_PAD_AFTER_SEC}秒の文脈込み)</span>
+        <span class="hint">(直前${PHRASE_PAD_BEFORE_SEC}秒を含み、次フレーズ開始前で終了)</span>
       </td>
     </tr>
     ${cueRows}`;
@@ -157,7 +171,7 @@ writeFileSync(
   .btn-nudge-big.active { background: #8a4a2f; border-color: #8a4a2f; }
   .btn-reset { border-color: #555; color: #aaa; }
   .btn-check { border-color: #3a5a7a; font-weight: 700; }
-  .nudge-current { min-width: 40px; text-align: center; font-size: 11px; color: #F4C95D; font-weight: 700; }
+  .nudge-current { min-width: 140px; text-align: center; font-size: 11px; color: #F4C95D; font-weight: 700; }
   .note-input { width: 100%; box-sizing: border-box; background: #0d0d0e; border: 1px solid #444; color: #eee; border-radius: 4px; padding: 3px 6px; font-size: 12px; font-family: inherit; margin-top: 3px; }
   .judge-status { font-size: 11px; color: #888; margin-top: 3px; }
   .judge-status.is-ok { color: #7CF29A; }
@@ -185,7 +199,7 @@ writeFileSync(
 </p>
 
 <div class="howto">
-  <b>使い方:</b> 各フレーズの音声(前後${PHRASE_PAD_BEFORE_SEC}秒の文脈込み)を▶で聴きながら、
+  <b>使い方:</b> 各フレーズの音声(直前${PHRASE_PAD_BEFORE_SEC}秒を含み、次フレーズ開始前で終了)を▶で聴きながら、
   その中の各cue行を判定する。判定は<b>listening-review.local.htmlと共通</b>なので、
   どちらのページでやっても同じ「まとめ」「保存」に合流する。<br/>
   行ごとに: ⏪⏪/⏪/⏩/⏩⏩でズレを合わせて🔔確認 → 👍(合ってる)/❌(合ってない)/🤔(わからない)。
@@ -236,46 +250,54 @@ ${rows}
   }
   var state = loadState();
 
+  // フル音源から直接切り出して再生する(cue/phraseクリップの窓を超える
+  // 大きな補正でも無音にならないようにするため。listening-review.local.html
+  // と同じ方式)。
+  var CONFIRM_PREROLL_SEC = 1.0;
+  var CONFIRM_POSTROLL_SEC = 1.5;
   var audioCtx = null;
-  var bufferCache = {};
+  var fullSongBufferPromise = null;
   function getAudioCtx() {
     if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     return audioCtx;
   }
-  function loadBuffer(key, src) {
-    if (bufferCache[key]) return Promise.resolve(bufferCache[key]);
-    return fetch(src)
-      .then(function (r) { return r.arrayBuffer(); })
-      .then(function (ab) { return getAudioCtx().decodeAudioData(ab); })
-      .then(function (buf) { bufferCache[key] = buf; return buf; });
+  function loadFullSongBuffer() {
+    if (!fullSongBufferPromise) {
+      fullSongBufferPromise = fetch('full-song.local.mp3')
+        .then(function (r) { return r.arrayBuffer(); })
+        .then(function (ab) { return getAudioCtx().decodeAudioData(ab); });
+    }
+    return fullSongBufferPromise;
   }
-  function playWithClick(key, src, clickAtSec, btn) {
+  function playWithClick(absoluteTimeSec, btn) {
     var original = btn.textContent;
     btn.disabled = true;
     btn.textContent = '⏳';
-    loadBuffer(key, src)
+    loadFullSongBuffer()
       .then(function (buffer) {
         btn.disabled = false;
         btn.textContent = original;
         var ctx = getAudioCtx();
         if (ctx.state === 'suspended') ctx.resume();
+        var sliceStartSec = Math.max(0, absoluteTimeSec - CONFIRM_PREROLL_SEC);
+        var actualPreroll = absoluteTimeSec - sliceStartSec;
+        var sliceDurationSec = Math.min(buffer.duration - sliceStartSec, actualPreroll + CONFIRM_POSTROLL_SEC);
+        if (sliceDurationSec <= 0) return;
         var startAt = ctx.currentTime + 0.05;
         var source = ctx.createBufferSource();
         source.buffer = buffer;
         source.connect(ctx.destination);
-        source.start(startAt);
-        if (clickAtSec >= 0 && clickAtSec <= buffer.duration) {
-          var osc = ctx.createOscillator();
-          var gain = ctx.createGain();
-          osc.type = 'square';
-          osc.frequency.value = 1800;
-          gain.gain.setValueAtTime(0.35, startAt + clickAtSec);
-          gain.gain.exponentialRampToValueAtTime(0.001, startAt + clickAtSec + 0.05);
-          osc.connect(gain);
-          gain.connect(ctx.destination);
-          osc.start(startAt + clickAtSec);
-          osc.stop(startAt + clickAtSec + 0.06);
-        }
+        source.start(startAt, sliceStartSec, sliceDurationSec);
+        var osc = ctx.createOscillator();
+        var gain = ctx.createGain();
+        osc.type = 'square';
+        osc.frequency.value = 1800;
+        gain.gain.setValueAtTime(0.35, startAt + actualPreroll);
+        gain.gain.exponentialRampToValueAtTime(0.001, startAt + actualPreroll + 0.05);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(startAt + actualPreroll);
+        osc.stop(startAt + actualPreroll + 0.06);
       })
       .catch(function () {
         btn.disabled = false;
@@ -337,7 +359,9 @@ ${rows}
     okBtn.classList.toggle('active', entry.status === 'ok');
     wrongBtn.classList.toggle('active', entry.status === 'adjust');
     rejectBtn.classList.toggle('active', entry.status === 'reject');
-    currentEl.textContent = entry.deltaMs === 0 ? 'ズレなし' : Math.abs(entry.deltaMs) + 'ms ' + (entry.deltaMs < 0 ? '早く' : '遅く');
+    var designedSec = parseFloat(tr.getAttribute('data-designedsec'));
+    var currentSec = designedSec + entry.deltaMs / 1000;
+    currentEl.textContent = designedSec.toFixed(3) + 's → ' + currentSec.toFixed(3) + 's' + (entry.deltaMs === 0 ? '(ズレなし)' : ' (' + (entry.deltaMs > 0 ? '+' : '') + entry.deltaMs + 'ms)');
     if (noteInput && document.activeElement !== noteInput) noteInput.value = entry.note || '';
 
     if (entry.status === 'adjust' && entry.deltaMs !== 0) {
@@ -395,6 +419,8 @@ ${rows}
         if (entry.status !== 'reject') entry.status = 'adjust';
         renderRow(tr);
         saveState();
+        var designedSec = parseFloat(tr.getAttribute('data-designedsec'));
+        if (checkBtn) playWithClick(designedSec + entry.deltaMs / 1000, checkBtn);
       });
     });
     tr.querySelector('.btn-reset').addEventListener('click', function () {
@@ -406,10 +432,9 @@ ${rows}
     var checkBtn = tr.querySelector('.btn-check');
     checkBtn.addEventListener('click', function () {
       var entry = getEntry(cueId);
-      var src = tr.getAttribute('data-clipsrc');
-      var designOffset = parseFloat(tr.getAttribute('data-designoffset'));
-      var clickAtSec = designOffset + entry.deltaMs / 1000;
-      playWithClick(src, src, clickAtSec, checkBtn);
+      var designedSec = parseFloat(tr.getAttribute('data-designedsec'));
+      var absoluteTimeSec = designedSec + entry.deltaMs / 1000;
+      playWithClick(absoluteTimeSec, checkBtn);
     });
     var noteInput = tr.querySelector('[data-role=note]');
     noteInput.addEventListener('input', function () {

@@ -60,17 +60,23 @@ try {
   const targetPhrase = master.phrases.find((p) => p.cues.some((c) => c.kind === 'word-accent'));
   if (!targetPhrase) throw new Error('word-accent cueを持つphraseが無い');
   const targetCue = targetPhrase.cues.find((c) => c.kind === 'word-accent')!;
+  const targetOnsetCue = targetPhrase.cues.find((c) => c.kind === 'phrase-onset');
+  if (!targetOnsetCue) throw new Error(`${targetPhrase.phraseId}にphrase-onset cueが無い`);
 
   const testPhraseOffsetMs = 222;
   const testCueOffsetMs = 111;
+  const testOnsetOffsetMs = -333;
   const originalTimeMs = targetCue.timeMs;
   const {sourceStartMs, globalContentOffsetMs} = master.audio;
 
   const expectedEffectiveMs = originalTimeMs + globalContentOffsetMs + testPhraseOffsetMs + testCueOffsetMs;
   const expectedAccentSec = (expectedEffectiveMs - sourceStartMs) / 1000;
+  const expectedStartSec =
+    (targetOnsetCue.timeMs + globalContentOffsetMs + testPhraseOffsetMs + testOnsetOffsetMs - sourceStartMs) / 1000;
 
   targetPhrase.phraseOffsetMs = testPhraseOffsetMs;
   targetCue.cueOffsetMs = testCueOffsetMs;
+  targetOnsetCue.cueOffsetMs = testOnsetOffsetMs;
   writeFileSync(masterPath, JSON.stringify(master, null, 2) + '\n');
   console.log(
     `[test] ${targetPhrase.phraseId}.phraseOffsetMs=${testPhraseOffsetMs}, ${targetCue.cueId}.cueOffsetMs=${testCueOffsetMs} を一時的に設定しました。` +
@@ -87,6 +93,7 @@ try {
   const generatedModule = (await import(`../src/data/startWeddingEdit/generated.ts?t=${Date.now()}`)) as {
     weddingEditLyricPhrases: Array<{
       phraseId: string;
+      startSec: number;
       importantWords: Array<{word: string; accentSec: number}>;
     }>;
   };
@@ -96,11 +103,13 @@ try {
   if (!afterWord) throw new Error(`generated.tsに${targetCue.text}(${targetCue.cueId})が見つからない`);
 
   const diffMs = Math.round((afterWord.accentSec - expectedAccentSec) * 1000);
-  const ok = Math.abs(diffMs) < 1; // 浮動小数点誤差1ms未満は許容
+  const startDiffMs = Math.round((afterPhrase.startSec - expectedStartSec) * 1000);
+  const ok = Math.abs(diffMs) < 1 && Math.abs(startDiffMs) < 1; // 浮動小数点誤差1ms未満は許容
 
   console.log(`  期待accentSec=${expectedAccentSec} 実際accentSec=${afterWord.accentSec} 差分=${diffMs}ms`);
+  console.log(`  期待startSec=${expectedStartSec} 実際startSec=${afterPhrase.startSec} 差分=${startDiffMs}ms`);
   if (ok) {
-    console.log('✅ offset composition regression test: PASS(global+phrase+cue offsetが1回だけ正しく合成された)');
+    console.log('✅ offset composition regression test: PASS(accentとphrase onsetへglobal+phrase+cue offsetが1回だけ正しく合成された)');
   } else {
     // 二重適用が起きている場合の典型例を示す(診断の助けにするため)
     const doubledPhraseAndCue = (originalTimeMs + globalContentOffsetMs + testPhraseOffsetMs * 2 + testCueOffsetMs * 2 - sourceStartMs) / 1000;
