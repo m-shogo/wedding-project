@@ -1,247 +1,205 @@
 # Rurubu WEDDING V20
 
-Status: `CLEAN_SLATE_CANONICAL / IMAGEGEN_FIRST / ALL_PAGES_OPEN / CURRENT_PAGE_ROLES_RESET_2026-09-01`
+Status: `CLEAN_SLATE_CANONICAL / IMAGEGEN_FIRST / CURRENT_PAGE_ROLES_LOCKED / DESIGN_SPEC_ACTIVE_2026-09-01`
 
-V20 is a complete redesign track.
+V20 is the active redesign track. Do not create V21 merely because V20 page roles were revised; the current work is still the same V20 being brought to final quality.
 
-It does **not** inherit V10/V11/V12 page composition, Figma layout, page-role mapping, old reference nodes, old AI-look scoring, old prompts, frame geometry, component grammar or old color assignment as visual authority.
+Historical V10/V11/V12/V20 experiments may remain for provenance and fact/source recovery, but they have no design authority when they conflict with the current files below.
 
-Historical material may remain for provenance and fact/source recovery, but current V20 production must follow `V20-LEGACY-QUARANTINE.md` and the current page architecture below.
+# 1. Read first — current authority
 
-## Fixed production facts
-
-- A5 portrait;
-- trim 148 x 210 mm;
-- 8 pages fixed;
-- wedding day `2026.10.24`;
-- numeric wedding date `20261024`;
-- P08 barcode digits `2026102400000` exactly;
-- 3 mm bleed is the current working assumption until printer-specific template overrides it;
-- editable Figma master;
-- replaceable real photos;
-- authoritative/personal/factual text remains native/editable;
-- `FIGMA COMPLETE != PRINT READY`.
-
-Do not revive accidental date variants such as `20161026` or `20261026`.
-
-## Current visual target
-
-V20 should feel like a professionally edited, high-energy Japanese travel magazine made specifically for this wedding — not merely a wedding booklet with travel stickers.
-
-For this private/noncommercial booklet, the working P01 masthead may be:
-
-`るるぶ WEDDING`
-
-The visual direction may strongly use:
-- saturated red / yellow / cyan-blue / navy / cream relationships;
-- thick display lettering;
-- white/cream keylines;
-- hard offset shadows;
-- strong title/photo collision;
-- unequal photo hierarchy;
-- tactile paper/ticket/stamp/ribbon/frame treatments;
-- routes and editorial artwork that move behind and in front of other layers;
-- active page edges;
-- page-specific micro discoveries.
-
-However the current clutter target is **about 75% of the earlier maximum-clutter experiments**.
-
-Do not fill every quiet area. Prefer fewer, stronger secondary reads and keep large photography visible.
-
-`AUTHENTIC MAGAZINE ENERGY > NUMBER OF ELEMENTS.`
-
-Do not import/vector-trace an official third-party logo file or pixel-copy a specific published page. Re-author the actual page for SHOGO & SHIORI.
-
-## Reading context
-
-V20 is primarily read by wedding guests and functions as an editorial booklet about the couple.
-
-It is not a pre-arrival logistics leaflet.
-
-Therefore V20 does not spend premium page space on dress code, access, transit, parking, arrival/check-in instructions, RSVP, what-to-bring reminders or similar utility.
-
-If another paper item owns menu/drink/seating/escort utility, V20 does not duplicate that content merely to fill space.
-
-Current editorial flow:
-
-`WHO ARE THESE TWO?`
-→ `HOW DID THEY BECOME US?`
-→ `WHERE DID THEY TRAVEL?`
-→ `WHO HAVE THEY SHARED LIFE WITH?`
-→ `WHAT ARE THEY LIKE IN REAL LIFE?`
-→ `WHAT DO THEY WANT TO SAY TO THEIR GUESTS?`
-→ `CLOSE LIKE A REAL MAGAZINE.`
-
-## North Star
-
-Google Drive image:
-- file ID `12ppT-SV-8OmOgz_a0MuhrkT3gNOOKsY3`;
-- file `0c570e8f-ebc5-42c6-8512-b05644a8aa6a.png`.
-
-This image has been directly reviewed and concretely decoded in `V20-NORTH-STAR-DENSITY-EXTRACTION.md`.
-
-It is a taste/density/layering calibration source, not a coordinate template.
-
-Key extracted principle:
-
-`THE PAGE IS RICH BEFORE THE READER READS THE BODY COPY.`
-
-## Current V20 authority chain
-
-Read current visual production authority in this order before any write:
+Before any V20 visual/content write, read in this order:
 
 1. `README.md`
-2. `V20-CURRENT-PAGE-ARCHITECTURE.md`
-3. `V20-LEGACY-QUARANTINE.md`
-4. `V20-PRIVATE-HOMAGE-AND-LAYERED-PAGE-GENERATION-RULE.md`
-5. `V20-IMAGEGEN-EDITORIAL-REBUILD-POLICY.md`
-6. `V20-RURUBU-DESIGN-DECODE.md`
-7. `V20-NORTH-STAR-IMAGE.md`
+2. `V20-CURRENT-PAGE-ARCHITECTURE.md` — highest current page-role/content authority
+3. `V20-PAGE-BY-PAGE-DESIGN-SPEC.md` — detailed P01–P08 design/production authority
+4. `V20-LEGACY-QUARANTINE.md`
+5. `V20-PRIVATE-HOMAGE-AND-LAYERED-PAGE-GENERATION-RULE.md`
+6. `V20-IMAGEGEN-EDITORIAL-REBUILD-POLICY.md`
+7. `V20-RURUBU-DESIGN-DECODE.md`
 8. `V20-NORTH-STAR-DENSITY-EXTRACTION.md`
 9. `V20-P01-P08-VISUAL-PRODUCTION-BIBLE.md`
 10. `V20-PAGE-MANUALS.md`
-11. `V20-CONTENT-INVENTORY.md`
-12. `V20-TRUTH-EDITORIAL-BOUNDARY.md`
-13. `V20-CONTENT-ARCHITECTURE-GATE.md`
-14. `V20-SPREAD-ARCHITECTURE.md`
-15. `V20-READING-PATH-SYSTEM.md`
-16. `V20-PAGE-DIFFERENTIATION-MATRIX.md`
-17. `V20-EDITORIAL-BUDGETS-AND-CHANGE-RESILIENCE.md`
-18. `V20-PHOTO-ROLE-SYSTEM.md`
-19. `V20-PHOTO-INVENTORY-FIRST-PASS.md`
-20. `V20-PHOTO-GAP-MATRIX.md`
-21. `V20-PHOTO-REPLACEMENT-LIST.md`
-22. `V20-PRODUCTION-GEOMETRY.md`
-23. page-specific current production briefs/addenda
-24. `V20-ASSET-FIRST-ASSEMBLY-CONTRACT.md`
-25. `V20-LAYER-OVERLAP-SYSTEM.md`
-26. `V20-EDITORIAL-CONTAINER-AND-TITLE-GRAMMAR.md`
-27. `V20-PARTS-SYSTEM.md`
-28. regenerated current asset queue/manifest after page-role reset
-29. `V20-QUALITY-GATES.md`
-30. `V20-ACCEPTANCE-EVIDENCE.md`
-31. only then derive exact ImageGen asset briefs and Figma placement instructions.
+11. factual/source/print documents as relevant
+12. only then derive ImageGen units and Figma placement.
 
-The old P07 seated-guest guide documents are now superseded historical stubs and are not current authority.
+If an older file conflicts with items 2–3, **items 2–3 win**. Do not average old and new directions.
 
-If an older/historical document contradicts `V20-CURRENT-PAGE-ARCHITECTURE.md`, the current architecture wins. Do not average the directions.
+Old P07 seated-guest files are superseded stubs only.
 
-## Current 8-page spine
+# 2. Fixed production facts
 
-- P01 COVER / `るるぶ WEDDING`
-- P02 PROFILE / WHO WE ARE
-- P03 OUR STORY
-- P04 ALL TRAVEL MEMORIES / OUR JOURNEY
-- P05 FAMILY & FRIENDS MEMORIES
-- P06 REAL LIFE / FAVORITES / BEST SHOTS
-- P07 CLOSING MESSAGE / THANK YOU
-- P08 BACK COVER / MAGAZINE BACK COVER
+- format: A5 portrait;
+- trim: `148 × 210 mm`;
+- pages: `8`;
+- working bleed: `3 mm` until printer template overrides;
+- wedding day: `2026.10.24`;
+- numeric date: `20261024`;
+- P08 decorative barcode digits: `2026102400000` exactly;
+- editable Figma master;
+- real photos remain replaceable;
+- factual/personal text remains native/editable;
+- `FIGMA COMPLETE != PRINT READY`.
 
-Physical spread thinking:
+Never revive accidental date variants such as `20161026` or `20261026`.
+
+# 3. Visual calibration — do not misread 75%
+
+The user-defined target is:
+
+- `RURUBU FEEL = 100%`
+- `EDITORIAL DENSITY = 75% OF MAXIMUM-CLUTTER TESTS`
+- `READABILITY = HIGH`
+
+`75%` means fewer elements/information, **not** weaker Rurubu-like character.
+
+Keep full-strength:
+- bold display title hierarchy;
+- high-energy Japanese travel-magazine color relationships;
+- unequal photos;
+- deep title/photo/frame collision;
+- tactile ticket/stamp/paper/ribbon behavior;
+- authored asymmetry;
+- page-specific discoveries.
+
+Reduce:
+- tiny stickers;
+- competing sub-features;
+- microcopy;
+- equal photo cards;
+- gap filling;
+- unnecessary clutter.
+
+`FULL-STRENGTH MAGAZINE CHARACTER, EDITED TO 75% INFORMATION LOAD.`
+
+# 4. Current P01–P08 spine
+
+- **P01** — Cover / `るるぶ WEDDING`
+- **P02** — Profile / Who We Are + `Q1/Q2`
+- **P03** — Our Story + `Q3/Q4`
+- **P04** — All Travel Memories / Our Journey
+- **P05** — Family & Friends Memories
+- **P06** — Real Life / Favorites / Best Shots + `Q5/Q6`
+- **P07** — Closing Message / Thank You
+- **P08** — Magazine Back Cover
+
+Spread flow:
 - P02–P03 = `WHO → STORY`;
-- P04–P05 = center spread `PLACES WE REMEMBER → PEOPLE WE REMEMBER`;
+- P04–P05 = `PLACES WE REMEMBER → PEOPLE WE REMEMBER`;
 - P06–P07 = `REAL LIFE → THANK YOU`;
-- P08 = stand-alone quiet back cover.
+- P08 = quiet standalone back cover.
 
-Explicitly obsolete page roles:
-- P05 Hawaii-only peak / proposal-arrival page;
-- P07 schedule/timetable;
-- P07 `TODAY'S TRAVEL GUIDE`;
-- P07 `11 DESTINATIONS`;
-- P07 `LOOK AROUND` / `EDITOR'S PICK`;
-- P08 as the main thank-you page.
+# 5. Six-question Q&A system
 
-## No permanent visual locks yet
+Exactly six Q&A slots are distributed:
 
-Current preferred Figma nodes are safe baselines, not ceilings.
+- P02: Q1/Q2 — profile/personality;
+- P03: Q3/Q4 — relationship/story;
+- P06: Q5/Q6 — daily-life/playful/future.
 
-Every page may be improved when a non-destructive candidate clearly beats current at:
-- page view;
-- spread view where relevant;
-- full-book contact;
-- A5 actual-size review.
+Actual question/answer copy remains TODO until supplied or approved. Never fabricate it.
 
-`CURRENT PREFERRED != PERMANENTLY LOCKED.`
+Design system:
+- `70% shared format`;
+- `30% page-specific expression`;
+- P02 = tidy;
+- P03 = emotional;
+- P06 = playful.
 
-## Canonical generation architecture
+Do not put all six Q&A on one page.
 
-A one-shot whole-page image may be generated as an **art-direction proof**. It is not the preferred final flattened production asset.
+# 6. Explicitly obsolete page roles
 
-If the proof is strong, decompose the successful visual behavior and rebuild the page from background to foreground:
+Do not restore without a new explicit user instruction:
+
+- P05 = Hawaii-only feature / proposal-arrival page;
+- P07 = timetable/schedule;
+- P07 = `TODAY'S TRAVEL GUIDE`;
+- P07 = `11 DESTINATIONS`;
+- P07 = `LOOK AROUND` / `EDITOR'S PICK`;
+- P07 = seated wedding discovery guide;
+- P08 = main thank-you page;
+- P02 = all six Q&A.
+
+# 7. Current page density rhythm
+
+Density numbers are relative to the previous maximum-clutter tests; authenticity remains 100%:
+
+- P01: `75/100`
+- P02: `58–62/100`
+- P03: `48–55/100`
+- P04: `75/100`
+- P05: `65–70/100`
+- P06: `60–65/100`
+- P07: `35–40/100`
+- P08: `20–25/100`
+
+# 8. Canonical production architecture
+
+One-shot full-page generations are allowed as **art-direction proofs only**.
+
+When a proof passes, rebuild as layered production:
 
 1. PAPER / BASE
-2. LARGE BACKGROUND / ENVIRONMENT COMPOSITE
+2. BACKGROUND / ENVIRONMENT
 3. HERO REAL PHOTO
-4. UNEQUAL SUPPORT / DETAIL PHOTOS
-5. GENERATED PHOTO-FRAME / PAPER-BACKING UNITS
-6. ROUTE BACK / LARGE FLOW ART when the page needs it
-7. GENERATED MAIN TITLE / MASTHEAD UNIT
-8. GENERATED SUBTITLE / SECOND-READ UNIT
-9. GENERATED ARTICLE / PROFILE / EPISODE / MEMORY VESSELS
-10. CAPTION / LABEL / TICKET / STAMP UNITS
-11. ROUTE FRONT / FOREGROUND COLLISION when relevant
+4. SUPPORT / DETAIL REAL PHOTOS
+5. GENERATED PHOTO FRAMES / BACKINGS
+6. ROUTE / THREAD BACK when relevant
+7. GENERATED MAIN TITLE / MASTHEAD
+8. GENERATED SUBTITLE / SECOND READ
+9. GENERATED PROFILE / STORY / MEMORY / Q&A VESSELS
+10. CAPTION / TICKET / STAMP / LABEL UNITS
+11. ROUTE / THREAD FRONT when relevant
 12. NATIVE AUTHORITATIVE TEXT
-13. MICRO DISCOVERIES
+13. SELECTIVE MICRO DISCOVERIES
 14. FOLIO / META / EDGE ACCENTS
 15. HIDDEN QA / GUIDES
 
-Figma is primarily the compositor and QA surface.
+Figma is primarily the compositor/QA surface.
 
-## Asset-first / zero-base rule
+# 9. Zero-base asset rule
 
-Prepared artwork carries the difficult visual language:
-- masthead/title/subtitle art;
-- page-specific tropical/flower/travel clusters;
-- article/text vessels;
-- photo-frame and caption units;
-- paper/tape/stamp/ticket/ribbon treatments;
-- route BACK/FRONT composites where editorially relevant;
-- page-specific icons and micro discoveries.
+Do not rasterize, trace or cosmetically recolor weak legacy SVG objects and call them new.
 
-Do not build the publication personality from repeated Figma cards, pills, rounded rectangles, polygons, generic gradients or generic icon packs.
+When an old object still has a useful semantic job:
 
-Old SVG visual language is quarantined.
+`KEEP THE JOB; REDESIGN THE OBJECT FROM ZERO.`
 
-When an old part still has a useful function:
+Prepared artwork may carry difficult visual language, but real photos remain replaceable and factual copy remains native.
 
-`KEEP THE JOB; REDESIGN THE OBJECT.`
+# 10. P08 barcode rule
 
-## Authenticity / anti-downgrade rule
+Human-readable digits are exactly:
 
-Do not mistake `red + yellow + blue + stickers` for a convincing travel-magazine page.
+`2026102400000`
 
-Reject or redesign when:
-- title scale is timid;
-- photos sit politely separated from titles/vessels;
-- all photos are equal cards;
-- all labels share one rounded silhouette;
-- old flat SVG/icon-pack aesthetics reappear;
-- decorations are evenly sprinkled merely to fill whitespace;
-- every asset is fully visible like a sticker catalogue;
-- high density is achieved only by tiny stickers;
-- the page looks like a wedding template imitating a magazine rather than an edited magazine page.
+Use a Code 128-compatible/decorative treatment so those digits remain unchanged.
 
-## What may be recovered from older records
+Do not silently alter a final digit to satisfy EAN-13 checksum rules. Do not present the decorative barcode as a real JAN/ISBN/product identifier.
 
-Only facts and sources that remain true, such as:
-- confirmed names/date/location/content;
-- real photos;
-- verified relationship facts;
-- print constraints;
-- provenance/source locators.
+# 11. Current source priorities
 
-Recovering a fact or source is never permission to inherit its old page role or layout.
+Before final production, source/confirm:
+- P02 final profile facts + Q1/Q2;
+- P03 grounded story copy + Q3/Q4;
+- P04 real travel-photo pool;
+- P05 family/friend photo pool + approved captions;
+- P06 everyday/food/Cookie/Melon/fun photos + Q5/Q6;
+- P07 final thank-you copy + closing photo;
+- P08 final background choice.
 
-## Current production priority
+Missing personal facts stay missing. Never generate fake memories, dates, Q&A answers, family/friend anecdotes, venue facts or travel facts to fill a design.
 
-1. preserve current Figma as rollback evidence only;
-2. rebuild the eight page roles from `V20-CURRENT-PAGE-ARCHITECTURE.md`;
-3. test one-shot page art-direction proofs at the current ~75% clutter target;
-4. decompose successful proofs into page-aware layered PNG units;
-5. source/replace real photos for P04 travel, P05 family/friends and P06 real life;
-6. keep P07 as closing message and P08 as minimal back cover;
-7. render P08 barcode digits exactly `2026102400000` using a non-commerce decorative/Code-128-compatible treatment;
-8. lock personal copy only after strong vessels/layout are stable;
-9. move to printer-template, bleed/export, CMYK/profile/preflight and physical proof after visual/source/copy gates close.
+# 12. Current production priority
 
-The goal is not to finish a design system. The goal is to finish eight convincing, authored magazine pages.
+1. use `V20-PAGE-BY-PAGE-DESIGN-SPEC.md` to create/inspect one-shot A5 page proofs for all P01–P08;
+2. judge the full eight-page contact sheet and spreads at the current density rhythm;
+3. refine the page spec if a proof still looks generic/overloaded;
+4. regenerate current asset queue/manifest from the new page roles;
+5. decompose approved proofs into page-aware ImageGen units;
+6. assemble in Figma with real-photo replacement/native copy preserved;
+7. perform page/spread/A5 actual-size QA;
+8. only after visual/source/copy gates close, perform printer-template, CMYK/profile, preflight and physical-proof work.
+
+The goal is eight convincing, authored magazine pages — not a generic reusable component system.
