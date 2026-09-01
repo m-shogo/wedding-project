@@ -108,6 +108,21 @@ Translate travel-magazine editorial thinking into the couple's real story:
 
 A page is not successful merely because it contains colorful tickets, stamps or arrows. Every object must help the page tell or organize something.
 
+## Hierarchy / reading-path priority
+
+When hierarchy is weak, fix it in this order:
+
+1. `SCALE`
+2. `IMAGE WEIGHT / CROP`
+3. `POSITION`
+4. `CONTRAST`
+5. `GROUPING`
+6. `OVERLAP`
+7. `COLOR`
+8. `DECORATION`
+
+Never repair a weak reading path by adding stickers.
+
 ## Five visual levels
 
 Most energetic pages may use:
@@ -124,6 +139,58 @@ Hard test:
 - if 4 or more objects compete at nearly the same size/contrast, hierarchy is weak;
 - at thumbnail/squint view, the first read must be obvious;
 - energetic pages usually have 1 first-read event + 1–3 meaningful secondary events, not 10 equal events.
+
+## Truth / editorial boundary
+
+Travel-magazine styling must never invent autobiographical or operational facts.
+
+### 1. FACT
+Must be grounded in user-confirmed/source evidence.
+Examples:
+- names;
+- wedding/registration dates;
+- real destinations;
+- relationship events;
+- venue/schedule facts;
+- profile answers;
+- real-photo provenance.
+
+Never infer or fabricate missing FACT content.
+
+### 2. EDITORIAL COPY
+Creative wording may frame or summarize grounded facts without adding a new factual claim.
+Examples:
+- chapter title;
+- short travel-magazine lead;
+- emotional bridge copy.
+
+Draft editorial copy remains native/editable until approved.
+
+### 3. DECORATIVE FICTION
+Safe non-factual visual language is allowed only when it clearly does not pretend to be operational truth.
+Examples:
+- generic `CHECK!`, `MEMO`, `BEST SHOT` labels;
+- non-functional route doodle;
+- generic issue mark;
+- decorative stamp with no false real date/place claim.
+
+Do **not** fabricate:
+- flight numbers;
+- booking/reference codes;
+- exact travel dates not grounded;
+- addresses;
+- transport guidance;
+- venue floor/gate/room details;
+- restaurant names unless grounded;
+- factual rankings such as `No.1`;
+- relationship dates;
+- Q&A answers;
+- dog ages/personalities;
+- fake QR codes/barcodes that imply functionality.
+
+Any unresolved guest-facing fact used during layout must visibly remain `TODO`, `TBD`, `PLACEHOLDER` or equivalent until grounded.
+
+Before final export, every guest-facing text object must be classifiable as FACT, approved EDITORIAL COPY, or safe DECORATIVE FICTION. Unknown origin = fail.
 
 ## Anti-AI / anti-template hard gate
 
@@ -160,7 +227,7 @@ Figma should primarily:
 - place and crop real photos;
 - use non-destructive masks so photos remain replaceable;
 - position transparent generated editorial assets;
-- control z-order and overlap;
+- control z-order, scale, rotation and overlap;
 - keep factual/personal copy native and editable;
 - adjust line breaks and local typography;
 - maintain trim/bleed/safe guides;
@@ -175,7 +242,7 @@ Simple native geometry is allowed when it is genuinely simple and useful, but th
 
 ### Auto Layout boundary
 
-Auto Layout is useful locally for things that truly have a responsive structural relationship, such as a small label/copy group or a tidy factual unit.
+Auto Layout is useful locally for things that truly have a structural relationship, such as a small label/copy group or a tidy factual unit.
 
 Do **not** make the whole page one responsive UI stack. Freeform editorial clusters, collisions and uneven photography remain intentionally positioned.
 
@@ -202,6 +269,38 @@ Inspect the real source photos before generating page-specific art.
 Generated decoration should respond to the actual page composition, photo subjects, crop direction, empty areas and story role. It must not look like a prebuilt unrelated sticker pack dropped on top afterward.
 
 During layout development, lower-resolution real-photo proxies are acceptable because final real photos will be replaced later. That tolerance does **not** apply to the quality of title art, frames, ornaments, alpha edges or other production graphics; those must be judged strictly.
+
+## Photo-role system — photo follows editorial job, not old geometry
+
+Classify candidate photographs by editorial role before forcing them into a frame:
+- `HERO` — strongest anchor only where the page requires one;
+- `EMOTION` — intimacy/laughter/human expression;
+- `PLACE` — destination/environment;
+- `ACTION` — eating/walking/playing/activity;
+- `DETAIL` — food/ticket/object/signage/hands/small memory;
+- `COMEDY` — casual/funny/off-guard;
+- `PORTRAIT` — person-first identity;
+- `FRIEND_MEMORY` — friend/group/candid memory for P05;
+- `CUTOUT_CANDIDATE` — subject separates cleanly from background;
+- `TRANSITION` — bridges zones rather than dominates.
+
+Hard rules:
+- old slot geometry never dictates current photo choice;
+- frame geometry follows the source photo's orientation/crop behavior;
+- HERO is not automatically the highest-resolution photo;
+- HERO is not mandatory on every page;
+- do not fill a page/spread with near-identical poses;
+- real autobiographical photos outrank generated substitutes;
+- DUMMY/REFERENCE imagery never becomes final autobiographical truth.
+
+For photo-heavy pages/spreads, check diversity across:
+- shot distance;
+- orientation;
+- people vs environment;
+- activity vs posed;
+- color/lighting;
+- crop treatment;
+- emotional tone.
 
 ## Composition grammar
 
@@ -243,6 +342,8 @@ Working target:
 - energetic pages: about 2–5 meaningful overlap relationships;
 - P07: 0–2;
 - P08: 0–1.
+
+`COLLISION MAY BE STRONG; HIERARCHY AND READABILITY MUST BE STRONGER.`
 
 ### Rotation discipline
 
@@ -414,6 +515,9 @@ Avoid anonymous `image1.png`, `final2.png`, `new.png` naming.
 - `2026.10.24`
 - density about 75/100
 
+Reading path:
+`るるぶ WEDDING → couple hero → names/date → 1–2 hooks → small details`.
+
 ### P02 — PROFILE + Q1/Q2
 - SHOGO / SHIORI profile
 - 2 main portraits/personality photos + optional support
@@ -421,6 +525,9 @@ Avoid anonymous `image1.png`, `final2.png`, `new.png` naming.
 - Q1/Q2 only
 - avoid symmetric employee-profile UI
 - density 58–62
+
+Reading path:
+`profile title → SHOGO → SHIORI → short facts → Q1/Q2`.
 
 ### P03 — OUR STORY + Q3/Q4
 - 3–4 grounded story chapters
@@ -430,12 +537,18 @@ Avoid anonymous `image1.png`, `final2.png`, `new.png` naming.
 - density 48–55
 - do not repeat one identical ticket/card four times; vary editorial vessel geometry while preserving reading order
 
+Reading path:
+`story title → anchor photo → story chapters → Q3/Q4`.
+
 ### P04 — ALL TRAVEL MEMORIES / OUR JOURNEY
 - strongest interior travel-magazine page
 - 1 travel hero + 4–5 unequal supports/details
 - real trips such as Okinawa / Korea / Hawaii / other verified places
 - personal memories only; no generic internet tourism facts
 - density about 75
+
+Reading path:
+`travel title → travel hero → 3–4 destination/memory clusters → support photos/captions → selective travel details`.
 
 ### P05 — FRIENDS MEMORIES ONLY
 Title direction: `友達との思い出`
@@ -458,12 +571,20 @@ Hard reject:
 - rigid 50:50 UI cards
 - inferred friend names/relationships/anecdotes
 
+Reading path:
+`友達との思い出 → SHOGO FRIENDS / SHIORI FRIENDS → friend-photo clusters → short captions`.
+
+P05 has **no page-wide HERO step**.
+
 ### P06 — REAL LIFE / FAVORITES / BEST SHOTS + Q5/Q6
 - 1 candid hero + 3–4 supports/details
 - everyday life / food / play / hobbies / Cookie / Melon when real sources exist
 - Q5/Q6 only
 - playful Q&A variant
 - density 60–65
+
+Reading path:
+`real-life title → candid hero → support moments → Q5/Q6 → small captions`.
 
 ### P07 — CLOSING MESSAGE / THANK YOU
 - 1 calm strong photo
@@ -472,6 +593,9 @@ Hard reject:
 - `2026.10.24`
 - 1 restrained closing motif
 - density 35–40
+
+Reading path:
+`closing photo/title → thank-you → names/date → final motif`.
 
 Never restore:
 - TODAY'S TRAVEL GUIDE
@@ -493,6 +617,9 @@ Never restore:
 - no `VOL.20`, `V20`, or other superseded version text; if version is visible, it must be V30/current or omitted
 - sparse must read as deliberately edited, not as an unfinished empty page
 
+Reading path:
+`quiet back-cover field → tiny issue/meta → decorative barcode`.
+
 ## Q&A lock
 
 Exactly six slots:
@@ -512,18 +639,45 @@ Do not return to planning/spec accumulation. Production is the priority.
 2. Review P01–P08 as a contact sheet.
 3. Review P02–P03, P04–P05, P06–P07 as spreads.
 4. Identify the largest visual weakness before adding decoration.
-5. Identify the 4–10 important visual units that create each page's quality.
-6. Generate/rebuild those units at high quality.
-7. Process generated isolated assets through the canonical chroma-background → Python alpha-cutout pipeline below.
-8. Save both source and transparent-production versions with clear provenance; upload the QA-passed production asset to the shared Drive asset area when available.
-9. Assemble the transparent production assets as editable layers in Figma.
-10. Keep real photos independently replaceable.
-11. Keep names/date/profile/Q&A/story/captions as native editable text.
-12. QA at thumbnail, spread and A5 actual-size equivalent.
-13. Regenerate only the weak units.
-14. Only after design/source/copy are complete, run print QA.
+5. Define each page's layer/decomposition checklist.
+6. Identify the 4–10 important visual units that create each page's quality.
+7. Generate/rebuild those units at high quality.
+8. Process generated isolated assets through the canonical chroma-background → Python alpha-cutout pipeline below.
+9. Save both source and transparent-production versions with clear provenance; upload the QA-passed production asset to the shared Drive asset area when available.
+10. Assemble the transparent production assets as editable layers in Figma from background to foreground.
+11. Keep real photos independently replaceable.
+12. Keep names/date/profile/Q&A/story/captions as native editable text.
+13. QA at thumbnail, spread and A5 actual-size equivalent.
+14. Regenerate only the weak units.
+15. Only after design/source/copy are complete, run print QA.
 
 Do not deliver a flattened whole-page generation as the final master.
+
+## Per-page decomposition checklist
+
+Before generating final assets for a page, explicitly identify:
+- PAPER / base;
+- large background/environment composite(s), normally 0–2 when useful;
+- real-photo roles;
+- photo frame/backing roles;
+- route/flow BACK and FRONT where applicable;
+- main title unit;
+- subtitle / second-read unit where applicable;
+- article/profile/story/friend/Q&A vessels;
+- medium labels/tickets/stamps;
+- native text responsibilities;
+- micro discoveries, only if still needed;
+- calm island / recovery field;
+- selected active edge(s);
+- principal front/back collision relationships;
+- QA/guides.
+
+This decomposition comes from the actual page proof and real source behavior, not from a generic asset library.
+
+`PAGE INTENT → LAYER PLAN → LARGE UNITS → PHOTOS → TITLE/SUBTITLE → VESSELS → MEDIUM UNITS → MICRO → QA`.
+
+Not:
+`GENERATE MANY STICKERS → TRY TO FIND PLACES FOR THEM`.
 
 ## Quality correction order
 
@@ -644,12 +798,13 @@ The expected flow is:
 
 `REAL SOURCE REVIEW`
 → `PAGE PROOF`
+→ `PAGE LAYER PLAN`
 → `4–10 IMPORTANT UNITS`
 → `IMAGE GENERATION ON SAFE SOLID KEY BACKGROUND`
 → `PYTHON ALPHA CUTOUT`
 → `ALPHA QA`
 → `DRIVE / GIT PRODUCTION ASSET`
-→ `FIGMA LAYERED PLACEMENT`
+→ `FIGMA LAYERED PLACEMENT FROM BACKGROUND TO FOREGROUND`
 → `PAGE / SPREAD / A5 QA`
 → `TARGETED REGENERATION IF NEEDED`
 
@@ -695,6 +850,20 @@ Spread rhythm:
 - P06–P07 = `REAL LIFE → THANK YOU`
 - P08 = standalone back cover
 
+## Current preferred is a baseline, not a ceiling
+
+No page is permanently protected merely because it is the current preferred candidate.
+
+A new candidate may replace it when it clearly improves:
+- page view;
+- spread view;
+- full-book contact sheet;
+- A5 actual-size readability;
+- source truth/replaceability;
+- layered editability.
+
+Do not preserve weak legacy geometry because of sunk cost.
+
 ## Originality / brand distance
 
 V30 should evoke the excitement and editing behavior of Japanese travel magazines while remaining an original private wedding publication.
@@ -705,6 +874,8 @@ Therefore:
 - do not reproduce a specific page pixel-for-pixel;
 - use Rurubu references as energy, hierarchy and editing calibration;
 - build original geometry around the couple's real content.
+
+`REFERENCE STRONGLY; RE-AUTHOR THE PAGE.`
 
 ## Print-production handoff
 
@@ -781,12 +952,14 @@ At the start of every V30 run:
 2. inspect the current V30 Figma board `3535:2`;
 3. confirm no V31 is being created;
 4. do not use `docs/rurubu-v20/` as current authority;
-5. run the anti-AI / anti-template gate before adding decoration;
-6. inspect real source/proxy photos before generating page-specific art;
-7. follow the safe-key-background → Python alpha-cutout → QA → Drive/Git → layered Figma pipeline for generated isolated assets;
-8. use Figma primarily as compositor, not as a generic UI-shape design generator;
-9. review contact sheet, spreads and A5 actual-size equivalent;
-10. fix the largest visual gap before microdetails;
-11. make concrete progress on P01–P08 production.
+5. run the truth/editorial boundary and anti-AI / anti-template gates before adding decoration;
+6. inspect and classify real source/proxy photos by editorial role before forcing geometry;
+7. use hierarchy priority `scale → image weight/crop → position → contrast → grouping → overlap → color → decoration`;
+8. make the per-page layer/decomposition plan from background to foreground;
+9. follow the safe-key-background → Python alpha-cutout → QA → Drive/Git → layered Figma pipeline for generated isolated assets;
+10. use Figma primarily as compositor, not as a generic UI-shape design generator;
+11. review contact sheet, spreads and A5 actual-size equivalent;
+12. fix the largest visual gap before microdetails;
+13. make concrete progress on P01–P08 production.
 
 **CURRENT = V30. V20 = FROZEN HISTORY.**
