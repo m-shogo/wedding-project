@@ -30,9 +30,10 @@ type ComparisonReceipt = {
 type MediaManifest = {
   schemaVersion: "wedding-movie-production-media-input/v1";
   projectId: SceneProjectId;
-  scenes: Array<{sceneId: string; sourceRevision: string; sha256: string; framing?: Framing & {revision: string}}>; 
+  scenes: Array<{sceneId: string; sourceRevision: string; sha256: string; framing?: Framing & {revision: string}}>;
 };
 type LoadedImage = {name: string; sha256: string; url: string};
+type ExpectedStill = {sceneId: string; side: "before" | "after"; kind: string; sha256: string; path: string};
 
 const SAMPLE_KINDS = ["SCENE_START_SAFE", "SCENE_MID", "SCENE_END_SAFE"] as const;
 
@@ -80,6 +81,10 @@ export function WeddingRealMediaFramingComparisonReviewCard({projectId}: {projec
     return () => window.removeEventListener(MOTION_ZUKAN_COMPOSER_CHANGED_EVENT, refresh);
   }, []);
 
+  useEffect(() => () => {
+    for (const image of images.values()) URL.revokeObjectURL(image.url);
+  }, [images]);
+
   const liveSceneRevisions = useMemo(() => {
     void composerTick;
     return new Map(loadMotionZukanComposerState().scenes.filter((scene) => scene.projectId === projectId).map((scene) => [scene.sceneId, scene.updatedAt]));
@@ -118,27 +123,34 @@ export function WeddingRealMediaFramingComparisonReviewCard({projectId}: {projec
   async function loadStillFiles(files: FileList | null) {
     if (!files || !receipt) return;
     setError(null);
-    const expected = new Map<string, {sceneId: string; side: "before" | "after"; kind: string; sha256: string; path: string}>();
+    const expectedBySha = new Map<string, ExpectedStill[]>();
     for (const scene of receipt.scenes) {
       for (const side of ["before", "after"] as const) {
-        for (const still of scene[side].stills) expected.set(basename(still.path), {sceneId: scene.sceneId, side, kind: still.kind, sha256: still.sha256, path: still.path});
+        for (const still of scene[side].stills) {
+          const expected: ExpectedStill = {sceneId: scene.sceneId, side, kind: still.kind, sha256: still.sha256, path: still.path};
+          expectedBySha.set(still.sha256, [...(expectedBySha.get(still.sha256) ?? []), expected]);
+        }
       }
     }
     const next = new Map(images);
+    let matched = 0;
     for (const file of Array.from(files)) {
-      const target = expected.get(file.name);
-      if (!target) continue;
       const buffer = await file.arrayBuffer();
       const sha256 = await createHash(buffer);
-      if (sha256 !== target.sha256) {
-        setError(`STILL_SHA_MISMATCH: ${file.name}`);
+      const targets = expectedBySha.get(sha256) ?? [];
+      if (targets.length === 0) {
+        setError(`STILL_SHA_MISMATCH_OR_NOT_IN_RECEIPT: ${file.name}`);
         continue;
       }
-      const key = stillKey(target.sceneId, target.side, target.kind);
-      const previous = next.get(key);
-      if (previous) URL.revokeObjectURL(previous.url);
-      next.set(key, {name: file.name, sha256, url: URL.createObjectURL(file)});
+      for (const target of targets) {
+        const key = stillKey(target.sceneId, target.side, target.kind);
+        const previous = next.get(key);
+        if (previous) URL.revokeObjectURL(previous.url);
+        next.set(key, {name: file.name, sha256, url: URL.createObjectURL(file)});
+        matched++;
+      }
     }
+    if (matched === 0 && files.length > 0) setError("STILL_SHA_MISMATCH: no selected file matched the comparison receipt");
     setImages(next);
   }
 
