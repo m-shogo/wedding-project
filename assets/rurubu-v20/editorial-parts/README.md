@@ -1,6 +1,6 @@
 # V20 editorial parts — generated PNG manifest
 
-Status: `CURRENT_CLASSIFICATION / P05_FRIENDS_ONLY_2026-09-01 / P07_OLD_GUIDE_ASSETS_REMOVED`
+Status: `CURRENT_CLASSIFICATION / P05_FRIENDS_ONLY_2026-09-01 / OLD_P45_AND_P07_ASSETS_REMOVED`
 
 Current authority: `docs/rurubu-v20/V20-CURRENT-PAGE-ARCHITECTURE.md`.
 
@@ -33,9 +33,16 @@ New P05 assets must be created from zero:
 - short caption vessels
 - restrained friend-memory accents
 
-## P04–P05 route assets
+## P04–P05 obsolete cross-spread route assets — removed
 
-Old cross-spread route assets are historical/comparison only when tied to the obsolete Hawaii/proposal story. P04 may independently use a new restrained travel route if its current proof needs it; P05 has no cross-fold route requirement.
+The former P04–P05 cross-spread route PNGs were tied to the obsolete Hawaii/proposal center-spread story and have been removed from the current branch:
+- `p04-p05/V20_P45_PRINTED_ROUTE_GEN_A.png`
+- `p04-p05/V20_P45_EPHEMERA_ROUTE_GEN_B.png`
+- `p04-p05/V20_P45_SPARSE_ROUTE_GEN_C.png`
+
+They remain only in Git history. Do not recover them for current assembly.
+
+If P04 needs a restrained route, generate a new P04-specific route from the current approved proof. P05 has no cross-fold route requirement.
 
 ## P07 obsolete guide assets — removed
 
