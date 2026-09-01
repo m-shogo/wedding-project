@@ -135,6 +135,187 @@ Each production image gets its own:
 
 `NO SPRITES / NO MULTI-PART PRODUCTION SHEETS / NO PACKED-ASSET PNGS.`
 
+## Production accident-prevention gates — HARD RULES
+
+These gates exist because recent V30 work exposed concrete failure modes: stale `VOL.20`, checkerboard-baked alpha, photo-well-only pages, template repetition, ambiguous replacement structure, and packed/generated asset risk.
+
+### Gate 1 — real photo replacement test, not structure-by-claim
+
+A photo slot is not accepted merely because its layer name says `REPLACEABLE`.
+
+For every photo slot, test at least one actual replacement during production:
+- replace the dummy/proxy image with a different image source;
+- test a materially different crop/orientation when practical, especially portrait vs landscape behavior;
+- verify the image remains clipped inside the intended frame;
+- verify the decorative frame/backing/tape does not need rebuilding;
+- verify crop/focal-point adjustment is enough to recover the composition;
+- verify no unexpected gap/exposed background appears inside the slot.
+
+For P05, all 8 friend-photo slots must independently pass replacement behavior before final design acceptance.
+
+### Gate 2 — placeholder / stale-marker zero gate
+
+Before a guest-facing export, scan the V30 production page for production-only or stale markers.
+
+Examples that must not remain visibly guest-facing:
+- `TBD`
+- `TODO`
+- `DUMMY`
+- `PLACEHOLDER`
+- `REAL PHOTO`
+- `PHOTO SWAP`
+- `SOURCE_KEYED`
+- `V20`
+- `VOL.20`
+- `V21`
+- `V31`
+- obsolete page-role strings
+
+A known production label may exist only in a hidden/non-export QA layer. Visible guest-facing hit = FAIL.
+
+### Gate 3 — no hidden graveyard inside V30 production page
+
+`V30_FINAL_PRODUCTION` must contain the current production state, not a hidden archive.
+
+Do not keep rejected/obsolete production assets merely as `visible=false` siblings inside the live page because an agent may rediscover and reuse them.
+
+Rejected or superseded candidates belong in:
+- Git history when appropriate;
+- Drive `99_REJECTED_DO_NOT_USE`;
+- a clearly non-production historical/reference surface outside the current V30 production page.
+
+Keep current production Figma intentionally clean.
+
+### Gate 4 — no destructive rescue scaling
+
+Do not rescue a badly sized generated part by stretching it non-uniformly until it fits.
+
+If a title, ticket, frame, stamp, paper object or other generated unit has the wrong aspect ratio/physical behavior:
+- regenerate or rebuild it for the intended physical size/aspect;
+- preserve natural proportions unless deliberate distortion is part of the design;
+- do not horizontally/vertically squash tactile editorial art as a convenience shortcut.
+
+### Gate 5 — repeated PNG reuse is also an anti-AI/template risk
+
+`ONE PART = ONE IMAGE` does not mean one approved PNG should be stamped everywhere.
+
+Avoid repeating the exact same production PNG across adjacent pages or multiple unrelated jobs when the repetition becomes visually obvious.
+
+Shared publication DNA is encouraged; literal copy/paste sameness is not.
+
+For related parts:
+- create about 2–4 meaningful variants when repetition would otherwise feel templated;
+- vary geometry/job while preserving family resemblance;
+- do not multiply near-identical variants merely to increase count.
+
+P03 must not become repeated identical ticket/card units. P05 should not repeat one frame recipe eight times if that makes it look like a contact sheet/UI grid.
+
+### Gate 6 — production-asset admission gate
+
+A generated isolated part may enter the live Figma production composition only after the required pipeline state is satisfied:
+
+`SOURCE_KEYED`
+→ `PYTHON CUTOUT`
+→ `ALPHA QA PASS`
+→ `PRODUCTION_RGBA`
+→ `DRIVE/GIT TRACEABILITY`
+→ `FIGMA ADOPTED`
+
+Immediate reject conditions include:
+- checkerboard baked into pixels;
+- key-color halo;
+- opaque unwanted rectangle/background;
+- accidental holes;
+- fake or garbled text when text should be native;
+- several independent parts packed into one bitmap;
+- wrong page role;
+- unknown provenance where provenance matters.
+
+The Figma production layer name and Drive/Git production filename should be semantically traceable to the same page/job.
+
+### Gate 7 — visual checkpoint after meaningful changes
+
+After a meaningful page or spread change, create a comparison checkpoint rather than relying on memory.
+
+Save appropriate QA outputs to Drive `90_QA_EXPORT`, especially after substantial changes to P01/P04/P05 or any page whose visual direction materially changed.
+
+Checkpoint should include as relevant:
+- 8-page contact sheet;
+- affected page render;
+- affected spread render;
+- A5-size QA render.
+
+Use a traceable name with date/time or Git SHA when practical.
+
+Purpose: enable before/after comparison and prevent accidental regression where an older candidate was visually stronger.
+
+### Gate 8 — face / focal-content safe zone
+
+Bleed and edge crops may be energetic, but critical human content must remain protected.
+
+Do not casually place near trim/fold or behind decoration:
+- eyes;
+- mouths;
+- important facial expressions;
+- meaningful hand/gesture details;
+- friend faces on P05;
+- names/dates/Q&A answers;
+- P07 thank-you copy;
+- P08 barcode digits.
+
+For P05 specifically, each of the 8 final photos must remain recognizable at A5 actual-size review; merely fitting inside a mask is not enough.
+
+### Gate 9 — content role locked / visual execution unlocked
+
+P01–P08 current semantic roles are locked unless the user explicitly changes them.
+
+However, current visual geometry is **not** protected by sunk cost.
+
+Rule:
+`CONTENT ROLE LOCKED / VISUAL EXECUTION UNLOCKED.`
+
+If the current layout is weak, rebuild the visual execution from zero while preserving the correct current page role and factual constraints.
+
+Do not preserve weak geometry merely because it already exists in Figma.
+
+### Gate 10 — do not patch a weak generated-art gap with generic Figma shapes
+
+If a page-specific generated title/frame/vessel/editorial object is weak or missing, do not silently patch the gap with generic rectangles, rounded cards, pills, SaaS shadows or template primitives merely to make the page look complete.
+
+Preferred response:
+- improve/regenerate the page-specific visual unit;
+- keep a clean replaceable placeholder if generation is temporarily blocked;
+- continue other safe production work;
+- record the blocker if it materially prevents completion.
+
+Figma may use simple native geometry for true technical/layout needs, but it must not become the emergency source of magazine personality.
+
+## Quality philosophy
+
+Do not add increasingly rigid aesthetic quotas merely to make the system feel controlled.
+
+Keep strict:
+- page roles;
+- truth/factual boundaries;
+- asset provenance;
+- one-part-one-image;
+- photo replaceability/clipping;
+- production pipeline;
+- QA/rejection gates.
+
+Keep visually flexible:
+- exact geometry;
+- local asymmetry;
+- title collision;
+- page-specific part choice;
+- photo hierarchy;
+- editorial surprise;
+- visual rebuilding when a stronger candidate emerges.
+
+The target is:
+
+`STRICT PROCESS + LOCKED CONTENT ROLE + FREE HIGH-QUALITY VISUAL EXECUTION.`
+
 ## Git page ownership
 
 Preferred structure as assets are adopted:
