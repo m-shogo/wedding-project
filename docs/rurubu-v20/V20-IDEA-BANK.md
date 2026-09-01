@@ -1,167 +1,145 @@
 # V20 Improvement Idea Bank
 
-Status: `CURATED / NOT_ALL_MANDATORY`
+Status: `CURATED_CURRENT / NOT_ALL_MANDATORY / PAGE_ROLES_ALIGNED_2026-09-01`
 
-Purpose: preserve high-value ideas without forcing every idea into the booklet.
+Purpose: preserve high-value ideas that are compatible with the current V20 architecture without allowing old experiments to re-enter production.
+
+Highest authority remains `V20-CURRENT-PAGE-ARCHITECTURE.md` and `V20-PAGE-BY-PAGE-DESIGN-SPEC.md`.
 
 ## ADOPT — high impact, low regret
 
-### 1. Spread-first design
-Treat P02–P03, P04–P05, P06–P07 as physical spreads. This is foundational.
+1. Spread-first QA: review P02–P03, P04–P05, P06–P07 as physical spreads.
+2. Two-speed reading: every page should work at 3-second scan and normal A5 reading scale.
+3. Photo role before frame: choose the real photo job first, then geometry.
+4. One calm field inside busy pages.
+5. Original masthead / no commercial-logo tracing.
+6. Native authoritative copy: names, dates, captions, Q&A and personal text stay editable.
+7. Photo surplus: collect more real candidates than final slots.
+8. Print-object tactility: paper, ticket, stamp, tape and caption feet used with purpose.
+9. Edge anchors only where they improve physical-magazine feel.
+10. Microdetails last, after hierarchy passes.
+11. Whole-page ImageGen proof is allowed for art direction, then decompose to layered assets.
+12. At A5, photo recognition and text readability outrank decorative density.
 
-### 2. Center-spread reveal
-Make P04–P05 the biggest reveal when the booklet opens flat: real travel route + destination photos + Hawaii proposal peak.
+## CURRENT PAGE-SPECIFIC IDEAS
 
-### 3. Two-speed reading
-Every page should work for:
-- 3-second scanner;
-- 30–90-second reader.
+### P01 Cover
+- strong masthead + couple/environment photography;
+- 1–2 cover hooks only;
+- one travel/tropical edge cluster if needed;
+- optional close-personality support image to keep the couple visually prominent.
 
-Large title/photo for speed 1; short captions/facts for speed 2.
+### P02 Profile + Q1/Q2
+- asymmetric two-person treatment;
+- several short grounded facts instead of long biographies;
+- tidy recurring Q&A shell;
+- optional tiny shared-life detail only when real.
 
-### 4. Composition verbs
-Give every page a different action grammar:
-- P01 STACK/CROP/BURST;
-- P02 PAIR/OFFSET/ANNOTATE;
-- P03 FLOW/EPISODE/INTERRUPTION;
-- P04–P05 ROUTE/HERO/SATELLITES/ARRIVAL;
-- P06 MOSAIC/CUTOUT/NOTE;
-- P07 ROUTE/TIME/STOP;
-- P08 RESOLVE/BREATHE.
+### P03 Our Story + Q3/Q4
+- 3–4 chapters maximum;
+- one emotional anchor + limited supports;
+- progression cue without corporate timeline;
+- proposal relationship meaning lives here, while P04 may show Hawaii only as a travel memory.
 
-This prevents template repetition.
+### P04 Travel Memories
+- strongest interior travel-magazine page;
+- one travel hero + 4–5 supports/details;
+- verified trips only;
+- route/ticket/stamp behavior if it connects real memories;
+- personal captions instead of tourism trivia.
 
-### 5. Photo role before frame
-Choose hero/support/candid/destination role first, then choose mask/frame. Never pick a frame and hunt for a photo that fits it.
+### P05 Friends Memories Only
+- title `友達との思い出`;
+- `SHOGO FRIENDS` + `SHIORI FRIENDS`;
+- about 3–4 photos per cluster;
+- medium/small photo rhythm;
+- one locally stronger photo per cluster is allowed;
+- no page-wide giant hero;
+- enough breathing room to see the two clusters immediately;
+- short friend-memory captions only when grounded.
 
-### 6. One calm zone inside busy pages
-A real magazine can be dense because not every square millimeter is equally loud.
+### P06 Real Life + Q5/Q6
+- candid/everyday personality;
+- real Cookie/Melon, food, hobbies/fun when available;
+- playful Q&A shell;
+- one or two imperfect/funny photos can make the booklet feel human rather than over-curated.
 
-### 7. Original masthead
-Create an original V20 masthead with travel-magazine energy rather than tracing a commercial logo.
+### P07 Closing / Thank You
+- one calm strong photo;
+- short sincere thank-you;
+- names/date;
+- one restrained continuation/journey cue at most.
 
-### 8. Native authoritative text
-Generated art can carry visual treatment, but names/dates/schedule/story copy remain native and correct.
+### P08 Magazine Back Cover
+- quiet field or 0–1 photo;
+- tiny issue/meta;
+- optional names/date;
+- decorative barcode digits exactly `2026102400000`;
+- one very small cover/back-cover echo can create closure.
 
-### 9. Photo surplus
-Collect more candidate photos than final slots. Design quality improves when crop choice is not forced by scarcity.
+## OPTIONAL — only when real content supports it
 
-### 10. Semantic route
-Any route line must connect actual places/events/reading order. No random airplane squiggles.
-
-### 11. Print-object tactility
-Use a controlled mix of postcard/tape/stamp/ticket/paper edges, not generic rounded cards.
-
-### 12. Edge anchors
-Use foliage/photo/title crops at page edges/bleed to prevent the floating-web-layout look.
-
-### 13. Proposal receives unique treatment
-Hawaii proposal should be an emotional feature, not just one more equal timeline node.
-
-### 14. Candid page after center spread
-P06 gives the eye/story a different kind of richness: personality rather than more destination information.
-
-### 15. Quiet back cover
-P08 intentionally lowers density to make the booklet feel finished.
-
-## OPTIONAL — adopt only when real content supports it
-
-### 16. Small real Q&A snippets
-Use 1–3 only when answers are genuine and short. P02/P06 can absorb them without changing architecture.
-
-### 17. Dogs as `TRAVEL COMPANIONS` micro-feature
-Use real Cookie/Melon photo(s) if available. Keep it affectionate and small; do not let corgi illustration replace the real dogs.
-
-### 18. Real-map simplification
-A simple vector route/map can use actual destination labels. It should be intentionally editorial, not Google Maps imitation.
-
-### 19. `EDITOR'S PICK` / `BEST SHOT`
-One or two playful magazine labels can work on P04–P06. Avoid repeating the same badge on every page.
-
-### 20. Paper/postcard captions
-Short captions can look handwritten while remaining native editable text in a suitable font/style.
-
-### 21. Physical stamp system
-Use different semantic stamps:
-- DATE;
-- DESTINATION;
-- ARRIVAL;
-not one generic stamp copied everywhere.
-
-### 22. Issue metadata
-Tiny recurring metadata such as `WEDDING JOURNEY / 2026 / YOKOHAMA` can tie pages together without a large repeated header.
-
-### 23. Route continuation at page turns
-A route may disappear at an outer edge and reappear on the next spread as a small continuity joke. Use only 1–2 times so it feels discovered, not mandatory.
-
-### 24. One deliberate cover/back-cover echo
-Reuse one small motif/color/photo detail from P01 on P08 for closure.
-
-### 25. Verified QR
-If there is a real useful destination later (photo upload, web invitation/archive, etc.), P08 or P07 can hold a QR. Never place a fake QR placeholder that looks functional.
-
-### 26. Venue micro-guide
-If verified venue facts/photos exist, P07 can include one small destination-guide module: useful fact + photo + label. Do not let it overtake the schedule.
-
-### 27. Food/detail photography as texture
-Use one small food/activity detail when it tells a real memory. Do not create a generic cafe aesthetic page.
-
-### 28. Hard-shadow title treatment
-A few display titles can use print-like hard offset shadows instead of soft UI shadows.
-
-### 29. Controlled halftone/paper grain
-Subtle only; useful for tactile quality. Never over small body text.
-
-### 30. Page-number as editorial detail
-Page numbers can pair with a tiny chapter label (`04 / JOURNEY`) while remaining readable and understated.
+- dogs as a tiny real-life feature on P06;
+- simple P04 map/route based on real travel memories;
+- one `BEST SHOT` label on P06;
+- subtle paper grain/halftone away from body text;
+- recurring folio/chapter metadata as publication DNA;
+- verified QR only if a real useful destination is explicitly supplied later;
+- one small `MEMORIES` cue shared across P04–P05 without forcing route continuity.
 
 ## EXPERIMENT — test visually before adoption
 
-### 31. Cutout hero on P01
-A real-person cutout crossing the masthead can be powerful, but only if extraction quality is excellent and hair/edge QA passes.
+- P01 cutout subject crossing masthead if extraction quality is excellent;
+- vertical/edge title treatment on P06 if Japanese readability remains strong;
+- P05 cluster shapes that are clearly different but still one page;
+- one restrained visual echo from P01 on P08;
+- P04 route BACK/FRONT split if it genuinely creates depth without clutter.
 
-### 32. Wide visual spanning P04–P05
-Could be dramatic, but avoid splitting faces/critical focal points at fold. A route/background span is safer than one essential couple photo across the fold.
+## EXPLICITLY RETIRED IDEAS
 
-### 33. Vertical title on P06
-Could differentiate the mosaic silhouette. Test actual Japanese readability; do not rotate long Japanese text for novelty.
+Do not revive from old versions:
+- P04–P05 as one Hawaii/proposal journey story;
+- P05 Hawaii proposal peak;
+- P05 family/FAMILY page;
+- P05 giant hero photo;
+- P07 itinerary / big time typography;
+- P07 `TODAY'S TRAVEL GUIDE`;
+- P07 `11 DESTINATIONS`;
+- P07 `LOOK AROUND` / `EDITOR'S PICK`;
+- venue/table discovery guide as P07's page job;
+- P08 as the main thank-you page;
+- all-six-Q&A page;
+- maximum-clutter sticker filling.
 
-### 34. Big number typography on P07
-Very strong for times; must remain editorial and functional, not copied from another timetable design.
+## AVOID
 
-### 35. Decorative luggage/passport cluster
-Useful on cover/center spread at small scale. Risk: theme-park prop overload. Limit to one strong cluster.
-
-## AVOID — likely to cause rework or cheapness
-
-- full-page single generated raster as the only master;
-- generic `Rurubu style` one-line Figma prompt;
-- exact reproduction of the North-Star coordinates;
-- exact commercial masthead/logo tracing;
+- full-page generated raster as final editable master;
+- generic one-line `Rurubu style` prompt;
+- exact North-Star coordinate copy;
+- official commercial logo tracing;
 - equal cards;
-- same frame on every photo;
-- every image tilted;
+- same frame everywhere;
+- every photo tilted;
 - sticker in every gap;
-- decorative English nobody understands;
-- pastel-on-pastel body copy;
+- decorative English without meaning;
 - generated Japanese facts;
-- invented dates/Q&A/flight/venue data;
-- fake QR/barcodes that look functional;
-- scaling all text down when copy overflows;
-- starting detailed Figma before source photos are understood;
-- polishing P01 to 100% while center spread/source gaps remain unresolved.
+- invented dates/Q&A/friend identities/flight/venue facts;
+- fake functional QR/barcodes;
+- shrinking all text to preserve too much content;
+- old Figma geometry dictating new photo roles.
 
 ## Best improvement loop
 
 For each page:
-1. content truth;
-2. real photo shortlist;
-3. greybox silhouette;
-4. screenshot;
-5. identify the single largest weakness;
+1. current page role;
+2. content truth;
+3. real photo shortlist;
+4. page proof / silhouette;
+5. identify largest weakness;
 6. fix hierarchy/crop/composition;
-7. then add parts;
-8. actual-size readability;
-9. only then micro-polish.
+7. add page-specific assets;
+8. A5 readability;
+9. spread/full-book review;
+10. micro-polish last.
 
-The fastest route to quality is not doing more decoration; it is making fewer wrong structural decisions.
+`THE FASTEST ROUTE TO QUALITY IS FEWER WRONG STRUCTURAL DECISIONS, NOT MORE DECORATION.`
