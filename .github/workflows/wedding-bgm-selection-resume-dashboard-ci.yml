@@ -1,0 +1,40 @@
+name: Wedding BGM Selection Resume Dashboard CI
+
+on:
+  pull_request:
+    paths:
+      - 'movie-dashboard/src/components/WeddingBgmRhythmSelectionResumeCard.tsx'
+      - 'movie-dashboard/src/components/WeddingMediaIntakeChecklistCard.tsx'
+      - '.github/workflows/wedding-bgm-selection-resume-dashboard-ci.yml'
+  workflow_dispatch:
+
+jobs:
+  contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify persisted Human selection resume contract
+        run: |
+          node <<'NODE'
+          const fs=require('fs');
+          const card=fs.readFileSync('movie-dashboard/src/components/WeddingBgmRhythmSelectionResumeCard.tsx','utf8');
+          const parent=fs.readFileSync('movie-dashboard/src/components/WeddingMediaIntakeChecklistCard.tsx','utf8');
+          for(const token of [
+            'wedding-movie-bgm-rhythm-human-selection/v1',
+            'wedding-movie-bgm-rhythm-human-selection-currentness/v1',
+            'data-bgm-selection-resume-state',
+            'data-resume-human-bgm-selection',
+            'LIVE_EDGE_FROM_REVISION_DRIFT',
+            'LIVE_EDGE_TO_REVISION_DRIFT',
+            'automaticSnapApplied:false',
+            'editApplied:false',
+            'remotionStudioGuiActual:"NOT_RUN"',
+            'palmierGuiActual:"NOT_RUN"',
+            'macDaVinciGuiActual:"NOT_RUN"',
+            'productionReady:false',
+            'verify-wedding-project-bgm-rhythm-human-selection-currentness.mts'
+          ]) if(!card.includes(token)) throw new Error(`missing resume contract token: ${token}`);
+          if(!parent.includes('WeddingBgmRhythmSelectionResumeCard')||!parent.includes('<WeddingBgmRhythmSelectionResumeCard projectId={projectId} />')) throw new Error('resume operator not mounted');
+          if(card.includes('automaticSnapApplied:true')||card.includes('editApplied:true')||card.includes('productionReady:true')) throw new Error('resume operator auto-promotes forbidden evidence/edit state');
+          NODE
