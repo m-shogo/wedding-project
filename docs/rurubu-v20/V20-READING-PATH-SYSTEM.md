@@ -1,88 +1,62 @@
 # V20 Reading Path System
 
-Status: `CANONICAL_READING_FLOW_RULE / RESET_2026-09-01`
+Status: `CANONICAL_READING_FLOW_RULE / P05_FRIENDS_ONLY_2026-09-01`
 
-Highest page-role authority: `V20-CURRENT-PAGE-ARCHITECTURE.md`.
+Highest authority: `V20-CURRENT-PAGE-ARCHITECTURE.md`.
 
-Every page must define a deliberate reading path before detailed styling.
-
-## Required path
-
-1. `FIRST READ` — title/hero idea recognized in ~3 seconds.
-2. `SECOND READ` — dominant photo/story anchor.
-3. `THIRD READ` — 1–2 supporting clusters.
-4. `FACTUAL COPY` — names, facts, captions, messages.
-5. `MICRO DISCOVERY` — optional small editorial detail.
-
-The current ~75% clutter target means the page does not need a fifth layer of tiny information everywhere.
-
-## Hierarchy priority
-
-Use in this order:
-1. scale;
-2. image weight/crop;
-3. position;
-4. contrast;
-5. grouping/proximity;
-6. overlap;
-7. color;
-8. decoration.
+Hierarchy priority:
+1. scale
+2. image weight/crop
+3. position
+4. contrast
+5. grouping
+6. overlap
+7. color
+8. decoration
 
 Never repair weak hierarchy by adding stickers.
 
-# Page paths
-
 ## P01
-`るるぶ WEDDING` → couple/Hawaii hero → names/date → 1–2 hooks → a few micro details.
+`るるぶ WEDDING` → couple hero → names/date → 1–2 hooks → small details.
 
 ## P02
-profile title → SHOGO → SHIORI → short facts → optional one shared/Q&A feature.
+profile title → SHOGO → SHIORI → short facts → Q1/Q2.
 
 ## P03
-story title → anchor photo → chapter 1/2 → proposal/major milestone → registration/wedding arrival.
+story title → anchor photo → story chapters → Q3/Q4 → wedding arrival.
 
 ## P04
-travel title → strongest travel hero → 2–4 memory/destination clusters → smaller photos/captions → selective travel micro details.
+travel title → travel hero → 3–4 destination/memory clusters → support photos/captions → selective travel details.
 
 ## P05
-warm memory title → anchor people photo → family/friend clusters → support group/candid photos → short grounded captions.
+`友達との思い出` → `SHOGO FRIENDS` → `SHIORI FRIENDS` → friend-photo clusters → short captions.
+
+P05 has **no page-wide hero step**. Reading is cluster-led, not hero-led.
+
+The reader should immediately understand which photos belong to SHOGO friends and which belong to SHIORI friends.
 
 ## P06
-playful real-life title → candid hero → 3–5 support moments → pet/food/fun note → small captions.
+real-life title → candid hero → support moments → Q5/Q6 → small captions.
 
 ## P07
-closing photo/title → thank-you message → names/date → one tiny final motif.
+closing photo/title → thank-you → names/date → final motif.
 
 ## P08
-back-cover field/photo/art → tiny meta → barcode `2026102400000`.
+quiet back-cover field → tiny meta → barcode `2026102400000`.
 
-P08 should have almost no multi-step reading burden.
+## Spread paths
 
-# Spread-level paths
+- P02–P03: `WHO THEY ARE → HOW THEY BECAME US`
+- P04–P05: `PLACES WE REMEMBER → FRIENDS WE REMEMBER`
+- P06–P07: `OUR REAL LIFE → THANK YOU`
 
-## P02–P03
-`WHO THEY ARE → HOW THEY BECAME US`.
-
-## P04–P05
-`PLACES WE REMEMBER → PEOPLE WE REMEMBER`.
-
-Do not force an old route from P04 into P05.
-
-## P06–P07
-`OUR REAL LIFE → THANK YOU`.
-
-P07 must visibly slow down from P06.
-
-# Explicit obsolete reading paths
+## Obsolete paths
 
 Do not recover:
-- P05 `HAWAII → PROPOSAL → ARRIVAL` as the current page path;
-- P07 `TODAY'S TRAVEL GUIDE → 11 DESTINATIONS → LOOK AROUND → EDITOR'S PICK`;
-- P07 timetable/schedule path;
-- P08 as the main thank-you-message path.
+- P05 family/friends path
+- P05 giant anchor photo path
+- P05 `HAWAII → PROPOSAL → ARRIVAL`
+- old P07 guide/destination/timetable paths
+- P08 main thank-you path
 
-## QA
-
-At thumbnail scale, ask what is seen 1st, 2nd and 3rd.
-
-If the answer differs materially from the current page manual, fix hierarchy before micro-polish.
+At thumbnail scale, P05 must read title → SHOGO FRIENDS / SHIORI FRIENDS, not one giant photograph.
