@@ -1,0 +1,64 @@
+name: Wedding Project BGM Rhythm Currentness CI
+
+on:
+  pull_request:
+    paths:
+      - 'motion-studio/scripts/verify-wedding-project-bgm-rhythm-alignment-currentness.mts'
+      - '.github/workflows/wedding-project-bgm-rhythm-currentness-ci.yml'
+  workflow_dispatch:
+
+jobs:
+  strict-current:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Build exact-binding currentness fixture
+        run: |
+          mkdir -p /tmp/bgm-current
+          printf 'approved-bgm-bytes' > /tmp/bgm-current/bgm.wav
+          BGM_SHA=$(sha256sum /tmp/bgm-current/bgm.wav | awk '{print $1}')
+          cat > /tmp/bgm-current/preview.json <<JSON
+          {"projectId":"opening","identity":{"bgmSha256":"${BGM_SHA}"}}
+          JSON
+          PREVIEW_SHA=$(sha256sum /tmp/bgm-current/preview.json | awk '{print $1}')
+          cat > /tmp/bgm-current/rhythm.json <<JSON
+          {"schemaVersion":"wedding-movie-production-rhythm-pass/v1","authority":"DERIVED_WHOLE_PROJECT_RHYTHM_MAP_FROM_CURRENT_RENDERED_REAL_MEDIA_PREVIEW","projectId":"opening","source":{"previewManifestPath":"/tmp/bgm-current/preview.json","previewManifestSha256":"${PREVIEW_SHA}"},"summary":{"humanRhythmReview":"NOT_RUN","productionReady":false},"evidenceBoundary":{"humanRhythmReviewPerformed":false,"humanVisualQa":"NOT_RUN","remotionStudioGuiActual":"NOT_RUN","palmierGuiActual":"NOT_RUN","macDaVinciGuiActual":"NOT_RUN","productionReady":false}}
+          JSON
+          RHYTHM_SHA=$(sha256sum /tmp/bgm-current/rhythm.json | awk '{print $1}')
+          cat > /tmp/bgm-current/cues.json <<JSON
+          {"schemaVersion":"wedding-movie-bgm-cue-map/v1","authority":"HUMAN_MARKED_BGM_CUES_BOUND_TO_CURRENT_APPROVED_AUDIO","projectId":"opening","revision":"cue-r1","source":{"audioPath":"/tmp/bgm-current/bgm.wav","audioSha256":"${BGM_SHA}"},"evidenceBoundary":{"remotionStudioGuiActual":"NOT_RUN","palmierGuiActual":"NOT_RUN","macDaVinciGuiActual":"NOT_RUN","productionReady":false}}
+          JSON
+          CUE_SHA=$(sha256sum /tmp/bgm-current/cues.json | awk '{print $1}')
+          cat > /tmp/bgm-current/alignment.json <<JSON
+          {"schemaVersion":"wedding-movie-bgm-rhythm-alignment/v1","authority":"DERIVED_ALIGNMENT_DISTANCES_FROM_CURRENT_RHYTHM_AND_HUMAN_BGM_CUES","projectId":"opening","revision":"alignment-r1","source":{"rhythmPassPath":"/tmp/bgm-current/rhythm.json","rhythmPassSha256":"${RHYTHM_SHA}","bgmCueMapPath":"/tmp/bgm-current/cues.json","bgmCueMapSha256":"${CUE_SHA}","previewManifestPath":"/tmp/bgm-current/preview.json","previewManifestSha256":"${PREVIEW_SHA}","bgmSha256":"${BGM_SHA}"},"summary":{"humanSelection":"NOT_RUN","productionReady":false},"evidenceBoundary":{"humanSelectionPerformed":false,"remotionStudioGuiActual":"NOT_RUN","palmierGuiActual":"NOT_RUN","macDaVinciGuiActual":"NOT_RUN","productionReady":false}}
+          JSON
+          cat > /tmp/bgm-current/rhythm-currentness.json <<JSON
+          {"schemaVersion":"wedding-movie-production-rhythm-pass-currentness/v1","authority":"LIVE_REVALIDATION_OF_PRODUCTION_RHYTHM_PASS_AGAINST_CURRENT_RENDERED_REAL_MEDIA_PREVIEW","projectId":"opening","state":"CURRENT","source":{"rhythmPassSha256":"${RHYTHM_SHA}","previewManifestSha256":"${PREVIEW_SHA}"}}
+          JSON
+      - name: Strict current passes
+        run: node --no-warnings motion-studio/scripts/verify-wedding-project-bgm-rhythm-alignment-currentness.mts --alignment=/tmp/bgm-current/alignment.json --rhythm-currentness=/tmp/bgm-current/rhythm-currentness.json --output=/tmp/bgm-current/current.json --strict-current
+      - name: Verify CURRENT boundary
+        run: |
+          node --input-type=module <<'NODE'
+          import {readFileSync} from 'node:fs';
+          const x=JSON.parse(readFileSync('/tmp/bgm-current/current.json','utf8'));
+          if(x.state!=='CURRENT'||x.mismatches.length!==0) throw new Error('not current');
+          if(x.evidenceBoundary.humanSelectionPerformed!==false||x.evidenceBoundary.productionReady!==false) throw new Error('Human boundary');
+          if(x.evidenceBoundary.remotionStudioGuiActual!=='NOT_RUN'||x.evidenceBoundary.palmierGuiActual!=='NOT_RUN'||x.evidenceBoundary.macDaVinciGuiActual!=='NOT_RUN') throw new Error('GUI boundary');
+          NODE
+      - name: BGM bytes drift becomes STALE
+        run: |
+          printf 'tampered' >> /tmp/bgm-current/bgm.wav
+          if node --no-warnings motion-studio/scripts/verify-wedding-project-bgm-rhythm-alignment-currentness.mts --alignment=/tmp/bgm-current/alignment.json --rhythm-currentness=/tmp/bgm-current/rhythm-currentness.json --output=/tmp/bgm-current/stale-audio.json --strict-current; then
+            echo 'expected BGM audio drift to block' >&2; exit 1
+          fi
+          grep -q 'BGM_AUDIO_SHA_DRIFT' /tmp/bgm-current/stale-audio.json
+      - name: Rhythm drift becomes STALE
+        run: |
+          printf '\n' >> /tmp/bgm-current/rhythm.json
+          node --no-warnings motion-studio/scripts/verify-wedding-project-bgm-rhythm-alignment-currentness.mts --alignment=/tmp/bgm-current/alignment.json --rhythm-currentness=/tmp/bgm-current/rhythm-currentness.json --output=/tmp/bgm-current/stale-rhythm.json || true
+          grep -q 'RHYTHM_PASS_SHA_DRIFT' /tmp/bgm-current/stale-rhythm.json
