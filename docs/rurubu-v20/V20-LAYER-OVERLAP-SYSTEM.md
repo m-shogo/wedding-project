@@ -1,353 +1,285 @@
 # V20 Layer / Overlap System
 
-Status: `CANONICAL_ASSET_FIRST_ASSEMBLY_RULE / FULL_EDITORIAL_COLLISION`
+Status: `CANONICAL / IMAGEGEN_FIRST / FULL_EDITORIAL_COLLISION / CURRENT_P07_DISCOVERY`
 
-Purpose: make V20 feel like a designed travel magazine rather than a web UI or an AI-generated sticker sheet. Figma assembles already-designed editorial assets and keeps variable content editable; it does not invent page composition from scratch.
+Purpose: make V20 feel like a professionally edited Japanese travel magazine rather than a web UI, wedding template or AI sticker sheet. Figma assembles already-designed page-aware editorial assets and keeps real photos / factual copy editable.
 
 ## 1. Core principle
 
 V20 intentionally uses strong overlap, depth, occlusion and edge intrusion.
 
-The previous weak assumption — “overlap only a little” — is rejected.
+Background, photography, frames, title art, subtitle art, vessels, routes, stamps and decoration may overlap heavily when hierarchy improves.
 
-Background, photography, frame, masthead, label, stamp, route, decorative art and text-support fields may overlap heavily when the editorial result improves.
+The constraint is not an overlap percentage. Ask:
+- is FIRST / SECOND / THIRD read clear?;
+- is important copy readable at A5?;
+- are important faces/gestures protected intentionally?;
+- does occlusion create tactile editorial depth rather than random clutter?;
+- does the page look like a real edited magazine rather than arranged components?
 
-Good overlap creates:
-- hierarchy;
-- reading flow;
-- tactile paper/editorial feeling;
-- visual continuity between photography and decoration;
-- controlled asymmetry;
-- strong magazine silhouette.
+`COLLISION MAY BE STRONG; HIERARCHY MUST BE STRONGER.`
 
-The governing constraint is NOT overlap percentage. The governing constraints are:
-- does the first/second/third read remain clear?
-- is important text readable?
-- are important faces/gestures intentionally protected when needed?
-- does the overlap create depth/story rather than random clutter?
+## 2. Canonical bottom-to-top production stack
 
-## 2. Canonical semantic layer stack
+Use the detailed authority in `V20-PRIVATE-HOMAGE-AND-LAYERED-PAGE-GENERATION-RULE.md`.
 
-Bottom to top as a common model:
+Working stack:
+1. PAPER / BASE
+2. LARGE BACKGROUND / ENVIRONMENT COMPOSITE
+3. HERO REAL PHOTO
+4. UNEQUAL SUPPORT / DETAIL REAL PHOTOS
+5. PHOTO FRAME / PAPER BACKING UNITS
+6. ROUTE BACK / LARGE FLOW ART
+7. DISPLAY TITLE / MASTHEAD
+8. SUBTITLE / SECOND-READ UNIT
+9. ARTICLE / PROFILE / EPISODE / DISCOVERY VESSELS
+10. CAPTION / LABEL / TICKET / STAMP UNITS
+11. ROUTE FRONT / FOREGROUND COLLISION
+12. NATIVE AUTHORITATIVE TEXT
+13. MICRO DISCOVERIES
+14. FOLIO / META / EDGE ACCENTS
+15. HIDDEN QA / GUIDES
 
-1. `BACKGROUND / PAPER + COLOR FIELD`
-2. `BACKGROUND ART / LARGE COMPOSITE`
-3. `REAL PHOTO / REPLACEABLE`
-4. `PHOTO FRAME / PAPER OBJECT / MASK OVERLAY`
-5. `DISPLAY TITLE / MASTHEAD / LARGE LABEL`
-6. `EDITORIAL CLUSTER / STAMP / ROUTE / FLOWER / TRAVEL OBJECT`
-7. `TEXT SUPPORT / PAPER / SLAB / LOCAL CONTRAST DEVICE`
-8. `NATIVE FACT TEXT / BODY / CAPTION / TIME / NAME`
-9. `MICRO ACCENT / ARROW / HEART / NUMBER / TINY STICKER`
-10. `QA / GUIDE` hidden from export
-
-Important:
-- this is semantic, not a rigid z-index law;
-- title may sit behind a cutout subject;
-- a stamp may sit above title;
-- a frame may sit above and below different photo regions;
-- text-support may cover a large portion of photography;
-- one asset may cross several semantic layers visually.
+This is semantic, not a rigid z-index law. A title may sit behind a cutout subject; route may disappear behind a photo and return in front; frame art may sit both behind and above the photo through split assets.
 
 ## 3. Figma's job
 
-Figma is primarily responsible for:
-- placing approved assets;
-- replacing/cropping real photos;
-- controlling z-order;
-- applying final rotations/scale;
-- keeping names, dates, body copy, captions, schedule facts editable;
-- adding/adjusting text-support fields when exact copy requires it;
-- print geometry and final QA.
+Figma primarily:
+- places approved assets;
+- crops/replaces real photos;
+- controls z-order, scale and rotation;
+- keeps names, dates, captions, profile/story/wedding-detail facts native/editable;
+- adjusts final line breaks and local support;
+- manages trim/safe/fold geometry;
+- performs page/spread/contact/A5 QA.
 
-Figma is NOT primarily responsible for:
-- drawing flower bouquets from primitives;
-- inventing travel illustrations;
-- building decorative clusters one atom at a time;
-- deciding the page layout from a generic prompt;
-- turning every content item into an Auto Layout card.
+Figma is not primarily responsible for inventing:
+- decorative clusters atom by atom;
+- flower/travel illustration from primitives;
+- page personality from generic rectangles/pills/polygons;
+- a generic sticker library;
+- the page layout from a vague style prompt.
 
-## 4. Prefer editorial cluster assets over atomic assets
+## 4. Prefer coherent editorial units
 
-Bad production pattern:
-- one flower;
-- one leaf;
-- one star;
-- one camera;
-- one line;
-- one ribbon;
-- then compose them all in Figma.
+Prefer page-specific units over unrelated atoms.
 
-Preferred V20 pattern:
-- `P01_TOP_RIGHT_TRAVEL_CLUSTER`;
-- `P01_BOTTOM_EDITORIAL_CLUSTER`;
-- `P45_JOURNEY_ROUTE_CLUSTER`;
-- `P05_PROPOSAL_HIGHLIGHT_CLUSTER`;
-- `P08_CLOSING_EDGE_CLUSTER`.
+Examples:
+- `P01_MASTHEAD_FEATURE_UNIT`;
+- `P02_PROFILE_ANNOTATION_UNIT`;
+- `P03_EPISODE_UNIT`;
+- `P45_ROUTE_BACK / ROUTE_FRONT`;
+- `P05_PROPOSAL_ARTICLE_UNIT`;
+- `P06_BEST_SHOTS_UNIT`;
+- `P07_DESTINATION_DISCOVERY_UNIT`;
+- `P08_CLOSING_EDGE_UNIT`.
 
-A cluster is precomposed for a known page job, usually with transparent background and deliberate transparent/quiet regions where photography or copy must remain legible.
+A unit should include deliberate quiet/transparent areas for native text/photo interaction.
 
 ## 5. Asset granularity
 
-Use three levels.
-
 ### LARGE COMPOSITE
-Page-defining atmosphere/structure. Normally 1–3 per page/spread.
+Normally 0–3 per page/spread.
+Examples: broad edge environment, center-spread route atmosphere, map/background fragment, large color/paper shape.
 
-Examples:
-- cover edge environment;
-- center-spread route + atmospheric marks;
-- large page-edge flower/travel composition;
-- broad editorial color/paper shape.
+### MEDIUM EDITORIAL UNIT
+Normally several per page.
+Examples: masthead/title, subtitle holder, article vessel, photo-frame unit, destination vessel, proposal highlight, LOOK AROUND / EDITOR'S PICK unit.
 
-### MEDIUM EDITORIAL PART
-Normally 2–6 per page.
+### MICRO DISCOVERY
+Added after hierarchy passes.
+Examples: tiny camera/plane/paw/food cue, mini stamp, route node, small number, issue mark, arrow, tiny flower.
 
-Examples:
-- masthead;
-- title plate;
-- destination stamp shell;
-- paper-note overlay;
-- postcard/polaroid overlay;
-- feature burst;
-- proposal highlight;
-- page-specific box/band/container art.
+Dense reference-like pages may contain many visible micro discoveries, but they are unequal and often partly hidden. Never use them to rescue weak title/photo structure.
 
-### MICRO ACCENT
-Normally 0–5 per page, added only after hierarchy already passes.
+## 6. Full editorial collision
 
-Examples:
-- arrow;
-- heart;
-- tiny number;
-- micro flower;
-- tiny airplane/camera mark.
+Explicitly valid:
+- photo behind title, frame above photo, stamp above title;
+- title crossing photo + paper + background at once;
+- support photo covering HERO corner;
+- article field covering a meaningful photo region;
+- route passing under one object and over another;
+- destination label crossing route + photo + frame;
+- giant numeral behind title/vessel;
+- edge object mostly cropped;
+- caption half inside / half outside a photo;
+- title partly hidden by a subject when silhouette remains legible.
 
-Never use micro accents to fill empty space that should remain calm.
+Do not present every generated asset fully visible like a sticker catalogue.
 
-## 6. Full editorial collision rule
+## 7. Text readability is solved locally
 
-Strong overlap is explicitly allowed and often preferred.
+Do not automatically separate text from photography.
 
-Allowed examples:
-- photo behind title, frame over photo, title over frame, stamp over title;
-- title crossing background, photo and paper field at once;
-- paper/box covering 50–90% of a photo if it creates a useful reading field;
-- small photo covering a significant corner of the HERO photo;
-- flower/route entering beneath and above different photo layers;
-- cutout person sitting in front of title while title remains readable from silhouette/context;
-- caption partly inside and partly outside photo;
-- destination label crossing route + photo + frame simultaneously;
-- giant numeral behind a text block and photo cluster;
-- title or photo intentionally cropped at bleed.
-
-There is no universal light/medium/strong overlap percentage in V20.
-
-A nearly full overlap can be correct. An almost-touching layout can be wrong.
-
-## 7. Text readability is solved by support, not separation
-
-Do NOT protect text by automatically moving it away from photography/decor.
-
-Instead choose an appropriate support method:
-- opaque paper field;
+Use page-specific support:
+- opaque/near-opaque paper field;
 - irregular color slab;
 - ribbon/band;
-- translucent local panel;
-- thick keyline/outline;
+- keyline/outline;
 - hard offset shadow;
 - local photo darkening/lightening;
-- marker stroke / handwritten backplate;
-- quiet area already present in photography;
-- frame/caption foot acting as text support;
-- cutout contour creating a readable edge.
+- marker backplate;
+- quiet photo zone;
+- attached caption foot;
+- cutout contour.
 
-Long body copy and operational facts may be visually embedded in a busy composition as long as their local support produces reliable readability.
+Long factual/personal text remains native.
 
-## 8. Protected content is contextual, not automatically isolated
+## 8. Protected content
 
-Important content may overlap strongly, but protect its semantic integrity.
-
-Examples:
-- a face may be partially overlapped if expression/readability remains strong;
-- a title may cover part of a body/landscape if the intended focal point survives;
-- schedule times can sit on a large photo if backed by an authoritative high-contrast field;
-- proposal copy can live inside the collage if it has a calm local reading island.
+Allowed:
+- partial face/body overlap when expression/gesture survives;
+- title covering landscape/body region;
+- article vessel embedded into photography;
+- destination labels partly obscured as graphical objects while native name stays readable.
 
 Hard protections:
-- do not obscure eyes/mouth/critical gesture without a deliberate composition reason;
-- do not reduce body-copy contrast below comfortable A5 readability;
-- do not compromise QR/functionality;
-- do not bury authoritative facts in decorative noise.
+- do not casually obscure eyes/mouth/critical gestures;
+- do not compromise A5 body-copy readability;
+- do not hide authoritative facts in decorative noise;
+- do not flatten replaceable real photography into generated art.
 
 ## 9. Depth hierarchy
 
-A page should have obvious depth levels even when many layers collide.
+Typical visual depth:
+- atmosphere/base;
+- HERO;
+- support images;
+- backing/frame;
+- title/subtitle mass;
+- major editorial vessel;
+- route/stamp collision;
+- native copy;
+- micro discovery.
 
-Typical hierarchy:
-- environmental background = broad atmosphere;
-- HERO photo = largest photographic weight;
-- secondary photos = smaller and may cover/enter HERO;
-- title/display art = may cross multiple boundaries;
-- editorial cluster = creates story/context;
-- text support = local readability structure;
-- native facts/copy = readable and editable;
-- micro accents = discovery layer.
-
-If every item has the same border, shadow, radius and raised-card treatment, the result becomes UI-like.
+If every element has identical border/shadow/radius/raised-card treatment, reject it as UI-like.
 
 ## 10. Edge intrusion
 
-Dense pages should frequently let noncritical elements enter/crop at page edges or bleed.
-
-Good candidates:
-- foliage;
-- flowers;
+Energetic pages should frequently activate page edges/bleed with noncritical elements:
+- foliage/flowers;
 - photo corners;
-- route line;
-- paper/ticket edge;
-- decorative travel objects;
+- route;
+- ticket/paper edge;
+- travel objects;
 - title letters;
 - giant numerals;
-- color slabs.
+- broad color slabs.
 
-Critical facts do not rely on bleed survival.
+North-Star calibration indicates roughly 2–4 active edges/corners can be appropriate on dense pages. Calm pages use less.
 
 ## 11. Rotation discipline
 
-Rotation is purposeful, not random.
-
-Typical behavior:
-- HERO may remain stable or follow source-photo energy;
-- support photos may rotate independently;
+Rotation is purposeful, not randomized.
+- HERO may stay stable;
+- support photos may vary;
 - paper/ticket/stamp may rotate more;
-- major title may be diagonal if that is its silhouette;
-- body copy normally stays readable, but its containing paper field may rotate subtly.
+- title may be diagonal when its silhouette benefits;
+- body text normally stays readable even if its vessel rotates slightly.
 
-No numeric rotation quota. Avoid randomizing every object.
+## 12. Calm island
 
-## 12. Calm fields are local supports, not empty pages
+A calm field is a local recovery/readability zone **inside** the layered world, not detached luxury whitespace.
 
-A dense Rurubu-like page can have a calm reading island completely surrounded by overlap.
+Examples:
+- P03 story/article paper invaded by photo/title edge;
+- P05 proposal field embedded in Hawaii photography;
+- P07 EDITOR'S PICK or TODAY'S DETAIL field embedded under/among destination/map/route layers;
+- P08 closing copy on calm paper over/adjacent to the real closing image.
 
-Good examples:
-- proposal story field floating on/over Hawaii photography;
-- profile copy field partly covered by portrait edge;
-- P07 practical note box embedded under giant time typography;
-- P08 closing copy on a postcard field sitting over photography.
+The obsolete P07 `giant time typography / timetable` example is not current authority.
 
-Calm does NOT mean separated from the composition.
+## 13. Background is active
 
-## 13. Background strategy
+Background may include paper tone, broad color shape, print texture, giant cropped typography/numeral, route/map fragment, edge illustration and low-information atmospheric marks.
 
-Background is an active participant and may itself be heavily covered.
+Most may be hidden. That is acceptable.
 
-Possible composition:
-- paper tone;
-- broad color shape;
-- texture;
-- giant cropped typography;
-- cropped edge botanical/travel artwork;
-- faint route/print marks;
-- local photo/environment fragment;
-- intentional calm support field.
-
-The background must not become a single flattened page image containing variable facts or irreplaceable photography.
+Do not flatten variable facts or irreplaceable real photography into the background.
 
 ## 14. Photo-frame strategy
 
-Prefer overlays and masks that allow independent photo replacement.
+Frames are optional visual actors, not universal wrappers.
 
 Possible stack:
-- background art;
+- backing paper;
 - real photo;
-- secondary photo partly over HERO;
-- transparent frame/paper overlay;
-- tape/stamp/title crossing frame/photo;
-- native caption on attached support field.
+- transparent frame overlay;
+- tape/stamp/title crossing it;
+- native caption attached to frame.
 
-A frame is optional. Do not frame every photo.
+Frame behavior should follow source photo role, not force every source into identical geometry.
 
 ## 15. Page intensity rhythm
 
-Overlap is strong where editorial energy calls for it, but visual temperature still varies.
+- P01 COVER: VERY HIGH / immediate authentic travel-magazine cover energy;
+- P02 PROFILE: HIGH / lively person feature with readable supports;
+- P03 STORY: MEDIUM / quiet high-density narrative;
+- P04–P05 JOURNEY: VERY HIGH / book's feature peak;
+- P06 OFF THE MAP: HIGH / playful candid collage;
+- P07 TODAY'S TRAVEL GUIDE: HIGH / destination-discovery graphic density;
+- P08 BACK: LOW–MEDIUM / deliberate release.
 
-Working direction:
-- P01 COVER: VERY HIGH collision;
-- P02 PROFILE: MEDIUM–HIGH, with readable profile supports;
-- P03 STORY: MEDIUM, article field penetrated by photo/title;
-- P04–P05 JOURNEY: VERY HIGH, with local proposal reading support;
-- P06 OFF THE MAP: HIGH / playful collage;
-- P07 WEDDING DAY: MEDIUM–HIGH visually, but information hierarchy protected;
-- P08 BACK: LOW–MEDIUM collision / deliberate closing calm.
+Lower intensity never means polite separation.
 
-Do not interpret a lower-intensity page as “everything separated.”
+## 16. Anti-AI / anti-cheap checks
 
-## 16. Anti-AI / anti-UI checks
-
-Reject or redesign when:
-- every photo is inside an identical card;
+Reject when:
+- every photo is an identical card;
 - every element has the same shadow/radius;
+- legacy flat SVG/icon-pack style appears;
 - empty space is filled with arbitrary stickers;
-- all layers are isolated with no visual interaction;
-- every photo has the same rotation/treatment;
-- all sections align to one obvious dashboard grid;
-- decorative assets look independently generated and unrelated;
-- cluster assets are symmetrical or centered by default;
-- hierarchy only exists because of different card colors;
-- all text is protected by the same white rounded rectangle;
-- boxes/bands are banned simply because they are boxes/bands;
-- every asset is fully visible like a sticker catalogue.
+- layers are isolated with no physical interaction;
+- every object is fully visible;
+- cluster assets look independent/unrelated;
+- everything follows one dashboard grid;
+- hierarchy depends only on color;
+- every text support is the same white rounded rectangle;
+- `red + yellow + blue + travel icons` is doing all the work while title/photo hierarchy stays weak.
 
-## 17. Editorial container rule
+## 17. Page-specific authenticity
 
-Boxes, bands, labels and frames are welcome when designed as magazine vessels.
+The goal is not generic `Rurubu style` prompts.
 
-Use `V20-EDITORIAL-CONTAINER-AND-TITLE-GRAMMAR.md` as the authority for:
-- diverse box/band silhouettes;
-- title-as-shape behavior;
-- strong text-support devices;
-- intentional occlusion;
-- anti-UI repetition checks.
-
-## 18. Cluster generation brief
-
-When generating a page-specific cluster, specify:
-- exact page and location;
-- what the cluster must overlap and what may sit over it;
-- transparent/quiet zones that variable copy/photo may need;
-- direction of visual flow;
+Each cluster brief must specify:
+- exact page/job;
+- surrounding real photos;
+- expected overlap and occlusion;
+- quiet/transparent zones;
 - density gradient;
-- object count/type;
-- forbidden symmetry;
-- transparent background requirement;
-- no real-person replacement;
-- no authoritative text baked into art;
-- approximate physical print size and required raster size;
-- expected z-order interactions.
+- physical size;
+- front/back interactions;
+- forbidden old SVG/reference silhouettes;
+- real alpha requirement where needed.
 
-Example concept:
-`P01 upper-right cluster: dense beyond top/right bleed, enters hero photo and masthead area, tropical flowers + foliage + one travel print motif, transparent center-left region reserved for face/title legibility, no text, no centered bouquet, designed to be partly hidden by the HERO and partly sit in front of its frame.`
+## 18. One-shot proof vs final production
 
-## 19. Assembly sequence
+A one-shot page image may test whether the written brief produces the intended complete magazine world.
+
+If successful, decompose its useful behavior into separate production assets. Do not use the whole generated page as an indivisible final master.
+
+## 19. Assembly / QA sequence
 
 For every page:
-1. place background/base composite;
-2. place real photography based on source behavior;
-3. place large editorial composite(s), allowing deep overlap;
-4. add frame/paper overlays only where editorially useful;
-5. add masthead/title/display art, including behind/in front of photo where intended;
-6. add medium editorial containers / route / stamp assets;
-7. create/adjust text-support geometry based on actual copy;
-8. add native variable/fact text;
-9. add micro accents only if needed;
-10. inspect first/second/third read at thumbnail scale;
-11. inspect text/face/function at A5 physical scale;
-12. hide micro decoration—not major composites—to verify hierarchy still works;
-13. re-enable all layers and judge whether collision creates authored depth.
+1. inspect current page/spread and Bible;
+2. optionally generate one-shot art-direction proof;
+3. define layer plan;
+4. assemble base/background;
+5. place real photos;
+6. place frames/backings and route BACK;
+7. add title/subtitle;
+8. add major vessels;
+9. add route FRONT / stamps / labels;
+10. add native text;
+11. add micro discoveries only after hierarchy works;
+12. review thumbnail;
+13. review page/spread/contact;
+14. review A5 actual-size;
+15. keep candidate only when it clearly beats the safe baseline.
 
 ## 20. Final principle
 
-V20 is not “slightly overlapping elements.”
+V20 is `controlled editorial collision` in service of an authentic magazine read.
 
-V20 is `controlled editorial collision`: background, photographs, frames, titles, editorial vessels and decorations may collide strongly and obscure one another, while local support preserves readability and the visual hierarchy remains deliberate.
+`THE PAGE SHOULD FEEL RICH BEFORE THE BODY COPY IS READ.`
