@@ -1,158 +1,160 @@
 # V20 Quality Gates
 
-Status: `CANONICAL_V20_QA / CURRENT_P07_DISCOVERY / AUTHENTIC_MAGAZINE_CHECK`
+Status: `CANONICAL_V20_QA / RESET_2026-09-01`
 
-V20 does not use V10/V11/V12 visual scores, old reference-node mappings, old page-similarity thresholds, old SVG style, or old schedule-first P07 as design authority.
+Highest page-role authority: `V20-CURRENT-PAGE-ARCHITECTURE.md`.
 
-QA is based on current V20 page jobs, North-Star density/layering extraction, private-homage direction, editability, content truth and print geometry.
+V20 does not use V10/V11/V12 visual scores, old SVG style, old P05 Hawaii-only role, old P07 guide/discovery/schedule role or old P08 closing-message role as current design authority.
 
 ## Gate 0 — Grounding
 
-Pass before structural Figma work:
+Pass before structural production:
 - A5 portrait / 8 pages confirmed;
+- wedding date `2026.10.24` confirmed;
+- P08 barcode digits `2026102400000` confirmed;
 - current authority chain read;
-- `V20-LEGACY-QUARANTINE.md` read;
-- missing personal facts explicitly identified;
-- no fixed page depends on fabricated Q&A or dates;
-- P01–P08 current visual Bible exists;
-- production geometry exists.
+- missing personal facts identified;
+- no page depends on fabricated Q&A/dates/captions;
+- current P01–P08 architecture/manual/Bible exist.
 
 ## Gate 1 — Photo inventory
 
-Before detailed composition:
-- actual candidate photos inventoried by role;
-- enough plausible sources exist for minimum photo count or the source gap is explicit;
-- hero candidates separated from support photos;
-- duplicates/repeats identified;
-- orientation/crop feasibility checked;
-- proxy vs final state recorded.
+Pass when:
+- candidate photos are inventoried by current page role;
+- P04 has real travel candidates or explicit gaps;
+- P05 has family/friend candidates or explicit gaps;
+- P06 has real-life candidates or explicit gaps;
+- P07 has at least one strong closing candidate;
+- hero/support roles are not duplicated blindly.
 
-Do not solve missing real sources by repeating one photo or inventing fake memories.
+Do not solve source gaps with invented memories.
 
 ## Gate 2 — Silhouette / page identity
 
-Review at thumbnail scale:
-- P01 cover silhouette is immediately strong and magazine-like;
-- P02 differs materially from P03;
-- P04–P05 clearly reads as one center-spread feature;
-- P06 reads as an irregular candid/photo mosaic;
-- P07 reads immediately as `TODAY'S TRAVEL GUIDE / 11 DESTINATIONS / LOOK AROUND` discovery, not timetable/logistics;
-- P08 visibly exhales.
+At thumbnail scale:
+- P01 = strong magazine cover;
+- P02 = profile/people feature;
+- P03 = quieter story feature;
+- P04 = strongest travel-memory interior page;
+- P05 = warm family/friend people-memory page;
+- P06 = candid real-life page;
+- P07 = calm closing/message page;
+- P08 = unmistakably sparse magazine back cover.
 
-Fail if multiple pages look like the same boxes with different content.
+Immediate fail if:
+- P05 still reads as Hawaii-only feature;
+- P07 reads as `TODAY'S TRAVEL GUIDE`, `11 DESTINATIONS`, map/discovery/timetable;
+- P08 reads as the main thank-you feature.
 
 ## Gate 3 — Reading hierarchy
 
-For every page name:
-1. FIRST READ;
-2. SECOND READ;
-3. THIRD READ;
-4. useful information;
-5. micro discovery.
+For each interior page define:
+1. first read;
+2. second read;
+3. third read;
+4. factual copy;
+5. optional micro discovery.
 
-Pass only when screenshot evidence supports that order.
+P08 may deliberately have only 1–2 reading steps.
 
-Fail if:
-- 4+ large elements compete equally;
-- decoration is noticed before page subject;
-- title disappears at thumbnail scale;
-- the reader must hunt for the next reading point.
+Fail if 4+ large elements compete equally.
 
-## Gate 4 — Anti-UI / editorial behavior
+## Gate 4 — 75% clutter calibration
+
+The current target is not maximum density.
+
+Pass when:
+- energetic pages still feel like edited Japanese travel magazine pages;
+- major photos remain visible;
+- only 2–3 meaningful secondary events compete below the first read;
+- calm fields are allowed to remain calm;
+- micro details reward browsing without filling every gap.
+
+Fail when:
+- stickers are added only because space exists;
+- copy/photo sizes shrink to accommodate more content;
+- every edge is active;
+- every photo has a different ornament;
+- the page looks like a scrapbook kit rather than a magazine.
+
+## Gate 5 — Anti-UI / editorial behavior
 
 Pass when:
 - equal card grids are avoided;
-- scale classes vary strongly;
-- photo treatments vary by role;
-- overlaps are intentional and deep where appropriate;
-- energetic pages activate edges/bleed;
-- calm reading fields are embedded inside the composition;
+- scale classes vary;
+- photo treatments vary by semantic role;
+- overlaps are intentional;
+- calm reading support is integrated;
 - repeated components do not determine the page.
 
 Immediate revision triggers:
 - three or more equal rounded cards;
 - same radius/shadow everywhere;
-- all sections centered;
-- identical adjacent page structures;
 - old flat SVG/icon-pack aesthetics;
-- sticker density used to hide weak hierarchy.
+- identical adjacent page structures.
 
-## Gate 5 — Authentic Japanese travel-magazine energy
-
-Compare against the directly reviewed North Star for visual phenomena, not coordinates.
+## Gate 6 — Authentic magazine energy
 
 Ask:
-- is there one dominant title/hero event with a major scale jump?;
-- does photography or the primary information graphic carry substantial page weight?;
-- do title, photo, frame, vessel and route physically collide?;
-- does the page feel rich before body copy is read?;
-- are there multiple secondary reading events?;
-- on dense pages, are there enough genuine micro discoveries to reward browsing?;
-- are 2–4 edges/corners active when the page role calls for high energy?;
-- is the calm island embedded rather than detached?;
-- do red/yellow/blue/cream/ink act as editorial jobs rather than equal rainbow decoration?;
-- does the page look like a professionally edited travel magazine rather than a wedding template imitating one?;
+- is there one dominant title/hero event?;
+- does photography carry major page weight?;
+- do title/photo/frame/vessel relationships feel physically edited?;
+- does the page still feel rich before body copy is read?;
+- is the current density appropriate for that page's role rather than maximized automatically?;
+- does the page look like a real printed editorial page rather than a wedding template?
 
-Reject when the only resemblance is `bright colors + stickers + travel icons`.
+P01 may use `るるぶ WEDDING` under current private-homage direction.
 
-P01 may use working masthead text `るるぶ WEDDING` under the current private-homage authority. Do not import/trace an official third-party logo asset.
+## Gate 7 — Content truth
 
-## Gate 6 — Content truth
+Fail final output if it invents:
+- relationship dates;
+- Q&A answers;
+- family/friend identities or relationships;
+- anecdotes;
+- destination facts;
+- venue facts;
+- QR/transport data;
+- publisher/price/ISBN/JAN commerce claims.
 
-Every factual/personal claim must be confirmed, grounded candidate with review state, or clearly marked production placeholder.
-
-Fail if final-looking output contains invented relationship dates, Q&A answers, venue facts, QR/flight/gate/transport data, country facts, or generated paragraph gibberish.
-
-## Gate 7 — Editability
+## Gate 8 — Editability
 
 Pass when:
 - authoritative text is native/editable;
-- each important real photo is independently replaceable;
-- frame/decor remains separate from photo source;
-- final page is not one indivisible flattened bitmap;
-- semantic layers exist;
-- page-specific composed art contains no hidden variable factual copy.
+- important real photos are independently replaceable;
+- frame/decor remains separable from photo source;
+- final master is not one flattened bitmap;
+- one-shot page generations remain art-direction proofs only.
 
-One-shot whole-page generations are allowed only as art-direction proofs and must be decomposed for production.
-
-## Gate 8 — Three-scale review
+## Gate 9 — Three-scale review
 
 Review at:
-1. thumbnail / 3-second scan;
-2. normal reading scale;
+1. thumbnail;
+2. normal screen reading;
 3. A5 actual-size equivalent.
 
-At thumbnail: title/page purpose/hero survive.
-At reading scale: secondary hierarchy and discoveries work.
-At A5: body/captions remain comfortable and details remain enjoyable rather than microscopic.
+At A5, group-photo faces on P05 must remain reasonably recognizable and P08 barcode digits must remain legible.
 
-## Gate 9 — Spread review
+## Gate 10 — Spread review
 
-For P02–P03, P04–P05, P06–P07:
-- shared publication DNA exists;
-- pages are not mirrored templates;
-- density differs enough to create rhythm;
-- visual bridge is intentional.
+P02–P03:
+- clear `WHO → STORY` rhythm;
+- not mirrored templates.
 
 P04–P05:
-- emotional peak is unmistakable;
-- route connects real editorial content;
-- Hawaii/proposal emphasis is clear;
-- fold-crossing elements are noncritical.
+- clear `PLACES WE REMEMBER → PEOPLE WE REMEMBER` relationship;
+- P04 is travel-led;
+- P05 is people-led;
+- no requirement for an old route crossing the fold;
+- no old Hawaii/proposal P05 visual role.
 
 P06–P07:
-- P06 = candid human/photo energy;
-- P07 = graphic destination/discovery energy;
-- P07 must not regress to schedule/timetable-first design.
+- P06 retains playful image energy;
+- P07 visibly slows down and closes emotionally;
+- no P07 destination/discovery system.
 
-## Gate 10 — Color / grayscale hierarchy
-
-Pass when:
-- dominant/support/accent color jobs are visible;
-- small text contrast is strong;
-- strong red/yellow/blue energy does not become equal-area rainbow noise;
-- hierarchy still makes sense in grayscale;
-- page identity does not depend only on hue.
+P08:
+- reviewed independently as back cover.
 
 ## Gate 11 — Photo resolution / provenance
 
@@ -160,66 +162,62 @@ Before final promotion:
 - source locator recorded;
 - final/proxy state recorded;
 - effective PPI checked;
-- no reference-only image is production art;
-- no mystery external asset lacks provenance note;
-- low-resolution hero assets are replaced or explicitly blocked from print-ready state.
+- no reference-only image used as production art;
+- mystery external assets rejected.
 
 ## Gate 12 — Copy / vessel stress
 
-Before layout freeze, test realistic copy in the approved vessel:
-- profile facts near intended maximum;
-- story paragraphs near working upper budget;
-- proposal/destination fields near realistic upper budget;
-- P07 verified wedding-detail callout at realistic 1–3-line lengths;
-- P08 closing message near upper budget.
+Stress-test:
+- P02 profile facts near intended maximum;
+- P03 story paragraphs near working maximum;
+- P04 travel captions without shrinking below comfortable type;
+- P05 short family/friend captions without identity invention;
+- P06 captions;
+- P07 closing message near 100 Japanese characters if needed;
+- P08 minimal meta + exact barcode digits.
 
-Human copy may be shortened/rebroken to fit a strong vessel. Do not solve overflow by shrinking body text into unreadable A5 type.
+Human copy may be shortened/rebroken to fit a strong vessel. Do not solve overflow by making A5 text microscopic.
 
-## Gate 13 — Print geometry
+## Gate 13 — P08 barcode integrity
 
-Before print-ready claim:
-- bleed/trim/safe dimensions verified;
+Required visible digits:
+`2026102400000`
+
+If encoded, use a format that can preserve those exact digits such as Code 128-compatible encoding.
+
+Do not silently convert to a different EAN-13 check digit.
+
+This barcode is decorative/private-publication metadata, not a claim of real commercial registration.
+
+## Gate 14 — Print geometry
+
+Before PRINT_READY:
+- bleed/trim/safe verified;
 - center-fold risks checked;
-- exported PDF physical dimensions verified;
+- exported PDF dimensions verified;
 - fonts/images reviewed;
-- printer-specific profile/bleed requirements applied;
-- physical/printer proof inspected where possible.
+- printer profile/CMYK/preflight applied;
+- physical proof inspected where possible.
 
 `FIGMA COMPLETE != PRINT READY`.
-
-## V20 page scorecard
-
-Use 0–5 only diagnostically after meaningful content exists:
-- page-job clarity;
-- title/hero hierarchy;
-- authentic magazine energy;
-- photo behavior;
-- editorial asymmetry;
-- useful density;
-- tactile/deep layering;
-- micro-discovery reward;
-- readability;
-- content truth;
-- editability;
-- page uniqueness / book rhythm.
-
-Hard content-truth, editability or print-safety failures override aesthetic scores.
 
 ## Correction priority
 
 When a page feels weak, fix in this order:
-1. page job;
+1. current page job;
 2. content selection;
 3. hero/photo choice;
-4. title scale / first-read mass;
+4. title scale;
 5. composition silhouette;
 6. reading path;
 7. photo inequality;
-8. copy support / calm island;
-9. overlap / occlusion / edge activity;
+8. calm/support field;
+9. overlap/edge activity;
 10. color jobs;
 11. medium editorial units;
 12. micro discoveries;
 13. micro-spacing.
 
-Never start by sprinkling more stickers.
+Never start by adding more stickers.
+
+`CURRENT PAGE ROLE + 75% EDITED DENSITY > LEGACY LAYOUT CONTINUITY.`
