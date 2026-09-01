@@ -24,11 +24,13 @@ Highest authority: `V20-CURRENT-PAGE-ARCHITECTURE.md`.
 
 ## P05 legacy status
 
-- `V20_P05_HAWAII_TITLE_SUBTITLE_HOLDER_GEN_A.png` — `REMOVED_CURRENT_BRANCH`
-- `V20_P05_PROPOSAL_ARTICLE_FRAME_GEN_B.png` — `SUPERSEDED / DO_NOT USE`; physical file may remain for provenance
-- old P04–P05 route assets — `VISUAL_REFERENCE_ONLY` or `SUPERSEDED` whenever their semantic job is the obsolete Hawaii/proposal center narrative
+Both obsolete P05 production PNGs are now `REMOVED_CURRENT_BRANCH`:
+- `V20_P05_HAWAII_TITLE_SUBTITLE_HOLDER_GEN_A.png`
+- `V20_P05_PROPOSAL_ARTICLE_FRAME_GEN_B.png`
 
-Do not recolor, trace, raster-wrap or cosmetically repurpose obsolete P05 assets.
+Old P04–P05 route assets are `VISUAL_REFERENCE_ONLY` or `SUPERSEDED` whenever their semantic job is the obsolete Hawaii/proposal center narrative.
+
+Do not recover, recolor, trace, raster-wrap or cosmetically repurpose obsolete P05 assets.
 
 ## Current P05 required classes
 
