@@ -1,0 +1,79 @@
+name: Wedding Project BGM Rhythm Human Selection CI
+
+on:
+  pull_request:
+    paths:
+      - 'motion-studio/scripts/wedding-project-bgm-rhythm-human-selection.mts'
+      - 'motion-studio/scripts/verify-wedding-project-bgm-rhythm-human-selection-currentness.mts'
+      - '.github/workflows/wedding-project-bgm-rhythm-human-selection-ci.yml'
+  workflow_dispatch:
+
+jobs:
+  human-selection:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Build exact CURRENT alignment fixture
+        run: |
+          mkdir -p /tmp/bgm-human-selection
+          printf 'bgm-bytes' > /tmp/bgm-human-selection/bgm.wav
+          BGM_SHA=$(sha256sum /tmp/bgm-human-selection/bgm.wav | awk '{print $1}')
+          cat > /tmp/bgm-human-selection/rhythm.json <<JSON
+          {"schemaVersion":"wedding-movie-production-rhythm-pass/v1","projectId":"opening"}
+          JSON
+          RHYTHM_SHA=$(sha256sum /tmp/bgm-human-selection/rhythm.json | awk '{print $1}')
+          cat > /tmp/bgm-human-selection/cues.json <<JSON
+          {"schemaVersion":"wedding-movie-bgm-cue-map/v1","projectId":"opening"}
+          JSON
+          CUE_SHA=$(sha256sum /tmp/bgm-human-selection/cues.json | awk '{print $1}')
+          cat > /tmp/bgm-human-selection/alignment.json <<JSON
+          {"schemaVersion":"wedding-movie-bgm-rhythm-alignment/v1","authority":"DERIVED_ALIGNMENT_DISTANCES_FROM_CURRENT_RHYTHM_AND_HUMAN_BGM_CUES","projectId":"opening","fps":30,"source":{"rhythmPassSha256":"${RHYTHM_SHA}","bgmCueMapSha256":"${CUE_SHA}","bgmSha256":"${BGM_SHA}"},"cues":[{"id":"hit-a","type":"HIT","label":"Human hit","frame":90,"seconds":3}],"events":[{"id":"scene:intro:end","kind":"SCENE_END","sceneId":"intro","sourceRevision":"scene-r1","timingRevision":"timing-r1","frame":84,"seconds":2.8},{"id":"edge:intro->travel:mid","kind":"TRANSITION_MIDPOINT","fromSceneId":"intro","toSceneId":"travel","fromSourceRevision":"scene-r1","toSourceRevision":"scene-r2","fromTimingRevision":"timing-r1","toTimingRevision":"timing-r2","transition":"CROSS_DISSOLVE","durationFrames":6,"frame":87,"seconds":2.9}],"alignmentCandidates":[{"eventId":"scene:intro:end","cueId":"hit-a"},{"eventId":"edge:intro->travel:mid","cueId":"hit-a"}],"summary":{"humanSelection":"NOT_RUN","productionReady":false},"evidenceBoundary":{"humanSelectionPerformed":false,"remotionStudioGuiActual":"NOT_RUN","palmierGuiActual":"NOT_RUN","macDaVinciGuiActual":"NOT_RUN","productionReady":false}}
+          JSON
+          ALIGNMENT_SHA=$(sha256sum /tmp/bgm-human-selection/alignment.json | awk '{print $1}')
+          cat > /tmp/bgm-human-selection/currentness.json <<JSON
+          {"schemaVersion":"wedding-movie-bgm-rhythm-alignment-currentness/v1","authority":"LIVE_REVALIDATION_OF_BGM_RHYTHM_ALIGNMENT_AGAINST_CURRENT_RHYTHM_AND_AUDIO","projectId":"opening","state":"CURRENT","source":{"alignmentSha256":"${ALIGNMENT_SHA}"},"checks":{"rhythmCurrent":true,"cueMapCurrent":true,"bgmCurrent":true,"previewCurrent":true,"evidenceBoundaryValid":true},"mismatches":[]}
+          JSON
+          cat > /tmp/bgm-human-selection/human-selection.json <<JSON
+          {"schemaVersion":"wedding-movie-human-bgm-rhythm-selection/v1","projectId":"opening","alignmentSha256":"${ALIGNMENT_SHA}","humanSelected":true,"selectedEventId":"edge:intro->travel:mid","selectedCueId":"hit-a","reviewer":"HUMAN_FIXTURE_ONLY","reviewedAt":"2026-09-01T00:00:00.000Z","notes":"CI fixture only"}
+          JSON
+      - name: Persist Human-selected cue and revision-bound edge
+        run: node --no-warnings motion-studio/scripts/wedding-project-bgm-rhythm-human-selection.mts --alignment=/tmp/bgm-human-selection/alignment.json --alignment-currentness=/tmp/bgm-human-selection/currentness.json --selection=/tmp/bgm-human-selection/human-selection.json --output=/tmp/bgm-human-selection/selection-receipt.json
+      - name: Verify selection is explicit and never auto-applied
+        run: |
+          node --input-type=module <<'NODE'
+          import {readFileSync} from 'node:fs';
+          const x=JSON.parse(readFileSync('/tmp/bgm-human-selection/selection-receipt.json','utf8'));
+          if(x.schemaVersion!=='wedding-movie-bgm-rhythm-human-selection/v1'||x.selection.performed!==true) throw new Error('selection receipt');
+          if(x.selection.event.id!=='edge:intro->travel:mid'||x.selection.cue.id!=='hit-a'||x.selection.editTarget.kind!=='TRANSITION_EDGE') throw new Error('selected edge/cue');
+          if(x.selection.editTarget.fromSourceRevision!=='scene-r1'||x.selection.editTarget.toSourceRevision!=='scene-r2') throw new Error('edge revision binding');
+          if(x.summary.automaticSnapApplied!==false||x.summary.editApplied!==false||x.summary.productionReady!==false) throw new Error('automatic edit promotion');
+          if(x.evidenceBoundary.remotionStudioGuiActual!=='NOT_RUN'||x.evidenceBoundary.palmierGuiActual!=='NOT_RUN'||x.evidenceBoundary.macDaVinciGuiActual!=='NOT_RUN') throw new Error('GUI Actual boundary');
+          NODE
+      - name: Strict current selection passes
+        run: node --no-warnings motion-studio/scripts/verify-wedding-project-bgm-rhythm-human-selection-currentness.mts --selection=/tmp/bgm-human-selection/selection-receipt.json --strict-current --output=/tmp/bgm-human-selection/selection-current.json
+      - name: Alignment drift makes Human selection STALE
+        run: |
+          printf '\n' >> /tmp/bgm-human-selection/alignment.json
+          if node --no-warnings motion-studio/scripts/verify-wedding-project-bgm-rhythm-human-selection-currentness.mts --selection=/tmp/bgm-human-selection/selection-receipt.json --strict-current --output=/tmp/bgm-human-selection/selection-stale.json; then
+            echo 'expected old Human selection to become STALE' >&2; exit 1
+          fi
+          grep -q 'ALIGNMENT_SHA_DRIFT' /tmp/bgm-human-selection/selection-stale.json
+      - name: Non-candidate cue/event pair fails closed
+        run: |
+          cp /tmp/bgm-human-selection/alignment.json /tmp/bgm-human-selection/alignment-restored.json
+          sed -i '$d' /tmp/bgm-human-selection/alignment-restored.json || true
+          ALIGNMENT_SHA=$(sha256sum /tmp/bgm-human-selection/alignment-restored.json | awk '{print $1}')
+          cat > /tmp/bgm-human-selection/currentness-restored.json <<JSON
+          {"schemaVersion":"wedding-movie-bgm-rhythm-alignment-currentness/v1","authority":"LIVE_REVALIDATION_OF_BGM_RHYTHM_ALIGNMENT_AGAINST_CURRENT_RHYTHM_AND_AUDIO","projectId":"opening","state":"CURRENT","source":{"alignmentSha256":"${ALIGNMENT_SHA}"},"checks":{"all":true},"mismatches":[]}
+          JSON
+          cat > /tmp/bgm-human-selection/invalid-pair.json <<JSON
+          {"schemaVersion":"wedding-movie-human-bgm-rhythm-selection/v1","projectId":"opening","alignmentSha256":"${ALIGNMENT_SHA}","humanSelected":true,"selectedEventId":"scene:intro:end","selectedCueId":"missing-cue","reviewer":"HUMAN_FIXTURE_ONLY","reviewedAt":"2026-09-01T00:00:00.000Z"}
+          JSON
+          if node --no-warnings motion-studio/scripts/wedding-project-bgm-rhythm-human-selection.mts --alignment=/tmp/bgm-human-selection/alignment-restored.json --alignment-currentness=/tmp/bgm-human-selection/currentness-restored.json --selection=/tmp/bgm-human-selection/invalid-pair.json --output=/tmp/bgm-human-selection/invalid.json 2>/tmp/bgm-human-selection/invalid.err; then
+            echo 'expected invalid cue/event pair to block' >&2; exit 1
+          fi
+          grep -q 'BGM_RHYTHM_HUMAN_SELECTION_CUE_NOT_FOUND' /tmp/bgm-human-selection/invalid.err
