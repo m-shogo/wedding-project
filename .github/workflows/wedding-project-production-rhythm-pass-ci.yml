@@ -1,0 +1,72 @@
+name: Wedding Project Production Rhythm Pass CI
+
+on:
+  pull_request:
+    paths:
+      - 'motion-studio/scripts/wedding-project-production-rhythm-pass.mts'
+      - '.github/workflows/wedding-project-production-rhythm-pass-ci.yml'
+  workflow_dispatch:
+
+jobs:
+  rhythm-pass:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Build current rendered preview fixture
+        run: |
+          mkdir -p /tmp/rhythm
+          printf 'rendered-real-media-preview-fixture' > /tmp/rhythm/opening.mp4
+          RENDER_SHA=$(sha256sum /tmp/rhythm/opening.mp4 | awk '{print $1}')
+          cat > /tmp/rhythm/preview.json <<JSON
+          {
+            "schemaVersion":"wedding-movie-project-real-media-preview/v1",
+            "authority":"DERIVED_FROM_CURRENT_SELECTED_SCENES_AND_PRODUCTION_READINESS_AUDIT",
+            "projectId":"opening",
+            "fps":30,
+            "scenes":[
+              {"sceneId":"intro","sourceRevision":"r1","patternId":"mask","productionRole":"TITLE_REVEAL","timing":{"revision":"t1"},"startFrame":0,"endFrameExclusive":30,"durationFrames":30,"transitionInFrames":0,"transitionOutFrames":6},
+              {"sceneId":"travel","sourceRevision":"r2","patternId":"push","productionRole":"PHOTO_MONTAGE","timing":{"revision":"t2"},"startFrame":24,"endFrameExclusive":114,"durationFrames":90,"transitionInFrames":6,"transitionOutFrames":12},
+              {"sceneId":"close","sourceRevision":"r3","patternId":"hold","productionRole":"ENDING_HOLD","timing":{"revision":"t3"},"startFrame":102,"endFrameExclusive":282,"durationFrames":180,"transitionInFrames":12,"transitionOutFrames":0}
+            ],
+            "transitions":[
+              {"fromSceneId":"intro","toSceneId":"travel","transition":"CROSS_DISSOLVE","durationFrames":6,"sourceStatus":"HUMAN_SELECTED"},
+              {"fromSceneId":"travel","toSceneId":"close","transition":"CROSS_DISSOLVE","durationFrames":12,"sourceStatus":"HUMAN_SELECTED"}
+            ],
+            "timeline":{"totalFrames":282,"durationSeconds":9.4},
+            "output":"/tmp/rhythm/opening.mp4",
+            "render":{"state":"RENDERED","sha256":"${RENDER_SHA}","bytes":35},
+            "summary":{"allRealMediaBoundCurrent":true,"framingCurrent":true,"timingCurrent":true,"bgmCurrent":true,"productionReady":false},
+            "evidenceBoundary":{"remotionStudioGuiActual":"NOT_RUN","palmierGuiActual":"NOT_RUN","macDaVinciGuiActual":"NOT_RUN","productionReady":false}
+          }
+          JSON
+      - name: Generate production rhythm pass
+        run: |
+          node --no-warnings motion-studio/scripts/wedding-project-production-rhythm-pass.mts --preview-manifest=/tmp/rhythm/preview.json --output=/tmp/rhythm/rhythm.json
+      - name: Verify timeline math and fail-closed Human boundary
+        run: |
+          node --input-type=module <<'NODE'
+          import {readFileSync} from 'node:fs';
+          const value=JSON.parse(readFileSync('/tmp/rhythm/rhythm.json','utf8'));
+          if(value.schemaVersion!=='wedding-movie-production-rhythm-pass/v1') throw new Error('schema');
+          if(value.authority!=='DERIVED_WHOLE_PROJECT_RHYTHM_MAP_FROM_CURRENT_RENDERED_REAL_MEDIA_PREVIEW') throw new Error('authority');
+          if(value.timeline.totalFrames!==282||value.timeline.rawSceneFrames!==300||value.timeline.crossDissolveOverlapFrames!==18) throw new Error('overlap accounting');
+          if(Math.abs(value.timeline.durationSeconds-9.4)>1e-9) throw new Error('duration');
+          if(value.scenes[1].exclusiveFrames!==72) throw new Error('exclusive frames');
+          if(value.humanReview.performed!==false||Object.values(value.humanReview.axes).some((x)=>x!=='NOT_RUN')) throw new Error('Human review auto-promotion');
+          if(value.summary.humanRhythmReview!=='NOT_RUN'||value.summary.productionReady!==false) throw new Error('summary boundary');
+          if(value.evidenceBoundary.remotionStudioGuiActual!=='NOT_RUN'||value.evidenceBoundary.palmierGuiActual!=='NOT_RUN'||value.evidenceBoundary.macDaVinciGuiActual!=='NOT_RUN') throw new Error('GUI boundary');
+          if(!value.mechanicalReviewCues.some((x)=>x.code==='SHORT_SCENE_REVIEW_CUE')) throw new Error('short cue missing');
+          if(!value.mechanicalReviewCues.some((x)=>x.code==='ADJACENT_DURATION_JUMP_REVIEW_CUE')) throw new Error('jump cue missing');
+          NODE
+      - name: Render SHA drift blocks
+        run: |
+          printf 'tampered' >> /tmp/rhythm/opening.mp4
+          if node --no-warnings motion-studio/scripts/wedding-project-production-rhythm-pass.mts --preview-manifest=/tmp/rhythm/preview.json --output=/tmp/rhythm/stale.json 2>/tmp/rhythm/stale.err; then
+            echo 'expected render SHA drift to block' >&2
+            exit 1
+          fi
+          grep -q 'PRODUCTION_RHYTHM_RENDER_SHA_DRIFT' /tmp/rhythm/stale.err
