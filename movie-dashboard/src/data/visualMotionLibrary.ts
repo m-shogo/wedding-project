@@ -606,6 +606,8 @@ function kitPresetToPattern(preset: StartMotionPreset): MotionPatternRecord {
           ? ["preview-cut-match-shape-source-actual", "preview-cut-match-shape-concept"]
           : preset.id === "whip-source-matched"
             ? ["preview-whip-source-matched-source-actual", "preview-whip-source-matched-concept"]
+            : preset.id === "photo-static-hero"
+              ? ["preview-photo-static-hero-davinci-actual", "preview-photo-static-hero-concept"]
         : [`preview-${preset.id}-concept`],
     reuseEvidence: {
       searchedExistingPatterns: true,
@@ -716,6 +718,23 @@ function kitPresetToImplementation(preset: StartMotionPreset): MotionImplementat
       studioRequired: false,
       verified: true,
       notes: "専用Resolve projectで1280x720 / 24fps / 95framesを構築。Text+単体ではなくFusion Merge後のEXR 118framesをResolve Saverで実Renderし、その先頭95framesをH.264へ収録。ffprobe・SHA-256・frame 0/5/11/50/94 pixel oracle・通常速度目視QAを通過。位置/scale motionはなくBlendだけが0→1へ変化する。",
+    };
+  }
+  if (preset.id === "photo-static-hero") {
+    return {
+      id: "impl-photo-static-hero",
+      patternId: "photo-static-hero",
+      kind: "DAVINCI_EDIT_NATIVE",
+      status: "PRODUCTION_READY",
+      method: "DaVinci Resolve Edit page native timeline。写真/動画クリップをそのままappendし、pan・zoom・keyframeを一切追加しない。",
+      artifactType: "NONE",
+      artifactPath: null,
+      installed: true,
+      tested: true,
+      resolveVersion: "21.0.4.5",
+      studioRequired: false,
+      verified: true,
+      notes: "専用Resolve project (MotionZukan_HeroStill_Actual_20260901_Claude) で1280x720 / 30fps timelineへrepo-stock-v1.mp4を120frame(4.0秒)appendしただけの状態でDeliverから実Render。Fusion/Text+/keyframeは未使用。ffprobeでh264 1280x720 30fps 4.032秒を確認済み。デモstock素材のため本人写真での最終採用判断は別ゲート。",
     };
   }
   if (preset.id === "cut-match-shape" || preset.id === "whip-source-matched") {
@@ -905,6 +924,22 @@ motionPreviews.push({
   resolveVersion: null,
   verified: true,
   notes: "異なる列車窓動画の実camera motion区間をframe 12でnative cut。前後とも背景が左へ流れることをpixel shiftで確認した。本人素材の採用承認やProduction Authorityではない。",
+});
+motionPreviews.push({
+  id: "preview-photo-static-hero-davinci-actual",
+  patternId: "photo-static-hero",
+  sourceType: "ACTUAL_DAVINCI_RENDER",
+  status: "VERIFIED",
+  freshness: "CURRENT",
+  assetPath: "/motion-previews/photo-static-hero/davinci-actual-v1.mp4",
+  posterPath: "/motion-previews/photo-static-hero/davinci-actual-v1-poster.png",
+  generatedBy: "DaVinci Resolve Free 21.0.4.5 / native Edit page timeline (no Fusion/keyframes) / Deliver page render",
+  generatedAt: "2026-09-01T15:30:00+09:00",
+  implementationId: "impl-photo-static-hero",
+  sampleAssetSetId: "sample-generic-hero-photo-v1",
+  resolveVersion: "21.0.4.5",
+  verified: true,
+  notes: "repo-stock-v1.mp4を1280x720 / 30fps timelineへ120frame(4.0秒)appendしただけの静止Hero。pan/zoom/keyframeは一切追加していない。ffprobeでh264 1280x720 30/1 4.032秒を確認済み。デモstock素材のため本人写真での最終採用判断は別ゲート。",
 });
 motionPreviews.push(...kitPatternsExcludingMaskSlide.map(kitPresetToPreview));
 

@@ -185,4 +185,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log(`Visual Motion Library contracts OK (${actualMediaState.mode === "COMPLETE" ? "media verified" : "code-only; local media absent"}): 3 native-app Actuals, 2 source-media Actual TESTED renders, independent pixel-oracle evidence, and separate Concept assets are registered; Human Master Scene values remain the source of truth.`);
+console.log(`Visual Motion Library contracts OK (${actualMediaState.mode === "COMPLETE" ? "media verified" : "code-only; local media absent"}): 4 native-app Actuals (mask-reveal, quiet-caption, cut-hard-accent, photo-static-hero), 2 source-media Actual TESTED renders, independent pixel-oracle evidence, and separate Concept assets are registered; Human Master Scene values remain the source of truth.`);
