@@ -26,7 +26,7 @@
 7. **DaVinci Resolveへ実際にimportした。** 新規project `MotionZukan_PalmierFcpxmlImport_20260902_Claude` を作成し、File → 読み込み → タイムライン で上記`.fcpxml`を指定。
    - Import前のXMLロードダイアログの時点で、Resolveがtimeline名`MZ_StaRt_Sequence_20260902`・解像度1280x720・30fpsを正しく読み取っていることを確認。
    - Import後、実際のtimelineにV1(画像3clip)・V2(テキスト3clip「WELC...」「GO!」「SHOG...」)の2trackが正しい順序・正しいframe位置で再構築されていることを確認(V2はtimeline表示上V1の上にスクロールしないと見えない位置にあった)。
-   - **一方、画像clip(matte-6826AF6B.png)はDaVinci上で「メディアオフライン」表示になった。** 実file自体は参照パス(`~/Documents/Palmier Pro/....palmier/media/matte-6826AF6B.png`)に確かに存在する(`ls`で確認済み)ため、パスの誤りではなくDaVinci側のrelink処理の問題。今回はrelinkの原因追及まではせず、構造(timeline/track/clip位置/text内容)の転送確認を主目的として区切った。
+   - **一方、画像clip(matte-6826AF6B.png)はDaVinci上で「メディアオフライン」表示になった。** 切り分けのため、同じファイルをFile → 読み込み → メディアで直接importしたところ問題なくthumbnailが出た(Go-to-folderで同じ絶対pathを指定)。**つまりファイル自体・パス・macOSのfile access権限は問題なく、FCPXML importのrelink処理固有の問題と判明した。**「コンフォームロック有効」を対象clipで解除し、「ビンから再コンフォーム」(ファイル名マッチ・タイト)を実行したが、それでも解消しなかった(同名の2つのbin item — offline版と直接importした正常版 — の間でreconformがどちらへ照合したか、または別の理由かは未確認)。timeline構造・text内容・frame位置は正しく転送されている一方、この特定の再リンク手順では画像を復旧できなかった。
 
 ## Scene → Palmierフィールド対応(今回検証した範囲)
 
@@ -48,6 +48,6 @@
 
 ## 次にやるなら
 
-1. **最優先**: FCPXML importでのmedia offline問題を解決する。原因候補: (a) パスの`%20`エンコードをDaVinciが正しく解釈しない、(b) `.palmier`パッケージ内へのfile accessがsandboxで制限される、(c) 別の理由で単純な「メディアの再リンク」操作で直るだけかもしれない(今回は追跡を打ち切った)。この解決なしでは、Palmier区間で置いた素材がDaVinci側で見えないままになる。
+1. **最優先**: FCPXML importでのmedia offline問題を解決する。**(b)のfile access権限は今回の追加検証で除外済み**(同一fileの直接importは成功した)。残る原因候補: (a) FCPXML内`file://`パスの`%20`エンコードをDaVinci側のFCPXML parserだけが正しく解釈しない、(c) 「ビンから再コンフォーム」が同名2 bin item(offline版/正常版)のうちoffline版へ照合してしまっている可能性(bin側でoffline版を削除してから正常版のみで再コンフォームを試す等)。この解決なしでは、Palmier区間で置いた素材がDaVinci側で見えないままになる。
 2. 実写真がまだ無い今のうちに、Composerの3〜5 Sceneをまとめて一度にPalmierへ流し込む小さなNode script化を検討する(手作業のMCP呼び出し列を、繰り返し可能な手順書またはscriptへ落とす)。
 3. StaRt 14 sectionのうち、まだ試していない残り11 sectionでも同じ手順が通ることを確認する。
