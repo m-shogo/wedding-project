@@ -122,8 +122,8 @@ if (handoff.includes("MOTION:type-mask-reveal") || page.includes("MOTION:type-ma
 if (workspace.includes('label="Editable Source of Truth JSON"')) errors.push("JSON serialization must not be presented to the user as the Source of Truth");
 
 requireAll(page, [
-  'Native App Actual 3件を、検証根拠と一緒に公開する',
-  'Mask RevealとQuiet CaptionはDaVinci Actual、Hard Cut AccentはPalmier Actualまで到達済み',
+  'Native App Actual 5件を、検証根拠と一緒に公開する',
+  'Mask Reveal・Quiet Caption・Static Hero・Word PunchはDaVinci Actual、Hard Cut AccentはPalmier Actualまで到達済み',
   '人間が理解できるScene Duration / Delay / Hold / Position / Direction等を正本', 'MaskRevealEditableWorkspace',
   'CONCEPT PREVIEW / 実装確認前', 'JUST-IN-TIME LEARNING', 'この演出で学べること', 'getMotionLearningBundle(pattern.id)',
   'learning.fusionRecipes.map', 'getLatestPreviewEvidence(preview.id)', 'ACTUAL ${actualRenderLabel(previewEvidence.sourceType)} RENDER QA ✓ / IMPLEMENTATION EVIDENCE',
@@ -185,4 +185,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log(`Visual Motion Library contracts OK (${actualMediaState.mode === "COMPLETE" ? "media verified" : "code-only; local media absent"}): 4 native-app Actuals (mask-reveal, quiet-caption, cut-hard-accent, photo-static-hero), 2 source-media Actual TESTED renders, independent pixel-oracle evidence, and separate Concept assets are registered; Human Master Scene values remain the source of truth.`);
+console.log(`Visual Motion Library contracts OK (${actualMediaState.mode === "COMPLETE" ? "media verified" : "code-only; local media absent"}): 5 native-app Actuals (mask-reveal, quiet-caption, cut-hard-accent, photo-static-hero, type-word-punch), 2 source-media Actual TESTED renders, independent pixel-oracle evidence, and separate Concept assets are registered; Human Master Scene values remain the source of truth.`);

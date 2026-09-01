@@ -608,6 +608,8 @@ function kitPresetToPattern(preset: StartMotionPreset): MotionPatternRecord {
             ? ["preview-whip-source-matched-source-actual", "preview-whip-source-matched-concept"]
             : preset.id === "photo-static-hero"
               ? ["preview-photo-static-hero-davinci-actual", "preview-photo-static-hero-concept"]
+              : preset.id === "type-word-punch"
+                ? ["preview-type-word-punch-davinci-actual", "preview-type-word-punch-concept"]
         : [`preview-${preset.id}-concept`],
     reuseEvidence: {
       searchedExistingPatterns: true,
@@ -757,6 +759,23 @@ function kitPresetToImplementation(preset: StartMotionPreset): MotionImplementat
       notes: isMatchShape
         ? "1280x720 / 30fps / 90framesのsource-media Actual renderでframe 44→45を検証。太陽中心は(646,284)→(643,300)、cut差分49.91、同一shot内差分2.10/2.80で、crossfadeなしのshape matchを確認した。"
         : "1280x720 / 30fps / 24framesのsource-media Actual renderで、cut前後の水平shiftを-164px / -112pxと測定。両shotとも背景が左へ流れ、frame 11→12は補間なしで切り替わる。アプリ固有操作ではなく素材適合性のTESTED証拠。",
+    };
+  }
+  if (preset.id === "type-word-punch") {
+    return {
+      id: "impl-type-word-punch",
+      patternId: "type-word-punch",
+      kind: "DAVINCI_TEXT_PLUS",
+      status: "PRODUCTION_READY",
+      method: "DaVinci Resolve Text+をFusion Mergeへ合成し、Blendだけを0→1→0で高速に往復させる単発パンチ。位置・scaleは固定。",
+      artifactType: "NONE",
+      artifactPath: null,
+      installed: true,
+      tested: true,
+      resolveVersion: "21.0.4.5",
+      studioRequired: false,
+      verified: true,
+      notes: "専用Resolve projectで1280x720 / 24fps timelineへFusion Saver(EXR)を直接render。Blend 0(frame0)→1(frame2)→1(frame8)→0(frame11)の単発パンチをffmpegでH.264化。frame0/2/11で無地/GO!表示/無地を目視確認済み。Deliverページのタイムラインrenderはこのproject構成でFusion効果を反映しない既知の不具合があったため、Fusion内蔵Saverでの直接renderに切り替えた。",
     };
   }
   const implementationTested = TESTED_REMOTION_IMPLEMENTATIONS.has(preset.id);
@@ -940,6 +959,22 @@ motionPreviews.push({
   resolveVersion: "21.0.4.5",
   verified: true,
   notes: "repo-stock-v1.mp4を1280x720 / 30fps timelineへ120frame(4.0秒)appendしただけの静止Hero。pan/zoom/keyframeは一切追加していない。ffprobeでh264 1280x720 30/1 4.032秒を確認済み。デモstock素材のため本人写真での最終採用判断は別ゲート。",
+});
+motionPreviews.push({
+  id: "preview-type-word-punch-davinci-actual",
+  patternId: "type-word-punch",
+  sourceType: "ACTUAL_DAVINCI_RENDER",
+  status: "VERIFIED",
+  freshness: "CURRENT",
+  assetPath: "/motion-previews/type-word-punch/davinci-actual-v1.mp4",
+  posterPath: "/motion-previews/type-word-punch/davinci-actual-v1-poster.png",
+  generatedBy: "DaVinci Resolve Free 21.0.4.5 / native Fusion Text+ + Merge / Saver EXR render",
+  generatedAt: "2026-09-01T15:50:00+09:00",
+  implementationId: "impl-type-word-punch",
+  sampleAssetSetId: "sample-generic-typography-v1",
+  resolveVersion: "21.0.4.5",
+  verified: true,
+  notes: "GO!をBlend 0→1(frame2)→1(frame8)→0(frame11)で単発パンチ表示。位置・サイズは固定でBlendのみ動く。Resolve Fusion Saverの直接EXR出力をffmpegでH.264化し、frame0/2/11の目視で無地→パンチ→無地の切り替わりを確認済み。",
 });
 motionPreviews.push(...kitPatternsExcludingMaskSlide.map(kitPresetToPreview));
 
