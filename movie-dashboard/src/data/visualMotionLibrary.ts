@@ -610,6 +610,10 @@ function kitPresetToPattern(preset: StartMotionPreset): MotionPatternRecord {
               ? ["preview-photo-static-hero-davinci-actual", "preview-photo-static-hero-concept"]
               : preset.id === "type-word-punch"
                 ? ["preview-type-word-punch-davinci-actual", "preview-type-word-punch-concept"]
+                : preset.id === "photo-small-push"
+                  ? ["preview-photo-small-push-davinci-actual", "preview-photo-small-push-concept"]
+                  : preset.id === "flash-one-frame-soft"
+                    ? ["preview-flash-one-frame-soft-davinci-actual", "preview-flash-one-frame-soft-concept"]
         : [`preview-${preset.id}-concept`],
     reuseEvidence: {
       searchedExistingPatterns: true,
@@ -720,6 +724,40 @@ function kitPresetToImplementation(preset: StartMotionPreset): MotionImplementat
       studioRequired: false,
       verified: true,
       notes: "専用Resolve projectで1280x720 / 24fps / 95framesを構築。Text+単体ではなくFusion Merge後のEXR 118framesをResolve Saverで実Renderし、その先頭95framesをH.264へ収録。ffprobe・SHA-256・frame 0/5/11/50/94 pixel oracle・通常速度目視QAを通過。位置/scale motionはなくBlendだけが0→1へ変化する。",
+    };
+  }
+  if (preset.id === "flash-one-frame-soft") {
+    return {
+      id: "impl-flash-one-frame-soft",
+      patternId: "flash-one-frame-soft",
+      kind: "DAVINCI_FUSION",
+      status: "PRODUCTION_READY",
+      method: "DaVinci Resolve FusionのBackground(白)をMergeでBlend合成し、カット点付近だけBlendを0→0.85→0で素早く往復させるソフトフラッシュ。",
+      artifactType: "NONE",
+      artifactPath: null,
+      installed: true,
+      tested: true,
+      resolveVersion: "21.0.4.5",
+      studioRequired: false,
+      verified: true,
+      notes: "専用Resolve projectで1280x720 / 30fps timelineへFusion Saver(EXR)を直接render。Blend 0(frame24)→0.85(frame27)→0(frame30)の3frame往復。frame24/27の目視で通常画→白フラッシュの切り替わりを確認済み。",
+    };
+  }
+  if (preset.id === "photo-small-push") {
+    return {
+      id: "impl-photo-small-push",
+      patternId: "photo-small-push",
+      kind: "DAVINCI_FUSION",
+      status: "PRODUCTION_READY",
+      method: "DaVinci Resolve Fusion Transformを写真クリップへ適用し、Sizeだけを1.00→1.05でframe 0〜119へ線形keyframe。位置・回転は固定。",
+      artifactType: "NONE",
+      artifactPath: null,
+      installed: true,
+      tested: true,
+      resolveVersion: "21.0.4.5",
+      studioRequired: false,
+      verified: true,
+      notes: "専用Resolve projectで1280x720 / 30fps timelineへFusion Saver(EXR)を直接render。Transform.Sizeを0(1.00)→119(1.05)でkeyframe。frame0/118のpixel差分(サンプリング平均abs diff 1.4→17.2、watermark帯の見かけ幅拡大)で寄りを確認済み。Deliverページのタイムラインrenderはこのproject構成でTransform keyframeを反映しない既知の不具合があったため、Fusion内蔵Saverでの直接renderに切り替えた。",
     };
   }
   if (preset.id === "photo-static-hero") {
@@ -975,6 +1013,38 @@ motionPreviews.push({
   resolveVersion: "21.0.4.5",
   verified: true,
   notes: "GO!をBlend 0→1(frame2)→1(frame8)→0(frame11)で単発パンチ表示。位置・サイズは固定でBlendのみ動く。Resolve Fusion Saverの直接EXR出力をffmpegでH.264化し、frame0/2/11の目視で無地→パンチ→無地の切り替わりを確認済み。",
+});
+motionPreviews.push({
+  id: "preview-photo-small-push-davinci-actual",
+  patternId: "photo-small-push",
+  sourceType: "ACTUAL_DAVINCI_RENDER",
+  status: "VERIFIED",
+  freshness: "CURRENT",
+  assetPath: "/motion-previews/photo-small-push/davinci-actual-v1.mp4",
+  posterPath: "/motion-previews/photo-small-push/davinci-actual-v1-poster.png",
+  generatedBy: "DaVinci Resolve Free 21.0.4.5 / native Fusion Transform / Saver EXR render",
+  generatedAt: "2026-09-01T16:05:00+09:00",
+  implementationId: "impl-photo-small-push",
+  sampleAssetSetId: "sample-generic-hero-photo-v1",
+  resolveVersion: "21.0.4.5",
+  verified: true,
+  notes: "Transform.Sizeを1.00(frame0)→1.05(frame119)で線形push。Resolve Fusion Saverの直接EXR出力をffmpegでH.264化。frame0/118のサンプリング平均pixel差分1.4→17.2(max 217)で寄りを確認済み。",
+});
+motionPreviews.push({
+  id: "preview-flash-one-frame-soft-davinci-actual",
+  patternId: "flash-one-frame-soft",
+  sourceType: "ACTUAL_DAVINCI_RENDER",
+  status: "VERIFIED",
+  freshness: "CURRENT",
+  assetPath: "/motion-previews/flash-one-frame-soft/davinci-actual-v1.mp4",
+  posterPath: "/motion-previews/flash-one-frame-soft/davinci-actual-v1-poster.png",
+  generatedBy: "DaVinci Resolve Free 21.0.4.5 / native Fusion Background + Merge / Saver EXR render",
+  generatedAt: "2026-09-01T16:09:00+09:00",
+  implementationId: "impl-flash-one-frame-soft",
+  sampleAssetSetId: "sample-generic-hero-photo-v1",
+  resolveVersion: "21.0.4.5",
+  verified: true,
+  notes: "白Backgroundとの合成をBlend 0(frame24)→0.85(frame27)→0(frame30)で往復させたソフトフラッシュ。Resolve Fusion Saverの直接EXR出力をffmpegでH.264化し、frame24/27の目視で切り替わりを確認済み。",
 });
 motionPreviews.push(...kitPatternsExcludingMaskSlide.map(kitPresetToPreview));
 
