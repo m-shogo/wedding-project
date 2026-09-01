@@ -1,223 +1,109 @@
 # V20 Quality Gates
 
-Status: `CANONICAL_V20_QA / RESET_2026-09-01`
+Status: `CANONICAL_V20_QA / P05_FRIENDS_ONLY_2026-09-01`
 
-Highest page-role authority: `V20-CURRENT-PAGE-ARCHITECTURE.md`.
-
-V20 does not use V10/V11/V12 visual scores, old SVG style, old P05 Hawaii-only role, old P07 guide/discovery/schedule role or old P08 closing-message role as current design authority.
+Highest authority: `V20-CURRENT-PAGE-ARCHITECTURE.md`.
 
 ## Gate 0 — Grounding
 
-Pass before structural production:
-- A5 portrait / 8 pages confirmed;
-- wedding date `2026.10.24` confirmed;
-- P08 barcode digits `2026102400000` confirmed;
-- current authority chain read;
-- missing personal facts identified;
-- no page depends on fabricated Q&A/dates/captions;
-- current P01–P08 architecture/manual/Bible exist.
+Pass when A5/8 pages, `2026.10.24`, barcode `2026102400000`, current authority chain and all missing personal facts are explicit.
 
 ## Gate 1 — Photo inventory
 
 Pass when:
-- candidate photos are inventoried by current page role;
-- P04 has real travel candidates or explicit gaps;
-- P05 has family/friend candidates or explicit gaps;
-- P06 has real-life candidates or explicit gaps;
-- P07 has at least one strong closing candidate;
-- hero/support roles are not duplicated blindly.
+- P04 has verified travel sources or explicit gaps
+- P05 has separate SHOGO FRIENDS and SHIORI FRIENDS source pools or explicit gaps
+- P06 has real-life sources or explicit gaps
+- P07 has a closing candidate
 
-Do not solve source gaps with invented memories.
+P05 must not require a family pool or giant hero pool.
 
-## Gate 2 — Silhouette / page identity
+## Gate 2 — Page identity
 
-At thumbnail scale:
-- P01 = strong magazine cover;
-- P02 = profile/people feature;
-- P03 = quieter story feature;
-- P04 = strongest travel-memory interior page;
-- P05 = warm family/friend people-memory page;
-- P06 = candid real-life page;
-- P07 = calm closing/message page;
-- P08 = unmistakably sparse magazine back cover.
+At thumbnail:
+- P01 strong cover
+- P02 profile
+- P03 story
+- P04 travel peak
+- P05 friends-only split page
+- P06 candid real life
+- P07 calm closing
+- P08 sparse back cover
 
-Immediate fail if:
-- P05 still reads as Hawaii-only feature;
-- P07 reads as `TODAY'S TRAVEL GUIDE`, `11 DESTINATIONS`, map/discovery/timetable;
-- P08 reads as the main thank-you feature.
+P05 hard fail if:
+- family/FAMILY appears
+- one giant hero dominates
+- SHOGO/SHIORI clusters are not distinguishable
+- old Hawaii/proposal page returns
 
 ## Gate 3 — Reading hierarchy
 
-For each interior page define:
-1. first read;
-2. second read;
-3. third read;
-4. factual copy;
-5. optional micro discovery.
+P05 required path:
+`友達との思い出 → SHOGO FRIENDS / SHIORI FRIENDS → photos → captions`.
 
-P08 may deliberately have only 1–2 reading steps.
+There is no page-wide P05 hero step.
 
-Fail if 4+ large elements compete equally.
+## Gate 4 — 75% density calibration
 
-## Gate 4 — 75% clutter calibration
+Pass when magazine character remains full-strength while micro clutter is reduced. Major photos stay visible, calm fields are allowed, and stickers are not used to fill space.
 
-The current target is not maximum density.
+## Gate 5 — Anti-UI
 
-Pass when:
-- energetic pages still feel like edited Japanese travel magazine pages;
-- major photos remain visible;
-- only 2–3 meaningful secondary events compete below the first read;
-- calm fields are allowed to remain calm;
-- micro details reward browsing without filling every gap.
-
-Fail when:
-- stickers are added only because space exists;
-- copy/photo sizes shrink to accommodate more content;
-- every edge is active;
-- every photo has a different ornament;
-- the page looks like a scrapbook kit rather than a magazine.
-
-## Gate 5 — Anti-UI / editorial behavior
-
-Pass when:
-- equal card grids are avoided;
-- scale classes vary;
-- photo treatments vary by semantic role;
-- overlaps are intentional;
-- calm reading support is integrated;
-- repeated components do not determine the page.
-
-Immediate revision triggers:
-- three or more equal rounded cards;
-- same radius/shadow everywhere;
-- old flat SVG/icon-pack aesthetics;
-- identical adjacent page structures.
+P05 must not become two identical rigid cards. The two clusters should be editorial territories with related DNA and different photo rhythms.
 
 ## Gate 6 — Authentic magazine energy
 
-Ask:
-- is there one dominant title/hero event?;
-- does photography carry major page weight?;
-- do title/photo/frame/vessel relationships feel physically edited?;
-- does the page still feel rich before body copy is read?;
-- is the current density appropriate for that page's role rather than maximized automatically?;
-- does the page look like a real printed editorial page rather than a wedding template?
-
-P01 may use `るるぶ WEDDING` under current private-homage direction.
+Ask whether title/photo/frame relationships feel edited and printed rather than like a web template. `RURUBU FEEL = 100%` while density stays within the page target.
 
 ## Gate 7 — Content truth
 
-Fail final output if it invents:
-- relationship dates;
-- Q&A answers;
-- family/friend identities or relationships;
-- anecdotes;
-- destination facts;
-- venue facts;
-- QR/transport data;
-- publisher/price/ISBN/JAN commerce claims.
+Fail if final-looking output invents dates, Q&A answers, friend identities/relationships/anecdotes, travel facts, venue facts or commerce metadata.
 
 ## Gate 8 — Editability
 
-Pass when:
-- authoritative text is native/editable;
-- important real photos are independently replaceable;
-- frame/decor remains separable from photo source;
-- final master is not one flattened bitmap;
-- one-shot page generations remain art-direction proofs only.
+Pass when factual text is native/editable, real photos individually replaceable and proof images are not the final flattened master.
 
-## Gate 9 — Three-scale review
+## Gate 9 — A5 readability
 
-Review at:
-1. thumbnail;
-2. normal screen reading;
-3. A5 actual-size equivalent.
-
-At A5, group-photo faces on P05 must remain reasonably recognizable and P08 barcode digits must remain legible.
+P05 friend faces must remain recognizable at A5. If 6–8 photos become too small, reduce count before shrinking all images.
 
 ## Gate 10 — Spread review
 
-P02–P03:
-- clear `WHO → STORY` rhythm;
-- not mirrored templates.
+P04–P05 must read:
+`PLACES WE REMEMBER → FRIENDS WE REMEMBER`.
 
-P04–P05:
-- clear `PLACES WE REMEMBER → PEOPLE WE REMEMBER` relationship;
-- P04 is travel-led;
-- P05 is people-led;
-- no requirement for an old route crossing the fold;
-- no old Hawaii/proposal P05 visual role.
+P04 may have one strong travel hero.
+P05 must not have one giant hero; it uses SHOGO and SHIORI friend clusters.
 
-P06–P07:
-- P06 retains playful image energy;
-- P07 visibly slows down and closes emotionally;
-- no P07 destination/discovery system.
+## Gate 11 — Source provenance
 
-P08:
-- reviewed independently as back cover.
+Record source locator/final-proxy state/effective PPI for adopted photos.
 
-## Gate 11 — Photo resolution / provenance
+## Gate 12 — Copy stress
 
-Before final promotion:
-- source locator recorded;
-- final/proxy state recorded;
-- effective PPI checked;
-- no reference-only image used as production art;
-- mystery external assets rejected.
+P05 captions must stay short and grounded. Do not add person labels merely to fill space.
 
-## Gate 12 — Copy / vessel stress
+## Gate 13 — P08 barcode
 
-Stress-test:
-- P02 profile facts near intended maximum;
-- P03 story paragraphs near working maximum;
-- P04 travel captions without shrinking below comfortable type;
-- P05 short family/friend captions without identity invention;
-- P06 captions;
-- P07 closing message near 100 Japanese characters if needed;
-- P08 minimal meta + exact barcode digits.
+Visible digits exactly `2026102400000`. Do not silently modify for EAN-13.
 
-Human copy may be shortened/rebroken to fit a strong vessel. Do not solve overflow by making A5 text microscopic.
+## Gate 14 — Print
 
-## Gate 13 — P08 barcode integrity
-
-Required visible digits:
-`2026102400000`
-
-If encoded, use a format that can preserve those exact digits such as Code 128-compatible encoding.
-
-Do not silently convert to a different EAN-13 check digit.
-
-This barcode is decorative/private-publication metadata, not a claim of real commercial registration.
-
-## Gate 14 — Print geometry
-
-Before PRINT_READY:
-- bleed/trim/safe verified;
-- center-fold risks checked;
-- exported PDF dimensions verified;
-- fonts/images reviewed;
-- printer profile/CMYK/preflight applied;
-- physical proof inspected where possible.
-
-`FIGMA COMPLETE != PRINT READY`.
+Verify bleed/trim/safe, fold risk, export dimensions, fonts/images, CMYK/profile/preflight and physical proof before `PRINT_READY`.
 
 ## Correction priority
 
-When a page feels weak, fix in this order:
-1. current page job;
-2. content selection;
-3. hero/photo choice;
-4. title scale;
-5. composition silhouette;
-6. reading path;
-7. photo inequality;
-8. calm/support field;
-9. overlap/edge activity;
-10. color jobs;
-11. medium editorial units;
-12. micro discoveries;
-13. micro-spacing.
+1. page role
+2. content selection
+3. photo selection/count
+4. title hierarchy
+5. silhouette
+6. reading path
+7. photo inequality
+8. calm space
+9. overlap
+10. color
+11. medium units
+12. micro detail
 
-Never start by adding more stickers.
-
-`CURRENT PAGE ROLE + 75% EDITED DENSITY > LEGACY LAYOUT CONTINUITY.`
+`P05 PASS = FRIENDS ONLY + SHOGO/SHIORI SPLIT + NO GIANT HERO + A5-READABLE FACES.`
