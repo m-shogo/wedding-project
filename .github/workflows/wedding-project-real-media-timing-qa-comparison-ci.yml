@@ -1,0 +1,68 @@
+name: Wedding Project Real Media Timing QA Comparison CI
+
+on:
+  pull_request:
+    paths:
+      - 'motion-studio/scripts/compare-wedding-project-real-media-timing-qa-stills.mts'
+      - '.github/workflows/wedding-project-real-media-timing-qa-comparison-ci.yml'
+  workflow_dispatch:
+
+jobs:
+  timing-comparison:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Build timing-only before-after fixtures
+        run: |
+          mkdir -p /tmp/timing-compare
+          node --input-type=module <<'NODE'
+          import {writeFileSync} from 'node:fs';
+          const mk=(which,revision,sourceRevision,target,computed,frames)=>{
+            const framing={fit:'COVER',focusX:50,focusY:45,scale:1.1,revision:'framing-current'};
+            const timing={sceneId:'scene-a',sourceRevision,targetDurationSeconds:target,computedDurationSeconds:computed,durationFrames:frames,fps:30,revision};
+            const rows=['SCENE_START_SAFE','SCENE_MID','SCENE_END_SAFE'].map((kind,i)=>({kind,sceneId:'scene-a',sourceRevision,patternId:'type-mask-reveal',productionRole:'TITLE_REVEAL',mediaSha256:'same-media-sha',framing,framingRevision:framing.revision,timing,timingRevision:timing.revision,frame:i===0?2:i===1?Math.floor((frames-1)/2):frames-3,seconds:0,path:`/tmp/${which}-${kind}.png`,sha256:`${which}-${kind}-sha`}));
+            return {schemaVersion:'wedding-movie-real-media-preview-qa-stills/v1',authority:'DERIVED_VISUAL_QA_ARTIFACTS_FROM_CURRENT_REAL_MEDIA_PREVIEW',projectId:'opening',source:{previewSha256:`preview-${which}`},stills:rows,transitionStills:[],summary:{sourceCurrentVerified:true,framingCurrentVerified:true,timingCurrentVerified:true,humanVisualQa:'NOT_RUN',productionReady:false},evidenceBoundary:{visualQa:'NOT_RUN',remotionStudioGuiActual:'NOT_RUN',palmierGuiActual:'NOT_RUN',macDaVinciGuiActual:'NOT_RUN'}};
+          };
+          writeFileSync('/tmp/timing-compare/before.json',JSON.stringify(mk('before','timing-r1','scene-rev-1',1,1,30),null,2));
+          writeFileSync('/tmp/timing-compare/after.json',JSON.stringify(mk('after','timing-r2','scene-rev-2',1.4,1.4,42),null,2));
+          NODE
+      - name: Compare timing correction
+        run: node --no-warnings motion-studio/scripts/compare-wedding-project-real-media-timing-qa-stills.mts --before-manifest=/tmp/timing-compare/before.json --after-manifest=/tmp/timing-compare/after.json --require-timing-change --output=/tmp/timing-compare/receipt.json
+      - name: Verify isolated timing delta
+        run: |
+          node --input-type=module <<'NODE'
+          import {readFileSync} from 'node:fs';
+          const r=JSON.parse(readFileSync('/tmp/timing-compare/receipt.json','utf8'));
+          if(r.schemaVersion!=='wedding-movie-real-media-timing-qa-comparison/v1'||r.summary.timingChangedScenes!==1||r.summary.sameSceneMediaFramingAuthorityVerified!==true) throw new Error('comparison summary');
+          const s=r.scenes[0];
+          if(!s.timingChanged||s.before.sourceRevision!=='scene-rev-1'||s.after.sourceRevision!=='scene-rev-2') throw new Error('scene revision progression');
+          if(s.before.timing.durationFrames!==30||s.after.timing.durationFrames!==42) throw new Error('timing frames');
+          if(r.evidenceBoundary.humanVisualReviewPerformed!==false||r.evidenceBoundary.remotionStudioGuiActual!=='NOT_RUN'||r.evidenceBoundary.palmierGuiActual!=='NOT_RUN'||r.evidenceBoundary.macDaVinciGuiActual!=='NOT_RUN'||r.evidenceBoundary.productionReady!==false) throw new Error('evidence boundary');
+          NODE
+      - name: Media drift fails closed
+        shell: bash
+        run: |
+          cp /tmp/timing-compare/after.json /tmp/timing-compare/after-media-drift.json
+          node --input-type=module <<'NODE'
+          import {readFileSync,writeFileSync} from 'node:fs'; const p='/tmp/timing-compare/after-media-drift.json'; const m=JSON.parse(readFileSync(p,'utf8')); for(const s of m.stills)s.mediaSha256='different-media'; writeFileSync(p,JSON.stringify(m));
+          NODE
+          if node --no-warnings motion-studio/scripts/compare-wedding-project-real-media-timing-qa-stills.mts --before-manifest=/tmp/timing-compare/before.json --after-manifest=/tmp/timing-compare/after-media-drift.json --require-timing-change 2>/tmp/timing-compare/media.err; then echo 'expected media drift block' >&2; exit 1; fi
+          grep -q 'REAL_MEDIA_TIMING_COMPARE_MEDIA_CHANGED' /tmp/timing-compare/media.err
+      - name: Framing drift fails closed
+        shell: bash
+        run: |
+          cp /tmp/timing-compare/after.json /tmp/timing-compare/after-framing-drift.json
+          node --input-type=module <<'NODE'
+          import {readFileSync,writeFileSync} from 'node:fs'; const p='/tmp/timing-compare/after-framing-drift.json'; const m=JSON.parse(readFileSync(p,'utf8')); for(const s of m.stills){s.framing.focusX=60;s.framing.revision='framing-other';s.framingRevision='framing-other';} writeFileSync(p,JSON.stringify(m));
+          NODE
+          if node --no-warnings motion-studio/scripts/compare-wedding-project-real-media-timing-qa-stills.mts --before-manifest=/tmp/timing-compare/before.json --after-manifest=/tmp/timing-compare/after-framing-drift.json --require-timing-change 2>/tmp/timing-compare/framing.err; then echo 'expected framing drift block' >&2; exit 1; fi
+          grep -q 'REAL_MEDIA_TIMING_COMPARE_FRAMING_CHANGED' /tmp/timing-compare/framing.err
+      - name: No timing change fails when required
+        shell: bash
+        run: |
+          if node --no-warnings motion-studio/scripts/compare-wedding-project-real-media-timing-qa-stills.mts --before-manifest=/tmp/timing-compare/before.json --after-manifest=/tmp/timing-compare/before.json --require-timing-change 2>/tmp/timing-compare/nochange.err; then echo 'expected no-change block' >&2; exit 1; fi
+          grep -q 'REAL_MEDIA_TIMING_COMPARE_NO_TIMING_CHANGE' /tmp/timing-compare/nochange.err
