@@ -1,259 +1,81 @@
 # V20 Page Content Scorecard
 
-Status: `ACTIVE_EDITORIAL_QA`
-
-Primary question:
-
-> If a guest is already seated at the wedding, is this page genuinely worth reading now and worth keeping later?
-
-Scores are editorial risk tools, not final grades.
-
-## Scoring axes
-
-Each page is judged on:
-- `KNOW THEM` — helps guests know the couple;
-- `CONVERSATION` — gives people something to talk about;
-- `TODAY` — relates meaningfully to the actual wedding experience;
-- `KEEP` — still interesting after the wedding;
-- `GROUNDING` — can be completed without invented facts.
-
----
-
-# P01 COVER
-
-Editorial value: `VERY HIGH`
-
-Guest reaction target:
-- “This really feels like a travel magazine about them.”
-
-Keep:
-- couple hero;
-- names/date/Yokohama;
-- 2–4 authentic cover hooks.
-
-Cut:
-- generic wedding slogans;
-- fake tourist rankings;
-- pre-arrival guidance;
-- decorative fake facts.
-
-Risk:
-- cover hooks become generic filler.
-
-Action:
-- every cover hook must point to a real page/story/detail inside the booklet.
-
----
-
-# P02 PROFILE
-
-Editorial value: `HIGH IF PERSONAL / LOW IF GENERIC`
-
-Guest reaction target:
-- “I didn't know that about them.”
-
-Keep only when factual and interesting:
-- hobby/personality contrast;
-- favorite travel/place;
-- food/activity with character;
-- dog/couple-life fact;
-- one surprising/recognizable fact;
-- short real Q&A if strong.
-
-Avoid as default filler:
-- blood type;
-- zodiac;
-- long job description;
-- generic likes/dislikes;
-- ten form-like fields.
-
-Risk:
-- lack of grounded individual facts.
-
-Fallback:
-- more photography + fewer better facts;
-- shared-life/dog module;
-- no fabricated profile grid.
-
----
-
-# P03 OUR STORY
-
-Editorial value: `HIGH`
-
-Guest reaction target:
-- “So that's how they got here.”
-
-Keep:
-- 3–4 memorable episodes;
-- early outings;
-- relationship turning point;
-- proposal;
-- registration/today connection.
-
-Cut:
-- exact dates that do not matter;
-- every small milestone;
-- corporate timeline formatting;
-- generic romance prose.
-
-Risk:
-- current evidence has story categories but not final concise copy.
-
-Action:
-- final copy should prioritize scene/episode over chronology.
-
----
-
-# P04–P05 OUR JOURNEY
-
-Editorial value: `VERY HIGH`
-
-Guest reaction target:
-- “These are their real trips and stories.”
-
-Keep:
-- real Okinawa/Korea/Hawaii photos;
-- one memorable story/detail per destination;
-- Hawaii proposal as emotional peak;
-- Yokohama arrival connection.
-
-Cut:
-- generic destination descriptions;
-- tourist-guide facts unrelated to the couple;
-- fake route/flight numbers;
-- destination modules with no real photo/story.
-
-Risk:
-- real Okinawa/Korea photo pools are still unresolved.
-
-Action:
-- do not freeze those frame geometries until source photos are reviewed.
-
----
-
-# P06 OFF THE MAP / REAL LIFE
-
-Editorial value: `VERY HIGH IF CANDID`
-
-Guest reaction target:
-- “This feels like the two of them.”
-
-Keep:
-- candid/ordinary photos;
-- dogs;
-- funny/relatable moments;
-- activity/food when it has a story;
-- tiny captions.
-
-Cut:
-- another polished destination gallery;
-- influencer-style best-photo-only curation;
-- fake handwritten quotes.
-
-Risk:
-- current Drive inventory has not yet located enough clearly named daily-life/dog real photos.
-
-Action:
-- real-life photo search remains a high-priority source gap.
-
----
-
-# P07 TODAY'S TRAVEL GUIDE / LOOK AROUND
-
-Editorial value: `HIGH IF PHYSICAL / LOW IF GENERIC`
-
-Guest reaction target:
-- “Oh, I can actually see that here.”
-
-Keep:
-- verified travel-theme details physically present today;
-- destination-themed decor/table concept when final;
-- 3–6 curated look-around discoveries;
-- 1 stronger editor's-pick detail with real meaning;
-- today's destination = Yokohama/date anchor.
-
-Cut:
-- dress code;
-- access;
-- timetable;
-- seating function;
-- menu/drink duplication;
-- generic venue introduction;
-- fake hidden details.
-
-Risk:
-- final physical details may evolve before the wedding.
-
-Action:
-- keep all detail text native/editable;
-- lock content later than P02–P06;
-- design should tolerate 3–6 discoveries without redesign.
-
----
-
-# P08 THANK YOU / CONTINUE THE JOURNEY
-
-Editorial value: `MEDIUM-HIGH`
-
-Guest reaction target:
-- “Nice ending; this feels complete.”
-
-Keep:
-- short personal thank-you;
-- calm real photo;
-- names/date;
-- journey-continuation motif.
-
-Cut:
-- leftover facts;
-- duplicated schedule/access/menu;
-- long formal greeting;
-- nonfunctional QR/barcode pretending to be functional.
-
-Risk:
-- generic thank-you wording.
-
-Action:
-- final message should sound like the couple, not a template.
-
----
-
-# Whole-book duplication audit
-
-Each content category gets one main home:
-
-- identity/profile → P02;
-- relationship story → P03;
-- travel destination story → P04–P05;
-- candid everyday personality → P06;
-- physical wedding discoveries → P07;
-- gratitude/closure → P08.
-
-Do not repeat the same story/photo/fact on multiple pages unless the reprise has an editorial purpose.
-
-## Other paper-item boundary
-
-Functional wedding information should remain with the paper item that owns that job.
-
-By default V20 does not duplicate:
-- menu;
-- drink list;
-- seating chart;
-- escort function;
-- RSVP/access;
-- pre-arrival guidance.
-
-## Strongest remaining content needs
-
-Before final copy lock, highest-value inputs are:
-
-1. 4–6 interesting SHOGO facts;
-2. 4–6 interesting SHIORI facts;
-3. concise wording for 3–4 relationship episodes;
-4. real Okinawa/Korea source photos + one story/detail each;
-5. candid/daily-life/dog photo pool;
-6. final physical wedding details for P07;
-7. personal P08 thank-you message.
-
-The design must remain strong if some of these arrive late. Missing content should reduce modules, not trigger fabricated filler.
+Status: `CURRENT / PAGE_ROLES_RESET_2026-09-01`
+
+Highest page-role authority: `V20-CURRENT-PAGE-ARCHITECTURE.md`.
+
+Score each page on whether its content belongs there, not whether the current Figma looks finished.
+
+| Page | Current role | Content focus | Target density | Main risk |
+|---|---|---|---:|---|
+| P01 | Cover | masthead + hero + date + few hooks | 7.5/10 | overfilling the cover |
+| P02 | Profile | two people + short facts | 6/10 | Q&A/profile dump |
+| P03 | Our Story | 3–4 grounded chapters | 5–5.5/10 | corporate timeline / forced dates |
+| P04 | All Travel Memories | real trips gathered on one page | 8/10 | equal destination cards / too many stickers |
+| P05 | Family & Friends | people memories | 7/10 | tiny group photos / invented captions |
+| P06 | Real Life / Best Shots | everyday, pets, food, fun | 6.5/10 | generic gallery grid |
+| P07 | Closing Message | calm photo + thank-you | 3.5–4/10 | old P07 guide content returning |
+| P08 | Magazine Back Cover | minimal back-cover meta + barcode | 2–3/10 | turning back cover into another feature page |
+
+## Page-specific content gates
+
+### P01
+PASS when:
+- cover is understandable in 3 seconds;
+- only a few hooks remain;
+- couple photography is not buried.
+
+### P02
+PASS when:
+- each person can be understood with 3–5 grounded facts;
+- optional Q&A stays very small;
+- no timeline/travel archive remains.
+
+### P03
+PASS when:
+- story order works without exact dates;
+- 3–4 chapters are enough;
+- proposal/registration are not buried.
+
+### P04
+PASS when:
+- all chosen travel memories can coexist without a directory/grid feeling;
+- one photo is clearly dominant;
+- labels/captions remain short and grounded.
+
+### P05
+PASS when:
+- family/friend photos are recognizable at A5;
+- one anchor exists;
+- captions do not invent identities or anecdotes;
+- old Hawaii-only structure is gone.
+
+### P06
+PASS when:
+- it clearly feels like real life, not another trip page;
+- pet/food/fun material is real;
+- photo hierarchy is irregular but readable.
+
+### P07
+PASS when:
+- the page emotionally closes the booklet interior;
+- one strong photo + short message is sufficient;
+- no `TODAY'S TRAVEL GUIDE`, `11 DESTINATIONS`, timetable or discovery system remains.
+
+### P08
+PASS when:
+- the page can be understood as a magazine back cover;
+- information is minimal;
+- barcode digits read exactly `2026102400000`;
+- there is no main thank-you message or feature collage.
+
+## Global fail conditions
+
+FAIL if:
+- an old Figma page role is preserved simply because it already exists;
+- content is invented to fill a prebuilt vessel;
+- a page contains material assigned to another page in the current architecture;
+- density is raised by shrinking text or adding tiny filler;
+- obsolete P05/P07/P08 roles reappear.
+
+`CONTENT BELONGING > LEGACY LAYOUT CONTINUITY.`
