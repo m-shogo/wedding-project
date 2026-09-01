@@ -570,3 +570,42 @@ Current acceptance state remains:
 
 Largest remaining visible/source gap:
 `P06 REAL EVERYDAY / FOOD / COOKIE / MELON REPLACEMENT`, with current dummies intentionally retained until verified sources arrive.
+
+## P02 profile-index editorial polish — 2026-09-01
+
+The P02–P03 spread was re-reviewed without introducing another dummy photograph. The remaining weakness was the P02 lower information area: its three fact categories read as a loose form-like line rather than an authored magazine index.
+
+Comparison and adoption:
+- original/current-before-polish P02: `3447:43`;
+- comparison candidate D: `3508:2`;
+- selected treatment: dark navy print strap with cyan offset, yellow section label and native numbered profile prompts;
+- current P02 remains `3447:43` and is renamed `P02_V20_PRODUCTION_D / PROFILE INDEX STRAP / CURRENT PREFERRED`;
+- added support nodes: cyan offset `3509:2`, navy strap `3509:3`;
+- updated native text/rule nodes: `3447:63`, `3447:64`, `3447:65`.
+
+The profile prompts remain fact-neutral and editable: `01 好きなこと / 02 旅のスタイル / 03 今日のひとこと`. No unverified biography was added. Prompt size was set to 15 Figma points so the right-hand label clears the overlapping Q&A badge.
+
+Spread QA:
+- P02–P03 spread `3447:2` was screenshot-reviewed after adoption;
+- P02 now reads as the quick-scan/profile half through a single information strap;
+- P03 `3447:67` was deliberately held unchanged because its quieter story/article structure remains the needed contrast;
+- no additional decorative part or generated photo was added.
+
+Full-book QA:
+- current contact sheet: `3509:4` (`V20_FULL_BOOK_CONTACT_SHEET_H`);
+- current P02–P03 contact preview: `3509:276`, sourced from `3447:2`;
+- P01 remains the strongest entry, P04–P05 the visual peak, P08 the quiet close;
+- `DESIGN_COMPLETE`: yes;
+- `SOURCE_COMPLETE`: no;
+- `COPY_LOCKED`: no;
+- `PRINT_READY`: no.
+
+Current preferred nodes:
+- P01 `3355:2`;
+- P02–P03 `3447:2` (P02 `3447:43`, P03 `3447:67`);
+- P04–P05 `3434:2`;
+- P06–P07 `3447:90`;
+- P08 `3474:2`;
+- full-book contact `3509:4`.
+
+Largest remaining source gap is unchanged: verified P06 everyday, food and Cookie/Melon photography, followed by the three P04 Okinawa/Korea travel roles. Current dummies remain visible by user direction until replacement sources arrive.

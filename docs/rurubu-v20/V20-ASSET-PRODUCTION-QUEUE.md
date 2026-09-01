@@ -402,4 +402,18 @@ Current Figma:
 - P04–P05 current spread `3434:2`;
 - P06–P07 current spread `3447:90`;
 - P08 current `3474:2`, using verified REAL_PHOTO `001.jpg` at `3474:3`;
-- full-book generated-PNG contact sheet `3477:2`.
+- full-book generated-PNG contact sheet `3509:4` (P02 profile-index polish included; P08 verified real `001.jpg` retained).
+
+## P02 profile-index polish — 2026-09-01
+
+Status: `PLACED / SCREENSHOT REVIEWED / NO NEW RASTER`
+
+- current spread remains `3447:2`;
+- current P02 remains `3447:43`;
+- new native/vector support nodes are `3509:2` and `3509:3`;
+- native prompt text remains editable at `3447:64`;
+- comparison candidate `3508:2` is retained as visual decision evidence;
+- P03 `3447:67` is intentionally unchanged;
+- current whole-book contact is `3509:4`.
+
+No new generated asset was justified. The improvement came from turning the loose lower labels into one page-specific print information strap while preserving the verified photo sources and the generated profile badge.
