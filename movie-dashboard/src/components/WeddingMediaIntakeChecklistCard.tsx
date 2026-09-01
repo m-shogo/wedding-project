@@ -5,6 +5,7 @@ import {OpeningCropReviewOperatorCard} from "./OpeningCropReviewOperatorCard";
 import {ProfileRealMediaReviewOperatorCard} from "./ProfileRealMediaReviewOperatorCard";
 import {WeddingBgmRhythmAlignmentCard} from "./WeddingBgmRhythmAlignmentCard";
 import {WeddingBgmRhythmSelectionResumeCard} from "./WeddingBgmRhythmSelectionResumeCard";
+import {WeddingHumanBgmCueMarkerCard} from "./WeddingHumanBgmCueMarkerCard";
 import {WeddingMovieProductionReadinessOperatorCard} from "./WeddingMovieProductionReadinessOperatorCard";
 import {WeddingProductionRhythmCorrectionQueueCard} from "./WeddingProductionRhythmCorrectionQueueCard";
 import {WeddingProductionRhythmReviewCard} from "./WeddingProductionRhythmReviewCard";
@@ -78,6 +79,7 @@ export function WeddingMediaIntakeChecklistCard({projectId}: {projectId: ScenePr
       <WeddingRealMediaFramingComparisonReviewCard projectId={projectId} />
       <WeddingRealMediaTimingComparisonReviewCard projectId={projectId} />
       <WeddingProductionRhythmReviewCard projectId={projectId} />
+      <WeddingHumanBgmCueMarkerCard projectId={projectId} />
       <WeddingBgmRhythmAlignmentCard projectId={projectId} />
       <WeddingBgmRhythmSelectionResumeCard projectId={projectId} />
       <WeddingProductionRhythmCorrectionQueueCard projectId={projectId} />
