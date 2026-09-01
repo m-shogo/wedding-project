@@ -33,6 +33,10 @@ function sha256(path: string) {
   return createHash("sha256").update(readFileSync(path)).digest("hex");
 }
 
+function stableSha(value: unknown) {
+  return createHash("sha256").update(JSON.stringify(value)).digest("hex");
+}
+
 const batchArg = arg("batch");
 if (!batchArg) fail("SELECTED_SCENE_RENDER_BATCH_REQUIRED", "pass --batch=/abs/or/repo/path.json");
 const batchPath = resolve(batchArg);
@@ -69,6 +73,17 @@ const scenes = batch.scenes.map((item: any, index: number) => {
   const mode = item.package.canonical?.mode;
   if (typeof text !== "string" || !intensity || !mode) fail("SELECTED_SCENE_RENDER_PROPS_MISSING", item.sceneId);
   const frames = Math.max(1, Math.round(Number(placement.durationSeconds) * FPS));
+  const targetDurationSeconds = Number(resolved?.sceneDurationSeconds ?? placement.durationSeconds);
+  if (!Number.isFinite(targetDurationSeconds) || targetDurationSeconds <= 0) fail("SELECTED_SCENE_RENDER_HUMAN_TIMING_INVALID", item.sceneId);
+  const timingIdentity = {
+    sceneId: item.sceneId,
+    sourceRevision: item.sourceRevision,
+    targetDurationSeconds: Number(targetDurationSeconds.toFixed(3)),
+    computedDurationSeconds: Number(Number(placement.durationSeconds).toFixed(3)),
+    durationFrames: frames,
+    fps: FPS,
+  };
+  const timing = {...timingIdentity, revision: stableSha(timingIdentity)};
   const patternToken = safeToken(item.selectedPatternId);
   const roleToken = safeToken(item.productionRole);
   const sceneToken = safeToken(item.sceneId);
@@ -86,6 +101,7 @@ const scenes = batch.scenes.map((item: any, index: number) => {
     patternId: item.selectedPatternId,
     productionRole: item.productionRole,
     selectionClass: item.selectionClass ?? null,
+    timing,
     timeline: {
       startSeconds: placement.startSeconds,
       endSeconds: placement.endSeconds,
@@ -170,6 +186,7 @@ const manifest = {
   summary: {
     totalScenes: scenes.length,
     renderedScenes: scenes.filter((scene: any) => scene.render.state === "RENDERED").length,
+    timingBoundScenes: scenes.filter((scene: any) => Boolean(scene.timing?.revision)).length,
     transitionEdges: transitions.length,
     crossDissolveEdges: transitions.filter((item: any) => item.transition === "CROSS_DISSOLVE").length,
     allSelectionsCurrent: true,
@@ -179,10 +196,10 @@ const manifest = {
     remotionStudioGuiActual: "NOT_RUN",
     palmierGuiActual: "NOT_RUN",
     macDaVinciGuiActual: "NOT_RUN",
-    rule: "CLI selected-scene renders, Human-selected transition bindings, and SHA-bound manifest are visual-reference artifacts only. They do not promote Remotion Studio GUI Actual, Palmier GUI Actual, Mac DaVinci GUI Actual, Human approval, or productionReady.",
+    rule: "CLI selected-scene renders, Human-selected timing/transition bindings, and SHA-bound manifest are visual-reference artifacts only. They do not promote Remotion Studio GUI Actual, Palmier GUI Actual, Mac DaVinci GUI Actual, Human approval, or productionReady.",
   },
 };
 
 mkdirSync(dirname(manifestPath), {recursive: true});
 writeFileSync(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`);
-console.log(JSON.stringify({manifestPath, projectId, scenes: scenes.length, transitions: transitions.length, rendered: manifest.summary.renderedScenes}, null, 2));
+console.log(JSON.stringify({manifestPath, projectId, scenes: scenes.length, timingBoundScenes: manifest.summary.timingBoundScenes, transitions: transitions.length, rendered: manifest.summary.renderedScenes}, null, 2));
