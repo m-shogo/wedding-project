@@ -13,10 +13,12 @@ Read in this order before writing production Figma:
 1. `docs/RURUBU-CURRENT.md`
 2. the actual page Visual Master image
 3. `assets/rurubu-v30/manifest.json`
-4. the page manifest, e.g. `assets/rurubu-v30/p01/manifest.json`
-5. `docs/rurubu-v30/VISUAL-MASTER-LOCK-AUDIT.md`
-6. **this document** `docs/rurubu-v30/FIGMA-EXECUTION-ACCEPTANCE.md`
-7. the page `README.md` if production has already started
+4. `assets/rurubu-v30/visual-polish-manifest.json`
+5. the page manifest, e.g. `assets/rurubu-v30/p01/manifest.json`
+6. page polish manifest when present, e.g. `assets/rurubu-v30/p01/polish-manifest.json`
+7. `docs/rurubu-v30/VISUAL-MASTER-LOCK-AUDIT.md`
+8. **this document** `docs/rurubu-v30/FIGMA-EXECUTION-ACCEPTANCE.md`
+9. the page `README.md` if production has already started
 
 The manifest is necessary but not sufficient. A future agent must see both the visual source and the execution/feedback process.
 
@@ -128,6 +130,25 @@ Hard reject:
 - a generic landscape validating a group-memory thumbnail;
 - claiming `REFERENCE_DELTA_PASS` from a STRUCTURAL_PROXY.
 
+## Fixed short display text policy
+
+Short fixed display text may use image-generated or prepared display art when its visual treatment is part of the page identity. This is **not limited to personal names**.
+
+Examples:
+- `るるぶ`
+- `WEDDING`
+- `OUR STORY`
+- `OUR JOURNEY`
+- `Q1`–`Q6`
+- short fixed teaser titles
+- short fixed page labels/badges
+
+Rules:
+- retain the approved exact string separately as native/source-of-truth data;
+- QA visible spelling/numbering against that source;
+- keep long-form body/Q&A/captions native/editable;
+- do not accept a generic native rendering merely because it is easier to edit.
+
 ## Identity Anchor Gate
 
 High-identity elements are not ordinary editable primitives.
@@ -174,10 +195,48 @@ Before reusing a component/variant, ask:
 
 If not, keep them separate or use variants with explicit page-specific differences.
 
+Check specifically for unwanted equalization of:
+- module width/height;
+- photo-slot size;
+- padding;
+- icon coordinates;
+- local x/y offsets;
+- overlap depth;
+- rotation/tilt where the Visual Master actually shows it.
+
+Do **not** add random tilt merely to look handmade. Irregularity must come from the Visual Master or improve direct Reference Delta.
+
 Fail examples:
 - three Feature modules made equal-height/equal-padding/equal-icon cards when the Visual Master staggers them;
 - Q3/Q4 normalized into one mirrored card;
 - repeated friend-photo frames stamped identically because reuse is convenient.
+
+## Tactile print finish gate
+
+Avoid the flat digital/AI-sticker look, but do not solve it with global grain.
+
+Suitable targets:
+- paper vessels;
+- tickets/postcards;
+- ribbons/tapes;
+- stamps/postmarks;
+- expressive display-title art;
+- irregular printed frames/backings.
+
+Allowed when subtle and reference-compatible:
+- light paper/matte feel;
+- slight printed-edge irregularity;
+- restrained local shadow/depth;
+- small material differences between paper objects.
+
+Hard reject:
+- heavy fake vintage grain;
+- dirty full-page paper overlays;
+- texture across faces;
+- texture that weakens factual copy/A5 readability;
+- noise used to hide weak generation.
+
+If texture becomes one of the first things noticed at A5, it is too strong.
 
 ## Reference Delta Gate — mandatory evidence
 
@@ -193,7 +252,7 @@ Compare Visual Master vs current Figma at matching aspect ratio in this order:
 6. asymmetric silhouette
 7. overlap relationships
 8. feature/module rhythm
-9. background/frame character
+9. background/frame/material character
 10. micro accents
 
 Any failure in items 1–5 blocks `REFERENCE_DELTA_PASS` even if technical QA is green.
@@ -205,19 +264,23 @@ When owner/user feedback reveals a systemic failure, do not fix only the current
 Classify the feedback:
 
 ### Page-specific
-Write to the page manifest.
+Write to the page manifest or page polish manifest.
 Examples:
 - P01 `Shogo & Shiori` must use expressive hot-pink script-like display treatment;
 - P01 hero must visually read as a two-person people-led anchor;
-- P01 2026 badge silhouette is a yellow cloud/burst, not a generic oval/circle.
+- P01 2026 badge silhouette is a yellow cloud/burst, not a generic oval/circle;
+- P01 Feature 1/2/3 must retain their measured local differences instead of becoming equal cards.
 
 ### Systemic
-Write to the root manifest and this execution guide.
+Write to the root manifest / `visual-polish-manifest.json` and this execution guide.
 Examples:
 - unrelated dummy images cannot validate visual hierarchy;
+- fixed short identity text may use generated/prepared display art with native source-of-truth;
 - native/vector simplification cannot override identity-anchor fidelity;
 - structural completion is not visual completion;
 - screenshot-based Reference Delta is mandatory before completion;
+- editorial irregularity must not be normalized into UI or randomized without reference evidence;
+- tactile print character must be local/subtle rather than global grain;
 - feedback must be propagated before the same method is used on later pages.
 
 A systemic issue creates `FEEDBACK_DEBT`. Do not proceed to the next production page until the debt is written back to authority or explicitly deferred by the user.
