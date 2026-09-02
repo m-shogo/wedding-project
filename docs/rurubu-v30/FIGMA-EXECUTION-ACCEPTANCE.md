@@ -16,6 +16,8 @@ Hard summaries:
 
 `FEEDBACK NOT WRITTEN BACK ≠ READY FOR FIGMA`
 
+`CHEAP ASSET FAILURE ≠ LONG DIAGNOSIS`
+
 ## Execution ownership / order
 
 Current user-locked workflow:
@@ -132,6 +134,44 @@ Hard reject:
 - adding generic white rescue rectangles behind a broken module when that changes authored silhouette/overlap.
 
 Repair the source/cutout alpha or regenerate only the affected module.
+
+## Fast-fail regeneration rule — HARD
+
+When a defect looks asset-side and the affected module is cheap to regenerate/re-cut, **do not spend prolonged time diagnosing it**.
+
+Use this order:
+
+1. Run **one quick discriminator** only:
+   - inspect one representative alpha/mask sample or one high-contrast composite; and
+   - if the source appears correct, check Figma opacity/blend/mask once.
+2. If the source/RGBA/cutout is visibly or numerically wrong, **regenerate or redo cutout immediately**.
+3. Replace only the affected module and delete the superseded LIVE node.
+4. Run **one integrated final QA pass** after replacement.
+5. Repeat diagnosis/QA only if the final pass still fails or a new blocker appears.
+
+Decision rule:
+
+> If diagnosis/context cost is likely to exceed regeneration/cutout cost, prefer regeneration/cutout.
+
+Typical immediate-regeneration cases:
+- paper/ticket/label interior translucency;
+- key-color halo or lost white/cream material;
+- broken/contaminated alpha;
+- clearly degraded generated lettering/module rendering;
+- wrong bundled-module treatment that is cheaper to regenerate than patch.
+
+Do not waste time on:
+- repeated midpoint screenshots for the same known defect;
+- several rounds of identical alpha diagnosis;
+- long status updates before fixing a cheap module;
+- manual micro-patching of broken generated art when regeneration is faster;
+- context-heavy reporting of every intermediate check.
+
+Reporting rule:
+- normally report once at the end with **cause → replacement → QA result → remaining debt**;
+- interrupt mid-process only for a real blocker, destructive-risk decision, or repeated regeneration failure.
+
+Speed never waives canonical copy/fact checks, destructive Figma safety, or the final integrated QA.
 
 ## Edge Safety Gate — HARD
 
@@ -250,6 +290,8 @@ Fix the weak object/module, not the entire page, whenever possible.
 
 Do not create another P01 page merely for a micro-fix. Keep CURRENT node and replace only affected module(s).
 
+For cheap asset-side defects, this rule is subordinate to the fast-fail rule above: **one quick discriminator, then regenerate/re-cut rather than prolonged diagnosis**.
+
 ## P01 current calibration — 2026-09-02 owner review
 
 P01 CURRENT remains `3535:7` and the `c64b3c66...` final REWORK remains the accepted baseline.
@@ -265,7 +307,8 @@ New owner-visible micro debt reopens final acceptance:
 1. **Feature 1–3 label/vessel opacity**
    - current screenshot looks more translucent/washed than Visual Master;
    - inspect actual source alpha, not only Figma layer opacity;
-   - intended white/cream paper must not reveal Hero/background.
+   - intended white/cream paper must not reveal Hero/background;
+   - if the quick alpha/composite check points asset-side, regenerate/re-cut immediately instead of prolonged diagnosis.
 
 2. **Feature 1–3 left-edge safety**
    - number badges/labels are too close to the left airmail border;
