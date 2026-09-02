@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>StaRtに目印をつける — Wedding Opening Studio</title>
+  <meta name="description" content="StaRtの曲の区切りにDaVinci Resolveのマーカーを置き、結婚式オープニングムービーの演出位置を見えるようにする。" />
+  <link rel="stylesheet" href="./styles.css" />
+  <link rel="stylesheet" href="./studio.css" />
+</head>
+<body class="studio-body marker-page">
+  <header class="studio-hero marker-hero">
+    <div class="hero-inner">
+      <div class="hero-copy">
+        <p class="eyebrow">STEP 02 / MUSIC MARKERS</p>
+        <h1>曲の中に、<br><span>目印を置く。</span></h1>
+        <p class="hero-lead">写真も文字も、まだ置かなくていい。<br><strong>「ここからサビ」「ここで旅行」「ここから5→1」</strong>が見えるだけで、一気に作りやすくなる。</p>
+      </div>
+      <div class="today-card">
+        <p class="today-kicker">KEY</p>
+        <strong>M</strong>
+        <p>再生ヘッドがある場所にマーカーを置くキー。今日はほぼこれだけ。</p>
+        <a class="primary-button" href="#first-marker">最初の1個を置く →</a>
+      </div>
+    </div>
+  </header>
+
+  <nav class="studio-nav" aria-label="ページ内ナビゲーション">
+    <a href="./index.html">← Studio</a>
+    <a href="#first-marker">最初の1個</a>
+    <a href="#marker-map">7個の目印</a>
+    <a href="#done">終わったら</a>
+  </nav>
+
+  <main class="studio-main">
+    <section class="studio-section now-section" id="first-marker">
+      <div class="section-heading">
+        <div>
+          <p class="chapter-no">FIRST ONE</p>
+          <h2>まず、0:16付近に1個だけ。</h2>
+          <p>1個できれば、残りは同じことの繰り返し。</p>
+        </div>
+        <span class="status-pill">1分で確認</span>
+      </div>
+
+      <div class="single-task">
+        <div class="task-main">
+          <p class="task-label">やること</p>
+          <h3>イントロの終わりに「1番START」の目印</h3>
+          <ol class="big-steps">
+            <li><span>1</span><div><strong>StaRtを再生する</strong><small>タイムラインの▶︎、またはSpace。</small></div></li>
+            <li><span>2</span><div><strong>0:16付近で止める</strong><small>ピッタリじゃなくてOK。あとで直せる。</small></div></li>
+            <li><span>3</span><div><strong>キーボードの M を1回押す</strong><small>タイムラインに色付きの目印が付けば成功。</small></div></li>
+            <li><span>4</span><div><strong>同じ場所でMをもう一度押す</strong><small>名前を入れる画面が開いたら「1番 START」と入力。</small></div></li>
+          </ol>
+          <label class="check action-check">
+            <input type="checkbox" data-progress="first-marker" />
+            <span>できた。最初のマーカーを置けた</span>
+          </label>
+        </div>
+        <aside class="task-side">
+          <p class="side-title">POINT</p>
+          <strong>秒数は仮で大丈夫。</strong>
+          <p>曲を聴いて「ここだ」と思った位置に少し動かしてOK。今は編集の地図を作る段階。</p>
+          <div class="mini-flow"><span>再生</span><b>→</b><span>止める</span><b>→</b><span>M</span><b>→</b><span>名前</span></div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="studio-section" id="marker-map">
+      <div class="section-heading">
+        <div>
+          <p class="chapter-no">MARKER MAP</p>
+          <h2>あとは、この7か所。</h2>
+          <p>上から順番に置けばOK。秒数は今の仮位置。</p>
+        </div>
+      </div>
+
+      <div class="marker-list">
+        <label class="marker-item"><input type="checkbox" data-progress="marker-016"><time>0:16</time><div><strong>1番 START</strong><span>イントロ終了。ここから新郎新婦・写真を入れる候補。</span></div></label>
+        <label class="marker-item hot"><input type="checkbox" data-progress="marker-038"><time>0:38</time><div><strong>1番 サビ</strong><span>写真ラッシュや短い歌詞を効かせる候補。</span></div></label>
+        <label class="marker-item travel"><input type="checkbox" data-progress="marker-058"><time>0:58</time><div><strong>間奏 / TRAVEL</strong><span>地図・飛行機・旅の演出を入れやすい区間。</span></div></label>
+        <label class="marker-item"><input type="checkbox" data-progress="marker-108"><time>1:08</time><div><strong>2番 START</strong><span>2人の旅や短いメッセージ候補。</span></div></label>
+        <label class="marker-item hot"><input type="checkbox" data-progress="marker-128"><time>1:28</time><div><strong>2番 サビ</strong><span>一番楽しい写真・動画を見せる候補。</span></div></label>
+        <label class="marker-item finale"><input type="checkbox" data-progress="marker-148"><time>1:48</time><div><strong>ラスト間奏</strong><span>入場に向けて上げ始める。</span></div></label>
+        <label class="marker-item countdown"><input type="checkbox" data-progress="marker-200"><time>2:00前後</time><div><strong>COUNTDOWN候補</strong><span>5・4・3・2・1を始める位置。曲を聴いてあとで決める。</span></div></label>
+      </div>
+
+      <div class="note marker-note"><strong>迷ったら：</strong> 秒数を打ち込んで正確に置くより、まず曲を聴きながら「ここ」と思う位置でM。細かい調整は演出を置く時で大丈夫。</div>
+    </section>
+
+    <section class="studio-section compact-section" id="done">
+      <div class="section-heading">
+        <div>
+          <p class="chapter-no">AFTER THIS</p>
+          <h2>目印が並んだら、やっと演出へ。</h2>
+          <p>次からは「どこを作りたい？」で選ぶ。順番に勉強する必要はない。</p>
+        </div>
+      </div>
+      <div class="next-scene-grid">
+        <a href="./template-usage-guide.html#travel"><span>✈️</span><strong>冒頭の旅行演出</strong><small>WELCOME / StaRt / 搭乗案内</small></a>
+        <a href="./template-usage-guide.html#lyrics"><span>Aa</span><strong>歌詞</strong><small>短い言葉をテンポよく</small></a>
+        <a href="./template-usage-guide.html#photos"><span>📸</span><strong>写真ラッシュ</strong><small>サビを一気に見せる</small></a>
+        <a href="./template-usage-guide.html#countdown"><span>5</span><strong>カウントダウン</strong><small>最後の5→1</small></a>
+      </div>
+      <p class="back-link"><a href="./index.html">← Wedding Opening Studioへ戻る</a></p>
+    </section>
+  </main>
+
+  <footer class="studio-footer"><strong>Wedding Opening Studio</strong><span>曲に地図を作る。</span></footer>
+  <script src="./app.js"></script>
+</body>
+</html>
