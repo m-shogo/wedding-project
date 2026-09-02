@@ -1,216 +1,312 @@
 # V30 P01 production assets
 
-Status: `P01_PROMOTED_CURRENT_WITH_CARRYOVER_DEBT / FINAL_PHOTO_QA_PENDING`
+Status: `P01_PROMOTED_CURRENT_WITH_CARRYOVER_AND_PROXY_DEBT / FINAL_PHOTO_QA_PENDING`
 
 P01 is the V30 pilot page.
 
-The targeted REWORK was a clear improvement over FIRST BUILD and remains the valid CURRENT at Figma node `3535:7`. Do **not** roll back to FIRST BUILD.
+The targeted REWORK remains materially better than FIRST BUILD and stays the valid CURRENT at Figma node `3535:7`. **Do not roll back to FIRST BUILD.**
 
-However, subsequent owner feedback and direct live Figma inspection found that multiple visible FIRST BUILD production assets were intentionally carried into CURRENT. The live frame is structurally clean; this is **not** a hidden-layer/graveyard failure. It is a visual carry-over/coherence issue.
+However, later owner feedback exposed two additional issues that reopen final visual acceptance:
+
+1. several visible FIRST BUILD production assets were intentionally carried into CURRENT and still show older visual language; and
+2. Hero + Feature 1–3 temporary photo proxies were cropped from the P01 Visual Master, which can bake page background/decorations into the photo slot and make photo-vs-page-part boundaries unclear.
 
 Therefore:
 
 - `PROMOTION = VALID`
 - `BEST_CURRENT = REWORK`
+- `CLEAN_PROXY_PASS = NO / ACTIVE PROXY METHOD DEPRECATED`
+- `BUNDLED_DISPLAY_MODULE_PASS = NO / REBUILD OPEN`
 - `VISUAL_CARRYOVER_PASS = NO / AUDIT OPEN`
 - `FINAL REFERENCE_DELTA_PASS = REOPENED`
 - `FIGMA_DESIGN_COMPLETE = NO`
 - `FINAL_PHOTO_QA_PENDING = YES`
 
 Required authorities:
+- `docs/RURUBU-CURRENT.md`
+- `assets/rurubu-v30/manifest.json`
 - `assets/rurubu-v30/visual-polish-manifest.json`
+- `assets/rurubu-v30/p01/manifest.json`
 - `assets/rurubu-v30/p01/polish-manifest.json`
 - `docs/rurubu-v30/FIGMA-EXECUTION-ACCEPTANCE.md`
 
-## Current page role
+## Current page / Figma authority
 
 - Cover: `るるぶ WEDDING`
-- One open, dominant hero-photo slot plus three independent Feature 1/2/3 photo slots
-- Locked facts: `Shogo`, `Shiori`, `2026`, `2026.10.24`, `PAGE 01`
-- Figma page/frame: `V30_FINAL_PRODUCTION` / `3535:7`
-- Physical intent: A5 portrait `148 × 210 mm`; Figma trim frame `559 × 794 px`
+- CURRENT frame: `3535:7`
+- A5 logical frame: `559 × 794 px`
+- physical intent: `148 × 210 mm`
+
+### Known temporary Figma cleanup for Codex
+
+An accidental duplicate exists:
+
+- `3708:2` — `V30 P01 / CARRYOVER REWORK / TEMP`
+
+It overlaps the P02 area and is not production authority.
+
+**Codex must delete `3708:2` at the beginning of the next P01 production pass.**
+
+Do not delete or overwrite the real P02 frame `3535:9`.
 
 ## What the promoted REWORK successfully improved
 
-The REWORK remains materially better than FIRST BUILD in:
+The current P01 is still better than FIRST BUILD in:
 - `るるぶ` identity anchor;
 - `Shogo & Shiori` display treatment;
-- people-led Hero visual mass;
-- `2026` badge;
-- overall first impression and title/Hero hierarchy.
+- people-led Hero hierarchy;
+- `2026` treatment;
+- overall title/Hero first impression.
 
-Promoted additions include:
+Current accepted identity art includes:
 
-| Asset | Role | Status |
+| Asset | Role | Current status |
 | --- | --- | --- |
-| `V30_P01_MASTHEAD_RURUBU_REWORK_FINAL_RGBA.png` | るるぶ identity-anchor display art | CURRENT / TRUE ALPHA VERIFIED |
-| `V30_P01_NAMES_LOCKUP_REWORK_FINAL_RGBA.png` | exact `Shogo & Shiori` expressive display art | CURRENT / TRUE ALPHA VERIFIED |
-| `V30_P01_HERO_VISUAL_PROXY_FROM_MASTER_CALIBRATION.png` | temporary people-led Hero calibration proxy | CURRENT VISUAL QA / REPLACE BEFORE FINAL PRINT |
-| `V30_P01_FEATURE_1_VISUAL_PROXY_FROM_MASTER_CALIBRATION.png` | temporary Feature 1 proxy | CURRENT VISUAL QA / REPLACE BEFORE FINAL PRINT |
-| `V30_P01_FEATURE_2_VISUAL_PROXY_FROM_MASTER_CALIBRATION.png` | temporary Feature 2 proxy | CURRENT VISUAL QA / REPLACE BEFORE FINAL PRINT |
-| `V30_P01_FEATURE_3_VISUAL_PROXY_FROM_MASTER_CALIBRATION.png` | temporary Feature 3 proxy | CURRENT VISUAL QA / REPLACE BEFORE FINAL PRINT |
+| `V30_P01_MASTHEAD_RURUBU_REWORK_FINAL_RGBA.png` | `るるぶ` display art | CURRENT / TRUE ALPHA VERIFIED |
+| `V30_P01_NAMES_LOCKUP_REWORK_FINAL_RGBA.png` | exact `Shogo & Shiori` display art | CURRENT / TRUE ALPHA VERIFIED |
 
-Generated candidates that only looked transparent because checkerboard pixels were baked into RGB were rejected. Actual alpha-channel inspection remains mandatory.
+Generated candidates that only *looked* transparent because checkerboard pixels were baked into RGB remain rejected. Actual alpha-channel inspection is mandatory.
 
-## New lesson: layer cleanliness is not visual freshness
+## Visual-Master crop proxies — DEPRECATED
 
-The FIRST BUILD reset/cleanup worked as intended:
-- no hidden rejected graveyard was found;
-- obsolete generic masthead/year/names/Hero candidates were removed from CURRENT;
-- the only intentionally hidden source layer is the exact `Shogo & Shiori` native source-of-truth.
+The following files were useful historical calibration experiments but are **not valid active photo proxies for the next production pass**:
 
-But several visible FIRST BUILD production assets were deliberately reused. Because they are visible, valid assets, a stale-layer scan cannot flag them.
+- `V30_P01_HERO_VISUAL_PROXY_FROM_MASTER_CALIBRATION.png`
+- `V30_P01_FEATURE_1_VISUAL_PROXY_FROM_MASTER_CALIBRATION.png`
+- `V30_P01_FEATURE_2_VISUAL_PROXY_FROM_MASTER_CALIBRATION.png`
+- `V30_P01_FEATURE_3_VISUAL_PROXY_FROM_MASTER_CALIBRATION.png`
 
-This created a different failure mode:
+Status:
+`QA_HISTORY_ONLY / DO_NOT_USE_AS_ACTIVE_PROXY`.
 
-`NO OLD HIDDEN LAYERS`
+Reason:
+- a crop from `P01.png` can contain sky/background, flower decoration, borders, frames, labels or other layout art;
+- decoration can then appear both inside the photo proxy and as a separate page layer;
+- it becomes difficult to tell which pixels belong to the photo and which belong to the page design;
+- Reference Delta may look better for the wrong reason because target layout information is already baked into the photo fill.
 
-but
+### Next active proxy sources
 
-`OLD VISUAL LANGUAGE STILL VISIBLE`.
+Use, in order:
+1. suitable user-provided real photo;
+2. clean standalone representative photo;
+3. clean generated standalone proxy photo with **no P01 page-layout decoration**.
 
-From now on every inherited visible asset must pass `VISUAL_CARRYOVER_PASS` in the current composition.
+Roles:
+- Hero → clean standalone two-person couple/wedding proxy;
+- Feature 1 → clean standalone couple/profile proxy;
+- Feature 2 → clean standalone travel/place proxy;
+- Feature 3 → clean standalone group/friends proxy.
 
-## Confirmed visible inherited production assets
+A proxy must not contain:
+- P01 border;
+- `WEDDING` / `るるぶ` / page label;
+- Feature number/heading;
+- Date ticket;
+- stamp/page badge;
+- flower/route/sticker copied from the P01 layout;
+- already-designed photo frame/backing.
 
-Direct live Figma inspection confirmed visible inherited items including:
+The Visual Master remains the **comparison authority**, not photo-slot source material.
 
-- `P01_NAMES_RIBBON / PRODUCTION_RGBA`
-- `P01_DATE_TICKET / PRODUCTION_RGBA`
-- `P01_FEATURE_1_VESSEL / PRODUCTION_RGBA`
-- `P01_FEATURE_2_VESSEL / PRODUCTION_RGBA`
-- `P01_FEATURE_3_VESSEL / PRODUCTION_RGBA`
-- `P01_JOURNEY_STAMP / PRODUCTION_RGBA`
-- `P01_BOTTOM_STORY_VESSEL / PRODUCTION_RGBA`
-- `P01_PAGE_BADGE / PRODUCTION_RGBA`
-- `P01_BOTTOM_FLORAL_CLUSTER / PRODUCTION_RGBA`
-- `P01_AIRMAIL_BORDER / PRODUCTION_RGBA`
+## P01 fixed display modules — COMPLETE MODULE GENERATION
 
-These are not automatically bad. They are simply **not grandfathered**.
+For these short fixed elements, the visible text does **not** need to remain editable in Figma.
 
-Detailed KEEP / REWORK / REVIEW decisions are tracked in:
-`assets/rurubu-v30/p01/polish-manifest.json`.
+The exact approved string/number is preserved in the manifest / asset metadata and must be QA-checked after generation.
 
-## Highest-priority carry-over debt
+### 1. Year module
 
-### Feature 1 / 2 / 3 vessels — REWORK REQUIRED
+Exact fixed text:
+- `2026`
 
-The current white/pink, white/blue and white/green vessels are still FIRST BUILD assets.
+May be one generated/prepared object containing:
+- `2026`;
+- yellow cloud/burst backing;
+- outline/depth;
+- attached heart / airplane / dotted-route accents when they visually behave as one year cluster.
 
-They remain structurally useful, but the visual language still reads more like compact UI/callout components than the richer Visual Master magazine teaser system.
+### 2. Date Ticket module
 
-Rebuild/rework the vessels while preserving:
-- independent replaceable photos;
-- Feature-specific color/icon roles;
-- non-identical dimensions/rhythm;
-- exact/source-controlled headings.
+Exact fixed text:
+- `WEDDING DATE`
+- `2026.10.24`
+- `SAT.`
 
-Do not rebuild them as one equal component with color variants.
+Generate as one complete visible module:
+- postal/ticket paper;
+- all three text lines;
+- cancellation/wave lines;
+- small fixed flower/accent;
+- printed edge/shadow.
 
-### Date ticket — REWORK REQUIRED
+Do **not** rebuild this as old backing + generic editable Figma text merely for editability.
 
-The current backing is still the FIRST BUILD ticket asset. Earlier feedback already identified insufficient physical/printed-object presence.
+### 3. Feature 1 module
 
-Rework toward:
-- stronger postal/ticket object silhouette;
-- appropriate paper/material depth;
-- cancellation/wave-line character;
-- flower accent;
-- current title/Hero quality level;
-- exact native `2026.10.24` source remains controlled.
+Exact visible content:
+- `1`
+- `ふたりのプロフィール`
 
-### Bottom story vessel — REWORK REQUIRED
+One module may include:
+- number badge + `1`;
+- fixed heading;
+- camera icon;
+- vessel/background;
+- fixed local decoration.
 
-The current backing is still FIRST BUILD-derived and now looks weaker beside the improved Hero/title system.
+Keep separate:
+- Feature 1 replaceable photo;
+- its mask/frame where required for photo swapping.
 
-Rework toward:
-- stronger occupied area;
-- irregular white cloud/paper character;
-- clearer cover-hook hierarchy;
-- stronger relationship with bottom floral cluster;
-- no flattening with editable story copy.
+### 4. Feature 2 module
 
-### Names ribbon backing — explicit requalification required
+Exact visible content:
+- `2`
+- `旅の思い出`
 
-The visible `Shogo & Shiori` lockup is improved and accepted, but its older ribbon backing was carried forward. Review the backing as part of the new names/title/Hero system rather than assuming it passes because the lettering improved.
+One module may include:
+- number badge + `2`;
+- fixed heading;
+- airplane / dotted route;
+- vessel/background;
+- fixed local decoration.
 
-### OUR JOURNEY / PAGE 01 — local requalification required
+Keep Feature 2 replaceable travel/place photo separate.
 
-They are subordinate and may remain valid, but must be rechecked after any bottom-story rebuild because adjacency changes can make previously acceptable assets stale.
+### 5. Feature 3 module
 
-## Assets provisionally requalified
+Reference visible content:
+- `3`
+- `家族と友達`
 
-Current review supports retaining, subject to recheck if adjacent systems change:
-- `WEDDING` display title;
-- right destination cluster;
-- left tropical cluster;
-- airmail border;
-- bottom floral cluster (recheck with bottom-story revision).
+One module may include:
+- number badge + `3`;
+- approved fixed heading;
+- flower/leaf iconography;
+- vessel/background;
+- fixed local decoration.
 
-`KEEP_REQUALIFIED` means explicitly checked in CURRENT — not merely unchanged.
+Keep Feature 3 replaceable group/friends photo separate.
 
-## Fixed short display text — P01 rule
+`家族と友達` here is P01 Visual-Master reference wording; it does **not** change the current P05 FRIENDS-only page role.
 
-Short fixed display text may use image-generated/prepared art when that is visually stronger than generic native text.
+### 6. Bottom Story module
 
-This includes P01:
+Exact fixed text:
+- `ふたりの“楽しい!”を詰めこんだ`
+- `わたしたちの旅ストーリー`
+
+May be one generated/prepared object containing:
+- irregular white story vessel;
+- both fixed lines;
+- heart;
+- sparkles;
+- local fixed outline/shadow accents.
+
+Keep the large bottom floral closure separate where independent overlap/placement is needed.
+
+### 7. OUR JOURNEY stamp module
+
+Exact fixed text:
+- `OUR JOURNEY`
+- `TAKE A TRIP`
+
+One module may contain:
+- stamp circle;
+- fixed lettering;
+- cancellation/wave lines;
+- fixed iconography.
+
+### 8. PAGE 01 module
+
+Exact fixed text:
+- `PAGE`
+- `01`
+
+One module may contain:
+- page badge backing;
+- `PAGE`;
+- `01`;
+- attached small heart/accent.
+
+### Other fixed identity art
+
+These may also remain complete display art:
 - `るるぶ`
 - `WEDDING`
 - `Shogo & Shiori`
-- `2026`
-- `OUR JOURNEY`
-- `PAGE 01` when display treatment needs it
 
-Keep the exact approved string separately as native/source-of-truth data and QA the visible result against it.
+The exact strings remain controlled in manifest/metadata. A hidden duplicate Figma text layer is **optional**, not mandatory.
 
-Long body/caption/Q&A text stays native/editable.
+## What must still stay separate/native
 
-## Feature irregularity rule
+Do not bake into fixed generated modules:
+- replaceable real/proxy photographs;
+- long body copy;
+- personal/TBD facts;
+- frequently changing text;
+- unapproved Q&A / story copy.
 
-Feature 1/2/3 are a related editorial family, not an equal-card UI component.
+## Visual carry-over debt
 
-Visual Master reference dimensions are approximately:
-- Feature 1: `310 × 180`
-- Feature 2: `330 × 190`
-- Feature 3: `320 × 180`
+`NO OLD HIDDEN LAYERS` does not imply `NO OLD VISUAL LANGUAGE`.
 
-Do not equalize:
+Current inherited-asset decisions are controlled by `p01/polish-manifest.json`.
+
+### Rebuild / replace as bundled display modules
+
+- old Date ticket backing;
+- old Feature 1 vessel;
+- old Feature 2 vessel;
+- old Feature 3 vessel;
+- old Bottom Story vessel;
+- OUR JOURNEY stamp treatment;
+- PAGE 01 treatment.
+
+### Explicit requalification still needed
+
+- names ribbon backing.
+
+### Provisionally requalified
+
+Subject to adjacency recheck:
+- WEDDING title;
+- right destination cluster;
+- left tropical cluster;
+- airmail border;
+- bottom floral cluster — recheck after Bottom Story changes.
+
+`KEEP_REQUALIFIED` means explicitly checked in CURRENT; unchanged/old/ADOPTED is not enough.
+
+## Feature irregularity
+
+Feature 1/2/3 are one editorial family, not equal UI cards.
+
+Approx Visual Master sizes:
+- Feature 1: `310 × 180` reference px;
+- Feature 2: `330 × 190`;
+- Feature 3: `320 × 180`.
+
+Preserve differences in:
 - module dimensions;
-- thumbnail dimensions;
-- padding;
-- icon coordinates;
-- local spacing/overlap.
+- photo dimensions;
+- local spacing;
+- icon placement;
+- overlap;
+- heading treatment.
 
-Do not add random scrapbook rotation. Any tilt/offset must be supported by the Visual Master or direct comparison.
+Do not add random scrapbook rotation.
 
-## Tactile print finish
+## Replaceable photo contract
 
-Priority parts for restrained tactile character:
-- `るるぶ` / `WEDDING` display art where appropriate;
-- names ribbon;
-- Date ticket;
-- Feature vessels/photo-frame system;
-- OUR JOURNEY stamp/postmark;
-- bottom story vessel.
+Hero + Feature 1–3 remain independent clipped photo slots.
 
-Allowed:
-- subtle paper/matte feel;
-- slight printed-edge irregularity;
-- restrained local depth/shadow;
-- small material differences between paper/ticket/ribbon/stamp objects.
-
-Reject:
-- uniform full-page grain;
-- heavy vintage dirt;
-- texture on faces;
-- noise that reduces exact text or A5 readability;
-- noise used to disguise weak generation.
-
-## Replaceable photo system
-
-Hero + Feature 1–3 remain independent clipped replaceable photo slots. Photo swap QA passed structurally.
-
-This must survive all carry-over rework. Rebuilding a vessel/frame must not destroy independent photo replacement.
+All bundled display-module work must preserve:
+- separate photo content;
+- non-destructive crop;
+- independent replacement;
+- no decoration disappearing when the photo is swapped.
 
 ## Google Drive traceability
 
@@ -221,33 +317,39 @@ This must survive all carry-over rework. Rebuilding a vessel/frame must not dest
 - Promoted REWORK evidence: [P01_REWORK_CURRENT_QA_20260902](https://drive.google.com/drive/folders/1WCUtnm_trU9tEeuZ3tMFjN-PP0KEGw4d)
 - Rejected folder: [99_REJECTED_DO_NOT_USE/P01](https://drive.google.com/drive/folders/1DXJ3gIlZalOiCeytBRnm425s3W9KO-bb)
 
+The old crop-proxy files may remain as historical QA/provenance, but must not be treated as active proxy authority.
+
 ## Current gate state
 
 - `VISUAL_MASTER_LOCKED = YES`
-- `FIGMA_STRUCTURE_READY = YES`
-- `PHOTO_SWAP_PASS = YES`
-- `REPRESENTATIVE_VISUAL_PROXY_READY = YES` — Visual Master calibration proxy
-- `IDENTITY_ANCHOR_PASS = YES`
 - `PROMOTION = YES / BEST CURRENT`
-- `VISUAL_CARRYOVER_PASS = NO / AUDIT OPEN`
-- `REFERENCE_DELTA_PASS = PROVISIONAL / REOPENED FOR COHERENCE`
-- `A5_READABILITY = PASS FOR CURRENT`
-- `A5_PRINT_QA_PASS = NO` — real-photo raster/export check pending
-- `HUMAN_FEEDBACK_REVIEWED = YES / NEW CARRYOVER DEBT WRITTEN BACK`
+- `FIGMA_STRUCTURE_READY = YES`
+- `IDENTITY_ANCHOR_PASS = YES` for current accepted major anchors
+- `CLEAN_PROXY_PASS = NO`
+- `BUNDLED_DISPLAY_MODULE_PASS = NO`
+- `VISUAL_CARRYOVER_PASS = NO`
+- `REFERENCE_DELTA_PASS = REOPENED`
+- `PHOTO_SWAP_PASS = STRUCTURAL PASS / RERUN AFTER CLEAN PROXY INSTALLATION`
+- `A5_PRINT_QA_PASS = NO`
+- `HUMAN_FEEDBACK_REVIEWED = YES / AUTHORITY UPDATED`
 - `FIGMA_DESIGN_COMPLETE = NO`
 - `FINAL_PHOTO_QA_PENDING = YES`
 - `PRINT_READY = NO`
 
-## Next P01 work
+## Next P01 production work — CODEX ONLY
 
-1. rework Feature 1/2/3 inherited vessels;
-2. rework Date ticket backing;
-3. rework Bottom story vessel;
-4. requalify names ribbon backing;
-5. requalify OUR JOURNEY / PAGE 01 / bottom floral area after bottom-story changes;
-6. capture fresh current screenshot;
-7. rerun mixed-generation coherence + Visual Master comparison;
-8. close `VISUAL_CARRYOVER_PASS`;
-9. only after that proceed to final-photo/print QA when real photos arrive.
+After authority review is complete, Codex should:
+
+1. delete mistaken TEMP `3708:2` without touching P02 `3535:9`;
+2. replace all four Visual-Master-crop proxies with clean standalone proxies;
+3. generate/rebuild complete Feature 1/2/3 modules while preserving separate photos;
+4. generate complete Date Ticket module;
+5. generate complete Bottom Story module;
+6. regenerate/requalify OUR JOURNEY and PAGE 01 modules;
+7. explicitly requalify the names ribbon backing;
+8. recheck bottom floral adjacency;
+9. capture fresh CURRENT screenshot;
+10. run `CLEAN_PROXY_PASS → BUNDLED_DISPLAY_MODULE_PASS → IDENTITY_ANCHOR_PASS → VISUAL_CARRYOVER_PASS → REFERENCE_DELTA_PASS`;
+11. report remaining debt before moving to P02.
 
 `BEST CURRENT ≠ FINAL COMPLETE.`
