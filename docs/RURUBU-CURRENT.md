@@ -1,6 +1,6 @@
 # Rurubu WEDDING — CURRENT POINTER
 
-Status: `CURRENT_POINTER / V30_ONLY / P01_TARGETED_POST_LOCK_PATCH_COMPLETE / 2026-09-02`
+Status: `CURRENT_POINTER / V30_ONLY / P02_ORNAMENT_QUALITY_REOPENED / 2026-09-02`
 
 The only current Rurubu WEDDING production version is **V30**.
 
@@ -18,13 +18,12 @@ The only current Rurubu WEDDING production version is **V30**.
 
 Newest explicit owner feedback can reopen an older PASS.
 
-## Current work ownership — USER LOCKED
+## Ownership — USER LOCKED
 
 ### ChatGPT
-- feedback analysis
-- actual Visual Master/current screenshot review
+- feedback / Visual Master / current-screenshot review
 - Root/shared/page manifest updates
-- contradiction cleanup
+- contradiction and stale-rule cleanup
 - Codex handoff
 - post-build review
 
@@ -56,16 +55,16 @@ Frames:
 - P07 `3535:19`
 - P08 `3535:21`
 
-TEMP `3708:2` was deleted. Real P02 `3535:9` must not be repurposed by P01 cleanup.
+TEMP `3708:2` is deleted. Do not create alternate/TEMP production pages unless explicitly approved.
 
-## Locked facts / roles
+## Locked project facts / page roles
 
 - A5 portrait / 8 pages
 - trim `148 × 210 mm`
 - bleed `3 mm`
 - wedding date `2026.10.24`
 - names `Shogo` / `Shiori`
-- P08 barcode digits exactly `2026102400000`
+- P08 barcode `2026102400000`
 
 Roles:
 - P01 Cover / `るるぶ WEDDING`
@@ -79,129 +78,117 @@ Roles:
 
 V20 = frozen history/reference only. Do not create V31 unless explicitly requested.
 
-## Systemic production rules
+## Systemic rules that matter now
 
-- fixed short authored display modules may be bundled with their vessel/icon/decor; editable native text is not inherently better;
+### 1. Asset role before render mode
+
+Every major visible element must first be classified as:
+
+- `NATIVE_TEXT`
+- `SHARED_COMMON_COMPONENT`
+- `GENERATED_DISPLAY_ASSET`
+- `PAGE_SPECIFIC_ORNAMENT`
+- `PHOTO`
+
+Stylized/fixed text is **not automatically an image asset**.
+
+Cross-page common furniture is **not a page-specific generated asset**.
+
+### 2. Shared common components
+
+Recurring publication furniture such as the PAGE badge family must remain one coherent P01-P08 system unless owner/Visual Master explicitly requires a page-specific exception.
+
+### 3. Ornament originality / carry-over
+
+Travel/tropical/icon/route ornaments must be judged for:
+
+- current visual quality;
+- local context fit;
+- stock/clipart feel;
+- same-page duplication/reuse feel;
+- coherence with surrounding title/photo/paper modules.
+
+`REQUALIFIED_CARRYOVER` is not a PASS merely because an old asset is technically clean or already exists.
+
+Do not use the same or near-identical prominent airplane/route/suitcase/tropical cluster in multiple positions unless repetition is clearly intentional.
+
+### 4. Clean proxy / alpha / border
+
 - page-master crops/screenshots are prohibited as active photo fills;
-- `TRUE ALPHA ≠ CORRECT ALPHA`: verify outside transparency and inside opacity separately;
-- if one same-family white-paper module fails inside-opacity QA, run one quick sibling sweep before closing page alpha integrity;
+- `TRUE ALPHA ≠ CORRECT ALPHA`;
 - opaque paper/ticket/label/vessel interiors normally remain alpha `>= 0.95`, preferably `1.00`;
-- newest owner-approved copy must propagate to dependent teaser/index/cover modules; stale generated copy has no grandfathered PASS;
-- page borders/frames are background-adjacent by default: above background, below Hero/photos/display modules/stickers unless Visual Master explicitly requires foreground overlap;
-- use fast-fail regeneration: one quick discriminator, then regenerate/re-cut cheap asset-side defects instead of prolonged diagnosis;
-- important labels/badges/text must not read as accidentally clipped by border/trim;
-- keep Figma LIVE current-only; history belongs in Git/Drive evidence.
+- if one same-family white-paper module fails inside-opacity QA, run one quick sibling sweep;
+- border/frame is background-adjacent by default;
+- cheap asset-side failure -> one quick discriminator -> regenerate/re-cut -> one integrated final QA.
 
-## P01 — TARGETED POST-LOCK PATCH COMPLETE
+### 5. Fast close
 
-P01 CURRENT remains `3535:7`.
+For a bounded correction, do not restart a full-page certification cycle. Fix the reopened scope, run one integrated final QA, sync once, then STOP.
 
-Preserve the already accepted improvements:
-- clean standalone Hero + Feature proxies;
-- Feature 1–3 opaque-paper fix;
-- Feature 1–3 left-edge safety fix;
-- top-left gold ring / diamond / yellow sparkle improvement;
-- stale/duplicate LIVE cleanup;
-- first micro-polish production binaries already synchronized to Git.
+## P01 — DESIGN LOCKED
 
-The three targeted owner-review issues are closed on CURRENT `3535:7`:
+P01 CURRENT: `3535:7`.
 
-### 1. Date + PAGE 01 internal opacity
-
-Targets:
-- `P01_WEDDING_DATE_2026_10_24_SAT / FINAL_REWORK_COMPLETE_MODULE`
-- `P01_PAGE_01 / FINAL_REWORK_COMPLETE_MODULE`
-
-The source-alpha discriminator confirmed an asset-side defect. Both modules were replaced in place with opaque-paper RGBA assets; no rescue rectangles were added. Figma node opacity, image-paint opacity, and blend settings remain `1 / 1 / NORMAL`.
-
-Because this was another same-family white-paper failure, one quick sibling sweep was run across:
-- Date
-- Feature 1
-- Feature 2
-- Feature 3
-- Bottom Story
-- PAGE 01
-
-The one-time sibling sweep passed: Date, Feature 1, Feature 2, Feature 3, Bottom Story, and PAGE 01 all have opaque intended paper cores. Date and PAGE 01 were the only failed source assets and were repaired; the other four were preserved.
-
-### 2. Feature 3 teaser copy
-
-The old visible wording `家族と友達` is superseded.
-
-Current approved exact P01 cover-teaser wording:
-
-**`3 / 友達との思い出`**
-
-`友達` alone is also not the approved final heading because it is too bare for the editorial teaser role.
-
-This friends-only wording aligns with the locked P05 Friends Memories role without importing family semantics back into P01.
-
-### 3. Airmail border depth / z-order
-
-Target:
-- `P01_AIRMAIL_BORDER / PRODUCTION_RGBA`
-
-Required depth:
-
-`background → airmail border → Hero/photos → authored display modules → major stickers/badges`
-
-The border was moved from top-level index `22` to index `1`: background index `0` → border index `1` → Hero/photos index `2+` → authored modules index `9+` → major stickers/badges index `23+`.
-
-## P01 targeted-patch evidence
-
-- fresh Figma screenshot SHA-256: `dd39f877da701f43db58e6a22cf6836b886584ab139fba1e6f5a624f6a647f74`
-- Date asset: `assets/rurubu-v30/p01/final-rework/V30_P01_DATE_MODULE_TARGETED_PATCH_OPAQUE_PAPER_RGBA.png` / Drive `16QnuF_oMMgBp8Qw0MvuyIY4DAqal10wX`
-- PAGE 01 asset: `assets/rurubu-v30/p01/final-rework/V30_P01_PAGE_01_MODULE_TARGETED_PATCH_OPAQUE_PAPER_RGBA.png` / Drive `1y7qv2RvUI8dmjDmQdwnGl6zObbvLpOOd`
-- Feature 3 asset: `assets/rurubu-v30/p01/final-rework/V30_P01_FEATURE_3_MODULE_TARGETED_PATCH_FRIENDS_COPY_RGBA.png` / Drive `1_mxdMD3rKPtKE0nhTpcuUU-FcX7DvGC4`
-- QA folder: Drive `1WCUtnm_trU9tEeuZ3tMFjN-PP0KEGw4d`
-- P02 `3535:9`: unchanged (`x=721`, `y=150`, `559×794`, hidden, opacity `1`, child count `0`, parent index `6`)
-
-## Current P01 gates
-
-- `FIGMA_STRUCTURE_READY = PASS`
-- `CLEAN_PROXY_PASS = PASS`
-- `FEATURE_ALPHA_FIX_PASS = PASS`
-- `FEATURE_LEFT_EDGE_PASS = PASS`
-- `RING_CLUSTER_PASS = PASS`
-- `ALPHA_INTEGRITY_PASS = PASS`
-- `COPY_SYNC_PASS = PASS`
-- `BORDER_Z_ORDER_PASS = PASS`
-- `REFERENCE_DELTA_PASS = PASS_AFTER_TARGETED_PATCH`
 - `FIGMA_DESIGN_COMPLETE = YES`
 - `FINAL_PHOTO_QA_PENDING = YES`
 - `PRINT_READY = NO`
 
-P02 production may proceed. P01 still requires owner-photo replacement and final-photo QA before print readiness.
+Remaining P01 work is only final owner-photo replacement + final-photo/print QA. Do not change accepted modules/masks/copy/alpha/z-order without new owner feedback.
 
-## Remaining P01 action
+## P02 — STRUCTURE/COPY/PHOTO PASS, ORNAMENT QUALITY REOPENED
 
-Replace only the four clean photo fills with final owner photos, then run final-photo and print-readiness QA. Do not change the accepted modules, masks, copy, alpha, or z-order.
+P02 CURRENT: `3535:9`.
 
-## P02 — FIGMA PRODUCTION COMPLETE
-
-P02 CURRENT is the official frame `3535:9`, built directly without creating a duplicate/TEMP frame.
-
+Preserve:
 - SHOGO = left / blue;
 - SHIORI = right / pink;
-- Q1 has one clean replaceable couple-photo inset;
+- Q1 has exactly one replaceable couple-photo inset;
 - Q2 has no photo slot;
-- all three photo fills use clean standalone proxies;
-- personal profile values, Japanese readings and Q&A answers remain unapproved/TBD rather than guest-facing facts;
-- profile/Q paper interiors are opaque;
-- the airmail border is background-adjacent;
-- one full-page comparison and one targeted polish cycle completed;
-- `FIGMA_DESIGN_COMPLETE = YES`;
-- `FINAL_PHOTO_QA_PENDING = YES`;
-- `PRINT_READY = NO`.
+- all three photo roles use clean standalone proxies;
+- profile/Q paper opacity is correct;
+- border is background-adjacent;
+- unapproved personal copy remains native/separate;
+- P01 and P03-P08 untouched.
 
-Production metadata: `assets/rurubu-v30/p02/production/manifest.json`.
+Owner-corrected role classification:
+- `ふたりの` = `NATIVE_TEXT`
+- `プロフィール` = `NATIVE_TEXT`
+- `私たちのこと、少しだけ紹介します♪` = `NATIVE_TEXT`
+- `SHOGO` = `NATIVE_TEXT`
+- `SHIORI` = `NATIVE_TEXT`
+- `PAGE 02` = `SHARED_COMMON_COMPONENT` aligned to P01-P08 PAGE badge family
+- travel/tropical/route/icon art = `PAGE_SPECIFIC_ORNAMENT`
+- three replaceable pictures = `PHOTO`
 
-## P03
+Reopened ornament targets — `REWORK_REQUIRED`:
+- `P02_Q2_PLANE_AND_ROUTE`
+- `P02_TOP_AIRPLANE_ROUTE`
+- `P02_Q2_SUITCASE`
+- `P02_TOP_RIGHT_TRAVEL_TROPICAL_CLUSTER / REQUALIFIED_CARRYOVER`
+- `P02_TOP_LEFT_TROPICAL_CLUSTER / REQUALIFIED_CARRYOVER`
+
+Reason: generic/stock icon feel and visible carry-over/reuse quality. Moving/resizing the existing assets is not a sufficient fix.
+
+Current P02 gates:
+- `FIGMA_STRUCTURE_READY = PASS_PRESERVED`
+- `CLEAN_PROXY_PASS = PASS_PRESERVED`
+- `ALPHA_INTEGRITY_PASS = PASS_PRESERVED`
+- `COPY_SAFETY_PASS = PASS_PRESERVED`
+- `ASSET_ROLE_CLASSIFICATION_PASS = PASS_AFTER_OWNER_CORRECTION`
+- `SHARED_COMPONENT_PASS = PASS_WITH_PAGE_BADGE_RULE_CORRECTED`
+- `ORNAMENT_ORIGINALITY_PASS = REOPENED`
+- `VISUAL_CARRYOVER_PASS = REOPENED_FOR_FIVE_ORNAMENTS`
+- `REFERENCE_DELTA_PASS = REOPENED_FOR_TARGETED_ORNAMENT_PATCH`
+- `FIGMA_DESIGN_COMPLETE = NO`
+- `FINAL_PHOTO_QA_PENDING = YES`
+- `PRINT_READY = NO`
+
+Do not start P03 production until the P02 ornament patch closes or the owner explicitly defers it.
+
+## P03+
 
 P03 has direct Visual Master/page-polish authority but production has not started.
 
-## P04–P08
-
-P04–P08 require direct image rereview before page-specific generation. Do not invent exact module lists from prose alone.
+P04-P08 still require direct image rereview before page-specific generation.
 
 **CURRENT = V30. V20 = FROZEN HISTORY.**
