@@ -39,8 +39,8 @@
       if (title) title.textContent = '次は、曲に目印。';
       if (text) text.textContent = 'WELCOME、サビ、ラストの位置を曲の上に見えるようにする。';
       if (link) {
-        link.textContent = '曲の流れを見る →';
-        link.setAttribute('href', '#timeline');
+        link.textContent = '目印をつける →';
+        link.setAttribute('href', './markers.html');
       }
     } else {
       if (kicker) kicker.textContent = 'TODAY';
@@ -61,6 +61,7 @@
 
     checks.forEach((check) => {
       check.closest('.step')?.classList.toggle('is-done', check.checked);
+      check.closest('.marker-item')?.classList.toggle('is-done', check.checked);
     });
 
     renderStudioState();
@@ -70,7 +71,11 @@
   checks.forEach((check) => {
     check.checked = Boolean(state[check.dataset.progress]);
     check.addEventListener('change', () => {
-      state[check.dataset.progress] = check.checked;
+      const key = check.dataset.progress;
+      state[key] = check.checked;
+      checks
+        .filter((other) => other !== check && other.dataset.progress === key)
+        .forEach((other) => { other.checked = check.checked; });
       save(state);
       render();
     });
