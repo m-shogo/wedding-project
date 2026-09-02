@@ -277,7 +277,7 @@ New owner-visible micro debt reopens final acceptance:
 
 Therefore current status is:
 
-`BEST CURRENT = YES`
+`BEST_CURRENT = YES`
 
 `FIGMA_STRUCTURE_READY = PASS`
 
