@@ -1,380 +1,399 @@
 # Rurubu WEDDING V30 production assets
 
-Status: `CURRENT_V30_PRODUCTION_ASSET_NAMESPACE`
+Status: `CURRENT_V30_PRODUCTION_ASSET_NAMESPACE / 2026-09-02`
 
-New production assets for the current booklet belong under this directory.
+New current production assets belong under this directory.
 
-Do not copy old generated V20 decorations into V30 merely to preserve prior work.
+Do not copy V20/older generated decoration into V30 merely to preserve prior work.
 
-V20 assets are historical/reference only unless `docs/rurubu-v30/README.md` explicitly permits a verified source/provenance reuse.
+Current execution authority is read in the order defined by `docs/RURUBU-CURRENT.md`.
 
-## Visual creation tool boundary — HARD RULE
+## Tool boundary — HARD
 
-Previous Canva-based page/part construction reduced the visual quality and pushed the work toward generic wedding-template / card-layout aesthetics. V30 must not return to that production path.
+### Codex owns production execution
 
-### Canva is NOT a V30 production design tool
+Current user-locked workflow:
+- ChatGPT = feedback / manifests / authority / handoff / review;
+- Codex = production ImageGen / cutout-alpha / Figma writes-cleanup / proxy placement / production QA evidence.
 
-Do **not** use Canva, Canva templates, Canva page layouts, Canva-generated decoration packs, or Canva AI composition as the visual source for V30 production.
+Do not begin a new Figma/ImageGen cycle before relevant manifest feedback is written back.
 
-Do not:
-- design/rebuild P01–P08 in Canva;
-- create magazine layouts in Canva and import them into Figma;
-- use Canva template geometry as a starting point;
-- use Canva sticker/card/ribbon/gradient packs to establish the publication look;
-- use Canva as an intermediate flattening/export step for production graphics;
-- recreate an existing V30 page with Canva merely because it is faster.
+### Canva is not a V30 production tool
 
-A Canva-looking result is a reject condition even if Canva itself was not literally used: generic wedding template, evenly spaced cards, repeated rounded boxes, polished-but-flat symmetry, generic gradients and sticker-pack decoration must be redesigned.
+Do not use Canva or Canva-style template construction as the visual source.
 
-### Generated visual art comes from image-generation models
+Reject Canva-like output even if Canva was not literally used:
+- equal cards;
+- generic wedding template;
+- generic gradients;
+- repeated rounded boxes;
+- polished but flat symmetry;
+- sticker-pack composition.
 
-For non-photographic editorial visuals that need authored personality, use an **image-generation model** such as the available ImageGen / Imagen-class workflow, following `docs/rurubu-v30/README.md`.
-
-Generated visual candidates include:
-- title/masthead art;
-- paper/backing objects;
-- photo frames;
-- tickets;
-- stamps;
-- ribbons;
-- tape;
-- caption/Q&A vessels;
-- editorial edge objects;
-- page-aware ornaments;
-- restrained texture/atmosphere when genuinely needed.
-
-Generated visuals must still follow the V30 pipeline:
-
-`PAGE INTENT`
-→ `PAGE-SPECIFIC IMAGE-GENERATION BRIEF`
-→ `SAFE SOLID KEY BACKGROUND`
-→ `PYTHON ALPHA CUTOUT`
-→ `ALPHA QA`
-→ `02_PRODUCTION_RGBA`
-→ `FIGMA LAYERED PLACEMENT`
-
-Do not substitute generic Figma/Canva primitives when a page-specific generated visual unit is what creates the magazine quality.
-
-### Figma remains compositor only
+### Figma is compositor
 
 Figma is for:
-- placing/cropping real photographs;
-- masks and replaceability;
-- placing QA-passed generated assets;
+- clean real/proxy photo placement and masks;
+- generated/prepared production assets/modules;
 - z-order/scale/rotation/overlap;
-- native authoritative text;
-- page/spread/A5 QA;
-- editable final assembly.
+- native **long/variable/TBD** text where editability is actually needed;
+- page/spread/A5/print QA;
+- editable final assembly at object/module level.
 
-Figma is not the primary visual-asset generator. Canva is not part of the V30 production chain.
+Figma is **not** required to keep every short fixed visible word editable.
 
-## Replaceable photo-slot contract — HARD RULE
+## Fixed bundled display modules — HARD
 
-Real photos may be dummy/proxy images during production because they will be replaced later, but **the Figma structure must already be final-quality and easy to swap**.
+A short fixed authored object may be generated/prepared as one production asset containing:
+- fixed text;
+- numbers;
+- vessel/background;
+- badge shape;
+- icon;
+- route/doodle;
+- local flower/heart/sparkle;
+- print outline/shadow;
+- attached fixed decoration.
 
-For every photo slot:
-- create one dedicated replaceable photo container/mask;
-- keep the image source as a separate child/layer from frame/backing/decoration;
-- use a non-destructive mask or clipping frame;
-- set/maintain clipping so the photo itself **never spills outside the intended frame**;
-- in a clipping-frame implementation, `clipsContent = true` is mandatory;
-- after any crop, scale, rotation or photo replacement, visually verify there are no exposed pixels outside the mask bounds;
-- decorative frame/backing/tape may extend outside the photo slot, but those remain separate layers and do not change the photo's clipping boundary;
-- replacing the photo should require only replacing/swapping the image content, not rebuilding the frame or editorial composition;
-- do not bake a real/dummy photo together with its decorative frame into one flattened image.
+Visible fixed text does **not** need to remain editable in Figma.
 
-Preferred conceptual structure:
+Exact approved strings/numbers must be recorded in:
+- Root/page manifest; or
+- asset metadata.
+
+QA visible generated spelling/numbering against that source.
+
+Examples:
+- `2026` + badge;
+- complete date ticket;
+- Feature number + heading + icon + vessel;
+- Q-number shell;
+- short story-hook vessel;
+- OUR JOURNEY-style stamp;
+- PAGE number badge;
+- fixed masthead/title/name lockup.
+
+Keep separate:
+- replaceable real photos;
+- long body copy;
+- unapproved/TBD personal copy;
+- frequently changing text;
+- independently movable decorations when the Visual Master requires separate overlap.
+
+## ONE PART = ONE IMAGE — CURRENT DEFINITION
+
+**ONE INDEPENDENT EDITORIAL OBJECT = ONE PRODUCTION IMAGE FILE.**
+
+A bundled fixed display module counts as **one editorial object**, even when its internal design contains several text/icon/background elements.
+
+This is allowed:
+- date ticket + its fixed date labels + postal lines as one module;
+- Feature number/heading/icon/vessel as one module, while the photo remains separate;
+- PAGE + number + badge as one module.
+
+This is forbidden:
+- unrelated title + stamp + ticket packed into one PNG;
+- four independent photo frames on one production bitmap;
+- several unrelated stickers used as one sprite;
+- P01/P04/P05 unrelated parts packed together;
+- replaceable photo flattened into fixed display art;
+- multi-page production sheets used directly in Figma.
+
+Proof/contact sheets may contain many items but remain `REFERENCE_PROOF` only.
+
+## Replaceable photo-slot contract — HARD
+
+Every real-photo slot:
+- dedicated replaceable clipped/masked container;
+- image content separate from display module/frame/decoration;
+- non-destructive crop;
+- `clipsContent = true` when using clipping-frame implementation;
+- no spill beyond mask;
+- photo replacement must not rebuild surrounding page art;
+- replacing photo must not remove a flower/badge/frame/title that belongs to the page design.
+
+Conceptually:
 
 `PHOTO SLOT / REPLACEABLE / CLIPPED`
 - `IMAGE / SWAP THIS`
-- separate frame/backing/foreground decoration outside the slot as needed
 
-P05 is fixed at:
-- `SHOGO FRIENDS`: 4 independent replaceable clipped photo slots
-- `SHIORI FRIENDS`: 4 independent replaceable clipped photo slots
-- total: **8 independent masks/slots**
+with display module/frame/decoration outside that image content as required.
 
-`1 PHOTO SLOT = 1 INDEPENDENT REPLACEABLE CLIPPED MASK.`
+P05 current hard requirement:
+- `SHOGO FRIENDS`: 4 independent photo slots
+- `SHIORI FRIENDS`: 4 independent photo slots
+- total 8.
 
-## Generated asset granularity — ONE PART = ONE IMAGE — ABSOLUTE RULE
+## Photo proxy contamination — HARD REJECT
 
-Every production editorial part must be independently generated, processed, stored and placed.
+Visual Master page PNGs are **reference/comparison images, not photo sources**.
 
-**ONE PART = ONE IMAGE FILE.**
+Never:
+- crop `P01.png`, `P02.png`, etc. and place that crop inside a photo slot;
+- use a page screenshot as proxy photo;
+- use a proxy containing page border/title/badge/ticket/stamp/Q shell/flower/route/frame/background decoration;
+- use a proxy whose baked decoration duplicates a separate page asset.
 
-Never place several unrelated/separately positionable production parts into one generated image merely to save generation calls, cutout work, uploads or Figma placements.
+Reason:
+- photo vs page-decoration boundaries become ambiguous;
+- decoration can appear twice;
+- swapping the proxy can accidentally remove intended page design;
+- Reference Delta can falsely pass.
 
-Forbidden examples:
-- title + stamp + ticket + tape all packed into one PNG when they need independent placement;
-- four photo frames exported on one canvas;
-- several stickers/labels arranged as a sprite/contact sheet and then used as one Figma image;
-- P05 SHOGO label + SHIORI label + caption vessels on one production bitmap;
-- P01/P04/P05 parts from different jobs packed into a single generated sheet.
+Allowed proxy sources:
+1. user-provided real photo;
+2. clean standalone representative photo;
+3. clean generated standalone photo proxy containing no page-layout decoration.
 
-Required behavior:
-- title = one image;
-- stamp = one image;
-- ticket = one image;
-- tape = one image;
-- frame = one image;
-- caption vessel = one image;
-- ornamental cluster = one image when the cluster is intentionally one inseparable visual object.
+VISUAL_PROXY must match hierarchy-relevant semantics. STRUCTURAL_PROXY may be looser but still must be clean standalone photo content.
 
-Exception is narrow:
-A group may be one image only when it is intentionally designed as **one inseparable semantic editorial unit** that will always move/scale/replace together. Convenience alone is not an exception.
+## Proxy admission QA
 
-Proof/contact sheets may show many candidates together for review, but those proof sheets are `REFERENCE_PROOF` only and **must never be used as the production Figma asset**.
+For every active proxy:
+- view proxy alone;
+- confirm it reads as photo content only;
+- no page-layout text/decorations baked in;
+- replace with a different clean image and confirm page decorations remain;
+- verify crop/mask behavior;
+- visual proxy subject count/orientation/focal mass is appropriate.
 
-Each production image gets its own:
-- semantic filename;
-- SOURCE_KEYED source when applicable;
-- PRODUCTION_RGBA output;
-- alpha QA;
-- page/job ownership;
-- independent Figma placement.
+## Production asset admission pipeline
 
-`NO SPRITES / NO MULTI-PART PRODUCTION SHEETS / NO PACKED-ASSET PNGS.`
+A generated isolated/bundled visual asset enters production only through:
 
-## Production accident-prevention gates — HARD RULES
-
-These gates exist because recent V30 work exposed concrete failure modes: stale `VOL.20`, checkerboard-baked alpha, photo-well-only pages, template repetition, ambiguous replacement structure, and packed/generated asset risk.
-
-### Gate 1 — real photo replacement test, not structure-by-claim
-
-A photo slot is not accepted merely because its layer name says `REPLACEABLE`.
-
-For every photo slot, test at least one actual replacement during production:
-- replace the dummy/proxy image with a different image source;
-- test a materially different crop/orientation when practical, especially portrait vs landscape behavior;
-- verify the image remains clipped inside the intended frame;
-- verify the decorative frame/backing/tape does not need rebuilding;
-- verify crop/focal-point adjustment is enough to recover the composition;
-- verify no unexpected gap/exposed background appears inside the slot.
-
-For P05, all 8 friend-photo slots must independently pass replacement behavior before final design acceptance.
-
-### Gate 2 — placeholder / stale-marker zero gate
-
-Before a guest-facing export, scan the V30 production page for production-only or stale markers.
-
-Examples that must not remain visibly guest-facing:
-- `TBD`
-- `TODO`
-- `DUMMY`
-- `PLACEHOLDER`
-- `REAL PHOTO`
-- `PHOTO SWAP`
-- `SOURCE_KEYED`
-- `V20`
-- `VOL.20`
-- `V21`
-- `V31`
-- obsolete page-role strings
-
-A known production label may exist only in a hidden/non-export QA layer. Visible guest-facing hit = FAIL.
-
-### Gate 3 — no hidden graveyard inside V30 production page
-
-`V30_FINAL_PRODUCTION` must contain the current production state, not a hidden archive.
-
-Do not keep rejected/obsolete production assets merely as `visible=false` siblings inside the live page because an agent may rediscover and reuse them.
-
-Rejected or superseded candidates belong in:
-- Git history when appropriate;
-- Drive `99_REJECTED_DO_NOT_USE`;
-- a clearly non-production historical/reference surface outside the current V30 production page.
-
-Keep current production Figma intentionally clean.
-
-### Gate 4 — no destructive rescue scaling
-
-Do not rescue a badly sized generated part by stretching it non-uniformly until it fits.
-
-If a title, ticket, frame, stamp, paper object or other generated unit has the wrong aspect ratio/physical behavior:
-- regenerate or rebuild it for the intended physical size/aspect;
-- preserve natural proportions unless deliberate distortion is part of the design;
-- do not horizontally/vertically squash tactile editorial art as a convenience shortcut.
-
-### Gate 5 — repeated PNG reuse is also an anti-AI/template risk
-
-`ONE PART = ONE IMAGE` does not mean one approved PNG should be stamped everywhere.
-
-Avoid repeating the exact same production PNG across adjacent pages or multiple unrelated jobs when the repetition becomes visually obvious.
-
-Shared publication DNA is encouraged; literal copy/paste sameness is not.
-
-For related parts:
-- create about 2–4 meaningful variants when repetition would otherwise feel templated;
-- vary geometry/job while preserving family resemblance;
-- do not multiply near-identical variants merely to increase count.
-
-P03 must not become repeated identical ticket/card units. P05 should not repeat one frame recipe eight times if that makes it look like a contact sheet/UI grid.
-
-### Gate 6 — production-asset admission gate
-
-A generated isolated part may enter the live Figma production composition only after the required pipeline state is satisfied:
-
-`SOURCE_KEYED`
+`PAGE AUTHORITY READY`
+→ `MODULE/PART BRIEF`
+→ `SOURCE_KEYED`
 → `PYTHON CUTOUT`
 → `ALPHA QA PASS`
 → `PRODUCTION_RGBA`
 → `DRIVE/GIT TRACEABILITY`
-→ `FIGMA ADOPTED`
+→ `FIGMA ADOPTED`.
 
-Immediate reject conditions include:
-- checkerboard baked into pixels;
-- key-color halo;
-- opaque unwanted rectangle/background;
-- accidental holes;
-- fake or garbled text when text should be native;
-- several independent parts packed into one bitmap;
-- wrong page role;
-- unknown provenance where provenance matters.
+Before generation, require:
+- Visual Master reviewed;
+- PASS A/PASS B complete where required;
+- bundled module boundary classified;
+- exact fixed visible strings/numbers known;
+- variable/native copy classified;
+- replaceable photo relationship known;
+- clean proxy role classified;
+- implementation-affecting feedback debt written back.
 
-The Figma production layer name and Drive/Git production filename should be semantically traceable to the same page/job.
+## Key-background generation
 
-### Gate 7 — visual checkpoint after meaningful changes
+For title/modules/paper/tickets/stamps/ribbons/tape/frames/ornaments needing alpha:
+- one independently movable object/module per image;
+- removable flat key background;
+- key color must not overlap artwork colors;
+- leave clean connected margin around object;
+- do not use scenic/gradient/textured background behind an object intended for cutout;
+- preserve intentional interior whites/creams/colors;
+- treat deliberate shadow as part of alpha silhouette and QA it.
 
-After a meaningful page or spread change, create a comparison checkpoint rather than relying on memory.
+## Python alpha cutout
 
-Save appropriate QA outputs to Drive `90_QA_EXPORT`, especially after substantial changes to P01/P04/P05 or any page whose visual direction materially changed.
+Use edge-connected background removal rather than naive global color deletion.
 
-Checkpoint should include as relevant:
+Preferred behavior:
+- know/sample key color;
+- find key region connected to outer edges/corners;
+- remove connected background with controlled tolerance;
+- preserve similar colors inside artwork;
+- preserve intended interior holes/colors;
+- clean key halo/fringe;
+- output true RGBA PNG.
+
+## Mandatory alpha QA
+
+Before adoption:
+- real alpha channel exists;
+- outer canvas transparent;
+- no baked checkerboard;
+- no key-color halo;
+- no accidental holes;
+- intentional interior colors preserved;
+- no unwanted opaque rectangle;
+- edges reviewed enlarged;
+- test on light/dark temporary background where useful.
+
+A checkerboard-looking generation preview is **not evidence of alpha**.
+
+## Source + production states
+
+### `SOURCE_KEYED`
+Original generated source with removable key background.
+
+### `PRODUCTION_RGBA`
+- true transparent production PNG;
+- alpha QA passed;
+- Figma placement source.
+
+Other useful states:
+- `REFERENCE_ONLY`
+- `CANDIDATE`
+- `ADOPTED`
+- `SUPERSEDED`
+- `REJECTED`.
+
+## Asset metadata / provenance
+
+Each adopted asset/module should record as applicable:
+- asset ID / semantic filename;
+- page/job;
+- render mode;
+- source/provenance;
+- generation prompt/version;
+- **exact fixed text/numbers baked into visible module**;
+- variable fields that remain outside;
+- photo relationship;
+- intended physical size/aspect;
+- canvas dimensions;
+- visual bounds / transparent padding;
+- alpha mode;
+- SHA-256 when available;
+- adoption/current/carry-over status.
+
+Avoid `image1.png`, `final2.png`, `new.png`.
+
+## Visual carry-over admission
+
+A production file being `ADOPTED` does not permanently approve its design.
+
+After a REWORK, every inherited visible asset must be requalified:
+- `KEEP_REQUALIFIED`
+- `REWORK_REQUIRED`
+- `REPLACE_REQUIRED`
+- `SUPERSEDED`
+
+Until rechecked:
+`UNREVIEWED_CARRYOVER`.
+
+Do not preserve old asset because generation effort was already spent.
+
+## Repeated asset anti-template rule
+
+One-part-one-image does not mean stamp the same PNG everywhere.
+
+Avoid obvious repeated production PNGs across unrelated page jobs.
+
+Use meaningful variants only where repetition would otherwise feel templated.
+
+Do not manufacture unnecessary near-identical variants just to increase count.
+
+## No hidden Figma graveyard
+
+`V30_FINAL_PRODUCTION` holds current production, not archive.
+
+Rejected/superseded assets belong in:
+- Git history;
+- Drive rejected area;
+- non-production reference/history surface.
+
+Do not leave rejected candidates as hidden live siblings where future agents may rediscover them.
+
+## No destructive rescue scaling
+
+If generated asset aspect/physical behavior is wrong:
+- regenerate/rebuild;
+- preserve natural proportions;
+- do not non-uniformly stretch tactile art as convenience.
+
+## No generic Figma rescue
+
+If a page-specific generated module is weak/missing:
+- improve/regenerate it;
+- keep a clean placeholder if blocked;
+- continue other safe work;
+- record blocker.
+
+Do not silently patch identity gaps with generic rectangles/pills/SaaS shadows.
+
+## Visual checkpoints
+
+After meaningful page/spread changes, save comparison evidence rather than trusting memory.
+
+Relevant QA may include:
+- page render;
+- spread render;
 - 8-page contact sheet;
-- affected page render;
-- affected spread render;
-- A5-size QA render.
+- A5-size render;
+- grayscale;
+- before/after comparison;
+- proxy-isolation proof;
+- module comparison.
 
-Use a traceable name with date/time or Git SHA when practical.
+Use traceable timestamp/Git SHA when practical.
 
-Purpose: enable before/after comparison and prevent accidental regression where an older candidate was visually stronger.
+## Current Google Drive production root
 
-### Gate 8 — face / focal-content safe zone
-
-Bleed and edge crops may be energetic, but critical human content must remain protected.
-
-Do not casually place near trim/fold or behind decoration:
-- eyes;
-- mouths;
-- important facial expressions;
-- meaningful hand/gesture details;
-- friend faces on P05;
-- names/dates/Q&A answers;
-- P07 thank-you copy;
-- P08 barcode digits.
-
-For P05 specifically, each of the 8 final photos must remain recognizable at A5 actual-size review; merely fitting inside a mask is not enough.
-
-### Gate 9 — content role locked / visual execution unlocked
-
-P01–P08 current semantic roles are locked unless the user explicitly changes them.
-
-However, current visual geometry is **not** protected by sunk cost.
-
-Rule:
-`CONTENT ROLE LOCKED / VISUAL EXECUTION UNLOCKED.`
-
-If the current layout is weak, rebuild the visual execution from zero while preserving the correct current page role and factual constraints.
-
-Do not preserve weak geometry merely because it already exists in Figma.
-
-### Gate 10 — do not patch a weak generated-art gap with generic Figma shapes
-
-If a page-specific generated title/frame/vessel/editorial object is weak or missing, do not silently patch the gap with generic rectangles, rounded cards, pills, SaaS shadows or template primitives merely to make the page look complete.
-
-Preferred response:
-- improve/regenerate the page-specific visual unit;
-- keep a clean replaceable placeholder if generation is temporarily blocked;
-- continue other safe production work;
-- record the blocker if it materially prevents completion.
-
-Figma may use simple native geometry for true technical/layout needs, but it must not become the emergency source of magazine personality.
-
-## Quality philosophy
-
-Do not add increasingly rigid aesthetic quotas merely to make the system feel controlled.
-
-Keep strict:
-- page roles;
-- truth/factual boundaries;
-- asset provenance;
-- one-part-one-image;
-- photo replaceability/clipping;
-- production pipeline;
-- QA/rejection gates.
-
-Keep visually flexible:
-- exact geometry;
-- local asymmetry;
-- title collision;
-- page-specific part choice;
-- photo hierarchy;
-- editorial surprise;
-- visual rebuilding when a stronger candidate emerges.
-
-The target is:
-
-`STRICT PROCESS + LOCKED CONTENT ROLE + FREE HIGH-QUALITY VISUAL EXECUTION.`
-
-## Git page ownership
-
-Preferred structure as assets are adopted:
-- `p01/`
-- `p02/`
-- `p03/`
-- `p04/`
-- `p05/`
-- `p06/`
-- `p07/`
-- `p08/`
-
-## Canonical Google Drive production root
-
-Use only this V30 Drive root for new Rurubu V30 production material:
+Canonical V30 Drive root:
 
 - `V30_FINAL_PRODUCTION`
 - folder ID: `1_WTIl18wz8oB8IhPaOKPJv3A4H00KLr8`
 
-It is inside the existing `RURUBU` root.
+Subfolders:
 
-Current V30 subfolders:
+### `00_REFERENCE_PROOF`
+ID: `1hL7swXxXOAVXRmJ88yiKEMTyhfeRv0YM`
 
-- `00_REFERENCE_PROOF`
-  - ID: `1hL7swXxXOAVXRmJ88yiKEMTyhfeRv0YM`
-  - contact sheets / page proofs / approved visual references only
+Visual Masters/contact sheets/page proofs only.
 
-- `01_SOURCE_KEYED`
-  - ID: `1qMzUwsLe3QRzKDmDImj_przF42nl4sTN`
-  - original generated assets with removable solid key background
-  - never use as Figma production placement when an RGBA version is required
+**Do not use reference-page crops as photo proxies.**
 
-- `02_PRODUCTION_RGBA`
-  - ID: `1A5sxBbehwF68mUnaHkjwVYWzbI-oSH_G`
-  - Python-cutout, alpha-QA-passed transparent production PNGs
-  - canonical generated-asset source for Figma placement
+### `01_SOURCE_KEYED`
+ID: `1qMzUwsLe3QRzKDmDImj_przF42nl4sTN`
 
-- `03_REAL_PHOTO_SOURCE`
-  - ID: `1spYUE-TAgvOCZSmF_sOSUZcE-5Op3lJ3`
-  - verified real-photo sources / approved proxies and final replacements
-  - never mix generated autobiographical substitutes here
+Generated keyed sources.
 
-- `90_QA_EXPORT`
-  - ID: `1Jfml45i7VyjwOloWaqpurGuxE13TeFXs`
-  - contact sheets, spread proofs, A5 QA renders, print/export QA artifacts
+### `02_PRODUCTION_RGBA`
+ID: `1A5sxBbehwF68mUnaHkjwVYWzbI-oSH_G`
 
-- `99_REJECTED_DO_NOT_USE`
-  - ID: `1DKoaR3EONXxufU_8-IhL_1KwEZHvedyb`
-  - rejected/checkerboard-baked/halo/fake-text/wrong-role assets
-  - nothing in this folder has production authority
+Alpha-QA-passed generated production assets/modules.
+
+### `03_REAL_PHOTO_SOURCE`
+ID: `1spYUE-TAgvOCZSmF_sOSUZcE-5Op3lJ3`
+
+Verified real photos / **clean standalone approved proxies** / final replacements.
+
+Do not place Visual Master page crops here as active photo proxies.
+
+### `90_QA_EXPORT`
+ID: `1Jfml45i7VyjwOloWaqpurGuxE13TeFXs`
+
+Page/spread/contact/A5/print/proxy/module QA evidence.
+
+### `99_REJECTED_DO_NOT_USE`
+ID: `1DKoaR3EONXxufU_8-IhL_1KwEZHvedyb`
+
+Rejected/checkerboard-baked/halo/fake-text/wrong-role/superseded production assets.
 
 ## Drive guardrails
 
-- Do not upload new V30 production assets into the old `RURUBU_V20_*` folders.
-- Do not treat files in old RURUBU folders as current merely because they exist.
-- `01_SOURCE_KEYED` → Python cutout → alpha QA → `02_PRODUCTION_RGBA` → Figma is the default generated-asset path.
-- A rejected asset must never remain next to approved production assets without explicit rejected classification.
-- Use semantic V30 page/job names; never anonymous `final2.png`, `new.png`, etc.
-- Store one production part per file; never upload packed production sheets to `02_PRODUCTION_RGBA`.
+- no new V30 production assets in old V20 folders;
+- files are not current merely because they exist;
+- `SOURCE_KEYED → cutout → alpha QA → PRODUCTION_RGBA → Figma`;
+- rejected asset never sits ambiguously beside current production authority;
+- semantic page/job naming;
+- no unrelated packed production sheets;
+- historical Visual-Master-crop calibration files may remain as QA history but cannot regain active proxy authority.
+
+## Current production acceptance
+
+A page asset set is not ready merely because:
+- layers exist;
+- alpha passes;
+- photos swap;
+- filenames say `ADOPTED`.
+
+Current acceptance requires, where applicable:
+- `CLEAN_PROXY_PASS`
+- `BUNDLED_DISPLAY_MODULE_PASS`
+- `IDENTITY_ANCHOR_PASS`
+- `VISUAL_CARRYOVER_PASS`
+- `REFERENCE_DELTA_PASS`
+- `PHOTO_SWAP_PASS`
+- A5/print QA.
 
 Current production authority:
-`docs/rurubu-v30/README.md`
+`docs/RURUBU-CURRENT.md`
