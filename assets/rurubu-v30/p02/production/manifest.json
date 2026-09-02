@@ -1,14 +1,14 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "project": "Rurubu WEDDING V30",
   "page": "P02",
-  "status": "FIGMA_PRODUCTION_COMPLETE_FINAL_PHOTO_QA_PENDING",
+  "status": "FIRST_PRODUCTION_BASELINE_VALID_ORNAMENT_QUALITY_REOPENED",
   "figma": {
     "fileKey": "bfM0d4c9dCeBv5pCkJ3TNM",
     "page": "V30_FINAL_PRODUCTION",
     "currentNode": "3535:9",
     "frameName": "V30 P02 / PROFILE / CURRENT",
-    "childCount": 76
+    "firstProductionChildCount": 76
   },
   "cleanStandaloneProxies": [
     {
@@ -33,6 +33,13 @@
       "figmaImageHash": "9bb700e0a39e65f53790fc320d39855665b4a082"
     }
   ],
+  "assetRoleClassification": {
+    "NATIVE_TEXT": ["ふたりの", "プロフィール", "私たちのこと、少しだけ紹介します♪", "SHOGO", "SHIORI", "profile labels and values", "Q1/Q2 question and answer copy"],
+    "SHARED_COMMON_COMPONENT": ["PAGE 02 / P01-P08 PAGE-badge family"],
+    "PAGE_SPECIFIC_ORNAMENT": ["travel/tropical/route/icon art"],
+    "PHOTO": ["SHOGO portrait", "SHIORI portrait", "Q1 couple inset"],
+    "rule": "Fixed or stylized text is not automatically an image asset. Cross-page publication furniture is not page-specific generated art."
+  },
   "copySafety": {
     "lockedVisibleCopy": ["ふたりの", "プロフィール", "SHOGO", "SHIORI", "Q1", "Q2", "PAGE", "02"],
     "japaneseNameReadingsFactized": false,
@@ -42,19 +49,35 @@
     "qaQuestions": "REFERENCE_ONLY native text, separately controllable",
     "qaAnswers": "TBD native text, separately controllable"
   },
+  "reopenedOrnamentDebt": {
+    "reason": "Owner review found generic/stock icon feel and obvious carry-over/reuse quality that the first structural QA did not catch.",
+    "status": "REWORK_REQUIRED",
+    "targets": [
+      "P02_Q2_PLANE_AND_ROUTE",
+      "P02_TOP_AIRPLANE_ROUTE",
+      "P02_Q2_SUITCASE",
+      "P02_TOP_RIGHT_TRAVEL_TROPICAL_CLUSTER / REQUALIFIED_CARRYOVER",
+      "P02_TOP_LEFT_TRAVEL_TROPICAL_CLUSTER / REQUALIFIED_CARRYOVER"
+    ],
+    "note": "For the top-left target, match the live Figma node name if it is `P02_TOP_LEFT_TROPICAL_CLUSTER / REQUALIFIED_CARRYOVER`; the role is the same. Moving/resizing/recoloring the old art alone is not a repair.",
+    "carryoverPassRequires": ["current visual quality", "local page-context fit", "no generic stock/clipart feel", "no obvious same-page duplication/reuse feel"]
+  },
   "acceptance": {
-    "FIGMA_STRUCTURE_READY": "PASS",
-    "CLEAN_PROXY_PASS": "PASS",
-    "BUNDLED_DISPLAY_MODULE_PASS": "PASS",
-    "ALPHA_INTEGRITY_PASS": "PASS",
-    "COPY_SAFETY_PASS": "PASS",
-    "EDGE_SAFETY_PASS": "PASS",
-    "BORDER_Z_ORDER_PASS": "PASS",
-    "REFERENCE_DELTA_PASS": "PASS_AFTER_ONE_TARGETED_POLISH",
-    "A5_GRAYSCALE_PASS": "PASS",
+    "FIGMA_STRUCTURE_READY": "PASS_PRESERVED",
+    "CLEAN_PROXY_PASS": "PASS_PRESERVED",
+    "BUNDLED_DISPLAY_MODULE_PASS": "SUPERSEDED_BY_ASSET_ROLE_CLASSIFICATION",
+    "ALPHA_INTEGRITY_PASS": "PASS_PRESERVED",
+    "COPY_SAFETY_PASS": "PASS_PRESERVED",
+    "EDGE_SAFETY_PASS": "PASS_PRESERVED",
+    "BORDER_Z_ORDER_PASS": "PASS_PRESERVED",
+    "ASSET_ROLE_CLASSIFICATION_PASS": "PASS_AFTER_OWNER_CORRECTION",
+    "ORNAMENT_ORIGINALITY_PASS": "REOPENED",
+    "VISUAL_CARRYOVER_PASS": "REOPENED_FOR_FIVE_ORNAMENTS",
+    "REFERENCE_DELTA_PASS": "REOPENED_FOR_TARGETED_ORNAMENT_PATCH",
+    "A5_GRAYSCALE_PASS": "PASS_BASELINE_PRESERVED",
     "HIDDEN_OBSOLETE_COUNT": 0,
     "DUPLICATE_SAME_JOB_LIVE_COUNT": 0,
-    "FIGMA_DESIGN_COMPLETE": true,
+    "FIGMA_DESIGN_COMPLETE": false,
     "FINAL_PHOTO_QA_PENDING": true,
     "PRINT_READY": false
   },
@@ -66,12 +89,13 @@
     "p01Untouched": true,
     "p03ToP08Untouched": true
   },
-  "evidence": {
+  "firstProductionEvidence": {
     "finalScreenshotSha256": "514f14b17650ecabbd60e2c570303117f0361479bea2d5563bdd5b7514050689",
     "a5ColorSha256": "728fbbe784668f42edea464bd92f389b608734569fbf3a336b7e239e07140532",
     "a5GrayscaleSha256": "4b716ae30310c17dadfe63de0457acede2899f39da28e4182ec1c147fdc0fced",
     "visualMasterComparisonSha256": "b3cf7131dab506d1415860b2389117f66fe2cda0afcc2853c3b791edc3367871",
     "driveProductionFolderId": "10TnlGlA7OEUVzv3lKGRLMGyXZ21jnpaU",
-    "driveQaFolderId": "1fvDQl2Rpe6H1JufWxtbnWc9zng8437MN"
+    "driveQaFolderId": "1fvDQl2Rpe6H1JufWxtbnWc9zng8437MN",
+    "note": "These hashes document the first production baseline. They are not evidence that the reopened ornament-quality gate is closed."
   }
 }
