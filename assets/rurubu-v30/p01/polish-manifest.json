@@ -1,24 +1,19 @@
 {
-  "schemaVersion": 8,
+  "schemaVersion": 9,
   "project": "Rurubu WEDDING V30",
   "page": "P01",
-  "status": "CURRENT_P01_DESIGN_LOCKED_FINAL_PHOTO_QA_PENDING",
+  "status": "CURRENT_P01_DESIGN_LOCKED_GIT_BINARY_SYNC_PENDING_FINAL_PHOTO_QA_PENDING",
   "inherits": [
     "assets/rurubu-v30/manifest.json",
     "assets/rurubu-v30/visual-polish-manifest.json",
     "assets/rurubu-v30/p01/manifest.json"
   ],
-  "purpose": "Current P01 execution authority after direct Visual Master rereview, final REWORK, owner-visible micro-polish and fresh post-fix Figma screenshot review. P01 design debt is closed; only final owner-photo replacement and final-photo/print QA remain.",
+  "purpose": "Current P01 execution authority after direct Visual Master rereview, final REWORK, targeted micro-polish and fresh post-fix Figma screenshot review. P01 design debt is closed. The only immediate operational debt is syncing four micro-polish production PNGs from the local worktree/Drive into remote Git; final owner-photo and print QA remain later.",
   "currentFigma": {
     "fileKey": "bfM0d4c9dCeBv5pCkJ3TNM",
     "currentNode": "3535:7",
     "realP02Node": "3535:9",
     "deletedTempNode": "3708:2"
-  },
-  "priorFinalRework": {
-    "commit": "c64b3c66d3a0579f704222eea980b193005d7dbd",
-    "acceptedAsBaseline": true,
-    "importantRule": "Do not roll back to FIRST BUILD and do not do another whole-page REWORK."
   },
   "fixedDisplayModules": [
     {"id":"P01_MASTHEAD_RURUBU","exactVisibleText":["るるぶ"]},
@@ -36,14 +31,6 @@
   "photoProxyPolicy": {
     "status": "CLEAN_STANDALONE_ONLY",
     "hardRule": "P01.png/page screenshots must never be used as active photo fills. Final owner photos replace only the four photo fills without changing accepted modules/masks."
-  },
-  "alphaAndMaterialExpectation": {
-    "Feature1": "White/pink paper-vessel interior is opaque printed paper; background/Hero must not show through except narrow antialiased edge pixels.",
-    "Feature2": "White/blue paper-vessel interior is opaque printed paper; background/Hero must not show through except narrow antialiased edge pixels.",
-    "Feature3": "White/green paper-vessel interior is opaque printed paper; background/Hero must not show through except narrow antialiased edge pixels.",
-    "Date": "Ticket body is opaque printed paper, not translucent glass.",
-    "BottomStory": "White cloud/paper vessel is opaque enough to separate copy from Hero/background.",
-    "hardRule": "Actual alpha existence alone is insufficient. Verify intended outside transparency and intended inside opacity."
   },
   "fastFailRegeneration": {
     "status": "REQUIRED_FOR_P01_AND_FUTURE_V30_ASSET_REPLACEMENTS",
@@ -66,29 +53,42 @@
     "featureInteriorOpacity": {
       "result": "PASS",
       "cause": "source PNG internal alpha, not Figma opacity/blend",
-      "repair": "Feature 1/2/3 affected production RGBA modules were repaired/replaced rather than masked by rescue rectangles",
       "reportedNumericCheck": "paper-core sample alpha 255; outer transparency retained 0-255; Figma node/image opacity 1.0",
-      "visualReview": "Fresh CURRENT screenshot no longer shows Hero/background bleeding through the intended white Feature vessels."
+      "visualReview": "Fresh CURRENT screenshot no longer shows Hero/background bleeding through intended white Feature vessels."
     },
     "featureLeftEdgeSafety": {
       "result": "PASS",
-      "repair": "Feature 1/2/3 were moved/tuned inward with non-identical local spacing preserved",
-      "visualReview": "Number badges/headings are no longer visibly clipped or compressed against the airmail border at full-page review."
+      "visualReview": "Feature badges/headings no longer read as accidentally clipped or compressed against the airmail border; unequal local rhythm remains."
     },
     "ringClusterFidelity": {
       "result": "PASS",
-      "repair": "Top-left support cue replaced/requalified as gold wedding rings + visible diamond + yellow sparkles",
-      "visualReview": "Wedding-specific cue is restored without overtaking masthead/WEDDING hierarchy."
-    },
-    "regression": {
-      "result": "PASS",
-      "preserved": ["Hero", "るるぶ", "WEDDING", "Shogo & Shiori", "2026", "Date", "Bottom Story", "OUR JOURNEY", "PAGE 01", "overall composition"]
+      "visualReview": "Gold wedding rings + visible diamond + yellow sparkles restore the wedding support cue without overtaking masthead/WEDDING hierarchy."
     },
     "cleanupReported": {
       "hiddenOldLayerCount": 0,
       "duplicateSameJobCount": 0,
       "P02Untouched": true
     }
+  },
+  "repositorySync": {
+    "status": "PENDING_AFTER_CODEX_USAGE_LIMIT_INTERRUPTED_COMMIT_PUSH",
+    "reason": "Codex finished Figma/Drive and local project-asset preparation but hit its usage limit before commit/push. ChatGPT later synchronized authority text, but cannot upload binary PNGs through the GitHub text-file connector.",
+    "remoteVerification": "Exact micro-polish Feature 1 PNG path returned 404 on remote branch after the run.",
+    "filesToSync": [
+      "assets/rurubu-v30/p01/final-rework/V30_P01_FEATURE_1_MODULE_MICRO_POLISH_OPAQUE_PAPER_RGBA.png",
+      "assets/rurubu-v30/p01/final-rework/V30_P01_FEATURE_2_MODULE_MICRO_POLISH_OPAQUE_PAPER_RGBA.png",
+      "assets/rurubu-v30/p01/final-rework/V30_P01_FEATURE_3_MODULE_MICRO_POLISH_OPAQUE_PAPER_RGBA.png",
+      "assets/rurubu-v30/p01/final-rework/V30_P01_TOP_LEFT_RING_DIAMOND_SPARKLE_MICRO_POLISH_RGBA.png"
+    ],
+    "safeResumeRule": [
+      "preserve/copy the four binary assets before resetting anything",
+      "discard/reconcile stale local authority-file edits because remote authority was already updated by ChatGPT",
+      "fast-forward/rebase local branch to latest remote PR head",
+      "stage only the four intended production PNGs plus any intentionally tracked final QA evidence",
+      "commit and push",
+      "verify the four remote paths exist and working tree is clean"
+    ],
+    "blocksP02": true
   },
   "acceptanceState": {
     "FIGMA_STRUCTURE_READY": "PASS",
@@ -103,20 +103,22 @@
     "A5_GRAYSCALE_PASS": "PASS",
     "HUMAN_FEEDBACK_REVIEWED": "PASS",
     "FIGMA_DESIGN_COMPLETE": true,
+    "GIT_PRODUCTION_ASSET_SYNC": "PENDING",
     "FINAL_PHOTO_QA_PENDING": true,
     "PRINT_READY": false
   },
   "nextAction": [
-    "P02 production may begin under its current Visual Master/page-polish authority.",
-    "When final owner P01 photos arrive, replace only Hero + Feature 1/2/3 photo fills and rerun final-photo crop/face-safe/resolution/print QA.",
-    "Do not reopen P01 design unless a new material owner-visible defect appears."
+    "First sync the four micro-polish binary production assets to remote Git without reapplying stale local doc edits.",
+    "After remote binary sync is verified and local worktree is clean, P02 production may begin under its current Visual Master/page-polish authority.",
+    "When final owner P01 photos arrive, replace only Hero + Feature 1/2/3 photo fills and rerun final-photo crop/face-safe/resolution/print QA."
   ],
   "doNotDo": [
     "do not rebuild P01",
+    "do not reapply stale local authority documents over newer remote authority",
+    "do not lose the four unpushed binary production assets while cleaning the local worktree",
     "do not use P01.png crops as photo proxies",
     "do not keep superseded hidden layers",
     "do not fake paper opacity with rescue rectangles",
-    "do not normalize Feature 1/2/3 into equal UI cards",
-    "do not modify P01 design merely because final real photos are still pending"
+    "do not normalize Feature 1/2/3 into equal UI cards"
   ]
 }
