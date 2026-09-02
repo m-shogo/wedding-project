@@ -1,369 +1,281 @@
 # Rurubu WEDDING — CURRENT POINTER
 
-Status: `CURRENT_POINTER / V30_ONLY / 2026-09-01`
+Status: `CURRENT_POINTER / V30_ONLY / 2026-09-02`
 
 The only current Rurubu WEDDING production version is **V30**.
 
-Read first, in this order:
-1. `docs/rurubu-v30/README.md`
-2. `assets/rurubu-v30/README.md`
-3. this file's `V30 HARD PRODUCTION OVERRIDES`, `Balanced visual-production doctrine`, and `Finalization / anti-regression gates`
+This file is the entry point. It intentionally stays shorter than the detailed production authorities so future agents do not miss the actual Visual Master, page manifest, or execution-feedback gates.
 
-The second file is not optional: it contains the current production-asset, replacement-mask, one-part-one-image, Canva-ban, and accident-prevention gates that must be applied during execution.
+## REQUIRED READ SET — every production run
 
-Current Git branch:
+Read in this order before changing a V30 page:
+
+1. **This file** — current version / scope / hard boundaries
+2. **The actual page Visual Master image** — `assets/rurubu-v30/pXX/PXX.png`
+3. **Root machine-readable production authority** — `assets/rurubu-v30/manifest.json`
+4. **Page-specific authority** — `assets/rurubu-v30/pXX/manifest.json`
+5. **Pre-build understanding audit** — `docs/rurubu-v30/VISUAL-MASTER-LOCK-AUDIT.md`
+6. **Post-build Figma acceptance + feedback gate** — `docs/rurubu-v30/FIGMA-EXECUTION-ACCEPTANCE.md`
+7. **Page README** if that page already has production work — `assets/rurubu-v30/pXX/README.md`
+8. **Broader V30 production guide** — `docs/rurubu-v30/README.md`
+9. **Production-asset mechanics** — `assets/rurubu-v30/README.md`
+
+Do **not** treat a manifest alone as sufficient visual authority.
+
+Do **not** treat a visually analyzed/locked page as a completed Figma implementation.
+
+`VISUAL_MASTER_LOCKED ≠ FIGMA_DESIGN_COMPLETE`.
+
+## Current Git / Figma authority
+
+Git branch:
 `rurubu/v30-final-production-20260901`
 
-Current Figma page:
+PR:
+`#878 — Rurubu V30: final production clean-slate`
+
+Figma file key:
+`bfM0d4c9dCeBv5pCkJ3TNM`
+
+Figma page:
 `V30_FINAL_PRODUCTION`
 
-Current Figma board:
-`V30 / FINAL PRODUCTION / 2026-09-01` — node `3535:2`
-
-## V30 HARD PRODUCTION OVERRIDES
-
-These rules are mandatory even if an older note or current proof is ambiguous:
-
-- Real-person / friend / couple / pet photography may use **dummy/proxy photos during layout**, because final photos will be replaced later.
-- Every replaceable photo slot must be built as an **easy-swap non-destructive Figma mask/clipped frame** from the beginning.
-- The photo image remains separate from its decorative frame/backing.
-- Replacing a photo must require only swapping/replacing the image inside the existing slot; surrounding editorial art must not need rebuilding.
-- **The photo must never visually extend outside its intended frame/mask bounds.** Use a real mask or a clipping frame with `clipsContent = true`; verify no pixel spills outside the slot after crop/scale/rotation.
-- Decorative frames/backings may intentionally overlap outside the photo slot, but the underlying photo itself stays clipped to its own mask.
-- For P05, keep exactly **4 SHOGO FRIENDS photo slots + 4 SHIORI FRIENDS photo slots = 8 independently replaceable masked photo slots**.
-- **ONE PART = ONE IMAGE is mandatory for generated/editorial assets.** One production part must be delivered as one independent image file.
-- Never pack multiple separate production parts into one generated PNG/canvas/contact sheet/sprite merely to save generations or uploads.
-- If a page needs title + tape + stamp + ticket + frame, those are separate image files unless they are intentionally one inseparable semantic editorial unit approved as a single part.
-- A proof/contact sheet may show several candidates together for review, but it must never become the production asset used in Figma.
-- Canva is not part of the V30 production design chain.
-- Photo replaceability must be **tested by an actual swap**, not accepted from layer naming alone.
-- Before guest-facing export, production/stale markers such as `TBD`, `DUMMY`, `REAL PHOTO`, `PHOTO SWAP`, `V20`, `VOL.20`, `V21`, `V31` must have zero visible hits.
-- Do not keep rejected/obsolete hidden assets inside the live `V30_FINAL_PRODUCTION` page as a graveyard; move them to history/reference or `99_REJECTED_DO_NOT_USE`.
-- Do not non-uniformly stretch generated editorial art to rescue the wrong aspect ratio; regenerate/rebuild for the intended physical size.
-- Repeating the exact same PNG across multiple unrelated jobs/pages is an anti-template risk; use meaningful variants when repetition becomes visible.
-- Generated assets enter live Figma only after `SOURCE_KEYED → Python cutout → alpha QA → PRODUCTION_RGBA → traceability` passes.
-- After meaningful visual changes, save contact/page/spread/A5 checkpoints to `90_QA_EXPORT` for regression comparison.
-- Faces, eyes, expressions, gestures, names, answers and other critical content must remain safe from trim/fold/decoration; P05's eight photos must remain recognizable at A5.
-- **CONTENT ROLE LOCKED / VISUAL EXECUTION UNLOCKED**: page roles stay fixed, but weak geometry may be rebuilt from zero.
-- Do not patch a missing/weak image-generated editorial unit with generic Figma cards/rectangles merely to make a page look finished.
-
-## Balanced visual-production doctrine — IMPORTANT CLARIFICATION
-
-Do not interpret `ImageGen-first` as `everything must be raster-generated`.
-
-The best V30 split is:
-
-`IMAGE GENERATION = MAGAZINE PERSONALITY`
-
-`FIGMA NATIVE = PRECISION / EDITABILITY / COMPOSITION`
-
-Use ImageGen / Imagen-class image generation for page-specific visual units whose value comes from authored irregularity, tactile print character or distinctive magazine personality, such as:
-- masthead/title art;
-- paper/backing objects;
-- irregular frames;
-- tickets;
-- stamps;
-- ribbons/tape clusters;
-- Q&A/caption vessels;
-- editorial ornaments;
-- page-aware texture/atmosphere when genuinely useful.
-
-Use precise native Figma geometry/text for things that benefit from accuracy rather than generative personality, such as:
-- masks/clipping frames;
-- simple rectangles;
-- simple rules/lines/separators;
-- basic route lines when no authored illustration is needed;
-- trim/bleed/safe/fold guides;
-- decorative barcode construction/text;
-- exact dates/names/body copy/Q&A/captions;
-- simple alignment/support geometry.
-
-Do not rasterize precision merely to satisfy an image-generation quota.
-
-Do not use Figma native primitives to invent the publication personality. Use them where precision and editability are the actual job.
-
-## Definition of ONE PART = ONE IMAGE
-
-This rule means:
-
-**ONE INDEPENDENT EDITORIAL OBJECT = ONE IMAGE FILE.**
-
-It does **not** mean every trivial technical primitive must become an image file.
-
-Examples that should normally remain independent generated images:
-- title art;
-- ticket;
-- stamp;
-- irregular photo frame/backing;
-- editorial paper vessel;
-- tape/ribbon cluster;
-- ornamental cluster that is genuinely one inseparable visual object.
-
-Examples that may remain native Figma when simple/technical:
-- one straight line;
-- simple rectangle/background field;
-- mask shape;
-- clipping frame;
-- safe-area guide;
-- simple separator;
-- barcode bars/text when precision is more important than texture.
-
-The prohibition is against packing several independently positionable editorial objects into one production bitmap.
-
-`NO PACKED PRODUCTION SHEETS / NO SPRITES / NO MULTI-OBJECT CONVENIENCE PNGS.`
-
-## Photo-first design rule
-
-Do not finish decoration first and hope the photos fit later.
-
-Before generating page-specific final art:
-1. place real photos or realistic dummy/proxy photos;
-2. establish approximate final orientation/crop behavior;
-3. identify faces/focal points/empty zones;
-4. establish the main reading path and photo-size hierarchy;
-5. then generate titles/frames/paper/stamps/tape/other editorial parts that respond to that actual composition.
-
-Generated art should respond to the real/proxy photographs, not look like a generic sticker kit dropped on top afterward.
-
-Photo wells are not the finished design, but photographs must influence the design before production parts are locked.
-
-## Two valid page-production modes
+Board:
+`V30 / FINAL PRODUCTION / 2026-09-01` — `3535:2`
+
+Page frames:
+- P01 `3535:7`
+- P02 `3535:9`
+- P03 `3535:11`
+- P04 `3535:13`
+- P05 `3535:15`
+- P06 `3535:17`
+- P07 `3535:19`
+- P08 `3535:21`
+
+## Locked facts / page roles
+
+- A5 portrait, 8 pages
+- trim `148 × 210 mm`
+- bleed `3 mm`
+- wedding date `2026.10.24`
+- couple names `Shogo` / `Shiori`
+- P08 decorative barcode digits `2026102400000`
+
+Current page roles:
+- P01 Cover / `るるぶ WEDDING`
+- P02 Profile + Q1/Q2
+- P03 Our Story + Q3/Q4
+- P04 All Travel Memories / Our Journey
+- P05 Friends Memories only — SHOGO FRIENDS + SHIORI FRIENDS
+- P06 Real Life / Favorites / Best Shots + Q5/Q6
+- P07 Closing Message / Thank You
+- P08 Magazine Back Cover
 
-Do not force every page through the exact same creation sequence.
+V20 is frozen history/reference only. Do not create V31 unless explicitly requested.
 
-### Mode A — ART-DIRECTION-FIRST
-Best for pages whose visual concept is the main challenge, especially strong feature/cover/back-cover exploration.
+## Core production doctrine
 
-Typical candidates:
-- P01
-- P04
-- P08 when necessary
+The target is:
 
-Flow:
-`WHOLE-PAGE VISUAL EXPLORATION / PROOF`
-→ `APPROVE VISUAL DIRECTION`
-→ `DECOMPOSE INTO INDEPENDENT EDITORIAL OBJECTS`
-→ `GENERATE PRODUCTION PARTS`
-→ `FIGMA LAYERED RECONSTRUCTION`
+`REAL / REPRESENTATIVE PHOTOS`
++
+`PAGE-SPECIFIC AUTHORED IMAGE-GENERATED / PREPARED ART`
++
+`PRECISE FIGMA COMPOSITION / MASKS / SOURCE-OF-TRUTH TEXT`
++
+`DIRECT VISUAL-MASTER COMPARISON`
++
+`A5 / PRINT QA`
++
+`HUMAN FEEDBACK WRITEBACK`.
 
-Whole-page generated output remains reference/proof only, never the final flattened master.
+Figma is the compositor. It must not invent a cheaper/generic publication personality merely because native primitives are easier to edit.
 
-### Mode B — STRUCTURE-FIRST
-Best for pages where photo count, information role and reading path are already constrained.
+Image generation is not a quota. Use it where authored visual character is the job; use native Figma where precision/editability is the job.
 
-Typical candidates:
-- P02
-- P03
-- P05
-- P06
-- P07
+## Identity Anchor rule — HARD
 
-Flow:
-`PHOTO ROLES / CONTENT ROLES`
-→ `ROUGH FIGMA STRUCTURE / MASKS / READING PATH`
-→ `IDENTIFY ONLY THE MISSING MAGAZINE-PERSONALITY OBJECTS`
-→ `GENERATE THOSE OBJECTS`
-→ `LAYERED FIGMA ASSEMBLY`
+High-saliency signature elements such as mastheads, main titles, names lockups and distinctive badges must be judged by visual character, not text correctness alone.
 
-Do not generate unnecessary page proofs or large asset batches when the structure is already clear.
+Compare at minimum:
+- silhouette;
+- letterform character;
+- outline/stroke weight;
+- dimensional depth/shadow;
+- color proportions;
+- scale;
+- relation to neighboring art;
+- authored irregularity.
 
-## Final preferred page workflow
+`EDITABLE` does not mean `GENERIC`.
 
-Use this as the default decision loop:
+For ordinary reading/factual copy, keep text native/editable.
 
-1. Lock the current page role.
-2. Place real/dummy proxy photographs in replaceable clipped masks.
-3. Check the page silhouette at thumbnail scale.
-4. Define the page's reading path and photo hierarchy.
-5. Decide whether Mode A or Mode B is appropriate.
-6. Identify roughly 4–8 important authored editorial objects when needed; do not force a quota if fewer are enough.
-7. Generate only the objects that genuinely create magazine personality.
-8. For isolated generated assets: safe solid key background → Python alpha cutout → alpha QA → Drive/Git traceability.
-9. Assemble from background to foreground in Figma.
-10. Keep factual/personal text native and editable.
-11. Review page, spread, full 8-page contact sheet and A5 actual-size readability.
-12. Regenerate/rebuild only the weak object or weak structural relationship.
+For a **short locked identity display** whose visual treatment cannot be reproduced faithfully with native text, visible prepared/display art may be used only when:
+- a separate native source-of-truth value/layer is retained;
+- visible spelling is QA-checked against that source;
+- it is not long/frequently changing copy.
 
-Do **not**:
-- mass-generate generic assets before page need is known;
-- build an asset warehouse and then search for places to use it;
-- finish decoration before understanding the photographs;
-- make every page follow the same visual template;
-- use image generation for simple precision geometry;
-- use Figma cards/rounded boxes to replace missing magazine personality;
-- flatten the page to hide structural weakness.
+This exception exists to prevent signature elements such as P01 `Shogo & Shiori` from becoming visually generic while preserving factual control.
 
-## Anti-AI principle — do not standardize the life out of the book
+## Photo proxy rule — HARD
 
-The eight pages must share publication DNA, but they must not look like eight instances of one component.
+There are two different proxy jobs.
 
-Human-edited magazine energy may include:
-- one page with a very large title;
-- another with denser photo clustering;
-- another with a calmer reading field;
-- different local frame geometries;
-- different collision patterns;
-- different active-edge behavior;
-- deliberately different page silhouettes.
+### STRUCTURAL_PROXY
+May be used to test:
+- clipping;
+- swapping;
+- fill/crop behavior;
+- frame independence.
 
-Do not enforce identical decoration counts, identical title geometry, identical photo counts, identical frame recipes or identical spacing across pages merely for consistency.
+It does **not** prove visual hierarchy.
 
-The rule system exists to prevent accidents, fabrication and template drift — **not to make every page obey the same visible formula**.
+### VISUAL_PROXY
+Required for Reference Delta when final photos are unavailable.
 
-## Finalization / anti-regression gates — READ EVERY RUN
+It must match the Visual Master on hierarchy-relevant semantics such as:
+- subject class (people/group/place/object);
+- important subject count;
+- orientation;
+- subject scale;
+- focal position;
+- face/gesture density when people-led;
+- bright/dark visual mass where relevant.
 
-These rules are the final layer of the V30 production system. They exist to stop endless redesign, protect the best candidate already achieved, and separate design quality from production completion.
+Preferred source order:
+1. suitable user-provided real photo;
+2. temporary crop from the user-provided Visual Master strictly for calibration;
+3. another approved semantically matching proxy.
 
-### Golden Snapshot / CURRENT BEST
+An unrelated travel-object image can test a mask, but **cannot validate a two-person cover Hero**.
 
-Maintain one clearly identified **CURRENT BEST** visual baseline for the whole book.
+## Replaceable-photo structure — HARD
 
-- Save the strongest current 8-page contact sheet to Drive `90_QA_EXPORT` as a Golden Snapshot / CURRENT BEST reference.
-- Also preserve relevant page/spread/A5 renders when a page becomes a new best.
-- A newer render does **not** automatically replace CURRENT BEST.
-- Replace CURRENT BEST only when the new candidate is equal or better at all relevant views: page, spread, 8-page contact sheet, and A5 actual-size readability.
-- If a new change is stronger locally but weakens the spread/book rhythm, it does not become CURRENT BEST until the broader regression is fixed.
-- Use timestamp/Git SHA or another traceable identifier so the baseline can be recovered.
+For every real-photo slot:
+- one independent clipped/masked replaceable container;
+- image separate from decorative frame/backing;
+- `clipsContent = true` for clipping-frame implementations;
+- photo never spills beyond its slot;
+- replacement does not require rebuilding surrounding editorial art;
+- actual swap behavior must be tested.
 
-`NEWER ≠ BETTER. CURRENT BEST IS A QUALITY BASELINE, NOT A RECENCY LABEL.`
+P05 remains exactly 4 SHOGO FRIENDS + 4 SHIORI FRIENDS = 8 independent friend-photo slots.
 
-### Page-specific Signature Move
+## Generated asset granularity — HARD
 
-Each page should have at least one recognizable page-specific editorial move or silhouette that helps it feel authored rather than templated.
+`ONE INDEPENDENT EDITORIAL OBJECT = ONE IMAGE FILE.`
 
-Examples:
-- an unusually strong masthead/photo relationship;
-- a distinctive travel-photo collision;
-- a friend-photo cluster geometry unique to P05;
-- a calm closing field on P07;
-- a deliberately sparse, edited back-cover gesture on P08.
+Do not pack unrelated independently movable parts into one production PNG/sprite/contact sheet.
 
-This is **not** a quota for extra decoration. A Signature Move may be created by title scale, crop, photo hierarchy, collision, calm space, or one strong editorial object.
+Simple precision geometry may remain native Figma when that preserves the Visual Master.
 
-Do not force the same Signature Move across pages. If a page already has a strong unique silhouette, do not add another object merely to satisfy this rule.
+Canva is not part of the V30 production design chain.
 
-### Generated-text boundary — HARD RULE
+## Anti-UI / anti-template rule
 
-Do not rely on image generation for guest-facing factual/personal text.
+Do not componentize editorial modules merely because they look related.
 
-Keep native/editable in Figma:
-- names;
-- dates;
-- body copy;
-- captions;
-- Q&A questions/answers;
-- friend labels/names/relationships;
-- thank-you copy;
-- factual place names and autobiographical details;
-- barcode digits and any precision metadata.
+Reuse/variants are appropriate only when:
+- the modules serve the same semantic purpose;
+- differences are predictable;
+- reuse preserves page-specific asymmetry and silhouette.
 
-Generated title/display art may include decorative lettering only when intentionally approved, short, visually important, and not carrying fragile factual/personal information that will need correction.
+Do not equalize padding, height, radius, icon position or photo geometry merely for implementation convenience.
 
-Reject generated assets containing:
-- garbled Japanese;
-- invented personal copy;
-- fake factual text;
-- accidental pseudo-writing that appears meaningful;
-- baked text that should remain editable.
+The book should share publication DNA without looking like eight instances of one UI component.
 
-`READING TEXT = NATIVE. GENERATED TEXT = EXCEPTIONAL DISPLAY ART ONLY.`
+## Mandatory two-stage visual QA
 
-### Remove Test
+### Before building: Visual Master Lock
+Use `VISUAL-MASTER-LOCK-AUDIT.md`:
+- PASS A 24-point review;
+- PASS B reverse omission/misclassification audit.
 
-For decorative/editorial assets, perform a mental or practical removal test.
+### After building: Figma Execution Acceptance
+Use `FIGMA-EXECUTION-ACCEPTANCE.md`:
+- capture the **current Figma screenshot**;
+- representative visual-proxy check;
+- identity-anchor check;
+- direct Visual Master Reference Delta;
+- anti-UI/componentization check;
+- photo-swap/editability check;
+- A5/print check;
+- human feedback writeback.
 
-- If removing one decorative object destroys the factual information architecture, too much meaning may be baked into decoration; move authoritative information back to native/editable structure.
-- If removing many objects changes almost nothing, the page is likely carrying filler and should be simplified.
-- Keep objects that improve hierarchy, grouping, tactile depth, reading path, photo framing, or page-specific character.
-- Do not keep an object merely because generation effort was already spent on it.
+Do not accept a technically clean Figma file that fails the first impression.
 
-### Final Photo Replacement PASS — separate production stage
+## Completion terminology
 
-Do not treat `DESIGN_COMPLETE` and `FINAL PHOTO SOURCES INSTALLED` as the same milestone.
+Use explicit states rather than vague `FIGMA_COMPLETE`:
 
-When final real photos become available, perform a dedicated replacement pass across all photo slots:
+- `FIGMA_STRUCTURE_READY`
+- `REPRESENTATIVE_VISUAL_PROXY_READY`
+- `IDENTITY_ANCHOR_PASS`
+- `REFERENCE_DELTA_PASS`
+- `PHOTO_SWAP_PASS`
+- `A5_PRINT_QA_PASS`
+- `HUMAN_FEEDBACK_REVIEWED`
+- `FIGMA_DESIGN_COMPLETE`
+- `FINAL_PHOTO_QA_PENDING`
+- `FINAL_PHOTO_QA_PASS`
+- `COMPLETE`
 
-`SWAP FINAL PHOTO`
-→ `CROP / FOCAL ADJUSTMENT`
-→ `MASK / CLIP CHECK`
-→ `FACE / GESTURE SAFE-ZONE CHECK`
-→ `A5 ACTUAL-SIZE CHECK`
-→ `SPREAD CHECK`
-→ `CONTACT-SHEET CHECK`
+Technical completion cannot skip visual acceptance.
 
-Do not assume a layout validated with proxies automatically works with final photographs.
+## Human Feedback writeback — HARD
 
-P05 requires this pass for all 8 independent friend-photo slots.
+When user/owner feedback reveals a repeatable failure mode:
+- fix the current page;
+- write page-specific lessons to the page manifest;
+- write systemic lessons to root manifest + `FIGMA-EXECUTION-ACCEPTANCE.md`;
+- do this **before repeating the same production method on another page**.
 
-### Print Reality Test
+Open systemic learning is `FEEDBACK_DEBT`.
 
-Screen polish is not sufficient.
+Do not scale a known-bad method across P02–P08 just because P01's file structure is clean.
 
-Before a page/book is considered visually final, inspect it in ways that expose weak hierarchy:
-- A5 actual-size view / physical proof when possible;
-- a reduced thumbnail / 3-second scan;
-- slightly increased viewing distance;
-- grayscale or strongly reduced-saturation check when useful.
+## P01 pilot calibration — current state
 
-Purpose:
-- confirm first-read hierarchy survives without relying only on color;
-- confirm faces remain recognizable;
-- confirm captions/body copy remain readable;
-- confirm busy pages still have recovery space;
-- confirm P07/P08 still feel intentionally quiet rather than unfinished.
+P01 first build proved masks/layers/asset traceability but did **not** pass visual acceptance.
 
-If the page only works when zoomed in on a bright screen, it is not finished.
+Current P01:
+`FIGMA_STRUCTURE_READY / VISUAL_REWORK_REQUIRED / FINAL_PHOTO_QA_PENDING`
 
-### Rule-system stop condition — IMPORTANT
+Known issues:
+- `るるぶ` too simplified/generic;
+- `Shogo & Shiori` heavy dark sans instead of hot-pink script/hand-lettered lockup;
+- Hero uses unrelated object/travel STRUCTURAL_PROXY;
+- `2026` badge weakened;
+- Feature 1/2/3 too UI-like;
+- Date ticket and bottom story hook too weak/compressed.
 
-V30 now has enough design/production governance.
+Do not use the first P01 build as the visual template for later pages until these lessons are resolved.
 
-Do **not** keep adding aesthetic rules, quotas, micro-tokens, mandatory decoration counts, fixed rotation formulas, fixed color counts, or page-by-page geometry formulas merely because more rules feel safer.
+## Print boundary
 
-Add a new rule only when at least one is true:
-- a concrete production failure occurred that existing rules did not prevent;
-- a repeated failure pattern is visible across runs;
-- a factual/print/editability risk needs an explicit guardrail;
-- the user explicitly changes the creative direction.
+Before print readiness:
+- A5 `148 × 210 mm` intent confirmed;
+- 3 mm bleed confirmed where required;
+- critical faces/text safe;
+- final placed raster resolution checked (target about 300 ppi for print graphics);
+- current links/assets validated;
+- grayscale/thumbnail/contact-sheet/spread QA completed;
+- final real photos separately replaced and rechecked.
+
+## Stop condition for governance
+
+Add new rules only when:
+- a concrete failure exposed a gap;
+- a repeatable failure is visible;
+- factual/print/editability risk requires it;
+- the user changes creative direction.
 
 Otherwise:
 
 `STOP WRITING RULES → MAKE THE BOOK BETTER.`
 
-The system should stay strict about accidents and truth, but permissive about strong visual authorship.
-
-## Core quality target
-
-The target is not `maximum ImageGen`.
-
-The target is:
-
-`REAL PHOTOS`
-+
-`PAGE-SPECIFIC AUTHORED IMAGE-GENERATED ART`
-+
-`PRECISE NATIVE FIGMA COMPOSITION / MASKS / TEXT`
-+
-`EDITORIAL HIERARCHY`
-+
-`LAYERED EDITABILITY`
-+
-`A5 / SPREAD / CONTACT-SHEET QA`.
-
-`QUALITY > ASSET COUNT.`
-
-`MAGAZINE PERSONALITY FROM GENERATED ART; PRECISION FROM FIGMA.`
-
-`1 INDEPENDENT EDITORIAL OBJECT = 1 IMAGE.`
-
-`1 PHOTO SLOT = 1 REPLACEABLE CLIPPED MASK.`
-
-`STRICT PROCESS + LOCKED CONTENT ROLE + FREE HIGH-QUALITY VISUAL EXECUTION.`
-
-`GOLDEN SNAPSHOT + SIGNATURE MOVE + FINAL PHOTO REPLACEMENT PASS + PRINT REALITY TEST.`
-
-`docs/rurubu-v20/` and `assets/rurubu-v20/` are frozen historical/reference material only and must never be treated as current production authority.
-
-Do not create V31 unless explicitly requested by the user.
+The current new rules were added because P01 produced concrete, repeatable visual failures that the prior gates did not prevent.
 
 **CURRENT = V30. V20 = FROZEN HISTORY.**
