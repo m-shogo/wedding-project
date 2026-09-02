@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "project": "Rurubu WEDDING V30",
   "page": "P01",
   "role": "COVER",
@@ -8,10 +8,7 @@
     "path": "assets/rurubu-v30/p01/P01.png",
     "authority": "PRIMARY_VISUAL_AUTHORITY",
     "analysisSource": "user-provided P01.png reviewed visually in ChatGPT",
-    "reviewedDimensionsPx": {
-      "width": 1055,
-      "height": 1491
-    },
+    "reviewedDimensionsPx": { "width": 1055, "height": 1491 },
     "reviewedMode": "RGBA",
     "reviewedSha256": "6184dd7694ed9a147d171f717f73aa4600f57a4e3655bf4b00cb63edb78b37ae",
     "rule": "Do not redesign P01 from text-only Rurubu rules. Reconstruct from this image first, then preserve editability."
@@ -22,10 +19,7 @@
       "second": "Shiori",
       "spellingLocked": true,
       "displayCaseMayVary": true,
-      "allowedDisplayExamples": [
-        "Shogo & Shiori",
-        "SHOGO & SHIORI"
-      ],
+      "allowedDisplayExamples": ["Shogo & Shiori", "SHOGO & SHIORI"],
       "forbidden": "Do not invent, misspell, swap, translate, abbreviate, or OCR-correct these names without explicit user instruction."
     },
     "weddingDate": {
@@ -48,13 +42,46 @@
     "masthead": {
       "importance": "CRITICAL",
       "description": "Large three-block るるぶ logo treatment near the top, each kana inside a chunky rounded colored block with thick white/black dimensional outline.",
-      "rule": "Treat the masthead as display art, not ordinary Figma body text. Its chunky outlined dimensional character is part of the cover identity."
+      "rule": "Treat the masthead as display art, not ordinary Figma body text."
     },
     "mainTitle": {
       "text": "WEDDING",
       "importance": "CRITICAL",
       "description": "Extremely large hot-pink rounded display lettering spanning almost full width, with layered white/yellow/dark outlines and dimensional shadow.",
       "rule": "Do not reduce it to clean flat typography or a small centered heading."
+    },
+    "backgroundSystem": {
+      "importance": "CRITICAL",
+      "mustBeIndependentLayer": true,
+      "description": "Full-page bright tropical travel environment behind the editorial objects: vivid blue sky, soft clouds, chapel/beach-resort cues and palm/tropical destination atmosphere. The background carries the travel-destination identity before smaller stickers are added.",
+      "pageField": "Warm pale-yellow outer page field visible beyond the inner airmail frame.",
+      "innerEnvironment": "Sky-blue destination scene fills the inner page and remains visually active behind the title, portrait and feature callouts.",
+      "rule": "Do not replace the visual-master background with a flat color, generic gradient, plain white canvas, or rely on the hero photograph alone to provide all environmental personality. Prepare/generate the background as its own production art when needed so it can be composed independently in Figma."
+    },
+    "frameSystem": {
+      "importance": "CRITICAL",
+      "mustBeIndependentLayers": true,
+      "outerPageFrame": {
+        "description": "Continuous diagonal airmail stripe border in blue, pink, yellow and white around the inner page, with a clean white inner separation edge.",
+        "rule": "This is part of the page identity, not an optional decoration. Rebuild as prepared/generated frame art rather than a generic Figma stroke."
+      },
+      "heroPhotoTreatment": {
+        "description": "The large central couple image is integrated into the destination scene with editorial overlap rather than placed inside a generic rounded card.",
+        "rule": "Do not add a uniform rounded rectangle around the hero. Preserve the open magazine-cover integration and title/photo overlap."
+      },
+      "featurePhotoFrames": {
+        "description": "Three small left-side feature thumbnails use simple white print/photo borders with slight editorial irregularity and are attached to numbered feature callouts.",
+        "rule": "Each thumbnail/frame is subordinate, replaceable and independently positionable. Avoid identical app-card shells, excessive corner radius or perfectly uniform spacing."
+      },
+      "editorialVessels": [
+        "date ticket/postcard frame",
+        "yellow-blue Shogo & Shiori ribbon/banner",
+        "white outlined feature-heading callout shapes",
+        "bottom white cloud/story statement vessel",
+        "round OUR JOURNEY postmark",
+        "PAGE 01 badge"
+      ],
+      "rule": "Frames, vessels and backings that carry the Rurubu visual language should be prepared/generated as page-specific art where plain Figma geometry would weaken the reference."
     },
     "photoHierarchy": {
       "hero": "One dominant portrait-oriented couple photo occupies most of the center/lower page and remains visually stronger than all support imagery.",
@@ -78,17 +105,8 @@
       "page-number badge"
     ],
     "colorBehavior": {
-      "dominant": [
-        "hot pink",
-        "sky blue",
-        "yellow",
-        "white"
-      ],
-      "support": [
-        "green foliage",
-        "hibiscus red/pink",
-        "small black editorial text"
-      ],
+      "dominant": ["hot pink", "sky blue", "yellow", "white"],
+      "support": ["green foliage", "hibiscus red/pink", "small black editorial text"],
       "rule": "Use saturated travel-magazine color blocking with white separation and dark outlines; avoid luxury-beige minimalism or generic gradients."
     },
     "typographyBehavior": {
@@ -100,13 +118,16 @@
   },
   "editableReconstructionPolicy": {
     "imageGeneratedOrPreparedArt": [
+      "full-page tropical background/environment",
+      "airmail outer page frame",
       "るるぶ masthead display art",
       "WEDDING display-title treatment",
       "ribbon/banner backing",
       "ticket/postcard vessels",
       "feature-number badges",
+      "feature photo-frame art where needed",
+      "bottom story/cloud vessel",
       "postmark/travel stamp motifs",
-      "airmail border",
       "flowers, foliage, airplane/path and destination illustrations",
       "decorative cloud/burst shapes"
     ],
@@ -121,11 +142,14 @@
       "central couple hero photo",
       "feature thumbnail photos"
     ],
-    "rule": "Figma is the compositor. Rebuild the reference appearance with layered replaceable photography and native factual copy rather than flattening the full page as the editable master."
+    "rule": "Figma is the compositor. Rebuild the reference appearance with independent background/frame art, layered replaceable photography and native factual copy rather than flattening the full page as the editable master."
   },
   "hardRejects": [
     "generic wedding brochure aesthetics",
     "minimal luxury cover",
+    "flat or generic background replacing the destination environment",
+    "missing airmail page frame",
+    "generic Figma stroke substituted for page-specific frame art",
     "equal-card grid",
     "flat native-text substitute for the expressive masthead",
     "small or weak WEDDING title",
@@ -137,8 +161,10 @@
   ],
   "qa": {
     "gate0": "At a 3-second glance, the page must read as a playful Japanese travel-magazine wedding cover, not merely as a colorful wedding collage.",
-    "referenceDelta": "Any production rebuild must be compared directly against P01.png for masthead strength, title scale, hero dominance, density, edge activity, travel motifs and color energy before technical QA.",
+    "referenceDelta": "Any production rebuild must be compared directly against P01.png for background atmosphere, airmail frame, masthead strength, title scale, hero dominance, feature-frame behavior, density, edge activity, travel motifs and color energy before technical QA.",
     "technicalQaAfterVisualPass": [
+      "background is independent and not accidentally baked into replaceable photography unless explicitly approved",
+      "outer frame integrity and bleed behavior",
       "photo replaceability",
       "native factual text correctness",
       "clipping",
