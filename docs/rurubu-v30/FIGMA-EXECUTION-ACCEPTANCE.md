@@ -2,7 +2,7 @@
 
 Status: `CURRENT_V30_REQUIRED_READ / POST-BUILD_VISUAL_QA / 2026-09-02`
 
-Purpose: prevent a technically clean/editable rebuild from being called complete when it is visually weaker, contaminated, unintentionally translucent, clipped, or mixed with stale production language.
+Purpose: prevent a technically clean/editable rebuild from being called complete when it is visually weaker, contaminated, unintentionally translucent, stale in copy, clipped, or layered at the wrong depth.
 
 Hard summaries:
 
@@ -15,6 +15,10 @@ Hard summaries:
 `EDITABLE ≠ BETTER DESIGN`
 
 `CHEAP ASSET FAILURE ≠ LONG DIAGNOSIS`
+
+`OLD GENERATED COPY ≠ CURRENT OWNER COPY`
+
+`BORDER ≠ FOREGROUND CONTENT`
 
 ## Execution ownership
 
@@ -42,7 +46,9 @@ Use explicit gates:
 - `CLEAN_PROXY_PASS`
 - `BUNDLED_DISPLAY_MODULE_PASS`
 - `ALPHA_INTEGRITY_PASS`
+- `COPY_SYNC_PASS`
 - `EDGE_SAFETY_PASS`
+- `BORDER_Z_ORDER_PASS`
 - `IDENTITY_ANCHOR_PASS`
 - `VISUAL_CARRYOVER_PASS`
 - `REFERENCE_DELTA_PASS`
@@ -89,15 +95,32 @@ Reject outer-transparency PASS when intended white/cream interiors are semi-tran
 
 Do not hide broken alpha with rescue rectangles or Figma opacity tricks. Repair/regenerate the affected source/cutout.
 
+### Sibling sweep rule — HARD
+
+If one same-family white-paper/ticket/label/vessel module fails inside-opacity QA, do not stop at that one module.
+
+Run one quick sibling sweep across the page's other same-family modules before closing `ALPHA_INTEGRITY_PASS`.
+
+For P01 the sweep set is:
+- Date ticket;
+- Feature 1 shell;
+- Feature 2 shell;
+- Feature 3 shell;
+- Bottom Story vessel;
+- PAGE 01 badge.
+
+This is one sweep, not repeated context-heavy diagnosis.
+
 ## Fast-fail regeneration rule — HARD
 
 For a cheap likely asset-side defect:
 
 1. run **one quick discriminator**;
 2. if source/RGBA/cutout is wrong, **regenerate/re-cut immediately**;
-3. inspect Figma opacity/blend/mask only when source passes;
-4. replace only the affected module and delete superseded LIVE content;
-5. run one integrated final QA pass.
+3. when one same-family paper module fails, run one sibling sweep;
+4. inspect Figma opacity/blend/mask only when source passes;
+5. replace only the affected module and delete superseded LIVE content;
+6. run one integrated final QA pass.
 
 If diagnosis/context cost is likely to exceed regeneration/cutout cost, prefer regeneration/cutout.
 
@@ -105,11 +128,39 @@ Do not burn time/context on repeated midpoint screenshots, identical alpha diagn
 
 Normally report once at the end: **cause → replacement → QA result → remaining debt**.
 
+## Copy Sync Gate — HARD
+
+Newest owner-approved visible wording overrides stale generated/native copy.
+
+When page role, teaser wording, section naming, or other visible owner-approved text changes:
+- update every dependent module on that page;
+- mark previous generated wording `SUPERSEDED`;
+- update page authority/README;
+- verify final screenshot uses one coherent terminology set.
+
+Hard reject:
+- old wording surviving because an earlier generated asset already exists;
+- mixed old/new terminology on one page;
+- page-role semantics contradicting the owner's latest decision.
+
 ## Edge Safety Gate — HARD
 
 Busy edge activation is allowed, but important labels/badges/text must not look accidentally clipped by trim/border.
 
 Review at full page and A5 size. Preserve intentional irregularity; do not mechanically equalize unrelated modules.
+
+## Border Z-Order Gate — HARD
+
+Page border/frame assets are background-adjacent support assets by default.
+
+Unless the Visual Master clearly requires otherwise, use this depth order:
+
+`background field → border/frame → Hero/photos → authored display modules → major stickers/badges/foreground accents`
+
+Hard reject:
+- border sitting above major editorial content by default;
+- frame visually slicing through photos/cards/text without clear Visual Master basis;
+- solving z-order by flattening unrelated content instead of moving the border.
 
 ## Identity Anchor Gate
 
@@ -141,75 +192,84 @@ Compare:
 2. clean proxy integrity
 3. fixed display-module fidelity
 4. alpha/material integrity
-5. edge safety
-6. identity anchors
-7. high-saliency photo mass
-8. title/photo ratio
-9. occupied vs calm areas
-10. asymmetric silhouette
-11. overlap/module rhythm
-12. background/frame character
-13. carry-over coherence
-14. micro accents
+5. copy sync
+6. edge safety
+7. border depth / z-order
+8. identity anchors
+9. high-saliency photo mass
+10. title/photo ratio
+11. occupied vs calm areas
+12. asymmetric silhouette
+13. overlap/module rhythm
+14. background/frame character
+15. carry-over coherence
+16. micro accents
 
 ## Human Feedback Writeback — HARD
 
 New repeatable failures must be modeled before scaling production. Page-specific feedback goes to page authority; systemic failures go to Root/visual-polish/this guide.
 
-## P01 current calibration — DESIGN LOCKED 2026-09-02
+## P01 current calibration — TARGETED POST-LOCK PATCH OPEN 2026-09-02
 
 P01 CURRENT remains `3535:7`.
 
-Major REWORK and the later micro-polish are accepted.
+Keep the already accepted baseline:
+- clean standalone Hero/Feature proxies;
+- Feature 1–3 opaque-paper correction;
+- Feature 1–3 safer left-edge spacing;
+- top-left gold wedding rings + diamond + yellow sparkles;
+- stale LIVE cleanup;
+- first micro-polish binary sync.
 
-The micro-polish closed these reopened gates:
+Latest owner review reopens three targeted issues:
 
-### Feature 1–3 label/vessel opacity — PASS
-- source-PNG internal alpha was identified as the cause;
-- affected Feature RGBA modules were repaired/replaced;
-- reported paper-core alpha samples are `255`;
-- outside transparency remains available;
-- Figma node/image opacity remains `1.0`;
-- fresh CURRENT screenshot no longer shows Hero/background through intended white Feature vessels.
+### Date + PAGE 01 inside opacity
 
-### Feature 1–3 left-edge safety — PASS
-- modules were tuned inward;
-- accepted module x positions are `21 / 23 / 22`;
-- their unequal editorial rhythm was preserved;
-- fresh screenshot no longer reads badges/headings as accidentally clipped by the airmail border.
+Targets:
+- `P01_WEDDING_DATE_2026_10_24_SAT / FINAL_REWORK_COMPLETE_MODULE`
+- `P01_PAGE_01 / FINAL_REWORK_COMPLETE_MODULE`
 
-### Top-left ring cluster fidelity — PASS
-- support cue now reads as gold wedding rings + visible diamond + yellow sparkles;
-- accepted node `3681:137` is at `27,40,92×76`;
-- it remains subordinate to masthead/WEDDING hierarchy.
+Both appear internally translucent. Use one quick source-alpha/composite discriminator; if asset-side, regenerate/re-cut immediately. Then run the single P01 white-paper sibling sweep before closing page alpha integrity.
 
-Fresh direct screenshot review also shows no material regression to Hero, names, 2026, Date, Bottom Story, OUR JOURNEY, PAGE 01 or overall page hierarchy.
+### Feature 3 teaser copy
+
+Superseded/rejected:
+- `家族と友達`
+- bare `友達`
+
+Approved exact heading:
+
+**`友達との思い出`**
+
+This preserves friends-only meaning while remaining an editorial teaser rather than a bare category word.
+
+### Airmail border depth
+
+Target:
+- `P01_AIRMAIL_BORDER / PRODUCTION_RGBA`
+
+Required depth:
+
+`background → airmail border → Hero/photos → authored display modules → major stickers/badges`
+
+The frame should support the page edge, not cover the content.
 
 Current P01 status:
 
 - `FIGMA_STRUCTURE_READY = PASS`
 - `CLEAN_PROXY_PASS = PASS`
-- `BUNDLED_DISPLAY_MODULE_PASS = PASS`
-- `MICRO_POLISH_DEBT = CLOSED`
-- `INTERNAL_OPACITY_PASS = YES`
-- `ALPHA_INTEGRITY_PASS = PASS`
-- `EDGE_SAFETY_PASS = PASS`
-- `RING_CLUSTER_PASS = YES`
-- `IDENTITY_ANCHOR_PASS = PASS`
-- `VISUAL_CARRYOVER_PASS = PASS`
-- `REFERENCE_DELTA_PASS = PASS_AFTER_MICRO_POLISH`
-- `PHOTO_SWAP_PASS = PASS`
-- `A5_GRAYSCALE_PASS = PASS`
-- `HUMAN_FEEDBACK_REVIEWED = PASS`
-- `FIGMA_DESIGN_COMPLETE = YES`
+- `FEATURE_ALPHA_FIX_PASS = PASS`
+- `FEATURE_LEFT_EDGE_PASS = PASS`
+- `RING_CLUSTER_PASS = PASS`
+- `ALPHA_INTEGRITY_PASS = REOPENED_FOR_DATE_AND_PAGE01_PLUS_SIBLING_SWEEP`
+- `COPY_SYNC_PASS = REOPENED_FOR_FEATURE_3`
+- `BORDER_Z_ORDER_PASS = REOPENED_FOR_AIRMAIL_BORDER`
+- `REFERENCE_DELTA_PASS = REOPENED_FOR_TARGETED_PATCH`
+- `FIGMA_DESIGN_COMPLETE = NO`
 - `FINAL_PHOTO_QA_PENDING = YES`
 - `PRINT_READY = NO`
 
-**P02 production may begin.**
-
-Evidence: fresh CURRENT screenshot SHA-256 `f83e608d943fb15131042edb43d59a503b171ca427902428e140789b134989a3`; QA Drive folder `1WCUtnm_trU9tEeuZ3tMFjN-PP0KEGw4d`; hidden obsolete / duplicate same-job layers `0 / 0`; P02 `3535:9` unchanged.
-
-P01 should not be reopened merely because final owner photos are pending. Final photos require only photo replacement plus crop/face-safe/effective-resolution/A5/print QA unless a new material visual defect appears.
+P02 production must wait until the targeted patch closes or the owner explicitly defers it.
 
 ## Print boundary
 
