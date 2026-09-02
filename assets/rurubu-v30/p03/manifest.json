@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 2,
+  "project": "Rurubu WEDDING V30",
+  "page": "P03",
+  "role": "OUR STORY + Q3/Q4",
+  "status": "AWAITING_VISUAL_REVIEW",
+  "inherits": "assets/rurubu-v30/manifest.json",
+  "visualMaster": {
+    "path": "assets/rurubu-v30/p03/P03.png",
+    "authority": "PRIMARY_VISUAL_AUTHORITY_PENDING_CHAT_REVIEW",
+    "rule": "Do not infer page-specific geometry from prose. Fill this manifest only after visually reviewing the page master."
+  },
+  "canonicalFacts": {
+    "names": {"Shogo": "LOCKED", "Shiori": "LOCKED"},
+    "weddingDate": "2026.10.24"
+  },
+  "requiredAfterVisualReview": ["threeSecondReadOrder", "pageSpec confirmation", "visualAuthority", "backgroundSystem", "frameSystem", "objects with normalized + Figma geometry", "layerOrder/zIndex", "overlap and mustNotCover rules", "photo masks and replaceability", "renderMode per object", "factClass per text object", "assetDecompositionPlan", "hardRejects", "ordered QA gates"],
+  "photoPolicy": {"inheritRoot": true, "rule": "Every real-photo slot must be a separate clipped/masked replaceable image; dummy sources must not spill outside frames."},
+  "qa": {"gate0": "Pending visual review of the actual page master."}
+}
