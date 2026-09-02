@@ -19,8 +19,8 @@
   const render = () => {
     const done = checks.filter((check) => check.checked).length;
     const total = checks.length;
-    progressText.textContent = `${done} / ${total}`;
-    progressBar.style.width = `${total ? (done / total) * 100 : 0}%`;
+    if (progressText) progressText.textContent = `${done} / ${total}`;
+    if (progressBar) progressBar.style.width = `${total ? (done / total) * 100 : 0}%`;
 
     checks.forEach((check) => {
       check.closest('.step')?.classList.toggle('is-done', check.checked);
@@ -34,6 +34,25 @@
       state[check.dataset.progress] = check.checked;
       save(state);
       render();
+    });
+  });
+
+  document.querySelectorAll('[data-copy-target]').forEach((button) => {
+    button.addEventListener('click', async () => {
+      const target = document.getElementById(button.dataset.copyTarget);
+      if (!target) return;
+      try {
+        await navigator.clipboard.writeText(target.textContent.trim());
+        const original = button.textContent;
+        button.textContent = 'コピー済み';
+        button.classList.add('is-copied');
+        window.setTimeout(() => {
+          button.textContent = original;
+          button.classList.remove('is-copied');
+        }, 1400);
+      } catch (_) {
+        button.textContent = '選択してコピー';
+      }
     });
   });
 
