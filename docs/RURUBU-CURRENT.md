@@ -4,7 +4,7 @@ Status: `CURRENT_POINTER / V30_ONLY / 2026-09-02`
 
 The only current Rurubu WEDDING production version is **V30**.
 
-This file is the entry point. It intentionally stays shorter than the detailed production authorities so future agents do not miss the actual Visual Master, page manifest, or execution-feedback gates.
+This file is the entry point. Do not infer current production state from an older chat/report alone.
 
 ## REQUIRED READ SET — every production run
 
@@ -13,18 +13,19 @@ Read in this order before changing a V30 page:
 1. **This file** — current version / scope / hard boundaries
 2. **The actual page Visual Master image** — `assets/rurubu-v30/pXX/PXX.png`
 3. **Root machine-readable production authority** — `assets/rurubu-v30/manifest.json`
-4. **Page-specific authority** — `assets/rurubu-v30/pXX/manifest.json`
-5. **Pre-build understanding audit** — `docs/rurubu-v30/VISUAL-MASTER-LOCK-AUDIT.md`
-6. **Post-build Figma acceptance + feedback gate** — `docs/rurubu-v30/FIGMA-EXECUTION-ACCEPTANCE.md`
-7. **Page README** if that page already has production work — `assets/rurubu-v30/pXX/README.md`
-8. **Broader V30 production guide** — `docs/rurubu-v30/README.md`
-9. **Production-asset mechanics** — `assets/rurubu-v30/README.md`
+4. **Current visual-polish / carry-over authority** — `assets/rurubu-v30/visual-polish-manifest.json`
+5. **Page-specific authority** — `assets/rurubu-v30/pXX/manifest.json`
+6. **Page polish/carry-over authority when present** — `assets/rurubu-v30/pXX/polish-manifest.json`
+7. **Pre-build understanding audit** — `docs/rurubu-v30/VISUAL-MASTER-LOCK-AUDIT.md`
+8. **Post-build Figma acceptance + feedback gate** — `docs/rurubu-v30/FIGMA-EXECUTION-ACCEPTANCE.md`
+9. **Page README** if that page already has production work — `assets/rurubu-v30/pXX/README.md`
+10. broader V30 docs only as needed.
 
 Do **not** treat a manifest alone as sufficient visual authority.
 
-Do **not** treat a visually analyzed/locked page as a completed Figma implementation.
+Do **not** treat a clean layer tree as proof that old visual language is gone.
 
-`VISUAL_MASTER_LOCKED ≠ FIGMA_DESIGN_COMPLETE`.
+`VISUAL_MASTER_LOCKED ≠ FIGMA_STRUCTURE_READY ≠ FIGMA_DESIGN_COMPLETE`.
 
 ## Current Git / Figma authority
 
@@ -86,6 +87,8 @@ The target is:
 +
 `DIRECT VISUAL-MASTER COMPARISON`
 +
+`VISUAL CARRY-OVER AUDIT`
++
 `A5 / PRINT QA`
 +
 `HUMAN FEEDBACK WRITEBACK`.
@@ -94,72 +97,45 @@ Figma is the compositor. It must not invent a cheaper/generic publication person
 
 Image generation is not a quota. Use it where authored visual character is the job; use native Figma where precision/editability is the job.
 
-## Identity Anchor rule — HARD
+## Fixed short display text / Identity Anchor rule — HARD
 
-High-saliency signature elements such as mastheads, main titles, names lockups and distinctive badges must be judged by visual character, not text correctness alone.
+Short fixed text whose visible treatment is part of page identity may use generated/prepared display art. This is not limited to names.
 
-Compare at minimum:
-- silhouette;
-- letterform character;
-- outline/stroke weight;
-- dimensional depth/shadow;
-- color proportions;
-- scale;
-- relation to neighboring art;
-- authored irregularity.
+Examples:
+- `るるぶ`
+- `WEDDING`
+- `Shogo & Shiori`
+- `OUR STORY`
+- `OUR JOURNEY`
+- Q1–Q6 labels
+- short fixed badge/feature/page labels
+
+Keep exact FACT/source strings separately as native/source-of-truth data and QA the visible rendering.
+
+Ordinary body copy, long answers and frequently changing text remain native/editable.
 
 `EDITABLE` does not mean `GENERIC`.
 
-For ordinary reading/factual copy, keep text native/editable.
-
-For a **short locked identity display** whose visual treatment cannot be reproduced faithfully with native text, visible prepared/display art may be used only when:
-- a separate native source-of-truth value/layer is retained;
-- visible spelling is QA-checked against that source;
-- it is not long/frequently changing copy.
-
-This exception exists to prevent signature elements such as P01 `Shogo & Shiori` from becoming visually generic while preserving factual control.
-
 ## Photo proxy rule — HARD
 
-There are two different proxy jobs.
+There are two proxy jobs:
 
 ### STRUCTURAL_PROXY
-May be used to test:
-- clipping;
-- swapping;
-- fill/crop behavior;
-- frame independence.
-
-It does **not** prove visual hierarchy.
+For clipping / swap / fill-crop / frame independence only.
 
 ### VISUAL_PROXY
-Required for Reference Delta when final photos are unavailable.
+For hierarchy / visual mass / crop / face/focal relationship / Reference Delta.
 
-It must match the Visual Master on hierarchy-relevant semantics such as:
-- subject class (people/group/place/object);
-- important subject count;
-- orientation;
-- subject scale;
-- focal position;
-- face/gesture density when people-led;
-- bright/dark visual mass where relevant.
-
-Preferred source order:
-1. suitable user-provided real photo;
-2. temporary crop from the user-provided Visual Master strictly for calibration;
-3. another approved semantically matching proxy.
-
-An unrelated travel-object image can test a mask, but **cannot validate a two-person cover Hero**.
+A people-dominant Hero requires a people-dominant visual proxy. An unrelated object/landscape can test a mask but cannot prove visual hierarchy.
 
 ## Replaceable-photo structure — HARD
 
 For every real-photo slot:
-- one independent clipped/masked replaceable container;
+- independent clipped/masked replaceable container;
 - image separate from decorative frame/backing;
-- `clipsContent = true` for clipping-frame implementations;
 - photo never spills beyond its slot;
-- replacement does not require rebuilding surrounding editorial art;
-- actual swap behavior must be tested.
+- replacement does not require rebuilding surrounding art;
+- actual swap behavior tested.
 
 P05 remains exactly 4 SHOGO FRIENDS + 4 SHIORI FRIENDS = 8 independent friend-photo slots.
 
@@ -167,52 +143,106 @@ P05 remains exactly 4 SHOGO FRIENDS + 4 SHIORI FRIENDS = 8 independent friend-ph
 
 `ONE INDEPENDENT EDITORIAL OBJECT = ONE IMAGE FILE.`
 
-Do not pack unrelated independently movable parts into one production PNG/sprite/contact sheet.
+Do not pack unrelated independently movable parts into one production bitmap.
 
 Simple precision geometry may remain native Figma when that preserves the Visual Master.
 
-Canva is not part of the V30 production design chain.
+## Visual Carry-over Audit — HARD
+
+This is separate from stale-layer cleanup.
+
+A page can have:
+- no hidden old layers;
+- clean Figma structure;
+- valid production PNGs;
+
+and still look old because visible FIRST BUILD assets were intentionally reused.
+
+Therefore any targeted REWORK/promotion must audit **every visible inherited production asset**.
+
+Each inherited asset must become one of:
+- `KEEP_REQUALIFIED`
+- `REWORK_REQUIRED`
+- `REPLACE_REQUIRED`
+- `SUPERSEDED`
+
+Until current-build comparison exists, status is `UNREVIEWED_CARRYOVER`.
+
+`ADOPTED` / `PRODUCTION_RGBA` / previous PASS / unchanged status do not grant permanent visual acceptance.
+
+When a high-saliency title/Hero/identity anchor is improved, reopen neighboring support assets automatically because the new quality bar can expose them as stale.
+
+A better REWORK may remain CURRENT while this debt is open, but label it:
+
+`PROMOTED_CURRENT_WITH_CARRYOVER_DEBT`
+
+and do not claim final `REFERENCE_DELTA_PASS` / `FIGMA_DESIGN_COMPLETE` until material carry-over debt is resolved or explicitly deferred by the user.
 
 ## Anti-UI / anti-template rule
 
-Do not componentize editorial modules merely because they look related.
+Do not equalize editorial modules merely for reuse.
 
-Reuse/variants are appropriate only when:
-- the modules serve the same semantic purpose;
-- differences are predictable;
-- reuse preserves page-specific asymmetry and silhouette.
+Preserve Visual-Master-supported differences in:
+- width/height;
+- photo sizes;
+- local offsets;
+- icon positions;
+- overlap;
+- negative space;
+- tilt only where evidenced.
 
-Do not equalize padding, height, radius, icon position or photo geometry merely for implementation convenience.
+Do not add random scrapbook rotation just to look handmade.
 
-The book should share publication DNA without looking like eight instances of one UI component.
+## Mandatory post-build acceptance
 
-## Mandatory two-stage visual QA
+After Figma work:
+1. capture the **current Figma screenshot**;
+2. representative visual-proxy check;
+3. identity-anchor check;
+4. Visual Carry-over Audit;
+5. direct Visual Master Reference Delta;
+6. anti-UI/coherence check;
+7. photo-swap/editability check;
+8. A5/print check;
+9. human feedback writeback.
 
-### Before building: Visual Master Lock
-Use `VISUAL-MASTER-LOCK-AUDIT.md`:
-- PASS A 24-point review;
-- PASS B reverse omission/misclassification audit.
+Do not accept a technically clean Figma file that fails the first impression or mixed-generation coherence test.
 
-### After building: Figma Execution Acceptance
-Use `FIGMA-EXECUTION-ACCEPTANCE.md`:
-- capture the **current Figma screenshot**;
-- representative visual-proxy check;
-- identity-anchor check;
-- direct Visual Master Reference Delta;
-- anti-UI/componentization check;
-- photo-swap/editability check;
-- A5/print check;
-- human feedback writeback.
+## Current P01 state — IMPORTANT
 
-Do not accept a technically clean Figma file that fails the first impression.
+The targeted P01 REWORK was a clear improvement over FIRST BUILD and was validly promoted into CURRENT `3535:7`.
+
+**Do not roll back to FIRST BUILD.**
+
+However, later owner review + direct live Figma inspection confirmed multiple visible FIRST BUILD production assets were intentionally carried forward. This was not a hidden-layer deletion bug.
+
+Current P01 state is therefore:
+
+`BEST CURRENT PROMOTED`
++
+`VISUAL CARRYOVER DEBT OPEN`
++
+`FINAL PHOTO QA PENDING`.
+
+Known inherited assets requiring requalification/rework are tracked in:
+`assets/rurubu-v30/p01/polish-manifest.json`.
+
+Highest-priority remaining carry-over work:
+- Feature 1/2/3 vessels;
+- Date ticket backing;
+- Bottom story vessel;
+- explicit review of names ribbon backing;
+- local requalification of OUR JOURNEY stamp / PAGE 01 around any bottom-area changes.
+
+P02 production should not scale this partial-rework method until P01 carry-over debt is resolved or explicitly deferred.
 
 ## Completion terminology
 
-Use explicit states rather than vague `FIGMA_COMPLETE`:
-
+Use explicit states:
 - `FIGMA_STRUCTURE_READY`
 - `REPRESENTATIVE_VISUAL_PROXY_READY`
 - `IDENTITY_ANCHOR_PASS`
+- `VISUAL_CARRYOVER_PASS`
 - `REFERENCE_DELTA_PASS`
 - `PHOTO_SWAP_PASS`
 - `A5_PRINT_QA_PASS`
@@ -222,60 +252,14 @@ Use explicit states rather than vague `FIGMA_COMPLETE`:
 - `FINAL_PHOTO_QA_PASS`
 - `COMPLETE`
 
-Technical completion cannot skip visual acceptance.
-
-## Human Feedback writeback — HARD
-
-When user/owner feedback reveals a repeatable failure mode:
-- fix the current page;
-- write page-specific lessons to the page manifest;
-- write systemic lessons to root manifest + `FIGMA-EXECUTION-ACCEPTANCE.md`;
-- do this **before repeating the same production method on another page**.
-
-Open systemic learning is `FEEDBACK_DEBT`.
-
-Do not scale a known-bad method across P02–P08 just because P01's file structure is clean.
-
-## P01 pilot calibration — current state
-
-P01 first build proved masks/layers/asset traceability but did **not** pass visual acceptance.
-
-Current P01:
-`FIGMA_STRUCTURE_READY / VISUAL_REWORK_REQUIRED / FINAL_PHOTO_QA_PENDING`
-
-Known issues:
-- `るるぶ` too simplified/generic;
-- `Shogo & Shiori` heavy dark sans instead of hot-pink script/hand-lettered lockup;
-- Hero uses unrelated object/travel STRUCTURAL_PROXY;
-- `2026` badge weakened;
-- Feature 1/2/3 too UI-like;
-- Date ticket and bottom story hook too weak/compressed.
-
-Do not use the first P01 build as the visual template for later pages until these lessons are resolved.
-
-## Print boundary
-
-Before print readiness:
-- A5 `148 × 210 mm` intent confirmed;
-- 3 mm bleed confirmed where required;
-- critical faces/text safe;
-- final placed raster resolution checked (target about 300 ppi for print graphics);
-- current links/assets validated;
-- grayscale/thumbnail/contact-sheet/spread QA completed;
-- final real photos separately replaced and rechecked.
-
 ## Stop condition for governance
 
-Add new rules only when:
-- a concrete failure exposed a gap;
-- a repeatable failure is visible;
-- factual/print/editability risk requires it;
-- the user changes creative direction.
+Add a rule only when a concrete/repeated failure exposed a real gap, or truth/print/editability risk requires it.
+
+This carry-over rule qualifies because P01 produced a real failure that stale-layer cleanup and prior Reference Delta reporting did not catch.
 
 Otherwise:
 
 `STOP WRITING RULES → MAKE THE BOOK BETTER.`
-
-The current new rules were added because P01 produced concrete, repeatable visual failures that the prior gates did not prevent.
 
 **CURRENT = V30. V20 = FROZEN HISTORY.**
