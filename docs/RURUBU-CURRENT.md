@@ -188,7 +188,7 @@ However owner review of the actual CURRENT screenshot reopened **three targeted 
 
 Current state:
 
-`BEST CURRENT = YES`
+`BEST_CURRENT = YES`
 
 `FIGMA_STRUCTURE_READY = PASS`
 
