@@ -1,16 +1,18 @@
 # Rurubu WEDDING V30 — Figma Execution Acceptance Gate
 
-Status: `CURRENT_V30_REQUIRED_READ / 2026-09-02`
+Status: `CURRENT_V30_REQUIRED_READ / ORNAMENT_ART_DIRECTION_AWARE / 2026-09-02`
 
-Purpose: prevent technically clean work from being called complete when asset roles, generated-art quality, transparency, carry-over, copy, photo replaceability, or Visual Master fidelity are wrong.
+Purpose: prevent technically clean or individually attractive work from being called complete when editorial DNA, V30 art direction, page role, asset roles, ornament family coherence, transparency, carry-over, copy, photo replaceability, or Visual Master fidelity are wrong.
 
 ## Authority
 
 Newest explicit owner feedback wins.
 
-For current execution, `assets/rurubu-v30/visual-polish-manifest.json`, page polish manifests, and `docs/rurubu-v30/TRUE-ALPHA-ASSET-GENERATION-POLICY.md` override conflicting older generic/root/page-main execution language.
+Current execution precedence:
 
-In particular, any older rule that implies **fixed/stylized text should normally be rasterized/bundled** is superseded. Asset role must be decided first.
+`owner feedback → page-specific ornament/page-polish authority → assets/rurubu-v30/ornament-art-direction-manifest.json → assets/rurubu-v30/visual-polish-manifest.json → TRUE-ALPHA policy → this Acceptance gate → older generic/root/page-main execution language`
+
+Older language that broadly rasterizes fixed/stylized text, treats P01 as the literal template for later pages, accepts good standalone illustration without publication-family review, or uses checkerboard-looking output as a transparency workflow is superseded.
 
 ## Required read set
 
@@ -18,19 +20,111 @@ In particular, any older rule that implies **fixed/stylized text should normally
 2. actual page Visual Master
 3. `assets/rurubu-v30/manifest.json`
 4. `assets/rurubu-v30/visual-polish-manifest.json`
-5. page manifest
-6. page polish manifest when present
-7. `docs/rurubu-v30/TRUE-ALPHA-ASSET-GENERATION-POLICY.md`
-8. `docs/rurubu-v30/VISUAL-MASTER-LOCK-AUDIT.md`
-9. this document
-10. page README when production exists
+5. `assets/rurubu-v30/ornament-art-direction-manifest.json`
+6. page manifest
+7. page polish manifest when present
+8. page-specific ornament manifest when present
+9. `docs/rurubu-v30/TRUE-ALPHA-ASSET-GENERATION-POLICY.md`
+10. `docs/rurubu-v30/VISUAL-MASTER-LOCK-AUDIT.md`
+11. this document
+12. page README when production exists
 
 For a bounded correction, also read `docs/rurubu-v30/FAST-TARGETED-PATCH-POLICY.md`.
 
-## 1. Asset-role classification — HARD
+## 1. Rurubu editorial DNA — HARD / FIRST GATE
 
-Before choosing render mode, classify every material visible element as one of:
+Before judging whether an ornament is beautiful, judge whether it functions as editorial material.
 
+Required characteristics:
+- decoration supports photography, headings, information blocks, eye movement or page rhythm;
+- lively density has hierarchy and calm zones;
+- mixed media may coexist, but it must feel art-directed by one publication team;
+- cutouts, routes, doodles, stickers, stamps and small illustrations are editorial tools, not independent artwork by default;
+- tactile print character is controlled and subordinate to readability/content.
+
+Hard reject:
+- attractive standalone illustration that competes with the page's editorial lead without a Visual Master reason;
+- botanical/fine-art plate behavior where a compact corner accent is needed;
+- strong retro-poster treatment inserted into a lighter page without deliberate page-role justification;
+- generic stock/clipart or SaaS icon language;
+- unrelated illustration genres mixed with no editorial unifier.
+
+Gate: `RURUBU_EDITORIAL_DNA_PASS`.
+
+## 2. V30 art direction — HARD
+
+P01 is a calibration reference, not the root authority and not a template to clone.
+
+P01-P08 Visual Masters collectively calibrate the V30 translation of the Rurubu editorial DNA.
+
+Judge compatibility across:
+- editorial usefulness;
+- line-weight range;
+- hand-drawn/printed character;
+- texture amount;
+- realism/detail range;
+- shadow/depth restraint;
+- palette temperature/saturation;
+- cutout/sticker weight;
+- route/doodle grammar;
+- micro-accent grammar;
+- relationship to photography and native text.
+
+Different families may use different drawing methods. Consistency means compatible editorial treatment and visual weight, not identical brushwork.
+
+Gate: `V30_ART_DIRECTION_PASS`.
+
+## 3. Page role fit — HARD
+
+The target page Visual Master controls local density, scale, motif choice, negative space and ornament dominance.
+
+Do not import P01 cover ornament density into a profile/story/closing page merely for continuity.
+
+Ask: does this ornament have the right job and visual weight for this exact location?
+
+Gate: `PAGE_ROLE_FIT_PASS`.
+
+## 4. Ornament family coherence — HARD
+
+Use the registry and workflow in `assets/rurubu-v30/ornament-art-direction-manifest.json`.
+
+Current family vocabulary includes:
+- `TRAVEL_ROUTE_DOODLE`
+- `TRAVEL_VEHICLE`
+- `TROPICAL_BOTANICAL`
+- `TRAVEL_EPHEMERA`
+- `MICRO_ACCENT`
+
+Families share grammar, not identical final assets.
+
+Hard reject both:
+- unrelated family members that look selected from different stock packs/illustration genres;
+- forcing every object into one identical drawing style and losing controlled mixed-media energy.
+
+Gate: `ORNAMENT_FAMILY_COHERENCE_PASS`.
+
+## 5. Production architecture — HARD
+
+Use:
+
+`PLAN_GLOBALLY_CALIBRATE_UPFRONT_PRODUCE_CONTEXTUALLY`
+
+Meaning:
+1. inventory ornament slots across reviewed pages first;
+2. establish only 1–2 family calibration anchors where needed;
+3. create genuine cross-page shared components once;
+4. generate final page-specific ornaments after page hierarchy/photos/native text/negative-space needs are known;
+5. write accepted family decisions back to the registry.
+
+Do **not** generate every final icon upfront.
+
+Do **not** work pure page-by-page without a global family system.
+
+When future pages are added, map new needs to existing families or explicitly extend the family registry.
+
+## 6. Asset-role classification — HARD
+
+Before choosing render mode, classify material elements as:
 - `NATIVE_TEXT`
 - `SHARED_COMMON_COMPONENT`
 - `GENERATED_DISPLAY_ASSET`
@@ -38,59 +132,50 @@ Before choosing render mode, classify every material visible element as one of:
 - `PHOTO`
 
 Decision order:
-
-1. Cross-page recurring publication furniture? → `SHARED_COMMON_COMPONENT`
-2. Text that should remain editable/consistent/separately controllable? → `NATIVE_TEXT`
-3. Page-specific decorative art/icon/route/cluster? → `PAGE_SPECIFIC_ORNAMENT`
-4. Replaceable photography? → `PHOTO`
-5. Only then consider `GENERATED_DISPLAY_ASSET` for a truly inseparable authored object whose copy is locked.
+1. cross-page recurring publication furniture → `SHARED_COMMON_COMPONENT`
+2. editable/consistent/separately controllable text → `NATIVE_TEXT`
+3. local decorative art/icon/route/cluster → `PAGE_SPECIFIC_ORNAMENT`
+4. replaceable photography → `PHOTO`
+5. only then consider `GENERATED_DISPLAY_ASSET` for a truly inseparable authored object with locked copy.
 
 Hard rejects:
+- stylized/fixed text called an image merely because it is rich;
+- PAGE-number family independently generated per page;
+- rasterizing native names/titles for convenience;
+- using `GENERATED_DISPLAY_ASSET` as a default ambiguity bucket.
 
-- stylized/fixed text called an image asset merely because it is visually rich;
-- PAGE-number family independently generated per page when it is a shared system;
-- rasterizing native names/titles just to imitate the reference;
-- using `GENERATED_DISPLAY_ASSET` as the default bucket when role is ambiguous.
+## 7. Shared common components — HARD
 
-## 2. Shared common components — HARD
-
-Recurring publication furniture must remain one coherent P01–P08 family unless owner/Visual Master explicitly requires a page-specific exception.
+Recurring publication furniture remains one coherent cross-page system unless owner/Visual Master explicitly requires an exception.
 
 Current example: PAGE 01 / PAGE 02 / ... badge family.
 
-Judge typography, backing, stroke, scale, edge relationship, and variable page number as one shared system.
+## 8. Ornament object quality / reuse intent
 
-## 3. Page-specific ornament originality — HARD
+Only after the higher-level editorial/art-direction/page/family gates pass, judge individual asset craft quality.
 
-Travel/tropical/icon/route/sticker art must feel authored for its exact local role.
+Gate: `ORNAMENT_OBJECT_QUALITY_PASS`.
 
-Reject:
+If a motif repeats, verify it is deliberate publication language rather than convenience/carry-over.
 
-- generic stock/clipart feel;
-- obvious same-page copy/paste reuse;
-- same or near-identical prominent airplane/route/suitcase/tropical cluster in multiple positions unless repetition is intentional;
-- slightly moving/resizing/recoloring an old carry-over and calling it requalified;
-- ornament quality materially below the title/photo/paper-module quality bar.
+Gate: `REUSE_INTENT_PASS`.
 
-`KEEP_REQUALIFIED` / `REQUALIFIED_CARRYOVER` requires a fresh current-build judgment of visual quality, local context fit, duplication feel, and stock/clipart feel.
+A beautiful individual PNG cannot override a failure in Rurubu DNA, V30 art direction, page fit or family coherence.
 
-## 4. Clean photo proxies — HARD
+## 9. Clean photo proxies — HARD
 
 Visual Master/page screenshots are comparison references only, never active photo fills.
 
-Allowed photo sources:
-
+Allowed:
 1. suitable user photo;
 2. clean standalone representative photo;
 3. clean generated standalone photo proxy with no page-layout decoration.
 
-Reject any proxy containing title, border, badge, paper shell, flower, route, frame, page background, or other layout decoration.
+Reject a proxy containing title, border, badge, paper shell, flower, route, frame, page background or other layout decoration.
 
-## 5. True-alpha generation preflight — HARD
+## 10. True-alpha generation preflight — HARD
 
-For any generated floating asset that needs transparent surroundings, follow `TRUE-ALPHA-ASSET-GENERATION-POLICY.md`.
-
-Preferred pipeline:
+For generated floating art:
 
 `true-alpha generation/export → immediate alpha-channel preflight → only PASS assets enter Figma`
 
@@ -98,80 +183,67 @@ If direct true alpha is unavailable:
 
 `single safe flat matte → one extraction → alpha preflight`
 
-Never use or request a checkerboard as the matte/background. A visible checkerboard baked into RGB is `GENERATION_ALPHA_FAIL`.
+Never request/accept checkerboard as matte/background. Baked checkerboard RGB is `GENERATION_ALPHA_FAIL`.
 
-Before Figma placement, require both:
-
+Before Figma placement require:
 - `ART_QUALITY_PASS`
 - `TRUE_ALPHA_PREFLIGHT_PASS`
 
-Figma must not be where fake transparency is discovered for the first time.
+Figma must not be where fake transparency is discovered first.
 
-## 6. Alpha integrity after cutout — HARD
+## 11. Alpha integrity after cutout — HARD
 
 `TRUE ALPHA ≠ CORRECT ALPHA`.
 
-Verify separately:
+Verify intended outside transparency and intended interior opacity separately.
 
-- intended outside region is transparent;
-- intended paper/vessel/badge/ribbon interiors remain opaque;
-- no checkerboard RGB, matte halo, opaque rectangle, fringe, or unintended holes;
-- white/cream/light artwork and thin routes/details survive extraction.
+Reject checkerboard RGB, matte halo, opaque rectangle, fringe, unintended holes, erased white/light art or broken thin routes/details.
 
 Opaque paper/vessel interiors normally use alpha `>= 0.95`, preferably `1.00`.
 
-If one same-family paper/ticket/label/vessel fails inside-opacity QA, run one quick sibling sweep and repair source-side alpha. Do not use rescue rectangles or Figma opacity tricks.
+If one same-family opaque-paper module fails, run one bounded sibling sweep and repair source-side alpha. Do not hide defects with rescue rectangles/Figma opacity.
 
-## 7. Border depth — HARD
+## 12. Border / copy / carry-over — HARD
 
-Default depth:
+Default border depth:
 
 `background → border/frame → Hero/photos → authored modules → major foreground accents`
 
-unless the Visual Master explicitly requires foreground border overlap.
+Newest owner-approved copy overrides stale generated/native copy. Unapproved personal facts remain separate/non-factual.
 
-## 8. Copy safety / copy sync — HARD
-
-Newest owner-approved copy overrides stale generated/native copy.
-
-Unapproved personal facts, readings, profile values, Q&A answers, and other TBD copy must remain separate and non-factual until grounded.
-
-## 9. Visual carry-over — HARD
-
-A clean layer tree does not grant a visual PASS.
-
-Use:
-
+Carry-over statuses:
 - `UNREVIEWED_CARRYOVER`
 - `KEEP_REQUALIFIED`
 - `REWORK_REQUIRED`
 - `REPLACE_REQUIRED`
 - `SUPERSEDED`
 
-Existing visible assets have no permanent grandfathered PASS.
+Existing visible assets have no permanent grandfathered visual PASS.
 
-## 10. Reference Delta / design completion
+## 13. Reference Delta / design completion
 
 Use the current screenshot and actual Visual Master, not layer names or prior reports.
 
-Before `FIGMA_DESIGN_COMPLETE = YES`, confirm the applicable items:
+Before `FIGMA_DESIGN_COMPLETE = YES`, confirm applicable gates in this order:
+1. `RURUBU_EDITORIAL_DNA_PASS`
+2. `V30_ART_DIRECTION_PASS`
+3. `PAGE_ROLE_FIT_PASS`
+4. `ORNAMENT_FAMILY_COHERENCE_PASS`
+5. correct asset-role classification/shared components
+6. `ORNAMENT_OBJECT_QUALITY_PASS`
+7. `REUSE_INTENT_PASS`
+8. clean photo-proxy integrity
+9. true-alpha/material alpha
+10. copy safety/sync
+11. border depth
+12. 3-second hierarchy/editorial rhythm
+13. A5 readability/edge safety
 
-- correct asset-role classification;
-- shared components remain coherent;
-- ornament originality/carry-over quality;
-- clean photo-proxy integrity;
-- alpha/material integrity;
-- copy safety/sync;
-- border depth;
-- 3-second hierarchy and high-saliency identity;
-- intentional asymmetry and editorial rhythm;
-- A5 readability/edge safety.
+Structure-only cleanliness or isolated PNG quality is never design completion.
 
-Structure-only cleanliness is never design completion.
+## 14. Fast close
 
-## 11. Fast close
-
-For bounded corrections, use proportional QA:
+For bounded corrections:
 
 `fix reopened scope → one bounded dependency/sibling check if required → one integrated final screenshot/QA → protected-page check → one remote sync check → close gates → STOP`
 
@@ -183,20 +255,21 @@ Do not restart unrelated prior-PASS audits unless the patch disturbed them.
 
 `DESIGN_LOCKED / FINAL_PHOTO_QA_PENDING / PRINT_READY_NO`
 
-Do not reopen without new owner feedback.
+P01 is a calibration reference for V30, not a template whose ornament density/exact motifs must be copied.
 
 ### P02
 
-`STRUCTURE_COPY_PHOTO_PASS / ORNAMENT_QUALITY_REOPENED`
+`STRUCTURE_COPY_PHOTO_PASS / ORNAMENT_ART_DIRECTION_REDESIGN_OPEN`
 
-Preserve accepted structure/photo/copy/alpha/border work.
+Preserve accepted structure/photo/copy/material-alpha/border work.
 
-Current five `REWORK_REQUIRED` ornaments:
+Read `assets/rurubu-v30/p02/ornament-art-direction-manifest.json` before another ornament run.
 
+Current five targets:
 - `P02_Q2_PLANE_AND_ROUTE`
 - `P02_TOP_AIRPLANE_ROUTE`
 - `P02_Q2_SUITCASE`
-- `P02_TOP_RIGHT_TRAVEL_TROPICAL_CLUSTER / REQUALIFIED_CARRYOVER`
-- `P02_TOP_LEFT_TROPICAL_CLUSTER / REQUALIFIED_CARRYOVER`
+- `P02_TOP_RIGHT_TRAVEL_TROPICAL_CLUSTER`
+- `P02_TOP_LEFT_TROPICAL_CLUSTER`
 
-P02 returns to `FIGMA_DESIGN_COMPLETE = YES` only after those five pass ornament-originality/carry-over/reference-delta review and all new transparent ornament assets pass true-alpha preflight.
+The latest candidates show strong standalone craft quality but unresolved illustration-genre drift. P02 returns to `FIGMA_DESIGN_COMPLETE = YES` only after the higher-level editorial/art-direction/page/family gates and final true-alpha preflight pass.
