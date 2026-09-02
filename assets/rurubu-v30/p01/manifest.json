@@ -1,0 +1,151 @@
+{
+  "schemaVersion": 1,
+  "project": "Rurubu WEDDING V30",
+  "page": "P01",
+  "role": "COVER",
+  "status": "VISUAL_MASTER_LOCKED",
+  "visualMaster": {
+    "path": "assets/rurubu-v30/p01/P01.png",
+    "authority": "PRIMARY_VISUAL_AUTHORITY",
+    "analysisSource": "user-provided P01.png reviewed visually in ChatGPT",
+    "reviewedDimensionsPx": {
+      "width": 1055,
+      "height": 1491
+    },
+    "reviewedMode": "RGBA",
+    "reviewedSha256": "6184dd7694ed9a147d171f717f73aa4600f57a4e3655bf4b00cb63edb78b37ae",
+    "rule": "Do not redesign P01 from text-only Rurubu rules. Reconstruct from this image first, then preserve editability."
+  },
+  "canonicalFacts": {
+    "coupleNames": {
+      "first": "Shogo",
+      "second": "Shiori",
+      "spellingLocked": true,
+      "displayCaseMayVary": true,
+      "allowedDisplayExamples": [
+        "Shogo & Shiori",
+        "SHOGO & SHIORI"
+      ],
+      "forbidden": "Do not invent, misspell, swap, translate, abbreviate, or OCR-correct these names without explicit user instruction."
+    },
+    "weddingDate": {
+      "canonical": "2026.10.24",
+      "locked": true,
+      "forbidden": "Do not change the year, month, day, separators, or infer another date from generated imagery."
+    }
+  },
+  "visualAuthority": {
+    "firstImpression": "Bright, high-energy Japanese travel-magazine cover with unmistakable playful Rurubu-like editorial density rather than a generic wedding brochure.",
+    "readingOrder": [
+      "three-block るるぶ masthead",
+      "giant WEDDING display title",
+      "Shogo & Shiori ribbon",
+      "central couple hero photograph",
+      "date ticket",
+      "three feature teasers on the left",
+      "bottom story statement and travel-stamp details"
+    ],
+    "masthead": {
+      "importance": "CRITICAL",
+      "description": "Large three-block るるぶ logo treatment near the top, each kana inside a chunky rounded colored block with thick white/black dimensional outline.",
+      "rule": "Treat the masthead as display art, not ordinary Figma body text. Its chunky outlined dimensional character is part of the cover identity."
+    },
+    "mainTitle": {
+      "text": "WEDDING",
+      "importance": "CRITICAL",
+      "description": "Extremely large hot-pink rounded display lettering spanning almost full width, with layered white/yellow/dark outlines and dimensional shadow.",
+      "rule": "Do not reduce it to clean flat typography or a small centered heading."
+    },
+    "photoHierarchy": {
+      "hero": "One dominant portrait-oriented couple photo occupies most of the center/lower page and remains visually stronger than all support imagery.",
+      "support": "Small feature thumbnails are secondary and embedded in editorial callouts rather than equal-sized cards.",
+      "rule": "Keep strongly unequal photo hierarchy; avoid equal grids and generic card layouts."
+    },
+    "composition": {
+      "density": "High but organized; many elements overlap and touch without becoming a uniform grid.",
+      "alignment": "Intentional asymmetry with dominant centered title/photo structure and offset editorial objects around it.",
+      "edgeBehavior": "Decorative flowers, leaves, stamps and title shapes actively use page edges and overlap neighboring areas.",
+      "rule": "Preserve purposeful collisions and irregular editorial clustering. Do not normalize into evenly spaced modules."
+    },
+    "travelEditorialGrammar": [
+      "airmail-stripe outer border",
+      "date shown on a ticket/postcard-like paper object",
+      "airplane icon and dotted travel path",
+      "postmark / travel stamp motifs",
+      "small feature-number circles",
+      "photo-thumbnail callouts",
+      "tropical destination illustrations and flowers",
+      "page-number badge"
+    ],
+    "colorBehavior": {
+      "dominant": [
+        "hot pink",
+        "sky blue",
+        "yellow",
+        "white"
+      ],
+      "support": [
+        "green foliage",
+        "hibiscus red/pink",
+        "small black editorial text"
+      ],
+      "rule": "Use saturated travel-magazine color blocking with white separation and dark outlines; avoid luxury-beige minimalism or generic gradients."
+    },
+    "typographyBehavior": {
+      "display": "Very heavy rounded outlined display lettering with depth and playful irregularity.",
+      "secondary": "Handwritten/script and bold Japanese feature headings used selectively.",
+      "body": "Small factual labels remain readable and subordinate.",
+      "rule": "Hierarchy must come from scale, weight, outline, overlap and placement before decoration."
+    }
+  },
+  "editableReconstructionPolicy": {
+    "imageGeneratedOrPreparedArt": [
+      "るるぶ masthead display art",
+      "WEDDING display-title treatment",
+      "ribbon/banner backing",
+      "ticket/postcard vessels",
+      "feature-number badges",
+      "postmark/travel stamp motifs",
+      "airmail border",
+      "flowers, foliage, airplane/path and destination illustrations",
+      "decorative cloud/burst shapes"
+    ],
+    "nativeEditableText": [
+      "Shogo",
+      "Shiori",
+      "2026.10.24",
+      "feature headings and factual copy where editability is required",
+      "page number where practical"
+    ],
+    "replaceablePhotography": [
+      "central couple hero photo",
+      "feature thumbnail photos"
+    ],
+    "rule": "Figma is the compositor. Rebuild the reference appearance with layered replaceable photography and native factual copy rather than flattening the full page as the editable master."
+  },
+  "hardRejects": [
+    "generic wedding brochure aesthetics",
+    "minimal luxury cover",
+    "equal-card grid",
+    "flat native-text substitute for the expressive masthead",
+    "small or weak WEDDING title",
+    "uniform photo frames",
+    "clean centered template with excessive empty space",
+    "invented couple names",
+    "invented wedding date",
+    "generated text treated as authoritative factual copy"
+  ],
+  "qa": {
+    "gate0": "At a 3-second glance, the page must read as a playful Japanese travel-magazine wedding cover, not merely as a colorful wedding collage.",
+    "referenceDelta": "Any production rebuild must be compared directly against P01.png for masthead strength, title scale, hero dominance, density, edge activity, travel motifs and color energy before technical QA.",
+    "technicalQaAfterVisualPass": [
+      "photo replaceability",
+      "native factual text correctness",
+      "clipping",
+      "alpha/transparency",
+      "A5 readability",
+      "sRGB export",
+      "print-edge and bleed checks"
+    ]
+  }
+}
