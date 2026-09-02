@@ -38,6 +38,15 @@
 
   const markerDoneCount = () => MARKER_KEYS.filter((key) => Boolean(state[key])).length;
 
+  const setJourneyState = (element, mode) => {
+    if (!element) return;
+    element.classList.toggle('is-done', mode === 'done');
+    element.classList.toggle('is-active', mode === 'active');
+    element.classList.toggle('is-locked', mode === 'locked');
+    if (mode === 'active') element.setAttribute('aria-current', 'step');
+    else element.removeAttribute('aria-current');
+  };
+
   const renderJourney = () => {
     const musicDone = Boolean(state['music-on-timeline']);
     const markersDone = markerDoneCount();
@@ -50,6 +59,10 @@
     if (journeyMusic) journeyMusic.textContent = musicDone ? '✓ 曲を置いた' : '① 曲を置く';
     if (journeyMarkers) journeyMarkers.textContent = allMarkersDone ? '✓ 目印できた' : `② 目印を置く${markersDone ? ` ${markersDone}/7` : ''}`;
     if (journeyScenes) journeyScenes.textContent = allMarkersDone ? '③ 好きな場面を作る ← 次' : '③ 好きな場面を作る';
+
+    setJourneyState(journeyMusic, musicDone ? 'done' : 'active');
+    setJourneyState(journeyMarkers, allMarkersDone ? 'done' : musicDone ? 'active' : 'locked');
+    setJourneyState(journeyScenes, allMarkersDone ? 'active' : 'locked');
   };
 
   const renderStudioState = () => {
