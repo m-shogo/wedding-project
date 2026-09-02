@@ -1,10 +1,16 @@
 # Rurubu WEDDING V30 — Visual Master Lock Audit
 
-Status: `CURRENT_V30_PRODUCTION_GUARDRAIL / 2026-09-02`
+Status: `CURRENT_V30_PRODUCTION_GUARDRAIL / PRE-BUILD_VISUAL_UNDERSTANDING / 2026-09-02`
 
 Purpose: prevent a page from being marked `VISUAL_MASTER_LOCKED` after only one interpretation pass.
 
 This document exists because P02 exposed a concrete failure mode: the main hierarchy and geometry were correctly captured, but some low-saliency accents and one flower object were omitted/misclassified. P01 was then re-audited with the same lesson.
+
+**Boundary:** this document proves that the Visual Master has been understood. It does **not** prove that the later Figma implementation is visually faithful. After a Figma build, the mandatory companion gate is:
+
+`docs/rurubu-v30/FIGMA-EXECUTION-ACCEPTANCE.md`
+
+`VISUAL_MASTER_LOCKED ≠ FIGMA_DESIGN_COMPLETE`.
 
 ## Mandatory lock sequence
 
@@ -57,7 +63,9 @@ Mandatory checks:
 - verify quiet/empty areas are intentional and not missing content;
 - verify no decorative object was silently merged into a vague `decoration cluster` if it has a distinct editorial job;
 - verify no generated/reference text was promoted to autobiographical FACT;
-- verify no page-specific object was omitted just because its saliency is low.
+- verify no page-specific object was omitted just because its saliency is low;
+- identify **identity anchors** whose exact visual character must later be checked again in the actual Figma screenshot;
+- record the required **visual-proxy semantics** for high-saliency photo slots so an unrelated structural placeholder cannot masquerade as a visual-QA proxy.
 
 ## Lock evidence required in each page manifest
 
@@ -67,6 +75,8 @@ Each reviewed page manifest should include equivalent evidence to:
 - `reviewCompleteness.firstPass = COMPLETE`
 - `reviewCompleteness.secondPassOmissionAudit = COMPLETE`
 - `reviewCompleteness.secondPassFindingsResolved`
+- identity-anchor classification where applicable
+- representative visual-proxy requirements for high-saliency photo slots
 - `partGenerationGate.secondPassOmissionAuditComplete = true`
 
 If the second pass finds an omission or wrong classification, correct the manifest before locking.
@@ -79,6 +89,8 @@ A micro element may be `FLEXIBLE` in exact position and still be necessary to re
 
 Likewise, repeated-looking modules must not be normalized into identical UI cards unless the Visual Master actually supports that conclusion.
 
+A correct written specification can still produce a weak Figma implementation. That is why the post-build screenshot gate is separate.
+
 ## Page-specific lessons already captured
 
 ### P01
@@ -86,10 +98,12 @@ Likewise, repeated-looking modules must not be normalized into identical UI card
 - keep top plumeria/foliage separate from the masthead glyphs;
 - keep the dotted-heart airplane route distinct around the 2026 badge;
 - hero is an open cover image, not a polaroid card;
+- Hero visual QA requires a two-person people-led proxy if the final real photo is unavailable;
 - Feature 1/2/3 share a family but have different color/icon/photo jobs;
 - right destination cluster includes chapel + sea + palms + flowers, not merely flowers;
 - bottom story vessel and bottom floral edge cluster are separate objects;
-- OUR JOURNEY postmark and PAGE 01 are separate jobs.
+- OUR JOURNEY postmark and PAGE 01 are separate jobs;
+- `るるぶ`, `WEDDING`, `Shogo & Shiori`, and the prominent `2026` treatment are identity anchors whose visual character must survive implementation, not merely their text values.
 
 ### P02
 - distinguish portrait/profile seam plumeria from Q1/Q2 seam hibiscus;
@@ -99,13 +113,24 @@ Likewise, repeated-looking modules must not be normalized into identical UI card
 - Q1 has inset photo, Q2 intentionally does not;
 - do not mechanically mirror the two sides.
 
+### P03
+- title-left / hero-right / timeline-left / Q&A-right asymmetry is structural;
+- hero pink tape is a separate object;
+- the dotted story route is decorative navigation, not factual travel routing;
+- steps 1–5 are one family but not cloned cards;
+- steps 1–4 have supporting photos while step 5 intentionally does not;
+- Q3 and Q4 are related but non-identical paper systems.
+
 ## State-machine rule
 
 `VISUAL_MASTER_PENDING`
 → PASS A complete
 → PASS B complete
 → omissions/misclassifications corrected
+→ identity anchors + visual-proxy semantics recorded
 → `VISUAL_MASTER_LOCKED`
-→ only then consider `PART_MAP_APPROVED`.
+→ only then consider `PART_MAP_APPROVED`
+→ Figma implementation
+→ **mandatory `FIGMA-EXECUTION-ACCEPTANCE.md` gate**.
 
-Technical QA or a complete-looking checklist can never substitute for this visual reverse-audit.
+Technical QA or a complete-looking checklist can never substitute for either visual reverse-audit or the later direct Figma screenshot comparison.
