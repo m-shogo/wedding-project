@@ -1,166 +1,131 @@
 {
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "project": "Rurubu WEDDING V30",
   "status": "CURRENT_REQUIRED_POLISH_EXTENSION",
-  "scope": "P01-P08 systemic visual-polish and carry-over requalification rules",
+  "scope": "P01-P08 systemic visual-polish, display-module, photo-proxy and carry-over requalification rules",
   "inherits": "assets/rurubu-v30/manifest.json",
-  "reason": "P01 exposed two distinct failure classes: first, visually generic native text / over-regularized modules; second, a later REWORK improved identity anchors while preserving several structurally valid FIRST BUILD assets whose older design language remained visible in CURRENT. Layer cleanliness alone did not prevent visual carry-over debt.",
-  "fixedShortDisplayTextPolicy": {
-    "rule": "Short fixed display text may be image-generated or prepared display art when its visual treatment is part of the page identity. This permission is not limited to personal names.",
+  "reason": "P01 exposed three systemic failure classes: visually generic native text/over-regularized modules; visually stale FIRST BUILD assets carried into a newer CURRENT; and Visual Master crops used as photo proxies, which contaminated photo slots with page background/decorations and made page-part boundaries hard to judge.",
+  "priorityOverride": {
+    "rule": "For V30 production after 2026-09-02, this manifest is a required execution override. Where an older root/acceptance rule permits Visual Master crops as photo proxies or implies fixed display text must remain editable in Figma, this newer rule wins unless the user explicitly says otherwise.",
+    "doNotInfer": "Do not silently fall back to older proxy/display-text behavior because it is already implemented."
+  },
+  "bundledFixedDisplayModulePolicy": {
+    "principle": "When a short fixed display element is visually authored as one editorial object, generate/prepare the complete visible module as one asset instead of decomposing it into generic Figma text + generic shapes.",
+    "oneAssetMayInclude": [
+      "short fixed text",
+      "numbers",
+      "background/vessel",
+      "badge shape",
+      "icons",
+      "doodles/routes",
+      "flowers/hearts/sparkles",
+      "printed outlines/shadows",
+      "local decorative accents"
+    ],
     "eligibleExamples": [
-      "るるぶ",
-      "WEDDING",
-      "OUR STORY",
-      "OUR JOURNEY",
-      "Q1",
-      "Q2",
-      "Q3",
-      "Q4",
-      "Q5",
-      "Q6",
-      "fixed short feature headings",
-      "fixed short badges and labels",
-      "short page-specific display titles"
+      "year/date badge",
+      "page-number badge",
+      "feature-number + feature-heading module",
+      "Q-number + fixed short heading shell",
+      "stamp/postmark module",
+      "short story-hook module",
+      "short fixed section title",
+      "short fixed name/title lockup when approved spelling is known"
     ],
-    "sourceOfTruthRule": "When the visible display is generated/prepared art, retain the approved exact string separately as native/source-of-truth data and QA the visible rendering against it.",
-    "preferNativeWhen": [
-      "body copy",
-      "long-form Q&A answers",
-      "captions",
-      "frequently changing text",
-      "guest names/relationships",
-      "precision metadata where styling is not identity-critical"
-    ],
+    "figmaEditability": {
+      "visibleTextMustBeEditable": false,
+      "rule": "For approved short fixed display modules, the visible text does not need to remain editable in Figma. Visual fidelity is the priority.",
+      "sourceOfTruthLocation": "The exact approved string/number must be recorded in the page manifest, asset metadata or other canonical data. A hidden duplicate native Figma text layer is optional, not mandatory.",
+      "longOrVariableCopy": "Long body copy, personal answers, captions, guest data, TBD copy and frequently changing text remain native/editable and must not be baked into fixed display art."
+    },
+    "bundlingDecisionRule": "Bundle only elements that visually behave as one module and are expected to move/scale together. Separate real-photo content, long/variable copy, and independently movable decorations when the Visual Master shows them as distinct objects.",
     "hardRejects": [
-      "choosing generic native type solely because it is easier to edit",
-      "baking long or frequently changing copy into raster art",
-      "accepting misspelled generated display text",
-      "treating generated visible text as the authoritative factual source"
+      "rebuilding an authored fixed badge as generic ellipse + Inter text solely for editability",
+      "splitting a fixed feature badge into many Figma primitives when the result becomes UI-like",
+      "forcing every fixed word to remain editable at the cost of the Visual Master",
+      "baking long/TBD/personal copy into generated art",
+      "bundling a replaceable real photo into the decorative module",
+      "bundling unrelated decorations only to reduce layer count"
+    ]
+  },
+  "fixedShortDisplayTextPolicy": {
+    "rule": "Short fixed display text may be image-generated or prepared display art when its visual treatment is part of page identity. This permission is not limited to personal names and may be applied through the bundled display-module policy above.",
+    "eligibleExamples": ["るるぶ", "WEDDING", "OUR STORY", "OUR JOURNEY", "Q1", "Q2", "Q3", "Q4", "Q5", "Q6", "fixed short feature headings", "fixed short badges and labels", "short page-specific display titles"],
+    "sourceOfTruthRule": "The approved exact string must exist in canonical/page manifest or asset metadata and visible generated spelling must be QA-checked against it. A duplicate native Figma text layer is not required for fixed approved display art.",
+    "preferNativeWhen": ["body copy", "long-form Q&A answers", "captions", "frequently changing text", "guest names/relationships", "TBD/personal facts not yet approved", "precision metadata where styling is not identity-critical"],
+    "hardRejects": ["choosing generic native type solely because it is easier to edit", "baking long or frequently changing copy into raster art", "accepting misspelled generated display text", "treating generated visible text as the authoritative factual source without canonical metadata"]
+  },
+  "photoProxyContaminationPolicy": {
+    "status": "HARD_OVERRIDE",
+    "principle": "A photo proxy must look like photo content only. It must not contain page-layout background, titles, badges, flowers, frames, doodles or other editorial decoration copied from the Visual Master.",
+    "visualMasterCropAsPhotoProxy": "PROHIBITED",
+    "why": [
+      "Visual Master crops can carry baked-in decoration/background into the photo slot",
+      "the same decoration may then appear both inside the proxy photo and as a real page layer",
+      "it becomes difficult to distinguish photo content from editorial assets",
+      "Reference Delta can falsely pass because part of the target layout is already baked into the proxy"
+    ],
+    "allowedProxySources": [
+      "user-provided real photo suitable for the slot",
+      "clean semantically representative standalone photo with no page-layout decoration",
+      "clean generated standalone photo used only as a temporary visual proxy, with no attempt to reproduce the Visual Master page composition"
+    ],
+    "structuralProxy": "May be any clean standalone photo that clearly differs from page decoration; it is for clipping/swap only and cannot pass visual hierarchy QA.",
+    "visualProxy": "Must match subject class/count/orientation/focal mass but remain a clean standalone photograph without page decorations.",
+    "hardRejects": [
+      "cropping P01.png/P02.png/etc and placing that crop inside a photo slot",
+      "photo proxies containing the page border, title, badge, route line, flower sticker, ticket, frame or story vessel",
+      "using a screenshot of the page as a photo fill",
+      "using a proxy whose baked decoration duplicates a separate Figma/generated page asset",
+      "claiming Reference Delta pass when proxy contamination exists"
+    ],
+    "qa": [
+      "inspect each proxy in isolation",
+      "confirm it reads as standalone photo content",
+      "confirm no page-layout typography or decoration is baked inside",
+      "confirm replacement with another clean photo does not remove any intended page decoration",
+      "confirm Visual Master comparison is based on page layers, not decoration hidden inside the proxy"
     ]
   },
   "editorialIrregularityPolicy": {
     "principle": "Preserve authored local irregularity from the Visual Master; do not manufacture random messiness and do not normalize the page into UI components.",
-    "checkDimensions": [
-      "module width and height differences",
-      "photo-slot size differences",
-      "local x/y offsets",
-      "rotation only where visually evidenced",
-      "icon position differences",
-      "overlap depth",
-      "edge activation",
-      "padding/negative-space differences"
-    ],
-    "rules": [
-      "Do not force equal heights, equal photo sizes, equal padding or equal icon alignment merely for component reuse.",
-      "When the Visual Master contains measured differences, preserve them or tune toward them during Reference Delta.",
-      "Do not assign arbitrary rotation formulas or random offsets. Any tilt/offset must serve the Visual Master or improve direct visual comparison.",
-      "Related modules may share publication DNA without sharing identical geometry."
-    ],
-    "hardRejects": [
-      "equal-card normalization",
-      "mechanical mirroring",
-      "randomized scrapbook rotation with no reference basis",
-      "component convenience overriding page silhouette"
-    ]
+    "checkDimensions": ["module width and height differences", "photo-slot size differences", "local x/y offsets", "rotation only where visually evidenced", "icon position differences", "overlap depth", "edge activation", "padding/negative-space differences"],
+    "rules": ["Do not force equal heights, equal photo sizes, equal padding or equal icon alignment merely for component reuse.", "When the Visual Master contains measured differences, preserve them or tune toward them during Reference Delta.", "Do not assign arbitrary rotation formulas or random offsets. Any tilt/offset must serve the Visual Master or improve direct visual comparison.", "Related modules may share publication DNA without sharing identical geometry."],
+    "hardRejects": ["equal-card normalization", "mechanical mirroring", "randomized scrapbook rotation with no reference basis", "component convenience overriding page silhouette"]
   },
   "tactilePrintFinishPolicy": {
     "principle": "Use restrained tactile/print character to avoid flat digital/AI-sticker appearance, but never apply indiscriminate global grain.",
-    "preferredTargets": [
-      "paper vessels",
-      "tickets/postcards",
-      "ribbons/tapes",
-      "stamps/postmarks",
-      "expressive display-title art",
-      "irregular printed frames/backings"
-    ],
-    "allowedCharacteristics": [
-      "subtle paper fiber or matte print feel",
-      "very slight ink/edge irregularity",
-      "restrained printed shadow/depth",
-      "small local imperfections that support the visual master"
-    ],
-    "avoidOn": [
-      "faces",
-      "real photographs unless part of an approved photo treatment",
-      "precision native body text",
-      "the entire page as a uniform noise overlay unless the Visual Master explicitly requires it"
-    ],
-    "hardRejects": [
-      "heavy fake vintage grain",
-      "global dirty-paper overlay",
-      "texture that reduces A5 readability",
-      "texture added merely to make output look less digital",
-      "visible compression/noise mistaken for tactile print quality"
-    ],
+    "preferredTargets": ["paper vessels", "tickets/postcards", "ribbons/tapes", "stamps/postmarks", "expressive display-title art", "irregular printed frames/backings"],
+    "allowedCharacteristics": ["subtle paper fiber or matte print feel", "very slight ink/edge irregularity", "restrained printed shadow/depth", "small local imperfections that support the visual master"],
+    "avoidOn": ["faces", "real photographs unless part of an approved photo treatment", "precision native body text", "the entire page as a uniform noise overlay unless the Visual Master explicitly requires it"],
+    "hardRejects": ["heavy fake vintage grain", "global dirty-paper overlay", "texture that reduces A5 readability", "texture added merely to make output look less digital", "visible compression/noise mistaken for tactile print quality"],
     "qa": "Texture/material treatment must survive A5 readability and Reference Delta; if it becomes the first thing noticed, it is too strong."
   },
   "visualCarryOverPolicy": {
     "status": "MANDATORY_AFTER_ANY_TARGETED_REWORK_OR_PROMOTION",
     "principle": "A clean Figma layer tree can still contain visually stale production assets. Existing assets receive no grandfathered visual approval merely because they were previously ADOPTED, technically valid, or unchanged in a newer build.",
-    "coreDistinctions": {
-      "layerCleanliness": "No hidden/rejected/stale nodes remain in LIVE Figma.",
-      "assetFreshness": "Every visible inherited asset still matches the current Visual Master and current page quality bar.",
-      "pageCoherence": "New and inherited assets read as one authored design language rather than different production eras mixed together."
-    },
+    "coreDistinctions": {"layerCleanliness": "No hidden/rejected/stale nodes remain in LIVE Figma.", "assetFreshness": "Every visible inherited asset still matches the current Visual Master and current page quality bar.", "pageCoherence": "New and inherited assets read as one authored design language rather than different production eras mixed together."},
     "grandfatheringForbidden": true,
-    "triggers": [
-      "a REWORK/CURRENT promotion reuses any production asset from an earlier build",
-      "a high-saliency identity anchor or Hero is regenerated/replaced",
-      "the page quality bar materially increases after owner feedback",
-      "a previously weak area is fixed while neighboring assets are left unchanged",
-      "the user reports that old parts still look visible even when stale-layer scan passes"
-    ],
+    "triggers": ["a REWORK/CURRENT promotion reuses any production asset from an earlier build", "a high-saliency identity anchor or Hero is regenerated/replaced", "the page quality bar materially increases after owner feedback", "a previously weak area is fixed while neighboring assets are left unchanged", "the user reports that old parts still look visible even when stale-layer scan passes"],
     "mandatoryAuditScope": "Audit every visible inherited production asset, not only files whose node names contain OLD/FIRST/V20. Provenance and appearance both matter.",
-    "auditViews": [
-      "isolated asset where practical",
-      "asset in current page context",
-      "full-page current screenshot",
-      "Visual Master side-by-side/overlay",
-      "A5-size thumbnail when the asset affects readability or rhythm"
-    ],
-    "statuses": {
-      "UNREVIEWED_CARRYOVER": "Inherited visible asset has not yet been requalified against the current Visual Master/current quality bar.",
-      "KEEP_REQUALIFIED": "Inherited asset was explicitly rechecked in the current composition and still fits both Visual Master and current design language.",
-      "REWORK_REQUIRED": "Asset job remains valid but its current visual execution is weaker/staler than the current page.",
-      "REPLACE_REQUIRED": "Asset's visual concept/job no longer fits and should be rebuilt/replaced rather than patched.",
-      "SUPERSEDED": "Asset has been removed from CURRENT and retained only as history/QA evidence."
-    },
-    "requiredAuditFieldsPerInheritedAsset": [
-      "assetId/path",
-      "carriedFrom build or provenance",
-      "current Figma node when applicable",
-      "current status",
-      "Visual Master comparison result",
-      "coherence with newly improved neighboring assets",
-      "KEEP / REWORK / REPLACE decision",
-      "reason",
-      "last current-build acceptance evidence"
-    ],
+    "auditViews": ["isolated asset where practical", "asset in current page context", "full-page current screenshot", "Visual Master side-by-side/overlay", "A5-size thumbnail when the asset affects readability or rhythm"],
+    "statuses": {"UNREVIEWED_CARRYOVER": "Inherited visible asset has not yet been requalified against the current Visual Master/current quality bar.", "KEEP_REQUALIFIED": "Inherited asset was explicitly rechecked in the current composition and still fits both Visual Master and current design language.", "REWORK_REQUIRED": "Asset job remains valid but its current visual execution is weaker/staler than the current page.", "REPLACE_REQUIRED": "Asset's visual concept/job no longer fits and should be rebuilt/replaced rather than patched.", "SUPERSEDED": "Asset has been removed from CURRENT and retained only as history/QA evidence."},
+    "requiredAuditFieldsPerInheritedAsset": ["assetId/path", "carriedFrom build or provenance", "current Figma node when applicable", "current status", "Visual Master comparison result", "coherence with newly improved neighboring assets", "KEEP / REWORK / REPLACE decision", "reason", "last current-build acceptance evidence"],
     "adjacencyRequalificationRule": "When a high-saliency anchor/Hero is materially improved, automatically reopen nearby supporting assets for requalification. Improving a title can make an old ribbon, ticket, feature vessel or badge visibly obsolete even if that asset did not itself regress.",
     "maintainedDefinition": "MAINTAINED is allowed only after explicit current-build requalification. 'Unchanged since first build' is not evidence. 'No regression' is insufficient if the asset remains materially behind the Visual Master or newly raised surrounding quality bar.",
-    "coherenceGate": {
-      "question": "Does the page look like one authored magazine cover/page, or like new identity anchors placed on top of older UI-like production parts?",
-      "failExamples": [
-        "new expressive masthead + old generic feature-card vessels",
-        "new premium display lettering + old flat/cheap ticket or badge",
-        "new people-led Hero + support modules whose scale/material/rhythm still belong to the previous draft",
-        "mixed outline/shadow/material systems that reveal different production eras"
-      ],
-      "blocking": true
-    },
+    "coherenceGate": {"question": "Does the page look like one authored magazine cover/page, or like new identity anchors placed on top of older UI-like production parts?", "failExamples": ["new expressive masthead + old generic feature-card vessels", "new premium display lettering + old flat/cheap ticket or badge", "new people-led Hero + support modules whose scale/material/rhythm still belong to the previous draft", "mixed outline/shadow/material systems that reveal different production eras"], "blocking": true},
     "promotionRule": "A candidate may become the best CURRENT working version while carry-over debt remains, but it must be labeled PROMOTED_CURRENT_WITH_CARRYOVER_DEBT and cannot claim final REFERENCE_DELTA_PASS / FIGMA_DESIGN_COMPLETE until all material inherited assets are KEEP_REQUALIFIED, REWORKED, REPLACED or explicitly user-deferred.",
-    "hardRejects": [
-      "treating ADOPTED as permanent visual approval",
-      "passing carry-over because node names are clean",
-      "keeping an old asset only because generation effort was already spent",
-      "marking an inherited asset PASS/MAINTAINED without explicit current-build comparison",
-      "allowing new and old design languages to coexist because the page is technically layered/editable"
-    ]
+    "hardRejects": ["treating ADOPTED as permanent visual approval", "passing carry-over because node names are clean", "keeping an old asset only because generation effort was already spent", "marking an inherited asset PASS/MAINTAINED without explicit current-build comparison", "allowing new and old design languages to coexist because the page is technically layered/editable"]
+  },
+  "pageApplicationRequirement": {
+    "rule": "Before any P01-P08 part generation, each page must classify its fixed display modules and photo slots. A page-specific manifest/polish manifest must state which visible short modules may be bundled into one generated asset and which copy must remain native/TBD.",
+    "requiredFields": ["bundledDisplayModules", "nativeOrVariableCopy", "photoProxyRoles", "photoProxyContaminationHardReject", "independentlyMovableExceptions"],
+    "pendingPages": "For pages still awaiting visual review, do not invent the module list from prose. Add the classification during the actual Visual Master PASS A/PASS B review."
   },
   "feedbackDebtPolicy": {
     "rule": "A newly discovered systemic failure pattern reopens FEEDBACK_DEBT even if the previous feedback cycle was closed. Closing one debt does not freeze future acceptance rules.",
-    "currentP01Lesson": "P01 REWORK improved major anchors and was a valid better CURRENT, but the later visual carry-over review found inherited FIRST BUILD vessels/ticket/story assets still visible. Therefore page promotion and page completion must be treated as separate decisions.",
-    "blockScalingRule": "Do not scale a production method to later pages while a newly discovered systemic carry-over failure remains unmodeled or unaudited."
+    "currentP01Lesson": "P01 proved that page promotion and page completion are separate decisions; it also proved that Visual Master crops are unsuitable photo proxies when they include page decoration, and that fixed display modules can be better generated as complete visible objects rather than editable Figma subparts.",
+    "blockScalingRule": "Do not scale a production method to later pages while a newly discovered systemic carry-over/display-module/proxy failure remains unmodeled or unaudited."
   },
-  "acceptanceRule": "These policies are evaluated during docs/rurubu-v30/FIGMA-EXECUTION-ACCEPTANCE.md. Structural QA, stale-layer scans, prior ADOPTED status, or a locally improved REWORK cannot waive visual carry-over/coherence review."
+  "acceptanceRule": "These policies are mandatory execution overrides for P01-P08. Structural QA, stale-layer scans, prior ADOPTED status, editable-text preference, or an older proxy-source rule cannot waive bundled-module fidelity, clean-photo-proxy, carry-over or coherence review."
 }
