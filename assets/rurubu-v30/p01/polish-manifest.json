@@ -1,19 +1,28 @@
 {
-  "schemaVersion": 9,
+  "schemaVersion": 10,
   "project": "Rurubu WEDDING V30",
   "page": "P01",
-  "status": "CURRENT_P01_DESIGN_LOCKED_GIT_BINARY_SYNC_COMPLETE_FINAL_PHOTO_QA_PENDING",
+  "status": "CURRENT_P01_TARGETED_POST_LOCK_PATCH_OPEN",
   "inherits": [
     "assets/rurubu-v30/manifest.json",
     "assets/rurubu-v30/visual-polish-manifest.json",
     "assets/rurubu-v30/p01/manifest.json"
   ],
-  "purpose": "Current P01 execution authority after direct Visual Master rereview, final REWORK, targeted micro-polish, fresh post-fix Figma screenshot review and Git synchronization of the four production PNGs. P01 design/repository debt is closed; final owner-photo and print QA remain later.",
+  "purpose": "Current P01 execution authority after final REWORK, first micro-polish, repository sync, and latest owner post-lock review. Preserve accepted Feature opacity/left-edge/ring improvements, but reopen targeted fixes for Date/Page01 inside opacity, Feature 3 copy sync, and airmail-border z-order before P02 production.",
+  "authorityPrecedence": "This newer page-polish manifest overrides conflicting execution/copy details in the older P01 main manifest. Canonical project facts remain inherited from Root authority.",
   "currentFigma": {
     "fileKey": "bfM0d4c9dCeBv5pCkJ3TNM",
     "currentNode": "3535:7",
     "realP02Node": "3535:9",
     "deletedTempNode": "3708:2"
+  },
+  "acceptedBaselineDoNotRegress": {
+    "cleanStandalonePhotoProxies": true,
+    "feature1To3OpaquePaperFix": true,
+    "feature1To3LeftSafeAreaFix": true,
+    "topLeftRingClusterFix": true,
+    "hiddenObsoleteLayerCount": 0,
+    "duplicateSameJobLayerCount": 0
   },
   "fixedDisplayModules": [
     {"id":"P01_MASTHEAD_RURUBU","exactVisibleText":["るるぶ"]},
@@ -23,107 +32,134 @@
     {"id":"P01_DATE_TICKET_MODULE","exactVisibleText":["WEDDING DATE","2026.10.24","SAT"]},
     {"id":"P01_FEATURE_1_DISPLAY_MODULE","exactVisibleText":["1","ふたりのプロフィール"],"replaceablePhotoSeparate":true},
     {"id":"P01_FEATURE_2_DISPLAY_MODULE","exactVisibleText":["2","旅の思い出"],"replaceablePhotoSeparate":true},
-    {"id":"P01_FEATURE_3_DISPLAY_MODULE","exactVisibleText":["3","家族と友達"],"replaceablePhotoSeparate":true},
+    {"id":"P01_FEATURE_3_DISPLAY_MODULE","exactVisibleText":["3","友達との思い出"],"replaceablePhotoSeparate":true},
     {"id":"P01_BOTTOM_STORY_MODULE","exactVisibleText":["ふたりの“楽しい!”を詰めこんだ","わたしたちの旅ストーリー"]},
     {"id":"P01_JOURNEY_STAMP_MODULE","exactVisibleText":["OUR JOURNEY","TAKE A TRIP"]},
     {"id":"P01_PAGE_BADGE_MODULE","exactVisibleText":["PAGE","01"]}
   ],
+  "copySyncExpectation": {
+    "hardRule": "Newest owner-approved visible wording must propagate to all dependent page modules. Existing generated art does not grandfather stale copy.",
+    "P01Feature3Teaser": {
+      "approvedExactVisibleText": "友達との思い出",
+      "supersededRejects": ["家族と友達", "友達"],
+      "reason": "Friends-only semantics are required, while the cover teaser should remain editorially descriptive rather than a bare category label."
+    },
+    "date": {
+      "approvedExactVisibleText": ["WEDDING DATE", "2026.10.24", "SAT"],
+      "supersededRejects": ["SAT."]
+    }
+  },
   "photoProxyPolicy": {
     "status": "CLEAN_STANDALONE_ONLY",
     "hardRule": "P01.png/page screenshots must never be used as active photo fills. Final owner photos replace only the four photo fills without changing accepted modules/masks."
   },
-  "fastFailRegeneration": {
-    "status": "REQUIRED_FOR_P01_AND_FUTURE_V30_ASSET_REPLACEMENTS",
-    "decisionRule": "Use one quick discriminator only. If a defect is likely asset-side and regeneration/cutout is cheaper than continued diagnosis, regenerate/re-cut immediately.",
-    "workflow": [
-      "check one representative source-alpha/composite or source-vs-Figma discriminator",
-      "if source/RGBA/cutout fails, regenerate/re-cut immediately",
-      "only inspect Figma opacity/blend/mask when source passes",
-      "replace affected module only and delete superseded LIVE node",
-      "run one integrated final page/A5 QA pass"
-    ],
-    "reporting": "Do not produce repeated midpoint reports/checks for the same cheap defect. Report cause, replacement, QA result and remaining debt once unless a real blocker appears."
-  },
-  "microPolishResolution20260902": {
-    "status": "CLOSED",
-    "evidenceBasis": [
-      "Codex run log supplied by owner",
-      "fresh Figma CURRENT screenshot reviewed directly by ChatGPT after the fix"
-    ],
-    "featureInteriorOpacity": {
-      "result": "PASS",
-      "cause": "source PNG internal alpha, not Figma opacity/blend",
-      "reportedNumericCheck": "paper-core sample alpha 255; outer transparency retained 0-255; Figma node/image opacity 1.0",
-      "visualReview": "Fresh CURRENT screenshot no longer shows Hero/background bleeding through intended white Feature vessels."
-    },
-    "featureLeftEdgeSafety": {
-      "result": "PASS",
-      "visualReview": "Feature badges/headings no longer read as accidentally clipped or compressed against the airmail border; unequal local rhythm remains."
-    },
-    "ringClusterFidelity": {
-      "result": "PASS",
-      "visualReview": "Gold wedding rings + visible diamond + yellow sparkles restore the wedding support cue without overtaking masthead/WEDDING hierarchy."
-    },
-    "cleanupReported": {
-      "hiddenOldLayerCount": 0,
-      "duplicateSameJobCount": 0,
-      "P02Untouched": true
-    },
-    "executionEvidence": {
-      "featureNodes": [
-        {"nodeId":"3681:112","x":21,"y":446,"asset":"assets/rurubu-v30/p01/final-rework/V30_P01_FEATURE_1_MODULE_MICRO_POLISH_OPAQUE_PAPER_RGBA.png","driveFileId":"14xuiVkqMTdESJXEhjBhOhK66E_g6zqXq","paperCoreMinAlpha":1.0},
-        {"nodeId":"3681:113","x":23,"y":542,"asset":"assets/rurubu-v30/p01/final-rework/V30_P01_FEATURE_2_MODULE_MICRO_POLISH_OPAQUE_PAPER_RGBA.png","driveFileId":"1cKSxf3jr6L1Vh7W779wtlBkmay5he_jN","paperCoreMinAlpha":1.0},
-        {"nodeId":"3681:114","x":22,"y":638,"asset":"assets/rurubu-v30/p01/final-rework/V30_P01_FEATURE_3_MODULE_MICRO_POLISH_OPAQUE_PAPER_RGBA.png","driveFileId":"17O0EWjw81__3mIPcVqgCBBYGyEo9sO1f","paperCoreMinAlpha":1.0}
-      ],
-      "ringNode":{"nodeId":"3681:137","x":27,"y":40,"width":92,"height":76,"asset":"assets/rurubu-v30/p01/final-rework/V30_P01_TOP_LEFT_RING_DIAMOND_SPARKLE_MICRO_POLISH_RGBA.png","driveFileId":"1SgU4XX4BIL1WOsFgYgdXoEeju5kf1sKE"},
-      "removedSupersededNodeIds":["3681:138","3681:139","3681:140","3681:141","3681:142"],
-      "productionDriveFolderId":"1-zfSYIrxrPnwWQuAXO8-toHZEuz-zrNr",
-      "qaDriveFolderId":"1WCUtnm_trU9tEeuZ3tMFjN-PP0KEGw4d",
-      "freshScreenshotDriveFileId":"1fuUfDjWxY9F4-xvgbVfLoX2FgOb3R1Wu",
-      "freshScreenshotSha256":"f83e608d943fb15131042edb43d59a503b171ca427902428e140789b134989a3"
+  "alphaAndMaterialExpectation": {
+    "Feature1": "White/pink paper-vessel interior must read as opaque printed paper.",
+    "Feature2": "White/blue paper-vessel interior must read as opaque printed paper.",
+    "Feature3": "White/green paper-vessel interior must read as opaque printed paper.",
+    "Date": "Date ticket paper body must be opaque printed paper, not translucent glass.",
+    "BottomStory": "White cloud/paper vessel must separate copy from Hero/background.",
+    "Page01": "PAGE 01 badge/paper interior must read as opaque print, not translucent.",
+    "defaultInteriorAlpha": ">=0.95, preferably 1.00 except narrow antialiased edges or explicitly approved translucent details",
+    "hardRule": "TRUE ALPHA is not enough. Outside transparency and inside opacity are separate pass conditions.",
+    "siblingSweepRule": {
+      "trigger": "If any white-paper/ticket/label/vessel module fails inside-opacity QA on a page",
+      "action": "Run one quick sibling sweep across other same-family modules before closing ALPHA_INTEGRITY_PASS.",
+      "P01SweepSet": ["P01_DATE_TICKET_MODULE", "P01_FEATURE_1_DISPLAY_MODULE", "P01_FEATURE_2_DISPLAY_MODULE", "P01_FEATURE_3_DISPLAY_MODULE", "P01_BOTTOM_STORY_MODULE", "P01_PAGE_BADGE_MODULE"]
     }
   },
-  "repositorySync": {
-    "status": "COMPLETE",
-    "filesToSync": [
-      "assets/rurubu-v30/p01/final-rework/V30_P01_FEATURE_1_MODULE_MICRO_POLISH_OPAQUE_PAPER_RGBA.png",
-      "assets/rurubu-v30/p01/final-rework/V30_P01_FEATURE_2_MODULE_MICRO_POLISH_OPAQUE_PAPER_RGBA.png",
-      "assets/rurubu-v30/p01/final-rework/V30_P01_FEATURE_3_MODULE_MICRO_POLISH_OPAQUE_PAPER_RGBA.png",
-      "assets/rurubu-v30/p01/final-rework/V30_P01_TOP_LEFT_RING_DIAMOND_SPARKLE_MICRO_POLISH_RGBA.png"
+  "depthAndLayerExpectation": {
+    "P01_AIRMAIL_BORDER": {
+      "figmaName": "P01_AIRMAIL_BORDER / PRODUCTION_RGBA",
+      "role": "background-adjacent frame",
+      "requiredZOrder": "above background field, below Hero/photos, below authored display modules, below major stickers/badges unless the Visual Master explicitly requires a foreground overlap",
+      "hardRule": "The border frames the page; it must not read as a foreground overlay slicing across editorial content."
+    }
+  },
+  "fastFailRegeneration": {
+    "status": "REQUIRED_FOR_P01_AND_FUTURE_V30_ASSET_REPLACEMENTS",
+    "decisionRule": "Run one quick discriminator. If a cheap defect is likely asset-side and regeneration/re-cut costs less than continued diagnosis, regenerate/re-cut immediately.",
+    "workflow": [
+      "run one representative source-alpha/composite discriminator",
+      "if source/RGBA/cutout fails, regenerate/re-cut immediately",
+      "when one white-paper module fails, run one sibling sweep before closing page alpha integrity",
+      "only inspect Figma opacity/blend/mask when source passes",
+      "replace only affected module and delete superseded LIVE node",
+      "run one integrated final page/A5 QA pass"
     ],
-    "verification": "All four files are committed on the PR branch; remote path existence and clean worktree are required in final handoff.",
-    "blocksP02": false
+    "reporting": "Avoid repeated midpoint checks/reports for the same cheap defect. Report once at the end unless there is a blocker or repeated regeneration failure."
+  },
+  "ownerReviewReopenedDebtLatest": {
+    "status": "OPEN / BLOCKS_P02_UNTIL_RESOLVED_OR_EXPLICITLY_DEFERRED",
+    "findings": [
+      {
+        "id": "P01_DATE_AND_PAGE01_INTERIOR_OPACITY",
+        "severity": "MATERIAL_MINOR",
+        "figmaTargets": ["P01_WEDDING_DATE_2026_10_24_SAT / FINAL_REWORK_COMPLETE_MODULE", "P01_PAGE_01 / FINAL_REWORK_COMPLETE_MODULE"],
+        "observation": "Both still appear internally translucent in the owner review.",
+        "requiredFix": "Use one quick alpha/composite discriminator. If asset-side, regenerate/re-cut immediately so intended paper core is opaque; do not use rescue rectangles."
+      },
+      {
+        "id": "P01_FEATURE_3_COPY_SYNC",
+        "severity": "CONTENT",
+        "observation": "The active Feature 3 module still shows superseded `家族と友達`.",
+        "requiredFix": "Replace the active Feature 3 display module so exact visible heading is `友達との思い出`.",
+        "rejects": ["家族と友達", "友達"]
+      },
+      {
+        "id": "P01_AIRMAIL_BORDER_Z_ORDER",
+        "severity": "MINOR",
+        "observation": "The airmail border currently reads too far in front.",
+        "requiredFix": "Move the border to background-adjacent depth: above background, below Hero/photos/display modules/stickers unless the Visual Master explicitly requires overlap."
+      }
+    ]
+  },
+  "repositorySync": {
+    "status": "COMPLETE_FOR_FIRST_MICRO_POLISH",
+    "note": "Existing first micro-polish binary sync remains valid. New targeted replacement binaries created for this reopened patch must also be committed/pushed before P02."
   },
   "acceptanceState": {
     "FIGMA_STRUCTURE_READY": "PASS",
     "CLEAN_PROXY_PASS": "PASS",
-    "BUNDLED_DISPLAY_MODULE_PASS": "PASS",
-    "INTERNAL_OPACITY_PASS": "YES",
-    "ALPHA_INTEGRITY_PASS": "PASS",
-    "EDGE_SAFETY_PASS": "PASS",
-    "RING_CLUSTER_PASS": "YES",
-    "IDENTITY_ANCHOR_PASS": "PASS",
+    "FEATURE_ALPHA_FIX_PASS": "PASS",
+    "FEATURE_LEFT_EDGE_PASS": "PASS",
+    "RING_CLUSTER_PASS": "PASS",
+    "BUNDLED_DISPLAY_MODULE_PASS": "REOPENED_FOR_DATE_PAGE01_AND_FEATURE3",
+    "ALPHA_INTEGRITY_PASS": "REOPENED_FOR_DATE_AND_PAGE01_PLUS_SIBLING_SWEEP",
+    "COPY_SYNC_PASS": "REOPENED_FOR_FEATURE_3",
+    "BORDER_Z_ORDER_PASS": "REOPENED_FOR_AIRMAIL_BORDER",
+    "IDENTITY_ANCHOR_PASS": "PASS_WITH_TARGETED_RECHECK",
     "VISUAL_CARRYOVER_PASS": "PASS",
-    "REFERENCE_DELTA_PASS": "PASS_AFTER_MICRO_POLISH",
+    "REFERENCE_DELTA_PASS": "REOPENED_FOR_TARGETED_PATCH",
     "PHOTO_SWAP_PASS": "PASS",
-    "A5_GRAYSCALE_PASS": "PASS",
-    "HUMAN_FEEDBACK_REVIEWED": "PASS",
-    "FIGMA_DESIGN_COMPLETE": true,
-    "GIT_PRODUCTION_ASSET_SYNC": "PASS",
+    "A5_GRAYSCALE_PASS": "REOPENED_FOR_TARGETED_PATCH",
+    "HUMAN_FEEDBACK_REVIEWED": "PASS_REOPENED_BY_NEW_OWNER_FINDINGS",
+    "FIGMA_DESIGN_COMPLETE": false,
     "FINAL_PHOTO_QA_PENDING": true,
     "PRINT_READY": false
   },
-  "nextAction": [
-    "P02 production may begin under its current Visual Master/page-polish authority.",
-    "When final owner P01 photos arrive, replace only Hero + Feature 1/2/3 photo fills and rerun final-photo crop/face-safe/resolution/print QA."
+  "nextCodexTargetedPatch": [
+    "update CURRENT 3535:7 only; do not create another P01",
+    "preserve Feature 1-3 opaque-paper, left-safe-area and ring improvements",
+    "check Date and PAGE 01 inside opacity once; if asset-side, regenerate/re-cut immediately",
+    "run one sibling white-paper sweep across Date/Feature1-3/BottomStory/Page01 before closing alpha integrity",
+    "replace Feature 3 module copy with exact `3 / 友達との思い出`",
+    "move P01_AIRMAIL_BORDER to background-adjacent z-order",
+    "delete superseded LIVE modules/layers after replacement",
+    "capture one fresh full-page + A5 final evidence set",
+    "run ALPHA_INTEGRITY → COPY_SYNC → BORDER_Z_ORDER → REFERENCE_DELTA once after fixes",
+    "commit/push any new production PNGs and verify remote paths",
+    "do not touch real P02 3535:9"
   ],
   "doNotDo": [
+    "do not start P02 while this targeted debt is open unless explicitly deferred",
     "do not rebuild P01",
-    "do not reapply stale local authority documents over newer remote authority",
-    "do not lose the four unpushed binary production assets while cleaning the local worktree",
-    "do not use P01.png crops as photo proxies",
-    "do not keep superseded hidden layers",
+    "do not regress already-accepted Feature opacity/edge/ring work",
+    "do not leave `家族と友達` active in P01",
+    "do not use bare `友達` as the approved Feature 3 cover heading",
     "do not fake paper opacity with rescue rectangles",
-    "do not normalize Feature 1/2/3 into equal UI cards"
+    "do not leave the airmail border above major editorial content",
+    "do not keep superseded hidden layers",
+    "do not waste repeated diagnosis/context when regeneration is faster"
   ]
 }
