@@ -25,6 +25,9 @@
     .marker-item strong{font-size:16px;line-height:1.35}
     .marker-item span{margin-top:3px;color:var(--studio-muted);font-size:12px;line-height:1.55}
     .marker-note{margin-top:18px}
+    .marker-figure{margin:18px 0 0;overflow:hidden;border:1px solid var(--studio-line);border-radius:18px;background:#1d232b}
+    .marker-figure img{display:block;width:100%;height:auto}
+    .marker-figure figcaption{padding:12px 15px;border-top:1px solid #39434c;background:#fff;color:var(--studio-muted);font-size:12px}
     .beat-strip{display:grid;grid-template-columns:16fr 22fr 20fr 10fr 20fr 20fr 20fr;overflow:hidden;margin:20px 0 2px;border-radius:12px;background:#e8edf0;box-shadow:inset 0 0 0 1px #d5dfe4}
     .beat-strip span{display:grid;place-items:center;min-height:58px;padding:8px 5px;border-right:1px solid rgba(255,255,255,.7);font-size:10px;font-weight:900;text-align:center;color:#31566e}
     .beat-strip .b-intro{background:#def2fb}.beat-strip .b-hot{background:#ffe3df}.beat-strip .b-travel{background:#e5f7fa}.beat-strip .b-final{background:#fff2ad}
@@ -93,6 +96,11 @@
           <div class="mini-flow"><span>再生</span><b>→</b><span>止める</span><b>→</b><span>M</span><b>→</b><span>名前</span></div>
         </aside>
       </div>
+
+      <figure class="marker-figure">
+        <img src="./assets/step-04-add-marker.svg" alt="DaVinci Resolveのタイムラインで、0:16付近に再生ヘッドを置いてMキーでマーカーを付ける簡略図" />
+        <figcaption>赤い縦線が「いまいる場所」。そこでMを押すと、上に黄色い目印が付く。</figcaption>
+      </figure>
     </section>
 
     <section class="studio-section" id="marker-map">
