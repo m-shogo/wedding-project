@@ -443,40 +443,42 @@ ${rows}
   // 音が聞こえる。cue単位の短い切り出しクリップ(窓1.0/1.2秒)だと大きな
   // 補正(1秒以上)で範囲外に出て無音になる問題があったため、フル音源から
   // 直接切り出す。
+  // file://で直接開いた場合、fetch()でのローカルファイル読み込みはブラウザの
+  // セキュリティ制限でエラーになることがある(「読み込み失敗」の原因)。
+  // そのため、通常の<audio>要素(ページ内の▶と同じ仕組み)でフル音源を1つだけ
+  // 読み込み、そのcurrentTimeを動かして再生する方式にする(fetch/Web Audio
+  // デコード不要。file://でもhttp://でも同じように動く)。
   var PLAY_PREROLL_SEC = 0.4;
   var PLAY_POSTROLL_SEC = 2.0;
-  var audioCtx = null;
-  var fullSongBufferPromise = null;
-  function getAudioCtx() {
-    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    return audioCtx;
-  }
-  function loadFullSongBuffer() {
-    if (!fullSongBufferPromise) {
-      fullSongBufferPromise = fetch('full-song.local.mp3')
-        .then(function (r) { return r.arrayBuffer(); })
-        .then(function (ab) { return getAudioCtx().decodeAudioData(ab); });
+  var sharedAudioEl = null;
+  var sharedAudioReady = null;
+  var sharedAudioStopTimer = null;
+  function getSharedAudio() {
+    if (!sharedAudioEl) {
+      sharedAudioEl = new Audio('full-song.local.mp3');
+      sharedAudioEl.preload = 'auto';
+      sharedAudioReady = new Promise(function (resolve, reject) {
+        sharedAudioEl.addEventListener('loadedmetadata', function () { resolve(); }, {once: true});
+        sharedAudioEl.addEventListener('error', function () { reject(new Error('audio load error')); }, {once: true});
+      });
     }
-    return fullSongBufferPromise;
+    return {audio: sharedAudioEl, ready: sharedAudioReady};
   }
   function playAtShiftedPosition(absoluteTimeSec, btn) {
     var originalLabel = btn.textContent;
     btn.disabled = true;
     btn.textContent = '⏳';
-    loadFullSongBuffer()
-      .then(function (buffer) {
+    var ref = getSharedAudio();
+    ref.ready
+      .then(function () {
         btn.disabled = false;
         btn.textContent = originalLabel;
-        var ctx = getAudioCtx();
-        if (ctx.state === 'suspended') ctx.resume();
-        var sliceStartSec = Math.max(0, absoluteTimeSec - PLAY_PREROLL_SEC);
-        var actualPreroll = absoluteTimeSec - sliceStartSec;
-        var sliceDurationSec = Math.min(buffer.duration - sliceStartSec, actualPreroll + PLAY_POSTROLL_SEC);
-        if (sliceDurationSec <= 0) return;
-        var source = ctx.createBufferSource();
-        source.buffer = buffer;
-        source.connect(ctx.destination);
-        source.start(ctx.currentTime + 0.05, sliceStartSec, sliceDurationSec);
+        if (sharedAudioStopTimer) clearTimeout(sharedAudioStopTimer);
+        ref.audio.pause();
+        ref.audio.currentTime = Math.max(0, absoluteTimeSec - PLAY_PREROLL_SEC);
+        var playPromise = ref.audio.play();
+        if (playPromise && playPromise.catch) playPromise.catch(function () {});
+        sharedAudioStopTimer = setTimeout(function () { ref.audio.pause(); }, (PLAY_PREROLL_SEC + PLAY_POSTROLL_SEC) * 1000);
       })
       .catch(function () {
         btn.disabled = false;
