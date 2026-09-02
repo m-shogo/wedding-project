@@ -1,31 +1,18 @@
 # Rurubu WEDDING V30 — Figma Execution Acceptance Gate
 
-Status: `CURRENT_V30_REQUIRED_READ / POST-BUILD_VISUAL_QA / 2026-09-02`
+Status: `CURRENT_V30_REQUIRED_READ / 2026-09-02`
 
-Purpose: prevent a technically clean/editable rebuild from being called complete when it is visually weaker, contaminated, unintentionally translucent, stale in copy, clipped, or layered at the wrong depth.
+Purpose: prevent technically clean work from being called complete when asset roles, generated-art quality, transparency, carry-over, copy, photo replaceability, or Visual Master fidelity are wrong.
 
-Hard summaries:
+## Authority
 
-`CLEAN LAYER TREE ≠ VISUALLY FRESH PAGE`
+Newest explicit owner feedback wins.
 
-`TRUE ALPHA ≠ CORRECT ALPHA`
+For current execution, `assets/rurubu-v30/visual-polish-manifest.json`, page polish manifests, and `docs/rurubu-v30/TRUE-ALPHA-ASSET-GENERATION-POLICY.md` override conflicting older generic/root/page-main execution language.
 
-`VISUAL MASTER CROP ≠ CLEAN PHOTO PROXY`
+In particular, any older rule that implies **fixed/stylized text should normally be rasterized/bundled** is superseded. Asset role must be decided first.
 
-`EDITABLE ≠ BETTER DESIGN`
-
-`CHEAP ASSET FAILURE ≠ LONG DIAGNOSIS`
-
-`OLD GENERATED COPY ≠ CURRENT OWNER COPY`
-
-`BORDER ≠ FOREGROUND CONTENT`
-
-## Execution ownership
-
-- ChatGPT: feedback analysis, Visual Master/current screenshot review, manifest/doc authority updates, contradiction cleanup, Codex handoff, post-build review.
-- Codex: production ImageGen, alpha/cutout preparation, Figma writes/cleanup, proxy installation, screenshots/exports, Drive/Git production evidence.
-
-## Mandatory read set
+## Required read set
 
 1. `docs/RURUBU-CURRENT.md`
 2. actual page Visual Master
@@ -33,253 +20,183 @@ Hard summaries:
 4. `assets/rurubu-v30/visual-polish-manifest.json`
 5. page manifest
 6. page polish manifest when present
-7. `docs/rurubu-v30/VISUAL-MASTER-LOCK-AUDIT.md`
-8. this document
-9. page README when production exists
+7. `docs/rurubu-v30/TRUE-ALPHA-ASSET-GENERATION-POLICY.md`
+8. `docs/rurubu-v30/VISUAL-MASTER-LOCK-AUDIT.md`
+9. this document
+10. page README when production exists
 
-Newest explicit owner feedback can reopen an older PASS.
+For a bounded correction, also read `docs/rurubu-v30/FAST-TARGETED-PATCH-POLICY.md`.
 
-## Completion vocabulary — HARD
+## 1. Asset-role classification — HARD
 
-Use explicit gates:
-- `FIGMA_STRUCTURE_READY`
-- `CLEAN_PROXY_PASS`
-- `BUNDLED_DISPLAY_MODULE_PASS`
-- `ALPHA_INTEGRITY_PASS`
-- `COPY_SYNC_PASS`
-- `EDGE_SAFETY_PASS`
-- `BORDER_Z_ORDER_PASS`
-- `IDENTITY_ANCHOR_PASS`
-- `VISUAL_CARRYOVER_PASS`
-- `REFERENCE_DELTA_PASS`
-- `PHOTO_SWAP_PASS`
-- `A5_PRINT_QA_PASS`
-- `HUMAN_FEEDBACK_REVIEWED`
-- `FIGMA_DESIGN_COMPLETE`
-- `FINAL_PHOTO_QA_PENDING` / `FINAL_PHOTO_QA_PASS`
-- `COMPLETE`
+Before choosing render mode, classify every material visible element as one of:
 
-## Clean photo-proxy policy — HARD
+- `NATIVE_TEXT`
+- `SHARED_COMMON_COMPONENT`
+- `GENERATED_DISPLAY_ASSET`
+- `PAGE_SPECIFIC_ORNAMENT`
+- `PHOTO`
 
-Visual Master is comparison authority, not photo-slot source material.
+Decision order:
 
-Never use page-master crops or page screenshots as active photo fills, and never use proxies containing page border/title/badge/ticket/stamp/Q shell/flower/route/frame/background decoration.
+1. Cross-page recurring publication furniture? → `SHARED_COMMON_COMPONENT`
+2. Text that should remain editable/consistent/separately controllable? → `NATIVE_TEXT`
+3. Page-specific decorative art/icon/route/cluster? → `PAGE_SPECIFIC_ORNAMENT`
+4. Replaceable photography? → `PHOTO`
+5. Only then consider `GENERATED_DISPLAY_ASSET` for a truly inseparable authored object whose copy is locked.
 
-Allowed:
-1. suitable user real photo;
+Hard rejects:
+
+- stylized/fixed text called an image asset merely because it is visually rich;
+- PAGE-number family independently generated per page when it is a shared system;
+- rasterizing native names/titles just to imitate the reference;
+- using `GENERATED_DISPLAY_ASSET` as the default bucket when role is ambiguous.
+
+## 2. Shared common components — HARD
+
+Recurring publication furniture must remain one coherent P01–P08 family unless owner/Visual Master explicitly requires a page-specific exception.
+
+Current example: PAGE 01 / PAGE 02 / ... badge family.
+
+Judge typography, backing, stroke, scale, edge relationship, and variable page number as one shared system.
+
+## 3. Page-specific ornament originality — HARD
+
+Travel/tropical/icon/route/sticker art must feel authored for its exact local role.
+
+Reject:
+
+- generic stock/clipart feel;
+- obvious same-page copy/paste reuse;
+- same or near-identical prominent airplane/route/suitcase/tropical cluster in multiple positions unless repetition is intentional;
+- slightly moving/resizing/recoloring an old carry-over and calling it requalified;
+- ornament quality materially below the title/photo/paper-module quality bar.
+
+`KEEP_REQUALIFIED` / `REQUALIFIED_CARRYOVER` requires a fresh current-build judgment of visual quality, local context fit, duplication feel, and stock/clipart feel.
+
+## 4. Clean photo proxies — HARD
+
+Visual Master/page screenshots are comparison references only, never active photo fills.
+
+Allowed photo sources:
+
+1. suitable user photo;
 2. clean standalone representative photo;
 3. clean generated standalone photo proxy with no page-layout decoration.
 
-## Bundled fixed display-module policy — HARD
+Reject any proxy containing title, border, badge, paper shell, flower, route, frame, page background, or other layout decoration.
 
-When short fixed text/numbers visually behave as one authored editorial object with their vessel/background/icon/accents, generate/prepare the complete visible module as one production asset.
+## 5. True-alpha generation preflight — HARD
 
-Visible fixed text does not need to remain editable in Figma. Replaceable photos and long/TBD/personal/frequently changing copy stay separate.
+For any generated floating asset that needs transparent surroundings, follow `TRUE-ALPHA-ASSET-GENERATION-POLICY.md`.
 
-## Alpha Integrity Gate — HARD
+Preferred pipeline:
 
-An RGBA file can have a valid alpha channel and still be visually wrong.
+`true-alpha generation/export → immediate alpha-channel preflight → only PASS assets enter Figma`
+
+If direct true alpha is unavailable:
+
+`single safe flat matte → one extraction → alpha preflight`
+
+Never use or request a checkerboard as the matte/background. A visible checkerboard baked into RGB is `GENERATION_ALPHA_FAIL`.
+
+Before Figma placement, require both:
+
+- `ART_QUALITY_PASS`
+- `TRUE_ALPHA_PREFLIGHT_PASS`
+
+Figma must not be where fake transparency is discovered for the first time.
+
+## 6. Alpha integrity after cutout — HARD
+
+`TRUE ALPHA ≠ CORRECT ALPHA`.
 
 Verify separately:
 
-### Outside transparency
-- intended external region transparent;
-- no baked checkerboard, key-color halo, opaque rectangle, fringe or debris.
+- intended outside region is transparent;
+- intended paper/vessel/badge/ribbon interiors remain opaque;
+- no checkerboard RGB, matte halo, opaque rectangle, fringe, or unintended holes;
+- white/cream/light artwork and thin routes/details survive extraction.
 
-### Intended interior opacity
-- opaque paper/ticket/label/vessel/badge/card areas remain opaque;
-- interior alpha normally `>= 0.95`, preferably `1.00`;
-- large translucent interiors require explicit Visual Master/page-authority evidence.
+Opaque paper/vessel interiors normally use alpha `>= 0.95`, preferably `1.00`.
 
-Reject outer-transparency PASS when intended white/cream interiors are semi-transparent.
+If one same-family paper/ticket/label/vessel fails inside-opacity QA, run one quick sibling sweep and repair source-side alpha. Do not use rescue rectangles or Figma opacity tricks.
 
-Do not hide broken alpha with rescue rectangles or Figma opacity tricks. Repair/regenerate the affected source/cutout.
+## 7. Border depth — HARD
 
-### Sibling sweep rule — HARD
+Default depth:
 
-If one same-family white-paper/ticket/label/vessel module fails inside-opacity QA, do not stop at that one module.
+`background → border/frame → Hero/photos → authored modules → major foreground accents`
 
-Run one quick sibling sweep across the page's other same-family modules before closing `ALPHA_INTEGRITY_PASS`.
+unless the Visual Master explicitly requires foreground border overlap.
 
-For P01 the sweep set is:
-- Date ticket;
-- Feature 1 shell;
-- Feature 2 shell;
-- Feature 3 shell;
-- Bottom Story vessel;
-- PAGE 01 badge.
+## 8. Copy safety / copy sync — HARD
 
-This is one sweep, not repeated context-heavy diagnosis.
+Newest owner-approved copy overrides stale generated/native copy.
 
-## Fast-fail regeneration rule — HARD
+Unapproved personal facts, readings, profile values, Q&A answers, and other TBD copy must remain separate and non-factual until grounded.
 
-For a cheap likely asset-side defect:
+## 9. Visual carry-over — HARD
 
-1. run **one quick discriminator**;
-2. if source/RGBA/cutout is wrong, **regenerate/re-cut immediately**;
-3. when one same-family paper module fails, run one sibling sweep;
-4. inspect Figma opacity/blend/mask only when source passes;
-5. replace only the affected module and delete superseded LIVE content;
-6. run one integrated final QA pass.
-
-If diagnosis/context cost is likely to exceed regeneration/cutout cost, prefer regeneration/cutout.
-
-Do not burn time/context on repeated midpoint screenshots, identical alpha diagnosis, long status updates or manual patching of clearly broken generated art.
-
-Normally report once at the end: **cause → replacement → QA result → remaining debt**.
-
-## Copy Sync Gate — HARD
-
-Newest owner-approved visible wording overrides stale generated/native copy.
-
-When page role, teaser wording, section naming, or other visible owner-approved text changes:
-- update every dependent module on that page;
-- mark previous generated wording `SUPERSEDED`;
-- update page authority/README;
-- verify final screenshot uses one coherent terminology set.
-
-Hard reject:
-- old wording surviving because an earlier generated asset already exists;
-- mixed old/new terminology on one page;
-- page-role semantics contradicting the owner's latest decision.
-
-## Edge Safety Gate — HARD
-
-Busy edge activation is allowed, but important labels/badges/text must not look accidentally clipped by trim/border.
-
-Review at full page and A5 size. Preserve intentional irregularity; do not mechanically equalize unrelated modules.
-
-## Border Z-Order Gate — HARD
-
-Page border/frame assets are background-adjacent support assets by default.
-
-Unless the Visual Master clearly requires otherwise, use this depth order:
-
-`background field → border/frame → Hero/photos → authored display modules → major stickers/badges/foreground accents`
-
-Hard reject:
-- border sitting above major editorial content by default;
-- frame visually slicing through photos/cards/text without clear Visual Master basis;
-- solving z-order by flattening unrelated content instead of moving the border.
-
-## Identity Anchor Gate
-
-Compare high-identity objects by silhouette, letterform character, stroke/outline, depth/shadow, color proportions, relative scale and relation to neighboring art. Text correctness alone is not a visual pass.
-
-## Anti-UI / editorial irregularity
-
-Related editorial modules do not automatically become identical components. Preserve authored differences in size, padding, icon placement, local x/y, overlap and tilt. Do not add random scrapbook rotation.
-
-## Visual Carry-over Audit — HARD
-
-A clean Figma tree can still contain stale visual language. Existing visible assets have no permanent grandfathered PASS.
+A clean layer tree does not grant a visual PASS.
 
 Use:
+
 - `UNREVIEWED_CARRYOVER`
 - `KEEP_REQUALIFIED`
 - `REWORK_REQUIRED`
 - `REPLACE_REQUIRED`
 - `SUPERSEDED`
 
-After a major anchor/module improves, reopen nearby support assets.
+Existing visible assets have no permanent grandfathered PASS.
 
-## Reference Delta Gate
+## 10. Reference Delta / design completion
 
-Use the current screenshot, not layer names or prior reports.
+Use the current screenshot and actual Visual Master, not layer names or prior reports.
 
-Compare:
-1. 3-second impression
-2. clean proxy integrity
-3. fixed display-module fidelity
-4. alpha/material integrity
-5. copy sync
-6. edge safety
-7. border depth / z-order
-8. identity anchors
-9. high-saliency photo mass
-10. title/photo ratio
-11. occupied vs calm areas
-12. asymmetric silhouette
-13. overlap/module rhythm
-14. background/frame character
-15. carry-over coherence
-16. micro accents
+Before `FIGMA_DESIGN_COMPLETE = YES`, confirm the applicable items:
 
-## Human Feedback Writeback — HARD
+- correct asset-role classification;
+- shared components remain coherent;
+- ornament originality/carry-over quality;
+- clean photo-proxy integrity;
+- alpha/material integrity;
+- copy safety/sync;
+- border depth;
+- 3-second hierarchy and high-saliency identity;
+- intentional asymmetry and editorial rhythm;
+- A5 readability/edge safety.
 
-New repeatable failures must be modeled before scaling production. Page-specific feedback goes to page authority; systemic failures go to Root/visual-polish/this guide.
+Structure-only cleanliness is never design completion.
 
-## P01 current calibration — TARGETED POST-LOCK PATCH OPEN 2026-09-02
+## 11. Fast close
 
-P01 CURRENT remains `3535:7`.
+For bounded corrections, use proportional QA:
 
-Keep the already accepted baseline:
-- clean standalone Hero/Feature proxies;
-- Feature 1–3 opaque-paper correction;
-- Feature 1–3 safer left-edge spacing;
-- top-left gold wedding rings + diamond + yellow sparkles;
-- stale LIVE cleanup;
-- first micro-polish binary sync.
+`fix reopened scope → one bounded dependency/sibling check if required → one integrated final screenshot/QA → protected-page check → one remote sync check → close gates → STOP`
 
-Latest owner review reopens three targeted issues:
+Do not restart unrelated prior-PASS audits unless the patch disturbed them.
 
-### Date + PAGE 01 inside opacity
+## Current calibration
 
-Targets:
-- `P01_WEDDING_DATE_2026_10_24_SAT / FINAL_REWORK_COMPLETE_MODULE`
-- `P01_PAGE_01 / FINAL_REWORK_COMPLETE_MODULE`
+### P01
 
-Both appear internally translucent. Use one quick source-alpha/composite discriminator; if asset-side, regenerate/re-cut immediately. Then run the single P01 white-paper sibling sweep before closing page alpha integrity.
+`DESIGN_LOCKED / FINAL_PHOTO_QA_PENDING / PRINT_READY_NO`
 
-### Feature 3 teaser copy
+Do not reopen without new owner feedback.
 
-Superseded/rejected:
-- `家族と友達`
-- bare `友達`
+### P02
 
-Approved exact heading:
+`STRUCTURE_COPY_PHOTO_PASS / ORNAMENT_QUALITY_REOPENED`
 
-**`友達との思い出`**
+Preserve accepted structure/photo/copy/alpha/border work.
 
-This preserves friends-only meaning while remaining an editorial teaser rather than a bare category word.
+Current five `REWORK_REQUIRED` ornaments:
 
-### Airmail border depth
+- `P02_Q2_PLANE_AND_ROUTE`
+- `P02_TOP_AIRPLANE_ROUTE`
+- `P02_Q2_SUITCASE`
+- `P02_TOP_RIGHT_TRAVEL_TROPICAL_CLUSTER / REQUALIFIED_CARRYOVER`
+- `P02_TOP_LEFT_TROPICAL_CLUSTER / REQUALIFIED_CARRYOVER`
 
-Target:
-- `P01_AIRMAIL_BORDER / PRODUCTION_RGBA`
-
-Required depth:
-
-`background → airmail border → Hero/photos → authored display modules → major stickers/badges`
-
-The frame should support the page edge, not cover the content.
-
-Current P01 status:
-
-- `FIGMA_STRUCTURE_READY = PASS`
-- `CLEAN_PROXY_PASS = PASS`
-- `FEATURE_ALPHA_FIX_PASS = PASS`
-- `FEATURE_LEFT_EDGE_PASS = PASS`
-- `RING_CLUSTER_PASS = PASS`
-- `ALPHA_INTEGRITY_PASS = REOPENED_FOR_DATE_AND_PAGE01_PLUS_SIBLING_SWEEP`
-- `COPY_SYNC_PASS = REOPENED_FOR_FEATURE_3`
-- `BORDER_Z_ORDER_PASS = REOPENED_FOR_AIRMAIL_BORDER`
-- `REFERENCE_DELTA_PASS = REOPENED_FOR_TARGETED_PATCH`
-- `FIGMA_DESIGN_COMPLETE = NO`
-- `FINAL_PHOTO_QA_PENDING = YES`
-- `PRINT_READY = NO`
-
-P02 production must wait until the targeted patch closes or the owner explicitly defers it.
-
-## Print boundary
-
-Before final print acceptance verify:
-- trim `148 × 210 mm`;
-- 3 mm bleed where required;
-- critical faces/text safe;
-- generated display text readable at actual size;
-- final-photo effective raster resolution around 300 ppi where practical;
-- current export evidence;
-- grayscale/thumbnail review.
-
-Technical print readiness never overrides visual acceptance.
+P02 returns to `FIGMA_DESIGN_COMPLETE = YES` only after those five pass ornament-originality/carry-over/reference-delta review and all new transparent ornament assets pass true-alpha preflight.
