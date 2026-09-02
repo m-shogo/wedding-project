@@ -42,9 +42,9 @@ if (!existsSync(audioPath)) {
 }
 mkdirSync(outDir, {recursive: true});
 
-// 🔔確認は、cue単位の短い切り出しクリップだと窓(1.0/1.2秒)を超える大きな
+// ▶再生は、cue単位の短い切り出しクリップだと窓(1.0/1.2秒)を超える大きな
 // ズレ(例: 1秒以上)で無音になってしまう(クリック音が窓の外に出るため)。
-// これを解消するため、フルの音源をmp3へ変換して1本だけ生成し、🔔確認は
+// これを解消するため、フルの音源をmp3へ変換して1本だけ生成し、▶再生は
 // このフル音源から必要な範囲を都度切り出して再生する(どれだけズラしても
 // 曲の長さの範囲内なら必ず鳴る)。
 const fullSongPath = join(dirname(htmlPath), 'full-song.local.mp3');
@@ -209,15 +209,15 @@ const rows = entries
       <audio controls preload="none" src="listening-clips/${e.clipFile}"></audio>
       <span style="color:#888;font-size:12px">(クリップ内 ${e.cueOffsetInClipSec.toFixed(2)}s地点が設計時刻)</span>
       <br/>
-      <button type="button" class="btn btn-check" data-action="check">🔔 今の位置で確認</button>
+      <button type="button" class="btn btn-check" data-action="check">▶ ここで聴く</button>
     </td>
     <td class="judge-cell">
       <div class="judge-row nudge-row">
-        <button type="button" class="btn btn-nudge btn-nudge-big" data-delta="-300">⏪⏪ うんと早く</button>
-        <button type="button" class="btn btn-nudge" data-delta="-50">⏪ 少し早く</button>
+        <button type="button" class="btn btn-nudge btn-nudge-big" data-delta="-300">⏪⏪</button>
+        <button type="button" class="btn btn-nudge" data-delta="-50">⏪</button>
         <span class="nudge-current" data-role="current">ズレなし</span>
-        <button type="button" class="btn btn-nudge" data-delta="50">少し遅く ⏩</button>
-        <button type="button" class="btn btn-nudge btn-nudge-big" data-delta="300">うんと遅く ⏩⏩</button>
+        <button type="button" class="btn btn-nudge" data-delta="50">⏩</button>
+        <button type="button" class="btn btn-nudge btn-nudge-big" data-delta="300">⏩⏩</button>
       </div>
       <div class="judge-row">
         <button type="button" class="btn btn-ok" data-action="ok">👍 合ってる</button>
@@ -334,13 +334,10 @@ writeFileSync(
       どっちか判断できなければ <b>🤔 わからない</b>(これでOK。無理に判断しなくていい)。
     </li>
     <li>
-      <b>❌ 合ってない</b> を押した行は、どれくらいズレてるかを下のボタンで教える。<br/>
-      歌詞が音より<b>早く</b>聞こえたら <b>⏪ 少し早く</b>、<b>遅れて</b>聞こえたら <b>少し遅く ⏩</b> を押す。<br/>
-      ズレがかなり大きい(「めっちゃズレてる」)時は、まず <b>⏪⏪ うんと早く</b> か <b>うんと遅く ⏩⏩</b> を1〜2回押してから、小さいボタンで微調整する。<br/>
-      何回押してもOK。押しすぎたら <b>↺ やり直す</b> で0に戻せる。
-    </li>
-    <li>
-      押したら <b>🔔 今の位置で確認</b> を押す。今押した分だけズラした位置で「ピッ」という音が鳴るので、<b>歌詞の頭と「ピッ」がピッタリ揃うまで、③→🔔確認、を何回でも繰り返す</b>。数字(ms)は見なくて良い。音だけで判断すればOK。揃ったらそのままでOK(自動的に記録されている)。
+      <b>❌ 合ってない</b> を押した行は、⏪/⏩のボタンでどれくらいズレてるか合わせる。<br/>
+      歌詞が音より<b>早く</b>聞こえたら <b>⏪</b>、<b>遅れて</b>聞こえたら <b>⏩</b> を押す(大きい方のボタンは一気に動く)。<br/>
+      <b>押すたびに、その分だけズラした位置から実際の歌が自動的に流れる</b>。歌詞の頭が再生の直後に聞こえるまで、押す→聴く、を繰り返す。<br/>
+      何回押してもOK。押しすぎたら <b>↺ やり直す</b> で0に戻せる。<b>▶ ここで聴く</b> を押せば、いつでも今の位置からもう一度聴き直せる。
     </li>
     <li>全部(または途中まで)終わったら、上の<b>「名前」欄に自分の名前</b>を入れて<b>「💾 保存する」</b>を押す。ファイルが1つダウンロードされるので、
       <code>local/analysis/start-wedding/listening-decisions.local.json</code> という名前でそのフォルダに保存する
@@ -439,14 +436,15 @@ ${rows}
   }
   var state = loadState(); // cueId -> {status: 'ok'|'reject', deltaMs: number, golden: boolean}
 
-  // 「🔔 ズレ確認」: 補正込みの実際の時刻の周辺を、フル音源から直接切り出して
-  // 再生し、その位置に短いクリック音を重ねる。cue単位の短い切り出しクリップ
-  // (窓1.0/1.2秒)だと、1秒を超えるような大きな補正でクリック音が窓の外へ出て
-  // 無音になってしまう(「1秒戻したら確認できない」問題)。フル音源からその場で
-  // 必要な範囲を取るため、補正量がどれだけ大きくても曲の長さの範囲内なら必ず
-  // 鳴る。数字をやり取りする往復を無くすための機能で、判定ロジックには影響しない。
-  var CONFIRM_PREROLL_SEC = 1.0;
-  var CONFIRM_POSTROLL_SEC = 1.5;
+  // 「▶ ここで聴く」: 補正込みの実際の時刻から、フル音源をそのまま再生する。
+  // クリック音を重ねる方式だと「歌がその分ズレて聞こえない」という指摘を
+  // 受けたため廃止し、今設定した秒数から実際の曲がそのまま流れるようにした。
+  // 再生開始位置は毎回delta分だけ動くので、押すたびに本当に違う場所から
+  // 音が聞こえる。cue単位の短い切り出しクリップ(窓1.0/1.2秒)だと大きな
+  // 補正(1秒以上)で範囲外に出て無音になる問題があったため、フル音源から
+  // 直接切り出す。
+  var PLAY_PREROLL_SEC = 0.4;
+  var PLAY_POSTROLL_SEC = 2.0;
   var audioCtx = null;
   var fullSongBufferPromise = null;
   function getAudioCtx() {
@@ -461,7 +459,7 @@ ${rows}
     }
     return fullSongBufferPromise;
   }
-  function playWithClick(absoluteTimeSec, btn) {
+  function playAtShiftedPosition(absoluteTimeSec, btn) {
     var originalLabel = btn.textContent;
     btn.disabled = true;
     btn.textContent = '⏳';
@@ -471,29 +469,18 @@ ${rows}
         btn.textContent = originalLabel;
         var ctx = getAudioCtx();
         if (ctx.state === 'suspended') ctx.resume();
-        var sliceStartSec = Math.max(0, absoluteTimeSec - CONFIRM_PREROLL_SEC);
-        var actualPreroll = absoluteTimeSec - sliceStartSec; // 曲の先頭に近い場合は前が詰まる
-        var sliceDurationSec = Math.min(buffer.duration - sliceStartSec, actualPreroll + CONFIRM_POSTROLL_SEC);
+        var sliceStartSec = Math.max(0, absoluteTimeSec - PLAY_PREROLL_SEC);
+        var actualPreroll = absoluteTimeSec - sliceStartSec;
+        var sliceDurationSec = Math.min(buffer.duration - sliceStartSec, actualPreroll + PLAY_POSTROLL_SEC);
         if (sliceDurationSec <= 0) return;
-        var startAt = ctx.currentTime + 0.05;
         var source = ctx.createBufferSource();
         source.buffer = buffer;
         source.connect(ctx.destination);
-        source.start(startAt, sliceStartSec, sliceDurationSec);
-        var osc = ctx.createOscillator();
-        var gain = ctx.createGain();
-        osc.type = 'square';
-        osc.frequency.value = 1800;
-        gain.gain.setValueAtTime(0.35, startAt + actualPreroll);
-        gain.gain.exponentialRampToValueAtTime(0.001, startAt + actualPreroll + 0.05);
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.start(startAt + actualPreroll);
-        osc.stop(startAt + actualPreroll + 0.06);
+        source.start(ctx.currentTime + 0.05, sliceStartSec, sliceDurationSec);
       })
       .catch(function () {
         btn.disabled = false;
-        btn.textContent = '🔔 読み込み失敗(再試行)';
+        btn.textContent = '▶ 読み込み失敗(再試行)';
       });
   }
 
@@ -638,9 +625,9 @@ ${rows}
         saveState();
         // ボタンを押した瞬間、その場で補正込みの位置を鳴らして確認できるように
         // する(「押したらリアルタイムで直して聴きたい」というフィードバック対応)。
-        // 別途🔔を押す手間を無くす。
+        // 別途▶を押す手間を無くす。
         var designedSec = parseFloat(tr.getAttribute('data-designedsec'));
-        if (checkBtn) playWithClick(designedSec + entry.deltaMs / 1000, checkBtn);
+        if (checkBtn) playAtShiftedPosition(designedSec + entry.deltaMs / 1000, checkBtn);
       });
     });
     tr.querySelector('.btn-reset').addEventListener('click', function () {
@@ -655,7 +642,7 @@ ${rows}
         var entry = getEntry(cueId);
         var designedSec = parseFloat(tr.getAttribute('data-designedsec'));
         var absoluteTimeSec = designedSec + entry.deltaMs / 1000;
-        playWithClick(absoluteTimeSec, checkBtn);
+        playAtShiftedPosition(absoluteTimeSec, checkBtn);
       });
     }
     var goldenInput = tr.querySelector('[data-role=golden]');

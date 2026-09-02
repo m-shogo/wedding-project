@@ -41,7 +41,7 @@ if (!existsSync(audioPath)) {
 }
 mkdirSync(clipsDir, {recursive: true});
 
-// 🔔確認用のフル音源(render-cue-listening-clips.mtsと同じファイル)。
+// ▶再生用のフル音源(render-cue-listening-clips.mtsと同じファイル)。
 // このscript単体で実行された場合でも動くよう、ここでも生成する
 // (実行順に依存しない)。
 const fullSongPath = join(dirname(outPath), 'full-song.local.mp3');
@@ -96,7 +96,7 @@ const rows = master.phrases
               <span class="nudge-current" data-role="current">ズレなし</span>
               <button type="button" class="btn btn-nudge" data-delta="50">⏩</button>
               <button type="button" class="btn btn-nudge btn-nudge-big" data-delta="300">⏩⏩</button>
-              <button type="button" class="btn btn-check" data-action="check">🔔確認</button>
+              <button type="button" class="btn btn-check" data-action="check">▶再生</button>
             </div>
             <div class="judge-row">
               <button type="button" class="btn btn-ok" data-action="ok">👍</button>
@@ -202,7 +202,7 @@ writeFileSync(
   <b>使い方:</b> 各フレーズの音声(直前${PHRASE_PAD_BEFORE_SEC}秒を含み、次フレーズ開始前で終了)を▶で聴きながら、
   その中の各cue行を判定する。判定は<b>listening-review.local.htmlと共通</b>なので、
   どちらのページでやっても同じ「まとめ」「保存」に合流する。<br/>
-  行ごとに: ⏪⏪/⏪/⏩/⏩⏩でズレを合わせて🔔確認 → 👍(合ってる)/❌(合ってない)/🤔(わからない)。
+  行ごとに: ⏪⏪/⏪/⏩/⏩⏩でズレを合わせて▶再生 → 👍(合ってる)/❌(合ってない)/🤔(わからない)。
 </div>
 
 <div class="toolbar">
@@ -250,11 +250,10 @@ ${rows}
   }
   var state = loadState();
 
-  // フル音源から直接切り出して再生する(cue/phraseクリップの窓を超える
-  // 大きな補正でも無音にならないようにするため。listening-review.local.html
-  // と同じ方式)。
-  var CONFIRM_PREROLL_SEC = 1.0;
-  var CONFIRM_POSTROLL_SEC = 1.5;
+  // 補正込みの実際の時刻から、フル音源をそのまま再生する(クリック音方式は
+  // 「歌がその分ズレて聞こえない」という指摘を受けて廃止)。
+  var PLAY_PREROLL_SEC = 0.4;
+  var PLAY_POSTROLL_SEC = 2.0;
   var audioCtx = null;
   var fullSongBufferPromise = null;
   function getAudioCtx() {
@@ -269,7 +268,7 @@ ${rows}
     }
     return fullSongBufferPromise;
   }
-  function playWithClick(absoluteTimeSec, btn) {
+  function playAtShiftedPosition(absoluteTimeSec, btn) {
     var original = btn.textContent;
     btn.disabled = true;
     btn.textContent = '⏳';
@@ -279,25 +278,14 @@ ${rows}
         btn.textContent = original;
         var ctx = getAudioCtx();
         if (ctx.state === 'suspended') ctx.resume();
-        var sliceStartSec = Math.max(0, absoluteTimeSec - CONFIRM_PREROLL_SEC);
+        var sliceStartSec = Math.max(0, absoluteTimeSec - PLAY_PREROLL_SEC);
         var actualPreroll = absoluteTimeSec - sliceStartSec;
-        var sliceDurationSec = Math.min(buffer.duration - sliceStartSec, actualPreroll + CONFIRM_POSTROLL_SEC);
+        var sliceDurationSec = Math.min(buffer.duration - sliceStartSec, actualPreroll + PLAY_POSTROLL_SEC);
         if (sliceDurationSec <= 0) return;
-        var startAt = ctx.currentTime + 0.05;
         var source = ctx.createBufferSource();
         source.buffer = buffer;
         source.connect(ctx.destination);
-        source.start(startAt, sliceStartSec, sliceDurationSec);
-        var osc = ctx.createOscillator();
-        var gain = ctx.createGain();
-        osc.type = 'square';
-        osc.frequency.value = 1800;
-        gain.gain.setValueAtTime(0.35, startAt + actualPreroll);
-        gain.gain.exponentialRampToValueAtTime(0.001, startAt + actualPreroll + 0.05);
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.start(startAt + actualPreroll);
-        osc.stop(startAt + actualPreroll + 0.06);
+        source.start(ctx.currentTime + 0.05, sliceStartSec, sliceDurationSec);
       })
       .catch(function () {
         btn.disabled = false;
@@ -420,7 +408,7 @@ ${rows}
         renderRow(tr);
         saveState();
         var designedSec = parseFloat(tr.getAttribute('data-designedsec'));
-        if (checkBtn) playWithClick(designedSec + entry.deltaMs / 1000, checkBtn);
+        if (checkBtn) playAtShiftedPosition(designedSec + entry.deltaMs / 1000, checkBtn);
       });
     });
     tr.querySelector('.btn-reset').addEventListener('click', function () {
@@ -434,7 +422,7 @@ ${rows}
       var entry = getEntry(cueId);
       var designedSec = parseFloat(tr.getAttribute('data-designedsec'));
       var absoluteTimeSec = designedSec + entry.deltaMs / 1000;
-      playWithClick(absoluteTimeSec, checkBtn);
+      playAtShiftedPosition(absoluteTimeSec, checkBtn);
     });
     var noteInput = tr.querySelector('[data-role=note]');
     noteInput.addEventListener('input', function () {
