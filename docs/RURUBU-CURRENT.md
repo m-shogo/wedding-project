@@ -1,6 +1,6 @@
 # Rurubu WEDDING — CURRENT POINTER
 
-Status: `CURRENT_POINTER / V30_ONLY / P01_TARGETED_POST_LOCK_PATCH_OPEN / 2026-09-02`
+Status: `CURRENT_POINTER / V30_ONLY / P01_TARGETED_POST_LOCK_PATCH_COMPLETE / 2026-09-02`
 
 The only current Rurubu WEDDING production version is **V30**.
 
@@ -92,7 +92,7 @@ V20 = frozen history/reference only. Do not create V31 unless explicitly request
 - important labels/badges/text must not read as accidentally clipped by border/trim;
 - keep Figma LIVE current-only; history belongs in Git/Drive evidence.
 
-## P01 — TARGETED POST-LOCK PATCH OPEN
+## P01 — TARGETED POST-LOCK PATCH COMPLETE
 
 P01 CURRENT remains `3535:7`.
 
@@ -104,7 +104,7 @@ Preserve the already accepted improvements:
 - stale/duplicate LIVE cleanup;
 - first micro-polish production binaries already synchronized to Git.
 
-Latest owner review reopened **three targeted issues**:
+The three targeted owner-review issues are closed on CURRENT `3535:7`:
 
 ### 1. Date + PAGE 01 internal opacity
 
@@ -112,9 +112,9 @@ Targets:
 - `P01_WEDDING_DATE_2026_10_24_SAT / FINAL_REWORK_COMPLETE_MODULE`
 - `P01_PAGE_01 / FINAL_REWORK_COMPLETE_MODULE`
 
-Both appear internally translucent. Use one quick source-alpha/composite discriminator; if asset-side, regenerate/re-cut immediately. Do not hide the defect with rescue rectangles.
+The source-alpha discriminator confirmed an asset-side defect. Both modules were replaced in place with opaque-paper RGBA assets; no rescue rectangles were added. Figma node opacity, image-paint opacity, and blend settings remain `1 / 1 / NORMAL`.
 
-Because this is another same-family white-paper failure, perform one quick sibling sweep across:
+Because this was another same-family white-paper failure, one quick sibling sweep was run across:
 - Date
 - Feature 1
 - Feature 2
@@ -122,7 +122,7 @@ Because this is another same-family white-paper failure, perform one quick sibli
 - Bottom Story
 - PAGE 01
 
-before closing `ALPHA_INTEGRITY_PASS`.
+The one-time sibling sweep passed: Date, Feature 1, Feature 2, Feature 3, Bottom Story, and PAGE 01 all have opaque intended paper cores. Date and PAGE 01 were the only failed source assets and were repaired; the other four were preserved.
 
 ### 2. Feature 3 teaser copy
 
@@ -130,7 +130,7 @@ The old visible wording `家族と友達` is superseded.
 
 Current approved exact P01 cover-teaser wording:
 
-**`友達との思い出`**
+**`3 / 友達との思い出`**
 
 `友達` alone is also not the approved final heading because it is too bare for the editorial teaser role.
 
@@ -145,7 +145,16 @@ Required depth:
 
 `background → airmail border → Hero/photos → authored display modules → major stickers/badges`
 
-The border should frame the page, not sit as a strong foreground overlay over editorial content.
+The border was moved from top-level index `22` to index `1`: background index `0` → border index `1` → Hero/photos index `2+` → authored modules index `9+` → major stickers/badges index `23+`.
+
+## P01 targeted-patch evidence
+
+- fresh Figma screenshot SHA-256: `dd39f877da701f43db58e6a22cf6836b886584ab139fba1e6f5a624f6a647f74`
+- Date asset: `assets/rurubu-v30/p01/final-rework/V30_P01_DATE_MODULE_TARGETED_PATCH_OPAQUE_PAPER_RGBA.png` / Drive `16QnuF_oMMgBp8Qw0MvuyIY4DAqal10wX`
+- PAGE 01 asset: `assets/rurubu-v30/p01/final-rework/V30_P01_PAGE_01_MODULE_TARGETED_PATCH_OPAQUE_PAPER_RGBA.png` / Drive `1y7qv2RvUI8dmjDmQdwnGl6zObbvLpOOd`
+- Feature 3 asset: `assets/rurubu-v30/p01/final-rework/V30_P01_FEATURE_3_MODULE_TARGETED_PATCH_FRIENDS_COPY_RGBA.png` / Drive `1_mxdMD3rKPtKE0nhTpcuUU-FcX7DvGC4`
+- QA folder: Drive `1WCUtnm_trU9tEeuZ3tMFjN-PP0KEGw4d`
+- P02 `3535:9`: unchanged (`x=721`, `y=150`, `559×794`, hidden, opacity `1`, child count `0`, parent index `6`)
 
 ## Current P01 gates
 
@@ -154,33 +163,23 @@ The border should frame the page, not sit as a strong foreground overlay over ed
 - `FEATURE_ALPHA_FIX_PASS = PASS`
 - `FEATURE_LEFT_EDGE_PASS = PASS`
 - `RING_CLUSTER_PASS = PASS`
-- `ALPHA_INTEGRITY_PASS = REOPENED_FOR_DATE_AND_PAGE01_PLUS_SIBLING_SWEEP`
-- `COPY_SYNC_PASS = REOPENED_FOR_FEATURE_3`
-- `BORDER_Z_ORDER_PASS = REOPENED_FOR_AIRMAIL_BORDER`
-- `REFERENCE_DELTA_PASS = REOPENED_FOR_TARGETED_PATCH`
-- `FIGMA_DESIGN_COMPLETE = NO`
+- `ALPHA_INTEGRITY_PASS = PASS`
+- `COPY_SYNC_PASS = PASS`
+- `BORDER_Z_ORDER_PASS = PASS`
+- `REFERENCE_DELTA_PASS = PASS_AFTER_TARGETED_PATCH`
+- `FIGMA_DESIGN_COMPLETE = YES`
 - `FINAL_PHOTO_QA_PENDING = YES`
 - `PRINT_READY = NO`
 
-P02 production is blocked until these targeted issues are resolved or explicitly deferred by the owner.
+P02 production may proceed. P01 still requires owner-photo replacement and final-photo QA before print readiness.
 
-## Next P01 action — CODEX ONLY
+## Remaining P01 action
 
-1. update CURRENT `3535:7` only;
-2. preserve Feature 1–3 opacity/edge fixes and ring improvement;
-3. check Date and PAGE 01 inside opacity once and regenerate/re-cut immediately if asset-side;
-4. run one white-paper sibling sweep before closing alpha integrity;
-5. replace Feature 3 visible heading with exact `3 / 友達との思い出`;
-6. move the airmail border to background-adjacent depth;
-7. delete superseded LIVE modules/layers after replacement;
-8. capture one fresh full-page + A5 final evidence set;
-9. run `ALPHA_INTEGRITY → COPY_SYNC → BORDER_Z_ORDER → REFERENCE_DELTA` once after fixes;
-10. commit/push any newly generated production binaries and verify remote paths;
-11. do not touch P02 `3535:9`.
+Replace only the four clean photo fills with final owner photos, then run final-photo and print-readiness QA. Do not change the accepted modules, masks, copy, alpha, or z-order.
 
 ## P02/P03
 
-P02/P03 have direct Visual Master/page-polish authorities already. P02 must wait until the P01 targeted patch above closes.
+P02/P03 have direct Visual Master/page-polish authorities already. The P01 targeted patch no longer blocks P02.
 
 ## P04–P08
 

@@ -1,14 +1,14 @@
 {
-  "schemaVersion": 10,
+  "schemaVersion": 11,
   "project": "Rurubu WEDDING V30",
   "page": "P01",
-  "status": "CURRENT_P01_TARGETED_POST_LOCK_PATCH_OPEN",
+  "status": "CURRENT_P01_TARGETED_POST_LOCK_PATCH_COMPLETE",
   "inherits": [
     "assets/rurubu-v30/manifest.json",
     "assets/rurubu-v30/visual-polish-manifest.json",
     "assets/rurubu-v30/p01/manifest.json"
   ],
-  "purpose": "Current P01 execution authority after final REWORK, first micro-polish, repository sync, and latest owner post-lock review. Preserve accepted Feature opacity/left-edge/ring improvements, but reopen targeted fixes for Date/Page01 inside opacity, Feature 3 copy sync, and airmail-border z-order before P02 production.",
+  "purpose": "Current P01 execution authority after final REWORK, first micro-polish, and the completed targeted post-lock patch. Date/Page01 paper opacity, Feature 3 copy sync, and airmail-border z-order are closed; final owner-photo QA remains pending.",
   "authorityPrecedence": "This newer page-polish manifest overrides conflicting execution/copy details in the older P01 main manifest. Canonical project facts remain inherited from Root authority.",
   "currentFigma": {
     "fileKey": "bfM0d4c9dCeBv5pCkJ3TNM",
@@ -90,33 +90,55 @@
     "reporting": "Avoid repeated midpoint checks/reports for the same cheap defect. Report once at the end unless there is a blocker or repeated regeneration failure."
   },
   "ownerReviewReopenedDebtLatest": {
-    "status": "OPEN / BLOCKS_P02_UNTIL_RESOLVED_OR_EXPLICITLY_DEFERRED",
+    "status": "COMPLETE / P02_UNBLOCKED",
     "findings": [
       {
         "id": "P01_DATE_AND_PAGE01_INTERIOR_OPACITY",
         "severity": "MATERIAL_MINOR",
         "figmaTargets": ["P01_WEDDING_DATE_2026_10_24_SAT / FINAL_REWORK_COMPLETE_MODULE", "P01_PAGE_01 / FINAL_REWORK_COMPLETE_MODULE"],
-        "observation": "Both still appear internally translucent in the owner review.",
-        "requiredFix": "Use one quick alpha/composite discriminator. If asset-side, regenerate/re-cut immediately so intended paper core is opaque; do not use rescue rectangles."
+        "observation": "The discriminator confirmed source-side transparency inside intended paper cores.",
+        "resolution": "Replaced Date and PAGE 01 image fills in place with opaque-paper RGBA assets. Measured paper-core alpha is 255 throughout; outside transparency remains; no rescue rectangles were added."
       },
       {
         "id": "P01_FEATURE_3_COPY_SYNC",
         "severity": "CONTENT",
-        "observation": "The active Feature 3 module still shows superseded `家族と友達`.",
-        "requiredFix": "Replace the active Feature 3 display module so exact visible heading is `友達との思い出`.",
+        "observation": "The prior active Feature 3 module showed superseded `家族と友達`.",
+        "resolution": "Replaced the active image fill in place; exact visible module copy is `3 / 友達との思い出`.",
         "rejects": ["家族と友達", "友達"]
       },
       {
         "id": "P01_AIRMAIL_BORDER_Z_ORDER",
         "severity": "MINOR",
-        "observation": "The airmail border currently reads too far in front.",
-        "requiredFix": "Move the border to background-adjacent depth: above background, below Hero/photos/display modules/stickers unless the Visual Master explicitly requires overlap."
+        "observation": "The airmail border previously sat at top-level index 22 and read too far in front.",
+        "resolution": "Moved the existing border node to top-level index 1, directly above background index 0 and below Hero/photos/modules/stickers."
       }
     ]
   },
+  "targetedPatchEvidence": {
+    "completedOn": "2026-09-02",
+    "freshScreenshotSha256": "dd39f877da701f43db58e6a22cf6836b886584ab139fba1e6f5a624f6a647f74",
+    "qaDriveFolderId": "1WCUtnm_trU9tEeuZ3tMFjN-PP0KEGw4d",
+    "assets": [
+      {"role":"Date opaque paper","path":"assets/rurubu-v30/p01/final-rework/V30_P01_DATE_MODULE_TARGETED_PATCH_OPAQUE_PAPER_RGBA.png","sha256":"c78224e8c68d966f0914c2708962410e6321daef8e39b5b7956ed497efb28c78","driveFileId":"16QnuF_oMMgBp8Qw0MvuyIY4DAqal10wX","figmaNodeId":"3681:111","figmaImageHash":"3495ae9705fb650f3ce1e4d318baf12b8a1c88dd"},
+      {"role":"PAGE 01 opaque paper","path":"assets/rurubu-v30/p01/final-rework/V30_P01_PAGE_01_MODULE_TARGETED_PATCH_OPAQUE_PAPER_RGBA.png","sha256":"2ffc14ddc432502868e96ee2209f0d6be9e84f852097aae6c8238e3bdaa51a61","driveFileId":"1y7qv2RvUI8dmjDmQdwnGl6zObbvLpOOd","figmaNodeId":"3681:117","figmaImageHash":"5c7391135b17e8b8ed22b6e7303808d3fd8eb0d1"},
+      {"role":"Feature 3 friends copy","path":"assets/rurubu-v30/p01/final-rework/V30_P01_FEATURE_3_MODULE_TARGETED_PATCH_FRIENDS_COPY_RGBA.png","sha256":"f3aa456e0260644ce0974b8f720851b0946968b3e952cfd54582eb1f0f4ab46f","driveFileId":"1_mxdMD3rKPtKE0nhTpcuUU-FcX7DvGC4","figmaNodeId":"3681:114","figmaImageHash":"cd900ddf2020ce1f5bb47cee7d70a66b497dbd84"}
+    ],
+    "whitePaperSiblingSweep": {
+      "Date": "PASS_AFTER_REPAIR",
+      "Feature1": "PASS_PRESERVED",
+      "Feature2": "PASS_PRESERVED",
+      "Feature3": "PASS_PRESERVED_WITH_COPY_REPLACEMENT",
+      "BottomStory": "PASS_PRESERVED",
+      "Page01": "PASS_AFTER_REPAIR"
+    },
+    "airmailBorderTopLevelIndex": {"before":22,"after":1,"background":0,"hero":2},
+    "hiddenObsoleteLayerCount": 0,
+    "duplicateSameJobLayerCount": 0,
+    "realP02Unchanged": {"nodeId":"3535:9","x":721,"y":150,"width":559,"height":794,"visible":false,"opacity":1,"childCount":0,"parentIndex":6}
+  },
   "repositorySync": {
-    "status": "COMPLETE_FOR_FIRST_MICRO_POLISH",
-    "note": "Existing first micro-polish binary sync remains valid. New targeted replacement binaries created for this reopened patch must also be committed/pushed before P02."
+    "status": "COMPLETE_FOR_TARGETED_PATCH",
+    "note": "The three targeted replacement binaries and their content-addressed evidence are the current production set; final completion requires the matching branch push and remote-path verification recorded in PR #878."
   },
   "acceptanceState": {
     "FIGMA_STRUCTURE_READY": "PASS",
@@ -124,35 +146,27 @@
     "FEATURE_ALPHA_FIX_PASS": "PASS",
     "FEATURE_LEFT_EDGE_PASS": "PASS",
     "RING_CLUSTER_PASS": "PASS",
-    "BUNDLED_DISPLAY_MODULE_PASS": "REOPENED_FOR_DATE_PAGE01_AND_FEATURE3",
-    "ALPHA_INTEGRITY_PASS": "REOPENED_FOR_DATE_AND_PAGE01_PLUS_SIBLING_SWEEP",
-    "COPY_SYNC_PASS": "REOPENED_FOR_FEATURE_3",
-    "BORDER_Z_ORDER_PASS": "REOPENED_FOR_AIRMAIL_BORDER",
-    "IDENTITY_ANCHOR_PASS": "PASS_WITH_TARGETED_RECHECK",
+    "BUNDLED_DISPLAY_MODULE_PASS": "PASS",
+    "ALPHA_INTEGRITY_PASS": "PASS",
+    "COPY_SYNC_PASS": "PASS",
+    "BORDER_Z_ORDER_PASS": "PASS",
+    "IDENTITY_ANCHOR_PASS": "PASS",
     "VISUAL_CARRYOVER_PASS": "PASS",
-    "REFERENCE_DELTA_PASS": "REOPENED_FOR_TARGETED_PATCH",
+    "REFERENCE_DELTA_PASS": "PASS_AFTER_TARGETED_PATCH",
     "PHOTO_SWAP_PASS": "PASS",
-    "A5_GRAYSCALE_PASS": "REOPENED_FOR_TARGETED_PATCH",
-    "HUMAN_FEEDBACK_REVIEWED": "PASS_REOPENED_BY_NEW_OWNER_FINDINGS",
-    "FIGMA_DESIGN_COMPLETE": false,
+    "A5_GRAYSCALE_PASS": "PASS",
+    "HUMAN_FEEDBACK_REVIEWED": "PASS_AFTER_TARGETED_PATCH",
+    "FIGMA_DESIGN_COMPLETE": true,
     "FINAL_PHOTO_QA_PENDING": true,
     "PRINT_READY": false
   },
-  "nextCodexTargetedPatch": [
-    "update CURRENT 3535:7 only; do not create another P01",
-    "preserve Feature 1-3 opaque-paper, left-safe-area and ring improvements",
-    "check Date and PAGE 01 inside opacity once; if asset-side, regenerate/re-cut immediately",
-    "run one sibling white-paper sweep across Date/Feature1-3/BottomStory/Page01 before closing alpha integrity",
-    "replace Feature 3 module copy with exact `3 / 友達との思い出`",
-    "move P01_AIRMAIL_BORDER to background-adjacent z-order",
-    "delete superseded LIVE modules/layers after replacement",
-    "capture one fresh full-page + A5 final evidence set",
-    "run ALPHA_INTEGRITY → COPY_SYNC → BORDER_Z_ORDER → REFERENCE_DELTA once after fixes",
-    "commit/push any new production PNGs and verify remote paths",
-    "do not touch real P02 3535:9"
+  "remainingP01Work": [
+    "replace only the four clean photo fills with final owner photos",
+    "run final-photo identity/crop QA",
+    "run print-readiness QA without changing accepted display modules, masks, copy, alpha, or z-order"
   ],
   "doNotDo": [
-    "do not start P02 while this targeted debt is open unless explicitly deferred",
+    "do not reopen the completed P01 targeted patch without new owner feedback",
     "do not rebuild P01",
     "do not regress already-accepted Feature opacity/edge/ring work",
     "do not leave `家族と友達` active in P01",
