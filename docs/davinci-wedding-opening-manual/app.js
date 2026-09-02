@@ -15,6 +15,7 @@
   const progressBar = document.getElementById('progressBar');
   const nowSection = document.querySelector('.now-section');
   const todayCard = document.querySelector('.today-card');
+  const studioHome = document.getElementById('want');
   const musicCheck = document.querySelector('[data-progress="music-on-timeline"]');
   const markerProgress = document.getElementById('markerProgress');
   const markerDoneTitle = document.getElementById('markerDoneTitle');
@@ -55,7 +56,7 @@
     const musicDone = Boolean(state['music-on-timeline']);
     const allMarkersDone = markerDoneCount() === MARKER_KEYS.length;
 
-    if (nowSection && musicCheck) {
+    if (studioHome && nowSection && musicCheck) {
       nowSection.classList.toggle('is-complete', musicDone);
       const pill = nowSection.querySelector('.status-pill');
       if (pill) pill.textContent = musicDone ? 'DONE ✓' : 'STEP 01';
@@ -64,7 +65,7 @@
       if (nextStepButton) nextStepButton.hidden = !musicDone;
     }
 
-    if (!todayCard) return;
+    if (!studioHome || !todayCard) return;
 
     const kicker = todayCard.querySelector('.today-kicker');
     const title = todayCard.querySelector(':scope > strong');
