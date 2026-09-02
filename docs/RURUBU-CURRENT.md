@@ -1,6 +1,6 @@
 # Rurubu WEDDING — CURRENT POINTER
 
-Status: `CURRENT_POINTER / V30_ONLY / P01_DESIGN_LOCKED / GIT_BINARY_SYNC_PENDING / 2026-09-02`
+Status: `CURRENT_POINTER / V30_ONLY / P01_DESIGN_LOCKED / GIT_BINARY_SYNC_COMPLETE / 2026-09-02`
 
 The only current Rurubu WEDDING production version is **V30**.
 
@@ -106,8 +106,11 @@ P01 design gates are PASS:
 - `FIGMA_STRUCTURE_READY`
 - `CLEAN_PROXY_PASS`
 - `BUNDLED_DISPLAY_MODULE_PASS`
+- `MICRO_POLISH_DEBT = CLOSED`
+- `INTERNAL_OPACITY_PASS = YES`
 - `ALPHA_INTEGRITY_PASS`
 - `EDGE_SAFETY_PASS`
+- `RING_CLUSTER_PASS = YES`
 - `IDENTITY_ANCHOR_PASS`
 - `VISUAL_CARRYOVER_PASS`
 - `REFERENCE_DELTA_PASS_AFTER_MICRO_POLISH`
@@ -120,26 +123,18 @@ Still pending later:
 - `FINAL_PHOTO_QA_PENDING = YES`
 - `PRINT_READY = NO`
 
-## Immediate operational debt — sync four production PNGs to Git
+## Repository sync — COMPLETE
 
-Codex completed Figma/Drive/local project-asset work but hit its usage limit before commit/push. ChatGPT has already synchronized the authority text to remote Git, but binary production PNG upload is not supported by the current GitHub text-file connector.
-
-Remote verification found the new Feature 1 micro-polish PNG path absent (`404`). Therefore before P02 production, sync these local binary assets:
+The four micro-polish production PNGs are committed on the PR branch:
 
 - `assets/rurubu-v30/p01/final-rework/V30_P01_FEATURE_1_MODULE_MICRO_POLISH_OPAQUE_PAPER_RGBA.png`
 - `assets/rurubu-v30/p01/final-rework/V30_P01_FEATURE_2_MODULE_MICRO_POLISH_OPAQUE_PAPER_RGBA.png`
 - `assets/rurubu-v30/p01/final-rework/V30_P01_FEATURE_3_MODULE_MICRO_POLISH_OPAQUE_PAPER_RGBA.png`
 - `assets/rurubu-v30/p01/final-rework/V30_P01_TOP_LEFT_RING_DIAMOND_SPARKLE_MICRO_POLISH_RGBA.png`
 
-Safe resume order:
-1. preserve/copy the four local PNGs before resetting anything;
-2. discard/reconcile stale local authority-file edits because remote authority is newer and already closed by ChatGPT;
-3. fast-forward/rebase local branch to latest PR head;
-4. stage the four intended PNGs plus only intentionally tracked final QA evidence;
-5. commit/push;
-6. verify all four remote paths exist and local worktree is clean.
+Feature module x positions are `21 / 23 / 22`; ring node `3681:137` is `27,40,92×76`. Fresh screenshot SHA-256 is `f83e608d943fb15131042edb43d59a503b171ca427902428e140789b134989a3`; QA Drive folder is `1WCUtnm_trU9tEeuZ3tMFjN-PP0KEGw4d`.
 
-**P02 production is blocked only until this repository-sync debt is closed.** This is not a P01 visual/design debt.
+**P02 production may proceed.**
 
 ## After binary sync
 

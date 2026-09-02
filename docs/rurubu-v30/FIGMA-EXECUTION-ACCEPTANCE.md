@@ -174,11 +174,13 @@ The micro-polish closed these reopened gates:
 
 ### Feature 1–3 left-edge safety — PASS
 - modules were tuned inward;
+- accepted module x positions are `21 / 23 / 22`;
 - their unequal editorial rhythm was preserved;
 - fresh screenshot no longer reads badges/headings as accidentally clipped by the airmail border.
 
 ### Top-left ring cluster fidelity — PASS
 - support cue now reads as gold wedding rings + visible diamond + yellow sparkles;
+- accepted node `3681:137` is at `27,40,92×76`;
 - it remains subordinate to masthead/WEDDING hierarchy.
 
 Fresh direct screenshot review also shows no material regression to Hero, names, 2026, Date, Bottom Story, OUR JOURNEY, PAGE 01 or overall page hierarchy.
@@ -188,8 +190,11 @@ Current P01 status:
 - `FIGMA_STRUCTURE_READY = PASS`
 - `CLEAN_PROXY_PASS = PASS`
 - `BUNDLED_DISPLAY_MODULE_PASS = PASS`
+- `MICRO_POLISH_DEBT = CLOSED`
+- `INTERNAL_OPACITY_PASS = YES`
 - `ALPHA_INTEGRITY_PASS = PASS`
 - `EDGE_SAFETY_PASS = PASS`
+- `RING_CLUSTER_PASS = YES`
 - `IDENTITY_ANCHOR_PASS = PASS`
 - `VISUAL_CARRYOVER_PASS = PASS`
 - `REFERENCE_DELTA_PASS = PASS_AFTER_MICRO_POLISH`
@@ -201,6 +206,8 @@ Current P01 status:
 - `PRINT_READY = NO`
 
 **P02 production may begin.**
+
+Evidence: fresh CURRENT screenshot SHA-256 `f83e608d943fb15131042edb43d59a503b171ca427902428e140789b134989a3`; QA Drive folder `1WCUtnm_trU9tEeuZ3tMFjN-PP0KEGw4d`; hidden obsolete / duplicate same-job layers `0 / 0`; P02 `3535:9` unchanged.
 
 P01 should not be reopened merely because final owner photos are pending. Final photos require only photo replacement plus crop/face-safe/effective-resolution/A5/print QA unless a new material visual defect appears.
 

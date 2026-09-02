@@ -1,6 +1,6 @@
 # V30 P01 production assets
 
-Status: `P01_DESIGN_LOCKED / GIT_BINARY_SYNC_PENDING / FINAL_PHOTO_QA_PENDING`
+Status: `P01_DESIGN_LOCKED / GIT_BINARY_SYNC_COMPLETE / FINAL_PHOTO_QA_PENDING`
 
 P01 CURRENT remains Figma node `3535:7`. Do not roll back to FIRST BUILD and do not create another P01 frame.
 
@@ -47,8 +47,11 @@ Reported checks:
 - `FIGMA_STRUCTURE_READY = PASS`
 - `CLEAN_PROXY_PASS = PASS`
 - `BUNDLED_DISPLAY_MODULE_PASS = PASS`
+- `MICRO_POLISH_DEBT = CLOSED`
+- `INTERNAL_OPACITY_PASS = YES`
 - `ALPHA_INTEGRITY_PASS = PASS`
 - `EDGE_SAFETY_PASS = PASS`
+- `RING_CLUSTER_PASS = YES`
 - `IDENTITY_ANCHOR_PASS = PASS`
 - `VISUAL_CARRYOVER_PASS = PASS`
 - `REFERENCE_DELTA_PASS = PASS_AFTER_MICRO_POLISH`
@@ -59,24 +62,16 @@ Reported checks:
 - `FINAL_PHOTO_QA_PENDING = YES`
 - `PRINT_READY = NO`
 
-## Immediate repository-sync debt
+## Repository sync — COMPLETE
 
-Codex hit its usage limit after completing Figma/Drive/local project-asset work but before commit/push. The remote branch therefore still lacks these four micro-polish production PNGs:
+The PR branch contains the four production PNGs:
 
 - `V30_P01_FEATURE_1_MODULE_MICRO_POLISH_OPAQUE_PAPER_RGBA.png`
 - `V30_P01_FEATURE_2_MODULE_MICRO_POLISH_OPAQUE_PAPER_RGBA.png`
 - `V30_P01_FEATURE_3_MODULE_MICRO_POLISH_OPAQUE_PAPER_RGBA.png`
 - `V30_P01_TOP_LEFT_RING_DIAMOND_SPARKLE_MICRO_POLISH_RGBA.png`
 
-Before P02:
-1. preserve the four local PNGs;
-2. discard/reconcile stale local authority-file edits because remote authority is newer;
-3. fast-forward/rebase to the latest PR head;
-4. add only the four intended binary production assets plus intentionally tracked final QA evidence;
-5. commit/push;
-6. verify remote existence and a clean local worktree.
-
-This is **not** a P01 visual/design debt. It is a traceability/repository-state gate.
+Accepted positions are Feature x `21 / 23 / 22` and ring node `3681:137` at `27,40,92×76`. Fresh screenshot SHA-256: `f83e608d943fb15131042edb43d59a503b171ca427902428e140789b134989a3`. QA Drive folder: `1WCUtnm_trU9tEeuZ3tMFjN-PP0KEGw4d`.
 
 ## Fast-fail rule retained
 
@@ -88,8 +83,8 @@ Do not waste repeated diagnosis/context on a cheap asset-side defect when regene
 
 ## Next P01 work
 
-After the binary sync, no further P01 design work is required until owner-approved final photographs arrive.
+No further P01 design work is required until owner-approved final photographs arrive.
 
 Then replace only the four photo fills and run final-photo crop/face-safe/effective-resolution/A5/print QA.
 
-**P02 production may begin only after the four binary assets are synchronized to remote Git and the local worktree is clean.**
+**P02 production may begin.**

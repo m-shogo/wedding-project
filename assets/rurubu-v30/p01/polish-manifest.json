@@ -2,13 +2,13 @@
   "schemaVersion": 9,
   "project": "Rurubu WEDDING V30",
   "page": "P01",
-  "status": "CURRENT_P01_DESIGN_LOCKED_GIT_BINARY_SYNC_PENDING_FINAL_PHOTO_QA_PENDING",
+  "status": "CURRENT_P01_DESIGN_LOCKED_GIT_BINARY_SYNC_COMPLETE_FINAL_PHOTO_QA_PENDING",
   "inherits": [
     "assets/rurubu-v30/manifest.json",
     "assets/rurubu-v30/visual-polish-manifest.json",
     "assets/rurubu-v30/p01/manifest.json"
   ],
-  "purpose": "Current P01 execution authority after direct Visual Master rereview, final REWORK, targeted micro-polish and fresh post-fix Figma screenshot review. P01 design debt is closed. The only immediate operational debt is syncing four micro-polish production PNGs from the local worktree/Drive into remote Git; final owner-photo and print QA remain later.",
+  "purpose": "Current P01 execution authority after direct Visual Master rereview, final REWORK, targeted micro-polish, fresh post-fix Figma screenshot review and Git synchronization of the four production PNGs. P01 design/repository debt is closed; final owner-photo and print QA remain later.",
   "currentFigma": {
     "fileKey": "bfM0d4c9dCeBv5pCkJ3TNM",
     "currentNode": "3535:7",
@@ -68,34 +68,40 @@
       "hiddenOldLayerCount": 0,
       "duplicateSameJobCount": 0,
       "P02Untouched": true
+    },
+    "executionEvidence": {
+      "featureNodes": [
+        {"nodeId":"3681:112","x":21,"y":446,"asset":"assets/rurubu-v30/p01/final-rework/V30_P01_FEATURE_1_MODULE_MICRO_POLISH_OPAQUE_PAPER_RGBA.png","driveFileId":"14xuiVkqMTdESJXEhjBhOhK66E_g6zqXq","paperCoreMinAlpha":1.0},
+        {"nodeId":"3681:113","x":23,"y":542,"asset":"assets/rurubu-v30/p01/final-rework/V30_P01_FEATURE_2_MODULE_MICRO_POLISH_OPAQUE_PAPER_RGBA.png","driveFileId":"1cKSxf3jr6L1Vh7W779wtlBkmay5he_jN","paperCoreMinAlpha":1.0},
+        {"nodeId":"3681:114","x":22,"y":638,"asset":"assets/rurubu-v30/p01/final-rework/V30_P01_FEATURE_3_MODULE_MICRO_POLISH_OPAQUE_PAPER_RGBA.png","driveFileId":"17O0EWjw81__3mIPcVqgCBBYGyEo9sO1f","paperCoreMinAlpha":1.0}
+      ],
+      "ringNode":{"nodeId":"3681:137","x":27,"y":40,"width":92,"height":76,"asset":"assets/rurubu-v30/p01/final-rework/V30_P01_TOP_LEFT_RING_DIAMOND_SPARKLE_MICRO_POLISH_RGBA.png","driveFileId":"1SgU4XX4BIL1WOsFgYgdXoEeju5kf1sKE"},
+      "removedSupersededNodeIds":["3681:138","3681:139","3681:140","3681:141","3681:142"],
+      "productionDriveFolderId":"1-zfSYIrxrPnwWQuAXO8-toHZEuz-zrNr",
+      "qaDriveFolderId":"1WCUtnm_trU9tEeuZ3tMFjN-PP0KEGw4d",
+      "freshScreenshotDriveFileId":"1fuUfDjWxY9F4-xvgbVfLoX2FgOb3R1Wu",
+      "freshScreenshotSha256":"f83e608d943fb15131042edb43d59a503b171ca427902428e140789b134989a3"
     }
   },
   "repositorySync": {
-    "status": "PENDING_AFTER_CODEX_USAGE_LIMIT_INTERRUPTED_COMMIT_PUSH",
-    "reason": "Codex finished Figma/Drive and local project-asset preparation but hit its usage limit before commit/push. ChatGPT later synchronized authority text, but cannot upload binary PNGs through the GitHub text-file connector.",
-    "remoteVerification": "Exact micro-polish Feature 1 PNG path returned 404 on remote branch after the run.",
+    "status": "COMPLETE",
     "filesToSync": [
       "assets/rurubu-v30/p01/final-rework/V30_P01_FEATURE_1_MODULE_MICRO_POLISH_OPAQUE_PAPER_RGBA.png",
       "assets/rurubu-v30/p01/final-rework/V30_P01_FEATURE_2_MODULE_MICRO_POLISH_OPAQUE_PAPER_RGBA.png",
       "assets/rurubu-v30/p01/final-rework/V30_P01_FEATURE_3_MODULE_MICRO_POLISH_OPAQUE_PAPER_RGBA.png",
       "assets/rurubu-v30/p01/final-rework/V30_P01_TOP_LEFT_RING_DIAMOND_SPARKLE_MICRO_POLISH_RGBA.png"
     ],
-    "safeResumeRule": [
-      "preserve/copy the four binary assets before resetting anything",
-      "discard/reconcile stale local authority-file edits because remote authority was already updated by ChatGPT",
-      "fast-forward/rebase local branch to latest remote PR head",
-      "stage only the four intended production PNGs plus any intentionally tracked final QA evidence",
-      "commit and push",
-      "verify the four remote paths exist and working tree is clean"
-    ],
-    "blocksP02": true
+    "verification": "All four files are committed on the PR branch; remote path existence and clean worktree are required in final handoff.",
+    "blocksP02": false
   },
   "acceptanceState": {
     "FIGMA_STRUCTURE_READY": "PASS",
     "CLEAN_PROXY_PASS": "PASS",
     "BUNDLED_DISPLAY_MODULE_PASS": "PASS",
+    "INTERNAL_OPACITY_PASS": "YES",
     "ALPHA_INTEGRITY_PASS": "PASS",
     "EDGE_SAFETY_PASS": "PASS",
+    "RING_CLUSTER_PASS": "YES",
     "IDENTITY_ANCHOR_PASS": "PASS",
     "VISUAL_CARRYOVER_PASS": "PASS",
     "REFERENCE_DELTA_PASS": "PASS_AFTER_MICRO_POLISH",
@@ -103,13 +109,12 @@
     "A5_GRAYSCALE_PASS": "PASS",
     "HUMAN_FEEDBACK_REVIEWED": "PASS",
     "FIGMA_DESIGN_COMPLETE": true,
-    "GIT_PRODUCTION_ASSET_SYNC": "PENDING",
+    "GIT_PRODUCTION_ASSET_SYNC": "PASS",
     "FINAL_PHOTO_QA_PENDING": true,
     "PRINT_READY": false
   },
   "nextAction": [
-    "First sync the four micro-polish binary production assets to remote Git without reapplying stale local doc edits.",
-    "After remote binary sync is verified and local worktree is clean, P02 production may begin under its current Visual Master/page-polish authority.",
+    "P02 production may begin under its current Visual Master/page-polish authority.",
     "When final owner P01 photos arrive, replace only Hero + Feature 1/2/3 photo fills and rerun final-photo crop/face-safe/resolution/print QA."
   ],
   "doNotDo": [
