@@ -1,0 +1,108 @@
+{
+  "schemaVersion": 1,
+  "project": "Rurubu WEDDING V30",
+  "page": "P01",
+  "status": "CURRENT_REQUIRED_P01_POLISH_EXTENSION",
+  "inherits": [
+    "assets/rurubu-v30/manifest.json",
+    "assets/rurubu-v30/visual-polish-manifest.json",
+    "assets/rurubu-v30/p01/manifest.json"
+  ],
+  "purpose": "Convert P01 first-build human feedback into concrete visual-polish requirements without rewriting the whole page or randomizing the reference.",
+  "fixedShortDisplayOverrides": {
+    "rule": "P01 fixed short display text may use image-generated/prepared display art when needed for fidelity; native/source-of-truth values remain separately controlled.",
+    "targets": {
+      "るるぶ": {
+        "mode": "generated/prepared display art preferred",
+        "reason": "first native rebuild was too generic",
+        "mustPreserve": ["three-block identity", "chunky glyph character", "white/dark dimensional edges", "playful irregularity"]
+      },
+      "WEDDING": {
+        "mode": "generated display art",
+        "mustPreserve": ["very large hot-pink mass", "thick layered outline/depth", "cover-dominant scale"]
+      },
+      "Shogo & Shiori": {
+        "mode": "display-art-with-native-source allowed",
+        "sourceOfTruth": "Shogo & Shiori",
+        "mustPreserve": ["hot-pink script/hand-lettered character", "energetic movement", "heart punctuation if present in approved treatment", "fit within yellow/blue ribbon"]
+      },
+      "2026": {
+        "mode": "prepared badge backing + native source or display-art-with-native-source",
+        "sourceOfTruth": "2026",
+        "mustPreserve": ["yellow cloud/burst silhouette", "playful outlined character", "heart/airplane-route ecology"]
+      },
+      "OUR JOURNEY": {
+        "mode": "generated/prepared stamp art allowed",
+        "mustPreserve": ["postmark/stamp character", "subordinate role"]
+      },
+      "PAGE 01": {
+        "mode": "native or display-art-with-native-source",
+        "sourceOfTruth": "PAGE 01",
+        "mustPreserve": ["subordinate page-meta role", "badge character"]
+      }
+    }
+  },
+  "featureStackIrregularityTargets": {
+    "sharedRule": "Feature 1/2/3 are a related editorial family but not one equal-card component. Preserve Visual Master differences instead of normalizing them.",
+    "visualMasterEvidence": {
+      "feature1ReferencePx": {"width": 310, "height": 180},
+      "feature2ReferencePx": {"width": 330, "height": 190},
+      "feature3ReferencePx": {"width": 320, "height": 180},
+      "photoSlotsAreNotExactlyEqual": true
+    },
+    "preserveDifferencesIn": [
+      "module width/height",
+      "photo-slot width/height",
+      "local vertical spacing",
+      "icon placement",
+      "accent placement",
+      "local overlap",
+      "heading treatment"
+    ],
+    "rotationRule": "Do not invent random scrapbook angles. Use rotation/offset only where the Visual Master supports it or direct overlay proves it improves fidelity.",
+    "hardRejects": [
+      "equal heights for Feature 1/2/3",
+      "equal thumbnail dimensions merely for reuse",
+      "identical padding",
+      "identical icon coordinates",
+      "identical rounded-card component",
+      "formulaic rotation applied to all three"
+    ]
+  },
+  "tactileFinishTargets": {
+    "principle": "P01 should feel like authored printed travel-magazine ephemera rather than flat digital cards, but texture must remain subtle.",
+    "priorityParts": [
+      "るるぶ/WEDDING display art where reference supports dimensional print character",
+      "names ribbon",
+      "date ticket",
+      "Feature 1/2/3 paper/photo-frame vessels",
+      "OUR JOURNEY stamp/postmark",
+      "bottom story vessel"
+    ],
+    "allowed": [
+      "subtle paper/matte feel",
+      "slight printed edge irregularity",
+      "restrained local shadow/depth",
+      "small material differences between ticket/ribbon/stamp/paper objects"
+    ],
+    "forbidden": [
+      "uniform full-page grain",
+      "heavy vintage dirt",
+      "texture on faces",
+      "texture that weakens exact factual text",
+      "noise used to disguise low-quality generation"
+    ],
+    "referenceDeltaRule": "Material treatment is supporting evidence only. It must never outweigh title, couple Hero, names/date or Feature readability."
+  },
+  "nextBuildPriority": [
+    "るるぶ identity anchor",
+    "Shogo & Shiori visible display lockup",
+    "representative two-person Hero visual proxy",
+    "2026 badge",
+    "Feature 1/2/3 irregular editorial rhythm",
+    "Date ticket physicality",
+    "bottom story physicality",
+    "fresh current Figma screenshot",
+    "Reference Delta rerun"
+  ]
+}
