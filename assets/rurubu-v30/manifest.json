@@ -3,6 +3,15 @@
   "project": "Rurubu WEDDING V30",
   "version": "V30",
   "status": "CURRENT_FINAL_PRODUCTION",
+  "authorityOrder": [
+    "user explicit instruction in current task",
+    "page visual master image P01-P08",
+    "page manifest",
+    "root manifest",
+    "docs/RURUBU-CURRENT.md",
+    "docs/rurubu-v30/README.md",
+    "older V20/history only as non-authoritative reference"
+  ],
   "canonicalFacts": {
     "coupleNames": {
       "first": "Shogo",
@@ -15,6 +24,52 @@
       "canonical": "2026.10.24",
       "locked": true,
       "rule": "Across P01-P08, 2026.10.24 is authoritative. Never infer another date from generated imagery, examples, OCR, old versions, or placeholders."
+    },
+    "p08BarcodeDigits": {
+      "canonical": "2026102400000",
+      "locked": true
+    }
+  },
+  "pageGeometry": {
+    "trimMm": {
+      "width": 148,
+      "height": 210
+    },
+    "orientation": "portrait",
+    "bleedMm": 3,
+    "fullBleedMm": {
+      "width": 154,
+      "height": 216
+    },
+    "safeTextMarginMm": 6,
+    "figmaCoordinateSystem": {
+      "trimFramePx": {
+        "width": 559,
+        "height": 794
+      },
+      "basis": "A5 trim at 96 dpi-equivalent Figma logical pixels",
+      "origin": "top-left",
+      "xDirection": "right",
+      "yDirection": "down",
+      "bleedPxApproxPerSide": 11.34,
+      "fullBleedPxApprox": {
+        "width": 582.0,
+        "height": 816.4
+      },
+      "safeTextMarginPxApprox": 22.68,
+      "rule": "All page-specific geometry should include normalized ratios plus Figma trim-pixel approximations. Normalized geometry is authoritative when source image dimensions differ."
+    },
+    "printRasterTarget": {
+      "targetPpi": 300,
+      "trimPxApprox": {
+        "width": 1748,
+        "height": 2480
+      },
+      "fullBleedPxApprox": {
+        "width": 1819,
+        "height": 2551
+      },
+      "rule": "Any full-page raster intended for final print must provide sufficient effective resolution at placed size; reference images may be lower because they are visual masters, not print masters."
     }
   },
   "visualAuthorityPolicy": {
@@ -22,45 +77,315 @@
     "workflow": [
       "review the page visual master",
       "extract page-specific visual grammar",
-      "explicitly identify the page background system",
-      "explicitly identify the page frame/vessel system",
-      "lock visual authority in the page manifest",
-      "compare production work directly against the visual master",
-      "only after visual fidelity passes, perform technical/editability QA"
+      "lock geometry, hierarchy, background, frame and layer behavior in the page manifest",
+      "create a full-page art-direction proof when the design is not yet visually proven",
+      "decompose the proven page into independently positionable assets",
+      "reconstruct in layered Figma with replaceable photography and native factual copy",
+      "compare production directly against the visual master",
+      "only after visual fidelity passes, perform editability and print QA"
     ],
-    "requiredPageManifestSections": [
-      "canonicalFacts when applicable",
-      "visualMaster",
-      "visualAuthority.backgroundSystem",
-      "visualAuthority.frameSystem",
-      "photoHierarchy",
-      "composition",
-      "typographyBehavior",
-      "editableReconstructionPolicy",
-      "hardRejects",
-      "qa"
-    ],
-    "backgroundPolicy": "The visible background/environment is a first-class design asset. Do not silently reduce it to a flat fill, generic gradient, or accidental content of a replaceable photograph. When the reference relies on environmental art, texture, map, sky, paper field, destination scene, pattern or illustrated setting, record it explicitly and prepare/generate it as an independent production layer when needed.",
-    "framePolicy": "Outer page frames, photo frames, tickets, label vessels, ribbons, stamps, clouds, boxes and other page-specific editorial containers are first-class visual-authority elements. Do not substitute generic rounded rectangles or plain Figma strokes when doing so weakens the visual master.",
     "figmaPolicy": "Figma is the layered compositor, not the source of magazine personality.",
-    "wholePagePolicy": "Whole-page reference images are art-direction masters; final editable production remains layered with replaceable photography and native factual copy.",
-    "doNot": [
-      "redesign a page from generic text-only Rurubu rules when a page visual master exists",
-      "omit the reference background or frames because they look decorative",
-      "replace page-specific frames with generic UI cards",
-      "treat generated factual text as authoritative",
-      "let editability requirements weaken the expressive masthead/title art",
-      "certify a page on technical QA before 3-second visual-fidelity QA passes"
+    "wholePagePolicy": "Whole-page reference images are art-direction masters; final editable production remains layered.",
+    "gate0": "At a 3-second glance, the intended editorial identity and page role must read correctly before technical QA can pass."
+  },
+  "renderModePolicy": {
+    "allowed": [
+      "generated-art",
+      "native-text",
+      "replaceable-photo",
+      "figma-shape-ok"
+    ],
+    "rules": {
+      "generated-art": "Expressive display art, irregular editorial vessels, frames, stamps, tickets, paper objects, borders and decorative systems may be generated/prepared art.",
+      "native-text": "Canonical facts and editable factual/editorial copy remain native whenever correctness or later editing matters.",
+      "replaceable-photo": "Real-photo slots are independent from their frame/backing and remain non-destructively replaceable.",
+      "figma-shape-ok": "Simple utility geometry may use Figma primitives only when doing so does not weaken the visual master."
+    }
+  },
+  "textTruthPolicy": {
+    "classes": [
+      "FACT",
+      "EDITORIAL_COPY",
+      "DECORATIVE_FICTION",
+      "TBD"
+    ],
+    "rules": [
+      "FACT must come from canonical/user-approved data only.",
+      "Generated text is never authoritative FACT.",
+      "EDITORIAL_COPY may be rewritten only within the approved page role.",
+      "DECORATIVE_FICTION may be stylized but must not impersonate a real fact.",
+      "TBD must remain clearly unresolved and must not be silently invented."
+    ]
+  },
+  "photoSystem": {
+    "default": {
+      "replaceable": true,
+      "maskRequired": true,
+      "clipsContent": true,
+      "nonDestructiveCrop": true,
+      "defaultFit": "FILL_CROP",
+      "photoAndFrameSeparate": true,
+      "mustNotBleedOutsideMask": true,
+      "mustNotFlattenWithFrame": true
+    },
+    "dummyPhotoPolicy": {
+      "allowed": true,
+      "status": "DUMMY_REFERENCE_ONLY",
+      "rule": "Use dummy imagery only to prove crop, mask and hierarchy. Dummy imagery is never autobiographical fact and must be replaceable without rebuilding the frame.",
+      "preferred": "neutral travel/place/object placeholders when real photos are unavailable"
+    },
+    "replacementQa": [
+      "swap portrait source into each slot",
+      "swap landscape source into each slot",
+      "test high-subject and low-subject focal positions",
+      "verify no spill outside mask",
+      "verify no gap caused by crop mode",
+      "verify frame/backing does not need rebuilding",
+      "verify important faces/subjects are not covered by must-not-cover elements"
+    ]
+  },
+  "layerSystem": {
+    "zIndexDirection": "higher number renders in front",
+    "defaultStack": [
+      {
+        "group": "background-field",
+        "zRange": "0-9"
+      },
+      {
+        "group": "background-editorial-art",
+        "zRange": "10-19"
+      },
+      {
+        "group": "photo-backings-and-masks",
+        "zRange": "20-29"
+      },
+      {
+        "group": "photos",
+        "zRange": "30-39"
+      },
+      {
+        "group": "frame-fronts",
+        "zRange": "40-49"
+      },
+      {
+        "group": "display-art",
+        "zRange": "50-69"
+      },
+      {
+        "group": "decorative-overlays",
+        "zRange": "70-79"
+      },
+      {
+        "group": "native-copy-and-facts",
+        "zRange": "80-89"
+      },
+      {
+        "group": "page-meta-and-critical-badges",
+        "zRange": "90-99"
+      },
+      {
+        "group": "trim-border-and-print-overlay",
+        "zRange": "100-109"
+      }
+    ],
+    "requiredPerObject": [
+      "zIndex",
+      "layerGroup",
+      "overlaps",
+      "mustNotCover"
+    ]
+  },
+  "backgroundSystem": {
+    "requiredPerPage": [
+      "visual role",
+      "background type",
+      "main color/photographic field",
+      "edge behavior",
+      "generated/prepared/native mode",
+      "full-bleed behavior",
+      "what must not be simplified"
+    ],
+    "rule": "A weak generic gradient or empty field must not replace page-specific background art when the visual master depends on it."
+  },
+  "frameSystem": {
+    "requiredTypesToConsider": [
+      "outer trim/airmail border",
+      "photo frame",
+      "photo mask",
+      "article/callout vessel",
+      "ticket/postcard vessel",
+      "badge",
+      "stamp/postmark",
+      "title backing"
+    ],
+    "rule": "Frames are editorial objects, not a single repeated rounded-card component. Each page may use unequal frame families."
+  },
+  "assetProductionPolicy": {
+    "onePartOneImage": true,
+    "rule": "Each independently positionable generated editorial object is stored as an independent asset after the whole-page visual direction is proven.",
+    "floatingAssetFormat": "PNG/RGBA with true transparency unless opacity is intentional",
+    "fullPageBackgroundFormat": "opaque PNG/JPG or prepared raster as appropriate",
+    "assetMetadataRequired": [
+      "assetId",
+      "path",
+      "renderMode",
+      "status",
+      "source/provenance",
+      "dimensions",
+      "alpha mode",
+      "sha256 when available",
+      "page",
+      "layerGroup",
+      "zIndex"
+    ],
+    "statuses": [
+      "REFERENCE_ONLY",
+      "CANDIDATE",
+      "ADOPTED",
+      "SUPERSEDED",
+      "REJECTED"
+    ]
+  },
+  "placementPolicy": {
+    "requiredPerObject": [
+      "normalized x/y/width/height",
+      "Figma trim-pixel approximation",
+      "anchor",
+      "zIndex",
+      "rotation if any",
+      "overlap relationships",
+      "must-not-cover relationships"
+    ],
+    "rule": "Do not rely on prose such as 'near the top'. Record measurable placement after visual review."
+  },
+  "qa": {
+    "orderedGates": [
+      "G0_VISUAL_IDENTITY_3_SECOND",
+      "G1_REFERENCE_DELTA",
+      "G2_CANONICAL_FACTS",
+      "G3_LAYER_AND_OCCLUSION",
+      "G4_PHOTO_MASK_AND_REPLACEABILITY",
+      "G5_A5_READABILITY_AND_SAFE_AREA",
+      "G6_ALPHA_AND_ASSET_INTEGRITY",
+      "G7_EXPORT_AND_PRINT",
+      "G8_HIDDEN_STALE_PLACEHOLDER_SCAN"
+    ],
+    "visualChecks": [
+      "first-read order",
+      "title scale",
+      "photo hierarchy",
+      "background fidelity",
+      "frame fidelity",
+      "edge activity",
+      "intentional asymmetry",
+      "meaningful overlap",
+      "information density",
+      "anti-template behavior"
+    ],
+    "printChecks": [
+      "3mm bleed coverage where required",
+      "critical factual text remains inside safe margin unless intentionally treated as display art",
+      "effective raster resolution at placed size",
+      "sRGB review export before CMYK conversion workflow",
+      "grayscale legibility",
+      "thumbnail/contact-sheet scan",
+      "spread adjacency check"
+    ]
+  },
+  "spreadRhythm": {
+    "pairs": [
+      {
+        "pages": [
+          "P02",
+          "P03"
+        ],
+        "rule": "coherent profile/story family without cloning the same card/grid system"
+      },
+      {
+        "pages": [
+          "P04",
+          "P05"
+        ],
+        "rule": "travel-to-friends transition; maintain energy while differentiating photo rhythm"
+      },
+      {
+        "pages": [
+          "P06",
+          "P07"
+        ],
+        "rule": "lively real-life page followed by a calmer closing page"
+      },
+      {
+        "pages": [
+          "P01"
+        ],
+        "rule": "standalone cover"
+      },
+      {
+        "pages": [
+          "P08"
+        ],
+        "rule": "standalone magazine back cover"
+      }
     ]
   },
   "pages": [
-    {"page":"P01","role":"COVER","visualMaster":"assets/rurubu-v30/p01/P01.png","manifest":"assets/rurubu-v30/p01/manifest.json","visualReview":"LOCKED"},
-    {"page":"P02","role":"PROFILE + Q1/Q2","visualMaster":"assets/rurubu-v30/p02/P02.png","manifest":"assets/rurubu-v30/p02/manifest.json","visualReview":"AWAITING_CHAT_REVIEW"},
-    {"page":"P03","role":"OUR STORY + Q3/Q4","visualMaster":"assets/rurubu-v30/p03/P03.png","manifest":"assets/rurubu-v30/p03/manifest.json","visualReview":"AWAITING_CHAT_REVIEW"},
-    {"page":"P04","role":"ALL TRAVEL MEMORIES / OUR JOURNEY","visualMaster":"assets/rurubu-v30/p04/P04.png","manifest":"assets/rurubu-v30/p04/manifest.json","visualReview":"AWAITING_CHAT_REVIEW"},
-    {"page":"P05","role":"FRIENDS MEMORIES","visualMaster":"assets/rurubu-v30/p05/P05.png","manifest":"assets/rurubu-v30/p05/manifest.json","visualReview":"AWAITING_CHAT_REVIEW"},
-    {"page":"P06","role":"REAL LIFE / FAVORITES / BEST SHOTS + Q5/Q6","visualMaster":"assets/rurubu-v30/p06/P06.png","manifest":"assets/rurubu-v30/p06/manifest.json","visualReview":"AWAITING_CHAT_REVIEW"},
-    {"page":"P07","role":"CLOSING MESSAGE / THANK YOU","visualMaster":"assets/rurubu-v30/p07/P07.png","manifest":"assets/rurubu-v30/p07/manifest.json","visualReview":"AWAITING_CHAT_REVIEW"},
-    {"page":"P08","role":"MAGAZINE BACK COVER","visualMaster":"assets/rurubu-v30/p08/P08.png","manifest":"assets/rurubu-v30/p08/manifest.json","visualReview":"AWAITING_CHAT_REVIEW","fixedBarcodeDigits":"2026102400000"}
+    {
+      "page": "P01",
+      "role": "COVER",
+      "visualMaster": "assets/rurubu-v30/p01/P01.png",
+      "manifest": "assets/rurubu-v30/p01/manifest.json",
+      "visualReview": "LOCKED"
+    },
+    {
+      "page": "P02",
+      "role": "PROFILE + Q1/Q2",
+      "visualMaster": "assets/rurubu-v30/p02/P02.png",
+      "manifest": "assets/rurubu-v30/p02/manifest.json",
+      "visualReview": "AWAITING_CHAT_REVIEW"
+    },
+    {
+      "page": "P03",
+      "role": "OUR STORY + Q3/Q4",
+      "visualMaster": "assets/rurubu-v30/p03/P03.png",
+      "manifest": "assets/rurubu-v30/p03/manifest.json",
+      "visualReview": "AWAITING_CHAT_REVIEW"
+    },
+    {
+      "page": "P04",
+      "role": "ALL TRAVEL MEMORIES / OUR JOURNEY",
+      "visualMaster": "assets/rurubu-v30/p04/P04.png",
+      "manifest": "assets/rurubu-v30/p04/manifest.json",
+      "visualReview": "AWAITING_CHAT_REVIEW"
+    },
+    {
+      "page": "P05",
+      "role": "FRIENDS MEMORIES",
+      "visualMaster": "assets/rurubu-v30/p05/P05.png",
+      "manifest": "assets/rurubu-v30/p05/manifest.json",
+      "visualReview": "AWAITING_CHAT_REVIEW"
+    },
+    {
+      "page": "P06",
+      "role": "REAL LIFE / FAVORITES / BEST SHOTS + Q5/Q6",
+      "visualMaster": "assets/rurubu-v30/p06/P06.png",
+      "manifest": "assets/rurubu-v30/p06/manifest.json",
+      "visualReview": "AWAITING_CHAT_REVIEW"
+    },
+    {
+      "page": "P07",
+      "role": "CLOSING MESSAGE / THANK YOU",
+      "visualMaster": "assets/rurubu-v30/p07/P07.png",
+      "manifest": "assets/rurubu-v30/p07/manifest.json",
+      "visualReview": "AWAITING_CHAT_REVIEW"
+    },
+    {
+      "page": "P08",
+      "role": "MAGAZINE BACK COVER",
+      "visualMaster": "assets/rurubu-v30/p08/P08.png",
+      "manifest": "assets/rurubu-v30/p08/manifest.json",
+      "visualReview": "AWAITING_CHAT_REVIEW",
+      "fixedBarcodeDigits": "2026102400000"
+    }
   ]
 }
