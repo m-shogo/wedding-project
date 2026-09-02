@@ -1,0 +1,170 @@
+{
+  "schemaVersion": 1,
+  "project": "Rurubu WEDDING V30",
+  "status": "CURRENT_SYSTEMIC_ORNAMENT_AUTHORITY",
+  "scope": "P01 onward, including future added pages",
+  "purpose": "Keep ornament production rooted in Rurubu-style editorial design, coherent as Rurubu WEDDING V30, adaptable by page role, and scalable when pages are added without forcing every ornament into one identical illustration style.",
+  "authorityModel": {
+    "hierarchy": [
+      "RURUBU_EDITORIAL_DNA",
+      "RURUBU_WEDDING_V30_ART_DIRECTION",
+      "PAGE_VISUAL_LANGUAGE",
+      "ORNAMENT_FAMILY",
+      "ASSET_INSTANCE"
+    ],
+    "principle": "P01 is a successful calibration reference, not the root authority. The root is the Rurubu-inspired editorial language; P01-P08 Visual Masters collectively calibrate how V30 translates that language.",
+    "hardReject": "Do not make all later pages imitate P01 cover density, composition or ornament count merely for consistency."
+  },
+  "rurubuEditorialDna": {
+    "status": "HARD / TOP_LEVEL",
+    "principles": [
+      "EDITORIAL_FIRST: decoration exists to help photos, headings, information blocks and reading flow; a beautiful standalone illustration is not automatically a good magazine ornament.",
+      "DENSE_BUT_READABLE: lively information density with strong size contrast, calm zones and clear hierarchy instead of uniform decorative noise.",
+      "PHOTO_AND_INFORMATION_LED: ornaments support the editorial content and do not become the main subject unless the page Visual Master explicitly gives them that role.",
+      "MIXED_MEDIA_UNDER_ONE_ART_DIRECTION: photos, cutouts, doodles, icons, stamps, routes, paper objects and illustrations may mix; they need not share one literal drawing style, but they must feel selected and art-directed by the same publication team.",
+      "PLAYFUL_EDITORIAL_UTILITY: arrows, routes, stickers, cutouts, badges and small motifs should guide attention, connect modules, activate edges or add narrative meaning rather than simply fill empty space.",
+      "TACTILE_PRINT_CHARACTER: use controlled hand-drawn/printed/paper character where useful, without turning the page into fine-art watercolor, vintage poster art or generic digital sticker packs.",
+      "LOCAL_VARIATION_WITH_GLOBAL_COHERENCE: page roles may change density and motif mix while remaining recognizably part of the same magazine."
+    ],
+    "hardRejects": [
+      "standalone artwork whose beauty dominates its editorial usefulness",
+      "high-detail botanical art used as a corner ornament when it reads like an independent illustration plate",
+      "retro poster illustration inserted into a lighter editorial page without a deliberate page-role reason",
+      "generic stock/clipart packs",
+      "SaaS-like flat icon systems",
+      "forcing every ornament into an identical drawing style and losing Rurubu-like mixed-media energy",
+      "mixing unrelated illustration genres with no shared editorial treatment"
+    ]
+  },
+  "v30ArtDirection": {
+    "status": "HARD / PROJECT_TRANSLATION",
+    "principle": "Translate the Rurubu editorial DNA into a joyful travel-wedding publication: bright, warm, tactile, photo-led, playful and print-oriented, but not childish, stock-like or over-illustrated.",
+    "calibrationSources": {
+      "primary": "current P01-P08 Visual Masters as a set",
+      "p01Role": "GLOBAL_STYLE_CALIBRATION_REFERENCE, especially for print tactility, cutout/sticker energy, edge activation and travel-magazine playfulness; not a page-template to clone",
+      "pageSpecific": "the target page Visual Master controls local density, motif choice, scale and calm-vs-busy balance"
+    },
+    "coherenceDimensions": [
+      "editorial usefulness",
+      "line-weight range",
+      "hand-drawn/printed character",
+      "texture amount",
+      "realism range",
+      "shadow/depth restraint",
+      "palette temperature and saturation",
+      "detail density",
+      "cutout/sticker weight",
+      "route/doodle grammar",
+      "micro-accent grammar",
+      "tactile print feeling",
+      "relationship to photography and native text"
+    ],
+    "controlledVariation": "Different ornament families may use different drawing methods. Consistency means compatible editorial treatment and visual weight, not identical brushwork."
+  },
+  "ornamentFamilyRegistry": {
+    "principle": "Families are reusable visual vocabularies, not libraries of identical repeated assets. A page selects or extends a family, then creates locally appropriate variants.",
+    "families": [
+      {
+        "id": "TRAVEL_ROUTE_DOODLE",
+        "role": "connect modules, imply movement, activate empty space",
+        "examples": ["dotted route", "dashed route", "small directional marks"],
+        "reuseMode": "grammar shared; exact path/shape normally page-specific"
+      },
+      {
+        "id": "TRAVEL_VEHICLE",
+        "role": "travel cue and narrative accent",
+        "examples": ["airplane", "train", "ship", "car where page role supports it"],
+        "reuseMode": "family character shared; vehicle and pose generated for local page role"
+      },
+      {
+        "id": "TROPICAL_BOTANICAL",
+        "role": "wedding/travel warmth and edge activation",
+        "examples": ["hibiscus", "plumeria", "palm leaves", "monstera"],
+        "reuseMode": "botanical vocabulary may recur, but major clusters must be independently composed"
+      },
+      {
+        "id": "TRAVEL_EPHEMERA",
+        "role": "small editorial storytelling objects",
+        "examples": ["luggage tag", "suitcase", "ticket", "postcard", "stamp", "compass", "envelope"],
+        "reuseMode": "shared material/print treatment; object chosen for page meaning"
+      },
+      {
+        "id": "MICRO_ACCENT",
+        "role": "small rhythm and emphasis",
+        "examples": ["heart", "star", "sparkle", "tiny dot", "small handwritten mark"],
+        "reuseMode": "intentional recurring motif family; exact placement/combination varies"
+      }
+    ],
+    "extensionRule": "A future page may introduce a new ornament family only when its page role cannot be served well by an existing family. The new family must first pass RURUBU_EDITORIAL_DNA_PASS and V30_ART_DIRECTION_PASS before page assets are produced."
+  },
+  "productionArchitecture": {
+    "strategy": "PLAN_GLOBALLY_CALIBRATE_UPFRONT_PRODUCE_CONTEXTUALLY",
+    "whyNotGenerateEverythingUpfront": [
+      "final scale, crop, negative space and overlap depend on the actual page composition",
+      "unused pre-generated assets create sunk-work pressure and encourage inappropriate carry-over",
+      "page Visual Masters or copy/photo changes can make early final assets obsolete",
+      "large one-shot batches tend to drift into multiple illustration genres or a generic asset-pack look"
+    ],
+    "whyNotPurePageByPage": [
+      "without an upfront family system, each page can invent a new style",
+      "shared publication furniture and recurring motif grammar drift",
+      "future pages cannot reliably reuse the visual language"
+    ],
+    "phases": [
+      {
+        "id": "PHASE_0_GLOBAL_INVENTORY",
+        "when": "before scaling production across many pages",
+        "action": "Inventory visible/likely ornament slots across all currently reviewed page Visual Masters. Record role, family candidate, shared-vs-page-specific nature, saliency and whether it is actually needed. Do not generate final art here.",
+        "futurePageRule": "When P09+ is added, append that page's ornament-slot inventory instead of redesigning the whole system."
+      },
+      {
+        "id": "PHASE_1_FAMILY_CALIBRATION",
+        "action": "For each materially used family, establish only 1-2 representative calibration anchors or reference treatments. Judge them against Rurubu editorial DNA and V30 art direction before producing many variants.",
+        "hardRule": "Calibration anchors are style references, not assets that must be copied into every page."
+      },
+      {
+        "id": "PHASE_2_SHARED_COMPONENTS",
+        "action": "Create true cross-page common components once as a coherent system. PAGE badge and other explicitly shared publication furniture belong here, not in page ornament generation."
+      },
+      {
+        "id": "PHASE_3_PAGE_CONTEXT_PRODUCTION",
+        "action": "Produce final page-specific ornament variants only after the target page hierarchy, photos, native text and negative-space needs are known. Prefer small batches by family within the page or spread so related variants can be compared together."
+      },
+      {
+        "id": "PHASE_4_REGISTRY_WRITEBACK",
+        "action": "Accepted assets write back family id, page role, local job, reuse intent, art-direction notes and alpha status. Rejected assets do not become future references merely because they exist."
+      }
+    ],
+    "batchingRule": "Batch the DESIGN SYSTEM early; do not batch all FINAL ICONS early. For final assets, batch related variants together only when shared context makes comparison useful."
+  },
+  "futurePageScalability": {
+    "pageAdditionWorkflow": [
+      "read new page Visual Master",
+      "inventory ornament slots and editorial jobs",
+      "map each need to an existing family when appropriate",
+      "if no existing family fits, request a family extension instead of inventing an untracked style",
+      "produce page-specific variants in context",
+      "write accepted family/asset decisions back to registry"
+    ],
+    "hardRule": "Adding a page must not require recreating all prior ornament assets or copying a previous page's ornament set."
+  },
+  "evaluationGates": {
+    "RURUBU_EDITORIAL_DNA_PASS": "Does the ornament function as Rurubu-style editorial material rather than merely good standalone art?",
+    "V30_ART_DIRECTION_PASS": "Does it feel compatible with the Rurubu WEDDING V30 publication as a whole?",
+    "PAGE_ROLE_FIT_PASS": "Is its visual weight, motif and density appropriate for this specific page role and local position?",
+    "ORNAMENT_FAMILY_COHERENCE_PASS": "Does it belong to its declared family while remaining a locally distinct variant?",
+    "ORNAMENT_OBJECT_QUALITY_PASS": "Is the individual asset itself well drawn/designed at the required A5 use size?",
+    "REUSE_INTENT_PASS": "If a motif repeats, is the repetition intentional publication language rather than convenience/carry-over?",
+    "TRUE_ALPHA_PREFLIGHT_PASS": "If floating transparency is required, does the production asset satisfy the current true-alpha generation policy before Figma placement?"
+  },
+  "reviewOrder": [
+    "RURUBU_EDITORIAL_DNA_PASS",
+    "V30_ART_DIRECTION_PASS",
+    "PAGE_ROLE_FIT_PASS",
+    "ORNAMENT_FAMILY_COHERENCE_PASS",
+    "ORNAMENT_OBJECT_QUALITY_PASS",
+    "REUSE_INTENT_PASS",
+    "TRUE_ALPHA_PREFLIGHT_PASS"
+  ],
+  "antiPattern": "Do not approve a beautiful asset at ORNAMENT_OBJECT_QUALITY_PASS if it already failed a higher-level editorial/art-direction gate."
+}
