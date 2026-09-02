@@ -9,6 +9,10 @@ P01 is the V30 pilot page. The live Figma frame was reset before reconstruction;
 Required post-build acceptance guide:
 `docs/rurubu-v30/FIGMA-EXECUTION-ACCEPTANCE.md`
 
+Required visual-polish extensions:
+- `assets/rurubu-v30/visual-polish-manifest.json`
+- `assets/rurubu-v30/p01/polish-manifest.json`
+
 ## Current page role
 
 - Cover: `るるぶ WEDDING`
@@ -55,6 +59,22 @@ These assets exist in the first rebuild, but `ADOPTED` does not automatically me
 | `V30_P01_AIRMAIL_BORDER_PRODUCTION_RGBA.png` | Airmail trim border | `3662:11` | REVIEW |
 
 The first-build `るるぶ` masthead, year badge, page-number disc and micro accents include editable Figma/vector work. **Editability does not grant visual acceptance.**
+
+## Fixed short display text — P01 rule
+
+Short fixed display text may use image-generated/prepared art when that is visually stronger than generic native text.
+
+This includes P01:
+- `るるぶ`
+- `WEDDING`
+- `Shogo & Shiori`
+- `2026`
+- `OUR JOURNEY`
+- `PAGE 01` when display treatment needs it
+
+Keep the exact approved string separately as native/source-of-truth data and QA the visible result against it.
+
+Long body/caption/Q&A text stays native/editable.
 
 ## Post-build visual feedback — REQUIRED CALIBRATION
 
@@ -103,10 +123,49 @@ They share a family but must preserve different local jobs, sizes/rhythm, accent
 - Feature 2: blue / airplane-route / travel-place
 - Feature 3: green / floral-leaf / group memory
 
-Do not equalize them merely for component reuse.
+The Visual Master itself already gives them slightly different dimensions rather than equal cards:
+- Feature 1 approx `310 × 180` reference px
+- Feature 2 approx `330 × 190` reference px
+- Feature 3 approx `320 × 180` reference px
+
+So do not equalize:
+- module height/width;
+- thumbnail size;
+- padding;
+- icon position;
+- local spacing/overlap.
+
+Small tilt/offset is allowed only when the Visual Master supports it or direct overlay improves. Do not add random scrapbook rotation by formula.
 
 ### 6. Date ticket / bottom story — REWORK
 Both are currently weaker/compressed relative to the Visual Master. Their physical print-object character and occupied area must be restored before completion.
+
+## Tactile print finish — P01 rule
+
+P01 should feel like authored travel-magazine print ephemera, not flat digital UI or an AI sticker sheet.
+
+Priority parts for restrained tactile character:
+- `るるぶ` / `WEDDING` display art where appropriate;
+- names ribbon;
+- Date ticket;
+- Feature 1/2/3 paper/photo-frame vessels;
+- OUR JOURNEY stamp/postmark;
+- bottom story vessel.
+
+Allowed:
+- subtle paper/matte feel;
+- slight printed edge irregularity;
+- restrained local depth/shadow;
+- small material differences between paper/ticket/ribbon/stamp objects.
+
+Do not use:
+- uniform full-page grain;
+- heavy vintage dirt;
+- texture on faces;
+- noise that reduces exact text or A5 readability;
+- noise to disguise weak generation.
+
+If texture becomes one of the first things noticed, it is too strong.
 
 ## Replaceable photo slots
 
@@ -148,7 +207,7 @@ Older QA exports that call the first build `FIGMA_COMPLETE` are historical evide
 - `REPRESENTATIVE_VISUAL_PROXY_READY = NO` for Hero
 - `IDENTITY_ANCHOR_PASS = NO`
 - `REFERENCE_DELTA_PASS = NO / REWORK REQUIRED`
-- `HUMAN_FEEDBACK_REVIEWED = YES` — systemic lessons are being written back to root/page authority
+- `HUMAN_FEEDBACK_REVIEWED = YES` — systemic lessons are written back to root/page/polish authority
 - `FIGMA_DESIGN_COMPLETE = NO`
 - `FINAL_PHOTO_QA_PENDING = YES`
 - `PRINT_READY = NO`
@@ -162,10 +221,11 @@ Use targeted revision:
 2. fix `Shogo & Shiori` visible display lockup while preserving exact spelling source;
 3. install representative two-person Hero visual proxy;
 4. fix `2026` badge silhouette/ecology;
-5. loosen/restore Feature 1/2/3 editorial rhythm;
+5. loosen/restore Feature 1/2/3 editorial rhythm and measured irregularity;
 6. strengthen Date ticket and bottom story vessel;
-7. capture a fresh Figma screenshot;
-8. run direct Reference Delta again;
-9. only then reconsider `FIGMA_DESIGN_COMPLETE`.
+7. add restrained local tactile print character where appropriate;
+8. capture a fresh Figma screenshot;
+9. run direct Reference Delta again;
+10. only then reconsider `FIGMA_DESIGN_COMPLETE`.
 
 `STRUCTURE READY ≠ VISUAL COMPLETE.`
