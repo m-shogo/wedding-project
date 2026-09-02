@@ -12,10 +12,10 @@
     <div>
       <p class="eyebrow">WEDDING MOVIE / BEGINNER MANUAL</p>
       <h1>DaVinci 結婚式オープニング<br class="sp-only" />制作マニュアル</h1>
-      <p class="lead">Mrs. GREEN APPLE「StaRt」を使った約2分のオープニングムービーを、<strong>1操作ずつ</strong>進めるための専用ガイド。</p>
+      <p class="lead">Mrs. GREEN APPLE「StaRt」を<strong>2番後の間奏まで</strong>使い、旅行テーマでオープニングムービーを作る専用ガイド。会話で決めたことだけを残し、1操作ずつ進める。</p>
     </div>
     <div class="progress-card" aria-live="polite">
-      <span>この章の進み具合</span>
+      <span>操作編の進み具合</span>
       <strong id="progressText">0 / 4</strong>
       <div class="progress-track"><div id="progressBar" class="progress-bar"></div></div>
     </div>
@@ -25,19 +25,107 @@
     <aside class="toc" aria-label="目次">
       <div class="toc-inner">
         <p class="toc-title">目次</p>
+        <a href="#planning">制作方針・候補</a>
+        <a href="#ai-davinci">AI × DaVinci</a>
+        <a href="#prompts">生成AIコピペ</a>
         <a class="active" href="#chapter-01">01 起動〜音楽を取り込む</a>
-        <span class="coming">02 音楽をタイムラインへ</span>
-        <span class="coming">03 写真を入れる</span>
-        <span class="coming">04 写真を動かす</span>
-        <span class="coming">05 歌詞を入れる</span>
-        <span class="coming">06 歌詞以外の文字</span>
-        <span class="coming">07 2分に仕上げる</span>
-        <span class="coming">08 書き出す</span>
+        <span class="coming">次の操作は会話で進んだら追加</span>
       </div>
     </aside>
 
-    <article class="content" id="chapter-01">
-      <section class="chapter-head">
+    <article class="content">
+      <section class="chapter-head" id="planning">
+        <p class="chapter-no">CURRENT PLAN</p>
+        <h2>今回のオープニングムービー</h2>
+        <div class="fact-grid">
+          <div><span>曲</span><strong>Mrs. GREEN APPLE「StaRt」</strong></div>
+          <div><span>使用範囲</span><strong>2番後の間奏まで（約2:08目安）</strong></div>
+          <div><span>世界観</span><strong>旅行風で統一</strong></div>
+          <div><span>制作</span><strong>実素材 + DaVinci + AI補助</strong></div>
+        </div>
+        <p>映画風など別テーマには広げない。人物の生成動画を作るのではなく、AIは<strong>素材・構成・テンプレート・自動化</strong>を助ける役として使う。</p>
+      </section>
+
+      <section class="idea-card">
+        <p class="chapter-no">OPENING IDEAS</p>
+        <h2>「StaRt」を“旅の出発”として見せる候補</h2>
+        <p>まだ確定しない。面白い候補として残して、曲に合わせて選ぶ。</p>
+        <div class="idea-grid">
+          <article><strong>搭乗案内</strong><span>WELCOME ABOARD → DESTINATION: WEDDING → StaRt</span></article>
+          <article><strong>出発スタンプ</strong><span>パスポート / 航空券に「StaRt」を出発印のように押す</span></article>
+          <article><strong>地図ルート</strong><span>ルート線と飛行機が目的地へ進み、到着点で「StaRt」</span></article>
+          <article><strong>フラップボード</strong><span>空港のパタパタ表示が切り替わって最後に「StaRt」</span></article>
+        </div>
+        <div class="candidate-list">
+          <strong>ようこそ系テキスト候補</strong>
+          <span>WELCOME ABOARD</span>
+          <span>WELCOME TO OUR WEDDING</span>
+          <span>DESTINATION: WEDDING</span>
+          <span>FLIGHT 1024</span>
+          <span>PASSENGERS: ALL OF YOU</span>
+          <span>OUR JOURNEY STARTS HERE</span>
+        </div>
+      </section>
+
+      <section class="idea-card" id="ai-davinci">
+        <p class="chapter-no">AI × DAVINCI</p>
+        <h2>生成動画AIを使わずにできること</h2>
+        <p>完成動画をAIに丸投げせず、<strong>AIに部品や設計を作らせて、DaVinciで自分が仕上げる</strong>。今回はこちらを優先する。</p>
+
+        <div class="method-list">
+          <article>
+            <div class="method-no">01</div>
+            <div><h3>AI → SVG / PNG素材 → DaVinciで動かす</h3><p>搭乗案内、スタンプ、地図、飛行機、ルート線、チケットなどをAIで作り、DaVinciのZoom / Position / Keyframeで動かす。初心者向けで失敗しにくい。</p></div>
+          </article>
+          <article>
+            <div class="method-no">02</div>
+            <div><h3>AI → Fusionテンプレート（.setting）</h3><p>AIに「StaRtタイトル」「カウントダウン」「搭乗案内」などのFusion構成を作らせる方法。FusionのマクロはTitle / Generator / Effect / TransitionとしてEditページに保存できる。</p></div>
+          </article>
+          <article>
+            <div class="method-no">03</div>
+            <div><h3>.setting をまとめて .drfx にする</h3><p>自作テンプレートを1つのインストール用ファイルにまとめられる。ダブルクリックでDaVinciへ追加できるので、今回用の「Wedding Travel Pack」にすることも可能。</p></div>
+          </article>
+          <article>
+            <div class="method-no">04</div>
+            <div><h3>AI → SRT → テキストを時間どおり配置</h3><p>決めた秒数とテキストからAIにSRTを作らせ、DaVinciへ読み込める。字幕として素早くタイミング確認する用途に向く。凝った歌詞演出は最終的にText+ / Fusionへ置き換える。</p></div>
+          </article>
+          <article>
+            <div class="method-no">05</div>
+            <div><h3>AI → JSON構成表 → Python / Lua → DaVinci</h3><p><strong>JSONをDaVinciが直接読み込むわけではない。</strong>「0:12でStaRt表示」「1:59からカウントダウン」などをJSONで管理し、DaVinciのスクリプトAPIを使うPython / Luaがその指示を読む。写真配置、マーカー、テキストなどの自動化候補。</p></div>
+          </article>
+          <article>
+            <div class="method-no">06</div>
+            <div><h3>DaVinci 21の既存テンプレートを使う</h3><p>最初からあるFusionタイトルをドラッグし、文字・色・速度だけ変更する方法も使う。ゼロからFusionを組む必要がないものは既存テンプレート優先。</p></div>
+          </article>
+        </div>
+
+        <div class="note">
+          <strong>今回のおすすめ順：</strong> まず「SVG/PNG + Editページ」→ 必要な演出だけ「Fusionテンプレート」→ 同じ作業が増えたら「JSON + Script」。最初から自動化を目的にしない。
+        </div>
+      </section>
+
+      <section class="idea-card" id="prompts">
+        <p class="chapter-no">COPY & PASTE</p>
+        <h2>生成AIへそのまま渡すプロンプト</h2>
+        <p>ここにプロンプトを集約する。チャット本文には大量に並べない。</p>
+
+        <div class="prompt-card">
+          <div class="prompt-head"><div><span>IMAGE / DESIGN</span><strong>旅行風「StaRt」タイトル素材</strong></div><button class="copy-button" data-copy-target="prompt-start">コピー</button></div>
+          <pre id="prompt-start">結婚式のオープニングムービーで使う「StaRt」のタイトル演出用ビジュアル素材を作ってください。テーマは旅行・出発・搭乗開始。明るく爽やかで、これから楽しい旅が始まるワクワク感を最優先にしてください。空港の搭乗案内、飛行機、旅のルート線、出発スタンプ、航空券などから必要な要素だけを洗練して組み合わせてください。人物は生成しません。実際の新郎新婦の写真を後からDaVinci Resolveで重ねます。文字を後から編集できるよう、「StaRt」そのものを画像に焼き込む案と、文字なし背景素材の案を分けて提案してください。16:9、1920x1080を前提。テンプレート感・AIっぽい過剰な装飾・映画予告風の重い雰囲気は避け、旅行雑誌や航空会社の明るいトラベルグラフィックのような方向にしてください。</pre>
+        </div>
+
+        <div class="prompt-card">
+          <div class="prompt-head"><div><span>DAVINCI / FUSION</span><strong>Fusionテンプレート生成依頼</strong></div><button class="copy-button" data-copy-target="prompt-fusion">コピー</button></div>
+          <pre id="prompt-fusion">DaVinci Resolve 21のFusionで使える、結婚式オープニングムービー用の再利用可能なタイトルテンプレートを設計してください。テーマは旅行・出発。メイン文字は「StaRt」で、WELCOME ABOARD、DESTINATION: WEDDING、日付などへ差し替えられる構造にしてください。初心者がEditページのInspectorだけで Text / Font / Size / Color / Animation Speed を調整できるよう、必要なパラメータだけ公開してください。過剰な3Dや重いプラグインは使わず、標準ノード中心。最終的にFusion Macro / .setting として保存し、Edit > Titlesから使える構成を優先してください。必要ならノード構成、キーフレーム、保存手順までセットで出してください。実在しないノードやパラメータ名を作らず、DaVinci Resolve 21で確認可能な標準機能のみ使用してください。</pre>
+        </div>
+
+        <div class="prompt-card">
+          <div class="prompt-head"><div><span>AUTOMATION</span><strong>JSON構成表 + DaVinciスクリプト依頼</strong></div><button class="copy-button" data-copy-target="prompt-json">コピー</button></div>
+          <pre id="prompt-json">DaVinci Resolveで結婚式オープニングムービーを組むための補助ツールを設計してください。まず、人間が編集しやすいJSONに、timeStart / timeEnd / type / text / asset / note を持つ構成表を定義してください。そのJSONを読み、DaVinci Resolveの公式スクリプトAPIを使って可能な範囲でタイムライン作成、マーカー配置、素材配置などを自動化するPythonまたはLuaスクリプトを作ってください。JSONをDaVinciへ直接importできるとは仮定しないでください。対応APIがない操作は無理に自動化せず「人間がDaVinci上で行う操作」と明記してください。今回の動画は1920x1080、旅行テーマ、Mrs. GREEN APPLE「StaRt」を2番後の間奏まで使う予定です。</pre>
+        </div>
+      </section>
+
+      <section class="chapter-head" id="chapter-01">
         <p class="chapter-no">CHAPTER 01</p>
         <h2>起動したところから、音楽を取り込むまで</h2>
         <p>ここではまだ動画を作り込みません。<strong>「プロジェクトを作る → Edit画面を開く → StaRtをDaVinciに入れる」</strong>だけです。</p>
@@ -49,7 +137,8 @@
           <li>一度にたくさん覚えない。</li>
           <li>初めて出てくる言葉は、その場で意味を書く。</li>
           <li>「どこを押すか」が分かる操作図を付ける。</li>
-          <li>会話で進んだところまで、このHTMLに追記していく。</li>
+          <li>会話で実際に決めたこと・進んだことだけ追記する。</li>
+          <li>PCで読みやすいことを最優先。SPは普通に読めれば十分。</li>
         </ul>
       </section>
 
@@ -120,7 +209,7 @@
         <span>STOP HERE</span>
         <h3>ここで一度止める</h3>
         <p>まだ音楽を下に置かない。写真も入れない。歌詞も作らない。</p>
-        <p>次は、<strong>Media Poolに入ったStaRtを「タイムライン」に置いて、再生するところ</strong>から進めます。</p>
+        <p>次の操作は、会話で実際に進めるタイミングで追加する。</p>
       </section>
 
       <section class="glossary">
@@ -129,13 +218,15 @@
           <div><dt>Project</dt><dd>今回作る動画の作業ファイル一式。</dd></div>
           <div><dt>Edit</dt><dd>写真・動画・音楽・文字を並べて編集するメイン画面。</dd></div>
           <div><dt>Media Pool</dt><dd>使う素材を置いておく場所。今は「素材置き場」でOK。</dd></div>
+          <div><dt>.setting</dt><dd>Fusionのマクロやテンプレートで使われる設定ファイル。</dd></div>
+          <div><dt>.drfx</dt><dd>Fusionテンプレートをまとめてインストールできるパッケージ。</dd></div>
         </dl>
       </section>
     </article>
   </main>
 
   <footer>
-    <p>Wedding Opening Manual — 会話しながら育てる初心者向けDaVinci Resolveガイド</p>
+    <p>Wedding Opening Manual — 実際の制作会話から必要なことだけ育てるDaVinci Resolveガイド</p>
   </footer>
 
   <script src="./app.js"></script>
