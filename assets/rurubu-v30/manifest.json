@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "project": "Rurubu WEDDING V30",
   "version": "V30",
   "status": "CURRENT_FINAL_PRODUCTION",
@@ -22,76 +22,45 @@
     "workflow": [
       "review the page visual master",
       "extract page-specific visual grammar",
+      "explicitly identify the page background system",
+      "explicitly identify the page frame/vessel system",
       "lock visual authority in the page manifest",
       "compare production work directly against the visual master",
       "only after visual fidelity passes, perform technical/editability QA"
     ],
+    "requiredPageManifestSections": [
+      "canonicalFacts when applicable",
+      "visualMaster",
+      "visualAuthority.backgroundSystem",
+      "visualAuthority.frameSystem",
+      "photoHierarchy",
+      "composition",
+      "typographyBehavior",
+      "editableReconstructionPolicy",
+      "hardRejects",
+      "qa"
+    ],
+    "backgroundPolicy": "The visible background/environment is a first-class design asset. Do not silently reduce it to a flat fill, generic gradient, or accidental content of a replaceable photograph. When the reference relies on environmental art, texture, map, sky, paper field, destination scene, pattern or illustrated setting, record it explicitly and prepare/generate it as an independent production layer when needed.",
+    "framePolicy": "Outer page frames, photo frames, tickets, label vessels, ribbons, stamps, clouds, boxes and other page-specific editorial containers are first-class visual-authority elements. Do not substitute generic rounded rectangles or plain Figma strokes when doing so weakens the visual master.",
     "figmaPolicy": "Figma is the layered compositor, not the source of magazine personality.",
     "wholePagePolicy": "Whole-page reference images are art-direction masters; final editable production remains layered with replaceable photography and native factual copy.",
     "doNot": [
       "redesign a page from generic text-only Rurubu rules when a page visual master exists",
+      "omit the reference background or frames because they look decorative",
+      "replace page-specific frames with generic UI cards",
       "treat generated factual text as authoritative",
       "let editability requirements weaken the expressive masthead/title art",
       "certify a page on technical QA before 3-second visual-fidelity QA passes"
     ]
   },
   "pages": [
-    {
-      "page": "P01",
-      "role": "COVER",
-      "visualMaster": "assets/rurubu-v30/p01/P01.png",
-      "manifest": "assets/rurubu-v30/p01/manifest.json",
-      "visualReview": "LOCKED"
-    },
-    {
-      "page": "P02",
-      "role": "PROFILE + Q1/Q2",
-      "visualMaster": "assets/rurubu-v30/p02/P02.png",
-      "manifest": "assets/rurubu-v30/p02/manifest.json",
-      "visualReview": "AWAITING_CHAT_REVIEW"
-    },
-    {
-      "page": "P03",
-      "role": "OUR STORY + Q3/Q4",
-      "visualMaster": "assets/rurubu-v30/p03/P03.png",
-      "manifest": "assets/rurubu-v30/p03/manifest.json",
-      "visualReview": "AWAITING_CHAT_REVIEW"
-    },
-    {
-      "page": "P04",
-      "role": "ALL TRAVEL MEMORIES / OUR JOURNEY",
-      "visualMaster": "assets/rurubu-v30/p04/P04.png",
-      "manifest": "assets/rurubu-v30/p04/manifest.json",
-      "visualReview": "AWAITING_CHAT_REVIEW"
-    },
-    {
-      "page": "P05",
-      "role": "FRIENDS MEMORIES",
-      "visualMaster": "assets/rurubu-v30/p05/P05.png",
-      "manifest": "assets/rurubu-v30/p05/manifest.json",
-      "visualReview": "AWAITING_CHAT_REVIEW"
-    },
-    {
-      "page": "P06",
-      "role": "REAL LIFE / FAVORITES / BEST SHOTS + Q5/Q6",
-      "visualMaster": "assets/rurubu-v30/p06/P06.png",
-      "manifest": "assets/rurubu-v30/p06/manifest.json",
-      "visualReview": "AWAITING_CHAT_REVIEW"
-    },
-    {
-      "page": "P07",
-      "role": "CLOSING MESSAGE / THANK YOU",
-      "visualMaster": "assets/rurubu-v30/p07/P07.png",
-      "manifest": "assets/rurubu-v30/p07/manifest.json",
-      "visualReview": "AWAITING_CHAT_REVIEW"
-    },
-    {
-      "page": "P08",
-      "role": "MAGAZINE BACK COVER",
-      "visualMaster": "assets/rurubu-v30/p08/P08.png",
-      "manifest": "assets/rurubu-v30/p08/manifest.json",
-      "visualReview": "AWAITING_CHAT_REVIEW",
-      "fixedBarcodeDigits": "2026102400000"
-    }
+    {"page":"P01","role":"COVER","visualMaster":"assets/rurubu-v30/p01/P01.png","manifest":"assets/rurubu-v30/p01/manifest.json","visualReview":"LOCKED"},
+    {"page":"P02","role":"PROFILE + Q1/Q2","visualMaster":"assets/rurubu-v30/p02/P02.png","manifest":"assets/rurubu-v30/p02/manifest.json","visualReview":"AWAITING_CHAT_REVIEW"},
+    {"page":"P03","role":"OUR STORY + Q3/Q4","visualMaster":"assets/rurubu-v30/p03/P03.png","manifest":"assets/rurubu-v30/p03/manifest.json","visualReview":"AWAITING_CHAT_REVIEW"},
+    {"page":"P04","role":"ALL TRAVEL MEMORIES / OUR JOURNEY","visualMaster":"assets/rurubu-v30/p04/P04.png","manifest":"assets/rurubu-v30/p04/manifest.json","visualReview":"AWAITING_CHAT_REVIEW"},
+    {"page":"P05","role":"FRIENDS MEMORIES","visualMaster":"assets/rurubu-v30/p05/P05.png","manifest":"assets/rurubu-v30/p05/manifest.json","visualReview":"AWAITING_CHAT_REVIEW"},
+    {"page":"P06","role":"REAL LIFE / FAVORITES / BEST SHOTS + Q5/Q6","visualMaster":"assets/rurubu-v30/p06/P06.png","manifest":"assets/rurubu-v30/p06/manifest.json","visualReview":"AWAITING_CHAT_REVIEW"},
+    {"page":"P07","role":"CLOSING MESSAGE / THANK YOU","visualMaster":"assets/rurubu-v30/p07/P07.png","manifest":"assets/rurubu-v30/p07/manifest.json","visualReview":"AWAITING_CHAT_REVIEW"},
+    {"page":"P08","role":"MAGAZINE BACK COVER","visualMaster":"assets/rurubu-v30/p08/P08.png","manifest":"assets/rurubu-v30/p08/manifest.json","visualReview":"AWAITING_CHAT_REVIEW","fixedBarcodeDigits":"2026102400000"}
   ]
 }
