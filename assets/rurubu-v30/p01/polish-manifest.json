@@ -1,225 +1,142 @@
 {
-  "schemaVersion": 5,
+  "schemaVersion": 6,
   "project": "Rurubu WEDDING V30",
   "page": "P01",
-  "status": "CURRENT_P01_PROMOTED_WITH_CARRYOVER_PROXY_AND_MODULE_DEBT",
+  "status": "CURRENT_P01_MICRO_VISUAL_POLISH_DEBT_OPEN",
   "inherits": [
     "assets/rurubu-v30/manifest.json",
     "assets/rurubu-v30/visual-polish-manifest.json",
     "assets/rurubu-v30/p01/manifest.json"
   ],
-  "purpose": "Authoritative P01 execution override after direct rereview of P01.png and owner feedback about contaminated photo proxies, stale carried-over parts, and fixed display modules that should be generated as complete objects.",
+  "purpose": "Current P01 execution authority after final REWORK plus owner review of the actual current screenshot. Major structural/proxy/carry-over work is complete, but minor visual debt is reopened for Feature-shell interior opacity/edge safety and top-left ring-cluster fidelity before P02 production.",
   "directVisualMasterRereview": {
     "date": "2026-09-02",
     "source": "assets/rurubu-v30/p01/P01.png",
-    "reviewedDimensionsPx": {"width": 1055, "height": 1491},
     "status": "COMPLETE",
-    "confirmedThreeSecondRead": [
-      "るるぶ + huge WEDDING",
+    "threeSecondRead": [
+      "るるぶ + WEDDING",
       "two-person Hero",
       "Shogo & Shiori ribbon",
       "2026 year cluster",
-      "date ticket + Feature 1/2/3 stack",
-      "bottom story hook",
+      "Date + Feature 1/2/3",
+      "Bottom Story",
       "OUR JOURNEY + PAGE 01"
-    ],
-    "confirmedObjectBoundaryRule": "The Visual Master is used to identify authored object boundaries and relationships. It must never be cropped into active photo slots."
-  },
-  "knownFigmaCleanup": {
-    "temporaryDuplicateNode": "3708:2",
-    "temporaryDuplicateName": "V30 P01 / CARRYOVER REWORK / TEMP",
-    "status": "DELETED_2026-09-02",
-    "mustPreserve": ["P01 CURRENT 3535:7", "real P02 frame 3535:9"],
-    "hardRule": "Delete only 3708:2. Do not delete, overwrite, move or repurpose 3535:9."
-  },
-  "currentInterpretation": {
-    "promotion": "VALID_BEST_CURRENT",
-    "figmaDesignComplete": true,
-    "finalReferenceDelta": "PASS_IMPROVED_2026-09-02",
-    "finalPhotoQaPending": true,
-    "openDebt": [],
-    "rule": "P01 CURRENT 3535:7 is the completed final-rework state. Keep clean standalone photos replaceable; final owner photography may replace the proxies without changing the accepted display modules."
-  },
-  "fixedDisplayModules": {
-    "globalRule": "Each module below is one independently movable editorial object. Its internal fixed text, number, background/vessel, icon and attached micro-decoration may be baked together. Visible fixed text does not need to be editable in Figma. Replaceable photographs never belong inside these generated modules.",
-    "targets": [
-      {
-        "id": "P01_MASTHEAD_RURUBU",
-        "exactVisibleText": ["るるぶ"],
-        "bundleTogether": ["three-block masthead lettering", "dimensional outlines/depth intrinsic to masthead"],
-        "mustRemainSeparate": ["top-left rings/sparkles", "top-center plumeria/foliage when independent overlap is useful"]
-      },
-      {
-        "id": "P01_WEDDING_TITLE",
-        "exactVisibleText": ["WEDDING"],
-        "bundleTogether": ["large hot-pink title lettering", "heart inside title", "layered white/yellow/dark outline and print depth"]
-      },
-      {
-        "id": "P01_NAMES_RIBBON_MODULE",
-        "exactVisibleText": ["Shogo & Shiori"],
-        "bundleTogether": ["hot-pink script lettering", "yellow ribbon", "blue ribbon return/backing", "small attached heart/accent"],
-        "nativeFigmaDuplicateRequired": false
-      },
-      {
-        "id": "P01_YEAR_2026_MODULE",
-        "exactVisibleText": ["2026"],
-        "bundleTogether": ["2026", "yellow cloud/burst backing", "outline/depth", "pink heart", "blue airplane", "dotted heart/route when visually attached to the year cluster"],
-        "rule": "Prefer one complete year cluster. Split the route/airplane only if independent overlap is required to match the Visual Master."
-      },
-      {
-        "id": "P01_DATE_TICKET_MODULE",
-        "exactVisibleText": ["WEDDING DATE", "2026.10.24", "SAT"],
-        "visualMasterReferenceCopy": ["Date", "2026.10.24", "Sat."],
-        "copyPriorityRule": "The owner's explicit current wording WEDDING DATE / 2026.10.24 / SAT overrides the Visual Master reference wording for final visible copy.",
-        "bundleTogether": ["ticket/postal paper", "all fixed date text", "postal/cancellation lines", "small fixed flower/accent", "printed outline/shadow"],
-        "replaceablePhotoInside": false
-      },
-      {
-        "id": "P01_FEATURE_1_DISPLAY_MODULE",
-        "exactCoreText": ["1", "ふたりのプロフィール"],
-        "visualMasterOptionalLabel": "特集",
-        "bundleTogether": ["number badge", "number", "fixed heading", "camera icon", "white/pink vessel", "local fixed accents"],
-        "mustRemainSeparate": ["Feature 1 replaceable photo", "Feature 1 photo mask/frame"]
-      },
-      {
-        "id": "P01_FEATURE_2_DISPLAY_MODULE",
-        "exactCoreText": ["2", "旅の思い出"],
-        "visualMasterOptionalLabel": "特集",
-        "bundleTogether": ["number badge", "number", "fixed heading", "airplane + dotted route iconography", "white/blue vessel", "local fixed accents"],
-        "mustRemainSeparate": ["Feature 2 replaceable photo", "Feature 2 photo mask/frame"]
-      },
-      {
-        "id": "P01_FEATURE_3_DISPLAY_MODULE",
-        "exactCoreText": ["3", "家族と友達"],
-        "visualMasterOptionalLabel": "特集",
-        "factSafety": "This is P01 cover teaser wording only and must never change P05's FRIENDS-only page role.",
-        "bundleTogether": ["number badge", "number", "fixed heading", "flower/leaf accents", "white/green vessel", "local fixed accents"],
-        "mustRemainSeparate": ["Feature 3 replaceable photo", "Feature 3 photo mask/frame"]
-      },
-      {
-        "id": "P01_BOTTOM_STORY_MODULE",
-        "exactVisibleText": ["ふたりの“楽しい!”を詰めこんだ", "わたしたちの旅ストーリー"],
-        "bundleTogether": ["irregular white cloud/paper vessel", "both fixed text lines", "pink heart", "yellow sparkles", "local outline/shadow"],
-        "mustRemainSeparate": ["large bottom floral cluster"]
-      },
-      {
-        "id": "P01_JOURNEY_STAMP_MODULE",
-        "exactVisibleText": ["OUR JOURNEY", "TAKE A TRIP"],
-        "bundleTogether": ["circular stamp", "fixed lettering", "internal tropical iconography", "postmark/cancellation lines"]
-      },
-      {
-        "id": "P01_PAGE_BADGE_MODULE",
-        "exactVisibleText": ["PAGE", "01"],
-        "bundleTogether": ["badge backing", "PAGE", "01", "small attached heart/accent"]
-      }
     ]
   },
-  "standaloneDecorativeAssets": [
-    "P01_TOP_LEFT_RING_SPARKLE_CLUSTER",
-    "P01_LEFT_TROPICAL_CLUSTER",
-    "P01_RIGHT_DESTINATION_CLUSTER including chapel/sea/palms/flowers",
-    "P01_BOTTOM_FLORAL_CLUSTER",
-    "P01_AIRMAIL_BORDER"
+  "currentFigma": {
+    "fileKey": "bfM0d4c9dCeBv5pCkJ3TNM",
+    "currentNode": "3535:7",
+    "realP02Node": "3535:9",
+    "deletedTempNode": "3708:2",
+    "hiddenOldLayerCountReported": 0,
+    "duplicateSameJobLayerCountReported": 0
+  },
+  "priorFinalRework": {
+    "commit": "c64b3c66d3a0579f704222eea980b193005d7dbd",
+    "acceptedAsBaseline": true,
+    "keep": [
+      "clean standalone Hero/Feature proxies",
+      "bundled Date/Feature/Bottom Story/Names/2026/Journey/Page modules",
+      "accepted WEDDING",
+      "tropical/destination clusters",
+      "airmail border",
+      "bottom floral"
+    ],
+    "importantRule": "Do not roll back to FIRST BUILD and do not do another whole-page REWORK."
+  },
+  "fixedDisplayModules": [
+    {"id": "P01_MASTHEAD_RURUBU", "exactVisibleText": ["るるぶ"]},
+    {"id": "P01_WEDDING_TITLE", "exactVisibleText": ["WEDDING"]},
+    {"id": "P01_NAMES_RIBBON_MODULE", "exactVisibleText": ["Shogo & Shiori"]},
+    {"id": "P01_YEAR_2026_MODULE", "exactVisibleText": ["2026"]},
+    {"id": "P01_DATE_TICKET_MODULE", "exactVisibleText": ["WEDDING DATE", "2026.10.24", "SAT"]},
+    {"id": "P01_FEATURE_1_DISPLAY_MODULE", "exactVisibleText": ["1", "ふたりのプロフィール"], "replaceablePhotoSeparate": true},
+    {"id": "P01_FEATURE_2_DISPLAY_MODULE", "exactVisibleText": ["2", "旅の思い出"], "replaceablePhotoSeparate": true},
+    {"id": "P01_FEATURE_3_DISPLAY_MODULE", "exactVisibleText": ["3", "家族と友達"], "replaceablePhotoSeparate": true},
+    {"id": "P01_BOTTOM_STORY_MODULE", "exactVisibleText": ["ふたりの“楽しい!”を詰めこんだ", "わたしたちの旅ストーリー"]},
+    {"id": "P01_JOURNEY_STAMP_MODULE", "exactVisibleText": ["OUR JOURNEY", "TAKE A TRIP"]},
+    {"id": "P01_PAGE_BADGE_MODULE", "exactVisibleText": ["PAGE", "01"]}
   ],
   "photoProxyPolicy": {
     "status": "CLEAN_STANDALONE_ONLY",
-    "hardRule": "No crop from P01.png or any page screenshot may be used as an active Hero/Feature photo proxy.",
-    "historicalCropFiles": [
-      "V30_P01_HERO_VISUAL_PROXY_FROM_MASTER_CALIBRATION.png",
-      "V30_P01_FEATURE_1_VISUAL_PROXY_FROM_MASTER_CALIBRATION.png",
-      "V30_P01_FEATURE_2_VISUAL_PROXY_FROM_MASTER_CALIBRATION.png",
-      "V30_P01_FEATURE_3_VISUAL_PROXY_FROM_MASTER_CALIBRATION.png"
-    ],
-    "historicalCropStatus": "QA_HISTORY_ONLY_DO_NOT_USE_ACTIVE",
+    "hardRule": "P01.png/page screenshots must never be used as active photo fills.",
     "roles": {
-      "P01_PHOTO_HERO_MASK": "clean standalone two-person couple/wedding photo; large face/upper-body mass; no page decoration",
-      "P01_FEATURE_1_PHOTO": "clean standalone two-person/couple profile photo",
-      "P01_FEATURE_2_PHOTO": "clean standalone travel/place landscape photo",
-      "P01_FEATURE_3_PHOTO": "clean standalone group/friends photo, 3+ people preferred"
-    },
-    "hardRejects": ["page border baked into photo", "title/badge/ticket/stamp/flower/route copied from P01 layout", "photo proxy whose decoration duplicates another page asset"],
-    "referenceDeltaRule": "Prior crop-based Reference Delta evidence is historical only. Re-run after clean standalone proxies are active."
-  },
-  "featureStackIrregularityTargets": {
-    "sharedRule": "Feature 1/2/3 are related but intentionally unequal editorial modules, never one equal UI-card component.",
-    "visualMasterEvidence": {
-      "feature1ReferencePx": {"width": 310, "height": 180},
-      "feature2ReferencePx": {"width": 330, "height": 190},
-      "feature3ReferencePx": {"width": 320, "height": 180},
-      "photoSlotsAreNotExactlyEqual": true
-    },
-    "preserveDifferencesIn": ["module size", "photo-slot size", "vertical spacing", "icon placement", "accent placement", "local overlap", "heading treatment"],
-    "hardRejects": ["equal heights", "equal thumbnail dimensions for reuse convenience", "identical padding", "identical icon coordinates", "same rounded-card component", "formulaic/random rotation"]
-  },
-  "carryOverAudit": {
-    "problemType": "VISIBLE_INHERITED_PRODUCTION_ART_DEBT_NOT_HIDDEN_LAYER_DEBT",
-    "decisions": [
-      {"asset": "P01_WEDDING_TITLE", "decision": "KEEP_REQUALIFIED"},
-      {"asset": "P01_RIGHT_DESTINATION_CLUSTER", "decision": "KEEP_REQUALIFIED"},
-      {"asset": "P01_LEFT_TROPICAL_CLUSTER", "decision": "KEEP_REQUALIFIED"},
-      {"asset": "P01_AIRMAIL_BORDER", "decision": "KEEP_REQUALIFIED"},
-      {"asset": "P01_BOTTOM_FLORAL_CLUSTER", "decision": "KEEP_REQUALIFIED_AFTER_STORY_REWORK"},
-      {"asset": "P01_NAMES_RIBBON", "decision": "REPLACED_WITH_COMPLETE_NAMES_RIBBON_MODULE"},
-      {"asset": "P01_DATE_TICKET", "decision": "REPLACED_WITH_BUNDLED_DISPLAY_MODULE"},
-      {"asset": "P01_FEATURE_1_VESSEL", "decision": "REPLACED_WITH_BUNDLED_DISPLAY_MODULE"},
-      {"asset": "P01_FEATURE_2_VESSEL", "decision": "REPLACED_WITH_BUNDLED_DISPLAY_MODULE"},
-      {"asset": "P01_FEATURE_3_VESSEL", "decision": "REPLACED_WITH_BUNDLED_DISPLAY_MODULE"},
-      {"asset": "P01_BOTTOM_STORY_VESSEL", "decision": "REPLACED_WITH_BUNDLED_DISPLAY_MODULE"},
-      {"asset": "P01_JOURNEY_STAMP", "decision": "REPLACED_WITH_BUNDLED_DISPLAY_MODULE"},
-      {"asset": "P01_PAGE_BADGE", "decision": "REPLACED_WITH_BUNDLED_DISPLAY_MODULE"}
-    ],
-    "completionRule": "Debt closes only after every material inherited visible asset is requalified/reworked/replaced and all contaminated Visual-Master-crop proxies are removed from active QA."
-  },
-  "tactileFinish": {
-    "priority": ["masthead/title depth", "names ribbon", "date ticket", "Feature modules", "journey stamp", "bottom story"],
-    "allowed": ["subtle paper/matte feel", "slight printed-edge irregularity", "restrained local shadow/depth"],
-    "forbidden": ["global heavy grain", "dirty vintage overlay", "texture on faces", "texture reducing text readability"]
-  },
-  "finalReworkExecution20260902": {
-    "figma": {
-      "fileKey": "bfM0d4c9dCeBv5pCkJ3TNM",
-      "page": "V30_FINAL_PRODUCTION",
-      "currentNode": "3535:7",
-      "realP02Node": "3535:9",
-      "deletedTempNode": "3708:2",
-      "hiddenOldLayerCount": 0,
-      "duplicateSameJobProductionLayerCount": 0,
-      "obsoleteActiveFillCount": 0,
-      "photoSwapPass": true
-    },
-    "productionAssets": [
-      {"file": "final-rework/V30_P01_HERO_CLEAN_STANDALONE_PROXY.png", "driveId": "1ChLnV2XPY5WcEontEUlf2tjPnAKZqphi"},
-      {"file": "final-rework/V30_P01_FEATURE_1_CLEAN_STANDALONE_PROXY.png", "driveId": "1ZG-J3zpp-hk1Pa3JKiUjXs42gAyJdQ_d"},
-      {"file": "final-rework/V30_P01_FEATURE_2_CLEAN_STANDALONE_PROXY.png", "driveId": "1DQWLfhnnrz6sNEDcJY72Aa0QLWRIQe9_"},
-      {"file": "final-rework/V30_P01_FEATURE_3_CLEAN_STANDALONE_PROXY.png", "driveId": "1kgAhlBWWOC3a3QBv-JNtOH6Xjk6j-Kg6"},
-      {"file": "final-rework/V30_P01_DATE_MODULE_FINAL_REWORK_RGBA.png", "driveId": "1Oaz-wSK0I1KlNFVrpVWM-l-LC-sOe7V0"},
-      {"file": "final-rework/V30_P01_FEATURE_1_MODULE_FINAL_REWORK_RGBA.png", "driveId": "1nNmjyhy_xRjuuYhq5XRrzw0zjQJO3_J1"},
-      {"file": "final-rework/V30_P01_FEATURE_2_MODULE_FINAL_REWORK_RGBA.png", "driveId": "1b7W141RAUkZt1fptkfnfZiJYw1rous9m"},
-      {"file": "final-rework/V30_P01_FEATURE_3_MODULE_FINAL_REWORK_RGBA.png", "driveId": "1OYCebe95OGvgHMIACrcbDKPFfePSO_YX"},
-      {"file": "final-rework/V30_P01_BOTTOM_STORY_MODULE_FINAL_REWORK_RGBA.png", "driveId": "10f6QCb7gZvRG6DNimsR8A3rgl1qV4UmY"},
-      {"file": "final-rework/V30_P01_NAMES_MODULE_FINAL_REWORK_RGBA.png", "driveId": "1UPhbEcqhPwVQgVTnqC6Y2P4ogR24wjWz"},
-      {"file": "final-rework/V30_P01_YEAR_2026_MODULE_FINAL_REWORK_RGBA.png", "driveId": "1Oz_bk1wYQdICUwSv-Vwd5mJQ2symD_Rj"},
-      {"file": "final-rework/V30_P01_JOURNEY_MODULE_FINAL_REWORK_RGBA.png", "driveId": "1k8Tza1pXfwV-K3JEjK_MURuR3URahxX4"},
-      {"file": "final-rework/V30_P01_PAGE_01_MODULE_FINAL_REWORK_RGBA.png", "driveId": "11MN7wc836RkLs4_S8AkZ88u8BjGwvHLe"}
-    ],
-    "qa": {
-      "currentBeforeDriveId": "1ECH3-O2Ee2sngPUgxR7QBHPAQWW_54-G",
-      "currentAfterDriveId": "1ZY-SW1WcLEBlB8Ivv0hY_zfJ3dCqTbOS",
-      "a5GrayscaleDriveId": "1f_IAfyrZlW0fYK1CoH5R_tRcfWtGlPgg",
-      "moduleContactSheetDriveId": "1yVYzFQOT_UGMOLoS-JFDLOAue-X4Mg6e",
-      "currentAfterSha256": "80d4c9baa9ff21de3d2c5c43f3ea419b6f022e0d0da5fe2360e87c6e60b4277e",
-      "a5GrayscaleSha256": "7700a932b5fc2ccaf5ce0f52fc57be19b16c9adb286a8d243d60fa934633c904",
-      "results": ["CLEAN_PROXY_PASS", "BUNDLED_DISPLAY_MODULE_PASS", "IDENTITY_ANCHOR_PASS", "VISUAL_CARRYOVER_PASS", "REFERENCE_DELTA_PASS", "PHOTO_SWAP_PASS", "A5_GRAYSCALE_PASS"]
+      "Hero": "clean standalone two-person couple/wedding photo",
+      "Feature1": "clean standalone couple/profile photo",
+      "Feature2": "clean standalone travel/place photo",
+      "Feature3": "clean standalone group/friends photo"
     }
   },
-  "nextCodexBuildPriority": [
-    "replace the four clean standalone layout proxies with owner-approved final photography when supplied; preserve the current masks, complete display modules and accepted composition"
+  "alphaAndMaterialExpectation": {
+    "Feature1": "White/pink paper-vessel interior should read as opaque printed paper; background/Hero must not visibly show through except narrow antialiased edge pixels.",
+    "Feature2": "White/blue paper-vessel interior should read as opaque printed paper; background/Hero must not visibly show through except narrow antialiased edge pixels.",
+    "Feature3": "White/green paper-vessel interior should read as opaque printed paper; background/Hero must not visibly show through except narrow antialiased edge pixels.",
+    "Date": "Ticket body is opaque printed paper, not translucent glass.",
+    "BottomStory": "White cloud/paper vessel is opaque enough to separate copy from Hero/background.",
+    "hardRule": "Actual alpha existence alone is insufficient. Inspect interior alpha and composited appearance."
+  },
+  "ownerReviewReopenedDebt20260902": {
+    "status": "OPEN / BLOCKS_P02_UNTIL_RESOLVED_OR_EXPLICITLY_DEFERRED",
+    "findings": [
+      {
+        "id": "P01_FEATURE_INTERIOR_OPACITY",
+        "severity": "MATERIAL_MINOR",
+        "observation": "Current screenshot makes Feature 1-3 white label/vessel areas look too transparent/washed compared with the Visual Master.",
+        "possibleCause": "Interior alpha may have been weakened during key-background cutout, even though the asset has a valid alpha channel.",
+        "requiredCheck": [
+          "inspect each Feature RGBA alpha channel",
+          "sample representative white/paper interior pixels",
+          "verify intended interior alpha >= 0.95, preferably 1.00",
+          "preview over dark/high-contrast backgrounds",
+          "confirm Hero/background does not show through intended paper"
+        ],
+        "repair": "Fix/regenerate source/cutout alpha for only the affected Feature modules if opacity is wrong. Do not add generic rescue rectangles or reduce whole-module opacity."
+      },
+      {
+        "id": "P01_FEATURE_LEFT_EDGE_SAFETY",
+        "severity": "MINOR",
+        "observation": "Feature number badges/labels sit too close to the left airmail border and read slightly cramped/clipped relative to Visual Master.",
+        "requiredFix": "Adjust only Feature 1-3 local x/scale/visual bounds as needed so badges and headings read intentionally inside the border while preserving unequal rhythm."
+      },
+      {
+        "id": "P01_RING_CLUSTER_FIDELITY",
+        "severity": "MINOR",
+        "observation": "Current top-left ring cluster is visually weaker than Visual Master; gold rings/diamond/sparkle wedding cue lacks saliency.",
+        "requiredFix": "Targeted requalify/regenerate/reposition the ring cluster only if needed. Preserve current masthead and overall title geometry."
+      }
+    ]
+  },
+  "acceptanceState": {
+    "FIGMA_STRUCTURE_READY": "PASS",
+    "CLEAN_PROXY_PASS": "PASS",
+    "BUNDLED_DISPLAY_MODULE_PASS": "PASS_WITH_ALPHA_RECHECK_REQUIRED_FOR_FEATURE_1_3",
+    "IDENTITY_ANCHOR_PASS": "PASS_EXCEPT_RING_SUPPORT_FIDELITY_RECHECK",
+    "VISUAL_CARRYOVER_PASS": "PASS",
+    "REFERENCE_DELTA_PASS": "REOPENED_FOR_MICRO_VISUAL_POLISH",
+    "PHOTO_SWAP_PASS": "PASS",
+    "A5_GRAYSCALE_PASS": "PASS_WITH_LEFT_EDGE_RECHECK",
+    "FIGMA_DESIGN_COMPLETE": false,
+    "FINAL_PHOTO_QA_PENDING": true,
+    "PRINT_READY": false
+  },
+  "nextCodexMicroPolish": [
+    "do not create a new P01 frame; update CURRENT 3535:7 only",
+    "inspect Feature 1/2/3 source alpha for intended paper-vessel interior opacity before changing geometry",
+    "if interior is unintentionally translucent, repair/regenerate only affected module RGBA and replace old LIVE module; remove superseded layer",
+    "tune Feature 1/2/3 left-edge spacing without normalizing their unequal sizes",
+    "requalify top-left ring/diamond/sparkle cluster against P01.png and strengthen only if needed",
+    "capture fresh full-page and A5 screenshots",
+    "run alpha-interior QA, edge-safety QA and fresh Reference Delta",
+    "update this status to complete only after user-visible issues are resolved",
+    "do not touch real P02 3535:9"
   ],
   "doNotDo": [
-    "do not edit P02-P08 while closing P01 debt",
+    "do not start P02 while this micro debt is open unless the user explicitly defers it",
+    "do not rebuild the entire P01 page",
     "do not use P01.png crops as photo proxies",
-    "do not recreate fixed modules as generic editable Figma primitives",
-    "do not flatten replaceable photos into display modules",
-    "do not regenerate the whole page when targeted module replacement is sufficient"
+    "do not keep superseded hidden layers",
+    "do not fake paper opacity with generic white rectangles that alter the authored module silhouette",
+    "do not make Feature 1/2/3 equal UI cards",
+    "do not modify P02-P08"
   ]
 }
