@@ -4,62 +4,51 @@ Status: `CURRENT_POINTER / V30_ONLY / 2026-09-02`
 
 The only current Rurubu WEDDING production version is **V30**.
 
-Do not infer current production state from an older chat/report alone.
-
 ## REQUIRED READ SET — every production run
 
-Read in this order before changing a V30 page:
+1. this file
+2. actual page Visual Master — `assets/rurubu-v30/pXX/PXX.png`
+3. Root manifest — `assets/rurubu-v30/manifest.json`
+4. V30 visual-polish override — `assets/rurubu-v30/visual-polish-manifest.json`
+5. page manifest
+6. page polish manifest when present
+7. `docs/rurubu-v30/VISUAL-MASTER-LOCK-AUDIT.md`
+8. `docs/rurubu-v30/FIGMA-EXECUTION-ACCEPTANCE.md`
+9. page README when production exists
 
-1. **This file**
-2. **actual page Visual Master** — `assets/rurubu-v30/pXX/PXX.png`
-3. **Root manifest** — `assets/rurubu-v30/manifest.json`
-4. **V30 visual-polish/execution overrides** — `assets/rurubu-v30/visual-polish-manifest.json`
-5. **page manifest** — `assets/rurubu-v30/pXX/manifest.json`
-6. **page polish manifest when present** — `assets/rurubu-v30/pXX/polish-manifest.json`
-7. **pre-build visual audit** — `docs/rurubu-v30/VISUAL-MASTER-LOCK-AUDIT.md`
-8. **post-build acceptance** — `docs/rurubu-v30/FIGMA-EXECUTION-ACCEPTANCE.md`
-9. **page README** when production already exists
-10. broader V30 docs only as needed.
-
-Do not treat one manifest alone as sufficient visual authority.
-
-When a page polish manifest is marked as a newer execution override after direct Visual Master rereview, **its module/proxy/decomposition decisions override older conflicting execution details in that page's older main manifest**. Canonical facts and locked page role still remain authoritative.
-
-`VISUAL_MASTER_LOCKED ≠ FIGMA_STRUCTURE_READY ≠ FIGMA_DESIGN_COMPLETE`.
+Newest explicit owner feedback can reopen an older PASS.
 
 ## Current work ownership — USER LOCKED
 
 ### ChatGPT
-- analyze user feedback;
-- inspect actual Visual Masters;
-- improve Root/shared/page manifests;
-- remove contradictory older rules;
-- prepare Codex handoff instructions;
-- review Codex output afterward.
+- feedback analysis
+- actual Visual Master/current screenshot review
+- Root/shared/page manifest updates
+- contradiction cleanup
+- Codex handoff
+- post-build review
 
 ### Codex
-- production ImageGen;
-- key-background/cutout/alpha preparation;
-- Figma writes and cleanup;
-- clean photo proxy placement;
-- Figma screenshots/exports;
-- Drive/Git production evidence when instructed.
+- production ImageGen
+- alpha/cutout preparation
+- Figma writes/cleanup
+- clean proxy placement
+- screenshots/exports
+- Drive/Git production evidence
 
-**ChatGPT must not jump ahead into production Figma/ImageGen while manifest/feedback work is open unless the user explicitly reassigns that work.**
+ChatGPT must not jump into production Figma/ImageGen while manifest/feedback work is open unless the user explicitly reassigns that work.
 
-## Current Git / Figma authority
+## Git / Figma authority
 
-Git branch: `rurubu/v30-final-production-20260901`
+Branch: `rurubu/v30-final-production-20260901`
 
-PR: `#878 — Rurubu V30: final production clean-slate`
+PR: `#878`
 
-Figma file key: `bfM0d4c9dCeBv5pCkJ3TNM`
+Figma file: `bfM0d4c9dCeBv5pCkJ3TNM`
 
-Figma page: `V30_FINAL_PRODUCTION`
+Page: `V30_FINAL_PRODUCTION`
 
-Board: `3535:2`
-
-Page frames:
+Frames:
 - P01 `3535:7`
 - P02 `3535:9`
 - P03 `3535:11`
@@ -69,14 +58,7 @@ Page frames:
 - P07 `3535:19`
 - P08 `3535:21`
 
-### Known temporary Figma cleanup
-
-A mistaken temporary duplicate exists:
-- `3708:2` — `V30 P01 / CARRYOVER REWORK / TEMP`
-
-Codex must delete `3708:2` before the next P01 production pass.
-
-**Do not delete or overwrite real P02 `3535:9`.**
+The mistaken TEMP `3708:2` was deleted on 2026-09-02. Real P02 `3535:9` must not be touched by P01 cleanup.
 
 ## Locked facts / roles
 
@@ -99,182 +81,169 @@ Roles:
 
 V20 = frozen history/reference only. Do not create V31 unless explicitly requested.
 
-## Direct Visual Master rereview status — 2026-09-02
+## Direct Visual Master rereview status
 
-The owner re-uploaded and ChatGPT directly rereviewed:
-- `P01.png`
-- `P02.png`
-- `P03.png`
+P01/P02/P03 were directly rereviewed from the actual images on 2026-09-02.
 
-This rereview was specifically used to classify **actual authored module boundaries**, **variable/native copy**, **clean photo-slot roles**, and **independently movable decoration**.
+Execution authorities:
+- P01 `assets/rurubu-v30/p01/polish-manifest.json`
+- P02 `assets/rurubu-v30/p02/polish-manifest.json`
+- P03 `assets/rurubu-v30/p03/polish-manifest.json`
 
-Current page execution authorities:
-- P01: `assets/rurubu-v30/p01/polish-manifest.json` schema v5
-- P02: `assets/rurubu-v30/p02/polish-manifest.json` schema v2
-- P03: `assets/rurubu-v30/p03/polish-manifest.json` schema v2
+### P01 fixed-module model
 
-### P01 rereview result
-
-Complete fixed-display modules include, where specified in the page polish manifest:
+Complete fixed display modules include:
 - `るるぶ`
 - `WEDDING`
 - `Shogo & Shiori` + ribbon
-- `2026` year cluster
+- `2026`
 - Date ticket
-- Feature 1 / 2 / 3 display shells
+- Feature 1/2/3 shells
 - Bottom Story
 - `OUR JOURNEY / TAKE A TRIP`
 - `PAGE / 01`
 
-Hero and Feature 1–3 photos remain independent replaceable photo slots.
+Replaceable photo slots remain separate:
+- Hero
+- Feature 1
+- Feature 2
+- Feature 3
 
-Large bottom floral cluster, left/right tropical/destination clusters, rings and airmail border remain separate where independent overlap is useful.
-
-For the Date module, the owner's explicit current display wording is:
+Current Date display copy:
 - `WEDDING DATE`
 - `2026.10.24`
 - `SAT`
 
-This overrides the Visual Master's reference wording `Date / 2026.10.24 / Sat.` for final visible copy.
+### P02 rereview model
 
-### P02 rereview result
+- `ふたりのプロフィール` top area is one authored header ecology
+- SHOGO/SHIORI bubbles are fixed display modules after exact copy approval
+- profile-sheet shells may be prepared art while personal values remain separate until copy-lock
+- Q1/Q2 are related but non-identical
+- Q1 alone has an inset couple photo
+- left=SHOGO/blue, right=SHIORI/pink
+- clean standalone proxies only
 
-The header is one authored title ecology centered on `ふたりのプロフィール`, not plain native title text plus stickers.
+### P03 rereview model
 
-P02 execution model:
-- header/title module may include title lettering + attached heart/plane/camera/floral ecology and ribbon art;
-- SHOGO/SHIORI name bubbles are fixed display modules once their exact visible copy is approved;
-- blue/pink profile sheets use generated/prepared shell art, while personal profile values remain separate until copy-lock;
-- Q1/Q2 are related but non-identical shell modules;
-- Q1 alone has a replaceable inset couple photo;
-- two portrait photos + Q1 inset photo use clean standalone proxies only;
-- left = SHOGO/blue, right = SHIORI/pink.
+- `OUR STORY + ふたりのこれまで` form one header system
+- intro sentence stays separate until copy-lock
+- Step 1–5 are individually authored modules
+- one continuous route spans multiple steps and remains independent
+- Step 1–4 have photo relationships; Step 5 intentionally has no photo
+- Q3/Q4 are related but non-identical
+- Hero + four support photos use clean standalone proxies
+- Hero pink tape remains independent
+- Wedding Day card and PAGE 03 may be complete fixed modules
 
-### P03 rereview result
+## Systemic production rules
 
-P03 execution model:
-- `OUR STORY` + `ふたりのこれまで` ribbon form one header system;
-- the handwritten intro sentence remains separate until copy-lock;
-- timeline Step 1–5 are individually authored heading modules, not repeated UI cards;
-- the continuous dotted timeline route spans multiple steps and remains independent;
-- Step 1–4 have photo relationships; Step 5 intentionally has no photo;
-- Q3/Q4 are related but non-identical paper shells;
-- Hero + four support photos use clean standalone proxies only;
-- Hero pink tape remains independent from the replaceable Hero photo;
-- Wedding Day card and PAGE 03 may be complete fixed modules;
-- bottom church/tropical cluster remains independently movable where needed.
+### Fixed bundled display modules
 
-## Bundled fixed display modules — HARD
+Short fixed text/numbers may be generated/prepared together with their vessel/background/icon/attached accents when they move as one authored object.
 
-If short fixed text/numbers visually belong to one authored object with its background/vessel, badge, icon, route/doodle, local flower/heart/sparkle and print depth, the **complete visible module may be generated/prepared as one production asset**.
+Visible fixed display text does not need to remain editable in Figma.
 
-Visible fixed text does **not** need to remain editable in Figma.
+Long/TBD/personal/frequently changing copy and replaceable photos remain separate.
 
-Exact approved strings/numbers must be preserved in manifest/asset metadata and QA-checked.
+### Clean photo proxies
 
-Keep separate/native:
-- long body copy;
-- unapproved Q&A;
-- personal/TBD facts;
-- frequently changing text;
-- replaceable photographs.
+Visual Master is comparison authority, not photo source.
 
-`ONE INDEPENDENT EDITORIAL OBJECT = ONE IMAGE`.
+Never use page-master crops or page screenshots as active photo fills.
 
-A bundled fixed display module is one object even if it contains several internal visible elements.
+### Alpha Integrity — HARD
 
-## Clean standalone photo proxies — HARD
+`TRUE ALPHA ≠ CORRECT ALPHA`.
 
-The Visual Master is comparison authority, **not photo-slot source material**.
+For RGBA modules, verify both:
+1. intended outside transparency;
+2. intended inside opacity.
 
-Do not crop `P01.png`, `P02.png`, etc. and use those crops inside photo slots. Do not use page screenshots as proxy photos.
+Opaque paper/ticket/label/vessel interiors should normally remain alpha `>= 0.95`, preferably `1.00`, except antialiased edges or explicitly approved translucency.
 
-Allowed proxy sources:
-1. suitable user-provided real photo;
-2. clean standalone representative photo;
-3. clean generated standalone photo proxy with no page-layout decoration.
+Preview over light/dark/high-contrast backgrounds and inspect alpha itself.
 
-For visual QA, the proxy must match the slot's subject role/count/orientation/focal mass.
+### Edge Safety — HARD
 
-## Replaceable-photo structure
+Busy edge activation is allowed, but important labels/badges/text must not look accidentally clipped by border/trim.
 
-Every real-photo slot:
-- independent clipped/masked container;
-- photo separate from decoration/frame;
-- non-destructive replacement;
-- photo never spills outside mask;
-- replacement must not remove page decoration.
+Review at full page and A5 size.
 
-P05 remains 4 SHOGO FRIENDS + 4 SHIORI FRIENDS = 8 independent slots.
+## P01 CURRENT STATUS — MICRO POLISH REOPENED
 
-## Visual Carry-over Audit
+P01 `3535:7` remains the best CURRENT. Do not roll back to FIRST BUILD and do not create another P01.
 
-Layer cleanup and visual freshness are different.
+The `c64b3c66...` final REWORK remains the accepted baseline for:
+- clean proxies
+- bundled modules
+- stale-layer cleanup
+- photo swap structure
 
-Every inherited visible asset after a REWORK must be:
-- `KEEP_REQUALIFIED`
-- `REWORK_REQUIRED`
-- `REPLACE_REQUIRED`
-- `SUPERSEDED`
+However owner review of the actual CURRENT screenshot reopened **three targeted visual checks**:
 
-until checked: `UNREVIEWED_CARRYOVER`.
-
-`ADOPTED`, prior PASS, unchanged, or `PRODUCTION_RGBA` do not grant permanent visual approval.
-
-## P01 current state
-
-The promoted P01 REWORK at `3535:7` remains the **best CURRENT**. Do not roll back to FIRST BUILD.
+1. Feature 1–3 paper/vessel interiors appear too transparent/washed relative to Visual Master.
+2. Feature 1–3 number badges/labels sit too close to the left airmail border.
+3. Top-left ring/diamond/sparkle cluster is visually weaker than Visual Master.
 
 Current state:
 
-`BEST CURRENT PROMOTED`
-+
-`CARRY-OVER DEBT OPEN`
-+
-`CLEAN-PROXY DEBT OPEN`
-+
-`DISPLAY-MODULE REWORK OPEN`
-+
-`FINAL PHOTO QA PENDING`.
+`BEST CURRENT = YES`
 
-Detailed next-build requirements: `assets/rurubu-v30/p01/polish-manifest.json`.
+`FIGMA_STRUCTURE_READY = PASS`
 
-P02 production must not begin until P01 implementation debt is resolved or explicitly deferred by the user.
+`CLEAN_PROXY_PASS = PASS`
 
-## Mandatory acceptance order
+`VISUAL_CARRYOVER_PASS = PASS`
 
-After Codex production:
+`ALPHA_INTEGRITY_PASS = REOPENED_FOR_FEATURE_1_3`
 
-1. current Figma screenshot
-2. `CLEAN_PROXY_PASS`
-3. `BUNDLED_DISPLAY_MODULE_PASS`
-4. `IDENTITY_ANCHOR_PASS`
-5. `VISUAL_CARRYOVER_PASS`
-6. direct Visual Master `REFERENCE_DELTA_PASS`
-7. anti-UI/coherence check
-8. photo swap / face-safe check
-9. A5 / grayscale / print checks
-10. human feedback writeback
+`EDGE_SAFETY_PASS = REOPENED_FOR_FEATURE_1_3`
 
-Technical QA cannot override visual failure.
+`REFERENCE_DELTA_PASS = REOPENED_FOR_MICRO_POLISH`
+
+`FIGMA_DESIGN_COMPLETE = NO`
+
+`FINAL_PHOTO_QA_PENDING = YES`
+
+P02 production is blocked until these micro issues are resolved or explicitly deferred by the owner.
+
+## Next P01 action — CODEX ONLY
+
+Targeted micro-polish only:
+
+1. inspect Feature 1/2/3 RGBA alpha channel and intended paper interior opacity;
+2. repair/regenerate only modules with incorrect interior alpha;
+3. do not fake opacity with generic white rescue rectangles;
+4. tune Feature 1–3 left-edge spacing without equalizing them;
+5. requalify top-left ring/diamond/sparkle cluster and strengthen only if needed;
+6. preserve CURRENT `3535:7`;
+7. do not touch P02 `3535:9`;
+8. remove superseded LIVE layers if any module is replaced;
+9. capture fresh full-page + A5 screenshots;
+10. rerun alpha integrity, edge safety and Reference Delta.
 
 ## P04–P08
 
-P04–P08 have not received this new direct image rereview in the current feedback cycle. Their exact bundled-module lists must **not** be invented from prose.
+P04–P08 have not been directly rereviewed in this feedback cycle.
 
-Before their production:
-- inspect the actual Visual Master;
-- run PASS A/PASS B;
-- classify bundled fixed modules;
-- classify native/variable copy;
-- classify clean standalone proxy roles;
-- then update page authority before Codex production.
+Before production:
+- inspect actual Visual Master
+- run PASS A/PASS B
+- classify bundled modules
+- classify variable/native copy
+- classify clean proxy roles
+- classify alpha/material expectations and edge-safety risks
+- update page authority
+- then hand off to Codex
+
+Do not invent exact module lists from prose alone.
 
 ## Stop condition for governance
 
 Add rules only for real/repeatable failures or truth/print/editability risk.
 
-Once the relevant feedback is represented and contradictions are removed:
+Once the current feedback is modeled and contradictions are removed:
 
 `STOP WRITING RULES → HAND OFF TO CODEX → MAKE THE BOOK BETTER.`
 
