@@ -1,24 +1,19 @@
 # V30 P01 production assets
 
-Status: `P01_PROMOTED_CURRENT_WITH_CARRYOVER_PROXY_AND_MODULE_DEBT / FINAL_PHOTO_QA_PENDING`
+Status: `P01_FINAL_REWORK_COMPLETE / CLEAN_STANDALONE_LAYOUT_PROXIES_ACTIVE / FINAL_PHOTO_QA_PENDING`
 
 P01 is the V30 pilot page.
 
-The targeted REWORK remains materially better than FIRST BUILD and stays CURRENT at Figma node `3535:7`. **Do not roll back to FIRST BUILD.**
-
-However, final acceptance is reopened because:
-- visible FIRST BUILD production art was intentionally carried into CURRENT;
-- Hero + Feature 1–3 active proxies were cropped from the P01 Visual Master and are now deprecated;
-- fixed display objects need to be rebuilt/requalified as complete modules rather than generic Figma text/shapes.
+The final targeted REWORK stays CURRENT at Figma node `3535:7`. **Do not roll back to FIRST BUILD.** The contaminated Visual-Master-crop proxies and weak split modules have been removed from active Figma LIVE.
 
 Current gates:
 - `BEST_CURRENT = YES`
 - `FIGMA_STRUCTURE_READY = YES`
-- `CLEAN_PROXY_PASS = NO`
-- `BUNDLED_DISPLAY_MODULE_PASS = NO`
-- `VISUAL_CARRYOVER_PASS = NO`
-- `REFERENCE_DELTA_PASS = REOPENED`
-- `FIGMA_DESIGN_COMPLETE = NO`
+- `CLEAN_PROXY_PASS = YES`
+- `BUNDLED_DISPLAY_MODULE_PASS = YES`
+- `VISUAL_CARRYOVER_PASS = YES`
+- `REFERENCE_DELTA_PASS = YES / IMPROVED`
+- `FIGMA_DESIGN_COMPLETE = YES`
 - `FINAL_PHOTO_QA_PENDING = YES`
 - `PRINT_READY = NO`
 
@@ -84,20 +79,20 @@ Do not actively use:
 
 Reason: page decoration/background can be baked into those crops, duplicate real page assets and falsely improve Reference Delta.
 
-Next proxies must be clean standalone photos:
+Active clean standalone layout proxies in `final-rework/` are:
 - Hero → two-person couple/wedding
 - Feature 1 → couple/profile
 - Feature 2 → travel/place
 - Feature 3 → group/friends
 
-## Visual carry-over debt
+## Visual carry-over resolution
 
-Current direction:
-- keep/requalify accepted WEDDING, tropical/destination clusters and airmail border;
-- replace old Date/Feature 1–3/Bottom Story visual language with complete fixed modules;
-- requalify names ribbon backing;
-- rework/requalify OUR JOURNEY and PAGE 01;
-- recheck bottom floral cluster after Bottom Story changes.
+Completed:
+- kept/requalified WEDDING, tropical/destination clusters, bottom floral and airmail border;
+- replaced Date, Feature 1–3 and Bottom Story with complete fixed modules;
+- replaced names ribbon and 2026 with complete clusters;
+- replaced OUR JOURNEY and PAGE 01 with complete modules;
+- deleted superseded split text, badge and route layers from CURRENT.
 
 `ADOPTED` or unchanged does not mean permanently visually accepted.
 
@@ -110,12 +105,12 @@ Visual Master reference sizes:
 
 Do not normalize them into equal UI cards. Preserve differences in module size, photo size, spacing, icon placement and local overlap. Do not add formulaic/random rotation.
 
-## Known Figma cleanup — CODEX ONLY
+## Figma cleanup completed
 
 Accidental TEMP:
 - `3708:2` — `V30 P01 / CARRYOVER REWORK / TEMP`
 
-Codex must delete `3708:2` at the start of the next P01 production pass.
+`3708:2` was deleted on 2026-09-02.
 
 Do **not** delete or overwrite real P02 `3535:9`.
 
@@ -128,15 +123,6 @@ Do **not** delete or overwrite real P02 `3535:9`.
 - Promoted REWORK evidence: [P01_REWORK_CURRENT_QA_20260902](https://drive.google.com/drive/folders/1WCUtnm_trU9tEeuZ3tMFjN-PP0KEGw4d)
 - Rejected: [99_REJECTED_DO_NOT_USE/P01](https://drive.google.com/drive/folders/1DXJ3gIlZalOiCeytBRnm425s3W9KO-bb)
 
-## Next P01 production — CODEX ONLY
+## Next P01 production
 
-After authority handoff, Codex should:
-1. delete TEMP `3708:2` only;
-2. replace four contaminated page-crop proxies with clean standalone proxies;
-3. rebuild/requalify fixed display modules according to `p01/polish-manifest.json`;
-4. preserve all replaceable photo slots;
-5. capture fresh CURRENT screenshot;
-6. run `CLEAN_PROXY → BUNDLED_DISPLAY_MODULE → IDENTITY_ANCHOR → VISUAL_CARRYOVER → REFERENCE_DELTA`;
-7. report remaining debt before moving to P02.
-
-`BEST CURRENT ≠ FINAL COMPLETE.`
+When owner-approved final photographs are supplied, replace only the four photo fills while preserving the accepted masks, display modules, overlaps and CURRENT node `3535:7`.

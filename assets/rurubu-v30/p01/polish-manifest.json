@@ -28,17 +28,17 @@
   "knownFigmaCleanup": {
     "temporaryDuplicateNode": "3708:2",
     "temporaryDuplicateName": "V30 P01 / CARRYOVER REWORK / TEMP",
-    "status": "DELETE_AT_START_OF_NEXT_CODEX_P01_RUN",
+    "status": "DELETED_2026-09-02",
     "mustPreserve": ["P01 CURRENT 3535:7", "real P02 frame 3535:9"],
     "hardRule": "Delete only 3708:2. Do not delete, overwrite, move or repurpose 3535:9."
   },
   "currentInterpretation": {
     "promotion": "VALID_BEST_CURRENT",
-    "figmaDesignComplete": false,
-    "finalReferenceDelta": "REOPENED",
+    "figmaDesignComplete": true,
+    "finalReferenceDelta": "PASS_IMPROVED_2026-09-02",
     "finalPhotoQaPending": true,
-    "openDebt": ["VISUAL_CARRYOVER", "CLEAN_PROXY", "BUNDLED_DISPLAY_MODULE"],
-    "rule": "Do not roll back accepted identity-anchor improvements, but do not call P01 complete until clean proxies and current-quality fixed modules replace the identified debt."
+    "openDebt": [],
+    "rule": "P01 CURRENT 3535:7 is the completed final-rework state. Keep clean standalone photos replaceable; final owner photography may replace the proxies without changing the accepted display modules."
   },
   "fixedDisplayModules": {
     "globalRule": "Each module below is one independently movable editorial object. Its internal fixed text, number, background/vessel, icon and attached micro-decoration may be baked together. Visible fixed text does not need to be editable in Figma. Replaceable photographs never belong inside these generated modules.",
@@ -158,15 +158,15 @@
       {"asset": "P01_RIGHT_DESTINATION_CLUSTER", "decision": "KEEP_REQUALIFIED"},
       {"asset": "P01_LEFT_TROPICAL_CLUSTER", "decision": "KEEP_REQUALIFIED"},
       {"asset": "P01_AIRMAIL_BORDER", "decision": "KEEP_REQUALIFIED"},
-      {"asset": "P01_BOTTOM_FLORAL_CLUSTER", "decision": "KEEP_REQUALIFIED_RECHECK_AFTER_STORY_REWORK"},
-      {"asset": "P01_NAMES_RIBBON", "decision": "REQUALIFY_AS_COMPLETE_NAMES_RIBBON_MODULE"},
-      {"asset": "P01_DATE_TICKET", "decision": "REPLACE_WITH_BUNDLED_DISPLAY_MODULE"},
-      {"asset": "P01_FEATURE_1_VESSEL", "decision": "REPLACE_WITH_BUNDLED_DISPLAY_MODULE"},
-      {"asset": "P01_FEATURE_2_VESSEL", "decision": "REPLACE_WITH_BUNDLED_DISPLAY_MODULE"},
-      {"asset": "P01_FEATURE_3_VESSEL", "decision": "REPLACE_WITH_BUNDLED_DISPLAY_MODULE"},
-      {"asset": "P01_BOTTOM_STORY_VESSEL", "decision": "REPLACE_WITH_BUNDLED_DISPLAY_MODULE"},
-      {"asset": "P01_JOURNEY_STAMP", "decision": "REWORK_AS_BUNDLED_DISPLAY_MODULE"},
-      {"asset": "P01_PAGE_BADGE", "decision": "REWORK_AS_BUNDLED_DISPLAY_MODULE"}
+      {"asset": "P01_BOTTOM_FLORAL_CLUSTER", "decision": "KEEP_REQUALIFIED_AFTER_STORY_REWORK"},
+      {"asset": "P01_NAMES_RIBBON", "decision": "REPLACED_WITH_COMPLETE_NAMES_RIBBON_MODULE"},
+      {"asset": "P01_DATE_TICKET", "decision": "REPLACED_WITH_BUNDLED_DISPLAY_MODULE"},
+      {"asset": "P01_FEATURE_1_VESSEL", "decision": "REPLACED_WITH_BUNDLED_DISPLAY_MODULE"},
+      {"asset": "P01_FEATURE_2_VESSEL", "decision": "REPLACED_WITH_BUNDLED_DISPLAY_MODULE"},
+      {"asset": "P01_FEATURE_3_VESSEL", "decision": "REPLACED_WITH_BUNDLED_DISPLAY_MODULE"},
+      {"asset": "P01_BOTTOM_STORY_VESSEL", "decision": "REPLACED_WITH_BUNDLED_DISPLAY_MODULE"},
+      {"asset": "P01_JOURNEY_STAMP", "decision": "REPLACED_WITH_BUNDLED_DISPLAY_MODULE"},
+      {"asset": "P01_PAGE_BADGE", "decision": "REPLACED_WITH_BUNDLED_DISPLAY_MODULE"}
     ],
     "completionRule": "Debt closes only after every material inherited visible asset is requalified/reworked/replaced and all contaminated Visual-Master-crop proxies are removed from active QA."
   },
@@ -175,16 +175,45 @@
     "allowed": ["subtle paper/matte feel", "slight printed-edge irregularity", "restrained local shadow/depth"],
     "forbidden": ["global heavy grain", "dirty vintage overlay", "texture on faces", "texture reducing text readability"]
   },
+  "finalReworkExecution20260902": {
+    "figma": {
+      "fileKey": "bfM0d4c9dCeBv5pCkJ3TNM",
+      "page": "V30_FINAL_PRODUCTION",
+      "currentNode": "3535:7",
+      "realP02Node": "3535:9",
+      "deletedTempNode": "3708:2",
+      "hiddenOldLayerCount": 0,
+      "duplicateSameJobProductionLayerCount": 0,
+      "obsoleteActiveFillCount": 0,
+      "photoSwapPass": true
+    },
+    "productionAssets": [
+      {"file": "final-rework/V30_P01_HERO_CLEAN_STANDALONE_PROXY.png", "driveId": "1ChLnV2XPY5WcEontEUlf2tjPnAKZqphi"},
+      {"file": "final-rework/V30_P01_FEATURE_1_CLEAN_STANDALONE_PROXY.png", "driveId": "1ZG-J3zpp-hk1Pa3JKiUjXs42gAyJdQ_d"},
+      {"file": "final-rework/V30_P01_FEATURE_2_CLEAN_STANDALONE_PROXY.png", "driveId": "1DQWLfhnnrz6sNEDcJY72Aa0QLWRIQe9_"},
+      {"file": "final-rework/V30_P01_FEATURE_3_CLEAN_STANDALONE_PROXY.png", "driveId": "1kgAhlBWWOC3a3QBv-JNtOH6Xjk6j-Kg6"},
+      {"file": "final-rework/V30_P01_DATE_MODULE_FINAL_REWORK_RGBA.png", "driveId": "1Oaz-wSK0I1KlNFVrpVWM-l-LC-sOe7V0"},
+      {"file": "final-rework/V30_P01_FEATURE_1_MODULE_FINAL_REWORK_RGBA.png", "driveId": "1nNmjyhy_xRjuuYhq5XRrzw0zjQJO3_J1"},
+      {"file": "final-rework/V30_P01_FEATURE_2_MODULE_FINAL_REWORK_RGBA.png", "driveId": "1b7W141RAUkZt1fptkfnfZiJYw1rous9m"},
+      {"file": "final-rework/V30_P01_FEATURE_3_MODULE_FINAL_REWORK_RGBA.png", "driveId": "1OYCebe95OGvgHMIACrcbDKPFfePSO_YX"},
+      {"file": "final-rework/V30_P01_BOTTOM_STORY_MODULE_FINAL_REWORK_RGBA.png", "driveId": "10f6QCb7gZvRG6DNimsR8A3rgl1qV4UmY"},
+      {"file": "final-rework/V30_P01_NAMES_MODULE_FINAL_REWORK_RGBA.png", "driveId": "1UPhbEcqhPwVQgVTnqC6Y2P4ogR24wjWz"},
+      {"file": "final-rework/V30_P01_YEAR_2026_MODULE_FINAL_REWORK_RGBA.png", "driveId": "1Oz_bk1wYQdICUwSv-Vwd5mJQ2symD_Rj"},
+      {"file": "final-rework/V30_P01_JOURNEY_MODULE_FINAL_REWORK_RGBA.png", "driveId": "1k8Tza1pXfwV-K3JEjK_MURuR3URahxX4"},
+      {"file": "final-rework/V30_P01_PAGE_01_MODULE_FINAL_REWORK_RGBA.png", "driveId": "11MN7wc836RkLs4_S8AkZ88u8BjGwvHLe"}
+    ],
+    "qa": {
+      "currentBeforeDriveId": "1ECH3-O2Ee2sngPUgxR7QBHPAQWW_54-G",
+      "currentAfterDriveId": "1ZY-SW1WcLEBlB8Ivv0hY_zfJ3dCqTbOS",
+      "a5GrayscaleDriveId": "1f_IAfyrZlW0fYK1CoH5R_tRcfWtGlPgg",
+      "moduleContactSheetDriveId": "1yVYzFQOT_UGMOLoS-JFDLOAue-X4Mg6e",
+      "currentAfterSha256": "80d4c9baa9ff21de3d2c5c43f3ea419b6f022e0d0da5fe2360e87c6e60b4277e",
+      "a5GrayscaleSha256": "7700a932b5fc2ccaf5ce0f52fc57be19b16c9adb286a8d243d60fa934633c904",
+      "results": ["CLEAN_PROXY_PASS", "BUNDLED_DISPLAY_MODULE_PASS", "IDENTITY_ANCHOR_PASS", "VISUAL_CARRYOVER_PASS", "REFERENCE_DELTA_PASS", "PHOTO_SWAP_PASS", "A5_GRAYSCALE_PASS"]
+    }
+  },
   "nextCodexBuildPriority": [
-    "delete TEMP 3708:2 without touching real P02 3535:9",
-    "replace all P01.png-crop proxies with clean standalone role-matched photos",
-    "requalify/generate complete 2026 and names-ribbon modules as needed",
-    "generate complete Feature 1/2/3 modules while keeping photos separate",
-    "generate complete Date Ticket module using WEDDING DATE / 2026.10.24 / SAT",
-    "generate complete Bottom Story module",
-    "generate/requalify OUR JOURNEY and PAGE 01 modules",
-    "recheck bottom floral cluster after story change",
-    "capture fresh CURRENT screenshot and run CLEAN_PROXY / BUNDLED_MODULE / CARRY_OVER / REFERENCE_DELTA QA"
+    "replace the four clean standalone layout proxies with owner-approved final photography when supplied; preserve the current masks, complete display modules and accepted composition"
   ],
   "doNotDo": [
     "do not edit P02-P08 while closing P01 debt",
