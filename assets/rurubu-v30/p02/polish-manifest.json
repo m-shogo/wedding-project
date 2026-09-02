@@ -1,161 +1,186 @@
 {
-  "schemaVersion": 3,
+  "schemaVersion": 4,
   "project": "Rurubu WEDDING V30",
   "page": "P02",
-  "status": "FIGMA_PRODUCTION_COMPLETE_FINAL_PHOTO_QA_PENDING",
+  "status": "P02_ORNAMENT_QUALITY_REOPENED / STRUCTURE_AND_COPY_SAFE",
   "inherits": [
     "assets/rurubu-v30/manifest.json",
     "assets/rurubu-v30/visual-polish-manifest.json",
     "assets/rurubu-v30/p02/manifest.json"
   ],
-  "purpose": "P02 execution authority after direct rereview of P02.png. Prevent generic-native rebuilding, contaminated page-crop photo proxies, false left/right mirroring and over-baking of unapproved personal copy.",
-  "directVisualMasterRereview": {
-    "date": "2026-09-02",
-    "source": "assets/rurubu-v30/p02/P02.png",
-    "reviewedDimensionsPx": {"width": 1055, "height": 1491},
-    "status": "COMPLETE",
-    "confirmedThreeSecondRead": [
-      "ふたりのプロフィール header/title system",
-      "large SHOGO and SHIORI portrait pair",
-      "SHOGO / SHIORI speech-bubble labels",
-      "blue/pink profile sheets",
-      "Q1 / Q2 lower modules",
-      "PAGE 02 + secondary travel/tropical accents"
-    ],
-    "confirmedAsymmetry": "Left and right form a semantic pair, not a mirrored UI. Q1 includes an inset couple photo; Q2 intentionally does not."
+  "purpose": "Current P02 authority after owner review of the first production build. Preserve the successful structure/copy/photo work, correct element-role classification, and reopen only weak reused travel/tropical ornaments before full design lock.",
+  "authorityPrecedence": "This page-polish manifest overrides conflicting execution/render-mode assumptions in the older P02 main manifest. Root canonical facts remain inherited.",
+  "currentFigma": {
+    "fileKey": "bfM0d4c9dCeBv5pCkJ3TNM",
+    "page": "V30_FINAL_PRODUCTION",
+    "currentNode": "3535:9",
+    "frameName": "V30 P02 / PROFILE / CURRENT"
   },
-  "fixedDisplayModules": {
-    "globalRule": "A fixed module may bake short fixed text, backing, iconography and attached accents when they visually move as one object. Personal profile values, unapproved name readings, Q&A question/answer copy and real photos remain separate until copy-locked.",
-    "targets": [
-      {
-        "id": "P02_HEADER_TITLE_MODULE",
-        "fixedCoreText": ["ふたりの", "プロフィール"],
-        "referenceEditorialRibbonText": "私たちのこと、少しだけ紹介します♪",
-        "bundleTogether": ["ふたりの", "large hot-pink プロフィール lettering", "layered outline/depth", "blue subtitle ribbon/background", "attached heart", "airplane + dotted route", "camera", "title-adjacent tropical flowers/leaves/sparkles where they visually behave as one header ecology"],
-        "copySafety": "The subtitle ribbon sentence is EDITORIAL_COPY_REFERENCE until explicitly copy-locked. It may be baked only after approval; otherwise keep the ribbon art ready for separate/native text.",
-        "hardReject": "Do not rebuild this as plain native title text plus unrelated sticker primitives."
-      },
-      {
-        "id": "P02_SHOGO_NAME_LABEL",
-        "lockedLatinText": "SHOGO",
-        "referenceReading": "しょうご",
-        "bundleTogether": ["blue speech-bubble backing", "SHOGO", "approved reading only when confirmed", "attached outline/shadow"],
-        "copySafety": "Latin spelling is locked. Japanese reading remains REFERENCE_ONLY until explicitly approved."
-      },
-      {
-        "id": "P02_SHIORI_NAME_LABEL",
-        "lockedLatinText": "SHIORI",
-        "referenceReading": "しおり",
-        "bundleTogether": ["pink speech-bubble backing", "SHIORI", "approved reading only when confirmed", "attached outline/shadow"],
-        "copySafety": "Latin spelling is locked. Japanese reading remains REFERENCE_ONLY until explicitly approved."
-      },
-      {
-        "id": "P02_PROFILE_SHEET_SHOGO_SHELL",
-        "fixedStructuralLabelsFromVisualMaster": ["出身地", "好きなこと", "旅のスタイル", "今日のひとこと"],
-        "bundleTogether": ["cream paper sheet", "blue hand-drawn/printed border", "row separators", "blue pictogram system", "fixed row labels when approved", "local printed shadow/depth"],
-        "mustRemainSeparate": ["all personal profile values/answers until grounded and copy-locked"],
-        "antiUiRule": "Do not make a sterile equal-radius table/card. Preserve tactile paper and local irregularity."
-      },
-      {
-        "id": "P02_PROFILE_SHEET_SHIORI_SHELL",
-        "fixedStructuralLabelsFromVisualMaster": ["出身地", "好きなこと", "旅のスタイル", "今日のひとこと"],
-        "bundleTogether": ["cream paper sheet", "pink hand-drawn/printed border", "row separators", "pink pictogram system", "fixed row labels when approved", "local printed shadow/depth"],
-        "mustRemainSeparate": ["all personal profile values/answers until grounded and copy-locked"],
-        "antiUiRule": "Related to SHOGO sheet but not mechanically mirrored. Preserve local size/line/icon differences."
-      },
-      {
-        "id": "P02_Q1_DISPLAY_SHELL",
-        "fixedVisiblePart": ["Q1"],
-        "referenceQuestion": "ふたりの出会いは？",
-        "bundleTogether": ["Q1 badge/number", "white paper shell", "blue dotted/printed edge", "tape", "small star/heart/doodle accents", "Q1 question only after copy lock"],
-        "mustRemainSeparate": ["Q1 answer until approved", "Q1 inset replaceable couple photo", "Q1 photo mask/frame"],
-        "hardRule": "Q1 owns the inset photo; do not add an equivalent photo to Q2 merely for symmetry."
-      },
-      {
-        "id": "P02_Q2_DISPLAY_SHELL",
-        "fixedVisiblePart": ["Q2"],
-        "referenceQuestion": "ふたりの旅のテーマは？",
-        "bundleTogether": ["Q2 badge/number", "white paper shell", "pink dotted/printed edge", "airplane + route", "suitcase", "fixed decorative accents", "Q2 question only after copy lock"],
-        "mustRemainSeparate": ["Q2 answer until approved"],
-        "hardRule": "Q2 intentionally has no inset real-photo slot."
-      },
-      {
-        "id": "P02_PAGE_BADGE_MODULE",
-        "exactVisibleText": ["PAGE", "02"],
-        "bundleTogether": ["page badge backing", "PAGE", "02", "small attached heart/accent"]
-      }
+  "visualMaster": {
+    "path": "assets/rurubu-v30/p02/P02.png",
+    "status": "DIRECT_REREVIEW_COMPLETE",
+    "threeSecondRead": ["ふたりのプロフィール header/title", "SHOGO/SHIORI portrait pair", "blue/pink profile sheets", "Q1/Q2 lower modules", "PAGE 02 + travel/tropical accents"],
+    "asymmetry": "SHOGO left/blue and SHIORI right/pink form a semantic pair but are not mechanically mirrored. Q1 owns one inset couple photo; Q2 owns none."
+  },
+  "assetRoleClassification": {
+    "status": "OWNER_CORRECTED_2026_09_02",
+    "hardRule": "Do not decide image generation from visual prominence alone. Follow Root assetRoleClassificationPolicy before generation or review.",
+    "NATIVE_TEXT": [
+      "P02_HEADER_FUTARI_NO / ふたりの",
+      "P02_TITLE_PROFILE / プロフィール",
+      "P02_HEADER_RIBBON_TEXT / 私たちのこと、少しだけ紹介します♪",
+      "P02_SHOGO_LATIN / SHOGO",
+      "P02_SHIORI_LATIN / SHIORI",
+      "profile row labels and variable profile values",
+      "Q1/Q2 question and answer copy while not copy-locked"
+    ],
+    "SHARED_COMMON_COMPONENT": [
+      "P02_PAGE_BADGE / PAGE 02 — same publication component family as P01 PAGE 01; page number is the variable"
+    ],
+    "GENERATED_OR_PREPARED_SHELLS": [
+      "warm paper/background field where raster treatment is useful",
+      "profile paper shells/backings where authored tactile art materially improves fidelity",
+      "Q1/Q2 paper shells/backings where authored tactile art materially improves fidelity",
+      "speech-bubble backings if kept separate from native SHOGO/SHIORI text"
+    ],
+    "PHOTO": [
+      "P02_PHOTO_SHOGO",
+      "P02_PHOTO_SHIORI",
+      "P02_Q1_INSET_COUPLE_PHOTO"
+    ],
+    "PAGE_SPECIFIC_ORNAMENT": [
+      "P02_Q2_PLANE_AND_ROUTE",
+      "P02_TOP_AIRPLANE_ROUTE",
+      "P02_Q2_SUITCASE",
+      "P02_TOP_RIGHT_TRAVEL_TROPICAL_CLUSTER",
+      "P02_TOP_LEFT_TROPICAL_CLUSTER",
+      "other local hearts/flowers/routes/icons whose overlap matters"
+    ],
+    "hardRejects": [
+      "treating プロフィール title as a generated image requirement",
+      "treating 私たちのこと、少しだけ紹介します♪ as a generated image requirement",
+      "treating SHOGO/SHIORI as image text",
+      "treating PAGE 02 as an independent page-specific generated badge instead of a shared common component family",
+      "bundling Q2 plane/route/suitcase into the Q2 shell merely for convenience"
     ]
   },
-  "nativeOrVariableCopy": [
-    "SHOGO profile personal values",
-    "SHIORI profile personal values",
-    "Japanese name readings until approved",
-    "header blue-ribbon sentence until approved",
-    "Q1 question until approved",
-    "Q1 answer",
-    "Q2 question until approved",
-    "Q2 answer",
-    "any TBD personal fact",
-    "long explanatory copy"
-  ],
-  "replaceablePhotos": {
-    "P02_PHOTO_SHOGO": "one-person SHOGO-role portrait/upper-body photo",
-    "P02_PHOTO_SHIORI": "one-person SHIORI-role portrait/upper-body photo",
-    "P02_Q1_INSET_COUPLE_PHOTO": "two-person couple photo inside Q1 only"
+  "copySafety": {
+    "lockedFacts": ["Shogo", "Shiori", "2026.10.24", "PAGE 02 page number"],
+    "referenceOrTbd": ["Japanese name readings", "personal profile values", "header ribbon editorial sentence until owner copy-lock", "Q1 question until owner copy-lock", "Q1 answer", "Q2 question until owner copy-lock", "Q2 answer"],
+    "hardRule": "Unapproved copy may remain visible only as separately controllable native REFERENCE_ONLY/TBD text. It must not be factized or baked into generated art."
   },
   "photoProxyPolicy": {
+    "status": "PASS_PRESERVED",
     "hardRule": "P02.png and page screenshots are comparison references only, never photo-fill sources.",
     "roles": {
-      "P02_PHOTO_SHOGO": "clean standalone one-person male-role portrait with similar face/upper-body mass",
-      "P02_PHOTO_SHIORI": "clean standalone one-person female-role portrait with similar face/upper-body mass",
+      "P02_PHOTO_SHOGO": "clean standalone one-person SHOGO-role portrait",
+      "P02_PHOTO_SHIORI": "clean standalone one-person SHIORI-role portrait",
       "P02_Q1_INSET_COUPLE_PHOTO": "clean standalone two-person couple photo"
     },
-    "hardRejects": ["crop from P02.png", "proxy containing title, profile sheet, border, flower, icon, Q shell or page background", "proxy decoration duplicated by a separate page asset"],
-    "qa": ["inspect proxy in isolation", "verify role/count/orientation", "verify no page-layout decoration is baked in", "re-run Reference Delta after clean proxies are placed"]
+    "q1InsetPhotoSlotCount": 1,
+    "q2PhotoSlotCount": 0
   },
-  "standaloneOrIndependentDecorations": [
-    "airmail border",
-    "portrait/profile seam plumeria cluster",
-    "lower Q1/Q2 seam hibiscus cluster",
-    "side hearts and micro accents when their independent overlap matters"
-  ],
-  "leftRightRoleLock": {
-    "left": "SHOGO / blue",
-    "right": "SHIORI / pink",
-    "hardRejects": ["swapping left/right identity", "making both profile sheets identical except hue", "mirroring every flower/icon/offset", "adding Q2 inset photo for symmetry"]
+  "sharedPageBadgePolicy": {
+    "status": "HARD_OVERRIDE",
+    "componentFamily": "P01-P08 PAGE badge family",
+    "currentValue": "02",
+    "rule": "PAGE 02 must visually align with the P01 PAGE 01 common component system. Do not independently restyle/regenerate it as a P02-only image asset. Keep the common backing/typography/stroke behavior coherent and vary the page number/content only unless a future owner-approved exception is explicit."
   },
-  "tactileFinish": {
-    "priority": ["header/title", "name bubbles", "profile sheets", "Q1/Q2 paper shells", "printed-photo frames"],
-    "allowed": ["subtle paper/matte feel", "slight printed-edge irregularity", "restrained local shadow/depth"],
-    "forbidden": ["global dirty grain", "flat SaaS-card shadows", "texture reducing profile/Q&A readability"]
+  "ornamentQualityDebtLatest": {
+    "status": "OPEN / TARGETED_ORNAMENT_REWORK_REQUIRED",
+    "reason": "Owner review found generic/weak icon quality and obvious reuse/carry-over feel. Previous REQUALIFIED_CARRYOVER status was too permissive and is revoked for the affected ornaments.",
+    "targets": [
+      {
+        "id": "P02_Q2_PLANE_AND_ROUTE",
+        "status": "REWORK_REQUIRED",
+        "problem": "generic/simple airplane-route icon and reuse feel",
+        "requirement": "replace with a distinct Q2-specific editorial travel ornament; do not reuse the top airplane-route geometry"
+      },
+      {
+        "id": "P02_TOP_AIRPLANE_ROUTE",
+        "status": "REWORK_REQUIRED",
+        "problem": "generic/simple airplane-route icon and reuse feel",
+        "requirement": "top-header route must be a separate authored composition supporting the title ecology"
+      },
+      {
+        "id": "P02_Q2_SUITCASE",
+        "status": "REWORK_REQUIRED",
+        "problem": "stock/clipart-like suitcase treatment",
+        "requirement": "replace with a more editorial/travel-magazine treatment matching current page line/detail quality"
+      },
+      {
+        "id": "P02_TOP_RIGHT_TRAVEL_TROPICAL_CLUSTER / REQUALIFIED_CARRYOVER",
+        "status": "REWORK_REQUIRED",
+        "problem": "carry-over/reuse feel and insufficient current-page specificity",
+        "requirement": "redesign as a P02 top-right role-specific cluster; do not pass by moving/resizing the old asset"
+      },
+      {
+        "id": "P02_TOP_LEFT_TROPICAL_CLUSTER / REQUALIFIED_CARRYOVER",
+        "status": "REWORK_REQUIRED",
+        "problem": "carry-over/reuse feel and insufficient current-page specificity",
+        "requirement": "redesign as a P02 top-left role-specific cluster; coordinate with top-right but do not mirror or duplicate it"
+      }
+    ],
+    "qualityBar": [
+      "authored Japanese travel-magazine/editorial ornament, not generic stock icon",
+      "distinct local roles with one coherent family",
+      "no same/near-identical prominent plane/route/cluster repeated within the page",
+      "line weight, color, detail and silhouette must match title/photo/paper-module quality",
+      "ornaments support composition and narrative rather than merely fill empty space"
+    ],
+    "doNotTouch": [
+      "P02 overall composition",
+      "SHOGO/SHIORI portrait/photo slots",
+      "profile structure",
+      "Q1 photo count and Q2 no-photo asymmetry",
+      "native/title/copy classification",
+      "shared PAGE 02 component behavior",
+      "clean proxies",
+      "paper alpha",
+      "background-adjacent border",
+      "P01 or P03-P08"
+    ]
+  },
+  "acceptedBaselineDoNotRegress": {
+    "SHOGO_left_blue": true,
+    "SHIORI_right_pink": true,
+    "nonMirroredPair": true,
+    "q1InsetPhotoOnly": true,
+    "cleanStandaloneProxies": true,
+    "opaquePaperInteriors": true,
+    "borderBackgroundAdjacent": true,
+    "copySafety": true,
+    "hiddenObsoleteLayerCount": 0,
+    "duplicateSameJobLiveLayerCount": 0
   },
   "executionQa": [
-    "verify all three photo slots use clean standalone proxy content",
-    "verify title/header reads as one authored editorial system rather than native title + stickers",
-    "verify profile personal values remain separately controllable until copy-locked",
-    "verify SHOGO=blue-left and SHIORI=pink-right",
-    "verify Q1 has inset photo and Q2 does not",
-    "verify Q1/Q2 are related but non-identical",
-    "verify PAGE 02 is a complete fixed badge module",
-    "run fresh Visual Master Reference Delta after production"
+    "verify role classification first: native/common/ornament/generated/photo",
+    "verify PAGE 02 matches the shared P01-P08 page-badge family",
+    "verify the five reopened ornaments no longer look generic, stock, copied or near-duplicated",
+    "verify top and Q2 airplane/route ornaments are distinct compositions",
+    "verify left/right top clusters are coordinated but not mirrored/reused",
+    "verify Q1 has one inset photo and Q2 has none",
+    "verify unapproved copy remains native and separately controllable",
+    "run one full-page Visual Master/current-quality comparison after the targeted ornament patch"
   ],
-  "productionCompletion": {
-    "date": "2026-09-02",
-    "officialFigmaNode": "3535:9",
-    "frameName": "V30 P02 / PROFILE / CURRENT",
-    "summary": "Built directly in the empty official frame with one full production pass and one targeted collision/fit polish. No duplicate P02 frame was created.",
-    "mainModules": ["header/title ecology", "SHOGO left portrait and blue name/profile system", "SHIORI right portrait and pink name/profile system", "Q1 paper module with one couple inset", "Q2 paper module without a photo slot", "PAGE 02 badge", "background-adjacent airmail border", "tropical/travel accents"],
-    "copySafety": "Japanese readings, personal profile values and Q&A answers remain unapproved and were not factized. Variable copy remains native and separately controllable.",
-    "alphaSafety": "All profile/Q paper shells use opaque cream fills with node and paint opacity 1. No rescue rectangles or translucent-paper workaround.",
-    "referenceDelta": "PASS_AFTER_ONE_TARGETED_POLISH",
-    "cleanProxyPass": true,
-    "q1InsetPhotoSlotCount": 1,
-    "q2PhotoSlotCount": 0,
-    "hiddenObsoleteLayerCount": 0,
-    "duplicateSameJobLiveLayerCount": 0,
-    "figmaDesignComplete": true,
-    "finalPhotoQaPending": true,
-    "printReady": false,
-    "productionManifest": "assets/rurubu-v30/p02/production/manifest.json"
+  "currentAcceptanceState": {
+    "FIGMA_STRUCTURE_READY": "PASS_PRESERVED",
+    "CLEAN_PROXY_PASS": "PASS_PRESERVED",
+    "ALPHA_INTEGRITY_PASS": "PASS_PRESERVED",
+    "COPY_SAFETY_PASS": "PASS_PRESERVED",
+    "BORDER_Z_ORDER_PASS": "PASS_PRESERVED",
+    "ASSET_ROLE_CLASSIFICATION_PASS": "PASS_AFTER_OWNER_CORRECTION",
+    "SHARED_COMPONENT_PASS": "PASS_WITH_PAGE_BADGE_RULE_CORRECTED",
+    "ORNAMENT_ORIGINALITY_PASS": "REOPENED",
+    "VISUAL_CARRYOVER_PASS": "REOPENED_FOR_FIVE_ORNAMENTS",
+    "REFERENCE_DELTA_PASS": "REOPENED_FOR_TARGETED_ORNAMENT_PATCH",
+    "FIGMA_DESIGN_COMPLETE": false,
+    "FINAL_PHOTO_QA_PENDING": true,
+    "PRINT_READY": false
+  },
+  "previousProductionEvidence": {
+    "firstProductionCommit": "021d1565ca558ab66b7a7f19c2b7256928c47963",
+    "productionManifest": "assets/rurubu-v30/p02/production/manifest.json",
+    "note": "Structural/photo/copy/alpha work from the first production remains accepted. This evidence does not grandfather the reopened ornament-quality debt."
   }
 }
