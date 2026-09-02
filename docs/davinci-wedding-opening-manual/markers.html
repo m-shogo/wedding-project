@@ -36,6 +36,7 @@
     .next-scene-grid a:hover{transform:translateY(-2px);border-color:#b5ceda;box-shadow:0 10px 20px rgba(31,57,74,.07)}
     .next-scene-grid a>span{font-size:20px;font-weight:950}.next-scene-grid a>strong{font-size:14px}.next-scene-grid a>small{color:var(--studio-muted);line-height:1.45}
     .back-link{margin:20px 0 0}.back-link a{color:#1b668f;font-weight:850;text-decoration:none}
+    .done-celebration{margin-top:18px;padding:14px 16px;border-radius:13px;background:#e9f8ef;border:1px solid #b9dec8;font-size:13px;font-weight:800}
     @media(max-width:760px){.marker-item{grid-template-columns:25px 1fr}.marker-item time{grid-column:2}.marker-item div{grid-column:2}.beat-strip{grid-template-columns:1fr}.beat-strip span{min-height:38px}.next-scene-grid{grid-template-columns:1fr 1fr}}
   </style>
 </head>
@@ -107,9 +108,10 @@
       <div class="section-heading">
         <div>
           <p class="chapter-no">MARKER MAP</p>
-          <h2>あとは、この7か所。</h2>
+          <h2>最初の1個を含めて、この7か所。</h2>
           <p>上から順番に置けばOK。秒数は今の仮位置。</p>
         </div>
+        <span class="status-pill" id="markerProgress">0 / 7</span>
       </div>
 
       <div class="beat-strip" aria-label="StaRtのおおまかな曲構成">
@@ -133,8 +135,8 @@
       <div class="section-heading">
         <div>
           <p class="chapter-no">AFTER THIS</p>
-          <h2>目印が並んだら、演出へ。</h2>
-          <p>ここからは好きな場所から作る。「冒頭を作りたい」「サビを作りたい」で選べばいい。</p>
+          <h2 id="markerDoneTitle">目印が並んだら、演出へ。</h2>
+          <p id="markerDoneText">ここからは好きな場所から作る。「冒頭を作りたい」「サビを作りたい」で選べばいい。</p>
         </div>
       </div>
       <div class="next-scene-grid">
@@ -143,7 +145,8 @@
         <a href="./template-usage-guide.html#photos"><span>📸</span><strong>写真ラッシュ</strong><small>サビを一気に見せる</small></a>
         <a href="./template-usage-guide.html#countdown"><span>5</span><strong>カウントダウン</strong><small>最後の5→1</small></a>
       </div>
-      <p class="back-link"><a href="./index.html">← Wedding Opening Studioへ戻る</a></p>
+      <div class="done-celebration" id="markerCelebration" hidden>曲の地図はできた。ここからは、作りたい場面を選んで進めればOK。</div>
+      <p class="back-link"><a href="./index.html# want">← Wedding Opening Studioへ戻る</a></p>
     </section>
   </main>
 
