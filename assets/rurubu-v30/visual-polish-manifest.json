@@ -1,52 +1,31 @@
 {
-  "schemaVersion": 3,
+  "schemaVersion": 4,
   "project": "Rurubu WEDDING V30",
   "status": "CURRENT_REQUIRED_POLISH_EXTENSION",
-  "scope": "P01-P08 systemic visual-polish, display-module, photo-proxy and carry-over requalification rules",
+  "scope": "P01-P08 systemic visual-polish, display-module, photo-proxy, carry-over and execution-ownership rules",
   "inherits": "assets/rurubu-v30/manifest.json",
-  "reason": "P01 exposed three systemic failure classes: visually generic native text/over-regularized modules; visually stale FIRST BUILD assets carried into a newer CURRENT; and Visual Master crops used as photo proxies, which contaminated photo slots with page background/decorations and made page-part boundaries hard to judge.",
+  "reason": "P01 exposed generic-native design, carry-over, contaminated photo-proxy and workflow-order failures. Production must not jump into Figma before feedback has been written back to authority.",
+  "workflowOwnership": {
+    "status": "USER_LOCKED_2026_09_02",
+    "manifestAndReviewOwner": "ChatGPT",
+    "figmaAndProductionImageGenerationOwner": "Codex",
+    "chatgptResponsibilities": ["analyze user feedback", "inspect current authority and evidence", "improve root/shared/page manifests", "detect contradictions and stale rules", "prepare Codex execution instructions", "review Codex result against Visual Master and manifests"],
+    "codexResponsibilities": ["production ImageGen", "alpha/cutout preparation", "Figma creation/editing/cleanup", "photo proxy installation", "Figma screenshot/export QA", "Drive/Git production evidence updates when instructed"],
+    "hardRule": "ChatGPT must not jump ahead into direct Figma modification or production image generation while manifest/feedback work is still open. Direct Figma/ImageGen work by ChatGPT requires a new explicit user instruction that reassigns that work.",
+    "handoffGate": "Do not hand off to Codex until the relevant systemic and page-specific feedback is represented in required authority and contradictory older behavior has an explicit override.",
+    "why": "The user wants design mistakes converted into reusable production knowledge before another implementation cycle begins."
+  },
   "priorityOverride": {
     "rule": "For V30 production after 2026-09-02, this manifest is a required execution override. Where an older root/acceptance rule permits Visual Master crops as photo proxies or implies fixed display text must remain editable in Figma, this newer rule wins unless the user explicitly says otherwise.",
     "doNotInfer": "Do not silently fall back to older proxy/display-text behavior because it is already implemented."
   },
   "bundledFixedDisplayModulePolicy": {
     "principle": "When a short fixed display element is visually authored as one editorial object, generate/prepare the complete visible module as one asset instead of decomposing it into generic Figma text + generic shapes.",
-    "oneAssetMayInclude": [
-      "short fixed text",
-      "numbers",
-      "background/vessel",
-      "badge shape",
-      "icons",
-      "doodles/routes",
-      "flowers/hearts/sparkles",
-      "printed outlines/shadows",
-      "local decorative accents"
-    ],
-    "eligibleExamples": [
-      "year/date badge",
-      "page-number badge",
-      "feature-number + feature-heading module",
-      "Q-number + fixed short heading shell",
-      "stamp/postmark module",
-      "short story-hook module",
-      "short fixed section title",
-      "short fixed name/title lockup when approved spelling is known"
-    ],
-    "figmaEditability": {
-      "visibleTextMustBeEditable": false,
-      "rule": "For approved short fixed display modules, the visible text does not need to remain editable in Figma. Visual fidelity is the priority.",
-      "sourceOfTruthLocation": "The exact approved string/number must be recorded in the page manifest, asset metadata or other canonical data. A hidden duplicate native Figma text layer is optional, not mandatory.",
-      "longOrVariableCopy": "Long body copy, personal answers, captions, guest data, TBD copy and frequently changing text remain native/editable and must not be baked into fixed display art."
-    },
+    "oneAssetMayInclude": ["short fixed text", "numbers", "background/vessel", "badge shape", "icons", "doodles/routes", "flowers/hearts/sparkles", "printed outlines/shadows", "local decorative accents"],
+    "eligibleExamples": ["year/date badge", "page-number badge", "feature-number + feature-heading module", "Q-number + fixed short heading shell", "stamp/postmark module", "short story-hook module", "short fixed section title", "short fixed name/title lockup when approved spelling is known"],
+    "figmaEditability": {"visibleTextMustBeEditable": false, "rule": "For approved short fixed display modules, the visible text does not need to remain editable in Figma. Visual fidelity is the priority.", "sourceOfTruthLocation": "The exact approved string/number must be recorded in the page manifest, asset metadata or other canonical data. A hidden duplicate native Figma text layer is optional, not mandatory.", "longOrVariableCopy": "Long body copy, personal answers, captions, guest data, TBD copy and frequently changing text remain native/editable and must not be baked into fixed display art."},
     "bundlingDecisionRule": "Bundle only elements that visually behave as one module and are expected to move/scale together. Separate real-photo content, long/variable copy, and independently movable decorations when the Visual Master shows them as distinct objects.",
-    "hardRejects": [
-      "rebuilding an authored fixed badge as generic ellipse + Inter text solely for editability",
-      "splitting a fixed feature badge into many Figma primitives when the result becomes UI-like",
-      "forcing every fixed word to remain editable at the cost of the Visual Master",
-      "baking long/TBD/personal copy into generated art",
-      "bundling a replaceable real photo into the decorative module",
-      "bundling unrelated decorations only to reduce layer count"
-    ]
+    "hardRejects": ["rebuilding an authored fixed badge as generic ellipse + Inter text solely for editability", "splitting a fixed feature badge into many Figma primitives when the result becomes UI-like", "forcing every fixed word to remain editable at the cost of the Visual Master", "baking long/TBD/personal copy into generated art", "bundling a replaceable real photo into the decorative module", "bundling unrelated decorations only to reduce layer count"]
   },
   "fixedShortDisplayTextPolicy": {
     "rule": "Short fixed display text may be image-generated or prepared display art when its visual treatment is part of page identity. This permission is not limited to personal names and may be applied through the bundled display-module policy above.",
@@ -59,33 +38,12 @@
     "status": "HARD_OVERRIDE",
     "principle": "A photo proxy must look like photo content only. It must not contain page-layout background, titles, badges, flowers, frames, doodles or other editorial decoration copied from the Visual Master.",
     "visualMasterCropAsPhotoProxy": "PROHIBITED",
-    "why": [
-      "Visual Master crops can carry baked-in decoration/background into the photo slot",
-      "the same decoration may then appear both inside the proxy photo and as a real page layer",
-      "it becomes difficult to distinguish photo content from editorial assets",
-      "Reference Delta can falsely pass because part of the target layout is already baked into the proxy"
-    ],
-    "allowedProxySources": [
-      "user-provided real photo suitable for the slot",
-      "clean semantically representative standalone photo with no page-layout decoration",
-      "clean generated standalone photo used only as a temporary visual proxy, with no attempt to reproduce the Visual Master page composition"
-    ],
+    "why": ["Visual Master crops can carry baked-in decoration/background into the photo slot", "the same decoration may then appear both inside the proxy photo and as a real page layer", "it becomes difficult to distinguish photo content from editorial assets", "Reference Delta can falsely pass because part of the target layout is already baked into the proxy"],
+    "allowedProxySources": ["user-provided real photo suitable for the slot", "clean semantically representative standalone photo with no page-layout decoration", "clean generated standalone photo used only as a temporary visual proxy, with no attempt to reproduce the Visual Master page composition"],
     "structuralProxy": "May be any clean standalone photo that clearly differs from page decoration; it is for clipping/swap only and cannot pass visual hierarchy QA.",
     "visualProxy": "Must match subject class/count/orientation/focal mass but remain a clean standalone photograph without page decorations.",
-    "hardRejects": [
-      "cropping P01.png/P02.png/etc and placing that crop inside a photo slot",
-      "photo proxies containing the page border, title, badge, route line, flower sticker, ticket, frame or story vessel",
-      "using a screenshot of the page as a photo fill",
-      "using a proxy whose baked decoration duplicates a separate Figma/generated page asset",
-      "claiming Reference Delta pass when proxy contamination exists"
-    ],
-    "qa": [
-      "inspect each proxy in isolation",
-      "confirm it reads as standalone photo content",
-      "confirm no page-layout typography or decoration is baked inside",
-      "confirm replacement with another clean photo does not remove any intended page decoration",
-      "confirm Visual Master comparison is based on page layers, not decoration hidden inside the proxy"
-    ]
+    "hardRejects": ["cropping P01.png/P02.png/etc and placing that crop inside a photo slot", "photo proxies containing the page border, title, badge, route line, flower sticker, ticket, frame or story vessel", "using a screenshot of the page as a photo fill", "using a proxy whose baked decoration duplicates a separate Figma/generated page asset", "claiming Reference Delta pass when proxy contamination exists"],
+    "qa": ["inspect each proxy in isolation", "confirm it reads as standalone photo content", "confirm no page-layout typography or decoration is baked inside", "confirm replacement with another clean photo does not remove any intended page decoration", "confirm Visual Master comparison is based on page layers, not decoration hidden inside the proxy"]
   },
   "editorialIrregularityPolicy": {
     "principle": "Preserve authored local irregularity from the Visual Master; do not manufacture random messiness and do not normalize the page into UI components.",
@@ -124,8 +82,8 @@
   },
   "feedbackDebtPolicy": {
     "rule": "A newly discovered systemic failure pattern reopens FEEDBACK_DEBT even if the previous feedback cycle was closed. Closing one debt does not freeze future acceptance rules.",
-    "currentP01Lesson": "P01 proved that page promotion and page completion are separate decisions; it also proved that Visual Master crops are unsuitable photo proxies when they include page decoration, and that fixed display modules can be better generated as complete visible objects rather than editable Figma subparts.",
+    "currentP01Lesson": "P01 proved that page promotion and page completion are separate decisions; it also proved that Visual Master crops are unsuitable photo proxies when they include page decoration, that fixed display modules can be better generated as complete visible objects rather than editable Figma subparts, and that manifest feedback should be completed before another Figma cycle begins.",
     "blockScalingRule": "Do not scale a production method to later pages while a newly discovered systemic carry-over/display-module/proxy failure remains unmodeled or unaudited."
   },
-  "acceptanceRule": "These policies are mandatory execution overrides for P01-P08. Structural QA, stale-layer scans, prior ADOPTED status, editable-text preference, or an older proxy-source rule cannot waive bundled-module fidelity, clean-photo-proxy, carry-over or coherence review."
+  "acceptanceRule": "These policies are mandatory execution overrides for P01-P08. Structural QA, stale-layer scans, prior ADOPTED status, editable-text preference, older proxy-source rules, or implementation momentum cannot waive manifest-first feedback closure, bundled-module fidelity, clean-photo-proxy, carry-over or coherence review."
 }
