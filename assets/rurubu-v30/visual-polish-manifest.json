@@ -1,10 +1,10 @@
 {
-  "schemaVersion": 6,
+  "schemaVersion": 7,
   "project": "Rurubu WEDDING V30",
   "status": "CURRENT_REQUIRED_POLISH_EXTENSION",
-  "scope": "P01-P08 systemic visual-polish, display-module, photo-proxy, alpha-integrity, carry-over and execution-ownership rules",
+  "scope": "P01-P08 systemic visual-polish, display-module, photo-proxy, alpha-integrity, copy-sync, border-depth, carry-over and execution-ownership rules",
   "inherits": "assets/rurubu-v30/manifest.json",
-  "reason": "P01 exposed generic-native design, stale carry-over, contaminated photo proxies, workflow-order failures, and a new alpha-integrity failure mode where outer transparency can pass while intended paper/vessel interiors become unintentionally translucent.",
+  "reason": "P01 exposed generic-native design, stale carry-over, contaminated photo proxies, workflow-order failures, inside-opacity failures, stale owner-copy propagation, and border/frame z-order problems that can survive otherwise clean structural QA.",
   "workflowOwnership": {
     "status": "USER_LOCKED_2026_09_02",
     "manifestAndReviewOwner": "ChatGPT",
@@ -42,6 +42,11 @@
       "intentionalTransparency": "Any large translucent interior region must be explicitly justified by the Visual Master/page authority; never assume transparency because the PNG has alpha."
     },
     "mandatoryQa": ["inspect alpha channel, not only RGB preview", "view asset over white, mid-gray, dark and high-contrast temporary backgrounds", "inspect the module by itself and inside the current page", "confirm intended paper/vessel interiors do not reveal page background or Hero pixels", "sample representative interior alpha values or generate an opacity-mask diagnostic when practical", "check text/icon readability after compositing", "compare against Visual Master material character at A5 size"],
+    "siblingSweepRule": {
+      "trigger": "Any same-page opaque paper/ticket/label/vessel module fails inside-opacity QA",
+      "action": "Run one quick sibling sweep across the page's other same-family modules before closing ALPHA_INTEGRITY_PASS.",
+      "reason": "A shared generation/cutout method can create the same hidden interior-alpha defect in multiple modules even when only one is initially noticed."
+    },
     "hardRejects": ["checkerboard preview treated as proof of correct alpha", "outer transparency pass while intended paper/vessel interior is semi-transparent", "white/cream paper deleted by key-color cutout", "large unexplained alpha holes inside tickets/cards/labels", "Figma opacity used to hide incorrect source alpha", "placing a white rectangle behind a broken module merely to fake the intended vessel when it changes silhouette or overlap"],
     "repairRule": "If interior opacity is wrong, fix/regenerate the source/cutout alpha for the affected module. Do not normalize the whole page or add generic Figma rescue shapes."
   },
@@ -49,18 +54,25 @@
     "status": "HARD / DEFAULT_EXECUTION_BEHAVIOR",
     "principle": "When a visible defect is likely asset-side, do not spend prolonged time diagnosing a cheap-to-regenerate module. Run one quick discriminator and regenerate/re-cut immediately when asset-side failure is likely or confirmed.",
     "decisionRule": "If diagnosis cost or context cost is likely to exceed regeneration/cutout cost, prefer regeneration/cutout.",
-    "workflow": [
-      "run one quick asset-vs-Figma discriminator",
-      "if source/RGBA/cutout is visibly or numerically wrong, regenerate or redo cutout immediately",
-      "inspect Figma opacity/blend/mask only when the asset itself passes the quick check",
-      "replace only the affected module and delete the superseded LIVE node",
-      "after replacement run one integrated final QA pass; repeat only if that pass fails"
-    ],
+    "workflow": ["run one quick asset-vs-Figma discriminator", "if source/RGBA/cutout is visibly or numerically wrong, regenerate or redo cutout immediately", "if one same-family paper module fails, run one sibling sweep before closing page alpha integrity", "inspect Figma opacity/blend/mask only when the asset itself passes the quick check", "replace only the affected module and delete the superseded LIVE node", "after replacement run one integrated final QA pass; repeat only if that pass fails"],
     "quickDiscriminatorExamples": ["inspect one representative interior alpha sample or alpha mask", "check source asset over one dark/high-contrast background", "confirm Figma node opacity/blend is normal when source passes"],
     "immediateRegenerationExamples": ["paper/ticket/label interior translucency", "broken or contaminated cutout alpha", "key-color halo or lost white/cream material", "clearly weak or corrupted generated display rendering", "wrong bundled module treatment that is cheaper to regenerate than patch"],
     "doNotWasteTimeOn": ["repeated midpoint screenshots for the same known defect", "multiple rounds of identical alpha diagnosis", "long back-and-forth status reports before fixing a cheap asset", "manual micro-patching of a broken generated module when regeneration is faster", "context-heavy reporting of every intermediate check"],
     "reportingRule": "Prefer one concise final report with cause, replacement, QA result and remaining debt. Report mid-process only for a real blocker, destructive-risk decision, or repeated regeneration failure.",
-    "safetyBoundary": "Do not skip canonical copy/fact checks, destructive Figma safety, or final integrated QA merely to be fast."
+    "safetyBoundary": "Do not skip canonical copy/fact checks, destructive Figma safety, sibling sweep after a shared alpha failure, or final integrated QA merely to be fast."
+  },
+  "copyPropagationPolicy": {
+    "status": "HARD / OWNER_FEEDBACK_OVERRIDES_STALE_GENERATED_COPY",
+    "principle": "When the owner changes visible wording, page-role terminology, or teaser meaning, update all dependent generated/native modules on that page instead of leaving stale text because an older asset already exists.",
+    "qa": ["compare visible copy against newest page authority", "check related teaser/index/cover modules for stale wording", "mark previous generated wording SUPERSEDED", "verify final screenshot uses one coherent terminology set"],
+    "hardRejects": ["old page-role wording surviving in a teaser after owner correction", "mixed old/new terminology on one page", "keeping stale copy because regeneration would be inconvenient"]
+  },
+  "borderDepthPolicy": {
+    "status": "HARD / DEFAULT_BACKGROUND_ADJACENT",
+    "principle": "Page border/frame assets are support framing, not foreground editorial content, unless the Visual Master clearly shows intentional foreground overlap.",
+    "defaultZOrder": ["background field", "border/frame", "Hero/photos", "authored display modules", "major stickers/badges/foreground accents"],
+    "qa": ["inspect whether border slices across text/cards/photos", "confirm frame supports page edge rather than dominating it", "compare intentional overlap directly with Visual Master"],
+    "hardRejects": ["border placed above major editorial modules by default", "frame reading as a foreground overlay that cuts through content", "flattening unrelated content to solve a z-order problem"]
   },
   "editorialIrregularityPolicy": {
     "principle": "Preserve authored local irregularity; do not normalize the page into UI components and do not manufacture random messiness.",
@@ -88,13 +100,13 @@
     "coherenceQuestion": "Does the page look like one authored magazine page, or like newer high-quality anchors layered over an older draft?"
   },
   "pageApplicationRequirement": {
-    "rule": "Before P01-P08 production, page authority must classify bundled fixed modules, native/variable copy, clean photo-proxy roles, independently movable exceptions, alpha/material expectations, and critical edge-safety zones.",
+    "rule": "Before P01-P08 production, page authority must classify bundled fixed modules, native/variable copy, clean photo-proxy roles, independently movable exceptions, alpha/material expectations, copy dependencies, border/frame depth expectations, and critical edge-safety zones.",
     "pendingPageRule": "For pages awaiting actual Visual Master review, do not invent exact module lists from prose."
   },
   "feedbackDebtPolicy": {
     "rule": "A newly discovered repeatable failure reopens FEEDBACK_DEBT even if an earlier cycle was closed.",
-    "newP01Lesson": "P01 showed that alpha QA must verify intended opaque interiors, not merely the existence of an alpha channel, that A5 edge safety can fail even after structural/carry-over gates pass, and that cheap asset-side defects should fast-fail into targeted regeneration rather than prolonged diagnosis.",
+    "newP01Lesson": "P01 showed that alpha QA must verify intended opaque interiors, one failed paper module should trigger a sibling sweep, owner copy changes must propagate to dependent generated modules, border/frame z-order can fail after other visual gates pass, and cheap asset-side defects should fast-fail into targeted regeneration rather than prolonged diagnosis.",
     "blockScalingRule": "Do not scale a newly discovered failure mode to later pages before it is modeled and the current affected page is rechecked or explicitly deferred by the user."
   },
-  "acceptanceRule": "Structural QA, stale-layer scans, prior ADOPTED status, editable-text preference, an alpha-channel existence check, or prolonged diagnostic effort cannot waive visual fidelity, clean-proxy, intended-interior-opacity, edge-safety, carry-over or coherence review. Cheap asset-side failures should be regenerated promptly under the fast-fail policy."
+  "acceptanceRule": "Structural QA, stale-layer scans, prior ADOPTED status, editable-text preference, an alpha-channel existence check, or prolonged diagnostic effort cannot waive visual fidelity, clean-proxy, intended-interior-opacity, copy-sync, border-depth, edge-safety, carry-over or coherence review. Cheap asset-side failures should be regenerated promptly under the fast-fail policy."
 }
