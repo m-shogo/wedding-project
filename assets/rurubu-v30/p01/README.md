@@ -1,18 +1,10 @@
 # V30 P01 production assets
 
-Status: `P01_DESIGN_LOCKED / FINAL_PHOTO_QA_PENDING`
+Status: `P01_DESIGN_LOCKED / GIT_BINARY_SYNC_PENDING / FINAL_PHOTO_QA_PENDING`
 
 P01 CURRENT remains Figma node `3535:7`. Do not roll back to FIRST BUILD and do not create another P01 frame.
 
-The large REWORK plus 2026-09-02 targeted micro-polish are accepted.
-
-Required authority:
-- `docs/RURUBU-CURRENT.md`
-- `assets/rurubu-v30/manifest.json`
-- `assets/rurubu-v30/visual-polish-manifest.json`
-- `assets/rurubu-v30/p01/manifest.json`
-- `assets/rurubu-v30/p01/polish-manifest.json`
-- `docs/rurubu-v30/FIGMA-EXECUTION-ACCEPTANCE.md`
+The large REWORK plus 2026-09-02 targeted micro-polish are visually accepted.
 
 ## Current accepted structure
 
@@ -35,35 +27,23 @@ Replaceable photo slots remain separate:
 
 P01.png/page screenshots remain comparison references only and must never be used as active photo fills.
 
-## Micro-polish resolution — 2026-09-02
+## Micro-polish resolution — PASS
 
-### Feature 1–3 interior opacity
-
-Resolved.
-
-Codex identified the defect as source-PNG internal alpha rather than Figma opacity/blend. The affected Feature display assets were repaired/replaced without adding rescue rectangles.
+Feature 1–3 interior opacity, left-edge safety and top-left ring/diamond/sparkle fidelity were fixed and reviewed from the fresh Figma CURRENT screenshot.
 
 Reported checks:
-- intended paper-core samples: alpha `255`;
+- intended Feature paper-core samples: alpha `255`;
 - outside transparency retained;
 - Figma node/image opacity: `1.0`;
-- fresh CURRENT screenshot no longer shows Hero/background through the intended white paper vessels.
+- Hero/background no longer visually bleeds through intended white Feature paper;
+- Feature badges/headings no longer read as accidentally clipped by the airmail border;
+- ring support cue now reads as gold wedding rings + visible diamond + yellow sparkles;
+- hidden obsolete layers: `0`;
+- duplicate same-job layers: `0`;
+- P02 `3535:9`: untouched.
 
-### Feature 1–3 left-edge safety
+## Design gate state
 
-Resolved.
-
-The three modules were tuned inward without normalizing their intentionally unequal local spacing/rhythm. Fresh CURRENT review no longer reads the number badges/headings as accidentally clipped by the airmail border.
-
-### Top-left ring cluster
-
-Resolved.
-
-The weak simplified cue was replaced/requalified as a support cluster reading as gold wedding rings + visible diamond + yellow sparkle. It remains subordinate to `るるぶ / WEDDING` hierarchy.
-
-## Current gate state
-
-- `BEST_CURRENT = YES`
 - `FIGMA_STRUCTURE_READY = PASS`
 - `CLEAN_PROXY_PASS = PASS`
 - `BUNDLED_DISPLAY_MODULE_PASS = PASS`
@@ -79,15 +59,28 @@ The weak simplified cue was replaced/requalified as a support cluster reading as
 - `FINAL_PHOTO_QA_PENDING = YES`
 - `PRINT_READY = NO`
 
-Reported cleanup after the micro-polish:
-- hidden obsolete layer count: `0`
-- duplicate same-job production layer count: `0`
-- P02 `3535:9`: untouched
-- TEMP `3708:2`: already deleted
+## Immediate repository-sync debt
+
+Codex hit its usage limit after completing Figma/Drive/local project-asset work but before commit/push. The remote branch therefore still lacks these four micro-polish production PNGs:
+
+- `V30_P01_FEATURE_1_MODULE_MICRO_POLISH_OPAQUE_PAPER_RGBA.png`
+- `V30_P01_FEATURE_2_MODULE_MICRO_POLISH_OPAQUE_PAPER_RGBA.png`
+- `V30_P01_FEATURE_3_MODULE_MICRO_POLISH_OPAQUE_PAPER_RGBA.png`
+- `V30_P01_TOP_LEFT_RING_DIAMOND_SPARKLE_MICRO_POLISH_RGBA.png`
+
+Before P02:
+1. preserve the four local PNGs;
+2. discard/reconcile stale local authority-file edits because remote authority is newer;
+3. fast-forward/rebase to the latest PR head;
+4. add only the four intended binary production assets plus intentionally tracked final QA evidence;
+5. commit/push;
+6. verify remote existence and a clean local worktree.
+
+This is **not** a P01 visual/design debt. It is a traceability/repository-state gate.
 
 ## Fast-fail rule retained
 
-For future P01/V30 generated-asset defects:
+For future V30 generated-asset defects:
 
 `one quick discriminator → asset-side failureなら即 regenerate/re-cut → replace affected module only → one integrated final QA`.
 
@@ -95,16 +88,8 @@ Do not waste repeated diagnosis/context on a cheap asset-side defect when regene
 
 ## Next P01 work
 
-No further P01 design work is required now.
+After the binary sync, no further P01 design work is required until owner-approved final photographs arrive.
 
-When owner-approved final photographs are supplied, replace only the four photo fills while preserving accepted masks, display modules, overlap and CURRENT node `3535:7`.
+Then replace only the four photo fills and run final-photo crop/face-safe/effective-resolution/A5/print QA.
 
-Then run final-photo:
-- crop / face-safe QA
-- effective resolution QA
-- A5 readability
-- print/export QA
-
-Historical baseline/rejected/superseded assets belong in Drive/Git history, not active Figma LIVE.
-
-**P02 production may begin.**
+**P02 production may begin only after the four binary assets are synchronized to remote Git and the local worktree is clean.**
