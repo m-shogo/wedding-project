@@ -1,12 +1,13 @@
 {
-  "schemaVersion": 4,
+  "schemaVersion": 5,
   "project": "Rurubu WEDDING V30",
   "version": "V30",
   "status": "CURRENT_FINAL_PRODUCTION",
   "authorityOrder": [
     "user explicit instruction in current task",
     "page visual master image P01-P08",
-    "page manifest page-specific visual/production constraints",
+    "page manifest and page polish manifest page-specific visual/production constraints",
+    "assets/rurubu-v30/visual-polish-manifest.json current V30 execution overrides",
     "docs/rurubu-v30/FIGMA-EXECUTION-ACCEPTANCE.md post-build visual acceptance and feedback process",
     "root manifest common production constraints",
     "docs/rurubu-v30/VISUAL-MASTER-LOCK-AUDIT.md pre-build visual-understanding audit",
@@ -19,12 +20,23 @@
       "docs/RURUBU-CURRENT.md",
       "actual page Visual Master image",
       "assets/rurubu-v30/manifest.json",
+      "assets/rurubu-v30/visual-polish-manifest.json",
       "page-specific manifest",
+      "page polish manifest when present",
       "docs/rurubu-v30/VISUAL-MASTER-LOCK-AUDIT.md",
       "docs/rurubu-v30/FIGMA-EXECUTION-ACCEPTANCE.md",
       "page README.md when production has already started"
     ],
-    "rule": "Manifest files are necessary but not sufficient. A production agent must also read the actual Visual Master and the pre-build/post-build audit documents."
+    "rule": "Manifest files are necessary but not sufficient. A production agent must also read the actual Visual Master and the pre-build/post-build audit documents. Newer visual-polish/page-polish overrides must be read before relying on older generic rules."
+  },
+  "workflowOwnership": {
+    "status": "USER_LOCKED_2026_09_02",
+    "manifestReviewOwner": "ChatGPT",
+    "figmaProductionAndImageGenOwner": "Codex",
+    "chatgptScope": ["feedback analysis", "manifest improvement", "authority conflict cleanup", "visual-review planning", "Codex prompt/handoff preparation", "post-Codex review"],
+    "codexScope": ["production ImageGen", "alpha/cutout preparation", "Figma writes/cleanup", "proxy installation", "visual export/QA evidence", "Drive/Git production evidence when instructed"],
+    "hardRule": "Do not jump into direct Figma modification or production ImageGen while manifest/feedback debt is open. ChatGPT does not perform those production writes unless the user explicitly reassigns them in a later instruction.",
+    "handoffGate": "Before Codex implementation, relevant systemic feedback and page-specific feedback must be represented in authority, contradictory older behavior must be explicitly replaced, and required visual review gates must be satisfied."
   },
   "canonicalFacts": {
     "coupleNames": {
@@ -81,6 +93,8 @@
       "threeSecondReadOrder": "LOCKED",
       "identityAnchorCharacter": "LOCKED",
       "representativeProxySemantics": "LOCKED for visual QA",
+      "photoProxyCleanliness": "LOCKED",
+      "fixedDisplayModuleClassification": "LOCKED before part generation",
       "mustNotCover": "LOCKED",
       "photoMasking": "LOCKED",
       "position": "TARGET",
@@ -103,8 +117,8 @@
     "order": [
       "canonical facts / hard role constraints",
       "visual master first impression and three-second hierarchy",
-      "identity-anchor character",
-      "representative visual-proxy semantics",
+      "identity-anchor and fixed-display-module character",
+      "clean representative visual-proxy semantics",
       "must-not-cover and photo safety",
       "relational constraints",
       "normalized geometry targets",
@@ -114,50 +128,52 @@
     "rule": "When two constraints conflict, resolve toward the higher item and record the deviation reason instead of silently forcing all constraints."
   },
   "visualAuthorityPolicy": {
-    "principle": "Page visual-master images outrank prose-only design interpretation for visual execution.",
+    "principle": "Page visual-master images outrank prose-only design interpretation for visual execution, but the Visual Master itself must not be reused as contaminated photo-slot content.",
     "workflow": [
       "review the page visual master",
       "extract page-specific visual grammar",
       "complete PASS A and PASS B visual-master lock audit",
-      "lock hierarchy, background, frame, relationship and constraint behavior in the page manifest",
+      "classify fixed bundled display modules vs native/variable copy",
+      "classify every real-photo slot and clean standalone proxy role",
+      "lock hierarchy, background, frame, relationship and constraint behavior in the page manifest/page polish manifest",
+      "close systemic/page feedback debt that affects the next implementation",
       "create or confirm a full-page art-direction proof",
-      "only then decompose the proven page into independently positionable assets",
-      "reconstruct in layered Figma with replaceable photography and controlled factual copy",
-      "install representative visual proxies if final photos are absent",
+      "only then decompose the proven page into independently positionable editorial objects or bundled modules",
+      "handoff production ImageGen/Figma execution to Codex",
+      "reconstruct in layered Figma with replaceable photography and controlled factual source metadata",
+      "install clean representative visual proxies if final photos are absent",
       "capture the current Figma screenshot",
+      "pass clean-proxy gate",
+      "pass fixed-display-module gate",
       "pass identity-anchor gate",
+      "pass visual carry-over/coherence gate when inherited assets exist",
       "pass direct Reference Delta against the Visual Master",
-      "perform editability/photo-swap/A5/print QA",
+      "perform photo-swap/A5/print QA",
       "review owner feedback and write systemic lessons back to authority before repeating the method on another page"
     ],
-    "figmaPolicy": "Figma is the layered compositor, not the source of magazine personality.",
-    "wholePagePolicy": "Whole-page reference images are art-direction masters; final editable production remains layered.",
+    "figmaPolicy": "Figma is the layered compositor, not the source of magazine personality. Fixed short display modules may be placed as complete prepared assets rather than rebuilt from generic primitives.",
+    "wholePagePolicy": "Whole-page reference images are art-direction masters; final production remains layered at editorial-object/module level with independently replaceable real photos.",
     "gate0": "At a 3-second glance, the intended editorial identity and page role must read correctly before technical QA can pass.",
-    "antiFalseComplete": "A technically clean Figma file is not complete if a high-saliency identity anchor, hero semantic, or first-impression relationship materially diverges from the Visual Master."
+    "antiFalseComplete": "A technically clean Figma file is not complete if a high-saliency identity anchor, contaminated proxy, stale inherited module, or first-impression relationship materially diverges from the Visual Master."
   },
   "identityAnchorPolicy": {
     "required": true,
     "definition": "A high-saliency element whose silhouette/lettering/treatment materially defines the page identity, such as a masthead, main title, names lockup or signature badge.",
-    "compareDimensions": [
-      "silhouette",
-      "letterform character",
-      "stroke and outline thickness",
-      "dimensional depth/shadow",
-      "highlight/gloss behavior when present",
-      "color proportions",
-      "relative scale",
-      "relationship to neighboring art",
-      "authored irregularity"
-    ],
+    "compareDimensions": ["silhouette", "letterform character", "stroke and outline thickness", "dimensional depth/shadow", "highlight/gloss behavior when present", "color proportions", "relative scale", "relationship to neighboring art", "authored irregularity"],
     "textCorrectnessAloneIsInsufficient": true,
     "editabilityRule": "Use native editable text/vector only when it preserves the Visual Master. Never accept a visibly generic substitute merely because it is easier to edit.",
-    "dualLayerFallback": "When visual fidelity requires prepared/vector/raster display art for locked short FACT text, keep a separate native source-of-truth value/layer and QA the visible rendering against it. Do not use this fallback for long or frequently changing copy.",
-    "hardRejects": [
-      "generic font substitution for a signature masthead",
-      "generic bold sans substitution for expressive script/hand-lettered identity text",
-      "simplifying an identity badge into a generic oval/circle when its silhouette is distinctive",
-      "passing an identity anchor because the words are spelled correctly while its visual character is wrong"
-    ]
+    "sourceOfTruthRule": "For fixed short FACT display art, the exact approved value must live in canonical/page manifest or asset metadata. A duplicate hidden native Figma layer is optional, not mandatory.",
+    "hardRejects": ["generic font substitution for a signature masthead", "generic bold sans substitution for expressive script/hand-lettered identity text", "simplifying an identity badge into a generic oval/circle when its silhouette is distinctive", "passing an identity anchor because the words are spelled correctly while its visual character is wrong"]
+  },
+  "bundledDisplayModulePolicy": {
+    "requiredPerPage": true,
+    "principle": "If short fixed text, numbers, background/vessel, icons and local accents visually behave as one authored object, they may and often should be generated/prepared as one complete display asset.",
+    "visibleTextMustRemainEditable": false,
+    "oneModuleMayContain": ["short fixed text", "numbers", "background/vessel", "badge shape", "icons", "route/doodle marks", "flowers/hearts/sparkles", "printed outline/shadow", "local fixed decorative accents"],
+    "mustRemainSeparate": ["replaceable real-photo content", "long body copy", "TBD/personal copy not yet approved", "frequently changing text", "decorations the Visual Master clearly positions/moves independently"],
+    "sourceOfTruth": "Exact approved fixed strings/numbers are stored in manifest or asset metadata and QA-checked against generated visible output; hidden duplicate Figma text is optional.",
+    "partGenerationRule": "Every page must explicitly classify bundledDisplayModules and nativeOrVariableCopy before part generation. Pages still awaiting Visual Master review must not invent this classification from prose alone.",
+    "hardRejects": ["generic ellipse + generic font reconstruction of an authored badge solely for editability", "splitting a fixed module into many primitives when that makes it UI-like", "bundling replaceable photography into the fixed module", "baking long/TBD/personal copy into generated display art", "bundling unrelated decorations only to reduce layer count"]
   },
   "relationalConstraintPolicy": {
     "requiredPerPage": true,
@@ -178,26 +194,20 @@
     "antiFailure": "Never improve a low-saliency decoration by weakening a higher-saliency title, hero image, canonical fact or primary page promise."
   },
   "renderModePolicy": {
-    "allowed": ["generated-art", "native-text", "replaceable-photo", "figma-shape-ok", "display-art-with-native-source"],
+    "allowed": ["generated-art", "bundled-display-module", "native-text", "replaceable-photo", "figma-shape-ok", "display-art-with-source-metadata"],
     "rules": {
       "generated-art": "Expressive display art, irregular editorial vessels, frames, stamps, tickets, paper objects, borders and decorative systems may be generated/prepared art.",
-      "native-text": "Canonical facts and editable factual/editorial copy remain native when correctness/editability matters and the native treatment preserves visual fidelity.",
+      "bundled-display-module": "A fixed authored module may combine short visible text/numbers with its vessel/icons/accents into one asset; visible text need not be editable.",
+      "native-text": "Long, variable, TBD or precision factual/editorial copy remains native when correctness/editability matters.",
       "replaceable-photo": "Real-photo slots are independent from their frame/backing and remain non-destructively replaceable.",
       "figma-shape-ok": "Simple utility geometry may use Figma primitives only when doing so does not weaken the visual master.",
-      "display-art-with-native-source": "For short locked display FACT text whose visual treatment is signature-level and cannot be reproduced faithfully as native text, visible prepared display art may be used only with a separate native source-of-truth and explicit spelling QA."
+      "display-art-with-source-metadata": "For short fixed FACT display art, preserve exact source value in canonical/page manifest or asset metadata and QA visible spelling/numbering. A hidden duplicate Figma text layer is optional."
     },
-    "fidelityPriority": "Editability is a production requirement, not permission to replace expressive identity art with generic native styling."
+    "fidelityPriority": "Editability is a production requirement only where future editing is genuinely needed; it is not permission to replace expressive fixed art with generic native styling."
   },
   "textTruthPolicy": {
     "classes": ["FACT", "EDITORIAL_COPY", "DECORATIVE_FICTION", "TBD"],
-    "rules": [
-      "FACT must come from canonical/user-approved data only.",
-      "Generated text is never authoritative FACT.",
-      "EDITORIAL_COPY may be rewritten only within the approved page role.",
-      "DECORATIVE_FICTION may be stylized but must not impersonate a real fact.",
-      "TBD must remain clearly unresolved and must not be silently invented.",
-      "Visible display rendering and source-of-truth are separate concerns: exact FACT value must remain controlled even when the visible short lockup is highly stylized."
-    ]
+    "rules": ["FACT must come from canonical/user-approved data only.", "Generated text is never authoritative FACT by itself.", "EDITORIAL_COPY may be rewritten only within the approved page role.", "DECORATIVE_FICTION may be stylized but must not impersonate a real fact.", "TBD must remain clearly unresolved and must not be silently invented.", "Visible display rendering and source-of-truth are separate concerns: exact FACT value remains controlled in manifest/metadata even when the visible fixed module is raster/vector display art."]
   },
   "photoSystem": {
     "default": {
@@ -221,31 +231,25 @@
       "structuralProxy": {
         "purpose": ["clipping", "swap", "fill/crop behavior", "frame independence"],
         "semanticMatchRequired": false,
+        "cleanStandalonePhotoRequired": true,
         "mayPassReferenceDelta": false
       },
       "visualProxy": {
         "purpose": ["hierarchy", "visual mass", "crop", "face/focal relationship", "title/photo collision", "Reference Delta"],
         "semanticMatchRequired": true,
+        "cleanStandalonePhotoRequired": true,
         "requiredMatchDimensions": ["subject class", "important subject count", "orientation", "subject scale", "focal position", "bright/dark visual mass when hierarchy-relevant", "face/gesture density when people-led"],
-        "preferredSourceOrder": ["user-provided real photo", "crop from user-provided Visual Master used only for calibration", "approved semantically matching proxy"],
-        "hardRejects": ["object/place proxy validating a people-dominant hero", "single-person proxy validating a two-person hero when face mass matters", "generic landscape validating a group-memory slot", "claiming Reference Delta pass from a structural proxy"]
+        "preferredSourceOrder": ["user-provided real photo", "approved clean standalone semantically matching photo", "clean generated standalone photo proxy without page-layout decoration"],
+        "visualMasterCropAsProxy": "PROHIBITED",
+        "hardRejects": ["crop from P01.png/P02.png/etc used as photo fill", "page screenshot used as photo fill", "proxy containing page title/border/badge/flower sticker/route/ticket/frame/story vessel or other layout decoration", "object/place proxy validating a people-dominant hero", "single-person proxy validating a two-person hero when face mass matters", "generic landscape validating a group-memory slot", "claiming Reference Delta pass from a structural or contaminated proxy"]
       }
     },
     "dummyPhotoPolicy": {
       "allowed": true,
       "status": "PROXY_ONLY",
-      "rule": "Dummy imagery may prove structure, but a high-saliency slot requires a representative VISUAL_PROXY before visual completion can be claimed. Dummy imagery is never autobiographical fact and remains replaceable without rebuilding the frame."
+      "rule": "Dummy imagery may prove structure, but it must be a clean standalone photo with no page-layout decoration. A high-saliency slot requires a semantically representative clean VISUAL_PROXY before visual completion can be claimed. Dummy imagery is never autobiographical fact and remains replaceable without rebuilding the frame."
     },
-    "replacementQa": [
-      "swap portrait source into each applicable slot",
-      "swap landscape source into each applicable slot",
-      "test high-subject and low-subject focal positions",
-      "test left/right focal positions where relevant",
-      "verify no spill outside mask",
-      "verify no gap caused by crop mode",
-      "verify frame/backing does not need rebuilding",
-      "verify important faces/subjects are not covered by must-not-cover elements"
-    ]
+    "replacementQa": ["inspect proxy in isolation and confirm it reads as photo content only", "verify no page typography/border/sticker/frame/background decoration is baked into proxy", "swap portrait source into each applicable slot", "swap landscape source into each applicable slot", "test high-subject and low-subject focal positions", "test left/right focal positions where relevant", "verify no spill outside mask", "verify no gap caused by crop mode", "verify frame/backing does not need rebuilding", "verify important faces/subjects are not covered by must-not-cover elements", "verify replacing proxy does not remove any intended page decoration"]
   },
   "layerSystem": {
     "zIndexDirection": "higher number renders in front",
@@ -280,12 +284,13 @@
   },
   "assetProductionPolicy": {
     "onePartOneImage": true,
+    "onePartDefinition": "One independently movable editorial object = one production image. A bundled fixed display module counts as one editorial object even if it contains internal text, numbers, background, icons and local accents. Replaceable real photos never count as part of that bundled module.",
     "partGenerationGate": {
-      "requiredBeforeGeneratingParts": ["page visual master reviewed", "three-second hierarchy locked", "full-page visual proof accepted or existing visual master confirmed", "reference-delta direction accepted", "background/frame/photo roles mapped", "identity anchors classified"],
-      "blockedIf": ["page still reads as generic wedding/travel collage", "primary masthead/title treatment is unresolved", "photo hierarchy is unresolved", "page role is unresolved", "identity-anchor representation method is unresolved"],
-      "rule": "Do not start isolated part generation merely because geometry is known. Whole-page art direction must pass first."
+      "requiredBeforeGeneratingParts": ["page visual master reviewed", "three-second hierarchy locked", "PASS A/PASS B complete", "fixed bundled display modules classified", "native/variable copy classified", "clean photo-proxy roles classified", "feedback debt affecting implementation written back", "full-page visual proof accepted or existing visual master confirmed", "background/frame/photo roles mapped", "identity anchors classified"],
+      "blockedIf": ["page still reads as generic wedding/travel collage", "primary masthead/title treatment is unresolved", "photo hierarchy is unresolved", "page role is unresolved", "identity-anchor representation method is unresolved", "fixed display modules are not classified", "proxy plan relies on Visual Master crops/page screenshots", "systemic feedback debt is not yet represented in authority"],
+      "rule": "Do not start production ImageGen/Figma merely because geometry is known. Manifest/review classification must be complete first."
     },
-    "targetedRevisionRule": "When one isolated asset is weak, revise/regenerate that asset first and explicitly state what must change and what must remain unchanged. Do not regenerate the whole page merely to fix one identity anchor.",
+    "targetedRevisionRule": "When one isolated asset/module is weak, revise/regenerate that asset first and explicitly state what must change and what must remain unchanged. Do not regenerate the whole page merely to fix one identity anchor/module.",
     "floatingAssetFormat": "PNG/RGBA with true transparency unless opacity is intentional",
     "fullPageBackgroundFormat": "opaque PNG/JPG or prepared raster as appropriate",
     "assetPaddingContract": {
@@ -294,7 +299,7 @@
       "rule": "Transparent padding must not silently change perceived size or placement. Crop/trim or account for it explicitly before Figma placement."
     },
     "alphaVerificationRule": "A checkerboard-looking generator preview is not proof of transparency. Inspect the actual alpha channel and reject baked checkerboard pixels before a floating asset is adopted.",
-    "assetMetadataRequired": ["assetId", "path", "renderMode", "status", "source/provenance", "dimensions", "visual bounds", "alpha mode", "sha256 when available", "page", "layerGroup", "zIndex"],
+    "assetMetadataRequired": ["assetId", "path", "renderMode", "status", "source/provenance", "exact fixed text/numbers when baked into display art", "dimensions", "visual bounds", "alpha mode", "sha256 when available", "page", "layerGroup", "zIndex"],
     "statuses": ["REFERENCE_ONLY", "CANDIDATE", "ADOPTED", "SUPERSEDED", "REJECTED"]
   },
   "placementPolicy": {
@@ -303,23 +308,26 @@
   },
   "deviationPolicy": {
     "allowed": true,
-    "requiresReasonWhen": ["position exceeds default tolerance", "size exceeds default tolerance", "z-order relationship changes", "quiet zone is entered", "saliency order changes", "identity-anchor render method changes", "visual proxy semantics differ from master"],
+    "requiresReasonWhen": ["position exceeds default tolerance", "size exceeds default tolerance", "z-order relationship changes", "quiet zone is entered", "saliency order changes", "identity-anchor render method changes", "bundled-display-module boundary changes", "visual proxy semantics differ from master"],
     "reasonExamples": ["real-photo face safety", "closer visual-master match", "A5 readability", "bleed/safe-area requirement"],
-    "forbiddenReason": "convenience, editability alone, or generic template normalization"
+    "forbiddenReason": "convenience, editability alone, generic template normalization, or preserving sunk work"
   },
   "humanFeedbackPolicy": {
     "enabled": true,
     "systemicFeedbackCreates": "FEEDBACK_DEBT",
-    "pageSpecificWriteback": "page manifest",
-    "systemicWriteback": ["root manifest", "docs/rurubu-v30/FIGMA-EXECUTION-ACCEPTANCE.md"],
+    "pageSpecificWriteback": ["page manifest", "page polish manifest when present"],
+    "systemicWriteback": ["root manifest", "assets/rurubu-v30/visual-polish-manifest.json", "docs/rurubu-v30/FIGMA-EXECUTION-ACCEPTANCE.md"],
     "rule": "When user/owner feedback reveals a repeatable failure mode, do not fix only the current Figma page. Record the lesson in authority before the same production method is applied to another page.",
     "blockNextProductionPageWhileFeedbackDebtOpen": true
   },
   "completionTerminology": {
     "FIGMA_STRUCTURE_READY": "Layering, masks, source control and replaceability are ready; no visual-fidelity claim.",
-    "REPRESENTATIVE_VISUAL_PROXY_READY": "High-saliency slots use semantically representative visual proxies when final photos are absent.",
+    "CLEAN_PROXY_PASS": "All active proxy photos are clean standalone photo content without Visual-Master/page decoration baked in.",
+    "BUNDLED_DISPLAY_MODULE_PASS": "All fixed authored display modules are correctly bundled/separated according to page manifest and do not regress into generic editable UI.",
+    "REPRESENTATIVE_VISUAL_PROXY_READY": "High-saliency slots use semantically representative clean visual proxies when final photos are absent.",
     "IDENTITY_ANCHOR_PASS": "Signature visual anchors preserve the Visual Master's character.",
-    "REFERENCE_DELTA_PASS": "Current screenshot passes direct visual comparison against the Visual Master.",
+    "VISUAL_CARRYOVER_PASS": "Every material inherited visible asset has been requalified/reworked/replaced/superseded in the current design language.",
+    "REFERENCE_DELTA_PASS": "Current screenshot passes direct visual comparison against the Visual Master after clean-proxy/module/carry-over checks.",
     "PHOTO_SWAP_PASS": "Photo replacement behavior is proven.",
     "A5_PRINT_QA_PASS": "Actual-size readability/safe-area/print checks pass.",
     "HUMAN_FEEDBACK_REVIEWED": "Owner feedback has been reviewed and systemic lessons written back.",
@@ -328,37 +336,21 @@
     "rule": "Never use FIGMA_COMPLETE as shorthand for structure-only completion."
   },
   "productionStateMachine": {
-    "states": [
-      "VISUAL_MASTER_PENDING",
-      "VISUAL_MASTER_LOCKED",
-      "PART_MAP_APPROVED",
-      "ASSETS_GENERATED",
-      "FIGMA_STRUCTURE_READY",
-      "REPRESENTATIVE_VISUAL_PROXY_READY",
-      "IDENTITY_ANCHOR_PASS",
-      "REFERENCE_DELTA_PASS",
-      "PHOTO_SWAP_PASS",
-      "A5_PRINT_QA_PASS",
-      "HUMAN_FEEDBACK_REVIEWED",
-      "FIGMA_DESIGN_COMPLETE",
-      "FINAL_PHOTO_QA_PENDING",
-      "FINAL_PHOTO_QA_PASS",
-      "COMPLETE"
-    ],
-    "rule": "Advance only when the prior applicable state's required evidence exists. Technical completion cannot skip representative-proxy, identity-anchor, Reference Delta or feedback stages."
+    "states": ["VISUAL_MASTER_PENDING", "VISUAL_MASTER_LOCKED", "PART_MAP_APPROVED", "ASSETS_GENERATED", "FIGMA_STRUCTURE_READY", "CLEAN_PROXY_PASS", "BUNDLED_DISPLAY_MODULE_PASS", "REPRESENTATIVE_VISUAL_PROXY_READY", "IDENTITY_ANCHOR_PASS", "VISUAL_CARRYOVER_PASS", "REFERENCE_DELTA_PASS", "PHOTO_SWAP_PASS", "A5_PRINT_QA_PASS", "HUMAN_FEEDBACK_REVIEWED", "FIGMA_DESIGN_COMPLETE", "FINAL_PHOTO_QA_PENDING", "FINAL_PHOTO_QA_PASS", "COMPLETE"],
+    "rule": "Advance only when the prior applicable state's required evidence exists. Technical completion cannot skip clean-proxy, bundled-display-module, identity-anchor, carry-over, Reference Delta or feedback stages."
   },
   "qa": {
-    "orderedGates": ["G0_VISUAL_IDENTITY_3_SECOND", "G1_REFERENCE_DELTA", "G2_CANONICAL_FACTS", "G3_RELATIONAL_HIERARCHY_AND_SALIENCY", "G4_QUIET_ZONES_AND_OCCLUSION", "G5_PHOTO_MASK_FACE_SAFE_AND_REPLACEABILITY", "G6_A5_READABILITY_AND_SAFE_AREA", "G7_ALPHA_PADDING_AND_ASSET_INTEGRITY", "G8_EXPORT_AND_PRINT", "G9_HIDDEN_STALE_PLACEHOLDER_SCAN"],
-    "executionSubGates": ["E0_CURRENT_FIGMA_SCREENSHOT_CAPTURED", "E1_REPRESENTATIVE_VISUAL_PROXY", "E2_IDENTITY_ANCHORS", "E3_FIRST_IMPRESSION_REFERENCE_DELTA", "E4_ANTI_UI_COMPONENTIZATION", "E5_EDITABILITY_AND_FACT_SOURCE", "E6_A5_PRINT", "E7_HUMAN_FEEDBACK_WRITEBACK"],
-    "figmaCompletionGateOrder": ["current Figma screenshot", "representative proxy check", "identity-anchor check", "direct visual-master comparison", "three-second hierarchy check", "anti-UI/componentization check", "A5-size readability check", "grayscale check", "photo replacement and face-safe check", "clipping/layer/occlusion check", "feedback writeback", "export/print check"],
-    "visualChecks": ["first-read order", "identity-anchor character", "representative photo semantics", "saliency order", "title scale", "photo hierarchy", "background fidelity", "frame fidelity", "edge activity", "intentional asymmetry", "meaningful overlap", "declared quiet zones", "information density", "anti-template behavior"],
+    "orderedGates": ["G0_VISUAL_IDENTITY_3_SECOND", "G1_CLEAN_PROXY_CONTAMINATION", "G2_FIXED_DISPLAY_MODULE_BOUNDARIES_AND_TEXT", "G3_VISUAL_CARRYOVER_AND_COHERENCE", "G4_REFERENCE_DELTA", "G5_CANONICAL_FACTS", "G6_RELATIONAL_HIERARCHY_AND_SALIENCY", "G7_QUIET_ZONES_AND_OCCLUSION", "G8_PHOTO_MASK_FACE_SAFE_AND_REPLACEABILITY", "G9_A5_READABILITY_AND_SAFE_AREA", "G10_ALPHA_PADDING_AND_ASSET_INTEGRITY", "G11_EXPORT_AND_PRINT", "G12_HIDDEN_STALE_PLACEHOLDER_SCAN"],
+    "executionSubGates": ["E0_CURRENT_FIGMA_SCREENSHOT_CAPTURED", "E1_CLEAN_STANDALONE_PROXY", "E2_BUNDLED_DISPLAY_MODULES", "E3_IDENTITY_ANCHORS", "E4_VISUAL_CARRYOVER", "E5_FIRST_IMPRESSION_REFERENCE_DELTA", "E6_ANTI_UI_COMPONENTIZATION", "E7_FACT_SOURCE_METADATA", "E8_A5_PRINT", "E9_HUMAN_FEEDBACK_WRITEBACK"],
+    "figmaCompletionGateOrder": ["current Figma screenshot", "clean proxy contamination check", "bundled fixed display-module check", "identity-anchor check", "visual carry-over/coherence check", "direct visual-master comparison", "three-second hierarchy check", "anti-UI/componentization check", "A5-size readability check", "grayscale check", "photo replacement and face-safe check", "clipping/layer/occlusion check", "feedback writeback", "export/print check"],
+    "visualChecks": ["first-read order", "identity-anchor character", "clean representative photo semantics", "fixed display-module character", "saliency order", "title scale", "photo hierarchy", "background fidelity", "frame fidelity", "edge activity", "intentional asymmetry", "meaningful overlap", "declared quiet zones", "information density", "mixed-generation coherence", "anti-template behavior"],
     "referenceDeltaPolicy": {
-      "method": "overlay/side-by-side against the page visual master at matching aspect ratio using the current Figma screenshot",
-      "priority": ["first impression", "identity anchors", "high-saliency photo subject/visual mass", "saliency hierarchy", "major relationships and overlaps", "relative scale", "occupied-vs-calm areas", "background/frame character", "micro geometry"],
-      "blockingRule": "Any material failure in first impression, identity anchor, high-saliency photo semantics, title/photo scale or major occupied-vs-calm areas blocks Reference Delta pass.",
-      "rule": "Do not accept a technically correct rebuild that fails the first-impression or hierarchy comparison."
+      "method": "overlay/side-by-side against the page visual master at matching aspect ratio using the current Figma screenshot; proxy photos themselves must be clean and may not contain cropped page decoration.",
+      "priority": ["first impression", "identity anchors", "fixed display modules", "high-saliency clean photo subject/visual mass", "saliency hierarchy", "major relationships and overlaps", "relative scale", "occupied-vs-calm areas", "background/frame character", "micro geometry"],
+      "blockingRule": "Any material failure in clean-proxy integrity, fixed display-module fidelity, carry-over coherence, first impression, identity anchor, high-saliency photo semantics, title/photo scale or major occupied-vs-calm areas blocks Reference Delta pass.",
+      "rule": "Do not accept a technically correct rebuild that fails the first-impression, module, proxy or coherence comparison."
     },
-    "printChecks": ["3mm bleed coverage where required", "critical factual text remains inside safe margin unless intentionally treated as display art", "effective raster resolution at placed size", "sRGB review export before CMYK conversion workflow", "grayscale legibility", "thumbnail/contact-sheet scan", "spread adjacency check"]
+    "printChecks": ["3mm bleed coverage where required", "critical factual text remains safe/readable including baked fixed display text", "effective raster resolution at placed size", "sRGB review export before CMYK conversion workflow", "grayscale legibility", "thumbnail/contact-sheet scan", "spread adjacency check"]
   },
   "spreadRhythm": {
     "pairs": [
@@ -370,9 +362,9 @@
     ]
   },
   "pages": [
-    {"page": "P01", "role": "COVER", "visualMaster": "assets/rurubu-v30/p01/P01.png", "manifest": "assets/rurubu-v30/p01/manifest.json", "visualReview": "LOCKED", "figmaState": "REFERENCE_DELTA_PASS_FINAL_PHOTO_QA_PENDING"},
-    {"page": "P02", "role": "PROFILE + Q1/Q2", "visualMaster": "assets/rurubu-v30/p02/P02.png", "manifest": "assets/rurubu-v30/p02/manifest.json", "visualReview": "LOCKED"},
-    {"page": "P03", "role": "OUR STORY + Q3/Q4", "visualMaster": "assets/rurubu-v30/p03/P03.png", "manifest": "assets/rurubu-v30/p03/manifest.json", "visualReview": "LOCKED"},
+    {"page": "P01", "role": "COVER", "visualMaster": "assets/rurubu-v30/p01/P01.png", "manifest": "assets/rurubu-v30/p01/manifest.json", "polishManifest": "assets/rurubu-v30/p01/polish-manifest.json", "visualReview": "LOCKED", "figmaState": "PROMOTED_CURRENT_WITH_CARRYOVER_AND_PROXY_DEBT"},
+    {"page": "P02", "role": "PROFILE + Q1/Q2", "visualMaster": "assets/rurubu-v30/p02/P02.png", "manifest": "assets/rurubu-v30/p02/manifest.json", "polishManifest": "assets/rurubu-v30/p02/polish-manifest.json", "visualReview": "LOCKED"},
+    {"page": "P03", "role": "OUR STORY + Q3/Q4", "visualMaster": "assets/rurubu-v30/p03/P03.png", "manifest": "assets/rurubu-v30/p03/manifest.json", "polishManifest": "assets/rurubu-v30/p03/polish-manifest.json", "visualReview": "LOCKED"},
     {"page": "P04", "role": "ALL TRAVEL MEMORIES / OUR JOURNEY", "visualMaster": "assets/rurubu-v30/p04/P04.png", "manifest": "assets/rurubu-v30/p04/manifest.json", "visualReview": "AWAITING_CHAT_REVIEW"},
     {"page": "P05", "role": "FRIENDS MEMORIES", "visualMaster": "assets/rurubu-v30/p05/P05.png", "manifest": "assets/rurubu-v30/p05/manifest.json", "visualReview": "AWAITING_CHAT_REVIEW"},
     {"page": "P06", "role": "REAL LIFE / FAVORITES / BEST SHOTS + Q5/Q6", "visualMaster": "assets/rurubu-v30/p06/P06.png", "manifest": "assets/rurubu-v30/p06/manifest.json", "visualReview": "AWAITING_CHAT_REVIEW"},
