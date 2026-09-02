@@ -19,6 +19,14 @@ The only current Rurubu WEDDING production version is **V30**.
 
 Newest explicit owner feedback can reopen an older PASS.
 
+### Current override precedence
+
+Some older generic/root/page-main language predates the 2026-09-02 corrections. For current execution:
+
+`owner feedback → page polish → visual-polish → TRUE-ALPHA policy → current Acceptance gate → older generic/root/page-main execution language`
+
+Therefore any older rule that broadly treats fixed/stylized text as a generated/bundled image candidate, or treats checkerboard-looking output as an acceptable transparency workflow, is **SUPERSEDED** by the current role-classification and true-alpha rules.
+
 ## Ownership — USER LOCKED
 
 ### ChatGPT
